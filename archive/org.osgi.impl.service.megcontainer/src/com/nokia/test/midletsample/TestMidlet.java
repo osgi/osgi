@@ -8,7 +8,8 @@ import org.osgi.application.*;
 import org.osgi.service.event.*;
 import org.osgi.framework.*;
 
-public class TestMidlet extends MIDlet implements EventHandler, SynchronousBundleListener {
+public class TestMidlet extends MIDlet implements EventHandler, SynchronousBundleListener,
+                                                  ServiceListener {
 	String                      fileName;
 	String                      storedString;
 	boolean                     paused;
@@ -88,9 +89,21 @@ public class TestMidlet extends MIDlet implements EventHandler, SynchronousBundl
 			myApplicationContext.removeBundleListener( this );
 			writeResult("BUNDLE LISTENER REMOVED");			
 		}
+		else if (event.getTopic().equals("com/nokia/megtest/AddServiceListener")) {
+			myApplicationContext.addServiceListener( this );
+			writeResult("SERVICE LISTENER ADDED");			
+		}
+		else if (event.getTopic().equals("com/nokia/megtest/RemoveServiceListener")) {
+			myApplicationContext.removeServiceListener( this );
+			writeResult("SERVICE LISTENER REMOVED");			
+		}
 	}
 
 	public void bundleChanged(BundleEvent event) {
 		writeResult("BUNDLE CHANGE RECEIVED");			
+	}
+
+	public void serviceChanged(ServiceEvent event) {
+		writeResult("SERVICE CHANGE RECEIVED");			
 	}
 }
