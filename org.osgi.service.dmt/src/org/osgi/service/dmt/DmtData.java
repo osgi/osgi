@@ -389,7 +389,8 @@ public class DmtData {
      * <li>{@link #FORMAT_STRING}, {@link #FORMAT_XML}, {@link #FORMAT_BINARY}
      * and {@link #FORMAT_BASE64}: the length of the stored data
      * <li>{@link #FORMAT_INTEGER} and {@link #FORMAT_FLOAT}: 4
-     * <li>{@link #FORMAT_DATE} and {@link #FORMAT_TIME}: TODO define size
+     * <li>{@link #FORMAT_DATE} and {@link #FORMAT_TIME}: the length of the
+     * date or time in its string representation
      * <li>{@link #FORMAT_BOOLEAN}: 1
      * <li>{@link #FORMAT_NULL}: 0
      * </ul>
