@@ -775,8 +775,8 @@ public class CMControl extends DefaultTestBundleControl {
 					.waitForSignal(SIGNAL_WAITING_TIME));
 			assertEquals("Config event pid match", pid, cl.getPid(2));
 			assertEquals("Config event type match",
-					ConfigurationEvent.CM_DELETED, cl.getType());
-			assertNull("Config Factory event pid null", cl.getFactoryPid());
+					ConfigurationEvent.CM_DELETED, cl.getType(2));
+			assertNull("Config Factory event pid null", cl.getFactoryPid(2));
 			ConfigurationAdmin admin = (ConfigurationAdmin) getContext()
 					.getService(cl.getReference());
 			assertNotNull("Configuration Admin from event", admin);
