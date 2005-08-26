@@ -16,6 +16,7 @@ import org.osgi.service.application.ApplicationHandle;
 import org.osgi.service.application.midlet.MidletDescriptor;
 import org.osgi.service.application.midlet.MidletHandle;
 import org.osgi.service.event.Event;
+import org.osgi.service.event.EventAdmin;
 import org.osgi.service.event.EventHandler;
 
 public class TestMidletContainerBundleActivator
@@ -169,6 +170,10 @@ public class TestMidletContainerBundleActivator
             System.out.println("Stopping the Midlet application                  FAILED");
         else
             System.out.println("Stopping the Midlet application                  PASSED");
+        if(!testCase_oatRegisterService())
+          System.out.println("Checking OAT service registration                FAILED");
+      else
+          System.out.println("Checking OAT service registration                PASSED");
         if(!testCase_launchAfterRestart())
             System.out.println("Launching Midlet app after container restart     FAILED");
         else
@@ -192,7 +197,7 @@ public class TestMidletContainerBundleActivator
         System.out.println("\n\nMidlet container tester thread finished!");
     }
 
-    boolean installMidletBundle(String resourceName)
+	boolean installMidletBundle(String resourceName)
     {
         try
         {
@@ -781,4 +786,39 @@ public class TestMidletContainerBundleActivator
         }
         return false;
     }
+
+  	boolean sendEvent(Event event, boolean asynchron) {
+  		ServiceReference serviceRef = bc
+  				.getServiceReference("org.osgi.service.event.EventAdmin");
+  		if (serviceRef != null) {
+  			EventAdmin eventAdmin = (EventAdmin) bc.getService(serviceRef);
+  			if (eventAdmin != null) {
+  				try {
+  					if (asynchron)
+  						eventAdmin.postEvent(event);
+  					else
+  						eventAdmin.sendEvent(event);
+  					return true;
+  				}
+  				finally {
+  					bc.ungetService(serviceRef);
+  				}
+  			}
+  		}
+  		System.out.println("Can't send the event properly!");
+  		return false;
+  	}
+
+  	private boolean testCase_oatRegisterService() {
+      try {
+  			sendEvent(new Event("com/nokia/megtest/CheckRegistered", null), false);
+  			if (!checkResultFile("REGISTERED SUCCESSFULLY"))
+  				throw new Exception("Event handler service was not registered!");
+      	return true;
+      }
+      catch(Exception e) {
+          e.printStackTrace();
+      }
+      return false;
+  	}
 }
