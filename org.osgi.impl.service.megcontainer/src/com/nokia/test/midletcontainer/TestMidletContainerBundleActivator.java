@@ -178,6 +178,10 @@ public class TestMidletContainerBundleActivator
             System.out.println("Checking OAT locate service                      FAILED");
         else
             System.out.println("Checking OAT locate service                      PASSED");
+        if(!testCase_oatBundleListener())
+            System.out.println("Checking OAT bundle listener                     FAILED");
+        else
+            System.out.println("Checking OAT bundle listener                     PASSED");
         if(!testCase_launchAfterRestart())
             System.out.println("Launching Midlet app after container restart     FAILED");
         else
@@ -201,7 +205,7 @@ public class TestMidletContainerBundleActivator
         System.out.println("\n\nMidlet container tester thread finished!");
     }
 
-	boolean installMidletBundle(String resourceName)
+  	boolean installMidletBundle(String resourceName)
     {
         try
         {
@@ -861,6 +865,53 @@ public class TestMidletContainerBundleActivator
   		  	return false;
   		  if( !testCase_stopApplication() )
 	  	  	return false;
+        return true;  		
+      }
+      catch(Exception e) {
+          e.printStackTrace();
+      }
+      return false;  		
+  	}
+
+  	boolean testCase_oatBundleListener() {
+      try {
+      	if( !testCase_launchApplication() )
+      		return false;
+  	  	if( !checkResponseForEvent( "com/nokia/megtest/AddBundleListener", 
+                                    "BUNDLE LISTENER ADDED") )
+  		  	return false;
+  	  	
+        URL dummyBundleURL = bc.getBundle().getResource( "dummybundle.jar" );
+        if(dummyBundleURL == null)
+            throw new Exception("Can't find dummybundle.jar in the resources!");  	  	
+        Bundle bundle = bc.installBundle( dummyBundleURL.toString(), dummyBundleURL.openStream() );
+  	  	
+  			if (!checkResultFile( "BUNDLE CHANGE RECEIVED" ))
+  				throw new Exception("Event handler service was not registered!");
+  	  	
+  	  	if( !checkResponseForEvent( "com/nokia/megtest/RemoveBundleListener", 
+                                    "BUNDLE LISTENER REMOVED") )
+          return false;
+  	  	
+  	  	bundle.start();
+  	  	
+  			String content = getResultFileContent();
+  			if ( content != null && content.equals( "BUNDLE CHANGE RECEIVED" ) )
+  				throw new Exception("Bundle listener was not removed!");
+  	  	
+  	  	if( !checkResponseForEvent( "com/nokia/megtest/AddBundleListener", 
+                                    "BUNDLE LISTENER ADDED") )
+          return false;
+  	  	
+  		  if( !testCase_stopApplication() )
+	  	  	return false;
+  		  
+  		  bundle.uninstall();
+  	  	
+  			content = getResultFileContent();
+  			if ( content != null && content.equals( "BUNDLE CHANGE RECEIVED" ) )
+  				throw new Exception("Bundle listener was not removed after stop!");
+  		  
         return true;  		
       }
       catch(Exception e) {
