@@ -405,34 +405,39 @@ public class TestMidletContainerBundleActivator
         return launchable != null && launchable.equalsIgnoreCase("true");
     }
 
-    private boolean checkResultFile(String result)
+    private String  getResultFileContent() {
+      try
+      {
+          File resultFile = bc.getDataFile("TestResult");
+          String resultStr = "";
+          if(resultFile.exists())
+          {
+              FileInputStream stream = new FileInputStream(resultFile);
+              byte buffer[] = new byte[1024];
+              int length;
+              while((length = stream.read(buffer, 0, buffer.length)) > 0) 
+                  resultStr = resultStr + new String(buffer);
+              stream.close();
+              resultStr = resultStr.trim();
+          }
+          resultFile.delete();
+          return resultStr;
+      }
+      catch(Exception e)
+      {
+          e.printStackTrace();
+      }
+      return null;    	
+    }
+    
+    private boolean checkResultFile(String expResult)
     {
-        boolean matches = false;
-        try
-        {
-            File resultFile = bc.getDataFile("TestResult");
-            String resultStr = "";
-            if(resultFile.exists())
-            {
-                FileInputStream stream = new FileInputStream(resultFile);
-                byte buffer[] = new byte[1024];
-                int length;
-                while((length = stream.read(buffer, 0, buffer.length)) > 0) 
-                    resultStr = resultStr + new String(buffer);
-                stream.close();
-                resultStr = resultStr.trim();
-            }
-            matches = resultStr.equals(result);
-            resultFile.delete();
-            if(!matches)
-                System.out.println("Received: " + resultStr + "  instead of " + result);
-            return matches;
-        }
-        catch(Exception e)
-        {
-            e.printStackTrace();
-        }
-        return false;
+    	  String result = getResultFileContent();
+    	  if( !result.equals( expResult ) ) {
+          System.out.println("Received: " + result + "  instead of " + expResult);
+          return false;
+    	  }
+        return true;
     }
 
     boolean testCase_launchApplication()
@@ -836,9 +841,10 @@ public class TestMidletContainerBundleActivator
   		  if( !testCase_stopApplication() )
   		  	return false;
   			sendEvent(new Event( "com/nokia/megtest/CheckRegistered", null), false);
-  			if ( checkResultFile( "REGISTERED SUCCESSFULLY" ) )
+  			String content = getResultFileContent();
+  			if ( content != null && content.equals( "REGISTERED SUCCESSFULLY" ) )
   				throw new Exception("Event handler was not unregistered after stop!");
-  		  
+  			return true;  		  
       }
       catch(Exception e) {
           e.printStackTrace();

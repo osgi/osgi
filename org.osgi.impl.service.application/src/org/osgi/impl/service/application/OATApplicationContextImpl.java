@@ -41,6 +41,7 @@ public class OATApplicationContextImpl implements ApplicationContext, ServiceLis
 	private Map startupParams = null;
 	private LinkedList serviceList = null;
 	private LinkedList registeredServiceList = null;
+	private LinkedList bundleListenerList = null;
 	private OATApplicationData oatAppData = null;
 	private ApplicationHandle appHandle = null;
 
@@ -55,6 +56,7 @@ public class OATApplicationContextImpl implements ApplicationContext, ServiceLis
 		this.startupParams = startupParams;
 		serviceList = new LinkedList();
 		registeredServiceList = new LinkedList();
+		bundleListenerList = new LinkedList();
 		oatAppData = appData;
 		this.appHandle = appHandle;
 		bc.addServiceListener( this );
@@ -65,6 +67,7 @@ public class OATApplicationContextImpl implements ApplicationContext, ServiceLis
 			throw new RuntimeException( "Application is not running!" );
 		
 	  bc.addBundleListener( listener );
+	  bundleListenerList.add( listener );
 	}
 	
 	public void addFrameworkListener(FrameworkListener listener) {
@@ -72,6 +75,7 @@ public class OATApplicationContextImpl implements ApplicationContext, ServiceLis
 			throw new RuntimeException( "Application is not running!" );
 		
     bc.addFrameworkListener( listener );
+    /* TODO */
 	}
 	
 	public void addServiceListener(ServiceListener listener, String filter)
@@ -80,6 +84,7 @@ public class OATApplicationContextImpl implements ApplicationContext, ServiceLis
 			throw new RuntimeException( "Application is not running!" );
 		
 		bc.addServiceListener( listener, filter );
+    /* TODO */
 	}
 	
 	public void addServiceListener(ServiceListener listener) {
@@ -87,6 +92,7 @@ public class OATApplicationContextImpl implements ApplicationContext, ServiceLis
 			throw new RuntimeException( "Application is not running!" );
 		
     bc.addServiceListener( listener );
+    /* TODO */
 	}
 	
 	public Map getStartupParameters() {
@@ -244,6 +250,7 @@ public class OATApplicationContextImpl implements ApplicationContext, ServiceLis
 			throw new RuntimeException( "Application is not running!" );
 		
 		bc.removeBundleListener( listener );
+    bundleListenerList.remove( listener );
 	}
 	
 	public void removeFrameworkListener(FrameworkListener listener) {
@@ -251,6 +258,7 @@ public class OATApplicationContextImpl implements ApplicationContext, ServiceLis
 			throw new RuntimeException( "Application is not running!" );
 		
     bc.removeFrameworkListener( listener );
+    /* TODO */
 	}
 	
 	public void removeServiceListener(ServiceListener listener) {
@@ -258,6 +266,7 @@ public class OATApplicationContextImpl implements ApplicationContext, ServiceLis
 			throw new RuntimeException( "Application is not running!" );
 		
 		bc.removeServiceListener( listener );
+    /* TODO */
 	}
 	
 	void destroy()
@@ -272,6 +281,12 @@ public class OATApplicationContextImpl implements ApplicationContext, ServiceLis
 			if( servReg.getReference().getBundle() != null ) /* service was not unregistered? */
 				servReg.unregister();
 		}
+		
+		while( !bundleListenerList.isEmpty() ) {
+			bc.removeBundleListener( (BundleListener)bundleListenerList.removeFirst() );
+		}
+		
+		/* TODO */
 		
 		bc.removeServiceListener( this );
 		
