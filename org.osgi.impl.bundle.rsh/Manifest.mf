@@ -7,7 +7,9 @@ Bundle-Copyright: ${copyright}
 Bundle-Vendor: OSGi Alliance
 Bundle-Version: 1.0
 Bundle-Category: osgi
-Import-Package: org.osgi.framework; specification-version=1.1, org.osgi.util.tracker; specification-version=1.1, org.osgi.service.url; specification-version=1.0, org.osgi.service.provisioning
+${IMPORT-PACKAGE}
+${EXPORT-PACKAGE}
+${PRIVATE-PACKAGE}
 CVS-Header: $Header$
 $(PRIVATE-PACKAGE)
 
