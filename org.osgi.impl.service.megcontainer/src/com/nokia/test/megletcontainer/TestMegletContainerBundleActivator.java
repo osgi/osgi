@@ -324,48 +324,18 @@ public class TestMegletContainerBundleActivator extends Object implements
 		else
 			System.out
 					.println("Launching Meglet app after container restart     PASSED");
-		if (!testCase_singletonCheck())
-			System.out
-					.println("Checking singleton application                   FAILED");
-		else
-			System.out
-					.println("Checking singleton application                   PASSED");
 		if (!testCase_uninstallMegletBundle())
 			System.out
 					.println("Meglet bundle uninstall from Meglet container    FAILED");
 		else
 			System.out
 					.println("Meglet bundle uninstall from Meglet container    PASSED");
-		if (!testCase_autoStartCheck())
-			System.out
-					.println("Checking autostart application                   FAILED");
-		else
-			System.out
-					.println("Checking autostart application                   PASSED");
-		if (!testCase_stopAfterAutoStart())
-			System.out
-					.println("Stopping the autostarted application             FAILED");
-		else
-			System.out
-					.println("Stopping the autostarted application             PASSED");
 		if (!testCase_uninstallMegletBundle())
 			System.out
 					.println("Meglet bundle uninstall from Meglet container    FAILED");
 		else
 			System.out
 					.println("Meglet bundle uninstall from Meglet container    PASSED");
-		if (!testCase_autoStartCheck())
-			System.out
-					.println("Checking autostart application after uninstall   FAILED");
-		else
-			System.out
-					.println("Checking autostart application after uninstall   PASSED");
-		if (!testCase_nonsingletonCheck())
-			System.out
-					.println("Checking non-singleton application               FAILED");
-		else
-			System.out
-					.println("Checking non-singleton application               PASSED");
 		if (!testCase_lifeCycleChangeByEvents())
 			System.out
 					.println("Lifecycle change by specific events              FAILED");
@@ -680,14 +650,6 @@ public class TestMegletContainerBundleActivator extends Object implements
 						+ " instead of 'MEG'!");
 			if (engProps.get("application.bundle.id") == null)
 				throw new Exception("No application bundle id found!");
-			if (!engProps.get("application.singleton").equals("true"))
-				throw new Exception("Singleton flag is "
-						+ (String) engProps.get("application.singleton")
-						+ " instead of 'true'!");
-			if (!engProps.get("application.autostart").equals("false"))
-				throw new Exception("Autostart flag is "
-						+ (String) engProps.get("application.autostart")
-						+ " instead of 'false'!");
 			if (!engProps.get("application.visible").equals("true"))
 				throw new Exception("Visible flag is "
 						+ (String) engProps.get("application.visible")
@@ -972,135 +934,6 @@ public class TestMegletContainerBundleActivator extends Object implements
 			if (!testCase_stopApplication())
 				return false;
 			return true;
-		}
-		catch (Exception e) {
-			e.printStackTrace();
-			return false;
-		}
-	}
-
-	boolean testCase_singletonCheck() {
-		try {
-			if (!testCase_launchApplication())
-				return false;
-			ApplicationHandle tmpAppHandle = appHandle;
-			boolean launchable = isLaunchable(appDescs[0]);
-			if (testCase_launchApplicationError(true))
-				return false;
-			if (launchable)
-				throw new Exception(
-						"Application was not launchable, but started!");
-			appHandle = tmpAppHandle;
-			if (!testCase_stopApplication())
-				return false;
-			return true;
-		}
-		catch (Exception e) {
-			e.printStackTrace();
-			return false;
-		}
-	}
-
-	boolean testCase_autoStartCheck() {
-		try {
-			if (!installMegletBundle("megletsample2.jar"))
-				return false;
-			ApplicationDescriptor appDesc = appDescs[0];
-			ServiceReference[] appList = bc.getServiceReferences(
-					"org.osgi.service.application.ApplicationHandle",
-					"(" + ApplicationHandle.APPLICATION_DESCRIPTOR + "=" + getPID( appDesc ) + ")");
-			if (appList == null || appList.length == 0)
-				throw new Exception(
-						"Application didn't autostart. The appHandle is missing!");
-			appHandle = (ApplicationHandle) bc.getService(appList[0]);
-			if (getAppDesc( appHandle ) != appDesc)
-				throw new Exception(
-						"The autostarted apphandle differs from the expected one!");
-			if ( !appHandle.getState().equals( ApplicationHandle.RUNNING ) )
-				throw new Exception(
-						"The autostarted application's status is not running!");
-			bc.ungetService(appList[0]);
-			if (!waitStateChangeEvent( APPLICATION_START, getPID( appDesc ) ))
-				throw new Exception("Didn't receive the start event!");
-			return true;
-		}
-		catch (Exception e) {
-			e.printStackTrace();
-			return false;
-		}
-	}
-	
-	boolean testCase_stopAfterAutoStart() {
-		try {
-			ApplicationDescriptor appDesc = appDescs[0];
-			ApplicationHandle oldHandle = appHandle;
-			String pid = getPID( appDesc );
-			
-			appHandle.destroy();
-			if( !waitStateChangeEvent( APPLICATION_STOPPED, pid ) )
-				throw new Exception("Didn't receive the stopped event!");
-			ServiceReference[] appList = bc.getServiceReferences(
-					"org.osgi.service.application.ApplicationHandle",
-					"(" + ApplicationHandle.APPLICATION_DESCRIPTOR + "="
-							+ pid + ")");
-			if (appList != null && appList.length != 0) {
-				for (int i = 0; i != appList.length; i++) {
-					ApplicationHandle handle = (ApplicationHandle) bc
-							.getService(appList[i]);
-					bc.ungetService(appList[i]);
-					if (handle == appHandle)
-						throw new Exception(
-								"Application handle doesn't removed after destroy!");
-				}
-			}
-			try {
-			  appHandle.getState();
-			}catch( Exception e )
-			{
-				return true;
-			}
-			throw new Exception("The status didn't change to NONEXISTENT!");
-		}
-		catch (Exception e) {
-			e.printStackTrace();
-			return false;
-		}		
-	}
-
-	boolean testCase_nonsingletonCheck() {
-		try {
-			ApplicationDescriptor appDesc = appDescs[0];
-			ApplicationHandle oldHandle = appHandle;
-			String pid = getPID( appDesc );
-			if (!testCase_launchApplication())
-				return false;
-			if (!testCase_stopApplication())
-				return false;
-			appHandle = oldHandle;
-			appHandle.destroy();
-			if( !waitStateChangeEvent( APPLICATION_STOPPED, pid ) )
-				throw new Exception("Didn't receive the stopped event!");
-			ServiceReference[] appList = bc.getServiceReferences(
-					"org.osgi.service.application.ApplicationHandle",
-					"(" + ApplicationHandle.APPLICATION_DESCRIPTOR + "="
-							+ pid + ")");
-			if (appList != null && appList.length != 0) {
-				for (int i = 0; i != appList.length; i++) {
-					ApplicationHandle handle = (ApplicationHandle) bc
-							.getService(appList[i]);
-					bc.ungetService(appList[i]);
-					if (handle == appHandle)
-						throw new Exception(
-								"Application handle doesn't removed after destroy!");
-				}
-			}
-			try {
-			  appHandle.getState();
-			}catch( Exception e )
-			{
-				return true;
-			}
-			throw new Exception("The status didn't change to NONEXISTENT!");
 		}
 		catch (Exception e) {
 			e.printStackTrace();
@@ -1760,8 +1593,8 @@ public class TestMegletContainerBundleActivator extends Object implements
 	
 			String[] properties = session.getChildNodeNames( "./OSGi/apps/" + appUID );
 			
-			String names[]  = new String [] { "localizedname", "version", "vendor", "autostart", "locked", 
-					                              "singleton", "bundle_id", "required_services", "launch" };
+			String names[]  = new String [] { "localizedname", "version", "vendor", "locked", 
+					                              "bundle_id", "required_services", "launch" };
 			Object values[] = new Object [ names.length ];
 			
 			Map props = appDesc.getProperties( Locale.getDefault().getLanguage() );
@@ -1769,10 +1602,8 @@ public class TestMegletContainerBundleActivator extends Object implements
 			values[ 0 ] = (String)( props.get( ApplicationDescriptor.APPLICATION_NAME ) );
 			values[ 1 ] = (String)( props.get( ApplicationDescriptor.APPLICATION_VERSION ) );
 			values[ 2 ] = (String)( props.get( ApplicationDescriptor.APPLICATION_VENDOR ) );
-			values[ 3 ] = Boolean.valueOf( (String)props.get( ApplicationDescriptor.APPLICATION_AUTOSTART ) );
-			values[ 4 ] = Boolean.valueOf( (String)props.get( ApplicationDescriptor.APPLICATION_LOCKED ) );
-			values[ 5 ] = Boolean.valueOf( (String)props.get( ApplicationDescriptor.APPLICATION_SINGLETON ) );
-			values[ 6 ] = (String)( props.get( "application.bundle.id" ) );
+			values[ 3 ] = Boolean.valueOf( (String)props.get( ApplicationDescriptor.APPLICATION_LOCKED ) );
+			values[ 4 ] = (String)( props.get( "application.bundle.id" ) );
 			
 			boolean found[] = new boolean[ names.length ];				
 			for( int i = 0; i != names.length; i++ )

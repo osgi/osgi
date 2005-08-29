@@ -37,7 +37,6 @@ class MEGBundleDescriptor {
 	public EventSubscribe			eventSubscribes[];
 	public Dependencies				dependencies[];
 	public long						bundleID;
-	public boolean					autoStartRequired;
 }
 
 public class MidletContainer implements BundleListener, EventHandler {
@@ -97,15 +96,12 @@ public class MidletContainer implements BundleListener, EventHandler {
 		else {
 			bundleIDs.add(Long.toString(bundleID));
 			saveVector(bundleIDs, "BundleIDs");
-			checkAutoStart(bundleID, true);
 			return;
 		}
 	}
 
 	public MIDlet createMidletInstance(MidletDescriptorImpl appDesc,
 			Vector serviceVector, boolean resume) throws Exception {
-		if (!checkSingletonity(appDesc, resume))
-			throw new Exception("Singleton Exception!");
 		MEGBundleDescriptor desc = getBundleDescriptor(appDesc.getBundleId());
 		int i = getApplicationIndex(desc, appDesc.getMidletDescriptor());
 		Dependencies deps = desc.dependencies[i];
@@ -182,41 +178,8 @@ public class MidletContainer implements BundleListener, EventHandler {
 		return "Exception occurred at checking the dependencies!";
 	}
 
-	private boolean checkSingletonity(MidletDescriptorImpl appDesc,
-			boolean resume) {
-		if (!appDesc.isSingleton())
-			return true;
-		try {
-			ServiceReference appList[] = bc.getServiceReferences(
-					"org.osgi.service.application.ApplicationHandle",
-					"(application.descriptor=" + appDesc.getPID() + ")");
-			if (appList == null || appList.length == 0)
-				return true;
-			if (!resume) {
-				return false;
-			}
-			else {
-				ApplicationHandle appHandle = (ApplicationHandle) bc
-						.getService(appList[0]);
-				boolean result = appHandle.getState().equals("PAUSED");
-				bc.ungetService(appList[0]);
-				return result;
-			}
-		}
-		catch (Exception e) {
-			log(
-					bc,
-					1,
-					"Exception occurred at checking the singletonity of a midlet!",
-					e);
-		}
-		return false;
-	}
-
 	public boolean isLaunchable(MidletDescriptorImpl appDesc) {
 		try {
-			if (!checkSingletonity(appDesc, false))
-				return false;
 			if (appDesc.isLocked())
 				return false;
 			if( !oat.isLaunchable( appDesc.getBundle(), appDesc.getStartClass() ) )
@@ -243,33 +206,6 @@ public class MidletContainer implements BundleListener, EventHandler {
 					e);
 		}
 		return false;
-	}
-
-	private void checkAutoStart(long bundleID, boolean isInstalling) {
-		try {
-			MEGBundleDescriptor desc = getBundleDescriptor(bundleID);
-			if (bc.getBundle(bundleID).getState() != 32) {
-				if (isInstalling)
-					desc.autoStartRequired = true;
-				return;
-			}
-			if (!isInstalling && !desc.autoStartRequired)
-				return;
-			ApplicationDescriptor appDescs[] = desc.applications;
-			for (int i = 0; i != appDescs.length; i++)
-				if (appDescs[i].getProperties("en")
-						.get("application.autostart").equals("true"))
-					appDescs[i].launch(null);
-
-			desc.autoStartRequired = false;
-		}
-		catch (Exception e) {
-			log(
-					bc,
-					1,
-					"Exception occurred at checking trying to autostart a midlet!",
-					e);
-		}
 	}
 
 	public void unregisterAllApplications() throws Exception {
@@ -333,7 +269,6 @@ public class MidletContainer implements BundleListener, EventHandler {
 			switch (event.getType()) {
 				case 2 : // '\002'
 					registerApplicationDescriptors(bundleID);
-					checkAutoStart(bundleID, false);
 					break;
 
 				case 4 : // '\004'
@@ -470,11 +405,9 @@ public class MidletContainer implements BundleListener, EventHandler {
 									.toString(bundleID));
 							props.setProperty("application.vendor",
 									MIDletVendor);
-							props.setProperty("application.singleton", "true");
 							props.setProperty("application.visible", "true");
 							props.setProperty("application.version",
 									MIDletVersion);
-							props.setProperty("application.autostart", "false");
 							String defaultLang = Locale.getDefault()
 									.getLanguage();
 							names.put(defaultLang, MIDletName);
@@ -534,7 +467,6 @@ public class MidletContainer implements BundleListener, EventHandler {
 				descs[k] = (ApplicationDescriptor) appVector.removeFirst();
 
 			MEGBundleDescriptor descriptor = new MEGBundleDescriptor();
-			descriptor.autoStartRequired = false;
 			descriptor.applications = new ApplicationDescriptor[applicationNum];
 			descriptor.eventSubscribes = new EventSubscribe[applicationNum];
 			descriptor.dependencies = new Dependencies[applicationNum];

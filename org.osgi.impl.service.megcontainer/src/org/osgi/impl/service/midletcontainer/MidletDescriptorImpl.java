@@ -61,11 +61,6 @@ public final class MidletDescriptorImpl implements
 		return bundle;
 	}
 
-	public boolean isSingleton() {
-		String singleton = props.getProperty("application.singleton");
-		return singleton == null || singleton.equalsIgnoreCase("true");
-	}
-
 	public String getStartClass() {
 		return startClass;
 	}
@@ -101,16 +96,6 @@ public final class MidletDescriptorImpl implements
 				.getProperty("application.version"));
 		properties.put("application.vendor", props
 				.getProperty("application.vendor"));
-		String singleton = props.getProperty("application.singleton");
-		if (singleton == null || singleton.equalsIgnoreCase("true"))
-			properties.put("application.singleton", "true");
-		else
-			properties.put("application.singleton", "false");
-		String autostart = props.getProperty("application.autostart");
-		if (autostart != null && autostart.equalsIgnoreCase("true"))
-			properties.put("application.autostart", "true");
-		else
-			properties.put("application.autostart", "false");
 		String visible = props.getProperty("application.visible");
 		if (visible != null && visible.equalsIgnoreCase("false"))
 			properties.put("application.visible", "false");
