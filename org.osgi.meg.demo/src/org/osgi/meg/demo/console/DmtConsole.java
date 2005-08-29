@@ -26,11 +26,16 @@
  */
 package org.osgi.meg.demo.console;
 
-import java.io.*;
 import java.io.ByteArrayOutputStream;
-import org.osgi.framework.*;
-import org.osgi.service.dmt.*;
-import org.osgi.tools.command.*;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
+import org.osgi.framework.BundleActivator;
+import org.osgi.framework.BundleContext;
+import org.osgi.service.dmt.DmtAdmin;
+import org.osgi.service.dmt.DmtException;
+import org.osgi.service.dmt.DmtSession;
+import org.osgi.tools.command.CommandInterpreter;
+import org.osgi.tools.command.CommandProvider;
 import org.osgi.util.tracker.ServiceTracker;
 
 /**
@@ -83,8 +88,8 @@ public class DmtConsole implements BundleActivator, CommandProvider {
 			prefix = "./";
 		if (string.length() == 0)
 			return prefix.substring(0, prefix.length() - 1);
-		else
-			return prefix + string;
+
+        return prefix + string;
 	}
 
 	public Object _listdmt(CommandInterpreter intp) throws DmtException {
@@ -104,8 +109,7 @@ public class DmtConsole implements BundleActivator, CommandProvider {
 					else {
 						if (arg.startsWith("-"))
 							throw new RuntimeException("Invalid option " + arg);
-						else
-							break;
+						break;
 					}
 			arg = intp.nextArgument();
 		}
