@@ -420,8 +420,8 @@ public class ServerTestGUI extends javax.swing.JFrame implements ActionListener,
             if (null == name)
                 return;
             String value = JOptionPane.showInputDialog(this, "Node value " +
-                "(type can be 'int', 'chr', 'boolean', 'xml', 'bin', 'null'):", 
-                "type:data_as_string");
+                    "type:data_as_string (type int/chr/bool/date/time/float/" +
+                    "xml/bin/b64/null):");
             if (null == value)
                 return;
             command("cl " + tn.uri() + "/" + name + " " + value);
@@ -445,8 +445,8 @@ public class ServerTestGUI extends javax.swing.JFrame implements ActionListener,
             if (null == tn)
                 return;
             String value = JOptionPane.showInputDialog(this, "Node value " +
-                "(type can be 'int', 'chr', 'boolean', 'xml', 'bin', 'null'):", 
-                "type:data_as_string");
+                    "type:data_as_string (type int/chr/bool/date/time/float/" +
+            "xml/bin/b64/null):");
             if (null == value)
                 return;
             command("setNodeValue " + tn.uri() + " " + value);

@@ -17,9 +17,13 @@
  */
 package org.osgi.meg.demo.remote;
 
-import java.io.*;
-import java.net.*;
-import org.osgi.service.dmt.*;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.net.Socket;
+import org.osgi.service.dmt.AlertItem;
+import org.osgi.service.dmt.DmtAdmin;
+import org.osgi.service.dmt.RemoteAlertSender;
 
 /* Description of the protocol at the end of this file */
 
@@ -42,7 +46,7 @@ public class ClientAdaptor implements RemoteAlertSender {
 	}
 
 	public void sendAlert(String serverid, int code, String correlator, 
-                          DmtAlertItem[] items)
+                          AlertItem[] items)
             throws Exception {
         String msg = "Code:" + code + "\n";
         msg += "Correlator:" + correlator + "\n";

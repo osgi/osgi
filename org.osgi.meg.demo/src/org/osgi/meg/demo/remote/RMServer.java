@@ -19,7 +19,6 @@ package org.osgi.meg.demo.remote;
 
 import java.io.*;
 import java.net.*;
-import java.util.StringTokenizer;
 
 public class RMServer extends Thread {
 	
@@ -111,7 +110,6 @@ public class RMServer extends Thread {
 
 			String input = null;
 			String result = null;
-			String output = null;
 			try {
 				while (isRunning() && isConnected()) {
 					input = in.readLine();
