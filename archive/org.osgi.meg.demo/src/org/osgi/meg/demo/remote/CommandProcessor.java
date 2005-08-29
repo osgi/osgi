@@ -17,8 +17,10 @@
  */
 package org.osgi.meg.demo.remote;
 
-import java.io.*;
-import java.util.*;
+import java.io.PrintWriter;
+import java.io.StringWriter;
+import java.util.Date;
+import java.util.StringTokenizer;
 import org.osgi.service.dmt.*;
 
 // TODO support non-recursive copy operation if necessary
@@ -59,7 +61,6 @@ public class CommandProcessor {
                         lockMode = DmtSession.LOCK_TYPE_EXCLUSIVE;
                 }
 				session = fact.getSession(args[2], uri,	lockMode);
-				// TODO other lock types
 			}
 			else if (cmd.equals("close")) {
 				session.close();
@@ -134,19 +135,19 @@ public class CommandProcessor {
 				ret = String.valueOf(b);
 			}
 			else if (cmd.equals("setnodeacl") || cmd.equals("sa")) {
-				DmtAcl acl = new DmtAcl(args[2]);
+				Acl acl = new Acl(args[2]);
 				session.setNodeAcl(uri, acl);
 			}
 			else if (cmd.equals("getnodeacl") || cmd.equals("ga")) {
-				DmtAcl acl = session.getNodeAcl(uri);
+				Acl acl = session.getNodeAcl(uri);
 				ret = acl == null ? "<unset>" : acl.toString();
 			}
 			else if (cmd.equals("geteffectivenodeacl") || cmd.equals("gea")) {
-				DmtAcl acl = session.getEffectiveNodeAcl(uri);
+				Acl acl = session.getEffectiveNodeAcl(uri);
 				ret = acl.toString();
 			}
 			else if (cmd.equals("getmetanode") || cmd.equals("gm")) {
-				DmtMetaNode mn = session.getMetaNode(uri);
+				MetaNode mn = session.getMetaNode(uri);
 				ret = mn == null ? "null" : mn.toString(); // TODO does it have a good tostring?
 			}
 			else {
@@ -223,17 +224,29 @@ public class CommandProcessor {
 		if (type.equals("int")) {
 			value = new DmtData(Integer.parseInt(data));
 		}
-		else if (type.equals("boolean")) {
+		else if (type.equals("bool")) {
 			value = new DmtData((new Boolean(data)).booleanValue());
 		}
 		else if (type.equals("chr")) {
 			value = new DmtData(data);
 		}
         else if (type.equals("xml")) {
-            value = new DmtData(data, true);
+            value = new DmtData(data, DmtData.FORMAT_XML);
         }
         else if (type.equals("bin")) {
             value = new DmtData(data.getBytes());
+        }
+        else if (type.equals("b64")) {
+            value = new DmtData(data.getBytes(), true);
+        }
+        else if (type.equals("date")) {
+            value = new DmtData(data, DmtData.FORMAT_DATE);
+        }
+        else if (type.equals("time")) {
+            value = new DmtData(data, DmtData.FORMAT_TIME);
+        }
+        else if (type.equals("float")) {
+            value = new DmtData(Float.parseFloat(data));
         }
         else if (type.equals("null")) {
             value = DmtData.NULL_VALUE;
@@ -251,65 +264,40 @@ public class CommandProcessor {
 		return ret;
 	}
 
-	private String help() {
-		StringBuffer sb = new StringBuffer();
-		sb.append("\n");
-		sb.append("Command          Short Params              Returns ");
-		sb.append("\n");
-		sb.append("===================================================");
-		sb.append("\n");
-		sb.append("open                    uri serverid [lockmode]    ");
-		sb.append("\n");
-		sb.append("close                                              ");
-		sb.append("\n");
-        sb.append("commit            c                                ");
+    private String help() {
+        StringBuffer sb = new StringBuffer();
         sb.append("\n");
-        sb.append("rollback          r                                ");
+        sb.append("Command             Short Params              Returns   \n");
+        sb.append("========================================================\n");
+        sb.append("open                      uri serverid [lockmode]       \n");
+        sb.append("close                                                   \n");
+        sb.append("commit              c                                   \n");
+        sb.append("rollback            r                                   \n");
+        sb.append("isNodeUri                 uri                 true/false\n");
+        sb.append("getNodeValue        gv    uri            value as string\n");
+        sb.append("getNodeTitle        gt    uri                 title     \n");
+        sb.append("getNodeVersion            uri                 version   \n");
+        sb.append("getNodeTimestamp          uri                 time      \n");
+        sb.append("getNodeSize               uri                 size      \n");
+        sb.append("getChildNodeNames   gc    uri                 names/    \n");
+        sb.append("setNodeTitle        st    uri title                     \n");
+        sb.append("setNodeValue        sv    uri type:data_as_string       \n");
+        sb.append("setNodeType         sty   uri type                      \n");
+        sb.append("deleteNode          d     uri                           \n");
+        sb.append("createInterior      ci    uri                           \n");
+        sb.append("createLeaf          cl    uri type:data_as_string       \n");
+        sb.append("copy                      uri new_uri                   \n");
+        sb.append("renameNode          re    uri new_name                  \n");
+        sb.append("execute             x     uri data                      \n");
+        sb.append("isLeafNode          il    uri                 true/false\n");
+        sb.append("setNodeAcl          sa    uri acl_as_string             \n");
+        sb.append("getNodeAcl          ga    uri                 acl       \n");
+        sb.append("getEffectiveNodeAcl gea   uri                 eff. acl  \n");
+        sb.append("getMetaNode         gm    uri                 metainfo  \n");
         sb.append("\n");
-		sb.append("isNodeUri               uri                 true/false");
-		sb.append("\n");
-		sb.append("getNodeValue      gv    uri                 value as string");
-		sb.append("\n");
-		sb.append("getNodeTitle      gt    uri                 title  ");
-		sb.append("\n");
-		sb.append("getNodeVersion          uri                 version");
-		sb.append("\n");
-		sb.append("getNodeTimestamp        uri                 time   ");
-		sb.append("\n");
-		sb.append("getNodeSize             uri                 size   ");
-		sb.append("\n");
-		sb.append("getChildNodeNames gc    uri                 names/ ");
-		sb.append("\n");
-		sb.append("setNodeTitle      st    uri title                  ");
-		sb.append("\n");
-		sb.append("setNodeValue      sv    uri type:data_as_string "
-				+ "(type can be 'int', 'chr', 'boolean', 'xml', 'bin', 'null')");
-		sb.append("\n");
-		sb.append("setNodeType       sty   uri type                   ");
-		sb.append("\n");
-		sb.append("deleteNode        d     uri                        ");
-		sb.append("\n");
-		sb.append("createInterior    ci    uri                        ");
-		sb.append("\n");
-		sb.append("createLeaf        cl    uri type:data (as above)   ");
-		sb.append("\n");
-		sb.append("copy                    uri new_uri                ");
-		sb.append("\n");
-		sb.append("renameNode        re    uri new_name               ");
-		sb.append("\n");
-		sb.append("execute           x     uri data                   ");
-		sb.append("\n");
-		sb.append("isLeafNode        il    uri                 true/false");
-		sb.append("\n");
-		sb.append("setNodeAcl        sa    uri acl_as_string          ");
-		sb.append("\n");
-		sb.append("getNodeAcl        ga    uri                 acl    ");
-		sb.append("\n");
-		sb.append("getEffectiveNodeAcl gea uri                 effective acl");
-		sb.append("\n");
-		sb.append("getMetaNode       gm    uri                 metainfo");
-		sb.append("\n");
-		return new String(sb);
-	}
-	
+        sb.append("type can be 'int', 'chr', 'bool', 'date', 'time', " +
+                  "'float', 'xml', 'bin', 'b64', 'null')\n");
+        return new String(sb);
+    }
+    
 }
