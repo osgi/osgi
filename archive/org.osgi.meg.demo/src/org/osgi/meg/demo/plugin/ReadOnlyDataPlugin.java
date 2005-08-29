@@ -27,6 +27,7 @@
 
 package org.osgi.meg.demo.plugin;
 
+import java.util.Arrays;
 import java.util.Date;
 import java.util.Dictionary;
 import java.util.Hashtable;
@@ -35,88 +36,113 @@ import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.dmt.DmtData;
 import org.osgi.service.dmt.DmtException;
-import org.osgi.service.dmt.DmtMetaNode;
-import org.osgi.service.dmt.DmtReadOnlyDataPlugin;
 import org.osgi.service.dmt.DmtSession;
+import org.osgi.service.dmt.MetaNode;
+import org.osgi.service.dmt.spi.*;
 
 /**
  * Simple read-only data plugin for trial purposes.
  */
-public class ReadOnlyDataPlugin implements DmtReadOnlyDataPlugin, BundleActivator {
-    private static final String PLUGIN_ROOT = "./OSGi/Application/Test";
+public class ReadOnlyDataPlugin implements DataPluginFactory, 
+        ReadableDataSession, BundleActivator {
+    private static final String[] PLUGIN_ROOT_PATH = new String[] {
+        ".", "OSGi", "Application", "Test"
+    };
     private static final String VALUE = "foobar!";
     private ServiceRegistration reg;
 
-    public void open(String subtreeUri, DmtSession session) throws DmtException {}
+    public ReadableDataSession openReadOnlySession(String[] sessionRoot,
+            DmtSession session) {
+        return this;
+    }
+    
+    public ReadWriteDataSession openReadWriteSession(String[] sessionRoot, 
+            DmtSession session) {
+        return null;
+    }
+
+    public TransactionalDataSession openAtomicSession(String[] sessionRoot, 
+            DmtSession session) {
+        return null;
+    }
+    
+    public void nodeChanged(String[] nodePath) {}
 
     public void close() throws DmtException {}
 
-    public boolean isNodeUri(String nodeUri) {
+    public boolean isNodeUri(String[] nodePath) {
         try {
-            checkPath(nodeUri);
+            checkPath(nodePath);
         } catch(Exception e) {
             return false;
         }
         return true;
     }
     
-    public boolean isLeafNode(String nodeUri) throws DmtException {
-        checkPath(nodeUri);
+    public boolean isLeafNode(String[] nodePath) throws DmtException {
+        checkPath(nodePath);
         return true;
     }
 
-    public DmtData getNodeValue(String nodeUri) throws DmtException {
-        checkPath(nodeUri);
+    public DmtData getNodeValue(String[] nodePath) throws DmtException {
+        checkPath(nodePath);
         return new DmtData(VALUE);
     }
 
-    public String getNodeTitle(String nodeUri) throws DmtException {
-        checkPath(nodeUri);
+    public String getNodeTitle(String[] nodePath) throws DmtException {
+        checkPath(nodePath);
         return "The node that contains foobar.";
     }
 
-    public String getNodeType(String nodeUri) throws DmtException {
-        checkPath(nodeUri);
+    public String getNodeType(String[] nodePath) throws DmtException {
+        checkPath(nodePath);
         return "text/plain";
     }
 
-    public int getNodeVersion(String nodeUri) throws DmtException {
-        checkPath(nodeUri);
-        return 0;
+    public int getNodeVersion(String[] nodePath) throws DmtException {
+        checkPath(nodePath);
+        throw new DmtException(nodePath, DmtException.FEATURE_NOT_SUPPORTED, 
+                "Version property not supported.");
     }
 
-    public Date getNodeTimestamp(String nodeUri) throws DmtException {
-        checkPath(nodeUri);
-        return new Date(0);
+    public Date getNodeTimestamp(String[] nodePath) throws DmtException {
+        checkPath(nodePath);
+        throw new DmtException(nodePath, DmtException.FEATURE_NOT_SUPPORTED, 
+                "Timestamp property not supported.");
     }
 
-    public int getNodeSize(String nodeUri) throws DmtException {
-        checkPath(nodeUri);
+    public int getNodeSize(String[] nodePath) throws DmtException {
+        checkPath(nodePath);
         return VALUE.length();
     }
 
-    public String[] getChildNodeNames(String nodeUri) throws DmtException {
+    public String[] getChildNodeNames(String[] nodePath) throws DmtException {
         throw new IllegalStateException("This method should never be called!");
     }
 
-    public DmtMetaNode getMetaNode(String nodeUri) throws DmtException {
-        checkPath(nodeUri);
+    public MetaNode getMetaNode(String[] nodePath) throws DmtException {
+        checkPath(nodePath);
         return null;
     }
 
     public void start(BundleContext context) throws Exception {
         Dictionary properties = new Hashtable();
-        properties.put("dataRootURIs", new String[] {PLUGIN_ROOT});
-        reg = context.registerService(DmtReadOnlyDataPlugin.class.getName(), this, properties);
+        StringBuffer rootUri = new StringBuffer(".");
+        for(int i = 1; i < PLUGIN_ROOT_PATH.length; i++)
+            rootUri.append('/').append(PLUGIN_ROOT_PATH[i]);
+        properties.put("dataRootURIs", new String[] {rootUri.toString()});
+        reg = context.registerService(DataPluginFactory.class.getName(), 
+                this, properties);
     }
 
     public void stop(BundleContext context) throws Exception {
         reg.unregister();
     }
 
-    private void checkPath(String nodeUri) throws DmtException {
-        if(!nodeUri.equals(PLUGIN_ROOT))
-            throw new DmtException(nodeUri, DmtException.NODE_NOT_FOUND, "Invalid node name.");
+    private void checkPath(String[] nodePath) throws DmtException {
+        if(!Arrays.equals(nodePath, PLUGIN_ROOT_PATH))
+            throw new DmtException(nodePath, DmtException.NODE_NOT_FOUND, 
+                    "Invalid node name.");
     }
 
 }

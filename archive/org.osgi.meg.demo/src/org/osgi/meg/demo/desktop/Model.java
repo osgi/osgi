@@ -17,15 +17,31 @@
  */
 package org.osgi.meg.demo.desktop;
 
-import java.io.*;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.net.URL;
-import java.util.*;
-import org.osgi.framework.*;
-import org.osgi.service.application.*;
-import org.osgi.service.dmt.*;
-import org.osgi.service.event.*;
-import org.osgi.service.log.*;
-import org.osgi.util.tracker.*;
+import java.util.Date;
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.Hashtable;
+import java.util.Timer;
+import java.util.TimerTask;
+import org.osgi.framework.Bundle;
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.InvalidSyntaxException;
+import org.osgi.framework.ServiceReference;
+import org.osgi.service.application.ApplicationDescriptor;
+import org.osgi.service.application.ApplicationHandle;
+import org.osgi.service.application.SingletonException;
+import org.osgi.service.dmt.DmtException;
+import org.osgi.service.dmt.spi.ExecPlugin;
+import org.osgi.service.event.Event;
+import org.osgi.service.event.EventHandler;
+import org.osgi.service.log.LogEntry;
+import org.osgi.service.log.LogReaderService;
+import org.osgi.util.tracker.ServiceTracker;
+import org.osgi.util.tracker.ServiceTrackerCustomizer;
 
 /**
  * Model part of the MVC pattern.
@@ -38,7 +54,7 @@ public class Model extends ServiceTracker implements Runnable, EventHandler {
 	private boolean			running;
 	private Hashtable		events	= new Hashtable();
 	// TODO eliminate this
-	private DmtExecPlugin	execPlugin;
+	private ExecPlugin	    execPlugin;
 
 	Model(BundleContext context, Desktop desktop) throws Exception {
 		// track the Application Manager
@@ -97,9 +113,9 @@ public class Model extends ServiceTracker implements Runnable, EventHandler {
 		});
 		trackAppDescr.open();
 		// TODO eliminate this
-		ServiceReference sref = context.getServiceReference(DmtExecPlugin.class
+		ServiceReference sref = context.getServiceReference(ExecPlugin.class
 				.getName());
-		execPlugin = (DmtExecPlugin) context.getService(sref);
+		execPlugin = (ExecPlugin) context.getService(sref);
 		// register ChannelListener
 		Hashtable config = new Hashtable();
 		config.put("topic", "*");

@@ -18,16 +18,12 @@
 package org.osgi.meg.demo.app.dmtclient;
 
 import java.util.Hashtable;
-
 import org.osgi.framework.*;
-
 import org.osgi.service.cm.ManagedService;
 import org.osgi.service.cm.ManagedServiceFactory;
-
-import org.osgi.service.dmt.*;
-
-import org.osgi.service.event.*;
-
+import org.osgi.service.dmt.DmtAdmin;
+import org.osgi.service.event.EventConstants;
+import org.osgi.service.event.EventHandler;
 import org.osgi.service.monitor.MonitorListener;
 import org.osgi.service.monitor.Monitorable;
 
