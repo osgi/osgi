@@ -23,13 +23,13 @@ import org.osgi.framework.BundleContext;
 import org.osgi.framework.BundleException;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.dmt.DmtAdmin;
+import org.osgi.service.dmt.spi.DataPluginFactory;
+import org.osgi.service.dmt.spi.ExecPlugin;
 import org.osgi.service.log.LogReaderService;
 import org.osgi.util.tracker.ServiceTracker;
-//import org.osgi.service.dmt.old.DmtDataPlugin;
-//import org.osgi.service.dmt.spi.ExecPlugin;
 
 public class LogPluginActivator implements BundleActivator {
-	static final String PLUGIN_ROOT = "./OSGi/Log";
+	static final String[] PLUGIN_ROOT_PATH = new String[] { ".", "OSGi", "Log" };
 
     private ServiceRegistration servReg;
 	private ServiceTracker      logReaderTracker;
@@ -37,10 +37,6 @@ public class LogPluginActivator implements BundleActivator {
     private LogPlugin           logPlugin;
 
 	public void start(BundleContext bc) throws BundleException {
-        System.out.println("Log plugin temporarily disabled.");
-        if(true)
-            return;
-
         System.out.println("Log plugin activated.");
 		// setting up the needed trackers
         logReaderTracker = 
@@ -53,18 +49,15 @@ public class LogPluginActivator implements BundleActivator {
 		// creating the service
 		logPlugin = new LogPlugin(bc, logReaderTracker, adminTracker);
 		Hashtable props = new Hashtable();
-		props.put("dataRootURIs", new String[] {PLUGIN_ROOT});
-		props.put("execRootURIs", new String[] {PLUGIN_ROOT});
-		//String[] ifs = new String[] {DmtDataPlugin.class.getName(),
-		//		ExecPlugin.class.getName()};
-		//servReg = bc.registerService(ifs, logPlugin, props);
+        String pluginRoot = Utils.tempAbsolutePathToUri(PLUGIN_ROOT_PATH);
+		props.put("dataRootURIs", new String[] { pluginRoot });
+		props.put("execRootURIs", new String[] { pluginRoot });
+		String[] ifs = new String[] {DataPluginFactory.class.getName(),
+				ExecPlugin.class.getName()};
+		servReg = bc.registerService(ifs, logPlugin, props);
 	}
 
 	public void stop(BundleContext bc) throws BundleException {
-        System.out.println("Log plugin temporarily disabled.");
-        if(true)
-            return;
-
         // closing the used trackers
 		adminTracker.close();
 		logReaderTracker.close();
