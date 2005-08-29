@@ -69,7 +69,7 @@ public class DmtAdminImpl implements DmtAdmin {
     };
     
     private DmtPrincipalPermissionAdmin dmtPermissionAdmin;
-	private DmtPluginDispatcher	dispatcher;
+	private PluginDispatcher	dispatcher;
 	private ServiceTracker eventTracker;
 	private ServiceTracker remoteAdapterTracker;
     
@@ -79,7 +79,7 @@ public class DmtAdminImpl implements DmtAdmin {
     
     // OPTIMIZE maybe make some context object to store these references
 	public DmtAdminImpl(DmtPrincipalPermissionAdmin dmtPermissionAdmin,
-			DmtPluginDispatcher dispatcher, ServiceTracker eventTracker,
+			PluginDispatcher dispatcher, ServiceTracker eventTracker,
 			ServiceTracker remoteAdapterTracker) 
 			throws NoSuchAlgorithmException
 	{
@@ -131,7 +131,7 @@ public class DmtAdminImpl implements DmtAdmin {
         if (lockMode != DmtSession.LOCK_TYPE_SHARED
                 && lockMode != DmtSession.LOCK_TYPE_EXCLUSIVE
                 && lockMode != DmtSession.LOCK_TYPE_ATOMIC)
-            throw new DmtException(null, DmtException.COMMAND_FAILED, 
+            throw new DmtException((String) null, DmtException.COMMAND_FAILED, 
                     "Unknown lockMode '" + lockMode + "' specified.");
     }
     
@@ -148,7 +148,8 @@ public class DmtAdminImpl implements DmtAdmin {
             
             // throw exception if this session cannot run and time runs out
             if(timeLeft <= 0) 
-                throw new DmtException(subtreeUri, DmtException.TIMEOUT,
+                throw new DmtException(subtreeUri, 
+                        DmtException.SESSION_CREATION_TIMEOUT,
                         "Session creation timed out because of concurrent " +
                         "sessions blocking access to Device Management Tree.");
             
@@ -180,7 +181,7 @@ public class DmtAdminImpl implements DmtAdmin {
         notifyAll(); // wake all waiting sessions, and reevaluate conflicts
     }
     
-    public String mangle(String base, String nodeName) {
+    public String mangle(String nodeName) {
         if(nodeName == null)
             throw new NullPointerException(
                     "The 'nodeName' parameter must not be null.");
@@ -189,32 +190,20 @@ public class DmtAdminImpl implements DmtAdmin {
             throw new IllegalArgumentException(
                     "The 'nodeName' parameter must not be empty.");        
 
-		StringBuffer nameBuffer;
-        if(segmentLengthLimit > 0 && nodeName.length() > segmentLengthLimit) {
+        if(segmentLengthLimit > 0 && nodeName.length() > segmentLengthLimit)
             // create node name hash
-			nameBuffer = getHash(nodeName);
-        } else {
-			// escape any '/' and '\' characters in the node name
-			nameBuffer = new StringBuffer(nodeName);
-			int i = 0;
-			while(i < nameBuffer.length()) {
-				if(nameBuffer.charAt(i) == '\\' || nameBuffer.charAt(i) == '/')
-					nameBuffer.insert(i++, '\\');
-				i++;
-			}
-        }
-        
-        if(base != null) {
-            if(base.length() == 0 || base.charAt(base.length()-1) != '/')
-				nameBuffer.insert(0, '/');
-            
-			nameBuffer.insert(0, base);
-        }
+			return getHash(nodeName);
+
+		// escape any '/' and '\' characters in the node name
+		StringBuffer nameBuffer = new StringBuffer(nodeName);
+		for(int i = 0; i < nameBuffer.length(); i++) // 'i' can increase in loop
+		    if(nameBuffer.charAt(i) == '\\' || nameBuffer.charAt(i) == '/')
+		        nameBuffer.insert(i++, '\\');
         
         return nameBuffer.toString();
     }
     
-	private StringBuffer getHash(String from) {
+	private String getHash(String from) {
 		byte[] byteStream;
 		try {
 			byteStream = from.getBytes("UTF-8");
@@ -244,21 +233,21 @@ public class DmtAdminImpl implements DmtAdmin {
 		sb.append(base64table[(d0<<4|d1>>4)&63]);
 		sb.append(base64table[(d1<<2)&63]);
 		
-		return sb;
+		return sb.toString();
 	}
 
     public void sendAlert(String principal, int code, String correlator,
-            DmtAlertItem[] items) throws DmtException {
+            AlertItem[] items) throws DmtException {
         RemoteAlertSender alertSender = getAlertSender(principal);
         if (alertSender == null) {
             if (principal == null)
-                throw new DmtException(null, DmtException.ALERT_NOT_ROUTED,
-                        "Remote adapter not found or is not "
-                                + "unique, cannot route alert without "
-                                + "principal name.");
-            throw new DmtException(null, DmtException.ALERT_NOT_ROUTED,
-                    "Cannot find remote adapter that can send "
-                            + "the alert to server '" + principal + "'.");
+                throw new DmtException((String) null,
+                        DmtException.ALERT_NOT_ROUTED,
+                        "Remote adapter not found or is not unique, cannot " +
+                        "route alert without principal name.");
+            throw new DmtException((String) null, DmtException.ALERT_NOT_ROUTED,
+                    "Cannot find remote adapter that can send the alert to " +
+                    "server '" + principal + "'.");
         }
         
         try {
@@ -268,8 +257,8 @@ public class DmtAdminImpl implements DmtAdmin {
             String message = "Error sending remote alert";
             if (principal != null)
                 message = message + " to server '" + principal + "'";
-            throw new DmtException(null, DmtException.REMOTE_ERROR, message
-                    + ".", e);
+            throw new DmtException((String) null, DmtException.REMOTE_ERROR, 
+                    message + ".", e);
         }
     }
     

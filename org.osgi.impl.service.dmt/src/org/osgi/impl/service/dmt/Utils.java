@@ -134,8 +134,8 @@ class Utils {
     }
 
     /**
-     * Checks the URI and returns the canonical form, assuming that it is an
-     * absolute URI.
+     * Checks the URI (specified with or without the leading dot) and returns 
+     * its canonical form.
      * <p>
      * This method ensures that the URI is valid (see conditions in 
      * {@link #validateAndNormalizeUri}).
@@ -214,6 +214,8 @@ class Utils {
 	}
 
     // precondition: URI is validated and normalized
+    // postcondition: array always contains at least one element 
+    //                (possibly an empty string) 
     static String[] splitUri(String uri) {
         List segments = new ArrayList();
         StringBuffer segment = new StringBuffer();
@@ -236,6 +238,27 @@ class Utils {
         segments.add(segment.toString());
     
         return (String[]) segments.toArray(new String[] {});
+    }
+    
+    static String[] tempAbsoluteUriToPath(String uri) {
+        String[] path = splitUri(uri);
+
+        if(!".".equals(path[0]))
+            throw new IllegalStateException("Internal error, invalid " +
+                    "absolute URI: " + uri);
+        
+        return path;
+    }
+    
+    static boolean tempIsAncestorPath(String[] ancestor, String[] node) {
+        if(node.length < ancestor.length)
+            return false;
+        
+        for(int i = 0; i < ancestor.length; i++)
+            if(!ancestor[i].equals(node[i]))
+                return false;
+        
+        return true;
     }
     
     // convenience method

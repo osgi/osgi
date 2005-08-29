@@ -18,22 +18,26 @@
 package org.osgi.impl.service.dmt;
 
 import java.util.*;
-import org.osgi.framework.*;
-import org.osgi.service.dmt.*;
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.ServiceReference;
+import org.osgi.service.dmt.DmtException;
+import org.osgi.service.dmt.spi.DataPluginFactory;
+import org.osgi.service.dmt.spi.ExecPlugin;
 import org.osgi.util.tracker.ServiceTrackerCustomizer;
 
 // TODO replace System.out-s with log messages
-public class DmtPluginDispatcher implements ServiceTrackerCustomizer {
+public class PluginDispatcher implements ServiceTrackerCustomizer {
     private BundleContext  bc;
     private ArrayList      plugins;
-    private Plugin         rootPlugin;
+    private PluginRegistration         rootPlugin;
 
-    DmtPluginDispatcher(BundleContext bc) {
+    PluginDispatcher(BundleContext bc) {
         this.bc = bc;
         plugins = new ArrayList();
         // root plugin could be a normal plugin when overlapping is allowed
-        DmtReadOnlyDataPlugin root = new RootPlugin(this); 
-        rootPlugin = new Plugin(root, new String[] { "." }, new String[] {});
+        DataPluginFactory root = new RootPlugin(this); 
+        rootPlugin = 
+            new PluginRegistration(root, new String[] { "." }, new String[] {});
     }
 
     public synchronized Object addingService(ServiceReference serviceRef) {
@@ -47,6 +51,7 @@ public class DmtPluginDispatcher implements ServiceTrackerCustomizer {
             return null;
         }
 
+        // TODO also check 'roots' and 'execs' for conflicts within the arrays
         if (pluginConflict(roots, execs, plugins)) {
             System.out.println("Plugin data or exec roots (" +
                     Arrays.asList(roots) + ", " + Arrays.asList(execs) +
@@ -63,7 +68,8 @@ public class DmtPluginDispatcher implements ServiceTrackerCustomizer {
             return null;
         }
 
-        Plugin plugin = new Plugin(bc.getService(serviceRef), roots, execs);
+        PluginRegistration plugin = 
+            new PluginRegistration(bc.getService(serviceRef), roots, execs);
         plugins.add(plugin);
         
         return plugin;
@@ -80,20 +86,20 @@ public class DmtPluginDispatcher implements ServiceTrackerCustomizer {
         bc.ungetService(serviceRef);
     }
 
-    synchronized Plugin getDataPlugin(String nodeUri) {
+    synchronized PluginRegistration getDataPlugin(String nodeUri) {
         Iterator i = plugins.iterator();
         while (i.hasNext()) {
-            Plugin plugin = (Plugin) i.next();
+            PluginRegistration plugin = (PluginRegistration) i.next();
             if (plugin.handlesData(nodeUri))
                 return plugin;
         }
         return rootPlugin;
     }
 
-    synchronized DmtExecPlugin getExecPlugin(String nodeUri) {
+    synchronized ExecPlugin getExecPlugin(String nodeUri) {
         Iterator i = plugins.iterator();
         while (i.hasNext()) {
-            Plugin plugin = (Plugin) i.next();
+            PluginRegistration plugin = (PluginRegistration) i.next();
             if (plugin.handlesExec(nodeUri))
                 return plugin.getExecPlugin();
         }
@@ -103,7 +109,7 @@ public class DmtPluginDispatcher implements ServiceTrackerCustomizer {
     synchronized boolean handledBySameDataPlugin(String nodeUri1, String nodeUri2) {
         Iterator i = plugins.iterator();
         while (i.hasNext()) {
-            Plugin plugin = (Plugin) i.next();
+            PluginRegistration plugin = (PluginRegistration) i.next();
             if (plugin.handlesData(nodeUri1))
                 return plugin.handlesData(nodeUri2);
             if (plugin.handlesData(nodeUri2))
@@ -114,12 +120,17 @@ public class DmtPluginDispatcher implements ServiceTrackerCustomizer {
 
     // finds all plugin root URIs that are directly below the given uri, and
     // returns the set of their last segments
-    synchronized Set getChildPluginNames(String uri) {
+    synchronized Set getChildPluginNames(String[] path) {
+        StringBuffer sb = new StringBuffer(path[0]);
+        for(int i = 1; i < path.length; i++)
+            sb.append('/').append(path[i]);
+        
         Set childPluginNames = new HashSet();
         
         Iterator i = plugins.iterator();
         while(i.hasNext())
-            childPluginNames.addAll(((Plugin) i.next()).getChildRootNames(uri));
+            childPluginNames.addAll(((PluginRegistration) i.next())
+                    .getChildRootNames(sb.toString()));
 
         return childPluginNames;
     }
@@ -143,7 +154,7 @@ public class DmtPluginDispatcher implements ServiceTrackerCustomizer {
         
         for (int i = 0; i < uris.length; i++) {
             try {
-                uris[i] = Utils.validateAndNormalizeAbsoluteUri(uris[i]);
+                uris[i] = Utils.validateAndNormalizeUri(uris[i]);
             } catch(DmtException e) {
                 System.out.println("Invalid URI '" + uris[i] + "' in property '" 
                         + propertyName + "', ignoring plugin.");
@@ -163,19 +174,17 @@ public class DmtPluginDispatcher implements ServiceTrackerCustomizer {
                                           ArrayList plugins) {
         Iterator i = plugins.iterator();
         while (i.hasNext())
-            if(((Plugin) i.next()).conflictsWith(roots, execs))
+            if(((PluginRegistration) i.next()).conflictsWith(roots, execs))
                 return true;
         return false;
     }
 
     private List getInvalidRoots(String[] roots) {
-        DmtReadOnlyDataPlugin root = rootPlugin.getReadOnlyDataPlugin();
         List list = new Vector();
         for (int i = 0; i < roots.length; i++) {
             // roots must not contain "." for the parent to be valid, this is
             // guaranteed by the conflict check (the root plugin provides ".")
-            if(!root.isNodeUri(roots[i]) && 
-                    !root.isNodeUri(Utils.parentUri(roots[i])))
+            if(!RootPlugin.isValidDataPluginRoot(Utils.tempAbsoluteUriToPath(roots[i])))
                 list.add(roots[i]);
         }
         

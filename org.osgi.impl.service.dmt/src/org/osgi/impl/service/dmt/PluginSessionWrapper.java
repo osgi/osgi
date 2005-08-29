@@ -18,19 +18,17 @@
 
 package org.osgi.impl.service.dmt;
 
-import java.security.AccessControlContext;
-import java.security.AccessController;
-import java.security.PrivilegedActionException;
-import java.security.PrivilegedAction;
-import java.security.PrivilegedExceptionAction;
+import java.security.*;
 import java.util.Date;
 import org.osgi.service.dmt.DmtData;
-import org.osgi.service.dmt.DmtDataPlugin;
 import org.osgi.service.dmt.DmtException;
-import org.osgi.service.dmt.DmtMetaNode;
-import org.osgi.service.dmt.DmtReadOnly;
-import org.osgi.service.dmt.DmtReadOnlyDataPlugin;
 import org.osgi.service.dmt.DmtSession;
+import org.osgi.service.dmt.MetaNode;
+import org.osgi.service.dmt.spi.ReadWriteDataSession;
+import org.osgi.service.dmt.spi.ReadableDataSession;
+import org.osgi.service.dmt.spi.TransactionalDataSession;
+
+// TODO update class javadoc
 
 /**
  * Wrapper class around data plugins, for reducing the privileges of remote
@@ -45,52 +43,46 @@ import org.osgi.service.dmt.DmtSession;
 
 // TODO find a way to make "privileged" calls with no security check
 // (for getMetaNodeNoCheck, isLeafNoCheck, and cardinality checks with getChildNodeNames)
-public class PluginWrapper implements DmtDataPlugin, DmtReadOnlyDataPlugin {
-    private DmtDataPlugin dataPlugin;
-    private DmtReadOnlyDataPlugin readOnlyDataPlugin;
-
-    // always equal to one of the above members, used for type-safety 
-    private DmtReadOnly dmtReadOnly;
+public class PluginSessionWrapper implements TransactionalDataSession {
+    private ReadableDataSession      readableDataSession      = null;
+    private ReadWriteDataSession     readWriteDataSession     = null;
+    private TransactionalDataSession transactionalDataSession = null;
     
-    // stores the roots of the subtrees handled by the plugins
-    private String[] dataRoots;
-    
-    private int lockMode;
     private AccessControlContext securityContext;
     
-    public PluginWrapper(Plugin plugin, int lockMode,
-                         AccessControlContext securityContext) {
+    // the root node of the session, either one of the plugin roots or a subnode
+    private String[] sessionRoot;
+    
+    // redundant information, could be calculated from session variables
+    private int sessionType;
+    
+    // Note, that the session type reflects the kind of 
+    public PluginSessionWrapper(ReadableDataSession session, int sessionType,
+            String[] sessionRoot, AccessControlContext securityContext) {
+        readableDataSession = session;
+        if(sessionType != DmtSession.LOCK_TYPE_SHARED) {
+            readWriteDataSession = (ReadWriteDataSession) session;
+            if(sessionType != DmtSession.LOCK_TYPE_EXCLUSIVE)
+                transactionalDataSession = (TransactionalDataSession) session;
+        }
         
-        if(plugin.isReadOnlyDataPlugin()) {
-            dataPlugin = null;
-            readOnlyDataPlugin = plugin.getReadOnlyDataPlugin();
-            dmtReadOnly = readOnlyDataPlugin;
-        } else if(plugin.isWritableDataPlugin()) {
-            dataPlugin = plugin.getWritableDataPlugin();
-            readOnlyDataPlugin = null;
-            dmtReadOnly = dataPlugin;
-        } else // never happens
-            throw new IllegalArgumentException("'plugin' parameter does not " +
-                    "contain a 'DmtDataPlugin' or 'DmtReadOnlyDataPlugin'.");
-        
-        this.lockMode = lockMode;
-        this.securityContext = securityContext;
-        
-        dataRoots = plugin.getDataRoots();
+        this.sessionType = sessionType;
+        this.sessionRoot = sessionRoot;
     }
     
-    String[] getDataRoots() {
-        return dataRoots;
+    int getSessionType() {
+        return sessionType;
     }
     
-    public void nodeChanged(String nodeUri) throws DmtException {
+    String[] getSessionRoot() {
+        return sessionRoot;
+    } 
+    
+    public void nodeChanged(String[] nodePath) throws DmtException {
         // no need to override the permissions of the plugin here,
         // only internal data structures have to be modified
         
-        if(dataPlugin != null)
-            dataPlugin.nodeChanged(nodeUri);
-        else
-            readOnlyDataPlugin.nodeChanged(nodeUri);
+        readableDataSession.nodeChanged(nodePath);
     }
     
     /*
@@ -98,6 +90,7 @@ public class PluginWrapper implements DmtDataPlugin, DmtReadOnlyDataPlugin {
      * DmtReadOnlyDataPlugin.open methods: if this class wraps a read-only
      * plugin, this call is redirected to the read-only version of open.
      */
+    /*
     public void open(final String uri, final int lockMode, final DmtSession session)
             throws DmtException {
         if(dataPlugin == null) { // redirect to open/2 for read-only plugins
@@ -153,26 +146,26 @@ public class PluginWrapper implements DmtDataPlugin, DmtReadOnlyDataPlugin {
             throw (DmtException) e.getException();
         }
     }
+    */
 
     /*
-     * NOTE: 
-     * - if this class wraps a read-only plugin, this call is ignored
-     * - if the (writable) plugin does not support transactions, commit is not called
+     * NOTE: if this class wraps a plugin without transactional write support,
+     * this call is ignored
      */
     public void commit() throws DmtException {
-        if(dataPlugin == null) // ignore commit for read-only plugins
+        // ignore commit for non-transactional plugins
+        if(transactionalDataSession == null)
             return;
         
         if (securityContext == null) {                      // local caller
-            commitIfTransactional();
+            transactionalDataSession.commit();
             return;
         }
-
         
         try {                                               // remote caller
             AccessController.doPrivileged(new PrivilegedExceptionAction() {
                 public Object run() throws DmtException {
-                    commitIfTransactional();
+                    transactionalDataSession.commit();
                     return null;
                 }
             }, securityContext);
@@ -181,22 +174,17 @@ public class PluginWrapper implements DmtDataPlugin, DmtReadOnlyDataPlugin {
         }
     }
 
-    private void commitIfTransactional() throws DmtException {
-        if(dataPlugin.supportsAtomic())
-            dataPlugin.commit();
-    }
-    
     /*
-     * NOTE: 
-     * - if this class wraps a read-only plugin, this call is ignored
-     * - if the (writable) plugin does not support transactions, rollback is not called
+     * NOTE: if this class wraps a plugin without transactional write support,
+     * this call is ignored
      */
     public void rollback() throws DmtException {
-        if(dataPlugin == null) // ignore rollback for read-only plugins
+        // ignore rollback for non-transactional plugins
+        if(transactionalDataSession == null)
             return;
         
         if (securityContext == null) {                      // local caller
-            rollbackIfTransactional();
+            transactionalDataSession.rollback();
             return;
         }
         
@@ -204,7 +192,7 @@ public class PluginWrapper implements DmtDataPlugin, DmtReadOnlyDataPlugin {
         try {                                               // remote caller
             AccessController.doPrivileged(new PrivilegedExceptionAction() {
                 public Object run() throws DmtException {
-                    rollbackIfTransactional();
+                    transactionalDataSession.rollback();
                     return null;
                 }
             }, securityContext);
@@ -213,16 +201,10 @@ public class PluginWrapper implements DmtDataPlugin, DmtReadOnlyDataPlugin {
         }
     }
     
-    private void rollbackIfTransactional() throws DmtException {
-        if(dataPlugin.supportsAtomic())
-            dataPlugin.rollback();
-    }
-
-    public void setNodeTitle(final String uri, final String title)
+    public void setNodeTitle(final String[] path, final String title)
             throws DmtException {
         if (securityContext == null) {                      // local caller
-            checkTransactionSupport(uri);
-            dataPlugin.setNodeTitle(uri, title);
+            readWriteDataSession.setNodeTitle(path, title);
             return;
         }
         
@@ -230,8 +212,7 @@ public class PluginWrapper implements DmtDataPlugin, DmtReadOnlyDataPlugin {
         try {                                               // remote caller
             AccessController.doPrivileged(new PrivilegedExceptionAction() {
                 public Object run() throws DmtException {
-                    checkTransactionSupport(uri);
-                    dataPlugin.setNodeTitle(uri, title);
+                    readWriteDataSession.setNodeTitle(path, title);
                     return null;
                 }
             }, securityContext);
@@ -240,11 +221,10 @@ public class PluginWrapper implements DmtDataPlugin, DmtReadOnlyDataPlugin {
         }
     }
     
-    public void setNodeValue(final String uri, final DmtData data)
+    public void setNodeValue(final String[] path, final DmtData data)
             throws DmtException {
         if (securityContext == null) {                      // local caller
-            checkTransactionSupport(uri);
-            dataPlugin.setNodeValue(uri, data);
+            readWriteDataSession.setNodeValue(path, data);
             return;
         }
         
@@ -252,8 +232,7 @@ public class PluginWrapper implements DmtDataPlugin, DmtReadOnlyDataPlugin {
         try {                                               // remote caller
             AccessController.doPrivileged(new PrivilegedExceptionAction() {
                 public Object run() throws DmtException {
-                    checkTransactionSupport(uri);
-                    dataPlugin.setNodeValue(uri, data);
+                    readWriteDataSession.setNodeValue(path, data);
                     return null;
                 }
             }, securityContext);
@@ -262,19 +241,18 @@ public class PluginWrapper implements DmtDataPlugin, DmtReadOnlyDataPlugin {
         }
     }
 
-    public void setDefaultNodeValue(final String uri)
+    public void setNodeType(final String[] path, final String type)
             throws DmtException {
         if (securityContext == null) {                      // local caller
-            checkTransactionSupport(uri);
-            dataPlugin.setDefaultNodeValue(uri);
+            readWriteDataSession.setNodeType(path, type);
             return;
         }
         
+
         try {                                               // remote caller
             AccessController.doPrivileged(new PrivilegedExceptionAction() {
                 public Object run() throws DmtException {
-                    checkTransactionSupport(uri);
-                    dataPlugin.setDefaultNodeValue(uri);
+                    readWriteDataSession.setNodeType(path, type);
                     return null;
                 }
             }, securityContext);
@@ -283,11 +261,29 @@ public class PluginWrapper implements DmtDataPlugin, DmtReadOnlyDataPlugin {
         }
     }
 
-    public void setNodeType(final String uri, final String type)
+    public void deleteNode(final String[] path) throws DmtException {
+        if (securityContext == null) {                      // local caller
+            readWriteDataSession.deleteNode(path);
+            return;
+        }
+        
+
+        try {                                               // remote caller
+            AccessController.doPrivileged(new PrivilegedExceptionAction() {
+                public Object run() throws DmtException {
+                    readWriteDataSession.deleteNode(path);
+                    return null;
+                }
+            }, securityContext);
+        } catch (PrivilegedActionException e) {
+            throw (DmtException) e.getException();
+        }
+    }
+
+    public void createInteriorNode(final String[] path, final String type)
             throws DmtException {
         if (securityContext == null) {                      // local caller
-            checkTransactionSupport(uri);
-            dataPlugin.setNodeType(uri, type);
+            readWriteDataSession.createInteriorNode(path, type);
             return;
         }
         
@@ -295,8 +291,7 @@ public class PluginWrapper implements DmtDataPlugin, DmtReadOnlyDataPlugin {
         try {                                               // remote caller
             AccessController.doPrivileged(new PrivilegedExceptionAction() {
                 public Object run() throws DmtException {
-                    checkTransactionSupport(uri);
-                    dataPlugin.setNodeType(uri, type);
+                    readWriteDataSession.createInteriorNode(path, type);
                     return null;
                 }
             }, securityContext);
@@ -305,126 +300,17 @@ public class PluginWrapper implements DmtDataPlugin, DmtReadOnlyDataPlugin {
         }
     }
 
-    public void deleteNode(final String uri) throws DmtException {
-        if (securityContext == null) {                      // local caller
-            checkTransactionSupport(uri);
-            dataPlugin.deleteNode(uri);
-            return;
-        }
-        
-
-        try {                                               // remote caller
-            AccessController.doPrivileged(new PrivilegedExceptionAction() {
-                public Object run() throws DmtException {
-                    checkTransactionSupport(uri);
-                    dataPlugin.deleteNode(uri);
-                    return null;
-                }
-            }, securityContext);
-        } catch (PrivilegedActionException e) {
-            throw (DmtException) e.getException();
-        }
-    }
-
-    public void createInteriorNode(final String uri) throws DmtException {
-        if (securityContext == null) {                      // local caller
-            checkTransactionSupport(uri);
-            dataPlugin.createInteriorNode(uri);
-            return;
-        }
-        
-
-        try {                                               // remote caller
-            AccessController.doPrivileged(new PrivilegedExceptionAction() {
-                public Object run() throws DmtException {
-                    checkTransactionSupport(uri);
-                    dataPlugin.createInteriorNode(uri);
-                    return null;
-                }
-            }, securityContext);
-        } catch (PrivilegedActionException e) {
-            throw (DmtException) e.getException();
-        }
-    }
-
-    public void createInteriorNode(final String uri, final String type)
-            throws DmtException {
-        if (securityContext == null) {                      // local caller
-            checkTransactionSupport(uri);
-            dataPlugin.createInteriorNode(uri, type);
-            return;
-        }
-        
-
-        try {                                               // remote caller
-            AccessController.doPrivileged(new PrivilegedExceptionAction() {
-                public Object run() throws DmtException {
-                    checkTransactionSupport(uri);
-                    dataPlugin.createInteriorNode(uri, type);
-                    return null;
-                }
-            }, securityContext);
-        } catch (PrivilegedActionException e) {
-            throw (DmtException) e.getException();
-        }
-    }
-
-    public void createLeafNode(final String uri) throws DmtException {
-        if (securityContext == null) {                      // local caller
-            checkTransactionSupport(uri);
-            dataPlugin.createLeafNode(uri);
-            return;
-        }
-        
-
-        try {                                               // remote caller
-            AccessController.doPrivileged(new PrivilegedExceptionAction() {
-                public Object run() throws DmtException {
-                    checkTransactionSupport(uri);
-                    dataPlugin.createLeafNode(uri);
-                    return null;
-                }
-            }, securityContext);
-        } catch (PrivilegedActionException e) {
-            throw (DmtException) e.getException();
-        }
-    }
-    
-    public void createLeafNode(final String uri, final DmtData value)
-            throws DmtException {
-        if (securityContext == null) {                      // local caller
-            checkTransactionSupport(uri);
-            dataPlugin.createLeafNode(uri, value);
-            return;
-        }
-        
-
-        try {                                               // remote caller
-            AccessController.doPrivileged(new PrivilegedExceptionAction() {
-                public Object run() throws DmtException {
-                    checkTransactionSupport(uri);
-                    dataPlugin.createLeafNode(uri, value);
-                    return null;
-                }
-            }, securityContext);
-        } catch (PrivilegedActionException e) {
-            throw (DmtException) e.getException();
-        }
-    }
-    
-    public void createLeafNode(final String uri, final DmtData value, 
+    public void createLeafNode(final String[] path, final DmtData value, 
             final String mimeType) throws DmtException {
         if (securityContext == null) {                      // local caller
-            checkTransactionSupport(uri);
-            dataPlugin.createLeafNode(uri, value, mimeType);
+            readWriteDataSession.createLeafNode(path, value, mimeType);
             return;
         }
         
         try {                                               // remote caller
             AccessController.doPrivileged(new PrivilegedExceptionAction() {
                 public Object run() throws DmtException {
-                    checkTransactionSupport(uri);
-                    dataPlugin.createLeafNode(uri, value, mimeType);
+                    readWriteDataSession.createLeafNode(path, value, mimeType);
                     return null;
                 }
             }, securityContext);
@@ -433,11 +319,10 @@ public class PluginWrapper implements DmtDataPlugin, DmtReadOnlyDataPlugin {
         }
     }
     
-    public void copy(final String uri, final String newUri,
+    public void copy(final String[] path, final String[] newPath,
             final boolean recursive) throws DmtException {
         if (securityContext == null) {                      // local caller
-            checkTransactionSupport(uri);
-            dataPlugin.copy(uri, newUri, recursive);
+            readWriteDataSession.copy(path, newPath, recursive);
             return;
         }
         
@@ -445,8 +330,7 @@ public class PluginWrapper implements DmtDataPlugin, DmtReadOnlyDataPlugin {
         try {                                               // remote caller
             AccessController.doPrivileged(new PrivilegedExceptionAction() {
                 public Object run() throws DmtException {
-                    checkTransactionSupport(uri);
-                    dataPlugin.copy(uri, newUri, recursive);
+                    readWriteDataSession.copy(path, newPath, recursive);
                     return null;
                 }
             }, securityContext);
@@ -455,11 +339,10 @@ public class PluginWrapper implements DmtDataPlugin, DmtReadOnlyDataPlugin {
         }
     }
 
-    public void renameNode(final String uri, final String newName)
+    public void renameNode(final String[] path, final String newName)
             throws DmtException {
         if (securityContext == null) {                      // local caller
-            checkTransactionSupport(uri);
-            dataPlugin.renameNode(uri, newName);
+            readWriteDataSession.renameNode(path, newName);
             return;
         }
         
@@ -467,8 +350,7 @@ public class PluginWrapper implements DmtDataPlugin, DmtReadOnlyDataPlugin {
         try {                                               // remote caller
             AccessController.doPrivileged(new PrivilegedExceptionAction() {
                 public Object run() throws DmtException {
-                    checkTransactionSupport(uri);
-                    dataPlugin.renameNode(uri, newName);
+                    readWriteDataSession.renameNode(path, newName);
                     return null;
                 }
             }, securityContext);
@@ -479,7 +361,7 @@ public class PluginWrapper implements DmtDataPlugin, DmtReadOnlyDataPlugin {
 
     public void close() throws DmtException {
         if (securityContext == null) {                      // local caller
-            dmtReadOnly.close();
+            readableDataSession.close();
             return;
         }
         
@@ -487,7 +369,7 @@ public class PluginWrapper implements DmtDataPlugin, DmtReadOnlyDataPlugin {
         try {                                               // remote caller
             AccessController.doPrivileged(new PrivilegedExceptionAction() {
                 public Object run() throws DmtException {
-                    dmtReadOnly.close();
+                    readableDataSession.close();
                     return null;
                 }
             }, securityContext);
@@ -496,29 +378,30 @@ public class PluginWrapper implements DmtDataPlugin, DmtReadOnlyDataPlugin {
         }
     }
 
-    public boolean isNodeUri(final String uri) {
+    public boolean isNodeUri(final String[] path) {
         if (securityContext == null)                        // local caller
-            return dmtReadOnly.isNodeUri(uri);
+            return readableDataSession.isNodeUri(path);
         
                                                             // remote caller
         Boolean ret = (Boolean) AccessController.doPrivileged(
                 new PrivilegedAction() {
                     public Object run() {
-                        return new Boolean(dmtReadOnly.isNodeUri(uri));
+                        return new Boolean(readableDataSession.isNodeUri(path));
                     }
                 }, securityContext);
         return ret.booleanValue();
     }
 
-    public boolean isLeafNode(final String uri) throws DmtException {
+    public boolean isLeafNode(final String[] path) throws DmtException {
         if (securityContext == null)                        // local caller
-            return dmtReadOnly.isLeafNode(uri);
+            return readableDataSession.isLeafNode(path);
         
         try {                                               // remote caller
             Boolean isLeaf = (Boolean) AccessController.doPrivileged(
                     new PrivilegedExceptionAction() {
                         public Object run() throws DmtException {
-                            return new Boolean(dmtReadOnly.isLeafNode(uri));
+                            return new Boolean(
+                                    readableDataSession.isLeafNode(path));
                         }
                     }, securityContext);
             return isLeaf.booleanValue();
@@ -527,16 +410,16 @@ public class PluginWrapper implements DmtDataPlugin, DmtReadOnlyDataPlugin {
         }
     }
     
-    public DmtData getNodeValue(final String uri) throws DmtException {
+    public DmtData getNodeValue(final String[] path) throws DmtException {
         if (securityContext == null)                        // local caller
-            return dmtReadOnly.getNodeValue(uri);
+            return readableDataSession.getNodeValue(path);
         
 
         try {                                               // remote caller
             return (DmtData) AccessController.doPrivileged(
                     new PrivilegedExceptionAction() {
                         public Object run() throws DmtException {
-                            return dmtReadOnly.getNodeValue(uri);
+                            return readableDataSession.getNodeValue(path);
                         }
                     }, securityContext);
         } catch (PrivilegedActionException e) {
@@ -544,16 +427,16 @@ public class PluginWrapper implements DmtDataPlugin, DmtReadOnlyDataPlugin {
         }
     }
 
-    public String getNodeTitle(final String uri) throws DmtException {
+    public String getNodeTitle(final String[] path) throws DmtException {
         if (securityContext == null)                        // local caller
-            return dmtReadOnly.getNodeTitle(uri);
+            return readableDataSession.getNodeTitle(path);
         
 
         try {                                               // remote caller
             return (String) AccessController.doPrivileged(
                     new PrivilegedExceptionAction() {
                         public Object run() throws DmtException {
-                            return dmtReadOnly.getNodeTitle(uri);
+                            return readableDataSession.getNodeTitle(path);
                         }
                     }, securityContext);
         } catch (PrivilegedActionException e) {
@@ -561,16 +444,16 @@ public class PluginWrapper implements DmtDataPlugin, DmtReadOnlyDataPlugin {
         }
     }
 
-    public String getNodeType(final String uri) throws DmtException {
+    public String getNodeType(final String[] path) throws DmtException {
         if (securityContext == null)                        // local caller
-            return dmtReadOnly.getNodeType(uri);
+            return readableDataSession.getNodeType(path);
         
 
         try {                                               // remote caller
             return (String) AccessController.doPrivileged(
                     new PrivilegedExceptionAction() {
                         public Object run() throws DmtException {
-                            return dmtReadOnly.getNodeType(uri);
+                            return readableDataSession.getNodeType(path);
                         }
                     }, securityContext);
         } catch (PrivilegedActionException e) {
@@ -578,16 +461,16 @@ public class PluginWrapper implements DmtDataPlugin, DmtReadOnlyDataPlugin {
         }
     }
 
-    public int getNodeVersion(final String uri) throws DmtException {
+    public int getNodeVersion(final String[] path) throws DmtException {
         if (securityContext == null)                        // local caller
-            return dmtReadOnly.getNodeVersion(uri);
+            return readableDataSession.getNodeVersion(path);
         
 
         try {                                               // remote caller
             Integer ret = (Integer) AccessController.doPrivileged(
                     new PrivilegedExceptionAction() {
                         public Object run() throws DmtException {
-                            return new Integer(dmtReadOnly.getNodeVersion(uri));
+                            return new Integer(readableDataSession.getNodeVersion(path));
                         }
                     }, securityContext);
             return ret.intValue();
@@ -596,16 +479,16 @@ public class PluginWrapper implements DmtDataPlugin, DmtReadOnlyDataPlugin {
         }
     }
 
-    public Date getNodeTimestamp(final String uri) throws DmtException {
+    public Date getNodeTimestamp(final String[] path) throws DmtException {
         if (securityContext == null)                        // local caller
-            return dmtReadOnly.getNodeTimestamp(uri);
+            return readableDataSession.getNodeTimestamp(path);
         
 
         try {                                               // remote caller
             return (Date) AccessController.doPrivileged(
                     new PrivilegedExceptionAction() {
                         public Object run() throws DmtException {
-                            return dmtReadOnly.getNodeTimestamp(uri);
+                            return readableDataSession.getNodeTimestamp(path);
                         }
                     }, securityContext);
         } catch (PrivilegedActionException e) {
@@ -613,16 +496,17 @@ public class PluginWrapper implements DmtDataPlugin, DmtReadOnlyDataPlugin {
         }
     }
 
-    public int getNodeSize(final String uri) throws DmtException {
+    public int getNodeSize(final String[] path) throws DmtException {
         if (securityContext == null)                        // local caller
-            return dmtReadOnly.getNodeSize(uri);
+            return readableDataSession.getNodeSize(path);
         
 
         try {                                               // remote caller
             Integer ret = (Integer) AccessController.doPrivileged(
                     new PrivilegedExceptionAction() {
                         public Object run() throws DmtException {
-                            return new Integer(dmtReadOnly.getNodeSize(uri));
+                            return new Integer(
+                                    readableDataSession.getNodeSize(path));
                         }
                     }, securityContext);
             return ret.intValue();
@@ -631,16 +515,16 @@ public class PluginWrapper implements DmtDataPlugin, DmtReadOnlyDataPlugin {
         }
     }
 
-    public String[] getChildNodeNames(final String uri) throws DmtException {
+    public String[] getChildNodeNames(final String[] path) throws DmtException {
         if (securityContext == null)                        // local caller
-            return dmtReadOnly.getChildNodeNames(uri);
+            return readableDataSession.getChildNodeNames(path);
         
 
         try {                                               // remote caller
             return (String[]) AccessController.doPrivileged(
                     new PrivilegedExceptionAction() {
                         public Object run() throws DmtException {
-                            return dmtReadOnly.getChildNodeNames(uri);
+                            return readableDataSession.getChildNodeNames(path);
                         }
                     }, securityContext);
         } catch (PrivilegedActionException e) {
@@ -648,16 +532,16 @@ public class PluginWrapper implements DmtDataPlugin, DmtReadOnlyDataPlugin {
         }
     }
 
-    public DmtMetaNode getMetaNode(final String uri) throws DmtException {
+    public MetaNode getMetaNode(final String[] path) throws DmtException {
         if (securityContext == null)                        // local caller
-            return dmtReadOnly.getMetaNode(uri);
+            return readableDataSession.getMetaNode(path);
         
 
         try {                                               // remote caller
-            return (DmtMetaNode) AccessController.doPrivileged(
+            return (MetaNode) AccessController.doPrivileged(
                     new PrivilegedExceptionAction() {
                         public Object run() throws DmtException {
-                            return dmtReadOnly.getMetaNode(uri);
+                            return readableDataSession.getMetaNode(path);
                         }
                     }, securityContext);
         } catch (PrivilegedActionException e) {
@@ -666,21 +550,16 @@ public class PluginWrapper implements DmtDataPlugin, DmtReadOnlyDataPlugin {
     }
     
     public boolean equals(Object obj) {
-        if(obj == null || !(obj instanceof PluginWrapper))
+        if(obj == null || !(obj instanceof PluginSessionWrapper))
             return false;
         
-        return dmtReadOnly.equals(((PluginWrapper) obj).dmtReadOnly); 
+        PluginSessionWrapper other = (PluginSessionWrapper) obj;
+        
+        return sessionRoot.equals(other.sessionRoot) &&
+                readableDataSession.equals(other.readableDataSession);       
     }
     
     public int hashCode() {
-        return dmtReadOnly.hashCode();
-    }
-    
-    private void checkTransactionSupport(String uri) throws DmtException {
-        if(lockMode == DmtSession.LOCK_TYPE_ATOMIC
-                && !dataPlugin.supportsAtomic())
-            throw new DmtException(uri, DmtException.TRANSACTION_ERROR,
-                    "Write operation attempted in atomic session " + 
-                    "on a non-transactional plugin.");
-    }
+        return sessionRoot.hashCode() ^ readableDataSession.hashCode();
+    } 
 }

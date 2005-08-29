@@ -18,10 +18,11 @@
 package org.osgi.impl.service.dmt;
 
 import java.util.Arrays;
-import org.osgi.service.dmt.*;
+import org.osgi.service.dmt.DmtData;
+import org.osgi.service.dmt.MetaNode;
 
 // TODO update the meta-data according to the new tree definitions
-public class DmtMetaNodeImpl implements DmtMetaNode {
+public class MetaNodeImpl implements MetaNode {
 	private boolean		deletable               = false;
 	private boolean		addable                 = false;
 	private boolean		retrievable             = true;
@@ -38,13 +39,13 @@ public class DmtMetaNodeImpl implements DmtMetaNode {
 	private String[]	mimeTypes				= null;
     
 	// Interior node with default properties
-	public DmtMetaNodeImpl() {
+	public MetaNodeImpl() {
 		leaf = false;
 		format = DmtData.FORMAT_NODE;
 	}
 
 	// Leaf node in ConfigurationPlugin
-	public DmtMetaNodeImpl(String description, boolean allowInfinte,
+	public MetaNodeImpl(String description, boolean allowInfinte,
 			DmtData[] validValues, int format) {
 		leaf = true;
         addable = true;
@@ -55,7 +56,7 @@ public class DmtMetaNodeImpl implements DmtMetaNode {
 	}
 
 	// Interior node in ConfigurationPlugin
-	public DmtMetaNodeImpl(String description, boolean allowInfinte,
+	public MetaNodeImpl(String description, boolean allowInfinte,
 			boolean isPermanent) {
 		leaf = false;
 		addable = !isPermanent;

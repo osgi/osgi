@@ -18,9 +18,10 @@
 package org.osgi.impl.service.dmt;
 
 import java.util.List;
-import org.osgi.service.dmt.*;
+import org.osgi.service.dmt.DmtData;
+import org.osgi.service.dmt.MetaNode;
 
-public class LogPluginMetanode implements DmtMetaNode {
+public class LogPluginMetanode implements MetaNode {
     static final boolean MODIFIABLE = true; 
     static final boolean SEARCH_PARAMETER = true; 
     static final boolean ALLOW_INFINITE = true; 
@@ -80,7 +81,7 @@ public class LogPluginMetanode implements DmtMetaNode {
         this.canExecute      = false;
         this.isLeaf          = true;
         
-        this.scope           = DmtMetaNode.AUTOMATIC;
+        this.scope           = MetaNode.AUTOMATIC;
         this.description     = description;
         this.maxOccurrence   = 1;
         this.isZeroOccurrenceAllowed = !isSearchParameter;
@@ -166,7 +167,7 @@ public class LogPluginMetanode implements DmtMetaNode {
                 for (int i = 0; i < components.length; i++)
                     if(!validComponents.contains(components[i]))
                         return false;
-            } catch(DmtException e) {
+            } catch(IllegalStateException e) {
                 // not checking components if format is not string
             }
         }

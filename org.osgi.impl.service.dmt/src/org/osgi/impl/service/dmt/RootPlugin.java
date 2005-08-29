@@ -19,9 +19,13 @@ package org.osgi.impl.service.dmt;
 
 import java.util.Date;
 import java.util.Set;
-import org.osgi.service.dmt.*;
+import org.osgi.service.dmt.DmtData;
+import org.osgi.service.dmt.DmtException;
+import org.osgi.service.dmt.DmtSession;
+import org.osgi.service.dmt.MetaNode;
+import org.osgi.service.dmt.spi.*;
 
-public class RootPlugin implements DmtReadOnlyDataPlugin {
+public class RootPlugin implements DataPluginFactory, ReadableDataSession {
 	private static Node	root	= 
         new Node(".", new Node[] {
                 new Node("OSGi", new Node[] {
@@ -46,37 +50,49 @@ public class RootPlugin implements DmtReadOnlyDataPlugin {
                 })
         });
     
-    private DmtPluginDispatcher dispatcher;
+    private PluginDispatcher dispatcher;
 
-    RootPlugin(DmtPluginDispatcher dispatcher) {
+    RootPlugin(PluginDispatcher dispatcher) {
         this.dispatcher = dispatcher;
     }
     
-	//----- DmtReadOnlyDataPlugin methods -----//
-	public void open(DmtSession session) throws DmtException {
-	}
-
-	public void open(String subtreeUri, DmtSession session) throws DmtException {
-		findNode(subtreeUri); // check that the node exists
-		open(session);
-	}
-    
-    public void nodeChanged(String nodeUri) {
-        // do nothing - the version and timestamp properties are not supported
+    // precondition: path must be absolute
+    static boolean isValidDataPluginRoot(String[] path) {
+        return root.findNode(path, 1, false) != null ||
+            root.findNode(path, 1, true) != null;
     }
 
-	public DmtMetaNode getMetaNode(String nodeUri)
+	//----- DmtReadOnlyDataPlugin methods -----//
+    public ReadableDataSession openReadOnlySession(String[] sessionRoot,
+            DmtSession session) {
+        return this;
+    }
+    
+    public ReadWriteDataSession openReadWriteSession(String[] sessionRoot, 
+            DmtSession session) {
+        return null;
+    }
+
+    public TransactionalDataSession openAtomicSession(String[] sessionRoot, 
+            DmtSession session) {
+        return null;
+    }
+    
+    public void nodeChanged(String[] nodePath) {}
+
+
+	public MetaNode getMetaNode(String[] nodePath)
 			throws DmtException {
-		findNode(nodeUri); // check that the node exists
-		return new DmtMetaNodeImpl();
+		findNode(nodePath); // check that the node exists
+		return new MetaNodeImpl();
 	}
 
 	//----- DmtReadOnly methods -----//
 	public void close() throws DmtException {}
 
-	public boolean isNodeUri(String nodeUri) {
+	public boolean isNodeUri(String[] nodePath) {
 		try {
-			findNode(nodeUri);
+			findNode(nodePath);
 			return true;
 		}
 		catch (DmtException e) {
@@ -84,60 +100,57 @@ public class RootPlugin implements DmtReadOnlyDataPlugin {
 		}
 	}
     
-    public boolean isLeafNode(String nodeUri) throws DmtException {
-        findNode(nodeUri); // check that the node exists
+    public boolean isLeafNode(String[] nodePath) throws DmtException {
+        findNode(nodePath); // check that the node exists
         return false; // currently all nodes are internal
     }
 
-	public DmtData getNodeValue(String nodeUri) throws DmtException {
+	public DmtData getNodeValue(String[] nodePath) throws DmtException {
 		// should never be called because all nodes are internal
 		return null;
 	}
 
-	public String getNodeTitle(String nodeUri) throws DmtException {
-		throw new DmtException(nodeUri, DmtException.FEATURE_NOT_SUPPORTED,
+	public String getNodeTitle(String[] nodePath) throws DmtException {
+		throw new DmtException(nodePath, DmtException.FEATURE_NOT_SUPPORTED,
 				"Title property not supported.");
 	}
 
-	public String getNodeType(String nodeUri) throws DmtException {
+	public String getNodeType(String[] nodePath) throws DmtException {
 		return null;
 	}
 
-	public int getNodeVersion(String nodeUri) throws DmtException {
-        throw new DmtException(nodeUri, DmtException.FEATURE_NOT_SUPPORTED,
+	public int getNodeVersion(String[] nodePath) throws DmtException {
+        throw new DmtException(nodePath, DmtException.FEATURE_NOT_SUPPORTED,
                 "Version property not supported.");
 	}
 
-	public Date getNodeTimestamp(String nodeUri) throws DmtException {
-		throw new DmtException(nodeUri, DmtException.FEATURE_NOT_SUPPORTED,
+	public Date getNodeTimestamp(String[] nodePath) throws DmtException {
+		throw new DmtException(nodePath, DmtException.FEATURE_NOT_SUPPORTED,
 				"Timestamp property not supported.");
 	}
 
-	public int getNodeSize(String nodeUri) throws DmtException {
+	public int getNodeSize(String[] nodePath) throws DmtException {
 		// should never be called because all nodes are internal
 		return 0;
 	}
 
-	public String[] getChildNodeNames(String nodeUri) throws DmtException {
-        Set children = dispatcher.getChildPluginNames(nodeUri);
+	public String[] getChildNodeNames(String[] nodePath) throws DmtException {
+        Set children = dispatcher.getChildPluginNames(nodePath);
         
-		Node[] childNodes = findNode(nodeUri).getChildren();
+		Node[] childNodes = findNode(nodePath).getChildren();
 		for (int i = 0; i < childNodes.length; i++)
 			children.add(childNodes[i].getName());
 
         return (String[]) children.toArray(new String[] {});
 	}
-
-	private Node findNode(String uri) throws DmtException {
-		if (uri.equals("."))
-			return root;
-		// any other absolute URI must begin with "./"
-		Node node = root.findNode(uri.substring(2));
-		if (node == null)
-			throw new DmtException(uri, DmtException.NODE_NOT_FOUND,
-					"Specified URI not found in tree.");
-		return node;
-	}
+    
+    private Node findNode(String[] path) throws DmtException {
+        Node node = root.findNode(path, 1, false);
+        if(node == null)
+            throw new DmtException(path, DmtException.NODE_NOT_FOUND,
+                    "Specified URI not found in tree.");
+        return node;
+    }
 }
 
 class Node {
@@ -152,16 +165,20 @@ class Node {
 			this.children = new Node[] {};
 	}
 
-	Node findNode(String name) {
-		if (name == null || name.length() == 0)
-			return this;
-		String first = Utils.getUriPart(name, true, true); // get first segment
-		for (int i = 0; i < children.length; i++)
-			if (first.equals(children[i].name))
-                // recurse with all segments but the first
-				return children[i].findNode(Utils.getUriPart(name, true, false));
-		return null;
-	}
+    Node findNode(String[] path, int start, boolean findParent) {
+        if(path.length < start)
+            return null; // does not happen (path would have to be empty array)
+        
+        if (start == path.length ||
+                (findParent && start == path.length-1))
+            return this;
+
+        for(int i = 0; i < children.length; i++)
+            if(path[start].equals(children[i].name))
+                return children[i].findNode(path, start+1, findParent);
+            
+        return null;
+    }
 
 	String getName() {
 		return name;

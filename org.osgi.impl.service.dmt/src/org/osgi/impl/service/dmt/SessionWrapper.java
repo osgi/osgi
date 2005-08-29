@@ -19,10 +19,10 @@
 package org.osgi.impl.service.dmt;
 
 import java.util.Date;
-import org.osgi.service.dmt.DmtAcl;
+import org.osgi.service.dmt.Acl;
 import org.osgi.service.dmt.DmtData;
 import org.osgi.service.dmt.DmtException;
-import org.osgi.service.dmt.DmtMetaNode;
+import org.osgi.service.dmt.MetaNode;
 import org.osgi.service.permissionadmin.PermissionInfo;
 import org.osgi.util.tracker.ServiceTracker;
 
@@ -30,7 +30,7 @@ class SessionWrapper extends DmtSessionImpl {
 
     SessionWrapper(String principal, String subtreeUri, int lockMode,
             PermissionInfo[] permissions, ServiceTracker eventTracker,
-            DmtPluginDispatcher dispatcher, DmtAdminImpl dmtAdmin)
+            PluginDispatcher dispatcher, DmtAdminImpl dmtAdmin)
             throws DmtException {
         super(principal, subtreeUri, lockMode, permissions, eventTracker,
                 dispatcher, dmtAdmin);
@@ -60,7 +60,7 @@ class SessionWrapper extends DmtSessionImpl {
         }
     }
 
-    public DmtAcl getNodeAcl(String nodeUri) throws DmtException {
+    public Acl getNodeAcl(String nodeUri) throws DmtException {
         try {
             return super.getNodeAcl(nodeUri);
         } catch(DmtException e) {
@@ -70,7 +70,7 @@ class SessionWrapper extends DmtSessionImpl {
         }
     }
 
-    public DmtAcl getEffectiveNodeAcl(String nodeUri) throws DmtException {
+    public Acl getEffectiveNodeAcl(String nodeUri) throws DmtException {
         try {
             return super.getEffectiveNodeAcl(nodeUri);
         } catch(DmtException e) {
@@ -80,7 +80,7 @@ class SessionWrapper extends DmtSessionImpl {
         }
     }
 
-    public void setNodeAcl(String nodeUri, DmtAcl acl) throws DmtException {
+    public void setNodeAcl(String nodeUri, Acl acl) throws DmtException {
         try {
             super.setNodeAcl(nodeUri, acl);
         } catch(DmtException e) {
@@ -318,7 +318,7 @@ class SessionWrapper extends DmtSessionImpl {
         }
     }
 
-    public DmtMetaNode getMetaNode(String nodeUri) throws DmtException {
+    public MetaNode getMetaNode(String nodeUri) throws DmtException {
         try {
             return super.getMetaNode(nodeUri);
         } catch(DmtException e) {

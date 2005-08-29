@@ -20,8 +20,10 @@ package org.osgi.impl.service.dmt;
 import java.security.AllPermission;
 import java.util.Hashtable;
 import java.util.Map;
-
-import org.osgi.framework.*;
+import org.osgi.framework.BundleActivator;
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.BundleException;
+import org.osgi.framework.ServiceRegistration;
 import org.osgi.impl.service.dmt.api.DmtPrincipalPermissionAdmin;
 import org.osgi.service.cm.ConfigurationAdmin;
 import org.osgi.service.cm.ManagedService;
@@ -55,10 +57,9 @@ public class DmtAdminActivator implements BundleActivator {
                     ConfigurationAdmin.class.getName(), null);
             configTracker.open();
             
-			DmtPluginDispatcher dispatcher = new DmtPluginDispatcher(bc);
-			String filter = "(|(objectClass=org.osgi.service.dmt.DmtDataPlugin)" +
-					          "(objectClass=org.osgi.service.dmt.DmtExecPlugin)" +
-                              "(objectClass=org.osgi.service.dmt.DmtReadOnlyDataPlugin))";
+			PluginDispatcher dispatcher = new PluginDispatcher(bc);
+			String filter = "(|(objectClass=org.osgi.service.dmt.spi.DataPluginFactory)" +
+					          "(objectClass=org.osgi.service.dmt.spi.ExecPlugin))";
 			pluginTracker = new ServiceTracker(bc, bc.createFilter(filter),
 					dispatcher);
 			pluginTracker.open();

@@ -19,70 +19,50 @@ package org.osgi.impl.service.dmt;
 
 import java.util.List;
 import java.util.Vector;
-import org.osgi.service.dmt.*;
+import org.osgi.service.dmt.spi.DataPluginFactory;
+import org.osgi.service.dmt.spi.ExecPlugin;
 
-class Plugin {
+class PluginRegistration {
 	private Object   plugin;
 	private String[] roots;
 	private String[] execs;
     
-	// redundant information
-    private boolean  isWritable; // if the plugin is a writable data plugin 
-    private boolean  isReadOnly; // if the plugin is a read-only data plugin
-
 	// precondition: roots != null && execs != null && 
     //               (roots.length != 0 || execs.length != 0)
-	Plugin(Object plugin, String[] roots, String[] execs) {
-        isReadOnly = plugin instanceof DmtReadOnlyDataPlugin;
-        isWritable = plugin instanceof DmtDataPlugin;
-        
-		if (roots.length > 0 && !isWritable && !isReadOnly)
+	PluginRegistration(Object plugin, String[] roots, String[] execs) {
+		if (roots.length > 0 && !(plugin instanceof DataPluginFactory))
 			throw new IllegalArgumentException(
-					"The plugin must implement DmtDataPlugin or " +
-                    "DmtReadOnlyDataPlugin if data roots are specified.");
-		if (execs.length > 0 && !(plugin instanceof DmtExecPlugin))
+					"The plugin must implement DataPluginFactory if data " +
+                    "roots are specified.");
+		if (execs.length > 0 && !(plugin instanceof ExecPlugin))
 			throw new IllegalArgumentException(
-					"The plugin must implement DmtExecPlugin if exec nodes " + 
-                    "are specified");
+					"The plugin must implement ExecPlugin if exec roots are " + 
+                    "specified");
         
 		this.plugin = plugin;
 		this.roots = roots;
 		this.execs = execs;
 	}
 
-	DmtDataPlugin getWritableDataPlugin() {
-		if (!isWritable)
-			throw new IllegalStateException(
-					"Plugin object is not a writable data plugin.");
-		return (DmtDataPlugin) plugin;
-	}
-
-	DmtReadOnlyDataPlugin getReadOnlyDataPlugin() {
-		if (!isReadOnly)
-			throw new IllegalStateException(
-					"Plugin object is not a read-only data plugin.");
-		return (DmtReadOnlyDataPlugin) plugin;
-	}
+    DataPluginFactory getDataPlugin() {
+        if(!(plugin instanceof DataPluginFactory))
+            throw new IllegalStateException("Plugin object is not a data " +
+                    "plugin.");
+        
+        return (DataPluginFactory) plugin;
+    }
     
-	DmtExecPlugin getExecPlugin() {
-		if (!(plugin instanceof DmtExecPlugin))
+	ExecPlugin getExecPlugin() {
+		if (!(plugin instanceof ExecPlugin))
 			throw new IllegalStateException(
 					"Plugin object is not an exec plugin.");
-		return (DmtExecPlugin) plugin;
+		return (ExecPlugin) plugin;
 	}
     
     String[] getDataRoots() {
         return roots;
     }
     
-    boolean isWritableDataPlugin() {
-        return isWritable;
-    }
-    
-    boolean isReadOnlyDataPlugin() {
-        return isReadOnly;
-    }
-
 	boolean handlesData(String subtreeUri) {
         return handles(subtreeUri, roots);
 	}
