@@ -18,10 +18,15 @@
 package org.osgi.impl.service.dmt;
 
 import java.util.Hashtable;
-import org.osgi.framework.*;
-import org.osgi.service.dmt.*;
-import org.osgi.service.log.*;
+import org.osgi.framework.BundleActivator;
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.BundleException;
+import org.osgi.framework.ServiceRegistration;
+import org.osgi.service.dmt.DmtAdmin;
+import org.osgi.service.log.LogReaderService;
 import org.osgi.util.tracker.ServiceTracker;
+//import org.osgi.service.dmt.old.DmtDataPlugin;
+//import org.osgi.service.dmt.spi.ExecPlugin;
 
 public class LogPluginActivator implements BundleActivator {
 	static final String PLUGIN_ROOT = "./OSGi/Log";
@@ -32,7 +37,11 @@ public class LogPluginActivator implements BundleActivator {
     private LogPlugin           logPlugin;
 
 	public void start(BundleContext bc) throws BundleException {
-		System.out.println("Log plugin activated.");
+        System.out.println("Log plugin temporarily disabled.");
+        if(true)
+            return;
+
+        System.out.println("Log plugin activated.");
 		// setting up the needed trackers
         logReaderTracker = 
             new ServiceTracker(bc, LogReaderService.class.getName(), null);
@@ -46,13 +55,17 @@ public class LogPluginActivator implements BundleActivator {
 		Hashtable props = new Hashtable();
 		props.put("dataRootURIs", new String[] {PLUGIN_ROOT});
 		props.put("execRootURIs", new String[] {PLUGIN_ROOT});
-		String[] ifs = new String[] {DmtDataPlugin.class.getName(),
-				DmtExecPlugin.class.getName()};
-		servReg = bc.registerService(ifs, logPlugin, props);
+		//String[] ifs = new String[] {DmtDataPlugin.class.getName(),
+		//		ExecPlugin.class.getName()};
+		//servReg = bc.registerService(ifs, logPlugin, props);
 	}
 
 	public void stop(BundleContext bc) throws BundleException {
-		// closing the used trackers
+        System.out.println("Log plugin temporarily disabled.");
+        if(true)
+            return;
+
+        // closing the used trackers
 		adminTracker.close();
 		logReaderTracker.close();
         

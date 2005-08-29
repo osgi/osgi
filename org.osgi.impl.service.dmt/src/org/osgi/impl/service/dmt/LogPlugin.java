@@ -17,20 +17,23 @@
  */
 package org.osgi.impl.service.dmt;
 
-import java.util.*;
-import java.io.*;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.net.URL;
-
+import java.text.SimpleDateFormat;
+import java.util.*;
 import org.osgi.framework.*;
+import org.osgi.impl.service.dmt.wbxmlenc.WbxmlCodePages;
 import org.osgi.service.dmt.*;
-import org.osgi.service.log.*;
+import org.osgi.service.log.LogEntry;
+import org.osgi.service.log.LogReaderService;
 import org.osgi.util.tracker.ServiceTracker;
-import org.osgi.impl.service.dmt.wbxmlenc.*;
-import java.text.*;
+//import org.osgi.service.dmt.old.DmtDataPlugin;
+//import org.osgi.service.dmt.spi.ExecPlugin;
 
 // TODO implement LogResult tree, make nodes automatic
 
-public class LogPlugin implements DmtDataPlugin, DmtExecPlugin {
+public class LogPlugin /*implements DmtDataPlugin, ExecPlugin */{
 	private static final String FILTER    = "Filter";
 	private static final String EXCLUDE   = "Exclude";
 	private static final String MAXR      = "MaxRecords";
@@ -100,16 +103,16 @@ public class LogPlugin implements DmtDataPlugin, DmtExecPlugin {
         // do nothing - the version and timestamp properties are not supported
     }
 
-	public DmtMetaNode getMetaNode(String nodeUri) throws DmtException {
+	public MetaNode getMetaNode(String nodeUri) throws DmtException {
         String[] path = prepareUri(nodeUri);
         if (path.length == 0) // OSGi/Log
-            return new LogPluginMetanode(DmtMetaNode.PERMANENT, 
+            return new LogPluginMetanode(MetaNode.PERMANENT, 
                                          !LogPluginMetanode.MODIFIABLE, 
                                          !LogPluginMetanode.ALLOW_INFINITE, 
                                          "Root node for log search requests.");
         
         if (path.length == 1) // OSGi/Log/<search_id>
-            return new LogPluginMetanode(DmtMetaNode.DYNAMIC,
+            return new LogPluginMetanode(MetaNode.DYNAMIC,
                                          LogPluginMetanode.MODIFIABLE,
                                          LogPluginMetanode.ALLOW_INFINITE,
                                          "Root node of a log search request.");
@@ -446,8 +449,8 @@ public class LogPlugin implements DmtDataPlugin, DmtExecPlugin {
 
 		Vector records = getResult(lr);
 		String result = formatResult(records);
-		DmtAlertItem[] items = new DmtAlertItem[1];
-		items[0] = new DmtAlertItem(nodeUri, null, null, new DmtData(result));
+		AlertItem[] items = new AlertItem[1];
+		items[0] = new AlertItem(nodeUri, null, null, new DmtData(result));
         
         getDmtAdmin().sendAlert(session.getPrincipal(), 1224, correlator, items);
 	}

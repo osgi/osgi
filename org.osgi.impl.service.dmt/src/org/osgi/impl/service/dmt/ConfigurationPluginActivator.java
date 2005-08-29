@@ -18,9 +18,12 @@
 package org.osgi.impl.service.dmt;
 
 import java.util.Hashtable;
-import org.osgi.framework.*;
+import org.osgi.framework.BundleActivator;
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.BundleException;
+import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.cm.ConfigurationAdmin;
-import org.osgi.service.dmt.DmtDataPlugin;
+//import org.osgi.service.dmt.old.DmtDataPlugin;
 import org.osgi.util.tracker.ServiceTracker;
 
 public class ConfigurationPluginActivator implements BundleActivator {
@@ -32,6 +35,10 @@ public class ConfigurationPluginActivator implements BundleActivator {
 	
 
 	public void start(BundleContext bc) throws BundleException {
+        System.out.println("Configuration plugin temporarily disabled.");
+        if(true)
+            return;
+        
 		System.out.println("Configuration plugin activation started.");
         
 		// looking up the Configuration Admin
@@ -45,13 +52,17 @@ public class ConfigurationPluginActivator implements BundleActivator {
 		properties.put("dataRootURIs", new String[] {PLUGIN_ROOT});
         
 		// registering the service
-		servReg = bc.registerService(DmtDataPlugin.class.getName(),
-				configPlugin, properties);
+		//servReg = bc.registerService(DmtDataPlugin.class.getName(),
+		//		configPlugin, properties);
 		System.out.println("Configuration plugin activation finished successfully.");
 	}
 
 	public void stop(BundleContext bc) throws BundleException {
-		// unregistering the service
+        System.out.println("Configuration plugin temporarily disabled.");
+        if(true)
+            return;
+
+        // unregistering the service
 		servReg.unregister();
         
 		// stopping the Configuration Admin tracker

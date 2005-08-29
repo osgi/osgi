@@ -18,11 +18,20 @@
 package org.osgi.impl.service.dmt;
 
 import java.io.IOException;
-import java.lang.reflect.*;
+import java.lang.reflect.Array;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.util.*;
-import org.osgi.framework.*;
-import org.osgi.service.cm.*;
-import org.osgi.service.dmt.*;
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.InvalidSyntaxException;
+import org.osgi.framework.ServiceReference;
+import org.osgi.service.cm.Configuration;
+import org.osgi.service.cm.ConfigurationAdmin;
+import org.osgi.service.cm.ManagedService;
+import org.osgi.service.dmt.DmtData;
+import org.osgi.service.dmt.DmtException;
+import org.osgi.service.dmt.DmtSession;
+import org.osgi.service.dmt.MetaNode;
 import org.osgi.util.tracker.ServiceTracker;
 
 // TODO IMPLEMENT NEW CONFIG MO DEFINITION
@@ -47,7 +56,7 @@ import org.osgi.util.tracker.ServiceTracker;
 // TODO put Service and Property into separate java files
 // Nasty things can happen (?) if the ConfigurationAdmin service returns data types not in the spec.
 // Changes in configuration admin during a write session are not taken into account.
-public class ConfigurationPlugin implements DmtDataPlugin {
+public class ConfigurationPlugin /* implements DmtDataPlugin */{
     // Strings that are valid values of the 'cardinality' leaf node
     private static final String[] validCardinalityStrings = new String[] {
             "scalar", "array", "vector" };
@@ -108,40 +117,40 @@ public class ConfigurationPlugin implements DmtDataPlugin {
         // do nothing - the version and timestamp properties are not supported
     }
 
-    public DmtMetaNode getMetaNode(String nodeUri)
+    public MetaNode getMetaNode(String nodeUri)
 			throws DmtException {
 		String[] path = prepareUri(nodeUri);
 
         if (path.length == 0) // ./OSGi/cfg
-			return new DmtMetaNodeImpl(
+			return new MetaNodeImpl(
 					"Root node of the configuration subtree.", false, true);
         
 		if (path.length == 1) // ./OSGi/cfg/<service_pid>
-			return new DmtMetaNodeImpl(
+			return new MetaNodeImpl(
 					"Root node for the configuration of a given service PID.",
 					true, false);
         
 		if (path.length == 2) // ./OSGi/cfg/<service_pid>/<key>
-		    return new DmtMetaNodeImpl(
+		    return new MetaNodeImpl(
                     "Root node for a configuration entry.", true, false);
         
 		if (path.length == 3) { // ./OSGi/cfg/<service_pid>/<key>/(type|cardinality|value|values)
 			if (path[2].equals("type"))
-				return new DmtMetaNodeImpl("Data type of configuration value.",
+				return new MetaNodeImpl("Data type of configuration value.",
 						false, validTypeData, DmtData.FORMAT_STRING);
 			
             if (path[2].equals("cardinality"))
-			    return new DmtMetaNodeImpl(
+			    return new MetaNodeImpl(
                         "Cardinality of the configuration value.", false,
 			            validCardinalityData, DmtData.FORMAT_STRING);
             
             if(path[2].equals("value"))
-                return new DmtMetaNodeImpl(
+                return new MetaNodeImpl(
                         "Scalar configuration data.", false, null, 
                         DmtData.FORMAT_STRING);
             
             if(path[2].equals("values"))
-                return new DmtMetaNodeImpl(
+                return new MetaNodeImpl(
                         "Root node for elements of a non-scalar configuration item.",
                         false, false);
 
@@ -154,7 +163,7 @@ public class ConfigurationPlugin implements DmtDataPlugin {
                 // TODO maybe skip int checking, it might be enough to specify name pattern in meta-data
                 Integer.parseInt(path[3]); 
                 if(path[2].equals("values"))
-                    return new DmtMetaNodeImpl(
+                    return new MetaNodeImpl(
                             "Data element for a non-scalar configuration item.", 
                             true, null, DmtData.FORMAT_STRING);
             } catch(NumberFormatException e) {}
@@ -1413,7 +1422,7 @@ class Property {
 							+ "' from the specifed value string.", e);
 		}
 		catch (Exception e) {
-			throw new DmtException(null, DmtException.COMMAND_FAILED,
+			throw new DmtException((String) null, DmtException.COMMAND_FAILED,
 					"Internal error, cannot create scalar value object.", e);
 		}
 	}
