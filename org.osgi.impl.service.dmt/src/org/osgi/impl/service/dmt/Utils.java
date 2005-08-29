@@ -250,6 +250,14 @@ class Utils {
         return path;
     }
     
+    // precondition: path is absolute
+    static String tempAbsolutePathToUri(String[] path) {
+        StringBuffer sb = new StringBuffer(".");
+        for(int i = 1; i < path.length; i++)
+            sb.append('/').append(path[i]);
+        return sb.toString();
+    }
+
     static boolean tempIsAncestorPath(String[] ancestor, String[] node) {
         if(node.length < ancestor.length)
             return false;
@@ -259,6 +267,26 @@ class Utils {
                 return false;
         
         return true;
+    }
+    
+    static boolean isEqualPath(String[] path1, String[] path2) {
+        if(path1.length != path2.length)
+            return false;
+        
+        for(int i = 0; i < path1.length; i++)
+            if(!path1[i].equals(path2[i]))
+                return false;
+            
+        return true;
+    }
+    
+    static String[] relativePath(String[] ancestor, String[] node) {
+        if (!tempIsAncestorPath(ancestor, node))
+            return null;
+        String[] relativePath = new String[node.length-ancestor.length];
+        for(int i = ancestor.length; i < node.length; i++)
+            relativePath[i-ancestor.length] = node[i];
+        return relativePath;
     }
     
     // convenience method
