@@ -235,8 +235,6 @@ public class Framework implements EventDispatcher, EventPublisher {
 		}
 		properties.put(Constants.FRAMEWORK_VENDOR, Constants.OSGI_FRAMEWORK_VENDOR);
 		properties.put(Constants.FRAMEWORK_VERSION, Constants.OSGI_FRAMEWORK_VERSION);
-		// Needed for communication with Bundle Server
-		properties.put(Constants.OSGI_IMPL_VERSION_KEY, Constants.OSGI_IMPL_VERSION);
 		String value = properties.getProperty(Constants.FRAMEWORK_PROCESSOR);
 		if (value == null) {
 			value = properties.getProperty(Constants.JVM_OS_ARCH);

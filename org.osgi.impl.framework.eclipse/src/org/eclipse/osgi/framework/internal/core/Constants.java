@@ -17,9 +17,6 @@ package org.eclipse.osgi.framework.internal.core;
  */
 
 public class Constants implements org.osgi.framework.Constants {
-	/** OSGI implementation version - make sure it is 3 digits for ServerConnection.java */
-	public static final String OSGI_IMPL_VERSION = "3.0.0"; //$NON-NLS-1$
-
 	/** Default framework version */
 	public static final String OSGI_FRAMEWORK_VERSION = "1.3"; //$NON-NLS-1$
 

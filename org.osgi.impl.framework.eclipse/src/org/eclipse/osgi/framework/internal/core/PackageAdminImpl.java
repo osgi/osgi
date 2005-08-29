@@ -515,10 +515,10 @@ public class PackageAdminImpl implements PackageAdmin {
 		State state = framework.adaptor.getState();
 		BundleDescription[] descriptions = state.getBundles();
 		for (int i = 0; i < descriptions.length; i++) {
-			long bundleId = descriptions[i].getBundleId();
-			if (bundleId == 0)
-				continue;
-			setResolved(descriptions[i]);
+			if (descriptions[i].getBundleId() == 0)
+				setFrameworkVersion(descriptions[i]);
+			else
+				setResolved(descriptions[i]);
 		}
 	}
 
@@ -571,22 +571,19 @@ public class PackageAdminImpl implements PackageAdmin {
 				// force resolution so packages are properly linked
 				state.resolve(false);
 			}
-			ExportPackageDescription[] packages = newSystemBundle.getExportPackages();
-			if (packages != null) {
-				String[] systemPackages = new String[packages.length];
-				for (int i = 0; i < packages.length; i++) {
-					ExportPackageDescription spec = packages[i];
-					if (spec.getName().equals(Constants.OSGI_FRAMEWORK_PACKAGE)) {
-						String version = spec.getVersion().toString();
-						if (version != null)
-							System.getProperties().put(Constants.FRAMEWORK_VERSION, version);
-					}
-					systemPackages[i] = spec.getName();
-				}
-			}
 		} catch (BundleException e) /* fatal error */{
 			e.printStackTrace();
 			throw new RuntimeException(NLS.bind(Msg.OSGI_SYSTEMBUNDLE_CREATE_EXCEPTION, e.getMessage())); //$NON-NLS-1$
 		}
+	}
+
+	private void setFrameworkVersion(BundleDescription systemBundle) {
+		ExportPackageDescription[] packages = systemBundle.getExportPackages();
+		for (int i = 0; i < packages.length; i++)
+			if (packages[i].getName().equals(Constants.OSGI_FRAMEWORK_PACKAGE)) {
+				System.getProperties().put(Constants.FRAMEWORK_VERSION, packages[i].getVersion().toString());
+				break;
+			}
+		System.getProperties().put(Constants.OSGI_IMPL_VERSION_KEY, systemBundle.getVersion().toString());
 	}
 }

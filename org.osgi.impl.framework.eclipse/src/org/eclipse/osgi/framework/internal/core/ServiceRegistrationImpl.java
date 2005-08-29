@@ -11,6 +11,7 @@
 
 package org.eclipse.osgi.framework.internal.core;
 
+import java.lang.reflect.Array;
 import java.util.*;
 import org.eclipse.osgi.framework.debug.Debug;
 import org.eclipse.osgi.framework.util.Headers;
@@ -574,73 +575,32 @@ public class ServiceRegistrationImpl implements ServiceRegistration {
 		 * @return cloned object or original object if we didn't clone it.
 		 */
 		protected static Object cloneValue(Object value) {
-			if (value != null) {
-				if (value instanceof String) /* shortcut String */
-				{
-					return (value);
-				}
+			if (value == null)
+				return null;
+			if (value instanceof String) /* shortcut String */
+				return (value);
 
-				Class clazz = value.getClass();
-
-				if (clazz.isArray()) {
-					Class type = clazz.getComponentType();
-
-					if (type.isPrimitive()) {
-						if (Integer.TYPE.isAssignableFrom(type)) {
-							return (((int[]) value).clone());
-						}
-
-						if (Long.TYPE.isAssignableFrom(type)) {
-							return (((long[]) value).clone());
-						}
-
-						if (Byte.TYPE.isAssignableFrom(type)) {
-							return (((byte[]) value).clone());
-						}
-
-						if (Short.TYPE.isAssignableFrom(type)) {
-							return (((short[]) value).clone());
-						}
-
-						if (Character.TYPE.isAssignableFrom(type)) {
-							return (((char[]) value).clone());
-						}
-
-						if (Float.TYPE.isAssignableFrom(type)) {
-							return (((float[]) value).clone());
-						}
-
-						if (Double.TYPE.isAssignableFrom(type)) {
-							return (((double[]) value).clone());
-						}
-
-						if (Boolean.TYPE.isAssignableFrom(type)) {
-							return (((boolean[]) value).clone());
-						}
-					} else /* non-primitive array object */
-					{
-						return (((Object[]) value).clone());
-					}
-				} else /* non array object */
-				{
-					try {
-						return (clazz.getMethod("clone", null).invoke(value, null)); //$NON-NLS-1$
-					} catch (Exception e) {
-						/* clone is not a public method on value's class */
-					} catch (Error e) {
-						/* JCL does not support reflection; try some well known types */
-
-						if (value instanceof Vector) {
-							return (((Vector) value).clone());
-						}
-
-						if (value instanceof Hashtable) {
-							return (((Hashtable) value).clone());
-						}
-					}
-				}
+			Class clazz = value.getClass();
+			if (clazz.isArray()) {
+				// Do an array copy
+				Class type = clazz.getComponentType();
+				int len = Array.getLength(value);
+				Object clonedArray = Array.newInstance(type, len);
+				System.arraycopy(value, 0, clonedArray, 0, len);
+				return clonedArray;
 			}
-
+			// must use reflection because Object clone method is protected!!
+			try {
+				return (clazz.getMethod("clone", null).invoke(value, null)); //$NON-NLS-1$
+			} catch (Exception e) {
+				/* clone is not a public method on value's class */
+			} catch (Error e) {
+				/* JCL does not support reflection; try some well known types */
+				if (value instanceof Vector)
+					return (((Vector) value).clone());
+				if (value instanceof Hashtable)
+					return (((Hashtable) value).clone());
+			}
 			return (value);
 		}
 
@@ -674,4 +634,3 @@ public class ServiceRegistrationImpl implements ServiceRegistration {
 		}
 	}
 }
-
