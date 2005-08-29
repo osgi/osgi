@@ -46,7 +46,7 @@ public final class HttpTransaction extends Thread {
 		InetAddress i = client.getInetAddress();
 		remoteAddress = i.getHostAddress();
 		if ("true".equals(HttpConfig.getProperty("http.network.dnslookup",
-				"true")))
+				"false")))
 			remoteHost = i.getHostName();
 	}
 
