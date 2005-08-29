@@ -86,69 +86,6 @@ public class PluginSessionWrapper implements TransactionalDataSession {
     }
     
     /*
-     * NOTE: This is a combination of the DmtDataPlugin.open and
-     * DmtReadOnlyDataPlugin.open methods: if this class wraps a read-only
-     * plugin, this call is redirected to the read-only version of open.
-     */
-    /*
-    public void open(final String uri, final int lockMode, final DmtSession session)
-            throws DmtException {
-        if(dataPlugin == null) { // redirect to open/2 for read-only plugins
-            open(uri, session);
-            return;
-        }
-        
-        if (securityContext == null) {                      // local caller
-            dataPlugin.open(uri, lockMode, session);
-            return;
-        }
-        
-
-        try {                                               // remote caller
-            AccessController.doPrivileged(new PrivilegedExceptionAction() {
-                public Object run() throws DmtException {
-                    dataPlugin.open(uri, lockMode, session);
-                    return null;
-                }
-            }, securityContext);
-        } catch(PrivilegedActionException e) {
-            throw (DmtException) e.getException();
-        }
-    }
-
-    public boolean supportsAtomic() {
-        if (securityContext == null)                        // local caller
-            return dataPlugin.supportsAtomic();
-        
-        Object ret = AccessController.doPrivileged(         // remote caller
-                new PrivilegedAction() {
-                    public Object run() {
-                        return new Boolean(dataPlugin.supportsAtomic());
-                    }
-                }, securityContext);
-        return ((Boolean) ret).booleanValue(); 
-    }
-
-    public void open(final String uri, final DmtSession session) throws DmtException {
-        if (securityContext == null) {                      // local caller
-            readOnlyDataPlugin.open(uri, session);
-            return;
-        }
-
-        try {                                               // remote caller
-            AccessController.doPrivileged(new PrivilegedExceptionAction() {
-                public Object run() throws DmtException {
-                    readOnlyDataPlugin.open(uri, session);
-                    return null;
-                }
-            }, securityContext);
-        } catch(PrivilegedActionException e) {
-            throw (DmtException) e.getException();
-        }
-    }
-    */
-
-    /*
      * NOTE: if this class wraps a plugin without transactional write support,
      * this call is ignored
      */
