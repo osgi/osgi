@@ -27,9 +27,9 @@ import org.osgi.util.tracker.ServiceTrackerCustomizer;
 
 // TODO replace System.out-s with log messages
 public class PluginDispatcher implements ServiceTrackerCustomizer {
-    private BundleContext  bc;
-    private ArrayList      plugins;
-    private PluginRegistration         rootPlugin;
+    private BundleContext      bc;
+    private ArrayList          plugins;
+    private PluginRegistration rootPlugin;
 
     PluginDispatcher(BundleContext bc) {
         this.bc = bc;
