@@ -16,8 +16,7 @@ import java.util.Map;
  * It is allowed to schedule an application based on a specific event.
  * ScheduledApplication service keeps the scheduling information. When the
  * specified event is fired a new instance must be launched. Note that launching
- * operation may fail because e.g. the application is locked or the application
- * is a singleton and already has an instance.
+ * operation may fail because e.g. the application is locked.
  */
 public interface ScheduledApplication {
 

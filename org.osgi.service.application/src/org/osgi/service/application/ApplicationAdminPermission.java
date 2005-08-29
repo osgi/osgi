@@ -17,14 +17,15 @@ import java.util.Vector;
 
 /**
  * This class implements permissions for manipulating applications and
- * application instances.
+ * their instances.
  * <P>
- * ApplicationAdminPermission can be targeted to a particular application (using
- * its PID as an identifier) or to all applications (when no PID is specified).
+ * ApplicationAdminPermission can be targeted to applications that matches the
+ * specified filter.
  * <P>
- * ApplicationAdminPermission may be granted for different actions: 
- * <code>lifecycle</code>, <code>schedule</code> and <code>lock</code>. 
- * The permission <code>schedule</code> implies the permission <code>lifecycle</code>. 
+ * ApplicationAdminPermission may be granted for different actions:
+ * <code>lifecycle</code>, <code>schedule</code> and <code>lock</code>.
+ * The permission <code>schedule</code> implies the permission
+ * <code>lifecycle</code>.
  */
 public class ApplicationAdminPermission extends BasicPermission {
 	private static final long serialVersionUID = 1L;
@@ -48,23 +49,26 @@ public class ApplicationAdminPermission extends BasicPermission {
 	public static final String LOCK = "lock";
 
 	/**
-	 * Constructs an ApplicationAdminPermission. The name is the unique
-	 * identifier of the target application. If the name is null then the
-	 * constructed permission is granted for all targets.
+	 * Constructs an ApplicationAdminPermission. The <code>filter</code>
+	 * specifies the target application. If the <code>filter</code> is
+	 * <code>null</code> then it matches <code>"*"</code>. If
+	 * <code>actions</code> is <code>"*"</code> then it identifies all the
+	 * possible actions.
 	 * 
-	 * @param pid -
-	 *            unique identifier of the application, it may be null. The
-	 *            value null indicates "all application".
-	 * @param actions -
+	 * @param filter
+	 *            filter to identify application. The value <code>null</code>
+	 *            indicates "all application".
+	 * @param actions
 	 *            comma-separated list of the desired actions granted on the
-	 *            applications. It must not be null. The order of the actions in
-	 *            the list is not significant.
+	 *            applications or "*" means all the actions. It must not be
+	 *            <code>null</code>. The order of the actions in the list is
+	 *            not significant.
 	 * 
 	 * @exception NullPointerException
-	 *                is thrown if the actions parameter is null
+	 *                is thrown if the actions parameter is <code>null</code>
 	 */
-	public ApplicationAdminPermission(String pid, String actions) {
-		super(pid == null ? "<All>" : pid, actions);
+	public ApplicationAdminPermission(String filter, String actions) {
+		super(filter == null ? "*" : actions);
 		
 		actionsVector = actionsVector( actions );
 

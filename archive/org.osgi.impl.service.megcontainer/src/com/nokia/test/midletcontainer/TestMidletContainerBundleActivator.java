@@ -217,10 +217,6 @@ public class TestMidletContainerBundleActivator
             System.out.println("Checking stop after service unregistering        FAILED");
         else
             System.out.println("Checking stop after service unregistering        PASSED");
-        if(!testCase_singletonCheck())
-            System.out.println("Checking singleton application                   FAILED");
-        else
-            System.out.println("Checking singleton application                   PASSED");
         if(!testCase_separateClassLoaderCheck())
             System.out.println("Checking if the class loader is separate         FAILED");
         else
@@ -394,10 +390,6 @@ public class TestMidletContainerBundleActivator
                 throw new Exception("The application type is " + (String)engProps.get("application.type") + " instead of 'MIDlet'!");
             if(engProps.get("application.bundle.id") == null)
                 throw new Exception("No application bundle id found!");
-            if(!engProps.get("application.singleton").equals("true"))
-                throw new Exception("Singleton flag is " + (String)engProps.get("application.singleton") + " instead of 'true'!");
-            if(!engProps.get("application.autostart").equals("false"))
-                throw new Exception("Autostart flag is " + (String)engProps.get("application.autostart") + " instead of 'false'!");
             if(!engProps.get("application.visible").equals("true"))
                 throw new Exception("Visible flag is " + (String)engProps.get("application.visible") + " instead of 'true'!");
             if(!engProps.get("application.vendor").equals("Nokia"))
@@ -727,34 +719,10 @@ public class TestMidletContainerBundleActivator
         return false;
     }
 
-    boolean testCase_singletonCheck()
-    {
-        try
-        {
-            if(!testCase_launchApplication())
-                return false;
-            ApplicationHandle tmpAppHandle = appHandle;
-            boolean launchable = isLaunchable(appDescs[0]);
-            if(testCase_launchApplicationError(true))
-                return false;
-            if(launchable)
-                throw new Exception("Application was not launchable, but started!");
-            appHandle = tmpAppHandle;
-            return testCase_stopApplication();
-        }
-        catch(Exception e)
-        {
-            e.printStackTrace();
-        }
-        return false;
-    }
-
     boolean testCase_separateClassLoaderCheck()
     {
         try
         {
-            if(!hack_changeSingletonity(false))
-                return false;
             if(!testCase_launchApplication())
                 return false;
             try
@@ -793,32 +761,9 @@ public class TestMidletContainerBundleActivator
             }
             catch(Exception e)
             {
-                return hack_changeSingletonity(true);
+                return true;
             }
             throw new Exception("The status didn't change to NONEXISTENT!");
-        }
-        catch(Exception e)
-        {
-            e.printStackTrace();
-        }
-        return false;
-    }
-
-    boolean hack_changeSingletonity(boolean isSingleton)
-    {
-        try
-        {
-            MidletDescriptor midDesc = (MidletDescriptor)appDescs[0];
-            Class midDescClass = org.osgi.service.application.midlet.MidletDescriptor.class;
-            Field delegate = midDescClass.getDeclaredField("delegate");
-            delegate.setAccessible(true);
-            MidletDescriptorImpl midDescImpl = (MidletDescriptorImpl)delegate.get(midDesc);
-            Class midDescImplClass = org.osgi.impl.service.midletcontainer.MidletDescriptorImpl.class;
-            Field props = midDescImplClass.getDeclaredField("props");
-            props.setAccessible(true);
-            Properties properties = (Properties)props.get(midDescImpl);
-            properties.setProperty("application.singleton", isSingleton ? "true" : "false");
-            return true;
         }
         catch(Exception e)
         {

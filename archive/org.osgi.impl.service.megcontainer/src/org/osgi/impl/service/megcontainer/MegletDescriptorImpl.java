@@ -101,14 +101,6 @@ public final class MegletDescriptorImpl implements MegletDescriptor.Delegate {
 		return Long.parseLong( props.getProperty("application.bundle.id") );
 	}
 
-	/**
-	 * @return
-	 */
-	public boolean isSingleton() {
-		String singleton = props.getProperty( MegletDescriptor.APPLICATION_SINGLETON );
-		return singleton == null || singleton.equalsIgnoreCase("true");
-	}
-
 
 	/**
 	 * @return
@@ -165,16 +157,6 @@ public final class MegletDescriptorImpl implements MegletDescriptor.Delegate {
 		properties.put("application.bundle.id", props.getProperty("application.bundle.id"));
 		properties.put( MegletDescriptor.APPLICATION_VERSION, props.getProperty( MegletDescriptor.APPLICATION_VERSION ));
 		properties.put( MegletDescriptor.APPLICATION_VENDOR, props.getProperty( MegletDescriptor.APPLICATION_VENDOR ));
-		String singleton = props.getProperty( MegletDescriptor.APPLICATION_SINGLETON );
-		if (singleton == null || singleton.equalsIgnoreCase("true"))
-			properties.put( MegletDescriptor.APPLICATION_SINGLETON, "true");
-		else
-			properties.put( MegletDescriptor.APPLICATION_SINGLETON, "false");
-		String autostart = props.getProperty( MegletDescriptor.APPLICATION_AUTOSTART );
-		if (autostart != null && autostart.equalsIgnoreCase("true"))
-			properties.put( MegletDescriptor.APPLICATION_AUTOSTART, "true");
-		else
-			properties.put( MegletDescriptor.APPLICATION_AUTOSTART, "false");
 		String visible = props.getProperty( MegletDescriptor.APPLICATION_VISIBLE );
 		if (visible != null && visible.equalsIgnoreCase("false"))
 			properties.put( MegletDescriptor.APPLICATION_VISIBLE, "false");

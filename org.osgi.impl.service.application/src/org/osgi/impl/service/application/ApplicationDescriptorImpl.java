@@ -104,16 +104,5 @@ public class ApplicationDescriptorImpl implements Delegate {
 			String isLaunchable = (String)props.get("application.launchable");
 	 		if (isLaunchable == null || !isLaunchable.equalsIgnoreCase("true"))
 	 			throw new Exception("Cannot launch the application!");
-			String isSingleton = (String)props.get("application.singleton");
-			if (isSingleton == null || isSingleton.equalsIgnoreCase("true")) {
-				ServiceReference[] appHandles = Activator.bc.getServiceReferences(
-						"org.osgi.service.application.ApplicationHandle", null);
-				if (appHandles != null)
-					for (int k = 0; k != appHandles.length; k++) {
-						if( appHandles[ k ].getProperty( ApplicationDescriptor.APPLICATION_PID )
-							  .equals( pid ) )
-							throw new SingletonException();
-					}
-			}
 	}
 }

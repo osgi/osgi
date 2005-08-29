@@ -55,7 +55,6 @@ class MEGBundleDescriptor {
 	public EventSubscribe[]			eventSubscribes;
 	public Dependencies[]			dependencies;
 	public long						bundleID;
-	public boolean					autoStartRequired;
 }
 
 /**
@@ -110,14 +109,10 @@ public class MegletContainer implements BundleListener, EventHandler {
 		bundleIDs.add(Long.toString(bundleID));
 		saveVector(bundleIDs, "BundleIDs");
 
-		checkAutoStart( bundleID, true );
 		return appDescs;
 	}
     
   public Meglet createMegletInstance( MegletDescriptorImpl appDesc, boolean resume ) throws Exception {
-		if( !checkSingletonity( appDesc, resume ) )
-			throw new Exception("Singleton Exception!");
-
 		MEGBundleDescriptor desc = getBundleDescriptor( appDesc.getBundleId() );
 		int i = getApplicationIndex( desc, appDesc.getMegletDescriptor() );
         
@@ -214,36 +209,8 @@ public class MegletContainer implements BundleListener, EventHandler {
 		}
 	}
 
-	private boolean checkSingletonity( MegletDescriptorImpl appDesc, boolean resume ) {
-		if( !((MegletDescriptorImpl)appDesc).isSingleton() )
-			return true;
-		
-		try {
-			ServiceReference []appList =
-					bc.getServiceReferences( "org.osgi.service.application.ApplicationHandle",
-									"(" + ApplicationHandle.APPLICATION_DESCRIPTOR + "="+ appDesc.getPID() + ")" );
-			if( appList == null || appList.length == 0 )
-        return true;
-      if( !resume )
-        return false;
-      
-      ApplicationHandle appHandle = (ApplicationHandle)bc.getService( appList[ 0 ] );      
-      boolean result = appHandle.getState().equals( MegletHandle.SUSPENDED );      
-      bc.ungetService( appList[ 0 ] );
-      
-      return result;
-		}
-		catch (Exception e) {
-			log(bc, LogService.LOG_ERROR,
-				"Exception occurred at checking the singletonity of a meglet!", e);
-			return false;
-		}
-	}
-
 	public boolean isLaunchable( MegletDescriptorImpl appDesc ) {
 		try {
-			if( !checkSingletonity( appDesc, false ) )
-				return false;
 			if( appDesc.isLocked() )
 				return false;
 			MEGBundleDescriptor desc = getBundleDescriptor(
@@ -264,31 +231,6 @@ public class MegletContainer implements BundleListener, EventHandler {
 			log(bc, LogService.LOG_ERROR,
 				"Exception occurred at checking if the meglet is launchable!", e);
 			return false;
-		}
-	}
-
-	private void checkAutoStart( long bundleID, boolean isInstalling ) {
-		try {
-			MEGBundleDescriptor desc = getBundleDescriptor( bundleID );
-
-			if( bc.getBundle( bundleID ).getState() != Bundle.ACTIVE ) {
-				if( isInstalling )
-					desc.autoStartRequired = true;
-				return;
-			} else if( !isInstalling && !desc.autoStartRequired )
-				return;
-
-			ApplicationDescriptor appDescs[] = desc.applications;
-			for (int i = 0; i != appDescs.length; i++) {
-				if (appDescs[i].getProperties("en").get("application.autostart").equals("true")) {
-					appDescs[i].launch( null );
-				}
-			}
-			desc.autoStartRequired = false;
-		}
-		catch (Exception e) {
-			log(bc, LogService.LOG_ERROR,
-				"Exception occurred at checking trying to autostart a meglet!", e);
 		}
 	}
 
@@ -348,7 +290,6 @@ public class MegletContainer implements BundleListener, EventHandler {
 			switch (event.getType()) {
 				case BundleEvent.STARTED :
 					registerApplicationDescriptors(bundleID);
-					checkAutoStart( bundleID, false );
 					break;
 				case BundleEvent.STOPPED :
 					unregisterApplicationDescriptors(bundleID);
@@ -515,17 +456,11 @@ public class MegletContainer implements BundleListener, EventHandler {
 							if( node.getNodeName().equals( "vendor" ) )
 								props.setProperty("application.vendor",
 										getAttributeValue( node, "value" ) );
-							if( node.getNodeName().equals( "singleton" ) )
-								props.setProperty("application.singleton",
-										getAttributeValue( node, "value" ) );
 							if( node.getNodeName().equals( "visible" ) )
 								props.setProperty("application.visible",
 										getAttributeValue( node, "value" ) );
 							if( node.getNodeName().equals( "version" ) )
 								props.setProperty("application.version",
-										getAttributeValue( node, "value" ) );
-							if( node.getNodeName().equals( "autostart" ) )
-								props.setProperty("application.autostart",
 										getAttributeValue( node, "value" ) );
 							if( node.getLocalName().equals( "component" ) &&
 									node.getPrefix() != null && node.getPrefix().equals( "scr" )) {
@@ -678,7 +613,6 @@ public class MegletContainer implements BundleListener, EventHandler {
 			for (int k = 0; k != applicationNum; k++)
 				descs[k] = (ApplicationDescriptor) appVector.removeFirst();
 			MEGBundleDescriptor descriptor = new MEGBundleDescriptor();
-			descriptor.autoStartRequired = false;
 			descriptor.applications = new ApplicationDescriptor[applicationNum];
 			descriptor.eventSubscribes = new EventSubscribe[applicationNum];
 			descriptor.dependencies = new Dependencies[applicationNum];

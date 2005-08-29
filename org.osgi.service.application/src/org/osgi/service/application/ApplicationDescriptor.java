@@ -48,15 +48,6 @@ public abstract class ApplicationDescriptor {
 	 */
 	public static final String APPLICATION_VENDOR = "application.vendor";
 
-	/**
-	 * The property key for the singleton property of the application.
-	 */
-	public static final String APPLICATION_SINGLETON = "application.singleton";
-
-	/**
-	 * The property key for the autostart property of the application.
-	 */
-	public static final String APPLICATION_AUTOSTART = "application.autostart";
 
 	/**
 	 * The property key for the visibility property of the application.
@@ -92,6 +83,16 @@ public abstract class ApplicationDescriptor {
 	 * The property key for the localized license of the application.
 	 */
 	public static final String APPLICATION_LICENSE = "application.license";
+
+	/**
+	 * The property key for the application container of the application.
+	 */
+	public static final String APPLICATION_CONTAINER = "application.container";
+
+	/**
+	 * The property key for thepackage of the application.
+	 */
+	public static final String APPLICATION_PACKAGE = "application.package";
 
 	
 	/**
@@ -196,8 +197,6 @@ public abstract class ApplicationDescriptor {
 	 * <LI>Check for the appropriate permission.
 	 * <LI>Check the locking state of the application. If locked then return
 	 * null otherwise continue.
-	 * <LI>If the application is a singleton and already has a running instance
-	 * then throw SingletonException.
 	 * <LI>Calls the launchSpecific() method to create and start an application
 	 * instance.
 	 * <LI>Returns the <code>ApplicationHandle</code> returned by the 
@@ -229,9 +228,6 @@ public abstract class ApplicationDescriptor {
 	 * @return the registered ApplicationHandle, which represents the newly 
 	 *         launched application instance
 	 * 
-	 * @throws SingletonException
-	 *             if the call attempts to launch a second instance of a
-	 *             singleton application
 	 * @throws SecurityException
 	 *             if the caller doesn't have "launch"
 	 *             ApplicationAdminPermission for the application.
@@ -241,7 +237,7 @@ public abstract class ApplicationDescriptor {
 	 *             if the application descriptor is unregistered
 	 */
 	public final ApplicationHandle launch(Map arguments)
-			throws SingletonException, Exception {
+			throws Exception {
 		delegate.launch(arguments);
 		return launchSpecific(arguments);
 	}

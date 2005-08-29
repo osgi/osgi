@@ -286,14 +286,8 @@ public class ApplicationPlugin implements BundleActivator, DmtDataPlugin,
 				return new DmtData((String) props.get( ApplicationDescriptor.APPLICATION_VERSION ));
 			else if ( key.equals( "vendor" ) )
 				return new DmtData((String) props.get( ApplicationDescriptor.APPLICATION_VENDOR ));
-			else if ( key.equals( "autostart" ) )
-				return new DmtData( ((String)props.get( ApplicationDescriptor.APPLICATION_AUTOSTART ))
-						                .equalsIgnoreCase("true"));
 			else if ( key.equals( "locked" ) )
 				return new DmtData( ((String)props.get( ApplicationDescriptor.APPLICATION_LOCKED ))
-            								.equalsIgnoreCase("true"));
-			else if ( key.equals( "singleton" ) )
-				return new DmtData( ((String)props.get( ApplicationDescriptor.APPLICATION_SINGLETON ))
             								.equalsIgnoreCase("true"));
 			else if ( key.equals( "bundle_id" ) )
 				return new DmtData( (String) props.get( "application.bundle.id" ));
