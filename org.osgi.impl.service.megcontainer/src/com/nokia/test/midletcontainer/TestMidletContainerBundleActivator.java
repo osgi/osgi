@@ -13,6 +13,7 @@ import org.osgi.framework.*;
 import org.osgi.service.application.ApplicationDescriptor;
 import org.osgi.service.application.ApplicationHandle;
 import org.osgi.service.application.midlet.MidletHandle;
+import org.osgi.service.dmt.DmtAdmin;
 import org.osgi.service.event.Event;
 import org.osgi.service.event.EventAdmin;
 import org.osgi.service.event.EventHandler;
@@ -21,23 +22,20 @@ import org.osgi.service.log.*;
 public class TestMidletContainerBundleActivator
     implements BundleActivator, BundleListener, EventHandler, Runnable
 {
-    private BundleContext bc;
-    private Thread testerThread;
-    private Bundle midletBundle;
-    private Bundle midletContainerBundle;
-    private Bundle logServiceBundle;
-    private ApplicationDescriptor appDescs[];
-    private ApplicationHandle appHandle;
-    private String installedAppUID;
-    private long installedBundleID;
-    private ServiceRegistration serviceReg;
-    private Hashtable           serviceRegProps;
-    private LinkedList receivedEvents;
-    private static final int APPLICATION_START = 1;
-    private static final int APPLICATION_PAUSE = 2;
-    private static final int APPLICATION_RESUME = 3;
-    private static final int APPLICATION_STOPPED = 5;
-    private static final int APPLICATION_STOPPED_AFTER_PAUSE = 6;
+    private BundleContext           bc;
+    private Thread                  testerThread;
+    private Bundle                  midletBundle;
+    private Bundle                  midletContainerBundle;
+    private Bundle                  logServiceBundle;
+    private ApplicationDescriptor   appDescs[];
+    private ApplicationHandle       appHandle;
+    private String                  installedAppUID;
+    private long                    installedBundleID;
+    private ServiceRegistration     serviceReg;
+    private Hashtable               serviceRegProps;
+    private LinkedList              receivedEvents;
+  	private ServiceReference				dmtFactoryRef;
+  	private DmtAdmin 								dmtFactory;
 
     public TestMidletContainerBundleActivator()
     {
@@ -56,6 +54,9 @@ public class TestMidletContainerBundleActivator
     public void stop(BundleContext bc)
         throws Exception
     {
+  		  if( dmtFactory != null )
+  			  bc.ungetService( dmtFactoryRef );
+  		
         serviceReg.unregister();
         this.bc = null;
     }
@@ -135,18 +136,24 @@ public class TestMidletContainerBundleActivator
     public void run()
     {
         System.out.println("Midlet container tester thread started!\n");
-        if(!testCase_lookUpMidletContainer())
-        {
+        if(!testCase_lookUpMidletContainer()) {
             System.out.println("Looking up the Midlet container                  FAILED");
             return;
         }
-        System.out.println("Looking up the Midlet container                  PASSED");
-        if(!testCase_lookUpLogService())
-        {
+        else
+            System.out.println("Looking up the Midlet container                  PASSED");
+        if(!testCase_lookUpLogService()) {
             System.out.println("Looking up the log service                       FAILED");
             return;
         }
-        System.out.println("Looking up the log service                       PASSED");
+        else
+            System.out.println("Looking up the log service                       PASSED");
+    		if (!testCase_lookUpDmtAdmin()) {
+    			  System.out.println("Looking up the DMT admin                         FAILED");
+    			return;
+    		}
+    		else
+    			  System.out.println("Looking up the DMT admin                         PASSED");
         if(!testCase_installMidletBundle())
             System.out.println("Midlet bundle install onto Midlet container      FAILED");
         else
@@ -313,6 +320,24 @@ public class TestMidletContainerBundleActivator
         }
         return false;
     }
+
+    boolean testCase_lookUpDmtAdmin() {
+  		try {
+  			dmtFactoryRef = bc.getServiceReference( DmtAdmin.class.getName() );
+        if(dmtFactoryRef == null)      
+        	throw new Exception("Can't find the DmtAdmin service!");
+        
+        dmtFactory = (DmtAdmin) bc.getService( dmtFactoryRef );
+        if( dmtFactory == null )
+        	throw new Exception("Can't get the DmtAdmin service!");
+        
+  			return true;
+  		}
+  		catch (Exception e) {
+  			e.printStackTrace();
+  			return false;
+  		}
+  	}
 
     boolean testCase_lookUpLogService()
     {
