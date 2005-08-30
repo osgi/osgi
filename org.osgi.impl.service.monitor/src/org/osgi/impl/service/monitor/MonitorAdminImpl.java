@@ -19,14 +19,29 @@ package org.osgi.impl.service.monitor;
 
 import java.security.AccessController;
 import java.security.PrivilegedAction;
-import java.util.*;
-
-import org.osgi.framework.*;
-import org.osgi.service.dmt.*;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Hashtable;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Set;
+import java.util.Vector;
+import org.osgi.framework.Bundle;
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.ServiceReference;
+import org.osgi.service.dmt.AlertItem;
+import org.osgi.service.dmt.DmtData;
+import org.osgi.service.dmt.DmtAdmin;
+import org.osgi.service.dmt.DmtException;
 import org.osgi.service.event.Event;
 import org.osgi.service.event.EventAdmin;
 import org.osgi.service.log.LogService;
-import org.osgi.service.monitor.*;
+import org.osgi.service.monitor.MonitorAdmin;
+import org.osgi.service.monitor.MonitorListener;
+import org.osgi.service.monitor.MonitorPermission;
+import org.osgi.service.monitor.Monitorable;
+import org.osgi.service.monitor.MonitoringJob;
+import org.osgi.service.monitor.StatusVariable;
 import org.osgi.util.tracker.ServiceTracker;
 
 /**
@@ -272,7 +287,7 @@ public class MonitorAdminImpl implements MonitorAdmin, MonitorListener {
         for (int i = 0; i < paths.length; i++) {
             try {
                 StatusVariable var = trustedGetStatusVariable(paths[i]);
-                itemList.add(new DmtAlertItem(
+                itemList.add(new AlertItem(
                         Activator.PLUGIN_ROOT + "/" + paths[i],
                         "x-oma-trap:" + paths[i], null, createData(var)));
             } catch(IllegalArgumentException e) {
@@ -280,8 +295,8 @@ public class MonitorAdminImpl implements MonitorAdmin, MonitorListener {
             }
         }
         
-        DmtAlertItem[] items = (DmtAlertItem[]) 
-            itemList.toArray(new DmtAlertItem[itemList.size()]);
+        AlertItem[] items = (AlertItem[]) 
+            itemList.toArray(new AlertItem[itemList.size()]);
 
         try {
             alertSender.sendAlert(initiator, MONITORING_ALERT_CODE, null, 

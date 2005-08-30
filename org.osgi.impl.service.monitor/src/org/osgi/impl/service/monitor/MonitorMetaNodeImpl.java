@@ -18,14 +18,15 @@
 package org.osgi.impl.service.monitor;
 
 import java.util.Arrays;
-import org.osgi.service.dmt.DmtException;
-import org.osgi.service.dmt.DmtMetaNode;
+import org.osgi.service.dmt.MetaNode;
 import org.osgi.service.dmt.DmtData;
 
 // TODO update meta-info based on spec (e.g. wrt permanent/automatic nodes)
 
-public class MonitorMetaNodeImpl implements DmtMetaNode
+public class MonitorMetaNodeImpl implements MetaNode
 {
+    static final String LEAF_MIME_TYPE = "text/plain";
+    
     boolean   deletable             = false;
     boolean   addable               = false;
     boolean   retrievable           = true;
@@ -55,6 +56,7 @@ public class MonitorMetaNodeImpl implements DmtMetaNode
     {
         leaf = true;
         scope = DYNAMIC;
+        mimeTypes = new String[] { LEAF_MIME_TYPE };
 
         this.replaceable = replaceable;
         this.defaultData = defaultData;
@@ -160,13 +162,10 @@ public class MonitorMetaNodeImpl implements DmtMetaNode
         if((valueFormat & format) == 0)
             return false;
         
-        try {
+        if(valueFormat == DmtData.FORMAT_INTEGER) {
             int intValue = value.getInt();
             if(intValue < min || intValue > max)
                 return false;
-        } catch(DmtException e) {
-            // TODO change this to ignore IllegalStateException according to new API
-            // ignore OTHER_ERROR if format of value was not FORMAT_INTEGER
         }
             
         return validValues == null ? true :

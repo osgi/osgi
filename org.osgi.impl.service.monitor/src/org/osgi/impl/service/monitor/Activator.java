@@ -18,12 +18,13 @@
 package org.osgi.impl.service.monitor;
 
 import java.util.Hashtable;
-
 import org.osgi.framework.*;
 import org.osgi.service.dmt.DmtAdmin;
-import org.osgi.service.dmt.DmtDataPlugin;
+import org.osgi.service.dmt.spi.DataPluginFactory;
 import org.osgi.service.event.EventAdmin;
-import org.osgi.service.monitor.*;
+import org.osgi.service.monitor.MonitorAdmin;
+import org.osgi.service.monitor.MonitorListener;
+import org.osgi.service.monitor.Monitorable;
 import org.osgi.util.tracker.ServiceTracker;
 
 /**
@@ -35,7 +36,10 @@ import org.osgi.util.tracker.ServiceTracker;
  */
 public class Activator implements BundleActivator
 {
-    static final String PLUGIN_ROOT = "./OSGi/Monitor";
+    static final String[] PLUGIN_ROOT_PATH = new String[] { 
+        ".", "OSGi", "Monitor"
+    };
+    static final String PLUGIN_ROOT = "./OSGi/Monitor"; // generate from array?
 
     ServiceTracker monitorableTracker;
     ServiceRegistration monitorAdminReg;
@@ -82,11 +86,11 @@ public class Activator implements BundleActivator
         };
         monitorAdminReg = bc.registerService(services, monitorAdmin, null);
 
-
         MonitorPlugin monitorPlugin = new MonitorPlugin(bc, monitorAdmin);
         Hashtable properties = new Hashtable();
         properties.put("dataRootURIs", new String[] { PLUGIN_ROOT });
-        monitorPluginReg = bc.registerService(DmtDataPlugin.class.getName(), monitorPlugin, properties);
+        monitorPluginReg = bc.registerService(DataPluginFactory.class.getName(),
+                monitorPlugin, properties);
 
         System.out.println("Monitor Admin and Plugin activation successful.");
     }
