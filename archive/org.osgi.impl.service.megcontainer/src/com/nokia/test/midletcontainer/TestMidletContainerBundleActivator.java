@@ -236,6 +236,30 @@ public class TestMidletContainerBundleActivator
     			  System.out.println("Checking the filter matching of the scheduler    FAILED");
     		else
     			  System.out.println("Checking the filter matching of the scheduler    PASSED");
+    		if (!testCase_appPluginCheckInstalledApps())
+    			  System.out.println("AppPlugin: checking the installed application    FAILED");
+    		else
+    			  System.out.println("AppPlugin: checking the installed application    PASSED");
+    		if (!testCase_appPluginCheckRunningApps()) 																	
+    			  System.out.println("AppPlugin: checking a running application        FAILED"); 	
+    		else 																																				
+    			  System.out.println("AppPlugin: checking a running application        PASSED"); 	
+    		if (!testCase_appPluginCheckApplicationLaunch()) 														
+    			  System.out.println("AppPlugin: checking the application launching    FAILED"); 	
+    		else 																																				
+    			  System.out.println("AppPlugin: checking the application launching    PASSED"); 	
+    		if (!testCase_appPluginCheckApplicationStop()) 															
+    			  System.out.println("AppPlugin: checking the application stopping     FAILED"); 	
+    		else 																																				
+    			  System.out.println("AppPlugin: checking the application stopping     PASSED"); 	
+    		if (!testCase_appPluginDeleteNode()) 															
+    			  System.out.println("AppPlugin: checking the node removal             FAILED"); 	
+    		else 																																				
+    			  System.out.println("AppPlugin: checking the node removal             PASSED"); 	
+    		if (!testCase_appPluginLock()) 															
+    			  System.out.println("AppPlugin: checking the lock changing            FAILED"); 	
+    		else 																																				
+    			  System.out.println("AppPlugin: checking the lock changing            PASSED"); 	
         if(!testCase_oatRegisterService())
             System.out.println("Checking OAT service registration                FAILED");
         else
@@ -1665,4 +1689,312 @@ public class TestMidletContainerBundleActivator
   			return false;
   		}
   	}
+  	
+  	
+  	boolean testCase_appPluginCheckRunningApps() {
+  		ApplicationDescriptor appDesc = appDescs[0];
+  		String appUID = getPID( appDesc );
+  		
+  		try {
+  			if( !testCase_launchApplication() )
+  				return false;
+  			
+  			ServiceReference[] references = bc.getServiceReferences(
+  					"org.osgi.service.application.ApplicationHandle",
+  					"(" + ApplicationHandle.APPLICATION_DESCRIPTOR + "=" + getPID( appDesc ) + ")");
+  			
+  			if( references == null || references.length == 0 )
+  				throw new Exception( "Service reference not found!" );
+  			
+  			DmtSession session = dmtFactory.getSession("./OSGi/app_instances");
+
+  			String[] nodeNames = session.getChildNodeNames( "./OSGi/app_instances" );
+  			
+  			if( nodeNames == null || nodeNames.length != 1 )
+  				throw new Exception( "Couldn't find the application instance node!" );
+  			
+  			ApplicationHandle appHandle = lookupAppHandle( appDesc );
+  			
+  			String instID = appHandle.getInstanceID();
+  			
+  			if( !nodeNames[ 0 ].equals( appHandle.getInstanceID() ) )
+  				throw new Exception( "Illegal node name (" + nodeNames[ 0 ] + 
+  						                 " instead of " + instID +")" );
+  			
+  			String[] childNodes = session.getChildNodeNames( "./OSGi/app_instances/" + appHandle.getInstanceID() );
+  			
+  			if( childNodes == null || childNodes.length != 2 )
+  				throw new Exception( "Invalid child nodes of the application instance!" );
+  			
+  			List childList = Arrays.asList( childNodes );
+  			
+  			if( childList.indexOf( "state" ) == -1 || childList.indexOf( "type" ) == -1 )
+  				throw new Exception( "Invalid child nodes of the application instance!" );
+  			
+  			DmtData typeValue = session.getNodeValue( "./OSGi/app_instances/" + instID + "/type" );
+  			if( !getPID( appDesc ).equals( typeValue.getString() ) )
+  				throw new Exception( "Bad type value (" + typeValue.getString() +"/" + getPID( appDesc ) + ")!" );
+
+  			DmtData stateValue = session.getNodeValue( "./OSGi/app_instances/" + instID + "/state" );
+  			if( !stateValue.getString().equals( ApplicationHandle.RUNNING ) )
+  				throw new Exception( "Bad state value (" + stateValue.getInt() + " " + 
+  						                  ApplicationHandle.RUNNING + ")!" );
+
+  			if( ! testCase_pauseApplication() )
+  				return false;
+
+  			stateValue = session.getNodeValue( "./OSGi/app_instances/" + instID + "/state" );
+  			if( !stateValue.getString().equals( MidletHandle.PAUSED ) )
+  				throw new Exception( "Bad state value (" + stateValue.getInt() + " " + 
+  						MidletHandle.PAUSED + ")!" );
+  			
+  			if( ! testCase_resumeApplication() )
+  				return false;
+
+  			stateValue = session.getNodeValue( "./OSGi/app_instances/" + instID + "/state" );
+  			if( !stateValue.getString().equals( ApplicationHandle.RUNNING ) )
+  				throw new Exception( "Bad state value (" + stateValue.getInt() + " " + 
+            ApplicationHandle.RUNNING + ")!" );
+
+  			session.close();
+
+  			if( !testCase_stopApplication() )
+  				return false;
+  			
+  			return true;
+  		}
+  		catch (Exception e) {
+  			e.printStackTrace();
+  			return false;
+  		}
+  	}
+  	
+  	boolean testCase_appPluginCheckApplicationLaunch()
+  	{
+  		ApplicationDescriptor appDesc = appDescs[0];
+  		String appUID = getPID( appDesc );
+  		
+  		try {
+  			DmtSession session = dmtFactory.getSession("./OSGi/apps");
+  			
+  			String[] nodeNames = session.getChildNodeNames( "./OSGi/apps/" + appUID + "/launch" );
+  			if( nodeNames != null && nodeNames.length != 0 )
+  				throw new Exception( "Exec-id found without setting it manually!" );
+  		
+  			session.createInteriorNode( "./OSGi/apps/" + appUID + "/launch/exec_id" );
+  			
+  			nodeNames = session.getChildNodeNames( "./OSGi/apps/" + appUID + "/launch" );
+  			if( nodeNames == null || nodeNames.length != 1 )
+  				throw new Exception( "Interior node wasn't created properly!" );
+  			if( !nodeNames[ 0 ].equals("exec_id") )
+  				throw new Exception( "The name of the interior node is " + nodeNames [ 0 ] + 
+  						                  "instead if exec_id !" );
+  			
+  			String[] childNodes = session.getChildNodeNames( "./OSGi/apps/" + appUID + "/launch/exec_id" );
+  			if( childNodes != null && childNodes.length != 0 )
+  				throw new Exception( "Extra parameters added to the exec_id interior node!" );
+  			
+  			Map args = createArgs();
+  			
+  			Iterator it = args.keySet().iterator();
+  			while( it.hasNext() )
+  			{
+  				String prop = (String)it.next();
+  				String value = (String)args.get( prop );
+  				
+  				session.createLeafNode( "./OSGi/apps/" + appUID + "/launch/exec_id/" + prop, 
+  						                    new DmtData( value ) );
+  				
+  				childNodes = session.getChildNodeNames( "./OSGi/apps/" + appUID + "/launch/exec_id" );
+  				if( childNodes == null || childNodes.length == 0 )
+  					throw new Exception( "Property wasn't added properly!" );
+  				if( Arrays.asList( childNodes ).indexOf( prop ) == -1 )
+  					throw new Exception( "Property wasn't added properly!" );
+  				
+  				DmtData content = session.getNodeValue( "./OSGi/apps/" + appUID + "/launch/exec_id/" + prop );
+  				if( !content.getString().equals( value ) )
+  					throw new Exception( "Illegal value was set to the property!" );
+  			}
+  			
+  			session.execute( "./OSGi/apps/" + appUID + "/launch/exec_id", null );
+
+  			if (!checkResultFile("START"))
+  				throw new Exception("Result of the launch is not START!");
+  			ServiceReference[] appList = bc.getServiceReferences(
+  					"org.osgi.service.application.ApplicationHandle",
+  					"(" + ApplicationHandle.APPLICATION_DESCRIPTOR + "=" + getPID( appDesc ) + ")");
+  			if (appList == null || appList.length == 0)
+  				throw new Exception("No registered application handle found!");
+
+  			appHandle = (ApplicationHandle) bc.getService(appList[0]);
+  			
+  			if ( !appHandle.getState().equals( ApplicationHandle.RUNNING ) )
+  				throw new Exception("Application didn't started!");
+
+  			bc.ungetService( appList[0] );
+
+  			nodeNames = session.getChildNodeNames( "./OSGi/apps/" + appUID + "/launch" );
+  			if( nodeNames != null && nodeNames.length != 0 )
+  				throw new Exception( "Exec-id didn't removed after launch!" );
+  			
+  			if( !testCase_stopApplication() )
+  				return false;
+  			
+  			return true;
+  		}
+  		catch (Exception e) {
+  			e.printStackTrace();
+  			return false;
+  		}
+  	}
+  	
+  	boolean testCase_appPluginCheckApplicationStop() {
+  		ApplicationDescriptor appDesc = appDescs[0];
+  		String appUID = getPID( appDesc );
+  		
+  		try {
+  			
+  			if( !testCase_launchApplication() )
+  				return false;
+  			
+  			DmtSession session = dmtFactory.getSession("./OSGi/app_instances");
+
+  			String[] nodeNames = session.getChildNodeNames( "./OSGi/app_instances" );
+  			
+  			if( nodeNames == null || nodeNames.length != 1 )
+  				throw new Exception( "Couldn't find the application instance node!" );
+  			
+  			String instanceName = nodeNames[ 0 ];			
+  			session.execute( "./OSGi/app_instances/" + instanceName, "STOP" );			
+
+  			nodeNames = session.getChildNodeNames( "./OSGi/app_instances" );
+  			if( nodeNames != null && nodeNames.length != 0 )
+  				throw new Exception( "Application didn't stop!" );
+  			
+  			if (!checkResultFile("STOP"))
+  				throw new Exception("Result of the stop is not STOP!");
+
+  			ServiceReference[] appList = bc.getServiceReferences(
+  					"org.osgi.service.application.ApplicationHandle",
+  					"(" + ApplicationHandle.APPLICATION_DESCRIPTOR + "="
+  							+ appUID + ")");
+  			if (appList != null && appList.length != 0) {
+  				for (int i = 0; i != appList.length; i++) {
+  					ApplicationHandle handle = (ApplicationHandle) bc
+  							.getService(appList[i]);
+  					bc.ungetService(appList[i]);
+  					if (handle == appHandle)
+  						throw new Exception(
+  								"Application handle doesn't removed after stop!");
+  				}
+  			}
+
+  			try {
+  			  appHandle.getState();
+  			}catch( Exception e ) 
+  			{
+  				return true;
+  			}
+  			throw new Exception("The status didn't change to NONEXISTENT!");			
+  		}
+  		catch (Exception e) {
+  			e.printStackTrace();
+  			return false;
+  		}
+  	}
+  	
+  	boolean testCase_appPluginDeleteNode() {
+  		ApplicationDescriptor appDesc = appDescs[0];
+  		String appUID = getPID( appDesc );
+  		
+  		try {
+  			DmtSession session = dmtFactory.getSession("./OSGi/apps");
+  			
+  			String[] nodeNames = session.getChildNodeNames( "./OSGi/apps/" + appUID + "/launch" );
+  			if( nodeNames != null && nodeNames.length != 0 )
+  				throw new Exception( "Exec-id found when no one is expected!" );
+  		
+  			session.createInteriorNode( "./OSGi/apps/" + appUID + "/launch/exec_id" );
+  			
+  			nodeNames = session.getChildNodeNames( "./OSGi/apps/" + appUID + "/launch" );
+  			if( nodeNames == null || nodeNames.length != 1 )
+  				throw new Exception( "Interior node wasn't created properly!" );
+  			if( !nodeNames[ 0 ].equals("exec_id") )
+  				throw new Exception( "The name of the interior node is " + nodeNames [ 0 ] + 
+  						                  "instead if exec_id !" );
+  			
+  			session.createLeafNode( "./OSGi/apps/" + appUID + "/launch/exec_id/myprop", 
+            new DmtData( "myvalue" ) );
+  			
+  			String[] childNodes = session.getChildNodeNames( "./OSGi/apps/" + appUID + "/launch/exec_id" );
+  			if( childNodes == null || childNodes.length != 1 )
+  				throw new Exception( "Property wasn't added properly!" );
+  			
+  			DmtData value = session.getNodeValue( "./OSGi/apps/" + appUID + "/launch/exec_id/myprop" );
+  			if( !value.getString().equals( "myvalue" ) )
+  				throw new Exception( "Invalid node value was received!" );
+  			
+  			session.setNodeValue( "./OSGi/apps/" + appUID + "/launch/exec_id/myprop", new DmtData( "newvalue" ) );
+  			value = session.getNodeValue( "./OSGi/apps/" + appUID + "/launch/exec_id/myprop" );
+  			if( !value.getString().equals( "newvalue" ) )
+  				throw new Exception( "Node value was not changed!" );
+  			
+  			if( !childNodes[ 0 ].equals( "myprop" ) )
+  				throw new Exception( "Property wasn't added properly!" );
+  			
+  			session.deleteNode( "./OSGi/apps/" + appUID + "/launch/exec_id/myprop" );
+  			
+  			childNodes = session.getChildNodeNames( "./OSGi/apps/" + appUID + "/launch/exec_id" );
+  			if( childNodes != null && childNodes.length != 0 )
+  				throw new Exception( "Property wasn't deleted properly!" );			
+  			
+  			session.deleteNode( "./OSGi/apps/" + appUID + "/launch/exec_id" );
+  			
+  			childNodes = session.getChildNodeNames( "./OSGi/apps/" + appUID + "/launch" );
+  			if( childNodes != null && childNodes.length != 0 )
+  				throw new Exception( "Node wasn't deleted properly!" );
+  			
+  			return true;
+  		}
+  		catch (Exception e) {
+  			e.printStackTrace();
+  			return false;
+  		}					
+  	}	
+  	
+  	boolean testCase_appPluginLock() {
+  		ApplicationDescriptor appDesc = appDescs[0];
+  		String appUID = getPID( appDesc );
+  		
+  		try {
+  			if( isLocked( appDesc ) )
+  				throw new Exception( "ApplicationDescriptor is unexpectedly locked!" );
+  			
+  			DmtSession session = dmtFactory.getSession("./OSGi/apps");
+  			DmtData value = session.getNodeValue( "./OSGi/apps/" + appUID + "/locked" );			
+  			if( value.getBoolean() )
+  				throw new Exception( "Application is unlocked, but AppPlugin reports locked!" );
+  			
+  			session.setNodeValue( "./OSGi/apps/" + appUID + "/locked", new DmtData( true ) );
+  			
+  			if( !isLocked( appDesc ) )
+  				throw new Exception( "AppPlugin failed to set the application locked!" );
+  			value = session.getNodeValue( "./OSGi/apps/" + appUID + "/locked" );			
+  			if( !value.getBoolean() )
+  				throw new Exception( "Application is locked, but AppPlugin reports unlocked!" );
+  			
+  			session.setNodeValue( "./OSGi/apps/" + appUID + "/locked", new DmtData( false ) );
+  			if( isLocked( appDesc ) )
+  				throw new Exception( "AppPlugin failed to set the application unlocked!" );
+  			value = session.getNodeValue( "./OSGi/apps/" + appUID + "/locked" );			
+  			if( value.getBoolean() )
+  				throw new Exception( "Application is unlocked, but AppPlugin reports locked!" );
+  			
+  			return true;
+  		}
+  		catch (Exception e) {
+  			e.printStackTrace();
+  			return false;
+  		}							
+  	}  	
 }
