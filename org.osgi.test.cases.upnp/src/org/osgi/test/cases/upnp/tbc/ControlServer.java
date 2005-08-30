@@ -92,7 +92,7 @@ public class ControlServer implements Runnable {
 		}
 		else
 			if (ll.equals("HTTP/1.1 500 Internal Server Error")) {
-				System.out.println("RECEIVED ERROR : " + ans);
+				//System.out.println("RECEIVED ERROR : " + ans);
 				isError = true;
 			}
 			else {
