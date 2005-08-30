@@ -25,11 +25,16 @@
  */
 package org.osgi.test.cases.framework.dynpkgimport.tlx;
 
+import java.io.IOException;
+import java.util.Properties;
+
 public class TestLib {
 	public TestLib() {
 	}
 
-	public String version() {
-		return "tlx";
+	public String version() throws IOException {
+		Properties props = new Properties();
+		props.load(getClass().getResourceAsStream("TestLib.properties"));
+		return props.getProperty("value");
 	}
 }

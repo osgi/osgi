@@ -45,9 +45,12 @@ public class Activator implements BundleActivator, TestService {
 	}
 
 	public void test1() throws Exception {
+		// This test has changed for OSGi R4;
+		// dynamic wires are only established after trying to load 
+		// from the private bundle first
 		TestLib tl = new TestLib();
-		if (!tl.version().equals("tlx")) {
-			throw new Exception("TestLib version != tlx");
+		if (!"tb3".equals(tl.version())) {
+			throw new Exception("TestLib version != tb3");
 		}
 	}
 }
