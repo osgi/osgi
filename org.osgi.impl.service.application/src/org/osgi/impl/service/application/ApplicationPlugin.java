@@ -37,8 +37,8 @@ public class ApplicationPlugin implements BundleActivator, DataPluginFactory,
 	static final String   			PREFIX_APPS				= "apps";
 	static final String					PREFIX_APPINST   	= "app_instances";
 	
-	static final String         propertyNames[]   = { "localizedname", "version", "vendor", "autostart", 
-																										"locked", "singleton", "bundle_id", "required_services", 
+	static final String         propertyNames[]   = { "localizedname", "version", "vendor", "locked", 
+			                                              "bundle_id", "required_services", 
 																										"launch" };
 	
 	private BundleContext				bc;
