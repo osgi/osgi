@@ -14,6 +14,8 @@ public class FileResource extends Resource {
 		this.file = file;
 		this.preprocess = preprocess;
 	}
+	
+	protected int getLineLength()  { return 120; }
 
 	InputStream getInputStream() throws IOException {
 		if (!preprocess)
@@ -29,12 +31,12 @@ public class FileResource extends Resource {
 		return new ByteArrayInputStream(out.toByteArray());
 	}
 
-	void parse( BufferedReader br, PrintWriter pw ) throws IOException {
-		parse(br,pw, 120, "\\\r\n");
+	void parse(BufferedReader br, PrintWriter pw) throws IOException {
+		parse(br, pw, getLineLength(), "\\\r\n");
 	}
-	
-	void parse(BufferedReader rdr, PrintWriter pw, int linewidth, String continuation)
-			throws IOException {
+
+	void parse(BufferedReader rdr, PrintWriter pw, int linewidth,
+			String continuation) throws IOException {
 		String line = rdr.readLine();
 		while (line != null) {
 			line = process(line);
@@ -48,17 +50,18 @@ public class FileResource extends Resource {
 						case '\r' :
 							n = 0;
 							break;
-							
+
 						case '$' :
-							if (i < line.length() - 2 ) {
-								int c2 = hex(line.charAt(i+1), line.charAt(i+2));
-								if ( c2 >= 0 ) {
+							if (i < line.length() - 2) {
+								int c2 = hex(line.charAt(i + 1), line
+										.charAt(i + 2));
+								if (c2 >= 0) {
 									c = (char) c2;
-									i+=2;
+									i += 2;
 								}
 							}
 					}
-					if (n > linewidth ) {
+					if (linewidth != 0 && n > linewidth) {
 						sb.append(continuation);
 						n = 1;
 					}
@@ -67,7 +70,7 @@ public class FileResource extends Resource {
 				}
 				String s = sb.toString();
 				pw.print(s);
-				pw.print( "\r\n" );
+				pw.print("\r\n");
 				if (btool.showmanifest)
 					System.out.println(s);
 			}
@@ -87,40 +90,42 @@ public class FileResource extends Resource {
 	static int hex(char c, char d) {
 		int cc = nibble(c);
 		int dd = nibble(d);
-		if ( cc < 0 || dd < 0 )
+		if (cc < 0 || dd < 0)
 			return -1;
-		System.out.println( "Hex " + c + " " + d  + " " + (cc*16+ dd) );
+		System.out.println("Hex " + c + " " + d + " " + (cc * 16 + dd));
 		return cc * 16 + dd;
 	}
+
 	static int nibble(char c) {
-		if ( c >= '0' && c <= '9' )
+		if (c >= '0' && c <= '9')
 			return c - '0';
 		c = Character.toUpperCase(c);
-		if ( c >= 'A' && c <= 'F')
+		if (c >= 'A' && c <= 'F')
 			return c - 'A' + 10;
-		
+
 		return -1;
 	}
 
 	String process(String line) throws IOException {
 		StringBuffer sb = new StringBuffer();
-		process(line, 0, '\0', sb );
+		process(line, 0, '\0', sb);
 		return sb.toString();
 	}
 
-	int process(String line, int index, char type, StringBuffer result) throws IOException {
+	int process(String line, int index, char type, StringBuffer result)
+			throws IOException {
 		StringBuffer variable = new StringBuffer();
 		outer: while (index < line.length()) {
 			char c1 = line.charAt(index++);
-			if ( ( ( type=='(' && c1==')') || (type=='{' && c1=='}'))) {
+			if (((type == '(' && c1 == ')') || (type == '{' && c1 == '}'))) {
 				result.append(replace(variable.toString()));
 				return index;
 			}
-				
+
 			if (c1 == '$' && index < line.length() - 2) {
 				char c2 = line.charAt(index);
 				if (c2 == '(' || c2 == '{') {
-					index = process(line,index+1,c2, variable);
+					index = process(line, index + 1, c2, variable);
 					continue outer;
 				}
 			}
@@ -211,13 +216,15 @@ public class FileResource extends Resource {
 			return null;
 		}
 
-		String list[] = args[1].split("\\s*,\\s*");
+		String list[] = args[1].trim().split("\\s*,\\s*");
 		StringBuffer sb = new StringBuffer();
 		String del = "";
 		for (int i = 0; i < list.length; i++) {
-			sb.append(del);
-			sb.append(list[i].replaceAll(args[2], args[3]));
-			del = ", ";
+			if (!list[i].equals("")) {
+				sb.append(del);
+				sb.append(list[i].replaceAll(args[2], args[3]));
+				del = ", ";
+			}
 		}
 
 		return sb.toString();
@@ -309,7 +316,6 @@ public class FileResource extends Resource {
 			return null;
 		}
 
-		StringBuffer sb = new StringBuffer();
 		if (args[1].trim().length() != 0)
 			return args[2];
 		if (args.length > 3)
@@ -336,5 +342,17 @@ public class FileResource extends Resource {
 
 	public String _ADMIN(String args[]) {
 		return "(org.osgi.framework.AdminPermission)";
+	}
+
+	public String _strip(String args[]) {
+		if (args.length == 2) {
+			int l = Math.min(args[1].length(), args[2].length());
+			if (args[2].startsWith(args[1]))
+				return args[2].substring(l);
+			else
+				return args[2];
+		}
+		else
+			throw new IllegalArgumentException("Need 2 arguments to _strip");
 	}
 }
