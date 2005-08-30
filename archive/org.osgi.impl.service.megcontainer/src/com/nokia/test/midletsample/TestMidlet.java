@@ -127,6 +127,9 @@ public class TestMidlet extends MIDlet implements EventHandler, SynchronousBundl
 			}
 			writeResult("LOCATE SERVICES OK");			
 		}
+		else if (event.getTopic().equals("com/nokia/megtest/NotifyDestroyed")) {
+			notifyDestroyed();
+		}
 	}
 
 	public void bundleChanged(BundleEvent event) {
