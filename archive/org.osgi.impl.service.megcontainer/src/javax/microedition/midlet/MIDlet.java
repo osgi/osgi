@@ -81,7 +81,7 @@ public abstract class MIDlet {
 	}
 
 	public final int checkPermission(String permission) {
-		return 1 /*state.checkPermission(permission)*/;
+		return -1 /*state.checkPermission(permission)*/;
 	}
 	
 	private MidletHandle midletHandle = null;
