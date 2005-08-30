@@ -5,7 +5,6 @@ import java.net.*;
 import org.osgi.framework.BundleContext;
 
 public class Description {
-	private String				XMLfileContents	= "";
 	public static String		cdPath;
 	public static BundleContext	bcd;
 
@@ -27,7 +26,7 @@ public class Description {
 			ur1 = new URL(cdURL);
 		}
 		catch (Exception eobj) {
-			XMLfileContents = "ERROR" + eobj.getMessage();
+			log("ERROR" + eobj.getMessage() + " for " + cdURL );
 			return null;
 		}
 		String fileN = ur1.getFile().trim();
@@ -36,69 +35,72 @@ public class Description {
 		if (portN == -1) {
 			portN = 80;
 		}
-		accept(ipaddr, portN, fileN);
-		if (XMLfileContents.startsWith("ERROR")) {
+		String xmlFileContents = accept(ipaddr, portN, fileN);
+		if (xmlFileContents.startsWith("ERROR")) {
+			log("Error in reading device document " + xmlFileContents );
 			return null;
 		}
 		else
-			if (XMLfileContents.length() != 0) {
+			if (xmlFileContents.length() != 0) {
 				try {
-					Document docs1 = new Document(XMLfileContents, false, bcd);
+					Document docs1 = new Document(xmlFileContents, false, bcd);
 					docs1.rootDevice.bc1 = bcd;
 					return docs1;
 				}
 				catch (Exception e) {
+					log("Building document" + e);
 					return null;
 				}
 			}
 			else {
+				log("No Contents for " + ur1 );
 				return null;
 			}
 	}
 
+	private void log(String string) {
+		//System.out.println("UPNP: " + string );
+	}
+
 	// This method accepts the request from the CD.
-	void accept(String cdaddress, int port, String fileN) {
+	String accept(String cdaddress, int port, String fileN) {
 		Socket sock = null;
 		try {
 			sock = new Socket(cdaddress, port);
-			sock.setSoTimeout(20000);
-			sendAgain(sock, fileN, cdaddress, port);
+			sock.setSoTimeout(5000);
+			return sendAgain(sock, fileN, cdaddress, port);
 		}
 		catch (java.io.InterruptedIOException iioe) {
 			try {
-				sendAgain(sock, fileN, cdaddress, port);
+				log("Retrying " + cdaddress );
+				return sendAgain(sock, fileN, cdaddress, port);
 			}
 			catch (Exception e) {
-				XMLfileContents = "ERROR:" + e.getMessage();
+				return "ERROR:" + e.getMessage();
 			}
 		}
-		catch (java.net.UnknownHostException uhe) {
-			XMLfileContents = "ERROR: " + uhe.getMessage();
-		}
-		catch (java.net.SocketException se) {
-			XMLfileContents = "ERROR:" + se.getMessage();
-		}
-		catch (java.io.IOException ioe) {
-			XMLfileContents = "ERROR:" + ioe.getMessage();
-		}
-		catch (Exception e) {
-			XMLfileContents = "ERROR:" + e.getMessage();
+		catch (Exception uhe) {
+			return "ERROR: " + uhe.getMessage();
 		}
 	}
 
 	// This method sends the message to the CD.
-	void sendAgain(Socket sock1, String fileN, String ipaddr, int portN)
+	String sendAgain(Socket sock1, String fileN, String ipaddr, int portN)
 			throws Exception {
 		OutputStream dos = sock1.getOutputStream();
 		String msgToSend = makeDescriptionRequest(ipaddr, portN, fileN);
+		log("write to " + ipaddr + ":" + portN + " " + msgToSend );
 		dos.write(msgToSend.getBytes());
 		dos.flush();
-		receiveData(sock1, fileN, ipaddr, portN);
+		log("will read from " + ipaddr );
+		String result = receiveData(sock1, fileN, ipaddr, portN);
+		log("have read from " + ipaddr );
 		sock1.close();
+		return result;
 	}
 
 	// This method receives the message from the CD.
-	void receiveData(Socket sock, String fileN, String ipaddr, int portN)
+	String receiveData(Socket sock, String fileN, String ipaddr, int portN)
 			throws Exception {
 		InputStream din = sock.getInputStream();
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -107,11 +109,13 @@ public class Description {
 		 * while(cctr!=-1){ cctr = din.read(); XMLfileContents = XMLfileContents +
 		 * (char)cctr; }
 		 */
-		int j;
-		while ((j = din.read()) != -1) {
-			baos.write(j);
+		byte [] buffer = new byte[4096];
+		int size = din.read(buffer);
+		while (size>0) {
+			baos.write(buffer,0,size);
+			size = din.read(buffer);
 		}
-		XMLfileContents = baos.toString();
+		return baos.toString();
 	}
 
 	public String makeDescriptionRequest(String ipaddr, int portN,
