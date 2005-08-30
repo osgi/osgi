@@ -20,7 +20,7 @@ public class DTParser {
 	private String getYear() {
 		int len = toParse.length();
 		String yyyy = toParse.substring(len - 4, len);
-		System.out.println("YEAR IS: " + yyyy);
+		//System.out.println("YEAR IS: " + yyyy);
 		return yyyy;
 	}
 
