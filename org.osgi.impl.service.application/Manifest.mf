@@ -5,8 +5,6 @@ Bundle-Vendor: OSGi Alliance
 Bundle-Copyright: ${copyright}
 Bundle-Version: 0.0.0.0
 Bundle-Activator: ${p}.Activator
-Scheduler-Name: Nokia Sample Scheduler
-Scheduler-Version: 1.0
 $(IMPORT-PACKAGE)
 $(EXPORT-PACKAGE)
 $(PRIVATE-PACKAGE)
