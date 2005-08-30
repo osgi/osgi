@@ -86,8 +86,7 @@ public class ApplicationMetaNode implements MetaNode {
 	}
 
 	public boolean isZeroOccurrenceAllowed() {
-		// TODO Auto-generated method stub
-		return false;
+		return true;
 	}
 
 	public DmtData getDefault() {

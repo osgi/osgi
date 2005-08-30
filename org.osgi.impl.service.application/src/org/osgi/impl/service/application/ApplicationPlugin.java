@@ -174,7 +174,7 @@ public class ApplicationPlugin implements BundleActivator, DataPluginFactory,
 		
 		checkUniqueID( path );
 		
-		execIds.put( path[ 1 ] + "/" + path[ 3 ], new Hashtable());
+		execIds.put( path[ 3 ] + "/" + path[ 5 ], new Hashtable());
 	}
 
 	public void createLeafNode(String[] path, DmtData value, String type) throws DmtException {
@@ -347,7 +347,7 @@ public class ApplicationPlugin implements BundleActivator, DataPluginFactory,
 				String[] keys = (String[]) execIds.keySet().toArray( new String[0] );
 				
 				String[] ret = new String[ keys.length ];
-				for (int i = 0; i < keys.length; ++i)
+				for (int i = 0; i < keys.length; ++i) 
 					ret[i] = keys[i].substring(keys[i].lastIndexOf("/") + 1,
 							keys[i].length());
 				
