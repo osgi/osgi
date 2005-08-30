@@ -1013,39 +1013,17 @@ public class DmtSessionImpl implements DmtSession {
         return getPluginSession(uri, true);
 	}
     
-    /*
-    // 'synchronized' is just indication, all entry points are synch'd anyway
-    private synchronized PluginWrapper getPlugin(String uri, boolean writable) 
-            throws DmtException {
-        Plugin plugin = dispatcher.getDataPlugin(uri);
-        
-        if(writable && !plugin.isWritableDataPlugin())
-            throw new DmtException(uri, DmtException.COMMAND_NOT_ALLOWED,
-                    "Cannot perform write operation on Read-Only plugin.");
-        
-        PluginWrapper wrappedPlugin = 
-            new PluginWrapper(plugin, lockMode, securityContext);
-
-        // this block requires synchronized access
-        if (!dataPlugins.contains(wrappedPlugin)) {
-            wrappedPlugin.open(subtreeUri, lockMode, this);
-            dataPlugins.add(wrappedPlugin);
-        }
-        return wrappedPlugin;
-        
-    }
-    */
-
     // precondition: if 'writable' is true, session lock type must not be shared
     // 'synchronized' is just indication, all entry points are synch'd anyway
     private synchronized PluginSessionWrapper getPluginSession(String uri, 
             boolean writeOperation) throws DmtException {
         
         PluginRegistration pluginRegistration = dispatcher.getDataPlugin(uri);
-        String[] pluginSessionRoot = getRootForPlugin(pluginRegistration, uri);
+        String rootUri = getRootForPlugin(pluginRegistration, uri);
+        String[] rootPath = Utils.tempAbsoluteUriToPath(rootUri);
         
         PluginSessionWrapper wrappedPlugin = (PluginSessionWrapper) 
-            dataPlugins.get(pluginSessionRoot);
+            dataPlugins.get(rootUri);
         
         if(wrappedPlugin != null) {
             if(writeOperation && 
@@ -1064,7 +1042,7 @@ public class DmtSessionImpl implements DmtSession {
             switch(lockMode) {
             case LOCK_TYPE_EXCLUSIVE:
                 pluginSession = 
-                    plugin.openReadWriteSession(pluginSessionRoot, this);
+                    plugin.openReadWriteSession(rootPath, this);
                 if(pluginSession == null && writeOperation)
                     // TODO exception code does not match javadoc, we need a way to decide whether the plugin is writable
                     throw new DmtException(uri, DmtException.COMMAND_FAILED,
@@ -1073,7 +1051,7 @@ public class DmtSessionImpl implements DmtSession {
                 break;
             case LOCK_TYPE_ATOMIC:
                 pluginSession = 
-                    plugin.openAtomicSession(pluginSessionRoot, this);
+                    plugin.openAtomicSession(rootPath, this);
                 if(pluginSession == null && writeOperation)
                     // TODO exception code does not match javadoc, we need a way to decide whether the plugin is writable
                     throw new DmtException(uri, DmtException.TRANSACTION_ERROR,
@@ -1088,25 +1066,25 @@ public class DmtSessionImpl implements DmtSession {
             if(pluginSession == null) {
                 pluginSessionType = LOCK_TYPE_SHARED;
                 pluginSession =
-                    plugin.openReadOnlySession(pluginSessionRoot, this);
+                    plugin.openReadOnlySession(rootPath, this);
             }
 
             wrappedPlugin = new PluginSessionWrapper(pluginSession, 
-                    pluginSessionType, pluginSessionRoot, securityContext);
+                    pluginSessionType, rootPath, securityContext);
             
             // this requires synchronized access
-            dataPlugins.put(pluginSessionRoot, wrappedPlugin);
+            dataPlugins.put(rootUri, wrappedPlugin);
         }
         
         return wrappedPlugin;
     }
     
-    private String[] getRootForPlugin(PluginRegistration plugin, String uri) {
+    private String getRootForPlugin(PluginRegistration plugin, String uri) {
         String[] roots = plugin.getDataRoots();
         for(int i = 0; i < roots.length; i++)
             if(Utils.isAncestor(roots[i], uri))
-                return Utils.tempAbsoluteUriToPath(
-                        Utils.isAncestor(roots[i], subtreeUri) ? subtreeUri : roots[i]);
+                return Utils.isAncestor(roots[i], subtreeUri) 
+                    ? subtreeUri : roots[i];
         
         throw new IllegalStateException("Internal error, plugin root not " +
                 "found for a URI handled by the plugin.");
