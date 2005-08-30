@@ -33,7 +33,6 @@ public class IPA {
 	public final int	IPA_BUNDLE		= 3;
 
 	void ipa(String type, String name, String parameter) throws IOException {
-		InputStream in = null;
 		int intType = -1;
 		if (type.equals("bundle"))
 			intType = IPA_BUNDLE;
