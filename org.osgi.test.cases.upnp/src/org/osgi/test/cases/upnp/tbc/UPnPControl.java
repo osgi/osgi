@@ -19,8 +19,8 @@ public class UPnPControl extends DefaultTestBundleControl {
 	private HttpService			http;
 	private ServiceReference	deviceRef;
 	private TestStarter			start;
-	static String[]				methods	= new String[] {"testDiscovery",
-			"testControl", "testEvent", "testExport"};
+	static String[]				methods	= new String[] {"testDiscovery", "testExport",
+			"testControl", "testEvent"};
 
 	public String[] getMethods() {
 		return methods;
@@ -38,32 +38,18 @@ public class UPnPControl extends DefaultTestBundleControl {
 				"org.osgi.service.http.port", "80"));
 		log("Register Service Listener to listen for service changes");
 		ServicesListener listener = new ServicesListener(getContext());
-		getContext().addServiceListener(listener,
-				"(objectClass=org.osgi.service.upnp.UPnPDevice)");
+		listener.open();
 		log("Start the UPnP Test Starter");
 		start = new TestStarter(http, this);
-		int con = 0;
-		while (true) {
-			con++;
-			if (listener.count == 3) {
-				break;
-			}
-			else {
-				Thread.sleep(10);
-			}
-			if (con == 3000) {
-				System.out.println("Register devices are not 3");
-				break;
-			}
-		}
-		//    Thread.sleep(2000);
+		
+		listener.waitFor(3);
 	}
 
 	//==========================================TEST
 	// METHODS====================================================================//
 	public void testDiscovery() {
 		try {
-			UPnPTester device = new UPnPTester(this, UPnPTester.DISCOVERY,
+			new UPnPTester(this, UPnPTester.DISCOVERY,
 					ServicesListener.getUPnPDevice(), getContext());
 		}
 		catch (Exception er) {
@@ -114,25 +100,4 @@ public class UPnPControl extends DefaultTestBundleControl {
 			er.printStackTrace();
 		}
 	}
-
-	// HttpContext
-	private HttpContext	httpContext	= new HttpContext() {
-										public URL getResource(String name) {
-											// Map a resource name to a URL.
-											return getClass().getResource(name);
-										}
-
-										public String getMimeType(String name) {
-											// Map a name to a MIME type.
-											return null;
-										}
-
-										public boolean handleSecurity(
-												HttpServletRequest request,
-												HttpServletResponse response)
-												throws java.io.IOException {
-											// Handle security for a request.
-											return true;
-										}
-									};
 }
