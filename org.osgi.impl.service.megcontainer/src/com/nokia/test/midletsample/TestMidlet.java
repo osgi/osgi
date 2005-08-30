@@ -133,6 +133,9 @@ public class TestMidlet extends MIDlet implements EventHandler, SynchronousBundl
 		else if (event.getTopic().equals("com/nokia/megtest/NotifyPaused")) {
 			notifyPaused();
 		}
+		else if (event.getTopic().equals("com/nokia/megtest/ResumeRequest")) {
+			resumeRequest();
+		}
 	}
 
 	public void bundleChanged(BundleEvent event) {

@@ -212,6 +212,10 @@ public class TestMidletContainerBundleActivator
             System.out.println("Checking MIDlet::notifyPaused                    FAILED");
         else
             System.out.println("Checking MIDlet::notifyPaused                    PASSED");        
+        if(!testCase_checkResumeRequest())
+            System.out.println("Checking MIDlet::resumeRequest                   FAILED");
+        else
+            System.out.println("Checking MIDlet::resumeRequest                   PASSED");        
     		if (!testCase_lockApplication())
     			  System.out.println("Locking the application                          FAILED");
     		else
@@ -1970,6 +1974,32 @@ public class TestMidletContainerBundleActivator
   			sendEvent(new Event( "com/nokia/megtest/NotifyPaused", null), false);
   			
  			  while( appHandle.getState() != MidletHandle.PAUSED ) {
+  			  	Thread.sleep( 100L );
+ 			  }
+  			
+  			if( !testCase_stopApplication() )
+  				return false;
+  			
+  			return true;
+  		}
+  		catch (Exception e) {
+  			e.printStackTrace();
+  			return false;
+  		}							  		
+  	}  
+  	
+  	boolean testCase_checkResumeRequest() {
+  		try {
+  			
+  			if( !testCase_launchApplication() )
+  				return false;
+
+  			if( !testCase_pauseApplication() )
+  				return false;  			
+  			
+  			sendEvent(new Event( "com/nokia/megtest/ResumeRequest", null), false);
+  			
+ 			  while( appHandle.getState() != ApplicationHandle.RUNNING ) {
   			  	Thread.sleep( 100L );
  			  }
   			
