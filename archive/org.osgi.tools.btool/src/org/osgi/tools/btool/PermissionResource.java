@@ -7,6 +7,8 @@ public class PermissionResource extends FileResource {
 	PermissionResource(BTool btool, File file) {
 		super(btool, "OSGI-INF/permissions.perm", file, true);
 	}
+	
+	protected int getLineLength() { return 0; }
 
 	public String replace(String key) throws IOException {
 		if (key.equals("PACKAGEPERMISSIONS")) {
