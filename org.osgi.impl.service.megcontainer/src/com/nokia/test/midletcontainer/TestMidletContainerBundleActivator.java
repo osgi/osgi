@@ -204,6 +204,10 @@ public class TestMidletContainerBundleActivator
             System.out.println("Stopping the Midlet application                  FAILED");
         else
             System.out.println("Stopping the Midlet application                  PASSED");
+        if(!testCase_checkNotifyDestroyed())
+            System.out.println("Checking MIDlet::notifyDestroyed                 FAILED");
+        else
+            System.out.println("Checking MIDlet::notifyDestroyed                 PASSED");        
     		if (!testCase_lockApplication())
     			  System.out.println("Locking the application                          FAILED");
     		else
@@ -666,35 +670,35 @@ public class TestMidletContainerBundleActivator
         return false;
     }
 
+    private void checkApplicationStop(String pid) throws Exception {
+      if(!checkResultFile("STOP"))
+        throw new Exception("Result of the stop is not STOP!");
+      ServiceReference appList[] = bc.getServiceReferences("org.osgi.service.application.ApplicationHandle", "(service.pid=" + pid + ")");
+      if(appList != null && appList.length != 0) {
+        for(int i = 0; i != appList.length; i++) {
+            ApplicationHandle handle = (ApplicationHandle)bc.getService(appList[i]);
+            bc.ungetService(appList[i]);
+            if(handle == appHandle)
+                throw new Exception("Application handle doesn't removed after stop!");
+        }
+
+      }
+      try {
+        appHandle.getState();
+      }
+      catch(Exception e) {
+        return;
+      }
+      throw new Exception("The status didn't change to NONEXISTENT!");    	
+    }
+    
     boolean testCase_stopApplication()
     {
-        try
-        {
+        try {
             String pid = getPID(getAppDesc(appHandle));
             appHandle.destroy();
-            if(!checkResultFile("STOP"))
-                throw new Exception("Result of the stop is not STOP!");
-            ServiceReference appList[] = bc.getServiceReferences("org.osgi.service.application.ApplicationHandle", "(service.pid=" + pid + ")");
-            if(appList != null && appList.length != 0)
-            {
-                for(int i = 0; i != appList.length; i++)
-                {
-                    ApplicationHandle handle = (ApplicationHandle)bc.getService(appList[i]);
-                    bc.ungetService(appList[i]);
-                    if(handle == appHandle)
-                        throw new Exception("Application handle doesn't removed after stop!");
-                }
-
-            }
-            try
-            {
-                appHandle.getState();
-            }
-            catch(Exception e)
-            {
-                return true;
-            }
-            throw new Exception("The status didn't change to NONEXISTENT!");
+            checkApplicationStop( pid );
+            return true;
         }
         catch(Exception e)
         {
@@ -846,29 +850,8 @@ public class TestMidletContainerBundleActivator
             String pid = getPID(getAppDesc(appHandle));
             if(!restart_LogService())
                 return false;
-            if(!checkResultFile("STOP"))
-                throw new Exception("Result of the stop is not STOP!");
-            ServiceReference appList[] = bc.getServiceReferences("org.osgi.service.application.ApplicationHandle", "(service.pid=" + pid + ")");
-            if(appList != null && appList.length != 0)
-            {
-                for(int i = 0; i != appList.length; i++)
-                {
-                    ApplicationHandle handle = (ApplicationHandle)bc.getService(appList[i]);
-                    bc.ungetService(appList[i]);
-                    if(handle == appHandle)
-                        throw new Exception("Application handle doesn't removed after stop!");
-                }
-
-            }
-            try
-            {
-                appHandle.getState();
-            }
-            catch(Exception e)
-            {
-                return true;
-            }
-            throw new Exception("The status didn't change to NONEXISTENT!");
+            checkApplicationStop( pid );
+            return true;
         }
         catch(Exception e)
         {
@@ -897,29 +880,8 @@ public class TestMidletContainerBundleActivator
                 return false;
             appHandle = oldHandle;
             appHandle.destroy();
-            if(!checkResultFile("STOP"))
-                throw new Exception("Result of the stop is not STOP!");
-            ServiceReference appList[] = bc.getServiceReferences("org.osgi.service.application.ApplicationHandle", "(application.descriptor=" + pid + ")");
-            if(appList != null && appList.length != 0)
-            {
-                for(int i = 0; i != appList.length; i++)
-                {
-                    ApplicationHandle handle = (ApplicationHandle)bc.getService(appList[i]);
-                    bc.ungetService(appList[i]);
-                    if(handle == appHandle)
-                        throw new Exception("Application handle doesn't removed after destroy!");
-                }
-
-            }
-            try
-            {
-                appHandle.getState();
-            }
-            catch(Exception e)
-            {
-                return true;
-            }
-            throw new Exception("The status didn't change to NONEXISTENT!");
+            checkApplicationStop( pid );
+            return true;
         }
         catch(Exception e)
         {
@@ -1201,26 +1163,8 @@ public class TestMidletContainerBundleActivator
   	  	if( !restart_logService() )
   	  		return false;
   	  	
-        if(!checkResultFile("STOP"))
-          throw new Exception("Result of the stop is not STOP!");
-
-        ServiceReference appList[] = bc.getServiceReferences("org.osgi.service.application.ApplicationHandle", "(service.pid=" + pid + ")");
-        if(appList != null && appList.length != 0) {
-          for(int i = 0; i != appList.length; i++)
-          {
-              ApplicationHandle handle = (ApplicationHandle)bc.getService(appList[i]);
-              bc.ungetService(appList[i]);
-              if(handle == appHandle)
-                  throw new Exception("Application handle doesn't removed after stop!");
-          }
-        }
-        try {
-          appHandle.getState();
-        }catch(Exception e) {
-          return true;
-        }
-        
-        throw new Exception("The status didn't change to NONEXISTENT!");
+  	  	checkApplicationStop( pid );
+        return true;
       }
       catch(Exception e) {
           e.printStackTrace();
@@ -1238,26 +1182,8 @@ public class TestMidletContainerBundleActivator
   	  	if( !restart_logService() )
   	  		return false;
   	  	
-        if(!checkResultFile("STOP"))
-          throw new Exception("Result of the stop is not STOP!");
-
-        ServiceReference appList[] = bc.getServiceReferences("org.osgi.service.application.ApplicationHandle", "(service.pid=" + pid + ")");
-        if(appList != null && appList.length != 0) {
-          for(int i = 0; i != appList.length; i++)
-          {
-              ApplicationHandle handle = (ApplicationHandle)bc.getService(appList[i]);
-              bc.ungetService(appList[i]);
-              if(handle == appHandle)
-                  throw new Exception("Application handle doesn't removed after stop!");
-          }
-        }
-        try {
-          appHandle.getState();
-        }catch(Exception e) {
-          return true;
-        }
-        
-        throw new Exception("The status didn't change to NONEXISTENT!");
+  	  	checkApplicationStop( pid );
+        return true;
       }
       catch(Exception e) {
           e.printStackTrace();
@@ -1840,6 +1766,8 @@ public class TestMidletContainerBundleActivator
   			if( !testCase_stopApplication() )
   				return false;
   			
+  			session.close();
+  			
   			return true;
   		}
   		catch (Exception e) {
@@ -1889,6 +1817,8 @@ public class TestMidletContainerBundleActivator
   				}
   			}
 
+  			session.close();
+  			
   			try {
   			  appHandle.getState();
   			}catch( Exception e ) 
@@ -1954,6 +1884,7 @@ public class TestMidletContainerBundleActivator
   			if( childNodes != null && childNodes.length != 0 )
   				throw new Exception( "Node wasn't deleted properly!" );
   			
+  			session.close();
   			return true;
   		}
   		catch (Exception e) {
@@ -1990,11 +1921,39 @@ public class TestMidletContainerBundleActivator
   			if( value.getBoolean() )
   				throw new Exception( "Application is unlocked, but AppPlugin reports locked!" );
   			
+  			session.close();
   			return true;
   		}
   		catch (Exception e) {
   			e.printStackTrace();
   			return false;
   		}							
-  	}  	
+  	}
+  	
+  	boolean testCase_checkNotifyDestroyed() {
+  		try {
+  			
+  			if( !testCase_launchApplication() )
+  				return false;
+
+  			String pid = getPID(getAppDesc(appHandle));
+
+  			sendEvent(new Event( "com/nokia/megtest/NotifyDestroyed", null), false);
+  			
+  			try {
+  			  while( true ) {
+  			  	Thread.sleep( 100L );
+  			    appHandle.getState();
+  			  }
+  			}catch( Exception e ) {}
+  			
+  			checkApplicationStop( pid );
+  			
+  			return true;
+  		}
+  		catch (Exception e) {
+  			e.printStackTrace();
+  			return false;
+  		}							  		
+  	}
 }
