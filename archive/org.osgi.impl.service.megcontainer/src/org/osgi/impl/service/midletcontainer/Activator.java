@@ -19,7 +19,7 @@ public class Activator implements BundleActivator {
 	}
 
 	public void stop(BundleContext bc) throws Exception {
-		midletContainer.unregisterAllApplications();
+		midletContainer.stop();
 		serviceListener.unregister();
 		this.bc = null;
 		System.out.println("Midlet container stopped successfully!");

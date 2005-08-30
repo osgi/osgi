@@ -122,12 +122,11 @@ public final class MidletDescriptorImpl implements
 	}
 
 	public ApplicationHandle launchSpecific(Map args) throws Exception {
-		Vector refs = new Vector();
-		MIDlet midlet = midletContainer.createMidletInstance(this, refs, false);
+		MIDlet midlet = midletContainer.createMidletInstance(this);
 		if (midlet == null)
 			throw new Exception("Cannot create meglet instance!");
 		else
-			return createMidletHandleByReflection(midlet, args, refs, midlet);
+			return createMidletHandleByReflection(midlet, args, midlet);
 	}
 
 	public void lockSpecific() {
@@ -150,8 +149,7 @@ public final class MidletDescriptorImpl implements
 		return new String(pid + ":" + instanceCounter++);
 	}
 
-	public MidletHandle createMidletHandleByReflection(MIDlet midlet, Map args,
-			Vector refs, Object baseClass) {
+	public MidletHandle createMidletHandleByReflection(MIDlet midlet, Map args, Object baseClass) {
 		try {
 			Class midletHandleClass = org.osgi.service.application.midlet.MidletHandle.class;
 			Constructor constructor = midletHandleClass
@@ -166,7 +164,7 @@ public final class MidletDescriptorImpl implements
 			delegate.setAccessible(true);
 			MidletHandleImpl midHnd = (MidletHandleImpl) delegate
 					.get(midletHandle);
-			midHnd.init(bc, midletContainer, midlet, refs, baseClass);
+			midHnd.init(bc, midletContainer, midlet, baseClass);
 			midHnd.startHandle(args);
 			return midletHandle;
 		}

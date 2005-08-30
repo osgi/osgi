@@ -21,7 +21,6 @@ public final class MidletHandleImpl implements ServiceListener,
 	private MidletDescriptorImpl	midletDelegate;
 	private MidletContainer			  midletContainer;
 	private BundleContext			    bc;
-	private Vector					      serviceRefs;
 	private Object					      baseClass;
 	public MidletHandleImpl() {
 		suspendedFileName = null;
@@ -146,23 +145,16 @@ public final class MidletHandleImpl implements ServiceListener,
 	}
 
 	public void init(BundleContext bc, MidletContainer midletContainer,
-			MIDlet midlet, Vector refs, Object baseClass) {
+			MIDlet midlet, Object baseClass) {
 		this.bc = bc;
 		this.midletContainer = midletContainer;
 		this.midlet = midlet;
 		this.baseClass = baseClass;
-		serviceRefs = refs;
 		bc.addServiceListener(this);
 		appDescRef = midletContainer.getReference(midletDelegate);
 		pid = (String) appDescRef.getProperty("service.pid");
 	}
 
 	public void serviceChanged(ServiceEvent e) {
-		if (e.getType() == 4 && status != null && midletHandle != null
-				&& serviceRefs.contains(e.getServiceReference()))
-			try {
-				midletHandle.destroy();
-			}
-			catch (Exception exception) {}
 	}
 }
