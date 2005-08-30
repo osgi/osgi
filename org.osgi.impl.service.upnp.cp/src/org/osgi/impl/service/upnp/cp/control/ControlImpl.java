@@ -48,7 +48,7 @@ public class ControlImpl implements Control, SOAPConstants {
 					return (Dictionary) pr.getArguments();
 				}
 				else
-					throw new Exception();
+					throw new Exception("Expected ok: " + path + " :: " + actionName + " :: "  + firstHeader);
 		}
 		throw new Exception();
 	}
@@ -68,7 +68,7 @@ public class ControlImpl implements Control, SOAPConstants {
 			port = Integer.parseInt(hostport.substring(i + 1));
 		}
 		Socket soc = new Socket(host, port);
-		soc.setSoTimeout(25 * 1000);
+		soc.setSoTimeout(5000);
 		OutputStream out = soc.getOutputStream();
 		out.write(request.getBytes());
 		out.flush();
