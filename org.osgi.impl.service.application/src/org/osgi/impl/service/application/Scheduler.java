@@ -152,17 +152,19 @@ public class Scheduler implements Runnable, EventHandler {
 				while ( it.hasNext() ) {
 					ScheduledApplication schedApp = (ScheduledApplication) it.next();
 
-				if ((schedApp.getTopic() != null)
+				  if ((schedApp.getTopic() != null)
 						&& e.matches(bc.createFilter("("
 								+ EventConstants.EVENT_TOPIC + "="
 								+ schedApp.getTopic() + ")")))
-					if ((schedApp.getEventFilter() == null) || e.matches(bc.createFilter(schedApp
+				  	
+  					if ((schedApp.getEventFilter() == null) || e.matches(bc.createFilter(schedApp
 									.getEventFilter()))) {
-						ApplicationDescriptor appDesc = schedApp
-								.getApplicationDescriptor();
-						appDesc.launch(schedApp.getArguments());
-						if (!schedApp.isRecurring())
-							removeList.add( schedApp );
+  						
+						  ApplicationDescriptor appDesc = schedApp.getApplicationDescriptor();
+						  if( appDesc.launch(schedApp.getArguments()) == null )
+						  	throw new Exception("Can't launch the application!");
+						  if (!schedApp.isRecurring())
+							  removeList.add( schedApp );
 					}
 				}
 		
