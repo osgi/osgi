@@ -16,26 +16,9 @@ import org.osgi.service.event.EventHandler;
 import org.osgi.service.log.LogService;
 import org.w3c.dom.*;
 
-class EventSubscribe {
-	public static final int	START	= 1;
-	public static final int	STOP	= 2;
-	public static final int	SUSPEND	= 3;
-	public static final int	RESUME	= 4;
-	public static final int	HANDLE	= 5;
-	public String			eventTopic[];
-	public int				eventAction[];
-}
-
-class Dependencies {
-	public String	dependentFields[];
-	public String	requiredService[];
-}
-
 class MEGBundleDescriptor {
 	public ApplicationDescriptor	applications[];
 	public ServiceRegistration		serviceRegistrations[];
-	public EventSubscribe			eventSubscribes[];
-	public Dependencies				dependencies[];
 	public long						bundleID;
 }
 
@@ -51,6 +34,7 @@ public class MidletContainer implements BundleListener, EventHandler {
 	public MidletContainer(BundleContext bc) throws Exception {
 		this.bc = bc;
 		bundleHash = new Hashtable();
+		bundleIDs = new Vector();
 		
 		oatRef = bc .getServiceReference(OATContainerInterface.class.getName());
     if (oatRef == null)
@@ -59,24 +43,10 @@ public class MidletContainer implements BundleListener, EventHandler {
     if (oat == null)
 	    throw new Exception("Cannot start the MidletContainer as OAT is not running!");
 		
-		bundleIDs = loadVector("BundleIDs");
-		for (int j = 0; j < bundleIDs.size(); j++) {
-			Bundle bundle = bc.getBundle(Long.parseLong((String) bundleIDs
-					.get(j)));
-			if (bundle == null || bundle.getState() == 1) {
-				bundleIDs.remove(j--);
-				saveVector(bundleIDs, "BundleIDs");
-			}
-		}
-
-		for (int i = 0; i != bundleIDs.size(); i++)
-			registerBundle(Long.parseLong((String) bundleIDs.get(i)));
-
 		bc.addBundleListener(this);
 		Bundle bundles[] = bc.getBundles();
 		for (int i = 0; i < bundles.length; i++) {
-			String id = (new StringBuffer(String.valueOf(bundles[i]
-					.getBundleId()))).toString();
+			String id = (new StringBuffer(String.valueOf(bundles[i].getBundleId()))).toString();
 			if (!bundleIDs.contains(id) && bundles[i].getBundleId() != 0L)
 				checkAndRegister(bundles[i]);
 		}
@@ -95,20 +65,12 @@ public class MidletContainer implements BundleListener, EventHandler {
 		}
 		else {
 			bundleIDs.add(Long.toString(bundleID));
-			saveVector(bundleIDs, "BundleIDs");
 			return;
 		}
 	}
 
-	public MIDlet createMidletInstance(MidletDescriptorImpl appDesc,
-			Vector serviceVector, boolean resume) throws Exception {
+	public MIDlet createMidletInstance(MidletDescriptorImpl appDesc) throws Exception {
 		MEGBundleDescriptor desc = getBundleDescriptor(appDesc.getBundleId());
-		int i = getApplicationIndex(desc, appDesc.getMidletDescriptor());
-		Dependencies deps = desc.dependencies[i];
-		String depResult = checkDependencies(appDesc, deps);
-		if (depResult != null)
-			throw new Exception(
-					"Can't start the application because of failed dependencies!");
 		Bundle appBundle = bc.getBundle(appDesc.getBundleId());
 		Class mainClass = appBundle.loadClass(appDesc.getStartClass());
 		ClassLoader loader = new MIDletClassLoader(getClass().getClassLoader(),
@@ -118,16 +80,6 @@ public class MidletContainer implements BundleListener, EventHandler {
 				.getDeclaredConstructor(new Class[0]);
 		constructor.setAccessible(true);
 		MIDlet app = (MIDlet) constructor.newInstance(new Object[0]);
-		for (int j = 0; j != deps.dependentFields.length; j++) {
-			Field field = midletClass.getDeclaredField(deps.dependentFields[i]);
-			ServiceReference ref = bc
-					.getServiceReference(deps.requiredService[i]);
-			serviceVector.add(ref);
-			Object serviceObj = bc.getService(ref);
-			field.setAccessible(true);
-			field.set(app, serviceObj);
-		}
-
 		return app;
 	}
 
@@ -152,32 +104,6 @@ public class MidletContainer implements BundleListener, EventHandler {
 				"Application wasn't installed onto the midlet container!");
 	}
 
-	private String checkDependencies(MidletDescriptorImpl appDesc,
-			Dependencies deps) {
-		try {
-			for (int i = 0; i != deps.requiredService.length; i++) {
-				String serviceToCheck = deps.requiredService[i];
-				if (serviceToCheck != null) {
-					ServiceReference refs[] = bc.getServiceReferences(
-							serviceToCheck, null);
-					if (refs == null || refs.length == 0)
-						return "Dependencies failed because of a missing service("
-								+ serviceToCheck + ")!";
-				}
-			}
-
-			return null;
-		}
-		catch (Exception e) {
-			log(
-					bc,
-					1,
-					"Exception occurred at checking the dependencies of a midlet!",
-					e);
-		}
-		return "Exception occurred at checking the dependencies!";
-	}
-
 	public boolean isLaunchable(MidletDescriptorImpl appDesc) {
 		try {
 			if (appDesc.isLocked())
@@ -188,27 +114,18 @@ public class MidletContainer implements BundleListener, EventHandler {
 					.getBundleId());
 			if (desc == null)
 				return false;
-			int i = getApplicationIndex(desc, appDesc.getMidletDescriptor());
-			if (i == -1) {
-				return false;
-			}
-			else {
-				String depResult = checkDependencies(appDesc,
-						desc.dependencies[i]);
-				return true;
-			}
+			return true;
 		}
 		catch (Exception e) {
-			log(
-					bc,
-					1,
-					"Exception occurred at checking if the midlet is launchable!",
-					e);
+			log(bc, 1, "Exception occurred at checking if the midlet is launchable!",	e);
 		}
 		return false;
 	}
 
-	public void unregisterAllApplications() throws Exception {
+	public void stop() throws Exception {
+		
+		terminateContainerApplications();
+		
 		for (int i = 0; i != bundleIDs.size(); i++)
 			unregisterApplicationDescriptors(Long.parseLong((String) bundleIDs
 					.get(i)));
@@ -217,6 +134,24 @@ public class MidletContainer implements BundleListener, EventHandler {
 		bc.removeBundleListener( this );
 	}
 
+	private void terminateContainerApplications() {
+		try {
+		  ServiceReference refs[] = bc.getServiceReferences( ApplicationHandle.class.getName(), null );
+		  if( refs == null || refs.length == 0 )
+		  	return;
+		  
+		  for( int i=0; i != refs.length; i++ ) {
+		  	ApplicationHandle appHandle = (ApplicationHandle)bc.getService( refs[ i ] );
+		  	if( appHandle instanceof MidletHandle ) {
+		  		try {
+		  		  appHandle.destroy(); /* TODO, what to do if the app doesn't stop? */
+		  		}catch( Exception e ) {}
+		  		bc.ungetService( refs[ i ] );
+		  	}		  	
+		  }
+		}catch( InvalidSyntaxException e ) {}
+	}
+	
 	private ApplicationDescriptor[] registerBundle(long bundleID) {
 		ApplicationDescriptor appDescs[] = parseManifestHeaders(bundleID);
 		if (appDescs == null) {
@@ -277,7 +212,6 @@ public class MidletContainer implements BundleListener, EventHandler {
 
 				case 16 : // '\020'
 					bundleIDs.remove(bundleStr);
-					saveVector(bundleIDs, "BundleIDs");
 					unregisterApplicationDescriptors(bundleID);
 					bundleHash.remove(new Long(bundleID));
 					break;
@@ -308,54 +242,6 @@ public class MidletContainer implements BundleListener, EventHandler {
 		}
 	}
 
-	private Vector loadVector(String fileName) {
-		Vector resultVector = new Vector();
-		try {
-			File vectorFile = bc.getDataFile(fileName);
-			if (vectorFile.exists()) {
-				FileInputStream stream = new FileInputStream(vectorFile);
-				String codedIds = "";
-				byte buffer[] = new byte[1024];
-				int length;
-				while ((length = stream.read(buffer, 0, buffer.length)) > 0)
-					codedIds = codedIds + new String(buffer);
-				stream.close();
-				if (!codedIds.equals("")) {
-					int comma;
-					for (int index = 0; index != -1; index = comma) {
-						comma = codedIds.indexOf(',', index);
-						String name;
-						if (comma >= 0)
-							name = codedIds.substring(index, comma);
-						else
-							name = codedIds.substring(index);
-						resultVector.add(name.trim());
-					}
-
-				}
-			}
-		}
-		catch (Exception e) {
-			log(bc, 1, "Exception occurred at loading '" + fileName + "'!", e);
-		}
-		return resultVector;
-	}
-
-	private void saveVector(Vector vector, String fileName) {
-		try {
-			File vectorFile = bc.getDataFile(fileName);
-			FileOutputStream stream = new FileOutputStream(vectorFile);
-			for (int i = 0; i != vector.size(); i++)
-				stream.write(((i != 0 ? "," : "") + (String) vector.get(i))
-						.getBytes());
-
-			stream.close();
-		}
-		catch (Exception e) {
-			log(bc, 1, "Exception occurred at saving '" + fileName + "'!", e);
-		}
-	}
-
 	private String getAttributeValue(Node node, String attribName) {
 		NamedNodeMap nnm = node.getAttributes();
 		if (nnm != null) {
@@ -379,8 +265,6 @@ public class MidletContainer implements BundleListener, EventHandler {
 			String MIDletVendor = (String) manifest.get("MIDlet-Vendor");
 			String MIDletSuiteIcon = (String) manifest.get("MIDlet-Icon");
 			LinkedList appVector = new LinkedList();
-			LinkedList eventVector = new LinkedList();
-			LinkedList dependencyVector = new LinkedList();
 			int midletCounter = 0;
 			String midletProps;
 			while ((midletProps = (String) manifest.get("MIDlet-"
@@ -397,10 +281,6 @@ public class MidletContainer implements BundleListener, EventHandler {
 							String MIDletStartClass = t.nextToken().trim();
 							if (MIDletIcon.equals(""))
 								MIDletIcon = MIDletSuiteIcon;
-							LinkedList eventTopic = new LinkedList();
-							LinkedList eventAction = new LinkedList();
-							LinkedList requiredServices = new LinkedList();
-							LinkedList requiredPackages = new LinkedList();
 							props.setProperty("application.bundle.id", Long
 									.toString(bundleID));
 							props.setProperty("application.vendor",
@@ -415,47 +295,9 @@ public class MidletContainer implements BundleListener, EventHandler {
 							String uniqueID = MIDletName + "-"
 									+ MIDletSuiteName + "-" + MIDletVersion;
 							props.put("service.pid", uniqueID);
-							EventSubscribe subscribe = new EventSubscribe();
-							Dependencies deps = new Dependencies();
-							String dependentFields = (String) manifest
-									.get("Dependent-Field-" + midletCounter);
-							if (dependentFields != null) {
-								LinkedList depVector = new LinkedList();
-								for (StringTokenizer tokens = new StringTokenizer(
-										dependentFields, ","); tokens
-										.hasMoreTokens(); depVector.add(tokens
-										.nextToken().trim()));
-								deps.dependentFields = new String[depVector
-										.size()];
-								deps.requiredService = new String[depVector
-										.size()];
-								int counter = 0;
-								while (depVector.size() != 0)
-									deps.dependentFields[counter++] = (String) depVector
-											.removeFirst();
-								Bundle appBundle = bc.getBundle(bundleID);
-								ClassLoader loader = new MIDletClassLoader(
-										getClass().getClassLoader(), appBundle,
-										getClass().getProtectionDomain());
-								Class startClass = loader
-										.loadClass(MIDletStartClass);
-								for (int i = 0; i != deps.dependentFields.length; i++) {
-									Field field = startClass
-											.getDeclaredField(deps.dependentFields[i]);
-									deps.requiredService[i] = field.getType()
-											.getName();
-									if (deps.requiredService[i]
-											.equals(org.osgi.framework.BundleContext.class
-													.getName()))
-										deps.requiredService[i] = null;
-								}
-
-							}
-							eventVector.add(subscribe);
 							appVector.add(createMidletDescriptorByReflection(
 									props, names, icons, defaultLang,
 									MIDletStartClass, bc.getBundle(bundleID)));
-							dependencyVector.add(deps);
 						}
 					}
 				}
@@ -468,14 +310,8 @@ public class MidletContainer implements BundleListener, EventHandler {
 
 			MEGBundleDescriptor descriptor = new MEGBundleDescriptor();
 			descriptor.applications = new ApplicationDescriptor[applicationNum];
-			descriptor.eventSubscribes = new EventSubscribe[applicationNum];
-			descriptor.dependencies = new Dependencies[applicationNum];
 			for (int l = 0; l != applicationNum; l++) {
 				descriptor.applications[l] = descs[l];
-				descriptor.eventSubscribes[l] = (EventSubscribe) eventVector
-						.removeFirst();
-				descriptor.dependencies[l] = (Dependencies) dependencyVector
-						.removeFirst();
 			}
 
 			descriptor.serviceRegistrations = new ServiceRegistration[applicationNum];
@@ -490,74 +326,6 @@ public class MidletContainer implements BundleListener, EventHandler {
 	}
 
 	public void handleEvent(Event event) {
-		try {
-			for (Enumeration megBundles = bundleHash.keys(); megBundles
-					.hasMoreElements();) {
-				Object key = megBundles.nextElement();
-				MEGBundleDescriptor bundleDesc = (MEGBundleDescriptor) bundleHash
-						.get(key);
-				for (int i = 0; i != bundleDesc.eventSubscribes.length; i++)
-					if (bundleDesc.eventSubscribes[i] != null
-							&& bundleDesc.eventSubscribes[i].eventTopic != null) {
-						for (int j = 0; j != bundleDesc.eventSubscribes[i].eventTopic.length; j++) {
-							org.osgi.framework.Filter topicFilter = bc
-									.createFilter("(event.topics="
-											+ bundleDesc.eventSubscribes[i].eventTopic[j]
-											+ ")");
-							if (event.matches(topicFilter))
-								switch (bundleDesc.eventSubscribes[i].eventAction[j]) {
-									default :
-										break;
-
-									case 1 : // '\001'
-										bundleDesc.applications[i].launch(null);
-										break;
-
-									case 2 : // '\002'
-									case 3 : // '\003'
-									case 4 : // '\004'
-										String pid = (String) bundleDesc.applications[i]
-												.getProperties("").get(
-														"service.pid");
-										ServiceReference references[] = bc
-												.getServiceReferences(
-														"org.osgi.service.application.ApplicationHandle",
-														"(application.descriptor="
-																+ pid + ")");
-										if (references == null
-												|| references.length == 0)
-											break;
-										for (int k = 0; k != references.length; k++) {
-											MidletHandle handle = (MidletHandle) bc
-													.getService(references[k]);
-											switch (bundleDesc.eventSubscribes[i].eventAction[j]) {
-												case 2 : // '\002'
-													handle.destroy();
-													break;
-
-												case 3 : // '\003'
-													handle.pause();
-													break;
-
-												case 4 : // '\004'
-													handle.resume();
-													break;
-											}
-											bc.ungetService(references[k]);
-										}
-
-										break;
-								}
-						}
-
-					}
-
-			}
-
-		}
-		catch (Exception e) {
-			log(bc, 1, "Exception occurred at processing a channel event!", e);
-		}
 	}
 
 	static boolean log(BundleContext bc, int severity, String message,

@@ -6,14 +6,12 @@
 package com.nokia.test.midletcontainer;
 
 import java.io.*;
-import java.lang.reflect.Field;
 import java.net.URL;
 import java.util.*;
+
 import org.osgi.framework.*;
-import org.osgi.impl.service.midletcontainer.MidletDescriptorImpl;
 import org.osgi.service.application.ApplicationDescriptor;
 import org.osgi.service.application.ApplicationHandle;
-import org.osgi.service.application.midlet.MidletDescriptor;
 import org.osgi.service.application.midlet.MidletHandle;
 import org.osgi.service.event.Event;
 import org.osgi.service.event.EventAdmin;
@@ -173,6 +171,14 @@ public class TestMidletContainerBundleActivator
             System.out.println("Stopping the Midlet application                  FAILED");
         else
             System.out.println("Stopping the Midlet application                  PASSED");
+    		if (!testCase_lockApplication())
+    			  System.out.println("Locking the application                          FAILED");
+    		else
+    			  System.out.println("Locking the application                          PASSED");
+    		if (!testCase_saveLockingState())
+    			  System.out.println("Save the locking state of the application        FAILED");
+    		else
+    			  System.out.println("Save the locking state of the application        PASSED");
         if(!testCase_oatRegisterService())
             System.out.println("Checking OAT service registration                FAILED");
         else
@@ -1125,4 +1131,92 @@ public class TestMidletContainerBundleActivator
       }
       return false;  		
   	}
+  	
+  	public boolean testCase_lockApplication() {
+  		try {
+  			ApplicationDescriptor appDesc = appDescs[0];
+  			if (isLocked( appDesc ))
+  				throw new Exception("Application is locked and cannot launch!");
+  			appDesc.lock();
+  			if (!isLocked( appDesc ))
+  				throw new Exception("Lock doesn't work!");
+  			if (!appDesc.getProperties("en").get("application.locked").equals(
+  					"true"))
+  				throw new Exception("Lock property is incorrect!");
+  			boolean launchable = isLaunchable(appDesc);
+  			boolean started = false;
+  			try {
+  				appHandle = appDesc.launch(new Hashtable());
+  				started = true;
+  			}catch (Exception e) {}
+  			
+  			if (started)
+  				throw new Exception("Application was launched inspite of lock!");
+  			appDesc.unlock();
+  			if (!appDesc.getProperties("en").get("application.locked").equals(
+  					"false"))
+  				throw new Exception("Lock property is incorrect!");
+  			if (isLocked( appDesc ))
+  				throw new Exception("Unlock doesn't work!");
+  			if (launchable)
+  				throw new Exception(
+  						"Application was not launchable but started!");
+  			if (!testCase_launchApplication())
+  				return false;
+  			return testCase_stopApplication();
+  		}
+  		catch (Exception e) {
+  			e.printStackTrace();
+  			return false;
+  		}
+  	}
+
+  	public boolean testCase_saveLockingState() {
+  		try {
+  			ApplicationDescriptor appDesc = appDescs[0];
+  			if (isLocked( appDesc ))
+  				throw new Exception("Application is locked and cannot launch!");
+  			if (!restart_MidletContainer(true))
+  				return false;
+  			appDesc = appDescs[0];
+  			if (!testCase_launchApplication())
+  				return false;
+  			if (isLocked( appDesc ))
+  				throw new Exception("Application is locked and cannot launch!");
+  			appDesc.lock();
+  			if (!appDesc.getProperties("en").get("application.locked").equals(
+  					"true"))
+  				throw new Exception("Lock property is incorrect!");
+  			if (!isLocked( appDesc ))
+  				throw new Exception("Lock doesn't work!");
+  			if (!restart_MidletContainer(true))
+  				return false;
+  			appDesc = appDescs[0];
+  			if (!isLocked( appDesc ))
+  				throw new Exception("Lock doesn't work after restart!");
+  			boolean launchable = isLaunchable(appDesc);
+  			boolean started = false;
+  			try {
+  				appHandle = appDesc.launch(new Hashtable());
+  				started = true;
+  			}
+  			catch (Exception e) {}
+  			if (started)
+  				throw new Exception("Application was launched inspite of lock!");
+  			appDesc.unlock();
+  			if (!appDesc.getProperties("en").get("application.locked").equals(
+  					"false"))
+  				throw new Exception("Lock property is incorrect!");
+  			if (launchable)
+  				throw new Exception(
+  						"Application was not launchable but started!");
+  			if (isLocked( appDesc ))
+  				throw new Exception("Unlock doesn't work!");
+  			return true;
+  		}
+  		catch (Exception e) {
+  			e.printStackTrace();
+  			return false;
+  		}
+  	}  	
 }

@@ -12,6 +12,5 @@ MicroEdition-Configuration: CLDC-1.1
 Import-Package: javax.microedition.midlet, org.osgi.service.log, org.osgi.ser
  vice.application, org.osgi.service.application.midlet, org.osgi.service.even
  t, org.osgi.application, org.osgi.framework
-Dependent-Field-1: logService
 
 
