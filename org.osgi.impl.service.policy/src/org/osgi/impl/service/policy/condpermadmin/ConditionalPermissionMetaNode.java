@@ -18,7 +18,7 @@
 package org.osgi.impl.service.policy.condpermadmin;
 
 import org.osgi.service.dmt.DmtData;
-import org.osgi.service.dmt.DmtMetaNode;
+import org.osgi.service.dmt.MetaNode;
 
 /**
  *
@@ -26,7 +26,7 @@ import org.osgi.service.dmt.DmtMetaNode;
  * 
  * @version $Revision$
  */
-public final class ConditionalPermissionMetaNode implements DmtMetaNode {
+public final class ConditionalPermissionMetaNode implements MetaNode {
 	public boolean can(int operation) { 
 		return (operation==CMD_DELETE)||
 			(operation==CMD_GET)||

@@ -18,10 +18,11 @@
 package org.osgi.impl.service.policy.unittests;
 
 import java.util.Arrays;
+
 import org.osgi.framework.AdminPermission;
 import org.osgi.framework.PackagePermission;
 import org.osgi.framework.ServicePermission;
-import org.osgi.impl.service.policy.condpermadmin.ConditionalPermissionAdminPlugin;
+import org.osgi.impl.service.policy.condpermadmin.PluginFactory;
 import org.osgi.impl.service.policy.unittests.DummyConditionalPermissionAdmin.PI;
 import org.osgi.impl.service.policy.unittests.util.DmtPluginTestCase;
 import org.osgi.service.condpermadmin.BundleLocationCondition;
@@ -29,8 +30,8 @@ import org.osgi.service.condpermadmin.ConditionInfo;
 import org.osgi.service.condpermadmin.ConditionalPermissionInfo;
 import org.osgi.service.dmt.DmtData;
 import org.osgi.service.dmt.DmtException;
-import org.osgi.service.dmt.DmtMetaNode;
 import org.osgi.service.dmt.DmtSession;
+import org.osgi.service.dmt.MetaNode;
 import org.osgi.service.http.HttpService;
 import org.osgi.service.permissionadmin.PermissionInfo;
 import org.osgi.util.gsm.IMEICondition;
@@ -40,7 +41,7 @@ public class ConditionalPermissionPluginTest extends DmtPluginTestCase {
 	/**
 	 * the plugin currently tested
 	 */
-	public ConditionalPermissionAdminPlugin plugin;
+	public PluginFactory plugin;
 	
 	/**
 	 * the DMT session opened during a testcase
@@ -96,7 +97,7 @@ public class ConditionalPermissionPluginTest extends DmtPluginTestCase {
 		condPermAdmin = new DummyConditionalPermissionAdmin();
 		context.properties.put("dataRootURIs",ROOT);
 		context.services.put("condPermAdmin",condPermAdmin);
-		plugin = new ConditionalPermissionAdminPlugin();
+		plugin = new PluginFactory();
 		context.doActivate(plugin);
 		addDataPlugin(ROOT,plugin);
 	}
@@ -124,9 +125,9 @@ public class ConditionalPermissionPluginTest extends DmtPluginTestCase {
 
 	public void testRootMetaNode() throws Exception {
 		newSession();
-		DmtMetaNode mn = dmtSession.getMetaNode(ROOT);
+		MetaNode mn = dmtSession.getMetaNode(ROOT);
 		assertNotNull(mn);
-		assertEquals(false,mn.can(DmtMetaNode.CMD_DELETE));
+		assertEquals(false,mn.can(MetaNode.CMD_DELETE));
 	}
 		
 	public void testListings() throws Exception {

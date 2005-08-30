@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <scr:component name="org.osgi.impl.service.policy.permadmin" 
 	xmlns:scr="http://www.osgi.org/xmlns/scr/v1.0.0">
-	<implementation class="org.osgi.impl.service.policy.permadmin.PermissionAdminPlugin"/>
+	<implementation class="org.osgi.impl.service.policy.permadmin.PluginFactory"/>
 	<property name="dataRootURIs" value="./OSGi/Policy/Java/LocationPermission"/>
 	<service>
-		<provide interface="org.osgi.service.dmt.DmtDataPlugin"/>
+		<provide interface="org.osgi.service.dmt.spi.DataPluginFactory"/>
 	</service>
 	<reference name="permissionAdmin"
 		interface="org.osgi.service.permissionadmin.PermissionAdmin"/>

@@ -17,7 +17,6 @@
  */
 package org.osgi.impl.service.policy.permadmin;
 
-import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Comparator;
@@ -34,8 +33,7 @@ import org.osgi.impl.service.policy.util.Splitter;
 import org.osgi.service.component.ComponentContext;
 import org.osgi.service.dmt.DmtData;
 import org.osgi.service.dmt.DmtException;
-import org.osgi.service.dmt.DmtMetaNode;
-import org.osgi.service.dmt.DmtSession;
+import org.osgi.service.dmt.MetaNode;
 import org.osgi.service.permissionadmin.PermissionAdmin;
 import org.osgi.service.permissionadmin.PermissionInfo;
 
@@ -51,12 +49,12 @@ public class PermissionAdminPlugin extends AbstractPolicyPlugin {
 	/*
 	 * ------------------------------------- 
 	 */
-	private final static DmtMetaNode	rootMetaNode = new RootMetaNode("PermissionAdmin tree");
-	private final static DmtMetaNode	locationsDirMetaNode = new RootMetaNode("permissions associated with bundle location");
-	private final static DmtMetaNode	permissionInfoMetaNode = new PermissionInfoMetaNode();
-	private final static DmtMetaNode 	defaultMetaNode = new DefaultMetaNode();
-	private final static DmtMetaNode	locationMetaNode = new LocationMetaNode();
-	private final static DmtMetaNode	locationEntryMetaNode = new LocationEntryMetaNode();
+	private final static MetaNode	rootMetaNode = new RootMetaNode("PermissionAdmin tree");
+	private final static MetaNode	locationsDirMetaNode = new RootMetaNode("permissions associated with bundle location");
+	private final static MetaNode	permissionInfoMetaNode = new PermissionInfoMetaNode();
+	private final static MetaNode 	defaultMetaNode = new DefaultMetaNode();
+	private final static MetaNode	locationMetaNode = new LocationMetaNode();
+	private final static MetaNode	locationEntryMetaNode = new LocationEntryMetaNode();
 	private final static Comparator permissionInfoComparator = new PermissionInfoComparator();
 
 	public static final String PERMISSIONINFO = PermissionInfoMetaNode.PERMISSIONINFO;
@@ -130,12 +128,7 @@ public class PermissionAdminPlugin extends AbstractPolicyPlugin {
 				return;
 			}
 			if (nodename.equals(LOCATION)) {
-				try {
-					this.location = data.getString();
-				}
-				catch (DmtException e) {
-					throw new IllegalArgumentException(e.getMessage());
-				}
+				this.location = data.getString();
 				return;
 			}
 
@@ -144,16 +137,9 @@ public class PermissionAdminPlugin extends AbstractPolicyPlugin {
 		}
 	};
 
-	public PermissionAdminPlugin() throws NoSuchAlgorithmException {}
-	
-	protected void activate(ComponentContext context) {
-		super.activate(context);
+	public PermissionAdminPlugin(ComponentContext context) {
+		super(context);
 		permissionAdmin = (PermissionAdmin) context.locateService("permissionAdmin");
-	}
-
-	public void open(String subtreeUri, int lockMode, DmtSession session)
-			throws DmtException {
-		super.open(subtreeUri,lockMode,session);
 		loadFromPermissionAdmin();
 	}
 
@@ -175,15 +161,15 @@ public class PermissionAdminPlugin extends AbstractPolicyPlugin {
 		defaultPermissions = permissionAdmin.getDefaultPermissions();
 	}
 
-	public DmtMetaNode getMetaNode(String nodeUri)
+	public MetaNode getMetaNode(String fullPath[])
 			throws DmtException {
-		String[] path = getPath(nodeUri);
+		String[] path = chopPath(fullPath);
 		if (path.length==0) {
 			return rootMetaNode;
 		}
 		if (path.length>=1) {
 			if (!path[0].equals(LOCATIONS)&&!path[0].equals(DEFAULT)) 
-				throw new DmtException(nodeUri,DmtException.NODE_NOT_FOUND,"");
+				throw new DmtException(fullPath,DmtException.NODE_NOT_FOUND,"");
 		}
 		if (path.length==1) {
 			if (path[0].equals(LOCATIONS)) {
@@ -194,14 +180,14 @@ public class PermissionAdminPlugin extends AbstractPolicyPlugin {
 		}
 		if (path.length>=2) {
 			if (!path[0].equals(LOCATIONS))
-				throw new DmtException(nodeUri,DmtException.NODE_NOT_FOUND,"");
+				throw new DmtException(fullPath,DmtException.NODE_NOT_FOUND,"");
 		}
 		if (path.length==2) {
 			return locationEntryMetaNode;
 		}
 		if (path.length>=3) {
 			if (!path[2].equals(PERMISSIONINFO)&&!path[2].equals(LOCATION)) {
-				throw new DmtException(nodeUri,DmtException.NODE_NOT_FOUND,"");
+				throw new DmtException(fullPath,DmtException.NODE_NOT_FOUND,"");
 			}
 		}
 		if (path.length==3) {
@@ -209,7 +195,7 @@ public class PermissionAdminPlugin extends AbstractPolicyPlugin {
 			if (path[2].equals(LOCATION)) return locationMetaNode;
 		}
 
-		throw new DmtException(nodeUri,DmtException.NODE_NOT_FOUND,"");
+		throw new DmtException(fullPath,DmtException.NODE_NOT_FOUND,"");
 	}
 
 	public void rollback() throws DmtException {
@@ -219,9 +205,9 @@ public class PermissionAdminPlugin extends AbstractPolicyPlugin {
 		locationEntries = null;
 	}
 
-	public void setNodeValue(String nodeUri, DmtData data) throws DmtException {
-		switchToWriteMode(nodeUri);
-		String[] path = getPath(nodeUri);
+	public void setNodeValue(String fullPath[], DmtData data) throws DmtException {
+		switchToWriteMode();
+		String[] path = chopPath(fullPath);
 		if (path.length==1) {
 			// this must be the Default node
 			this.defaultPermissions = stringToPermissionInfos(data.getString());
@@ -231,10 +217,9 @@ public class PermissionAdminPlugin extends AbstractPolicyPlugin {
 			// this must be Location/<location>/*
 			Entry e = (Entry) locationEntries.get(path[1]);
 			try {
-				switchToWriteMode(nodeUri);
 				e.setNodeValue(path[2],data);
 			} catch (IllegalArgumentException iae) {
-				throw new DmtException(nodeUri,DmtException.METADATA_MISMATCH,"cannot parse permission",iae);
+				throw new DmtException(fullPath,DmtException.METADATA_MISMATCH,"cannot parse permission",iae);
 			}
 			return;
 		}
@@ -242,9 +227,9 @@ public class PermissionAdminPlugin extends AbstractPolicyPlugin {
 		throw new IllegalStateException();
 	}
 
-	public void deleteNode(String nodeUri) throws DmtException {
-		switchToWriteMode(nodeUri);
-		String[] path = getPath(nodeUri);
+	public void deleteNode(String path[]) throws DmtException {
+		switchToWriteMode();
+		path = chopPath(path);
 		if (path.length==1) {
 			// this must be the Default node
 			this.defaultPermissions = null;
@@ -259,11 +244,9 @@ public class PermissionAdminPlugin extends AbstractPolicyPlugin {
 		throw new IllegalStateException();
 	}
 
-	public void createInteriorNode(String nodeUri) throws DmtException {
-		String path[] = getPath(nodeUri);
-		
-		switchToWriteMode(nodeUri);
-		
+	public void createInteriorNode(String path[],String type) throws DmtException {
+		path = chopPath(path);;
+		switchToWriteMode();
 		if (path[0].equals(DEFAULT)) {
 			defaultPermissions = new PermissionInfo[0];
 			return;
@@ -312,9 +295,9 @@ public class PermissionAdminPlugin extends AbstractPolicyPlugin {
 
 	public void close() {}
 	
-	public boolean isNodeUri(String nodeUri) {
+	public boolean isNodeUri(String fullPath[]) {
 		Entry e = null;
-		String[] path = getPath(nodeUri);
+		String[] path = chopPath(fullPath);
 		if (path.length==0) { return true; }
 		if (path.length>=1) {
 			if (!path[0].equals(DEFAULT)&&!path[0].equals(LOCATIONS)) return false;
@@ -332,8 +315,8 @@ public class PermissionAdminPlugin extends AbstractPolicyPlugin {
 		return e.isNodeUri(path[2]);
 	}
 
-	public DmtData getNodeValue(String nodeUri) throws DmtException {
-		String path[] = getPath(nodeUri);
+	public DmtData getNodeValue(String path[]) throws DmtException {
+		path = chopPath(path);
 		
 		if (path.length==1) {
 			return new DmtData(permissionInfosToString(defaultPermissions));
@@ -342,11 +325,11 @@ public class PermissionAdminPlugin extends AbstractPolicyPlugin {
 			Entry e = (Entry) locationEntries.get(path[1]);
 			return e.getNodeValue(path[2]);
 		}
-		throw new IllegalStateException(nodeUri);
+		throw new IllegalStateException();
 	}
 
-	public boolean isLeafNode(String nodeUri) throws DmtException {
-		String[] path = getPath(nodeUri);
+	public boolean isLeafNode(String path[]) throws DmtException {
+		path = chopPath(path);
 		if (path.length==0) return false;
 		if (path.length==1) {
 			return (path[0].equals(DEFAULT));
@@ -360,13 +343,8 @@ public class PermissionAdminPlugin extends AbstractPolicyPlugin {
 		return false;
 	}
 
-	public void setDefaultNodeValue(String nodeUri) throws DmtException {
-		String path[] = getPath(nodeUri);
-		// TODO
-	}
-
-	public String[] getChildNodeNames(String nodeUri) throws DmtException {
-		String[] path = getPath(nodeUri);
+	public String[] getChildNodeNames(String path[]) throws DmtException {
+		path = chopPath(path);
 		if (path.length==0) {
 			if (defaultPermissions==null) {
 				return new String[] { LOCATIONS };
@@ -382,20 +360,13 @@ public class PermissionAdminPlugin extends AbstractPolicyPlugin {
 		if (path.length==2) {
 			return new String[] { LOCATION, PERMISSIONINFO };
 		}
-		throw new IllegalStateException(nodeUri);
+		throw new IllegalStateException();
 	}
 
-	public void createLeafNode(String nodeUri, DmtData value, String mimeType) throws DmtException {
+	public void createLeafNode(String path[], DmtData value, String mimeType) throws DmtException {
+		switchToWriteMode();
 		// only one leaf node can be created: Default
-		switchToWriteMode(nodeUri);
 		defaultPermissions = stringToPermissionInfos(value.getString());
 	}
-
-	public void createLeafNode(String nodeUri) throws DmtException {
-		// only one leaf node can be created: Default
-		switchToWriteMode(nodeUri);
-		defaultPermissions = new PermissionInfo[0];
-	}
-
 	
 }

@@ -39,8 +39,7 @@ import org.osgi.service.condpermadmin.ConditionalPermissionAdmin;
 import org.osgi.service.condpermadmin.ConditionalPermissionInfo;
 import org.osgi.service.dmt.DmtData;
 import org.osgi.service.dmt.DmtException;
-import org.osgi.service.dmt.DmtMetaNode;
-import org.osgi.service.dmt.DmtSession;
+import org.osgi.service.dmt.MetaNode;
 import org.osgi.service.permissionadmin.PermissionInfo;
 
 /**
@@ -69,27 +68,27 @@ public class ConditionalPermissionAdminPlugin extends AbstractPolicyPlugin {
 	/**
 	 * metanode given back when asked about ./OSGi/Policy/Java/ConditionalPermission
 	 */
-	private static final DmtMetaNode rootMetaNode = new RootMetaNode("permissions specified by conditions");
+	private static final MetaNode rootMetaNode = new RootMetaNode("permissions specified by conditions");
 
 	/**
 	 * metanode given back when asked about ./OSGi/Policy/Java/ConditionalPermission/[...]/PermissionInfo
 	 */
-	private static final DmtMetaNode permissionInfoMetaNode = new PermissionInfoMetaNode();
+	private static final MetaNode permissionInfoMetaNode = new PermissionInfoMetaNode();
 	
 	/**
 	 * metanode given back when asked about ./OSGi/Policy//Java/ConditionalPermission/[...]/ConditionInfo
 	 */
-	private static final DmtMetaNode conditionInfoMetaNode = new ConditionInfoMetaNode();
+	private static final MetaNode conditionInfoMetaNode = new ConditionInfoMetaNode();
 
 	/**
 	 * metanode given back when asked about ./OSGi/Policy/Java/ConditionalPermission/[...]
 	 */
-	private static final DmtMetaNode conditionalPermissionMetaNode = new ConditionalPermissionMetaNode();
+	private static final MetaNode conditionalPermissionMetaNode = new ConditionalPermissionMetaNode();
 
 	/**
 	 * metanode given back when asked about ./OSGi/Policy/Java/ConditionalPermission/[...]/Name
 	 */
-	private static final DmtMetaNode nameMetaNode = new NameMetaNode();
+	private static final MetaNode nameMetaNode = new NameMetaNode();
 
 	/**
 	 * internal representation of a conditional permission
@@ -171,14 +170,9 @@ public class ConditionalPermissionAdminPlugin extends AbstractPolicyPlugin {
 	private static final Comparator conditionInfoComparator = new ConditionInfoComparator();
 	
 		
-	protected void activate(ComponentContext context) {
-		super.activate(context);
+	public ConditionalPermissionAdminPlugin(ComponentContext context) {
+		super(context);
 		condPermAdmin = (ConditionalPermissionAdmin) context.locateService("condPermAdmin");
-	}
-
-	public void open(String subtreeUri, int lockMode, DmtSession session)
-			throws DmtException {
-		super.open(subtreeUri,lockMode,session);
 
 		// copy everything from the conditional permission admin, populate our tree
 		conditionalPermissions = new HashMap();
@@ -188,11 +182,11 @@ public class ConditionalPermissionAdminPlugin extends AbstractPolicyPlugin {
 			conditionalPermissions.put(mangle(e.getName()),
 					new ConditionalPermission(e.getName(),e.getConditionInfos(),e.getPermissionInfos()));
 		}
-	}
+}
 
-	public DmtMetaNode getMetaNode(String nodeUri)
+	public MetaNode getMetaNode(String fullPath[])
 			throws DmtException {
-		String[] path = getPath(nodeUri);
+		String[] path = chopPath(fullPath);
 		if (path.length==0) {
 			return rootMetaNode;
 		}
@@ -203,11 +197,11 @@ public class ConditionalPermissionAdminPlugin extends AbstractPolicyPlugin {
 			if (path[1].equals(NAME)) return nameMetaNode;
 			if (path[1].equals(PERMISSIONINFO)) return permissionInfoMetaNode;
 			if (path[1].equals(CONDITIONINFO)) return conditionInfoMetaNode;
-			throw new DmtException(nodeUri,DmtException.NODE_NOT_FOUND,
+			throw new DmtException(fullPath,DmtException.NODE_NOT_FOUND,
 					"Must be either "+PERMISSIONINFO+" or "+CONDITIONINFO);
 		}
 		
-		throw new DmtException(nodeUri,DmtException.NODE_NOT_FOUND,"");
+		throw new DmtException(fullPath,DmtException.NODE_NOT_FOUND,"");
 	}
 
 	public void rollback() throws DmtException {
@@ -215,23 +209,23 @@ public class ConditionalPermissionAdminPlugin extends AbstractPolicyPlugin {
 		conditionalPermissions = null;
 	}
 
-	public void setNodeValue(String nodeUri, DmtData data) throws DmtException {
-		String path[] = getPath(nodeUri);
-		switchToWriteMode(nodeUri);
+	public void setNodeValue(String fullPath[], DmtData data) throws DmtException {
+		String[] path = chopPath(fullPath);
+		switchToWriteMode();
 		ConditionalPermission cp = (ConditionalPermission) conditionalPermissions.get(path[0]);
 		cp.setNodeValue(path[1],data);
 	}
 
-	public void deleteNode(String nodeUri) throws DmtException {
-		String path[] = getPath(nodeUri);
-		switchToWriteMode(nodeUri);
+	public void deleteNode(String fullPath[]) throws DmtException {
+		String[] path = chopPath(fullPath);
+		switchToWriteMode();
 		if (path.length!=1) throw new IllegalStateException(); // should not get here
 		conditionalPermissions.remove(path[0]);
 	}
 
-	public void createInteriorNode(String nodeUri) throws DmtException {
-		String[] path = getPath(nodeUri);
-		switchToWriteMode(nodeUri);
+	public void createInteriorNode(String fullPath[],String type) throws DmtException {
+		String[] path = chopPath(fullPath);
+		switchToWriteMode();
 		if (path.length!=1) throw new IllegalStateException(); // should not get here
 		conditionalPermissions.put(path[0],new ConditionalPermission());
 	}
@@ -274,8 +268,8 @@ public class ConditionalPermissionAdminPlugin extends AbstractPolicyPlugin {
 	
 	public void close() {}
 
-	public boolean isNodeUri(String nodeUri) {
-		String[] path = getPath(nodeUri);
+	public boolean isNodeUri(String path[]) {
+		path = chopPath(path);
 		if (path.length==0) return true;
 		ConditionalPermission cp = (ConditionalPermission) conditionalPermissions.get(path[0]);
 		if (cp==null) return false;
@@ -287,24 +281,19 @@ public class ConditionalPermissionAdminPlugin extends AbstractPolicyPlugin {
 		return false;
 	}
 
-	public DmtData getNodeValue(String nodeUri) throws DmtException {
-		// note: nodeUri and metanode are already checked here
-		String[] path = getPath(nodeUri);
+	public DmtData getNodeValue(String[] path) throws DmtException {
+		path = chopPath(path);
 		ConditionalPermission cp = (ConditionalPermission) conditionalPermissions.get(path[0]);
 		return cp.getNodeValue(path[1]);
 	}
 
-	public boolean isLeafNode(String nodeUri) throws DmtException {
-		String[] path = getPath(nodeUri);
+	public boolean isLeafNode(String path[]) throws DmtException {
+		path = chopPath(path);
 		return path.length==2;
 	}
 
-	public void setDefaultNodeValue(String nodeUri) throws DmtException {
-		// TODO Auto-generated method stub
-	}
-
-	public String[] getChildNodeNames(String nodeUri) throws DmtException {
-		String[] path = getPath(nodeUri);
+	public String[] getChildNodeNames(String fullPath[]) throws DmtException {
+		String[] path = chopPath(fullPath);
 		if (path.length==0) {
 			Set hashes = conditionalPermissions.keySet();
 			String children[] = new String[hashes.size()];

@@ -18,7 +18,7 @@
 package org.osgi.impl.service.policy;
 
 import org.osgi.service.dmt.DmtData;
-import org.osgi.service.dmt.DmtMetaNode;
+import org.osgi.service.dmt.MetaNode;
 
 /**
  *
@@ -26,7 +26,7 @@ import org.osgi.service.dmt.DmtMetaNode;
  * 
  * @version $Revision$
  */
-public final class PermissionInfoMetaNode implements DmtMetaNode {
+public final class PermissionInfoMetaNode implements MetaNode {
 	public static final String PERMISSIONINFO = "PermissionInfo";
 	public static final String[] PERMISSIONINFO_ARRAY = new String[] { PERMISSIONINFO };
 	public boolean can(int operation) {	return (operation==CMD_GET)||(operation==CMD_REPLACE);}

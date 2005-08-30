@@ -19,7 +19,6 @@ package org.osgi.impl.service.policy.dmtprincipal;
 
 import java.io.IOException;
 import java.security.AccessController;
-import java.security.NoSuchAlgorithmException;
 import java.security.PrivilegedAction;
 import java.security.PrivilegedActionException;
 import java.security.PrivilegedExceptionAction;
@@ -31,6 +30,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.Map.Entry;
+
 import org.osgi.impl.service.dmt.api.DmtPrincipalPermissionAdmin;
 import org.osgi.impl.service.policy.AbstractPolicyPlugin;
 import org.osgi.impl.service.policy.PermissionInfoMetaNode;
@@ -40,8 +40,7 @@ import org.osgi.impl.service.policy.util.Splitter;
 import org.osgi.service.component.ComponentContext;
 import org.osgi.service.dmt.DmtData;
 import org.osgi.service.dmt.DmtException;
-import org.osgi.service.dmt.DmtMetaNode;
-import org.osgi.service.dmt.DmtSession;
+import org.osgi.service.dmt.MetaNode;
 import org.osgi.service.permissionadmin.PermissionInfo;
 
 /**
@@ -114,10 +113,10 @@ public class DmtPrincipalPlugin extends AbstractPolicyPlugin {
 		}
 	}
 
-	private static final DmtMetaNode rootMetaNode = new RootMetaNode("tree representing DMT Principal permissions");
-	private static final DmtMetaNode principalMetaNode = new PrincipalMetaNode();
-	private static final DmtMetaNode permissionInfoMetaNode = new PermissionInfoMetaNode();
-	private static final DmtMetaNode principalPermissionMetaNode = new PrincipalPermissionMetaNode();
+	private static final MetaNode rootMetaNode = new RootMetaNode("tree representing DMT Principal permissions");
+	private static final MetaNode principalMetaNode = new PrincipalMetaNode();
+	private static final MetaNode permissionInfoMetaNode = new PermissionInfoMetaNode();
+	private static final MetaNode principalPermissionMetaNode = new PrincipalPermissionMetaNode();
 
 	private final PrivilegedAction getPrincipalPermissions = new PrivilegedAction(){
 		public Object run() {
@@ -134,16 +133,10 @@ public class DmtPrincipalPlugin extends AbstractPolicyPlugin {
 	};
 	private final SetPrincipalPermissions setPrincipalPermissions = new SetPrincipalPermissions();
 
-	public DmtPrincipalPlugin() throws NoSuchAlgorithmException {}
-
-	protected void activate(ComponentContext context) {
-		super.activate(context);
+	public DmtPrincipalPlugin(ComponentContext context) {
+		super(context);
 		dmtPrincipalPermissionAdmin = (DmtPrincipalPermissionAdmin) context.locateService("dmtPrincipalPermissionAdmin");
-	}
-	
-	public void open(String subtreeUri, int lockMode, DmtSession session)
-			throws DmtException {
-		super.open(subtreeUri,lockMode,session);
+
 		currentState = new HashMap();
 
 		// Note that the security check is already done in the DMT Admin, when it
@@ -159,10 +152,10 @@ public class DmtPrincipalPlugin extends AbstractPolicyPlugin {
 			currentState.put(mangle(p),new PrincipalPermission(p,pi));
 		}
 	}
-
-	public DmtMetaNode getMetaNode(String nodeUri)
+	
+	public MetaNode getMetaNode(String fullPath[])
 			throws DmtException {
-		String[] path = getPath(nodeUri);
+		String[] path = chopPath(fullPath);
 		if (path.length==0) return rootMetaNode;
 		if (path.length==1) {
 			return principalPermissionMetaNode;
@@ -170,34 +163,34 @@ public class DmtPrincipalPlugin extends AbstractPolicyPlugin {
 		if (path.length==2) {
 			if (PRINCIPAL.equals(path[1])) return principalMetaNode;
 			if (PERMISSIONINFO.equals(path[1])) return permissionInfoMetaNode;
-			throw new DmtException(nodeUri,DmtException.NODE_NOT_FOUND,
+			throw new DmtException(fullPath,DmtException.NODE_NOT_FOUND,
 					"Must be either "+PRINCIPAL+" or "+PERMISSIONINFO);
 		}
-		throw new DmtException(nodeUri,DmtException.NODE_NOT_FOUND,"");
+		throw new DmtException(fullPath,DmtException.NODE_NOT_FOUND,"");
 	}
 
 	public void rollback() throws DmtException {
 		throw new DmtException(ROOT,DmtException.FEATURE_NOT_SUPPORTED,"");
 	}
 
-	public void setNodeValue(String nodeUri, DmtData data) throws DmtException {
-		String path[] = getPath(nodeUri);
-		switchToWriteMode(nodeUri);
+	public void setNodeValue(String path[], DmtData data) throws DmtException {
+		path = chopPath(path);
+		switchToWriteMode();
 		if (path.length!=2) throw new IllegalStateException(); // this cannot happen
 		PrincipalPermission p = (PrincipalPermission) currentState.get(path[0]);
 		p.setNodeValue(path[1],data.getString());
 	}
 
-	public void deleteNode(String nodeUri) throws DmtException {
-		String[] path = getPath(nodeUri);
-		switchToWriteMode(nodeUri);
+	public void deleteNode(String path[]) throws DmtException {
+		path = chopPath(path);
+		switchToWriteMode();
 		if (path.length!=1) throw new IllegalStateException(); // should not get here
 		currentState.remove(path[0]);
 	}
 
-	public void createInteriorNode(String nodeUri) throws DmtException {
-		String path[] = getPath(nodeUri);
-		switchToWriteMode(nodeUri);
+	public void createInteriorNode(String path[],String type) throws DmtException {
+		path = chopPath(path);
+		switchToWriteMode();
 		if (path.length!=1) throw new IllegalStateException(); // should not get here
 		currentState.put(path[0],new PrincipalPermission("",null));
 	}
@@ -237,8 +230,8 @@ public class DmtPrincipalPlugin extends AbstractPolicyPlugin {
 
 	public void close() {}
 	
-	public boolean isNodeUri(String nodeUri) {
-		String path[] = getPath(nodeUri);
+	public boolean isNodeUri(String path[]) {
+		path = chopPath(path);
 		if (path.length==0) return true;
 		PrincipalPermission pp = null;
 		pp = (PrincipalPermission) currentState.get(path[0]);
@@ -250,17 +243,17 @@ public class DmtPrincipalPlugin extends AbstractPolicyPlugin {
 		return false;
 	}
 
-	public DmtData getNodeValue(String nodeUri) throws DmtException {
-		String[] path = getPath(nodeUri);
+	public DmtData getNodeValue(String path[]) throws DmtException {
+		path = chopPath(path);
 
 		// isNodeUri and metadata should check all this
-		if (path.length!=2) throw new IllegalStateException(nodeUri);
+		if (path.length!=2) throw new IllegalStateException(""+path.length);
 		PrincipalPermission pp = (PrincipalPermission) currentState.get(path[0]);
 		return pp.getNodeValue(path[1]);
 	}
 
-	public boolean isLeafNode(String nodeUri) throws DmtException {
-		String[] path = getPath(nodeUri);
+	public boolean isLeafNode(String path[]) throws DmtException {
+		path = chopPath(path);
 		return path.length==2;
 	}
 
@@ -268,8 +261,8 @@ public class DmtPrincipalPlugin extends AbstractPolicyPlugin {
 		// TODO Auto-generated method stub
 	}
 
-	public String[] getChildNodeNames(String nodeUri) throws DmtException {
-		String[] path = getPath(nodeUri);
+	public String[] getChildNodeNames(String path[]) throws DmtException {
+		path = chopPath(path);
 		// note: nodeUri is already checked
 		if (path.length==0) {
 			Set ks = currentState.keySet();
@@ -280,7 +273,7 @@ public class DmtPrincipalPlugin extends AbstractPolicyPlugin {
 			return new String[] { PRINCIPAL, PERMISSIONINFO };
 		}
 		
-		// since nodeUri is checked, we CANNOT get her
+		// since nodeUri is checked, we CANNOT get here
 		throw new IllegalStateException();
 	}
 

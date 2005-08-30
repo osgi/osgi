@@ -17,15 +17,13 @@
  */
 package org.osgi.impl.service.policy;
 
-import java.util.ArrayList;
 import java.util.Date;
 
 import org.osgi.service.component.ComponentContext;
 import org.osgi.service.dmt.DmtAdmin;
 import org.osgi.service.dmt.DmtData;
-import org.osgi.service.dmt.DmtDataPlugin;
 import org.osgi.service.dmt.DmtException;
-import org.osgi.service.dmt.DmtSession;
+import org.osgi.service.dmt.spi.TransactionalDataSession;
 
 /**
  *
@@ -33,7 +31,7 @@ import org.osgi.service.dmt.DmtSession;
  * 
  * @version $Revision$
  */
-public abstract class AbstractPolicyPlugin implements DmtDataPlugin {
+public abstract class AbstractPolicyPlugin implements TransactionalDataSession {
 	/**
 	 * the official root position in the management tree
 	 */
@@ -53,64 +51,33 @@ public abstract class AbstractPolicyPlugin implements DmtDataPlugin {
 	 * the dmt admin, needed for the mangle function
 	 */
 	private DmtAdmin dmtAdmin;
+		
+	public final String mangle(String nodename) {
+		return dmtAdmin.mangle(nodename);
+	}
 	
-	protected void activate(ComponentContext context) {
+	public AbstractPolicyPlugin(ComponentContext context) {
 		ROOT = (String) context.getProperties().get("dataRootURIs");
 		dmtAdmin = (DmtAdmin) context.locateService("dmtAdmin");
-	}
-	
-	public final String mangle(String nodename) {
-		return dmtAdmin.mangle(null,nodename);
-	}
-	
-	public void open(String subtreeUri, int lockMode, DmtSession session)
-			throws DmtException {
-		dirty = false;
-		atomic = (lockMode == DmtSession.LOCK_TYPE_ATOMIC);
-	}
-
-	public final boolean supportsAtomic() {
-		return true;
+		dirty=false;
 	}
 
 	/**
-	 * checks if we are allowed to write (eg. in atomic mode), and flips the dirty bit
+	 * flips the dirty bit
 	 * @param nodeUri
 	 * @throws DmtException
 	 */
-	protected final void switchToWriteMode(String nodeUri) throws DmtException {
-		if (!atomic)
-            // TODO by Tamas: this check will not be needed in new API, plugin can indicate at session open if it only supports atomic write
-            throw new DmtException(nodeUri,DmtException.COMMAND_FAILED,
-				"modifying tree is only allowed in atomic sessions");
+	protected final void switchToWriteMode() {
 		dirty=true;
 	}
-	
+		
 	/**
-	 * return the path elements, from our base
-	 * @param nodeUri
-	 * @return an array of nodenames
+	 * 
 	 */
-	protected final  String[] getPath(String nodeUri) {
-		if (!nodeUri.startsWith(ROOT)) 
-			throw new IllegalStateException("Dmt should not give me URIs that are not mine");
-		if (nodeUri.length()==ROOT.length()) return new String[] {};
-		ArrayList result = new ArrayList();
-		int pos = ROOT.length()+1;
-		while(pos<nodeUri.length()) {
-			int slashpos = nodeUri.indexOf('/',pos);
-			while((slashpos!=-1)&&(nodeUri.charAt(slashpos-1)=='\\')) {
-				slashpos = nodeUri.indexOf('/',slashpos+1);
-			}
-			if (slashpos==-1) {
-				result.add(nodeUri.substring(pos));
-				break;
-			}
-			result.add(nodeUri.substring(pos,slashpos));
-			pos=slashpos+1;
-		}
-		String[] r = new String[result.size()];
-		return (String[]) result.toArray(r);
+	protected final String[] chopPath(String[]path) {
+		String []ret = new String[path.length-5];
+		System.arraycopy(path,5,ret,0,path.length-5);
+		return ret;
 	}
 	
 	protected final boolean isDirty() {
@@ -121,62 +88,49 @@ public abstract class AbstractPolicyPlugin implements DmtDataPlugin {
 	 * methods that are not needed anywhere
 	 */
 
-	public final void setNodeTitle(String nodeUri, String title) throws DmtException {
+	public final void setNodeTitle(String nodeUri[], String title) throws DmtException {
 		throw new DmtException(nodeUri,DmtException.FEATURE_NOT_SUPPORTED,"");
 	}
 
-	public final void setNodeType(String nodeUri, String type) throws DmtException {
+	public final void setNodeType(String nodeUri[], String type) throws DmtException {
 		throw new DmtException(nodeUri,DmtException.FEATURE_NOT_SUPPORTED,"");
 	}
 
-	public final void createInteriorNode(String nodeUri, String type)
+	public void createLeafNode(String nodeUri[], DmtData value,String mimeType)
 			throws DmtException {
 		throw new DmtException(nodeUri,DmtException.FEATURE_NOT_SUPPORTED,"");
 	}
 
-	public final void createLeafNode(String nodeUri, DmtData value)
+	public final void copy(String nodeUri[], String newNodeUri[], boolean recursive)
 			throws DmtException {
 		throw new DmtException(nodeUri,DmtException.FEATURE_NOT_SUPPORTED,"");
 	}
 
-	public final void copy(String nodeUri, String newNodeUri, boolean recursive)
-			throws DmtException {
+	public final void renameNode(String nodeUri[], String newName) throws DmtException {
 		throw new DmtException(nodeUri,DmtException.FEATURE_NOT_SUPPORTED,"");
 	}
 
-	public final void renameNode(String nodeUri, String newName) throws DmtException {
+	public final String getNodeTitle(String nodeUri[]) throws DmtException {
 		throw new DmtException(nodeUri,DmtException.FEATURE_NOT_SUPPORTED,"");
 	}
 
-	public final String getNodeTitle(String nodeUri) throws DmtException {
+	public final String getNodeType(String nodeUri[]) throws DmtException {
 		throw new DmtException(nodeUri,DmtException.FEATURE_NOT_SUPPORTED,"");
 	}
 
-	public final String getNodeType(String nodeUri) throws DmtException {
+	public final int getNodeVersion(String nodeUri[]) throws DmtException {
 		throw new DmtException(nodeUri,DmtException.FEATURE_NOT_SUPPORTED,"");
 	}
 
-	public final int getNodeVersion(String nodeUri) throws DmtException {
+	public final Date getNodeTimestamp(String nodeUri[]) throws DmtException {
 		throw new DmtException(nodeUri,DmtException.FEATURE_NOT_SUPPORTED,"");
 	}
 
-	public final Date getNodeTimestamp(String nodeUri) throws DmtException {
+	public final int getNodeSize(String nodeUri[]) throws DmtException {
 		throw new DmtException(nodeUri,DmtException.FEATURE_NOT_SUPPORTED,"");
 	}
 
-	public final int getNodeSize(String nodeUri) throws DmtException {
-		throw new DmtException(nodeUri,DmtException.FEATURE_NOT_SUPPORTED,"");
-	}
-
-	public void createLeafNode(String nodeUri) throws DmtException {
-		throw new DmtException(nodeUri,DmtException.FEATURE_NOT_SUPPORTED,"");
-	}
-
-	public void createLeafNode(String nodeUri, DmtData value, String mimeType) throws DmtException {
-		throw new DmtException(nodeUri,DmtException.FEATURE_NOT_SUPPORTED,"");
-	}
-
-	public void nodeChanged(String nodeUri) throws DmtException {
+	public void nodeChanged(String nodeUri[]) throws DmtException {
 		throw new DmtException(nodeUri,DmtException.FEATURE_NOT_SUPPORTED,"");
 	}
 

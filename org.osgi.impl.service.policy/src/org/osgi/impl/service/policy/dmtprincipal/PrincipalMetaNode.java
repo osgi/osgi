@@ -18,7 +18,7 @@
 package org.osgi.impl.service.policy.dmtprincipal;
 
 import org.osgi.service.dmt.DmtData;
-import org.osgi.service.dmt.DmtMetaNode;
+import org.osgi.service.dmt.MetaNode;
 
 /**
  *
@@ -26,7 +26,7 @@ import org.osgi.service.dmt.DmtMetaNode;
  * 
  * @version $Revision$
  */
-public final class PrincipalMetaNode implements DmtMetaNode {
+public final class PrincipalMetaNode implements MetaNode {
 	public static final String PRINCIPAL = "Principal";
 	public static final String[] PRINCIPAL_ARRAY = new String[] { PRINCIPAL };
 	public boolean can(int operation) { return (operation==CMD_GET)||(operation==CMD_REPLACE); }

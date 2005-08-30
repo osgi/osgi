@@ -18,7 +18,7 @@
 package org.osgi.impl.service.policy.condpermadmin;
 
 import org.osgi.service.dmt.DmtData;
-import org.osgi.service.dmt.DmtMetaNode;
+import org.osgi.service.dmt.MetaNode;
 
 /**
  *
@@ -26,7 +26,7 @@ import org.osgi.service.dmt.DmtMetaNode;
  * 
  * @version $Revision$
  */
-public final class NameMetaNode implements DmtMetaNode {
+public final class NameMetaNode implements MetaNode {
 	public static final String NAME = "Name";
 	public static final String[] NAME_ARRAY = new String[] { NAME };
 	public boolean can(int operation) { return (operation==CMD_GET)||(operation==CMD_REPLACE); }

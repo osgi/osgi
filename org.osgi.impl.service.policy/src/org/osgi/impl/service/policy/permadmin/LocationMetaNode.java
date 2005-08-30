@@ -18,7 +18,7 @@
 package org.osgi.impl.service.policy.permadmin;
 
 import org.osgi.service.dmt.DmtData;
-import org.osgi.service.dmt.DmtMetaNode;
+import org.osgi.service.dmt.MetaNode;
 
 /**
  *
@@ -26,7 +26,7 @@ import org.osgi.service.dmt.DmtMetaNode;
  * 
  * @version $Revision$
  */
-public final class LocationMetaNode implements DmtMetaNode {
+public final class LocationMetaNode implements MetaNode {
 	public static final String LOCATION = "Location";
 	public static final String[] LOCATION_ARRAY = new String[] { LOCATION };
 	

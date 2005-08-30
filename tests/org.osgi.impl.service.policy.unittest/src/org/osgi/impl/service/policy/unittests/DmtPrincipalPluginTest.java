@@ -20,10 +20,11 @@ package org.osgi.impl.service.policy.unittests;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
+
 import org.osgi.framework.AdminPermission;
 import org.osgi.framework.PackagePermission;
 import org.osgi.impl.service.dmt.api.DmtPrincipalPermissionAdmin;
-import org.osgi.impl.service.policy.dmtprincipal.DmtPrincipalPlugin;
+import org.osgi.impl.service.policy.dmtprincipal.PluginFactory;
 import org.osgi.impl.service.policy.unittests.util.DmtPluginTestCase;
 import org.osgi.service.dmt.DmtData;
 import org.osgi.service.dmt.DmtException;
@@ -46,7 +47,7 @@ public class DmtPrincipalPluginTest extends DmtPluginTestCase implements DmtPrin
 	/**
 	 * the plugin currently tested
 	 */
-	public DmtPrincipalPlugin plugin;
+	public PluginFactory plugin;
 
 	/**
 	 * an opened DMT session to our subtree
@@ -66,7 +67,7 @@ public class DmtPrincipalPluginTest extends DmtPluginTestCase implements DmtPrin
 		principalPermissions = new HashMap();
 		context.properties.put("dataRootURIs",ROOT);
 		context.services.put("dmtPrincipalPermissionAdmin",this);
-		plugin = new DmtPrincipalPlugin();
+		plugin = new PluginFactory();
 		context.doActivate(plugin);
 		addDataPlugin(ROOT,plugin);
 	}

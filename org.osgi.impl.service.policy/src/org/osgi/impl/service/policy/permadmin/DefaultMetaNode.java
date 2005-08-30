@@ -18,7 +18,7 @@
 package org.osgi.impl.service.policy.permadmin;
 
 import org.osgi.service.dmt.DmtData;
-import org.osgi.service.dmt.DmtMetaNode;
+import org.osgi.service.dmt.MetaNode;
 
 /**
  *
@@ -26,7 +26,7 @@ import org.osgi.service.dmt.DmtMetaNode;
  * 
  * @version $Revision$
  */
-public final class DefaultMetaNode implements DmtMetaNode {
+public final class DefaultMetaNode implements MetaNode {
 	public static final String DEFAULT = "Default";
 	public static final String[] DEFAULT_ARRAY = new String[] { DEFAULT };
 	

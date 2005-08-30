@@ -24,7 +24,9 @@ import java.net.URL;
 import java.util.Dictionary;
 import java.util.Enumeration;
 import java.util.Hashtable;
+
 import junit.framework.TestCase;
+
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.BundleException;
@@ -42,9 +44,9 @@ import org.osgi.impl.service.policy.unittests.DummyComponentContext;
 import org.osgi.service.cm.Configuration;
 import org.osgi.service.cm.ConfigurationAdmin;
 import org.osgi.service.cm.ManagedService;
-import org.osgi.service.dmt.DmtDataPlugin;
 import org.osgi.service.dmt.DmtAdmin;
 import org.osgi.service.dmt.RemoteAlertSender;
+import org.osgi.service.dmt.spi.DataPluginFactory;
 import org.osgi.service.event.Event;
 import org.osgi.service.event.EventAdmin;
 
@@ -248,7 +250,7 @@ public abstract class DmtPluginTestCase extends TestCase {
 		public boolean match(ServiceReference reference) {
 			if (reference instanceof DummyServiceReference) {
 				DummyServiceReference dummyRef = (DummyServiceReference)reference;
-				if (dummyRef.serviceObject instanceof DmtDataPlugin) {
+				if (dummyRef.serviceObject instanceof DataPluginFactory) {
 					return true;
 				}
 			}
@@ -302,7 +304,7 @@ public abstract class DmtPluginTestCase extends TestCase {
 		dmtBundleContext = null;
 	}
 	
-	public void addDataPlugin(String URI,DmtDataPlugin plugin) {
+	public void addDataPlugin(String URI,DataPluginFactory plugin) {
 		DummyServiceReference ref = new DummyServiceReference(plugin);
 		ref.dataRootURIs = new String[] {URI};
 		ServiceEvent e = new ServiceEvent(ServiceEvent.REGISTERED,ref);

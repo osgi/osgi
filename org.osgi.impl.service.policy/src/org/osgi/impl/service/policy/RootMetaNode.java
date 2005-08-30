@@ -18,7 +18,7 @@
 package org.osgi.impl.service.policy;
 
 import org.osgi.service.dmt.DmtData;
-import org.osgi.service.dmt.DmtMetaNode;
+import org.osgi.service.dmt.MetaNode;
 
 /**
  *
@@ -26,7 +26,7 @@ import org.osgi.service.dmt.DmtMetaNode;
  * 
  * @version $Revision$
  */
-public final class RootMetaNode implements DmtMetaNode {
+public final class RootMetaNode implements MetaNode {
 	private final String description;
 	public RootMetaNode(String description) {
 		this.description = description;

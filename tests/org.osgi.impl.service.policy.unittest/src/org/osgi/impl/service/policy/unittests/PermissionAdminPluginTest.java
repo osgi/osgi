@@ -21,12 +21,12 @@ import java.util.Arrays;
 
 import org.osgi.framework.AdminPermission;
 import org.osgi.framework.PackagePermission;
-import org.osgi.impl.service.policy.permadmin.PermissionAdminPlugin;
+import org.osgi.impl.service.policy.permadmin.PluginFactory;
 import org.osgi.impl.service.policy.unittests.util.DmtPluginTestCase;
 import org.osgi.service.dmt.DmtData;
 import org.osgi.service.dmt.DmtException;
-import org.osgi.service.dmt.DmtMetaNode;
 import org.osgi.service.dmt.DmtSession;
+import org.osgi.service.dmt.MetaNode;
 import org.osgi.service.permissionadmin.PermissionInfo;
 
 /**
@@ -45,7 +45,7 @@ public class PermissionAdminPluginTest extends DmtPluginTestCase {
 	public static final String LOCATION2_HASH = "http:\\/\\/location2";
 
 	public DummyPermissionAdmin	permAdmin;
-	public PermissionAdminPlugin	plugin;
+	public PluginFactory	plugin;
 	public static final PermissionInfo ADMINPERMISSION = new PermissionInfo(AdminPermission.class.getName(),"","");
 	public static final PermissionInfo IMPORTFRAMEWORKPERMISSION 
 		= new PermissionInfo(PackagePermission.class.getName(),"org.osgi.framework","IMPORT");
@@ -57,7 +57,7 @@ public class PermissionAdminPluginTest extends DmtPluginTestCase {
 		permAdmin = new DummyPermissionAdmin();
 		context.properties.put("dataRootURIs",ROOT);
 		context.services.put("permissionAdmin",permAdmin);
-		plugin = new PermissionAdminPlugin();
+		plugin = new PluginFactory();
 		context.doActivate(plugin);
 		addDataPlugin(ROOT,plugin);
 	}
@@ -81,7 +81,7 @@ public class PermissionAdminPluginTest extends DmtPluginTestCase {
 	
 	public void testRegister() throws Exception {
 		newSession();
-		DmtMetaNode mn = dmtSession.getMetaNode(ROOT);
+		MetaNode mn = dmtSession.getMetaNode(ROOT);
 	}
 	
 	public void testEmptyTree() throws Exception {
