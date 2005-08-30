@@ -208,6 +208,10 @@ public class TestMidletContainerBundleActivator
             System.out.println("Checking MIDlet::notifyDestroyed                 FAILED");
         else
             System.out.println("Checking MIDlet::notifyDestroyed                 PASSED");        
+        if(!testCase_checkNotifyPaused())
+            System.out.println("Checking MIDlet::notifyPaused                    FAILED");
+        else
+            System.out.println("Checking MIDlet::notifyPaused                    PASSED");        
     		if (!testCase_lockApplication())
     			  System.out.println("Locking the application                          FAILED");
     		else
@@ -1956,4 +1960,27 @@ public class TestMidletContainerBundleActivator
   			return false;
   		}							  		
   	}
+  	
+  	boolean testCase_checkNotifyPaused() {
+  		try {
+  			
+  			if( !testCase_launchApplication() )
+  				return false;
+
+  			sendEvent(new Event( "com/nokia/megtest/NotifyPaused", null), false);
+  			
+ 			  while( appHandle.getState() != MidletHandle.PAUSED ) {
+  			  	Thread.sleep( 100L );
+ 			  }
+  			
+  			if( !testCase_stopApplication() )
+  				return false;
+  			
+  			return true;
+  		}
+  		catch (Exception e) {
+  			e.printStackTrace();
+  			return false;
+  		}							  		
+  	}  
 }
