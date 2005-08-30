@@ -250,7 +250,7 @@ public class UPnPTester implements UPnPEventListener {
 					+ UPnPConstants.ACT_MPF);
 		}
 		catch (Exception exc) {
-			exc.printStackTrace();
+			//exc.printStackTrace();
 			control.log("Exception is thrown OK");
 		}
 		act = cs.getAction(UPnPConstants.ACT_PB);
@@ -386,8 +386,8 @@ public class UPnPTester implements UPnPEventListener {
 		if (dict != null) {
 			state = true;
 			Object tmp = dict.get(UPnPConstants.N_OUT_HEX);
-			System.out.println(tmp.getClass());
-			System.out.println(tmp);
+			//System.out.println(tmp.getClass());
+			//System.out.println(tmp);
 			String st = new String((byte[]) dict.get(UPnPConstants.N_OUT_HEX));
 			if (st == null || !st.equals(UPnPConstants.V_OUT_HEX)) {
 				control.log("SERVER: " + UPnPConstants.N_OUT_HEX
@@ -467,6 +467,7 @@ public class UPnPTester implements UPnPEventListener {
 			exc.printStackTrace();
 		}
 		hash.put(UPnPEventListener.UPNP_FILTER, filter);
+		hash.put("upnptest", "true");
 		ender = 8;
 		control.log("Register UPnPEventListener to listen for events");
 		sr = bc.registerService(UPnPEventListener.class.getName(), this, hash);
@@ -711,6 +712,10 @@ public class UPnPTester implements UPnPEventListener {
 		}
 	}
 
+	
+	
+	
+	
 	private void eventExportTest() {
 		try {
 			control.log("Starting event test of Export");
@@ -724,16 +729,22 @@ public class UPnPTester implements UPnPEventListener {
 			URL eventURL = new URL(event);
 			String evHost = eventURL.getHost();
 			int evPort = eventURL.getPort();
-			control.log("Create and start Eventing Server");
+			
+			control.log("Create and start Eventing Server");			
 			EventServer evs = new EventServer(evHost, evPort, bc, control);
 			int pr = evPort + 1;
 			String callback = "http://" + evHost + ":" + pr + "/";
 			control.log("Create subscribe message and send it");
-			byte[] subscr = cp.createSUBSCRIBE(EVENT_SUB_URL, evHost, evPort,
-					callback, 6);
+			
+			// pkr; added to have the same path URL
+			String match = (udn + SERVICE_ID).replace(':', '-');
+			
+			byte[] subscr = cp.createSUBSCRIBE(/*EVENT_SUB_URL*/ match, evHost, evPort,
+					callback, 60);
 			Thread th = new Thread(evs, "EVS");
 			th.start();
 			evs.send(subscr);
+			
 			control.log("Create table with events");
 			Hashtable events = new Hashtable(6);
 			events.put(UPnPConstants.N_IN_STRING, UPnPConstants.E_STRING);
@@ -750,13 +761,13 @@ public class UPnPTester implements UPnPEventListener {
 					control.log("No UPnPEventListener is found");
 					break;
 				}
-			}
+			}			
 			control.log("Starting ServerSocket to listen for Notify msg");
 			SSNotify not = new SSNotify(pr, control);
 			not.start();
 			control.log("Notify UPnPEventListener service");
 			evs.getListener().notifyUPnPEvent(udn, SERVICE_ID, events);
-			evs.finish();
+			evs.finish();				
 			while (!not.isFinished) {
 				Thread.sleep(100);
 				if (cps.isError) {
