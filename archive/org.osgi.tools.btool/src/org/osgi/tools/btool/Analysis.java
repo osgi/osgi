@@ -10,8 +10,6 @@ import java.io.*;
 import java.util.*;
 import java.util.zip.*;
 
-import org.osgi.framework.Constants;
-
 /**
  * @author Peter Kriens
  * 
@@ -22,7 +20,6 @@ public class Analysis {
 	BTool			btool;
 	String			zipfile;
 	Manifest		manifest;
-	private Object	dependencies;
 
 	Analysis(BTool btool, Dependencies dependencies, String zipfile) {
 		this.btool = btool;
@@ -38,19 +35,8 @@ public class Analysis {
 		manifest = new Manifest(btool, zip.getInputStream(entry));
 		checkActivator();
 		checkSymbolicName();
-		checkBundleManifest();
 	}
 
-	/**
-	 * 
-	 */
-	private void checkBundleManifest() {
-		String name = manifest.getValue(Constants.BUNDLE_MANIFESTVERSION);
-		if ( name == null )
-			btool.warnings.add("No Bundle Manifest Version set");
-		
-		
-	}
 
 	private void checkSymbolicName() {
 		String name = manifest.getValue("Bundle-SymbolicName");
