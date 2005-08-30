@@ -66,9 +66,9 @@ public class EclipseProject {
 	 * @return
 	 */
 	String toPath(Collection c) {
-		if ( c==null || c.isEmpty() )
+		if (c == null || c.isEmpty())
 			return null;
-		
+
 		StringBuffer sb = new StringBuffer();
 		String del = "";
 		HashSet set = new HashSet();
@@ -128,11 +128,18 @@ public class EclipseProject {
 			}
 			workspace = eclipseProject.getParentFile();
 			projectFile = new File(eclipseProject, ".classpath");
-			if (!projectFile.exists())
-				throw new RuntimeException("No classpath for "
-						+ eclipseProject.getPath());
-			SAXParserImpl saxParser = new SAXParserImpl();
-			saxParser.parse(projectFile, new Handler());
+			if (!projectFile.exists()) {
+				if (classpath == null) {
+					throw new RuntimeException("No classpath for "
+							+ eclipseProject.getPath());
+				}
+				else
+					return;
+			}
+			else {
+				SAXParserImpl saxParser = new SAXParserImpl();
+				saxParser.parse(projectFile, new Handler());
+			}
 		}
 		catch (Throwable e) {
 			throw new RuntimeException(e);
@@ -172,13 +179,11 @@ public class EclipseProject {
 
 			if (tag.equals("classpath"))
 				doClasspath(attrs);
+			else if (tag.equals("classpathentry"))
+				doClasspathEntry(attrs);
 			else
-				if (tag.equals("classpathentry"))
-					doClasspathEntry(attrs);
-				else
-					System.err
-							.println("Invalid tag in .classpath file, ignored "
-									+ tag);
+				System.err.println("Invalid tag in .classpath file, ignored "
+						+ tag);
 		}
 
 		void doClasspath(Attributes attrs) {
@@ -187,7 +192,6 @@ public class EclipseProject {
 		void doClasspathEntry(Attributes attrs) {
 			String kind = attrs.getValue("kind");
 			String path = attrs.getValue("path");
-			String output = attrs.getValue("output");
 			String sourcePath = attrs.getValue("sourcepath");
 			boolean exported = false;
 			String s = attrs.getValue("exported");
@@ -199,17 +203,14 @@ public class EclipseProject {
 
 			if ("src".equals(kind))
 				doSrc(path, exported);
+			else if ("lib".equals(kind))
+				doLib(path, sourcePath, exported);
+			else if ("output".equals(kind))
+				doOutput(path);
+			else if ("con".equals(kind))
+				/* ignore */;
 			else
-				if ("lib".equals(kind))
-					doLib(path, sourcePath, exported);
-				else
-					if ("output".equals(kind))
-						doOutput(path);
-					else
-						if ("con".equals(kind))
-							/*ignore*/;
-						else
-						System.out.println("Unknown kind: " + kind);
+				System.out.println("Unknown kind: " + kind);
 		}
 	}
 
