@@ -72,7 +72,6 @@ public class DeviceServlet extends HttpServlet {
 
 	public void doGet(HttpServletRequest req, HttpServletResponse res)
 			throws ServletException, IOException {
-		//    logger.log("{DeviceServlet} - Incomming GET request");
 		String xml = req.getParameter("xml");
 		String icon = req.getParameter("icon");
 		String uri = req.getRequestURI();

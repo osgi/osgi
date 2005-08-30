@@ -24,7 +24,7 @@ public class DescriptionInvoker {
 			Dictionary args, boolean mposted, HttpServletResponse res)
 			throws ServletException, IOException {
 		hash.clear();
-		logger.log("Incomming invoke request for Action: " + actionName);
+		logger.log("Incoming invoke request for Action: " + actionName);
 		if (actionName.equals(UPnPConstants.ACT_POS)) {
 			postOutSucc(serviceType, actionName, args, res);
 		}

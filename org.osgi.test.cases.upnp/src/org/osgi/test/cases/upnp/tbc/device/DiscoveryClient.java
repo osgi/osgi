@@ -26,13 +26,11 @@ public abstract class DiscoveryClient implements Runnable {
 	public void run() {
 		try {
 			while (running) {
-				server.logger.log("Creating alive discovery messages");
 				packet = getAliveDiscoveries();
 				int len = packet.length;
 				if (getTimeout() <= 0) {
 					break;
 				}
-				server.logger.log("Sending alive discovery messages");
 				for (int i = 0; i < len; i++) {
 					server.send(packet[i]);
 				}
