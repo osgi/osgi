@@ -14,7 +14,7 @@ x ./OSGi/log/a ""
 ci ./OSGi/mon/org.osgi.meg.demo.app.events.TestApplication/TestParameter/Server/myjob
 sv ./OSGi/mon/org.osgi.meg.demo.app.events.TestApplication/TestParameter/Server/myjob/Reporting/Type chr:EV
 sv ./OSGi/mon/org.osgi.meg.demo.app.events.TestApplication/TestParameter/Server/myjob/Reporting/Value int:1
-sv ./OSGi/mon/org.osgi.meg.demo.app.events.TestApplication/TestParameter/Server/myjob/Enabled boolean:true
+sv ./OSGi/mon/org.osgi.meg.demo.app.events.TestApplication/TestParameter/Server/myjob/Enabled bool:true
 cl ./OSGi/cfg/org.osgi.meg.demo.app.events.TestApplication/TestParameter chr:something
 
 # close the session to commit changes
