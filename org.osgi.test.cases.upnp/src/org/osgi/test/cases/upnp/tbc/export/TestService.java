@@ -125,7 +125,7 @@ public abstract class TestService implements UPnPService, ServiceListener {
 			bc.addServiceListener(this, filter.toString());
 			ServiceReference[] refs = bc.getServiceReferences(
 					UPnPEventListener.class.getName(), filter.toString());
-			System.out.println("REFS: " + refs);
+			//System.out.println("REFS: " + refs);
 			if (refs != null && refs.length > 0) {
 				//        synchronized (listeners) {
 				for (int i = 0; i < refs.length; i++) {

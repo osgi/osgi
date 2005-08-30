@@ -199,7 +199,7 @@ public class UPnPExportedDevice implements UPnPDevice {
 	}
 
 	public org.osgi.service.upnp.UPnPService getService(String str) {
-		System.out.println("STRING: " + str);
+		//System.out.println("STRING: " + str);
 		for (int i = 0; i < service.length; i++) {
 			if (service[i].getId().equals(str)) {
 				return service[i];
