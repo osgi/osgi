@@ -31,7 +31,6 @@ import java.io.*;
 import java.util.*;
 import java.security.*;
 
-import org.osgi.framework.*;
 import org.osgi.service.application.*;
 import org.osgi.service.application.ApplicationDescriptor.Delegate;
 

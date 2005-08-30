@@ -22,7 +22,7 @@ import org.osgi.service.dmt.*;
 /**
  * DMT meta node for the Application Admin
  */
-public class ApplicationMetaNode implements DmtMetaNode {
+public class ApplicationMetaNode implements MetaNode {
 	static final boolean	CANDELETE	= true;
 	static final boolean	CANADD		= true;
 	static final boolean	CANGET		= true;
@@ -72,7 +72,7 @@ public class ApplicationMetaNode implements DmtMetaNode {
 
 	public int getScope() {
 		// TODO Auto-generated method stub
-		return DmtMetaNode.DYNAMIC;
+		return MetaNode.DYNAMIC;
 	}
 
 	public String getDescription() {
