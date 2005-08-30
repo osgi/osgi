@@ -59,9 +59,16 @@ public class EventServer implements Runnable {
 				if (ll.equals("HTTP/1.1 200 OK")) {
 					control
 							.log("HTTP/1.1 200 OK msg as reply to subsribe msg is received");
-					listRef = bc
-							.getServiceReference("org.osgi.service.upnp.UPnPEventListener");
-					eventList = (UPnPEventListener) bc.getService(listRef);
+					ServiceReference[] listRefs = bc
+							.getServiceReferences(UPnPEventListener.class.getName(),null);
+					for ( int i=0; listRefs!=null && i<listRefs.length; i++ ) {
+						String s = listRefs[i].getProperty("upnp.filter") + "";
+						if ( s.indexOf("Tester") >= 0 ) {
+							listRef = listRefs[i];
+							eventList = (UPnPEventListener) bc.getService(listRef);							
+							break;
+						}
+					}
 				}
 			}
 		}
