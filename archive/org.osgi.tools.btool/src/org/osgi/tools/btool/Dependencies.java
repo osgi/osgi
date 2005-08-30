@@ -399,7 +399,7 @@ public class Dependencies {
 	 * @param source
 	 * @return
 	 */
-	private String findVersionInManifest(String name, String version,
+	String findVersionInManifest(String name, String version,
 			Source source) {
 		try {
 			// Try using he manifest for a good version
