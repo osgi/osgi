@@ -1,7 +1,5 @@
 package org.osgi.tools.btool;
 
-import java.io.File;
-
 import javax.security.cert.X509Certificate;
 
 /**
@@ -15,7 +13,6 @@ public class SignerResource extends Resource {
 	
 	public SignerResource(BTool btool, String certificate) {
 		super(btool, null, "" );
-		File		file = new File( btool.project.getFile(), certificate );
 		
 	}
 	
