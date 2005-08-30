@@ -14,6 +14,8 @@ import org.osgi.service.application.ApplicationDescriptor;
 import org.osgi.service.application.ApplicationHandle;
 import org.osgi.service.application.midlet.MidletHandle;
 import org.osgi.service.dmt.DmtAdmin;
+import org.osgi.service.dmt.DmtData;
+import org.osgi.service.dmt.DmtSession;
 import org.osgi.service.event.Event;
 import org.osgi.service.event.EventAdmin;
 import org.osgi.service.event.EventHandler;
@@ -158,6 +160,10 @@ public class TestMidletContainerBundleActivator
             System.out.println("Midlet bundle install onto Midlet container      FAILED");
         else
             System.out.println("Midlet bundle install onto Midlet container      PASSED");
+    		if (!testCase_appPluginCheckInstalledApps()) 																
+      			System.out.println("AppPlugin: checking the installed application    FAILED"); 	
+    		else 																																				
+    			  System.out.println("AppPlugin: checking the installed application    PASSED"); 	
         if(!testCase_checkAppDescs())
             System.out.println("Checking the installed Midlet app descriptors    FAILED");
         else
@@ -1244,4 +1250,89 @@ public class TestMidletContainerBundleActivator
   			return false;
   		}
   	}  	
+  	
+  	boolean testCase_appPluginCheckInstalledApps()
+  	{
+  		ApplicationDescriptor appDesc = appDescs[0];
+  		String appUID = getPID( appDesc );
+  		
+  		try {
+  			DmtSession session = dmtFactory.getSession("./OSGi/apps");
+  			
+  			String[] nodeNames = session.getChildNodeNames( "./OSGi/apps" );
+  		
+  			if( nodeNames.length != 1)
+  				throw new Exception( "Too many nodenames are present! Only one meglet is installed!" );
+  			
+  			if( !appUID.equals( nodeNames[ 0 ] ) )
+  				throw new Exception( "Illegal node name found! (" + nodeNames[ 0 ] + " instead of " + appUID );
+  	
+  			String[] properties = session.getChildNodeNames( "./OSGi/apps/" + appUID );
+  			
+  			String names[]  = new String [] { "localizedname", "version", "vendor", "locked", 
+  					                              "bundle_id", "required_services", "launch" };
+  			Object values[] = new Object [ names.length ];
+  			
+  			Map props = appDesc.getProperties( Locale.getDefault().getLanguage() );
+  			
+  			values[ 0 ] = (String)( props.get( ApplicationDescriptor.APPLICATION_NAME ) );
+  			values[ 1 ] = (String)( props.get( ApplicationDescriptor.APPLICATION_VERSION ) );
+  			values[ 2 ] = (String)( props.get( ApplicationDescriptor.APPLICATION_VENDOR ) );
+  			values[ 3 ] = Boolean.valueOf( (String)props.get( ApplicationDescriptor.APPLICATION_LOCKED ) );
+  			values[ 4 ] = (String)( props.get( "application.bundle.id" ) );
+  			
+  			boolean found[] = new boolean[ names.length ];				
+  			for( int i = 0; i != names.length; i++ )
+  				found [ i ] = false;
+  			
+  			for( int i = 0; i != properties.length; i++ ) {
+  				int j = 0;
+  				for(; j != names.length; j++ )
+  					if( properties[ i ].equals( names [ j ] ) ) {
+  						if( found [ j ] )
+  							throw new Exception( "Parameter duplication:" + properties[ i ] + "!" );
+  						found[ j ] = true;
+  						if( values[ j ] == null )
+  							break;
+  						
+  						DmtData value = session.getNodeValue( "./OSGi/apps/" + appUID + "/" + names[ i ] );
+  						
+  						System.out.println( "Counter: " + j + "Name: " + names[ j ] + " Value: " + value.getFormat() );
+  						
+  						switch( value.getFormat() )
+  						{
+  						case DmtData.FORMAT_BOOLEAN:
+  							if( ((Boolean)values[j]).booleanValue() != value.getBoolean() )
+  								throw new Exception( "Invalid value of " + names[ j ] + " (" + values [ j ] + ") !" );
+  							break;
+  						case DmtData.FORMAT_STRING:
+  							if( !((String)values[j]).equals( value.getString() ) )
+  								throw new Exception( "Invalid value of " + names[ j ] + " (" + values [ j ] + ") !" );														
+  							break;
+  						case DmtData.FORMAT_INTEGER:
+  							if( ((Integer)values[j]).intValue() != value.getInt() )
+  								throw new Exception( "Invalid value of " + names[ j ] + " (" + values [ j ] + ") !" );
+  							break;
+  						default:
+  							throw new Exception( "Illegal type for " + names [ j ] + "parameter !" );
+  						}
+  						
+  						break;
+  					}
+  					if( j == properties.length )
+  						throw new Exception( "Invalid parameter:" +  properties[ i ] + "!" );
+  			}
+
+  			for( int i = 0; i != found.length; i++ )
+  				if( !found [ i ] )
+  					throw new Exception( "The " + names[ i ] + " is missing from the properties!" );
+  			
+  			session.close();
+  			return true;
+  		}
+  		catch (Exception e) {
+  			e.printStackTrace();
+  			return false;
+  		}
+  	}
 }

@@ -26,9 +26,10 @@ public class MidletContainer implements BundleListener, EventHandler {
 	private BundleContext	bc;
 	private Vector			bundleIDs;
 	private Hashtable		bundleHash;
-	private int				height;
-	private int				width;
+	private int				  height;
+	private int				  width;
 	private OATContainerInterface oat;
+	private int         counter = 0;
 	ServiceReference oatRef = null;
 
 	public MidletContainer(BundleContext bc) throws Exception {
@@ -292,8 +293,10 @@ public class MidletContainer implements BundleListener, EventHandler {
 									.getLanguage();
 							names.put(defaultLang, MIDletName);
 							icons.put(defaultLang, MIDletIcon);
-							String uniqueID = MIDletName + "-"
-									+ MIDletSuiteName + "-" + MIDletVersion;
+							String uniqueID = "MIDlet:" + (counter++) + ":" + MIDletName + "-" +
+									              MIDletVersion + "-" + MIDletSuiteName;
+							if( uniqueID.length() > 32 )
+								uniqueID = uniqueID.substring(0, 32);
 							props.put("service.pid", uniqueID);
 							appVector.add(createMidletDescriptorByReflection(
 									props, names, icons, defaultLang,
