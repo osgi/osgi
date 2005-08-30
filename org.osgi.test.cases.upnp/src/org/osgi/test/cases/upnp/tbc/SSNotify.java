@@ -27,7 +27,7 @@ public class SSNotify extends Thread {
 	public void run() {
 		try {
 			sock = ssocket.accept();
-			sock.setSoTimeout(1000);
+			sock.setSoTimeout(5000);
 			is = sock.getInputStream();
 			control.log("Waiting for events");
 			Hashtable ht = readHeaders(is, 30);
