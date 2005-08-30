@@ -12,6 +12,7 @@ import java.util.*;
 import org.osgi.framework.*;
 import org.osgi.service.application.ApplicationDescriptor;
 import org.osgi.service.application.ApplicationHandle;
+import org.osgi.service.application.ScheduledApplication;
 import org.osgi.service.application.midlet.MidletHandle;
 import org.osgi.service.dmt.DmtAdmin;
 import org.osgi.service.dmt.DmtData;
@@ -29,6 +30,7 @@ public class TestMidletContainerBundleActivator
     private Bundle                  midletBundle;
     private Bundle                  midletContainerBundle;
     private Bundle                  logServiceBundle;
+  	private Bundle									schedulerBundle;
     private ApplicationDescriptor   appDescs[];
     private ApplicationHandle       appHandle;
     private String                  installedAppUID;
@@ -106,11 +108,6 @@ public class TestMidletContainerBundleActivator
         return false;
     }
 
-    boolean waitStateChangeEvent(int state, String pid)
-    {
-        return true;
-    }
-
     String getPID(ApplicationDescriptor appDesc)
     {
         return (String)appDesc.getProperties("").get("service.pid");
@@ -135,27 +132,50 @@ public class TestMidletContainerBundleActivator
         }
     }
 
+  	ApplicationHandle lookupAppHandle(ApplicationDescriptor appDesc)
+  			throws Exception {
+  		Map props = appDesc.getProperties("en");
+  		long bundleID = Long.parseLong((String) props
+  				.get("application.bundle.id"));
+  		ServiceReference[] references = bc.getServiceReferences(
+  				"org.osgi.service.application.ApplicationHandle",
+  				"(" + ApplicationHandle.APPLICATION_DESCRIPTOR + "=" + getPID( appDesc ) + ")");
+  		if (references == null || references.length == 0)
+  			return null;
+  		for (int i = 0; i != references.length; i++) {
+  			ApplicationHandle handle = (ApplicationHandle) bc
+  					.getService(references[i]);
+  			ApplicationDescriptor desc = getAppDesc( handle );
+  			bc.ungetService(references[i]);
+  			if (appDesc == desc)
+  				return handle;
+  		}
+  		return null;
+  	}
+
     public void run()
     {
         System.out.println("Midlet container tester thread started!\n");
         if(!testCase_lookUpMidletContainer()) {
             System.out.println("Looking up the Midlet container                  FAILED");
             return;
-        }
-        else
+        } else
             System.out.println("Looking up the Midlet container                  PASSED");
         if(!testCase_lookUpLogService()) {
             System.out.println("Looking up the log service                       FAILED");
             return;
-        }
-        else
+        } else
             System.out.println("Looking up the log service                       PASSED");
     		if (!testCase_lookUpDmtAdmin()) {
     			  System.out.println("Looking up the DMT admin                         FAILED");
     			return;
-    		}
-    		else
+    		} else
     			  System.out.println("Looking up the DMT admin                         PASSED");
+    		if (!testCase_lookUpScheduler()) {
+    			  System.out.println("Looking up the scheduler                         FAILED");
+    			  return;
+    		} else
+    			  System.out.println("Looking up the scheduler                         PASSED");
         if(!testCase_installMidletBundle())
             System.out.println("Midlet bundle install onto Midlet container      FAILED");
         else
@@ -192,6 +212,30 @@ public class TestMidletContainerBundleActivator
     			  System.out.println("Save the locking state of the application        FAILED");
     		else
     			  System.out.println("Save the locking state of the application        PASSED");
+    		if (!testCase_scheduleAnApplication())
+       			System.out.println("Scheduling an application                        FAILED");
+    		else
+    			  System.out.println("Scheduling an application                        PASSED");
+    		if (!testCase_scheduleTwoApplications())
+    			  System.out.println("Scheduling two applications                      FAILED");
+    		else
+    			  System.out.println("Scheduling two applications                      PASSED");
+    		if (!testCase_scheduleApplicationsWithAARestart())
+    			  System.out.println("Scheduling an applications with AA restart       FAILED");
+    		else
+    			  System.out.println("Scheduling an applications with AA restart       PASSED");
+    		if (!testCase_removeScheduledApplication())
+    			  System.out.println("Checking scheduled application remove            FAILED");
+    		else
+    			  System.out.println("Checking scheduled application remove            PASSED");
+    		if (!testCase_recurringSchedule())
+    			  System.out.println("Checking the recurring schedule                  FAILED");
+    		else
+    			  System.out.println("Checking the recurring schedule                  PASSED");
+    		if (!testCase_schedulerFilterMatching())
+    			  System.out.println("Checking the filter matching of the scheduler    FAILED");
+    		else
+    			  System.out.println("Checking the filter matching of the scheduler    PASSED");
         if(!testCase_oatRegisterService())
             System.out.println("Checking OAT service registration                FAILED");
         else
@@ -325,6 +369,29 @@ public class TestMidletContainerBundleActivator
             e.printStackTrace();
         }
         return false;
+    }
+
+    boolean testCase_lookUpScheduler() {
+  		try {
+  			Bundle[] bundles = bc.getBundles();
+  			for (int i = 0; i < bundles.length; i++) {
+  				if (bundles[i].getState() == Bundle.ACTIVE) {
+  					Dictionary dict = bundles[i].getHeaders();
+  					Object name = dict.get("Bundle-Name");
+  					if ( name != null && name.equals( "impl.service.application" )) {
+  						System.out.println("NOKIA scheduler found!");
+  						schedulerBundle = bundles[i];
+  						return true;
+  					}
+  				}
+  			}
+  			System.out.println("Scheduler bundle is not running!");
+  			return false;
+  		}
+  		catch (Exception e) {
+  			e.printStackTrace();
+  			return false;
+  		}
     }
 
     boolean testCase_lookUpDmtAdmin() {
@@ -519,8 +586,6 @@ public class TestMidletContainerBundleActivator
                 throw new Exception("Result of the launch is not START!");
             if(!launchable)
                 throw new Exception("Application started, but originally was not launchable!");
-            if(!waitStateChangeEvent(1, getPID(appDesc)))
-                throw new Exception("Didn't receive the start event!");
             ServiceReference appList[] = bc.getServiceReferences("org.osgi.service.application.ApplicationHandle", "(application.descriptor=" + getPID(appDesc) + ")");
             if(appList == null || appList.length == 0)
                 throw new Exception("No registered application handle found!");
@@ -546,8 +611,6 @@ public class TestMidletContainerBundleActivator
             ((MidletHandle)appHandle).pause();
             if(!checkResultFile("PAUSE"))
                 throw new Exception("Result of the pause is not PAUSE!");
-            if(!waitStateChangeEvent(2, getPID(appDescs[0])))
-                throw new Exception("Didn't receive the pause event!");
             if(!appHandle.getState().equals("PAUSED"))
                 throw new Exception("The status didn't change to paused!");
             else
@@ -567,8 +630,6 @@ public class TestMidletContainerBundleActivator
             ((MidletHandle)appHandle).resume();
             if(!checkResultFile("RESUME"))
                 throw new Exception("Result of the resume is not RESUME!");
-            if(!waitStateChangeEvent(3, getPID(appDescs[0])))
-                throw new Exception("Didn't resumed the application correctly!");
             if(!appHandle.getState().equals("RUNNING"))
                 throw new Exception("The status didn't change to running!");
             else
@@ -589,8 +650,6 @@ public class TestMidletContainerBundleActivator
             appHandle.destroy();
             if(!checkResultFile("STOP"))
                 throw new Exception("Result of the stop is not STOP!");
-            if(!waitStateChangeEvent(5, pid))
-                throw new Exception("Didn't receive the stopped event!");
             ServiceReference appList[] = bc.getServiceReferences("org.osgi.service.application.ApplicationHandle", "(service.pid=" + pid + ")");
             if(appList != null && appList.length != 0)
             {
@@ -620,12 +679,34 @@ public class TestMidletContainerBundleActivator
         return false;
     }
 
+    private boolean reloadInstalledApps( boolean hasAppInstalled ) throws Exception {
+      ServiceReference references[] = bc.getServiceReferences("org.osgi.service.application.ApplicationDescriptor", "(application.bundle.id=" + installedBundleID + ")");
+      if(hasAppInstalled)
+      {
+          if(references == null || references.length == 0)
+              throw new Exception("ApplicationDescriptor doesn't restored after container restart!");
+          appDescs = new ApplicationDescriptor[references.length];
+          for(int i = 0; i != references.length; i++)
+          {
+              appDescs[i] = (ApplicationDescriptor)bc.getService(references[i]);
+              bc.ungetService(references[i]);
+          }
+
+      } else
+      {
+          appDescs = null;
+          if(references != null && references.length != 0)
+              throw new Exception("New ApplicationDescriptor's appeared after container restart!");
+      }
+      return true;    	
+    }
+    
     public boolean restart_MidletContainer(boolean hasAppInstalled)
     {
         try
         {
             midletContainerBundle.stop();
-            while(midletContainerBundle.getState() != 4) 
+            while(midletContainerBundle.getState() != Bundle.RESOLVED) 
                 try
                 {
                     Thread.sleep(100L);
@@ -635,31 +716,13 @@ public class TestMidletContainerBundleActivator
             if(appList != null && appList.length != 0)
                 throw new Exception("Application descriptor doesn't removed after container stop!");
             midletContainerBundle.start();
-            while(midletContainerBundle.getState() != 32) 
+            while(midletContainerBundle.getState() != Bundle.ACTIVE) 
                 try
                 {
                     Thread.sleep(100L);
                 }
                 catch(InterruptedException interruptedexception1) { }
-            ServiceReference references[] = bc.getServiceReferences("org.osgi.service.application.ApplicationDescriptor", "(application.bundle.id=" + installedBundleID + ")");
-            if(hasAppInstalled)
-            {
-                if(references == null || references.length == 0)
-                    throw new Exception("ApplicationDescriptor doesn't restored after container restart!");
-                appDescs = new ApplicationDescriptor[references.length];
-                for(int i = 0; i != references.length; i++)
-                {
-                    appDescs[i] = (ApplicationDescriptor)bc.getService(references[i]);
-                    bc.ungetService(references[i]);
-                }
-
-            } else
-            {
-                appDescs = null;
-                if(references != null && references.length != 0)
-                    throw new Exception("New ApplicationDescriptor's appeared after container restart!");
-            }
-            return true;
+            return reloadInstalledApps( hasAppInstalled );
         }
         catch(Exception e)
         {
@@ -695,6 +758,42 @@ public class TestMidletContainerBundleActivator
         return false;
     }
 
+    public boolean restart_scheduler() {
+  		try {
+  			schedulerBundle.stop();
+  			while (schedulerBundle.getState() != Bundle.RESOLVED) {
+  				try {
+  					Thread.sleep(100);
+  				}
+  				catch (InterruptedException e) {}
+  			}
+  			schedulerBundle.start();
+  			while (schedulerBundle.getState() != Bundle.ACTIVE) {
+  				try {
+  					Thread.sleep(100);
+  				}
+  				catch (InterruptedException e) {}
+  			}
+  			
+  			/* stopping the scheduler may result stopping the MIDlet container */
+  			
+  			if( midletContainerBundle.getState() != Bundle.ACTIVE ) {
+  				midletContainerBundle.start();
+          while(midletContainerBundle.getState() != Bundle.ACTIVE) 
+            try {
+                Thread.sleep(100L);
+            }catch(InterruptedException interruptedexception1) { }
+            
+          reloadInstalledApps( appDescs != null && appDescs.length != 0 );
+  			}	
+  			return true;
+  		}
+  		catch (Exception e) {
+  			e.printStackTrace();
+  			return false;
+  		}
+  	}
+
     boolean testCase_launchAfterRestart()
     {
         try
@@ -725,8 +824,6 @@ public class TestMidletContainerBundleActivator
                 return false;
             if(!checkResultFile("STOP"))
                 throw new Exception("Result of the stop is not STOP!");
-            if(!waitStateChangeEvent(5, pid))
-                throw new Exception("Didn't receive the stopped event!");
             ServiceReference appList[] = bc.getServiceReferences("org.osgi.service.application.ApplicationHandle", "(service.pid=" + pid + ")");
             if(appList != null && appList.length != 0)
             {
@@ -778,8 +875,6 @@ public class TestMidletContainerBundleActivator
             appHandle.destroy();
             if(!checkResultFile("STOP"))
                 throw new Exception("Result of the stop is not STOP!");
-            if(!waitStateChangeEvent(5, pid))
-                throw new Exception("Didn't receive the stopped event!");
             ServiceReference appList[] = bc.getServiceReferences("org.osgi.service.application.ApplicationHandle", "(application.descriptor=" + pid + ")");
             if(appList != null && appList.length != 0)
             {
@@ -1251,6 +1346,243 @@ public class TestMidletContainerBundleActivator
   		}
   	}  	
   	
+  	String getFilterFromNow( int delaySec ) {
+  		Calendar calendar = Calendar.getInstance();
+  		calendar.add( Calendar.SECOND, delaySec );
+  		
+  		String filter = "(&";
+  		filter += "(year=" 		+ calendar.get( Calendar.YEAR ) +")";
+  		filter += "(month=" 	+	calendar.get( Calendar.MONTH ) +")";
+  		filter += "(day=" 		+	calendar.get( Calendar.DAY_OF_MONTH ) +")";
+  		filter += "(hour=" 		+	calendar.get( Calendar.HOUR_OF_DAY ) +")";
+  		filter += "(minute="	+ calendar.get( Calendar.MINUTE ) +")";
+  		filter += "(second="	+ calendar.get( Calendar.SECOND ) +")";
+  		filter += ")";
+  		
+  		return filter;
+  	}
+
+  	boolean testCase_scheduleAnApplication() {
+  		try {
+  			ApplicationDescriptor appDesc = appDescs[0];
+  			if (lookupAppHandle(appDesc) != null)
+  				throw new Exception(
+  						"There's a running instance of the appDesc!");
+  			Map args = createArgs();
+  			if (args == null)
+  				throw new Exception("Cannot create the arguments of launch!");
+  			appDesc.schedule(args, "org/osgi/timer", getFilterFromNow( 2 ), false);
+  			Thread.sleep(3000);
+  			appHandle = lookupAppHandle(appDesc);
+  			if (appHandle == null
+  					|| !appHandle.getState().equals( ApplicationHandle.RUNNING ) )
+  				throw new Exception("Application wasn't scheduled!");
+  			if (!checkResultFile("START"))
+  				throw new Exception("Result of the schedule is not START!");
+  			if (!testCase_stopApplication())
+  				return false;
+  			return true;
+  		}
+  		catch (Exception e) {
+  			e.printStackTrace();
+  			return false;
+  		}
+  	}
+
+  	boolean testCase_scheduleTwoApplications() {
+  		try {
+  			ApplicationDescriptor appDesc = appDescs[0];
+  			if (lookupAppHandle(appDesc) != null)
+  				throw new Exception(
+  						"There's a running instance of the appDesc!");
+  			Map args = createArgs();
+  			if (args == null)
+  				throw new Exception("Cannot create the arguments of launch!");
+  			appDesc.schedule(args, "org/osgi/timer", getFilterFromNow( 4 ), false);
+  			appDesc.schedule(args, "org/osgi/timer", getFilterFromNow( 2 ), false);
+  			Thread.sleep(3000);
+  			appHandle = lookupAppHandle(appDesc);
+  			if (appHandle == null
+  					|| !appHandle.getState().equals( ApplicationHandle.RUNNING ) )
+  				throw new Exception("Application wasn't scheduled!");
+  			if (!checkResultFile("START"))
+  				throw new Exception("Result of the schedule is not START!");
+  			if (!testCase_stopApplication())
+  				return false;
+  			Thread.sleep(2000);
+  			appHandle = lookupAppHandle(appDesc);
+  			if (appHandle == null
+  					|| !appHandle.getState().equals( ApplicationHandle.RUNNING ) ) 
+  				throw new Exception("Application wasn't scheduled!");
+  			if (!checkResultFile("START"))
+  				throw new Exception("Result of the schedule is not START!");
+  			if (!testCase_stopApplication())
+  				return false;
+  			return true;
+  		}
+  		catch (Exception e) {
+  			e.printStackTrace();
+  			return false;
+  		}
+  	}
+
+  	public boolean testCase_scheduleApplicationsWithAARestart() {
+  		try {
+  			ApplicationDescriptor appDesc = appDescs[0];
+  			if (lookupAppHandle(appDesc) != null)
+  				throw new Exception(
+  						"There's a running instance of the appDesc!");
+  			Map args = createArgs();
+  			if (args == null)
+  				throw new Exception("Cannot create the arguments of launch!");
+  			appDesc.schedule(args, "org/osgi/timer", getFilterFromNow( 3 ), false);
+  			if (!restart_scheduler())
+  				return false;
+  			Thread.sleep(4000);
+  			appDesc = appDescs[0];
+  			appHandle = lookupAppHandle(appDesc);
+  			if (appHandle == null
+  					|| !appHandle.getState().equals( ApplicationHandle.RUNNING ) )
+  				throw new Exception("Application wasn't scheduled!");
+  			if (!checkResultFile("START"))
+  				throw new Exception("Result of the schedule is not START!");
+  			if (!testCase_stopApplication())
+  				return false;
+  			return true;
+  		}
+  		catch (Exception e) {
+  			e.printStackTrace();
+  			return false;
+  		}
+  	}
+  	
+  	public boolean testCase_removeScheduledApplication() {
+  		try {
+  			ApplicationDescriptor appDesc = appDescs[0];
+  			if (lookupAppHandle(appDesc) != null)
+  				throw new Exception(
+  						"There's a running instance of the appDesc!");
+  			Map args = createArgs();
+  			if (args == null)
+  				throw new Exception("Cannot create the arguments of launch!");
+  			ScheduledApplication schedApp = appDesc.
+  					schedule(args, "org/osgi/timer", getFilterFromNow( 2 ), false);
+  			
+  			if( schedApp.getApplicationDescriptor() != appDesc )
+  				throw new Exception( "Invalid application descriptor was received!" );
+  			
+  			schedApp.remove();
+  			Thread.sleep(3000);
+  			appHandle = lookupAppHandle(appDesc);
+  			if (appHandle != null )
+  				throw new Exception("Application was scheduled inspite of removing!");
+  			return true;
+  		}
+  		catch (Exception e) {
+  			e.printStackTrace();
+  			return false;
+  		}
+  	}
+  	
+  	public boolean testCase_recurringSchedule() {
+  		try {
+  			ApplicationDescriptor appDesc = appDescs[0];
+  			if (lookupAppHandle(appDesc) != null)
+  				throw new Exception(
+  						"There's a running instance of the appDesc!");
+  			Map args = createArgs();
+  			if (args == null)
+  				throw new Exception("Cannot create the arguments of launch!");
+  			appDesc.schedule(args, "com/nokia/test/ScheduleEvent", null, false);
+  			
+  			sendEvent(new Event("com/nokia/test/ScheduleEvent", null), false);
+  			
+  			appHandle = lookupAppHandle(appDesc);
+  			if (appHandle == null
+  					|| !appHandle.getState().equals( ApplicationHandle.RUNNING ) )
+  				throw new Exception("Application wasn't scheduled!");
+  			if (!checkResultFile("START"))
+  				throw new Exception("Result of the schedule is not START!");
+  			if (!testCase_stopApplication())
+  				return false;
+  			
+  			sendEvent(new Event("com/nokia/test/ScheduleEvent", null), false);
+  			appHandle = lookupAppHandle(appDesc);
+  			if (appHandle != null )
+  				throw new Exception("Application was scheduled inspite of non-recurring!");
+
+  			ScheduledApplication schedApp = appDesc.schedule(args, "com/nokia/test/ScheduleEvent", null, true);
+  			sendEvent(new Event("com/nokia/test/ScheduleEvent", null), false);
+  			
+  			appHandle = lookupAppHandle(appDesc);
+  			if (appHandle == null
+  					|| !appHandle.getState().equals( ApplicationHandle.RUNNING ) )
+  				throw new Exception("Application wasn't scheduled!");
+  			if (!checkResultFile("START"))
+  				throw new Exception("Result of the schedule is not START!");
+  			if (!testCase_stopApplication())
+  				return false;
+
+  			sendEvent(new Event("com/nokia/test/ScheduleEvent", null), false);
+  			
+  			appHandle = lookupAppHandle(appDesc);
+  			if (appHandle == null
+  					|| !appHandle.getState().equals( ApplicationHandle.RUNNING ) )
+  				throw new Exception("Application wasn't scheduled!");
+  			if (!checkResultFile("START"))
+  				throw new Exception("Result of the schedule is not START!");
+  			if (!testCase_stopApplication())
+  				return false;
+  			
+  			schedApp.remove();
+  			return true;
+  		}
+  		catch (Exception e) {
+  			e.printStackTrace();
+  			return false;
+  		}
+  	}
+
+  	public boolean testCase_schedulerFilterMatching() {
+  		try {
+  			ApplicationDescriptor appDesc = appDescs[0];
+  			if (lookupAppHandle(appDesc) != null)
+  				throw new Exception(
+  						"There's a running instance of the appDesc!");
+  			Map args = createArgs();
+  			if (args == null)
+  				throw new Exception("Cannot create the arguments of launch!");
+  			appDesc.schedule(args, "com/nokia/test/ScheduleEvent", "(propi=hallo)", false);
+  			
+  			Hashtable propi = new Hashtable();
+  			propi.put( "propi", "hello" );
+  			
+  			sendEvent(new Event("com/nokia/test/ScheduleEvent", null), false);
+  			sendEvent(new Event("com/nokia/test/ScheduleEvent", propi), false);
+  			appHandle = lookupAppHandle(appDesc);
+  			if (appHandle != null )
+  				throw new Exception("Application was scheduled inspite of non-recurring!");
+  			
+  			propi.put( "propi", "hallo" );
+  			
+  			sendEvent(new Event("com/nokia/test/ScheduleEvent", propi), false);
+  			
+  			appHandle = lookupAppHandle(appDesc);
+  			if (appHandle == null
+  					|| !appHandle.getState().equals( ApplicationHandle.RUNNING ) )
+  				throw new Exception("Application wasn't scheduled!");
+  			if (!checkResultFile("START"))
+  				throw new Exception("Result of the schedule is not START!");
+  			if (!testCase_stopApplication())
+  				return false;
+  			return true;
+  		}
+  		catch (Exception e) {
+  			e.printStackTrace();
+  			return false;
+  		}
+  	}  	
+  	
   	boolean testCase_appPluginCheckInstalledApps()
   	{
   		ApplicationDescriptor appDesc = appDescs[0];
@@ -1296,8 +1628,6 @@ public class TestMidletContainerBundleActivator
   							break;
   						
   						DmtData value = session.getNodeValue( "./OSGi/apps/" + appUID + "/" + names[ i ] );
-  						
-  						System.out.println( "Counter: " + j + "Name: " + names[ j ] + " Value: " + value.getFormat() );
   						
   						switch( value.getFormat() )
   						{

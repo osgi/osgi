@@ -3,6 +3,7 @@ package org.osgi.impl.service.midletcontainer;
 import java.io.*;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
+import java.security.MessageDigest;
 import java.util.*;
 import javax.microedition.midlet.MIDlet;
 import org.osgi.framework.*;
@@ -22,14 +23,13 @@ class MEGBundleDescriptor {
 	public long						bundleID;
 }
 
-public class MidletContainer implements BundleListener, EventHandler {
+public class MidletContainer implements BundleListener, ServiceListener, EventHandler {
 	private BundleContext	bc;
 	private Vector			bundleIDs;
 	private Hashtable		bundleHash;
 	private int				  height;
 	private int				  width;
 	private OATContainerInterface oat;
-	private int         counter = 0;
 	ServiceReference oatRef = null;
 
 	public MidletContainer(BundleContext bc) throws Exception {
@@ -45,6 +45,7 @@ public class MidletContainer implements BundleListener, EventHandler {
 	    throw new Exception("Cannot start the MidletContainer as OAT is not running!");
 		
 		bc.addBundleListener(this);
+		bc.addServiceListener( this );
 		Bundle bundles[] = bc.getBundles();
 		for (int i = 0; i < bundles.length; i++) {
 			String id = (new StringBuffer(String.valueOf(bundles[i].getBundleId()))).toString();
@@ -293,10 +294,10 @@ public class MidletContainer implements BundleListener, EventHandler {
 									.getLanguage();
 							names.put(defaultLang, MIDletName);
 							icons.put(defaultLang, MIDletIcon);
-							String uniqueID = "MIDlet:" + (counter++) + ":" + MIDletName + "-" +
-									              MIDletVersion + "-" + MIDletSuiteName;
-							if( uniqueID.length() > 32 )
-								uniqueID = uniqueID.substring(0, 32);
+							String uniqueID = "MIDlet: " + MIDletName + "-" + MIDletVersion + "-" + MIDletSuiteName;
+							if( uniqueID.length() > 32 ) {
+								uniqueID = getHash( uniqueID );
+							}
 							props.put("service.pid", uniqueID);
 							appVector.add(createMidletDescriptorByReflection(
 									props, names, icons, defaultLang,
@@ -403,5 +404,61 @@ public class MidletContainer implements BundleListener, EventHandler {
 	
 	OATContainerInterface getOATInterface() {
 		return oat;
+	}
+
+	public void serviceChanged(ServiceEvent event) {
+		if( event.getType() == ServiceEvent.UNREGISTERING ) {
+			if( event.getServiceReference() == oatRef ) {
+				try {
+				  bc.getBundle().stop();   /* if the OAT service stops, stop the container also */
+				}catch(BundleException e) {}
+			}
+		}
+	}
+
+  private static final char base64table[] = {
+      'A','B','C','D','E','F','G','H',
+      'I','J','K','L','M','N','O','P',
+      'Q','R','S','T','U','V','W','X',
+      'Y','Z','a','b','c','d','e','f',
+      'g','h','i','j','k','l','m','n',
+      'o','p','q','r','s','t','u','v',
+      'w','x','y','z','0','1','2','3',
+      '4','5','6','7','8','9','+','_', // !!! this differs from base64
+  };
+	
+	private String getHash(String from) throws Exception {
+    MessageDigest md = MessageDigest.getInstance("SHA");
+		  
+	  byte[] byteStream;
+  	try {
+	  	byteStream = from.getBytes("UTF-8");
+	  }
+		catch (UnsupportedEncodingException e) {
+		 // There's no way UTF-8 encoding is not implemented...
+		 throw new IllegalStateException("there's no UTF-8 encoder here!");
+		}
+		byte[] digest = md.digest(byteStream);
+		
+		//  very dumb base64 encoder code. There is no need for multiple lines
+		// or trailing '='-s....
+		// also, we hardcoded the fact that sha-1 digests are 20 bytes long
+		StringBuffer sb = new StringBuffer(digest.length*2);
+		for(int i=0;i<6;i++) {
+			int d0 = digest[i*3]&0xff;
+			int d1 = digest[i*3+1]&0xff;
+			int d2 = digest[i*3+2]&0xff;
+			sb.append(base64table[d0>>2]);
+			sb.append(base64table[(d0<<4|d1>>4)&63]);
+			sb.append(base64table[(d1<<2|d2>>6)&63]);
+			sb.append(base64table[d2&63]);
+		}
+		int d0 = digest[18]&0xff;
+		int d1 = digest[19]&0xff;
+		sb.append(base64table[d0>>2]);
+		sb.append(base64table[(d0<<4|d1>>4)&63]);
+		sb.append(base64table[(d1<<2)&63]);
+		
+		return sb.toString();
 	}
 }
