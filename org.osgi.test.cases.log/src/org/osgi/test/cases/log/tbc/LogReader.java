@@ -21,7 +21,7 @@ public class LogReader implements LogListener {
 		this.logService = logService;
 		this.bundle = bundle;
 		this.id = id;
-		stopString = "DONE " + id;
+		stopString = "DONEx " + id + " <4711>";
 	}
 
 	public void start() {
@@ -70,6 +70,11 @@ public class LogReader implements LogListener {
 			// System.out.print(id + " Called - " +
 			// entry.getBundle().getBundleId());
 			if (isListening()) {
+				// Check if we log or some other bundle
+				if ( entry.getMessage().indexOf("4711") == -1 ) {
+					System.out.println("Not for us " + entry.getMessage());
+					return;
+				}
 				// System.out.println(" - logging");
 				System.out.println("Message: " + entry.getMessage());
 				if (bundle.equals(entry.getBundle())) {

@@ -31,7 +31,7 @@ public class LogControl extends DefaultTestBundleControl {
 				getContext().getBundle(), "reader");
 		reader.start();
 		RuntimeException e = new RuntimeException();
-		String message = "'The message'";
+		String message = "'The message <4711>'";
 		ServiceReference sr = logServiceReference;
 		logService.log(LogService.LOG_ERROR, message);
 		logService.log(LogService.LOG_WARNING, message);
@@ -59,29 +59,29 @@ public class LogControl extends DefaultTestBundleControl {
 		LogReader reader2 = new LogReader(logReaderService, logService,
 				getContext().getBundle(), "R2");
 		/* Logged by none */
-		logService.log(LogService.LOG_INFO, "Hello0");
+		logService.log(LogService.LOG_INFO, "Hello0 <4711>");
 		reader1.start();
 		/* Logged by R1 */
-		logService.log(LogService.LOG_INFO, "Hello1");
+		logService.log(LogService.LOG_INFO, "Hello1 <4711>");
 		reader1.stop();
 		/* Logged by none */
-		logService.log(LogService.LOG_INFO, "Hello2");
+		logService.log(LogService.LOG_INFO, "Hello2 <4711>");
 		reader2.start();
 		/* Logged by R2 */
-		logService.log(LogService.LOG_INFO, "Hello3");
+		logService.log(LogService.LOG_INFO, "Hello3 <4711>");
 		reader2.stop();
 		/* Logged by none */
-		logService.log(LogService.LOG_INFO, "Hello4");
+		logService.log(LogService.LOG_INFO, "Hello4 <4711>");
 		reader1.start();
 		reader2.start();
 		/* Logged by R1 + R2 */
-		logService.log(LogService.LOG_INFO, "Hello5");
+		logService.log(LogService.LOG_INFO, "Hello5 <4711>");
 		reader1.stop();
 		/* Logged by R2 */
-		logService.log(LogService.LOG_INFO, "Hello6");
+		logService.log(LogService.LOG_INFO, "Hello6 <4711>");
 		reader2.stop();
 		/* Logged by none */
-		logService.log(LogService.LOG_INFO, "Hello7");
+		logService.log(LogService.LOG_INFO, "Hello7 <4711>");
 		logLogStrings(reader1.id, reader1.getLog());
 		logLogStrings(reader2.id, reader2.getLog());
 	}
