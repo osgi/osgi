@@ -837,11 +837,15 @@ public class BTool extends Task {
 		if (eclipse != null) {
 			String cp = eclipse.getClasspath();
 			String bp = eclipse.getBootclasspath();
-			if (bp != null && bp.length() > 0)
-				cp = cp + EclipseProject.PATHSEP + bp;
-			StringTokenizer st = new StringTokenizer(cp, EclipseProject.PATHSEP);
-			while (st.hasMoreElements()) {
-				String file = st.nextToken().trim();
+			
+			Collection	col = new Vector();
+			add(col,cp,EclipseProject.PATHSEP);
+			add(col,bp,EclipseProject.PATHSEP);
+			add(col,classpath,",");
+			
+			
+			for (Iterator i=col.iterator(); i.hasNext(); ) {
+				String file = (String) i.next();
 				File f = new File(file);
 				if (f.exists()) {
 					trace("Classpath File " + f);
@@ -854,6 +858,16 @@ public class BTool extends Task {
 				else
 					warning("No such Classpath file " + f.getAbsolutePath());
 			}
+		}
+	}
+
+	void add(Collection col, String paths, String pathsep) {
+		if ( paths == null )
+			return;
+		
+		StringTokenizer st = new StringTokenizer(paths,pathsep);
+		while ( st.hasMoreTokens() ) {
+			col.add( st.nextToken().trim());
 		}
 	}
 
@@ -1097,5 +1111,11 @@ public class BTool extends Task {
 
 	public void setModified(long modified) {
 		this.modified = modified;
+	}
+	
+	
+	public void setClasspath(String list) {
+		if ( list != null && list.length() > 0 )
+		classpath = list;
 	}
 }
