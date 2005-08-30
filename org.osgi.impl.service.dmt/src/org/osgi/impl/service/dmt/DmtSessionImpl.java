@@ -1200,7 +1200,6 @@ public class DmtSessionImpl implements DmtSession {
             return;
         
         if(type == null) // default MIME type was requested
-            // TODO maybe check that meta-data defines at least one MIME type
             return;
         
         // TODO check that 'type' is a proper MIME type string, COMMAND_FAILED if not
