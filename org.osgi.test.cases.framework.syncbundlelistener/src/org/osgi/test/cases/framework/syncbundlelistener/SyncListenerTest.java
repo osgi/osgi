@@ -15,11 +15,4 @@ import org.osgi.test.cases.util.*;
  * @author Ericsson Telecom AB
  */
 public class SyncListenerTest extends DefaultTestCase {
-	public String getDescription() {
-		return "Tests the synchronous bundle listener";
-	}
-
-	public String getName() {
-		return "test.cases.framework.syncbundlelistener";
-	}
 }

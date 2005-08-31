@@ -14,15 +14,4 @@ import org.osgi.test.cases.util.*;
  *  @testcase org.osgi.service.packageadmin
  */
 public class TC2 extends DefaultTestCase implements BundleActivator {
-	static final String			NAME	= "test.cases.packageadmin.tc2";
-	private BundleContext		BC;
-	private ServiceRegistration	serviceReg;
-
-	public String getDescription() {
-		return "Exporting packages, updating";
-	}
-
-	public String getName() {
-		return NAME;
-	}
 }
