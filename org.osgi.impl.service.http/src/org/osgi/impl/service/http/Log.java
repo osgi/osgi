@@ -13,6 +13,7 @@ package org.osgi.impl.service.http;
 
 import org.osgi.framework.*;
 import org.osgi.service.log.LogService;
+import org.osgi.util.tracker.ServiceTracker;
 
 //  ******************** Log ********************
 /**
@@ -37,6 +38,7 @@ public final class Log {
 
 	static void init(BundleContext bc) {
 		logRef = new LogRef(bc);
+		logRef.open();
 		debug = Boolean.getBoolean("org.osgi.service.http.debug");
 	}
 
@@ -87,49 +89,9 @@ public final class Log {
  * when used by http.
  */
 
-final class LogRef implements ServiceListener {
-	private final static String	logClass	= "org.osgi.service.log.LogService";
-	private BundleContext		bc;
-	private ServiceReference	logSR;
-	private LogService			log;
-
-	/**
-	 * Create new logger.
-	 */
+final class LogRef extends ServiceTracker {
 	LogRef(BundleContext bc) {
-		this.bc = bc;
-		try {
-			bc.addServiceListener(this, "(objectClass=" + logClass + ")");
-		}
-		catch (InvalidSyntaxException e) {
-			doLog("Failed to log service listener" + e, LogService.LOG_ERROR);
-		}
-	}
-
-	/**
-	 * Service listener entry point.
-	 * 
-	 * @param evt Service event
-	 */
-	public void serviceChanged(ServiceEvent evt) {
-		if (evt.getServiceReference() == logSR
-				&& evt.getType() == ServiceEvent.UNREGISTERING) {
-			synchronized (this) {
-				close();
-			}
-			doLog("Log service gone, using stderr", LogService.LOG_WARNING);
-		}
-	}
-
-	/**
-	 * Unget the log service.
-	 */
-	synchronized void close() {
-		if (log != null) {
-			bc.ungetService(logSR);
-			logSR = null;
-			log = null;
-		}
+		super(bc, LogService.class.getName(), null);
 	}
 
 	/**
@@ -140,17 +102,15 @@ final class LogRef implements ServiceListener {
 	 * @param tag Descriptive label for System.err
 	 */
 	synchronized void doLog(String msg, int level) {
-		if (log == null) {
-			logSR = bc.getServiceReference(logClass);
-			if (logSR != null)
-				log = (LogService) bc.getService(logSR);
-			if (log == null)
-				logSR = null;
-		}
+		LogService log = getLog();
 		if (log != null)
 			log.log(level, msg);
 		else
 			System.err.println(getHdr(level) + msg);
+	}
+
+	private LogService getLog() {
+		return (LogService) getService();
 	}
 
 	private static String getHdr(int level) {
