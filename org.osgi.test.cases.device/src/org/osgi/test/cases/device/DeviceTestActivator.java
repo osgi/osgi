@@ -14,7 +14,4 @@ public class DeviceTestActivator extends DefaultTestCase {
 		return "Device Access tests";
 	}
 
-	public String getName() {
-		return "test.cases.device";
-	}
 }

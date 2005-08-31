@@ -15,11 +15,4 @@ import org.osgi.test.cases.util.*;
  * @author Ericsson Radio Systems AB
  */
 public class DivTestCase extends DefaultTestCase {
-	public String getDescription() {
-		return "Diverse tests: native, manifest, framework event ";
-	}
-
-	public String getName() {
-		return "test.cases.framework.div";
-	}
 }
