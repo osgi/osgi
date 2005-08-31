@@ -13,7 +13,7 @@ import org.osgi.framework.*;
 import org.osgi.service.application.ApplicationDescriptor;
 import org.osgi.service.application.ApplicationHandle;
 import org.osgi.service.application.ScheduledApplication;
-import org.osgi.service.application.midlet.MidletHandle;
+import org.osgi.impl.service.midletcontainer.*;
 import org.osgi.service.dmt.DmtAdmin;
 import org.osgi.service.dmt.DmtData;
 import org.osgi.service.dmt.DmtSession;
@@ -110,12 +110,12 @@ public class TestMidletContainerBundleActivator
 
     String getPID(ApplicationDescriptor appDesc)
     {
-        return (String)appDesc.getProperties("").get("service.pid");
+        return (String)appDesc.getProperties("").get(Constants.SERVICE_PID);
     }
 
     boolean isLocked(ApplicationDescriptor appDesc)
     {
-        return Boolean.valueOf((String)appDesc.getProperties("").get("application.locked")).booleanValue();
+        return Boolean.valueOf((String)appDesc.getProperties("").get(ApplicationDescriptor.APPLICATION_LOCKED)).booleanValue();
     }
 
     public ApplicationDescriptor getAppDesc(ApplicationHandle appHnd)
@@ -138,7 +138,7 @@ public class TestMidletContainerBundleActivator
   		long bundleID = Long.parseLong((String) props
   				.get("application.bundle.id"));
   		ServiceReference[] references = bc.getServiceReferences(
-  				"org.osgi.service.application.ApplicationHandle",
+  				ApplicationHandle.class.getName(),
   				"(" + ApplicationHandle.APPLICATION_DESCRIPTOR + "=" + getPID( appDesc ) + ")");
   		if (references == null || references.length == 0)
   			return null;
@@ -351,7 +351,7 @@ public class TestMidletContainerBundleActivator
                     }
                     catch(InterruptedException interruptedexception) { }
                 } while(midletBundle.getState() != 32);
-                appList = bc.getServiceReferences("org.osgi.service.application.ApplicationDescriptor", "(application.bundle.id=" + installedBundleID + ")");
+                appList = bc.getServiceReferences(ApplicationDescriptor.class.getName(), "(application.bundle.id=" + installedBundleID + ")");
             } while(appList == null || appList.length == 0);
             appDescs = new ApplicationDescriptor[appList.length];
             for(int i = 0; i != appList.length; i++)
@@ -500,7 +500,7 @@ public class TestMidletContainerBundleActivator
         String appUID = getPID(appDesc);
         try
         {
-            ServiceReference appList[] = bc.getServiceReferences("org.osgi.service.application.ApplicationDescriptor", "(service.pid=" + appUID + ")");
+            ServiceReference appList[] = bc.getServiceReferences(ApplicationDescriptor.class.getName(), "("+Constants.SERVICE_PID+"=" + appUID + ")");
             if(appList == null || appList.length == 0)
                 throw new Exception("No ApplicationUID(" + appUID + ") registered!");
             long bundleID = -1L;
@@ -510,30 +510,30 @@ public class TestMidletContainerBundleActivator
                 if((ApplicationDescriptor)bc.getService(appList[i]) == appDesc)
                 {
                     registered = true;
-                    if(!appList[i].getProperty("service.pid").equals(getPID(appDesc)))
-                        throw new Exception("Illegal service.pid in the AppDesc (" + (String)appList[i].getProperty("service.pid") + " != " + getPID(appDesc) + ")");
-                    if(!appList[i].getProperty("application.name").equals(appDesc.getProperties(Locale.getDefault().getLanguage()).get("application.name")))
-                        throw new Exception("Illegal application name in the AppDesc (" + (String)appList[i].getProperty("application.name") + " != " + appDesc.getProperties("").get("application.name") + ")");
+                    if(!appList[i].getProperty(Constants.SERVICE_PID).equals(getPID(appDesc)))
+                        throw new Exception("Illegal service.pid in the AppDesc (" + (String)appList[i].getProperty(Constants.SERVICE_PID) + " != " + getPID(appDesc) + ")");
+                    if(!appList[i].getProperty(ApplicationDescriptor.APPLICATION_NAME).equals(appDesc.getProperties(Locale.getDefault().getLanguage()).get(ApplicationDescriptor.APPLICATION_NAME)))
+                        throw new Exception("Illegal application name in the AppDesc (" + (String)appList[i].getProperty(ApplicationDescriptor.APPLICATION_NAME) + " != " + appDesc.getProperties("").get(ApplicationDescriptor.APPLICATION_NAME) + ")");
                     bundleID = appList[i].getBundle().getBundleId();
                 }
                 bc.ungetService(appList[i]);
             }
 
             Map engProps = appDesc.getProperties("en");
-            if(!engProps.get("application.name").equals("TestMidlet"))
-                throw new Exception("The application name is " + (String)engProps.get("application.name") + " instead of 'TestMidlet'!");
-            if(!((String)engProps.get("application.icon")).endsWith("/TestIcon.gif"))
-                throw new Exception("The icon path " + (String)engProps.get("application.icon") + " doesn't ends with '/TestIcon.gif'!");
-            if(!engProps.get("application.version").equals("1.0.0"))
-                throw new Exception("The application version is " + (String)engProps.get("application.version") + " instead of '1.0.0'!");
-            if(!engProps.get("application.type").equals("MIDlet"))
-                throw new Exception("The application type is " + (String)engProps.get("application.type") + " instead of 'MIDlet'!");
+            if(!engProps.get(ApplicationDescriptor.APPLICATION_NAME).equals("TestMidlet"))
+                throw new Exception("The application name is " + (String)engProps.get(ApplicationDescriptor.APPLICATION_NAME) + " instead of 'TestMidlet'!");
+            if(!((String)engProps.get(ApplicationDescriptor.APPLICATION_ICON)).endsWith("/TestIcon.gif"))
+                throw new Exception("The icon path " + (String)engProps.get(ApplicationDescriptor.APPLICATION_ICON) + " doesn't ends with '/TestIcon.gif'!");
+            if(!engProps.get(ApplicationDescriptor.APPLICATION_VERSION).equals("1.0.0"))
+                throw new Exception("The application version is " + (String)engProps.get(ApplicationDescriptor.APPLICATION_VERSION) + " instead of '1.0.0'!");
+            if(!engProps.get(ApplicationDescriptor.APPLICATION_CONTAINER).equals("MIDlet"))
+                throw new Exception("The application type is " + (String)engProps.get(ApplicationDescriptor.APPLICATION_CONTAINER) + " instead of 'MIDlet'!");
             if(engProps.get("application.bundle.id") == null)
                 throw new Exception("No application bundle id found!");
-            if(!engProps.get("application.visible").equals("true"))
-                throw new Exception("Visible flag is " + (String)engProps.get("application.visible") + " instead of 'true'!");
-            if(!engProps.get("application.vendor").equals("Nokia"))
-                throw new Exception("Vendor flag is " + (String)engProps.get("application.vendor") + " instead of 'Nokia'!");
+            if(!engProps.get(ApplicationDescriptor.APPLICATION_VISIBLE).equals("true"))
+                throw new Exception("Visible flag is " + (String)engProps.get(ApplicationDescriptor.APPLICATION_VISIBLE) + " instead of 'true'!");
+            if(!engProps.get(ApplicationDescriptor.APPLICATION_VENDOR).equals("Nokia"))
+                throw new Exception("Vendor flag is " + (String)engProps.get(ApplicationDescriptor.APPLICATION_VENDOR) + " instead of 'Nokia'!");
             else
                 return true;
         }
@@ -564,7 +564,7 @@ public class TestMidletContainerBundleActivator
 
     private boolean isLaunchable(ApplicationDescriptor appDesc)
     {
-        String launchable = (String)appDesc.getProperties("en").get("application.launchable");
+        String launchable = (String)appDesc.getProperties("en").get(ApplicationDescriptor.APPLICATION_LAUNCHABLE);
         return launchable != null && launchable.equalsIgnoreCase("true");
     }
 
@@ -622,7 +622,7 @@ public class TestMidletContainerBundleActivator
                 throw new Exception("Result of the launch is not START!");
             if(!launchable)
                 throw new Exception("Application started, but originally was not launchable!");
-            ServiceReference appList[] = bc.getServiceReferences("org.osgi.service.application.ApplicationHandle", "(application.descriptor=" + getPID(appDesc) + ")");
+            ServiceReference appList[] = bc.getServiceReferences(ApplicationHandle.class.getName(), "("+ ApplicationHandle.APPLICATION_DESCRIPTOR + "=" + getPID(appDesc) + ")");
             if(appList == null || appList.length == 0)
                 throw new Exception("No registered application handle found!");
             if(getAppDesc(appHandle) != appDesc)
@@ -681,7 +681,7 @@ public class TestMidletContainerBundleActivator
     private void checkApplicationStop(String pid) throws Exception {
       if(!checkResultFile("STOP"))
         throw new Exception("Result of the stop is not STOP!");
-      ServiceReference appList[] = bc.getServiceReferences("org.osgi.service.application.ApplicationHandle", "(service.pid=" + pid + ")");
+      ServiceReference appList[] = bc.getServiceReferences(ApplicationHandle.class.getName(), "("+ Constants.SERVICE_PID + "=" + pid + ")");
       if(appList != null && appList.length != 0) {
         for(int i = 0; i != appList.length; i++) {
             ApplicationHandle handle = (ApplicationHandle)bc.getService(appList[i]);
@@ -716,7 +716,7 @@ public class TestMidletContainerBundleActivator
     }
 
     private boolean reloadInstalledApps( boolean hasAppInstalled ) throws Exception {
-      ServiceReference references[] = bc.getServiceReferences("org.osgi.service.application.ApplicationDescriptor", "(application.bundle.id=" + installedBundleID + ")");
+      ServiceReference references[] = bc.getServiceReferences(ApplicationDescriptor.class.getName(), "(application.bundle.id=" + installedBundleID + ")");
       if(hasAppInstalled)
       {
           if(references == null || references.length == 0)
@@ -748,7 +748,7 @@ public class TestMidletContainerBundleActivator
                     Thread.sleep(100L);
                 }
                 catch(InterruptedException interruptedexception) { }
-            ServiceReference appList[] = bc.getServiceReferences("org.osgi.service.application.ApplicationDescriptor", "(service.pid=" + installedAppUID + ")");
+            ServiceReference appList[] = bc.getServiceReferences(ApplicationDescriptor.class.getName(), "(" + Constants.SERVICE_PID + "=" + installedAppUID + ")");
             if(appList != null && appList.length != 0)
                 throw new Exception("Application descriptor doesn't removed after container stop!");
             midletContainerBundle.start();
@@ -1224,7 +1224,7 @@ public class TestMidletContainerBundleActivator
   			appDesc.lock();
   			if (!isLocked( appDesc ))
   				throw new Exception("Lock doesn't work!");
-  			if (!appDesc.getProperties("en").get("application.locked").equals(
+  			if (!appDesc.getProperties("en").get(ApplicationDescriptor.APPLICATION_LOCKED).equals(
   					"true"))
   				throw new Exception("Lock property is incorrect!");
   			boolean launchable = isLaunchable(appDesc);
@@ -1237,7 +1237,7 @@ public class TestMidletContainerBundleActivator
   			if (started)
   				throw new Exception("Application was launched inspite of lock!");
   			appDesc.unlock();
-  			if (!appDesc.getProperties("en").get("application.locked").equals(
+  			if (!appDesc.getProperties("en").get(ApplicationDescriptor.APPLICATION_LOCKED).equals(
   					"false"))
   				throw new Exception("Lock property is incorrect!");
   			if (isLocked( appDesc ))
@@ -1268,7 +1268,7 @@ public class TestMidletContainerBundleActivator
   			if (isLocked( appDesc ))
   				throw new Exception("Application is locked and cannot launch!");
   			appDesc.lock();
-  			if (!appDesc.getProperties("en").get("application.locked").equals(
+  			if (!appDesc.getProperties("en").get(ApplicationDescriptor.APPLICATION_LOCKED).equals(
   					"true"))
   				throw new Exception("Lock property is incorrect!");
   			if (!isLocked( appDesc ))
@@ -1288,7 +1288,7 @@ public class TestMidletContainerBundleActivator
   			if (started)
   				throw new Exception("Application was launched inspite of lock!");
   			appDesc.unlock();
-  			if (!appDesc.getProperties("en").get("application.locked").equals(
+  			if (!appDesc.getProperties("en").get(ApplicationDescriptor.APPLICATION_LOCKED).equals(
   					"false"))
   				throw new Exception("Lock property is incorrect!");
   			if (launchable)
@@ -1634,7 +1634,7 @@ public class TestMidletContainerBundleActivator
   				return false;
   			
   			ServiceReference[] references = bc.getServiceReferences(
-  					"org.osgi.service.application.ApplicationHandle",
+  					ApplicationHandle.class.getName(),
   					"(" + ApplicationHandle.APPLICATION_DESCRIPTOR + "=" + getPID( appDesc ) + ")");
   			
   			if( references == null || references.length == 0 )
@@ -1755,7 +1755,7 @@ public class TestMidletContainerBundleActivator
   			if (!checkResultFile("START"))
   				throw new Exception("Result of the launch is not START!");
   			ServiceReference[] appList = bc.getServiceReferences(
-  					"org.osgi.service.application.ApplicationHandle",
+  					ApplicationHandle.class.getName(),
   					"(" + ApplicationHandle.APPLICATION_DESCRIPTOR + "=" + getPID( appDesc ) + ")");
   			if (appList == null || appList.length == 0)
   				throw new Exception("No registered application handle found!");
@@ -1811,7 +1811,7 @@ public class TestMidletContainerBundleActivator
   				throw new Exception("Result of the stop is not STOP!");
 
   			ServiceReference[] appList = bc.getServiceReferences(
-  					"org.osgi.service.application.ApplicationHandle",
+  					ApplicationHandle.class.getName(),
   					"(" + ApplicationHandle.APPLICATION_DESCRIPTOR + "="
   							+ appUID + ")");
   			if (appList != null && appList.length != 0) {
