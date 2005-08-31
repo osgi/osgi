@@ -104,6 +104,9 @@ public class Director implements BundleActivator {
 			ScriptEditor editor = new ScriptEditor("batch", new URL(script));
 			handler.getRun().doTestCase(editor);
 		}
+		catch (java.net.ConnectException e) {
+			System.out.println("Could not connect to target: " + target);
+		}
 		catch (Exception e) {
 			System.out.println("Failure in test run: " + script);
 			e.printStackTrace();
