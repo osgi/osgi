@@ -1,10 +1,10 @@
-<method name="testBasicRegistration">
+[begin=testBasicRegistration]
 REGISTERED      org.osgi.test.cases.framework.registry.tbc.Marker1, org.osgi.test.cases.framework.registry.tbc.Marker2  OWNER
 MODIFIED        org.osgi.test.cases.framework.registry.tbc.Marker1, org.osgi.test.cases.framework.registry.tbc.Marker2  OWNER
 UNREGISTERING   org.osgi.test.cases.framework.registry.tbc.Marker1, org.osgi.test.cases.framework.registry.tbc.Marker2  OWNER
-</method>
+[end=testBasicRegistration]
 
-<method name="testBasicFactory">
+[begin=testBasicFactory]
 REGISTERED      org.osgi.test.cases.framework.registry.tbc.Marker1, org.osgi.test.cases.framework.registry.tbc.Marker2  OWNER
 Getting reference via Marker1
 Getting service Marker1
@@ -36,34 +36,34 @@ Unregistering
 UNREGISTERING   org.osgi.test.cases.framework.registry.tbc.Marker1, org.osgi.test.cases.framework.registry.tbc.Marker2  OWNER
 Unregister once more (invalid)
 OK Correctly thrown IllegalStateException
-</method>
+[end=testBasicFactory]
 
-<method name="testFactoryException">
+[begin=testFactoryException]
 Factory exception
 REGISTERED      org.osgi.test.cases.framework.registry.tbc.Marker1, org.osgi.test.cases.framework.registry.tbc.Marker2  OWNER
 Checking factory result with Marker1 :  org.osgi.test.cases.framework.registry.tbc.Marker1, org.osgi.test.cases.framework.registry.tbc.Marker2  OWNER
 UNREGISTERING   org.osgi.test.cases.framework.registry.tbc.Marker1, org.osgi.test.cases.framework.registry.tbc.Marker2  OWNER
-</method>
+[end=testFactoryException]
 
-<method name="testWrongClass">
+[begin=testWrongClass]
 Wrong class registration
 OK thrown IllegalArgumentException
-</method>
+[end=testWrongClass]
 
-<method name="testManyRegistrations">
+[begin=testManyRegistrations]
 Registering 1000 services
 Should have 1000 references : 1000
 Should have 500 references (via filter): 500
 Should have 500 references (via class): 500
 Should have 0 references (=null) : null
-</method>
+[end=testManyRegistrations]
 
-<method name="testNullService">
+[begin=testNullService]
 Null service registration
 OK thrown IllegalArgumentException due to null service
-</method>
+[end=testNullService]
 
-<method name="testEventSpan">
+[begin=testEventSpan]
 Check for synchronous service events
 REGISTERED      org.osgi.test.cases.framework.registry.tbc.Marker1, org.osgi.test.cases.framework.registry.tbc.Marker2  OWNER
 Visited should now be true after registration true
@@ -71,7 +71,7 @@ MODIFIED        org.osgi.test.cases.framework.registry.tbc.Marker1, org.osgi.tes
 Visited should now be true after setProperties true
 UNREGISTERING   org.osgi.test.cases.framework.registry.tbc.Marker1, org.osgi.test.cases.framework.registry.tbc.Marker2  OWNER
 Visited should now be true after unregistration true
-</method>
+[end=testEventSpan]
 
 #This is from unprepare method. Should be silent.
 Cleaning up after bundle dies

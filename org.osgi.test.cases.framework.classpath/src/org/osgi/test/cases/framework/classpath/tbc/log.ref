@@ -1,19 +1,19 @@
-<method name="testImportUninstalledCode">
+[begin=testImportUninstalledCode]
 Installed a bundle importing uninstalled code: "State is INSTALLED."
 Started a bundle importing uninstalled code: "Exception thrown, Ok."
-</method>
+[end=testImportUninstalledCode]
 
-<method name="testExport">
+[begin="testExport"]
 Testing export of a package: "Code was exported, Ok."
-</method>
+[end="testExport"]
 
-<method name="testReinstall">
+[begin=testReinstall]
 Testing reinstallation of same bundle: "They are the same, Ok."
-</method>
+[end=testReinstall]
 
-<method name="testImportGone">
+[begin=testImportGone]
 Testing removal of export package: "Installed and started exporting bundle."
 Testing removal of export package: "Installed and started importing bundle."
 Testing removal of export package: "Exporting state: ACTIVE. Importing state: ACTIVE."
 Testing removal of export package: "Exporting bundle stopped."
-</method>
+[end=testImportGone]
