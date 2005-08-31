@@ -71,8 +71,6 @@ public class AlertItem {
      * (returned by {@link #getData}). There might be no type associated with
      * the alert item.
      * 
-     * ### "no format" must be "no type"?
-     * 
      * @return the type type associated with the alert item, or
      *         <code>null</code> if there is no type
      */
