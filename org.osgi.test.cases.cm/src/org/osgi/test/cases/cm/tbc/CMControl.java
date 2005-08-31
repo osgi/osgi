@@ -54,7 +54,7 @@ public class CMControl extends DefaultTestBundleControl {
 	private Hashtable			confProps;
 	/* Two constants that are lacking in the spec */
 	public static final String	SERVICE_FACTORY_PID	= "service.factoryPid";
-	private static final long	SIGNAL_WAITING_TIME	= 2000;
+	private static final long	SIGNAL_WAITING_TIME	= 25000;
 
 	// public static final String SERVICE_BUNDLE_LOCATION =
 	// "service.bundleLocation";
@@ -772,13 +772,13 @@ public class CMControl extends DefaultTestBundleControl {
 			trace("Wait until the ConfigurationListener has gotten the delete");
 			
 			assertTrue("Delete done", synchronizer
-					.waitForSignal(SIGNAL_WAITING_TIME));
+					.waitForSignal(SIGNAL_WAITING_TIME, 2));
 			assertEquals("Config event pid match", pid, cl.getPid(2));
 			assertEquals("Config event type match",
 					ConfigurationEvent.CM_DELETED, cl.getType(2));
 			assertNull("Config Factory event pid null", cl.getFactoryPid(2));
 			ConfigurationAdmin admin = (ConfigurationAdmin) getContext()
-					.getService(cl.getReference());
+					.getService(cl.getReference(2));
 			assertNotNull("Configuration Admin from event", admin);
 			Configuration[] configs = admin.listConfigurations(null);
 			assertNull("No configuration in cm", configs);
