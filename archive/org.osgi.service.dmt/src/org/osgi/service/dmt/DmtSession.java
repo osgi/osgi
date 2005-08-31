@@ -16,10 +16,15 @@ import java.util.Date;
  * commands for management applications are available on the
  * <code>DmtSession</code> interface. The session is associated with a root
  * node which limits the subtree in which the operations can be executed within
- * this session. Most of the operations take a node URI as parameter, which can
- * be either an absolute URI (starting with &quot;./&quot;) or a URI relative to
- * the root node of the session. The empty string as relative URI means the root
- * URI the session was opened with.
+ * this session.
+ * <p>
+ * Most of the operations take a node URI as parameter, which can be either an 
+ * absolute URI (starting with &quot;./&quot;) or a URI relative to the root 
+ * node of the session. The empty string as relative URI means the root URI the
+ * session was opened with.  All segments of a URI must be within the segment 
+ * length limit of the implementation, and the special characters '/' and '\' 
+ * must be escaped (preceded by a '\').  Any string can be converted to a valid
+ * URI segment using the {@link #mangle(String)} method.
  * <p>
  * If the URI specified does not correspond to a legitimate node in the tree an
  * exception is thrown. The only exception is the {@link #isNodeUri(String)} 
