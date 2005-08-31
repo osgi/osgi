@@ -220,13 +220,13 @@ public class FileResource extends Resource {
 		StringBuffer sb = new StringBuffer();
 		String del = "";
 		for (int i = 0; i < list.length; i++) {
-			if (!list[i].equals("")) {
+			String element = list[i].trim();
+			if (!element.equals("")) {
 				sb.append(del);
-				sb.append(list[i].replaceAll(args[2], args[3]));
+				sb.append(element.replaceAll(args[2], args[3]));
 				del = ", ";
 			}
 		}
-
 		return sb.toString();
 	}
 
