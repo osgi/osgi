@@ -10,22 +10,23 @@
 package org.osgi.service.dmt;
 
 /**
- * An interface providing methods to open sessions and send alerts.
- * The implementation of
- * <code>DmtAdmin</code> should register itself in the OSGi service registry
- * as a service. <code>DmtAdmin</code> is the entry point for applications to
- * use the DMT API. The <code>getSession</code> methods are used to open a
- * session on a specified subtree of the DMT. A typical way of usage:
+ * An interface providing methods to open sessions and send alerts. The 
+ * implementation of <code>DmtAdmin</code> should register itself in the OSGi 
+ * service registry as a service. <code>DmtAdmin</code> is the entry point for 
+ * applications to use the DMT API. The <code>getSession</code> methods are used
+ * to open a session on a specified subtree of the DMT. A typical way of usage:
  * <pre>
- *  serviceRef = context.getServiceReference(
- *    DmtAdmin.class.getName());
- *  DmtAdmin factory = (DmtAdmin) 
- *    context.getService(serviceRef);
- *  DmtSession session = factory.getSession(
- *    &quot;./OSGi/cfg&quot;);
- *  session.createInteriorNode(
- *    &quot;./OSGi/cfg/mycfg&quot;);
+ *  serviceRef = context.getServiceReference(DmtAdmin.class.getName());
+ *  DmtAdmin factory = (DmtAdmin) context.getService(serviceRef);
+ *  DmtSession session = factory.getSession(&quot;./OSGi/Configuration&quot;);
+ *  session.createInteriorNode(&quot;./OSGi/Configuration/my.table&quot;);
  * </pre>
+ * <p>
+ * The methods for opening a session take a node URI (the session root) as 
+ * parameter. All segments of the given URI must be within the segment length
+ * limit of the implementation, and the special characters '/' and '\' must be
+ * escaped (preceded by a '\').  Any string can be converted to a valid URI
+ * segment using the {@link #mangle(String)} method.
  */
 public interface DmtAdmin {
     /**
