@@ -23,11 +23,13 @@ import org.osgi.framework.BundleContext;
 import org.osgi.framework.BundleException;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.cm.ConfigurationAdmin;
-//import org.osgi.service.dmt.old.DmtDataPlugin;
+import org.osgi.service.dmt.spi.DataPluginFactory;
 import org.osgi.util.tracker.ServiceTracker;
 
 public class ConfigurationPluginActivator implements BundleActivator {
-    static final String PLUGIN_ROOT = "./OSGi/Configuration";
+    static final String[] PLUGIN_ROOT_PATH = new String[] {
+        ".", "OSGi", "Configuration"
+    };
 
     private ServiceRegistration servReg;
 	private ServiceTracker      configTracker;
@@ -35,10 +37,6 @@ public class ConfigurationPluginActivator implements BundleActivator {
 	
 
 	public void start(BundleContext bc) throws BundleException {
-        System.out.println("Configuration plugin temporarily disabled.");
-        if(true)
-            return;
-        
 		System.out.println("Configuration plugin activation started.");
         
 		// looking up the Configuration Admin
@@ -47,21 +45,18 @@ public class ConfigurationPluginActivator implements BundleActivator {
         configTracker.open();
         
 		// creating the service
+        String pluginRoot = Utils.tempAbsolutePathToUri(PLUGIN_ROOT_PATH);
 		configPlugin = new ConfigurationPlugin(bc, configTracker);
 		Hashtable properties = new Hashtable();
-		properties.put("dataRootURIs", new String[] {PLUGIN_ROOT});
+		properties.put("dataRootURIs", new String[] { pluginRoot });
         
 		// registering the service
-		//servReg = bc.registerService(DmtDataPlugin.class.getName(),
-		//		configPlugin, properties);
+		servReg = bc.registerService(DataPluginFactory.class.getName(),
+				configPlugin, properties);
 		System.out.println("Configuration plugin activation finished successfully.");
 	}
 
 	public void stop(BundleContext bc) throws BundleException {
-        System.out.println("Configuration plugin temporarily disabled.");
-        if(true)
-            return;
-
         // unregistering the service
 		servReg.unregister();
         
