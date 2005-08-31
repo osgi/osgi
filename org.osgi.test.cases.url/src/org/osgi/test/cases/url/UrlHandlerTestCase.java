@@ -21,21 +21,4 @@ import org.osgi.test.cases.util.DefaultTestCase;
  * @version $Revision$
  */
 public class UrlHandlerTestCase extends DefaultTestCase {
-	//*********************************************************
-	/**
-	 * Overridding the method to return the description of the testcase
-	 */
-	public String getDescription() {
-		return "Tests the Url handler and Content handler mechanism of the OSGi framework";
-	}
-
-	//*********************************************************
-	//*********************************************************
-	/**
-	 * Overridding the method to return the name of the testcase
-	 */
-	public String getName() {
-		return "test.cases.url";
-	}
-	//*********************************************************
 }
