@@ -290,13 +290,10 @@ public class HttpTestServlet1 extends javax.servlet.http.HttpServlet {
 		response.setContentType("text/html");
 		PrintWriter out = response.getWriter();
 		out.println("Hanging!");
-		// Sleep forever
-		while (true) {
-			try {
-				Thread.sleep(2000);
-			}
-			catch (InterruptedException ie) {
-			}
+		try {
+			wait(50000);
+		}
+		catch (InterruptedException ie) {
 		}
 	}
 

@@ -47,7 +47,8 @@ public class HttpTestBundle1 extends DefaultTestBundleControl implements
 									"EndingSlash", // "TC13"
 									"RootAlias", // "TC14" new
 									"ServletRegDefaultContext", // "TC15" new
-									"ResourceRegDefaultContext", // "TC16" new
+									"ResourceRegDefaultContext", // "TC16"
+																	// new
 									"RegisterMultipleAliases", // "TC17" new
 									// RUNTIME BEHAVIOUR
 									"Empty_doGet", // "TC50"
@@ -55,8 +56,9 @@ public class HttpTestBundle1 extends DefaultTestBundleControl implements
 									// "doGetExceptions", // "TC52" Disabled due
 									// to undefined behavior
 									"LargeOutput", // "TC53"
-									//"WebServerVersion", // "TC54" removed
-									"HangRequest", // "TC55"
+									// "WebServerVersion", // "TC54" removed
+									// "HangRequest", // "TC55" removed because
+									// not clear what it tests
 									"LargeURL", // "TC56"
 									"OddURL", // "TC57"
 									"MultipleNamesURL", // "TC58a" updated
@@ -65,8 +67,8 @@ public class HttpTestBundle1 extends DefaultTestBundleControl implements
 									"ResourceName", // "TC60"
 									"Authentication", // "TC61" new
 									"ServletContextSharing", // "TC62" new
-									//BUGBUG need to complete this testcase
-									//"Permissions" // "TC63" new
+									// BUGBUG need to complete this testcase
+									// "Permissions" // "TC63" new
 									};
 
 	protected String[] getMethods() {
@@ -720,7 +722,7 @@ public class HttpTestBundle1 extends DefaultTestBundleControl implements
 		};
 		// HttpContext nonpermitting
 		HttpContext hc2 = new HttpContext() {
-			//private boolean ispermitted = true;
+			// private boolean ispermitted = true;
 			public java.net.URL getResource(String name) {
 				// Map a resource name to a URL.
 				return getClass().getResource(name);
@@ -894,141 +896,42 @@ public class HttpTestBundle1 extends DefaultTestBundleControl implements
 		log("Servlet resource returning large output unregistered");
 	}
 
-	//Remove tc54 as this is not needed
-	//public void WebServerVersion () throws Exception
-	//{
-	//  log ( "TC54 Query version of http service" );
+	// Remove tc54 as this is not needed
+	// public void WebServerVersion () throws Exception
+	// {
+	// log ( "TC54 Query version of http service" );
 	//
-	//  HttpTestServlet1 servlet = new HttpTestServlet1();
-	//  final String urlstr = "http://localhost:" +
-	//								_httpPort +
-	//								"/tc54servlet?TestCase=54";
-	//  URL source = null;
-	//  String inputLine = new String();
-	//  StringBuffer resbuf = new StringBuffer();
-	//  BufferedReader in = null;
+	// HttpTestServlet1 servlet = new HttpTestServlet1();
+	// final String urlstr = "http://localhost:" +
+	// _httpPort +
+	// "/tc54servlet?TestCase=54";
+	// URL source = null;
+	// String inputLine = new String();
+	// StringBuffer resbuf = new StringBuffer();
+	// BufferedReader in = null;
 	//
-	//  // register servlet with path /tc54servlet
-	//  _http.registerServlet("/tc54servlet",
-	//						servlet,
-	//						null,
-	//						httpContext);
-	//  log("Servlet resource returning http version registered");
+	// // register servlet with path /tc54servlet
+	// _http.registerServlet("/tc54servlet",
+	// servlet,
+	// null,
+	// httpContext);
+	// log("Servlet resource returning http version registered");
 	//
-	//  // get and use resoruce /tc54servlet
-	//  source = new URL(urlstr);
-	//  in = new BufferedReader(new InputStreamReader(source.openStream()));
+	// // get and use resoruce /tc54servlet
+	// source = new URL(urlstr);
+	// in = new BufferedReader(new InputStreamReader(source.openStream()));
 	//
-	//  // read lines in resource /tc54servlet
-	//  log ("Receiving from servlet");
-	//  while ((inputLine = in.readLine()) != null) { resbuf.append(inputLine); }
-	//  log (resbuf.toString());
-	//  in.close();
+	// // read lines in resource /tc54servlet
+	// log ("Receiving from servlet");
+	// while ((inputLine = in.readLine()) != null) { resbuf.append(inputLine); }
+	// log (resbuf.toString());
+	// in.close();
 	//
-	//  // unregister simple servlet
-	//  _http.unregister ("/tc54servlet");
-	//  log ("Servlet resource returning http version unregistered");
-	//}
-	//End of tc54
-	public void HangRequest() throws Exception {
-		log("TC55 Hang request to http service");
-		HttpTestServlet1 servlet = new HttpTestServlet1();
-		final String urlstr = "http://localhost:" + _httpPort
-				+ "/tc55servlet?TestCase=55";
-		URL source2 = null;
-		String inputLine = new String();
-		StringBuffer resbuf = new StringBuffer();
-		// register servlet with path /tc55servlet
-		try {
-			_http.registerServlet("/tc55servlet", servlet, null, httpContext);
-			log("Servlet resource hanging dopost registered");
-		}
-		catch (ServletException se) {
-			log("Error registering servlet");
-		}
-		catch (NamespaceException ne) {
-			log("Error namespace registering servlet");
-		}
-		// spawn thread doing a request that will hang
-		Runnable requestThread = new Runnable() {
-			public void run() {
-				String inputLine2 = new String();
-				StringBuffer resbuf2 = new StringBuffer();
-				URL source = null;
-				BufferedReader in = null;
-				// get and use resource
-				try {
-					source = new URL(urlstr);
-				}
-				catch (MalformedURLException mue) {
-				}
-				// read lines in resource
-				log("Receiving from servlet dopost");
-				try {
-					HttpURLConnection conn = (HttpURLConnection) source
-							.openConnection();
-					conn.setRequestMethod("POST");
-					conn.setDoOutput(true);
-					conn.setRequestProperty("Content-Type", "text/plain");
-					PrintWriter pw = new PrintWriter(conn.getOutputStream());
-					pw.flush();
-					conn.connect();
-					////
-					in = new BufferedReader(new InputStreamReader(conn
-							.getInputStream()));
-					while ((inputLine2 = in.readLine()) != null) {
-						resbuf2.append(inputLine2);
-					}
-					log(resbuf2.toString());
-					in.close();
-				}
-				catch (IOException ioe) {
-					log(resbuf2.toString());
-					log("IOException in servlet");
-					ioe.printStackTrace();
-				}
-				finally {
-					// unregister simple servlet
-					_http.unregister("/tc55servlet");
-					log("Servlet resource throwing exception unregistered");
-				}
-			}
-		};
-		new Thread(requestThread).start();
-		try {
-			Thread.sleep(1000);
-		}
-		catch (InterruptedException ie) {
-		}
-		// get and use resource
-		try {
-			source2 = new URL(urlstr);
-		}
-		catch (MalformedURLException mue) {
-		}
-		// do normal request
-		log("Receiving from servlet doget");
-		BufferedReader in2 = null;
-		try {
-			in2 = new BufferedReader(
-					new InputStreamReader(source2.openStream()));
-			while ((inputLine = in2.readLine()) != null) {
-				resbuf.append(inputLine);
-			}
-			log(resbuf.toString());
-			in2.close();
-		}
-		catch (IOException ioe) {
-			log(resbuf.toString());
-			log("IOException in servlet");
-			ioe.printStackTrace();
-		}
-		finally {
-			// unregister simple servlet
-			_http.unregister("/tc55servlet");
-			log("Servlet hanging dopost unregistered");
-		}
-	}
+	// // unregister simple servlet
+	// _http.unregister ("/tc54servlet");
+	// log ("Servlet resource returning http version unregistered");
+	// }
+	// End of tc54
 
 	public void LargeURL() throws Exception {
 		log("TC56 Access of servlet with long parameter values");
@@ -1079,7 +982,7 @@ public class HttpTestBundle1 extends DefaultTestBundleControl implements
 		source = new URL(urlstr + "&" + param1 + "&" + param2 + "&" + param3
 				+ "&" + param4 + "&" + param5);
 		in = new BufferedReader(new InputStreamReader(source.openStream()));
-		//log (source.toString()); //for testing purposes!!
+		// log (source.toString()); //for testing purposes!!
 		// read lines in resource /tc57servlet
 		log("Receiving from servlet");
 		while ((inputLine = in.readLine()) != null) {
@@ -1374,7 +1277,7 @@ public class HttpTestBundle1 extends DefaultTestBundleControl implements
 
 	public void Permissions() {
 		log("TC63 Registering resources without correct permissions");
-		//BUGBUG need to complete test case!!
+		// BUGBUG need to complete test case!!
 	}
 
 	int guessHttpPort() {
@@ -1434,11 +1337,12 @@ public class HttpTestBundle1 extends DefaultTestBundleControl implements
 										}
 									};
 
-	//remove attributes from MIME-type and convert it into lower case
+	// remove attributes from MIME-type and convert it into lower case
 	private String filterMIMEtype(String mime) {
 		if (mime.indexOf(';') != -1)
 			return mime.substring(0, mime.indexOf(';')).toLowerCase();
 		else
 			return mime.toLowerCase();
 	}
+
 }

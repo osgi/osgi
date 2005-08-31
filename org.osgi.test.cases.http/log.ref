@@ -152,13 +152,6 @@ Receiving from servlet
 bufsize = 4194304
 Servlet resource returning large output unregistered
 
-TC55 Hang request to http service
-Servlet resource hanging dopost registered
-Receiving from servlet dopost
-Receiving from servlet doget
-<html><head><title>OSGi - HTTP Service test case</title></head><body><h1>55 Hang request to http service</h1></body></html>
-Servlet hanging dopost unregistered
-
 TC56 Access of servlet with long parameter values
 Servlet accessed with long parameter registered
 Receiving from servlet
