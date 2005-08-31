@@ -8,7 +8,6 @@ Bundle-Version: 1.1
 Bundle-DocURL: http://www.gatespace.com
 Bundle-ContactAddress: info@gatespace.com
 Bundle-Activator: org.osgi.impl.service.http.HttpServiceController
-Export-Service: org.osgi.service.http.HttpService
 $(IMPORT-PACKAGE)
 $(EXPORT-PACKAGE)
 $(PRIVATE-PACKAGE)
