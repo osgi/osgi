@@ -90,7 +90,7 @@ public class DefaultTestCase
 	@see org.osgi.test.cases.framework.classpath.tbc.TestBundleControl
 	 */
 	public int test(TestRun run) {
-		System.out.println("Running test case " + getName());
+		//System.out.println("Running test case " + getName());
 		this.run = run;
 		errors = 0;
 		cont = true;
@@ -256,7 +256,7 @@ public class DefaultTestCase
 		sb.append( getName() );
 		sb.append( "/" );
 		
-		System.out.println( "HTTP server is: " + sb.toString() );
+		//System.out.println( "HTTP server is: " + sb.toString() );
 		testbundle.send( sb.toString() );
 	}
 
@@ -267,8 +267,6 @@ public class DefaultTestCase
 	
 	public URL getResource(String name) {
 		URL url = null;
-		System.out.println("Asking for " + name );
-		
 		try {
 			url = getClass().getResource(name);
 			if ( url == null )
@@ -279,7 +277,6 @@ public class DefaultTestCase
 				System.out.println("name " + name );
 				url = getClass().getResource(name);
 			}
-			System.out.println("Asking for " + name + " getting " + url );
 			return url;
 		}
 		catch( Exception e ) {
