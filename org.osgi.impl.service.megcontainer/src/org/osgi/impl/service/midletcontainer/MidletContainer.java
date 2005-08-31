@@ -2,7 +2,6 @@ package org.osgi.impl.service.midletcontainer;
 
 import java.io.*;
 import java.lang.reflect.Constructor;
-import java.lang.reflect.Field;
 import java.security.MessageDigest;
 import java.util.*;
 import javax.microedition.midlet.MIDlet;
@@ -10,10 +9,6 @@ import org.osgi.framework.*;
 import org.osgi.impl.service.application.OATContainerInterface;
 import org.osgi.service.application.ApplicationDescriptor;
 import org.osgi.service.application.ApplicationHandle;
-import org.osgi.service.application.midlet.MidletDescriptor;
-import org.osgi.service.application.midlet.MidletHandle;
-import org.osgi.service.event.Event;
-import org.osgi.service.event.EventHandler;
 import org.osgi.service.log.LogService;
 import org.w3c.dom.*;
 
@@ -23,7 +18,7 @@ class MEGBundleDescriptor {
 	public long						bundleID;
 }
 
-public class MidletContainer implements BundleListener, ServiceListener, EventHandler {
+public class MidletContainer implements BundleListener, ServiceListener {
 	private BundleContext	bc;
 	private Vector			bundleIDs;
 	private Hashtable		bundleHash;
@@ -71,7 +66,7 @@ public class MidletContainer implements BundleListener, ServiceListener, EventHa
 		}
 	}
 
-	public MIDlet createMidletInstance(MidletDescriptorImpl appDesc) throws Exception {
+	public MIDlet createMidletInstance(MidletDescriptor appDesc) throws Exception {
 		MEGBundleDescriptor desc = getBundleDescriptor(appDesc.getBundleId());
 		Bundle appBundle = bc.getBundle(appDesc.getBundleId());
 		Class mainClass = appBundle.loadClass(appDesc.getStartClass());
@@ -104,24 +99,6 @@ public class MidletContainer implements BundleListener, ServiceListener, EventHa
 
 		throw new Exception(
 				"Application wasn't installed onto the midlet container!");
-	}
-
-	public boolean isLaunchable(MidletDescriptorImpl appDesc) {
-		try {
-			if (appDesc.isLocked())
-				return false;
-			if( !oat.isLaunchable( appDesc.getBundle(), appDesc.getStartClass() ) )
-				return false;
-			MEGBundleDescriptor desc = getBundleDescriptor(appDesc
-					.getBundleId());
-			if (desc == null)
-				return false;
-			return true;
-		}
-		catch (Exception e) {
-			log(bc, 1, "Exception occurred at checking if the midlet is launchable!",	e);
-		}
-		return false;
 	}
 
 	public void stop() throws Exception {
@@ -177,10 +154,10 @@ public class MidletContainer implements BundleListener, ServiceListener, EventHa
 			}
 			Dictionary properties = new Hashtable(desc.applications[i]
 					.getProperties(Locale.getDefault().getLanguage()));
-			String pid = (String) properties.get("service.pid");
-			properties.put("service.pid", pid);
+			String pid = (String) properties.get(Constants.SERVICE_PID);
+			properties.put(Constants.SERVICE_PID, pid);
 			desc.serviceRegistrations[i] = bc.registerService(
-					"org.osgi.service.application.ApplicationDescriptor",
+					ApplicationDescriptor.class.getName(),
 					desc.applications[i], properties);
 		}
 
@@ -239,7 +216,6 @@ public class MidletContainer implements BundleListener, ServiceListener, EventHa
 				installApplication(b.getBundleId());
 		}
 		catch (Exception e) {
-			e.printStackTrace();
 			log(bc, 1, "Exception occurred at installing the midlet!", e);
 		}
 	}
@@ -285,11 +261,10 @@ public class MidletContainer implements BundleListener, ServiceListener, EventHa
 								MIDletIcon = MIDletSuiteIcon;
 							props.setProperty("application.bundle.id", Long
 									.toString(bundleID));
-							props.setProperty("application.vendor",
+							props.setProperty(ApplicationDescriptor.APPLICATION_VENDOR,
 									MIDletVendor);
-							props.setProperty("application.visible", "true");
-							props.setProperty("application.version",
-									MIDletVersion);
+							props.setProperty(ApplicationDescriptor.APPLICATION_VISIBLE, "true");
+							props.setProperty(ApplicationDescriptor.APPLICATION_VERSION, MIDletVersion);
 							String defaultLang = Locale.getDefault()
 									.getLanguage();
 							names.put(defaultLang, MIDletName);
@@ -298,10 +273,12 @@ public class MidletContainer implements BundleListener, ServiceListener, EventHa
 							if( uniqueID.length() > 32 ) {
 								uniqueID = getHash( uniqueID );
 							}
-							props.put("service.pid", uniqueID);
-							appVector.add(createMidletDescriptorByReflection(
-									props, names, icons, defaultLang,
-									MIDletStartClass, bc.getBundle(bundleID)));
+							props.put(Constants.SERVICE_PID, uniqueID);
+
+							MidletDescriptor midletDesc = new MidletDescriptor( bc, props, names, icons, defaultLang, MIDletStartClass,
+									bc.getBundle(bundleID), this);
+							
+							appVector.add( midletDesc );
 						}
 					}
 				}
@@ -329,9 +306,6 @@ public class MidletContainer implements BundleListener, ServiceListener, EventHa
 		return null;
 	}
 
-	public void handleEvent(Event event) {
-	}
-
 	static boolean log(BundleContext bc, int severity, String message,
 			Throwable throwable) {
 		System.out.println("Serverity:" + severity + " Message:" + message
@@ -351,43 +325,6 @@ public class MidletContainer implements BundleListener, ServiceListener, EventHa
 			}
 		}
 		return false;
-	}
-
-	public ServiceReference getReference(MidletDescriptorImpl megDesc) {
-		MEGBundleDescriptor desc = (MEGBundleDescriptor) bundleHash
-				.get(new Long(megDesc.getBundleId()));
-		if (desc == null)
-			return null;
-		for (int i = 0; i != desc.applications.length; i++)
-			if (megDesc.getMidletDescriptor() == desc.applications[i])
-				return desc.serviceRegistrations[i].getReference();
-
-		return null;
-	}
-
-	public MidletDescriptor createMidletDescriptorByReflection(
-			Properties props, Hashtable names, Hashtable icons,
-			String defaultLang, String startClass, Bundle bundle) {
-		String pid = (String) props.get("service.pid");
-		try {
-			Class midletDescriptorClass = org.osgi.service.application.midlet.MidletDescriptor.class;
-			Constructor constructor = midletDescriptorClass
-					.getDeclaredConstructor(new Class[] {java.lang.String.class});
-			constructor.setAccessible(true);
-			MidletDescriptor midletDescriptor = (MidletDescriptor) constructor
-					.newInstance(new Object[] {pid});
-			Field delegate = midletDescriptorClass.getDeclaredField("delegate");
-			delegate.setAccessible(true);
-			MidletDescriptorImpl megDesc = (MidletDescriptorImpl) delegate
-					.get(midletDescriptor);
-			megDesc.init(bc, props, names, icons, defaultLang, startClass,
-					bundle, this);
-			return midletDescriptor;
-		}
-		catch (Exception e) {
-			log(bc, 1, "Exception occurred at creating midlet descriptor!", e);
-		}
-		return null;
 	}
 
 	private Map convertObsoleteDictionaryToMap(Dictionary dict) {

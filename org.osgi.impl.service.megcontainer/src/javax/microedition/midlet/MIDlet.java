@@ -1,6 +1,6 @@
 package javax.microedition.midlet;
 
-import org.osgi.service.application.midlet.*;
+import org.osgi.impl.service.midletcontainer.*;
 import java.util.*;
 
 public abstract class MIDlet {
