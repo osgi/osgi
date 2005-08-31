@@ -18,8 +18,10 @@ import java.util.List;
 import org.eclipse.osgi.component.Log;
 import org.eclipse.osgi.component.Main;
 import org.eclipse.osgi.component.model.ComponentDescription;
-import org.osgi.framework.Bundle;
-import org.xml.sax.*;
+import org.osgi.framework.BundleContext;
+import org.xml.sax.Attributes;
+import org.xml.sax.SAXException;
+import org.xml.sax.SAXParseException;
 import org.xml.sax.helpers.DefaultHandler;
 
 /**
@@ -37,13 +39,13 @@ public class ParserHandler extends DefaultHandler {
 	protected DefaultHandler handler;
 	protected List components;
 	protected Main main;
-	protected Bundle bundle;
+	protected BundleContext bundleContext;
 	protected int depth;
 	protected boolean error;
 
-	public ParserHandler(Main main, Bundle bundle, List components) {
+	public ParserHandler(Main main, BundleContext bundleContext, List components) {
 		this.main = main;
-		this.bundle = bundle;
+		this.bundleContext = bundleContext;
 		this.components = components;
 	}
 

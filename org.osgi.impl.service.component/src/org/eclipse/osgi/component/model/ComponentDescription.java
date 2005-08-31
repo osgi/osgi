@@ -14,9 +14,13 @@
 package org.eclipse.osgi.component.model;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Hashtable;
 import java.util.List;
+import java.util.Map;
 
-import org.osgi.framework.Bundle;
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.Constants;
 
 /**
  *
@@ -25,7 +29,7 @@ import org.osgi.framework.Bundle;
  * @version $Revision$
  */
 public class ComponentDescription {
-	protected Bundle bundle;
+	protected BundleContext bundleContext;
 	protected String name;
 	protected boolean autoenable;
 	protected boolean immediate;
@@ -37,20 +41,26 @@ public class ComponentDescription {
 	protected ImplementationDescription implementation;
 	protected List properties;
 	protected ServiceDescription service;
-	protected List references;
+	protected List servicesProvided;
+	
+	protected List referenceDescriptions;
 
 	protected List componentDescriptionProps;
+	protected Map cdpsByPID;
 
 	/**
 	 * @param bundle The bundle to set.
 	 */
-	public ComponentDescription(Bundle bundle) {
-		this.bundle = bundle;
+	public ComponentDescription(BundleContext bundleContext) {
+		this.bundleContext = bundleContext;
 		autoenable = true;
 		immediate = false;
 		properties = new ArrayList();
-		references = new ArrayList();
+		referenceDescriptions = new ArrayList();
 		componentDescriptionProps = new ArrayList();
+		cdpsByPID = new Hashtable();
+		servicesProvided = Collections.EMPTY_LIST;
+		
 	}
 
 	/**
@@ -84,8 +94,8 @@ public class ComponentDescription {
 	/**
 	 * @return Returns the bundle.
 	 */
-	public Bundle getBundle() {
-		return bundle;
+	public BundleContext getBundleContext() {
+		return bundleContext;
 	}
 
 	/**
@@ -153,29 +163,44 @@ public class ComponentDescription {
 	public ServiceDescription getService() {
 		return service;
 	}
+	
+	/**
+	 * return a handly list of the serviceInterfaces provided
+	 */
+	public List getServicesProvided() {
+		return servicesProvided;
+	}
 
 	/**
 	 * @param service The service to set.
 	 */
 	public void setService(ServiceDescription service) {
 		this.service = service;
+
+		if (service!= null) {
+			servicesProvided = new ArrayList();
+			ProvideDescription[] provideDescription = service.getProvides();
+			for (int i = 0; i < provideDescription.length; i++) {
+				servicesProvided.add(provideDescription[i].getInterfacename());
+			}
+		} else {
+			servicesProvided = Collections.EMPTY_LIST;
+		}
+		
 	}
 
 	/**
 	 * @return Returns the references.
 	 */
-	public ReferenceDescription[] getReferences() {
-		int size = references.size();
-		ReferenceDescription[] result = new ReferenceDescription[size];
-		references.toArray(result);
-		return result;
+	public List getReferenceDescriptions() {
+		return referenceDescriptions;
 	}
 
 	/**
 	 * @param reference The references to set.
 	 */
-	public void addReference(ReferenceDescription reference) {
-		references.add(reference);
+	public void addReferenceDescription(ReferenceDescription reference) {
+		referenceDescriptions.add(reference);
 	}
 
 	/**
@@ -222,13 +247,26 @@ public class ComponentDescription {
 
 	public void addComponentDescriptionProp(ComponentDescriptionProp cdp) {
 		componentDescriptionProps.add(cdp);
+		String pid = (String)cdp.getProperties().get(Constants.SERVICE_PID);
+		if (pid != null) {
+			cdpsByPID.put(pid,cdp);
+		}
 	}
 
 	public List getComponentDescriptionProps() {
 		return componentDescriptionProps;
 	}
+	
+	public ComponentDescriptionProp getComponentDescriptionPropByPID(String pid) {
+		return (ComponentDescriptionProp)cdpsByPID.get(pid);
+	}
 
 	public void clearComponentDescriptionProps() {
 		componentDescriptionProps.clear();
+		cdpsByPID.clear();
+	}
+	
+	public void removeComponentDescriptionProp(ComponentDescriptionProp cdp) {
+		componentDescriptionProps.remove(cdp);
 	}
 }

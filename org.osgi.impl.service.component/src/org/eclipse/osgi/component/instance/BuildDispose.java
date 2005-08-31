@@ -15,7 +15,6 @@ package org.eclipse.osgi.component.instance;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Arrays;
-import java.util.Dictionary;
 import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Iterator;
@@ -36,6 +35,7 @@ import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
+import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.component.ComponentConstants;
 import org.osgi.service.component.ComponentContext;
 import org.osgi.service.component.ComponentException;
@@ -54,9 +54,6 @@ public class BuildDispose implements WorkDispatcher {
 	static final boolean DEBUG = false;
 
 	protected InvokeMethod invoke;
-
-	/** next free component id. */
-	protected long componentid;
 
 	private int stackCount;
 	private Hashtable delayedBindTable;
@@ -100,7 +97,7 @@ public class BuildDispose implements WorkDispatcher {
 	 * @return ComponentInstance
 	 */
 
-	public ComponentInstance build(Bundle usingBundle, ComponentDescriptionProp cdp, Dictionary properties) throws ComponentException {
+	public ComponentInstance build(Bundle usingBundle, ComponentDescriptionProp cdp) throws ComponentException {
 
 		synchronized (this) {
 
@@ -114,7 +111,7 @@ public class BuildDispose implements WorkDispatcher {
 
 				Object instance = createInstance(componentDescription);
 
-				componentInstance = instantiate(cdp, instance, properties);
+				componentInstance = instantiate(cdp, instance);
 				
 				createComponentContext(cdp,usingBundle,componentInstance);
 
@@ -152,6 +149,16 @@ public class BuildDispose implements WorkDispatcher {
 	void disposeComponent(ComponentDescriptionProp cdp) {
 
 		synchronized (this) {
+			//unregister this cdp's service
+			ServiceRegistration serviceRegistration = cdp.getServiceRegistration();
+			if (serviceRegistration != null) {
+				try {
+					serviceRegistration.unregister();
+				} catch (IllegalStateException e) {
+					//service has already been unregistered, no problem
+				}
+			}
+			
 			// get all instances for this component
 			List instances = cdp.getInstances();
 			if (instances != null) {
@@ -195,15 +202,15 @@ public class BuildDispose implements WorkDispatcher {
 	/**
 	 * Create the new Instance
 	 * 
-	 * @param componentDescription
+	 * @param cd
 	 * @return Object instance
 	 */
 	
-	private Object createInstance(ComponentDescription componentDescription) throws ComponentException {
+	private Object createInstance(ComponentDescription cd) throws ComponentException {
 		Object instance = null;
-		String classname = componentDescription.getImplementation().getClassname();
+		String classname = cd.getImplementation().getClassname();
 		try {
-			instance = ((componentDescription.getBundle()).loadClass(classname)).newInstance();
+			instance = cd.getBundleContext().getBundle().loadClass(classname).newInstance();
 		} catch (IllegalAccessException e) {
 			Log.log(1, "[SCR] IllegalAccessException attempting to create instance ", e);
 			throw new ComponentException(e.getMessage()); 
@@ -225,8 +232,8 @@ public class BuildDispose implements WorkDispatcher {
 	 * @param instance 
 	 * @param properties
 	 */
-	private ComponentInstanceImpl instantiate(ComponentDescriptionProp cdp, Object instance, Dictionary properties) {
-		return new ComponentInstanceImpl(this, cdp, instance, properties);
+	private ComponentInstanceImpl instantiate(ComponentDescriptionProp cdp, Object instance) {
+		return new ComponentInstanceImpl(main, cdp, instance);
 	}
 
 	/**
@@ -265,7 +272,7 @@ public class BuildDispose implements WorkDispatcher {
 			//if there is a published service, then get the ServiceObject and call bind
 			try {
 				//get All Registered services using this target filter
-				serviceReferences = componentInstance.getComponentContext().getBundleContext().getServiceReferences(reference.getReferenceDescription().getInterfacename(), reference.getReferenceDescription().getTarget());
+				serviceReferences = componentInstance.getComponentContext().getBundleContext().getServiceReferences(reference.getReferenceDescription().getInterfacename(), reference.getTarget());
 				
 			//If a bind method throws an exception, SCR must log an error message containing the exception with the Log Service but 
 			//the activation of the component configuration does not fail.
@@ -273,10 +280,8 @@ public class BuildDispose implements WorkDispatcher {
 				Log.log(1, "[SCR] InvalidSyntaxException attempting to bindReference ", e);
 			}
 
-			String cardinality = reference.getReferenceDescription().getCardinality();
-
 			//if cardinality is 0..1 or 0..n, it is OK if there is nothing to bind with
-			if ((cardinality.equals("0..1") || cardinality.equals("0..n")) && serviceReferences == null) {
+			if (!reference.getReferenceDescription().isRequired() && serviceReferences == null) {
 				//that's OK
 				return;
 			}
@@ -285,10 +290,10 @@ public class BuildDispose implements WorkDispatcher {
 			Arrays.sort(serviceReferences);
 			
 			//we only want to bind one service
-			if ((cardinality.equals("1..1")) || (cardinality.equals("0..1"))) {
+			if (reference.getReferenceDescription().getCardinalityHigh() == 1) {
 				bindServiceToReference(reference, serviceReferences[0], componentInstance);
 				//here we can bind more than one service, if availible
-			} else if ((cardinality.equals("1..n")) || (cardinality.equals("0..n"))) {
+			} else {
 				for (int j = 0; j < serviceReferences.length; j++) {
 					bindServiceToReference(reference, serviceReferences[j], componentInstance);
 				}
@@ -395,7 +400,7 @@ public class BuildDispose implements WorkDispatcher {
 		//cause circularity
 
 		//if reference has bind method and policy=dynamic, activate later and bind
-		if (reference.getReferenceDescription().getBind() != null && reference.getPolicy().equalsIgnoreCase("dynamic")) {
+		if (reference.getReferenceDescription().getBind() != null && reference.getReferenceDescription().getPolicy().equalsIgnoreCase("dynamic")) {
 			//delay bind by putting on the queue later
 			delayedBindTable.put(reference, consumerCDP);
 		}
@@ -548,27 +553,17 @@ public class BuildDispose implements WorkDispatcher {
 		componentInstance.setComponentContext(context);
 	}
 
-	/**
-	 * Method to return the next available component id. 
-	 * 
-	 * @return next component id.
-	 */
-	long getNextComponentId() {
-		synchronized (this) {
-			long id = componentid;
-			componentid++;
-			return (id);
-		}
-	}
-
 	/* (non-Javadoc)
 	 * @see org.eclipse.osgi.component.workqueue.WorkDispatcher#dispatchWork(int, java.lang.Object)
 	 */
 	public void dispatchWork(int workAction, Object workObject) {
 		switch (workAction) {
 			case BUILD :
-				ComponentDescriptionProp cdp = (ComponentDescriptionProp) workObject;
-				build(null, cdp, null);
+				//only build if cdp is still resolved
+				ComponentDescriptionProp cdp = (ComponentDescriptionProp)workObject;
+				if (main.resolver.satisfiedCDPs.contains(cdp)) {
+					build(null, cdp);
+				}
 		}
 		
 	}

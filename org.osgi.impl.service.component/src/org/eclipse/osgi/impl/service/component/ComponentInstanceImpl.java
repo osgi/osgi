@@ -13,14 +13,13 @@
 
 package org.eclipse.osgi.impl.service.component;
 
-import java.util.Dictionary;
+import java.util.Collections;
 import java.util.Enumeration;
 import java.util.Hashtable;
 
-import org.eclipse.osgi.component.instance.BuildDispose;
+import org.eclipse.osgi.component.Main;
 import org.eclipse.osgi.component.model.ComponentDescriptionProp;
 import org.osgi.framework.ServiceReference;
-import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.component.ComponentContext;
 import org.osgi.service.component.ComponentInstance;
 
@@ -34,10 +33,8 @@ import org.osgi.service.component.ComponentInstance;
 public class ComponentInstanceImpl implements ComponentInstance {
 
 	Object instance;
-	Dictionary properties = null;
-	BuildDispose buildDispose;
-	public ComponentDescriptionProp component;
-	ServiceRegistration serviceRegistration = null;
+	Main main;
+	public ComponentDescriptionProp cdp;
 	private ComponentContext componentContext;
 	
 	//ServiceReference:ServiceObject that binded to this instance
@@ -48,11 +45,10 @@ public class ComponentInstanceImpl implements ComponentInstance {
 	 * @param Object instance
 	 * 
 	 */
-	public ComponentInstanceImpl(BuildDispose buildDispose, ComponentDescriptionProp component, Object instance, Dictionary properties) {
-		this.buildDispose = buildDispose;
+	public ComponentInstanceImpl(Main main, ComponentDescriptionProp cdp, Object instance) {
+		this.main = main;
 		this.instance = instance;
-		this.properties = properties;
-		this.component = component;
+		this.cdp = cdp;
 
 	}
 	
@@ -70,13 +66,17 @@ public class ComponentInstanceImpl implements ComponentInstance {
 	 * the instance has already been deactivated, this method does nothing.
 	 */
 	public void dispose() {
-		//deactivate, unregister if a service
-		if(serviceRegistration != null)
-			serviceRegistration.unregister();
-		buildDispose.disposeComponentInstance(component, this);
-		component.removeInstance(this);
+		//deactivate
+		if (!cdp.isComponentFactory() && cdp.getComponentDescription().getFactory()!=null) {
+			//this is a factory instance, so dispose of CDP
+			cdp.getComponentDescription().removeComponentDescriptionProp(cdp);
+			main.resolver.disposeInstances(Collections.singletonList(cdp));
+			cdp = null;
+		} else {
+			main.resolver.instanceProcess.buildDispose.disposeComponentInstance(cdp, this);
+			cdp.removeInstance(this);
+		}
 		instance = null;
-		properties = null;
 	}
 
 	/**
@@ -89,13 +89,6 @@ public class ComponentInstanceImpl implements ComponentInstance {
 		return instance;
 	}
 
-	/*
-	 * returns the instance properties
-	 */
-	protected Dictionary getProperties() {
-		return properties;
-	}
-	
 	public void addServiceReference(ServiceReference serviceReference, Object serviceObject)
 	{
 		serviceReferenceToServiceObject.put(serviceReference,serviceObject);
@@ -114,9 +107,9 @@ public class ComponentInstanceImpl implements ComponentInstance {
 	{
 		return serviceReferenceToServiceObject.get(serviceReference);
 	}
-		
-	public void setServiceRegistration(ServiceRegistration serviceRegistration){
-		this.serviceRegistration =  serviceRegistration;
+
+	public ComponentDescriptionProp getComponentDescriptionProp() {
+		return cdp;
 	}
-	
+			
 }

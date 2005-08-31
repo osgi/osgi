@@ -191,7 +191,7 @@ class InvokeMethod {
 				serviceObject = componentInstance.getServiceObject(serviceReference);
 				if (serviceObject == null) {
 					serviceObject = buildDispose.getService(
-							componentInstance.component,
+							componentInstance.getComponentDescriptionProp(),
 							reference,
 							componentInstance.getComponentContext().getBundleContext(),
 							serviceReference

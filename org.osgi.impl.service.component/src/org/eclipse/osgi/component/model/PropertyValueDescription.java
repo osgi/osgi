@@ -30,16 +30,6 @@ public class PropertyValueDescription extends PropertyDescription {
 	}
 
 	/**
-	 * @param name
-	 * @return
-	 * @see org.eclipse.osgi.component.model.PropertyDescription#getProperty(java.lang.String)
-	 */
-	public Object getProperty(String name) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	/**
 	 * @return Returns the name.
 	 */
 	public String getName() {

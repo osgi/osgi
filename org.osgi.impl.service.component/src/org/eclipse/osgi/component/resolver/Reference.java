@@ -16,6 +16,7 @@ package org.eclipse.osgi.component.resolver;
 
 import java.util.ArrayList;
 import java.util.Dictionary;
+import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
 
@@ -40,15 +41,9 @@ public class Reference {
 	/* set this to true to compile in debug messages */
 	static final boolean DEBUG = false;
 	static final String TARGET = ".target";
-	static final String CARDINALITY_DEFAULT = "1..1";
-	static final String POLICY_DEFAULT = "static";
 	protected ReferenceDescription referenceDescription;
 	protected String target;
-	protected String cardinality;
-	protected String policy;
-	protected int cardinalityHigh;
-	protected int cardinalityLow;
-
+	
 	protected List serviceReferences = new ArrayList();
 
 	/**
@@ -56,51 +51,19 @@ public class Reference {
 	 * 
 	 * @param referenceDescription
 	 */
-	public Reference(ReferenceDescription referenceDescription, Dictionary properties) {
+	public Reference(ReferenceDescription referenceDescription, Hashtable properties) {
 		this.referenceDescription = referenceDescription;
-		this.target = referenceDescription.getTarget();
-
+		
 		// RFC 80 section 5.3.1.3:
 		// If [target] is not specified and there is no <reference-name>.target
 		// component
 		// property, then the selection filter used to select the desired
 		// service is
 		// “(objectClass=”+<interface-name>+”)”.
-		if (properties != null) {
-			String newTarget = (String) properties.get(referenceDescription.getName() + TARGET);
-			if (newTarget != null) {
-				this.target = newTarget;
-			}
-		}
-		if (target == null) {
-			target = "(objectClass=" + referenceDescription.getInterfacename() + ")";
-		}
-
-		// If it is not specified, then a policy of “static” is used.
-		policy = referenceDescription.getPolicy();
-		if (policy == null) {
-			policy = POLICY_DEFAULT;
-		}
-
-		// Cardinality indicates the number of services, matching this
-		// reference,
-		// which will bind to this Service Component. Possible values are:
-		// 0..1, 0..n, 1..1 (i.e. exactly one), 1..n (i.e. at least one).
-		// This attribute is optional. If it is not specified, then a
-		// cardinality
-		// of “1..1” is used.
-		cardinality = referenceDescription.getCardinality();
-		if (cardinality == null) {
-			cardinality = CARDINALITY_DEFAULT;
-		}
-		if (cardinality.charAt(0) == '0')
-			cardinalityLow = 0;
-		else
-			cardinalityLow = 1;
-		if (cardinality.charAt(3) == '1')
-			cardinalityHigh = 1;
-		else
-			cardinalityHigh = 999999999; //infinite
+		this.target = (String) properties.get(referenceDescription.getName() + TARGET);
+		this.target = this.target != null ? this.target : referenceDescription.getTarget();
+		this.target = this.target != null ? this.target : "(objectClass=" + referenceDescription.getInterfacename() + ")";
+		
 	}
 
 	/**
@@ -112,7 +75,9 @@ public class Reference {
 
 		//check if this bundle has the permission to GET the Service it Requires
 		Bundle bundle = context.getBundle();
-		if (!bundle.hasPermission(new ServicePermission(referenceDescription.getInterfacename(), ServicePermission.GET))) {
+		if (System.getSecurityManager() != null &&
+			!bundle.hasPermission(new ServicePermission(referenceDescription.getInterfacename(), ServicePermission.GET))) {
+
 			return false;
 		}
 
@@ -139,20 +104,8 @@ public class Reference {
 		return target;
 	}
 
-	public String getPolicy() {
-		return policy;
-	}
-
-	//	if the cardinality is "0..1" or "0..n" then this refernce is not required
-	public boolean isRequired() {
-		//we want to re-resolve if the component is static and already satisfied
-		//		if (policy.equals("static") && cd.isEligible())
-		//		return true;
-		return (cardinality.charAt(0) == '1');
-	}
-
 	public boolean dynamicBindReference(ServiceReference serviceReference) {
-		if ("static".equals(policy)) {
+		if ("static".equals(referenceDescription.getPolicy())) {
 			return false;
 		}
 		String[] serviceName = (String[]) (serviceReference.getProperty("objectClass"));
@@ -160,7 +113,7 @@ public class Reference {
 			return false;
 		}
 		int currentRefCount = serviceReferences.size();
-		if (currentRefCount < cardinalityHigh) {
+		if (currentRefCount < referenceDescription.getCardinalityHigh()) {
 			return true;
 		}
 		return false;
@@ -170,7 +123,7 @@ public class Reference {
 	public boolean dynamicUnbindReference(ServiceReference serviceReference) {
 
 		// nothing dynamic to do if static
-		if ("static".equals(policy)) {
+		if ("static".equals(referenceDescription.getPolicy())) {
 			return false;
 		}
 
@@ -228,7 +181,7 @@ public class Reference {
 		Iterator it = enabledCDPs.iterator();
 		while (it.hasNext()) {
 			ComponentDescriptionProp cdpRefLookup = (ComponentDescriptionProp) it.next();
-			List provideList = cdpRefLookup.getServicesProvided();
+			List provideList = cdpRefLookup.getComponentDescription().getServicesProvided();
 
 			if (provideList.contains(this.getReferenceDescription().getInterfacename())) {
 				//check the target field

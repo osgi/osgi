@@ -21,20 +21,36 @@ package org.eclipse.osgi.component.model;
  * @version $Revision$
  */
 public class ReferenceDescription {
+	
+	private static final int CARDINALITY_HIGH_DEFAULT = 1;
+	private static final int CARDINALITY_LOW_DEFAULT = 1;
+	static final String POLICY_DEFAULT = "static";
+	
 	protected ComponentDescription parent;
 	protected String name;
 	protected String interfacename;
-	protected String cardinality;
+
+	// Cardinality indicates the number of services, matching this
+	// reference,
+	// which will bind to this Service Component. Possible values are:
+	// 0..1, 0..n, 1..1 (i.e. exactly one), 1..n (i.e. at least one).
+	// This attribute is optional. If it is not specified, then a
+	// cardinality
+	// of “1..1” is used.
+	protected int cardinalityHigh;
+	protected int cardinalityLow;
 	protected String policy;
 	protected String target;
 	protected String bind;
 	protected String unbind;
-	
+
 	public ReferenceDescription(ComponentDescription parent) {
 		this.parent = parent;
-		cardinality = "1..1";
-		policy = "static";
-
+		
+		//set defaults
+		cardinalityHigh = CARDINALITY_HIGH_DEFAULT;
+		cardinalityLow = CARDINALITY_LOW_DEFAULT;
+		policy = POLICY_DEFAULT;
 	}
 
 	/**
@@ -54,16 +70,29 @@ public class ReferenceDescription {
 	/**
 	 * @return Returns the cardinality.
 	 */
-	public String getCardinality() {
-		return cardinality;
+	public int getCardinalityHigh() {
+		return cardinalityHigh;
 	}
-
+	
 	/**
 	 * @param cardinality The cardinality to set.
 	 */
 	public void setCardinality(String cardinality) {
-		// TODO validate
-		this.cardinality = cardinality;
+		if (cardinality.equals("0..1")) {
+			cardinalityLow = 0;
+			cardinalityHigh = 1;
+		} else if (cardinality.equals("0..n")) {
+			cardinalityLow = 0;
+			cardinalityHigh = 999999999; //infinite
+		} else if (cardinality.equals("1..1")) {
+			cardinalityLow = 1;
+			cardinalityHigh = 1;
+		} else if (cardinality.equals("1..n")) {
+			cardinalityLow = 1;
+			cardinalityHigh = 999999999;
+		} else {
+			//TODO throw exception?
+		}
 	}
 
 	/**
@@ -142,4 +171,8 @@ public class ReferenceDescription {
 		return parent;
 	}
 	
+	//	if the cardinality is "1..1" or "1..n" then this refernce is required
+	public boolean isRequired() {
+		return (cardinalityLow == 1);
+	}	
 }

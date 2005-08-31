@@ -54,8 +54,7 @@ public class Main implements BundleActivator, BundleTrackerCustomizer, WorkDispa
 
 	protected Hashtable bundleToComponentDescriptions;
 	protected Hashtable bundleToLastModified;
-	protected List enableCDs;
-	
+		
 	/**
 	 * Utility reference to Log class, necessary for communication with Log
 	 * Service.
@@ -151,8 +150,11 @@ public class Main implements BundleActivator, BundleTrackerCustomizer, WorkDispa
 		//compare the two and if changed ( or if first time ) update the maps
 		if ((!bundleLastModified.equals(bundleOldLastModified)) || (bundleOldLastModified == null)) {
 
+			//get the BundleContext for this bundle (framework impl dependent)
+			BundleContext bundleContext = framework.getBundleContext(bundle);
+			
 			// get all ComponentDescriptions for this bundle
-			List componentDescriptions = cache.getComponentDescriptions(bundle);
+			List componentDescriptions = cache.getComponentDescriptions(bundleContext);
 
 			// update map of bundle to ComponentDescriptions
 			bundleToComponentDescriptions.put(bundleID, componentDescriptions);
@@ -176,7 +178,6 @@ public class Main implements BundleActivator, BundleTrackerCustomizer, WorkDispa
 
 		//publish all CDs to be enabled, to resolver (add to the workqueue and publish event)
 		workQueue.enqueueWork(this, ADD, enableComponentDescriptions);
-		//workQueue.enqueueWork(this, ADD, bundle);
 		return value;
 	}
 
@@ -235,9 +236,6 @@ public class Main implements BundleActivator, BundleTrackerCustomizer, WorkDispa
 		bundleToComponentDescriptions.remove(bundleID);
 		bundleToLastModified.remove(bundleID);
 
-		// publish event to resolver ( or dissolver if there is one) with list of CD's to disable 
-		//workQueue.enqueueWork(this, REMOVE, bundle);
-		//workQueue.enqueueWork(this, REMOVE, disableComponentDescriptions);
 		resolver.disableComponents(disableComponentDescriptions);
 		return;
 	}
@@ -345,7 +343,7 @@ public class Main implements BundleActivator, BundleTrackerCustomizer, WorkDispa
 			//for each ComponentDescription in list
 			while (it.hasNext()) {
 				componentDescription = (ComponentDescription) it.next();
-				//bundleID = new Long (componentDescription.getBundle().getBundleId());
+				//bundleID = new Long (cd.getBundle().getBundleId());
 
 				if (componentDescription.isEnabled()) {
 
@@ -384,7 +382,7 @@ public class Main implements BundleActivator, BundleTrackerCustomizer, WorkDispa
 			while (it.hasNext()) {
 				ComponentDescription componentDescription = (ComponentDescription) it.next();
 
-				//bundleID = new Long (componentDescription.getBundle().getBundleId());
+				//bundleID = new Long (cd.getBundle().getBundleId());
 
 				//find the ComponentDescription with the specified name
 				if (componentDescription.getName().equals(name)) {
@@ -402,7 +400,6 @@ public class Main implements BundleActivator, BundleTrackerCustomizer, WorkDispa
 		}
 
 		// publish to resolver the list of CDs to disable
-		//workQueue.enqueueWork(this, REMOVE, disableComponentDescriptions);
 		resolver.disableComponents(disableComponentDescriptions);
 		return;
 	}
@@ -446,7 +443,7 @@ public class Main implements BundleActivator, BundleTrackerCustomizer, WorkDispa
 	/**
 	 * Validate the Component Description
 	 * 
-	 * @param componentDescription to be validated
+	 * @param cd to be validated
 	 * 
 	 */
 	public void validate(ComponentDescription componentDescription) {
@@ -456,24 +453,24 @@ public class Main implements BundleActivator, BundleTrackerCustomizer, WorkDispa
 				(componentDescription.getService() != null) &&
 				(componentDescription.getService().isServicefactory())) {
 			componentDescription.setValid(false);
-			Log.log(1, "validate componentDescription: ", new Throwable("invalid to specify both ComponentFactory and ServiceFactory"));
+			Log.log(1, "validate cd: ", new Throwable("invalid to specify both ComponentFactory and ServiceFactory"));
 		} else if (
 				(componentDescription.isImmediate()) &&
 				(componentDescription.getService() != null) &&
 				(componentDescription.getService().isServicefactory())) {
 			componentDescription.setValid(false);
-			Log.log(1, "validate componentDescription: ", new Throwable("invalid to specify both immediate and ServiceFactory"));
+			Log.log(1, "validate cd: ", new Throwable("invalid to specify both immediate and ServiceFactory"));
 		} else if (
 				(componentDescription.isImmediate()) &&
 				(componentDescription.getFactory() != null )) {
 			componentDescription.setValid(false);
-			Log.log(1, "validate componentDescription: ", new Throwable("invalid to specify both immediate and ComponentFactory"));
+			Log.log(1, "validate cd: ", new Throwable("invalid to specify both immediate and ComponentFactory"));
 		} else if (
 				(!componentDescription.isImmediate()) &&
 				(componentDescription.getService() == null ) &&
 				(componentDescription.getFactory() == null )) {
 			componentDescription.setValid(false);
-			Log.log(1, "validate componentDescription: ", new Throwable("invalid set immediate to false and provide no Service"));
+			Log.log(1, "validate cd: ", new Throwable("invalid set immediate to false and provide no Service"));
 		} else {
 			componentDescription.setValid(true);
 		}

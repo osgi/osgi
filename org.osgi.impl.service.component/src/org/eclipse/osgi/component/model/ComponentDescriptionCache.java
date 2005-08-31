@@ -17,7 +17,7 @@ import java.util.List;
 
 import org.eclipse.osgi.component.Main;
 import org.eclipse.osgi.component.parser.Parser;
-import org.osgi.framework.Bundle;
+import org.osgi.framework.BundleContext;
 
 /**
  *
@@ -48,9 +48,9 @@ public class ComponentDescriptionCache {
 	 * @param bundle Bundle for which component description are to be returns
 	 * @return An array list of the component descriptions for the specified bundle.
 	 */
-	public List getComponentDescriptions(Bundle bundle) {
+	public List getComponentDescriptions(BundleContext bundleContext) {
 		// The cache is not yet implement, so we always parse the XML.
-		return parser.getComponentDescriptions(bundle);
+		return parser.getComponentDescriptions(bundleContext);
 	}
 
 	public void dispose() {

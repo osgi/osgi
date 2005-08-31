@@ -14,12 +14,13 @@
  */
 package org.eclipse.osgi.impl.service.component;
 
+import java.util.Collections;
 import java.util.Dictionary;
-import org.eclipse.osgi.component.instance.InstanceProcess;
-import org.eclipse.osgi.component.model.ComponentDescription;
+import java.util.Enumeration;
+import java.util.Hashtable;
+
+import org.eclipse.osgi.component.Main;
 import org.eclipse.osgi.component.model.ComponentDescriptionProp;
-import org.osgi.framework.BundleContext;
-import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.component.ComponentException;
 import org.osgi.service.component.ComponentFactory;
 import org.osgi.service.component.ComponentInstance;
@@ -38,12 +39,8 @@ public class ComponentFactoryImpl implements ComponentFactory {
 	/* set this to true to compile in debug messages */
 	static final boolean DEBUG = true;
 
-	ComponentDescriptionProp componentDescriptionProp;
-	ComponentDescription componentDescription;
-	ServiceRegistration serviceRegistration;
-	BundleContext bundleContext;
-	InstanceProcess instanceProcess;
-	boolean registerService = false;
+	private ComponentDescriptionProp cdp;
+	private Main main;
 
 	/**
 	 * ComponentFactoryImpl
@@ -52,16 +49,9 @@ public class ComponentFactoryImpl implements ComponentFactory {
 	 * @param componentDescriptionProp the ComponentDescription Object with Properties
 	 * @param buildDispose 
 	 */
-	public ComponentFactoryImpl(BundleContext bundleContext, ComponentDescriptionProp component, InstanceProcess instanceProcess) {
-		this.componentDescriptionProp = component;
-		this.componentDescription = component.getComponentDescription();
-		this.bundleContext = bundleContext;
-		this.instanceProcess = instanceProcess;
-
-		//if the Component Description includes a Service 
-		if (componentDescription.getService() != null)
-			registerService = true;
-
+	public ComponentFactoryImpl(ComponentDescriptionProp cdp, Main main) {
+		this.cdp = cdp;
+		this.main = main;
 	}
 
 	/**
@@ -77,24 +67,36 @@ public class ComponentFactoryImpl implements ComponentFactory {
 	 * @throws ComponentException If the Service Component Runtime is unable to
 	 *         activate the component configuration.
 	 */
-	public ComponentInstance newInstance(Dictionary properties) {
+	public ComponentInstance newInstance(Dictionary newProperties) {
 
-		ComponentInstance instance = null;
-		try {
-			instance = instanceProcess.buildDispose.build(null, componentDescriptionProp, properties);
-
-			if (registerService) {
-				
-				serviceRegistration = instanceProcess.registerServices(bundleContext, componentDescriptionProp,properties);
-				ComponentInstanceImpl componentInstanceImpl = (ComponentInstanceImpl) instance;
-				componentInstanceImpl.setServiceRegistration(serviceRegistration);
-			}
-		} catch (ComponentException e) {
-			System.err.println("Could not create instance of " + componentDescription + " with properties " + properties);
-			e.printStackTrace();
-			throw e;
+		//merge properties
+		Hashtable properties = (Hashtable)cdp.getProperties().clone();
+		Enumeration propsEnum = newProperties.keys();
+		while(propsEnum.hasMoreElements()) {
+			Object key = propsEnum.nextElement();
+			properties.put(key,newProperties.get(key));
 		}
+		
+		//create a new cdp (adds to resolver enabledCDPs list)
+		ComponentDescriptionProp newCDP = main.resolver.mapFactoryInstance(cdp.getComponentDescription(),properties);
 
-		return instance;
+		//try to resolve new cdp - adds to resolver's satisfied list
+		if(!main.resolver.isEligible(newCDP)) {
+			main.resolver.enabledCDPs.remove(newCDP); //was added by mapFactoryInstance
+			throw new ComponentException("Could not resolve instance of " + cdp + " with properties " + properties);
+		}
+		
+		//if new cdp resolves, send it to instance process (will register service
+		//if it has one)
+		main.resolver.instanceProcess.buildInstances(Collections.singletonList(newCDP));
+		
+		//get instance of new cdp to return
+		
+		if (newCDP.getComponentDescription().isImmediate()) {
+			//if cdp is immediate then instanceProcess created one
+			return (ComponentInstance)newCDP.getInstances().get(0);
+		}
+		
+		return main.resolver.instanceProcess.buildDispose.build(null, newCDP);
 	}
 }

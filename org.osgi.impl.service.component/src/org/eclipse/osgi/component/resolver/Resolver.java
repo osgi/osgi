@@ -14,15 +14,24 @@
 
 package org.eclipse.osgi.component.resolver;
 
+import java.io.BufferedInputStream;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Dictionary;
+import java.util.Enumeration;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
+import java.util.Map;
+import java.util.Properties;
 import java.util.Set;
 
 import org.eclipse.osgi.component.Log;
@@ -30,13 +39,16 @@ import org.eclipse.osgi.component.Main;
 import org.eclipse.osgi.component.instance.InstanceProcess;
 import org.eclipse.osgi.component.model.ComponentDescription;
 import org.eclipse.osgi.component.model.ComponentDescriptionProp;
+import org.eclipse.osgi.component.model.PropertyDescription;
+import org.eclipse.osgi.component.model.PropertyResourceDescription;
+import org.eclipse.osgi.component.model.PropertyValueDescription;
 import org.eclipse.osgi.component.model.ProvideDescription;
 import org.eclipse.osgi.component.model.ReferenceDescription;
-import org.eclipse.osgi.component.model.ServiceDescription;
 import org.eclipse.osgi.component.workqueue.WorkDispatcher;
 import org.eclipse.osgi.component.workqueue.WorkQueue;
 import org.osgi.framework.AllServiceListener;
 import org.osgi.framework.Bundle;
+import org.osgi.framework.Constants;
 import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceEvent;
 import org.osgi.framework.ServicePermission;
@@ -44,6 +56,7 @@ import org.osgi.framework.ServiceReference;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.cm.Configuration;
 import org.osgi.service.cm.ConfigurationAdmin;
+import org.osgi.service.component.ComponentConstants;
 import org.osgi.service.component.ComponentException;
 import org.osgi.service.log.LogService;
 import org.osgi.util.tracker.ServiceTracker;
@@ -60,6 +73,9 @@ public class Resolver implements AllServiceListener, WorkDispatcher {
 
 	/* set this to true to compile in debug messages */
 	static final boolean DEBUG = false;
+
+	/** next free component id. */
+	static protected long componentid;
 
 	/**
 	 * The ConfigurationListener class
@@ -89,9 +105,9 @@ public class Resolver implements AllServiceListener, WorkDispatcher {
 
 	protected ComponentProperties componentProperties = null;
 
-	protected List cds;
-
+	//note satisfiedCDPs is a subset of enabledCDPs
 	public List enabledCDPs, satisfiedCDPs;
+	public Map enabledCDsByName;
 
 	protected ServiceRegistration configListener;
 
@@ -106,11 +122,13 @@ public class Resolver implements AllServiceListener, WorkDispatcher {
 	public Resolver(Main main) {
 		this.main = main;
 
+		componentid = 1;
+		
 		// for now use Main's workqueue
 		workQueue = main.workQueue;
 		enabledCDPs = new ArrayList();
 		satisfiedCDPs = new ArrayList();
-		cds = new ArrayList();
+		enabledCDsByName = new HashMap();
 		instanceProcess = new InstanceProcess(main);
 		componentProperties = new ComponentProperties(main);
 		addServiceListener();
@@ -152,11 +170,14 @@ public class Resolver implements AllServiceListener, WorkDispatcher {
 		if (componentDescriptions != null) {
 			Iterator it = componentDescriptions.iterator();
 			while (it.hasNext()) {
-				ComponentDescription componentDescription = (ComponentDescription) it.next();
-
+				ComponentDescription cd = (ComponentDescription) it.next();
+				
+				//add to our enabled lookup list
+				enabledCDsByName.put(cd.getName(),cd);
+				
 				// check for a Configuration properties for this component
 				try {
-					config = componentProperties.getConfiguration(componentDescription.getName());
+					config = componentProperties.getConfiguration(cd.getName());
 				} catch (IOException e) {
 					//Log it and continue
 					Log.log(1, "[SCR] IOException when getting Configuration Properties. ", e);
@@ -164,10 +185,8 @@ public class Resolver implements AllServiceListener, WorkDispatcher {
 
 				// if no Configuration
 				if (config == null) {
-					Dictionary props = new Hashtable();
-					addComponentName(componentDescription, props);
 					// create ComponentDescriptionProp
-					map(componentDescription, props);
+					map(cd, null);
 
 				} else {
 
@@ -175,7 +194,7 @@ public class Resolver implements AllServiceListener, WorkDispatcher {
 					if (config.getFactoryPid() != null) {
 
 						// if ComponentFactory is specified
-						if (componentDescription.getFactory() != null) {
+						if (cd.getFactory() != null) {
 							throw new ComponentException("incompatible to specify both ComponentFactory and ManagedServiceFactory are incompatible");
 						}
 						
@@ -188,25 +207,15 @@ public class Resolver implements AllServiceListener, WorkDispatcher {
 							Log.log(1, "[SCR] IOException when getting CM Configurations. ", e);
 						}
 						
-						// for each MSF set of properties(P), map(CD, new CD+P(CD,P))
+						// for each MSF set of properties(P), map(CD,P)
 						if (configs != null) {
-							for (int index = 0; index < configs.length; index++) {
-								Dictionary props = configs[index].getProperties();
-								if (props == null) {
-									props = new Hashtable();
-								}
-								addComponentName(componentDescription, props);
-								map(componentDescription, configs[index].getProperties());
+							for (int i = 0; i < configs.length; i++) {
+								map(cd, configs[i].getProperties());
 							}
 						}
 					} else {
 						// if Service
-						Dictionary props = config.getProperties();
-						if (props == null) {
-							props = new Hashtable();
-						}
-						addComponentName(componentDescription, props);
-						map(componentDescription, props);
+						map(cd, config.getProperties());
 					}
 				}
 			}
@@ -218,52 +227,152 @@ public class Resolver implements AllServiceListener, WorkDispatcher {
 	/**
 	 * Create the CDP and add to the maps
 	 * 
-	 * @param componentDescription
+	 * @param cd
 	 * @param properties
 	 * @throws IOException
 	 */
-	public void map(ComponentDescription componentDescription, Dictionary properties) {
-
-		cds.add(componentDescription);
-		List references = new ArrayList();
+	public ComponentDescriptionProp map(ComponentDescription cd, Dictionary configAdminProps) {
+		return doMap(cd,configAdminProps,cd.getFactory()!=null);
+	}
+	public ComponentDescriptionProp mapFactoryInstance(ComponentDescription cd, Dictionary configAdminProps) {
+		return doMap(cd,configAdminProps,false);
+	}
+	private ComponentDescriptionProp doMap(ComponentDescription cd, Dictionary configAdminProps, boolean componentFactory) {
 
 		// Create CD+P
-		ComponentDescriptionProp componentDescriptionProp = new ComponentDescriptionProp(componentDescription, properties);
-		componentDescription.addComponentDescriptionProp(componentDescriptionProp);
-
-		List services = new ArrayList();
-		ServiceDescription serviceDescription = componentDescription.getService();
-		if (serviceDescription != null) {
-			ProvideDescription[] provideDescription = serviceDescription.getProvides();
-			for (int i = 0; i < provideDescription.length; i++) {
-				services.add(provideDescription[i].getInterfacename());
-			}
-
-			componentDescriptionProp.setServiceProvided(services);
-		}
-
-		// Get all the required service reference descriptions for this
-		// ComponentDescription
-		ReferenceDescription[] referenceDescriptions = componentDescription.getReferences();
-
+		
+		//calculate the CDP's properties
+		Hashtable properties = initProperties(cd,configAdminProps);
+		
 		// for each Reference Description, create a reference object
-		if (referenceDescriptions.length > 0) {
-			int i = 0;
-			while (i < referenceDescriptions.length) {
+		List references = new ArrayList();
+		Iterator it = cd.getReferenceDescriptions().iterator();
+		while(it.hasNext()) {
+			ReferenceDescription referenceDesc = (ReferenceDescription)it.next();
 
-				// create new Reference Object and add to CD+P:ref map
-				Reference ref = new Reference(referenceDescriptions[i], properties);
-				references.add(ref);
-				i++;
-			}
-
-			// add to componentDescriptionPropToRefMap
-			componentDescriptionProp.setReferences(references);
-
-		}
+			// create new Reference Object and add to CD+P:ref map
+			Reference ref = new Reference(referenceDesc, properties);
+			references.add(ref);
+		
+		} 
+		references = !references.isEmpty() ? references : Collections.EMPTY_LIST;
+				
+		ComponentDescriptionProp cdp = new ComponentDescriptionProp(cd, references, properties,componentFactory);
+		cd.addComponentDescriptionProp(cdp);
 
 		// add CD+P to set
-		enabledCDPs.add(componentDescriptionProp);
+		enabledCDPs.add(cdp);
+		
+		return cdp;
+	}
+	
+	/** 
+	 * Initialize Properties for a CD+P 
+	 * 
+	 * The property elements provide default or supplemental property values 
+	 * if not overridden by the properties retrieved from Configuration Admin.
+	 * 
+	 * The property and properties elements are processed in top to bottom order.
+	 * This allows later elements to override property values defined by earlier 
+	 * elements.  There can be many property and properties elements and they may be 
+	 * interleaved.
+	 * 
+	 * @return Dictionary properties
+	 */
+	private Hashtable initProperties(ComponentDescription cd, Dictionary configAdminProps){
+		
+		Hashtable properties = new Hashtable();
+
+		//0) add Reference target properties
+		Iterator it = cd.getReferenceDescriptions().iterator();
+		while(it.hasNext()) {
+			ReferenceDescription referenceDesc = (ReferenceDescription)it.next();
+			if (referenceDesc.getTarget() != null) {
+				properties.put(
+						referenceDesc.getName() + ".target",
+						referenceDesc.getTarget()
+						);
+			}
+		}
+		
+		//1) get properties from Service Component XML
+		PropertyDescription[] propertyDescriptions = cd.getProperties();
+		for (int i = 0; i < propertyDescriptions.length; i++) {
+			if (propertyDescriptions[i] instanceof PropertyValueDescription) {
+				PropertyValueDescription propvalue = (PropertyValueDescription) propertyDescriptions[i];
+				properties.put(propvalue.getName(), propvalue.getValue());
+			} else {
+				//read from seperate properties file
+				properties.putAll(loadPropertyFile(cd,((PropertyResourceDescription) propertyDescriptions[i]).getEntry()));
+			}
+		}
+
+		//2) Add configAdmin properties
+		if (configAdminProps != null) {
+			Enumeration keys = configAdminProps.keys();
+			while(keys.hasMoreElements()) {
+				Object key = keys.nextElement();
+				properties.put(key,configAdminProps.get(key));
+			}
+		}
+		
+		//add component.name and component.id (cannot be overridden)
+		properties.put(ComponentConstants.COMPONENT_NAME,cd.getName());
+		properties.put(ComponentConstants.COMPONENT_ID, new Long(getNextComponentId()));
+		
+		//add component.factory if it's a factory
+		if (cd.getFactory() != null) {
+			properties.put(ComponentConstants.COMPONENT_FACTORY, cd.getFactory());
+		}
+		
+		//add ObjectClass so we can match target filters before actually being registered
+		List servicesProvided = cd.getServicesProvided();
+		if (!servicesProvided.isEmpty()) {
+			properties.put(Constants.OBJECTCLASS, servicesProvided.toArray(new String [servicesProvided.size()]));
+		}
+
+		return properties;
+	}
+	
+	/**
+	 * Get the Service Component properties from a properties entry file 
+	 * 
+	 * @param propertyEntryName - the name of the properties file
+	 */
+	static private Hashtable loadPropertyFile(ComponentDescription cd, String propertyEntryName) {
+
+		URL url = null;
+		Properties props = new Properties();
+
+		url = cd.getBundleContext().getBundle().getEntry(propertyEntryName);
+		if (url == null) {
+			throw new ComponentException("Properties entry file " + propertyEntryName + " cannot be found");
+		}
+
+		try {
+			InputStream in = null;
+			File file = new File(propertyEntryName);
+		
+			if (file.exists()) {
+				//throws FileNotFoundException if it's not there or no read access
+				in = new FileInputStream(file);
+			} else {
+				in = url.openStream();
+			}
+			if (in != null) {
+				props.load(new BufferedInputStream(in));
+				in.close();
+			} else {
+				//TODO log something?
+				if (DEBUG)
+					System.out.println("Unable to find properties file " + propertyEntryName);
+			}
+		} catch (IOException e) {
+			throw new ComponentException("Properties entry file " + propertyEntryName + " cannot be read");
+		}
+
+		return props;
+
 	}
 
 	/**
@@ -279,27 +388,30 @@ public class Resolver implements AllServiceListener, WorkDispatcher {
 	 * @param componentDescriptions
 	 */
 	public void disableComponents(List componentDescriptions) {
-		List removeList = new ArrayList();
 
 		// Received list of CDs to disable
 		if (componentDescriptions != null) {
 			Iterator it = componentDescriptions.iterator();
 			while (it.hasNext()) {
 
-				// get the first CD
-				ComponentDescription componentDescription = (ComponentDescription) it.next();
+				// get the CD
+				ComponentDescription cd = (ComponentDescription) it.next();
 
-				removeList.addAll(componentDescription.getComponentDescriptionProps());
-				componentDescription.clearComponentDescriptionProps();
+				disposeInstances((List)((ArrayList)cd.getComponentDescriptionProps()).clone());
+				
+				cd.clearComponentDescriptionProps();
+				
+				enabledCDsByName.remove(cd.getName());
 			}
-
-			// dispose of all instances for this CDP
-			instanceProcess.disposeInstances(removeList);
-
-			satisfiedCDPs.removeAll(removeList);
-			enabledCDPs.removeAll(removeList);
 			
 		}
+	}
+	
+	public void disposeInstances(List cdps) {
+		//unregister, deactivate, and unbind
+		satisfiedCDPs.removeAll(cdps);
+		enabledCDPs.removeAll(cdps);
+		instanceProcess.disposeInstances(cdps);
 	}
 
 	/**
@@ -405,6 +517,30 @@ public class Resolver implements AllServiceListener, WorkDispatcher {
 	}
 
 	/**
+	 * Check if a particular CDP is eligible.  Also checks for circularity.
+	 * If cdp is eligible it is added to satisfiedCDPs list, but not sent to instance
+	 * process
+	 * @param cdp
+	 * @return
+	 */
+	public boolean isEligible(ComponentDescriptionProp cdp) {
+
+		//we added a CDP, so check for circularity and mark
+		//cycles
+		resolveCycles();
+
+		//get list of newly satisfied CDPs and build them
+		List newlySatisfiedCDPs = resolveSatisfied();
+		newlySatisfiedCDPs.removeAll(satisfiedCDPs);
+		
+		if (!newlySatisfiedCDPs.contains(cdp)) {
+			return false;
+		}
+		satisfiedCDPs.add(cdp);
+		return true;
+		
+	}
+	/**
 	 * Return list of components which are satisfied
 	 * @return
 	 */
@@ -416,12 +552,29 @@ public class Resolver implements AllServiceListener, WorkDispatcher {
 			ComponentDescriptionProp cdp = (ComponentDescriptionProp) it.next();
 			ComponentDescription cd = cdp.getComponentDescription();
 
+			// check if all the services needed by the CDP are available
+			List refs = cdp.getReferences();
+			Iterator iterator = refs.iterator();
+			boolean hasProviders = true;
+			while (iterator.hasNext()) {
+				Reference reference = (Reference) iterator.next();
+				if (reference != null) {
+					if (reference.getReferenceDescription().isRequired() && 
+						!reference.hasProvider(cdp.getComponentDescription().getBundleContext())) {
+						hasProviders=false;
+						break;
+					}
+				}
+			}
+			if (!hasProviders) 
+				continue;
+
 			//check if the bundle providing the service has permission to register the provided interface(s)
 			//if a service is provided
-			//TODO we should move this out of here
-			if (cd.getService() != null) {
+			//TODO we can cache the ServicePermission objects
+			if (cd.getService() != null && System.getSecurityManager() != null) {
 				ProvideDescription[] provides = cd.getService().getProvides();
-				Bundle bundle = cd.getBundle();
+				Bundle bundle = cd.getBundleContext().getBundle();
 				boolean hasPermission = true;
 				for (int i=0;i<provides.length;i++) {
 					//make sure bundle has permission to register the service
@@ -433,22 +586,6 @@ public class Resolver implements AllServiceListener, WorkDispatcher {
 				if (!hasPermission)
 					continue;
 			}
-			// check if all the services needed by the CDP are available
-			List refs = cdp.getReferences();
-			Iterator iterator = refs.iterator();
-			boolean hasProviders = true;
-			while (iterator.hasNext()) {
-				Reference reference = (Reference) iterator.next();
-				if (reference != null) {
-					if (reference.cardinalityLow == 1 && 
-						!reference.hasProvider(main.framework.getBundleContext(cdp.getComponentDescription().getBundle()))) {
-						hasProviders=false;
-						break;
-					}
-				}
-			}
-			if (!hasProviders) 
-				continue;
 			
 			//we have permission and providers - this CDP is satisfied
 			resolvedSatisfiedCDPs.add(cdp);
@@ -511,32 +648,38 @@ public class Resolver implements AllServiceListener, WorkDispatcher {
 	 *      java.lang.Object)
 	 */
 	public void dispatchWork(int workAction, Object workObject) {
+		Iterator it;
 		switch (workAction) {
 			case BUILD :
-				instanceProcess.buildInstances((List) workObject);
+				//only build if cdps are still satisfied
+				List queueCDPs = (List)workObject;
+				List cdps = new ArrayList(queueCDPs.size());
+				it = queueCDPs.iterator();
+				while(it.hasNext()) {
+					ComponentDescriptionProp cdp = (ComponentDescriptionProp)it.next();
+					if (this.satisfiedCDPs.contains(cdp)) {
+						cdps.add(cdp);
+					}
+				}
+				if (!cdps.isEmpty()) {
+					instanceProcess.buildInstances(cdps);
+				}
 				break;
 			case DYNAMICBIND :
-				instanceProcess.dynamicBind((Hashtable) workObject);
+				//only dynamicBind if cdps are still satisfied
+				Hashtable serviceTable = (Hashtable)workObject;
+				it = serviceTable.values().iterator();
+				while(it.hasNext()) {
+					if(!this.satisfiedCDPs.contains(it.next())) {
+						//modifies underlying hashtable
+						it.remove();
+					}
+				}
+				if (!serviceTable.isEmpty()) {
+					instanceProcess.dynamicBind(serviceTable);
+				}
 				break;
 		}
-	}
-
-	/**
-	 * Called from Instance Process when dispose is complete
-	 * 
-	 * @param List of componentDescriptionProps that have been disposed of
-	 */
-	public void disposedComponents(List componentDescriptionProps) {
-		//TODO does any action need to take place here?
-	}
-
-	/**
-	 * Called from Instance Process when build is complete
-	 * 
-	 * @param List of componentDescriptionProps that have been built
-	 */
-	public void builtComponents(List componentDescriptionProps) {
-		//TODO does any action need to take place on build complete
 	}
 
 	private Hashtable selectDynamicBind(ServiceReference serviceReference) {
@@ -709,7 +852,7 @@ public class Resolver implements AllServiceListener, WorkDispatcher {
 		ReferenceCDP optionalRefCDP = null;
 		while (cycleIterator.hasNext()) {
 			ReferenceCDP cycleRefCDP = (ReferenceCDP) cycleIterator.next();
-			if (cycleRefCDP.ref.cardinalityLow == 0) {
+			if (!cycleRefCDP.ref.getReferenceDescription().isRequired()) {
 				optionalRefCDP = cycleRefCDP;
 				break;
 			}
@@ -723,9 +866,18 @@ public class Resolver implements AllServiceListener, WorkDispatcher {
 		//add note not to initiate activation of next dependency
 		optionalRefCDP.consumer.setDelayActivateCDPName(optionalRefCDP.producer.getComponentDescription().getName());
 	}
-
-	private void addComponentName(ComponentDescription cd, Dictionary props) {
-		props.put("component.name", cd.getName());
-		props.put("objectClass", cd.getName());
+	
+	/**
+	 * Method to return the next available component id. 
+	 * 
+	 * @return next component id.
+	 */
+	private long getNextComponentId() {
+		synchronized (this){
+			long id = componentid;
+			componentid++;
+			return (id);
+		}
 	}
+
 }

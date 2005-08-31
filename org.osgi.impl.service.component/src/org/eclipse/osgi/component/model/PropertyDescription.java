@@ -25,6 +25,4 @@ public abstract class PropertyDescription {
 	public PropertyDescription(ComponentDescription parent) {
 		this.parent = parent;
 	}
-
-	public abstract Object getProperty(String name);
 }

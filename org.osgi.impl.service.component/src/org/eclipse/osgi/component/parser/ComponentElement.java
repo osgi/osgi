@@ -29,7 +29,7 @@ public class ComponentElement extends DefaultHandler {
 	public ComponentElement(ParserHandler root, Attributes attributes) {
 		this.root = root;
 		this.parent = root;
-		component = new ComponentDescription(root.bundle);
+		component = new ComponentDescription(root.bundleContext);
 		immediateSet = false;
 
 		int size = attributes.getLength();
@@ -109,8 +109,8 @@ public class ComponentElement extends DefaultHandler {
 
 	public void endElement(String uri, String localName, String qName) {
 		
-		// if unset, immediate attribute is false if service element is specified or true otherwise
-		// except if component factory then immediate by default is false
+		//if unset, immediate attribute is false if service element is specified or true otherwise
+		//if component factory then immediate by default is false
 		if (!immediateSet && (component.getFactory() == null)) {
 			component.setImmediate(component.getService() == null);
 		}

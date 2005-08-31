@@ -11,15 +11,15 @@
  * trademarks that are the sole property of the respective owners.
  */
 
+
 package org.eclipse.osgi.component.instance;
 
-import java.util.ArrayList;
-import java.util.Dictionary;
+import java.io.IOException;
+import java.util.Collections;
 import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
-import java.io.IOException;
 
 import org.eclipse.osgi.component.Log;
 import org.eclipse.osgi.component.Main;
@@ -28,21 +28,18 @@ import org.eclipse.osgi.component.model.ComponentDescriptionProp;
 import org.eclipse.osgi.component.resolver.ComponentProperties;
 import org.eclipse.osgi.component.resolver.Reference;
 import org.eclipse.osgi.component.resolver.Resolver;
-import org.eclipse.osgi.component.workqueue.WorkDispatcher;
 import org.eclipse.osgi.component.workqueue.WorkQueue;
-import org.osgi.service.component.ComponentException;
 import org.eclipse.osgi.impl.service.component.ComponentFactoryImpl;
 import org.eclipse.osgi.impl.service.component.ComponentInstanceImpl;
-import org.osgi.framework.BundleContext;
+import org.osgi.framework.Constants;
+import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
 import org.osgi.framework.ServiceRegistration;
-import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.service.cm.Configuration;
 import org.osgi.service.cm.ConfigurationAdmin;
 import org.osgi.service.cm.ConfigurationEvent;
 import org.osgi.service.cm.ConfigurationListener;
-import org.osgi.service.component.ComponentConstants;
-import org.osgi.service.component.ComponentFactory;
+import org.osgi.service.component.ComponentException;
 import org.osgi.util.tracker.ServiceTracker;
 import org.osgi.util.tracker.ServiceTrackerCustomizer;
 
@@ -52,7 +49,7 @@ import org.osgi.util.tracker.ServiceTrackerCustomizer;
  * TODO To change the template for this generated type comment go to
  * Window - Preferences - Java - Code Style - Code Templates
  */
-public class InstanceProcess implements WorkDispatcher, ConfigurationListener, ServiceTrackerCustomizer {
+public class InstanceProcess implements ConfigurationListener, ServiceTrackerCustomizer {
 
 	/* set this to true to compile in debug messages */
 	static final boolean DEBUG = false;
@@ -77,17 +74,8 @@ public class InstanceProcess implements WorkDispatcher, ConfigurationListener, S
 	 */
 	public static final int DISPOSED = 2;
 
-	/** map CDP:serviceRegistration [1:n] */
-	public Hashtable registrations;
-
-	/** map fpid:spids [1:n] */
-	protected Hashtable fpids;
-
 	/** Main SCR class */
 	protected Main main;
-
-	/** map CDP:factory */
-	protected Hashtable factories;
 
 	/** Properties for this Component from the Configuration Admin */
 	protected ComponentProperties componentProperties = null;
@@ -110,9 +98,6 @@ public class InstanceProcess implements WorkDispatcher, ConfigurationListener, S
 
 		//for now use Main's workqueue
 		workQueue = main.workQueue;
-		registrations = new Hashtable();
-		fpids = new Hashtable();
-		factories = new Hashtable();
 		buildDispose = new BuildDispose(main);
 		componentProperties = new ComponentProperties(main);
 		configAdminTracker = new ServiceTracker(main.context, CMADMIN_SERVICE_CLASS, this);
@@ -132,10 +117,7 @@ public class InstanceProcess implements WorkDispatcher, ConfigurationListener, S
 		configAdminTracker = null;
 		buildDispose = null;
 		main = null;
-		factories = null;
 		workQueue = null;
-		registrations = null;
-		fpids = null;
 		componentProperties = null;
 	}
 
@@ -147,63 +129,59 @@ public class InstanceProcess implements WorkDispatcher, ConfigurationListener, S
 
 	public void buildInstances(List componentDescriptionProps) {
 
-		ComponentDescriptionProp componentDescriptionProp;
-		ComponentDescription componentDescription;
+		ComponentDescriptionProp cdp;
+		ComponentDescription cd;
 		String factoryPid = null;
 
 		// loop through CD+P list of enabled
 		if (componentDescriptionProps != null) {
 			Iterator it = componentDescriptionProps.iterator();
 			while (it.hasNext()) {
-				componentDescriptionProp = (ComponentDescriptionProp) it.next();
-				componentDescription = componentDescriptionProp.getComponentDescription();
+				cdp = (ComponentDescriptionProp) it.next();
+				cd = cdp.getComponentDescription();
 				if (DEBUG)
-					System.out.println("InstanceProcess: buildInstances: component name = " + componentDescription.getName());
-
-				BundleContext bundleContext = main.framework.getBundleContext(componentDescription.getBundle());
+					System.out.println("InstanceProcess: buildInstances: component name = " + cd.getName());
 
 				//if component is immediate - create instance immediately
-				if (componentDescription.isImmediate()) {
+				if (cd.isImmediate()) {
 					try {
-						buildDispose.build(null, componentDescriptionProp, null);
+						buildDispose.build(null, cdp);
 					} catch (ComponentException e) {
 						Log.log(1, "[SCR] Error attempting to build Component.", e);
 					} 
 				}
 
 				// ComponentFactory
-				if (componentDescription.getFactory() != null) {
+				if (cdp.isComponentFactory()) {
 					if (DEBUG)
 						System.out.println("InstanceProcess: buildInstances: ComponentFactory");
 					//check if MSF
 					configurationAdmin = componentProperties.getConfigurationAdmin();
 
 					try {
-						Configuration config = configurationAdmin.getConfiguration(componentDescription.getName());
+						Configuration config = configurationAdmin.getConfiguration(cd.getName());
 						if (config != null)
 							factoryPid = config.getFactoryPid();
 					} catch (IOException e) {
 						Log.log(1, "[SCR] Error attempting to create componentFactory. ", e);
 					}
 
-					//if MSF throw exception - can't be ComponentFactory add MSF
+					//if MSF throw exception - can't be ComponentFactory and MSF
 					if (factoryPid != null) {
 						throw new org.osgi.service.component.ComponentException("ManagedServiceFactory and ConfigurationFactory are incompatible");
 					}
-					ComponentFactory factory = new ComponentFactoryImpl(bundleContext, componentDescriptionProp, this);
-					registerComponentFactory(bundleContext, componentDescriptionProp, factory);
+					
+					// if the factory attribute is set on the component element then register a component factory service
+					// for the Service Component on behalf of the Service Component.
+					cdp.setServiceRegistration(cd.getBundleContext().registerService(
+						COMPONENT_FACTORY_CLASS,
+						new ComponentFactoryImpl(cdp, main),
+						cdp.getProperties()
+						));
 
 					// if ServiceFactory or Service
-				} else if (componentDescription.getService() != null) {
-					registrations.put(
-							componentDescriptionProp, 
-							RegisterComponentService.registerService(
-									this, 
-									bundleContext, 
-									componentDescriptionProp, 
-									componentDescription.getService().isServicefactory(), 
-									null)
-								);
+				} else if (cd.getService() != null) {
+					RegisterComponentService.registerService(this, cdp);
 				}
 				
 			}//end while(more componentDescriptionProps)
@@ -219,96 +197,17 @@ public class InstanceProcess implements WorkDispatcher, ConfigurationListener, S
 
 	public void disposeInstances(List componentDescriptionProps) {
 
-		ComponentDescriptionProp componentDescriptionProp;
-		ComponentDescription componentDescription;
 		//	loop through CD+P list to be disposed
 		if (componentDescriptionProps != null) {
 			Iterator it = componentDescriptionProps.iterator();
 			while (it.hasNext()) {
-				componentDescriptionProp = (ComponentDescriptionProp) it.next();
-				componentDescription = componentDescriptionProp.getComponentDescription();
-
-				// if ComponentFactory 
-				if (componentDescription.getFactory() != null) {
-					ServiceRegistration reg = (ServiceRegistration) factories.get(componentDescriptionProp);
-					try {
-						reg.unregister();
-					} catch (IllegalStateException e) {
-						//Service is already unregistered
-						//do nothing
-					}
-				}
-
-				//unregister all services
-				ServiceRegistration serviceRegistration = (ServiceRegistration) registrations.get(componentDescriptionProp);
-				try {
-					if (serviceRegistration != null)
-						serviceRegistration.unregister();
-				} catch (IllegalStateException e) {
-					//Service is already unregistered
-					//do nothing
-				}
-
-				//remove from service registrations list
-				registrations.remove(componentDescriptionProp);
-
+				ComponentDescriptionProp cdp = (ComponentDescriptionProp) it.next();
+				
 				//dispose component
-				buildDispose.disposeComponent(componentDescriptionProp);
+				buildDispose.disposeComponent(cdp);
 			}
 		}
 
-		// when dispose is complete, call back to resolver with list of disposed components
-		workQueue.enqueueWork(this, DISPOSED, componentDescriptionProps);
-	}
-
-	/**Register Services
-	 * 
-	 * @param bundleContext
-	 * @param componentDescriptionProp
-	 * 
-	 */
-
-	public ServiceRegistration registerServices(BundleContext bundleContext, ComponentDescriptionProp componentDescriptionProp, Dictionary props) {
-		ServiceRegistration reg = RegisterComponentService.registerService(this, bundleContext, componentDescriptionProp, false, props);
-		registrations.put(componentDescriptionProp, reg);
-		return reg;
-	}
-
-	/**
-	 * Register the Component Factory
-	 * 
-	 * @param context
-	 * @param componentDescriptionProp
-	 * @param factory
-	 */
-	private void registerComponentFactory(BundleContext context, ComponentDescriptionProp componentDescriptionProp, ComponentFactory factory) {
-		ComponentDescription componentDescription = componentDescriptionProp.getComponentDescription();
-		// if the factory attribute is set on the component element then register a component factory service
-		// for the Service Component on behalf of the Service Component.
-		Hashtable properties = new Hashtable(2);
-		properties.put(ComponentConstants.COMPONENT_NAME, componentDescription.getName());
-		properties.put(ComponentConstants.COMPONENT_FACTORY, componentDescription.getFactory());
-		ServiceRegistration serviceRegistration = context.registerService(COMPONENT_FACTORY_CLASS, factory, properties);
-		factories.put(componentDescriptionProp, serviceRegistration);
-	}
-
-	/* (non-Javadoc)
-	 * @see org.eclipse.osgi.component.workqueue.WorkDispatcher#dispatchWork(int, java.lang.Object)
-	 */
-	public void dispatchWork(int workAction, Object workObject) {
-		//ComponentDescriptionProp componentDescriptionProp = (ComponentDescriptionProp) workObject;
-		List componentDescriptionProps = (List) workObject;
-		switch (workAction) {
-			//			case BUILD_FAILED :
-			//				main.resolver.markFailedInstance(componentDescriptionProp);
-			//				break;
-			case DISPOSED :
-				main.resolver.disposedComponents(componentDescriptionProps);
-				break;
-			case BUILT :
-				main.resolver.builtComponents(componentDescriptionProps);
-				break;
-		}
 	}
 
 	public void dynamicBind(Hashtable serviceTable) {
@@ -396,9 +295,6 @@ public class InstanceProcess implements WorkDispatcher, ConfigurationListener, S
 	public void configurationEvent(ConfigurationEvent event) {
 
 		Configuration[] config = null;
-		ArrayList spids = null;
-		ComponentDescriptionProp componentDescriptionProp;
-		Enumeration keys;
 
 		String pid = event.getPid();
 		if (DEBUG)
@@ -408,106 +304,115 @@ public class InstanceProcess implements WorkDispatcher, ConfigurationListener, S
 		if (DEBUG)
 			System.out.println("fpid = " + fpid);
 
+		
 		switch (event.getType()) {
 			case ConfigurationEvent.CM_UPDATED :
+
+				String filter = (fpid != null ? "(&" : "") +
+						"(" + Constants.SERVICE_PID + "=" + pid + ")" +
+						(fpid != null ? ("(" + ConfigurationAdmin.SERVICE_FACTORYPID + "=" + fpid + "))") : "")
+						;
 
 				// Get the config for this service.pid
 				ConfigurationAdmin cm = (ConfigurationAdmin) configAdminTracker.getService();
 				try {
-					config = cm.listConfigurations("(service.pid=" + pid + ")");
+					config = cm.listConfigurations(filter);
 				} catch (IOException e) {
 					Log.log(1, "[SCR] Error attempting to list CM Configurations ", e);
 				} catch (InvalidSyntaxException e) {
 					Log.log(1, "[SCR] Error attempting to list CM Configurations ", e);
 				}
 
+				//if NOT a factory	
+				if (fpid == null) {
+					
+					//find the spid == component name in the CD list
+					ComponentDescription cd = (ComponentDescription)main.resolver.enabledCDsByName.get(pid);
+					
+					//there is only one CDP for this CD, so we can disable the CD
+					main.resolver.disableComponents(Collections.singletonList(cd));
+					
+					//now re-enable the CD - the resolver will pick up the new config
+					workQueue.enqueueWork(main,Main.ADD,Collections.singletonList(cd));
+								
 				//If a MSF
-				//Register a SF for each new config
-				if (fpid != null) {
-
-					// if fpid is found in list of saved factory pids
-					if (fpids.containsKey(fpid)) {
-
-						// get service pids associated to this factory pid
-						spids = (ArrayList) fpids.get(fpid);
-						if (spids == null)
-							spids = new ArrayList();
-
-						// if a service pid match is found then this is an UPDATE of the properties
-						if (spids.contains(pid)) {
-
-							updateServiceProperties(fpid, config);
-
-							// else this is a NEW config
-						} else {
-
-							//register a new SF with config.getProperties();
-							keys = registrations.keys();
-							while (keys.hasMoreElements()) {
-								componentDescriptionProp = (ComponentDescriptionProp) keys.nextElement();
-								if (fpid.equals(componentDescriptionProp.getComponentDescription().getName())) {
-									BundleContext bundleContext = main.framework.getBundleContext(componentDescriptionProp.getComponentDescription().getBundle());
-									ServiceRegistration t = RegisterComponentService.registerService(this, bundleContext, componentDescriptionProp, false, config[0].getProperties());
-									registrations.put(componentDescriptionProp, t);
-								}
-							}
-							spids.add(pid);
-							fpids.put(fpid, spids);
-						}
-
-						// fpid is not found so create a new entry
-						// Since the config has never been updated before do an update instead of a new
-					} else {
-
-						spids = new ArrayList();
-						spids.add(pid);
-						fpids.put(fpid, spids);
-						updateServiceProperties(fpid, config);
-					}
-
-					// else if NOT a factory	
+				//create a new CDP or update an existing one
 				} else {
+					//find the fpid == component name in the CD list
+					ComponentDescription cd = (ComponentDescription)main.resolver.enabledCDsByName.get(fpid);
+					
+					//get cdp with this PID
+					ComponentDescriptionProp cdp = cd.getComponentDescriptionPropByPID(pid);
+					
+					//if only the no-props cdp exists, replace it
+					if (cdp == null && 
+							cd.getComponentDescriptionProps().size()==1 &&
+							((ComponentDescriptionProp)cd.getComponentDescriptionProps().get(0))
+								.getProperties().get(Constants.SERVICE_PID) == null) {
+						cdp = (ComponentDescriptionProp)cd.getComponentDescriptionProps().get(0);
+					}
+					
+					//if old cdp exists, dispose of it
+					if (cdp != null) {
+						//config already exists - dispose of it
+						cd.removeComponentDescriptionProp(cdp);
+						main.resolver.disposeInstances(Collections.singletonList(cdp));
+					}
+					
+					//create a new cdp (adds to resolver enabledCDPs list)
+					main.resolver.map(cd,config[0].getProperties());
+						
+					//kick the resolver to figure out if CDP is satisfied, etc
+					workQueue.enqueueWork(main,Main.ADD,null);
 
-					//find the spid == implementation name in the CDP list
-					//then get service registration and update properties
-					updateServiceProperties(pid, config);
 				}
 
 				break;
 			case ConfigurationEvent.CM_DELETED :
+				
+				//if not a factory
+				if (fpid == null) {
+					//find the spid == component name in the CD list
+					ComponentDescription cd = (ComponentDescription)main.resolver.enabledCDsByName.get(pid);
+					
+					//there is only one CDP for this CD, so we can disable the CD
+					main.resolver.disableComponents(Collections.singletonList(cd));
+					
+					//now re-enable the CD - the resolver will create CDP with no 
+					//configAdmin properties
+					workQueue.enqueueWork(main,Main.ADD,Collections.singletonList(cd));
+				} else {
+					//config is a factory
 
-				//unregister the Service if the config was deleted
-				String comparePid = fpid == null ? pid : fpid;
-				updateServiceProperties(comparePid, null);
+					//find the fpid == component name in the CD list
+					ComponentDescription cd = (ComponentDescription)main.resolver.enabledCDsByName.get(fpid);
+					
+					//get CDP created for this config (with this PID)
+					ComponentDescriptionProp cdp = cd.getComponentDescriptionPropByPID(pid);
+					
+					//if this was the last CDP created for this factory
+					if (cd.getComponentDescriptionProps().size() == 1) {
 
+						//there is only one CDP for this CD, so we can disable the CD
+						main.resolver.disableComponents(Collections.singletonList(cd));
+						
+						//now re-enable the CD - the resolver will create CDP with no 
+						//configAdmin properties
+						workQueue.enqueueWork(main,Main.ADD,Collections.singletonList(cd));
+
+					} else {
+
+						//we can just dispose this CDP
+						cd.removeComponentDescriptionProp(cdp);
+						disposeInstances(Collections.singletonList(cdp));
+						main.resolver.satisfiedCDPs.remove(cdp);
+						main.resolver.enabledCDPs.remove(cdp);
+
+					}
+				}
 				break;
 		}
 
-	}
-
-	private void updateServiceProperties(String pid, Configuration[] config) {
-
-		Enumeration keys;
-		ServiceRegistration serviceRegistration;
-		ComponentDescriptionProp componentDescriptionProp;
-
-		Dictionary props = null;
-		if (config != null)
-			props = config[0].getProperties();
-
-		//New properties for Service
-		keys = registrations.keys();
-		while (keys.hasMoreElements()) {
-			componentDescriptionProp = (ComponentDescriptionProp) keys.nextElement();
-			if (pid.equals(componentDescriptionProp.getComponentDescription().getName())) {
-				serviceRegistration = (ServiceRegistration) registrations.get(componentDescriptionProp);
-				serviceRegistration.unregister();
-				registrations.remove(componentDescriptionProp);
-				BundleContext bundleContext = main.framework.getBundleContext(componentDescriptionProp.getComponentDescription().getBundle());
-				ServiceRegistration reg = RegisterComponentService.registerService(this, bundleContext, componentDescriptionProp, false, props);
-				registrations.put(componentDescriptionProp, reg);
-			}
-		}
 	}
 
 	/**

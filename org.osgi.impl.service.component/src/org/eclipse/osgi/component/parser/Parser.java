@@ -13,26 +13,27 @@
 
 package org.eclipse.osgi.component.parser;
 
-import java.io.InputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Dictionary;
 import java.util.Enumeration;
 import java.util.List;
 
+import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
-import javax.xml.parsers.ParserConfigurationException;
-import org.xml.sax.SAXException;
 
 import org.eclipse.osgi.component.Log;
 import org.eclipse.osgi.component.Main;
 import org.eclipse.osgi.util.ManifestElement;
 import org.osgi.framework.Bundle;
+import org.osgi.framework.BundleContext;
 import org.osgi.framework.BundleException;
 import org.osgi.service.component.ComponentConstants;
 import org.osgi.util.tracker.ServiceTracker;
+import org.xml.sax.SAXException;
 
 /**
  * 
@@ -61,13 +62,13 @@ public class Parser {
 		parserTracker.close();
 	}
 
-	public List getComponentDescriptions(Bundle bundle) {
-		ManifestElement[] xml = parseManifestHeader(bundle);
+	public List getComponentDescriptions(BundleContext bundleContext) {
+		ManifestElement[] xml = parseManifestHeader(bundleContext.getBundle());
 		int length = xml.length;
 		List result = new ArrayList(length);
 
 		for (int i = 0; i < length; i++) {
-			List components = parseComponentDescription(main, bundle, xml[i].getValue());
+			List components = parseComponentDescription(bundleContext, xml[i].getValue());
 			result.addAll(components);
 		}
 
@@ -98,11 +99,12 @@ public class Parser {
 	 * @param bundle Bundle
 	 * @param xml String
 	 */
-	public List parseComponentDescription(Main main, Bundle bundle, String xml) {
+	public List parseComponentDescription(BundleContext bundleContext, String xml) {
 		List result = new ArrayList();
 		int fileIndex = xml.lastIndexOf('/');
+		String path = fileIndex != -1 ? xml.substring(0,fileIndex) : "/"; 
 		try {
-			Enumeration urls = bundle.findEntries(xml.substring(0,fileIndex),xml.substring(fileIndex+1), false);
+			Enumeration urls = bundleContext.getBundle().findEntries(path,xml.substring(fileIndex+1), false);
 			if (urls == null || !urls.hasMoreElements()) {
 				throw new BundleException("resource not found: " + xml);
 			}
@@ -112,7 +114,7 @@ public class Parser {
 			parserFactory.setNamespaceAware(true);
 			parserFactory.setValidating(false);
 			SAXParser saxParser = parserFactory.newSAXParser();
-			saxParser.parse(is, new ParserHandler(main, bundle, result));
+			saxParser.parse(is, new ParserHandler(main, bundleContext, result));
 		} catch (IOException e) {
 			Log.log(1, "[SCR] IOException attempting to parse ComponentDescription XML. ", e);
 		} catch (BundleException e) {

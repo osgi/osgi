@@ -93,7 +93,7 @@ public class ReferenceElement extends DefaultHandler {
 
 	public void endElement(String uri, String localName, String qName) {
 		ComponentDescription component = parent.getComponentDescription();
-		component.addReference(reference);
+		component.addReferenceDescription(reference);
 		root.setHandler(parent);
 	}
 }

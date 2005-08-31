@@ -19,7 +19,6 @@ import java.security.PrivilegedAction;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Dictionary;
-import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.List;
 
@@ -80,9 +79,6 @@ public class ComponentContextImpl implements ComponentContext {
 	/* ComponentInstance instance */
 	ComponentInstanceImpl componentInstance;
 
-	/* ComponentDescription */
-	ComponentDescription componentDescription;
-
 	/* ComponentDescription plus Properties */
 	ComponentDescriptionProp cdp;
 
@@ -90,26 +86,17 @@ public class ComponentContextImpl implements ComponentContext {
 
 	Bundle usingBundle;
 	
-	ServiceReference serviceReference;
-
 	/**
 	 * Construct a ComponentContext object
 	 *
 	 * @param bundle The ComponentDescriptionProp we are wrapping.
 	 */
-	public ComponentContextImpl(Main main, Bundle usingBundle, ComponentDescriptionProp component, ComponentInstanceImpl ci) {
-		this.cdp = component;
-		this.componentDescription = component.getComponentDescription();
-		this.componentInstance = ci;
-		this.bundleContext = main.framework.getBundleContext(component.getComponentDescription().getBundle());
+	public ComponentContextImpl(Main main, Bundle usingBundle, ComponentDescriptionProp cdp, ComponentInstanceImpl componentInstance) {
+		this.cdp = cdp;
+		this.componentInstance = componentInstance;
+		this.bundleContext = cdp.getComponentDescription().getBundleContext();
 		this.usingBundle = usingBundle;
 		this.main = main;
-		
-		//ServiceReference will be null if no services are offered
-		ServiceRegistration serviceRegistration= (ServiceRegistration)main.resolver.instanceProcess.registrations.get(component);
-		if (serviceRegistration != null) {
-			this.serviceReference = serviceRegistration.getReference();
-		}
 	}
 
 	/**
@@ -119,28 +106,7 @@ public class ComponentContextImpl implements ComponentContext {
 	 *         only and cannot be modified.
 	 */
 	public Dictionary getProperties() {
-
-		Dictionary props = (Dictionary) AccessController.doPrivileged(
-		          new PrivilegedAction() {
-		            public Object run() {
-		                
-		                Dictionary props = componentInstance.getProperties();
-
-		        		if (props != null) {
-		        			Dictionary properties = cdp.getProperties();
-		        			Enumeration keys = props.keys();
-		        			while (keys.hasMoreElements()) {
-		        				Object key = keys.nextElement();
-		        				properties.put(key, props.get(key));
-		        			}
-		        			return properties;
-		        		}
-		        		return cdp.getProperties();
-		            }
-		          }
-		        );
-
-		return props;
+		return (Dictionary)cdp.getProperties().clone();
 	}
 
 	/**
@@ -169,30 +135,41 @@ public class ComponentContextImpl implements ComponentContext {
 			}
 			
 			if (thisReference != null) {
-				ServiceReference serviceReference;
+				ServiceReference serviceReference = null;
 				//check to see if this reference is already bound
 				if (!thisReference.getServiceReferences().isEmpty()) {
 					//if possible, return reference we are already bound to
 					serviceReference = (ServiceReference)thisReference.getServiceReferences().get(0);
 				} else {
-					serviceReference = bundleContext.getServiceReference(
-							thisReference.getReferenceDescription().getInterfacename()
+					ServiceReference [] serviceReferences = bundleContext.getServiceReferences(
+							thisReference.getReferenceDescription().getInterfacename(),
+							thisReference.getTarget()							
 							);
+					if (serviceReferences != null && serviceReferences.length >0) {
+
+						//sort by service ranking and service id
+						Arrays.sort(serviceReferences);
+
+						serviceReference = serviceReferences[0];
+					}
+					
 				}
-				Object serviceObject =  main.resolver.instanceProcess.buildDispose.getService(
-						cdp,
-						thisReference,
-						bundleContext,
-						serviceReference
-						);
-				componentInstance.addServiceReference(serviceReference,serviceObject);
-				return serviceObject;
+				if (serviceReference != null) {
+					Object serviceObject =  main.resolver.instanceProcess.buildDispose.getService(
+							cdp,
+							thisReference,
+							bundleContext,
+							serviceReference
+							);
+					componentInstance.addServiceReference(serviceReference,serviceObject);
+					return serviceObject;
+				}
 			}
 
 			return null;
 
-		} catch (ComponentException e) {
-			throw e;
+		} catch (Exception e) {
+			throw new ComponentException(e);
 		}
 
 	}
@@ -325,8 +302,8 @@ public class ComponentContextImpl implements ComponentContext {
 	 */
 
 	public Bundle getUsingBundle() {
-
-		if ((componentDescription.getService() == null) || (!componentDescription.getService().isServicefactory())) {
+		ComponentDescription cd = cdp.getComponentDescription();
+		if ((cd.getService() == null) || (!cd.getService().isServicefactory())) {
 			return null;
 		}
 		return usingBundle;
@@ -393,7 +370,14 @@ public class ComponentContextImpl implements ComponentContext {
 	 *         service.
 	 */
 	public ServiceReference getServiceReference(){
-		return this.serviceReference;
+		ServiceReference serviceReference = null;
+		if (cdp.getComponentDescription().getService() != null) {
+			ServiceRegistration serviceRegistration = cdp.getServiceRegistration();
+			if (serviceRegistration != null) {
+				serviceReference = serviceRegistration.getReference();
+			}
+		}
+		return serviceReference;
 	}
 
 }

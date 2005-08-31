@@ -28,16 +28,6 @@ public class PropertyResourceDescription extends PropertyDescription {
 	}
 
 	/**
-	 * @param name
-	 * @return
-	 * @see org.eclipse.osgi.component.model.PropertyDescription#getProperty(java.lang.String)
-	 */
-	public Object getProperty(String name) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	/**
 	 * @return Returns the entry.
 	 */
 	public String getEntry() {
