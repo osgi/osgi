@@ -1,4 +1,4 @@
-[method name="testUnitConstants"]
+[begin=testUnitConstants]
 Unit.A: A
 Unit.C: C
 Unit.cd: cd
@@ -27,12 +27,12 @@ Unit.unity:
 Unit.V: V
 Unit.W: W
 Unit.Wb: Wb
-[/method]
+[end=testUnitConstants]
 
-[method name="testUnitComparison"]
-[/method]
+[begin=testUnitComparison]
+[end=testUnitComparison]
 
-[method name="testStateConstructor"]
+[begin=testStateConstructor]
 Value of state 0
 value: 1
 name: null
@@ -51,12 +51,12 @@ name: secondState
 time: 1001
 firstState.toString: 2 "firstState"
 secondState.toString: 4 "secondState"
-[/method]
+[end=testStateConstructor]
 
-[method name="testStateComparison"]
-[/method]
+[begin=testStateComparison]
+[end=testStateComparison]
 
-[method name="testMeasurementConstructor"]
+[begin=testMeasurementConstructor]
 Value of mesure 0
 value: 100.0
 error: 0.0
@@ -92,12 +92,12 @@ value: 106.0
 error: 1.5
 unit:
 time: 1001
-[/method]
+[begin=testMeasurementConstructor]
 
-[method name="testMeasurementComparison"]
-[/method]
+[begin=testMeasurementComparison]
+[end=testMeasurementComparison]
 
-[method name="testMeasurementAddition"]
+[begin=testMeasurementAddition]
 mesure content after add
 value: 200.0
 error: 1.0
@@ -176,9 +176,9 @@ add  to [] can be done
 add  to [m,s,kg,K,A,mol,cd,rad,m/s,m/s2,m2,m3,Hz,N,Pa,J,W,C,V,F,Ohm,S,Wb,T,lx,Gy,kat] cannot be done
 Error computed by add = 1.2
 Error computed by add = 2.3
-[/method]
+[begin=testMeasurementAddition]
 
-[method name="testMeasurementSubstraction"]
+[begin=testMeasurementSubstraction]
 mesure content after sub
 value: 0.0
 error: 1.0
@@ -257,9 +257,9 @@ sub  to [] can be done
 sub  to [m,s,kg,K,A,mol,cd,rad,m/s,m/s2,m2,m3,Hz,N,Pa,J,W,C,V,F,Ohm,S,Wb,T,lx,Gy,kat] cannot be done
 Error computed by sub = 1.2
 Error computed by sub = 2.3
-[/method]
+[begin=testMeasurementSubstraction]
 
-[method name="testMeasurementMultiplication"]
+[begin=testMeasurementMultiplication]
 mesure content after mul
 value: 10000.0
 error: 100.0
@@ -401,9 +401,9 @@ mul kat to m^14*kg^7*K*A*mol*cd^2*rad/s^16 = m^14*kg^7*K*A*mol^2*cd^2*rad/s^17
 mul  to m^14*kg^7*K*A*mol^2*cd^2*rad/s^17 = m^14*kg^7*K*A*mol^2*cd^2*rad/s^17
 Error computed by mul = 120.0
 Error computed by mul = 570.0
-[/method]
+[begin=testMeasurementMultiplication]
 
-[method name="testMeasurementDivision"]
+[begin=testMeasurementDivision]
 mesure content after div
 value: 1.0
 error: 0.01
@@ -546,4 +546,4 @@ div kat to s^16/m^14*kg^7*K*A*mol*cd^2*rad = s^17/m^14*kg^7*K*A*mol^2*cd^2*rad
 div  to s^17/m^14*kg^7*K*A*mol^2*cd^2*rad = s^17/m^14*kg^7*K*A*mol^2*cd^2*rad
 Error computed by div = 0.012
 Error computed by div = 0.01425
-[/method]
+[begin=testMeasurementDivision]

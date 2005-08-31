@@ -1,4 +1,4 @@
-[method name="testTc1"]
+[begin=testTc1]
 Now a bundle that contains TestService1 is started.
 The number of Services being tracked by ServiceTracker is: 1 : '1'
 ServiceReference for the tracked service can be reached at this time: true : 'true'
@@ -14,9 +14,9 @@ No ServiceReferences for tracked services can be reached at this time: true : 't
 No Services for tracked services can be reached at this time: true : 'true'
 The number of Services being tracked by ServiceTracker is: 0 : '0'
 ServiceTracker TestCase 1 is completed.
-[/method]
+[end=testTc1]
 
-[method name="testTc2"]
+[begin=testTc2]
 ServiceTracker is created for Testbundle 1, Testbundle 2 and Testbundle 3
 The number of Services being tracked by ServiceTracker 1 is: 0 : '0'
 The number of Services being tracked by ServiceTracker 2 is: 0 : '0'
@@ -30,9 +30,9 @@ The number of Services being tracked by ServiceTracker 1 is: 1 : '1'
 The number of Services being tracked by ServiceTracker 2 is: 1 : '1'
 The number of Services being tracked by ServiceTracker 3 is: 1 : '1'
 ServiceTracker TestCase 2 is completed.
-[/method]
+[end=testTc2]
 
-[method name="testTc3"]
+[begin=testTc3]
 Install a ServiceTracker.
 The number of Services being tracked by ServiceTracker 1 is: 0 : '0'
 Install Testbundle 1.
@@ -43,10 +43,10 @@ Uninstall Testbundle 1.
 Now removedService in ServiceTrackerCustomizer should send a message.
 Now removedService is activated.
 ServiceTracker TestCase 3 is completed.
-[/method]
+[end=testTc3]
 
 
-#[method name="testTc4"]
+[begin=testTc4]
 #A ServiceTracker for TestService1 is created.
 #Testbundles 1, 2, 3 and 4 is started.
 #The bundles that has TestService1: 'ServiceTracker TestCase4 testbundle1'
@@ -68,10 +68,10 @@ ServiceTracker TestCase 3 is completed.
 #TestService1 is a part of the Services being tracked by this ServiceTracker: true : 'true'
 #The number of Services being tracked by ServiceTracker 1 is: 2 : '2'
 #ServiceTracker TestCase 4 is completed.
-#[/method]
+[begin=testTc4]
 
 
-[method name="testTc5"]
+[begin=testTc5]
 A ServiceTracker for TestService1 is created.
 A ServiceTracker containing a Filter that finds TestService1 is created.
 The number of Services being tracked by ServiceTracker 1 is: 0 : '0'
@@ -85,11 +85,11 @@ The number of Services being tracked by ServiceTracker 1 is: 1 : '1'
 Now the property is changed back again.
 The number of Services being tracked by ServiceTracker 1 is: 2 : '2'
 ServiceTracker TestCase 5 is completed.
-[/method]
+[begin=testTc5]
 
-[method name="testTc6"]
+[begin=testTc6]
 ServiceTracker.getTrackingCount() == 0
 ServiceTracker.getTrackingCount() == 1
 ServiceTracker.getTrackingCount() == 2
 ServiceTracker TestCase 6 is completed.
-[/method]
+[begin=testTc6]

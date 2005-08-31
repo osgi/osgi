@@ -1,141 +1,141 @@
-[method name="testCreateRole"]
+[begin=testCreateRole]
 Created: "foo-user"
 Created: "null"
 Created: "foo-group"
 Created: "java.lang.IllegalArgumentException"
-[/method]
+[begin=testCreateRole]
 
-[method name="testRemoveRole"]
+[begin=testRemoveRole]
 Removed: "true"
 Removed: "false"
-[/method]
+[end=testRemoveRole]
 
-[method name="testGetRole"]
+[begin=testGetRole]
 getRole: "foo1"
 getRole: "foo2"
 getRole: "foo3"
 getRole: "foo4"
 getRole: "null"
 getRole: "user.anyone"
-[/method]
+[end=testGetRole]
 
-[method name="testGetRoles"]
+[begin=testGetRoles]
 Roles: "3 roles: { role1, role2, role3 }"
 Roles: "4 roles: { role1, role2, role3, user.anyone }"
-[/method]
+[end=testGetRoles]
 
-[method name="testGetUser"]
+[begin=testGetUser]
 getUser: "null"
 getUser: "user1"
 getUser: "null"
-[/method]
+[end=testGetUser]
 
-[method name="testRoleGetType"]
+[begin=testRoleGetType]
 Role.USER: "1"
 Role.GROUP: "2"
 Role.ROLE: "0"
 getType: "1"
 getType: "2"
-[/method]
+[end=testRoleGetType]
 
-[method name="testRoleChangeProperties"]
+[begin=testRoleChangeProperties]
 changed property: "testValue"
-[/method]
+[end=testRoleChangeProperties]
 
-[method name="testRolePutProperties"]
+[begin=testRolePutProperties]
 putProperties: "ok"
 putProperties: "java.lang.IllegalArgumentException"
 putProperties: "ok"
-[/method]
+[end=testRolePutProperties]
 
-[method name="testRoleGetName"]
+[begin=testRoleGetName]
 getName: "r1"
-[/method]
+[end=testRoleGetName]
 
-[method name="testUserChangeCredentials"]
+[begin=testUserChangeCredentials]
 getCredentials: "testValue"
-[/method]
+[end=testUserChangeCredentials]
 
-[method name="testUserPutCredentials"]
+[begin=testUserPutCredentials]
 putCredentials: "ok"
 putCredentials: "java.lang.IllegalArgumentException"
 putCredentials: "ok"
-[/method]
+[end=testUserPutCredentials]
 
-[method name="testUserHasCredential"]
+[begin=testUserHasCredential]
 hasCredential: "true"
 hasCredential: "false"
 hasCredential: "true"
-[/method]
+[end=testUserHasCredential]
 
-[method name="testGroupAddMember"]
+[begin=testGroupAddMember]
 adding member: "true"
 adding existing member: "false"
-[/method]
+[end=testGroupAddMember]
 
-[method name="testGroupAddRequiredMembers"]
+[begin=testGroupAddRequiredMembers]
 adding member: "true"
 adding existing member: "false"
-[/method]
+[end=testGroupAddRequiredMembers]
 
-[method name="testGroupGetMembers"]
+[begin=testGroupGetMembers]
 getMembers: "No roles"
 getMembers: "2 roles: { user1, user2 }"
-[/method]
+[end=testGroupGetMembers]
 
-[method name="testGroupGetRequiredMembers"]
+[begin=testGroupGetRequiredMembers]
 getRequiredMembers: "No roles"
 getRequiredMembers: "2 roles: { user1, user2 }"
-[/method]
+[end=testGroupGetRequiredMembers]
 
-[method name="testGroupRemoveMember"]
+[begin=testGroupRemoveMember]
 members after remove: "1 roles: { user1 }"
-[/method]
+[end=testGroupRemoveMember]
 
-[method name="testUserAnyone"]
+[begin=testUserAnyone]
 hasRole foorole: "true"
 user.anyone found: "false"
-[/method]
+[end=testUserAnyone]
 
-[method name="testBasicRequired"]
+[begin=testBasicRequired]
 hasRole testrole: "true"
 hasRole testrole: "true"
 hasRole testrole: "false"
-[/method]
+[end=testBasicRequired]
 
-[method name="testRequiredAuth"]
+[begin=testRequiredAuth]
 hasRole testrole: "false"
-[/method]
+[end=testRequiredAuth]
 
-[method name="testUserAnyoneBasic"]
+[begin=testUserAnyoneBasic]
 hasRole testrole: "true"
 hasRole testrole: "true"
 hasRole testrole: "false"
 hasRole testrole: "false"
-[/method]
+[end=testUserAnyoneBasic]
 
-[method name="testUserAnyoneRequired"]
+[begin=testUserAnyoneRequired]
 hasRole testrole: "true"
 hasRole testrole: "false"
 hasRole testrole: "false"
 hasRole testrole: "true"
-[/method]
+[end=testUserAnyoneRequired]
 
-[method name="testAnonymousUser"]
+[begin=testAnonymousUser]
 anonymous user: "null"
 hasRole anygroup: "false"
 hasRole anygroup: "true"
 hasRole requiredgroup: "false"
 hasRole user.anyone: "true"
-[/method]
+[end=testAnonymousUser]
 
-[method name="testGroupInGroup"]
+[begin=testGroupInGroup]
 hasRole group1: "false"
-[/method]
+[end=testGroupInGroup]
 
-[method name="testUserAdminEvents"]
+[begin=testUserAdminEvents]
 waiting: "createRoleEvent"
 received event: "ROLE_CREATED for user1"
 received event: "ROLE_CHANGED for user1"
 received event: "ROLE_REMOVED for user1"
-[/method]
+[end=testUserAdminEvents]
