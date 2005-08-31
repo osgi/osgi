@@ -61,7 +61,6 @@ public class Log implements Serializable {
 				case BEGIN :
 					switch (c) {
 						case '[' :
-						case '<' :
 							state = SKIP;
 							terminator = c;
 							break;
@@ -78,7 +77,6 @@ public class Log implements Serializable {
 				case SKIP :
 					switch (c) {
 						case ']' :
-						case '>' :
 							if (terminator == c) {
 								state = BEGIN;
 								c = 0;
