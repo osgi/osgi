@@ -115,7 +115,13 @@ public class Discovery extends Thread {
 			String application;
 			String comment;
 			String host;
-			listener = new DatagramSocket(PORT);
+			try {
+				listener = new DatagramSocket(PORT);
+			}
+			catch( BindException e ) {
+				log("DatagramSockeet for target discovery already in use (" + PORT  + ")", null );
+				return;
+			}
 			listener.setSoTimeout(25000);
 			log("Discovery starts.", null);
 			while (cont) {
