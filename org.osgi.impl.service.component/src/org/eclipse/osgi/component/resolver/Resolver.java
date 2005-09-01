@@ -84,7 +84,7 @@ public class Resolver implements AllServiceListener, WorkDispatcher {
 	static final String CMADMIN_SERVICE_CLASS = "org.osgi.service.cm.ConfigurationAdmin";
 
 	/* ServiceTracker for configurationAdmin */
-	private ServiceTracker configAdminTracker;
+	public ServiceTracker configAdminTracker;
 
 	/**
 	 * Service Component instances need to be built.
@@ -102,8 +102,6 @@ public class Resolver implements AllServiceListener, WorkDispatcher {
 	public Main main;
 
 	public InstanceProcess instanceProcess;
-
-	protected ComponentProperties componentProperties = null;
 
 	//note satisfiedCDPs is a subset of enabledCDPs
 	public List enabledCDPs, satisfiedCDPs;
@@ -130,7 +128,6 @@ public class Resolver implements AllServiceListener, WorkDispatcher {
 		satisfiedCDPs = new ArrayList();
 		enabledCDsByName = new HashMap();
 		instanceProcess = new InstanceProcess(main);
-		componentProperties = new ComponentProperties(main);
 		addServiceListener();
 		configAdminTracker = new ServiceTracker(main.context, CMADMIN_SERVICE_CLASS, null);
 		configAdminTracker.open(true); //true for track all services
@@ -177,7 +174,10 @@ public class Resolver implements AllServiceListener, WorkDispatcher {
 				
 				// check for a Configuration properties for this component
 				try {
-					config = componentProperties.getConfiguration(cd.getName());
+					ConfigurationAdmin configurationAdmin = (ConfigurationAdmin) configAdminTracker.getService();
+					if (configurationAdmin != null) {
+						config = configurationAdmin.getConfiguration(cd.getName(),cd.getBundleContext().getBundle().getLocation());
+					}
 				} catch (IOException e) {
 					//Log it and continue
 					Log.log(1, "[SCR] IOException when getting Configuration Properties. ", e);

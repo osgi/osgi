@@ -25,7 +25,6 @@ import org.eclipse.osgi.component.Log;
 import org.eclipse.osgi.component.Main;
 import org.eclipse.osgi.component.model.ComponentDescription;
 import org.eclipse.osgi.component.model.ComponentDescriptionProp;
-import org.eclipse.osgi.component.resolver.ComponentProperties;
 import org.eclipse.osgi.component.resolver.Reference;
 import org.eclipse.osgi.component.resolver.Resolver;
 import org.eclipse.osgi.component.workqueue.WorkQueue;
@@ -40,8 +39,6 @@ import org.osgi.service.cm.ConfigurationAdmin;
 import org.osgi.service.cm.ConfigurationEvent;
 import org.osgi.service.cm.ConfigurationListener;
 import org.osgi.service.component.ComponentException;
-import org.osgi.util.tracker.ServiceTracker;
-import org.osgi.util.tracker.ServiceTrackerCustomizer;
 
 /**
  * @author Administrator
@@ -49,20 +46,13 @@ import org.osgi.util.tracker.ServiceTrackerCustomizer;
  * TODO To change the template for this generated type comment go to
  * Window - Preferences - Java - Code Style - Code Templates
  */
-public class InstanceProcess implements ConfigurationListener, ServiceTrackerCustomizer {
+public class InstanceProcess implements ConfigurationListener{
 
 	/* set this to true to compile in debug messages */
 	static final boolean DEBUG = false;
 
 	static final String COMPONENT_FACTORY_CLASS = "org.osgi.service.component.ComponentFactory";
-	static final String CMADMIN_SERVICE_CLASS = "org.osgi.service.cm.ConfigurationAdmin";
 	static final String CONFIG_LISTENER_CLASS = "org.osgi.service.cm.ConfigurationListener";
-
-	/** ConfigurationAdmin instance */
-	protected ConfigurationAdmin configurationAdmin;
-
-	/* ServiceTracker for configurationAdmin */
-	private ServiceTracker configAdminTracker;
 
 	/**
 	 * Service Component instances need to be built.
@@ -76,9 +66,6 @@ public class InstanceProcess implements ConfigurationListener, ServiceTrackerCus
 
 	/** Main SCR class */
 	protected Main main;
-
-	/** Properties for this Component from the Configuration Admin */
-	protected ComponentProperties componentProperties = null;
 
 	/* Actually does the work of building and disposing of instances */
 	public BuildDispose buildDispose;
@@ -99,9 +86,6 @@ public class InstanceProcess implements ConfigurationListener, ServiceTrackerCus
 		//for now use Main's workqueue
 		workQueue = main.workQueue;
 		buildDispose = new BuildDispose(main);
-		componentProperties = new ComponentProperties(main);
-		configAdminTracker = new ServiceTracker(main.context, CMADMIN_SERVICE_CLASS, this);
-		configAdminTracker.open(true); //true for track all services
 		registerConfigurationListener();
 
 	}
@@ -113,12 +97,9 @@ public class InstanceProcess implements ConfigurationListener, ServiceTrackerCus
 
 		removeConfigurationListener();
 		buildDispose.dispose();
-		configAdminTracker.close();
-		configAdminTracker = null;
 		buildDispose = null;
 		main = null;
 		workQueue = null;
-		componentProperties = null;
 	}
 
 	/**
@@ -156,14 +137,16 @@ public class InstanceProcess implements ConfigurationListener, ServiceTrackerCus
 					if (DEBUG)
 						System.out.println("InstanceProcess: buildInstances: ComponentFactory");
 					//check if MSF
-					configurationAdmin = componentProperties.getConfigurationAdmin();
-
-					try {
-						Configuration config = configurationAdmin.getConfiguration(cd.getName());
-						if (config != null)
-							factoryPid = config.getFactoryPid();
-					} catch (IOException e) {
-						Log.log(1, "[SCR] Error attempting to create componentFactory. ", e);
+					ConfigurationAdmin configurationAdmin = (ConfigurationAdmin)main.resolver.configAdminTracker.getService();
+					
+					if (configurationAdmin != null) {
+						try {
+							Configuration config = configurationAdmin.getConfiguration(cd.getName());
+							if (config != null)
+								factoryPid = config.getFactoryPid();
+						} catch (IOException e) {
+							Log.log(1, "[SCR] Error attempting to create componentFactory. ", e);
+						}
 					}
 
 					//if MSF throw exception - can't be ComponentFactory and MSF
@@ -314,7 +297,7 @@ public class InstanceProcess implements ConfigurationListener, ServiceTrackerCus
 						;
 
 				// Get the config for this service.pid
-				ConfigurationAdmin cm = (ConfigurationAdmin) configAdminTracker.getService();
+				ConfigurationAdmin cm = (ConfigurationAdmin)main.resolver.configAdminTracker.getService();
 				try {
 					config = cm.listConfigurations(filter);
 				} catch (IOException e) {
@@ -414,41 +397,4 @@ public class InstanceProcess implements ConfigurationListener, ServiceTrackerCus
 		}
 
 	}
-
-	/**
-	 * A ConfigurationAdmin Service is being added to the ServiceTracker object.
-	 *
-	 * @param reference Reference to service being added to the <tt>ServiceTracker</tt> object.
-	 * @return The service object to be tracked for the
-	 * <tt>ServiceReference</tt> object or <tt>null</tt> if the <tt>ServiceReference</tt> object should not
-	 * be tracked.
-	 */
-	public Object addingService(ServiceReference ref) {
-		configurationAdmin = (ConfigurationAdmin) main.context.getService(ref);
-		return configurationAdmin;
-	}
-
-	/**
-	 * A ConfigurationAdmin Service tracked by the ServiceTracker object has been modified.
-	 *
-	 * @param reference Reference to service that has been modified.
-	 * @param service The service object for the modified service.
-	 */
-	public void modifiedService(ServiceReference ref, Object object) {
-
-	}
-
-	/**
-	 * The ConfigurationAdmin Service tracked by the Service Tracker has been removed
-	 *
-	 * <p>This method is called after a service is no longer being tracked
-	 * by the <tt>ServiceTracker</tt> object.
-	 *
-	 * @param reference Reference to service that has been removed.
-	 * @param service The service object for the removed service.
-	 */
-	public void removedService(ServiceReference reference, Object object) {
-		main.context.ungetService(reference);
-	}
-
 }
