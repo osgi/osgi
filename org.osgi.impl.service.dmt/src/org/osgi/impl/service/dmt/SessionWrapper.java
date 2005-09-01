@@ -24,16 +24,13 @@ import org.osgi.service.dmt.DmtData;
 import org.osgi.service.dmt.DmtException;
 import org.osgi.service.dmt.MetaNode;
 import org.osgi.service.permissionadmin.PermissionInfo;
-import org.osgi.util.tracker.ServiceTracker;
 
 class SessionWrapper extends DmtSessionImpl {
 
     SessionWrapper(String principal, String subtreeUri, int lockMode,
-            PermissionInfo[] permissions, ServiceTracker eventTracker,
-            PluginDispatcher dispatcher, DmtAdminImpl dmtAdmin)
-            throws DmtException {
-        super(principal, subtreeUri, lockMode, permissions, eventTracker,
-                dispatcher, dmtAdmin);
+            PermissionInfo[] permissions, Context context, 
+            DmtAdminImpl dmtAdmin) throws DmtException {
+        super(principal, subtreeUri, lockMode, permissions, context, dmtAdmin);
     }
 
     // close() not wrapped, nothing to do if it throws an exception

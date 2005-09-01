@@ -18,7 +18,6 @@
 package org.osgi.impl.service.dmt;
 
 import java.util.*;
-import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
 import org.osgi.service.dmt.DmtException;
 import org.osgi.service.dmt.spi.DataPluginFactory;
@@ -27,12 +26,12 @@ import org.osgi.util.tracker.ServiceTrackerCustomizer;
 
 // TODO replace System.out-s with log messages
 public class PluginDispatcher implements ServiceTrackerCustomizer {
-    private BundleContext      bc;
+    private Context            context;
     private ArrayList          plugins;
     private PluginRegistration rootPlugin;
 
-    PluginDispatcher(BundleContext bc) {
-        this.bc = bc;
+    PluginDispatcher(Context context) {
+        this.context = context;
         plugins = new ArrayList();
         // root plugin could be a normal plugin when overlapping is allowed
         DataPluginFactory root = new RootPlugin(this); 
@@ -70,8 +69,8 @@ public class PluginDispatcher implements ServiceTrackerCustomizer {
             return null;
         }
 
-        PluginRegistration plugin = 
-            new PluginRegistration(bc.getService(serviceRef), roots, execs);
+        PluginRegistration plugin = new PluginRegistration(
+                context.getBundleContext().getService(serviceRef), roots, execs);
         plugins.add(plugin);
         
         return plugin;
@@ -85,7 +84,7 @@ public class PluginDispatcher implements ServiceTrackerCustomizer {
     public synchronized void removedService(ServiceReference serviceRef, Object plugin) {
         // removes the plugin and ungets the service
         plugins.remove(plugin);
-        bc.ungetService(serviceRef);
+        context.getBundleContext().ungetService(serviceRef);
     }
 
     synchronized PluginRegistration getDataPlugin(Node node) {

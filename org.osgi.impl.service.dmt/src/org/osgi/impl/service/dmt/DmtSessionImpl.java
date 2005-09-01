@@ -27,7 +27,6 @@ import org.osgi.service.dmt.spi.*;
 import org.osgi.service.event.Event;
 import org.osgi.service.event.EventAdmin;
 import org.osgi.service.permissionadmin.PermissionInfo;
-import org.osgi.util.tracker.ServiceTracker;
 
 // Needed for meta-data name and value pattern matching
 //import java.util.regex.Pattern;
@@ -57,9 +56,8 @@ public class DmtSessionImpl implements DmtSession {
 	}
 	
     private final AccessControlContext securityContext;
-    private final PluginDispatcher     dispatcher;
-    private final ServiceTracker       eventTracker;
     private final DmtAdminImpl         dmtAdmin;
+    private final Context              context;
 
     private final String principal;
     private final Node   subtreeNode;
@@ -76,9 +74,8 @@ public class DmtSessionImpl implements DmtSession {
     // - when all conflicting sessions have been closed, DmtAdmin calls "open()"
     //   to actually open the session for external use
 	DmtSessionImpl(String principal, String subtreeUri, int lockMode,
-	               PermissionInfo[] permissions, ServiceTracker eventTracker, 
-                   PluginDispatcher dispatcher, DmtAdminImpl dmtAdmin) 
-            throws DmtException {
+	               PermissionInfo[] permissions, Context context, 
+                   DmtAdminImpl dmtAdmin) throws DmtException {
         
         Node node = Node.validateAndNormalizeUri(subtreeUri);
         subtreeNode = node.isAbsolute() ? 
@@ -86,9 +83,8 @@ public class DmtSessionImpl implements DmtSession {
 		
         this.principal = principal;
         this.lockMode = lockMode;
-		this.dispatcher = dispatcher;
-        this.eventTracker = eventTracker;
         this.dmtAdmin = dmtAdmin;
+        this.context = context;
         
         if(principal != null) { // remote session
             SecurityManager sm = System.getSecurityManager();
@@ -328,7 +324,8 @@ public class DmtSessionImpl implements DmtSession {
 		final Node node = makeAbsoluteUriAndCheck(nodeUri, SHOULD_EXIST);
         checkOperation(node, Acl.EXEC, MetaNode.CMD_EXECUTE);
         
-        final ExecPlugin plugin = dispatcher.getExecPlugin(node);
+        final ExecPlugin plugin = 
+            context.getPluginDispatcher().getExecPlugin(node);
         final DmtSession session = this;
 		
         if (plugin == null)
@@ -757,7 +754,8 @@ public class DmtSessionImpl implements DmtSession {
 
         // DMTND 7.7.1.5: "needs correct access rights for the equivalent Add,
 		// Delete, Get, and Replace commands"
-		if (dispatcher.handledBySameDataPlugin(node, newNode)) {
+		if (context.getPluginDispatcher()
+                .handledBySameDataPlugin(node, newNode)) {
             checkNodePermissionRecursive(node, Acl.GET);
 			checkNodeCapability(node, MetaNode.CMD_GET);
 
@@ -777,7 +775,7 @@ public class DmtSessionImpl implements DmtSession {
                     newNode.getPath(), recursive);
 		}
 		else
-			copyNoCheck(node, newNode, recursive); // does not trigger any events  
+			copyNoCheck(node, newNode, recursive); // does not trigger events  
 
         enqueueEvent(EventList.COPY, node, newNode);
 	}
@@ -930,7 +928,8 @@ public class DmtSessionImpl implements DmtSession {
         Event event = new Event(topic, properties);
         
         // it's an error if Event Admin is missing, but it could also be ignored
-        EventAdmin eventChannel = (EventAdmin) eventTracker.getService();
+        EventAdmin eventChannel = 
+            (EventAdmin) context.getTracker(EventAdmin.class).getService();
         if(eventChannel == null)
             throw new MissingResourceException("Event Admin not found.",
                     EventAdmin.class.getName(), null);
@@ -1072,7 +1071,8 @@ public class DmtSessionImpl implements DmtSession {
     private synchronized PluginSessionWrapper getPluginSession(Node node, 
             boolean writeOperation) throws DmtException {
         
-        PluginRegistration pluginRegistration = dispatcher.getDataPlugin(node);
+        PluginRegistration pluginRegistration = 
+            context.getPluginDispatcher().getDataPlugin(node);
         Node root = getRootForPlugin(pluginRegistration, node);
         
         PluginSessionWrapper wrappedPlugin = (PluginSessionWrapper) 

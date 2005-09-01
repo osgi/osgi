@@ -69,24 +69,18 @@ public class DmtAdminImpl implements DmtAdmin {
     };
     
     private DmtPrincipalPermissionAdmin dmtPermissionAdmin;
-	private PluginDispatcher	dispatcher;
-	private ServiceTracker eventTracker;
-	private ServiceTracker remoteAdapterTracker;
+    private Context context;
     
     private List openSessions; // a list of DmtSession refs to open sessions
 
 	private MessageDigest md;
+
     
-    // OPTIMIZE maybe make some context object to store these references
 	public DmtAdminImpl(DmtPrincipalPermissionAdmin dmtPermissionAdmin,
-			PluginDispatcher dispatcher, ServiceTracker eventTracker,
-			ServiceTracker remoteAdapterTracker) 
-			throws NoSuchAlgorithmException
+			Context context) throws NoSuchAlgorithmException
 	{
 		this.dmtPermissionAdmin = dmtPermissionAdmin;
-		this.dispatcher = dispatcher;
-		this.eventTracker = eventTracker;
-		this.remoteAdapterTracker = remoteAdapterTracker;
+		this.context = context;
 		
 		openSessions = new Vector();
 		
@@ -115,7 +109,7 @@ public class DmtAdminImpl implements DmtAdmin {
             subtreeUri = ".";
         
 		SessionWrapper session = new SessionWrapper(principal, subtreeUri,
-                lockMode, permissions, eventTracker, dispatcher, this);
+                lockMode, permissions, context, this);
                 
         // passing the normalized variant of the subtreeUri parameter
 		waitUntilNoConflictingSessions(session.getRootNode(), lockMode);
@@ -140,7 +134,6 @@ public class DmtAdminImpl implements DmtAdmin {
     // notifyAll is called.  Some threads may be "starved", i.e. timed out.
     private void waitUntilNoConflictingSessions(Node subtreeNode, int lockMode) 
             throws DmtException {
-        // TODO also check for (non-shared) sessions within the same plugin
         final long timeLimit = System.currentTimeMillis() + TIMEOUT;
         
         while(conflictsWithOpenSessions(subtreeNode, lockMode)) {
@@ -263,6 +256,8 @@ public class DmtAdminImpl implements DmtAdmin {
     }
     
     private RemoteAlertSender getAlertSender(String principal) {
+        ServiceTracker remoteAdapterTracker = 
+            context.getTracker(RemoteAlertSender.class);
         if (principal == null) { // return adapter if it is unique 
             Object[] alertSenders = remoteAdapterTracker.getServices();
             if(alertSenders == null || alertSenders.length != 1)

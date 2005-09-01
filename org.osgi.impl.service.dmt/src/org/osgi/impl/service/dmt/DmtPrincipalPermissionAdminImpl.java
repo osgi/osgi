@@ -33,7 +33,6 @@ import org.osgi.service.cm.ConfigurationAdmin;
 import org.osgi.service.cm.ConfigurationException;
 import org.osgi.service.cm.ManagedService;
 import org.osgi.service.permissionadmin.PermissionInfo;
-import org.osgi.util.tracker.ServiceTracker;
 
 // known problem: if a principal is called "service.pid" it will be ignored
 public class DmtPrincipalPermissionAdminImpl 
@@ -45,10 +44,10 @@ public class DmtPrincipalPermissionAdminImpl
     private static final int PREFIX_LENGTH = CONFIG_KEY_PREFIX.length();
     
     private Hashtable permissions;
-    private ServiceTracker configTracker;
+    private Context context;
     
-    public DmtPrincipalPermissionAdminImpl(ServiceTracker configTracker) {
-        this.configTracker = configTracker;
+    public DmtPrincipalPermissionAdminImpl(Context context) {
+        this.context = context;
         
         // persisted permission table will be set by the Configuration Admin
         permissions = new Hashtable();
@@ -68,8 +67,8 @@ public class DmtPrincipalPermissionAdminImpl
         // when the (asynchronous) update arrives from the config. admin
         this.permissions = new Hashtable(permissions);
         
-        ConfigurationAdmin configAdmin = 
-            (ConfigurationAdmin) configTracker.getService();
+        ConfigurationAdmin configAdmin = (ConfigurationAdmin) 
+            context.getTracker(ConfigurationAdmin.class).getService();
         if(configAdmin == null)
             throw new MissingResourceException("Configuration Admin not found.",
                     ConfigurationAdmin.class.getName(), null);

@@ -25,59 +25,33 @@ import org.osgi.framework.BundleContext;
 import org.osgi.framework.BundleException;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.impl.service.dmt.api.DmtPrincipalPermissionAdmin;
-import org.osgi.service.cm.ConfigurationAdmin;
 import org.osgi.service.cm.ManagedService;
 import org.osgi.service.dmt.DmtAdmin;
-import org.osgi.service.dmt.RemoteAlertSender;
-import org.osgi.service.event.EventAdmin;
 import org.osgi.service.permissionadmin.PermissionInfo;
-import org.osgi.util.tracker.ServiceTracker;
 
 public class DmtAdminActivator implements BundleActivator {
-    // TODO make this PID shorter otherwise it could be mangled...
     static final String DMT_PERMISSION_ADMIN_SERVICE_PID = 
         "org.osgi.impl.service.dmt.perms";
 
     private ServiceRegistration	adminReg;
-	private ServiceRegistration	alertReg;
     private ServiceRegistration permissionReg;
-	private ServiceTracker      eventTracker;
-    private ServiceTracker      configTracker;
-	private ServiceTracker      pluginTracker;
-    private ServiceTracker      remoteAdapterTracker;
-
+    
+    private Context context;
 
 	public void start(BundleContext bc) throws BundleException {
 		try {
-            eventTracker = new ServiceTracker(bc, 
-                    EventAdmin.class.getName(), null);
-            eventTracker.open();
-            
-            configTracker = new ServiceTracker(bc, 
-                    ConfigurationAdmin.class.getName(), null);
-            configTracker.open();
-            
-			PluginDispatcher dispatcher = new PluginDispatcher(bc);
-			String filter = "(|(objectClass=org.osgi.service.dmt.spi.DataPluginFactory)" +
-					          "(objectClass=org.osgi.service.dmt.spi.ExecPlugin))";
-			pluginTracker = new ServiceTracker(bc, bc.createFilter(filter),
-					dispatcher);
-			pluginTracker.open();
-            
-            remoteAdapterTracker = new ServiceTracker(bc,
-                    RemoteAlertSender.class.getName(), null);
-            remoteAdapterTracker.open();
+            context = new Context(bc);
             
 			// creating the services
             DmtPrincipalPermissionAdmin dmtPermissionAdmin =
-                new DmtPrincipalPermissionAdminImpl(configTracker);
+                new DmtPrincipalPermissionAdminImpl(context);
 			DmtAdminImpl dmtAdmin = 
-                new DmtAdminImpl(dmtPermissionAdmin,
-                    dispatcher, eventTracker, remoteAdapterTracker);
+                new DmtAdminImpl(dmtPermissionAdmin, context);
 			
             // registering the services
 			adminReg = bc.registerService(DmtAdmin.class.getName(),
 					dmtAdmin, null);
+            
             String[] services = new String[] {
                     DmtPrincipalPermissionAdmin.class.getName(),
                     ManagedService.class.getName()
@@ -100,14 +74,10 @@ public class DmtAdminActivator implements BundleActivator {
 	}
 
 	public void stop(BundleContext bc) throws BundleException {
-		// stopping service trackers
-		remoteAdapterTracker.close();
-		pluginTracker.close();
-        configTracker.close();
-        eventTracker.close();
-		// unregistering the service
+		// stopping everything in the context (e.g. service trackers)
+        context.close();
+		// unregistering the services
 		adminReg.unregister();
-		alertReg.unregister();
         permissionReg.unregister();
 	}
 }
