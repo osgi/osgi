@@ -70,7 +70,7 @@ public class MidletContainer implements BundleListener, ServiceListener {
 		MEGBundleDescriptor desc = getBundleDescriptor(appDesc.getBundleId());
 		Bundle appBundle = bc.getBundle(appDesc.getBundleId());
 		Class mainClass = appBundle.loadClass(appDesc.getStartClass());
-		ClassLoader loader = new MIDletClassLoader(getClass().getClassLoader(),
+		ClassLoader loader = new MIDletClassLoader(mainClass.getClassLoader(),
 				appBundle, mainClass.getProtectionDomain());
 		Class midletClass = loader.loadClass(appDesc.getStartClass());
 		Constructor constructor = midletClass

@@ -9,5 +9,5 @@ MIDlet-Container-Name: Nokia Sample MIDlet Container
 MIDlet-Container-Version: 1.0
 Import-Package: org.osgi.framework, javax.microedition.midlet, org.osgi.servi
  ce.application, org.osgi.service.event, org.osgi.service.log,
-  org.osgi.impl.service.application, org.osgi.application
+  org.osgi.impl.service.application
 Export-Package: org.osgi.impl.service.midletcontainer, javax.microedition.midlet

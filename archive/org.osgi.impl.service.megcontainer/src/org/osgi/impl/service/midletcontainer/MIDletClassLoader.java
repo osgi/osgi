@@ -18,8 +18,9 @@ class MIDletClassLoader extends ClassLoader {
 	}
 
 	protected Class findClass(String name) throws ClassNotFoundException {
-		byte b[] = loadClassData(name);
-		return defineClass(name, b, 0, b.length, protectionDomain);
+		return bundle.loadClass( name );
+//		byte b[] = loadClassData(name);
+//		return defineClass(name, b, 0, b.length, protectionDomain);
 	}
 
 	private byte[] loadClassData(String name) throws ClassNotFoundException {
