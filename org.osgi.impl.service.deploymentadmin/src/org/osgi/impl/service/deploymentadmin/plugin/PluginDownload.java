@@ -30,19 +30,17 @@ import org.osgi.framework.ServiceReference;
 import org.osgi.impl.service.deploymentadmin.DeploymentPackageImpl;
 import org.osgi.impl.service.deploymentadmin.Metanode;
 import org.osgi.impl.service.deploymentadmin.PluginCtx;
-import org.osgi.impl.service.deploymentadmin.Splitter;
 import org.osgi.impl.service.dwnl.DownloadAgent;
-import org.osgi.service.dmt.DmtAlertItem;
+import org.osgi.service.dmt.AlertItem;
 import org.osgi.service.dmt.DmtData;
-import org.osgi.service.dmt.DmtDataPlugin;
 import org.osgi.service.dmt.DmtException;
-import org.osgi.service.dmt.DmtExecPlugin;
-import org.osgi.service.dmt.DmtMetaNode;
+import org.osgi.service.dmt.MetaNode;
 import org.osgi.service.dmt.DmtSession;
+import org.osgi.service.dmt.spi.*;
 import org.xml.sax.helpers.DefaultHandler;
 
-public class PluginDownload extends DefaultHandler 
-        implements DmtDataPlugin, DmtExecPlugin, Serializable 
+public class PluginDownload extends DefaultHandler implements DataPluginFactory,
+        ReadWriteDataSession, ExecPlugin, Serializable 
 {
     
     // download and deployment states (value of the 
@@ -101,10 +99,15 @@ public class PluginDownload extends DefaultHandler
             return (String[]) ht.keySet().toArray(new String[] {});
         }
         
-        private void start(final String nodeUri, final String correlator, final String principal) 
+        private void start(final String[] nodeUriArr, final String correlator, final String principal) 
                 throws DmtException 
         {
-            String[] nodeUriArr = Splitter.split(nodeUri, '/', 0);
+            // convert nodeUriArr to a URI string for sending alert
+            StringBuffer sb = new StringBuffer(nodeUriArr[0]);
+            for (int i = 0; i < nodeUriArr.length; i++)
+                sb.append('/').append(nodeUriArr[i]);
+            
+            final String nodeUri = sb.toString();
             final Entry entry = (Entry) ht.get(nodeUriArr[4]);
             
             entry.setStatus(STATUS_STREAMING);
@@ -112,7 +115,7 @@ public class PluginDownload extends DefaultHandler
             DownloadAgent dwnlAgent = pluginCtx.getDownloadAgent();
             if (null == dwnlAgent) {
                 entry.setStatus(STATUS_DOWNLD_FAILED);
-                throw new DmtException(nodeUri, DmtException.COMMAND_FAILED, 
+                throw new DmtException(nodeUriArr, DmtException.COMMAND_FAILED, 
                     "Download Agent service is not available");
             }
 
@@ -122,7 +125,7 @@ public class PluginDownload extends DefaultHandler
                         SAXParserFactory.class.getName(),
                         "(&(parser.namespaceAware=true)" + "(parser.validating=true))");
                 if (refs == null)
-                    throw new DmtException(nodeUri, DmtException.COMMAND_FAILED, 
+                    throw new DmtException(nodeUriArr, DmtException.COMMAND_FAILED, 
                         "SAX Parser is not available");
                 SAXParserFactory factory = (SAXParserFactory) pluginCtx.getBundleContext().
                         getService(refs[0]);
@@ -191,8 +194,8 @@ public class PluginDownload extends DefaultHandler
                 return;
 
             try {
-                pluginCtx.getDmtAdmin().sendAlert(principal, 1226, correlator, new DmtAlertItem[] {
-                        new DmtAlertItem(nodeUri, "org.osgi.deployment.downloadandinstallandactivate",
+                pluginCtx.getDmtAdmin().sendAlert(principal, 1226, correlator, new AlertItem[] {
+                        new AlertItem(nodeUri, "org.osgi.deployment.downloadandinstallandactivate",
                         null, new DmtData(alertCode))});
             }
             catch (DmtException e) {
@@ -203,31 +206,35 @@ public class PluginDownload extends DefaultHandler
     }
     
     ///////////////////////////////////////////////////////////////////////////
-    // DMT methods
+    // DMT Data Plugin methods
 
-	public void open(String subtreeUri, int lockMode, DmtSession session) throws DmtException {
+	public ReadableDataSession openReadOnlySession(String[] subtreePath, 
+            DmtSession session) {
+        return this;
 	}
 
-	public boolean supportsAtomic() {
-		return false;
+	public ReadWriteDataSession openReadWriteSession(String[] subtreePath, 
+            DmtSession session) {
+        return this;
 	}
 
-	public void rollback() throws DmtException {
+	public TransactionalDataSession openAtomicSession(String[] subtreePath, 
+            DmtSession session) {
+        return null;
 	}
 
-	public void commit() throws DmtException {
+    ///////////////////////////////////////////////////////////////////////////
+    // DMT Read-Write Session methods
+
+	public void setNodeTitle(String[] nodeUriArr, String title) throws DmtException {
 	}
 
-	public void setNodeTitle(String nodeUri, String title) throws DmtException {
-	}
-
-	public void setNodeValue(String nodeUri, DmtData data) throws DmtException {
-        String[] nodeUriArr = Splitter.split(nodeUri, '/', 0);
+	public void setNodeValue(String[] nodeUriArr, DmtData data) throws DmtException {
         int l = nodeUriArr.length;
         if (l != 6)
             throw new RuntimeException("Internal error");
         if (!entries.contains(nodeUriArr[4]))
-            throw new DmtException(nodeUri, DmtException.NODE_NOT_FOUND, "");
+            throw new DmtException(nodeUriArr, DmtException.NODE_NOT_FOUND, "");
         if (nodeUriArr[5].equals("ID"))
             entries.get(nodeUriArr[4]).id = data.getString();            
         if (nodeUriArr[5].equals("URI"))
@@ -238,19 +245,15 @@ public class PluginDownload extends DefaultHandler
             pluginCtx.save();
         }
         catch (IOException e) {
-            throw new DmtException(nodeUri, DmtException.DATA_STORE_FAILURE, 
+            throw new DmtException(nodeUriArr, DmtException.DATA_STORE_FAILURE, 
                     "Changes cannot be persisted", e); 
         }
     }
 
-	public void setDefaultNodeValue(String nodeUri) throws DmtException {
+	public void setNodeType(String[] nodeUriArr, String type) throws DmtException {
 	}
 
-	public void setNodeType(String nodeUri, String type) throws DmtException {
-	}
-
-	public void deleteNode(String nodeUri) throws DmtException {
-        String[] nodeUriArr = Splitter.split(nodeUri, '/', 0);
+	public void deleteNode(String[] nodeUriArr) throws DmtException {
         int l = nodeUriArr.length;
         if (l != 5)
             throw new RuntimeException("Internal error");
@@ -259,52 +262,40 @@ public class PluginDownload extends DefaultHandler
             pluginCtx.save();
         }
         catch (IOException e) {
-            throw new DmtException(nodeUri, DmtException.DATA_STORE_FAILURE, 
+            throw new DmtException(nodeUriArr, DmtException.DATA_STORE_FAILURE, 
                     "Changes cannot be persisted", e); 
         }
 	}
 
-	public void createInteriorNode(String nodeUri) throws DmtException {
-		String[] nodeUriArr = Splitter.split(nodeUri, '/', 0);
+	public void createInteriorNode(String[] nodeUriArr, String type) throws DmtException {
         int l = nodeUriArr.length;
         if (l != 5)
             throw new RuntimeException("Internal error");
         if (entries.contains(nodeUriArr[4]))
-            throw new DmtException(nodeUri, DmtException.NODE_ALREADY_EXISTS, "");
+            throw new DmtException(nodeUriArr, DmtException.NODE_ALREADY_EXISTS, "");
         entries.add(nodeUriArr[4]);
         try {
             pluginCtx.save();
         }
         catch (IOException e) {
-            throw new DmtException(nodeUri, DmtException.DATA_STORE_FAILURE, 
+            throw new DmtException(nodeUriArr, DmtException.DATA_STORE_FAILURE, 
                     "Changes cannot be persisted", e); 
         }
 	}
 
-	public void createInteriorNode(String nodeUri, String type) throws DmtException {
-	    createInteriorNode(nodeUri);
+	public void createLeafNode(String[] nodeUriArr, DmtData value, String mimeType) throws DmtException {
 	}
 
-	public void createLeafNode(String nodeUri) throws DmtException {
+	public void copy(String[] nodeUriArr, String[] newNodeUriArr, boolean recursive) throws DmtException {
 	}
 
-	public void createLeafNode(String nodeUri, DmtData value) throws DmtException {
-	}
-
-	public void createLeafNode(String nodeUri, DmtData value, String mimeType) throws DmtException {
-	}
-
-	public void copy(String nodeUri, String newNodeUri, boolean recursive) throws DmtException {
-	}
-
-	public void renameNode(String nodeUri, String newName) throws DmtException {
+	public void renameNode(String[] nodeUriArr, String newName) throws DmtException {
 	}
 
 	public void close() throws DmtException {
 	}
 
-	public boolean isNodeUri(String nodeUri) {
-		String[] nodeUriArr = Splitter.split(nodeUri, '/', 0);
+	public boolean isNodeUri(String[] nodeUriArr) {
         int l = nodeUriArr.length;
         if (l < 4)
             throw new RuntimeException("Internal error");
@@ -334,8 +325,7 @@ public class PluginDownload extends DefaultHandler
         return false;
 	}
 
-	public boolean isLeafNode(String nodeUri) throws DmtException {
-		String[] nodeUriArr = Splitter.split(nodeUri, '/', 0);
+	public boolean isLeafNode(String[] nodeUriArr) throws DmtException {
         int l = nodeUriArr.length;
         if (l < 4)
             throw new RuntimeException("Internal error");
@@ -359,8 +349,7 @@ public class PluginDownload extends DefaultHandler
         throw new RuntimeException("Internal error");
 	}
 
-	public DmtData getNodeValue(String nodeUri) throws DmtException {
-	    String[] nodeUriArr = Splitter.split(nodeUri, '/', 0);
+	public DmtData getNodeValue(String[] nodeUriArr) throws DmtException {
         int l = nodeUriArr.length;
 		if (l == 6) {
 		    if (nodeUriArr[5].equals("ID"))
@@ -380,36 +369,35 @@ public class PluginDownload extends DefaultHandler
 		throw new RuntimeException("Internal error");
 	}
 
-	public String getNodeTitle(String nodeUri) throws DmtException {
+	public String getNodeTitle(String[] nodeUriArr) throws DmtException {
 		return null;
 	}
 
-	public String getNodeType(String nodeUri) throws DmtException {
+	public String getNodeType(String[] nodeUriArr) throws DmtException {
 		return null;
 	}
 
-	public int getNodeVersion(String nodeUri) throws DmtException {
+	public int getNodeVersion(String[] nodeUriArr) throws DmtException {
 		return 0;
 	}
 
-	public Date getNodeTimestamp(String nodeUri) throws DmtException {
+	public Date getNodeTimestamp(String[] nodeUriArr) throws DmtException {
 		return null;
 	}
 
-	public int getNodeSize(String nodeUri) throws DmtException {
-		DmtData data = getNodeValue(nodeUri);
+	public int getNodeSize(String[] nodeUriArr) throws DmtException {
+		DmtData data = getNodeValue(nodeUriArr);
 		return data.getSize();
 	}
 
-	public String[] getChildNodeNames(String nodeUri) throws DmtException {
-		String[] nodeUriArr = Splitter.split(nodeUri, '/', 0);
+	public String[] getChildNodeNames(String[] nodeUriArr) throws DmtException {
         int l = nodeUriArr.length;
         if (l < 4)
             throw new RuntimeException("Internal error");
         if (l == 4)
         	return entries.keys();
         if (!entries.contains(nodeUriArr[4]))
-            throw new DmtException(nodeUri, DmtException.NODE_NOT_FOUND, "");
+            throw new DmtException(nodeUriArr, DmtException.NODE_NOT_FOUND, "");
         if (l == 5)
             return new String[] {"ID", "URI", "EnvType", "Status", "Operations"};
         if (l == 6)
@@ -418,71 +406,69 @@ public class PluginDownload extends DefaultHandler
         throw new RuntimeException("Internal error");
 	}
 
-	public DmtMetaNode getMetaNode(String nodeUri) throws DmtException {
-        String[] nodeUriArr = Splitter.split(nodeUri, '/', 0);
+	public MetaNode getMetaNode(String[] nodeUriArr) throws DmtException {
         int l = nodeUriArr.length;
         if (l < 4)
             throw new RuntimeException("Internal error");
         if (l == 4)
-			return new Metanode(DmtMetaNode.CMD_GET, !Metanode.IS_LEAF,
-					DmtMetaNode.PERMANENT, "", 1, !Metanode.ZERO_OCC, null, 0,
+			return new Metanode(MetaNode.CMD_GET, !Metanode.IS_LEAF,
+					MetaNode.PERMANENT, "", 1, !Metanode.ZERO_OCC, null, 0,
 					0, null, DmtData.FORMAT_NODE);
         if (l == 5)
-			return new Metanode(DmtMetaNode.CMD_GET, !Metanode.IS_LEAF,
-					DmtMetaNode.DYNAMIC, "", Integer.MAX_VALUE, Metanode.ZERO_OCC, null, 0,
-					0, null, DmtData.FORMAT_NODE).orOperation(DmtMetaNode.CMD_ADD).
-                    orOperation(DmtMetaNode.CMD_DELETE);
+			return new Metanode(MetaNode.CMD_GET, !Metanode.IS_LEAF,
+					MetaNode.DYNAMIC, "", Integer.MAX_VALUE, Metanode.ZERO_OCC, null, 0,
+					0, null, DmtData.FORMAT_NODE).orOperation(MetaNode.CMD_ADD).
+                    orOperation(MetaNode.CMD_DELETE);
         if (l == 6) {
             if (nodeUriArr[5].equals("ID"))
-                return new Metanode(DmtMetaNode.CMD_GET, Metanode.IS_LEAF,
-    					DmtMetaNode.AUTOMATIC, "", 1, !Metanode.ZERO_OCC, null, 0,
-    					0, null, DmtData.FORMAT_STRING).orOperation(DmtMetaNode.CMD_REPLACE);
+                return new Metanode(MetaNode.CMD_GET, Metanode.IS_LEAF,
+    					MetaNode.AUTOMATIC, "", 1, !Metanode.ZERO_OCC, null, 0,
+    					0, null, DmtData.FORMAT_STRING).orOperation(MetaNode.CMD_REPLACE);
 		    if (nodeUriArr[5].equals("URI"))
-		        return new Metanode(DmtMetaNode.CMD_GET, Metanode.IS_LEAF,
-    					DmtMetaNode.AUTOMATIC, "", 1, !Metanode.ZERO_OCC, null, 0,
-    					0, null, DmtData.FORMAT_STRING).orOperation(DmtMetaNode.CMD_REPLACE);
+		        return new Metanode(MetaNode.CMD_GET, Metanode.IS_LEAF,
+    					MetaNode.AUTOMATIC, "", 1, !Metanode.ZERO_OCC, null, 0,
+    					0, null, DmtData.FORMAT_STRING).orOperation(MetaNode.CMD_REPLACE);
 		    if (nodeUriArr[5].equals("EnvType"))
-                return new Metanode(DmtMetaNode.CMD_GET, Metanode.IS_LEAF,
-                        DmtMetaNode.AUTOMATIC, "", 1, !Metanode.ZERO_OCC, null, 0,
-                        0, null, DmtData.FORMAT_STRING).orOperation(DmtMetaNode.CMD_REPLACE);
+                return new Metanode(MetaNode.CMD_GET, Metanode.IS_LEAF,
+                        MetaNode.AUTOMATIC, "", 1, !Metanode.ZERO_OCC, null, 0,
+                        0, null, DmtData.FORMAT_STRING).orOperation(MetaNode.CMD_REPLACE);
 		    if (nodeUriArr[5].equals("Status"))
-		        return new Metanode(DmtMetaNode.CMD_GET, Metanode.IS_LEAF,
-    					DmtMetaNode.AUTOMATIC, "", 1, !Metanode.ZERO_OCC, null, 0,
+		        return new Metanode(MetaNode.CMD_GET, Metanode.IS_LEAF,
+    					MetaNode.AUTOMATIC, "", 1, !Metanode.ZERO_OCC, null, 0,
     					0, null, DmtData.FORMAT_STRING);
             if (nodeUriArr[5].equals("Operations"))
-                return new Metanode(DmtMetaNode.CMD_GET, !Metanode.IS_LEAF,
-    					DmtMetaNode.AUTOMATIC, "", 1, !Metanode.ZERO_OCC, null, 0,
+                return new Metanode(MetaNode.CMD_GET, !Metanode.IS_LEAF,
+    					MetaNode.AUTOMATIC, "", 1, !Metanode.ZERO_OCC, null, 0,
     					0, null, DmtData.FORMAT_NODE);
         }
         if (l == 7) {
-            return new Metanode(DmtMetaNode.CMD_GET, !Metanode.IS_LEAF,
-					DmtMetaNode.PERMANENT, "", 1, !Metanode.ZERO_OCC, null, 0,
-					0, null, DmtData.FORMAT_NULL).orOperation(DmtMetaNode.CMD_EXECUTE);
+            return new Metanode(MetaNode.CMD_GET, !Metanode.IS_LEAF,
+					MetaNode.PERMANENT, "", 1, !Metanode.ZERO_OCC, null, 0,
+					0, null, DmtData.FORMAT_NULL).orOperation(MetaNode.CMD_EXECUTE);
         }
         
         throw new RuntimeException("Internal error");
 	}
 
-	public void execute(DmtSession session, String nodeUri, String correlator, String data) throws DmtException {
-        String[] nodeUriArr = Splitter.split(nodeUri, '/', 0);
+	public void execute(DmtSession session, String[] nodeUriArr, String correlator, String data) throws DmtException {
         int l = nodeUriArr.length;
         if (l != 7)
             throw new RuntimeException("Internal error");
         if (!entries.contains(nodeUriArr[4]))
-            throw new DmtException(nodeUri, DmtException.NODE_NOT_FOUND, "");
+            throw new DmtException(nodeUriArr, DmtException.NODE_NOT_FOUND, "");
         String envType = entries.get(nodeUriArr[4]).envType;
         if (null == envType || !envType.equals("OSGi.R4"))
-            throw new DmtException(nodeUri, DmtException.COMMAND_FAILED, "EnvType has to " +
+            throw new DmtException(nodeUriArr, DmtException.COMMAND_FAILED, "EnvType has to " +
                     "be 'OSGi.R4'");
         String id = entries.get(nodeUriArr[4]).id;
         if (null == id || id.trim().length() == 0)
-            throw new DmtException(nodeUri, DmtException.COMMAND_FAILED, "ID has to " +
+            throw new DmtException(nodeUriArr, DmtException.COMMAND_FAILED, "ID has to " +
                     "be set");
         
-        entries.start(nodeUri, correlator, session.getPrincipal());
+        entries.start(nodeUriArr, correlator, session.getPrincipal());
 	}
     
-    public void nodeChanged(String nodeUri) throws DmtException {
+    public void nodeChanged(String[] nodeUriArr) throws DmtException {
     }
     
     ///////////////////////////////////////////////////////////////////////////

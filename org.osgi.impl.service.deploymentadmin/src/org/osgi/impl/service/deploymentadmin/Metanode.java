@@ -18,9 +18,9 @@
 package org.osgi.impl.service.deploymentadmin;
 
 import org.osgi.service.dmt.DmtData;
-import org.osgi.service.dmt.DmtMetaNode;
+import org.osgi.service.dmt.MetaNode;
 
-public class Metanode implements DmtMetaNode {
+public class Metanode implements MetaNode {
     
     public static final boolean IS_LEAF = true;
     public static final boolean ZERO_OCC = true;

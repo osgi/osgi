@@ -54,9 +54,8 @@ import org.osgi.service.deploymentadmin.DeploymentAdminPermission;
 import org.osgi.service.deploymentadmin.DeploymentException;
 import org.osgi.service.deploymentadmin.DeploymentPackage;
 import org.osgi.service.dmt.DmtAdmin;
-import org.osgi.service.dmt.DmtDataPlugin;
-import org.osgi.service.dmt.DmtExecPlugin;
-import org.osgi.service.dmt.DmtReadOnlyDataPlugin;
+import org.osgi.service.dmt.spi.DataPluginFactory;
+import org.osgi.service.dmt.spi.ExecPlugin;
 import org.osgi.service.event.Event;
 import org.osgi.service.event.EventAdmin;
 import org.osgi.util.tracker.ServiceTracker;
@@ -143,7 +142,7 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
 		initTrackers();
 		
         // registers Deployment Admin service
-        registerService(DeploymentAdmin.class.getName(), this, null);
+        registerService(new String[] { DeploymentAdmin.class.getName() }, this, null);
         
         // initialize logger
         logger = new Logger(context);
@@ -347,34 +346,30 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
 
     private void registerDmtPlugins() {
         Hashtable props;
+        
+        String[] pluginClassNames = new String[] { 
+                DataPluginFactory.class.getName(),
+                ExecPlugin.class.getName() 
+        };  
                 
         props = new Hashtable();
-        props.put(DmtDataPlugin.DATA_ROOT_URIS, "./OSGi/Deployment/Download");
-        registerService(DmtDataPlugin.class.getName(), pluginDownload, props);
+        props.put(DataPluginFactory.DATA_ROOT_URIS, "./OSGi/Deployment/Download");
+        props.put(ExecPlugin.EXEC_ROOT_URIS, "./OSGi/Deployment/Download");
+        registerService(pluginClassNames, pluginDownload, props);
 
         props = new Hashtable();
-        props.put(DmtExecPlugin.EXEC_ROOT_URIS, "./OSGi/Deployment/Download");
-        registerService(DmtDataPlugin.class.getName(), pluginDownload, props);
+        props.put(DataPluginFactory.DATA_ROOT_URIS, "./OSGi/Deployment/Inventory/Deployed");
+        props.put(ExecPlugin.EXEC_ROOT_URIS, "./OSGi/Deployment/Inventory/Deployed");
+        registerService(pluginClassNames, pluginDeployed, props);
 
         props = new Hashtable();
-        props.put(DmtDataPlugin.DATA_ROOT_URIS, "./OSGi/Deployment/Inventory/Deployed");
-        registerService(DmtReadOnlyDataPlugin.class.getName(), pluginDeployed, props);
-
-        props = new Hashtable();
-        props.put(DmtExecPlugin.EXEC_ROOT_URIS, "./OSGi/Deployment/Inventory/Deployed");
-        registerService(DmtReadOnlyDataPlugin.class.getName(), pluginDeployed, props);
-        
-        props = new Hashtable();
-        props.put(DmtDataPlugin.DATA_ROOT_URIS, "./OSGi/Deployment/Inventory/Delivered");
-        registerService(DmtReadOnlyDataPlugin.class.getName(), pluginDelivered, props);
-
-        props = new Hashtable();
-        props.put(DmtExecPlugin.EXEC_ROOT_URIS, "./OSGi/Deployment/Inventory/Delivered");
-        registerService(DmtReadOnlyDataPlugin.class.getName(), pluginDelivered, props);
+        props.put(DataPluginFactory.DATA_ROOT_URIS, "./OSGi/Deployment/Inventory/Delivered");
+        props.put(ExecPlugin.EXEC_ROOT_URIS, "./OSGi/Deployment/Inventory/Delivered");
+        registerService(pluginClassNames, pluginDelivered, props);
     }
     
-    private void registerService(String className, Object service, Hashtable props) {
-        serviceRegs.add(context.registerService(className, service, props));
+    private void registerService(String[] classNames, Object service, Hashtable props) {
+        serviceRegs.add(context.registerService(classNames, service, props));
     }
     
     private void unregisterServices() {
