@@ -1,40 +1,58 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project name="project" default="runAllTests"> 
-	<target name="runAllTests">		
+<project name="project" default="director"> 
+	
+	
+	<target name="director">
 		<java jar="../org.osgi.impl.framework.eclipse.jar"
 			fork="true"
 		>
-			<jvmarg line="-Dorg.osgi.service.http.port=81"/>
 			<jvmarg line="-Xverify:none"/>
-			<jvmarg line="-Dosgi.framework.systempackages=javax.xml.parsers,javax.xml.transform,javax.xml.transform.stream,org.xml.sax,org.xml.sax.helpers,javax.crypto,javax.crypto.spec"/>
-			
 			<arg line="-console"/>
 			<arg line="init"/>
 			<arg line="launch"/>
-			<arg line="'install file:../../osgi.released/osgi.jar start'"/>
-			<arg line="'install file:../org.osgi.tools.console.jar start'"/>
+			<arg line="'install file:../osgi.jar start'"/>
 			<arg line="'install file:../osgi.min.jar start'"/>
+			<arg line="'install file:../org.osgi.tools.console.jar start'"/>
 			<arg line="'install file:../osgi.director.jar start'"/>
-			<arg line="'install file:../osgi.test.jar start'"/>
-			
 		</java>
 	</target>
-	<target name="runEmpty">		
+		
+	<target name="run-cmpn">
+		<ant target="-run">
+			<property name="tests" value="file:../osgi.cmpn.tests.jar"/>
+			<property name="script" value="file:cmpn.script"/>
+		</ant> 
+	</target>
+	
+	<target name="run-core">
+		<ant target="-run">
+			<property name="tests" value="file:../osgi.core.tests.jar"/>
+			<property name="script" value="file:core.script"/>
+		</ant> 
+	</target>
+	
+	<target name="run-link">
+		<ant target="-run">
+			<property name="tests" value="file:../org.osgi.test.cases.testtool.jar"/>
+			<property name="script" value="file:link.script"/>
+		</ant> 
+	</target>
+	
+	<target name="-run">		
 		<java jar="../org.osgi.impl.framework.eclipse.jar"
 			fork="true"
 		>
-			<jvmarg line="-Dorg.osgi.service.http.port=81"/>
 			<jvmarg line="-Xverify:none"/>
-			<jvmarg line="-Dosgi.framework.systempackages=javax.xml.parsers,javax.xml.transform,javax.xml.transform.stream,org.xml.sax,org.xml.sax.helpers,javax.crypto,javax.crypto.spec"/>
+			<jvmarg line="-Dorg.osgi.test.batch.script=${script}"/>
 			
 			<arg line="-console"/>
 			<arg line="init"/>
-			<arg line="launch"/>
-			<arg line="'install file:../../osgi.released/osgi.jar start'"/>
-			<arg line="'install file:../org.osgi.tools.console.jar start'"/>
+			<arg line="'install file:../osgi.jar start'"/>
 			<arg line="'install file:../osgi.min.jar start'"/>
+			<arg line="'install file:../org.osgi.tools.console.jar start'"/>
 			<arg line="'install file:../osgi.director.jar start'"/>
-			
+			<arg line="'install ${tests} start'"/>
+			<arg line="launch"/>
 		</java>
 	</target>
 </project>

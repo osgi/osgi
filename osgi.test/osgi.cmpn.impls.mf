@@ -1,0 +1,18 @@
+Manifest-Version: 1.0
+Bundle-Name: cmpn.impls
+Bundle-Activator: org.osgi.tools.group.Group
+Bundle-Description: OSGi Service Platform Release 3, Compendium Test Cases loader
+Bundle-Copyright: ${copyright}
+CVS-Header: $Header$
+Bundle-Vendor: OSGi Alliance
+Bundle-Version: 3.0
+Bundle-Category: osgi,test
+Bundle-DocUrl: http://www.osgi.org/
+Export-Package: javax.servlet;specification-version=2.1,
+ javax.servlet.http;specification-version=2.1,
+ javax.microedition.io
+Bundle-Classpath: .,servlet.jar
+$(IMPORT-PACKAGE)
+group-load:  ${cmpn.impls.jars}
+
+

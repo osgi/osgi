@@ -1,27 +1,31 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project name="project" default="run"> 
-	<target name="run">
-		
-		<java jar="../org.osgi.impl.framework.eclipse.jar"
-			fork="true"
-		>			
-			<jvmarg line="-Dorg.osgi.test.watchdog=120"/>
-			<jvmarg line="-Dorg.osgi.test.seewait=true"/>
-			<jvmarg line="-Djava.security.manager"/>
+<project name="project" default="run-core"> 
+	
+	<target name="run-core">
+		<ant target="-run">
+		  <property name="impls" value="file:../osgi.core.impls.jar"/>
+		</ant>
+	</target>
+	
+	<target name="run-cmpn">
+		<ant target="-run">
+		  <property name="impls" value="file:../osgi.cmpn.impls.jar"/>
+		</ant>
+	</target>
+	
+	<target name="-run">
+		<echo>Testing ${impls}</echo>
+		<java jar="../org.osgi.impl.framework.eclipse.jar" fork="true" >	
+			<jvmarg line="-Djava.security.manager=org.eclipse.osgi.framework.internal.core.FrameworkSecurityManager"/>
 			<jvmarg line="-Djava.security.policy=policy"/>
-			<jvmarg line="-Dmail.host=localhost"/>
-			<jvmarg line="-Dorg.osgi.service.http.port=8080"/>
-			 
-			<jvmarg line="-Dosgi.framework.systempackages=javax.xml.parsers;specification-version=1.1,javax.xml.transform,javax.xml.transform.stream,org.xml.sax;specification-version=2.0,org.xml.sax.helpers;specification-version=2.0,javax.crypto,javax.crypto.spec,javax.swing,javax.swing.border,javax.swing.text"/>
-			
+			<jvmarg line="-Xverify:none"/>
 			<arg line="-console"/>
 			<arg line="init"/>
-			<arg line="launch"/>
-			<arg line="'install file:../../osgi.released/osgi.jar start'"/>
+			<arg line="'install file:../osgi.jar start'"/>
 			<arg line="'install file:../org.osgi.tools.console.jar start'"/>
 			<arg line="'install file:../osgi.target.jar start'"/>
-			<arg line="'install file:../osgi.refimpl.jar start'"/>
-			
+			<arg line="'install ${impls} start'"/>
+			<arg line="launch"/>
 		</java>
 	</target>
 </project>
