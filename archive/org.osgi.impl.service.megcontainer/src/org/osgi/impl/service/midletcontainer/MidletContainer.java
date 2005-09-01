@@ -11,6 +11,7 @@ import org.osgi.service.application.ApplicationDescriptor;
 import org.osgi.service.application.ApplicationHandle;
 import org.osgi.service.log.LogService;
 import org.w3c.dom.*;
+import java.net.URL;
 
 class MEGBundleDescriptor {
 	public ApplicationDescriptor	applications[];
@@ -70,8 +71,18 @@ public class MidletContainer implements BundleListener, ServiceListener {
 		MEGBundleDescriptor desc = getBundleDescriptor(appDesc.getBundleId());
 		Bundle appBundle = bc.getBundle(appDesc.getBundleId());
 		Class mainClass = appBundle.loadClass(appDesc.getStartClass());
+		String mainClassFileName = appDesc.getStartClass().replace( '.', '/' ) + ".class";
+		
+		URL url = appBundle.getResource( mainClassFileName );
+		if( url == null )
+			throw new Exception( "Internal error!" );
+		String urlName = url.toString();
+		if( !urlName.endsWith( mainClassFileName ) )
+			throw new Exception( "Internal error!" );
+		String location = urlName.substring( 0, urlName.length() - mainClassFileName.length() );
+		
 		ClassLoader loader = new MIDletClassLoader(mainClass.getClassLoader(),
-				appBundle, mainClass.getProtectionDomain());
+				appBundle, mainClass.getProtectionDomain(), location );
 		Class midletClass = loader.loadClass(appDesc.getStartClass());
 		Constructor constructor = midletClass
 				.getDeclaredConstructor(new Class[0]);
