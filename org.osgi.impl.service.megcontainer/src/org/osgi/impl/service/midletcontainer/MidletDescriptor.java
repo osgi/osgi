@@ -1,5 +1,9 @@
 package org.osgi.impl.service.midletcontainer;
 
+import java.lang.reflect.Constructor;
+import java.net.URL;
+import java.security.AccessController;
+import java.security.PrivilegedExceptionAction;
 import java.util.*;
 import javax.microedition.midlet.MIDlet;
 import org.osgi.framework.*;
@@ -111,7 +115,7 @@ public final class MidletDescriptor extends ApplicationDescriptor {
 	}
 
 	public ApplicationHandle launchSpecific(Map args) throws Exception {
-		MIDlet midlet = midletContainer.createMidletInstance(this);
+		MIDlet midlet = createMidletInstance();
 		if (midlet == null)
 			throw new Exception("Cannot create meglet instance!");
 		else {
@@ -151,4 +155,30 @@ public final class MidletDescriptor extends ApplicationDescriptor {
 		}
 		return false;
 	}	
+
+	public MIDlet createMidletInstance() throws Exception {
+		return (MIDlet)AccessController.doPrivileged(new PrivilegedExceptionAction() {
+			public java.lang.Object run() throws Exception {
+				Bundle appBundle = bc.getBundle(getBundleId());
+				Class mainClass = appBundle.loadClass(getStartClass());
+				String mainClassFileName = getStartClass().replace( '.', '/' ) + ".class";
+				
+				URL url = appBundle.getResource( mainClassFileName );
+				if( url == null )
+					throw new Exception( "Internal error!" );
+				String urlName = url.toString();
+				if( !urlName.endsWith( mainClassFileName ) )
+					throw new Exception( "Internal error!" );
+				String location = urlName.substring( 0, urlName.length() - mainClassFileName.length() );
+				
+				ClassLoader loader = new MIDletClassLoader(mainClass.getClassLoader(),
+						appBundle, mainClass.getProtectionDomain(), location );
+				Class midletClass = loader.loadClass(getStartClass());
+				Constructor constructor = midletClass
+						.getDeclaredConstructor(new Class[0]);
+				constructor.setAccessible(true);
+				MIDlet app = (MIDlet) constructor.newInstance(new Object[0]);
+				return app;
+		  }});
+	}
 }
