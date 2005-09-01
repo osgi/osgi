@@ -19,6 +19,11 @@ import org.osgi.framework.BundleContext;
 import org.osgi.service.log.LogService;
 import org.osgi.util.tracker.ServiceTracker;
 
+/**
+ * Utility class with static methods for logging to LogService, if available 
+ * 
+ * @version $Revision$
+ */
 public class Log {
 	static private ServiceTracker	logTracker;
 
