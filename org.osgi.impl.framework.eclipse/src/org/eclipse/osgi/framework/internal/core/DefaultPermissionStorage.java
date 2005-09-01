@@ -61,7 +61,7 @@ public class DefaultPermissionStorage implements PermissionStorage {
 				Debug.println("Unable to create directory: " + permissionDir.getPath()); //$NON-NLS-1$
 			}
 
-			throw new IOException(NLS.bind(AdaptorMsg.ADAPTOR_DIRECTORY_CREATE_EXCEPTION, permissionDir)); //$NON-NLS-1$
+			throw new IOException(NLS.bind(AdaptorMsg.ADAPTOR_DIRECTORY_CREATE_EXCEPTION, permissionDir)); 
 		}
 
 		defaultData = new File(permissionDir, ".default"); //$NON-NLS-1$

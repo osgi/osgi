@@ -207,9 +207,9 @@ public class FilePath {
 		int count = this.matchingFirstSegments(base);
 		if (baseCount == count && count == base.segments.length)
 			return base.hasTrailingSlash() ? ("." + SEPARATOR) : "."; //$NON-NLS-1$ //$NON-NLS-2$
-		StringBuffer relative = new StringBuffer(); //$NON-NLS-1$	
+		StringBuffer relative = new StringBuffer(); //	
 		for (int j = 0; j < baseCount - count; j++)
-			relative.append(PARENT_DIR + SEPARATOR); //$NON-NLS-1$
+			relative.append(PARENT_DIR + SEPARATOR); 
 		for (int i = 0; i < base.segments.length - count; i++) {
 			relative.append(base.segments[count + i]);
 			relative.append(SEPARATOR);

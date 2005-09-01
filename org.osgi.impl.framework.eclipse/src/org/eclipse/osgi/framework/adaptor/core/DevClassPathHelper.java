@@ -15,6 +15,7 @@ import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.*;
+import org.eclipse.osgi.util.ManifestElement;
 
 /**
  * This class provides helper methods to support developement classpaths.
@@ -82,16 +83,7 @@ public final class DevClassPathHelper {
 	 * @param prop the initial comma-separated string
 	 */
 	public static String[] getArrayFromList(String prop) {
-		if (prop == null || prop.trim().equals("")) //$NON-NLS-1$
-			return new String[0];
-		Vector list = new Vector();
-		StringTokenizer tokens = new StringTokenizer(prop, ","); //$NON-NLS-1$
-		while (tokens.hasMoreTokens()) {
-			String token = tokens.nextToken().trim();
-			if (!token.equals("")) //$NON-NLS-1$
-				list.addElement(token);
-		}
-		return list.isEmpty() ? new String[0] : (String[]) list.toArray(new String[list.size()]);
+		return ManifestElement.getArrayFromList(prop, ","); //$NON-NLS-1$
 	}
 
 	/**

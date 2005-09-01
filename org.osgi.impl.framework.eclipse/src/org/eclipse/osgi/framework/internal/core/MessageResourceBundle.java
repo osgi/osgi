@@ -226,7 +226,7 @@ public class MessageResourceBundle {
 		if (adaptor != null)
 			adaptor.getFrameworkLog().log(new FrameworkLogEntry(FrameworkAdaptor.FRAMEWORK_SYMBOLICNAME + ' ' + severity + ' ' + 1, msg, 0, e, null));
 		else {
-			System.out.println(msg); //$NON-NLS-1$
+			System.out.println(msg); 
 			if (e != null)
 				e.printStackTrace();
 		}

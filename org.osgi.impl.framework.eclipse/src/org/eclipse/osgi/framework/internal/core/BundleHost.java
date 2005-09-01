@@ -189,7 +189,7 @@ public class BundleHost extends AbstractBundle {
 		}
 		if (Debug.DEBUG && Debug.DEBUG_GENERAL) {
 			if ((state & (STARTING | ACTIVE | STOPPING | RESOLVED)) == 0) {
-				Debug.println("Bundle.checkLoader() called when state != STARTING | ACTIVE | STOPPING | RESOLVED: " + this); //$NON-NLS-1$ //$NON-NLS-2$
+				Debug.println("Bundle.checkLoader() called when state != STARTING | ACTIVE | STOPPING | RESOLVED: " + this); //$NON-NLS-1$ 
 				Debug.printStackTrace(new Exception("Stack trace")); //$NON-NLS-1$
 			}
 		}
@@ -197,7 +197,7 @@ public class BundleHost extends AbstractBundle {
 		BundleLoader loader = getBundleLoader();
 		if (loader == null) {
 			if (Debug.DEBUG && Debug.DEBUG_GENERAL) {
-				Debug.println("Bundle.checkLoader() called when loader == null: " + this); //$NON-NLS-1$ //$NON-NLS-2$
+				Debug.println("Bundle.checkLoader() called when loader == null: " + this); //$NON-NLS-1$ 
 				Debug.printStackTrace(new Exception("Stack trace")); //$NON-NLS-1$
 			}
 			return null;
@@ -223,7 +223,7 @@ public class BundleHost extends AbstractBundle {
 		}
 		BundleLoader loader = checkLoader();
 		if (loader == null)
-			throw new ClassNotFoundException(NLS.bind(Msg.BUNDLE_CNFE_NOT_RESOLVED, getBundleData().getLocation(), name)); //$NON-NLS-1$
+			throw new ClassNotFoundException(NLS.bind(Msg.BUNDLE_CNFE_NOT_RESOLVED, getBundleData().getLocation(), name)); 
 		return (loader.loadClass(name));
 	}
 
@@ -334,7 +334,7 @@ public class BundleHost extends AbstractBundle {
 					if (state == UNINSTALLED) {
 						context.close();
 						context = null;
-						throw new BundleException(NLS.bind(Msg.BUNDLE_UNINSTALLED_EXCEPTION, getBundleData().getLocation())); //$NON-NLS-1$
+						throw new BundleException(NLS.bind(Msg.BUNDLE_UNINSTALLED_EXCEPTION, getBundleData().getLocation())); 
 					}
 				}
 			} finally {
@@ -502,7 +502,7 @@ public class BundleHost extends AbstractBundle {
 					// then we cannot attach a fragment into the middle
 					// of the fragment chain.
 					if (loader != null) {
-						throw new BundleException(NLS.bind(Msg.BUNDLE_LOADER_ATTACHMENT_ERROR, fragments[i].getSymbolicName(), getSymbolicName())); //$NON-NLS-1$
+						throw new BundleException(NLS.bind(Msg.BUNDLE_LOADER_ATTACHMENT_ERROR, fragments[i].getSymbolicName(), getSymbolicName())); 
 					}
 					newFragments[i] = fragment;
 					inserted = true;

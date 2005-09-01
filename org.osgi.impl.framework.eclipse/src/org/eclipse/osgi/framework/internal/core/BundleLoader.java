@@ -122,7 +122,7 @@ public class BundleLoader implements ClassLoaderDelegate {
 		try {
 			bundle.getBundleData().open(); /* make sure the BundleData is open */
 		} catch (IOException e) {
-			throw new BundleException(Msg.BUNDLE_READ_EXCEPTION, e); //$NON-NLS-1$
+			throw new BundleException(Msg.BUNDLE_READ_EXCEPTION, e); 
 		}
 		initialize(proxy.getBundleDescription());
 	}
@@ -315,7 +315,7 @@ public class BundleLoader implements ClassLoaderDelegate {
 					parent = getParentPrivileged(bcl);
 					classloader = bcl;
 				} else {
-					bundle.framework.publishFrameworkEvent(FrameworkEvent.ERROR, bundle, new BundleException(Msg.BUNDLE_NO_CLASSPATH_MATCH)); //$NON-NLS-1$
+					bundle.framework.publishFrameworkEvent(FrameworkEvent.ERROR, bundle, new BundleException(Msg.BUNDLE_NO_CLASSPATH_MATCH)); 
 				}
 			} catch (BundleException e) {
 				bundle.framework.publishFrameworkEvent(FrameworkEvent.ERROR, bundle, e);

@@ -63,8 +63,6 @@ public class FrameworkConsole implements Runnable {
 	 */
 	public FrameworkConsole(OSGi osgi, String[] args) {
 
-		getDefaultStreams();
-
 		this.args = args;
 		this.osgi = osgi;
 
@@ -80,8 +78,6 @@ public class FrameworkConsole implements Runnable {
 	 @param args - any arguments passed on the command line when Launcher is started.
 	 */
 	public FrameworkConsole(OSGi osgi, int port, String[] args) {
-
-		getSocketStream(port);
 
 		this.useSocketStream = true;
 		this.port = port;
@@ -106,7 +102,7 @@ public class FrameworkConsole implements Runnable {
 	 */
 	private void getSocketStream(int port) {
 		try {
-			System.out.println(NLS.bind(ConsoleMsg.CONSOLE_LISTENING_ON_PORT, String.valueOf(port))); 
+			System.out.println(NLS.bind(ConsoleMsg.CONSOLE_LISTENING_ON_PORT, String.valueOf(port)));
 			if (ss == null) {
 				ss = new ServerSocket(port);
 				scsg = new ConsoleSocketGetter(ss);
@@ -188,6 +184,7 @@ public class FrameworkConsole implements Runnable {
 	 *  - create OSGi CommandProvider object
 	 */
 	private void initialize() {
+		getDefaultStreams();
 
 		context = osgi.getBundleContext();
 
@@ -211,6 +208,9 @@ public class FrameworkConsole implements Runnable {
 					getSocketStream(port);
 					console();
 				}
+			} else {
+				getDefaultStreams();
+				console();
 			}
 		} catch (IOException e) {
 			e.printStackTrace(out);
@@ -234,7 +234,6 @@ public class FrameworkConsole implements Runnable {
 				docommand(args[i]);
 			}
 		}
-		console();
 	}
 
 	/**
@@ -252,13 +251,13 @@ public class FrameworkConsole implements Runnable {
 		BufferedReader br = (BufferedReader) in;
 		//cache the console prompt String
 		String consolePrompt = "\r\n" + ConsoleMsg.CONSOLE_PROMPT; //$NON-NLS-1$
-		boolean block = System.getProperty("osgi.dev") != null; //$NON-NLS-1$
+		boolean block = System.getProperty("osgi.dev") != null || System.getProperty("osgi.console.blockOnReady") != null; //$NON-NLS-1$ //$NON-NLS-2$
 		while (!disconnect) {
 			out.print(consolePrompt);
 			out.flush();
 
 			String cmdline = null;
-			if (block) {
+			if (block && !useSocketStream) {
 				// bug 40066: avoid waiting on input stream - apparently generates contention with other native calls 
 				try {
 					synchronized (lock) {
@@ -318,7 +317,7 @@ public class FrameworkConsole implements Runnable {
 		try {
 			/** The buffered input reader on standard in. */
 			input = ((BufferedReader) in).readLine();
-			System.out.println("<" + input + ">");  //$NON-NLS-1$//$NON-NLS-2$
+			System.out.println("<" + input + ">"); //$NON-NLS-1$//$NON-NLS-2$
 		} catch (IOException e) {
 			input = ""; //$NON-NLS-1$
 		}
@@ -362,9 +361,9 @@ public class FrameworkConsole implements Runnable {
 					socket = ss.accept();
 					if (!acceptConnections) {
 						PrintWriter o = createPrintWriter(socket.getOutputStream());
-						o.println(ConsoleMsg.CONSOLE_TELNET_CONNECTION_REFUSED); 
+						o.println(ConsoleMsg.CONSOLE_TELNET_CONNECTION_REFUSED);
 						o.println(ConsoleMsg.CONSOLE_TELNET_CURRENTLY_USED);
-						o.println(ConsoleMsg.CONSOLE_TELNET_ONE_CLIENT_ONLY); 
+						o.println(ConsoleMsg.CONSOLE_TELNET_ONE_CLIENT_ONLY);
 						o.close();
 						socket.close();
 					} else {

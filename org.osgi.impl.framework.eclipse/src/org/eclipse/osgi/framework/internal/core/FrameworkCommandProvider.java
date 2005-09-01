@@ -115,26 +115,26 @@ public class FrameworkCommandProvider implements CommandProvider {
 		help.append(ConsoleMsg.CONSOLE_HELP_VALID_COMMANDS_HEADER);
 		help.append(newline);
 		addHeader(ConsoleMsg.CONSOLE_HELP_CONTROLLING_FRAMEWORK_HEADER, help);
-		addCommand("launch", ConsoleMsg.CONSOLE_HELP_LAUNCH_COMMAND_DESCRIPTION, help); //$NON-NLS-1$ //$NON-NLS-2$
-		addCommand("shutdown", ConsoleMsg.CONSOLE_HELP_SHUTDOWN_COMMAND_DESCRIPTION, help); //$NON-NLS-1$ //$NON-NLS-2$
-		addCommand("close", ConsoleMsg.CONSOLE_HELP_CLOSE_COMMAND_DESCRIPTION, help); //$NON-NLS-1$ //$NON-NLS-2$
-		addCommand("exit", ConsoleMsg.CONSOLE_HELP_EXIT_COMMAND_DESCRIPTION, help); //$NON-NLS-1$ //$NON-NLS-2$
-		addCommand("gc", ConsoleMsg.CONSOLE_HELP_GC_COMMAND_DESCRIPTION, help); //$NON-NLS-1$ //$NON-NLS-2$
-		addCommand("init", ConsoleMsg.CONSOLE_HELP_INIT_COMMAND_DESCRIPTION, help); //$NON-NLS-1$ //$NON-NLS-2$
-		addCommand("setprop", ConsoleMsg.CONSOLE_HELP_KEYVALUE_ARGUMENT_DESCRIPTION, ConsoleMsg.CONSOLE_HELP_SETPROP_COMMAND_DESCRIPTION, help); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-		addHeader(ConsoleMsg.CONSOLE_HELP_CONTROLLING_BUNDLES_HEADER, help); //$NON-NLS-1$
-		addCommand("install", ConsoleMsg.CONSOLE_HELP_INSTALL_COMMAND_DESCRIPTION, help); //$NON-NLS-1$ //$NON-NLS-2$
-		addCommand("uninstall", ConsoleMsg.CONSOLE_HELP_UNINSTALL_COMMAND_DESCRIPTION, help); //$NON-NLS-1$ //$NON-NLS-2$
-		addCommand("start", ConsoleMsg.CONSOLE_HELP_START_COMMAND_DESCRIPTION, help); //$NON-NLS-1$ //$NON-NLS-2$
-		addCommand("stop", ConsoleMsg.CONSOLE_HELP_STOP_COMMAND_DESCRIPTION, help); //$NON-NLS-1$ //$NON-NLS-2$
-		addCommand("refresh", ConsoleMsg.CONSOLE_HELP_REFRESH_COMMAND_DESCRIPTION, help); //$NON-NLS-1$ //$NON-NLS-2$
-		addCommand("update", ConsoleMsg.CONSOLE_HELP_UPDATE_COMMAND_DESCRIPTION, help); //$NON-NLS-1$ //$NON-NLS-2$
-		addHeader(ConsoleMsg.CONSOLE_HELP_DISPLAYING_STATUS_HEADER, help); //$NON-NLS-1$
-		addCommand("status", ConsoleMsg.CONSOLE_HELP_STATUS_COMMAND_DESCRIPTION, help); //$NON-NLS-1$ //$NON-NLS-2$
-		addCommand("ss", ConsoleMsg.CONSOLE_HELP_SS_COMMAND_DESCRIPTION, help); //$NON-NLS-1$ //$NON-NLS-2$
+		addCommand("launch", ConsoleMsg.CONSOLE_HELP_LAUNCH_COMMAND_DESCRIPTION, help); //$NON-NLS-1$ 
+		addCommand("shutdown", ConsoleMsg.CONSOLE_HELP_SHUTDOWN_COMMAND_DESCRIPTION, help); //$NON-NLS-1$ 
+		addCommand("close", ConsoleMsg.CONSOLE_HELP_CLOSE_COMMAND_DESCRIPTION, help); //$NON-NLS-1$ 
+		addCommand("exit", ConsoleMsg.CONSOLE_HELP_EXIT_COMMAND_DESCRIPTION, help); //$NON-NLS-1$ 
+		addCommand("gc", ConsoleMsg.CONSOLE_HELP_GC_COMMAND_DESCRIPTION, help); //$NON-NLS-1$ 
+		addCommand("init", ConsoleMsg.CONSOLE_HELP_INIT_COMMAND_DESCRIPTION, help); //$NON-NLS-1$ 
+		addCommand("setprop", ConsoleMsg.CONSOLE_HELP_KEYVALUE_ARGUMENT_DESCRIPTION, ConsoleMsg.CONSOLE_HELP_SETPROP_COMMAND_DESCRIPTION, help); //$NON-NLS-1$  
+		addHeader(ConsoleMsg.CONSOLE_HELP_CONTROLLING_BUNDLES_HEADER, help); 
+		addCommand("install", ConsoleMsg.CONSOLE_HELP_INSTALL_COMMAND_DESCRIPTION, help); //$NON-NLS-1$ 
+		addCommand("uninstall", ConsoleMsg.CONSOLE_HELP_UNINSTALL_COMMAND_DESCRIPTION, help); //$NON-NLS-1$ 
+		addCommand("start", ConsoleMsg.CONSOLE_HELP_START_COMMAND_DESCRIPTION, help); //$NON-NLS-1$ 
+		addCommand("stop", ConsoleMsg.CONSOLE_HELP_STOP_COMMAND_DESCRIPTION, help); //$NON-NLS-1$ 
+		addCommand("refresh", ConsoleMsg.CONSOLE_HELP_REFRESH_COMMAND_DESCRIPTION, help); //$NON-NLS-1$ 
+		addCommand("update", ConsoleMsg.CONSOLE_HELP_UPDATE_COMMAND_DESCRIPTION, help); //$NON-NLS-1$ 
+		addHeader(ConsoleMsg.CONSOLE_HELP_DISPLAYING_STATUS_HEADER, help); 
+		addCommand("status", ConsoleMsg.CONSOLE_HELP_STATUS_COMMAND_DESCRIPTION, help); //$NON-NLS-1$ 
+		addCommand("ss", ConsoleMsg.CONSOLE_HELP_SS_COMMAND_DESCRIPTION, help); //$NON-NLS-1$ 
 		addCommand("services", ConsoleMsg.CONSOLE_HELP_FILTER_ARGUMENT_DESCRIPTION, ConsoleMsg.CONSOLE_HELP_SERVICES_COMMAND_DESCRIPTION, help); //$NON-NLS-1$ 
 		addCommand("packages", ConsoleMsg.CONSOLE_HELP_PACKAGES_ARGUMENT_DESCRIPTION, ConsoleMsg.CONSOLE_HELP_PACKAGES_COMMAND_DESCRIPTION, help); //$NON-NLS-1$ 
-		addCommand("bundles", ConsoleMsg.CONSOLE_HELP_BUNDLES_COMMAND_DESCRIPTION, help); //$NON-NLS-1$ //$NON-NLS-2$
+		addCommand("bundles", ConsoleMsg.CONSOLE_HELP_BUNDLES_COMMAND_DESCRIPTION, help); //$NON-NLS-1$ 
 		addCommand("bundle", ConsoleMsg.CONSOLE_HELP_IDLOCATION_ARGUMENT_DESCRIPTION, ConsoleMsg.CONSOLE_HELP_BUNDLE_COMMAND_DESCRIPTION, help); //$NON-NLS-1$ 
 		addCommand("headers", ConsoleMsg.CONSOLE_HELP_IDLOCATION_ARGUMENT_DESCRIPTION, ConsoleMsg.CONSOLE_HELP_HEADERS_COMMAND_DESCRIPTION, help); //$NON-NLS-1$ 
 		addCommand("log", ConsoleMsg.CONSOLE_HELP_IDLOCATION_ARGUMENT_DESCRIPTION, ConsoleMsg.CONSOLE_HELP_LOG_COMMAND_DESCRIPTION, help); //$NON-NLS-1$ 
@@ -224,7 +224,7 @@ public class FrameworkCommandProvider implements CommandProvider {
 	public void _start(CommandInterpreter intp) throws Exception {
 		String nextArg = intp.nextArgument();
 		if (nextArg == null) {
-			intp.println(ConsoleMsg.CONSOLE_NO_BUNDLE_SPECIFIED_ERROR); //$NON-NLS-1$
+			intp.println(ConsoleMsg.CONSOLE_NO_BUNDLE_SPECIFIED_ERROR); 
 		}
 		while (nextArg != null) {
 			AbstractBundle bundle = getBundleFromToken(intp, nextArg, true);
@@ -494,7 +494,7 @@ public class FrameworkCommandProvider implements CommandProvider {
 				return;
 			}
 		}
-		intp.println(ConsoleMsg.CONSOLE_NO_REGISTERED_SERVICES_MESSAGE); //$NON-NLS-1$
+		intp.println(ConsoleMsg.CONSOLE_NO_REGISTERED_SERVICES_MESSAGE); 
 	}
 
 	/**

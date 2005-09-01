@@ -115,7 +115,7 @@ public class ServiceUse {
 				}
 				// allow the adaptor to handle this unexpected error
 				context.framework.adaptor.handleRuntimeError(t);
-				BundleException be = new BundleException(NLS.bind(Msg.SERVICE_FACTORY_EXCEPTION, factory.getClass().getName(), "getService"), t); //$NON-NLS-1$ //$NON-NLS-2$
+				BundleException be = new BundleException(NLS.bind(Msg.SERVICE_FACTORY_EXCEPTION, factory.getClass().getName(), "getService"), t); //$NON-NLS-1$ 
 				context.framework.publishFrameworkEvent(FrameworkEvent.ERROR, factorybundle, be);
 				return (null);
 			}
@@ -125,7 +125,7 @@ public class ServiceUse {
 					Debug.println(factory + ".getService() returned null."); //$NON-NLS-1$
 				}
 
-				BundleException be = new BundleException(NLS.bind(Msg.SERVICE_OBJECT_NULL_EXCEPTION, factory.getClass().getName())); //$NON-NLS-1$
+				BundleException be = new BundleException(NLS.bind(Msg.SERVICE_OBJECT_NULL_EXCEPTION, factory.getClass().getName())); 
 				context.framework.publishFrameworkEvent(FrameworkEvent.ERROR, factorybundle, be);
 
 				return (null);
@@ -137,7 +137,7 @@ public class ServiceUse {
 				if (Debug.DEBUG && Debug.DEBUG_SERVICES) {
 					Debug.println("Service object is not an instanceof " + invalidService); //$NON-NLS-1$
 				}
-				throw new IllegalArgumentException(NLS.bind(Msg.SERVICE_NOT_INSTANCEOF_CLASS_EXCEPTION, invalidService)); //$NON-NLS-1$
+				throw new IllegalArgumentException(NLS.bind(Msg.SERVICE_NOT_INSTANCEOF_CLASS_EXCEPTION, invalidService)); 
 			}
 			this.service = service;
 		}
@@ -199,7 +199,7 @@ public class ServiceUse {
 					}
 
 					AbstractBundle factorybundle = registration.context.bundle;
-					BundleException be = new BundleException(NLS.bind(Msg.SERVICE_FACTORY_EXCEPTION, factory.getClass().getName(), "ungetService"), t); //$NON-NLS-1$ //$NON-NLS-2$
+					BundleException be = new BundleException(NLS.bind(Msg.SERVICE_FACTORY_EXCEPTION, factory.getClass().getName(), "ungetService"), t); //$NON-NLS-1$ 
 					context.framework.publishFrameworkEvent(FrameworkEvent.ERROR, factorybundle, be);
 				}
 
@@ -238,7 +238,7 @@ public class ServiceUse {
 				}
 
 				AbstractBundle factorybundle = registration.context.bundle;
-				BundleException be = new BundleException(NLS.bind(Msg.SERVICE_FACTORY_EXCEPTION, factory.getClass().getName(), "ungetService"), t); //$NON-NLS-1$ //$NON-NLS-2$
+				BundleException be = new BundleException(NLS.bind(Msg.SERVICE_FACTORY_EXCEPTION, factory.getClass().getName(), "ungetService"), t); //$NON-NLS-1$ 
 				context.framework.publishFrameworkEvent(FrameworkEvent.ERROR, factorybundle, be);
 			}
 

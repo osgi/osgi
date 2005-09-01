@@ -351,7 +351,7 @@ public class BundleNativeCode {
 		try {
 			filter = new FilterImpl(filterString);
 		} catch (InvalidSyntaxException e) {
-			BundleException be = new BundleException(Msg.BUNDLE_NATIVECODE_INVALID_FILTER, e); //$NON-NLS-1$
+			BundleException be = new BundleException(Msg.BUNDLE_NATIVECODE_INVALID_FILTER, e); 
 			bundle.framework.publishFrameworkEvent(FrameworkEvent.ERROR, bundle, be);
 			return false;
 		}

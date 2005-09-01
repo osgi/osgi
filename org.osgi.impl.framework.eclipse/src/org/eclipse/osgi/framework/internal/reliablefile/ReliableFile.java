@@ -91,14 +91,14 @@ public class ReliableFile {
 	private static int[] lastGenerations = null;
 
 	static {
-		String prop = System.getProperty(PROP_MAX_BUFFER); //$NON-NLS-1$
+		String prop = System.getProperty(PROP_MAX_BUFFER); 
 		if (prop != null) {
 			try {
 				maxInputStreamBuffer = Integer.parseInt(prop);
 			} catch (NumberFormatException e) {/*ignore*/
 			}
 		}
-		prop = System.getProperty(PROP_MAX_GENERATIONS); //$NON-NLS-1$
+		prop = System.getProperty(PROP_MAX_GENERATIONS); 
 		if (prop != null) {
 			try {
 				defaultMaxGenerations = Integer.parseInt(prop);
@@ -174,7 +174,7 @@ public class ReliableFile {
 		int[] generations = null;
 		try {
 			String name = file.getName();
-			String prefix = name + '.'; //$NON-NLS-1$
+			String prefix = name + '.'; 
 			int prefixLen = prefix.length();
 			File parent = new File(file.getParent());
 			String[] files = parent.list();
@@ -242,7 +242,7 @@ public class ReliableFile {
 			}
 			File file;
 			if (generations[idx] != 0)
-				file = new File(parent, name + '.' + generations[idx]); //$NON-NLS-1$
+				file = new File(parent, name + '.' + generations[idx]); 
 			else
 				file = referenceFile;
 			InputStream is = null;
@@ -328,7 +328,7 @@ public class ReliableFile {
 		if (!append) {
 			OutputStream os = new FileOutputStream(tmpFile);
 			outputFile = tmpFile;
-			return os; //$NON-NLS-1$
+			return os; 
 		}
 
 		InputStream is;
@@ -505,7 +505,7 @@ public class ReliableFile {
 	 * <code>false</code> otherwise.
 	 */
 	public static boolean exists(File file) {
-		String prefix = file.getName() + '.'; //$NON-NLS-1$
+		String prefix = file.getName() + '.'; 
 		File parent = new File(file.getParent());
 		int prefixLen = prefix.length();
 		String[] files = parent.list();
@@ -779,7 +779,12 @@ public class ReliableFile {
 					crc.update(data, 0, 16); // update crc w/ sig bytes
 					return FILETYPE_NOSIGNATURE;
 				}
-			long crccmp = Long.valueOf(new String(data, 4, 8), 16).longValue();
+			long crccmp;
+			try {
+				crccmp = Long.valueOf(new String(data, 4, 8, "UTF-8"), 16).longValue(); //$NON-NLS-1$
+			} catch (UnsupportedEncodingException e) {
+				crccmp = Long.valueOf(new String(data, 4, 8), 16).longValue();
+			}
 			if (crccmp == crc.getValue()) {
 				return FILETYPE_VALID;
 			}

@@ -410,11 +410,11 @@ public abstract class AbstractBundleData implements BundleData, Cloneable {
 	protected void loadFromManifest() throws BundleException {
 		getManifest();
 		if (manifest == null)
-			throw new BundleException(NLS.bind(AdaptorMsg.ADAPTOR_ERROR_GETTING_MANIFEST, getLocation())); //$NON-NLS-1$
+			throw new BundleException(NLS.bind(AdaptorMsg.ADAPTOR_ERROR_GETTING_MANIFEST, getLocation())); 
 		try {
 			setVersion(Version.parseVersion((String) manifest.get(Constants.BUNDLE_VERSION)));
 		} catch (IllegalArgumentException e) {
-			setVersion(Version.emptyVersion);
+			setVersion(new InvalidVersion((String) manifest.get(Constants.BUNDLE_VERSION)));
 		}
 		ManifestElement[] bsnHeader = ManifestElement.parseHeader(Constants.BUNDLE_SYMBOLICNAME, (String) manifest.get(Constants.BUNDLE_SYMBOLICNAME));
 		int bundleType = 0;

@@ -54,8 +54,7 @@ public class Framework implements EventDispatcher, EventPublisher {
 	protected ServiceRegistry serviceRegistry; //TODO This is duplicated from the adaptor, do we really gain ?
 	/** next free service id. */
 	protected long serviceid;
-	/** the VM profile (execution environment */
-	private String vmProfile;
+
 	/*
 	 * The following EventListeners objects keep track of event listeners
 	 * by BundleContext.  Each element is a EventListeners that is the list
@@ -294,47 +293,6 @@ public class Framework implements EventDispatcher, EventPublisher {
 				}
 			}
 		}
-		setExecutionEnvironment();
-	}
-
-	private void setExecutionEnvironment() {
-		String value = properties.getProperty(Constants.FRAMEWORK_EXECUTIONENVIRONMENT, ""); //$NON-NLS-1$
-		String j2meConfig = properties.getProperty(Constants.J2ME_MICROEDITION_CONFIGURATION);
-		String j2meProfile = properties.getProperty(Constants.J2ME_MICROEDITION_PROFILES);
-		StringBuffer ee = new StringBuffer(value);
-		if (j2meConfig != null && j2meConfig.length() > 0 && j2meProfile != null && j2meProfile.length() > 0) {
-			// save the vmProfile based off of the config and profile
-			vmProfile = j2meConfig + '_' + j2meProfile;
-			int ic = value.indexOf(j2meConfig);
-			// append the profile only if it is not already present
-			if (!(ic >= 0) || !(ic + j2meConfig.length() < value.length() && value.charAt(ic + j2meConfig.length()) == '/') || !(value.startsWith(j2meProfile, ic + j2meConfig.length() + 1))) {
-				if (ee.length() > 0) {
-					ee.append(',');
-				}
-				ee.append(j2meConfig).append('/').append(j2meProfile);
-			}
-
-		} else if (value.length() > 0) {
-			// just use the first EE defined as our profile
-			StringTokenizer st = new StringTokenizer(value, ","); //$NON-NLS-1$
-			vmProfile = st.nextToken().replace('/', '_');
-		} else {
-			String javaSpecVersion = properties.getProperty("java.specification.version"); //$NON-NLS-1$
-			// set the profile and EE based off of the java.specification.version
-			// TODO We assume J2SE here.  need to support other profiles J2ME/J2EE ...
-			if (javaSpecVersion != null) {
-				StringTokenizer st = new StringTokenizer(javaSpecVersion, " _-"); //$NON-NLS-1$
-				javaSpecVersion = st.nextToken();
-				vmProfile = "J2SE-" + javaSpecVersion; //$NON-NLS-1$
-				int index = value.indexOf(vmProfile);
-				if (index < 0) {
-					if (ee.length() > 0)
-						ee.append(',');
-					ee.append(vmProfile);
-				}
-			}
-		}
-		properties.put(Constants.FRAMEWORK_EXECUTIONENVIRONMENT, ee.toString());
 	}
 
 	private void setBootDelegation() {
@@ -364,21 +322,7 @@ public class Framework implements EventDispatcher, EventPublisher {
 	}
 
 	private void loadVMProfile() {
-		InputStream in = findVMProfile();
-		Properties profileProps = new Properties();
-		if (in != null) {
-			try {
-				profileProps.load(new BufferedInputStream(in));
-			} catch (IOException e) {
-				// do nothing
-			} finally {
-				try {
-					in.close();
-				} catch (IOException ee) {
-					// do nothing
-				}
-			}
-		}
+		Properties profileProps = findVMProfile();
 		String systemExports = properties.getProperty(Constants.OSGI_FRAMEWORK_SYSTEM_PACKAGES);
 		// set the system exports property using the vm profile; only if the property is not already set
 		if (systemExports == null) {
@@ -396,9 +340,38 @@ public class Framework implements EventDispatcher, EventPublisher {
 				properties.put(Constants.OSGI_BOOTDELEGATION, profileBootDelegation); // override with the profile value
 		} else if (Constants.OSGI_BOOTDELEGATION_NONE.equals(type))
 			properties.remove(Constants.OSGI_BOOTDELEGATION); // remove the bootdelegation property in case it was set
+		// set the org.osgi.framework.executionenvironment property according to the java profile
+		if (properties.getProperty(Constants.FRAMEWORK_EXECUTIONENVIRONMENT) == null) {
+			// get the ee from the java profile; if no ee is defined then try the java profile name
+			String ee = profileProps.getProperty(Constants.FRAMEWORK_EXECUTIONENVIRONMENT, profileProps.getProperty(Constants.OSGI_JAVA_PROFILE_NAME));
+			if (ee != null)
+				properties.put(Constants.FRAMEWORK_EXECUTIONENVIRONMENT, ee);
+		}
 	}
 
-	private InputStream findVMProfile() {
+	private Properties findVMProfile() {
+		Properties result = new Properties();
+		// Find the VM profile name using J2ME properties
+		String j2meConfig = properties.getProperty(Constants.J2ME_MICROEDITION_CONFIGURATION);
+		String j2meProfiles = properties.getProperty(Constants.J2ME_MICROEDITION_PROFILES);
+		String vmProfile = null;
+		if (j2meConfig != null && j2meConfig.length() > 0 && j2meProfiles != null && j2meProfiles.length() > 0) {
+			// save the vmProfile based off of the config and profile
+			// use the last profile; assuming that is the highest one
+			String[] j2meProfileList = ManifestElement.getArrayFromList(j2meProfiles, " "); //$NON-NLS-1$
+			if (j2meProfileList != null && j2meProfileList.length > 0)
+				vmProfile = j2meConfig + '_' + j2meProfileList[j2meProfileList.length - 1];
+		} else {
+			// No J2ME properties; use J2SE properties
+			String javaSpecVersion = properties.getProperty("java.specification.version"); //$NON-NLS-1$
+			// set the profile and EE based off of the java.specification.version
+			// TODO We assume J2SE here.  need to support other profiles J2EE ...
+			if (javaSpecVersion != null) {
+				StringTokenizer st = new StringTokenizer(javaSpecVersion, " _-"); //$NON-NLS-1$
+				javaSpecVersion = st.nextToken();
+				vmProfile = "J2SE-" + javaSpecVersion; //$NON-NLS-1$
+			}
+		}
 		URL url = null;
 		// check for the java profile property for a url
 		String propJavaProfile = System.getProperty(Constants.OSGI_JAVA_PROFILE);
@@ -416,13 +389,30 @@ public class Framework implements EventDispatcher, EventPublisher {
 			if (url == null)
 				url = getClass().getResource(javaProfile);
 		}
-		if (url != null)
+		if (url != null) {
+			InputStream in = null;
 			try {
-				return url.openStream();
+				in = url.openStream();
+				result.load(new BufferedInputStream(in));
 			} catch (IOException e) {
 				// TODO consider logging ...
+			} finally {
+				if (in != null)
+					try {
+						in.close();
+					} catch (IOException ee) {
+						// do nothing
+					}
 			}
-		return null;
+		}
+		// set the profile name if it does not provide one
+		if (result.getProperty(Constants.OSGI_JAVA_PROFILE_NAME) == null)
+			if (vmProfile != null)
+				result.put(Constants.OSGI_JAVA_PROFILE_NAME, vmProfile.replace('_', '/'));
+			else
+				// last resort; default to the absolute minimum profile name
+				result.put(Constants.OSGI_JAVA_PROFILE_NAME, "OSGi/Minimum-1.0"); //$NON-NLS-1$
+		return result;
 	}
 
 	/**

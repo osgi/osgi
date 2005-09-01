@@ -79,10 +79,13 @@ public class Headers extends Dictionary {
 	private int getIndex(Object key) {
 		boolean stringKey = key instanceof String;
 		for (int i = 0; i < size; i++) {
-			if (headers[i].equals(key))
-				return i;
-			if (stringKey && (headers[i] instanceof String) && ((String) headers[i]).equalsIgnoreCase((String) key))
-				return i;
+			if (stringKey && (headers[i] instanceof String)) {
+				if (((String) headers[i]).equalsIgnoreCase((String) key))
+					return i;
+			} else {
+				if (headers[i].equals(key))
+					return i;
+			}
 		}
 		return -1;
 	}
@@ -132,6 +135,41 @@ public class Headers extends Dictionary {
 	}
 
 	/**
+	 * Set a header value or optionally replace it if it already exists.
+	 *
+	 * @param key Key name.
+	 * @param value Value of the key or null to remove key.
+	 * @param replace A value of true will allow a previous
+	 * value of the key to be replaced.  A value of false 
+	 * will cause an IllegalArgumentException to be thrown 
+	 * if a previous value of the key exists.
+	 * @return the previous value to which the key was mapped,
+	 * or null if the key did not have a previous mapping.
+	 *
+	 * @exception IllegalArgumentException If a case-variant of the key is
+	 * already present.
+	 */
+	public synchronized Object set(Object key, Object value, boolean replace) {
+		if (key instanceof String)
+			key = ((String)key).intern();
+		int i = getIndex(key);
+		if (value == null) { /* remove */
+			if (i != -1)
+				return remove(i);
+		} else { /* put */
+			if (i != -1) { /* duplicate key */
+				if (!replace)
+					throw new IllegalArgumentException(NLS.bind(Msg.HEADER_DUPLICATE_KEY_EXCEPTION, key));
+				Object oldVal = values[i];
+				values[i] = value;
+				return oldVal;
+			}
+			add(key, value);
+		}
+		return null;
+	}
+
+	/**
 	 * Set a header value.
 	 *
 	 * @param key Key name.
@@ -143,20 +181,7 @@ public class Headers extends Dictionary {
 	 * already present.
 	 */
 	public synchronized Object set(Object key, Object value) {
-		if (key instanceof String)
-			key = ((String)key).intern();
-		int i = getIndex(key);
-		if (value == null) /* remove */
-		{
-			if (i != -1)
-				return remove(i);
-		} else /* put */
-		{
-			if (i != -1) /* duplicate key */
-				throw new IllegalArgumentException(NLS.bind(Msg.HEADER_DUPLICATE_KEY_EXCEPTION, key));
-			add(key, value);
-		}
-		return null;
+		return set(key, value, false);
 	}
 
 	/**
@@ -231,8 +256,7 @@ public class Headers extends Dictionary {
 				{
 					if (!firstLine) /* flush last line */
 					{
-						headers.set(header, null); /* remove old attribute,if present */
-						headers.set(header, value.toString().trim());
+						headers.set(header, value.toString().trim(), true);
 					}
 					break; /* done processing main attributes */
 				}
@@ -248,8 +272,7 @@ public class Headers extends Dictionary {
 				}
 
 				if (!firstLine) {
-					headers.set(header, null); /* remove old attribute,if present */
-					headers.set(header, value.toString().trim());
+					headers.set(header, value.toString().trim(), true);
 					value.setLength(0); /* clear StringBuffer */
 				}
 

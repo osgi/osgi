@@ -248,7 +248,7 @@ public class SystemBundle extends BundleHost {
 	public void uninstall() throws BundleException {
 		framework.checkAdminPermission(this, AdminPermission.LIFECYCLE);
 
-		throw new BundleException(Msg.BUNDLE_SYSTEMBUNDLE_UNINSTALL_EXCEPTION); //$NON-NLS-1$
+		throw new BundleException(Msg.BUNDLE_SYSTEMBUNDLE_UNINSTALL_EXCEPTION); 
 	}
 
 	/**

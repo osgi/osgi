@@ -565,7 +565,7 @@ public class BundleContextImpl implements BundleContext, EventDispatcher {
 				Debug.println("Service object is null"); //$NON-NLS-1$
 			}
 
-			throw new NullPointerException(Msg.SERVICE_ARGUMENT_NULL_EXCEPTION); //$NON-NLS-1$
+			throw new NullPointerException(Msg.SERVICE_ARGUMENT_NULL_EXCEPTION); 
 		}
 
 		int size = clazzes.length;
@@ -575,7 +575,7 @@ public class BundleContextImpl implements BundleContext, EventDispatcher {
 				Debug.println("Classes array is empty"); //$NON-NLS-1$
 			}
 
-			throw new IllegalArgumentException(Msg.SERVICE_EMPTY_CLASS_LIST_EXCEPTION); //$NON-NLS-1$
+			throw new IllegalArgumentException(Msg.SERVICE_EMPTY_CLASS_LIST_EXCEPTION); 
 		}
 
 		/* copy the array so that changes to the original will not affect us. */
@@ -594,7 +594,7 @@ public class BundleContextImpl implements BundleContext, EventDispatcher {
 				if (Debug.DEBUG && Debug.DEBUG_SERVICES) {
 					Debug.println("Service object is not an instanceof " + invalidService); //$NON-NLS-1$
 				}
-				throw new IllegalArgumentException(NLS.bind(Msg.SERVICE_NOT_INSTANCEOF_CLASS_EXCEPTION, invalidService)); //$NON-NLS-1$
+				throw new IllegalArgumentException(NLS.bind(Msg.SERVICE_NOT_INSTANCEOF_CLASS_EXCEPTION, invalidService)); 
 			}
 		}
 
@@ -1010,7 +1010,7 @@ public class BundleContextImpl implements BundleContext, EventDispatcher {
 			String clazz = null;
 			clazz = bundleActivator.getClass().getName();
 
-			throw new BundleException(NLS.bind(Msg.BUNDLE_ACTIVATOR_EXCEPTION, new Object[] {clazz, "start", bundle.getSymbolicName() == null ? "" + bundle.getBundleId() : bundle.getSymbolicName()}), t); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+			throw new BundleException(NLS.bind(Msg.BUNDLE_ACTIVATOR_EXCEPTION, new Object[] {clazz, "start", bundle.getSymbolicName() == null ? "" + bundle.getBundleId() : bundle.getSymbolicName()}), t); //$NON-NLS-1$ //$NON-NLS-2$ 
 		} finally {
 			if (Profile.PROFILE && Profile.STARTUP)
 				Profile.logExit("BundleContextImpl.startActivator()"); //$NON-NLS-1$
@@ -1048,7 +1048,7 @@ public class BundleContextImpl implements BundleContext, EventDispatcher {
 
 			String clazz = (activator == null) ? "" : activator.getClass().getName(); //$NON-NLS-1$
 
-			throw new BundleException(NLS.bind(Msg.BUNDLE_ACTIVATOR_EXCEPTION, new Object[] {clazz, "stop", bundle.getSymbolicName() == null ? "" + bundle.getBundleId() : bundle.getSymbolicName()}), t); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+			throw new BundleException(NLS.bind(Msg.BUNDLE_ACTIVATOR_EXCEPTION, new Object[] {clazz, "stop", bundle.getSymbolicName() == null ? "" + bundle.getBundleId() : bundle.getSymbolicName()}), t); //$NON-NLS-1$ //$NON-NLS-2$ 
 		} finally {
 			activator = null;
 		}
@@ -1305,7 +1305,7 @@ public class BundleContextImpl implements BundleContext, EventDispatcher {
 	 */
 	protected void checkValid() {
 		if (!isValid()) {
-			throw new IllegalStateException(Msg.BUNDLE_CONTEXT_INVALID_EXCEPTION); //$NON-NLS-1$
+			throw new IllegalStateException(Msg.BUNDLE_CONTEXT_INVALID_EXCEPTION); 
 		}
 	}
 

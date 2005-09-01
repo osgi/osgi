@@ -110,6 +110,7 @@ public class Constants implements org.osgi.framework.Constants {
 	public static final String OSGI_IMPL_VERSION_KEY = "osgi.framework.version"; //$NON-NLS-1$
 	/** OSGi java profile; used to give a URL to a java profile */
 	public static final String OSGI_JAVA_PROFILE = "osgi.java.profile"; //$NON-NLS-1$
+	public static final String OSGI_JAVA_PROFILE_NAME = "osgi.java.profile.name"; //$NON-NLS-1$
 	/** 
 	 * OSGi java profile bootdelegation; used to indicate how the org.osgi.framework.bootdelegation
 	 * property defined in the java profile should be processed, (ingnore, override, none). default is ignore

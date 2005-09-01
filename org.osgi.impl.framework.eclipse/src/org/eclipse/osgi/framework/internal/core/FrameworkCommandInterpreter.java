@@ -206,7 +206,7 @@ public class FrameworkCommandInterpreter implements CommandInterpreter {
 	 */
 	private void setMaximumLinesToScroll(int lines) {
 		if (lines < 0) {
-			throw new IllegalArgumentException(ConsoleMsg.CONSOLE_LINES_TO_SCROLL_NEGATIVE_ERROR); //$NON-NLS-1$
+			throw new IllegalArgumentException(ConsoleMsg.CONSOLE_LINES_TO_SCROLL_NEGATIVE_ERROR); 
 		}
 
 		maxLineCount = lines;
@@ -361,7 +361,7 @@ public class FrameworkCommandInterpreter implements CommandInterpreter {
 				System.err.println(NLS.bind(ConsoleMsg.CONSOLE_ERROR_READING_RESOURCE, resource));
 			}
 		} else {
-			println(NLS.bind(ConsoleMsg.CONSOLE_RESOURCE_NOT_IN_BUNDLE, resource, bundle.toString())); //$NON-NLS-1$
+			println(NLS.bind(ConsoleMsg.CONSOLE_RESOURCE_NOT_IN_BUNDLE, resource, bundle.toString())); 
 		}
 	}
 

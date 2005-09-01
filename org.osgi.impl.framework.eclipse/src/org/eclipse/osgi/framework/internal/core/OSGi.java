@@ -96,12 +96,12 @@ public class OSGi {
 	 */
 	protected void displayBanner() {
 		System.out.println();
-		System.out.print(Msg.ECLIPSE_OSGI_NAME); //$NON-NLS-1$
+		System.out.print(Msg.ECLIPSE_OSGI_NAME); 
 		System.out.print(" "); //$NON-NLS-1$
-		System.out.println(Msg.ECLIPSE_OSGI_VERSION); //$NON-NLS-1$
+		System.out.println(Msg.ECLIPSE_OSGI_VERSION); 
 		System.out.println();
-		System.out.println(Msg.OSGI_VERSION); //$NON-NLS-1$
+		System.out.println(Msg.OSGI_VERSION); 
 		System.out.println();
-		System.out.println(Msg.ECLIPSE_COPYRIGHT); //$NON-NLS-1$
+		System.out.println(Msg.ECLIPSE_COPYRIGHT); 
 	}
 }

@@ -103,7 +103,27 @@ public class StateManager implements PlatformAdmin, Runnable {
 		BundleDescription[] removalPendings = systemState.getRemovalPendings();
 		if (removalPendings.length > 0)
 			systemState.resolve(removalPendings);
-		writeState(stateFile, lazyFile);
+		writeState(systemState, stateFile, lazyFile);
+	}
+
+	/**
+	 * Update the given target files with the state data in memory.
+	 * @param stateFile
+	 * @param lazyFile
+	 * @throws IOException
+	 */
+	public void update(File stateFile, File lazyFile) throws IOException {
+		BundleDescription[] removalPendings = systemState.getRemovalPendings();
+		StateImpl state = systemState;
+		if (removalPendings.length > 0) {
+			state = (StateImpl) state.getFactory().createState(systemState);
+			state.setResolver(getResolver());
+			state.setPlatformProperties(System.getProperties());
+			state.resolve(false);
+		}
+		writeState(state, stateFile, lazyFile);
+		lastTimeStamp = state.getTimeStamp();
+		// TODO consider updating the state files for lazy loading
 	}
 
 	private void readSystemState(File stateFile, File lazyFile, long expectedTimeStamp) {
@@ -140,13 +160,13 @@ public class StateManager implements PlatformAdmin, Runnable {
 		}
 	}
 
-	private void writeState(File stateFile, File lazyFile) throws IOException {
-		if (systemState == null)
+	private void writeState(StateImpl state, File stateFile, File lazyFile) throws IOException {
+		if (state == null)
 			return;
-		if (cachedState && lastTimeStamp == systemState.getTimeStamp())
+		if (cachedState && lastTimeStamp == state.getTimeStamp())
 			return;
-		systemState.fullyLoad(); // make sure we are fully loaded before saving
-		factory.writeState(systemState, stateFile, lazyFile);
+		state.fullyLoad(); // make sure we are fully loaded before saving
+		factory.writeState(state, stateFile, lazyFile);
 	}
 
 	private boolean initializeSystemState() {
@@ -284,13 +304,14 @@ public class StateManager implements PlatformAdmin, Runnable {
 	}
 
 	public void run() {
+		long timeStamp = lastTimeStamp; // cache the original timestamp incase of updates
 		while (true) {
 			try {
 				Thread.sleep(expireTime);
 			} catch (InterruptedException e) {
 				return;
 			}
-			if (systemState != null && lastTimeStamp == systemState.getTimeStamp())
+			if (systemState != null && timeStamp == systemState.getTimeStamp())
 				systemState.unloadLazyData(expireTime);
 		}
 	}

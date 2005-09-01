@@ -162,7 +162,7 @@ public class DefaultAdaptor extends AbstractFrameworkAdaptor {
 		data.setLastModified(bundleMetaData.getLong(METADATA_LAST_MODIFIED, 0));
 
 		if (data.getGeneration() == -1 || data.getFileName() == null || data.getLocation() == null) {
-			throw new IOException(AdaptorMsg.ADAPTOR_STORAGE_EXCEPTION); //$NON-NLS-1$
+			throw new IOException(AdaptorMsg.ADAPTOR_STORAGE_EXCEPTION); 
 		}
 	}
 

@@ -53,7 +53,7 @@ public class BundleURLConnection extends URLConnection {
 				in = bundleEntry.getInputStream();
 				connected = true;
 			} else {
-				throw new IOException(NLS.bind(AdaptorMsg.RESOURCE_NOT_FOUND_EXCEPTION, url)); //$NON-NLS-1$
+				throw new IOException(NLS.bind(AdaptorMsg.RESOURCE_NOT_FOUND_EXCEPTION, url)); 
 			}
 		}
 	}

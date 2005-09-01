@@ -14,21 +14,21 @@ import org.eclipse.osgi.service.resolver.*;
 import org.osgi.framework.BundleException;
 
 public class SystemState extends StateImpl {
-	public boolean addBundle(BundleDescription description) {
+	synchronized public boolean addBundle(BundleDescription description) {
 		if (!super.addBundle(description))
 			return false;
 		updateTimeStamp();
 		return true;
 	}
 
-	public boolean removeBundle(BundleDescription toRemove) {
+	synchronized public boolean removeBundle(BundleDescription toRemove) {
 		if (!super.removeBundle(toRemove))
 			return false;
 		updateTimeStamp();
 		return true;
 	}
 
-	public boolean updateBundle(BundleDescription newDescription) {
+	synchronized public boolean updateBundle(BundleDescription newDescription) {
 		if (!super.updateBundle(newDescription))
 			return false;
 		updateTimeStamp();
@@ -38,7 +38,7 @@ public class SystemState extends StateImpl {
 	private void updateTimeStamp() {
 		if (getTimeStamp() == Long.MAX_VALUE)
 			setTimeStamp(0);
-		setTimeStamp(getTimeStamp()+1);
+		setTimeStamp(getTimeStamp() + 1);
 	}
 
 	public StateDelta compare(State state) throws BundleException {
@@ -46,26 +46,28 @@ public class SystemState extends StateImpl {
 		throw new UnsupportedOperationException();
 	}
 
-	public StateDelta resolve() {
+	synchronized public StateDelta resolve() {
 		StateDelta delta = super.resolve();
 		if (delta.getChanges().length > 0)
 			updateTimeStamp(); // resolver linkage has changed; update the timestamp
 		return delta;
 	}
-	public StateDelta resolve(boolean incremental) {
+
+	synchronized public StateDelta resolve(boolean incremental) {
 		StateDelta delta = super.resolve(incremental);
 		if (delta.getChanges().length > 0)
 			updateTimeStamp(); // resolver linkage has changed; update the timestamp
 		return delta;
 	}
-	public StateDelta resolve(BundleDescription[] reResolve) {
+
+	synchronized public StateDelta resolve(BundleDescription[] reResolve) {
 		StateDelta delta = super.resolve(reResolve);
 		if (delta.getChanges().length > 0)
 			updateTimeStamp(); // resolver linkage has changed; update the timestamp
 		return delta;
 	}
 
-	public ExportPackageDescription linkDynamicImport(BundleDescription importingBundle, String requestedPackage) {
+	synchronized public ExportPackageDescription linkDynamicImport(BundleDescription importingBundle, String requestedPackage) {
 		ExportPackageDescription result = super.linkDynamicImport(importingBundle, requestedPackage);
 		if (result == null)
 			return null;

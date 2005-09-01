@@ -180,7 +180,7 @@ public class BundleFragment extends AbstractBundle {
 		}
 		// cannot load a class from a fragment because there is no classloader
 		// associated with fragments.
-		throw new ClassNotFoundException(NLS.bind(Msg.BUNDLE_FRAGMENT_CNFE, name)); //$NON-NLS-1$
+		throw new ClassNotFoundException(NLS.bind(Msg.BUNDLE_FRAGMENT_CNFE, name)); 
 	}
 
 	/**
@@ -221,7 +221,7 @@ public class BundleFragment extends AbstractBundle {
 	 * @param persistent if true persistently record the bundle was started.
 	 */
 	protected void startWorker(boolean persistent) throws BundleException {
-		throw new BundleException(NLS.bind(Msg.BUNDLE_FRAGMENT_START, this)); //$NON-NLS-1$
+		throw new BundleException(NLS.bind(Msg.BUNDLE_FRAGMENT_START, this)); 
 	}
 
 	/**
@@ -230,7 +230,7 @@ public class BundleFragment extends AbstractBundle {
 	 * @param persistent if true persistently record the bundle was stopped.
 	 */
 	protected void stopWorker(boolean persistent) throws BundleException {
-		throw new BundleException(NLS.bind(Msg.BUNDLE_FRAGMENT_STOP, this)); //$NON-NLS-1$
+		throw new BundleException(NLS.bind(Msg.BUNDLE_FRAGMENT_STOP, this)); 
 	}
 
 	/**

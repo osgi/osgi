@@ -137,7 +137,7 @@ public class ServiceRegistrationImpl implements ServiceRegistration {
 		synchronized (registrationLock) {
 			if (state != REGISTERED) /* in the process of unregisterING */
 			{
-				throw new IllegalStateException(Msg.SERVICE_ALREADY_UNREGISTERED_EXCEPTION); //$NON-NLS-1$
+				throw new IllegalStateException(Msg.SERVICE_ALREADY_UNREGISTERED_EXCEPTION); 
 			}
 
 			/* remove this object from the service registry */
@@ -205,7 +205,7 @@ public class ServiceRegistrationImpl implements ServiceRegistration {
 		 * but makes more sense.
 		 */
 		if (reference == null) {
-			throw new IllegalStateException(Msg.SERVICE_ALREADY_UNREGISTERED_EXCEPTION); //$NON-NLS-1$
+			throw new IllegalStateException(Msg.SERVICE_ALREADY_UNREGISTERED_EXCEPTION); 
 		}
 
 		return (reference);
@@ -237,7 +237,7 @@ public class ServiceRegistrationImpl implements ServiceRegistration {
 		synchronized (registrationLock) {
 			if (state != REGISTERED) /* in the process of unregistering */
 			{
-				throw new IllegalStateException(Msg.SERVICE_ALREADY_UNREGISTERED_EXCEPTION); //$NON-NLS-1$
+				throw new IllegalStateException(Msg.SERVICE_ALREADY_UNREGISTERED_EXCEPTION); 
 			}
 
 			this.properties = createProperties(props);

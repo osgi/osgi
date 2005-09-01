@@ -65,11 +65,11 @@ public class StartLevelManager implements EventDispatcher, EventListener, Servic
 		} else {
 			try {
 				if (Integer.parseInt(value) <= 0) {
-					System.err.println(NLS.bind(Msg.PROPERTIES_INVALID_FW_STARTLEVEL, Constants.DEFAULT_STARTLEVEL)); //$NON-NLS-1$
+					System.err.println(NLS.bind(Msg.PROPERTIES_INVALID_FW_STARTLEVEL, Constants.DEFAULT_STARTLEVEL)); 
 					value = Constants.DEFAULT_STARTLEVEL;
 				}
 			} catch (NumberFormatException nfe) {
-				System.err.println(NLS.bind(Msg.PROPERTIES_INVALID_FW_STARTLEVEL, Constants.DEFAULT_STARTLEVEL)); //$NON-NLS-1$
+				System.err.println(NLS.bind(Msg.PROPERTIES_INVALID_FW_STARTLEVEL, Constants.DEFAULT_STARTLEVEL)); 
 				value = Constants.DEFAULT_STARTLEVEL;
 			}
 		}
@@ -219,7 +219,7 @@ public class StartLevelManager implements EventDispatcher, EventListener, Servic
 	 */
 	public void setStartLevel(int newSL, org.osgi.framework.Bundle callerBundle) {
 		if (newSL <= 0) {
-			throw new IllegalArgumentException(NLS.bind(Msg.STARTLEVEL_EXCEPTION_INVALID_REQUESTED_STARTLEVEL, "" + newSL)); //$NON-NLS-1$ //$NON-NLS-2$
+			throw new IllegalArgumentException(NLS.bind(Msg.STARTLEVEL_EXCEPTION_INVALID_REQUESTED_STARTLEVEL, "" + newSL)); //$NON-NLS-1$ 
 		}
 		framework.checkAdminPermission(framework.systemBundle, AdminPermission.STARTLEVEL);
 
@@ -317,7 +317,7 @@ public class StartLevelManager implements EventDispatcher, EventListener, Servic
 	public boolean isBundlePersistentlyStarted(org.osgi.framework.Bundle bundle) {
 
 		if (bundle.getState() == AbstractBundle.UNINSTALLED) {
-			throw new IllegalArgumentException(Msg.BUNDLE_UNINSTALLED_EXCEPTION); //$NON-NLS-1$
+			throw new IllegalArgumentException(Msg.BUNDLE_UNINSTALLED_EXCEPTION); 
 		}
 		AbstractBundle b = (AbstractBundle) bundle;
 		int status = b.getBundleData().getStatus();
@@ -334,7 +334,7 @@ public class StartLevelManager implements EventDispatcher, EventListener, Servic
 	public int getBundleStartLevel(org.osgi.framework.Bundle bundle) {
 
 		if (bundle.getState() == AbstractBundle.UNINSTALLED) {
-			throw new IllegalArgumentException(Msg.BUNDLE_UNINSTALLED_EXCEPTION); //$NON-NLS-1$
+			throw new IllegalArgumentException(Msg.BUNDLE_UNINSTALLED_EXCEPTION); 
 		}
 		return ((AbstractBundle) bundle).getStartLevel();
 	}
@@ -371,11 +371,11 @@ public class StartLevelManager implements EventDispatcher, EventListener, Servic
 
 		String exceptionText = ""; //$NON-NLS-1$
 		if (bundle.getBundleId() == 0) { // system bundle has id=0
-			exceptionText = Msg.STARTLEVEL_CANT_CHANGE_SYSTEMBUNDLE_STARTLEVEL; //$NON-NLS-1$
+			exceptionText = Msg.STARTLEVEL_CANT_CHANGE_SYSTEMBUNDLE_STARTLEVEL; 
 		} else if (bundle.getState() == AbstractBundle.UNINSTALLED) {
-			exceptionText = Msg.BUNDLE_UNINSTALLED_EXCEPTION; //$NON-NLS-1$
+			exceptionText = Msg.BUNDLE_UNINSTALLED_EXCEPTION; 
 		} else if (newSL <= 0) {
-			exceptionText = NLS.bind(Msg.STARTLEVEL_EXCEPTION_INVALID_REQUESTED_STARTLEVEL, "" + newSL); //$NON-NLS-1$ //$NON-NLS-2$
+			exceptionText = NLS.bind(Msg.STARTLEVEL_EXCEPTION_INVALID_REQUESTED_STARTLEVEL, "" + newSL); //$NON-NLS-1$ 
 		}
 		if (exceptionText.length() > 0) {
 			throw new IllegalArgumentException(exceptionText);

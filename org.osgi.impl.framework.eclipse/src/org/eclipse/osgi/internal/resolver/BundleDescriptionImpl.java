@@ -434,6 +434,7 @@ public class BundleDescriptionImpl extends BaseDescriptionImpl implements Bundle
 		System.arraycopy(lazyData.resolvedImports, 0, newImports, 0, lazyData.resolvedImports.length);
 		newImports[newImports.length - 1] = result;
 		lazyData.resolvedImports = newImports;
+		setLazyLoaded(false);
 	}
 
 	void unload(long currentTime, long expireTime) {

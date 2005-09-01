@@ -428,15 +428,29 @@ public class ManifestElement {
 	 * @param stringList the initial comma-separated string
 	 */
 	public static String[] getArrayFromList(String stringList) {
-		if (stringList == null || stringList.trim().equals("")) //$NON-NLS-1$
-			return null;
-		Vector list = new Vector();
-		StringTokenizer tokens = new StringTokenizer(stringList, ","); //$NON-NLS-1$
+		String[] result = getArrayFromList(stringList, ","); //$NON-NLS-1$
+		return result.length == 0 ? null : result;
+	}
+
+	/**
+	 * Returns the result of converting a list of tokens into an array.  The tokens
+	 * are split using the specified separator.
+	 * 
+	 * @return the array of string tokens.  If there are none then an empty array
+	 * is returned.
+	 * @param stringList the initial string list
+	 * @param separator the separator to use to split the list into tokens.
+	 */
+	public static String[] getArrayFromList(String stringList, String separator) {
+		if (stringList == null || stringList.trim().length() == 0)
+			return new String[0];
+		ArrayList list = new ArrayList();
+		StringTokenizer tokens = new StringTokenizer(stringList, separator);
 		while (tokens.hasMoreTokens()) {
 			String token = tokens.nextToken().trim();
-			if (!token.equals("")) //$NON-NLS-1$
-				list.addElement(token);
+			if (token.length() != 0)
+				list.add(token);
 		}
-		return list.isEmpty() ? new String[0] : (String[]) list.toArray(new String[list.size()]);
+		return (String[]) list.toArray(new String[list.size()]);
 	}
 }

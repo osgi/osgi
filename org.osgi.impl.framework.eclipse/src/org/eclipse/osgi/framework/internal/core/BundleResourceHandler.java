@@ -131,14 +131,14 @@ public abstract class BundleResourceHandler extends URLStreamHandler {
 
 		String bidString = url.getHost();
 		if (bidString == null) {
-			throw new IOException(NLS.bind(AdaptorMsg.URL_NO_BUNDLE_ID, url.toExternalForm())); //$NON-NLS-1$
+			throw new IOException(NLS.bind(AdaptorMsg.URL_NO_BUNDLE_ID, url.toExternalForm())); 
 		}
 		AbstractBundle bundle = null;
 		long bundleID;
 		try {
 			bundleID = Long.parseLong(bidString);
 		} catch (NumberFormatException nfe) {
-			throw new MalformedURLException(NLS.bind(AdaptorMsg.URL_INVALID_BUNDLE_ID, bidString)); //$NON-NLS-1$
+			throw new MalformedURLException(NLS.bind(AdaptorMsg.URL_INVALID_BUNDLE_ID, bidString)); 
 		}
 		bundle = (AbstractBundle) context.getBundle(bundleID);
 		// check to make sure that this URL was created using the
@@ -150,7 +150,7 @@ public abstract class BundleResourceHandler extends URLStreamHandler {
 		}
 
 		if (bundle == null) {
-			throw new IOException(NLS.bind(AdaptorMsg.URL_NO_BUNDLE_FOUND, url.toExternalForm())); //$NON-NLS-1$
+			throw new IOException(NLS.bind(AdaptorMsg.URL_NO_BUNDLE_FOUND, url.toExternalForm())); 
 		}
 		return (new BundleURLConnection(url, findBundleEntry(url, bundle)));
 	}

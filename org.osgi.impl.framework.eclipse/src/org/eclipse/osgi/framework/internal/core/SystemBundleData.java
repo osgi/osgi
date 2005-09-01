@@ -122,8 +122,7 @@ public class SystemBundleData extends AbstractBundleData {
 		} else {
 			newValue += "," + append; //$NON-NLS-1$
 		}
-		systemManifest.set(header, null);
-		systemManifest.set(header, newValue);
+		systemManifest.set(header, newValue, true);
 	}
 
 	private void createBundleFile(File osgiBase) {
