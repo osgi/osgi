@@ -28,9 +28,9 @@ public interface EventConstants {
 	 * Event handlers SHOULD be registered with this property. The value of the
 	 * property is an array of strings that describe the topics in which the
 	 * handler is interested. An asterisk ('*') may be used as a
-	 * trailing wildcard. Event handlers which do not have a value for this
+	 * trailing wildcard. Event handlers which have not specified this
 	 * propery are treated as though they had specified this property with the
-	 * value { '*' }. More precisely, the value of each entry in the
+	 * value {&quot;*&quot;}. More precisely, the value of each entry in the
 	 * array must conform to the following grammar:
 	 * 
 	 * <pre>
