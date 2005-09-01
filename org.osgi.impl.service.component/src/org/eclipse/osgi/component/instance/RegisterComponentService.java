@@ -28,9 +28,9 @@ import org.osgi.service.component.ComponentException;
 import org.osgi.service.component.ComponentInstance;
 
 /**
- *
- * Register the Service Component's provided services
- * A ServiceFactory is used to enable lazy activation
+ * 
+ * Register the Service Component's provided services A ServiceFactory is used
+ * to enable lazy activation
  * 
  * @version $Revision$
  */
@@ -38,9 +38,9 @@ import org.osgi.service.component.ComponentInstance;
 abstract class RegisterComponentService {
 
 	/* set this to true to compile in debug messages */
-	static final boolean DEBUG = false;
+	static final boolean	DEBUG	= false;
 
-	//cannot instantiate - this is a utility class
+	// cannot instantiate - this is a utility class
 	private RegisterComponentService() {
 	}
 
@@ -50,119 +50,147 @@ abstract class RegisterComponentService {
 	 * @param ip - InstanceProcess
 	 * @param bc - BundleContext
 	 * @param cdp - ComponentDescription plus Properties
-	 * @param factory - boolean 
+	 * @param factory - boolean
 	 * @return ServiceRegistration
 	 */
-	static void registerService(InstanceProcess instanceProcess, ComponentDescriptionProp cdp) {
-		
+	static void registerService(InstanceProcess instanceProcess,
+			ComponentDescriptionProp cdp) {
+
 		ComponentDescription cd = cdp.getComponentDescription();
-		
+
 		final InstanceProcess finalInstanceProcess = instanceProcess;
 		final ComponentDescriptionProp finalCDP = cdp;
 
 		List servicesProvided = cd.getServicesProvided();
-		String [] servicesProvidedArray = (String [])servicesProvided.toArray(new String [servicesProvided.size()]);
-		
+		String[] servicesProvidedArray = (String[]) servicesProvided
+				.toArray(new String[servicesProvided.size()]);
+
 		// register the service using a ServiceFactory
 		ServiceRegistration serviceRegistration = null;
 		if (cd.getService().isServicefactory()) {
 			// register the service using a ServiceFactory
 			serviceRegistration = cd.getBundleContext().registerService(
-					servicesProvidedArray,
-					new ServiceFactory() {
-				// map of instance:componentInstance
-				Hashtable instances;
+					servicesProvidedArray, new ServiceFactory() {
+						// map of instance:componentInstance
+						Hashtable	instances;
 
-				// ServiceFactory.getService method.
-				public Object getService(Bundle bundle, ServiceRegistration registration) {
-					if (DEBUG)
-						System.out.println("RegisterComponentServiceFactory:getService: registration:" + registration);
-					
-					ComponentInstance componentInstance = null;
-					Object instance = null;
-					try {
-						componentInstance = finalInstanceProcess.buildDispose.build(bundle, finalCDP);
-						instance = componentInstance.getInstance();
-					} catch (ComponentException e) {
-						Log.log(1, "[SCR] Error attempting to register a Service Factory.", e);						
-					} 
-					
-					if (componentInstance != null && instance != null) {
-						//save so we can dispose later
-						synchronized(this) {
-							if (instances == null) {
-								instances = new Hashtable();
+						// ServiceFactory.getService method.
+						public Object getService(Bundle bundle,
+								ServiceRegistration registration) {
+							if (DEBUG)
+								System.out
+										.println("RegisterComponentServiceFactory:getService: registration:"
+												+ registration);
+
+							ComponentInstance componentInstance = null;
+							Object instance = null;
+							try {
+								componentInstance = finalInstanceProcess.buildDispose
+										.build(bundle, finalCDP);
+								instance = componentInstance.getInstance();
+							}
+							catch (ComponentException e) {
+								Log
+										.log(
+												1,
+												"[SCR] Error attempting to register a Service Factory.",
+												e);
+							}
+
+							if (componentInstance != null && instance != null) {
+								// save so we can dispose later
+								synchronized (this) {
+									if (instances == null) {
+										instances = new Hashtable();
+									}
+								}
+								instances.put(instance, componentInstance);
+							}
+							return instance;
+						}
+
+						// ServiceFactory.ungetService method.
+						public void ungetService(Bundle bundle,
+								ServiceRegistration registration, Object service) {
+							if (DEBUG)
+								System.out
+										.println("RegisterComponentServiceFactory:ungetService: registration = "
+												+ registration);
+							((ComponentInstance) instances.get(service))
+									.dispose();
+							instances.remove(service);
+							synchronized (this) {
+								if (instances.isEmpty()) {
+									instances = null;
+								}
 							}
 						}
-						instances.put(instance,componentInstance);
-					}
-					return instance;
-				}
-
-				// ServiceFactory.ungetService method.
-				public void ungetService(Bundle bundle, ServiceRegistration registration, Object service) {
-					if (DEBUG)
-						System.out.println("RegisterComponentServiceFactory:ungetService: registration = " + registration);
-					((ComponentInstance)instances.get(service)).dispose();
-					instances.remove(service);
-					synchronized(this) {
-						if (instances.isEmpty()) {
-							instances = null;
-						}
-					}
-				}
-			}, cdp.getProperties());
-		} else {
-			//servicefactory=false
-			//always return the same instance
+					}, cdp.getProperties());
+		}
+		else {
+			// servicefactory=false
+			// always return the same instance
 			serviceRegistration = cd.getBundleContext().registerService(
-					servicesProvidedArray,
-					new ServiceFactory() {
+					servicesProvidedArray, new ServiceFactory() {
 
-				int references = 0;
-				//if we create an instance, keep track of it
-				ComponentInstance instance;
+						int					references	= 0;
+						// if we create an instance, keep track of it
+						ComponentInstance	instance;
 
-				//ServiceFactory.getService method.
-				public Object getService(Bundle bundle, ServiceRegistration registration) {
-					if (DEBUG)
-						System.out.println("RegisterComponentService: getService: registration = " + registration);
-					
-					synchronized(this) {
-						
-						if (finalCDP.getInstances().isEmpty()) {
-							try {
-								instance = finalInstanceProcess.buildDispose.build(null, finalCDP);
-							} catch (ComponentException e) {
-								Log.log(1, "[SCR] Error attempting to register Service.", e);
-								return null;
-							}		
+						// ServiceFactory.getService method.
+						public Object getService(Bundle bundle,
+								ServiceRegistration registration) {
+							if (DEBUG)
+								System.out
+										.println("RegisterComponentService: getService: registration = "
+												+ registration);
+
+							synchronized (this) {
+
+								if (finalCDP.getInstances().isEmpty()) {
+									try {
+										instance = finalInstanceProcess.buildDispose
+												.build(null, finalCDP);
+									}
+									catch (ComponentException e) {
+										Log
+												.log(
+														1,
+														"[SCR] Error attempting to register Service.",
+														e);
+										return null;
+									}
+								}
+								references++;
+							}
+							return ((ComponentInstance) finalCDP.getInstances()
+									.get(0)).getInstance();
 						}
-						references++;
-					}
-					return ((ComponentInstance)finalCDP.getInstances().get(0)).getInstance();
-				}
 
-				// ServiceFactory.ungetService method.
-				public void ungetService(Bundle bundle, ServiceRegistration registration, Object service) {
-					if (DEBUG)
-						System.out.println("RegisterComponentService: ungetService: registration = " + registration);
-					
-					synchronized(this) {
-						references--;
-						if (references < 1 && instance != null) {
-							//if instance != null then we created it
-							//dispose instance						
-							instance.dispose();
-							instance = null;
+						// ServiceFactory.ungetService method.
+						public void ungetService(Bundle bundle,
+								ServiceRegistration registration, Object service) {
+							if (DEBUG)
+								System.out
+										.println("RegisterComponentService: ungetService: registration = "
+												+ registration);
+
+							synchronized (this) {
+								references--;
+								if (references < 1 && instance != null) {
+									// if instance != null then we created it
+									// dispose instance
+									instance.dispose();
+									instance = null;
+								}
+							}
 						}
-					}
-				}
-			}, cdp.getProperties());
+					}, cdp.getProperties());
 		}
 
 		if (DEBUG)
-			System.out.println("RegisterComponentService: register: " + serviceRegistration);
+			System.out.println("RegisterComponentService: register: "
+					+ serviceRegistration);
 
 		cdp.setServiceRegistration(serviceRegistration);
 	}

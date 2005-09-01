@@ -14,14 +14,14 @@
 package org.eclipse.osgi.component.model;
 
 /**
- *
+ * 
  * TODO Add Javadoc comment for this type.
  * 
  * @version $Revision$
  */
 public class PropertyResourceDescription extends PropertyDescription {
 
-	protected String entry;
+	protected String	entry;
 
 	public PropertyResourceDescription(ComponentDescription parent) {
 		super(parent);

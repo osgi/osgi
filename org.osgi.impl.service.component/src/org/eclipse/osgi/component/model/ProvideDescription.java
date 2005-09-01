@@ -14,14 +14,14 @@
 package org.eclipse.osgi.component.model;
 
 /**
- *
+ * 
  * TODO Add Javadoc comment for this type.
  * 
  * @version $Revision$
  */
 public class ProvideDescription {
-	protected ServiceDescription parent;
-	protected String interfacename;
+	protected ServiceDescription	parent;
+	protected String				interfacename;
 
 	public ProvideDescription(ServiceDescription parent) {
 		this.parent = parent;

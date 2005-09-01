@@ -19,14 +19,16 @@ import org.xml.sax.Attributes;
 import org.xml.sax.helpers.DefaultHandler;
 
 public class ImplementationElement extends DefaultHandler {
-	protected ParserHandler root;
-	protected ComponentElement parent;
-	protected ImplementationDescription implementation;
+	protected ParserHandler				root;
+	protected ComponentElement			parent;
+	protected ImplementationDescription	implementation;
 
-	public ImplementationElement(ParserHandler root, ComponentElement parent, Attributes attributes) {
+	public ImplementationElement(ParserHandler root, ComponentElement parent,
+			Attributes attributes) {
 		this.root = root;
 		this.parent = parent;
-		implementation = new ImplementationDescription(parent.getComponentDescription());
+		implementation = new ImplementationDescription(parent
+				.getComponentDescription());
 
 		int size = attributes.getLength();
 		for (int i = 0; i < size; i++) {
@@ -37,7 +39,8 @@ public class ImplementationElement extends DefaultHandler {
 				implementation.setClassname(value);
 				continue;
 			}
-			root.logError("unrecognized implementation element attribute: " + key);
+			root.logError("unrecognized implementation element attribute: "
+					+ key);
 		}
 
 		if (implementation.getClassname() == null) {
@@ -45,7 +48,8 @@ public class ImplementationElement extends DefaultHandler {
 		}
 	}
 
-	public void startElement(String uri, String localName, String qName, Attributes attributes) {
+	public void startElement(String uri, String localName, String qName,
+			Attributes attributes) {
 		root.logError("implementation does not support nested elements");
 	}
 

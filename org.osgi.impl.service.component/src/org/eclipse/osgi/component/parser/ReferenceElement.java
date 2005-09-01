@@ -19,11 +19,12 @@ import org.xml.sax.Attributes;
 import org.xml.sax.helpers.DefaultHandler;
 
 public class ReferenceElement extends DefaultHandler {
-	protected ParserHandler root;
-	protected ComponentElement parent;
-	protected ReferenceDescription reference;
+	protected ParserHandler			root;
+	protected ComponentElement		parent;
+	protected ReferenceDescription	reference;
 
-	public ReferenceElement(ParserHandler root, ComponentElement parent, Attributes attributes) {
+	public ReferenceElement(ParserHandler root, ComponentElement parent,
+			Attributes attributes) {
 		this.root = root;
 		this.parent = parent;
 		reference = new ReferenceDescription(parent.getComponentDescription());
@@ -78,7 +79,8 @@ public class ReferenceElement extends DefaultHandler {
 		}
 	}
 
-	public void startElement(String uri, String localName, String qName, Attributes attributes) {
+	public void startElement(String uri, String localName, String qName,
+			Attributes attributes) {
 		root.logError("reference does not support nested elements");
 	}
 

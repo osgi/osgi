@@ -26,7 +26,8 @@ import org.xml.sax.helpers.DefaultHandler;
 
 /**
  * ParserHandler implements the methods for the DefaultHandler of the SAX
- * parser. Each Service Component bundle contains a set of xml files which are parsed.
+ * parser. Each Service Component bundle contains a set of xml files which are
+ * parsed.
  * 
  * @version $Revision$
  */
@@ -34,14 +35,14 @@ import org.xml.sax.helpers.DefaultHandler;
 public class ParserHandler extends DefaultHandler {
 
 	/* set this to true to compile in debug messages */
-	static final boolean DEBUG = false;
+	static final boolean		DEBUG	= false;
 
-	protected DefaultHandler handler;
-	protected List components;
-	protected Main main;
-	protected BundleContext bundleContext;
-	protected int depth;
-	protected boolean error;
+	protected DefaultHandler	handler;
+	protected List				components;
+	protected Main				main;
+	protected BundleContext		bundleContext;
+	protected int				depth;
+	protected boolean			error;
 
 	public ParserHandler(Main main, BundleContext bundleContext, List components) {
 		this.main = main;
@@ -75,7 +76,8 @@ public class ParserHandler extends DefaultHandler {
 		depth = 0;
 	}
 
-	public void startPrefixMapping(String prefix, String uri) throws SAXException {
+	public void startPrefixMapping(String prefix, String uri)
+			throws SAXException {
 
 		if (DEBUG) {
 			System.out.println("[startPrefixMapping:prefix]" + prefix);
@@ -83,7 +85,8 @@ public class ParserHandler extends DefaultHandler {
 		}
 	}
 
-	public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
+	public void startElement(String uri, String localName, String qName,
+			Attributes attributes) throws SAXException {
 		depth++;
 
 		if (DEBUG) {
@@ -96,11 +99,16 @@ public class ParserHandler extends DefaultHandler {
 			for (int i = 0; i < size; i++) {
 				String key = attributes.getQName(i);
 				String value = attributes.getValue(i);
-				System.out.println(" [attr:" + i + ":localName]" + attributes.getLocalName(i));
-				System.out.println(" [attr:" + i + ":qName]" + attributes.getQName(i));
-				System.out.println(" [attr:" + i + ":type]" + attributes.getType(i));
-				System.out.println(" [attr:" + i + ":URI]" + attributes.getURI(i));
-				System.out.println(" [attr:" + i + ":value]" + attributes.getValue(i));
+				System.out.println(" [attr:" + i + ":localName]"
+						+ attributes.getLocalName(i));
+				System.out.println(" [attr:" + i + ":qName]"
+						+ attributes.getQName(i));
+				System.out.println(" [attr:" + i + ":type]"
+						+ attributes.getType(i));
+				System.out.println(" [attr:" + i + ":URI]"
+						+ attributes.getURI(i));
+				System.out.println(" [attr:" + i + ":value]"
+						+ attributes.getValue(i));
 			}
 			System.out.println("[startElement:end]");
 		}
@@ -111,13 +119,15 @@ public class ParserHandler extends DefaultHandler {
 		}
 
 		if (localName.equals(ParserConstants.COMPONENT_ELEMENT)) {
-			if (((depth == 1) && (uri.length() == 0)) || uri.equals(ParserConstants.SCR_NAMESPACE)) {
+			if (((depth == 1) && (uri.length() == 0))
+					|| uri.equals(ParserConstants.SCR_NAMESPACE)) {
 				setHandler(new ComponentElement(this, attributes));
 			}
 		}
 	}
 
-	public void characters(char[] ch, int start, int length) throws SAXException {
+	public void characters(char[] ch, int start, int length)
+			throws SAXException {
 
 		if (DEBUG) {
 			System.out.print("[characters:begin]");
@@ -130,7 +140,8 @@ public class ParserHandler extends DefaultHandler {
 		}
 	}
 
-	public void endElement(String uri, String localName, String qName) throws SAXException {
+	public void endElement(String uri, String localName, String qName)
+			throws SAXException {
 
 		if (DEBUG) {
 			System.out.println("[endElement:uri]" + uri);

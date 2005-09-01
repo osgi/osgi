@@ -39,31 +39,35 @@ import org.osgi.framework.ServiceReference;
 public class Reference {
 
 	/* set this to true to compile in debug messages */
-	static final boolean DEBUG = false;
-	static final String TARGET = ".target";
-	protected ReferenceDescription referenceDescription;
-	protected String target;
-	
-	protected List serviceReferences = new ArrayList();
+	static final boolean			DEBUG				= false;
+	static final String				TARGET				= ".target";
+	protected ReferenceDescription	referenceDescription;
+	protected String				target;
+
+	protected List					serviceReferences	= new ArrayList();
 
 	/**
 	 * Reference object
 	 * 
 	 * @param referenceDescription
 	 */
-	public Reference(ReferenceDescription referenceDescription, Hashtable properties) {
+	public Reference(ReferenceDescription referenceDescription,
+			Hashtable properties) {
 		this.referenceDescription = referenceDescription;
-		
+
 		// RFC 80 section 5.3.1.3:
 		// If [target] is not specified and there is no <reference-name>.target
 		// component
 		// property, then the selection filter used to select the desired
 		// service is
 		// “(objectClass=”+<interface-name>+”)”.
-		this.target = (String) properties.get(referenceDescription.getName() + TARGET);
-		this.target = this.target != null ? this.target : referenceDescription.getTarget();
-		this.target = this.target != null ? this.target : "(objectClass=" + referenceDescription.getInterfacename() + ")";
-		
+		this.target = (String) properties.get(referenceDescription.getName()
+				+ TARGET);
+		this.target = this.target != null ? this.target : referenceDescription
+				.getTarget();
+		this.target = this.target != null ? this.target : "(objectClass="
+				+ referenceDescription.getInterfacename() + ")";
+
 	}
 
 	/**
@@ -73,10 +77,13 @@ public class Reference {
 	 */
 	public boolean hasProvider(BundleContext context) {
 
-		//check if this bundle has the permission to GET the Service it Requires
+		// check if this bundle has the permission to GET the Service it
+		// Requires
 		Bundle bundle = context.getBundle();
-		if (System.getSecurityManager() != null &&
-			!bundle.hasPermission(new ServicePermission(referenceDescription.getInterfacename(), ServicePermission.GET))) {
+		if (System.getSecurityManager() != null
+				&& !bundle.hasPermission(new ServicePermission(
+						referenceDescription.getInterfacename(),
+						ServicePermission.GET))) {
 
 			return false;
 		}
@@ -84,14 +91,17 @@ public class Reference {
 		// Get all service references for this target filter
 		try {
 			ServiceReference[] serviceReferences = null;
-			serviceReferences = context.getServiceReferences(referenceDescription.getInterfacename(),target);
-			// if there is no service published that this Service ComponentReferences
+			serviceReferences = context.getServiceReferences(
+					referenceDescription.getInterfacename(), target);
+			// if there is no service published that this Service
+			// ComponentReferences
 			if (serviceReferences != null) {
 				return true;
 			}
 			return false;
-		} catch (InvalidSyntaxException e) {
-			//won't ever happen because filter is null;
+		}
+		catch (InvalidSyntaxException e) {
+			// won't ever happen because filter is null;
 			return false;
 		}
 	}
@@ -108,7 +118,8 @@ public class Reference {
 		if ("static".equals(referenceDescription.getPolicy())) {
 			return false;
 		}
-		String[] serviceName = (String[]) (serviceReference.getProperty("objectClass"));
+		String[] serviceName = (String[]) (serviceReference
+				.getProperty("objectClass"));
 		if (!serviceName[0].equals(referenceDescription.getInterfacename())) {
 			return false;
 		}
@@ -127,7 +138,8 @@ public class Reference {
 			return false;
 		}
 
-		//now check if the ServiceReference is found in the list of saved ServiceReferences for this reference 
+		// now check if the ServiceReference is found in the list of saved
+		// ServiceReferences for this reference
 		if (!serviceReferences.contains(serviceReference)) {
 			return false;
 		}
@@ -143,7 +155,7 @@ public class Reference {
 	public void removeServiceReference(ServiceReference serviceReference) {
 		serviceReferences.remove(serviceReference);
 	}
-	
+
 	public void clearServiceReferences() {
 		serviceReferences.clear();
 	}
@@ -162,15 +174,16 @@ public class Reference {
 		try {
 			filter = FrameworkUtil.createFilter(target);
 			return filter.match(properties);
-		} catch (InvalidSyntaxException e) {
+		}
+		catch (InvalidSyntaxException e) {
 			e.printStackTrace();
 			return false;
 		}
 	}
 
 	/**
-	 * Check if this reference can be satisfied by a CDP in a set of 
-	 * enabled CDPs
+	 * Check if this reference can be satisfied by a CDP in a set of enabled
+	 * CDPs
 	 * 
 	 * @param enabledCDPs the list of enabled cdps
 	 * @return the providing CDP or null if none
@@ -180,11 +193,14 @@ public class Reference {
 		// loop thru all enabled cdps to match providers of services
 		Iterator it = enabledCDPs.iterator();
 		while (it.hasNext()) {
-			ComponentDescriptionProp cdpRefLookup = (ComponentDescriptionProp) it.next();
-			List provideList = cdpRefLookup.getComponentDescription().getServicesProvided();
+			ComponentDescriptionProp cdpRefLookup = (ComponentDescriptionProp) it
+					.next();
+			List provideList = cdpRefLookup.getComponentDescription()
+					.getServicesProvided();
 
-			if (provideList.contains(this.getReferenceDescription().getInterfacename())) {
-				//check the target field
+			if (provideList.contains(this.getReferenceDescription()
+					.getInterfacename())) {
+				// check the target field
 				if (matchProperties(cdpRefLookup)) {
 					return cdpRefLookup;
 				}

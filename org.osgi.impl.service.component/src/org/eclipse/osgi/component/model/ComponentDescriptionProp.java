@@ -21,42 +21,43 @@ import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.component.ComponentInstance;
 
 /**
- *
- * Combines the Compoent Description object and properties 
+ * 
+ * Combines the Compoent Description object and properties
  * 
  * @version $Revision$
  */
 public class ComponentDescriptionProp {
 
 	/* set this to true to compile in debug messages */
-	static final boolean DEBUG = false;
+	static final boolean			DEBUG	= false;
 
-	protected ComponentDescription cd;
-	protected Hashtable properties;
-	protected ServiceRegistration serviceRegistration;
+	protected ComponentDescription	cd;
+	protected Hashtable				properties;
+	protected ServiceRegistration	serviceRegistration;
 
-	protected List delayActivateCDPNames;
-	protected List references;
-	protected List instances;
-	
-	boolean componentFactory;
+	protected List					delayActivateCDPNames;
+	protected List					references;
+	protected List					instances;
+
+	boolean							componentFactory;
 
 	/**
 	 * @param bundle The bundle to set.
 	 */
-	public ComponentDescriptionProp(ComponentDescription cd, List references, Hashtable properties, boolean componentFactory){
+	public ComponentDescriptionProp(ComponentDescription cd, List references,
+			Hashtable properties, boolean componentFactory) {
 
 		this.cd = cd;
 		this.references = references;
 		this.properties = properties;
-		
+
 		delayActivateCDPNames = new ArrayList();
 		instances = new ArrayList();
-		
+
 		this.componentFactory = componentFactory;
 	}
 
-	/** 
+	/**
 	 * getProperties
 	 * 
 	 * @return Dictionary properties
@@ -65,10 +66,10 @@ public class ComponentDescriptionProp {
 		return properties;
 	}
 
-	/** 
+	/**
 	 * getComponentDescription
 	 * 
-	 * @return ComponentDescription 
+	 * @return ComponentDescription
 	 */
 	public ComponentDescription getComponentDescription() {
 		return cd;
@@ -98,7 +99,7 @@ public class ComponentDescriptionProp {
 	public List getReferences() {
 		return references;
 	}
-	
+
 	public void addInstance(ComponentInstance instance) {
 		instances.add(instance);
 	}
@@ -114,7 +115,7 @@ public class ComponentDescriptionProp {
 	public void removeAllInstances() {
 		instances.clear();
 	}
-	
+
 	public boolean isComponentFactory() {
 		return componentFactory;
 	}

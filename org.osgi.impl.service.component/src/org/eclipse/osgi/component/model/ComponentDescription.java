@@ -23,30 +23,30 @@ import org.osgi.framework.BundleContext;
 import org.osgi.framework.Constants;
 
 /**
- *
- *  Memory model of the Service Component xml
+ * 
+ * Memory model of the Service Component xml
  * 
  * @version $Revision$
  */
 public class ComponentDescription {
-	protected BundleContext bundleContext;
-	protected String name;
-	protected boolean autoenable;
-	protected boolean immediate;
-	protected boolean enabled;
-	protected boolean satisfied;
-	protected boolean valid;
-	protected String factory;
+	protected BundleContext				bundleContext;
+	protected String					name;
+	protected boolean					autoenable;
+	protected boolean					immediate;
+	protected boolean					enabled;
+	protected boolean					satisfied;
+	protected boolean					valid;
+	protected String					factory;
 
-	protected ImplementationDescription implementation;
-	protected List properties;
-	protected ServiceDescription service;
-	protected List servicesProvided;
-	
-	protected List referenceDescriptions;
+	protected ImplementationDescription	implementation;
+	protected List						properties;
+	protected ServiceDescription		service;
+	protected List						servicesProvided;
 
-	protected List componentDescriptionProps;
-	protected Map cdpsByPID;
+	protected List						referenceDescriptions;
+
+	protected List						componentDescriptionProps;
+	protected Map						cdpsByPID;
 
 	/**
 	 * @param bundle The bundle to set.
@@ -60,7 +60,7 @@ public class ComponentDescription {
 		componentDescriptionProps = new ArrayList();
 		cdpsByPID = new Hashtable();
 		servicesProvided = Collections.EMPTY_LIST;
-		
+
 	}
 
 	/**
@@ -163,7 +163,7 @@ public class ComponentDescription {
 	public ServiceDescription getService() {
 		return service;
 	}
-	
+
 	/**
 	 * return a handly list of the serviceInterfaces provided
 	 */
@@ -177,16 +177,17 @@ public class ComponentDescription {
 	public void setService(ServiceDescription service) {
 		this.service = service;
 
-		if (service!= null) {
+		if (service != null) {
 			servicesProvided = new ArrayList();
 			ProvideDescription[] provideDescription = service.getProvides();
 			for (int i = 0; i < provideDescription.length; i++) {
 				servicesProvided.add(provideDescription[i].getInterfacename());
 			}
-		} else {
+		}
+		else {
 			servicesProvided = Collections.EMPTY_LIST;
 		}
-		
+
 	}
 
 	/**
@@ -247,25 +248,25 @@ public class ComponentDescription {
 
 	public void addComponentDescriptionProp(ComponentDescriptionProp cdp) {
 		componentDescriptionProps.add(cdp);
-		String pid = (String)cdp.getProperties().get(Constants.SERVICE_PID);
+		String pid = (String) cdp.getProperties().get(Constants.SERVICE_PID);
 		if (pid != null) {
-			cdpsByPID.put(pid,cdp);
+			cdpsByPID.put(pid, cdp);
 		}
 	}
 
 	public List getComponentDescriptionProps() {
 		return componentDescriptionProps;
 	}
-	
+
 	public ComponentDescriptionProp getComponentDescriptionPropByPID(String pid) {
-		return (ComponentDescriptionProp)cdpsByPID.get(pid);
+		return (ComponentDescriptionProp) cdpsByPID.get(pid);
 	}
 
 	public void clearComponentDescriptionProps() {
 		componentDescriptionProps.clear();
 		cdpsByPID.clear();
 	}
-	
+
 	public void removeComponentDescriptionProp(ComponentDescriptionProp cdp) {
 		componentDescriptionProps.remove(cdp);
 	}

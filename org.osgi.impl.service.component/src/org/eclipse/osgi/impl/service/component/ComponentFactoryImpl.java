@@ -37,17 +37,18 @@ import org.osgi.service.component.ComponentInstance;
 public class ComponentFactoryImpl implements ComponentFactory {
 
 	/* set this to true to compile in debug messages */
-	static final boolean DEBUG = true;
+	static final boolean				DEBUG	= true;
 
-	private ComponentDescriptionProp cdp;
-	private Main main;
+	private ComponentDescriptionProp	cdp;
+	private Main						main;
 
 	/**
 	 * ComponentFactoryImpl
 	 * 
 	 * @param context the SC bundle context
-	 * @param componentDescriptionProp the ComponentDescription Object with Properties
-	 * @param buildDispose 
+	 * @param componentDescriptionProp the ComponentDescription Object with
+	 *        Properties
+	 * @param buildDispose
 	 */
 	public ComponentFactoryImpl(ComponentDescriptionProp cdp, Main main) {
 		this.cdp = cdp;
@@ -69,34 +70,39 @@ public class ComponentFactoryImpl implements ComponentFactory {
 	 */
 	public ComponentInstance newInstance(Dictionary newProperties) {
 
-		//merge properties
-		Hashtable properties = (Hashtable)cdp.getProperties().clone();
+		// merge properties
+		Hashtable properties = (Hashtable) cdp.getProperties().clone();
 		Enumeration propsEnum = newProperties.keys();
-		while(propsEnum.hasMoreElements()) {
+		while (propsEnum.hasMoreElements()) {
 			Object key = propsEnum.nextElement();
-			properties.put(key,newProperties.get(key));
+			properties.put(key, newProperties.get(key));
 		}
-		
-		//create a new cdp (adds to resolver enabledCDPs list)
-		ComponentDescriptionProp newCDP = main.resolver.mapFactoryInstance(cdp.getComponentDescription(),properties);
 
-		//try to resolve new cdp - adds to resolver's satisfied list
-		if(!main.resolver.isEligible(newCDP)) {
-			main.resolver.enabledCDPs.remove(newCDP); //was added by mapFactoryInstance
-			throw new ComponentException("Could not resolve instance of " + cdp + " with properties " + properties);
+		// create a new cdp (adds to resolver enabledCDPs list)
+		ComponentDescriptionProp newCDP = main.resolver.mapFactoryInstance(cdp
+				.getComponentDescription(), properties);
+
+		// try to resolve new cdp - adds to resolver's satisfied list
+		if (!main.resolver.isEligible(newCDP)) {
+			main.resolver.enabledCDPs.remove(newCDP); // was added by
+														// mapFactoryInstance
+			throw new ComponentException("Could not resolve instance of " + cdp
+					+ " with properties " + properties);
 		}
-		
-		//if new cdp resolves, send it to instance process (will register service
-		//if it has one)
-		main.resolver.instanceProcess.buildInstances(Collections.singletonList(newCDP));
-		
-		//get instance of new cdp to return
-		
+
+		// if new cdp resolves, send it to instance process (will register
+		// service
+		// if it has one)
+		main.resolver.instanceProcess.buildInstances(Collections
+				.singletonList(newCDP));
+
+		// get instance of new cdp to return
+
 		if (newCDP.getComponentDescription().isImmediate()) {
-			//if cdp is immediate then instanceProcess created one
-			return (ComponentInstance)newCDP.getInstances().get(0);
+			// if cdp is immediate then instanceProcess created one
+			return (ComponentInstance) newCDP.getInstances().get(0);
 		}
-		
+
 		return main.resolver.instanceProcess.buildDispose.build(null, newCDP);
 	}
 }

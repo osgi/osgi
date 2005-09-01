@@ -42,23 +42,24 @@ import org.osgi.util.tracker.ServiceTracker;
  * 
  * @version $Revision$
  */
-public class Main implements BundleActivator, BundleTrackerCustomizer, WorkDispatcher {
+public class Main implements BundleActivator, BundleTrackerCustomizer,
+		WorkDispatcher {
 
-	public BundleContext context;
-	public FrameworkHook framework;
-	public ComponentDescriptionCache cache;
-	public BundleTracker bundleTracker;
-	public Resolver resolver;
-	public ServiceTracker packageAdminTracker;
-	public WorkQueue workQueue;
+	public BundleContext				context;
+	public FrameworkHook				framework;
+	public ComponentDescriptionCache	cache;
+	public BundleTracker				bundleTracker;
+	public Resolver						resolver;
+	public ServiceTracker				packageAdminTracker;
+	public WorkQueue					workQueue;
 
-	protected Hashtable bundleToComponentDescriptions;
-	protected Hashtable bundleToLastModified;
-		
+	protected Hashtable					bundleToComponentDescriptions;
+	protected Hashtable					bundleToLastModified;
+
 	/**
 	 * Bundle is being added to SCR tracked bundles.
 	 */
-	public static final int ADD = 1;
+	public static final int				ADD	= 1;
 
 	/**
 	 * Start the SCR bundle.
@@ -73,7 +74,8 @@ public class Main implements BundleActivator, BundleTrackerCustomizer, WorkDispa
 		bundleToComponentDescriptions = new Hashtable();
 		bundleToLastModified = new Hashtable();
 
-		packageAdminTracker = new ServiceTracker(context, PackageAdmin.class.getName(), null);
+		packageAdminTracker = new ServiceTracker(context, PackageAdmin.class
+				.getName(), null);
 		packageAdminTracker.open(true);
 		bundleTracker = new BundleTracker(context, Bundle.ACTIVE, this);
 		workQueue = new WorkQueue(this, "SCR Work Queue");
@@ -88,7 +90,7 @@ public class Main implements BundleActivator, BundleTrackerCustomizer, WorkDispa
 	 * @param context BundleContext for SCR implementation.
 	 */
 	public void stop(BundleContext context) {
-		
+
 		Log.dispose();
 		bundleTracker.close();
 		workQueue.closeAndJoin();
@@ -102,8 +104,8 @@ public class Main implements BundleActivator, BundleTrackerCustomizer, WorkDispa
 		bundleToLastModified = null;
 		this.context = null;
 
-		//	TODO
-		//when SCR is shutting down write/flush database to disk (cache)
+		// TODO
+		// when SCR is shutting down write/flush database to disk (cache)
 
 	}
 
@@ -123,7 +125,8 @@ public class Main implements BundleActivator, BundleTrackerCustomizer, WorkDispa
 
 		List enableComponentDescriptions = new ArrayList();
 
-		PackageAdmin packageAdmin = (PackageAdmin) packageAdminTracker.getService();
+		PackageAdmin packageAdmin = (PackageAdmin) packageAdminTracker
+				.getService();
 		if (packageAdmin.getBundleType(bundle) != 0) {
 			return null; // don't process fragments.
 		}
@@ -142,14 +145,16 @@ public class Main implements BundleActivator, BundleTrackerCustomizer, WorkDispa
 		// get the last saved value for the bundle's last modified date
 		Long bundleOldLastModified = (Long) bundleToLastModified.get(bundleID);
 
-		//compare the two and if changed ( or if first time ) update the maps
-		if ((!bundleLastModified.equals(bundleOldLastModified)) || (bundleOldLastModified == null)) {
+		// compare the two and if changed ( or if first time ) update the maps
+		if ((!bundleLastModified.equals(bundleOldLastModified))
+				|| (bundleOldLastModified == null)) {
 
-			//get the BundleContext for this bundle (framework impl dependent)
+			// get the BundleContext for this bundle (framework impl dependent)
 			BundleContext bundleContext = framework.getBundleContext(bundle);
-			
+
 			// get all ComponentDescriptions for this bundle
-			List componentDescriptions = cache.getComponentDescriptions(bundleContext);
+			List componentDescriptions = cache
+					.getComponentDescriptions(bundleContext);
 
 			// update map of bundle to ComponentDescriptions
 			bundleToComponentDescriptions.put(bundleID, componentDescriptions);
@@ -157,13 +162,15 @@ public class Main implements BundleActivator, BundleTrackerCustomizer, WorkDispa
 			// update bundle:lastModifiedDate map
 			bundleToLastModified.put(bundleID, bundleLastModified);
 
-			//for each CD in bundle set enable flag based on autoenable 
+			// for each CD in bundle set enable flag based on autoenable
 			if (componentDescriptions != null) {
 				Iterator it = componentDescriptions.iterator();
 				while (it.hasNext()) {
-					ComponentDescription componentDescription = (ComponentDescription) it.next();
+					ComponentDescription componentDescription = (ComponentDescription) it
+							.next();
 					validate(componentDescription);
-					if (componentDescription.isAutoenable() && componentDescription.isValid()) {
+					if (componentDescription.isAutoenable()
+							&& componentDescription.isValid()) {
 						componentDescription.setEnabled(true);
 						enableComponentDescriptions.add(componentDescription);
 					}
@@ -171,7 +178,8 @@ public class Main implements BundleActivator, BundleTrackerCustomizer, WorkDispa
 			}
 		}
 
-		//publish all CDs to be enabled, to resolver (add to the workqueue and publish event)
+		// publish all CDs to be enabled, to resolver (add to the workqueue and
+		// publish event)
 		workQueue.enqueueWork(this, ADD, enableComponentDescriptions);
 		return value;
 	}
@@ -202,32 +210,34 @@ public class Main implements BundleActivator, BundleTrackerCustomizer, WorkDispa
 	 */
 
 	public void removedBundle(Bundle bundle, Object object) {
-		
+
 		List disableComponentDescriptions = new ArrayList();
 		Long bundleID = new Long(bundle.getBundleId());
 
-		//get CD's for this bundle
-		List ComponentDescriptions = (List) bundleToComponentDescriptions.get(new Long(bundle.getBundleId()));
+		// get CD's for this bundle
+		List ComponentDescriptions = (List) bundleToComponentDescriptions
+				.get(new Long(bundle.getBundleId()));
 		if (ComponentDescriptions != null) {
 			Iterator it = ComponentDescriptions.iterator();
 
-			//for each CD in bundle
+			// for each CD in bundle
 			while (it.hasNext()) {
-				ComponentDescription ComponentDescription = (ComponentDescription) it.next();
+				ComponentDescription ComponentDescription = (ComponentDescription) it
+						.next();
 
-				//check if enabled && satisfied
+				// check if enabled && satisfied
 				if ((ComponentDescription.isEnabled())) {
 
-					//add to disabled list
+					// add to disabled list
 					disableComponentDescriptions.add(ComponentDescription);
 
-					//mark disabled
+					// mark disabled
 					ComponentDescription.setEnabled(false);
 				}
 			}
 		}
 
-		//remove the bundle from the lists/maps
+		// remove the bundle from the lists/maps
 		bundleToComponentDescriptions.remove(bundleID);
 		bundleToLastModified.remove(bundleID);
 
@@ -246,17 +256,18 @@ public class Main implements BundleActivator, BundleTrackerCustomizer, WorkDispa
 		if (CDs != null) {
 			Iterator it = CDs.iterator();
 
-			//for each CD in list
+			// for each CD in list
 			while (it.hasNext()) {
 				ComponentDescription CD = (ComponentDescription) it.next();
 
-				//if CD is not valid and is disabled then enable it
+				// if CD is not valid and is disabled then enable it
 				if (CD.isValid() && !CD.isEnabled()) {
 
 					// set CD enabled
 					CD.setEnabled(true);
 				}
-				//else it is either not valid or it is already enabled - do nothing 
+				// else it is either not valid or it is already enabled - do
+				// nothing
 			}
 		}
 	}
@@ -264,33 +275,38 @@ public class Main implements BundleActivator, BundleTrackerCustomizer, WorkDispa
 	/**
 	 * enableComponent - called by SC via ComponentContext
 	 * 
-	 * @param name The name of a component or <code>null</code> to indicate all
-	 *        components in the bundle.
-	 *        
-	 * @param bundle The bundle which contains the Service Component to be enabled
+	 * @param name The name of a component or <code>null</code> to indicate
+	 *        all components in the bundle.
+	 * 
+	 * @param bundle The bundle which contains the Service Component to be
+	 *        enabled
 	 */
 
 	public void enableComponent(String name, Bundle bundle) {
 
 		// get all ComponentDescriptions for this bundle
-      List componentDescriptions = (List) bundleToComponentDescriptions.get(new Long(bundle.getBundleId()));
-      
-		//Create the list of CD's to be enabled
+		List componentDescriptions = (List) bundleToComponentDescriptions
+				.get(new Long(bundle.getBundleId()));
+
+		// Create the list of CD's to be enabled
 		List enableCDs = new ArrayList();
 
 		if (componentDescriptions != null) {
 			Iterator it = componentDescriptions.iterator();
 
-			//for each CD in list
+			// for each CD in list
 			while (it.hasNext()) {
-				ComponentDescription componentDescription = (ComponentDescription) it.next();
+				ComponentDescription componentDescription = (ComponentDescription) it
+						.next();
 				validate(componentDescription);
 
-				//if name is null then enable ALL Component Descriptions in this bundle
+				// if name is null then enable ALL Component Descriptions in
+				// this bundle
 				if (name == null) {
 
 					// if CD is valid and is disabled then enable it
-					if (componentDescription.isValid() && !componentDescription.isEnabled()) {
+					if (componentDescription.isValid()
+							&& !componentDescription.isEnabled()) {
 
 						// add to list of CDs to enable
 						enableCDs.add(componentDescription);
@@ -298,11 +314,13 @@ public class Main implements BundleActivator, BundleTrackerCustomizer, WorkDispa
 						// set CD enabled
 						componentDescription.setEnabled(true);
 					}
-				} else {
+				}
+				else {
 					if (componentDescription.getName().equals(name)) {
 
-						//if CD is valid and is disabled then enable it
-						if (componentDescription.isValid() && !componentDescription.isEnabled()) {
+						// if CD is valid and is disabled then enable it
+						if (componentDescription.isValid()
+								&& !componentDescription.isEnabled()) {
 
 							// add to list of CDs to enable
 							enableCDs.add(componentDescription);
@@ -312,7 +330,8 @@ public class Main implements BundleActivator, BundleTrackerCustomizer, WorkDispa
 						}
 					}
 				}
-				//else it is either not valid or it is already enabled - do nothing 
+				// else it is either not valid or it is already enabled - do
+				// nothing
 			}
 		}
 
@@ -324,21 +343,22 @@ public class Main implements BundleActivator, BundleTrackerCustomizer, WorkDispa
 	/**
 	 * disableComponents - called by resolver
 	 * 
-	 * @param componentDescriptions - List of ComponentDescriptions to mark disabled
+	 * @param componentDescriptions - List of ComponentDescriptions to mark
+	 *        disabled
 	 */
 
 	public void disableComponents(List componentDescriptions) {
 
 		ComponentDescription componentDescription = null;
-		//Long bundleID;
+		// Long bundleID;
 
 		if (componentDescriptions != null) {
 			Iterator it = componentDescriptions.iterator();
 
-			//for each ComponentDescription in list
+			// for each ComponentDescription in list
 			while (it.hasNext()) {
 				componentDescription = (ComponentDescription) it.next();
-				//bundleID = new Long (cd.getBundle().getBundleId());
+				// bundleID = new Long (cd.getBundle().getBundleId());
 
 				if (componentDescription.isEnabled()) {
 
@@ -353,33 +373,36 @@ public class Main implements BundleActivator, BundleTrackerCustomizer, WorkDispa
 	}
 
 	/**
-	 * disableComponent -  The specified component name must be in the same bundle as this component.
-	 * Called by SC componentContext method
+	 * disableComponent - The specified component name must be in the same
+	 * bundle as this component. Called by SC componentContext method
 	 * 
-	 * @param name The name of a component to disable 
-	 *        
-	 * @param bundle The bundle which contains the Service Component to be disabled
+	 * @param name The name of a component to disable
+	 * 
+	 * @param bundle The bundle which contains the Service Component to be
+	 *        disabled
 	 * 
 	 */
 
 	public void disableComponent(String name, Bundle bundle) {
 
 		List disableComponentDescriptions = new ArrayList();
-		//Long bundleID = null;
+		// Long bundleID = null;
 
-		//	Get the list of CDs for this bundle
-		List componentDescriptionsList = (List) bundleToComponentDescriptions.get(new Long(bundle.getBundleId()));
+		// Get the list of CDs for this bundle
+		List componentDescriptionsList = (List) bundleToComponentDescriptions
+				.get(new Long(bundle.getBundleId()));
 
 		if (componentDescriptionsList != null) {
 			Iterator it = componentDescriptionsList.iterator();
 
-			//for each ComponentDescription in list
+			// for each ComponentDescription in list
 			while (it.hasNext()) {
-				ComponentDescription componentDescription = (ComponentDescription) it.next();
+				ComponentDescription componentDescription = (ComponentDescription) it
+						.next();
 
-				//bundleID = new Long (cd.getBundle().getBundleId());
+				// bundleID = new Long (cd.getBundle().getBundleId());
 
-				//find the ComponentDescription with the specified name
+				// find the ComponentDescription with the specified name
 				if (componentDescription.getName().equals(name)) {
 
 					// if enabled then add to disabled list and mark disabled
@@ -412,7 +435,7 @@ public class Main implements BundleActivator, BundleTrackerCustomizer, WorkDispa
 		switch (workAction) {
 			case ADD :
 				resolver.enableComponents(descriptions);
-			break;
+				break;
 		}
 	}
 
@@ -427,11 +450,12 @@ public class Main implements BundleActivator, BundleTrackerCustomizer, WorkDispa
 			return bundle.getHeaders();
 		}
 
-		return (Dictionary) AccessController.doPrivileged(new PrivilegedAction() {
-			public Object run() {
-				return bundle.getHeaders();
-			}
-		});
+		return (Dictionary) AccessController
+				.doPrivileged(new PrivilegedAction() {
+					public Object run() {
+						return bundle.getHeaders();
+					}
+				});
 
 	}
 
@@ -443,32 +467,55 @@ public class Main implements BundleActivator, BundleTrackerCustomizer, WorkDispa
 	 */
 	public void validate(ComponentDescription componentDescription) {
 
-		if (
-				(componentDescription.getFactory() != null) &&
-				(componentDescription.getService() != null) &&
-				(componentDescription.getService().isServicefactory())) {
+		if ((componentDescription.getFactory() != null)
+				&& (componentDescription.getService() != null)
+				&& (componentDescription.getService().isServicefactory())) {
 			componentDescription.setValid(false);
-			Log.log(1, "validate cd: ", new Throwable("invalid to specify both ComponentFactory and ServiceFactory"));
-		} else if (
-				(componentDescription.isImmediate()) &&
-				(componentDescription.getService() != null) &&
-				(componentDescription.getService().isServicefactory())) {
-			componentDescription.setValid(false);
-			Log.log(1, "validate cd: ", new Throwable("invalid to specify both immediate and ServiceFactory"));
-		} else if (
-				(componentDescription.isImmediate()) &&
-				(componentDescription.getFactory() != null )) {
-			componentDescription.setValid(false);
-			Log.log(1, "validate cd: ", new Throwable("invalid to specify both immediate and ComponentFactory"));
-		} else if (
-				(!componentDescription.isImmediate()) &&
-				(componentDescription.getService() == null ) &&
-				(componentDescription.getFactory() == null )) {
-			componentDescription.setValid(false);
-			Log.log(1, "validate cd: ", new Throwable("invalid set immediate to false and provide no Service"));
-		} else {
-			componentDescription.setValid(true);
+			Log
+					.log(
+							1,
+							"validate cd: ",
+							new Throwable(
+									"invalid to specify both ComponentFactory and ServiceFactory"));
 		}
+		else
+			if ((componentDescription.isImmediate())
+					&& (componentDescription.getService() != null)
+					&& (componentDescription.getService().isServicefactory())) {
+				componentDescription.setValid(false);
+				Log
+						.log(
+								1,
+								"validate cd: ",
+								new Throwable(
+										"invalid to specify both immediate and ServiceFactory"));
+			}
+			else
+				if ((componentDescription.isImmediate())
+						&& (componentDescription.getFactory() != null)) {
+					componentDescription.setValid(false);
+					Log
+							.log(
+									1,
+									"validate cd: ",
+									new Throwable(
+											"invalid to specify both immediate and ComponentFactory"));
+				}
+				else
+					if ((!componentDescription.isImmediate())
+							&& (componentDescription.getService() == null)
+							&& (componentDescription.getFactory() == null)) {
+						componentDescription.setValid(false);
+						Log
+								.log(
+										1,
+										"validate cd: ",
+										new Throwable(
+												"invalid set immediate to false and provide no Service"));
+					}
+					else {
+						componentDescription.setValid(true);
+					}
 
 	}
 

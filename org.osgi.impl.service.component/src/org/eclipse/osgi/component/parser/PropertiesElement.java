@@ -19,14 +19,16 @@ import org.xml.sax.Attributes;
 import org.xml.sax.helpers.DefaultHandler;
 
 public class PropertiesElement extends DefaultHandler {
-	protected ParserHandler root;
-	protected ComponentElement parent;
-	protected PropertyResourceDescription properties;
+	protected ParserHandler					root;
+	protected ComponentElement				parent;
+	protected PropertyResourceDescription	properties;
 
-	public PropertiesElement(ParserHandler root, ComponentElement parent, Attributes attributes) {
+	public PropertiesElement(ParserHandler root, ComponentElement parent,
+			Attributes attributes) {
 		this.root = root;
 		this.parent = parent;
-		properties = new PropertyResourceDescription(parent.getComponentDescription());
+		properties = new PropertyResourceDescription(parent
+				.getComponentDescription());
 
 		int size = attributes.getLength();
 		for (int i = 0; i < size; i++) {
@@ -45,7 +47,8 @@ public class PropertiesElement extends DefaultHandler {
 		}
 	}
 
-	public void startElement(String uri, String localName, String qName, Attributes attributes) {
+	public void startElement(String uri, String localName, String qName,
+			Attributes attributes) {
 		root.logError("properties does not support nested elements");
 	}
 

@@ -14,13 +14,13 @@
 package org.eclipse.osgi.component.model;
 
 /**
- *
+ * 
  * TODO Add Javadoc comment for this type.
  * 
  * @version $Revision$
  */
 public abstract class PropertyDescription {
-	protected ComponentDescription parent;
+	protected ComponentDescription	parent;
 
 	public PropertyDescription(ComponentDescription parent) {
 		this.parent = parent;

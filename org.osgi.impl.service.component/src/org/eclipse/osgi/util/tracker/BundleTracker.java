@@ -24,34 +24,35 @@ import org.osgi.framework.*;
  */
 public class BundleTracker implements BundleTrackerCustomizer {
 	/* set this to true to compile in debug messages */
-	static final boolean DEBUG = false;
+	static final boolean					DEBUG			= false;
 
 	/**
 	 * Bundle context this <tt>BundleTracker</tt> object is tracking against.
 	 */
-	protected final BundleContext context;
+	protected final BundleContext			context;
 
 	/**
 	 * <tt>BundleTrackerCustomizer</tt> object for this tracker.
 	 */
-	private final BundleTrackerCustomizer customizer;
+	private final BundleTrackerCustomizer	customizer;
 
 	/**
 	 * Tracked bundles: <tt>Bundle</tt> object -> customized Object and
 	 * <tt>BundleListener</tt> object
 	 */
-	private Tracked tracked;
+	private Tracked							tracked;
 
 	/**
 	 * Modification count. This field is initialized to zero by open, set to -1
 	 * by close and incremented by modified. This field is volatile since it is
 	 * accessed by multiple threads.
 	 */
-	private volatile int trackingCount = -1;
+	private volatile int					trackingCount	= -1;
 
-	private final int mask;
+	private final int						mask;
 
-	public BundleTracker(BundleContext context, int stateMask, BundleTrackerCustomizer customizer) {
+	public BundleTracker(BundleContext context, int stateMask,
+			BundleTrackerCustomizer customizer) {
 		this.context = context;
 		this.mask = stateMask;
 		this.customizer = (customizer == null) ? this : customizer;
@@ -97,7 +98,8 @@ public class BundleTracker implements BundleTrackerCustomizer {
 		tracked = null;
 		try {
 			context.removeBundleListener(outgoing);
-		} catch (IllegalStateException e) {
+		}
+		catch (IllegalStateException e) {
 			/* In case the context was stopped. */
 		}
 		if (bundles != null) {
@@ -160,9 +162,9 @@ public class BundleTracker implements BundleTrackerCustomizer {
 	 */
 	public Bundle[] getBundles() {
 		Tracked tracked = this.tracked; /*
-		 * use local var since we are not
-		 * synchronized
-		 */
+										 * use local var since we are not
+										 * synchronized
+										 */
 		if (tracked == null) /* if BundleTracker is not open */
 		{
 			return null;
@@ -193,9 +195,9 @@ public class BundleTracker implements BundleTrackerCustomizer {
 	 */
 	public Object getObject(Bundle bundle) {
 		Tracked tracked = this.tracked; /*
-		 * use local var since we are not
-		 * synchronized
-		 */
+										 * use local var since we are not
+										 * synchronized
+										 */
 		if (tracked == null) /* if BundleTracker is not open */
 		{
 			return null;
@@ -217,9 +219,9 @@ public class BundleTracker implements BundleTrackerCustomizer {
 	 */
 	public void remove(Bundle bundle) {
 		Tracked tracked = this.tracked; /*
-		 * use local var since we are not
-		 * synchronized
-		 */
+										 * use local var since we are not
+										 * synchronized
+										 */
 		if (tracked == null) /* if BundleTracker is not open */
 		{
 			return;
@@ -235,9 +237,9 @@ public class BundleTracker implements BundleTrackerCustomizer {
 	 */
 	public int size() {
 		Tracked tracked = this.tracked; /*
-		 * use local var since we are not
-		 * synchronized
-		 */
+										 * use local var since we are not
+										 * synchronized
+										 */
 		if (tracked == null) /* if BundleTracker is not open */
 		{
 			return 0;
@@ -281,12 +283,12 @@ public class BundleTracker implements BundleTrackerCustomizer {
 		/**
 		 * List of Bundles in the process of being added.
 		 */
-		private List adding;
+		private List				adding;
 		/**
 		 * true if the tracked object is closed. This field is volatile because
 		 * it is set by one thread and read by another.
 		 */
-		private volatile boolean closed;
+		private volatile boolean	closed;
 
 		/**
 		 * Tracked constructor.
@@ -328,7 +330,8 @@ public class BundleTracker implements BundleTrackerCustomizer {
 				 * If the customizer throws an unchecked exception, it is safe
 				 * to let it propagate
 				 */
-			} else {
+			}
+			else {
 				untrack(bundle);
 				/*
 				 * If the customizer throws an unchecked exception, it is safe
@@ -350,7 +353,8 @@ public class BundleTracker implements BundleTrackerCustomizer {
 			if (object != null) /* we are already tracking the bundle */
 			{
 				if (DEBUG) {
-					System.out.println("BundleTracker.Tracked.track[modified]: " + bundle); //$NON-NLS-1$
+					System.out
+							.println("BundleTracker.Tracked.track[modified]: " + bundle); //$NON-NLS-1$
 				}
 				/* Call customizer outside of synchronized region */
 				customizer.modifiedBundle(bundle, object);
@@ -363,19 +367,21 @@ public class BundleTracker implements BundleTrackerCustomizer {
 			}
 			synchronized (this) {
 				if (adding.contains(bundle)) /*
-				 * if this bundle is already in
-				 * the process of being added.
-				 */
+												 * if this bundle is already in
+												 * the process of being added.
+												 */
 				{
 					if (DEBUG) {
-						System.out.println("BundleTracker.Tracked.track[already adding]: " + bundle); //$NON-NLS-1$
+						System.out
+								.println("BundleTracker.Tracked.track[already adding]: " + bundle); //$NON-NLS-1$
 					}
 					return;
 				}
 				adding.add(bundle); /* mark this bundle is being added */
 			}
 			if (DEBUG) {
-				System.out.println("BundleTracker.Tracked.track[adding]: " + bundle); //$NON-NLS-1$
+				System.out
+						.println("BundleTracker.Tracked.track[adding]: " + bundle); //$NON-NLS-1$
 			}
 			boolean becameUntracked = false;
 			/* Call customizer outside of synchronized region */
@@ -385,20 +391,22 @@ public class BundleTracker implements BundleTrackerCustomizer {
 				 * If the customizer throws an unchecked exception, it will
 				 * propagate after the finally
 				 */
-			} finally {
+			}
+			finally {
 				synchronized (this) {
 					if (adding.remove(bundle)) /*
-					 * if the bundle was not
-					 * untracked during the
-					 * customizer callback
-					 */
+												 * if the bundle was not
+												 * untracked during the
+												 * customizer callback
+												 */
 					{
 						if (object != null) {
 							this.put(bundle, object);
 							modified(); /* increment modification count */
 							notifyAll();
 						}
-					} else {
+					}
+					else {
 						becameUntracked = true;
 					}
 				}
@@ -408,7 +416,8 @@ public class BundleTracker implements BundleTrackerCustomizer {
 			 */
 			if (becameUntracked) {
 				if (DEBUG) {
-					System.out.println("BundleTracker.Tracked.track[removed]: " + bundle); //$NON-NLS-1$
+					System.out
+							.println("BundleTracker.Tracked.track[removed]: " + bundle); //$NON-NLS-1$
 				}
 				/* Call customizer outside of synchronized region */
 				customizer.removedBundle(bundle, object);
@@ -428,23 +437,24 @@ public class BundleTracker implements BundleTrackerCustomizer {
 			Object object;
 			synchronized (this) {
 				if (adding.remove(bundle)) /*
-				 * if the bundle is in the process
-				 * of being added
-				 */
+											 * if the bundle is in the process
+											 * of being added
+											 */
 				{
 					if (DEBUG) {
-						System.out.println("BundleTracker.Tracked.untrack[being added]: " + bundle); //$NON-NLS-1$
+						System.out
+								.println("BundleTracker.Tracked.untrack[being added]: " + bundle); //$NON-NLS-1$
 					}
 					return; /*
-					 * in case the bundle is untracked while in the
-					 * process of adding
-					 */
+							 * in case the bundle is untracked while in the
+							 * process of adding
+							 */
 				}
 				object = this.remove(bundle); /*
-				 * must remove from tracker
-				 * before calling customizer
-				 * callback
-				 */
+												 * must remove from tracker
+												 * before calling customizer
+												 * callback
+												 */
 				if (object == null) /* are we actually tracking the bundle */
 				{
 					return;
@@ -452,7 +462,8 @@ public class BundleTracker implements BundleTrackerCustomizer {
 				modified(); /* increment modification count */
 			}
 			if (DEBUG) {
-				System.out.println("BundleTracker.Tracked.untrack[removed]: " + bundle); //$NON-NLS-1$
+				System.out
+						.println("BundleTracker.Tracked.untrack[removed]: " + bundle); //$NON-NLS-1$
 			}
 			/* Call customizer outside of synchronized region */
 			customizer.removedBundle(bundle, object);

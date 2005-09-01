@@ -14,16 +14,16 @@
 package org.eclipse.osgi.component.model;
 
 /**
- *
+ * 
  * TODO Add Javadoc comment for this type.
  * 
  * @version $Revision$
  */
 public class PropertyValueDescription extends PropertyDescription {
 
-	protected String name;
-	protected String type;
-	protected Object value;
+	protected String	name;
+	protected String	type;
+	protected Object	value;
 
 	public PropertyValueDescription(ComponentDescription parent) {
 		super(parent);

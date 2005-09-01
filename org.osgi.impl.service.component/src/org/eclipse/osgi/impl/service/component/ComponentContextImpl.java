@@ -40,7 +40,8 @@ import org.osgi.service.component.ComponentInstance;
  * execution context including locating services by reference name.
  * 
  * <p>
- * A component's implementation class may optionally implement an activate method:
+ * A component's implementation class may optionally implement an activate
+ * method:
  * 
  * <pre>
  * protected void activate(ComponentContext context);
@@ -74,24 +75,26 @@ import org.osgi.service.component.ComponentInstance;
 public class ComponentContextImpl implements ComponentContext {
 
 	/** The BundleContext this component is associated with */
-	protected BundleContext bundleContext;
+	protected BundleContext		bundleContext;
 
 	/* ComponentInstance instance */
-	ComponentInstanceImpl componentInstance;
+	ComponentInstanceImpl		componentInstance;
 
 	/* ComponentDescription plus Properties */
-	ComponentDescriptionProp cdp;
+	ComponentDescriptionProp	cdp;
 
-	Main main;
+	Main						main;
 
-	Bundle usingBundle;
-	
+	Bundle						usingBundle;
+
 	/**
 	 * Construct a ComponentContext object
-	 *
+	 * 
 	 * @param bundle The ComponentDescriptionProp we are wrapping.
 	 */
-	public ComponentContextImpl(Main main, Bundle usingBundle, ComponentDescriptionProp cdp, ComponentInstanceImpl componentInstance) {
+	public ComponentContextImpl(Main main, Bundle usingBundle,
+			ComponentDescriptionProp cdp,
+			ComponentInstanceImpl componentInstance) {
 		this.cdp = cdp;
 		this.componentInstance = componentInstance;
 		this.bundleContext = cdp.getComponentDescription().getBundleContext();
@@ -106,7 +109,7 @@ public class ComponentContextImpl implements ComponentContext {
 	 *         only and cannot be modified.
 	 */
 	public Dictionary getProperties() {
-		return (Dictionary)cdp.getProperties().clone();
+		return (Dictionary) cdp.getProperties().clone();
 	}
 
 	/**
@@ -114,164 +117,169 @@ public class ComponentContextImpl implements ComponentContext {
 	 * 
 	 * @param name The name of a service reference as specified in a
 	 *        <code>reference</code> element in this component's description.
-	 * @return A service object for the referenced service or <code>null</code> if
-	 *         the reference cardinality is <code>0..1</code> or <code>0..n</code>
-	 *         and no matching service is available.
+	 * @return A service object for the referenced service or <code>null</code>
+	 *         if the reference cardinality is <code>0..1</code> or
+	 *         <code>0..n</code> and no matching service is available.
 	 * @throws ComponentException If the Service Component Runtime catches an
 	 *         exception while activating the target service.
 	 */
 	public Object locateService(String name) throws ComponentException {
 
 		try {
-			//find the Reference Description with the specified name
+			// find the Reference Description with the specified name
 			Iterator references = cdp.getReferences().iterator();
 			Reference thisReference = null;
-			while(references.hasNext()) {
-				Reference reference = (Reference)references.next();
+			while (references.hasNext()) {
+				Reference reference = (Reference) references.next();
 				if (reference.getReferenceDescription().getName().equals(name)) {
 					thisReference = reference;
 					break;
 				}
 			}
-			
+
 			if (thisReference != null) {
 				ServiceReference serviceReference = null;
-				//check to see if this reference is already bound
+				// check to see if this reference is already bound
 				if (!thisReference.getServiceReferences().isEmpty()) {
-					//if possible, return reference we are already bound to
-					serviceReference = (ServiceReference)thisReference.getServiceReferences().get(0);
-				} else {
-					ServiceReference [] serviceReferences = bundleContext.getServiceReferences(
-							thisReference.getReferenceDescription().getInterfacename(),
-							thisReference.getTarget()							
-							);
-					if (serviceReferences != null && serviceReferences.length >0) {
+					// if possible, return reference we are already bound to
+					serviceReference = (ServiceReference) thisReference
+							.getServiceReferences().get(0);
+				}
+				else {
+					ServiceReference[] serviceReferences = bundleContext
+							.getServiceReferences(thisReference
+									.getReferenceDescription()
+									.getInterfacename(), thisReference
+									.getTarget());
+					if (serviceReferences != null
+							&& serviceReferences.length > 0) {
 
-						//sort by service ranking and service id
+						// sort by service ranking and service id
 						Arrays.sort(serviceReferences);
 
 						serviceReference = serviceReferences[0];
 					}
-					
+
 				}
 				if (serviceReference != null) {
-					Object serviceObject =  main.resolver.instanceProcess.buildDispose.getService(
-							cdp,
-							thisReference,
-							bundleContext,
-							serviceReference
-							);
-					componentInstance.addServiceReference(serviceReference,serviceObject);
+					Object serviceObject = main.resolver.instanceProcess.buildDispose
+							.getService(cdp, thisReference, bundleContext,
+									serviceReference);
+					componentInstance.addServiceReference(serviceReference,
+							serviceObject);
 					return serviceObject;
 				}
 			}
 
 			return null;
 
-		} catch (Exception e) {
+		}
+		catch (Exception e) {
 			throw new ComponentException(e);
 		}
 
 	}
 
 	/**
-	 * Returns the service object for the specified reference name and <code>ServiceReference</code>.
+	 * Returns the service object for the specified reference name and
+	 * <code>ServiceReference</code>.
 	 * 
 	 * @param name The name of a reference as specified in a
 	 *        <code>reference</code> element in this component's description.
-	 * @param reference The <code>ServiceReference</code> to a specific bound service. This must
-	 * 			be a <code>ServiceReference</code> provided to the component via the bind
-	 * 			or unbind method for the specified reference name.        
+	 * @param reference The <code>ServiceReference</code> to a specific bound
+	 *        service. This must be a <code>ServiceReference</code> provided
+	 *        to the component via the bind or unbind method for the specified
+	 *        reference name.
 	 * @return A service object for the referenced service or <code>null</code>
-	 *         if the specified <code>ServiceReference</code> is not a bound 
+	 *         if the specified <code>ServiceReference</code> is not a bound
 	 *         service for the specified reference name.
 	 * @throws ComponentException If the Service Component Runtime catches an
 	 *         exception while activating the bound service.
 	 */
-	public Object locateService(String name, ServiceReference serviceReference) throws ComponentException{
+	public Object locateService(String name, ServiceReference serviceReference)
+			throws ComponentException {
 		try {
-			//find the Reference Description with the specified name
+			// find the Reference Description with the specified name
 			Iterator references = cdp.getReferences().iterator();
 			Reference thisReference = null;
-			while(references.hasNext()) {
-				Reference reference = (Reference)references.next();
+			while (references.hasNext()) {
+				Reference reference = (Reference) references.next();
 				if (reference.getReferenceDescription().getName().equals(name)) {
 					thisReference = reference;
 					break;
 				}
 			}
-			
+
 			if (thisReference != null) {
-				Object serviceObject = main.resolver.instanceProcess.buildDispose.getService(
-						cdp,
-						thisReference,
-						bundleContext,
-						serviceReference
-						);
-				componentInstance.addServiceReference(serviceReference,serviceObject);
+				Object serviceObject = main.resolver.instanceProcess.buildDispose
+						.getService(cdp, thisReference, bundleContext,
+								serviceReference);
+				componentInstance.addServiceReference(serviceReference,
+						serviceObject);
 				return serviceObject;
 			}
 
 			return null;
 
-		} catch (ComponentException e) {
+		}
+		catch (ComponentException e) {
 			throw e;
 		}
 	}
-	
+
 	/**
 	 * Returns the service objects for the specified service reference name.
 	 * 
 	 * @param name The name of a service reference as specified in a
 	 *        <code>reference</code> element in this component's description.
 	 * @return An array of service objects for the referenced service or
-	 *         <code>null</code> if the reference cardinality is <code>0..1</code>
-	 *         or <code>0..n</code> and no matching service is available.
+	 *         <code>null</code> if the reference cardinality is
+	 *         <code>0..1</code> or <code>0..n</code> and no matching
+	 *         service is available.
 	 * @throws ComponentException If the Service Component Runtime catches an
 	 *         exception while activating a target service.
 	 */
 	public Object[] locateServices(String name) throws ComponentException {
 		try {
-			//find the Reference Description with the specified name
+			// find the Reference Description with the specified name
 			Iterator references = cdp.getReferences().iterator();
 			Reference thisReference = null;
-			while(references.hasNext()) {
-				Reference reference = (Reference)references.next();
+			while (references.hasNext()) {
+				Reference reference = (Reference) references.next();
 				if (reference.getReferenceDescription().getName().equals(name)) {
 					thisReference = reference;
 					break;
 				}
 			}
-			
+
 			if (thisReference != null) {
-				ServiceReference [] serviceReferences = bundleContext.getServiceReferences(
-							thisReference.getReferenceDescription().getInterfacename(),
-							thisReference.getTarget()
-							);
-				
-				//sort by service ranking and service id
+				ServiceReference[] serviceReferences = bundleContext
+						.getServiceReferences(thisReference
+								.getReferenceDescription().getInterfacename(),
+								thisReference.getTarget());
+
+				// sort by service ranking and service id
 				Arrays.sort(serviceReferences);
-				
+
 				List serviceObjects = new ArrayList(serviceReferences.length);
-				for (int counter = 0;counter < serviceReferences.length;counter++) {
-					Object serviceObject = main.resolver.instanceProcess.buildDispose.getService(
-						cdp,
-						thisReference,
-						bundleContext,
-						serviceReferences[counter]
-						);
+				for (int counter = 0; counter < serviceReferences.length; counter++) {
+					Object serviceObject = main.resolver.instanceProcess.buildDispose
+							.getService(cdp, thisReference, bundleContext,
+									serviceReferences[counter]);
 					if (serviceObject != null) {
 						serviceObjects.add(serviceObject);
-						componentInstance.addServiceReference(serviceReferences[counter],serviceObject);
+						componentInstance.addServiceReference(
+								serviceReferences[counter], serviceObject);
 					}
-				} //end for serviceReferences
+				} // end for serviceReferences
 				if (!serviceObjects.isEmpty()) {
 					return serviceObjects.toArray();
-				} 
-			} 
+				}
+			}
 			return null;
 
-		} catch (InvalidSyntaxException e) {
+		}
+		catch (InvalidSyntaxException e) {
 			throw new ComponentException(e.getMessage());
 		}
 	}
@@ -287,15 +295,15 @@ public class ComponentContextImpl implements ComponentContext {
 
 	/**
 	 * If the component is registered as a service using the
-	 * <code>servicefactory=&quot;true&quot;</code> attribute, then this method
-	 * returns the bundle using the service provided by this component.
+	 * <code>servicefactory=&quot;true&quot;</code> attribute, then this
+	 * method returns the bundle using the service provided by this component.
 	 * <p>
 	 * This method will return <code>null</code> if the component is either:
 	 * <ul>
 	 * <li>Not a service, then no bundle can be using it as a service.
 	 * <li>Is a service but did not specify the
-	 * <code>servicefactory=&quot;true&quot;</code> attribute, then all bundles
-	 * will use this component. 
+	 * <code>servicefactory=&quot;true&quot;</code> attribute, then all
+	 * bundles will use this component.
 	 * </ul>
 	 * 
 	 * @return The bundle using this component as a service or <code>null</code>.
@@ -322,20 +330,20 @@ public class ComponentContextImpl implements ComponentContext {
 	 * Enables the specified component name. The specified component name must
 	 * be in the same bundle as this component.
 	 * 
-	 * @param name The name of a component or <code>null</code> to indicate all
-	 *        components in the bundle.
+	 * @param name The name of a component or <code>null</code> to indicate
+	 *        all components in the bundle.
 	 */
 	public void enableComponent(String name) {
 		final String componentName = name;
-		
-		 AccessController.doPrivileged(new PrivilegedAction() {
-            public Object run() {
-                // privileged code goes here, for example:
-            	main.enableComponent(componentName, bundleContext.getBundle());
-                return null; // nothing to return
-            }
-        });
-		
+
+		AccessController.doPrivileged(new PrivilegedAction() {
+			public Object run() {
+				// privileged code goes here, for example:
+				main.enableComponent(componentName, bundleContext.getBundle());
+				return null; // nothing to return
+			}
+		});
+
 	}
 
 	/**
@@ -345,16 +353,16 @@ public class ComponentContextImpl implements ComponentContext {
 	 * @param name The name of a component.
 	 */
 	public void disableComponent(String name) {
-		
+
 		final String componentName = name;
-		
+
 		AccessController.doPrivileged(new PrivilegedAction() {
-            public Object run() {
-                // privileged code goes here, for example:
-            	main.disableComponent(componentName, bundleContext.getBundle());
-                return null; // nothing to return
-            }
-        });
+			public Object run() {
+				// privileged code goes here, for example:
+				main.disableComponent(componentName, bundleContext.getBundle());
+				return null; // nothing to return
+			}
+		});
 	}
 
 	/**
@@ -369,10 +377,11 @@ public class ComponentContextImpl implements ComponentContext {
 	 *         <code>null</code> if this component is not registered as a
 	 *         service.
 	 */
-	public ServiceReference getServiceReference(){
+	public ServiceReference getServiceReference() {
 		ServiceReference serviceReference = null;
 		if (cdp.getComponentDescription().getService() != null) {
-			ServiceRegistration serviceRegistration = cdp.getServiceRegistration();
+			ServiceRegistration serviceRegistration = cdp
+					.getServiceRegistration();
 			if (serviceRegistration != null) {
 				serviceReference = serviceRegistration.getReference();
 			}

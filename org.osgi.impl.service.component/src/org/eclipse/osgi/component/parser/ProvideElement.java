@@ -19,11 +19,12 @@ import org.xml.sax.Attributes;
 import org.xml.sax.helpers.DefaultHandler;
 
 public class ProvideElement extends DefaultHandler {
-	protected ParserHandler root;
-	protected ServiceElement parent;
-	protected ProvideDescription provide;
+	protected ParserHandler			root;
+	protected ServiceElement		parent;
+	protected ProvideDescription	provide;
 
-	public ProvideElement(ParserHandler root, ServiceElement parent, Attributes attributes) {
+	public ProvideElement(ParserHandler root, ServiceElement parent,
+			Attributes attributes) {
 		this.root = root;
 		this.parent = parent;
 		provide = new ProvideDescription(parent.getServiceDescription());
@@ -45,7 +46,8 @@ public class ProvideElement extends DefaultHandler {
 		}
 	}
 
-	public void startElement(String uri, String localName, String qName, Attributes attributes) {
+	public void startElement(String uri, String localName, String qName,
+			Attributes attributes) {
 		root.logError("provide does not support nested elements");
 	}
 

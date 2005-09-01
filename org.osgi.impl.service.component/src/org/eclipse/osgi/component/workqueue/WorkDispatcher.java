@@ -20,12 +20,13 @@ package org.eclipse.osgi.component.workqueue;
 
 public interface WorkDispatcher {
 	/**
-	 * This method is called once for each work item.
-	 * This method can then complete processing work on the work queue thread.
+	 * This method is called once for each work item. This method can then
+	 * complete processing work on the work queue thread.
 	 * 
-	 * <p>The WorkQueue will ignore any Throwable thrown by this method
-	 * in order to continue dispatch of the next work item.
-	 *
+	 * <p>
+	 * The WorkQueue will ignore any Throwable thrown by this method in order to
+	 * continue dispatch of the next work item.
+	 * 
 	 * @param workAction Work action value passed from the work enqueuer.
 	 * @param workObject Work object passed from the work enqueuer.
 	 */

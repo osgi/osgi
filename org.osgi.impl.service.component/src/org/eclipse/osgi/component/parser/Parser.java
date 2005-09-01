@@ -42,10 +42,10 @@ import org.xml.sax.SAXException;
  * @version $Revision$
  */
 public class Parser {
-	protected Main main;
+	protected Main			main;
 
 	/* ServiceTracker for parser */
-	private ServiceTracker parserTracker;
+	private ServiceTracker	parserTracker;
 
 	/**
 	 * Create and open a ServiceTracker which will track registered XML parsers
@@ -54,7 +54,8 @@ public class Parser {
 	 */
 	public Parser(Main main) {
 		this.main = main;
-		parserTracker = new ServiceTracker(main.context, ParserConstants.SAX_FACTORY_CLASS, null);
+		parserTracker = new ServiceTracker(main.context,
+				ParserConstants.SAX_FACTORY_CLASS, null);
 		parserTracker.open(true);
 	}
 
@@ -68,7 +69,8 @@ public class Parser {
 		List result = new ArrayList(length);
 
 		for (int i = 0; i < length; i++) {
-			List components = parseComponentDescription(bundleContext, xml[i].getValue());
+			List components = parseComponentDescription(bundleContext, xml[i]
+					.getValue());
 			result.addAll(components);
 		}
 
@@ -76,53 +78,84 @@ public class Parser {
 	}
 
 	/*
-	 * Get the xml files from the bundle 
+	 * Get the xml files from the bundle
 	 * 
-	 * @param bundle Bundle 
-	 * @return Vector holding all the xmlfiles for the specifed Bundle
+	 * @param bundle Bundle @return Vector holding all the xmlfiles for the
+	 * specifed Bundle
 	 */
 	public ManifestElement[] parseManifestHeader(Bundle bundle) {
 
 		Dictionary headers = bundle.getHeaders();
-		String files = (String) headers.get(ComponentConstants.SERVICE_COMPONENT);
+		String files = (String) headers
+				.get(ComponentConstants.SERVICE_COMPONENT);
 
 		try {
-			return ManifestElement.parseHeader(ComponentConstants.SERVICE_COMPONENT, files);
-		} catch (BundleException e) {
-			Log.log(1, "[SCR] Error attempting parse Manifest Element Header. ", e);
+			return ManifestElement.parseHeader(
+					ComponentConstants.SERVICE_COMPONENT, files);
+		}
+		catch (BundleException e) {
+			Log
+					.log(
+							1,
+							"[SCR] Error attempting parse Manifest Element Header. ",
+							e);
 			return new ManifestElement[0];
 		}
 	}
 
 	/**
-	 * Given the bundle and the xml filename, parset it! 
+	 * Given the bundle and the xml filename, parset it!
+	 * 
 	 * @param bundle Bundle
 	 * @param xml String
 	 */
-	public List parseComponentDescription(BundleContext bundleContext, String xml) {
+	public List parseComponentDescription(BundleContext bundleContext,
+			String xml) {
 		List result = new ArrayList();
 		int fileIndex = xml.lastIndexOf('/');
-		String path = fileIndex != -1 ? xml.substring(0,fileIndex) : "/"; 
+		String path = fileIndex != -1 ? xml.substring(0, fileIndex) : "/";
 		try {
-			Enumeration urls = bundleContext.getBundle().findEntries(path,xml.substring(fileIndex+1), false);
+			Enumeration urls = bundleContext.getBundle().findEntries(path,
+					xml.substring(fileIndex + 1), false);
 			if (urls == null || !urls.hasMoreElements()) {
 				throw new BundleException("resource not found: " + xml);
 			}
-			URL url = (URL)urls.nextElement();
+			URL url = (URL) urls.nextElement();
 			InputStream is = url.openStream();
-			SAXParserFactory parserFactory = (SAXParserFactory) parserTracker.getService();
+			SAXParserFactory parserFactory = (SAXParserFactory) parserTracker
+					.getService();
 			parserFactory.setNamespaceAware(true);
 			parserFactory.setValidating(false);
 			SAXParser saxParser = parserFactory.newSAXParser();
 			saxParser.parse(is, new ParserHandler(main, bundleContext, result));
-		} catch (IOException e) {
-			Log.log(1, "[SCR] IOException attempting to parse ComponentDescription XML. ", e);
-		} catch (BundleException e) {
-			Log.log(1, "[SCR] BundleException attempting to parse ComponentDescription XML. ", e);
-		} catch (SAXException e) {
-			Log.log(1, "[SCR] SAXException attempting to parse ComponentDescription XML. ", e);
-		} catch (ParserConfigurationException e) {
-			Log.log(1, "[SCR] ParserConfigurationException attempting to parse ComponentDescription XML. ", e);
+		}
+		catch (IOException e) {
+			Log
+					.log(
+							1,
+							"[SCR] IOException attempting to parse ComponentDescription XML. ",
+							e);
+		}
+		catch (BundleException e) {
+			Log
+					.log(
+							1,
+							"[SCR] BundleException attempting to parse ComponentDescription XML. ",
+							e);
+		}
+		catch (SAXException e) {
+			Log
+					.log(
+							1,
+							"[SCR] SAXException attempting to parse ComponentDescription XML. ",
+							e);
+		}
+		catch (ParserConfigurationException e) {
+			Log
+					.log(
+							1,
+							"[SCR] ParserConfigurationException attempting to parse ComponentDescription XML. ",
+							e);
 		}
 
 		return result;

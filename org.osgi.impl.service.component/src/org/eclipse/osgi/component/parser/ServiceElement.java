@@ -19,11 +19,12 @@ import org.xml.sax.Attributes;
 import org.xml.sax.helpers.DefaultHandler;
 
 public class ServiceElement extends DefaultHandler {
-	protected ParserHandler root;
-	protected ComponentElement parent;
-	protected ServiceDescription service;
+	protected ParserHandler			root;
+	protected ComponentElement		parent;
+	protected ServiceDescription	service;
 
-	public ServiceElement(ParserHandler root, ComponentElement parent, Attributes attributes) {
+	public ServiceElement(ParserHandler root, ComponentElement parent,
+			Attributes attributes) {
 		this.root = root;
 		this.parent = parent;
 		service = new ServiceDescription(parent.getComponentDescription());
@@ -45,7 +46,8 @@ public class ServiceElement extends DefaultHandler {
 		return service;
 	}
 
-	public void startElement(String uri, String localName, String qName, Attributes attributes) {
+	public void startElement(String uri, String localName, String qName,
+			Attributes attributes) {
 		if (localName.equals(ParserConstants.PROVIDE_ELEMENT)) {
 			root.setHandler(new ProvideElement(root, this, attributes));
 			return;
@@ -73,7 +75,8 @@ public class ServiceElement extends DefaultHandler {
 		}
 
 		if ((component.getFactory() != null) && service.isServicefactory()) {
-			root.logError("component factory is incompatible with Service factory ");
+			root
+					.logError("component factory is incompatible with Service factory ");
 		}
 
 		component.setService(service);

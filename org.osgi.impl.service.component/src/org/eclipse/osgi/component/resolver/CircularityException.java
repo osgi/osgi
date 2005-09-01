@@ -18,16 +18,14 @@ import org.eclipse.osgi.component.model.ComponentDescriptionProp;
  * 
  */
 public class CircularityException extends Exception {
-	
-	private ComponentDescriptionProp cdp;
-	
-	public CircularityException(ComponentDescriptionProp cdp)
-	{
+
+	private ComponentDescriptionProp	cdp;
+
+	public CircularityException(ComponentDescriptionProp cdp) {
 		this.cdp = cdp;
 	}
-	
-	public ComponentDescriptionProp getCircularDependency()
-	{
+
+	public ComponentDescriptionProp getCircularDependency() {
 		return cdp;
 	}
 

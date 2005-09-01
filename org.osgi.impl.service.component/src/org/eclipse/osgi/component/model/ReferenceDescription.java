@@ -13,22 +13,21 @@
 
 package org.eclipse.osgi.component.model;
 
-
 /**
- *
+ * 
  * TODO Add Javadoc comment for this type.
  * 
  * @version $Revision$
  */
 public class ReferenceDescription {
-	
-	private static final int CARDINALITY_HIGH_DEFAULT = 1;
-	private static final int CARDINALITY_LOW_DEFAULT = 1;
-	static final String POLICY_DEFAULT = "static";
-	
-	protected ComponentDescription parent;
-	protected String name;
-	protected String interfacename;
+
+	private static final int		CARDINALITY_HIGH_DEFAULT	= 1;
+	private static final int		CARDINALITY_LOW_DEFAULT		= 1;
+	static final String				POLICY_DEFAULT				= "static";
+
+	protected ComponentDescription	parent;
+	protected String				name;
+	protected String				interfacename;
 
 	// Cardinality indicates the number of services, matching this
 	// reference,
@@ -37,17 +36,17 @@ public class ReferenceDescription {
 	// This attribute is optional. If it is not specified, then a
 	// cardinality
 	// of “1..1” is used.
-	protected int cardinalityHigh;
-	protected int cardinalityLow;
-	protected String policy;
-	protected String target;
-	protected String bind;
-	protected String unbind;
+	protected int					cardinalityHigh;
+	protected int					cardinalityLow;
+	protected String				policy;
+	protected String				target;
+	protected String				bind;
+	protected String				unbind;
 
 	public ReferenceDescription(ComponentDescription parent) {
 		this.parent = parent;
-		
-		//set defaults
+
+		// set defaults
 		cardinalityHigh = CARDINALITY_HIGH_DEFAULT;
 		cardinalityLow = CARDINALITY_LOW_DEFAULT;
 		policy = POLICY_DEFAULT;
@@ -73,7 +72,7 @@ public class ReferenceDescription {
 	public int getCardinalityHigh() {
 		return cardinalityHigh;
 	}
-	
+
 	/**
 	 * @param cardinality The cardinality to set.
 	 */
@@ -81,18 +80,25 @@ public class ReferenceDescription {
 		if (cardinality.equals("0..1")) {
 			cardinalityLow = 0;
 			cardinalityHigh = 1;
-		} else if (cardinality.equals("0..n")) {
-			cardinalityLow = 0;
-			cardinalityHigh = 999999999; //infinite
-		} else if (cardinality.equals("1..1")) {
-			cardinalityLow = 1;
-			cardinalityHigh = 1;
-		} else if (cardinality.equals("1..n")) {
-			cardinalityLow = 1;
-			cardinalityHigh = 999999999;
-		} else {
-			//TODO throw exception?
 		}
+		else
+			if (cardinality.equals("0..n")) {
+				cardinalityLow = 0;
+				cardinalityHigh = 999999999; // infinite
+			}
+			else
+				if (cardinality.equals("1..1")) {
+					cardinalityLow = 1;
+					cardinalityHigh = 1;
+				}
+				else
+					if (cardinality.equals("1..n")) {
+						cardinalityLow = 1;
+						cardinalityHigh = 999999999;
+					}
+					else {
+						// TODO throw exception?
+					}
 	}
 
 	/**
@@ -170,9 +176,9 @@ public class ReferenceDescription {
 	public ComponentDescription getComponentDescription() {
 		return parent;
 	}
-	
-	//	if the cardinality is "1..1" or "1..n" then this refernce is required
+
+	// if the cardinality is "1..1" or "1..n" then this refernce is required
 	public boolean isRequired() {
 		return (cardinalityLow == 1);
-	}	
+	}
 }

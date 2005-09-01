@@ -21,10 +21,10 @@ import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
 public class ComponentElement extends DefaultHandler {
-	protected ParserHandler root;
-	protected ParserHandler parent;
-	protected ComponentDescription component;
-	protected boolean immediateSet;
+	protected ParserHandler			root;
+	protected ParserHandler			parent;
+	protected ComponentDescription	component;
+	protected boolean				immediateSet;
 
 	public ComponentElement(ParserHandler root, Attributes attributes) {
 		this.root = root;
@@ -39,7 +39,8 @@ public class ComponentElement extends DefaultHandler {
 
 			if (key.equals(ParserConstants.NAME_ATTRIBUTE)) {
 				component.setName(value);
-				PropertyValueDescription nameProperty = new PropertyValueDescription(component);
+				PropertyValueDescription nameProperty = new PropertyValueDescription(
+						component);
 				nameProperty.setName(ComponentConstants.COMPONENT_NAME);
 				nameProperty.setValue(value);
 				component.addProperty(nameProperty);
@@ -70,7 +71,8 @@ public class ComponentElement extends DefaultHandler {
 		return component;
 	}
 
-	public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
+	public void startElement(String uri, String localName, String qName,
+			Attributes attributes) throws SAXException {
 		if (localName.equals(ParserConstants.IMPLEMENTATION_ELEMENT)) {
 			root.setHandler(new ImplementationElement(root, this, attributes));
 			return;
@@ -108,20 +110,22 @@ public class ComponentElement extends DefaultHandler {
 	}
 
 	public void endElement(String uri, String localName, String qName) {
-		
-		//if unset, immediate attribute is false if service element is specified or true otherwise
-		//if component factory then immediate by default is false
+
+		// if unset, immediate attribute is false if service element is
+		// specified or true otherwise
+		// if component factory then immediate by default is false
 		if (!immediateSet && (component.getFactory() == null)) {
 			component.setImmediate(component.getService() == null);
 		}
-		
+
 		if (component.getImplementation() == null) {
 			root.logError("no implementation element");
 		}
 
 		if (root.isError()) {
 			root.setError(false);
-		} else {
+		}
+		else {
 			parent.addComponentDescription(component);
 		}
 

@@ -20,7 +20,7 @@ import org.eclipse.osgi.component.parser.Parser;
 import org.osgi.framework.BundleContext;
 
 /**
- *
+ * 
  * Cache of component descriptions.
  * 
  * @version $Revision$
@@ -28,10 +28,10 @@ import org.osgi.framework.BundleContext;
 public class ComponentDescriptionCache {
 
 	/**
-	 * Parser object to use if the bundle's information is not in the cache
-	 * or is stale.
+	 * Parser object to use if the bundle's information is not in the cache or
+	 * is stale.
 	 */
-	protected Parser parser;
+	protected Parser	parser;
 
 	/**
 	 * Create the cache object.
@@ -46,7 +46,8 @@ public class ComponentDescriptionCache {
 	 * Return the component descriptions for the specified bundle.
 	 * 
 	 * @param bundle Bundle for which component description are to be returns
-	 * @return An array list of the component descriptions for the specified bundle.
+	 * @return An array list of the component descriptions for the specified
+	 *         bundle.
 	 */
 	public List getComponentDescriptions(BundleContext bundleContext) {
 		// The cache is not yet implement, so we always parse the XML.

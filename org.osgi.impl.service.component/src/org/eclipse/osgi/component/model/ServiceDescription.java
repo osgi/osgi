@@ -17,15 +17,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- *
+ * 
  * TODO Add Javadoc comment for this type.
  * 
  * @version $Revision$
  */
 public class ServiceDescription {
-	protected ComponentDescription parent;
-	protected boolean servicefactory;
-	protected List provides;
+	protected ComponentDescription	parent;
+	protected boolean				servicefactory;
+	protected List					provides;
 
 	public ServiceDescription(ComponentDescription parent) {
 		this.parent = parent;

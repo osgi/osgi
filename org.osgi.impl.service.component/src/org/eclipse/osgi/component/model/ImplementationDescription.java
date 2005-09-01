@@ -14,14 +14,14 @@
 package org.eclipse.osgi.component.model;
 
 /**
- *
+ * 
  * TODO Add Javadoc comment for this type.
  * 
  * @version $Revision$
  */
 public class ImplementationDescription {
-	protected ComponentDescription parent;
-	protected String classname;
+	protected ComponentDescription	parent;
+	protected String				classname;
 
 	public ImplementationDescription(ComponentDescription parent) {
 		this.parent = parent;

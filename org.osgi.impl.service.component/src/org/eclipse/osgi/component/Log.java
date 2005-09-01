@@ -18,33 +18,32 @@ import org.osgi.service.log.LogService;
 import org.osgi.util.tracker.ServiceTracker;
 
 public class Log {
-	static private ServiceTracker logTracker;
-	
-	private Log() {};
-	
+	static private ServiceTracker	logTracker;
+
+	private Log() {
+	};
+
 	static void init(BundleContext bc) {
-		logTracker = new ServiceTracker(bc,LogService.class.getName(),null);
+		logTracker = new ServiceTracker(bc, LogService.class.getName(), null);
 		logTracker.open();
 	}
-	
+
 	static void dispose() {
 		if (logTracker != null) {
 			logTracker.close();
 		}
 		logTracker = null;
 	}
-	
+
 	public static void log(int level, String message) {
 		log(level, message, null);
 	}
 
 	public static void log(int level, String message, Throwable e) {
-		LogService logService = (LogService)logTracker.getService();
+		LogService logService = (LogService) logTracker.getService();
 		if (logService != null) {
-			logService.log(level,message,e);
+			logService.log(level, message, e);
 		}
 	}
-
-
 
 }

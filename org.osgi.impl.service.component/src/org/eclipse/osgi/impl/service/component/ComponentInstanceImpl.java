@@ -32,27 +32,28 @@ import org.osgi.service.component.ComponentInstance;
  */
 public class ComponentInstanceImpl implements ComponentInstance {
 
-	Object instance;
-	Main main;
-	public ComponentDescriptionProp cdp;
-	private ComponentContext componentContext;
-	
-	//ServiceReference:ServiceObject that binded to this instance
-	private Hashtable serviceReferenceToServiceObject = new Hashtable();
+	Object							instance;
+	Main							main;
+	public ComponentDescriptionProp	cdp;
+	private ComponentContext		componentContext;
 
-	/** ComponentInstanceImpl
+	// ServiceReference:ServiceObject that binded to this instance
+	private Hashtable				serviceReferenceToServiceObject	= new Hashtable();
+
+	/**
+	 * ComponentInstanceImpl
 	 * 
 	 * @param Object instance
 	 * 
 	 */
-	public ComponentInstanceImpl(Main main, ComponentDescriptionProp cdp, Object instance) {
+	public ComponentInstanceImpl(Main main, ComponentDescriptionProp cdp,
+			Object instance) {
 		this.main = main;
 		this.instance = instance;
 		this.cdp = cdp;
 
 	}
-	
-	
+
 	public void setComponentContext(ComponentContext context) {
 		this.componentContext = context;
 	}
@@ -66,14 +67,17 @@ public class ComponentInstanceImpl implements ComponentInstance {
 	 * the instance has already been deactivated, this method does nothing.
 	 */
 	public void dispose() {
-		//deactivate
-		if (!cdp.isComponentFactory() && cdp.getComponentDescription().getFactory()!=null) {
-			//this is a factory instance, so dispose of CDP
+		// deactivate
+		if (!cdp.isComponentFactory()
+				&& cdp.getComponentDescription().getFactory() != null) {
+			// this is a factory instance, so dispose of CDP
 			cdp.getComponentDescription().removeComponentDescriptionProp(cdp);
 			main.resolver.disposeInstances(Collections.singletonList(cdp));
 			cdp = null;
-		} else {
-			main.resolver.instanceProcess.buildDispose.disposeComponentInstance(cdp, this);
+		}
+		else {
+			main.resolver.instanceProcess.buildDispose
+					.disposeComponentInstance(cdp, this);
 			cdp.removeInstance(this);
 		}
 		instance = null;
@@ -89,27 +93,25 @@ public class ComponentInstanceImpl implements ComponentInstance {
 		return instance;
 	}
 
-	public void addServiceReference(ServiceReference serviceReference, Object serviceObject)
-	{
-		serviceReferenceToServiceObject.put(serviceReference,serviceObject);
+	public void addServiceReference(ServiceReference serviceReference,
+			Object serviceObject) {
+		serviceReferenceToServiceObject.put(serviceReference, serviceObject);
 	}
-	
+
 	public Enumeration getServiceReferences() {
 		return serviceReferenceToServiceObject.keys();
 	}
-	
-	public void removeServiceReference(ServiceReference serviceReference)
-	{
+
+	public void removeServiceReference(ServiceReference serviceReference) {
 		serviceReferenceToServiceObject.remove(serviceReference);
 	}
-	
-	public Object getServiceObject(ServiceReference serviceReference)
-	{
+
+	public Object getServiceObject(ServiceReference serviceReference) {
 		return serviceReferenceToServiceObject.get(serviceReference);
 	}
 
 	public ComponentDescriptionProp getComponentDescriptionProp() {
 		return cdp;
 	}
-			
+
 }

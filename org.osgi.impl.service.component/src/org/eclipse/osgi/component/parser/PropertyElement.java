@@ -22,15 +22,17 @@ import org.xml.sax.Attributes;
 import org.xml.sax.helpers.DefaultHandler;
 
 public class PropertyElement extends DefaultHandler {
-	protected ParserHandler root;
-	protected ComponentElement parent;
-	protected PropertyValueDescription property;
-	protected List values;
+	protected ParserHandler				root;
+	protected ComponentElement			parent;
+	protected PropertyValueDescription	property;
+	protected List						values;
 
-	public PropertyElement(ParserHandler root, ComponentElement parent, Attributes attributes) {
+	public PropertyElement(ParserHandler root, ComponentElement parent,
+			Attributes attributes) {
 		this.root = root;
 		this.parent = parent;
-		property = new PropertyValueDescription(parent.getComponentDescription());
+		property = new PropertyValueDescription(parent
+				.getComponentDescription());
 		values = new ArrayList();
 
 		int size = attributes.getLength();
@@ -60,7 +62,8 @@ public class PropertyElement extends DefaultHandler {
 		}
 	}
 
-	public void startElement(String uri, String localName, String qName, Attributes attributes) {
+	public void startElement(String uri, String localName, String qName,
+			Attributes attributes) {
 		root.logError("property does not support nested elements");
 	}
 
@@ -90,108 +93,148 @@ public class PropertyElement extends DefaultHandler {
 
 		int size = values.size();
 
-		//If the value attribute is specified, then body of the property element is ignored. 
+		// If the value attribute is specified, then body of the property
+		// element is ignored.
 		if ((property.getValue() != null) && (size > 0)) {
-			root.logError("If the value attribute is specified, the body of the property element is ignored. key = " + property.getName() + " value = " + property.getValue());
+			root
+					.logError("If the value attribute is specified, the body of the property element is ignored. key = "
+							+ property.getName()
+							+ " value = "
+							+ property.getValue());
 
-			//if characters were specified ( values are specifed in the body of the property element )
-		} else if (size > 0) {
-			//if String then store as String[]
-			if (property.getType().equals("String")) {
-				String[] result = new String[size];
-				values.toArray(result);
-				property.setValue(result);
-			} else if (property.getType().equals("Integer")) {
-				int[] result = new int[size];
-				if (values != null) {
-					Iterator it = values.iterator();
-					int i = 0;
-					while (it.hasNext()) {
-						Integer value = new Integer((String) it.next());
-						result[i++] = value.intValue();
-					}
-					property.setValue(result);
-				}
-			} else if (property.getType().equals("Long")) {
-				long[] result = new long[size];
-				if (values != null) {
-					Iterator it = values.iterator();
-					int i = 0;
-					while (it.hasNext()) {
-						Long value = new Long((String) it.next());
-						result[i++] = value.longValue();
-					}
-					property.setValue(result);
-				}
-			} else if (property.getType().equals("Double")) {
-				double[] result = new double[size];
-				if (values != null) {
-					Iterator it = values.iterator();
-					int i = 0;
-					while (it.hasNext()) {
-						Double value = new Double((String) it.next());
-						result[i++] = value.doubleValue();
-					}
-					property.setValue(result);
-				}
-			} else if (property.getType().equals("Float")) {
-				float[] result = new float[size];
-				if (values != null) {
-					Iterator it = values.iterator();
-					int i = 0;
-					while (it.hasNext()) {
-						Float value = new Float((String) it.next());
-						result[i++] = value.floatValue();
-					}
-					property.setValue(result);
-				}
-			} else if (property.getType().equals("Byte")) {
-				byte[] result = new byte[size];
-				if (values != null) {
-					Iterator it = values.iterator();
-					int i = 0;
-					while (it.hasNext()) {
-						Byte value = new Byte((String) it.next());
-						result[i++] = value.byteValue();
-					}
-					property.setValue(result);
-				}
-			} else if (property.getType().equals("Char")) {
-				char[] result = new char[size];
-				if (values != null) {
-					Iterator it = values.iterator();
-					int i = 0;
-					while (it.hasNext()) {
-						char[] value = ((String) it.next()).toCharArray();
-						result[i++] = value[0];
-					}
-					property.setValue(result);
-				}
-			} else if (property.getType().equals("Boolean")) {
-				boolean[] result = new boolean[size];
-				if (values != null) {
-					Iterator it = values.iterator();
-					int i = 0;
-					while (it.hasNext()) {
-						Boolean value = new Boolean((String) it.next());
-						result[i++] = value.booleanValue();
-					}
-					property.setValue(result);
-				}
-			} else if (property.getType().equals("Short")) {
-				short[] result = new short[size];
-				if (values != null) {
-					Iterator it = values.iterator();
-					int i = 0;
-					while (it.hasNext()) {
-						Short value = new Short((String) it.next());
-						result[i++] = value.shortValue();
-					}
-					property.setValue(result);
-				}
-			}
-
+			// if characters were specified ( values are specifed in the body of
+			// the property element )
 		}
+		else
+			if (size > 0) {
+				// if String then store as String[]
+				if (property.getType().equals("String")) {
+					String[] result = new String[size];
+					values.toArray(result);
+					property.setValue(result);
+				}
+				else
+					if (property.getType().equals("Integer")) {
+						int[] result = new int[size];
+						if (values != null) {
+							Iterator it = values.iterator();
+							int i = 0;
+							while (it.hasNext()) {
+								Integer value = new Integer((String) it.next());
+								result[i++] = value.intValue();
+							}
+							property.setValue(result);
+						}
+					}
+					else
+						if (property.getType().equals("Long")) {
+							long[] result = new long[size];
+							if (values != null) {
+								Iterator it = values.iterator();
+								int i = 0;
+								while (it.hasNext()) {
+									Long value = new Long((String) it.next());
+									result[i++] = value.longValue();
+								}
+								property.setValue(result);
+							}
+						}
+						else
+							if (property.getType().equals("Double")) {
+								double[] result = new double[size];
+								if (values != null) {
+									Iterator it = values.iterator();
+									int i = 0;
+									while (it.hasNext()) {
+										Double value = new Double((String) it
+												.next());
+										result[i++] = value.doubleValue();
+									}
+									property.setValue(result);
+								}
+							}
+							else
+								if (property.getType().equals("Float")) {
+									float[] result = new float[size];
+									if (values != null) {
+										Iterator it = values.iterator();
+										int i = 0;
+										while (it.hasNext()) {
+											Float value = new Float((String) it
+													.next());
+											result[i++] = value.floatValue();
+										}
+										property.setValue(result);
+									}
+								}
+								else
+									if (property.getType().equals("Byte")) {
+										byte[] result = new byte[size];
+										if (values != null) {
+											Iterator it = values.iterator();
+											int i = 0;
+											while (it.hasNext()) {
+												Byte value = new Byte(
+														(String) it.next());
+												result[i++] = value.byteValue();
+											}
+											property.setValue(result);
+										}
+									}
+									else
+										if (property.getType().equals("Char")) {
+											char[] result = new char[size];
+											if (values != null) {
+												Iterator it = values.iterator();
+												int i = 0;
+												while (it.hasNext()) {
+													char[] value = ((String) it
+															.next())
+															.toCharArray();
+													result[i++] = value[0];
+												}
+												property.setValue(result);
+											}
+										}
+										else
+											if (property.getType().equals(
+													"Boolean")) {
+												boolean[] result = new boolean[size];
+												if (values != null) {
+													Iterator it = values
+															.iterator();
+													int i = 0;
+													while (it.hasNext()) {
+														Boolean value = new Boolean(
+																(String) it
+																		.next());
+														result[i++] = value
+																.booleanValue();
+													}
+													property.setValue(result);
+												}
+											}
+											else
+												if (property.getType().equals(
+														"Short")) {
+													short[] result = new short[size];
+													if (values != null) {
+														Iterator it = values
+																.iterator();
+														int i = 0;
+														while (it.hasNext()) {
+															Short value = new Short(
+																	(String) it
+																			.next());
+															result[i++] = value
+																	.shortValue();
+														}
+														property
+																.setValue(result);
+													}
+												}
+
+			}
 
 		ComponentDescription component = parent.getComponentDescription();
 		component.addProperty(property);

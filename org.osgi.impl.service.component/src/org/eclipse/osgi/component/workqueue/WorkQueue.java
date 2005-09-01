@@ -21,23 +21,22 @@ import org.eclipse.osgi.component.Main;
  */
 
 public class WorkQueue extends Thread {
-	public static final boolean DEBUG = false;
-	public Main main;
+	public static final boolean	DEBUG	= false;
+	public Main					main;
 
 	/**
-	 * Queued is a nested class. This class represents
-	 * the items which are placed on the asynch dispatch queue. This class is
-	 * private.
+	 * Queued is a nested class. This class represents the items which are
+	 * placed on the asynch dispatch queue. This class is private.
 	 */
 	private class Queued {
 		/** dispatcher of this item */
-		final WorkDispatcher dispatcher;
+		final WorkDispatcher	dispatcher;
 		/** action for this item */
-		final int action;
+		final int				action;
 		/** object for this item */
-		final Object object;
+		final Object			object;
 		/** next item in work queue */
-		Queued next;
+		Queued					next;
 
 		/**
 		 * Constructor for work queue item
@@ -59,7 +58,8 @@ public class WorkQueue extends Thread {
 				 * Call the WorkDispatcher to dispatch the work.
 				 */
 				dispatcher.dispatchWork(action, object);
-			} catch (Throwable t) {
+			}
+			catch (Throwable t) {
 				t.printStackTrace();
 				Log.log(1, "[SCR] Error dispatching work ", t);
 			}
@@ -67,11 +67,11 @@ public class WorkQueue extends Thread {
 	}
 
 	/** item at the head of the work queue */
-	private Queued head;
+	private Queued				head;
 	/** item at the tail of the work queue */
-	private Queued tail;
+	private Queued				tail;
 	/** if true the thread should complete it's work and terminate */
-	private volatile boolean stopping;
+	private volatile boolean	stopping;
 
 	/**
 	 * Constructor for the work queue thread.
@@ -93,8 +93,9 @@ public class WorkQueue extends Thread {
 		stopping = true;
 		interrupt();
 		try {
-			join(); //wait for work to finish
-		} catch (InterruptedException e) {
+			join(); // wait for work to finish
+		}
+		catch (InterruptedException e) {
 			e.printStackTrace();
 		}
 	}
@@ -112,12 +113,14 @@ public class WorkQueue extends Thread {
 
 				item.dispatch();
 			}
-		} catch (RuntimeException e) {
+		}
+		catch (RuntimeException e) {
 			if (DEBUG) {
 				e.printStackTrace(System.err);
 			}
 			throw e;
-		} catch (Error e) {
+		}
+		catch (Error e) {
 			if (DEBUG) {
 				e.printStackTrace(System.err);
 			}
@@ -144,7 +147,8 @@ public class WorkQueue extends Thread {
 		{
 			head = item;
 			tail = item;
-		} else /* else add to end of queue */
+		}
+		else /* else add to end of queue */
 		{
 			tail.next = item;
 			tail = item;
@@ -165,7 +169,8 @@ public class WorkQueue extends Thread {
 		while ((!stopping) && (head == null)) {
 			try {
 				wait();
-			} catch (InterruptedException e) {
+			}
+			catch (InterruptedException e) {
 			}
 		}
 
