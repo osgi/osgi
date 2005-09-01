@@ -15,13 +15,15 @@
  * The above notice must be included on all copies of this document.
  * ============================================================================
  */
+
 package org.osgi.impl.service.dmt;
 
 import java.util.ArrayList;
 import java.util.List;
 import org.osgi.service.dmt.DmtException;
 
-class Utils {
+// TODO implement operations to work on either path or URI, depending on which is available.
+public class Node {
     /* 
      * Permitted characters in a segment of a relative URI (RFC 2396):
      * - letters and digits: a-z, A-Z, 0-9
@@ -33,6 +35,8 @@ class Utils {
      * The API allows any characters, but "/" and "\" characters must be escaped
      * (preceded with "\").
      */
+    
+    static final Node ROOT_NODE = new Node(".");
     
     /**
      * Checks the node name and returns the canonical form.
@@ -88,9 +92,10 @@ class Utils {
         
         return sb.toString();
     }
-    
+
     /**
-     * Checks the URI and returns the canonical form.
+     * Checks the URI and canonicalizes it, returning the result as a node
+     * object.
      * <p>
      * This method ensures that the URI is non-<code>null</code> and does not
      * end with the <code>'/'</code> character, and that all segments of the URI
@@ -98,16 +103,16 @@ class Utils {
      * <p>
      * The canonicalization consists of removing all occurrances of the escape 
      * character <code>'\'</code> that precede characters other than
-     * <code>'/'</code> and <code>'\'</code>.  
+     * <code>'/'</code> and <code>'\'</code>.
      *
      * @param uri the URI string to check and canonicalize
-     * @return the canonicalized form of the given URI
+     * @return a node object representing the canonicalized URI
      * @throws DmtException with the code <code>URI_TOO_LONG</code> if any
      *         any segment of the URI is too long, or <code>INVALID_URI</code> 
      *         if the URI does not meet one of the other constraints described 
      *         above
      */
-    static String validateAndNormalizeUri(String uri) throws DmtException {
+    static Node validateAndNormalizeUri(String uri) throws DmtException {
         if (uri == null)
             throw new DmtException(uri, DmtException.INVALID_URI,
                     "The URI parameter is null.");
@@ -130,37 +135,9 @@ class Utils {
         
         appendName(sb, uri, start, len);
         
-        return sb.toString();
+        return new Node(sb.toString());
     }
 
-    /**
-     * Checks the URI (specified with or without the leading dot) and returns 
-     * its canonical form.
-     * <p>
-     * This method ensures that the URI is valid (see conditions in 
-     * {@link #validateAndNormalizeUri}).
-     * <p>
-     * The canonicalization consists of removing all occurrances of the escape 
-     * character <code>'\'</code> that precede characters other than
-     * <code>'/'</code> and <code>'\'</code>.  If the given URI does not 
-     * specify the root node <code>"."</code> as the first segment, this is
-     * prepended to the canonicalized URI before returning.
-     *
-     * @param uri the URI string to check and canonicalize
-     * @return the canonicalized form of the given URI
-     * @throws DmtException with the code <code>URI_TOO_LONG</code> if any
-     *         any segment of the URI is too long, or <code>INVALID_URI</code> 
-     *         if the URI does not meet one of the other constraints described 
-     *         above
-     */
-    static String validateAndNormalizeAbsoluteUri(String uri) 
-            throws DmtException {
-        uri = validateAndNormalizeUri(uri);
-        if (isAbsoluteUri(uri))
-            return uri;
-        return "./" + uri;
-    }
-    
     private static void appendName(StringBuffer sb, String uri, 
             int start, int end) throws DmtException {
         String segment = uri.substring(start, end);
@@ -174,49 +151,162 @@ class Utils {
         sb.append(validateAndNormalizeNodeName(segment));
     }
     
-    // precondition: URI is validated and normalized
-	static boolean isAbsoluteUri(String uri) {
-		return uri.equals(".") || uri.startsWith("./");
-	}
-
-    // precondition: both URIs are validated and normalized
-	static boolean isAncestor(String ancestor, String node) {
-		if (node.equals(ancestor))
-			return true;
-		return node.startsWith(ancestor + '/');
-	}
-    
-    // precondition: both URIs are validated and normalized
-    static boolean isParent(String parent, String node) {
-        String nodeParent = parentUri(node);
-        return nodeParent != null && nodeParent.equals(parent);
+    static String[] getUriArray(Node[] nodes) {
+        String[] uris = new String[nodes.length];
+        for(int i = 0; i < uris.length; i++)
+            uris[i] = nodes[i].getUri();
+        return uris;
     }
     
-    // returns whether two nodes are on the same branch, i.e. one is the
-    // ancestor of the other
-    // precondition: both URIs are validated and normalized
-    static boolean isOnSameBranch(String uri1, String uri2) {
-        return isAncestor(uri1, uri2) || isAncestor(uri2, uri1);
+    // only exported as a convenience method for plugins
+    static String convertPathToUri(String[] path) {
+        if(path.length == 0)
+            return "";
+        
+        StringBuffer sb = new StringBuffer(path[0]);
+        for(int i = 1; i < path.length; i++)
+            sb.append('/').append(path[i]);
+        return sb.toString();
+    }
+    
+    // convenience method for plugins
+    static boolean isEqualPath(String[] path1, String[] path2) {
+        if(path1.length != path2.length)
+            return false;
+        
+        for(int i = 0; i < path1.length; i++)
+            if(!path1[i].equals(path2[i]))
+                return false;
+            
+        return true;
     }
 
-    // precondition: both URIs are validated and normalized
-	static String relativeUri(String ancestor, String node) {
-		if (!isAncestor(ancestor, node))
-			return null;
-		if (node.length() == ancestor.length())
-			return "";
-		return node.substring(ancestor.length() + 1);
-	}
-
-    // precondition: both URIs are validated and normalized
-	static String createAbsoluteUri(String ancestor, String subNode) {
-		return subNode.equals("") ? ancestor : ancestor + '/' + subNode;
-	}
-
+    
+    private String uri;
+    private String[] path;
+    
     // precondition: URI is validated and normalized
-    // postcondition: array always contains at least one element 
-    //                (possibly an empty string) 
-    static String[] splitUri(String uri) {
+    private Node(String uri) {
+        this.uri = uri;
+        path = null;
+    }
+    
+    // precondition: path is valid (originates from a previous Node object)
+    Node(String[] path) {
+        this.path = path;
+        uri = null;
+    }
+    
+    String[] getPath() {
+        if(path == null)
+            path = convertUriToPath(uri);
+        return path;
+    }
+    
+    String getUri() {
+        if(uri == null)
+            uri = convertPathToUri(path);
+        return uri;
+    }
+    
+    String getLastSegment() {
+        String[] path = getPath();
+        return path.length == 0 ? null : path[path.length-1];
+    }
+    
+    boolean isAbsolute() {
+        return ".".equals(getPath()[0]);
+    }
+    
+    boolean isRoot() {
+        return isAbsolute() && getPath().length == 1;
+    }
+    
+    boolean isEmpty() {
+        return getPath().length == 0;
+    }
+    
+    // precondition: both nodes are absolute
+    boolean isParentOf(Node other) {
+        return isAncestorOf(other) && 
+                getPath().length == other.getPath().length - 1;
+    }
+    
+    // precondition: both nodes are absolute
+    boolean isAncestorOf(Node other) {
+        String[] otherPath = other.getPath();
+        String[] path = getPath();
+        
+        if(otherPath.length < path.length)
+            return false;
+        
+        for(int i = 0; i < path.length; i++)
+            if(!path[i].equals(otherPath[i]))
+                return false;
+        
+        return true;
+    }
+    
+    // precondition: both nodes are absolute
+    boolean isOnSameBranch(Node other) {
+        return isAncestorOf(other) || other.isAncestorOf(this);
+    }
+    
+    Node getParent() {
+        if(isEmpty() || isRoot())
+            return null;
+
+        String[] path = getPath();
+        String[] parent = new String[path.length-1];
+        for (int i = 0; i < parent.length; i++)
+            parent[i] = path[i];
+        return new Node(parent);
+    }
+    
+    // precondition: parameter node is not absolute
+    Node appendRelativeNode(Node relativeNode) {
+        if(relativeNode.isAbsolute())
+            throw new IllegalStateException(
+                    "Cannot append an absolute node to another node.");
+
+        if(relativeNode.isEmpty())
+            return this;
+        
+        return new Node(getUri() + '/' + relativeNode.getUri());
+    }
+
+    // precondition: segment parameter is validated and normalized
+    Node appendSegment(String segment) {
+        return new Node(getUri() + '/' + segment);
+    }
+    
+    // precondition: both nodes are absolute
+    Node getRelativeNode(Node descendentNode) {
+        if (!isAncestorOf(descendentNode))
+            return null;
+        String uri = getUri();
+        String descendentUri = descendentNode.getUri();
+        
+        if (uri.length() == descendentUri.length())
+            return new Node("");
+        return new Node(descendentUri.substring(uri.length() + 1));
+    }
+    
+    public boolean equals(Object other) {
+        if(!(other instanceof Node))
+            return false;
+        
+        return getUri().equals(((Node) other).getUri());
+    }
+    
+    public int hashCode() {
+        return getUri().hashCode();
+    }
+    
+    private static String[] convertUriToPath(String uri) {
+        if(uri.length() == 0)
+            return new String[] {};
+        
         List segments = new ArrayList();
         StringBuffer segment = new StringBuffer();
         
@@ -237,105 +327,6 @@ class Utils {
         }
         segments.add(segment.toString());
     
-        return (String[]) segments.toArray(new String[] {});
-    }
-    
-    static String[] tempAbsoluteUriToPath(String uri) {
-        String[] path = splitUri(uri);
-
-        if(!".".equals(path[0]))
-            throw new IllegalStateException("Internal error, invalid " +
-                    "absolute URI: " + uri);
-        
-        return path;
-    }
-    
-    // precondition: path is absolute
-    static String tempAbsolutePathToUri(String[] path) {
-        StringBuffer sb = new StringBuffer(".");
-        for(int i = 1; i < path.length; i++)
-            sb.append('/').append(path[i]);
-        return sb.toString();
-    }
-
-    static boolean tempIsAncestorPath(String[] ancestor, String[] node) {
-        if(node.length < ancestor.length)
-            return false;
-        
-        for(int i = 0; i < ancestor.length; i++)
-            if(!ancestor[i].equals(node[i]))
-                return false;
-        
-        return true;
-    }
-    
-    static boolean isEqualPath(String[] path1, String[] path2) {
-        if(path1.length != path2.length)
-            return false;
-        
-        for(int i = 0; i < path1.length; i++)
-            if(!path1[i].equals(path2[i]))
-                return false;
-            
-        return true;
-    }
-    
-    static String[] relativePath(String[] ancestor, String[] node) {
-        if (!tempIsAncestorPath(ancestor, node))
-            return null;
-        String[] relativePath = new String[node.length-ancestor.length];
-        for(int i = ancestor.length; i < node.length; i++)
-            relativePath[i-ancestor.length] = node[i];
-        return relativePath;
-    }
-    
-    // convenience method
-    // precondition: both URIs are validated and normalized
-    static String parentUri(String uri) {
-        return getUriPart(uri, false, false);
-    }
-    
-    /**
-     * Returns some segment or segments of the given URI as selected by the
-     * boolean parameters. First the method finds the first segment separator
-     * from the direction defined by <code>forward</code>. If
-     * <code>firstMatch</code> is <code>true</code>, the single URI segment
-     * between the start of the search and the separator is returned (or the
-     * whole URI if no separator was found). If <code>firstMatch</code> is
-     * <code>false</code>, the rest of the segments are returned (or
-     * <code>null</code> if there was no separator).
-     * <p>
-     * Precondition: the <code>uri</code> parameter is validated and normalized.
-     */
-    static String getUriPart(String uri, boolean forward, boolean firstMatch) {
-        int sep = forward ? indexOfUnescaped(uri, '/') 
-                : lastIndexOfUnescaped(uri, '/');
-
-        if(sep == -1)
-            return firstMatch ? uri : null;
-        
-        return forward ^ firstMatch ? uri.substring(sep + 1) 
-                : uri.substring(0, sep);
-    }
-    
-    private static int lastIndexOfUnescaped(String str, int ch) {
-        int sep = str.lastIndexOf(ch);
-        while(sep != -1) {
-            if(sep == 0 || str.charAt(sep-1) != '\\')
-                return sep;
-            sep = str.lastIndexOf(ch, sep-1);
-        }            
-        
-        return -1;
-    }
-    
-    private static int indexOfUnescaped(String str, int ch) {
-        int sep = str.indexOf(ch);
-        while(sep != -1) {
-            if(sep == 0 || str.charAt(sep-1) != '\\')
-                return sep;
-            sep = str.indexOf(ch, sep+1);
-        }
-        return -1;
+        return (String[]) segments.toArray(new String[segments.size()]);
     }
 }

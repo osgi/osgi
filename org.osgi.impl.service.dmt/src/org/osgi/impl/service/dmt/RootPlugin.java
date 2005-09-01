@@ -151,40 +151,40 @@ public class RootPlugin implements DataPluginFactory, ReadableDataSession {
                     "Specified URI not found in tree.");
         return node;
     }
-}
 
-class Node {
-	String	name;
-	Node[]	children;
-
-	Node(String name, Node[] children) {
-		this.name = name;
-		if (children != null)
-			this.children = children;
-		else
-			this.children = new Node[] {};
-	}
-
-    Node findNode(String[] path, int start, boolean findParent) {
-        if(path.length < start)
-            return null; // does not happen (path would have to be empty array)
+    static class Node {
+        String	name;
+        Node[]	children;
         
-        if (start == path.length ||
-                (findParent && start == path.length-1))
-            return this;
-
-        for(int i = 0; i < children.length; i++)
-            if(path[start].equals(children[i].name))
-                return children[i].findNode(path, start+1, findParent);
+        Node(String name, Node[] children) {
+            this.name = name;
+            if (children != null)
+                this.children = children;
+            else
+                this.children = new Node[] {};
+        }
+        
+        Node findNode(String[] path, int start, boolean findParent) {
+            if(path.length < start)
+                return null; // does not happen (path would have to be empty array)
             
-        return null;
+            if (start == path.length ||
+                    (findParent && start == path.length-1))
+                return this;
+            
+            for(int i = 0; i < children.length; i++)
+                if(path[start].equals(children[i].name))
+                    return children[i].findNode(path, start+1, findParent);
+                
+            return null;
+        }
+        
+        String getName() {
+            return name;
+        }
+        
+        Node[] getChildren() {
+            return children;
+        }
     }
-
-	String getName() {
-		return name;
-	}
-
-	Node[] getChildren() {
-		return children;
-	}
 }

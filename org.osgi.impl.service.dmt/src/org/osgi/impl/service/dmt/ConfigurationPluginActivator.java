@@ -45,7 +45,7 @@ public class ConfigurationPluginActivator implements BundleActivator {
         configTracker.open();
         
 		// creating the service
-        String pluginRoot = Utils.tempAbsolutePathToUri(PLUGIN_ROOT_PATH);
+        String pluginRoot = Node.convertPathToUri(PLUGIN_ROOT_PATH);
 		configPlugin = new ConfigurationPlugin(bc, configTracker);
 		Hashtable properties = new Hashtable();
 		properties.put("dataRootURIs", new String[] { pluginRoot });

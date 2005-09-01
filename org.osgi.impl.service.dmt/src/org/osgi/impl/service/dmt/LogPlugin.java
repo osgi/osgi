@@ -107,7 +107,7 @@ public class LogPlugin implements DataPluginFactory, TransactionalDataSession,
             DmtSession session) throws DmtException {
         // session info not needed, it will come in the exec()
         
-        if(!Utils.isEqualPath(sessionRoot, LogPluginActivator.PLUGIN_ROOT_PATH))
+        if(!Node.isEqualPath(sessionRoot, LogPluginActivator.PLUGIN_ROOT_PATH))
             throw new DmtException(sessionRoot, DmtException.COMMAND_FAILED,
                     "Fine-grained locking not supported in atomic sessions, " +
                     "session root must not be below \"./OSGi/Log\".");
@@ -436,7 +436,7 @@ public class LogPlugin implements DataPluginFactory, TransactionalDataSession,
 		Vector records = getResult(lr);
 		String result = formatResult(records);
 		AlertItem[] items = new AlertItem[1];
-		items[0] = new AlertItem(Utils.tempAbsolutePathToUri(nodePath), null, 
+		items[0] = new AlertItem(Node.convertPathToUri(nodePath), null, 
                 null, new DmtData(result));
         
         getDmtAdmin().sendAlert(session.getPrincipal(), 1224, correlator, items);
@@ -444,9 +444,12 @@ public class LogPlugin implements DataPluginFactory, TransactionalDataSession,
 
 	//----- Private utility methods -----//
 	private static String[] chopPath(String[] absolutePath) {
-		// result not null because DmtAdmin only gives us nodes in our subtree
-		return Utils.relativePath(LogPluginActivator.PLUGIN_ROOT_PATH, 
-                absolutePath);
+		// DmtAdmin only gives us nodes in our subtree
+        int rootLength = LogPluginActivator.PLUGIN_ROOT_PATH.length;
+        String[] path = new String[absolutePath.length-rootLength];
+        for(int i = 0; i < absolutePath.length-rootLength; i++)
+            path[i] = absolutePath[i+rootLength];
+        return path;
 	}
     
     private static String escape(String nodeName) {

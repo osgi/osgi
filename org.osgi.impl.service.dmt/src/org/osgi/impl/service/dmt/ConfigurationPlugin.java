@@ -116,7 +116,7 @@ public class ConfigurationPlugin implements DataPluginFactory,
     
     public ReadWriteDataSession openReadWriteSession(String[] sessionRoot,
             DmtSession session) throws DmtException {
-        if(!Utils.isEqualPath(sessionRoot, 
+        if(!Node.isEqualPath(sessionRoot, 
                 ConfigurationPluginActivator.PLUGIN_ROOT_PATH))
             throw new DmtException(sessionRoot, DmtException.COMMAND_FAILED,
                     "Fine-grained locking not supported, " +
@@ -128,7 +128,7 @@ public class ConfigurationPlugin implements DataPluginFactory,
     
     public TransactionalDataSession openAtomicSession(String[] sessionRoot,
             DmtSession session) throws DmtException {
-        if(!Utils.isEqualPath(sessionRoot, 
+        if(!Node.isEqualPath(sessionRoot, 
                 ConfigurationPluginActivator.PLUGIN_ROOT_PATH))
             throw new DmtException(sessionRoot, DmtException.COMMAND_FAILED,
                     "Fine-grained locking not supported, " +
@@ -671,9 +671,12 @@ public class ConfigurationPlugin implements DataPluginFactory,
 	//----- Private utility methods -----//
     
     private static String[] chopPath(String[] absolutePath) {
-        // result not null because DmtAdmin only gives us nodes in our subtree
-        return Utils.relativePath(ConfigurationPluginActivator.PLUGIN_ROOT_PATH, 
-                absolutePath);
+        // DmtAdmin only gives us nodes in our subtree
+        int rootLength = ConfigurationPluginActivator.PLUGIN_ROOT_PATH.length;
+        String[] path = new String[absolutePath.length-rootLength];
+        for(int i = 0; i < absolutePath.length-rootLength; i++)
+            path[i] = absolutePath[i+rootLength];
+        return path;
     }
 }
 

@@ -37,12 +37,13 @@ public class PluginDispatcher implements ServiceTrackerCustomizer {
         // root plugin could be a normal plugin when overlapping is allowed
         DataPluginFactory root = new RootPlugin(this); 
         rootPlugin = 
-            new PluginRegistration(root, new String[] { "." }, new String[] {});
+            new PluginRegistration(root, new Node[] { Node.ROOT_NODE }, 
+                    new Node[] {});
     }
 
     public synchronized Object addingService(ServiceReference serviceRef) {
-        String[] roots = getURIs(serviceRef, "dataRootURIs");
-        String[] execs = getURIs(serviceRef, "execRootURIs");
+        Node[] roots = getURIs(serviceRef, "dataRootURIs");
+        Node[] execs = getURIs(serviceRef, "execRootURIs");
 
         if (roots == null || execs == null)
             return null;
@@ -54,16 +55,17 @@ public class PluginDispatcher implements ServiceTrackerCustomizer {
         // TODO also check 'roots' and 'execs' for conflicts within the arrays
         if (pluginConflict(roots, execs, plugins)) {
             System.out.println("Plugin data or exec roots (" +
-                    Arrays.asList(roots) + ", " + Arrays.asList(execs) +
+                    Arrays.asList(Node.getUriArray(roots)) + ", " +
+                    Arrays.asList(Node.getUriArray(execs)) +
                     ") conflict with a previously registered plugin; " +
                     "ignoring this plugin.");
             return null;
         } 
         
-        List invalidRoots = getInvalidRoots(roots);
-        if(invalidRoots.size() != 0) {
+        List invalidRootUris = getInvalidRoots(roots);
+        if(invalidRootUris.size() != 0) {
             System.out.println("Ignoring plugin because of invalid "
-                    + "plugin data roots '" + invalidRoots
+                    + "plugin data roots '" + invalidRootUris
                     + "': the node or the parent must already exist.");
             return null;
         }
@@ -86,60 +88,56 @@ public class PluginDispatcher implements ServiceTrackerCustomizer {
         bc.ungetService(serviceRef);
     }
 
-    synchronized PluginRegistration getDataPlugin(String nodeUri) {
+    synchronized PluginRegistration getDataPlugin(Node node) {
         Iterator i = plugins.iterator();
         while (i.hasNext()) {
             PluginRegistration plugin = (PluginRegistration) i.next();
-            if (plugin.handlesData(nodeUri))
+            if (plugin.handlesData(node))
                 return plugin;
         }
         return rootPlugin;
     }
 
-    synchronized ExecPlugin getExecPlugin(String nodeUri) {
+    synchronized ExecPlugin getExecPlugin(Node node) {
         Iterator i = plugins.iterator();
         while (i.hasNext()) {
             PluginRegistration plugin = (PluginRegistration) i.next();
-            if (plugin.handlesExec(nodeUri))
+            if (plugin.handlesExec(node))
                 return plugin.getExecPlugin();
         }
         return null;
     }
 
-    synchronized boolean handledBySameDataPlugin(String nodeUri1, String nodeUri2) {
+    synchronized boolean handledBySameDataPlugin(Node node1, Node node2) {
         Iterator i = plugins.iterator();
         while (i.hasNext()) {
             PluginRegistration plugin = (PluginRegistration) i.next();
-            if (plugin.handlesData(nodeUri1))
-                return plugin.handlesData(nodeUri2);
-            if (plugin.handlesData(nodeUri2))
+            if (plugin.handlesData(node1))
+                return plugin.handlesData(node2);
+            if (plugin.handlesData(node2))
                 return false;
         }
         return true; // both URIs are handled by the root plugin
     }
 
-    // finds all plugin root URIs that are directly below the given uri, and
+    // finds all plugin root URIs that are directly below the given node, and
     // returns the set of their last segments
     synchronized Set getChildPluginNames(String[] path) {
-        StringBuffer sb = new StringBuffer(path[0]);
-        for(int i = 1; i < path.length; i++)
-            sb.append('/').append(path[i]);
-        
         Set childPluginNames = new HashSet();
         
         Iterator i = plugins.iterator();
         while(i.hasNext())
             childPluginNames.addAll(((PluginRegistration) i.next())
-                    .getChildRootNames(sb.toString()));
+                    .getChildRootNames(new Node(path)));
 
         return childPluginNames;
     }
     
-    private String[] getURIs(ServiceReference serviceRef, String propertyName) {
+    private Node[] getURIs(ServiceReference serviceRef, String propertyName) {
         // property might be modified later, but framework RI gives us a copy
         Object property = serviceRef.getProperty(propertyName);
         if (property == null)
-            return new String[] {};
+            return new Node[] {};
         
         String[] uris;
         if (property instanceof String)
@@ -152,25 +150,26 @@ public class PluginDispatcher implements ServiceTrackerCustomizer {
             return null;
         }
         
+        Node[] nodes = new Node[uris.length];
         for (int i = 0; i < uris.length; i++) {
             try {
-                uris[i] = Utils.validateAndNormalizeUri(uris[i]);
+                nodes[i] = Node.validateAndNormalizeUri(uris[i]);
             } catch(DmtException e) {
                 System.out.println("Invalid URI '" + uris[i] + "' in property '" 
                         + propertyName + "', ignoring plugin.");
                 e.printStackTrace(System.out);
                 return null;
             }
-            if (!Utils.isAbsoluteUri(uris[i])) {
+            if (!nodes[i].isAbsolute()) {
                 System.out.println("Relative URI '" + uris[i] + "' in " +
                         "property '" + propertyName + "', ignoring plugin.");
                 return null;
             }
         }
-        return uris;
+        return nodes;
     }
 
-    private static boolean pluginConflict(String[] roots, String[] execs,
+    private static boolean pluginConflict(Node[] roots, Node[] execs,
                                           ArrayList plugins) {
         Iterator i = plugins.iterator();
         while (i.hasNext())
@@ -179,13 +178,13 @@ public class PluginDispatcher implements ServiceTrackerCustomizer {
         return false;
     }
 
-    private List getInvalidRoots(String[] roots) {
+    private List getInvalidRoots(Node[] roots) {
         List list = new Vector();
         for (int i = 0; i < roots.length; i++) {
             // roots must not contain "." for the parent to be valid, this is
             // guaranteed by the conflict check (the root plugin provides ".")
-            if(!RootPlugin.isValidDataPluginRoot(Utils.tempAbsoluteUriToPath(roots[i])))
-                list.add(roots[i]);
+            if(!RootPlugin.isValidDataPluginRoot(roots[i].getPath()))
+                list.add(roots[i].getUri());
         }
         
         return list;

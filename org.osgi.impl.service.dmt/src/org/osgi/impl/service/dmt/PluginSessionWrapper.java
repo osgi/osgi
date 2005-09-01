@@ -51,14 +51,14 @@ public class PluginSessionWrapper implements TransactionalDataSession {
     private AccessControlContext securityContext;
     
     // the root node of the session, either one of the plugin roots or a subnode
-    private String[] sessionRoot;
+    private Node sessionRoot;
     
     // redundant information, could be calculated from session variables
     private int sessionType;
     
     // Note, that the session type reflects the kind of 
     public PluginSessionWrapper(ReadableDataSession session, int sessionType,
-            String[] sessionRoot, AccessControlContext securityContext) {
+            Node sessionRoot, AccessControlContext securityContext) {
         readableDataSession = session;
         if(sessionType != DmtSession.LOCK_TYPE_SHARED) {
             readWriteDataSession = (ReadWriteDataSession) session;
@@ -74,7 +74,7 @@ public class PluginSessionWrapper implements TransactionalDataSession {
         return sessionType;
     }
     
-    String[] getSessionRoot() {
+    Node getSessionRoot() {
         return sessionRoot;
     } 
     

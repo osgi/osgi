@@ -118,7 +118,7 @@ public class DmtAdminImpl implements DmtAdmin {
                 lockMode, permissions, eventTracker, dispatcher, this);
                 
         // passing the normalized variant of the subtreeUri parameter
-		waitUntilNoConflictingSessions(session.getRootUri(), lockMode);
+		waitUntilNoConflictingSessions(session.getRootNode(), lockMode);
 		session.open();
         openSessions.add(session); 
         
@@ -138,17 +138,17 @@ public class DmtAdminImpl implements DmtAdmin {
     // Note, that this does not provide fair scheduling of waiting sessions,
     // the order of sessions depends on the order of thread activation when
     // notifyAll is called.  Some threads may be "starved", i.e. timed out.
-    private void waitUntilNoConflictingSessions(String subtreeUri, int lockMode) 
+    private void waitUntilNoConflictingSessions(Node subtreeNode, int lockMode) 
             throws DmtException {
         // TODO also check for (non-shared) sessions within the same plugin
         final long timeLimit = System.currentTimeMillis() + TIMEOUT;
         
-        while(conflictsWithOpenSessions(subtreeUri, lockMode)) {
+        while(conflictsWithOpenSessions(subtreeNode, lockMode)) {
             long timeLeft = timeLimit - System.currentTimeMillis();
             
             // throw exception if this session cannot run and time runs out
             if(timeLeft <= 0) 
-                throw new DmtException(subtreeUri, 
+                throw new DmtException(subtreeNode.getUri(), 
                         DmtException.SESSION_CREATION_TIMEOUT,
                         "Session creation timed out because of concurrent " +
                         "sessions blocking access to Device Management Tree.");
@@ -162,11 +162,11 @@ public class DmtAdminImpl implements DmtAdmin {
         }
     }
     
-    private boolean conflictsWithOpenSessions(String subtreeUri, int lockMode) {
+    private boolean conflictsWithOpenSessions(Node subtreeNode, int lockMode) {
         Iterator i = openSessions.iterator();
         while (i.hasNext()) {
-            DmtSession openSession = (DmtSession) i.next();
-            if(Utils.isOnSameBranch(subtreeUri, openSession.getRootUri()) && 
+            DmtSessionImpl openSession = (DmtSessionImpl) i.next();
+            if(subtreeNode.isOnSameBranch(openSession.getRootNode()) && 
                     (lockMode != DmtSession.LOCK_TYPE_SHARED || 
                      openSession.getLockType() != DmtSession.LOCK_TYPE_SHARED))
                 return true; // only two shared sessions can be on one branch

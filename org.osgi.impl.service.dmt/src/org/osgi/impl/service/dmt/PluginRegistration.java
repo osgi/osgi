@@ -24,12 +24,12 @@ import org.osgi.service.dmt.spi.ExecPlugin;
 
 class PluginRegistration {
 	private Object   plugin;
-	private String[] roots;
-	private String[] execs;
+	private Node[] roots;
+	private Node[] execs;
     
 	// precondition: roots != null && execs != null && 
     //               (roots.length != 0 || execs.length != 0)
-	PluginRegistration(Object plugin, String[] roots, String[] execs) {
+	PluginRegistration(Object plugin, Node[] roots, Node[] execs) {
 		if (roots.length > 0 && !(plugin instanceof DataPluginFactory))
 			throw new IllegalArgumentException(
 					"The plugin must implement DataPluginFactory if data " +
@@ -59,46 +59,46 @@ class PluginRegistration {
 		return (ExecPlugin) plugin;
 	}
     
-    String[] getDataRoots() {
+    Node[] getDataRoots() {
         return roots;
     }
     
-	boolean handlesData(String subtreeUri) {
+	boolean handlesData(Node subtreeUri) {
         return handles(subtreeUri, roots);
 	}
 
-	boolean handlesExec(String subtreeUri) {
+	boolean handlesExec(Node subtreeUri) {
         return handles(subtreeUri, execs);
 	}
     
-    private static boolean handles(String uri, String[] roots) {
-        for (int i = 0; i < roots.length; i++)
-            if (Utils.isAncestor(roots[i], uri))
+    private static boolean handles(Node uri, Node[] roots) {
+        for(int i = 0; i < roots.length; i++)
+            if(roots[i].isAncestorOf(uri))
                 return true;
         return false;
     }
     
-    boolean conflictsWith(String[] otherRoots, String[] otherExecs) {
+    boolean conflictsWith(Node[] otherRoots, Node[] otherExecs) {
         return 
             conflicts(roots, otherRoots) ||
             conflicts(execs, otherExecs);
     }
     
-    private static boolean conflicts(String[] roots, String[] otherRoots) {
+    private static boolean conflicts(Node[] roots, Node[] otherRoots) {
         for(int i = 0; i < roots.length; i++)
             for(int j = 0; j < otherRoots.length; j++)
-                if (Utils.isOnSameBranch(roots[i], otherRoots[j]))
+                if(roots[i].isOnSameBranch(otherRoots[j]))
                     return true;
         return false;
     }
     
     // finds the data root URIs that are directly below the given uri, and
     // returns the list of their last segments
-    List getChildRootNames(String uri) {
+    List getChildRootNames(Node uri) {
         List childRootNames = new Vector();
         for(int i = 0; i < roots.length; i++)
-            if(Utils.isParent(uri, roots[i]))
-                childRootNames.add(Utils.getUriPart(roots[i], false, true));
+            if(uri.isParentOf(roots[i]))
+                childRootNames.add(roots[i].getLastSegment());
             
         return childRootNames;
     }
