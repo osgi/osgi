@@ -1,11 +1,15 @@
 package javax.microedition.midlet;
 
 import org.osgi.impl.service.midletcontainer.*;
+
 import java.util.*;
 
 public abstract class MIDlet {
 
-	protected MIDlet() {}
+	protected MIDlet() 
+	{
+		MidletContainer.registerMidlet( this, new Container2Midlet( this ) );
+	}
 
 	protected abstract void startApp() throws MIDletStateChangeException;
 
@@ -85,20 +89,34 @@ public abstract class MIDlet {
 	}
 	
 	private MidletHandle midletHandle = null;
-	private Hashtable    args = null;
+	private Map          args = null;
 	
-	private void reflectionMethod(String command, Object object) throws Exception {
-		if( command.equals("MidletHandle"))
-			midletHandle = (MidletHandle) object;
-		else if( command.equals("Start")) {
-			args = new Hashtable( (Hashtable)object );
+	private class Container2Midlet implements Container2MidletInterface {
+		private MIDlet midlet;
+		
+		public Container2Midlet( MIDlet midlet ) {
+			this.midlet = midlet;
+		}
+		
+		public void setMidletHandle(MidletHandle midHnd) {
+			midletHandle = midHnd;			
+		}
+		public void start(Map startArgs) throws MIDletStateChangeException {
+			args = startArgs;
 			startApp();
 		}
-		else if( command.equals("Pause") )
+
+		public void pause() {
 			pauseApp();
-		else if( command.equals("Resume") )
+		}
+
+		public void resume() throws MIDletStateChangeException {
 			startApp();
-		else if( command.equals("Destroy") )
-			destroyApp( ((Boolean)object).booleanValue() );
+		}
+
+		public void destroy(boolean immed) throws MIDletStateChangeException {
+			destroyApp( immed );
+			MidletContainer.unregisterMidlet( midlet );
+		}		
 	}
 }

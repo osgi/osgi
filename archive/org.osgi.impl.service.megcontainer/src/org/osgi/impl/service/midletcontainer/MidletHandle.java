@@ -1,6 +1,5 @@
 package org.osgi.impl.service.midletcontainer;
 
-import java.lang.reflect.Method;
 import java.util.*;
 import javax.microedition.midlet.MIDlet;
 import org.osgi.framework.*;
@@ -40,9 +39,9 @@ public final class MidletHandle extends ApplicationHandle {
 		if (status != null)
 			throw new Exception("Invalid State");
 		if (midlet != null) {
-			midletCommand(midlet, "MidletHandle", this);
+			MidletContainer.getMidletCommInterface( midlet ).setMidletHandle( this );
 			registerToOATHash( args );
-			midletCommand(midlet, "Start", args);
+			MidletContainer.getMidletCommInterface( midlet ).start( args );
 			setStatus("RUNNING");
 			registerAppHandle();
 		}
@@ -55,7 +54,7 @@ public final class MidletHandle extends ApplicationHandle {
 		if (status == null)
 			throw new Exception("Invalid State");
 		if (midlet != null)
-			midletCommand(midlet, "Destroy", new Boolean(true));
+			MidletContainer.getMidletCommInterface( midlet ).destroy( true );
 		
 		setStatus(null);
 		unregisterFromOATHash();
@@ -67,7 +66,7 @@ public final class MidletHandle extends ApplicationHandle {
 		if (status != "RUNNING")
 			throw new Exception("Invalid State");
 		if (midlet != null) {
-			midletCommand(midlet, "Pause", null);
+			MidletContainer.getMidletCommInterface( midlet ).pause();
 			setStatus("PAUSED");
 		}
 		else {
@@ -79,7 +78,7 @@ public final class MidletHandle extends ApplicationHandle {
 		if (status != "PAUSED")
 			throw new Exception("Invalid State");
 		if (midlet != null) {
-			midletCommand(midlet, "Resume", null);
+			MidletContainer.getMidletCommInterface( midlet ).resume();
 			setStatus("RUNNING");
 		}
 		else {
@@ -119,14 +118,5 @@ public final class MidletHandle extends ApplicationHandle {
 			serviceReg.unregister();
 			serviceReg = null;
 		}
-	}
-
-	void midletCommand(MIDlet midlet, String command, Object param)
-			throws Exception {
-		Class midletClass = javax.microedition.midlet.MIDlet.class;
-		Method setupMethod = midletClass.getDeclaredMethod("reflectionMethod",
-				new Class[] {java.lang.String.class, java.lang.Object.class});
-		setupMethod.setAccessible(true);
-		setupMethod.invoke(midlet, new Object[] {command, param});
 	}
 }
