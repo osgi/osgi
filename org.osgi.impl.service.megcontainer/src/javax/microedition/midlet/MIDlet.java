@@ -8,7 +8,7 @@ public abstract class MIDlet {
 
 	protected MIDlet() 
 	{
-		MidletContainer.registerMidlet( this, new Container2Midlet( this ) );
+		MidletHandle.registerMidlet( this, new Container2Midlet( this ) );
 	}
 
 	protected abstract void startApp() throws MIDletStateChangeException;
@@ -116,7 +116,7 @@ public abstract class MIDlet {
 
 		public void destroy(boolean immed) throws MIDletStateChangeException {
 			destroyApp( immed );
-			MidletContainer.unregisterMidlet( midlet );
+			MidletHandle.unregisterMidlet( midlet );
 		}		
 	}
 }

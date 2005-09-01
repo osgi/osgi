@@ -3,7 +3,6 @@ package org.osgi.impl.service.midletcontainer;
 import java.io.*;
 import java.security.MessageDigest;
 import java.util.*;
-import javax.microedition.midlet.MIDlet;
 import org.osgi.framework.*;
 import org.osgi.impl.service.application.OATContainerInterface;
 import org.osgi.service.application.ApplicationDescriptor;
@@ -382,22 +381,5 @@ public class MidletContainer implements BundleListener, ServiceListener {
 		sb.append(base64table[(d1<<2)&63]);
 		
 		return sb.toString();
-	}
-	
-	private static Hashtable  container2MidletHash = new Hashtable();
-	
-	public static void registerMidlet( MIDlet midlet, Container2MidletInterface commInterface ) {
-		container2MidletHash.put( midlet, commInterface );
-	}
-
-	public static void unregisterMidlet( MIDlet midlet ) {
-		container2MidletHash.remove( midlet );
-	}
-	
-	public static Container2MidletInterface getMidletCommInterface( MIDlet midlet ) throws Exception {
-		Object iface = container2MidletHash.get( midlet );
-		if( iface == null )
-			throw new Exception( "Midlet not found!" );
-		return (Container2MidletInterface)iface;
 	}
 }
