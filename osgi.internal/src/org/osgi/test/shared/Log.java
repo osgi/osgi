@@ -46,30 +46,23 @@ public class Log implements Serializable {
 		return _string;
 	}
 
-	final static int	BEGIN	= 1;
 	final static int	SKIP	= 2;
 	final static int	NORMAL	= 3;
-	final static int	COMMENT	= 4;
 
 	public static String cleanup(String s) {
 		StringBuffer sb = new StringBuffer();
-		int state = BEGIN;
-		int terminator = 0;
+		int state = NORMAL;
 		for (int i = 0; i < s.length(); i++) {
 			char c = s.charAt(i);
 			switch (state) {
-				case BEGIN :
+				case NORMAL :
 					switch (c) {
 						case '[' :
 							state = SKIP;
-							terminator = c;
-							break;
-						case ' ' :
 							break;
 						case '#' :
 							return sb.toString();
 						default :
-							state = NORMAL;
 							sb.append(c);
 							break;
 					}
@@ -77,21 +70,9 @@ public class Log implements Serializable {
 				case SKIP :
 					switch (c) {
 						case ']' :
-							if (terminator == c) {
-								state = BEGIN;
-								c = 0;
-							}
+							state = NORMAL;
+							c = 0;
 							break;
-					}
-					break;
-				case NORMAL :
-					switch (c) {
-						//case '<':
-						//case '[': terminator = c; state = SKIP; break;
-						case '#' :
-							return sb.toString();
-						default :
-							sb.append(c);
 					}
 					break;
 			}
