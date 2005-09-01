@@ -56,12 +56,6 @@ public class Main implements BundleActivator, BundleTrackerCustomizer, WorkDispa
 	protected Hashtable bundleToLastModified;
 		
 	/**
-	 * Utility reference to Log class, necessary for communication with Log
-	 * Service.
-	 */
-	protected Log					log;
-
-	/**
 	 * Bundle is being added to SCR tracked bundles.
 	 */
 	public static final int ADD = 1;
@@ -74,7 +68,7 @@ public class Main implements BundleActivator, BundleTrackerCustomizer, WorkDispa
 	public void start(BundleContext context) {
 		this.context = context;
 		framework = new FrameworkHook();
-		log = new Log(context);
+		Log.init(context);
 		cache = new ComponentDescriptionCache(this);
 		bundleToComponentDescriptions = new Hashtable();
 		bundleToLastModified = new Hashtable();
@@ -95,6 +89,7 @@ public class Main implements BundleActivator, BundleTrackerCustomizer, WorkDispa
 	 */
 	public void stop(BundleContext context) {
 		
+		Log.dispose();
 		bundleTracker.close();
 		workQueue.closeAndJoin();
 		resolver.dispose();

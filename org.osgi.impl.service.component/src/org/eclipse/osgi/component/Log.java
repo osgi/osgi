@@ -13,90 +13,38 @@
 
 package org.eclipse.osgi.component;
 
-import org.osgi.framework.*;
+import org.osgi.framework.BundleContext;
 import org.osgi.service.log.LogService;
+import org.osgi.util.tracker.ServiceTracker;
 
-public class Log implements ServiceListener {
-	protected BundleContext bc;
-	private static ServiceReference logReference = null;
-	private static LogService logService = null;
+public class Log {
+	static private ServiceTracker logTracker;
 	
-	static final String LOGSERVICE_NAME = LogService.class.getName();
+	private Log() {};
 	
-	Log(BundleContext bc) {
-		this.bc = bc;
-	    logReference = bc.getServiceReference(LogService.class.getName());
-		if (logReference != null) {
-			logService = (LogService) bc.getService(logReference);
+	static void init(BundleContext bc) {
+		logTracker = new ServiceTracker(bc,LogService.class.getName(),null);
+		logTracker.open();
+	}
+	
+	static void dispose() {
+		if (logTracker != null) {
+			logTracker.close();
 		}
-		addServiceListener();
+		logTracker = null;
 	}
 	
-	public static void log(int severity, String message) {
-		log(severity, message, null);
+	public static void log(int level, String message) {
+		log(level, message, null);
 	}
 
-	public static void log(int severity, String message, Throwable e) {
+	public static void log(int level, String message, Throwable e) {
+		LogService logService = (LogService)logTracker.getService();
 		if (logService != null) {
-			logService.log(severity, message, e);
+			logService.log(level,message,e);
 		}
 	}
 
-	public void shutdown() {
-		if (logService != null) {
-			bc.ungetService(logReference);
-			logService = null;
-		}
-		removeServiceListener();
-	}
-
-	/**
-	 * addService Listener - Listen for changes in the referenced services
-	 * 
-	 */
-	public void addServiceListener() {
-		try {
-			bc.addServiceListener(this, "(objectclass=" + LOGSERVICE_NAME + ")");
-		} catch ( InvalidSyntaxException e){
-		}
-
-	}
-
-	/**
-	 * removeServiceListener -
-	 * 
-	 */
-	public void removeServiceListener() {
-		bc.removeServiceListener(this);
-	}
-
-	/**
-	 * Listen for service change events
-	 * 
-	 * @param event
-	 */
-	public void serviceChanged(ServiceEvent event) {
-
-		ServiceReference logReference = event.getServiceReference();
-		int eventType = event.getType();
-
-		switch (eventType) {
-
-			case ServiceEvent.REGISTERED :
-				if (logService == null) {
-					logReference = event.getServiceReference();
-					logService = (LogService) bc.getService(logReference);
-				}
-				break;
-			case ServiceEvent.UNREGISTERING :
-				if (event.getServiceReference().equals(logReference)) {
-					bc.ungetService(logReference);
-					logService = null;
-				}
-				break;
-		}
-
-	}
 
 
 }
