@@ -1,6 +1,7 @@
 package org.osgi.impl.service.midletcontainer;
 
 import java.util.*;
+
 import javax.microedition.midlet.MIDlet;
 import org.osgi.framework.*;
 import org.osgi.service.application.*;
@@ -39,9 +40,9 @@ public final class MidletHandle extends ApplicationHandle {
 		if (status != null)
 			throw new Exception("Invalid State");
 		if (midlet != null) {
-			MidletContainer.getMidletCommInterface( midlet ).setMidletHandle( this );
+			getMidletCommInterface( midlet ).setMidletHandle( this );
 			registerToOATHash( args );
-			MidletContainer.getMidletCommInterface( midlet ).start( args );
+			getMidletCommInterface( midlet ).start( args );
 			setStatus("RUNNING");
 			registerAppHandle();
 		}
@@ -54,7 +55,7 @@ public final class MidletHandle extends ApplicationHandle {
 		if (status == null)
 			throw new Exception("Invalid State");
 		if (midlet != null)
-			MidletContainer.getMidletCommInterface( midlet ).destroy( true );
+			getMidletCommInterface( midlet ).destroy( true );
 		
 		setStatus(null);
 		unregisterFromOATHash();
@@ -66,7 +67,7 @@ public final class MidletHandle extends ApplicationHandle {
 		if (status != "RUNNING")
 			throw new Exception("Invalid State");
 		if (midlet != null) {
-			MidletContainer.getMidletCommInterface( midlet ).pause();
+			getMidletCommInterface( midlet ).pause();
 			setStatus("PAUSED");
 		}
 		else {
@@ -78,7 +79,7 @@ public final class MidletHandle extends ApplicationHandle {
 		if (status != "PAUSED")
 			throw new Exception("Invalid State");
 		if (midlet != null) {
-			MidletContainer.getMidletCommInterface( midlet ).resume();
+			getMidletCommInterface( midlet ).resume();
 			setStatus("RUNNING");
 		}
 		else {
@@ -118,5 +119,22 @@ public final class MidletHandle extends ApplicationHandle {
 			serviceReg.unregister();
 			serviceReg = null;
 		}
+	}
+
+	private static Hashtable  container2MidletHash = new Hashtable();
+	
+	public static void registerMidlet( MIDlet midlet, Container2MidletInterface commInterface ) {
+		container2MidletHash.put( midlet, commInterface );
+	}
+
+	public static void unregisterMidlet( MIDlet midlet ) {
+		container2MidletHash.remove( midlet );
+	}
+	
+	public static Container2MidletInterface getMidletCommInterface( MIDlet midlet ) throws Exception {
+		Object iface = container2MidletHash.get( midlet );
+		if( iface == null )
+			throw new Exception( "Midlet not found!" );
+		return (Container2MidletInterface)iface;
 	}
 }
