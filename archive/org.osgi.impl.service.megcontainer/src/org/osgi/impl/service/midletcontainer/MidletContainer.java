@@ -10,25 +10,22 @@ import org.osgi.service.application.ApplicationHandle;
 import org.osgi.service.log.LogService;
 import org.w3c.dom.*;
 
-class MEGBundleDescriptor {
+class MidletBundleDescriptor {
 	public ApplicationDescriptor	applications[];
 	public ServiceRegistration		serviceRegistrations[];
-	public long						bundleID;
 }
 
 public class MidletContainer implements BundleListener, ServiceListener {
-	private BundleContext	bc;
-	private Vector			bundleIDs;
-	private Hashtable		bundleHash;
-	private int				  height;
-	private int				  width;
+	private BundleContext	        bc;
+	private Vector			          installedMidletBundles;
+	private Hashtable	           	bundleDescriptorHash;
 	private OATContainerInterface oat;
-	ServiceReference oatRef = null;
+	ServiceReference              oatRef = null;
 
 	public MidletContainer(BundleContext bc) throws Exception {
 		this.bc = bc;
-		bundleHash = new Hashtable();
-		bundleIDs = new Vector();
+		bundleDescriptorHash = new Hashtable();
+		installedMidletBundles = new Vector();
 		
 		oatRef = bc .getServiceReference(OATContainerInterface.class.getName());
     if (oatRef == null)
@@ -37,19 +34,17 @@ public class MidletContainer implements BundleListener, ServiceListener {
     if (oat == null)
 	    throw new Exception("Cannot start the MidletContainer as OAT is not running!");
 		
-		bc.addBundleListener(this);
+		bc.addBundleListener( this );
 		bc.addServiceListener( this );
 		Bundle bundles[] = bc.getBundles();
 		for (int i = 0; i < bundles.length; i++) {
-			String id = (new StringBuffer(String.valueOf(bundles[i].getBundleId()))).toString();
-			if (!bundleIDs.contains(id) && bundles[i].getBundleId() != 0L && isMidlet( bundles[ i ] ) )
+			if (!installedMidletBundles.contains( bundles[ i ] ) && isMidletBundle( bundles[ i ] ) )
 				installMidletBundle(bundles[i]);
 		}
-
 	}
 
 	public void installMidletBundle(Bundle bundle) throws IOException, Exception {
-		if (bundleIDs.contains(Long.toString(bundle.getBundleId())))
+		if (installedMidletBundles.contains( bundle ))
 			return;
 		
     oat.registerOATBundle( bundle );
@@ -59,15 +54,14 @@ public class MidletContainer implements BundleListener, ServiceListener {
 			throw new Exception("Not a valid MIDlet bundle!");
 		}
 		else {
-			bundleIDs.add(Long.toString(bundle.getBundleId()));
+			installedMidletBundles.add( bundle );
 			return;
 		}
 	}
 
-	private MEGBundleDescriptor getBundleDescriptor(long bundleID)
+	private MidletBundleDescriptor getBundleDescriptor(Bundle bundle)
 			throws Exception {
-		MEGBundleDescriptor desc = (MEGBundleDescriptor) bundleHash
-				.get(new Long(bundleID));
+		MidletBundleDescriptor desc = (MidletBundleDescriptor) bundleDescriptorHash.get( bundle );
 		if (desc == null)
 			throw new Exception(
 					"Application wasn't installed onto the midlet container!");
@@ -75,7 +69,7 @@ public class MidletContainer implements BundleListener, ServiceListener {
 			return desc;
 	}
 
-	private int getApplicationIndex(MEGBundleDescriptor desc,
+	private int getApplicationIndex(MidletBundleDescriptor desc,
 			ApplicationDescriptor appDesc) throws Exception {
 		for (int i = 0; i != desc.applications.length; i++)
 			if (desc.applications[i] == appDesc)
@@ -89,9 +83,8 @@ public class MidletContainer implements BundleListener, ServiceListener {
 		
 		terminateContainerApplications();
 		
-		for (int i = 0; i != bundleIDs.size(); i++)
-			unregisterApplicationDescriptors(Long.parseLong((String) bundleIDs
-					.get(i)));
+		for (int i = 0; i != installedMidletBundles.size(); i++)
+			unregisterApplicationDescriptors((Bundle)installedMidletBundles.get(i));
 
 		bc.ungetService( oatRef );
 		bc.removeBundleListener( this );
@@ -121,14 +114,13 @@ public class MidletContainer implements BundleListener, ServiceListener {
 			return null;
 		}
 		else {
-			registerApplicationDescriptors(bundle.getBundleId());
+			registerApplicationDescriptors( bundle );
 			return appDescs;
 		}
 	}
 
-	private void registerApplicationDescriptors(long bundleID) {
-		MEGBundleDescriptor desc = (MEGBundleDescriptor) bundleHash
-				.get(new Long(bundleID));
+	private void registerApplicationDescriptors(Bundle bundle) {
+		MidletBundleDescriptor desc = (MidletBundleDescriptor) bundleDescriptorHash.get( bundle );
 		if (desc == null)
 			return;
 		for (int i = 0; i != desc.applications.length; i++) {
@@ -147,9 +139,8 @@ public class MidletContainer implements BundleListener, ServiceListener {
 
 	}
 
-	private void unregisterApplicationDescriptors(long bundleID) {
-		MEGBundleDescriptor desc = (MEGBundleDescriptor) bundleHash
-				.get(new Long(bundleID));
+	private void unregisterApplicationDescriptors(Bundle bundle) {
+		MidletBundleDescriptor desc = (MidletBundleDescriptor) bundleDescriptorHash.get( bundle );
 		if (desc == null)
 			return;
 		for (int i = 0; i != desc.serviceRegistrations.length; i++)
@@ -161,38 +152,36 @@ public class MidletContainer implements BundleListener, ServiceListener {
 	}
 
 	public void bundleChanged(BundleEvent event) {
-		long bundleID = event.getBundle().getBundleId();
-		String bundleStr = Long.toString(bundleID);
-		if (bundleIDs.contains(bundleStr))
+		if (installedMidletBundles.contains(event.getBundle()))
 			switch (event.getType()) {
 				case BundleEvent.STARTED :
-					registerApplicationDescriptors(bundleID);
+					registerApplicationDescriptors(event.getBundle());
 					break;
 
 				case BundleEvent.STOPPED :
-					unregisterApplicationDescriptors(bundleID);
+					unregisterApplicationDescriptors(event.getBundle());
 					break;
 
 				case BundleEvent.UNINSTALLED :
-					bundleIDs.remove(bundleStr);
-					unregisterApplicationDescriptors(bundleID);
-					bundleHash.remove(new Long(bundleID));
+					installedMidletBundles.remove(event.getBundle());
+					unregisterApplicationDescriptors(event.getBundle());
+					bundleDescriptorHash.remove(event.getBundle());
 					break;
 
 				case BundleEvent.UPDATED :
-					unregisterApplicationDescriptors(bundleID);
-					registerApplicationDescriptors(bundleID);
+					unregisterApplicationDescriptors(event.getBundle());
+					registerApplicationDescriptors(event.getBundle());
 					break;					
 			}
 		else if( event.getType() == BundleEvent.INSTALLED ) {
 	  	try {
-			  if( isMidlet( event.getBundle() ) )
+			  if( isMidletBundle( event.getBundle() ) )
 				  installMidletBundle( event.getBundle() );
 	  	}catch( Exception e ) {}			
 		}
 	}
 
-	boolean isMidlet( Bundle b ) {
+	private boolean isMidletBundle( Bundle b ) {
 		try {
 			Dictionary dict = b.getHeaders();
 			if (dict != null && dict.get("MIDlet-Name") != null
@@ -275,15 +264,14 @@ public class MidletContainer implements BundleListener, ServiceListener {
 			for (int k = 0; k != applicationNum; k++)
 				descs[k] = (ApplicationDescriptor) appVector.removeFirst();
 
-			MEGBundleDescriptor descriptor = new MEGBundleDescriptor();
+			MidletBundleDescriptor descriptor = new MidletBundleDescriptor();
 			descriptor.applications = new ApplicationDescriptor[applicationNum];
 			for (int l = 0; l != applicationNum; l++) {
 				descriptor.applications[l] = descs[l];
 			}
 
 			descriptor.serviceRegistrations = new ServiceRegistration[applicationNum];
-			descriptor.bundleID = bundle.getBundleId();
-			bundleHash.put(new Long(bundle.getBundleId()), descriptor);
+			bundleDescriptorHash.put(bundle, descriptor);
 			return descs;
 		}
 		catch (Throwable e) {
