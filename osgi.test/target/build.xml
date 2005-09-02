@@ -4,22 +4,26 @@
 	<target name="run-core">
 		<ant target="-run">
 		  <property name="impls" value="file:../osgi.core.impls.jar"/>
+		  <property name="bootclasspath" value=" ../testcond.jar"/>
 		</ant>
 	</target>
 	
 	<target name="run-cmpn">
 		<ant target="-run">
-		  <property name="impls" value="file:../osgi.cmpn.impls.jar"/>
+			  <property name="impls" value="file:../osgi.cmpn.impls.jar"/>
+			  <property name="bootclasspath" value=""/>
 		</ant>
 	</target>
 	
 	<target name="-run">
 		<echo>Testing ${impls}</echo>
-		<java jar="../org.osgi.impl.framework.eclipse.jar" fork="true" >	
+		<java fork="true" classname="org.eclipse.osgi.framework.launcher.Launcher">	
+			<classpath path="../org.osgi.impl.framework.eclipse.jar"/>
+			<classpath path="../testcond.jar"/>
 			<jvmarg line="-Djava.security.manager=org.eclipse.osgi.framework.internal.core.FrameworkSecurityManager"/>
 			<jvmarg line="-Djava.security.policy=policy"/>
 			<jvmarg line="-Xverify:none"/>
-			<arg line="-console:2012"/>
+			<arg line="-console"/>
 			<arg line="init"/>
 			<arg line="'install file:../osgi.jar start'"/>
 			<arg line="'install file:../osgi.target.jar start'"/>

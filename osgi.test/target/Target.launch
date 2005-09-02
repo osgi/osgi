@@ -9,7 +9,7 @@
 </listAttribute>
 <stringAttribute key="org.eclipse.jdt.launching.PROGRAM_ARGUMENTS" value="-console&#13;&#10;init&#13;&#10;launch&#13;&#10;&quot;install file:../../osgi.released/osgi.jar start&quot;&#13;&#10;&quot;install file:../org.osgi.tools.console.jar start&quot;&#13;&#10;&quot;install file:../osgi.target.jar start&quot;&#13;&#10;&quot;install file:../osgi.refimpl.jar start&quot;"/>
 <stringAttribute key="org.eclipse.jdt.launching.PROJECT_ATTR" value="osgi.test"/>
-<stringAttribute key="org.eclipse.jdt.launching.VM_ARGUMENTS" value="-Djava.security.manager=org.eclipse.osgi.framework.internal.core.FrameworkSecurityManager &#13;&#10;-Djava.security.policy=policy"/>
+<stringAttribute key="org.eclipse.jdt.launching.VM_ARGUMENTS" value="-Djava.security.manager=org.eclipse.osgi.framework.internal.core.FrameworkSecurityManager &#13;&#10;-Djava.security.policy=policy&#13;&#10;-Dorg.osgi.test.testcase.timeout=120000"/>
 <listAttribute key="org.eclipse.debug.ui.favoriteGroups">
 <listEntry value="org.eclipse.debug.ui.launchGroup.run"/>
 <listEntry value="org.eclipse.debug.ui.launchGroup.debug"/>

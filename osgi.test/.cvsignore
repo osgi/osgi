@@ -1,3 +1,4 @@
 *.jar
 director
 target
+*.zip

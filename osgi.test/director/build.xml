@@ -7,7 +7,7 @@
 			fork="true"
 		>
 			<jvmarg line="-Xverify:none"/>
-			<arg line="-console:2012"/>
+			<arg line="-console"/>
 			<arg line="init"/>
 			<arg line="'install file:../osgi.jar start'"/>
 			<arg line="'install file:../osgi.min.jar start'"/>
@@ -48,7 +48,7 @@
 			<jvmarg line="-Dorg.osgi.test.batch.script=${script}"/>
 			<jvmarg line="-Dorg.osgi.test.batch.out=${out}"/>
 			
-			<arg line="-console:2012"/>
+			<arg line="-console"/>
 			<arg line="init"/>
 			<arg line="'install file:../osgi.jar start'"/>
 			<arg line="'install file:../osgi.min.jar start'"/>
