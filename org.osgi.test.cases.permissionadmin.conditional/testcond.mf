@@ -1,0 +1,9 @@
+Manifest-Version: 1.0
+Bundle-Name: ${p}.testcond
+Bundle-SymbolicName: ${p}.testcond
+Bundle-Version: 4
+Bundle-Copyright: Copyright (c) OSGi Alliance (2000, 2002). All Rights Reserved.
+CVS-Header: $Header$
+$(EXPORT-PACKAGE)
+$(PRIVATE-PACKAGE)
+
