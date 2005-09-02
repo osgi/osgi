@@ -20,7 +20,9 @@ import java.util.List;
 
 /**
  * 
- * TODO Add Javadoc comment for this type.
+ * This class models the service element.
+ * The service element is optional. It describes the service information to be
+ * used when a component configuration is to be registered as a service. * 
  * 
  * @version $Revision$
  */
@@ -36,25 +38,28 @@ public class ServiceDescription {
 	}
 
 	/**
-	 * @param servicefactory The servicefactory to set.
+	 * @param servicefactory indicates if servicefactory is set
 	 */
 	public void setServicefactory(boolean servicefactory) {
 		this.servicefactory = servicefactory;
 	}
 
 	/**
-	 * @return Returns the servicefactory.
+	 * @return Returns true is servicefactory is set
 	 */
 	public boolean isServicefactory() {
 		return servicefactory;
 	}
 
+	/**
+	 * @param provide add this provide element to the array of provide elements.
+	 */
 	public void addProvide(ProvideDescription provide) {
 		provides.add(provide);
 	}
 
 	/**
-	 * @return Returns the provides.
+	 * @return Returns the array of provide elements.
 	 */
 	public ProvideDescription[] getProvides() {
 		int size = provides.size();

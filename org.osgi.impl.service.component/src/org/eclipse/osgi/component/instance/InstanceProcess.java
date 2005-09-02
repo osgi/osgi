@@ -42,10 +42,11 @@ import org.osgi.service.cm.ConfigurationListener;
 import org.osgi.service.component.ComponentException;
 
 /**
- * @author Administrator
+ * This class provides the following function
  * 
- * TODO To change the template for this generated type comment go to Window -
- * Preferences - Java - Code Style - Code Templates
+ * The Resolver Process notifies the Instance Process of any instances to 
+ * build or dispose of.
+ * 
  */
 public class InstanceProcess implements ConfigurationListener {
 
@@ -106,7 +107,7 @@ public class InstanceProcess implements ConfigurationListener {
 	/**
 	 * Build the Service Component Instances, includes activating and binding
 	 * 
-	 * @param componentDescriptionProps - a List of all instances to build.
+	 * @param componentDescriptionProps - a List of all cdps to build.
 	 */
 
 	public void buildInstances(List componentDescriptionProps) {
@@ -237,10 +238,9 @@ public class InstanceProcess implements ConfigurationListener {
 	}
 
 	/**
-	 * Called by dispatcher ( Resolver) when work available on queue
+	 * Handles Dynamic unbind
 	 * 
-	 * @param serviceTable Map of ReferenceDescription:subtable Subtable Maps
-	 *        cdp:serviceReference
+	 * @param unbindJobs List to be unbound
 	 * 
 	 */
 	public void dynamicUnBind(List unbindJobs) {

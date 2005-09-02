@@ -17,7 +17,8 @@ package org.eclipse.osgi.component.model;
 
 /**
  * 
- * TODO Add Javadoc comment for this type.
+ * This class models the properties element.
+ * The properties element reads a set of properties from a bundle entry.
  * 
  * @version $Revision$
  */

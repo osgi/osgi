@@ -17,7 +17,8 @@ package org.eclipse.osgi.component.model;
 
 /**
  * 
- * TODO Add Javadoc comment for this type.
+ * This class models the property element.
+ * The property element defines a single property. 
  * 
  * @version $Revision$
  */

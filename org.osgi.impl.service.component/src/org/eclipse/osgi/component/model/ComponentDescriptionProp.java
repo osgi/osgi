@@ -24,7 +24,10 @@ import org.osgi.service.component.ComponentInstance;
 
 /**
  * 
- * Combines the Compoent Description object and properties
+ * Component Description with properties
+ * 
+ * Component Configuration – A component configuration represents a component
+ * description parameterized by component properties.
  * 
  * @version $Revision$
  */

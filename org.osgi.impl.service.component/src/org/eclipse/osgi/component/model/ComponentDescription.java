@@ -51,7 +51,9 @@ public class ComponentDescription {
 	protected Map						cdpsByPID;
 
 	/**
-	 * @param bundle The bundle to set.
+	 * Constructor
+	 * 
+	 * @param bundleContext The bundle to set.
 	 */
 	public ComponentDescription(BundleContext bundleContext) {
 		this.bundleContext = bundleContext;
@@ -66,35 +68,39 @@ public class ComponentDescription {
 	}
 
 	/**
-	 * @return Returns the autoenable.
+	 * Return true if autoenable is set
+	 * 
+	 * @return Returns autoenable
 	 */
 	public boolean isAutoenable() {
 		return autoenable;
 	}
 
 	/**
-	 * @param autoenable The autoenable to set.
+	 * @param autoenable The autoenable value to set.
 	 */
 	public void setAutoenable(boolean autoenable) {
 		this.autoenable = autoenable;
 	}
 
 	/**
-	 * @return Returns the immediate.
+	 * @return Returns true if immediate is set
 	 */
 	public boolean isImmediate() {
 		return immediate;
 	}
 
 	/**
-	 * @param autoenable The autoenable to set.
+	 * Set the specified value for immediate
+	 * 
+	 * @param immediate
 	 */
 	public void setImmediate(boolean immediate) {
 		this.immediate = immediate;
 	}
 
 	/**
-	 * @return Returns the bundle.
+	 * @return Returns the bundleContext
 	 */
 	public BundleContext getBundleContext() {
 		return bundleContext;
@@ -193,7 +199,7 @@ public class ComponentDescription {
 	}
 
 	/**
-	 * @return Returns the references.
+	 * @return Returns the reference Descriptions.
 	 */
 	public List getReferenceDescriptions() {
 		return referenceDescriptions;
@@ -214,7 +220,7 @@ public class ComponentDescription {
 	}
 
 	/**
-	 * @param enable set the value
+	 * @param enabled set the value
 	 */
 	public void setEnabled(boolean enabled) {
 		this.enabled = enabled;
@@ -256,6 +262,7 @@ public class ComponentDescription {
 		}
 	}
 
+	
 	public List getComponentDescriptionProps() {
 		return componentDescriptionProps;
 	}

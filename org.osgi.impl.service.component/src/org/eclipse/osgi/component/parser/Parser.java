@@ -39,7 +39,7 @@ import org.xml.sax.SAXException;
 
 /**
  * 
- * TODO Add Javadoc comment for this type.
+ * Parse the component description xml
  * 
  * @version $Revision$
  */

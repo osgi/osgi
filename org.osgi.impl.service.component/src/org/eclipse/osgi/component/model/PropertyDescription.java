@@ -17,7 +17,7 @@ package org.eclipse.osgi.component.model;
 
 /**
  * 
- * TODO Add Javadoc comment for this type.
+ * Abstract class for modeling the property and properties elements.
  * 
  * @version $Revision$
  */

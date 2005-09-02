@@ -27,7 +27,6 @@ import org.osgi.service.component.ComponentContext;
 import org.osgi.service.log.LogService;
 
 /**
- * 
  * Invoke a method on the Service Component: activate, deactivate, bind or
  * unbind
  * 
@@ -87,6 +86,9 @@ class InvokeMethod {
 	 * @param bind
 	 * @param instance
 	 * @param serviceObject
+	 * 
+	 * @throws IllegalAccessException
+	 * @throws InvocationTargetException
 	 */
 
 	void bindComponent(Method bindMethod, Object instance, Object serviceObject)
@@ -102,6 +104,9 @@ class InvokeMethod {
 	 * @param unbind
 	 * @param instance
 	 * @param serviceObject
+	 * 
+	 * @throws IllegalAccessException
+	 * @throws InvocationTargetException
 	 */
 
 	void unbindComponent(Method unbindMethod, Object instance,
@@ -115,9 +120,12 @@ class InvokeMethod {
 	/**
 	 * invokeMethod - invoke a Method on the Service Compoent via reflection
 	 * 
-	 * @param methodName - the method name to invoke
+	 * @param method- the method name to invoke
 	 * @param instance - instance used to get Class
 	 * @param parameterTypes - array of parameters to pass to the method
+	 * 
+	 * @throws IllegalAccessException
+	 * @throws InvocationTargetException
 	 */
 
 	private void invokeMethod(Method method, Object instance,
@@ -145,7 +153,7 @@ class InvokeMethod {
 	 * method
 	 * 
 	 * @param methodName name of method to look for
-	 * @param instance Object to look in
+	 * @param consumerClass Object to look in
 	 */
 	Method findActivateOrDeactivateMethod(String methodName, Class consumerClass) {
 		Method method = null;
@@ -183,8 +191,11 @@ class InvokeMethod {
 	/**
 	 * Search through class and the superclasses for a method
 	 * 
+	 * @param componentInstance Object to look in
+	 * @param reference Reference object
+	 * @param serviceReference
 	 * @param methodName name of method to look for
-	 * @param instance Object to look in
+	 * 
 	 */
 	Method findBindOrUnbindMethod(ComponentInstanceImpl componentInstance,
 			Reference reference, ServiceReference serviceReference,

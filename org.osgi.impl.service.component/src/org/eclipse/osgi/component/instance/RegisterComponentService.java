@@ -48,10 +48,7 @@ abstract class RegisterComponentService {
 	 * registerService
 	 * 
 	 * @param ip - InstanceProcess
-	 * @param bc - BundleContext
 	 * @param cdp - ComponentDescription plus Properties
-	 * @param factory - boolean
-	 * @return ServiceRegistration
 	 */
 	static void registerService(InstanceProcess instanceProcess,
 			ComponentDescriptionProp cdp) {

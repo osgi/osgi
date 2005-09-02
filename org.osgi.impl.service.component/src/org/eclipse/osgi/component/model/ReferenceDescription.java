@@ -17,7 +17,9 @@ package org.eclipse.osgi.component.model;
 
 /**
  * 
- * TODO Add Javadoc comment for this type.
+ * This class models the reference element.
+ * A reference declares a dependency that a component has on a set 
+ * of target services. * 
  * 
  * @version $Revision$
  */
@@ -55,14 +57,14 @@ public class ReferenceDescription {
 	}
 
 	/**
-	 * @return Returns the bind.
+	 * @return Returns the bind method.
 	 */
 	public String getBind() {
 		return bind;
 	}
 
 	/**
-	 * @param bind The bind to set.
+	 * @param bind The bind method.
 	 */
 	public void setBind(String bind) {
 		this.bind = bind;
@@ -76,7 +78,7 @@ public class ReferenceDescription {
 	}
 
 	/**
-	 * @param cardinality The cardinality to set.
+	 * @param cardinality 
 	 */
 	public void setCardinality(String cardinality) {
 		if (cardinality.equals("0..1")) {
@@ -162,14 +164,14 @@ public class ReferenceDescription {
 	}
 
 	/**
-	 * @return Returns the unbind.
+	 * @return Returns the unbind method
 	 */
 	public String getUnbind() {
 		return unbind;
 	}
 
 	/**
-	 * @param unbind The unbind to set.
+	 * @param unbind The unbind method to set.
 	 */
 	public void setUnbind(String unbind) {
 		this.unbind = unbind;

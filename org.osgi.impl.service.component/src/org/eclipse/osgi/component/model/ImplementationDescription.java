@@ -17,7 +17,9 @@ package org.eclipse.osgi.component.model;
 
 /**
  * 
- * TODO Add Javadoc comment for this type.
+ * This class models the implementation element.
+ * The implementation element is required and defines the name of the component
+ * implementation class.
  * 
  * @version $Revision$
  */
@@ -37,7 +39,7 @@ public class ImplementationDescription {
 	}
 
 	/**
-	 * @param classname The classname to set.
+	 * @param classname set this class name.
 	 */
 	public void setClassname(String classname) {
 		this.classname = classname;

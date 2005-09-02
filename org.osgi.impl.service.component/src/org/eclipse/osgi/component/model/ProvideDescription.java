@@ -17,7 +17,10 @@ package org.eclipse.osgi.component.model;
 
 /**
  * 
- * TODO Add Javadoc comment for this type.
+ * This class models the provide element.
+ * The service element must have one or more provide elements that define
+ * the service interfaces. The provide element has a single attribute:
+ * interface 
  * 
  * @version $Revision$
  */

@@ -46,8 +46,8 @@ import org.osgi.service.component.ComponentInstance;
 /**
  * This class provides the following function
  * 
- * Build of a component instance - includes activate, bind, instantiate. Dispose
- * of a component instance - includes deactivate, unbind, unreference.
+ * Build of a component instance - includes activate, bind, instantiate. 
+ * Dispose of a component instance - includes deactivate, unbind, unreference.
  * 
  */
 public class BuildDispose implements WorkDispatcher {
@@ -68,8 +68,6 @@ public class BuildDispose implements WorkDispatcher {
 	 * BuildDispose - Build or Dispose of the Instance
 	 * 
 	 * @param main Main SCR class
-	 * @param registrations - map of ComponentDescriptionProps to service
-	 *        registrations
 	 */
 
 	public BuildDispose(Main main) {
@@ -80,7 +78,7 @@ public class BuildDispose implements WorkDispatcher {
 	}
 
 	/**
-	 * dispose cleanup the SCR is shutting down
+	 * dispose - cleanup since the SCR is shutting down
 	 */
 	public void dispose() {
 		synchronized (this) {
@@ -92,11 +90,10 @@ public class BuildDispose implements WorkDispatcher {
 	/**
 	 * build the ComponentInstance
 	 * 
-	 * @param bundleContext - bundle context of the bundle containg the Service
-	 *        Component
-	 * @param cdp - Component Description with Properties Object
-	 * @param instance - instance object
-	 * @param properties - properties for this instance
+	 * @param usingBundle - bundle containg the Service Component
+	 * @param cdp - Component Desscription Property
+	 * 
+	 * @throws ComponentException
 	 * 
 	 * @return ComponentInstance
 	 */
@@ -155,7 +152,7 @@ public class BuildDispose implements WorkDispatcher {
 	/**
 	 * dispose of the Component Instances
 	 * 
-	 * @param cdp Component Description plus properties
+	 * @param cdp Component Description plus properties (Component Configuration)
 	 */
 	void disposeComponent(ComponentDescriptionProp cdp) {
 
@@ -194,7 +191,7 @@ public class BuildDispose implements WorkDispatcher {
 	/**
 	 * dispose of the Component Instance
 	 * 
-	 * @param cdp - Component Description plus properties
+	 * @param cdp - Component Description plus properties (Component Configuration)
 	 * @param ci ComponentInstance
 	 */
 	public void disposeComponentInstance(ComponentDescriptionProp cdp,
@@ -222,7 +219,8 @@ public class BuildDispose implements WorkDispatcher {
 	/**
 	 * Create the new Instance
 	 * 
-	 * @param cd
+	 * @param cd Component Description
+	 * 
 	 * @return Object instance
 	 */
 
@@ -267,7 +265,7 @@ public class BuildDispose implements WorkDispatcher {
 	 * 
 	 * @param cdp
 	 * @param instance
-	 * @param properties
+	 * @return ComponentInstanceImpl
 	 */
 	private ComponentInstanceImpl instantiate(ComponentDescriptionProp cdp,
 			Object instance) {
@@ -280,7 +278,7 @@ public class BuildDispose implements WorkDispatcher {
 	 * 
 	 * @param cdp
 	 * @param componentInstance
-	 * @param context - BundleContext
+	 * 
 	 */
 	private void bind(ComponentDescriptionProp cdp,
 			ComponentInstanceImpl componentInstance) {
@@ -301,10 +299,8 @@ public class BuildDispose implements WorkDispatcher {
 	/**
 	 * Call the bind method for this referenceDescription
 	 * 
-	 * @param cdp
 	 * @param reference
 	 * @param componentInstance
-	 * @param bundleContext
 	 * 
 	 */
 	public void bindReference(Reference reference,
@@ -415,6 +411,16 @@ public class BuildDispose implements WorkDispatcher {
 		}
 	}
 
+	/**
+	 * Return the Service Object
+	 * 
+	 * @param consumerCDP
+	 * @param reference 
+	 * @param bundleContext
+	 * @param serviceReference
+	 * 
+	 * @return Object - Service Object
+	 */
 	public Object getService(ComponentDescriptionProp consumerCDP,
 			Reference reference, BundleContext bundleContext,
 			ServiceReference serviceReference) {
@@ -509,7 +515,7 @@ public class BuildDispose implements WorkDispatcher {
 	 * Call the unbind method for each of the Referenced Services in this
 	 * Serivce Component
 	 * 
-	 * @param cdp
+	 * @param cdp Component Configuration
 	 * @param componentInstance
 	 */
 	private void unbind(ComponentDescriptionProp cdp,
@@ -545,7 +551,6 @@ public class BuildDispose implements WorkDispatcher {
 	/**
 	 * Call the unbind method for this Reference Description
 	 * 
-	 * @param cdp
 	 * @param reference
 	 * @param componentInstance
 	 * @param serviceReference
@@ -623,9 +628,8 @@ public class BuildDispose implements WorkDispatcher {
 	/**
 	 * Invoke the Serivce Component activate method
 	 * 
-	 * @param cdp - ComponentDescriptionProperty object
-	 * @param usingBundle -
-	 * @param componentInstance -
+	 * @param componentInstance
+	 * @throws ComponentException
 	 */
 	private void activate(ComponentInstanceImpl componentInstance)
 			throws ComponentException {
@@ -659,8 +663,7 @@ public class BuildDispose implements WorkDispatcher {
 	/**
 	 * Invoke the Service Component deactivate method
 	 * 
-	 * @param cdp - ComponentDescriptionProperty object
-	 * @param instance
+	 * @param componentInstance
 	 */
 	private void deactivate(ComponentInstanceImpl componentInstance) {
 
@@ -695,7 +698,7 @@ public class BuildDispose implements WorkDispatcher {
 	 * @param cdp
 	 * @param usingBundle
 	 * @param componentInstance
-	 * @return
+	 * 
 	 */
 	private void createComponentContext(ComponentDescriptionProp cdp,
 			Bundle usingBundle, ComponentInstanceImpl componentInstance) {
