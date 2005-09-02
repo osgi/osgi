@@ -51,24 +51,12 @@ public final class MidletDescriptor extends ApplicationDescriptor {
 		}
 	}
 
-	public long getBundleId() {
-		return Long.parseLong(props.getProperty("application.bundle.id"));
-	}
-
 	Bundle getBundle() {
 		return bundle;
 	}
 
-	public String getStartClass() {
-		return startClass;
-	}
-
 	public String getPID() {
 		return pid;
-	}
-
-	protected BundleContext getBundleContext() {
-		return bc;
 	}
 
 	public Map getPropertiesSpecific(String locale) {
@@ -157,11 +145,10 @@ public final class MidletDescriptor extends ApplicationDescriptor {
 	public MIDlet createMidletInstance() throws Exception {
 		return (MIDlet)AccessController.doPrivileged(new PrivilegedExceptionAction() {
 			public java.lang.Object run() throws Exception {
-				Bundle appBundle = bc.getBundle(getBundleId());
-				Class mainClass = appBundle.loadClass(getStartClass());
-				String mainClassFileName = getStartClass().replace( '.', '/' ) + ".class";
+				Class mainClass = bundle.loadClass(startClass);
+				String mainClassFileName = startClass.replace( '.', '/' ) + ".class";
 				
-				URL url = appBundle.getResource( mainClassFileName );
+				URL url = bundle.getResource( mainClassFileName );
 				if( url == null )
 					throw new Exception( "Internal error!" );
 				String urlName = url.toString();
@@ -170,8 +157,8 @@ public final class MidletDescriptor extends ApplicationDescriptor {
 				String location = urlName.substring( 0, urlName.length() - mainClassFileName.length() );
 				
 				ClassLoader loader = new MIDletClassLoader(mainClass.getClassLoader(),
-						appBundle, mainClass.getProtectionDomain(), location );
-				Class midletClass = loader.loadClass(getStartClass());
+						bundle, mainClass.getProtectionDomain(), location );
+				Class midletClass = loader.loadClass(startClass);
 				Constructor constructor = midletClass
 						.getDeclaredConstructor(new Class[0]);
 				constructor.setAccessible(true);
