@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project name="released" default="javadoc">
+<project name="project" default="javadoc">
 	<import file="../cnf/build.xml" />
 
 
