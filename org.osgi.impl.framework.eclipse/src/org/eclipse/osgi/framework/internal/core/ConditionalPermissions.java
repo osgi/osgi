@@ -131,6 +131,8 @@ public class ConditionalPermissions extends PermissionCollection {
 			if (cpsArray[i].isNonEmpty()) {
 				newEmpty = false;
 				Condition conds[] = cpsArray[i].getNeededConditions();
+				if (conds == null)
+					continue;
 				// check mutable !isPostponed conditions first; 
 				// note that !mutable conditions have already been evaluated
 				for (int j = 0; j < conds.length; j++)

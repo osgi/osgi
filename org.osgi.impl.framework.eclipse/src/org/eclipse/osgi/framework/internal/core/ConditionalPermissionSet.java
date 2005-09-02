@@ -57,7 +57,7 @@ public class ConditionalPermissionSet extends PermissionCollection {
 	 *        immutable and satisfied may be added. </b>
 	 */
 	void addConditionalPermissionInfo(ConditionalPermissionInfoImpl cpi) {
-		if (neededConditions.length > 0)
+		if (neededConditions.length > 0 || neededConditions == null)
 			throw new RuntimeException("Cannot add ConditionalPermissionInfoImpl to a non satisfied set");
 		// first look for a null slot
 		for (int i = 0; i < cpis.length; i++)
