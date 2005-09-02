@@ -28,13 +28,11 @@ import org.osgi.service.component.ComponentException;
 import org.osgi.service.component.ComponentInstance;
 
 /**
- * 
- * Register the Service Component's provided services A ServiceFactory is used
- * to enable lazy activation
+ * Static utility class to register a Component Configuration's provided service.
+ * A ServiceFactory is used to enable lazy activation
  * 
  * @version $Revision$
  */
-
 abstract class RegisterComponentService {
 
 	/* set this to true to compile in debug messages */
@@ -54,7 +52,8 @@ abstract class RegisterComponentService {
 			ComponentDescriptionProp cdp) {
 
 		ComponentDescription cd = cdp.getComponentDescription();
-
+		
+		//make final references for use by anonymous inner class
 		final InstanceProcess finalInstanceProcess = instanceProcess;
 		final ComponentDescriptionProp finalCDP = cdp;
 
@@ -68,7 +67,7 @@ abstract class RegisterComponentService {
 			// register the service using a ServiceFactory
 			serviceRegistration = cd.getBundleContext().registerService(
 					servicesProvidedArray, new ServiceFactory() {
-						// map of instance:componentInstance
+						// map of Bundle:componentInstance
 						Hashtable	instances;
 
 						// ServiceFactory.getService method.
@@ -80,11 +79,9 @@ abstract class RegisterComponentService {
 												+ registration);
 
 							ComponentInstance componentInstance = null;
-							Object instance = null;
 							try {
 								componentInstance = finalInstanceProcess.buildDispose
 										.build(bundle, finalCDP);
-								instance = componentInstance.getInstance();
 							}
 							catch (ComponentException e) {
 								Log
@@ -94,16 +91,16 @@ abstract class RegisterComponentService {
 												e);
 							}
 
-							if (componentInstance != null && instance != null) {
+							if (componentInstance != null) {
 								// save so we can dispose later
 								synchronized (this) {
 									if (instances == null) {
 										instances = new Hashtable();
 									}
 								}
-								instances.put(instance, componentInstance);
+								instances.put(bundle, componentInstance);
 							}
-							return instance;
+							return componentInstance.getInstance();
 						}
 
 						// ServiceFactory.ungetService method.
@@ -113,9 +110,9 @@ abstract class RegisterComponentService {
 								System.out
 										.println("RegisterComponentServiceFactory:ungetService: registration = "
 												+ registration);
-							((ComponentInstance) instances.get(service))
+							((ComponentInstance) instances.get(bundle))
 									.dispose();
-							instances.remove(service);
+							instances.remove(bundle);
 							synchronized (this) {
 								if (instances.isEmpty()) {
 									instances = null;
