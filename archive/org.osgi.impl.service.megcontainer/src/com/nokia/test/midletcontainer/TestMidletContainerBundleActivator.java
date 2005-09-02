@@ -884,6 +884,13 @@ public class TestMidletContainerBundleActivator
             String pid = getPID(appDesc);
             if(!testCase_launchApplication())
                 return false;
+            
+            /* checking if the two instance is alive */
+            if( !checkResponseForEvent( "com/nokia/megtest/GetInstance1", "OK" ) )
+            	return false;
+            if( !checkResponseForEvent( "com/nokia/megtest/GetInstance2", "OK" ) )
+            	return false;
+						
             if(!testCase_stopApplication())
                 return false;
             appHandle = oldHandle;

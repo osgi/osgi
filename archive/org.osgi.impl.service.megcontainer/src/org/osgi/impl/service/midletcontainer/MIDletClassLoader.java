@@ -11,6 +11,7 @@ class MIDletClassLoader extends ClassLoader {
 	private ProtectionDomain	protectionDomain;
 	private ClassLoader   parent;
 	private String        mainClassLocation;
+	private String []     exportPackages;
 
 	public MIDletClassLoader(ClassLoader parent, Bundle bundle,
 			ProtectionDomain protectionDomain, String mainClassLocation ) {
@@ -20,6 +21,22 @@ class MIDletClassLoader extends ClassLoader {
 		this.protectionDomain = protectionDomain;
 		this.parent = parent;
 		this.mainClassLocation = mainClassLocation;
+		
+		String exports = (String)bundle.getHeaders().get( "Export-Package" );
+		
+		if( exports == null )
+			exportPackages = new String [ 0 ];
+		else {		
+		  String newStr = "";           // deleting the white spaces		
+		  for( int i=0; i != exports.length(); i++ ) {
+			  char chr = exports.charAt( i );
+			  if( chr == '\n' || chr == ' ' || chr == '\t' )
+				  continue;
+			  newStr += chr;
+		  }
+		  exports = newStr;
+		  exportPackages  = Splitter.split( exports, ',', 0);
+		}
 	}
 
 	protected Class findClass(String name) throws ClassNotFoundException {
@@ -58,6 +75,17 @@ class MIDletClassLoader extends ClassLoader {
 			if( !url.toString().startsWith( mainClassLocation ) )
 				throw new ClassNotFoundException();
 
+			/* the exported packages will not be loaded with the new class loader */
+			int pkgNdx = name.lastIndexOf( '.' );
+			if( pkgNdx > 0) {
+				String pkg = name.substring( 0, pkgNdx );
+				
+				for( int i=0; i != exportPackages.length; i++ )
+					if( exportPackages[i].equals( pkg ) ) {
+						throw new ClassNotFoundException();
+					}
+			}
+			
 			URLConnection connection = url.openConnection();			
 			int length = connection.getContentLength();
 			data = new byte[length];
