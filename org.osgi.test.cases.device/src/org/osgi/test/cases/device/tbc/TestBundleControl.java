@@ -35,7 +35,7 @@ public class TestBundleControl extends Thread implements BundleActivator {
 	public static String		tcHome				= null;
 	private boolean				finish				= false;
 	public boolean				noDriverFoundCalled	= false;
-	private int					timeout				= 50;
+	private int					timeout				= 100;
 	private String[]			methods				= {"standaloneDriverTest",
 			"deviceDetectionTest", "driverLoadingTest", "defaultSelectionTest",
 			"redirectionTest"						};
@@ -62,6 +62,7 @@ public class TestBundleControl extends Thread implements BundleActivator {
 	public void stop(BundleContext bc) throws Exception {
 		quit();
 	}
+
 
 	public void run() {
 		int progress = 0;
@@ -98,7 +99,7 @@ public class TestBundleControl extends Thread implements BundleActivator {
 			catch (Exception e) {
 				e.printStackTrace();
 			}
-			sr.unregister();
+			try { sr.unregister(); } catch( Exception e ) {}
 			quit();
 		}
 	}
@@ -308,8 +309,6 @@ public class TestBundleControl extends Thread implements BundleActivator {
 		sysProps.put("device.test.mode", "100");
 		// install the bundle representing the device
 		Bundle deviceBundle = null;
-		//    InputStream is =
-		// this.getClass().getResourceAsStream("/basicdev.jar");
 		try {
 			log(subtest, "installing device bundle");
 			deviceBundle = bc.installBundle(tcHome + "dev1.jar");
@@ -469,6 +468,7 @@ public class TestBundleControl extends Thread implements BundleActivator {
 	private void waitFor(String subtest, String message) {
 		int counter = 0;
 		int m = TestBundleControl.MESSAGE_NONE;
+		System.out.println("Starting to wait " + subtest + " " + message );
 		while (((m = getMessage()) == TestBundleControl.MESSAGE_NONE)
 				&& counter++ < 100) {
 			try {
@@ -478,6 +478,7 @@ public class TestBundleControl extends Thread implements BundleActivator {
 				ie.printStackTrace();
 			}
 		}
+		System.out.println("Done waiting " + subtest + " " + message + " " + m );
 		switch (m) {
 			case TestBundleControl.MESSAGE_OK :
 				log(subtest, message + " OK");
@@ -486,7 +487,7 @@ public class TestBundleControl extends Thread implements BundleActivator {
 				log(subtest, message + " timed out!");
 				break;
 			case TestBundleControl.MESSAGE_ERROR :
-				log(subtest, "error message received dor " + message);
+				log(subtest, "error message received do " + message);
 				break;
 			default :
 				log(subtest, "unkown message received");
