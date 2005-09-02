@@ -4,6 +4,7 @@ import java.io.*;
 import javax.microedition.midlet.MIDlet;
 import javax.microedition.midlet.MIDletStateChangeException;
 import org.osgi.service.log.LogService;
+import com.nokia.test.midletsample.export.*;
 import org.osgi.application.*;
 import org.osgi.service.event.*;
 import org.osgi.framework.*;
@@ -18,6 +19,7 @@ public class TestMidlet extends MIDlet implements EventHandler, SynchronousBundl
 	private LogService	        logService;
 	private long		            myStaticFieldChecker;
 	private ApplicationContext  myApplicationContext;
+	private int                 instanceID = 0;
 	
 
 	public TestMidlet() {
@@ -41,12 +43,14 @@ public class TestMidlet extends MIDlet implements EventHandler, SynchronousBundl
 		}
 		else {
 			fileName = getAppProperty("TestResult");
+			instanceID = InstanceID.addInstance();
 			writeResult("START");
 		}
 	}
 
 	public void destroyApp(boolean immediate) throws MIDletStateChangeException {
-		if (myStaticFieldChecker == staticFieldChecker) {
+		InstanceID.releaseInstance();
+		if (myStaticFieldChecker == staticFieldChecker) {			
 			writeResult("STOP");
 		}
 		else {
@@ -135,6 +139,9 @@ public class TestMidlet extends MIDlet implements EventHandler, SynchronousBundl
 		}
 		else if (event.getTopic().equals("com/nokia/megtest/ResumeRequest")) {
 			resumeRequest();
+		}
+		else if (event.getTopic().equals("com/nokia/megtest/GetInstance" + new Integer( instanceID ).toString())) {
+			writeResult( "OK" );						
 		}
 	}
 
