@@ -1,6 +1,6 @@
 <script name="cmpn-compliance" version="4.0">
-	<delay duration="4" type="sec"/>
-	<separate duration="4" type="sec"/>
+	<delay duration="2" type="sec"/>
+	<separate duration="1" type="sec"/>
 	
 	<testcase>test.cm</testcase> 					<!-- Tests the Configuration Management service -->
 	<testcase>test.component</testcase> 			<!-- Tests the Declarative Services -->

@@ -1,6 +1,6 @@
 <script name="core-compliance" version="4.0">
-	<delay duration="4" type="sec"/>
-	<separate duration="4" type="sec"/>
+	<delay duration="2" type="sec"/>
+	<separate duration="1" type="sec"/>
 	
 	<testcase>test.framework.classloading</testcase>
 	<testcase>test.framework.classpath</testcase>
