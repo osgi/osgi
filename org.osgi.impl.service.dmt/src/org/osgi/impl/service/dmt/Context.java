@@ -22,6 +22,7 @@ import java.util.Hashtable;
 import java.util.Iterator;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.InvalidSyntaxException;
+import org.osgi.service.log.LogService;
 import org.osgi.util.tracker.ServiceTracker;
 import org.osgi.util.tracker.ServiceTrackerCustomizer;
 
@@ -77,6 +78,18 @@ public class Context {
             pluginTracker.close();
     }
 
+    // Find a better place for this method...
+    void log(int severity, String message, Throwable throwable) {
+        System.out.println("Log entry | Serverity: " + severity + 
+                " Message: " + message + " Throwable: " + throwable);
+
+        LogService logService = 
+            (LogService) getTracker(LogService.class).getService();
+        
+        if (logService != null)
+            logService.log(severity, message, throwable);
+    }
+    
     private ServiceTracker openTracker(Class trackedClass,
             ServiceTrackerCustomizer customizer) {
         
