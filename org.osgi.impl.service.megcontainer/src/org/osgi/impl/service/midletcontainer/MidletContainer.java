@@ -8,7 +8,6 @@ import org.osgi.impl.service.application.OATContainerInterface;
 import org.osgi.service.application.ApplicationDescriptor;
 import org.osgi.service.application.ApplicationHandle;
 import org.osgi.service.log.LogService;
-import org.w3c.dom.*;
 
 class MidletBundleDescriptor {
 	public ApplicationDescriptor	applications[];
@@ -48,35 +47,13 @@ public class MidletContainer implements BundleListener, ServiceListener {
 			return;
 		
     oat.registerOATBundle( bundle );
-		
-		ApplicationDescriptor appDescs[] = registerBundle( bundle );
-		if (appDescs == null) {
+
+    ApplicationDescriptor appDescs[] = parseMidletHeaders(bundle);
+		if (appDescs == null)
 			throw new Exception("Not a valid MIDlet bundle!");
-		}
-		else {
-			installedMidletBundles.add( bundle );
-			return;
-		}
-	}
 
-	private MidletBundleDescriptor getBundleDescriptor(Bundle bundle)
-			throws Exception {
-		MidletBundleDescriptor desc = (MidletBundleDescriptor) bundleDescriptorHash.get( bundle );
-		if (desc == null)
-			throw new Exception(
-					"Application wasn't installed onto the midlet container!");
-		else
-			return desc;
-	}
-
-	private int getApplicationIndex(MidletBundleDescriptor desc,
-			ApplicationDescriptor appDesc) throws Exception {
-		for (int i = 0; i != desc.applications.length; i++)
-			if (desc.applications[i] == appDesc)
-				return i;
-
-		throw new Exception(
-				"Application wasn't installed onto the midlet container!");
+		registerApplicationDescriptors( bundle );		
+		installedMidletBundles.add( bundle );
 	}
 
 	public void stop() throws Exception {
@@ -108,17 +85,6 @@ public class MidletContainer implements BundleListener, ServiceListener {
 		}catch( InvalidSyntaxException e ) {}
 	}
 	
-	private ApplicationDescriptor[] registerBundle(Bundle bundle) {
-		ApplicationDescriptor appDescs[] = parseManifestHeaders(bundle);
-		if (appDescs == null) {
-			return null;
-		}
-		else {
-			registerApplicationDescriptors( bundle );
-			return appDescs;
-		}
-	}
-
 	private void registerApplicationDescriptors(Bundle bundle) {
 		MidletBundleDescriptor desc = (MidletBundleDescriptor) bundleDescriptorHash.get( bundle );
 		if (desc == null)
@@ -169,8 +135,12 @@ public class MidletContainer implements BundleListener, ServiceListener {
 					break;
 
 				case BundleEvent.UPDATED :
-					unregisterApplicationDescriptors(event.getBundle());
-					registerApplicationDescriptors(event.getBundle());
+					installedMidletBundles.remove(event.getBundle());
+  				unregisterApplicationDescriptors(event.getBundle());
+					bundleDescriptorHash.remove(event.getBundle());
+					try {
+				    installMidletBundle( event.getBundle() );
+					}catch( Exception e ) {}
 					break;					
 			}
 		else if( event.getType() == BundleEvent.INSTALLED ) {
@@ -196,21 +166,7 @@ public class MidletContainer implements BundleListener, ServiceListener {
 		return false;
 	}
 	
-	private String getAttributeValue(Node node, String attribName) {
-		NamedNodeMap nnm = node.getAttributes();
-		if (nnm != null) {
-			int len = nnm.getLength();
-			for (int i = 0; i < len; i++) {
-				Attr attr = (Attr) nnm.item(i);
-				if (attr.getNodeName().equals(attribName))
-					return attr.getNodeValue();
-			}
-
-		}
-		return null;
-	}
-
-	private ApplicationDescriptor[] parseManifestHeaders(Bundle bundle) {
+	private ApplicationDescriptor[] parseMidletHeaders(Bundle bundle) {
 		try {
 			Dictionary dict = bundle.getHeaders();
 			String MIDletSuiteName = (String) dict.get("MIDlet-Name");
