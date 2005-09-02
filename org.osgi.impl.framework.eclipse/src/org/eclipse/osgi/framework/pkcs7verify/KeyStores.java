@@ -44,11 +44,11 @@ public class KeyStores {
 		initializeDefaultKeyStores();
 	}
 
-	private void processKeyStore(URL url, String type) {
-		if (type == null) {
+	private void processKeyStore(String urlSpec, String type) {
+		if (type == null)
 			type = KeyStore.getDefaultType();
-		}
 		try {
+			URL url = new URL(urlSpec);
 			KeyStore ks = KeyStore.getInstance(type);
 			ks.load(url.openStream(), null);
 			listOfKeyStores.add(ks);
@@ -64,19 +64,19 @@ public class KeyStores {
 	private void initializeDefaultKeyStores() {
 		listOfKeyStores = new ArrayList(5);
 		// get JRE cacerts
-		try {
-			URL url = new URL("file", null, 0, System.getProperty("java.home") + File.separator + "lib" + File.separator + "security" + File.separator + "cacerts"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
-			processKeyStore(url, Security.getProperty(DEFAULT_KEYSTORE_TYPE));
-		} catch (MalformedURLException e) {
-			// should not happen, hardcoded...
-		}
+		String defaultType = Security.getProperty(DEFAULT_KEYSTORE_TYPE);
+		String urlSpec = "file:" + System.getProperty("java.home") + File.separator + "lib" + File.separator + "security" + File.separator + "cacerts"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
+		processKeyStore(urlSpec, defaultType);
+
 		// get java.home .keystore
-		try {
-			URL url = new URL("file", null, 0, System.getProperty("user.home") + File.separator + ".keystore"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-			processKeyStore(url, Security.getProperty(DEFAULT_KEYSTORE_TYPE));
-		} catch (MalformedURLException e) {
-			// should not happen, hardcoded...
-		}
+		urlSpec = "file:" + System.getProperty("user.home") + File.separator + ".keystore"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+		processKeyStore(urlSpec, defaultType);
+
+		// get osgi.framework.keystore keystore
+		urlSpec = System.getProperty("osgi.framework.keystore"); //$NON-NLS-1$
+		if (urlSpec != null)
+			processKeyStore(urlSpec, defaultType);
+
 		// get KeyStores from policy files...
 		int index = 1;
 		String java_policy = Security.getProperty(JAVA_POLICY_URL + index);
@@ -144,7 +144,7 @@ public class KeyStores {
 	 * retrieve the keystore from java.policy file
 	 */
 	private void processKeystoreFromString(String content, URL rootURL) {
-		String keyStoreType = Security.getProperty(DEFAULT_KEYSTORE_TYPE);
+		String keyStoreType = null;
 		int indexOfSpace = content.indexOf(' ');
 		if (indexOfSpace == -1)
 			return;
@@ -154,14 +154,7 @@ public class KeyStores {
 		} else {
 			keyStoreType = content.substring(secondSpace + 1, content.length()).trim();
 		}
-		URL url = null;
-		try {
-			url = new URL(rootURL, content.substring(indexOfSpace, secondSpace));
-		} catch (MalformedURLException e1) {
-			log(e1);
-		}
-		if (url != null)
-			processKeyStore(url, null);
+		processKeyStore(content.substring(indexOfSpace, secondSpace), keyStoreType);
 	}
 
 	private void log(Exception e) {

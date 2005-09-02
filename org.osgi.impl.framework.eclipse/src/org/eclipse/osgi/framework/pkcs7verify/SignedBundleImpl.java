@@ -554,8 +554,11 @@ public class SignedBundleImpl extends SignedBundle {
 
 	public BundleEntry getEntry(String path) {
 		BundleEntry be = bundleFile.getEntry(path);
-		if (be == null)
-			return null;
+		if (be == null) {
+			if (digests4entries.get(path) == null)
+				return null;
+			throw new RuntimeException("A file has been removed from the bundle: " + getBaseFile().toString() + " : " + path); //$NON-NLS-1$ //$NON-NLS-2$
+		}
 		if (be.getName().startsWith("META-INF/")) //$NON-NLS-1$
 			return be;
 		if (certChains == null) {
