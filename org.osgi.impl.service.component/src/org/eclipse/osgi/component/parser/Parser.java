@@ -58,7 +58,7 @@ public class Parser {
 		this.main = main;
 		parserTracker = new ServiceTracker(main.context,
 				ParserConstants.SAX_FACTORY_CLASS, null);
-		parserTracker.open(true);
+		parserTracker.open();
 	}
 
 	public void dispose() {
