@@ -16,6 +16,7 @@
 package org.eclipse.osgi.component.resolver;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Dictionary;
 import java.util.Hashtable;
 import java.util.Iterator;
@@ -140,14 +141,34 @@ public class Reference {
 	 * @param serviceReference
 	 */
 	public boolean dynamicBindReference(ServiceReference serviceReference) {
+		
+		//check policy
 		if ("static".equals(referenceDescription.getPolicy())) {
 			return false;
 		}
-		String[] serviceName = (String[]) (serviceReference
-				.getProperty("objectClass"));
-		if (!serviceName[0].equals(referenceDescription.getInterfacename())) {
+		
+		//check interface
+		List provideList = Arrays.asList((String[]) (serviceReference
+				.getProperty("objectClass")));
+		if (!provideList.contains(this.getReferenceDescription()
+				.getInterfacename())) {
 			return false;
 		}
+		
+		//check target filter
+		Filter filter;
+		try {
+			filter = FrameworkUtil.createFilter(target);
+		}
+		catch (InvalidSyntaxException e) {
+			//TODO log something?
+			return false;
+		}
+		if (!filter.match(serviceReference)) {
+			return false;
+		}
+
+		//check cardinality
 		int currentRefCount = serviceReferences.size();
 		if (currentRefCount < referenceDescription.getCardinalityHigh()) {
 			return true;
@@ -199,24 +220,6 @@ public class Reference {
 	}
 
 	/**
-	 * Check if properties are matched by this Reference's target filter
-	 * @param properties
-	 * @return
-	 */
-	public boolean matchProperties(ComponentDescriptionProp cdp) {
-		Dictionary properties = cdp.getProperties();
-		Filter filter;
-		try {
-			filter = FrameworkUtil.createFilter(target);
-			return filter.match(properties);
-		}
-		catch (InvalidSyntaxException e) {
-			//TODO log something?
-			return false;
-		}
-	}
-
-	/**
 	 * Check if this reference can be satisfied by the service provided by one
 	 * of a list of Component Configurations
 	 * 
@@ -226,6 +229,16 @@ public class Reference {
 	 */
 	public ComponentDescriptionProp findProviderCDP(List cdps) {
 
+		Filter filter;
+		try {
+			filter = FrameworkUtil.createFilter(target);
+		}
+		catch (InvalidSyntaxException e) {
+			//TODO log something?
+			return null;
+		}
+
+		
 		// loop thru cdps to search for provider of service
 		Iterator it = cdps.iterator();
 		while (it.hasNext()) {
@@ -236,7 +249,7 @@ public class Reference {
 			if (provideList.contains(this.getReferenceDescription()
 					.getInterfacename())) {
 				// check the target field
-				if (matchProperties(cdp)) {
+				if(filter.match(cdp.getProperties())) {
 					return cdp;
 				}
 			}
