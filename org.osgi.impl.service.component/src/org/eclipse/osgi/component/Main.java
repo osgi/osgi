@@ -59,7 +59,7 @@ public class Main implements BundleActivator, BundleTrackerCustomizer,
 	protected Hashtable					bundleToLastModified;
 
 	/**
-	 * Bundle is being added to SCR tracked bundles.
+	 * New Service Components (ComponentDescription)s are added
 	 */
 	public static final int				ADD	= 1;
 
@@ -79,7 +79,10 @@ public class Main implements BundleActivator, BundleTrackerCustomizer,
 		packageAdminTracker = new ServiceTracker(context, PackageAdmin.class
 				.getName(), null);
 		packageAdminTracker.open(true);
+		
+		//notify this object when bundles enter (or exit) the Bundle.ACTIVE state
 		bundleTracker = new BundleTracker(context, Bundle.ACTIVE, this);
+		
 		workQueue = new WorkQueue(this, "SCR Work Queue");
 		resolver = new Resolver(this);
 		workQueue.start();
@@ -93,12 +96,16 @@ public class Main implements BundleActivator, BundleTrackerCustomizer,
 	 */
 	public void stop(BundleContext context) {
 
-		Log.dispose();
 		bundleTracker.close();
+		
+		//process all remaining events in queue and then shut it down
 		workQueue.closeAndJoin();
+		
 		resolver.dispose();
 		packageAdminTracker.close();
 		cache.dispose();
+		Log.dispose();
+		
 		cache = null;
 		framework = null;
 		resolver = null;
@@ -106,22 +113,23 @@ public class Main implements BundleActivator, BundleTrackerCustomizer,
 		bundleToLastModified = null;
 		this.context = null;
 
-		// TODO
-		// when SCR is shutting down write/flush database to disk (cache)
+		// TODO when SCR is shutting down write/flush database to disk (cache)
 
 	}
 
 	/**
-	 * Returns the value of the candidate bundle's Service-Component manifest
-	 * header. If the bundle has the header, then the bundle will be tracked. If
-	 * not, null is returned and the bundle will not be tracked.
+	 * Returns the bundle's Service-Component manifest header.  If the bundle
+	 * has header, then the bundle will be tracked. If not, null is returned 
+	 * and the bundle will not be tracked.
 	 * 
-	 * If the bundle is to be tracked, then this method will enqueue that the
-	 * bundle will be tracked.
+	 * If the bundle contains service components, parse the service component xml 
+	 * file(s) and create an {@link ComponentDescription ComponentDescription} object for every service 
+	 * component in the bundle.  Add the {@link ComponentDescription ComponentDescriptions} to 
+	 * the queue to be sent to the resolver.
 	 * 
 	 * @param bundle Candidate bundle to be tracked.
-	 * @return Value of the candidate bundle's Service-Component manifest header
-	 *         or null if the bundle does not specify the header.
+	 * @return the bundle's Service-Component manifest header or null if the 
+	 * bundle does not specify the header.
 	 */
 	public Object addingBundle(Bundle bundle) {
 
@@ -205,7 +213,9 @@ public class Main implements BundleActivator, BundleTrackerCustomizer,
 	}
 
 	/**
-	 * Enqueue that the bundle is untracking.
+	 * A bundle is going to an in-ACTIVE state.  Dispose and remove it's service
+	 * components from the system.  Disposal is done synchronously so all of the 
+	 * service components have been disposed before this method returns.
 	 * 
 	 * @param bundle Bundle becoming untracked.
 	 * @param object Value returned by addingBundle.
@@ -275,7 +285,9 @@ public class Main implements BundleActivator, BundleTrackerCustomizer,
 	}
 
 	/**
-	 * enableComponent - called by SC via ComponentContext
+	 * Called by Service Component code via ComponentContext
+	 * 
+	 * Enable the component(s) and put them on the queue for the resolver.
 	 * 
 	 * @param name The name of a component or <code>null</code> to indicate
 	 *        all components in the bundle.
@@ -283,7 +295,6 @@ public class Main implements BundleActivator, BundleTrackerCustomizer,
 	 * @param bundle The bundle which contains the Service Component to be
 	 *        enabled
 	 */
-
 	public void enableComponent(String name, Bundle bundle) {
 
 		// get all ComponentDescriptions for this bundle
@@ -375,20 +386,21 @@ public class Main implements BundleActivator, BundleTrackerCustomizer,
 	}
 
 	/**
-	 * disableComponent - The specified component name must be in the same
-	 * bundle as this component. Called by SC componentContext method
+	 * Disable a Service Component - The specified component name must be in the 
+	 * bundle as this component. Called by Service Component via ComponentContext.
+	 * 
+	 * Synchronously disable the component.  All component configurations (CDPs)
+	 * are disposed before this method returns.
 	 * 
 	 * @param name The name of a component to disable
 	 * 
 	 * @param bundle The bundle which contains the Service Component to be
 	 *        disabled
-	 * 
 	 */
 
 	public void disableComponent(String name, Bundle bundle) {
 
 		List disableComponentDescriptions = new ArrayList();
-		// Long bundleID = null;
 
 		// Get the list of CDs for this bundle
 		List componentDescriptionsList = (List) bundleToComponentDescriptions
@@ -401,8 +413,6 @@ public class Main implements BundleActivator, BundleTrackerCustomizer,
 			while (it.hasNext()) {
 				ComponentDescription componentDescription = (ComponentDescription) it
 						.next();
-
-				// bundleID = new Long (cd.getBundle().getBundleId());
 
 				// find the ComponentDescription with the specified name
 				if (componentDescription.getName().equals(name)) {
@@ -425,8 +435,10 @@ public class Main implements BundleActivator, BundleTrackerCustomizer,
 	}
 
 	/**
-	 * @param workAction
-	 * @param workObject
+	 * Put a job on the work queue to be done later (asynchronously) by the work 
+	 * queue thread.
+	 * @param workAction currently only valid value is Main.ADD
+	 * @param workObject work object to be acted upon
 	 * @see org.eclipse.osgi.component.workqueue.WorkDispatcher#dispatchWork(int,
 	 *      java.lang.Object)
 	 */
@@ -464,8 +476,10 @@ public class Main implements BundleActivator, BundleTrackerCustomizer,
 	/**
 	 * Validate the Component Description
 	 * 
-	 * @param cd to be validated
+	 * If error is found log and throw exception.
 	 * 
+	 * @param cd to be validated
+	 * @throws Throwable if fatal problem is found
 	 */
 	public void validate(ComponentDescription componentDescription) {
 
