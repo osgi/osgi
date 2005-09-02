@@ -228,8 +228,7 @@ class InvokeMethod {
 				if (serviceObject == null) {
 					serviceObject = buildDispose.getService(componentInstance
 							.getComponentDescriptionProp(), reference,
-							componentInstance.getComponentContext()
-									.getBundleContext(), serviceReference);
+							serviceReference);
 				}
 				if (serviceObject == null) {
 					// we could not create a serviceObject because of

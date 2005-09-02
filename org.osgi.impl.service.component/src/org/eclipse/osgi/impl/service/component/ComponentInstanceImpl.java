@@ -36,7 +36,7 @@ public class ComponentInstanceImpl implements ComponentInstance {
 
 	Object							instance;
 	Main							main;
-	public ComponentDescriptionProp	cdp;
+	protected ComponentDescriptionProp	cdp;
 	private ComponentContext		componentContext;
 
 	// ServiceReference:ServiceObject that binded to this instance
@@ -79,7 +79,7 @@ public class ComponentInstanceImpl implements ComponentInstance {
 		}
 		else {
 			main.resolver.instanceProcess.buildDispose
-					.disposeComponentInstance(cdp, this);
+					.disposeComponentInstance(this);
 			cdp.removeInstance(this);
 		}
 		instance = null;

@@ -81,11 +81,11 @@ public class ComponentContextImpl implements ComponentContext {
 	ComponentInstanceImpl		componentInstance;
 
 	/* ComponentDescription plus Properties */
-	ComponentDescriptionProp	cdp;
+	protected ComponentDescriptionProp	cdp;
 
-	Main						main;
+	protected Main						main;
 
-	Bundle						usingBundle;
+	protected Bundle						usingBundle;
 
 	/**
 	 * Construct a ComponentContext object
@@ -93,9 +93,8 @@ public class ComponentContextImpl implements ComponentContext {
 	 * @param bundle The ComponentDescriptionProp we are wrapping.
 	 */
 	public ComponentContextImpl(Main main, Bundle usingBundle,
-			ComponentDescriptionProp cdp,
 			ComponentInstanceImpl componentInstance) {
-		this.cdp = cdp;
+		this.cdp = componentInstance.getComponentDescriptionProp();
 		this.componentInstance = componentInstance;
 		this.bundleContext = cdp.getComponentDescription().getBundleContext();
 		this.usingBundle = usingBundle;
@@ -163,8 +162,7 @@ public class ComponentContextImpl implements ComponentContext {
 				}
 				if (serviceReference != null) {
 					Object serviceObject = main.resolver.instanceProcess.buildDispose
-							.getService(cdp, thisReference, bundleContext,
-									serviceReference);
+							.getService(cdp, thisReference, serviceReference);
 					componentInstance.addServiceReference(serviceReference,
 							serviceObject);
 					return serviceObject;
@@ -212,8 +210,7 @@ public class ComponentContextImpl implements ComponentContext {
 
 			if (thisReference != null) {
 				Object serviceObject = main.resolver.instanceProcess.buildDispose
-						.getService(cdp, thisReference, bundleContext,
-								serviceReference);
+						.getService(cdp, thisReference, serviceReference);
 				componentInstance.addServiceReference(serviceReference,
 						serviceObject);
 				return serviceObject;
@@ -264,7 +261,7 @@ public class ComponentContextImpl implements ComponentContext {
 				List serviceObjects = new ArrayList(serviceReferences.length);
 				for (int counter = 0; counter < serviceReferences.length; counter++) {
 					Object serviceObject = main.resolver.instanceProcess.buildDispose
-							.getService(cdp, thisReference, bundleContext,
+							.getService(cdp, thisReference,
 									serviceReferences[counter]);
 					if (serviceObject != null) {
 						serviceObjects.add(serviceObject);
