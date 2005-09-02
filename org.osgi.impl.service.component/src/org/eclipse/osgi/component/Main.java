@@ -258,33 +258,6 @@ public class Main implements BundleActivator, BundleTrackerCustomizer,
 	}
 
 	/**
-	 * enableComponents - called by resolver
-	 * 
-	 * @param CDs - List of ComponentDescriptions to mark successfully enabled
-	 */
-
-	public void enableComponents(List CDs) {
-
-		if (CDs != null) {
-			Iterator it = CDs.iterator();
-
-			// for each CD in list
-			while (it.hasNext()) {
-				ComponentDescription CD = (ComponentDescription) it.next();
-
-				// if CD is not valid and is disabled then enable it
-				if (CD.isValid() && !CD.isEnabled()) {
-
-					// set CD enabled
-					CD.setEnabled(true);
-				}
-				// else it is either not valid or it is already enabled - do
-				// nothing
-			}
-		}
-	}
-
-	/**
 	 * Called by Service Component code via ComponentContext
 	 * 
 	 * Enable the component(s) and put them on the queue for the resolver.
@@ -351,38 +324,6 @@ public class Main implements BundleActivator, BundleTrackerCustomizer,
 		// publish to resolver the list of CDs to enable
 		if (!enableCDs.isEmpty())
 			workQueue.enqueueWork(this, ADD, enableCDs);
-	}
-
-	/**
-	 * disableComponents - called by resolver
-	 * 
-	 * @param componentDescriptions - List of ComponentDescriptions to mark
-	 *        disabled
-	 */
-
-	public void disableComponents(List componentDescriptions) {
-
-		ComponentDescription componentDescription = null;
-		// Long bundleID;
-
-		if (componentDescriptions != null) {
-			Iterator it = componentDescriptions.iterator();
-
-			// for each ComponentDescription in list
-			while (it.hasNext()) {
-				componentDescription = (ComponentDescription) it.next();
-				// bundleID = new Long (cd.getBundle().getBundleId());
-
-				if (componentDescription.isEnabled()) {
-
-					// mark disabled
-					componentDescription.setEnabled(false);
-
-				}
-			}
-		}
-
-		return;
 	}
 
 	/**
