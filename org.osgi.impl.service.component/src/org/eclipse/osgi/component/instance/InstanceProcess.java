@@ -40,6 +40,7 @@ import org.osgi.service.cm.ConfigurationAdmin;
 import org.osgi.service.cm.ConfigurationEvent;
 import org.osgi.service.cm.ConfigurationListener;
 import org.osgi.service.component.ComponentException;
+import org.osgi.service.component.ComponentFactory;
 
 /**
  * Register services for satisfied Component Configurations and listen for 
@@ -50,19 +51,6 @@ public class InstanceProcess implements ConfigurationListener {
 
 	/* set this to true to compile in debug messages */
 	static final boolean			DEBUG					= false;
-
-	static final String				COMPONENT_FACTORY_CLASS	= "org.osgi.service.component.ComponentFactory";
-	static final String				CONFIG_LISTENER_CLASS	= "org.osgi.service.cm.ConfigurationListener";
-
-	/**
-	 * Service Component instances need to be built.
-	 */
-	public static final int			BUILT					= 1;
-
-	/**
-	 * Service Component instances need to be disposed.
-	 */
-	public static final int			DISPOSED				= 2;
 
 	/** Main SCR class */
 	protected Main					main;
@@ -87,7 +75,9 @@ public class InstanceProcess implements ConfigurationListener {
 		// use Main's workqueue
 		workQueue = main.workQueue;
 		buildDispose = new BuildDispose(main);
-		registerConfigurationListener();
+		
+		configListener = main.context.registerService(
+				ConfigurationListener.class.getName(), this, null);
 
 	}
 
@@ -96,7 +86,10 @@ public class InstanceProcess implements ConfigurationListener {
 	 */
 	public void dispose() {
 
-		removeConfigurationListener();
+		if (configListener != null) {
+			main.context.ungetService(configListener.getReference());
+		}
+		
 		buildDispose.dispose();
 		buildDispose = null;
 		main = null;
@@ -184,7 +177,7 @@ public class InstanceProcess implements ConfigurationListener {
 					// for the Service Component on behalf of the Service
 					// Component.
 					cdp.setServiceRegistration(cd.getBundleContext()
-							.registerService(COMPONENT_FACTORY_CLASS,
+							.registerService(ComponentFactory.class.getName(),
 									new ComponentFactoryImpl(cdp, main),
 									cdp.getProperties()));
 
@@ -285,26 +278,6 @@ public class InstanceProcess implements ConfigurationListener {
 			// all instances are now unbound
 			reference.removeServiceReference(serviceReference);
 		}
-	}
-
-	/**
-	 * registerConfigListener - Listen for changes in the configuration
-	 * 
-	 */
-	public void registerConfigurationListener() {
-		configListener = main.context.registerService(CONFIG_LISTENER_CLASS,
-				this, null);
-
-	}
-
-	/**
-	 * removeConfigurationListener -
-	 * 
-	 */
-	public void removeConfigurationListener() {
-		if (configListener != null)
-			main.context.ungetService(configListener.getReference());
-
 	}
 
 	/**
