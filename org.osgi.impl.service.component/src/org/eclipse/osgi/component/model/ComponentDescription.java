@@ -48,6 +48,11 @@ public class ComponentDescription {
 	protected List						referenceDescriptions;
 
 	protected List						componentDescriptionProps;
+	
+	/**
+	 * Map of Component Configurations created for this Service Component keyed
+	 * by ConfigurationAdmin PID
+	 */
 	protected Map						cdpsByPID;
 
 	/**
