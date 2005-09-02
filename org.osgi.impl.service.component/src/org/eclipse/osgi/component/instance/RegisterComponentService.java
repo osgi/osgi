@@ -43,7 +43,7 @@ abstract class RegisterComponentService {
 	}
 
 	/**
-	 * registerService
+	 * Register the Component Configuration's service
 	 * 
 	 * @param ip - InstanceProcess
 	 * @param cdp - ComponentDescription plus Properties
@@ -128,8 +128,12 @@ abstract class RegisterComponentService {
 					servicesProvidedArray, new ServiceFactory() {
 
 						int					references	= 0;
-						// if we create an instance, keep track of it
-						ComponentInstance	instance;
+						
+						//keep track of whether the componentInstance was created
+						//by this class' getService method or if it already 
+						//existed - if we create it then we have to dispose
+						//of it when it is no longer in use (references == 0)
+						boolean disposeComponentInstance = false;
 
 						// ServiceFactory.getService method.
 						public Object getService(Bundle bundle,
@@ -143,8 +147,11 @@ abstract class RegisterComponentService {
 
 								if (finalCDP.getInstances().isEmpty()) {
 									try {
-										instance = finalInstanceProcess.buildDispose
+										//track that we created this instance
+										//so we know to dispose of it later
+										finalInstanceProcess.buildDispose
 												.build(null, finalCDP);
+										disposeComponentInstance = true;
 									}
 									catch (ComponentException e) {
 										Log
@@ -171,11 +178,13 @@ abstract class RegisterComponentService {
 
 							synchronized (this) {
 								references--;
-								if (references < 1 && instance != null) {
-									// if instance != null then we created it
-									// dispose instance
-									instance.dispose();
-									instance = null;
+								if (references < 1 && disposeComponentInstance) {
+									// if disposeComponentInstance then we 
+									// created it in getService so we should
+									// dispose of it now
+									((ComponentInstance) finalCDP.getInstances()
+											.get(0)).dispose();
+									disposeComponentInstance = false;
 								}
 							}
 						}
