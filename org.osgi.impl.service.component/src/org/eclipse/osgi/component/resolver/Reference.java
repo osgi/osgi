@@ -33,28 +33,44 @@ import org.osgi.framework.ServiceReference;
 
 /**
  * 
- * Wrapper for a References Description includes satisfied state
+ * Wrapper for a {@link ReferenceDescription that may have
+ * a different target filter set by ConfigAdmin or ComponentFactory.newInstance()
  * 
+ * @see org.eclipse.osgi.component.model.ReferenceDescription
  * @version $Revision$
  */
 public class Reference {
 
 	/* set this to true to compile in debug messages */
 	static final boolean			DEBUG				= false;
-	static final String				TARGET				= ".target";
+	protected static final String	TARGET				= ".target";
 	protected ReferenceDescription	referenceDescription;
 	protected String				target;
 
+	/**
+	 * A List of {@link ServiceReference}s bound to this Reference
+	 */
 	protected List					serviceReferences	= new ArrayList();
 
 	/**
-	 * Reference object
+	 * Create a new Reference object.
+	 * 
+	 * If properties include a (reference name).target property, that overrides
+	 * the target in the {@link ReferenceDescription}.
 	 * 
 	 * @param referenceDescription
+	 * @param properties Properties for this Component Configuration
 	 */
 	public Reference(ReferenceDescription referenceDescription,
 			Hashtable properties) {
 		this.referenceDescription = referenceDescription;
+
+		//properties can override the Service Component XML
+		this.target = (String) properties.get(referenceDescription.getName()
+				+ TARGET);
+		
+		this.target = this.target != null ? this.target : referenceDescription
+				.getTarget();
 
 		// RFC 80 section 5.3.1.3:
 		// If [target] is not specified and there is no <reference-name>.target
@@ -62,24 +78,26 @@ public class Reference {
 		// property, then the selection filter used to select the desired
 		// service is
 		// “(objectClass=”+<interface-name>+”)”.
-		this.target = (String) properties.get(referenceDescription.getName()
-				+ TARGET);
-		this.target = this.target != null ? this.target : referenceDescription
-				.getTarget();
 		this.target = this.target != null ? this.target : "(objectClass="
 				+ referenceDescription.getInterfacename() + ")";
 
 	}
 
 	/**
-	 * hasProviders
+	 * Check if there is at least one service registered that satisfies this
+	 * reference.
 	 * 
-	 * @param scrBundleContext
+	 * Checks ServicePermission.GET.
+	 * 
+	 * @param context Bundle context used to call 
+	 *        {@link BundleContext#getServiceReferences(java.lang.String, java.lang.String)}
+	 * @return whether this Reference can be satisfied by the currently registered services
 	 */
 	public boolean hasProvider(BundleContext context) {
 
 		// check if this bundle has the permission to GET the Service it
 		// Requires
+		//TODO this may be redundant - is this checked in getServiceReferences below?
 		Bundle bundle = context.getBundle();
 		if (System.getSecurityManager() != null
 				&& !bundle.hasPermission(new ServicePermission(
@@ -91,18 +109,18 @@ public class Reference {
 
 		// Get all service references for this target filter
 		try {
-			ServiceReference[] serviceReferences = null;
-			serviceReferences = context.getServiceReferences(
+			ServiceReference[] providers = null;
+			providers = context.getServiceReferences(
 					referenceDescription.getInterfacename(), target);
 			// if there is no service published that this Service
 			// ComponentReferences
-			if (serviceReferences != null) {
+			if (providers != null) {
 				return true;
 			}
 			return false;
 		}
 		catch (InvalidSyntaxException e) {
-			// won't ever happen because filter is null;
+			//TODO log something?
 			return false;
 		}
 	}
@@ -115,6 +133,12 @@ public class Reference {
 		return target;
 	}
 
+	/**
+	 * Check if a {@link ServiceReference} should be dynamically bound to this 
+	 * Reference.
+	 * 
+	 * @param serviceReference
+	 */
 	public boolean dynamicBindReference(ServiceReference serviceReference) {
 		if ("static".equals(referenceDescription.getPolicy())) {
 			return false;
@@ -132,6 +156,11 @@ public class Reference {
 
 	}
 
+	/**
+	 * Check if we need to be dynamically unbound from a {@link ServiceReference}
+	 * 
+	 * @param serviceReference
+	 */
 	public boolean dynamicUnbindReference(ServiceReference serviceReference) {
 
 		// nothing dynamic to do if static
@@ -169,6 +198,11 @@ public class Reference {
 		return serviceReferences.contains(serviceReference);
 	}
 
+	/**
+	 * Check if properties are matched by this Reference's target filter
+	 * @param properties
+	 * @return
+	 */
 	public boolean matchProperties(ComponentDescriptionProp cdp) {
 		Dictionary properties = cdp.getProperties();
 		Filter filter;
@@ -177,33 +211,33 @@ public class Reference {
 			return filter.match(properties);
 		}
 		catch (InvalidSyntaxException e) {
-			e.printStackTrace();
+			//TODO log something?
 			return false;
 		}
 	}
 
 	/**
-	 * Check if this reference can be satisfied by a CDP in a set of enabled
-	 * CDPs
+	 * Check if this reference can be satisfied by the service provided by one
+	 * of a list of Component Configurations
 	 * 
-	 * @param enabledCDPs the list of enabled cdps
+	 * @param cdps a List of {@link ComponentDescriptionProp}s to search for providers
+	 * for this reference
 	 * @return the providing CDP or null if none
 	 */
-	public ComponentDescriptionProp findProviderCDP(List enabledCDPs) {
+	public ComponentDescriptionProp findProviderCDP(List cdps) {
 
-		// loop thru all enabled cdps to match providers of services
-		Iterator it = enabledCDPs.iterator();
+		// loop thru cdps to search for provider of service
+		Iterator it = cdps.iterator();
 		while (it.hasNext()) {
-			ComponentDescriptionProp cdpRefLookup = (ComponentDescriptionProp) it
-					.next();
-			List provideList = cdpRefLookup.getComponentDescription()
+			ComponentDescriptionProp cdp = (ComponentDescriptionProp) it.next();
+			List provideList = cdp.getComponentDescription()
 					.getServicesProvided();
 
 			if (provideList.contains(this.getReferenceDescription()
 					.getInterfacename())) {
 				// check the target field
-				if (matchProperties(cdpRefLookup)) {
-					return cdpRefLookup;
+				if (matchProperties(cdp)) {
+					return cdp;
 				}
 			}
 		}
