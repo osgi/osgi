@@ -22,7 +22,7 @@ package org.eclipse.osgi.component.parser;
  * @version $Revision$
  */
 
-public interface ParserConstants {
+interface ParserConstants {
 
 	// Define the Service Component XML Tags
 	static final String	SCR_NAMESPACE				= "http://www.osgi.org/xmlns/scr/v1.0.0";
