@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project name="project" default="director"> 
+<project name="project" default="director">
 	
 	
 	<target name="director">
@@ -7,13 +7,12 @@
 			fork="true"
 		>
 			<jvmarg line="-Xverify:none"/>
-			<arg line="-console"/>
+			<arg line="-console:2012"/>
 			<arg line="init"/>
-			<arg line="launch"/>
 			<arg line="'install file:../osgi.jar start'"/>
 			<arg line="'install file:../osgi.min.jar start'"/>
-			<arg line="'install file:../org.osgi.tools.console.jar start'"/>
 			<arg line="'install file:../osgi.director.jar start'"/>
+			<arg line="launch"/>
 		</java>
 	</target>
 		
@@ -21,21 +20,24 @@
 		<ant target="-run">
 			<property name="tests" value="file:../osgi.cmpn.tests.jar"/>
 			<property name="script" value="file:cmpn.script"/>
-		</ant> 
+			<property name="out" value="run-cmpn.xml"/>
+		</ant>
 	</target>
 	
 	<target name="run-core">
 		<ant target="-run">
 			<property name="tests" value="file:../osgi.core.tests.jar"/>
 			<property name="script" value="file:core.script"/>
-		</ant> 
+			<property name="out" value="run-core.xml"/>
+		</ant>
 	</target>
 	
 	<target name="run-link">
 		<ant target="-run">
 			<property name="tests" value="file:../org.osgi.test.cases.testtool.jar"/>
 			<property name="script" value="file:link.script"/>
-		</ant> 
+			<property name="out" value="run-link.xml"/>
+		</ant>
 	</target>
 	
 	<target name="-run">		
@@ -44,12 +46,12 @@
 		>
 			<jvmarg line="-Xverify:none"/>
 			<jvmarg line="-Dorg.osgi.test.batch.script=${script}"/>
+			<jvmarg line="-Dorg.osgi.test.batch.out=${out}"/>
 			
-			<arg line="-console"/>
+			<arg line="-console:2012"/>
 			<arg line="init"/>
 			<arg line="'install file:../osgi.jar start'"/>
 			<arg line="'install file:../osgi.min.jar start'"/>
-			<arg line="'install file:../org.osgi.tools.console.jar start'"/>
 			<arg line="'install file:../osgi.director.jar start'"/>
 			<arg line="'install ${tests} start'"/>
 			<arg line="launch"/>

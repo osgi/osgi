@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project name="project" default="run-core"> 
+<project name="project" default="run-core">
 	
 	<target name="run-core">
 		<ant target="-run">
@@ -19,10 +19,9 @@
 			<jvmarg line="-Djava.security.manager=org.eclipse.osgi.framework.internal.core.FrameworkSecurityManager"/>
 			<jvmarg line="-Djava.security.policy=policy"/>
 			<jvmarg line="-Xverify:none"/>
-			<arg line="-console"/>
+			<arg line="-console:2012"/>
 			<arg line="init"/>
 			<arg line="'install file:../osgi.jar start'"/>
-			<arg line="'install file:../org.osgi.tools.console.jar start'"/>
 			<arg line="'install file:../osgi.target.jar start'"/>
 			<arg line="'install ${impls} start'"/>
 			<arg line="launch"/>
