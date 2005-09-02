@@ -44,11 +44,13 @@ Check if tc5servlet available after bundle installed (no)
 /tc5servlet not available
 Check if tc5servlet available after bundle started (yes)
 --- start file: /tc5servlet
+<html><head><title>OSGi - HTTP Service test case</title></head><body><h1>5 Uninstallation of source bundle</h1></body></html>
 --- end file: /tc5servlet
 Check if tc5servlet available after bundle stopped (no)
 /tc5servlet not available
 Check if tc5servlet available after bundle started again (yes)
 --- start file: /tc5servlet
+<html><head><title>OSGi - HTTP Service test case</title></head><body><h1>5 Uninstallation of source bundle</h1></body></html>
 --- end file: /tc5servlet
 Check if tc5servlet available after bundle uninstalled without stop (no)
 /tc5servlet not available
