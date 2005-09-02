@@ -78,7 +78,7 @@ public class Main implements BundleActivator, BundleTrackerCustomizer,
 
 		packageAdminTracker = new ServiceTracker(context, PackageAdmin.class
 				.getName(), null);
-		packageAdminTracker.open(true);
+		packageAdminTracker.open();
 		
 		//notify this object when bundles enter (or exit) the Bundle.ACTIVE state
 		bundleTracker = new BundleTracker(context, Bundle.ACTIVE, this);
