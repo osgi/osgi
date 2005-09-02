@@ -42,10 +42,8 @@ import org.osgi.service.cm.ConfigurationListener;
 import org.osgi.service.component.ComponentException;
 
 /**
- * This class provides the following function
- * 
- * The Resolver Process notifies the Instance Process of any instances to 
- * build or dispose of.
+ * Register services for satisfied Component Configurations and listen for 
+ * configuration changes from ConfigAdmin
  * 
  */
 public class InstanceProcess implements ConfigurationListener {
@@ -74,10 +72,11 @@ public class InstanceProcess implements ConfigurationListener {
 
 	protected WorkQueue				workQueue;
 
+	//configListener service registered by this class
 	protected ServiceRegistration	configListener;
 
 	/**
-	 * Handle Instance processing building and disposing.
+	 * Handle Instance processing
 	 * 
 	 * @param main - the Main class of the SCR
 	 */
@@ -85,7 +84,7 @@ public class InstanceProcess implements ConfigurationListener {
 
 		this.main = main;
 
-		// for now use Main's workqueue
+		// use Main's workqueue
 		workQueue = main.workQueue;
 		buildDispose = new BuildDispose(main);
 		registerConfigurationListener();
@@ -105,18 +104,25 @@ public class InstanceProcess implements ConfigurationListener {
 	}
 
 	/**
-	 * Build the Service Component Instances, includes activating and binding
+	 * Register and possibly activate Component Configurations.
 	 * 
-	 * @param componentDescriptionProps - a List of all cdps to build.
+	 * Activate each Service Component that has the attribute immediate=true.
+	 * 
+	 * If Service Component has a service element, register the service or
+	 * service factory.
+	 * 
+	 * If Service Component has the factory attribute set, register a 
+	 * {@link org.osgi.service.component.ComponentFactory}.
+	 * 
+	 * @param componentDescriptionProps - List of satisfied Component Configurations
 	 */
-
 	public void buildInstances(List componentDescriptionProps) {
 
 		ComponentDescriptionProp cdp;
 		ComponentDescription cd;
 		String factoryPid = null;
 
-		// loop through CD+P list of enabled
+		// loop through CD+P list
 		if (componentDescriptionProps != null) {
 			Iterator it = componentDescriptionProps.iterator();
 			while (it.hasNext()) {
@@ -195,11 +201,10 @@ public class InstanceProcess implements ConfigurationListener {
 
 	/**
 	 * 
-	 * Dispose of Component Instances, includes unregistering services and
-	 * removing instances.
+	 * Dispose of Component Configurations
 	 * 
-	 * @param componentDescriptionProps - list of ComponentDescriptions plus
-	 *        Property objects to be disposed
+	 * @param componentDescriptionProps - list of Component Configurations to be
+	 *         disposed
 	 */
 
 	public void disposeInstances(List componentDescriptionProps) {
@@ -218,6 +223,11 @@ public class InstanceProcess implements ConfigurationListener {
 
 	}
 
+	/**
+	 * Dynamically bind references.
+	 * 
+	 * @param serviceTable {@link Reference}:{@link ComponentDescription} map to bind
+	 */
 	public void dynamicBind(Hashtable serviceTable) {
 		Enumeration e = serviceTable.keys();
 		while (e.hasMoreElements()) {
@@ -238,10 +248,11 @@ public class InstanceProcess implements ConfigurationListener {
 	}
 
 	/**
-	 * Handles Dynamic unbind
+	 * Dynamically unbind references.
 	 * 
-	 * @param unbindJobs List to be unbound
-	 * 
+	 * @param unbindJobs List of 
+	 * {@link org.eclipse.osgi.component.resolver.Resolver.DynamicUnbindJob Resolver.DynamicUnbindJob}s
+	 * to be unbound
 	 */
 	public void dynamicUnBind(List unbindJobs) {
 		// for each unbind job
@@ -300,11 +311,13 @@ public class InstanceProcess implements ConfigurationListener {
 	 * Listen for configuration changes
 	 * 
 	 * Service Components can receive properties from the Configuration Admin
-	 * service. If a Service Component is activated and it’s properties are
+	 * service. If a Component Configuration is activated and it’s properties are
 	 * updated in the Configuration Admin service, the SCR must deactivate the
 	 * component and activate the component again using the new properties.
 	 * 
 	 * @param event ConfigurationEvent
+	 * 
+	 * @see ConfigurationListener#configurationEvent(org.osgi.service.cm.ConfigurationEvent)
 	 */
 	public void configurationEvent(ConfigurationEvent event) {
 
