@@ -166,8 +166,9 @@ public class Target extends Thread implements BundleActivator, ServiceFactory,
 						&& i < permissionSnapshot.length; i++)
 					ht.put(permissionSnapshot[i], "");
 				String[] newer = perm.getLocations();
-				for (int i = 0; newer!=null && i < newer.length; i++) {
-					if (now != null && now[i].getLocation().indexOf("~keep~") < 0) {
+				for (int i = 0; newer != null && i < newer.length; i++) {
+					if (now != null
+							&& now[i].getLocation().indexOf("~keep~") < 0) {
 						if (ht.get(newer[i]) == null)
 							perm.setPermissions(newer[i], null);
 					}
@@ -247,7 +248,7 @@ public class Target extends Thread implements BundleActivator, ServiceFactory,
 				DatagramSocket announce = new DatagramSocket();
 				DatagramPacket packet = new DatagramPacket(msg.getBytes(), msg
 						.getBytes().length, InetAddress.getByName(ipaddr), 2001);
-				//TODO check if unconnected
+				// TODO check if unconnected
 				try {
 					announce.send(packet);
 				}
@@ -307,6 +308,11 @@ public class Target extends Thread implements BundleActivator, ServiceFactory,
 							log("Problems reading socket.", ioe);
 					}
 				}
+			}
+			catch (java.net.BindException e) {
+				System.out
+						.println("There is likely another target already running; port "
+								+ preferredSocket + " is already bound");
 			}
 			catch (Throwable ee) {
 				log("Initialization target service ", ee);
@@ -376,9 +382,10 @@ public class Target extends Thread implements BundleActivator, ServiceFactory,
 		try {
 			log("Installing " + name, null);
 			Bundle bundle = find(name);
-			if ( bundle == null ) {
+			if (bundle == null) {
 				bundle = context.installBundle(name, in);
-			} else {
+			}
+			else {
 				bundle.update(in);
 			}
 			in.close();
@@ -403,8 +410,8 @@ public class Target extends Thread implements BundleActivator, ServiceFactory,
 	 */
 	private Bundle find(String name) {
 		Bundle b[] = context.getBundles();
-		for ( int i=0; i<b.length; i++ )
-			if ( b[i].getLocation().equals(name))
+		for (int i = 0; i < b.length; i++)
+			if (b[i].getLocation().equals(name))
 				return b[i];
 		return null;
 	}
@@ -417,7 +424,7 @@ public class Target extends Thread implements BundleActivator, ServiceFactory,
 	public void uninstall(String name) throws Exception {
 		log("Uninstalling " + name, null);
 		TestCaseLinkImpl control = getTestCaseLink(name);
-		if ( control != null ) {
+		if (control != null) {
 			control.getBundle().uninstall();
 			links.removeElement(control);
 		}
@@ -561,10 +568,10 @@ public class Target extends Thread implements BundleActivator, ServiceFactory,
 	}
 
 	public void setTestProperties(Dictionary properties) throws IOException {
-		for ( Enumeration e=properties.keys(); e.hasMoreElements(); ) {
+		for (Enumeration e = properties.keys(); e.hasMoreElements();) {
 			String key = (String) e.nextElement();
-			String  value = (String) properties.get(key);
-			System.setProperty(key, value );
-		}		
+			String value = (String) properties.get(key);
+			System.setProperty(key, value);
+		}
 	}
 }
