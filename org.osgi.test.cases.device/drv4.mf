@@ -6,7 +6,9 @@ Bundle-Description: A driver that will win the bidding (through selector)
 Bundle-DocURL: http://www.prosyst.bg
 Bundle-Activator: org.osgi.test.cases.device.drv4.WinnerDriver
 Bundle-Category: test_driver
-Import-Package: org.osgi.service.device; specification-version="1.1", org.osgi.test.cases.device.tbc
+Import-Package: org.osgi.service.device; specification-version="1.1", 
+  org.osgi.test.cases.device.tbc, 
+  org.osgi.framework
 
 
 

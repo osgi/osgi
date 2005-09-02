@@ -1,12 +1,14 @@
 package org.osgi.test.cases.device.tbc;
 
 import java.lang.reflect.*;
-import java.util.*;
+import java.util.Hashtable;
+
 import org.osgi.framework.*;
-import org.osgi.service.device.*;
+import org.osgi.service.device.DriverLocator;
 import org.osgi.test.cases.device.tbc.locators.*;
 import org.osgi.test.cases.device.tbc.selectors.*;
-import org.osgi.test.service.*;
+import org.osgi.test.cases.util.DefaultTestBundleControl;
+import org.osgi.test.service.TestCaseLink;
 
 /**
  * The activator of the device access test case
@@ -14,7 +16,7 @@ import org.osgi.test.service.*;
  * @author ProSyst
  * @version 1.0
  */
-public class TestBundleControl extends Thread implements BundleActivator {
+public class TestBundleControl extends DefaultTestBundleControl {
 	ServiceRegistration			testCaseSR			= null;
 	private int					message				= -1;
 	/**
@@ -30,8 +32,6 @@ public class TestBundleControl extends Thread implements BundleActivator {
 	 */
 	public static final int		MESSAGE_ERROR		= 1;
 	private BundleContext		bc					= null;
-	private ServiceReference	linkRef				= null;
-	private TestCaseLink		link				= null;
 	public static String		tcHome				= null;
 	private boolean				finish				= false;
 	public boolean				noDriverFoundCalled	= false;
@@ -40,79 +40,16 @@ public class TestBundleControl extends Thread implements BundleActivator {
 			"deviceDetectionTest", "driverLoadingTest", "defaultSelectionTest",
 			"redirectionTest"						};
 
-	public void start(BundleContext bc) throws Exception {
-		this.bc = bc;
-		linkRef = bc.getServiceReference(TestCaseLink.class.getName());
-		link = (TestCaseLink) bc.getService(linkRef);
-		try {
-			timeout = Integer.parseInt(System.getProperty(
-					"osgi.test.device.timeout", "50"));
-			if (timeout <= 0)
-				timeout = 50; // to prevent some unpleasant situations
-		}
-		catch (NumberFormatException e) {
-			e.printStackTrace();
-			System.out.println("wrong value for timeout: "
-					+ System.getProperty("osgi.test.device.timeout")
-					+ " Timeout set to 50");
-		}
-		start();
-	}
-
-	public void stop(BundleContext bc) throws Exception {
-		quit();
-	}
-
-
-	public void run() {
-		int progress = 0;
-		ServiceRegistration sr = bc.registerService(TestBundleControl.class
+	public void prepare() throws Exception {
+		log("Test bundle control started Ok.");
+		this.bc = getContext();
+		tcHome = getWebServer();
+		bc.registerService(TestBundleControl.class
 				.getName(), this, null);
-		try {
-			link.log("Test bundle control started Ok.");
-			tcHome = (String) link.receive(10000);
-			for (int i = 0; !finish && i < methods.length; i++) {
-				Method method = getClass().getDeclaredMethod(methods[i],
-						new Class[0]);
-				method.invoke(this, new Object[0]);
-				link.send("" + 100 * (i + 1) / methods.length);
-			}
-		}
-		catch (InvocationTargetException xe) {
-			Throwable e = xe.getTargetException();
-			e.printStackTrace();
-			if (e instanceof BundleException) {
-				BundleException ee = (BundleException) e;
-				Throwable eee = ee.getNestedException();
-				if (eee != null) {
-					eee.printStackTrace();
-				}
-			}
-		}
-		catch (Exception remainder) {
-			remainder.printStackTrace();
-		}
-		finally {
-			try {
-				link.send("ready");
-			}
-			catch (Exception e) {
-				e.printStackTrace();
-			}
-			try { sr.unregister(); } catch( Exception e ) {}
-			quit();
-		}
 	}
 
-	/**
-	 * Releases the reference to the TestCaseLink.
-	 */
-	void quit() {
-		if (!finish) {
-			bc.ungetService(linkRef);
-			linkRef = null;
-			finish = true;
-		}
+	public String[] getMethods() {
+		return methods;
 	}
 
 	public int setMessage(int m) {
@@ -497,7 +434,7 @@ public class TestBundleControl extends Thread implements BundleActivator {
 
 	public void log(String subtest, String toLog) {
 		try {
-			link.log("[" + subtest + "] " + toLog);
+			log("[" + subtest + "] " + toLog);
 		}
 		catch (Exception e) {
 			e.printStackTrace();
