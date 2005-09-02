@@ -451,12 +451,26 @@ public class ProvisioningControl extends DefaultTestBundleControl {
 		assertEquals("Must have also loaded ipa-ref-start.ipa", "true", get("ipa-ref-start.ipa"));
 		assertNotNull("Started local-prov.jar from ipa-ref-start.ipa", local );
 		assertNotNull("Started test-0-prov.jar from simple.ipa", test0 );
-		assertTrue("Installed local bundle must be started", local.getState() == Bundle.ACTIVE );
-		assertTrue("Installed remote bundle must be started", test0.getState() == Bundle.ACTIVE );
+		
+		waitForBundleState("Installed local bundle must be started", local, Bundle.ACTIVE );
+		waitForBundleState("Installed remote bundle must be started", test0, Bundle.ACTIVE );
 		assertEquals( "Check provisioning.start.bundle property", "test-0-prov.jar", get("provisioning.start.bundle"));
 	}
 	
 	
+	void waitForBundleState(String string, Bundle bundle, int active) {
+		long deadline = System.currentTimeMillis() + 15000;
+		while (bundle.getState() != active ) try {
+			if ( deadline <= System.currentTimeMillis() )
+				assertEquals(string, bundle.getState(), active );
+			else {
+				Thread.sleep(50);
+			}
+		} catch( InterruptedException ie ) {
+			// who cares
+		}
+	}
+
 	/**
 	 * Test if the provisioning service sends the SPID to the server. we
 	 * have registered a "spid-test" url handler that we use. It will
