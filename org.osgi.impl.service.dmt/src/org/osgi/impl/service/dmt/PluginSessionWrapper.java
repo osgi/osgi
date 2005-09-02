@@ -28,17 +28,13 @@ import org.osgi.service.dmt.spi.ReadWriteDataSession;
 import org.osgi.service.dmt.spi.ReadableDataSession;
 import org.osgi.service.dmt.spi.TransactionalDataSession;
 
-// TODO update class javadoc
 
 /**
- * Wrapper class around data plugins, for reducing the privileges of remote
- * callers while the plugin is executed. Additionally, it hides the two types of
- * open methods from DmtSessionImpl.
+ * Wrapper class around data plugin sessions, for reducing the privileges of 
+ * remote callers while the plugin is executed.
  * <p>
- * This class also takes over the responsibility of properly handling plugins
- * that do not support transactions in atomic transactions.  Commit and rollback
- * calls are not propagated to such plugins, and an exception is thrown if there 
- * is an attempt to call any of their write methods. 
+ * Two instances of this class are equal if the wrapped plugin sessions are
+ * equal and the roots of the sessions are the same.   
  */
 
 // TODO find a way to make "privileged" calls with no security check
