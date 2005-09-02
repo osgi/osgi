@@ -89,16 +89,17 @@ public class DeviceDetectionTestDriver implements Driver, BundleActivator {
 	 * @returns null
 	 */
 	public String attach(ServiceReference reference) throws Exception {
-		String driverID = (String) reference.getProperty("deviceID");
-		if ("basicDevice".equals(driverID)
-				|| "basicDevice_noDevice".equals(driverID)
-				|| "basicDevice_noCategory".equals(driverID)) {
+		String deviceID = (String) reference.getProperty("deviceID");
+		if ("basicDevice".equals(deviceID)
+				|| "basicDevice_noDevice".equals(deviceID)
+				|| "basicDevice_noCategory".equals(deviceID)) {
+			// log("<drv1 basicdriver> attaching basic device"); //***
 			master.setMessage(TestBundleControl.MESSAGE_OK);
 			device = (Device) bc.getService(reference);
 			deviceRef = reference;
 		}
 		else {
-			log(driverID + " attached! Error");
+			log(deviceID + " attached! Error");
 			master.setMessage(TestBundleControl.MESSAGE_ERROR);
 		}
 		bc.ungetService(masterRef);

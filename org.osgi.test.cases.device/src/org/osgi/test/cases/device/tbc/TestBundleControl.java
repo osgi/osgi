@@ -33,7 +33,6 @@ public class TestBundleControl extends DefaultTestBundleControl {
 	public static final int		MESSAGE_ERROR		= 1;
 	private BundleContext		bc					= null;
 	public static String		tcHome				= null;
-	private boolean				finish				= false;
 	public boolean				noDriverFoundCalled	= false;
 	private int					timeout				= 100;
 	private String[]			methods				= {"standaloneDriverTest",
@@ -95,12 +94,20 @@ public class TestBundleControl extends DefaultTestBundleControl {
 			driverBundle_2.start();
 			// wait for driver to attach or to be rejected
 			waitFor(subtest, "device attachment");
+			
+			//
+			// The next testcase sometimes fails because also the
+			// previously registered dev2 is matched by drv7 ... 
+			// Might be a bug in the RI
+			//
 			log(subtest,
 					"installing and starting basic driver bundle - it should attach to device 1");
 			driverBundle_1 = bc.installBundle(tcHome + "drv1.jar");
 			driverBundle_1.start();
 			// wait for driver to attach or to be rejected
 			waitFor(subtest, "device attachment");
+			
+			
 			log(subtest, "registering a locator service");
 			ServiceRegistration reg = bc.registerService(DriverLocator.class
 					.getName(), new EmptyLocator(this), null);
@@ -407,7 +414,7 @@ public class TestBundleControl extends DefaultTestBundleControl {
 		int m = TestBundleControl.MESSAGE_NONE;
 		System.out.println("Starting to wait " + subtest + " " + message );
 		while (((m = getMessage()) == TestBundleControl.MESSAGE_NONE)
-				&& counter++ < 100) {
+				&& counter++ < 1000) {
 			try {
 				Thread.sleep(timeout);
 			}
