@@ -27,8 +27,8 @@ import org.osgi.service.component.ComponentContext;
 import org.osgi.service.log.LogService;
 
 /**
- * Invoke a method on the Service Component: activate, deactivate, bind or
- * unbind
+ * Invoke a method on a Service Component implementation class instance:
+ * activate, deactivate, bind or unbind
  * 
  * @version $Revision$
  */
@@ -45,10 +45,10 @@ class InvokeMethod {
 	}
 
 	/**
-	 * Invoke the activate method of the Service Component
+	 * Invoke the activate method of the Service Component if one exists
 	 * 
 	 * @param instance The instance of the component
-	 * @param context The componenet context
+	 * @param context The component context
 	 */
 	void activateComponent(Object instance, ComponentContext context)
 			throws IllegalAccessException, InvocationTargetException {
@@ -63,10 +63,10 @@ class InvokeMethod {
 	}
 
 	/**
-	 * Invoke the deactivate method of the Service Component
+	 * Invoke the deactivate method of the Service Component if one exists
 	 * 
 	 * @param instance The instance of the component
-	 * @param context The componenet context
+	 * @param context The component context
 	 */
 	void deactivateComponent(Object instance, ComponentContext context)
 			throws IllegalAccessException, InvocationTargetException {
@@ -81,20 +81,19 @@ class InvokeMethod {
 	}
 
 	/**
-	 * bindComponent method of the Service Component
+	 * Invoke a bind method of a Service Component
 	 * 
 	 * @param bind
 	 * @param instance
-	 * @param serviceObject
+	 * @param param service object or {@link ServiceReference}
 	 * 
 	 * @throws IllegalAccessException
 	 * @throws InvocationTargetException
 	 */
-
-	void bindComponent(Method bindMethod, Object instance, Object serviceObject)
+	void bindComponent(Method bindMethod, Object instance, Object param)
 			throws IllegalAccessException, InvocationTargetException {
 		// Create an array of parameters to pass to the method
-		Object[] parameterTypes = new Object[] {serviceObject};
+		Object[] parameterTypes = new Object[] {param};
 		invokeMethod(bindMethod, instance, parameterTypes);
 	}
 
@@ -103,17 +102,16 @@ class InvokeMethod {
 	 * 
 	 * @param unbind
 	 * @param instance
-	 * @param serviceObject
+	 * @param param service object or {@link ServiceReference}
 	 * 
 	 * @throws IllegalAccessException
 	 * @throws InvocationTargetException
 	 */
-
 	void unbindComponent(Method unbindMethod, Object instance,
-			Object serviceObject) throws IllegalAccessException,
+			Object param) throws IllegalAccessException,
 			InvocationTargetException {
 		// Create an array of parameters to pass to the method
-		Object[] parameterTypes = new Object[] {serviceObject};
+		Object[] parameterTypes = new Object[] {param};
 		invokeMethod(unbindMethod, instance, parameterTypes);
 	}
 
@@ -121,7 +119,7 @@ class InvokeMethod {
 	 * invokeMethod - invoke a Method on the Service Compoent via reflection
 	 * 
 	 * @param method- the method name to invoke
-	 * @param instance - instance used to get Class
+	 * @param instance - instance to invoke method on
 	 * @param parameterTypes - array of parameters to pass to the method
 	 * 
 	 * @throws IllegalAccessException
@@ -150,10 +148,13 @@ class InvokeMethod {
 
 	/**
 	 * Search through class and the superclasses for an activate or deactivate
-	 * method
+	 * method.
+	 * 
+	 * If method if found but not public or protected, log an error and return null
 	 * 
 	 * @param methodName name of method to look for
 	 * @param consumerClass Object to look in
+	 * @return method or null if not found
 	 */
 	Method findActivateOrDeactivateMethod(String methodName, Class consumerClass) {
 		Method method = null;
@@ -189,12 +190,25 @@ class InvokeMethod {
 	}
 
 	/**
-	 * Search through class and the superclasses for a method
+	 * Search through class and the superclasses for a bind or unbind method.
+	 * 
+	 * See OSGi R4 Specification section 112.3.1 "Accessing Services" for an 
+	 * explanation of the method search algorithm used for bind and unbind
+	 * methods.
+	 * 
+	 * Searching for the bind or unbind method may require a service object.  If
+	 * the object has not already been acquired, this method may call 
+	 * {@link BuildDispose#getService(ComponentDescriptionProp, Reference, ServiceReference)} 
+	 * to get it.
+	 * 
+	 * If method can not be found we log an error and return null.
 	 * 
 	 * @param componentInstance Object to look in
 	 * @param reference Reference object
 	 * @param serviceReference
 	 * @param methodName name of method to look for
+	 * 
+	 * @return the method or null if no method was found
 	 * 
 	 */
 	Method findBindOrUnbindMethod(ComponentInstanceImpl componentInstance,
