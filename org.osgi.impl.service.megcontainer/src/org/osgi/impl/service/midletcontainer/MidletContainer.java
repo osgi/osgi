@@ -42,24 +42,24 @@ public class MidletContainer implements BundleListener, ServiceListener {
 		Bundle bundles[] = bc.getBundles();
 		for (int i = 0; i < bundles.length; i++) {
 			String id = (new StringBuffer(String.valueOf(bundles[i].getBundleId()))).toString();
-			if (!bundleIDs.contains(id) && bundles[i].getBundleId() != 0L)
-				checkAndRegister(bundles[i]);
+			if (!bundleIDs.contains(id) && bundles[i].getBundleId() != 0L && isMidlet( bundles[ i ] ) )
+				installMidletBundle(bundles[i]);
 		}
 
 	}
 
-	public void installApplication(long bundleID) throws IOException, Exception {
-		if (bundleIDs.contains(Long.toString(bundleID)))
+	public void installMidletBundle(Bundle bundle) throws IOException, Exception {
+		if (bundleIDs.contains(Long.toString(bundle.getBundleId())))
 			return;
 		
-    oat.registerOATBundle( bc.getBundle( bundleID ) );
+    oat.registerOATBundle( bundle );
 		
-		ApplicationDescriptor appDescs[] = registerBundle(bundleID);
+		ApplicationDescriptor appDescs[] = registerBundle( bundle );
 		if (appDescs == null) {
 			throw new Exception("Not a valid MIDlet bundle!");
 		}
 		else {
-			bundleIDs.add(Long.toString(bundleID));
+			bundleIDs.add(Long.toString(bundle.getBundleId()));
 			return;
 		}
 	}
@@ -115,13 +115,13 @@ public class MidletContainer implements BundleListener, ServiceListener {
 		}catch( InvalidSyntaxException e ) {}
 	}
 	
-	private ApplicationDescriptor[] registerBundle(long bundleID) {
-		ApplicationDescriptor appDescs[] = parseManifestHeaders(bundleID);
+	private ApplicationDescriptor[] registerBundle(Bundle bundle) {
+		ApplicationDescriptor appDescs[] = parseManifestHeaders(bundle);
 		if (appDescs == null) {
 			return null;
 		}
 		else {
-			registerApplicationDescriptors(bundleID);
+			registerApplicationDescriptors(bundle.getBundleId());
 			return appDescs;
 		}
 	}
@@ -165,45 +165,48 @@ public class MidletContainer implements BundleListener, ServiceListener {
 		String bundleStr = Long.toString(bundleID);
 		if (bundleIDs.contains(bundleStr))
 			switch (event.getType()) {
-				case 2 : // '\002'
+				case BundleEvent.STARTED :
 					registerApplicationDescriptors(bundleID);
 					break;
 
-				case 4 : // '\004'
+				case BundleEvent.STOPPED :
 					unregisterApplicationDescriptors(bundleID);
 					break;
 
-				case 16 : // '\020'
+				case BundleEvent.UNINSTALLED :
 					bundleIDs.remove(bundleStr);
 					unregisterApplicationDescriptors(bundleID);
 					bundleHash.remove(new Long(bundleID));
 					break;
 
-				case 8 : // '\b'
+				case BundleEvent.UPDATED :
 					unregisterApplicationDescriptors(bundleID);
 					registerApplicationDescriptors(bundleID);
-					break;
+					break;					
 			}
-		else if (event.getType() == 1)
-			checkAndRegister(event.getBundle());
+		else if( event.getType() == BundleEvent.INSTALLED ) {
+	  	try {
+			  if( isMidlet( event.getBundle() ) )
+				  installMidletBundle( event.getBundle() );
+	  	}catch( Exception e ) {}			
+		}
 	}
 
-	void checkAndRegister(Bundle b) {
+	boolean isMidlet( Bundle b ) {
 		try {
-			Map map = convertObsoleteDictionaryToMap(b.getHeaders());
-			if (map != null && map.containsKey("MIDlet-Name")
-					&& map.containsKey("MIDlet-Version")
-					&& map.containsKey("MIDlet-Vendor")
-					&& map.containsKey("MIDlet-1")
-					&& map.containsKey("MicroEdition-Profile")
-					&& map.containsKey("MicroEdition-Configuration"))
-				installApplication(b.getBundleId());
+			Dictionary dict = b.getHeaders();
+			if (dict != null && dict.get("MIDlet-Name") != null
+					&& dict.get("MIDlet-Version") != null
+					&& dict.get("MIDlet-Vendor") != null
+					&& dict.get("MIDlet-1") != null
+					&& dict.get("MicroEdition-Profile") != null
+					&& dict.get("MicroEdition-Configuration") != null)
+				return true;
 		}
-		catch (Exception e) {
-			log(bc, 1, "Exception occurred at installing the midlet!", e);
-		}
+		catch (Exception e) {}
+		return false;
 	}
-
+	
 	private String getAttributeValue(Node node, String attribName) {
 		NamedNodeMap nnm = node.getAttributes();
 		if (nnm != null) {
@@ -218,18 +221,17 @@ public class MidletContainer implements BundleListener, ServiceListener {
 		return null;
 	}
 
-	private ApplicationDescriptor[] parseManifestHeaders(long bundleID) {
+	private ApplicationDescriptor[] parseManifestHeaders(Bundle bundle) {
 		try {
-			Map manifest = convertObsoleteDictionaryToMap(bc
-					.getBundle(bundleID).getHeaders());
-			String MIDletSuiteName = (String) manifest.get("MIDlet-Name");
-			String MIDletVersion = (String) manifest.get("MIDlet-Version");
-			String MIDletVendor = (String) manifest.get("MIDlet-Vendor");
-			String MIDletSuiteIcon = (String) manifest.get("MIDlet-Icon");
+			Dictionary dict = bundle.getHeaders();
+			String MIDletSuiteName = (String) dict.get("MIDlet-Name");
+			String MIDletVersion = (String) dict.get("MIDlet-Version");
+			String MIDletVendor = (String) dict.get("MIDlet-Vendor");
+			String MIDletSuiteIcon = (String) dict.get("MIDlet-Icon");
 			LinkedList appVector = new LinkedList();
 			int midletCounter = 0;
 			String midletProps;
-			while ((midletProps = (String) manifest.get("MIDlet-"
+			while ((midletProps = (String) dict.get("MIDlet-"
 					+ ++midletCounter)) != null) {
 				Properties props = new Properties();
 				Hashtable names = new Hashtable();
@@ -244,7 +246,7 @@ public class MidletContainer implements BundleListener, ServiceListener {
 							if (MIDletIcon.equals(""))
 								MIDletIcon = MIDletSuiteIcon;
 							props.setProperty("application.bundle.id", Long
-									.toString(bundleID));
+									.toString(bundle.getBundleId()));
 							props.setProperty(ApplicationDescriptor.APPLICATION_VENDOR,
 									MIDletVendor);
 							props.setProperty(ApplicationDescriptor.APPLICATION_VISIBLE, "true");
@@ -260,7 +262,7 @@ public class MidletContainer implements BundleListener, ServiceListener {
 							props.put(Constants.SERVICE_PID, uniqueID);
 
 							MidletDescriptor midletDesc = new MidletDescriptor( bc, props, names, icons, defaultLang, MIDletStartClass,
-									bc.getBundle(bundleID), this);
+									bundle, this);
 							
 							appVector.add( midletDesc );
 						}
@@ -280,8 +282,8 @@ public class MidletContainer implements BundleListener, ServiceListener {
 			}
 
 			descriptor.serviceRegistrations = new ServiceRegistration[applicationNum];
-			descriptor.bundleID = bundleID;
-			bundleHash.put(new Long(bundleID), descriptor);
+			descriptor.bundleID = bundle.getBundleId();
+			bundleHash.put(new Long(bundle.getBundleId()), descriptor);
 			return descs;
 		}
 		catch (Throwable e) {
@@ -311,18 +313,6 @@ public class MidletContainer implements BundleListener, ServiceListener {
 		return false;
 	}
 
-	private Map convertObsoleteDictionaryToMap(Dictionary dict) {
-		Hashtable convertedTable = new Hashtable();
-		if (dict == null)
-			return null;
-		String key;
-		for (Enumeration enum = dict.keys(); enum.hasMoreElements(); convertedTable
-				.put(key, dict.get(key)))
-			key = (String) enum.nextElement();
-
-		return convertedTable;
-	}
-	
 	OATContainerInterface getOATInterface() {
 		return oat;
 	}
