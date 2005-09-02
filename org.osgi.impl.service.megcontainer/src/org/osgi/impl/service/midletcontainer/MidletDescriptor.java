@@ -11,15 +11,15 @@ import org.osgi.service.application.*;
 
 public final class MidletDescriptor extends ApplicationDescriptor {
 	private Properties			props;
-	private Hashtable			names;
-	private Hashtable			icons;
+	private Hashtable			  names;
+	private Hashtable			  icons;
 	private BundleContext		bc;
-	private String				startClass;
-	private String				pid;
-	private Bundle				bundle;
-	private String				defaultLanguage;
-	private boolean				locked;
-	private MidletContainer		midletContainer;
+	private String				  startClass;
+	private String				  pid;
+	private Bundle				  bundle;
+	private String				  defaultLanguage;
+	private boolean				  locked;
+	private MidletContainer	midletContainer;
 	private static int			instanceCounter;
 
 	public MidletDescriptor(BundleContext bc, Properties props, Map names, Map icons,
@@ -136,17 +136,13 @@ public final class MidletDescriptor extends ApplicationDescriptor {
 		locked = false;
 	}
 
-	public boolean isLocked() {
-		return locked;
-	}
-
 	static synchronized String createNewInstanceID(String pid) {
 		return new String(pid + ":" + instanceCounter++);
 	}
 	
 	public boolean isLaunchable() {
 		try {
-			if (isLocked())
+			if ( locked )
 				return false;
 			if( !midletContainer.getOATInterface().isLaunchable( getBundle(), startClass ) )
 				return false;
