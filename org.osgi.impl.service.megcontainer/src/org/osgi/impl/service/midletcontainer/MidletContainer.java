@@ -96,8 +96,6 @@ public class MidletContainer implements BundleListener, ServiceListener {
 			}
 			Dictionary properties = new Hashtable(desc.applications[i]
 					.getProperties(Locale.getDefault().getLanguage()));
-			String pid = (String) properties.get(Constants.SERVICE_PID);
-			properties.put(Constants.SERVICE_PID, pid);
 			desc.serviceRegistrations[i] = bc.registerService(
 					ApplicationDescriptor.class.getName(),
 					desc.applications[i], properties);
