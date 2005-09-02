@@ -73,6 +73,8 @@ public final class MidletDescriptor extends ApplicationDescriptor {
 
 	public Map getPropertiesSpecific(String locale) {
 		Hashtable properties = new Hashtable();
+		if( locale == null )
+			locale = "";
 		String localizedName = (String) names.get(locale);
 		if (localizedName == null) {
 			if ((localizedName = (String) names.get(defaultLanguage)) == null) {
