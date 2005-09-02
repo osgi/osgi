@@ -40,14 +40,51 @@ public class ComponentDescriptionProp {
 	protected Hashtable				properties;
 	protected ServiceRegistration	serviceRegistration;
 
-	protected List					delayActivateCDPNames;
+	/**
+	 * List of {@link org.eclipse.osgi.component.resolver.Reference Reference} objects
+	 */
 	protected List					references;
+	
+	/**
+	 * List of {@link ComponentInstance} objects
+	 */
 	protected List					instances;
 
-	boolean							componentFactory;
+	/**
+	 * List of names (Strings) of Component Configurations we should not cause to
+	 * activate during the activation of this Component Configuration.  This is
+	 * populated by the {@link org.eclipse.osgi.component.resolver.Resolver Resolver}
+	 * and used by {@link org.eclipse.osgi.component.instance.BuildDispose BuildDispose}.
+	 */
+	protected List					delayActivateCDPNames;
 
 	/**
-	 * @param bundle The bundle to set.
+	 * Flag to indicate that this Component Configuration registers 
+	 * the {@link org.osgi.service.component.ComponentFactory} 
+	 * service.  
+	 * 
+	 * (A Service Component that has the "factory" attribute will have
+	 * one Component Configuration that registers 
+	 * {@link org.osgi.service.component.ComponentFactory} and then a Component
+	 * Configuration for every factory instance that registers a different service
+	 * or none at all).
+	 */
+	protected boolean							componentFactory;
+
+	/**
+	 * Create a new Component Configuration for this Service Component with
+	 * it's own Reference objects, and properties.
+	 * 
+	 * @param cd the Service Component
+	 * 
+	 * @param references a List of 
+	 *        {@link org.eclipse.osgi.component.resolver.Reference Reference}
+	 *        objects
+	 *        
+	 * @param properties Properties associated with this Component Configuration
+	 * 
+	 * @param componentFactory "Component Factory" flag - see 
+	 *        {@link ComponentDescriptionProp#componentFactory}
 	 */
 	public ComponentDescriptionProp(ComponentDescription cd, List references,
 			Hashtable properties, boolean componentFactory) {
@@ -63,23 +100,22 @@ public class ComponentDescriptionProp {
 	}
 
 	/**
-	 * getProperties
-	 * 
-	 * @return Dictionary properties
+	 * Get the properties of this Component Configuration
 	 */
 	public Hashtable getProperties() {
 		return properties;
 	}
 
-	/**
-	 * getComponentDescription
-	 * 
-	 * @return ComponentDescription
-	 */
 	public ComponentDescription getComponentDescription() {
 		return cd;
 	}
 
+	/**
+	 * Add a new Component Configuration name we should beware of activating to
+	 * prevent a cycle.
+	 * 
+	 * @see ComponentDescriptionProp#delayActivateCDPNames
+	 */
 	public void setDelayActivateCDPName(String cdpName) {
 		if (!delayActivateCDPNames.contains(cdpName))
 			delayActivateCDPNames.add(cdpName);
