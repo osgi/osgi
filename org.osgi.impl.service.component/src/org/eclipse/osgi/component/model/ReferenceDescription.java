@@ -19,7 +19,9 @@ package org.eclipse.osgi.component.model;
  * 
  * This class models the reference element.
  * A reference declares a dependency that a component has on a set 
- * of target services. * 
+ * of target services.
+ * 
+ * @see org.eclipse.osgi.component.resolver.Reference
  * 
  * @version $Revision$
  */
@@ -181,7 +183,7 @@ public class ReferenceDescription {
 		return parent;
 	}
 
-	// if the cardinality is "1..1" or "1..n" then this refernce is required
+	// if the cardinality is "1..1" or "1..n" then this reference is required
 	public boolean isRequired() {
 		return (cardinalityLow == 1);
 	}
