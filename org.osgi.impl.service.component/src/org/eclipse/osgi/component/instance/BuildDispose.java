@@ -30,7 +30,6 @@ import org.eclipse.osgi.component.model.ComponentDescriptionProp;
 import org.eclipse.osgi.component.model.ReferenceDescription;
 import org.eclipse.osgi.component.resolver.Reference;
 import org.eclipse.osgi.component.resolver.Resolver;
-import org.eclipse.osgi.component.workqueue.WorkDispatcher;
 import org.eclipse.osgi.impl.service.component.ComponentContextImpl;
 import org.eclipse.osgi.impl.service.component.ComponentInstanceImpl;
 import org.osgi.framework.Bundle;
@@ -50,7 +49,7 @@ import org.osgi.service.component.ComponentInstance;
  * Dispose of a component instance - includes deactivate, unbind, unreference.
  * 
  */
-public class BuildDispose implements WorkDispatcher {
+public class BuildDispose {
 
 	/* set this to true to compile in debug messages */
 	static final boolean		DEBUG	= false;
@@ -71,8 +70,6 @@ public class BuildDispose implements WorkDispatcher {
 	private Hashtable			delayedBindTable;
 	
 	
-	private static final int	BUILD	= 1;
-
 	/** Main SCR class */
 	protected Main				main;
 
@@ -822,24 +819,6 @@ public class BuildDispose implements WorkDispatcher {
 		ComponentContext context = new ComponentContextImpl(main, usingBundle,
 				cdp, componentInstance);
 		componentInstance.setComponentContext(context);
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.eclipse.osgi.component.workqueue.WorkDispatcher#dispatchWork(int,
-	 *      java.lang.Object)
-	 */
-	public void dispatchWork(int workAction, Object workObject) {
-		switch (workAction) {
-			case BUILD :
-				// only build if cdp is still resolved
-				ComponentDescriptionProp cdp = (ComponentDescriptionProp) workObject;
-				if (main.resolver.satisfiedCDPs.contains(cdp)) {
-					build(null, cdp);
-				}
-		}
-
 	}
 
 }
