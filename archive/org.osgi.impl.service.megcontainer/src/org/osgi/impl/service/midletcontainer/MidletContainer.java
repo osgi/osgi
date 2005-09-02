@@ -58,8 +58,6 @@ public class MidletContainer implements BundleListener, ServiceListener {
 
 	public void stop() throws Exception {
 		
-		terminateContainerApplications();
-		
 		for (int i = 0; i != installedMidletBundles.size(); i++)
 			unregisterApplicationDescriptors((Bundle)installedMidletBundles.get(i));
 
@@ -67,21 +65,23 @@ public class MidletContainer implements BundleListener, ServiceListener {
 		bc.removeBundleListener( this );
 	}
 
-	private void terminateContainerApplications() {
+	private void terminateApplications( MidletBundleDescriptor desc ) {
 		try {
-		  ServiceReference refs[] = bc.getServiceReferences( ApplicationHandle.class.getName(), null );
-		  if( refs == null || refs.length == 0 )
-		  	return;
-		  
-		  for( int i=0; i != refs.length; i++ ) {
-		  	ApplicationHandle appHandle = (ApplicationHandle)bc.getService( refs[ i ] );
-		  	if( appHandle instanceof MidletHandle ) {
-		  		try {
-		  		  appHandle.destroy(); /* TODO, what to do if the app doesn't stop? */
-		  		}catch( Exception e ) {}
-		  		bc.ungetService( refs[ i ] );
-		  	}		  	
-		  }
+			for( int i=0; i != desc.applications.length; i++ ) {
+				ApplicationDescriptor appDesc = desc.applications[ i ];
+				ServiceReference refs[] = bc.getServiceReferences( ApplicationHandle.class.getName(), 
+						 "(" + ApplicationHandle.APPLICATION_DESCRIPTOR + "=" + 
+						 appDesc.getProperties( null ).get( ApplicationDescriptor.APPLICATION_PID ) + ")" );
+			  if( refs != null && refs.length != 0 ) {
+				  for( int j=0; j != refs.length; j++ ) {
+				  	ApplicationHandle appHandle = (ApplicationHandle)bc.getService( refs[ j ] );
+				  	try {
+				  	  appHandle.destroy(); /* TODO, what to do if the app doesn't stop? */
+				  	}catch( Exception e ) {}
+				  	bc.ungetService( refs[ j ] );
+				  }		  				  	
+			  }
+			}
 		}catch( InvalidSyntaxException e ) {}
 	}
 	
@@ -109,12 +109,15 @@ public class MidletContainer implements BundleListener, ServiceListener {
 		MidletBundleDescriptor desc = (MidletBundleDescriptor) bundleDescriptorHash.get( bundle );
 		if (desc == null)
 			return;
-		for (int i = 0; i != desc.serviceRegistrations.length; i++)
+
+		terminateApplications( desc );
+		
+		for (int i = 0; i != desc.serviceRegistrations.length; i++) {
 			if (desc.serviceRegistrations[i] != null) {
 				desc.serviceRegistrations[i].unregister();
 				desc.serviceRegistrations[i] = null;
 			}
-
+		}
 	}
 
 	public void bundleChanged(BundleEvent event) {
