@@ -27,6 +27,7 @@ import org.osgi.framework.Constants;
 import org.osgi.framework.ServiceReference;
 import org.osgi.impl.service.dmt.api.DmtPrincipalPermissionAdmin;
 import org.osgi.service.dmt.*;
+import org.osgi.service.log.LogService;
 import org.osgi.service.permissionadmin.PermissionInfo;
 import org.osgi.util.tracker.ServiceTracker;
 
@@ -39,7 +40,12 @@ public class DmtAdminImpl implements DmtAdmin {
     public static final int MINIMAL_SEGMENT_LENGTH_LIMIT = 32;
 
     // session initiation timeout after 10 seconds, to make testing easier 
-    public static final long TIMEOUT = 10000; 
+    public static final long OPEN_TIMEOUT = 10000;
+    
+    // session idle timeout: session is invalidated after 5 minutes inactivity
+    public static final long IDLE_TIMEOUT = 300000;
+    // half-minute idle timeout for demonstration purposes 
+    //public static final long IDLE_TIMEOUT = 30000;
     
     // contains the maximum length of node names or 0 if there is no limit
     static final int segmentLengthLimit;
@@ -134,7 +140,7 @@ public class DmtAdminImpl implements DmtAdmin {
     // notifyAll is called.  Some threads may be "starved", i.e. timed out.
     private void waitUntilNoConflictingSessions(Node subtreeNode, int lockMode) 
             throws DmtException {
-        final long timeLimit = System.currentTimeMillis() + TIMEOUT;
+        final long timeLimit = System.currentTimeMillis() + OPEN_TIMEOUT;
         
         while(conflictsWithOpenSessions(subtreeNode, lockMode)) {
             long timeLeft = timeLimit - System.currentTimeMillis();
@@ -168,8 +174,9 @@ public class DmtAdminImpl implements DmtAdmin {
     }
 
     synchronized void releaseSession(DmtSession session) {
-        if(!openSessions.remove(session)) // TODO write log message instead
-            System.out.println("Session release notification from unknown session!");
+        if(!openSessions.remove(session))
+            context.log(LogService.LOG_INFO, "Session release notification " +
+                    "from unknown session!", null);
         
         notifyAll(); // wake all waiting sessions, and reevaluate conflicts
     }
