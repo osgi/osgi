@@ -80,6 +80,7 @@ public class ConditionalTestControl extends DefaultTestBundleControl {
                                                   "testCPInfosSetBeforeInstallBundle", //"TC9"
                                                   "testMultipleBundlesOnStack", //"T10"
                                                   "testRecursionInChecks", //"T11"
+                                                  "testMutable2Immutable", //"T12"
                                                   };
 
   /**
@@ -418,7 +419,7 @@ public class ConditionalTestControl extends DefaultTestBundleControl {
     AdminPermission allPermissions = new AdminPermission("*", "*");
 
     try {
-      TestCondition.setTestBundleLocation(testBundleLocation);
+      TestCondition.setTestBundleLocation(testBundle);
     } catch (Exception ex) {
       pass(ex.getMessage());
       //it doesn't work because loadClass method in RI works with the system class loader only
@@ -613,7 +614,7 @@ public class ConditionalTestControl extends DefaultTestBundleControl {
    */
   public void testMultipleBundlesOnStack() {//TC10
     try {
-      TestCondition.setTestBundleLocation(testBundleLocation);
+      TestCondition.setTestBundleLocation(testBundle);
     } catch (Exception ex) {
       pass(ex.getMessage());
       //it doesn't work because loadClass method in RI works with the system class loader only
@@ -659,7 +660,7 @@ public class ConditionalTestControl extends DefaultTestBundleControl {
     cpi[0][3] = utility.setPermissionsByCPermissionAdmin(new ConditionInfo[] { blcA, ic },
         new Permission[] { permissionS });
 
-    TestCondition.setTestBundleLocation(permBundleLocation);
+    TestCondition.setTestBundleLocation(permBundle);
     cpi[1][1] = utility.setPermissionsByCPermissionAdmin(new ConditionInfo[] { blcB, ic1, pc1, pc2 },
         new Permission[] { permissionP, permissionR });
     cpi[1][2] = utility.setPermissionsByCPermissionAdmin(new ConditionInfo[] { blcB, pc2 },
@@ -667,7 +668,7 @@ public class ConditionalTestControl extends DefaultTestBundleControl {
     cpi[1][3] = utility.setPermissionsByCPermissionAdmin(new ConditionInfo[] { blcB, ic },
         new Permission[] { permissionQ });
 
-    TestCondition.setTestBundleLocation(domBundleLocation);
+    TestCondition.setTestBundleLocation(domBundle);
     cpi[2][1] = utility.setPermissionsByCPermissionAdmin(new ConditionInfo[] { blcC, ic },
         new Permission[] { permissionQ });
     cpi[2][2] = utility.setPermissionsByCPermissionAdmin(new ConditionInfo[] { blcC, ic0 },
@@ -704,7 +705,7 @@ public class ConditionalTestControl extends DefaultTestBundleControl {
    */
   public void testRecursionInChecks() {//TC11
     try {
-      TestConditionRecursive.setTestBundleLocation(domBundleLocation);
+      TestConditionRecursive.setTestBundleLocation(domBundle);
     } catch (Exception ex) {
       pass(ex.getMessage());
       //it doesn't work because loadClass method in RI works with the system class loader only
@@ -749,6 +750,73 @@ public class ConditionalTestControl extends DefaultTestBundleControl {
 
     cpi1.delete();
     cpi2.delete();
+  }
+
+  /**
+   * Check a condition that starts as a mutable and later becomes immutable.
+   */
+  public void testMutable2Immutable() {//TC12
+    utility.setTestBunde(testBundle, false);
+    TestCondition.satisfOrder.removeAllElements();
+    
+    try {
+      TestCondition.setTestBundleLocation(testBundle);
+    } catch (Exception ex) {
+      pass(ex.getMessage());
+      //it doesn't work because loadClass method in RI works with the system class loader only
+      if (ex instanceof ClassNotFoundException)
+        fail("Please use Target_tck95.launch for successful run of 'testMoreConditions' test case");
+    }
+
+    ConditionInfo cInfo = new ConditionInfo(BUNDLE_LOCATION_CONDITION, new String[] { testBundleLocation });
+    ConditionInfo tc1  = utility.createTestCInfo(false, false, true, "TestCondition_200"); // not postponed, not satisfied, mutable
+    ConditionInfo tc2  = utility.createTestCInfo(false,  true, true, "TestCondition_201"); // not postponed, satisfied, mutable
+    ConditionInfo tc3  = utility.createTestCInfo( true, false, true, "TestCondition_202"); // postponed, not satisfied, mutable
+    ConditionInfo tc4  = utility.createTestCInfo( true,  true, true, "TestCondition_203"); // postponed, satisfied, mutable
+
+    AdminPermission perm1 = new AdminPermission("*", AdminPermission.EXECUTE);
+    AdminPermission perm2 = new AdminPermission("*", AdminPermission.LIFECYCLE);
+    AdminPermission perm3 = new AdminPermission("*", AdminPermission.RESOLVE);
+    AdminPermission perm4 = new AdminPermission("*", AdminPermission.STARTLEVEL);
+
+    ConditionalPermissionInfo cpi_df = utility.setPermissionsByCPermissionAdmin(new ConditionInfo[] { cInfo },
+        new Permission[] { new AdminPermission("*", AdminPermission.EXTENSIONLIFECYCLE) });
+    TestCondition.changeToImmutable(true);
+    
+    ConditionalPermissionInfo cpi = utility.setPermissionsByCPermissionAdmin(new ConditionInfo[] { cInfo, tc1 },
+        new Permission[] { perm1 });
+    utility.notAllowed(perm1, SecurityException.class);
+    utility.notAllowed(perm1, SecurityException.class);
+    utility.notAllowed(perm1, SecurityException.class);
+    utility.testEqualArrays(new String[] { "TestCondition_200", "TestCondition_200" }, TestCondition.getSatisfOrder());
+    cpi.delete();
+
+    cpi = utility.setPermissionsByCPermissionAdmin(new ConditionInfo[] { cInfo, tc2 },
+        new Permission[] { perm2 });
+    utility.allowed(perm2);
+    utility.allowed(perm2);
+    utility.allowed(perm2);
+    utility.testEqualArrays(new String[] { "TestCondition_201", "TestCondition_201" }, TestCondition.getSatisfOrder());
+    cpi.delete();
+
+    cpi = utility.setPermissionsByCPermissionAdmin(new ConditionInfo[] { cInfo, tc3 },
+        new Permission[] { perm3 });
+    utility.notAllowed(perm3, SecurityException.class);
+    utility.notAllowed(perm3, SecurityException.class);
+    utility.notAllowed(perm3, SecurityException.class);
+    utility.testEqualArrays(new String[] { "TestCondition_202", "TestCondition_202" }, TestCondition.getSatisfOrder());
+    cpi.delete();
+
+    cpi = utility.setPermissionsByCPermissionAdmin(new ConditionInfo[] { cInfo, tc4 },
+        new Permission[] { perm4 });
+    utility.allowed(perm4);
+    utility.allowed(perm4);
+    utility.allowed(perm4);
+    utility.testEqualArrays(new String[] { "TestCondition_203", "TestCondition_203" }, TestCondition.getSatisfOrder());
+    cpi.delete();
+    
+    TestCondition.changeToImmutable(false);
+    cpi_df.delete();
   }
 
   /**

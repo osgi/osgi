@@ -19,7 +19,7 @@ public class TestConditionRecursive extends TestCondition {
   }
 
   public static Condition getCondition(Bundle bundle, ConditionInfo info) {
-    if (testBundleLocation.equals(bundle.getLocation())) {
+    if (testBundle == bundle) {
       return new TestConditionRecursive(bundle, info);
     }
     return Condition.FALSE;

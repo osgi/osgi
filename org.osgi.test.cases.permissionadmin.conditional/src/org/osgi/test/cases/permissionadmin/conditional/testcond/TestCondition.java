@@ -12,10 +12,10 @@ import org.osgi.framework.Bundle;
 public class TestCondition implements Condition {
   private static final String CONDITION_TYPE = TestCondition.class.getName();
   private static final String CONDITION_TYPE2 = TestConditionRecursive.class.getName();
-	private static final String TEST_BUNDLE = "http://127.0.0.1/permissionadmin.conditional/tb1.jar";
   
-  protected static String testBundleLocation = TEST_BUNDLE;
+  protected static Bundle testBundle = null;
   public    static Vector satisfOrder = new Vector();
+  private   static boolean varmutable;
   
   protected boolean postponed;
   protected boolean satisfied;
@@ -37,14 +37,14 @@ public class TestCondition implements Condition {
 	}	
   
   public static Condition getCondition(Bundle bundle, ConditionInfo info) {
-    if (testBundleLocation.equals(bundle.getLocation())) {
+    if (testBundle == bundle) {
       return new TestCondition(bundle, info);
     }
     return Condition.FALSE;
   }
   
-  public static void setTestBundleLocation(String bundleLocation) {
-    testBundleLocation = bundleLocation;
+  public static void setTestBundleLocation(Bundle bundle) {
+    testBundle = bundle;
   }
   
 	public boolean isPostponed() {
@@ -53,6 +53,7 @@ public class TestCondition implements Condition {
 
 	public boolean isSatisfied() {
 //    System.out.println("#isSatisfied method checked of " + info);
+    if (varmutable) mutable = false;
     satisfOrder.addElement(name);
 		return satisfied;
 	}
@@ -60,6 +61,10 @@ public class TestCondition implements Condition {
 	public boolean isMutable() {
 		return mutable;
 	}
+  
+  public static void changeToImmutable(boolean state) {
+    varmutable = state;
+  }
   
   private void setInfoString(String[] args) {
     StringBuffer buf = new StringBuffer();
