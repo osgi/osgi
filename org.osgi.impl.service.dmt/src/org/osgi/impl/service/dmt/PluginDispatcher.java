@@ -22,9 +22,9 @@ import org.osgi.framework.ServiceReference;
 import org.osgi.service.dmt.DmtException;
 import org.osgi.service.dmt.spi.DataPluginFactory;
 import org.osgi.service.dmt.spi.ExecPlugin;
+import org.osgi.service.log.LogService;
 import org.osgi.util.tracker.ServiceTrackerCustomizer;
 
-// TODO replace System.out-s with log messages
 public class PluginDispatcher implements ServiceTrackerCustomizer {
     private Context            context;
     private ArrayList          plugins;
@@ -47,25 +47,26 @@ public class PluginDispatcher implements ServiceTrackerCustomizer {
         if (roots == null || execs == null)
             return null;
         if (roots.length == 0 && execs.length == 0) {
-            System.out.println("Plugin is not registered for any nodes, ignoring plugin.");
+            context.log(LogService.LOG_WARNING, "Plugin is not registered " +
+                    "for any nodes, ignoring plugin.", null);
             return null;
         }
 
         // TODO also check 'roots' and 'execs' for conflicts within the arrays
         if (pluginConflict(roots, execs, plugins)) {
-            System.out.println("Plugin data or exec roots (" +
+            context.log(LogService.LOG_WARNING, "Plugin data or exec roots (" +
                     Arrays.asList(Node.getUriArray(roots)) + ", " +
                     Arrays.asList(Node.getUriArray(execs)) +
                     ") conflict with a previously registered plugin; " +
-                    "ignoring this plugin.");
+                    "ignoring this plugin.", null);
             return null;
         } 
         
         List invalidRootUris = getInvalidRoots(roots);
         if(invalidRootUris.size() != 0) {
-            System.out.println("Ignoring plugin because of invalid "
-                    + "plugin data roots '" + invalidRootUris
-                    + "': the node or the parent must already exist.");
+            context.log(LogService.LOG_WARNING, "Ignoring plugin because of " +
+                    "invalid plugin data roots '" + invalidRootUris +
+                    "': the node or the parent must already exist.", null);
             return null;
         }
 
@@ -144,8 +145,9 @@ public class PluginDispatcher implements ServiceTrackerCustomizer {
         else if (property instanceof String[])
             uris = (String[]) property;
         else {
-            System.out.println("Plugin property '" + propertyName + "' does "
-                    + "not contain 'String' or 'String[]', ignoring plugin.");
+            context.log(LogService.LOG_WARNING, "Plugin property '" + 
+                    propertyName + "' does not contain 'String' or " +
+                    "'String[]', ignoring plugin.", null);
             return null;
         }
         
@@ -154,14 +156,15 @@ public class PluginDispatcher implements ServiceTrackerCustomizer {
             try {
                 nodes[i] = Node.validateAndNormalizeUri(uris[i]);
             } catch(DmtException e) {
-                System.out.println("Invalid URI '" + uris[i] + "' in property '" 
-                        + propertyName + "', ignoring plugin.");
-                e.printStackTrace(System.out);
+                context.log(LogService.LOG_WARNING, "Invalid URI '" + uris[i] + 
+                        "' in property '" + propertyName + 
+                        "', ignoring plugin.", e);
                 return null;
             }
             if (!nodes[i].isAbsolute()) {
-                System.out.println("Relative URI '" + uris[i] + "' in " +
-                        "property '" + propertyName + "', ignoring plugin.");
+                context.log(LogService.LOG_WARNING, "Relative URI '" + uris[i] +
+                        "' in property '" + propertyName + "', ignoring " +
+                        "plugin.", null);
                 return null;
             }
         }
