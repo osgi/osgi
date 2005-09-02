@@ -26,10 +26,14 @@ import org.osgi.service.dmt.security.*;
 import org.osgi.service.dmt.spi.*;
 import org.osgi.service.event.Event;
 import org.osgi.service.event.EventAdmin;
+import org.osgi.service.log.LogService;
 import org.osgi.service.permissionadmin.PermissionInfo;
 
 // Needed for meta-data name and value pattern matching
 //import java.util.regex.Pattern;
+
+// TODO ensure that plugins are never called for nodes above the session root (e.g. when the parent node is checked)
+// TODO should ADD events be sent for nodes created automatically?
 
 // OPTIMIZE node handling (e.g. retrieve plugin from dispatcher only once per API call), maybe with new URI class
 // OPTIMIZE only retrieve meta-data once per API call
@@ -114,7 +118,7 @@ public class DmtSessionImpl implements DmtSession {
     // throws NODE_NOT_FOUND if the previously specified root does not exist
     void open() throws DmtException {
         if(lockMode == LOCK_TYPE_ATOMIC)
-            // shallow copy is enough, URIs and Acls are immutable 
+            // shallow copy is enough, Nodes and Acls are immutable 
             savedAcls = (Hashtable) acls.clone();
         
         state = STATE_OPEN;
@@ -132,21 +136,26 @@ public class DmtSessionImpl implements DmtSession {
     // called by the Session Wrapper, rollback parameter is:
     // - true if a fatal exception has been thrown in a DMT access method
     // - false if any exception has been thrown in the commit/rollback methods
-    protected void invalidateSession(boolean rollback) {
+    protected void invalidateSession(boolean rollback, boolean timeout) {
         state = STATE_INVALID;
+        context.log(LogService.LOG_WARNING, "Invalidating session '" + 
+                sessionId + "' because of " + (timeout ? "timeout." : "error."), 
+                null);
         
         if(lockMode == LOCK_TYPE_ATOMIC && rollback) {
             try {
                 rollbackPlugins();
             } catch(DmtException e) {
-                // TODO
+                context.log(LogService.LOG_WARNING, "Error rolling back " +
+                        "plugin while invalidating session.", e);
             }
         }
         
         try {
             closeAndRelease(false);
         } catch(DmtException e) {
-            // TODO
+            context.log(LogService.LOG_WARNING, "Error closing plugin while" +
+                    "invalidating session.", e);
         }
     }
     
@@ -221,7 +230,6 @@ public class DmtSessionImpl implements DmtSession {
 					"Some plugins failed to close.", closeExceptions, false);
     }
     
-    // TODO close all plugins in case of error (if current op. is not close anyway)
     // no other API methods can be called while this method is executed 
     public synchronized void commit() throws DmtException {
         checkSession();
@@ -271,7 +279,6 @@ public class DmtSessionImpl implements DmtSession {
 
     }
     
-    // TODO close all plugins in case of error 
     // no other API methods can be called while this method is executed 
     public synchronized void rollback() throws DmtException {
 		checkSession();
@@ -655,7 +662,10 @@ public class DmtSessionImpl implements DmtSession {
             throw new DmtException(node.getUri(), 
                     DmtException.COMMAND_NOT_ALLOWED,
                     "Cannot create root node.");
-        // TODO automatically create missing parent node 
+        
+        createAncestorsIfNeeded(parent, sendEvent);
+        
+        // ensures that the parent, if it already existed, was an interior node
         checkNode(parent, SHOULD_BE_INTERIOR);
         checkNodePermission(parent, Acl.ADD);
         checkNodeCapability(node, MetaNode.CMD_ADD);
@@ -709,7 +719,10 @@ public class DmtSessionImpl implements DmtSession {
             throw new DmtException(node.getUri(), 
                     DmtException.COMMAND_NOT_ALLOWED, 
                     "Cannot create root node.");
-        // TODO automatically create missing parent node 
+        
+        createAncestorsIfNeeded(parent, sendEvent);
+
+        // ensures that the parent, if it already existed, was an interior node
         checkNode(parent, SHOULD_BE_INTERIOR);
         checkNodePermission(parent, Acl.ADD);
         checkNodeCapability(node, MetaNode.CMD_ADD);
@@ -747,15 +760,21 @@ public class DmtSessionImpl implements DmtSession {
 			throw new DmtException(node.getUri(), 
                     DmtException.COMMAND_NOT_ALLOWED,
 					"Cannot copy node to its descendant, '" + newNode + "'.");
-		Node newParentNode = newNode.getParent();
-        // newParentUri cannot be null, because newUri is a valid absolute URI
-        // that points to a nonexisting node, and as such it must contain a '/'
-		checkNode(newParentNode, SHOULD_BE_INTERIOR);
 
-        // DMTND 7.7.1.5: "needs correct access rights for the equivalent Add,
-		// Delete, Get, and Replace commands"
-		if (context.getPluginDispatcher()
+        if (context.getPluginDispatcher()
                 .handledBySameDataPlugin(node, newNode)) {
+            
+		    Node newParentNode = newNode.getParent();
+		    // newParentNode cannot be null, because newNode is a valid absolute
+            // nonexisting node, so it cannot be the root
+            
+            createAncestorsIfNeeded(newParentNode, false);
+
+            // ensures that the parent, if it already existed, was an int. node
+		    checkNode(newParentNode, SHOULD_BE_INTERIOR);
+
+		    // DMTND 7.7.1.5: "needs correct access rights for the equivalent
+		    // Add, Delete, Get, and Replace commands"
             checkNodePermissionRecursive(node, Acl.GET);
 			checkNodeCapability(node, MetaNode.CMD_GET);
 
@@ -1090,6 +1109,7 @@ public class DmtSessionImpl implements DmtSession {
         } else {
             DataPluginFactory plugin = pluginRegistration.getDataPlugin();
 
+            // TODO perform all 'open...' methods within the principal's security context!
             ReadableDataSession pluginSession = null;
             int pluginSessionType = lockMode;
             
@@ -1293,13 +1313,26 @@ public class DmtSessionImpl implements DmtSession {
     private Node makeAbsoluteUri(String nodeUri) throws DmtException {
         Node node = Node.validateAndNormalizeUri(nodeUri);
 		if (node.isAbsolute()) {
-			if (!subtreeNode.isAncestorOf(node))
-				throw new DmtException(nodeUri, DmtException.COMMAND_FAILED,
-						"Specified URI points outside the subtree of this session.");
+            checkNodeIsInSession(node);
 			return node;
 		}
 		return subtreeNode.appendRelativeNode(node);
 	}
+    
+    private void checkNodeIsInSession(Node node) throws DmtException {
+        if (!subtreeNode.isAncestorOf(node))
+            throw new DmtException(node.getUri(), DmtException.COMMAND_FAILED,
+                    "Specified URI points outside the subtree of this session.");        
+    }
+
+    private void createAncestorsIfNeeded(Node node, boolean sendEvent)
+            throws DmtException {
+        // TODO print more specific error message if node is not in session
+        checkNodeIsInSession(node);
+        if (!getReadableDataSession(node).isNodeUri(node.getPath())) {
+            commonCreateInteriorNode(node, null, sendEvent);
+        }
+    }
 
     // remove null entries from the returned array (if it is non-null)
     private static List normalizeChildNodeNames(String[] pluginChildNodes) {
@@ -1409,7 +1442,7 @@ public class DmtSessionImpl implements DmtSession {
                 "Unknown meta-data capability constant " + capability + ".");
     }
     
-	// ENHANCE define constants for the action names should in the Acl class
+	// ENHANCE define constants for the action names in the Acl class
 	private static String writeAclCommands(int actions) {
 		String commands = null;
 		commands = writeCommand(commands, actions, Acl.ADD,     "Add");
