@@ -2,28 +2,28 @@
 <project name="project" default="run-core">
 	
 	<target name="run-core">
-		<ant target="-run">
-		  <property name="impls" value="file:../osgi.core.impls.jar"/>
-		  <property name="bootclasspath" value=" ../testcond.jar"/>
-		</ant>
+		<antcall target="-run">
+		  <param name="impls" value="file:../osgi.core.impls.jar"/>
+		  <param name="classpath" value=" ../testcond.jar"/>
+		</antcall>
 	</target>
 	
 	<target name="run-cmpn">
-		<ant target="-run">
-			  <property name="impls" value="file:../osgi.cmpn.impls.jar"/>
-			  <property name="bootclasspath" value=""/>
-		</ant>
+		<antcall target="-run">
+			  <param name="impls" value="file:../osgi.cmpn.impls.jar"/>
+			  <param name="classpath" value=""/>
+		</antcall>
 	</target>
 	
 	<target name="-run">
 		<echo>Testing ${impls}</echo>
 		<java fork="true" classname="org.eclipse.osgi.framework.launcher.Launcher">	
 			<classpath path="../org.osgi.impl.framework.eclipse.jar"/>
-			<classpath path="../testcond.jar"/>
+			<classpath path="${classpath}"/>
 			<jvmarg line="-Djava.security.manager=org.eclipse.osgi.framework.internal.core.FrameworkSecurityManager"/>
 			<jvmarg line="-Djava.security.policy=policy"/>
 			<jvmarg line="-Xverify:none"/>
-			<arg line="-console"/>
+			<arg line="-console:2011"/>
 			<arg line="init"/>
 			<arg line="'install file:../osgi.jar start'"/>
 			<arg line="'install file:../osgi.target.jar start'"/>
