@@ -31,10 +31,15 @@ public class Analysis {
 	 */
 	public void execute() throws Exception {
 		ZipFile zip = new ZipFile(new File(zipfile));
-		ZipEntry entry = zip.getEntry("META-INF/MANIFEST.MF");
-		manifest = new Manifest(btool, zip.getInputStream(entry));
-		checkActivator();
-		checkSymbolicName();
+		try {
+			ZipEntry entry = zip.getEntry("META-INF/MANIFEST.MF");
+			manifest = new Manifest(btool, zip.getInputStream(entry));
+			checkActivator();
+			checkSymbolicName();
+		}
+		finally {
+			zip.close();
+		}
 	}
 
 
