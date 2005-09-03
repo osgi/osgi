@@ -1,4 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="project" default="publish"> 
 	<import file="../cnf/build.xml"/>
+
+	<target name="-jar">
+		<antcall target="master.-jar"/>
+		<condition property="signjar">
+			<or>
+				<equals arg1="${item.jarFile}" arg2="tb2.jar"/>
+				<equals arg1="${item.jarFile}" arg2="tb3.jar"/>
+			</or>
+		</condition>
+		<antcall target="jarsigner"/>
+	</target>
+
+	<target name="jarsigner" if="signjar">
+		<!-- I don't know why, but a small delay is needed to allow zipfile to be
+		     closed after btool before the exec of jarsigner. Otherwise,
+		     jarsigner gets an error trying to rename the jar file.
+		-->
+		<sleep milliseconds="500"/>
+		<signjar jar="${item.jarFile}" 
+			keystore="certificate\.keystore" 
+			storepass="testtest" 
+			keypass="testtest"
+			alias="test"/>
+	</target>
 </project>
