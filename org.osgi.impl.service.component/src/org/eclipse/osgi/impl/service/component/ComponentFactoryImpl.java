@@ -26,11 +26,10 @@ import org.osgi.service.component.ComponentFactory;
 import org.osgi.service.component.ComponentInstance;
 
 /**
- * When a component is declared with the <code>factory</code> attribute on its
- * <code>component</code> element, the Service Component Runtime will register
- * a ComponentFactory service to allow new component configurations to be
- * created and activated rather than automatically creating and activating
- * component configuration as necessary.
+ * When a Service Component is declared with the <code>factory</code> attribute 
+ * on its <code>component</code> element, the Service Component Runtime will 
+ * register a ComponentFactory service to allow new component configurations 
+ * to be created and activated.
  * 
  * @version $Revision$
  */
@@ -60,13 +59,13 @@ public class ComponentFactoryImpl implements ComponentFactory {
 	 * may be provided for the component configuration.
 	 * 
 	 * @param properties Additional properties for the component configuration.
-	 * @return A ComponentInstance object encapsulating the component
-	 *         configuration. The returned component configuration has been
-	 *         activated and, if the component specifies a <code>service</code>
-	 *         element, the component configuration has been registered as a
-	 *         service.
+	 * @return A ComponentInstance object encapsulating an instance of the 
+	 *         component configuration. The returned Component Configuration 
+	 *         instance has been activated and, if the Service Component 
+	 *         specifies a <code>service</code> element, the Component 
+	 *         Configuration has been registered as a service.
 	 * @throws ComponentException If the Service Component Runtime is unable to
-	 *         activate the component configuration.
+	 *         activate the Component Configuration instance.
 	 */
 	public ComponentInstance newInstance(Dictionary newProperties) {
 
