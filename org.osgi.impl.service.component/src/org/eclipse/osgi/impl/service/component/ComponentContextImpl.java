@@ -36,7 +36,7 @@ import org.osgi.service.component.ComponentException;
 import org.osgi.service.component.ComponentInstance;
 
 /**
- * A ComponentContext object is used by a Service Component to interact with it
+ * A ComponentContext object is used by a Service Component to interact with it's
  * execution context including locating services by reference name.
  * 
  * <p>
@@ -74,23 +74,36 @@ import org.osgi.service.component.ComponentInstance;
  */
 public class ComponentContextImpl implements ComponentContext {
 
-	/** The BundleContext this component is associated with */
+	/** The BundleContext of the Bundle that contains the Service Component
+	 * this ComponentContextImpl is associated with */
 	protected BundleContext		bundleContext;
 
-	/* ComponentInstance instance */
+	/**
+	 *  Component Configuraiton instance
+	 */
 	ComponentInstanceImpl		componentInstance;
 
-	/* ComponentDescription plus Properties */
+	/**
+	 * Component Configuration
+	 */
 	protected ComponentDescriptionProp	cdp;
 
 	protected Main						main;
 
+	/**
+	 * If the {@link ComponentContextImpl#componentInstance} was created for a 
+	 * {@link org.osgi.framework.ServiceFactory#getService(org.osgi.framework.Bundle, org.osgi.framework.ServiceRegistration) ServiceFactory.getService(...)}
+	 * call, this is the bundle that is "using" this Component instance.
+	 * Else null.
+	 */
 	protected Bundle						usingBundle;
 
 	/**
 	 * Construct a ComponentContext object
-	 * 
-	 * @param bundle The ComponentDescriptionProp we are wrapping.
+	 *
+	 * @param main
+	 * @param usingBundle See {@link ComponentContextImpl#usingBundle}
+	 * @param componentInstance
 	 */
 	public ComponentContextImpl(Main main, Bundle usingBundle,
 			ComponentInstanceImpl componentInstance) {
@@ -120,7 +133,7 @@ public class ComponentContextImpl implements ComponentContext {
 	 *         if the reference cardinality is <code>0..1</code> or
 	 *         <code>0..n</code> and no matching service is available.
 	 * @throws ComponentException If the Service Component Runtime catches an
-	 *         exception while activating the target service.
+	 *         exception while getting the target service.
 	 */
 	public Object locateService(String name) throws ComponentException {
 
@@ -192,7 +205,7 @@ public class ComponentContextImpl implements ComponentContext {
 	 *         if the specified <code>ServiceReference</code> is not a bound
 	 *         service for the specified reference name.
 	 * @throws ComponentException If the Service Component Runtime catches an
-	 *         exception while activating the bound service.
+	 *         exception while getting the service.
 	 */
 	public Object locateService(String name, ServiceReference serviceReference)
 			throws ComponentException {
@@ -255,22 +268,24 @@ public class ComponentContextImpl implements ComponentContext {
 								.getReferenceDescription().getInterfacename(),
 								thisReference.getTarget());
 
-				// sort by service ranking and service id
-				Arrays.sort(serviceReferences);
-
-				List serviceObjects = new ArrayList(serviceReferences.length);
-				for (int counter = 0; counter < serviceReferences.length; counter++) {
-					Object serviceObject = main.resolver.instanceProcess.buildDispose
-							.getService(cdp, thisReference,
-									serviceReferences[counter]);
-					if (serviceObject != null) {
-						serviceObjects.add(serviceObject);
-						componentInstance.addServiceReference(
-								serviceReferences[counter], serviceObject);
+				if (serviceReferences != null) {
+					// sort by service ranking and service id
+					Arrays.sort(serviceReferences);
+	
+					List serviceObjects = new ArrayList(serviceReferences.length);
+					for (int counter = 0; counter < serviceReferences.length; counter++) {
+						Object serviceObject = main.resolver.instanceProcess.buildDispose
+								.getService(cdp, thisReference,
+										serviceReferences[counter]);
+						if (serviceObject != null) {
+							serviceObjects.add(serviceObject);
+							componentInstance.addServiceReference(
+									serviceReferences[counter], serviceObject);
+						}
+					} // end for serviceReferences
+					if (!serviceObjects.isEmpty()) {
+						return serviceObjects.toArray();
 					}
-				} // end for serviceReferences
-				if (!serviceObjects.isEmpty()) {
-					return serviceObjects.toArray();
 				}
 			}
 			return null;
@@ -295,12 +310,13 @@ public class ComponentContextImpl implements ComponentContext {
 	 * <code>servicefactory=&quot;true&quot;</code> attribute, then this
 	 * method returns the bundle using the service provided by this component.
 	 * <p>
-	 * This method will return <code>null</code> if the component is either:
+	 * This method will return <code>null</code> if the component is:
 	 * <ul>
 	 * <li>Not a service, then no bundle can be using it as a service.
 	 * <li>Is a service but did not specify the
 	 * <code>servicefactory=&quot;true&quot;</code> attribute, then all
 	 * bundles will use this component.
+	 * <li>Was created because it specified the immediate=true attribute.
 	 * </ul>
 	 * 
 	 * @return The bundle using this component as a service or <code>null</code>.
@@ -315,9 +331,9 @@ public class ComponentContextImpl implements ComponentContext {
 	}
 
 	/**
-	 * Returns the ComponentInstance object for this component.
+	 * Returns this Component Configuration instance.
 	 * 
-	 * @return The ComponentInstance object for this component.
+	 * @return The ComponentInstance object for this ComponentDescriptionProp.
 	 */
 	public ComponentInstance getComponentInstance() {
 		return componentInstance;
@@ -335,9 +351,8 @@ public class ComponentContextImpl implements ComponentContext {
 
 		AccessController.doPrivileged(new PrivilegedAction() {
 			public Object run() {
-				// privileged code goes here, for example:
 				main.enableComponent(componentName, bundleContext.getBundle());
-				return null; // nothing to return
+				return null;
 			}
 		});
 
@@ -355,7 +370,6 @@ public class ComponentContextImpl implements ComponentContext {
 
 		AccessController.doPrivileged(new PrivilegedAction() {
 			public Object run() {
-				// privileged code goes here, for example:
 				main.disableComponent(componentName, bundleContext.getBundle());
 				return null; // nothing to return
 			}
@@ -363,12 +377,12 @@ public class ComponentContextImpl implements ComponentContext {
 	}
 
 	/**
-	 * If this component is registered as a service using the
+	 * If this Service Component specified the
 	 * <code>service</code> element, then this method returns the service
-	 * reference of the service provided by this component.
+	 * reference of the service provided by this Component Configuration.
 	 * <p>
-	 * This method will return <code>null</code> if this component is not
-	 * registered as a service.
+	 * This method will return <code>null</code> if this Component Configuration
+	 * is not registered as a service.
 	 * 
 	 * @return The <code>ServiceReference</code> object for this component or
 	 *         <code>null</code> if this component is not registered as a
