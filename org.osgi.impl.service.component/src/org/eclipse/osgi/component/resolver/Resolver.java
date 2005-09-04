@@ -54,7 +54,6 @@ import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceEvent;
 import org.osgi.framework.ServicePermission;
 import org.osgi.framework.ServiceReference;
-import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.cm.Configuration;
 import org.osgi.service.cm.ConfigurationAdmin;
 import org.osgi.service.component.ComponentConstants;
@@ -63,10 +62,12 @@ import org.osgi.service.log.LogService;
 import org.osgi.util.tracker.ServiceTracker;
 
 /**
+ * Resolver - resolves the Service Components.  This includes creating Component 
+ * Configurations, resolving the required referenced services, and checking for 
+ * circular dependencies.
  * 
- * Resolver - resolves the Service Component Descriptions This includes
- * resolving the required referenced services activating and registering
- * provided services also deactivating, binding and unbinding
+ * The Resolver implements AllServiceListener so it can be informed about service
+ * changes in the framework.
  * 
  * @version $Revision$
  */
@@ -75,14 +76,11 @@ public class Resolver implements AllServiceListener, WorkDispatcher {
 	/* set this to true to compile in debug messages */
 	static final boolean			DEBUG					= false;
 
-	/** next free component id. */
-	static protected long			componentid;
-
-	/**
-	 * The ConfigurationListener class
+	/** 
+	 * next free component id.
+	 * See OSGi R4 Specification section 112.6 "Component Properties"
 	 */
-	static final String				CONFIG_LISTENER_CLASS	= "org.osgi.service.cm.ConfigurationListener";
-	static final String				CMADMIN_SERVICE_CLASS	= "org.osgi.service.cm.ConfigurationAdmin";
+	static protected long			componentid;
 
 	/* ServiceTracker for configurationAdmin */
 	public ServiceTracker			configAdminTracker;
@@ -93,7 +91,7 @@ public class Resolver implements AllServiceListener, WorkDispatcher {
 	public static final int			BUILD					= 1;
 
 	/**
-	 * Service Component instances to bind dynamic
+	 * Service Component instances to bind dynamically
 	 */
 	public static final int			DYNAMICBIND				= 3;
 
@@ -104,11 +102,24 @@ public class Resolver implements AllServiceListener, WorkDispatcher {
 
 	public InstanceProcess			instanceProcess;
 
-	// note satisfiedCDPs is a subset of enabledCDPs
-	public List						enabledCDPs, satisfiedCDPs;
+	/**
+	 * List of {@link ComponentDescriptionProp}s - the currently "enabled" 
+	 * Component Configurations.
+	 */
+	public List						enabledCDPs; 
+	
+	/**
+	 * List of {@link ComponentDescriptionProp}s - the currently "satisfied" 
+	 * Component Configurations.  Note that to be satisfied a Component 
+	 * Configuration must first be enabled, so this list is a subset of 
+	 * {@link Resolver#enabledCDPs enabledCDPs}.
+	 */
+	public List						satisfiedCDPs;
+	
+	/**
+	 * A map of name:Service Component (String):({@link ComponentDescription})
+	 */
 	public Map						enabledCDsByName;
-
-	protected ServiceRegistration	configListener;
 
 	private WorkQueue				workQueue;
 
@@ -124,14 +135,19 @@ public class Resolver implements AllServiceListener, WorkDispatcher {
 
 		// for now use Main's workqueue
 		workQueue = main.workQueue;
+		
 		enabledCDPs = new ArrayList();
 		satisfiedCDPs = new ArrayList();
 		enabledCDsByName = new HashMap();
-		instanceProcess = new InstanceProcess(main);
-		addServiceListener();
+
 		configAdminTracker = new ServiceTracker(main.context,
-				CMADMIN_SERVICE_CLASS, null);
-		configAdminTracker.open(true); // true for track all services
+				ConfigurationAdmin.class.getName(), null);
+		configAdminTracker.open();
+
+		instanceProcess = new InstanceProcess(main);
+
+		//start listening to ServiceChanged events
+		main.context.addServiceListener(this);
 
 	}
 
@@ -140,30 +156,48 @@ public class Resolver implements AllServiceListener, WorkDispatcher {
 	 */
 	public void dispose() {
 
-		removeServiceListener();
+		//stop listening to ServiceChanged events
+		main.context.removeServiceListener(this);
+
 		instanceProcess.dispose();
+		instanceProcess = null;
+		
 		configAdminTracker.close();
 		configAdminTracker = null;
+
 		enabledCDPs = null;
 		satisfiedCDPs = null;
+		enabledCDsByName = null;
 
 	}
 
 	/**
-	 * enableComponents - called by the dispatchWorker
+	 * Enable Service Components - create Component Configuration(s) for the 
+	 * Service Components and try to satisfy their dependencies.
 	 * 
-	 * @param descriptions - a list of all component descriptions for a single
-	 *        bundle to be enabled. Receive List of enabled CD's from
-	 *        ComponentCache For each CD add to list of enabled create list of
-	 *        CD:CD+P create list of CD+P:ref ( where ref is a Reference Object)
-	 *        resolve CD+P
+	 * <p>
+	 * For each Service Component ({@link ComponentDescription}) check 
+	 * ConfigurationAdmin for properties and create a Component Configuration 
+	 * ({@link ComponentDescriptionProp}).
+	 * </p>
 	 * 
+	 * <p>
+	 * If a {@link org.osgi.service.cm.ManagedServiceFactory ManagedServiceFactory}
+	 * is registered for the Service Component, we may create multiple Component
+	 * Configurations.
+	 * </p>
+	 * 
+	 * <p>
+	 * After the Component Configuration(s) are created, call 
+	 * {@link Resolver#getEligible(ServiceEvent) getEligible(null)} to try to
+	 * satisfy them.
+	 * </p>
+	 * 
+	 * @param componentDescriptions - a List of {@link ComponentDescription}s to 
+	 *        be enabled 
 	 */
 	public void enableComponents(List componentDescriptions)
 			throws ComponentException {
-
-		Configuration config = null;
-		Configuration[] configs = null;
 
 		if (componentDescriptions != null) {
 			Iterator it = componentDescriptions.iterator();
@@ -174,6 +208,7 @@ public class Resolver implements AllServiceListener, WorkDispatcher {
 				enabledCDsByName.put(cd.getName(), cd);
 
 				// check for a Configuration properties for this component
+				Configuration config = null;
 				try {
 					ConfigurationAdmin configurationAdmin = (ConfigurationAdmin) configAdminTracker
 							.getService();
@@ -209,6 +244,7 @@ public class Resolver implements AllServiceListener, WorkDispatcher {
 									"incompatible to specify both ComponentFactory and ManagedServiceFactory are incompatible");
 						}
 
+						Configuration[] configs = null;
 						try {
 							ConfigurationAdmin cm = (ConfigurationAdmin) configAdminTracker
 									.getService();
@@ -250,17 +286,30 @@ public class Resolver implements AllServiceListener, WorkDispatcher {
 	}
 
 	/**
-	 * Create the CDP and add to the maps
+	 * Combine ConfigAdmin properties with a Service Component 
+	 * ({@link ComponentDescription}) to create a Component Configuration 
+	 * ({@link ComponentConfiguration}), and add it to our list of enabled 
+	 * Component Configurations ({@link Resolver#enabledCDPs}).
 	 * 
-	 * @param cd
-	 * @param properties
-	 * @throws IOException
+	 * The ConfigAdmin properties are combined with the properties from the 
+	 * Service Component's XML.
+	 * 
+	 * @param cd Service Component
+	 * @param configAdminProps ConfigAdmin properties for this Component
+	 *        Configuration 
 	 */
 	public ComponentDescriptionProp map(ComponentDescription cd,
 			Dictionary configAdminProps) {
 		return doMap(cd, configAdminProps, cd.getFactory() != null);
 	}
 
+	/**
+	 * Create a Component Configuration of a Service Component that has the
+	 * "factory" attribute.  
+	 * 
+	 * @see Resolver#map(ComponentDescription, Dictionary)
+	 * @see ComponentDescriptionProp#componentFactory
+	 */
 	public ComponentDescriptionProp mapFactoryInstance(ComponentDescription cd,
 			Dictionary configAdminProps) {
 		return doMap(cd, configAdminProps, false);
@@ -281,7 +330,7 @@ public class Resolver implements AllServiceListener, WorkDispatcher {
 			ReferenceDescription referenceDesc = (ReferenceDescription) it
 					.next();
 
-			// create new Reference Object and add to CD+P:ref map
+			// create new Reference Object
 			Reference ref = new Reference(referenceDesc, properties);
 			references.add(ref);
 
@@ -328,7 +377,7 @@ public class Resolver implements AllServiceListener, WorkDispatcher {
 			}
 		}
 
-		// 1) get properties from Service Component XML
+		// 1) get properties from Service Component XML, in parse order
 		PropertyDescription[] propertyDescriptions = cd.getProperties();
 		for (int i = 0; i < propertyDescriptions.length; i++) {
 			if (propertyDescriptions[i] instanceof PropertyValueDescription) {
@@ -424,16 +473,16 @@ public class Resolver implements AllServiceListener, WorkDispatcher {
 	}
 
 	/**
-	 * Disable list of ComponentDescriptions
+	 * Disable Service Components.
 	 * 
-	 * get all CD+P's from CD:CD+P Map get instances from CD+P:list of instance
-	 * (1:n) map
+	 * For each Service Component ({@link ComponentDescription}),
+	 * dispose of all of it's Component Configurations 
+	 * ({@link ComponentDescriptionProp}s).
 	 * 
-	 * Strip out of Map all CD+P's Continue to pull string check each Ref
-	 * dependency and continue to pull out CD+P's if they become not satisfied
-	 * Then call Resolver to re-resolve
+	 * @see Resolver#disposeInstances(List)
 	 * 
-	 * @param componentDescriptions
+	 * @param componentDescriptions List of {@link ComponentDescriptionProp}s to
+	 *        disable
 	 */
 	public void disableComponents(List componentDescriptions) {
 
@@ -456,6 +505,16 @@ public class Resolver implements AllServiceListener, WorkDispatcher {
 		}
 	}
 
+	/**
+	 * Dispose of Component Configurations ({@link ComponentDescriptionProp}s).
+	 * 
+	 * Remove Component Configurations from satisfied and enabled lists, and send
+	 * to InstanceProcess to be unregistered, deactivated, and unbound.
+	 * 
+	 * @see InstanceProcess#disposeInstances(List)
+	 * 
+	 * @param cdps List of {@link ComponentDescriptionProp}s
+	 */
 	public void disposeInstances(List cdps) {
 		// unregister, deactivate, and unbind
 		satisfiedCDPs.removeAll(cdps);
@@ -464,11 +523,53 @@ public class Resolver implements AllServiceListener, WorkDispatcher {
 	}
 
 	/**
-	 * Get the Eligible Components
+	 * Process a service change
+	 * <p>
+	 * A change has happened in the OSGi service environment, or new
+	 * Component Configurations have been added to the system.
+	 * </p>
+	 * Depending on the change, take the following actions:
+	 * <p>
+	 * If new Component Configurations were added (param event is null):
+	 *  <ol>
+	 *     <li>Check for circularity and mark cycles</li>
+	 *     <li>Send newly satisfied Component Configurations to Instance 
+	 *     process</li>
+	 *  </ol>
+	 *  </p>
+	 *  <p>
+	 * If a service was registered:
+	 * <ol>
+	 *    <li>Put "Dynamic Bind" events on the queue for any Component 
+	 *    Configurations which should be bound to the new service</li>
+	 *    <li>Send newly satisfied Component Configurations to Instance 
+	 *    process</li>
+	 * </ol>
+	 * </p>
+	 * <p>
+	 * If a service was modified:
+	 * <ol>
+	 *    <li>Synchronously dispose of all Component Configurations that 
+	 *    become unsatisfied</li>
+	 *    <li>Put "Dynamic Unbind Bind" events on the queue for any remaining 
+	 *    Component Configurations which should be unbound from the service</li>
+	 *    <li>Put "Dynamic Bind" events on the queue for any Component 
+	 *    Configurations which should be bound to the modified service</li>
+	 *    <li>Send newly satisfied Component Configurations to Instance 
+	 *    process</li>
+	 * </ol>
+	 * </p>
+	 * <p>
+	 * If a service was unregistered:
+	 * <ol>
+	 *    <li>Synchronously dispose of all Component Configurations that 
+	 *    become unsatisfied</li>
+	 *    <li>Put "Dynamic Unbind Bind" events on the queue for any remaining 
+	 *    Component Configurations which should be unbound from the service</li>
+	 * </ol>
+	 * </p>
 	 * 
-	 * loop through CD+P list of enabled get references check if satisfied if
-	 * true add to satisfied list send to Instance Process
-	 * 
+	 * @param event the service event or null if new cdps were added to the enabled list
 	 */
 	public void getEligible(ServiceEvent event) {
 
@@ -490,96 +591,93 @@ public class Resolver implements AllServiceListener, WorkDispatcher {
 
 		}
 		// if service registered
-		else
-			if (event.getType() == ServiceEvent.REGISTERED) {
+		else if (event.getType() == ServiceEvent.REGISTERED) {
 
-				// dynamic bind
-				Hashtable dynamicBind = selectDynamicBind(event
-						.getServiceReference());
-				if (!dynamicBind.isEmpty()) {
-					workQueue.enqueueWork(this, DYNAMICBIND, dynamicBind);
-				}
-
-				// get list of newly satisfied CDPs and build them
-				List newlySatisfiedCDPs = resolveSatisfied();
-				newlySatisfiedCDPs.removeAll(satisfiedCDPs);
-				if (!newlySatisfiedCDPs.isEmpty()) {
-					workQueue.enqueueWork(this, BUILD, newlySatisfiedCDPs);
-
-					satisfiedCDPs.addAll(newlySatisfiedCDPs);
-				}
-
+			// dynamic bind
+			Hashtable dynamicBind = selectDynamicBind(event
+					.getServiceReference());
+			if (!dynamicBind.isEmpty()) {
+				workQueue.enqueueWork(this, DYNAMICBIND, dynamicBind);
 			}
-			// if service modified
-			else
-				if (event.getType() == ServiceEvent.MODIFIED) {
 
-					// check for newly unsatisfied components and synchronously
-					// dispose them
-					List newlyUnsatisfiedCDPs = (List) ((ArrayList) satisfiedCDPs)
-							.clone();
-					newlyUnsatisfiedCDPs.removeAll(resolveSatisfied());
-					if (!newlyUnsatisfiedCDPs.isEmpty()) {
-						satisfiedCDPs.removeAll(newlyUnsatisfiedCDPs);
+			// get list of newly satisfied CDPs and build them
+			List newlySatisfiedCDPs = resolveSatisfied();
+			newlySatisfiedCDPs.removeAll(satisfiedCDPs);
+			if (!newlySatisfiedCDPs.isEmpty()) {
+				workQueue.enqueueWork(this, BUILD, newlySatisfiedCDPs);
 
-						instanceProcess.disposeInstances(newlyUnsatisfiedCDPs);
-					}
+				satisfiedCDPs.addAll(newlySatisfiedCDPs);
+			}
 
-					// dynamic unbind
-					// check each satisfied cdp - do we need to unbind
-					List dynamicUnBind = selectDynamicUnBind(event
-							.getServiceReference());
-					if (!dynamicUnBind.isEmpty()) {
-						instanceProcess.dynamicUnBind(dynamicUnBind);
-					}
+		}
+		// if service modified
+		else if (event.getType() == ServiceEvent.MODIFIED) {
 
-					// dynamic bind
-					Hashtable dynamicBind = selectDynamicBind(event
-							.getServiceReference());
-					if (!dynamicBind.isEmpty()) {
-						workQueue.enqueueWork(this, DYNAMICBIND, dynamicBind);
-					}
+			// check for newly unsatisfied components and synchronously
+			// dispose them
+			List newlyUnsatisfiedCDPs = (List) ((ArrayList) satisfiedCDPs)
+					.clone();
+			newlyUnsatisfiedCDPs.removeAll(resolveSatisfied());
+			if (!newlyUnsatisfiedCDPs.isEmpty()) {
+				satisfiedCDPs.removeAll(newlyUnsatisfiedCDPs);
 
-					// get list of newly satisfied CDPs and build them
-					List newlySatisfiedCDPs = resolveSatisfied();
-					newlySatisfiedCDPs.removeAll(satisfiedCDPs);
-					if (!newlySatisfiedCDPs.isEmpty()) {
-						workQueue.enqueueWork(this, BUILD, newlySatisfiedCDPs);
+				instanceProcess.disposeInstances(newlyUnsatisfiedCDPs);
+			}
 
-						satisfiedCDPs.addAll(newlySatisfiedCDPs);
-					}
+			// dynamic unbind
+			// check each satisfied cdp - do we need to unbind
+			List dynamicUnBind = selectDynamicUnBind(event
+					.getServiceReference());
+			if (!dynamicUnBind.isEmpty()) {
+				instanceProcess.dynamicUnBind(dynamicUnBind);
+			}
 
-				}
-				// if service unregistering
-				else
-					if (event.getType() == ServiceEvent.UNREGISTERING) {
+			// dynamic bind
+			Hashtable dynamicBind = selectDynamicBind(event
+					.getServiceReference());
+			if (!dynamicBind.isEmpty()) {
+				workQueue.enqueueWork(this, DYNAMICBIND, dynamicBind);
+			}
 
-						// check for newly unsatisfied components and
-						// synchronously dispose them
-						List newlyUnsatisfiedCDPs = (List) ((ArrayList) satisfiedCDPs)
-								.clone();
-						newlyUnsatisfiedCDPs.removeAll(resolveSatisfied());
-						if (!newlyUnsatisfiedCDPs.isEmpty()) {
-							satisfiedCDPs.removeAll(newlyUnsatisfiedCDPs);
+			// get list of newly satisfied CDPs and build them
+			List newlySatisfiedCDPs = resolveSatisfied();
+			newlySatisfiedCDPs.removeAll(satisfiedCDPs);
+			if (!newlySatisfiedCDPs.isEmpty()) {
+				workQueue.enqueueWork(this, BUILD, newlySatisfiedCDPs);
 
-							instanceProcess
-									.disposeInstances(newlyUnsatisfiedCDPs);
-						}
+				satisfiedCDPs.addAll(newlySatisfiedCDPs);
+			}
 
-						// dynamic unbind
-						List dynamicUnBind = selectDynamicUnBind(event
-								.getServiceReference());
-						if (!dynamicUnBind.isEmpty()) {
-							instanceProcess.dynamicUnBind(dynamicUnBind);
-						}
+		}
+		// if service unregistering
+		else if (event.getType() == ServiceEvent.UNREGISTERING) {
 
-					}
+			// check for newly unsatisfied components and
+			// synchronously dispose them
+			List newlyUnsatisfiedCDPs = (List) ((ArrayList) satisfiedCDPs)
+					.clone();
+			newlyUnsatisfiedCDPs.removeAll(resolveSatisfied());
+			if (!newlyUnsatisfiedCDPs.isEmpty()) {
+				satisfiedCDPs.removeAll(newlyUnsatisfiedCDPs);
+
+				instanceProcess
+						.disposeInstances(newlyUnsatisfiedCDPs);
+			}
+
+			// dynamic unbind
+			List dynamicUnBind = selectDynamicUnBind(event
+					.getServiceReference());
+			if (!dynamicUnBind.isEmpty()) {
+				instanceProcess.dynamicUnBind(dynamicUnBind);
+			}
+
+		}
 
 	}
 
 	/**
-	 * Check if a particular CDP is eligible. Also checks for circularity. If
-	 * cdp is eligible it is added to satisfiedCDPs list, but not sent to
+	 * Check if a particular CDP is satisfied. Also checks for circularity. If
+	 * cdp is satisfied it is added to satisfiedCDPs list, but not sent to
 	 * instance process
 	 * 
 	 * @param cdp
@@ -604,9 +702,22 @@ public class Resolver implements AllServiceListener, WorkDispatcher {
 	}
 
 	/**
-	 * Return list of components which are satisfied
+	 * Calculate which of the currently enabled Component Configurations 
+	 * ({@link Resolver#enabledCDPs}) are "satisfied".  
 	 * 
-	 * @return
+	 * <p>
+	 * An "enabled" Component 
+	 * Configuration is "satisfied" if there is at least one OSGi Service
+	 * registered that has the correct interface and matches the target filter 
+	 * for each of it's required (cardinality = "1..1" or "1..n") references.
+	 * </p>
+	 * <p>
+	 * If a Component Configuration will register a service and security is 
+	 * enabled, check if the bundle it comes from has 
+	 * {@link ServicePermission#REGISTER} for that service.  If the Component
+	 * Configuration does not have the necessary permission it is not "satisfied".
+	 * </p>
+	 * @return List of {@link ComponentDescriptionProp}s that are "satisfied"
 	 */
 	public List resolveSatisfied() {
 		List resolvedSatisfiedCDPs = new ArrayList();
@@ -655,27 +766,11 @@ public class Resolver implements AllServiceListener, WorkDispatcher {
 					continue;
 			}
 
-			// we have permission and providers - this CDP is satisfied
+			// we have providers and permission - this CDP is satisfied
 			resolvedSatisfiedCDPs.add(cdp);
 		} // end while (more enabled CDPs)
 		return resolvedSatisfiedCDPs.isEmpty() ? Collections.EMPTY_LIST
 				: resolvedSatisfiedCDPs;
-	}
-
-	/**
-	 * addService Listener - Listen for changes in the referenced services
-	 * 
-	 */
-	public void addServiceListener() {
-		main.context.addServiceListener(this);
-	}
-
-	/**
-	 * removeServiceListener -
-	 * 
-	 */
-	public void removeServiceListener() {
-		main.context.removeServiceListener(this);
 	}
 
 	/**
@@ -698,14 +793,10 @@ public class Resolver implements AllServiceListener, WorkDispatcher {
 		// if ((reference.getProperty(ComponentConstants.COMPONENT_ID) == null)
 
 		switch (eventType) {
-			// The properties of a registered Service have been modified
 			case ServiceEvent.MODIFIED :
-				getEligible(event);
-				break;
 			case ServiceEvent.REGISTERED :
-				getEligible(event);
-				break;
 			case ServiceEvent.UNREGISTERING :
+
 				getEligible(event);
 				break;
 		}
@@ -713,8 +804,29 @@ public class Resolver implements AllServiceListener, WorkDispatcher {
 	}
 
 	/**
-	 * @param workAction
-	 * @param workObject
+	 * Called asynchronously by the work queue thread to perform work.
+	 * <p>
+	 * There are two possible work actions:
+	 * <ul>
+	 *    <li>BUILD - workObject is a list of Component Configurations to be
+	 *    sent to the Instance process.  The Component Configurations have become
+	 *    satisfied.  Check that the Component Configurations are still satisfied 
+	 *    (system state may have changed while they were waiting on the work 
+	 *    queue) and send them to the instance process 
+	 *    ({@link InstanceProcess#buildInstances(List)}).
+	 *    </li>
+	 *    <li>DYNAMICBIND - workObject is a Map of References : Component 
+	 *    Configurations that need to be dynamically bound.  Check that the 
+	 *    Component Configurations are still satisfied (system state may have 
+	 *    changed while they were waiting on the work queue) and send them to 
+	 *    the instance process ({@link InstanceProcess#dynamicBind(Hashtable)}).
+	 * </ul>
+	 * </p>
+	 * @param workAction {@link Resolver#BUILD} or {@link Resolver#DYNAMICBIND}
+	 * @param workObject a List of {@link ComponentDescriptionProp}s if workAction
+	 *        is {@link Resolver#BUILD} or a Map of 
+	 *        {@link Reference}:{@link ComponentDescriptionProp} if workAction 
+	 *        is {@link Resolver#DYNAMICBIND} 
 	 * @see org.eclipse.osgi.component.workqueue.WorkDispatcher#dispatchWork(int,
 	 *      java.lang.Object)
 	 */
@@ -754,6 +866,15 @@ public class Resolver implements AllServiceListener, WorkDispatcher {
 		}
 	}
 
+	/**
+	 * Calculate which of the currently satisfied CDPs 
+	 * ({@link Resolver#satisfiedCDPs}) need to be dynamically bound to an OSGi
+	 * service.
+	 * 
+	 * @param serviceReference the service
+	 * @return a Hashtable of {@link Reference}:{@link ComponentDescriptionProp} 
+	 *         that need to be dynamically bound to this service
+	 */
 	private Hashtable selectDynamicBind(ServiceReference serviceReference) {
 		Hashtable bindTable = new Hashtable();
 		Iterator it = satisfiedCDPs.iterator();
@@ -772,14 +893,15 @@ public class Resolver implements AllServiceListener, WorkDispatcher {
 	}
 
 	/**
-	 * selectDynamicUnBind Determine which resolved component description with
-	 * properties need to unbind from this unregistering service Return map of
-	 * reference description and component description with properties, for
-	 * each.
-	 * 
-	 * @param cdps
+	 * An OSGi service is unregistering, calculate which of the satisfied 
+	 * Component Configurations need to dynamically unbind from it.
+	 * <p>
+	 *  A Component Configuration needs to dynamically unbind from a service
+	 *  if it was bound to the service and the reference it was policy="dynamic".
+	 *  </p>
 	 * @param serviceReference
-	 * @return
+	 * @return a List of {@link DynamicUnbindJob}s
+	 * @see DynamicUnbindJob
 	 */
 	private List selectDynamicUnBind(ServiceReference serviceReference) {
 
@@ -792,8 +914,7 @@ public class Resolver implements AllServiceListener, WorkDispatcher {
 			Iterator it_ = references.iterator();
 			while (it_.hasNext()) {
 				Reference reference = (Reference) it_.next();
-				// Does the cdp require this service, use the Reference object
-				// to check
+				// Is reference dynamic and bound to this service? - must unbind
 				if (reference.dynamicUnbindReference(serviceReference)) {
 					DynamicUnbindJob unbindJob = new DynamicUnbindJob();
 					unbindJob.component = cdp;
@@ -806,12 +927,26 @@ public class Resolver implements AllServiceListener, WorkDispatcher {
 		return unbindJobs;
 	}
 
+	/**
+	 * Bean used to encapsulate the variables needed to dynamically unbind
+	 * a service from a Component Configuration.  Objects of this class are
+	 * placed on the work queue.
+	 * 
+	 * @version $Revision$
+	 * @see Resolver#dispatchWork(int, Object)
+	 */
 	static public class DynamicUnbindJob {
 		public ComponentDescriptionProp	component;
 		public Reference				reference;
 		public ServiceReference			serviceReference;
 	}
 
+	/**
+	 * Doubly-linked node used to traverse the dependency tree in order to
+	 * find cycles.
+	 *  
+	 * @version $Revision$
+	 */
 	static private class ReferenceCDP {
 		public ComponentDescriptionProp	consumer;
 		public Reference				ref;
@@ -827,12 +962,12 @@ public class Resolver implements AllServiceListener, WorkDispatcher {
 
 	/**
 	 * Check through the enabled list for cycles. Cycles can only exist if every
-	 * service is provided by a CDP (not legacy OSGi). If the cycle has no
-	 * optional dependencies, throw CircularityException. If cycle can be "
-	 * broken" by an optional dependency, make a note and return the optional
-	 * dep. to be created.
+	 * service is provided by a Service Component (not legacy OSGi). If the cycle 
+	 * has no optional dependencies, log an error and disable a Component 
+	 * Configuration in the cycle. If cycle can be "broken" by an optional 
+	 * dependency, make a note (stored in the 
+	 * {@link ComponentDescriptionProp#delayActivateCDPNames} List).
 	 * 
-	 * @return List of cycle breaks
 	 * @throws CircularityException if cycle exists with no optional
 	 *         dependencies
 	 */
@@ -869,6 +1004,7 @@ public class Resolver implements AllServiceListener, WorkDispatcher {
 				}
 			} // end while (more enabled CDPs)
 
+			//traverse dependency tree and look for cycles
 			Set visited = new HashSet();
 			it = dependencies.keySet().iterator();
 			while (it.hasNext()) {
@@ -893,6 +1029,24 @@ public class Resolver implements AllServiceListener, WorkDispatcher {
 		}
 	}
 
+	/**
+	 * Recursively do a depth-first traversal of a dependency tree, looking for 
+	 * cycles.
+	 * <p>
+	 * If a cycle is found, calls 
+	 * {@link Resolver#handleDependencyCycle(ReferenceCDP, List)}.
+	 * </p>
+	 * 
+	 * @param cdp current node in dependency tree
+	 * @param visited Set of {@link ComponentDescriptionProp} that are visited 
+	 *        nodes
+	 * @param dependencies Dependency tree - a Hashtable of 
+	 * ({@link ComponentDescriptionProp}):(List of {@link ReferenceCDP}s)
+	 * @param currentStack List of {@link ReferenceCDP}s - the history of our
+	 *        traversal so far (the path back to the root of the tree)
+	 * @throws CircularityException if an cycle with no optional dependencies is
+	 * found.
+	 */
 	private void traverseDependencies(ComponentDescriptionProp cdp,
 			Set visited, Hashtable dependencies, List currentStack)
 			throws CircularityException {
@@ -927,12 +1081,14 @@ public class Resolver implements AllServiceListener, WorkDispatcher {
 
 	}
 
-	/*
+	/**
 	 * A cycle was detected. CDP is referenced by the last element in
-	 * currentStack. returns CircularityException if the cycle does not contain
-	 * an optional dependency. else choses a starting point at which to
-	 * initialize the cycle (the starting point must be immediately after an
-	 * optional dependency).
+	 * currentStack. Throws CircularityException if the cycle does not contain
+	 * an optional dependency, else choses a point at which to
+	 * "break" the cycle (the break point must be immediately after an
+	 * optional dependency) and adds a "cycle note".
+	 * 
+	 * @see ComponentDescriptionProp#delayActivateCDPNames
 	 */
 	private void handleDependencyCycle(ReferenceCDP refCDP, List currentStack)
 			throws CircularityException {
@@ -966,9 +1122,7 @@ public class Resolver implements AllServiceListener, WorkDispatcher {
 	 */
 	private long getNextComponentId() {
 		synchronized (this) {
-			long id = componentid;
-			componentid++;
-			return (id);
+			return componentid++;
 		}
 	}
 
