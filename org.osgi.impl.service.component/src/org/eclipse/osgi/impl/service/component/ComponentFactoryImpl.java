@@ -83,7 +83,7 @@ public class ComponentFactoryImpl implements ComponentFactory {
 				.getComponentDescription(), properties);
 
 		// try to resolve new cdp - adds to resolver's satisfied list
-		if (!main.resolver.isEligible(newCDP)) {
+		if (!main.resolver.justResolve(newCDP)) {
 			main.resolver.enabledCDPs.remove(newCDP); // was added by
 														// mapFactoryInstance
 			throw new ComponentException("Could not resolve instance of " + cdp

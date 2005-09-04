@@ -189,7 +189,7 @@ public class Resolver implements AllServiceListener, WorkDispatcher {
 	 * 
 	 * <p>
 	 * After the Component Configuration(s) are created, call 
-	 * {@link Resolver#getEligible(ServiceEvent) getEligible(null)} to try to
+	 * {@link Resolver#resolve(ServiceEvent) getEligible(null)} to try to
 	 * satisfy them.
 	 * </p>
 	 * 
@@ -282,7 +282,7 @@ public class Resolver implements AllServiceListener, WorkDispatcher {
 			}
 		}
 		// resolve
-		getEligible(null);
+		resolve(null);
 	}
 
 	/**
@@ -571,7 +571,7 @@ public class Resolver implements AllServiceListener, WorkDispatcher {
 	 * 
 	 * @param event the service event or null if new cdps were added to the enabled list
 	 */
-	public void getEligible(ServiceEvent event) {
+	public void resolve(ServiceEvent event) {
 
 		// if added CDPs
 		if (event == null) {
@@ -683,7 +683,7 @@ public class Resolver implements AllServiceListener, WorkDispatcher {
 	 * @param cdp
 	 * @return
 	 */
-	public boolean isEligible(ComponentDescriptionProp cdp) {
+	public boolean justResolve(ComponentDescriptionProp cdp) {
 
 		// we added a CDP, so check for circularity and mark
 		// cycles
@@ -797,7 +797,7 @@ public class Resolver implements AllServiceListener, WorkDispatcher {
 			case ServiceEvent.REGISTERED :
 			case ServiceEvent.UNREGISTERING :
 
-				getEligible(event);
+				resolve(event);
 				break;
 		}
 
