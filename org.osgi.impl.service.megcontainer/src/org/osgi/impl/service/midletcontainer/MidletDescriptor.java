@@ -39,7 +39,8 @@ public final class MidletDescriptor extends ApplicationDescriptor {
 		if (names.size() == 0 || icons.size() == 0
 				|| !props.containsKey("application.bundle.id")
 				|| !props.containsKey(Constants.SERVICE_PID)
-				|| !props.containsKey(ApplicationDescriptor.APPLICATION_VERSION))
+				|| !props.containsKey(ApplicationDescriptor.APPLICATION_VERSION)
+				|| !props.containsKey(ApplicationDescriptor.APPLICATION_PACKAGE ))
 			throw new Exception("Invalid MEG container input!");
 		if (!names.containsKey(defaultLang)) {
 			throw new Exception("Invalid default language!");
@@ -82,6 +83,8 @@ public final class MidletDescriptor extends ApplicationDescriptor {
 				.getProperty("application.bundle.id"));
 		properties.put(ApplicationDescriptor.APPLICATION_VERSION, props
 				.getProperty(ApplicationDescriptor.APPLICATION_VERSION));
+		properties.put(ApplicationDescriptor.APPLICATION_PACKAGE, props
+				.getProperty(ApplicationDescriptor.APPLICATION_PACKAGE));
 		properties.put(ApplicationDescriptor.APPLICATION_VENDOR, props
 				.getProperty(ApplicationDescriptor.APPLICATION_VENDOR));
 		String visible = props.getProperty(ApplicationDescriptor.APPLICATION_VISIBLE);
