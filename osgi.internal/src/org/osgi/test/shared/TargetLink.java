@@ -7,6 +7,7 @@
 package org.osgi.test.shared;
 
 import java.io.*;
+import java.net.SocketException;
 import java.util.Dictionary;
 
 /**
@@ -26,8 +27,8 @@ public class TargetLink extends Link {
 	final static int		REBOOT				= 11;
 	final static int		CLOSE_TARGET		= 12;
 	final static int		UPDATE_FRAMEWORK	= 13;
-	final static int        SET_TEST_PROPERTIES = 14;
-	
+	final static int		SET_TEST_PROPERTIES	= 14;
+
 	public IRun				_run;
 	public ITarget			_target;
 
@@ -85,7 +86,7 @@ public class TargetLink extends Link {
 
 	/**
 	 * Called from director to update the framework, will close the link
-	 *  
+	 * 
 	 */
 	public void updateFramework() throws IOException {
 		send(UPDATE_FRAMEWORK, null);
@@ -101,13 +102,12 @@ public class TargetLink extends Link {
 		request(SEND_TO_TARGET, new Object[] {name, msg});
 	}
 
-	
-	public void setTestProperties( Dictionary d ) throws IOException {
-		request(SET_TEST_PROPERTIES, new Object[] {d});		
+	public void setTestProperties(Dictionary d) throws IOException {
+		request(SET_TEST_PROPERTIES, new Object[] {d});
 	}
-	
+
 	//
-	//  Target -> Run
+	// Target -> Run
 	//
 	/**
 	 * Called from target to director to send an object to the owning testcase.
@@ -150,7 +150,7 @@ public class TargetLink extends Link {
 	}
 
 	//
-	//  Event loop
+	// Event loop
 	//
 	/**
 	 * Event loop when a new message has arrived.
@@ -188,9 +188,9 @@ public class TargetLink extends Link {
 				case CLOSE_TARGET :
 					close();
 					return;
-				case SET_TEST_PROPERTIES:
+				case SET_TEST_PROPERTIES :
 					p = (Object[]) msg.getContent();
-					_target.setTestProperties((Dictionary)p[0]);
+					_target.setTestProperties((Dictionary) p[0]);
 					break;
 				//
 				// Target -> run
@@ -214,6 +214,9 @@ public class TargetLink extends Link {
 							null);
 			}
 			msg.reply(OK, result);
+		}
+		catch (SocketException e) {
+			try { close(); } catch( Exception ee ) {}
 		}
 		catch (Exception e) {
 			e.printStackTrace();

@@ -153,7 +153,6 @@ public class DefaultTestCase
 			run = null;
 			testbundle = null;
 			if ( http!=null) {
-				System.out.println("Unregistering " + getName());
 				http.unregister("/" + getName() );
 			}
 			try { deinit(); } catch(Exception e) {}
