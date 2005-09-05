@@ -2,20 +2,4 @@
 <project name="project" default="publish"> 
 	<import file="../cnf/build.xml"/>
 
-	<target name="-jar" depends="master.-jar,-signjar" if="signjar">
-		<signjar jar="${item.jarFile}" 
-			keystore="certificate/.keystore" 
-			storepass="testtest" 
-			keypass="testtest"
-			alias="test"/>
-	</target>
-	
-	<target name="-signjar">
-		<condition property="signjar">
-			<or>
-				<equals arg1="${item.jarFile}" arg2="tb2.jar"/>
-				<equals arg1="${item.jarFile}" arg2="tb3.jar"/>
-			</or>
-		</condition>
-	</target>
 </project>
