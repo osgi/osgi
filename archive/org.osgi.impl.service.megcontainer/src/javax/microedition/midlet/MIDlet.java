@@ -2,6 +2,7 @@ package javax.microedition.midlet;
 
 import org.osgi.impl.service.midletcontainer.*;
 
+import java.security.*;
 import java.util.*;
 
 public abstract class MIDlet {
@@ -101,21 +102,53 @@ public abstract class MIDlet {
 		public void setMidletHandle(MidletHandle midHnd) {
 			midletHandle = midHnd;			
 		}
-		public void start(Map startArgs) throws MIDletStateChangeException {
-			args = startArgs;
-			startApp();
+		public void start(final Map startArgs) throws MIDletStateChangeException {
+			try {
+			  AccessController.doPrivileged(new PrivilegedExceptionAction() {
+				  public Object run() throws Exception {			
+					  args = startArgs;
+					  startApp();
+					  return null;
+				  }
+			  });
+			}catch(PrivilegedActionException e ) {
+				throw (MIDletStateChangeException)e.getException(); 
+			}
 		}
 
 		public void pause() {
-			pauseApp();
+		  AccessController.doPrivileged(new PrivilegedAction() {
+			  public Object run() {			
+     			pauseApp();
+				  return null;
+			  }
+		  });
 		}
 
 		public void resume() throws MIDletStateChangeException {
-			startApp();
+			try {
+			  AccessController.doPrivileged(new PrivilegedExceptionAction() {
+				  public Object run() throws Exception {			
+					  startApp();
+					  return null;
+				  }
+			  });
+			}catch(PrivilegedActionException e ) {
+				throw (MIDletStateChangeException)e.getException(); 
+			}
 		}
 
-		public void destroy(boolean immed) throws MIDletStateChangeException {
-			destroyApp( immed );
+		public void destroy(final boolean immed) throws MIDletStateChangeException {
+			try {
+			  AccessController.doPrivileged(new PrivilegedExceptionAction() {
+				  public Object run() throws Exception {			
+						destroyApp( immed );
+					  return null;
+				  }
+			  });
+			}catch(PrivilegedActionException e ) {
+				throw (MIDletStateChangeException)e.getException(); 
+			}
 			MidletHandle.unregisterMidlet( midlet );
 		}		
 	}
