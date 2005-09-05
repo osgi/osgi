@@ -9,11 +9,6 @@ import org.osgi.service.application.ApplicationDescriptor;
 import org.osgi.service.application.ApplicationHandle;
 import org.osgi.service.log.LogService;
 
-class MidletBundleDescriptor {
-	public ApplicationDescriptor	applications[];
-	public ServiceRegistration		serviceRegistrations[];
-}
-
 public class MidletContainer implements BundleListener, ServiceListener {
 	private BundleContext	        bc;
 	private Vector			          installedMidletBundles;
@@ -65,13 +60,12 @@ public class MidletContainer implements BundleListener, ServiceListener {
 		bc.removeBundleListener( this );
 	}
 
-	private void terminateApplications( MidletBundleDescriptor desc ) {
+	private void terminateApplications( MidletDescriptor descs[] ) {
 		try {
-			for( int i=0; i != desc.applications.length; i++ ) {
-				ApplicationDescriptor appDesc = desc.applications[ i ];
+			for( int i=0; i != descs.length; i++ ) {
 				ServiceReference refs[] = bc.getServiceReferences( ApplicationHandle.class.getName(), 
 						 "(" + ApplicationHandle.APPLICATION_DESCRIPTOR + "=" + 
-						 appDesc.getProperties( null ).get( ApplicationDescriptor.APPLICATION_PID ) + ")" );
+						 descs[ i ].getProperties( null ).get( ApplicationDescriptor.APPLICATION_PID ) + ")" );
 			  if( refs != null && refs.length != 0 ) {
 				  for( int j=0; j != refs.length; j++ ) {
 				  	ApplicationHandle appHandle = (ApplicationHandle)bc.getService( refs[ j ] );
@@ -86,35 +80,22 @@ public class MidletContainer implements BundleListener, ServiceListener {
 	}
 	
 	private void registerApplicationDescriptors(Bundle bundle) {
-		MidletBundleDescriptor desc = (MidletBundleDescriptor) bundleDescriptorHash.get( bundle );
-		if (desc == null)
+		MidletDescriptor descs[] = (MidletDescriptor []) bundleDescriptorHash.get( bundle );
+		if (descs == null)
 			return;
-		for (int i = 0; i != desc.applications.length; i++) {
-			if (desc.serviceRegistrations[i] != null) {
-				desc.serviceRegistrations[i].unregister();
-				desc.serviceRegistrations[i] = null;
-			}
-			Dictionary properties = new Hashtable(desc.applications[i]
-					.getProperties(Locale.getDefault().getLanguage()));
-			desc.serviceRegistrations[i] = bc.registerService(
-					ApplicationDescriptor.class.getName(),
-					desc.applications[i], properties);
-		}
-
+		for (int i = 0; i != descs.length; i++)
+			descs[ i ].register();
 	}
 
 	private void unregisterApplicationDescriptors(Bundle bundle) {
-		MidletBundleDescriptor desc = (MidletBundleDescriptor) bundleDescriptorHash.get( bundle );
-		if (desc == null)
+		MidletDescriptor descs[] = (MidletDescriptor []) bundleDescriptorHash.get( bundle );
+		if (descs == null)
 			return;
 
-		terminateApplications( desc );
+		terminateApplications( descs );
 		
-		for (int i = 0; i != desc.serviceRegistrations.length; i++) {
-			if (desc.serviceRegistrations[i] != null) {
-				desc.serviceRegistrations[i].unregister();
-				desc.serviceRegistrations[i] = null;
-			}
+		for (int i = 0; i != descs.length; i++) {
+			descs[ i ].unregister();
 		}
 	}
 
@@ -221,20 +202,12 @@ public class MidletContainer implements BundleListener, ServiceListener {
 					}
 				}
 			}
-			ApplicationDescriptor descs[] = new ApplicationDescriptor[appVector
-					.size()];
+			MidletDescriptor descs[] = new MidletDescriptor[appVector.size()];
 			int applicationNum = appVector.size();
 			for (int k = 0; k != applicationNum; k++)
-				descs[k] = (ApplicationDescriptor) appVector.removeFirst();
+				descs[k] = (MidletDescriptor) appVector.removeFirst();
 
-			MidletBundleDescriptor descriptor = new MidletBundleDescriptor();
-			descriptor.applications = new ApplicationDescriptor[applicationNum];
-			for (int l = 0; l != applicationNum; l++) {
-				descriptor.applications[l] = descs[l];
-			}
-
-			descriptor.serviceRegistrations = new ServiceRegistration[applicationNum];
-			bundleDescriptorHash.put(bundle, descriptor);
+			bundleDescriptorHash.put(bundle, descs);
 			return descs;
 		}
 		catch (Throwable e) {
