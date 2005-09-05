@@ -67,8 +67,6 @@ public class StandAloneDriver implements BundleActivator, Driver {
 	static int n = 0;
 	
 	public String attach(ServiceReference ref) throws Exception {
-		if ( n++ == 1 )
-			System.out.println("Second time");
 		if ("standalone driver test device".equals(ref.getProperty("deviceID"))) {
 			deviceRef = ref;
 			device = bc.getService(deviceRef); // to catch the device

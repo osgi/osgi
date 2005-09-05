@@ -26,6 +26,7 @@ public class StadnaloneDriverTestDevice implements BundleActivator {
 		Hashtable h = new Hashtable();
 		h.put("deviceID", "standalone driver test device");
 		h.put("DEVICE_CATEGORY", category);
+		h.put("device.test", Boolean.TRUE);
 		deviceSR = bc.registerService("java.lang.Object", this, h);
 	}
 

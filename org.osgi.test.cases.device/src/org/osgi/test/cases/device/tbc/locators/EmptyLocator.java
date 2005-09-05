@@ -29,15 +29,18 @@ public class EmptyLocator implements DriverLocator {
 	 * @return null every time
 	 */
 	public String[] findDrivers(Dictionary props) {
-		if ("standalone driver test device".equals(props.get("deviceID"))) {
-			master.setMessage(TestBundleControl.MESSAGE_OK);
-			log("find drivers invoked for the correct device - OK!");
-		}
-		else {
-			master.setMessage(TestBundleControl.MESSAGE_ERROR);
-			log("find drivers invoked for: " + props.get("deviceID")
-					+ " - Error!");
-		}
+		// Also gets called for UPnP devices it seems ...
+		if (props.get("device.test").equals(Boolean.TRUE)) {
+			if ("standalone driver test device".equals(props.get("deviceID"))) {
+				master.setMessage(TestBundleControl.MESSAGE_OK);
+				log("find drivers invoked for the correct device - OK!");
+			}
+			else {
+				master.setMessage(TestBundleControl.MESSAGE_ERROR);
+				log("find drivers invoked for: " + props.get("deviceID")
+						+ " - Error!");
+			}
+		} 
 		return null;
 	}
 

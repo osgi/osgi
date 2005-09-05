@@ -47,6 +47,7 @@ public class BasicDevice implements BundleActivator, Device {
 				Hashtable h_0 = new Hashtable();
 				h_0.put("deviceID", "basicDevice");
 				h_0.put("DEVICE_CATEGORY", category);
+				h_0.put("device.test", Boolean.TRUE);
 				log("Registering device that implements Device and there is a driver for it");
 				deviceSR = bc.registerService("org.osgi.service.device.Device",
 						this, h_0);
@@ -56,6 +57,7 @@ public class BasicDevice implements BundleActivator, Device {
 				Hashtable h_1 = new Hashtable();
 				h_1.put("deviceID", "basicDevice_noDevice");
 				h_1.put("DEVICE_CATEGORY", category);
+				h_1.put("device.test", Boolean.TRUE);
 				log("Registering device that doesn't implement Device and there is a driver for it");
 				deviceSR = bc.registerService("java.lang.Object", this, h_1);
 				break;
@@ -63,6 +65,7 @@ public class BasicDevice implements BundleActivator, Device {
 				// org.osgi.service.device.Device without matching driver
 				Hashtable h_2 = new Hashtable();
 				h_2.put("deviceID", "basicDevice_noDriver");
+				h_2.put("device.test", Boolean.TRUE);
 				log("Registering device that implement Device and there is NO driver for it");
 				deviceSR = bc.registerService("org.osgi.service.device.Device",
 						this, h_2);
@@ -72,6 +75,7 @@ public class BasicDevice implements BundleActivator, Device {
 				Hashtable h_3 = new Hashtable();
 				h_3.put("deviceID", "basicDevice_noDevice_noDriver");
 				h_3.put("DEVICE_CATEGORY", category);
+				h_3.put("device.test", Boolean.TRUE);
 				log("Registering device that doesn't implement Device and there is NO driver for it");
 				deviceSR = bc.registerService("java.lang.Object", this, h_3);
 				break;
@@ -80,6 +84,7 @@ public class BasicDevice implements BundleActivator, Device {
 				// DEVICE_CATEGOR property - it must be recognized too
 				Hashtable h_4 = new Hashtable();
 				h_4.put("deviceID", "basicDevice_noCategory");
+				h_4.put("device.test", Boolean.TRUE);
 				log("Registering device that implements Device but does not set DEVICE_CATEGORY property");
 				deviceSR = bc.registerService("org.osgi.service.device.Device",
 						this, h_4);
@@ -88,6 +93,7 @@ public class BasicDevice implements BundleActivator, Device {
 				Hashtable h_100 = new Hashtable();
 				h_100.put("deviceID", "generalDevice");
 				h_100.put("DEVICE_CATEGORY", category);
+				h_100.put("device.test", Boolean.TRUE);
 				log("Registering a device for general use");
 				deviceSR = bc.registerService("org.osgi.service.device.Device",
 						this, h_100);

@@ -87,6 +87,10 @@ public class TestBundleControl extends DefaultTestBundleControl {
 					"installing and starting device bundle 2 (standalone test device)");
 			deviceBundle_2 = bc.installBundle(tcHome + "dev2.jar");
 			deviceBundle_2.start();
+			
+			
+			Thread.sleep(1000); // Give the RI time to settle (this is BAD!!!!!)
+			
 			log(
 					subtest,
 					"installing driver one - it should attatch to device 2 (standalone test device)");
@@ -412,7 +416,6 @@ public class TestBundleControl extends DefaultTestBundleControl {
 	private void waitFor(String subtest, String message) {
 		int counter = 0;
 		int m = TestBundleControl.MESSAGE_NONE;
-		System.out.println("Starting to wait " + subtest + " " + message );
 		while (((m = getMessage()) == TestBundleControl.MESSAGE_NONE)
 				&& counter++ < 1000) {
 			try {
@@ -422,7 +425,6 @@ public class TestBundleControl extends DefaultTestBundleControl {
 				ie.printStackTrace();
 			}
 		}
-		System.out.println("Done waiting " + subtest + " " + message + " " + m );
 		switch (m) {
 			case TestBundleControl.MESSAGE_OK :
 				log(subtest, message + " OK");
