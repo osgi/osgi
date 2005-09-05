@@ -555,7 +555,12 @@ public interface DmtSession {
         throws DmtException;
 
     /**
-     * Create an interior node.
+     * Create an interior node.  If the parent node does not exist, it is 
+     * created automatically, as if this method were called for the parent URI.
+     * This way all missing ancestor nodes leading to the specified node are
+     * created.  Any exceptions encountered while creating the ancestors are 
+     * propagated to the caller of this method, these are not explicitly listed
+     * in the error descriptions below.
      * <p>
      * If meta-data is available for the node, several checks are made before 
      * creating it.  The node must have <code>MetaNode.CMD_ADD</code> access
@@ -608,7 +613,13 @@ public interface DmtSession {
 
     /**
      * Create an interior node with a given type. The type of interior node, if
-     * specified, is a URI identifying a DDF document.
+     * specified, is a URI identifying a DDF document.  If the parent node does 
+     * not exist, it is created automatically, as if 
+     * {@link #createInteriorNode(String)} were called for the parent URI. This 
+     * way all missing ancestor nodes leading to the specified node are created.
+     * Any exceptions encountered while creating the ancestors are propagated to
+     * the caller of this method, these are not explicitly listed in the error 
+     * descriptions below.
      * <p>
      * If meta-data is available for the node, several checks are made before 
      * creating it.  The node must have <code>MetaNode.CMD_ADD</code> access
@@ -668,6 +679,13 @@ public interface DmtSession {
      * have a default value or MIME type, this method will throw a 
      * <code>DmtException</code> with error code <code>METADATA_MISMATCH</code>.
      * <p>
+     * If the parent node does not exist, it is created automatically, as if 
+     * {@link #createInteriorNode(String)} were called for the parent URI. This 
+     * way all missing ancestor nodes leading to the specified node are created.
+     * Any exceptions encountered while creating the ancestors are propagated to
+     * the caller of this method, these are not explicitly listed in the error 
+     * descriptions below.
+     * <p>
      * If meta-data is available for a node, several checks are made before 
      * creating it.  The node must have <code>MetaNode.CMD_ADD</code> access
      * type, it must be defined as a non-permanent leaf node, the node name must 
@@ -724,6 +742,13 @@ public interface DmtSession {
      * node does not have a default MIME type or value (if needed), this method 
      * will throw a <code>DmtException</code> with error code 
      * <code>METADATA_MISMATCH</code>.
+     * <p>
+     * If the parent node does not exist, it is created automatically, as if 
+     * {@link #createInteriorNode(String)} were called for the parent URI. This 
+     * way all missing ancestor nodes leading to the specified node are created.
+     * Any exceptions encountered while creating the ancestors are propagated to
+     * the caller of this method, these are not explicitly listed in the error 
+     * descriptions below.
      * <p>
      * If meta-data is available for a node, several checks are made before 
      * creating it.  The node must have <code>MetaNode.CMD_ADD</code> access
@@ -786,6 +811,13 @@ public interface DmtSession {
      * If the node does not have the necessary defaults, this method will throw
      * a <code>DmtException</code> with error code 
      * <code>METADATA_MISMATCH</code>.
+     * <p>
+     * If the parent node does not exist, it is created automatically, as if 
+     * {@link #createInteriorNode(String)} were called for the parent URI. This 
+     * way all missing ancestor nodes leading to the specified node are created.
+     * Any exceptions encountered while creating the ancestors are propagated to
+     * the caller of this method, these are not explicitly listed in the error 
+     * descriptions below.
      * <p>
      * If meta-data is available for a node, several checks are made before 
      * creating it.  The node must have <code>MetaNode.CMD_ADD</code> access
