@@ -191,6 +191,12 @@ public class MidletContainer implements BundleListener, ServiceListener {
 							String MIDletStartClass = t.nextToken().trim();
 							if (MIDletIcon.equals(""))
 								MIDletIcon = MIDletSuiteIcon;
+							
+							String bundleName = bundle.getSymbolicName();
+							if( bundleName == null )
+								bundleName = Long.toString( bundle.getBundleId() );
+							props.setProperty(ApplicationDescriptor.APPLICATION_PACKAGE, bundleName );
+							
 							props.setProperty("application.bundle.id", Long
 									.toString(bundle.getBundleId()));
 							props.setProperty(ApplicationDescriptor.APPLICATION_VENDOR,
