@@ -28,7 +28,7 @@
 package org.osgi.impl.service.application;
 
 import org.osgi.service.application.*;
-//import java.security.*;
+import java.security.*;
 
 public class ApplicationHandleImpl implements ApplicationHandle.Delegate {
 	ApplicationHandle	handle;
@@ -41,7 +41,7 @@ public class ApplicationHandleImpl implements ApplicationHandle.Delegate {
 	}
 
 	public void destroy() throws Exception {
-//		AccessController.checkPermission(new ApplicationAdminPermission( handle.getInstanceID(), 
-//				ApplicationAdminPermission.MANIPULATE));
+		AccessController.checkPermission(new ApplicationAdminPermission( handle.getInstanceID(), 
+				ApplicationAdminPermission.LIFECYCLE));
 	}
 }
