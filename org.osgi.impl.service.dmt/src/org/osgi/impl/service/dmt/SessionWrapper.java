@@ -36,7 +36,7 @@ class SessionWrapper extends DmtSessionImpl {
             DmtAdminImpl dmtAdmin) throws DmtException {
         super(principal, subtreeUri, lockMode, permissions, context, dmtAdmin);
         
-        timer = new Timer(true); // TODO is it OK to make it a daemon?
+        timer = new Timer(true);
         invalidateTask = null;
     }
     

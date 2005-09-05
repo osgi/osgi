@@ -37,8 +37,6 @@ import org.osgi.service.dmt.spi.TransactionalDataSession;
  * equal and the roots of the sessions are the same.   
  */
 
-// TODO find a way to make "privileged" calls with no security check
-// (for getMetaNodeNoCheck, isLeafNoCheck, and cardinality checks with getChildNodeNames)
 public class PluginSessionWrapper implements TransactionalDataSession {
     private ReadableDataSession      readableDataSession      = null;
     private ReadWriteDataSession     readWriteDataSession     = null;
