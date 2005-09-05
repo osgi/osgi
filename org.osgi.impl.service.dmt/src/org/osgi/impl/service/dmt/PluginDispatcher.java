@@ -52,7 +52,15 @@ public class PluginDispatcher implements ServiceTrackerCustomizer {
             return null;
         }
 
-        // TODO also check 'roots' and 'execs' for conflicts within the arrays
+        if (selfConflict(roots) || selfConflict(execs)) {
+            context.log(LogService.LOG_WARNING, "Plugin data or exec roots (" +
+                    Arrays.asList(Node.getUriArray(roots)) + ", " +
+                    Arrays.asList(Node.getUriArray(execs)) +
+                    ") contain conflicting entries; ignoring this plugin.", 
+                    null);
+            return null;
+        }
+            
         if (pluginConflict(roots, execs, plugins)) {
             context.log(LogService.LOG_WARNING, "Plugin data or exec roots (" +
                     Arrays.asList(Node.getUriArray(roots)) + ", " +
@@ -177,6 +185,14 @@ public class PluginDispatcher implements ServiceTrackerCustomizer {
         while (i.hasNext())
             if(((PluginRegistration) i.next()).conflictsWith(roots, execs))
                 return true;
+        return false;
+    }
+    
+    private static boolean selfConflict(Node[] roots) {
+        for(int i = 0; i < roots.length-1; i++)
+            for(int j = i+1; j < roots.length; j++)
+                if(roots[i].isOnSameBranch(roots[j]))
+                    return true;
         return false;
     }
 
