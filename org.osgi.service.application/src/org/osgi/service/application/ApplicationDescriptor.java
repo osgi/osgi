@@ -46,7 +46,7 @@ public abstract class ApplicationDescriptor {
 	/**
 	 * The property key for the name of the application vendor.
 	 */
-	public static final String APPLICATION_VENDOR = "application.vendor";
+	public static final String APPLICATION_VENDOR = Constants.SERVICE_VENDOR;
 
 
 	/**
