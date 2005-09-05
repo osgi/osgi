@@ -1,5 +1,6 @@
 package org.osgi.impl.service.midletcontainer;
 
+import java.security.AccessController;
 import java.util.*;
 
 import javax.microedition.midlet.MIDlet;
@@ -67,6 +68,9 @@ public final class MidletHandle extends ApplicationHandle {
 	}
 
 	public void pause() throws Exception {
+		AccessController.checkPermission( new ApplicationAdminPermission(
+				midletDescriptor.getPID(), ApplicationAdminPermission.LIFECYCLE ) );
+		
 		if (!status.equals( MidletHandle.RUNNING ) )
 			throw new Exception("Invalid State");
 		if (midlet != null) {
@@ -79,6 +83,9 @@ public final class MidletHandle extends ApplicationHandle {
 	}
 
 	public void resume() throws Exception {
+		AccessController.checkPermission( new ApplicationAdminPermission(
+				midletDescriptor.getPID(), ApplicationAdminPermission.LIFECYCLE ) );
+		
 		if (!status.equals( MidletHandle.PAUSED ) )
 			throw new Exception("Invalid State");
 		if (midlet != null) {
