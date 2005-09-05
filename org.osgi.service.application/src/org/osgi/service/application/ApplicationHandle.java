@@ -41,6 +41,7 @@ public abstract class ApplicationHandle {
 	 * created application instance.
 	 */
 	public final static String RUNNING = "RUNNING";
+	public final static String STOPPING = "STOPPING";
 
 	private final String instanceId;
 	
