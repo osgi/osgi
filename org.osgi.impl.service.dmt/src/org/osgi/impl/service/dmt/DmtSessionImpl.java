@@ -32,9 +32,6 @@ import org.osgi.service.permissionadmin.PermissionInfo;
 // Needed for meta-data name and value pattern matching
 //import java.util.regex.Pattern;
 
-// TODO ensure that plugins are never called for nodes above the session root (e.g. when the parent node is checked)
-// TODO should ADD events be sent for nodes created automatically?
-
 // OPTIMIZE node handling (e.g. retrieve plugin from dispatcher only once per API call), maybe with new URI class
 // OPTIMIZE only retrieve meta-data once per API call
 // OPTIMIZE only call commit/rollback for plugins that were actually modified since the last transaction boundary
@@ -55,8 +52,7 @@ public class DmtSessionImpl implements DmtSession {
     private static Hashtable savedAcls;
     
 	static {
-		acls = new Hashtable();
-		acls.put(Node.ROOT_NODE, new Acl("Add=*&Get=*&Replace=*"));
+        init_acls();
 	}
 	
     private final AccessControlContext securityContext;
@@ -626,12 +622,18 @@ public class DmtSessionImpl implements DmtSession {
                 // maxOccurrence == 1 means that there cannot be other instances
                 // of this node, so it cannot be deleted.  If maxOccurrence > 1 
                 // then we have to check whether this is the last one.
-                if(metaNode.getMaxOccurrence() == 1 
-                        || getNodeCardinality(node) == 1)
+                if(metaNode.getMaxOccurrence() == 1) 
                     throw new DmtException(node.getUri(), 
                             DmtException.METADATA_MISMATCH,
-                            "Metadata does not allow deleting last instance " +
-                            "of this node.");
+                            "Metadata does not allow deleting the only " +
+                            "instance of this node.");
+                checkNodeIsInSession(node.getParent(), "(needed to determine" +
+                        "the number of siblings of the given node) ");
+                if(getNodeCardinality(node) == 1)
+                    throw new DmtException(node.getUri(), 
+                            DmtException.METADATA_MISMATCH,
+                            "Metadata does not allow deleting the last " +
+                            "instance of this node.");
             }
         }
         
@@ -663,10 +665,8 @@ public class DmtSessionImpl implements DmtSession {
                     DmtException.COMMAND_NOT_ALLOWED,
                     "Cannot create root node.");
         
-        createAncestorsIfNeeded(parent, sendEvent);
+        ensureInteriorAncestors(parent, sendEvent);
         
-        // ensures that the parent, if it already existed, was an interior node
-        checkNode(parent, SHOULD_BE_INTERIOR);
         checkNodePermission(parent, Acl.ADD);
         checkNodeCapability(node, MetaNode.CMD_ADD);
 
@@ -720,10 +720,8 @@ public class DmtSessionImpl implements DmtSession {
                     DmtException.COMMAND_NOT_ALLOWED, 
                     "Cannot create root node.");
         
-        createAncestorsIfNeeded(parent, sendEvent);
+        ensureInteriorAncestors(parent, sendEvent);
 
-        // ensures that the parent, if it already existed, was an interior node
-        checkNode(parent, SHOULD_BE_INTERIOR);
         checkNodePermission(parent, Acl.ADD);
         checkNodeCapability(node, MetaNode.CMD_ADD);
 
@@ -768,10 +766,7 @@ public class DmtSessionImpl implements DmtSession {
 		    // newParentNode cannot be null, because newNode is a valid absolute
             // nonexisting node, so it cannot be the root
             
-            createAncestorsIfNeeded(newParentNode, false);
-
-            // ensures that the parent, if it already existed, was an int. node
-		    checkNode(newParentNode, SHOULD_BE_INTERIOR);
+            ensureInteriorAncestors(newParentNode, false);
 
 		    // DMTND 7.7.1.5: "needs correct access rights for the equivalent
 		    // Add, Delete, Get, and Replace commands"
@@ -1003,7 +998,8 @@ public class DmtSessionImpl implements DmtSession {
 		}
 	}
 
-    // precondition: path must be absolute
+    // precondition: path must be absolute, and the parent of the given node 
+    // must be within the subtree of the session 
     private int getNodeCardinality(Node node) throws DmtException {
         Node parent = node.getParent();
         String[] neighbours = 
@@ -1109,30 +1105,20 @@ public class DmtSessionImpl implements DmtSession {
         } else {
             DataPluginFactory plugin = pluginRegistration.getDataPlugin();
 
-            // TODO perform all 'open...' methods within the principal's security context!
             ReadableDataSession pluginSession = null;
             int pluginSessionType = lockMode;
             
-            switch(lockMode) {
-            case LOCK_TYPE_EXCLUSIVE:
+            if(lockMode != LOCK_TYPE_SHARED) {
                 pluginSession = 
-                    plugin.openReadWriteSession(root.getPath(), this);
-                if(pluginSession == null && writeOperation)
+                    openPluginSession(plugin, root, pluginSessionType);
+                if(pluginSession == null && writeOperation) {
+                    boolean atomic = (lockMode == LOCK_TYPE_ATOMIC);
                     // TODO exception code does not match javadoc, we need a way to decide whether the plugin is writable
                     throw new DmtException(node.getUri(), 
-                            DmtException.COMMAND_FAILED,
-                            "The plugin handling the requested node does not " +
-                            "support non-atomic writing.");
-                break;
-            case LOCK_TYPE_ATOMIC:
-                pluginSession = plugin.openAtomicSession(root.getPath(), this);
-                if(pluginSession == null && writeOperation)
-                    // TODO exception code does not match javadoc, we need a way to decide whether the plugin is writable
-                    throw new DmtException(node.getUri(), 
-                            DmtException.TRANSACTION_ERROR,
-                            "The plugin handling the requested node does not " +
-                            "support atomic writing.");
-                break;
+                            atomic ? DmtException.TRANSACTION_ERROR : DmtException.COMMAND_FAILED,
+                            "The plugin handling the requested node does not support " +
+                            (atomic ? "" : "non-") + "atomic writing.");
+                }
             }
             
             // read-only session if lockMode is LOCK_TYPE_SHARED, or if the 
@@ -1140,8 +1126,8 @@ public class DmtSessionImpl implements DmtSession {
             // operation is for reading
             if(pluginSession == null) {
                 pluginSessionType = LOCK_TYPE_SHARED;
-                pluginSession =
-                    plugin.openReadOnlySession(root.getPath(), this);
+                pluginSession = 
+                    openPluginSession(plugin, root, pluginSessionType);
             }
 
             wrappedPlugin = new PluginSessionWrapper(pluginSession, 
@@ -1163,6 +1149,35 @@ public class DmtSessionImpl implements DmtSession {
         
         throw new IllegalStateException("Internal error, plugin root not " +
                 "found for a URI handled by the plugin.");
+    }
+    
+    private ReadableDataSession openPluginSession(
+            final DataPluginFactory plugin, Node root, 
+            final int pluginSessionType) throws DmtException {
+        
+        final DmtSession session = this;
+        final String[] rootPath = root.getPath();
+
+        ReadableDataSession pluginSession;
+        try {
+            pluginSession = (ReadableDataSession) 
+                AccessController.doPrivileged(new PrivilegedExceptionAction() {
+                public Object run() throws DmtException {
+                    switch(pluginSessionType) {
+                    case LOCK_TYPE_EXCLUSIVE:
+                        return plugin.openReadWriteSession(rootPath, session);
+                    case LOCK_TYPE_ATOMIC:
+                        return plugin.openAtomicSession(rootPath, session);
+                    default: // LOCK_TYPE_SHARED
+                        return plugin.openReadOnlySession(rootPath, session);                        
+                    }
+                }
+            }, securityContext);
+        } catch(PrivilegedActionException e) {
+            throw (DmtException) e.getException();
+        }
+
+        return pluginSession;
     }
     
     // precondition: path must be absolute
@@ -1282,7 +1297,10 @@ public class DmtSessionImpl implements DmtSession {
         if(type == null) // default MIME type was requested
             return;
         
-        // TODO check that 'type' is a proper MIME type string, COMMAND_FAILED if not
+        int sep = type.indexOf('/');
+        if(sep == -1 || sep == 0 || sep == type.length()-1)
+            throw new DmtException(node.getUri(), DmtException.COMMAND_FAILED,
+                    "The given type string does not contain a MIME type.");
         
         String[] validMimeTypes = metaNode.getMimeTypes();
         if(validMimeTypes != null && !Arrays.asList(validMimeTypes).contains(type))
@@ -1313,25 +1331,28 @@ public class DmtSessionImpl implements DmtSession {
     private Node makeAbsoluteUri(String nodeUri) throws DmtException {
         Node node = Node.validateAndNormalizeUri(nodeUri);
 		if (node.isAbsolute()) {
-            checkNodeIsInSession(node);
+            checkNodeIsInSession(node, "");
 			return node;
 		}
 		return subtreeNode.appendRelativeNode(node);
 	}
     
-    private void checkNodeIsInSession(Node node) throws DmtException {
+    private void checkNodeIsInSession(Node node, String uriExplanation) 
+            throws DmtException {
         if (!subtreeNode.isAncestorOf(node))
             throw new DmtException(node.getUri(), DmtException.COMMAND_FAILED,
-                    "Specified URI points outside the subtree of this session.");        
+                    "Specified URI " + uriExplanation + "points outside the " +
+                    "subtree of this session.");
     }
 
-    private void createAncestorsIfNeeded(Node node, boolean sendEvent)
+    private void ensureInteriorAncestors(Node node, boolean sendEvent)
             throws DmtException {
-        // TODO print more specific error message if node is not in session
-        checkNodeIsInSession(node);
-        if (!getReadableDataSession(node).isNodeUri(node.getPath())) {
+        checkNodeIsInSession(node, "(needed to ensure " +
+                "a proper creation point for the new node) ");
+        if (!getReadableDataSession(node).isNodeUri(node.getPath()))
             commonCreateInteriorNode(node, null, sendEvent);
-        }
+        else
+            checkNode(node, SHOULD_BE_INTERIOR);
     }
 
     // remove null entries from the returned array (if it is non-null)
@@ -1463,6 +1484,11 @@ public class DmtSessionImpl implements DmtSession {
 	private static boolean isEmptyAcl(Acl acl) {
 		return acl.getPermissions("*") == 0 && acl.getPrincipals().length == 0;
 	}
+    
+    static void init_acls() {
+        acls = new Hashtable();
+        acls.put(Node.ROOT_NODE, new Acl("Add=*&Get=*&Replace=*"));
+    }
 }
 
 // Sets of node URIs for the different types of changes. 
