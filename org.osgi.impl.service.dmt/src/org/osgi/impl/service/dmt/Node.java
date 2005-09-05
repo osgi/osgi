@@ -22,7 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 import org.osgi.service.dmt.DmtException;
 
-// TODO implement operations to work on either path or URI, depending on which is available.
+// OPTIMIZE implement operations to work on either path or URI, depending on which is available.
 public class Node {
     /* 
      * Permitted characters in a segment of a relative URI (RFC 2396):
@@ -258,8 +258,7 @@ public class Node {
 
         String[] path = getPath();
         String[] parent = new String[path.length-1];
-        for (int i = 0; i < parent.length; i++)
-            parent[i] = path[i];
+        System.arraycopy(path, 0, parent, 0, path.length-1);
         return new Node(parent);
     }
     

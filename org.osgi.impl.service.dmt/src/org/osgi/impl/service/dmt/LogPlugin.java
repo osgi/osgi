@@ -447,8 +447,8 @@ public class LogPlugin implements DataPluginFactory, TransactionalDataSession,
 		// DmtAdmin only gives us nodes in our subtree
         int rootLength = LogPluginActivator.PLUGIN_ROOT_PATH.length;
         String[] path = new String[absolutePath.length-rootLength];
-        for(int i = 0; i < absolutePath.length-rootLength; i++)
-            path[i] = absolutePath[i+rootLength];
+        System.arraycopy(absolutePath, rootLength, path, 0, 
+                absolutePath.length-rootLength);
         return path;
 	}
     

@@ -651,9 +651,7 @@ public class MonitorPlugin implements DataPluginFactory, ReadWriteDataSession
         int pathLen = fullPath.length;
 
         String[] relativePath = new String[pathLen-rootLen];
-        for(int i = rootLen; i < pathLen; i++)
-            relativePath[i-rootLen] = fullPath[i];
-        // TODO unescape path segments (either all of them here, or just the IDs where needed)
+        System.arraycopy(fullPath, rootLen, relativePath, 0, pathLen-rootLen);
         return relativePath;
     }
     
