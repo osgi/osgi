@@ -11,6 +11,9 @@
 package org.osgi.service.application;
 
 import java.io.IOException;
+import java.security.AccessController;
+import java.security.PrivilegedActionException;
+import java.security.PrivilegedExceptionAction;
 import java.util.Map;
 
 import org.osgi.framework.Constants;
@@ -239,7 +242,17 @@ public abstract class ApplicationDescriptor {
 	public final ApplicationHandle launch(Map arguments)
 			throws Exception {
 		delegate.launch(arguments);
-		return launchSpecific(arguments);
+		
+		final Map launchArgs = arguments;		
+		try {
+		  return (ApplicationHandle)AccessController.doPrivileged(new PrivilegedExceptionAction() {
+			  public Object run() throws Exception {			
+				  return launchSpecific(launchArgs);
+			  }
+		  });
+		}catch(PrivilegedActionException e ) {
+			throw e.getException(); 
+		}
 	}
 
 	/**
