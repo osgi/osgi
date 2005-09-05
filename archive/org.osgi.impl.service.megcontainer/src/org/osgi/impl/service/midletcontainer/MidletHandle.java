@@ -43,7 +43,7 @@ public final class MidletHandle extends ApplicationHandle {
 			getMidletCommInterface( midlet ).setMidletHandle( this );
 			registerToOATHash( args );
 			getMidletCommInterface( midlet ).start( args );
-			setStatus("RUNNING");
+			setStatus( MidletHandle.RUNNING );
 			registerAppHandle();
 		}
 		else {
@@ -52,23 +52,26 @@ public final class MidletHandle extends ApplicationHandle {
 	}
 
 	public void destroySpecific() throws Exception {
-		if (status == null)
+		if (status == null || status.equals( MidletHandle.STOPPING ) )
 			throw new Exception("Invalid State");
+		
+		setStatus( MidletHandle.STOPPING );
+		
 		if (midlet != null)
 			getMidletCommInterface( midlet ).destroy( true );
 		
-		setStatus(null);
 		unregisterFromOATHash();
 		unregisterAppHandle();
+		setStatus(null);
 		midlet = null;
 	}
 
 	public void pause() throws Exception {
-		if (status != "RUNNING")
+		if (!status.equals( MidletHandle.RUNNING ) )
 			throw new Exception("Invalid State");
 		if (midlet != null) {
 			getMidletCommInterface( midlet ).pause();
-			setStatus("PAUSED");
+			setStatus( MidletHandle.PAUSED );
 		}
 		else {
 			throw new Exception("Invalid midlet handle!");
@@ -76,11 +79,11 @@ public final class MidletHandle extends ApplicationHandle {
 	}
 
 	public void resume() throws Exception {
-		if (status != "PAUSED")
+		if (!status.equals( MidletHandle.PAUSED ) )
 			throw new Exception("Invalid State");
 		if (midlet != null) {
 			getMidletCommInterface( midlet ).resume();
-			setStatus("RUNNING");
+			setStatus( MidletHandle.RUNNING );
 		}
 		else {
 			throw new Exception("Invalid midlet handle!");
