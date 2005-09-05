@@ -68,42 +68,40 @@ public class Manifest extends Hashtable {
 		if (line.length() < 2)
 			return 1;
 		int colon = line.indexOf(':');
-		if (colon < 1)
+		if (colon < 1) {
 			error("Invalid header '" + line + "'");
-		String header = line.substring(0, colon).toLowerCase();
-		String alphanum = "abcdefghijklmnopqrstuvwxyz0123456789";
-		String set = alphanum;
-		if (alphanum.indexOf(header.charAt(0)) < 0)
-			error("Header does not start with alphanum: " + header);
-		for (int i = 0; i < header.length(); i++) {
-			if (set.indexOf(header.charAt(i)) < 0)
-				error("Header contains non alphanum, - _: " + header);
-			set = "_-" + alphanum;
 		}
-		String value = "";
-		if (colon + 2 < line.length())
-			value = line.substring(colon + 2);
-		else
-			error("No value for manifest header " + header);
-		if (_section == 0) {
-			if (header.equals("import-package"))
-				_imports = getPackages(value, PackageResource.IMPORT);
+		else {
+			String header = line.substring(0, colon).toLowerCase();
+			String alphanum = "abcdefghijklmnopqrstuvwxyz0123456789";
+			String set = alphanum;
+			if (alphanum.indexOf(header.charAt(0)) < 0)
+				error("Header does not start with alphanum: " + header);
+			for (int i = 0; i < header.length(); i++) {
+				if (set.indexOf(header.charAt(i)) < 0)
+					error("Header contains non alphanum, - _: " + header);
+				set = "_-" + alphanum;
+			}
+			String value = "";
+			if (colon + 2 < line.length())
+				value = line.substring(colon + 2);
 			else
-				if (header.equals("export-package"))
+				error("No value for manifest header " + header);
+			if (_section == 0) {
+				if (header.equals("import-package"))
+					_imports = getPackages(value, PackageResource.IMPORT);
+				else if (header.equals("export-package"))
 					_exports = getPackages(value, PackageResource.EXPORT);
-				else
-					if (header.equals("bundle-activator"))
-						_activator = value.trim();
-					else
-						if (header.equals("bundle-updatelocation"))
-							_location = value.trim();
-						else
-							if (header.equals("bundle-classpath"))
-								_classpath = getClasspath(value);
-							else
-								if (header.equals("bundle-nativecode"))
-									_native = getNative(value);
-			put(header, value);
+				else if (header.equals("bundle-activator"))
+					_activator = value.trim();
+				else if (header.equals("bundle-updatelocation"))
+					_location = value.trim();
+				else if (header.equals("bundle-classpath"))
+					_classpath = getClasspath(value);
+				else if (header.equals("bundle-nativecode"))
+					_native = getNative(value);
+				put(header, value);
+			}
 		}
 		return 0;
 	}
@@ -172,14 +170,12 @@ public class Manifest extends Hashtable {
 				parameter = getParameter(st);
 				if (parameter.is("specification-version", Parameter.ATTRIBUTE))
 					p.version = parameter.value;
+				else if (parameter.is("version", Parameter.ATTRIBUTE))
+					p.version = parameter.value;
+				else if (parameter.type == Parameter.ATTRIBUTE)
+					p.addParameter(parameter);
 				else
-					if (parameter.is("version", Parameter.ATTRIBUTE))
-						p.version = parameter.value;
-					else
-						if (parameter.type == Parameter.ATTRIBUTE)
-							p.addParameter(parameter);
-						else
-							p.addParameter(parameter);
+					p.addParameter(parameter);
 			}
 			v.addElement(p);
 		} while (st.ttype == ',');
@@ -198,27 +194,19 @@ public class Manifest extends Hashtable {
 				Parameter parameter = getParameter(st);
 				if (parameter.value == null)
 					names.addElement(parameter.key);
+				else if (parameter.is("processor", Parameter.ATTRIBUTE))
+					spec.processor = parameter.value;
+				else if (parameter.is("osname", Parameter.ATTRIBUTE))
+					spec.osname = parameter.value;
+				else if (parameter.is("osversion", Parameter.ATTRIBUTE))
+					spec.osversion = parameter.value;
+				else if (parameter.is("language", Parameter.ATTRIBUTE))
+					spec.language = parameter.value;
+				else if (parameter.is("selection-filter", Parameter.DIRECTIVE))
+					spec.filter = parameter.value;
 				else
-					if (parameter.is("processor", Parameter.ATTRIBUTE))
-						spec.processor = parameter.value;
-					else
-						if (parameter.is("osname", Parameter.ATTRIBUTE))
-							spec.osname = parameter.value;
-						else
-							if (parameter.is("osversion", Parameter.ATTRIBUTE))
-								spec.osversion = parameter.value;
-							else
-								if (parameter.is("language",
-										Parameter.ATTRIBUTE))
-									spec.language = parameter.value;
-								else
-									if (parameter.is("selection-filter",
-											Parameter.DIRECTIVE))
-										spec.filter = parameter.value;
-									else
-										model
-												.warning("Unknown parameter for native code : "
-														+ parameter);
+					model.warning("Unknown parameter for native code : "
+							+ parameter);
 			} while (st.ttype == ';');
 			spec.paths = new String[names.size()];
 			names.copyInto(spec.paths);
@@ -236,7 +224,6 @@ public class Manifest extends Hashtable {
 			result[i] = st.nextToken();
 		return result;
 	}
-
 
 	public Package[] getImports() {
 		return _imports;
