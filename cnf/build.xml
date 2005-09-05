@@ -160,8 +160,10 @@
 		<foreach list="${jars.compile.order}" delimiter=" ," target="-jar" param="item.jarFile" inheritAll="true" />
 	</target>
 
+	<target name="-jar" depends="-btool,-signjar"/>
+	
 	<!--
-	     JAR
+	     BTOOL
 	     Build the jar file with btool. Due to ants fantastic lack of
 	     variable handling, we have to refer to giving btool property names
 	     so it can do the expansion of properties itself ...
@@ -182,7 +184,7 @@
 	                         is the file used in initial provisioning
 	     ignoreVersions      Do not use version on automatic import/export
 	-->
-	<target name="-jar">
+	<target name="-btool">
 		<echo>JAR ${item.jarFile}</echo>
 		<btool jar="${project}/${item.jarFile}"
 		       failok="${btool.failok}"
@@ -201,6 +203,14 @@
 			   manifestVersion="${btool.manifestVersion}"
 			   modified="${base.modified}"
 			   />
+	</target>
+
+	<target name="-signjar" if="sign.${item.jarFile}">
+		<signjar jar="${item.jarFile}" 
+			keystore="${workspace}/cnf/certificate/.keystore" 
+			storepass="testtest" 
+			keypass="testtest"
+			alias="test"/>
 	</target>
 
 	<!--
