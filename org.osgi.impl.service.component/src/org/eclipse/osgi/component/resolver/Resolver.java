@@ -479,7 +479,7 @@ public class Resolver implements AllServiceListener, WorkDispatcher {
 	 * dispose of all of it's Component Configurations 
 	 * ({@link ComponentDescriptionProp}s).
 	 * 
-	 * @see Resolver#disposeInstances(List)
+	 * @see Resolver#disposeComponentConfigs(List)
 	 * 
 	 * @param componentDescriptions List of {@link ComponentDescriptionProp}s to
 	 *        disable
@@ -494,7 +494,7 @@ public class Resolver implements AllServiceListener, WorkDispatcher {
 				// get the CD
 				ComponentDescription cd = (ComponentDescription) it.next();
 
-				disposeInstances((List) ((ArrayList) cd
+				disposeComponentConfigs((List) ((ArrayList) cd
 						.getComponentDescriptionProps()).clone());
 
 				cd.clearComponentDescriptionProps();
@@ -511,15 +511,15 @@ public class Resolver implements AllServiceListener, WorkDispatcher {
 	 * Remove Component Configurations from satisfied and enabled lists, and send
 	 * to InstanceProcess to be unregistered, deactivated, and unbound.
 	 * 
-	 * @see InstanceProcess#disposeInstances(List)
+	 * @see InstanceProcess#disposeComponentConfigs(List)
 	 * 
 	 * @param cdps List of {@link ComponentDescriptionProp}s
 	 */
-	public void disposeInstances(List cdps) {
+	public void disposeComponentConfigs(List cdps) {
 		// unregister, deactivate, and unbind
 		satisfiedCDPs.removeAll(cdps);
 		enabledCDPs.removeAll(cdps);
-		instanceProcess.disposeInstances(cdps);
+		instanceProcess.disposeComponentConfigs(cdps);
 	}
 
 	/**
@@ -621,7 +621,7 @@ public class Resolver implements AllServiceListener, WorkDispatcher {
 			if (!newlyUnsatisfiedCDPs.isEmpty()) {
 				satisfiedCDPs.removeAll(newlyUnsatisfiedCDPs);
 
-				instanceProcess.disposeInstances(newlyUnsatisfiedCDPs);
+				instanceProcess.disposeComponentConfigs(newlyUnsatisfiedCDPs);
 			}
 
 			// dynamic unbind
@@ -661,7 +661,7 @@ public class Resolver implements AllServiceListener, WorkDispatcher {
 				satisfiedCDPs.removeAll(newlyUnsatisfiedCDPs);
 
 				instanceProcess
-						.disposeInstances(newlyUnsatisfiedCDPs);
+						.disposeComponentConfigs(newlyUnsatisfiedCDPs);
 			}
 
 			// dynamic unbind
@@ -813,7 +813,7 @@ public class Resolver implements AllServiceListener, WorkDispatcher {
 	 *    satisfied.  Check that the Component Configurations are still satisfied 
 	 *    (system state may have changed while they were waiting on the work 
 	 *    queue) and send them to the instance process 
-	 *    ({@link InstanceProcess#buildInstances(List)}).
+	 *    ({@link InstanceProcess#registerComponentConfigs(List)}).
 	 *    </li>
 	 *    <li>DYNAMICBIND - workObject is a Map of References : Component 
 	 *    Configurations that need to be dynamically bound.  Check that the 
@@ -846,7 +846,7 @@ public class Resolver implements AllServiceListener, WorkDispatcher {
 					}
 				}
 				if (!cdps.isEmpty()) {
-					instanceProcess.buildInstances(cdps);
+					instanceProcess.registerComponentConfigs(cdps);
 				}
 				break;
 			case DYNAMICBIND :

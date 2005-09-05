@@ -109,7 +109,7 @@ public class InstanceProcess implements ConfigurationListener {
 	 * 
 	 * @param componentDescriptionProps - List of satisfied Component Configurations
 	 */
-	public void buildInstances(List componentDescriptionProps) {
+	public void registerComponentConfigs(List componentDescriptionProps) {
 
 		ComponentDescriptionProp cdp;
 		ComponentDescription cd;
@@ -129,7 +129,7 @@ public class InstanceProcess implements ConfigurationListener {
 				// if component is immediate - create instance immediately
 				if (cd.isImmediate()) {
 					try {
-						buildDispose.build(null, cdp);
+						buildDispose.buildComponentConfigInstance(null, cdp);
 					}
 					catch (ComponentException e) {
 						Log
@@ -200,7 +200,7 @@ public class InstanceProcess implements ConfigurationListener {
 	 *         disposed
 	 */
 
-	public void disposeInstances(List componentDescriptionProps) {
+	public void disposeComponentConfigs(List componentDescriptionProps) {
 
 		// loop through CD+P list to be disposed
 		if (componentDescriptionProps != null) {
@@ -210,7 +210,7 @@ public class InstanceProcess implements ConfigurationListener {
 						.next();
 
 				// dispose component
-				buildDispose.disposeComponent(cdp);
+				buildDispose.disposeComponentConfig(cdp);
 			}
 		}
 
@@ -381,7 +381,7 @@ public class InstanceProcess implements ConfigurationListener {
 					if (cdp != null) {
 						// config already exists - dispose of it
 						cd.removeComponentDescriptionProp(cdp);
-						main.resolver.disposeInstances(Collections
+						main.resolver.disposeComponentConfigs(Collections
 								.singletonList(cdp));
 					}
 
@@ -443,7 +443,7 @@ public class InstanceProcess implements ConfigurationListener {
 
 						// we can just dispose this CDP
 						cd.removeComponentDescriptionProp(cdp);
-						disposeInstances(Collections.singletonList(cdp));
+						disposeComponentConfigs(Collections.singletonList(cdp));
 						main.resolver.satisfiedCDPs.remove(cdp);
 						main.resolver.enabledCDPs.remove(cdp);
 

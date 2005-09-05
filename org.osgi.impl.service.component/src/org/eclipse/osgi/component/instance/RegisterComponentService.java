@@ -81,7 +81,7 @@ abstract class RegisterComponentService {
 							ComponentInstance componentInstance = null;
 							try {
 								componentInstance = finalInstanceProcess.buildDispose
-										.build(bundle, finalCDP);
+										.buildComponentConfigInstance(bundle, finalCDP);
 							}
 							catch (ComponentException e) {
 								Log
@@ -150,7 +150,7 @@ abstract class RegisterComponentService {
 										//track that we created this instance
 										//so we know to dispose of it later
 										finalInstanceProcess.buildDispose
-												.build(null, finalCDP);
+												.buildComponentConfigInstance(null, finalCDP);
 										disposeComponentInstance = true;
 									}
 									catch (ComponentException e) {

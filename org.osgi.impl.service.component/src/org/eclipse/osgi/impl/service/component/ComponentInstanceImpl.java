@@ -74,7 +74,7 @@ public class ComponentInstanceImpl implements ComponentInstance {
 				&& cdp.getComponentDescription().getFactory() != null) {
 			// this is a factory instance, so dispose of CDP
 			cdp.getComponentDescription().removeComponentDescriptionProp(cdp);
-			main.resolver.disposeInstances(Collections.singletonList(cdp));
+			main.resolver.disposeComponentConfigs(Collections.singletonList(cdp));
 			cdp = null;
 		}
 		else {

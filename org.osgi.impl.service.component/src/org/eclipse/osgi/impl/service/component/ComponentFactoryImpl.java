@@ -92,7 +92,7 @@ public class ComponentFactoryImpl implements ComponentFactory {
 		// if new cdp resolves, send it to instance process (will register
 		// service
 		// if it has one)
-		main.resolver.instanceProcess.buildInstances(Collections
+		main.resolver.instanceProcess.registerComponentConfigs(Collections
 				.singletonList(newCDP));
 
 		// get instance of new cdp to return
@@ -102,6 +102,6 @@ public class ComponentFactoryImpl implements ComponentFactory {
 			return (ComponentInstance) newCDP.getInstances().get(0);
 		}
 
-		return main.resolver.instanceProcess.buildDispose.build(null, newCDP);
+		return main.resolver.instanceProcess.buildDispose.buildComponentConfigInstance(null, newCDP);
 	}
 }

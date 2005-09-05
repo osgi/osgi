@@ -58,14 +58,14 @@ public class BuildDispose {
 
 	/**
 	 * Counts re-entry in to the
-	 * {@link BuildDispose#build(Bundle, ComponentDescriptionProp)} method. This
+	 * {@link BuildDispose#buildComponentConfigInstance(Bundle, ComponentDescriptionProp)} method. This
 	 * is used to handle circular dependencies.
 	 */
 	private int				stackCount;
 
 	/**
 	 * Used with stackCount to handle circular dependencies in the
-	 * {@link BuildDispose#build(Bundle, ComponentDescriptionProp)} method.
+	 * {@link BuildDispose#buildComponentConfigInstance(Bundle, ComponentDescriptionProp)} method.
 	 */
 	private Hashtable		delayedBindTable;
 
@@ -103,7 +103,7 @@ public class BuildDispose {
 	 * 
 	 * This method also handles possible circluarities. The method is re-entrant
 	 * and tracks how many times we have entered the method. If a possible
-	 * circularity is encountered will binding references (it is detected
+	 * circularity is encountered while binding references (it is detected
 	 * earlier by the resolver) then the bind action is delayed until the last
 	 * time we exit this method to "break" the cirularity. See the OSGi R4
 	 * specification section 112.3.5 for more information about Cirular
@@ -121,7 +121,7 @@ public class BuildDispose {
 	 * 
 	 */
 
-	public ComponentInstance build(Bundle usingBundle,
+	public ComponentInstance buildComponentConfigInstance(Bundle usingBundle,
 			ComponentDescriptionProp cdp) throws ComponentException {
 
 		synchronized (this) {
@@ -192,7 +192,7 @@ public class BuildDispose {
 	 * 
 	 * @param cdp Component Configuration to dispose
 	 */
-	void disposeComponent(ComponentDescriptionProp cdp) {
+	void disposeComponentConfig(ComponentDescriptionProp cdp) {
 
 		synchronized (this) {
 			// unregister this cdp's service
@@ -525,7 +525,7 @@ public class BuildDispose {
 	 * If getting the service could cause a circularity and the reference's
 	 * policy is "dynamic", add an entry to the "delayed bind table" which is
 	 * processed farther up the call stack by the
-	 * {@link BuildDispose#build(Bundle, ComponentDescriptionProp)} method.
+	 * {@link BuildDispose#buildComponentConfigInstance(Bundle, ComponentDescriptionProp)} method.
 	 * 
 	 * @param consumerCDP
 	 * @param reference
