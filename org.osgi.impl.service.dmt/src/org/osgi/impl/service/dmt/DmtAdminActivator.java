@@ -42,6 +42,8 @@ public class DmtAdminActivator implements BundleActivator {
 		try {
             context = new Context(bc);
             
+            DmtSessionImpl.init_acls();
+            
 			// creating the services
             DmtPrincipalPermissionAdmin dmtPermissionAdmin =
                 new DmtPrincipalPermissionAdminImpl(context);
