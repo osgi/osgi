@@ -5,22 +5,24 @@ import java.net.URL;
 import java.security.AccessController;
 import java.security.PrivilegedExceptionAction;
 import java.util.*;
+
 import javax.microedition.midlet.MIDlet;
 import org.osgi.framework.*;
 import org.osgi.service.application.*;
 
 public final class MidletDescriptor extends ApplicationDescriptor {
-	private Properties			props;
-	private Hashtable			  names;
-	private Hashtable			  icons;
-	private BundleContext		bc;
-	private String				  startClass;
-	private String				  pid;
-	private Bundle				  bundle;
-	private String				  defaultLanguage;
-	private boolean				  locked;
-	private MidletContainer	midletContainer;
-	private static int			instanceCounter;
+	private Properties					props;
+	private Hashtable			  		names;
+	private Hashtable			  		icons;
+	private BundleContext				bc;
+	private String				  		startClass;
+	private String				  		pid;
+	private Bundle				  		bundle;
+	private String				  		defaultLanguage;
+	private boolean				  		locked;
+	private MidletContainer			midletContainer;
+	private static int			    instanceCounter;
+	private ServiceRegistration serviceReg;
 
 	public MidletDescriptor(BundleContext bc, Properties props, Map names, Map icons,
 			String defaultLang, String startClass, Bundle bundle,
@@ -36,6 +38,7 @@ public final class MidletDescriptor extends ApplicationDescriptor {
 		this.icons = new Hashtable(icons);
 		this.startClass = startClass;
 		this.bundle = bundle;
+		this.serviceReg = null;
 		if (names.size() == 0 || icons.size() == 0
 				|| !props.containsKey("application.bundle.id")
 				|| !props.containsKey(Constants.SERVICE_PID)
@@ -121,10 +124,14 @@ public final class MidletDescriptor extends ApplicationDescriptor {
 
 	public void lockSpecific() {
 		locked = true;
+		if( serviceReg != null )
+		  register();  // if lock changes, change the service registration properties also
 	}
 
 	public void unlockSpecific() {
 		locked = false;
+		if( serviceReg != null )
+   		register();  // if lock changes, change the service registration properties also
 	}
 
 	static synchronized String createNewInstanceID(String pid) {
@@ -168,5 +175,18 @@ public final class MidletDescriptor extends ApplicationDescriptor {
 				MIDlet app = (MIDlet) constructor.newInstance(new Object[0]);
 				return app;
 		  }});
+	}
+	
+	void register() {
+		unregister();
+		Dictionary properties = new Hashtable( getProperties(Locale.getDefault().getLanguage()));
+		serviceReg = bc.registerService(ApplicationDescriptor.class.getName(),this, properties);		
+	}
+	
+	void unregister() {
+		if (serviceReg != null) {
+			serviceReg.unregister();
+			serviceReg = null;
+		}
 	}
 }
