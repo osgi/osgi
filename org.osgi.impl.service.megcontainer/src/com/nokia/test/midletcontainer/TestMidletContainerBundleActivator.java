@@ -259,12 +259,12 @@ public class TestMidletContainerBundleActivator
 /*    		if (!testCase_appPluginCheckApplicationLaunch()) 														
     			  System.out.println("AppPlugin: checking the application launching    FAILED"); 	
     		else 																																				
-    			  System.out.println("AppPlugin: checking the application launching    PASSED"); 	
+    			  System.out.println("AppPlugin: checking the application launching    PASSED");*/ 	
     		if (!testCase_appPluginCheckApplicationStop()) 															
     			  System.out.println("AppPlugin: checking the application stopping     FAILED"); 	
     		else 																																				
     			  System.out.println("AppPlugin: checking the application stopping     PASSED"); 	
-    		if (!testCase_appPluginDeleteNode()) 															
+/*    		if (!testCase_appPluginDeleteNode()) 															
     			  System.out.println("AppPlugin: checking the node removal             FAILED"); 	
     		else 																																				
     			  System.out.println("AppPlugin: checking the node removal             PASSED"); 	
@@ -1798,17 +1798,26 @@ public class TestMidletContainerBundleActivator
   			if( !testCase_launchApplication() )
   				return false;
   			
-  			DmtSession session = dmtFactory.getSession("./OSGi/app_instances");
+  			DmtSession session = dmtFactory.getSession("./OSGi/Application/" + appUID + "/Instances");
 
-  			String[] nodeNames = session.getChildNodeNames( "./OSGi/app_instances" );
+  			String[] nodeNames = session.getChildNodeNames( "./OSGi/Application/" + appUID + "/Instances" );
   			
   			if( nodeNames == null || nodeNames.length != 1 )
   				throw new Exception( "Couldn't find the application instance node!" );
   			
-  			String instanceName = nodeNames[ 0 ];			
-  			session.execute( "./OSGi/app_instances/" + instanceName, "STOP" );			
+  			String instanceName = nodeNames[ 0 ];
+  			
+  			String[] operationNames = session.getChildNodeNames( "./OSGi/Application/" + appUID + "/Instances/" + instanceName + "/Operations" );  			
+  			if( operationNames == null || operationNames.length != 2 )
+  				throw new Exception( "Invalid child nodes of the application instance operations!" );
 
-  			nodeNames = session.getChildNodeNames( "./OSGi/app_instances" );
+  			List childList = Arrays.asList( operationNames );  			
+  			if( childList.indexOf( "Stop" ) == -1 || childList.indexOf( "Ext" ) == -1 )
+  				throw new Exception( "Invalid child nodes of the application instance operations!" );
+  			
+  			session.execute( "./OSGi/Application/" + appUID + "/Instances/" + instanceName + "/Operations/Stop", "STOP" );			
+
+  			nodeNames = session.getChildNodeNames( "./OSGi/Application/" + appUID + "/Instances" );
   			if( nodeNames != null && nodeNames.length != 0 )
   				throw new Exception( "Application didn't stop!" );
   			
