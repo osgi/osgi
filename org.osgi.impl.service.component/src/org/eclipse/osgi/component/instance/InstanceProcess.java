@@ -311,7 +311,7 @@ public class InstanceProcess implements ConfigurationListener {
 					.get(pid);
 		}
 		if (cd == null) {
-			//this coniguration event has nothing to do with declarative services
+			//this configuration event has nothing to do with declarative services
 			return;
 		}
 
