@@ -31,22 +31,78 @@ import java.util.Date;
 import java.util.Dictionary;
 import java.util.Hashtable;
 
-import org.osgi.framework.BundleActivator;
-import org.osgi.framework.BundleContext;
-import org.osgi.framework.Constants;
-import org.osgi.framework.InvalidSyntaxException;
-import org.osgi.framework.ServiceReference;
-import org.osgi.framework.ServiceRegistration;
-import org.osgi.service.application.ApplicationDescriptor;
-import org.osgi.service.dmt.DmtData;
-import org.osgi.service.dmt.DmtException;
-import org.osgi.service.dmt.DmtSession;
-import org.osgi.service.dmt.MetaNode;
-import org.osgi.service.dmt.spi.DataPluginFactory;
-import org.osgi.service.dmt.spi.ExecPlugin;
-import org.osgi.service.dmt.spi.ReadWriteDataSession;
-import org.osgi.service.dmt.spi.ReadableDataSession;
-import org.osgi.service.dmt.spi.TransactionalDataSession;
+import org.osgi.framework.*;
+import org.osgi.service.application.*;
+import org.osgi.service.dmt.*;
+import org.osgi.service.dmt.spi.*;
+
+class InstanceOperationsNode extends ApplicationPluginBaseNode {
+	InstanceOperationsNode() {
+		super( "Operations" );
+		
+		addChildNode( new ApplicationPluginBaseNode("Ext") );
+		/* TODO */
+	}
+}
+
+class InstanceStateNode extends ApplicationPluginBaseNode {
+	InstanceStateNode() {
+		super( "State", "text/plain" );
+	}
+	
+	public DmtData getNodeValue( String path[] ) throws DmtException {
+		try {
+		  ServiceReference refs[] = ApplicationPlugin.bc.getServiceReferences( ApplicationHandle.class.getName(), 
+                         "(" + Constants.SERVICE_PID + "=" + path[ 5 ] + ")" );
+		  if( refs == null || refs.length != 1 )
+		  	throw new DmtException(path, DmtException.METADATA_MISMATCH, "Cannot get node value!" );
+		  
+		  String state = (String)refs[ 0 ].getProperty( ApplicationHandle.APPLICATION_STATE );
+		  if( state == null )
+		  	throw new DmtException(path, DmtException.METADATA_MISMATCH, "Cannot get node value!" );
+		  	
+		  return new DmtData( state );
+		}catch( Exception e) {
+			throw new DmtException(path, DmtException.METADATA_MISMATCH, "Cannot get node value!" );					
+		}		
+	}
+}
+
+class InstanceIDNode extends ApplicationPluginBaseNode {
+	InstanceIDNode() {
+		super();
+		
+		addChildNode( new InstanceOperationsNode() );
+		addChildNode( new InstanceStateNode() );
+	}
+
+	public String[]  getNames( String []path ) {
+		
+		ServiceReference[] refs = null;
+		
+		try {
+		  refs = ApplicationPlugin.bc.getServiceReferences( ApplicationHandle.class.getName(), 
+                         "(" + ApplicationHandle.APPLICATION_DESCRIPTOR + "=" + path[ 3 ] + ")" );
+		}catch( InvalidSyntaxException e) {}
+		
+		if( refs == null || refs.length == 0 )
+			return new String [ 0 ];
+		
+		String result[] = new String[ refs.length ];
+		for( int i=0; i != refs.length; i++ )
+			result[ i ] = (String)refs[ i ].getProperty( Constants.SERVICE_PID );
+		
+		return result;
+	}
+}
+
+class InstancesNode extends ApplicationPluginBaseNode {
+	InstancesNode() {
+		super("Instances");
+		
+		addChildNode( new InstanceIDNode() );
+	}
+}
 
 class ApplicationPropertyNode extends ApplicationPluginBaseNode {
 	private String  name;
@@ -104,6 +160,8 @@ class ApplicationIDNode extends ApplicationPluginBaseNode {
 		
 		/* TODO */
 		
+		addChildNode( new InstancesNode() );
+		
 		addChildNode( new ApplicationPropertyNode( "Name",        ApplicationDescriptor.APPLICATION_NAME ) );
 		addChildNode( new ApplicationPropertyNode( "IconURI",     ApplicationDescriptor.APPLICATION_ICON ) );
 		addChildNode( new ApplicationPropertyNode( "Version",     ApplicationDescriptor.APPLICATION_VERSION ) );
@@ -111,6 +169,8 @@ class ApplicationIDNode extends ApplicationPluginBaseNode {
 		addChildNode( new ApplicationPropertyNode( "Locked",      ApplicationDescriptor.APPLICATION_LOCKED, true ) );
 		addChildNode( new ApplicationPropertyNode( "PackageID",   ApplicationDescriptor.APPLICATION_PACKAGE ) );
 		addChildNode( new ApplicationPropertyNode( "ContainerID", ApplicationDescriptor.APPLICATION_CONTAINER ) );
+		
+		addChildNode( new ApplicationPluginBaseNode("Ext") );
 	}
 	
 	public String[]  getNames( String []path ) {
