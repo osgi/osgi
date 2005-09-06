@@ -37,6 +37,7 @@ import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
+import java.util.StringTokenizer;
 import java.util.Vector;
 
 import org.eclipse.osgi.service.resolver.VersionRange;
@@ -150,6 +151,9 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
         // load persisten data (e.g. Deployment Package meta information)
         load();
         
+        // creates the System DP if needed
+        createSystemDp();
+        
         // initialise DMT plugins
         initDmtPlugins();
 
@@ -261,15 +265,11 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
         
         DeploymentPackage dp = null;
         
-        if ("System".equals(symbName)) {
-            dp = createSystemDp();
-        } else {
-            for (Iterator iter = dps.iterator(); iter.hasNext();) {
-                DeploymentPackage tdp = (DeploymentPackageImpl) iter.next();
-                if (tdp.getName().equals(symbName)) {
-                    dp = tdp;
-                    break;
-                }
+        for (Iterator iter = dps.iterator(); iter.hasNext();) {
+            DeploymentPackage tdp = (DeploymentPackageImpl) iter.next();
+            if (tdp.getName().equals(symbName)) {
+                dp = tdp;
+                break;
             }
         }
         
@@ -312,13 +312,13 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
             }
         }
         
-        DeploymentPackageImpl sysDp = createSystemDp();
+        /*DeploymentPackageImpl sysDp = createSystemDp();
         try {
             checkPermission(sysDp, DeploymentAdminPermission.ACTION_LIST);
             ret.add(sysDp);
         } catch (SecurityException e) {
             // do nothing
-        }
+        }*/
         
         return (DeploymentPackage[]) ret.toArray(new DeploymentPackage[] {});
     }
@@ -696,21 +696,38 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
         return null;
     }
 
-    private DeploymentPackageImpl createSystemDp() {
-        Set all = new HashSet();
-        Bundle[] bundles = context.getBundles();
-        for (int i = 0; i < bundles.length; i++)
-            all.add(new BundleEntry(bundles[i]));
-
-        Set sub = new HashSet();
+    /*
+     * Creates the System Dp if there is no System DP yet
+     */
+    private void createSystemDp() {
         for (Iterator iter = dps.iterator(); iter.hasNext();) {
-            DeploymentPackageImpl dp = (DeploymentPackageImpl) iter.next();
-            Set s = dp.getBundleEntriesAsSet();
-            sub.addAll(s);
+            DeploymentPackage dp = (DeploymentPackage) iter.next();
+            if (dp.getName().equals("System"))
+                return;
         }
         
-        all.removeAll(sub);
-        return DeploymentPackageImpl.createSystem(this, all);
+        Set bundles = new HashSet();
+        
+        String s = System.getProperty(DAConstants.SYSTEM_DP);
+        if (null == s)
+            bundles.add(new BundleEntry(context.getBundle(0)));
+        else {
+            StringTokenizer st = new StringTokenizer(s, ",");
+            while (st.hasMoreTokens()) {
+                long l = Long.parseLong(st.nextToken());
+                Bundle b = context.getBundle(l);
+                if (null == b) {
+                    logger.log(Logger.LOG_WARNING, "Error while creating the initial " +
+                            "\"System\" bundle. Bundle with bundleid " + l + 
+                            " has not found. Check the " + DAConstants.SYSTEM_DP +
+                            " system property!");
+                    continue;
+                }
+                bundles.add(new BundleEntry(b));
+            }
+        }
+        
+        dps.add(DeploymentPackageImpl.createOriginalSystemDp(this, bundles));
     }
 
     /*

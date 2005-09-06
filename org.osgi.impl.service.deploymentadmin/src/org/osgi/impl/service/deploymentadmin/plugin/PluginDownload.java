@@ -442,7 +442,7 @@ public class PluginDownload extends DefaultHandler implements DataPluginFactory,
     					0, null, DmtData.FORMAT_NODE);
         }
         if (l == 7) {
-            return new Metanode(MetaNode.CMD_GET, !Metanode.IS_LEAF,
+            return new Metanode(MetaNode.CMD_GET, Metanode.IS_LEAF,
 					MetaNode.PERMANENT, "", 1, !Metanode.ZERO_OCC, null, 0,
 					0, null, DmtData.FORMAT_NULL).orOperation(MetaNode.CMD_EXECUTE);
         }

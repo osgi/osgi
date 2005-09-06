@@ -98,14 +98,14 @@ public class PluginDeployed implements DataPluginFactory, ReadableDataSession,
             set.add(mv);
         }
 
-        // gathers deployed bundles (not bilonging to any DP)
+        // gathers deployed bundles (not belonging to any DP)
         Set bset = new HashSet();
         Bundle[] bs = pluginCtx.getBundleContext().getBundles();
         for (int i = 0; i < bs.length; i++)
             bset.add(new Long(bs[i].getBundleId()));
         for (int i = 0; i < dps.length; i++) {
-            if ("System".equals(dps[i].getName()))
-                continue;
+            // ###vif ("System".equals(dps[i].getName()))
+            //    continue;
             for (Iterator iter = ((DeploymentPackageImpl) dps[i]).
                     getBundleEntryIterator(); iter.hasNext();) {
                 BundleEntry be = (BundleEntry) iter.next();
@@ -246,10 +246,8 @@ public class PluginDeployed implements DataPluginFactory, ReadableDataSession,
                 if (l == 9)
                     return true;
                 if (!"Location".equals(nodeUriArr[9]) &&
-                    !"ServiceComponent".equals(nodeUriArr[9]) &&
                     !"Signers".equals(nodeUriArr[9]) &&
-                    !"Manifest".equals(nodeUriArr[9]) &&
-                    !"ApplicationType".equals(nodeUriArr[9]))
+                    !"Manifest".equals(nodeUriArr[9]))
                     	return false;
                 if (l == 10)
                     return true;
@@ -259,9 +257,6 @@ public class PluginDeployed implements DataPluginFactory, ReadableDataSession,
                     int n = Integer.parseInt(nodeUriArr[10]);
                     return n >= 0 && n <= lim;
                 } 
-                if ("ServiceComponent".equals(nodeUriArr[9])) {
-                    // TODO
-                }
             } 
         }
         
@@ -304,7 +299,6 @@ public class PluginDeployed implements DataPluginFactory, ReadableDataSession,
             }
             if (l == 10) {
 	            if ("Location".equals(nodeUriArr[9]) ||
-	                "ApplicationType".equals(nodeUriArr[9]) ||
 	                "Manifest".equals(nodeUriArr[9]))
 	                	return true;
 	            return false;
@@ -376,8 +370,6 @@ public class PluginDeployed implements DataPluginFactory, ReadableDataSession,
                     return new DmtData(b.getLocation());
                 if ("State".equals(nodeUriArr[9]))
                     return new DmtData(b.getState());
-                if ("ApplicationType".equals(nodeUriArr[9]))
-                    return new DmtData(0); // TODO
                 if ("Manifest".equals(nodeUriArr[9])) {
                     try {
                         return new DmtData(getManifest(b));
@@ -459,8 +451,7 @@ public class PluginDeployed implements DataPluginFactory, ReadableDataSession,
             if (!s.contains(nodeUriArr[8]))
                 throw new DmtException(nodeUriArr, DmtException.NODE_NOT_FOUND, "");
             if (l == 9)
-                return new String[] {"ApplicationType", "Manifest", "Signers", 
-                    "ServiceComponent", "Location"};
+                return new String[] {"Manifest", "Signers", "Location"};
             if (l == 10) {
                 if ("Signers".equals(nodeUriArr[9])) {
                     String[] signers = getStandaloneBundleSigners(nodeUriArr[8]);
@@ -470,10 +461,6 @@ public class PluginDeployed implements DataPluginFactory, ReadableDataSession,
                     for (int i = 0; i < signers.length; i++)
                         al.add(String.valueOf(i));
                     return (String[]) al.toArray(new String[] {});
-                }
-                if ("ServiceComponent".equals(nodeUriArr[9])) {
-                    // TODO
-                    return new String[] {"TODO"};
                 }
             }
         }
@@ -538,8 +525,7 @@ public class PluginDeployed implements DataPluginFactory, ReadableDataSession,
                         "", 1, !Metanode.ZERO_OCC, null, 0, 0, null, DmtData.FORMAT_NODE);
             }
             if (l == 10) {
-                if ("Signers".equals(nodeUriArr[9]) ||
-                    "ServiceComponent".equals(nodeUriArr[9]))
+                if ("Signers".equals(nodeUriArr[9]))
                     return new Metanode(MetaNode.CMD_GET, Metanode.IS_LEAF, MetaNode.AUTOMATIC,
                             "", 1, !Metanode.ZERO_OCC, null, 0, 0, null, DmtData.FORMAT_STRING);
                 return new Metanode(MetaNode.CMD_GET, !Metanode.IS_LEAF, MetaNode.AUTOMATIC,
@@ -677,8 +663,11 @@ public class PluginDeployed implements DataPluginFactory, ReadableDataSession,
         // create name sections for bundles
         for (Iterator iter = dp.getBundleEntryIterator(); iter.hasNext();) {
             BundleEntry be = (BundleEntry) iter.next();
+            CaseInsensitiveMap attrs = be.getAttrs();
+            if (null == attrs)
+                continue;
             manifest.append(keyValuePair("Name", be.getResName()) + "\n");
-            for (Iterator beit = be.getAttrs().keySet().iterator(); beit.hasNext();) {
+            for (Iterator beit = attrs.keySet().iterator(); beit.hasNext();) {
                 String key = (String) beit.next();
                 String rawKey = be.getAttrs().getRawKey(key);
                 String kvp = keyValuePair(rawKey, be.getAttrs().get(key));

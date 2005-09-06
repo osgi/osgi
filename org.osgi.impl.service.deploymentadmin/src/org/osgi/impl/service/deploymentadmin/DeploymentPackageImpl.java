@@ -97,7 +97,7 @@ public class DeploymentPackageImpl implements DeploymentPackage, Serializable {
     /*
      * Creates the Systemp DP
      */
-    static DeploymentPackageImpl createSystem(DeploymentAdminImpl da, Set bundleEntries) {
+    /*static DeploymentPackageImpl createSystem(DeploymentAdminImpl da, Set bundleEntries) {
         if (null == da)
             throw new IllegalArgumentException("Internal error");
         
@@ -108,14 +108,35 @@ public class DeploymentPackageImpl implements DeploymentPackage, Serializable {
         dp.bundleEntries = new LinkedList(bundleEntries);
         
         return dp;
+    }*/
+
+    /*
+     * Creates the Systemp DP
+     */
+    static DeploymentPackageImpl createOriginalSystemDp(DeploymentAdminImpl da, Set bundleEntries) {
+        if (null == da)
+            throw new IllegalArgumentException("Internal error");
+        
+        DeploymentPackageImpl dp = new DeploymentPackageImpl();
+        dp.mainSection = new CaseInsensitiveMap(null, dp);
+        dp.mainSection.put("Manifest-Version", "1.0");
+        dp.mainSection.put(DAConstants.DP_NAME, "System");
+        dp.mainSection.put(DAConstants.DP_VERSION, "0.0.0");
+        dp.bundleEntries = new LinkedList(bundleEntries);
+        
+        return dp;
     }
-    
+
     boolean isEmpty() {
         return getName().equals("") && getVersion().equals(new Version("0.0.0"));
     }
     
-    boolean isSystem() {
+    /*boolean isSystem() {
         return getName().equals("System") && getVersion().equals(new Version("0.0.0"));
+    }*/
+    
+    boolean isSystem() {
+        return getName().equals("System");
     }
     
     public boolean equals(Object obj) {
