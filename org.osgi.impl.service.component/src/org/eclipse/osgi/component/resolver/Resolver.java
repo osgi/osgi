@@ -340,6 +340,16 @@ public class Resolver implements AllServiceListener, WorkDispatcher {
 
 		ComponentDescriptionProp cdp = new ComponentDescriptionProp(cd,
 				references, properties, componentFactory);
+		
+		//for each Reference, set it's "parent" (the CDP)
+		it = cdp.getReferences().iterator();
+		while (it.hasNext()) {
+			Reference reference = (Reference) it.next();
+
+			// set parent CDP
+			reference.setComponentDescriptionProp(cdp);
+		}
+		
 		cd.addComponentDescriptionProp(cdp);
 
 		// add CD+P to set
@@ -594,7 +604,7 @@ public class Resolver implements AllServiceListener, WorkDispatcher {
 		else if (event.getType() == ServiceEvent.REGISTERED) {
 
 			// dynamic bind
-			Hashtable dynamicBind = selectDynamicBind(event
+			List dynamicBind = selectDynamicBind(event
 					.getServiceReference());
 			if (!dynamicBind.isEmpty()) {
 				workQueue.enqueueWork(this, DYNAMICBIND, dynamicBind);
@@ -626,14 +636,14 @@ public class Resolver implements AllServiceListener, WorkDispatcher {
 
 			// dynamic unbind
 			// check each satisfied cdp - do we need to unbind
-			List dynamicUnBind = selectDynamicUnBind(event
+			Map dynamicUnBind = selectDynamicUnBind(event
 					.getServiceReference());
 			if (!dynamicUnBind.isEmpty()) {
 				instanceProcess.dynamicUnBind(dynamicUnBind);
 			}
 
 			// dynamic bind
-			Hashtable dynamicBind = selectDynamicBind(event
+			List dynamicBind = selectDynamicBind(event
 					.getServiceReference());
 			if (!dynamicBind.isEmpty()) {
 				workQueue.enqueueWork(this, DYNAMICBIND, dynamicBind);
@@ -665,7 +675,7 @@ public class Resolver implements AllServiceListener, WorkDispatcher {
 			}
 
 			// dynamic unbind
-			List dynamicUnBind = selectDynamicUnBind(event
+			Map dynamicUnBind = selectDynamicUnBind(event
 					.getServiceReference());
 			if (!dynamicUnBind.isEmpty()) {
 				instanceProcess.dynamicUnBind(dynamicUnBind);
@@ -815,17 +825,16 @@ public class Resolver implements AllServiceListener, WorkDispatcher {
 	 *    queue) and send them to the instance process 
 	 *    ({@link InstanceProcess#registerComponentConfigs(List)}).
 	 *    </li>
-	 *    <li>DYNAMICBIND - workObject is a Map of References : Component 
-	 *    Configurations that need to be dynamically bound.  Check that the 
-	 *    Component Configurations are still satisfied (system state may have 
-	 *    changed while they were waiting on the work queue) and send them to 
-	 *    the instance process ({@link InstanceProcess#dynamicBind(Hashtable)}).
+	 *    <li>DYNAMICBIND - workObject is a List of References that need to be 
+	 *    dynamically bound.  Check that the Component Configurations are still 
+	 *    satisfied (system state may have changed while they were waiting on 
+	 *    the work queue) and send them to the instance process 
+	 *    ({@link InstanceProcess#dynamicBind(List)}).
 	 * </ul>
 	 * </p>
 	 * @param workAction {@link Resolver#BUILD} or {@link Resolver#DYNAMICBIND}
 	 * @param workObject a List of {@link ComponentDescriptionProp}s if workAction
-	 *        is {@link Resolver#BUILD} or a Map of 
-	 *        {@link Reference}:{@link ComponentDescriptionProp} if workAction 
+	 *        is {@link Resolver#BUILD} or a List of {@link Reference}s if workAction 
 	 *        is {@link Resolver#DYNAMICBIND} 
 	 * @see org.eclipse.osgi.component.workqueue.WorkDispatcher#dispatchWork(int,
 	 *      java.lang.Object)
@@ -851,16 +860,17 @@ public class Resolver implements AllServiceListener, WorkDispatcher {
 				break;
 			case DYNAMICBIND :
 				// only dynamicBind if cdps are still satisfied
-				Hashtable serviceTable = (Hashtable) workObject;
-				it = serviceTable.values().iterator();
+				List references = (List) workObject;
+				it = references.iterator();
 				while (it.hasNext()) {
-					if (!this.satisfiedCDPs.contains(it.next())) {
-						// modifies underlying hashtable
+					if (!this.satisfiedCDPs.contains(((Reference) it.next())
+							.getComponentDescriptionProp())) {
+						// modifies underlying list
 						it.remove();
 					}
 				}
-				if (!serviceTable.isEmpty()) {
-					instanceProcess.dynamicBind(serviceTable);
+				if (!references.isEmpty()) {
+					instanceProcess.dynamicBind(references);
 				}
 				break;
 		}
@@ -872,11 +882,11 @@ public class Resolver implements AllServiceListener, WorkDispatcher {
 	 * service.
 	 * 
 	 * @param serviceReference the service
-	 * @return a Hashtable of {@link Reference}:{@link ComponentDescriptionProp} 
-	 *         that need to be dynamically bound to this service
+	 * @return a List of {@link Reference}s that need to be dynamically bound 
+	 *         to this service
 	 */
-	private Hashtable selectDynamicBind(ServiceReference serviceReference) {
-		Hashtable bindTable = new Hashtable();
+	private List selectDynamicBind(ServiceReference serviceReference) {
+		List bindList = new ArrayList();
 		Iterator it = satisfiedCDPs.iterator();
 		while (it.hasNext()) {
 			ComponentDescriptionProp cdp = (ComponentDescriptionProp) it.next();
@@ -885,11 +895,11 @@ public class Resolver implements AllServiceListener, WorkDispatcher {
 			while (refIt.hasNext()) {
 				Reference reference = (Reference) refIt.next();
 				if (reference.dynamicBindReference(serviceReference)) {
-					bindTable.put(reference, cdp);
+					bindList.add(reference);
 				}
 			}
 		}
-		return bindTable;
+		return bindList;
 	}
 
 	/**
@@ -900,12 +910,11 @@ public class Resolver implements AllServiceListener, WorkDispatcher {
 	 *  if it was bound to the service and the reference it was policy="dynamic".
 	 *  </p>
 	 * @param serviceReference
-	 * @return a List of {@link DynamicUnbindJob}s
-	 * @see DynamicUnbindJob
+	 * @return a Map of {@link Reference}:{@link ServiceReference} to unbind
 	 */
-	private List selectDynamicUnBind(ServiceReference serviceReference) {
+	private Map selectDynamicUnBind(ServiceReference serviceReference) {
 
-		List unbindJobs = new ArrayList();
+		Map unbindJobs = new Hashtable();
 
 		Iterator it = satisfiedCDPs.iterator();
 		while (it.hasNext()) {
@@ -916,29 +925,11 @@ public class Resolver implements AllServiceListener, WorkDispatcher {
 				Reference reference = (Reference) it_.next();
 				// Is reference dynamic and bound to this service? - must unbind
 				if (reference.dynamicUnbindReference(serviceReference)) {
-					DynamicUnbindJob unbindJob = new DynamicUnbindJob();
-					unbindJob.component = cdp;
-					unbindJob.reference = reference;
-					unbindJob.serviceReference = serviceReference;
-					unbindJobs.add(unbindJob);
+					unbindJobs.put(reference,serviceReference);
 				}
 			}
 		}
-		return unbindJobs;
-	}
-
-	/**
-	 * Bean used to encapsulate the variables needed to dynamically unbind
-	 * a service from a Component Configuration.  Objects of this class are
-	 * placed on the work queue.
-	 * 
-	 * @version $Revision$
-	 * @see Resolver#dispatchWork(int, Object)
-	 */
-	static public class DynamicUnbindJob {
-		public ComponentDescriptionProp	component;
-		public Reference				reference;
-		public ServiceReference			serviceReference;
+		return unbindJobs.isEmpty() ? Collections.EMPTY_MAP : unbindJobs;
 	}
 
 	/**
@@ -948,13 +939,10 @@ public class Resolver implements AllServiceListener, WorkDispatcher {
 	 * @version $Revision$
 	 */
 	static private class ReferenceCDP {
-		public ComponentDescriptionProp	consumer;
 		public Reference				ref;
 		public ComponentDescriptionProp	producer;
 
-		protected ReferenceCDP(ComponentDescriptionProp consumer,
-				Reference ref, ComponentDescriptionProp producer) {
-			this.consumer = consumer;
+		protected ReferenceCDP(Reference ref, ComponentDescriptionProp producer) {
 			this.ref = ref;
 			this.producer = producer;
 		}
@@ -990,8 +978,8 @@ public class Resolver implements AllServiceListener, WorkDispatcher {
 					ComponentDescriptionProp providerCDP = reference
 							.findProviderCDP(enabledCDPs);
 					if (providerCDP != null) {
-						dependencyList.add(new ReferenceCDP(enabledCDP,
-								reference, providerCDP));
+						dependencyList.add(new ReferenceCDP(reference,
+								providerCDP));
 					}
 				} // end while(more references)
 
@@ -1107,12 +1095,15 @@ public class Resolver implements AllServiceListener, WorkDispatcher {
 
 		if (optionalRefCDP == null) {
 			// no optional dependency
-			throw new CircularityException(refCDP.consumer);
+			throw new CircularityException(refCDP.ref
+					.getComponentDescriptionProp());
 		}
 
 		// add note not to initiate activation of next dependency
-		optionalRefCDP.consumer.setDelayActivateCDPName(optionalRefCDP.producer
-				.getComponentDescription().getName());
+		optionalRefCDP.ref.getComponentDescriptionProp()
+				.setDelayActivateCDPName(
+						optionalRefCDP.producer.getComponentDescription()
+								.getName());
 	}
 
 	/**

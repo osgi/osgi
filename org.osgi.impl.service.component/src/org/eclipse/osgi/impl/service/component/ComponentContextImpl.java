@@ -175,7 +175,7 @@ public class ComponentContextImpl implements ComponentContext {
 				}
 				if (serviceReference != null) {
 					Object serviceObject = main.resolver.instanceProcess.buildDispose
-							.getService(cdp, thisReference, serviceReference);
+							.getService(thisReference, serviceReference);
 					componentInstance.addServiceReference(serviceReference,
 							serviceObject);
 					return serviceObject;
@@ -223,7 +223,7 @@ public class ComponentContextImpl implements ComponentContext {
 
 			if (thisReference != null) {
 				Object serviceObject = main.resolver.instanceProcess.buildDispose
-						.getService(cdp, thisReference, serviceReference);
+						.getService(thisReference, serviceReference);
 				componentInstance.addServiceReference(serviceReference,
 						serviceObject);
 				return serviceObject;
@@ -275,7 +275,7 @@ public class ComponentContextImpl implements ComponentContext {
 					List serviceObjects = new ArrayList(serviceReferences.length);
 					for (int counter = 0; counter < serviceReferences.length; counter++) {
 						Object serviceObject = main.resolver.instanceProcess.buildDispose
-								.getService(cdp, thisReference,
+								.getService(thisReference,
 										serviceReferences[counter]);
 						if (serviceObject != null) {
 							serviceObjects.add(serviceObject);

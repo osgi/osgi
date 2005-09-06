@@ -17,17 +17,15 @@ package org.eclipse.osgi.component.instance;
 
 import java.io.IOException;
 import java.util.Collections;
-import java.util.Enumeration;
-import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import org.eclipse.osgi.component.Log;
 import org.eclipse.osgi.component.Main;
 import org.eclipse.osgi.component.model.ComponentDescription;
 import org.eclipse.osgi.component.model.ComponentDescriptionProp;
 import org.eclipse.osgi.component.resolver.Reference;
-import org.eclipse.osgi.component.resolver.Resolver;
 import org.eclipse.osgi.component.workqueue.WorkQueue;
 import org.eclipse.osgi.impl.service.component.ComponentFactoryImpl;
 import org.eclipse.osgi.impl.service.component.ComponentInstanceImpl;
@@ -219,18 +217,17 @@ public class InstanceProcess implements ConfigurationListener {
 	/**
 	 * Dynamically bind references.
 	 * 
-	 * @param serviceTable {@link Reference}:{@link ComponentDescription} map to bind
+	 * @param references List of {@link Reference}s to dynamically bind
 	 */
-	public void dynamicBind(Hashtable serviceTable) {
-		Enumeration e = serviceTable.keys();
-		while (e.hasMoreElements()) {
-			Reference reference = (Reference) e.nextElement();
-			ComponentDescriptionProp cdp = (ComponentDescriptionProp) serviceTable
-					.get(reference);
-			List instances = cdp.getInstances();
-			Iterator it = instances.iterator();
-			while (it.hasNext()) {
-				ComponentInstanceImpl compInstance = (ComponentInstanceImpl) it
+	public void dynamicBind(List references) {
+		Iterator it = references.iterator();
+		while (it.hasNext()) {
+			Reference reference = (Reference) it.next();
+			List instances = reference.getComponentDescriptionProp()
+					.getInstances();
+			Iterator it2 = instances.iterator();
+			while (it2.hasNext()) {
+				ComponentInstanceImpl compInstance = (ComponentInstanceImpl) it2
 						.next();
 				if (compInstance != null) {
 					buildDispose.bindReference(reference, compInstance);
@@ -243,19 +240,17 @@ public class InstanceProcess implements ConfigurationListener {
 	/**
 	 * Dynamically unbind references.
 	 * 
-	 * @param unbindJobs List of 
-	 * {@link org.eclipse.osgi.component.resolver.Resolver.DynamicUnbindJob Resolver.DynamicUnbindJob}s
+	 * @param unbindJobs Map of {@link Reference}:{@link ServiceReference}
 	 * to be unbound
 	 */
-	public void dynamicUnBind(List unbindJobs) {
+	public void dynamicUnBind(Map unbindJobs) {
 		// for each unbind job
-		Iterator itr = unbindJobs.iterator();
+		Iterator itr = unbindJobs.entrySet().iterator();
 		while (itr.hasNext()) {
-			Resolver.DynamicUnbindJob unbindJob = (Resolver.DynamicUnbindJob) itr
-					.next();
-			Reference reference = unbindJob.reference;
-			ComponentDescriptionProp cdp = unbindJob.component;
-			ServiceReference serviceReference = unbindJob.serviceReference;
+			Map.Entry unbindJob = (Map.Entry)itr.next();
+			Reference reference = (Reference)unbindJob.getKey();
+			ComponentDescriptionProp cdp = reference.getComponentDescriptionProp();
+			ServiceReference serviceReference = (ServiceReference)unbindJob.getValue();
 
 			// get the list of instances created
 			List instances = cdp.getInstances();

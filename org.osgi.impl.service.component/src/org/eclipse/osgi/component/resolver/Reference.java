@@ -45,6 +45,7 @@ public class Reference {
 	static final boolean			DEBUG				= false;
 	protected static final String	TARGET				= ".target";
 	protected ReferenceDescription	referenceDescription;
+	protected ComponentDescriptionProp cdp;
 	protected String				target;
 
 	/**
@@ -81,6 +82,20 @@ public class Reference {
 		this.target = this.target != null ? this.target : "(objectClass="
 				+ referenceDescription.getInterfacename() + ")";
 
+	}
+	
+	/**
+	 * Set the Component Configuration that this reference belongs to
+	 */
+	protected void setComponentDescriptionProp(ComponentDescriptionProp parent) {
+		cdp = parent;
+	}
+
+	/**
+	 * Get the Component Configuration that this reference belongs to
+	 */
+	public ComponentDescriptionProp getComponentDescriptionProp() {
+		return cdp;
 	}
 
 	/**
@@ -241,15 +256,15 @@ public class Reference {
 		// loop thru cdps to search for provider of service
 		Iterator it = cdps.iterator();
 		while (it.hasNext()) {
-			ComponentDescriptionProp cdp = (ComponentDescriptionProp) it.next();
-			List provideList = cdp.getComponentDescription()
+			ComponentDescriptionProp providerCDP = (ComponentDescriptionProp) it.next();
+			List provideList = providerCDP.getComponentDescription()
 					.getServicesProvided();
 
 			if (provideList.contains(this.getReferenceDescription()
 					.getInterfacename())) {
 				// check the target field
-				if(filter.match(cdp.getProperties())) {
-					return cdp;
+				if(filter.match(providerCDP.getProperties())) {
+					return providerCDP;
 				}
 			}
 		}

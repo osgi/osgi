@@ -16,9 +16,9 @@ package org.eclipse.osgi.component.instance;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Enumeration;
-import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
@@ -67,7 +67,7 @@ public class BuildDispose {
 	 * Used with stackCount to handle circular dependencies in the
 	 * {@link BuildDispose#buildComponentConfigInstance(Bundle, ComponentDescriptionProp)} method.
 	 */
-	private Hashtable		delayedBindTable;
+	private List		delayedBindList;
 
 	/** Main SCR class */
 	protected Main			main;
@@ -79,7 +79,7 @@ public class BuildDispose {
 		invoke = new InvokeMethod(this);
 		this.main = main;
 		stackCount = 0;
-		delayedBindTable = new Hashtable();
+		delayedBindList = new ArrayList();
 	}
 
 	/**
@@ -163,13 +163,13 @@ public class BuildDispose {
 			// if this is the last time in this method and we have "delayed"
 			// bind
 			// actions to do (there was a circularity during bind)
-			if (stackCount == 0 && !delayedBindTable.isEmpty()) {
+			if (stackCount == 0 && !delayedBindList.isEmpty()) {
 				// put delayed dynamic binds on the queue.
 				// (this is used to handle circularity)
 				main.resolver.instanceProcess.workQueue.enqueueWork(
-						main.resolver, Resolver.DYNAMICBIND, delayedBindTable
-								.clone());
-				delayedBindTable.clear();
+						main.resolver, Resolver.DYNAMICBIND,
+						((ArrayList) delayedBindList).clone());
+				delayedBindList.clear();
 			}
 
 			return componentInstance;
@@ -502,16 +502,16 @@ public class BuildDispose {
 	 * 
 	 * @return the service object or null if it would cause a circularity
 	 */
-	public Object getService(ComponentDescriptionProp consumerCDP,
-			Reference reference, ServiceReference serviceReference) {
+	public Object getService(Reference reference, ServiceReference serviceReference) {
 		// check if getting this service would cause a circularity
-		if (couldCauseCycle(consumerCDP, reference, serviceReference)) {
+		if (couldCauseCycle(reference, serviceReference)) {
 			return null;
 		}
 
 		// getting this service will not cause a circularity
-		return consumerCDP.getComponentDescription().getBundleContext()
-				.getService(serviceReference);
+		return reference.getComponentDescriptionProp()
+				.getComponentDescription().getBundleContext().getService(
+						serviceReference);
 
 	}
 
@@ -532,8 +532,11 @@ public class BuildDispose {
 	 * @param serviceReference
 	 * @return if getting the service could cause a circularity
 	 */
-	private boolean couldCauseCycle(ComponentDescriptionProp consumerCDP,
-			Reference reference, ServiceReference serviceReference) {
+	private boolean couldCauseCycle(Reference reference,
+			ServiceReference serviceReference) {
+		
+		ComponentDescriptionProp consumerCDP = reference
+				.getComponentDescriptionProp();
 		// if we are not building a component, no cycles possible
 		if (stackCount == 0) {
 			return false;
@@ -600,7 +603,7 @@ public class BuildDispose {
 				&& reference.getReferenceDescription().getPolicy()
 						.equalsIgnoreCase("dynamic")) {
 			// delay bind by putting on the queue later
-			delayedBindTable.put(reference, consumerCDP);
+			delayedBindList.add(reference);
 		}
 
 		// can't get service now because of circularity - we will bind later

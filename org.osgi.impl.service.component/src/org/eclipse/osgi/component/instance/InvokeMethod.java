@@ -240,8 +240,7 @@ class InvokeMethod {
 				serviceObject = componentInstance
 						.getServiceObject(serviceReference);
 				if (serviceObject == null) {
-					serviceObject = buildDispose.getService(componentInstance
-							.getComponentDescriptionProp(), reference,
+					serviceObject = buildDispose.getService(reference,
 							serviceReference);
 				}
 				if (serviceObject == null) {
