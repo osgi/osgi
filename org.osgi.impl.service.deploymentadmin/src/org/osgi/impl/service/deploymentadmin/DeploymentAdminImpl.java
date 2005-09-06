@@ -701,8 +701,8 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
      */
     private void createSystemDp() {
         for (Iterator iter = dps.iterator(); iter.hasNext();) {
-            DeploymentPackage dp = (DeploymentPackage) iter.next();
-            if (dp.getName().equals("System"))
+            DeploymentPackageImpl dp = (DeploymentPackageImpl) iter.next();
+            if (dp.isSystem())
                 return;
         }
         

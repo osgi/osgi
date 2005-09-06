@@ -127,9 +127,9 @@ public class DeploymentPackageImpl implements DeploymentPackage, Serializable {
         return dp;
     }
 
-    boolean isEmpty() {
+    /*boolean isEmpty() {
         return getName().equals("") && getVersion().equals(new Version("0.0.0"));
-    }
+    }*/
     
     /*boolean isSystem() {
         return getName().equals("System") && getVersion().equals(new Version("0.0.0"));
@@ -427,7 +427,7 @@ public class DeploymentPackageImpl implements DeploymentPackage, Serializable {
      */
     public void uninstall() throws DeploymentException {
         checkStale();
-        if (isSystem() || isEmpty())
+        if (isSystem())
             throw new RuntimeException("\"System\" deployment package cannot be uninstalled");
         
         dpCtx.checkPermission(this, DeploymentAdminPermission.ACTION_UNINSTALL);
@@ -443,7 +443,7 @@ public class DeploymentPackageImpl implements DeploymentPackage, Serializable {
      */
     public boolean uninstallForced() {
         checkStale();
-        if (isSystem() || isEmpty())
+        if (isSystem())
             throw new RuntimeException("\"System\" deployment package cannot be uninstalled");
         
         dpCtx.checkPermission(this, DeploymentAdminPermission.ACTION_UNINSTALL_FORCED);
