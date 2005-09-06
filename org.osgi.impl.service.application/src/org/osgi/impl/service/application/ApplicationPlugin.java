@@ -51,20 +51,15 @@ class InstanceStateNode extends ApplicationPluginBaseNode {
 	}
 	
 	public DmtData getNodeValue( String path[] ) throws DmtException {
-		try {
-		  ServiceReference refs[] = ApplicationPlugin.bc.getServiceReferences( ApplicationHandle.class.getName(), 
-                         "(" + Constants.SERVICE_PID + "=" + path[ 5 ] + ")" );
-		  if( refs == null || refs.length != 1 )
-		  	throw new DmtException(path, DmtException.METADATA_MISMATCH, "Cannot get node value!" );
+		ServiceReference appHndRef = ApplicationPlugin.getApplicationHandle( path );
+	  if( appHndRef == null )
+	  	throw new DmtException(path, DmtException.METADATA_MISMATCH, "Cannot get node value!" );
 		  
-		  String state = (String)refs[ 0 ].getProperty( ApplicationHandle.APPLICATION_STATE );
-		  if( state == null )
-		  	throw new DmtException(path, DmtException.METADATA_MISMATCH, "Cannot get node value!" );
+	  String state = (String)appHndRef.getProperty( ApplicationHandle.APPLICATION_STATE );
+	  if( state == null )
+	  	throw new DmtException(path, DmtException.METADATA_MISMATCH, "Cannot get node value!" );
 		  	
-		  return new DmtData( state );
-		}catch( Exception e) {
-			throw new DmtException(path, DmtException.METADATA_MISMATCH, "Cannot get node value!" );					
-		}		
+	  return new DmtData( state );
 	}
 }
 
@@ -126,31 +121,28 @@ class ApplicationPropertyNode extends ApplicationPluginBaseNode {
 	}
 	
 	public String [] getNames( String path[] ) {
-		if( getProperty( path ) != null )
-			return new String [] { name }; // if the property is missing, the variable is hidden
-		else
-			return new String [ 0 ];
+		try {
+		  if( getProperty( path ) != null )
+			  return new String [] { name }; // if the property is missing, the variable is hidden
+		  else
+			  return new String [ 0 ];
+		}catch( Exception e ) {
+		  return new String [ 0 ];			
+		}
 	}
 	
-	public DmtData getNodeValue( String path[] ) {
+	public DmtData getNodeValue( String path[] ) throws DmtException {
 		if( !isBoolean )
 		  return new DmtData( getProperty( path ) );
 		else
 			return new DmtData( Boolean.valueOf( getProperty( path ) ).booleanValue() );
 	}
 	
-	String getProperty( String []path ) {
-		String appUID = path[ 3 ];
-		try {
-			ServiceReference[] refs = ApplicationPlugin.bc.getServiceReferences( ApplicationDescriptor.class.getName(), 
-					"(" + Constants.SERVICE_PID + "=" + appUID + ")");
-			if ( refs == null || refs.length !=  1)
-				return null;
-			
-			return (String)refs[ 0 ].getProperty( propertyName );
-		}catch( Exception e ) {
-			return null;
-		}
+	String getProperty( String []path )  throws DmtException {
+		ServiceReference ref = ApplicationPlugin.getApplicationDescriptor( path );
+		if( ref == null )
+			throw new DmtException(path, DmtException.METADATA_MISMATCH, "Cannot get node value!" );
+		return (String)ref.getProperty( propertyName );
 	}
 }
 
@@ -372,5 +364,33 @@ public class ApplicationPlugin implements BundleActivator, DataPluginFactory,
 	public int getNodeVersion(String[] path) throws DmtException {
 		throw new DmtException( path, DmtException.FEATURE_NOT_SUPPORTED,
                         		"Version property not supported!" ); 
+	}
+	
+	static ServiceReference getApplicationDescriptor( String path[] ) {
+		String appUID = path[ 3 ];
+		try {
+			ServiceReference[] refs = bc.getServiceReferences( ApplicationDescriptor.class.getName(), 
+					"(" + Constants.SERVICE_PID + "=" + appUID + ")");
+			if ( refs == null || refs.length !=  1)
+				return null;
+			
+			return refs[ 0 ];
+		}catch( Exception e ) {
+			return null;
+		}		
+	}
+
+	static ServiceReference getApplicationHandle( String path[] ) {
+		try {
+  	  ServiceReference refs[] = bc.getServiceReferences( ApplicationHandle.class.getName(), 
+                                      "(" + Constants.SERVICE_PID + "=" + path[ 5 ] + ")" );
+  	  
+      if( refs == null || refs.length != 1 )
+        return null;
+
+      return refs[ 0 ];
+		}catch( Exception e ) {
+			return null;
+		}
 	}
 }
