@@ -252,11 +252,11 @@ public class TestMidletContainerBundleActivator
     			  System.out.println("AppPlugin: checking the installed application    FAILED");
     		else
     			  System.out.println("AppPlugin: checking the installed application    PASSED");
-/*    		if (!testCase_appPluginCheckRunningApps()) 																	
+    		if (!testCase_appPluginCheckRunningApps()) 																	
     			  System.out.println("AppPlugin: checking a running application        FAILED"); 	
     		else 																																				
     			  System.out.println("AppPlugin: checking a running application        PASSED"); 	
-    		if (!testCase_appPluginCheckApplicationLaunch()) 														
+/*    		if (!testCase_appPluginCheckApplicationLaunch()) 														
     			  System.out.println("AppPlugin: checking the application launching    FAILED"); 	
     		else 																																				
     			  System.out.println("AppPlugin: checking the application launching    PASSED"); 	
@@ -1567,7 +1567,8 @@ public class TestMidletContainerBundleActivator
   			String[] properties = session.getChildNodeNames( "./OSGi/Application/" + appUID );
   			
   			String names[]  = new String [] { "Name", "IconURI", "Version", "Vendor", 
-  					                              "Locked", "PackageID", "ContainerID" };
+  					                              "Locked", "PackageID", "ContainerID",
+																					"Instances", "Ext" };
   			Object values[] = new Object [ names.length ];
   			
   			Map props = appDesc.getProperties( Locale.getDefault().getLanguage() );
@@ -1594,21 +1595,21 @@ public class TestMidletContainerBundleActivator
   						if( values[ j ] == null )
   							break;
   						
-  						DmtData value = session.getNodeValue( "./OSGi/Application/" + appUID + "/" + names[ i ] );
+  						DmtData value = session.getNodeValue( "./OSGi/Application/" + appUID + "/" + names[ j ] );
   						
   						switch( value.getFormat() )
   						{
   						case DmtData.FORMAT_BOOLEAN:
   							if( ((Boolean)values[j]).booleanValue() != value.getBoolean() )
-  								throw new Exception( "Invalid value of " + names[ j ] + " (" + values [ j ] + ") !" );
+  								throw new Exception( "Invalid value of " + names[ j ] + " (" + values [ j ] + "!=" + value.getBoolean() + ") !" );
   							break;
   						case DmtData.FORMAT_STRING:
   							if( !((String)values[j]).equals( value.getString() ) )
-  								throw new Exception( "Invalid value of " + names[ j ] + " (" + values [ j ] + ") !" );														
+  								throw new Exception( "Invalid value of " + names[ j ] + " (" + values [ j ] + "!=" + value.getString() + ") !" );														
   							break;
   						case DmtData.FORMAT_INTEGER:
   							if( ((Integer)values[j]).intValue() != value.getInt() )
-  								throw new Exception( "Invalid value of " + names[ j ] + " (" + values [ j ] + ") !" );
+  								throw new Exception( "Invalid value of " + names[ j ] + " (" + values [ j ] + "!=" + value.getInt() +  ") !" );
   							break;
   						default:
   							throw new Exception( "Illegal type for " + names [ j ] + "parameter !" );
@@ -1649,9 +1650,9 @@ public class TestMidletContainerBundleActivator
   			if( references == null || references.length == 0 )
   				throw new Exception( "Service reference not found!" );
   			
-  			DmtSession session = dmtFactory.getSession("./OSGi/app_instances");
+  			DmtSession session = dmtFactory.getSession("./OSGi/Application/" + appUID + "/Instances" );
 
-  			String[] nodeNames = session.getChildNodeNames( "./OSGi/app_instances" );
+  			String[] nodeNames = session.getChildNodeNames( "./OSGi/Application/" + appUID + "/Instances" );
   			
   			if( nodeNames == null || nodeNames.length != 1 )
   				throw new Exception( "Couldn't find the application instance node!" );
@@ -1663,22 +1664,17 @@ public class TestMidletContainerBundleActivator
   			if( !nodeNames[ 0 ].equals( appHandle.getInstanceID() ) )
   				throw new Exception( "Illegal node name (" + nodeNames[ 0 ] + 
   						                 " instead of " + instID +")" );
-  			
-  			String[] childNodes = session.getChildNodeNames( "./OSGi/app_instances/" + appHandle.getInstanceID() );
+  			String[] childNodes = session.getChildNodeNames( "./OSGi/Application/" + appUID + "/Instances/" + appHandle.getInstanceID() );
   			
   			if( childNodes == null || childNodes.length != 2 )
   				throw new Exception( "Invalid child nodes of the application instance!" );
   			
   			List childList = Arrays.asList( childNodes );
   			
-  			if( childList.indexOf( "state" ) == -1 || childList.indexOf( "type" ) == -1 )
+  			if( childList.indexOf( "State" ) == -1 || childList.indexOf( "Operations" ) == -1 )
   				throw new Exception( "Invalid child nodes of the application instance!" );
   			
-  			DmtData typeValue = session.getNodeValue( "./OSGi/app_instances/" + instID + "/type" );
-  			if( !getPID( appDesc ).equals( typeValue.getString() ) )
-  				throw new Exception( "Bad type value (" + typeValue.getString() +"/" + getPID( appDesc ) + ")!" );
-
-  			DmtData stateValue = session.getNodeValue( "./OSGi/app_instances/" + instID + "/state" );
+  			DmtData stateValue = session.getNodeValue( "./OSGi/Application/" + appUID + "/Instances/" + appHandle.getInstanceID() + "/State" );
   			if( !stateValue.getString().equals( ApplicationHandle.RUNNING ) )
   				throw new Exception( "Bad state value (" + stateValue.getInt() + " " + 
   						                  ApplicationHandle.RUNNING + ")!" );
@@ -1686,7 +1682,7 @@ public class TestMidletContainerBundleActivator
   			if( ! testCase_pauseApplication() )
   				return false;
 
-  			stateValue = session.getNodeValue( "./OSGi/app_instances/" + instID + "/state" );
+  			stateValue = session.getNodeValue( "./OSGi/Application/" + appUID + "/Instances/" + appHandle.getInstanceID() + "/State" );
   			if( !stateValue.getString().equals( MidletHandle.PAUSED ) )
   				throw new Exception( "Bad state value (" + stateValue.getInt() + " " + 
   						MidletHandle.PAUSED + ")!" );
@@ -1694,7 +1690,7 @@ public class TestMidletContainerBundleActivator
   			if( ! testCase_resumeApplication() )
   				return false;
 
-  			stateValue = session.getNodeValue( "./OSGi/app_instances/" + instID + "/state" );
+  			stateValue = session.getNodeValue( "./OSGi/Application/" + appUID + "/Instances/" + appHandle.getInstanceID() + "/State" );
   			if( !stateValue.getString().equals( ApplicationHandle.RUNNING ) )
   				throw new Exception( "Bad state value (" + stateValue.getInt() + " " + 
             ApplicationHandle.RUNNING + ")!" );
