@@ -19,8 +19,10 @@ public class UPnPControl extends DefaultTestBundleControl {
 	private HttpService			http;
 	private ServiceReference	deviceRef;
 	private TestStarter			start;
-	static String[]				methods	= new String[] {"testDiscovery", "testExport",
-			"testControl", "testEvent"};
+	 static String[] methods = new String[] {"testDiscovery",
+		  "testControl",
+		  "testEvent",
+		  "testExport"};
 
 	public String[] getMethods() {
 		return methods;

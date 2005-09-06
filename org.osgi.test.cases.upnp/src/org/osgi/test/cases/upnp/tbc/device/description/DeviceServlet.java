@@ -121,7 +121,7 @@ public class DeviceServlet extends HttpServlet {
 
 	public void doPost(HttpServletRequest req, HttpServletResponse res)
 			throws ServletException, IOException {
-		logger.log("{DeviceServlet} - Incomming POST request");
+		logger.log("{DeviceServlet} - Incoming POST request");
 		String uri = req.getRequestURI();
 		if (uri.equals(UPnPConstants.SR_CON)) {
 			String dsi = req.getParameter(UPnPConstants.DSI);
@@ -133,7 +133,7 @@ public class DeviceServlet extends HttpServlet {
 
 	public void doMPost(HttpServletRequest req, HttpServletResponse res)
 			throws ServletException, IOException {
-		logger.log("{DeviceServlet} - Incomming M-POST request");
+		logger.log("{DeviceServlet} - Incoming M-POST request");
 		//// try {
 		//// Object xx = null;
 		//// Enumeration en = req.getHeaderNames();
@@ -348,7 +348,7 @@ public class DeviceServlet extends HttpServlet {
 
 	public synchronized void doSubscribe(HttpServletRequest req,
 			HttpServletResponse res) throws ServletException, IOException {
-		logger.log("{DeviceServlet} - Incomming SUBSCRIBE request");
+		logger.log("{DeviceServlet} - Incoming SUBSCRIBE request");
 		String uri = req.getRequestURI();
 		if (uri == null || !uri.equals(UPnPConstants.SR_EV)) {
 			res.sendError(400, "Must access event url");
@@ -454,7 +454,7 @@ public class DeviceServlet extends HttpServlet {
 
 	public synchronized void doUnsubscribe(HttpServletRequest req,
 			HttpServletResponse res) throws ServletException, IOException {
-		//    logger.log("{DeviceServlet} - Incomming UNSUBSCRIBE request");
+		//    logger.log("{DeviceServlet} - Incoming UNSUBSCRIBE request");
 		String uri = req.getRequestURI();
 		if (uri == null || !uri.equals(UPnPConstants.SR_EV)) {
 			res.sendError(400, "Must access event url");

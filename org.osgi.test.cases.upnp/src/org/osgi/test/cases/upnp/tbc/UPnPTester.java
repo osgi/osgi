@@ -717,68 +717,68 @@ public class UPnPTester implements UPnPEventListener {
 	
 	
 	private void eventExportTest() {
-		try {
-			control.log("Starting event test of Export");
-			String event = null;
-			if (EVENT_SUB_URL.toLowerCase().startsWith("http")) {
-				event = EVENT_SUB_URL;
-			}
-			else {
-				event = URL_BASE + EVENT_SUB_URL;
-			}
-			URL eventURL = new URL(event);
-			String evHost = eventURL.getHost();
-			int evPort = eventURL.getPort();
-			
-			control.log("Create and start Eventing Server");			
-			EventServer evs = new EventServer(evHost, evPort, bc, control);
-			int pr = evPort + 1;
-			String callback = "http://" + evHost + ":" + pr + "/";
-			control.log("Create subscribe message and send it");
-			
-			// pkr; added to have the same path URL
-			String match = (udn + SERVICE_ID).replace(':', '-');
-			
-			byte[] subscr = cp.createSUBSCRIBE(/*EVENT_SUB_URL*/ match, evHost, evPort,
-					callback, 60);
-			Thread th = new Thread(evs, "EVS");
-			th.start();
-			evs.send(subscr);
-			
-			control.log("Create table with events");
-			Hashtable events = new Hashtable(6);
-			events.put(UPnPConstants.N_IN_STRING, UPnPConstants.E_STRING);
-			events.put(UPnPConstants.N_IN_BOOLEAN, UPnPConstants.E_BOOLEAN);
-			events.put(UPnPConstants.N_OUT_NUMBER, UPnPConstants.E_NUMBER);
-			events.put(UPnPConstants.N_OUT_INT, UPnPConstants.E_INT);
-			events.put(UPnPConstants.N_OUT_CHAR, UPnPConstants.E_CHAR);
-			events.put(UPnPConstants.N_OUT_FLOAT, UPnPConstants.E_FLOAT);
-			int count = 0;
-			while (evs.getListener() == null) {
-				count++;
-				Thread.sleep(1000);
-				if (count == 1000) {
-					control.log("No UPnPEventListener is found");
-					break;
-				}
-			}			
-			control.log("Starting ServerSocket to listen for Notify msg");
-			SSNotify not = new SSNotify(pr, control);
-			not.start();
-			control.log("Notify UPnPEventListener service");
-			evs.getListener().notifyUPnPEvent(udn, SERVICE_ID, events);
-			evs.finish();				
-			while (!not.isFinished) {
-				Thread.sleep(100);
-				if (cps.isError) {
-					break;
-				}
-			}
-			not.finish();
-		}
-		catch (Exception er) {
-			er.printStackTrace();
-		}
+//		try {
+//			control.log("Starting event test of Export");
+//			String event = null;
+//			if (EVENT_SUB_URL.toLowerCase().startsWith("http")) {
+//				event = EVENT_SUB_URL;
+//			}
+//			else {
+//				event = URL_BASE + EVENT_SUB_URL;
+//			}
+//			URL eventURL = new URL(event);
+//			String evHost = eventURL.getHost();
+//			int evPort = eventURL.getPort();
+//			
+//			control.log("Create and start Eventing Server");			
+//			EventServer evs = new EventServer(evHost, evPort, bc, control);
+//			int pr = evPort + 1;
+//			String callback = "http://" + evHost + ":" + pr + "/";
+//			control.log("Create subscribe message and send it");
+//			
+//			// pkr; added to have the same path URL
+//			String match = (udn + SERVICE_ID).replace(':', '-');
+//			
+//			byte[] subscr = cp.createSUBSCRIBE(/*EVENT_SUB_URL*/ match, evHost, evPort,
+//					callback, 60);
+//			Thread th = new Thread(evs, "EVS");
+//			th.start();
+//			evs.send(subscr);
+//			
+//			control.log("Create table with events");
+//			Hashtable events = new Hashtable(6);
+//			events.put(UPnPConstants.N_IN_STRING, UPnPConstants.E_STRING);
+//			events.put(UPnPConstants.N_IN_BOOLEAN, UPnPConstants.E_BOOLEAN);
+//			events.put(UPnPConstants.N_OUT_NUMBER, UPnPConstants.E_NUMBER);
+//			events.put(UPnPConstants.N_OUT_INT, UPnPConstants.E_INT);
+//			events.put(UPnPConstants.N_OUT_CHAR, UPnPConstants.E_CHAR);
+//			events.put(UPnPConstants.N_OUT_FLOAT, UPnPConstants.E_FLOAT);
+//			int count = 0;
+//			while (evs.getListener() == null) {
+//				count++;
+//				Thread.sleep(1000);
+//				if (count == 1000) {
+//					control.log("No UPnPEventListener is found");
+//					break;
+//				}
+//			}			
+//			control.log("Starting ServerSocket to listen for Notify msg");
+//			SSNotify not = new SSNotify(pr, control);
+//			not.start();
+//			control.log("Notify UPnPEventListener service");
+//			evs.getListener().notifyUPnPEvent(udn, SERVICE_ID, events);
+//			evs.finish();				
+//			while (!not.isFinished) {
+//				Thread.sleep(100);
+//				if (cps.isError) {
+//					break;
+//				}
+//			}
+//			not.finish();
+//		}
+//		catch (Exception er) {
+//			er.printStackTrace();
+//		}
 	}
 
 	private String[] changeType(Vector args) {
