@@ -29,38 +29,42 @@ public class Activator extends Object implements
 	static  Scheduler					scheduler;
 	static  BundleContext 		bc;
 	private ApplicationPlugin appPlugin;
+	private OAT               oat;
 
 	public Activator() {
 		super();
 	}
 
 	public void start(BundleContext bc) throws Exception {
-		  System.out.println( "Application service is currently disabled!" );
+		Activator.bc = bc;
+		scheduler = new Scheduler(bc);
 		
-//		Activator.bc = bc;
-//		scheduler = new Scheduler(bc);
+		appPlugin = new ApplicationPlugin();
+		appPlugin.start( bc );
 		
-//		appPlugin = new ApplicationPlugin();
-//		appPlugin.start( bc );
+		oat = new OAT();
+		oat.start( bc );
 		
-//		System.out.println("Application service started successfully!");
+		System.out.println("Application service started successfully!");
 	}
 
 	public void stop(BundleContext bc) throws Exception {
-//		appPlugin.stop( bc );
-//		appPlugin = null;
+		appPlugin.stop( bc );
+		appPlugin = null;
 		
-//		scheduler.stop();
-//		scheduler = null;
+		scheduler.stop();
+		scheduler = null;
 		
-//		Activator.bc = null;
+		oat.stop( bc );
+		oat = null;
 		
-//		System.out.println("Application service stopped successfully!");
+		Activator.bc = null;
+		
+		System.out.println("Application service stopped successfully!");
 	}
 
 
-	static boolean log(BundleContext bc, int severity, String message,
-			Throwable throwable) {
+	static boolean log( int severity, String message,	Throwable throwable) {
 		System.out.println("Serverity:" + severity + " Message:" + message
 				+ " Throwable:" + throwable);
 
