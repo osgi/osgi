@@ -35,13 +35,52 @@ import org.osgi.framework.*;
 import org.osgi.service.application.*;
 import org.osgi.service.dmt.*;
 import org.osgi.service.dmt.spi.*;
+import org.osgi.service.log.LogService;
+
+class InstanceOperationsStopNode extends ApplicationPluginBaseNode {
+	InstanceOperationsStopNode() {
+		super( "Stop" );
+		
+		isLeaf = canExecute = true;
+		canGet = false;
+	}
+	
+	public void execute(DmtSession session, String path[], String correlator, String data) throws DmtException {
+		ServiceReference appHandle = ApplicationPlugin.getApplicationHandle( path );
+		if( appHandle == null )
+			throw new DmtException(path, DmtException.COMMAND_FAILED, "Cannot execute the node.");
+		
+		final ApplicationHandle appHnd = (ApplicationHandle)ApplicationPlugin.bc.getService( appHandle );
+
+		class DestroyerThread extends Thread {
+			public void run() {
+        
+				try {
+					if( appHnd != null )
+						appHnd.destroy();
+				}catch( Exception e ) {
+				}          
+			};
+		}
+		
+		DestroyerThread destroyerThread = new DestroyerThread();
+		destroyerThread.start();
+
+		try {
+			destroyerThread.join( 5000 );
+		}catch(InterruptedException e) {}
+		
+		if( destroyerThread.isAlive() )
+			Activator.log( LogService.LOG_ERROR, "Stop method of the application didn't finish at 5s!", null );				
+	}
+}
 
 class InstanceOperationsNode extends ApplicationPluginBaseNode {
 	InstanceOperationsNode() {
 		super( "Operations" );
 		
 		addChildNode( new ApplicationPluginBaseNode("Ext") );
-		/* TODO */
+		addChildNode( new InstanceOperationsStopNode() );
 	}
 }
 
