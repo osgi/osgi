@@ -252,7 +252,7 @@ public class TestMidletContainerBundleActivator
     			  System.out.println("AppPlugin: checking the installed application    FAILED");
     		else
     			  System.out.println("AppPlugin: checking the installed application    PASSED");
-    		if (!testCase_appPluginCheckRunningApps()) 																	
+/*    		if (!testCase_appPluginCheckRunningApps()) 																	
     			  System.out.println("AppPlugin: checking a running application        FAILED"); 	
     		else 																																				
     			  System.out.println("AppPlugin: checking a running application        PASSED"); 	
@@ -271,7 +271,7 @@ public class TestMidletContainerBundleActivator
     		if (!testCase_appPluginLock()) 															
     			  System.out.println("AppPlugin: checking the lock changing            FAILED"); 	
     		else 																																				
-    			  System.out.println("AppPlugin: checking the lock changing            PASSED"); 	
+    			  System.out.println("AppPlugin: checking the lock changing            PASSED");*/ 	
         if(!testCase_oatRegisterService())
             System.out.println("Checking OAT service registration                FAILED");
         else
@@ -1554,9 +1554,9 @@ public class TestMidletContainerBundleActivator
   		String appUID = getPID( appDesc );
   		
   		try {
-  			DmtSession session = dmtFactory.getSession("./OSGi/apps");
+  			DmtSession session = dmtFactory.getSession("./OSGi/Application");
   			
-  			String[] nodeNames = session.getChildNodeNames( "./OSGi/apps" );
+  			String[] nodeNames = session.getChildNodeNames( "./OSGi/Application" );
   		
   			if( nodeNames.length != 1)
   				throw new Exception( "Too many nodenames are present! Only one meglet is installed!" );
@@ -1564,19 +1564,21 @@ public class TestMidletContainerBundleActivator
   			if( !appUID.equals( nodeNames[ 0 ] ) )
   				throw new Exception( "Illegal node name found! (" + nodeNames[ 0 ] + " instead of " + appUID );
   	
-  			String[] properties = session.getChildNodeNames( "./OSGi/apps/" + appUID );
+  			String[] properties = session.getChildNodeNames( "./OSGi/Application/" + appUID );
   			
-  			String names[]  = new String [] { "localizedname", "version", "vendor", "locked", 
-  					                              "bundle_id", "required_services", "launch" };
+  			String names[]  = new String [] { "Name", "IconURI", "Version", "Vendor", 
+  					                              "Locked", "PackageID", "ContainerID" };
   			Object values[] = new Object [ names.length ];
   			
   			Map props = appDesc.getProperties( Locale.getDefault().getLanguage() );
   			
   			values[ 0 ] = (String)( props.get( ApplicationDescriptor.APPLICATION_NAME ) );
-  			values[ 1 ] = (String)( props.get( ApplicationDescriptor.APPLICATION_VERSION ) );
-  			values[ 2 ] = (String)( props.get( ApplicationDescriptor.APPLICATION_VENDOR ) );
-  			values[ 3 ] = Boolean.valueOf( (String)props.get( ApplicationDescriptor.APPLICATION_LOCKED ) );
-  			values[ 4 ] = (String)( props.get( "application.bundle.id" ) );
+  			values[ 1 ] = (String)( props.get( ApplicationDescriptor.APPLICATION_ICON ) );
+  			values[ 2 ] = (String)( props.get( ApplicationDescriptor.APPLICATION_VERSION ) );
+  			values[ 3 ] = (String)( props.get( ApplicationDescriptor.APPLICATION_VENDOR ) );
+  			values[ 4 ] = Boolean.valueOf( (String)props.get( ApplicationDescriptor.APPLICATION_LOCKED ) );
+  			values[ 5 ] = (String)( props.get( ApplicationDescriptor.APPLICATION_PACKAGE ) );
+  			values[ 6 ] = (String)( props.get( ApplicationDescriptor.APPLICATION_CONTAINER ) );
   			
   			boolean found[] = new boolean[ names.length ];				
   			for( int i = 0; i != names.length; i++ )
@@ -1592,7 +1594,7 @@ public class TestMidletContainerBundleActivator
   						if( values[ j ] == null )
   							break;
   						
-  						DmtData value = session.getNodeValue( "./OSGi/apps/" + appUID + "/" + names[ i ] );
+  						DmtData value = session.getNodeValue( "./OSGi/Application/" + appUID + "/" + names[ i ] );
   						
   						switch( value.getFormat() )
   						{
