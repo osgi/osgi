@@ -158,10 +158,10 @@ public class DmtData {
         this(value);
         switch(format) {
         case FORMAT_DATE:
-            // TODO check that the value is of the correct format
+            checkDateFormat(value);
             break;
         case FORMAT_TIME:
-            // TODO check that the value is of one of the correct formats
+            checkTimeFormat(value);
             break;
         case FORMAT_STRING:
         case FORMAT_XML:
@@ -172,7 +172,7 @@ public class DmtData {
         }
         this.format = format;
     }
-
+    
     /**
      * Create a <code>DmtData</code> instance of <code>int</code> format and
      * set its value.
@@ -502,6 +502,48 @@ public class DmtData {
         return 0;               // never reached
     }
     
+    // ENHANCE extend date check for number of days in month, leap years, etc.
+    private void checkDateFormat(String value) {
+        if(value.length() != 8)
+            throw new IllegalArgumentException("Date string '" + value + 
+                    "' does not follow the format 'CCYYMMDD'.");
+        
+        checkNumber(value, "Date", 0, 4, 0, 9999);
+        checkNumber(value, "Date", 4, 2, 1, 12);
+        checkNumber(value, "Date", 6, 2, 1, 31);
+    }
+    
+    // ENHANCE extend time check for leap seconds, etc.
+    private void checkTimeFormat(String value) {
+        if(value.length() > 0 && value.charAt(value.length()-1) == 'Z')
+            value = value.substring(0, value.length()-1);
+        
+        if(value.length() != 6)
+            throw new IllegalArgumentException("Time string '" + value + 
+                    "' does not follow the format 'hhmmss' or 'hhmmssZ'.");
+            
+        // if hour is 24, only 240000 should be allowed
+        checkNumber(value, "Time", 0, 2, 0, 24);
+        checkNumber(value, "Time", 2, 2, 0, 59);
+        checkNumber(value, "Time", 4, 2, 0, 59);
+    }
+    
+    private void checkNumber(String value, String name, int from, int length, 
+            int min, int max) {
+        String part = value.substring(from, from+length);
+        int number;
+        try {
+            number = Integer.parseInt(part);
+        } catch(NumberFormatException e) {
+            throw new IllegalArgumentException(name + " string '" + value +
+                    "' contains a non-numeric part.");
+        }
+        if(number < min || number > max) 
+            throw new IllegalArgumentException("A segment of the " + name +
+                    " string '" + value + "' is out of range.");
+    }
+
+
     // character array of hexadecimal digits, used for printing binary data
     private static char[] hex = "0123456789ABCDEF".toCharArray();
         
