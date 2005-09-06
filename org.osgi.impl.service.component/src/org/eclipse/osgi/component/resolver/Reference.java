@@ -33,7 +33,7 @@ import org.osgi.framework.ServiceReference;
 
 /**
  * 
- * Wrapper for a {@link ReferenceDescription that may have
+ * Wrapper for a {@link ReferenceDescription} that may have
  * a different target filter set by ConfigAdmin or ComponentFactory.newInstance()
  * 
  * @see org.eclipse.osgi.component.model.ReferenceDescription
