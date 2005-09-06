@@ -299,6 +299,23 @@ public class InstanceProcess implements ConfigurationListener {
 		if (DEBUG)
 			System.out.println("fpid = " + fpid);
 
+		//See if this configuration event is for declarative services
+		ComponentDescription cd;
+		if (fpid != null) {
+			// find the fpid == component name in the CD list
+			cd = (ComponentDescription) main.resolver.enabledCDsByName
+					.get(fpid);
+		} else {
+			// find the spid == component name in the CD list
+			cd = (ComponentDescription) main.resolver.enabledCDsByName
+					.get(pid);
+		}
+		if (cd == null) {
+			//this coniguration event has nothing to do with declarative services
+			return;
+		}
+
+		
 		switch (event.getType()) {
 			case ConfigurationEvent.CM_UPDATED :
 
@@ -336,10 +353,6 @@ public class InstanceProcess implements ConfigurationListener {
 				// if NOT a factory
 				if (fpid == null) {
 
-					// find the spid == component name in the CD list
-					ComponentDescription cd = (ComponentDescription) main.resolver.enabledCDsByName
-							.get(pid);
-
 					// there is only one CDP for this CD, so we can disable the
 					// CD
 					main.resolver.disableComponents(Collections
@@ -354,9 +367,6 @@ public class InstanceProcess implements ConfigurationListener {
 					// create a new CDP or update an existing one
 				}
 				else {
-					// find the fpid == component name in the CD list
-					ComponentDescription cd = (ComponentDescription) main.resolver.enabledCDsByName
-							.get(fpid);
 
 					// get cdp with this PID
 					ComponentDescriptionProp cdp = cd
@@ -393,9 +403,6 @@ public class InstanceProcess implements ConfigurationListener {
 
 				// if not a factory
 				if (fpid == null) {
-					// find the spid == component name in the CD list
-					ComponentDescription cd = (ComponentDescription) main.resolver.enabledCDsByName
-							.get(pid);
 
 					// there is only one CDP for this CD, so we can disable the
 					// CD
@@ -410,10 +417,6 @@ public class InstanceProcess implements ConfigurationListener {
 				}
 				else {
 					// config is a factory
-
-					// find the fpid == component name in the CD list
-					ComponentDescription cd = (ComponentDescription) main.resolver.enabledCDsByName
-							.get(fpid);
 
 					// get CDP created for this config (with this PID)
 					ComponentDescriptionProp cdp = cd
