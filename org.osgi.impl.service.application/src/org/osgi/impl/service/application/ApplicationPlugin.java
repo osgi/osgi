@@ -37,6 +37,42 @@ import org.osgi.service.dmt.*;
 import org.osgi.service.dmt.spi.*;
 import org.osgi.service.log.LogService;
 
+class LockerNode extends ApplicationPluginBaseNode {
+	private boolean isLock;
+	
+	LockerNode( String name, boolean isLock ) {
+		super( name );
+		this.isLock = isLock;
+		isLeaf = canExecute = true;
+		canGet = false;
+	}
+	
+	public void execute(DmtSession session, String path[], String correlator, String data) throws DmtException {
+		ServiceReference ref = ApplicationPlugin.getApplicationDescriptor( path );
+		if( ref == null )
+			throw new DmtException(path, DmtException.METADATA_MISMATCH, "Cannot execute the node!" );
+		ApplicationDescriptor appDesc = (ApplicationDescriptor)ApplicationPlugin.bc.getService( ref );
+		
+		if( isLock )
+			appDesc.lock();
+		else
+			appDesc.unlock();
+		
+		ApplicationPlugin.bc.ungetService( ref );
+	}
+}
+
+class OperationsNode extends ApplicationPluginBaseNode {
+	OperationsNode() {
+		super( "Operations" );
+
+		/* TODO */
+		
+		addChildNode( new LockerNode("Unlock",false) );
+		addChildNode( new LockerNode("Lock",true) );
+	}
+}
+
 class InstanceOperationsStopNode extends ApplicationPluginBaseNode {
 	InstanceOperationsStopNode() {
 		super( "Stop" );
@@ -190,6 +226,8 @@ class ApplicationIDNode extends ApplicationPluginBaseNode {
 		super();
 		
 		/* TODO */
+		
+		addChildNode( new OperationsNode() );
 		
 		addChildNode( new InstancesNode() );
 		
