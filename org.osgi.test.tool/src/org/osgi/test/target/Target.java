@@ -566,10 +566,11 @@ public class Target extends Thread implements BundleActivator, ServiceFactory,
 	}
 
 	public void setTestProperties(Dictionary properties) throws IOException {
+		Properties sysProps = System.getProperties();
 		for (Enumeration e = properties.keys(); e.hasMoreElements();) {
 			String key = (String) e.nextElement();
 			String value = (String) properties.get(key);
-			System.setProperty(key, value);
+			sysProps.setProperty(key, value);
 		}
 	}
 }

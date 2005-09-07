@@ -103,7 +103,7 @@ public class TestCommands implements CommandProvider {
 		String location = tag.getAttribute("location");
 		if ( location != null ) {
 			result.addAttribute("location", location );
-			System.setProperty(IRun.TEST_PROPERTIES_FILE, location );
+			System.getProperties().setProperty(IRun.TEST_PROPERTIES_FILE, location );
 		} else {
 			result.addAttribute("error", "no location");
 		}
