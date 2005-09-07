@@ -267,11 +267,11 @@ public class TestMidletContainerBundleActivator
 /*    		if (!testCase_appPluginDeleteNode()) 															
     			  System.out.println("AppPlugin: checking the node removal             FAILED"); 	
     		else 																																				
-    			  System.out.println("AppPlugin: checking the node removal             PASSED"); 	
+    			  System.out.println("AppPlugin: checking the node removal             PASSED");*/ 	
     		if (!testCase_appPluginLock()) 															
     			  System.out.println("AppPlugin: checking the lock changing            FAILED"); 	
     		else 																																				
-    			  System.out.println("AppPlugin: checking the lock changing            PASSED");*/ 	
+    			  System.out.println("AppPlugin: checking the lock changing            PASSED"); 	
         if(!testCase_oatRegisterService())
             System.out.println("Checking OAT service registration                FAILED");
         else
@@ -1568,7 +1568,7 @@ public class TestMidletContainerBundleActivator
   			
   			String names[]  = new String [] { "Name", "IconURI", "Version", "Vendor", 
   					                              "Locked", "PackageID", "ContainerID",
-																					"Instances", "Ext" };
+																					"Instances", "Ext", "Operations" };
   			Object values[] = new Object [ names.length ];
   			
   			Map props = appDesc.getProperties( Locale.getDefault().getLanguage() );
@@ -1923,23 +1923,31 @@ public class TestMidletContainerBundleActivator
   			if( isLocked( appDesc ) )
   				throw new Exception( "ApplicationDescriptor is unexpectedly locked!" );
   			
-  			DmtSession session = dmtFactory.getSession("./OSGi/apps");
-  			DmtData value = session.getNodeValue( "./OSGi/apps/" + appUID + "/locked" );			
+  			DmtSession session = dmtFactory.getSession("./OSGi/Application" );
+  			DmtData value = session.getNodeValue("./OSGi/Application/" + appUID +"/Locked" );			
   			if( value.getBoolean() )
   				throw new Exception( "Application is unlocked, but AppPlugin reports locked!" );
+
+  			String[] operationNames = session.getChildNodeNames( "./OSGi/Application/" + appUID + "/Operations" );  			
+  			if( operationNames == null || operationNames.length < 2 )
+  				throw new Exception( "Invalid child nodes of the application instance operations!" );
+  			List childList = Arrays.asList( operationNames );  			
+  			if( childList.indexOf( "Lock" ) == -1 || childList.indexOf( "Unlock" ) == -1 )
+  				throw new Exception( "Invalid child nodes of the operations node!" );
   			
-  			session.setNodeValue( "./OSGi/apps/" + appUID + "/locked", new DmtData( true ) );
+  			session.execute( "./OSGi/Application/" + appUID +"/Operations/Lock", "" );
   			
   			if( !isLocked( appDesc ) )
   				throw new Exception( "AppPlugin failed to set the application locked!" );
-  			value = session.getNodeValue( "./OSGi/apps/" + appUID + "/locked" );			
+  			value = session.getNodeValue("./OSGi/Application/" + appUID +"/Locked" );			
   			if( !value.getBoolean() )
   				throw new Exception( "Application is locked, but AppPlugin reports unlocked!" );
   			
-  			session.setNodeValue( "./OSGi/apps/" + appUID + "/locked", new DmtData( false ) );
+  			session.execute( "./OSGi/Application/" + appUID +"/Operations/Unlock", "" );
+
   			if( isLocked( appDesc ) )
   				throw new Exception( "AppPlugin failed to set the application unlocked!" );
-  			value = session.getNodeValue( "./OSGi/apps/" + appUID + "/locked" );			
+  			value = session.getNodeValue("./OSGi/Application/" + appUID +"/Locked" );			
   			if( value.getBoolean() )
   				throw new Exception( "Application is unlocked, but AppPlugin reports locked!" );
   			
