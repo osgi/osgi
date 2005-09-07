@@ -59,10 +59,7 @@ public class ApplicationPluginBaseNode implements MetaNode {
 	}
 
 	protected ApplicationPluginBaseNode( String name ) {
-		canDelete = canAdd = canReplace = canExecute = isLeaf = false;
-		canGet = true;
-		this.name = name;
-		this.type = null;
+		init( name, null, null, null );
 	}
 	
 	protected ApplicationPluginBaseNode( String name, String type ) {
@@ -71,7 +68,36 @@ public class ApplicationPluginBaseNode implements MetaNode {
 		this.name = name;
 		this.type = null;
 	}
+	
+	protected void init( String name, ApplicationPluginBaseNode child1, ApplicationPluginBaseNode child2, 
+			            ApplicationPluginBaseNode child3 ) {		
+		canDelete = canAdd = canReplace = canExecute = isLeaf = false;
+		canGet = true;
+		this.name = name;
+		this.type = null;
 		
+		if( child1 != null )
+			addChildNode( child1 );
+		if( child2 != null )
+			addChildNode( child2 );
+		if( child3 != null )
+			addChildNode( child3 );
+	}
+	
+	protected ApplicationPluginBaseNode( String name, ApplicationPluginBaseNode child1 ) {
+		init( name, child1, null, null );
+	}
+
+	protected ApplicationPluginBaseNode( String name, ApplicationPluginBaseNode child1,
+			                                 ApplicationPluginBaseNode child2 ) {
+		init( name, child1, child2, null );
+	}
+	
+	protected ApplicationPluginBaseNode( String name, ApplicationPluginBaseNode child1,
+                   ApplicationPluginBaseNode child2, ApplicationPluginBaseNode child3 ) {
+    init( name, child1, child2, child3 );
+  }
+	
 	protected String [] getNames( String []path ) {
 		return new String[] { name };
 	}
@@ -143,8 +169,13 @@ public class ApplicationPluginBaseNode implements MetaNode {
 		throw new DmtException(path, DmtException.METADATA_MISMATCH, "Node has no value!" );		
 	}	
 	
-	public MetaNode getChildMetaData(String path[]) throws DmtException {
-		throw new DmtException(path, DmtException.NODE_NOT_FOUND, "Node not found.");		
+	public ApplicationPluginBaseNode getAdditiveChild() throws DmtException {
+		for( int i=0; i != children.size(); i++ ) {
+			ApplicationPluginBaseNode child = (ApplicationPluginBaseNode)children.get(i);
+			if( child.canAdd )
+				return child;
+		}
+		return null;
 	}
 	
 	public String getNodeType(String path[]) {

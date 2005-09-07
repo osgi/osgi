@@ -62,17 +62,6 @@ class LockerNode extends ApplicationPluginBaseNode {
 	}
 }
 
-class OperationsNode extends ApplicationPluginBaseNode {
-	OperationsNode() {
-		super( "Operations" );
-
-		/* TODO */
-		
-		addChildNode( new LockerNode("Unlock",false) );
-		addChildNode( new LockerNode("Lock",true) );
-	}
-}
-
 class InstanceOperationsStopNode extends ApplicationPluginBaseNode {
 	InstanceOperationsStopNode() {
 		super( "Stop" );
@@ -111,15 +100,6 @@ class InstanceOperationsStopNode extends ApplicationPluginBaseNode {
 	}
 }
 
-class InstanceOperationsNode extends ApplicationPluginBaseNode {
-	InstanceOperationsNode() {
-		super( "Operations" );
-		
-		addChildNode( new ApplicationPluginBaseNode("Ext") );
-		addChildNode( new InstanceOperationsStopNode() );
-	}
-}
-
 class InstanceStateNode extends ApplicationPluginBaseNode {
 	InstanceStateNode() {
 		super( "State", "text/plain" );
@@ -142,7 +122,9 @@ class InstanceIDNode extends ApplicationPluginBaseNode {
 	InstanceIDNode() {
 		super();
 		
-		addChildNode( new InstanceOperationsNode() );
+		addChildNode( new ApplicationPluginBaseNode("Operations", 
+				                                        new ApplicationPluginBaseNode("Ext"),
+																								new InstanceOperationsStopNode()) );
 		addChildNode( new InstanceStateNode() );
 	}
 
@@ -163,14 +145,6 @@ class InstanceIDNode extends ApplicationPluginBaseNode {
 			result[ i ] = (String)refs[ i ].getProperty( Constants.SERVICE_PID );
 		
 		return result;
-	}
-}
-
-class InstancesNode extends ApplicationPluginBaseNode {
-	InstancesNode() {
-		super("Instances");
-		
-		addChildNode( new InstanceIDNode() );
 	}
 }
 
@@ -227,9 +201,11 @@ class ApplicationIDNode extends ApplicationPluginBaseNode {
 		
 		/* TODO */
 		
-		addChildNode( new OperationsNode() );
+		addChildNode( new ApplicationPluginBaseNode( "Operations",
+				new ApplicationPluginBaseNode("Launch" /* TODO */),
+				new LockerNode("Unlock",false), new LockerNode("Lock",true)) );
 		
-		addChildNode( new InstancesNode() );
+		addChildNode( new ApplicationPluginBaseNode( "Instances", new InstanceIDNode() ) );
 		
 		addChildNode( new ApplicationPropertyNode( "Name",        ApplicationDescriptor.APPLICATION_NAME ) );
 		addChildNode( new ApplicationPropertyNode( "IconURI",     ApplicationDescriptor.APPLICATION_ICON ) );
@@ -261,14 +237,6 @@ class ApplicationIDNode extends ApplicationPluginBaseNode {
 	}
 }
 
-class ApplicationRootNode extends ApplicationPluginBaseNode {
-	ApplicationRootNode() {
-		super( "Application" );
-		
-		addChildNode( new ApplicationIDNode() );
-	}	
-}
-
 public class ApplicationPlugin implements BundleActivator, DataPluginFactory,
                                           ExecPlugin, ReadWriteDataSession {
 
@@ -290,7 +258,7 @@ public class ApplicationPlugin implements BundleActivator, DataPluginFactory,
 		// unregistered by the OSGi framework
 		pluginReg = bc.registerService(ifs, this, dict);
 		
-		rootNode = new ApplicationRootNode();
+		rootNode = new ApplicationPluginBaseNode( "Application", new ApplicationIDNode() );
 	}
 
 	public void stop(BundleContext context) throws Exception {
@@ -344,17 +312,23 @@ public class ApplicationPlugin implements BundleActivator, DataPluginFactory,
 	}
 
 	public void createInteriorNode(String[] path, String type) throws DmtException {
-		ApplicationPluginBaseNode node = getParentNode( path );
+		ApplicationPluginBaseNode node = getParentNode( path ).getAdditiveChild();
+		if( node == null )
+			throw new DmtException(path, DmtException.NODE_NOT_FOUND, "Node not found.");
+		
 		node.createInteriorNode( path, type );		
 	}
 
 	public void createLeafNode(String[] path, DmtData value, String type) throws DmtException {
-		ApplicationPluginBaseNode node = getParentNode( path );
+		ApplicationPluginBaseNode node = getParentNode( path ).getAdditiveChild();
+		if( node == null )
+			throw new DmtException(path, DmtException.NODE_NOT_FOUND, "Node not found.");		
+		
     node.createLeafNode( path, value, type );		
 	}
 
 	public void deleteNode(String[] path) throws DmtException {
-		ApplicationPluginBaseNode node = getParentNode( path );
+		ApplicationPluginBaseNode node = getNode( path );
     node.deleteNode( path );				
 	}
 
@@ -383,8 +357,6 @@ public class ApplicationPlugin implements BundleActivator, DataPluginFactory,
 	}
 
 	public void close() throws DmtException {
-		// TODO Auto-generated method stub
-		
 	}
 
 	public String[] getChildNodeNames(String[] path) throws DmtException {		
@@ -397,8 +369,11 @@ public class ApplicationPlugin implements BundleActivator, DataPluginFactory,
 		if( node != null )
 			return node;
 		
-		node = getParentNode( path );
-		return node.getChildMetaData( path );
+		node = getParentNode( path ).getAdditiveChild();
+		if( node == null )
+			throw new DmtException(path, DmtException.NODE_NOT_FOUND, "Node not found.");		
+		
+		return node;
 	}
 
 	public int getNodeSize(String[] path) throws DmtException {
