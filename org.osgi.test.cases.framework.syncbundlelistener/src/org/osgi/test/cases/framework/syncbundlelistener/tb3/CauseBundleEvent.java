@@ -24,7 +24,6 @@ public class CauseBundleEvent implements BundleActivator {
 	 */
 	public void start(BundleContext context) {
 		bc = context;
-		System.out.println("*Starting*");
 		try {
 			_linkRef = bc.getServiceReference(LogProxy.class.getName());
 			if (_linkRef != null) {
@@ -43,7 +42,6 @@ public class CauseBundleEvent implements BundleActivator {
 	}
 
 	public void stop(BundleContext bc) {
-		System.out.println("Stopping***********");
 		bc.ungetService(_linkRef);
 	}
 }
