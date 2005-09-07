@@ -333,17 +333,18 @@ public class PluginDelivered implements DataPluginFactory, ReadableDataSession,
         DmtAdmin dmtA = pluginCtx.getDmtAdmin();
         if (null == dmtA)
             throw new RuntimeException("DMT Admin doesn't run");
-        File[] files = null;
-        AccessController.doPrivileged(new PrivilegedAction() {
+        File[] files = (File[]) AccessController.doPrivileged(new PrivilegedAction() {
             public Object run() {
                 return store.listFiles();
             }});
         ArrayList ret = new ArrayList();
-        for (int i = 0; i < files.length; i++) {
-            String a = files[i].getName();
-            String b = dmtA.mangle(files[i].getName());
-            if (a.equals(b) && !files[i].isDirectory())
-                ret.add(files[i]);
+        if (null != files) {
+            for (int i = 0; i < files.length; i++) {
+                String a = files[i].getName();
+                String b = dmtA.mangle(files[i].getName());
+                if (a.equals(b) && !files[i].isDirectory())
+                    ret.add(files[i]);
+            }
         }
         return (File[]) ret.toArray(new File[] {});
     }

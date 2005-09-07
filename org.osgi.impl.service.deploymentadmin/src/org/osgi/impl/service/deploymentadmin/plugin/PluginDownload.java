@@ -19,6 +19,9 @@ package org.osgi.impl.service.deploymentadmin.plugin;
 
 import java.io.IOException;
 import java.io.Serializable;
+import java.security.AccessController;
+import java.security.PrivilegedActionException;
+import java.security.PrivilegedExceptionAction;
 import java.util.Date;
 import java.util.Hashtable;
 
@@ -121,16 +124,20 @@ public class PluginDownload extends DefaultHandler implements DataPluginFactory,
 
             SAXParser parser = null;
             try {
-                ServiceReference refs[] = pluginCtx.getBundleContext().getServiceReferences(
-                        SAXParserFactory.class.getName(),
-                        "(&(parser.namespaceAware=true)" + "(parser.validating=true))");
-                if (refs == null)
-                    throw new DmtException(nodeUriArr, DmtException.COMMAND_FAILED, 
-                        "SAX Parser is not available");
-                SAXParserFactory factory = (SAXParserFactory) pluginCtx.getBundleContext().
-                        getService(refs[0]);
-                parser = factory.newSAXParser();
-            } catch (Exception e) {
+                parser = (SAXParser) AccessController.doPrivileged(new PrivilegedExceptionAction() {
+                    public Object run() throws Exception {
+                        ServiceReference refs[] = pluginCtx.getBundleContext().getServiceReferences(
+                                SAXParserFactory.class.getName(),
+                                "(&(parser.namespaceAware=true)" + "(parser.validating=true))");
+                        if (refs == null)
+                            throw new DmtException(nodeUriArr, DmtException.COMMAND_FAILED, 
+                                "SAX Parser is not available");
+                        SAXParserFactory factory = (SAXParserFactory) pluginCtx.getBundleContext().
+                                getService(refs[0]);
+                        return factory.newSAXParser();
+                    }});
+            }
+            catch (PrivilegedActionException e) {
                 entry.setStatus(STATUS_DOWNLD_FAILED);
                 throw new RuntimeException("Internal error: " + e);
             }
