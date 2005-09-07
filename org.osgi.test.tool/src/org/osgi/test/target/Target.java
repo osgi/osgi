@@ -127,7 +127,6 @@ public class Target extends Thread implements BundleActivator, ServiceFactory,
 	 * reinitialize.
 	 */
 	public void linkClosed() {
-		log("Link closed " + open, null);
 		if (open) {
 			open = false;
 			run = null;
@@ -325,14 +324,13 @@ public class Target extends Thread implements BundleActivator, ServiceFactory,
 					}
 			}
 			finally {
-				System.out.println("In finally of target run");
 				try {
 					listener.close();
 					Socket s = new Socket("localhost", preferredSocket);
 					s.close();
 				}
 				catch (Exception e) {
-					System.out.println("Cannot cleanup");
+					log("Cannot cleanup",e);
 				}
 				if (run != null)
 					run.close();
