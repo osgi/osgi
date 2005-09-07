@@ -12,4 +12,4 @@ Import-Package: org.osgi.framework; specification-version=1.1,
   org.osgi.service.http;specification-version=1.1, 
   org.osgi.util.tracker;specification-version=1.1, 
   org.osgi.impl.service.upnp.cp.util;specification-version=1.0
-
+Bundle-RequiredExecutionEnvironment: J2SE-1.4

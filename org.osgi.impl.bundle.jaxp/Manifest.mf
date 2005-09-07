@@ -11,4 +11,4 @@ $(EXPORT-PACKAGE)
 $(IMPORT-PACKAGE)
 $(PRIVATE-PACKAGE)
 CVS-Header: $Header$
-
+Bundle-RequiredExecutionEnvironment: J2SE-1.4
