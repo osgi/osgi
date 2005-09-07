@@ -273,7 +273,6 @@ public class DefaultTestCase
 			
 			if ( url == null && name.startsWith("/www") ) {
 				name = name.substring(4);
-				System.out.println("name " + name );
 				url = getClass().getResource(name);
 			}
 			return url;

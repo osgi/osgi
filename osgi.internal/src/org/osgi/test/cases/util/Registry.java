@@ -37,12 +37,9 @@ public class Registry {
 
     public Bundle installBundle(String bundleName) throws Exception {
         try {
-            System.out.println("Trying to install : " + bundleName);
             URL    url = new URL(webserver + bundleName);
             InputStream in = url.openStream();
-
-            System.out.println("Trying to install : " + in);
-
+ 
             Bundle        b = context.installBundle(webserver + bundleName, in);
 
             bundles.addElement(b);

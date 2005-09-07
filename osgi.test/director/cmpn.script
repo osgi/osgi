@@ -15,7 +15,7 @@
 	<testcase>test.prefs</testcase> 				<!-- Tests the Preferences service -->
 	<testcase>test.provisioning</testcase> 			<!-- Tests Initial Provisioning -->
 	<testcase>test.tracker</testcase> 		        <!-- The service tracker test case -->
-	<!-- <testcase>test.upnp</testcase> 		       The service tracker test case -->
+	<testcase>test.upnp</testcase> 		       		<!-- The service tracker test case -->
 	<testcase>test.useradmin</testcase> 			<!-- Tests the UserAdmin service -->
 	<testcase>test.wireadmin</testcase> 			<!-- Tests the Wire Admin Service -->
 	<testcase>test.xml</testcase> 					<!-- Tests the XML Parser Service -->	
