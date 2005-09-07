@@ -256,10 +256,10 @@ public class TestMidletContainerBundleActivator
     			  System.out.println("AppPlugin: checking a running application        FAILED"); 	
     		else 																																				
     			  System.out.println("AppPlugin: checking a running application        PASSED"); 	
-/*    		if (!testCase_appPluginCheckApplicationLaunch()) 														
+    		if (!testCase_appPluginCheckApplicationLaunch()) 														
     			  System.out.println("AppPlugin: checking the application launching    FAILED"); 	
     		else 																																				
-    			  System.out.println("AppPlugin: checking the application launching    PASSED");*/ 	
+    			  System.out.println("AppPlugin: checking the application launching    PASSED"); 	
     		if (!testCase_appPluginCheckApplicationStop()) 															
     			  System.out.println("AppPlugin: checking the application stopping     FAILED"); 	
     		else 																																				
@@ -1714,26 +1714,59 @@ public class TestMidletContainerBundleActivator
   		String appUID = getPID( appDesc );
   		
   		try {
-  			DmtSession session = dmtFactory.getSession("./OSGi/apps");
+  			DmtSession session = dmtFactory.getSession("./OSGi/Application");
   			
-  			String[] nodeNames = session.getChildNodeNames( "./OSGi/apps/" + appUID + "/launch" );
+  			String[] launchNode = session.getChildNodeNames( "./OSGi/Application/" + appUID + "/Operations" );
+  			boolean found = false;
+  			for( int q=0; q != launchNode.length; q++ )
+  				if( launchNode[ q ].equals( "Launch" ) ) {
+  					found = true;
+  					break;
+  				}
+  			if( !found )
+  				throw new Exception( "Launch node is missing!" );
+  			
+  			String[] nodeNames = session.getChildNodeNames( "./OSGi/Application/" + appUID + "/Operations/Launch" );
   			if( nodeNames != null && nodeNames.length != 0 )
-  				throw new Exception( "Exec-id found without setting it manually!" );
+  				throw new Exception( "Launch-id found without setting it manually!" );
   		
-  			session.createInteriorNode( "./OSGi/apps/" + appUID + "/launch/exec_id" );
+  			session.createInteriorNode( "./OSGi/Application/" + appUID + "/Operations/Launch/my_launch_id" );
   			
-  			nodeNames = session.getChildNodeNames( "./OSGi/apps/" + appUID + "/launch" );
+  			nodeNames = session.getChildNodeNames( "./OSGi/Application/" + appUID + "/Operations/Launch" );
   			if( nodeNames == null || nodeNames.length != 1 )
   				throw new Exception( "Interior node wasn't created properly!" );
-  			if( !nodeNames[ 0 ].equals("exec_id") )
+  			if( !nodeNames[ 0 ].equals("my_launch_id") )
   				throw new Exception( "The name of the interior node is " + nodeNames [ 0 ] + 
-  						                  "instead if exec_id !" );
+  						                  "instead if my_launch_id !" );
   			
-  			String[] childNodes = session.getChildNodeNames( "./OSGi/apps/" + appUID + "/launch/exec_id" );
-  			if( childNodes != null && childNodes.length != 0 )
-  				throw new Exception( "Extra parameters added to the exec_id interior node!" );
+  			String[] childNodes = session.getChildNodeNames( "./OSGi/Application/" + appUID + "/Operations/Launch/my_launch_id" );
+  			if( childNodes == null || childNodes.length != 2 )
+  				throw new Exception( "Invalid parameters placed into to the my_launch_id interior node!" );
+  			List childList = Arrays.asList( childNodes );  			
+  			if( childList.indexOf( "Arguments" ) == -1 || childList.indexOf( "Result" ) == -1 )
+  				throw new Exception( "Invalid child nodes of my_launch_id!" );
+  			
+  			String[] resultNodes = session.getChildNodeNames( "./OSGi/Application/" + appUID + "/Operations/Launch/my_launch_id/Result" );
+  			if( resultNodes == null || resultNodes.length != 3 )
+  				throw new Exception( "Invalid parameters placed into to the my_launch_id/Result interior node!" );
+  			List resultList = Arrays.asList( resultNodes );  			
+  			if( resultList.indexOf( "InstanceID" ) == -1 || resultList.indexOf( "Status" ) == -1 || 
+  					resultList.indexOf( "Message" ) == -1 )
+  				throw new Exception( "Invalid child nodes of the my_launch_id/Result!" );
+
+  			String resultInstance = session.getNodeValue( "./OSGi/Application/" + appUID + "/Operations/Launch/my_launch_id/Result/InstanceID" ).getString();
+  			String resultStatus = session.getNodeValue( "./OSGi/Application/" + appUID + "/Operations/Launch/my_launch_id/Result/Status" ).getString();
+  			String resultMessage = session.getNodeValue( "./OSGi/Application/" + appUID + "/Operations/Launch/my_launch_id/Result/Message" ).getString();
+  			
+  			if( !resultInstance.equals("") || !resultStatus.equals("") || !resultMessage.equals("") )
+  				throw new Exception( "Invalid default values for Result subnodes!" );
+  			
+  			String[] argNodes = session.getChildNodeNames( "./OSGi/Application/" + appUID + "/Operations/Launch/my_launch_id/Arguments" );
+  			if( argNodes != null && argNodes.length != 0 )
+  				throw new Exception( "Extra parameters placed into to the my_launch_id/Arguments interior node!" );
   			
   			Map args = createArgs();
+  			int argIDcnt = 0;
   			
   			Iterator it = args.keySet().iterator();
   			while( it.hasNext() )
@@ -1741,22 +1774,53 @@ public class TestMidletContainerBundleActivator
   				String prop = (String)it.next();
   				String value = (String)args.get( prop );
   				
-  				session.createLeafNode( "./OSGi/apps/" + appUID + "/launch/exec_id/" + prop, 
-  						                    new DmtData( value ) );
+  				String argID = "Arg" + argIDcnt++;
   				
-  				childNodes = session.getChildNodeNames( "./OSGi/apps/" + appUID + "/launch/exec_id" );
-  				if( childNodes == null || childNodes.length == 0 )
-  					throw new Exception( "Property wasn't added properly!" );
-  				if( Arrays.asList( childNodes ).indexOf( prop ) == -1 )
-  					throw new Exception( "Property wasn't added properly!" );
+    			session.createInteriorNode( "./OSGi/Application/" + appUID + "/Operations/Launch/my_launch_id/Arguments/" + argID );
   				
-  				DmtData content = session.getNodeValue( "./OSGi/apps/" + appUID + "/launch/exec_id/" + prop );
-  				if( !content.getString().equals( value ) )
-  					throw new Exception( "Illegal value was set to the property!" );
+    			argNodes = session.getChildNodeNames( "./OSGi/Application/" + appUID + "/Operations/Launch/my_launch_id/Arguments" );
+    			if( argNodes == null || argNodes.length != argIDcnt )
+    				throw new Exception( "The my_launch_id/Arguments/<arg_id> interior node was not created!" );
+    			boolean foundArgID = false;
+    			for( int w=0; w != argNodes.length; w++ )
+    				if( argNodes[ w ].equals( argID ) ) {
+    					found = true;
+    					break;
+    				}
+    			
+    			String []argIDNodes = session.getChildNodeNames( "./OSGi/Application/" + appUID + "/Operations/Launch/my_launch_id/Arguments/" + argID );
+    			if( argIDNodes == null || argIDNodes.length != 2 )
+    				throw new Exception( "Invalid leaf nodes of my_launch_id/Arguments/<arg_id>/" );
+    			if( !( ( argIDNodes[ 0 ].equals( "Name" ) && argIDNodes[ 1 ].equals( "Value" ) ) ||
+    					 ( argIDNodes[ 0 ].equals( "Value" ) && argIDNodes[ 1 ].equals( "Name" ) ) ) )
+    				throw new Exception( "Invalid leaf nodes of my_launch_id/Arguments/<arg_id>/" );
+    			
+    			String defaultName = session.getNodeValue( "./OSGi/Application/" + appUID + "/Operations/Launch/my_launch_id/Arguments/" + argID + "/Name" ).getString();
+    			if( !defaultName.equals("") )
+    				throw new Exception( "Invalid default value for my_launch_id/Arguments/<arg>/Name!" );
+    			DmtData defaultValue = session.getNodeValue( "./OSGi/Application/" + appUID + "/Operations/Launch/my_launch_id/Arguments/" + argID + "/Value" );
+    			if( defaultValue.getFormat() != DmtData.FORMAT_NULL )
+    				throw new Exception( "Invalid default value for my_launch_id/Arguments/<arg>/Value!" );
+    			
+    			session.setNodeValue( "./OSGi/Application/" + appUID + "/Operations/Launch/my_launch_id/Arguments/" + argID + "/Name", new DmtData( prop ) );
+          if( !session.getNodeValue( "./OSGi/Application/" + appUID + "/Operations/Launch/my_launch_id/Arguments/" + argID + "/Name" ).getString().equals( prop ) )
+    				throw new Exception( "The my_launch_id/Arguments/<arg>/Name was not set correctly!" );          	
+          
+    			session.setNodeValue( "./OSGi/Application/" + appUID + "/Operations/Launch/my_launch_id/Arguments/" + argID + "/Value", new DmtData( value ) );
+          if( !session.getNodeValue( "./OSGi/Application/" + appUID + "/Operations/Launch/my_launch_id/Arguments/" + argID + "/Value" ).getString().equals( value ) )
+    				throw new Exception( "The my_launch_id/Arguments/<arg>/Value was not set correctly!" );          	    			
   			}
   			
-  			session.execute( "./OSGi/apps/" + appUID + "/launch/exec_id", null );
+  			session.execute( "./OSGi/Application/" + appUID + "/Operations/Launch/my_launch_id", null );
 
+  			resultInstance = session.getNodeValue( "./OSGi/Application/" + appUID + "/Operations/Launch/my_launch_id/Result/InstanceID" ).getString();  			
+  			resultStatus = session.getNodeValue( "./OSGi/Application/" + appUID + "/Operations/Launch/my_launch_id/Result/Status" ).getString();
+  			if( !resultStatus.equals("OK") )
+  				throw new Exception("Invalid value for result status!");
+  			resultMessage = session.getNodeValue( "./OSGi/Application/" + appUID + "/Operations/Launch/my_launch_id/Result/Message" ).getString();
+  			if( !resultMessage.equals("") )
+  				throw new Exception("Invalid value for result message!");
+  			
   			if (!checkResultFile("START"))
   				throw new Exception("Result of the launch is not START!");
   			ServiceReference[] appList = bc.getServiceReferences(
@@ -1767,14 +1831,19 @@ public class TestMidletContainerBundleActivator
 
   			appHandle = (ApplicationHandle) bc.getService(appList[0]);
   			
+  			if( !resultInstance.equals( appHandle.getInstanceID() ) )
+  				throw new Exception("Result instance was not set properly!");
+  			
   			if ( !appHandle.getState().equals( ApplicationHandle.RUNNING ) )
   				throw new Exception("Application didn't started!");
 
   			bc.ungetService( appList[0] );
 
-  			nodeNames = session.getChildNodeNames( "./OSGi/apps/" + appUID + "/launch" );
+  			session.deleteNode( "./OSGi/Application/" + appUID + "/Operations/Launch/my_launch_id" );
+
+  			nodeNames = session.getChildNodeNames( "./OSGi/Application/" + appUID + "/Operations/Launch" );
   			if( nodeNames != null && nodeNames.length != 0 )
-  				throw new Exception( "Exec-id didn't removed after launch!" );
+  				throw new Exception( "my_launch_id wasn't removed after deleting its node!" );
   			
   			if( !testCase_stopApplication() )
   				return false;
