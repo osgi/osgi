@@ -115,7 +115,7 @@ public final class MidletDescriptor extends ApplicationDescriptor {
 		if (midlet == null)
 			throw new Exception("Cannot create meglet instance!");
 		else {
-			MidletHandle midHnd = new MidletHandle(bc, createNewInstanceID(pid), this, 
+			MidletHandle midHnd = new MidletHandle(bc, createNewInstanceID(bc, pid), this, 
 					                                   midletContainer, midlet, startClass );
       midHnd.startHandle(args);
 			return midHnd;
@@ -134,8 +134,8 @@ public final class MidletDescriptor extends ApplicationDescriptor {
    		register();  // if lock changes, change the service registration properties also
 	}
 
-	static synchronized String createNewInstanceID(String pid) {
-		return new String(pid + ":" + instanceCounter++);
+	static synchronized String createNewInstanceID(BundleContext bc, String pid) {
+		return MidletContainer.mangle( bc, new String(pid + ":" + instanceCounter++) );
 	}
 	
 	public boolean isLaunchable() {

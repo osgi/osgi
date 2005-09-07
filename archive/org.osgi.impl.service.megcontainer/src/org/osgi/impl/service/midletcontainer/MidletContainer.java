@@ -190,7 +190,7 @@ public class MidletContainer implements BundleListener, ServiceListener {
 							names.put(defaultLang, MIDletName);
 							icons.put(defaultLang, MIDletIcon);
 							String uniqueID = "MIDlet: " + MIDletName + "-" + MIDletVersion + "-" + MIDletSuiteName;
-							uniqueID = mangle( uniqueID );
+							uniqueID = mangle( bc, uniqueID );
 								
 							props.put(Constants.SERVICE_PID, uniqueID);
 
@@ -251,7 +251,7 @@ public class MidletContainer implements BundleListener, ServiceListener {
 		}
 	}
 	
-	private String mangle( String in ) {
+	static String mangle( BundleContext bc, String in ) {
 		ServiceReference dmtAdminRef = bc.getServiceReference( DmtAdmin.class.getName() );
     if(dmtAdminRef == null)      
     	return in;
