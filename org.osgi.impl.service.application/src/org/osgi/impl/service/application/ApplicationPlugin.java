@@ -27,15 +27,283 @@
 
 package org.osgi.impl.service.application;
 
-import java.util.Date;
-import java.util.Dictionary;
-import java.util.Hashtable;
+import java.util.*;
 
 import org.osgi.framework.*;
 import org.osgi.service.application.*;
 import org.osgi.service.dmt.*;
 import org.osgi.service.dmt.spi.*;
 import org.osgi.service.log.LogService;
+
+
+interface ArgumentInterface {
+	public Hashtable getHash( String path[] ) throws DmtException;
+}
+
+class ArgumentVariableNode extends ApplicationPluginBaseNode {
+	private ArgumentIDNode argIDRef;
+	
+	ArgumentVariableNode( ArgumentIDNode argIDRef, String name ) {
+		super( name, "text/plain" );
+		
+		this.argIDRef = argIDRef;		
+		canReplace = true;
+	}
+		
+	public void setNodeValue(String path[], DmtData value) throws DmtException {
+		argIDRef.setVariableValue( path, value );		
+	}
+	
+	public DmtData getNodeValue(String path[]) throws DmtException {
+		return argIDRef.getVariableValue( path );		
+	}	
+}
+
+class ArgumentIDNode extends ApplicationPluginBaseNode {
+	private ArgumentInterface callerRef;
+			
+	ArgumentIDNode( ArgumentInterface callerRef ) {
+		super();
+		
+		this.callerRef = callerRef;
+		
+		addChildNode( new ArgumentVariableNode(this, "Name" ) );
+		addChildNode( new ArgumentVariableNode(this, "Value" ) );
+		
+		canAdd = canDelete = true;
+	}
+
+	public void deleteNode(String path[]) throws DmtException {
+		String argID = path[ path.length - 1 ];
+		
+		Hashtable argHash = callerRef.getHash( path );
+		argHash.remove( argID );		
+	}
+
+	public void createInteriorNode(String path[], String type) throws DmtException {
+		String argID = path[ path.length - 1 ];
+		
+		Hashtable argHash = callerRef.getHash( path );
+		argHash.put( argID, new NameValuePair() );
+	}
+	
+	public Hashtable getArguments( Hashtable itemHash ) {
+		Hashtable hashtable = new Hashtable();
+		
+		Enumeration enum = itemHash.keys();
+		while( enum.hasMoreElements() ) {
+			String key = (String)enum.nextElement();
+			NameValuePair nvp = (NameValuePair)itemHash.get( key );
+			hashtable.put( nvp.name, nvp.value );
+		}
+		
+		return hashtable;
+	}
+	
+	DmtData getVariableValue( String path[] ) throws DmtException {
+		String var = path[ path.length - 1 ];
+		String argID = path[ path.length - 2 ];
+		
+		Hashtable argHash = callerRef.getHash( path );
+		NameValuePair nvp = (NameValuePair)argHash.get( argID );
+		
+		if( nvp == null )
+			throw new DmtException(path, DmtException.NODE_NOT_FOUND, "Node not found.");		
+		
+		if( var.equals( "Name" ) ) {
+			return new DmtData( nvp.name );
+		}else{
+			if( nvp.value instanceof String )
+				return new DmtData( (String)nvp.value );
+			else if( nvp.value instanceof Boolean )
+				return new DmtData( ((Boolean)nvp.value).booleanValue() );
+			else if( nvp.value instanceof byte [] )
+				return new DmtData( (byte [])nvp.value );
+			else if( nvp.value instanceof Integer )
+				return new DmtData( ((Integer)nvp.value).intValue() );
+			else if( nvp.value instanceof Float )
+				return new DmtData( ((Float)nvp.value).floatValue() );
+			return DmtData.NULL_VALUE;
+		}		
+	}
+	
+	public String[] getNames( String []path ) {
+		try {
+		  Hashtable ht = callerRef.getHash( path );
+		  String result[] = new String[ ht.size() ];
+		  Enumeration enum = ht.keys();
+		  int i=0;
+		  while( enum.hasMoreElements() )
+			  result[ i++ ] = (String)enum.nextElement();
+		
+		  return result;
+		}catch( Exception e ) {
+			return new String [ 0 ];
+		}
+	}
+	
+	void setVariableValue( String path[], DmtData value ) throws DmtException {
+		String var = path[ path.length - 1 ];
+		String argID = path[ path.length - 2 ];
+		
+		Hashtable argHash = callerRef.getHash( path );
+		NameValuePair nvp = (NameValuePair)argHash.get( argID );
+		
+		if( nvp == null )
+			throw new DmtException(path, DmtException.NODE_NOT_FOUND, "Node not found.");		
+		
+		if( var.equals( "Name" ) ) {
+			nvp.name = value.getString();			
+		} else {
+			switch( value.getFormat() ) {
+				case DmtData.FORMAT_BINARY:
+					nvp.value = value.getBinary();
+				  break;
+				case DmtData.FORMAT_STRING:
+					nvp.value = value.getString();
+				  break;
+				case DmtData.FORMAT_INTEGER:
+					nvp.value = new Integer( value.getInt() );
+				  break;
+				case DmtData.FORMAT_FLOAT:
+					nvp.value = new Float( value.getFloat() );
+				  break;
+				case DmtData.FORMAT_BOOLEAN:
+					nvp.value = new Boolean( value.getBoolean() );
+				  break;
+				default:
+					nvp.value = null;
+				  break;
+			}
+		}		
+	}
+	
+	class NameValuePair {
+		String name = "";
+		Object value = null;
+	}
+}
+
+class LaunchResultNode extends ApplicationPluginBaseNode {
+	private LaunchIDNode launchIDRef;
+	private int          kind;
+	
+	LaunchResultNode( LaunchIDNode launchIDRef, String name, int kind ) {
+		super( name, "text/plain" );
+		
+		this.launchIDRef = launchIDRef;
+		this.kind = kind;
+	}
+	
+	public DmtData getNodeValue( String path[] ) throws DmtException {
+	  return new DmtData( launchIDRef.getResultValue( path, kind ) );
+	}
+}
+
+
+class LaunchIDNode extends ApplicationPluginBaseNode implements ArgumentInterface {
+
+	private Hashtable launchIDHash = new Hashtable();
+	private ArgumentIDNode argIDNode;
+	
+	LaunchIDNode() {
+		super();
+		
+		addChildNode( new ApplicationPluginBaseNode( "Arguments", argIDNode = new ArgumentIDNode( this ) ) );
+		addChildNode( new ApplicationPluginBaseNode( "Result", 
+				new LaunchResultNode( this, "InstanceID", 0 ),
+				new LaunchResultNode( this, "Status", 1 ),
+				new LaunchResultNode( this, "Message", 2 ) ) );
+		
+		canAdd = canDelete = canExecute = true;
+	}
+	
+	public String[] getNames( String []path ) {
+		String elems[] = new String[ launchIDHash.size() ];
+		Enumeration enum = launchIDHash.keys();
+		int i=0;
+		while( enum.hasMoreElements() )
+			elems[ i++ ] = (String)enum.nextElement();
+		return elems;
+	}
+		
+	public void createInteriorNode(String path[], String type) throws DmtException {
+    String key = path[ path.length - 1 ];    
+    launchIDHash.put( key, new LaunchableItem() );
+	}
+	
+	public void deleteNode(String path[]) throws DmtException {
+    String key = path[ path.length - 1 ];    
+    launchIDHash.remove( key );
+	}	
+	
+	public void execute(DmtSession session, String path[], String correlator, String data) throws DmtException {
+    String key = path[ path.length - 1 ];
+    
+		LaunchableItem item = (LaunchableItem) launchIDHash.get( key );
+		if( item == null )
+			throw new DmtException(path, DmtException.NODE_NOT_FOUND, "Node not found.");
+		
+		Hashtable args = argIDNode.getArguments( item.argumentHash );
+		
+		ServiceReference appDescRef = ApplicationPlugin.getApplicationDescriptor( path );
+		ApplicationDescriptor appDesc = (ApplicationDescriptor)Activator.bc.getService( appDescRef );
+		
+		item.resultInstanceID = "";
+		item.resultMessage = "";
+		item.resultStatus = "";
+		try {
+			ApplicationHandle appHnd = appDesc.launch( args );
+			item.resultInstanceID = appHnd.getInstanceID();
+			item.resultStatus = "OK";
+		}catch( Exception e ) {
+			item.resultMessage = e.getMessage();
+			item.resultStatus = e.getClass().getName();
+		}
+		
+		Activator.bc.ungetService( appDescRef );
+	}
+
+	public String getResultValue( String path[], int kind ) throws DmtException  {
+		String key = path[ 6 ];
+		
+		LaunchableItem item = (LaunchableItem) launchIDHash.get( key );
+		if( item == null )
+			throw new DmtException(path, DmtException.NODE_NOT_FOUND, "Node not found.");		
+	
+		String result = "";
+		
+		switch( kind ) {
+		case 0:
+			result = item.resultInstanceID;
+			break;
+		case 1:
+			result = item.resultStatus;
+			break;
+		case 2:
+			result = item.resultMessage;
+			break;			
+		}		
+		return result;
+	}
+	
+	public Hashtable getHash( String path[] ) throws DmtException {
+		String key = path[ 6 ];
+				
+		LaunchableItem item = (LaunchableItem) launchIDHash.get( key );
+		if( item == null )
+			throw new DmtException(path, DmtException.NODE_NOT_FOUND, "Node not found.");
+		
+		return item.argumentHash;
+	}
+	
+	class LaunchableItem {
+		public String    resultInstanceID = "";
+		public String    resultStatus = "";
+		public String    resultMessage = "";
+    public Hashtable argumentHash = new Hashtable();
+	}
+}
 
 class LockerNode extends ApplicationPluginBaseNode {
 	private boolean isLock;
@@ -202,7 +470,7 @@ class ApplicationIDNode extends ApplicationPluginBaseNode {
 		/* TODO */
 		
 		addChildNode( new ApplicationPluginBaseNode( "Operations",
-				new ApplicationPluginBaseNode("Launch" /* TODO */),
+				new ApplicationPluginBaseNode("Launch", new LaunchIDNode() ),
 				new LockerNode("Unlock",false), new LockerNode("Lock",true)) );
 		
 		addChildNode( new ApplicationPluginBaseNode( "Instances", new InstanceIDNode() ) );
