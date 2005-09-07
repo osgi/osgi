@@ -264,10 +264,6 @@ public class TestMidletContainerBundleActivator
     			  System.out.println("AppPlugin: checking the application stopping     FAILED"); 	
     		else 																																				
     			  System.out.println("AppPlugin: checking the application stopping     PASSED"); 	
-/*    		if (!testCase_appPluginDeleteNode()) 															
-    			  System.out.println("AppPlugin: checking the node removal             FAILED"); 	
-    		else 																																				
-    			  System.out.println("AppPlugin: checking the node removal             PASSED");*/ 	
     		if (!testCase_appPluginLock()) 															
     			  System.out.println("AppPlugin: checking the lock changing            FAILED"); 	
     		else 																																				
@@ -1764,6 +1760,17 @@ public class TestMidletContainerBundleActivator
   			String[] argNodes = session.getChildNodeNames( "./OSGi/Application/" + appUID + "/Operations/Launch/my_launch_id/Arguments" );
   			if( argNodes != null && argNodes.length != 0 )
   				throw new Exception( "Extra parameters placed into to the my_launch_id/Arguments interior node!" );
+
+  			session.createInteriorNode( "./OSGi/Application/" + appUID + "/Operations/Launch/my_launch_id/Arguments/dummyArg" );
+  			argNodes = session.getChildNodeNames( "./OSGi/Application/" + appUID + "/Operations/Launch/my_launch_id/Arguments" );
+  			if( argNodes == null || argNodes.length != 1 )
+  				throw new Exception( "The my_launch_id/Arguments/dummyArg interior node was not created!" );
+
+  			session.deleteNode( "./OSGi/Application/" + appUID + "/Operations/Launch/my_launch_id/Arguments/dummyArg" );
+
+  			argNodes = session.getChildNodeNames( "./OSGi/Application/" + appUID + "/Operations/Launch/my_launch_id/Arguments" );
+  			if( argNodes != null && argNodes.length != 0 )
+  				throw new Exception( "The my_launch_id/Arguments/dummyArg interior node was not deleted!" );
   			
   			Map args = createArgs();
   			int argIDcnt = 0;
@@ -1923,67 +1930,7 @@ public class TestMidletContainerBundleActivator
   			return false;
   		}
   	}
-  	
-  	boolean testCase_appPluginDeleteNode() {
-  		ApplicationDescriptor appDesc = appDescs[0];
-  		String appUID = getPID( appDesc );
-  		
-  		try {
-  			DmtSession session = dmtFactory.getSession("./OSGi/apps");
-  			
-  			String[] nodeNames = session.getChildNodeNames( "./OSGi/apps/" + appUID + "/launch" );
-  			if( nodeNames != null && nodeNames.length != 0 )
-  				throw new Exception( "Exec-id found when no one is expected!" );
-  		
-  			session.createInteriorNode( "./OSGi/apps/" + appUID + "/launch/exec_id" );
-  			
-  			nodeNames = session.getChildNodeNames( "./OSGi/apps/" + appUID + "/launch" );
-  			if( nodeNames == null || nodeNames.length != 1 )
-  				throw new Exception( "Interior node wasn't created properly!" );
-  			if( !nodeNames[ 0 ].equals("exec_id") )
-  				throw new Exception( "The name of the interior node is " + nodeNames [ 0 ] + 
-  						                  "instead if exec_id !" );
-  			
-  			session.createLeafNode( "./OSGi/apps/" + appUID + "/launch/exec_id/myprop", 
-            new DmtData( "myvalue" ) );
-  			
-  			String[] childNodes = session.getChildNodeNames( "./OSGi/apps/" + appUID + "/launch/exec_id" );
-  			if( childNodes == null || childNodes.length != 1 )
-  				throw new Exception( "Property wasn't added properly!" );
-  			
-  			DmtData value = session.getNodeValue( "./OSGi/apps/" + appUID + "/launch/exec_id/myprop" );
-  			if( !value.getString().equals( "myvalue" ) )
-  				throw new Exception( "Invalid node value was received!" );
-  			
-  			session.setNodeValue( "./OSGi/apps/" + appUID + "/launch/exec_id/myprop", new DmtData( "newvalue" ) );
-  			value = session.getNodeValue( "./OSGi/apps/" + appUID + "/launch/exec_id/myprop" );
-  			if( !value.getString().equals( "newvalue" ) )
-  				throw new Exception( "Node value was not changed!" );
-  			
-  			if( !childNodes[ 0 ].equals( "myprop" ) )
-  				throw new Exception( "Property wasn't added properly!" );
-  			
-  			session.deleteNode( "./OSGi/apps/" + appUID + "/launch/exec_id/myprop" );
-  			
-  			childNodes = session.getChildNodeNames( "./OSGi/apps/" + appUID + "/launch/exec_id" );
-  			if( childNodes != null && childNodes.length != 0 )
-  				throw new Exception( "Property wasn't deleted properly!" );			
-  			
-  			session.deleteNode( "./OSGi/apps/" + appUID + "/launch/exec_id" );
-  			
-  			childNodes = session.getChildNodeNames( "./OSGi/apps/" + appUID + "/launch" );
-  			if( childNodes != null && childNodes.length != 0 )
-  				throw new Exception( "Node wasn't deleted properly!" );
-  			
-  			session.close();
-  			return true;
-  		}
-  		catch (Exception e) {
-  			e.printStackTrace();
-  			return false;
-  		}					
-  	}	
-  	
+  	  	
   	boolean testCase_appPluginLock() {
   		ApplicationDescriptor appDesc = appDescs[0];
   		String appUID = getPID( appDesc );
