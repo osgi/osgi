@@ -23,6 +23,8 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.Serializable;
+import java.security.AccessController;
+import java.security.PrivilegedAction;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -331,7 +333,11 @@ public class PluginDelivered implements DataPluginFactory, ReadableDataSession,
         DmtAdmin dmtA = pluginCtx.getDmtAdmin();
         if (null == dmtA)
             throw new RuntimeException("DMT Admin doesn't run");
-        File[] files = store.listFiles();
+        File[] files = null;
+        AccessController.doPrivileged(new PrivilegedAction() {
+            public Object run() {
+                return store.listFiles();
+            }});
         ArrayList ret = new ArrayList();
         for (int i = 0; i < files.length; i++) {
             String a = files[i].getName();
