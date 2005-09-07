@@ -229,13 +229,13 @@ public class PluginDelivered implements DataPluginFactory, ReadableDataSession,
 					0, null, DmtData.FORMAT_NODE).orOperation(MetaNode.CMD_ADD);
         if (l == 6)
 			return new Metanode(MetaNode.CMD_GET, !Metanode.IS_LEAF,
-					MetaNode.AUTOMATIC, "", 1, !Metanode.ZERO_OCC, null, 0,
-					0, null, DmtData.FORMAT_NODE).orOperation(MetaNode.CMD_ADD);
+					MetaNode.AUTOMATIC, "", Integer.MAX_VALUE, Metanode.ZERO_OCC, null, 0,
+					0, null, DmtData.FORMAT_NODE);
         if (l == 7) {
             if (nodeUriArr[6].equals("ID"))
                 return new Metanode(MetaNode.CMD_GET, Metanode.IS_LEAF,
     					MetaNode.AUTOMATIC, "", 1, !Metanode.ZERO_OCC, null, 0,
-    					0, null, DmtData.FORMAT_STRING).orOperation(MetaNode.CMD_REPLACE);
+    					0, null, DmtData.FORMAT_STRING);
 		    if (nodeUriArr[6].equals("Data"))
 		        return new Metanode(MetaNode.CMD_GET, Metanode.IS_LEAF,
     					MetaNode.AUTOMATIC, "", 1, !Metanode.ZERO_OCC, null, 0,
