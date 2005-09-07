@@ -5,6 +5,7 @@
 	<projects>
 		<project>org.osgi.impl.service.application</project>
 		<project>org.osgi.service.application</project>
+		<project>org.osgi.service.dmt</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>

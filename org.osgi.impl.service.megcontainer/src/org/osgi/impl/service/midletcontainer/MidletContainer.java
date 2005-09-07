@@ -7,6 +7,7 @@ import org.osgi.framework.*;
 import org.osgi.impl.service.application.OATContainerInterface;
 import org.osgi.service.application.ApplicationDescriptor;
 import org.osgi.service.application.ApplicationHandle;
+import org.osgi.service.dmt.DmtAdmin;
 import org.osgi.service.log.LogService;
 
 public class MidletContainer implements BundleListener, ServiceListener {
@@ -189,9 +190,8 @@ public class MidletContainer implements BundleListener, ServiceListener {
 							names.put(defaultLang, MIDletName);
 							icons.put(defaultLang, MIDletIcon);
 							String uniqueID = "MIDlet: " + MIDletName + "-" + MIDletVersion + "-" + MIDletSuiteName;
-							if( uniqueID.length() > 32 ) {
-								uniqueID = getHash( uniqueID );
-							}
+							uniqueID = mangle( uniqueID );
+								
 							props.put(Constants.SERVICE_PID, uniqueID);
 
 							MidletDescriptor midletDesc = new MidletDescriptor( bc, props, names, icons, defaultLang, MIDletStartClass,
@@ -250,50 +250,20 @@ public class MidletContainer implements BundleListener, ServiceListener {
 			}
 		}
 	}
-
-  private static final char base64table[] = {
-      'A','B','C','D','E','F','G','H',
-      'I','J','K','L','M','N','O','P',
-      'Q','R','S','T','U','V','W','X',
-      'Y','Z','a','b','c','d','e','f',
-      'g','h','i','j','k','l','m','n',
-      'o','p','q','r','s','t','u','v',
-      'w','x','y','z','0','1','2','3',
-      '4','5','6','7','8','9','+','_', // !!! this differs from base64
-  };
 	
-	private String getHash(String from) throws Exception {
-    MessageDigest md = MessageDigest.getInstance("SHA");
-		  
-	  byte[] byteStream;
-  	try {
-	  	byteStream = from.getBytes("UTF-8");
-	  }
-		catch (UnsupportedEncodingException e) {
-		 // There's no way UTF-8 encoding is not implemented...
-		 throw new IllegalStateException("there's no UTF-8 encoder here!");
-		}
-		byte[] digest = md.digest(byteStream);
+	private String mangle( String in ) {
+		ServiceReference dmtAdminRef = bc.getServiceReference( DmtAdmin.class.getName() );
+    if(dmtAdminRef == null)      
+    	return in;
+    
+    DmtAdmin dmtAdmin = (DmtAdmin) bc.getService( dmtAdminRef );
+    if( dmtAdmin == null )
+    	return in;
 		
-		//  very dumb base64 encoder code. There is no need for multiple lines
-		// or trailing '='-s....
-		// also, we hardcoded the fact that sha-1 digests are 20 bytes long
-		StringBuffer sb = new StringBuffer(digest.length*2);
-		for(int i=0;i<6;i++) {
-			int d0 = digest[i*3]&0xff;
-			int d1 = digest[i*3+1]&0xff;
-			int d2 = digest[i*3+2]&0xff;
-			sb.append(base64table[d0>>2]);
-			sb.append(base64table[(d0<<4|d1>>4)&63]);
-			sb.append(base64table[(d1<<2|d2>>6)&63]);
-			sb.append(base64table[d2&63]);
-		}
-		int d0 = digest[18]&0xff;
-		int d1 = digest[19]&0xff;
-		sb.append(base64table[d0>>2]);
-		sb.append(base64table[(d0<<4|d1>>4)&63]);
-		sb.append(base64table[(d1<<2)&63]);
-		
-		return sb.toString();
+    String result = dmtAdmin.mangle( in );
+    
+    bc.getService( dmtAdminRef );
+    
+    return result;
 	}
 }
