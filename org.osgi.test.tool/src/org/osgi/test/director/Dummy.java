@@ -19,6 +19,7 @@ import org.osgi.test.shared.IApplet;
  */
 class Dummy implements IApplet {
 	public void setMessage(String s) {
+		System.out.println(":: " + s);
 	}
 
 	public void setError(String s) {
