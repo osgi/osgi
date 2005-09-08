@@ -268,6 +268,14 @@ public class TestMidletContainerBundleActivator
     			  System.out.println("AppPlugin: checking the lock changing            FAILED"); 	
     		else 																																				
     			  System.out.println("AppPlugin: checking the lock changing            PASSED"); 	
+    		if (!testCase_appPluginScheduleSynchronization()) 															
+  			    System.out.println("AppPlugin: schedule synchronization check        FAILED"); 	
+  		  else 																																				
+  			    System.out.println("AppPlugin: schedule synchronization check        PASSED"); 	
+    		if (!testCase_appPluginModifySchedule()) 															
+	  		    System.out.println("AppPlugin: schedule modification                 FAILED"); 	
+  		  else 																																				
+		  	    System.out.println("AppPlugin: schedule modification                 PASSED"); 	
         if(!testCase_oatRegisterService())
             System.out.println("Checking OAT service registration                FAILED");
         else
@@ -547,7 +555,7 @@ public class TestMidletContainerBundleActivator
             File file = bc.getDataFile("TestResult");
             if(file.exists())
                 file.delete();
-            Hashtable args = new Hashtable();
+            HashMap args = new HashMap();
             args.put("TestResult", file.getAbsolutePath());
             return args;
         }
@@ -612,7 +620,8 @@ public class TestMidletContainerBundleActivator
             Map args = createArgs();
             if(args == null)
                 throw new Exception("Cannot create the arguments of launch!");
-            boolean launchable = isLaunchable(appDesc);
+            args.put( "Null value", null );
+            boolean launchable = isLaunchable(appDesc);            
             appHandle = appDesc.launch(args);
             if(!checkResultFile("START"))
                 throw new Exception("Result of the launch is not START!");
@@ -1330,6 +1339,7 @@ public class TestMidletContainerBundleActivator
   				throw new Exception(
   						"There's a running instance of the appDesc!");
   			Map args = createArgs();
+  			args.put( "NullChecking", null );
   			if (args == null)
   				throw new Exception("Cannot create the arguments of launch!");
   			appDesc.schedule(args, "org/osgi/timer", getFilterFromNow( 2 ), false);
@@ -1974,6 +1984,222 @@ public class TestMidletContainerBundleActivator
   			e.printStackTrace();
   			return false;
   		}							
+  	}
+  	
+  	boolean testCase_appPluginScheduleSynchronization() {
+  		ApplicationDescriptor appDesc = appDescs[0];
+  		String appUID = getPID( appDesc );
+  		
+  		try {
+  			DmtSession session = dmtFactory.getSession("./OSGi/Application" );
+
+  			String[] scheduleNames = session.getChildNodeNames( "./OSGi/Application/" + appUID + "/Schedules" );  			
+  			if( scheduleNames != null && scheduleNames.length != 0 )
+  				throw new Exception( "Schedule found without scheduling an application!" );
+
+  			HashMap args = new HashMap();
+  			args.put( "String", "String" );
+  			args.put( "Boolean", new Boolean( true ) );
+  			args.put( "Integer", new Integer( 23 ) );
+  			args.put( "null", null );
+  			args.put( "Unmappable", new Hashtable() );
+  			args.put( "Binary", new byte [] {1,2,3});
+  			args.put( "Float", new Float( 2.25 ));
+  			
+  			String topicFilter = "x/y/z/*";
+  			String eventFilter = "(Zizi=OKSA)";
+  			boolean recurring = false;
+  			
+  			ScheduledApplication schedApp = appDesc.schedule( args, topicFilter, eventFilter, recurring );
+  			
+  			scheduleNames = session.getChildNodeNames( "./OSGi/Application/" + appUID + "/Schedules" );  			
+  			if( scheduleNames != null && scheduleNames.length != 1 )
+  				throw new Exception( "Schedule was not registered in ApplicationPlugin!" );
+  			
+  			String schedID = scheduleNames[ 0 ];
+
+  			String[] scheduleChildNames = session.getChildNodeNames( "./OSGi/Application/" + appUID + "/Schedules/" + schedID );  			
+  			if( scheduleChildNames == null || scheduleChildNames.length != 5 )
+  				throw new Exception( "Invalid items found in the schedule node!" );  			
+  			List schedChildList = Arrays.asList( scheduleChildNames );
+  			
+  			if( schedChildList.indexOf( "Enabled" ) == -1 || 
+  					schedChildList.indexOf( "TopicFilter" ) == -1 ||
+						schedChildList.indexOf( "EventFilter" ) == -1 ||
+						schedChildList.indexOf( "Recurring" ) == -1 ||
+						schedChildList.indexOf( "Arguments" ) == -1 )
+  				throw new Exception( "Schedule child node was not found!" );
+
+  			DmtData enabledValue = session.getNodeValue( "./OSGi/Application/" + appUID + "/Schedules/" + schedID + "/Enabled");
+  			DmtData topicFilterValue = session.getNodeValue( "./OSGi/Application/" + appUID + "/Schedules/" + schedID + "/TopicFilter");
+  			DmtData eventFilterValue = session.getNodeValue( "./OSGi/Application/" + appUID + "/Schedules/" + schedID + "/EventFilter");
+  			DmtData recurringValue = session.getNodeValue( "./OSGi/Application/" + appUID + "/Schedules/" + schedID + "/Recurring");
+  			
+  			if( enabledValue.getBoolean() != true )
+  				throw new Exception( "Invalid enabled value!" );  			
+  			if( !topicFilterValue.getString().equals( topicFilter ) )
+  				throw new Exception( "Invalid topic filter value!" );  			
+  			if( !eventFilterValue.getString().equals( eventFilter ) )
+  				throw new Exception( "Invalid event filter value!" );  			
+  			if( recurringValue.getBoolean() != recurring )
+  				throw new Exception( "Invalid recurring value!" );  			
+  				
+  			String[] argumentPairs = session.getChildNodeNames( "./OSGi/Application/" + appUID + "/Schedules/" + schedID + "/Arguments" );
+  			if( argumentPairs == null || argumentPairs.length != args.size() )
+  				throw new Exception( "Invalid argument number was received!" );
+  			
+  			for( int q=0; q != argumentPairs.length; q++ ) {
+  				String argID = argumentPairs[ q ];
+  				String [] pairElems =  session.getChildNodeNames( "./OSGi/Application/" + appUID + "/Schedules/" + schedID + "/Arguments/" + argID );
+  				if( pairElems == null || ( pairElems.length != 2 && pairElems.length != 1) )
+  					throw new Exception( "Invalid element number!" );
+
+  				List pairElemList = Arrays.asList( pairElems );
+    			
+    			if( pairElemList.indexOf( "Name" ) == -1 )
+    				throw new Exception( "Name is missing from the list" );
+    			
+    			if( pairElems.length == 2 && pairElemList.indexOf( "Value" ) == -1 )
+    				throw new Exception( "Value is missing from the list" );
+  				
+    			String key = session.getNodeValue( "./OSGi/Application/" + appUID + "/Schedules/" + schedID + "/Arguments/" + argID + "/Name" ).getString();
+    			Object content = args.get( key );
+    			if( key.equals( "Unmappable" ) ) {
+    				if( pairElems.length != 1 )
+    					throw new Exception("AppPlugin mapped an unmappable element!");
+    				continue;    			
+    			}
+    			if( pairElems.length != 2 )
+    				throw new Exception("Value is missing from a mappable element!");
+    			
+    			DmtData argValue = session.getNodeValue( "./OSGi/Application/" + appUID + "/Schedules/" + schedID + "/Arguments/" + argID + "/Value" );
+    			
+    			if( content == null ) {
+    				if( argValue.getFormat() != DmtData.FORMAT_NULL )
+    					throw new Exception("Invalid null value");
+    				continue;
+    			}
+    			else if( content instanceof Boolean ) {
+    				if( argValue.getBoolean() != ((Boolean)content).booleanValue() )
+    					throw new Exception("Invalid Boolean value");
+    				continue;
+    			}
+    			else if( content instanceof Integer ) {
+    				if( argValue.getInt() != ((Integer)content).intValue() )
+    					throw new Exception("Invalid Integer value");
+    				continue;
+    			}
+    			else if( content instanceof Float ) {
+    				if( argValue.getFloat() != ((Float)content).floatValue() )
+    					throw new Exception("Invalid Float value");
+    				continue;
+    			}
+    			else if( content instanceof byte [] ) {
+    				byte recvBin[] = argValue.getBinary();
+    				byte expBin[] = (byte [])content;
+    				
+    				if( recvBin.length != expBin.length )
+    					throw new Exception( "Invalid binary value" );
+    				
+    				for( int p=0; p != expBin.length; p++ )
+    					if( recvBin[ p ] != expBin[ p ] )
+    						throw new Exception( "Invalid binary value" );    				
+    				continue;
+    			}
+    			else if( content instanceof String ) {
+    				if( !argValue.getString().equals( content ) )
+  						throw new Exception( "Invalid string value" );    				    					
+    				continue;
+    			}
+    			throw new Exception("Invalid mapping received!");
+  			}
+  			
+  			schedApp.remove();
+
+  			scheduleNames = session.getChildNodeNames( "./OSGi/Application/" + appUID + "/Schedules" );  			
+  			if( scheduleNames != null && scheduleNames.length != 0 )
+  				throw new Exception( "Schedule was not deleted from the registry after remove!" );
+  			
+  			session.close();  			
+  			return true;
+  		}
+  		catch (Exception e) {
+  			e.printStackTrace();
+  			return false;
+  		}							  		
+  	}
+  	
+  	boolean testCase_appPluginModifySchedule() {
+  		ApplicationDescriptor appDesc = appDescs[0];
+  		String appUID = getPID( appDesc );
+  		
+  		try {
+  			DmtSession session = dmtFactory.getSession("./OSGi/Application" );
+
+  			HashMap args = new HashMap();  			
+  			String topicFilter = "x/y/z/*";
+  			String eventFilter = "(Zizi=OKSA)";
+  			boolean recurring = true;  			
+  			ScheduledApplication schedApp = appDesc.schedule( args, topicFilter, eventFilter, recurring );
+
+  			String[] scheduleNames = session.getChildNodeNames( "./OSGi/Application/" + appUID + "/Schedules" );  			
+  			if( scheduleNames == null || scheduleNames.length != 1 )
+  				throw new Exception( "Schedule was not registered in the ApplicationPlugin!" );
+  			String schedID = scheduleNames[ 0 ];
+  			
+  			DmtData newTopicFilter = new DmtData("a/y/z/*");
+  			session.setNodeValue( "./OSGi/Application/" + appUID + "/Schedules/" + schedID + "/TopicFilter", newTopicFilter);
+  			if( !session.getNodeValue( "./OSGi/Application/" + appUID + "/Schedules/" + schedID + "/TopicFilter" )
+  					   .getString().equals( newTopicFilter.getString() ))
+  				throw new Exception("TopicFilter cannot be modified!");
+  			
+  			if( session.getNodeValue( "./OSGi/Application/" + appUID + "/Schedules/" + schedID + "/Enabled" ).getBoolean() )
+  				throw new Exception("Schedule was not disabled after TopicFilter modification!");
+  			
+  			ServiceReference refs[] = bc.getServiceReferences( ScheduledApplication.class.getName(), null );
+  			if( refs != null && refs.length != 0 )
+  				throw new Exception("Schedule was not disabled by the modification!");
+
+  			session.setNodeValue( "./OSGi/Application/" + appUID + "/Schedules/" + schedID + "/Enabled", new DmtData( true ));
+  			if( !session.getNodeValue( "./OSGi/Application/" + appUID + "/Schedules/" + schedID + "/Enabled" ).getBoolean() )
+  				throw new Exception("Cannot set the enabled field to true!");
+
+  			refs = bc.getServiceReferences( ScheduledApplication.class.getName(), null );
+  			if( refs == null || refs.length != 1 )
+  				throw new Exception("Schedule was not registered by setting Enabled to true!");
+  			
+  			DmtData newEventFilter = new DmtData( "(Zizi=Hali)" );
+  			session.setNodeValue( "./OSGi/Application/" + appUID + "/Schedules/" + schedID + "/EventFilter", newEventFilter);
+  			if( !session.getNodeValue( "./OSGi/Application/" + appUID + "/Schedules/" + schedID + "/EventFilter" )
+  					   .getString().equals( newEventFilter.getString() ))
+  				throw new Exception("EventFilter cannot be modified!");
+
+  			if( session.getNodeValue( "./OSGi/Application/" + appUID + "/Schedules/" + schedID + "/Enabled" ).getBoolean() )
+  				throw new Exception("Schedule was not disabled after EventFilter modification!");
+  			session.setNodeValue( "./OSGi/Application/" + appUID + "/Schedules/" + schedID + "/Enabled", new DmtData( true ));
+  			if( !session.getNodeValue( "./OSGi/Application/" + appUID + "/Schedules/" + schedID + "/Enabled" ).getBoolean() )
+  				throw new Exception("Cannot set the enabled field to true!");
+
+  			DmtData newRecurring = new DmtData( false );
+  			session.setNodeValue( "./OSGi/Application/" + appUID + "/Schedules/" + schedID + "/Recurring", newRecurring);
+  			if( session.getNodeValue( "./OSGi/Application/" + appUID + "/Schedules/" + schedID + "/Recurring" ).getBoolean() )
+   				throw new Exception("Recurring cannot be modified!");
+
+  			if( session.getNodeValue( "./OSGi/Application/" + appUID + "/Schedules/" + schedID + "/Enabled" ).getBoolean() )
+  				throw new Exception("Schedule was not disabled after Recurring modification!");
+  			session.setNodeValue( "./OSGi/Application/" + appUID + "/Schedules/" + schedID + "/Enabled", new DmtData( true ));
+  			if( !session.getNodeValue( "./OSGi/Application/" + appUID + "/Schedules/" + schedID + "/Enabled" ).getBoolean() )
+  				throw new Exception("Cannot set the enabled field to true!");
+
+  			/* TODO */
+  			
+  			session.close();  			
+  			return true;
+  		}
+  		catch (Exception e) {
+  			e.printStackTrace();
+  			return false;
+  		}  		
   	}
   	
   	boolean testCase_checkNotifyDestroyed() {
