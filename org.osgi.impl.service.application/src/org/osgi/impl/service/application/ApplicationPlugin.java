@@ -50,6 +50,16 @@ class ArgumentVariableNode extends ApplicationPluginBaseNode {
 		this.argIDRef = argIDRef;		
 		canReplace = true;
 	}
+	public String[] getNames( String []path ) {
+		if( !name.equals( "Value" ) )
+			return new String [] {name};
+		try {
+			argIDRef.checkVariableValue( path );
+			return new String [] {name};			
+		}catch( Exception e ) {
+			return new String [ 0 ];
+		}
+	}
 		
 	public void setNodeValue(String path[], DmtData value) throws DmtException {
 		argIDRef.setVariableValue( path, value );		
@@ -62,11 +72,13 @@ class ArgumentVariableNode extends ApplicationPluginBaseNode {
 
 class ArgumentIDNode extends ApplicationPluginBaseNode {
 	private ArgumentInterface callerRef;
+	private int treeDepth;
 			
-	ArgumentIDNode( ArgumentInterface callerRef ) {
+	ArgumentIDNode( ArgumentInterface callerRef, int treeDepth ) {
 		super();
 		
 		this.callerRef = callerRef;
+		this.treeDepth = treeDepth;
 		
 		addChildNode( new ArgumentVariableNode(this, "Name" ) );
 		addChildNode( new ArgumentVariableNode(this, "Value" ) );
@@ -75,7 +87,7 @@ class ArgumentIDNode extends ApplicationPluginBaseNode {
 	}
 
 	public void deleteNode(String path[]) throws DmtException {
-		String argID = path[ path.length - 1 ];
+		String argID = path[ treeDepth ];
 		
 		Hashtable argHash = callerRef.getHash( path );
 		argHash.remove( argID );
@@ -84,7 +96,7 @@ class ArgumentIDNode extends ApplicationPluginBaseNode {
 	}
 
 	public void createInteriorNode(String path[], String type) throws DmtException {
-		String argID = path[ path.length - 1 ];
+		String argID = path[ treeDepth ];
 		
 		Hashtable argHash = callerRef.getHash( path );
 		argHash.put( argID, new NameValuePair() );
@@ -105,9 +117,29 @@ class ArgumentIDNode extends ApplicationPluginBaseNode {
 		return hashtable;
 	}
 	
+	public Hashtable toArgIDHash( Hashtable arguments ) {
+		Hashtable hashtable = new Hashtable();
+		
+		int argCnt = 1;
+		
+		Enumeration enum = arguments.keys();
+		while( enum.hasMoreElements() ) {
+			String key = (String)enum.nextElement();
+			Object value = arguments.get( key );
+			
+			NameValuePair nvp = new NameValuePair();
+			nvp.name = key;
+			nvp.value = value;
+			
+			hashtable.put( "ARG" + argCnt++, nvp );
+		}
+		
+		return hashtable;
+	}
+	
 	DmtData getVariableValue( String path[] ) throws DmtException {
-		String var = path[ path.length - 1 ];
-		String argID = path[ path.length - 2 ];
+		String var = path[ treeDepth + 1 ];
+		String argID = path[ treeDepth ];
 		
 		Hashtable argHash = callerRef.getHash( path );
 		NameValuePair nvp = (NameValuePair)argHash.get( argID );
@@ -118,6 +150,8 @@ class ArgumentIDNode extends ApplicationPluginBaseNode {
 		if( var.equals( "Name" ) ) {
 			return new DmtData( nvp.name );
 		}else{
+			if( nvp.value == null )
+				return DmtData.NULL_VALUE;
 			if( nvp.value instanceof String )
 				return new DmtData( (String)nvp.value );
 			else if( nvp.value instanceof Boolean )
@@ -128,8 +162,26 @@ class ArgumentIDNode extends ApplicationPluginBaseNode {
 				return new DmtData( ((Integer)nvp.value).intValue() );
 			else if( nvp.value instanceof Float )
 				return new DmtData( ((Float)nvp.value).floatValue() );
-			return DmtData.NULL_VALUE;
+			
+			throw new DmtException(path, DmtException.METADATA_MISMATCH, "Cannot map the value to a DMT type!" );
 		}		
+	}
+
+	void checkVariableValue( String path[] ) throws DmtException {
+		String argID = path[ treeDepth ];
+		
+		Hashtable argHash = callerRef.getHash( path );
+		NameValuePair nvp = (NameValuePair)argHash.get( argID );
+		
+		if( nvp == null )
+			throw new DmtException(path, DmtException.NODE_NOT_FOUND, "Node not found.");		
+		
+		if( nvp.value == null || nvp.value instanceof String || nvp.value instanceof Boolean ||
+				nvp.value instanceof byte [] || nvp.value instanceof Integer || 
+				nvp.value instanceof Float )
+			return;
+			
+		throw new DmtException(path, DmtException.METADATA_MISMATCH, "Cannot map the value to a DMT type!" );
 	}
 	
 	public String[] getNames( String []path ) {
@@ -138,8 +190,9 @@ class ArgumentIDNode extends ApplicationPluginBaseNode {
 		  String result[] = new String[ ht.size() ];
 		  Enumeration enum = ht.keys();
 		  int i=0;
-		  while( enum.hasMoreElements() )
+		  while( enum.hasMoreElements() ) {
 			  result[ i++ ] = (String)enum.nextElement();
+		  }
 		
 		  return result;
 		}catch( Exception e ) {
@@ -148,8 +201,8 @@ class ArgumentIDNode extends ApplicationPluginBaseNode {
 	}
 	
 	void setVariableValue( String path[], DmtData value ) throws DmtException {
-		String var = path[ path.length - 1 ];
-		String argID = path[ path.length - 2 ];
+		String var = path[ treeDepth + 1 ];
+		String argID = path[ treeDepth ];
 		
 		Hashtable argHash = callerRef.getHash( path );
 		NameValuePair nvp = (NameValuePair)argHash.get( argID );
@@ -176,9 +229,11 @@ class ArgumentIDNode extends ApplicationPluginBaseNode {
 				case DmtData.FORMAT_BOOLEAN:
 					nvp.value = new Boolean( value.getBoolean() );
 				  break;
-				default:
+				case DmtData.FORMAT_NULL:
 					nvp.value = null;
 				  break;
+				default:
+					return;
 			}
 		}		
 		callerRef.changed( path );
@@ -212,6 +267,7 @@ class ScheduleItemNode extends ApplicationPluginBaseNode {
 
 class ScheduleIDNode extends ApplicationPluginBaseNode implements ArgumentInterface {
 	private Hashtable  schedulesByPidHash = new Hashtable();
+	private ArgumentIDNode argIDNode;
 	
 	ScheduleIDNode() {
 		super();		
@@ -221,6 +277,9 @@ class ScheduleIDNode extends ApplicationPluginBaseNode implements ArgumentInterf
 		addChildNode( new ScheduleItemNode( this, "TopicFilter", 1 ));
 		addChildNode( new ScheduleItemNode( this, "EventFilter", 2 ));
 		addChildNode( new ScheduleItemNode( this, "Recurring", 3 ));
+		
+		addChildNode( new ApplicationPluginBaseNode( "Arguments",
+				          argIDNode = new ArgumentIDNode( this, 7 )));
 	}
 	
 	public String[] getNames( String []path ) {
@@ -382,7 +441,7 @@ class ScheduleIDNode extends ApplicationPluginBaseNode implements ArgumentInterf
 					
 					item.eventFilter = schedApp.getEventFilter();
 					item.topicFilter = schedApp.getTopic();
-					item.arguments = new Hashtable( schedApp.getArguments() );
+					item.arguments = argIDNode.toArgIDHash( new Hashtable( schedApp.getArguments() ) );
 					item.recurring = schedApp.isRecurring();
 					
 					ApplicationPlugin.bc.ungetService( refs[ j ] );
@@ -411,7 +470,7 @@ class ScheduleIDNode extends ApplicationPluginBaseNode implements ArgumentInterf
 		try {
 			ServiceReference appDescRef = ApplicationPlugin.getApplicationDescriptor( path );
 			ApplicationDescriptor appDesc = (ApplicationDescriptor)ApplicationPlugin.bc.getService( appDescRef );
-		  appDesc.schedule( item.arguments, item.topicFilter, item.eventFilter, item.recurring );
+		  appDesc.schedule( argIDNode.getArguments( item.arguments ), item.topicFilter, item.eventFilter, item.recurring );
 		  item.enabled = true;
 		  ApplicationPlugin.bc.ungetService( appDescRef );
 		}catch( Exception e ) {}
@@ -460,7 +519,7 @@ class LaunchIDNode extends ApplicationPluginBaseNode implements ArgumentInterfac
 	LaunchIDNode() {
 		super();
 		
-		addChildNode( new ApplicationPluginBaseNode( "Arguments", argIDNode = new ArgumentIDNode( this ) ) );
+		addChildNode( new ApplicationPluginBaseNode( "Arguments", argIDNode = new ArgumentIDNode( this, 8 ) ) );
 		addChildNode( new ApplicationPluginBaseNode( "Result", 
 				new LaunchResultNode( this, "InstanceID", 0 ),
 				new LaunchResultNode( this, "Status", 1 ),
