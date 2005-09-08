@@ -116,7 +116,11 @@ public class TestMidlet extends MIDlet implements EventHandler, SynchronousBundl
 			Iterator iterator = startupArgs.keySet().iterator();
 			while( iterator.hasNext() ) {
 				String key = (String)iterator.next(); 
-				if( !startupArgs.get( key ).equals( getAppProperty(key) ) ) {
+				Object value1 = getAppProperty(key);
+				Object value2 = startupArgs.get( key );
+				if( value1 == null && value2 == null )
+					continue;
+				if( !value1.equals( value2 ) ) {
 					writeResult("STARTUP PARAMETER FAILURE");			
 					return;
 				}
