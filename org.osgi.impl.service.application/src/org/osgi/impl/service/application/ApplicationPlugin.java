@@ -38,6 +38,7 @@ import org.osgi.service.log.LogService;
 
 interface ArgumentInterface {
 	public Hashtable getHash( String path[] ) throws DmtException;
+	public void changed( String path[] );
 }
 
 class ArgumentVariableNode extends ApplicationPluginBaseNode {
@@ -77,7 +78,9 @@ class ArgumentIDNode extends ApplicationPluginBaseNode {
 		String argID = path[ path.length - 1 ];
 		
 		Hashtable argHash = callerRef.getHash( path );
-		argHash.remove( argID );		
+		argHash.remove( argID );
+		
+		callerRef.changed( path );
 	}
 
 	public void createInteriorNode(String path[], String type) throws DmtException {
@@ -85,6 +88,8 @@ class ArgumentIDNode extends ApplicationPluginBaseNode {
 		
 		Hashtable argHash = callerRef.getHash( path );
 		argHash.put( argID, new NameValuePair() );
+
+		callerRef.changed( path );
 	}
 	
 	public Hashtable getArguments( Hashtable itemHash ) {
@@ -176,6 +181,7 @@ class ArgumentIDNode extends ApplicationPluginBaseNode {
 				  break;
 			}
 		}		
+		callerRef.changed( path );
 	}
 	
 	class NameValuePair {
@@ -184,14 +190,37 @@ class ArgumentIDNode extends ApplicationPluginBaseNode {
 	}
 }
 
-class ScheduleIDNode extends ApplicationPluginBaseNode {
-	private Hashtable  schedulesByPidHash = new Hashtable();
+class ScheduleItemNode extends ApplicationPluginBaseNode {
+	private int kind;
+	private ScheduleIDNode schedIDNode;
 	
-	/* TODO */
+	ScheduleItemNode( ScheduleIDNode schedIDNode, String name, int kind ) {
+		super( name, "text/plain" );
+		this.kind = kind;
+	  this.schedIDNode = schedIDNode;
+		canReplace = true;
+	}
+	
+	public DmtData getNodeValue( String path[] ) throws DmtException {
+	  return schedIDNode.getItemValue( path, kind );
+	}
+
+	public void setNodeValue(String path[], DmtData value) throws DmtException {
+		schedIDNode.setItemValue( path, kind, value );		
+	}
+}
+
+class ScheduleIDNode extends ApplicationPluginBaseNode implements ArgumentInterface {
+	private Hashtable  schedulesByPidHash = new Hashtable();
 	
 	ScheduleIDNode() {
 		super();		
 		canAdd = canDelete = true;
+		
+		addChildNode( new ScheduleItemNode( this, "Enabled", 0 ));
+		addChildNode( new ScheduleItemNode( this, "TopicFilter", 1 ));
+		addChildNode( new ScheduleItemNode( this, "EventFilter", 2 ));
+		addChildNode( new ScheduleItemNode( this, "Recurring", 3 ));
 	}
 	
 	public String[] getNames( String []path ) {
@@ -209,9 +238,110 @@ class ScheduleIDNode extends ApplicationPluginBaseNode {
 			result[ i++ ] = (String)enum.nextElement();
 		
 		return result;
+	}	
+	
+	public DmtData getItemValue( String path[], int kind ) throws DmtException {
+		String pid = ApplicationPlugin.getPID( path );
+    String key = path[ path.length - 2 ];    		
+		Hashtable scheduleHash = (Hashtable)schedulesByPidHash.get( pid );
+		if( scheduleHash == null )
+			throw new DmtException(path, DmtException.NODE_NOT_FOUND, "Node not found.");
+	  ScheduledItem item = (ScheduledItem)scheduleHash.get( key );
+		if( item == null )
+			throw new DmtException(path, DmtException.NODE_NOT_FOUND, "Node not found.");
+		switch( kind ) {
+			case 0:
+				return new DmtData( item.enabled );
+			case 1:
+				return new DmtData( item.topicFilter );
+			case 2:
+				return new DmtData( item.eventFilter );
+			case 3:
+				return new DmtData( item.recurring );
+		}
+		throw new DmtException(path, DmtException.NODE_NOT_FOUND, "Node not found.");		
+	}
+
+	public void setItemValue(String path[], int kind, DmtData value) throws DmtException {
+		String pid = ApplicationPlugin.getPID( path );
+    String key = path[ path.length - 2 ];    		
+		Hashtable scheduleHash = (Hashtable)schedulesByPidHash.get( pid );
+		if( scheduleHash == null )
+			throw new DmtException(path, DmtException.NODE_NOT_FOUND, "Node not found.");
+	  ScheduledItem item = (ScheduledItem)scheduleHash.get( key );
+		if( item == null )
+			throw new DmtException(path, DmtException.NODE_NOT_FOUND, "Node not found.");
+		switch( kind ) {
+			case 0:
+				if( value.getBoolean() )
+					enable( item, path );				
+				else
+					disable( item );
+				break;
+			case 1:
+				item.topicFilter = value.getString();
+				disable( item );
+				break;
+			case 2:
+				item.eventFilter = value.getString();
+				disable( item );
+				break;
+			case 3:
+				item.recurring = value.getBoolean();
+				disable( item );
+				break;
+		}
+	}
+
+	public Hashtable getHash(String[] path) throws DmtException {
+		String pid = ApplicationPlugin.getPID( path );
+		String key = path[ 5 ];
+		Hashtable scheduleHash = (Hashtable)schedulesByPidHash.get( pid );
+		if( scheduleHash == null )
+			throw new DmtException(path, DmtException.NODE_NOT_FOUND, "Node not found.");
+				
+		ScheduledItem item = (ScheduledItem) scheduleHash.get( key );
+		if( item == null )
+			throw new DmtException(path, DmtException.NODE_NOT_FOUND, "Node not found.");
+		
+		return item.arguments;
+	}
+
+	public void changed(String[] path) {
+		String pid = ApplicationPlugin.getPID( path );
+		String key = path[ 5 ];
+		Hashtable scheduleHash = (Hashtable)schedulesByPidHash.get( pid );
+		if( scheduleHash == null )
+			return;
+				
+		ScheduledItem item = (ScheduledItem) scheduleHash.get( key );
+		if( item == null )
+			return;
+		
+		disable( item );
 	}
 	
+	public void createInteriorNode(String path[], String type) throws DmtException {
+		String pid = ApplicationPlugin.getPID( path );
+    String key = path[ path.length - 1 ];    
+		Hashtable scheduleHash = (Hashtable)schedulesByPidHash.get( pid );
+		if( scheduleHash == null ) {
+			scheduleHash = new Hashtable();
+			schedulesByPidHash.put( pid, scheduleHash );
+		}
+		schedulesByPidHash.put( key, new ScheduledItem() );
+	}
 	
+	public void deleteNode(String path[]) throws DmtException {
+		String pid = ApplicationPlugin.getPID( path );
+    String key = path[ path.length - 1 ];    
+		Hashtable scheduleHash = (Hashtable)schedulesByPidHash.get( pid );
+		if( scheduleHash == null )
+			throw new DmtException(path, DmtException.NODE_NOT_FOUND, "Node not found.");
+		scheduleHash.remove( key );
+    if( scheduleHash.size() == 0 )
+    	schedulesByPidHash.remove( pid );
+	}	
 	
 	void synchronizeHashWithRegistry( Hashtable scheduleHash ) {
 		try {			
@@ -274,13 +404,16 @@ class ScheduleIDNode extends ApplicationPluginBaseNode {
 		item.enabled = false;
 	}
 	
-	void enable( ScheduledItem item, ApplicationDescriptor appDesc ) {
+	void enable( ScheduledItem item, String path[] ) {
 		if( item.enabled )
 			disable( item );
 		
 		try {
+			ServiceReference appDescRef = ApplicationPlugin.getApplicationDescriptor( path );
+			ApplicationDescriptor appDesc = (ApplicationDescriptor)ApplicationPlugin.bc.getService( appDescRef );
 		  appDesc.schedule( item.arguments, item.topicFilter, item.eventFilter, item.recurring );
 		  item.enabled = true;
+		  ApplicationPlugin.bc.ungetService( appDescRef );
 		}catch( Exception e ) {}
 	}
 	
@@ -368,6 +501,8 @@ class LaunchIDNode extends ApplicationPluginBaseNode implements ArgumentInterfac
 		if( launchIDHash == null )
 			throw new DmtException(path, DmtException.NODE_NOT_FOUND, "Node not found.");
     launchIDHash.remove( key );
+    if( launchIDHash.size() == 0 )
+    	launchIDsHash.remove( pid );
 	}	
 	
 	public void execute(DmtSession session, String path[], String correlator, String data) throws DmtException {
@@ -447,6 +582,10 @@ class LaunchIDNode extends ApplicationPluginBaseNode implements ArgumentInterfac
 		public String    resultStatus = "";
 		public String    resultMessage = "";
     public Hashtable argumentHash = new Hashtable();
+	}
+
+	public void changed(String[] path) {
+		// do nothing		
 	}
 }
 
