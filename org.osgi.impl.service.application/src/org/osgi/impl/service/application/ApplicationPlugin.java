@@ -37,7 +37,7 @@ import org.osgi.service.log.LogService;
 
 
 interface ArgumentInterface {
-	public Hashtable getHash( String path[] ) throws DmtException;
+	public HashMap getHash( String path[] ) throws DmtException;
 	public void changed( String path[] );
 }
 
@@ -89,7 +89,7 @@ class ArgumentIDNode extends ApplicationPluginBaseNode {
 	public void deleteNode(String path[]) throws DmtException {
 		String argID = path[ treeDepth ];
 		
-		Hashtable argHash = callerRef.getHash( path );
+		HashMap argHash = callerRef.getHash( path );
 		argHash.remove( argID );
 		
 		callerRef.changed( path );
@@ -98,50 +98,50 @@ class ArgumentIDNode extends ApplicationPluginBaseNode {
 	public void createInteriorNode(String path[], String type) throws DmtException {
 		String argID = path[ treeDepth ];
 		
-		Hashtable argHash = callerRef.getHash( path );
+		HashMap argHash = callerRef.getHash( path );
 		argHash.put( argID, new NameValuePair() );
 
 		callerRef.changed( path );
 	}
 	
-	public Hashtable getArguments( Hashtable itemHash ) {
-		Hashtable hashtable = new Hashtable();
+	public HashMap getArguments( HashMap itemHash ) {
+		HashMap hashmap = new HashMap();
 		
-		Enumeration enum = itemHash.keys();
-		while( enum.hasMoreElements() ) {
-			String key = (String)enum.nextElement();
+		Iterator iter = itemHash.keySet().iterator();
+		while( iter.hasNext() ) {
+			String key = (String)iter.next();
 			NameValuePair nvp = (NameValuePair)itemHash.get( key );
-			hashtable.put( nvp.name, nvp.value );
+			hashmap.put( nvp.name, nvp.value );
 		}
 		
-		return hashtable;
+		return hashmap;
 	}
 	
-	public Hashtable toArgIDHash( Hashtable arguments ) {
-		Hashtable hashtable = new Hashtable();
+	public HashMap toArgIDHash( Map arguments ) {
+		HashMap hashmap = new HashMap();
 		
 		int argCnt = 1;
 		
-		Enumeration enum = arguments.keys();
-		while( enum.hasMoreElements() ) {
-			String key = (String)enum.nextElement();
+		Iterator iter = arguments.keySet().iterator();
+		while( iter.hasNext() ) {
+			String key = (String)iter.next();
 			Object value = arguments.get( key );
 			
 			NameValuePair nvp = new NameValuePair();
 			nvp.name = key;
 			nvp.value = value;
 			
-			hashtable.put( "ARG" + argCnt++, nvp );
+			hashmap.put( "ARG" + argCnt++, nvp );
 		}
 		
-		return hashtable;
+		return hashmap;
 	}
 	
 	DmtData getVariableValue( String path[] ) throws DmtException {
 		String var = path[ treeDepth + 1 ];
 		String argID = path[ treeDepth ];
 		
-		Hashtable argHash = callerRef.getHash( path );
+		HashMap argHash = callerRef.getHash( path );
 		NameValuePair nvp = (NameValuePair)argHash.get( argID );
 		
 		if( nvp == null )
@@ -170,7 +170,7 @@ class ArgumentIDNode extends ApplicationPluginBaseNode {
 	void checkVariableValue( String path[] ) throws DmtException {
 		String argID = path[ treeDepth ];
 		
-		Hashtable argHash = callerRef.getHash( path );
+		HashMap argHash = callerRef.getHash( path );
 		NameValuePair nvp = (NameValuePair)argHash.get( argID );
 		
 		if( nvp == null )
@@ -186,13 +186,12 @@ class ArgumentIDNode extends ApplicationPluginBaseNode {
 	
 	public String[] getNames( String []path ) {
 		try {
-		  Hashtable ht = callerRef.getHash( path );
+			HashMap ht = callerRef.getHash( path );
 		  String result[] = new String[ ht.size() ];
-		  Enumeration enum = ht.keys();
+		  Iterator iter = ht.keySet().iterator();
 		  int i=0;
-		  while( enum.hasMoreElements() ) {
-			  result[ i++ ] = (String)enum.nextElement();
-		  }
+		  while( iter.hasNext() )
+			  result[ i++ ] = (String)iter.next();		 
 		
 		  return result;
 		}catch( Exception e ) {
@@ -204,7 +203,7 @@ class ArgumentIDNode extends ApplicationPluginBaseNode {
 		String var = path[ treeDepth + 1 ];
 		String argID = path[ treeDepth ];
 		
-		Hashtable argHash = callerRef.getHash( path );
+		HashMap argHash = callerRef.getHash( path );
 		NameValuePair nvp = (NameValuePair)argHash.get( argID );
 		
 		if( nvp == null )
@@ -352,7 +351,7 @@ class ScheduleIDNode extends ApplicationPluginBaseNode implements ArgumentInterf
 		}
 	}
 
-	public Hashtable getHash(String[] path) throws DmtException {
+	public HashMap getHash(String[] path) throws DmtException {
 		String pid = ApplicationPlugin.getPID( path );
 		String key = path[ 5 ];
 		Hashtable scheduleHash = (Hashtable)schedulesByPidHash.get( pid );
@@ -441,7 +440,7 @@ class ScheduleIDNode extends ApplicationPluginBaseNode implements ArgumentInterf
 					
 					item.eventFilter = schedApp.getEventFilter();
 					item.topicFilter = schedApp.getTopic();
-					item.arguments = argIDNode.toArgIDHash( new Hashtable( schedApp.getArguments() ) );
+					item.arguments = argIDNode.toArgIDHash( schedApp.getArguments() );
 					item.recurring = schedApp.isRecurring();
 					
 					ApplicationPlugin.bc.ungetService( refs[ j ] );
@@ -488,7 +487,7 @@ class ScheduleIDNode extends ApplicationPluginBaseNode implements ArgumentInterf
 		public String           topicFilter = "";
 		public String           eventFilter = "";
 		public boolean          recurring = false;		
-		public Hashtable        arguments = new Hashtable();
+		public HashMap          arguments = new HashMap();
 		
 		public ServiceReference servRef = null;
 	}
@@ -575,7 +574,7 @@ class LaunchIDNode extends ApplicationPluginBaseNode implements ArgumentInterfac
 		if( item == null )
 			throw new DmtException(path, DmtException.NODE_NOT_FOUND, "Node not found.");
 		
-		Hashtable args = argIDNode.getArguments( item.argumentHash );
+		HashMap args = argIDNode.getArguments( item.argumentHash );
 		
 		ServiceReference appDescRef = ApplicationPlugin.getApplicationDescriptor( path );
 		ApplicationDescriptor appDesc = (ApplicationDescriptor)Activator.bc.getService( appDescRef );
@@ -622,7 +621,7 @@ class LaunchIDNode extends ApplicationPluginBaseNode implements ArgumentInterfac
 		return result;
 	}
 	
-	public Hashtable getHash( String path[] ) throws DmtException {
+	public HashMap getHash( String path[] ) throws DmtException {
 		String pid = ApplicationPlugin.getPID( path );
 		String key = path[ 6 ];
 		Hashtable launchIDHash = (Hashtable)launchIDsHash.get( pid );
@@ -640,7 +639,7 @@ class LaunchIDNode extends ApplicationPluginBaseNode implements ArgumentInterfac
 		public String    resultInstanceID = "";
 		public String    resultStatus = "";
 		public String    resultMessage = "";
-    public Hashtable argumentHash = new Hashtable();
+    public HashMap   argumentHash = new HashMap();
 	}
 
 	public void changed(String[] path) {

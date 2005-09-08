@@ -175,6 +175,7 @@ public class Scheduler implements Runnable, EventHandler {
 				}
 		}
 		catch (Exception ex) {
+			ex.printStackTrace();
 			Activator.log(
 					LogService.LOG_ERROR,
 					"Exception occurred at scheduling an application!",

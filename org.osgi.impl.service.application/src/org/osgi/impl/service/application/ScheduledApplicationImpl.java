@@ -32,7 +32,7 @@ public class ScheduledApplicationImpl implements ScheduledApplication, Serializa
 	private Scheduler				scheduler;
 	
 	private String							pid;
-	private Hashtable						args;
+	private HashMap 						args;
 	private String							topic;
 	private String  						eventFilter;
 	private boolean							recurring;
@@ -46,7 +46,7 @@ public class ScheduledApplicationImpl implements ScheduledApplication, Serializa
 		this.bc = bc;
 		this.pid = pid;
 		if( args != null )
-			this.args = new Hashtable( args );
+			this.args = new HashMap( args );
 		else
 			this.args = null;
 		this.topic = topic;
@@ -70,7 +70,7 @@ public class ScheduledApplicationImpl implements ScheduledApplication, Serializa
 		checkValidity();		
 		if( args == null )
 			return null;
-		return new Hashtable( args );
+		return new HashMap( args );
 	}
 
 	public String getTopic() {
@@ -140,7 +140,7 @@ public class ScheduledApplicationImpl implements ScheduledApplication, Serializa
 			ClassNotFoundException {
 		bc = null;
 		pid= (String) in.readObject();
-		args = (Hashtable) in.readObject();
+		args = (HashMap) in.readObject();
 		topic = (String) in.readObject();
 		eventFilter = (String) in.readObject();
 		Boolean recurring = (Boolean) in.readObject();		
