@@ -2191,8 +2191,84 @@ public class TestMidletContainerBundleActivator
   			if( !session.getNodeValue( "./OSGi/Application/" + appUID + "/Schedules/" + schedID + "/Enabled" ).getBoolean() )
   				throw new Exception("Cannot set the enabled field to true!");
 
-  			/* TODO */
+  			session.createInteriorNode( "./OSGi/Application/" + appUID + "/Schedules/" + schedID + "/Arguments/Arg0" );
+
+  			if( session.getNodeValue( "./OSGi/Application/" + appUID + "/Schedules/" + schedID + "/Enabled" ).getBoolean() )
+  				throw new Exception("Schedule was not disabled after adding a new argument node!");
+  			session.setNodeValue( "./OSGi/Application/" + appUID + "/Schedules/" + schedID + "/Enabled", new DmtData( true ));
+  			if( !session.getNodeValue( "./OSGi/Application/" + appUID + "/Schedules/" + schedID + "/Enabled" ).getBoolean() )
+  				throw new Exception("Cannot set the enabled field to true!");
+
+  			session.setNodeValue( "./OSGi/Application/" + appUID + "/Schedules/" + schedID + "/Arguments/Arg0/Name", 
+  					                  new DmtData( "Boolean" ));
   			
+  			if( session.getNodeValue( "./OSGi/Application/" + appUID + "/Schedules/" + schedID + "/Enabled" ).getBoolean() )
+  				throw new Exception("Schedule was not disabled after changing the value of a node!");
+  			
+  			session.setNodeValue( "./OSGi/Application/" + appUID + "/Schedules/" + schedID + "/Arguments/Arg0/Value", 
+                              new DmtData( true ));
+  			session.createInteriorNode( "./OSGi/Application/" + appUID + "/Schedules/" + schedID + "/Arguments/Arg1" );
+  			session.setNodeValue( "./OSGi/Application/" + appUID + "/Schedules/" + schedID + "/Arguments/Arg1/Name", 
+  					                  new DmtData( "Integer" ));
+  			session.setNodeValue( "./OSGi/Application/" + appUID + "/Schedules/" + schedID + "/Arguments/Arg1/Value", 
+                              new DmtData( 23 ));
+  			session.createInteriorNode( "./OSGi/Application/" + appUID + "/Schedules/" + schedID + "/Arguments/Arg2" );
+  			session.setNodeValue( "./OSGi/Application/" + appUID + "/Schedules/" + schedID + "/Arguments/Arg2/Name", 
+  					                  new DmtData( "String" ));
+  			session.setNodeValue( "./OSGi/Application/" + appUID + "/Schedules/" + schedID + "/Arguments/Arg2/Value", 
+                              new DmtData( "Hali" ));
+  			session.createInteriorNode( "./OSGi/Application/" + appUID + "/Schedules/" + schedID + "/Arguments/Arg3" );
+  			session.setNodeValue( "./OSGi/Application/" + appUID + "/Schedules/" + schedID + "/Arguments/Arg3/Name", 
+  					                  new DmtData( "null" ));
+  			session.setNodeValue( "./OSGi/Application/" + appUID + "/Schedules/" + schedID + "/Arguments/Arg3/Value", 
+                              DmtData.NULL_VALUE);
+  			session.createInteriorNode( "./OSGi/Application/" + appUID + "/Schedules/" + schedID + "/Arguments/Arg4" );
+  			session.setNodeValue( "./OSGi/Application/" + appUID + "/Schedules/" + schedID + "/Arguments/Arg4/Name", 
+  					                  new DmtData( "Binary" ));
+  			session.setNodeValue( "./OSGi/Application/" + appUID + "/Schedules/" + schedID + "/Arguments/Arg4/Value", 
+                              new DmtData( new byte[] {1,2,3} ));
+  			session.createInteriorNode( "./OSGi/Application/" + appUID + "/Schedules/" + schedID + "/Arguments/Arg5" );
+  			session.setNodeValue( "./OSGi/Application/" + appUID + "/Schedules/" + schedID + "/Arguments/Arg5/Name", 
+  					                  new DmtData( "Float" ));
+  			session.setNodeValue( "./OSGi/Application/" + appUID + "/Schedules/" + schedID + "/Arguments/Arg5/Value", 
+                              new DmtData( (float)12.5 ));
+
+  			session.setNodeValue( "./OSGi/Application/" + appUID + "/Schedules/" + schedID + "/Enabled", new DmtData( true ));
+  			if( !session.getNodeValue( "./OSGi/Application/" + appUID + "/Schedules/" + schedID + "/Enabled" ).getBoolean() )
+  				throw new Exception("Cannot set the enabled field to true!");
+  			
+  			refs = bc.getServiceReferences( ScheduledApplication.class.getName(), null );
+  			if( refs == null || refs.length != 1 )
+  				throw new Exception("Schedule was not registered by setting Enabled to true!");
+  			
+  			schedApp = (ScheduledApplication)bc.getService( refs[ 0 ]);
+  			
+  			Map newArgs = schedApp.getArguments();
+  			
+  			if( newArgs.size() != 6 )
+  				throw new Exception("Invalid argument size!");
+  			
+  			if( !newArgs.containsKey( "null" ) )
+  				throw new Exception("Null variable disappeared!");
+  			if( newArgs.get( "null" ) != null )
+  				throw new Exception("Invalid null value!");
+  			if( !newArgs.get( "String" ).equals( "Hali" ) )
+  				throw new Exception("Invalid string value!");
+  			if( !((Boolean)newArgs.get( "Boolean" )).booleanValue() )
+  				throw new Exception("Invalid string value!");
+  			if( ((Integer)newArgs.get( "Integer" )).intValue() != 23)
+  				throw new Exception("Invalid integer value!");
+  			if( ((Float)newArgs.get( "Float" )).floatValue() != (float)12.5)
+  				throw new Exception("Invalid float value!");
+  			
+  			byte [] bin = (byte [])newArgs.get( "Binary" );
+  			if( bin.length != 3 )
+  				throw new Exception("Invalid binary length!");
+  			if( bin[ 0 ] != 1 || bin[ 1 ] != 2 || bin[ 2 ] != 3 )
+  				throw new Exception("Invalid binary value!");
+  			
+  			schedApp.remove();
+				
   			session.close();  			
   			return true;
   		}
