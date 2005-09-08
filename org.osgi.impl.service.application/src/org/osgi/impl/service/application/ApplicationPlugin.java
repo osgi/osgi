@@ -191,7 +191,7 @@ class ArgumentIDNode extends ApplicationPluginBaseNode {
 		  Iterator iter = ht.keySet().iterator();
 		  int i=0;
 		  while( iter.hasNext() )
-			  result[ i++ ] = (String)iter.next();		 
+			  result[ i++ ] = (String)iter.next();
 		
 		  return result;
 		}catch( Exception e ) {
@@ -477,8 +477,26 @@ class ScheduleIDNode extends ApplicationPluginBaseNode implements ArgumentInterf
 		try {
 			ServiceReference appDescRef = ApplicationPlugin.getApplicationDescriptor( path );
 			ApplicationDescriptor appDesc = (ApplicationDescriptor)ApplicationPlugin.bc.getService( appDescRef );
-		  appDesc.schedule( argIDNode.getArguments( item.arguments ), item.topicFilter, item.eventFilter, item.recurring );
+		  ScheduledApplication schedApp = appDesc.schedule( argIDNode.getArguments( item.arguments ), item.topicFilter, item.eventFilter, item.recurring );
 		  item.enabled = true;
+		  
+		  ServiceReference refs[] = ApplicationPlugin.bc.getServiceReferences( ScheduledApplication.class.getName(), 
+		  		"(" + ApplicationDescriptor.APPLICATION_PID + "=" + 
+					appDescRef.getProperty( Constants.SERVICE_PID ) + ")");
+		  
+		  if( refs != null ) {
+		  	for( int i=0; i != refs.length; i++ ) {
+		  		ScheduledApplication app = (ScheduledApplication)ApplicationPlugin.bc.getService( refs[ i ] );
+		  		
+		  		if( app == schedApp ) {
+		  			item.servRef = refs[ i ];
+			  		ApplicationPlugin.bc.ungetService( refs[ i ] );
+			  		break;
+		  		}		  		
+		  		ApplicationPlugin.bc.ungetService( refs[ i ] );
+		  	}
+		  }		  
+
 		  ApplicationPlugin.bc.ungetService( appDescRef );
 		}catch( Exception e ) {}
 	}

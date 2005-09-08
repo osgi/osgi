@@ -115,7 +115,7 @@ public class ApplicationPluginBaseNode implements MetaNode {
 				ApplicationPluginBaseNode childResult = child.search( path, ndx + 1 );
 				if( childResult != null )
 					return childResult;
-			}		
+			}					
 			return null;
 		}
 		return null;		
