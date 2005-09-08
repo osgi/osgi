@@ -184,6 +184,124 @@ class ArgumentIDNode extends ApplicationPluginBaseNode {
 	}
 }
 
+class ScheduleIDNode extends ApplicationPluginBaseNode {
+	private Hashtable  schedulesByPidHash = new Hashtable();
+	
+	/* TODO */
+	
+	ScheduleIDNode() {
+		super();		
+		canAdd = canDelete = true;
+	}
+	
+	public String[] getNames( String []path ) {
+		String pid = ApplicationPlugin.getPID( path );
+		Hashtable scheduleHash = (Hashtable)schedulesByPidHash.get( pid );
+		if( scheduleHash == null )
+			return new String [ 0 ];
+		
+		synchronizeHashWithRegistry( scheduleHash );
+		
+		String result[] = new String [ scheduleHash.size() ];
+		Enumeration enum = scheduleHash.keys();
+		int i=0;
+		while( enum.hasMoreElements() )
+			result[ i++ ] = (String)enum.nextElement();
+		
+		return result;
+	}
+	
+	
+	
+	void synchronizeHashWithRegistry( Hashtable scheduleHash ) {
+		try {			
+			ServiceReference refs[] = ApplicationPlugin.bc.getServiceReferences( ScheduledApplication.class.getName(), null );
+			
+			boolean findInHash[] = new boolean [ refs.length ];
+			for( int w=0; w != refs.length; w++ )
+				findInHash[ w ] = false;
+			
+			Enumeration enum = scheduleHash.keys();
+			while( enum.hasMoreElements() ) {
+				String key = (String)enum.nextElement();
+				ScheduledItem item = (ScheduledItem)scheduleHash.get( key );
+				
+				boolean foundReference = false;
+				for( int i=0; i != refs.length; i++ )
+					if( item.servRef == refs[ i ] ) {
+						foundReference = true;
+						findInHash[ i ] = true;
+						break;
+					}
+				
+				if( !foundReference && item.enabled ) {  /* a real reference was deleted ? */
+					scheduleHash.remove( key ); /* remove the item from the hash as well */
+					enum = scheduleHash.keys(); /* restart check because of delete */
+				}
+			}
+			
+			for( int j=0; j != findInHash.length; j++ ) {
+				if( !findInHash[ j ] ) {       /* the reference is missing from the hash table? */
+					String key = generateKey( scheduleHash );  /* place it into the hash */
+					ScheduledItem item = new ScheduledItem();
+					item.servRef = refs[ j ];
+					item.enabled = true;
+					
+					ScheduledApplication schedApp = (ScheduledApplication)ApplicationPlugin.bc
+					                                      .getService( refs[ j ] );
+					
+					item.eventFilter = schedApp.getEventFilter();
+					item.topicFilter = schedApp.getTopic();
+					item.arguments = new Hashtable( schedApp.getArguments() );
+					item.recurring = schedApp.isRecurring();
+					
+					ApplicationPlugin.bc.ungetService( refs[ j ] );
+				}
+			}
+			
+		}catch( InvalidSyntaxException e ) {}
+	}
+	
+	void disable( ScheduledItem item ) {
+		ServiceReference ref = item.servRef;
+		if( ref != null && ref.getBundle() != null ) {
+			ScheduledApplication schedApp = (ScheduledApplication)ApplicationPlugin.bc
+			                                 .getService( ref );
+			schedApp.remove();
+			ApplicationPlugin.bc.ungetService( ref );
+		}		
+		item.servRef = null;
+		item.enabled = false;
+	}
+	
+	void enable( ScheduledItem item, ApplicationDescriptor appDesc ) {
+		if( item.enabled )
+			disable( item );
+		
+		try {
+		  appDesc.schedule( item.arguments, item.topicFilter, item.eventFilter, item.recurring );
+		  item.enabled = true;
+		}catch( Exception e ) {}
+	}
+	
+	String generateKey( Hashtable scheduleHash ) {
+		int schedNum = 1;
+		while( scheduleHash.containsKey( "S" + schedNum ) )
+			schedNum++;
+		return "S"+schedNum;
+	}
+	
+	class ScheduledItem {
+		public boolean          enabled = false;
+		public String           topicFilter = "";
+		public String           eventFilter = "";
+		public boolean          recurring = false;		
+		public Hashtable        arguments = new Hashtable();
+		
+		public ServiceReference servRef = null;
+	}
+}
+
 class LaunchResultNode extends ApplicationPluginBaseNode {
 	private LaunchIDNode launchIDRef;
 	private int          kind;
@@ -203,7 +321,7 @@ class LaunchResultNode extends ApplicationPluginBaseNode {
 
 class LaunchIDNode extends ApplicationPluginBaseNode implements ArgumentInterface {
 
-	private Hashtable launchIDHash = new Hashtable();
+	private Hashtable launchIDsHash = new Hashtable();
 	private ArgumentIDNode argIDNode;
 	
 	LaunchIDNode() {
@@ -219,6 +337,11 @@ class LaunchIDNode extends ApplicationPluginBaseNode implements ArgumentInterfac
 	}
 	
 	public String[] getNames( String []path ) {
+		String pid = ApplicationPlugin.getPID( path );
+		Hashtable launchIDHash = (Hashtable)launchIDsHash.get( pid );
+		if( launchIDHash == null )
+			return new String[ 0 ];
+		
 		String elems[] = new String[ launchIDHash.size() ];
 		Enumeration enum = launchIDHash.keys();
 		int i=0;
@@ -228,17 +351,31 @@ class LaunchIDNode extends ApplicationPluginBaseNode implements ArgumentInterfac
 	}
 		
 	public void createInteriorNode(String path[], String type) throws DmtException {
+		String pid = ApplicationPlugin.getPID( path );
     String key = path[ path.length - 1 ];    
+		Hashtable launchIDHash = (Hashtable)launchIDsHash.get( pid );
+		if( launchIDHash == null ) {
+			launchIDHash = new Hashtable();
+			launchIDsHash.put( pid, launchIDHash );
+		}
     launchIDHash.put( key, new LaunchableItem() );
 	}
 	
 	public void deleteNode(String path[]) throws DmtException {
+		String pid = ApplicationPlugin.getPID( path );
     String key = path[ path.length - 1 ];    
+		Hashtable launchIDHash = (Hashtable)launchIDsHash.get( pid );
+		if( launchIDHash == null )
+			throw new DmtException(path, DmtException.NODE_NOT_FOUND, "Node not found.");
     launchIDHash.remove( key );
 	}	
 	
 	public void execute(DmtSession session, String path[], String correlator, String data) throws DmtException {
+		String pid = ApplicationPlugin.getPID( path );
     String key = path[ path.length - 1 ];
+		Hashtable launchIDHash = (Hashtable)launchIDsHash.get( pid );
+		if( launchIDHash == null )
+			throw new DmtException(path, DmtException.NODE_NOT_FOUND, "Node not found.");
     
 		LaunchableItem item = (LaunchableItem) launchIDHash.get( key );
 		if( item == null )
@@ -265,7 +402,11 @@ class LaunchIDNode extends ApplicationPluginBaseNode implements ArgumentInterfac
 	}
 
 	public String getResultValue( String path[], int kind ) throws DmtException  {
+		String pid = ApplicationPlugin.getPID( path );
 		String key = path[ 6 ];
+		Hashtable launchIDHash = (Hashtable)launchIDsHash.get( pid );
+		if( launchIDHash == null )
+			throw new DmtException(path, DmtException.NODE_NOT_FOUND, "Node not found.");
 		
 		LaunchableItem item = (LaunchableItem) launchIDHash.get( key );
 		if( item == null )
@@ -288,7 +429,11 @@ class LaunchIDNode extends ApplicationPluginBaseNode implements ArgumentInterfac
 	}
 	
 	public Hashtable getHash( String path[] ) throws DmtException {
+		String pid = ApplicationPlugin.getPID( path );
 		String key = path[ 6 ];
+		Hashtable launchIDHash = (Hashtable)launchIDsHash.get( pid );
+		if( launchIDHash == null )
+			throw new DmtException(path, DmtException.NODE_NOT_FOUND, "Node not found.");
 				
 		LaunchableItem item = (LaunchableItem) launchIDHash.get( key );
 		if( item == null )
@@ -467,7 +612,7 @@ class ApplicationIDNode extends ApplicationPluginBaseNode {
 	ApplicationIDNode() {
 		super();
 		
-		/* TODO */
+		addChildNode( new ApplicationPluginBaseNode( "Schedules", new ScheduleIDNode() ) );
 		
 		addChildNode( new ApplicationPluginBaseNode( "Operations",
 				new ApplicationPluginBaseNode("Launch", new LaunchIDNode() ),
@@ -684,6 +829,20 @@ public class ApplicationPlugin implements BundleActivator, DataPluginFactory,
 	public int getNodeVersion(String[] path) throws DmtException {
 		throw new DmtException( path, DmtException.FEATURE_NOT_SUPPORTED,
                         		"Version property not supported!" ); 
+	}
+
+	static String getPID( String path[] ) {
+		String appUID = path[ 3 ];
+		try {
+			ServiceReference[] refs = bc.getServiceReferences( ApplicationDescriptor.class.getName(), 
+					"(" + Constants.SERVICE_PID + "=" + appUID + ")");
+			if ( refs == null || refs.length !=  1)
+				return null;
+			
+			return (String)refs[ 0 ].getProperty( Constants.SERVICE_PID );
+		}catch( Exception e ) {
+			return null;
+		}				
 	}
 	
 	static ServiceReference getApplicationDescriptor( String path[] ) {
