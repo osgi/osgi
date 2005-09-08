@@ -1564,7 +1564,7 @@ public class TestMidletContainerBundleActivator
   			
   			String names[]  = new String [] { "Name", "IconURI", "Version", "Vendor", 
   					                              "Locked", "PackageID", "ContainerID",
-																					"Instances", "Ext", "Operations" };
+																					"Instances", "Ext", "Operations", "Schedules" };
   			Object values[] = new Object [ names.length ];
   			
   			Map props = appDesc.getProperties( Locale.getDefault().getLanguage() );
