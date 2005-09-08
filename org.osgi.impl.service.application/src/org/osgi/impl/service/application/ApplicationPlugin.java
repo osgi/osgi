@@ -284,10 +284,12 @@ class ScheduleIDNode extends ApplicationPluginBaseNode implements ArgumentInterf
 	public String[] getNames( String []path ) {
 		String pid = ApplicationPlugin.getPID( path );
 		Hashtable scheduleHash = (Hashtable)schedulesByPidHash.get( pid );
-		if( scheduleHash == null )
-			return new String [ 0 ];
+		if( scheduleHash == null ) {
+			scheduleHash = new Hashtable();
+			schedulesByPidHash.put( pid, scheduleHash );
+		}
 		
-		synchronizeHashWithRegistry( scheduleHash );
+		synchronizeHashWithRegistry( pid, scheduleHash );
 		
 		String result[] = new String [ scheduleHash.size() ];
 		Enumeration enum = scheduleHash.keys();
@@ -401,10 +403,14 @@ class ScheduleIDNode extends ApplicationPluginBaseNode implements ArgumentInterf
     	schedulesByPidHash.remove( pid );
 	}	
 	
-	void synchronizeHashWithRegistry( Hashtable scheduleHash ) {
+	void synchronizeHashWithRegistry( String pid, Hashtable scheduleHash ) {
 		try {			
-			ServiceReference refs[] = ApplicationPlugin.bc.getServiceReferences( ScheduledApplication.class.getName(), null );
+			ServiceReference refs[] = ApplicationPlugin.bc.getServiceReferences( ScheduledApplication.class.getName(),
+                                "(" + ApplicationDescriptor.APPLICATION_PID + "=" + pid + ")");
 			
+			if( refs == null )
+				refs = new ServiceReference[ 0 ];
+
 			boolean findInHash[] = new boolean [ refs.length ];
 			for( int w=0; w != refs.length; w++ )
 				findInHash[ w ] = false;
@@ -444,6 +450,8 @@ class ScheduleIDNode extends ApplicationPluginBaseNode implements ArgumentInterf
 					item.recurring = schedApp.isRecurring();
 					
 					ApplicationPlugin.bc.ungetService( refs[ j ] );
+					
+					scheduleHash.put( key, item );					
 				}
 			}
 			
