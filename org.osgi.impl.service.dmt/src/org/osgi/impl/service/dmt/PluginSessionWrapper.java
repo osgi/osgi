@@ -47,12 +47,17 @@ public class PluginSessionWrapper implements TransactionalDataSession {
     // the root node of the session, either one of the plugin roots or a subnode
     private Node sessionRoot;
     
+    // the registration object for the plugin providing the session, used for
+    // checking that the plugin has not been unregistered
+    private PluginRegistration pluginRegistration;
+    
     // redundant information, could be calculated from session variables
     private int sessionType;
     
     // Note, that the session type reflects the kind of 
-    public PluginSessionWrapper(ReadableDataSession session, int sessionType,
-            Node sessionRoot, AccessControlContext securityContext) {
+    public PluginSessionWrapper(PluginRegistration pluginRegistration, 
+            ReadableDataSession session, int sessionType, Node sessionRoot, 
+            AccessControlContext securityContext) {
         readableDataSession = session;
         if(sessionType != DmtSession.LOCK_TYPE_SHARED) {
             readWriteDataSession = (ReadWriteDataSession) session;
@@ -62,6 +67,7 @@ public class PluginSessionWrapper implements TransactionalDataSession {
         
         this.sessionType = sessionType;
         this.sessionRoot = sessionRoot;
+        this.pluginRegistration = pluginRegistration;
     }
     
     int getSessionType() {
@@ -76,6 +82,7 @@ public class PluginSessionWrapper implements TransactionalDataSession {
         // no need to override the permissions of the plugin here,
         // only internal data structures have to be modified
         
+        checkRegistration(nodePath);
         readableDataSession.nodeChanged(nodePath);
     }
     
@@ -84,6 +91,8 @@ public class PluginSessionWrapper implements TransactionalDataSession {
      * this call is ignored
      */
     public void commit() throws DmtException {
+        checkRegistration(null);
+        
         // ignore commit for non-transactional plugins
         if(transactionalDataSession == null)
             return;
@@ -110,6 +119,8 @@ public class PluginSessionWrapper implements TransactionalDataSession {
      * this call is ignored
      */
     public void rollback() throws DmtException {
+        checkRegistration(null);
+        
         // ignore rollback for non-transactional plugins
         if(transactionalDataSession == null)
             return;
@@ -134,6 +145,8 @@ public class PluginSessionWrapper implements TransactionalDataSession {
     
     public void setNodeTitle(final String[] path, final String title)
             throws DmtException {
+        checkRegistration(path);
+        
         if (securityContext == null) {                      // local caller
             readWriteDataSession.setNodeTitle(path, title);
             return;
@@ -154,6 +167,8 @@ public class PluginSessionWrapper implements TransactionalDataSession {
     
     public void setNodeValue(final String[] path, final DmtData data)
             throws DmtException {
+        checkRegistration(path);
+        
         if (securityContext == null) {                      // local caller
             readWriteDataSession.setNodeValue(path, data);
             return;
@@ -174,6 +189,8 @@ public class PluginSessionWrapper implements TransactionalDataSession {
 
     public void setNodeType(final String[] path, final String type)
             throws DmtException {
+        checkRegistration(path);
+        
         if (securityContext == null) {                      // local caller
             readWriteDataSession.setNodeType(path, type);
             return;
@@ -193,6 +210,8 @@ public class PluginSessionWrapper implements TransactionalDataSession {
     }
 
     public void deleteNode(final String[] path) throws DmtException {
+        checkRegistration(path);
+        
         if (securityContext == null) {                      // local caller
             readWriteDataSession.deleteNode(path);
             return;
@@ -213,6 +232,8 @@ public class PluginSessionWrapper implements TransactionalDataSession {
 
     public void createInteriorNode(final String[] path, final String type)
             throws DmtException {
+        checkRegistration(path);
+        
         if (securityContext == null) {                      // local caller
             readWriteDataSession.createInteriorNode(path, type);
             return;
@@ -233,6 +254,8 @@ public class PluginSessionWrapper implements TransactionalDataSession {
 
     public void createLeafNode(final String[] path, final DmtData value, 
             final String mimeType) throws DmtException {
+        checkRegistration(path);
+        
         if (securityContext == null) {                      // local caller
             readWriteDataSession.createLeafNode(path, value, mimeType);
             return;
@@ -252,6 +275,8 @@ public class PluginSessionWrapper implements TransactionalDataSession {
     
     public void copy(final String[] path, final String[] newPath,
             final boolean recursive) throws DmtException {
+        checkRegistration(path);
+        
         if (securityContext == null) {                      // local caller
             readWriteDataSession.copy(path, newPath, recursive);
             return;
@@ -272,6 +297,8 @@ public class PluginSessionWrapper implements TransactionalDataSession {
 
     public void renameNode(final String[] path, final String newName)
             throws DmtException {
+        checkRegistration(path);
+        
         if (securityContext == null) {                      // local caller
             readWriteDataSession.renameNode(path, newName);
             return;
@@ -291,6 +318,8 @@ public class PluginSessionWrapper implements TransactionalDataSession {
     }
 
     public void close() throws DmtException {
+        checkRegistration(null);
+        
         if (securityContext == null) {                      // local caller
             readableDataSession.close();
             return;
@@ -310,6 +339,8 @@ public class PluginSessionWrapper implements TransactionalDataSession {
     }
 
     public boolean isNodeUri(final String[] path) {
+        checkRegistration(path);
+        
         if (securityContext == null)                        // local caller
             return readableDataSession.isNodeUri(path);
         
@@ -324,6 +355,8 @@ public class PluginSessionWrapper implements TransactionalDataSession {
     }
 
     public boolean isLeafNode(final String[] path) throws DmtException {
+        checkRegistration(path);
+
         if (securityContext == null)                        // local caller
             return readableDataSession.isLeafNode(path);
         
@@ -342,6 +375,8 @@ public class PluginSessionWrapper implements TransactionalDataSession {
     }
     
     public DmtData getNodeValue(final String[] path) throws DmtException {
+        checkRegistration(path);
+
         if (securityContext == null)                        // local caller
             return readableDataSession.getNodeValue(path);
         
@@ -359,6 +394,8 @@ public class PluginSessionWrapper implements TransactionalDataSession {
     }
 
     public String getNodeTitle(final String[] path) throws DmtException {
+        checkRegistration(path);
+
         if (securityContext == null)                        // local caller
             return readableDataSession.getNodeTitle(path);
         
@@ -376,6 +413,8 @@ public class PluginSessionWrapper implements TransactionalDataSession {
     }
 
     public String getNodeType(final String[] path) throws DmtException {
+        checkRegistration(path);
+
         if (securityContext == null)                        // local caller
             return readableDataSession.getNodeType(path);
         
@@ -393,6 +432,8 @@ public class PluginSessionWrapper implements TransactionalDataSession {
     }
 
     public int getNodeVersion(final String[] path) throws DmtException {
+        checkRegistration(path);
+
         if (securityContext == null)                        // local caller
             return readableDataSession.getNodeVersion(path);
         
@@ -411,6 +452,8 @@ public class PluginSessionWrapper implements TransactionalDataSession {
     }
 
     public Date getNodeTimestamp(final String[] path) throws DmtException {
+        checkRegistration(path);
+
         if (securityContext == null)                        // local caller
             return readableDataSession.getNodeTimestamp(path);
         
@@ -428,6 +471,8 @@ public class PluginSessionWrapper implements TransactionalDataSession {
     }
 
     public int getNodeSize(final String[] path) throws DmtException {
+        checkRegistration(path);
+
         if (securityContext == null)                        // local caller
             return readableDataSession.getNodeSize(path);
         
@@ -447,6 +492,8 @@ public class PluginSessionWrapper implements TransactionalDataSession {
     }
 
     public String[] getChildNodeNames(final String[] path) throws DmtException {
+        checkRegistration(path);
+
         if (securityContext == null)                        // local caller
             return readableDataSession.getChildNodeNames(path);
         
@@ -464,6 +511,8 @@ public class PluginSessionWrapper implements TransactionalDataSession {
     }
 
     public MetaNode getMetaNode(final String[] path) throws DmtException {
+        checkRegistration(path);
+
         if (securityContext == null)                        // local caller
             return readableDataSession.getMetaNode(path);
         
@@ -493,4 +542,9 @@ public class PluginSessionWrapper implements TransactionalDataSession {
     public int hashCode() {
         return sessionRoot.hashCode() ^ readableDataSession.hashCode();
     } 
+    
+    private void checkRegistration(String[] path) {
+        if(!pluginRegistration.isRegistered())
+            throw new PluginUnregisteredException(path);
+    }
 }

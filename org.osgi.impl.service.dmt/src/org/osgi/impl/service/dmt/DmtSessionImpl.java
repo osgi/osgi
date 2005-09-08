@@ -32,6 +32,8 @@ import org.osgi.service.permissionadmin.PermissionInfo;
 // Needed for meta-data name and value pattern matching
 //import java.util.regex.Pattern;
 
+// TODO clean up plugin unregistration error case
+
 // OPTIMIZE node handling (e.g. retrieve plugin from dispatcher only once per API call), maybe with new URI class
 // OPTIMIZE only retrieve meta-data once per API call
 // OPTIMIZE only call commit/rollback for plugins that were actually modified since the last transaction boundary
@@ -1130,8 +1132,8 @@ public class DmtSessionImpl implements DmtSession {
                     openPluginSession(plugin, root, pluginSessionType);
             }
 
-            wrappedPlugin = new PluginSessionWrapper(pluginSession, 
-                    pluginSessionType, root, securityContext);
+            wrappedPlugin = new PluginSessionWrapper(pluginRegistration,
+                    pluginSession, pluginSessionType, root, securityContext);
             
             // this requires synchronized access
             dataPlugins.put(root.getUri(), wrappedPlugin);
@@ -1142,6 +1144,7 @@ public class DmtSessionImpl implements DmtSession {
     
     private Node getRootForPlugin(PluginRegistration plugin, Node node) {
         Node[] roots = plugin.getDataRoots();
+        
         for(int i = 0; i < roots.length; i++)
             if(roots[i].isAncestorOf(node))
                 return roots[i].isAncestorOf(subtreeNode) 

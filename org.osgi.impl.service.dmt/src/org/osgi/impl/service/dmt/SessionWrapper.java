@@ -41,12 +41,16 @@ class SessionWrapper extends DmtSessionImpl {
     }
     
     void open() throws DmtException {
-        super.open();
+        try {
+            super.open();
+        } catch(PluginUnregisteredException e) {
+            throw new IllegalStateException(e.getMessage());
+        }
         startTimer(); // this is the first time the timer is started
     }
     
     // convenience method for fatal errors in normal DMT access methods
-    void invalidateSession() {
+    private void invalidateSession() {
         invalidateSession(true, false);
     }
     
@@ -59,7 +63,11 @@ class SessionWrapper extends DmtSessionImpl {
     
     public void close() throws DmtException {
         removeTimer(); // timer is stopped for good if session is closed
-        super.close();
+        try {
+            super.close();
+        } catch(PluginUnregisteredException e) {
+            throw new IllegalStateException(e.getMessage());
+        }
     }
     
     public void execute(String nodeUri, String data) throws DmtException {
@@ -70,6 +78,9 @@ class SessionWrapper extends DmtSessionImpl {
             if(e.isFatal())
                 invalidateSession();
             throw e;
+        } catch(PluginUnregisteredException e) {
+            invalidateSession();
+            throw new IllegalStateException(e.getMessage());
         } finally {
             startTimer();
         }
@@ -84,6 +95,9 @@ class SessionWrapper extends DmtSessionImpl {
             if(e.isFatal())
                 invalidateSession();
             throw e;
+        } catch(PluginUnregisteredException e) {
+            invalidateSession();
+            throw new IllegalStateException(e.getMessage());
         } finally {
             startTimer();
         }
@@ -97,6 +111,9 @@ class SessionWrapper extends DmtSessionImpl {
             if(e.isFatal())
                 invalidateSession();
             throw e;
+        } catch(PluginUnregisteredException e) {
+            invalidateSession();
+            throw new IllegalStateException(e.getMessage());
         } finally {
             startTimer();
         }
@@ -110,6 +127,9 @@ class SessionWrapper extends DmtSessionImpl {
             if(e.isFatal())
                 invalidateSession();
             throw e;
+        } catch(PluginUnregisteredException e) {
+            invalidateSession();
+            throw new IllegalStateException(e.getMessage());
         } finally {
             startTimer();
         }
@@ -123,6 +143,9 @@ class SessionWrapper extends DmtSessionImpl {
             if(e.isFatal())
                 invalidateSession();
             throw e;
+        } catch(PluginUnregisteredException e) {
+            invalidateSession();
+            throw new IllegalStateException(e.getMessage());
         } finally {
             startTimer();
         }
@@ -135,6 +158,9 @@ class SessionWrapper extends DmtSessionImpl {
         } catch(DmtException e) {
             invalidateSession(false, false);
             throw e;
+        } catch(PluginUnregisteredException e) {
+            invalidateSession();
+            throw new IllegalStateException(e.getMessage());
         } catch(RuntimeException e) {
             invalidateSession(false, false);
             throw e;
@@ -150,6 +176,9 @@ class SessionWrapper extends DmtSessionImpl {
         } catch(DmtException e) {
             invalidateSession(false, false);
             throw e;
+        } catch(PluginUnregisteredException e) {
+            invalidateSession();
+            throw new IllegalStateException(e.getMessage());
         } catch(RuntimeException e) {
             invalidateSession(false, false);
             throw e;
@@ -166,6 +195,9 @@ class SessionWrapper extends DmtSessionImpl {
             if(e.isFatal())
                 invalidateSession();
             throw e;
+        } catch(PluginUnregisteredException e) {
+            invalidateSession();
+            throw new IllegalStateException(e.getMessage());
         } finally {
             startTimer();
         }
@@ -179,6 +211,9 @@ class SessionWrapper extends DmtSessionImpl {
             if(e.isFatal())
                 invalidateSession();
             throw e;
+        } catch(PluginUnregisteredException e) {
+            invalidateSession();
+            throw new IllegalStateException(e.getMessage());
         } finally {
             startTimer();
         }
@@ -192,6 +227,9 @@ class SessionWrapper extends DmtSessionImpl {
             if(e.isFatal())
                 invalidateSession();
             throw e;
+        } catch(PluginUnregisteredException e) {
+            invalidateSession();
+            throw new IllegalStateException(e.getMessage());
         } finally {
             startTimer();
         }
@@ -205,6 +243,9 @@ class SessionWrapper extends DmtSessionImpl {
             if(e.isFatal())
                 invalidateSession();
             throw e;
+        } catch(PluginUnregisteredException e) {
+            invalidateSession();
+            throw new IllegalStateException(e.getMessage());
         } finally {
             startTimer();
         }
@@ -218,6 +259,9 @@ class SessionWrapper extends DmtSessionImpl {
             if(e.isFatal())
                 invalidateSession();
             throw e;
+        } catch(PluginUnregisteredException e) {
+            invalidateSession();
+            throw new IllegalStateException(e.getMessage());
         } finally {
             startTimer();
         }
@@ -231,6 +275,9 @@ class SessionWrapper extends DmtSessionImpl {
             if(e.isFatal())
                 invalidateSession();
             throw e;
+        } catch(PluginUnregisteredException e) {
+            invalidateSession();
+            throw new IllegalStateException(e.getMessage());
         } finally {
             startTimer();
         }
@@ -245,6 +292,9 @@ class SessionWrapper extends DmtSessionImpl {
             if(e.isFatal())
                 invalidateSession();
             throw e;
+        } catch(PluginUnregisteredException e) {
+            invalidateSession();
+            throw new IllegalStateException(e.getMessage());
         } finally {
             startTimer();
         }
@@ -258,6 +308,9 @@ class SessionWrapper extends DmtSessionImpl {
             if(e.isFatal())
                 invalidateSession();
             throw e;
+        } catch(PluginUnregisteredException e) {
+            invalidateSession();
+            throw new IllegalStateException(e.getMessage());
         } finally {
             startTimer();
         }
@@ -272,6 +325,9 @@ class SessionWrapper extends DmtSessionImpl {
             if(e.isFatal())
                 invalidateSession();
             throw e;
+        } catch(PluginUnregisteredException e) {
+            invalidateSession();
+            throw new IllegalStateException(e.getMessage());
         } finally {
             startTimer();
         }
@@ -286,6 +342,9 @@ class SessionWrapper extends DmtSessionImpl {
             if(e.isFatal())
                 invalidateSession();
             throw e;
+        } catch(PluginUnregisteredException e) {
+            invalidateSession();
+            throw new IllegalStateException(e.getMessage());
         } finally {
             startTimer();
         }
@@ -300,6 +359,9 @@ class SessionWrapper extends DmtSessionImpl {
             if(e.isFatal())
                 invalidateSession();
             throw e;
+        } catch(PluginUnregisteredException e) {
+            invalidateSession();
+            throw new IllegalStateException(e.getMessage());
         } finally {
             startTimer();
         }
@@ -313,6 +375,9 @@ class SessionWrapper extends DmtSessionImpl {
             if(e.isFatal())
                 invalidateSession();
             throw e;
+        } catch(PluginUnregisteredException e) {
+            invalidateSession();
+            throw new IllegalStateException(e.getMessage());
         } finally {
             startTimer();
         }
@@ -322,6 +387,9 @@ class SessionWrapper extends DmtSessionImpl {
         stopTimer();
         try {
             return super.isNodeUri(nodeUri);
+        } catch(PluginUnregisteredException e) {
+            invalidateSession();
+            throw new IllegalStateException(e.getMessage());
         } finally {
             startTimer();
         }
@@ -335,6 +403,9 @@ class SessionWrapper extends DmtSessionImpl {
             if(e.isFatal())
                 invalidateSession();
             throw e;
+        } catch(PluginUnregisteredException e) {
+            invalidateSession();
+            throw new IllegalStateException(e.getMessage());
         } finally {
             startTimer();
         }
@@ -348,6 +419,9 @@ class SessionWrapper extends DmtSessionImpl {
             if(e.isFatal())
                 invalidateSession();
             throw e;
+        } catch(PluginUnregisteredException e) {
+            invalidateSession();
+            throw new IllegalStateException(e.getMessage());
         } finally {
             startTimer();
         }
@@ -361,6 +435,9 @@ class SessionWrapper extends DmtSessionImpl {
             if(e.isFatal())
                 invalidateSession();
             throw e;
+        } catch(PluginUnregisteredException e) {
+            invalidateSession();
+            throw new IllegalStateException(e.getMessage());
         } finally {
             startTimer();
         }
@@ -374,6 +451,9 @@ class SessionWrapper extends DmtSessionImpl {
             if(e.isFatal())
                 invalidateSession();
             throw e;
+        } catch(PluginUnregisteredException e) {
+            invalidateSession();
+            throw new IllegalStateException(e.getMessage());
         } finally {
             startTimer();
         }
@@ -387,6 +467,9 @@ class SessionWrapper extends DmtSessionImpl {
             if(e.isFatal())
                 invalidateSession();
             throw e;
+        } catch(PluginUnregisteredException e) {
+            invalidateSession();
+            throw new IllegalStateException(e.getMessage());
         } finally {
             startTimer();
         }
@@ -400,6 +483,9 @@ class SessionWrapper extends DmtSessionImpl {
             if(e.isFatal())
                 invalidateSession();
             throw e;
+        } catch(PluginUnregisteredException e) {
+            invalidateSession();
+            throw new IllegalStateException(e.getMessage());
         } finally {
             startTimer();
         }
@@ -413,6 +499,9 @@ class SessionWrapper extends DmtSessionImpl {
             if(e.isFatal())
                 invalidateSession();
             throw e;
+        } catch(PluginUnregisteredException e) {
+            invalidateSession();
+            throw new IllegalStateException(e.getMessage());
         } finally {
             startTimer();
         }
@@ -426,6 +515,9 @@ class SessionWrapper extends DmtSessionImpl {
             if(e.isFatal())
                 invalidateSession();
             throw e;
+        } catch(PluginUnregisteredException e) {
+            invalidateSession();
+            throw new IllegalStateException(e.getMessage());
         } finally {
             startTimer();
         }
@@ -439,11 +531,14 @@ class SessionWrapper extends DmtSessionImpl {
             if(e.isFatal())
                 invalidateSession();
             throw e;
+        } catch(PluginUnregisteredException e) {
+            invalidateSession();
+            throw new IllegalStateException(e.getMessage());
         } finally {
             startTimer();
         }
     }
-
+    
     private synchronized void stopTimer() {
         if(invalidateTask == null)
             return;

@@ -36,7 +36,7 @@ public class PluginDispatcher implements ServiceTrackerCustomizer {
         // root plugin could be a normal plugin when overlapping is allowed
         DataPluginFactory root = new RootPlugin(this); 
         rootPlugin = 
-            new PluginRegistration(root, new Node[] { Node.ROOT_NODE }, 
+            new PluginRegistration(null, root, new Node[] { Node.ROOT_NODE }, 
                     new Node[] {});
     }
 
@@ -78,7 +78,7 @@ public class PluginDispatcher implements ServiceTrackerCustomizer {
             return null;
         }
 
-        PluginRegistration plugin = new PluginRegistration(
+        PluginRegistration plugin = new PluginRegistration(serviceRef,
                 context.getBundleContext().getService(serviceRef), roots, execs);
         plugins.add(plugin);
         

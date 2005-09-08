@@ -19,17 +19,20 @@ package org.osgi.impl.service.dmt;
 
 import java.util.List;
 import java.util.Vector;
+import org.osgi.framework.ServiceReference;
 import org.osgi.service.dmt.spi.DataPluginFactory;
 import org.osgi.service.dmt.spi.ExecPlugin;
 
 class PluginRegistration {
-	private Object   plugin;
+	private Object plugin;
 	private Node[] roots;
 	private Node[] execs;
+    private ServiceReference pluginRef;
     
 	// precondition: roots != null && execs != null && 
     //               (roots.length != 0 || execs.length != 0)
-	PluginRegistration(Object plugin, Node[] roots, Node[] execs) {
+	PluginRegistration(ServiceReference pluginRef, Object plugin, 
+            Node[] roots, Node[] execs) {
 		if (roots.length > 0 && !(plugin instanceof DataPluginFactory))
 			throw new IllegalArgumentException(
 					"The plugin must implement DataPluginFactory if data " +
@@ -40,6 +43,7 @@ class PluginRegistration {
                     "specified");
         
 		this.plugin = plugin;
+        this.pluginRef = pluginRef;
 		this.roots = roots;
 		this.execs = execs;
 	}
@@ -101,5 +105,9 @@ class PluginRegistration {
                 childRootNames.add(roots[i].getLastSegment());
             
         return childRootNames;
+    }
+    
+    boolean isRegistered() {
+        return pluginRef == null || pluginRef.getBundle() != null;
     }
 }
