@@ -382,9 +382,13 @@ public abstract class ApplicationDescriptor {
 
 	{
 		try {
-			cName = System
-					.getProperty("org.osgi.vendor.application.ApplicationDescriptor");
-			implementation = Class.forName(cName);
+		  AccessController.doPrivileged(new PrivilegedExceptionAction() {
+			  public Object run() throws Exception {			
+					cName = System.getProperty("org.osgi.vendor.application.ApplicationDescriptor");
+    			implementation = Class.forName(cName);
+				  return null;
+			  }
+		  });
 		}
 		catch (Throwable t) {
 			// Ignore

@@ -10,6 +10,9 @@
 
 package org.osgi.service.application;
 
+import java.security.AccessController;
+import java.security.PrivilegedExceptionAction;
+
 import org.osgi.framework.Constants;
 
 /**
@@ -172,9 +175,13 @@ public abstract class ApplicationHandle {
 	static String				cName;
 	{
 		try {
-			cName = System
-					.getProperty("org.osgi.vendor.application.ApplicationHandle");
-			implementation = Class.forName(cName);
+		  AccessController.doPrivileged(new PrivilegedExceptionAction() {
+			  public Object run() throws Exception {			
+					cName = System.getProperty("org.osgi.vendor.application.ApplicationHandle");
+			    implementation = Class.forName(cName);
+				  return null;
+			  }
+		  });
 		}
 		catch (Throwable t) {
 			// Ignore
