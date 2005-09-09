@@ -493,6 +493,8 @@ class ScheduleIDNode extends ApplicationPluginBaseNode implements ArgumentInterf
 		  ScheduledApplication schedApp = appDesc.schedule( argIDNode.getArguments( item.arguments ), item.topicFilter, item.eventFilter, item.recurring );
 		  item.enabled = true;
 		  
+		  /* TODO */
+		  
 		  ServiceReference refs[] = ApplicationPlugin.bc.getServiceReferences( ScheduledApplication.class.getName(), 
 		  		"(" + ApplicationDescriptor.APPLICATION_PID + "=" + 
 					appDescRef.getProperty( Constants.SERVICE_PID ) + ")");
@@ -623,7 +625,7 @@ class LaunchIDNode extends ApplicationPluginBaseNode implements ArgumentInterfac
 		item.resultStatus = "";
 		try {
 			ApplicationHandle appHnd = appDesc.launch( args );
-			item.resultInstanceID = appHnd.getInstanceID();
+			item.resultInstanceID = appHnd.getInstanceId();
 			item.resultStatus = "OK";
 		}catch( Exception e ) {
 			item.resultMessage = e.getMessage();
