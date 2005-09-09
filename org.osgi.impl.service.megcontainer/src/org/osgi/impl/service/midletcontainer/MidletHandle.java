@@ -105,7 +105,7 @@ public final class MidletHandle extends ApplicationHandle {
 
 	private Hashtable properties() {
 		Hashtable props = new Hashtable();
-		props.put(Constants.SERVICE_PID, getInstanceID());
+		props.put(Constants.SERVICE_PID, getInstanceId());
 		props.put(ApplicationHandle.APPLICATION_STATE, status);
 		props.put(ApplicationHandle.APPLICATION_DESCRIPTOR, midletDescriptor.getPID());
 		return props;
