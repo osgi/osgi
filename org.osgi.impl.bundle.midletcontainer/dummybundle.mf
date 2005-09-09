@@ -1,0 +1,8 @@
+Manifest-Version: 1.0
+Bundle-Name: Dummy Bundle
+Bundle-SymbolicName: com.nokia.test.dummybundle
+Bundle-Vendor: Nokia
+Bundle-Version: 1.0
+Bundle-ClassPath: .
+Bundle-Activator: com.nokia.test.dummybundle.DummyBundleActivator
+Import-Package: org.osgi.framework
