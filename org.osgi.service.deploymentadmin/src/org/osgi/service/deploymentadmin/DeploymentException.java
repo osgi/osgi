@@ -133,7 +133,7 @@ public class DeploymentException extends Exception {
 	 * @param code The error code of the failure. Code should be one of the
 	 *        predefined integer values (<code>CODE_X</code>).
 	 * @param message Message associated with the exception
-	 * @param causes the originating exception
+	 * @param cause the originating exception
 	 */
 	public DeploymentException(int code, String message, Throwable cause) {
 		this.code = code;

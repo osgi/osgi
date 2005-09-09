@@ -48,7 +48,8 @@ public interface DeploymentAdmin {
       *         installed deployment packages (including the "System" deployment package). 
       *         The return value cannot be null. In case of missing permissions it may 
       *         give back an empty array.
-      * @see DeploymentPackage, DeploymentAdminPermission
+      * @see DeploymentPackage
+      * @see DeploymentAdminPermission
       */
     DeploymentPackage[] listDeploymentPackages();
 
@@ -59,14 +60,15 @@ public interface DeploymentAdmin {
      * During an installation of an existing package (update), the target deployment package 
      * must remain the return value until the installation process is completed, after which 
      * the source is the return value.
-     * @param  the symbolic name of the deployment package to be retrieved. It mustn't be null.
+     * @param  symbName the symbolic name of the deployment package to be retrieved. It mustn't be null.
      * @return The <code>DeploymentPackage</code> for the given symbolic name. 
      *         If there is no deployment package with that symbolic name currently installed, 
      *         null is returned.
      * @throws SecurityException if access to the deployment package identified by the symbolic name 
      * 	       is not permitted based on the current security policy.
      * @throws IllegalArgumentException if the given <code>symbName</code> is null
-     * @see DeploymentPackage, DeploymentAdminPermission
+     * @see DeploymentPackage
+     * @see DeploymentAdminPermission
      */
     DeploymentPackage getDeploymentPackage(String symbName);  
   
