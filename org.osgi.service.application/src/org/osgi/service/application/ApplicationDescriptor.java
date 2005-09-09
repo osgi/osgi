@@ -127,7 +127,7 @@ public abstract class ApplicationDescriptor {
 	 * 
 	 * @return the identifier of the represented application
 	 */
-	protected final String getApplicationId() {
+	public final String getApplicationId() {
 		return pid;
 	}
 
@@ -192,7 +192,7 @@ public abstract class ApplicationDescriptor {
 	protected abstract Map getPropertiesSpecific(String locale);
 
 	/**
-	 * Launches a new instance of an application. The args parameter specifies
+	 * Launches a new instance of an application. The <code>args</code> parameter specifies
 	 * the startup parameters for the instance to be launched, it may be null.
 	 * <p>
 	 * The following steps are made:
@@ -200,7 +200,7 @@ public abstract class ApplicationDescriptor {
 	 * <LI>Check for the appropriate permission.
 	 * <LI>Check the locking state of the application. If locked then return
 	 * null otherwise continue.
-	 * <LI>Calls the launchSpecific() method to create and start an application
+	 * <LI>Calls the <code>launchSpecific()</code> method to create and start an application
 	 * instance.
 	 * <LI>Returns the <code>ApplicationHandle</code> returned by the 
 	 * launchSpecific()
@@ -211,10 +211,9 @@ public abstract class ApplicationDescriptor {
 	 * The <code>Map</code> argument of the launch method contains startup 
 	 * arguments for the
 	 * application. The keys used in the Map can be standard or application
-	 * specific. MEG defines the
-	 * #### .osgi.triggeringevent (contained funny character)
+	 * specific. MEG defines the <code>org.osgi.triggeringevent</code>
 	 * key to be used to
-	 * pass the triggering event to a scheduled application (see [ref]), however
+	 * pass the triggering event to a scheduled application, however
 	 * in the future it is possible that other well-known keys will be defined.
 	 * To avoid unwanted clashes of keys, the following rules should be applied:
 	 * <ul>
@@ -394,5 +393,4 @@ public abstract class ApplicationDescriptor {
 			// Ignore
 		}
 	}
-
 }

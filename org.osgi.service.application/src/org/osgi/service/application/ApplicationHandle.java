@@ -44,6 +44,12 @@ public abstract class ApplicationHandle {
 	 * created application instance.
 	 */
 	public final static String RUNNING = "RUNNING";
+	
+  /**
+   * The application instance is being stopped. This is the state of the
+   * application instance during the execution of the <code>destroy()</code>
+   * method.
+   */
 	public final static String STOPPING = "STOPPING";
 
 	private final String instanceId;
@@ -117,7 +123,7 @@ public abstract class ApplicationHandle {
 	 * 
 	 * @return the unique identifier of the instance
 	 */
-	public final String getInstanceID() {
+	public final String getInstanceId() {
 		return this.instanceId;
 	}
 

@@ -68,7 +68,7 @@ public class ApplicationAdminPermission extends BasicPermission {
 	 *                is thrown if the actions parameter is <code>null</code>
 	 */
 	public ApplicationAdminPermission(String filter, String actions) {
-		super(filter == null ? "*" : actions);
+		super(filter == null ? "*" : filter);
 		
 		actionsVector = actionsVector( actions );
 
@@ -85,11 +85,8 @@ public class ApplicationAdminPermission extends BasicPermission {
 
       ApplicationAdminPermission other = (ApplicationAdminPermission) p;
       
-      if( getName().equals("<All>") )
-      {      	
-      	if( !other.getName().equals( getName() ) )
-      		return false;
-      }
+      if( ! super.implies(other) )
+      	return false;
       
       if( !actionsVector.containsAll( other.actionsVector ) )
       	return false;
@@ -100,9 +97,9 @@ public class ApplicationAdminPermission extends BasicPermission {
   private static final Vector ACTIONS = new Vector();
   private Vector actionsVector;
   static {
-      ACTIONS.add(LIFECYCLE.toLowerCase());
-      ACTIONS.add(SCHEDULE.toLowerCase());
-      ACTIONS.add(LOCK.toLowerCase());
+      ACTIONS.add(LIFECYCLE);
+      ACTIONS.add(SCHEDULE);
+      ACTIONS.add(LOCK);
   }
 
   private static Vector actionsVector(String actions) {
