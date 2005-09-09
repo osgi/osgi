@@ -315,7 +315,10 @@ class ScheduleIDNode extends ApplicationPluginBaseNode implements ArgumentInterf
 			case 1:
 				return new DmtData( item.topicFilter );
 			case 2:
-				return new DmtData( item.eventFilter );
+				if( item.eventFilter == null )
+					return DmtData.NULL_VALUE;
+				else
+				  return new DmtData( item.eventFilter );
 			case 3:
 				return new DmtData( item.recurring );
 		}
@@ -343,7 +346,10 @@ class ScheduleIDNode extends ApplicationPluginBaseNode implements ArgumentInterf
 				disable( item );
 				break;
 			case 2:
-				item.eventFilter = value.getString();
+				if( value.getFormat() == DmtData.FORMAT_NULL )
+					item.eventFilter = null;
+				else
+				  item.eventFilter = value.getString();
 				disable( item );
 				break;
 			case 3:
@@ -389,7 +395,7 @@ class ScheduleIDNode extends ApplicationPluginBaseNode implements ArgumentInterf
 			scheduleHash = new Hashtable();
 			schedulesByPidHash.put( pid, scheduleHash );
 		}
-		schedulesByPidHash.put( key, new ScheduledItem() );
+		scheduleHash.put( key, new ScheduledItem() );
 	}
 	
 	public void deleteNode(String path[]) throws DmtException {
@@ -398,7 +404,11 @@ class ScheduleIDNode extends ApplicationPluginBaseNode implements ArgumentInterf
 		Hashtable scheduleHash = (Hashtable)schedulesByPidHash.get( pid );
 		if( scheduleHash == null )
 			throw new DmtException(path, DmtException.NODE_NOT_FOUND, "Node not found.");
-		scheduleHash.remove( key );
+		
+		ScheduledItem item = (ScheduledItem)scheduleHash.remove( key );
+		if( item != null )
+			disable( item );
+		
     if( scheduleHash.size() == 0 )
     	schedulesByPidHash.remove( pid );
 	}	
@@ -446,7 +456,10 @@ class ScheduleIDNode extends ApplicationPluginBaseNode implements ArgumentInterf
 					
 					item.eventFilter = schedApp.getEventFilter();
 					item.topicFilter = schedApp.getTopic();
-					item.arguments = argIDNode.toArgIDHash( schedApp.getArguments() );
+					Map args = schedApp.getArguments();
+					if( args == null )
+						args = new HashMap();
+					item.arguments = argIDNode.toArgIDHash( args );
 					item.recurring = schedApp.isRecurring();
 					
 					ApplicationPlugin.bc.ungetService( refs[ j ] );
