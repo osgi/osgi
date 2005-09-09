@@ -11,7 +11,7 @@ import org.osgi.framework.*;
  * will not be reused after destorying the corresponding application instace.
  * <p/>
  * Application instances can obtain their <code>ApplicationContext</code>
- * using the {@link Framework#getMyApplicationContext} method.
+ * using the {@link Framework#getApplicationContext} method.
  * 
  * @see org.osgi.application.Framework
  */
@@ -206,9 +206,25 @@ public interface ApplicationContext {
     public Map getStartupParameters();
 
     
+    /**
+     * ### Missing doc
+     * TODO
+     * @param clazzes
+     * @param service
+     * @param properties
+     * @return The ServiceRegistrationn for this service
+     */
     public ServiceRegistration registerService(String[] clazzes,
             Object service, Dictionary properties);
 
+    /**
+     * ### Missing doc
+     * TODO
+     * @param clazz
+     * @param service
+     * @param properties
+     * @return The ServiceRegistrationn for this service
+     */
     public ServiceRegistration registerService(String clazz, Object service,
             Dictionary properties);
 }
