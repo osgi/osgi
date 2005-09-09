@@ -32,6 +32,7 @@ import java.util.Date;
 import org.osgi.framework.Bundle;
 import org.osgi.impl.service.deploymentadmin.DAConstants;
 import org.osgi.impl.service.deploymentadmin.DeploymentPackageImpl;
+import org.osgi.impl.service.deploymentadmin.Logger;
 import org.osgi.impl.service.deploymentadmin.Metanode;
 import org.osgi.impl.service.deploymentadmin.PluginCtx;
 import org.osgi.service.dmt.DmtAdmin;
@@ -52,9 +53,12 @@ public class PluginDelivered implements DataPluginFactory, ReadableDataSession,
 	    if (null == delArea)
 	        delArea = "/temp";
 	    store = new File(delArea);
-	    if (!store.exists())
-	        throw new RuntimeException("Delivered area ('" + delArea + "') does not exist. " +
-                "Set the " + DAConstants.DELIVERED_AREA + " system property");
+	    if (!store.exists()) {
+            pluginCtx.getLogger().log(Logger.LOG_WARNING, "Delivered area ('" + 
+                    delArea + "') does not exist. Set the " + 
+                    DAConstants.DELIVERED_AREA + " system property");
+            store = null;
+        }
         
 		this.pluginCtx = pluginCtx;		
 	}
@@ -91,7 +95,7 @@ public class PluginDelivered implements DataPluginFactory, ReadableDataSession,
          	return false;
         if (l == 5)
             return true;
-        if (!Arrays.asList(getFiles(nodeUriArr)).contains(new File(store, nodeUriArr[5])))
+        if (!fileExists(nodeUriArr))
             return false;
         if (l == 6)
             return true;
@@ -116,7 +120,7 @@ public class PluginDelivered implements DataPluginFactory, ReadableDataSession,
             throw new RuntimeException("Internal error");
         if (l == 5)
             return false;
-        if (!Arrays.asList(getFiles(nodeUriArr)).contains(new File(store, nodeUriArr[5])))
+        if (!fileExists(nodeUriArr))
             throw new DmtException(nodeUriArr, DmtException.NODE_NOT_FOUND, "");
         if (l == 6)
             return false;
@@ -135,7 +139,7 @@ public class PluginDelivered implements DataPluginFactory, ReadableDataSession,
 
     public DmtData getNodeValue(String[] nodeUriArr) throws DmtException {
         int l = nodeUriArr.length;
-        if (!Arrays.asList(getFiles(nodeUriArr)).contains(new File(store, nodeUriArr[5])))
+        if (!fileExists(nodeUriArr))
             throw new DmtException(nodeUriArr, DmtException.NODE_NOT_FOUND, "");
 		if (l == 7) {
 		    if (nodeUriArr[6].equals("ID"))
@@ -207,7 +211,7 @@ public class PluginDelivered implements DataPluginFactory, ReadableDataSession,
                 ret[i] = files[i].getName();
         	return ret;
         }
-        if (!Arrays.asList(getFiles(nodeUriArr)).contains(new File(store, nodeUriArr[5])))
+        if (!fileExists(nodeUriArr))
             throw new DmtException(nodeUriArr, DmtException.NODE_NOT_FOUND, "");
 	    if (l == 6)
             return new String[] {"ID", "EnvType", "Data", "Operations"};
@@ -333,10 +337,17 @@ public class PluginDelivered implements DataPluginFactory, ReadableDataSession,
         DmtAdmin dmtA = pluginCtx.getDmtAdmin();
         if (null == dmtA)
             throw new RuntimeException("DMT Admin doesn't run");
-        File[] files = (File[]) AccessController.doPrivileged(new PrivilegedAction() {
-            public Object run() {
-                return store.listFiles();
-            }});
+        
+        File[] files;
+        if (null != store) {
+            files = (File[]) AccessController.doPrivileged(new PrivilegedAction() {
+                public Object run() {
+                    return store.listFiles();
+                }});
+        } else {
+            files = new File[] {};
+        }
+        
         ArrayList ret = new ArrayList();
         if (null != files) {
             for (int i = 0; i < files.length; i++) {
@@ -349,4 +360,11 @@ public class PluginDelivered implements DataPluginFactory, ReadableDataSession,
         return (File[]) ret.toArray(new File[] {});
     }
 
+    private boolean fileExists(String[] nodeUriArr) {
+        if (null != store)
+            return Arrays.asList(getFiles(nodeUriArr)).contains(
+                    new File(store, nodeUriArr[5]));
+        return false;
+    }
+    
 }
