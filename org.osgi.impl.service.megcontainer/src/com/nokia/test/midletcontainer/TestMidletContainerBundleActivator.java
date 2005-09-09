@@ -276,6 +276,10 @@ public class TestMidletContainerBundleActivator
 	  		    System.out.println("AppPlugin: schedule modification                 FAILED"); 	
   		  else 																																				
 		  	    System.out.println("AppPlugin: schedule modification                 PASSED"); 	
+    		if (!testCase_appPluginCreateAndDeleteSchedule()) 															
+  		      System.out.println("AppPlugin: create and delete schedule            FAILED"); 	
+		    else 																																				
+	  	      System.out.println("AppPlugin: create and delete schedule            PASSED"); 	
         if(!testCase_oatRegisterService())
             System.out.println("Checking OAT service registration                FAILED");
         else
@@ -2277,6 +2281,88 @@ public class TestMidletContainerBundleActivator
   			return false;
   		}  		
   	}
+  	
+    boolean testCase_appPluginCreateAndDeleteSchedule() {
+  		ApplicationDescriptor appDesc = appDescs[0];
+  		String appUID = getPID( appDesc );
+  		
+  		try {
+  			DmtSession session = dmtFactory.getSession("./OSGi/Application" );
+  			
+  			Map args = createArgs();
+  			
+  			session.createInteriorNode( "./OSGi/Application/" + appUID + "/Schedules/my_schedule_id" );
+
+  			DmtData topicFilter = new DmtData("com/nokia/test/ScheduleEvent");
+  			session.setNodeValue( "./OSGi/Application/" + appUID + "/Schedules/my_schedule_id/TopicFilter", topicFilter);
+  			if( !session.getNodeValue( "./OSGi/Application/" + appUID + "/Schedules/my_schedule_id/TopicFilter" )
+  					   .getString().equals( topicFilter.getString() ))
+  				throw new Exception("TopicFilter cannot be modified!");
+
+  			DmtData eventFilter = DmtData.NULL_VALUE;
+  			session.setNodeValue( "./OSGi/Application/" + appUID + "/Schedules/my_schedule_id/EventFilter", eventFilter);
+  			if( session.getNodeValue( "./OSGi/Application/" + appUID + "/Schedules/my_schedule_id/EventFilter" )
+  					   .getFormat() != DmtData.FORMAT_NULL )
+  				throw new Exception("EventFilter cannot be modified!");
+  			
+  			DmtData recurring = new DmtData( true );
+  			session.setNodeValue( "./OSGi/Application/" + appUID + "/Schedules/my_schedule_id/Recurring", recurring);
+  			if( !session.getNodeValue( "./OSGi/Application/" + appUID + "/Schedules/my_schedule_id/Recurring" ).getBoolean() )
+   				throw new Exception("Recurring cannot be modified!");
+  			
+  			int argCnt = 1;
+  			Iterator iter = args.keySet().iterator();
+  			while( iter.hasNext() ) {
+  				String key = (String)iter.next();
+  				String value = (String)args.get( key );
+  				String argID = "Arg" + argCnt++;
+  				
+    			session.createInteriorNode( "./OSGi/Application/" + appUID + "/Schedules/my_schedule_id/Arguments/" + argID );
+    			session.setNodeValue( "./OSGi/Application/" + appUID + "/Schedules/my_schedule_id/Arguments/" + argID +  "/Name", 
+    					                  new DmtData( key ));
+    			session.setNodeValue( "./OSGi/Application/" + appUID + "/Schedules/my_schedule_id/Arguments/" + argID + "/Value", 
+                                new DmtData( value ));
+  			}
+
+  			session.setNodeValue( "./OSGi/Application/" + appUID + "/Schedules/my_schedule_id/Enabled", new DmtData( true ));
+  			if( !session.getNodeValue( "./OSGi/Application/" + appUID + "/Schedules/my_schedule_id/Enabled" ).getBoolean() )
+   				throw new Exception("Recurring cannot be modified!");
+
+  			sendEvent(new Event( "com/nokia/test/ScheduleEvent", null), false);
+  			
+  			appHandle = lookupAppHandle(appDesc);
+  			if (appHandle == null
+  					|| !appHandle.getState().equals( ApplicationHandle.RUNNING ) )
+  				throw new Exception("Application wasn't scheduled!");
+  			if (!checkResultFile("START"))
+  				throw new Exception("Result of the schedule is not START!");
+  			if (!testCase_stopApplication())
+  				return false;
+  			
+  			session.deleteNode( "./OSGi/Application/" + appUID + "/Schedules/my_schedule_id" );
+
+  			String[] scheduleNames = session.getChildNodeNames( "./OSGi/Application/" + appUID + "/Schedules" );  			
+  			if( scheduleNames != null && scheduleNames.length != 0 )
+  				throw new Exception( "Schedule was not registered in the ApplicationPlugin!" );
+
+  			ServiceReference refs[] = bc.getServiceReferences( ScheduledApplication.class.getName(), null );
+  			if( refs != null && refs.length != 0 )
+  				throw new Exception("Schedule was not disabled after delete!");
+
+  			sendEvent(new Event( "com/nokia/test/ScheduleEvent", null), false);
+  			
+  			appHandle = lookupAppHandle(appDesc);
+  			if (appHandle != null)
+  				throw new Exception("Schedule was not properly deleted!");
+  			
+  			session.close();  			
+  			return true;
+  		}
+  		catch (Exception e) {
+  			e.printStackTrace();
+  			return false;
+  		}  		    	
+    }
   	
   	boolean testCase_checkNotifyDestroyed() {
   		try {
