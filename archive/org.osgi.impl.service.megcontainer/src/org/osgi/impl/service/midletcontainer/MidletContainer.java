@@ -1,7 +1,6 @@
 package org.osgi.impl.service.midletcontainer;
 
 import java.io.*;
-import java.security.MessageDigest;
 import java.util.*;
 import org.osgi.framework.*;
 import org.osgi.impl.service.application.OATContainerInterface;
@@ -69,10 +68,29 @@ public class MidletContainer implements BundleListener, ServiceListener {
 						 descs[ i ].getProperties( null ).get( ApplicationDescriptor.APPLICATION_PID ) + ")" );
 			  if( refs != null && refs.length != 0 ) {
 				  for( int j=0; j != refs.length; j++ ) {
-				  	ApplicationHandle appHandle = (ApplicationHandle)bc.getService( refs[ j ] );
-				  	try {
-				  	  appHandle.destroy(); /* TODO, what to do if the app doesn't stop? */
-				  	}catch( Exception e ) {}
+				  	final ApplicationHandle appHandle = (ApplicationHandle)bc.getService( refs[ j ] );
+
+				  	class DestroyerThread extends Thread {
+							public void run() {
+				        
+								try {
+									if( appHandle != null )
+										appHandle.destroy();
+								}catch( Exception e ) {
+								}          
+							};
+						}
+						
+						DestroyerThread destroyerThread = new DestroyerThread();
+						destroyerThread.start();
+
+						try {
+							destroyerThread.join( 5000 );
+						}catch(InterruptedException e) {}
+						
+						if( destroyerThread.isAlive() )
+							log( bc, LogService.LOG_ERROR, "Stop method of the application didn't finish at 5s!", null );
+						
 				  	bc.ungetService( refs[ j ] );
 				  }		  				  	
 			  }
