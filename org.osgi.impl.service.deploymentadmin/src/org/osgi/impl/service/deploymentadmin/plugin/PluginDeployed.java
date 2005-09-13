@@ -247,7 +247,8 @@ public class PluginDeployed implements DataPluginFactory, ReadableDataSession,
                     return true;
                 if (!"Location".equals(nodeUriArr[9]) &&
                     !"Signers".equals(nodeUriArr[9]) &&
-                    !"Manifest".equals(nodeUriArr[9]))
+                    !"Manifest".equals(nodeUriArr[9]) && 
+                    !"State".equals(nodeUriArr[9]))
                     	return false;
                 if (l == 10)
                     return true;
@@ -299,7 +300,8 @@ public class PluginDeployed implements DataPluginFactory, ReadableDataSession,
             }
             if (l == 10) {
 	            if ("Location".equals(nodeUriArr[9]) ||
-	                "Manifest".equals(nodeUriArr[9]))
+	                "Manifest".equals(nodeUriArr[9]) ||
+                    "State".equals(nodeUriArr[9]))
 	                	return true;
 	            return false;
             }
@@ -451,7 +453,7 @@ public class PluginDeployed implements DataPluginFactory, ReadableDataSession,
             if (!s.contains(nodeUriArr[8]))
                 throw new DmtException(nodeUriArr, DmtException.NODE_NOT_FOUND, "");
             if (l == 9)
-                return new String[] {"Manifest", "Signers", "Location"};
+                return new String[] {"Manifest", "Signers", "Location", "State"};
             if (l == 10) {
                 if ("Signers".equals(nodeUriArr[9])) {
                     String[] signers = getStandaloneBundleSigners(nodeUriArr[8]);
@@ -528,6 +530,9 @@ public class PluginDeployed implements DataPluginFactory, ReadableDataSession,
                 if ("Signers".equals(nodeUriArr[9]))
                     return new Metanode(MetaNode.CMD_GET, Metanode.IS_LEAF, MetaNode.AUTOMATIC,
                             "", 1, !Metanode.ZERO_OCC, null, 0, 0, null, DmtData.FORMAT_STRING);
+                if ("State".equals(nodeUriArr[9]))
+                    return new Metanode(MetaNode.CMD_GET, Metanode.IS_LEAF, MetaNode.AUTOMATIC,
+                            "", 1, !Metanode.ZERO_OCC, null, 0, 0, null, DmtData.FORMAT_INTEGER);
                 return new Metanode(MetaNode.CMD_GET, !Metanode.IS_LEAF, MetaNode.AUTOMATIC,
                     "", 1, !Metanode.ZERO_OCC, null, 0, 0, null, DmtData.FORMAT_NODE);
             }
