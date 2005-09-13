@@ -58,6 +58,8 @@ public class DeploymentSessionImpl implements DeploymentSession {
     private TrackerPackageAdmin         trackPackAdmin;
     private boolean                     forced;
     
+    DeploymentPackageJarInputStream.Entry actEntry;
+    
     /*
      * Class to track resource processors
      */
@@ -449,20 +451,19 @@ public class DeploymentSessionImpl implements DeploymentSession {
     private void processResources(DeploymentPackageJarInputStream wjis) 
     		throws DeploymentException, IOException 
     {
-        DeploymentPackageJarInputStream.Entry entry = wjis.nextEntry();
-        while (null != entry) {
-            if (!entry.isResource())
+        while (null != actEntry) {
+            if (!actEntry.isResource())
                 throw new DeploymentException(DeploymentException.CODE_ORDER_ERROR, 
                         "Bundles have to precede resources in the deployment package");
             
-            if (!entry.isMissing()) {
-                processResource(entry);
-                ResourceEntry re = srcDp.getResourceEntryByName(entry.getName());
-                re.updateCertificates(entry);
+            if (!actEntry.isMissing()) {
+                processResource(actEntry);
+                ResourceEntry re = srcDp.getResourceEntryByName(actEntry.getName());
+                re.updateCertificates(actEntry);
             } else
                 ; // do nothing
             wjis.closeEntry();
-            entry = wjis.nextEntry();
+            actEntry = wjis.nextEntry();
         }
     }
 
@@ -670,23 +671,23 @@ public class DeploymentSessionImpl implements DeploymentSession {
     private void processBundles(DeploymentPackageJarInputStream wjis) 
     		throws BundleException, IOException, DeploymentException 
     {
-        DeploymentPackageJarInputStream.Entry entry = wjis.nextEntry();
-        while (null != entry && entry.isBundle()) 
+        actEntry = wjis.nextEntry();
+        while (null != actEntry && actEntry.isBundle()) 
         {
-            checkManifestEntryPresence(entry);
+            checkManifestEntryPresence(actEntry);
             
-            if (!entry.isMissing()) {
-                Bundle b = processBundle(entry);
-                srcDp.getBundleEntryByName(entry.getName()).
+            if (!actEntry.isMissing()) {
+                Bundle b = processBundle(actEntry);
+                srcDp.getBundleEntryByName(actEntry.getName()).
                 	setBundleId(b.getBundleId());
             } else {
-                BundleEntry beS = srcDp.getBundleEntryByName(entry.getName());
-                BundleEntry beT = targetDp.getBundleEntryByName(entry.getName());
+                BundleEntry beS = srcDp.getBundleEntryByName(actEntry.getName());
+                BundleEntry beT = targetDp.getBundleEntryByName(actEntry.getName());
                 srcDp.remove(beS);
                 srcDp.add(beT);
             }
             wjis.closeEntry();
-            entry = wjis.nextEntry();
+            actEntry = wjis.nextEntry();
         }
     }
     
