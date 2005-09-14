@@ -97,8 +97,8 @@ public class ApplicationDescriptorImpl implements Delegate {
   				pid, ApplicationAdminPermission.LIFECYCLE ) );
 
 			Map props = descriptor.getProperties("en");
-			String isLocked = (String)props.get(ApplicationDescriptor.APPLICATION_LOCKED);
-			if (isLocked != null && isLocked.equalsIgnoreCase("true"))
+			Boolean isLocked = (Boolean)props.get(ApplicationDescriptor.APPLICATION_LOCKED);
+			if (isLocked != null && isLocked.booleanValue() )
 				throw new Exception("Application is locked, can't launch!");
 			String isLaunchable = (String)props.get(ApplicationDescriptor.APPLICATION_LAUNCHABLE);
 	 		if (isLaunchable == null || !isLaunchable.equalsIgnoreCase("true"))

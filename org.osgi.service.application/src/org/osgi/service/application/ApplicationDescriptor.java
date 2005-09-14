@@ -166,17 +166,18 @@ public abstract class ApplicationDescriptor {
 	public final Map getProperties(String locale) {
 		Map props = getPropertiesSpecific( locale );
 		
-		boolean isLocked = delegate.isLocked();
-		Boolean wasLocked = Boolean.valueOf( (String)props.remove( APPLICATION_LOCKED ) );
-		if( wasLocked != null && wasLocked.booleanValue() != isLocked ) {
-			if( isLocked )
-				lockSpecific();
+		/* currently the ApplicationDescriptor manages the load/save of locking */
+		boolean isLocked = delegate.isLocked(); // the real locking state
+		Boolean containerLocked = (Boolean)props.remove( APPLICATION_LOCKED );
+		if( containerLocked != null && containerLocked.booleanValue() != isLocked ) {
+			if( isLocked )      /* if the container's information is not correct */
+				lockSpecific();   /* about the locking state (after loading the lock states) */
 			else
 				unlockSpecific();
 		}			
-		props.put( APPLICATION_LOCKED, new Boolean( isLocked ) );
-		
-		return getPropertiesSpecific( locale );
+		/* replace the container's lock with the application model's lock, that's the correct */
+		props.put( APPLICATION_LOCKED, new Boolean( isLocked ) ); 		
+		return props;
 	}
 	
 	/**

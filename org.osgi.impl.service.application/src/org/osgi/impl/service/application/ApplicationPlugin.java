@@ -833,16 +833,16 @@ class ApplicationPropertyNode extends ApplicationPluginBaseNode {
 	
 	public DmtData getNodeValue( String path[] ) throws DmtException {
 		if( !isBoolean )
-		  return new DmtData( getProperty( path ) );
+		  return new DmtData( (String)getProperty( path ) );
 		else
-			return new DmtData( Boolean.valueOf( getProperty( path ) ).booleanValue() );
+			return new DmtData( ((Boolean)( getProperty( path ) )).booleanValue() );
 	}
 	
-	String getProperty( String []path )  throws DmtException {
+	Object getProperty( String []path )  throws DmtException {
 		ServiceReference ref = ApplicationPlugin.getApplicationDescriptor( path );
 		if( ref == null )
 			throw new DmtException(path, DmtException.METADATA_MISMATCH, "Cannot get node value!" );
-		return (String)ref.getProperty( propertyName );
+		return ref.getProperty( propertyName );
 	}
 }
 
