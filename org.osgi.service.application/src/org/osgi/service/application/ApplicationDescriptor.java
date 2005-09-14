@@ -142,6 +142,14 @@ public abstract class ApplicationDescriptor {
 	 * to enable the container implementation to insert application model and/or
 	 * container implementation specific properties.
 	 * 
+	 * The returned {@link java.util.Map} will contain the standard OSGi service 
+	 * properties as well
+	 * (e.g. service.id, service.vendor etc.) and specialized application
+	 * descriptors may offer further service properties. The returned Map contains
+	 * a snapshot of the properties. It will not reflect further changes in the
+	 * property values nor will the update of the Map change the corresponding
+	 * service property.
+	 *   
 	 * @param locale
 	 *            the locale string, it may be null, the value null means the
 	 *            default locale. If the provided locale is the empty String 
