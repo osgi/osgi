@@ -32,6 +32,8 @@ class NamePattern {
     private String pattern;
     
     NamePattern(String str) {
+        if (0 == str.trim().length())
+            throw new IllegalArgumentException("Deployment package name must not be empty");
         pattern = str;
     }
     
