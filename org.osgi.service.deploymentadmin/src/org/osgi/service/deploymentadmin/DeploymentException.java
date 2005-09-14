@@ -182,9 +182,6 @@ public class DeploymentException extends Exception {
 	 * @return Returns the message.
 	 */
 	public String getMessage() {
-		if (getCause() != null)
-			return message + " : " + getCause().getMessage();
-		else
-			return message;
+	    return message;
 	}
 }
