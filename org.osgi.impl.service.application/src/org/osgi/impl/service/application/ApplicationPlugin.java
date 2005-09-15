@@ -871,13 +871,14 @@ class ApplicationIDNode extends ApplicationPluginBaseNode {
 		
 		addChildNode( new ApplicationPluginBaseNode( "Instances", new InstanceIDNode() ) );
 		
-		addChildNode( new ApplicationPropertyNode( "Name",        ApplicationDescriptor.APPLICATION_NAME ) );
-		addChildNode( new ApplicationPropertyNode( "IconURI",     ApplicationDescriptor.APPLICATION_ICON ) );
-		addChildNode( new ApplicationPropertyNode( "Version",     ApplicationDescriptor.APPLICATION_VERSION ) );
-		addChildNode( new ApplicationPropertyNode( "Vendor",      ApplicationDescriptor.APPLICATION_VENDOR ) );
-		addChildNode( new ApplicationPropertyNode( "Locked",      ApplicationDescriptor.APPLICATION_LOCKED, true ) );
-		addChildNode( new ApplicationPropertyNode( "PackageID",   ApplicationDescriptor.APPLICATION_PACKAGE ) );
-		addChildNode( new ApplicationPropertyNode( "ContainerID", ApplicationDescriptor.APPLICATION_CONTAINER ) );
+		addChildNode( new ApplicationPropertyNode( "Name",          ApplicationDescriptor.APPLICATION_NAME ) );
+		addChildNode( new ApplicationPropertyNode( "IconURI",       ApplicationDescriptor.APPLICATION_ICON ) );
+		addChildNode( new ApplicationPropertyNode( "Version",       ApplicationDescriptor.APPLICATION_VERSION ) );
+		addChildNode( new ApplicationPropertyNode( "Vendor",        ApplicationDescriptor.APPLICATION_VENDOR ) );
+		addChildNode( new ApplicationPropertyNode( "Locked",        ApplicationDescriptor.APPLICATION_LOCKED, true ) );
+		addChildNode( new ApplicationPropertyNode( "PackageID",     ApplicationDescriptor.APPLICATION_PACKAGE ) );
+		addChildNode( new ApplicationPropertyNode( "ContainerID",   ApplicationDescriptor.APPLICATION_CONTAINER ) );
+		addChildNode( new ApplicationPropertyNode( "ApplicationID", ApplicationDescriptor.APPLICATION_PID ) );
 		
 		addChildNode( new ApplicationPluginBaseNode("Ext") );
 	}
