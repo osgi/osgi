@@ -81,8 +81,12 @@ public abstract class ApplicationHandle {
 		this.descriptor = descriptor;
 
 		try {
-			delegate = (Delegate) implementation
-					.newInstance();
+		  AccessController.doPrivileged(new PrivilegedExceptionAction() {
+			  public Object run() throws Exception {			
+					delegate = (Delegate) implementation.newInstance();
+				  return null;
+			  }
+		  });
 			delegate.setApplicationHandle( this, descriptor.delegate );
 		}
 		catch (Exception e) {

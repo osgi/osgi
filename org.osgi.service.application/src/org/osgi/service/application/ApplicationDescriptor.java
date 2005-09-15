@@ -109,9 +109,13 @@ public abstract class ApplicationDescriptor {
 	protected  ApplicationDescriptor(String pid) {
 		this.pid = pid;
 		try {
-			delegate = (Delegate) implementation
-					.newInstance();
-			delegate.setApplicationDescriptor( this, pid );
+		  AccessController.doPrivileged(new PrivilegedExceptionAction() {
+			  public Object run() throws Exception {			
+					delegate = (Delegate) implementation.newInstance();
+				  return null;
+			  }
+		  });
+	    delegate.setApplicationDescriptor( this, pid );
 		}
 		catch (Exception e) {
 			// Too bad ...
