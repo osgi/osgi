@@ -751,6 +751,19 @@ class InstanceStateNode extends ApplicationPluginBaseNode {
 	}
 }
 
+class InstanceIDPropertyNode extends ApplicationPluginBaseNode {
+	InstanceIDPropertyNode() {
+		super( "InstanceID", "text/plain" );
+	}
+	
+	public DmtData getNodeValue( String path[] ) throws DmtException {
+		String instID = InstanceIDNode.getInstanceID( path );
+	  if( instID == null )
+	  	throw new DmtException(path, DmtException.METADATA_MISMATCH, "Cannot get the instance ID!" );		  
+	  return new DmtData( instID );
+	}
+}
+
 class InstanceIDNode extends ApplicationPluginBaseNode {
 	
 	private static Hashtable mangledInstanceIDHash = new Hashtable();
@@ -762,6 +775,7 @@ class InstanceIDNode extends ApplicationPluginBaseNode {
 				                                        new ApplicationPluginBaseNode("Ext"),
 																								new InstanceOperationsStopNode()) );
 		addChildNode( new InstanceStateNode() );
+		addChildNode( new InstanceIDPropertyNode() );
 	}
 
 	public String[]  getNames( String []path ) {
@@ -790,6 +804,12 @@ class InstanceIDNode extends ApplicationPluginBaseNode {
 		return result;
 	}
 	
+	static String getInstanceID( String path[] ) {
+		String appUID     = ApplicationIDNode.getPID( path );
+		String instanceID = (String)mangledInstanceIDHash.get( appUID + "/" + path[ 5 ] );
+		return instanceID;
+	}
+
 	static ServiceReference getApplicationHandle( String path[] ) {
 		String appUID     = ApplicationIDNode.getPID( path );
 		String instanceID = (String)mangledInstanceIDHash.get( appUID + "/" + path[ 5 ] );
