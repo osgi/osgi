@@ -34,6 +34,7 @@ import org.osgi.service.application.*;
 import org.osgi.service.dmt.*;
 import org.osgi.service.dmt.spi.*;
 import org.osgi.service.log.LogService;
+import org.osgi.util.tracker.ServiceTracker;
 
 
 interface ArgumentInterface {
@@ -282,7 +283,7 @@ class ScheduleIDNode extends ApplicationPluginBaseNode implements ArgumentInterf
 	}
 	
 	public String[] getNames( String []path ) {
-		String pid = ApplicationPlugin.getPID( path );
+		String pid = ApplicationIDNode.getPID( path );
 		Hashtable scheduleHash = (Hashtable)schedulesByPidHash.get( pid );
 		if( scheduleHash == null ) {
 			scheduleHash = new Hashtable();
@@ -301,7 +302,7 @@ class ScheduleIDNode extends ApplicationPluginBaseNode implements ArgumentInterf
 	}	
 	
 	public DmtData getItemValue( String path[], int kind ) throws DmtException {
-		String pid = ApplicationPlugin.getPID( path );
+		String pid = ApplicationIDNode.getPID( path );
     String key = path[ path.length - 2 ];    		
 		Hashtable scheduleHash = (Hashtable)schedulesByPidHash.get( pid );
 		if( scheduleHash == null )
@@ -326,7 +327,7 @@ class ScheduleIDNode extends ApplicationPluginBaseNode implements ArgumentInterf
 	}
 
 	public void setItemValue(String path[], int kind, DmtData value) throws DmtException {
-		String pid = ApplicationPlugin.getPID( path );
+		String pid = ApplicationIDNode.getPID( path );
     String key = path[ path.length - 2 ];    		
 		Hashtable scheduleHash = (Hashtable)schedulesByPidHash.get( pid );
 		if( scheduleHash == null )
@@ -360,7 +361,7 @@ class ScheduleIDNode extends ApplicationPluginBaseNode implements ArgumentInterf
 	}
 
 	public HashMap getHash(String[] path) throws DmtException {
-		String pid = ApplicationPlugin.getPID( path );
+		String pid = ApplicationIDNode.getPID( path );
 		String key = path[ 5 ];
 		Hashtable scheduleHash = (Hashtable)schedulesByPidHash.get( pid );
 		if( scheduleHash == null )
@@ -374,7 +375,7 @@ class ScheduleIDNode extends ApplicationPluginBaseNode implements ArgumentInterf
 	}
 
 	public void changed(String[] path) {
-		String pid = ApplicationPlugin.getPID( path );
+		String pid = ApplicationIDNode.getPID( path );
 		String key = path[ 5 ];
 		Hashtable scheduleHash = (Hashtable)schedulesByPidHash.get( pid );
 		if( scheduleHash == null )
@@ -388,7 +389,7 @@ class ScheduleIDNode extends ApplicationPluginBaseNode implements ArgumentInterf
 	}
 	
 	public void createInteriorNode(String path[], String type) throws DmtException {
-		String pid = ApplicationPlugin.getPID( path );
+		String pid = ApplicationIDNode.getPID( path );
     String key = path[ path.length - 1 ];    
 		Hashtable scheduleHash = (Hashtable)schedulesByPidHash.get( pid );
 		if( scheduleHash == null ) {
@@ -399,7 +400,7 @@ class ScheduleIDNode extends ApplicationPluginBaseNode implements ArgumentInterf
 	}
 	
 	public void deleteNode(String path[]) throws DmtException {
-		String pid = ApplicationPlugin.getPID( path );
+		String pid = ApplicationIDNode.getPID( path );
     String key = path[ path.length - 1 ];    
 		Hashtable scheduleHash = (Hashtable)schedulesByPidHash.get( pid );
 		if( scheduleHash == null )
@@ -488,30 +489,11 @@ class ScheduleIDNode extends ApplicationPluginBaseNode implements ArgumentInterf
 			disable( item );
 		
 		try {
-			ServiceReference appDescRef = ApplicationPlugin.getApplicationDescriptor( path );
+			ServiceReference appDescRef = ApplicationIDNode.getApplicationDescriptor( path );
 			ApplicationDescriptor appDesc = (ApplicationDescriptor)ApplicationPlugin.bc.getService( appDescRef );
-		  ScheduledApplication schedApp = appDesc.schedule( argIDNode.getArguments( item.arguments ), item.topicFilter, item.eventFilter, item.recurring );
-		  item.enabled = true;
-		  
-		  /* TODO */
-		  
-		  ServiceReference refs[] = ApplicationPlugin.bc.getServiceReferences( ScheduledApplication.class.getName(), 
-		  		"(" + ApplicationDescriptor.APPLICATION_PID + "=" + 
-					appDescRef.getProperty( Constants.SERVICE_PID ) + ")");
-		  
-		  if( refs != null ) {
-		  	for( int i=0; i != refs.length; i++ ) {
-		  		ScheduledApplication app = (ScheduledApplication)ApplicationPlugin.bc.getService( refs[ i ] );
-		  		
-		  		if( app == schedApp ) {
-		  			item.servRef = refs[ i ];
-			  		ApplicationPlugin.bc.ungetService( refs[ i ] );
-			  		break;
-		  		}		  		
-		  		ApplicationPlugin.bc.ungetService( refs[ i ] );
-		  	}
-		  }		  
-
+		  ScheduledApplicationImpl schedApp = (ScheduledApplicationImpl)appDesc.schedule( argIDNode.getArguments( item.arguments ), item.topicFilter, item.eventFilter, item.recurring );
+		  item.servRef = schedApp.getReference();
+		  item.enabled = true;		  
 		  ApplicationPlugin.bc.ungetService( appDescRef );
 		}catch( Exception e ) {}
 	}
@@ -569,7 +551,7 @@ class LaunchIDNode extends ApplicationPluginBaseNode implements ArgumentInterfac
 	}
 	
 	public String[] getNames( String []path ) {
-		String pid = ApplicationPlugin.getPID( path );
+		String pid = ApplicationIDNode.getPID( path );
 		Hashtable launchIDHash = (Hashtable)launchIDsHash.get( pid );
 		if( launchIDHash == null )
 			return new String[ 0 ];
@@ -583,7 +565,7 @@ class LaunchIDNode extends ApplicationPluginBaseNode implements ArgumentInterfac
 	}
 		
 	public void createInteriorNode(String path[], String type) throws DmtException {
-		String pid = ApplicationPlugin.getPID( path );
+		String pid = ApplicationIDNode.getPID( path );
     String key = path[ path.length - 1 ];    
 		Hashtable launchIDHash = (Hashtable)launchIDsHash.get( pid );
 		if( launchIDHash == null ) {
@@ -594,7 +576,7 @@ class LaunchIDNode extends ApplicationPluginBaseNode implements ArgumentInterfac
 	}
 	
 	public void deleteNode(String path[]) throws DmtException {
-		String pid = ApplicationPlugin.getPID( path );
+		String pid = ApplicationIDNode.getPID( path );
     String key = path[ path.length - 1 ];    
 		Hashtable launchIDHash = (Hashtable)launchIDsHash.get( pid );
 		if( launchIDHash == null )
@@ -605,7 +587,7 @@ class LaunchIDNode extends ApplicationPluginBaseNode implements ArgumentInterfac
 	}	
 	
 	public void execute(DmtSession session, String path[], String correlator, String data) throws DmtException {
-		String pid = ApplicationPlugin.getPID( path );
+		String pid = ApplicationIDNode.getPID( path );
     String key = path[ path.length - 1 ];
 		Hashtable launchIDHash = (Hashtable)launchIDsHash.get( pid );
 		if( launchIDHash == null )
@@ -617,7 +599,7 @@ class LaunchIDNode extends ApplicationPluginBaseNode implements ArgumentInterfac
 		
 		HashMap args = argIDNode.getArguments( item.argumentHash );
 		
-		ServiceReference appDescRef = ApplicationPlugin.getApplicationDescriptor( path );
+		ServiceReference appDescRef = ApplicationIDNode.getApplicationDescriptor( path );
 		ApplicationDescriptor appDesc = (ApplicationDescriptor)Activator.bc.getService( appDescRef );
 		
 		item.resultInstanceID = "";
@@ -636,7 +618,7 @@ class LaunchIDNode extends ApplicationPluginBaseNode implements ArgumentInterfac
 	}
 
 	public String getResultValue( String path[], int kind ) throws DmtException  {
-		String pid = ApplicationPlugin.getPID( path );
+		String pid = ApplicationIDNode.getPID( path );
 		String key = path[ 6 ];
 		Hashtable launchIDHash = (Hashtable)launchIDsHash.get( pid );
 		if( launchIDHash == null )
@@ -663,7 +645,7 @@ class LaunchIDNode extends ApplicationPluginBaseNode implements ArgumentInterfac
 	}
 	
 	public HashMap getHash( String path[] ) throws DmtException {
-		String pid = ApplicationPlugin.getPID( path );
+		String pid = ApplicationIDNode.getPID( path );
 		String key = path[ 6 ];
 		Hashtable launchIDHash = (Hashtable)launchIDsHash.get( pid );
 		if( launchIDHash == null )
@@ -699,7 +681,7 @@ class LockerNode extends ApplicationPluginBaseNode {
 	}
 	
 	public void execute(DmtSession session, String path[], String correlator, String data) throws DmtException {
-		ServiceReference ref = ApplicationPlugin.getApplicationDescriptor( path );
+		ServiceReference ref = ApplicationIDNode.getApplicationDescriptor( path );
 		if( ref == null )
 			throw new DmtException(path, DmtException.METADATA_MISMATCH, "Cannot execute the node!" );
 		ApplicationDescriptor appDesc = (ApplicationDescriptor)ApplicationPlugin.bc.getService( ref );
@@ -722,7 +704,7 @@ class InstanceOperationsStopNode extends ApplicationPluginBaseNode {
 	}
 	
 	public void execute(DmtSession session, String path[], String correlator, String data) throws DmtException {
-		ServiceReference appHandle = ApplicationPlugin.getApplicationHandle( path );
+		ServiceReference appHandle = InstanceIDNode.getApplicationHandle( path );
 		if( appHandle == null )
 			throw new DmtException(path, DmtException.COMMAND_FAILED, "Cannot execute the node.");
 		
@@ -757,7 +739,7 @@ class InstanceStateNode extends ApplicationPluginBaseNode {
 	}
 	
 	public DmtData getNodeValue( String path[] ) throws DmtException {
-		ServiceReference appHndRef = ApplicationPlugin.getApplicationHandle( path );
+		ServiceReference appHndRef = InstanceIDNode.getApplicationHandle( path );
 	  if( appHndRef == null )
 	  	throw new DmtException(path, DmtException.METADATA_MISMATCH, "Cannot get node value!" );
 		  
@@ -770,6 +752,9 @@ class InstanceStateNode extends ApplicationPluginBaseNode {
 }
 
 class InstanceIDNode extends ApplicationPluginBaseNode {
+	
+	private static Hashtable mangledInstanceIDHash = new Hashtable();
+	
 	InstanceIDNode() {
 		super();
 		
@@ -783,19 +768,44 @@ class InstanceIDNode extends ApplicationPluginBaseNode {
 		
 		ServiceReference[] refs = null;
 		
+		String appUID = null;
+		
 		try {
 		  refs = ApplicationPlugin.bc.getServiceReferences( ApplicationHandle.class.getName(), 
-                         "(" + ApplicationHandle.APPLICATION_DESCRIPTOR + "=" + path[ 3 ] + ")" );
+                         "(" + ApplicationHandle.APPLICATION_DESCRIPTOR + "=" + 
+                         (appUID = ApplicationIDNode.getPID( path )) + ")" );
 		}catch( InvalidSyntaxException e) {}
 		
 		if( refs == null || refs.length == 0 )
 			return new String [ 0 ];
 		
 		String result[] = new String[ refs.length ];
-		for( int i=0; i != refs.length; i++ )
-			result[ i ] = (String)refs[ i ].getProperty( Constants.SERVICE_PID );
+		for( int i=0; i != refs.length; i++ ) {
+			String instanceID = (String)refs[ i ].getProperty( Constants.SERVICE_PID );
+			String mangledInstanceID = ApplicationPlugin.mangle( instanceID );
+			mangledInstanceIDHash.put( appUID + "/" + mangledInstanceID, instanceID );
+			result[ i ] = mangledInstanceID;
+		}
 		
 		return result;
+	}
+	
+	static ServiceReference getApplicationHandle( String path[] ) {
+		String appUID     = ApplicationIDNode.getPID( path );
+		String instanceID = (String)mangledInstanceIDHash.get( appUID + "/" + path[ 5 ] );
+		if( instanceID == null )
+			return null;
+		try {
+  	  ServiceReference refs[] = ApplicationPlugin.bc.getServiceReferences( ApplicationHandle.class.getName(), 
+                                      "(" + Constants.SERVICE_PID + "=" + instanceID + ")" );
+  	  
+      if( refs == null || refs.length != 1 )
+        return null;
+
+      return refs[ 0 ];
+		}catch( Exception e ) {
+			return null;
+		}
 	}
 }
 
@@ -839,7 +849,7 @@ class ApplicationPropertyNode extends ApplicationPluginBaseNode {
 	}
 	
 	Object getProperty( String []path )  throws DmtException {
-		ServiceReference ref = ApplicationPlugin.getApplicationDescriptor( path );
+		ServiceReference ref = ApplicationIDNode.getApplicationDescriptor( path );
 		if( ref == null )
 			throw new DmtException(path, DmtException.METADATA_MISMATCH, "Cannot get node value!" );
 		return ref.getProperty( propertyName );
@@ -847,6 +857,9 @@ class ApplicationPropertyNode extends ApplicationPluginBaseNode {
 }
 
 class ApplicationIDNode extends ApplicationPluginBaseNode {
+	
+	private static Hashtable mangledAppIDHash = new Hashtable();
+	
 	ApplicationIDNode() {
 		super();
 		
@@ -871,6 +884,8 @@ class ApplicationIDNode extends ApplicationPluginBaseNode {
 	
 	public String[]  getNames( String []path ) {
 		
+		mangledAppIDHash.clear();
+		
 		ServiceReference[] refs = null;
 		
 		try {
@@ -881,10 +896,37 @@ class ApplicationIDNode extends ApplicationPluginBaseNode {
 			return new String [ 0 ];
 		
 		String result[] = new String[ refs.length ];
-		for( int i=0; i != refs.length; i++ )
-			result[ i ] = (String)refs[ i ].getProperty( Constants.SERVICE_PID );
+		for( int i=0; i != refs.length; i++ ) {
+			String appID = (String)refs[ i ].getProperty( Constants.SERVICE_PID );
+			String mangledAppId = ApplicationPlugin.mangle( appID );
+			mangledAppIDHash.put( mangledAppId, appID );
+			result[ i ] = mangledAppId;
+		}
 		
 		return result;
+	}
+
+	static String getPID( String path[] ) {
+		String appUID = (String)mangledAppIDHash.get( path[ 3 ] );
+		if( appUID == null )
+			return null;
+		return appUID;
+	}
+	
+	static ServiceReference getApplicationDescriptor( String path[] ) {
+		String appUID = (String)mangledAppIDHash.get( path[ 3 ] );
+		if( appUID == null )
+			return null;
+		try {
+			ServiceReference[] refs = ApplicationPlugin.bc.getServiceReferences( ApplicationDescriptor.class.getName(), 
+					"(" + Constants.SERVICE_PID + "=" + appUID + ")");
+			if ( refs == null || refs.length !=  1)
+				return null;
+			
+			return refs[ 0 ];
+		}catch( Exception e ) {
+			return null;
+		}		
 	}
 }
 
@@ -897,6 +939,7 @@ public class ApplicationPlugin implements BundleActivator, DataPluginFactory,
 	private ServiceRegistration       pluginReg;
 	
 	private ApplicationPluginBaseNode rootNode;
+	private static ServiceTracker     dmtTracker;
 
 	public void start(BundleContext bc) throws Exception {
 		ApplicationPlugin.bc = bc;
@@ -909,11 +952,15 @@ public class ApplicationPlugin implements BundleActivator, DataPluginFactory,
 		// unregistered by the OSGi framework
 		pluginReg = bc.registerService(ifs, this, dict);
 		
+		dmtTracker = new ServiceTracker( bc, DmtAdmin.class.getName(), null );
+		dmtTracker.open();
+		
 		rootNode = new ApplicationPluginBaseNode( "Application", new ApplicationIDNode() );
 	}
 
 	public void stop(BundleContext context) throws Exception {
 		pluginReg.unregister();
+		dmtTracker.close();
 		ApplicationPlugin.bc = null;
 	}
 
@@ -1068,46 +1115,11 @@ public class ApplicationPlugin implements BundleActivator, DataPluginFactory,
 		throw new DmtException( path, DmtException.FEATURE_NOT_SUPPORTED,
                         		"Version property not supported!" ); 
 	}
-
-	static String getPID( String path[] ) {
-		String appUID = path[ 3 ];
-		try {
-			ServiceReference[] refs = bc.getServiceReferences( ApplicationDescriptor.class.getName(), 
-					"(" + Constants.SERVICE_PID + "=" + appUID + ")");
-			if ( refs == null || refs.length !=  1)
-				return null;
-			
-			return (String)refs[ 0 ].getProperty( Constants.SERVICE_PID );
-		}catch( Exception e ) {
-			return null;
-		}				
-	}
 	
-	static ServiceReference getApplicationDescriptor( String path[] ) {
-		String appUID = path[ 3 ];
-		try {
-			ServiceReference[] refs = bc.getServiceReferences( ApplicationDescriptor.class.getName(), 
-					"(" + Constants.SERVICE_PID + "=" + appUID + ")");
-			if ( refs == null || refs.length !=  1)
-				return null;
-			
-			return refs[ 0 ];
-		}catch( Exception e ) {
-			return null;
-		}		
-	}
-
-	static ServiceReference getApplicationHandle( String path[] ) {
-		try {
-  	  ServiceReference refs[] = bc.getServiceReferences( ApplicationHandle.class.getName(), 
-                                      "(" + Constants.SERVICE_PID + "=" + path[ 5 ] + ")" );
-  	  
-      if( refs == null || refs.length != 1 )
-        return null;
-
-      return refs[ 0 ];
-		}catch( Exception e ) {
-			return null;
-		}
+	static String mangle( String in ) {
+		DmtAdmin dmtAdmin = (DmtAdmin)dmtTracker.getService();
+		if( dmtAdmin == null )
+			throw new RuntimeException("DmtAdmin not running!");
+		return dmtAdmin.mangle( in );
 	}
 }
