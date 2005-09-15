@@ -48,6 +48,7 @@ public class OATApplicationContextImpl implements ApplicationContext, ServiceLis
 	private Vector mandatoryTargetList = null;
 	private OATApplicationData oatAppData = null;
 	private ApplicationHandle appHandle = null;
+	private Object mainClass = null;
 
 	class Service {
 		OATServiceData    serviceData;
@@ -55,9 +56,10 @@ public class OATApplicationContextImpl implements ApplicationContext, ServiceLis
 		ServiceReference  serviceReference;
 	}
 		
-	public OATApplicationContextImpl( Bundle bundle, Map startupParams, OATApplicationData appData, ApplicationHandle appHandle ) {
+	public OATApplicationContextImpl( Bundle bundle, Map startupParams, OATApplicationData appData, ApplicationHandle appHandle, Object mainClass ) {
 		bc = frameworkHook( bundle );
 		this.startupParams = startupParams;
+		this.mainClass = mainClass;
 		serviceList = new LinkedList();
 		registeredServiceList = new LinkedList();
 		bundleListenerList = new LinkedList();
@@ -247,6 +249,9 @@ public class OATApplicationContextImpl implements ApplicationContext, ServiceLis
 			Dictionary properties) {
 		if( appHandle == null )
 			throw new RuntimeException( "Application is not running!" );
+		
+		if( service == mainClass )
+			throw new SecurityException( "Registering the base class of the application is insecure and forbidden!" );
 		
 		ServiceRegistration servReg = bc.registerService( clazz, service, properties );
 		registeredServiceList.add( servReg );

@@ -81,7 +81,7 @@ public class OAT implements OATContainerInterface, BundleListener {
 		
 		for( int i = 0; i != oatAppDatas.length; i++) {			
 			if( oatAppDatas[ i ].getBaseClass().equals( mainClass.getClass().getName() ) ) {
-				OATApplicationContextImpl appCtx = new OATApplicationContextImpl( bundle, args, oatAppDatas[ i ], appHandle );						
+				OATApplicationContextImpl appCtx = new OATApplicationContextImpl( bundle, args, oatAppDatas[ i ], appHandle, mainClass );						
 				oatHashtable.put( mainClass, appCtx );
 				return;
 			}
