@@ -68,6 +68,7 @@ public class PluginSessionWrapper implements TransactionalDataSession {
         this.sessionType = sessionType;
         this.sessionRoot = sessionRoot;
         this.pluginRegistration = pluginRegistration;
+        this.securityContext = securityContext;
     }
     
     int getSessionType() {
