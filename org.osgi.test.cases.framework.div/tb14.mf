@@ -9,5 +9,5 @@ Bundle-Activator: org.osgi.test.cases.framework.div.tb14.Activator
 Bundle-Category: %bundlecategory
 Bundle-Copyright: %bundlecopyright
 Bundle-Localization: localization/bundlemanifest
-Fragment-Host: ${p}.tb9, ${p}.tb9a
+Fragment-Host: ${p}.tb9
 

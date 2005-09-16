@@ -205,8 +205,8 @@ public class TestControl extends DefaultTestBundleControl implements
 	 * Tests that URL.getPath method for a URL that uses the bundle resource or
 	 * bundle entry protocol returns an absolute path (a path that starts with
 	 * ‘/’). For example, the URL returned from
-	 * Bundle.getEntry(“myimages/test.gif”) must have a path of
-	 * “/myimages/test.gif”.
+	 * Bundle.getEntry(“myimages/test.gif�?) must have a path of
+	 * “/myimages/test.gif�?.
 	 * 
 	 * @throws Exception if an error occurs or an assertion fails in the test.
 	 * @spec Bundle.getResource(String)
@@ -290,9 +290,9 @@ public class TestControl extends DefaultTestBundleControl implements
 
 	/**
 	 * Tests that in order for a host bundle to allow fragments to attach, the
-	 * host bundle must have BundlePermission[ <bundle symbolic name>,“host”].
+	 * host bundle must have BundlePermission[ <bundle symbolic name>,“host�?].
 	 * In order to be allowed to attach to a host bundle, a fragment bundle must
-	 * have BundlePermission[ <bundle symbolic name>,“fragment”].
+	 * have BundlePermission[ <bundle symbolic name>,“fragment�?].
 	 * 
 	 * @throws Exception if an error occurs or an assertion fails in the test.
 	 * @spec Bundle.installBundle(String)
@@ -344,70 +344,12 @@ public class TestControl extends DefaultTestBundleControl implements
 	}
 
 	/**
-	 * Tests multiple-hosts parameter with a value of true. The fragment should
-	 * attempt attach to all bundles selected by bundle-version that can be
-	 * resolved.
-	 * 
-	 * Tests the fragment-attachment directives with the value of ”always”. The
-	 * default value is “always”. always – indicates that fragments are allowed
-	 * to attach to the host bundle at any time (while the host is resolved or
-	 * during the process of resolving the host bundle).
-	 * 
-	 * @throws Exception if an error occurs or an assertion fails in the test.
-	 * @spec Bundle.installBundle(String)
-	 */
-	public void testFragmentHostHeader01() throws Exception {
-		// Install and start host bundle version 1.0
-		Bundle tb3a = getContext().installBundle(getWebServer() + "tb3a.jar");
-		tb3a.start();
-
-		// Install and start host bundle version 2.0
-		Bundle tb3c = getContext().installBundle(getWebServer() + "tb3c.jar");
-		tb3c.start();
-
-		// Install fragment bundle with multiple-hosts=true
-		Bundle tb3b = getContext().installBundle(getWebServer() + "tb3b.jar");
-		PackageAdmin pa = (PackageAdmin) getService(PackageAdmin.class);
-		pa.resolveBundles(new Bundle[] {tb3b});
-
-		try {
-			// Try recovering resource from host that is in classpath of
-			// fragment
-			try {
-				tb3a
-						.loadClass("org.osgi.test.cases.framework.fragments.tb3b.SomeClass");
-			}
-			catch (ClassNotFoundException e) {
-				fail("The class should be in the classpath of host bundle tb3a ver 1.0");
-			}
-
-			// Try recovering resource from host that is in classpath of
-			// fragment
-			try {
-				tb3c
-						.loadClass("org.osgi.test.cases.framework.fragments.tb3b.SomeClass");
-			}
-			catch (ClassNotFoundException e) {
-				fail("The class should be in the classpath of host bundle tb3a ver 2.0");
-			}
-		}
-		finally {
-			tb3c.stop();
-			tb3c.uninstall();
-			tb3a.stop();
-			tb3a.uninstall();
-			tb3b.uninstall();
-			ungetService(pa);
-		}
-	}
-
-	/**
 	 * Tests multiple-hosts parameter with a value of false. The fragment will
 	 * only attach to the selected bundle with the greatest version that can be
-	 * resolved. The default value is “false”.
+	 * resolved. The default value is “false�?.
 	 * 
-	 * Tests the fragment-attachment directives with the value of ”always”. The
-	 * default value is “always”. always – indicates that fragments are allowed
+	 * Tests the fragment-attachment directives with the value of �?always�?. The
+	 * default value is “always�?. always – indicates that fragments are allowed
 	 * to attach to the host bundle at any time (while the host is resolved or
 	 * during the process of resolving the host bundle).
 	 * 
@@ -494,7 +436,7 @@ public class TestControl extends DefaultTestBundleControl implements
 
 	/**
 	 * Tests the fragment-attachment directive recognized by the framework for
-	 * Bundle-SymbolicName taking the value of “resolve-time” which indicates
+	 * Bundle-SymbolicName taking the value of “resolve-time�? which indicates
 	 * that fragments are allowed to attach to the host bundle only during the
 	 * process of resolving the host bundle.
 	 * 
@@ -529,7 +471,7 @@ public class TestControl extends DefaultTestBundleControl implements
 
 	/**
 	 * Tests the fragment-attachment directive recognized by the framework for
-	 * Bundle-SymbolicName taking the value of “resolve-time” which indicates
+	 * Bundle-SymbolicName taking the value of “resolve-time�? which indicates
 	 * that fragments are allowed to attach to the host bundle only during the
 	 * process of resolving the host bundle.
 	 * 

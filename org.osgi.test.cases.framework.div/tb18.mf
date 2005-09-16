@@ -6,7 +6,7 @@ Bundle-Vendor: IBM
 Bundle-Version: 1.0
 Bundle-Activator: org.osgi.test.cases.div.tb18.NativeCode
 Comment: This fragment bundle contains native code to be loaded by its host bundle (tb17).
-Fragment-Host: test.cases.div.tb17; multiple-hosts:=false; bundle-version:=1.0
+Fragment-Host: test.cases.div.tb17; bundle-version:=1.0
 Bundle-NativeCode: org/osgi/test/cases/div/tb2/linux_x86/libNative.so; osname=Linux; processor=x86,
  org/osgi/test/cases/div/tb2/qnx_x86/libNative.so; osname=QNX; processor=x86,
  org/osgi/test/cases/div/tb2/qnx_ppc/libNative.so; osname=QNX; processor=PowerPC,
