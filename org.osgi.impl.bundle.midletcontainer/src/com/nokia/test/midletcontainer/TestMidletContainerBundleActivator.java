@@ -21,6 +21,7 @@ import org.osgi.service.event.Event;
 import org.osgi.service.event.EventAdmin;
 import org.osgi.service.event.EventHandler;
 import org.osgi.service.log.*;
+import org.osgi.util.tracker.ServiceTracker;
 
 public class TestMidletContainerBundleActivator
     implements BundleActivator, BundleListener, EventHandler, Runnable
@@ -40,6 +41,7 @@ public class TestMidletContainerBundleActivator
     private LinkedList              receivedEvents;
   	private ServiceReference				dmtFactoryRef;
   	private DmtAdmin 								dmtFactory;
+  	private ServiceTracker          dmtTracker;
 
     public TestMidletContainerBundleActivator()
     {
@@ -53,6 +55,10 @@ public class TestMidletContainerBundleActivator
         this.bc = bc;
         serviceReg = bc.registerService("org.osgi.service.event.EventHandler", this, serviceRegProps);
         bc.addBundleListener(this);
+        
+    		
+    		dmtTracker = new ServiceTracker( bc, DmtAdmin.class.getName(), null );
+    		dmtTracker.open();        
     }
 
     public void stop(BundleContext bc)
@@ -107,6 +113,13 @@ public class TestMidletContainerBundleActivator
         }
         return false;
     }
+  	
+  	String mangle( String in ) {
+  		DmtAdmin dmtAdmin = (DmtAdmin)dmtTracker.getService();
+  		if( dmtAdmin == null )
+  			throw new RuntimeException("DmtAdmin not running!");
+  		return dmtAdmin.mangle( in );
+  	}
 
     String getPID(ApplicationDescriptor appDesc)
     {
@@ -115,7 +128,7 @@ public class TestMidletContainerBundleActivator
 
     boolean isLocked(ApplicationDescriptor appDesc)
     {
-        return Boolean.valueOf((String)appDesc.getProperties("").get(ApplicationDescriptor.APPLICATION_LOCKED)).booleanValue();
+        return ((Boolean)appDesc.getProperties("").get(ApplicationDescriptor.APPLICATION_LOCKED)).booleanValue();
     }
 
     public ApplicationDescriptor getAppDesc(ApplicationHandle appHnd)
@@ -316,6 +329,10 @@ public class TestMidletContainerBundleActivator
             System.out.println("Checking OAT startup parameters                  FAILED");
         else
             System.out.println("Checking OAT startup parameters                  PASSED");
+        if(!testCase_oatSelfRegistration())
+            System.out.println("Checking whether self registration is forbidden  FAILED");
+        else
+            System.out.println("Checking whether self registration is forbidden  PASSED");
         if(!testCase_launchAfterRestart())
             System.out.println("Launching Midlet app after container restart     FAILED");
         else
@@ -390,9 +407,9 @@ public class TestMidletContainerBundleActivator
     {
         try
         {
-            Bundle bundles[] = bc.getBundles();
+            Bundle bundles[] = bc.getBundles();            
             for(int i = 0; i < bundles.length; i++)
-                if(bundles[i].getState() == 32)
+                if(bundles[i].getState() == Bundle.ACTIVE)
                 {
                     Dictionary dict = bundles[i].getHeaders();
                     Object name = dict.get("MIDlet-Container-Name");
@@ -893,13 +910,7 @@ public class TestMidletContainerBundleActivator
             String pid = getPID(appDesc);
             if(!testCase_launchApplication())
                 return false;
-            
-            /* checking if the two instance is alive */
-            if( !checkResponseForEvent( "com/nokia/megtest/GetInstance1", "OK" ) )
-            	return false;
-            if( !checkResponseForEvent( "com/nokia/megtest/GetInstance2", "OK" ) )
-            	return false;
-						
+            					
             if(!testCase_stopApplication())
                 return false;
             appHandle = oldHandle;
@@ -1231,6 +1242,23 @@ public class TestMidletContainerBundleActivator
       }
       return false;  		
   	}
+
+  	boolean testCase_oatSelfRegistration() {
+      try {
+      	if( !testCase_launchApplication() )
+      		return false;
+  	  	if( !checkResponseForEvent( "com/nokia/megtest/RegisterMyself", 
+                                    "REGISTER MYSELF OK") )
+  		  	return false;
+  		  if( !testCase_stopApplication() )
+	  	  	return false;
+        return true;  		
+      }
+      catch(Exception e) {
+          e.printStackTrace();
+      }
+      return false;  		
+  	}
   	
   	public boolean testCase_lockApplication() {
   		try {
@@ -1240,8 +1268,7 @@ public class TestMidletContainerBundleActivator
   			appDesc.lock();
   			if (!isLocked( appDesc ))
   				throw new Exception("Lock doesn't work!");
-  			if (!appDesc.getProperties("en").get(ApplicationDescriptor.APPLICATION_LOCKED).equals(
-  					"true"))
+  			if ( !((Boolean)appDesc.getProperties("en").get(ApplicationDescriptor.APPLICATION_LOCKED)).booleanValue() )
   				throw new Exception("Lock property is incorrect!");
   			boolean launchable = isLaunchable(appDesc);
   			boolean started = false;
@@ -1253,8 +1280,7 @@ public class TestMidletContainerBundleActivator
   			if (started)
   				throw new Exception("Application was launched inspite of lock!");
   			appDesc.unlock();
-  			if (!appDesc.getProperties("en").get(ApplicationDescriptor.APPLICATION_LOCKED).equals(
-  					"false"))
+  			if (((Boolean)appDesc.getProperties("en").get(ApplicationDescriptor.APPLICATION_LOCKED)).booleanValue())
   				throw new Exception("Lock property is incorrect!");
   			if (isLocked( appDesc ))
   				throw new Exception("Unlock doesn't work!");
@@ -1284,8 +1310,7 @@ public class TestMidletContainerBundleActivator
   			if (isLocked( appDesc ))
   				throw new Exception("Application is locked and cannot launch!");
   			appDesc.lock();
-  			if (!appDesc.getProperties("en").get(ApplicationDescriptor.APPLICATION_LOCKED).equals(
-  					"true"))
+  			if (!((Boolean)appDesc.getProperties("en").get(ApplicationDescriptor.APPLICATION_LOCKED)).booleanValue())
   				throw new Exception("Lock property is incorrect!");
   			if (!isLocked( appDesc ))
   				throw new Exception("Lock doesn't work!");
@@ -1304,8 +1329,7 @@ public class TestMidletContainerBundleActivator
   			if (started)
   				throw new Exception("Application was launched inspite of lock!");
   			appDesc.unlock();
-  			if (!appDesc.getProperties("en").get(ApplicationDescriptor.APPLICATION_LOCKED).equals(
-  					"false"))
+  			if (((Boolean)appDesc.getProperties("en").get(ApplicationDescriptor.APPLICATION_LOCKED)).booleanValue())
   				throw new Exception("Lock property is incorrect!");
   			if (launchable)
   				throw new Exception(
@@ -1571,14 +1595,17 @@ public class TestMidletContainerBundleActivator
   			if( nodeNames.length != 1)
   				throw new Exception( "Too many nodenames are present! Only one meglet is installed!" );
   			
-  			if( !appUID.equals( nodeNames[ 0 ] ) )
-  				throw new Exception( "Illegal node name found! (" + nodeNames[ 0 ] + " instead of " + appUID );
+  			String mangledAppUID = mangle( appUID ); 
+  			
+  			if( !mangledAppUID.equals( nodeNames[ 0 ] ) )
+  				throw new Exception( "Illegal node name found! (" + nodeNames[ 0 ] + " instead of " + mangledAppUID );
   	
-  			String[] properties = session.getChildNodeNames( "./OSGi/Application/" + appUID );
+  			String[] properties = session.getChildNodeNames( "./OSGi/Application/" + mangledAppUID );
   			
   			String names[]  = new String [] { "Name", "IconURI", "Version", "Vendor", 
   					                              "Locked", "PackageID", "ContainerID",
-																					"Instances", "Ext", "Operations", "Schedules" };
+																					"ApplicationID", "Instances", "Ext", 
+																					"Operations", "Schedules" };
   			Object values[] = new Object [ names.length ];
   			
   			Map props = appDesc.getProperties( Locale.getDefault().getLanguage() );
@@ -1587,9 +1614,10 @@ public class TestMidletContainerBundleActivator
   			values[ 1 ] = (String)( props.get( ApplicationDescriptor.APPLICATION_ICON ) );
   			values[ 2 ] = (String)( props.get( ApplicationDescriptor.APPLICATION_VERSION ) );
   			values[ 3 ] = (String)( props.get( ApplicationDescriptor.APPLICATION_VENDOR ) );
-  			values[ 4 ] = Boolean.valueOf( (String)props.get( ApplicationDescriptor.APPLICATION_LOCKED ) );
+  			values[ 4 ] = (Boolean)(props.get( ApplicationDescriptor.APPLICATION_LOCKED ) );
   			values[ 5 ] = (String)( props.get( ApplicationDescriptor.APPLICATION_PACKAGE ) );
   			values[ 6 ] = (String)( props.get( ApplicationDescriptor.APPLICATION_CONTAINER ) );
+  			values[ 7 ] = (String)( props.get( ApplicationDescriptor.APPLICATION_PID ) );
   			
   			boolean found[] = new boolean[ names.length ];				
   			for( int i = 0; i != names.length; i++ )
@@ -1605,7 +1633,7 @@ public class TestMidletContainerBundleActivator
   						if( values[ j ] == null )
   							break;
   						
-  						DmtData value = session.getNodeValue( "./OSGi/Application/" + appUID + "/" + names[ j ] );
+  						DmtData value = session.getNodeValue( "./OSGi/Application/" + mangledAppUID + "/" + names[ j ] );
   						
   						switch( value.getFormat() )
   						{
@@ -1648,6 +1676,7 @@ public class TestMidletContainerBundleActivator
   	boolean testCase_appPluginCheckRunningApps() {
   		ApplicationDescriptor appDesc = appDescs[0];
   		String appUID = getPID( appDesc );
+			String mangledAppUID = mangle( appUID ); 
   		
   		try {
   			if( !testCase_launchApplication() )
@@ -1660,31 +1689,36 @@ public class TestMidletContainerBundleActivator
   			if( references == null || references.length == 0 )
   				throw new Exception( "Service reference not found!" );
   			
-  			DmtSession session = dmtFactory.getSession("./OSGi/Application/" + appUID + "/Instances" );
+  			DmtSession session = dmtFactory.getSession("./OSGi/Application/" + mangledAppUID + "/Instances" );
 
-  			String[] nodeNames = session.getChildNodeNames( "./OSGi/Application/" + appUID + "/Instances" );
+  			String[] nodeNames = session.getChildNodeNames( "./OSGi/Application/" + mangledAppUID + "/Instances" );
   			
   			if( nodeNames == null || nodeNames.length != 1 )
   				throw new Exception( "Couldn't find the application instance node!" );
   			
   			ApplicationHandle appHandle = lookupAppHandle( appDesc );
   			
-  			String instID = appHandle.getInstanceID();
+  			String mangledInstID = mangle( appHandle.getInstanceId() );
   			
-  			if( !nodeNames[ 0 ].equals( appHandle.getInstanceID() ) )
+  			if( !nodeNames[ 0 ].equals( mangledInstID ) ) 
   				throw new Exception( "Illegal node name (" + nodeNames[ 0 ] + 
-  						                 " instead of " + instID +")" );
-  			String[] childNodes = session.getChildNodeNames( "./OSGi/Application/" + appUID + "/Instances/" + appHandle.getInstanceID() );
+  						                 " instead of " + mangledInstID +")" );
+  			String[] childNodes = session.getChildNodeNames( "./OSGi/Application/" + mangledAppUID + "/Instances/" + mangledInstID );
   			
-  			if( childNodes == null || childNodes.length != 2 )
+  			if( childNodes == null || childNodes.length != 3 )
   				throw new Exception( "Invalid child nodes of the application instance!" );
   			
   			List childList = Arrays.asList( childNodes );
   			
-  			if( childList.indexOf( "State" ) == -1 || childList.indexOf( "Operations" ) == -1 )
+  			if( childList.indexOf( "State" ) == -1 || childList.indexOf( "Operations" ) == -1 || 
+  					childList.indexOf( "InstanceID" ) == -1 ) 
   				throw new Exception( "Invalid child nodes of the application instance!" );
   			
-  			DmtData stateValue = session.getNodeValue( "./OSGi/Application/" + appUID + "/Instances/" + appHandle.getInstanceID() + "/State" );
+  			DmtData instidValue = session.getNodeValue( "./OSGi/Application/" + mangledAppUID + "/Instances/" + mangledInstID + "/InstanceID" );
+  			if( !instidValue.getString().equals( appHandle.getInstanceId() ) )
+  				throw new Exception("InstanceID node has illegal value!");
+  			
+  			DmtData stateValue = session.getNodeValue( "./OSGi/Application/" + mangledAppUID + "/Instances/" + mangledInstID + "/State" );
   			if( !stateValue.getString().equals( ApplicationHandle.RUNNING ) )
   				throw new Exception( "Bad state value (" + stateValue.getInt() + " " + 
   						                  ApplicationHandle.RUNNING + ")!" );
@@ -1692,7 +1726,7 @@ public class TestMidletContainerBundleActivator
   			if( ! testCase_pauseApplication() )
   				return false;
 
-  			stateValue = session.getNodeValue( "./OSGi/Application/" + appUID + "/Instances/" + appHandle.getInstanceID() + "/State" );
+  			stateValue = session.getNodeValue( "./OSGi/Application/" + mangledAppUID + "/Instances/" + mangledInstID + "/State" );
   			if( !stateValue.getString().equals( MidletHandle.PAUSED ) )
   				throw new Exception( "Bad state value (" + stateValue.getInt() + " " + 
   						MidletHandle.PAUSED + ")!" );
@@ -1700,7 +1734,7 @@ public class TestMidletContainerBundleActivator
   			if( ! testCase_resumeApplication() )
   				return false;
 
-  			stateValue = session.getNodeValue( "./OSGi/Application/" + appUID + "/Instances/" + appHandle.getInstanceID() + "/State" );
+  			stateValue = session.getNodeValue( "./OSGi/Application/" + mangledAppUID + "/Instances/" + mangledInstID + "/State" );
   			if( !stateValue.getString().equals( ApplicationHandle.RUNNING ) )
   				throw new Exception( "Bad state value (" + stateValue.getInt() + " " + 
             ApplicationHandle.RUNNING + ")!" );
@@ -1722,11 +1756,12 @@ public class TestMidletContainerBundleActivator
   	{
   		ApplicationDescriptor appDesc = appDescs[0];
   		String appUID = getPID( appDesc );
+			String mangledAppUID = mangle( appUID ); 
   		
   		try {
   			DmtSession session = dmtFactory.getSession("./OSGi/Application");
   			
-  			String[] launchNode = session.getChildNodeNames( "./OSGi/Application/" + appUID + "/Operations" );
+  			String[] launchNode = session.getChildNodeNames( "./OSGi/Application/" + mangledAppUID + "/Operations" );
   			boolean found = false;
   			for( int q=0; q != launchNode.length; q++ )
   				if( launchNode[ q ].equals( "Launch" ) ) {
@@ -1736,27 +1771,27 @@ public class TestMidletContainerBundleActivator
   			if( !found )
   				throw new Exception( "Launch node is missing!" );
   			
-  			String[] nodeNames = session.getChildNodeNames( "./OSGi/Application/" + appUID + "/Operations/Launch" );
+  			String[] nodeNames = session.getChildNodeNames( "./OSGi/Application/" + mangledAppUID + "/Operations/Launch" );
   			if( nodeNames != null && nodeNames.length != 0 )
   				throw new Exception( "Launch-id found without setting it manually!" );
   		
-  			session.createInteriorNode( "./OSGi/Application/" + appUID + "/Operations/Launch/my_launch_id" );
+  			session.createInteriorNode( "./OSGi/Application/" + mangledAppUID + "/Operations/Launch/my_launch_id" );
   			
-  			nodeNames = session.getChildNodeNames( "./OSGi/Application/" + appUID + "/Operations/Launch" );
+  			nodeNames = session.getChildNodeNames( "./OSGi/Application/" + mangledAppUID + "/Operations/Launch" );
   			if( nodeNames == null || nodeNames.length != 1 )
   				throw new Exception( "Interior node wasn't created properly!" );
   			if( !nodeNames[ 0 ].equals("my_launch_id") )
   				throw new Exception( "The name of the interior node is " + nodeNames [ 0 ] + 
   						                  "instead if my_launch_id !" );
   			
-  			String[] childNodes = session.getChildNodeNames( "./OSGi/Application/" + appUID + "/Operations/Launch/my_launch_id" );
+  			String[] childNodes = session.getChildNodeNames( "./OSGi/Application/" + mangledAppUID + "/Operations/Launch/my_launch_id" );
   			if( childNodes == null || childNodes.length != 2 )
   				throw new Exception( "Invalid parameters placed into to the my_launch_id interior node!" );
   			List childList = Arrays.asList( childNodes );  			
   			if( childList.indexOf( "Arguments" ) == -1 || childList.indexOf( "Result" ) == -1 )
   				throw new Exception( "Invalid child nodes of my_launch_id!" );
   			
-  			String[] resultNodes = session.getChildNodeNames( "./OSGi/Application/" + appUID + "/Operations/Launch/my_launch_id/Result" );
+  			String[] resultNodes = session.getChildNodeNames( "./OSGi/Application/" + mangledAppUID + "/Operations/Launch/my_launch_id/Result" );
   			if( resultNodes == null || resultNodes.length != 3 )
   				throw new Exception( "Invalid parameters placed into to the my_launch_id/Result interior node!" );
   			List resultList = Arrays.asList( resultNodes );  			
@@ -1764,25 +1799,25 @@ public class TestMidletContainerBundleActivator
   					resultList.indexOf( "Message" ) == -1 )
   				throw new Exception( "Invalid child nodes of the my_launch_id/Result!" );
 
-  			String resultInstance = session.getNodeValue( "./OSGi/Application/" + appUID + "/Operations/Launch/my_launch_id/Result/InstanceID" ).getString();
-  			String resultStatus = session.getNodeValue( "./OSGi/Application/" + appUID + "/Operations/Launch/my_launch_id/Result/Status" ).getString();
-  			String resultMessage = session.getNodeValue( "./OSGi/Application/" + appUID + "/Operations/Launch/my_launch_id/Result/Message" ).getString();
+  			String resultInstance = session.getNodeValue( "./OSGi/Application/" + mangledAppUID + "/Operations/Launch/my_launch_id/Result/InstanceID" ).getString();
+  			String resultStatus = session.getNodeValue( "./OSGi/Application/" + mangledAppUID + "/Operations/Launch/my_launch_id/Result/Status" ).getString();
+  			String resultMessage = session.getNodeValue( "./OSGi/Application/" + mangledAppUID + "/Operations/Launch/my_launch_id/Result/Message" ).getString();
   			
   			if( !resultInstance.equals("") || !resultStatus.equals("") || !resultMessage.equals("") )
   				throw new Exception( "Invalid default values for Result subnodes!" );
   			
-  			String[] argNodes = session.getChildNodeNames( "./OSGi/Application/" + appUID + "/Operations/Launch/my_launch_id/Arguments" );
+  			String[] argNodes = session.getChildNodeNames( "./OSGi/Application/" + mangledAppUID + "/Operations/Launch/my_launch_id/Arguments" );
   			if( argNodes != null && argNodes.length != 0 )
   				throw new Exception( "Extra parameters placed into to the my_launch_id/Arguments interior node!" );
 
-  			session.createInteriorNode( "./OSGi/Application/" + appUID + "/Operations/Launch/my_launch_id/Arguments/dummyArg" );
-  			argNodes = session.getChildNodeNames( "./OSGi/Application/" + appUID + "/Operations/Launch/my_launch_id/Arguments" );
+  			session.createInteriorNode( "./OSGi/Application/" + mangledAppUID + "/Operations/Launch/my_launch_id/Arguments/dummyArg" );
+  			argNodes = session.getChildNodeNames( "./OSGi/Application/" + mangledAppUID + "/Operations/Launch/my_launch_id/Arguments" );
   			if( argNodes == null || argNodes.length != 1 )
   				throw new Exception( "The my_launch_id/Arguments/dummyArg interior node was not created!" );
 
-  			session.deleteNode( "./OSGi/Application/" + appUID + "/Operations/Launch/my_launch_id/Arguments/dummyArg" );
+  			session.deleteNode( "./OSGi/Application/" + mangledAppUID + "/Operations/Launch/my_launch_id/Arguments/dummyArg" );
 
-  			argNodes = session.getChildNodeNames( "./OSGi/Application/" + appUID + "/Operations/Launch/my_launch_id/Arguments" );
+  			argNodes = session.getChildNodeNames( "./OSGi/Application/" + mangledAppUID + "/Operations/Launch/my_launch_id/Arguments" );
   			if( argNodes != null && argNodes.length != 0 )
   				throw new Exception( "The my_launch_id/Arguments/dummyArg interior node was not deleted!" );
   			
@@ -1797,9 +1832,9 @@ public class TestMidletContainerBundleActivator
   				
   				String argID = "Arg" + argIDcnt++;
   				
-    			session.createInteriorNode( "./OSGi/Application/" + appUID + "/Operations/Launch/my_launch_id/Arguments/" + argID );
+    			session.createInteriorNode( "./OSGi/Application/" + mangledAppUID + "/Operations/Launch/my_launch_id/Arguments/" + argID );
   				
-    			argNodes = session.getChildNodeNames( "./OSGi/Application/" + appUID + "/Operations/Launch/my_launch_id/Arguments" );
+    			argNodes = session.getChildNodeNames( "./OSGi/Application/" + mangledAppUID + "/Operations/Launch/my_launch_id/Arguments" );
     			if( argNodes == null || argNodes.length != argIDcnt )
     				throw new Exception( "The my_launch_id/Arguments/<arg_id> interior node was not created!" );
     			boolean foundArgID = false;
@@ -1809,36 +1844,36 @@ public class TestMidletContainerBundleActivator
     					break;
     				}
     			
-    			String []argIDNodes = session.getChildNodeNames( "./OSGi/Application/" + appUID + "/Operations/Launch/my_launch_id/Arguments/" + argID );
+    			String []argIDNodes = session.getChildNodeNames( "./OSGi/Application/" + mangledAppUID + "/Operations/Launch/my_launch_id/Arguments/" + argID );
     			if( argIDNodes == null || argIDNodes.length != 2 )
     				throw new Exception( "Invalid leaf nodes of my_launch_id/Arguments/<arg_id>/" );
     			if( !( ( argIDNodes[ 0 ].equals( "Name" ) && argIDNodes[ 1 ].equals( "Value" ) ) ||
     					 ( argIDNodes[ 0 ].equals( "Value" ) && argIDNodes[ 1 ].equals( "Name" ) ) ) )
     				throw new Exception( "Invalid leaf nodes of my_launch_id/Arguments/<arg_id>/" );
     			
-    			String defaultName = session.getNodeValue( "./OSGi/Application/" + appUID + "/Operations/Launch/my_launch_id/Arguments/" + argID + "/Name" ).getString();
+    			String defaultName = session.getNodeValue( "./OSGi/Application/" + mangledAppUID + "/Operations/Launch/my_launch_id/Arguments/" + argID + "/Name" ).getString();
     			if( !defaultName.equals("") )
     				throw new Exception( "Invalid default value for my_launch_id/Arguments/<arg>/Name!" );
-    			DmtData defaultValue = session.getNodeValue( "./OSGi/Application/" + appUID + "/Operations/Launch/my_launch_id/Arguments/" + argID + "/Value" );
+    			DmtData defaultValue = session.getNodeValue( "./OSGi/Application/" + mangledAppUID + "/Operations/Launch/my_launch_id/Arguments/" + argID + "/Value" );
     			if( defaultValue.getFormat() != DmtData.FORMAT_NULL )
     				throw new Exception( "Invalid default value for my_launch_id/Arguments/<arg>/Value!" );
     			
-    			session.setNodeValue( "./OSGi/Application/" + appUID + "/Operations/Launch/my_launch_id/Arguments/" + argID + "/Name", new DmtData( prop ) );
-          if( !session.getNodeValue( "./OSGi/Application/" + appUID + "/Operations/Launch/my_launch_id/Arguments/" + argID + "/Name" ).getString().equals( prop ) )
+    			session.setNodeValue( "./OSGi/Application/" + mangledAppUID + "/Operations/Launch/my_launch_id/Arguments/" + argID + "/Name", new DmtData( prop ) );
+          if( !session.getNodeValue( "./OSGi/Application/" + mangledAppUID + "/Operations/Launch/my_launch_id/Arguments/" + argID + "/Name" ).getString().equals( prop ) )
     				throw new Exception( "The my_launch_id/Arguments/<arg>/Name was not set correctly!" );          	
           
-    			session.setNodeValue( "./OSGi/Application/" + appUID + "/Operations/Launch/my_launch_id/Arguments/" + argID + "/Value", new DmtData( value ) );
-          if( !session.getNodeValue( "./OSGi/Application/" + appUID + "/Operations/Launch/my_launch_id/Arguments/" + argID + "/Value" ).getString().equals( value ) )
+    			session.setNodeValue( "./OSGi/Application/" + mangledAppUID + "/Operations/Launch/my_launch_id/Arguments/" + argID + "/Value", new DmtData( value ) );
+          if( !session.getNodeValue( "./OSGi/Application/" + mangledAppUID + "/Operations/Launch/my_launch_id/Arguments/" + argID + "/Value" ).getString().equals( value ) )
     				throw new Exception( "The my_launch_id/Arguments/<arg>/Value was not set correctly!" );          	    			
   			}
   			
-  			session.execute( "./OSGi/Application/" + appUID + "/Operations/Launch/my_launch_id", null );
+  			session.execute( "./OSGi/Application/" + mangledAppUID + "/Operations/Launch/my_launch_id", null );
 
-  			resultInstance = session.getNodeValue( "./OSGi/Application/" + appUID + "/Operations/Launch/my_launch_id/Result/InstanceID" ).getString();  			
-  			resultStatus = session.getNodeValue( "./OSGi/Application/" + appUID + "/Operations/Launch/my_launch_id/Result/Status" ).getString();
+  			resultInstance = session.getNodeValue( "./OSGi/Application/" + mangledAppUID + "/Operations/Launch/my_launch_id/Result/InstanceID" ).getString();  			
+  			resultStatus = session.getNodeValue( "./OSGi/Application/" + mangledAppUID + "/Operations/Launch/my_launch_id/Result/Status" ).getString();
   			if( !resultStatus.equals("OK") )
   				throw new Exception("Invalid value for result status!");
-  			resultMessage = session.getNodeValue( "./OSGi/Application/" + appUID + "/Operations/Launch/my_launch_id/Result/Message" ).getString();
+  			resultMessage = session.getNodeValue( "./OSGi/Application/" + mangledAppUID + "/Operations/Launch/my_launch_id/Result/Message" ).getString();
   			if( !resultMessage.equals("") )
   				throw new Exception("Invalid value for result message!");
   			
@@ -1852,7 +1887,7 @@ public class TestMidletContainerBundleActivator
 
   			appHandle = (ApplicationHandle) bc.getService(appList[0]);
   			
-  			if( !resultInstance.equals( appHandle.getInstanceID() ) )
+  			if( !resultInstance.equals( appHandle.getInstanceId() ) )
   				throw new Exception("Result instance was not set properly!");
   			
   			if ( !appHandle.getState().equals( ApplicationHandle.RUNNING ) )
@@ -1860,9 +1895,9 @@ public class TestMidletContainerBundleActivator
 
   			bc.ungetService( appList[0] );
 
-  			session.deleteNode( "./OSGi/Application/" + appUID + "/Operations/Launch/my_launch_id" );
+  			session.deleteNode( "./OSGi/Application/" + mangledAppUID + "/Operations/Launch/my_launch_id" );
 
-  			nodeNames = session.getChildNodeNames( "./OSGi/Application/" + appUID + "/Operations/Launch" );
+  			nodeNames = session.getChildNodeNames( "./OSGi/Application/" + mangledAppUID + "/Operations/Launch" );
   			if( nodeNames != null && nodeNames.length != 0 )
   				throw new Exception( "my_launch_id wasn't removed after deleting its node!" );
   			
@@ -1882,22 +1917,23 @@ public class TestMidletContainerBundleActivator
   	boolean testCase_appPluginCheckApplicationStop() {
   		ApplicationDescriptor appDesc = appDescs[0];
   		String appUID = getPID( appDesc );
+			String mangledAppUID = mangle( appUID ); 
   		
   		try {
   			
   			if( !testCase_launchApplication() )
   				return false;
   			
-  			DmtSession session = dmtFactory.getSession("./OSGi/Application/" + appUID + "/Instances");
+  			DmtSession session = dmtFactory.getSession("./OSGi/Application/" + mangledAppUID + "/Instances");
 
-  			String[] nodeNames = session.getChildNodeNames( "./OSGi/Application/" + appUID + "/Instances" );
+  			String[] nodeNames = session.getChildNodeNames( "./OSGi/Application/" + mangledAppUID + "/Instances" );
   			
   			if( nodeNames == null || nodeNames.length != 1 )
   				throw new Exception( "Couldn't find the application instance node!" );
   			
   			String instanceName = nodeNames[ 0 ];
   			
-  			String[] operationNames = session.getChildNodeNames( "./OSGi/Application/" + appUID + "/Instances/" + instanceName + "/Operations" );  			
+  			String[] operationNames = session.getChildNodeNames( "./OSGi/Application/" + mangledAppUID + "/Instances/" + instanceName + "/Operations" );  			
   			if( operationNames == null || operationNames.length != 2 )
   				throw new Exception( "Invalid child nodes of the application instance operations!" );
 
@@ -1905,9 +1941,9 @@ public class TestMidletContainerBundleActivator
   			if( childList.indexOf( "Stop" ) == -1 || childList.indexOf( "Ext" ) == -1 )
   				throw new Exception( "Invalid child nodes of the application instance operations!" );
   			
-  			session.execute( "./OSGi/Application/" + appUID + "/Instances/" + instanceName + "/Operations/Stop", "STOP" );			
+  			session.execute( "./OSGi/Application/" + mangledAppUID + "/Instances/" + instanceName + "/Operations/Stop", "STOP" );			
 
-  			nodeNames = session.getChildNodeNames( "./OSGi/Application/" + appUID + "/Instances" );
+  			nodeNames = session.getChildNodeNames( "./OSGi/Application/" + mangledAppUID + "/Instances" );
   			if( nodeNames != null && nodeNames.length != 0 )
   				throw new Exception( "Application didn't stop!" );
   			
@@ -1948,36 +1984,37 @@ public class TestMidletContainerBundleActivator
   	boolean testCase_appPluginLock() {
   		ApplicationDescriptor appDesc = appDescs[0];
   		String appUID = getPID( appDesc );
+			String mangledAppUID = mangle( appUID ); 
   		
   		try {
   			if( isLocked( appDesc ) )
   				throw new Exception( "ApplicationDescriptor is unexpectedly locked!" );
   			
   			DmtSession session = dmtFactory.getSession("./OSGi/Application" );
-  			DmtData value = session.getNodeValue("./OSGi/Application/" + appUID +"/Locked" );			
+  			DmtData value = session.getNodeValue("./OSGi/Application/" + mangledAppUID +"/Locked" );			
   			if( value.getBoolean() )
   				throw new Exception( "Application is unlocked, but AppPlugin reports locked!" );
 
-  			String[] operationNames = session.getChildNodeNames( "./OSGi/Application/" + appUID + "/Operations" );  			
+  			String[] operationNames = session.getChildNodeNames( "./OSGi/Application/" + mangledAppUID + "/Operations" );  			
   			if( operationNames == null || operationNames.length < 2 )
   				throw new Exception( "Invalid child nodes of the application instance operations!" );
   			List childList = Arrays.asList( operationNames );  			
   			if( childList.indexOf( "Lock" ) == -1 || childList.indexOf( "Unlock" ) == -1 )
   				throw new Exception( "Invalid child nodes of the operations node!" );
   			
-  			session.execute( "./OSGi/Application/" + appUID +"/Operations/Lock", "" );
+  			session.execute( "./OSGi/Application/" + mangledAppUID +"/Operations/Lock", "" );
   			
   			if( !isLocked( appDesc ) )
   				throw new Exception( "AppPlugin failed to set the application locked!" );
-  			value = session.getNodeValue("./OSGi/Application/" + appUID +"/Locked" );			
+  			value = session.getNodeValue("./OSGi/Application/" + mangledAppUID +"/Locked" );			
   			if( !value.getBoolean() )
   				throw new Exception( "Application is locked, but AppPlugin reports unlocked!" );
   			
-  			session.execute( "./OSGi/Application/" + appUID +"/Operations/Unlock", "" );
+  			session.execute( "./OSGi/Application/" + mangledAppUID +"/Operations/Unlock", "" );
 
   			if( isLocked( appDesc ) )
   				throw new Exception( "AppPlugin failed to set the application unlocked!" );
-  			value = session.getNodeValue("./OSGi/Application/" + appUID +"/Locked" );			
+  			value = session.getNodeValue("./OSGi/Application/" + mangledAppUID +"/Locked" );			
   			if( value.getBoolean() )
   				throw new Exception( "Application is unlocked, but AppPlugin reports locked!" );
   			
@@ -1993,11 +2030,12 @@ public class TestMidletContainerBundleActivator
   	boolean testCase_appPluginScheduleSynchronization() {
   		ApplicationDescriptor appDesc = appDescs[0];
   		String appUID = getPID( appDesc );
+			String mangledAppUID = mangle( appUID ); 
   		
   		try {
   			DmtSession session = dmtFactory.getSession("./OSGi/Application" );
 
-  			String[] scheduleNames = session.getChildNodeNames( "./OSGi/Application/" + appUID + "/Schedules" );  			
+  			String[] scheduleNames = session.getChildNodeNames( "./OSGi/Application/" + mangledAppUID + "/Schedules" );  			
   			if( scheduleNames != null && scheduleNames.length != 0 )
   				throw new Exception( "Schedule found without scheduling an application!" );
 
@@ -2016,13 +2054,13 @@ public class TestMidletContainerBundleActivator
   			
   			ScheduledApplication schedApp = appDesc.schedule( args, topicFilter, eventFilter, recurring );
   			
-  			scheduleNames = session.getChildNodeNames( "./OSGi/Application/" + appUID + "/Schedules" );  			
+  			scheduleNames = session.getChildNodeNames( "./OSGi/Application/" + mangledAppUID + "/Schedules" );  			
   			if( scheduleNames != null && scheduleNames.length != 1 )
   				throw new Exception( "Schedule was not registered in ApplicationPlugin!" );
   			
   			String schedID = scheduleNames[ 0 ];
 
-  			String[] scheduleChildNames = session.getChildNodeNames( "./OSGi/Application/" + appUID + "/Schedules/" + schedID );  			
+  			String[] scheduleChildNames = session.getChildNodeNames( "./OSGi/Application/" + mangledAppUID + "/Schedules/" + schedID );  			
   			if( scheduleChildNames == null || scheduleChildNames.length != 5 )
   				throw new Exception( "Invalid items found in the schedule node!" );  			
   			List schedChildList = Arrays.asList( scheduleChildNames );
@@ -2034,10 +2072,10 @@ public class TestMidletContainerBundleActivator
 						schedChildList.indexOf( "Arguments" ) == -1 )
   				throw new Exception( "Schedule child node was not found!" );
 
-  			DmtData enabledValue = session.getNodeValue( "./OSGi/Application/" + appUID + "/Schedules/" + schedID + "/Enabled");
-  			DmtData topicFilterValue = session.getNodeValue( "./OSGi/Application/" + appUID + "/Schedules/" + schedID + "/TopicFilter");
-  			DmtData eventFilterValue = session.getNodeValue( "./OSGi/Application/" + appUID + "/Schedules/" + schedID + "/EventFilter");
-  			DmtData recurringValue = session.getNodeValue( "./OSGi/Application/" + appUID + "/Schedules/" + schedID + "/Recurring");
+  			DmtData enabledValue = session.getNodeValue( "./OSGi/Application/" + mangledAppUID + "/Schedules/" + schedID + "/Enabled");
+  			DmtData topicFilterValue = session.getNodeValue( "./OSGi/Application/" + mangledAppUID + "/Schedules/" + schedID + "/TopicFilter");
+  			DmtData eventFilterValue = session.getNodeValue( "./OSGi/Application/" + mangledAppUID + "/Schedules/" + schedID + "/EventFilter");
+  			DmtData recurringValue = session.getNodeValue( "./OSGi/Application/" + mangledAppUID + "/Schedules/" + schedID + "/Recurring");
   			
   			if( enabledValue.getBoolean() != true )
   				throw new Exception( "Invalid enabled value!" );  			
@@ -2048,13 +2086,13 @@ public class TestMidletContainerBundleActivator
   			if( recurringValue.getBoolean() != recurring )
   				throw new Exception( "Invalid recurring value!" );  			
   				
-  			String[] argumentPairs = session.getChildNodeNames( "./OSGi/Application/" + appUID + "/Schedules/" + schedID + "/Arguments" );
+  			String[] argumentPairs = session.getChildNodeNames( "./OSGi/Application/" + mangledAppUID + "/Schedules/" + schedID + "/Arguments" );
   			if( argumentPairs == null || argumentPairs.length != args.size() )
   				throw new Exception( "Invalid argument number was received!" );
   			
   			for( int q=0; q != argumentPairs.length; q++ ) {
   				String argID = argumentPairs[ q ];
-  				String [] pairElems =  session.getChildNodeNames( "./OSGi/Application/" + appUID + "/Schedules/" + schedID + "/Arguments/" + argID );
+  				String [] pairElems =  session.getChildNodeNames( "./OSGi/Application/" + mangledAppUID + "/Schedules/" + schedID + "/Arguments/" + argID );
   				if( pairElems == null || ( pairElems.length != 2 && pairElems.length != 1) )
   					throw new Exception( "Invalid element number!" );
 
@@ -2066,7 +2104,7 @@ public class TestMidletContainerBundleActivator
     			if( pairElems.length == 2 && pairElemList.indexOf( "Value" ) == -1 )
     				throw new Exception( "Value is missing from the list" );
   				
-    			String key = session.getNodeValue( "./OSGi/Application/" + appUID + "/Schedules/" + schedID + "/Arguments/" + argID + "/Name" ).getString();
+    			String key = session.getNodeValue( "./OSGi/Application/" + mangledAppUID + "/Schedules/" + schedID + "/Arguments/" + argID + "/Name" ).getString();
     			Object content = args.get( key );
     			if( key.equals( "Unmappable" ) ) {
     				if( pairElems.length != 1 )
@@ -2076,7 +2114,7 @@ public class TestMidletContainerBundleActivator
     			if( pairElems.length != 2 )
     				throw new Exception("Value is missing from a mappable element!");
     			
-    			DmtData argValue = session.getNodeValue( "./OSGi/Application/" + appUID + "/Schedules/" + schedID + "/Arguments/" + argID + "/Value" );
+    			DmtData argValue = session.getNodeValue( "./OSGi/Application/" + mangledAppUID + "/Schedules/" + schedID + "/Arguments/" + argID + "/Value" );
     			
     			if( content == null ) {
     				if( argValue.getFormat() != DmtData.FORMAT_NULL )
@@ -2120,7 +2158,7 @@ public class TestMidletContainerBundleActivator
   			
   			schedApp.remove();
 
-  			scheduleNames = session.getChildNodeNames( "./OSGi/Application/" + appUID + "/Schedules" );  			
+  			scheduleNames = session.getChildNodeNames( "./OSGi/Application/" + mangledAppUID + "/Schedules" );  			
   			if( scheduleNames != null && scheduleNames.length != 0 )
   				throw new Exception( "Schedule was not deleted from the registry after remove!" );
   			
@@ -2136,6 +2174,7 @@ public class TestMidletContainerBundleActivator
   	boolean testCase_appPluginModifySchedule() {
   		ApplicationDescriptor appDesc = appDescs[0];
   		String appUID = getPID( appDesc );
+			String mangledAppUID = mangle( appUID ); 
   		
   		try {
   			DmtSession session = dmtFactory.getSession("./OSGi/Application" );
@@ -2146,26 +2185,26 @@ public class TestMidletContainerBundleActivator
   			boolean recurring = true;  			
   			ScheduledApplication schedApp = appDesc.schedule( args, topicFilter, eventFilter, recurring );
 
-  			String[] scheduleNames = session.getChildNodeNames( "./OSGi/Application/" + appUID + "/Schedules" );  			
+  			String[] scheduleNames = session.getChildNodeNames( "./OSGi/Application/" + mangledAppUID + "/Schedules" );  			
   			if( scheduleNames == null || scheduleNames.length != 1 )
   				throw new Exception( "Schedule was not registered in the ApplicationPlugin!" );
   			String schedID = scheduleNames[ 0 ];
   			
   			DmtData newTopicFilter = new DmtData("a/y/z/*");
-  			session.setNodeValue( "./OSGi/Application/" + appUID + "/Schedules/" + schedID + "/TopicFilter", newTopicFilter);
-  			if( !session.getNodeValue( "./OSGi/Application/" + appUID + "/Schedules/" + schedID + "/TopicFilter" )
+  			session.setNodeValue( "./OSGi/Application/" + mangledAppUID + "/Schedules/" + schedID + "/TopicFilter", newTopicFilter);
+  			if( !session.getNodeValue( "./OSGi/Application/" + mangledAppUID + "/Schedules/" + schedID + "/TopicFilter" )
   					   .getString().equals( newTopicFilter.getString() ))
   				throw new Exception("TopicFilter cannot be modified!");
   			
-  			if( session.getNodeValue( "./OSGi/Application/" + appUID + "/Schedules/" + schedID + "/Enabled" ).getBoolean() )
+  			if( session.getNodeValue( "./OSGi/Application/" + mangledAppUID + "/Schedules/" + schedID + "/Enabled" ).getBoolean() )
   				throw new Exception("Schedule was not disabled after TopicFilter modification!");
   			
   			ServiceReference refs[] = bc.getServiceReferences( ScheduledApplication.class.getName(), null );
   			if( refs != null && refs.length != 0 )
   				throw new Exception("Schedule was not disabled by the modification!");
 
-  			session.setNodeValue( "./OSGi/Application/" + appUID + "/Schedules/" + schedID + "/Enabled", new DmtData( true ));
-  			if( !session.getNodeValue( "./OSGi/Application/" + appUID + "/Schedules/" + schedID + "/Enabled" ).getBoolean() )
+  			session.setNodeValue( "./OSGi/Application/" + mangledAppUID + "/Schedules/" + schedID + "/Enabled", new DmtData( true ));
+  			if( !session.getNodeValue( "./OSGi/Application/" + mangledAppUID + "/Schedules/" + schedID + "/Enabled" ).getBoolean() )
   				throw new Exception("Cannot set the enabled field to true!");
 
   			refs = bc.getServiceReferences( ScheduledApplication.class.getName(), null );
@@ -2173,72 +2212,72 @@ public class TestMidletContainerBundleActivator
   				throw new Exception("Schedule was not registered by setting Enabled to true!");
   			
   			DmtData newEventFilter = new DmtData( "(Zizi=Hali)" );
-  			session.setNodeValue( "./OSGi/Application/" + appUID + "/Schedules/" + schedID + "/EventFilter", newEventFilter);
-  			if( !session.getNodeValue( "./OSGi/Application/" + appUID + "/Schedules/" + schedID + "/EventFilter" )
+  			session.setNodeValue( "./OSGi/Application/" + mangledAppUID + "/Schedules/" + schedID + "/EventFilter", newEventFilter);
+  			if( !session.getNodeValue( "./OSGi/Application/" + mangledAppUID + "/Schedules/" + schedID + "/EventFilter" )
   					   .getString().equals( newEventFilter.getString() ))
   				throw new Exception("EventFilter cannot be modified!");
 
-  			if( session.getNodeValue( "./OSGi/Application/" + appUID + "/Schedules/" + schedID + "/Enabled" ).getBoolean() )
+  			if( session.getNodeValue( "./OSGi/Application/" + mangledAppUID + "/Schedules/" + schedID + "/Enabled" ).getBoolean() )
   				throw new Exception("Schedule was not disabled after EventFilter modification!");
-  			session.setNodeValue( "./OSGi/Application/" + appUID + "/Schedules/" + schedID + "/Enabled", new DmtData( true ));
-  			if( !session.getNodeValue( "./OSGi/Application/" + appUID + "/Schedules/" + schedID + "/Enabled" ).getBoolean() )
+  			session.setNodeValue( "./OSGi/Application/" + mangledAppUID + "/Schedules/" + schedID + "/Enabled", new DmtData( true ));
+  			if( !session.getNodeValue( "./OSGi/Application/" + mangledAppUID + "/Schedules/" + schedID + "/Enabled" ).getBoolean() )
   				throw new Exception("Cannot set the enabled field to true!");
 
   			DmtData newRecurring = new DmtData( false );
-  			session.setNodeValue( "./OSGi/Application/" + appUID + "/Schedules/" + schedID + "/Recurring", newRecurring);
-  			if( session.getNodeValue( "./OSGi/Application/" + appUID + "/Schedules/" + schedID + "/Recurring" ).getBoolean() )
+  			session.setNodeValue( "./OSGi/Application/" + mangledAppUID + "/Schedules/" + schedID + "/Recurring", newRecurring);
+  			if( session.getNodeValue( "./OSGi/Application/" + mangledAppUID + "/Schedules/" + schedID + "/Recurring" ).getBoolean() )
    				throw new Exception("Recurring cannot be modified!");
 
-  			if( session.getNodeValue( "./OSGi/Application/" + appUID + "/Schedules/" + schedID + "/Enabled" ).getBoolean() )
+  			if( session.getNodeValue( "./OSGi/Application/" + mangledAppUID + "/Schedules/" + schedID + "/Enabled" ).getBoolean() )
   				throw new Exception("Schedule was not disabled after Recurring modification!");
-  			session.setNodeValue( "./OSGi/Application/" + appUID + "/Schedules/" + schedID + "/Enabled", new DmtData( true ));
-  			if( !session.getNodeValue( "./OSGi/Application/" + appUID + "/Schedules/" + schedID + "/Enabled" ).getBoolean() )
+  			session.setNodeValue( "./OSGi/Application/" + mangledAppUID + "/Schedules/" + schedID + "/Enabled", new DmtData( true ));
+  			if( !session.getNodeValue( "./OSGi/Application/" + mangledAppUID + "/Schedules/" + schedID + "/Enabled" ).getBoolean() )
   				throw new Exception("Cannot set the enabled field to true!");
 
-  			session.createInteriorNode( "./OSGi/Application/" + appUID + "/Schedules/" + schedID + "/Arguments/Arg0" );
+  			session.createInteriorNode( "./OSGi/Application/" + mangledAppUID + "/Schedules/" + schedID + "/Arguments/Arg0" );
 
-  			if( session.getNodeValue( "./OSGi/Application/" + appUID + "/Schedules/" + schedID + "/Enabled" ).getBoolean() )
+  			if( session.getNodeValue( "./OSGi/Application/" + mangledAppUID + "/Schedules/" + schedID + "/Enabled" ).getBoolean() )
   				throw new Exception("Schedule was not disabled after adding a new argument node!");
-  			session.setNodeValue( "./OSGi/Application/" + appUID + "/Schedules/" + schedID + "/Enabled", new DmtData( true ));
-  			if( !session.getNodeValue( "./OSGi/Application/" + appUID + "/Schedules/" + schedID + "/Enabled" ).getBoolean() )
+  			session.setNodeValue( "./OSGi/Application/" + mangledAppUID + "/Schedules/" + schedID + "/Enabled", new DmtData( true ));
+  			if( !session.getNodeValue( "./OSGi/Application/" + mangledAppUID + "/Schedules/" + schedID + "/Enabled" ).getBoolean() )
   				throw new Exception("Cannot set the enabled field to true!");
 
-  			session.setNodeValue( "./OSGi/Application/" + appUID + "/Schedules/" + schedID + "/Arguments/Arg0/Name", 
+  			session.setNodeValue( "./OSGi/Application/" + mangledAppUID + "/Schedules/" + schedID + "/Arguments/Arg0/Name", 
   					                  new DmtData( "Boolean" ));
   			
-  			if( session.getNodeValue( "./OSGi/Application/" + appUID + "/Schedules/" + schedID + "/Enabled" ).getBoolean() )
+  			if( session.getNodeValue( "./OSGi/Application/" + mangledAppUID + "/Schedules/" + schedID + "/Enabled" ).getBoolean() )
   				throw new Exception("Schedule was not disabled after changing the value of a node!");
   			
-  			session.setNodeValue( "./OSGi/Application/" + appUID + "/Schedules/" + schedID + "/Arguments/Arg0/Value", 
+  			session.setNodeValue( "./OSGi/Application/" + mangledAppUID + "/Schedules/" + schedID + "/Arguments/Arg0/Value", 
                               new DmtData( true ));
-  			session.createInteriorNode( "./OSGi/Application/" + appUID + "/Schedules/" + schedID + "/Arguments/Arg1" );
-  			session.setNodeValue( "./OSGi/Application/" + appUID + "/Schedules/" + schedID + "/Arguments/Arg1/Name", 
+  			session.createInteriorNode( "./OSGi/Application/" + mangledAppUID + "/Schedules/" + schedID + "/Arguments/Arg1" );
+  			session.setNodeValue( "./OSGi/Application/" + mangledAppUID + "/Schedules/" + schedID + "/Arguments/Arg1/Name", 
   					                  new DmtData( "Integer" ));
-  			session.setNodeValue( "./OSGi/Application/" + appUID + "/Schedules/" + schedID + "/Arguments/Arg1/Value", 
+  			session.setNodeValue( "./OSGi/Application/" + mangledAppUID + "/Schedules/" + schedID + "/Arguments/Arg1/Value", 
                               new DmtData( 23 ));
-  			session.createInteriorNode( "./OSGi/Application/" + appUID + "/Schedules/" + schedID + "/Arguments/Arg2" );
-  			session.setNodeValue( "./OSGi/Application/" + appUID + "/Schedules/" + schedID + "/Arguments/Arg2/Name", 
+  			session.createInteriorNode( "./OSGi/Application/" + mangledAppUID + "/Schedules/" + schedID + "/Arguments/Arg2" );
+  			session.setNodeValue( "./OSGi/Application/" + mangledAppUID + "/Schedules/" + schedID + "/Arguments/Arg2/Name", 
   					                  new DmtData( "String" ));
-  			session.setNodeValue( "./OSGi/Application/" + appUID + "/Schedules/" + schedID + "/Arguments/Arg2/Value", 
+  			session.setNodeValue( "./OSGi/Application/" + mangledAppUID + "/Schedules/" + schedID + "/Arguments/Arg2/Value", 
                               new DmtData( "Hali" ));
-  			session.createInteriorNode( "./OSGi/Application/" + appUID + "/Schedules/" + schedID + "/Arguments/Arg3" );
-  			session.setNodeValue( "./OSGi/Application/" + appUID + "/Schedules/" + schedID + "/Arguments/Arg3/Name", 
+  			session.createInteriorNode( "./OSGi/Application/" + mangledAppUID + "/Schedules/" + schedID + "/Arguments/Arg3" );
+  			session.setNodeValue( "./OSGi/Application/" + mangledAppUID + "/Schedules/" + schedID + "/Arguments/Arg3/Name", 
   					                  new DmtData( "null" ));
-  			session.setNodeValue( "./OSGi/Application/" + appUID + "/Schedules/" + schedID + "/Arguments/Arg3/Value", 
+  			session.setNodeValue( "./OSGi/Application/" + mangledAppUID + "/Schedules/" + schedID + "/Arguments/Arg3/Value", 
                               DmtData.NULL_VALUE);
-  			session.createInteriorNode( "./OSGi/Application/" + appUID + "/Schedules/" + schedID + "/Arguments/Arg4" );
-  			session.setNodeValue( "./OSGi/Application/" + appUID + "/Schedules/" + schedID + "/Arguments/Arg4/Name", 
+  			session.createInteriorNode( "./OSGi/Application/" + mangledAppUID + "/Schedules/" + schedID + "/Arguments/Arg4" );
+  			session.setNodeValue( "./OSGi/Application/" + mangledAppUID + "/Schedules/" + schedID + "/Arguments/Arg4/Name", 
   					                  new DmtData( "Binary" ));
-  			session.setNodeValue( "./OSGi/Application/" + appUID + "/Schedules/" + schedID + "/Arguments/Arg4/Value", 
+  			session.setNodeValue( "./OSGi/Application/" + mangledAppUID + "/Schedules/" + schedID + "/Arguments/Arg4/Value", 
                               new DmtData( new byte[] {1,2,3} ));
-  			session.createInteriorNode( "./OSGi/Application/" + appUID + "/Schedules/" + schedID + "/Arguments/Arg5" );
-  			session.setNodeValue( "./OSGi/Application/" + appUID + "/Schedules/" + schedID + "/Arguments/Arg5/Name", 
+  			session.createInteriorNode( "./OSGi/Application/" + mangledAppUID + "/Schedules/" + schedID + "/Arguments/Arg5" );
+  			session.setNodeValue( "./OSGi/Application/" + mangledAppUID + "/Schedules/" + schedID + "/Arguments/Arg5/Name", 
   					                  new DmtData( "Float" ));
-  			session.setNodeValue( "./OSGi/Application/" + appUID + "/Schedules/" + schedID + "/Arguments/Arg5/Value", 
+  			session.setNodeValue( "./OSGi/Application/" + mangledAppUID + "/Schedules/" + schedID + "/Arguments/Arg5/Value", 
                               new DmtData( (float)12.5 ));
 
-  			session.setNodeValue( "./OSGi/Application/" + appUID + "/Schedules/" + schedID + "/Enabled", new DmtData( true ));
-  			if( !session.getNodeValue( "./OSGi/Application/" + appUID + "/Schedules/" + schedID + "/Enabled" ).getBoolean() )
+  			session.setNodeValue( "./OSGi/Application/" + mangledAppUID + "/Schedules/" + schedID + "/Enabled", new DmtData( true ));
+  			if( !session.getNodeValue( "./OSGi/Application/" + mangledAppUID + "/Schedules/" + schedID + "/Enabled" ).getBoolean() )
   				throw new Exception("Cannot set the enabled field to true!");
   			
   			refs = bc.getServiceReferences( ScheduledApplication.class.getName(), null );
@@ -2285,29 +2324,30 @@ public class TestMidletContainerBundleActivator
     boolean testCase_appPluginCreateAndDeleteSchedule() {
   		ApplicationDescriptor appDesc = appDescs[0];
   		String appUID = getPID( appDesc );
+			String mangledAppUID = mangle( appUID ); 
   		
   		try {
   			DmtSession session = dmtFactory.getSession("./OSGi/Application" );
   			
   			Map args = createArgs();
   			
-  			session.createInteriorNode( "./OSGi/Application/" + appUID + "/Schedules/my_schedule_id" );
+  			session.createInteriorNode( "./OSGi/Application/" + mangledAppUID + "/Schedules/my_schedule_id" );
 
   			DmtData topicFilter = new DmtData("com/nokia/test/ScheduleEvent");
-  			session.setNodeValue( "./OSGi/Application/" + appUID + "/Schedules/my_schedule_id/TopicFilter", topicFilter);
-  			if( !session.getNodeValue( "./OSGi/Application/" + appUID + "/Schedules/my_schedule_id/TopicFilter" )
+  			session.setNodeValue( "./OSGi/Application/" + mangledAppUID + "/Schedules/my_schedule_id/TopicFilter", topicFilter);
+  			if( !session.getNodeValue( "./OSGi/Application/" + mangledAppUID + "/Schedules/my_schedule_id/TopicFilter" )
   					   .getString().equals( topicFilter.getString() ))
   				throw new Exception("TopicFilter cannot be modified!");
 
   			DmtData eventFilter = DmtData.NULL_VALUE;
-  			session.setNodeValue( "./OSGi/Application/" + appUID + "/Schedules/my_schedule_id/EventFilter", eventFilter);
-  			if( session.getNodeValue( "./OSGi/Application/" + appUID + "/Schedules/my_schedule_id/EventFilter" )
+  			session.setNodeValue( "./OSGi/Application/" + mangledAppUID + "/Schedules/my_schedule_id/EventFilter", eventFilter);
+  			if( session.getNodeValue( "./OSGi/Application/" + mangledAppUID + "/Schedules/my_schedule_id/EventFilter" )
   					   .getFormat() != DmtData.FORMAT_NULL )
   				throw new Exception("EventFilter cannot be modified!");
   			
   			DmtData recurring = new DmtData( true );
-  			session.setNodeValue( "./OSGi/Application/" + appUID + "/Schedules/my_schedule_id/Recurring", recurring);
-  			if( !session.getNodeValue( "./OSGi/Application/" + appUID + "/Schedules/my_schedule_id/Recurring" ).getBoolean() )
+  			session.setNodeValue( "./OSGi/Application/" + mangledAppUID + "/Schedules/my_schedule_id/Recurring", recurring);
+  			if( !session.getNodeValue( "./OSGi/Application/" + mangledAppUID + "/Schedules/my_schedule_id/Recurring" ).getBoolean() )
    				throw new Exception("Recurring cannot be modified!");
   			
   			int argCnt = 1;
@@ -2317,15 +2357,15 @@ public class TestMidletContainerBundleActivator
   				String value = (String)args.get( key );
   				String argID = "Arg" + argCnt++;
   				
-    			session.createInteriorNode( "./OSGi/Application/" + appUID + "/Schedules/my_schedule_id/Arguments/" + argID );
-    			session.setNodeValue( "./OSGi/Application/" + appUID + "/Schedules/my_schedule_id/Arguments/" + argID +  "/Name", 
+    			session.createInteriorNode( "./OSGi/Application/" + mangledAppUID + "/Schedules/my_schedule_id/Arguments/" + argID );
+    			session.setNodeValue( "./OSGi/Application/" + mangledAppUID + "/Schedules/my_schedule_id/Arguments/" + argID +  "/Name", 
     					                  new DmtData( key ));
-    			session.setNodeValue( "./OSGi/Application/" + appUID + "/Schedules/my_schedule_id/Arguments/" + argID + "/Value", 
+    			session.setNodeValue( "./OSGi/Application/" + mangledAppUID + "/Schedules/my_schedule_id/Arguments/" + argID + "/Value", 
                                 new DmtData( value ));
   			}
 
-  			session.setNodeValue( "./OSGi/Application/" + appUID + "/Schedules/my_schedule_id/Enabled", new DmtData( true ));
-  			if( !session.getNodeValue( "./OSGi/Application/" + appUID + "/Schedules/my_schedule_id/Enabled" ).getBoolean() )
+  			session.setNodeValue( "./OSGi/Application/" + mangledAppUID + "/Schedules/my_schedule_id/Enabled", new DmtData( true ));
+  			if( !session.getNodeValue( "./OSGi/Application/" + mangledAppUID + "/Schedules/my_schedule_id/Enabled" ).getBoolean() )
    				throw new Exception("Recurring cannot be modified!");
 
   			sendEvent(new Event( "com/nokia/test/ScheduleEvent", null), false);
@@ -2339,9 +2379,9 @@ public class TestMidletContainerBundleActivator
   			if (!testCase_stopApplication())
   				return false;
   			
-  			session.deleteNode( "./OSGi/Application/" + appUID + "/Schedules/my_schedule_id" );
+  			session.deleteNode( "./OSGi/Application/" + mangledAppUID + "/Schedules/my_schedule_id" );
 
-  			String[] scheduleNames = session.getChildNodeNames( "./OSGi/Application/" + appUID + "/Schedules" );  			
+  			String[] scheduleNames = session.getChildNodeNames( "./OSGi/Application/" + mangledAppUID + "/Schedules" );  			
   			if( scheduleNames != null && scheduleNames.length != 0 )
   				throw new Exception( "Schedule was not registered in the ApplicationPlugin!" );
 

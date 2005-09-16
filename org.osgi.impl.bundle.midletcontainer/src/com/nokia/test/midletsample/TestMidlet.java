@@ -4,7 +4,6 @@ import java.io.*;
 import javax.microedition.midlet.MIDlet;
 import javax.microedition.midlet.MIDletStateChangeException;
 import org.osgi.service.log.LogService;
-import com.nokia.test.midletsample.export.*;
 import org.osgi.application.*;
 import org.osgi.service.event.*;
 import org.osgi.framework.*;
@@ -19,7 +18,6 @@ public class TestMidlet extends MIDlet implements EventHandler, SynchronousBundl
 	private LogService	        logService;
 	private long		            myStaticFieldChecker;
 	private ApplicationContext  myApplicationContext;
-	private int                 instanceID = 0;
 	
 
 	public TestMidlet() {
@@ -29,6 +27,12 @@ public class TestMidlet extends MIDlet implements EventHandler, SynchronousBundl
 		myStaticFieldChecker = 0L;
 	}
 
+	private class MyEventHandler implements EventHandler {
+		public void handleEvent(Event event) {
+			eventHandler( event );
+		}		
+	}
+	
 	public void startApp() throws MIDletStateChangeException {
 		staticFieldChecker = myStaticFieldChecker = System.currentTimeMillis();
 
@@ -36,20 +40,19 @@ public class TestMidlet extends MIDlet implements EventHandler, SynchronousBundl
 		if( myApplicationContext == null )
 			System.err.println( "OAT didn't create the ApplicationContext!" );
 		else
-			myApplicationContext.registerService( EventHandler.class.getName(), this, null );
+			myApplicationContext.registerService( EventHandler.class.getName(), 
+					new MyEventHandler(), null );
 
 		if (paused) {
 			writeResult("RESUME");
 		}
 		else {
 			fileName = getAppProperty("TestResult");
-			instanceID = InstanceID.addInstance();
 			writeResult("START");
 		}
 	}
 
 	public void destroyApp(boolean immediate) throws MIDletStateChangeException {
-		InstanceID.releaseInstance();
 		if (myStaticFieldChecker == staticFieldChecker) {			
 			writeResult("STOP");
 		}
@@ -78,6 +81,10 @@ public class TestMidlet extends MIDlet implements EventHandler, SynchronousBundl
 	}
 
 	public void handleEvent(Event event) {
+		// never will be called
+	}
+	
+	public void eventHandler(Event event) {
 		if (event.getTopic().equals("com/nokia/megtest/CheckRegistered")) {
 			writeResult("REGISTERED SUCCESSFULLY");
 		}
@@ -144,8 +151,14 @@ public class TestMidlet extends MIDlet implements EventHandler, SynchronousBundl
 		else if (event.getTopic().equals("com/nokia/megtest/ResumeRequest")) {
 			resumeRequest();
 		}
-		else if (event.getTopic().equals("com/nokia/megtest/GetInstance" + new Integer( instanceID ).toString())) {
-			writeResult( "OK" );						
+		else if (event.getTopic().equals("com/nokia/megtest/RegisterMyself")) {
+			try {
+			  myApplicationContext.registerService( EventHandler.class.getName(), this, null );
+				writeResult("REGISTER MYSELF FAILURE");			
+			}catch( SecurityException e )
+			{
+				writeResult("REGISTER MYSELF OK");			
+			}
 		}
 	}
 

@@ -1,13 +1,12 @@
 Manifest-Version: 1.0
-Bundle-Name: MEGContainer
+Bundle-Name: MIDletContainer
 Bundle-SymbolicName: ${p}
 Bundle-Vendor: Nokia
 Bundle-Version: 1.0
 Bundle-ClassPath: .
 Bundle-Activator: $(p).Activator
-Meglet-Container-Name: Nokia Sample Meglet Container
-Meglet-Container-Version: 1.0
-DynamicImport-Package: *
+MIDlet-Container-Name: Nokia Sample MIDlet Container
+MIDlet-Container-Version: 1.0
 $(EXPORT-PACKAGE)
 $(IMPORT-PACKAGE)
 $(PRIVATE-PACKAGE)

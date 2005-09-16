@@ -5,6 +5,7 @@ import java.net.URL;
 import java.security.AccessController;
 import java.security.PrivilegedExceptionAction;
 import java.util.*;
+import org.osgi.service.log.LogService;
 
 import javax.microedition.midlet.MIDlet;
 import org.osgi.framework.*;
@@ -100,9 +101,9 @@ public final class MidletDescriptor extends ApplicationDescriptor {
 			launchable = isLaunchable();
 		}
 		catch (Exception e) {
-			MidletContainer.log(bc,1,"Exception occurred at searching the Midlet container reference!",e);
+			MidletContainer.log(bc, LogService.LOG_ERROR ,"Exception occurred at searching the Midlet container reference!",e);
 		}
-		properties.put(ApplicationDescriptor.APPLICATION_LOCKED, (new Boolean(locked)).toString());
+		properties.put(ApplicationDescriptor.APPLICATION_LOCKED, new Boolean(locked));
 		properties.put(ApplicationDescriptor.APPLICATION_LAUNCHABLE, (new Boolean(launchable))
 				.toString());
 		properties.put(ApplicationDescriptor.APPLICATION_CONTAINER, "MIDlet");
@@ -135,7 +136,7 @@ public final class MidletDescriptor extends ApplicationDescriptor {
 	}
 
 	static synchronized String createNewInstanceID(BundleContext bc, String pid) {
-		return MidletContainer.mangle( bc, new String(pid + ":" + instanceCounter++) );
+		return new String(pid + ":" + instanceCounter++);
 	}
 	
 	public boolean isLaunchable() {
@@ -147,7 +148,7 @@ public final class MidletDescriptor extends ApplicationDescriptor {
 			return true;
 		}
 		catch (Exception e) {
-			MidletContainer.log(bc, 1, "Exception occurred at checking if the midlet is launchable!",	e);
+			MidletContainer.log(bc, LogService.LOG_ERROR, "Exception occurred at checking if the midlet is launchable!",	e);
 		}
 		return false;
 	}	
@@ -166,13 +167,14 @@ public final class MidletDescriptor extends ApplicationDescriptor {
 					throw new Exception( "Internal error!" );
 				String location = urlName.substring( 0, urlName.length() - mainClassFileName.length() );
 				
-				ClassLoader loader = new MIDletClassLoader(mainClass.getClassLoader(),
+				MIDletClassLoader loader = new MIDletClassLoader(mainClass.getClassLoader(),
 						bundle, mainClass.getProtectionDomain(), location );
 				Class midletClass = loader.loadClass(startClass);
 				Constructor constructor = midletClass
 						.getDeclaredConstructor(new Class[0]);
 				constructor.setAccessible(true);
 				MIDlet app = (MIDlet) constructor.newInstance(new Object[0]);
+				loader.setCorrespondingMIDlet( app );
 				return app;
 		  }});
 	}

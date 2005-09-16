@@ -11,4 +11,3 @@ MicroEdition-Profile: MIDP-2.0
 MicroEdition-Configuration: CLDC-1.1
 Import-Package: javax.microedition.midlet, org.osgi.service.log, org.osgi.ser
  vice.application, org.osgi.service.event, org.osgi.application, org.osgi.framework
-Export-Package: com.nokia.test.midletsample.export

@@ -2,6 +2,9 @@ package org.osgi.impl.bundle.midletcontainer;
 
 import java.io.*;
 import java.util.*;
+
+import javax.microedition.midlet.MIDlet;
+
 import org.osgi.framework.*;
 import org.osgi.impl.service.application.OATContainerInterface;
 import org.osgi.service.application.ApplicationDescriptor;
@@ -160,8 +163,21 @@ public class MidletContainer implements BundleListener, ServiceListener {
 					&& dict.get("MIDlet-Vendor") != null
 					&& dict.get("MIDlet-1") != null
 					&& dict.get("MicroEdition-Profile") != null
-					&& dict.get("MicroEdition-Configuration") != null)
-				return true;
+					&& dict.get("MicroEdition-Configuration") != null) {
+				
+					String exports = (String)dict.get( Constants.EXPORT_PACKAGE );
+					if( exports != null && exports.trim().length() != 0 ) {
+						log(bc, LogService.LOG_ERROR, "Package export not allowed for MIDlets!", null );
+						return false;
+					}
+					
+					String bundleActivator = (String)dict.get( Constants.BUNDLE_ACTIVATOR );
+					if( bundleActivator != null && bundleActivator.trim().length() != 0 ) {
+						log(bc, LogService.LOG_ERROR, "MIDlets cannot have Bundle-Activator!", null );
+						return false;
+					}
+					return true;
+			}
 		}
 		catch (Exception e) {}
 		return false;
@@ -208,7 +224,6 @@ public class MidletContainer implements BundleListener, ServiceListener {
 							names.put(defaultLang, MIDletName);
 							icons.put(defaultLang, MIDletIcon);
 							String uniqueID = "MIDlet: " + MIDletName + "-" + MIDletVersion + "-" + MIDletSuiteName;
-							uniqueID = mangle( bc, uniqueID );
 								
 							props.put(Constants.SERVICE_PID, uniqueID);
 
@@ -229,7 +244,7 @@ public class MidletContainer implements BundleListener, ServiceListener {
 			return descs;
 		}
 		catch (Throwable e) {
-			log(bc, 1, "Exception occurred at parsing a midlet bundle!", e);
+			log(bc, LogService.LOG_ERROR, "Exception occurred at parsing a midlet bundle!", e);
 		}
 		return null;
 	}
@@ -269,19 +284,20 @@ public class MidletContainer implements BundleListener, ServiceListener {
 		}
 	}
 	
-	static String mangle( BundleContext bc, String in ) {
-		ServiceReference dmtAdminRef = bc.getServiceReference( DmtAdmin.class.getName() );
-    if(dmtAdminRef == null)      
-    	return in;
-    
-    DmtAdmin dmtAdmin = (DmtAdmin) bc.getService( dmtAdminRef );
-    if( dmtAdmin == null )
-    	return in;
+	public static MIDlet getSelfMIDlet() {
+		class MySecurityManager extends SecurityManager {
+			public Class [] getMyClassContext() {
+				return getClassContext();
+			}
+		}
 		
-    String result = dmtAdmin.mangle( in );
-    
-    bc.getService( dmtAdminRef );
-    
-    return result;
+		MySecurityManager mySecurityManager = new MySecurityManager();
+		Class []myClassContext = mySecurityManager.getMyClassContext();
+		for( int i=0; i != myClassContext.length; i++ ) {
+			if( myClassContext[ i ].getClassLoader() instanceof MIDletClassLoader ) {
+				return ((MIDletClassLoader)myClassContext[ i ].getClassLoader()).getCorrespondingMIDlet();
+			}
+		}		
+		return null; 
 	}
 }

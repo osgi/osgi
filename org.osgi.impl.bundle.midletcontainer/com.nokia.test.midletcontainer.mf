@@ -8,7 +8,8 @@ Bundle-Activator: com.nokia.test.midletcontainer.TestMidletContainerBundleAct
  ivator
 Import-Package: javax.microedition.midlet, org.osgi.service.application, org.
  osgi.service.application.midlet, org.osgi.service.event, org.osgi.framework,
-  org.osgi.impl.bundle.midletcontainer, org.osgi.service.log, org.osgi.service.dmt
+  org.osgi.impl.bundle.midletcontainer, org.osgi.service.log, org.osgi.service.dmt,
+  org.osgi.util.tracker
 Export-Package: com.nokia.test.midletcontainer
 
 
