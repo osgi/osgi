@@ -6,11 +6,11 @@ import java.util.*;
 import javax.microedition.midlet.MIDlet;
 
 import org.osgi.framework.*;
-import org.osgi.impl.service.application.OATContainerInterface;
 import org.osgi.service.application.ApplicationDescriptor;
 import org.osgi.service.application.ApplicationHandle;
-import org.osgi.service.dmt.DmtAdmin;
 import org.osgi.service.log.LogService;
+
+
 
 public class MidletContainer implements BundleListener, ServiceListener {
 	private BundleContext	        bc;
@@ -92,7 +92,7 @@ public class MidletContainer implements BundleListener, ServiceListener {
 						}catch(InterruptedException e) {}
 						
 						if( destroyerThread.isAlive() )
-							log( bc, LogService.LOG_ERROR, "Stop method of the application didn't finish at 5s!", null );
+							Activator.log( LogService.LOG_ERROR, "Stop method of the application didn't finish at 5s!", null );
 						
 				  	bc.ungetService( refs[ j ] );
 				  }		  				  	
@@ -167,13 +167,13 @@ public class MidletContainer implements BundleListener, ServiceListener {
 				
 					String exports = (String)dict.get( Constants.EXPORT_PACKAGE );
 					if( exports != null && exports.trim().length() != 0 ) {
-						log(bc, LogService.LOG_ERROR, "Package export not allowed for MIDlets!", null );
+						Activator.log( LogService.LOG_ERROR, "Package export not allowed for MIDlets!", null );
 						return false;
 					}
 					
 					String bundleActivator = (String)dict.get( Constants.BUNDLE_ACTIVATOR );
 					if( bundleActivator != null && bundleActivator.trim().length() != 0 ) {
-						log(bc, LogService.LOG_ERROR, "MIDlets cannot have Bundle-Activator!", null );
+						Activator.log( LogService.LOG_ERROR, "MIDlets cannot have Bundle-Activator!", null );
 						return false;
 					}
 					return true;
@@ -244,30 +244,9 @@ public class MidletContainer implements BundleListener, ServiceListener {
 			return descs;
 		}
 		catch (Throwable e) {
-			log(bc, LogService.LOG_ERROR, "Exception occurred at parsing a midlet bundle!", e);
+			Activator.log( LogService.LOG_ERROR, "Exception occurred at parsing a midlet bundle!", e);
 		}
 		return null;
-	}
-
-	static boolean log(BundleContext bc, int severity, String message,
-			Throwable throwable) {
-		System.out.println("Serverity:" + severity + " Message:" + message
-				+ " Throwable:" + throwable);
-		ServiceReference serviceRef = bc
-				.getServiceReference("org.osgi.service.log.LogService");
-		if (serviceRef != null) {
-			LogService logService = (LogService) bc.getService(serviceRef);
-			if (logService != null) {
-				try {
-					logService.log(severity, message, throwable);
-				}
-				finally {
-					bc.ungetService(serviceRef);
-				}
-				return true;
-			}
-		}
-		return false;
 	}
 
 	OATContainerInterface getOATInterface() {

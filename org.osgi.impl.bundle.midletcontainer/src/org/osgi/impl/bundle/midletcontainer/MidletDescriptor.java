@@ -101,7 +101,7 @@ public final class MidletDescriptor extends ApplicationDescriptor {
 			launchable = isLaunchable();
 		}
 		catch (Exception e) {
-			MidletContainer.log(bc, LogService.LOG_ERROR ,"Exception occurred at searching the Midlet container reference!",e);
+			Activator.log( LogService.LOG_ERROR ,"Exception occurred at searching the Midlet container reference!",e);
 		}
 		properties.put(ApplicationDescriptor.APPLICATION_LOCKED, new Boolean(locked));
 		properties.put(ApplicationDescriptor.APPLICATION_LAUNCHABLE, (new Boolean(launchable))
@@ -148,7 +148,7 @@ public final class MidletDescriptor extends ApplicationDescriptor {
 			return true;
 		}
 		catch (Exception e) {
-			MidletContainer.log(bc, LogService.LOG_ERROR, "Exception occurred at checking if the midlet is launchable!",	e);
+			Activator.log( LogService.LOG_ERROR, "Exception occurred at checking if the midlet is launchable!",	e);
 		}
 		return false;
 	}	

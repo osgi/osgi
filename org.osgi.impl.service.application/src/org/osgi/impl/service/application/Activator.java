@@ -29,7 +29,6 @@ public class Activator extends Object implements
 	static  Scheduler					scheduler;
 	static  BundleContext 		bc;
 	private ApplicationPlugin appPlugin;
-	private OAT               oat;
 
 	public Activator() {
 		super();
@@ -42,9 +41,6 @@ public class Activator extends Object implements
 		appPlugin = new ApplicationPlugin();
 		appPlugin.start( bc );
 		
-		oat = new OAT();
-		oat.start( bc );
-		
 		System.out.println("Application service started successfully!");
 	}
 
@@ -54,9 +50,6 @@ public class Activator extends Object implements
 		
 		scheduler.stop();
 		scheduler = null;
-		
-		oat.stop( bc );
-		oat = null;
 		
 		Activator.bc = null;
 		

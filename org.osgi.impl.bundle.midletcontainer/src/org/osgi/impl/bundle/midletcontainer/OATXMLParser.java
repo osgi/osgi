@@ -25,7 +25,7 @@
  * property of their respective owners. All rights reserved.
  */
 
-package org.osgi.impl.service.application;
+package org.osgi.impl.bundle.midletcontainer;
 
 import java.io.InputStream;
 import java.net.URL;
