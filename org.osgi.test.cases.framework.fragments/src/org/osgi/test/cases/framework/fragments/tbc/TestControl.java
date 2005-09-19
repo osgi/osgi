@@ -101,7 +101,7 @@ public class TestControl extends DefaultTestBundleControl implements
 	/**
 	 * Tests that a bundle fragment supplies classpath entries to host.
 	 * 
-	 * Tests that resources and classes are loaded by their host bundleâ€™s class
+	 * Tests that resources and classes are loaded by their host bundle's class
 	 * loader.
 	 * 
 	 * @throws Exception if an error occurs or an assertion fails in the test.
@@ -204,9 +204,9 @@ public class TestControl extends DefaultTestBundleControl implements
 	 * 
 	 * Tests that URL.getPath method for a URL that uses the bundle resource or
 	 * bundle entry protocol returns an absolute path (a path that starts with
-	 * â€˜/â€™). For example, the URL returned from
-	 * Bundle.getEntry(â€œmyimages/test.gifâ€?) must have a path of
-	 * â€œ/myimages/test.gifâ€?.
+	 * '/'). For example, the URL returned from
+	 * Bundle.getEntry("myimages/test.gif") must have a path of
+	 * "/myimages/test.gif".
 	 * 
 	 * @throws Exception if an error occurs or an assertion fails in the test.
 	 * @spec Bundle.getResource(String)
@@ -290,9 +290,9 @@ public class TestControl extends DefaultTestBundleControl implements
 
 	/**
 	 * Tests that in order for a host bundle to allow fragments to attach, the
-	 * host bundle must have BundlePermission[ <bundle symbolic name>,â€œhostâ€?].
+	 * host bundle must have BundlePermission[ <bundle symbolic name>,"host"].
 	 * In order to be allowed to attach to a host bundle, a fragment bundle must
-	 * have BundlePermission[ <bundle symbolic name>,â€œfragmentâ€?].
+	 * have BundlePermission[ <bundle symbolic name>,"fragment"].
 	 * 
 	 * @throws Exception if an error occurs or an assertion fails in the test.
 	 * @spec Bundle.installBundle(String)
@@ -346,10 +346,10 @@ public class TestControl extends DefaultTestBundleControl implements
 	/**
 	 * Tests multiple-hosts parameter with a value of false. The fragment will
 	 * only attach to the selected bundle with the greatest version that can be
-	 * resolved. The default value is â€œfalseâ€?.
+	 * resolved. The default value is "false".
 	 * 
-	 * Tests the fragment-attachment directives with the value of â€?alwaysâ€?. The
-	 * default value is â€œalwaysâ€?. always â€“ indicates that fragments are allowed
+	 * Tests the fragment-attachment directives with the value of "always". The
+	 * default value is "always". always - indicates that fragments are allowed
 	 * to attach to the host bundle at any time (while the host is resolved or
 	 * during the process of resolving the host bundle).
 	 * 
@@ -436,7 +436,7 @@ public class TestControl extends DefaultTestBundleControl implements
 
 	/**
 	 * Tests the fragment-attachment directive recognized by the framework for
-	 * Bundle-SymbolicName taking the value of â€œresolve-timeâ€? which indicates
+	 * Bundle-SymbolicName taking the value of "resolve-time" which indicates
 	 * that fragments are allowed to attach to the host bundle only during the
 	 * process of resolving the host bundle.
 	 * 
@@ -471,7 +471,7 @@ public class TestControl extends DefaultTestBundleControl implements
 
 	/**
 	 * Tests the fragment-attachment directive recognized by the framework for
-	 * Bundle-SymbolicName taking the value of â€œresolve-timeâ€? which indicates
+	 * Bundle-SymbolicName taking the value of "resolve-time" which indicates
 	 * that fragments are allowed to attach to the host bundle only during the
 	 * process of resolving the host bundle.
 	 * 
@@ -507,7 +507,7 @@ public class TestControl extends DefaultTestBundleControl implements
 
 	/**
 	 * Tests that attaching a fragment bundle to an already resolved host bundle
-	 * is not possible when the fragmentâ€™s Import-Package entries add additional
+	 * is not possible when the fragment's Import-Package entries add additional
 	 * packages to the host.
 	 * 
 	 * Tests that if an error occurs during the attachment of a fragment bundle
@@ -543,7 +543,7 @@ public class TestControl extends DefaultTestBundleControl implements
 
 	/**
 	 * Tests that attaching a fragment bundle to an already resolved host bundle
-	 * is not possible when the fragmentâ€™s Require-Bundle entries add additional
+	 * is not possible when the fragment's Require-Bundle entries add additional
 	 * required bundles to the host.
 	 * 
 	 * @throws Exception if an error occurs or an assertion fails in the test.
