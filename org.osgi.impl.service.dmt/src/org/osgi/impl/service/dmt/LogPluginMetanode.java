@@ -55,9 +55,7 @@ public class LogPluginMetanode implements MetaNode {
         this.canAdd          = modifiable;
         this.canGet          = true;
         this.canReplace      = true;
-        //this.canExecute      = false;
-        // TODO remove executability when LogResult subtree is implemented
-        this.canExecute      = modifiable;
+        this.canExecute      = false;
         this.isLeaf          = false;
         
         this.scope           = scope;

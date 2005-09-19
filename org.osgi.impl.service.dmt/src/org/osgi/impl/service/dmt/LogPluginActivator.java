@@ -51,9 +51,7 @@ public class LogPluginActivator implements BundleActivator {
 		Hashtable props = new Hashtable();
         String pluginRoot = Node.convertPathToUri(PLUGIN_ROOT_PATH);
 		props.put("dataRootURIs", new String[] { pluginRoot });
-		props.put("execRootURIs", new String[] { pluginRoot });
-		String[] ifs = new String[] {DataPluginFactory.class.getName(),
-				ExecPlugin.class.getName()};
+		String[] ifs = new String[] {DataPluginFactory.class.getName()};
 		servReg = bc.registerService(ifs, logPlugin, props);
 	}
 

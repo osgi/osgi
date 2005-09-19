@@ -17,29 +17,21 @@
  */
 package org.osgi.impl.service.dmt;
 
-import java.io.PrintWriter;
-import java.io.StringWriter;
-import java.net.URL;
-import java.text.SimpleDateFormat;
 import java.util.*;
 import org.osgi.framework.*;
-import org.osgi.impl.service.dmt.wbxmlenc.WbxmlCodePages;
 import org.osgi.service.dmt.*;
 import org.osgi.service.log.LogEntry;
 import org.osgi.service.log.LogReaderService;
 import org.osgi.util.tracker.ServiceTracker;
 import org.osgi.service.dmt.spi.*;
-import org.osgi.service.dmt.spi.ExecPlugin;
 import org.osgi.service.dmt.spi.DataPluginFactory;
 import org.osgi.service.dmt.spi.TransactionalDataSession;
 
-// TODO implement LogResult tree, make nodes automatic
-
-public class LogPlugin implements DataPluginFactory, TransactionalDataSession, 
-        ExecPlugin {
+public class LogPlugin implements DataPluginFactory, TransactionalDataSession {
 	private static final String FILTER    = "Filter";
 	private static final String EXCLUDE   = "Exclude";
 	private static final String MAXR      = "MaxRecords";
+	private static final String LOGRESULT = "LogResult";
 
     private static final String SEVERITY  = "Severity";
 	private static final String TIME      = "Time";
@@ -60,8 +52,6 @@ public class LogPlugin implements DataPluginFactory, TransactionalDataSession,
 	private ServiceTracker adminTracker;
 	private Hashtable      requests;
 	
-    private WbxmlCodePages wbxmlCodePages;
-
     // the state of the request table is stored here in atomic sessions 
     private Hashtable           savedRequests;
     
@@ -71,22 +61,7 @@ public class LogPlugin implements DataPluginFactory, TransactionalDataSession,
 		this.logReaderTracker = logReaderTracker;
 		this.adminTracker = adminTracker;
         
-		requests = new Hashtable();
-		
-		String resourceName = getClass().getName();
-		int index = resourceName.lastIndexOf( '.' );
-		resourceName = resourceName.substring( 0, index );
-		resourceName = resourceName.replace( '.', '/' ) + "/wbxmlenc/TND-WBXML.tokens";
-		
-		URL resourceURL = bc.getBundle().getResource(resourceName);
-		if (resourceURL == null)
-			throw new BundleException("Can't find " + resourceName + " in the resources!");
-
-		try {
-			wbxmlCodePages = new WbxmlCodePages( resourceURL.openStream() );
-		}catch( Exception e ) {
-			throw new BundleException( e.getMessage(), e );
-		}
+		requests = new Hashtable();		
 	}
 
 	//----- DataPluginFactory methods -----//
@@ -150,11 +125,15 @@ public class LogPlugin implements DataPluginFactory, TransactionalDataSession,
         }
         String leaf = path[1];
         if (leaf.equals(EXCLUDE))
-            lr.exclude = data == null ? DEFAULT_EXCLUDE : data.getString();
-        else if (leaf.equals(FILTER))
+            lr.setExclude( data == null ? DEFAULT_EXCLUDE : data.getString() );
+        else if (leaf.equals(FILTER)) {
             lr.filter = data == null ? DEFAULT_FILTER : data.getString();
-        else if (leaf.equals(MAXR))
+            lr.logrecords = null; // reevaluate the log results
+        }
+        else if (leaf.equals(MAXR)) {
             lr.maxrecords = data == null ? DEFAULT_MAXR : data.getInt();
+            lr.logrecords = null; // reevaluate the log results
+        }
         else {
             // should never happen because of meta-data
             throw new DmtException(fullPath, DmtException.METADATA_MISMATCH,
@@ -262,13 +241,45 @@ public class LogPlugin implements DataPluginFactory, TransactionalDataSession,
                         DmtData.FORMAT_INTEGER, new DmtData(DEFAULT_MAXR), null,
                         "The maximum number of records to be included in the result.");
             
-            // TODO LogResult node
+            if(path[1].equals(LOGRESULT))
+                return new LogPluginMetanode(MetaNode.AUTOMATIC,
+                        !LogPluginMetanode.MODIFIABLE, 
+                        !LogPluginMetanode.ALLOW_INFINITE, 
+                        "Root node for log results.");
             
             throw new DmtException(fullPath, DmtException.NODE_NOT_FOUND, 
                     "No such node defined in the logging tree");
         }
+
+        // OSGi/Log/<search_id>/LogResult/<result_id>
+        if (path.length == 3 && path[1].equals(LOGRESULT)) {
+                return new LogPluginMetanode(MetaNode.DYNAMIC,
+                        !LogPluginMetanode.MODIFIABLE,
+                        LogPluginMetanode.ALLOW_INFINITE,
+                        "Log result item node.");
+        }
             
-        // TODO LogResult subtree
+        // OSGi/Log/<search_id>/LogResult/<result_id>/<param>
+        if(path.length == 4 && path[1].equals(LOGRESULT)) {
+        	if( path[ 3 ].equals( SEVERITY ) )
+                return new LogPluginMetanode(false, DmtData.FORMAT_INTEGER, null, null,
+                          "The severity of a log result item.");
+        	if( path[ 3 ].equals( TIME ) )
+                return new LogPluginMetanode(false, DmtData.FORMAT_STRING, null, null,
+                          "The timestamp of a log result item.");
+        	if( path[ 3 ].equals( SYSTEM ) )
+                return new LogPluginMetanode(false, DmtData.FORMAT_STRING, null, null,
+                          "The system of a log result item.");
+        	if( path[ 3 ].equals( SUBSYSTEM ) )
+                return new LogPluginMetanode(false, DmtData.FORMAT_STRING, null, null,
+                          "The subsystem of a log result item.");
+        	if( path[ 3 ].equals( MESSAGE ) )
+                return new LogPluginMetanode(false, DmtData.FORMAT_STRING, null, null,
+                          "The message of a log result item.");
+        	if( path[ 3 ].equals( DATA ) )
+                return new LogPluginMetanode(false, DmtData.FORMAT_STRING, null, null,
+                          "The data of a log result item.");
+        }
         
         // path.length > 2
         throw new DmtException(fullPath, DmtException.NODE_NOT_FOUND,
@@ -289,13 +300,34 @@ public class LogPlugin implements DataPluginFactory, TransactionalDataSession,
             return true;
         
         if (path.length == 2)
-            // TODO LogResult node
             return 
                 path[1].equals(FILTER) || 
                 path[1].equals(EXCLUDE) || 
-                path[1].equals(MAXR);
+                path[1].equals(MAXR) ||
+				path[1].equals(LOGRESULT);
 
-        // TODO LogResult subtree
+        if( lr.logrecords == null ) {
+        	try {
+        	    evaluateLogRequest( lr );
+        	}catch( DmtException e ) {
+        		return false;
+        	}
+        }
+        	
+        if( lr.logrecords.get(path[ 2 ] ) == null )
+        	return false;
+        
+        if( path.length == 3 )
+        	return true;
+        
+        if( path.length == 4 )
+            return 
+				(lr.include[LogRequest.SEVERITY_ID]  && path[3].equals(SEVERITY)  ) || 
+				(lr.include[LogRequest.SYSTEM_ID]    && path[3].equals(SYSTEM)    ) || 
+				(lr.include[LogRequest.SUBSYSTEM_ID] && path[3].equals(SUBSYSTEM) ) ||
+				(lr.include[LogRequest.MESSAGE_ID]   && path[3].equals(MESSAGE)   ) ||
+				(lr.include[LogRequest.DATA_ID]      && path[3].equals(DATA)      ) ||
+				(lr.include[LogRequest.TIME_ID]      && path[3].equals(TIME)      );
         
         return false;
     }
@@ -316,9 +348,12 @@ public class LogPlugin implements DataPluginFactory, TransactionalDataSession,
             return false;
         
         if(path.length == 2)
-            return true; // TODO LogResult node
+            return !path[1].equals( LOGRESULT );
         
-        // TODO LogResult subtree
+        if(path.length == 3 )
+        	return false;
+        if(path.length == 4 )
+        	return true;
         
         // should never be reached
         throw new DmtException(fullPath, DmtException.NODE_NOT_FOUND,
@@ -342,7 +377,26 @@ public class LogPlugin implements DataPluginFactory, TransactionalDataSession,
         if (leaf.equals(MAXR))
             return new DmtData(lr.maxrecords);
 
-        // TODO LogResult subtree
+        if (path[1].equals(LOGRESULT)) {
+        	if( lr.logrecords == null )
+        		evaluateLogRequest( lr );
+
+        	LogResultItem lri = (LogResultItem)lr.logrecords.get( path[2] );        	
+        	leaf = path[ 3 ];
+        	
+        	if( lr.include[LogRequest.TIME_ID] && leaf.equals( TIME ) )
+        		return new DmtData( lri.time );
+        	if( lr.include[LogRequest.SYSTEM_ID] && leaf.equals( SYSTEM ) )
+        		return new DmtData( lri.system );
+        	if( lr.include[LogRequest.SUBSYSTEM_ID] && leaf.equals( SUBSYSTEM ) )
+        		return new DmtData( lri.subsystem );
+        	if( lr.include[LogRequest.SEVERITY_ID] && leaf.equals( SEVERITY ) )
+        		return new DmtData( lri.severity );
+        	if( lr.include[LogRequest.DATA_ID] && leaf.equals( DATA ) )
+        		return new DmtData( lri.data );
+        	if( lr.include[LogRequest.MESSAGE_ID] && leaf.equals( MESSAGE ) )
+        		return new DmtData( lri.message );
+        }
         
         // should never be reached
         throw new DmtException(fullPath, DmtException.NODE_NOT_FOUND,
@@ -355,25 +409,10 @@ public class LogPlugin implements DataPluginFactory, TransactionalDataSession,
 	}
 
 	public String getNodeType(String[] fullPath) throws DmtException {
-        String[] path = chopPath(fullPath);
-        
-        if(path.length == 0)
-            // TODO return URL to log tree DDF
-            return null;
-        
-        LogRequest lr = (LogRequest) requests.get(path[0]);
-        if (lr == null)
-            throw new DmtException(fullPath, DmtException.NODE_NOT_FOUND,
-                                   "No such log request");
-
-        if(path.length == 1)
-            return null;
-        
-        // path.length == 2
-        // TODO LogResult node
-        return LogPluginMetanode.LEAF_MIME_TYPE;
-        
-        // TODO LogResult subtree
+		if( isLeafNode( fullPath ) )
+	        return LogPluginMetanode.LEAF_MIME_TYPE;
+		else
+			return null;
 	}
 
 	public int getNodeVersion(String[] fullPath) throws DmtException {
@@ -409,38 +448,45 @@ public class LogPlugin implements DataPluginFactory, TransactionalDataSession,
                                    "No such log request");
         
         if (path.length == 1)
-            // TODO LogResult node
-            return new String[] { FILTER, EXCLUDE, MAXR };
+            return new String[] { FILTER, EXCLUDE, MAXR, LOGRESULT };
 
-        // TODO LogResult subtree
+    	if( lr.logrecords == null )
+    		evaluateLogRequest( lr );
+    	
+        if (path.length == 2) {
+            String[] recordIDArray = (String[]) 
+              lr.logrecords.keySet().toArray(new String[lr.logrecords.size()]);
+        	return recordIDArray;
+        }
+        
+        if( path.length == 3 ) {
+        	int availableItems = 0;
+        	for( int q = 0; q != LogRequest.MAX_IDS; q++ )
+        		if( lr.include[ q ] )
+        			availableItems ++;
+        	String[] childNames = new String[ availableItems ];
+        	int cnt = 0;
+        	
+        	if( lr.include[ LogRequest.SEVERITY_ID ] )
+        		childNames[ cnt++ ] = SEVERITY;
+        	if( lr.include[ LogRequest.TIME_ID ] )
+        		childNames[ cnt++ ] = TIME;
+        	if( lr.include[ LogRequest.SYSTEM_ID ] )
+        		childNames[ cnt++ ] = SYSTEM;
+        	if( lr.include[ LogRequest.SUBSYSTEM_ID ] )
+        		childNames[ cnt++ ] = SUBSYSTEM;
+        	if( lr.include[ LogRequest.MESSAGE_ID ] )
+        		childNames[ cnt++ ] = MESSAGE;
+        	if( lr.include[ LogRequest.DATA_ID ] )
+        		childNames[ cnt++ ] = DATA;
+        	
+        	return childNames;
+        }
         
         // should never be reached
         throw new DmtException(fullPath, DmtException.METADATA_MISMATCH,
                                "The specified URI points to a leaf node.");
     }
-
-	//  ----- DmtExecPlugin methods -----//
-	public void execute(DmtSession session, String[] nodePath, 
-            String correlator, String data) throws DmtException {
-		String[] path = chopPath(nodePath);
-		if (path.length != 1) {
-            // should never be reached
-			throw new DmtException(nodePath, DmtException.METADATA_MISMATCH,
-					"Cannot execute node on this level");
-		}
-		LogRequest lr = (LogRequest) requests.get(path[0]);
-		if (lr == null)
-			throw new DmtException(nodePath, DmtException.NODE_NOT_FOUND,
-					               "No such log request");
-
-		Vector records = getResult(lr);
-		String result = formatResult(records);
-		AlertItem[] items = new AlertItem[1];
-		items[0] = new AlertItem(Node.convertPathToUri(nodePath), null, 
-                null, new DmtData(result));
-        
-        getDmtAdmin().sendAlert(session.getPrincipal(), 1224, correlator, items);
-	}
 
 	//----- Private utility methods -----//
 	private static String[] chopPath(String[] absolutePath) {
@@ -480,94 +526,12 @@ public class LogPlugin implements DataPluginFactory, TransactionalDataSession,
         }
         return copy;
     }
-    
-	private String createRTProperties( String format ) {
-		String type = "text/plain";
-		
-		if( format.equals( "node" ) )
-			type = "";
-		
-		return "<RTProperties><Format><" + format + "/></Format><Type>" + type +
-		       "</Type></RTProperties>";
-	}
-	
-	private String createNode( String name, String format, String value, String embed ) {
-		String encoded = "<Node><NodeName>" + name + "</NodeName>";
-		if( format != null )
-			encoded += createRTProperties( format );
-		if( embed != null )
-			encoded += embed;
-		if( value != null )
-			encoded += "<Value>" + value + "</Value>";
-		encoded += "</Node>";
-		return encoded;
-	}
-	
+
 	/*
-	 * Formats the vector of logentries into a string to be sent within an alert
-	 */
-	private String formatResult(Vector records) {
-		String result = "";
-
-		for (int i = 0; i < records.size(); i++) {
-			LogEntry e = (LogEntry) records.elementAt(i);
-			if (e == null)
-				continue; //should not happen
-			
-			String logEncode = "";
-
-            // TODO this might use the default locale to determine the time, which is not good 
-			SimpleDateFormat sdf = new SimpleDateFormat( "yyMMdd'T'HHmmss'Z'" );
-			
-			logEncode += createNode( "time", "chr", sdf.format( new Date( e.getTime() ) ) , null );
-			
-			logEncode += createNode( "severity", "int", Integer.toString( e.getLevel() ), null );
-
-			String symName = e.getBundle().getSymbolicName();
-			if( symName == null )
-				symName = Long.toString( e.getBundle().getBundleId() );
-			logEncode += createNode( "system", "chr", symName, null );
-
-			ServiceReference servRef = e.getServiceReference();
-			String refName = "";
-			if( servRef != null ) {
-				String []objects = (String [])servRef.getProperty( Constants.OBJECTCLASS );
-				if( objects != null ) {
-					for( int j = 0; j != objects.length; j++ )
-						refName += ( ( j == 0 ) ? "" : "," ) + objects[ j ];
-				}					
-			}			
-			logEncode += createNode( "subsystem", "chr", refName, null );
-			
-			logEncode += createNode( "message", "chr", e.getMessage(), null );
-			
-			Throwable t = e.getException();
-			String data = "";
-			if( t != null ) {
-				StringWriter writer = new StringWriter();
-				t.printStackTrace( new PrintWriter( writer ) );
-				data = writer.toString();
-			}			
-			logEncode += createNode( "data", "chr", data , null );
-			
-			logEncode += createNode( "id", "chr", Integer.toString( i ), null );
-			
-			result += createNode( Integer.toString( i ), "node", null, logEncode );			
-		}
-
-		result = createNode( "logresult", "node", null, result );
-		result = "<MgmtTree>" + result + "</MgmtTree>";
-		return result;
-	}
-
-    //TODO use the exclude filter also within the loop so that it need not be done separately
-	/*
-	 * Calculates the result of a log request. Uses the filter and maxrecords.
+	 * Evaluate the result of a log request. Uses the filter and maxrecords.
 	 * Returns a vector of logentries 
 	 */
-	private Vector getResult(LogRequest lr) throws DmtException {
-		Vector ret = new Vector();
-        
+	private void evaluateLogRequest(LogRequest lr) throws DmtException {
 		Filter filter = null;
 		try {
 			if (!lr.filter.equals(""))
@@ -584,10 +548,16 @@ public class LogPlugin implements DataPluginFactory, TransactionalDataSession,
                     LogReaderService.class.getName(), null);
         
 		Enumeration e = logReader.getLog();
+		
 		int max = Integer.MAX_VALUE;
+		
+		int logIDCounter = 1;
+		lr.logrecords = new Hashtable();
+		
 		if (lr.maxrecords != 0)
 			max = lr.maxrecords;
-		while (e.hasMoreElements() && ret.size() <= max) {
+
+		while (e.hasMoreElements() && lr.logrecords.size() < max) {
 			LogEntry le = (LogEntry) e.nextElement();
 			if (filter != null) {
 				//create a dictionary for matching with the filter
@@ -605,9 +575,19 @@ public class LogPlugin implements DataPluginFactory, TransactionalDataSession,
 					continue;
 				}
 			}
-			ret.add(le);
+			Bundle loggerBundle = le.getBundle();
+			String bundleStr = (loggerBundle == null) ? "" : loggerBundle.toString(); 
+			
+			ServiceReference servRef = le.getServiceReference();
+			String servRefStr = (servRef == null ) ? "" : servRef.toString();
+			
+			Throwable exception = le.getException();
+			String exceptionStr = (exception == null) ? "" : exception.toString();
+			
+			lr.logrecords.put( "LOG" + logIDCounter++, 
+    			new LogResultItem( le.getLevel(), timeToString(le.getTime()), 
+    				bundleStr, servRefStr, le.getMessage(), exceptionStr ) );
 		}
-		return ret;
 	}
 
     private String timeToString(long time) {
@@ -631,17 +611,81 @@ public class LogPlugin implements DataPluginFactory, TransactionalDataSession,
     private void pad(StringBuffer sb, int num, int width) {
         String numStr = String.valueOf(num);
         width -= numStr.length();
-        while(width > 0)
+        while(width > 0) {
             sb.append('0');
+            width--;
+        }
         sb.append(numStr);
     }
     
+    class LogResultItem implements Cloneable {
+    	int      severity   = 1;
+    	String   time       = "";
+    	String   system     = "";
+    	String   subsystem  = "";
+    	String   message    = "";
+    	String   data       = "";
+
+    	public LogResultItem( int severity, String time, String system, 
+    			              String subsystem, String message, String data ) {
+    		this.severity  = severity;
+    		this.time      = time;
+    		this.system    = system;
+    		this.subsystem = subsystem;
+    		this.message   = message;
+    		this.data      = data;    		
+    	}
+    	
+    	public Object clone() {
+    		return new LogResultItem( severity, time, system, subsystem, message, data);
+    	}
+    }
+    
 	class LogRequest implements Cloneable {
-		String[] path     = null;
-		String filter     = DEFAULT_FILTER;
-		String exclude    = DEFAULT_EXCLUDE;
-		int    maxrecords = DEFAULT_MAXR;
+		final static int  MAX_IDS          = 6;
+		final static int  SEVERITY_ID      = 0;
+		final static int  TIME_ID          = 1;
+		final static int  MESSAGE_ID       = 2;
+		final static int  SYSTEM_ID        = 3;
+		final static int  SUBSYSTEM_ID     = 4;
+		final static int  DATA_ID          = 5;
+		
+		String[]   path                    = null;
+		String     filter                  = DEFAULT_FILTER;
+		String     exclude                 = DEFAULT_EXCLUDE;
+		boolean    include[]               = new boolean[ MAX_IDS ];
+		int        maxrecords              = DEFAULT_MAXR;
+		Hashtable  logrecords              = null;
         
+		public LogRequest() {
+			for( int i=0; i!= MAX_IDS; i++ )
+				include[ i ] = true;
+		}
+		
+		public void setExclude( String exclude ) {
+			this.exclude = exclude;
+
+			for( int j=0; j!= MAX_IDS; j++ )
+				include[ j ] = true;
+			
+			String [] excludeStrs = Splitter.split( exclude, ',', 0);
+			for( int i = 0; i != excludeStrs.length; i++ ) {
+				String excludeItem = excludeStrs[ i ].trim();
+				if( excludeItem.equals( TIME ))
+					include[ TIME_ID ] = false;
+				if( excludeItem.equals( DATA ))
+					include[ DATA_ID ] = false;
+				if( excludeItem.equals( SYSTEM ))
+					include[ SYSTEM_ID ] = false;
+				if( excludeItem.equals( SUBSYSTEM ))
+					include[ SUBSYSTEM_ID ] = false;
+				if( excludeItem.equals( MESSAGE ))
+					include[ MESSAGE_ID ] = false;
+				if( excludeItem.equals( SEVERITY ))
+					include[ SEVERITY_ID ] = false;
+			}
+		}
+		
         public Object clone() {
             LogRequest lr = new LogRequest();
             
@@ -650,6 +694,20 @@ public class LogPlugin implements DataPluginFactory, TransactionalDataSession,
             lr.exclude    = exclude;
             lr.maxrecords = maxrecords;
             
+            for( int i=0; i != MAX_IDS; i++ )
+            	lr.include[ i ] = include[ i ];
+            
+            if( logrecords != null ) {
+            	lr.logrecords = new Hashtable();
+            	Iterator keys = logrecords.keySet().iterator();
+            	
+            	while( keys.hasNext() ) {
+            		String newKey = new String( (String)keys.next() );
+            		LogResultItem newValue = (LogResultItem)((LogResultItem)logrecords.get( newKey )).clone();
+            		lr.logrecords.put( newKey, newValue );
+            	}
+            } else         
+                lr.logrecords = null;
             return lr;
         }
 	}
