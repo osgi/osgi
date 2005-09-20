@@ -5,8 +5,6 @@ Bundle-Vendor: Nokia
 Bundle-Version: 1.0
 Bundle-ClassPath: .
 Bundle-Activator: $(p).Activator
-MIDlet-Container-Name: Nokia Sample MIDlet Container
-MIDlet-Container-Version: 1.0
 $(EXPORT-PACKAGE)
 $(IMPORT-PACKAGE)
 $(PRIVATE-PACKAGE)
