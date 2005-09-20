@@ -163,7 +163,7 @@ public class LogPluginMetanode implements MetaNode {
                 String excludes = value.getString();
                 String[] components = Splitter.split(excludes, ',', 0);
                 for (int i = 0; i < components.length; i++)
-                    if(!validComponents.contains(components[i]))
+                    if(!validComponents.contains(components[i].trim()))
                         return false;
             } catch(IllegalStateException e) {
                 // not checking components if format is not string
