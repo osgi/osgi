@@ -105,6 +105,7 @@ public abstract class ApplicationHandle {
 	 * @return The corresponding <code>ApplicationDescriptor</code>
 	 */
 	public final ApplicationDescriptor getApplicationDescriptor() {
+		getState(); // throws IllegalStateException if the handle is invalid 
 		return descriptor;
 	}
 
@@ -128,7 +129,8 @@ public abstract class ApplicationHandle {
 	 * @return the unique identifier of the instance
 	 */
 	public final String getInstanceId() {
-		return this.instanceId;
+		getState(); // throws IllegalStateException if the handle is invalid 
+		return instanceId;
 	}
 
 	/**
@@ -163,6 +165,7 @@ public abstract class ApplicationHandle {
 	 *             if the application handle is unregistered
 	 */
 	public final void destroy() throws Exception {
+		getState(); // throws IllegalStateException if the handle is invalid 
 		delegate.destroy();
 		destroySpecific();
 	}
