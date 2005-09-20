@@ -407,16 +407,13 @@ public class TestMidletContainerBundleActivator
     {
         try
         {
-            Bundle bundles[] = bc.getBundles();            
+            Bundle bundles[] = bc.getBundles();   
             for(int i = 0; i < bundles.length; i++)
                 if(bundles[i].getState() == Bundle.ACTIVE)
-                {
-                    Dictionary dict = bundles[i].getHeaders();
-                    Object name = dict.get("MIDlet-Container-Name");
-                    Object version = dict.get("MIDlet-Container-Version");
-                    if(name != null && version != null)
+                {                    
+                	  String symbolicName = bundles[i].getSymbolicName(); 
+                    if( symbolicName != null && symbolicName.equals("org.osgi.impl.bundle.midletcontainer") )
                     {
-                        System.out.println((String)name + " (" + (String)version + ") found!");
                         midletContainerBundle = bundles[i];
                         return true;
                     }
