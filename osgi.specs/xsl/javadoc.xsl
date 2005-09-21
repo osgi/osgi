@@ -12,14 +12,15 @@
 					<h1 class="Heading1"><xsl:value-of select="@name"/><a name="{@fqn}"/><a index="{@fqn}"/><a name="package:{@fqn}"/></h1>
 					<xsl:apply-templates select=".//formattingerror"/>
 					<xsl:apply-templates select="description" mode="html"/>
-					<xsl:if test="count(class)!=1">
+					<xsl:variable name="classes" select="class[not(skip)]"/>
+					<xsl:if test="count($classes)!=1">
 						<h2 class="Heading2">Summary</h2>
-						<xsl:apply-templates select="class" mode="index">
+						<xsl:apply-templates select="$classes" mode="index">
 							<xsl:sort select="@name"/>
 						</xsl:apply-templates>
 					</xsl:if>					
 					<xsl:call-template name="descriptors"><xsl:with-param name="target" select="."/></xsl:call-template>
-					<xsl:apply-templates select="class">
+					<xsl:apply-templates select="$classes">
 						<xsl:sort select="@name"/>
 					</xsl:apply-templates>
 				</body>
@@ -43,42 +44,49 @@
 	</xsl:template>
 	
 	<xsl:template match="class">
-		<h6 class='anchor'><a name="{@qn}"/><a index="{@name}"/><a index="{saxon:if(@interface,'interface','class')}:{@name}"/><xsl:value-of select="@name"/></h6>
-		<h2 class="Heading2">
-			<xsl:value-of select="@modifiers"/>
-			<xsl:text> </xsl:text>
-			<xsl:value-of select="@name"/>
-			<xsl:if test="@superclass and @superclass!='Object'">
-				<br/><tab/>extends 
-				<xsl:value-of select="@superclass"/>
-			</xsl:if>
-			<xsl:for-each select="implements[@local]">
-				<xsl:choose>
-					<xsl:when test="position()=1">
-						<br/><tab/>implements
-					</xsl:when>
-					<xsl:otherwise>
-						,
-					</xsl:otherwise>
-				</xsl:choose>
-				<xsl:value-of select="@name"/>
-			</xsl:for-each>
-		</h2>
-		<xsl:apply-templates select="description" mode="html"/>
-		<xsl:call-template name="descriptors"><xsl:with-param name="target" select="."/></xsl:call-template>
-		<xsl:if test="field">
-			<xsl:apply-templates select="field">
-				<xsl:sort select="@name"/>
-			</xsl:apply-templates>
-		</xsl:if>
-		<xsl:if test="method[@isConstructor]">
-			<xsl:apply-templates select="method[@isConstructor]"/>
-		</xsl:if>
-		<xsl:if test="method[not(@isConstructor)]">
-			<xsl:apply-templates select="method[not(@isConstructor)]">
-				<xsl:sort select="@name"/>
-			</xsl:apply-templates>
-		</xsl:if>
+		<xsl:choose>
+			<xsl:when test="skip">
+				<!-- Skipping this class because it has the @skip tag -->
+			</xsl:when>
+			<xsl:otherwise>
+				<h6 class='anchor'><a name="{@qn}"/><a index="{@name}"/><a index="{saxon:if(@interface,'interface','class')}:{@name}"/><xsl:value-of select="@name"/></h6>
+				<h2 class="Heading2">
+					<xsl:value-of select="@modifiers"/>
+					<xsl:text> </xsl:text>
+					<xsl:value-of select="@name"/>
+					<xsl:if test="@superclass and @superclass!='Object'">
+						<br/><tab/>extends 
+						<xsl:value-of select="@superclass"/>
+					</xsl:if>
+					<xsl:for-each select="implements[@local]">
+						<xsl:choose>
+							<xsl:when test="position()=1">
+								<br/><tab/>implements
+							</xsl:when>
+							<xsl:otherwise>
+								,
+							</xsl:otherwise>
+						</xsl:choose>
+						<xsl:value-of select="@name"/>
+					</xsl:for-each>
+				</h2>
+				<xsl:apply-templates select="description" mode="html"/>
+				<xsl:call-template name="descriptors"><xsl:with-param name="target" select="."/></xsl:call-template>
+				<xsl:if test="field">
+					<xsl:apply-templates select="field">
+						<xsl:sort select="@name"/>
+					</xsl:apply-templates>
+				</xsl:if>
+				<xsl:if test="method[@isConstructor]">
+					<xsl:apply-templates select="method[@isConstructor]"/>
+				</xsl:if>
+				<xsl:if test="method[not(@isConstructor)]">
+					<xsl:apply-templates select="method[not(@isConstructor)]">
+						<xsl:sort select="@name"/>
+					</xsl:apply-templates>
+				</xsl:if>
+			</xsl:otherwise>
+		</xsl:choose>
 	</xsl:template>
 	
 	<xsl:template match="field">
