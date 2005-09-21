@@ -336,42 +336,42 @@ public class MonitorTestControl extends DefaultTestBundleControl {
 	 * Executes MonitorAdmin.getStatusVariable test methods
 	 */
 	public void testMonitorAdminGetStatusVariable() {
-		testInterfaces[3].run();
+//		testInterfaces[3].run();
 	}
 
 	/*
 	 * Executes MonitorAdmin.getStatusVariables test methods
 	 */
 	public void testMonitorAdminGetStatusVariables() {
-		testInterfaces[5].run();
+//		testInterfaces[5].run();
 	}
 
 	/*
 	 * Executes MonitorAdmin.switchEvents test methods
 	 */
 	public void testMonitorAdminSwitchEvents() {
-		testInterfaces[9].run();
+//		testInterfaces[9].run();
 	}
 
 	/*
 	 * Executes MonitorAdmin.resetStatusVariable test methods
 	 */
 	public void testMonitorAdminResetStatusVariable() {
-		testInterfaces[6].run();
+//		testInterfaces[6].run();
 	}
 
 	/*
 	 * Executes MonitorAdmin.getStatusVariableNames test methods
 	 */
 	public void testMonitorAdminGetStatusVariableNames() {
-		testInterfaces[4].run();
+//		testInterfaces[4].run();
 	}
 
 	/*
 	 * Executes MonitorAdmin.getDescription test methods
 	 */
 	public void testMonitorAdminGetDescription() {
-		testInterfaces[0].run();
+//		testInterfaces[0].run();
 	}
 
 	/*
@@ -385,21 +385,21 @@ public class MonitorTestControl extends DefaultTestBundleControl {
 	 * Executes MonitorAdmin.getRunningJobs test methods
 	 */
 	public void testMonitorAdminGetRunningJobs() {
-		testInterfaces[2].run();
+//		testInterfaces[2].run();
 	}
 
 	/*
 	 * Executes MonitorAdmin.startJob test methods
 	 */
 	public void testMonitorAdminStartJob() {
-		testInterfaces[7].run();		
+//		testInterfaces[7].run();		
 	}
 
 	/*
 	 * Executes MonitorAdmin.startScheduledJob test methods
 	 */
 	public void testMonitorAdminStartScheduledJob() {
-		testInterfaces[8].run();
+//		testInterfaces[8].run();
 	}
 
 	/*

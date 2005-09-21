@@ -1,9 +1,9 @@
 Manifest-Version: 1.0
-Bundle-SymbolicName: ${p}
 Bundle-Activator: ${p}.TestMonitor
-Bundle-Name: test.monitor
+Bundle-Name: ${p}
+Bundle-SymbolicName: ${p}
 Bundle-Version: 1.0
-Bundle-Copyright: ${copyright}
+Bundle-Copyright: Copyright (c) OSGi Alliance (2000-2005). All Rights Reserved.
 Bundle-Description: Monitor Test Case.
 Bundle-Vendor: OSGi Alliance
 Bundle-DocUrl: http://www.osgi.org/testcases/4/test.cases.template
