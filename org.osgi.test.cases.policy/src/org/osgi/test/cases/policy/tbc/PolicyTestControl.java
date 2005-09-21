@@ -160,6 +160,8 @@ public class PolicyTestControl extends DefaultTestBundleControl {
 		PolicyConstants.LOCATION = tb1SvrReference.getBundle().getLocation();
 		tb1Service = (TB1Service) getContext().getService(tb1SvrReference);
 		testBundleTB1 = tb1Service.getTestClasses(this);
+		new DmtPermission(".",DmtPermission.ADD);
+
 		setPermissions(new PermissionInfo(DmtPermission.class.getName(),
 				PolicyConstants.ALL_NODES, PolicyConstants.ALL_ACTIONS));
 		
