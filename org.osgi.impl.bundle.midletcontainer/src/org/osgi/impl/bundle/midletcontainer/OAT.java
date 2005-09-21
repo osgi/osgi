@@ -65,7 +65,13 @@ public class OAT implements OATContainerInterface, BundleListener {
 	
 	public void registerOATBundle(Bundle bundle) throws Exception {
 		URL url = bc.getBundle( bundle.getBundleId() ).getResource(	"OSGI-INF/app/apps.xml");
-		OATApplicationData []oatAppDatas = (new OATXMLParser( bc )).parse( url );
+		OATApplicationData []oatAppDatas;
+		try {
+		  oatAppDatas = (new OATXMLParser( bc )).parse( url );
+		}catch( Exception e ) {
+			oatAppDatas = new OATApplicationData[ 1 ];
+			oatAppDatas[ 0 ] = new OATApplicationData( null, new OATServiceData[ 0 ]);
+		}
 		oatAppDescHash.put( bundle, oatAppDatas );
 	}
 	
@@ -79,7 +85,9 @@ public class OAT implements OATContainerInterface, BundleListener {
 		if( oatAppDatas == null )
 			throw new Exception( "Application bundle is not registered in OAT" );
 		
-		for( int i = 0; i != oatAppDatas.length; i++) {			
+		for( int i = 0; i != oatAppDatas.length; i++) {
+			if( oatAppDatas[ i ].getBaseClass() == null )
+				oatAppDatas[ i ].setBaseClass( mainClass.getClass().getName() );
 			if( oatAppDatas[ i ].getBaseClass().equals( mainClass.getClass().getName() ) ) {
 				OATApplicationContextImpl appCtx = new OATApplicationContextImpl( bundle, args, oatAppDatas[ i ], appHandle, mainClass );						
 				oatHashtable.put( mainClass, appCtx );
@@ -115,6 +123,9 @@ public class OAT implements OATContainerInterface, BundleListener {
 				return false;
 
 			for( int i = 0; i != oatAppDatas.length; i++) {			
+				if( oatAppDatas[ i ].getBaseClass() == null )
+					oatAppDatas[ i ].setBaseClass( baseClass );				
+				
 				if( oatAppDatas[ i ].getBaseClass().equals( baseClass ) ) {
 					OATApplicationData appData = oatAppDatas[ i ];
 					

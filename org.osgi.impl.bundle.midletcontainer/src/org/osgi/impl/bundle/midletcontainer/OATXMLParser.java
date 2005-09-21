@@ -105,6 +105,10 @@ class OATApplicationData {
 		return baseClass_;
 	}
 	
+	public void setBaseClass( String clazz ) {
+		baseClass_ = clazz;
+	}
+	
 	public OATServiceData[] getServices() {
 		return services_;
 	}
