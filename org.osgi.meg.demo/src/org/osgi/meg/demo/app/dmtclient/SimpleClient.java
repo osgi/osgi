@@ -246,7 +246,17 @@ public class SimpleClient implements ManagedService, ManagedServiceFactory,
             bc.ungetService(pRef);
             */
             
-            DmtSession session = factory.getSession(".");
+            config = ca.getConfiguration("proba123");
+            System.out.println(config.getFactoryPid() == null ? "sima" : "factory");
+            Configuration[] cs = ca.listConfigurations("(service.pid=proba123)");
+            System.out.println(cs == null ? "nincs meg" : "megvan");
+            properties = new Hashtable();
+            properties.put("my.int.array", new int[] { 3, 2, 1 });
+            config.update(properties);
+            cs = ca.listConfigurations("(service.pid=proba123)");
+            System.out.println(cs == null ? "nincs meg" : "megvan");
+            
+            DmtSession session = factory.getSession(".", DmtSession.LOCK_TYPE_ATOMIC);
             System.out.println("Retrieved session, id=" + session.getSessionId() +
                                ", lock type=" + session.getLockType() +
                                ", principal=" + session.getPrincipal() +
