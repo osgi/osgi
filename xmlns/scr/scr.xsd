@@ -26,6 +26,14 @@ case, the scr namespace is assumed. Otherwise the namespace must be used.
 	<element name="component" type="scr:Tcomponent"/>
 
 	<complexType name="Tcomponent">
+		<annotation>
+			<documentation xml:lang="en">
+			Implementations of SCR must not require component descriptions to specify the subelements 
+			of the component element in the order as required by the schema. SCR implementations must 
+			allow other orderings since arbitrary orderings do not affect the meaning of the component 
+			description. Only the relative ordering of property and properties element have meaning.
+			</documentation>
+		</annotation>
 		<sequence>
 			<element name="implementation" type="scr:Timplementation" minOccurs="1" maxOccurs="1"/>
 			<choice minOccurs="0" maxOccurs="unbounded">
