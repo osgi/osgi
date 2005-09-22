@@ -497,8 +497,21 @@ public class OATApplicationContextImpl implements ApplicationContext, ServiceLis
 		}
 	}
 
-	public Map getServiceProperties(Object arg0) {
-		// TODO Auto-generated method stub
+	public Map getServiceProperties(Object serviceObject) {
+		Iterator iter = serviceList.iterator();
+		
+		while( iter.hasNext() ) {
+			Service service = (Service)iter.next();
+			if( service.serviceObject == serviceObject ) {
+				HashMap props = new HashMap();
+				
+				String []keys = service.serviceReference.getPropertyKeys();
+				for( int i = 0; i != keys.length; i++ )
+					props.put( keys[ i ], service.serviceReference.getProperty( keys[ i ] ) );
+				
+				return props;
+			}
+		}
 		return null;
 	}
 }
