@@ -278,13 +278,38 @@ public class DmtException extends Exception {
      */
     public static final int SESSION_CREATION_TIMEOUT = 7;
 
-    //----- Private fields -----//
+    //----- Content fields -----//
     
-    private String    uri     = null;
-    private int       code    = 0;
-    private String    message = null;
-    private Vector    causes  = null;
-    private boolean   fatal   = false;
+    /**
+     * The URI of the node on which the failed DMT operation was issued, or 
+     * <code>null</code> if the operation was not associated with a node.
+     */
+    private String uri = null;
+    
+    /**
+     * The error code of the failure, one of the constants defined in this 
+     * class.
+     */
+    private int code = 0;
+    
+    /**
+     * The message associated with the exception, or <code>null</code> if there
+     * is no error message.
+     */
+    private String message = null;
+    
+    /**
+     * The list of originating exceptions, or empty list or <code>null</code> if
+     * there are no originating exceptions.
+     */
+    private Vector causes = null;
+    
+    /**
+     * Determines whether the exception is fatal or not.  This is basically a
+     * two-state severity indicator, with the 'fatal' severity being the more
+     * serious one. 
+     */
+    private boolean fatal = false;
 
     
     //----- Constructors -----//
@@ -505,9 +530,34 @@ public class DmtException extends Exception {
         }
     }
 
-    //----- Private methods -----//
+    //----- Utility methods -----//
 
-    private String getCodeText(int code) {
+    /**
+     * Converts the given path, given as an array of path segments, to a single
+     * URI string.
+     * 
+     * @param path the path to convert
+     * @return the URI string representing the same node as the given path
+     */
+    private static String pathToUri(String[] path) {
+        if(path == null)
+            return null;
+        
+        StringBuffer sb = new StringBuffer();
+        if(path.length > 0)
+            sb.append(path[0]);
+        for(int i = 1; i < path.length; i++)
+            sb.append('/').append(path[i]);
+        return sb.toString();
+    }
+    
+    /**
+     * Returns the name of the given error code.
+     * 
+     * @param code the error code
+     * @return a string containing the error code name
+     */
+    private static String getCodeText(int code) {
         // todo sync codes
         switch(code) {
         case NODE_NOT_FOUND:           return "NODE_NOT_FOUND";
@@ -530,17 +580,5 @@ public class DmtException extends Exception {
         default:
             return "<unknown code>";
         }
-    }
-    
-    private static String pathToUri(String[] path) {
-        if(path == null)
-            return null;
-        
-        StringBuffer sb = new StringBuffer();
-        if(path.length > 0)
-            sb.append(path[0]);
-        for(int i = 1; i < path.length; i++)
-            sb.append('/').append(path[i]);
-        return sb.toString();
     }
 }
