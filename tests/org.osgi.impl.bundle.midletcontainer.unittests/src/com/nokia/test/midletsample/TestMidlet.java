@@ -10,7 +10,7 @@ import org.osgi.framework.*;
 import java.util.*;
 
 public class TestMidlet extends MIDlet implements EventHandler, SynchronousBundleListener,
-                                                  ServiceListener, FrameworkListener {
+                                                  ApplicationServiceListener, FrameworkListener {
 	String                      fileName;
 	String                      storedString;
 	boolean                     paused;
@@ -166,7 +166,7 @@ public class TestMidlet extends MIDlet implements EventHandler, SynchronousBundl
 		writeResult("BUNDLE CHANGE RECEIVED");			
 	}
 
-	public void serviceChanged(ServiceEvent event) {
+	public void serviceChanged(ApplicationServiceEvent event) {
 		writeResult("SERVICE CHANGE RECEIVED");			
 	}
 
