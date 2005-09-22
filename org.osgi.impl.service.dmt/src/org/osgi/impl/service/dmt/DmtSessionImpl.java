@@ -34,7 +34,7 @@ import org.osgi.service.permissionadmin.PermissionInfo;
 
 // TODO clean up plugin unregistration error case
 
-// OPTIMIZE node handling (e.g. retrieve plugin from dispatcher only once per API call), maybe with new URI class
+// OPTIMIZE node handling (e.g. retrieve plugin from dispatcher only once per API call)
 // OPTIMIZE only retrieve meta-data once per API call
 // OPTIMIZE only call commit/rollback for plugins that were actually modified since the last transaction boundary
 public class DmtSessionImpl implements DmtSession {
