@@ -30,6 +30,7 @@ package org.osgi.impl.bundle.midletcontainer;
 import java.lang.reflect.*;
 import java.security.*;
 import java.util.*;
+
 import org.osgi.framework.*;
 import org.osgi.application.*;
 import org.osgi.service.application.*;
@@ -494,5 +495,10 @@ public class OATApplicationContextImpl implements ApplicationContext, ServiceLis
 				}
 			}
 		}
+	}
+
+	public Map getServiceProperties(Object arg0) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }
