@@ -84,7 +84,7 @@ public class RootPlugin implements DataPluginFactory, ReadableDataSession {
 	public MetaNode getMetaNode(String[] nodePath)
 			throws DmtException {
 		findNode(nodePath); // check that the node exists
-		return new MetaNodeImpl();
+		return new RootPluginMetaNode();
 	}
 
 	//----- DmtReadOnly methods -----//
