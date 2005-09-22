@@ -115,7 +115,7 @@ public class OATApplicationContextImpl implements ApplicationContext, ServiceLis
 		if( appHandle == null )
 			throw new RuntimeException( "Application is not running!" );
 		
-		Filter filterItem = bc.createFilter( filter );
+		Filter filterItem = (filter == null) ? null : bc.createFilter( filter );
 		serviceListenerList.add( new ServiceListener( listener, filterItem ) );
 	}
 	
@@ -452,11 +452,18 @@ public class OATApplicationContextImpl implements ApplicationContext, ServiceLis
 	public void serviceChanged(ServiceEvent event) {
 		Service serv = getServiceByReference( event.getServiceReference() );
 		
+		Hashtable eventHash = new Hashtable();
+		String []propKeys = event.getServiceReference().getPropertyKeys();
+		
+		for( int w=0; w != propKeys.length; w++ )
+			eventHash.put( propKeys[ w ], event.getServiceReference().getProperty( propKeys[ w ]) );
+		
 		Iterator iter = serviceListenerList.iterator();
 		while( iter.hasNext() ) {
 			ServiceListener servListener = (ServiceListener)  iter.next();
 			
-			/* TODO */
+			if( servListener.filter != null && !servListener.filter.match( eventHash ) )
+				continue;
 			
 			Object serviceObject = ( serv == null ) ? null : serv.serviceObject;
 			
