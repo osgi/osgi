@@ -213,37 +213,34 @@ class LogPlugin implements DataPluginFactory, TransactionalDataSession {
     public MetaNode getMetaNode(String[] fullPath) throws DmtException {
         String[] path = chopPath(fullPath);
         if (path.length == 0) // OSGi/Log
-            return new LogPluginMetanode(MetaNode.PERMANENT, 
-                                         !LogPluginMetanode.MODIFIABLE, 
-                                         !LogPluginMetanode.ALLOW_INFINITE, 
-                                         "Root node for log search requests.");
+            return new LogMetaNode(MetaNode.PERMANENT, 
+                    !LogMetaNode.MODIFIABLE, !LogMetaNode.ALLOW_INFINITE, 
+                    "Root node for log search requests.");
         
         if (path.length == 1) // OSGi/Log/<search_id>
-            return new LogPluginMetanode(MetaNode.DYNAMIC,
-                                         LogPluginMetanode.MODIFIABLE,
-                                         LogPluginMetanode.ALLOW_INFINITE,
-                                         "Root node of a log search request.");
+            return new LogMetaNode(MetaNode.DYNAMIC,
+                    LogMetaNode.MODIFIABLE, LogMetaNode.ALLOW_INFINITE,
+                    "Root node of a log search request.");
         
         if (path.length == 2) { // OSGi/Log/<search_id>/<param>
             if(path[1].equals(FILTER))
-                return new LogPluginMetanode(LogPluginMetanode.SEARCH_PARAMETER,
+                return new LogMetaNode(LogMetaNode.SEARCH_PARAMETER,
                         DmtData.FORMAT_STRING, new DmtData(DEFAULT_FILTER), null,  
                         "Filter expression to select log records included in the result.");
                 
             if(path[1].equals(EXCLUDE))
-                return new LogPluginMetanode(LogPluginMetanode.SEARCH_PARAMETER,
+                return new LogMetaNode(LogMetaNode.SEARCH_PARAMETER,
                         DmtData.FORMAT_STRING, new DmtData(DEFAULT_EXCLUDE), VALID_EXCLUDE_COMPONENTS,
                         "A list of log entry attributes not to include in the result records.");
             
             if(path[1].equals(MAXR))
-                return new LogPluginMetanode(LogPluginMetanode.SEARCH_PARAMETER,
+                return new LogMetaNode(LogMetaNode.SEARCH_PARAMETER,
                         DmtData.FORMAT_INTEGER, new DmtData(DEFAULT_MAXR), null,
                         "The maximum number of records to be included in the result.");
             
             if(path[1].equals(LOGRESULT))
-                return new LogPluginMetanode(MetaNode.AUTOMATIC,
-                        !LogPluginMetanode.MODIFIABLE, 
-                        !LogPluginMetanode.ALLOW_INFINITE, 
+                return new LogMetaNode(MetaNode.AUTOMATIC,
+                        !LogMetaNode.MODIFIABLE, !LogMetaNode.ALLOW_INFINITE, 
                         "Root node for log results.");
             
             throw new DmtException(fullPath, DmtException.NODE_NOT_FOUND, 
@@ -252,37 +249,36 @@ class LogPlugin implements DataPluginFactory, TransactionalDataSession {
 
         // OSGi/Log/<search_id>/LogResult/<result_id>
         if (path.length == 3 && path[1].equals(LOGRESULT)) {
-                return new LogPluginMetanode(MetaNode.DYNAMIC,
-                        !LogPluginMetanode.MODIFIABLE,
-                        LogPluginMetanode.ALLOW_INFINITE,
+                return new LogMetaNode(MetaNode.DYNAMIC,
+                        !LogMetaNode.MODIFIABLE, LogMetaNode.ALLOW_INFINITE,
                         "Log result item node.");
         }
             
         // OSGi/Log/<search_id>/LogResult/<result_id>/<param>
         if(path.length == 4 && path[1].equals(LOGRESULT)) {
         	if( path[ 3 ].equals( SEVERITY ) )
-                return new LogPluginMetanode(false, DmtData.FORMAT_INTEGER, null, null,
+                return new LogMetaNode(false, DmtData.FORMAT_INTEGER, null, null,
                           "The severity of a log result item.");
         	if( path[ 3 ].equals( TIME ) )
-                return new LogPluginMetanode(false, DmtData.FORMAT_STRING, null, null,
+                return new LogMetaNode(false, DmtData.FORMAT_STRING, null, null,
                           "The timestamp of a log result item.");
         	if( path[ 3 ].equals( SYSTEM ) )
-                return new LogPluginMetanode(false, DmtData.FORMAT_STRING, null, null,
+                return new LogMetaNode(false, DmtData.FORMAT_STRING, null, null,
                           "The system of a log result item.");
         	if( path[ 3 ].equals( SUBSYSTEM ) )
-                return new LogPluginMetanode(false, DmtData.FORMAT_STRING, null, null,
+                return new LogMetaNode(false, DmtData.FORMAT_STRING, null, null,
                           "The subsystem of a log result item.");
         	if( path[ 3 ].equals( MESSAGE ) )
-                return new LogPluginMetanode(false, DmtData.FORMAT_STRING, null, null,
+                return new LogMetaNode(false, DmtData.FORMAT_STRING, null, null,
                           "The message of a log result item.");
         	if( path[ 3 ].equals( DATA ) )
-                return new LogPluginMetanode(false, DmtData.FORMAT_STRING, null, null,
+                return new LogMetaNode(false, DmtData.FORMAT_STRING, null, null,
                           "The data of a log result item.");
         }
         
         // path.length > 2
         throw new DmtException(fullPath, DmtException.NODE_NOT_FOUND,
-                               "No such node defined in the logging tree");
+                "No such node defined in the logging tree");
     }
 
     public boolean isNodeUri(String[] fullPath) {
@@ -408,7 +404,7 @@ class LogPlugin implements DataPluginFactory, TransactionalDataSession {
 	}
 
 	public String getNodeType(String[] fullPath) throws DmtException {
-		return isLeafNode(fullPath) ? LogPluginMetanode.LEAF_MIME_TYPE : null;
+		return isLeafNode(fullPath) ? LogMetaNode.LEAF_MIME_TYPE : null;
 	}
 
 	public int getNodeVersion(String[] fullPath) throws DmtException {

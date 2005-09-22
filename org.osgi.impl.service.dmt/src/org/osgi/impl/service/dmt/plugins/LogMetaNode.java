@@ -21,7 +21,7 @@ import java.util.List;
 import org.osgi.service.dmt.DmtData;
 import org.osgi.service.dmt.MetaNode;
 
-class LogPluginMetanode implements MetaNode {
+class LogMetaNode implements MetaNode {
     static final boolean MODIFIABLE = true; 
     static final boolean SEARCH_PARAMETER = true; 
     static final boolean ALLOW_INFINITE = true; 
@@ -48,7 +48,7 @@ class LogPluginMetanode implements MetaNode {
     private List validComponents;
 
     // Meta-node constructor for interior nodes
-    protected LogPluginMetanode(int scope, boolean modifiable, 
+    protected LogMetaNode(int scope, boolean modifiable, 
             boolean allowInfinite, String description) {
         
         this.canDelete       = modifiable;
@@ -69,7 +69,7 @@ class LogPluginMetanode implements MetaNode {
     }
     
     // Meta-node constructor for leaf nodes
-	protected LogPluginMetanode(boolean isSearchParameter, int format, 
+	protected LogMetaNode(boolean isSearchParameter, int format, 
             DmtData defaultValue, List validComponents, 
             String description) {
         this.canDelete       = false;
@@ -163,7 +163,7 @@ class LogPluginMetanode implements MetaNode {
                 String excludes = value.getString();
                 String[] components = Splitter.split(excludes, ',', 0);
                 for (int i = 0; i < components.length; i++)
-                    if(!validComponents.contains(components[i]))
+                    if(!validComponents.contains(components[i].trim()))
                         return false;
             } catch(IllegalStateException e) {
                 // not checking components if format is not string
