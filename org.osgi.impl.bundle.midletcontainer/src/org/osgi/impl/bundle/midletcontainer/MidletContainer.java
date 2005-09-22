@@ -49,7 +49,11 @@ public class MidletContainer implements BundleListener, ServiceListener {
 		if (appDescs == null)
 			throw new Exception("Not a valid MIDlet bundle!");
 
-		oat.registerOATBundle( bundle );
+		String startClasses[] = new String [ appDescs.length ];
+		for( int i=0; i != appDescs.length; i++ )
+			startClasses[ i ] = ((MidletDescriptor)appDescs[ i ]).getStartClass();
+		
+		oat.registerOATBundle( bundle, startClasses );
 
 		registerApplicationDescriptors( bundle );		
 		installedMidletBundles.add( bundle );

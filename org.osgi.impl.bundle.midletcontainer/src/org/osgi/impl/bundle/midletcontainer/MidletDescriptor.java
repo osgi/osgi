@@ -192,6 +192,10 @@ public final class MidletDescriptor extends ApplicationDescriptor {
 		}
 	}
 
+	String getStartClass() {
+		return startClass;
+	}
+	
 	/**
 	 * @param pattern
 	 * @return

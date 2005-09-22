@@ -32,7 +32,7 @@ import java.util.*;
 import org.osgi.service.application.*;
 
 public interface OATContainerInterface {
-	public void registerOATBundle       ( Bundle bundle ) throws Exception;
+	public void registerOATBundle       ( Bundle bundle, String baseClasses[] ) throws Exception;
   public boolean isLaunchable         ( Bundle bundle, String baseClass );            
   public void createApplicationContext( Object mainClass, ApplicationHandle appHandle, Map args, Bundle bundle )
                                         throws Exception;
