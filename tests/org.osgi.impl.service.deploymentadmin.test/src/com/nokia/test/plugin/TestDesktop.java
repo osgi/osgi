@@ -1,38 +1,14 @@
 package com.nokia.test.plugin;
 
-import java.awt.BorderLayout;
-import java.awt.Button;
-import java.awt.Checkbox;
-import java.awt.Frame;
-import java.awt.GridLayout;
-import java.awt.Label;
-import java.awt.List;
-import java.awt.Panel;
-import java.awt.TextArea;
-import java.awt.TextField;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.awt.event.WindowListener;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
-import java.util.Hashtable;
-
 import javax.swing.JOptionPane;
-
 import org.osgi.service.dmt.DmtAdmin;
 import org.osgi.service.dmt.DmtData;
 import org.osgi.service.dmt.DmtException;
@@ -41,7 +17,7 @@ import org.osgi.service.dmt.DmtSession;
 
 public class TestDesktop extends Frame implements ActionListener {
     
-    private String ROOT = "./OSGi/Deployment";
+    private String ROOT = "./OSGi/Configuration";
     private String TEST_FILE = "../../org.osgi.impl.service.deploymentadmin.test/" +
     		"DmtPluginTest.txt";
 
@@ -55,10 +31,12 @@ public class TestDesktop extends Frame implements ActionListener {
     private static final String GET_META_NODE        = "getMetaNode";
     private static final String GET_CHILD_NODE_NAMES = "getChildNodeNames";
     private static final String CREATE_INT_NODE      = "createInteriorNode";
-    private static final String DELETE_NODE          = "DeleteNode";
+    private static final String CREATE_LEAF_NODE     = "createLeafNode";
+    private static final String DELETE_NODE          = "deleteNode";
     private static final String SET_NODE_VALUE       = "setNodeValue";
     private static final String GET_NODE_VALUE       = "getNodeValue";
     private static final String EXECUTE              = "execute";
+    private static final String REOPEN               = "reopen";
     private static final String MAKE_TEST            = "MAKE TEST";
     private static final String RUN_TESTS            = "RUN TESTS";
     
@@ -70,10 +48,12 @@ public class TestDesktop extends Frame implements ActionListener {
     private Button b_getMetaNode = new Button(GET_META_NODE);
     private Button b_getChildNodeNames = new Button(GET_CHILD_NODE_NAMES);
     private Button b_createInteriorNode = new Button(CREATE_INT_NODE);
+    private Button b_createLeafNode = new Button(CREATE_LEAF_NODE);
     private Button b_deleteNode = new Button(DELETE_NODE);
     private Button b_setNodeValue = new Button(SET_NODE_VALUE);
     private Button b_getNodeValue = new Button(GET_NODE_VALUE);
     private Button b_execute = new Button(EXECUTE);
+    private Button b_reopen = new Button(REOPEN);
     private Button b_makeTest = new Button(MAKE_TEST);
     private Button b_runTests = new Button(RUN_TESTS);
     
@@ -89,7 +69,7 @@ public class TestDesktop extends Frame implements ActionListener {
     
     public TestDesktop(DmtAdmin admin) throws Exception {
         this.admin = admin;
-        this.session = admin.getSession(ROOT);
+        session = admin.getSession(ROOT, DmtSession.LOCK_TYPE_ATOMIC);
         setLayout(new GridLayout(1, 0));
         addWindowListener(new WindowAdapter() {
             	public void windowClosing(WindowEvent e) {
@@ -98,7 +78,7 @@ public class TestDesktop extends Frame implements ActionListener {
             	}
             });
         
-        pa_left.setLayout(new GridLayout(10, 0));
+        pa_left.setLayout(new GridLayout(8, 0));
         pa_right.setLayout(new GridLayout(2, 0));
         pa_right_top.setLayout(new GridLayout(5, 1));
         pa_right_bottom.setLayout(new GridLayout(5, 1));
@@ -109,8 +89,7 @@ public class TestDesktop extends Frame implements ActionListener {
         
         tf_uri.setText(ROOT);
         pa_right_top.add(tf_uri);
-        
-        pa_right_bottom.add(tf_result);
+        pa_right_top.add(tf_result);
         
         b_isNodeUri.setActionCommand(IS_NODE_URI);
         b_isNodeUri.addActionListener(this);
@@ -132,9 +111,9 @@ public class TestDesktop extends Frame implements ActionListener {
         b_createInteriorNode.addActionListener(this);
         pa_left.add(b_createInteriorNode);
         
-        b_deleteNode.setActionCommand(DELETE_NODE);
-        b_deleteNode.addActionListener(this);
-        pa_left.add(b_deleteNode);
+        b_createLeafNode.setActionCommand(CREATE_LEAF_NODE);
+        b_createLeafNode.addActionListener(this);
+        pa_left.add(b_createLeafNode);
         
         b_setNodeValue.setActionCommand(SET_NODE_VALUE);
         b_setNodeValue.addActionListener(this);
@@ -144,9 +123,17 @@ public class TestDesktop extends Frame implements ActionListener {
         b_getNodeValue.addActionListener(this);
         pa_left.add(b_getNodeValue);
         
+        b_deleteNode.setActionCommand(DELETE_NODE);
+        b_deleteNode.addActionListener(this);
+        pa_left.add(b_deleteNode);
+        
         b_execute.setActionCommand(EXECUTE);
         b_execute.addActionListener(this);
         pa_left.add(b_execute);
+        
+        b_reopen.setActionCommand(REOPEN);
+        b_reopen.addActionListener(this);
+        pa_left.add(b_reopen);
         
         b_makeTest.setActionCommand(MAKE_TEST);
         b_makeTest.addActionListener(this);
@@ -161,7 +148,7 @@ public class TestDesktop extends Frame implements ActionListener {
         pa_left.add(la_passed);
         
         pack();
-        setSize(800, 600);
+        setSize(1088, 512);
         setVisible(true);
         
         runTests();
@@ -196,6 +183,16 @@ public class TestDesktop extends Frame implements ActionListener {
         } else if (CREATE_INT_NODE.equals(acc)){
         	lastCommand = acc;
         	session.createInteriorNode(uri);
+        } else if (CREATE_LEAF_NODE.equals(acc)){
+        	lastCommand = acc;
+            String text;
+            if (null != value)
+                text = value;
+            else {
+                text = JOptionPane.showInputDialog(this, "");
+                lastValue = text;
+            }
+        	session.createLeafNode(uri, dmtFromString(text));
         } else if (DELETE_NODE.equals(acc)) {
             lastCommand = acc;
             session.deleteNode(uri);
@@ -208,8 +205,7 @@ public class TestDesktop extends Frame implements ActionListener {
                 text = JOptionPane.showInputDialog(this, "");
                 lastValue = text;
             }
-        	DmtData data = new DmtData(text);
-        	session.setNodeValue(uri, data);
+        	session.setNodeValue(uri, dmtFromString(text));
         } else if (GET_NODE_VALUE.equals(acc)) {
             lastCommand = acc;
             res = session.getNodeValue(uri).toString();
@@ -219,6 +215,10 @@ public class TestDesktop extends Frame implements ActionListener {
         } else if (EXECUTE.equals(acc)) {
                 lastCommand = acc;
                 session.execute(uri, "", "");
+        } else if (REOPEN.equals(acc)) {
+                lastCommand = acc;
+                session.close();
+                session = admin.getSession(ROOT, DmtSession.LOCK_TYPE_ATOMIC);
         } else if (MAKE_TEST.equals(acc)) {
             if (null == lastCommand)
                 return null;
@@ -229,7 +229,9 @@ public class TestDesktop extends Frame implements ActionListener {
             String neg = "" + cb_negativeTest.getState();
             pw.print(uri + "\t" + lastCommand + "\t" + tf_result.getText() + 
                     "\t" + neg);
-            if ("setNodeValue".equals(lastCommand))
+            if (SET_NODE_VALUE.equals(lastCommand))
+                pw.println("\t" + lastValue);
+            if (CREATE_LEAF_NODE.equals(lastCommand))
                 pw.println("\t" + lastValue);
             else
                 pw.println();
@@ -266,7 +268,9 @@ public class TestDesktop extends Frame implements ActionListener {
             Exception ex = null;
             try {
                 String value = null;
-                if (sa[1].equals("setNodeValue"))
+                if (sa[1].equals(SET_NODE_VALUE))
+                    value = sa[4];
+                if (sa[1].equals(CREATE_LEAF_NODE))
                     value = sa[4];
                 res = action(sa[1], sa[0], value);
                 res = (null == res ? "" : res);
@@ -294,6 +298,47 @@ public class TestDesktop extends Frame implements ActionListener {
         }
         r.close();
         System.out.println("FAILED LINES: " + failedLines);
+    }
+
+    // copied from org.osgi.meg.demo.remote.CommandProcessor, keep in sync.
+    private DmtData dmtFromString(String typedata) {
+        // TODO add new types (here and in remote gui)
+        // expected format eg "int:23"
+        int pos = typedata.indexOf(":");
+        String type = typedata.substring(0, pos);
+        String data = typedata.substring(pos + 1);
+        DmtData value = null;
+        if (type.equals("int")) {
+            value = new DmtData(Integer.parseInt(data));
+        }
+        else if (type.equals("bool")) {
+            value = new DmtData((new Boolean(data)).booleanValue());
+        }
+        else if (type.equals("chr")) {
+            value = new DmtData(data);
+        }
+        else if (type.equals("xml")) {
+            value = new DmtData(data, DmtData.FORMAT_XML);
+        }
+        else if (type.equals("bin")) {
+            value = new DmtData(data.getBytes());
+        }
+        else if (type.equals("b64")) {
+            value = new DmtData(data.getBytes(), true);
+        }
+        else if (type.equals("date")) {
+            value = new DmtData(data, DmtData.FORMAT_DATE);
+        }
+        else if (type.equals("time")) {
+            value = new DmtData(data, DmtData.FORMAT_TIME);
+        }
+        else if (type.equals("float")) {
+            value = new DmtData(Float.parseFloat(data));
+        }
+        else if (type.equals("null")) {
+            value = DmtData.NULL_VALUE;
+        }
+        return value;
     }
 
 }
