@@ -55,6 +55,17 @@ public class OATApplicationContextImpl implements ApplicationContext, ServiceLis
 		Object            serviceObject;
 		ServiceReference  serviceReference;
 	}
+	
+	class ServiceListener {
+		
+		public ServiceListener( ApplicationServiceListener listener, Filter filter ) {
+			this.listener = listener;
+			this.filter = filter;
+		}
+		
+		ApplicationServiceListener listener;
+		Filter filter;
+	}
 		
 	public OATApplicationContextImpl( Bundle bundle, Map startupParams, OATApplicationData appData, ApplicationHandle appHandle, Object mainClass ) {
 		bc = frameworkHook( bundle );
@@ -98,21 +109,20 @@ public class OATApplicationContextImpl implements ApplicationContext, ServiceLis
     frameworkListenerList.add( listener );
 	}
 	
-	public void addServiceListener(ServiceListener listener, String filter)
+	public void addServiceListener(ApplicationServiceListener listener, String filter)
 			throws InvalidSyntaxException {
 		if( appHandle == null )
 			throw new RuntimeException( "Application is not running!" );
 		
-		bc.addServiceListener( listener, filter );
-		serviceListenerList.add( listener );
+		Filter filterItem = bc.createFilter( filter );
+		serviceListenerList.add( new ServiceListener( listener, filterItem ) );
 	}
 	
-	public void addServiceListener(ServiceListener listener) {
+	public void addServiceListener(ApplicationServiceListener listener) {
 		if( appHandle == null )
 			throw new RuntimeException( "Application is not running!" );
 		
-    bc.addServiceListener( listener );
-    serviceListenerList.add( listener );
+    serviceListenerList.add( new ServiceListener( listener, null )  );
 	}
 	
 	public Map getStartupParameters() {
@@ -284,19 +294,22 @@ public class OATApplicationContextImpl implements ApplicationContext, ServiceLis
     frameworkListenerList.remove( listener );
 	}
 	
-	public void removeServiceListener(ServiceListener listener) {
+	public void removeServiceListener(ApplicationServiceListener listener) {
 		if( appHandle == null )
 			throw new RuntimeException( "Application is not running!" );
 		
-		bc.removeServiceListener( listener );
-		serviceListenerList.remove( listener );
+		Iterator iter = serviceListenerList.iterator();
+		
+		while( iter.hasNext() ) {
+			ServiceListener servListener = (ServiceListener)iter.next();
+			if( servListener.listener == listener )
+				iter.remove();
+		}
 	}
 	
 	void destroy()
 	{
-		while( !serviceListenerList.isEmpty() ) { /* This line must be the first for proper working */
-			bc.removeServiceListener( (ServiceListener)serviceListenerList.removeFirst() );
-		}
+		serviceListenerList.clear();
 		
 		while( !serviceList.isEmpty() ) {
 			Service serv = (Service)serviceList.removeFirst();
@@ -436,8 +449,21 @@ public class OATApplicationContextImpl implements ApplicationContext, ServiceLis
 	}
 
 	public void serviceChanged(ServiceEvent event) {
-		if( event.getType() == ServiceEvent.UNREGISTERING ) {
-			Service serv = getServiceByReference( event.getServiceReference() );
+		Service serv = getServiceByReference( event.getServiceReference() );
+		
+		Iterator iter = serviceListenerList.iterator();
+		while( iter.hasNext() ) {
+			ServiceListener servListener = (ServiceListener)  iter.next();
+			
+			/* TODO */
+			
+			Object serviceObject = ( serv == null ) ? null : serv.serviceObject;
+			
+			servListener.listener.serviceChanged( 
+					new ApplicationServiceEvent( event.getType(), event.getServiceReference(), serviceObject ) );
+		}
+		
+		if( event.getType() == ServiceEvent.UNREGISTERING ) {			
 			if( serv != null )
 				if( removeService( serv ) )
 					return;

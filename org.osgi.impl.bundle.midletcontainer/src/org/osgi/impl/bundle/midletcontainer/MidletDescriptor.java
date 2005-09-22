@@ -191,4 +191,13 @@ public final class MidletDescriptor extends ApplicationDescriptor {
 			serviceReg = null;
 		}
 	}
+
+	/**
+	 * @param pattern
+	 * @return
+	 * @see org.osgi.service.application.ApplicationDescriptor#matchDNChain(java.lang.String)
+	 */
+	public boolean matchDNChain(String pattern) {
+		return false;
+	}
 }

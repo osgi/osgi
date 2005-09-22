@@ -3,8 +3,9 @@
 	<name>org.osgi.impl.bundle.midletcontainer</name>
 	<comment></comment>
 	<projects>
-		<project>org.osgi.impl.service.application</project>
 		<project>org.osgi.service.application</project>
+		<project>org.osgi.application</project>
+		<project>org.osgi.impl.service.application</project>
 		<project>org.osgi.service.dmt</project>
 	</projects>
 	<buildSpec>
