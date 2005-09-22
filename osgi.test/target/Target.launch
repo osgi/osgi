@@ -8,9 +8,9 @@
 <listEntry value="&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;&#13;&#10;&lt;runtimeClasspathEntry internalArchive=&quot;/osgi.test/org.osgi.impl.framework.eclipse.jar&quot; path=&quot;3&quot; type=&quot;2&quot;/&gt;&#13;&#10;"/>
 <listEntry value="&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;&#13;&#10;&lt;runtimeClasspathEntry internalArchive=&quot;/osgi.test/testcond.jar&quot; path=&quot;3&quot; type=&quot;2&quot;/&gt;&#13;&#10;"/>
 </listAttribute>
-<stringAttribute key="org.eclipse.jdt.launching.PROGRAM_ARGUMENTS" value="-console&#13;&#10;init&#13;&#10;launch&#13;&#10;&quot;install file:../../osgi.released/osgi.jar start&quot;&#13;&#10;&quot;install file:../org.osgi.tools.console.jar start&quot;&#13;&#10;&quot;install file:../osgi.target.jar start&quot;&#13;&#10;&quot;install file:../osgi.refimpl.jar start&quot;"/>
+<stringAttribute key="org.eclipse.jdt.launching.PROGRAM_ARGUMENTS" value="-console:2011&#13;&#10;init&#13;&#10;&quot;install file:../osgi.jar start&quot;&#13;&#10;&quot;install file:../osgi.target.jar start&quot;&#13;&#10;&quot;install file:../osgi.core.impls.jar start&quot;&#13;&#10;&quot;install file:../osgi.cmpn.impls.jar start&quot;&#13;&#10;launch"/>
 <stringAttribute key="org.eclipse.jdt.launching.PROJECT_ATTR" value="osgi.test"/>
-<stringAttribute key="org.eclipse.jdt.launching.VM_ARGUMENTS" value="-Djava.security.manager=org.eclipse.osgi.framework.internal.core.FrameworkSecurityManager &#13;&#10;-Djava.security.policy=policy&#13;&#10;-Dorg.osgi.test.testcase.timeout=120000"/>
+<stringAttribute key="org.eclipse.jdt.launching.VM_ARGUMENTS" value="-Djava.security.manager=org.eclipse.osgi.framework.internal.core.FrameworkSecurityManager &#13;&#10;-Djava.security.policy=policy&#13;&#10;-Dorg.osgi.test.testcase.timeout=120000&#13;&#10;-Xverify:none"/>
 <listAttribute key="org.eclipse.debug.ui.favoriteGroups">
 <listEntry value="org.eclipse.debug.ui.launchGroup.run"/>
 <listEntry value="org.eclipse.debug.ui.launchGroup.debug"/>
