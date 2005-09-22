@@ -509,6 +509,7 @@ public class OATApplicationContextImpl implements ApplicationContext, ServiceLis
 		
 		while( iter.hasNext() ) {
 			Service service = (Service)iter.next();
+			
 			if( service.serviceObject == serviceObject ) {
 				HashMap props = new HashMap();
 				

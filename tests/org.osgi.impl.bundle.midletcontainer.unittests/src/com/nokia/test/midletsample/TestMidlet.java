@@ -18,7 +18,7 @@ public class TestMidlet extends MIDlet implements EventHandler, SynchronousBundl
 	private LogService	        logService;
 	private long		            myStaticFieldChecker;
 	private ApplicationContext  myApplicationContext;
-	
+	private LogService          logger = null;	
 
 	public TestMidlet() {
 		fileName = null;
@@ -89,9 +89,17 @@ public class TestMidlet extends MIDlet implements EventHandler, SynchronousBundl
 			writeResult("REGISTERED SUCCESSFULLY");
 		}
 		else if (event.getTopic().equals("com/nokia/megtest/LocateService")) {
-			LogService logger = (LogService)myApplicationContext.locateService( "log" );
+			logger = (LogService)myApplicationContext.locateService( "log" );
 			logger.log( LogService.LOG_INFO, "Service works fine!" );
 			writeResult("LOG SERVICE OPERABLE");			
+		}
+		else if (event.getTopic().equals("com/nokia/megtest/CheckProperties")) {
+			Map props = myApplicationContext.getServiceProperties( logger );
+			if( props == null || props.size() == 0 || props.get( Constants.SERVICE_PID ) == null ||
+					props.get( Constants.SERVICE_ID ) == null || props.get( Constants.OBJECTCLASS ) == null )
+				writeResult("PROPERTIES FAILURE");
+			else				
+			  writeResult("PROPERTIES OK");
 		}
 		else if (event.getTopic().equals("com/nokia/megtest/AddBundleListener")) {
 			myApplicationContext.addBundleListener( this );

@@ -301,6 +301,10 @@ public class TestMidletContainerBundleActivator
             System.out.println("Checking OAT locate service                      FAILED");
         else
             System.out.println("Checking OAT locate service                      PASSED");
+        if(!testCase_oatGetServiceProps())
+            System.out.println("Checking OAT getting service properties          FAILED");
+        else
+            System.out.println("Checking OAT getting service properties          PASSED");
         if(!testCase_oatLocateServices())
             System.out.println("Checking OAT locate services                     FAILED");
         else
@@ -1025,6 +1029,26 @@ public class TestMidletContainerBundleActivator
   	  	if( !checkResponseForEvent( "com/nokia/megtest/LocateService", 
                                     "LOG SERVICE OPERABLE") )
           return false;
+  		  if( !testCase_stopApplication() )
+	  	  	return false;
+        return true;  		
+      }
+      catch(Exception e) {
+          e.printStackTrace();
+      }
+      return false;  		
+  	}
+
+  	boolean testCase_oatGetServiceProps() {
+      try {
+      	if( !testCase_launchApplication() )
+      		return false;
+  	  	if( !checkResponseForEvent( "com/nokia/megtest/LocateService", 
+                                    "LOG SERVICE OPERABLE") )
+          return false;
+  	  	if( !checkResponseForEvent( "com/nokia/megtest/CheckProperties", 
+                                    "PROPERTIES OK") )
+  		  	return false;
   		  if( !testCase_stopApplication() )
 	  	  	return false;
         return true;  		
