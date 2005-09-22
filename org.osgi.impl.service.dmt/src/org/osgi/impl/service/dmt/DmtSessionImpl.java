@@ -467,8 +467,11 @@ public class DmtSessionImpl implements DmtSession {
         
         List processedChildNodes = normalizeChildNodeNames(pluginChildNodes);
         
-        return (String[]) processedChildNodes
-                .toArray(new String[processedChildNodes.size()]);
+        String[] processedChildNodeArray = (String[]) 
+            processedChildNodes.toArray(new String[processedChildNodes.size()]);
+        // ordering is not a requirement, but allows easier testing of plugins
+        Arrays.sort(processedChildNodeArray);
+        return processedChildNodeArray;
     }
     
 	// GET property op
