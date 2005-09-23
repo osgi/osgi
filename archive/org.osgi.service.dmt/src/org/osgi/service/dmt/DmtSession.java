@@ -591,8 +591,7 @@ public interface DmtSession {
      *         with a principal and the ACL of the parent node does not allow
      *         the <code>Add</code> operation for the associated principal
      *         <li><code>COMMAND_NOT_ALLOWED</code> if the underlying plugin
-     *         is read-only, if the parent node is not an interior node, or if 
-     *         the target node is the root of the tree
+     *         is read-only or if the parent node is not an interior node
      *         <li><code>METADATA_MISMATCH</code> if the node could not be
      *         created because of meta-data restrictions (see above)
      *         <li><code>TRANSACTION_ERROR</code> in an atomic session if the
@@ -652,8 +651,7 @@ public interface DmtSession {
      *         with a principal and the ACL of the parent node does not allow
      *         the <code>Add</code> operation for the associated principal
      *         <li><code>COMMAND_NOT_ALLOWED</code> if the underlying plugin
-     *         is read-only, if the parent node is not an interior node, or if 
-     *         the target node is the root of the tree
+     *         is read-only or if the parent node is not an interior node
      *         <li><code>METADATA_MISMATCH</code> if the node could not be
      *         created because of meta-data restrictions (see above)
      *         <li><code>TRANSACTION_ERROR</code> in an atomic session if the
@@ -715,8 +713,7 @@ public interface DmtSession {
      *         with a principal and the ACL of the parent node does not allow
      *         the <code>Add</code> operation for the associated principal
      *         <li><code>COMMAND_NOT_ALLOWED</code> if the underlying plugin
-     *         is read-only, if the parent node is not an interior node, or if 
-     *         the target node is the root of the tree
+     *         is read-only or if the parent node is not an interior node
      *         <li><code>METADATA_MISMATCH</code> if the node could not be
      *         created because of meta-data restrictions (see above)
      *         <li><code>TRANSACTION_ERROR</code> in an atomic session if the
@@ -785,8 +782,7 @@ public interface DmtSession {
      *         with a principal and the ACL of the parent node does not allow
      *         the <code>Add</code> operation for the associated principal
      *         <li><code>COMMAND_NOT_ALLOWED</code> if the underlying plugin
-     *         is read-only, if the parent node is not an interior node, or if 
-     *         the target node is the root of the tree
+     *         is read-only or if the parent node is not an interior node
      *         <li><code>METADATA_MISMATCH</code> if the node could not be
      *         created because of meta-data restrictions (see above)
      *         <li><code>TRANSACTION_ERROR</code> in an atomic session if the
@@ -857,8 +853,7 @@ public interface DmtSession {
      *         with a principal and the ACL of the parent node does not allow
      *         the <code>Add</code> operation for the associated principal
      *         <li><code>COMMAND_NOT_ALLOWED</code> if the underlying plugin
-     *         is read-only, if the parent node is not an interior node, or if 
-     *         the target node is the root of the tree
+     *         is read-only or if the parent node is not an interior node
      *         <li><code>METADATA_MISMATCH</code> if the node could not be
      *         created because of meta-data restrictions (see above)
      *         <li><code>TRANSACTION_ERROR</code> in an atomic session if the
