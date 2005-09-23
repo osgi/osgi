@@ -46,7 +46,7 @@ public interface DmtAdmin {
      *         <li><code>URI_TOO_LONG</code> if <code>subtreeUri</code> or a
      *         segment of it is too long, or if it has too many segments
      *         <li><code>INVALID_URI</code> if <code>subtreeUri</code> is
-     *         <code>null</code> or syntactically invalid
+     *         syntactically invalid
      *         <li><code>NODE_NOT_FOUND</code> if <code>subtreeUri</code>
      *         specifies a non-existing node
      *         <li><code>TIMEOUT</code> if the operation timed out because of
@@ -75,7 +75,7 @@ public interface DmtAdmin {
      *         <li><code>URI_TOO_LONG</code> if <code>subtreeUri</code> or a
      *         segment of it is too long, or if it has too many segments
      *         <li><code>INVALID_URI</code> if <code>subtreeUri</code> is
-     *         <code>null</code> or syntactically invalid
+     *         syntactically invalid
      *         <li><code>NODE_NOT_FOUND</code> if <code>subtreeUri</code>
      *         specifies a non-existing node
      *         <li><code>FEATURE_NOT_SUPPORTED</code> if atomic sessions are
@@ -116,7 +116,7 @@ public interface DmtAdmin {
      *         <li><code>URI_TOO_LONG</code> if <code>subtreeUri</code> or a
      *         segment of it is too long, or if it has too many segments
      *         <li><code>INVALID_URI</code> if <code>subtreeUri</code> is
-     *         <code>null</code> or syntactically invalid
+     *         syntactically invalid
      *         <li><code>NODE_NOT_FOUND</code> if <code>subtreeUri</code>
      *         specifies a non-existing node
      *         <li><code>FEATURE_NOT_SUPPORTED</code> if atomic sessions are
