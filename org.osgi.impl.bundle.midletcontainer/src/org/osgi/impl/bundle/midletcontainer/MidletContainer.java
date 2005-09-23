@@ -213,6 +213,9 @@ public class MidletContainer implements BundleListener, ServiceListener {
 							if (MIDletIcon.equals(""))
 								MIDletIcon = MIDletSuiteIcon;
 							
+							if( MIDletIcon == null )
+								MIDletIcon = "";
+							
 							String bundleName = bundle.getSymbolicName();
 							if( bundleName == null )
 								bundleName = Long.toString( bundle.getBundleId() );

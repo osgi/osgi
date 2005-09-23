@@ -78,7 +78,7 @@ public class OAT implements OATContainerInterface, BundleListener {
 		  
 		}catch( Exception e ) {
 		  Activator.log( LogService.LOG_ERROR, "Exception occurred at parsing apps.xml file!", e );
-			
+		  
 			oatAppDatas = new OATApplicationData[ baseClasses.length ];
 			for( int i=0; i != baseClasses.length; i++ )
 				oatAppDatas[ i ] = new OATApplicationData( baseClasses[ i ], new OATServiceData[ 0 ] );
