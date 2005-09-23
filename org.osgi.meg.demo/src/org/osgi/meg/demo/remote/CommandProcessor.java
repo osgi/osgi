@@ -178,37 +178,32 @@ public class CommandProcessor {
                 stackTrace = fullTrace.substring(newline + 1, end);
             }
             
+            String code    = null;
+            String exUri   = null;
+            String message = null;
+            
+            String[] parts;
             if(e instanceof DmtException) {
-                String code    = null;
-                String exUri     = null;
-                String message = null;
+                DmtException dmtException = (DmtException) e;
+                exUri = dmtException.getURI();
+                parts = Splitter.split(dmtException.getMessage(), ':', 3);
                 
-                String[] parts = Splitter.split(e.toString(), ':', 4);
-
-                switch(parts.length) {
-                case 1: 
-                    break;
-                case 2: 
+                code = parts[0]; // first part is always the exception code
+                if(parts.length == 2 && exUri == null)
+                    // if there is no URI, it must be the message
+                    message = parts[1].trim();
+                if(parts.length == 3)
+                    // URI is in the middle, message at the end
+                    message = parts[2].trim();
+                
+            } else {
+                parts = Splitter.split(e.toString(), ':', 2);
+                if(parts.length > 1)
                     message = parts[1].trim(); 
-                    break;
-                case 3:
-                    // we don't know whether parts[1] is a code or a URI...
-                    message = (parts[1] + ':' + parts[2]).trim(); 
-                    break;
-                case 4: 
-                    code = parts[1].trim();
-                    exUri = parts[2].trim();
-                    message = parts[3].trim();
-                    break;
-                }
-                
-                return MAGIC_EXCEPTION_PREFIX + "\n" + exName + "\n" +
-                    code + "\n" + exUri + "\n" + message + "\n" + stackTrace;  
             }
             
-            String[] parts = Splitter.split(e.toString(), ':', 2);
-            return MAGIC_EXCEPTION_PREFIX + "\n" + exName + "\nnull\nnull\n" + 
-                (parts.length > 1 ? parts[1] : "null") + "\n" + stackTrace; 
+            return MAGIC_EXCEPTION_PREFIX + "\n" + exName + "\n" +
+                    code + "\n" + exUri + "\n" + message + "\n" + stackTrace;  
         }
          
         return ret;
