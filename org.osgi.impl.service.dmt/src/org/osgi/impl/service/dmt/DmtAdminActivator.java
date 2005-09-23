@@ -30,9 +30,14 @@ import org.osgi.service.dmt.DmtAdmin;
 import org.osgi.service.permissionadmin.PermissionInfo;
 
 public class DmtAdminActivator implements BundleActivator {
+    // do not change this, it is not handled dynamically in the plugins
+    static final String DMT_ROOT = "./OSGi";
+    
+    static final String DMT_ROOT_PROPERTY = "org.osgi.service.dmt.root";
+    
     static final String DMT_PERMISSION_ADMIN_SERVICE_PID = 
         "org.osgi.impl.service.dmt.perms";
-
+    
     private ServiceRegistration	adminReg;
     private ServiceRegistration permissionReg;
     
@@ -40,6 +45,8 @@ public class DmtAdminActivator implements BundleActivator {
 
 	public void start(BundleContext bc) throws BundleException {
 		try {
+            System.setProperty(DMT_ROOT_PROPERTY, DMT_ROOT);
+            
             context = new Context(bc);
             
             DmtSessionImpl.init_acls();
