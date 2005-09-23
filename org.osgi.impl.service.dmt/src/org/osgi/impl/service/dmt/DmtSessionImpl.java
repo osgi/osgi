@@ -609,12 +609,13 @@ public class DmtSessionImpl implements DmtSession {
 	public synchronized void deleteNode(String nodeUri) throws DmtException {
 		checkWriteSession();
         Node node = makeAbsoluteUriAndCheck(nodeUri, SHOULD_EXIST);
-		checkOperation(node, Acl.DELETE, MetaNode.CMD_DELETE);
         
         if(node.isRoot())
             throw new DmtException(node.getUri(), 
                     DmtException.COMMAND_NOT_ALLOWED,
                     "Cannot delete root node.");
+
+		checkOperation(node, Acl.DELETE, MetaNode.CMD_DELETE);
 
         MetaNode metaNode = getMetaNodeNoCheck(node);
 		if (metaNode != null) {
@@ -664,10 +665,10 @@ public class DmtSessionImpl implements DmtSession {
     private void commonCreateInteriorNode(Node node, String type,
             boolean sendEvent) throws DmtException {
         checkNode(node, SHOULD_NOT_EXIST);
+        
         Node parent = node.getParent();
-        if(parent == null)
-            throw new DmtException(node.getUri(), 
-                    DmtException.COMMAND_NOT_ALLOWED,
+        if(parent == null) // this should never happen, root must always exist
+            throw new DmtException(node.getUri(), DmtException.COMMAND_FAILED, 
                     "Cannot create root node.");
         
         ensureInteriorAncestors(parent, sendEvent);
@@ -719,10 +720,10 @@ public class DmtSessionImpl implements DmtSession {
     private void commonCreateLeafNode(Node node, DmtData value,
             String mimeType, boolean sendEvent) throws DmtException {
         checkNode(node, SHOULD_NOT_EXIST);
+        
         Node parent = node.getParent();
-        if(parent == null)
-            throw new DmtException(node.getUri(), 
-                    DmtException.COMMAND_NOT_ALLOWED, 
+        if(parent == null) // this should never happen, root must always exist
+            throw new DmtException(node.getUri(), DmtException.COMMAND_FAILED, 
                     "Cannot create root node.");
         
         ensureInteriorAncestors(parent, sendEvent);
