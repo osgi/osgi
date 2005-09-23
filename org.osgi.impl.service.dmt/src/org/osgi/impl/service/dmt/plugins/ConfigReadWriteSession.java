@@ -394,22 +394,11 @@ class ConfigReadWriteSession extends ConfigReadOnlySession
         // path[3].equals(VALUES)
         // path[4] is an index
 
-        if(entry.getValue() != null)
-            throw new DmtException(fullPath, DmtException.NODE_NOT_FOUND,
-                    "The given key specifies scalar data.");
-        
-        int index = Integer.parseInt(path[4]);
-        Value element;
         try {
-            element = entry.removeElementAt(index);
+            entry.removeElementAt(Integer.parseInt(path[4]));
         } catch(ConfigPluginException e) {
             throw e.getDmtException(fullPath);
         }
-
-        if(element == null)
-            throw new DmtException(fullPath, DmtException.NODE_NOT_FOUND, 
-                    "No element exists in the array/vector with the given " +
-                    "index.");
     }
 
     public void setNodeType(String[] fullPath, String type) 
@@ -430,18 +419,67 @@ class ConfigReadWriteSession extends ConfigReadOnlySession
                 "Title property not supported.");
     }
 
+    public void renameNode(String[] fullPath, String newName)
+            throws DmtException {
+        String[] path = chopPath(fullPath);
+        
+        if(path.length == 0)
+            throw new DmtException(fullPath, DmtException.COMMAND_FAILED,
+                    "Cannot rename root node of the configuration tree.");
+        
+        Event event = getEventForConfiguration(path[0]);
+        
+        // throw an exception if no event was found and the configuration did 
+        // not exist at the beginning of the session, or if a delete event was 
+        // found
+        if(!configurationExists(event, path[0], fullPath))
+            throw new DmtException(fullPath, DmtException.NODE_NOT_FOUND,
+                    "There is no configuration data for the given PID.");
+        
+        Conf conf = getConf(event, path[0], fullPath);
+        
+        if(path.length == 1)
+            throw new DmtException(fullPath, DmtException.COMMAND_FAILED,
+                    "Cannot rename configuration table root node.");
+        
+        if(path.length == 2)
+            throw new DmtException(fullPath, DmtException.COMMAND_FAILED,
+                    "Cannot rename " + KEYS + " node.");
+
+        // path[2] is a key name
+        ConfigEntry entry = conf.getEntry(path[2]);
+        if(entry == null)
+            throw new DmtException(fullPath, DmtException.NODE_NOT_FOUND,
+                    "The specified key does not exist in the configuration.");
+        
+        if(path.length == 3) {
+            if(conf.getEntry(newName) != null)
+                throw new DmtException(fullPath, DmtException.NODE_ALREADY_EXISTS,
+                        "The specified key already exists in the configuration.");
+            
+            conf.renameEntry(path[2], newName);
+            return;
+        }
+
+        if (path.length == 4)
+            throw new DmtException(fullPath, DmtException.COMMAND_FAILED,
+                    "Cannot rename the specified node.");
+
+        // path.length == 5
+        int index = Integer.parseInt(path[4]);
+        int newIndex = Integer.parseInt(newName);
+        try {
+            entry.renameElementAt(index, newIndex);
+        } catch(ConfigPluginException e) {
+            throw e.getDmtException(fullPath);
+        }
+    }
+
     public void copy(String[] fullPath, String[] newNodePath, boolean recursive)
             throws DmtException {
         // ENHANCE allow cloning pid, key (on the same level)
         throw new DmtException(fullPath, DmtException.FEATURE_NOT_SUPPORTED,
                 "Cannot copy configuration nodes.");
-    }
-
-    public void renameNode(String[] fullPath, String newName)
-            throws DmtException {
-        // ENHANCE allow renaming index, key
-        throw new DmtException(fullPath, DmtException.COMMAND_FAILED,
-                "Cannot rename configuration nodes.");
     }
     
     
@@ -941,16 +979,20 @@ class Conf {
         this.location = location;
     }
     
+    ConfigEntry createEntry(String key) {
+        return (ConfigEntry) properties.put(key, new ConfigEntry());
+    }
+    
     ConfigEntry getEntry(String key) {
         return (ConfigEntry) properties.get(key);
     }
     
-    ConfigEntry removeEntry(String key) {
-        return (ConfigEntry) properties.remove(key);
+    ConfigEntry renameEntry(String oldKey, String newKey) {
+        return (ConfigEntry) properties.put(newKey, properties.remove(oldKey));
     }
     
-    ConfigEntry createEntry(String key) {
-        return (ConfigEntry) properties.put(key, new ConfigEntry());
+    ConfigEntry removeEntry(String key) {
+        return (ConfigEntry) properties.remove(key);
     }
     
     Dictionary getDictionary() throws ConfigPluginException {

@@ -385,13 +385,41 @@ class ConfigEntry {
     }
     
     /**
-     * Removes the element at the given index for non-scalar entries. If there
-     * is no element at the given index, null is returned.
+     * Moves an element node to a different index.
      * 
-     * @throws ConfigPluginException if the entry is scalar or if the values
-     *         node is not created yet
+     * @throws ConfigPluginException if the entry is scalar, if the values node
+     *         is not created yet, if there is no element with the given index
+     *         or an element with the new index already exists
      */
-    Value removeElementAt(int index) throws ConfigPluginException {
+    void renameElementAt(int oldIndex, int newIndex) 
+            throws ConfigPluginException {
+        
+        if(value != null)
+            throw new ConfigPluginException(DmtException.NODE_NOT_FOUND,
+                    "The specified key contains a scalar value.");
+        
+        if(values == null)
+            throw new ConfigPluginException(DmtException.NODE_NOT_FOUND,
+                    "The given node has not been created yet.");
+        
+        if(!values.containsKey(new Integer(oldIndex)))
+            throw new ConfigPluginException(DmtException.NODE_NOT_FOUND,
+                    "There is no element with the given index.");
+        
+        if(values.containsKey(new Integer(newIndex)))
+            throw new ConfigPluginException(DmtException.NODE_ALREADY_EXISTS,
+                    "An element with the new index already exists.");
+        
+        values.put(new Integer(newIndex), values.remove(new Integer(oldIndex)));
+    }
+    
+    /**
+     * Removes the element at the given index for non-scalar entries.
+     * 
+     * @throws ConfigPluginException if the entry is scalar, if the values node
+     *         is not created yet, or if there is no entry for the given index
+     */
+    void removeElementAt(int index) throws ConfigPluginException {
         if(value != null)
             throw new ConfigPluginException(DmtException.NODE_NOT_FOUND,
                     "The specified key contains a scalar value.");
@@ -401,7 +429,10 @@ class ConfigEntry {
                     "The " + ConfigReadOnlySession.VALUES + " node " +
                     "has not been created yet.");
         
-        return (Value) values.remove(new Integer(index));
+        if(values.remove(new Integer(index)) == null)
+            throw new ConfigPluginException(DmtException.NODE_NOT_FOUND, 
+                    "No element exists in the array/vector with the given " +
+                    "index.");
     }
 }
 
