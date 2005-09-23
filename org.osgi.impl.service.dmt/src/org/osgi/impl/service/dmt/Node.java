@@ -215,7 +215,10 @@ public class Node {
     }
     
     boolean isAbsolute() {
-        return ".".equals(getPath()[0]);
+        String[] path = getPath();
+        if(path.length == 0)
+            return false;
+        return ".".equals(path[0]);
     }
     
     boolean isRoot() {
