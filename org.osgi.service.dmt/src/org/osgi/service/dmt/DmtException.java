@@ -60,7 +60,7 @@ public class DmtException extends Exception {
      * <li>an interior node operation is requested for a leaf node, or vica
      * versa (e.g. trying to retrieve the value of an interior node)
      * <li>an attempt is made to create a node where the parent is a leaf node
-     * <li>an attempt is made to create, rename or delete the root node
+     * <li>an attempt is made to rename or delete the root node
      * <li>a write operation (other than setting the ACL) is performed on a node
      * provided by a read-only plugin
      * <li>a node is copied to its descendant
@@ -464,21 +464,22 @@ public class DmtException extends Exception {
         return code;
     }
     /**
-     * Get the message associated with this exception. The message also contains
-     * the associated URI (if specified) and the exception code.
+     * Get the message associated with this exception. The returned string also 
+     * contains the associated URI (if any) and the exception code.  The 
+     * resulting message has the following format (parts in square brackets are
+     * only included if the field inside them is not <code>null</code>):
+     * <pre>&lt;exception_code&gt;[: '&lt;uri&gt;'][: &lt;error_message&gt;]</pre>
      * 
-     * @return the error message, or <code>null</code> if no message, URI or
-     *         code was specified with the exception
+     * @return the error message in the format described above
      */
     public String getMessage() {
-        String fullMessage = message == null ? "" : message;
-
+        StringBuffer sb = new StringBuffer(getCodeText(code));
         if(uri != null)
-            fullMessage = "'" + uri + "': " + fullMessage;
-
-        fullMessage = getCodeText(code) + ": " + fullMessage;
-
-        return fullMessage.length() == 0 ? null : fullMessage;
+            sb.append(": '").append(uri).append('\'');
+        if(message != null)
+            sb.append(": ").append(message);
+        
+        return sb.toString();
     }
 
     /**
