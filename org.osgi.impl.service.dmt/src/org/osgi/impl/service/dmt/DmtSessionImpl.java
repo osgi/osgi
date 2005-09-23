@@ -410,18 +410,18 @@ public class DmtSessionImpl implements DmtSession {
         // ACLs everywhere, and the "Replace" Access Type seems to be given
         // only for modifiable nodes.
         
+		// check that the new ACL is valid
+        if(node.isRoot() && (acl == null || !acl.isPermitted("*", Acl.ADD)))
+            // should be 405 "Forbidden" according to DMTND 7.7.1.2
+            throw new DmtException(node.getUri(),
+                    DmtException.COMMAND_NOT_ALLOWED, "Root ACL must allow " +
+                    "the Add operation for all principals.");
+        
         if (acl == null || isEmptyAcl(acl))
             acls.remove(node);
-        else {
-            // check that the new ACL is valid
-            if (node.isRoot() && !acl.isPermitted("*", Acl.ADD)) 
-                // should be 405 "Forbidden" according to DMTND 7.7.1.2
-                throw new DmtException(node.getUri(), 
-                        DmtException.COMMAND_NOT_ALLOWED, "Root ACL must " +
-                                "allow the Add operation for all principals.");
-
+        else
             acls.put(node, acl);
-        }
+
         getReadableDataSession(node).nodeChanged(node.getPath());
         
         enqueueEvent(EventList.REPLACE, node);
