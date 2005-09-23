@@ -136,6 +136,21 @@ public abstract class ApplicationDescriptor {
 	}
 
 	/**
+	 * This method verifies whether the specified <code>pattern</code>
+	 * matches the Distinguished Names of any of the certificate chains
+	 * used to authenticate this application.
+	 * <P>
+	 * The <code>pattern</code> must adhere to the 
+	 * syntax defined in {@link org.osgi.service.application.ApplicationAdminPermission}
+	 * for signer attributes. 
+	 *  
+	 * @param pattern a pattern for a chain of Distinguished Names
+	 * @return <code>true</code> if the specified pattern matches at least
+	 *   one of the certificate chains used to authenticate this application 
+	 */	
+	public abstract boolean matchDNChain( String pattern );
+	
+	/**
 	 * Returns the properties of the application descriptor as key-value pairs.
 	 * The return value contains the locale aware and unaware properties as
 	 * well. Some of the properties can be retrieved directly with methods in

@@ -10,9 +10,14 @@
 
 package org.osgi.application;
 
-import java.util.*;
+import java.util.Dictionary;
+import java.util.Map;
 
-import org.osgi.framework.*;
+import org.osgi.framework.BundleListener;
+import org.osgi.framework.FrameworkListener;
+import org.osgi.framework.InvalidSyntaxException;
+import org.osgi.framework.ServiceRegistration;
+
 
 /**
  * <code>ApplicationContext</code> is the access point for an OSGi-aware
@@ -62,25 +67,25 @@ public interface ApplicationContext {
     public void addFrameworkListener(FrameworkListener listener);
 
     /**
-     * Adds the specified {@link org.osgi.framework.ServiceListener} object to this context
+     * Adds the specified {@link org.osgi.framework.ApplicationServiceListener} object to this context
      * application instance's list of listeners.
      * <p/>
      * This method is the same as calling
-     * {@link ApplicationContext#addServiceListener(ServiceListener,String)}
+     * {@link ApplicationContext#addServiceListener(ApplicationServiceListener,String)}
      * with <code>filter</code> set to <code>null</code>.
      * <p/>
      * 
      * @param listener
-     *            The {@link org.osgi.framework.ServiceListener} to be added.
+     *            The {@link org.osgi.framework.ApplicationServiceListener} to be added.
      * @throws java.lang.IllegalStateException
      *             If this context application instance has stopped.
      */
-    public void addServiceListener(ServiceListener listener);
+    public void addServiceListener(ApplicationServiceListener listener);
 
     /**
-     * Adds the specified {@link org.osgi.framework.ServiceListener} object with the
+     * Adds the specified {@link org.osgi.framework.ApplicationServiceListener} object with the
      * specified filter to this context application instance's list of
-     * listeners. ServiceListener objects are notified when a service has a
+     * listeners. ApplicationServiceListener objects are notified when a service has a
      * lifecycle state change.
      * <p/>
      * If this context bundle's list of listeners already contains a listener
@@ -108,14 +113,14 @@ public interface ApplicationContext {
      * of type <code>MODIFIED</code>. Thus, the <code>listener</code> will
      * not be called with a {@link org.osgi.framework.ServiceEvent} of type <code>REGISTERED</code>.
      * <p/>
-     * If the Java Runtime Environment supports permissions, the {@link org.osgi.framework.ServiceListener}
+     * If the Java Runtime Environment supports permissions, the {@link org.osgi.framework.ApplicationServiceListener}
      * object will be notified of a service event only if the application that
      * is registering it has the {@link org.osgi.framework.ServicePermission} to get the
      * service using at least one of the named classes the service was
      * registered under.
      * 
      * @param listener
-     *            The {@link org.osgi.framework.ServiceListener} object to be added.
+     *            The {@link org.osgi.framework.ApplicationServiceListener} object to be added.
      * @param filter
      *            The filter criteria.
      * @throws org.osgi.framework.InvalidSyntaxException
@@ -124,7 +129,7 @@ public interface ApplicationContext {
      * @throws java.lang.IllegalStateException
      *             If this context application instace has stopped.
      */
-    public void addServiceListener(ServiceListener listener,
+    public void addServiceListener(ApplicationServiceListener listener,
             java.lang.String filter) throws InvalidSyntaxException;
 
     /**
@@ -156,18 +161,18 @@ public interface ApplicationContext {
     public void removeFrameworkListener(FrameworkListener listener);
 
     /**
-     * Removes the specified {@link org.osgi.framework.ServiceListener} object from this
+     * Removes the specified {@link org.osgi.framework.ApplicationServiceListener} object from this
      * context application instances's list of listeners.
      * <p/>
      * If <code>listener</code> is not contained in this context application
      * instance's list of listeners, this method does nothing.
      * 
      * @param listener
-     *            The {@link org.osgi.framework.ServiceListener} object to be removed.
+     *            The {@link org.osgi.framework.ApplicationServiceListener} object to be removed.
      * @throws java.lang.IllegalStateException
      *             If this context application instance has stopped.
      */
-    public void removeServiceListener(ServiceListener listener);
+    public void removeServiceListener(ApplicationServiceListener listener);
 
     /**
      * This method returns the service object for the specified
@@ -214,6 +219,22 @@ public interface ApplicationContext {
      * @return a {@link java.util.Map} containing the startup arguments.
      */
     public Map getStartupParameters();
+    
+    /**
+     * Application can query the service properties of a service object
+     * it is bound to. Application gets bound to a service object when
+     * it fisrt obtains a reference to the service by calling 
+     * <code>locateService</code> or <code>locateServices</code> methods.
+     * 
+     * @param serviceObject A service object the application is bound to.
+     *    It must not be null.
+     * @return The service properties associated with the specified service
+     *    object.
+     * @throws IllegalArgumentExceptions if the application is not
+     *    bound to the specified service object or it is not a service
+     *    object at all.
+     */
+    public Map getServiceProperties(Object serviceObject);
 
     
     /**

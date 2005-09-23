@@ -75,6 +75,19 @@ public class ApplicationAdminPermission extends BasicPermission {
 		if (!ACTIONS.containsAll(actionsVector))
       throw new IllegalArgumentException("Illegal action!");
 	}
+	
+	/**
+	 * This method can be used in the {@link java.security.ProtectionDomain}
+	 * implementation in the <code>implies</code> method to insert the
+	 * application ID of the current application into the permission being
+	 * checked. This enables the evaluation of the 
+	 * <code>&lt;$lt;SELF&gt;&gt;</code> pseudo targets.
+	 * @param applicationId the ID of the current application
+	 * @return the permission updated with the ID of the current application
+	 */
+	public ApplicationAdminPermission setCurrentApplicationId(String applicationId) {
+		return this;
+	}
 
   public boolean implies(Permission p) {
   	  if( p == null )
