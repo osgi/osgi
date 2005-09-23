@@ -148,11 +148,13 @@ public class DmtData {
      * string or XML.
      * 
      * @param value the string or XML value to set
-     * @param format the format of the <code>DmtData</code> instance to be created,
-     *        must be one of the formats specified above
+     * @param format the format of the <code>DmtData</code> instance to be 
+     *        created, must be one of the formats specified above
      * @throws IllegalArgumentException if <code>format</code> is not one of
      *         the allowed formats, or <code>value</code> is not a valid string
      *         for the given format
+     * @throws NullPointerException if a date or time is constructed and
+     *         <code>value</code> is <code>null</code>
      */
     public DmtData(String value, int format) {
         this(value);
@@ -210,9 +212,13 @@ public class DmtData {
      * Create a <code>DmtData</code> instance of <code>bin</code> format and
      * set its value.
      * 
-     * @param bytes the byte array to set
+     * @param bytes the byte array to set, must not be <code>null</code>
+     * @throws NullPointerException if <code>bytes</code> is <code>null</code>
      */
     public DmtData(byte[] bytes) {
+        if(bytes == null)
+            throw new NullPointerException("Binary data argument is null.");
+        
         format = FORMAT_BINARY;
         this.bytes = bytes;
     }
@@ -222,12 +228,16 @@ public class DmtData {
      * <code>b64</code> format and set its value.  The chosen format is
      * specified by the <code>base64</code> parameter.
      * 
-     * @param bytes the byte array to set
+     * @param bytes the byte array to set, must not be <code>null</code>
      * @param base64 if <code>true</code>, the new instance will have
      * <code>b64</code> format, if <code>false</code>, it will have
      * <code>bin</code> format
+     * @throws NullPointerException if <code>bytes</code> is <code>null</code>
      */
     public DmtData(byte[] bytes, boolean base64) {
+        if(bytes == null)
+            throw new NullPointerException("Binary data argument is null.");
+        
         format = base64 ? FORMAT_BASE64 : FORMAT_BINARY;
         this.bytes = bytes;
     }
@@ -341,7 +351,6 @@ public class DmtData {
      */
     public byte[] getBinary() {
         if(format == FORMAT_BINARY) {
-
             byte[] bytesCopy = new byte[bytes.length];
             for(int i = 0; i < bytes.length; i++)
                 bytesCopy[i] = bytes[i];
@@ -387,7 +396,8 @@ public class DmtData {
      * data in the node:
      * <ul>
      * <li>{@link #FORMAT_STRING}, {@link #FORMAT_XML}, {@link #FORMAT_BINARY}
-     * and {@link #FORMAT_BASE64}: the length of the stored data
+     * and {@link #FORMAT_BASE64}: the length of the stored data, or 0 if the
+     * data is <code>null</code>
      * <li>{@link #FORMAT_INTEGER} and {@link #FORMAT_FLOAT}: 4
      * <li>{@link #FORMAT_DATE} and {@link #FORMAT_TIME}: the length of the
      * date or time in its string representation
@@ -402,7 +412,7 @@ public class DmtData {
         case FORMAT_STRING:
         case FORMAT_XML:     
         case FORMAT_DATE:    
-        case FORMAT_TIME:    return str.length();
+        case FORMAT_TIME:    return str == null ? 0 : str.length();
         case FORMAT_BINARY:
         case FORMAT_BASE64:  return bytes.length;
         case FORMAT_INTEGER:
@@ -549,12 +559,18 @@ public class DmtData {
         
     // generates a hexadecimal dump of the given binary data
     private static String getHexDump(byte[] bytes) {
+        if(bytes.length == 0)
+            return "";
+        
         StringBuffer buf = new StringBuffer();
-        for (int i = 0; i < bytes.length; i++) {
-            byte b = bytes[i];
-            buf.append(hex[(b & 0xF0) >> 4]).append(hex[b & 0x0F]).append(' ');
-        }
+        appendHexByte(buf, bytes[0]);
+        for (int i = 1; i < bytes.length; i++)
+            appendHexByte(buf.append(' '), bytes[i]);
         
         return buf.toString();
+    }
+    
+    private static void appendHexByte(StringBuffer buf, byte b) {
+        buf.append(hex[(b & 0xF0) >> 4]).append(hex[b & 0x0F]);
     }
 }
