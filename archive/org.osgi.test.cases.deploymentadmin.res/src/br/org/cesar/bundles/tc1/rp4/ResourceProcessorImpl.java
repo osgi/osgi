@@ -29,87 +29,87 @@
  *
  * Date          Author(s)
  * CR            Headline
- * ============  ==============================================================
- * Apr 25, 2005  Andre Assad
- * 26            Implement MEG TCK for the deployment RFC-88
- * ============  ==============================================================
- * Jul 14, 2005  Andre Assad
- * 145           Implement spec review issues
- * ============  ==============================================================
+ * ===========   ==============================================================
+ * Set 08, 2005  Alexandre Alves
+ * 179           Implement Review Issues            
+ * ===========   ==============================================================
  */
-
-package br.org.cesar.bundles.tc1.rp1;
+package br.org.cesar.bundles.tc1.rp4;
 
 import java.io.InputStream;
 import java.util.Dictionary;
 import java.util.Hashtable;
-
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.deploymentadmin.DeploymentException;
 import org.osgi.service.deploymentadmin.DeploymentSession;
 import org.osgi.service.deploymentadmin.ResourceProcessor;
+import org.osgi.test.cases.deploymentadmin.tc1.tbc.util.TestingRollbackCall;
 import org.osgi.test.cases.deploymentadmin.tc1.tbc.DeploymentConstants;
-import org.osgi.test.cases.deploymentadmin.tc1.tbc.DeploymentTestControl;
 
 /**
- * @author Andre Assad
- * 
- * A testing resource processor to test deployment packages
- * installation.
+ * @author Alexandre Alves
+ *
  */
-public class ResourceProcessorImpl implements BundleActivator,ResourceProcessor {
+public class ResourceProcessorImpl implements BundleActivator, TestingRollbackCall {
 
-	private ServiceRegistration sr;
-	
-	private DeploymentTestControl tbc;    
-	
+	private boolean called = false;
+    private boolean prepareException = false;
+    private ServiceRegistration sr;
+
 	public void start(BundleContext bc) throws Exception {
 		Dictionary props = new Hashtable();
-		props.put("service.pid", DeploymentConstants.PID_RESOURCE_PROCESSOR1);
-		props.put(DeploymentConstants.RESOURCE_PROCESSOR_PROPERTY_KEY, "initial value for it");
-
-		sr = bc.registerService(ResourceProcessor.class.getName(), this, props);
-		System.out.println("ResourceProcessor started.");
-
+		props.put("service.pid", DeploymentConstants.PID_RESOURCE_PROCESSOR4);
+		
+        sr = bc.registerService(ResourceProcessor.class.getName(), this, props);
+		System.out.println("Resource Processor started.");
 	}
 
-	public void stop(BundleContext bc) throws Exception {
+	public void stop(BundleContext context) throws Exception {
 		sr.unregister();
-
+		
 	}
 
-	public void begin(DeploymentSession session) {
+    public void begin(DeploymentSession session) {
+    }
 
+    public void process(String name, InputStream stream) throws DeploymentException {
+        
+    }
 
-	}
+    public void dropped(String resource) throws DeploymentException {
+        
+    }
 
-	public void process(String arg0, InputStream arg1)
-			throws DeploymentException {
-	}
+    public void dropAllResources() throws DeploymentException {
+        throw new DeploymentException(0);
+    }
 
-	public void dropped(String arg0) throws DeploymentException {
+    public void prepare() throws DeploymentException {
+        if (prepareException) {
+            throw new DeploymentException(0);
+        }
+                
+    }
 
-	}
+    public void commit() {
+        
+    }
 
-	public void dropAllResources() throws DeploymentException {
-		DeploymentConstants.DROPALLRESOURCES_COUNT++;
-	}
+    public void rollback() {
+        called = true;
+    }
 
-	public void prepare() throws DeploymentException {
-	}
+    public void cancel() {
+        
+    }
 
-	public void commit() {
-		DeploymentConstants.COMMIT_COUNT++;
-	}
+    public boolean isRolbackCalled() {
+        return called;
+    }
 
-	public void rollback() {
-
-	}
-
-	public void cancel() {
-
-	}
-
+    public void setPrepareException(boolean value) {
+        this.prepareException = value;
+    }
 }
