@@ -109,4 +109,14 @@ public class TestingDeploymentPackage {
 	public TestingResource[] getResources() {
 		return resources;
 	}
+    
+    public TestingBundle getBundle(String bsn) {
+        if (bundles == null)
+            return null;
+        for (int i = 0; i < bundles.length; i++) {
+            if (bsn.equals(bundles[i].getName()))
+                return bundles[i];
+        }
+        return null;
+    }
 }

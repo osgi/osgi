@@ -1,0 +1,969 @@
+/*
+ * Copyright (c) The OSGi Alliance (2004). All Rights Reserved.
+ * 
+ * Implementation of certain elements of the OSGi Specification may be subject
+ * to third party intellectual property rights, including without limitation,
+ * patent rights (such a third party may or may not be a member of the OSGi
+ * Alliance). The OSGi Alliance is not responsible and shall not be held
+ * responsible in any manner for identifying or failing to identify any or all
+ * such third party intellectual property rights.
+ * 
+ * This document and the information contained herein are provided on an "AS IS"
+ * basis and THE OSGI ALLIANCE DISCLAIMS ALL WARRANTIES, EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO ANY WARRANTY THAT THE USE OF THE INFORMATION
+ * HEREIN WILL NOT INFRINGE ANY RIGHTS AND ANY IMPLIED WARRANTIES OF
+ * MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE. IN NO EVENT WILL THE
+ * OSGI ALLIANCE BE LIABLE FOR ANY LOSS OF PROFITS, LOSS OF BUSINESS, LOSS OF
+ * USE OF DATA, INTERRUPTION OF BUSINESS, OR FOR DIRECT, INDIRECT, SPECIAL OR
+ * EXEMPLARY, INCIDENTIAL, PUNITIVE OR CONSEQUENTIAL DAMAGES OF ANY KIND IN
+ * CONNECTION WITH THIS DOCUMENT OR THE INFORMATION CONTAINED HEREIN, EVEN IF
+ * ADVISED OF THE POSSIBILITY OF SUCH LOSS OR DAMAGE.
+ * 
+ * All Company, brand and product names may be trademarks that are the sole
+ * property of their respective owners. All rights reserved.
+ * 
+ */
+
+/*
+ * REVISION HISTORY:
+ *
+ * Date          Author(s)
+ * CR            Headline
+ * ============  ==============================================================
+ * Sep 06, 2005  Andre Assad
+ * 179           Implement Review Issues
+ * ============  ==============================================================
+ */ 
+package org.osgi.test.cases.deploymentadmin.tc2.tbc.DeploymentSession;
+
+import java.io.InputStream;
+import java.util.Enumeration;
+import java.util.Vector;
+import org.osgi.framework.Bundle;
+import org.osgi.framework.BundleEvent;
+import org.osgi.framework.BundleException;
+import org.osgi.service.deploymentadmin.DeploymentException;
+import org.osgi.service.deploymentadmin.DeploymentPackage;
+import org.osgi.service.deploymentadmin.ResourceProcessor;
+import org.osgi.service.log.LogEntry;
+import org.osgi.service.log.LogService;
+import org.osgi.test.cases.deploymentadmin.tc2.tbc.DeploymentConstants;
+import org.osgi.test.cases.deploymentadmin.tc2.tbc.DeploymentTestControl;
+import org.osgi.test.cases.deploymentadmin.tc2.tbc.Event.BundleListenerImpl;
+import org.osgi.test.cases.deploymentadmin.tc2.tbc.util.MessagesConstants;
+import org.osgi.test.cases.deploymentadmin.tc2.tbc.util.TestingBundle;
+import org.osgi.test.cases.deploymentadmin.tc2.tbc.util.TestingDeploymentPackage;
+import org.osgi.test.cases.deploymentadmin.tc2.tbc.util.TestingResource;
+import org.osgi.test.cases.deploymentadmin.tc2.tbc.util.TestingSessionResourceProcessor;
+
+/**
+ * This test class validates the session operations that happens during a
+ * deployment package installation. <br>
+ * Note some tests for installation cases may have already been done in API test
+ * cases and are not replicated here.
+ * 
+ * @author Andre Assad
+ */
+public class InstallSession {
+    
+    private boolean reach, clean, reachTC;
+    private Barrier releaseBarrier, cleanupBarrier;
+    private SessionWorker worker;
+    
+    // shared statics for testing
+    public static boolean EXCEPTION_AT_START = false;
+    public static boolean ROLL_BACK = false;
+    public static boolean BUNDLES_UNINSTALLED = false;
+
+    private DeploymentTestControl tbc;
+    private DeploymentPackage rp;
+    
+    public InstallSession(DeploymentTestControl tbc) {
+        this.tbc = tbc;
+    }
+    
+    public void run() {
+        try {
+            prepare();
+            testInstallSession001();
+            testInstallSession002();
+            testInstallSession003();
+            testInstallSession004();
+            testInstallSession005();
+            testInstallSession006();
+            testInstallSession007();
+            testInstallSession008();
+            testInstallSession009();
+            testInstallSession010();
+            testInstallSession011();
+            testInstallSession012();
+            testInstallSession013();
+            testInstallSession014();
+            testInstallSession015();
+            testInstallSession016();
+            testInstallSession017();
+            testInstallSession018();
+            testInstallSession019();
+        } finally {
+            unprepare();
+        }
+    }
+    
+
+    /**
+     * Uninstalls testing resource processor
+     */
+    private void unprepare() {
+        tbc.uninstall(rp);
+    }
+
+    /**
+     * Installs a resource processor to be used in the test cases.
+     */
+    private void prepare() {
+        TestingDeploymentPackage testRP = tbc.getTestingDeploymentPackage(DeploymentConstants.RESOURCE_PROCESSOR_RP3);
+        try {
+            rp = tbc.installDeploymentPackage(tbc.getWebServer() + testRP.getFilename());
+        } catch (Exception e) {
+            tbc.fail("Failed to install testing resource processor");
+        }
+    }
+
+    /**
+     * Validates if Deployment Admin asserts that the Manifest file is the first
+     * resource in the Deployment Package JAR file.
+     * 
+     * @spec 114.8 Installing a Deployment Package
+     */
+    private void testInstallSession001() {
+        tbc.log("#testInstallSession001");
+        DeploymentPackage dp = null;
+        try {
+            TestingDeploymentPackage testDP = tbc.getTestingDeploymentPackage(DeploymentConstants.MANIFEST_NOT_1ST_FILE);
+            dp = tbc.installDeploymentPackage(tbc.getWebServer() + testDP.getFilename());
+            tbc.failException("#", DeploymentException.class);
+        } catch (DeploymentException e) {
+            // TODO what is the error code for this case?
+            tbc.pass("DeploymentException correctly thrown");
+        } catch (Exception e) {
+            tbc.fail(MessagesConstants.getMessage(
+                MessagesConstants.UNEXPECTED_EXCEPTION, new String[]{e.getClass().getName()}));
+        } finally {
+            tbc.uninstall(dp);
+        }
+    }
+    
+    /**
+     * Asserts that an exception thrown during the install must roll back the
+     * session.
+     * 
+     * @spec 114.8 Installing a Deployment Package
+     */
+    private void testInstallSession002() {
+        tbc.log("#testInstallSession002");
+        DeploymentPackage dp = null;
+        TestingSessionResourceProcessor tsrp = null;
+        try {
+            TestingDeploymentPackage testDP = tbc.getTestingDeploymentPackage(DeploymentConstants.INSTALL_FAIL_DP);
+            dp = tbc.installDeploymentPackage(tbc.getWebServer() + testDP.getFilename());
+        } catch (DeploymentException e) {
+            try {
+                tsrp = (TestingSessionResourceProcessor) tbc.getService(ResourceProcessor.class,
+                    "(service.pid=" + DeploymentConstants.PID_RESOURCE_PROCESSOR3 + ")");
+                
+                tbc.assertTrue("Roll back was called during a failed installation", tsrp.isRolledback());
+            } catch (Exception e1) {
+                tbc.fail("Failed to get resource processor from registry");
+            }
+        } catch (Exception e) {
+            tbc.fail(MessagesConstants.getMessage(
+                MessagesConstants.UNEXPECTED_EXCEPTION, new String[]{e.getClass().getName()}));
+        } finally {
+            tsrp.reset();
+            tbc.uninstall(dp);
+        }
+    }
+    
+    /**
+     * Assert that the installed bundle has the Bundle Symbolic Name as defined
+     * by the source manifest. If not, the session must be roll back.
+     * 
+     * @spec 114.8 Installing a Deployment Package
+     */
+    private void testInstallSession003() {
+        tbc.log("#testInstallSession003");
+        DeploymentPackage dp = null;
+        TestingSessionResourceProcessor tsrp = null;
+        try {
+            TestingDeploymentPackage testDP = tbc.getTestingDeploymentPackage(DeploymentConstants.BSN_DIFF_FROM_MANIFEST);
+            dp = tbc.installDeploymentPackage(tbc.getWebServer() + testDP.getFilename());
+        } catch (DeploymentException e) {
+            try {
+                tsrp = (TestingSessionResourceProcessor) tbc.getService(ResourceProcessor.class,
+                    "(service.pid=" + DeploymentConstants.PID_RESOURCE_PROCESSOR3 + ")");
+                
+                tbc.assertTrue("Roll back was called when BSN is not the same as defined in manifest", tsrp.isRolledback());
+            } catch (Exception e1) {
+                tbc.fail("Failed to get resource processor from registry");
+            }
+        } catch (Exception e) {
+            tbc.fail(MessagesConstants.getMessage(
+                MessagesConstants.UNEXPECTED_EXCEPTION, new String[]{e.getClass().getName()}));
+        } finally {
+            tsrp.reset();
+            tbc.uninstall(dp);
+        }
+    }
+    
+    /**
+     * Assert that the installed bundle has the Bundle version as defined by the
+     * source manifest. If not, the session must be roll back.
+     * 
+     * @spec 114.8 Installing a Deployment Package
+     */
+    private void testInstallSession004() {
+        tbc.log("#testInstallSession004");
+        DeploymentPackage dp = null;
+        TestingSessionResourceProcessor tsrp = null;
+        try {
+            TestingDeploymentPackage testDP = tbc.getTestingDeploymentPackage(DeploymentConstants.BVERSION_DIFF_FROM_MANIFEST);
+            dp = tbc.installDeploymentPackage(tbc.getWebServer() + testDP.getFilename());
+        } catch (DeploymentException e) {
+            try {
+                tsrp = (TestingSessionResourceProcessor) tbc.getService(ResourceProcessor.class,
+                    "(service.pid=" + DeploymentConstants.PID_RESOURCE_PROCESSOR3 + ")");
+                
+                tbc.assertTrue("Roll back was called when bundle version is not the same as defined in manifest", tsrp.isRolledback());
+            } catch (Exception e1) {
+                tbc.fail("Failed to get resource processor from registry");
+            }
+        } catch (Exception e) {
+            tbc.fail(MessagesConstants.getMessage(
+                MessagesConstants.UNEXPECTED_EXCEPTION, new String[]{e.getClass().getName()}));
+        } finally {
+            tsrp.reset();
+            tbc.uninstall(dp);
+        }
+    }
+    
+    /**
+     * Assert if any Customizer bundles start method throws an exception, the
+     * session must be rolled back.
+     * 
+     * @spec 114.8 Installing a Deployment Package
+     */
+    private void testInstallSession005() {
+        tbc.log("#testInstallSession005");
+        DeploymentPackage dp = null;
+        try {
+            TestingDeploymentPackage testDP = tbc.getTestingDeploymentPackage(DeploymentConstants.RESOURCE_PROCESSOR_RP3);
+            // uninstalls testing resource processor
+            unprepare();
+            // statically sets exception at start
+            EXCEPTION_AT_START = true;
+            dp = tbc.installDeploymentPackage(tbc.getWebServer() + testDP.getFilename());
+        } catch (DeploymentException e) {
+            try {
+                tbc.assertTrue(
+                        "Roll back was called when a Customizer bundle�s start method throws an exception", ROLL_BACK);
+            } catch (Exception e1) {
+                tbc.fail("Failed to get resource processor from registry");
+            }
+        } catch (Exception e) {
+            tbc.fail(MessagesConstants.getMessage(
+                MessagesConstants.UNEXPECTED_EXCEPTION, new String[]{e.getClass().getName()}));
+        } finally {
+            reset();
+            prepare();
+        }
+    }
+    
+    /**
+     * Asserts that when calling the matched Resource Processor service
+     * process(String,Input-Stream) method. The <b>argument is the JAR path </b>
+     * of the resource.
+     * 
+     * @spec 114.8 Installing a Deployment Package
+     */
+    private void testInstallSession006() {
+        tbc.log("#testInstallSession006");
+        DeploymentPackage dp = null;
+        TestingSessionResourceProcessor tsrp = null;
+        try {
+            TestingDeploymentPackage testDP = tbc.getTestingDeploymentPackage(DeploymentConstants.SIMPLE_RESOURCE_RP3);
+            dp = tbc.installDeploymentPackage(tbc.getWebServer() + testDP.getFilename());
+            
+            tsrp = (TestingSessionResourceProcessor) tbc.getService(ResourceProcessor.class,
+                "(service.pid=" + DeploymentConstants.PID_RESOURCE_PROCESSOR3 + ")");
+            
+            // installed
+            String resourceName = tsrp.getResourceName();
+            InputStream resourceStream = tsrp.getResourceStream();
+            
+            //tested
+            String testResource = testDP.getResources()[0].getName();
+            
+            tbc.assertEquals("The name of the resource is correct", testResource, resourceName);
+            
+            int in = 0;
+            StringBuffer sb = new StringBuffer();
+            // read the stream so we can validate if is really correct
+            while ((in=resourceStream.read()) != -1) {
+                sb.append((char)in);
+            }
+            
+            tbc.log("#"+sb);
+            tbc.assertTrue("The input string correctly returned the right characters", 
+                (sb.toString().indexOf("TCK") != -1));
+            
+        } catch (Exception e) {
+            tbc.fail(MessagesConstants.getMessage(
+                MessagesConstants.UNEXPECTED_EXCEPTION, new String[]{e.getClass().getName()}));
+        } finally {
+            tbc.uninstall(dp);
+            tsrp.reset();
+        }
+    }
+    
+    /**
+     * Asserts that Deployment Admin calls the matched Resource Processor
+     * service process(String,Input-Stream) method. The argument is the JAR path
+     * of the resource. <b>Any Exceptions thrown during this method must abort the
+     * installation.</b>
+     * 
+     * @spec 114.8 Installing a Deployment Package
+     */
+    private void testInstallSession007() {
+        tbc.log("#testInstallSession007");
+        DeploymentPackage dp = null;
+        TestingSessionResourceProcessor tsrp = null;
+        try {
+            tsrp = (TestingSessionResourceProcessor) tbc.getService(ResourceProcessor.class,
+                "(service.pid=" + DeploymentConstants.PID_RESOURCE_PROCESSOR3 + ")");
+            tsrp.setException(TestingSessionResourceProcessor.PROCESS);
+
+            TestingDeploymentPackage testDP = tbc.getTestingDeploymentPackage(DeploymentConstants.SIMPLE_RESOURCE_RP3);
+            dp = tbc.installDeploymentPackage(tbc.getWebServer() + testDP.getFilename());
+            
+            DeploymentPackage installed = tbc.getDeploymentAdmin().getDeploymentPackage(testDP.getName());
+            tbc.assertNull("Installation was aborted", installed);
+        } catch (Exception e) {
+            tbc.fail(MessagesConstants.getMessage(
+                MessagesConstants.UNEXPECTED_EXCEPTION, new String[]{e.getClass().getName()}));
+        } finally {
+            tsrp.reset();
+            tbc.uninstall(dp);
+        }
+    }
+    
+    /**
+     * This test case asserts the following order is followed: "first the bundles
+     * are uninstalled and then later the resources are dropped"
+     * 
+     * @spec 114.8 Installing a Deployment Package
+     */
+    private void testInstallSession008() {
+        tbc.log("#testInstallSession008");
+        DeploymentPackage dp1 = null, dp2 = null;
+        TestingSessionResourceProcessor tsrp = null;
+        try {
+            TestingDeploymentPackage testDP1 = tbc.getTestingDeploymentPackage(DeploymentConstants.SIMPLE_BUNDLE_RES_DP);
+            dp1 = tbc.installDeploymentPackage(tbc.getWebServer() + testDP1.getFilename());
+
+            tsrp = (TestingSessionResourceProcessor) tbc.getService(ResourceProcessor.class,
+                "(service.pid=" + DeploymentConstants.PID_RESOURCE_PROCESSOR3 + ")");
+            tsrp.setTest(TestingSessionResourceProcessor.DROPPED);
+            
+            TestingDeploymentPackage testDP2 = tbc.getTestingDeploymentPackage(DeploymentConstants.SIMPLE_DP);
+            
+            releaseBarrier = new Barrier();
+            cleanupBarrier = new Barrier();
+            worker = new SessionWorker(testDP2, 0);
+            worker.start();
+            
+            // asserts bundles were uninstalled
+            TestingBundle tb = testDP1.getBundles()[2];
+            Bundle b = tbc.getBundle(tb.getName());
+            // assert
+            tbc.assertNull("Bundle bundle.tb3 was uninstalled", b);
+            
+            tsrp.setReleased(true);
+            tsrp.waitForRelease(false);
+            
+        } catch (Exception e) {
+            tbc.fail(MessagesConstants.getMessage(
+                MessagesConstants.UNEXPECTED_EXCEPTION, new String[]{e.getClass().getName()}));
+        } finally {
+            cleanUp(tsrp);
+        }
+    }
+    
+    /**
+     * First the bundles are uninstalled and then later the resources are
+     * dropped. Asserts that <b>Exceptions are ignored in this phase to allow
+     * repairs to always succeed</b>, even if the existing package is corrupted. 
+     * 
+     * @spec 114.8 Installing a Deployment Package
+     */
+    private void testInstallSession009() {
+        tbc.log("#testInstallSession009");
+        DeploymentPackage dp1 = null, dp2 = null;
+        TestingSessionResourceProcessor tsrp = null;
+        try {
+            TestingDeploymentPackage testDP1 = tbc.getTestingDeploymentPackage(DeploymentConstants.SIMPLE_BUNDLE_RES_DP);
+            dp1 = tbc.installDeploymentPackage(tbc.getWebServer() + testDP1.getFilename());
+
+            tsrp = (TestingSessionResourceProcessor) tbc.getService(ResourceProcessor.class,
+                "(service.pid=" + DeploymentConstants.PID_RESOURCE_PROCESSOR3 + ")");
+            tsrp.setTest(TestingSessionResourceProcessor.DROPPED);
+            // dropped will throw an exception
+            tsrp.setException(TestingSessionResourceProcessor.DROPPED);
+            
+            TestingDeploymentPackage testDP2 = tbc.getTestingDeploymentPackage(DeploymentConstants.SIMPLE_DP);
+            
+            releaseBarrier = new Barrier();
+            cleanupBarrier = new Barrier();
+            worker = new SessionWorker(testDP2, 0);
+            worker.start();
+            
+            // asserts bundles were uninstalled
+            TestingBundle tb = testDP1.getBundles()[2];
+            Bundle b = tbc.getBundle(tb.getName());
+            // assert
+            tbc.assertNull("Bundle bundle.tb3 was uninstalled", b);
+            
+            tsrp.setReleased(true);
+            tsrp.waitForRelease(false);
+            
+        } catch (Exception e) {
+            tbc.fail(MessagesConstants.getMessage(
+                MessagesConstants.UNEXPECTED_EXCEPTION, new String[]{e.getClass().getName()}));
+        } finally {
+            cleanUp(tsrp);
+        }
+    }
+    
+    /**
+     * Uninstall all stale bundles <b>in reverse target order </b>, using the
+     * OSGi Framework uninstall method semantics.
+     * 
+     * @spec 114.8 Installing a Deployment Package
+     */
+    private void testInstallSession010() {
+        tbc.log("#testInstallSession010");
+        DeploymentPackage dp1 = null, dp2 = null;
+        try {
+            TestingDeploymentPackage testDP1 = tbc.getTestingDeploymentPackage(DeploymentConstants.SIMPLE_BUNDLE_RES_DP);
+            dp1 = tbc.installDeploymentPackage(tbc.getWebServer() + testDP1.getFilename());
+            // listen to bundles events
+            BundleListenerImpl listener = tbc.getBundleListener();
+            listener.reset();
+
+            TestingDeploymentPackage testDP2 = tbc.getTestingDeploymentPackage(DeploymentConstants.SIMPLE_NO_RESOURCE_DP);
+            dp1 = tbc.installDeploymentPackage(tbc.getWebServer() + testDP2.getFilename());
+/*            
+            Vector events = listener.getEvents();
+            int count = 2;
+            for (int j = 0; j < events.size() || (count > 0); j++) {// there were 3 bundles in target
+                BundleEvent event = (BundleEvent) events.elementAt(j);
+                if (event.getType() == BundleEvent.UNINSTALLED) {
+                    TestingBundle testBundle = testDP1.getBundles()[count];
+                    if (event.getBundle().getSymbolicName().equals(testBundle.getName())) {
+                        count++;
+                    }
+                }
+            }
+           
+            tbc.assertTrue("The 3 bundles were uninstalled in reverse target order", (count==2));
+            */
+        } catch (Exception e) {
+            tbc.fail(MessagesConstants.getMessage(
+                MessagesConstants.UNEXPECTED_EXCEPTION, new String[]{e.getClass().getName()}));
+        } finally {
+            tbc.uninstall(new DeploymentPackage[]{dp2, dp1});
+        }
+    }
+    
+    /**
+     * Asserts that Deployment Admin drops all the resources, <b>in reverse
+     * target order </b>, that are in the target by calling the matching
+     * Resource Processor service dropped(String) method
+     * 
+     * @spec 114.8 Installing a Deployment Package
+     */
+    private void testInstallSession011() {
+        tbc.log("#testInstallSession011");
+        DeploymentPackage dp1 = null;
+        TestingSessionResourceProcessor tsrp = null;
+        try {
+            TestingDeploymentPackage target = tbc.getTestingDeploymentPackage(DeploymentConstants.SIMPLE_BUNDLE_RES_DP);
+            dp1 = tbc.installDeploymentPackage(tbc.getWebServer() + target.getFilename());
+            // handles session operations
+            tsrp = (TestingSessionResourceProcessor) tbc.getService(ResourceProcessor.class,
+                "(service.pid=" + DeploymentConstants.PID_RESOURCE_PROCESSOR3 + ")");
+            tsrp.setTest(TestingSessionResourceProcessor.DROPPED);
+
+            TestingDeploymentPackage source = tbc.getTestingDeploymentPackage(DeploymentConstants.SIMPLE_NO_RESOURCE_DP);
+            
+            releaseBarrier = new Barrier();
+            cleanupBarrier = new Barrier();
+            worker = new SessionWorker(source, 0);
+            worker.start();
+            
+            TestingResource[] testRes = target.getResources();
+            assertDroppedResource(tsrp, testRes[1]);
+            
+            // there must be 2 resources in DP
+            tsrp.setReleased(true);
+            tsrp.waitForRelease(true);
+            
+            assertDroppedResource(tsrp, testRes[0]);
+            // releases
+            tsrp.reset();
+            tsrp.waitForRelease(false);
+            
+        } catch (Exception e) {
+            tbc.fail(MessagesConstants.getMessage(
+                MessagesConstants.UNEXPECTED_EXCEPTION, new String[]{e.getClass().getName()}));
+        } finally {
+            tbc.uninstall(dp1);
+            cleanUp(tsrp);
+        }
+    }
+    
+    /**
+     * Asserts that Deployment Admin drops all the resources, in reverse target
+     * order, that are in the target by calling the matching Resource Processor
+     * service dropped(String) method. <b>Any exceptions thrown during this method
+     * must initiate a roll back</b>.
+     * 
+     * @spec 114.8 Installing a Deployment Package
+     */
+    private void testInstallSession012() {
+        tbc.log("#testInstallSession012");
+        DeploymentPackage dp1 = null, dp2 = null;
+        TestingSessionResourceProcessor tsrp = null;
+        try {
+            TestingDeploymentPackage target = tbc.getTestingDeploymentPackage(DeploymentConstants.SIMPLE_BUNDLE_RES_DP);
+            dp1 = tbc.installDeploymentPackage(tbc.getWebServer() + target.getFilename());
+            // handles session operations
+            tsrp = (TestingSessionResourceProcessor) tbc.getService(ResourceProcessor.class,
+                "(service.pid=" + DeploymentConstants.PID_RESOURCE_PROCESSOR3 + ")");
+            tsrp.setTest(TestingSessionResourceProcessor.DROPPED);
+            tsrp.setException(TestingSessionResourceProcessor.DROPPED);
+
+            TestingDeploymentPackage source = tbc.getTestingDeploymentPackage(DeploymentConstants.SIMPLE_NO_RESOURCE_DP);
+            dp2 = tbc.installDeploymentPackage(tbc.getWebServer() + source.getFilename()); // will throw a DAException
+            
+            tbc.assertTrue("Session Rolled back", tsrp.isRolledback());
+        } catch (Exception e) {
+            tbc.fail(MessagesConstants.getMessage(
+                MessagesConstants.UNEXPECTED_EXCEPTION, new String[]{e.getClass().getName()}));
+        } finally {
+            tsrp.reset();
+            tbc.uninstall(new DeploymentPackage[]{dp2, dp1});
+        }
+    }
+    
+    /**
+     * Asserts that processors that have not joined the session(don't have associated
+     * resource) <b>must NOT prepare to commit</b>.
+     * 
+     * @spec 114.8 Installing a Deployment Package
+     */
+    private void testInstallSession013() {
+        tbc.log("#testInstallSession013");
+        DeploymentPackage dp1 = null;
+        TestingSessionResourceProcessor tsrp = null;
+        try {
+            TestingDeploymentPackage source = tbc.getTestingDeploymentPackage(DeploymentConstants.RP_RESOURCE_INSTALL_DP);
+            dp1 = tbc.installDeploymentPackage(tbc.getWebServer() + source.getFilename());
+            // handles session operations
+            tsrp = (TestingSessionResourceProcessor) tbc.getService(ResourceProcessor.class,
+                "(service.pid=" + DeploymentConstants.PID_RESOURCE_PROCESSOR3 + ")");
+
+            tbc.assertTrue(DeploymentConstants.PID_RESOURCE_PROCESSOR3 + " have to prepared to commit", 
+                tsrp.isPrepared());
+        } catch (Exception e) {
+            tbc.fail(MessagesConstants.getMessage(
+                MessagesConstants.UNEXPECTED_EXCEPTION, new String[]{e.getClass().getName()}));
+        } finally {
+            tsrp.reset();
+            tbc.uninstall(dp1);
+        }
+    }
+    
+    /**
+     * All the Resource Processor services that have joined the session must
+     * now prepare to commit. <b>If any Resource Processor throws an Exception, the
+     * session must roll back</b>.
+     * 
+     * @spec 114.8 Installing a Deployment Package
+     */
+    private void testInstallSession014() {
+        tbc.log("#testInstallSession014");
+        DeploymentPackage dp1 = null;
+        TestingSessionResourceProcessor tsrp = null;
+        try {
+            tsrp = (TestingSessionResourceProcessor) tbc.getService(ResourceProcessor.class,
+                "(service.pid=" + DeploymentConstants.PID_RESOURCE_PROCESSOR3 + ")");
+            tsrp.setException(TestingSessionResourceProcessor.PREPARE);
+            
+            TestingDeploymentPackage source = tbc.getTestingDeploymentPackage(DeploymentConstants.SIMPLE_BUNDLE_RES_DP);
+            dp1 = tbc.installDeploymentPackage(tbc.getWebServer() + source.getFilename());
+
+            tbc.assertTrue("Session was Rolled back", tsrp.isRolledback());
+        } catch (Exception e) {
+            tbc.fail(MessagesConstants.getMessage(
+                MessagesConstants.UNEXPECTED_EXCEPTION, new String[]{e.getClass().getName()}));
+        } finally {
+            tsrp.reset();
+            tbc.uninstall(dp1);
+        }
+    }
+    
+    /**
+     * Asserts that DeploymentAdmin start the bundles <b>in the source resource
+     * order</b>.
+     * 
+     * @spec 114.8 Installing a Deployment Package
+     */
+    private synchronized void testInstallSession015() {
+        tbc.log("#testInstallSession015");
+        DeploymentPackage dp1 = null;
+        TestingSessionResourceProcessor tsrp = null;
+        try {
+            tsrp = (TestingSessionResourceProcessor) tbc.getService(ResourceProcessor.class,
+                "(service.pid=" + DeploymentConstants.PID_RESOURCE_PROCESSOR3 + ")");
+            
+            BundleListenerImpl listener = tbc.getBundleListener();
+            listener.reset();
+            
+            TestingDeploymentPackage source = tbc.getTestingDeploymentPackage(DeploymentConstants.SIMPLE_BUNDLE_RES_DP);
+            TestingBundle[] bundles = source.getBundles();
+            dp1 = tbc.installDeploymentPackage(tbc.getWebServer() + source.getFilename());
+            
+            //wait for install events
+            wait(1000);
+            Vector events = listener.getEvents();
+            int count = 0;
+            for (int i = 0; (i < events.size()) && (count < 3); i++) {
+                BundleEvent event = (BundleEvent)events.elementAt(i);
+                if (event.getType() == BundleEvent.STARTED) {
+                    Bundle b = event.getBundle();
+                    if (bundles[count].getName().equals(b.getSymbolicName()))
+                        count++;
+                }
+            }
+            
+            tbc.assertTrue("Bundles started in the correct order", (count==2));
+        } catch (Exception e) {
+            tbc.fail(MessagesConstants.getMessage(
+                MessagesConstants.UNEXPECTED_EXCEPTION, new String[]{e.getClass().getName()}));
+        } finally {
+            tsrp.reset();
+            tbc.uninstall(dp1);
+        }
+    }
+    
+    /**
+     * Asserts that Exceptions thrown during the start of deployment package
+     * bundles <b>must be logged but do not abort the deployment operation</b>.
+     * 
+     * @spec 114.8 Installing a Deployment Package
+     */
+    private void testInstallSession016() {
+        tbc.log("#testInstallSession016");
+        DeploymentPackage dp1 = null;
+        TestingSessionResourceProcessor tsrp = null;
+        try {
+            TestingDeploymentPackage source = tbc.getTestingDeploymentPackage(DeploymentConstants.BUNDLE_FAIL_RES_DP);
+            dp1 = tbc.installDeploymentPackage(tbc.getWebServer() + source.getFilename());
+            Enumeration logsAfter = tbc.getLogReader().getLog();
+            // Cannot assume the most recent log is the deployment installation
+            boolean found = false;
+            while (logsAfter.hasMoreElements() && ! found) {
+                LogEntry log = (LogEntry) logsAfter.nextElement();
+                Bundle b = log.getBundle();
+                if (b.getSymbolicName().indexOf("deployment") != -1) {
+                    found = true;
+                    tbc.pass("Deployment Admin bundle logged the start bundle failure");
+                }
+            }
+            if (!found) {
+                tbc.log("Deployment Admin bundle did not logged the start bundle failure");
+            }
+        } catch (Exception e) {
+            tbc.fail(MessagesConstants.getMessage(
+                MessagesConstants.UNEXPECTED_EXCEPTION, new String[]{e.getClass().getName()}));
+        } finally {
+            tsrp.reset();
+            tbc.uninstall(dp1);
+        }
+    }
+    
+    /**
+     * Asserts that all target bundles <b>must be stopped in reverse target
+     * resource order </b>.
+     * 
+     * @spec 114.8 Installing a Deployment Package
+     */
+    private void testInstallSession017() {
+        tbc.log("#testInstallSession017");
+        DeploymentPackage dp1 = null, dp2 = null;
+        try {
+            TestingDeploymentPackage target = tbc.getTestingDeploymentPackage(DeploymentConstants.SIMPLE_BUNDLE_RES_DP);
+            dp1 = tbc.installDeploymentPackage(tbc.getWebServer() + target.getFilename());
+            // listen to bundles events
+            BundleListenerImpl listener = tbc.getBundleListener();
+            listener.reset();
+
+            TestingDeploymentPackage source = tbc.getTestingDeploymentPackage(DeploymentConstants.SIMPLE_DP);
+            dp2 = tbc.installDeploymentPackage(tbc.getWebServer() + source.getFilename());
+/*            
+            Vector events = listener.getEvents();
+            int count = 2;
+            for (int j = 0; j < events.size() || (count > 0); j++) {// there were 3 bundles in target
+                BundleEvent event = (BundleEvent) events.elementAt(j);
+                if (event.getType() == BundleEvent.STOPPED) {
+                    TestingBundle testBundle = target.getBundles()[count];
+                    if (event.getBundle().getSymbolicName().equals(testBundle.getName())) {
+                        count++;
+                    }
+                }
+            }
+            
+            tbc.assertTrue("The 3 bundles were stopped in reverse target order", (count==2));
+*/            
+        } catch (Exception e) {
+            tbc.fail(MessagesConstants.getMessage(
+                MessagesConstants.UNEXPECTED_EXCEPTION, new String[]{e.getClass().getName()}));
+        } finally {
+            tbc.uninstall(new DeploymentPackage[]{dp2, dp1});
+        }
+    }
+    
+    /**
+     * Asserts that Exceptions thrown during stopping of target bundles must be
+     * ignored but <b>should be logged as a warning </b>.
+     * 
+     * @spec 114.8 Installing a Deployment Package
+     */
+    private void testInstallSession018() {
+        tbc.log("#testInstallSession018");
+        DeploymentPackage dp1 = null, dp2 = null;
+        try {
+            TestingDeploymentPackage target = tbc.getTestingDeploymentPackage(DeploymentConstants.BUNDLE_FAIL_ON_STOP);
+            dp1 = tbc.installDeploymentPackage(tbc.getWebServer() + target.getFilename());
+
+            TestingDeploymentPackage source = tbc.getTestingDeploymentPackage(DeploymentConstants.SIMPLE_DP);
+            dp2 = tbc.installDeploymentPackage(tbc.getWebServer() + source.getFilename());
+            
+            // asserts the uninstalled DP has been removed
+            TestingBundle[] bundles = target.getBundles();
+            Bundle b = tbc.getBundle(bundles[0].getName());
+            tbc.assertNull("The installed bundles has been removed", b);
+            
+            boolean found = false;
+            // assert Exception was logged
+            Enumeration logsAfter = tbc.getLogReader().getLog();
+            while (logsAfter.hasMoreElements()) {
+                // get the latest log
+                LogEntry log = (LogEntry)logsAfter.nextElement();
+                if ((log.getLevel() == LogService.LOG_WARNING)
+                    && (log.getException() instanceof BundleException)
+                    && (log.getBundle().getSymbolicName().indexOf("deployment") != -1))
+                {
+                    tbc.pass("The log message is a WARNING and the Exception is a BundleException");
+                    found = true;
+                    break;
+                }
+            }
+            if (!found){
+                tbc.log("The log message is NOT a WARNING and the Exception is NOT a BundleException");
+            }
+        } catch (Exception e) {
+            tbc.fail(MessagesConstants.getMessage(
+                MessagesConstants.UNEXPECTED_EXCEPTION, new String[]{e.getClass().getName()}));
+        } finally {
+            tbc.uninstall(new DeploymentPackage[]{dp2, dp1});
+        }
+    }
+    
+    /**
+     * Asserts that any exceptions thrown during uninstallation of stale bundles
+     * <b>should be logged as a warning but must be ignored.</b>
+     * 
+     * @spec 114.8 Installing a Deployment Package
+     */
+    private void testInstallSession019() {
+        tbc.log("#testInstallSession019");
+        DeploymentPackage dp1 = null, dp2 = null;
+        try {
+            Enumeration logsBefore = tbc.getLogReader().getLog();
+            TestingDeploymentPackage target = tbc.getTestingDeploymentPackage(DeploymentConstants.SIMPLE_BUNDLE_RES_DP);
+            dp1 = tbc.installDeploymentPackage(tbc.getWebServer() + target.getFilename());
+
+            // uninstall bundle before DP update
+            TestingBundle tBundle = target.getBundle("bundle.tb3");
+            Bundle b = tbc.getBundle(tBundle.getName());
+            b.uninstall();
+            
+            TestingDeploymentPackage source = tbc.getTestingDeploymentPackage(DeploymentConstants.SIMPLE_DP);
+            dp2 = tbc.installDeploymentPackage(tbc.getWebServer() + source.getFilename());
+            
+            Enumeration logsAfter = tbc.getLogReader().getLog();
+            tbc.assertTrue("Logs after are the same as logs before uninstallation", !logsAfter.equals(logsBefore));
+            
+            boolean found = false;
+            // assert Exception was logged
+            while (logsAfter.hasMoreElements()) {
+                // get the latest log
+                LogEntry log = (LogEntry)logsAfter.nextElement();
+                if ((log.getLevel() == LogService.LOG_WARNING)
+                    && (log.getException() instanceof IllegalStateException)
+                    && (log.getBundle().getSymbolicName().indexOf("deployment") != -1))
+                {
+                    tbc.pass("The log message is a WARNING and the Exception is a IllegalStateException");
+                    found = true;
+                    break;
+                }
+            }
+            if (!found){
+                tbc.log("The log message is NOT a WARNING and the Exception is NOT a IllegalStateException");
+            }
+        } catch (Exception e) {
+            tbc.fail(MessagesConstants.getMessage(
+                MessagesConstants.UNEXPECTED_EXCEPTION, new String[]{e.getClass().getName()}));
+        } finally {
+            tbc.uninstall(new DeploymentPackage[]{dp2, dp1});
+        }
+    }
+    
+    private void assertDroppedResource(TestingSessionResourceProcessor tsrp, TestingResource testRes) {
+        // wait untill dropped is processed
+        int count = 0;
+        while(!tsrp.isDropped() && count < DeploymentConstants.SESSION_TIMEOUT) {
+            count++;
+            try {
+                this.wait(1);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+        
+        // asserts resource name
+        String res = tsrp.getResourceName();
+        tbc.assertEquals("DP resource correctly handled", testRes.getName(), res);
+
+    }
+    
+    private void cleanUp(TestingSessionResourceProcessor tsrp) {
+        EXCEPTION_AT_START = false;
+        ROLL_BACK = false;
+
+        reachTC = true;
+        try {
+            releaseBarrier.waitForRelease();
+            cleanupBarrier.waitCleanUp();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        tsrp.reset();
+        cleanupBarrier.reset();
+        cleanupBarrier = null;
+        releaseBarrier = null;
+    }
+
+    /**
+     * Reset flags.
+     */
+    private void reset() {
+        EXCEPTION_AT_START = false;
+        ROLL_BACK = false;
+    }
+    
+    class SessionWorker extends Thread {
+        
+        private TestingDeploymentPackage testDP;
+        private int id;
+        
+        protected SessionWorker(TestingDeploymentPackage testDP, int id) {
+            this.testDP = testDP;
+            this.id = id;
+        }
+        
+        public void run() {
+            DeploymentPackage dp = null;
+            try {                
+                dp = tbc.installDeploymentPackage(tbc.getWebServer() + testDP.getFilename());
+                tbc.log("#Installation of test DP completed successfuly");
+                reach = true;
+                // wait for other threads
+                releaseBarrier.waitForRelease();
+            } catch (Exception e) {
+                tbc.fail(MessagesConstants.getMessage(
+                    MessagesConstants.UNEXPECTED_EXCEPTION, new String[]{e.getClass().getName()}));
+            } finally {
+                // clean up must also be synchronized. Otherwise other TCs may be impacted.
+                tbc.uninstall(dp);
+                clean = true;
+                tbc.log("#Clean up successful");
+                try {
+                    cleanupBarrier.waitCleanUp();
+                } catch (InterruptedException e1) {
+                    e1.printStackTrace();
+                }
+            }
+        }
+        
+        private void release() {
+            try {
+                TestingSessionResourceProcessor tsrp = (TestingSessionResourceProcessor) tbc.getService(ResourceProcessor.class,
+                    "(service.pid=" + DeploymentConstants.PID_RESOURCE_PROCESSOR3 + ")");
+                if (tsrp != null) {
+                    tsrp.setReleased(true);
+                    tsrp.waitForRelease(false);
+                } else {
+                    tbc.fail("null reference of TestingBlockingResourceProcessor ");
+                }
+            } catch (Exception e) {
+                tbc.fail("Failed to get Testing Session Resource Processor from registry");
+            }
+        }
+    }
+    
+    class Barrier {
+        
+        protected synchronized void waitForRelease() throws InterruptedException {
+            if (reach && reachTC) {
+                tbc.log("#Both sessions finished in the correct sequence");
+                // if needed do some action
+                this.notifyAll();
+            } else {
+                while (!(reach && reachTC)) {
+                    this.wait(DeploymentConstants.SESSION_TIMEOUT);
+                }
+            }
+        }
+        
+        protected synchronized void waitCleanUp() throws InterruptedException {
+            if (clean && reachTC) {
+                // if needed do some action
+                this.notifyAll();
+            } else {
+                while (!(clean && reachTC)) {
+                    this.wait(DeploymentConstants.TIMEOUT);
+                }
+            }
+        }
+        
+        public void reset() {
+            worker = null;
+            reach = false;
+            reachTC = false;
+            clean = false;
+        }
+    }
+    
+}

@@ -67,6 +67,7 @@ public class ResourceProcessor {
 		testResourceProcessor004();
 		testResourceProcessor005();
 		testResourceProcessor006();
+        testResourceProcessor007();
 	}
 
 		
@@ -75,7 +76,7 @@ public class ResourceProcessor {
 	 * Asserts that the action is INSTALL and that DeploymentAdmin calls the methods of a 
 	 * resource processor in the specified order
 	 * 
-	 * @spec 115.10 Resource Processors
+	 * @spec 114.10 Resource Processors
 	 */
 	private void testResourceProcessor001()  {
 		tbc.log("#testResourceProcessor001");
@@ -109,7 +110,7 @@ public class ResourceProcessor {
 	 * Asserts that DeploymentException.CODE_PREPARE is thrown when an exception is thrown on prepare() method of the ResourceProcessor
 	 * It also tests if DeploymentAdmin calls the correct order of methods, including rollback()
 	 * 
-	 * @spec 115.10 Resource Processors			
+	 * @spec 114.10 Resource Processors			
 	 */
 	private void testResourceProcessor002() {
 		tbc.log("#testResourceProcessor002");
@@ -150,7 +151,7 @@ public class ResourceProcessor {
 	 * Asserts that the action is UPDATE and that DeploymentAdmin calls the 
 	 * methods of a resource processor in the specified order
 	 * 
-	 * @spec 115.10 Resource Processors
+	 * @spec 114.10 Resource Processors
 	 */
 	private void testResourceProcessor003() {
 		tbc.log("#testResourceProcessor003");
@@ -193,7 +194,7 @@ public class ResourceProcessor {
 	/**
 	 * Uninstall a resource (not the deployment package) in order no know if the dropped method is called.
 	 * 
-	 * @spec 115.10 Resource Processors					
+	 * @spec 114.10 Resource Processors					
 	 */
 	private void testResourceProcessor004() {
 		tbc.log("#testResourceProcessor004");
@@ -233,7 +234,7 @@ public class ResourceProcessor {
 	 * Asserts that DeploymentException.CODE_NO_SUCH_RESOURCE is thrown when an exception is thrown on dropped() method of the ResourceProcessor
 	 * It also tests if DeploymentAdmin calls the correct order of methods, including rollback()
 	 * 
-	 * @spec 115.10 Resource Processors			
+	 * @spec 114.10 Resource Processors			
 	 */
 	private void testResourceProcessor005() {
 		tbc.log("#testResourceProcessor005");
@@ -270,11 +271,12 @@ public class ResourceProcessor {
 		}
 		
 	}
+    
 	/**
 	 * Uninstalls a deployment package containing a resource. Asserts that DeploymentAdmin calls the methods of a
 	 * resource processor in the specified order
 	 * 
-	 * @spec 115.10 Resource Processors
+	 * @spec 114.10 Resource Processors
 	 */
 	private void testResourceProcessor006() {
 		tbc.log("#testResourceProcessor006");
@@ -305,5 +307,34 @@ public class ResourceProcessor {
 		} finally {
 			tbc.uninstall(new DeploymentPackage[] { dpInstallResource,dpResourceProcessor });
 		}
-	}	
+	}
+    
+    /**
+     * Assert that Customizer bundles must never process a resource from another
+     * Deployment Package. DeploymentException.CODE_FOREIGN_CUSTOMIZER must be
+     * thrown.
+     * 
+     * @spec 114.5 Customizer
+     */
+    public void testResourceProcessor007() {
+        tbc.log("#testResourceProcessor007");
+        
+        DeploymentPackage dp1 = null, dp2 = null;
+        TestingDeploymentPackage testDP1 = tbc.getTestingDeploymentPackage(DeploymentConstants.SESSION_RESOURCE_PROCESSOR_DP);
+        TestingDeploymentPackage testDP2 = tbc.getTestingDeploymentPackage(DeploymentConstants.RP_FROM_OTHER_DP);
+        
+        try {
+            dp1 = tbc.installDeploymentPackage(tbc.getWebServer() + testDP1.getFilename());
+            tbc.assertNotNull("Deployment Package 1 installed", dp1);
+            
+            dp2 = tbc.installDeploymentPackage(tbc.getWebServer() + testDP2.getFilename());
+            tbc.failException("#", DeploymentException.class);
+        } catch (DeploymentException e) {
+            tbc.assertEquals("DeploymentException.CODE_FOREIGN_CUSTOMIZER correctly thrown", DeploymentException.CODE_FOREIGN_CUSTOMIZER, e.getCode());
+        } catch (Exception e) {
+            tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }));
+        } finally {
+            tbc.uninstall(new DeploymentPackage[]{dp1, dp2});
+        }
+    }
 }

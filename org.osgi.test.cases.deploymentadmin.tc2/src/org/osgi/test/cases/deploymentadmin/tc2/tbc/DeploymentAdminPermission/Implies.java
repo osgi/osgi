@@ -66,6 +66,10 @@ public class Implies {
 		testImplies003();
 		testImplies004();
 		testImplies005();
+        testImplies006();
+        testImplies007();
+        testImplies008();
+        testImplies009();
 	}
 
 	/**
@@ -199,4 +203,110 @@ public class Implies {
 							.getClass().getName() }));
 		}
 	}
+    
+    /**
+     * This method asserts that an object implies other object that
+     * use a wildcard as filter name.
+     * 
+     * @spec DeploymentAdminPermission.implies(Permission)
+     */
+    public void testImplies006() {
+        tbc.log("#testImplies006");
+        try {
+            DeploymentAdminPermission deployPermission = new DeploymentAdminPermission(
+                    DeploymentConstants.DEPLOYMENT_PACKAGE_NAME2,
+                    org.osgi.service.deploymentadmin.DeploymentAdminPermission.ACTION_INSTALL);
+            DeploymentAdminPermission deployPermission2 = new DeploymentAdminPermission(
+                    DeploymentConstants.BUNDLE_NAME_ALL,
+                    org.osgi.service.deploymentadmin.DeploymentAdminPermission.ACTION_INSTALL);
+            tbc
+                    .assertTrue(
+                            "Asserts that an object implies other object that use wildcard as filter name.",
+                            deployPermission.implies(deployPermission2));
+        } catch (Exception e) {
+            tbc.fail(MessagesConstants.getMessage(
+                    MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e
+                            .getClass().getName() }));
+        }
+    }    
+
+    /**
+     * This method asserts that an object does not implies other object that
+     * use a more specific wildcard as filter name.
+     * 
+     * @spec DeploymentAdminPermission.implies(Permission)
+     */
+    public void testImplies007() {
+        tbc.log("#testImplies007");
+        try {
+            DeploymentAdminPermission deployPermission = new DeploymentAdminPermission(
+                "(name=a*)",
+                    org.osgi.service.deploymentadmin.DeploymentAdminPermission.ACTION_INSTALL);
+            DeploymentAdminPermission deployPermission2 = new DeploymentAdminPermission(
+                    "(name=*)",
+                    org.osgi.service.deploymentadmin.DeploymentAdminPermission.ACTION_INSTALL);
+            tbc
+                    .assertTrue(
+                            "Asserts that an object does not implies other object that use a more specific wildcard as filter name.",
+                            !deployPermission.implies(deployPermission2));
+        } catch (Exception e) {
+            tbc.fail(MessagesConstants.getMessage(
+                    MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e
+                            .getClass().getName() }));
+        }
+    }    
+    
+    /**
+     * This method asserts an object that has wildcard in certificate 
+     * accept any certificate
+     * 
+     * @spec DeploymentAdminPermission.implies(Permission)
+     */
+    public void testImplies008() {
+        tbc.log("#testImplies008");
+        try {
+            DeploymentAdminPermission deployPermission = new DeploymentAdminPermission(
+                DeploymentConstants.DEPLOYMENT_PACKAGE_NAME3,
+                    org.osgi.service.deploymentadmin.DeploymentAdminPermission.ACTION_INSTALL);
+            DeploymentAdminPermission deployPermission2 = new DeploymentAdminPermission(
+                DeploymentConstants.DEPLOYMENT_PACKAGE_NAME2,
+                    org.osgi.service.deploymentadmin.DeploymentAdminPermission.ACTION_INSTALL);
+            tbc
+                    .assertTrue(
+                            "Asserts that an object that has wildcard in certificate accept any certificate.",
+                            deployPermission.implies(deployPermission2));
+        } catch (Exception e) {
+            tbc.fail(MessagesConstants.getMessage(
+                    MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e
+                            .getClass().getName() }));
+        }
+    }   
+    
+    /**
+     * This method asserts an object that has a specific certificate does
+     * not hold a DeploymentAdminPermission that has a wildcard 
+     * to accept any certificate.
+     * 
+     * @spec DeploymentAdminPermission.implies(Permission)
+     */
+    public void testImplies009() {
+        tbc.log("#testImplies009");
+        try {
+            DeploymentAdminPermission deployPermission = new DeploymentAdminPermission(
+                DeploymentConstants.DEPLOYMENT_PACKAGE_NAME2,
+                    org.osgi.service.deploymentadmin.DeploymentAdminPermission.ACTION_INSTALL);
+            DeploymentAdminPermission deployPermission2 = new DeploymentAdminPermission(
+                DeploymentConstants.DEPLOYMENT_PACKAGE_NAME3,
+                    org.osgi.service.deploymentadmin.DeploymentAdminPermission.ACTION_INSTALL);
+            tbc
+                    .assertTrue(
+                            "Asserts that an object that has a specific certificate does not hold a DeploymentAdminPermission that has a wildcard to accept any certificate.",
+                            deployPermission.implies(deployPermission2));
+        } catch (Exception e) {
+            tbc.fail(MessagesConstants.getMessage(
+                    MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e
+                            .getClass().getName() }));
+        }
+    }    
+    
 }

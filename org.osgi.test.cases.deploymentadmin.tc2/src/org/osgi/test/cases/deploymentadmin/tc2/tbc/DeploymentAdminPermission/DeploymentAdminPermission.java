@@ -68,6 +68,8 @@ public class DeploymentAdminPermission {
 		testDeploymentAdminPermission005();
 		testDeploymentAdminPermission006();
 		testDeploymentAdminPermission007();
+        testDeploymentAdminPermission008();
+        testDeploymentAdminPermission009();
 	}
 
 	/**
@@ -75,7 +77,7 @@ public class DeploymentAdminPermission {
 	 * 
 	 * @spec DeploymentAdminPermission.DeploymentAdminPermission(String,String)
 	 */
-	public void testDeploymentAdminPermission001() {
+	private void testDeploymentAdminPermission001() {
 		tbc.log("#testDeploymentAdminPermission001");
 		try {
 			org.osgi.service.deploymentadmin.DeploymentAdminPermission dpAdmPerm = new org.osgi.service.deploymentadmin.DeploymentAdminPermission(
@@ -95,7 +97,7 @@ public class DeploymentAdminPermission {
 	 * 
 	 * @spec DeploymentAdminPermission.DeploymentAdminPermission(String,String) 
 	 */
-	public void testDeploymentAdminPermission002() {
+	private void testDeploymentAdminPermission002() {
 		tbc.log("#testDeploymentAdminPermission002");
 		try {
 			String actions = org.osgi.service.deploymentadmin.DeploymentAdminPermission.ACTION_INSTALL
@@ -136,7 +138,7 @@ public class DeploymentAdminPermission {
 	 * 
 	 * @spec DeploymentAdminPermission.DeploymentAdminPermission(String,String)
 	 */
-	public void testDeploymentAdminPermission003() {
+	private void testDeploymentAdminPermission003() {
 		tbc.log("#testDeploymentAdminPermission003");
 		try {
 			org.osgi.service.deploymentadmin.DeploymentAdminPermission dpAdmPerm = new org.osgi.service.deploymentadmin.DeploymentAdminPermission(
@@ -158,7 +160,7 @@ public class DeploymentAdminPermission {
 	 * 
  	 * @spec DeploymentAdminPermission.DeploymentAdminPermission(String,String)
 	 */
-	public void testDeploymentAdminPermission004() {
+	private void testDeploymentAdminPermission004() {
 		tbc.log("#testDeploymentAdminPermission004");
 		try {
 			org.osgi.service.deploymentadmin.DeploymentAdminPermission dpAdmPerm = new org.osgi.service.deploymentadmin.DeploymentAdminPermission(
@@ -181,7 +183,7 @@ public class DeploymentAdminPermission {
 	 * 
 	 * @spec DeploymentAdminPermission.DeploymentAdminPermission(String,String)
 	 */
-	public void testDeploymentAdminPermission005() {
+	private void testDeploymentAdminPermission005() {
 		tbc.log("#testDeploymentAdminPermission005");
 		try {
 			String invalidAction = "invalid";
@@ -205,7 +207,7 @@ public class DeploymentAdminPermission {
 	 * 
 	 * @spec DeploymentAdminPermission.DeploymentAdminPermission(String,String)
 	 */
-	public void testDeploymentAdminPermission006() {
+	private void testDeploymentAdminPermission006() {
 		tbc.log("#testDeploymentAdminPermission006");
 		try {
 			org.osgi.service.deploymentadmin.DeploymentAdminPermission dpAdmPerm = new org.osgi.service.deploymentadmin.DeploymentAdminPermission(
@@ -227,7 +229,7 @@ public class DeploymentAdminPermission {
 	 * an empty filter name is passed
 	 * @spec DeploymentAdminPermission.DeploymentAdminPermission(String,String)
 	 */
-	public void testDeploymentAdminPermission007() {
+	private void testDeploymentAdminPermission007() {
 		tbc.log("#testDeploymentAdminPermission007");
 		try {
 			org.osgi.service.deploymentadmin.DeploymentAdminPermission dpAdmPerm = new org.osgi.service.deploymentadmin.DeploymentAdminPermission(
@@ -242,4 +244,48 @@ public class DeploymentAdminPermission {
 							e.getClass().getName() }));
 		}
 	}
+    
+    /**
+     * This method asserts that DeploymentAdminPermission throws IllegalArgumentException
+     * when invalid characteres is used in certificate.
+     * 
+     * @spec DeploymentAdminPermission.DeploymentAdminPermission(String,String)
+     */
+    private void testDeploymentAdminPermission008() {
+        tbc.log("#testDeploymentAdminPermission008");
+        try {
+            org.osgi.service.deploymentadmin.DeploymentAdminPermission dpAdmPerm = new org.osgi.service.deploymentadmin.DeploymentAdminPermission(
+                    DeploymentConstants.DEPLOYMENT_PACKAGE_NAME4, org.osgi.service.deploymentadmin.DeploymentAdminPermission.ACTION_INSTALL);
+            tbc.failException("#", IllegalArgumentException.class);
+        } catch (IllegalArgumentException e) {
+            tbc.pass(MessagesConstants.getMessage(MessagesConstants.EXCEPTION_CORRECTLY_THROWN,
+                    new String[] { IllegalArgumentException.class.getName() }));
+        } catch (Exception e) {
+            tbc.fail(MessagesConstants.getMessage(MessagesConstants.EXCEPTION_THROWN, new String[] {
+                            IllegalArgumentException.class.getName(),
+                            e.getClass().getName() }));
+        }
+    } 
+    
+    /**
+     * This method asserts that DeploymentAdminPermission throws IllegalArgumentException
+     * when the distinguished names are invalid.
+     * 
+     * @spec DeploymentAdminPermission.DeploymentAdminPermission(String,String)
+     */
+    private void testDeploymentAdminPermission009() {
+        tbc.log("#testDeploymentAdminPermission009");
+        try {
+            org.osgi.service.deploymentadmin.DeploymentAdminPermission dpAdmPerm = new org.osgi.service.deploymentadmin.DeploymentAdminPermission(
+                    DeploymentConstants.DEPLOYMENT_PACKAGE_NAME5, org.osgi.service.deploymentadmin.DeploymentAdminPermission.ACTION_INSTALL);
+            tbc.failException("#", IllegalArgumentException.class);
+        } catch (IllegalArgumentException e) {
+            tbc.pass(MessagesConstants.getMessage(MessagesConstants.EXCEPTION_CORRECTLY_THROWN,
+                    new String[] { IllegalArgumentException.class.getName() }));
+        } catch (Exception e) {
+            tbc.fail(MessagesConstants.getMessage(MessagesConstants.EXCEPTION_THROWN, new String[] {
+                            IllegalArgumentException.class.getName(),
+                            e.getClass().getName() }));
+        }
+    }     
 }

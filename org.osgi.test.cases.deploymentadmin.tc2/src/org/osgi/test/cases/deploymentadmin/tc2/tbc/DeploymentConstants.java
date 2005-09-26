@@ -48,9 +48,13 @@ package org.osgi.test.cases.deploymentadmin.tc2.tbc;
 public class DeploymentConstants {
 
 	public static final String SIGNER_FILTER = "CN=CESAR.ORG.BR, OU=CESAR, O=MOTOROLA, L=RECIFE, C=BR";
+    public static final String SIGNER_FILTER_WILDCARD = "CN=*.ORG.BR, OU=CESAR, O=MOTOROLA, L=RECIFE, C=BR";
+    public static final String SIGNER_FILTER_INVALID1 = "CN=#@$.ORG.BR, OU=CESAR, O=MOTOROLA, L=RECIFE, C=BR";
+    public static final String SIGNER_FILTER_INVALID2 = "2=*.ORG.BR, TX=CESAR, R=MOTOROLA, L=RECIFE, C=BR";
 	public static final String PID_RESOURCE_PROCESSOR1 = "org.osgi.test.cases.deployment.bundles.rp1";
 	public static final String PID_RESOURCE_PROCESSOR2 = "org.osgi.test.cases.deployment.bundles.rp2";
 	public static final String PID_RESOURCE_PROCESSOR3 = "org.osgi.test.cases.deployment.bundles.rp3";
+    public static final String PID_RESOURCE_PROCESSOR4 = "org.osgi.test.cases.deployment.bundles.rp4";
 	public static final String PID_MANAGED_SERVICE_FACTORY = "org.osgi.test.cases.deploymentadmin.tc2.tb1";
 	public static final String PID_MANAGED_SERVICE = "br.org.cesar.bundles.tb4";
 	
@@ -64,18 +68,42 @@ public class DeploymentConstants {
 	public static final int SESSION_UPDATE_TEST_DP = 7;
 	public static final int TRANSACTIONAL_SESSION_DP = 8;
 	public static final int RESOURCE_PROCESSOR_2_DP = 9;
+    public static final int BLOCK_SESSION_RESOURCE_PROCESSOR = 10;
+    public static final int MANIFEST_NOT_1ST_FILE = 11;
+    public static final int RP_FROM_OTHER_DP = 12;
+    public static final int INSTALL_FAIL_DP = 13;
+    public static final int RESOURCE_PROCESSOR_RP3 = 14;
+    public static final int BSN_DIFF_FROM_MANIFEST = 15;
+    public static final int BVERSION_DIFF_FROM_MANIFEST = 16;
+    public static final int SIMPLE_RESOURCE_RP3 = 17;
+    public static final int SIMPLE_BUNDLE_RES_DP = 18;
+    public static final int SIMPLE_NO_BUNDLE_DP = 19;
+    public static final int SIMPLE_NO_RESOURCE_DP = 20;
+    public static final int BUNDLE_FAIL_RES_DP = 21;
+    public static final int BUNDLE_FAIL_ON_STOP = 22;
+    public static final int SIGNING_FILE_NOT_NEXT = 23;
 	
 	//This array index is very important, and must be the same as the deployment code
 	//Use 31 characters. 
-	public static final String[] MAP_CODE_TO_DP = { "simple_dp","rp_resource_dp","rp_resource_dp","rp_resource_dp",
-			"auto_config_dp","session_resource_processor_dp","session_test_dp","session_update_test_dp",
-			"transactional_session_dp","resource_processor2_dp" };
+	public static final String[] MAP_CODE_TO_DP = {"simple_dp",
+        "rp_resource_dp", "rp_resource_dp", "rp_resource_dp", "auto_config_dp",
+        "session_resource_processor_dp", "session_test_dp",
+        "session_update_test_dp", "transactional_session_dp",
+        "resource_processor2_dp", "block_session", "manifest_not_1st_file",
+        "rp_from_other_dp", "install_fail_dp", "resource_processor_rp3",
+        "bsn_diff_from_manifest", "bversion_diff_from_manifest",
+        "simple_resource_rp3", "simple_bundle_res_dp", "simple_no_bundle",
+        "simple_no_resource", "bundle_fail_res_dp", "bundle_fail_on_stop_dp",
+        "signing_file_not_next"};
 	
 	public static final String DEPLOYMENT_PACKAGE_NAME_ALL = "(name=*)";
 	public static final String BUNDLE_NAME_ALL = "(name=*)";
 	public static final String DEPLOYMENT_PACKAGE_NAME0 = "(name="+MAP_CODE_TO_DP[0]+")";
 	public static final String DEPLOYMENT_PACKAGE_NAME1 = "(&(name="+MAP_CODE_TO_DP[1]+")"+"(signer=-;"+SIGNER_FILTER+"))";
 	public static final String DEPLOYMENT_PACKAGE_NAME2 = "(&(name="+MAP_CODE_TO_DP[2]+")"+"(signer=-;"+SIGNER_FILTER+"))";
+    public static final String DEPLOYMENT_PACKAGE_NAME3 = "(&(name="+MAP_CODE_TO_DP[2]+")"+"(signer=-;"+SIGNER_FILTER_WILDCARD+"))";
+    public static final String DEPLOYMENT_PACKAGE_NAME4 = "(&(name="+MAP_CODE_TO_DP[0]+")"+"(signer=-;"+SIGNER_FILTER_INVALID1+"))";
+    public static final String DEPLOYMENT_PACKAGE_NAME5 = "(&(name="+MAP_CODE_TO_DP[0]+")"+"(signer=-;"+SIGNER_FILTER_INVALID2+"))";
 	
 	public static final String DEPLOYMENT_PACKAGE_DIFFERENT_SIGNATURE = "(&(name="+MAP_CODE_TO_DP[0]+")"+"(signer=-;"+"CN=CESAR.ORG.BR, OU=CIN, O=MOTOROLA, L=RECIFE, ST=PERNAMBUCO, C=BR))";
 	public static final String INVALID_DEPLOYMENT_PACKAGE_NAME = "name;CESAR signer,CA_CESAR";
@@ -87,9 +115,11 @@ public class DeploymentConstants {
 	public static final String BUNDLE_NAME_FILTER = "(name=bundle.tb1)";
 	public static final String BUNDLE_NAME_WRONG_FILTER = "(&(name=bundle.tb1)(location=-;osgi-dp: bundle001.jar))";
 	public static final String EXCEPTION_MESSAGE = "Unknown failure";
-	
-	
+    
 	// very large, we don't know what kind of devices the TCK will be executed
 	public static final int TIMEOUT = 180000;
+    
+    //set default value and then reset if present in TCK properties file
+    public static int SESSION_TIMEOUT = 1000;
 
 }

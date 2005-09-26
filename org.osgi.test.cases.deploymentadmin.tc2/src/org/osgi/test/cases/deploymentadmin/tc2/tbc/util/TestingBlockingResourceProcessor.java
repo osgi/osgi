@@ -29,42 +29,26 @@
  *
  * Date          Author(s)
  * CR            Headline
- * ============  ==============================================================
- * Apr 12, 2005  Alexandre Alves
- * 26            Implement MEG TCK
+ * ============   ==============================================================
+ * Aug 31, 2005  Andre Assad
+ * 179           Implement review issues  
  * ============  ==============================================================
  */
-package org.osgi.test.cases.deploymentadmin.tc2.tbc.DeploymentAdminPermission;
+package org.osgi.test.cases.deploymentadmin.tc2.tbc.util;
 
-import org.osgi.test.cases.deploymentadmin.tc2.tbc.DeploymentTestControl;
-import org.osgi.service.deploymentadmin.DeploymentAdminPermission;
+import org.osgi.service.deploymentadmin.ResourceProcessor;
+
 
 /**
- * This Test Class Validates the constants according to MEG specification.
+ * @author Andre Assad
+ *
+ * Helper interface for testing blocking sessions
+ * 
  */
-public class DeploymentAdminPermissionConstants {
-	private DeploymentTestControl tbc;
-
-	public DeploymentAdminPermissionConstants(DeploymentTestControl tbc) {
-		this.tbc = tbc;
-	}
-
-	public void run() {
-		testConstants001();
-	}
-
-	/**
-	 * Tests all constants values according to constants fields values.
-	 * 
-	 * @spec 114.14.3 
-	 */
-	public void testConstants001() {
-		tbc.log("#testConstants001");
-		tbc.assertEquals("Asserting ACTION_INSTALL value", "install", DeploymentAdminPermission.ACTION_INSTALL);
-		tbc.assertEquals("Asserting ACTION_CANCEL value", "cancel", DeploymentAdminPermission.ACTION_CANCEL);
-		tbc.assertEquals("Asserting ACTION_LIST value", "list", DeploymentAdminPermission.ACTION_LIST);
-		tbc.assertEquals("Asserting ACTION_UNINSTALL value", "uninstall", DeploymentAdminPermission.ACTION_UNINSTALL);
-		tbc.assertEquals("Asserting ACTION_UNINSTALL_FORCEFUL value", "uninstallForced", DeploymentAdminPermission.ACTION_UNINSTALL_FORCED);
-	}
-
+public interface TestingBlockingResourceProcessor extends ResourceProcessor {
+    
+    public boolean isReleased();
+    public void setReleased(boolean released);
+    public void waitForRelease();
+    
 }

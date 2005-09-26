@@ -50,7 +50,6 @@ import java.net.URL;
 import java.util.Dictionary;
 import java.util.HashMap;
 import java.util.Hashtable;
-
 import org.osgi.framework.Bundle;
 import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
@@ -59,6 +58,7 @@ import org.osgi.service.cm.ManagedServiceFactory;
 import org.osgi.service.deploymentadmin.DeploymentAdmin;
 import org.osgi.service.deploymentadmin.DeploymentException;
 import org.osgi.service.deploymentadmin.DeploymentPackage;
+import org.osgi.service.log.LogReaderService;
 import org.osgi.service.permissionadmin.PermissionAdmin;
 import org.osgi.service.permissionadmin.PermissionInfo;
 import org.osgi.test.cases.deploymentadmin.tc2.tbc.Configuration.Configuration;
@@ -66,6 +66,7 @@ import org.osgi.test.cases.deploymentadmin.tc2.tbc.DeploymentAdminPermission.Dep
 import org.osgi.test.cases.deploymentadmin.tc2.tbc.DeploymentCustomizerPermission.DeploymentCustomizerPermissionConstants;
 import org.osgi.test.cases.deploymentadmin.tc2.tbc.DeploymentException.DeploymentExceptionConstants;
 import org.osgi.test.cases.deploymentadmin.tc2.tbc.DeploymentSession.DeploymentSession;
+import org.osgi.test.cases.deploymentadmin.tc2.tbc.DeploymentSession.InstallSession;
 import org.osgi.test.cases.deploymentadmin.tc2.tbc.Event.BundleListenerImpl;
 import org.osgi.test.cases.deploymentadmin.tc2.tbc.ResourceProcessor.ResourceProcessor;
 import org.osgi.test.cases.deploymentadmin.tc2.tbc.util.TestingBundle;
@@ -83,6 +84,7 @@ public class DeploymentTestControl extends DefaultTestBundleControl {
 
 	private DeploymentAdmin deploymentAdmin;
 	private PermissionAdmin permissionAdmin;
+    private LogReaderService logReader;
 	
 	private BundleListenerImpl bundleListener;
 	private boolean transactionalDA;
@@ -105,6 +107,8 @@ public class DeploymentTestControl extends DefaultTestBundleControl {
 		permissionAdmin = (PermissionAdmin) getContext().getService(getContext().getServiceReference(PermissionAdmin.class.getName()));
 		ServiceReference daServiveReference = getContext().getServiceReference(DeploymentAdmin.class.getName());
 		deploymentAdmin = (DeploymentAdmin) getContext().getService(daServiveReference);
+        
+        logReader = (LogReaderService)getContext().getService(getContext().getServiceReference(LogReaderService.class.getName()));
 		
 		createTestingDeploymentPackages();
 		setManagedServiceAndFactoryProperties();
@@ -178,9 +182,9 @@ public class DeploymentTestControl extends DefaultTestBundleControl {
 				TestingBundle[] bundles = {
 						new TestingBundle("bundles.tb1", "1.5", "bundle001.jar"),
 						new TestingBundle("bundles.tb2", "1.5", "bundle002.jar"),
-						new TestingBundle("org.osgi.test.cases.deployment.bundles.rp4","1.0", "rp_bundle4.jar") };
+						new TestingBundle("org.osgi.test.cases.deployment.bundles.rp3","1.0", "rp_bundle3.jar") };
 				TestingResource[] resources = { 
-						new TestingResource("simple_resource.xml", "org.osgi.test.cases.deployment.bundles.rp4") };
+						new TestingResource("simple_resource.xml", "org.osgi.test.cases.deployment.bundles.rp3") };
 				dp = new TestingDeploymentPackage(DeploymentConstants.MAP_CODE_TO_DP[DeploymentConstants.SIMPLE_DP], "1.0", "session_resource_processor.dp", bundles, resources);
 				packages.put(""+i, dp);
 				break;
@@ -212,6 +216,103 @@ public class DeploymentTestControl extends DefaultTestBundleControl {
 				packages.put(""+i, dp);
 				break;
 			}
+            case DeploymentConstants.BLOCK_SESSION_RESOURCE_PROCESSOR: {
+                TestingBundle[] bundles = {new TestingBundle(DeploymentConstants.PID_RESOURCE_PROCESSOR4, "1.0", "rp_bundle4.jar")};
+                TestingResource[] resources = {new TestingResource("conf.txt",DeploymentConstants.PID_RESOURCE_PROCESSOR4)};
+                dp = new TestingDeploymentPackage(DeploymentConstants.MAP_CODE_TO_DP[DeploymentConstants.BLOCK_SESSION_RESOURCE_PROCESSOR], "1.0.0", "block_session.dp", bundles, resources);
+                packages.put(""+i, dp);
+                break;
+            }
+            case DeploymentConstants.MANIFEST_NOT_1ST_FILE: {
+                TestingBundle[] bundles = {new TestingBundle("bundles.tb1", "1.0", "bundle001.jar"), new TestingBundle("bundles.tb2", "1.0", "bundle002.jar")};
+                dp = new TestingDeploymentPackage(DeploymentConstants.MAP_CODE_TO_DP[DeploymentConstants.MANIFEST_NOT_1ST_FILE], "1.0", "manifest_not_1st_file.dp", bundles);
+                packages.put(""+i, dp);
+                break;
+            }
+            case DeploymentConstants.RP_FROM_OTHER_DP: {
+                TestingBundle[] bundles = {new TestingBundle(DeploymentConstants.PID_RESOURCE_PROCESSOR1, "1.0", "rp_bundle1.jar")};
+                TestingResource[] resources = {new TestingResource("simple_resource.xml", DeploymentConstants.PID_RESOURCE_PROCESSOR1)};
+                dp = new TestingDeploymentPackage(DeploymentConstants.MAP_CODE_TO_DP[DeploymentConstants.RP_FROM_OTHER_DP], "1.0", "rp_from_other_dp.dp", bundles, resources);
+                packages.put(""+i, dp);
+                break;
+            }
+            case DeploymentConstants.BSN_DIFF_FROM_MANIFEST: {
+                TestingBundle[] bundles = {new TestingBundle("bundle_different_name.tb1", "1.0", "bundle001.jar")};
+                TestingResource[] resources = {new TestingResource("simple_resource.xml", DeploymentConstants.PID_RESOURCE_PROCESSOR3)};
+                dp = new TestingDeploymentPackage(DeploymentConstants.MAP_CODE_TO_DP[DeploymentConstants.BSN_DIFF_FROM_MANIFEST],
+                        "1.0", "bsn_dif_from_manifest.dp", bundles, resources);
+                packages.put(""+i, dp);
+                break;
+            }
+            case DeploymentConstants.BVERSION_DIFF_FROM_MANIFEST: {
+                TestingBundle[] bundles = {new TestingBundle("bundle.tb1.tb1", "9.9", "bundle001.jar")};
+                TestingResource[] resources = {new TestingResource("simple_resource.xml", DeploymentConstants.PID_RESOURCE_PROCESSOR3)};
+                dp = new TestingDeploymentPackage(DeploymentConstants.MAP_CODE_TO_DP[DeploymentConstants.BVERSION_DIFF_FROM_MANIFEST],
+                        "1.0", "bversion_dif_from_manifest.dp", bundles, resources);
+                packages.put(""+i, dp);
+                break;
+            }
+            case DeploymentConstants.INSTALL_FAIL_DP: {
+                TestingBundle[] bundles = {new TestingBundle("bundles.tb5", "1.0", "bundle005.jar")};
+                TestingResource[] resources = {new TestingResource("simple_resource.xml", DeploymentConstants.PID_RESOURCE_PROCESSOR3)};
+                dp = new TestingDeploymentPackage(DeploymentConstants.MAP_CODE_TO_DP[DeploymentConstants.INSTALL_FAIL_DP],
+                        "1.0", "installation_fails.dp", bundles, resources);
+                packages.put(""+i, dp);
+                break;
+            }
+            case DeploymentConstants.RESOURCE_PROCESSOR_RP3: {
+                TestingBundle[] bundles = {new TestingBundle(DeploymentConstants.PID_RESOURCE_PROCESSOR3, "1.0", "rp_bundle3.jar")};
+                dp = new TestingDeploymentPackage(DeploymentConstants.MAP_CODE_TO_DP[DeploymentConstants.RESOURCE_PROCESSOR_RP3],
+                        "1.0", "resource_processor_rp3.dp", bundles);
+                packages.put(""+i, dp);
+                break;
+            }
+            case DeploymentConstants.SIMPLE_RESOURCE_RP3: {
+                TestingResource[] resources = {new TestingResource("simple_resource.xml", DeploymentConstants.PID_RESOURCE_PROCESSOR3)};
+                dp = new TestingDeploymentPackage(DeploymentConstants.MAP_CODE_TO_DP[DeploymentConstants.SIMPLE_RESOURCE_RP3],
+                        "1.0.0", "simple_resource_rp3.dp", null, resources);
+                packages.put(""+i, dp);
+                break;
+            }
+            case DeploymentConstants.SIMPLE_BUNDLE_RES_DP: {
+                TestingBundle[] bundles = {new TestingBundle("bundles.tb1", "1.0", "bundle001.jar"), new TestingBundle("bundles.tb2", "1.0", "bundle002.jar"), new TestingBundle("bundles.tb3", "1.0", "bundle003.jar")};
+                TestingResource[] resources = {new TestingResource("simple_resource.xml", DeploymentConstants.PID_RESOURCE_PROCESSOR3), new TestingResource("conf.txt", DeploymentConstants.PID_RESOURCE_PROCESSOR3)};
+                dp = new TestingDeploymentPackage(DeploymentConstants.MAP_CODE_TO_DP[DeploymentConstants.SIMPLE_DP], "1.0.0", "simple_bundle_res.dp", bundles, resources);
+                packages.put(""+i, dp);
+                break;
+            }
+            case DeploymentConstants.SIMPLE_NO_BUNDLE_DP: {
+                TestingResource[] resources = {new TestingResource("simple_resource.xml", DeploymentConstants.PID_RESOURCE_PROCESSOR3)};
+                dp = new TestingDeploymentPackage(DeploymentConstants.MAP_CODE_TO_DP[DeploymentConstants.SIMPLE_DP], "1.0.0", "simple_no_bundle.dp", null, resources);
+                packages.put(""+i, dp);
+                break;
+            }
+            case DeploymentConstants.SIMPLE_NO_RESOURCE_DP: {
+                TestingBundle[] bundles = {new TestingBundle("bundles.tb1", "1.0", "bundle001.jar")};
+                dp = new TestingDeploymentPackage(DeploymentConstants.MAP_CODE_TO_DP[DeploymentConstants.SIMPLE_DP], "1.0.0", "simple_no_resource.dp", bundles);
+                packages.put(""+i, dp);
+                break;
+            }
+            case DeploymentConstants.BUNDLE_FAIL_RES_DP: {
+                TestingBundle[] bundles = {new TestingBundle("bundles.tb5", "1.0", "bundle005.jar"), new TestingBundle("bundles.tb1", "1.0", "bundle001.jar"), new TestingBundle("bundles.tb2", "1.0", "bundle002.jar")};
+                TestingResource[] resources = {new TestingResource("simple_resource.xml", DeploymentConstants.PID_RESOURCE_PROCESSOR3), new TestingResource("conf.txt", DeploymentConstants.PID_RESOURCE_PROCESSOR3)};
+                dp = new TestingDeploymentPackage(DeploymentConstants.MAP_CODE_TO_DP[DeploymentConstants.SIMPLE_DP], "1.0.0", "bundle_fail_res.dp", bundles, resources);
+                packages.put(""+i, dp);
+                break;
+            }
+            case DeploymentConstants.BUNDLE_FAIL_ON_STOP: {
+                TestingBundle[] bundles = {new TestingBundle("bundles.tb6", "1.0", "bundle006.jar"), new TestingBundle("bundles.tb1", "1.0", "bundle001.jar"), new TestingBundle("bundles.tb2", "1.0", "bundle002.jar")};
+                TestingResource[] resources = {new TestingResource("simple_resource.xml", DeploymentConstants.PID_RESOURCE_PROCESSOR3), new TestingResource("conf.txt", DeploymentConstants.PID_RESOURCE_PROCESSOR3)};
+                dp = new TestingDeploymentPackage(DeploymentConstants.MAP_CODE_TO_DP[DeploymentConstants.SIMPLE_DP], "1.0.0", "bundle_fail_on_stop_res.dp", bundles, resources);
+                packages.put(""+i, dp);
+                break;
+            }
+            case DeploymentConstants.SIGNING_FILE_NOT_NEXT: {
+                TestingBundle[] bundles = {new TestingBundle("bundles.tb1", "1.0", "bundle001.jar"), new TestingBundle("bundles.tb2", "1.0", "bundle002.jar")};
+                dp = new TestingDeploymentPackage(DeploymentConstants.MAP_CODE_TO_DP[DeploymentConstants.SIMPLE_DP], "1.0.0", "bundle_fail_on_stop_res.dp", bundles);
+                packages.put(""+i, dp);
+                break;
+            }
 			}
 		}
 	}
@@ -319,7 +420,12 @@ public class DeploymentTestControl extends DefaultTestBundleControl {
 	//DeploymentSession Test Cases
 	public void testDeploymentSession() {
 		new DeploymentSession(this).run();
-	}	
+	}
+    
+    //DeploymentSession Test Cases
+    public void testInstallSession() {
+        new InstallSession(this).run();
+    }   
 	
 	// ResourceProcessor Test Cases
 	public void testResourceProcessor() {
@@ -446,4 +552,13 @@ public class DeploymentTestControl extends DefaultTestBundleControl {
 		return bundleListener;
 	}
 
+    /**
+     * @return Returns the logReader.
+     */
+    public LogReaderService getLogReader() {
+        if (logReader==null)
+            throw new NullPointerException("Log Reader Service instance is null");
+        return logReader;
+        
+    }
 }

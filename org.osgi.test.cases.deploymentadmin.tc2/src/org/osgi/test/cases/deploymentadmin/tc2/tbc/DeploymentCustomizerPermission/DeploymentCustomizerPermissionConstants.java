@@ -60,7 +60,7 @@ public class DeploymentCustomizerPermissionConstants {
 	/**
 	 * Validates the values of the specified constants.
 	 * 
-	 * @spec 115.14.4
+	 * @spec 114.14.4
 	 */
 	private void testConstants001() {
 		tbc.log("#testConstants001");

@@ -38,11 +38,11 @@
 package org.osgi.test.cases.deploymentadmin.tc2.tbc.util;
 
 import java.io.File;
+import java.io.InputStream;
 
 import org.osgi.framework.Bundle;
 import org.osgi.service.deploymentadmin.DeploymentPackage;
 import org.osgi.service.deploymentadmin.ResourceProcessor;
-import org.osgi.util.tracker.ServiceTracker;
 
 /**
  * @author Andre Assad
@@ -51,8 +51,37 @@ import org.osgi.util.tracker.ServiceTracker;
  *
  */
 public interface TestingSessionResourceProcessor extends ResourceProcessor {
-	public File getDataFile(Bundle bundle);
+    
+	// TYPES
+    public static final int PROCESS = 0;
+    public static final int DROPPED = 1;
+    public static final int DROP_ALL_RESOURCES = 2;
+    public static final int PREPARE = 3;
+    public static final int COMMIT = 4;
+    public static final int ROLL_BACK = 5;
+    public static final int CANCEL = 6;
+    public static final int START = 7;
+    
+    public File getDataFile(Bundle bundle);
 	public DeploymentPackage getTargetDeploymentPackage();
 	public DeploymentPackage getSourceDeploymentPackage();
-	public ServiceTracker getTracker();
+    public String getResourceName();
+    public InputStream getResourceStream();
+    
+    public boolean isProcessed();
+    public boolean isDropped();
+    public boolean isDroppedAllResources();
+    public boolean isPrepared();
+    public boolean isCommited();
+    public boolean isRolledback();
+    public boolean isCancelled();
+    public boolean isStarted();
+    public void reset();
+    
+    public void setException(int type);
+    public void setTest(int type);
+    
+    public void waitForRelease(boolean waitAgain);
+    public void setReleased(boolean release);
+    public boolean isReleased();
 }

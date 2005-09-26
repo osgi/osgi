@@ -59,7 +59,7 @@ public class DeploymentExceptionConstants {
 	 * specified in DeploymentException) of the checked exception received when
 	 * something fails during any deployment processes.
 	 * 
-	 * @spec 115.14.5
+	 * @spec 114.14.5
 	 */
 	public void testConstants001() {
 		tbc.log("#testConstants001");
