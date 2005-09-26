@@ -51,7 +51,7 @@ import org.osgi.service.deploymentadmin.DeploymentException;
 import org.osgi.service.deploymentadmin.DeploymentSession;
 import org.osgi.service.deploymentadmin.ResourceProcessor;
 import org.osgi.test.cases.deploymentadmin.tc1.tbc.DeploymentConstants;
-import org.osgi.test.cases.util.DefaultTestBundleControl;
+import org.osgi.test.cases.deploymentadmin.tc1.tbc.DeploymentTestControl;
 
 /**
  * @author Andre Assad
@@ -62,9 +62,8 @@ import org.osgi.test.cases.util.DefaultTestBundleControl;
 public class ResourceProcessorImpl implements BundleActivator,ResourceProcessor {
 
 	private ServiceRegistration sr;
+    private DeploymentTestControl tbc;
 	
-	private DefaultTestBundleControl tbc;
-
 	
 	public void start(BundleContext bc) throws Exception {
 		Dictionary props = new Hashtable();
@@ -73,7 +72,7 @@ public class ResourceProcessorImpl implements BundleActivator,ResourceProcessor 
 
 		sr = bc.registerService(ResourceProcessor.class.getName(), this, props);
 		System.out.println("ResourceProcessor started.");
-
+        
 	}
 
 	public void stop(BundleContext bc) throws Exception {
@@ -95,7 +94,7 @@ public class ResourceProcessorImpl implements BundleActivator,ResourceProcessor 
 	}
 
 	public void dropAllResources() throws DeploymentException {
-
+		DeploymentConstants.DROPALLRESOURCES_COUNT++;
 	}
 
 	public void prepare() throws DeploymentException {
@@ -103,7 +102,7 @@ public class ResourceProcessorImpl implements BundleActivator,ResourceProcessor 
 	}
 
 	public void commit() {
-	
+		DeploymentConstants.COMMIT_COUNT++;
 	}
 
 	public void rollback() {

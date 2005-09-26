@@ -1,0 +1,27 @@
+Manifest-Version: 1.0
+DeploymentPackage-SymbolicName: simple_dp
+DeploymentPackage-Version: 1.2.0
+DeploymentPackage-Copyright: Motorola (c).
+DeploymentPackage-ContactAddress: Rua Bione, 220, Cais do Apolo - Bairro do Recife, Recife - PE, CEP: 50.030-390.
+DeploymentPackage-Description: A testing deployment package.
+DeploymentPackage-DocURL: www.cesar.org.br.
+DeploymentPackage-Vendor: CESAR.
+DeploymentPackage-License: www.cesar.org.br/megtck/license.html
+
+Name: bundle005.jar
+Bundle-SymbolicName: bundles.tb5
+Bundle-Version: 1.0
+
+Name: bundle001.jar
+Bundle-SymbolicName: bundles.tb1
+Bundle-Version: 1.0
+
+Name: bundle002.jar
+Bundle-SymbolicName: bundles.tb2
+Bundle-Version: 1.0
+
+Name: simple_resource.xml
+Resource-Processor: org.osgi.test.cases.deployment.bundles.rp3
+
+Name: conf.txt
+Resource-Processor: org.osgi.test.cases.deployment.bundles.rp3
