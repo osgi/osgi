@@ -63,6 +63,7 @@ public class DeploymentEventHandlerImpl implements EventHandler {
 	private Event event;
 	private boolean handlingComplete;
 	private boolean handlingUninstall;
+    private boolean verifying;
 	
 	public DeploymentEventHandlerImpl(DeploymentTestControl tbc) {
 		this.tbc = tbc;
@@ -89,26 +90,33 @@ public class DeploymentEventHandlerImpl implements EventHandler {
 
 	public void handleEvent(Event event) {
 		String topic = event.getTopic();
-
-		if (!handlingComplete && !handlingUninstall && topic.equals(TOPIC_INSTALL)) {
-			install = true;
-			this.event = event;
-			synchronized (tbc) {
-				tbc.notifyAll();
-			}
-		} else if (!handlingComplete && handlingUninstall && topic.equals(TOPIC_UNINSTALL)){
-			this.event = event;
-			uninstall = true;
-			synchronized (tbc) {
-				tbc.notifyAll();
-			}
-		} else if ((handlingComplete && topic.equals(TOPIC_COMPLETE))) {
-			this.event = event;
-			complete = true;
-			synchronized (tbc) {
-				tbc.notifyAll();
-			}
-		}
+        
+        if (verifying) {
+            if (!handlingComplete && !handlingUninstall
+                && topic.equals(TOPIC_INSTALL))
+            {
+                install = true;
+                this.event = event;
+                synchronized (tbc) {
+                    tbc.notifyAll();
+                }
+            } else if (!handlingComplete && handlingUninstall
+                && topic.equals(TOPIC_UNINSTALL))
+            {
+                this.event = event;
+                uninstall = true;
+                synchronized (tbc) {
+                    tbc.notifyAll();
+                }
+            } else if ((handlingComplete && topic.equals(TOPIC_COMPLETE))) {
+                this.event = event;
+                complete = true;
+                synchronized (tbc) {
+                    tbc.notifyAll();
+                }
+            }
+        } else
+            ; // do nothing
 	}
 
 	/**
@@ -153,6 +161,7 @@ public class DeploymentEventHandlerImpl implements EventHandler {
 		this.uninstall = false;
 		this.complete = false;
 		this.event = null;
+		this.verifying = false;
 	}
 	/**
 	 * @return Returns the handlingUninstall.
@@ -166,4 +175,16 @@ public class DeploymentEventHandlerImpl implements EventHandler {
 	public void setHandlingUninstall(boolean handlingUninstall) {
 		this.handlingUninstall = handlingUninstall;
 	}
+    /**
+     * @return Returns the verifying.
+     */
+    public boolean isVerifying() {
+        return verifying;
+    }
+    /**
+     * @param verifying The verifying to set.
+     */
+    public void setVerifying(boolean verifying) {
+        this.verifying = verifying;
+    }
 }

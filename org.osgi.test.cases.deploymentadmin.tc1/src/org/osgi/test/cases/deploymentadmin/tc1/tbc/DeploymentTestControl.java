@@ -52,10 +52,10 @@ import java.io.OutputStream;
 import java.net.MalformedURLException;
 import java.net.SocketPermission;
 import java.net.URL;
+import java.security.AllPermission;
 import java.util.Dictionary;
 import java.util.HashMap;
 import java.util.PropertyPermission;
-
 import org.osgi.framework.AdminPermission;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.InvalidSyntaxException;
@@ -80,6 +80,7 @@ import org.osgi.test.cases.deploymentadmin.tc1.tbc.DeploymentPackage.GetResource
 import org.osgi.test.cases.deploymentadmin.tc1.tbc.DeploymentPackage.GetResources;
 import org.osgi.test.cases.deploymentadmin.tc1.tbc.DeploymentPackage.GetVersion;
 import org.osgi.test.cases.deploymentadmin.tc1.tbc.DeploymentPackage.IsStale;
+import org.osgi.test.cases.deploymentadmin.tc1.tbc.DeploymentPackage.ManifestFormat;
 import org.osgi.test.cases.deploymentadmin.tc1.tbc.DeploymentPackage.SystemDeploymentPackage;
 import org.osgi.test.cases.deploymentadmin.tc1.tbc.Event.BundleListenerImpl;
 import org.osgi.test.cases.deploymentadmin.tc1.tbc.Event.DeploymentEventHandlerActivator;
@@ -87,6 +88,7 @@ import org.osgi.test.cases.deploymentadmin.tc1.tbc.Event.DeploymentEventHandlerI
 import org.osgi.test.cases.deploymentadmin.tc1.tbc.util.TestingBundle;
 import org.osgi.test.cases.deploymentadmin.tc1.tbc.util.TestingDeploymentPackage;
 import org.osgi.test.cases.deploymentadmin.tc1.tbc.util.TestingResource;
+import org.osgi.test.cases.deploymentadmin.tc1.tbc.util.TestingRollbackCall;
 import org.osgi.test.cases.util.DefaultTestBundleControl;
 
 /**
@@ -99,7 +101,6 @@ public class DeploymentTestControl extends DefaultTestBundleControl {
 	private ResourceProcessor resourceProcessor;
 	private PermissionAdmin permissionAdmin;
 	private TB1Service tb1Srv;
-	private DeploymentEventHandlerImpl deploymentEventHandler;
 	
 	private ServiceReference tb1ServiceRef;
 	private BundleListenerImpl bundleListener;
@@ -108,6 +109,9 @@ public class DeploymentTestControl extends DefaultTestBundleControl {
 	private HashMap packages = new HashMap();
 	private Dictionary managedProps;
 	private Dictionary managedFactoryProps;
+    
+    private DeploymentEventHandlerImpl deploymentEventHandler;
+    private PermissionWorker permWorker;
 	
 	/**
 	 * <remove>Prepare for each run. It is important that a test run is properly
@@ -124,7 +128,7 @@ public class DeploymentTestControl extends DefaultTestBundleControl {
 		permissionAdmin = (PermissionAdmin) getContext().getService(getContext().getServiceReference(PermissionAdmin.class.getName()));
 		ServiceReference daServiveReference = getContext().getServiceReference(DeploymentAdmin.class.getName());
 		deploymentAdmin = (DeploymentAdmin) getContext().getService(daServiveReference);
-		
+        
 		try {
 			
 			install("tb1.jar");
@@ -133,17 +137,24 @@ public class DeploymentTestControl extends DefaultTestBundleControl {
 				testClasses = tb1Srv.getTestClasses(this);
 			}
 		} catch (Exception e) {
-			System.out.println("failed to install bundle tb1.jar");
+			log("Failed to install bundle tb1.jar");
 		}
-		
+        
 		createTestingDeploymentPackages();
 		setBundleServicePermissions();
-		installHandlersAndListeners();
-
+        startPermissionWorker();
+        installHandlersAndListeners();
 	}
 	
+    /**
+     * 
+     */
+    private void startPermissionWorker() {
+        permWorker = new PermissionWorker(this);
+        permWorker.start();
+    }
 
-	/**
+    /**
 	 * Sets permissions to resource processors bundles installed in deployment packages
 	 */
 	private void setBundleServicePermissions() {
@@ -164,16 +175,19 @@ public class DeploymentTestControl extends DefaultTestBundleControl {
 
 	private void installHandlersAndListeners() {
 		try {
-			deploymentEventHandler = new DeploymentEventHandlerImpl(this);
-			DeploymentEventHandlerActivator testDeploymentEventHandler = new DeploymentEventHandlerActivator(deploymentEventHandler);
-			testDeploymentEventHandler.start(getContext());
+            bundleListener = new BundleListenerImpl(this);
+            getContext().addBundleListener(bundleListener);
+            
+            deploymentEventHandler = new DeploymentEventHandlerImpl(this);
+            DeploymentEventHandlerActivator act = new DeploymentEventHandlerActivator(deploymentEventHandler);
+            act.start(getContext());
 		} catch (Exception e) {
 			log("#TestControl: Failed starting Handles and Listeners");
 		}
 	}
 	
 	/**
-	 * 
+	 * Generate Testing Deployment Packages
 	 */
 	private void createTestingDeploymentPackages() {
 		TestingDeploymentPackage dp = null;
@@ -344,7 +358,7 @@ public class DeploymentTestControl extends DefaultTestBundleControl {
 			}
 			case DeploymentConstants.WRONG_FORMAT_DP: {
 				TestingBundle[] bundles = {new TestingBundle("bundles.tb1", "1.0", "bundle001.jar"), new TestingBundle("bundles.tb2", "1.0", "bundle002.jar")};
-				dp = new TestingDeploymentPackage(DeploymentConstants.MAP_CODE_TO_DP[DeploymentConstants.WRONG_FORMAT_DP], "1.0", "wrong_format.jar", bundles);
+				dp = new TestingDeploymentPackage(DeploymentConstants.MAP_CODE_TO_DP[DeploymentConstants.WRONG_FORMAT_DP], "1.0", "wrong_format.wrg", bundles);
 				packages.put(""+i, dp);
 				break;
 			}
@@ -361,38 +375,157 @@ public class DeploymentTestControl extends DefaultTestBundleControl {
 				break;
 			}
 			case DeploymentConstants.WRONG_VERSION_DP: {
-				TestingBundle[] bundles = {new TestingBundle("bundles.tb1", "1.0", "bundle001.jar"), new TestingBundle("bundles.tb2", "1.0", "bundle002.jar")};
+				TestingBundle[] bundles = {new TestingBundle("bundles.tb1", "1.0", "bundle001.jar")};
 				dp = new TestingDeploymentPackage(DeploymentConstants.MAP_CODE_TO_DP[DeploymentConstants.WRONG_VERSION_DP], "1.0", "wrong_version.dp", bundles);
 				packages.put(""+i, dp);
 				break;
 			}
-
 			case DeploymentConstants.SIMPLE_UNINSTALL_BUNDLE_DP: {
 				dp = new TestingDeploymentPackage(DeploymentConstants.MAP_CODE_TO_DP[DeploymentConstants.SIMPLE_DP], "1.1.1", "simple_uninstall_bundle.dp", null);
 				packages.put(""+i, dp);
 				break;
 			}
-
 			case DeploymentConstants.BUNDLE_THROWS_EXCEPTION_DP: {
 				TestingBundle[] bundles = {new TestingBundle("bundles.tb5", "1.0", "bundle005.jar")};
 				dp = new TestingDeploymentPackage(DeploymentConstants.MAP_CODE_TO_DP[DeploymentConstants.BUNDLE_THROWS_EXCEPTION_DP], "1.0.0", "bundle_throws_exception.dp", bundles);
 				packages.put(""+i, dp);
 				break;
 			}
-			
 			case DeploymentConstants.BUNDLE_THROWS_EXCEPTION_STOP_DP: {
 				TestingBundle[] bundles = {new TestingBundle("bundles.tb6", "1.0", "bundle006.jar")};
 				dp = new TestingDeploymentPackage(DeploymentConstants.MAP_CODE_TO_DP[DeploymentConstants.BUNDLE_THROWS_EXCEPTION_STOP_DP], "1.0.0", "bundle_throws_exception.dp", bundles);
 				packages.put(""+i, dp);
 				break;
 			}
-			
 			case DeploymentConstants.BUNDLE_DOESNT_THROW_EXCEPTION_DP: {
 				TestingBundle[] bundles = {new TestingBundle("bundles.tb5", "1.0", "bundle005.jar")};
 				dp = new TestingDeploymentPackage(DeploymentConstants.MAP_CODE_TO_DP[DeploymentConstants.BUNDLE_THROWS_EXCEPTION_DP], "1.0.0", "bundle_doesnt_throw_exception.dp", bundles);
 				packages.put(""+i, dp);
 				break;
 			}
+            case DeploymentConstants.BLOCK_SESSION_RESOURCE_PROCESSOR: {
+                TestingBundle[] bundles = {new TestingBundle(DeploymentConstants.PID_RESOURCE_PROCESSOR3, "1.0", "rp_bundle4.jar")};
+                TestingResource[] resources = {new TestingResource("conf.txt",DeploymentConstants.PID_RESOURCE_PROCESSOR3)};
+                dp = new TestingDeploymentPackage(DeploymentConstants.MAP_CODE_TO_DP[DeploymentConstants.BLOCK_SESSION_RESOURCE_PROCESSOR], "1.0.0", "block_session.dp", bundles, resources);
+                packages.put(""+i, dp);
+                break;
+            }
+            case DeploymentConstants.VERSION_DIFFERENT_FROM_MANIFEST_DP: {
+                TestingBundle[] bundles = {new TestingBundle("bundles.tb1","1.0", "bundle001.jar")};
+                dp = new TestingDeploymentPackage(DeploymentConstants.MAP_CODE_TO_DP[DeploymentConstants.VERSION_DIFFERENT_FROM_MANIFEST_DP], "1.0", "version_dif_from_manifest_dp.dp", bundles);
+                packages.put("" + i, dp);
+                break;
+            }
+            case DeploymentConstants.MISSING_B_VERSION_HEADER: {
+                TestingBundle[] bundles = {new TestingBundle("bundles.tb1", "1.0", "bundle001.jar")};
+                dp = new TestingDeploymentPackage(DeploymentConstants.MAP_CODE_TO_DP[DeploymentConstants.SIMPLE_DP], "1.0", "missing_name_header.dp", bundles);
+                packages.put(""+i, dp);
+                break;
+            }
+            case DeploymentConstants.MISSING_BSN_HEADER: {
+                TestingBundle[] bundles = {new TestingBundle("bundles.tb1", "1.0", "bundle001.jar")};
+                dp = new TestingDeploymentPackage(DeploymentConstants.MAP_CODE_TO_DP[DeploymentConstants.SIMPLE_DP], "1.0", "missing_name_header.dp", bundles);
+                packages.put(""+i, dp);
+                break;
+            }
+            case DeploymentConstants.MISSING_FIX_PACK_HEADER: {
+                TestingBundle[] bundles = {new TestingBundle("bundles.tb1", "1.0", "bundle001.jar")};
+                dp = new TestingDeploymentPackage(DeploymentConstants.MAP_CODE_TO_DP[DeploymentConstants.SIMPLE_DP], "1.0", "missing_name_header.dp", bundles);
+                packages.put(""+i, dp);
+                break;
+            }
+            case DeploymentConstants.MISSING_RES_NAME_HEADER: {
+                TestingBundle[] bundles = {new TestingBundle("bundles.tb1", "1.0", "bundle001.jar")};
+                dp = new TestingDeploymentPackage(DeploymentConstants.MAP_CODE_TO_DP[DeploymentConstants.SIMPLE_DP], "1.0", "missing_name_header.dp", bundles);
+                packages.put(""+i, dp);
+                break;
+            }
+            case DeploymentConstants.MISSING_VERSION_HEADER: {
+                TestingBundle[] bundles = {new TestingBundle("bundles.tb1", "1.0", "bundle001.jar")};
+                dp = new TestingDeploymentPackage(DeploymentConstants.MAP_CODE_TO_DP[DeploymentConstants.SIMPLE_DP], "1.0", "missing_name_header.dp", bundles);
+                packages.put(""+i, dp);
+                break;
+            }
+            case DeploymentConstants.SIMPLE_RESOURCE_PROCESSOR_UNINSTALL: {
+                TestingBundle[] bundles = {new TestingBundle(DeploymentConstants.PID_RESOURCE_PROCESSOR4, "1.0", "rp_bundle4.jar")};
+                dp = new TestingDeploymentPackage(DeploymentConstants.MAP_CODE_TO_DP[i], "1.0", "simple_resource_processor_uninstall.dp", bundles);
+                packages.put(""+i, dp);
+                break;
+            }           
+            case DeploymentConstants.SIMPLE_RESOURCE_UNINSTALL_DP: {
+                TestingResource[] resources = {new TestingResource("conf.txt",DeploymentConstants.PID_RESOURCE_PROCESSOR4)};
+                dp = new TestingDeploymentPackage(DeploymentConstants.MAP_CODE_TO_DP[i], "1.0", "simple_resource_uninstall.dp", null, resources);
+                packages.put(""+i, dp);
+                break;
+            }
+            case DeploymentConstants.WRONG_BSN: {
+                TestingBundle[] bundles = {new TestingBundle("bundles.tb1", "1.0", "bundle001.jar")};
+                dp = new TestingDeploymentPackage(DeploymentConstants.MAP_CODE_TO_DP[DeploymentConstants.WRONG_BSN], "1.0", "wrong_bsn.dp", bundles);
+                packages.put(""+i, dp);
+                break;
+            }
+            case DeploymentConstants.WRONG_BVERSION: {
+                TestingBundle[] bundles = {new TestingBundle("bundles.tb1", "1.0", "bundle001.jar")};
+                dp = new TestingDeploymentPackage(DeploymentConstants.MAP_CODE_TO_DP[DeploymentConstants.WRONG_BVERSION], "1.0", "wrong_bversion.dp", bundles);
+                packages.put(""+i, dp);
+                break;
+            }
+            case DeploymentConstants.WRONG_CUSTOMIZER: {
+                TestingBundle[] bundles = {new TestingBundle("bundles.tb1", "1.0", "bundle001.jar")};
+                dp = new TestingDeploymentPackage(DeploymentConstants.MAP_CODE_TO_DP[DeploymentConstants.WRONG_CUSTOMIZER], "1.0", "wrong_customizer.dp", bundles);
+                packages.put(""+i, dp);
+                break;
+            }
+            case DeploymentConstants.WRONG_DP_MISSING: {
+                TestingBundle[] bundles = {new TestingBundle("bundles.tb1", "1.0", "bundle001.jar")};
+                dp = new TestingDeploymentPackage(DeploymentConstants.MAP_CODE_TO_DP[DeploymentConstants.WRONG_DP_MISSING], "1.0", "wrong_dp_missing.dp", bundles);
+                packages.put(""+i, dp);
+                break;
+            }
+            case DeploymentConstants.WRONG_FIX_PACK: {
+                TestingBundle[] bundles = {new TestingBundle("bundles.tb1", "1.0", "bundle001.jar")};
+                dp = new TestingDeploymentPackage(DeploymentConstants.MAP_CODE_TO_DP[DeploymentConstants.WRONG_FIX_PACK], "1.0", "wrong_fix_pack.dp", bundles);
+                packages.put(""+i, dp);
+                break;
+            }
+            case DeploymentConstants.WRONG_NAME: {
+                TestingBundle[] bundles = {new TestingBundle("bundles.tb1", "1.0", "bundle001.jar")};
+                dp = new TestingDeploymentPackage(DeploymentConstants.MAP_CODE_TO_DP[DeploymentConstants.WRONG_NAME], "1.0", "wrong_name.dp", bundles);
+                packages.put(""+i, dp);
+                break;
+            }
+            case DeploymentConstants.WRONG_RP: {
+                TestingBundle[] bundles = {new TestingBundle("bundles.tb1", "1.0", "bundle001.jar")};
+                dp = new TestingDeploymentPackage(DeploymentConstants.MAP_CODE_TO_DP[DeploymentConstants.WRONG_RP], "1.0", "wrong_rp.dp", bundles);
+                packages.put(""+i, dp);
+                break;
+            }
+            case DeploymentConstants.SESSION_TEST_DP: {
+                TestingBundle[] bundles = {new TestingBundle("org.osgi.test.cases.deployment.bundles.rp1", "1.0", "rp_bundle.jar"), new TestingBundle("org.osgi.test.cases.deployment.bundles.rp2", "1.0", "rp_bundle2.jar")};
+                TestingResource[] resources = {new TestingResource("simple_resource.xml","org.osgi.test.cases.deployment.bundles.rp1"), new TestingResource("conf.txt","org.osgi.test.cases.deployment.bundles.rp2")};
+                dp = new TestingDeploymentPackage(DeploymentConstants.MAP_CODE_TO_DP[DeploymentConstants.SESSION_TEST_DP], "1.0", "session_test.dp", bundles, resources);
+                packages.put(""+i, dp);
+                break;
+            }
+            case DeploymentConstants.RESOURCE_PROCESSOR_2_DP: {
+                TestingBundle[] bundles = {new TestingBundle(DeploymentConstants.PID_RESOURCE_PROCESSOR2, "1.0", "rp_bundle2.jar")};
+                dp = new TestingDeploymentPackage(DeploymentConstants.MAP_CODE_TO_DP[DeploymentConstants.RESOURCE_PROCESSOR_2_DP], "1.0.0", "resource_processor2.dp", bundles);
+                packages.put(""+i, dp);
+                break;
+            }
+            case DeploymentConstants.STRANGE_PATH_DP: {
+                TestingBundle[] bundles = {new TestingBundle("bundles.tb1", "1.0", "bundle001.jar")};
+                dp = new TestingDeploymentPackage(DeploymentConstants.MAP_CODE_TO_DP[DeploymentConstants.STRANGE_PATH_DP], "1.0", "strange_path.dp", bundles);
+                packages.put(""+i, dp);
+                break;
+            }
+            case DeploymentConstants.LOCALIZED_DP: {
+                TestingBundle[] bundles = {new TestingBundle("bundles.tb3", "1.0", "bundle003.jar")};
+                TestingResource[] resources = {new TestingResource("OSGi-INF/I10n/dp.properties",null)};
+                dp = new TestingDeploymentPackage(DeploymentConstants.MAP_CODE_TO_DP[DeploymentConstants.LOCALIZED_DP], "1.0", "localized.dp", bundles, resources);
+                packages.put(""+i, dp);
+                break;
+            }
 			}
 		}
 	}
@@ -488,6 +621,17 @@ public class DeploymentTestControl extends DefaultTestBundleControl {
 	public void testDeploymentAdminUninstallDeploymentPackage() {
 		testClasses[5].run();
 	}
+    
+    // UninstallDeploymentPackage
+    public void testDeploymentAdminCancel() {
+      testClasses[6].run();
+    }
+    
+    // UninstallDeploymentPackage
+    public void testInstallExceptions() {
+        testClasses[7].run();
+    }
+
 	// DeploymentPackage Test Cases
 	// Equals
 	public void testDeploymentPackageEquals() {
@@ -542,6 +686,11 @@ public class DeploymentTestControl extends DefaultTestBundleControl {
 	public void testSystemDeploymentPackage() {
 		new SystemDeploymentPackage(this).run();
 	}
+    
+    //Manifest Format
+    public void testManifestFormat() {
+        new ManifestFormat(this).run();
+    }
 	
 	/**
 	 * @return Returns the permissionAdmin.
@@ -572,6 +721,30 @@ public class DeploymentTestControl extends DefaultTestBundleControl {
 		}
 		return null;
 	}
+    
+    public DeploymentPackage installDeploymentPackageAndNotify(String urlStr) throws DeploymentException, SecurityException {
+        InputStream in = null;
+        URL url = null;
+        try {
+            url = new URL(urlStr);
+            in = url.openStream();
+            synchronized (this) {
+                this.notifyAll();
+            }
+            return getDeploymentAdmin().installDeploymentPackage(in);
+        } catch (MalformedURLException e) {
+            fail("Failed to open the URL");
+        } catch (IOException e) {
+            fail("Failed to open an InputStream");
+        } finally {
+            if (in != null)
+                try {
+                    in.close();
+                } catch (Exception e1) {
+                }
+        }
+        return null;
+    }
 	
 	public DeploymentPackage installDeploymentPackage(String urlStr, String rename) throws DeploymentException, SecurityException {
 		URL url = null;
@@ -618,10 +791,10 @@ public class DeploymentTestControl extends DefaultTestBundleControl {
 			uninstall(dps[i]);
 		}
 	}
+    
 	public void uninstall(DeploymentPackage dp) {
 		if ((dp != null)&&!dp.isStale()) {
 			try {
-				setDeploymentAdminPermission("(name="+dp.getName()+")", DeploymentConstants.ALL_PERMISSION);
 				dp.uninstall();
 			} catch (DeploymentException e) {
 				log("#Deployment Package could not be uninstalled. Uninstalling forcefully...");
@@ -629,6 +802,7 @@ public class DeploymentTestControl extends DefaultTestBundleControl {
 			} 
 		}
 	}
+    
 	public Bundle getBundle(String name) {
 		Bundle bundle = null;
 		Bundle[] bundles = getContext().getBundles();
@@ -644,59 +818,117 @@ public class DeploymentTestControl extends DefaultTestBundleControl {
 		}
 		return bundle;
 	}
+    
+    public synchronized void cleanUp(DeploymentPackage dp) {
+        setDeploymentAdminPermission(
+            DeploymentConstants.DEPLOYMENT_PACKAGE_NAME_ALL,
+            DeploymentConstants.ALL_PERMISSION);
+        try {
+            wait(1000);
+            uninstall(dp);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        
+    }
 
-	/**
+    /**
+     * Give All Permission to TBC
+     */
+    private void setAllPermission() {
+        PermissionInfo[] all = {new PermissionInfo(AllPermission.class.getName(), "<all permissions>", "<all actions>")};
+        setPermissionInfo(bundleLocation, all);
+    }
+    
+    /**
 	 * Set the DeploymentAdminPermission for the caller
 	 */
 	public void setDeploymentAdminPermission(String name, String perm) {
-		getPermissionAdmin().setPermissions(bundleLocation,
-						new PermissionInfo[] {
-							new PermissionInfo(PackagePermission.class.getName(), "*", "EXPORT, IMPORT"),
-								// to find the Deployment Admin
-								new PermissionInfo(ServicePermission.class.getName(), "*", "GET"),
-								// to load files that are passed to the Deployment Admin
-								new PermissionInfo(FilePermission.class.getName(), "<<ALL FILES>>", "READ, WRITE, EXECUTE, DELETE"),
-								// to access deployment admin
-								new PermissionInfo(DeploymentAdminPermission.class.getName(), name, perm),
-								// to manipulate bundles
-								new PermissionInfo(AdminPermission.class.getName(), "*", "*"),
-								// to connect to director webserver
-								new PermissionInfo(SocketPermission.class.getName(), "*", "accept,connect,listen,resolve"),
-								// to read, write in properties whenever necessary
-								new PermissionInfo(PropertyPermission.class.getName(), "*", "read,write")
-								});
+        PermissionInfo[] info = new PermissionInfo[] {
+            new PermissionInfo(PackagePermission.class.getName(), "*", "EXPORT, IMPORT"),
+                // to find the Deployment Admin
+                new PermissionInfo(ServicePermission.class.getName(), "*", "GET"),
+                // to load files that are passed to the Deployment Admin
+                new PermissionInfo(FilePermission.class.getName(), "<<ALL FILES>>", "READ, WRITE, EXECUTE, DELETE"),
+                // to access deployment admin
+                new PermissionInfo(DeploymentAdminPermission.class.getName(), name, perm),
+                // to manipulate bundles
+                new PermissionInfo(AdminPermission.class.getName(), "*", "*"),
+                // to connect to director webserver
+                new PermissionInfo(SocketPermission.class.getName(), "*", "accept,connect,listen,resolve"),
+                // to read, write in properties whenever necessary
+                new PermissionInfo(PropertyPermission.class.getName(), "*", "read,write"),
+                // to allow tb1 to reset permissions
+                new PermissionInfo(AllPermission.class.getName(), "<all permissions>", "<all actions>")
+                };
+        
+        permWorker.setLocation(bundleLocation);
+        permWorker.setPermissions(info);
+        synchronized (permWorker) {
+            permWorker.notifyAll();
+        }
 	}
-	
-	/**
-	 * Set the a PermissionInfo for a bundle location for the caller
-	 */
-	public void setPermissionInfo(String location, PermissionInfo[] info) {
-		getPermissionAdmin().setPermissions(location, info);
-	}
+    
+    /**
+     * Sets a PermissionInfo for a resource processor bundle
+     * @param location
+     * @param name filter
+     */
+    public void setCustomizerPermission(String location, String filter) {
+        PermissionInfo info[] = {
+                new PermissionInfo(DeploymentCustomizerPermission.class.getName(), filter,
+                        DeploymentCustomizerPermission.ACTION_PRIVATEAREA),
+                new PermissionInfo(ServicePermission.class.getName(), "*",ServicePermission.GET + ","
+                                + ServicePermission.REGISTER),
+                new PermissionInfo(AdminPermission.class.getName(), "*", "*"),
+                new PermissionInfo(PackagePermission.class.getName(), "*", "EXPORT, IMPORT"),
+                new PermissionInfo(FilePermission.class.getName(), "<<ALL FILES>>", "READ, WRITE, EXECUTE, DELETE"), };
+
+        permWorker.setLocation(location);
+        permWorker.setPermissions(info);
+        synchronized (permWorker) {
+            permWorker.notifyAll();
+        }
+    }
 	
 	/**
 	 * Give's the Resource Processors the right to access a bundle's private
 	 * area and set the DeploymentAdminPermission for the caller.
 	 */
 	public void setDeploymentAdminAndCustomizerPermission(String dpName, String DAaction, String bundleName, String customizerAction) {
-		getPermissionAdmin().setPermissions(bundleLocation,
-						new PermissionInfo[] {
-								new PermissionInfo(PackagePermission.class.getName(), "*", "EXPORT, IMPORT"),
-								// to find the Deployment Admin
-								new PermissionInfo(ServicePermission.class.getName(), "*", "GET"),
-								// to load files that are passed to the Deployment Admin
-								new PermissionInfo(FilePermission.class.getName(), "<<ALL FILES>>", "READ, WRITE, EXECUTE, DELETE"),
-								// to access deployment admin
-								new PermissionInfo(DeploymentAdminPermission.class.getName(), dpName, DAaction),
-								// to manipulate bundles
-								new PermissionInfo(AdminPermission.class.getName(), "*", "*"),
-								// to connect to director webserver
-								new PermissionInfo(SocketPermission.class.getName(), "*", "accept,connect,listen,resolve"),
-								// to read, write in properties whenever necessary
-								new PermissionInfo(PropertyPermission.class.getName(), "*", "read,write"),
-								// to give Resource Processors the right to access a bundle's private area
-								new PermissionInfo(DeploymentCustomizerPermission.class.getName(), bundleName, customizerAction), });
-	}
+        PermissionInfo[] info = new PermissionInfo[] {
+            new PermissionInfo(PackagePermission.class.getName(), "*", "EXPORT, IMPORT"),
+            // to find the Deployment Admin
+            new PermissionInfo(ServicePermission.class.getName(), "*", "GET"),
+            // to load files that are passed to the Deployment Admin
+            new PermissionInfo(FilePermission.class.getName(), "<<ALL FILES>>", "READ, WRITE, EXECUTE, DELETE"),
+            // to access deployment admin
+            new PermissionInfo(DeploymentAdminPermission.class.getName(), dpName, DAaction),
+            // to manipulate bundles
+            new PermissionInfo(AdminPermission.class.getName(), "*", "*"),
+            // to connect to director webserver
+            new PermissionInfo(SocketPermission.class.getName(), "*", "accept,connect,listen,resolve"),
+            // to read, write in properties whenever necessary
+            new PermissionInfo(PropertyPermission.class.getName(), "*", "read,write"),
+            // to give Resource Processors the right to access a bundle's private area
+            new PermissionInfo(DeploymentCustomizerPermission.class.getName(), bundleName, customizerAction), 
+            // to allow tb1 to reset permissions
+            new PermissionInfo(AllPermission.class.getName(), "<all permissions>", "<all actions>")
+            };
+        
+        permWorker.setLocation(bundleLocation);
+        permWorker.setPermissions(info);
+        synchronized (permWorker) {
+            permWorker.notifyAll();
+        }
+    }
+    
+    /**
+     * Set the a PermissionInfo for a bundle location for the caller
+     */
+    public void setPermissionInfo(String location, PermissionInfo[] info) {
+        getPermissionAdmin().setPermissions(location, info);
+    }
 	
 	/**
 	 * @return Returns the tb1Srv.
@@ -722,14 +954,15 @@ public class DeploymentTestControl extends DefaultTestBundleControl {
 	 * @return Returns the deploymentEventHandler.
 	 */
 	public DeploymentEventHandlerImpl getDeploymentEventHandler() {
-		if (deploymentEventHandler==null)
-			throw new NullPointerException("DeploymentEventHandler implementation is null"); 
-		return deploymentEventHandler;
-	}
+        if (deploymentEventHandler == null) {
+            throw new NullPointerException("Deployment Event Handler is null"); 
+        }
+        return deploymentEventHandler;
+    }
 
 	/**
-	 * @return Returns the managedFactoryProps.
-	 */
+     * @return Returns the managedFactoryProps.
+     */
 	public Dictionary getManagedFactoryProps() {
 		return managedFactoryProps;
 	}
@@ -744,9 +977,24 @@ public class DeploymentTestControl extends DefaultTestBundleControl {
 	 * @return Returns the bundleEventHandler.
 	 */
 	public BundleListenerImpl getBundleListener() {
+        BundleListenerImpl registered = null;
 		if (bundleListener==null)
 			throw new NullPointerException("BundleListener implementation instance is null");
-		return bundleListener;
+        return bundleListener;
 	}
-
+    
+    /**
+     * @return Returns a TestingSessionResourceProcessor instance.
+     * @throws InvalidSyntaxException 
+     */
+    public Object getServiceInstance(String pid) throws InvalidSyntaxException {
+        ServiceReference[] sr = getContext().getServiceReferences(
+            ResourceProcessor.class.getName(), "(service.pid=" + pid + ")");
+        
+        return (sr!=null)?getContext().getService(sr[0]):null;
+    }
+    
+    public TestingRollbackCall getTestingRollbackCall() throws Exception {
+        return (TestingRollbackCall) getService(ResourceProcessor.class, "(service.pid=" + DeploymentConstants.PID_RESOURCE_PROCESSOR4 + ")");
+    }
 }

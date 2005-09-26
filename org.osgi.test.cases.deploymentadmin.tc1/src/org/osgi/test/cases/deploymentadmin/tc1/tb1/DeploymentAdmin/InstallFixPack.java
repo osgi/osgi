@@ -117,12 +117,12 @@ public class InstallFixPack implements TestInterface {
 	}
 	
 	/**
-	 * This test case uninstall bundle.tb2 from the deployment
-	 * package, and then check if it was removed from the
-	 * framework as well as from the deployment package.
-	 * 
-	 * @spec 115.9 Uninstalling a Deployment Package
-	 */			
+     * This test case uninstall bundle.tb2 from the deployment package, and then
+     * check if it was removed from the framework as well as from the deployment
+     * package.
+     * 
+     * @spec 114.9 Uninstalling a Deployment Package
+     */			
 	private void testInstallFixPack002() {
 		tbc.log("#testInstallFixPack002");
 		TestingDeploymentPackage testDP = tbc.getTestingDeploymentPackage(DeploymentConstants.SIMPLE_DP);
@@ -142,8 +142,8 @@ public class InstallFixPack implements TestInterface {
 			
 			// asserts dp bundles
 			tbc.assertTrue("There are no more bundles in deployment package", (pairs.length==1));
-			tbc.assertEquals("There the remaining bundle name is correct", testDP.getBundles()[0].getName(), pairs[0][0]);
-			tbc.assertEquals("There the remaining bundle version is correct",testDP.getBundles()[0].getVersion(), new Version(pairs[0][1]));
+			tbc.assertEquals("The remaining bundle name is correct", testDP.getBundles()[0].getName(), pairs[0][0]);
+			tbc.assertEquals("The remaining bundle version is correct",testDP.getBundles()[0].getVersion(), new Version(pairs[0][1]));
 			
 			// assert that the bundles have been uninstalled from the framework
 			String b2Name = testDP.getBundles()[1].getName();
@@ -161,7 +161,7 @@ public class InstallFixPack implements TestInterface {
 	 * This test case installs a fix-pack that adds a bundles
 	 * to the fixed deployment package.
 	 * 
-	 * @spec 115.4 Fix Package
+	 * @spec 114.4 Fix Package
 	 */			
 	private void testInstallFixPack003() {
 		tbc.log("#testInstallFixPack003");
@@ -208,7 +208,7 @@ public class InstallFixPack implements TestInterface {
 	 * micro version of deployment package within range of
 	 * deployment packages defined in the manifest.
 	 * 
-	 * @spec 115.4 Fix Package
+	 * @spec 114.4 Fix Package
 	 */		
 	private void testInstallFixPack004() {
 		tbc.log("#testInstallFixPack004");
@@ -241,7 +241,7 @@ public class InstallFixPack implements TestInterface {
 	 * minor version of deployment package within range of
 	 * deployment packages defined in the manifest.
 	 * 
-	 * @spec 115.4 Fix Package
+	 * @spec 114.4 Fix Package
 	 */		
 	private void testInstallFixPack005() {
 		tbc.log("#testInstallFixPack005");
@@ -273,7 +273,7 @@ public class InstallFixPack implements TestInterface {
 	 * major version of deployment package within range of
 	 * deployment packages defined in the manifest.
 	 * 
-	 * @spec 115.4 Fix Package
+	 * @spec 114.4 Fix Package
 	 */		
 	private void testInstallFixPack006() {
 		tbc.log("#testInstallFixPack006");
@@ -305,7 +305,7 @@ public class InstallFixPack implements TestInterface {
 	 * deployment packages higher than the version of the
 	 * installed deployment package.
 	 * 
-	 * @spec 115.4 Fix Package
+	 * @spec 114.4 Fix Package
 	 */			
 	private void testInstallFixPack007() {
 		tbc.log("#testInstallFixPack007");
@@ -333,7 +333,7 @@ public class InstallFixPack implements TestInterface {
 	 * DeploymentException with CODE_MISSING_FIXPACK_TARGET
 	 * code is thrown.
 	 * 
-	 * @spec 115.14.5.6 CODE_MISSING_FIXPACK_TARGET
+	 * @spec 114.14.5.6 CODE_MISSING_FIXPACK_TARGET
 	 */				
 	private void testInstallFixPack008() {
 		tbc.log("#testInstallFixPack008");
@@ -356,7 +356,7 @@ public class InstallFixPack implements TestInterface {
 	 * This test case install a simple fix pack that adds a
 	 * resource for a deployment package.
 	 * 
-	 * @spec 115.4 Fix Package
+	 * @spec 114.4 Fix Package
 	 */	
 	private void testInstallFixPack009() {
 		tbc.log("#testInstallFixPack009");
@@ -402,7 +402,7 @@ public class InstallFixPack implements TestInterface {
 	 * This test case install a simple fix pack that uninstalls
 	 * a resource from a deployment package.
 	 * 
-	 * @spec 115.4 Fix Package
+	 * @spec 114.4 Fix Package
 	 */		
 	private void testInstallFixPack010() {
 		tbc.log("#testInstallFixPack010");
@@ -443,7 +443,7 @@ public class InstallFixPack implements TestInterface {
 	 * a resource from a deployment package, which had no resources, expecting
 	 * a DeploymentException as result with error code equal to CODE_MISSING_RESOURCE. 
 	 * 
-	 * @spec 115.14.5.8 CODE_MISSING_RESOURCE
+	 * @spec 114.14.5.8 CODE_MISSING_RESOURCE
 	 */			
 	private void testInstallFixPack011() {
 		tbc.log("#testInstallFixPack011");
@@ -474,7 +474,7 @@ public class InstallFixPack implements TestInterface {
 	 * a bundle from a deployment package, which had no bundle, expecting
 	 * a DeploymentException as result with error code equal to CODE_MISSING_BUNDLE. 
 	 * 
-	 * @spec 115.14.5.5 CODE_MISSING_BUNDLE
+	 * @spec 114.14.5.5 CODE_MISSING_BUNDLE
 	 */		
 	private void testInstallFixPack012() {
 		tbc.log("#testInstallFixPack012");
@@ -505,7 +505,7 @@ public class InstallFixPack implements TestInterface {
 	 * deployment packages below the version of the
 	 * installed deployment package. 
 	 * 
-	 * @spec 115.14.5.6 CODE_MISSING_FIXPACK_TARGET
+	 * @spec 114.14.5.6 CODE_MISSING_FIXPACK_TARGET
 	 */			
 
 	private void testInstallFixPack013() {

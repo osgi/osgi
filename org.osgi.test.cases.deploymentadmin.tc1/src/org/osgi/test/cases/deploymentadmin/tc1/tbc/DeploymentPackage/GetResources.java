@@ -62,6 +62,7 @@ public class GetResources {
 	public void run() {
 		testGetResources001();
 		testGetResources002();
+        testGetResources003();
 	}
 
 	/**
@@ -159,4 +160,48 @@ public class GetResources {
 		}
 
 	}
+    
+    /**
+     * Asserts that it returns only the bundle after the update of
+     * the DeploymentPackage.
+     * 
+     * @spec DeploymentPackage.getResources()
+     */
+    private void testGetResources003() {
+        tbc.log("#testGetResources003");
+        DeploymentPackage dp = null;
+        DeploymentPackage rpDP = null;
+        DeploymentPackage noDP = null;
+        
+        try {
+
+            TestingDeploymentPackage testDP = tbc
+                    .getTestingDeploymentPackage(DeploymentConstants.SIMPLE_RESOURCE_PROCESSOR_DP);
+            dp = tbc.installDeploymentPackage(tbc.getWebServer()
+                    + testDP.getFilename());            
+            
+            TestingDeploymentPackage testRpDp = tbc.getTestingDeploymentPackage(DeploymentConstants.SIMPLE_RESOURCE_DP);
+            rpDP = tbc.installDeploymentPackage(tbc.getWebServer()
+                    + testRpDp.getFilename());
+                        
+            TestingDeploymentPackage noRpDp = tbc.getTestingDeploymentPackage(DeploymentConstants.SIMPLE_NO_RESOURCE_DP);
+            noDP = tbc.installDeploymentPackage(tbc.getWebServer()
+                    + testRpDp.getFilename());
+            
+            String[] resources = noDP.getResources();
+            tbc.assertTrue("Asserts that it returns the requested resources",
+                    resources.length == 1);                        
+            
+            tbc.assertEquals("Asserting if the returned resource is equal to bundle001.jar", testRpDp.getBundles()[0].getFilename(), resources[0]);
+
+        } catch (Exception e) {
+            tbc.fail(MessagesConstants.getMessage(
+                    MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e
+                            .getClass().getName() }));
+        } finally {
+            tbc.uninstall(new DeploymentPackage[] { dp, rpDP });
+        }
+
+    }
+    
 }

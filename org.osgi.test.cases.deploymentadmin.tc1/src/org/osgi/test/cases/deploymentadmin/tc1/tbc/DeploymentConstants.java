@@ -47,9 +47,14 @@ import org.osgi.service.deploymentadmin.DeploymentAdminPermission;
  * 
  */
 public class DeploymentConstants {
-
+	public static int DROPALLRESOURCES_COUNT = 0;
+	public static int COMMIT_COUNT = 0;
+	
 	public static final String SIGNER_FILTER = "CN=CESAR.ORG.BR, OU=CESAR, O=MOTOROLA, L=RECIFE, C=BR";
 	public static final String PID_RESOURCE_PROCESSOR1 = "org.osgi.test.cases.deployment.bundles.rp1";
+    public static final String PID_RESOURCE_PROCESSOR2 = "org.osgi.test.cases.deployment.bundles.rp2";
+    public static final String PID_RESOURCE_PROCESSOR3 = "org.osgi.test.cases.deployment.bundles.rp3";
+    public static final String PID_RESOURCE_PROCESSOR4 = "org.osgi.test.cases.deployment.bundles.rp4";
 
 	public static final int SIMPLE_DP = 0;
 	public static final int SIMPLE_DP_CLONE = 1;
@@ -86,24 +91,55 @@ public class DeploymentConstants {
 	public static final int BUNDLE_THROWS_EXCEPTION_DP = 33;
 	public static final int BUNDLE_THROWS_EXCEPTION_STOP_DP = 34;
 	public static final int BUNDLE_DOESNT_THROW_EXCEPTION_DP = 35;
-	
+    public static final int BLOCK_SESSION_RESOURCE_PROCESSOR = 36;
+    public static final int VERSION_DIFFERENT_FROM_MANIFEST_DP = 37;
+    public static final int MISSING_B_VERSION_HEADER = 38;
+    public static final int MISSING_BSN_HEADER = 39;
+    public static final int MISSING_FIX_PACK_HEADER = 40;
+    public static final int MISSING_RES_NAME_HEADER = 41;
+    public static final int MISSING_VERSION_HEADER = 42;
+    public static final int SIMPLE_RESOURCE_PROCESSOR_UNINSTALL = 43;
+    public static final int SIMPLE_RESOURCE_UNINSTALL_DP = 44;
+    public static final int WRONG_BSN = 45;
+    public static final int WRONG_BVERSION = 46;
+    public static final int WRONG_CUSTOMIZER = 47;
+    public static final int WRONG_DP_MISSING = 48;
+    public static final int WRONG_FIX_PACK = 49;
+    public static final int WRONG_NAME = 50;
+    public static final int WRONG_RP = 51;
+    public static final int SESSION_TEST_DP = 52;
+    public static final int RESOURCE_PROCESSOR_2_DP = 53;
+    public static final int STRANGE_PATH_DP = 54;
+    public static final int LOCALIZED_DP = 55;
+    public static final int SIGNING_FILE_NOT_NEXT = 56;
+    
 	//This array index is very important, and must be the same as the deployment code
-	//Use 31 characters. 
-	public static final String[] MAP_CODE_TO_DP = { "simple_dp",
-			"simple_clone_dp", "simple_fix_pack_dp",
-			"missing_resource_fix_pack_dp", "missing_bundle_fix_pack",
-			"simple_resource_processor_dp", "simple_higher_major_version_dp",
-			"simple_higher_minor_version_dp", "simple_higher_micro_version_dp",
-			"bundle_from_other_dp", "bundle_from_other_dp_dif_vers",
-			"symb_name_dif_from_manifest_dp", "bad_header_dp",
-			"resource_from_other_dp", "resource_processor_dp", "add_bundle_fix_pack_dp",
-			"fix_pack_higher_range_dp.jar", "simple_resource_dp",
-			"simple_resource_dp", "simple_unsigned_bundle_dp",
-			"simple_unsigned_dp", "simple_no_bundle_dp",
-			"simple_no_resource_dp", "fix_pack_lower_range_dp.jar", "missing_name_header_dp",
-			"system", "wrong_order","wrong_format", "untrusted", "wrong_path", "wrong_version",
-			"simple_uninstall_bundle_dp","simple_uninstall_bundle_dp","bundle_throws_exception_dp",
-			"bundle_throws_exception_stop_dp", "bundle_doesnt_throw_exception_dp"};
+	//Use 31 characters.
+	public static final String[] MAP_CODE_TO_DP = {"simple_dp",
+        "simple_clone_dp", "simple_fix_pack_dp",
+        "missing_resource_fix_pack_dp", "missing_bundle_fix_pack",
+        "simple_resource_processor_dp", "simple_higher_major_version_dp",
+        "simple_higher_minor_version_dp", "simple_higher_micro_version_dp",
+        "bundle_from_other_dp", "bundle_from_other_dp_dif_vers",
+        "symb_name_dif_from_manifest_dp", "bad_header_dp",
+        "resource_from_other_dp", "resource_processor_dp",
+        "add_bundle_fix_pack_dp", "fix_pack_higher_range_dp.jar",
+        "simple_resource_dp", "simple_resource_dp",
+        "simple_unsigned_bundle_dp", "simple_unsigned_dp",
+        "simple_no_bundle_dp", "simple_no_resource_dp",
+        "fix_pack_lower_range_dp.jar", "missing_name_header_dp", "system",
+        "wrong_order", "wrong_format", "untrusted", "wrong_path",
+        "wrong_version", "simple_uninstall_bundle_dp",
+        "simple_uninstall_bundle_dp", "bundle_throws_exception_dp",
+        "bundle_throws_exception_stop_dp", "bundle_doesnt_throw_exception_dp",
+        "block_session", "version_dif_from_manifest_dp",
+        "missing_b_version_header", "missing_bsn_header",
+        "missing_fix_pack_header", "missing_res_name_header",
+        "missing_version_header", "simple_resource_processor_uninstall",
+        "simple_resource_uninstall_dp", "wrong_bsn", "wrong_bversion",
+        "wrong_customizer", "wrong_dp_missing", "wrong_fix_pack", "wrong_name",
+        "wrong_rp", "session_test_dp", "resource_processor2_dp",
+        "strange_path", "localized", "signing_file_not_next"};
 	
 	public static final String DEPLOYMENT_PACKAGE_NAME_ALL = "(name=*)";
 	public static final String BUNDLE_NAME_ALL = "(name=*)";
@@ -148,5 +184,6 @@ public class DeploymentConstants {
 	
 	// very large, we don't know what kind of devices the TCK will be executed
 	public static final int TIMEOUT = 180000;
+    public static final int SESSION_TIMEOUT = 1000;
 
 }

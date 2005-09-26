@@ -40,13 +40,13 @@ package org.osgi.test.cases.deploymentadmin.tc1.tb1.DeploymentAdmin;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.Version;
 import org.osgi.service.deploymentadmin.DeploymentAdminPermission;
-import org.osgi.service.deploymentadmin.DeploymentCustomizerPermission;
 import org.osgi.service.deploymentadmin.DeploymentException;
 import org.osgi.service.deploymentadmin.DeploymentPackage;
 import org.osgi.test.cases.deploymentadmin.tc1.tbc.DeploymentConstants;
 import org.osgi.test.cases.deploymentadmin.tc1.tbc.DeploymentTestControl;
 import org.osgi.test.cases.deploymentadmin.tc1.tbc.TestInterface;
 import org.osgi.test.cases.deploymentadmin.tc1.tbc.util.MessagesConstants;
+import org.osgi.test.cases.deploymentadmin.tc1.tbc.util.TestingBundle;
 import org.osgi.test.cases.deploymentadmin.tc1.tbc.util.TestingDeploymentPackage;
 
 /**
@@ -65,6 +65,7 @@ public class InstallDeploymentPackageAPI implements TestInterface {
 	}
 
 	public void run() {
+        prepare();
 		testInstallDeploymentPackageAPI001();
 		testInstallDeploymentPackageAPI002();
 		testInstallDeploymentPackageAPI003();
@@ -75,49 +76,29 @@ public class InstallDeploymentPackageAPI implements TestInterface {
 		testInstallDeploymentPackageAPI008();
 		testInstallDeploymentPackageAPI009();
 		testInstallDeploymentPackageAPI010();
-		testInstallDeploymentPackageAPI011();
-		testInstallDeploymentPackageAPI012();
-		testInstallDeploymentPackageAPI013();
-		testInstallDeploymentPackageAPI014();
-		testInstallDeploymentPackageAPI015();
-		testInstallDeploymentPackageAPI016();
-		testInstallDeploymentPackageAPI017();
 	}
 
-	/**
-	 * This test case installs a simple deployment package,
-	 * without granting this caller the installDeploymentPackage
-	 * permission. It must throw SecurityException.
-	 * 
-	 * @spec DeploymentAdmin.installDeploymentPackage(InputStream)
-	 */		
-	private void testInstallDeploymentPackageAPI001() {
-		tbc.log("#testInstallDeploymentPackageAPI001");
-		tbc.setDeploymentAdminPermission(DeploymentConstants.DEPLOYMENT_PACKAGE_NAME0, DeploymentAdminPermission.ACTION_LIST);
-		DeploymentPackage dp = null;
-		try {
-			TestingDeploymentPackage testDP = tbc.getTestingDeploymentPackage(DeploymentConstants.SIMPLE_DP);
-			dp = tbc.installDeploymentPackage(tbc.getWebServer() + testDP.getFilename());
-			tbc.failException("#", SecurityException.class);
-		} catch (SecurityException e) {
-			tbc.pass(MessagesConstants.getMessage(MessagesConstants.EXCEPTION_CORRECTLY_THROWN, new String[] { "SecurityException" }));
-		} catch (Exception e) {
-			tbc.fail(MessagesConstants.getMessage(MessagesConstants.EXCEPTION_THROWN, new String[] {"SecurityException", e.getClass().getName() }));
-		} finally {
-			tbc.uninstall(dp);
-		}
-	}
+    /**
+     * Sets permission needed and wait for PermissionWorker
+     */
+    private synchronized void prepare() {
+        try {
+            tbc.setDeploymentAdminPermission(DeploymentConstants.DEPLOYMENT_PACKAGE_NAME_ALL, DeploymentConstants.ALL_PERMISSION);
+            wait(1000);
+        } catch (Exception e) {
+            tbc.fail("Failed to wait for PermissionWorker");
+        }
+    }
 
-	/**
+    /**
 	 * This test case installs a simple deployment package,
 	 * granting the correct action "install"
 	 * 
 	 * @spec DeploymentAdmin.installDeploymentPackage(InputStream)
 	 */			
-	private void testInstallDeploymentPackageAPI002() {
-		tbc.log("#testInstallDeploymentPackageAPI002");
+	private void testInstallDeploymentPackageAPI001() {
+		tbc.log("#testInstallDeploymentPackageAPI001");
 		TestingDeploymentPackage testDP = tbc.getTestingDeploymentPackage(DeploymentConstants.SIMPLE_DP);
-		tbc.setDeploymentAdminPermission(DeploymentConstants.DEPLOYMENT_PACKAGE_NAME0, DeploymentAdminPermission.ACTION_INSTALL);
 		DeploymentPackage dp = null;
 		try {
 			dp = tbc.installDeploymentPackage(tbc.getWebServer()+testDP.getFilename());
@@ -139,16 +120,13 @@ public class InstallDeploymentPackageAPI implements TestInterface {
 	}
 
 	/**
-	 * This test case installs a simple deployment package and
-	 * then updates it with the same deployment package
-	 * name/version, in order to check if no action was
-	 * taken.
-	 * 
-	 * @spec DeploymentAdmin.installDeploymentPackage(InputStream)
-	 */		
-	private void testInstallDeploymentPackageAPI003() {
-		tbc.log("#testInstallDeploymentPackageAPI003");
-		tbc.setDeploymentAdminPermission(DeploymentConstants.DEPLOYMENT_PACKAGE_NAME_ALL, DeploymentConstants.ALL_PERMISSION);
+     * Asserts if the two versions are the same, then this method simply returns with
+     * the <b>old (target)</b> deployment package without any action.
+     * 
+     * @spec DeploymentAdmin.installDeploymentPackage(InputStream)
+     */		
+	private void testInstallDeploymentPackageAPI002() {
+		tbc.log("#testInstallDeploymentPackageAPI002");
 		TestingDeploymentPackage testDP = tbc.getTestingDeploymentPackage(DeploymentConstants.SIMPLE_DP);
 		TestingDeploymentPackage testDP2 = tbc.getTestingDeploymentPackage(DeploymentConstants.SIMPLE_DP_CLONE);
 		DeploymentPackage dp1 = null, dp2 = null;
@@ -158,137 +136,47 @@ public class InstallDeploymentPackageAPI implements TestInterface {
 			tbc.assertNotNull(MessagesConstants.getMessage(MessagesConstants.ASSERT_NOT_NULL, new String[]{"deployment package"}), dp1);
 
 			dp2 = tbc.installDeploymentPackage(tbc.getWebServer() + testDP2.getFilename());
-			// do not assert not null; the implementation may cancel the installation
-			DeploymentPackage[] finalList = tbc.getDeploymentAdmin().listDeploymentPackages();
-			
-			tbc.assertTrue("Only one deployment package was added to the list of DPs", (initialList.length==(finalList.length-1)));
+			String[][] depBundles = dp2.getBundleSymNameVersionPairs();
+            TestingBundle[] testBundles = testDP.getBundles();
+            
+            tbc.assertTrue("Returned DP has bundles", depBundles.length > 0);
+            int count = 0;
+            for (int i = 0; (i < depBundles.length) && (count < 2); i++) {
+                for (int j = 0; j < testBundles.length; j++) {
+                    if (depBundles[i][0].trim().equals(testBundles[j].getName())) {
+                        tbc.assertEquals("Assert Deployment Package bundle "
+                            + depBundles[i][0] + " Version", depBundles[i][1], testBundles[j].getVersion().toString());
+                        count++;
+                        break;
+                    }
+                }
+            }
+            tbc.assertTrue("The 2 old DP bundles are the same as returned", count==2);
+            // to be really sure assert the Manifest header too
+            String header = dp2.getHeader(DeploymentConstants.DP_HEADER_COPYRIGHT);
+            tbc.assertEquals("Header also belongs to old DP", DeploymentConstants.DP_MY_COPYRIGHT, header);
 		} catch (Exception e) {
 			tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }));
 		} finally {
-			// just the first dp must be unistalled
 			tbc.uninstall(dp1);
 		}
 	}
 	
 	/**
-	 * This test case attempts to pass a null input stream to
-	 * installDeploymentPackage method to verify that null is returned.
-	 * 
-	 * @spec DeploymentAdmin.installDeploymentPackage(InputStream)
-	 */			
-	private void testInstallDeploymentPackageAPI004() {
-		//TODO the bahavior of passing null is not specified.
-		tbc.log("#testInstallDeploymentPackageAPI004");
-		tbc.setDeploymentAdminPermission(DeploymentConstants.DEPLOYMENT_PACKAGE_NAME_ALL, DeploymentConstants.ALL_PERMISSION);
+     * Asserts that the input stream of the deployment package must not be null.
+     * 
+     * @spec DeploymentAdmin.installDeploymentPackage(InputStream)
+     */			
+	private void testInstallDeploymentPackageAPI003() {
+		tbc.log("#testInstallDeploymentPackageAPI003");
 		DeploymentPackage dp = null;
 		try {
 			dp = tbc.getDeploymentAdmin().installDeploymentPackage(null);
-			tbc.assertNull(MessagesConstants.getMessage(MessagesConstants.ASSERT_NULL, new String[]{"deployment package"}), dp);
+			tbc.failException("#", DeploymentException.class);
 		} catch (DeploymentException e) {
 			tbc.pass(MessagesConstants.getMessage(MessagesConstants.EXCEPTION_CORRECTLY_THROWN, new String[] { e.getClass().getName() }));
 		} catch (Exception e) {
 			tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }));
-		}
-	}
-	
-	/**
-	 * Asserts that a bundle must belong to one and only one deployment
-	 * package throwing DeploymentException.CODE_BUNDLE_SHARING_VIOLATION.
-	 * 
-	 * @spec DeploymentAdmin.installDeploymentPackage(InputStream)
-	 */			
-	private void testInstallDeploymentPackageAPI005() {
-		tbc.log("#testInstallDeploymentPackageAPI005");
-		tbc.setDeploymentAdminPermission(DeploymentConstants.DEPLOYMENT_PACKAGE_NAME_ALL, DeploymentConstants.ALL_PERMISSION);
-		DeploymentPackage dp = null;
-		DeploymentPackage dp2 = null;		
-		try {
-			TestingDeploymentPackage testDP = tbc.getTestingDeploymentPackage(DeploymentConstants.SIMPLE_DP);
-			dp = tbc.installDeploymentPackage(tbc.getWebServer() + testDP.getFilename());
-			TestingDeploymentPackage testDP2 = tbc.getTestingDeploymentPackage(DeploymentConstants.DP_CONTAINING_A_BUNDLE_FROM_OTHER_DP);
-			dp2 = tbc.installDeploymentPackage(tbc.getWebServer() + testDP2.getFilename());
-			tbc.failException("#", DeploymentException.class);
-		} catch (DeploymentException e) {
-			tbc.assertEquals("The code of the DeploymentException is ", DeploymentException.CODE_BUNDLE_SHARING_VIOLATION, e.getCode());
-		} catch (Exception e) {
-			tbc.fail(MessagesConstants.getMessage(MessagesConstants.EXCEPTION_THROWN, new String[] {"DeploymentException", e.getClass().getName() }));
-		} finally {
-			tbc.uninstall(new DeploymentPackage[] { dp, dp2 });
-		}
-	}
-
-	/**
-	 * Asserts that a bundle must belong to only one deployment
-	 * package, even if its version is different. A deployment
-	 * package that installs a bundle that was already in the
-	 * framework should throw
-	 * DeploymentException.CODE_BUNDLE_SHARING_VIOLATION.
-	 * 
-	 * @spec DeploymentAdmin.installDeploymentPackage(InputStream)
-	 */
-	private void testInstallDeploymentPackageAPI006() {
-		tbc.log("#testInstallDeploymentPackageAPI006");
-		tbc.setDeploymentAdminPermission(DeploymentConstants.DEPLOYMENT_PACKAGE_NAME_ALL, DeploymentConstants.ALL_PERMISSION);
-		DeploymentPackage dp = null;
-		DeploymentPackage dp2 = null;
-		try {
-			TestingDeploymentPackage testDP = tbc.getTestingDeploymentPackage(DeploymentConstants.SIMPLE_DP);
-			dp = tbc.installDeploymentPackage(tbc.getWebServer() + testDP.getFilename());
-			TestingDeploymentPackage testDP2 = tbc.getTestingDeploymentPackage(DeploymentConstants.DP_CONTAINING_A_BUNDLE_FROM_OTHER_DP_DIF_VERS);
-			dp2 = tbc.installDeploymentPackage(tbc.getWebServer() + testDP2.getFilename());
-			tbc.failException("#", DeploymentException.class);
-		} catch (DeploymentException e) {
-			tbc.assertEquals("The code of the DeploymentException is ", DeploymentException.CODE_BUNDLE_SHARING_VIOLATION, e.getCode());
-		} catch (Exception e) {
-			tbc.fail(MessagesConstants.getMessage(MessagesConstants.EXCEPTION_THROWN, new String[] {"DeploymentException", e.getClass().getName() }));
-		} finally {
-			tbc.uninstall(new DeploymentPackage[] { dp, dp2 });
-		}
-	}
-	
-	/**
-	 * Asserts that a DeploymentException.CODE_MISSING_HEADER is thrown when
-	 * mandatory manifest header is missing. 
-	 * 
-	 * @spec DeploymentAdmin.installDeploymentPackage(InputStream)
-	 */	
-	private void testInstallDeploymentPackageAPI007() {
-		tbc.log("#testInstallDeploymentPackageAPI007");
-		tbc.setDeploymentAdminPermission(DeploymentConstants.DEPLOYMENT_PACKAGE_NAME_ALL, DeploymentConstants.ALL_PERMISSION);
-		DeploymentPackage dp = null;
-		try {
-			TestingDeploymentPackage testDP = tbc.getTestingDeploymentPackage(DeploymentConstants.MISSING_NAME_HEADER_DP);
-			dp = tbc.installDeploymentPackage(tbc.getWebServer() + testDP.getFilename());
-			tbc.failException("#", DeploymentException.class);
-		} catch (DeploymentException e) {
-			tbc.assertEquals("The code of the DeploymentException is ", DeploymentException.CODE_MISSING_HEADER, e.getCode());
-		} catch (Exception e) {
-			tbc.fail(MessagesConstants.getMessage(MessagesConstants.EXCEPTION_THROWN, new String[] {"DeploymentException", e.getClass().getName() }));
-		} finally {
-			tbc.uninstall(dp);
-		}
-	}	
-
-	/**
-	 * Asserts that a DeploymentException.CODE_BUNDLE_NAME_ERROR is thrown when
-	 * bundle symbolic name is not the same as defined by the deployment package manifest 
-	 * 
-	 * @spec DeploymentAdmin.installDeploymentPackage(InputStream)
-	 */		
-	private void testInstallDeploymentPackageAPI008() {
-		tbc.log("#testInstallDeploymentPackageAPI008");
-		tbc.setDeploymentAdminPermission(DeploymentConstants.DEPLOYMENT_PACKAGE_NAME_ALL, DeploymentConstants.ALL_PERMISSION);
-		DeploymentPackage dp = null;
-		try {
-			TestingDeploymentPackage testDP = tbc.getTestingDeploymentPackage(DeploymentConstants.SYMB_NAME_DIFFERENT_FROM_MANIFEST_DP);
-			dp = tbc.installDeploymentPackage(tbc.getWebServer() + testDP.getFilename());
-			tbc.failException("#", DeploymentException.class);
-		} catch (DeploymentException e) {
-			tbc.assertEquals("The code of the DeploymentException is ", DeploymentException.CODE_BUNDLE_NAME_ERROR, e.getCode());
-		} catch (Exception e) {
-			tbc.fail(MessagesConstants.getMessage(MessagesConstants.EXCEPTION_THROWN, new String[] {"DeploymentException", e.getClass().getName() }));
-		} finally {
-			tbc.uninstall(dp);
 		}
 	}
 	
@@ -300,9 +188,8 @@ public class InstallDeploymentPackageAPI implements TestInterface {
 	 * 
 	 * @spec DeploymentAdmin.installDeploymentPackage(InputStream)
 	 */			
-	private void testInstallDeploymentPackageAPI009() {
-		tbc.log("#testInstallDeploymentPackageAPI009");
-		tbc.setDeploymentAdminPermission(DeploymentConstants.DEPLOYMENT_PACKAGE_NAME_ALL, DeploymentConstants.ALL_PERMISSION);
+	private void testInstallDeploymentPackageAPI004() {
+		tbc.log("#testInstallDeploymentPackageAPI004");
 		TestingDeploymentPackage testDP = tbc.getTestingDeploymentPackage(DeploymentConstants.SIMPLE_DP);
 		TestingDeploymentPackage testDP2 = tbc.getTestingDeploymentPackage(DeploymentConstants.SIMPLE_HIGHER_MAJOR_VERSION_DP);
 		
@@ -334,9 +221,8 @@ public class InstallDeploymentPackageAPI implements TestInterface {
 	 * 
 	 * @spec DeploymentAdmin.installDeploymentPackage(InputStream)
 	 */	
-	private void testInstallDeploymentPackageAPI010() {
-		tbc.log("#testInstallDeploymentPackageAPI010");
-		tbc.setDeploymentAdminPermission(DeploymentConstants.DEPLOYMENT_PACKAGE_NAME_ALL, DeploymentConstants.ALL_PERMISSION);
+	private void testInstallDeploymentPackageAPI005() {
+		tbc.log("#testInstallDeploymentPackageAPI005");
 		TestingDeploymentPackage testDP = tbc.getTestingDeploymentPackage(DeploymentConstants.SIMPLE_HIGHER_MAJOR_VERSION_DP);
 		TestingDeploymentPackage testDP2 = tbc.getTestingDeploymentPackage(DeploymentConstants.SIMPLE_DP);
 		
@@ -368,9 +254,8 @@ public class InstallDeploymentPackageAPI implements TestInterface {
 	 * 
 	 * @spec DeploymentAdmin.installDeploymentPackage(InputStream)
 	 */		
-	private void testInstallDeploymentPackageAPI011() {
-		tbc.log("#testInstallDeploymentPackageAPI011");
-		tbc.setDeploymentAdminPermission(DeploymentConstants.DEPLOYMENT_PACKAGE_NAME_ALL, DeploymentConstants.ALL_PERMISSION);
+	private void testInstallDeploymentPackageAPI006() {
+		tbc.log("#testInstallDeploymentPackageAPI006");
 		TestingDeploymentPackage testDP = tbc.getTestingDeploymentPackage(DeploymentConstants.SIMPLE_DP);
 		TestingDeploymentPackage testDP2 = tbc.getTestingDeploymentPackage(DeploymentConstants.SIMPLE_HIGHER_MICRO_VERSION_DP);
 		
@@ -401,9 +286,8 @@ public class InstallDeploymentPackageAPI implements TestInterface {
 	 * 
 	 * @spec DeploymentAdmin.installDeploymentPackage(InputStream)
 	 */			
-	private void testInstallDeploymentPackageAPI012() {
-		tbc.log("#testInstallDeploymentPackageAPI012");
-		tbc.setDeploymentAdminPermission(DeploymentConstants.DEPLOYMENT_PACKAGE_NAME_ALL, DeploymentConstants.ALL_PERMISSION);
+	private void testInstallDeploymentPackageAPI007() {
+		tbc.log("#testInstallDeploymentPackageAPI007");
 		TestingDeploymentPackage testDP = tbc.getTestingDeploymentPackage(DeploymentConstants.SIMPLE_HIGHER_MICRO_VERSION_DP);
 		TestingDeploymentPackage testDP2 = tbc.getTestingDeploymentPackage(DeploymentConstants.SIMPLE_DP);
 		
@@ -434,9 +318,8 @@ public class InstallDeploymentPackageAPI implements TestInterface {
 	 * 
 	 * @spec DeploymentAdmin.installDeploymentPackage(InputStream)
 	 */			
-	private void testInstallDeploymentPackageAPI013() {
-		tbc.log("#testInstallDeploymentPackageAPI013");
-		tbc.setDeploymentAdminPermission(DeploymentConstants.DEPLOYMENT_PACKAGE_NAME_ALL, DeploymentConstants.ALL_PERMISSION);
+	private void testInstallDeploymentPackageAPI008() {
+		tbc.log("#testInstallDeploymentPackageAPI008");
 		TestingDeploymentPackage testDP = tbc.getTestingDeploymentPackage(DeploymentConstants.SIMPLE_DP);
 		TestingDeploymentPackage testDP2 = tbc.getTestingDeploymentPackage(DeploymentConstants.SIMPLE_HIGHER_MINOR_VERSION_DP);
 		
@@ -466,9 +349,8 @@ public class InstallDeploymentPackageAPI implements TestInterface {
 	 * 
 	 * @spec DeploymentAdmin.installDeploymentPackage(InputStream)
 	 */				
-	private void testInstallDeploymentPackageAPI014() {
-		tbc.log("#testInstallDeploymentPackageAPI014");
-		tbc.setDeploymentAdminPermission(DeploymentConstants.DEPLOYMENT_PACKAGE_NAME_ALL, DeploymentConstants.ALL_PERMISSION);
+	private void testInstallDeploymentPackageAPI009() {
+		tbc.log("#testInstallDeploymentPackageAPI009");
 		TestingDeploymentPackage testDP = tbc.getTestingDeploymentPackage(DeploymentConstants.SIMPLE_HIGHER_MINOR_VERSION_DP);
 		TestingDeploymentPackage testDP2 = tbc.getTestingDeploymentPackage(DeploymentConstants.SIMPLE_DP);
 		
@@ -490,86 +372,30 @@ public class InstallDeploymentPackageAPI implements TestInterface {
 
 		}
 	}
-	
-	/**
-	 * Asserts that DmtException.CODE_BUNDLE_START is thrown when one
-	 * or more bundles couldn't be started when installing a
-	 * deployment package.
-	 * 
-	 * @spec DeploymentAdmin.installDeploymentPackage(InputStream)
-	 */		
-	private void testInstallDeploymentPackageAPI015() {
-		tbc.log("#testInstallDeploymentPackageAPI015");
-		tbc.setDeploymentAdminPermission(DeploymentConstants.DEPLOYMENT_PACKAGE_NAME_ALL, DeploymentConstants.ALL_PERMISSION);
-		DeploymentPackage dp = null;
-		try {
-			TestingDeploymentPackage testDP = tbc.getTestingDeploymentPackage(DeploymentConstants.BUNDLE_THROWS_EXCEPTION_DP);
-			dp = tbc.installDeploymentPackage(tbc.getWebServer() + testDP.getFilename());
-			tbc.failException("",DeploymentException.class);
-		} catch (DeploymentException e) {
-			tbc.assertEquals("Asserts that DmtException.CODE_BUNDLE_START is thrown when one or more bundles couldn't be started",DeploymentException.CODE_BUNDLE_START,e.getCode());
-		} catch (Exception e) {
-			tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }));
-		} finally {
-			tbc.uninstall(dp);
-		}
-	}
-	/**
-	 * Asserts that DmtException.CODE_BUNDLE_START is thrown when one
-	 * or more bundles couldn't be started when updating a
-	 * deployment package.
-	 * 
-	 * @spec DeploymentAdmin.installDeploymentPackage(InputStream)
-	 */		
-	private void testInstallDeploymentPackageAPI016() {
-		tbc.log("#testInstallDeploymentPackageAPI016");
-		tbc.setDeploymentAdminPermission(DeploymentConstants.DEPLOYMENT_PACKAGE_NAME_ALL, DeploymentConstants.ALL_PERMISSION);
-		DeploymentPackage dp = null;
-		DeploymentPackage dp2 = null;
-		try {
-			TestingDeploymentPackage testDP = tbc.getTestingDeploymentPackage(DeploymentConstants.BUNDLE_DOESNT_THROW_EXCEPTION_DP);
-			dp = tbc.installDeploymentPackage(tbc.getWebServer() + testDP.getFilename());
-			TestingDeploymentPackage testDP2 = tbc.getTestingDeploymentPackage(DeploymentConstants.BUNDLE_THROWS_EXCEPTION_DP);
-			dp2 = tbc.installDeploymentPackage(tbc.getWebServer() + testDP2.getFilename());
-			tbc.failException("",DeploymentException.class);
-		} catch (DeploymentException e) {
-			tbc.assertEquals("Asserts that DmtException.CODE_BUNDLE_START is thrown when one or more bundles couldn't be started",DeploymentException.CODE_BUNDLE_START,e.getCode());
-		} catch (Exception e) {
-			tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }));
-		} finally {
-			tbc.uninstall(new DeploymentPackage[] { dp, dp2 });
-		}
-	}
-	
-	/**
-	 * Asserts that a DeploymentException.CODE_RESOURCE_SHARING_VIOLATION is
-	 * thrown when a resource already exists. 
-	 * 
-	 * @spec DeploymentAdmin.installDeploymentPackage(InputStream)
-	 */		
-	private void testInstallDeploymentPackageAPI017() {
-		tbc.log("#testInstallDeploymentPackageAPI017");
-		tbc.setDeploymentAdminAndCustomizerPermission(
-				DeploymentConstants.DEPLOYMENT_PACKAGE_NAME_ALL,
-				DeploymentConstants.ALL_PERMISSION,
-				DeploymentConstants.BUNDLE_NAME_ALL,
-				DeploymentCustomizerPermission.ACTION_PRIVATEAREA);
-		DeploymentPackage dp = null, dp2 = null, rp = null;
-		TestingDeploymentPackage testRP = tbc.getTestingDeploymentPackage(DeploymentConstants.RESOURCE_PROCESSOR_DP);
-		try {
-			rp = tbc.installDeploymentPackage(tbc.getWebServer() + testRP.getFilename());
-			
-			TestingDeploymentPackage testDP = tbc.getTestingDeploymentPackage(DeploymentConstants.SIMPLE_RESOURCE_DP);
-			dp = tbc.installDeploymentPackage(tbc.getWebServer() + testDP.getFilename());			
-			TestingDeploymentPackage testDP2 = tbc.getTestingDeploymentPackage(DeploymentConstants.RESOURCE_FROM_OTHER_DP);
-			dp2 = tbc.installDeploymentPackage(tbc.getWebServer() + testDP2.getFilename());
-			tbc.failException("#", DeploymentException.class);
-		} catch (DeploymentException e) {
-			tbc.assertEquals("The code of the DeploymentException is ", DeploymentException.CODE_RESOURCE_SHARING_VIOLATION, e.getCode());
-		} catch (Exception e) {
-			tbc.fail(MessagesConstants.getMessage(MessagesConstants.EXCEPTION_THROWN, new String[] {"DeploymentException", e.getClass().getName() }));
-		} finally {
-			tbc.uninstall(new DeploymentPackage[] { rp, dp, dp2 });
-		}
-	}
+    
+    /**
+     * This test case installs a simple deployment package,
+     * without granting this caller the installDeploymentPackage
+     * permission. It must throw SecurityException.
+     * 
+     * @spec DeploymentAdmin.installDeploymentPackage(InputStream)
+     */     
+    private synchronized void testInstallDeploymentPackageAPI010() {
+        tbc.log("#testInstallDeploymentPackageAPI010");
+        tbc.setDeploymentAdminPermission(DeploymentConstants.DEPLOYMENT_PACKAGE_NAME0, DeploymentAdminPermission.ACTION_LIST);
+        DeploymentPackage dp = null;
+        try {
+            wait(1000);
+            TestingDeploymentPackage testDP = tbc.getTestingDeploymentPackage(DeploymentConstants.SIMPLE_DP);
+            dp = tbc.installDeploymentPackage(tbc.getWebServer() + testDP.getFilename());
+            tbc.failException("#", SecurityException.class);
+        } catch (SecurityException e) {
+            tbc.pass(MessagesConstants.getMessage(MessagesConstants.EXCEPTION_CORRECTLY_THROWN, new String[] { "SecurityException" }));
+        } catch (Exception e) {
+            tbc.fail(MessagesConstants.getMessage(MessagesConstants.EXCEPTION_THROWN, new String[] {"SecurityException", e.getClass().getName() }));
+        } finally {
+            // it sets all permissions
+            tbc.cleanUp(dp);
+        }
+    }
 }

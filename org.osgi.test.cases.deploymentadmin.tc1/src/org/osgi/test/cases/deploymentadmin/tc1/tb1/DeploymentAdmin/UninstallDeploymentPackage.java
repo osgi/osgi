@@ -61,81 +61,53 @@ public class UninstallDeploymentPackage implements TestInterface {
 	}
 
 	public void run() {
+        prepare();
 		testUninstallDeploymentPackage001();
 		testUninstallDeploymentPackage002();
 		testUninstallDeploymentPackage003();
 		testUninstallDeploymentPackage004();
+        testUninstallDeploymentPackage005();
+        testUninstallDeploymentPackage006();
+        testUninstallDeploymentPackage007();
+        testUninstallDeploymentPackage008();
+        testUninstallDeploymentPackage009();
+        testUninstallDeploymentPackage010();
+        testUninstallDeploymentPackage011();
+        testUninstallDeploymentPackage012();
 	}
 
-
-	
+    /**
+     * Sets permission needed and wait for PermissionWorker
+     */
+    private synchronized void prepare() {
+        try {
+            tbc.setDeploymentAdminPermission(DeploymentConstants.DEPLOYMENT_PACKAGE_NAME_ALL, DeploymentConstants.ALL_PERMISSION);
+            wait(1000);
+        } catch (Exception e) {
+            tbc.fail("Failed to wait for PermissionWorker");
+        }
+    }
 	
 	/**
-	 * This test case installs a simple deployment package and
-	 * then tries to uninstall without granting this caller the
-	 * uninstall permission. A SecurityException must be throw.
-	 * 
-	 * @spec DeploymentPackage.uninstall()
-	 */	
+     * This test case uninstalls a simple deployment package, granting the
+     * correct "uninstall" permission.
+     * 
+     * @spec DeploymentPackage.uninstall()
+     */			
 	private void testUninstallDeploymentPackage001() {
 		tbc.log("#testUninstallDeploymentPackage001");
-		tbc.setDeploymentAdminPermission(DeploymentConstants.DEPLOYMENT_PACKAGE_NAME_ALL, DeploymentAdminPermission.ACTION_INSTALL);
-		DeploymentPackage dp = null;
-		try {
-			TestingDeploymentPackage testDP = tbc.getTestingDeploymentPackage(DeploymentConstants.SIMPLE_DP);
-			dp = tbc.installDeploymentPackage(tbc.getWebServer() + testDP.getFilename());
-			dp.uninstall();
-			tbc.failException("#", SecurityException.class);
-		} catch (SecurityException e) {
-			tbc.pass(MessagesConstants.getMessage(MessagesConstants.EXCEPTION_CORRECTLY_THROWN, new String[] { "SecurityException" }));
-		} catch (Exception e) {
-			tbc.fail(MessagesConstants.getMessage(MessagesConstants.EXCEPTION_THROWN, new String[] {"SecurityException", e.getClass().getName() }));
-		} finally {
-			tbc.uninstall(dp);
-		}
-	}
-	
-	/**
-	 * This test case installs a simple deployment package and 
-	 * then tries to uninstall forcefully without granting this caller 
-	 * the uninstallForceful permission. A SecurityException must be throw.
-	 * 
-	 * @spec DeploymentPackage.uninstallForced()
-	 */		
-	private void testUninstallDeploymentPackage002() {
-		tbc.log("#testUninstallDeploymentPackage002");
-		tbc.setDeploymentAdminPermission(DeploymentConstants.DEPLOYMENT_PACKAGE_NAME_ALL, DeploymentAdminPermission.ACTION_INSTALL);
-		DeploymentPackage dp = null;
-		try {
-			TestingDeploymentPackage testDP = tbc.getTestingDeploymentPackage(DeploymentConstants.SIMPLE_DP);
-			dp = tbc.installDeploymentPackage(tbc.getWebServer() + testDP.getFilename());
-			dp.uninstallForced();
-			tbc.failException("#", SecurityException.class);
-		} catch (SecurityException e) {
-			tbc.pass(MessagesConstants.getMessage(MessagesConstants.EXCEPTION_CORRECTLY_THROWN, new String[] { "SecurityException" }));
-		} catch (Exception e) {
-			tbc.fail(MessagesConstants.getMessage(MessagesConstants.EXCEPTION_THROWN, new String[] {"SecurityException", e.getClass().getName() }));
-		} finally {
-			tbc.setDeploymentAdminPermission(DeploymentConstants.DEPLOYMENT_PACKAGE_NAME_ALL, DeploymentAdminPermission.ACTION_UNINSTALL+","+DeploymentAdminPermission.ACTION_UNINSTALL_FORCED);
-		}
-	}
-	/**
-	 * This test case uninstalls a simple deployment package,
-	 * granting the correct "uninstall" permission.
-	 * 
-	 * @spec DeploymentPackage.uninstall()
-	 */			
-	private void testUninstallDeploymentPackage003() {
-		tbc.log("#testUninstallDeploymentPackage003");
 		TestingDeploymentPackage testDP = tbc.getTestingDeploymentPackage(DeploymentConstants.SIMPLE_DP);
-		tbc.setDeploymentAdminPermission(DeploymentConstants.DEPLOYMENT_PACKAGE_NAME0, DeploymentAdminPermission.ACTION_INSTALL);
 		DeploymentPackage dp = null;
 		try {
 			dp = tbc.installDeploymentPackage(tbc.getWebServer()+testDP.getFilename());
 			tbc.assertNotNull(MessagesConstants.getMessage(MessagesConstants.ASSERT_NOT_NULL, new String[]{"deployment package"}), dp);
 			tbc.setDeploymentAdminPermission(DeploymentConstants.DEPLOYMENT_PACKAGE_NAME0, DeploymentAdminPermission.ACTION_UNINSTALL);
 			dp.uninstall();
-			tbc.pass("A DeploymentPackage could be uninstalled using only \"uninstall\" permission");
+
+            tbc.assertNull("Asserting that bundle001.jar was uninstalled.", tbc.getBundle("bundle001.jar"));
+            tbc.assertNull("Asserting that bundle002.jar was uninstalled.", tbc.getBundle("bundle002.jar"));           
+            
+			tbc.pass("A DeploymentPackage could be uninstalled using only \"uninstall\" permission");            
 		} catch (Exception e) {
 			tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }));
 		} finally {
@@ -145,26 +117,321 @@ public class UninstallDeploymentPackage implements TestInterface {
 	
 	/**
 	 * This test case uninstalls a simple deployment package,
-	 * granting the correct "uninstall" permission.
+	 * granting the correct "uninstall_forced" permission.
 	 * 
 	 * @spec DeploymentPackage.uninstallForced()
 	 */			
-	private void testUninstallDeploymentPackage004() {
-		tbc.log("#testUninstallDeploymentPackage004");
+	private void testUninstallDeploymentPackage002() {
+		tbc.log("#testUninstallDeploymentPackage002");
 		TestingDeploymentPackage testDP = tbc.getTestingDeploymentPackage(DeploymentConstants.SIMPLE_DP);
-		tbc.setDeploymentAdminPermission(DeploymentConstants.DEPLOYMENT_PACKAGE_NAME0, DeploymentAdminPermission.ACTION_INSTALL);
 		DeploymentPackage dp = null;
 		try {
 			dp = tbc.installDeploymentPackage(tbc.getWebServer()+testDP.getFilename());
 			tbc.assertNotNull(MessagesConstants.getMessage(MessagesConstants.ASSERT_NOT_NULL, new String[]{"deployment package"}), dp);
 			tbc.setDeploymentAdminPermission(DeploymentConstants.DEPLOYMENT_PACKAGE_NAME0, DeploymentAdminPermission.ACTION_UNINSTALL_FORCED);
-			dp.uninstallForced();
-			tbc.pass("A DeploymentPackage could be uninstalled forceful using only \"uninstallForced\" permission");
+			tbc.assertTrue("UninstallDeploymentPackage forced executed properly", dp.uninstallForced());
+            
+            tbc.assertNull("Asserting that bundle001.jar was uninstalled.", tbc.getBundle("bundle001.jar"));
+            tbc.assertNull("Asserting that bundle002.jar was uninstalled.", tbc.getBundle("bundle002.jar"));
 		} catch (Exception e) {
 			tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }));
 		} finally {
 			tbc.uninstall(dp);
 		}
 	}
+    
+    /**
+     * This test case asserts that when an error occurs in
+     * dropAllResources(), the resource processors must not cause a roll back.
+     * 
+     * @spec DeploymentPackage.uninstallForced()
+     */     
+    private void testUninstallDeploymentPackage003() {
+        tbc.log("#testUninstallDeploymentPackage003");
+        DeploymentPackage dp = null, dpError = null;
+        try {
+            TestingDeploymentPackage testDP = tbc.getTestingDeploymentPackage(DeploymentConstants.SIMPLE_RESOURCE_PROCESSOR_UNINSTALL);
+            dp = tbc.installDeploymentPackage(tbc.getWebServer() + testDP.getFilename());
+            TestingDeploymentPackage testDPError = tbc.getTestingDeploymentPackage(DeploymentConstants.SIMPLE_RESOURCE_UNINSTALL_DP);
+            dpError = tbc.installDeploymentPackage(tbc.getWebServer() + testDP.getFilename());            
+            dpError.uninstallForced();
+            tbc.assertTrue("Asserting that rollback was not called.", !tbc.getTestingRollbackCall().isRolbackCalled());
+        } catch (Exception e) {
+            tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }));
+        } finally {
+            tbc.uninstall(new DeploymentPackage[] { dp, dpError } );
+        }
 
+    }    
+    
+    /**
+     * This test case asserts that all resource processor services that are
+     * owned by this DeploymentPackage has dropAllResources() method called.
+     * 
+     * @spec DeploymentPackage.uninstall()
+     */     
+    private void testUninstallDeploymentPackage004() {
+        tbc.log("#testUninstallDeploymentPackage004");
+        DeploymentPackage dp = null;
+        try {
+        	DeploymentConstants.DROPALLRESOURCES_COUNT = 0;
+            TestingDeploymentPackage testDP = tbc.getTestingDeploymentPackage(DeploymentConstants.SESSION_TEST_DP);
+            dp = tbc.installDeploymentPackage(tbc.getWebServer() + testDP.getFilename());                    
+            dp.uninstall();
+            tbc.assertEquals("Asserting that DropAllResources() was called two times (once per resource processor).", 2, DeploymentConstants.DROPALLRESOURCES_COUNT);
+        } catch (Exception e) {
+            tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }));
+        } finally {
+            tbc.uninstall(dp);
+        }
+
+    }
+    
+    /**
+     * This test case asserts that only the resource processors
+     * that are owned by this deployment package calls dropAllResources.
+     * 
+     * @spec DeploymentPackage.uninstall()
+     */     
+    private void testUninstallDeploymentPackage005() {
+        tbc.log("#testUninstallDeploymentPackage005");
+        DeploymentPackage dp = null, dp2 = null;
+        try {
+        	DeploymentConstants.DROPALLRESOURCES_COUNT = 0;        	
+            TestingDeploymentPackage testDP = tbc.getTestingDeploymentPackage(DeploymentConstants.RESOURCE_PROCESSOR_DP);
+            dp = tbc.installDeploymentPackage(tbc.getWebServer() + testDP.getFilename());
+            TestingDeploymentPackage testDP2 = tbc.getTestingDeploymentPackage(DeploymentConstants.RESOURCE_PROCESSOR_2_DP);
+            dp2 = tbc.installDeploymentPackage(tbc.getWebServer() + testDP2.getFilename());            
+            dp.uninstall();
+            tbc.assertEquals("Asserting that DropAllResources() was called only one time (by rp1).", 1, DeploymentConstants.DROPALLRESOURCES_COUNT);
+        } catch (Exception e) {
+            tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }));
+        } finally {
+            tbc.uninstall(new DeploymentPackage[] { dp2, dp } );
+        }
+
+    }
+    
+    /**
+     * This test case asserts that when an error occurs in
+     * dropAllResources(), the resource processors must cause a roll back.
+     * 
+     * @spec DeploymentPackage.uninstall()
+     */     
+    private void testUninstallDeploymentPackage006() {
+        tbc.log("#testUninstallDeploymentPackage006");
+        DeploymentPackage dp = null, dpError = null;
+        try {
+            TestingDeploymentPackage testDP = tbc.getTestingDeploymentPackage(DeploymentConstants.SIMPLE_RESOURCE_PROCESSOR_UNINSTALL);
+            dp = tbc.installDeploymentPackage(tbc.getWebServer() + testDP.getFilename());
+            TestingDeploymentPackage testDPError = tbc.getTestingDeploymentPackage(DeploymentConstants.SIMPLE_RESOURCE_UNINSTALL_DP);
+            dpError = tbc.installDeploymentPackage(tbc.getWebServer() + testDP.getFilename());            
+            dpError.uninstall();
+            tbc.assertTrue("Asserting that rollback was called.", tbc.getTestingRollbackCall().isRolbackCalled());
+        } catch (Exception e) {
+            tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }));
+        } finally {
+            tbc.uninstall(new DeploymentPackage[] { dp, dpError } );
+        }
+
+    }    
+    
+    /**
+     * This test case asserts that when an error occurs in
+     * prepare() method, the resource processors must cause a roll back.
+     * 
+     * @spec DeploymentPackage.uninstall()
+     */     
+    private void testUninstallDeploymentPackage007() {
+        tbc.log("#testUninstallDeploymentPackage007");
+        DeploymentPackage dp = null, dpError = null;
+        try {
+            TestingDeploymentPackage testDP = tbc.getTestingDeploymentPackage(DeploymentConstants.SIMPLE_RESOURCE_PROCESSOR_UNINSTALL);
+            dp = tbc.installDeploymentPackage(tbc.getWebServer() + testDP.getFilename());
+            TestingDeploymentPackage testDPError = tbc.getTestingDeploymentPackage(DeploymentConstants.SIMPLE_RESOURCE_UNINSTALL_DP);
+            dpError = tbc.installDeploymentPackage(tbc.getWebServer() + testDP.getFilename());
+            tbc.getTestingRollbackCall().setPrepareException(true);
+            dpError.uninstall();
+            tbc.assertTrue("Asserting that rollback was called.", tbc.getTestingRollbackCall().isRolbackCalled());
+        } catch (Exception e) {
+            tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }));
+        } finally {
+            tbc.uninstall(new DeploymentPackage[] { dp, dpError } );
+        }
+
+    }   
+    
+    /**
+     * This test case asserts that when an error occurs in
+     * prepare() method, the resource processors must cause a roll back.
+     * 
+     * @spec DeploymentPackage.uninstallForced()
+     */     
+    private void testUninstallDeploymentPackage008() {
+        tbc.log("#testUninstallDeploymentPackage008");
+        DeploymentPackage dp = null, dpError = null;
+        try {
+            TestingDeploymentPackage testDP = tbc.getTestingDeploymentPackage(DeploymentConstants.SIMPLE_RESOURCE_PROCESSOR_UNINSTALL);
+            dp = tbc.installDeploymentPackage(tbc.getWebServer() + testDP.getFilename());
+            TestingDeploymentPackage testDPError = tbc.getTestingDeploymentPackage(DeploymentConstants.SIMPLE_RESOURCE_UNINSTALL_DP);
+            dpError = tbc.installDeploymentPackage(tbc.getWebServer() + testDP.getFilename());
+            tbc.getTestingRollbackCall().setPrepareException(true);
+            dpError.uninstallForced();
+            tbc.assertTrue("Asserting that rollback was called.", tbc.getTestingRollbackCall().isRolbackCalled());
+        } catch (Exception e) {
+            tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }));
+        } finally {
+            tbc.uninstall(new DeploymentPackage[] { dp, dpError } );
+        }
+
+    }     
+    
+    /**
+     * This test case asserts that commit is called by the
+     * resource processors that joined the session.
+     * 
+     * @spec DeploymentPackage.uninstall()
+     */     
+    private void testUninstallDeploymentPackage009() {
+        tbc.log("#testUninstallDeploymentPackage009");
+        DeploymentPackage dp = null, dp2 = null;
+        try {
+        	DeploymentConstants.COMMIT_COUNT = 0;
+            TestingDeploymentPackage testDP = tbc.getTestingDeploymentPackage(DeploymentConstants.RESOURCE_PROCESSOR_DP);
+            dp = tbc.installDeploymentPackage(tbc.getWebServer() + testDP.getFilename());
+            TestingDeploymentPackage testDP2 = tbc.getTestingDeploymentPackage(DeploymentConstants.RESOURCE_PROCESSOR_2_DP);
+            dp2 = tbc.installDeploymentPackage(tbc.getWebServer() + testDP2.getFilename());                 
+            dp.uninstall();
+            tbc.assertEquals("Asserting that Commit() was called only one time.", 1, DeploymentConstants.COMMIT_COUNT);
+        } catch (Exception e) {
+            tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }));
+        } finally {
+            tbc.uninstall(new DeploymentPackage[] { dp2, dp } );
+        }
+
+    }  
+    
+    /**
+     * This test case asserts that commit is called by the
+     * resource processors that joined the session.
+     * 
+     * @spec DeploymentPackage.uninstallForced()
+     */     
+    private void testUninstallDeploymentPackage010() {
+        tbc.log("#testUninstallDeploymentPackage010");
+        DeploymentPackage dp = null, dp2 = null;
+        try {
+        	DeploymentConstants.COMMIT_COUNT = 0;
+            TestingDeploymentPackage testDP = tbc.getTestingDeploymentPackage(DeploymentConstants.RESOURCE_PROCESSOR_DP);
+            dp = tbc.installDeploymentPackage(tbc.getWebServer() + testDP.getFilename());
+            TestingDeploymentPackage testDP2 = tbc.getTestingDeploymentPackage(DeploymentConstants.RESOURCE_PROCESSOR_2_DP);
+            dp2 = tbc.installDeploymentPackage(tbc.getWebServer() + testDP2.getFilename());                  
+            dp.uninstallForced();
+            tbc.assertEquals("Asserting that Commit() was called only one time.", 1, DeploymentConstants.COMMIT_COUNT);
+        } catch (Exception e) {
+            tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }));
+        } finally {
+            tbc.uninstall(new DeploymentPackage[] { dp2, dp } );
+        }
+
+    } 
+    
+    /**
+     * This test case asserts that a deployment package that has two
+     * resource processors, both must call the commit method.
+     * 
+     * @spec DeploymentPackage.uninstall()
+     */     
+    private void testUninstallDeploymentPackage011() {
+        tbc.log("#testUninstallDeploymentPackage011");
+        DeploymentPackage dp = null;
+        try {
+        	DeploymentConstants.COMMIT_COUNT = 0;
+            TestingDeploymentPackage testDP = tbc.getTestingDeploymentPackage(DeploymentConstants.SESSION_TEST_DP);
+            dp = tbc.installDeploymentPackage(tbc.getWebServer() + testDP.getFilename());
+            dp.uninstall();
+            tbc.assertEquals("Asserting that Commit() was called only one time.", 2, DeploymentConstants.COMMIT_COUNT);
+        } catch (Exception e) {
+            tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }));
+        } finally {
+            tbc.uninstall(new DeploymentPackage[] { dp } );
+        }
+
+    }  
+    
+    /**
+     * This test case asserts that a deployment package that has two
+     * resource processors, both must call the commit method.
+
+     * 
+     * @spec DeploymentPackage.uninstallForced()
+     */     
+    private void testUninstallDeploymentPackage012() {
+        tbc.log("#testUninstallDeploymentPackage012");
+        DeploymentPackage dp = null;
+        try {
+        	DeploymentConstants.COMMIT_COUNT = 0;
+            TestingDeploymentPackage testDP = tbc.getTestingDeploymentPackage(DeploymentConstants.SESSION_TEST_DP);
+            dp = tbc.installDeploymentPackage(tbc.getWebServer() + testDP.getFilename());
+            dp.uninstallForced();
+            tbc.assertEquals("Asserting that Commit() was called only one time.", 1, DeploymentConstants.COMMIT_COUNT);
+        } catch (Exception e) {
+            tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }));
+        } finally {
+            tbc.uninstall(new DeploymentPackage[] { dp } );
+        }
+
+    }
+    
+    /**
+     * This test case installs a simple deployment package and then tries to
+     * uninstall without granting this caller the uninstall permission. A
+     * SecurityException must be throw.
+     * 
+     * @spec DeploymentPackage.uninstall()
+     */ 
+    private synchronized void testUninstallDeploymentPackage013() {
+        tbc.log("#testUninstallDeploymentPackage013");
+        tbc.setDeploymentAdminPermission(DeploymentConstants.DEPLOYMENT_PACKAGE_NAME_ALL, DeploymentAdminPermission.ACTION_INSTALL);
+        DeploymentPackage dp = null;
+        try {
+            wait(1000);
+            TestingDeploymentPackage testDP = tbc.getTestingDeploymentPackage(DeploymentConstants.SIMPLE_DP);
+            dp = tbc.installDeploymentPackage(tbc.getWebServer() + testDP.getFilename());
+            dp.uninstall();
+            tbc.failException("#", SecurityException.class);
+        } catch (SecurityException e) {
+            tbc.pass(MessagesConstants.getMessage(MessagesConstants.EXCEPTION_CORRECTLY_THROWN, new String[] { "SecurityException" }));
+        } catch (Exception e) {
+            tbc.fail(MessagesConstants.getMessage(MessagesConstants.EXCEPTION_THROWN, new String[] {"SecurityException", e.getClass().getName() }));
+        } finally {
+            tbc.cleanUp(dp);
+        }
+    }
+
+    /**
+     * This test case installs a simple deployment package and 
+     * then tries to uninstall forcefully without granting this caller 
+     * the uninstallForceful permission. A SecurityException must be throw.
+     * 
+     * @spec DeploymentPackage.uninstallForced()
+     */     
+    private void testUninstallDeploymentPackage014() {
+        tbc.log("#testUninstallDeploymentPackage014");
+        tbc.setDeploymentAdminPermission(DeploymentConstants.DEPLOYMENT_PACKAGE_NAME_ALL, DeploymentAdminPermission.ACTION_INSTALL);
+        DeploymentPackage dp = null;
+        try {
+            wait(1000);
+            TestingDeploymentPackage testDP = tbc.getTestingDeploymentPackage(DeploymentConstants.SIMPLE_DP);
+            dp = tbc.installDeploymentPackage(tbc.getWebServer() + testDP.getFilename());
+            dp.uninstallForced();
+            tbc.failException("#", SecurityException.class);
+        } catch (SecurityException e) {
+            tbc.pass(MessagesConstants.getMessage(MessagesConstants.EXCEPTION_CORRECTLY_THROWN, new String[] { "SecurityException" }));
+        } catch (Exception e) {
+            tbc.fail(MessagesConstants.getMessage(MessagesConstants.EXCEPTION_THROWN, new String[] {"SecurityException", e.getClass().getName() }));
+        } finally {
+            tbc.cleanUp(dp);
+        }
+    }
 }

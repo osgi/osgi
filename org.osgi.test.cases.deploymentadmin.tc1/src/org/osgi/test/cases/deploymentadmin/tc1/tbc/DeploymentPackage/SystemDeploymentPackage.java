@@ -70,7 +70,7 @@ public class SystemDeploymentPackage {
 	 * Package must be contained in the list that is returned from the
 	 * listDeploymentPackages method.
 	 * 
-	 * @spec 115.2.4 The System Deployment Package
+	 * @spec 114.2.4 The System Deployment Package
 	 */
 	private void testSystemDeploymentPackage001() {
 		tbc.log("#testSystemDeploymentPackage001");
@@ -92,7 +92,7 @@ public class SystemDeploymentPackage {
 	 * This test case asserts that the System Deployment Package with "System"
 	 * is case sensitive 
 	 * 
-	 * @spec 115.2.4 The System Deployment Package
+	 * @spec 114.2.4 The System Deployment Package
 	 */
 	private void testSystemDeploymentPackage002() {
 		tbc.log("#testSystemDeploymentPackage002");
@@ -114,7 +114,7 @@ public class SystemDeploymentPackage {
 	 * This test case asserts that the System Deployment Package version must be
 	 * zero.
 	 * 
-	 * @spec 115.2.4 The System Deployment Package
+	 * @spec 114.2.4 The System Deployment Package
 	 */
 	private void testSystemDeploymentPackage003() {
 		tbc.log("#testSystemDeploymentPackage003");
@@ -141,7 +141,7 @@ public class SystemDeploymentPackage {
 	 * Asserts that it must be an error to install or update a Deployment Package with the
 	 * name system
 	 * 
-	 * @spec 115.2.4 The System Deployment Package
+	 * @spec 114.2.4 The System Deployment Package
 	 */
 	private void testSystemDeploymentPackage004() {
 		tbc.log("#testSystemDeploymentPackage004");
@@ -150,7 +150,7 @@ public class SystemDeploymentPackage {
 		tbc.setDeploymentAdminPermission(DeploymentConstants.DEPLOYMENT_PACKAGE_NAME_ALL, DeploymentConstants.ALL_PERMISSION);
 		TestingDeploymentPackage testDP = tbc.getTestingDeploymentPackage(DeploymentConstants.SYSTEM_DP);
 		sysDP = tbc.installDeploymentPackage(tbc.getWebServer() + testDP.getFilename());
-		tbc.failException("",DeploymentException.class);
+		tbc.fail("No exception thrown when installing a Deployment Package with name symbolic name like system");
 			
 		} catch (DeploymentException e) {
 			tbc.pass("Failed to install/update the deployment package");
@@ -165,7 +165,7 @@ public class SystemDeploymentPackage {
 	 * Asserts that it must be an error if an attempt is made to delete the
 	 * System Deployment Package.
 	 * 
-	 * @spec 115.2.4 The System Deployment Package
+	 * @spec 114.2.4 The System Deployment Package
 	 */
 	private void testSystemDeploymentPackage005() {
 		tbc.log("#testSystemDeploymentPackage005");

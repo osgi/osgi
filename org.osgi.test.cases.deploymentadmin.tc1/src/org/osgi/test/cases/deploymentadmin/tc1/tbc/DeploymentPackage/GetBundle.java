@@ -67,6 +67,7 @@ public class GetBundle {
 	public void run() {
 		testGetBundle001();
 		testGetBundle002();
+        testGetBundle003();
 	}
 	
 	/**
@@ -111,4 +112,35 @@ public class GetBundle {
 			tbc.uninstall(dp);
 		}
 	}
+    
+    /**
+     * Asserts that when a fix-pack removes a bundle then getBundle mustn't
+     * return it. 
+     * 
+     * @spec DeploymentPackage.getBundle(String)
+     */
+    private void testGetBundle003() {
+        tbc.log("#testGetBundle003");
+        DeploymentPackage dp = null;
+        DeploymentPackage fixDp = null;
+        try {
+            TestingDeploymentPackage testDP = tbc.getTestingDeploymentPackage(DeploymentConstants.SIMPLE_DP);           
+            TestingDeploymentPackage testFixDP = tbc.getTestingDeploymentPackage(DeploymentConstants.SIMPLE_UNINSTALL_BUNDLE_DP);
+            dp = tbc.installDeploymentPackage(tbc.getWebServer() + testDP.getFilename());
+            
+            TestingBundle[] testBundle = testDP.getBundles();
+            
+            tbc.assertEquals("Asserting the number of installed bundles.", 2, dp.getBundleSymNameVersionPairs().length);
+            
+            fixDp = tbc.installDeploymentPackage(tbc.getWebServer() + testFixDP.getFilename());
+            
+            Bundle bundle = dp.getBundle(testBundle[0].getName());
+
+            tbc.assertNull("The removed bundles was not returned by getBundle after an installation of a fix-pack that removes that bundles.", bundle);
+        } catch (Exception e) {
+            tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }));
+        } finally {
+            tbc.uninstall(new DeploymentPackage[] { dp, fixDp });
+        }
+    }    
 }

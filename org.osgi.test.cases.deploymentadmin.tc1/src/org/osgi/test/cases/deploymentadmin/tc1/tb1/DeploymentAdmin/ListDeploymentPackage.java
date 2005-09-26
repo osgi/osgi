@@ -36,10 +36,14 @@
  * Jul 15, 2005  Andre Assad
  * 145           Implement spec review issues
  * ============  ==============================================================
+ * Aug 30, 2005  Andre Assad
+ * 179           Implement Review Issues
+ * ============  ==============================================================
  */
 
 package org.osgi.test.cases.deploymentadmin.tc1.tb1.DeploymentAdmin;
 
+import org.osgi.service.deploymentadmin.DeploymentAdminPermission;
 import org.osgi.service.deploymentadmin.DeploymentException;
 import org.osgi.service.deploymentadmin.DeploymentPackage;
 import org.osgi.test.cases.deploymentadmin.tc1.tbc.DeploymentConstants;
@@ -64,40 +68,57 @@ public class ListDeploymentPackage implements TestInterface {
 	}
 
 	public void run() {
+        prepare();
 		testListDeploymentPackage001();
 		testListDeploymentPackage002();
 		testListDeploymentPackage003();
+        testListDeploymentPackage004();
+        testListDeploymentPackage005();
+        testListDeploymentPackage006();
+        testListDeploymentPackage007();
+        testListDeploymentPackage008();
 	}
+    
+    /**
+     * Sets permission needed and wait for PermissionWorker
+     */
+    private synchronized void prepare() {
+        try {
+            tbc.setDeploymentAdminPermission(DeploymentConstants.DEPLOYMENT_PACKAGE_NAME_ALL, DeploymentConstants.ALL_PERMISSION);
+            wait(1000);
+        } catch (Exception e) {
+            tbc.fail("Failed to wait for PermissionWorker");
+        }
+    }
 
 	/**
-	 * Asserts that if there are no deployment packages
-	 * installed it gives back an empty array.
-	 * 
-	 * @spec DeploymentAdmin.listDeploymentPackage()
-	 */			
+     * Asserts that if there are no deployment packages installed it gives back
+     * an the array containing only the "System" deployment package.
+     * 
+     * @spec DeploymentAdmin.listDeploymentPackage()
+     */			
 	private void testListDeploymentPackage001() {
 		tbc.log("#testListDeploymentPackage001");
-		tbc.setDeploymentAdminPermission(DeploymentConstants.DEPLOYMENT_PACKAGE_NAME_ALL, DeploymentConstants.ALL_PERMISSION);
 		try {
 			tbc.assertTrue("Asserts that all of the deployment package had been uninstalled.",uninstallAllDeploymentPackages());
 			DeploymentPackage dps[] = tbc.getDeploymentAdmin().listDeploymentPackages();
-			tbc.assertTrue("Asserts if there are no deployment packages installed it will give back an empty array.",dps.length==0);
+			tbc.assertTrue("There is only one DP", (dps.length==1));
+            tbc.assertEquals("The remaining DP is the System DP", DeploymentConstants.SYSTEM_DP_NAME, dps[0].getName());
 		} catch (Exception e) {
 			tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }));
 		}
 	}
 	
 	/**
-	 * Installs a deployment package and assert that an array of
-	 * DeploymentPackage objects representing all the installed
-	 * deployment packages is returned. After that, uninstall the
-	 * deployment package and asserts that it was uninstalled.
-	 * 
-	 * @spec DeploymentAdmin.listDeploymentPackage()
-	 */			
+     * Installs a deployment package and assert that an array of
+     * DeploymentPackage objects representing all the installed deployment
+     * packages is returned. After that, uninstall the deployment package and
+     * asserts that DeploymentPackages are not in the list.
+     * 
+     * @spec DeploymentAdmin.listDeploymentPackage()
+     */			
 	private void testListDeploymentPackage002() {
 		tbc.log("#testListDeploymentPackage002");
-		tbc.setDeploymentAdminPermission(DeploymentConstants.DEPLOYMENT_PACKAGE_NAME0, DeploymentConstants.ALL_PERMISSION);
 		DeploymentPackage dp = null;
 		int initialNumberOfPackages;
 		int finalNumberOfPackages;
@@ -112,7 +133,7 @@ public class ListDeploymentPackage implements TestInterface {
 			finalNumberOfPackages = dps.length;
 			tbc.assertTrue("Asserts that after installing a deployment package there are more deployment packages installed than before",(finalNumberOfPackages==(initialNumberOfPackages+1)));
 			
-			found = false;
+            found = false;
 			for(int i=0; i<dps.length && !found ;i++) {
 				if (dps[i].equals(dp)) {
 					found = true;
@@ -150,25 +171,151 @@ public class ListDeploymentPackage implements TestInterface {
 	private void testListDeploymentPackage003() {
 		tbc.log("#testListDeploymentPackage003");
 
-		tbc.setDeploymentAdminPermission(DeploymentConstants.DEPLOYMENT_PACKAGE_NAME_ALL, DeploymentConstants.ALL_PERMISSION);
 		TestingDeploymentPackage testDP = tbc.getTestingDeploymentPackage(DeploymentConstants.WRONG_VERSION_DP);
 		DeploymentPackage dp = null;
-		boolean found = false;
 		try {
 			dp = tbc.installDeploymentPackage(tbc.getWebServer() + testDP.getFilename());
 			tbc.failException("#", Exception.class);
 		} catch (Exception e) {
-			DeploymentPackage[] list = tbc.getDeploymentAdmin().listDeploymentPackages();
-			for (int i=0; !found && i<list.length; i++) {
-				if (list[i].getName().equals(testDP.getName())){
-					found = true;
-				}
-			}
-			tbc.assertTrue("The installed deployment package is not visible", !found);
+            DeploymentPackage found = findDP(testDP.getName());
+			tbc.assertNull("The installed deployment package is not visible", found);
 		} finally {
 			tbc.uninstall(dp);
 		}
 	}
+    
+    /**
+     * Asserts that only the latest version of the DP is returned when an update
+     * operation is executed.
+     * 
+     * @spec DeploymentAdmin.listDeploymentPackage()
+     */         
+    private void testListDeploymentPackage004() {
+        tbc.log("#testListDeploymentPackage004");
+        DeploymentPackage dp = null, updateDP = null;
+        try {
+            TestingDeploymentPackage testDP = tbc.getTestingDeploymentPackage(DeploymentConstants.SIMPLE_DP);
+            dp = tbc.installDeploymentPackage(tbc.getWebServer() + testDP.getFilename());
+            
+            TestingDeploymentPackage testUpdateDP = tbc.getTestingDeploymentPackage(DeploymentConstants.ADD_BUNDLE_FIX_PACK_DP);
+            updateDP = tbc.installDeploymentPackage(tbc.getWebServer() + testUpdateDP.getFilename());
+            
+            DeploymentPackage found = findDP(testDP.getName());
+            tbc.assertEquals(
+                "During an update, the target deployment package remained the same",
+                updateDP.getName().trim() + "_" + updateDP.getVersion().toString().trim(),
+                found.getName().trim() + "_" + found.getVersion().toString().trim());
+            
+            
+        } catch (Exception e) {
+            tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }));
+        } finally {
+            tbc.uninstall(new DeploymentPackage[]{dp, updateDP});
+        }
+    }
+
+    /**
+     * Asserts if during an installation of an existing package (update), the
+     * target deployment package must remain in this list until the
+     * installation process is completed.
+     * 
+     * @spec DeploymentAdmin.listDeploymentPackage()
+     */
+   private void testListDeploymentPackage005() {
+       tbc.log("#testListDeploymentPackage005");
+       DeploymentPackage dp = null;
+       try {
+           TestingDeploymentPackage testDP = tbc.getTestingDeploymentPackage(DeploymentConstants.SIMPLE_DP);
+           dp = tbc.installDeploymentPackage(tbc.getWebServer() + testDP.getFilename());
+           
+           Thread worker = new ListDeploymentPackageWorker();
+           worker.start();
+           // Not sure if this is going to be synchronized
+           synchronized (tbc) {
+               tbc.wait();
+           }
+           DeploymentPackage found = findDP(testDP.getName());
+           
+           tbc.assertEquals(
+                   "During an update, the target deployment package remained the same",
+                   dp.getName().trim() + "_" + dp.getVersion().toString().trim(), 
+                   found.getName().trim() + "_" + found.getVersion().toString().trim());
+           
+       } catch (Exception e) {
+           tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }));
+       } finally {
+           tbc.uninstall(dp);
+       }
+   }
+   
+   /**
+    * Asserts that after an installation of an existing package (update) is
+    * completed, the source is in the list of listDeploymentPackage method.
+    * 
+    * @spec DeploymentAdmin.listDeploymentPackage()
+    */     
+   private void testListDeploymentPackage006() {
+       tbc.log("#testListDeploymentPackage006");
+       DeploymentPackage dp = null;
+       try {
+           TestingDeploymentPackage testDP = tbc.getTestingDeploymentPackage(DeploymentConstants.SIMPLE_DP);
+           tbc.installDeploymentPackage(tbc.getWebServer() + testDP.getFilename());
+           
+           TestingDeploymentPackage updateDP = tbc.getTestingDeploymentPackage(DeploymentConstants.ADD_BUNDLE_FIX_PACK_DP);
+           dp = tbc.installDeploymentPackage(tbc.getWebServer() + updateDP.getFilename());
+           
+           DeploymentPackage found = findDP(testDP.getName());
+           
+           tbc.assertEquals(
+                   "During an update, the target deployment package remained the same",
+                   dp.getName().trim() + "_" + dp.getVersion().toString().trim(), 
+                   found.getName().trim() + "_" + found.getVersion().toString().trim());
+           
+       } catch (Exception e) {
+           tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }));
+       } finally {
+           tbc.uninstall(dp);
+       }
+   }
+   
+   /**
+     * Asserts in case of missing permissions it <b>MAY</b> give back an empty array.
+     * 
+     * @spec DeploymentAdmin.listDeploymentPackage()
+     */     
+   private void testListDeploymentPackage007() {
+       tbc.log("#testListDeploymentPackage007");
+       tbc.setDeploymentAdminPermission(DeploymentConstants.DEPLOYMENT_PACKAGE_NAME_ALL, DeploymentAdminPermission.ACTION_INSTALL);
+       try {
+           DeploymentPackage[] dp = tbc.getDeploymentAdmin().listDeploymentPackages();
+           if (dp.length==0) {
+               tbc.pass("The returned array is empty");
+           } else {
+               tbc.log("The returned array is NOT empty");
+           }
+       } catch (Exception e) {
+           tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }));
+       }
+   }
+   
+   /**
+    * Asserts that SecurityException is thrown if the caller does not have "list" permission
+    * 
+    * @spec DeploymentAdmin.listDeploymentPackage()
+    */     
+  private void testListDeploymentPackage008() {
+      tbc.log("#testListDeploymentPackage008");
+      tbc.setDeploymentAdminPermission(DeploymentConstants.DEPLOYMENT_PACKAGE_NAME_ALL, DeploymentAdminPermission.ACTION_INSTALL);
+      try {
+          DeploymentPackage[] dp = tbc.getDeploymentAdmin().listDeploymentPackages();
+          tbc.failException("#", SecurityException.class);
+      } catch (SecurityException e) {
+          tbc.pass(MessagesConstants.getMessage(MessagesConstants.EXCEPTION_CORRECTLY_THROWN, new String[] { "SecurityException" }));
+      } catch (Exception e) {
+            tbc.fail(MessagesConstants.getMessage(MessagesConstants.EXCEPTION_THROWN, new String[]{
+                    "SecurityException", e.getClass().getName()}));
+        }
+    }
 	
 	//Returns if all deployment packages could be uninstalled.
 	private boolean uninstallAllDeploymentPackages() {
@@ -186,4 +333,32 @@ public class ListDeploymentPackage implements TestInterface {
 		}
 		return passed;
 	}
+    
+    private DeploymentPackage findDP(String name) {
+        boolean found = false;
+        DeploymentPackage dp = null;
+        DeploymentPackage[] list = tbc.getDeploymentAdmin().listDeploymentPackages();
+        for (int i=0; (dp==null) && i<list.length; i++) {
+            if (list[i].getName().equals(name)){
+                dp = list[i];
+            }
+        }
+        return dp;
+    }
+    
+    class ListDeploymentPackageWorker extends Thread {
+        
+        public void run() {
+            TestingDeploymentPackage updateDP = tbc.getTestingDeploymentPackage(DeploymentConstants.ADD_BUNDLE_FIX_PACK_DP);
+            DeploymentPackage dp = null;
+            try {
+                dp = tbc.installDeploymentPackageAndNotify(tbc.getWebServer() + updateDP.getFilename());
+            } catch (Exception e) {
+                tbc.log("failed to install source deployment package");
+            } finally {
+                tbc.uninstall(dp);
+            }
+        }
+        
+    }
 }

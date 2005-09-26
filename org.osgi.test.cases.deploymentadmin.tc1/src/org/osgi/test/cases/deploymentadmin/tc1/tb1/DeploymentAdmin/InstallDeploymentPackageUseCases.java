@@ -79,19 +79,23 @@ public class InstallDeploymentPackageUseCases implements TestInterface {
 		testInstallDeploymentPackageUseCases011();
 		testInstallDeploymentPackageUseCases012();
 		testInstallDeploymentPackageUseCases013();
-		testInstallDeploymentPackageUseCases014();
+        testInstallDeploymentPackageUseCases014();
+        testInstallDeploymentPackageUseCases015();
+        testInstallDeploymentPackageUseCases016();
 	}
 
 	/**
 	 * Asserts that an event is sent when a installation is started.
 	 * 
-	 * @spec 115.8 Installing a Deployment Package
+	 * @spec 114.8 Installing a Deployment Package
 	 */		
 	private void testInstallDeploymentPackageUseCases001() {
 		tbc.log("#testInstallDeploymentPackageUseCases001");
 		tbc.setDeploymentAdminPermission(DeploymentConstants.DEPLOYMENT_PACKAGE_NAME_ALL, DeploymentConstants.ALL_PERMISSION);
 		DeploymentPackage dp = null;
 		DeploymentEventHandlerImpl deploymentEventHandler = tbc.getDeploymentEventHandler();
+        deploymentEventHandler.setVerifying(true);
+
 		try {
 			TestingDeploymentPackage testDP = tbc.getTestingDeploymentPackage(DeploymentConstants.SIMPLE_DP);
 			
@@ -113,7 +117,7 @@ public class InstallDeploymentPackageUseCases implements TestInterface {
 	/**
 	 * Asserts that an event is sent when a uninstallation is started.
 	 * 
-	 * @spec 115.9 Uninstalling a Deployment Package
+	 * @spec 114.9 Uninstalling a Deployment Package
 	 */			
 	private void testInstallDeploymentPackageUseCases002() {
 		tbc.log("#testInstallDeploymentPackageUseCases002");
@@ -121,6 +125,7 @@ public class InstallDeploymentPackageUseCases implements TestInterface {
 		DeploymentPackage dp = null;
 		DeploymentEventHandlerImpl deploymentEventHandler = tbc.getDeploymentEventHandler();
 		deploymentEventHandler.setHandlingUninstall(true);
+        deploymentEventHandler.setVerifying(true);
 
 		try {
 			TestingDeploymentPackage testDP = tbc.getTestingDeploymentPackage(DeploymentConstants.SIMPLE_DP);
@@ -146,7 +151,7 @@ public class InstallDeploymentPackageUseCases implements TestInterface {
 	/**
 	 * Asserts that an event is sent when a installation is completed.
 	 * 
-	 * @spec 115.11 Events
+	 * @spec 114.11 Events
 	 */				
 	private void testInstallDeploymentPackageUseCases003() {
 		tbc.log("#testInstallDeploymentPackageUseCases003");
@@ -154,6 +159,8 @@ public class InstallDeploymentPackageUseCases implements TestInterface {
 		DeploymentPackage dp = null;
 		DeploymentEventHandlerImpl deploymentEventHandler = tbc.getDeploymentEventHandler();
 		deploymentEventHandler.setHandlingComplete(true);
+        deploymentEventHandler.setVerifying(true);
+
 		try {
 			TestingDeploymentPackage testDP = tbc.getTestingDeploymentPackage(DeploymentConstants.SIMPLE_DP);
 			
@@ -179,7 +186,7 @@ public class InstallDeploymentPackageUseCases implements TestInterface {
 	/**
 	 * Asserts that an event is sent when an uninstallation is completed.
 	 * 
-	 * @spec 115.11 Events
+	 * @spec 114.11 Events
 	 */				
 	private void testInstallDeploymentPackageUseCases004() {
 		tbc.log("#testInstallDeploymentPackageUseCases004");
@@ -188,7 +195,8 @@ public class InstallDeploymentPackageUseCases implements TestInterface {
 		DeploymentEventHandlerImpl deploymentEventHandler = tbc.getDeploymentEventHandler();
 		deploymentEventHandler.setHandlingComplete(true);
 		deploymentEventHandler.setHandlingUninstall(true);
-		
+        deploymentEventHandler.setVerifying(true);
+
 		try {
 			TestingDeploymentPackage testDP = tbc.getTestingDeploymentPackage(DeploymentConstants.SIMPLE_DP);
 			dp = tbc.installDeploymentPackage(tbc.getWebServer() + testDP.getFilename());
@@ -212,59 +220,14 @@ public class InstallDeploymentPackageUseCases implements TestInterface {
 	}	
 
 	/**
-	 * This test case installs a deployment package without
-	 * signing its bundles. It must thrown DeploymentException.
-	 * 
-	 * @spec 115.14.5.15 CODE_SIGNING_ERROR
-	 */				
-	private void testInstallDeploymentPackageUseCases005() {
-		tbc.log("#testInstallDeploymentPackageUseCases005");
-		tbc.setDeploymentAdminPermission(DeploymentConstants.DEPLOYMENT_PACKAGE_NAME_ALL, DeploymentConstants.ALL_PERMISSION);
-		TestingDeploymentPackage testDP = tbc.getTestingDeploymentPackage(DeploymentConstants.SIMPLE_UNSIGNED_BUNDLE_DP);
-		DeploymentPackage dp = null;
-		try {
-			dp = tbc.installDeploymentPackage(tbc.getWebServer() + testDP.getFilename());
-			tbc.failException("#", DeploymentException.class);
-		} catch (DeploymentException e) {
-			tbc.assertEquals("Deployment Exception thrown signing code error", DeploymentException.CODE_SIGNING_ERROR, e.getCode());
-		} catch (Exception e) {
-			tbc.fail(MessagesConstants.getMessage(MessagesConstants.EXCEPTION_THROWN, new String[] {"DeploymentException", e.getClass().getName() }));
-		} finally {
-			tbc.uninstall(dp);
-		}
-	}
-	
-	/**
-	 *  This test case installs a unsigned deployment package.
-	 * 
-	 * @spec 115.14.5.15 CODE_SIGNING_ERROR
-	 */					
-	private void testInstallDeploymentPackageUseCases006() {
-		tbc.log("#testInstallDeploymentPackageUseCases006");
-		tbc.setDeploymentAdminPermission(DeploymentConstants.DEPLOYMENT_PACKAGE_NAME_ALL, DeploymentConstants.ALL_PERMISSION);
-		TestingDeploymentPackage testDP = tbc.getTestingDeploymentPackage(DeploymentConstants.SIMPLE_UNSIGNED_DP);
-		DeploymentPackage dp = null;
-		try {
-			dp = tbc.installDeploymentPackage(tbc.getWebServer() + testDP.getFilename());
-			tbc.failException("#", DeploymentException.class);
-		} catch (DeploymentException e) {
-			tbc.assertEquals("DeploymentException thrown signing code error", DeploymentException.CODE_SIGNING_ERROR, e.getCode());
-		} catch (Exception e) {
-			tbc.fail(MessagesConstants.getMessage(MessagesConstants.EXCEPTION_THROWN, new String[] {"DeploymentException", e.getClass().getName() }));
-		} finally {
-			tbc.uninstall(dp);
-		}
-	}
-
-	/**
 	 *  This test case asserts that Deployment Admin service
 	 *  must set the bundle location to the following URL:
 	 *  location ::= 'osgi-dp:' bsn
 	 * 
-	 * @spec 115.2.1 Resources
+	 * @spec 114.2.1 Resources
 	 */		
-	private void testInstallDeploymentPackageUseCases007() {
-		tbc.log("#testInstallDeploymentPackageUseCases007");
+	private void testInstallDeploymentPackageUseCases005() {
+		tbc.log("#testInstallDeploymentPackageUseCases005");
 		tbc.setDeploymentAdminPermission(DeploymentConstants.DEPLOYMENT_PACKAGE_NAME_ALL, DeploymentConstants.ALL_PERMISSION);
 		DeploymentPackage dp = null;
 		try {
@@ -284,19 +247,19 @@ public class InstallDeploymentPackageUseCases implements TestInterface {
 	}
 	
 	/**
-	 * This test case asserts that the extension of a
-	 * Deployment Package JAR file name must be .dp.
-	 * 
-	 * @spec 115.3 File Format
-	 */		
-	private void testInstallDeploymentPackageUseCases008() {
-		tbc.log("#testInstallDeploymentPackageUseCases008");
+     * This test case asserts that the extension of a Deployment Package JAR
+     * file name SHOULD be .dp
+     * 
+     * @spec 114.3 File Format
+     */		
+	private void testInstallDeploymentPackageUseCases006() {
+		tbc.log("#testInstallDeploymentPackageUseCases006");
 		tbc.setDeploymentAdminPermission(DeploymentConstants.DEPLOYMENT_PACKAGE_NAME_ALL, DeploymentConstants.ALL_PERMISSION);
 		DeploymentPackage dp = null;
 		try {
 			TestingDeploymentPackage testDP = tbc.getTestingDeploymentPackage(DeploymentConstants.WRONG_FORMAT_DP);
 			dp = tbc.installDeploymentPackage(tbc.getWebServer() + testDP.getFilename());
-			tbc.failException("#", DeploymentException.class);
+            tbc.log("DeploymentAdmin accepted a deployment package without .dp format");
 		} catch (DeploymentException e) {
 			tbc.pass("Correctly failed to install a deployment package with wrong extension");
 		} catch (Exception e) {
@@ -310,16 +273,16 @@ public class InstallDeploymentPackageUseCases implements TestInterface {
 	 * Asserts that resources must come after bundles in a
 	 * deployment package jar file.
 	 * 
-	 * @spec 115.3 File Format
+	 * @spec 114.3 File Format
 	 */		
-	private void testInstallDeploymentPackageUseCases009() {
-		tbc.log("#testInstallDeploymentPackageUseCases009");
+	private void testInstallDeploymentPackageUseCases007() {
+		tbc.log("#testInstallDeploymentPackageUseCases007");
 		tbc.setDeploymentAdminPermission(DeploymentConstants.DEPLOYMENT_PACKAGE_NAME_ALL, DeploymentConstants.ALL_PERMISSION);
 		DeploymentPackage dp = null;
 		try {
 			TestingDeploymentPackage testDP = tbc.getTestingDeploymentPackage(DeploymentConstants.WRONG_ORDER_DP);
 			dp = tbc.installDeploymentPackage(tbc.getWebServer() + testDP.getFilename());
-			tbc.failException("#", DeploymentException.class);			
+			tbc.failException("#", DeploymentException.class);
 		} catch (DeploymentException e) {
 			tbc.pass("Correctly failed to install a deployment package with wrong extension");
 		} catch (Exception e) {
@@ -333,10 +296,10 @@ public class InstallDeploymentPackageUseCases implements TestInterface {
 	 * Tests that the Deployment Admin service must reject a Deployment
 	 * Package that has an invalid signature.
 	 * 
-	 * @spec 115.3.1 Signing
+	 * @spec 114.3.1 Signing
 	 */		
-	private void testInstallDeploymentPackageUseCases010() {
-		tbc.log("#testInstallDeploymentPackageUseCases010");
+	private void testInstallDeploymentPackageUseCases008() {
+		tbc.log("#testInstallDeploymentPackageUseCases008");
 		tbc.setDeploymentAdminPermission(DeploymentConstants.DEPLOYMENT_PACKAGE_NAME_ALL, DeploymentConstants.ALL_PERMISSION);
 		DeploymentPackage dp = null;
 		try {
@@ -356,10 +319,10 @@ public class InstallDeploymentPackageUseCases implements TestInterface {
 	 * Tests that a path name in a deployment package file must
 	 * not contain any character except: [A-Za-z0-9_.-]
 	 * 
-	 * @spec 115.3.2 Path Names
+	 * @spec 114.3.2 Path Names
 	 */		
-	private void testInstallDeploymentPackageUseCases011() {
-		tbc.log("#testInstallDeploymentPackageUseCases011");
+	private void testInstallDeploymentPackageUseCases009() {
+		tbc.log("#testInstallDeploymentPackageUseCases009");
 		tbc.setDeploymentAdminPermission(DeploymentConstants.DEPLOYMENT_PACKAGE_NAME_ALL, DeploymentConstants.ALL_PERMISSION);
 		DeploymentPackage dp = null;
 		try {
@@ -376,37 +339,14 @@ public class InstallDeploymentPackageUseCases implements TestInterface {
 	}
 	
 	/**
-	 * Tests that the syntax follows the standard OSGi
-	 * Framework rules for versions.
-	 * 
-	 * @spec 115.3.4.2 Semantic Headers
-	 */		
-	private void testInstallDeploymentPackageUseCases012() {
-		tbc.log("#testInstallDeploymentPackageUseCases012");
-		tbc.setDeploymentAdminPermission(DeploymentConstants.DEPLOYMENT_PACKAGE_NAME_ALL, DeploymentConstants.ALL_PERMISSION);
-		DeploymentPackage dp = null;
-		try {
-			TestingDeploymentPackage testDP = tbc.getTestingDeploymentPackage(DeploymentConstants.WRONG_VERSION_DP);
-			dp = tbc.installDeploymentPackage(tbc.getWebServer() + testDP.getFilename());
-			tbc.failException("#", DeploymentException.class);
-		} catch (DeploymentException e) {
-			tbc.pass("Correctly failed to install a deployment package with a wrong version format.");
-		} catch (Exception e) {
-			tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }));
-		} finally {
-			tbc.uninstall(dp);
-		}
-	}
-	
-	/**
 	 * Asserts that when installing a deployment package all target bundles must
 	 * be stopped in reverse target resource order and then installed according
 	 * to the semantics of the OSGi Framework installBundle method.
 	 * 
-	 * @spec 115.8 Installing a Deployment Package
+	 * @spec 114.8 Installing a Deployment Package
 	 */
-	private void testInstallDeploymentPackageUseCases013() {
-		tbc.log("#testInstallDeploymentPackageUseCases013");
+	private void testInstallDeploymentPackageUseCases010() {
+		tbc.log("#testInstallDeploymentPackageUseCases010");
 		tbc.setDeploymentAdminPermission(DeploymentConstants.DEPLOYMENT_PACKAGE_NAME_ALL, DeploymentConstants.ALL_PERMISSION);
 
 		DeploymentPackage dp = null;
@@ -449,10 +389,10 @@ public class InstallDeploymentPackageUseCases implements TestInterface {
 	/**
 	 * Tests that Exceptions thrown during stopping of a bundle must be ignored
 	 * 
-	 * @spec 115.8 Installing a Deployment Package
+	 * @spec 114.8 Installing a Deployment Package
 	 */		
-	private void testInstallDeploymentPackageUseCases014() {
-		tbc.log("#testInstallDeploymentPackageUseCases014");
+	private void testInstallDeploymentPackageUseCases011() {
+		tbc.log("#testInstallDeploymentPackageUseCases011");
 		tbc.setDeploymentAdminPermission(DeploymentConstants.DEPLOYMENT_PACKAGE_NAME_ALL, DeploymentConstants.ALL_PERMISSION);
 		DeploymentPackage dp = null;
 		try {
@@ -464,4 +404,152 @@ public class InstallDeploymentPackageUseCases implements TestInterface {
 			tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }));
 		}
 	}
+    
+    /**
+     * Asserts that DeploymentException is thrown when the Bundle Version is not
+     * the same as defined by the deployment package manifest.
+     * 
+     * @spec DeploymentException.DeploymentException()
+     */     
+    private void testInstallDeploymentPackageUseCases012() {
+        tbc.log("#testInstallDeploymentPackageUseCases012");
+        tbc.setDeploymentAdminPermission(DeploymentConstants.DEPLOYMENT_PACKAGE_NAME_ALL, DeploymentConstants.ALL_PERMISSION);
+        DeploymentPackage dp = null;
+        try {
+            TestingDeploymentPackage testDP = tbc.getTestingDeploymentPackage(DeploymentConstants.VERSION_DIFFERENT_FROM_MANIFEST_DP);
+            dp = tbc.installDeploymentPackage(tbc.getWebServer() + testDP.getFilename());
+            tbc.failException("#", DeploymentException.class);
+        } catch (DeploymentException e) {
+            //TODO what is the error code for this case?
+            tbc.pass("DeploymentException correctly thrown");
+        } catch (Exception e) {
+            tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }));
+        } finally {
+            tbc.uninstall(dp);
+        }
+    }
+    
+    /**
+     * Asserts that an event is sent when a installation is completed, and was not successful.
+     * 
+     * @spec 114.11 Events
+     */             
+    private void testInstallDeploymentPackageUseCases013() {
+        tbc.log("#testInstallDeploymentPackageUseCases013");
+        tbc.setDeploymentAdminPermission(DeploymentConstants.DEPLOYMENT_PACKAGE_NAME_ALL, DeploymentConstants.ALL_PERMISSION);
+        DeploymentPackage dp = null;
+        DeploymentEventHandlerImpl deploymentEventHandler = tbc.getDeploymentEventHandler();
+        deploymentEventHandler.setHandlingComplete(true);
+        deploymentEventHandler.setVerifying(true);
+
+        TestingDeploymentPackage testDP = null;
+        try {
+            testDP = tbc.getTestingDeploymentPackage(DeploymentConstants.MISSING_NAME_HEADER_DP);
+            
+            synchronized (tbc) {
+                dp = tbc.installDeploymentPackage(tbc.getWebServer() + testDP.getFilename());
+                tbc.wait(DeploymentConstants.TIMEOUT);
+            }
+            tbc.failException("#", DeploymentException.class);
+        } catch (DeploymentException e) {
+            String dpNameProp = (String) deploymentEventHandler.getProperty("deploymentpackage.name");
+            Boolean successProp = (Boolean) deploymentEventHandler.getProperty("successful");
+            tbc.assertTrue("A complete event occured", deploymentEventHandler.isComplete());
+            tbc.assertEquals("The installed deployment package is " + testDP.getName(), testDP.getName(), dpNameProp);
+            tbc.assertTrue("The installation of deployment package was NOT successfull ", !successProp.booleanValue());
+        } catch (Exception e) {
+            tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }));
+        } finally {
+            tbc.uninstall(dp);
+            deploymentEventHandler.reset();
+        }
+    }
+    
+    /**
+     * Asserts that an event is sent when an uninstallation is completed, and was NOT successful.
+     * 
+     * @spec 114.11 Events
+     */             
+    private void testInstallDeploymentPackageUseCases014() {
+        tbc.log("#testInstallDeploymentPackageUseCases014");
+        tbc.setDeploymentAdminPermission(DeploymentConstants.DEPLOYMENT_PACKAGE_NAME_ALL, DeploymentConstants.ALL_PERMISSION);
+        DeploymentPackage dp = null;
+        DeploymentEventHandlerImpl deploymentEventHandler = tbc.getDeploymentEventHandler();
+        deploymentEventHandler.setHandlingComplete(true);
+        deploymentEventHandler.setHandlingUninstall(true);
+        deploymentEventHandler.setVerifying(true);
+
+        TestingDeploymentPackage testDP = null;
+        try {
+            testDP = tbc.getTestingDeploymentPackage(DeploymentConstants.SIMPLE_RESOURCE_PROCESSOR_DP);
+            dp = tbc.installDeploymentPackage(tbc.getWebServer() + testDP.getFilename());
+            
+            // uninstalls RP bundle so uninstallation fails
+            Bundle b = tbc.getBundle(testDP.getBundles()[0].getName());
+            b.uninstall();
+
+            synchronized (tbc) {
+                tbc.uninstall(dp);
+                tbc.wait(DeploymentConstants.TIMEOUT);
+            }
+            tbc.failException("#", DeploymentException.class);
+        } catch (DeploymentException e) {
+            String dpNameProp = (String) deploymentEventHandler.getProperty("deploymentpackage.name");
+            Boolean successProp = (Boolean) deploymentEventHandler.getProperty("successful");
+            tbc.assertTrue("A complete event occured", deploymentEventHandler.isComplete());
+            tbc.assertEquals("The installed deployment package is " + testDP.getName(), testDP.getName(), dpNameProp);
+            tbc.assertTrue("The uninstallation of deployment package was NOT successfull ", !successProp.booleanValue());
+        } catch (Exception e) {
+            tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }));
+        } finally {
+            deploymentEventHandler.reset();
+        }
+    }
+    
+    /**
+     * Asserts that a path name must not contain any character except:
+     * [A-Za-z0-9_.-]. This test case installs a DP with a path that contains
+     * valid characters that are not letters.
+     * 
+     * @spec 114.3.2 Path Names
+     */
+    private void testInstallDeploymentPackageUseCases015() {
+        tbc.log("#testInstallDeploymentPackageUseCases015");
+        tbc.setDeploymentAdminPermission(DeploymentConstants.DEPLOYMENT_PACKAGE_NAME_ALL, DeploymentConstants.ALL_PERMISSION);
+        DeploymentPackage dp = null;
+        TestingDeploymentPackage testDP = null;
+        try {
+            testDP = tbc.getTestingDeploymentPackage(DeploymentConstants.STRANGE_PATH_DP);
+            dp = tbc.installDeploymentPackage(tbc.getWebServer() + testDP.getFilename());
+            tbc.pass("No exception is thrown during the installation of a DP with strange path to bundles");
+        } catch (Exception e) {
+            tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }));
+        } finally {
+            tbc.uninstall(dp);
+        }
+    }
+    
+    /**
+     * Asserts if the Deployment Package is signed, subsequent files in the JAR
+     * <b>must be the signature files</b> as defined in the manifest specification.
+     * 
+     * @spec 114.3 File Format
+     */
+    private void testInstallDeploymentPackageUseCases016() {
+        tbc.log("#testInstallDeploymentPackageUseCases016");
+        DeploymentPackage dp = null;
+        try {
+            TestingDeploymentPackage testDP = tbc.getTestingDeploymentPackage(DeploymentConstants.SIGNING_FILE_NOT_NEXT);
+            dp = tbc.installDeploymentPackage(tbc.getWebServer() + testDP.getFilename());
+            tbc.failException("#", DeploymentException.class);
+        } catch (DeploymentException e) {
+            // TODO what is the error code for this case?
+            tbc.pass("DeploymentException correctly thrown");
+        } catch (Exception e) {
+            tbc.fail(MessagesConstants.getMessage(
+                MessagesConstants.UNEXPECTED_EXCEPTION, new String[]{e.getClass().getName()}));
+        } finally {
+            tbc.uninstall(dp);
+        }
+    }
 }

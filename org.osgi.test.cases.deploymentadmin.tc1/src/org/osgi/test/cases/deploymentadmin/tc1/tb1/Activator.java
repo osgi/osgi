@@ -33,16 +33,20 @@
  * 14/04/2005    Andre Assad
  * 26            Implement MEG TCK for the deployment RFC-88
  * ============  ==============================================================
+ * 02/09/2005    Andre Assad
+ * 179           Implement Review Issues
+ * ============  ==============================================================
  */
-
 package org.osgi.test.cases.deploymentadmin.tc1.tb1;
 
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
+import org.osgi.test.cases.deploymentadmin.tc1.tb1.DeploymentAdmin.Cancel;
 import org.osgi.test.cases.deploymentadmin.tc1.tb1.DeploymentAdmin.GetDeploymentPackage;
 import org.osgi.test.cases.deploymentadmin.tc1.tb1.DeploymentAdmin.InstallDeploymentPackageAPI;
 import org.osgi.test.cases.deploymentadmin.tc1.tb1.DeploymentAdmin.InstallDeploymentPackageUseCases;
+import org.osgi.test.cases.deploymentadmin.tc1.tb1.DeploymentAdmin.InstallExceptions;
 import org.osgi.test.cases.deploymentadmin.tc1.tb1.DeploymentAdmin.InstallFixPack;
 import org.osgi.test.cases.deploymentadmin.tc1.tb1.DeploymentAdmin.ListDeploymentPackage;
 import org.osgi.test.cases.deploymentadmin.tc1.tb1.DeploymentAdmin.UninstallDeploymentPackage;
@@ -81,7 +85,9 @@ public class Activator implements BundleActivator, TB1Service {
 				new InstallFixPack((DeploymentTestControl) tbc),
 				new ListDeploymentPackage((DeploymentTestControl) tbc),
 				new GetDeploymentPackage((DeploymentTestControl) tbc),
-				new UninstallDeploymentPackage((DeploymentTestControl) tbc) 
+				new UninstallDeploymentPackage((DeploymentTestControl) tbc),
+                new Cancel((DeploymentTestControl) tbc),
+                new InstallExceptions((DeploymentTestControl) tbc)
 				};
 	}
 }
