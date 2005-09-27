@@ -78,8 +78,22 @@ public class DeploymentThread extends Thread {
             }
         } else if (mimeType.equals(PluginConstants.MIME_BUNDLE)) {
             try {
-                Bundle b = pluginCtx.getBundleContext().installBundle(location, is);
-                b.start();
+                // TODO is the update correct in this way?
+                Bundle[] bs = pluginCtx.getBundleContext().getBundles();
+                Bundle b = null;
+                for (int i = 0; i < bs.length; i++) {
+                    if (bs[i].getLocation().equals(location)) {
+                        b = bs[i];
+                        break;
+                    }
+                }
+                if (null == b) {
+                    b = pluginCtx.getBundleContext().installBundle(location, is);
+                    b.start();
+                } else {
+                    b.update(is);
+                }
+                
                 listenerBundle.onFinish(b, null);
             } catch (Exception e) {
                 listenerBundle.onFinish(null, e);
