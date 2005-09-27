@@ -197,7 +197,7 @@ public abstract class ApplicationHandle {
 		  });
 		}
 		catch (Throwable t) {
-			// Ignore
+			t.printStackTrace();
 		}
 	}
 

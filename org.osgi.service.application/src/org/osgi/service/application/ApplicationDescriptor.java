@@ -418,7 +418,7 @@ public abstract class ApplicationDescriptor {
 		  });
 		}
 		catch (Throwable t) {
-			// Ignore
+			t.printStackTrace();
 		}
 	}
 }
