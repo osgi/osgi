@@ -129,8 +129,8 @@ public class DeploymentTestControl extends DefaultTestBundleControl {
 		ServiceReference daServiveReference = getContext().getServiceReference(DeploymentAdmin.class.getName());
 		deploymentAdmin = (DeploymentAdmin) getContext().getService(daServiveReference);
         
+        installHandlersAndListeners();
 		try {
-			
 			install("tb1.jar");
 			tb1Srv = (TB1Service) getContext().getService(getContext().getServiceReference(TB1Service.class.getName()));
 			if(tb1Srv!=null) {
@@ -143,7 +143,6 @@ public class DeploymentTestControl extends DefaultTestBundleControl {
 		createTestingDeploymentPackages();
 		setBundleServicePermissions();
         startPermissionWorker();
-        installHandlersAndListeners();
 	}
 	
     /**
@@ -833,14 +832,6 @@ public class DeploymentTestControl extends DefaultTestBundleControl {
     }
 
     /**
-     * Give All Permission to TBC
-     */
-    private void setAllPermission() {
-        PermissionInfo[] all = {new PermissionInfo(AllPermission.class.getName(), "<all permissions>", "<all actions>")};
-        setPermissionInfo(bundleLocation, all);
-    }
-    
-    /**
 	 * Set the DeploymentAdminPermission for the caller
 	 */
 	public void setDeploymentAdminPermission(String name, String perm) {
@@ -862,11 +853,7 @@ public class DeploymentTestControl extends DefaultTestBundleControl {
                 new PermissionInfo(AllPermission.class.getName(), "<all permissions>", "<all actions>")
                 };
         
-        permWorker.setLocation(bundleLocation);
-        permWorker.setPermissions(info);
-        synchronized (permWorker) {
-            permWorker.notifyAll();
-        }
+        setAssyncPermission(info);
 	}
     
     /**
@@ -884,14 +871,10 @@ public class DeploymentTestControl extends DefaultTestBundleControl {
                 new PermissionInfo(PackagePermission.class.getName(), "*", "EXPORT, IMPORT"),
                 new PermissionInfo(FilePermission.class.getName(), "<<ALL FILES>>", "READ, WRITE, EXECUTE, DELETE"), };
 
-        permWorker.setLocation(location);
-        permWorker.setPermissions(info);
-        synchronized (permWorker) {
-            permWorker.notifyAll();
-        }
+        setAssyncPermission(location, info);
     }
 	
-	/**
+    /**
 	 * Give's the Resource Processors the right to access a bundle's private
 	 * area and set the DeploymentAdminPermission for the caller.
 	 */
@@ -916,10 +899,42 @@ public class DeploymentTestControl extends DefaultTestBundleControl {
             new PermissionInfo(AllPermission.class.getName(), "<all permissions>", "<all actions>")
             };
         
+        setAssyncPermission(info);
+    }
+    
+    /**
+     * @param bundleLocation2
+     * @param info
+     */
+    private void setAssyncPermission(PermissionInfo[] info) {
         permWorker.setLocation(bundleLocation);
         permWorker.setPermissions(info);
         synchronized (permWorker) {
-            permWorker.notifyAll();
+            try {
+                permWorker.notifyAll();
+                // wait for worker to notify tha permission is set
+                permWorker.wait(DeploymentConstants.TIMEOUT);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+    
+    /**
+     * @param location
+     * @param info
+     */
+    private void setAssyncPermission(String location, PermissionInfo[] info) {
+        permWorker.setLocation(location);
+        permWorker.setPermissions(info);
+        synchronized (permWorker) {
+            try {
+                permWorker.notifyAll();
+                // wait for worker to notify tha permission is set
+                permWorker.wait(DeploymentConstants.TIMEOUT);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
     }
     
@@ -945,7 +960,7 @@ public class DeploymentTestControl extends DefaultTestBundleControl {
 	 */
 	public TestInterface[] getTestClasses() {
 		if (testClasses == null) {
-			throw new NullPointerException("Test Classes instance is null"); 
+			throw new NullPointerException("Test Classes instance is null");
 		}
 		return testClasses;
 	}

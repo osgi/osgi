@@ -79,12 +79,11 @@ public class UninstallDeploymentPackage implements TestInterface {
     /**
      * Sets permission needed and wait for PermissionWorker
      */
-    private synchronized void prepare() {
+    private void prepare() {
         try {
             tbc.setDeploymentAdminPermission(DeploymentConstants.DEPLOYMENT_PACKAGE_NAME_ALL, DeploymentConstants.ALL_PERMISSION);
-            wait(1000);
         } catch (Exception e) {
-            tbc.fail("Failed to wait for PermissionWorker");
+            tbc.fail("Failed to set Permission necessary for testing uninstall Deployment Packages methods");
         }
     }
 	
@@ -390,12 +389,11 @@ public class UninstallDeploymentPackage implements TestInterface {
      * 
      * @spec DeploymentPackage.uninstall()
      */ 
-    private synchronized void testUninstallDeploymentPackage013() {
+    private void testUninstallDeploymentPackage013() {
         tbc.log("#testUninstallDeploymentPackage013");
         tbc.setDeploymentAdminPermission(DeploymentConstants.DEPLOYMENT_PACKAGE_NAME_ALL, DeploymentAdminPermission.ACTION_INSTALL);
         DeploymentPackage dp = null;
         try {
-            wait(1000);
             TestingDeploymentPackage testDP = tbc.getTestingDeploymentPackage(DeploymentConstants.SIMPLE_DP);
             dp = tbc.installDeploymentPackage(tbc.getWebServer() + testDP.getFilename());
             dp.uninstall();
@@ -421,7 +419,6 @@ public class UninstallDeploymentPackage implements TestInterface {
         tbc.setDeploymentAdminPermission(DeploymentConstants.DEPLOYMENT_PACKAGE_NAME_ALL, DeploymentAdminPermission.ACTION_INSTALL);
         DeploymentPackage dp = null;
         try {
-            wait(1000);
             TestingDeploymentPackage testDP = tbc.getTestingDeploymentPackage(DeploymentConstants.SIMPLE_DP);
             dp = tbc.installDeploymentPackage(tbc.getWebServer() + testDP.getFilename());
             dp.uninstallForced();

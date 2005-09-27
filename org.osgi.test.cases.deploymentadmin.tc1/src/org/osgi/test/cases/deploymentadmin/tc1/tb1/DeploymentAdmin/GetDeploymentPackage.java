@@ -68,7 +68,6 @@ public class GetDeploymentPackage implements TestInterface {
 	}
 
 	public void run() {
-        testGetDeploymentPackage008();
         prepare();
 		testGetDeploymentPackage001();
 		testGetDeploymentPackage002();
@@ -77,18 +76,18 @@ public class GetDeploymentPackage implements TestInterface {
         testGetDeploymentPackage005();
         testGetDeploymentPackage006();
         testGetDeploymentPackage007();
+        testGetDeploymentPackage008();
 	}
 
 	
 	/**
      * Sets permission needed and wait for PermissionWorker
      */
-    private synchronized void prepare() {
+    private void prepare() {
         try {
             tbc.setDeploymentAdminPermission(DeploymentConstants.DEPLOYMENT_PACKAGE_NAME_ALL, DeploymentConstants.ALL_PERMISSION);
-            wait(1000);
         } catch (Exception e) {
-            tbc.fail("Failed to wait for PermissionWorker");
+            tbc.fail("Failed to set Permission necessary for testing #getDeploymentPackage");
         }
     }
 
@@ -268,12 +267,11 @@ public class GetDeploymentPackage implements TestInterface {
      * 
      * @spec DeploymentAdmin.getDeploymentPackage(String)
      */ 
-    private synchronized void testGetDeploymentPackage008() {
+    private void testGetDeploymentPackage008() {
         tbc.log("#testGetDeploymentPackage008");
         tbc.setDeploymentAdminPermission(DeploymentConstants.DEPLOYMENT_PACKAGE_NAME_ALL, DeploymentAdminPermission.ACTION_INSTALL + "," + DeploymentAdminPermission.ACTION_UNINSTALL + "," + DeploymentAdminPermission.ACTION_UNINSTALL_FORCED);
         DeploymentPackage dp = null;
         try {
-            wait(1000);
             TestingDeploymentPackage testDP = tbc.getTestingDeploymentPackage(DeploymentConstants.SIMPLE_DP);
             dp = tbc.installDeploymentPackage(tbc.getWebServer() + testDP.getFilename());
             tbc.getDeploymentAdmin().getDeploymentPackage(dp.getName());

@@ -68,6 +68,7 @@ public class InstallFixPack implements TestInterface {
 	}
 
 	public void run() {
+        prepare();
 		testInstallFixPack001();
 		testInstallFixPack002();
 		testInstallFixPack003();
@@ -82,6 +83,17 @@ public class InstallFixPack implements TestInterface {
 		testInstallFixPack012();
 		testInstallFixPack013();
 	}
+    
+    /**
+     * Sets permission needed and wait for PermissionWorker
+     */
+    private void prepare() {
+        try {
+            tbc.setDeploymentAdminPermission(DeploymentConstants.DEPLOYMENT_PACKAGE_NAME_ALL, DeploymentConstants.ALL_PERMISSION);
+        } catch (Exception e) {
+            tbc.fail("Failed to set Permission necessary for testing installDeploymentPackage");
+        }
+    }
 	
 	/**
 	 * This test case install a simple fix pack for a range of
@@ -94,7 +106,7 @@ public class InstallFixPack implements TestInterface {
 		tbc.log("#testInstallFixPack001");
 		TestingDeploymentPackage testDP = tbc.getTestingDeploymentPackage(DeploymentConstants.SIMPLE_DP);
 		TestingDeploymentPackage testFixDP = tbc.getTestingDeploymentPackage(DeploymentConstants.SIMPLE_FIX_PACK_DP);
-		tbc.setDeploymentAdminPermission(DeploymentConstants.DEPLOYMENT_PACKAGE_NAME_ALL, DeploymentConstants.ALL_PERMISSION);
+		
 		DeploymentPackage dp = null;
 		DeploymentPackage fixDP = null;
 		try {
@@ -127,7 +139,7 @@ public class InstallFixPack implements TestInterface {
 		tbc.log("#testInstallFixPack002");
 		TestingDeploymentPackage testDP = tbc.getTestingDeploymentPackage(DeploymentConstants.SIMPLE_DP);
 		TestingDeploymentPackage testFixDP = tbc.getTestingDeploymentPackage(DeploymentConstants.MISSING_BUNDLE_FIX_PACK_DP);
-		tbc.setDeploymentAdminPermission(DeploymentConstants.DEPLOYMENT_PACKAGE_NAME_ALL, DeploymentConstants.ALL_PERMISSION);
+		
 		DeploymentPackage dp = null;
 		DeploymentPackage fixDP = null;
 		try {
@@ -167,7 +179,7 @@ public class InstallFixPack implements TestInterface {
 		tbc.log("#testInstallFixPack003");
 		TestingDeploymentPackage testDP = tbc.getTestingDeploymentPackage(DeploymentConstants.SIMPLE_DP);
 		TestingDeploymentPackage testFixDP = tbc.getTestingDeploymentPackage(DeploymentConstants.ADD_BUNDLE_FIX_PACK_DP);
-		tbc.setDeploymentAdminPermission(DeploymentConstants.DEPLOYMENT_PACKAGE_NAME_ALL, DeploymentConstants.ALL_PERMISSION);
+		
 		DeploymentPackage dp = null;
 		DeploymentPackage fixDP = null;
 		try {
@@ -214,7 +226,7 @@ public class InstallFixPack implements TestInterface {
 		tbc.log("#testInstallFixPack004");
 		TestingDeploymentPackage testDP = tbc.getTestingDeploymentPackage(DeploymentConstants.SIMPLE_HIGHER_MICRO_VERSION_DP);
 		TestingDeploymentPackage testFixDP = tbc.getTestingDeploymentPackage(DeploymentConstants.SIMPLE_FIX_PACK_DP);
-		tbc.setDeploymentAdminPermission(DeploymentConstants.DEPLOYMENT_PACKAGE_NAME_ALL, DeploymentConstants.ALL_PERMISSION);
+		
 		DeploymentPackage dp = null;
 		DeploymentPackage fixDP = null;
 		try {
@@ -247,7 +259,7 @@ public class InstallFixPack implements TestInterface {
 		tbc.log("#testInstallFixPack005");
 		TestingDeploymentPackage testDP = tbc.getTestingDeploymentPackage(DeploymentConstants.SIMPLE_HIGHER_MINOR_VERSION_DP);
 		TestingDeploymentPackage testFixDP = tbc.getTestingDeploymentPackage(DeploymentConstants.SIMPLE_FIX_PACK_DP);
-		tbc.setDeploymentAdminPermission(DeploymentConstants.DEPLOYMENT_PACKAGE_NAME_ALL, DeploymentConstants.ALL_PERMISSION);
+		
 		DeploymentPackage dp = null;
 		DeploymentPackage fixDP = null;
 		try {
@@ -279,7 +291,7 @@ public class InstallFixPack implements TestInterface {
 		tbc.log("#testInstallFixPack006");
 		TestingDeploymentPackage testDP = tbc.getTestingDeploymentPackage(DeploymentConstants.SIMPLE_HIGHER_MAJOR_VERSION_DP);
 		TestingDeploymentPackage testFixDP = tbc.getTestingDeploymentPackage(DeploymentConstants.SIMPLE_FIX_PACK_DP);
-		tbc.setDeploymentAdminPermission(DeploymentConstants.DEPLOYMENT_PACKAGE_NAME_ALL, DeploymentConstants.ALL_PERMISSION);
+		
 		DeploymentPackage dp = null;
 		DeploymentPackage fixDP = null;
 		try {
@@ -311,7 +323,7 @@ public class InstallFixPack implements TestInterface {
 		tbc.log("#testInstallFixPack007");
 		TestingDeploymentPackage testDP = tbc.getTestingDeploymentPackage(DeploymentConstants.SIMPLE_DP);
 		TestingDeploymentPackage testFixDP = tbc.getTestingDeploymentPackage(DeploymentConstants.FIX_PACK_HIGHER_RANGE_DP);
-		tbc.setDeploymentAdminPermission(DeploymentConstants.DEPLOYMENT_PACKAGE_NAME_ALL, DeploymentConstants.ALL_PERMISSION);
+		
 		DeploymentPackage dp = null;
 		DeploymentPackage fixDP = null;
 		try {
@@ -338,7 +350,7 @@ public class InstallFixPack implements TestInterface {
 	private void testInstallFixPack008() {
 		tbc.log("#testInstallFixPack008");
 		TestingDeploymentPackage testFixDP = tbc.getTestingDeploymentPackage(DeploymentConstants.SIMPLE_FIX_PACK_DP);
-		tbc.setDeploymentAdminPermission(DeploymentConstants.DEPLOYMENT_PACKAGE_NAME_ALL, DeploymentConstants.ALL_PERMISSION);
+		
 		DeploymentPackage fixDP = null;
 		try {
 			fixDP = tbc.installDeploymentPackage(tbc.getWebServer()+testFixDP.getFilename());
@@ -367,7 +379,7 @@ public class InstallFixPack implements TestInterface {
 
 		TestingResource[] testRes = testFixDP.getResources();
 		
-		tbc.setDeploymentAdminPermission(DeploymentConstants.DEPLOYMENT_PACKAGE_NAME_ALL, DeploymentConstants.ALL_PERMISSION);
+		
 		DeploymentPackage dp = null, fixDP = null, rp =null;
 		try {
 			// install resource processor to handle resources
@@ -411,7 +423,7 @@ public class InstallFixPack implements TestInterface {
 		TestingDeploymentPackage testFixDP = tbc.getTestingDeploymentPackage(DeploymentConstants.MISSING_RESOURCE_FIX_PACK_DP);
 		TestingDeploymentPackage testRP = tbc.getTestingDeploymentPackage(DeploymentConstants.RESOURCE_PROCESSOR_DP);
 
-		tbc.setDeploymentAdminPermission(DeploymentConstants.DEPLOYMENT_PACKAGE_NAME_ALL, DeploymentConstants.ALL_PERMISSION);
+		
 		DeploymentPackage dp = null, fixDP = null, rp = null;
 		try {
 			// install resource processor to handle resources
@@ -452,7 +464,7 @@ public class InstallFixPack implements TestInterface {
 		TestingDeploymentPackage testFixDP = tbc.getTestingDeploymentPackage(DeploymentConstants.MISSING_RESOURCE_FIX_PACK_DP);
 		TestingDeploymentPackage testRP = tbc.getTestingDeploymentPackage(DeploymentConstants.RESOURCE_PROCESSOR_DP);
 
-		tbc.setDeploymentAdminPermission(DeploymentConstants.DEPLOYMENT_PACKAGE_NAME_ALL, DeploymentConstants.ALL_PERMISSION);
+		
 		DeploymentPackage dp = null, fixDP = null, rp = null;
 		try {
 			// install resource processor to handle resources
@@ -483,7 +495,7 @@ public class InstallFixPack implements TestInterface {
 		TestingDeploymentPackage testFixDP = tbc.getTestingDeploymentPackage(DeploymentConstants.MISSING_BUNDLE_FIX_PACK_DP);
 		TestingDeploymentPackage testRP = tbc.getTestingDeploymentPackage(DeploymentConstants.RESOURCE_PROCESSOR_DP);
 		
-		tbc.setDeploymentAdminPermission(DeploymentConstants.DEPLOYMENT_PACKAGE_NAME_ALL, DeploymentConstants.ALL_PERMISSION);
+		
 		DeploymentPackage dp = null, fixDP = null, rp = null;
 		try {
 			// install resource processor to handle resources
@@ -510,7 +522,7 @@ public class InstallFixPack implements TestInterface {
 
 	private void testInstallFixPack013() {
 		tbc.log("#testInstallFixPack013");
-		tbc.setDeploymentAdminPermission(DeploymentConstants.DEPLOYMENT_PACKAGE_NAME_ALL, DeploymentConstants.ALL_PERMISSION);
+		
 		TestingDeploymentPackage testDP = tbc.getTestingDeploymentPackage(DeploymentConstants.SIMPLE_DP);
 		TestingDeploymentPackage testFixDP = tbc.getTestingDeploymentPackage(DeploymentConstants.FIX_PACK_LOWER_RANGE_DP);
 		DeploymentPackage dp = null;

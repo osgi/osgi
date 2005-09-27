@@ -73,7 +73,7 @@ public class Cancel implements TestInterface {
     public void run() {
         testCancel001();
 //        testCancel002();
-//        testCancel003();
+        testCancel003();
         testCancel004();
     }
     
@@ -83,7 +83,7 @@ public class Cancel implements TestInterface {
      * 
      * @spec DeploymentAdmin.cancel()
      */
-    private synchronized void testCancel001() {
+    private void testCancel001() {
         tbc.log("#testCancel001");
         
         SessionWorker worker = null;
@@ -92,37 +92,22 @@ public class Cancel implements TestInterface {
 
         tbc.setDeploymentAdminPermission(
             DeploymentConstants.DEPLOYMENT_PACKAGE_NAME_ALL, DeploymentAdminPermission.ACTION_CANCEL);
+        
         BundleListenerImpl listener = tbc.getBundleListener();
         listener.reset();
         try {
-            wait(1000);
             cleanupBarrier = new Barrier();
             releaseBarrier = new Barrier();
             
-            int off = 1000;
             TestingDeploymentPackage blockDP = tbc.getTestingDeploymentPackage(DeploymentConstants.BLOCK_SESSION_RESOURCE_PROCESSOR);
             
             worker = new SessionWorker(blockDP);
             worker.start();
             tbc.assertTrue("Installation of blocking session DP not completed", !reach);
             
-            // not sure if this is going to be enough
-            wait(off);
-            Vector events = listener.getEvents();
-            Iterator it = events.iterator();
-            boolean found = false;
-            while (it.hasNext() && !found) {
-                BundleEvent event = (BundleEvent)it.next();
-                if (event.getBundle().getSymbolicName().equals(
-                    DeploymentConstants.PID_RESOURCE_PROCESSOR3)
-                    && event.getType() == BundleEvent.STARTED)
-                {
-                    found = true;
-                }
-            }
+            // assure blocking resource processor is started
+            waitForStartEvent(listener);
             
-            tbc.assertTrue("Found event", found);
-
             testBlockRP = (TestingBlockingResourceProcessor) tbc.getServiceInstance(DeploymentConstants.PID_RESOURCE_PROCESSOR3);
             tbc.assertNotNull("Blocking Resource Processor was registered", testBlockRP);
             
@@ -139,7 +124,7 @@ public class Cancel implements TestInterface {
                 MessagesConstants.UNEXPECTED_EXCEPTION, new String[]{e.getClass().getName()}));
         } finally {
             worker = null;
-            if (!canceled) {
+            if (!canceled && testBlockRP!=null) {
                 tbc.getDeploymentAdmin().cancel();
                 testBlockRP.setReleased(true);
                 testBlockRP.waitForRelease();
@@ -164,60 +149,50 @@ public class Cancel implements TestInterface {
 
         tbc.setDeploymentAdminPermission(
             DeploymentConstants.DEPLOYMENT_PACKAGE_NAME_ALL, DeploymentAdminPermission.ACTION_CANCEL);
+        
         BundleListenerImpl listener = tbc.getBundleListener();
         listener.reset();
         try {
-            wait(1000);
             cleanupBarrier = new Barrier();
             releaseBarrier = new Barrier();
             
             TestingDeploymentPackage blockDP = tbc.getTestingDeploymentPackage(DeploymentConstants.BLOCK_SESSION_RESOURCE_PROCESSOR);
-            int off = (1000 > DeploymentConstants.SESSION_TIMEOUT)?(DeploymentConstants.SESSION_TIMEOUT - 200):1000;
             
-            worker1 = new SessionWorker(blockDP);
+            worker1 = new SessionWorker(blockDP, true, true);
             worker1.start();
             tbc.assertTrue("Installation of blocking session DP not completed", !reach);
             
-            // not sure if this is going to be enough
-            wait(off);
-            off = (2*off > DeploymentConstants.SESSION_TIMEOUT)?(DeploymentConstants.SESSION_TIMEOUT - off):off;
-
-            Vector events = listener.getEvents();
-            Iterator it = events.iterator();
-            boolean found = false;
-            while (it.hasNext() && !found) {
-                BundleEvent event = (BundleEvent)it.next();
-                if (event.getBundle().getSymbolicName().equals(
-                    DeploymentConstants.PID_RESOURCE_PROCESSOR3)
-                    && event.getType() == BundleEvent.STARTED)
-                {
-                    found = true;
-                }
-            }
-            
-            tbc.assertTrue("Found event", found);
+            // assure blocking resource processor is started
+            waitForStartEvent(listener);
             
             testBlockRP = (TestingBlockingResourceProcessor) tbc.getServiceInstance(DeploymentConstants.PID_RESOURCE_PROCESSOR3);
             tbc.assertNotNull("Blocking Resource Processor was registered", testBlockRP);
             
-            // notifies waiting thread
+            // notifies waiting resource processor
             testBlockRP.setReleased(true);
             testBlockRP.waitForRelease();
             
-            wait(off); // for finishing installation
+            // wait for installation to finish
+            reachTC = true;
+            releaseBarrier.waitRelease();
             dp = worker1.getDp();
+            reachTC = false;
             
-            // tell threads to wait again
+            // tell blocking resource processor to wait again
             testBlockRP.setReleased(false);
             worker2 = new SessionWorker(blockDP, false);
             worker2.setDp(dp);
             worker2.start();
             
-            // reset off
-            off = (1000 > DeploymentConstants.SESSION_TIMEOUT)?(DeploymentConstants.SESSION_TIMEOUT - 200):1000;
-            wait(off); // for uninstallation to begin
+            wait(500); // for uninstallation to begins.
+                       // not sure if this is enough.
+            
             canceled = tbc.getDeploymentAdmin().cancel();
             tbc.assertTrue("Deployment Admin successfuly cancelled active session", canceled);
+            
+            // make sure resource processor won't block the session
+            testBlockRP.setReleased(true);
+            testBlockRP.waitForRelease();
             
             reachTC = true;
             releaseBarrier.waitRelease();
@@ -227,13 +202,13 @@ public class Cancel implements TestInterface {
         } finally {
             worker1 = null;
             worker2 = null;
-            if (!canceled) {
+            if (!canceled && testBlockRP!=null) {
                 tbc.getDeploymentAdmin().cancel();
                 testBlockRP.setReleased(true);
                 testBlockRP.waitForRelease();
             }
-            tbc.uninstall(dp);
             cleanUp(testBlockRP);
+            tbc.uninstall(dp);
         }
     }
     
@@ -247,10 +222,9 @@ public class Cancel implements TestInterface {
     private synchronized void testCancel003() {
         tbc.log("#testCancel003");
         
-        SessionWorker worker1 = null;
+        SessionWorker worker = null;
         TestingBlockingResourceProcessor testBlockRP = null;
         boolean canceled = false;
-        DeploymentPackage dp = null;
 
         tbc.setDeploymentAdminPermission(
             DeploymentConstants.DEPLOYMENT_PACKAGE_NAME_ALL,
@@ -258,58 +232,45 @@ public class Cancel implements TestInterface {
         
         BundleListenerImpl listener = tbc.getBundleListener();
         listener.reset();
+        
+        cleanupBarrier = new Barrier();
+        releaseBarrier = new Barrier();
         try {
-            wait(1000);
-            cleanupBarrier = new Barrier();
-            releaseBarrier = new Barrier();
-
             TestingDeploymentPackage blockDP = tbc.getTestingDeploymentPackage(DeploymentConstants.BLOCK_SESSION_RESOURCE_PROCESSOR);
-            int off = (1000 > DeploymentConstants.SESSION_TIMEOUT)?(DeploymentConstants.SESSION_TIMEOUT - 200):1000;
             
-            worker1 = new SessionWorker(blockDP);
-            worker1.start();
+            worker = new SessionWorker(blockDP);
+            worker.start();
             tbc.assertTrue("Installation of blocking session DP not completed", !reach);
             
-            // not sure if this is going to be enough
-            wait(off);
-            Vector events = listener.getEvents();
-            Iterator it = events.iterator();
-            boolean found = false;
-            while (it.hasNext() && !found) {
-                BundleEvent event = (BundleEvent)it.next();
-                if (event.getBundle().getSymbolicName().equals(
-                    DeploymentConstants.PID_RESOURCE_PROCESSOR3)
-                    && event.getType() == BundleEvent.STARTED)
-                {
-                    found = true;
-                }
-            }
+            // assure blocking resource processor is started
+            waitForStartEvent(listener);
             
-            tbc.assertTrue("Found event", found);
-
             testBlockRP = (TestingBlockingResourceProcessor) tbc.getServiceInstance(DeploymentConstants.PID_RESOURCE_PROCESSOR3);
             tbc.assertNotNull("Blocking Resource Processor was registered", testBlockRP);
             
             canceled = tbc.getDeploymentAdmin().cancel();
             tbc.failException("#", SecurityException.class);
-            
         } catch (SecurityException e) {
             tbc.pass("SecurityException correctly thrown");
         } catch (Exception e) {
             tbc.fail(MessagesConstants.getMessage(
                 MessagesConstants.UNEXPECTED_EXCEPTION, new String[]{e.getClass().getName()}));
         } finally {
-            worker1 = null;
+            testBlockRP.setReleased(true);
+            testBlockRP.waitForRelease();
+            // release inner threads
             reachTC = true;
             try {
                 releaseBarrier.waitRelease();
             } catch (InterruptedException e1) {
                 e1.printStackTrace();
             }
-            if (!canceled) {
+            worker = null;
+            if (!canceled && testBlockRP!=null) {
                 tbc.getDeploymentAdmin().cancel();
+                testBlockRP.setReleased(true);
+                testBlockRP.waitForRelease();
             }
-            tbc.uninstall(dp);
             cleanUp(testBlockRP);
         }
     }
@@ -335,6 +296,33 @@ public class Cancel implements TestInterface {
     }
     
     /**
+     * @throws InterruptedException 
+     * 
+     */
+    private synchronized void waitForStartEvent(BundleListenerImpl listener) throws InterruptedException {
+        boolean found = false;
+        for (int waited = 0; (waited <=1) && !found; waited++) {
+            Vector events = listener.getEvents();
+            Iterator it = events.iterator();
+            while (it.hasNext() && !found) {
+                BundleEvent event = (BundleEvent) it.next();
+                if (event.getBundle().getSymbolicName().equals(
+                    DeploymentConstants.PID_RESOURCE_PROCESSOR3)
+                    && event.getType() == BundleEvent.STARTED)
+                {
+                    found = true;
+                }
+            } // event might not have been sent
+            if (!found) {
+                wait(700);
+            }
+        }
+        
+        tbc.assertTrue("Found event", found);
+        
+    }
+    
+    /**
      * CleanUp operations
      */
     private void cleanUp(TestingBlockingResourceProcessor testBlockRP) {
@@ -351,7 +339,7 @@ public class Cancel implements TestInterface {
     class SessionWorker extends Thread {
         
         private TestingDeploymentPackage testDP;
-        private boolean installation;
+        private boolean installation, noCleanup;
         DeploymentPackage dp;
         
         protected SessionWorker(TestingDeploymentPackage testDP) {
@@ -359,8 +347,13 @@ public class Cancel implements TestInterface {
         }
         
         protected SessionWorker(TestingDeploymentPackage testDP, boolean installation) {
+            this(testDP, installation, false);
+        }
+        
+        protected SessionWorker(TestingDeploymentPackage testDP, boolean installation, boolean noCleanup) {
             this.testDP = testDP;
             this.installation = installation;
+            this.noCleanup = noCleanup;
         }
         
         public void run() {
@@ -382,17 +375,16 @@ public class Cancel implements TestInterface {
                 tbc.fail(MessagesConstants.getMessage(
                     MessagesConstants.UNEXPECTED_EXCEPTION, new String[]{e.getClass().getName()}));
             } finally {
-                if (installation) {
+                if (installation && !noCleanup) {
                     tbc.uninstall(dp);
-                    clean = true;
                     tbc.log("#Clean up successful");
-                    try {
-                        cleanupBarrier.waitCleanUp();
-                    } catch (InterruptedException e1) {
-                        e1.printStackTrace();
-                    }
-                } else
-                    ; // do nothing
+                }
+                try {
+                    clean = true;
+                    cleanupBarrier.waitCleanUp();
+                } catch (InterruptedException e1) {
+                    e1.printStackTrace();
+                }
             }
         }
         /**

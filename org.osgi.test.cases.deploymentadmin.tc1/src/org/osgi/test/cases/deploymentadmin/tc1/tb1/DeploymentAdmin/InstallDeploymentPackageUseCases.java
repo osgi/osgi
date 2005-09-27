@@ -37,10 +37,13 @@
 
 package org.osgi.test.cases.deploymentadmin.tc1.tb1.DeploymentAdmin;
 
+import java.util.Iterator;
+import java.util.Vector;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleEvent;
 import org.osgi.service.deploymentadmin.DeploymentException;
 import org.osgi.service.deploymentadmin.DeploymentPackage;
+import org.osgi.service.event.Event;
 import org.osgi.test.cases.deploymentadmin.tc1.tbc.DeploymentConstants;
 import org.osgi.test.cases.deploymentadmin.tc1.tbc.DeploymentTestControl;
 import org.osgi.test.cases.deploymentadmin.tc1.tbc.TestInterface;
@@ -60,12 +63,14 @@ import org.osgi.test.cases.deploymentadmin.tc1.tbc.util.TestingDeploymentPackage
 public class InstallDeploymentPackageUseCases implements TestInterface {
 
 	private DeploymentTestControl tbc;
+    private DeploymentEventHandlerImpl deploymentEventHandler;
 
 	public InstallDeploymentPackageUseCases(DeploymentTestControl tbc) {
 		this.tbc = tbc;
 	}
 
 	public void run() {
+        prepare();
 		testInstallDeploymentPackageUseCases001();
 		testInstallDeploymentPackageUseCases002();
 		testInstallDeploymentPackageUseCases003();
@@ -83,6 +88,18 @@ public class InstallDeploymentPackageUseCases implements TestInterface {
         testInstallDeploymentPackageUseCases015();
         testInstallDeploymentPackageUseCases016();
 	}
+    
+    /**
+     * Sets permission needed and wait for PermissionWorker
+     */
+    private synchronized void prepare() {
+        try {
+            tbc.setDeploymentAdminPermission(DeploymentConstants.DEPLOYMENT_PACKAGE_NAME_ALL, DeploymentConstants.ALL_PERMISSION);
+            deploymentEventHandler = tbc.getDeploymentEventHandler();
+        } catch (Exception e) {
+            tbc.fail("Failed to set Permission necessary for testing installDeploymentPackage");
+        }
+    }
 
 	/**
 	 * Asserts that an event is sent when a installation is started.
@@ -91,19 +108,17 @@ public class InstallDeploymentPackageUseCases implements TestInterface {
 	 */		
 	private void testInstallDeploymentPackageUseCases001() {
 		tbc.log("#testInstallDeploymentPackageUseCases001");
-		tbc.setDeploymentAdminPermission(DeploymentConstants.DEPLOYMENT_PACKAGE_NAME_ALL, DeploymentConstants.ALL_PERMISSION);
 		DeploymentPackage dp = null;
-		DeploymentEventHandlerImpl deploymentEventHandler = tbc.getDeploymentEventHandler();
-        deploymentEventHandler.setVerifying(true);
-
 		try {
 			TestingDeploymentPackage testDP = tbc.getTestingDeploymentPackage(DeploymentConstants.SIMPLE_DP);
 			
+            deploymentEventHandler.reset();
+            deploymentEventHandler.setVerifying(true);
 			synchronized (tbc) {
 				dp = tbc.installDeploymentPackage(tbc.getWebServer() + testDP.getFilename());
 				tbc.wait(DeploymentConstants.TIMEOUT);
 			}
-			String prop = (String) deploymentEventHandler.getProperty("deploymentpackage.name");
+            String prop = (String)findProperty("deploymentpackage.name");
 			tbc.assertTrue("An install event occured", deploymentEventHandler.isInstall());
 			tbc.assertEquals("The installed deployment package is " + testDP.getName(), testDP.getName(), prop);
 		} catch (Exception e) {
@@ -114,30 +129,29 @@ public class InstallDeploymentPackageUseCases implements TestInterface {
 		}
 	}
 	
-	/**
+    /**
 	 * Asserts that an event is sent when a uninstallation is started.
 	 * 
 	 * @spec 114.9 Uninstalling a Deployment Package
 	 */			
 	private void testInstallDeploymentPackageUseCases002() {
 		tbc.log("#testInstallDeploymentPackageUseCases002");
-		tbc.setDeploymentAdminPermission(DeploymentConstants.DEPLOYMENT_PACKAGE_NAME_ALL, DeploymentConstants.ALL_PERMISSION);
 		DeploymentPackage dp = null;
-		DeploymentEventHandlerImpl deploymentEventHandler = tbc.getDeploymentEventHandler();
-		deploymentEventHandler.setHandlingUninstall(true);
-        deploymentEventHandler.setVerifying(true);
 
 		try {
 			TestingDeploymentPackage testDP = tbc.getTestingDeploymentPackage(DeploymentConstants.SIMPLE_DP);
 			dp = tbc.installDeploymentPackage(tbc.getWebServer() + testDP.getFilename());
 
+            deploymentEventHandler.reset();
+            deploymentEventHandler.setHandlingUninstall(true);
+            deploymentEventHandler.setVerifying(true);
 			synchronized (tbc) {
 				tbc.uninstall(dp);
 				// waiting for uninstall event
 				tbc.wait(DeploymentConstants.TIMEOUT);
 			}
 
-			String prop = (String) deploymentEventHandler.getProperty("deploymentpackage.name");
+			String prop = (String)findProperty("deploymentpackage.name");
 			tbc.assertTrue("An uninstall event occured", deploymentEventHandler.isUninstall());
 			tbc.assertEquals("The installed deployment package is " + testDP.getName(), testDP.getName(), prop);
 			
@@ -155,22 +169,21 @@ public class InstallDeploymentPackageUseCases implements TestInterface {
 	 */				
 	private void testInstallDeploymentPackageUseCases003() {
 		tbc.log("#testInstallDeploymentPackageUseCases003");
-		tbc.setDeploymentAdminPermission(DeploymentConstants.DEPLOYMENT_PACKAGE_NAME_ALL, DeploymentConstants.ALL_PERMISSION);
 		DeploymentPackage dp = null;
-		DeploymentEventHandlerImpl deploymentEventHandler = tbc.getDeploymentEventHandler();
-		deploymentEventHandler.setHandlingComplete(true);
-        deploymentEventHandler.setVerifying(true);
-
-		try {
+		
+        try {
 			TestingDeploymentPackage testDP = tbc.getTestingDeploymentPackage(DeploymentConstants.SIMPLE_DP);
-			
+            
+            deploymentEventHandler.reset();
+            deploymentEventHandler.setHandlingComplete(true);
+            deploymentEventHandler.setVerifying(true);
 			synchronized (tbc) {
 				dp = tbc.installDeploymentPackage(tbc.getWebServer() + testDP.getFilename());
 				tbc.wait(DeploymentConstants.TIMEOUT);
 			}
 			
-			String dpNameProp = (String) deploymentEventHandler.getProperty("deploymentpackage.name");
-			Boolean successProp = (Boolean) deploymentEventHandler.getProperty("successful");
+			String dpNameProp = (String)findProperty("deploymentpackage.name");
+			Boolean successProp = (Boolean) findProperty("successful");
 			tbc.assertTrue("A complete event occured", deploymentEventHandler.isComplete());
 			tbc.assertEquals("The installed deployment package is " + testDP.getName(), testDP.getName(), dpNameProp);
 			tbc.assertTrue("The installation of deployment package was successfull ", successProp.booleanValue());
@@ -190,24 +203,23 @@ public class InstallDeploymentPackageUseCases implements TestInterface {
 	 */				
 	private void testInstallDeploymentPackageUseCases004() {
 		tbc.log("#testInstallDeploymentPackageUseCases004");
-		tbc.setDeploymentAdminPermission(DeploymentConstants.DEPLOYMENT_PACKAGE_NAME_ALL, DeploymentConstants.ALL_PERMISSION);
 		DeploymentPackage dp = null;
-		DeploymentEventHandlerImpl deploymentEventHandler = tbc.getDeploymentEventHandler();
-		deploymentEventHandler.setHandlingComplete(true);
-		deploymentEventHandler.setHandlingUninstall(true);
-        deploymentEventHandler.setVerifying(true);
 
 		try {
 			TestingDeploymentPackage testDP = tbc.getTestingDeploymentPackage(DeploymentConstants.SIMPLE_DP);
 			dp = tbc.installDeploymentPackage(tbc.getWebServer() + testDP.getFilename());
-			
+
+            deploymentEventHandler.reset();
+            deploymentEventHandler.setHandlingComplete(true);
+            deploymentEventHandler.setHandlingUninstall(true);
+            deploymentEventHandler.setVerifying(true);
 			synchronized (tbc) {
 				tbc.uninstall(dp);
 				tbc.wait(DeploymentConstants.TIMEOUT);
 			}
 			
-			String dpNameProp = (String) deploymentEventHandler.getProperty("deploymentpackage.name");
-			Boolean successProp = (Boolean) deploymentEventHandler.getProperty("successful");
+			String dpNameProp = (String) findProperty("deploymentpackage.name");
+			Boolean successProp = (Boolean) findProperty("successful");
 			tbc.assertTrue("A complete event occured", deploymentEventHandler.isComplete());
 			tbc.assertEquals("The installed deployment package is " + testDP.getName(), testDP.getName(), dpNameProp);
 			tbc.assertTrue("The installation of deployment package was successfull ", successProp.booleanValue());
@@ -228,7 +240,6 @@ public class InstallDeploymentPackageUseCases implements TestInterface {
 	 */		
 	private void testInstallDeploymentPackageUseCases005() {
 		tbc.log("#testInstallDeploymentPackageUseCases005");
-		tbc.setDeploymentAdminPermission(DeploymentConstants.DEPLOYMENT_PACKAGE_NAME_ALL, DeploymentConstants.ALL_PERMISSION);
 		DeploymentPackage dp = null;
 		try {
 			TestingDeploymentPackage testDP = tbc.getTestingDeploymentPackage(DeploymentConstants.SIMPLE_DP);
@@ -254,7 +265,6 @@ public class InstallDeploymentPackageUseCases implements TestInterface {
      */		
 	private void testInstallDeploymentPackageUseCases006() {
 		tbc.log("#testInstallDeploymentPackageUseCases006");
-		tbc.setDeploymentAdminPermission(DeploymentConstants.DEPLOYMENT_PACKAGE_NAME_ALL, DeploymentConstants.ALL_PERMISSION);
 		DeploymentPackage dp = null;
 		try {
 			TestingDeploymentPackage testDP = tbc.getTestingDeploymentPackage(DeploymentConstants.WRONG_FORMAT_DP);
@@ -277,7 +287,6 @@ public class InstallDeploymentPackageUseCases implements TestInterface {
 	 */		
 	private void testInstallDeploymentPackageUseCases007() {
 		tbc.log("#testInstallDeploymentPackageUseCases007");
-		tbc.setDeploymentAdminPermission(DeploymentConstants.DEPLOYMENT_PACKAGE_NAME_ALL, DeploymentConstants.ALL_PERMISSION);
 		DeploymentPackage dp = null;
 		try {
 			TestingDeploymentPackage testDP = tbc.getTestingDeploymentPackage(DeploymentConstants.WRONG_ORDER_DP);
@@ -300,7 +309,6 @@ public class InstallDeploymentPackageUseCases implements TestInterface {
 	 */		
 	private void testInstallDeploymentPackageUseCases008() {
 		tbc.log("#testInstallDeploymentPackageUseCases008");
-		tbc.setDeploymentAdminPermission(DeploymentConstants.DEPLOYMENT_PACKAGE_NAME_ALL, DeploymentConstants.ALL_PERMISSION);
 		DeploymentPackage dp = null;
 		try {
 			TestingDeploymentPackage testDP = tbc.getTestingDeploymentPackage(DeploymentConstants.UNTRUSTED_DP);
@@ -323,7 +331,6 @@ public class InstallDeploymentPackageUseCases implements TestInterface {
 	 */		
 	private void testInstallDeploymentPackageUseCases009() {
 		tbc.log("#testInstallDeploymentPackageUseCases009");
-		tbc.setDeploymentAdminPermission(DeploymentConstants.DEPLOYMENT_PACKAGE_NAME_ALL, DeploymentConstants.ALL_PERMISSION);
 		DeploymentPackage dp = null;
 		try {
 			TestingDeploymentPackage testDP = tbc.getTestingDeploymentPackage(DeploymentConstants.WRONG_PATH_DP);
@@ -347,7 +354,6 @@ public class InstallDeploymentPackageUseCases implements TestInterface {
 	 */
 	private void testInstallDeploymentPackageUseCases010() {
 		tbc.log("#testInstallDeploymentPackageUseCases010");
-		tbc.setDeploymentAdminPermission(DeploymentConstants.DEPLOYMENT_PACKAGE_NAME_ALL, DeploymentConstants.ALL_PERMISSION);
 
 		DeploymentPackage dp = null;
 		Bundle currentBundle = null;
@@ -358,6 +364,7 @@ public class InstallDeploymentPackageUseCases implements TestInterface {
 		BundleListenerImpl listener = tbc.getBundleListener();
 		// makes sure no old parameters will influence this test case 
 		listener.reset();
+        listener.setVerifying(true);
 		try {
 			TestingDeploymentPackage testDP = tbc.getTestingDeploymentPackage(DeploymentConstants.SIMPLE_DP);
 			TestingBundle[] tb = testDP.getBundles();
@@ -383,6 +390,7 @@ public class InstallDeploymentPackageUseCases implements TestInterface {
 			tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }));
 		} finally {
 			tbc.uninstall(dp);
+            listener.reset();
 		}
 	}
 	
@@ -393,7 +401,6 @@ public class InstallDeploymentPackageUseCases implements TestInterface {
 	 */		
 	private void testInstallDeploymentPackageUseCases011() {
 		tbc.log("#testInstallDeploymentPackageUseCases011");
-		tbc.setDeploymentAdminPermission(DeploymentConstants.DEPLOYMENT_PACKAGE_NAME_ALL, DeploymentConstants.ALL_PERMISSION);
 		DeploymentPackage dp = null;
 		try {
 			TestingDeploymentPackage testDP = tbc.getTestingDeploymentPackage(DeploymentConstants.BUNDLE_THROWS_EXCEPTION_STOP_DP);
@@ -413,7 +420,6 @@ public class InstallDeploymentPackageUseCases implements TestInterface {
      */     
     private void testInstallDeploymentPackageUseCases012() {
         tbc.log("#testInstallDeploymentPackageUseCases012");
-        tbc.setDeploymentAdminPermission(DeploymentConstants.DEPLOYMENT_PACKAGE_NAME_ALL, DeploymentConstants.ALL_PERMISSION);
         DeploymentPackage dp = null;
         try {
             TestingDeploymentPackage testDP = tbc.getTestingDeploymentPackage(DeploymentConstants.VERSION_DIFFERENT_FROM_MANIFEST_DP);
@@ -436,16 +442,15 @@ public class InstallDeploymentPackageUseCases implements TestInterface {
      */             
     private void testInstallDeploymentPackageUseCases013() {
         tbc.log("#testInstallDeploymentPackageUseCases013");
-        tbc.setDeploymentAdminPermission(DeploymentConstants.DEPLOYMENT_PACKAGE_NAME_ALL, DeploymentConstants.ALL_PERMISSION);
         DeploymentPackage dp = null;
-        DeploymentEventHandlerImpl deploymentEventHandler = tbc.getDeploymentEventHandler();
-        deploymentEventHandler.setHandlingComplete(true);
-        deploymentEventHandler.setVerifying(true);
 
         TestingDeploymentPackage testDP = null;
         try {
             testDP = tbc.getTestingDeploymentPackage(DeploymentConstants.MISSING_NAME_HEADER_DP);
             
+            deploymentEventHandler.reset();
+            deploymentEventHandler.setHandlingComplete(true);
+            deploymentEventHandler.setVerifying(true);
             synchronized (tbc) {
                 dp = tbc.installDeploymentPackage(tbc.getWebServer() + testDP.getFilename());
                 tbc.wait(DeploymentConstants.TIMEOUT);
@@ -472,12 +477,7 @@ public class InstallDeploymentPackageUseCases implements TestInterface {
      */             
     private void testInstallDeploymentPackageUseCases014() {
         tbc.log("#testInstallDeploymentPackageUseCases014");
-        tbc.setDeploymentAdminPermission(DeploymentConstants.DEPLOYMENT_PACKAGE_NAME_ALL, DeploymentConstants.ALL_PERMISSION);
         DeploymentPackage dp = null;
-        DeploymentEventHandlerImpl deploymentEventHandler = tbc.getDeploymentEventHandler();
-        deploymentEventHandler.setHandlingComplete(true);
-        deploymentEventHandler.setHandlingUninstall(true);
-        deploymentEventHandler.setVerifying(true);
 
         TestingDeploymentPackage testDP = null;
         try {
@@ -487,9 +487,13 @@ public class InstallDeploymentPackageUseCases implements TestInterface {
             // uninstalls RP bundle so uninstallation fails
             Bundle b = tbc.getBundle(testDP.getBundles()[0].getName());
             b.uninstall();
-
+            
+            deploymentEventHandler.reset();
+            deploymentEventHandler.setHandlingComplete(true);
+            deploymentEventHandler.setHandlingUninstall(true);
+            deploymentEventHandler.setVerifying(true);
             synchronized (tbc) {
-                tbc.uninstall(dp);
+                dp.uninstall();
                 tbc.wait(DeploymentConstants.TIMEOUT);
             }
             tbc.failException("#", DeploymentException.class);
@@ -502,6 +506,7 @@ public class InstallDeploymentPackageUseCases implements TestInterface {
         } catch (Exception e) {
             tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }));
         } finally {
+            dp.uninstallForced();
             deploymentEventHandler.reset();
         }
     }
@@ -515,7 +520,6 @@ public class InstallDeploymentPackageUseCases implements TestInterface {
      */
     private void testInstallDeploymentPackageUseCases015() {
         tbc.log("#testInstallDeploymentPackageUseCases015");
-        tbc.setDeploymentAdminPermission(DeploymentConstants.DEPLOYMENT_PACKAGE_NAME_ALL, DeploymentConstants.ALL_PERMISSION);
         DeploymentPackage dp = null;
         TestingDeploymentPackage testDP = null;
         try {
@@ -551,5 +555,22 @@ public class InstallDeploymentPackageUseCases implements TestInterface {
         } finally {
             tbc.uninstall(dp);
         }
+    }
+    
+    /**
+     * @param string
+     * @return
+     */
+    private Object findProperty(String prop) {
+        Vector events = deploymentEventHandler.getEvents();
+        Iterator it = events.iterator();
+        while (it.hasNext()) {
+            Event event = (Event)it.next();
+            Object value = event.getProperty(prop);
+            if (value != null) {
+                return value;
+            }
+        }
+        return null;
     }
 }

@@ -37,6 +37,7 @@
 
 package org.osgi.test.cases.deploymentadmin.tc1.tbc.Event;
 
+import java.util.Vector;
 import org.osgi.service.event.Event;
 import org.osgi.service.event.EventHandler;
 import org.osgi.test.cases.deploymentadmin.tc1.tbc.DeploymentTestControl;
@@ -61,12 +62,14 @@ public class DeploymentEventHandlerImpl implements EventHandler {
 	private boolean complete;
 	
 	private Event event;
+    private Vector events;
 	private boolean handlingComplete;
 	private boolean handlingUninstall;
     private boolean verifying;
 	
 	public DeploymentEventHandlerImpl(DeploymentTestControl tbc) {
 		this.tbc = tbc;
+        this.events = new Vector();
 	}
 
 	/**
@@ -90,26 +93,21 @@ public class DeploymentEventHandlerImpl implements EventHandler {
 
 	public void handleEvent(Event event) {
 		String topic = event.getTopic();
+        this.event = event;
+        events.add(event);
         
         if (verifying) {
-            if (!handlingComplete && !handlingUninstall
-                && topic.equals(TOPIC_INSTALL))
-            {
+            if (!handlingComplete && !handlingUninstall && topic.equals(TOPIC_INSTALL)) {
                 install = true;
-                this.event = event;
                 synchronized (tbc) {
                     tbc.notifyAll();
                 }
-            } else if (!handlingComplete && handlingUninstall
-                && topic.equals(TOPIC_UNINSTALL))
-            {
-                this.event = event;
+            } else if (!handlingComplete && handlingUninstall && topic.equals(TOPIC_UNINSTALL)) {
                 uninstall = true;
                 synchronized (tbc) {
                     tbc.notifyAll();
                 }
             } else if ((handlingComplete && topic.equals(TOPIC_COMPLETE))) {
-                this.event = event;
                 complete = true;
                 synchronized (tbc) {
                     tbc.notifyAll();
@@ -162,6 +160,7 @@ public class DeploymentEventHandlerImpl implements EventHandler {
 		this.complete = false;
 		this.event = null;
 		this.verifying = false;
+        this.events = new Vector();
 	}
 	/**
 	 * @return Returns the handlingUninstall.
@@ -186,5 +185,11 @@ public class DeploymentEventHandlerImpl implements EventHandler {
      */
     public void setVerifying(boolean verifying) {
         this.verifying = verifying;
+    }
+    /**
+     * @return Returns the events.
+     */
+    public Vector getEvents() {
+        return events;
     }
 }

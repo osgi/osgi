@@ -82,12 +82,11 @@ public class ListDeploymentPackage implements TestInterface {
     /**
      * Sets permission needed and wait for PermissionWorker
      */
-    private synchronized void prepare() {
+    private void prepare() {
         try {
             tbc.setDeploymentAdminPermission(DeploymentConstants.DEPLOYMENT_PACKAGE_NAME_ALL, DeploymentConstants.ALL_PERMISSION);
-            wait(1000);
         } catch (Exception e) {
-            tbc.fail("Failed to wait for PermissionWorker");
+            tbc.fail("Failed to set Permission necessary for testing listDeploymentPackage");
         }
     }
 

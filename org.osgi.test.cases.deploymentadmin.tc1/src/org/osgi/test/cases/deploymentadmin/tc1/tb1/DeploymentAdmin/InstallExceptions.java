@@ -62,6 +62,7 @@ public class InstallExceptions implements TestInterface {
     }
 
     public void run() {
+        prepare();
         testInstallExceptions001();
         testInstallExceptions002();
         testInstallExceptions003();
@@ -79,6 +80,17 @@ public class InstallExceptions implements TestInterface {
     }
     
     /**
+     * Sets permission needed and wait for PermissionWorker
+     */
+    private void prepare() {
+        try {
+            tbc.setDeploymentAdminPermission(DeploymentConstants.DEPLOYMENT_PACKAGE_NAME_ALL, DeploymentConstants.ALL_PERMISSION);
+        } catch (Exception e) {
+            tbc.fail("Failed to set Permission necessary for testing installDeploymentPackage");
+        }
+    }
+    
+    /**
      * Asserts that a bundle must belong to one and only one deployment
      * package throwing DeploymentException.CODE_BUNDLE_SHARING_VIOLATION.
      * 
@@ -86,7 +98,6 @@ public class InstallExceptions implements TestInterface {
      */         
     private void testInstallExceptions001() {
         tbc.log("#testInstallExceptions001");
-        tbc.setDeploymentAdminPermission(DeploymentConstants.DEPLOYMENT_PACKAGE_NAME_ALL, DeploymentConstants.ALL_PERMISSION);
         DeploymentPackage dp = null;
         DeploymentPackage dp2 = null;       
         try {
@@ -115,7 +126,6 @@ public class InstallExceptions implements TestInterface {
      */
     private void testInstallExceptions002() {
         tbc.log("#testInstallExceptions002");
-        tbc.setDeploymentAdminPermission(DeploymentConstants.DEPLOYMENT_PACKAGE_NAME_ALL, DeploymentConstants.ALL_PERMISSION);
         DeploymentPackage dp = null;
         DeploymentPackage dp2 = null;
         try {
@@ -141,7 +151,6 @@ public class InstallExceptions implements TestInterface {
      */ 
     private void testInstallExceptions003() {
         tbc.log("#testInstallExceptions003");
-        tbc.setDeploymentAdminPermission(DeploymentConstants.DEPLOYMENT_PACKAGE_NAME_ALL, DeploymentConstants.ALL_PERMISSION);
         DeploymentPackage dp = null;
         try {
             TestingDeploymentPackage testDP = tbc.getTestingDeploymentPackage(DeploymentConstants.MISSING_NAME_HEADER_DP);
@@ -164,7 +173,7 @@ public class InstallExceptions implements TestInterface {
      */ 
     private void testInstallExceptions004() {
         tbc.log("#testInstallExceptions004");
-        tbc.setDeploymentAdminPermission(DeploymentConstants.DEPLOYMENT_PACKAGE_NAME_ALL, DeploymentConstants.ALL_PERMISSION);
+        
         DeploymentPackage dp = null;
         try {
             TestingDeploymentPackage testDP = tbc.getTestingDeploymentPackage(DeploymentConstants.MISSING_VERSION_HEADER);
@@ -187,7 +196,7 @@ public class InstallExceptions implements TestInterface {
      */ 
     private void testInstallExceptions005() {
         tbc.log("#testInstallExceptions005");
-        tbc.setDeploymentAdminPermission(DeploymentConstants.DEPLOYMENT_PACKAGE_NAME_ALL, DeploymentConstants.ALL_PERMISSION);
+        
         DeploymentPackage dp = null;
         try {
             TestingDeploymentPackage testDP = tbc.getTestingDeploymentPackage(DeploymentConstants.MISSING_VERSION_HEADER);
@@ -211,7 +220,7 @@ public class InstallExceptions implements TestInterface {
      */ 
     private void testInstallExceptions006() {
         tbc.log("#testInstallExceptions006");
-        tbc.setDeploymentAdminPermission(DeploymentConstants.DEPLOYMENT_PACKAGE_NAME_ALL, DeploymentConstants.ALL_PERMISSION);
+        
         DeploymentPackage dp = null;
         try {
             TestingDeploymentPackage testDP = tbc.getTestingDeploymentPackage(DeploymentConstants.MISSING_BSN_HEADER);
@@ -235,7 +244,7 @@ public class InstallExceptions implements TestInterface {
      */ 
     private void testInstallExceptions007() {
         tbc.log("#testInstallExceptions007");
-        tbc.setDeploymentAdminPermission(DeploymentConstants.DEPLOYMENT_PACKAGE_NAME_ALL, DeploymentConstants.ALL_PERMISSION);
+        
         DeploymentPackage dp = null;
         try {
             TestingDeploymentPackage testDP = tbc.getTestingDeploymentPackage(DeploymentConstants.MISSING_BSN_HEADER);
@@ -258,7 +267,7 @@ public class InstallExceptions implements TestInterface {
      */ 
     private void testInstallExceptions008() {
         tbc.log("#testInstallExceptions008");
-        tbc.setDeploymentAdminPermission(DeploymentConstants.DEPLOYMENT_PACKAGE_NAME_ALL, DeploymentConstants.ALL_PERMISSION);
+        
         DeploymentPackage dp = null;
         try {
             TestingDeploymentPackage testDP = tbc.getTestingDeploymentPackage(DeploymentConstants.MISSING_B_VERSION_HEADER);
@@ -281,7 +290,7 @@ public class InstallExceptions implements TestInterface {
      */     
     private void testInstallExceptions009() {
         tbc.log("#testInstallExceptions009");
-        tbc.setDeploymentAdminPermission(DeploymentConstants.DEPLOYMENT_PACKAGE_NAME_ALL, DeploymentConstants.ALL_PERMISSION);
+        
         DeploymentPackage dp = null;
         try {
             TestingDeploymentPackage testDP = tbc.getTestingDeploymentPackage(DeploymentConstants.SYMB_NAME_DIFFERENT_FROM_MANIFEST_DP);
@@ -305,7 +314,7 @@ public class InstallExceptions implements TestInterface {
      */     
     private void testInstallExceptions010() {
         tbc.log("#testInstallExceptions010");
-        tbc.setDeploymentAdminPermission(DeploymentConstants.DEPLOYMENT_PACKAGE_NAME_ALL, DeploymentConstants.ALL_PERMISSION);
+        
         DeploymentPackage dp = null;
         try {
             TestingDeploymentPackage testDP = tbc.getTestingDeploymentPackage(DeploymentConstants.BUNDLE_THROWS_EXCEPTION_DP);
@@ -328,7 +337,7 @@ public class InstallExceptions implements TestInterface {
      */     
     private void testInstallExceptions011() {
         tbc.log("#testInstallExceptions011");
-        tbc.setDeploymentAdminPermission(DeploymentConstants.DEPLOYMENT_PACKAGE_NAME_ALL, DeploymentConstants.ALL_PERMISSION);
+        
         DeploymentPackage dp = null;
         DeploymentPackage dp2 = null;
         try {
@@ -386,7 +395,7 @@ public class InstallExceptions implements TestInterface {
      */             
     private void testInstallExceptions013() {
         tbc.log("#testInstallExceptions013");
-        tbc.setDeploymentAdminPermission(DeploymentConstants.DEPLOYMENT_PACKAGE_NAME_ALL, DeploymentConstants.ALL_PERMISSION);
+        
         TestingDeploymentPackage testDP = tbc.getTestingDeploymentPackage(DeploymentConstants.SIMPLE_UNSIGNED_BUNDLE_DP);
         DeploymentPackage dp = null;
         try {
@@ -408,7 +417,7 @@ public class InstallExceptions implements TestInterface {
      */                 
     private void testInstallExceptions014() {
         tbc.log("#testInstallExceptions014");
-        tbc.setDeploymentAdminPermission(DeploymentConstants.DEPLOYMENT_PACKAGE_NAME_ALL, DeploymentConstants.ALL_PERMISSION);
+        
         TestingDeploymentPackage testDP = tbc.getTestingDeploymentPackage(DeploymentConstants.SIMPLE_UNSIGNED_DP);
         DeploymentPackage dp = null;
         try {

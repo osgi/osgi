@@ -84,9 +84,8 @@ public class InstallDeploymentPackageAPI implements TestInterface {
     private synchronized void prepare() {
         try {
             tbc.setDeploymentAdminPermission(DeploymentConstants.DEPLOYMENT_PACKAGE_NAME_ALL, DeploymentConstants.ALL_PERMISSION);
-            wait(1000);
         } catch (Exception e) {
-            tbc.fail("Failed to wait for PermissionWorker");
+            tbc.fail("Failed to set Permission necessary for testing installDeploymentPackage");
         }
     }
 
@@ -380,12 +379,11 @@ public class InstallDeploymentPackageAPI implements TestInterface {
      * 
      * @spec DeploymentAdmin.installDeploymentPackage(InputStream)
      */     
-    private synchronized void testInstallDeploymentPackageAPI010() {
+    private void testInstallDeploymentPackageAPI010() {
         tbc.log("#testInstallDeploymentPackageAPI010");
         tbc.setDeploymentAdminPermission(DeploymentConstants.DEPLOYMENT_PACKAGE_NAME0, DeploymentAdminPermission.ACTION_LIST);
         DeploymentPackage dp = null;
         try {
-            wait(1000);
             TestingDeploymentPackage testDP = tbc.getTestingDeploymentPackage(DeploymentConstants.SIMPLE_DP);
             dp = tbc.installDeploymentPackage(tbc.getWebServer() + testDP.getFilename());
             tbc.failException("#", SecurityException.class);
