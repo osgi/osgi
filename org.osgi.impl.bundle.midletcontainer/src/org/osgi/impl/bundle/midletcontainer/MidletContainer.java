@@ -85,6 +85,7 @@ public class MidletContainer implements BundleListener, ServiceListener {
 									if( appHandle != null )
 										appHandle.destroy();
 								}catch( Exception e ) {
+									Activator.log( LogService.LOG_ERROR ,"Cannot terminate the MIDlet!",e);
 								}          
 							};
 						}
@@ -149,14 +150,18 @@ public class MidletContainer implements BundleListener, ServiceListener {
 					bundleDescriptorHash.remove(event.getBundle());
 					try {
 				    installMidletBundle( event.getBundle() );
-					}catch( Exception e ) {}
+					}catch( Exception e ) {
+						Activator.log( LogService.LOG_ERROR ,"Exception occurred at installing a Midlet!",e);
+					}
 					break;					
 			}
 		else if( event.getType() == BundleEvent.INSTALLED ) {
 	  	try {
 			  if( isMidletBundle( event.getBundle() ) )
 				  installMidletBundle( event.getBundle() );
-	  	}catch( Exception e ) {}			
+	  	}catch( Exception e ) {
+				Activator.log( LogService.LOG_ERROR ,"Exception occurred at installing a Midlet!",e);
+	  	}			
 		}
 	}
 
@@ -184,7 +189,10 @@ public class MidletContainer implements BundleListener, ServiceListener {
 					return true;
 			}
 		}
-		catch (Exception e) {}
+		catch (Exception e) 
+		{
+			Activator.log( LogService.LOG_ERROR ,"Unexpected exception at checking whether the bundle is MIDlet suite!",e);
+		}
 		return false;
 	}
 	
@@ -265,8 +273,11 @@ public class MidletContainer implements BundleListener, ServiceListener {
 		if( event.getType() == ServiceEvent.UNREGISTERING ) {
 			if( event.getServiceReference() == oatRef ) {
 				try {
+					Activator.log( LogService.LOG_ERROR ,"Stopping the MIDlet container as OAT has been stopped!", null );
 				  bc.getBundle().stop();   /* if the OAT service stops, stop the container also */
-				}catch(BundleException e) {}
+				}catch(BundleException e) {
+					Activator.log( LogService.LOG_ERROR ,"Failed to stop the MIDlet container!", e);
+				}
 			}
 		}
 	}
