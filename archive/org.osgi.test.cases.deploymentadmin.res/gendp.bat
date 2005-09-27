@@ -1,34 +1,14 @@
 @ECHO OFF
 
 ECHO cleaning up before begin
+del /q ..\org.osgi.test.cases.deploymentadmin.tc1\res\*.dp
+del /q ..\org.osgi.test.cases.deploymentadmin.tc2\res\*.dp
 del /q bundles\*.jar
 del /q bundles_update\*.jar
 
 ECHO Building
 call ..\cnf\ant\bin\ant
 cd bundles
-
-ECHO Signing bundles
-jarsigner -keystore ..\megtck_keystore -storepass megtck -keypass megtck bundle001.jar megtck
-jarsigner -keystore ..\megtck_keystore -storepass megtck -keypass megtck bundle002.jar megtck
-jarsigner -keystore ..\megtck_keystore -storepass megtck -keypass megtck bundle003.jar megtck
-jarsigner -keystore ..\megtck_keystore -storepass megtck -keypass megtck bundle004.jar megtck
-jarsigner -keystore ..\megtck_keystore -storepass megtck -keypass megtck bundle005.jar megtck
-jarsigner -keystore ..\megtck_keystore -storepass megtck -keypass megtck bundle006.jar megtck
-jarsigner -keystore ..\megtck_keystore -storepass megtck -keypass megtck ..\bundles_update\bundle001.jar megtck
-jarsigner -keystore ..\megtck_keystore -storepass megtck -keypass megtck ..\bundles_update\bundle002.jar megtck
-jarsigner -keystore ..\megtck_keystore -storepass megtck -keypass megtck ..\bundles_update\bundle005.jar megtck
-jarsigner -keystore ..\megtck_keystore -storepass megtck -keypass megtck rp_bundle_tc1_rp1.jar megtck
-jarsigner -keystore ..\megtck_keystore -storepass megtck -keypass megtck rp_bundle_tc1_rp2.jar megtck
-jarsigner -keystore ..\megtck_keystore -storepass megtck -keypass megtck rp_bundle_tc2_rp1.jar megtck
-jarsigner -keystore ..\megtck_keystore -storepass megtck -keypass megtck rp_bundle_tc2_rp2.jar megtck
-jarsigner -keystore ..\megtck_keystore -storepass megtck -keypass megtck rp_bundle_tc2_rp3.jar megtck
-
-ECHO Signing resources
-jarsigner -keystore ..\megtck_keystore -storepass megtck -keypass megtck conf.txt megtck
-jarsigner -keystore ..\megtck_keystore -storepass megtck -keypass megtck simple_resource.xml megtck
-jarsigner -keystore ..\megtck_keystore -storepass megtck -keypass megtck resource_processor_file.txt megtck
-jarsigner -keystore ..\megtck_keystore -storepass megtck -keypass megtck OSGI-INF\AUTOCONF.xml megtck
 
 copy bundle001.jar wrong(path)\
 
