@@ -17,122 +17,104 @@
  */
 package org.osgi.meg.demo.desktop;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
-import java.util.Date;
-import java.util.Enumeration;
+import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Hashtable;
-import java.util.Timer;
-import java.util.TimerTask;
+import java.util.Map;
+
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
-import org.osgi.framework.InvalidSyntaxException;
+import org.osgi.framework.Constants;
+import org.osgi.framework.ServiceEvent;
+import org.osgi.framework.ServiceListener;
 import org.osgi.framework.ServiceReference;
 import org.osgi.service.application.ApplicationDescriptor;
 import org.osgi.service.application.ApplicationHandle;
-import org.osgi.service.application.SingletonException;
-import org.osgi.service.dmt.DmtException;
-import org.osgi.service.dmt.spi.ExecPlugin;
-import org.osgi.service.event.Event;
-import org.osgi.service.event.EventHandler;
-import org.osgi.service.log.LogEntry;
-import org.osgi.service.log.LogReaderService;
+import org.osgi.service.deploymentadmin.DeploymentAdmin;
+import org.osgi.service.deploymentadmin.DeploymentPackage;
 import org.osgi.util.tracker.ServiceTracker;
 import org.osgi.util.tracker.ServiceTrackerCustomizer;
 
 /**
  * Model part of the MVC pattern.
  */
-public class Model extends ServiceTracker implements Runnable, EventHandler {
-	private Desktop			desktop;
-	private BundleContext	context;
-	private ServiceTracker	trackAppHandle;
-	private ServiceTracker	trackAppDescr;
-	private boolean			running;
-	private Hashtable		events	= new Hashtable();
-	// TODO eliminate this
-	private ExecPlugin	    execPlugin;
+public class Model {
 
-	Model(BundleContext context, Desktop desktop) throws Exception {
-		// track the Application Manager
-		super(context, ApplicationManager.class.getName(), null);
+    private SimpleDesktop desktop;
+	private BundleContext context;
+    private Map appDescrs = new HashMap();  
+    private Map appInstances = new HashMap();
+
+    private ServiceTracker dadminTracker;
+    
+    private ListenToAppDescriptor listenToAppDescriptor = 
+        new ListenToAppDescriptor();
+    private ListenToAppHandle     listenToAppHandle = 
+        new ListenToAppHandle();
+    
+    private class ListenToAppDescriptor implements ServiceListener {
+
+        public void serviceChanged(ServiceEvent event) {
+            ServiceReference sref = event.getServiceReference();
+            String pid = (String) sref.getProperty(ApplicationDescriptor.APPLICATION_PID);
+            switch (event.getType()) {
+                case ServiceEvent.REGISTERED :
+                    appDescrs.put(pid, sref);
+                    desktop.onAppInstalled(pid);
+                    break;
+                case ServiceEvent.UNREGISTERING :
+                    appDescrs.remove(pid);
+                    desktop.onAppUninstalled(pid);
+                    break;
+                default :
+                    break;
+            }
+        }
+        
+    }
+
+    private class ListenToAppHandle implements ServiceListener {
+
+        public void serviceChanged(ServiceEvent event) {
+            ServiceReference sref = event.getServiceReference();
+            String pid = (String) sref.getProperty(ApplicationHandle.APPLICATION_PID);
+            switch (event.getType()) {
+                case ServiceEvent.REGISTERED :
+                    appInstances.put(pid, sref);
+                    desktop.onAppLaunched(pid);
+                    break;
+                case ServiceEvent.UNREGISTERING :
+                    appInstances.remove(pid);
+                    desktop.onAppStopped(pid);
+                    break;
+                default :
+                    break;
+            }
+        }
+        
+    }
+
+	Model(BundleContext context, SimpleDesktop desktop) throws Exception {
 		this.context = context;
 		this.desktop = desktop;
-		// for the anonymous inner classes
-		final BundleContext constcontext = context;
-		final Desktop constdesktop = desktop;
-		// track ApplicationHandle
-		trackAppHandle = new ServiceTracker(context, ApplicationHandle.class
-				.getName(), new ServiceTrackerCustomizer() {
-			public Object addingService(ServiceReference reference) {
-				ApplicationHandle ret = (ApplicationHandle) constcontext
-						.getService(reference);
-				constdesktop.addLaunchApp(ret);
-				return ret;
-			}
 
-			public void modifiedService(ServiceReference reference,
-					Object service) {
-			}
-
-			public void removedService(ServiceReference reference,
-					Object service) {
-				constdesktop.removeRunApp((ApplicationHandle) service);
-				constcontext.ungetService(reference);
-			}
-		});
-		trackAppHandle.open();
-		// track ApplicationDescriptor
-		final BundleContext finalContext = context;
-		trackAppDescr = new ServiceTracker(context, ApplicationDescriptor.class
-				.getName(), new ServiceTrackerCustomizer() {
-			public Object addingService(ServiceReference reference) {
-				ApplicationDescriptor descr = (ApplicationDescriptor) constcontext
-						.getService(reference);
-				String uid = (String) reference.getProperty("unique_id");
-				String appName = (String) reference
-						.getProperty("localized_name");
-				byte[] imageData = createImageData(reference, finalContext);
-				constdesktop.addInstApp(descr, appName, imageData);
-				return descr;
-			}
-
-			public void modifiedService(ServiceReference reference,
-					Object service) {
-			}
-
-			public void removedService(ServiceReference reference,
-					Object service) {
-				String uid = (String) reference.getProperty("unique_id");
-				constdesktop.removeInstApp((ApplicationDescriptor) service);
-				constcontext.ungetService(reference);
-			}
-		});
-		trackAppDescr.open();
-		// TODO eliminate this
-		ServiceReference sref = context.getServiceReference(ExecPlugin.class
-				.getName());
-		execPlugin = (ExecPlugin) context.getService(sref);
-		// register ChannelListener
-		Hashtable config = new Hashtable();
-		config.put("topic", "*");
-		context.registerService(EventHandler.class.getName(), this, config);
-		initRefreshInstApps();
+        dadminTracker = 
+            new ServiceTracker(context, DeploymentAdmin.class.getName(), null);
+        dadminTracker.open();
+        
+        context.addServiceListener(listenToAppDescriptor, "(" + Constants.OBJECTCLASS +
+                "=" + ApplicationDescriptor.class.getName() + ")");
+        context.addServiceListener(listenToAppHandle, "(" + Constants.OBJECTCLASS +
+                "=" + ApplicationHandle.class.getName() + ")");
 	}
 
-	private void initRefreshInstApps() {
-		Timer t = new Timer();
-		t.schedule(new TimerTask() {
-			public void run() {
-				desktop.refreshInstApps();
-			}
-		}, 0, 1000);
-	}
+    // closes the resources. called by the DesktopActivator
+    public void destroy() {
+        dadminTracker.close();
+    }
 
-	private static byte[] createImageData(ServiceReference reference,
+	/*private static byte[] createImageData(ServiceReference reference,
 			BundleContext context) {
 		InputStream iconStream = null;
 		// TODO not only 8x8
@@ -172,9 +154,9 @@ public class Model extends ServiceTracker implements Runnable, EventHandler {
 			}
 		}
 		return imageData;
-	}
+	}*/
 
-	private static byte[] createImageArray(InputStream iconStream) {
+	/*private static byte[] createImageArray(InputStream iconStream) {
 		ByteArrayOutputStream bos = new ByteArrayOutputStream();
 		try {
 			int d = iconStream.read();
@@ -196,131 +178,130 @@ public class Model extends ServiceTracker implements Runnable, EventHandler {
 				}
 			}
 		}
+	}*/
+
+	public String installDp(String aUrl) throws Exception {
+        URL url = new URL(aUrl);
+        InputStream is = url.openStream();
+	    DeploymentAdmin da = (DeploymentAdmin) dadminTracker.getService();
+        
+        try {
+            DeploymentPackage dp = da.installDeploymentPackage(is);
+            return dp.getName();
+        } finally {
+            if (null != is)
+                is.close();
+        }
 	}
 
-	// closes the resources. called by the DesktopActivator
-	public void destroy() {
-		synchronized (this) {
-			running = false;
-		}
-		close();
-		trackAppHandle.close();
-		trackAppDescr.close();
-	}
+	public void uninstallDp(String dpName) throws Exception {
+        DeploymentAdmin da = (DeploymentAdmin) dadminTracker.getService();
+        DeploymentPackage dp = da.getDeploymentPackage(dpName);
+        dp.uninstallForced();
+    }
 
-	public void launchApp(ApplicationDescriptor descr) throws Exception {
-		ApplicationHandle handle = ((ApplicationManager) getService())
-				.launchApplication(descr, new HashMap());
-	}
+    public String installBundle(String aUrl) throws Exception {
+        URL url = new URL(aUrl);
+        InputStream is = url.openStream();
+        Bundle b = context.installBundle(aUrl, is);
+        b.start();
+        return b.getLocation();
+    }
 
-	public void installApp(String url) throws DmtException {
-		// TODO eliminate this
-		execPlugin.execute(null, "./OSGi/deploy/install", url);
-	}
+    public boolean existsDp(String dpName) {
+        DeploymentAdmin da = (DeploymentAdmin) dadminTracker.getService();
+        DeploymentPackage dp = da.getDeploymentPackage(dpName);
+        return dp != null;
+    }
 
-	public void uninstallApp(ApplicationDescriptor descr) throws Exception {
-		String type = descr.getContainerID();
-		ServiceReference[] refs = context.getServiceReferences(
-				ApplicationContainer.class.getName(), "(application_type=MEG)");
-		ApplicationContainer cont = (ApplicationContainer) context
-				.getService(refs[0]);
-		cont.uninstallApplication(descr, false);
-		context.ungetService(refs[0]);
-	}
+    public void uninstallBundle(String s) throws Exception {
+        Bundle[] bundles = context.getBundles();
+        Bundle b = null;
+        for (int i = 0; i < bundles.length; i++) {
+            if (bundles[i].getLocation().equals(s)) {
+                b = bundles[i];
+                break;
+            }
+        }
+        if (null != b) {
+            if (b.getState() == Bundle.ACTIVE)
+                b.stop();
+            b.uninstall();
+        }
+    }
 
-	public void stopApp(ApplicationHandle handle) throws Exception {
-		handle.destroyApplication();
-	}
+    public void launchApp(String pid) throws Exception {
+        ServiceReference sref = (ServiceReference) appDescrs.get(pid);
+        ApplicationDescriptor ad = (ApplicationDescriptor) context.getService(sref);
+        
+        // TODO app parameters
+        ApplicationHandle handle = ad.launch(new HashMap());
 
-	public void suspendApp(ApplicationHandle handle) throws Exception {
-		handle.suspendApplication();
-	}
+        context.ungetService(sref);
+    }
 
-	public void resumeApp(ApplicationHandle handle) throws Exception {
-		handle.resumeApplication();
-	}
+    public void stopApp(String pid) throws Exception {
+        ServiceReference sref = (ServiceReference) appInstances.get(pid);
+        if (null == sref)
+            return;
+        ApplicationHandle handle = (ApplicationHandle) context.getService(sref);
+        if (null == handle)
+            return;
+        handle.destroy();
+    }
 
-	public void run() {
-		running = true;
-		while (running) {
-			synchronized (this) {
-				try {
-					ServiceReference[] refs = context.getServiceReferences(
-							ApplicationHandle.class.getName(), null);
-					if (null != refs) {
-						Hashtable ht = new Hashtable();
-						for (int i = 0; i < refs.length; ++i) {
-							ApplicationHandle handle = (ApplicationHandle) context
-									.getService(refs[i]);
-							ht.put(handle, new Integer(handle.getAppStatus()));
-							desktop.refreshRunningApps(ht);
-							context.ungetService(refs[i]);
-						}
-					}
-				}
-				catch (InvalidSyntaxException e) {
-					throw new RuntimeException("Internal error.");
-				}
-			}
-			try {
-				Thread.sleep(1000);
-			}
-			catch (InterruptedException e) {
-			}
-		}
-	}
+//	public String getLogs() {
+//		ServiceReference sref = context
+//				.getServiceReference(LogReaderService.class.getName());
+//		LogReaderService lr = (LogReaderService) context.getService(sref);
+//		StringBuffer sb = new StringBuffer();
+//		String[] level = new String[] {"ERROR", "WARNING", "INFO", "DEBUG"};
+//		for (Enumeration en = lr.getLog(); en.hasMoreElements();) {
+//			LogEntry le = (LogEntry) en.nextElement();
+//			Date d = new Date(le.getTime());
+//			sb.append(d + "    " + level[le.getLevel() - 1] + " \t"
+//					+ le.getMessage() + "\n");
+//		}
+//		context.ungetService(sref);
+//		return sb.toString();
+//	}
 
-	public String getLogs() {
-		ServiceReference sref = context
-				.getServiceReference(LogReaderService.class.getName());
-		LogReaderService lr = (LogReaderService) context.getService(sref);
-		StringBuffer sb = new StringBuffer();
-		String[] level = new String[] {"ERROR", "WARNING", "INFO", "DEBUG"};
-		for (Enumeration en = lr.getLog(); en.hasMoreElements();) {
-			LogEntry le = (LogEntry) en.nextElement();
-			Date d = new Date(le.getTime());
-			sb.append(d + "    " + level[le.getLevel() - 1] + " \t"
-					+ le.getMessage() + "\n");
-		}
-		context.ungetService(sref);
-		return sb.toString();
-	}
+//	public void handleEvent(Event event) {
+//		// TODO
+//		if (!"Bundle Event".equals(event.getTopic()))
+//			return;
+//		Object[] pair = (Object[]) events.get(event.getTopic());
+//		if (null == pair)
+//			return;
+//		Hashtable props = (Hashtable) pair[0];
+//		ApplicationDescriptor descr = (ApplicationDescriptor) pair[1];
+//		long ide = ((Long) event.getProperty("bundle.id")).longValue();
+//		long idp = ((Long) props.get("bundle.id")).longValue();
+//		if (ide == idp) {
+//			try {
+//				((ApplicationManager) getService()).launchApplication(
+//						(ApplicationDescriptor) pair[1], null);
+//			}
+//			catch (SingletonException e) {
+//				// TODO
+//				e.printStackTrace();
+//			}
+//			catch (Exception e) {
+//				// TODO
+//				e.printStackTrace();
+//			}
+//			events.remove(event.getTopic());
+//		}
+//	}
 
-	public void handleEvent(Event event) {
-		// TODO
-		if (!"Bundle Event".equals(event.getTopic()))
-			return;
-		Object[] pair = (Object[]) events.get(event.getTopic());
-		if (null == pair)
-			return;
-		Hashtable props = (Hashtable) pair[0];
-		ApplicationDescriptor descr = (ApplicationDescriptor) pair[1];
-		long ide = ((Long) event.getProperty("bundle.id")).longValue();
-		long idp = ((Long) props.get("bundle.id")).longValue();
-		if (ide == idp) {
-			try {
-				((ApplicationManager) getService()).launchApplication(
-						(ApplicationDescriptor) pair[1], null);
-			}
-			catch (SingletonException e) {
-				// TODO
-				e.printStackTrace();
-			}
-			catch (Exception e) {
-				// TODO
-				e.printStackTrace();
-			}
-			events.remove(event.getTopic());
-		}
-	}
+//	public void scheduleOnEvent(String topic, Hashtable ht,
+//			ApplicationDescriptor descr) {
+//		events.put(topic, new Object[] {ht, descr});
+//	}
 
-	public void scheduleOnEvent(String topic, Hashtable ht,
-			ApplicationDescriptor descr) {
-		events.put(topic, new Object[] {ht, descr});
-	}
-
-	public void scheduleOnDate(Date date, ApplicationDescriptor descr) {
-		((ApplicationManager) getService()).addScheduledApplication(descr,
-				new Hashtable(), date);
-	}
+//	public void scheduleOnDate(Date date, ApplicationDescriptor descr) {
+//		((ApplicationManager) getService()).addScheduledApplication(descr,
+//				new Hashtable(), date);
+//	}
+    
 }
