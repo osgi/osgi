@@ -201,6 +201,9 @@ public class Scheduler implements Runnable, EventHandler {
 			props.put( "minute", 			new Byte( (byte)calendar.get( Calendar.MINUTE ) ) );
 			props.put( "second", 			new Byte( (byte)calendar.get( Calendar.SECOND ) ) );
 			
+			if( stopped ) /* avoid exception */
+				break;
+			
 		  ServiceReference serviceRef = bc.getServiceReference("org.osgi.service.event.EventAdmin");
 			if (serviceRef != null) {
 				EventAdmin eventAdmin = (EventAdmin) bc.getService(serviceRef);
