@@ -15,6 +15,8 @@ class MIDletClassLoader extends ClassLoader {
 	private ClassLoader   parent;
 	private String        mainClassLocation;
 	private MIDlet        correspondingMidlet = null;
+    private static char[] hex = "0123456789ABCDEF".toCharArray();
+    private static final boolean DEBUG = false;
 
 	public MIDletClassLoader(ClassLoader parent, Bundle bundle,
 			ProtectionDomain protectionDomain, String mainClassLocation ) {
@@ -28,6 +30,8 @@ class MIDletClassLoader extends ClassLoader {
 
 	protected Class findClass(String name) throws ClassNotFoundException {
 		byte b[] = loadClassData(name);
+        if(DEBUG)
+            System.out.println("name:" + name + "\nbytes:" + getHexDump(b));
 		return defineClass(name, b, 0, b.length, protectionDomain);
 	}
 	
@@ -67,7 +71,13 @@ class MIDletClassLoader extends ClassLoader {
 			data = new byte[length];
 			InputStream input = connection.getInputStream();
 			try {
-				input.read(data);
+                int offset = 0;
+                while(offset < length) {
+                    int res = input.read(data, offset, length-offset);
+                    if(res < 0)
+                        break;
+                    offset += res;
+                }
 			}
 			finally {
 				input.close();
@@ -87,4 +97,20 @@ class MIDletClassLoader extends ClassLoader {
 	void setCorrespondingMIDlet( MIDlet midlet ) {
 		correspondingMidlet = midlet;
 	}
+
+    // generates a hexadecimal dump of the given binary data
+    private static String getHexDump(byte[] bytes) {
+        if(bytes.length == 0)
+            return "";
+        
+        StringBuffer buf = new StringBuffer();
+        for (int i = 0; i < bytes.length; i++) {
+            if((i % 16) == 0)
+                buf.append('\n');
+            byte b = bytes[i];
+            buf.append(hex[(b & 0xF0) >> 4]).append(hex[b & 0x0F]).append(' ');
+        }
+        
+        return buf.toString();
+    }
 }
