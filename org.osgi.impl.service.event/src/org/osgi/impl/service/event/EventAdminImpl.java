@@ -301,8 +301,8 @@ public class EventAdminImpl implements EventAdmin {
 		String eventTopic = event.getTopic();
 		Object o = ref.getProperty(EventConstants.EVENT_TOPIC);
 		if (o == null) {
-			// means "*" , no need to investigate further
-			return true;
+			// means no topics, no need to investigate further
+			return false;
 		}
 		if (!(o instanceof String[])) {
 			// EVENT_TOPIC property must be String[], ignored.
