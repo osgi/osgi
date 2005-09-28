@@ -17,81 +17,79 @@
  */
 package org.osgi.meg.demo.desktop;
 
-import java.net.MalformedURLException;
-import java.util.*;
 import org.osgi.framework.*;
-import org.osgi.service.application.*;
-import org.osgi.service.dmt.DmtException;
 
 /**
  * Controller part of the MVC pattern.
  */
 public class Activator implements BundleActivator {
-	private Model	model;
-	private Desktop	desktop;
+    
+    private Model         model;
+    private SimpleDesktop desktop;
 
-	public Activator() {
-		super();
-	}
+    public Activator() {
+        super();
+    }
 
-	public void start(BundleContext context) throws Exception {
-		try {
-			desktop = new Desktop(this);
-			model = new Model(context, desktop);
-			model.open();
-			desktop.setModel(model);
-			new Thread(model).start();
-			desktop.setVisible(true);
-		}
-		catch (Throwable t) {
-			t.printStackTrace();
-		}
-	}
+    public void start(BundleContext context) throws Exception {
+        try {
+            desktop = new SimpleDesktop(this);
+            model = new Model(context, desktop);
+            desktop.setVisible(true);
+        }
+        catch (Throwable t) {
+            t.printStackTrace();
+        }
+    }
 
-	public void stop(BundleContext context) throws Exception {
-		model.destroy();
-		desktop.hide();
-	}
+    public void stop(BundleContext context) throws Exception {
+        model.destroy();
+        desktop.setVisible(false);
+    }
 
-	public void installApp(String url) throws MalformedURLException,
-			DmtException {
-		model.installApp(url);
-	}
+    public String installDp(String url) throws Exception {
+        return model.installDp(url);
+    }
 
-	public void launchApp(ApplicationDescriptor descr) throws Exception {
-		model.launchApp(descr);
-	}
+    public void uninstallDp(String dpName) throws Exception {
+        model.uninstallDp(dpName);
+    }
 
-	public void uninstallApp(ApplicationDescriptor descr) throws Exception {
-		model.uninstallApp(descr);
-	}
+    public String installBundle(String url) throws Exception {
+        return model.installBundle(url);
+    }
 
-	public void stopApp(ApplicationHandle handle) throws Exception {
-		model.stopApp(handle);
-	}
+    public boolean existsDp(String dpName) {
+        return model.existsDp(dpName);
+    }
 
-	public void suspendApp(ApplicationHandle handle) throws Exception {
-		model.suspendApp(handle);
-	}
+    public void uninstallBundle(String s) throws Exception {
+        model.uninstallBundle(s);
+    }
 
-	public void resumeApp(ApplicationHandle handle) throws Exception {
-		model.resumeApp(handle);
-	}
+    public void launchApp(String pid) throws Exception {
+        model.launchApp(pid);
+    }
 
-	public void scheduleOnEvent(String topic, String props,
-			ApplicationDescriptor descr) {
-		// TODO
-		Hashtable ht = new Hashtable();
-		ht.put("bundle.id", new Long(props));
-		/*
-		 * String[] pairs = Splitter.split(props, ',', 0); for (int i = 0; i <
-		 * pairs.length; ++i) { String[] pair = Splitter.split(pairs[i], '=',
-		 * 0); ht.put(pair[0], pair[1]); }
-		 */
-		model.scheduleOnEvent(topic, ht, descr);
-	}
+    public void stopApp(String pid) throws Exception {
+        model.stopApp(pid);
+    }
 
-	public void scheduleOnDate(Date date, ApplicationDescriptor descr) {
-		model.scheduleOnDate(date, descr);
-	}
+//  public void scheduleOnEvent(String topic, String props,
+//          ApplicationDescriptor descr) {
+//      // TODO
+//      Hashtable ht = new Hashtable();
+//      ht.put("bundle.id", new Long(props));
+//      /*
+//       * String[] pairs = Splitter.split(props, ',', 0); for (int i = 0; i <
+//       * pairs.length; ++i) { String[] pair = Splitter.split(pairs[i], '=',
+//       * 0); ht.put(pair[0], pair[1]); }
+//       */
+//      model.scheduleOnEvent(topic, ht, descr);
+//  }
+//
+//  public void scheduleOnDate(Date date, ApplicationDescriptor descr) {
+//      model.scheduleOnDate(date, descr);
+//  }
+    
 }

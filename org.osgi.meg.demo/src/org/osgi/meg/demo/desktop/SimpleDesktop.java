@@ -12,47 +12,37 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.util.Hashtable;
 
-import org.osgi.framework.BundleActivator;
-import org.osgi.framework.BundleContext;
-import org.osgi.framework.ServiceReference;
-import org.osgi.service.application.ApplicationContainer;
-import org.osgi.service.application.ApplicationDescriptor;
-import org.osgi.service.application.ApplicationHandle;
-import org.osgi.service.application.ApplicationManager;
-import org.osgi.service.dmt.DmtAdmin;
-import org.osgi.service.dmt.DmtException;
-import org.osgi.service.dmt.DmtSession;
-import org.osgi.util.tracker.ServiceTracker;
-import org.osgi.util.tracker.ServiceTrackerCustomizer;
 
-public class SimpleDesktop extends Frame implements BundleActivator, ActionListener {
+public class SimpleDesktop extends Frame implements ActionListener {
     
     private static final String INSTALL   = "install";
     private static final String UNINSTALL = "uninstall";
     private static final String LAUNCH    = "launch";
     private static final String STOP      = "stop";
     
-    private Panel  pNorth;
-    private Panel  pSouth;
+    private Panel  pSouth = new Panel();
     private Button bInstall;
     private Button bUninstall;
     private Button bLaunch;
     private Button bStop;
+    private List   lInstPackages;
     private List   lInstApp;
-    private List   lRunApp;
+    private List   lRunningApp;
 
-    private BundleContext context;
-    private DmtSession session;
-    private Hashtable instApp = new Hashtable();
-    private Hashtable runApp = new Hashtable();
-    private ServiceTracker trackAppDescr;
-    private ServiceTracker trackAppHandle;
-    private ServiceTracker trackAppManager;
+    private Activator     controller;
+    //private DmtSession session;
+    //private Hashtable instApp = new Hashtable();
+    //private Hashtable runApp = new Hashtable();
+    //private ServiceTracker trackAppDescr;
+    //private ServiceTracker trackAppHandle;
+    //private ServiceTracker trackAppManager;
     
-    public SimpleDesktop() throws DmtException {
+    public SimpleDesktop(Activator controller) {
         super("Desktop (OSGi MEG RI)");
+        this.controller = controller;
+        initTracker();
+
         setLayout(new BorderLayout());
         setSize(300, 200);
         
@@ -66,143 +56,161 @@ public class SimpleDesktop extends Frame implements BundleActivator, ActionListe
             	}
             });
         
-        pNorth = new Panel();
+        Panel pNorth = new Panel();
+        pNorth.setLayout(new GridLayout(0, 3));
         add(pNorth, BorderLayout.NORTH);
-        	bInstall = new Button(INSTALL);
-        	bInstall.setActionCommand(INSTALL);
-        	bInstall.addActionListener(this);
-        	pNorth.add(bInstall);
-
-        	bUninstall = new Button(UNINSTALL);
-        	bUninstall.setActionCommand(UNINSTALL);
-        	bUninstall.addActionListener(this);
-        	pNorth.add(bUninstall);
-
-        	bLaunch = new Button(LAUNCH);
-        	bLaunch.setActionCommand(LAUNCH);
-        	bLaunch.addActionListener(this);
-        	pNorth.add(bLaunch);
-
-        	bStop = new Button(STOP);
-        	bStop.setActionCommand(STOP);
-        	bStop.addActionListener(this);
-        	pNorth.add(bStop);
-
-        pSouth = new Panel();
-        pSouth.setLayout(new GridLayout(1, 4));
-        add(pSouth, BorderLayout.SOUTH);
         
-        Panel pCenter = new Panel();
-        pCenter.setLayout(new GridLayout(1,2));
-        add(pCenter, BorderLayout.CENTER);
-       		lInstApp = new List();
-           	pCenter.add(lInstApp);
-
-       		lRunApp = new List();
-       		pCenter.add(lRunApp);
-    }
+        Panel pNorth1 = new Panel();
+        pNorth.add(pNorth1);
+        pNorth1.setLayout(new GridLayout(3, 0));
+            bInstall = new Button(INSTALL);
+            bInstall.setActionCommand(INSTALL);
+            bInstall.addActionListener(this);
+            pNorth1.add(bInstall);
     
-    private void init() throws DmtException {
-        initDmtAdmin();
-        initTracker();
+            bUninstall = new Button(UNINSTALL);
+            bUninstall.setActionCommand(UNINSTALL);
+            bUninstall.addActionListener(this);
+            pNorth1.add(bUninstall);
+            
+            pNorth1.add(new Label("Packages"));
 
+        Panel pNorth2 = new Panel();
+        pNorth.add(pNorth2);
+        pNorth2.setLayout(new GridLayout(3, 0));
+            bLaunch = new Button(LAUNCH);
+            bLaunch.setActionCommand(LAUNCH);
+            bLaunch.addActionListener(this);
+            pNorth2.add(bLaunch);
+            
+            pNorth2.add(new Panel());
+            
+            pNorth2.add(new Label("Applications"));
+
+        Panel pNorth3 = new Panel();
+        pNorth.add(pNorth3);
+        pNorth3.setLayout(new GridLayout(3, 0));
+            bStop = new Button(STOP);
+            bStop.setActionCommand(STOP);
+            bStop.addActionListener(this);
+            pNorth3.add(bStop);
+            
+            pNorth3.add(new Panel());
+            
+            pNorth3.add(new Label("Application instances"));
+
+        pSouth.setLayout(new GridLayout(0, 4));
+        add(pSouth, BorderLayout.SOUTH);
+
+        Panel pCenter = new Panel(); 
+        pCenter.setLayout(new GridLayout(0, 3));
+        
+        add(pCenter, BorderLayout.CENTER);
+       		lInstPackages = new List();
+           	pCenter.add(lInstPackages);
+
+       		lInstApp = new List();
+       		pCenter.add(lInstApp);
+            
+            lRunningApp = new List();
+            pCenter.add(lRunningApp);
+            
         setVisible(true);
-        validate();
     }
 
     private void initTracker() {
-		final BundleContext finalContext = context;
+		//final BundleContext finalContext = context;
 		
-		trackAppDescr = new ServiceTracker(context, ApplicationDescriptor.class
-				.getName(), new ServiceTrackerCustomizer() {
-			public Object addingService(ServiceReference reference) {
-				ApplicationDescriptor descr = (ApplicationDescriptor) finalContext
-						.getService(reference);
-				String uid = (String) reference.getProperty("unique_id");
-				String appName = (String) reference
-						.getProperty("localized_name");
-				
-				lInstApp.add(uid + "(" + appName + ")");
-				instApp.put(uid + "(" + appName + ")", descr);
-				
-				validate();
-				return descr;
-			}
-
-			public void modifiedService(ServiceReference reference,
-					Object service) {
-			}
-
-			public void removedService(ServiceReference reference,
-					Object service) {
-				String uid = (String) reference.getProperty("unique_id");
-				String appName = (String) reference
-						.getProperty("localized_name");
-			
-				lInstApp.remove(uid + "(" + appName + ")");
-				instApp.remove(uid + "(" + appName + ")");
-				
-				finalContext.ungetService(reference);
-				validate();
-			}
-		});
-		trackAppDescr.open();
+//		trackAppDescr = new ServiceTracker(context, ApplicationDescriptor.class
+//				.getName(), new ServiceTrackerCustomizer() {
+//			public Object addingService(ServiceReference reference) {
+//				ApplicationDescriptor descr = (ApplicationDescriptor) finalContext
+//						.getService(reference);
+//				String uid = (String) reference.getProperty("unique_id");
+//				String appName = (String) reference
+//						.getProperty("localized_name");
+//				
+//				lInstApp.add(uid + "(" + appName + ")");
+//				instApp.put(uid + "(" + appName + ")", descr);
+//				
+//				validate();
+//				return descr;
+//			}
+//
+//			public void modifiedService(ServiceReference reference,
+//					Object service) {
+//			}
+//
+//			public void removedService(ServiceReference reference,
+//					Object service) {
+//				String uid = (String) reference.getProperty("unique_id");
+//				String appName = (String) reference
+//						.getProperty("localized_name");
+//			
+//				lInstApp.remove(uid + "(" + appName + ")");
+//				instApp.remove(uid + "(" + appName + ")");
+//				
+//				finalContext.ungetService(reference);
+//				validate();
+//			}
+//		});
+//		trackAppDescr.open();
 		
-		trackAppHandle = new ServiceTracker(context, ApplicationHandle.class
-				.getName(), new ServiceTrackerCustomizer() {
-			public Object addingService(ServiceReference reference) {
-				ApplicationHandle handle = (ApplicationHandle) finalContext.
-						getService(reference);
-				lRunApp.add(handle.getAppDescriptor().getName());
-				runApp.put(handle.getAppDescriptor().getName(), handle);
+//		trackAppHandle = new ServiceTracker(context, ApplicationHandle.class
+//				.getName(), new ServiceTrackerCustomizer() {
+//			public Object addingService(ServiceReference reference) {
+//				ApplicationHandle handle = (ApplicationHandle) finalContext.
+//						getService(reference);
+//				lRunApp.add(handle.getAppDescriptor().getName());
+//				runApp.put(handle.getAppDescriptor().getName(), handle);
+//
+//				lRunApp.validate();
+//				validate();
+//				return handle;
+//			}
+//
+//			public void modifiedService(ServiceReference reference,
+//					Object service) {
+//			}
+//
+//			public void removedService(ServiceReference reference,
+//					Object service) {
+//			    ApplicationHandle handle = (ApplicationHandle) finalContext.
+//						getService(reference);
+//			    lRunApp.remove(handle.getAppDescriptor().getName());
+//			    runApp.remove(handle.getAppDescriptor().getName());
+//				finalContext.ungetService(reference);
+//				
+//				lRunApp.validate();
+//				validate();
+//			}
+//		});
+//		trackAppHandle.open();
 
-				lRunApp.validate();
-				validate();
-				return handle;
-			}
-
-			public void modifiedService(ServiceReference reference,
-					Object service) {
-			}
-
-			public void removedService(ServiceReference reference,
-					Object service) {
-			    ApplicationHandle handle = (ApplicationHandle) finalContext.
-						getService(reference);
-			    lRunApp.remove(handle.getAppDescriptor().getName());
-			    runApp.remove(handle.getAppDescriptor().getName());
-				finalContext.ungetService(reference);
-				
-				lRunApp.validate();
-				validate();
-			}
-		});
-		trackAppHandle.open();
-
-		trackAppManager = new ServiceTracker(context, ApplicationManager.class
-				.getName(), new ServiceTrackerCustomizer() {
-			public Object addingService(ServiceReference reference) {
-			    ApplicationManager man = (ApplicationManager) finalContext.
-						getService(reference);
-				return man;
-			}
-
-			public void modifiedService(ServiceReference reference,
-					Object service) {
-			}
-
-			public void removedService(ServiceReference reference,
-					Object service) {
-			}
-		});
-		trackAppManager.open();
+//		trackAppManager = new ServiceTracker(context, ApplicationManager.class
+//				.getName(), new ServiceTrackerCustomizer() {
+//			public Object addingService(ServiceReference reference) {
+//			    ApplicationManager man = (ApplicationManager) finalContext.
+//						getService(reference);
+//				return man;
+//			}
+//
+//			public void modifiedService(ServiceReference reference,
+//					Object service) {
+//			}
+//
+//			public void removedService(ServiceReference reference,
+//					Object service) {
+//			}
+//		});
+//		trackAppManager.open();
 	}
 
-    private void initDmtAdmin() throws DmtException {
-        ServiceReference ref = context.getServiceReference(DmtAdmin.class.getName());
-        DmtAdmin factory = (DmtAdmin) context.getService(ref);
-        session = factory.getSession(".", DmtSession.LOCK_TYPE_ATOMIC);
-    }
+//    private void initDmtAdmin() throws DmtException {
+//        ServiceReference ref = context.getServiceReference(DmtAdmin.class.getName());
+//        DmtAdmin factory = (DmtAdmin) context.getService(ref);
+//        session = factory.getSession(".", DmtSession.LOCK_TYPE_ATOMIC);
+//    }
 
     /////////////////////////////////////////////////////////////////
     // ActionListener
@@ -220,7 +228,6 @@ public class SimpleDesktop extends Frame implements BundleActivator, ActionListe
 	            pSouth.add(l, BorderLayout.SOUTH);
 	            
 	            final TextField tUrl = new TextField();
-	            tUrl.setText("file:");
 	            tUrl.setSize(200, 20);
 	            pSouth.add(tUrl, BorderLayout.SOUTH);
 	
@@ -230,12 +237,19 @@ public class SimpleDesktop extends Frame implements BundleActivator, ActionListe
 	            ActionListener listener = new ActionListener() {
 	                public void actionPerformed(ActionEvent e) {
 	                    if (bOK == e.getSource()) {
-		    				if (null != l.getText()) {
+                            String url = tUrl.getText();
+		    				if (null != url) {
 		    					try {
-	                                session.execute("./OSGi/deploy/install",
-	                                        tUrl.getText());
-	                            }
-	                            catch (Exception ex) {
+                                    if (url.endsWith(".dp")) {
+                                        String symbName = 
+                                            controller.installDp(url);
+                                        lInstPackages.add(symbName);
+                                    } else if (url.endsWith(".jar")) {
+                                        String location = 
+                                            controller.installBundle(url);
+                                        lInstPackages.add(location);
+                                    }
+	                            } catch (Exception ex) {
 	                                // TODO
 	                                ex.printStackTrace();
 	                            }
@@ -255,24 +269,25 @@ public class SimpleDesktop extends Frame implements BundleActivator, ActionListe
 	            
 	            validate();
 	        } else if (UNINSTALL.equals(command)) {
-	            String s = lInstApp.getSelectedItem();
-	            ApplicationDescriptor descr = (ApplicationDescriptor) instApp.get(s);
-	    		String type = descr.getContainerID();
-	    		ServiceReference[] refs = context.getServiceReferences(
-	    				ApplicationContainer.class.getName(), "(application_type=MEG)");
-	    		ApplicationContainer cont = (ApplicationContainer) context.
-	    				getService(refs[0]);
-	    		cont.uninstallApplication(descr, false);
-	    		context.ungetService(refs[0]);
+	            String s = lInstPackages.getSelectedItem();
+	            if (null == s)
+                    return;
+                boolean existsDp = controller.existsDp(s);
+                if (existsDp)
+                    controller.uninstallDp(s);
+                else
+                    controller.uninstallBundle(s);
+                lInstPackages.remove(s);
 	        } else if (LAUNCH.equals(command)) {
-	            ApplicationManager man = (ApplicationManager) trackAppManager.getService();
-	            String s = lInstApp.getSelectedItem();
-	            ApplicationDescriptor descr = (ApplicationDescriptor) instApp.get(s);
-	            man.launchApplication(descr, null);
+                String pid = lInstApp.getSelectedItem();
+                if (null == pid)
+                    return;
+                controller.launchApp(pid);
 	        } else if (STOP.equals(command)) {
-	            String s = lRunApp.getSelectedItem();
-	            ApplicationHandle handle = (ApplicationHandle) runApp.get(s);
-	            handle.destroyApplication();
+                String pid = lRunningApp.getSelectedItem();
+                if (null == pid)
+                    return;
+                controller.stopApp(pid);
 	        }
         } catch (Exception e) {
             // TODO
@@ -280,17 +295,20 @@ public class SimpleDesktop extends Frame implements BundleActivator, ActionListe
         }
     }
 
-    /////////////////////////////////////////////////////////////////
-    // BundleActivator
-    
-    public void start(BundleContext context) throws Exception {
-        this.context = context;
-        init();
+    public void onAppInstalled(String pid) {
+        lInstApp.add(pid);
     }
 
-    public void stop(BundleContext context) throws Exception {
-        // TODO Auto-generated method stub
-        
+    public void onAppUninstalled(String pid) {
+        lInstApp.remove(pid);
+    }
+
+    public void onAppLaunched(String pid) {
+        lRunningApp.add(pid);
+    }
+
+    public void onAppStopped(String pid) {
+        lRunningApp.remove(pid);
     }
 
 }
