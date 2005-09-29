@@ -514,7 +514,7 @@ public class PluginDeployed implements DataPluginFactory, ReadableDataSession,
                             "", 1, !Metanode.ZERO_OCC, null, 0, 0, null, DmtData.FORMAT_STRING);
                 if ("PackageType".equals(nodeUriArr[7]))
                     return new Metanode(MetaNode.CMD_GET, !Metanode.IS_LEAF, MetaNode.AUTOMATIC,
-                            "", 1, Metanode.ZERO_OCC, null, 0, 0, null, DmtData.FORMAT_NODE);
+                            "", 1, Metanode.ZERO_OCC, null, 0, 0, null, DmtData.FORMAT_INTEGER);
                 if ("Bundles".equals(nodeUriArr[7]))
                     return new Metanode(MetaNode.CMD_GET, !Metanode.IS_LEAF, MetaNode.AUTOMATIC,
                             "", 1, !Metanode.ZERO_OCC, null, 0, 0, null, DmtData.FORMAT_NODE);
