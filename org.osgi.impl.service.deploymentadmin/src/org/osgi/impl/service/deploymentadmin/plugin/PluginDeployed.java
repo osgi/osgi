@@ -580,8 +580,14 @@ public class PluginDeployed implements DataPluginFactory, ReadableDataSession,
             });
             undThread.start();
         } else {
-            String symbName = fromNodeId(nodeUriArr[5]);
-            Bundle bundle = getBundleBySymbName(symbName);
+            String sId = fromNodeId(nodeUriArr[5]);
+            long id;
+            try {
+                id = Integer.parseInt(sId);    
+            } catch (NumberFormatException e) {
+                return;
+            }
+            Bundle bundle = getBundleByBundleId(id);
             UndeployThread undThread = new UndeployThread(bundle);
             undThread.setListener(new UndeployThread.Listener() {
                 public void onFinish(Exception exception) {
@@ -611,6 +617,15 @@ public class PluginDeployed implements DataPluginFactory, ReadableDataSession,
             if (null == bSymbName)
                 continue;
             if (bSymbName.equals(symbName))
+                return bundles[i];
+        }
+        return null;
+    }
+    
+    private Bundle getBundleByBundleId(long id) {
+        Bundle[] bundles = pluginCtx.getBundleContext().getBundles();
+        for (int i = 0; i < bundles.length; i++) {
+            if (bundles[i].getBundleId() == id)
                 return bundles[i];
         }
         return null;
