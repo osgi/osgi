@@ -1,5 +1,5 @@
 Manifest-Version: 1.0
-DeploymentPackage-SymbolicName: system
+DeploymentPackage-SymbolicName: System
 DeploymentPackage-Version: 1.0.0
 DeploymentPackage-Copyright: Motorola (c).
 DeploymentPackage-ContactAddress: Rua Bione, 220, Cais do Apolo - Bairro do Recife, Recife - PE, CEP: 50.030-390.

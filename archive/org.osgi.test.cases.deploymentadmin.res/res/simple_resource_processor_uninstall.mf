@@ -1,14 +1,8 @@
 Manifest-Version: 1.0
 DeploymentPackage-SymbolicName: simple_resource_processor_uninstall
-DeploymentPackage-Copyright: %copyright
-DeploymentPackage-Vendor: %vendor
-DeploymentPackage-License: %licenseurl
-DeploymentPackage-Description: %3dlib
 DeploymentPackage-Version: 1.0.0
-Bundle-Localization: OSGI-INF/test/dp
 
-Name: rp_bundle.jar
+Name: rp_bundle4.jar
 Bundle-SymbolicName: org.osgi.test.cases.deployment.bundles.rp4
-Bundle-Version: %version
-Bundle-Localization: OSGI-INF/test/dp
+Bundle-Version: 1.0
 DeploymentPackage-Customizer: false

@@ -28,23 +28,15 @@ jarsigner -keystore ..\megtck_keystore -storepass megtck -keypass megtck ..\res\
 move ..\res\simple_no_bundle.dp ..\..\org.osgi.test.cases.deploymentadmin.tc1\res\
 move ..\res\simple_no_bundle.dp ..\..\org.osgi.test.cases.deploymentadmin.tc2\res\
 
-jar -cvfm ..\res\session_test.dp ..\res\session_test.mf rp_bundle.jar rp_bundle2.jar simple_resource.xml conf.txt
-jarsigner -keystore ..\megtck_keystore -storepass megtck -keypass megtck ..\res\session_test.dp megtck
-move ..\res\session_test.dp ..\..\org.osgi.test.cases.deploymentadmin.tc1\res\
-move ..\res\session_test.dp ..\..\org.osgi.test.cases.deploymentadmin.tc2\res\
-
-jar -cvfm ..\res\resource_processor2.dp ..\res\resource_processor2_dp.mf rp_bundle2.jar
-jarsigner -keystore ..\megtck_keystore -storepass megtck -keypass megtck ..\res\resource_processor2.dp megtck
-move ..\res\resource_processor2.dp ..\..\org.osgi.test.cases.deploymentadmin.tc1\res\
-move ..\res\resource_processor2.dp ..\..\org.osgi.test.cases.deploymentadmin.tc2\res\
-
 REM Renaming resource processors bundles to be compliant with deployment packages manifests
 del rp_bundle.jar
 del rp_bundle2.jar
-del rp_bundle2.jar
+del rp_bundle3.jar
+del rp_bundle4.jar
 ren rp_bundle_tc1_rp1.jar rp_bundle.jar
 ren rp_bundle_tc1_rp2.jar rp_bundle2.jar
 ren rp_bundle_tc1_rp3.jar rp_bundle3.jar
+ren rp_bundle_tc1_rp4.jar rp_bundle4.jar
 
 ECHO Creating TC1 deployment packages
 jar -cvfm ..\res\simple_clone.dp ..\res\simple_clone_dp.mf bundle001.jar bundle002.jar
@@ -213,9 +205,9 @@ jar -cvfm ..\res\wrong_version.dp ..\res\wrong_version.mf bundle001.jar
 jarsigner -keystore ..\megtck_keystore -storepass megtck -keypass megtck ..\res\wrong_version.dp megtck
 move ..\res\wrong_version.dp ..\..\org.osgi.test.cases.deploymentadmin.tc1\res\
 
-jar -cvfm ..\res\simple_resource_processor_uninstall.dp ..\res\simple_resource_processor_uninstall.mf rp_bundle.jar
-jarsigner -keystore ..\megtck_keystore -storepass megtck -keypass megtck ..\res\simple_resource_processor_uninstall.dp megtck
-move ..\res\simple_resource_processor_uninstall.dp ..\..\org.osgi.test.cases.deploymentadmin.tc1\res\
+jar -cvfm ..\res\simple_res_proc_uninstall.dp ..\res\simple_resource_processor_uninstall.mf rp_bundle4.jar
+jarsigner -keystore ..\megtck_keystore -storepass megtck -keypass megtck ..\res\simple_res_proc_uninstall.dp megtck
+move ..\res\simple_res_proc_uninstall.dp ..\..\org.osgi.test.cases.deploymentadmin.tc1\res\
 
 jar -cvfm ..\res\simple_resource_uninstall.dp ..\res\simple_resource_uninstall_dp.mf conf.txt
 jarsigner -keystore ..\megtck_keystore -storepass megtck -keypass megtck ..\res\simple_resource_uninstall.dp megtck
@@ -225,9 +217,17 @@ jar -cvfm ..\res\strange_path.dp ..\res\strange_path_dp.mf bundle001.jar
 jarsigner -keystore ..\megtck_keystore -storepass megtck -keypass megtck ..\res\strange_path.dp megtck
 move ..\res\strange_path.dp ..\..\org.osgi.test.cases.deploymentadmin.tc1\res\
 
-jar -cvfm ..\res\localized.dp ..\res\localized_dp.mf bundle003.jar
+jar -cvfm ..\res\localized.dp ..\res\localized_dp.mf bundle003.jar OSGI-INF/l10n/dp.properties
 jarsigner -keystore ..\megtck_keystore -storepass megtck -keypass megtck ..\res\localized.dp megtck
 move ..\res\localized.dp ..\..\org.osgi.test.cases.deploymentadmin.tc1\res\
+
+jar -cvfm ..\res\session_test.dp ..\res\session_test.mf rp_bundle.jar rp_bundle2.jar simple_resource.xml conf.txt
+jarsigner -keystore ..\megtck_keystore -storepass megtck -keypass megtck ..\res\session_test.dp megtck
+move ..\res\session_test.dp ..\..\org.osgi.test.cases.deploymentadmin.tc1\res\
+
+jar -cvfm ..\res\resource_processor2.dp ..\res\resource_processor2_dp.mf rp_bundle2.jar
+jarsigner -keystore ..\megtck_keystore -storepass megtck -keypass megtck ..\res\resource_processor2.dp megtck
+move ..\res\resource_processor2.dp ..\..\org.osgi.test.cases.deploymentadmin.tc1\res\
 
 ECHO Moving update bundles to current dir
 move /y ..\bundles_update\bundle001.jar .\
@@ -341,6 +341,14 @@ move ..\res\bundle_fail_on_stop_res.dp ..\..\org.osgi.test.cases.deploymentadmin
 jar -cvf ..\res\signing_files_not_next.dp bundle001.jar bundle002.jar META-INF\MANIFEST.mf META-INF\README.txt META-INF\MEGTCK.DSA META-INF\MEGTCK.SF
 jarsigner -keystore ..\megtck_keystore -storepass megtck -keypass megtck ..\res\signing_files_not_next.dp megtck
 move ..\res\signing_files_not_next.dp ..\..\org.osgi.test.cases.deploymentadmin.tc2\res\
+
+jar -cvfm ..\res\session_test.dp ..\res\session_test.mf rp_bundle.jar rp_bundle2.jar simple_resource.xml conf.txt
+jarsigner -keystore ..\megtck_keystore -storepass megtck -keypass megtck ..\res\session_test.dp megtck
+move ..\res\session_test.dp ..\..\org.osgi.test.cases.deploymentadmin.tc2\res\
+
+jar -cvfm ..\res\resource_processor2.dp ..\res\resource_processor2_dp.mf rp_bundle2.jar
+jarsigner -keystore ..\megtck_keystore -storepass megtck -keypass megtck ..\res\resource_processor2.dp megtck
+move ..\res\resource_processor2.dp ..\..\org.osgi.test.cases.deploymentadmin.tc2\res\
 
 REM Backing to the previous directory
 cd ..
