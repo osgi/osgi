@@ -58,7 +58,7 @@ public class PropertyElement extends DefaultHandler {
 			}
 			root.logError("unrecognized properties element attribute: " + key);
 		}
-
+		
 		if (property.getName() == null) {
 			root.logError("property name not specified");
 		}
@@ -97,12 +97,37 @@ public class PropertyElement extends DefaultHandler {
 
 		// If the value attribute is specified, then body of the property
 		// element is ignored.
-		if ((property.getValue() != null) && (size > 0)) {
-			root
-					.logError("If the value attribute is specified, the body of the property element is ignored. key = "
-							+ property.getName()
-							+ " value = "
-							+ property.getValue());
+		if (property.getValue() != null) {
+			if(size > 0) {
+		
+				root
+						.logError("If the value attribute is specified, the body of the property element is ignored. key = "
+								+ property.getName()
+								+ " value = "
+								+ property.getValue());
+			}
+			
+			//parse the value according to the type
+			String type = property.getType();
+			if (type == null || type.equals("String")) {
+				//value is already a string
+			} else if (type.equals("Long")) {
+				property.setValue(Long.valueOf((String)property.getValue(),10));
+			} else if (type.equals("Double")) {
+				property.setValue(Double.valueOf((String)property.getValue()));
+			} else if (type.equals("Float")) {
+				property.setValue(Float.valueOf((String)property.getValue()));
+			} else if (type.equals("Integer")) {
+				property.setValue(Integer.valueOf((String)property.getValue()));
+			} else if (type.equals("Byte")) {
+				property.setValue(Byte.valueOf((String)property.getValue(),10));
+			} else if (type.equals("Char")) {
+				property.setValue(new Character(((String)property.getValue()).charAt(0)));
+			} else if (type.equals("Boolean")) {
+				property.setValue(Boolean.valueOf((String)property.getValue()));
+			} else if (type.equals("Short")) {
+				property.setValue(Short.valueOf((String)property.getValue(),10));
+			}
 
 			// if characters were specified ( values are specifed in the body of
 			// the property element )
