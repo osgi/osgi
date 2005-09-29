@@ -17,15 +17,20 @@
  */
 package org.osgi.meg.demo.desktop;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.InputStream;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
+import org.osgi.framework.BundleEvent;
+import org.osgi.framework.BundleListener;
 import org.osgi.framework.Constants;
+import org.osgi.framework.FrameworkEvent;
+import org.osgi.framework.FrameworkListener;
 import org.osgi.framework.ServiceEvent;
 import org.osgi.framework.ServiceListener;
 import org.osgi.framework.ServiceReference;
@@ -33,13 +38,16 @@ import org.osgi.service.application.ApplicationDescriptor;
 import org.osgi.service.application.ApplicationHandle;
 import org.osgi.service.deploymentadmin.DeploymentAdmin;
 import org.osgi.service.deploymentadmin.DeploymentPackage;
+import org.osgi.service.log.LogEntry;
+import org.osgi.service.log.LogListener;
+import org.osgi.service.log.LogReaderService;
 import org.osgi.util.tracker.ServiceTracker;
-import org.osgi.util.tracker.ServiceTrackerCustomizer;
 
 /**
  * Model part of the MVC pattern.
  */
-public class Model {
+public class Model implements BundleListener, ServiceListener,
+        FrameworkListener, LogListener {
 
     private SimpleDesktop desktop;
 	private BundleContext context;
@@ -107,78 +115,20 @@ public class Model {
                 "=" + ApplicationDescriptor.class.getName() + ")");
         context.addServiceListener(listenToAppHandle, "(" + Constants.OBJECTCLASS +
                 "=" + ApplicationHandle.class.getName() + ")");
+        
+        context.addBundleListener(this);
+        context.addFrameworkListener(this);
+        context.addServiceListener(this);
+        
+        ServiceReference logReference = context.getServiceReference(LogReaderService.class.getName());
+        LogReaderService log =  (LogReaderService) context.getService(logReference);
+        log.addLogListener(this);
 	}
 
     // closes the resources. called by the DesktopActivator
     public void destroy() {
         dadminTracker.close();
     }
-
-	/*private static byte[] createImageData(ServiceReference reference,
-			BundleContext context) {
-		InputStream iconStream = null;
-		// TODO not only 8x8
-		String iconPath = (String) reference
-				.getProperty("localized_icon_8x8_path");
-		Bundle bundle = null;
-		URL url = null;
-		byte[] imageData = null;
-		if (iconPath.startsWith("bundle://")) {
-			String[] sarr = Splitter.split(iconPath, '/', 0);
-			String fileName = sarr[sarr.length - 1];
-			sarr = Splitter.split(sarr[2], ':', 0);
-			bundle = context.getBundle(Long.parseLong(sarr[0]));
-			url = bundle.getResource(fileName);
-		}
-		else {
-			bundle = reference.getBundle();
-			url = bundle.getResource(iconPath);
-		}
-		if (null != url) {
-			try {
-				iconStream = url.openConnection().getInputStream();
-				imageData = createImageArray(iconStream);
-				;
-			}
-			catch (IOException e) {
-				e.printStackTrace();
-			}
-			finally {
-				if (null != iconStream) {
-					try {
-						iconStream.close();
-					}
-					catch (IOException e) {
-					}
-				}
-			}
-		}
-		return imageData;
-	}*/
-
-	/*private static byte[] createImageArray(InputStream iconStream) {
-		ByteArrayOutputStream bos = new ByteArrayOutputStream();
-		try {
-			int d = iconStream.read();
-			while (d != -1) {
-				bos.write(d);
-				d = iconStream.read();
-			}
-			return bos.toByteArray();
-		}
-		catch (IOException e) {
-			return null;
-		}
-		finally {
-			if (null != bos) {
-				try {
-					bos.close();
-				}
-				catch (IOException e) {
-				}
-			}
-		}
-	}*/
 
 	public String installDp(String aUrl) throws Exception {
         URL url = new URL(aUrl);
@@ -194,6 +144,19 @@ public class Model {
         }
 	}
 
+    public String installDp(File f) throws Exception {
+        FileInputStream is = new FileInputStream(f);
+        DeploymentAdmin da = (DeploymentAdmin) dadminTracker.getService();
+        
+        try {
+            DeploymentPackage dp = da.installDeploymentPackage(is);
+            return dp.getName();
+        } finally {
+            if (null != is)
+                is.close();
+        }
+    }
+
 	public void uninstallDp(String dpName) throws Exception {
         DeploymentAdmin da = (DeploymentAdmin) dadminTracker.getService();
         DeploymentPackage dp = da.getDeploymentPackage(dpName);
@@ -204,6 +167,13 @@ public class Model {
         URL url = new URL(aUrl);
         InputStream is = url.openStream();
         Bundle b = context.installBundle(aUrl, is);
+        b.start();
+        return b.getLocation();
+    }
+
+    public String installBundle(File f) throws Exception {
+        FileInputStream is = new FileInputStream(f);
+        Bundle b = context.installBundle("file:///" + f.getAbsolutePath(), is);
         b.start();
         return b.getLocation();
     }
@@ -250,58 +220,25 @@ public class Model {
         handle.destroy();
     }
 
-//	public String getLogs() {
-//		ServiceReference sref = context
-//				.getServiceReference(LogReaderService.class.getName());
-//		LogReaderService lr = (LogReaderService) context.getService(sref);
-//		StringBuffer sb = new StringBuffer();
-//		String[] level = new String[] {"ERROR", "WARNING", "INFO", "DEBUG"};
-//		for (Enumeration en = lr.getLog(); en.hasMoreElements();) {
-//			LogEntry le = (LogEntry) en.nextElement();
-//			Date d = new Date(le.getTime());
-//			sb.append(d + "    " + level[le.getLevel() - 1] + " \t"
-//					+ le.getMessage() + "\n");
-//		}
-//		context.ungetService(sref);
-//		return sb.toString();
-//	}
+    public void bundleChanged(BundleEvent be) {
+        desktop.onEvent("BUNDLE EVENT: "+be.toString());
+    }
 
-//	public void handleEvent(Event event) {
-//		// TODO
-//		if (!"Bundle Event".equals(event.getTopic()))
-//			return;
-//		Object[] pair = (Object[]) events.get(event.getTopic());
-//		if (null == pair)
-//			return;
-//		Hashtable props = (Hashtable) pair[0];
-//		ApplicationDescriptor descr = (ApplicationDescriptor) pair[1];
-//		long ide = ((Long) event.getProperty("bundle.id")).longValue();
-//		long idp = ((Long) props.get("bundle.id")).longValue();
-//		if (ide == idp) {
-//			try {
-//				((ApplicationManager) getService()).launchApplication(
-//						(ApplicationDescriptor) pair[1], null);
-//			}
-//			catch (SingletonException e) {
-//				// TODO
-//				e.printStackTrace();
-//			}
-//			catch (Exception e) {
-//				// TODO
-//				e.printStackTrace();
-//			}
-//			events.remove(event.getTopic());
-//		}
-//	}
+    public void serviceChanged(ServiceEvent arg0) {
+        desktop.onEvent("SERVICE EVENT: "+arg0.toString());
+    }
 
-//	public void scheduleOnEvent(String topic, Hashtable ht,
-//			ApplicationDescriptor descr) {
-//		events.put(topic, new Object[] {ht, descr});
-//	}
+    public void frameworkEvent(FrameworkEvent event) {
+        Throwable t = event.getThrowable();
+        String tail = "\n";
+        if( null != t ) {
+            tail = " Exception: " + t.toString();
+        }
+        desktop.onEvent("FRAMEWORK EVENT: " + event.toString() + tail);
+    }
 
-//	public void scheduleOnDate(Date date, ApplicationDescriptor descr) {
-//		((ApplicationManager) getService()).addScheduledApplication(descr,
-//				new Hashtable(), date);
-//	}
-    
+    public void logged(LogEntry event) {        
+        desktop.onEvent("LOG EVENT: ["+event.getBundle().getLocation()+ "] " + event.getMessage());
+    }
+   
 }
