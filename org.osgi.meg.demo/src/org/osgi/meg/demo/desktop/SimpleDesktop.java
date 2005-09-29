@@ -2,49 +2,51 @@ package org.osgi.meg.demo.desktop;
 
 import java.awt.BorderLayout;
 import java.awt.Button;
+import java.awt.FileDialog;
 import java.awt.Frame;
 import java.awt.GridLayout;
 import java.awt.Label;
 import java.awt.List;
 import java.awt.Panel;
-import java.awt.TextField;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.io.File;
 
 
 public class SimpleDesktop extends Frame implements ActionListener {
     
-    private static final String INSTALL   = "install";
-    private static final String UNINSTALL = "uninstall";
-    private static final String LAUNCH    = "launch";
-    private static final String STOP      = "stop";
+    private static final String INSTALL_URL   = "install_url";
+    private static final String INSTALL_LOCAL = "install_local";
+    private static final String UNINSTALL     = "uninstall";
+    private static final String LAUNCH        = "launch";
+    private static final String STOP          = "stop";
     
-    private Panel  pSouth = new Panel();
-    private Button bInstall;
-    private Button bUninstall;
-    private Button bLaunch;
-    private Button bStop;
-    private List   lInstPackages;
-    private List   lInstApp;
-    private List   lRunningApp;
+    // in GetPane class
+    static final String OK          = "OK";
+    static final String CANCEL      = "Cancel";
+    
+    //private Panel      pSouth = new Panel();
+    private GetPane    pSouthGet = new GetPane(this);
+    private StatusPane pSouthStatus = new StatusPane();
+    private Button     bInstallURL;
+    private Button     bInstallLocal;
+    private Button     bUninstall;
+    private Button     bLaunch;
+    private Button     bStop;
+    private List       lInstPackages;
+    private List       lInstApp;
+    private List       lRunningApp;
 
     private Activator     controller;
-    //private DmtSession session;
-    //private Hashtable instApp = new Hashtable();
-    //private Hashtable runApp = new Hashtable();
-    //private ServiceTracker trackAppDescr;
-    //private ServiceTracker trackAppHandle;
-    //private ServiceTracker trackAppManager;
     
     public SimpleDesktop(Activator controller) {
         super("Desktop (OSGi MEG RI)");
         this.controller = controller;
-        initTracker();
 
         setLayout(new BorderLayout());
-        setSize(300, 200);
+        setSize(400, 500);
         
         // it doesn't exist on CDC (Erin 9500)
         //setExtendedState(MAXIMIZED_BOTH);
@@ -62,12 +64,17 @@ public class SimpleDesktop extends Frame implements ActionListener {
         
         Panel pNorth1 = new Panel();
         pNorth.add(pNorth1);
-        pNorth1.setLayout(new GridLayout(3, 0));
-            bInstall = new Button(INSTALL);
-            bInstall.setActionCommand(INSTALL);
-            bInstall.addActionListener(this);
-            pNorth1.add(bInstall);
-    
+        pNorth1.setLayout(new GridLayout(4, 0));
+            bInstallURL = new Button(INSTALL_URL);
+            bInstallURL.setActionCommand(INSTALL_URL);
+            bInstallURL.addActionListener(this);
+            pNorth1.add(bInstallURL);
+
+            bInstallLocal = new Button(INSTALL_LOCAL);
+            bInstallLocal.setActionCommand(INSTALL_LOCAL);
+            bInstallLocal.addActionListener(this);
+            pNorth1.add(bInstallLocal);
+
             bUninstall = new Button(UNINSTALL);
             bUninstall.setActionCommand(UNINSTALL);
             bUninstall.addActionListener(this);
@@ -77,7 +84,9 @@ public class SimpleDesktop extends Frame implements ActionListener {
 
         Panel pNorth2 = new Panel();
         pNorth.add(pNorth2);
-        pNorth2.setLayout(new GridLayout(3, 0));
+        pNorth2.setLayout(new GridLayout(4, 0));
+            pNorth2.add(new Panel());
+            
             pNorth2.add(new Panel());
         
             bLaunch = new Button(LAUNCH);
@@ -89,7 +98,9 @@ public class SimpleDesktop extends Frame implements ActionListener {
 
         Panel pNorth3 = new Panel();
         pNorth.add(pNorth3);
-        pNorth3.setLayout(new GridLayout(3, 0));
+        pNorth3.setLayout(new GridLayout(4, 0));
+            pNorth3.add(new Panel());
+            
             pNorth3.add(new Panel());
         
             bStop = new Button(STOP);
@@ -99,8 +110,7 @@ public class SimpleDesktop extends Frame implements ActionListener {
             
             pNorth3.add(new Label("Application instances"));
 
-        pSouth.setLayout(new GridLayout(0, 4));
-        add(pSouth, BorderLayout.SOUTH);
+        add(pSouthStatus, BorderLayout.SOUTH);
 
         Panel pCenter = new Panel(); 
         pCenter.setLayout(new GridLayout(0, 3));
@@ -118,156 +128,53 @@ public class SimpleDesktop extends Frame implements ActionListener {
         setVisible(true);
     }
 
-    private void initTracker() {
-		//final BundleContext finalContext = context;
-		
-//		trackAppDescr = new ServiceTracker(context, ApplicationDescriptor.class
-//				.getName(), new ServiceTrackerCustomizer() {
-//			public Object addingService(ServiceReference reference) {
-//				ApplicationDescriptor descr = (ApplicationDescriptor) finalContext
-//						.getService(reference);
-//				String uid = (String) reference.getProperty("unique_id");
-//				String appName = (String) reference
-//						.getProperty("localized_name");
-//				
-//				lInstApp.add(uid + "(" + appName + ")");
-//				instApp.put(uid + "(" + appName + ")", descr);
-//				
-//				validate();
-//				return descr;
-//			}
-//
-//			public void modifiedService(ServiceReference reference,
-//					Object service) {
-//			}
-//
-//			public void removedService(ServiceReference reference,
-//					Object service) {
-//				String uid = (String) reference.getProperty("unique_id");
-//				String appName = (String) reference
-//						.getProperty("localized_name");
-//			
-//				lInstApp.remove(uid + "(" + appName + ")");
-//				instApp.remove(uid + "(" + appName + ")");
-//				
-//				finalContext.ungetService(reference);
-//				validate();
-//			}
-//		});
-//		trackAppDescr.open();
-		
-//		trackAppHandle = new ServiceTracker(context, ApplicationHandle.class
-//				.getName(), new ServiceTrackerCustomizer() {
-//			public Object addingService(ServiceReference reference) {
-//				ApplicationHandle handle = (ApplicationHandle) finalContext.
-//						getService(reference);
-//				lRunApp.add(handle.getAppDescriptor().getName());
-//				runApp.put(handle.getAppDescriptor().getName(), handle);
-//
-//				lRunApp.validate();
-//				validate();
-//				return handle;
-//			}
-//
-//			public void modifiedService(ServiceReference reference,
-//					Object service) {
-//			}
-//
-//			public void removedService(ServiceReference reference,
-//					Object service) {
-//			    ApplicationHandle handle = (ApplicationHandle) finalContext.
-//						getService(reference);
-//			    lRunApp.remove(handle.getAppDescriptor().getName());
-//			    runApp.remove(handle.getAppDescriptor().getName());
-//				finalContext.ungetService(reference);
-//				
-//				lRunApp.validate();
-//				validate();
-//			}
-//		});
-//		trackAppHandle.open();
-
-//		trackAppManager = new ServiceTracker(context, ApplicationManager.class
-//				.getName(), new ServiceTrackerCustomizer() {
-//			public Object addingService(ServiceReference reference) {
-//			    ApplicationManager man = (ApplicationManager) finalContext.
-//						getService(reference);
-//				return man;
-//			}
-//
-//			public void modifiedService(ServiceReference reference,
-//					Object service) {
-//			}
-//
-//			public void removedService(ServiceReference reference,
-//					Object service) {
-//			}
-//		});
-//		trackAppManager.open();
-	}
-
-//    private void initDmtAdmin() throws DmtException {
-//        ServiceReference ref = context.getServiceReference(DmtAdmin.class.getName());
-//        DmtAdmin factory = (DmtAdmin) context.getService(ref);
-//        session = factory.getSession(".", DmtSession.LOCK_TYPE_ATOMIC);
-//    }
-
-    /////////////////////////////////////////////////////////////////
-    // ActionListener
-
     public void actionPerformed(ActionEvent event) {
         String command = event.getActionCommand();
         try {
-	        if (INSTALL.equals(command)) {
-	            if (0 != pSouth.getComponentCount())
-	                return;
-	            
-	            final Label l = new Label("URL:");
-	            l.setAlignment(Label.RIGHT);
-	            l.setBounds(0, 0, 20, 20);
-	            pSouth.add(l, BorderLayout.SOUTH);
-	            
-	            final TextField tUrl = new TextField();
-	            tUrl.setSize(200, 20);
-	            pSouth.add(tUrl, BorderLayout.SOUTH);
-	
-	            final Button bOK = new Button("OK");
-	            final Button bCancel = new Button("Cancel");
-	            
-	            ActionListener listener = new ActionListener() {
-	                public void actionPerformed(ActionEvent e) {
-	                    if (bOK == e.getSource()) {
-                            String url = tUrl.getText();
-		    				if (null != url) {
-		    					try {
-                                    if (url.endsWith(".dp")) {
-                                        String symbName = 
-                                            controller.installDp(url);
-                                        lInstPackages.add(symbName);
-                                    } else if (url.endsWith(".jar")) {
-                                        String location = 
-                                            controller.installBundle(url);
-                                        lInstPackages.add(location);
-                                    }
-	                            } catch (Exception ex) {
-	                                // TODO
-	                                ex.printStackTrace();
-	                            }
-		    				}
-	                    }
-	                    pSouth.removeAll();
-	                    validate();
-	                }};
-	
-	            bOK.setBounds(230, 0, 100, 20);	            
-	            pSouth.add(bOK, BorderLayout.SOUTH);
-	            bOK.addActionListener(listener);
-	            
-	            bCancel.setBounds(335, 0, 100, 20);
-	            pSouth.add(bCancel, BorderLayout.SOUTH);
-	            bCancel.addActionListener(listener);
-	            
-	            validate();
+            if (OK.equals(command)) {
+                String url = pSouthGet.getText();
+                if (null != url) {
+                    try {
+                        if (url.endsWith(".dp")) {
+                            String symbName = 
+                                controller.installDp(url);
+                            lInstPackages.add(symbName);
+                        } else if (url.endsWith(".jar")) {
+                            String location = 
+                                controller.installBundle(url);
+                            lInstPackages.add(location);
+                        }
+                    } catch (Exception ex) {
+                        // TODO
+                        ex.printStackTrace();
+                    }
+                }
+                remove(pSouthGet);
+                add(pSouthStatus, BorderLayout.SOUTH);
+                validate();
+            } else if (CANCEL.equals(command)) {
+                remove(pSouthGet);
+                add(pSouthStatus, BorderLayout.SOUTH);
+                validate();
+            } else if (INSTALL_URL.equals(command)) {
+                remove(pSouthStatus);
+                add(pSouthGet, BorderLayout.SOUTH);
+                validate();
+            } else if (INSTALL_LOCAL.equals(command)) {
+                FileDialog fd = new FileDialog(new Frame(),  "", FileDialog.LOAD);
+                fd.setVisible(true);
+                if (fd.getFile() != null) {
+                  File f = new File(fd.getDirectory(), fd.getFile());
+                  if (f.getName().endsWith(".dp")) {
+                      String symbName = 
+                          controller.installDp(f);
+                      lInstPackages.add(symbName);
+                  } else if (f.getName().endsWith(".jar")) {
+                      String location = 
+                          controller.installBundle(f);
+                      lInstPackages.add(location);
+                  }
+                }
 	        } else if (UNINSTALL.equals(command)) {
 	            String s = lInstPackages.getSelectedItem();
 	            if (null == s)
@@ -309,6 +216,10 @@ public class SimpleDesktop extends Frame implements ActionListener {
 
     public void onAppStopped(String pid) {
         lRunningApp.remove(pid);
+    }
+
+    public void onEvent(String string) {
+        pSouthStatus.onEvent(string);
     }
 
 }

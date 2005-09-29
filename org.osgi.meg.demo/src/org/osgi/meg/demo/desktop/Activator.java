@@ -17,6 +17,8 @@
  */
 package org.osgi.meg.demo.desktop;
 
+import java.io.File;
+
 import org.osgi.framework.*;
 
 /**
@@ -51,12 +53,20 @@ public class Activator implements BundleActivator {
         return model.installDp(url);
     }
 
+    public String installDp(File f) throws Exception {
+        return model.installDp(f);
+    }
+
     public void uninstallDp(String dpName) throws Exception {
         model.uninstallDp(dpName);
     }
 
     public String installBundle(String url) throws Exception {
         return model.installBundle(url);
+    }
+
+    public String installBundle(File f) throws Exception {
+        return model.installBundle(f);
     }
 
     public boolean existsDp(String dpName) {
