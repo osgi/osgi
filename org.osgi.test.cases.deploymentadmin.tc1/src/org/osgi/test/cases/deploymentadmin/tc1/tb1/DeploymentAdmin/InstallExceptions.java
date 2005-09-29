@@ -77,6 +77,7 @@ public class InstallExceptions implements TestInterface {
         testInstallExceptions012();
         testInstallExceptions013();
         testInstallExceptions014();
+        testInstallExceptions015();
     }
     
     /**
@@ -429,5 +430,27 @@ public class InstallExceptions implements TestInterface {
             tbc.uninstall(dp);
         }
     }
-
+    
+    /**
+     * The Resource Processor service with the given PID is not found
+     * registered.
+     * 
+     * @spec 114.14.5.14 CODE_PROCESSOR_NOT_FOUND
+     */                 
+    private void testInstallExceptions015() {
+        tbc.log("#testInstallExceptions015");
+        
+        TestingDeploymentPackage testDP = tbc.getTestingDeploymentPackage(DeploymentConstants.SIMPLE_RESOURCE_DP);
+        DeploymentPackage dp = null;
+        try {
+            dp = tbc.installDeploymentPackage(tbc.getWebServer() + testDP.getFilename());
+            tbc.failException("#", DeploymentException.class);
+        } catch (DeploymentException e) {
+            tbc.assertEquals("DeploymentException thrown signing code error", DeploymentException.CODE_PROCESSOR_NOT_FOUND, e.getCode());
+        } catch (Exception e) {
+            tbc.fail(MessagesConstants.getMessage(MessagesConstants.EXCEPTION_THROWN, new String[] {"DeploymentException", e.getClass().getName() }));
+        } finally {
+            tbc.uninstall(dp);
+        }
+    }
 }
