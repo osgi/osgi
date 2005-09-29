@@ -442,13 +442,17 @@ public class PluginDownload extends DefaultHandler implements DataPluginFactory,
 		    if (nodeUriArr[5].equals("Status"))
 		        return new Metanode(MetaNode.CMD_GET, Metanode.IS_LEAF,
     					MetaNode.AUTOMATIC, "", 1, !Metanode.ZERO_OCC, null, 0,
-    					0, null, DmtData.FORMAT_STRING);
+    					0, null, DmtData.FORMAT_INTEGER);
             if (nodeUriArr[5].equals("Operations"))
                 return new Metanode(MetaNode.CMD_GET, !Metanode.IS_LEAF,
     					MetaNode.AUTOMATIC, "", 1, !Metanode.ZERO_OCC, null, 0,
     					0, null, DmtData.FORMAT_NODE);
         }
         if (l == 7) {
+            if (nodeUriArr[6].equals("DownloadAndInstallAndActivate"))
+                return new Metanode(MetaNode.CMD_GET, Metanode.IS_LEAF,
+                        MetaNode.AUTOMATIC, "", 1, !Metanode.ZERO_OCC, null, 0,
+                        0, null, DmtData.FORMAT_NULL).orOperation(MetaNode.CMD_EXECUTE);
             return new Metanode(MetaNode.CMD_GET, Metanode.IS_LEAF,
 					MetaNode.PERMANENT, "", 1, !Metanode.ZERO_OCC, null, 0,
 					0, null, DmtData.FORMAT_NULL).orOperation(MetaNode.CMD_EXECUTE);

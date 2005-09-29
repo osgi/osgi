@@ -220,6 +220,9 @@ public class PluginDeployed implements DataPluginFactory, ReadableDataSession,
             if (l == 8)
                 return true;
         } else if ("Ext".equals(nodeUriArr[6])) {
+            String[] bis = getBundleIDs(nodeUriArr[5]);
+            if ("Bundles".equals(nodeUriArr[7]) && bis.length <= 0)
+                return false;
             if (!"Signers".equals(nodeUriArr[7]) &&
                 !"Manifest".equals(nodeUriArr[7]) &&
                 !"Bundles".equals(nodeUriArr[7]) &&
@@ -431,8 +434,13 @@ public class PluginDeployed implements DataPluginFactory, ReadableDataSession,
                 return new String[] {"Remove"};
         } else if ("Ext".equals(nodeUriArr[6])) {
             if (l == 7) {
-                if (dpNode(nodeUriArr[5]))
-                    return new String[] {"Signers", "Manifest", "Bundles", "PackageType"};
+                if (dpNode(nodeUriArr[5])) {
+                    String[] bis = getBundleIDs(nodeUriArr[5]);
+                    if (bis.length <= 0)
+                        return new String[] {"Signers", "Manifest", "PackageType"};
+                    else
+                        return new String[] {"Signers", "Manifest", "Bundles", "PackageType"};
+                }
                 return new String[] {"Bundles", "PackageType"};
             }
             if (l == 8) {
@@ -517,28 +525,32 @@ public class PluginDeployed implements DataPluginFactory, ReadableDataSession,
                             "", 1, Metanode.ZERO_OCC, null, 0, 0, null, DmtData.FORMAT_INTEGER);
                 if ("Bundles".equals(nodeUriArr[7]))
                     return new Metanode(MetaNode.CMD_GET, !Metanode.IS_LEAF, MetaNode.AUTOMATIC,
-                            "", 1, !Metanode.ZERO_OCC, null, 0, 0, null, DmtData.FORMAT_NODE);
+                            "", Integer.MAX_VALUE, Metanode.ZERO_OCC, null, 0, 0, null, DmtData.FORMAT_NODE);
             }
             if (l == 9) {
                 if ("Signers".equals(nodeUriArr[7]))
                     return new Metanode(MetaNode.CMD_GET, Metanode.IS_LEAF, MetaNode.AUTOMATIC,
                         "", 1, Metanode.ZERO_OCC, null, 0, 0, null, DmtData.FORMAT_NODE);
+                if ("Bundles".equals(nodeUriArr[8]))
+                    return new Metanode(MetaNode.CMD_GET, !Metanode.IS_LEAF, MetaNode.AUTOMATIC,
+                        "", Integer.MAX_VALUE, !Metanode.ZERO_OCC, null, 0, 0, null, DmtData.FORMAT_NODE);
                 return new Metanode(MetaNode.CMD_GET, !Metanode.IS_LEAF, MetaNode.AUTOMATIC,
                         "", 1, !Metanode.ZERO_OCC, null, 0, 0, null, DmtData.FORMAT_NODE);
             }
             if (l == 10) {
                 if ("Signers".equals(nodeUriArr[9]))
                     return new Metanode(MetaNode.CMD_GET, Metanode.IS_LEAF, MetaNode.AUTOMATIC,
-                            "", 1, !Metanode.ZERO_OCC, null, 0, 0, null, DmtData.FORMAT_STRING);
+                            "", 1, !Metanode.ZERO_OCC, null, 0, 0, null, DmtData.FORMAT_NODE);
                 if ("State".equals(nodeUriArr[9]))
                     return new Metanode(MetaNode.CMD_GET, Metanode.IS_LEAF, MetaNode.AUTOMATIC,
                             "", 1, !Metanode.ZERO_OCC, null, 0, 0, null, DmtData.FORMAT_INTEGER);
-                return new Metanode(MetaNode.CMD_GET, !Metanode.IS_LEAF, MetaNode.AUTOMATIC,
-                    "", 1, !Metanode.ZERO_OCC, null, 0, 0, null, DmtData.FORMAT_NODE);
+                if ("Location".equals(nodeUriArr[9]))
+                    return new Metanode(MetaNode.CMD_GET, !Metanode.IS_LEAF, MetaNode.AUTOMATIC,
+                            "", 1, !Metanode.ZERO_OCC, null, 0, 0, null, DmtData.FORMAT_STRING);
+                if ("Manifest".equals(nodeUriArr[9]))
+                    return new Metanode(MetaNode.CMD_GET, !Metanode.IS_LEAF, MetaNode.AUTOMATIC,
+                            "", 1, !Metanode.ZERO_OCC, null, 0, 0, null, DmtData.FORMAT_STRING);
             }
-            if (l == 10)
-                return new Metanode(MetaNode.CMD_GET, Metanode.IS_LEAF, MetaNode.AUTOMATIC,
-                    "", 1, Metanode.ZERO_OCC, null, 0, 0, null, DmtData.FORMAT_STRING);
             if (l == 11) {
                 if ("Signers".equals(nodeUriArr[9]))
                     return new Metanode(MetaNode.CMD_GET, Metanode.IS_LEAF, MetaNode.AUTOMATIC,
