@@ -71,7 +71,6 @@ public class GetResourceHeader {
 			testGetResourceHeader003();
 			testGetResourceHeader004();
 			testGetResourceHeader005();
-            testGetResourceHeader006();
 		} finally {
 			uninstallDeploymentPackage();
 		}
@@ -165,30 +164,6 @@ public class GetResourceHeader {
 		}
 	}
     
-    /**
-     * Asserts that all human readable headers can be localized
-     * using the same mechanism as that is used to localize the
-     * manifest of a bundle.
-     * 
-     * @spec 114.3.5 Localization
-     */  
-    private void testGetResourceHeader006() {
-        tbc.log("#testGetResourceHeader006");
-        DeploymentPackage testDp = null;
-        TestingDeploymentPackage testingDp= null;        
-        try {
-            testingDp = tbc.getTestingDeploymentPackage(DeploymentConstants.SIMPLE_RESOURCE_PROCESSOR_UNINSTALL);
-            testDp = tbc.installDeploymentPackage(tbc.getWebServer() + testingDp.getFilename());
-
-            String resourceHeader = testDp.getResourceHeader(testingDp.getFilename(),DeploymentConstants.BUNDLE_HEADER_VERSION);
-            tbc.assertEquals("Asserting the Bundle-Version value.", "1.0", resourceHeader);
-        } catch (Exception e) {
-            tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }));
-        } finally {
-            tbc.uninstall(testDp);
-        }
-    }     
-	
 	/**
 	 * Uninstalls the deployment packages previously installed.
 	 */

@@ -182,10 +182,8 @@ public class SystemDeploymentPackage {
 			tbc.assertTrue("The System Deployment Package is present in the framework",found);
 			sysDP.uninstall();
 			tbc.failException("",DeploymentException.class);
-		} catch (DeploymentException e) {
-			tbc.pass("It correcty failed uninstalling the System Deployment Package");
 		} catch (Exception e) {
-			tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }));
+			tbc.pass("The System deployment package cannot be uninstalled");
 		}
 	}
 }

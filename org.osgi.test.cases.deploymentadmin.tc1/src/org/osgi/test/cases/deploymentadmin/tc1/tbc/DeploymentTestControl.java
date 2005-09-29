@@ -88,7 +88,6 @@ import org.osgi.test.cases.deploymentadmin.tc1.tbc.Event.DeploymentEventHandlerI
 import org.osgi.test.cases.deploymentadmin.tc1.tbc.util.TestingBundle;
 import org.osgi.test.cases.deploymentadmin.tc1.tbc.util.TestingDeploymentPackage;
 import org.osgi.test.cases.deploymentadmin.tc1.tbc.util.TestingResource;
-import org.osgi.test.cases.deploymentadmin.tc1.tbc.util.TestingRollbackCall;
 import org.osgi.test.cases.util.DefaultTestBundleControl;
 
 /**
@@ -169,7 +168,11 @@ public class DeploymentTestControl extends DefaultTestBundleControl {
 				new PermissionInfo(FilePermission.class.getName(), "<<ALL FILES>>", "READ, WRITE, EXECUTE, DELETE"),
 				};
 		
-		setPermissionInfo(DeploymentConstants.OSGI_DP_LOCATION + DeploymentConstants.PID_RESOURCE_PROCESSOR1, info);
+		// set this permissions to all resource processors
+        setPermissionInfo(DeploymentConstants.OSGI_DP_LOCATION + DeploymentConstants.PID_RESOURCE_PROCESSOR1, info);
+        setPermissionInfo(DeploymentConstants.OSGI_DP_LOCATION + DeploymentConstants.PID_RESOURCE_PROCESSOR2, info);
+        setPermissionInfo(DeploymentConstants.OSGI_DP_LOCATION + DeploymentConstants.PID_RESOURCE_PROCESSOR3, info);
+        setPermissionInfo(DeploymentConstants.OSGI_DP_LOCATION + DeploymentConstants.PID_RESOURCE_PROCESSOR4, info);
 	}
 
 	private void installHandlersAndListeners() {
@@ -447,7 +450,7 @@ public class DeploymentTestControl extends DefaultTestBundleControl {
             }
             case DeploymentConstants.SIMPLE_RESOURCE_PROCESSOR_UNINSTALL: {
                 TestingBundle[] bundles = {new TestingBundle(DeploymentConstants.PID_RESOURCE_PROCESSOR4, "1.0", "rp_bundle4.jar")};
-                dp = new TestingDeploymentPackage(DeploymentConstants.MAP_CODE_TO_DP[i], "1.0", "simple_resource_processor_uninstall.dp", bundles);
+                dp = new TestingDeploymentPackage(DeploymentConstants.MAP_CODE_TO_DP[i], "1.0", "simple_res_proc_uninstall.dp", bundles);
                 packages.put(""+i, dp);
                 break;
             }           
@@ -1007,9 +1010,5 @@ public class DeploymentTestControl extends DefaultTestBundleControl {
             ResourceProcessor.class.getName(), "(service.pid=" + pid + ")");
         
         return (sr!=null)?getContext().getService(sr[0]):null;
-    }
-    
-    public TestingRollbackCall getTestingRollbackCall() throws Exception {
-        return (TestingRollbackCall) getService(ResourceProcessor.class, "(service.pid=" + DeploymentConstants.PID_RESOURCE_PROCESSOR4 + ")");
     }
 }

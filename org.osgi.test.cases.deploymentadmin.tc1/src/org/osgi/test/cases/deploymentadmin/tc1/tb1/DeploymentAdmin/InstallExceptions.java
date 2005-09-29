@@ -368,14 +368,12 @@ public class InstallExceptions implements TestInterface {
                 DeploymentConstants.ALL_PERMISSION,
                 DeploymentConstants.BUNDLE_NAME_ALL,
                 DeploymentCustomizerPermission.ACTION_PRIVATEAREA);
-        DeploymentPackage dp = null, dp2 = null, rp = null;
-        TestingDeploymentPackage testRP = tbc.getTestingDeploymentPackage(DeploymentConstants.RESOURCE_PROCESSOR_DP);
+        DeploymentPackage dp2 = null, rp = null;
         try {
+            TestingDeploymentPackage testRP = tbc.getTestingDeploymentPackage(DeploymentConstants.SESSION_TEST_DP);
             rp = tbc.installDeploymentPackage(tbc.getWebServer() + testRP.getFilename());
             
-            TestingDeploymentPackage testDP = tbc.getTestingDeploymentPackage(DeploymentConstants.SIMPLE_RESOURCE_DP);
-            dp = tbc.installDeploymentPackage(tbc.getWebServer() + testDP.getFilename());           
-            TestingDeploymentPackage testDP2 = tbc.getTestingDeploymentPackage(DeploymentConstants.RESOURCE_FROM_OTHER_DP);
+            TestingDeploymentPackage testDP2 = tbc.getTestingDeploymentPackage(DeploymentConstants.SIMPLE_RESOURCE_DP);
             dp2 = tbc.installDeploymentPackage(tbc.getWebServer() + testDP2.getFilename());
             tbc.failException("#", DeploymentException.class);
         } catch (DeploymentException e) {
@@ -383,7 +381,7 @@ public class InstallExceptions implements TestInterface {
         } catch (Exception e) {
             tbc.fail(MessagesConstants.getMessage(MessagesConstants.EXCEPTION_THROWN, new String[] {"DeploymentException", e.getClass().getName() }));
         } finally {
-            tbc.uninstall(new DeploymentPackage[] { rp, dp, dp2 });
+            tbc.uninstall(new DeploymentPackage[] { rp, dp2 });
         }
     }
     

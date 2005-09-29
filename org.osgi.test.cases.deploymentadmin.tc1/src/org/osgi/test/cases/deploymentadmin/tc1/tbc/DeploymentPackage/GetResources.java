@@ -23,7 +23,6 @@
  * property of their respective owners. All rights reserved.
  * 
  */
-
 /*
  * REVISION HISTORY:
  *
@@ -46,162 +45,95 @@ import org.osgi.test.cases.deploymentadmin.tc1.tbc.util.TestingDeploymentPackage
 import org.osgi.test.cases.deploymentadmin.tc1.tbc.util.TestingResource;
 
 /**
- * @author Luiz Felipe Guimaraes
- * 
- * This Test Class Validates the implementation of <code>getResources</code> method of DeploymenPackage, 
- * according to MEG specification
+ * @author Luiz Felipe Guimaraes This Test Class Validates the implementation of
+ *         <code>getResources</code> method of DeploymenPackage, according to
+ *         MEG specification
  */
-
 public class GetResources {
-	private DeploymentTestControl tbc;
 
-	public GetResources(DeploymentTestControl tbc) {
-		this.tbc = tbc;
-	}
+    private DeploymentTestControl tbc;
 
-	public void run() {
-		testGetResources001();
-		testGetResources002();
-        testGetResources003();
-	}
+    public GetResources(DeploymentTestControl tbc) {
+        this.tbc = tbc;
+    }
 
-	/**
-	 * Asserts that it returns an array of strings representing the resources that are specified 
-	 * in the manifest of the deployment package
-	 * 
-	 * @spec DeploymentPackage.getResources()
-	 */
-	private void testGetResources001() {
-		tbc.log("#testGetResources001");
-		DeploymentPackage dp = null;
-		try {
-			TestingDeploymentPackage testDP = tbc
-					.getTestingDeploymentPackage(DeploymentConstants.SIMPLE_RESOURCE_PROCESSOR_DP);
-			TestingResource testResource[] = testDP.getResources();
-			TestingBundle testBundle[] = testDP.getBundles();
+    public void run() {
+        testGetResources001();
+        testGetResources002();
+    }
 
-			dp = tbc.installDeploymentPackage(tbc.getWebServer()
-					+ testDP.getFilename());
-
-			String[] resources = dp.getResources();
-
-			boolean passed = false;
-			int resourceLengthExpected = testResource.length
-					+ testBundle.length;
-			int resourceLengthGot = resources.length;
-
-			int found=0;
-
-			if (resourceLengthExpected == resourceLengthGot) {
-				for (int i = 0; i < testResource.length; i++) {
-					for (int j = 0; j < resourceLengthGot; j++) {
-						if (resources[j].equals(testResource[i].getName())) {
-							found++;
-							break;
-						}
-					}
-
-				}
-				for (int i = 0; i < testBundle.length; i++) {
-					for (int j = 0; j < resourceLengthGot; j++) {
-						if (resources[j].equals(testBundle[i].getFilename())) {
-							found++;
-							break;
-						}
-					}
-					
-				}
-
-			}
-
-			tbc.assertTrue("Asserts that it returns the requested resources.",
-					found==resourceLengthExpected);
-
-		} catch (Exception e) {
-			tbc.fail(MessagesConstants.getMessage(
-					MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e
-							.getClass().getName() }));
-		} finally {
-			tbc.uninstall(dp);
-		}
-	}
-
-	/**
-	 * Asserts that it returns an array zero dimensional if there is no resources
-	 * 
-	 * @spec DeploymentPackage.getResources()
-	 */
-	private void testGetResources002() {
-		tbc.log("#testGetResources002");
-		DeploymentPackage dp = null;
-		DeploymentPackage fixDP = null;
-		
-		try {
-			TestingDeploymentPackage testDP = tbc
-					.getTestingDeploymentPackage(DeploymentConstants.SIMPLE_DP);
-			dp = tbc.installDeploymentPackage(tbc.getWebServer()
-					+ testDP.getFilename());
-			
-			TestingDeploymentPackage testFixDP = tbc.getTestingDeploymentPackage(DeploymentConstants.SIMPLE_UNINSTALL_BUNDLE_DP);
-			fixDP = tbc.installDeploymentPackage(tbc.getWebServer()
-					+ testFixDP.getFilename());
-			
-			
-			String[] resources = fixDP.getResources();
-			tbc.assertTrue("Asserts that it returns the requested resources",
-					resources.length == 0);
-
-		} catch (Exception e) {
-			tbc.fail(MessagesConstants.getMessage(
-					MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e
-							.getClass().getName() }));
-		} finally {
-			tbc.uninstall(new DeploymentPackage[] { dp, fixDP });
-		}
-
-	}
-    
     /**
-     * Asserts that it returns only the bundle after the update of
-     * the DeploymentPackage.
+     * Asserts that it returns an array of strings representing the resources
+     * that are specified in the manifest of the deployment package
      * 
      * @spec DeploymentPackage.getResources()
      */
-    private void testGetResources003() {
-        tbc.log("#testGetResources003");
+    private void testGetResources001() {
+        tbc.log("#testGetResources001");
         DeploymentPackage dp = null;
-        DeploymentPackage rpDP = null;
-        DeploymentPackage noDP = null;
-        
         try {
-
-            TestingDeploymentPackage testDP = tbc
-                    .getTestingDeploymentPackage(DeploymentConstants.SIMPLE_RESOURCE_PROCESSOR_DP);
-            dp = tbc.installDeploymentPackage(tbc.getWebServer()
-                    + testDP.getFilename());            
+            TestingDeploymentPackage testDP = tbc.getTestingDeploymentPackage(DeploymentConstants.SIMPLE_RESOURCE_PROCESSOR_DP);
+            TestingResource testResource[] = testDP.getResources();
+            TestingBundle testBundle[] = testDP.getBundles();
             
-            TestingDeploymentPackage testRpDp = tbc.getTestingDeploymentPackage(DeploymentConstants.SIMPLE_RESOURCE_DP);
-            rpDP = tbc.installDeploymentPackage(tbc.getWebServer()
-                    + testRpDp.getFilename());
-                        
-            TestingDeploymentPackage noRpDp = tbc.getTestingDeploymentPackage(DeploymentConstants.SIMPLE_NO_RESOURCE_DP);
-            noDP = tbc.installDeploymentPackage(tbc.getWebServer()
-                    + testRpDp.getFilename());
-            
-            String[] resources = noDP.getResources();
-            tbc.assertTrue("Asserts that it returns the requested resources",
-                    resources.length == 1);                        
-            
-            tbc.assertEquals("Asserting if the returned resource is equal to bundle001.jar", testRpDp.getBundles()[0].getFilename(), resources[0]);
-
+            dp = tbc.installDeploymentPackage(tbc.getWebServer() + testDP.getFilename());
+            String[] resources = dp.getResources();
+            boolean passed = false;
+            int resourceLengthExpected = testResource.length + testBundle.length;
+            int resourceLengthGot = resources.length;
+            int found = 0;
+            if (resourceLengthExpected == resourceLengthGot) {
+                for (int i = 0; i < testResource.length; i++) {
+                    for (int j = 0; j < resourceLengthGot; j++) {
+                        if (resources[j].equals(testResource[i].getName())) {
+                            found++;
+                            break;
+                        }
+                    }
+                }
+                for (int i = 0; i < testBundle.length; i++) {
+                    for (int j = 0; j < resourceLengthGot; j++) {
+                        if (resources[j].equals(testBundle[i].getFilename())) {
+                            found++;
+                            break;
+                        }
+                    }
+                }
+            } else {
+                tbc.fail("The number of resources received from DP is not #resources + #bundles");
+            }
+            tbc.assertTrue("Asserts that it returns the requested resources.",
+                found == resourceLengthExpected);
         } catch (Exception e) {
             tbc.fail(MessagesConstants.getMessage(
-                    MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e
-                            .getClass().getName() }));
+                MessagesConstants.UNEXPECTED_EXCEPTION, new String[]{e
+                    .getClass().getName()}));
         } finally {
-            tbc.uninstall(new DeploymentPackage[] { dp, rpDP });
+            tbc.uninstall(dp);
         }
-
     }
-    
+
+    /**
+     * Asserts that it returns an array zero dimensional if there is no
+     * resources
+     * 
+     * @spec DeploymentPackage.getResources()
+     */
+    private void testGetResources002() {
+        tbc.log("#testGetResources002");
+        DeploymentPackage dp = null;
+        DeploymentPackage fixDP = null;
+        try {
+            TestingDeploymentPackage testDP = tbc.getTestingDeploymentPackage(DeploymentConstants.SIMPLE_DP);
+            dp = tbc.installDeploymentPackage(tbc.getWebServer() + testDP.getFilename());
+            TestingDeploymentPackage testFixDP = tbc.getTestingDeploymentPackage(DeploymentConstants.SIMPLE_UNINSTALL_BUNDLE_DP);
+            fixDP = tbc.installDeploymentPackage(tbc.getWebServer()+ testFixDP.getFilename());
+            String[] resources = fixDP.getResources();
+            tbc.assertTrue("Asserts that it returns the requested resources", resources.length == 0);
+        } catch (Exception e) {
+            tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[]{e.getClass().getName()}));
+        } finally {
+            tbc.uninstall(new DeploymentPackage[]{dp, fixDP});
+        }
+    }
 }

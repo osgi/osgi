@@ -135,7 +135,7 @@ public class DeploymentConstants {
         "block_session", "version_dif_from_manifest_dp",
         "missing_b_version_header", "missing_bsn_header",
         "missing_fix_pack_header", "missing_res_name_header",
-        "missing_version_header", "simple_resource_processor_uninstall",
+        "missing_version_header", "simple_res_proc_uninstall",
         "simple_resource_uninstall_dp", "wrong_bsn", "wrong_bversion",
         "wrong_customizer", "wrong_dp_missing", "wrong_fix_pack", "wrong_name",
         "wrong_rp", "session_test_dp", "resource_processor2_dp",
