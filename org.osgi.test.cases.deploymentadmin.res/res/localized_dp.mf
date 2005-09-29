@@ -5,6 +5,7 @@ DeploymentPackage-Copyright: %copyright
 DeploymentPackage-Vendor: %vendor
 DeploymentPackage-License: %licenseurl
 DeploymentPackage-Description: %desc
+Bundle-Localization: OSGI-INF/l10n/dp
 
 Name: bundle003.jar
 Bundle-SymbolicName: bundles.tb3

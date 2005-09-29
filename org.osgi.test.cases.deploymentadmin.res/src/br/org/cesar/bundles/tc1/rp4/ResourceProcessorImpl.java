@@ -45,8 +45,9 @@ import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.deploymentadmin.DeploymentException;
 import org.osgi.service.deploymentadmin.DeploymentSession;
 import org.osgi.service.deploymentadmin.ResourceProcessor;
-import org.osgi.test.cases.deploymentadmin.tc1.tbc.util.TestingRollbackCall;
+import org.osgi.test.cases.deploymentadmin.tc1.tb1.DeploymentAdmin.UninstallDeploymentPackage;
 import org.osgi.test.cases.deploymentadmin.tc1.tbc.DeploymentConstants;
+import org.osgi.test.cases.deploymentadmin.tc1.tbc.util.TestingRollbackCall;
 
 /**
  * @author Alexandre Alves
@@ -99,6 +100,7 @@ public class ResourceProcessorImpl implements BundleActivator, TestingRollbackCa
 
     public void rollback() {
         called = true;
+        UninstallDeploymentPackage.ROLL_BACK_CALLED = true;
     }
 
     public void cancel() {

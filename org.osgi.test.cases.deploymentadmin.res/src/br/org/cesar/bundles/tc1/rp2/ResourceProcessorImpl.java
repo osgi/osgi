@@ -67,7 +67,7 @@ public class ResourceProcessorImpl implements BundleActivator,ResourceProcessor 
 	
 	public void start(BundleContext bc) throws Exception {
 		Dictionary props = new Hashtable();
-		props.put("service.pid", DeploymentConstants.PID_RESOURCE_PROCESSOR1);
+		props.put("service.pid", DeploymentConstants.PID_RESOURCE_PROCESSOR2);
 		props.put(DeploymentConstants.RESOURCE_PROCESSOR_PROPERTY_KEY, "initial value for it");
 
 		sr = bc.registerService(ResourceProcessor.class.getName(), this, props);
