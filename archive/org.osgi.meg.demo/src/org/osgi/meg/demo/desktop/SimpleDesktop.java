@@ -78,24 +78,24 @@ public class SimpleDesktop extends Frame implements ActionListener {
         Panel pNorth2 = new Panel();
         pNorth.add(pNorth2);
         pNorth2.setLayout(new GridLayout(3, 0));
+            pNorth2.add(new Panel());
+        
             bLaunch = new Button(LAUNCH);
             bLaunch.setActionCommand(LAUNCH);
             bLaunch.addActionListener(this);
             pNorth2.add(bLaunch);
-            
-            pNorth2.add(new Panel());
             
             pNorth2.add(new Label("Applications"));
 
         Panel pNorth3 = new Panel();
         pNorth.add(pNorth3);
         pNorth3.setLayout(new GridLayout(3, 0));
+            pNorth3.add(new Panel());
+        
             bStop = new Button(STOP);
             bStop.setActionCommand(STOP);
             bStop.addActionListener(this);
             pNorth3.add(bStop);
-            
-            pNorth3.add(new Panel());
             
             pNorth3.add(new Label("Application instances"));
 
