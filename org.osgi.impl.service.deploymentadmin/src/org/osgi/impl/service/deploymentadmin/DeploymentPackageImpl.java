@@ -388,7 +388,7 @@ public class DeploymentPackageImpl implements DeploymentPackage, Serializable {
                     return b.getLocation();
                 }});
             if (null == location)
-                return null;
+                continue;
             if (location.equals(DeploymentAdminImpl.location(symbName, null)))
                 return b;
         }

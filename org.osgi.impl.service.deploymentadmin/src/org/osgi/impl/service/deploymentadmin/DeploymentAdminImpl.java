@@ -396,7 +396,7 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
         if (null == pwd)
             throw new RuntimeException("There is no keystore password set. Set the " +
                     DAConstants.KEYSTORE_PWD + " system property!");
-        keystore = KeyStore.getInstance("JKS");
+        keystore = KeyStore.getInstance(ksType);
         keystore.load(new FileInputStream(file), pwd.toCharArray());
         if (null == keystore)
             throw new RuntimeException("Loading keystore failed");
