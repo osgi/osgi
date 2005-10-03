@@ -602,6 +602,8 @@ public class DeploymentSessionImpl implements DeploymentSession {
      */
     private ResourceProcessor findProcessor(String pid) {
         ServiceReference[] refs = trackRp.getServiceReferences();
+        if (null == refs)
+            return null;
         for (int i = 0; i < refs.length; i++) {
             ServiceReference ref = refs[i];
             String s_pid = (String) ref.getProperty(Constants.SERVICE_PID);
