@@ -578,13 +578,13 @@ public class DeploymentPackageImpl implements DeploymentPackage, Serializable {
             for (int i = 0; i < name.length(); i++) {
                 char ch = name.charAt(i);
                 if (ch >= 'a' && ch <= 'z')
-                    return;
+                    continue;
                 if (ch >= 'A' && ch <= 'Z')
-                    return;
+                    continue;
                 if (ch >= '0' && ch <= '9')
-                    return;
+                    continue;
                 if (ch == '_' || ch == '.' || ch == '-' || ch == '/')
-                    return;
+                    continue;
                 throw new DeploymentException(DeploymentException.CODE_BAD_HEADER, 
                         "Character '" + ch + "' is not allowed in resource names");
             }
