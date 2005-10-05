@@ -29,102 +29,63 @@
  * Date          Author(s)
  * CR            Headline
  * ============  ==============================================================
- * Abr 14, 2005  Luiz Felipe Guimaraes
- * 1			 Implement Meg TCK
+ * Jan 26, 2005  Leonardo Barros
+ * 1             Implement TCK
+ * ============  ==============================================================
+ * Feb 25, 2005  Andre Assad
+ * 1             Updates after formal inspection (BTC_MEG_TCK_CODE-INSPR-001)
  * ============  ==============================================================
  */
-package org.osgi.test.cases.dmt.plugins.tbc;
+
+package org.osgi.test.cases.dmt.plugins.tbc.MetaNode;
 
 import org.osgi.service.dmt.DmtData;
+import org.osgi.service.dmt.DmtSession;
 import org.osgi.service.dmt.MetaNode;
+import org.osgi.test.cases.dmt.plugins.tbc.DmtTestControl;
 
-public class TestPluginMetaNode implements MetaNode {
+/**
+ * This test case validates the implementation of <code>getFormat</code> method of MetaNode, 
+ * according to MEG specification
 
-	private boolean	 isLeaf;
-    private int      format;
-    private String[] mimeTypes;
+ */
+public class GetFormat {
+	private DmtTestControl tbc;
 
-    // Interior nodes
-    public TestPluginMetaNode() {
-        
-        this.isLeaf        = false;
-        this.format        = DmtData.FORMAT_NODE;
-        this.mimeTypes     = null;
-    }
+	public GetFormat(DmtTestControl tbc) {
+		this.tbc = tbc;
+	}
+
+	public void run() {
+		testGetFormat001();
+	}
+
+
+	/**
+	 * Asserts that the correct format is returned from the MetaNode of the specified node
+	 * 
+	 * @spec MetaNode.getFormat()
+	 */
+	private void testGetFormat001() {
+		DmtSession session = null;
+		try {
+			tbc.log("#testGetFormat001");
+			session = tbc.getDmtAdmin().getSession(
+					TestMetaNodeDataPluginActivator.ROOT,
+					DmtSession.LOCK_TYPE_SHARED);
+
+			MetaNode metanode = session
+					.getMetaNode(TestMetaNodeDataPluginActivator.ROOT);
+
+			tbc.assertEquals("Asserts getFormat method", DmtData.FORMAT_NODE,
+					metanode.getFormat());
+		} catch (Exception e) {
+			tbc.fail("Unexpected Exception: " + e.getClass().getName()
+					+ " [Message: " + e.getMessage() + "]");
+		} finally {
+			tbc.closeSession(session);
+		}
+	}
     
-    // Leaf nodes
-	public TestPluginMetaNode(int format) {
-        this.isLeaf        = true;
-        this.format        = format;
-        this.mimeTypes     = new String[] { "text/xml" };
-	}
 
-
-    public boolean can(int operation) {
-        return true;
-    }       	
-
-    public boolean isLeaf() {
-		return isLeaf;
-	}
-
-	public int getScope() {
-		return DYNAMIC;
-	}
-
-	public String getDescription() {
-		return "";
-	}
-
-	public int getMaxOccurrence() {
-		return Integer.MAX_VALUE;
-	}
-
-	public boolean isZeroOccurrenceAllowed() {
-		return true;
-	}
-
-	public DmtData getDefault() {
-		return new DmtData("test");
-	}
-
-	public double getMax() {
-		return Integer.MAX_VALUE;
-	}
-
-	public double getMin() {
-		return Integer.MIN_VALUE;
-	}
-
-    public String[] getValidNames() {
-        return null;
-    }
-    
-	public DmtData[] getValidValues() {
-		return null;
-	}
-
-	public int getFormat() {
-		return format;
-	}
-
-    public String getNamePattern() {
-        return null;
-    }
-    
-	public String getPattern() {
-		return null;
-	}
-
-	public String[] getMimeTypes() {
-		return mimeTypes;
-	}
-
-	public boolean isValidValue(DmtData value) {
-		return true;
-	}
-
-	public boolean isValidName(String name) {
-		return true;
-	}
 }
