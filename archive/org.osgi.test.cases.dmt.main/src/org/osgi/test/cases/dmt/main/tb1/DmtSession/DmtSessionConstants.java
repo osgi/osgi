@@ -44,7 +44,7 @@ import org.osgi.test.cases.dmt.main.tbc.DmtTestControl;
 import org.osgi.test.cases.dmt.main.tbc.TestInterface;
 
 /**
- * @generalDescription This class tests all of <code>constants<code> of DmtSession
+ * This class tests all constants of DmtSession
  *                     
  * @author Alexandre Santos
  */
@@ -62,8 +62,9 @@ public class DmtSessionConstants implements TestInterface {
     }
     
     /**
-     * @testID testConstants001
-     * @testDescription This method asserts the constants values for LOCK TYPES
+     * This method asserts the constants values 
+     * 
+     * @spec 118.12.16
      */    
     private void testConstants001() {
 		tbc.log("#testConstants001");

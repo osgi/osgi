@@ -42,12 +42,12 @@
 
 package org.osgi.test.cases.dmt.main.tbc.DmtPrincipalPermission;
 
+import org.osgi.test.cases.dmt.main.tbc.DmtConstants;
 import org.osgi.test.cases.dmt.main.tbc.DmtTestControl;
 
 /**
- * @methodUnderTest org.osgi.service.dmt.DmtPrincipalPermission#DmtPrincipalPermission
- * @generalDescription This class tests DmtPrincipalPermission constructors
- *                     according with MEG specification (rfc0085)
+ * This class tests DmtPrincipalPermission constructors according with MEG specification
+ * 
  */
 
 public class DmtPrincipalPermission {
@@ -73,19 +73,20 @@ public class DmtPrincipalPermission {
 	}
 
 	/**
-	 * @testID testDmtPrincipalPermission001
-	 * @testDescription It asserts if the principal passed in the constructor is
-	 *                  equals to DmtPrincipalPermission.getName() method.
+	 * It asserts if the principal passed in the constructor is
+	 * equals to DmtPrincipalPermission.getName() method.
+	 * 
+	 * @spec DmtPrincipalPermission.DmtPrincipalPermission(String)
 	 */
 	private void testDmtPrincipalPermission001() {
 		try {
 			tbc.log("#testDmtPrincipalPermission001");
-			org.osgi.service.dmt.DmtPrincipalPermission dmtPrincipalPermission = new org.osgi.service.dmt.DmtPrincipalPermission(
-					DmtTestControl.PRINCIPAL);
+			org.osgi.service.dmt.security.DmtPrincipalPermission dmtPrincipalPermission = new org.osgi.service.dmt.security.DmtPrincipalPermission(
+					DmtConstants.PRINCIPAL);
 			tbc
 					.assertEquals(
 							"Asserts that the principal passed as parameter is equal to the returned value",
-							DmtTestControl.PRINCIPAL, dmtPrincipalPermission
+							DmtConstants.PRINCIPAL, dmtPrincipalPermission
 									.getName());
 			tbc.assertEquals("Asserts that the actions returned is '*'", "*",
 					dmtPrincipalPermission.getActions());
@@ -96,13 +97,14 @@ public class DmtPrincipalPermission {
 	}
 
 	/**
-	 * @testID testDmtPrincipalPermission002
-	 * @testDescription Asserts that '*' is returned.
+	 * Asserts that '*' is returned when it is passed as principal.
+	 * 
+	 * @spec DmtPrincipalPermission.DmtPrincipalPermission(String)
 	 */
 	private void testDmtPrincipalPermission002() {
 		try {
 			tbc.log("#testDmtPrincipalPermission002");
-			org.osgi.service.dmt.DmtPrincipalPermission dmtPrincipalPermission = new org.osgi.service.dmt.DmtPrincipalPermission(
+			org.osgi.service.dmt.security.DmtPrincipalPermission dmtPrincipalPermission = new org.osgi.service.dmt.security.DmtPrincipalPermission(
 					"*");
 			tbc
 					.assertEquals(
@@ -117,20 +119,20 @@ public class DmtPrincipalPermission {
 	}
 
 	/**
-	 * @testID testDmtPrincipalPermission003
-	 * @testDescription Tests the constructor which has two string parameters.
-	 *                  The second parameter is ignored and the first one sets
-	 *                  the principal
+	 * It asserts if the principal passed in the constructor with 2 arguments is
+	 * equals to DmtPrincipalPermission.getName() method.
+	 * 
+	 * @spec DmtPrincipalPermission.DmtPrincipalPermission(String,String)
 	 */
 	private void testDmtPrincipalPermission003() {
 		try {
 			tbc.log("#testDmtPrincipalPermission003");
-			org.osgi.service.dmt.DmtPrincipalPermission dmtPrincipalPermission = new org.osgi.service.dmt.DmtPrincipalPermission(
-					DmtTestControl.PRINCIPAL, "*");
+			org.osgi.service.dmt.security.DmtPrincipalPermission dmtPrincipalPermission = new org.osgi.service.dmt.security.DmtPrincipalPermission(
+					DmtConstants.PRINCIPAL, "*");
 			tbc
 					.assertEquals(
 							"Asserts that the principal passed as parameter is equal to the returned value",
-							DmtTestControl.PRINCIPAL, dmtPrincipalPermission
+							DmtConstants.PRINCIPAL, dmtPrincipalPermission
 									.getName());
 			tbc
 					.assertEquals(
@@ -143,14 +145,14 @@ public class DmtPrincipalPermission {
 	}
 
 	/**
-	 * @testID testDmtPrincipalPermission004
-	 * @testDescription Tests if NullPointerException is thrown if name is null
-	 *                  constructor with 1 parameter
+	 * Asserts that NullPointerException is thrown if name is null constructor with 1 parameter
+	 * 
+	 * @spec DmtPrincipalPermission.DmtPrincipalPermission(String)
 	 */
 	private void testDmtPrincipalPermission004() {
 		try {
 			tbc.log("#testDmtPrincipalPermission004");
-			new org.osgi.service.dmt.DmtPrincipalPermission(null);
+			new org.osgi.service.dmt.security.DmtPrincipalPermission(null);
 			tbc.failException("#", NullPointerException.class);
 		} catch (NullPointerException e) {
 			tbc.pass("NullPointerException correctly thrown");
@@ -161,32 +163,32 @@ public class DmtPrincipalPermission {
 	}
 
 	/**
-	 * @testID testDmtPrincipalPermission005
-	 * @testDescription Tests if IllegalArgumentException is thrown if name is
-	 *                  empty constructor with 1 parameter
+	 * Asserts that IllegalArgumentException is thrown if name is empty constructor with 1 parameter
+	 * 
+	 * @spec DmtPrincipalPermission.DmtPrincipalPermission(String)
 	 */
 	private void testDmtPrincipalPermission005() {
 		try {
 			tbc.log("#testDmtPrincipalPermission005");
-			new org.osgi.service.dmt.DmtPrincipalPermission("");
+			new org.osgi.service.dmt.security.DmtPrincipalPermission("");
 			tbc.failException("#", IllegalArgumentException.class);
 		} catch (IllegalArgumentException e) {
 			tbc.pass("IllegalArgumentException correctly thrown");
 		} catch (Exception e) {
-			tbc.fail("Expected " + NullPointerException.class.getName()
+			tbc.fail("Expected " + IllegalArgumentException.class.getName()
 					+ " but was " + e.getClass().getName());
 		}
 	}
 
 	/**
-	 * @testID testDmtPrincipalPermission006
-	 * @testDescription Tests if NullPointerException is thrown if name is null
-	 *                  constructor with 2 parameter
+	 * Asserts that NullPointerException is thrown if name is null constructor with 2 parameter
+	 * 
+	 * @spec DmtPrincipalPermission.DmtPrincipalPermission(String,String)
 	 */
 	private void testDmtPrincipalPermission006() {
 		try {
 			tbc.log("#testDmtPrincipalPermission006");
-			new org.osgi.service.dmt.DmtPrincipalPermission(null, "*");
+			new org.osgi.service.dmt.security.DmtPrincipalPermission(null, "*");
 			tbc.failException("#", NullPointerException.class);
 		} catch (NullPointerException e) {
 			tbc.pass("NullPointerException correctly thrown");
@@ -197,33 +199,33 @@ public class DmtPrincipalPermission {
 	}
 
 	/**
-	 * @testID testDmtPrincipalPermission007
-	 * @testDescription Tests if IllegalArgumentException is thrown if name is
-	 *                  empty constructor with 2 parameter
+	 * Asserts that IllegalArgumentException is thrown if name is empty constructor with 2 parameter
+	 * 
+	 * @spec DmtPrincipalPermission.DmtPrincipalPermission(String,String)
 	 */
 	private void testDmtPrincipalPermission007() {
 		try {
 			tbc.log("#testDmtPrincipalPermission007");
-			new org.osgi.service.dmt.DmtPrincipalPermission("", "*");
+			new org.osgi.service.dmt.security.DmtPrincipalPermission("", "*");
 			tbc.failException("#", IllegalArgumentException.class);
 		} catch (IllegalArgumentException e) {
 			tbc.pass("IllegalArgumentException correctly thrown");
 		} catch (Exception e) {
-			tbc.fail("Expected " + NullPointerException.class.getName()
+			tbc.fail("Expected " + IllegalArgumentException.class.getName()
 					+ " but was " + e.getClass().getName());
 		}
 	}
 
 	/**
-	 * @testID testDmtPrincipalPermission008
-	 * @testDescription Tests if NullPointerException is thrown if actions is
-	 *                  null
+	 * Asserts that NullPointerException is thrown if actions is null
+	 * 
+	 * @spec DmtPrincipalPermission.DmtPrincipalPermission(String,String)
 	 */
 	private void testDmtPrincipalPermission008() {
 		try {
 			tbc.log("#testDmtPrincipalPermission008");
-			new org.osgi.service.dmt.DmtPrincipalPermission(
-					DmtTestControl.PRINCIPAL, null);
+			new org.osgi.service.dmt.security.DmtPrincipalPermission(
+					DmtConstants.PRINCIPAL, null);
 			tbc.failException("#", NullPointerException.class);
 		} catch (NullPointerException e) {
 			tbc.pass("NullPointerException correctly thrown");
@@ -234,34 +236,35 @@ public class DmtPrincipalPermission {
 	}
 
 	/**
-	 * @testID testDmtPrincipalPermission009
-	 * @testDescription Tests if IllegalArgumentException is thrown if actions
-	 *                  is not "*"
+	 * Asserts that IllegalArgumentException is thrown if actions is not "*"
+	 * 
+	 * @spec DmtPrincipalPermission.DmtPrincipalPermission(String,String)
 	 */
 	private void testDmtPrincipalPermission009() {
 		try {
 			tbc.log("#testDmtPrincipalPermission009");
-			new org.osgi.service.dmt.DmtPrincipalPermission(
-					DmtTestControl.PRINCIPAL, "");
+			new org.osgi.service.dmt.security.DmtPrincipalPermission(
+					DmtConstants.PRINCIPAL, "");
 			tbc.failException("#", IllegalArgumentException.class);
 		} catch (IllegalArgumentException e) {
 			tbc.pass("IllegalArgumentException correctly thrown");
 		} catch (Exception e) {
-			tbc.fail("Expected " + NullPointerException.class.getName()
+			tbc.fail("Expected " + IllegalArgumentException.class.getName()
 					+ " but was " + e.getClass().getName());
 		}
 	}
 
 	/**
-	 * @testID testDmtPrincipalPermission010
-	 * @testDescription It asserts if the name of the principal can end with "*"
-	 *                  to match any principal
+	 * Asserts that the name of the principal can end with "*" to match any principal
+	 * using the constructor with 1 parameter
+	 * 
+	 * @spec DmtPrincipalPermission.DmtPrincipalPermission(String)
 	 */
 	private void testDmtPrincipalPermission010() {
 		try {
 			tbc.log("#testDmtPrincipalPermission010");
 			String principal = "www.cesar*";
-			org.osgi.service.dmt.DmtPrincipalPermission dmtPrincipalPermission = new org.osgi.service.dmt.DmtPrincipalPermission(
+			org.osgi.service.dmt.security.DmtPrincipalPermission dmtPrincipalPermission = new org.osgi.service.dmt.security.DmtPrincipalPermission(
 					principal);
 			tbc
 					.assertEquals(
@@ -276,15 +279,16 @@ public class DmtPrincipalPermission {
 	}
 
 	/**
-	 * @testID testDmtPrincipalPermission011
-	 * @testDescription It asserts if the name of the principal can end with "*"
-	 *                  to match any principal
+	 * Asserts that the name of the principal can end with "*" to match any principal
+	 * using the constructor with 2 parameters
+	 * 
+	 * @spec DmtPrincipalPermission.DmtPrincipalPermission(String,String)
 	 */
 	private void testDmtPrincipalPermission011() {
 		try {
 			tbc.log("#testDmtPrincipalPermission011");
 			String principal = "www.cesar*";
-			org.osgi.service.dmt.DmtPrincipalPermission dmtPrincipalPermission = new org.osgi.service.dmt.DmtPrincipalPermission(
+			org.osgi.service.dmt.security.DmtPrincipalPermission dmtPrincipalPermission = new org.osgi.service.dmt.security.DmtPrincipalPermission(
 					principal, "*");
 			tbc
 					.assertEquals(

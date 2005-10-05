@@ -39,18 +39,16 @@
 
 package org.osgi.test.cases.dmt.main.tb1.DmtSession;
 
-import org.osgi.service.dmt.DmtException;
 import org.osgi.service.dmt.DmtSession;
+import org.osgi.service.permissionadmin.PermissionInfo;
 import org.osgi.test.cases.dmt.main.tbc.DmtTestControl;
 import org.osgi.test.cases.dmt.main.tbc.TestInterface;
 
 /**
  * @author Andre Assad
  * 
- * @methodUnderTest org.osgi.service.dmt.DmtSession#rollback
- * @generalDescription This Test Case Validates the implementation of
- *                     <code>rollback<code> method, according to MEG reference
- *                     documentation (rfc0085).
+ * This test case validates the implementation of <code>rollback</code> method of DmtSession, 
+ * according to MEG specification
  */
 public class Rollback implements TestInterface {
 	private DmtTestControl tbc;
@@ -60,16 +58,21 @@ public class Rollback implements TestInterface {
 	}
 
 	public void run() {
+        prepare();
 		testRollback001();
 		testRollback002();
 		testRollback003();
 	}
-
+    private void prepare() {
+        //TODO JavaDoc says it can throw SecurityException but which DmtPermission is needed?
+        tbc.setPermissions(new PermissionInfo[0]);
+    }
 	/**
-	 * @testID testRollback001
-	 * @testDescription This method asserts that whenever a DmtSession with
-	 *                  without LOCK_TYPE_EXCLUSIVE lock is created, the roll back
-	 *                  operation is not supported.
+	 * This method asserts that IllegalStateException is thrown 
+	 * if rollback() is called when the session is opened using 
+	 * the LOCK_TYPE_EXCLUSIVE lock type
+	 * 
+	 * @spec DmtSession.rollback()
 	 */
 	private void testRollback001() {
 		DmtSession session = null;
@@ -77,10 +80,9 @@ public class Rollback implements TestInterface {
 			tbc.log("#testRollback001");
 			session = tbc.getDmtAdmin().getSession(".", DmtSession.LOCK_TYPE_EXCLUSIVE);
 			session.rollback();
-			tbc.failException("#",DmtException.class);
-		} catch (DmtException e) {
-			tbc.assertEquals("Asserting DmtException type",
-					DmtException.FEATURE_NOT_SUPPORTED, e.getCode());
+			tbc.failException("#",IllegalStateException.class);
+		} catch (IllegalStateException e) {
+			tbc.pass("IllegalStateException correctly thrown");
 		} catch (Exception e) {
 			tbc.fail("Unexpected Exception: " + e.getClass().getName()
 					+ " [Message: " + e.getMessage() + "]");
@@ -90,10 +92,11 @@ public class Rollback implements TestInterface {
 	}
 	
 	/**
-	 * @testID testRollback002
-	 * @testDescription This method asserts that whenever a DmtSession with
-	 *                  without LOCK_TYPE_SHARED lock is created, the roll back
-	 *                  operation is not supported (second case).
+	 * This method asserts that IllegalStateException is thrown 
+	 * if rollback() is called when the session is opened using 
+	 * the LOCK_TYPE_SHARED lock type
+	 * 
+	 * @spec DmtSession.rollback()
 	 */
 	private void testRollback002() {
 		DmtSession session = null;
@@ -101,10 +104,9 @@ public class Rollback implements TestInterface {
 			tbc.log("#testRollback002");
 			session = tbc.getDmtAdmin().getSession(".", DmtSession.LOCK_TYPE_SHARED);
 			session.rollback();
-			tbc.failException("#",DmtException.class);
-		} catch (DmtException e) {
-			tbc.assertEquals("Asserting DmtException type",
-					DmtException.FEATURE_NOT_SUPPORTED, e.getCode());
+			tbc.failException("#",IllegalStateException.class);
+		} catch (IllegalStateException e) {
+			tbc.pass("IllegalStateException correctly thrown");
 		} catch (Exception e) {
 			tbc.fail("Unexpected Exception: " + e.getClass().getName()
 					+ " [Message: " + e.getMessage() + "]");
@@ -113,25 +115,24 @@ public class Rollback implements TestInterface {
 		}
 	}
 
-	/**
-	 * @testID testRollback003
-	 * @testDescription This method asserts that an IllegalStateException 
-	 *                  is thrown when a session is already rolled back
-	 */
-	private void testRollback003() {
-		DmtSession session = null;
-		try {
-			tbc.log("#testRollback003");
-            session = tbc.getDmtAdmin().getSession(".", DmtSession.LOCK_TYPE_ATOMIC);
-            session.close();
-			session.rollback();
-			tbc.failException("#",IllegalStateException.class);
-		} catch (IllegalStateException e) {
-			tbc.pass("The Exception was IllegalStateException");
-		} catch (Exception e) {
-			tbc.fail("Expected " + IllegalStateException.class.getName() + " but was " + e.getClass().getName());
-		} finally {
-			tbc.closeSession(session);
-		}
-	}
+		
+    /**
+     * This method asserts that after a rollback() the session is not closed.
+     * 
+     * @spec DmtSession.rollback()
+     */
+    private void testRollback003() {
+        DmtSession session = null;
+        try {
+            tbc.log("#testRollback003");
+            session = tbc.getDmtAdmin().getSession(".",DmtSession.LOCK_TYPE_ATOMIC);
+            session.rollback();
+            tbc.assertEquals("Asserting that after a rollback(), the session is not closed.", session.getState(), DmtSession.STATE_OPEN);
+        } catch (Exception e) {
+        	tbc.fail("Unexpected Exception: " + e.getClass().getName() + " [Message: " + e.getMessage() +"]");
+        } finally {
+            tbc.closeSession(session);
+        }
+    }
+    
 }

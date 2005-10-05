@@ -39,23 +39,22 @@
 
 package org.osgi.test.cases.dmt.main.tb1.DmtSession;
 
-import org.osgi.service.dmt.DmtAcl;
+import org.osgi.service.dmt.Acl;
 import org.osgi.service.dmt.DmtException;
-import org.osgi.service.dmt.DmtPermission;
-import org.osgi.service.dmt.DmtPrincipalPermission;
+import org.osgi.service.dmt.security.DmtPermission;
+import org.osgi.service.dmt.security.DmtPrincipalPermission;
 import org.osgi.service.dmt.DmtSession;
 import org.osgi.service.permissionadmin.PermissionInfo;
+import org.osgi.test.cases.dmt.main.tbc.DmtConstants;
 import org.osgi.test.cases.dmt.main.tbc.DmtTestControl;
 import org.osgi.test.cases.dmt.main.tbc.TestInterface;
-import org.osgi.test.cases.dmt.main.tbc.Plugin.TestExecPluginActivator;
+import org.osgi.test.cases.dmt.main.tbc.Plugin.ExecPlugin.TestExecPluginActivator;
 
 /**
  * @author Andre Assad
  * 
- * @methodUnderTest org.osgi.service.dmt.DmtReadOnly#getNodeVersion
- * @generalDescription This Test Case Validates the implementation of
- *                     <code>getNodeVersion<code> method, according to MEG reference
- *                     documentation (rfc0085).
+ * This test case validates the implementation of <code>getNodeVersion</code> method of DmtSession, 
+ * according to MEG specification
  */
 public class GetNodeVersion implements TestInterface {
 	private DmtTestControl tbc;
@@ -65,22 +64,24 @@ public class GetNodeVersion implements TestInterface {
 	}
 
 	public void run() {
-		/*testGetNodeVersion001();
-		testGetNodeVersion002();
-		testGetNodeVersion003();
-		testGetNodeVersion004();
-		testGetNodeVersion005();
-		testGetNodeVersion006();
-		testGetNodeVersion007();
-		testGetNodeVersion008();
-		testGetNodeVersion009();*/
-		testGetNodeVersion010();
+        prepare();
+        if (DmtConstants.SUPPORTS_NODE_SIZE) {
+    		testGetNodeVersion001();
+    		testGetNodeVersion002();
+    		testGetNodeVersion003();
+    		testGetNodeVersion004();
+        } else {
+            testGetNodeVersionFeatureNotSupported001();
+        }
 	}
-
+    private void prepare() {
+        tbc.setPermissions(new PermissionInfo(DmtPermission.class.getName(), DmtConstants.ALL_NODES,DmtConstants.ALL_ACTIONS));
+    }
 	/**
-	 * @testID testGetNodeVersion001
-	 * @testDescription This method asserts that getNodeVersion correctly throws
-	 *                  DmtException when a inexistent node is used.
+	 * This method asserts that DmtException.NODE_NOT_FOUND is thrown
+	 * if nodeUri points to a non-existing node 
+	 * 
+	 * @spec DmtSession.getNodeVersion(String)
 	 */
 	private void testGetNodeVersion001() {
 		DmtSession session = null;
@@ -100,41 +101,45 @@ public class GetNodeVersion implements TestInterface {
 			tbc.fail("Expected " + DmtException.class.getName() + " but was "
 					+ e.getClass().getName());
 		} finally {
-			tbc.cleanUp(session, new String[] { DmtTestControl.LOG_SEARCH });
+			tbc.closeSession(session);
 		}
 	}
 
+	
+
 	/**
-	 * @testID testGetNodeVersion002
-	 * @testDescription This method asserts that a DmtException with error code
-	 *                  equals to URI_TOO_LONG is thrown.
+	 * This method asserts that getNodeVersion is executed when the right Acl is set (Remote)
+	 * 
+	 * @spec DmtSession.getNodeVersion(String)
 	 */
 	private void testGetNodeVersion002() {
 		DmtSession session = null;
 		try {
 			tbc.log("#testGetNodeVersion002");
 
-			session = tbc.getDmtAdmin().getSession(".",
-					DmtSession.LOCK_TYPE_EXCLUSIVE);
-			session.getNodeVersion(DmtTestControl.URI_LONG);
+            tbc.openSessionAndSetNodeAcl(TestExecPluginActivator.LEAF_NODE, DmtConstants.PRINCIPAL, Acl.GET );
 
-			tbc.failException("", DmtException.class);
-		} catch (DmtException e) {
-			tbc.assertEquals(
-					"Asserting that DmtException code is URI_TOO_LONG",
-					DmtException.URI_TOO_LONG, e.getCode());
+			tbc.setPermissions(new PermissionInfo(DmtPrincipalPermission.class.getName(),DmtConstants.PRINCIPAL,"*"));
+			session = tbc.getDmtAdmin().getSession(DmtConstants.PRINCIPAL,
+					TestExecPluginActivator.ROOT, DmtSession.LOCK_TYPE_EXCLUSIVE);
+
+			session.getNodeVersion(TestExecPluginActivator.LEAF_NODE);
+			
+			tbc.pass("getNodeVersion correctly executed");
 		} catch (Exception e) {
-			tbc.fail("Expected " + DmtException.class.getName() + " but was "
-					+ e.getClass().getName());
+			tbc.fail("Unexpected Exception: " + e.getClass().getName() + " [Message: " + e.getMessage() +"]");
 		} finally {
-			tbc.closeSession(session);
+            tbc.setPermissions(new PermissionInfo(DmtPermission.class.getName(), DmtConstants.ALL_NODES,DmtConstants.ALL_ACTIONS));
+            tbc.cleanUp(session,TestExecPluginActivator.LEAF_NODE);
+            
 		}
+
 	}
 
 	/**
-	 * @testID testGetNodeVersion003
-	 * @testDescription This method asserts that a DmtException with error code
-	 *                  equals to INVALID_URI is thrown.
+	 * This method asserts that getNodeVersion is executed when the right DmtPermission is set (Local)
+	 * 
+	 * @spec DmtSession.getNodeVersion(String)
 	 */
 	private void testGetNodeVersion003() {
 		DmtSession session = null;
@@ -143,219 +148,36 @@ public class GetNodeVersion implements TestInterface {
 
 			session = tbc.getDmtAdmin().getSession(".",
 					DmtSession.LOCK_TYPE_EXCLUSIVE);
-			session.getNodeVersion(DmtTestControl.INVALID_URI);
-
-			tbc.failException("", DmtException.class);
-		} catch (DmtException e) {
-			tbc.assertEquals(
-					"Asserting that DmtException code is INVALID_URI",
-					DmtException.INVALID_URI, e.getCode());
+			
+			tbc.setPermissions(new PermissionInfo(DmtPermission.class
+					.getName(), DmtConstants.ALL_NODES, DmtPermission.GET));
+			
+			session.getNodeVersion(TestExecPluginActivator.LEAF_NODE);
+			
+			tbc.pass("getNodeVersion correctly executed");
 		} catch (Exception e) {
-			tbc.fail("Expected " + DmtException.class.getName() + " but was "
-					+ e.getClass().getName());
+			tbc.fail("Unexpected Exception: " + e.getClass().getName() + " [Message: " + e.getMessage() +"]");
 		} finally {
-			tbc.closeSession(session);
+            tbc.setPermissions(new PermissionInfo(DmtPermission.class.getName(), DmtConstants.ALL_NODES,DmtConstants.ALL_ACTIONS));
+            tbc.cleanUp(session, null);
+            
 		}
 	}
-
+	
 	/**
-	 * @testID testGetNodeVersion004
-	 * @testDescription This method asserts that a DmtException with error code
-	 *                  equals to OTHER_ERROR is thrown.
+	 *This method asserts that relative URI works as described.
+	 *
+	 * @spec DmtSession.getNodeVersion(String)
 	 */
 	private void testGetNodeVersion004() {
 		DmtSession session = null;
 		try {
 			tbc.log("#testGetNodeVersion004");
-
-			session = tbc.getDmtAdmin().getSession(DmtTestControl.OSGi_CFG,
-					DmtSession.LOCK_TYPE_SHARED);
-			session.getNodeVersion(TestExecPluginActivator.LEAF_NODE);
-
-			tbc.failException("", DmtException.class);
-		} catch (DmtException e) {
-			tbc.assertEquals(
-					"Asserting that DmtException code is OTHER_ERROR",
-					DmtException.OTHER_ERROR, e.getCode());
-		} catch (Exception e) {
-			tbc.fail("Expected " + DmtException.class.getName() + " but was "
-					+ e.getClass().getName());
-		} finally {
-			tbc.closeSession(session);
-		}
-	}
-
-	/**
-	 * @testID testGetNodeVersion005
-	 * @testDescription This method asserts that a DmtException with error code
-	 *                  equals to PERMISSION_DENIED is thrown.
-	 */
-	private void testGetNodeVersion005() {
-		DmtSession localSession = null;
-		DmtSession remoteSession = null;
-		try {
-			tbc.log("#testGetNodeVersion005");
-
-			localSession = tbc.getDmtAdmin().getSession(".",
-					DmtSession.LOCK_TYPE_EXCLUSIVE);
-			localSession.setNodeAcl(TestExecPluginActivator.LEAF_NODE, new DmtAcl(
-					new String[] { DmtTestControl.PRINCIPAL },
-					new int[] { DmtAcl.EXEC }));
-			localSession.close();
-
-			tbc.setPermissions(new PermissionInfo(DmtPrincipalPermission.class.getName(),DmtTestControl.PRINCIPAL,"*"));
-			remoteSession = tbc.getDmtAdmin().getSession(DmtTestControl.PRINCIPAL,
-					TestExecPluginActivator.ROOT, DmtSession.LOCK_TYPE_EXCLUSIVE);
-
-			remoteSession.getNodeVersion(TestExecPluginActivator.LEAF_NODE);
-			
-			tbc.failException("", DmtException.class);
-		} catch (DmtException e) {
-				tbc.assertEquals(
-						"Asserting that DmtException code is PERMISSION_DENIED",
-						DmtException.PERMISSION_DENIED, e.getCode());
-		} catch (Exception e) {
-			tbc.fail("Expected " + DmtException.class.getName() + " but was "
-					+ e.getClass().getName());
-		} finally {
-			tbc.cleanUp(localSession, remoteSession, TestExecPluginActivator.LEAF_NODE);
-		}
-
-	}
-
-	/**
-	 * @testID testGetNodeVersion006
-	 * @testDescription This method asserts that an SecurityException is thrown
-	 *                  when getNodeVersion is called without the right
-	 *                  permission
-	 */
-	private void testGetNodeVersion006() {
-		DmtSession session = null;
-		try {
-			tbc.log("#testGetNodeVersion006");
-
-			session = tbc.getDmtAdmin().getSession(".",
-					DmtSession.LOCK_TYPE_EXCLUSIVE);
-			
-			tbc.setPermissions(new PermissionInfo(DmtPermission.class
-					.getName(), DmtTestControl.ALL_NODES, DmtPermission.EXEC));
-			
-			session.getNodeVersion(TestExecPluginActivator.LEAF_NODE);
-			
-			tbc.failException("", SecurityException.class);
-		} catch (SecurityException e) {
-			tbc.pass("The Exception was SecurityException");
-		} catch (Exception e) {
-			tbc.fail("Expected " + SecurityException.class.getName()
-					+ " but was " + e.getClass().getName());
-		} finally {
-			tbc.cleanUp(session, null, null);
-		}
-	}
-
-	/**
-	 * @testID testGetNodeVersion007
-	 * @testDescription This method asserts that an IllegalStateException is
-	 *                  thrown when attemps to execute getNodeVersion using a
-	 *                  closed session.
-	 */
-	private void testGetNodeVersion007() {
-		DmtSession session = null;
-		try {
-			tbc.log("#testGetNodeVersion007");
-
-			session = tbc.getDmtAdmin().getSession(".",
-					DmtSession.LOCK_TYPE_SHARED);
-			session.close();
-			session.getNodeVersion(TestExecPluginActivator.LEAF_NODE);
-			
-			tbc.failException("", IllegalStateException.class);
-		} catch (IllegalStateException e) {
-			tbc.pass("The Exception was IllegalStateException");
-		} catch (Exception e) {
-			tbc.fail("Expected " + IllegalStateException.class.getName()
-					+ " but was " + e.getClass().getName());
-		} finally {
-			tbc.closeSession(session);
-		}
-
-	}
-
-	/**
-	 * @testID testGetNodeVersion008
-	 * @testDescription This method asserts that it getNodeVersion successfully executed 
-	 * 					when the correct permission is assigned
-	 */
-	private void testGetNodeVersion008() {
-		DmtSession localSession = null;
-		DmtSession remoteSession = null;
-		try {
-			tbc.log("#testGetNodeVersion008");
-
-			localSession = tbc.getDmtAdmin().getSession(".",
-					DmtSession.LOCK_TYPE_EXCLUSIVE);
-			localSession.setNodeAcl(TestExecPluginActivator.LEAF_NODE, new DmtAcl(
-					new String[] { DmtTestControl.PRINCIPAL },
-					new int[] { DmtAcl.GET }));
-			localSession.close();
-
-			tbc.setPermissions(new PermissionInfo(DmtPrincipalPermission.class.getName(),DmtTestControl.PRINCIPAL,"*"));
-			remoteSession = tbc.getDmtAdmin().getSession(DmtTestControl.PRINCIPAL,
-					TestExecPluginActivator.ROOT, DmtSession.LOCK_TYPE_EXCLUSIVE);
-
-			remoteSession.getNodeVersion(TestExecPluginActivator.LEAF_NODE);
-			
-			tbc.pass("getNodeVersion correctly executed");
-		} catch (Exception e) {
-			tbc.fail("Unexpected Exception: " + e.getClass().getName() + " [Message: " + e.getMessage() +"]");
-		} finally {
-			tbc.cleanUp(localSession, remoteSession, TestExecPluginActivator.LEAF_NODE);
-		}
-
-	}
-
-	/**
-	 * @testID testGetNodeVersion009
-	 * @testDescription This method asserts that it getNodeVersion successfully executed 
-	 * 					when the correct permission is assigned
-	 */
-	private void testGetNodeVersion009() {
-		DmtSession session = null;
-		try {
-			tbc.log("#testGetNodeVersion009");
-
-			session = tbc.getDmtAdmin().getSession(".",
-					DmtSession.LOCK_TYPE_EXCLUSIVE);
-			
-			tbc.setPermissions(new PermissionInfo(DmtPermission.class
-					.getName(), DmtTestControl.ALL_NODES, DmtPermission.GET));
-			
-			session.getNodeVersion(TestExecPluginActivator.LEAF_NODE);
-			
-			tbc.pass("getNodeVersion correctly executed");
-		} catch (Exception e) {
-			tbc.fail("Unexpected Exception: " + e.getClass().getName() + " [Message: " + e.getMessage() +"]");
-		} finally {
-			tbc.cleanUp(session, null, null);
-		}
-	}
-	
-	/**
-	 * @testID testGetNodeVersion010
-	 * @testDescription This method asserts that relative URI works as described.
-	 * 
-	 */
-	private void testGetNodeVersion010() {
-		DmtSession session = null;
-		try {
-			tbc.log("#testGetNodeVersion010");
-			
-			tbc.setPermissions(new PermissionInfo(DmtPermission.class.getName(), DmtTestControl.ALL_NODES,DmtTestControl.ALL_ACTIONS));
 			
 			session = tbc.getDmtAdmin().getSession(
 					TestExecPluginActivator.ROOT, DmtSession.LOCK_TYPE_ATOMIC);
 
-			session.getNodeVersion(TestExecPluginActivator.LEAF_VALUE);
+			session.getNodeVersion(TestExecPluginActivator.LEAF_RELATIVE);
 
 			tbc.pass("A relative URI can be used with getNodeVersion.");
 		} catch (Exception e) {
@@ -364,5 +186,32 @@ public class GetNodeVersion implements TestInterface {
 		} finally {
 			tbc.closeSession(session);
 		}
-	}	
+	}
+    /**
+     * Asserts that if the DmtAdmin service implementation does not support this method,
+     * DmtException.FEATURE_NOT_SUPPORTED is thrown 
+     * 
+     * @spec DmtSession.getNodeVersion(String)
+     */
+    private void testGetNodeVersionFeatureNotSupported001() {
+        DmtSession session = null;
+        try {
+            tbc.log("#testGetNodeVersionFeatureNotSupported001");
+
+            session = tbc.getDmtAdmin().getSession(".",
+                    DmtSession.LOCK_TYPE_EXCLUSIVE);
+            session.getNodeVersion(TestExecPluginActivator.INTERIOR_NODE);
+
+            tbc.failException("", DmtException.class);
+        } catch (DmtException e) {
+            tbc.assertEquals(
+                    "Asserting that DmtException's code is FEATURE_NOT_SUPPORTED",
+                    DmtException.FEATURE_NOT_SUPPORTED, e.getCode());
+        } catch (Exception e) {
+            tbc.fail("Expected " + DmtException.class.getName() + " but was "
+                    + e.getClass().getName());
+        } finally {
+            tbc.closeSession(session);
+        }
+    }
 }

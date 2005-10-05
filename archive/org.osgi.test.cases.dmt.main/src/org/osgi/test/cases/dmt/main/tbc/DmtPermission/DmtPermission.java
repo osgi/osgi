@@ -38,12 +38,11 @@ package org.osgi.test.cases.dmt.main.tbc.DmtPermission;
 
 import java.util.StringTokenizer;
 
+import org.osgi.test.cases.dmt.main.tbc.DmtConstants;
 import org.osgi.test.cases.dmt.main.tbc.DmtTestControl;
 
 /**
- * @methodUnderTest org.osgi.service.dmt.DmtPermission#DmtPermission
- * @generalDescription This class tests DmtPermission constructors according
- *                     with MEG specification (rfc0085)
+ * This class tests DmtPermission constructors according to MEG specification 
  */
 
 public class DmtPermission {
@@ -65,17 +64,18 @@ public class DmtPermission {
 	}
 
 	/**
-	 * @testID testDmtPermission001
-	 * @testDescription It asserts that the actions passed in the constructor is
-	 *                  equals to DmtPermission.getActions() method (listed in
-	 *                  this order: Add, Delete, Exec, Get, Replace.).
+	 * It asserts that the actions passed in the constructor is equals to 
+	 * DmtPermission.getActions() method (listed in this order: 
+	 * Add, Get, Replace.).
+	 * 
+	 * @spec DmtPermission.DmtPermission(String,String)
 	 */
 	private void testDmtPermission001() {
 		try {
 			tbc.log("#testDmtPermission001");
 			StringTokenizer stringToken = new StringTokenizer(
-					new org.osgi.service.dmt.DmtPermission(
-							DmtTestControl.OSGi_LOG, DmtTestControl.ACTIONS)
+					new org.osgi.service.dmt.security.DmtPermission(
+							DmtConstants.OSGi_LOG, DmtConstants.ACTIONS)
 							.getActions(), ",");
 
 			boolean ordered = true;
@@ -85,16 +85,16 @@ public class DmtPermission {
 			boolean errorFound = false;
 			while (stringToken.hasMoreTokens()) {
 				String currentToken = stringToken.nextToken().trim();
-				if (currentToken.equals(org.osgi.service.dmt.DmtPermission.ADD)) {
+				if (currentToken.equals(org.osgi.service.dmt.security.DmtPermission.ADD)) {
 					hasADD = true;
 				} else if (currentToken
-						.equals(org.osgi.service.dmt.DmtPermission.GET)) {
+						.equals(org.osgi.service.dmt.security.DmtPermission.GET)) {
 					hasGET = true;
 					if (!hasADD) {
 						ordered = false;
 					}
 				} else if (currentToken
-						.equals(org.osgi.service.dmt.DmtPermission.REPLACE)) {
+						.equals(org.osgi.service.dmt.security.DmtPermission.REPLACE)) {
 					hasREPLACE = true;
 					if (!hasGET) {
 						ordered = false;
@@ -118,17 +118,17 @@ public class DmtPermission {
 	}
 
 	/**
-	 * @testID testDmtPermission002
-	 * @testDescription Asserts that the list of actions is really all of the
-	 *                  actions and that it is listed in this order: Add,
-	 *                  Delete, Exec, Get, Replace.
+	 * Asserts that the list of actions is really all of the actions and that 
+	 * it is listed in this order: Add, Delete, Exec, Get, Replace.
+	 * 
+	 * @spec DmtPermission.DmtPermission(String,String)
 	 */
 	private void testDmtPermission002() {
 		try {
 			tbc.log("#testDmtPermission002");
 			StringTokenizer stringToken = new StringTokenizer(
-					new org.osgi.service.dmt.DmtPermission(
-							DmtTestControl.OSGi_LOG, "*").getActions(), ",");
+					new org.osgi.service.dmt.security.DmtPermission(
+							DmtConstants.OSGi_LOG, "*").getActions(), ",");
 
 			boolean ordered = true;
 			boolean hasADD = false;
@@ -140,30 +140,30 @@ public class DmtPermission {
 
 			while (stringToken.hasMoreTokens()) {
 				String currentToken = stringToken.nextToken().trim();
-				if (currentToken.equals(org.osgi.service.dmt.DmtPermission.ADD)) {
+				if (currentToken.equals(org.osgi.service.dmt.security.DmtPermission.ADD)) {
 					hasADD = true;
 
 				} else if (currentToken
-						.equals(org.osgi.service.dmt.DmtPermission.DELETE)) {
+						.equals(org.osgi.service.dmt.security.DmtPermission.DELETE)) {
 					hasDELETE = true;
 					if (!hasADD) {
 						ordered = false;
 					}
 
 				} else if (currentToken
-						.equals(org.osgi.service.dmt.DmtPermission.EXEC)) {
+						.equals(org.osgi.service.dmt.security.DmtPermission.EXEC)) {
 					hasEXEC = true;
 					if (!hasDELETE) {
 						ordered = false;
 					}
 				} else if (currentToken
-						.equals(org.osgi.service.dmt.DmtPermission.GET)) {
+						.equals(org.osgi.service.dmt.security.DmtPermission.GET)) {
 					hasGET = true;
 					if (!hasEXEC) {
 						ordered = false;
 					}
 				} else if (currentToken
-						.equals(org.osgi.service.dmt.DmtPermission.REPLACE)) {
+						.equals(org.osgi.service.dmt.security.DmtPermission.REPLACE)) {
 					hasREPLACE = true;
 					if (!hasGET) {
 						ordered = false;
@@ -188,14 +188,14 @@ public class DmtPermission {
 	}
 
 	/**
-	 * @testID testDmtPermission003
-	 * @testDescription Asserts that NullPointerException is thrown if actions
-	 *                  are null
+	 * Asserts that NullPointerException is thrown if actions parameter is null
+	 * 
+	 * @spec DmtPermission.DmtPermission(String,String)
 	 */
 	private void testDmtPermission003() {
 		tbc.log("#testDmtPermission003");
 		try {
-			new org.osgi.service.dmt.DmtPermission(DmtTestControl.OSGi_LOG,
+			new org.osgi.service.dmt.security.DmtPermission(DmtConstants.OSGi_LOG,
 					null);
 			tbc.failException("#", NullPointerException.class);
 		} catch (NullPointerException e) {
@@ -208,14 +208,14 @@ public class DmtPermission {
 	}
 
 	/**
-	 * @testID testDmtPermission004
-	 * @testDescription Asserts that NullPointerException is thrown if dmtUri is
-	 *                  null
+	 * Asserts that NullPointerException is thrown if dmtUri is null
+	 * 
+	 * @spec DmtPermission.DmtPermission(String,String)
 	 */
 	private void testDmtPermission004() {
 		tbc.log("#testDmtPermission004");
 		try {
-			new org.osgi.service.dmt.DmtPermission(null, DmtTestControl.ACTIONS);
+			new org.osgi.service.dmt.security.DmtPermission(null, DmtConstants.ACTIONS);
 			tbc.failException("#", NullPointerException.class);
 		} catch (NullPointerException e) {
 			tbc.pass("NullPointerException correctly thrown");
@@ -227,15 +227,15 @@ public class DmtPermission {
 	}
 
 	/**
-	 * @testID testDmtPermission005
-	 * @testDescription Asserts that IllegalArgumentException is thrown if
-	 *                  actions are invalid
+	 * Asserts that IllegalArgumentException is thrown if actions are invalid
+	 * 
+	 * @spec DmtPermission.DmtPermission(String,String)
 	 */
 	private void testDmtPermission005() {
 		tbc.log("#testDmtPermission005");
 		try {
-			new org.osgi.service.dmt.DmtPermission(DmtTestControl.OSGi_LOG,
-					DmtTestControl.TITLE);
+			new org.osgi.service.dmt.security.DmtPermission(DmtConstants.OSGi_LOG,
+					DmtConstants.TITLE);
 			tbc.failException("#", IllegalArgumentException.class);
 		} catch (IllegalArgumentException e) {
 			tbc.pass("IllegalArgumentException correctly thrown");
@@ -247,15 +247,15 @@ public class DmtPermission {
 	}
 
 	/**
-	 * @testID testDmtPermission006
-	 * @testDescription Asserts that IllegalArgumentException is thrown if
-	 *                  dmtUri is invalid
+	 * Asserts that IllegalArgumentException is thrown if dmtUri is invalid
+	 * 
+	 * @spec DmtPermission.DmtPermission(String,String)
 	 */
 	private void testDmtPermission006() {
 		tbc.log("#testDmtPermission006");
 		try {
-			new org.osgi.service.dmt.DmtPermission(DmtTestControl.INVALID,
-					DmtTestControl.ACTIONS);
+			new org.osgi.service.dmt.security.DmtPermission(DmtConstants.INVALID,
+					DmtConstants.ACTIONS);
 			tbc.failException("#", IllegalArgumentException.class);
 		} catch (IllegalArgumentException e) {
 			tbc.pass("IllegalArgumentException correctly thrown");
@@ -267,18 +267,19 @@ public class DmtPermission {
 	}
 
 	/**
-	 * @testID testDmtPermission007
-	 * @testDescription Asserts that a wildcard is permitted on dmtUri
+	 * Asserts that a wildcard is permitted on dmtUri
+	 * 
+	 * @spec DmtPermission.DmtPermission(String,String)
 	 */
 	private void testDmtPermission007() {
 		tbc.log("#testDmtPermission007");
 		try {
-			String actions = new org.osgi.service.dmt.DmtPermission(
-					DmtTestControl.OSGi_ROOT + "/l*",
-					org.osgi.service.dmt.DmtPermission.GET).getActions();
+			String actions = new org.osgi.service.dmt.security.DmtPermission(
+					DmtConstants.OSGi_ROOT + "/l*",
+					org.osgi.service.dmt.security.DmtPermission.GET).getActions();
 
 			tbc.assertEquals("Asserts that a wildcard is permitted on dmtUri",
-					org.osgi.service.dmt.DmtPermission.GET, actions.trim());
+					org.osgi.service.dmt.security.DmtPermission.GET, actions.trim());
 		} catch (Exception e) {
 			tbc.fail("Unexpected exception: " + e.getClass().getName());
 		}
@@ -286,21 +287,21 @@ public class DmtPermission {
 	}
 
 	/**
-	 * @testID testDmtPermission008
-	 * @testDescription Asserts that a wildcard is permitted on dmtUri after '/'
-	 *                  character
+	 * Asserts that a wildcard is permitted on dmtUri after '/' character
+	 * 
+	 * @spec DmtPermission.DmtPermission(String,String)
 	 */
 	private void testDmtPermission008() {
 		tbc.log("#testDmtPermission008");
 		try {
-			String actions = new org.osgi.service.dmt.DmtPermission(
-					DmtTestControl.OSGi_ROOT + "/*",
-					org.osgi.service.dmt.DmtPermission.GET).getActions();
+			String actions = new org.osgi.service.dmt.security.DmtPermission(
+					DmtConstants.OSGi_ROOT + "/*",
+					org.osgi.service.dmt.security.DmtPermission.GET).getActions();
 
 			tbc
 					.assertEquals(
 							"Asserts that a wildcard is permitted on dmtUri after '/' character",
-							org.osgi.service.dmt.DmtPermission.GET, actions
+							org.osgi.service.dmt.security.DmtPermission.GET, actions
 									.trim());
 		} catch (Exception e) {
 			tbc.fail("Unexpected exception: " + e.getClass().getName());

@@ -27,7 +27,7 @@
  * REVISION HISTORY:
  *
  * Date          Author(s)
- * CR            Headline
+ * CR            Headline	
  * ============  ==============================================================
  * Jan 25, 2005  Andre Assad
  * CR 1          Implement MEG TCK
@@ -39,23 +39,21 @@
 
 package org.osgi.test.cases.dmt.main.tb1.DmtSession;
 
-import org.osgi.service.dmt.DmtAcl;
+import org.osgi.service.dmt.Acl;
 import org.osgi.service.dmt.DmtException;
-import org.osgi.service.dmt.DmtPermission;
-import org.osgi.service.dmt.DmtPrincipalPermission;
 import org.osgi.service.dmt.DmtSession;
+import org.osgi.service.dmt.security.DmtPermission;
+import org.osgi.service.dmt.security.DmtPrincipalPermission;
 import org.osgi.service.permissionadmin.PermissionInfo;
+import org.osgi.test.cases.dmt.main.tbc.DmtConstants;
 import org.osgi.test.cases.dmt.main.tbc.DmtTestControl;
 import org.osgi.test.cases.dmt.main.tbc.TestInterface;
-import org.osgi.test.cases.dmt.main.tbc.Plugin.TestExecPluginActivator;
+import org.osgi.test.cases.dmt.main.tbc.Plugin.ExecPlugin.TestExecPluginActivator;
+import org.osgi.test.cases.dmt.main.tbc.Plugin.ReadOnly.TestReadOnlyPluginActivator;
 
 /**
- * @author Andre Assad
- * 
- * @methodUnderTest org.osgi.service.dmt.DmtSession#deleteNode
- * @generalDescription This Test Case Validates the implementation of
- *                     <code>deleteNode<code> method, according to MEG reference
- *                     documentation (rfc0085).
+ * This Test Case Validates the implementation of <code>deleteNode<code> 
+ * method of DmtSession, according to MEG specification
  */
 public class DeleteNode implements TestInterface {
 	private DmtTestControl tbc;
@@ -64,7 +62,8 @@ public class DeleteNode implements TestInterface {
 		this.tbc = tbc;
 	}
 
-	public void run() {		
+	public void run() {	
+        prepare();
 		testDeleteNode001();
 		testDeleteNode002();
 		testDeleteNode003();
@@ -73,17 +72,15 @@ public class DeleteNode implements TestInterface {
 		testDeleteNode006();
 		testDeleteNode007();
 		testDeleteNode008();
-		testDeleteNode009();
-		testDeleteNode010();
-		testDeleteNode011();
-
 	}
-
-		/**
-	 * @testID testDeleteNode001
-	 * @testDescription This method tests that a DmtException is thrown using
-	 *                  the NODE_NOT_FOUND code whenever an invalid node is
-	 *                  deleted.
+    private void prepare() {
+        tbc.setPermissions(new PermissionInfo(DmtPermission.class.getName(), DmtConstants.ALL_NODES,DmtConstants.ALL_ACTIONS));
+    }
+	/**
+	 * This method asserts that DmtException.NODE_NOT_FOUND is thrown
+	 * if nodeUri points to a non-existing node 
+	 * 
+	 * @spec DmtSession.deleteNode(String)
 	 */
 	private void testDeleteNode001() {
 		DmtSession session = null;
@@ -101,30 +98,30 @@ public class DeleteNode implements TestInterface {
 					DmtException.NODE_NOT_FOUND, e.getCode());
 		} catch (Exception e) {
 			tbc.fail("Expected " + DmtException.class.getName() + " but was "
-					+ e.getClass().getName());
+					+ e.getClass().getName());	
 		} finally {
 			tbc.closeSession(session);
 		}
 	}
 
 	/**
-	 * @testID testDeleteNode002
-	 * @testDescription This method asserts that a DmtException with error code
-	 *                  equals to OTHER_ERROR is thrown.
+	 * This method asserts that DmtException.TRANSACTION_ERROR is thrown when this method is called
+	 * in a plugin that does not support atomic transactions and the session is LOCK_TYPE_ATOMIC
+	 * 
+	 * @spec DmtSession.deleteNode(String)
 	 */
 	private void testDeleteNode002() {
 		DmtSession session = null;
 		try {
 			tbc.log("#testDeleteNode002");
-
-			session = tbc.getDmtAdmin().getSession(DmtTestControl.OSGi_LOG,
-					DmtSession.LOCK_TYPE_EXCLUSIVE);
-			session.deleteNode(TestExecPluginActivator.INTERIOR_NODE);
+			session = tbc.getDmtAdmin().getSession(TestReadOnlyPluginActivator.ROOT,
+			    DmtSession.LOCK_TYPE_ATOMIC);
 			
+			session.deleteNode(TestReadOnlyPluginActivator.INTERIOR_NODE);
 			tbc.failException("", DmtException.class);
 		} catch (DmtException e) {
-			tbc.assertEquals("Asserting that DmtException code is OTHER_ERROR",
-					DmtException.OTHER_ERROR, e.getCode());
+			tbc.assertEquals("Asserting that DmtException code is TRANSACTION_ERROR",
+					DmtException.TRANSACTION_ERROR, e.getCode());
 		} catch (Exception e) {
 			tbc.fail("Expected " + DmtException.class.getName() + " but was "
 					+ e.getClass().getName());
@@ -134,72 +131,118 @@ public class DeleteNode implements TestInterface {
 	}
 
 	/**
-	 * @testID testDeleteNode003
-	 * @testDescription This method asserts that a DmtException with error code
-	 *                  equals to INVALID_URI is thrown.
+	 * This method asserts if IllegalStateException is thrown if this method is called 
+	 * when the session is LOCK_TYPE_SHARED
+	 * 
+	 * @spec DmtSession.deleteNode(String)
 	 */
 	private void testDeleteNode003() {
 		DmtSession session = null;
 		try {
 			tbc.log("#testDeleteNode003");
-
-			session = tbc.getDmtAdmin().getSession(".",
-					DmtSession.LOCK_TYPE_EXCLUSIVE);
-			session.deleteNode(DmtTestControl.INVALID_URI);
-			
-			tbc.failException("", DmtException.class);
-		} catch (DmtException e) {
-			tbc.assertEquals("Asserting that DmtException code is INVALID_URI",
-					DmtException.INVALID_URI, e.getCode());
+			session = tbc.getDmtAdmin().getSession(".",DmtSession.LOCK_TYPE_SHARED);
+			session.deleteNode(TestExecPluginActivator.INTERIOR_NODE);
+			tbc.failException("", IllegalStateException.class);
+		} catch (IllegalStateException e) {
+			tbc.pass("IllegalStateException correctly thrown");
 		} catch (Exception e) {
-			tbc.fail("Expected " + DmtException.class.getName() + " but was "
-					+ e.getClass().getName());
+			tbc.failException("", IllegalStateException.class);
 		} finally {
 			tbc.closeSession(session);
 		}
 	}
 
 	/**
-	 * @testID testDeleteNode004
-	 * @testDescription This method asserts that a DmtException with error code
-	 *                  equals to URI_TOO_LONG is thrown.
+	 * This method asserts that deleteNode is executed when the right Acl is set (Remote)
+	 * 
+	 * @spec DmtSession.deleteNode(String)
 	 */
 	private void testDeleteNode004() {
 		DmtSession session = null;
 		try {
 			tbc.log("#testDeleteNode004");
-
-			session = tbc.getDmtAdmin().getSession(".",
+            tbc.openSessionAndSetNodeAcl(TestExecPluginActivator.INTERIOR_NODE, DmtConstants.PRINCIPAL, Acl.DELETE );
+			tbc.setPermissions(new PermissionInfo(DmtPrincipalPermission.class.getName(),DmtConstants.PRINCIPAL,"*"));
+			session = tbc.getDmtAdmin().getSession(DmtConstants.PRINCIPAL, TestExecPluginActivator.INTERIOR_NODE,
 					DmtSession.LOCK_TYPE_EXCLUSIVE);
-			session.deleteNode(DmtTestControl.URI_LONG);
+			session.deleteNode(TestExecPluginActivator.INTERIOR_NODE);
 			
-			tbc.failException("", DmtException.class);
-		} catch (DmtException e) {
-			tbc.assertEquals(
-					"Asserting that DmtException code is URI_TOO_LONG",
-					DmtException.URI_TOO_LONG, e.getCode());
+			tbc.pass("deleteNode was successfully executed");
 		} catch (Exception e) {
-			tbc.fail("Expected " + DmtException.class.getName() + " but was "
-					+ e.getClass().getName());
+			tbc.fail("Unexpected Exception: " + e.getClass().getName() + " [Message: " + e.getMessage() +"]");
 		} finally {
-			tbc.closeSession(session);
+            tbc.setPermissions(new PermissionInfo(DmtPermission.class.getName(), DmtConstants.ALL_NODES,DmtConstants.ALL_ACTIONS));
+            tbc.cleanUp(session, TestExecPluginActivator.INTERIOR_NODE);
+            
 		}
+
 	}
 
 	/**
-	 * @testID testDeleteNode005
-	 * @testDescription This method asserts that a DmtException with error code
-	 *                  equals to COMMAND_NOT_ALLOWED is thrown.
+	 * This method asserts that deleteNode is executed when the right DmtPermission is set (Local)
+	 * 
+	 * @spec DmtSession.deleteNode(String)
 	 */
 	private void testDeleteNode005() {
 		DmtSession session = null;
 		try {
 			tbc.log("#testDeleteNode005");
-
-			session = tbc.getDmtAdmin().getSession(".",
+            tbc.setPermissions(new PermissionInfo(DmtPermission.class.getName(), DmtConstants.ALL_NODES,DmtPermission.DELETE));
+			session = tbc.getDmtAdmin().getSession(TestExecPluginActivator.ROOT,
 					DmtSession.LOCK_TYPE_EXCLUSIVE);
-			session.deleteNode(DmtTestControl.OSGi_ROOT);
+
+			session.deleteNode(TestExecPluginActivator.INTERIOR_NODE);
 			
+			tbc.pass("deleteNode was successfully executed");
+		} catch (Exception e) {
+			tbc.fail("Unexpected Exception: " + e.getClass().getName() + " [Message: " + e.getMessage() +"]");
+		
+		} finally {
+            tbc.setPermissions(new PermissionInfo(DmtPermission.class.getName(), DmtConstants.ALL_NODES,DmtConstants.ALL_ACTIONS));
+            tbc.cleanUp(session, null);
+            
+		}
+	}
+	
+	
+	/**
+	 * This method asserts that relative URI works as described.
+	 * 
+	 * @spec DmtSession.deleteNode(String)
+	 * 
+	 */
+	private void testDeleteNode006() {
+		DmtSession session = null;
+		try {
+			tbc.log("#testDeleteNode006");
+			session = tbc.getDmtAdmin().getSession(
+					TestExecPluginActivator.ROOT, DmtSession.LOCK_TYPE_ATOMIC);
+
+			session.deleteNode(TestExecPluginActivator.INTERIOR_NODE_NAME);
+
+			tbc.pass("A relative URI can be used with deleteNode.");
+		} catch (Exception e) {
+			tbc.fail("Unexpected Exception: " + e.getClass().getName()
+					+ " [Message: " + e.getMessage() + "]");
+		} finally {
+			tbc.closeSession(session);
+		}
+	}
+	
+	
+	/**
+	 * Asserts that DmtException with COMMAND_NOT_ALLOWED code is thrown when 
+	 * the target node is the root of the tree 
+
+	 * 
+	 * @spec DmtSession.deleteNode(String)
+	 */
+	private void testDeleteNode007() {
+		DmtSession session = null;
+		tbc.log("#testDeleteNode007");
+		try {
+			session = tbc.getDmtAdmin().getSession(TestExecPluginActivator.ROOT,DmtSession.LOCK_TYPE_EXCLUSIVE);
+			session.deleteNode(TestExecPluginActivator.ROOT);
 			tbc.failException("", DmtException.class);
 		} catch (DmtException e) {
 			tbc.assertEquals(
@@ -212,183 +255,30 @@ public class DeleteNode implements TestInterface {
 			tbc.closeSession(session);
 		}
 	}
-
 	/**
-	 * @testID testDeleteNode006
-	 * @testDescription This method asserts that deleteNode is
-	 *                  successfully executed when the correct permission is
-	 *                  assigned
-	 */
-	private void testDeleteNode006() {
-		DmtSession localSession = null;
-		DmtSession remoteSession = null;
-		try {
-			tbc.log("#testDeleteNode006");
-
-			localSession = tbc.getDmtAdmin().getSession(".",
-					DmtSession.LOCK_TYPE_EXCLUSIVE);
-			localSession.setNodeAcl(
-					TestExecPluginActivator.INTERIOR_NODE,
-					new DmtAcl(new String[] { DmtTestControl.PRINCIPAL },
-							new int[] { DmtAcl.DELETE }));
-			localSession.close();
-			
-			tbc.setPermissions(new PermissionInfo(DmtPrincipalPermission.class.getName(),DmtTestControl.PRINCIPAL,"*"));
-			remoteSession = tbc.getDmtAdmin().getSession(DmtTestControl.PRINCIPAL, TestExecPluginActivator.INTERIOR_NODE,
-					DmtSession.LOCK_TYPE_EXCLUSIVE);
-			remoteSession.deleteNode(TestExecPluginActivator.INTERIOR_NODE);
-			
-			tbc.pass("deleteNode was successfully executed");
-		} catch (Exception e) {
-			tbc.fail("Unexpected Exception: " + e.getClass().getName() + " [Message: " + e.getMessage() +"]");
-		} finally {
-			tbc.cleanUp(localSession, remoteSession, TestExecPluginActivator.INTERIOR_NODE);
-		}
-
-	}
-
-	/**
-	 * @testID testDeleteNode007
-	 * @testDescription This method asserts that deleteNode is successfully executed 
-	 * 					when the correct permission is assigned
-	 */
-	private void testDeleteNode007() {
-		DmtSession session = null;
-		try {
-			tbc.log("#testDeleteNode007");
-
-			session = tbc.getDmtAdmin().getSession(TestExecPluginActivator.ROOT,
-					DmtSession.LOCK_TYPE_EXCLUSIVE);
-
-			tbc.setPermissions(new PermissionInfo(DmtPermission.class
-					.getName(), DmtTestControl.ALL_NODES, DmtPermission.DELETE));
-
-			session.deleteNode(TestExecPluginActivator.INTERIOR_NODE);
-			
-			tbc.pass("deleteNode was successfully executed");
-		} catch (Exception e) {
-			tbc.fail("Unexpected Exception: " + e.getClass().getName() + " [Message: " + e.getMessage() +"]");
-		
-		} finally {
-			tbc.cleanUp(session, null, null);
-		}
-	}
-	/**
-	 * @testID testDeleteNode008
-	 * @testDescription This method asserts that a DmtException with error code
-	 *                  equals to PERMISSION_DENIED is thrown.
+	 * Asserts that DmtException with COMMAND_NOT_ALLOWED code is thrown when 
+	 * if the underlying plugin is read-only 
+	 * 
+	 * @spec DmtSession.deleteNode(String)
 	 */
 	private void testDeleteNode008() {
-		DmtSession localSession = null;
-		DmtSession remoteSession = null;
+		DmtSession session = null;
+		tbc.log("#testDeleteNode008");
 		try {
-			tbc.log("#testDeleteNode008");
-
-			localSession = tbc.getDmtAdmin().getSession(".",
-					DmtSession.LOCK_TYPE_EXCLUSIVE);
-			localSession.setNodeAcl(
-					TestExecPluginActivator.INTERIOR_NODE,
-					new DmtAcl(new String[] { DmtTestControl.PRINCIPAL },
-							new int[] { DmtAcl.EXEC }));
-			localSession.close();
-			
-			tbc.setPermissions(new PermissionInfo(DmtPrincipalPermission.class.getName(),DmtTestControl.PRINCIPAL,"*"));
-			remoteSession = tbc.getDmtAdmin().getSession(DmtTestControl.PRINCIPAL, TestExecPluginActivator.INTERIOR_NODE,
-					DmtSession.LOCK_TYPE_EXCLUSIVE);
-
-			remoteSession.deleteNode(TestExecPluginActivator.INTERIOR_NODE);
-			
+			session = tbc.getDmtAdmin().getSession(TestExecPluginActivator.ROOT,DmtSession.LOCK_TYPE_EXCLUSIVE);
+			session.deleteNode(TestExecPluginActivator.INTERIOR_NODE);
 			tbc.failException("", DmtException.class);
 		} catch (DmtException e) {
 			tbc.assertEquals(
-					"Asserting that DmtException code is PERMISSION_DENIED",
-					DmtException.PERMISSION_DENIED, e.getCode());
+					"Asserting that DmtException code is COMMAND_NOT_ALLOWED",
+					DmtException.COMMAND_NOT_ALLOWED, e.getCode());
 		} catch (Exception e) {
 			tbc.fail("Expected " + DmtException.class.getName() + " but was "
 					+ e.getClass().getName());
-		} finally {
-			tbc.cleanUp(localSession, remoteSession, TestExecPluginActivator.INTERIOR_NODE);
-		}
-
-	}
-
-	/**
-	 * @testID testDeleteNode009
-	 * @testDescription This method asserts that an SecurityException is thrown
-	 *                  when deleteNode is called without the right permission
-	 */
-	private void testDeleteNode009() {
-		DmtSession session = null;
-		try {
-			tbc.log("#testDeleteNode009");
-
-			session = tbc.getDmtAdmin().getSession(TestExecPluginActivator.ROOT,
-					DmtSession.LOCK_TYPE_EXCLUSIVE);
-
-			tbc.setPermissions(new PermissionInfo(DmtPermission.class
-					.getName(), DmtTestControl.ALL_NODES, DmtPermission.EXEC));
-
-			session.deleteNode(TestExecPluginActivator.INTERIOR_NODE);
-			
-			tbc.failException("#", SecurityException.class);
-		} catch (SecurityException e) {
-			tbc.pass("The Exception was SecurityException");
-		} catch (Exception e) {
-			tbc.fail("Expected " + SecurityException.class.getName()
-					+ " but was " + e.getClass().getName());
-		} finally {
-			tbc.cleanUp(session, null, null);
-		}
-	}
-	/**
-	 * @testID testDeleteNode010
-	 * @testDescription This method asserts that an IllegalStateException is
-	 *                  thrown when attemps to delete a node using a closed
-	 *                  session.
-	 */
-	private void testDeleteNode010() {
-		DmtSession session = null;
-		try {
-			tbc.log("#testDeleteNode010");
-
-			session = tbc.getDmtAdmin().getSession(".",
-					DmtSession.LOCK_TYPE_EXCLUSIVE);
-			session.close();
-			
-			session.deleteNode(TestExecPluginActivator.INTERIOR_NODE);
-			
-			tbc.failException("", IllegalStateException.class);
-		} catch (IllegalStateException e) {
-			tbc.pass("The Exception was IllegalStateException");
-		} catch (Exception e) {
-			tbc.fail("Expected " + IllegalStateException.class.getName()
-					+ " but was " + e.getClass().getName());
 		} finally {
 			tbc.closeSession(session);
 		}
 	}
 	
-	/**
-	 * @testID testDeleteNode011
-	 * @testDescription This method asserts that relative URI works as described.
-	 * 
-	 */
-	private void testDeleteNode011() {
-		DmtSession session = null;
-		try {
-			tbc.log("#testDeleteNode011");
-			tbc.setPermissions(new PermissionInfo(DmtPermission.class.getName(), DmtTestControl.ALL_NODES,DmtTestControl.ALL_ACTIONS));
-			session = tbc.getDmtAdmin().getSession(
-					TestExecPluginActivator.ROOT, DmtSession.LOCK_TYPE_ATOMIC);
 
-			session.deleteNode(TestExecPluginActivator.INTERIOR_VALUE);
-
-			tbc.pass("A relative URI can be used with deleteNode.");
-		} catch (Exception e) {
-			tbc.fail("Unexpected Exception: " + e.getClass().getName()
-					+ " [Message: " + e.getMessage() + "]");
-		} finally {
-			tbc.closeSession(session);
-		}
-	}	
 }

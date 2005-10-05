@@ -40,16 +40,15 @@
 package org.osgi.test.cases.dmt.main.tb1.DmtSession;
 
 import org.osgi.service.dmt.DmtSession;
+import org.osgi.service.permissionadmin.PermissionInfo;
 import org.osgi.test.cases.dmt.main.tbc.DmtTestControl;
 import org.osgi.test.cases.dmt.main.tbc.TestInterface;
 
 /**
  * @author Andre Assad
  * 
- * @methodUnderTest org.osgi.service.dmt.DmtSession#getLockType
- * @generalDescription This Test Case Validates the implementation of
- *                     <code>getLockType<code> method, according to MEG reference
- *                     documentation.
+ * This test case validates the implementation of <code>getLockType<code> method of DmtSession, 
+ * according to MEG specification
  */
 public class GetLockType implements TestInterface {
 	private DmtTestControl tbc;
@@ -59,15 +58,22 @@ public class GetLockType implements TestInterface {
 	}
 
 	public void run() {
+        prepare();
 		testGetLockType001();
 		testGetLockType002();
 		testGetLockType003();
 	}
 
+    private void prepare() {
+        //This method do not throw any exceptions, so, if it is checking for DmtPermission an exception is
+        //incorrectly thrown.
+        tbc.setPermissions(new PermissionInfo[0]);
+    }
 	/**
-	 * @testID testGetLockType001
-	 * @testDescription This method asserts the current type of the session's
-	 *                  lock.
+	 * This method asserts that DmtSession.LOCK_TYPE_ATOMIC is returned when
+	 * getLockType is called in an atomic session 
+	 * 
+	 * @spec DmtSession.getLockType()
 	 */
 	private void testGetLockType001() {
 		DmtSession session = null;
@@ -86,9 +92,10 @@ public class GetLockType implements TestInterface {
 	}
 
 	/**
-	 * @testID testGetLockType002
-	 * @testDescription This method asserts the current type of the session's
-	 *                  lock.
+	 * This method asserts that DmtSession.LOCK_TYPE_EXCLUSIVE is returned when
+	 * getLockType is called in an exclusive session 
+	 * 
+	 * @spec DmtSession.getLockType()
 	 */
 	private void testGetLockType002() {
 		DmtSession session = null;
@@ -107,9 +114,10 @@ public class GetLockType implements TestInterface {
 	}
 
 	/**
-	 * @testID testGetLockType003
-	 * @testDescription This method asserts the current type of the session's
-	 *                  lock.
+	 * This method asserts that DmtSession.LOCK_TYPE_SHARED is returned when
+	 * getLockType is called in a read only session 
+	 * 
+	 * @spec DmtSession.getLockType()
 	 */
 	private void testGetLockType003() {
 		DmtSession session = null;

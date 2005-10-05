@@ -36,17 +36,16 @@
 
 package org.osgi.test.cases.dmt.main.tb1.DmtSession;
 
-import org.osgi.service.dmt.DmtException;
 import org.osgi.service.dmt.DmtSession;
+import org.osgi.service.permissionadmin.PermissionInfo;
 import org.osgi.test.cases.dmt.main.tbc.DmtTestControl;
 import org.osgi.test.cases.dmt.main.tbc.TestInterface;
 /**
  * @author Luiz Felipe Guimaraes
  * 
- * @methodUnderTest org.osgi.service.dmt.DmtSession#commit
- * @generalDescription This Test Case Validates the implementation of
- *                     <code>commit<code> method, according to MEG reference
- *                     documentation (rfc0085).
+ * This test case validates the implementation of <code>commit</code> method of DmtSession, 
+ * according to MEG specification.
+ * 
  */
 public class Commit implements TestInterface {
 	private DmtTestControl tbc;
@@ -56,40 +55,44 @@ public class Commit implements TestInterface {
 	}
 
 	public void run() {
+        prepare();
 		testCommit001();
 		testCommit002();
 		testCommit003();
         testCommit004();
 	}
-
+    private void prepare() {
+        //TODO JavaDoc says it can throw SecurityException but which DmtPermission is needed?
+        tbc.setPermissions(new PermissionInfo[0]);
+    }
 	/**
-	 * @testID testCommit001
-	 * @testDescription This method asserts that whenever a DmtSession with
-	 *                  LOCK_TYPE_EXCLUSIVE lock is created, the commit
-	 *                  operation is not supported.
+	 * This method asserts that whenever a DmtSession with LOCK_TYPE_EXCLUSIVE 
+	 * lock is created, the commit operation is not supported.
+	 * 
+	 * @spec DmtSession.commit()
 	 */
 	private void testCommit001() {
 		DmtSession session = null;
 		try {
 			tbc.log("#testCommit001");
-			session = tbc.getDmtAdmin().getSession(".",DmtSession.LOCK_TYPE_EXCLUSIVE);		
+			session = tbc.getDmtAdmin().getSession(".",DmtSession.LOCK_TYPE_EXCLUSIVE);
 			session.commit();
-			tbc.failException("#", DmtException.class);
-		} catch (DmtException e) {
-			tbc.assertEquals("Asserting DmtException type",
-					DmtException.FEATURE_NOT_SUPPORTED, e.getCode());
+			tbc.failException("#", IllegalStateException.class);
+		} catch (IllegalStateException e) {
+			tbc.pass("IllegalStateException is thrown if the session is tried to commit a non-atomic session");
 		} catch (Exception e) {
-			tbc.fail("Unexpected Exception: " + e.getClass().getName() + " [Message: " + e.getMessage() +"]");
+			tbc.fail("Expected " + IllegalStateException.class.getName() + " but was "
+					+ e.getClass().getName());
 		} finally {
 			tbc.closeSession(session);
 		}
 	}
 
 	/**
-	 * @testID testCommit002
-	 * @testDescription This method asserts that whenever a DmtSession with
-	 *                  LOCK_TYPE_SHARED lock is created, the commit operation
-	 *                  is not supported (second case).
+	 * This method asserts that whenever a DmtSession with LOCK_TYPE_SHARED lock is created, 
+	 * the commit operation is not supported (second case).
+	 * 
+	 * @spec DmtSession.commit()
 	 */
 	private void testCommit002() {
 		DmtSession session = null;
@@ -97,43 +100,43 @@ public class Commit implements TestInterface {
 			tbc.log("#testCommit002");
 			session = tbc.getDmtAdmin().getSession(".",DmtSession.LOCK_TYPE_SHARED);
 			session.commit();
-			tbc.failException("#", DmtException.class);
-		} catch (DmtException e) {
-			tbc.assertEquals("Asserting DmtException type",
-					DmtException.FEATURE_NOT_SUPPORTED, e.getCode());
+			tbc.failException("#", IllegalStateException.class);
+		} catch (IllegalStateException e) {
+			tbc.pass("IllegalStateException is thrown if the session is tried to commit a non-atomic session");
 		} catch (Exception e) {
-			tbc.fail("Unexpected Exception: " + e.getClass().getName() + " [Message: " + e.getMessage() +"]");
+			tbc.fail("Expected " + IllegalStateException.class.getName() + " but was "
+					+ e.getClass().getName());
 		} finally {
 			tbc.closeSession(session);
 		}
 	}
 
-	/**
-	 * @testID testCommit003
-	 * @testDescription This method asserts that an IllegalStateException is
-	 *                  thrown when a session is already closed
-	 */
-	private void testCommit003() {
-		DmtSession session = null;
-		try {
-			tbc.log("#testCommit003");
-			session = tbc.getDmtAdmin().getSession(".",DmtSession.LOCK_TYPE_ATOMIC);
-			session.close();
-			session.commit();
-			tbc.failException("#", IllegalStateException.class);
-		} catch (IllegalStateException e) {
-			tbc.pass("The exception was IllegalStateException");
-		} catch (Exception e) {
-			tbc.fail("Expected " + IllegalStateException.class.getName()
-					+ " but was " + e.getClass().getName());
-		} finally {
-			tbc.closeSession(session);
-		}
-	}
     
     /**
-     * @testID testCommit004
-     * @testDescription This method asserts that commit() will pass correctly.
+     * This method asserts that commit() passes correctly.
+     * 
+     * @spec DmtSession.commit()
+     */
+    private void testCommit003() {
+        DmtSession session = null;
+        try {
+            tbc.log("#testCommit003");
+            session = tbc.getDmtAdmin().getSession(".",DmtSession.LOCK_TYPE_ATOMIC);
+            session.commit();
+            session.close();
+            tbc.pass("Asserting that session was committed correctly");
+        } catch (Exception e) {
+            tbc.fail("Expected " + IllegalStateException.class.getName()
+                    + " but was " + e.getClass().getName());
+        } finally {
+            tbc.closeSession(session);
+        }
+    }
+    
+    /**
+     * This method asserts that after a commit() the session is not closed.
+     * 
+     * @spec DmtSession.commit()
      */
     private void testCommit004() {
         DmtSession session = null;
@@ -141,11 +144,9 @@ public class Commit implements TestInterface {
             tbc.log("#testCommit004");
             session = tbc.getDmtAdmin().getSession(".",DmtSession.LOCK_TYPE_ATOMIC);
             session.commit();
-            session.close();
-            tbc.pass("Asserting that session were commited correctly");
+            tbc.assertEquals("Asserting that after a commit(), the session is not closed.", session.getState(), DmtSession.STATE_OPEN);
         } catch (Exception e) {
-            tbc.fail("Expected " + IllegalStateException.class.getName()
-                    + " but was " + e.getClass().getName());
+        	tbc.fail("Unexpected Exception: " + e.getClass().getName() + " [Message: " + e.getMessage() +"]");
         } finally {
             tbc.closeSession(session);
         }

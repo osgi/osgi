@@ -39,19 +39,19 @@
 
 package org.osgi.test.cases.dmt.main.tbc.DmtException;
 
+import java.util.Iterator;
 import java.util.Vector;
-
+import org.osgi.test.cases.dmt.main.tbc.DmtConstants;
 import org.osgi.test.cases.dmt.main.tbc.DmtTestControl;
+import org.osgi.test.cases.dmt.main.tbc.Plugin.ExecPlugin.TestExecPluginActivator;
 
 /**
- * @methodUnderTest org.osgi.service.dmt.DmtException#DmtException
- * @generalDescription This class tests DmtException constructors according with
- *                     MEG specification (rfc0085)
+ * This class tests DmtException constructors according to MEG specification 
  */
 
 public class DmtException {
 	private DmtTestControl tbc;
-	private static final String EXCEPTION_MSG = "test";
+	private static final String EXCEPTION_MSG = "exception_msg";
 	public DmtException(DmtTestControl tbc) {
 		this.tbc = tbc;
 	}
@@ -67,28 +67,82 @@ public class DmtException {
 		testDmtException008();
 		testDmtException009();
 		testDmtException010();
+        testDmtException011();
+        testDmtException012();
 	}
 
 	/**
-	 * @testID testDmtException001
-	 * @testDescription Tests if the values that are passed as parameters for
-	 *                  the constructor are equal to the values returned through
-	 *                  its corresponding get methods 
+	 * Tests if the values that are passed as parameters for the constructor are equal 
+	 * to the values returned through its corresponding get methods using the constructor
+     * DmtException(String,int,String)
+	 * 
+	 * @spec DmtException.DmtException(String,int,String)
 	 * 
 	 */
 	private void testDmtException001() {
 		tbc.log("#testDmtException001");
 		org.osgi.service.dmt.DmtException de = new org.osgi.service.dmt.DmtException(
-				DmtTestControl.OSGi_LOG,
+				DmtConstants.OSGi_LOG,
 				org.osgi.service.dmt.DmtException.INVALID_URI,
-				DmtTestControl.MESSAGE);
+				DmtConstants.MESSAGE);
 
-		tbc.assertEquals("Asserts getURI() method", DmtTestControl.OSGi_LOG, de
-				.getURI());
-		tbc.assertTrue("Asserts getMessage() method", de.getMessage().indexOf(
-				DmtTestControl.MESSAGE) > -1);
+		tbc.assertEquals("Asserts getURI() method", DmtConstants.OSGi_LOG, de.getURI());
+		tbc.assertEquals("Asserts getMessage() method","INVALID_URI: '"+DmtConstants.OSGi_LOG+"': "+DmtConstants.MESSAGE,de.getMessage());
+		
+		tbc.assertEquals("Asserts getCode() method",org.osgi.service.dmt.DmtException.INVALID_URI, de.getCode());
+		
+		tbc.assertEquals("Asserts getCauses() method", 0, de.getCauses().size());
+		tbc.assertNull("Asserts getCause() method", de.getCause());
+		tbc.assertTrue("Asserts isFatal() method", !de.isFatal());
+	}
+	
+	
+	/**
+	 * Tests if the values that are passed as parameters for the constructor are equal 
+	 * to the values returned through its corresponding get methods using the constructor
+     * DmtException(String,int,String) and 'null' values whenever it is possible
+	 * 
+	 * @spec DmtException.DmtException(String,int,String)
+	 * 
+	 */
+	private void testDmtException002() {
+		tbc.log("#testDmtException002");
+		org.osgi.service.dmt.DmtException de = new org.osgi.service.dmt.DmtException((String)null, org.osgi.service.dmt.DmtException.CONCURRENT_ACCESS, null);
+		tbc.assertNull("Asserts getURI() method", de.getURI());
+        
+		tbc.assertEquals("Asserts getCode() method", org.osgi.service.dmt.DmtException.CONCURRENT_ACCESS, de.getCode());
+        tbc.assertEquals("Asserts getMessage() method","CONCURRENT_ACCESS",de.getMessage());
+		tbc.assertNull("Asserts getCause() method", de.getCause());		
+		tbc.assertTrue("Asserts that getCauses() returns an empty Vector if there is no cause", 
+				de.getCauses().size()==0);
+		tbc.assertTrue("Asserts isFatal() method", !de.isFatal());
+		
+	}
+	
+	/**
+	 * Tests if the values that are passed as parameters for the constructor are equal 
+	 * to the values returned through its corresponding get methods using the constructor
+     * DmtException(String[],int,String)
+	 * 
+	 * @spec DmtException.DmtException(String[],int,String)
+	 * 
+	 */
+	private void testDmtException003() {
+		tbc.log("#testDmtException003");
+		org.osgi.service.dmt.DmtException de = new org.osgi.service.dmt.DmtException(
+				new String[] {".","a","b","c" },
+				org.osgi.service.dmt.DmtException.COMMAND_NOT_ALLOWED,
+				DmtConstants.MESSAGE);
+
+		String uri = "./a/b/c";
+
+		tbc.assertEquals("Asserts getURI() method", uri, de.getURI());
+
+        tbc.assertEquals("Asserts getMessage() method","COMMAND_NOT_ALLOWED: '"+uri+"': "+DmtConstants.MESSAGE,de.getMessage());
+
 		tbc.assertEquals("Asserts getCode() method",
-				org.osgi.service.dmt.DmtException.INVALID_URI, de.getCode());
+				org.osgi.service.dmt.DmtException.COMMAND_NOT_ALLOWED, de.getCode());
+		
 		tbc.assertEquals("Asserts getCauses() method", 0, de.getCauses().size());
 		tbc.assertNull("Asserts getCause() method", de.getCause());
 		tbc.assertTrue("Asserts isFatal() method", !de.isFatal());
@@ -97,45 +151,50 @@ public class DmtException {
 	
 	
 	/**
-	 * @testID testDmtException002
-	 * @testDescription Tests if the values that are passed as parameters for
-	 *                  the constructor are equal to the values returned through
-	 *                  its corresponding get methods
+	 * Tests if the values that are passed as parameters for the constructor are equal 
+	 * to the values returned through its corresponding get methods using the constructor
+     * DmtException(String[],int,String) and 'null' values whenever it is possible
+	 * 
+	 * @spec DmtException.DmtException(String[],int,String)
 	 * 
 	 */
-	private void testDmtException002() {
-		tbc.log("#testDmtException002");
-		org.osgi.service.dmt.DmtException de = new org.osgi.service.dmt.DmtException(null, -1, null);
-		tbc.assertNull("Asserts getURI() method", de.getURI());
-		tbc.assertNull("Asserts getMessage() method", de.getMessage());
-		tbc.assertEquals("Asserts getCode() method", -1, de.getCode());
+	private void testDmtException004() {
+		tbc.log("#testDmtException004");
+		org.osgi.service.dmt.DmtException de = new org.osgi.service.dmt.DmtException((String[])null, org.osgi.service.dmt.DmtException.ALERT_NOT_ROUTED, null);
 		
+		tbc.assertNull("Asserts getURI() method", de.getURI());
+		
+		tbc.assertEquals("Asserts getCode() method", org.osgi.service.dmt.DmtException.ALERT_NOT_ROUTED, de.getCode());
+        tbc.assertEquals("Asserts getMessage() method","ALERT_NOT_ROUTED",de.getMessage());
 		tbc.assertNull("Asserts getCause() method", de.getCause());		
-		tbc.assertTrue("Asserts that getCauses() returns an empty Vector if there is no cause", de.getCauses().size()==0);
+		tbc.assertTrue("Asserts that getCauses() returns an empty Vector if there is no cause", 
+				de.getCauses().size()==0);
 		tbc.assertTrue("Asserts isFatal() method", !de.isFatal());
 		
 	}
-	
 
 	/**
-	 * @testID testDmtException003
-	 * @testDescription Tests if the values that are passed as parameters for
-	 *                  the constructor are equal to the values returned through
-	 *                  its corresponding get methods
+	 * Tests if the values that are passed as parameters for the constructor are equal 
+	 * to the values returned through its corresponding get methods using the constructor
+	 * DmtException(String,int,String,Throwable)
+     * 
+	 * @spec DmtException.DmtException(String,int,String,Throwable)
+	 * 
 	 */
-	private void testDmtException003() {
-		tbc.log("#testDmtException003");
+	private void testDmtException005() {
+		tbc.log("#testDmtException005");
 		org.osgi.service.dmt.DmtException de = new org.osgi.service.dmt.DmtException(
-				DmtTestControl.OSGi_LOG,
-				org.osgi.service.dmt.DmtException.FORMAT_NOT_SUPPORTED,
-				DmtTestControl.MESSAGE, new Exception());
+				DmtConstants.OSGi_LOG,
+				org.osgi.service.dmt.DmtException.CONCURRENT_ACCESS,
+				DmtConstants.MESSAGE, new Exception());
 
-		tbc.assertEquals("Asserts getURI() method", DmtTestControl.OSGi_LOG, de
+		tbc.assertEquals("Asserts getURI() method", DmtConstants.OSGi_LOG, de
 				.getURI());
-		tbc.assertTrue("Asserts getMessage() method", de.getMessage().indexOf(
-				DmtTestControl.MESSAGE) > -1);
+		
+
+        tbc.assertEquals("Asserts getMessage() method","CONCURRENT_ACCESS: '"+DmtConstants.OSGi_LOG+"': "+DmtConstants.MESSAGE,de.getMessage());
 		tbc.assertEquals("Asserts getCode() method",
-				org.osgi.service.dmt.DmtException.FORMAT_NOT_SUPPORTED, de.getCode());
+				org.osgi.service.dmt.DmtException.CONCURRENT_ACCESS, de.getCode());
 		
 		tbc.assertException("Asserts getCause() method", Exception.class, de.getCause());
 		
@@ -146,211 +205,230 @@ public class DmtException {
 		tbc.assertTrue("Asserts isFatal() method", !de.isFatal());
 	}
 	/**
-	 * @testID testDmtException004
-	 * @testDescription Tests if the values that are passed as parameters for
-	 *                  the constructor are equal to the values returned through
-	 *                  its corresponding get methods
-	 */
-	private void testDmtException004() {
-		tbc.log("#testDmtException004");
-		org.osgi.service.dmt.DmtException de = new org.osgi.service.dmt.DmtException(null, -1, null,
-				(Throwable)null);
-		tbc.assertNull("Asserts getURI() method", de.getURI());
-		tbc.assertNull("Asserts getMessage() method", de.getMessage());
-		tbc.assertEquals("Asserts getCode() method", -1, de.getCode());
-		tbc.assertNull("Asserts getCause() method",de.getCause());
-		tbc.assertTrue("Asserts that getCauses() returns an empty Vector if there is no cause", de.getCauses().size()==0);
-		tbc.assertTrue("Asserts isFatal() method", !de.isFatal());
-
-	}	
-
-	/**
-	 * @testID testDmtException005
-	 * @testDescription Tests if the values that are passed as parameters for
-	 *                  the constructor are equal to the values returned through
-	 *                  its corresponding get methods
-	 */
-	private void testDmtException005() {
-		tbc.log("#testDmtException005");
-		Vector causes = new Vector();
-		causes.add(0, new Exception(EXCEPTION_MSG));
-
-		org.osgi.service.dmt.DmtException de = new org.osgi.service.dmt.DmtException(
-				DmtTestControl.OSGi_LOG,
-				org.osgi.service.dmt.DmtException.METADATA_MISMATCH,
-				DmtTestControl.MESSAGE, causes);
-		
-		tbc.assertEquals("Asserts getURI() method", DmtTestControl.OSGi_LOG,de.getURI());
-		tbc.assertTrue("Asserts getMessage() method", de.getMessage().indexOf(
-				DmtTestControl.MESSAGE) > -1);
-		tbc.assertEquals("Asserts getCode() method",
-				org.osgi.service.dmt.DmtException.METADATA_MISMATCH, de.getCode());
-		
-		tbc.assertException("Asserts getCause() method", Exception.class, de.getCause());
-		tbc.assertTrue("Asserts getCause() method", de.getCause().toString().indexOf(EXCEPTION_MSG)>-1);
-		tbc.assertEquals("Asserts the size of getCauses() method", causes.size(), de.getCauses().size());
-		tbc.assertTrue("Asserts the name of getCauses() method",
-				(((Exception) de.getCauses().elementAt(0)).toString().indexOf(
-						EXCEPTION_MSG) > -1));
-		tbc.assertTrue("Asserts isFatal() method", !de.isFatal());
-
-	}
-	/**
-	 * @testID testDmtException006
-	 * @testDescription Tests if the values that are passed as parameters for
-	 *                  the constructor are equal to the values returned through
-	 *                  its corresponding get methods
+	 * Tests if the values that are passed as parameters for the constructor are equal 
+	 * to the values returned through its corresponding get methods using the constructor
+     * DmtException(String,int,String,Throwable)  and 'null' values whenever it is possible
+	 * 
+	 * @spec DmtException.DmtException(String,int,String,Throwable)
+	 * 
 	 */
 	private void testDmtException006() {
 		tbc.log("#testDmtException006");
-		Vector causes = new Vector();
-		causes.add(0, new IllegalArgumentException(EXCEPTION_MSG));
-
-		org.osgi.service.dmt.DmtException de = new org.osgi.service.dmt.DmtException(null, -1, null, (Vector)null);
+		org.osgi.service.dmt.DmtException de = new org.osgi.service.dmt.DmtException((String)null, org.osgi.service.dmt.DmtException.COMMAND_FAILED, null,
+				(Throwable)null);
 		tbc.assertNull("Asserts getURI() method", de.getURI());
-		tbc.assertNull("Asserts getMessage() method", de.getMessage());
-		tbc.assertEquals("Asserts getCode() method", -1, de.getCode());
+        tbc.assertEquals("Asserts getMessage() method","COMMAND_FAILED",de.getMessage());
+		
+		tbc.assertEquals("Asserts getCode() method",  org.osgi.service.dmt.DmtException.COMMAND_FAILED, de.getCode());
+		
 		tbc.assertNull("Asserts getCause() method",de.getCause());
-		tbc.assertTrue("Asserts that getCauses() returns an empty Vector if there is no cause", de.getCauses().size()==0);
+		tbc.assertTrue("Asserts that getCauses() returns an empty Vector if there is no cause", 
+				de.getCauses().size()==0);
 		tbc.assertTrue("Asserts isFatal() method", !de.isFatal());
 
-	}
+	}	
 	/**
-	 * @testID testDmtException007
-	 * @testDescription Tests if the values the method isFatal() returns true
-	 *                  correctly
+	 * Tests if the values that are passed as parameters for the constructor are equal 
+	 * to the values returned through its corresponding get methods using the constructor
+     * DmtException(String[],int,String,Throwable)
+	 * 
+	 * @spec DmtException.DmtException(String[],int,String,Throwable)
+	 * 
 	 */
 	private void testDmtException007() {
 		tbc.log("#testDmtException007");
-		Vector causes = new Vector();
-		causes.add(0, new Exception(EXCEPTION_MSG));
 		org.osgi.service.dmt.DmtException de = new org.osgi.service.dmt.DmtException(
-				DmtTestControl.OSGi_LOG,
-				org.osgi.service.dmt.DmtException.INVALID_URI,
-				DmtTestControl.MESSAGE, causes, true);
+				new String[] {".","d", "e", "f"},
+				org.osgi.service.dmt.DmtException.REMOTE_ERROR,
+				DmtConstants.MESSAGE, new IllegalArgumentException());
+		String uri = "./d/e/f";
 
-		tbc.assertEquals("Asserts getURI() method", DmtTestControl.OSGi_LOG, de
-				.getURI());
-		tbc.assertTrue("Asserts getMessage() method", de.getMessage().indexOf(
-				DmtTestControl.MESSAGE) > -1);
+		tbc.assertEquals("Asserts getURI() method", uri, de.getURI());
+
+        tbc.assertEquals("Asserts getMessage() method","REMOTE_ERROR: '"+uri+"': "+DmtConstants.MESSAGE,de.getMessage());
+        
 		tbc.assertEquals("Asserts getCode() method",
-				org.osgi.service.dmt.DmtException.INVALID_URI, de.getCode());
-		tbc.assertEquals("Asserts the size of getCauses() method", 1, de
-				.getCauses().size());
-		tbc.assertTrue("Asserts the name of getCauses() method",
-				(((Exception) de.getCauses().elementAt(0)).toString().indexOf(
-						EXCEPTION_MSG) > -1));
-		tbc.assertTrue("Asserts isFatal() method", de.isFatal());
+				org.osgi.service.dmt.DmtException.REMOTE_ERROR, de.getCode());
+		
+		tbc.assertException("Asserts getCause() method", IllegalArgumentException.class, de.getCause());
+		
+		tbc.assertEquals("Asserts getCauses() method", 1, de.getCauses().size());
+		
+		tbc.assertException("Asserts getCauses() method", IllegalArgumentException.class,
+				(Exception) de.getCauses().get(0));
+		tbc.assertTrue("Asserts isFatal() method", !de.isFatal());
 	}
-
 	/**
-	 * @testID testDmtException008
-	 * @testDescription Tests if the values the method isFatal() returns true
-	 *                  correctly, that getCause returns null if there is no cause
-	 * 					and that getCauses returns an empty vector
+	 * Tests if the values that are passed as parameters for the constructor are equal 
+	 * to the values returned through its corresponding get methods using the constructor
+	 * DmtException(String[],int,String,Throwable) and 'null' values whenever it is possible
+     * 
+	 * @spec DmtException.DmtException(String[],int,String,Throwable)
+	 * 
 	 */
 	private void testDmtException008() {
 		tbc.log("#testDmtException008");
-		org.osgi.service.dmt.DmtException de = new org.osgi.service.dmt.DmtException(null, -1, null, (Vector)null, true);
+		org.osgi.service.dmt.DmtException de = new org.osgi.service.dmt.DmtException((String[])null, org.osgi.service.dmt.DmtException.URI_TOO_LONG, null,
+				(Throwable)null);
 		tbc.assertNull("Asserts getURI() method", de.getURI());
-		tbc.assertNull("Asserts getMessage() method", de.getMessage());
-		tbc.assertEquals("Asserts getCode() method", -1, de.getCode());
+        tbc.assertEquals("Asserts getMessage() method","URI_TOO_LONG",de.getMessage());
+		tbc.assertEquals("Asserts getCode() method", org.osgi.service.dmt.DmtException.URI_TOO_LONG, de.getCode());
 		tbc.assertNull("Asserts getCause() method",de.getCause());
-		tbc.assertTrue("Asserts that getCauses() returns an empty Vector if there is no cause", de.getCauses().size()==0);
-		tbc.assertTrue("Asserts isFatal() method", de.isFatal());
+		tbc.assertTrue("Asserts that getCauses() returns an empty Vector if there is no cause", 
+				de.getCauses().size()==0);
+		tbc.assertTrue("Asserts isFatal() method", !de.isFatal());
+
 	}
-	
 	/**
-	 * @testID testDmtException009
-	 * @testDescription Tests if the values the method isFatal() returns false
-	 *                  correctly. It also tests if GetMessage returns 
-	 *                  the associated URI and the exception code
+	 * Tests if the values that are passed as parameters for the constructor are equal 
+	 * to the values returned through its corresponding get methods using the constructor
+     * DmtException(String,int,String,Vector,boolean)
+	 * 
+	 * @spec DmtException.DmtException(String,int,String,Vector,boolean)
+	 * 
 	 */
 	private void testDmtException009() {
 		tbc.log("#testDmtException009");
-		Vector causes = new Vector();
-		causes.add(0, new Exception(EXCEPTION_MSG));
-		org.osgi.service.dmt.DmtException de = new org.osgi.service.dmt.DmtException(
-				DmtTestControl.OSGi_LOG,
-				org.osgi.service.dmt.DmtException.INVALID_URI,
-				DmtTestControl.MESSAGE, causes, false);
-
-		tbc.assertEquals("Asserts getURI() method", DmtTestControl.OSGi_LOG, de
-				.getURI());
-		String message = de.getMessage();
-		
-		tbc.assertTrue("Asserts getMessage() method",
-					message.indexOf(DmtTestControl.MESSAGE) > -1
-					&& message.indexOf(DmtTestControl.OSGi_LOG) > -1
-					&& message.indexOf(String.valueOf(org.osgi.service.dmt.DmtException.INVALID_URI)) > -1);
-
-		tbc.assertEquals("Asserts getCode() method",
-				org.osgi.service.dmt.DmtException.INVALID_URI, de.getCode());
-		tbc.assertEquals("Asserts the size of getCauses() method", causes.size(), de
-				.getCauses().size());
-		tbc.assertTrue("Asserts the name of getCauses() method",
-				(((Exception) de.getCauses().elementAt(0)).toString().indexOf(
-						EXCEPTION_MSG) > -1));
-		tbc.assertTrue("Asserts isFatal() method", !de.isFatal());
-	}
-	
-	/**
-	 * @testID testDmtException010
-	 * @testDescription Tests if, when there are more than one exception, getCause returns the first one
-	 * 					and getCauses returns all of them 
-	 */
-	private void testDmtException010() {
-		tbc.log("#testDmtException010");
 		Vector causes = new Vector();
 		causes.add(0, new IllegalStateException(EXCEPTION_MSG));
 		causes.add(1, new Exception(EXCEPTION_MSG));
 		causes.add(2, new IllegalArgumentException(EXCEPTION_MSG));
 		org.osgi.service.dmt.DmtException de = new org.osgi.service.dmt.DmtException(
-				DmtTestControl.OSGi_CFG,
-				org.osgi.service.dmt.DmtException.OTHER_ERROR,
-				DmtTestControl.MESSAGE, causes);
+				TestExecPluginActivator.ROOT,
+				org.osgi.service.dmt.DmtException.COMMAND_NOT_ALLOWED,
+				DmtConstants.MESSAGE, causes,true);
 
-		tbc.assertEquals("Asserts getURI() method", DmtTestControl.OSGi_CFG, de.getURI());
+		tbc.assertEquals("Asserts getURI() method", TestExecPluginActivator.ROOT, de.getURI());
 		
-		String message = de.getMessage();
-		tbc.assertTrue("Asserts getMessage() method",
-						message.indexOf(DmtTestControl.MESSAGE) > -1
-								&& message.indexOf(DmtTestControl.OSGi_CFG) > -1
-								&& message.indexOf(String.valueOf(org.osgi.service.dmt.DmtException.OTHER_ERROR)) > -1);
-								
-		tbc.assertEquals("Asserts getCode() method",org.osgi.service.dmt.DmtException.OTHER_ERROR, de.getCode());
+        tbc.assertEquals("Asserts getMessage() method","COMMAND_NOT_ALLOWED: '"+TestExecPluginActivator.ROOT+"': "+DmtConstants.MESSAGE,de.getMessage());
+        
+		tbc.assertEquals("Asserts getCode() method",org.osgi.service.dmt.DmtException.COMMAND_NOT_ALLOWED, de.getCode());
 		
 		tbc.assertException("Asserts that getCause returns the first exception in case of more than one exception", 
 				IllegalStateException.class, de.getCause());
 		
 		Vector causesReturned = de.getCauses();
 		tbc.assertEquals("Asserts the size of getCauses() method", causes.size(), causesReturned.size());
-		
+		Iterator iter = causesReturned.iterator();
 		int found=0;
 		int expected = causes.size();
-		for (int i=0;i<causesReturned.size();i++) {
-			if (causesReturned.elementAt(i) instanceof IllegalStateException) {
-				if (((IllegalStateException)causesReturned.elementAt(i)).toString().indexOf(EXCEPTION_MSG)>-1) {
-					found++;
-					continue;
-				}
-			}
-			if (causesReturned.elementAt(i) instanceof Exception) {
-				if (((Exception)causesReturned.elementAt(i)).toString().indexOf(EXCEPTION_MSG)>-1) {
-					found++;
-					continue;
-				}
-			}
-			if (causesReturned.elementAt(i) instanceof IllegalArgumentException) {
-				if (((IllegalArgumentException)causesReturned.elementAt(i)).toString().indexOf(EXCEPTION_MSG)>-1) {
-					found++;
-					continue;
-				}
-			}			
-				
-		}
+        while (iter.hasNext()) {
+            Object obj = iter.next();
+            if (obj instanceof IllegalStateException) {
+                if (((IllegalStateException)obj).toString().indexOf(EXCEPTION_MSG)>-1) {
+                    found++;
+                }
+            } else if (obj instanceof Exception) {
+                if (((Exception)obj).toString().indexOf(EXCEPTION_MSG)>-1) {
+                    found++;
+                }
+            } else if (obj instanceof IllegalArgumentException) {
+                if (((IllegalArgumentException)obj).toString().indexOf(EXCEPTION_MSG)>-1) {
+                    found++;
+                }
+            }           
+            
+        }
 		tbc.assertEquals("Asserts the all of the exceptions were returned correctly",expected,found);
-		tbc.assertTrue("Asserts isFatal() method", !de.isFatal());
-	}	
+		tbc.assertTrue("Asserts isFatal() method", de.isFatal());
+	}
+
+	/**
+	 * Tests if the values that are passed as parameters for the constructor are equal 
+	 * to the values returned through its corresponding get methods using the constructor
+	 * DmtException(String,int,String,Vector,boolean) and 'null' values whenever it is possible
+     * 
+	 * @spec DmtException.DmtException(String,int,String,Vector,boolean)
+	 * 
+	 */
+	private void testDmtException010() {
+		tbc.log("#testDmtException010");
+		org.osgi.service.dmt.DmtException de = new org.osgi.service.dmt.DmtException((String)null, org.osgi.service.dmt.DmtException.TRANSACTION_ERROR, null, (Vector)null, true);
+		tbc.assertNull("Asserts getURI() method", de.getURI());
+        tbc.assertEquals("Asserts getMessage() method","TRANSACTION_ERROR",de.getMessage());
+		tbc.assertEquals("Asserts getCode() method",org.osgi.service.dmt.DmtException.TRANSACTION_ERROR, de.getCode());
+		tbc.assertNull("Asserts getCause() method",de.getCause());
+		tbc.assertTrue("Asserts that getCauses() returns an empty Vector if there is no cause", de.getCauses().size()==0);
+		tbc.assertTrue("Asserts isFatal() method", de.isFatal());
+	}
+	
+	/**
+	 * Tests if the values that are passed as parameters for the constructor are equal 
+	 * to the values returned through its corresponding get methods using the constructor
+	 * DmtException(String[],int,String,Vector,boolean)
+     * 
+	 * @spec DmtException.DmtException(String[],int,String,Vector,boolean)
+	 * 
+	 */
+	private void testDmtException011() {
+		tbc.log("#testDmtException011");
+		Vector causes = new Vector();
+		causes.add(0, new IllegalArgumentException(EXCEPTION_MSG));
+		causes.add(1, new Exception(EXCEPTION_MSG));
+		causes.add(2, new IllegalStateException(EXCEPTION_MSG));
+		org.osgi.service.dmt.DmtException de = new org.osgi.service.dmt.DmtException(
+				new String [] {".","g", "h", "i"},
+				org.osgi.service.dmt.DmtException.FEATURE_NOT_SUPPORTED,
+				DmtConstants.MESSAGE, causes, true);
+
+		String uri = "./g/h/i";
+
+		tbc.assertEquals("Asserts getURI() method", uri, de.getURI());
+
+        tbc.assertEquals("Asserts getMessage() method","FEATURE_NOT_SUPPORTED: '"+uri+"': "+DmtConstants.MESSAGE,de.getMessage());
+		tbc.assertEquals("Asserts getCode() method",
+				org.osgi.service.dmt.DmtException.FEATURE_NOT_SUPPORTED, de.getCode());
+
+		tbc.assertException("Asserts that getCause returns the first exception in case of more than one exception", 
+				IllegalArgumentException.class, de.getCause());
+		
+		Vector causesReturned = de.getCauses();
+		tbc.assertEquals("Asserts the size of getCauses() method", causes.size(), causesReturned.size());
+        Iterator iter = causesReturned.iterator();
+        int found=0;
+        int expected = causes.size();
+        while (iter.hasNext()) {
+            Object obj = iter.next();
+            if (obj instanceof IllegalStateException) {
+                if (((IllegalStateException)obj).toString().indexOf(EXCEPTION_MSG)>-1) {
+                    found++;
+                }
+            } else if (obj instanceof Exception) {
+                if (((Exception)obj).toString().indexOf(EXCEPTION_MSG)>-1) {
+                    found++;
+                }
+            } else if (obj instanceof IllegalArgumentException) {
+                if (((IllegalArgumentException)obj).toString().indexOf(EXCEPTION_MSG)>-1) {
+                    found++;
+                }
+            }           
+            
+        }
+		tbc.assertEquals("Asserts the all of the exceptions were returned correctly",expected,found);
+		tbc.assertTrue("Asserts isFatal() method", de.isFatal());
+	}
+
+	/**
+	 * Tests if the values that are passed as parameters for the constructor are equal 
+	 * to the values returned through its corresponding get methods using the constructor
+	 * DmtException(String[],int,String,Vector,boolean) and 'null' values whenever it is possible
+     * 
+	 * @spec DmtException.DmtException(String[],int,String,Vector,boolean)
+	 * 
+	 */
+	private void testDmtException012() {
+		tbc.log("#testDmtException012");
+		org.osgi.service.dmt.DmtException de = new org.osgi.service.dmt.DmtException((String[])null, org.osgi.service.dmt.DmtException.NODE_ALREADY_EXISTS, null, (Vector)null, true);
+		
+		tbc.assertNull("Asserts getURI() method", de.getURI());
+        tbc.assertEquals("Asserts getMessage() method","NODE_ALREADY_EXISTS",de.getMessage());
+		tbc.assertEquals("Asserts getCode() method", org.osgi.service.dmt.DmtException.NODE_ALREADY_EXISTS, de.getCode());
+		tbc.assertNull("Asserts getCause() method",de.getCause());
+		tbc.assertTrue("Asserts that getCauses() returns an empty Vector if there is no cause", 
+				de.getCauses().size()==0);
+		
+		tbc.assertTrue("Asserts isFatal() method", de.isFatal());
+	}
+	
 
 }

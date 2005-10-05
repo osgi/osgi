@@ -40,22 +40,22 @@
 
 package org.osgi.test.cases.dmt.main.tb1.DmtSession;
 
-import org.osgi.service.dmt.DmtAcl;
+import org.osgi.service.dmt.Acl;
 import org.osgi.service.dmt.DmtException;
-import org.osgi.service.dmt.DmtPermission;
-import org.osgi.service.dmt.DmtPrincipalPermission;
+import org.osgi.service.dmt.security.DmtPermission;
+import org.osgi.service.dmt.security.DmtPrincipalPermission;
 import org.osgi.service.dmt.DmtSession;
 import org.osgi.service.permissionadmin.PermissionInfo;
+import org.osgi.test.cases.dmt.main.tbc.DmtConstants;
 import org.osgi.test.cases.dmt.main.tbc.DmtTestControl;
 import org.osgi.test.cases.dmt.main.tbc.TestInterface;
-import org.osgi.test.cases.dmt.main.tbc.Plugin.TestExecPluginActivator;
+import org.osgi.test.cases.dmt.main.tbc.Plugin.ExecPlugin.TestExecPluginActivator;
 
 /**
+ * @author Luiz Felipe Guimaraes
  * 
- * @methodUnderTest org.osgi.service.dmt.DmtReadOnly#getChildNodeNames
- * @generalDescription This Test Case Validates the implementation of
- *                     <code>getChildNodeNames<code> method, according to MEG reference
- *                     documentation (rfc0085).
+ * This test case validates the implementation of <code>getChildNodeNames</code> method of DmtSession, 
+ * according to MEG specification
  */
 public class GetChildNodeNames implements TestInterface {
 	private DmtTestControl tbc;
@@ -65,6 +65,7 @@ public class GetChildNodeNames implements TestInterface {
 	}
 
 	public void run() {
+        prepare();
 		testGetChildNodeNames001();
 		testGetChildNodeNames002();
 		testGetChildNodeNames003();
@@ -72,18 +73,16 @@ public class GetChildNodeNames implements TestInterface {
 		testGetChildNodeNames005();
 		testGetChildNodeNames006();
 		testGetChildNodeNames007();
-		testGetChildNodeNames008();
-		testGetChildNodeNames009();
-		testGetChildNodeNames010();
-		testGetChildNodeNames011();
-		testGetChildNodeNames012();
 	}
 
+    private void prepare() {
+        tbc.setPermissions(new PermissionInfo(DmtPermission.class.getName(), DmtConstants.ALL_NODES,DmtConstants.ALL_ACTIONS));
+    }
 	/**
-	 * @testID testGetChildNodeNames001
-	 * @testDescription This method asserts that a DmtException is thrown
-	 *                  whenever a tbc.getSession() tries to retrieve the child
-	 *                  node names of an invalid node
+	 * This method asserts that DmtException.NODE_NOT_FOUND is thrown
+	 * if nodeUri points to a non-existing node 
+	 * 
+	 * @spec DmtSession.getChildNodeNames(String)
 	 */
 	private void testGetChildNodeNames001() {
 		DmtSession session = null;
@@ -107,225 +106,48 @@ public class GetChildNodeNames implements TestInterface {
 		}
 	}
 
-	
 	/**
-	 * @testID testGetChildNodeNames002
-	 * @testDescription This method asserts if getChildNodeNames throws
-	 *                  DmtException with the correct code
+	 * This method asserts that getChildNodeNames is executed when the right Acl is set (Remote)
+	 * 
+	 * @spec DmtSession.getChildNodeNames(String)
 	 */
 	private void testGetChildNodeNames002() {
 		DmtSession session = null;
 		try {
 			tbc.log("#testGetChildNodeNames002");
-			session = tbc.getDmtAdmin().getSession(".",
-					DmtSession.LOCK_TYPE_SHARED);
-			session.getChildNodeNames(DmtTestControl.INVALID_URI);
 
-			tbc.failException("", DmtException.class);
-		} catch (DmtException e) {
-			tbc.assertEquals("Asserts DmtException.getCode",
-					DmtException.INVALID_URI, e.getCode());
+            tbc.openSessionAndSetNodeAcl(TestExecPluginActivator.INTERIOR_NODE, DmtConstants.PRINCIPAL, Acl.GET );
+			tbc.setPermissions(new PermissionInfo(DmtPrincipalPermission.class.getName(),DmtConstants.PRINCIPAL,"*"));
+			session = tbc.getDmtAdmin().getSession(DmtConstants.PRINCIPAL,
+					TestExecPluginActivator.INTERIOR_NODE, DmtSession.LOCK_TYPE_SHARED);
+
+			session.getChildNodeNames(TestExecPluginActivator.INTERIOR_NODE);
+			tbc.pass("getChildNodeNames correctly executed");
 		} catch (Exception e) {
-			tbc.fail("Expected " + DmtException.class.getName() + " but was "
-					+ e.getClass().getName());
+			tbc.fail("Unexpected Exception: " + e.getClass().getName() + " [Message: " + e.getMessage() +"]");
 		} finally {
-			tbc.closeSession(session);
+            tbc.setPermissions(new PermissionInfo(DmtPermission.class.getName(), DmtConstants.ALL_NODES,DmtConstants.ALL_ACTIONS));
+            tbc.cleanUp(session,TestExecPluginActivator.INTERIOR_NODE);
+            
 		}
+
 	}
 
 	/**
-	 * @testID testGetChildNodeNames003
-	 * @testDescription This method asserts if getChildNodeNames throws
-	 *                  DmtException with the correct code
+	 * This method asserts that getChildNodeNames is executed when the right DmtPermission is set (Local)
+	 * 
+	 * @spec DmtSession.getChildNodeNames(String)
 	 */
 	private void testGetChildNodeNames003() {
 		DmtSession session = null;
 		try {
 			tbc.log("#testGetChildNodeNames003");
 
-			session = tbc.getDmtAdmin().getSession(DmtTestControl.OSGi_LOG,
-					DmtSession.LOCK_TYPE_SHARED);
-			session.getChildNodeNames(DmtTestControl.OSGi_CFG);
-
-			tbc.failException("", DmtException.class);
-		} catch (DmtException e) {
-			tbc.assertEquals("Asserts DmtException.getCode",
-					DmtException.OTHER_ERROR, e.getCode());
-		} catch (Exception e) {
-			tbc.fail("Expected " + DmtException.class.getName() + " but was "
-					+ e.getClass().getName());
-		} finally {
-			tbc.closeSession(session);
-		}
-	}
-
-	/**
-	 * @testID testGetChildNodeNames004
-	 * @testDescription This method asserts that a DmtException is thrown
-	 *                  whenr it tries to get the child
-	 *                  node names of an uri too long
-	 */
-	private void testGetChildNodeNames004() {
-		DmtSession session = null;
-		try {
-			tbc.log("#testGetChildNodeNames004");
-
-			session = tbc.getDmtAdmin().getSession(".",
-					DmtSession.LOCK_TYPE_SHARED);
-
-			session.getChildNodeNames(DmtTestControl.URI_LONG);
-
-			tbc.failException("", DmtException.class);
-		} catch (DmtException e) {
-			tbc.assertEquals("Asserts DmtException.getCode",
-					DmtException.URI_TOO_LONG, e.getCode());
-		} catch (Exception e) {
-			tbc.fail("Expected " + DmtException.class.getName() + " but was "
-					+ e.getClass().getName());
-		} finally {
-			tbc.closeSession(session);
-		}
-	}
-
-	/**
-	 * @testID testGetChildNodeNames005
-	 * @testDescription This method asserts that a DmtException with error code
-	 *                  equals to PERMISSION_DENIED is thrown.
-	 */
-	private void testGetChildNodeNames005() {
-		DmtSession localSession = null;
-		DmtSession remoteSession = null;
-		try {
-			tbc.log("#testGetChildNodeNames005");
-
-			localSession = tbc.getDmtAdmin().getSession(".",
-					DmtSession.LOCK_TYPE_EXCLUSIVE);
-			localSession.setNodeAcl(TestExecPluginActivator.INTERIOR_NODE, new DmtAcl(
-					new String[] { DmtTestControl.PRINCIPAL },
-					new int[] { DmtAcl.EXEC }));
-
-			localSession.close();
-			tbc.setPermissions(new PermissionInfo(DmtPrincipalPermission.class.getName(),DmtTestControl.PRINCIPAL,"*"));
-			remoteSession = tbc.getDmtAdmin().getSession(DmtTestControl.PRINCIPAL,TestExecPluginActivator.INTERIOR_NODE,DmtSession.LOCK_TYPE_SHARED);
-
-			remoteSession.getChildNodeNames(TestExecPluginActivator.INTERIOR_NODE);
-			
-			tbc.failException("", DmtException.class);
-		} catch (DmtException e) {
-			tbc.assertEquals(
-					"Asserting that DmtException code is PERMISSION_DENIED",
-					DmtException.PERMISSION_DENIED, e.getCode());
-		} catch (Exception e) {
-			tbc.fail("Expected " + DmtException.class.getName() + " but was "
-					+ e.getClass().getName());
-		} finally {
-			tbc.cleanUp(localSession, remoteSession, TestExecPluginActivator.INTERIOR_NODE);
-		}
-
-	}
-
-	/**
-	 * @testID testGetChildNodeNames006
-	 * @testDescription This method asserts that an SecurityException is thrown
-	 *                  when getChildNodeNames is called without the right
-	 *                  permission
-	 */
-	private void testGetChildNodeNames006() {
-		DmtSession session = null;
-		try {
-			tbc.log("#testGetChildNodeNames006");
-
 			session = tbc.getDmtAdmin().getSession(".",
 					DmtSession.LOCK_TYPE_EXCLUSIVE);
 			
 			tbc.setPermissions(new PermissionInfo(DmtPermission.class
-					.getName(), DmtTestControl.ALL_NODES, DmtPermission.EXEC));
-			
-			session.getChildNodeNames(DmtTestControl.OSGi_LOG);
-			
-			tbc.failException("#", SecurityException.class);
-		} catch (SecurityException e) {
-			tbc.pass("The Exception was SecurityException");
-		} catch (Exception e) {
-			tbc.fail("Expected " + SecurityException.class.getName()
-					+ " but was " + e.getClass().getName());
-		} finally {
-			tbc.cleanUp(session, null, null);
-		}
-	}
-
-	/**
-	 * @testID testGetChildNodeNames007
-	 * @testDescription This method asserts if IllegalStateException is
-	 *                  correctly thrown
-	 */
-	private void testGetChildNodeNames007() {
-		DmtSession session = null;
-		try {
-			tbc.log("#testGetChildNodeNames007");
-			
-			session = tbc.getDmtAdmin().getSession(".",
-					DmtSession.LOCK_TYPE_EXCLUSIVE);
-			session.close();
-			session.getChildNodeNames(DmtTestControl.OSGi_LOG);
-			
-			tbc.failException("", IllegalStateException.class);;
-		} catch (IllegalStateException e) {
-			tbc.pass("IllegalStateException correctly thrown");
-		} catch (Exception e) {
-			tbc.fail("Expected " + IllegalStateException.class.getName()
-					+ " but was " + e.getClass().getName());
-		} finally {
-			tbc.closeSession(session);
-		}
-	}
-	/**
-	 * @testID testGetChildNodeNames008
-	 * @testDescription This method asserts that getChildNodeNames is successfully executed 
-	 * 					when the correct permission is assigned
-	 */
-	private void testGetChildNodeNames008() {
-		DmtSession localSession = null;
-		DmtSession remoteSession = null;
-		try {
-			tbc.log("#testGetChildNodeNames008");
-
-			localSession = tbc.getDmtAdmin().getSession(".",
-					DmtSession.LOCK_TYPE_EXCLUSIVE);
-			localSession.setNodeAcl(TestExecPluginActivator.INTERIOR_NODE, new DmtAcl(
-					new String[] { DmtTestControl.PRINCIPAL },
-					new int[] { DmtAcl.GET }));
-
-			localSession.close();
-			tbc.setPermissions(new PermissionInfo(DmtPrincipalPermission.class.getName(),DmtTestControl.PRINCIPAL,"*"));
-			remoteSession = tbc.getDmtAdmin().getSession(DmtTestControl.PRINCIPAL,
-					TestExecPluginActivator.INTERIOR_NODE, DmtSession.LOCK_TYPE_SHARED);
-
-			remoteSession.getChildNodeNames(TestExecPluginActivator.INTERIOR_NODE);
-			tbc.pass("getChildNodeNames correctly executed");
-		} catch (Exception e) {
-			tbc.fail("Unexpected Exception: " + e.getClass().getName() + " [Message: " + e.getMessage() +"]");
-		} finally {
-			tbc.cleanUp(localSession, remoteSession, TestExecPluginActivator.INTERIOR_NODE);
-		}
-
-	}
-
-	/**
-	 * @testID testGetChildNodeNames009
-	 * @testDescription This method asserts that getChildNodeNames is successfully executed 
-	 * 					when the correct permission is assigned
-	 */
-	private void testGetChildNodeNames009() {
-		DmtSession session = null;
-		try {
-			tbc.log("#testGetChildNodeNames009");
-
-			session = tbc.getDmtAdmin().getSession(".",
-					DmtSession.LOCK_TYPE_EXCLUSIVE);
-			
-			tbc.setPermissions(new PermissionInfo(DmtPermission.class
-					.getName(), DmtTestControl.ALL_NODES, DmtPermission.GET));
+					.getName(), DmtConstants.ALL_NODES, DmtPermission.GET));
 			
 			session.getChildNodeNames(TestExecPluginActivator.INTERIOR_NODE);
 			
@@ -334,25 +156,27 @@ public class GetChildNodeNames implements TestInterface {
 			tbc.fail("Unexpected Exception: " + e.getClass().getName() + " [Message: " + e.getMessage() +"]");
 			
 		} finally {
-			tbc.cleanUp(session, null, null);
+            tbc.setPermissions(new PermissionInfo(DmtPermission.class.getName(), DmtConstants.ALL_NODES,DmtConstants.ALL_ACTIONS));
+            tbc.cleanUp(session, null);
+            
 		}
 	}
 	
 	/**
-	 * @testID testGetChildNodeNames010
-	 * @testDescription This method asserts that an empty array is returned by DmtAdmin 
-	 * 					when the plugin returns null.
+	 * This method asserts that an empty array is returned by DmtAdmin when the plugin returns null.
+	 * 
+	 * @spec DmtSession.getChildNodeNames(String)
 	 */
-	private void testGetChildNodeNames010() {
+	private void testGetChildNodeNames004() {
 		DmtSession session = null;
 		try {
-			tbc.log("#testGetChildNodeNames010");
+			tbc.log("#testGetChildNodeNames004");
 
 			session = tbc.getDmtAdmin().getSession(".",
 					DmtSession.LOCK_TYPE_EXCLUSIVE);
 			
 			tbc.setPermissions(new PermissionInfo(DmtPermission.class
-					.getName(), DmtTestControl.ALL_NODES, DmtPermission.GET));
+					.getName(), DmtConstants.ALL_NODES, DmtPermission.GET));
 			
 			String[] childs = session.getChildNodeNames(TestExecPluginActivator.ROOT);
 			
@@ -362,27 +186,28 @@ public class GetChildNodeNames implements TestInterface {
 			tbc.fail("Unexpected Exception: " + e.getClass().getName() + " [Message: " + e.getMessage() +"]");
 			
 		} finally {
-			tbc.cleanUp(session, null, null);
+            tbc.setPermissions(new PermissionInfo(DmtPermission.class.getName(), DmtConstants.ALL_NODES,DmtConstants.ALL_ACTIONS));
+            tbc.cleanUp(session, null);
+            
 		}
 	}	
 	
 	/**
-	 * @testID testGetChildNodeNames011
-	 * @testDescription This method asserts that DmtAdmin remove the null 
-	 * 					entries when our plugin return an array of string
-	 * 					that contains null entries.
+	 * This method asserts that DmtAdmin remove the null entries when our plugin return an array of string that contains null entries.
+	 * 
+	 * @spec DmtSession.getChildNodeNames(String)
 	 * 
 	 */
-	private void testGetChildNodeNames011() {
+	private void testGetChildNodeNames005() {
 		DmtSession session = null;
 		try {
-			tbc.log("#testGetChildNodeNames011");
+			tbc.log("#testGetChildNodeNames005");
 
 			session = tbc.getDmtAdmin().getSession(".",
 					DmtSession.LOCK_TYPE_EXCLUSIVE);
 			
 			tbc.setPermissions(new PermissionInfo(DmtPermission.class
-					.getName(), DmtTestControl.ALL_NODES, DmtPermission.GET));
+					.getName(), DmtConstants.ALL_NODES, DmtPermission.GET));
 			
 			String[] childs = session.getChildNodeNames(TestExecPluginActivator.INTERIOR_NODE_WITH_NULL_VALUES);
 			
@@ -403,26 +228,25 @@ public class GetChildNodeNames implements TestInterface {
 			tbc.fail("Unexpected Exception: " + e.getClass().getName() + " [Message: " + e.getMessage() +"]");
 			
 		} finally {
-			tbc.cleanUp(session, null, null);
+            tbc.setPermissions(new PermissionInfo(DmtPermission.class.getName(), DmtConstants.ALL_NODES,DmtConstants.ALL_ACTIONS));
+            tbc.cleanUp(session, null);
+            
 		}
 	}		
 	
 	/**
-	 * @testID testGetChildNodeNames012
-	 * @testDescription This method asserts that relative URI works as described.
+	 * This method asserts that relative URI works as described.
 	 * 
+	 * @spec DmtSession.getChildNodeNames(String)
 	 */
-	private void testGetChildNodeNames012() {
+	private void testGetChildNodeNames006() {
 		DmtSession session = null;
 		try {
-			tbc.log("#testGetChildNodeNames012");
-			
-			tbc.setPermissions(new PermissionInfo(DmtPermission.class.getName(), DmtTestControl.ALL_NODES,DmtTestControl.ALL_ACTIONS));
-			
+			tbc.log("#testGetChildNodeNames006");
 			session = tbc.getDmtAdmin().getSession(
 					TestExecPluginActivator.ROOT, DmtSession.LOCK_TYPE_ATOMIC);
 
-			session.getChildNodeNames(TestExecPluginActivator.INTERIOR_VALUE);
+			session.getChildNodeNames(TestExecPluginActivator.INTERIOR_NODE_NAME);
 
 			tbc.pass("A relative URI can be used with getChildNodeNames.");
 		} catch (Exception e) {
@@ -433,5 +257,32 @@ public class GetChildNodeNames implements TestInterface {
 		}
 	}	
 	
+
+	/**
+	 * This method asserts that DmtException.COMMAND_NOT_ALLOWED is thrown when is tried to get 
+	 * a node that is not an interior node
+	 *  
+	 * @spec DmtSession.getChildNodeNames(String)
+	 */
+	private void testGetChildNodeNames007() {
+		DmtSession session = null;
+		try {
+			tbc.log("#testGetChildNodeNames007");
+
+			session = tbc.getDmtAdmin().getSession(TestExecPluginActivator.ROOT,
+					DmtSession.LOCK_TYPE_SHARED);
+			session.getChildNodeNames(TestExecPluginActivator.LEAF_NODE);
+
+			tbc.failException("", DmtException.class);
+		} catch (DmtException e) {
+			tbc.assertEquals("Asserts DmtException.getCode",
+					DmtException.COMMAND_NOT_ALLOWED, e.getCode());
+		} catch (Exception e) {
+			tbc.fail("Expected " + DmtException.class.getName() + " but was "
+					+ e.getClass().getName());
+		} finally {
+			tbc.closeSession(session);
+		}
+	}	
 	
 }

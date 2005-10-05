@@ -3,7 +3,7 @@ Bundle-Name: ${p}.tb1
 Bundle-SymbolicName: ${p}.tb1
 Bundle-Version: 1
 Bundle-Activator: $(p).tb1.Activator
-$(IMPORT-PACKAGE)
+$(IMPORT-PACKAGE),org.osgi.service.dmt.spi,org.osgi.service.dmt.security
 $(EXPORT-PACKAGE)
 $(PRIVATE-PACKAGE)
 

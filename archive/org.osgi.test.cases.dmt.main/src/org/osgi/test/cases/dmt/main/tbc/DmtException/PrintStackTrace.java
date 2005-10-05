@@ -42,15 +42,12 @@ package org.osgi.test.cases.dmt.main.tbc.DmtException;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.PrintStream;
-import java.io.PrintWriter;
 import java.util.Vector;
-
 import org.osgi.test.cases.dmt.main.tbc.DmtTestControl;
 
 /**
- * @methodUnderTest org.osgi.service.dmt.DmtException#printStackTrace
- * @generalDescription This class tests printStackTrace methods according with
- *                     MEG specification (rfc0085)
+ * This test case validates the implementation of <code>printStackTrace</code> method of DmtException, 
+ * according to MEG specification
  */
 public class PrintStackTrace {
 	private DmtTestControl tbc;
@@ -62,120 +59,72 @@ public class PrintStackTrace {
 	public void run() {
 		testPrintStackTrace001();
 		testPrintStackTrace002();
-		testPrintStackTrace003();
-		testPrintStackTrace004();
 	}
 
 	/**
-	 * @testID testPrintStackTrace001
-	 * @testDescription Tests if the string printed contains causes passed as
-	 *                  parameters for the constructor
+	 *  Asserts that any causes that were specified for this exception are printed
+	 * 
+	 * @spec DmtException.printStackTrace(java.io.PrintStream)
 	 */
 	private void testPrintStackTrace001() {
 		tbc.log("#testPrintStackTrace001");
-		org.osgi.service.dmt.DmtException de = new org.osgi.service.dmt.DmtException(
-				null, 0, null, new Exception());
-
-		ByteArrayOutputStream baos = new ByteArrayOutputStream();
-		PrintStream ps = new PrintStream(baos);
-		de.printStackTrace(ps);
-
-		tbc.assertTrue("Asserts printStackTrace method",
-						baos.toString().indexOf("java.lang.Exception") > -1);
-		
-		try {
-			ps.close();
-			baos.close();
-		} catch (IOException e) {
-		}
+        try {
+    		org.osgi.service.dmt.DmtException de = new org.osgi.service.dmt.DmtException(
+    				(String)null, 0, null, new Exception());
+    
+    		ByteArrayOutputStream baos = new ByteArrayOutputStream();
+    		PrintStream ps = new PrintStream(baos);
+    		de.printStackTrace(ps);
+    
+    		tbc.assertTrue("Asserts printStackTrace method",
+    						baos.toString().indexOf("java.lang.Exception") > -1);
+    		
+    		try {
+    			ps.close();
+    			baos.close();
+    		} catch (IOException e) {
+    		}
+        } catch (Exception e) {
+            tbc.fail("Unexpected Exception: " + e.getClass().getName()
+                    + " [Message: " + e.getMessage() + "]");
+        }
 	}
 	
 	/**
-	 * @testID testPrintStackTrace002
-	 * @testDescription Tests if the string printed contains causes passed as
-	 *                  parameters for the constructor
+	 * Asserts that any causes that were specified for this exception are printed when
+     * there is more than one cause
+	 * 
+	 * @spec DmtException.printStackTrace(java.io.PrintStream)
 	 */
 	private void testPrintStackTrace002() {
 		tbc.log("#testPrintStackTrace002");
-		Vector causes = new Vector();
-		causes.add(0,new Exception());
-		causes.add(1,new NullPointerException());
-		
-		org.osgi.service.dmt.DmtException de = new org.osgi.service.dmt.DmtException(
-				null, 0, null,causes);
-
-		ByteArrayOutputStream baos = new ByteArrayOutputStream();
-		PrintStream ps = new PrintStream(baos);
-		de.printStackTrace(ps);
-
-		tbc.assertTrue("Asserts printStackTrace method",
-						baos.toString().indexOf("java.lang.Exception") > -1);
-
-		tbc.assertTrue("Asserts printStackTrace method",
-				baos.toString().indexOf("java.lang.NullPointerException") > -1);
-
-		try {
-			ps.close();
-			baos.close();
-		} catch (IOException e) {
-		}
-	}
-	
-	/**
-	 * @testID testPrintStackTrace003
-	 * @testDescription Tests if the string printed contains causes passed as
-	 *                  parameters for the constructor
-	 */
-	private void testPrintStackTrace003() {
-		tbc.log("#testPrintStackTrace003");
-		org.osgi.service.dmt.DmtException de = new org.osgi.service.dmt.DmtException(
-				null, 0, null, new Exception());
-		
-		ByteArrayOutputStream baos = new ByteArrayOutputStream();
-		PrintWriter pw = new PrintWriter(baos,true);
-		
-		de.printStackTrace(pw);
-
-		tbc.assertTrue("Asserts printStackTrace method",
-				baos.toString().indexOf("java.lang.Exception") > -1);
-
-		try {
-			pw.close();
-			baos.close();
-		} catch (IOException e) {
-		}
-	}
-	
-	/**
-	 * @testID testPrintStackTrace004
-	 * @testDescription Tests if the string printed contains causes passed as
-	 *                  parameters for the constructor
-	 */
-	private void testPrintStackTrace004() {
-		tbc.log("#testPrintStackTrace004");
-		Vector causes = new Vector();
-		causes.add(0,new Exception());
-		causes.add(1,new NullPointerException());
-		
-		org.osgi.service.dmt.DmtException de = new org.osgi.service.dmt.DmtException(
-				null, 0, null,causes);
-
-		ByteArrayOutputStream baos = new ByteArrayOutputStream();
-		PrintWriter pw = new PrintWriter(baos,true); 
-		
-		de.printStackTrace(pw);
-
-		tbc.assertTrue("Asserts printStackTrace method",
-						baos.toString().indexOf("java.lang.Exception") > -1);
-
-		tbc.assertTrue("Asserts printStackTrace method",
-				baos.toString().indexOf("java.lang.NullPointerException") > -1);
-
-		try {
-			pw.close();
-			baos.close();
-		} catch (IOException e) {
-		}
+        try {
+    		Vector causes = new Vector();
+    		causes.add(0,new Exception());
+    		causes.add(1,new NullPointerException());
+    		
+    		org.osgi.service.dmt.DmtException de = new org.osgi.service.dmt.DmtException(
+    				(String)null, 0, null,causes,false);
+    
+    		ByteArrayOutputStream baos = new ByteArrayOutputStream();
+    		PrintStream ps = new PrintStream(baos);
+    		de.printStackTrace(ps);
+    
+    		tbc.assertTrue("Asserts printStackTrace method",
+    						baos.toString().indexOf("java.lang.Exception") > -1);
+    
+    		tbc.assertTrue("Asserts printStackTrace method",
+    				baos.toString().indexOf("java.lang.NullPointerException") > -1);
+    
+    		try {
+    			ps.close();
+    			baos.close();
+    		} catch (IOException e) {
+    		}
+        } catch (Exception e) {
+            tbc.fail("Unexpected Exception: " + e.getClass().getName()
+                    + " [Message: " + e.getMessage() + "]");
+        }
 	}
 
 }

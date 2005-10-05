@@ -38,7 +38,9 @@ package org.osgi.test.cases.dmt.main.tb1;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
+import org.osgi.test.cases.dmt.main.tb1.DmtAdmin.DmtAdressingUri;
 import org.osgi.test.cases.dmt.main.tb1.DmtAdmin.GetSession;
+import org.osgi.test.cases.dmt.main.tb1.DmtAdmin.SendAlert;
 import org.osgi.test.cases.dmt.main.tb1.DmtSession.Close;
 import org.osgi.test.cases.dmt.main.tb1.DmtSession.Commit;
 import org.osgi.test.cases.dmt.main.tb1.DmtSession.Copy;
@@ -46,6 +48,7 @@ import org.osgi.test.cases.dmt.main.tb1.DmtSession.CreateInteriorNode;
 import org.osgi.test.cases.dmt.main.tb1.DmtSession.CreateLeafNode;
 import org.osgi.test.cases.dmt.main.tb1.DmtSession.DeleteNode;
 import org.osgi.test.cases.dmt.main.tb1.DmtSession.DmtSessionConstants;
+import org.osgi.test.cases.dmt.main.tb1.DmtSession.Events;
 import org.osgi.test.cases.dmt.main.tb1.DmtSession.Execute;
 import org.osgi.test.cases.dmt.main.tb1.DmtSession.GetChildNodeNames;
 import org.osgi.test.cases.dmt.main.tb1.DmtSession.GetEffectiveNodeAcl;
@@ -64,8 +67,11 @@ import org.osgi.test.cases.dmt.main.tb1.DmtSession.GetSetNodeValue;
 import org.osgi.test.cases.dmt.main.tb1.DmtSession.GetState;
 import org.osgi.test.cases.dmt.main.tb1.DmtSession.IsLeafNode;
 import org.osgi.test.cases.dmt.main.tb1.DmtSession.IsNodeUri;
+import org.osgi.test.cases.dmt.main.tb1.DmtSession.Mangle;
 import org.osgi.test.cases.dmt.main.tb1.DmtSession.RenameNode;
 import org.osgi.test.cases.dmt.main.tb1.DmtSession.Rollback;
+import org.osgi.test.cases.dmt.main.tb1.DmtSession.SetDefaultNodeValue;
+import org.osgi.test.cases.dmt.main.tb1.DmtSession.TestExceptions;
 import org.osgi.test.cases.dmt.main.tbc.DmtTestControl;
 import org.osgi.test.cases.dmt.main.tbc.TB1Service;
 import org.osgi.test.cases.dmt.main.tbc.TestInterface;
@@ -110,7 +116,14 @@ public class Activator implements BundleActivator, TB1Service  {
 				 new GetRootUri((DmtTestControl)tbc),
 				 new GetSessionId((DmtTestControl)tbc),
 				 new GetState((DmtTestControl)tbc),
-				 new IsNodeUri((DmtTestControl)tbc)
+				 new IsNodeUri((DmtTestControl)tbc),
+				 new SendAlert((DmtTestControl)tbc),
+				 new org.osgi.test.cases.dmt.main.tb1.DmtAdmin.Mangle((DmtTestControl)tbc),
+				 new SetDefaultNodeValue((DmtTestControl)tbc),
+				 new DmtAdressingUri((DmtTestControl)tbc),
+				 new TestExceptions((DmtTestControl)tbc),
+				 new Mangle((DmtTestControl)tbc), 
+				 new Events((DmtTestControl)tbc)
 		};
 	}					
 				

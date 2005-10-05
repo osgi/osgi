@@ -54,16 +54,15 @@ public class DmtPermissionConstants {
 	}
 
 	/**
-	 * @testID testConstants001
-	 * @testDescription This method asserts the constants values
+	 * This method asserts the constants values
 	 */
 	private void testConstants001() {
 		tbc.log("#testConstants001");
-		tbc.assertEquals("Asserting DmtPermission.ADD","Add",org.osgi.service.dmt.DmtPermission.ADD);
-		tbc.assertEquals("Asserting DmtPermission.DELETE","Delete",org.osgi.service.dmt.DmtPermission.DELETE);
-		tbc.assertEquals("Asserting DmtPermission.EXEC","Exec",org.osgi.service.dmt.DmtPermission.EXEC);
-		tbc.assertEquals("Asserting DmtPermission.GET","Get",org.osgi.service.dmt.DmtPermission.GET);
-		tbc.assertEquals("Asserting DmtPermission.REPLACE","Replace",org.osgi.service.dmt.DmtPermission.REPLACE);
+		tbc.assertEquals("Asserting DmtPermission.ADD","Add",org.osgi.service.dmt.security.DmtPermission.ADD);
+		tbc.assertEquals("Asserting DmtPermission.DELETE","Delete",org.osgi.service.dmt.security.DmtPermission.DELETE);
+		tbc.assertEquals("Asserting DmtPermission.EXEC","Exec",org.osgi.service.dmt.security.DmtPermission.EXEC);
+		tbc.assertEquals("Asserting DmtPermission.GET","Get",org.osgi.service.dmt.security.DmtPermission.GET);
+		tbc.assertEquals("Asserting DmtPermission.REPLACE","Replace",org.osgi.service.dmt.security.DmtPermission.REPLACE);
 	}
 	
 

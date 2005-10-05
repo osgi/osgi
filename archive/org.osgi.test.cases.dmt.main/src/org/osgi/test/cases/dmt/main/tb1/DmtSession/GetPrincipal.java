@@ -39,19 +39,18 @@
 
 package org.osgi.test.cases.dmt.main.tb1.DmtSession;
 
-import org.osgi.service.dmt.DmtPrincipalPermission;
+import org.osgi.service.dmt.security.DmtPrincipalPermission;
 import org.osgi.service.dmt.DmtSession;
 import org.osgi.service.permissionadmin.PermissionInfo;
+import org.osgi.test.cases.dmt.main.tbc.DmtConstants;
 import org.osgi.test.cases.dmt.main.tbc.DmtTestControl;
 import org.osgi.test.cases.dmt.main.tbc.TestInterface;
 
 /**
  * @author Andre Assad
  * 
- * @methodUnderTest org.osgi.service.dmt.DmtSession#getPrincipal
- * @generalDescription This Test Case Validates the implementation of
- *                     <code>getPrincipal<code> method, according to MEG reference
- *                     documentation.
+ * This test case validates the implementation of <code>getPrincipal</code> method, 
+ * according to MEG specification.
  */
 public class GetPrincipal implements TestInterface {
 	private DmtTestControl tbc;
@@ -61,38 +60,42 @@ public class GetPrincipal implements TestInterface {
 	}
 
 	public void run() {
+        prepare();
 		testGetPrincipal001();
 		testGetPrincipal002();
 	}
-
+    private void prepare() {
+        //This method do not throw any exceptions, so, if it is checking for DmtPermission an exception is
+        //incorrectly thrown.
+        tbc.setPermissions(new PermissionInfo[0]);
+    }
 	/**
-	 * @testID testGetPrincipal001
-	 * @testDescription This method asserts that the same principal passed on
-	 *                  the tbc.getSession() creation, really belongs to the
-	 *                  tbc.getSession() object created.
+	 * Asserts that getPrincipal returns the principal passed in the DmtSession's constructor
+	 *  
+	 * @spec DmtSession.getPrincipal()
 	 */
 	private void testGetPrincipal001() {
 		DmtSession session = null;
 		try {
 			tbc.log("#testGetPrincipal001");
-			tbc.setPermissions(new PermissionInfo(DmtPrincipalPermission.class.getName(),DmtTestControl.PRINCIPAL,"*"));
-			session = tbc.getDmtAdmin().getSession(DmtTestControl.PRINCIPAL,
+			tbc.setPermissions(new PermissionInfo(DmtPrincipalPermission.class.getName(),DmtConstants.PRINCIPAL,"*"));
+			session = tbc.getDmtAdmin().getSession(DmtConstants.PRINCIPAL,
 					".", DmtSession.LOCK_TYPE_ATOMIC);
 
-			tbc.assertEquals("Asserting tbc.getSession() principal",
-					DmtTestControl.PRINCIPAL, session.getPrincipal());
+			tbc.assertEquals("Asserts that getPrincipal returns the principal passed in the DmtSession's constructor",
+					DmtConstants.PRINCIPAL, session.getPrincipal());
 		} catch (Exception e) {
 			tbc.fail("Unexpected Exception: " + e.getClass().getName()
 					+ " [Message: " + e.getMessage() + "]");
 		} finally {
-			tbc.cleanUp(session, null, null);
+			tbc.cleanUp(session, null);
 		}
 	}
 
 	/**
-	 * @testID testGetPrincipal002
-	 * @testDescription This method asserts that for a local tbc.getSession() a
-	 *                  null principal is created.
+	 * Asserts that getPrincipal returns null when the session is local
+	 * 
+	 * @spec DmtSession.getPrincipal()
 	 */
 	private void testGetPrincipal002() {
 		DmtSession session = null;
@@ -100,7 +103,7 @@ public class GetPrincipal implements TestInterface {
 			tbc.log("#testGetPrincipal002");
 			session = tbc.getDmtAdmin().getSession(".",
 					DmtSession.LOCK_TYPE_ATOMIC);
-			tbc.assertNull("Asserting tbc.getSession() principal", session
+			tbc.assertNull("Asserts that getPrincipal returns null when the session is local", session
 					.getPrincipal());
 		} catch (Exception e) {
 			tbc.fail("Unexpected Exception: " + e.getClass().getName()

@@ -39,18 +39,17 @@
 
 package org.osgi.test.cases.dmt.main.tb1.DmtSession;
 
-import org.osgi.service.dmt.DmtPermission;
+import org.osgi.service.dmt.security.DmtPermission;
 import org.osgi.service.dmt.DmtSession;
 import org.osgi.service.permissionadmin.PermissionInfo;
+import org.osgi.test.cases.dmt.main.tbc.DmtConstants;
 import org.osgi.test.cases.dmt.main.tbc.DmtTestControl;
 import org.osgi.test.cases.dmt.main.tbc.TestInterface;
-import org.osgi.test.cases.dmt.main.tbc.Plugin.TestExecPluginActivator;
+import org.osgi.test.cases.dmt.main.tbc.Plugin.ExecPlugin.TestExecPluginActivator;
 
 /**
- * @methodUnderTest org.osgi.service.dmt.DmtSession#isNodeUri
- * @generalDescription This Test Case Validates the implementation of
- *                     <code>isNodeUri<code> method, according to MEG reference
- *                     documentation (rfc0085).
+ * This test case validates the implementation of <code>isNodeUri</code> method of DmtSession, 
+ * according to MEG specification
  */
 public class IsNodeUri implements TestInterface {
 	private DmtTestControl tbc;
@@ -60,16 +59,20 @@ public class IsNodeUri implements TestInterface {
 	}
 
 	public void run() {
+        prepare();
 		testIsNodeUri001();
 		testIsNodeUri002();
 		testIsNodeUri003();
-		testIsNodeUri004();
 	}
-
+    private void prepare() {
+        //This method do not throw SecurityException, so, if it is checking for DmtPermission an exception is
+        //incorrectly thrown.
+        tbc.setPermissions(new PermissionInfo[0]);
+    }
 	/**
-	 * @testID testIsNodeUri001
-	 * @testDescription Tests if the method returns true for a valid URI of the
-	 *                  DMT.
+	 * Asserts that 'true' is returned if the URI really exists.
+	 * 
+	 * @spec DmtSession.isNodeUri(String)
 	 */
 	private void testIsNodeUri001() {
 		DmtSession session = null;
@@ -79,7 +82,7 @@ public class IsNodeUri implements TestInterface {
 			session = tbc.getDmtAdmin().getSession(".",
 					DmtSession.LOCK_TYPE_EXCLUSIVE);
 			tbc.assertTrue("Assert isNodeUri", session
-					.isNodeUri(DmtTestControl.OSGi_LOG));
+					.isNodeUri(DmtConstants.OSGi_LOG));
 		} catch (Exception e) {
 			tbc.fail("Unexpected Exception: " + e.getClass().getName()
 					+ " [Message: " + e.getMessage() + "]");
@@ -89,9 +92,9 @@ public class IsNodeUri implements TestInterface {
 	}
 
 	/**
-	 * @testID testIsNodeUri002
-	 * @testDescription Tests if the method returns false for an invalid URI of
-	 *                  the DMT.
+	 * Asserts that 'false' is returned if the URI really exists.
+	 * 
+	 * @spec DmtSession.isNodeUri(String)
 	 */
 	private void testIsNodeUri002() {
 		DmtSession session = null;
@@ -101,7 +104,7 @@ public class IsNodeUri implements TestInterface {
 			session = tbc.getDmtAdmin().getSession(".",
 					DmtSession.LOCK_TYPE_SHARED);
 			tbc.assertTrue("Assert isNodeUri", !session
-					.isNodeUri(DmtTestControl.INVALID_NODE));
+					.isNodeUri(TestExecPluginActivator.INEXISTENT_NODE));
 		} catch (Exception e) {
 			tbc.fail("Unexpected Exception: " + e.getClass().getName()
 					+ " [Message: " + e.getMessage() + "]");
@@ -111,47 +114,21 @@ public class IsNodeUri implements TestInterface {
 	}
 
 	/**
-	 * @testID testIsNodeUri003
-	 * @testDescription Simulates a IllegalStateException for close() session
-	 *                  case.
+	 * This method asserts that relative URI works as described.
+	 * 
+	 * @spec DmtSession.isNodeUri(String)
 	 */
 	private void testIsNodeUri003() {
 		DmtSession session = null;
 		try {
 			tbc.log("#testIsNodeUri003");
-
-			session = tbc.getDmtAdmin().getSession(".",
-					DmtSession.LOCK_TYPE_EXCLUSIVE);
-			session.close();
-
-			session.isNodeUri(DmtTestControl.OSGi_LOG);
-			tbc.failException("", IllegalStateException.class);
-		} catch (IllegalStateException e) {
-			tbc.pass("IllegalStateException properly thrown");
-		} catch (Exception e) {
-			tbc.fail("Expected " + IllegalStateException.class.getName()
-					+ " but was " + e.getClass().getName());
-		} finally {
-			tbc.closeSession(session);
-		}
-	}
-	
-	/**
-	 * @testID testIsNodeUri004
-	 * @testDescription This method asserts that relative URI works as described.
-	 * 
-	 */
-	private void testIsNodeUri004() {
-		DmtSession session = null;
-		try {
-			tbc.log("#testIsNodeUri004");
 			
-			tbc.setPermissions(new PermissionInfo(DmtPermission.class.getName(), DmtTestControl.ALL_NODES,DmtTestControl.ALL_ACTIONS));
+			tbc.setPermissions(new PermissionInfo(DmtPermission.class.getName(), DmtConstants.ALL_NODES,DmtConstants.ALL_ACTIONS));
 			
 			session = tbc.getDmtAdmin().getSession(
 					TestExecPluginActivator.ROOT, DmtSession.LOCK_TYPE_ATOMIC);
 
-			session.isNodeUri(TestExecPluginActivator.INTERIOR_VALUE);
+			session.isNodeUri(TestExecPluginActivator.INTERIOR_NODE_NAME);
 
 			tbc.pass("A relative URI can be used with isNodeUri.");
 		} catch (Exception e) {

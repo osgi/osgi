@@ -36,15 +36,13 @@
 
 package org.osgi.test.cases.dmt.main.tbc.DmtPermission;
 
-import org.osgi.service.dmt.DmtPermission;
+import org.osgi.service.dmt.security.DmtPermission;
+import org.osgi.test.cases.dmt.main.tbc.DmtConstants;
 import org.osgi.test.cases.dmt.main.tbc.DmtTestControl;
 
 /**
- * 
- * @methodUnderTest org.osgi.service.dmt.DmtPermission#hashCode
- * @generalDescription This Test Case Validates the implementation of
- *                     <code>hashCode<code> method, according to MEG reference
- *                     documentation.
+ * This test case validates the implementation of <code>hashCode<code> method of DmtPermission, 
+ * according to MEG specification
  */
 public class HashCode {
 	private DmtTestControl tbc;
@@ -59,21 +57,21 @@ public class HashCode {
 	}
 
 	/**
-	 * @testID testHashCode001
-	 * @testDescription Asserts that two objects initialized with the same
-	 *                  dmtUri and actions have the same hashcode
+	 * Asserts that two objects initialized with the same dmtUri and actions have the same hashcode
+	 * 
+	 * @spec DmtPermission.hashCode()
 	 */
 	private void testHashCode001() {
 		try {
 			tbc.log("#testHashCode001");
-			org.osgi.service.dmt.DmtPermission permission = new org.osgi.service.dmt.DmtPermission(
-					DmtTestControl.OSGi_LOG, DmtTestControl.ACTIONS);
+			org.osgi.service.dmt.security.DmtPermission permission = new org.osgi.service.dmt.security.DmtPermission(
+					DmtConstants.OSGi_LOG, DmtConstants.ACTIONS);
 			tbc
 					.assertEquals(
 							"Asserting that two objects initialized with the same dmtUri and actions have the same hashcode",
-							new org.osgi.service.dmt.DmtPermission(
-									DmtTestControl.OSGi_LOG,
-									DmtTestControl.ACTIONS).hashCode(),
+							new org.osgi.service.dmt.security.DmtPermission(
+									DmtConstants.OSGi_LOG,
+									DmtConstants.ACTIONS).hashCode(),
 							permission.hashCode());
 		} catch (Exception e) {
 			tbc.fail("Unexpected exception: " + e.getClass().getName());
@@ -81,10 +79,10 @@ public class HashCode {
 	}
 
 	/**
-	 * @testID testHashCode002
-	 * @testDescription Asserts that two objects initialized with the same
-	 *                  dmtUri and the same set of actions (in a different
-	 *                  order) have the same hashcode
+	 * Asserts that two objects initialized with the same dmtUri and the same set of actions (in a different
+	 * order) have the same hashcode using the constructor with two parameters
+	 * 
+	 * @spec DmtPermission.hashCode()
 	 */
 	private void testHashCode002() {
 		try {
@@ -93,14 +91,14 @@ public class HashCode {
 					+ "," + DmtPermission.EXEC;
 			String actionsDifferentOrder = DmtPermission.DELETE + ","
 					+ DmtPermission.EXEC + "," + DmtPermission.ADD;
-			org.osgi.service.dmt.DmtPermission permission = new org.osgi.service.dmt.DmtPermission(
-					DmtTestControl.OSGi_LOG, actions);
+			org.osgi.service.dmt.security.DmtPermission permission = new org.osgi.service.dmt.security.DmtPermission(
+					DmtConstants.OSGi_LOG, actions);
 			tbc
 					.assertEquals(
 							"Asserting that two objects initialized with the same dmtUri and actions are equal",
 							permission.hashCode(),
-							(new org.osgi.service.dmt.DmtPermission(
-									DmtTestControl.OSGi_LOG,
+							(new org.osgi.service.dmt.security.DmtPermission(
+									DmtConstants.OSGi_LOG,
 									actionsDifferentOrder)).hashCode());
 		} catch (Exception e) {
 			tbc.fail("Unexpected exception: " + e.getClass().getName());
