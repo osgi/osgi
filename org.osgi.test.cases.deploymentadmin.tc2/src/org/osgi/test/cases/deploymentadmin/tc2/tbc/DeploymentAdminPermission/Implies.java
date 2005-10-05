@@ -228,7 +228,7 @@ public class Implies {
             
             tbc.assertTrue(
                     "Asserts that an object implies other object that use wildcard as filter name.",
-                    deployPermission.implies(deployPermission2));
+                    deployPermission2.implies(deployPermission));
         } catch (Exception e) {
             tbc.fail(MessagesConstants.getMessage(
                     MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e
@@ -309,7 +309,7 @@ public class Implies {
             
             tbc.assertTrue(
                             "Asserts that an object that has a specific certificate does not hold a DeploymentAdminPermission that has a wildcard to accept any certificate.",
-                            deployPermission.implies(deployPermission2));
+                            !deployPermission.implies(deployPermission2));
         } catch (Exception e) {
             tbc.fail(MessagesConstants.getMessage(
                     MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e
