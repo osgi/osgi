@@ -78,16 +78,18 @@ public class Implies {
 	 * 
 	 * @spec DeploymentAdminPermission.implies(Permission)
 	 */
-	public void testImplies001() {
+	private void testImplies001() {
 		tbc.log("#testImplies001");
 		try {
 			DeploymentAdminPermission deployPermission = new DeploymentAdminPermission(
 					DeploymentConstants.DEPLOYMENT_PACKAGE_NAME0,
 					org.osgi.service.deploymentadmin.DeploymentAdminPermission.ACTION_INSTALL);
-			DeploymentAdminPermission deployPermission2 = new DeploymentAdminPermission(
+			
+            DeploymentAdminPermission deployPermission2 = new DeploymentAdminPermission(
 					DeploymentConstants.DEPLOYMENT_PACKAGE_NAME0,
 					org.osgi.service.deploymentadmin.DeploymentAdminPermission.ACTION_INSTALL);
-			tbc.assertTrue("Implies when both target and action are equal",
+			
+            tbc.assertTrue("Implies when both target and action are equal",
 					deployPermission.implies(deployPermission2));
 		} catch (Exception e) {
 			tbc.fail(MessagesConstants.getMessage(
@@ -102,7 +104,7 @@ public class Implies {
 	 * 
 	 * @spec DeploymentAdminPermission.implies(Permission)
 	 */
-	public void testImplies002() {
+	private void testImplies002() {
 		tbc.log("#testImplies002");
 		try {
 			DeploymentAdminPermission deployPermission = new DeploymentAdminPermission(
@@ -130,19 +132,20 @@ public class Implies {
 	 * 
 	 * @spec DeploymentAdminPermission.implies(Permission)
 	 */
-	public void testImplies003() {
+	private void testImplies003() {
 		tbc.log("#testImplies003");
 		try {
 			DeploymentAdminPermission deployPermission = new DeploymentAdminPermission(
 					DeploymentConstants.DEPLOYMENT_PACKAGE_NAME0,
 					org.osgi.service.deploymentadmin.DeploymentAdminPermission.ACTION_INSTALL);
-			DeploymentAdminPermission deployPermission2 = new DeploymentAdminPermission(
+			
+            DeploymentAdminPermission deployPermission2 = new DeploymentAdminPermission(
 					DeploymentConstants.DEPLOYMENT_PACKAGE_NAME0,
 					org.osgi.service.deploymentadmin.DeploymentAdminPermission.ACTION_INSTALL
 							+ ","
 							+ org.osgi.service.deploymentadmin.DeploymentAdminPermission.ACTION_CANCEL);
-			tbc
-					.assertTrue(
+			
+            tbc.assertTrue(
 							"Asserts implies when an object does not contains the actions that the other object contains.",
 							!deployPermission.implies(deployPermission2));
 		} catch (Exception e) {
@@ -158,17 +161,18 @@ public class Implies {
 	 * 
 	 * @spec DeploymentAdminPermission.implies(Permission)
 	 */
-	public void testImplies004() {
+	private void testImplies004() {
 		tbc.log("#testImplies004");
 		try {
 			DeploymentAdminPermission deployPermission = new DeploymentAdminPermission(
 					DeploymentConstants.DEPLOYMENT_PACKAGE_NAME0,
 					org.osgi.service.deploymentadmin.DeploymentAdminPermission.ACTION_INSTALL);
-			DeploymentAdminPermission deployPermission2 = new DeploymentAdminPermission(
+			
+            DeploymentAdminPermission deployPermission2 = new DeploymentAdminPermission(
 					DeploymentConstants.DEPLOYMENT_PACKAGE_NAME2,
 					org.osgi.service.deploymentadmin.DeploymentAdminPermission.ACTION_INSTALL);
-			tbc
-					.assertTrue(
+			
+            tbc.assertTrue(
 							"Asserts implies when an object hasn't the same signal of the other.",
 							!deployPermission.implies(deployPermission2));
 		} catch (Exception e) {
@@ -184,17 +188,18 @@ public class Implies {
 	 * 
 	 * @spec DeploymentAdminPermission.implies(Permission)
 	 */
-	public void testImplies005() {
+	private void testImplies005() {
 		tbc.log("#testImplies005");
 		try {
 			DeploymentAdminPermission deployPermission = new DeploymentAdminPermission(
 					DeploymentConstants.DEPLOYMENT_PACKAGE_NAME0,
 					org.osgi.service.deploymentadmin.DeploymentAdminPermission.ACTION_INSTALL);
-			DeploymentAdminPermission deployPermission2 = new DeploymentAdminPermission(
+			
+            DeploymentAdminPermission deployPermission2 = new DeploymentAdminPermission(
 					DeploymentConstants.DEPLOYMENT_PACKAGE_NAME2,
 					org.osgi.service.deploymentadmin.DeploymentAdminPermission.ACTION_INSTALL);
-			tbc
-					.assertTrue(
+			
+            tbc.assertTrue(
 							"Asserts implies when an object hasn't the same name of the other.",
 							!deployPermission.implies(deployPermission2));
 		} catch (Exception e) {
@@ -210,19 +215,20 @@ public class Implies {
      * 
      * @spec DeploymentAdminPermission.implies(Permission)
      */
-    public void testImplies006() {
+    private void testImplies006() {
         tbc.log("#testImplies006");
         try {
             DeploymentAdminPermission deployPermission = new DeploymentAdminPermission(
                     DeploymentConstants.DEPLOYMENT_PACKAGE_NAME2,
                     org.osgi.service.deploymentadmin.DeploymentAdminPermission.ACTION_INSTALL);
+            
             DeploymentAdminPermission deployPermission2 = new DeploymentAdminPermission(
-                    DeploymentConstants.BUNDLE_NAME_ALL,
+                    DeploymentConstants.DEPLOYMENT_PACKAGE_NAME_ALL,
                     org.osgi.service.deploymentadmin.DeploymentAdminPermission.ACTION_INSTALL);
-            tbc
-                    .assertTrue(
-                            "Asserts that an object implies other object that use wildcard as filter name.",
-                            deployPermission.implies(deployPermission2));
+            
+            tbc.assertTrue(
+                    "Asserts that an object implies other object that use wildcard as filter name.",
+                    deployPermission.implies(deployPermission2));
         } catch (Exception e) {
             tbc.fail(MessagesConstants.getMessage(
                     MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e
@@ -236,19 +242,19 @@ public class Implies {
      * 
      * @spec DeploymentAdminPermission.implies(Permission)
      */
-    public void testImplies007() {
+    private void testImplies007() {
         tbc.log("#testImplies007");
         try {
             DeploymentAdminPermission deployPermission = new DeploymentAdminPermission(
-                "(name=a*)",
-                    org.osgi.service.deploymentadmin.DeploymentAdminPermission.ACTION_INSTALL);
+                "(&(name=a*))", org.osgi.service.deploymentadmin.DeploymentAdminPermission.ACTION_INSTALL);
+            
             DeploymentAdminPermission deployPermission2 = new DeploymentAdminPermission(
-                    "(name=*)",
-                    org.osgi.service.deploymentadmin.DeploymentAdminPermission.ACTION_INSTALL);
-            tbc
-                    .assertTrue(
-                            "Asserts that an object does not implies other object that use a more specific wildcard as filter name.",
-                            !deployPermission.implies(deployPermission2));
+                DeploymentConstants.DEPLOYMENT_PACKAGE_NAME_ALL,
+                org.osgi.service.deploymentadmin.DeploymentAdminPermission.ACTION_INSTALL);
+            
+            tbc.assertTrue(
+                    "Asserts that an object does not implies other object that use a more specific wildcard as filter name.",
+                    !deployPermission.implies(deployPermission2));
         } catch (Exception e) {
             tbc.fail(MessagesConstants.getMessage(
                     MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e
@@ -262,17 +268,18 @@ public class Implies {
      * 
      * @spec DeploymentAdminPermission.implies(Permission)
      */
-    public void testImplies008() {
+    private void testImplies008() {
         tbc.log("#testImplies008");
         try {
             DeploymentAdminPermission deployPermission = new DeploymentAdminPermission(
                 DeploymentConstants.DEPLOYMENT_PACKAGE_NAME3,
                     org.osgi.service.deploymentadmin.DeploymentAdminPermission.ACTION_INSTALL);
+            
             DeploymentAdminPermission deployPermission2 = new DeploymentAdminPermission(
                 DeploymentConstants.DEPLOYMENT_PACKAGE_NAME2,
                     org.osgi.service.deploymentadmin.DeploymentAdminPermission.ACTION_INSTALL);
-            tbc
-                    .assertTrue(
+            
+            tbc.assertTrue(
                             "Asserts that an object that has wildcard in certificate accept any certificate.",
                             deployPermission.implies(deployPermission2));
         } catch (Exception e) {
@@ -289,17 +296,18 @@ public class Implies {
      * 
      * @spec DeploymentAdminPermission.implies(Permission)
      */
-    public void testImplies009() {
+    private void testImplies009() {
         tbc.log("#testImplies009");
         try {
             DeploymentAdminPermission deployPermission = new DeploymentAdminPermission(
                 DeploymentConstants.DEPLOYMENT_PACKAGE_NAME2,
                     org.osgi.service.deploymentadmin.DeploymentAdminPermission.ACTION_INSTALL);
+            
             DeploymentAdminPermission deployPermission2 = new DeploymentAdminPermission(
                 DeploymentConstants.DEPLOYMENT_PACKAGE_NAME3,
                     org.osgi.service.deploymentadmin.DeploymentAdminPermission.ACTION_INSTALL);
-            tbc
-                    .assertTrue(
+            
+            tbc.assertTrue(
                             "Asserts that an object that has a specific certificate does not hold a DeploymentAdminPermission that has a wildcard to accept any certificate.",
                             deployPermission.implies(deployPermission2));
         } catch (Exception e) {

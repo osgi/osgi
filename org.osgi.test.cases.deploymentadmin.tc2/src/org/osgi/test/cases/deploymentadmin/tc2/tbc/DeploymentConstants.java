@@ -82,6 +82,7 @@ public class DeploymentConstants {
     public static final int BUNDLE_FAIL_RES_DP = 21;
     public static final int BUNDLE_FAIL_ON_STOP = 22;
     public static final int SIGNING_FILE_NOT_NEXT = 23;
+    public static final int SIMPLE_UNINSTALL_BUNDLE = 24;
 	
 	//This array index is very important, and must be the same as the deployment code
 	//Use 31 characters. 
@@ -94,9 +95,9 @@ public class DeploymentConstants {
         "bsn_diff_from_manifest", "bversion_diff_from_manifest",
         "simple_resource_rp3", "simple_bundle_res_dp", "simple_no_bundle",
         "simple_no_resource", "bundle_fail_res_dp", "bundle_fail_on_stop_dp",
-        "signing_file_not_next"};
+        "signing_file_not_next", "simple_uninstall_bundle"};
 	
-	public static final String DEPLOYMENT_PACKAGE_NAME_ALL = "(name=*)";
+	public static final String DEPLOYMENT_PACKAGE_NAME_ALL = "(&(name=*))";
 	public static final String BUNDLE_NAME_ALL = "(name=*)";
 	public static final String DEPLOYMENT_PACKAGE_NAME0 = "(name="+MAP_CODE_TO_DP[0]+")";
 	public static final String DEPLOYMENT_PACKAGE_NAME1 = "(&(name="+MAP_CODE_TO_DP[1]+")"+"(signer=-;"+SIGNER_FILTER+"))";

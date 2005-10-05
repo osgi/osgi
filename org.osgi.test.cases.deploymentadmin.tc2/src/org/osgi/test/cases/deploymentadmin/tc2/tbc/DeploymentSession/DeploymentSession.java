@@ -46,10 +46,9 @@
 
 package org.osgi.test.cases.deploymentadmin.tc2.tbc.DeploymentSession;
 
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.FilePermission;
-import java.io.FileReader;
+import java.util.Iterator;
 import java.util.Vector;
 import org.osgi.framework.AdminPermission;
 import org.osgi.framework.BundleEvent;
@@ -83,6 +82,9 @@ import org.osgi.test.cases.deploymentadmin.tc2.tbc.util.TestingSessionResourcePr
 public class DeploymentSession {
 
 	private DeploymentTestControl tbc;
+    
+    public static boolean SIMULATING_EXCEPTION_ON_COMMIT = false;
+    public static boolean SIMULATING_EXCEPTION_ON_PREPARE = false;
     
     private boolean reach1 = false, reach2= false, reachTC = false;
     private boolean clean1, clean2;
@@ -133,21 +135,19 @@ public class DeploymentSession {
 		
 		DeploymentPackage sourceDP = null, targetDP = null;
 		try {
-			targetDP = tbc.installDeploymentPackage(tbc.getWebServer() + testDP.getFilename());
-			tbc.assertNotNull(MessagesConstants.getMessage(MessagesConstants.ASSERT_NOT_NULL,new String[] {"Resource Processor"}),targetDP);
-			
-			sourceDP = tbc.installDeploymentPackage(tbc.getWebServer() + testRP.getFilename());
+            sourceDP = tbc.installDeploymentPackage(tbc.getWebServer() + testDP.getFilename());
 			tbc.assertNotNull(MessagesConstants.getMessage(MessagesConstants.ASSERT_NOT_NULL,new String[] {"Resource Processor"}),sourceDP);
 			
-			TestingSessionResourceProcessor testSessionRP = (TestingSessionResourceProcessor) getTestSessionRP(DeploymentConstants.PID_RESOURCE_PROCESSOR3);
-			
-			File file = testSessionRP.getDataFile(targetDP.getBundle(testTargetBundle.getName()));
-            boolean value = isInFile(file); 
-            
-			tbc.assertTrue("The session has access to the private data area of the bundle in the target DP", value);
+			targetDP = tbc.installDeploymentPackage(tbc.getWebServer() + testRP.getFilename());
+			tbc.assertNotNull(MessagesConstants.getMessage(MessagesConstants.ASSERT_NOT_NULL,new String[] {"Resource Processor"}),targetDP);
 
-			file = testSessionRP.getDataFile(sourceDP.getBundle(testSourceBundle.getName()));
-			tbc.assertNotNull("The session has access to the private data area of the bundle in the source DP", file);
+            TestingSessionResourceProcessor testSessionRP = (TestingSessionResourceProcessor) getTestSessionRP(DeploymentConstants.PID_RESOURCE_PROCESSOR3);
+			
+			File file1 = testSessionRP.getDataFile(targetDP.getBundle(testTargetBundle.getName()));
+            tbc.assertNotNull("The session has access to the private data area of the bundle in the target DP", file1);
+
+			File file2 = testSessionRP.getDataFile(sourceDP.getBundle(testSourceBundle.getName()));
+			tbc.assertNotNull("The session has access to the private data area of the bundle in the source DP", file2);
 		} catch (Exception e) {
 			tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }));
 		} finally {
@@ -155,22 +155,6 @@ public class DeploymentSession {
 		}
 	}
 	
-    private boolean isInFile(File file) {
-        try {
-            String str = null;
-            BufferedReader reader = new BufferedReader(new FileReader(file));
-            while ((str = reader.readLine()) != null) {
-                if (str.indexOf("<organization name=\"CESAR\">MEG TCK</organization>") != -1) {
-                    return true;
-                }
-            }
-        } catch (Exception e) {
-            tbc.log("#error reading the private file.");
-            e.printStackTrace();
-        }
-        return false;
-    }
-
     /**
 	 * Asserts that <code>DeploymentCustomizerPermission(" <filter>", "privatearea")<code>
 	 * is needed for calling <code>getDataFile<code> method. <code>SecurityException<code> must be
@@ -317,7 +301,10 @@ public class DeploymentSession {
 		tbc.log("#testDeploymentSession006");
 		
 		setResourceProcessorPermissions(
-				DeploymentConstants.OSGI_DP_LOCATION + DeploymentConstants.PID_RESOURCE_PROCESSOR3, "(name=*)");
+				DeploymentConstants.OSGI_DP_LOCATION + DeploymentConstants.PID_RESOURCE_PROCESSOR1, "(name=*)");
+        
+        setResourceProcessorPermissions(
+            DeploymentConstants.OSGI_DP_LOCATION + DeploymentConstants.PID_RESOURCE_PROCESSOR2, "(name=*)");
 		
 		TestingDeploymentPackage testRP = tbc.getTestingDeploymentPackage(DeploymentConstants.SESSION_TEST_DP);
 		DeploymentPackage targetDP = null;
@@ -330,7 +317,7 @@ public class DeploymentSession {
 			if (rp1.sessionJoinTime() > rp2.sessionJoinTime()) {
 				tbc.assertTrue("The Resource Processor prepare method was called in the reverse order of joining.",
 								rp1.sessionPrepareTime() < rp2.sessionPrepareTime());
-			} else if (rp1.sessionJoinTime() < rp2.sessionJoinTime()) {
+			} else { // (rp1.sessionJoinTime() < rp2.sessionJoinTime()) 
 				tbc.assertTrue("The Resource Processor prepare method was called in the reverse order of joining.",
 								rp1.sessionPrepareTime() > rp2.sessionPrepareTime());
 			}
@@ -350,6 +337,13 @@ public class DeploymentSession {
 	 */
 	private void testDeploymentSession007()  {
 		tbc.log("#testDeploymentSession007");
+        
+        setResourceProcessorPermissions(DeploymentConstants.OSGI_DP_LOCATION
+            + DeploymentConstants.PID_RESOURCE_PROCESSOR1, "(name=*)");
+        
+        setResourceProcessorPermissions(DeploymentConstants.OSGI_DP_LOCATION
+            + DeploymentConstants.PID_RESOURCE_PROCESSOR2, "(name=*)");
+
 		TestingDeploymentPackage testRP = tbc.getTestingDeploymentPackage(DeploymentConstants.SESSION_TEST_DP);
 		DeploymentPackage targetDP = null;
 		try {
@@ -361,7 +355,7 @@ public class DeploymentSession {
 			if (rp1.sessionJoinTime() > rp2.sessionJoinTime()) {
 				tbc.assertTrue("The Resource Processors commit methods were called in the reverse order of joining.",
 								rp1.sessionCommitTime() < rp2.sessionCommitTime());
-			} else if (rp1.sessionJoinTime() < rp2.sessionJoinTime()) {
+			} else { // (rp1.sessionJoinTime() < rp2.sessionJoinTime())
 				tbc.assertTrue("The Resource Processors commit methods were called in the reverse order of joining.",
 								rp1.sessionCommitTime() > rp2.sessionCommitTime());
 			}
@@ -380,24 +374,30 @@ public class DeploymentSession {
 	 */
 	private void testDeploymentSession008()  {
 		tbc.log("#testDeploymentSession008");
+        
+        setResourceProcessorPermissions(DeploymentConstants.OSGI_DP_LOCATION
+            + DeploymentConstants.PID_RESOURCE_PROCESSOR1, "(name=*)");
+        
+        setResourceProcessorPermissions(DeploymentConstants.OSGI_DP_LOCATION
+            + DeploymentConstants.PID_RESOURCE_PROCESSOR2, "(name=*)");
+        
+        SIMULATING_EXCEPTION_ON_COMMIT = true;
+
 		TestingDeploymentPackage testRP = tbc.getTestingDeploymentPackage(DeploymentConstants.SESSION_TEST_DP);
-		TestingDeploymentPackage testUpdateRP = tbc.getTestingDeploymentPackage(DeploymentConstants.SESSION_UPDATE_TEST_DP);
-		DeploymentPackage targetDP = null, updateDP = null;
+		DeploymentPackage targetDP = null;
 		try {
 			// to register TestingResourceProcessor
 			targetDP = tbc.installDeploymentPackage(tbc.getWebServer() + testRP.getFilename());
 			
 			// to hold testing resource processor service instance
 			TestingResourceProcessor rp1 = (TestingResourceProcessor)getTestSessionRP(DeploymentConstants.PID_RESOURCE_PROCESSOR1);
-			rp1.setSimulateExceptionOnCommit(true);
 			
-			//commit must throw a RuntimeException
-			updateDP = tbc.installDeploymentPackage(tbc.getWebServer() + testUpdateRP.getFilename());
-			tbc.pass("DeploymentAdmin service ignored exception throwed on commit method.");
+			tbc.assertTrue("DeploymentAdmin service ignored exception throwed on commit method.", rp1.isInstallUpdateOrdered());
 		} catch (Exception e) {
 			tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }));
 		} finally {
-			tbc.uninstall(new DeploymentPackage[] { targetDP, updateDP });
+            SIMULATING_EXCEPTION_ON_COMMIT = false;
+			tbc.uninstall(targetDP);
 		}
 	}
 	
@@ -410,31 +410,32 @@ public class DeploymentSession {
 	private void testDeploymentSession009()  {
 		tbc.log("#testDeploymentSession009");
 		TestingDeploymentPackage testRP = tbc.getTestingDeploymentPackage(DeploymentConstants.SESSION_TEST_DP);
-		TestingDeploymentPackage testUpdateRP = tbc.getTestingDeploymentPackage(DeploymentConstants.SESSION_UPDATE_TEST_DP);
-		DeploymentPackage targetDP = null, updateDP = null;
+		DeploymentPackage targetDP = null;
+        TestingResourceProcessor rp1 = null, rp2 = null;
 		try {
-			// to register TestingResourceProcessor
-			targetDP = tbc.installDeploymentPackage(tbc.getWebServer() + testRP.getFilename());
-			
-			// to hold testing resource processor service instance
-			TestingResourceProcessor rp1 = (TestingResourceProcessor)getTestSessionRP(DeploymentConstants.PID_RESOURCE_PROCESSOR1);
-			TestingResourceProcessor rp2 = (TestingResourceProcessor)getTestSessionRP(DeploymentConstants.PID_RESOURCE_PROCESSOR2);
-			rp1.setSimulateExceptionOnPrepare(true);
-			
-			//prepare must throw a DeploymentException
-			updateDP = tbc.installDeploymentPackage(tbc.getWebServer() + testUpdateRP.getFilename());
-
-			if (rp1.sessionJoinTime() > rp2.sessionJoinTime()) {
-				tbc.assertTrue("The Resource Processors rollback methods were called in the reverse order of joining.",
-								rp1.sessionRollbackTime() < rp2.sessionRollbackTime());
-			} else if (rp1.sessionJoinTime() < rp2.sessionJoinTime()) {
-				tbc.assertTrue("The Resource Processor rollback methods were called in the reverse order of joining.",
-								rp1.sessionRollbackTime() > rp2.sessionRollbackTime());
-			}
-		} catch (Exception e) {
+            // to register TestingResourceProcessor
+            targetDP = tbc.installDeploymentPackage(tbc.getWebServer() + testRP.getFilename());
+            // to hold testing resource processor service instance
+            rp1 = (TestingResourceProcessor) getTestSessionRP(DeploymentConstants.PID_RESOURCE_PROCESSOR1);
+            rp2 = (TestingResourceProcessor) getTestSessionRP(DeploymentConstants.PID_RESOURCE_PROCESSOR2);
+            
+            SIMULATING_EXCEPTION_ON_PREPARE = true;
+            targetDP.uninstall();
+		} catch (DeploymentException e) {
+            if (rp1.sessionJoinTime() > rp2.sessionJoinTime()) {
+                tbc.assertTrue(
+                        "The Resource Processors rollback methods were called in the reverse order of joining.",
+                        rp1.sessionRollbackTime() < rp2.sessionRollbackTime());
+            } else { // if (rp1.sessionJoinTime() < rp2.sessionJoinTime())
+                tbc.assertTrue(
+                        "The Resource Processor rollback methods were called in the reverse order of joining.",
+                        rp1.sessionRollbackTime() > rp2.sessionRollbackTime());
+            }
+        } catch (Exception e) {
 			tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }));
 		} finally {
-			tbc.uninstall(new DeploymentPackage[] { targetDP, updateDP });
+            SIMULATING_EXCEPTION_ON_PREPARE = false;
+			tbc.uninstall(targetDP);
 		}
 	}
 	
@@ -455,29 +456,36 @@ public class DeploymentSession {
 		listener.reset();
 		try {
 			targetDP = tbc.installDeploymentPackage(tbc.getWebServer() + testDP.getFilename());
-			TestingBundle[] testBundles = testDP.getBundles();
-			events = listener.getEvents();
-			if (tbc.isTransactionalDA()){
-				tbc.assertTrue("In a transactional session no event is sent if the installation fails",
-								events.isEmpty());
-			} else { //non-transactional
-				BundleEvent event = (BundleEvent)events.get(0);
-				tbc.assertEquals("First bundle event is install", BundleEvent.INSTALLED, event.getType());
-				tbc.assertEquals("Assert Bundle name", testBundles[0].getName(), event.getBundle().getSymbolicName());
+		} catch (DeploymentException e) {
+            TestingBundle[] testBundles = testDP.getBundles();
+            events = listener.getEvents();
+            if (tbc.isTransactionalDA()){
+                tbc.assertTrue("In a transactional session no event is sent if the installation fails", events.isEmpty());
+            } else { //non-transactional
+                Iterator it = events.iterator();
+                BundleEvent event = null;
+                int i = 0;
+                // assert INSTALLED events
+                while (it.hasNext() && i < 2) {
+                    event = (BundleEvent)it.next();
+                    if (event.getType() == BundleEvent.INSTALLED) {
+                        tbc.assertEquals("Bundle " + i + " INSTALLED",
+                            testBundles[i++].getName(), event.getBundle().getSymbolicName());
+                    }
+                }
 
-				event = (BundleEvent)events.get(1);
-				tbc.assertEquals("Second bundle event is install", BundleEvent.INSTALLED, event.getType());
-				tbc.assertEquals("Assert Bundle name", testBundles[1].getName(), event.getBundle().getSymbolicName());
-
-				event = (BundleEvent)events.get(2);
-				tbc.assertEquals("Third event is uninstall", BundleEvent.UNINSTALLED, event.getType());
-				tbc.assertEquals("Assert Bundle name", testBundles[0].getName(), event.getBundle().getSymbolicName());
-
-				event = (BundleEvent)events.get(3);
-				tbc.assertEquals("Fourth event is uninstall", BundleEvent.UNINSTALLED, event.getType());
-				tbc.assertEquals("Assert Bundle name", testBundles[1].getName(), event.getBundle().getSymbolicName());
-			}
-		} catch (Exception e) {
+                // assert UNINSTALLED events
+                it = events.iterator();
+                i = 0;
+                while (it.hasNext() && i < 2) {
+                    event = (BundleEvent)it.next();
+                    if (event.getType() == BundleEvent.UNINSTALLED) {
+                        tbc.assertEquals("Bundle " + i + " UNINSTALLED",
+                            testBundles[i++].getName(), event.getBundle().getSymbolicName());
+                    }
+                }
+            }
+        } catch (Exception e) {
 			tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }));
 		} finally {
 			tbc.uninstall(targetDP);
@@ -485,8 +493,7 @@ public class DeploymentSession {
 		}
 	}
 	
-	
-	/**
+    /**
 	 * Asserts if the deployment action is an update, <code>getSourceDeploymentPackage<code>
 	 * returns the <code>DeploymentPackage<code> instance that corresponds to the deployment 
 	 * package being streamed in for this session

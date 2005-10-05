@@ -204,8 +204,8 @@ public class DeploymentTestControl extends DefaultTestBundleControl {
 				break;
 			}
 			case DeploymentConstants.TRANSACTIONAL_SESSION_DP: {
-				TestingBundle[] bundles = {new TestingBundle("org.osgi.test.cases.deployment.bundles.rp1", "1.0", "rp_bundle.jar"), new TestingBundle("org.osgi.test.cases.deployment.bundles.rp2", "1.0", "rp_bundle2.jar")};
-				TestingResource[] resources = {new TestingResource("simple_resource.xml","org.osgi.test.cases.deployment.bundles.rp1"), new TestingResource("simple_resource.xml","br.org.unknown.rp")};
+				TestingBundle[] bundles = {new TestingBundle("bundles.tb1", "1.0", "bundle001.jar"), new TestingBundle("bundles.tb2", "1.0", "bundle002.jar")};
+				TestingResource[] resources = {new TestingResource("simple_resource.xml","br.org.unknown.rp")};
 				dp = new TestingDeploymentPackage(DeploymentConstants.MAP_CODE_TO_DP[DeploymentConstants.TRANSACTIONAL_SESSION_DP], "1.0", "transactional_session.dp", bundles, resources);
 				packages.put(""+i, dp);
 				break;
@@ -310,6 +310,11 @@ public class DeploymentTestControl extends DefaultTestBundleControl {
             case DeploymentConstants.SIGNING_FILE_NOT_NEXT: {
                 TestingBundle[] bundles = {new TestingBundle("bundles.tb1", "1.0", "bundle001.jar"), new TestingBundle("bundles.tb2", "1.0", "bundle002.jar")};
                 dp = new TestingDeploymentPackage(DeploymentConstants.MAP_CODE_TO_DP[DeploymentConstants.SIMPLE_DP], "1.0.0", "bundle_fail_on_stop_res.dp", bundles);
+                packages.put(""+i, dp);
+                break;
+            }
+            case DeploymentConstants.SIMPLE_UNINSTALL_BUNDLE: {
+                dp = new TestingDeploymentPackage(DeploymentConstants.MAP_CODE_TO_DP[DeploymentConstants.SIMPLE_DP], "1.1.1", "simple_uninstall_bundle.dp", null);
                 packages.put(""+i, dp);
                 break;
             }
