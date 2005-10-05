@@ -20,13 +20,30 @@ move ..\res\simple.dp ..\..\org.osgi.test.cases.deploymentadmin.tc2\res\
 
 jar -cvfm ..\res\simple_no_resource.dp ..\res\simple_no_resource_dp.mf bundle001.jar
 jarsigner -keystore ..\megtck_keystore -storepass megtck -keypass megtck ..\res\simple_no_resource.dp megtck
-move ..\res\simple_no_resource.dp ..\..\org.osgi.test.cases.deploymentadmin.tc1\res\
+copy ..\res\simple_no_resource.dp ..\..\org.osgi.test.cases.deploymentadmin.tc1\res\
 move ..\res\simple_no_resource.dp ..\..\org.osgi.test.cases.deploymentadmin.tc2\res\
 
 jar -cvfm ..\res\simple_no_bundle.dp ..\res\simple_no_bundle_dp.mf simple_resource.xml
 jarsigner -keystore ..\megtck_keystore -storepass megtck -keypass megtck ..\res\simple_no_bundle.dp megtck
-move ..\res\simple_no_bundle.dp ..\..\org.osgi.test.cases.deploymentadmin.tc1\res\
+copy ..\res\simple_no_bundle.dp ..\..\org.osgi.test.cases.deploymentadmin.tc1\res\
 move ..\res\simple_no_bundle.dp ..\..\org.osgi.test.cases.deploymentadmin.tc2\res\
+
+jar -cvfm ..\res\simple_uninstall_bundle.dp ..\res\simple_uninstall_bundle_dp.mf
+jarsigner -keystore ..\megtck_keystore -storepass megtck -keypass megtck ..\res\simple_uninstall_bundle.dp megtck
+copy ..\res\simple_uninstall_bundle.dp ..\..\org.osgi.test.cases.deploymentadmin.tc1\res\
+move ..\res\simple_uninstall_bundle.dp ..\..\org.osgi.test.cases.deploymentadmin.tc2\res\
+
+jar -cvfm ..\res\transactional_session.dp ..\res\transactional_session.mf bundle001.jar bundle002.jar simple_resource.xml
+jarsigner -keystore ..\megtck_keystore -storepass megtck -keypass megtck ..\res\transactional_session.dp megtck
+move ..\res\transactional_session.dp ..\..\org.osgi.test.cases.deploymentadmin.tc2\res\
+
+jar -cvfm ..\res\bundle_fail_res.dp ..\res\bundle_fail_res_dp.mf bundle005.jar bundle001.jar bundle002.jar simple_resource.xml conf.txt
+jarsigner -keystore ..\megtck_keystore -storepass megtck -keypass megtck ..\res\bundle_fail_res.dp megtck
+move ..\res\bundle_fail_res.dp ..\..\org.osgi.test.cases.deploymentadmin.tc2\res\
+
+jar -cvfm ..\res\bundle_fail_on_stop_res.dp ..\res\bundle_fail_on_stop_res_dp.mf bundle006.jar bundle001.jar bundle002.jar simple_resource.xml conf.txt
+jarsigner -keystore ..\megtck_keystore -storepass megtck -keypass megtck ..\res\bundle_fail_on_stop_res.dp megtck
+move ..\res\bundle_fail_on_stop_res.dp ..\..\org.osgi.test.cases.deploymentadmin.tc2\res\
 
 REM Renaming resource processors bundles to be compliant with deployment packages manifests
 del rp_bundle.jar
@@ -157,10 +174,6 @@ jar -cvfm ..\res\wrong_path.dp ..\res\wrong_path.mf wrong(path)\bundle001.jar
 jarsigner -keystore ..\megtck_keystore -storepass megtck -keypass megtck ..\res\wrong_path.dp megtck
 move ..\res\wrong_path.dp ..\..\org.osgi.test.cases.deploymentadmin.tc1\res\
 
-jar -cvfm ..\res\simple_uninstall_bundle.dp ..\res\simple_uninstall_bundle_dp.mf
-jarsigner -keystore ..\megtck_keystore -storepass megtck -keypass megtck ..\res\simple_uninstall_bundle.dp megtck
-move ..\res\simple_uninstall_bundle.dp ..\..\org.osgi.test.cases.deploymentadmin.tc1\res\
-
 jar -cvfm ..\res\bundle_doesnt_throw_exception.dp ..\res\bundle_throws_exception_dp.mf bundle005.jar
 jarsigner -keystore ..\megtck_keystore -storepass megtck -keypass megtck ..\res\bundle_doesnt_throw_exception.dp megtck
 move ..\res\bundle_doesnt_throw_exception.dp ..\..\org.osgi.test.cases.deploymentadmin.tc1\res\
@@ -290,10 +303,6 @@ jar -cvfm ..\res\session_update_test.dp ..\res\session_update_test.mf rp_bundle.
 jarsigner -keystore ..\megtck_keystore -storepass megtck -keypass megtck ..\res\session_update_test.dp megtck
 move ..\res\session_update_test.dp ..\..\org.osgi.test.cases.deploymentadmin.tc2\res\
 
-jar -cvfm ..\res\transactional_session.dp ..\res\transactional_session.mf bundle001.jar bundle002.jar simple_resource.xml
-jarsigner -keystore ..\megtck_keystore -storepass megtck -keypass megtck ..\res\transactional_session.dp megtck
-move ..\res\transactional_session.dp ..\..\org.osgi.test.cases.deploymentadmin.tc2\res\
-
 jar -cvfm ..\res\auto_config.dp ..\res\auto_config_dp.mf bundle004.jar OSGI-INF\AUTOCONF.xml
 jarsigner -keystore ..\megtck_keystore -storepass megtck -keypass megtck ..\res\auto_config.dp megtck
 move ..\res\auto_config.dp ..\..\org.osgi.test.cases.deploymentadmin.tc2\res\
@@ -310,7 +319,7 @@ jar -cvfm ..\res\rp_from_other_dp.dp ..\res\rp_from_other_dp.mf rp_bundle3.jar c
 jarsigner -keystore ..\megtck_keystore -storepass megtck -keypass megtck ..\res\rp_from_other_dp.dp megtck
 move ..\res\rp_from_other_dp.dp ..\..\org.osgi.test.cases.deploymentadmin.tc2\res\
 
-jar -cvfm ..\res\installation_fails.dp ..\res\installation_fails_dp.mf bundle005.jar simple_resource.xml
+jar -cvfm ..\res\installation_fails.dp ..\res\installation_fails_dp.mf simple_resource.xml conf.txt
 jarsigner -keystore ..\megtck_keystore -storepass megtck -keypass megtck ..\res\installation_fails.dp megtck
 move ..\res\installation_fails.dp ..\..\org.osgi.test.cases.deploymentadmin.tc2\res\
 
@@ -330,14 +339,6 @@ jar -cvfm ..\res\simple_bundle_res.dp ..\res\simple_bundle_res_dp.mf bundle001.j
 jarsigner -keystore ..\megtck_keystore -storepass megtck -keypass megtck ..\res\simple_bundle_res.dp megtck
 move ..\res\simple_bundle_res.dp ..\..\org.osgi.test.cases.deploymentadmin.tc2\res\
 
-jar -cvfm ..\res\bundle_fail_res.dp ..\res\bundle_fail_res_dp.mf bundle005.jar bundle001.jar bundle002.jar simple_resource.xml conf.txt
-jarsigner -keystore ..\megtck_keystore -storepass megtck -keypass megtck ..\res\bundle_fail_res.dp megtck
-move ..\res\bundle_fail_res.dp ..\..\org.osgi.test.cases.deploymentadmin.tc2\res\
-
-jar -cvfm ..\res\bundle_fail_on_stop_res.dp ..\res\bundle_fail_on_stop_res_dp.mf bundle006.jar bundle001.jar bundle002.jar simple_resource.xml conf.txt
-jarsigner -keystore ..\megtck_keystore -storepass megtck -keypass megtck ..\res\bundle_fail_on_stop_res.dp megtck
-move ..\res\bundle_fail_on_stop_res.dp ..\..\org.osgi.test.cases.deploymentadmin.tc2\res\
-
 jar -cvf ..\res\signing_files_not_next.dp bundle001.jar bundle002.jar META-INF\MANIFEST.mf META-INF\README.txt META-INF\MEGTCK.DSA META-INF\MEGTCK.SF
 jarsigner -keystore ..\megtck_keystore -storepass megtck -keypass megtck ..\res\signing_files_not_next.dp megtck
 move ..\res\signing_files_not_next.dp ..\..\org.osgi.test.cases.deploymentadmin.tc2\res\
@@ -349,6 +350,10 @@ move ..\res\session_test.dp ..\..\org.osgi.test.cases.deploymentadmin.tc2\res\
 jar -cvfm ..\res\resource_processor2.dp ..\res\resource_processor2_dp.mf rp_bundle2.jar
 jarsigner -keystore ..\megtck_keystore -storepass megtck -keypass megtck ..\res\resource_processor2.dp megtck
 move ..\res\resource_processor2.dp ..\..\org.osgi.test.cases.deploymentadmin.tc2\res\
+
+jar -cvfm ..\res\simple_resource_rp3.dp ..\res\simple_resource_rp3.mf simple_resource.xml
+jarsigner -keystore ..\megtck_keystore -storepass megtck -keypass megtck ..\res\simple_resource_rp3.dp megtck
+move ..\res\simple_resource_rp3.dp ..\..\org.osgi.test.cases.deploymentadmin.tc2\res\
 
 REM Backing to the previous directory
 cd ..
