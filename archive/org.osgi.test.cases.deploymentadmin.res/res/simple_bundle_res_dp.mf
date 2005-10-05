@@ -10,11 +10,11 @@ DeploymentPackage-License: www.cesar.org.br/megtck/license.html
 
 Name: bundle001.jar
 Bundle-SymbolicName: bundles.tb1
-Bundle-Version: 1.0
+Bundle-Version: 1.5
 
 Name: bundle002.jar
 Bundle-SymbolicName: bundles.tb2
-Bundle-Version: 1.0
+Bundle-Version: 0.5
 
 Name: bundle003.jar
 Bundle-SymbolicName: bundles.tb3
