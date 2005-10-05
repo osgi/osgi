@@ -30,96 +30,59 @@
  * CR            Headline
  * ============  ==============================================================
  * Feb 24, 2005  Luiz Felipe Guimaraes
- * 31            [MEGTCK][DMT] Validation of ConfigAdmin DMT Structure
+ * 31            [MEGTCK][DMT] Validation of Configuration Tree Structure
  * ============  ==============================================================
  */
 
 package org.osgi.test.cases.dmt.plugins.tbc.TreeStructure;
-import java.util.Dictionary;
-import java.util.Hashtable;
-import java.util.Vector;
-
 import org.osgi.service.dmt.DmtData;
 import org.osgi.service.dmt.DmtSession;
+import org.osgi.service.dmt.MetaNode;
+import org.osgi.test.cases.dmt.plugins.tbc.DmtConstants;
 import org.osgi.test.cases.dmt.plugins.tbc.DmtTestControl;
 import org.osgi.test.cases.util.DefaultTestBundleControl;
 
 /**
  * @author Luiz Felipe Guimaraes
  * 
- * @generalDescription This Test Class Validates the implementation of RFC87 section 5.2 (Configuration)
+ * This test class validates the implementation of Configuration Management Object
  */
 public class Configuration extends DefaultTestBundleControl {
+    
 	private DmtTestControl tbc;
 	
-	public final static String BUNDLE_PID = "br.org.cesar.test";
+	public final static String PID = "br.org.cesar.pid";
 	
-	public final static String URI_BUNDLE = DmtTestControl.OSGi_CFG + "/" + BUNDLE_PID;
-
-	public final static String URI_BUNDLE_KEYS = DmtTestControl.OSGi_CFG + "/" + BUNDLE_PID + "/keys";
+	public final static String CFG_PID = DmtConstants.OSGi_CFG + "/" + PID;
 	
-	public final static String LOCATION = "testlocation";
+	public final static String CFG_PID_PID = CFG_PID +"/Pid";
 	
-	public final static String URI_BUNDLE_LOCATION = URI_BUNDLE + "/" + LOCATION;
+	public final static String CFG_PID_FACTORYPID = CFG_PID +"/FactoryPid";
 	
-	public final static String URI_BUNDLE_PID = URI_BUNDLE +"/service.pid";
+	public final static String CFG_PID_LOCATION = CFG_PID + "/Location";
 	
-	public final static String BUNDLE_2_FACTORY_PID = "br.org.cesar.test2";
-
-	public static String BUNDLE_2_PID = "";
+	public final static String CFG_PID_KEYS = CFG_PID +"/Keys";
 	
-	public static String URI_BUNDLE_2 = "";
-
-	public static String URI_BUNDLE_2_KEYS = "";
+	public final static String CFG_PID_KEYS_KEY = CFG_PID_KEYS + "/key1";
 	
-	public static String URI_BUNDLE_2_LOCATION = "";
+	public final static String CFG_PID_KEYS_KEY_TYPE = CFG_PID_KEYS_KEY + "/Type";
 	
-	public static String URI_BUNDLE_2_PID = "";
+	public final static String CFG_PID_KEYS_KEY_CARDINALITY = CFG_PID_KEYS_KEY + "/Cardinality";
 	
-	public static String URI_BUNDLE_2_FACTORY_PID = "";
+	public final static String CFG_PID_KEYS_KEY_VALUE = CFG_PID_KEYS_KEY + "/Value";
 	
-	public final static String LOCATION_2 = "testlocation2";
-
-	public final static String SCALAR = "scalar";
+	public final static String CFG_PID_KEYS_KEY_VALUES = CFG_PID_KEYS_KEY + "/Values";
 	
-	public final static String ARRAY = "array";
+	public final static String CFG_PID_KEYS_KEY_VALUES_N = CFG_PID_KEYS_KEY_VALUES + "/n1";
 	
-	public final static String VECTOR = "vector";
 	
-	public final static String CARDINALITY = "/cardinality";
+	private final DmtData defaultDataString = new DmtData("test");
 	
-	public final static String TYPE = "/type";
-	
-	public final static String VALUE = "/value";
-
-	private org.osgi.service.cm.Configuration config = null;
-
-	private org.osgi.service.cm.Configuration config2 = null;
-
-
-	private void init() {
-		try {
-			Dictionary properties = new Hashtable();
-			config = tbc.getConfigurationAdmin().getConfiguration(BUNDLE_PID,LOCATION);
-			config2 = tbc.getConfigurationAdmin().createFactoryConfiguration(BUNDLE_2_FACTORY_PID,LOCATION_2);
-			BUNDLE_2_PID = config2.getPid();
-			URI_BUNDLE_2 = DmtTestControl.OSGi_CFG + "/" + BUNDLE_2_PID;
-			URI_BUNDLE_2_KEYS = DmtTestControl.OSGi_CFG + "/" + BUNDLE_2_PID + "/keys";
-			URI_BUNDLE_2_LOCATION = URI_BUNDLE_2 + "/" + LOCATION_2;
-			URI_BUNDLE_2_PID = URI_BUNDLE_2_KEYS + "/service.pid";
-			URI_BUNDLE_2_FACTORY_PID = URI_BUNDLE_2_KEYS + "/service.factoryPid";
-			config.update(properties);
-			config2.update(properties);
-		} catch (Exception e) {
-			tbc.fail("Failed creating a ManagedService");
-		}
-	}
 	public Configuration(DmtTestControl tbc) {
 		this.tbc = tbc;
 	}
 
 	public void run() {
-		init();
 		testConfiguration001();
 		testConfiguration002();
 		testConfiguration003();
@@ -132,24 +95,25 @@ public class Configuration extends DefaultTestBundleControl {
 		testConfiguration010();
 		testConfiguration011();
 		testConfiguration012();
-		testConfiguration013();
-		testConfiguration014();
-		testConfiguration015();
 	}
-
+	
 	/**
-	 * @testID testConfiguration001
-	 * @testDescription Asserts that a configuration dictionary from a Managed Service is stored in a expected node 
-	 * 					and that there is a location node
+	 * Asserts the MetaNode of the $/Configuration node.
+	 * 
+	 * @spec 3.2 Configuration Management Object
 	 */
 	private void testConfiguration001() {
 		DmtSession session = null;
 		try {
 			tbc.log("#testConfiguration001");
-			session = tbc.getDmtAdmin().getSession(DmtTestControl.OSGi_CFG,DmtSession.LOCK_TYPE_EXCLUSIVE);
-			tbc.assertTrue("Asserts that a configuration dictionary from a Managed Service is stored in the expected node ["+ URI_BUNDLE +"]",session.isNodeUri(URI_BUNDLE));
-			tbc.assertEquals("Asserts that the service.pid node contains the expected value",BUNDLE_PID,session.getNodeValue(URI_BUNDLE_PID).getString());
-			tbc.assertTrue("Asserts that there is a location node [" + URI_BUNDLE_LOCATION + "]",session.isNodeUri(URI_BUNDLE_LOCATION));
+			session = tbc.getDmtAdmin().getSession(DmtConstants.OSGi_CFG,DmtSession.LOCK_TYPE_ATOMIC);
+			MetaNode metaNode = session.getMetaNode(DmtConstants.OSGi_CFG);
+			tbc.assertEquals("Asserts that $/Configuration node is permanent",MetaNode.PERMANENT, metaNode.getScope());
+			tbc.assertTrue("Asserts that $/Configuration node can be gotten", metaNode.can(MetaNode.CMD_GET));
+			tbc.assertEquals("Asserts that $/Configuration node format is an interior node", DmtData.FORMAT_NODE,metaNode.getFormat());
+			tbc.assertTrue("Asserts $/Configuration node cardinality", !metaNode.isZeroOccurrenceAllowed() && metaNode.getMaxOccurrence()==1);
+			
+			
 		} catch (Exception e) {
 			tbc.fail("Unexpected Exception: " + e.getClass().getName()
 					+ " [Message: " + e.getMessage() + "]");
@@ -157,473 +121,332 @@ public class Configuration extends DefaultTestBundleControl {
 			tbc.closeSession(session);
 		}
 	}
-	
+
 	/**
-	 * @testID testConfiguration002
-	 * @testDescription Asserts that a configuration dictionary from a Managed Service Factory is stored in a expected node 
-	 * 					and that there is a location node
+	 * Asserts the MetaNode of the $/Configuration/&lt;pid&gt; node.
+	 * 
+	 * @spec 3.2 Configuration Management Object
 	 */
-	private void testConfiguration002()  {
+	private void testConfiguration002() {
 		DmtSession session = null;
 		try {
 			tbc.log("#testConfiguration002");
-			session = tbc.getDmtAdmin().getSession(DmtTestControl.OSGi_CFG,DmtSession.LOCK_TYPE_EXCLUSIVE);
-			tbc.assertTrue("Asserts that the <id> set by the Configuration Admin was created in the expected node ["+ URI_BUNDLE_2 +"]",session.isNodeUri(URI_BUNDLE_2));
-			tbc.assertTrue("Asserts that there is a location node [" + URI_BUNDLE_2_LOCATION + "]",session.isNodeUri(URI_BUNDLE_2_LOCATION));
-			tbc.assertEquals("Asserts that the service.pid node contains the expected value",BUNDLE_2_PID,session.getNodeValue(URI_BUNDLE_2_PID).getString());
-			tbc.assertTrue("Asserts that there is a service.factoryPid node [" + URI_BUNDLE_2_FACTORY_PID + "]",session.isNodeUri(URI_BUNDLE_2_FACTORY_PID));
-			tbc.assertEquals("Asserts that the service.factoryPid node contains the expected value",BUNDLE_2_FACTORY_PID,session.getNodeValue(URI_BUNDLE_2_FACTORY_PID).getString());
+			session = tbc.getDmtAdmin().getSession(DmtConstants.OSGi_CFG,DmtSession.LOCK_TYPE_ATOMIC);
+			session.createInteriorNode(CFG_PID);
+			MetaNode metaNode = session.getMetaNode(CFG_PID);
+			
+			tbc.assertEquals("Asserts that $/Configuration/<pid> node is dynamic",MetaNode.DYNAMIC, metaNode.getScope());
+			tbc.assertTrue("Asserts that $/Configuration/<pid> node can be gotten", metaNode.can(MetaNode.CMD_GET));
+			tbc.assertTrue("Asserts that $/Configuration/<pid> node can be added", metaNode.can(MetaNode.CMD_ADD));
+			tbc.assertTrue("Asserts that $/Configuration/<pid> node can be deleted", metaNode.can(MetaNode.CMD_DELETE));
+			tbc.assertEquals("Asserts that $/Configuration/<pid> node format is an interior node", DmtData.FORMAT_NODE,metaNode.getFormat());
+			tbc.assertTrue("Asserts $/Configuration/<pid> node cardinality", metaNode.isZeroOccurrenceAllowed() && metaNode.getMaxOccurrence()==Integer.MAX_VALUE);
+
 		} catch (Exception e) {
 			tbc.fail("Unexpected Exception: " + e.getClass().getName()
 					+ " [Message: " + e.getMessage() + "]");
 		} finally {
-			tbc.closeSession(session);
+			tbc.cleanUp(session,new String[] { CFG_PID });
 		}
 	}
-	
+
 	/**
-	 * @testID testConfiguration003
-	 * @testDescription Asserts that a String property is created correctly
+	 * Asserts the MetaNode of the $/Configuration/&lt;pid&gt;/Location node.
+	 * 
+	 * @spec 3.2 Configuration Management Object
 	 */
 	private void testConfiguration003() {
-		tbc.log("#testConfiguration003");
-		String propertyName = "stringproperty";
-		String propertyValue = new String("StringProperty");
-		String propertyValueClassName = "String";
-		String uriProperty = URI_BUNDLE_KEYS + "/" + propertyName;
-		String uriPropertyType = uriProperty + TYPE ;
-		String uriPropertyCardinality = uriProperty + CARDINALITY ;
-		String uriPropertyValue = uriProperty + VALUE ;
-		Dictionary properties = new Hashtable();
-		
 		DmtSession session = null;
-		try {	
-			properties.put(propertyName, propertyValue);
-			config.update(properties);
-			session = tbc.getDmtAdmin().getSession(DmtTestControl.OSGi_CFG,DmtSession.LOCK_TYPE_EXCLUSIVE);
-			tbc.assertTrue("Asserts that the property node ["+ uriProperty + "] exists",session.isNodeUri(uriProperty));
-			tbc.assertEquals("Asserts that the property has the correct type set.",propertyValueClassName,session.getNodeValue(uriPropertyType).getString());
-			DmtData data = session.getNodeValue(uriPropertyValue);
-			tbc.assertEquals("Asserts that the property has the correct value format set.",DmtData.FORMAT_STRING,data.getFormat());
-			tbc.assertEquals("Asserts that the property has the correct value set.",propertyValue.toString(),data.getString());
-			tbc.assertEquals("Asserts that the property has the correct cardinality set.",SCALAR,session.getNodeValue(uriPropertyCardinality).getString());
+		try {
+			tbc.log("#testConfiguration003");
+			session = tbc.getDmtAdmin().getSession(DmtConstants.OSGi_CFG,DmtSession.LOCK_TYPE_ATOMIC);
+			session.createInteriorNode(CFG_PID);
+			session.createLeafNode(CFG_PID_LOCATION, defaultDataString);
+			MetaNode metaNode = session.getMetaNode(CFG_PID_LOCATION);
+			
+			tbc.assertEquals("Asserts that $/Configuration/<pid>/Location node is dynamic",MetaNode.DYNAMIC, metaNode.getScope());
+			tbc.assertTrue("Asserts that $/Configuration/<pid>/Location node can be gotten", metaNode.can(MetaNode.CMD_GET));
+			tbc.assertTrue("Asserts that $/Configuration/<pid>/Location node can be added", metaNode.can(MetaNode.CMD_ADD));
+			tbc.assertEquals("Asserts that $/Configuration/<pid>/Location node format is a chr node", DmtData.FORMAT_STRING,metaNode.getFormat());
+			tbc.assertTrue("Asserts $/Configuration/<pid>/Location node cardinality", !metaNode.isZeroOccurrenceAllowed() && metaNode.getMaxOccurrence()==1);
+
 		} catch (Exception e) {
 			tbc.fail("Unexpected Exception: " + e.getClass().getName()
 					+ " [Message: " + e.getMessage() + "]");
 		} finally {
-			tbc.closeSession(session);
+			tbc.cleanUp(session,new String[] { CFG_PID });
 		}
-	}
+	}	
+	
 	/**
-	 * @testID testConfiguration004
-	 * @testDescription Asserts that an Integer property is created correctly
+	 * Asserts the MetaNode of the $/Configuration/&lt;pid&gt;/Pid node.
+	 * 
+	 * @spec 3.2 Configuration Management Object
 	 */
 	private void testConfiguration004() {
-		tbc.log("#testConfiguration004");
-		String propertyName = "integerproperty";
-		Integer propertyValue = new Integer(10);
-		String propertyValueClassName = "Integer";
-		String uriProperty = URI_BUNDLE_KEYS + "/" + propertyName;
-		String uriPropertyType = uriProperty + TYPE ;
-		String uriPropertyCardinality = uriProperty + CARDINALITY ;
-		String uriPropertyValue = uriProperty + VALUE ;
-		Dictionary properties = new Hashtable();
-		
 		DmtSession session = null;
 		try {
-			properties.put(propertyName, propertyValue);
-			config.update(properties);
-			session = tbc.getDmtAdmin().getSession(DmtTestControl.OSGi_CFG,DmtSession.LOCK_TYPE_EXCLUSIVE);
-			tbc.assertTrue("Asserts that the property node ["+ uriProperty + "] exists",session.isNodeUri(uriProperty));
-			tbc.assertEquals("Asserts that the property has the correct type set.",propertyValueClassName,session.getNodeValue(uriPropertyType).getString());
-			DmtData data = session.getNodeValue(uriPropertyValue);
-			tbc.assertEquals("Asserts that the property has the correct value format set.",DmtData.FORMAT_STRING,data.getFormat());
-			tbc.assertEquals("Asserts that the property has the correct value set.",propertyValue.toString(),data.getString());
-			tbc.assertEquals("Asserts that the property has the correct cardinality set.",SCALAR,session.getNodeValue(uriPropertyCardinality).getString());
+			tbc.log("#testConfiguration004");
+			session = tbc.getDmtAdmin().getSession(DmtConstants.OSGi_CFG,DmtSession.LOCK_TYPE_ATOMIC);
+			session.createInteriorNode(CFG_PID);
+			session.createLeafNode(CFG_PID_PID,defaultDataString);
+			
+			MetaNode metaNode = session.getMetaNode(CFG_PID_PID);
+			
+			tbc.assertEquals("Asserts that $/Configuration/<pid>/Pid node is dynamic",MetaNode.DYNAMIC, metaNode.getScope());
+			tbc.assertTrue("Asserts that $/Configuration/<pid>/Pid node can be gotten", metaNode.can(MetaNode.CMD_GET));
+			tbc.assertTrue("Asserts that $/Configuration/<pid>/Pid node can be added", metaNode.can(MetaNode.CMD_ADD));
+			tbc.assertEquals("Asserts that $/Configuration/<pid>/Pid node format is a chr node", DmtData.FORMAT_STRING,metaNode.getFormat());
+			tbc.assertTrue("Asserts $/Configuration/<pid>/Pid node cardinality", !metaNode.isZeroOccurrenceAllowed() && metaNode.getMaxOccurrence()==1);
+
 		} catch (Exception e) {
 			tbc.fail("Unexpected Exception: " + e.getClass().getName()
 					+ " [Message: " + e.getMessage() + "]");
 		} finally {
-			tbc.closeSession(session);
+		    tbc.cleanUp(session,new String[] { CFG_PID });
 		}
 	}	
+	
 	/**
-	 * @testID testConfiguration005
-	 * @testDescription Asserts that a Long property is created correctly
+	 * Asserts the MetaNode of the $/Configuration/&lt;pid&gt;/FactoryPid node.
+	 * 
+	 * @spec 3.2 Configuration Management Object
 	 */
 	private void testConfiguration005() {
-		tbc.log("#testConfiguration005");
-		String propertyName = "longproperty";
-		Long propertyValue = new Long(12);
-		String propertyValueClassName = "Long";
-		String uriProperty = URI_BUNDLE_KEYS + "/" + propertyName;
-		String uriPropertyType = uriProperty + TYPE ;
-		String uriPropertyCardinality = uriProperty + CARDINALITY ;
-		String uriPropertyValue = uriProperty + VALUE ;
-		Dictionary properties = new Hashtable();
-		
 		DmtSession session = null;
 		try {
-			properties.put(propertyName, propertyValue);
-			config.update(properties);
-			session = tbc.getDmtAdmin().getSession(DmtTestControl.OSGi_CFG,DmtSession.LOCK_TYPE_EXCLUSIVE);
-			tbc.assertTrue("Asserts that the property node ["+ uriProperty + "] exists",session.isNodeUri(uriProperty));
-			tbc.assertEquals("Asserts that the property has the correct type set.",propertyValueClassName,session.getNodeValue(uriPropertyType).getString());
-			DmtData data = session.getNodeValue(uriPropertyValue);
-			tbc.assertEquals("Asserts that the property has the correct value format set.",DmtData.FORMAT_STRING,data.getFormat());
-			tbc.assertEquals("Asserts that the property has the correct value set.",propertyValue.toString(),data.getString());
-			tbc.assertEquals("Asserts that the property has the correct cardinality set.",SCALAR,session.getNodeValue(uriPropertyCardinality).getString());
+			tbc.log("#testConfiguration005");
+			session = tbc.getDmtAdmin().getSession(DmtConstants.OSGi_CFG,DmtSession.LOCK_TYPE_ATOMIC);
+			session.createInteriorNode(CFG_PID);
+			session.createLeafNode(CFG_PID_FACTORYPID,defaultDataString);
+			
+			MetaNode metaNode = session.getMetaNode(CFG_PID_FACTORYPID);
+			
+			tbc.assertEquals("Asserts that $/Configuration/<pid>/FactoryPid node is dynamic",MetaNode.DYNAMIC, metaNode.getScope());
+			tbc.assertTrue("Asserts that $/Configuration/<pid>/FactoryPid node can be gotten", metaNode.can(MetaNode.CMD_GET));
+			tbc.assertTrue("Asserts that $/Configuration/<pid>/FactoryPid node can be added", metaNode.can(MetaNode.CMD_ADD));
+			tbc.assertEquals("Asserts that $/Configuration/<pid>/FactoryPid node format is a chr node", DmtData.FORMAT_STRING,metaNode.getFormat());
+			tbc.assertTrue("Asserts $/Configuration/<pid>/FactoryPid node cardinality", metaNode.isZeroOccurrenceAllowed() && metaNode.getMaxOccurrence()==1);
+
 		} catch (Exception e) {
 			tbc.fail("Unexpected Exception: " + e.getClass().getName()
 					+ " [Message: " + e.getMessage() + "]");
 		} finally {
-			tbc.closeSession(session);
+		    tbc.cleanUp(session,new String[] { CFG_PID });
 		}
-	}			
+	}
+	
 	/**
-	 * @testID testConfiguration006
-	 * @testDescription Asserts that a Float property is created correctly
+	 * Asserts the MetaNode of the $/Configuration/&lt;pid&gt;/Keys node.
+	 * 
+	 * @spec 3.2 Configuration Management Object
 	 */
 	private void testConfiguration006() {
-		tbc.log("#testConfiguration006");
-		String propertyName = "floatproperty";
-		Float propertyValue = new Float(12);
-		String propertyValueClassName = "Float";
-		String uriProperty = URI_BUNDLE_KEYS + "/" + propertyName;
-		String uriPropertyType = uriProperty + TYPE ;
-		String uriPropertyCardinality = uriProperty + CARDINALITY ;
-		String uriPropertyValue = uriProperty + VALUE ;
-		Dictionary properties = new Hashtable();
-		
 		DmtSession session = null;
 		try {
-			properties.put(propertyName, propertyValue);
-			config.update(properties);
-			session = tbc.getDmtAdmin().getSession(DmtTestControl.OSGi_CFG,DmtSession.LOCK_TYPE_EXCLUSIVE);
-			tbc.assertTrue("Asserts that the property node ["+ uriProperty + "] exists",session.isNodeUri(uriProperty));
-			tbc.assertEquals("Asserts that the property has the correct type set.",propertyValueClassName,session.getNodeValue(uriPropertyType).getString());
-			DmtData data = session.getNodeValue(uriPropertyValue);
-			tbc.assertEquals("Asserts that the property has the correct value format set.",DmtData.FORMAT_STRING,data.getFormat());
-			tbc.assertEquals("Asserts that the property has the correct value set.",propertyValue.toString(),data.getString());
-			tbc.assertEquals("Asserts that the property has the correct cardinality set.",SCALAR,session.getNodeValue(uriPropertyCardinality).getString());
+			tbc.log("#testConfiguration006");
+			session = tbc.getDmtAdmin().getSession(DmtConstants.OSGi_CFG,DmtSession.LOCK_TYPE_ATOMIC);
+			session.createInteriorNode(CFG_PID);
+			
+			MetaNode metaNode = session.getMetaNode(CFG_PID_KEYS);
+			
+			tbc.assertEquals("Asserts that $/Configuration/<pid>/Keys node is automatic",MetaNode.AUTOMATIC, metaNode.getScope());
+			tbc.assertTrue("Asserts that $/Configuration/<pid>/Keys node can be gotten", metaNode.can(MetaNode.CMD_GET));
+			tbc.assertEquals("Asserts that $/Configuration/<pid>/Keys node format is an interior node", DmtData.FORMAT_NODE,metaNode.getFormat());
+			tbc.assertTrue("Asserts $/Configuration/<pid>/Keys node cardinality", !metaNode.isZeroOccurrenceAllowed() && metaNode.getMaxOccurrence()==1);
+
 		} catch (Exception e) {
 			tbc.fail("Unexpected Exception: " + e.getClass().getName()
 					+ " [Message: " + e.getMessage() + "]");
 		} finally {
-			tbc.closeSession(session);
-		}
-	}	
-	/**
-	 * @testID testConfiguration007
-	 * @testDescription Asserts that a Double property is created correctly
-	 */
-	private void testConfiguration007() {
-		tbc.log("#testConfiguration007");
-		String propertyName = "doubleproperty";
-		Double propertyValue = new Double(2.2);
-		String propertyValueClassName = "Double";
-		String uriProperty = URI_BUNDLE_KEYS + "/" + propertyName;
-		String uriPropertyType = uriProperty + TYPE ;
-		String uriPropertyCardinality = uriProperty + CARDINALITY ;
-		String uriPropertyValue = uriProperty + VALUE ;
-		Dictionary properties = new Hashtable();
-		
-		DmtSession session = null;
-		try {
-			properties.put(propertyName, propertyValue);
-			config.update(properties);
-			session = tbc.getDmtAdmin().getSession(DmtTestControl.OSGi_CFG,DmtSession.LOCK_TYPE_EXCLUSIVE);
-			tbc.assertTrue("Asserts that the property node ["+ uriProperty + "] exists",session.isNodeUri(uriProperty));
-			tbc.assertEquals("Asserts that the property has the correct type set.",propertyValueClassName,session.getNodeValue(uriPropertyType).getString());
-			DmtData data = session.getNodeValue(uriPropertyValue);
-			tbc.assertEquals("Asserts that the property has the correct value format set.",DmtData.FORMAT_STRING,data.getFormat());
-			tbc.assertEquals("Asserts that the property has the correct value set.",propertyValue.toString(),data.toString());
-			tbc.assertEquals("Asserts that the property has the correct cardinality set.",SCALAR,session.getNodeValue(uriPropertyCardinality).getString());
-		} catch (Exception e) {
-			tbc.fail("Unexpected Exception: " + e.getClass().getName()
-					+ " [Message: " + e.getMessage() + "]");
-		} finally {
-			tbc.closeSession(session);
-		}
-	}		
-	/**
-	 * @testID testConfiguration008
-	 * @testDescription Asserts that a Byte property is created correctly
-	 */
-	private void testConfiguration008() {
-		tbc.log("#testConfiguration008");
-		String propertyName = "byteproperty";
-		Byte propertyValue = new Byte((byte)10);
-		String propertyValueClassName = "Byte";
-		String uriProperty = URI_BUNDLE_KEYS + "/" + propertyName;
-		String uriPropertyType = uriProperty + TYPE ;
-		String uriPropertyCardinality = uriProperty + CARDINALITY ;
-		String uriPropertyValue = uriProperty + VALUE ;
-		Dictionary properties = new Hashtable();
-		
-		DmtSession session = null;
-		try {
-			properties.put(propertyName, propertyValue);
-			config.update(properties);
-			session = tbc.getDmtAdmin().getSession(DmtTestControl.OSGi_CFG,DmtSession.LOCK_TYPE_EXCLUSIVE);
-			tbc.assertTrue("Asserts that the property node ["+ uriProperty + "] exists",session.isNodeUri(uriProperty));
-			tbc.assertEquals("Asserts that the property has the correct type set.",propertyValueClassName,session.getNodeValue(uriPropertyType).getString());
-			DmtData data = session.getNodeValue(uriPropertyValue);
-			tbc.assertEquals("Asserts that the property has the correct value format set.",DmtData.FORMAT_STRING,data.getFormat());
-			tbc.assertEquals("Asserts that the property has the correct value set.",propertyValue.toString(),data.getString());
-			tbc.assertEquals("Asserts that the property has the correct cardinality set.",SCALAR,session.getNodeValue(uriPropertyCardinality).getString());
-		} catch (Exception e) {
-			tbc.fail("Unexpected Exception: " + e.getClass().getName()
-					+ " [Message: " + e.getMessage() + "]");
-		} finally {
-			tbc.closeSession(session);
+		    tbc.cleanUp(session,new String[] { CFG_PID });
 		}
 	}
 	/**
-	 * @testID testConfiguration009
-	 * @testDescription Asserts that a Short property is created correctly
+	 * Asserts the MetaNode of the $/Configuration/&lt;pid&gt;/Keys/&lt;key&gt; node.
+	 * 
+	 * @spec 3.2 Configuration Management Object
+	 */
+	private void testConfiguration007() {
+		DmtSession session = null;
+		try {
+			tbc.log("#testConfiguration007");
+			session = tbc.getDmtAdmin().getSession(DmtConstants.OSGi_CFG,DmtSession.LOCK_TYPE_ATOMIC);
+			session.createInteriorNode(CFG_PID);
+			session.createInteriorNode(CFG_PID_KEYS_KEY);
+			
+			MetaNode metaNode = session.getMetaNode(CFG_PID_KEYS_KEY);
+			
+			tbc.assertEquals("Asserts that $/Configuration/<pid>/Keys/<key> node is dynamic",MetaNode.DYNAMIC, metaNode.getScope());
+			tbc.assertTrue("Asserts that $/Configuration/<pid>/Keys/<key> node can be gotten", metaNode.can(MetaNode.CMD_GET));
+			tbc.assertTrue("Asserts that $/Configuration/<pid>/Keys/<key> node can be added", metaNode.can(MetaNode.CMD_ADD));
+			tbc.assertTrue("Asserts that $/Configuration/<pid>/Keys/<key> node can be deleted", metaNode.can(MetaNode.CMD_DELETE));
+			tbc.assertEquals("Asserts that $/Configuration/<pid>/Keys/<key> node format is an interior node", DmtData.FORMAT_NODE,metaNode.getFormat());
+			tbc.assertTrue("Asserts $/Configuration/<pid>/Keys/<key> node cardinality", !metaNode.isZeroOccurrenceAllowed() && metaNode.getMaxOccurrence()==1);
+
+		} catch (Exception e) {
+			tbc.fail("Unexpected Exception: " + e.getClass().getName()
+					+ " [Message: " + e.getMessage() + "]");
+		} finally {
+		    tbc.cleanUp(session,new String[] { CFG_PID_KEYS_KEY, CFG_PID });
+		}
+	}
+	
+	/**
+	 * Asserts the MetaNode of the $/Configuration/&lt;pid&gt;/Keys/&lt;key&gt;/Type node.
+	 * 
+	 * @spec 3.2 Configuration Management Object
+	 */
+	private void testConfiguration008() {
+		DmtSession session = null;
+		try {
+			tbc.log("#testConfiguration008");
+			session = tbc.getDmtAdmin().getSession(DmtConstants.OSGi_CFG,DmtSession.LOCK_TYPE_ATOMIC);
+			session.createInteriorNode(CFG_PID);
+			session.createInteriorNode(CFG_PID_KEYS_KEY);
+			session.createInteriorNode(CFG_PID_KEYS_KEY_TYPE);
+			
+			MetaNode metaNode = session.getMetaNode(CFG_PID_KEYS_KEY_TYPE);
+			
+			tbc.assertEquals("Asserts that $/Configuration/<pid>/Keys/<key>/Type node is dynamic",MetaNode.DYNAMIC, metaNode.getScope());
+			tbc.assertTrue("Asserts that $/Configuration/<pid>/Keys/<key>/Type node can be gotten", metaNode.can(MetaNode.CMD_GET));
+			tbc.assertTrue("Asserts that $/Configuration/<pid>/Keys/<key>/Type node can be added", metaNode.can(MetaNode.CMD_ADD));
+			tbc.assertEquals("Asserts that $/Configuration/<pid>/Keys/<key>/Type node format is a chr node", DmtData.FORMAT_STRING,metaNode.getFormat());
+			tbc.assertTrue("Asserts $/Configuration/<pid>/Keys/<key>/Type node cardinality", !metaNode.isZeroOccurrenceAllowed() && metaNode.getMaxOccurrence()==1);
+
+		} catch (Exception e) {
+			tbc.fail("Unexpected Exception: " + e.getClass().getName()
+					+ " [Message: " + e.getMessage() + "]");
+		} finally {
+		    tbc.cleanUp(session,new String[] { CFG_PID_KEYS_KEY, CFG_PID });
+		}
+	}
+	
+	/**
+	 * Asserts the MetaNode of the $/Configuration/&lt;pid&gt;/Keys/&lt;key&gt;/Cardinality node.
+	 * 
+	 * @spec 3.2 Configuration Management Object
 	 */
 	private void testConfiguration009() {
-		tbc.log("#testConfiguration009");
-		String propertyName = "shortproperty";
-		Short propertyValue = new Short((short)2);
-		String propertyValueClassName = "Short";
-		String uriProperty = URI_BUNDLE_KEYS + "/" + propertyName;
-		String uriPropertyType = uriProperty + TYPE ;
-		String uriPropertyCardinality = uriProperty + CARDINALITY ;
-		String uriPropertyValue = uriProperty + VALUE ;
-		Dictionary properties = new Hashtable();
-		
 		DmtSession session = null;
 		try {
-			properties.put(propertyName, propertyValue);
-			config.update(properties);
-			session = tbc.getDmtAdmin().getSession(DmtTestControl.OSGi_CFG,DmtSession.LOCK_TYPE_EXCLUSIVE);
-			tbc.assertTrue("Asserts that the property node ["+ uriProperty + "] exists",session.isNodeUri(uriProperty));
-			tbc.assertEquals("Asserts that the property has the correct type set.",propertyValueClassName,session.getNodeValue(uriPropertyType).getString());
-			DmtData data = session.getNodeValue(uriPropertyValue);
-			tbc.assertEquals("Asserts that the property has the correct value format set.",DmtData.FORMAT_STRING,data.getFormat());
-			tbc.assertEquals("Asserts that the property has the correct value set.",propertyValue.toString(),data.getString());
-			tbc.assertEquals("Asserts that the property has the correct cardinality set.",SCALAR,session.getNodeValue(uriPropertyCardinality).getString());
+			tbc.log("#testConfiguration009");
+			session = tbc.getDmtAdmin().getSession(DmtConstants.OSGi_CFG,DmtSession.LOCK_TYPE_ATOMIC);
+			session.createInteriorNode(CFG_PID);
+			session.createInteriorNode(CFG_PID_KEYS_KEY);
+			session.createInteriorNode(CFG_PID_KEYS_KEY_CARDINALITY);
+			
+			MetaNode metaNode = session.getMetaNode(CFG_PID_KEYS_KEY_TYPE);
+			
+			tbc.assertEquals("Asserts that $/Configuration/<pid>/Keys/<key>/Cardinality node is dynamic",MetaNode.DYNAMIC, metaNode.getScope());
+			tbc.assertTrue("Asserts that $/Configuration/<pid>/Keys/<key>/Cardinality node can be gotten", metaNode.can(MetaNode.CMD_GET));
+			tbc.assertTrue("Asserts that $/Configuration/<pid>/Keys/<key>/Cardinality node can be added", metaNode.can(MetaNode.CMD_ADD));
+			tbc.assertEquals("Asserts that $/Configuration/<pid>/Keys/<key>/Cardinality node format is a chr node", DmtData.FORMAT_STRING,metaNode.getFormat());
+			tbc.assertTrue("Asserts $/Configuration/<pid>/Keys/<key>/Cardinality node cardinality", !metaNode.isZeroOccurrenceAllowed() && metaNode.getMaxOccurrence()==1);
+
 		} catch (Exception e) {
 			tbc.fail("Unexpected Exception: " + e.getClass().getName()
 					+ " [Message: " + e.getMessage() + "]");
 		} finally {
-			tbc.closeSession(session);
+		    tbc.cleanUp(session,new String[] { CFG_PID_KEYS_KEY, CFG_PID });
 		}
-	}	
+	}
 	
 	/**
-	 * @testID testConfiguration010
-	 * @testDescription Asserts that a Character property is created correctly
+	 * Asserts the MetaNode of the $/Configuration/&lt;pid&gt;/Keys/&lt;key&gt;/Value node.
+	 * 
+	 * @spec 3.2 Configuration Management Object
 	 */
 	private void testConfiguration010() {
-		tbc.log("#testConfiguration010");
-		String propertyName = "characterproperty";
-		Character propertyValue = new Character('A');
-		String propertyValueClassName = "Character";
-		String uriProperty = URI_BUNDLE_KEYS + "/" + propertyName;
-		String uriPropertyType = uriProperty + TYPE ;
-		String uriPropertyCardinality = uriProperty + CARDINALITY ;
-		String uriPropertyValue = uriProperty + VALUE ;
-		Dictionary properties = new Hashtable();
-		
 		DmtSession session = null;
 		try {
-			properties.put(propertyName, propertyValue);
-			config.update(properties);
-			session = tbc.getDmtAdmin().getSession(DmtTestControl.OSGi_CFG,DmtSession.LOCK_TYPE_EXCLUSIVE);
-			tbc.assertTrue("Asserts that the property node ["+ uriProperty + "] exists",session.isNodeUri(uriProperty));
-			tbc.assertEquals("Asserts that the property has the correct type set.",propertyValueClassName,session.getNodeValue(uriPropertyType).getString());
-			DmtData data = session.getNodeValue(uriPropertyValue);
-			tbc.assertEquals("Asserts that the property has the correct value format set.",DmtData.FORMAT_STRING,data.getFormat());			
-			tbc.assertEquals("Asserts that the property has the correct value set.",propertyValue.toString(),data.getString());
-			tbc.assertEquals("Asserts that the property has the correct cardinality set.",SCALAR,session.getNodeValue(uriPropertyCardinality).getString());
+			tbc.log("#testConfiguration010");
+			session = tbc.getDmtAdmin().getSession(DmtConstants.OSGi_CFG,DmtSession.LOCK_TYPE_ATOMIC);
+			session.createInteriorNode(CFG_PID);
+			session.createInteriorNode(CFG_PID_KEYS_KEY);
+			session.createInteriorNode(CFG_PID_KEYS_KEY_VALUE);
+			
+			MetaNode metaNode = session.getMetaNode(CFG_PID_KEYS_KEY_VALUE);
+			
+			int formatsAllowed = DmtData.FORMAT_STRING | DmtData.FORMAT_BINARY | DmtData.FORMAT_INTEGER | DmtData.FORMAT_BOOLEAN | DmtData.FORMAT_FLOAT;
+			
+			tbc.assertEquals("Asserts that $/Configuration/<pid>/Keys/<key>/Value node is dynamic",MetaNode.DYNAMIC, metaNode.getScope());
+			tbc.assertTrue("Asserts that $/Configuration/<pid>/Keys/<key>/Value node can be gotten", metaNode.can(MetaNode.CMD_GET));
+			tbc.assertTrue("Asserts that $/Configuration/<pid>/Keys/<key>/Value node can be added", metaNode.can(MetaNode.CMD_ADD));
+			tbc.assertTrue("Asserts that $/Configuration/<pid>/Keys/<key>/Value node can be replaced", metaNode.can(MetaNode.CMD_REPLACE));
+			tbc.assertEquals("Asserts that $/Configuration/<pid>/Keys/<key>/Value node format is a chr node", formatsAllowed ,metaNode.getFormat());
+			tbc.assertTrue("Asserts $/Configuration/<pid>/Keys/<key>/Value node cardinality", metaNode.isZeroOccurrenceAllowed() && metaNode.getMaxOccurrence()==1);
+
 		} catch (Exception e) {
 			tbc.fail("Unexpected Exception: " + e.getClass().getName()
 					+ " [Message: " + e.getMessage() + "]");
 		} finally {
-			tbc.closeSession(session);
+		    tbc.cleanUp(session,new String[] { CFG_PID_KEYS_KEY, CFG_PID });
 		}
-	}		
-	/**
-	 * @testID testConfiguration011
-	 * @testDescription Asserts that a Boolean property is created correctly
-	 */
-	private void testConfiguration011() {
-		tbc.log("#testConfiguration011");
-		String propertyName = "booleanproperty";
-		Boolean propertyValue = new Boolean(true);
-		String propertyValueClassName = "Boolean";
-		String uriProperty = URI_BUNDLE_KEYS + "/" + propertyName;
-		String uriPropertyType = uriProperty + TYPE ;
-		String uriPropertyCardinality = uriProperty + CARDINALITY ;
-		String uriPropertyValue = uriProperty + VALUE;
-		Dictionary properties = new Hashtable();
-		
-		DmtSession session = null;
-		try {
-			properties.put(propertyName, propertyValue);
-			config.update(properties);
-			session = tbc.getDmtAdmin().getSession(DmtTestControl.OSGi_CFG,DmtSession.LOCK_TYPE_EXCLUSIVE);
-			tbc.assertTrue("Asserts that the property node ["+ uriProperty + "] exists",session.isNodeUri(uriProperty));
-			tbc.assertEquals("Asserts that the property has the correct type set.",propertyValueClassName,session.getNodeValue(uriPropertyType).getString());
-			DmtData data = session.getNodeValue(uriPropertyValue);
-			tbc.assertEquals("Asserts that the property has the correct value format set.",DmtData.FORMAT_BOOLEAN,data.getFormat());
-			tbc.assertEquals("Asserts that the property has the correct value set.",propertyValue.booleanValue(),data.getBoolean());
-			tbc.assertEquals("Asserts that the property has the correct cardinality set.",SCALAR,session.getNodeValue(uriPropertyCardinality).getString());
-		} catch (Exception e) {
-			tbc.fail("Unexpected Exception: " + e.getClass().getName()
-					+ " [Message: " + e.getMessage() + "]");
-		} finally {
-			tbc.closeSession(session);
-		}
-	}	
-	/**
-	 * @testID testConfiguration012
-	 * @testDescription Asserts that an array property is created correctly
-	 */
-	private void testConfiguration012() {
-		tbc.log("#testConfiguration012");
-		String propertyName = "arrayproperty";
-		int[] propertyValue = {1,2};
-		String propertyValueClassName = "int";
-		String uriProperty = URI_BUNDLE_KEYS + "/" + propertyName;
-		String uriPropertyType = uriProperty + TYPE ;
-		String uriPropertyCardinality = uriProperty + CARDINALITY ;
-		String uriPropertyValue = uriProperty + VALUE ;
-		String uriPropertyValue_0 = uriPropertyValue + "/0";
-		String uriPropertyValue_1 = uriPropertyValue + "/1";
-		Dictionary properties = new Hashtable();
-		
-		DmtSession session = null;
-		try {
-			properties.put(propertyName, propertyValue);
-			config.update(properties);
-			session = tbc.getDmtAdmin().getSession(DmtTestControl.OSGi_CFG,DmtSession.LOCK_TYPE_EXCLUSIVE);
-			tbc.assertTrue("Asserts that the property node ["+ uriProperty + "] exists",session.isNodeUri(uriProperty));
-			tbc.assertEquals("Asserts that the property has the correct type set.",propertyValueClassName,session.getNodeValue(uriPropertyType).toString());
-			tbc.assertTrue("Asserts that the value node ["+ uriPropertyValue + "] exists",session.isNodeUri(uriPropertyValue));
-			tbc.assertEquals("Asserts that the property has the correct value set in ["+ uriPropertyValue_0 + "].",Integer.toString(propertyValue[0]),session.getNodeValue(uriPropertyValue_0).toString());
-			tbc.assertEquals("Asserts that the property has the correct value set in ["+ uriPropertyValue_1 + "].",Integer.toString(propertyValue[1]),session.getNodeValue(uriPropertyValue_1).toString());
-			tbc.assertEquals("Asserts that the property has the correct cardinality set.",ARRAY,session.getNodeValue(uriPropertyCardinality).getString());
-		} catch (Exception e) {
-			tbc.fail("Unexpected Exception: " + e.getClass().getName()
-					+ " [Message: " + e.getMessage() + "]");
-		} finally {
-			tbc.closeSession(session);
-		}
-	}	
-	/**
-	 * @testID testConfiguration013
-	 * @testDescription Asserts that a Vector property is created correctly and that null is permitted
-	 * 					in Vectors.
-	 */
-	private void testConfiguration013() {
-		tbc.log("#testConfiguration013");
-		String propertyName = "vectoryproperty";
-		Vector propertyValue = new Vector();
-		String propertyValueClassName = "Integer";
-		String uriProperty = URI_BUNDLE_KEYS + "/" + propertyName;
-		String uriPropertyType = uriProperty + TYPE ;
-		String uriPropertyCardinality = uriProperty + CARDINALITY ;
-		String uriPropertyValue = uriProperty + VALUE ;
-		String uriPropertyValue_0 = uriPropertyValue + "/0";
-		String uriPropertyValue_1 = uriPropertyValue + "/1";
-		Dictionary properties = new Hashtable();
-		
-		DmtSession session = null;
-		try {
-			propertyValue.add(0,new Integer(3));
-			propertyValue.add(1,new Integer(5));
-			properties.put(propertyName, propertyValue);
-			config.update(properties);
-			session = tbc.getDmtAdmin().getSession(DmtTestControl.OSGi_CFG,DmtSession.LOCK_TYPE_EXCLUSIVE);
-			tbc.assertTrue("Asserts that the property node ["+ uriProperty + "] exists",session.isNodeUri(uriProperty));
-			tbc.assertEquals("Asserts that the property has the correct type set.",propertyValueClassName,session.getNodeValue(uriPropertyType).toString());
-			tbc.assertTrue("Asserts that the value node ["+ uriPropertyValue + "] exists",session.isNodeUri(uriPropertyValue));
-			tbc.assertEquals("Asserts that the property has the correct value set in ["+ uriPropertyValue_0 + "].",propertyValue.elementAt(0).toString(),session.getNodeValue(uriPropertyValue_0).toString());
-			tbc.assertEquals("Asserts that the property has the correct value set in ["+ uriPropertyValue_1 + "].",propertyValue.elementAt(1).toString(),session.getNodeValue(uriPropertyValue_1).toString());
-			tbc.assertEquals("Asserts that the property has the correct cardinality set.",VECTOR,session.getNodeValue(uriPropertyCardinality).getString());
-		} catch (Exception e) {
-			tbc.fail("Unexpected Exception: " + e.getClass().getName()
-					+ " [Message: " + e.getMessage() + "]");
-		} finally {
-			tbc.closeSession(session);
-		}
-	}			
+	}
+	
 	
 	/**
-	 * @testID testConfiguration014
-	 * @testDescription Asserts that a byte[] property is created correctly
+	 * Asserts the MetaNode of the $/Configuration/&lt;pid&gt;/Keys/&lt;key&gt;/Values node.
+	 * 
+	 * @spec 3.2 Configuration Management Object
 	 */
-	private void testConfiguration014() {
-		tbc.log("#testConfiguration014");
-		String propertyName = "byteproperty";
-	    byte[] propertyValue = new byte[1024];
-		String propertyValueClassName = "byte";
-		String uriProperty = URI_BUNDLE_KEYS + "/" + propertyName;
-		String uriPropertyType = uriProperty + TYPE ;
-		String uriPropertyCardinality = uriProperty + CARDINALITY ;
-		String uriPropertyValue = uriProperty + VALUE ;
-		Dictionary properties = new Hashtable();
-		
-		DmtSession session = null;
-		
-		try {
-			properties.put(propertyName, propertyValue);
-			config.update(properties);
-			session = tbc.getDmtAdmin().getSession(DmtTestControl.OSGi_CFG,DmtSession.LOCK_TYPE_EXCLUSIVE);
-			tbc.assertTrue("Asserts that the property node ["+ uriProperty + "] exists",session.isNodeUri(uriProperty));
-			tbc.assertEquals("Asserts that the property has the correct type set.",propertyValueClassName,session.getNodeValue(uriPropertyType).getString());
-			DmtData data = session.getNodeValue(uriPropertyValue);
-			tbc.assertEquals("Asserts that the property has the correct value format set.",DmtData.FORMAT_BINARY,data.getFormat());
-			tbc.assertEquals("Asserts that the property has the correct value set.",propertyValue,data.getBinary());
-			tbc.assertEquals("Asserts that the property has the correct cardinality set.",SCALAR,session.getNodeValue(uriPropertyCardinality).getString());
-		} catch (Exception e) {
-			tbc.fail("Unexpected Exception: " + e.getClass().getName()
-					+ " [Message: " + e.getMessage() + "]");
-		} finally {
-			tbc.closeSession(session);
-		}
-	}	
-	/**
-	 * @testID testConfiguration015
-	 * @testDescription Asserts that null is permitted in Vectors.
-	 */
-	private void testConfiguration015() {
-		
-		tbc.log("#testConfiguration015");
-		String propertyName = "vectorynewproperty";
-		Vector propertyValue = new Vector();
-		String propertyValueClassName = "Integer";
-		String uriProperty = URI_BUNDLE_KEYS + "/" + propertyName;
-		String uriPropertyType = uriProperty + TYPE ;
-		String uriPropertyCardinality = uriProperty + CARDINALITY ;
-		String uriPropertyValue = uriProperty + VALUE ;
-		String uriPropertyValue_0 = uriPropertyValue + "/0";
-		String uriPropertyValue_1 = uriPropertyValue + "/1";
-		Dictionary properties = new Hashtable();
-		
+	private void testConfiguration011() {
 		DmtSession session = null;
 		try {
-			propertyValue.add(0,new Integer(3));
-			propertyValue.add(1,null);
-			properties.put(propertyName, propertyValue);
-			config.update(properties);
-			session = tbc.getDmtAdmin().getSession(DmtTestControl.OSGi_CFG,DmtSession.LOCK_TYPE_EXCLUSIVE);
-			tbc.assertTrue("Asserts that the property node ["+ uriProperty + "] exists",session.isNodeUri(uriProperty));
-			tbc.assertEquals("Asserts that the property has the correct type set.",propertyValueClassName,session.getNodeValue(uriPropertyType).toString());
-			tbc.assertTrue("Asserts that the value node ["+ uriPropertyValue + "] exists",session.isNodeUri(uriPropertyValue));
-			tbc.assertEquals("Asserts that the property has the correct value set in ["+ uriPropertyValue_0 + "].",propertyValue.elementAt(0).toString(),session.getNodeValue(uriPropertyValue_0).toString());
-			tbc.assertEquals("Asserts that the property has the correct value set in ["+ uriPropertyValue_1 + "].",propertyValue.elementAt(1).toString(),session.getNodeValue(uriPropertyValue_1).toString());
-			tbc.assertEquals("Asserts that the property has the correct cardinality set.",VECTOR,session.getNodeValue(uriPropertyCardinality).toString());
-		} catch (Exception e) {
-			tbc.fail("Unexpected Exception: " + e.getClass().getName()
-					+ " [Message: " + e.getMessage() + "]");
-		} finally {
-			tbc.closeSession(session);
-		}
-	}		
+			tbc.log("#testConfiguration011");
+			session = tbc.getDmtAdmin().getSession(DmtConstants.OSGi_CFG,DmtSession.LOCK_TYPE_ATOMIC);
+			session.createInteriorNode(CFG_PID);
+			session.createInteriorNode(CFG_PID_KEYS_KEY);
+			session.createInteriorNode(CFG_PID_KEYS_KEY_VALUES);
+			
+			MetaNode metaNode = session.getMetaNode(CFG_PID_KEYS_KEY_VALUES);
+			
+			tbc.assertEquals("Asserts that $/Configuration/<pid>/Keys/<key>/Values node is dynamic",MetaNode.DYNAMIC, metaNode.getScope());
+			tbc.assertTrue("Asserts that $/Configuration/<pid>/Keys/<key>/Values node can be gotten", metaNode.can(MetaNode.CMD_GET));
+			tbc.assertTrue("Asserts that $/Configuration/<pid>/Keys/<key>/Values node can be added", metaNode.can(MetaNode.CMD_ADD));
+			tbc.assertEquals("Asserts that $/Configuration/<pid>/Keys/<key>/Values node format is an interior node", DmtData.FORMAT_NODE ,metaNode.getFormat());
+			tbc.assertTrue("Asserts $/Configuration/<pid>/Keys/<key>/Values node cardinality", metaNode.isZeroOccurrenceAllowed() && metaNode.getMaxOccurrence()==1);
 
+		} catch (Exception e) {
+			tbc.fail("Unexpected Exception: " + e.getClass().getName()
+					+ " [Message: " + e.getMessage() + "]");
+		} finally {
+		    tbc.cleanUp(session,new String[] { CFG_PID_KEYS_KEY, CFG_PID });
+		}
+	}
+
+	/**
+	 * Asserts the MetaNode of the $/Configuration/&lt;pid&gt;/Keys/&lt;key&gt;/Values/&lt;n&gt; node.
+	 * 
+	 * @spec 3.2 Configuration Management Object
+	 */
+	private void testConfiguration012() {
+		DmtSession session = null;
+		try {
+			tbc.log("#testConfiguration012");
+			session = tbc.getDmtAdmin().getSession(DmtConstants.OSGi_CFG,DmtSession.LOCK_TYPE_ATOMIC);
+			session.createInteriorNode(CFG_PID);
+			session.createInteriorNode(CFG_PID_KEYS_KEY);
+			session.createInteriorNode(CFG_PID_KEYS_KEY_VALUES_N);
+			
+			MetaNode metaNode = session.getMetaNode(CFG_PID_KEYS_KEY_VALUES_N);
+			
+			int formatsAllowed = DmtData.FORMAT_STRING | DmtData.FORMAT_INTEGER | DmtData.FORMAT_BOOLEAN | DmtData.FORMAT_FLOAT;
+			
+			tbc.assertEquals("Asserts that $/Configuration/<pid>/Keys/<key>/Values/<n> node is dynamic",MetaNode.DYNAMIC, metaNode.getScope());
+			tbc.assertTrue("Asserts that $/Configuration/<pid>/Keys/<key>/Values/<n> node can be gotten", metaNode.can(MetaNode.CMD_GET));
+			tbc.assertTrue("Asserts that $/Configuration/<pid>/Keys/<key>/Values/<n> node can be added", metaNode.can(MetaNode.CMD_ADD));
+			tbc.assertTrue("Asserts that $/Configuration/<pid>/Keys/<key>/Values/<n> node can be deleted", metaNode.can(MetaNode.CMD_DELETE));
+			tbc.assertTrue("Asserts that $/Configuration/<pid>/Keys/<key>/Values/<n> node can be replaced", metaNode.can(MetaNode.CMD_REPLACE));
+			tbc.assertEquals("Asserts that $/Configuration/<pid>/Keys/<key>/Values/<n> node format is a chr, int, bool, float", formatsAllowed ,metaNode.getFormat());
+			tbc.assertTrue("Asserts $/Configuration/<pid>/Keys/<key>/Values/<n> node cardinality", metaNode.isZeroOccurrenceAllowed() && metaNode.getMaxOccurrence()==Integer.MAX_VALUE);
+
+		} catch (Exception e) {
+			tbc.fail("Unexpected Exception: " + e.getClass().getName()
+					+ " [Message: " + e.getMessage() + "]");
+		} finally {
+		    tbc.cleanUp(session,new String[] { CFG_PID_KEYS_KEY, CFG_PID });
+		}
+	}
 }

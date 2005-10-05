@@ -1,13 +1,13 @@
 /*
  * Copyright (c) The OSGi Alliance (2004). All Rights Reserved.
- * 
+ *
  * Implementation of certain elements of the OSGi Specification may be subject
  * to third party intellectual property rights, including without limitation,
  * patent rights (such a third party may or may not be a member of the OSGi
  * Alliance). The OSGi Alliance is not responsible and shall not be held
  * responsible in any manner for identifying or failing to identify any or all
  * such third party intellectual property rights.
- * 
+ *
  * This document and the information contained herein are provided on an "AS IS"
  * basis and THE OSGI ALLIANCE DISCLAIMS ALL WARRANTIES, EXPRESS OR IMPLIED,
  * INCLUDING BUT NOT LIMITED TO ANY WARRANTY THAT THE USE OF THE INFORMATION
@@ -18,21 +18,54 @@
  * EXEMPLARY, INCIDENTIAL, PUNITIVE OR CONSEQUENTIAL DAMAGES OF ANY KIND IN
  * CONNECTION WITH THIS DOCUMENT OR THE INFORMATION CONTAINED HEREIN, EVEN IF
  * ADVISED OF THE POSSIBILITY OF SUCH LOSS OR DAMAGE.
- * 
+ *
  * All Company, brand and product names may be trademarks that are the sole
  * property of their respective owners. All rights reserved.
  */
 
-package org.osgi.test.cases.dmt.plugins;
+/* 
+ * REVISION HISTORY:
+ *
+ * Date          Author(s)
+ * CR            Headline
+ * ============  ==============================================================
+ * Aug 29, 2005  Luiz Felipe Guimaraes
+ * 173           [MEGTCK][DMT] Changes on interface names and plugins
+ * ============  ==============================================================
+ */
 
-import org.osgi.test.cases.util.DefaultTestCase;
+package org.osgi.test.cases.dmt.plugins.tbc.DataPluginFactory.TransactionalDataSession;
+
+import org.osgi.service.dmt.spi.DataPluginFactory;
+import org.osgi.service.dmt.spi.ExecPlugin;
+import org.osgi.test.cases.dmt.plugins.tbc.DmtTestControl;
 
 /**
- * This test case validates the implementation of <code>DmtAdmin<code> service, according to 
- * MEG reference specification.
- * @author Andre Assad
- * @testcase org.osgi.service.dmt
+ * @author Luiz Felipe Guimaraes
+ *
+ * This class validates the constants of DataPluginFactory and ExecPlugin
  */
-public class TestDmtPlugins extends DefaultTestCase {
+public class PluginConstants {
+	private DmtTestControl tbc;
 
+
+	public PluginConstants(DmtTestControl tbc) {
+		this.tbc = tbc;
+	}
+
+	public void run() {
+		testConstants001();
+	}
+
+	/**
+	 * This class validates the constants of DataPluginFactory and ExecPlugin
+	 * 
+	 * @spec 117.14.2
+	 */
+	private void testConstants001() {
+		tbc.log("#testConstants001");
+		tbc.assertEquals("Asserting DATA_ROOT_URIS value", DataPluginFactory.DATA_ROOT_URIS, DataPluginFactory.DATA_ROOT_URIS);
+		tbc.assertEquals("Asserting EXEC_ROOT_URIS value", "execRootURIs", ExecPlugin.EXEC_ROOT_URIS);
+		
+	}
 }

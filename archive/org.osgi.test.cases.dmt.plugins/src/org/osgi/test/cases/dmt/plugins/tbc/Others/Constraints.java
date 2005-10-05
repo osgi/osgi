@@ -41,15 +41,14 @@ package org.osgi.test.cases.dmt.plugins.tbc.Others;
 
 import org.osgi.service.dmt.DmtException;
 import org.osgi.service.dmt.DmtSession;
+import org.osgi.test.cases.dmt.plugins.tbc.DmtConstants;
 import org.osgi.test.cases.dmt.plugins.tbc.DmtTestControl;
-import org.osgi.test.cases.dmt.plugins.tbc.DmtDataPlugin.TestDataPluginActivator;
+import org.osgi.test.cases.dmt.plugins.tbc.DataPluginFactory.TestDataPluginActivator;
 
 /**
  * @author Andre Assad
  * 
- * @generalDescription This Test Case Validates the constraints specified on the
- *                     session 5.2 of the rfc0085, according to MEG reference
- *                     documentation (rfc0085).
+ * This test case validates the constraints according to MEG specification
  */
 public class Constraints {
 
@@ -78,18 +77,18 @@ public class Constraints {
 	}
 
 	/**
-	 * @testID testConstraints001
-	 * @testDescription Tests if there can be any number of concurrent read only
-	 *                  sessions within the same subtree.
+	 * Tests if there can be any number of concurrent read only sessions within the same subtree.
+     * 
+     * @spec 117.3 The DMT Admin Service
 	 */
 	private void testConstraints001() {
 		DmtSession session1 = null;
 		DmtSession session2 = null;
 		try {
 			tbc.log("#testConstraints001");
-			session1 = tbc.getDmtAdmin().getSession(DmtTestControl.OSGi_LOG,
+			session1 = tbc.getDmtAdmin().getSession(DmtConstants.OSGi_LOG,
 					DmtSession.LOCK_TYPE_SHARED);
-			session2 = tbc.getDmtAdmin().getSession(DmtTestControl.OSGi_LOG,
+			session2 = tbc.getDmtAdmin().getSession(DmtConstants.OSGi_LOG,
 					DmtSession.LOCK_TYPE_SHARED);
 			tbc.pass("Two concurrent read only sessions were created.");
 		} catch (Exception e) {
@@ -102,10 +101,10 @@ public class Constraints {
 	}
 
 	/**
-	 * @testID testConstraints002
-	 * @testDescription Tests if a read only session blocks the creation of an
-	 *                  updating session (with a LOCK_TYPE_EXCLUSIVE) within the
-	 *                  same subtree.
+	 * Tests if a read only session blocks the creation of an updating session 
+     * (with a LOCK_TYPE_EXCLUSIVE) within the same subtree.
+     * 
+     * @spec 117.3 The DMT Admin Service
 	 */
 
 	private void testConstraints002() {
@@ -113,14 +112,14 @@ public class Constraints {
 		DmtSession session2 = null;
 		try {
 			tbc.log("#testConstraints002");
-			session1 = tbc.getDmtAdmin().getSession(DmtTestControl.OSGi_LOG,
+			session1 = tbc.getDmtAdmin().getSession(DmtConstants.OSGi_LOG,
 					DmtSession.LOCK_TYPE_SHARED);
-			session2 = tbc.getDmtAdmin().getSession(DmtTestControl.OSGi_LOG,
+			session2 = tbc.getDmtAdmin().getSession(DmtConstants.OSGi_LOG,
 					DmtSession.LOCK_TYPE_EXCLUSIVE);
 			tbc
 					.fail("A read only session didn't block the creation of an updating session (with a LOCK_TYPE_EXCLUSIVE)");
 		} catch (DmtException e) {
-			tbc.assertEquals("A read only session blocked the creation of an updating session (with a LOCK_TYPE_EXCLUSIVE)",DmtException.TIMEOUT,e.getCode());
+			tbc.assertEquals("A read only session blocked the creation of an updating session (with a LOCK_TYPE_EXCLUSIVE)",DmtException.SESSION_CREATION_TIMEOUT,e.getCode());
 		} catch (Exception e) {
 			tbc.fail("Expected " + DmtException.class.getName()
 					+ " but it was " + e.getClass().getName());
@@ -131,24 +130,24 @@ public class Constraints {
 	}
 
 	/**
-	 * @testID testConstraints003
-	 * @testDescription Tests if a read only session blocks the creation of an
-	 *                  updating session (with a LOCK_TYPE_ATOMIC) within the
-	 *                  same subtree.
+	 * Tests if a read only session blocks the creation of an updating session 
+     * (with a LOCK_TYPE_ATOMIC) within the same subtree.
+     * 
+     * @spec 117.3 The DMT Admin Service
 	 */
 	private void testConstraints003() {
 		tbc.log("#testConstraints003");
 		DmtSession session1 = null;
 		DmtSession session2 = null;
 		try {
-			session1 = tbc.getDmtAdmin().getSession(DmtTestControl.OSGi_LOG,
+			session1 = tbc.getDmtAdmin().getSession(DmtConstants.OSGi_LOG,
 					DmtSession.LOCK_TYPE_SHARED);
-			session2 = tbc.getDmtAdmin().getSession(DmtTestControl.OSGi_LOG,
+			session2 = tbc.getDmtAdmin().getSession(DmtConstants.OSGi_LOG,
 					DmtSession.LOCK_TYPE_ATOMIC);
 			tbc
 					.fail("A read only session didn't block the creation of an updating session (with a LOCK_TYPE_ATOMIC)");
 		} catch (DmtException e) {
-			tbc.assertEquals("A read only session blocked the creation of an updating session (with a LOCK_TYPE_ATOMIC)",DmtException.TIMEOUT,e.getCode());
+			tbc.assertEquals("A read only session blocked the creation of an updating session (with a LOCK_TYPE_ATOMIC)",DmtException.SESSION_CREATION_TIMEOUT,e.getCode());
 		} catch (Exception e) {
 			tbc.fail("Expected " + DmtException.class.getName()
 					+ " but it was " + e.getClass().getName());
@@ -160,23 +159,24 @@ public class Constraints {
 
 
 	/**
-	 * @testID testConstraints004
-	 * @testDescription Tests if a session (with the LOCK_TYPE_EXCLUSIVE) can
-	 *                  not be shared with LOCK_TYPE_ATOMIC lock
+	 * Tests if a session (with the LOCK_TYPE_EXCLUSIVE) can not be shared 
+     * with LOCK_TYPE_ATOMIC lock
+     * 
+     * @spec 117.3 The DMT Admin Service
 	 */
 	private void testConstraints004() {
 		tbc.log("#testConstraints004");
 		DmtSession session1 = null;
 		DmtSession session2 = null;
 		try {
-			session1 = tbc.getDmtAdmin().getSession(DmtTestControl.OSGi_LOG,
+			session1 = tbc.getDmtAdmin().getSession(DmtConstants.OSGi_LOG,
 					DmtSession.LOCK_TYPE_EXCLUSIVE);
-			session2 = tbc.getDmtAdmin().getSession(DmtTestControl.OSGi_LOG,
+			session2 = tbc.getDmtAdmin().getSession(DmtConstants.OSGi_LOG,
 					DmtSession.LOCK_TYPE_ATOMIC);
 			tbc
 					.fail("An EXCLUSIVE session could be shared with an ATOMIC session");
 		} catch (DmtException e) {
-			tbc.assertEquals("An EXCLUSIVE session could NOT be shared with an ATOMIC session",DmtException.TIMEOUT,e.getCode());
+			tbc.assertEquals("An EXCLUSIVE session could NOT be shared with an ATOMIC session",DmtException.SESSION_CREATION_TIMEOUT,e.getCode());
 		} catch (Exception e) {
 			tbc.fail("Expected " + DmtException.class.getName()
 					+ " but it was " + e.getClass().getName());
@@ -187,23 +187,24 @@ public class Constraints {
 	}
 
 	/**
-	 * @testID testConstraints005
-	 * @testDescription Tests if a session (with the LOCK_TYPE_EXCLUSIVE) can
-	 *                  not be shared with LOCK_TYPE_SHARED lock
+	 * Tests if a session (with the LOCK_TYPE_EXCLUSIVE) can not be 
+     * shared with LOCK_TYPE_SHARED lock
+     * 
+     * @spec 117.3 The DMT Admin Service
 	 */
 	private void testConstraints005() {
 		tbc.log("#testConstraints005");
 		DmtSession session1 = null;
 		DmtSession session2 = null;
 		try {
-			session1 = tbc.getDmtAdmin().getSession(DmtTestControl.OSGi_LOG,
+			session1 = tbc.getDmtAdmin().getSession(DmtConstants.OSGi_LOG,
 					DmtSession.LOCK_TYPE_EXCLUSIVE);
-			session2 = tbc.getDmtAdmin().getSession(DmtTestControl.OSGi_LOG,
+			session2 = tbc.getDmtAdmin().getSession(DmtConstants.OSGi_LOG,
 					DmtSession.LOCK_TYPE_SHARED);
 			tbc
 					.fail("An EXCLUSIVE session could be shared with a SHARED session");
 		} catch (DmtException e) {
-			tbc.assertEquals("An EXCLUSIVE session could NOT be shared with aa SHARED session",DmtException.TIMEOUT,e.getCode());
+			tbc.assertEquals("An EXCLUSIVE session could NOT be shared with aa SHARED session",DmtException.SESSION_CREATION_TIMEOUT,e.getCode());
 		} catch (Exception e) {
 			tbc.fail("Expected " + DmtException.class.getName()
 					+ " but it was " + e.getClass().getName());
@@ -214,23 +215,24 @@ public class Constraints {
 	}
 
 	/**
-	 * @testID testConstraints006
-	 * @testDescription Tests if a session (with the LOCK_TYPE_EXCLUSIVE) can
-	 *                  not be shared with LOCK_TYPE_EXCLUSIVE lock
+	 * Tests if a session (with the LOCK_TYPE_EXCLUSIVE) can not be shared 
+     * with LOCK_TYPE_EXCLUSIVE lock
+     * 
+     * @spec 117.3 The DMT Admin Service
 	 */
 	private void testConstraints006() {
 		tbc.log("#testConstraints006");
 		DmtSession session1 = null;
 		DmtSession session2 = null;
 		try {
-			session1 = tbc.getDmtAdmin().getSession(DmtTestControl.OSGi_LOG,
+			session1 = tbc.getDmtAdmin().getSession(DmtConstants.OSGi_LOG,
 					DmtSession.LOCK_TYPE_EXCLUSIVE);
-			session2 = tbc.getDmtAdmin().getSession(DmtTestControl.OSGi_LOG,
+			session2 = tbc.getDmtAdmin().getSession(DmtConstants.OSGi_LOG,
 					DmtSession.LOCK_TYPE_EXCLUSIVE);
 			tbc
 					.fail("An EXCLUSIVE session could be shared with an EXCLUSIVE session");
 		} catch (DmtException e) {
-			tbc.assertEquals("An EXCLUSIVE session could NOT be shared with an EXCLUSIVE session",DmtException.TIMEOUT,e.getCode());
+			tbc.assertEquals("An EXCLUSIVE session could NOT be shared with an EXCLUSIVE session",DmtException.SESSION_CREATION_TIMEOUT,e.getCode());
 		} catch (Exception e) {
 			tbc.fail("Expected " + DmtException.class.getName()
 					+ " but it was " + e.getClass().getName());
@@ -241,9 +243,11 @@ public class Constraints {
 	}
 
 	/**
-	 * @testID testConstraints007
-	 * @testDescription Test if concurrent updating sessions cannot be opened
-	 *                  within the same plugin
+	 * Test if concurrent updating sessions cannot be opened within the same plugin.
+     * Both session have LOCK_TYPE_ATOMIC
+     * 
+     * 
+     * @spec 117.3 The DMT Admin Service
 	 */
 	private void testConstraints007() {
 		tbc.log("#testConstraints007");
@@ -251,15 +255,15 @@ public class Constraints {
 		DmtSession session2 = null;
 		try {
 			session1 = tbc.getDmtAdmin().getSession(
-					TestDataPluginActivator.TEST_DATA_PLUGIN_ROOT,
+					TestDataPluginActivator.ROOT,
 					DmtSession.LOCK_TYPE_ATOMIC);
 			session2 = tbc.getDmtAdmin().getSession(
-					TestDataPluginActivator.TEST_DATA_PLUGIN_ROOT,
+					TestDataPluginActivator.INTERIOR_NODE,
 					DmtSession.LOCK_TYPE_ATOMIC);
 			tbc
 					.fail("An ATOMIC session could be shared with an ATOMIC session");
 		} catch (DmtException e) {
-			tbc.assertEquals("An ATOMIC session could NOT be shared with an ATOMIC session",DmtException.TIMEOUT,e.getCode());
+			tbc.assertEquals("An ATOMIC session could NOT be shared with an ATOMIC session",DmtException.SESSION_CREATION_TIMEOUT,e.getCode());
 		} catch (Exception e) {
 			tbc.fail("Expected " + DmtException.class.getName()
 					+ " but it was " + e.getClass().getName());
@@ -270,9 +274,10 @@ public class Constraints {
 	}
 
 	/**
-	 * @testID testConstraints008
-	 * @testDescription Test if concurrent updating sessions cannot be opened
-	 *                  within the same plugin
+	 * Test if concurrent updating sessions cannot be opened within the same plugin.
+     * One session has LOCK_TYPE_ATOMIC and other has LOCK_TYPE_EXCLUSIVE
+     * 
+     * @spec 117.3 The DMT Admin Service
 	 */
 
 	private void testConstraints008() {
@@ -281,15 +286,15 @@ public class Constraints {
 		DmtSession session2 = null;
 		try {
 			session1 = tbc.getDmtAdmin().getSession(
-					TestDataPluginActivator.TEST_DATA_PLUGIN_ROOT,
+					TestDataPluginActivator.ROOT,
 					DmtSession.LOCK_TYPE_ATOMIC);
 			session2 = tbc.getDmtAdmin().getSession(
-					TestDataPluginActivator.TEST_DATA_PLUGIN_ROOT,
+					TestDataPluginActivator.ROOT,
 					DmtSession.LOCK_TYPE_EXCLUSIVE);
 			tbc
 					.fail("An ATOMIC session could be shared with an EXCLUSIVE session");
 		} catch (DmtException e) {
-			tbc.assertEquals("An ATOMIC session could NOT be shared with an EXCLUSIVE session",DmtException.TIMEOUT,e.getCode());
+			tbc.assertEquals("An ATOMIC session could NOT be shared with an EXCLUSIVE session",DmtException.SESSION_CREATION_TIMEOUT,e.getCode());
 		} catch (Exception e) {
 			tbc.fail("Expected " + DmtException.class.getName()
 					+ " but it was " + e.getClass().getName());
@@ -300,9 +305,9 @@ public class Constraints {
 	}
 
 	/**
-	 * @testID testConstraints009
-	 * @testDescription Test if concurrent updating sessions cannot be opened
-	 *                  within the same plugin
+	 * Test if concurrent updating sessions cannot be shared with a shared session.
+     * 
+     * @spec 117.3 The DMT Admin Service
 	 */
 
 	private void testConstraints009() {
@@ -311,15 +316,15 @@ public class Constraints {
 		DmtSession session2 = null;
 		try {
 			session1 = tbc.getDmtAdmin().getSession(
-					TestDataPluginActivator.TEST_DATA_PLUGIN_ROOT,
+					TestDataPluginActivator.ROOT,
 					DmtSession.LOCK_TYPE_ATOMIC);
 			session2 = tbc.getDmtAdmin().getSession(
-					TestDataPluginActivator.TEST_DATA_PLUGIN_ROOT,
+					TestDataPluginActivator.ROOT,
 					DmtSession.LOCK_TYPE_SHARED);
 			tbc
 					.fail("An ATOMIC session could be shared with a SHARED session");
 		} catch (DmtException e) {
-			tbc.assertEquals("An ATOMIC session could NOT be shared with a SHARED session",DmtException.TIMEOUT,e.getCode());
+			tbc.assertEquals("An ATOMIC session could NOT be shared with a SHARED session",DmtException.SESSION_CREATION_TIMEOUT,e.getCode());
 		} catch (Exception e) {
 			tbc.fail("Expected " + DmtException.class.getName()
 					+ " but it was " + e.getClass().getName());
@@ -332,9 +337,9 @@ public class Constraints {
 	
 
 	/**
-	 * @testID testConstraints010
-	 * @testDescription Test if concurrent updating sessions can be opened
-	 *                  within different plugins
+	 * Test if concurrent updating sessions can be opened within different plugins
+     * 
+     * @spec 117.3 The DMT Admin Service
 	 */
 
 	private void testConstraints010() {
@@ -342,10 +347,10 @@ public class Constraints {
 		DmtSession session1 = null;
 		DmtSession session2 = null;
 		try {
-			session1 = tbc.getDmtAdmin().getSession(DmtTestControl.OSGi_LOG,
+			session1 = tbc.getDmtAdmin().getSession(DmtConstants.OSGi_LOG,
 					DmtSession.LOCK_TYPE_ATOMIC);
 			session2 = tbc.getDmtAdmin().getSession(
-					TestDataPluginActivator.TEST_DATA_PLUGIN_ROOT,
+					TestDataPluginActivator.ROOT,
 					DmtSession.LOCK_TYPE_ATOMIC);
 			tbc.pass("Two sessions could be opened with different plugins.");
 		} catch (Exception e) {
@@ -359,9 +364,9 @@ public class Constraints {
 	
 	
 	/**
-	 * @testID testConstraints011
-	 * @testDescription Test if concurrent updating sessions can be opened
-	 *                  within different plugins
+	 * Test if concurrent updating sessions can be opened within different plugins
+     * 
+     * @spec 117.3 The DMT Admin Service
 	 */
 
 	private void testConstraints011() {
@@ -369,10 +374,10 @@ public class Constraints {
 		DmtSession session1 = null;
 		DmtSession session2 = null;
 		try {
-			session1 = tbc.getDmtAdmin().getSession(DmtTestControl.OSGi_LOG,
+			session1 = tbc.getDmtAdmin().getSession(DmtConstants.OSGi_LOG,
 					DmtSession.LOCK_TYPE_EXCLUSIVE);
 			session2 = tbc.getDmtAdmin().getSession(
-					TestDataPluginActivator.TEST_DATA_PLUGIN_ROOT,
+					TestDataPluginActivator.ROOT,
 					DmtSession.LOCK_TYPE_EXCLUSIVE);
 			tbc.pass("Two sessions could be opened with different plugins.");
 		} catch (Exception e) {
@@ -385,9 +390,9 @@ public class Constraints {
 	}	
 	
 	/**
-	 * @testID testConstraints012
-	 * @testDescription Test if concurrent updating sessions can be opened
-	 *                  within different plugins
+	 * Test if concurrent updating sessions can be opened within different plugins
+     * 
+     * @spec 117.3 The DMT Admin Service
 	 */
 
 	private void testConstraints012() {
@@ -395,10 +400,10 @@ public class Constraints {
 		DmtSession session1 = null;
 		DmtSession session2 = null;
 		try {
-			session1 = tbc.getDmtAdmin().getSession(DmtTestControl.OSGi_LOG,
+			session1 = tbc.getDmtAdmin().getSession(DmtConstants.OSGi_LOG,
 					DmtSession.LOCK_TYPE_ATOMIC);
 			session2 = tbc.getDmtAdmin().getSession(
-					TestDataPluginActivator.TEST_DATA_PLUGIN_ROOT,
+					TestDataPluginActivator.ROOT,
 					DmtSession.LOCK_TYPE_EXCLUSIVE);
 			tbc.pass("Two sessions could be opened with different plugins.");
 		} catch (Exception e) {
@@ -410,9 +415,10 @@ public class Constraints {
 		}
 	}		
 	/**
-	 * @testID testConstraints013
-	 * @testDescription Test if concurrent updating sessions cannot be opened
-	 *                  within the same plugin (different subtrees)
+	 * Test if concurrent updating sessions cannot be opened within the 
+     * same plugin (different subtrees)
+     * 
+     * @spec 117.3 The DMT Admin Service
 	 */
 
 	private void testConstraints013() {
@@ -421,7 +427,7 @@ public class Constraints {
 		DmtSession session2 = null;
 		try {
 			session1 = tbc.getDmtAdmin().getSession(
-					TestDataPluginActivator.TEST_DATA_PLUGIN_ROOT,
+					TestDataPluginActivator.ROOT,
 					DmtSession.LOCK_TYPE_ATOMIC);
 			session2 = tbc.getDmtAdmin().getSession(
 					TestDataPluginActivator.TEST_DATA_PLUGIN_ROOT2,
@@ -429,7 +435,7 @@ public class Constraints {
 			tbc
 					.fail("Two updating sessions could be opened within the same plugin (on different subtrees).");
 		} catch (DmtException e) {
-			tbc.assertEquals("Two updating sessions could NOT be opened within the same plugin (on different subtrees).",DmtException.TIMEOUT,e.getCode());
+			tbc.assertEquals("Two updating sessions could NOT be opened within the same plugin (on different subtrees).",DmtException.SESSION_CREATION_TIMEOUT,e.getCode());
 		} catch (Exception e) {
 			tbc.fail("Expected " + DmtException.class.getName()
 					+ " but it was " + e.getClass().getName());
@@ -440,9 +446,10 @@ public class Constraints {
 	}
 	
 	/**
-	 * @testID testConstraints014
-	 * @testDescription Test if concurrent updating sessions cannot be opened
-	 *                  within the same plugin (different subtrees)
+	 * Test if concurrent updating sessions cannot be opened within the same 
+     * plugin (different subtrees)
+     * 
+     * @spec 117.3 The DMT Admin Service
 	 */
 
 	private void testConstraints014() {
@@ -451,7 +458,7 @@ public class Constraints {
 		DmtSession session2 = null;
 		try {
 			session1 = tbc.getDmtAdmin().getSession(
-					TestDataPluginActivator.TEST_DATA_PLUGIN_ROOT,
+					TestDataPluginActivator.ROOT,
 					DmtSession.LOCK_TYPE_EXCLUSIVE);
 			session2 = tbc.getDmtAdmin().getSession(
 					TestDataPluginActivator.TEST_DATA_PLUGIN_ROOT2,
@@ -459,7 +466,7 @@ public class Constraints {
 			tbc
 					.fail("Two updating sessions could be opened within the same plugin (on different subtrees).");
 		} catch (DmtException e) {
-			tbc.assertEquals("Two updating sessions could NOT be opened within the same plugin (on different subtrees).",DmtException.TIMEOUT,e.getCode());
+			tbc.assertEquals("Two updating sessions could NOT be opened within the same plugin (on different subtrees).",DmtException.SESSION_CREATION_TIMEOUT,e.getCode());
 		} catch (Exception e) {
 			tbc.fail("Expected " + DmtException.class.getName()
 					+ " but it was " + e.getClass().getName());
@@ -469,9 +476,10 @@ public class Constraints {
 		}
 	}
 	/**
-	 * @testID testConstraints015
-	 * @testDescription Test if concurrent updating sessions cannot be opened
-	 *                  within the same plugin (different subtrees)
+	 * Test if concurrent updating sessions cannot be opened within the same plugin 
+     * (different subtrees)
+     * 
+     * @spec 117.3 The DMT Admin Service
 	 */
 
 	private void testConstraints015() {
@@ -480,7 +488,7 @@ public class Constraints {
 		DmtSession session2 = null;
 		try {
 			session1 = tbc.getDmtAdmin().getSession(
-					TestDataPluginActivator.TEST_DATA_PLUGIN_ROOT,
+					TestDataPluginActivator.ROOT,
 					DmtSession.LOCK_TYPE_ATOMIC);
 			session2 = tbc.getDmtAdmin().getSession(
 					TestDataPluginActivator.TEST_DATA_PLUGIN_ROOT2,
@@ -488,7 +496,7 @@ public class Constraints {
 			tbc
 					.fail("Two updating sessions could be opened within the same plugin (on different subtrees).");
 		} catch (DmtException e) {
-			tbc.assertEquals("Two updating sessions could NOT be opened within the same plugin (on different subtrees).",DmtException.TIMEOUT,e.getCode());
+			tbc.assertEquals("Two updating sessions could NOT be opened within the same plugin (on different subtrees).",DmtException.SESSION_CREATION_TIMEOUT,e.getCode());
 		} catch (Exception e) {
 			tbc.fail("Expected " + DmtException.class.getName()
 					+ " but it was " + e.getClass().getName());
