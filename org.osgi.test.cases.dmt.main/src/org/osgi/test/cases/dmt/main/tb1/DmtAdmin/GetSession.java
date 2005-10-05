@@ -41,30 +41,31 @@
 package org.osgi.test.cases.dmt.main.tb1.DmtAdmin;
 
 import org.osgi.service.dmt.DmtException;
-import org.osgi.service.dmt.DmtPermission;
-import org.osgi.service.dmt.DmtPrincipalPermission;
 import org.osgi.service.dmt.DmtSession;
+import org.osgi.service.dmt.security.DmtPermission;
+import org.osgi.service.dmt.security.DmtPrincipalPermission;
 import org.osgi.service.permissionadmin.PermissionInfo;
+import org.osgi.test.cases.dmt.main.tbc.DmtConstants;
 import org.osgi.test.cases.dmt.main.tbc.DmtTestControl;
 import org.osgi.test.cases.dmt.main.tbc.TestInterface;
-import org.osgi.test.cases.dmt.main.tbc.Plugin.TestExecPluginActivator;
+import org.osgi.test.cases.dmt.main.tbc.Plugin.ExecPlugin.TestExecPluginActivator;
+import org.osgi.test.cases.dmt.main.tbc.Plugin.ReadOnly.TestReadOnlyPluginActivator;
 
 /**
  * @author Andre Assad
  * 
- * @methodUnderTest org.osgi.service.dmt.DmtAdmin#getSession
- * @generalDescription This Test Class Validates the implementation of
- *                     <code>getSession<code> constructor, according to MEG reference
- *                     documentation (rfc0085).
+ * This test case validates the implementation of <code>getSession</code> method of DmtAdmin, 
+ * according to MEG specification
  */
 public class GetSession implements TestInterface {
 	private DmtTestControl tbc;
-
+	
 	public GetSession(DmtTestControl tbc) {
 		this.tbc = tbc;
 	}
 
 	public void run() {
+        prepare();
 		testGetSession001();
 		testGetSession002();
 		testGetSession003();
@@ -74,6 +75,7 @@ public class GetSession implements TestInterface {
 		testGetSession007();
 		testGetSession008();
 		testGetSession009();
+        testGetSession010();
 		testGetSession011();
 		testGetSession012();
 		testGetSession013();
@@ -87,21 +89,31 @@ public class GetSession implements TestInterface {
 		testGetSession021();
 		testGetSession022();
 		testGetSession023();
+		testGetSession024();
+		testGetSession025();
+		testGetSession026();
 
 	}
 
+    private void prepare() {
+        tbc.setPermissions(
+            new PermissionInfo[] {
+            new PermissionInfo(DmtPermission.class.getName(), DmtConstants.ALL_NODES,DmtConstants.ALL_ACTIONS),
+            new PermissionInfo(DmtPrincipalPermission.class.getName(), DmtConstants.PRINCIPAL, "*") }
+            );
+    }
 	/**
-	 * @testID testGetSession001
-	 * @testDescription This method asserts that a session is opened with the
-	 *                  specified subtree, lock type (the default is
-	 *                  LOCK_TYPE_EXCLUSIVE) and principal.
+	 * This method asserts that a session is opened with the specified subtree, lock type (the default is
+	 * LOCK_TYPE_EXCLUSIVE) and principal.
+	 * 
+	 * @spec DmtAdmin.getSession(String)
 	 */
 	private void testGetSession001() {
 		DmtSession session = null;
 		try {
 			tbc.log("#testGetSession001");
-			session = tbc.getDmtAdmin().getSession(DmtTestControl.OSGi_LOG);
-			tbc.assertEquals("Asserting subtree", DmtTestControl.OSGi_LOG,
+			session = tbc.getDmtAdmin().getSession(DmtConstants.OSGi_LOG);
+			tbc.assertEquals("Asserting subtree", DmtConstants.OSGi_LOG,
 					session.getRootUri());
 			tbc.assertEquals("Asserting lock type",
 					DmtSession.LOCK_TYPE_EXCLUSIVE, session.getLockType());
@@ -116,9 +128,9 @@ public class GetSession implements TestInterface {
 	}
 
 	/**
-	 * @testID testGetSession002
-	 * @testDescription This method asserts that "." on the parameter subtree
-	 *                  gives access to the whole subtree
+	 * This method asserts that "." on the parameter subtree gives access to the whole subtree
+	 * 
+	 * @spec DmtAdmin.getSession(String)
 	 */
 	private void testGetSession002() {
 		DmtSession session = null;
@@ -129,6 +141,9 @@ public class GetSession implements TestInterface {
 			tbc.assertEquals("Asserting lock type",
 					DmtSession.LOCK_TYPE_EXCLUSIVE, session.getLockType());
 			tbc.assertNull("Asserting principal", session.getPrincipal());
+            tbc.assertTrue("asserts that '.' on the parameter subtree gives access to the whole subtree",
+                session.isNodeUri(TestExecPluginActivator.INTERIOR_NODE));
+            
 		} catch (Exception e) {
 			tbc.fail("Unexpected Exception: " + e.getClass().getName()
 					+ " [Message: " + e.getMessage() + "]");
@@ -139,9 +154,9 @@ public class GetSession implements TestInterface {
 	}
 
 	/**
-	 * @testID testGetSession003
-	 * @testDescription This method asserts that null on the parameter subtree
-	 *                  gives access to the whole subtree
+	 * This method asserts that null on the parameter subtree gives access to the whole subtree
+	 * 
+	 * @spec DmtAdmin.getSession(String)
 	 */
 	private void testGetSession003() {
 		DmtSession session = null;
@@ -152,6 +167,8 @@ public class GetSession implements TestInterface {
 			tbc.assertEquals("Asserting lock type",
 					DmtSession.LOCK_TYPE_EXCLUSIVE, session.getLockType());
 			tbc.assertNull("Asserting principal", session.getPrincipal());
+            tbc.assertTrue("asserts that null on the parameter subtree gives access to the whole subtree",
+                session.isNodeUri(TestExecPluginActivator.INTERIOR_NODE));
 		} catch (Exception e) {
 			tbc.fail("Unexpected Exception: " + e.getClass().getName()
 					+ " [Message: " + e.getMessage() + "]");
@@ -162,15 +179,15 @@ public class GetSession implements TestInterface {
 	}
 
 	/**
-	 * @testID testGetSession004
-	 * @testDescription This method asserts if an invalid node causes an
-	 *                  exception with NODE_NOT_FOUND code
+	 * This method asserts that DmtException.NODE_NOT_FOUND is thrown if a session is opened with an inexistent node 
+	 * 
+	 * @spec DmtAdmin.getSession(String)
 	 */
 	private void testGetSession004() {
 		DmtSession session = null;
 		try {
 			tbc.log("#testGetSession004");
-			session = tbc.getDmtAdmin().getSession(DmtTestControl.INVALID_NODE);
+			session = tbc.getDmtAdmin().getSession(TestExecPluginActivator.INEXISTENT_NODE);
 			tbc.failException("#", DmtException.class);
 		} catch (DmtException e) {
 			tbc.assertEquals(
@@ -185,66 +202,18 @@ public class GetSession implements TestInterface {
 		}
 	}
 
-	/**
-	 * @testID testGetSession005
-	 * @testDescription This method asserts if a too long uri causes an
-	 *                  exception with URI_TOO_LONG code
+		/**
+	 * This method asserts that a session is opened with the specified subtree, lock type and principal.
+	 * 
+	 * @spec DmtAdmin.getSession(String,int)
 	 */
 	private void testGetSession005() {
 		DmtSession session = null;
 		try {
 			tbc.log("#testGetSession005");
-			session = tbc.getDmtAdmin().getSession(DmtTestControl.URI_LONG);
-			tbc.failException("#", DmtException.class);
-		} catch (DmtException e) {
-			tbc.assertEquals(
-					"Asserting if the exception's code is URI_TOO_LONG.",
-					DmtException.URI_TOO_LONG, e.getCode());
-		} catch (Exception e) {
-			tbc.fail("Expected " + DmtException.class.getName() + " but was "
-					+ e.getClass().getName());
-
-		} finally {
-			tbc.closeSession(session);
-		}
-	}
-
-	/**
-	 * @testID testGetSession006
-	 * @testDescription This method asserts if a node using invalid characters
-	 *                  causes an exception with INVALID_URI code
-	 */
-	private void testGetSession006() {
-		DmtSession session = null;
-		try {
-			tbc.log("#testGetSession006");
-			session = tbc.getDmtAdmin().getSession(DmtTestControl.INVALID_URI);
-			tbc.failException("#", DmtException.class);
-		} catch (DmtException e) {
-			tbc.assertEquals(
-					"Asserting if the exception's code is INVALID_URI.",
-					DmtException.INVALID_URI, e.getCode());
-		} catch (Exception e) {
-			tbc.fail("Expected " + DmtException.class.getName() + " but was "
-					+ e.getClass().getName());
-
-		} finally {
-			tbc.closeSession(session);
-		}
-	}
-
-	/**
-	 * @testID testGetSession007
-	 * @testDescription This method asserts that a session is opened with the
-	 *                  specified subtree, lock type and principal.
-	 */
-	private void testGetSession007() {
-		DmtSession session = null;
-		try {
-			tbc.log("#testGetSession007");
-			session = tbc.getDmtAdmin().getSession(DmtTestControl.OSGi_LOG,
+			session = tbc.getDmtAdmin().getSession(DmtConstants.OSGi_LOG,
 					DmtSession.LOCK_TYPE_SHARED);
-			tbc.assertEquals("Asserting subtree", DmtTestControl.OSGi_LOG,
+			tbc.assertEquals("Asserting subtree", DmtConstants.OSGi_LOG,
 					session.getRootUri());
 			tbc.assertEquals("Asserting lock type",
 					DmtSession.LOCK_TYPE_SHARED, session.getLockType());
@@ -259,20 +228,23 @@ public class GetSession implements TestInterface {
 	}
 
 	/**
-	 * @testID testGetSession008
-	 * @testDescription This method asserts that "." on the parameter subtree
-	 *                  gives access to the whole subtree
+	 * This method asserts that "." on the parameter subtree gives access to the whole subtree
+	 * 
+	 * @spec DmtAdmin.getSession(String,int)
 	 */
-	private void testGetSession008() {
+	private void testGetSession006() {
 		DmtSession session = null;
 		try {
-			tbc.log("#testGetSession008");
+			tbc.log("#testGetSession006");
 			session = tbc.getDmtAdmin().getSession(".",
 					DmtSession.LOCK_TYPE_ATOMIC);
 			tbc.assertEquals("Asserting subtree", ".", session.getRootUri());
 			tbc.assertEquals("Asserting lock type",
 					DmtSession.LOCK_TYPE_ATOMIC, session.getLockType());
 			tbc.assertNull("Asserting principal", session.getPrincipal());
+            tbc.assertTrue("asserts that '.' on the parameter subtree gives access to the whole subtree",
+                session.isNodeUri(TestExecPluginActivator.INTERIOR_NODE));
+            
 		} catch (Exception e) {
 			tbc.fail("Unexpected Exception: " + e.getClass().getName()
 					+ " [Message: " + e.getMessage() + "]");
@@ -283,20 +255,22 @@ public class GetSession implements TestInterface {
 	}
 
 	/**
-	 * @testID testGetSession009
-	 * @testDescription This method asserts that null on the parameter subtree
-	 *                  gives access to the whole subtree
+	 * This method asserts that null on the parameter subtree gives access to the whole subtree
+	 * 
+	 * @spec DmtAdmin.getSession(String,int)
 	 */
-	private void testGetSession009() {
+	private void testGetSession007() {
 		DmtSession session = null;
 		try {
-			tbc.log("#testGetSession009");
+			tbc.log("#testGetSession007");
 			session = tbc.getDmtAdmin().getSession(null,
 					DmtSession.LOCK_TYPE_EXCLUSIVE);
 			tbc.assertEquals("Asserting subtree", ".", session.getRootUri());
 			tbc.assertEquals("Asserting lock type",
 					DmtSession.LOCK_TYPE_EXCLUSIVE, session.getLockType());
 			tbc.assertNull("Asserting principal", session.getPrincipal());
+            tbc.assertTrue("asserts that null on the parameter subtree gives access to the whole subtree",
+                session.isNodeUri(TestExecPluginActivator.INTERIOR_NODE));
 		} catch (Exception e) {
 			tbc.fail("Unexpected Exception: " + e.getClass().getName()
 					+ " [Message: " + e.getMessage() + "]");
@@ -307,15 +281,15 @@ public class GetSession implements TestInterface {
 	}
 
 	/**
-	 * @testID testGetSession011
-	 * @testDescription This method asserts if an invalid node causes an
-	 *                  exception with NODE_NOT_FOUND code
+	 * This method asserts that DmtException.NODE_NOT_FOUND is thrown if a session is opened with an inexistent node
+	 * 
+	 * @spec DmtAdmin.getSession(String,int)
 	 */
-	private void testGetSession011() {
+	private void testGetSession008() {
 		DmtSession session = null;
 		try {
-			tbc.log("#testGetSession011");
-			session = tbc.getDmtAdmin().getSession(DmtTestControl.INVALID_NODE,
+			tbc.log("#testGetSession008");
+			session = tbc.getDmtAdmin().getSession(TestExecPluginActivator.INEXISTENT_NODE,
 					DmtSession.LOCK_TYPE_SHARED);
 			tbc.failException("#", DmtException.class);
 		} catch (DmtException e) {
@@ -331,283 +305,182 @@ public class GetSession implements TestInterface {
 		}
 	}
 
+	
+
 	/**
-	 * @testID testGetSession012
-	 * @testDescription This method asserts if a too long uri causes an
-	 *                  exception with URI_TOO_LONG code
+	 * This method asserts that DmtException.COMMAND_FAILED is thrown if a session is opened using an invalid lock
+	 * 
+	 * @spec DmtAdmin.getSession(String,int)
+	 */
+	private void testGetSession009() {
+		DmtSession session = null;
+		try {
+			tbc.log("#testGetSession009");
+			session = tbc.getDmtAdmin().getSession(DmtConstants.OSGi_LOG,
+					DmtConstants.INVALID_LOCKMODE);
+			tbc.failException("#", DmtException.class);
+		} catch (DmtException e) {
+			tbc.assertEquals(
+					"Asserting if the exception's code is COMMAND_FAILED.",
+					DmtException.COMMAND_FAILED, e.getCode());
+		} catch (Exception e) {
+			tbc.fail("Expected " + DmtException.class.getName() + " but was "
+					+ e.getClass().getName());
+		} finally {
+			tbc.closeSession(session);
+		}
+	}
+
+	
+
+	/**
+	 * This method asserts that a session is opened with the specified subtree, lock type and principal. 
+	 * 
+	 * @spec DmtAdmin.getSession(String,String,int)
+	 */
+	private void testGetSession010() {
+		DmtSession session = null;
+		try {
+			tbc.log("#testGetSession010");
+			session = tbc.getDmtAdmin().getSession(DmtConstants.PRINCIPAL,
+					DmtConstants.OSGi_LOG, DmtSession.LOCK_TYPE_ATOMIC);
+			tbc.assertEquals("Asserting subtree", DmtConstants.OSGi_LOG,
+					session.getRootUri());
+			tbc.assertEquals("Asserting lock type",
+					DmtSession.LOCK_TYPE_ATOMIC, session.getLockType());
+			tbc.assertEquals("Asserting principal", DmtConstants.PRINCIPAL,
+					session.getPrincipal());
+		} catch (Exception e) {
+			tbc.fail("Unexpected Exception: " + e.getClass().getName()
+					+ " [Message: " + e.getMessage() + "]");
+
+		} finally {
+			tbc.closeSession(session);
+		}
+	}
+
+	/**
+	 * This method asserts that "." on the parameter subtree gives access to the whole subtree
+	 * 
+	 * @spec DmtAdmin.getSession(String,String,int)
+	 */
+	private void testGetSession011() {
+		DmtSession session = null;
+		try {
+			tbc.log("#testGetSession011");
+			session = tbc.getDmtAdmin().getSession(DmtConstants.PRINCIPAL,
+					".", DmtSession.LOCK_TYPE_EXCLUSIVE);
+			tbc.assertEquals("Asserting subtree", ".", session.getRootUri());
+			tbc.assertEquals("Asserting lock type",
+					DmtSession.LOCK_TYPE_EXCLUSIVE, session.getLockType());
+			tbc.assertEquals("Asserting principal", DmtConstants.PRINCIPAL,
+					session.getPrincipal());
+            tbc.assertTrue("asserts that '.' on the parameter subtree gives access to the whole subtree",
+                session.isNodeUri(TestExecPluginActivator.INTERIOR_NODE));
+		} catch (Exception e) {
+			tbc.fail("Unexpected Exception: " + e.getClass().getName()
+					+ " [Message: " + e.getMessage() + "]");
+		} finally {
+			tbc.closeSession(session);
+		}
+	}
+
+	/**
+	 * This method asserts that null on the parameter subtree gives access to the whole subtree
+	 * 
+	 * @spec DmtAdmin.getSession(String,String,int)
 	 */
 	private void testGetSession012() {
 		DmtSession session = null;
 		try {
 			tbc.log("#testGetSession012");
-			session = tbc.getDmtAdmin().getSession(DmtTestControl.URI_LONG,
-					DmtSession.LOCK_TYPE_SHARED);
-			tbc.failException("#", DmtException.class);
-		} catch (DmtException e) {
-			tbc.assertEquals(
-					"Asserting if the exception's code is URI_TOO_LONG.",
-					DmtException.URI_TOO_LONG, e.getCode());
-		} catch (Exception e) {
-			tbc.fail("Expected " + DmtException.class.getName() + " but was "
-					+ e.getClass().getName());
 
+			session = tbc.getDmtAdmin().getSession(DmtConstants.PRINCIPAL,
+					null, DmtSession.LOCK_TYPE_EXCLUSIVE);
+			tbc.assertEquals("Asserting subtree", ".", session.getRootUri());
+			tbc.assertEquals("Asserting lock type",
+					DmtSession.LOCK_TYPE_EXCLUSIVE, session.getLockType());
+			tbc.assertEquals("Asserting principal", DmtConstants.PRINCIPAL,
+					session.getPrincipal());
+            tbc.assertTrue("asserts that null on the parameter subtree gives access to the whole subtree",
+                session.isNodeUri(TestExecPluginActivator.INTERIOR_NODE));
+		} catch (Exception e) {
+			tbc.fail("Unexpected Exception: " + e.getClass().getName()
+					+ " [Message: " + e.getMessage() + "]");
 		} finally {
 			tbc.closeSession(session);
 		}
 	}
 
 	/**
-	 * @testID testGetSession013
-	 * @testDescription This method asserts if a invalid lock mode causes an
-	 *                  exception with OTHER_ERROR code
+	 * This method asserts that DmtException.NODE_NOT_FOUND is thrown if a session is opened with an inexistent node
+	 * 
+	 * @spec DmtAdmin.getSession(String,String,int)
 	 */
 	private void testGetSession013() {
 		DmtSession session = null;
 		try {
 			tbc.log("#testGetSession013");
-			session = tbc.getDmtAdmin().getSession(DmtTestControl.OSGi_LOG,
-					DmtTestControl.INVALID_LOCKMODE);
+
+			session = tbc.getDmtAdmin().getSession(DmtConstants.PRINCIPAL,
+					TestExecPluginActivator.INEXISTENT_NODE, DmtSession.LOCK_TYPE_SHARED);
 			tbc.failException("#", DmtException.class);
 		} catch (DmtException e) {
 			tbc.assertEquals(
-					"Asserting if the exception's code is OTHER_ERROR.",
-					DmtException.OTHER_ERROR, e.getCode());
+					"Asserting if the exception's code is NODE_NOT_FOUND.",
+					DmtException.NODE_NOT_FOUND, e.getCode());
 		} catch (Exception e) {
 			tbc.fail("Expected " + DmtException.class.getName() + " but was "
 					+ e.getClass().getName());
 		} finally {
 			tbc.closeSession(session);
+			
 		}
 	}
 
+
+
 	/**
-	 * @testID testGetSession014
-	 * @testDescription This method asserts if a node using invalid characters
-	 *                  causes an exception with INVALID_URI code
+	 * This method asserts that DmtException.COMMAND_FAILED is thrown if a session is opened using an invalid lock
+	 * 
+	 * @spec DmtAdmin.getSession(String,String,int)
 	 */
 	private void testGetSession014() {
 		DmtSession session = null;
 		try {
 			tbc.log("#testGetSession014");
-			session = tbc.getDmtAdmin().getSession(DmtTestControl.INVALID_URI,
-					DmtSession.LOCK_TYPE_SHARED);
+			
+			session = tbc.getDmtAdmin().getSession(DmtConstants.PRINCIPAL,
+					DmtConstants.OSGi_LOG, DmtConstants.INVALID_LOCKMODE);
 			tbc.failException("#", DmtException.class);
 		} catch (DmtException e) {
 			tbc.assertEquals(
-					"Asserting if the exception's code is INVALID_URI.",
-					DmtException.INVALID_URI, e.getCode());
+					"Asserting if the exception's code is COMMAND_FAILED.",
+					DmtException.COMMAND_FAILED, e.getCode());
 		} catch (Exception e) {
 			tbc.fail("Expected " + DmtException.class.getName() + " but was "
 					+ e.getClass().getName());
-
 		} finally {
 			tbc.closeSession(session);
 		}
 	}
 
+	
+
 	/**
-	 * @testID testGetSession015
-	 * @testDescription This method asserts that a session is opened with the
-	 *                  specified subtree, lock type and principal. This
-	 *                  constructor use by default LOCK_TYPE_ATOMIC
+	 * This method asserts if SecurityException is thrown when the caller 
+	 * does not have the required DmtPrincipalPermission
 	 * 
+	 * @spec DmtAdmin.getSession(String,String,int)
 	 */
 	private void testGetSession015() {
 		DmtSession session = null;
 		try {
 			tbc.log("#testGetSession015");
 			tbc.setPermissions(new PermissionInfo(DmtPrincipalPermission.class
-					.getName(), DmtTestControl.PRINCIPAL, "*"));
-			session = tbc.getDmtAdmin().getSession(DmtTestControl.PRINCIPAL,
-					DmtTestControl.OSGi_LOG, DmtSession.LOCK_TYPE_ATOMIC);
-			tbc.assertEquals("Asserting subtree", DmtTestControl.OSGi_LOG,
-					session.getRootUri());
-			tbc.assertEquals("Asserting lock type",
-					DmtSession.LOCK_TYPE_ATOMIC, session.getLockType());
-			tbc.assertEquals("Asserting principal", DmtTestControl.PRINCIPAL,
-					session.getPrincipal());
-		} catch (Exception e) {
-			tbc.fail("Unexpected Exception: " + e.getClass().getName()
-					+ " [Message: " + e.getMessage() + "]");
-
-		} finally {
-			tbc.closeSession(session);
-			tbc.setPermissions(new PermissionInfo(
-					DmtPermission.class.getName(), DmtTestControl.ALL_NODES,
-					DmtTestControl.ALL_ACTIONS));
-		}
-	}
-
-	/**
-	 * @testID testGetSession016
-	 * @testDescription This method asserts that "." on the parameter subtree
-	 *                  gives access to the whole subtree
-	 * 
-	 */
-	private void testGetSession016() {
-		DmtSession session = null;
-		try {
-			tbc.log("#testGetSession016");
-			tbc.setPermissions(new PermissionInfo(DmtPrincipalPermission.class
-					.getName(), DmtTestControl.PRINCIPAL, "*"));
-			session = tbc.getDmtAdmin().getSession(DmtTestControl.PRINCIPAL,
-					".", DmtSession.LOCK_TYPE_EXCLUSIVE);
-			tbc.assertEquals("Asserting subtree", ".", session.getRootUri());
-			tbc.assertEquals("Asserting lock type",
-					DmtSession.LOCK_TYPE_EXCLUSIVE, session.getLockType());
-			tbc.assertEquals("Asserting principal", DmtTestControl.PRINCIPAL,
-					session.getPrincipal());
-		} catch (Exception e) {
-			tbc.fail("Unexpected Exception: " + e.getClass().getName()
-					+ " [Message: " + e.getMessage() + "]");
-		} finally {
-			tbc.closeSession(session);
-			tbc.setPermissions(new PermissionInfo(
-					DmtPermission.class.getName(), DmtTestControl.ALL_NODES,
-					DmtTestControl.ALL_ACTIONS));
-		}
-	}
-
-	/**
-	 * @testID testGetSession017
-	 * @testDescription This method asserts that null on the parameter subtree
-	 *                  gives access to the whole subtree
-	 * 
-	 */
-	private void testGetSession017() {
-		DmtSession session = null;
-		try {
-			tbc.log("#testGetSession017");
-			tbc.setPermissions(new PermissionInfo(DmtPrincipalPermission.class
-					.getName(), DmtTestControl.PRINCIPAL, "*"));
-			session = tbc.getDmtAdmin().getSession(DmtTestControl.PRINCIPAL,
-					null, DmtSession.LOCK_TYPE_EXCLUSIVE);
-			tbc.assertEquals("Asserting subtree", ".", session.getRootUri());
-			tbc.assertEquals("Asserting lock type",
-					DmtSession.LOCK_TYPE_EXCLUSIVE, session.getLockType());
-			tbc.assertEquals("Asserting principal", DmtTestControl.PRINCIPAL,
-					session.getPrincipal());
-		} catch (Exception e) {
-			tbc.fail("Unexpected Exception: " + e.getClass().getName()
-					+ " [Message: " + e.getMessage() + "]");
-		} finally {
-			tbc.closeSession(session);
-			tbc.setPermissions(new PermissionInfo(
-					DmtPermission.class.getName(), DmtTestControl.ALL_NODES,
-					DmtTestControl.ALL_ACTIONS));
-		}
-	}
-
-	/**
-	 * @testID testGetSession018
-	 * @testDescription This method asserts if an invalid node causes an
-	 *                  exception with NODE_NOT_FOUND code
-	 */
-	private void testGetSession018() {
-		DmtSession session = null;
-		try {
-			tbc.log("#testGetSession018");
-			session = tbc.getDmtAdmin().getSession(DmtTestControl.PRINCIPAL,
-					DmtTestControl.INVALID_NODE, DmtSession.LOCK_TYPE_SHARED);
-			tbc.failException("#", DmtException.class);
-		} catch (DmtException e) {
-			tbc.assertEquals(
-					"Asserting if the exception's code is NODE_NOT_FOUND.",
-					DmtException.NODE_NOT_FOUND, e.getCode());
-		} catch (Exception e) {
-			tbc.fail("Expected " + DmtException.class.getName() + " but was "
-					+ e.getClass().getName());
-		} finally {
-			tbc.closeSession(session);
-		}
-	}
-
-	/**
-	 * @testID testGetSession019
-	 * @testDescription This method asserts if a too long uri causes an
-	 *                  exception with URI_TOO_LONG code
-	 */
-	private void testGetSession019() {
-		DmtSession session = null;
-		try {
-			tbc.log("#testGetSession019");
-			session = tbc.getDmtAdmin().getSession(DmtTestControl.PRINCIPAL,
-					DmtTestControl.URI_LONG, DmtSession.LOCK_TYPE_SHARED);
-			tbc.failException("#", DmtException.class);
-		} catch (DmtException e) {
-			tbc.assertEquals(
-					"Asserting if the exception's code is URI_TOO_LONG.",
-					DmtException.URI_TOO_LONG, e.getCode());
-		} catch (Exception e) {
-			tbc.fail("Expected " + DmtException.class.getName() + " but was "
-					+ e.getClass().getName());
-		} finally {
-			tbc.closeSession(session);
-		}
-	}
-
-	/**
-	 * @testID testGetSession020
-	 * @testDescription This method asserts if a invalid lock mode causes an
-	 *                  exception with OTHER_ERROR code
-	 */
-	private void testGetSession020() {
-		DmtSession session = null;
-		try {
-			tbc.log("#testGetSession020");
-			session = tbc.getDmtAdmin().getSession(DmtTestControl.PRINCIPAL,
-					DmtTestControl.OSGi_LOG, DmtTestControl.INVALID_LOCKMODE);
-			tbc.failException("#", DmtException.class);
-		} catch (DmtException e) {
-			tbc.assertEquals(
-					"Asserting if the exception's code is OTHER_ERROR.",
-					DmtException.OTHER_ERROR, e.getCode());
-		} catch (Exception e) {
-			tbc.fail("Expected " + DmtException.class.getName() + " but was "
-					+ e.getClass().getName());
-		} finally {
-			tbc.closeSession(session);
-		}
-	}
-
-	/**
-	 * @testID testGetSession021
-	 * @testDescription This method asserts if a node using invalid characters
-	 *                  causes an exception with INVALID_URI code
-	 */
-	private void testGetSession021() {
-		DmtSession session = null;
-		try {
-			tbc.log("#testGetSession021");
-			session = tbc.getDmtAdmin().getSession(DmtTestControl.PRINCIPAL,
-					DmtTestControl.INVALID_URI, DmtSession.LOCK_TYPE_SHARED);
-			tbc.failException("#", DmtException.class);
-		} catch (DmtException e) {
-			tbc.assertEquals(
-					"Asserting if the exception's code is INVALID_URI.",
-					DmtException.INVALID_URI, e.getCode());
-		} catch (Exception e) {
-			tbc.fail("Expected " + DmtException.class.getName() + " but was "
-					+ e.getClass().getName());
-		} finally {
-			tbc.closeSession(session);
-		}
-	}
-
-	/**
-	 * @testID testGetSession022
-	 * @testDescription This method asserts if SecurityException is thrown when
-	 *                  the caller does not have the required
-	 *                  DmtPrincipalPermission
-	 */
-	private void testGetSession022() {
-		DmtSession session = null;
-		try {
-			tbc.log("#testGetSession022");
-			tbc.setPermissions(new PermissionInfo(DmtPrincipalPermission.class
-					.getName(), DmtTestControl.PRINCIPAL_2, "*"));
-			session = tbc.getDmtAdmin().getSession(DmtTestControl.PRINCIPAL,
-					DmtTestControl.OSGi_LOG, DmtSession.LOCK_TYPE_SHARED);
+					.getName(), DmtConstants.PRINCIPAL_2, "*"));
+			session = tbc.getDmtAdmin().getSession(DmtConstants.PRINCIPAL,
+					DmtConstants.OSGi_LOG, DmtSession.LOCK_TYPE_SHARED);
 			tbc.failException("#", SecurityException.class);
 		} catch (SecurityException e) {
 			tbc.pass("SecurityException was thrown.");
@@ -616,21 +489,45 @@ public class GetSession implements TestInterface {
 					+ " but was " + e.getClass().getName());
 		} finally {
 			tbc.closeSession(session);
-			tbc.setPermissions(new PermissionInfo(
-					DmtPermission.class.getName(), DmtTestControl.ALL_NODES,
-					DmtTestControl.ALL_ACTIONS));
+            tbc.setPermissions(
+                new PermissionInfo[] {
+                new PermissionInfo(DmtPermission.class.getName(), DmtConstants.ALL_NODES,DmtConstants.ALL_ACTIONS),
+                new PermissionInfo(DmtPrincipalPermission.class.getName(), DmtConstants.PRINCIPAL, "*") }
+                );
 		}
 	}
 
 	/**
-	 * @testID testGetSession023
-	 * @testDescription This method asserts if a leaf node can be opened as
-	 *                  session root 
+	 * This method asserts if a leaf node can be opened as session root
+	 *  
+	 * @spec DmtAdmin.getSession(String)
 	 */
-	private void testGetSession023() {
+	private void testGetSession016() {
 		DmtSession session = null;
 		try {
-			tbc.log("#testGetSession023");
+			tbc.log("#testGetSession016");
+
+			session = tbc.getDmtAdmin().getSession(
+					TestExecPluginActivator.LEAF_NODE);
+			tbc.pass("A leaf node could be opened as session root.");
+		} catch (Exception e) {
+			tbc.fail("Unexpected Exception: " + e.getClass().getName()
+					+ " [Message: " + e.getMessage() + "]");
+		} finally {
+			tbc.closeSession(session);
+
+		}
+	}
+	
+	/**
+	 * This method asserts if a leaf node can be opened as session root
+	 *  
+	 * @spec DmtAdmin.getSession(String,int)
+	 */
+	private void testGetSession017() {
+		DmtSession session = null;
+		try {
+			tbc.log("#testGetSession017");
 
 			session = tbc.getDmtAdmin().getSession(
 					TestExecPluginActivator.LEAF_NODE,
@@ -642,6 +539,244 @@ public class GetSession implements TestInterface {
 		} finally {
 			tbc.closeSession(session);
 
+		}
+	}
+	
+	/**
+	 * This method asserts if a leaf node can be opened as session root
+	 *  
+	 * @spec DmtAdmin.getSession(String,String,int)
+	 */
+	private void testGetSession018() {
+		DmtSession session = null;
+		try {
+			tbc.log("#testGetSession018");
+			session = tbc.getDmtAdmin().getSession(DmtConstants.PRINCIPAL,
+					TestExecPluginActivator.LEAF_NODE,
+					DmtSession.LOCK_TYPE_ATOMIC);
+			tbc.pass("A leaf node could be opened as session root.");
+		} catch (Exception e) {
+			tbc.fail("Unexpected Exception: " + e.getClass().getName()
+					+ " [Message: " + e.getMessage() + "]");
+		} finally {
+			tbc.closeSession(session);
+		}
+	}
+
+	
+	/**
+	 * This method asserts that DmtException.INVALID_URI is thrown when  
+	 * nodeUri is syntactically invalid
+	 * 
+	 * @spec DmtAdmin.getSession(String)
+	 */
+	private void testGetSession019() {
+		DmtSession session = null;
+		try {
+			tbc.log("#testGetSession019");
+            //It is from 1 because 0 is 'null' and null is a valid nodeUri for this method
+			for (int i=1;i<DmtTestControl.INVALID_URIS.length;i++) {
+				try {
+				    session = tbc.getDmtAdmin().getSession(DmtTestControl.INVALID_URIS[i].toString());
+                    tbc.failException("", DmtException.class);
+                } catch (DmtException e) {
+                    tbc.pass("DmtException.INVALID_URI is thrown when nodeUri is syntactically invalid");
+                }
+			}
+			
+		} catch (Exception e) {
+			tbc.fail("Unexpected Exception: " + e.getClass().getName()
+				+ " [Message: " + e.getMessage() + "]");
+		} finally {
+			tbc.closeSession(session);
+		}
+	}
+	/**
+	 * This method asserts that DmtException.INVALID_URI is thrown when  
+	 * nodeUri is syntactically invalid
+	 * 
+	 * @spec DmtAdmin.getSession(String,int)
+	 */
+	private void testGetSession020() {
+		DmtSession session = null;
+		try {
+			tbc.log("#testGetSession020");
+
+            //It is from 1 because 0 is 'null' and null is a valid nodeUri for this method
+            for (int i=1;i<DmtTestControl.INVALID_URIS.length;i++) {
+                try {
+                    session = tbc.getDmtAdmin().getSession(DmtTestControl.INVALID_URIS[i].toString(),DmtSession.LOCK_TYPE_ATOMIC);
+                    tbc.failException("", DmtException.class);
+                } catch (DmtException e) {
+                        tbc.pass("DmtException.INVALID_URI is thrown when nodeUri is syntactically invalid");
+                }
+            }
+
+			
+		} catch (Exception e) {
+			tbc.fail("Unexpected Exception: " + e.getClass().getName()
+				+ " [Message: " + e.getMessage() + "]");
+		} finally {
+			tbc.closeSession(session);
+		}
+	}
+	/**
+	 * This method asserts that DmtException.INVALID_URI is thrown when  
+	 * nodeUri is syntactically invalid
+	 * 
+	 * @spec DmtAdmin.getSession(String,String,int)
+	 */
+	private void testGetSession021() {
+		DmtSession session = null;
+		try {
+			tbc.log("#testGetSession021");
+
+            //It is from 1 because 0 is 'null' and null is a valid nodeUri for this method
+            for (int i=1;i<DmtTestControl.INVALID_URIS.length;i++) {
+                try {
+                    session = tbc.getDmtAdmin().getSession(DmtConstants.PRINCIPAL,DmtTestControl.INVALID_URIS[i].toString(),DmtSession.LOCK_TYPE_ATOMIC);
+                    tbc.failException("", DmtException.class);
+                } catch (DmtException e) {
+                        tbc.pass("DmtException.INVALID_URI is thrown when nodeUri is syntactically invalid");
+                }
+            }
+			
+		} catch (Exception e) {
+			tbc.fail("Unexpected Exception: " + e.getClass().getName()
+				+ " [Message: " + e.getMessage() + "]");
+		} finally {
+			tbc.closeSession(session);
+		}
+	}
+	/**
+	 * This method asserts that DmtException.URI_TOO_LONG is thrown when  
+	 * nodeUri is too long
+	 * 
+	 * @spec DmtAdmin.getSession(String)
+	 */
+	private void testGetSession022() {
+		DmtSession session = null;
+		try {
+			tbc.log("#testGetSession022");
+
+            for (int i=0;i<DmtTestControl.URIS_TOO_LONG.length;i++) {
+                try {
+                    session = tbc.getDmtAdmin().getSession(DmtTestControl.URIS_TOO_LONG[i].toString());
+                    tbc.failException("", DmtException.class);
+                } catch (DmtException e) {
+                        tbc.pass("DmtException.URI_TOO_LONG is thrown when nodeUri is too long");
+                }
+            }
+		} catch (Exception e) {
+			tbc.fail("Unexpected Exception: " + e.getClass().getName()
+				+ " [Message: " + e.getMessage() + "]");
+		} finally {
+			tbc.closeSession(session);
+		}
+	}
+	/**
+	 * This method asserts that DmtException.URI_TOO_LONG is thrown when  
+	 * nodeUri is too long
+	 * 
+	 * @spec DmtAdmin.getSession(String,int)
+	 */
+	private void testGetSession023() {
+		DmtSession session = null;
+		try {
+			tbc.log("#testGetSession023");
+
+            for (int i=0;i<DmtTestControl.URIS_TOO_LONG.length;i++) {
+                try {
+                    session = tbc.getDmtAdmin().getSession(DmtTestControl.URIS_TOO_LONG[i].toString(),DmtSession.LOCK_TYPE_ATOMIC);
+                    tbc.failException("", DmtException.class);
+                } catch (DmtException e) {
+                        tbc.pass("DmtException.URI_TOO_LONG is thrown when nodeUri is too long");
+                }
+            }
+			
+		} catch (Exception e) {
+			tbc.fail("Unexpected Exception: " + e.getClass().getName()
+				+ " [Message: " + e.getMessage() + "]");
+		} finally {
+			tbc.closeSession(session);
+		}
+	}
+	/**
+	 * This method asserts that DmtException.URI_TOO_LONG is thrown when  
+	 * nodeUri is too long
+	 * 
+	 * @spec DmtAdmin.getSession(String,String,int)
+	 */
+	private void testGetSession024() {
+		DmtSession session = null;
+		try {
+			tbc.log("#testGetSession024");
+			
+            for (int i=0;i<DmtTestControl.URIS_TOO_LONG.length;i++) {
+                try {
+                    session = tbc.getDmtAdmin().getSession(DmtConstants.PRINCIPAL,DmtTestControl.URIS_TOO_LONG[i].toString(),DmtSession.LOCK_TYPE_ATOMIC);
+                    tbc.failException("", DmtException.class);
+                } catch (DmtException e) {
+                        tbc.pass("DmtException.URI_TOO_LONG is thrown when nodeUri is too long");
+                }
+            }
+			
+		} catch (Exception e) {
+			tbc.fail("Unexpected Exception: " + e.getClass().getName()
+				+ " [Message: " + e.getMessage() + "]");
+		} finally {
+			tbc.closeSession(session);
+		}
+	}
+	/**
+	 * This method asserts that DmtException.FEATURE_NOT_SUPPORTED is thrown 
+	 * if atomic sessions are not supported and lockMode requests an atomic session 
+	 * 
+	 * @spec DmtAdmin.getSession(String,int)
+	 */
+	private void testGetSession025() {
+		DmtSession session = null;
+		try {
+			tbc.log("#testGetSession025");
+			
+			session = tbc.getDmtAdmin().getSession(TestReadOnlyPluginActivator.ROOT,
+					DmtSession.LOCK_TYPE_ATOMIC);
+			tbc.failException("#", DmtException.class);
+		} catch (DmtException e) {
+			tbc.assertEquals(
+					"Asserting if the exception's code is FEATURE_NOT_SUPPORTED.",
+					DmtException.FEATURE_NOT_SUPPORTED, e.getCode());
+		} catch (Exception e) {
+			tbc.fail("Expected " + DmtException.class.getName() + " but was "
+					+ e.getClass().getName());
+		} finally {
+			tbc.closeSession(session);
+		}
+	}
+	
+	/**
+	 * This method asserts that DmtException.FEATURE_NOT_SUPPORTED is thrown 
+	 * if atomic sessions are not supported and lockMode requests an atomic session 
+	 * 
+	 * @spec DmtAdmin.getSession(String,String,int)
+	 */
+	private void testGetSession026() {
+		DmtSession session = null;
+		try {
+			tbc.log("#testGetSession026");
+			
+			session = tbc.getDmtAdmin().getSession(DmtConstants.PRINCIPAL,TestReadOnlyPluginActivator.ROOT,
+					DmtSession.LOCK_TYPE_ATOMIC);
+			tbc.failException("#", DmtException.class);
+		} catch (DmtException e) {
+			tbc.assertEquals(
+					"Asserting if the exception's code is FEATURE_NOT_SUPPORTED.",
+					DmtException.FEATURE_NOT_SUPPORTED, e.getCode());
+		} catch (Exception e) {
+			tbc.fail("Expected " + DmtException.class.getName() + " but was "
+					+ e.getClass().getName());
+		} finally {
+			tbc.closeSession(session);
 		}
 	}
 

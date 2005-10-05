@@ -35,27 +35,31 @@
  * Feb 15, 2005  Alexandre Santos
  * 1             Updates after formal inspection (BTC_MEG_TCK_CODE-INSPR-001)
  * ===========  ===============================================================
+ * Aug 25, 2005  Luiz Felipe Guimaraes
+ * 173           [MEGTCK][DMT] Changes on interface names and plugins
+ * ============  ==============================================================
  */
 package org.osgi.test.cases.dmt.main.tb1.DmtSession;
 
-import org.osgi.service.dmt.DmtAcl;
+import org.osgi.service.dmt.Acl;
 import org.osgi.service.dmt.DmtData;
 import org.osgi.service.dmt.DmtException;
-import org.osgi.service.dmt.DmtPermission;
-import org.osgi.service.dmt.DmtPrincipalPermission;
+import org.osgi.service.dmt.security.DmtPermission;
+import org.osgi.service.dmt.security.DmtPrincipalPermission;
 import org.osgi.service.dmt.DmtSession;
 import org.osgi.service.permissionadmin.PermissionInfo;
+import org.osgi.test.cases.dmt.main.tbc.DmtConstants;
 import org.osgi.test.cases.dmt.main.tbc.DmtTestControl;
 import org.osgi.test.cases.dmt.main.tbc.TestInterface;
-import org.osgi.test.cases.dmt.main.tbc.Plugin.TestExecPluginActivator;
+import org.osgi.test.cases.dmt.main.tbc.Plugin.ExecPlugin.TestExecPlugin;
+import org.osgi.test.cases.dmt.main.tbc.Plugin.ExecPlugin.TestExecPluginActivator;
+import org.osgi.test.cases.dmt.main.tbc.Plugin.ReadOnly.TestReadOnlyPluginActivator;
 
 /**
  * @author Andre Assad
  * 
- * @methodUnderTest org.osgi.service.dmt.DmtSession#createLeafNode
- * @generalDescription This Test Case Validates the implementation of
- *                     <code>createLeafNode<code> method, according to MEG reference
- *                     documentation (rfc0085).
+ * This Test Case Validates the implementation of <code>createLeafNode<code> method of DmtSession, 
+ * according to MEG specification
  */
 public class CreateLeafNode implements TestInterface {
 	private DmtTestControl tbc;
@@ -65,6 +69,7 @@ public class CreateLeafNode implements TestInterface {
 	}
 
 	public void run() {
+        prepare();
 		testCreateLeafNode001();
 		testCreateLeafNode002();
 		testCreateLeafNode003();
@@ -93,18 +98,25 @@ public class CreateLeafNode implements TestInterface {
 		testCreateLeafNode026();
 		testCreateLeafNode027();
 		testCreateLeafNode028();
-		testCreateLeafNode029();
-		testCreateLeafNode030();
-		testCreateLeafNode031();
-		testCreateLeafNode032();
-		testCreateLeafNode033();
+        testCreateLeafNode029();
+        testCreateLeafNode030();
+        testCreateLeafNode031();
+        testCreateLeafNode032();
+        testCreateLeafNode033();
+        testCreateLeafNode034();
+        testCreateLeafNode035();
+        testCreateLeafNode036();
+        testCreateLeafNode037();
+        
 	}
-
+    private void prepare() {
+        tbc.setPermissions(new PermissionInfo(DmtPermission.class.getName(), DmtConstants.ALL_NODES,DmtConstants.ALL_ACTIONS));
+    }
 	/**
-	 * @testID testCreateLeafNode001
-	 * @testDescription This method asserts that a DmtException with error code
-	 *                  equals to NODE_ALREADY_EXISTS is thrown using the
-	 *                  constructor with only one argument.
+	 * This method asserts that DmtException.NODE_ALREADY_EXISTS is thrown
+	 * if nodeUri points to a node that already exists 
+	 * 
+	 * @spec DmtSession.createLeafNode(String)
 	 */
 	private void testCreateLeafNode001() {
 		DmtSession session = null;
@@ -130,10 +142,10 @@ public class CreateLeafNode implements TestInterface {
 	}
 
 	/**
-	 * @testID testCreateLeafNode002
-	 * @testDescription This method asserts that a DmtException with error code
-	 *                  equals to NODE_ALREADY_EXISTS is thrown using the
-	 *                  constructor with two parameters.
+	 * This method asserts that DmtException.NODE_ALREADY_EXISTS is thrown  
+	 * if nodeUri points to a node that already exists using the method with two parameters
+	 *  
+	 * @spec DmtSession.createLeafNode(String,DmtData)
 	 */
 	private void testCreateLeafNode002() {
 		DmtSession session = null;
@@ -160,10 +172,10 @@ public class CreateLeafNode implements TestInterface {
 	}
 
 	/**
-	 * @testID testCreateLeafNode003
-	 * @testDescription This method asserts that a DmtException with error code
-	 *                  equals to NODE_ALREADY_EXISTS is thrown using the
-	 *                  constructor with three parameters.
+	 * This method asserts that DmtException.NODE_ALREADY_EXISTS is thrown  
+	 * if nodeUri points to a node that already exists using the method with three parameters
+	 *  
+	 * @spec DmtSession.createLeafNode(String,DmtData,String)
 	 */
 	private void testCreateLeafNode003() {
 		DmtSession session = null;
@@ -173,7 +185,7 @@ public class CreateLeafNode implements TestInterface {
 			session = tbc.getDmtAdmin().getSession(".",
 					DmtSession.LOCK_TYPE_EXCLUSIVE);
 			session.createLeafNode(TestExecPluginActivator.LEAF_NODE,
-					new DmtData(10), DmtTestControl.MIMETYPE);
+					new DmtData(10), DmtConstants.MIMETYPE);
 
 			tbc.failException("", DmtException.class);
 		} catch (DmtException e) {
@@ -187,154 +199,189 @@ public class CreateLeafNode implements TestInterface {
 			tbc.closeSession(session);
 		}
 	}
-
+	
 	/**
-	 * @testID testCreateLeafNode004
-	 * @testDescription This method asserts that a DmtException with error code
-	 *                  equals to OTHER_ERROR is thrown using the constructor
-	 *                  with only one argument.
+	 * This method asserts that createLeafNode is executed when the right DmtPermission is set (Local) 
+	 * using the method with one parameter.
+	 * 
+	 * @spec DmtSession.createLeafNode(String)
 	 */
 	private void testCreateLeafNode004() {
 		DmtSession session = null;
 		try {
 			tbc.log("#testCreateLeafNode004");
 
-			session = tbc.getDmtAdmin().getSession(DmtTestControl.OSGi_CFG,
+			session = tbc.getDmtAdmin().getSession(".",
 					DmtSession.LOCK_TYPE_EXCLUSIVE);
+
+			tbc.setPermissions(new PermissionInfo(
+					DmtPermission.class.getName(), DmtConstants.ALL_NODES,
+					DmtPermission.ADD));
 
 			session
 					.createLeafNode(TestExecPluginActivator.INEXISTENT_LEAF_NODE);
 
-			tbc.failException("", DmtException.class);
-		} catch (DmtException e) {
-			tbc.assertEquals("Asserting that DmtException code is OTHER_ERROR",
-					DmtException.OTHER_ERROR, e.getCode());
+			tbc.pass("createLeafNode was successfully executed");
+
 		} catch (Exception e) {
 			tbc.fail("Unexpected Exception: " + e.getClass().getName()
 					+ " [Message: " + e.getMessage() + "]");
 		} finally {
-			tbc.closeSession(session);
+            tbc.setPermissions(new PermissionInfo(DmtPermission.class.getName(), DmtConstants.ALL_NODES,DmtConstants.ALL_ACTIONS));
+            tbc.cleanUp(session, null);
 		}
 	}
 
 	/**
-	 * @testID testCreateLeafNode005
-	 * @testDescription This method asserts that a DmtException with error code
-	 *                  equals to OTHER_ERROR is thrown using the constructor
-	 *                  with two parameters.
+	 * This method asserts that createLeafNode is executed when the right DmtPermission is set (Local)  
+	 * using the method with two parameters.
+	 * 
+	 * @spec DmtSession.createLeafNode(String,DmtData)
 	 */
 	private void testCreateLeafNode005() {
 		DmtSession session = null;
-
 		try {
 			tbc.log("#testCreateLeafNode005");
 
-			session = tbc.getDmtAdmin().getSession(DmtTestControl.OSGi_CFG,
+			session = tbc.getDmtAdmin().getSession(".",
 					DmtSession.LOCK_TYPE_EXCLUSIVE);
+
+			tbc.setPermissions(new PermissionInfo(
+					DmtPermission.class.getName(), DmtConstants.ALL_NODES,
+					DmtPermission.ADD));
+
 			session.createLeafNode(
 					TestExecPluginActivator.INEXISTENT_LEAF_NODE, new DmtData(
 							10));
 
-			tbc.failException("", DmtException.class);
-		} catch (DmtException e) {
-			tbc.assertEquals("Asserting that DmtException code is OTHER_ERROR",
-					DmtException.OTHER_ERROR, e.getCode());
+			tbc.pass("createLeafNode was successfully executed");
+
 		} catch (Exception e) {
 			tbc.fail("Unexpected Exception: " + e.getClass().getName()
 					+ " [Message: " + e.getMessage() + "]");
 		} finally {
-			tbc.closeSession(session);
+            tbc.setPermissions(new PermissionInfo(DmtPermission.class.getName(), DmtConstants.ALL_NODES,DmtConstants.ALL_ACTIONS));
+            tbc.cleanUp(session, null);
+            
 		}
 	}
 
 	/**
-	 * @testID testCreateLeafNode006
-	 * @testDescription This method asserts that a DmtException with error code
-	 *                  equals to OTHER_ERROR is thrown using the constructor
-	 *                  with three parameters.
+	 * This method asserts that createLeafNode is executed when the right DmtPermission is set (Local) 
+	 * using the method with three parameters.
+	 * 
+	 * @spec DmtSession.createLeafNode(String,DmtData,String)
 	 */
 	private void testCreateLeafNode006() {
 		DmtSession session = null;
 		try {
 			tbc.log("#testCreateLeafNode006");
 
-			session = tbc.getDmtAdmin().getSession(DmtTestControl.OSGi_CFG,
+			session = tbc.getDmtAdmin().getSession(".",
 					DmtSession.LOCK_TYPE_EXCLUSIVE);
+
+			tbc.setPermissions(new PermissionInfo(
+					DmtPermission.class.getName(), DmtConstants.ALL_NODES,
+					DmtPermission.ADD));
+
 			session.createLeafNode(
 					TestExecPluginActivator.INEXISTENT_LEAF_NODE, new DmtData(
-							10), DmtTestControl.MIMETYPE);
+							10), DmtConstants.MIMETYPE);
 
-			tbc.failException("", DmtException.class);
-		} catch (DmtException e) {
-			tbc.assertEquals("Asserting that DmtException code is OTHER_ERROR",
-					DmtException.OTHER_ERROR, e.getCode());
+			tbc.pass("createLeafNode was successfully executed");
+
 		} catch (Exception e) {
 			tbc.fail("Unexpected Exception: " + e.getClass().getName()
 					+ " [Message: " + e.getMessage() + "]");
 		} finally {
-			tbc.closeSession(session);
+            tbc.setPermissions(new PermissionInfo(DmtPermission.class.getName(), DmtConstants.ALL_NODES,DmtConstants.ALL_ACTIONS));
+            tbc.cleanUp(session, null);
+            
 		}
 	}
 
 	/**
-	 * @testID testCreateLeafNode007
-	 * @testDescription This method asserts that a DmtException with error code
-	 *                  equals to INVALID_URI is thrown using the constructor
-	 *                  with only one argument.
+	 * This method asserts that createLeafNode is executed when the right Acl is set (Remote)
+	 * using the method with one parameter.
+	 * 
+	 * @spec DmtSession.createLeafNode(String)
 	 */
 	private void testCreateLeafNode007() {
 		DmtSession session = null;
 		try {
 			tbc.log("#testCreateLeafNode007");
-
 			session = tbc.getDmtAdmin().getSession(".",
 					DmtSession.LOCK_TYPE_EXCLUSIVE);
-			session.createLeafNode(DmtTestControl.INVALID_URI);
+			session.setNodeAcl(TestExecPluginActivator.ROOT, new Acl(
+					new String[] { DmtConstants.PRINCIPAL },
+					new int[] { Acl.ADD }));
 
-			tbc.failException("", DmtException.class);
-		} catch (DmtException e) {
-			tbc.assertEquals("Asserting that DmtException code is INVALID_URI",
-					DmtException.INVALID_URI, e.getCode());
+			session.close();
+			tbc.setPermissions(new PermissionInfo(DmtPrincipalPermission.class
+					.getName(), DmtConstants.PRINCIPAL, "*"));
+			session = tbc.getDmtAdmin().getSession(DmtConstants.PRINCIPAL,
+					TestExecPluginActivator.ROOT,
+					DmtSession.LOCK_TYPE_EXCLUSIVE);
+
+			session
+					.createLeafNode(TestExecPluginActivator.INEXISTENT_LEAF_NODE);
+
+			tbc.pass("createLeafNode was successfully executed");
+
 		} catch (Exception e) {
 			tbc.fail("Unexpected Exception: " + e.getClass().getName()
 					+ " [Message: " + e.getMessage() + "]");
 		} finally {
-			tbc.closeSession(session);
+            tbc.setPermissions(new PermissionInfo(DmtPermission.class.getName(), DmtConstants.ALL_NODES,DmtConstants.ALL_ACTIONS));
+            tbc.cleanUp(session, TestExecPluginActivator.ROOT);
+            
 		}
+
 	}
 
 	/**
-	 * @testID testCreateLeafNode008
-	 * @testDescription This method asserts that a DmtException with error code
-	 *                  equals to INVALID_URI is thrown using the constructor
-	 *                  with two parameters.
+	 * This method asserts that createLeafNode is executed when the right Acl is set (Remote) 
+	 * using the method with two parameters.
+	 * 
+	 * @spec DmtSession.createLeafNode(String,DmtData)
 	 */
 	private void testCreateLeafNode008() {
 		DmtSession session = null;
 		try {
 			tbc.log("#testCreateLeafNode008");
-
 			session = tbc.getDmtAdmin().getSession(".",
 					DmtSession.LOCK_TYPE_EXCLUSIVE);
-			session.createLeafNode(DmtTestControl.INVALID_URI, new DmtData(10));
+			session.setNodeAcl(TestExecPluginActivator.ROOT, new Acl(
+					new String[] { DmtConstants.PRINCIPAL },
+					new int[] { Acl.ADD }));
+			session.close();
 
-			tbc.failException("", DmtException.class);
-		} catch (DmtException e) {
-			tbc.assertEquals("Asserting that DmtException code is INVALID_URI",
-					DmtException.INVALID_URI, e.getCode());
+			tbc.setPermissions(new PermissionInfo(DmtPrincipalPermission.class
+					.getName(), DmtConstants.PRINCIPAL, "*"));
+			session = tbc.getDmtAdmin().getSession(DmtConstants.PRINCIPAL,
+					TestExecPluginActivator.ROOT,
+					DmtSession.LOCK_TYPE_EXCLUSIVE);
+			session.createLeafNode(
+					TestExecPluginActivator.INEXISTENT_LEAF_NODE,
+					new DmtData(0));
+
+			tbc.pass("createLeafNode was successfully executed");
+
 		} catch (Exception e) {
 			tbc.fail("Unexpected Exception: " + e.getClass().getName()
 					+ " [Message: " + e.getMessage() + "]");
 		} finally {
-			tbc.closeSession(session);
+            tbc.setPermissions(new PermissionInfo(DmtPermission.class.getName(), DmtConstants.ALL_NODES,DmtConstants.ALL_ACTIONS));
+            tbc.cleanUp(session, TestExecPluginActivator.ROOT);
+            
 		}
+
 	}
 
 	/**
-	 * @testID testCreateLeafNode009
-	 * @testDescription This method asserts that a DmtException with error code
-	 *                  equals to INVALID_URI is thrown using the constructor
-	 *                  with three parameters.
+	 * This method asserts that createLeafNode is executed when the right Acl is set (Remote)
+	 * 
+	 * @spec DmtSession.createLeafNode(String,DmtData,String)
 	 */
 	private void testCreateLeafNode009() {
 		DmtSession session = null;
@@ -343,732 +390,47 @@ public class CreateLeafNode implements TestInterface {
 
 			session = tbc.getDmtAdmin().getSession(".",
 					DmtSession.LOCK_TYPE_EXCLUSIVE);
-			session.createLeafNode(DmtTestControl.INVALID_URI, new DmtData(10),
-					DmtTestControl.MIMETYPE);
+			session.setNodeAcl(TestExecPluginActivator.ROOT, new Acl(
+					new String[] { DmtConstants.PRINCIPAL },
+					new int[] { Acl.ADD }));
 
-			tbc.failException("", DmtException.class);
-		} catch (DmtException e) {
-			tbc.assertEquals("Asserting that DmtException code is INVALID_URI",
-					DmtException.INVALID_URI, e.getCode());
+			session.close();
+
+			tbc.setPermissions(new PermissionInfo(DmtPrincipalPermission.class
+					.getName(), DmtConstants.PRINCIPAL, "*"));
+			session = tbc.getDmtAdmin().getSession(DmtConstants.PRINCIPAL,
+					TestExecPluginActivator.ROOT,
+					DmtSession.LOCK_TYPE_EXCLUSIVE);
+
+			session.createLeafNode(
+					TestExecPluginActivator.INEXISTENT_LEAF_NODE, new DmtData(
+							10), DmtConstants.MIMETYPE);
+
+			tbc.pass("createLeafNode was successfully executed");
+
 		} catch (Exception e) {
 			tbc.fail("Unexpected Exception: " + e.getClass().getName()
 					+ " [Message: " + e.getMessage() + "]");
 		} finally {
-			tbc.cleanUp(session, new String[] { DmtTestControl.INVALID_URI });
+            tbc.setPermissions(new PermissionInfo(DmtPermission.class.getName(), DmtConstants.ALL_NODES,DmtConstants.ALL_ACTIONS));
+            tbc.cleanUp(session, TestExecPluginActivator.ROOT);
+            
 		}
 	}
 
 	/**
-	 * @testID testCreateLeafNode010
-	 * @testDescription This method asserts that a DmtException with error code
-	 *                  equals to URI_TOO_LONG is thrown using the constructor
-	 *                  with only one argument.
+	 * This method asserts that relative URI works as described in this method using the method with one parameter.
+	 * 
+	 * @spec DmtSession.createLeafNode(String)
 	 */
 	private void testCreateLeafNode010() {
 		DmtSession session = null;
 		try {
 			tbc.log("#testCreateLeafNode010");
-
-			session = tbc.getDmtAdmin().getSession(".",
-					DmtSession.LOCK_TYPE_EXCLUSIVE);
-			session.createLeafNode(DmtTestControl.URI_LONG);
-
-			tbc.failException("", DmtException.class);
-		} catch (DmtException e) {
-			tbc.assertEquals(
-					"Asserting that DmtException code is URI_TOO_LONG",
-					DmtException.URI_TOO_LONG, e.getCode());
-		} catch (Exception e) {
-			tbc.fail("Unexpected Exception: " + e.getClass().getName()
-					+ " [Message: " + e.getMessage() + "]");
-		} finally {
-			tbc.cleanUp(session, new String[] { DmtTestControl.URI_LONG });
-		}
-	}
-
-	/**
-	 * @testID testCreateLeafNode011
-	 * @testDescription This method asserts that a DmtException with error code
-	 *                  equals to URI_TOO_LONG is thrown using the constructor
-	 *                  with two parameters.
-	 */
-	private void testCreateLeafNode011() {
-		DmtSession session = null;
-		try {
-			tbc.log("#testCreateLeafNode011");
-
-			session = tbc.getDmtAdmin().getSession(".",
-					DmtSession.LOCK_TYPE_EXCLUSIVE);
-			session.createLeafNode(DmtTestControl.URI_LONG, new DmtData(10));
-
-			tbc.failException("", DmtException.class);
-		} catch (DmtException e) {
-			tbc.assertEquals(
-					"Asserting that DmtException code is URI_TOO_LONG",
-					DmtException.URI_TOO_LONG, e.getCode());
-		} catch (Exception e) {
-			tbc.fail("Unexpected Exception: " + e.getClass().getName()
-					+ " [Message: " + e.getMessage() + "]");
-		} finally {
-			tbc.cleanUp(session, new String[] { DmtTestControl.URI_LONG });
-		}
-	}
-
-	/**
-	 * @testID testCreateLeafNode012
-	 * @testDescription This method asserts that a DmtException with error code
-	 *                  equals to URI_TOO_LONG is thrown using the constructor
-	 *                  with three parameters.
-	 */
-	private void testCreateLeafNode012() {
-		DmtSession session = null;
-		try {
-			tbc.log("#testCreateLeafNode012");
-
-			session = tbc.getDmtAdmin().getSession(".",
-					DmtSession.LOCK_TYPE_EXCLUSIVE);
-			session.createLeafNode(DmtTestControl.URI_LONG, new DmtData(10),
-					DmtTestControl.MIMETYPE);
-
-			tbc.failException("", DmtException.class);
-		} catch (DmtException e) {
-			tbc.assertEquals(
-					"Asserting that DmtException code is URI_TOO_LONG",
-					DmtException.URI_TOO_LONG, e.getCode());
-		} catch (Exception e) {
-			tbc.fail("Unexpected Exception: " + e.getClass().getName()
-					+ " [Message: " + e.getMessage() + "]");
-		} finally {
-			tbc.cleanUp(session, new String[] { DmtTestControl.URI_LONG });
-		}
-	}
-
-	/**
-	 * @testID testCreateLeafNode013
-	 * @testDescription This method asserts that a DmtException with error code
-	 *                  equals to COMMAND_FAILED is thrown using the constructor
-	 *                  with two parameters.
-	 */
-	private void testCreateLeafNode013() {
-		DmtSession session = null;
-		try {
-			tbc.log("#testCreateLeafNode013");
-
-			session = tbc.getDmtAdmin().getSession(".",
-					DmtSession.LOCK_TYPE_EXCLUSIVE);
-			session.createLeafNode(
-					TestExecPluginActivator.INEXISTENT_LEAF_NODE, null);
-
-			tbc.failException("", DmtException.class);
-		} catch (DmtException e) {
-			tbc.assertEquals(
-					"Asserting that DmtException code is COMMAND_FAILED",
-					DmtException.COMMAND_FAILED, e.getCode());
-		} catch (Exception e) {
-			tbc.fail("Unexpected Exception: " + e.getClass().getName()
-					+ " [Message: " + e.getMessage() + "]");
-		} finally {
-			tbc.closeSession(session);
-		}
-	}
-
-	/**
-	 * @testID testCreateLeafNode014
-	 * @testDescription This method asserts that a DmtException with error code
-	 *                  equals to COMMAND_FAILED is thrown using the constructor
-	 *                  with three parameters.
-	 */
-	private void testCreateLeafNode014() {
-		DmtSession session = null;
-		try {
-			tbc.log("#testCreateLeafNode014");
-
-			session = tbc.getDmtAdmin().getSession(".",
-					DmtSession.LOCK_TYPE_EXCLUSIVE);
-			session.createLeafNode(
-					TestExecPluginActivator.INEXISTENT_LEAF_NODE, null,
-					DmtTestControl.MIMETYPE);
-
-			tbc.failException("", DmtException.class);
-		} catch (DmtException e) {
-			tbc.assertEquals(
-					"Asserting that DmtException code is COMMAND_FAILED",
-					DmtException.COMMAND_FAILED, e.getCode());
-		} catch (Exception e) {
-			tbc.fail("Unexpected Exception: " + e.getClass().getName()
-					+ " [Message: " + e.getMessage() + "]");
-		} finally {
-			tbc.closeSession(session);
-		}
-	}
-
-	/**
-	 * @testID testCreateLeafNode015
-	 * @testDescription This method asserts that a DmtException with error code
-	 *                  equals to PERMISSION_DENIED is thrown.
-	 */
-	private void testCreateLeafNode015() {
-		DmtSession session = null;
-		try {
-			tbc.log("#testCreateLeafNode015");
-			session = tbc.getDmtAdmin().getSession(".",
-					DmtSession.LOCK_TYPE_EXCLUSIVE);
-			session.setNodeAcl(TestExecPluginActivator.ROOT, new DmtAcl(
-					new String[] { DmtTestControl.PRINCIPAL },
-					new int[] { DmtAcl.EXEC }));
-
-			session.close();
-			tbc.setPermissions(new PermissionInfo(DmtPrincipalPermission.class
-					.getName(), DmtTestControl.PRINCIPAL, "*"));
-			session = tbc.getDmtAdmin().getSession(DmtTestControl.PRINCIPAL,
-					TestExecPluginActivator.ROOT,
-					DmtSession.LOCK_TYPE_EXCLUSIVE);
-
-			session
-					.createLeafNode(TestExecPluginActivator.INEXISTENT_LEAF_NODE);
-
-			tbc.failException("", DmtException.class);
-		} catch (DmtException e) {
-			tbc.assertEquals(
-					"Asserting that DmtException code is PERMISSION_DENIED",
-					DmtException.PERMISSION_DENIED, e.getCode());
-		} catch (Exception e) {
-			tbc.fail("Unexpected Exception: " + e.getClass().getName()
-					+ " [Message: " + e.getMessage() + "]");
-		} finally {
-			tbc.cleanUp(session, null, TestExecPluginActivator.ROOT);
-		}
-
-	}
-
-	/**
-	 * @testID testCreateLeafNode016
-	 * @testDescription This method asserts that a DmtException with error code
-	 *                  equals to PERMISSION_DENIED is thrown using the
-	 *                  constructor with two parameters.
-	 */
-	private void testCreateLeafNode016() {
-		DmtSession session = null;
-		try {
-			tbc.log("#testCreateLeafNode016");
-			session = tbc.getDmtAdmin().getSession(".",
-					DmtSession.LOCK_TYPE_EXCLUSIVE);
-			session.setNodeAcl(TestExecPluginActivator.ROOT, new DmtAcl(
-					new String[] { DmtTestControl.PRINCIPAL },
-					new int[] { DmtAcl.EXEC }));
-			session.close();
-
-			tbc.setPermissions(new PermissionInfo(DmtPrincipalPermission.class
-					.getName(), DmtTestControl.PRINCIPAL, "*"));
-			session = tbc.getDmtAdmin().getSession(DmtTestControl.PRINCIPAL,
-					TestExecPluginActivator.ROOT,
-					DmtSession.LOCK_TYPE_EXCLUSIVE);
-			session.createLeafNode(
-					TestExecPluginActivator.INEXISTENT_LEAF_NODE,
-					new DmtData(0));
-
-			tbc.failException("", DmtException.class);
-		} catch (DmtException e) {
-			tbc.assertEquals(
-					"Asserting that DmtException code is PERMISSION_DENIED",
-					DmtException.PERMISSION_DENIED, e.getCode());
-		} catch (Exception e) {
-			tbc.fail("Unexpected Exception: " + e.getClass().getName()
-					+ " [Message: " + e.getMessage() + "]");
-		} finally {
-			tbc.cleanUp(session, null, TestExecPluginActivator.ROOT);
-		}
-
-	}
-
-	/**
-	 * @testID testCreateLeafNode017
-	 * @testDescription This method asserts that a DmtException with error code
-	 *                  equals to PERMISSION_DENIED is thrown.
-	 */
-	private void testCreateLeafNode017() {
-		DmtSession session = null;
-		try {
-			tbc.log("#testCreateLeafNode017");
-
-			session = tbc.getDmtAdmin().getSession(".",
-					DmtSession.LOCK_TYPE_EXCLUSIVE);
-			session.setNodeAcl(TestExecPluginActivator.ROOT, new DmtAcl(
-					new String[] { DmtTestControl.PRINCIPAL },
-					new int[] { DmtAcl.EXEC }));
-
-			session.close();
-
-			tbc.setPermissions(new PermissionInfo(DmtPrincipalPermission.class
-					.getName(), DmtTestControl.PRINCIPAL, "*"));
-			session = tbc.getDmtAdmin().getSession(DmtTestControl.PRINCIPAL,
-					TestExecPluginActivator.ROOT,
-					DmtSession.LOCK_TYPE_EXCLUSIVE);
-
-			session.createLeafNode(
-					TestExecPluginActivator.INEXISTENT_LEAF_NODE, new DmtData(
-							10), DmtTestControl.MIMETYPE);
-
-			tbc.failException("", DmtException.class);
-		} catch (DmtException e) {
-			tbc.assertEquals(
-					"Asserting that DmtException code is PERMISSION_DENIED",
-					DmtException.PERMISSION_DENIED, e.getCode());
-		} catch (Exception e) {
-			tbc.fail("Unexpected Exception: " + e.getClass().getName()
-					+ " [Message: " + e.getMessage() + "]");
-		} finally {
-			tbc.cleanUp(session, null, TestExecPluginActivator.ROOT);
-		}
-	}
-
-	/**
-	 * @testID testCreateLeafNode018
-	 * @testDescription This method asserts that an IllegalStateException is
-	 *                  thrown when attemps to create a leaf node using a closed
-	 *                  session
-	 */
-	private void testCreateLeafNode018() {
-		DmtSession session = null;
-		try {
-			tbc.log("#testCreateLeafNode018");
-
-			session = tbc.getDmtAdmin().getSession(".",
-					DmtSession.LOCK_TYPE_EXCLUSIVE);
-
-			session.close();
-			session
-					.createLeafNode(TestExecPluginActivator.INEXISTENT_LEAF_NODE);
-
-			tbc.failException("", IllegalStateException.class);
-		} catch (IllegalStateException e) {
-			tbc.pass("The Exception was IllegalStateException");
-		} catch (Exception e) {
-			tbc.fail("Expected " + IllegalStateException.class.getName()
-					+ " but was " + e.getClass().getName());
-		} finally {
-			tbc.closeSession(session);
-		}
-
-	}
-
-	/**
-	 * @testID testCreateLeafNode019
-	 * @testDescription This method asserts that an IllegalStateException is
-	 *                  thrown when attemps to create a leaf node using a closed
-	 *                  session using the constructor with two parameters.
-	 */
-	private void testCreateLeafNode019() {
-		DmtSession session = null;
-		try {
-			tbc.log("#testCreateLeafNode019");
-
-			session = tbc.getDmtAdmin().getSession(".",
-					DmtSession.LOCK_TYPE_EXCLUSIVE);
-			session.close();
-			session.createLeafNode(
-					TestExecPluginActivator.INEXISTENT_LEAF_NODE, new DmtData(
-							10));
-
-			tbc.failException("", IllegalStateException.class);
-		} catch (IllegalStateException e) {
-			tbc.pass("The Exception was IllegalStateException");
-		} catch (Exception e) {
-			tbc.fail("Expected " + IllegalStateException.class.getName()
-					+ " but was " + e.getClass().getName());
-		} finally {
-			tbc.closeSession(session);
-		}
-	}
-
-	/**
-	 * @testID testCreateLeafNode020
-	 * @testDescription This method asserts that an IllegalStateException is
-	 *                  thrown when attemps to create a leaf node using a closed
-	 *                  session using the constructor with three parameters.
-	 */
-	private void testCreateLeafNode020() {
-		DmtSession session = null;
-		try {
-			tbc.log("#testCreateLeafNode020");
-
-			session = tbc.getDmtAdmin().getSession(".",
-					DmtSession.LOCK_TYPE_EXCLUSIVE);
-			session.close();
-			session.createLeafNode(
-					TestExecPluginActivator.INEXISTENT_LEAF_NODE, new DmtData(
-							10), DmtTestControl.MIMETYPE);
-
-			tbc.failException("", IllegalStateException.class);
-		} catch (IllegalStateException e) {
-			tbc.pass("The Exception was IllegalStateException");
-		} catch (Exception e) {
-			tbc.fail("Expected " + IllegalStateException.class.getName()
-					+ " but was " + e.getClass().getName());
-		} finally {
-			tbc.closeSession(session);
-		}
-	}
-
-	/**
-	 * @testID testCreateLeafNode021
-	 * @testDescription This method asserts that an SecurityException is thrown
-	 *                  when createLeafNode is called without the right
-	 *                  permission
-	 */
-	private void testCreateLeafNode021() {
-		DmtSession session = null;
-		try {
-			tbc.log("#testCreateLeafNode021");
-
-			session = tbc.getDmtAdmin().getSession(".",
-					DmtSession.LOCK_TYPE_EXCLUSIVE);
-
-			tbc.setPermissions(new PermissionInfo(
-					DmtPermission.class.getName(), DmtTestControl.ALL_NODES,
-					DmtPermission.EXEC));
-
-			session
-					.createLeafNode(TestExecPluginActivator.INEXISTENT_LEAF_NODE);
-
-			tbc.failException("#", SecurityException.class);
-		} catch (SecurityException e) {
-			tbc.pass("The Exception was SecurityException");
-		} catch (Exception e) {
-			tbc.fail("Expected " + SecurityException.class.getName()
-					+ " but was " + e.getClass().getName());
-		} finally {
-			tbc.cleanUp(session, null, null);
-		}
-	}
-
-	/**
-	 * @testID testCreateLeafNode022
-	 * @testDescription This method asserts that an SecurityException is thrown
-	 *                  when createLeafNode is called without the right
-	 *                  permission using the constructor with two parameters.
-	 */
-	private void testCreateLeafNode022() {
-		DmtSession session = null;
-		try {
-			tbc.log("#testCreateLeafNode022");
-
-			session = tbc.getDmtAdmin().getSession(".",
-					DmtSession.LOCK_TYPE_EXCLUSIVE);
-
-			tbc.setPermissions(new PermissionInfo(
-					DmtPermission.class.getName(), DmtTestControl.ALL_NODES,
-					DmtPermission.EXEC));
-			session.createLeafNode(
-					TestExecPluginActivator.INEXISTENT_LEAF_NODE, new DmtData(
-							10));
-
-			tbc.failException("#", SecurityException.class);
-		} catch (SecurityException e) {
-			tbc.pass("The Exception was SecurityException");
-		} catch (Exception e) {
-			tbc.fail("Expected " + SecurityException.class.getName()
-					+ " but was " + e.getClass().getName());
-		} finally {
-			tbc.cleanUp(session, null, null);
-		}
-	}
-
-	/**
-	 * @testID testCreateLeafNode023
-	 * @testDescription This method asserts that an SecurityException is thrown
-	 *                  when createLeafNode is called without the right
-	 *                  permission
-	 */
-	private void testCreateLeafNode023() {
-		DmtSession session = null;
-		try {
-			tbc.log("#testCreateLeafNode023");
-
-			session = tbc.getDmtAdmin().getSession(".",
-					DmtSession.LOCK_TYPE_EXCLUSIVE);
-
-			tbc.setPermissions(new PermissionInfo(
-					DmtPermission.class.getName(), DmtTestControl.ALL_NODES,
-					DmtPermission.EXEC));
-
-			session.createLeafNode(
-					TestExecPluginActivator.INEXISTENT_LEAF_NODE, new DmtData(
-							10), DmtTestControl.MIMETYPE);
-
-			tbc.failException("#", SecurityException.class);
-		} catch (SecurityException e) {
-			tbc.pass("The Exception was SecurityException");
-		} catch (Exception e) {
-			tbc.fail("Expected " + SecurityException.class.getName()
-					+ " but was " + e.getClass().getName());
-		} finally {
-			tbc.cleanUp(session, null, null);
-		}
-	}
-
-	/**
-	 * @testID testCreateLeafNode024
-	 * @testDescription This method asserts that we can create a leaf node
-	 *                  without raise an exception using the constructor with
-	 *                  one argument.
-	 */
-	private void testCreateLeafNode024() {
-		DmtSession session = null;
-		try {
-			tbc.log("#testCreateLeafNode024");
-
-			session = tbc.getDmtAdmin().getSession(".",
-					DmtSession.LOCK_TYPE_EXCLUSIVE);
-
-			tbc.setPermissions(new PermissionInfo(
-					DmtPermission.class.getName(), DmtTestControl.ALL_NODES,
-					DmtPermission.ADD));
-
-			session
-					.createLeafNode(TestExecPluginActivator.INEXISTENT_LEAF_NODE);
-
-			tbc.pass("createLeafNode was successfully executed");
-
-		} catch (Exception e) {
-			tbc.fail("Unexpected Exception: " + e.getClass().getName()
-					+ " [Message: " + e.getMessage() + "]");
-		} finally {
-			tbc.cleanUp(session, null, null);
-		}
-	}
-
-	/**
-	 * @testID testCreateLeafNode025
-	 * @testDescription This method asserts that we can create a leaf node
-	 *                  without raise an exception using the constructor with
-	 *                  two arguments.
-	 */
-	private void testCreateLeafNode025() {
-		DmtSession session = null;
-		try {
-			tbc.log("#testCreateLeafNode025");
-
-			session = tbc.getDmtAdmin().getSession(".",
-					DmtSession.LOCK_TYPE_EXCLUSIVE);
-
-			tbc.setPermissions(new PermissionInfo(
-					DmtPermission.class.getName(), DmtTestControl.ALL_NODES,
-					DmtPermission.ADD));
-
-			session.createLeafNode(
-					TestExecPluginActivator.INEXISTENT_LEAF_NODE, new DmtData(
-							10));
-
-			tbc.pass("createLeafNode was successfully executed");
-
-		} catch (Exception e) {
-			tbc.fail("Unexpected Exception: " + e.getClass().getName()
-					+ " [Message: " + e.getMessage() + "]");
-		} finally {
-			tbc.cleanUp(session, null, null);
-		}
-	}
-
-	/**
-	 * @testID testCreateLeafNode026
-	 * @testDescription This method asserts that we can create a leaf node
-	 *                  without raise an exception using the constructor with
-	 *                  three arguments.
-	 */
-	private void testCreateLeafNode026() {
-		DmtSession session = null;
-		try {
-			tbc.log("#testCreateLeafNode026");
-
-			session = tbc.getDmtAdmin().getSession(".",
-					DmtSession.LOCK_TYPE_EXCLUSIVE);
-
-			tbc.setPermissions(new PermissionInfo(
-					DmtPermission.class.getName(), DmtTestControl.ALL_NODES,
-					DmtPermission.ADD));
-
-			session.createLeafNode(
-					TestExecPluginActivator.INEXISTENT_LEAF_NODE, new DmtData(
-							10), DmtTestControl.MIMETYPE);
-
-			tbc.pass("createLeafNode was successfully executed");
-
-		} catch (Exception e) {
-			tbc.fail("Unexpected Exception: " + e.getClass().getName()
-					+ " [Message: " + e.getMessage() + "]");
-		} finally {
-			tbc.cleanUp(session, null, null);
-		}
-	}
-
-	/**
-	 * @testID testCreateLeafNode027
-	 * @testDescription This method asserts that we can create a leaf node
-	 *                  without raise an exception using the constructor with
-	 *                  one argument.
-	 */
-	private void testCreateLeafNode027() {
-		DmtSession session = null;
-		try {
-			tbc.log("#testCreateLeafNode027");
-			session = tbc.getDmtAdmin().getSession(".",
-					DmtSession.LOCK_TYPE_EXCLUSIVE);
-			session.setNodeAcl(TestExecPluginActivator.ROOT, new DmtAcl(
-					new String[] { DmtTestControl.PRINCIPAL },
-					new int[] { DmtAcl.ADD }));
-
-			session.close();
-			tbc.setPermissions(new PermissionInfo(DmtPrincipalPermission.class
-					.getName(), DmtTestControl.PRINCIPAL, "*"));
-			session = tbc.getDmtAdmin().getSession(DmtTestControl.PRINCIPAL,
-					TestExecPluginActivator.ROOT,
-					DmtSession.LOCK_TYPE_EXCLUSIVE);
-
-			session
-					.createLeafNode(TestExecPluginActivator.INEXISTENT_LEAF_NODE);
-
-			tbc.pass("createLeafNode was successfully executed");
-
-		} catch (Exception e) {
-			tbc.fail("Unexpected Exception: " + e.getClass().getName()
-					+ " [Message: " + e.getMessage() + "]");
-		} finally {
-			tbc.cleanUp(session, null, TestExecPluginActivator.ROOT);
-		}
-
-	}
-
-	/**
-	 * @testID testCreateLeafNode028
-	 * @testDescription This method asserts that we can create a leaf node
-	 *                  without raise an exception using the constructor with
-	 *                  two arguments.
-	 */
-	private void testCreateLeafNode028() {
-		DmtSession session = null;
-		try {
-			tbc.log("#testCreateLeafNode028");
-			session = tbc.getDmtAdmin().getSession(".",
-					DmtSession.LOCK_TYPE_EXCLUSIVE);
-			session.setNodeAcl(TestExecPluginActivator.ROOT, new DmtAcl(
-					new String[] { DmtTestControl.PRINCIPAL },
-					new int[] { DmtAcl.ADD }));
-			session.close();
-
-			tbc.setPermissions(new PermissionInfo(DmtPrincipalPermission.class
-					.getName(), DmtTestControl.PRINCIPAL, "*"));
-			session = tbc.getDmtAdmin().getSession(DmtTestControl.PRINCIPAL,
-					TestExecPluginActivator.ROOT,
-					DmtSession.LOCK_TYPE_EXCLUSIVE);
-			session.createLeafNode(
-					TestExecPluginActivator.INEXISTENT_LEAF_NODE,
-					new DmtData(0));
-
-			tbc.pass("createLeafNode was successfully executed");
-
-		} catch (Exception e) {
-			tbc.fail("Unexpected Exception: " + e.getClass().getName()
-					+ " [Message: " + e.getMessage() + "]");
-		} finally {
-			tbc.cleanUp(session, null, TestExecPluginActivator.ROOT);
-		}
-
-	}
-
-	/**
-	 * @testID testCreateLeafNode029
-	 * @testDescription This method asserts that we can create a leaf node
-	 *                  without raise an exception using the constructor with
-	 *                  three arguments.
-	 */
-	private void testCreateLeafNode029() {
-		DmtSession session = null;
-		try {
-			tbc.log("#testCreateLeafNode029");
-
-			session = tbc.getDmtAdmin().getSession(".",
-					DmtSession.LOCK_TYPE_EXCLUSIVE);
-			session.setNodeAcl(TestExecPluginActivator.ROOT, new DmtAcl(
-					new String[] { DmtTestControl.PRINCIPAL },
-					new int[] { DmtAcl.ADD }));
-
-			session.close();
-
-			tbc.setPermissions(new PermissionInfo(DmtPrincipalPermission.class
-					.getName(), DmtTestControl.PRINCIPAL, "*"));
-			session = tbc.getDmtAdmin().getSession(DmtTestControl.PRINCIPAL,
-					TestExecPluginActivator.ROOT,
-					DmtSession.LOCK_TYPE_EXCLUSIVE);
-
-			session.createLeafNode(
-					TestExecPluginActivator.INEXISTENT_LEAF_NODE, new DmtData(
-							10), DmtTestControl.MIMETYPE);
-
-			tbc.pass("createLeafNode was successfully executed");
-
-		} catch (Exception e) {
-			tbc.fail("Unexpected Exception: " + e.getClass().getName()
-					+ " [Message: " + e.getMessage() + "]");
-		} finally {
-			tbc.cleanUp(session, null, TestExecPluginActivator.ROOT);
-		}
-	}
-
-	/**
-	 * @testID testCreateLeafNode030
-	 * @testDescription This method asserts that we can create a leaf node
-	 *                  without raise an exception using the constructor with
-	 *                  three arguments.
-	 */
-	private void testCreateLeafNode030() {
-		DmtSession session = null;
-		try {
-			tbc.log("#testCreateLeafNode030");
-
-			session = tbc.getDmtAdmin().getSession(".",
-					DmtSession.LOCK_TYPE_EXCLUSIVE);
-			session.setNodeAcl(TestExecPluginActivator.ROOT, new DmtAcl(
-					new String[] { DmtTestControl.PRINCIPAL },
-					new int[] { DmtAcl.ADD }));
-
-			session.close();
-
-			tbc.setPermissions(new PermissionInfo(DmtPrincipalPermission.class
-					.getName(), DmtTestControl.PRINCIPAL, "*"));
-			session = tbc.getDmtAdmin().getSession(DmtTestControl.PRINCIPAL,
-					TestExecPluginActivator.ROOT,
-					DmtSession.LOCK_TYPE_EXCLUSIVE);
-
-			session.createLeafNode(
-					TestExecPluginActivator.INEXISTENT_LEAF_NODE, new DmtData(
-							10), null);
-
-			tbc.pass("createLeafNode was successfully executed");
-
-		} catch (Exception e) {
-			tbc.fail("Unexpected Exception: " + e.getClass().getName()
-					+ " [Message: " + e.getMessage() + "]");
-		} finally {
-			tbc.cleanUp(session, null, TestExecPluginActivator.ROOT);
-		}
-	}
-
-	/**
-	 * @testID testCreateLeafNode031
-	 * @testDescription This method asserts that relative URI works as described
-	 *                  in this method using the method with one arguments.
-	 * 
-	 */
-	private void testCreateLeafNode031() {
-		DmtSession session = null;
-		try {
-			tbc.log("#testCreateLeafNode031");
-			tbc.setPermissions(new PermissionInfo(DmtPermission.class.getName(), DmtTestControl.ALL_NODES,DmtTestControl.ALL_ACTIONS));
 			session = tbc.getDmtAdmin().getSession(
 					TestExecPluginActivator.ROOT, DmtSession.LOCK_TYPE_ATOMIC);
 
-			session.createLeafNode(TestExecPluginActivator.INEXISTENT_LEAF_VALUE);
+			session.createLeafNode(TestExecPluginActivator.INEXISTENT_LEAF_NODE_NAME);
 
 			tbc.pass("A relative URI can be used with CreateLeafNode.");
 		} catch (Exception e) {
@@ -1080,20 +442,18 @@ public class CreateLeafNode implements TestInterface {
 	}
 
 	/**
-	 * @testID testCreateLeafNode032
-	 * @testDescription This method asserts that relative URI works as described
-	 *                  in this method using the method with two arguments.
+	 * This method asserts that relative URI works as described in this method using the method with two parameters.
 	 * 
+	 * @spec DmtSession.createLeafNode(String,DmtData)
 	 */
-	private void testCreateLeafNode032() {
+	private void testCreateLeafNode011() {
 		DmtSession session = null;
 		try {
-			tbc.log("#testCreateLeafNode032");
-			tbc.setPermissions(new PermissionInfo(DmtPermission.class.getName(), DmtTestControl.ALL_NODES,DmtTestControl.ALL_ACTIONS));
+			tbc.log("#testCreateLeafNode011");
 			session = tbc.getDmtAdmin().getSession(
 					TestExecPluginActivator.ROOT, DmtSession.LOCK_TYPE_ATOMIC);
 
-			session.createLeafNode(TestExecPluginActivator.INEXISTENT_LEAF_VALUE,
+			session.createLeafNode(TestExecPluginActivator.INEXISTENT_LEAF_NODE_NAME,
 					new DmtData(10));
 
 			tbc.pass("A relative URI can be used with CreateLeafNode.");
@@ -1104,23 +464,21 @@ public class CreateLeafNode implements TestInterface {
 			tbc.closeSession(session);
 		}
 	}
-
 	/**
-	 * @testID testCreateLeafNode033
-	 * @testDescription This method asserts that relative URI works as described
-	 *                  in this method using the method with three arguments.
+	 * This method asserts that relative URI works as described in this method 
+	 * using the method with three parameters
 	 * 
+	 * @spec DmtSession.createLeafNode(String,DmtData,String)
 	 */
-	private void testCreateLeafNode033() {
+	private void testCreateLeafNode012() {
 		DmtSession session = null;
 		try {
-			tbc.log("#testCreateLeafNode033");
-			tbc.setPermissions(new PermissionInfo(DmtPermission.class.getName(), DmtTestControl.ALL_NODES,DmtTestControl.ALL_ACTIONS));
+			tbc.log("#testCreateLeafNode012");
 			session = tbc.getDmtAdmin().getSession(
 					TestExecPluginActivator.ROOT, DmtSession.LOCK_TYPE_ATOMIC);
 
-			session.createLeafNode(TestExecPluginActivator.INEXISTENT_LEAF_VALUE,
-					new DmtData(10), null);
+			session.createLeafNode(TestExecPluginActivator.INEXISTENT_LEAF_NODE_NAME,
+					new DmtData(10), DmtConstants.MIMETYPE);
 
 			tbc.pass("A relative URI can be used with CreateLeafNode.");
 		} catch (Exception e) {
@@ -1130,5 +488,643 @@ public class CreateLeafNode implements TestInterface {
 			tbc.closeSession(session);
 		}
 	}
+	
+	/**
+	 * This method asserts if IllegalStateException is thrown if this method is called 
+	 * when the session is LOCK_TYPE_SHARED
+	 * 
+	 * @spec DmtSession.createLeafNode(String)
+	 */
+	private void testCreateLeafNode013() {
+		DmtSession session = null;
+		try {
+			tbc.log("#testCreateLeafNode013");
+			session = tbc.getDmtAdmin().getSession(".",DmtSession.LOCK_TYPE_SHARED);
+			session.createLeafNode(TestExecPluginActivator.INEXISTENT_LEAF_NODE);
+			tbc.failException("", IllegalStateException.class);
+		} catch (IllegalStateException e) {
+			tbc.pass("IllegalStateException correctly thrown");
+		} catch (Exception e) {
+			tbc.failException("", IllegalStateException.class);
+		} finally {
+			tbc.closeSession(session);
+		}
+	}
 
+	/**
+	 * This method asserts if IllegalStateException is thrown if this method is called 
+	 * when the session is LOCK_TYPE_SHARED
+	 * 
+	 * @spec DmtSession.createLeafNode(String,DmtData)
+	 */
+	private void testCreateLeafNode014() {
+		DmtSession session = null;
+		try {
+			tbc.log("#testCreateLeafNode014");
+			session = tbc.getDmtAdmin().getSession(".",DmtSession.LOCK_TYPE_SHARED);
+			session.createLeafNode(TestExecPluginActivator.INEXISTENT_LEAF_NODE,new DmtData(10));
+			tbc.failException("", IllegalStateException.class);
+		} catch (IllegalStateException e) {
+			tbc.pass("IllegalStateException correctly thrown");
+		} catch (Exception e) {
+			tbc.failException("", IllegalStateException.class);
+		} finally {
+			tbc.closeSession(session);
+		}
+	}
+	/**
+	 * This method asserts if IllegalStateException is thrown if this method is called 
+	 * when the session is LOCK_TYPE_SHARED
+	 * 
+	 * @spec DmtSession.createLeafNode(String,DmtData,String)
+	 */
+	private void testCreateLeafNode015() {
+		DmtSession session = null;
+		try {
+			tbc.log("#testCreateLeafNode015");
+			session = tbc.getDmtAdmin().getSession(".",DmtSession.LOCK_TYPE_SHARED);
+			session.createLeafNode(TestExecPluginActivator.INEXISTENT_LEAF_NODE,new DmtData(10),DmtConstants.MIMETYPE);
+			tbc.failException("", IllegalStateException.class);
+		} catch (IllegalStateException e) {
+			tbc.pass("IllegalStateException correctly thrown");
+		} catch (Exception e) {
+			tbc.failException("", IllegalStateException.class);
+		} finally {
+			tbc.closeSession(session);
+		}
+	}
+	
+	/**
+	 * Asserts that DmtException with COMMAND_NOT_ALLOWED code is thrown when the parent
+	 * is not an interior node.
+	 * 
+	 * @spec DmtSession.createLeafNode(String)
+	 */
+	private void testCreateLeafNode016() {
+		DmtSession session = null;
+		tbc.log("#testCreateLeafNode016");
+		try {
+			session = tbc.getDmtAdmin().getSession(".",DmtSession.LOCK_TYPE_EXCLUSIVE);
+			session.createLeafNode(TestExecPluginActivator.LEAF_NODE +"/test");
+			tbc.failException("", DmtException.class);
+		} catch (DmtException e) {
+			tbc.assertEquals(
+					"Asserting that DmtException code is COMMAND_NOT_ALLOWED",
+					DmtException.COMMAND_NOT_ALLOWED, e.getCode());
+		} catch (Exception e) {
+			tbc.fail("Expected " + DmtException.class.getName() + " but was "
+					+ e.getClass().getName());
+		} finally {
+			tbc.closeSession(session);
+		}
+	}
+	
+	/**
+	 * Asserts that DmtException with COMMAND_NOT_ALLOWED code is thrown when the parent
+	 * is not an interior node.
+	 * 
+	 * @spec DmtSession.createLeafNode(String,DmtData)
+	 */
+	private void testCreateLeafNode017() {
+		DmtSession session = null;
+		tbc.log("#testCreateLeafNode017");
+		try {
+			session = tbc.getDmtAdmin().getSession(".",DmtSession.LOCK_TYPE_EXCLUSIVE);
+			session.createLeafNode(TestExecPluginActivator.LEAF_NODE +"/test",new DmtData(10));
+			tbc.failException("", DmtException.class);
+		} catch (DmtException e) {
+			tbc.assertEquals(
+					"Asserting that DmtException code is COMMAND_NOT_ALLOWED",
+					DmtException.COMMAND_NOT_ALLOWED, e.getCode());
+		} catch (Exception e) {
+			tbc.fail("Expected " + DmtException.class.getName() + " but was "
+					+ e.getClass().getName());
+		} finally {
+			tbc.closeSession(session);
+		}
+	}
+	/**
+	 * Asserts that DmtException with COMMAND_NOT_ALLOWED code is thrown when the parent
+	 * is not an interior node.
+	 * 
+	 * @spec DmtSession.createLeafNode(String,DmtData,String)
+	 */
+	private void testCreateLeafNode018() {
+		DmtSession session = null;
+		tbc.log("#testCreateLeafNode018");
+		try {
+			session = tbc.getDmtAdmin().getSession(".",DmtSession.LOCK_TYPE_EXCLUSIVE);
+			session.createLeafNode(TestExecPluginActivator.LEAF_NODE +"/test",new DmtData(10),DmtConstants.MIMETYPE);
+			tbc.failException("", DmtException.class);
+		} catch (DmtException e) {
+			tbc.assertEquals(
+					"Asserting that DmtException code is COMMAND_NOT_ALLOWED",
+					DmtException.COMMAND_NOT_ALLOWED, e.getCode());
+		} catch (Exception e) {
+			tbc.fail("Expected " + DmtException.class.getName() + " but was "
+					+ e.getClass().getName());
+		} finally {
+			tbc.closeSession(session);
+		}
+	}
+	/**
+	 * Asserts that DmtException with COMMAND_NOT_ALLOWED code is thrown when 
+	 * the target node is the root of the tree 
+	 * 
+	 * @spec DmtSession.createLeafNode(String,DmtData,String)
+	 */
+	private void testCreateLeafNode019() {
+		DmtSession session = null;
+		tbc.log("#testCreateLeafNode019");
+		try {
+			session = tbc.getDmtAdmin().getSession(TestExecPluginActivator.ROOT,DmtSession.LOCK_TYPE_EXCLUSIVE);
+			session.createLeafNode(TestExecPluginActivator.ROOT);
+			tbc.failException("", DmtException.class);
+		} catch (DmtException e) {
+			tbc.assertEquals(
+					"Asserting that DmtException code is COMMAND_NOT_ALLOWED",
+					DmtException.COMMAND_NOT_ALLOWED, e.getCode());
+		} catch (Exception e) {
+			tbc.fail("Expected " + DmtException.class.getName() + " but was "
+					+ e.getClass().getName());
+		} finally {
+			tbc.closeSession(session);
+		}
+	}
+	/**
+	 * Asserts that DmtException with COMMAND_NOT_ALLOWED code is thrown when 
+	 * the target node is the root of the tree 
+	 * 
+	 * @spec DmtSession.createLeafNode(String,DmtData)
+	 */
+	private void testCreateLeafNode020() {
+		DmtSession session = null;
+		tbc.log("#testCreateLeafNode020");
+		try {
+			session = tbc.getDmtAdmin().getSession(TestExecPluginActivator.ROOT,DmtSession.LOCK_TYPE_EXCLUSIVE);
+			session.createLeafNode(TestExecPluginActivator.ROOT,new DmtData(10));
+			tbc.failException("", DmtException.class);
+		} catch (DmtException e) {
+			tbc.assertEquals(
+					"Asserting that DmtException code is COMMAND_NOT_ALLOWED",
+					DmtException.COMMAND_NOT_ALLOWED, e.getCode());
+		} catch (Exception e) {
+			tbc.fail("Expected " + DmtException.class.getName() + " but was "
+					+ e.getClass().getName());
+		} finally {
+			tbc.closeSession(session);
+		}
+	}
+	/**
+	 * Asserts that DmtException with COMMAND_NOT_ALLOWED code is thrown when 
+	 * the target node is the root of the tree 
+	 * 
+	 * @spec DmtSession.createLeafNode(String,DmtData,String)
+	 */
+	private void testCreateLeafNode021() {
+		DmtSession session = null;
+		tbc.log("#testCreateLeafNode021");
+		try {
+			session = tbc.getDmtAdmin().getSession(TestExecPluginActivator.ROOT,DmtSession.LOCK_TYPE_EXCLUSIVE);
+			session.createLeafNode(TestExecPluginActivator.ROOT,new DmtData(10), DmtConstants.MIMETYPE);
+			tbc.failException("", DmtException.class);
+		} catch (DmtException e) {
+			tbc.assertEquals(
+					"Asserting that DmtException code is COMMAND_NOT_ALLOWED",
+					DmtException.COMMAND_NOT_ALLOWED, e.getCode());
+		} catch (Exception e) {
+			tbc.fail("Expected " + DmtException.class.getName() + " but was "
+					+ e.getClass().getName());
+		} finally {
+			tbc.closeSession(session);
+		}
+	}
+	
+	/**
+	 * This method asserts that DmtException.TRANSACTION_ERROR is thrown when this method is called
+	 * in a plugin that does not support atomic transactions and the session is LOCK_TYPE_ATOMIC
+	 * 
+	 * @spec DmtSession.createLeafNode(String)
+	 */
+	private void testCreateLeafNode022() {
+		DmtSession session = null;
+		try {
+			tbc.log("#testCreateLeafNode022");
+			session = tbc.getDmtAdmin().getSession(TestReadOnlyPluginActivator.ROOT,
+			    DmtSession.LOCK_TYPE_ATOMIC);
+			
+			session.createLeafNode(TestReadOnlyPluginActivator.INEXISTENT_LEAF_NODE);
+			tbc.failException("", DmtException.class);
+		} catch (DmtException e) {
+			tbc.assertEquals("Asserting that DmtException code is TRANSACTION_ERROR",
+					DmtException.TRANSACTION_ERROR, e.getCode());
+		} catch (Exception e) {
+			tbc.fail("Expected " + DmtException.class.getName() + " but was "
+					+ e.getClass().getName());
+		} finally {
+			tbc.closeSession(session);
+		}
+	}
+	/**
+	 * This method asserts that DmtException.TRANSACTION_ERROR is thrown when this method is called
+	 * in a plugin that does not support atomic transactions and the session is LOCK_TYPE_ATOMIC
+	 * 
+	 * @spec DmtSession.createLeafNode(String,DmtData)
+	 */
+	private void testCreateLeafNode023() {
+		DmtSession session = null;
+		try {
+			tbc.log("#testCreateLeafNode023");
+			session = tbc.getDmtAdmin().getSession(TestReadOnlyPluginActivator.ROOT,
+			    DmtSession.LOCK_TYPE_ATOMIC);
+			
+			session.createLeafNode(TestReadOnlyPluginActivator.INEXISTENT_LEAF_NODE,new DmtData(10));
+			tbc.failException("", DmtException.class);
+		} catch (DmtException e) {
+			tbc.assertEquals("Asserting that DmtException code is TRANSACTION_ERROR",
+					DmtException.TRANSACTION_ERROR, e.getCode());
+		} catch (Exception e) {
+			tbc.fail("Expected " + DmtException.class.getName() + " but was "
+					+ e.getClass().getName());
+		} finally {
+			tbc.closeSession(session);
+		}
+	}
+	/**
+	 * This method asserts that DmtException.TRANSACTION_ERROR is thrown when this method is called
+	 * in a plugin that does not support atomic transactions and the session is LOCK_TYPE_ATOMIC
+	 * 
+	 * @spec DmtSession.createLeafNode(String,DmtData,String)
+	 */
+	private void testCreateLeafNode024() {
+		DmtSession session = null;
+		try {
+			tbc.log("#testCreateLeafNode024");
+			session = tbc.getDmtAdmin().getSession(TestReadOnlyPluginActivator.ROOT,
+			    DmtSession.LOCK_TYPE_ATOMIC);
+			
+			session.createLeafNode(TestReadOnlyPluginActivator.INEXISTENT_LEAF_NODE,new DmtData(10), DmtConstants.MIMETYPE);
+			tbc.failException("", DmtException.class);
+		} catch (DmtException e) {
+			tbc.assertEquals("Asserting that DmtException code is TRANSACTION_ERROR",
+					DmtException.TRANSACTION_ERROR, e.getCode());
+		} catch (Exception e) {
+			tbc.fail("Expected " + DmtException.class.getName() + " but was "
+					+ e.getClass().getName());
+		} finally {
+			tbc.closeSession(session);
+		}
+	}
+	
+	/**
+	 * Asserts that DmtException with COMMAND_NOT_ALLOWED code is thrown  
+	 * if the underlying plugin is read-only 
+	 * 
+	 * @spec DmtSession.createLeafNode(String,DmtData,String)
+	 */
+	private void testCreateLeafNode025() {
+		DmtSession session = null;
+		tbc.log("#testCreateLeafNode025");
+		try {
+			session = tbc.getDmtAdmin().getSession(TestReadOnlyPluginActivator.ROOT,DmtSession.LOCK_TYPE_EXCLUSIVE);
+			session.createLeafNode(TestReadOnlyPluginActivator.INEXISTENT_LEAF_NODE,new DmtData(10), DmtConstants.MIMETYPE);
+			tbc.failException("", DmtException.class);
+		} catch (DmtException e) {
+			tbc.assertEquals(
+					"Asserting that DmtException code is COMMAND_NOT_ALLOWED",
+					DmtException.COMMAND_NOT_ALLOWED, e.getCode());
+		} catch (Exception e) {
+			tbc.fail("Expected " + DmtException.class.getName() + " but was "
+					+ e.getClass().getName());
+		} finally {
+			tbc.closeSession(session);
+		}
+	}
+	/**
+	 * Asserts that DmtException with COMMAND_NOT_ALLOWED code is thrown  
+	 * if the underlying plugin is read-only 
+	 * 
+	 * @spec DmtSession.createLeafNode(String,DmtData)
+	 */
+	private void testCreateLeafNode026() {
+		DmtSession session = null;
+		tbc.log("#testCreateLeafNode026");
+		try {
+			session = tbc.getDmtAdmin().getSession(TestReadOnlyPluginActivator.ROOT,DmtSession.LOCK_TYPE_EXCLUSIVE);
+			session.createLeafNode(TestReadOnlyPluginActivator.INEXISTENT_LEAF_NODE,new DmtData(10));
+			tbc.failException("", DmtException.class);
+		} catch (DmtException e) {
+			tbc.assertEquals(
+					"Asserting that DmtException code is COMMAND_NOT_ALLOWED",
+					DmtException.COMMAND_NOT_ALLOWED, e.getCode());
+		} catch (Exception e) {
+			tbc.fail("Expected " + DmtException.class.getName() + " but was "
+					+ e.getClass().getName());
+		} finally {
+			tbc.closeSession(session);
+		}
+	}
+	/**
+	 * Asserts that DmtException with COMMAND_NOT_ALLOWED code is thrown  
+	 * if the underlying plugin is read-only 
+	 * 
+	 * @spec DmtSession.createLeafNode(String)
+	 */
+	private void testCreateLeafNode027() {
+		DmtSession session = null;
+		tbc.log("#testCreateLeafNode027");
+		try {
+			session = tbc.getDmtAdmin().getSession(TestReadOnlyPluginActivator.ROOT,DmtSession.LOCK_TYPE_EXCLUSIVE);
+			session.createLeafNode(TestReadOnlyPluginActivator.INEXISTENT_LEAF_NODE);
+			tbc.failException("", DmtException.class);
+		} catch (DmtException e) {
+			tbc.assertEquals(
+					"Asserting that DmtException code is COMMAND_NOT_ALLOWED",
+					DmtException.COMMAND_NOT_ALLOWED, e.getCode());
+		} catch (Exception e) {
+			tbc.fail("Expected " + DmtException.class.getName() + " but was "
+					+ e.getClass().getName());
+		} finally {
+			tbc.closeSession(session);
+		}
+	}
+	/**
+	 * Asserts that DmtException with COMMAND_FAILED code is thrown  
+	 * if mimeType is not a proper MIME type string
+	 * 
+	 * @spec DmtSession.createLeafNode(String,DmtData,String)
+	 */
+	private void testCreateLeafNode028() {
+		DmtSession session = null;
+		tbc.log("#testCreateLeafNode028");
+		try {
+			session = tbc.getDmtAdmin().getSession(TestExecPluginActivator.ROOT,DmtSession.LOCK_TYPE_EXCLUSIVE);
+			session.createLeafNode(TestExecPluginActivator.INEXISTENT_LEAF_NODE,new DmtData(10),DmtConstants.INVALID);
+			tbc.failException("", DmtException.class);
+		} catch (DmtException e) {
+			tbc.assertEquals(
+					"Asserting that DmtException code is COMMAND_FAILED",
+					DmtException.COMMAND_FAILED, e.getCode());
+		} catch (Exception e) {
+			tbc.fail("Expected " + DmtException.class.getName() + " but was "
+					+ e.getClass().getName());
+		} finally {
+			tbc.closeSession(session);
+		}
+	}
+    
+    /**
+     * This method asserts that null can be passed as value using the method with two parameters.
+     * 
+     * @spec DmtSession.createLeafNode(String,DmtData)
+     */
+    private void testCreateLeafNode029() {
+        DmtSession session = null;
+        try {
+            tbc.log("#testCreateLeafNode029");
+
+            session = tbc.getDmtAdmin().getSession(".",
+                    DmtSession.LOCK_TYPE_EXCLUSIVE);
+
+            session.createLeafNode(
+                    TestExecPluginActivator.INEXISTENT_LEAF_NODE, null);
+
+            tbc.pass("createLeafNode was successfully executed");
+
+        } catch (Exception e) {
+            tbc.fail("Unexpected Exception: " + e.getClass().getName()
+                    + " [Message: " + e.getMessage() + "]");
+        } finally {
+            tbc.setPermissions(new PermissionInfo(DmtPermission.class.getName(), DmtConstants.ALL_NODES,DmtConstants.ALL_ACTIONS));
+            tbc.cleanUp(session, null);
+            
+        }
+    }
+    /**
+     * This method asserts that null can be passed as value using the method with three parameters.
+     * 
+     * @spec DmtSession.createLeafNode(String,DmtData)
+     */
+    private void testCreateLeafNode030() {
+        DmtSession session = null;
+        try {
+            tbc.log("#testCreateLeafNode030");
+
+            session = tbc.getDmtAdmin().getSession(".",
+                    DmtSession.LOCK_TYPE_EXCLUSIVE);
+
+            session.createLeafNode(
+                    TestExecPluginActivator.INEXISTENT_LEAF_NODE, null,DmtConstants.MIMETYPE);
+
+            tbc.pass("createLeafNode was successfully executed");
+
+        } catch (Exception e) {
+            tbc.fail("Unexpected Exception: " + e.getClass().getName()
+                    + " [Message: " + e.getMessage() + "]");
+        } finally {
+            tbc.setPermissions(new PermissionInfo(DmtPermission.class.getName(), DmtConstants.ALL_NODES,DmtConstants.ALL_ACTIONS));
+            tbc.cleanUp(session, null);
+            
+        }
+    }
+    /**
+     * This method asserts that null can be passed as mimetype
+     * 
+     * @spec DmtSession.createLeafNode(String,DmtData,String)
+     */
+    private void testCreateLeafNode031() {
+        DmtSession session = null;
+        try {
+            tbc.log("#testCreateLeafNode031");
+
+            session = tbc.getDmtAdmin().getSession(".",
+                    DmtSession.LOCK_TYPE_EXCLUSIVE);
+
+            session.createLeafNode(
+                    TestExecPluginActivator.INEXISTENT_LEAF_NODE, new DmtData(10),null);
+
+            tbc.pass("createLeafNode was successfully executed");
+
+        } catch (Exception e) {
+            tbc.fail("Unexpected Exception: " + e.getClass().getName()
+                    + " [Message: " + e.getMessage() + "]");
+        } finally {
+            tbc.setPermissions(new PermissionInfo(DmtPermission.class.getName(), DmtConstants.ALL_NODES,DmtConstants.ALL_ACTIONS));
+            tbc.cleanUp(session, null);
+            
+        }
+    }
+    /**
+     * Asserts that if the parent node does not exist, it is created automatically,  
+     * as if createInteriorNode(String) were called for the parent URI using the method with three parameters.
+     * 
+     * @spec DmtSession.createLeafNode(String)
+     */
+    private void testCreateLeafNode032() {
+        DmtSession session = null;
+        try {
+            tbc.log("#testCreateLeafNode032");
+            TestExecPlugin.resetCount();
+            session = tbc.getDmtAdmin().getSession(".",
+                    DmtSession.LOCK_TYPE_EXCLUSIVE);
+
+            session.createLeafNode(
+                    TestExecPluginActivator.INEXISTENT_INTERIOR_AND_LEAF_NODES);
+
+           
+            tbc.assertTrue("Asserts that if the parent node does not exist, it is created automatically, " +
+                    "as if createInteriorNode(String) were called for the parent URI", 
+                    TestExecPlugin.getCreateInteriorNodeCount()==2 && TestExecPlugin.getCreateLeafNodeCount()==1);
+        } catch (Exception e) {
+            tbc.fail("Unexpected Exception: " + e.getClass().getName()
+                    + " [Message: " + e.getMessage() + "]");
+        } finally {
+            tbc.cleanUp(session, null);
+            
+        }
+    }
+    /**
+     * Asserts that if the parent node does not exist, it is created automatically,  
+     * as if createInteriorNode(String) were called for the parent URI using the method with three parameters.
+     * 
+     * @spec DmtSession.createLeafNode(String,DmtData)
+     */
+    private void testCreateLeafNode033() {
+        DmtSession session = null;
+        try {
+            tbc.log("#testCreateLeafNode033");
+            TestExecPlugin.resetCount();
+            session = tbc.getDmtAdmin().getSession(".",
+                    DmtSession.LOCK_TYPE_EXCLUSIVE);
+
+            session.createLeafNode(
+                    TestExecPluginActivator.INEXISTENT_INTERIOR_AND_LEAF_NODES, new DmtData(10));
+
+           
+            tbc.assertTrue("Asserts that if the parent node does not exist, it is created automatically, " +
+                    "as if createInteriorNode(String) were called for the parent URI", 
+                    TestExecPlugin.getCreateInteriorNodeCount()==2 && TestExecPlugin.getCreateLeafNodeCount()==1);
+        } catch (Exception e) {
+            tbc.fail("Unexpected Exception: " + e.getClass().getName()
+                    + " [Message: " + e.getMessage() + "]");
+        } finally {
+            tbc.cleanUp(session, null);
+            
+        }
+    }
+    /**
+     * Asserts that if the parent node does not exist, it is created automatically,  
+     * as if createInteriorNode(String) were called for the parent URI using the method with three parameters.
+     * 
+     * @spec DmtSession.createLeafNode(String,DmtData,String)
+     */
+    private void testCreateLeafNode034() {
+        DmtSession session = null;
+        try {
+            tbc.log("#testCreateLeafNode034");
+            TestExecPlugin.resetCount();
+            session = tbc.getDmtAdmin().getSession(".",
+                    DmtSession.LOCK_TYPE_EXCLUSIVE);
+
+            session.createLeafNode(
+                    TestExecPluginActivator.INEXISTENT_INTERIOR_AND_LEAF_NODES, new DmtData(10),null);
+
+           
+            tbc.assertTrue("Asserts that if the parent node does not exist, it is created automatically, " +
+                    "as if createInteriorNode(String) were called for the parent URI", 
+                    TestExecPlugin.getCreateInteriorNodeCount()==2 && TestExecPlugin.getCreateLeafNodeCount()==1);
+        } catch (Exception e) {
+            tbc.fail("Unexpected Exception: " + e.getClass().getName()
+                    + " [Message: " + e.getMessage() + "]");
+        } finally {
+            tbc.cleanUp(session, null);
+            
+        }
+    }
+    /**
+     * Asserts that any exceptions encountered while creating the ancestors are propagated to 
+     * the caller of this method
+     * 
+     * @spec DmtSession.createLeafNode(String)
+     */
+    private void testCreateLeafNode035() {
+        DmtSession session = null;
+        try {
+            tbc.log("#testCreateLeafNode035");
+            TestExecPlugin.setExceptionAtCreateInteriorNode(true);
+            session = tbc.getDmtAdmin().getSession(".",
+                    DmtSession.LOCK_TYPE_EXCLUSIVE);
+
+            session.createLeafNode(
+                    TestExecPluginActivator.INEXISTENT_INTERIOR_AND_LEAF_NODES);
+            tbc.failException("", IllegalStateException.class);
+        } catch (IllegalStateException e) {
+            tbc.pass("Asserts that any exceptions encountered while creating the ancestors are propagated to the caller of createLeafNode");
+        } catch (Exception e) {
+            tbc.fail("Expected " + IllegalStateException.class.getName() + " but was "
+                + e.getClass().getName());
+        } finally {
+            tbc.cleanUp(session, null);
+            TestExecPlugin.setExceptionAtCreateInteriorNode(false);
+            
+        }
+    }
+    /**
+     * Asserts that any exceptions encountered while creating the ancestors are propagated to 
+     * the caller of this method
+     * 
+     * @spec DmtSession.createLeafNode(String,DmtData)
+     */
+    private void testCreateLeafNode036() {
+        DmtSession session = null;
+        try {
+            tbc.log("#testCreateLeafNode036");
+            TestExecPlugin.setExceptionAtCreateInteriorNode(true);
+            session = tbc.getDmtAdmin().getSession(".",
+                    DmtSession.LOCK_TYPE_EXCLUSIVE);
+
+            session.createLeafNode(
+                    TestExecPluginActivator.INEXISTENT_INTERIOR_AND_LEAF_NODES, new DmtData(10));
+            tbc.failException("", IllegalStateException.class);
+        } catch (IllegalStateException e) {
+            tbc.pass("Asserts that any exceptions encountered while creating the ancestors are propagated to the caller of createLeafNode");
+        } catch (Exception e) {
+            tbc.fail("Expected " + IllegalStateException.class.getName() + " but was "
+                + e.getClass().getName());
+        } finally {
+            tbc.cleanUp(session, null);
+            TestExecPlugin.setExceptionAtCreateInteriorNode(false);
+            
+        }
+    }
+    /**
+     * Asserts that any exceptions encountered while creating the ancestors are propagated to 
+     * the caller of this method
+     * 
+     * @spec DmtSession.createLeafNode(String,DmtData,String)
+     */
+    private void testCreateLeafNode037() {
+        DmtSession session = null;
+        try {
+            tbc.log("#testCreateLeafNode037");
+            TestExecPlugin.setExceptionAtCreateInteriorNode(true);
+            session = tbc.getDmtAdmin().getSession(".",
+                    DmtSession.LOCK_TYPE_EXCLUSIVE);
+
+            session.createLeafNode(
+                    TestExecPluginActivator.INEXISTENT_INTERIOR_AND_LEAF_NODES, new DmtData(10),null);
+            tbc.failException("", IllegalStateException.class);
+        } catch (IllegalStateException e) {
+            tbc.pass("Asserts that any exceptions encountered while creating the ancestors are propagated to the caller of createLeafNode");
+        } catch (Exception e) {
+            tbc.fail("Expected " + IllegalStateException.class.getName() + " but was "
+                + e.getClass().getName());
+        } finally {
+            tbc.cleanUp(session, null);
+            TestExecPlugin.setExceptionAtCreateInteriorNode(false);
+            
+        }
+    }
+    
+		
 }

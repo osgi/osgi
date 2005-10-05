@@ -39,23 +39,22 @@
 
 package org.osgi.test.cases.dmt.main.tb1.DmtSession;
 
-import org.osgi.service.dmt.DmtAcl;
+import org.osgi.service.dmt.Acl;
 import org.osgi.service.dmt.DmtException;
-import org.osgi.service.dmt.DmtPermission;
-import org.osgi.service.dmt.DmtPrincipalPermission;
+import org.osgi.service.dmt.security.DmtPermission;
+import org.osgi.service.dmt.security.DmtPrincipalPermission;
 import org.osgi.service.dmt.DmtSession;
 import org.osgi.service.permissionadmin.PermissionInfo;
+import org.osgi.test.cases.dmt.main.tbc.DmtConstants;
 import org.osgi.test.cases.dmt.main.tbc.DmtTestControl;
 import org.osgi.test.cases.dmt.main.tbc.TestInterface;
-import org.osgi.test.cases.dmt.main.tbc.Plugin.TestExecPluginActivator;
+import org.osgi.test.cases.dmt.main.tbc.Plugin.ExecPlugin.TestExecPluginActivator;
 
 /**
  * @author Andre Assad
  * 
- * @methodUnderTest org.osgi.service.dmt.DmtSession#getNodeSize
- * @generalDescription This Test Case Validates the implementation of
- *                     <code>getNodeSize<code> method, according to MEG reference
- *                     documentation (rfc0085).
+ * This test case validates the implementation of <code>getNodeSize</code> method of DmtSession, 
+ * according to MEG specification
  */
 public class GetNodeSize implements TestInterface {
 	private DmtTestControl tbc;
@@ -65,23 +64,25 @@ public class GetNodeSize implements TestInterface {
 	}
 
 	public void run() {
-		testGetNodeSize001();
-		testGetNodeSize002();
-		testGetNodeSize003();
-		testGetNodeSize004();
-		testGetNodeSize005();
-		testGetNodeSize006();
-		testGetNodeSize007();
-		testGetNodeSize008();
-		testGetNodeSize009();
-		testGetNodeSize010();
-		testGetNodeSize011();
+        prepare();
+        if (DmtConstants.SUPPORTS_NODE_SIZE) {        
+    		testGetNodeSize001();
+    		testGetNodeSize002();
+    		testGetNodeSize003();
+    		testGetNodeSize004();
+    		testGetNodeSize005();
+        } else {
+            testGetNodeSizeFeatureNotSupported001();
+        }
 	}
-
+    private void prepare() {
+        tbc.setPermissions(new PermissionInfo(DmtPermission.class.getName(), DmtConstants.ALL_NODES,DmtConstants.ALL_ACTIONS));
+    }
 	/**
-	 * @testID testGetNodeSize001
-	 * @testDescription This method asserts that getNodeSize correctly throws
-	 *                  DmtException when a inexistent node is used.
+	 * This method asserts that DmtException.NODE_NOT_FOUND is thrown
+	 * if nodeUri points to a non-existing node 
+	 * 
+	 * @spec DmtSession.getNodeSize(String)
 	 */
 	private void testGetNodeSize001() {
 		DmtSession session = null;
@@ -106,263 +107,78 @@ public class GetNodeSize implements TestInterface {
 	}
 
 	/**
-	 * @testID testGetNodeSize002
-	 * @testDescription This method asserts that a DmtException with error code
-	 *                  equals to URI_TOO_LONG is thrown.
+	 * This method asserts that getNodeSize is executed when the right Acl is set (Remote)
+	 * 
+	 * @spec DmtSession.getNodeSize(String)
 	 */
 	private void testGetNodeSize002() {
 		DmtSession session = null;
 		try {
 			tbc.log("#testGetNodeSize002");
 
-			session = tbc.getDmtAdmin().getSession(".",
+            tbc.openSessionAndSetNodeAcl(TestExecPluginActivator.ROOT, DmtConstants.PRINCIPAL, Acl.GET );
+
+			tbc.setPermissions(new PermissionInfo(DmtPrincipalPermission.class
+					.getName(), DmtConstants.PRINCIPAL, "*"));
+			session = tbc.getDmtAdmin().getSession(
+					DmtConstants.PRINCIPAL, TestExecPluginActivator.ROOT,
 					DmtSession.LOCK_TYPE_EXCLUSIVE);
 
-			session.getNodeSize(DmtTestControl.URI_LONG);
-			tbc.failException("", DmtException.class);
+			session.getNodeSize(TestExecPluginActivator.LEAF_NODE);
 
-		} catch (DmtException e) {
-			tbc.assertEquals(
-					"Asserting that DmtException code is URI_TOO_LONG",
-					DmtException.URI_TOO_LONG, e.getCode());
+			tbc.pass("getNodeSize correctly executed");
 		} catch (Exception e) {
-			tbc.fail("Expected " + DmtException.class.getName() + " but was "
-					+ e.getClass().getName());
+			tbc.fail("Unexpected Exception: " + e.getClass().getName()
+					+ " [Message: " + e.getMessage() + "]");
 		} finally {
-			tbc.closeSession(session);
+            tbc.setPermissions(new PermissionInfo(DmtPermission.class.getName(), DmtConstants.ALL_NODES,DmtConstants.ALL_ACTIONS));
+            tbc.cleanUp(session,TestExecPluginActivator.LEAF_NODE);
+            
 		}
+
 	}
 
 	/**
-	 * @testID testGetNodeSize003
-	 * @testDescription This method asserts that a DmtException with error code
-	 *                  equals to INVALID_URI is thrown.
+	 * This method asserts that getNodeSize is executed when the right Acl is set (Local)
+	 * 
+	 * @spec DmtSession.getNodeSize(String)
 	 */
 	private void testGetNodeSize003() {
 		DmtSession session = null;
 		try {
 			tbc.log("#testGetNodeSize003");
-
 			session = tbc.getDmtAdmin().getSession(".",
 					DmtSession.LOCK_TYPE_EXCLUSIVE);
 
-			session.getNodeSize(DmtTestControl.INVALID_URI);
+			tbc.setPermissions(new PermissionInfo(
+					DmtPermission.class.getName(), DmtConstants.ALL_NODES,
+					DmtPermission.GET));
 
-			tbc.failException("", DmtException.class);
-		} catch (DmtException e) {
-			tbc.assertEquals("Asserting that DmtException code is INVALID_URI",
-					DmtException.INVALID_URI, e.getCode());
+			session.getNodeSize(TestExecPluginActivator.LEAF_NODE);
+
+			tbc.pass("getNodeSize correctly executed");
 		} catch (Exception e) {
-			tbc.fail("Expected " + DmtException.class.getName() + " but was "
-					+ e.getClass().getName());
+			tbc.fail("Unexpected Exception: " + e.getClass().getName()
+					+ " [Message: " + e.getMessage() + "]");
 		} finally {
-			tbc.closeSession(session);
+            tbc.setPermissions(new PermissionInfo(DmtPermission.class.getName(), DmtConstants.ALL_NODES,DmtConstants.ALL_ACTIONS));
+            tbc.cleanUp(session, null);	
+            
 		}
 	}
 
 	/**
-	 * @testID testGetNodeSize004
-	 * @testDescription This method asserts that a DmtException with error code
-	 *                  equals to OTHER_ERROR is thrown.
+	 * This method asserts that DmtException.COMMAND_NOT_ALLOWED is thrown
+	 * if the specified node is not a leaf node
+	 *  
+	 * @spec DmtSession.getNodeSize(String)
 	 */
 	private void testGetNodeSize004() {
 		DmtSession session = null;
 		try {
 			tbc.log("#testGetNodeSize004");
-
-			session = tbc.getDmtAdmin().getSession(DmtTestControl.OSGi_CFG,
-					DmtSession.LOCK_TYPE_EXCLUSIVE);
-			session.getNodeSize(TestExecPluginActivator.LEAF_NODE);
-
-			tbc.failException("", DmtException.class);
-		} catch (DmtException e) {
-			tbc.assertEquals("Asserting that DmtException code is OTHER_ERROR",
-					DmtException.OTHER_ERROR, e.getCode());
-		} catch (Exception e) {
-			tbc.fail("Expected " + DmtException.class.getName() + " but was "
-					+ e.getClass().getName());
-		} finally {
-			tbc.closeSession(session);
-		}
-	}
-
-	/**
-	 * @testID testGetNodeSize005
-	 * @testDescription This method asserts that a DmtException with error code
-	 *                  equals to PERMISSION_DENIED is thrown.
-	 */
-	private void testGetNodeSize005() {
-		DmtSession localSession = null;
-		DmtSession remoteSession = null;
-		try {
-			tbc.log("#testGetNodeSize005");
-
-			localSession = tbc.getDmtAdmin().getSession(".",
-					DmtSession.LOCK_TYPE_EXCLUSIVE);
-			localSession.setNodeAcl(TestExecPluginActivator.LEAF_NODE,
-					new DmtAcl(new String[] { DmtTestControl.PRINCIPAL },
-							new int[] { DmtAcl.EXEC }));
-			localSession.close();
-
-			tbc.setPermissions(new PermissionInfo(DmtPrincipalPermission.class
-					.getName(), DmtTestControl.PRINCIPAL, "*"));
-			remoteSession = tbc.getDmtAdmin().getSession(
-					DmtTestControl.PRINCIPAL, TestExecPluginActivator.ROOT,
-					DmtSession.LOCK_TYPE_EXCLUSIVE);
-
-			remoteSession.getNodeSize(TestExecPluginActivator.LEAF_NODE);
-
-			tbc.failException("", DmtException.class);
-		} catch (DmtException e) {
-			tbc.assertEquals(
-					"Asserting that DmtException code is PERMISSION_DENIED",
-					DmtException.PERMISSION_DENIED, e.getCode());
-		} catch (Exception e) {
-			tbc.fail("Expected " + DmtException.class.getName() + " but was "
-					+ e.getClass().getName());
-		} finally {
-			tbc.cleanUp(localSession, remoteSession, TestExecPluginActivator.LEAF_NODE);
-		}
-
-	}
-
-	/**
-	 * @testID testGetNodeSize006
-	 * @testDescription This method asserts that an SecurityException is thrown
-	 *                  when getNodeSize is called without the right permission
-	 */
-	private void testGetNodeSize006() {
-		DmtSession session = null;
-		try {
-			tbc.log("#testGetNodeSize006");
 			session = tbc.getDmtAdmin().getSession(".",
 					DmtSession.LOCK_TYPE_EXCLUSIVE);
-
-			tbc.setPermissions(new PermissionInfo(
-					DmtPermission.class.getName(), DmtTestControl.ALL_NODES,
-					DmtPermission.EXEC));
-
-			session.getNodeSize(TestExecPluginActivator.LEAF_NODE);
-
-			tbc.failException("", SecurityException.class);
-
-		} catch (SecurityException e) {
-			tbc.pass("The Exception was SecurityException");
-		} catch (Exception e) {
-			tbc.fail("Expected " + SecurityException.class.getName()
-					+ " but was " + e.getClass().getName());
-		} finally {
-			tbc.cleanUp(session, null, null);
-		}
-	}
-
-	/**
-	 * @testID testGetNodeSize007
-	 * @testDescription This method asserts that an IllegalStateException is
-	 *                  thrown when attemps to execute getNodeSize using a
-	 *                  closed session.
-	 */
-	private void testGetNodeSize007() {
-		DmtSession session = null;
-		try {
-			tbc.log("#testGetNodeSize007");
-
-			session = tbc.getDmtAdmin().getSession(".",
-					DmtSession.LOCK_TYPE_SHARED);
-			session.close();
-			session.getNodeSize(TestExecPluginActivator.LEAF_NODE);
-
-			tbc.failException("", IllegalStateException.class);
-		} catch (IllegalStateException e) {
-			tbc.pass("The Exception was IllegalStateException");
-		} catch (Exception e) {
-			tbc.fail("Expected " + IllegalStateException.class.getName()
-					+ " but was " + e.getClass().getName());
-		} finally {
-			tbc.closeSession(session);
-		}
-
-	}
-
-	/**
-	 * @testID testGetNodeSize008
-	 * @testDescription This method asserts that no exception is thrown when we
-	 *                  set the correct acl permission.
-	 */
-	private void testGetNodeSize008() {
-		DmtSession localSession = null;
-		DmtSession remoteSession = null;
-		try {
-			tbc.log("#testGetNodeSize008");
-
-			localSession = tbc.getDmtAdmin().getSession(".",
-					DmtSession.LOCK_TYPE_EXCLUSIVE);
-			localSession.setNodeAcl(TestExecPluginActivator.LEAF_NODE,
-					new DmtAcl(new String[] { DmtTestControl.PRINCIPAL },
-							new int[] { DmtAcl.GET }));
-			localSession.close();
-
-			tbc.setPermissions(new PermissionInfo(DmtPrincipalPermission.class
-					.getName(), DmtTestControl.PRINCIPAL, "*"));
-			remoteSession = tbc.getDmtAdmin().getSession(
-					DmtTestControl.PRINCIPAL, TestExecPluginActivator.ROOT,
-					DmtSession.LOCK_TYPE_EXCLUSIVE);
-
-			remoteSession.getNodeSize(TestExecPluginActivator.LEAF_NODE);
-
-			tbc.pass("getNodeSize correctly executed");
-		} catch (Exception e) {
-			tbc.fail("Unexpected Exception: " + e.getClass().getName()
-					+ " [Message: " + e.getMessage() + "]");
-		} finally {
-			tbc.cleanUp(localSession, remoteSession, TestExecPluginActivator.LEAF_NODE);
-		}
-
-	}
-
-	/**
-	 * @testID testGetNodeSize009
-	 * @testDescription This method asserts that getNodeSize is successfully
-	 *                  executed when the correct permission is assigned
-	 */
-	private void testGetNodeSize009() {
-		DmtSession session = null;
-		try {
-			tbc.log("#testGetNodeSize009");
-			session = tbc.getDmtAdmin().getSession(".",
-					DmtSession.LOCK_TYPE_EXCLUSIVE);
-
-			tbc.setPermissions(new PermissionInfo(
-					DmtPermission.class.getName(), DmtTestControl.ALL_NODES,
-					DmtPermission.GET));
-
-			session.getNodeSize(TestExecPluginActivator.LEAF_NODE);
-
-			tbc.pass("getNodeSize correctly executed");
-		} catch (Exception e) {
-			tbc.fail("Unexpected Exception: " + e.getClass().getName()
-					+ " [Message: " + e.getMessage() + "]");
-		} finally {
-			tbc.cleanUp(session, null, null);			
-		}
-	}
-
-	/**
-	 * @testID testGetNodeSize010
-	 * @testDescription This method call getNodeSize in an interior node, 
-	 *                  so, a DmtException with error code COMMAND_NOT_ALLOWED
-	 *                  will be raised.
-	 */
-	private void testGetNodeSize010() {
-		DmtSession session = null;
-		try {
-			tbc.log("#testGetNodeSize010");
-			session = tbc.getDmtAdmin().getSession(".",
-					DmtSession.LOCK_TYPE_EXCLUSIVE);
-
-			tbc.setPermissions(new PermissionInfo(
-					DmtPermission.class.getName(), DmtTestControl.ALL_NODES,
-					DmtPermission.GET));
 
 			session.getNodeSize(TestExecPluginActivator.INTERIOR_NODE);
 
@@ -376,26 +192,24 @@ public class GetNodeSize implements TestInterface {
 			tbc.fail("Expected " + DmtException.class.getName() + " but was "
 					+ e.getClass().getName());
 		} finally {
-			tbc.cleanUp(session, null, null);			
+			tbc.cleanUp(session, null);			
 		}
 	}
 	
 	/**
-	 * @testID testGetNodeSize011
-	 * @testDescription This method asserts that relative URI works as described.
+	 * This method asserts that relative URI works as described.
 	 * 
+	 * @spec DmtSession.getNodeSize(String)
 	 */
-	private void testGetNodeSize011() {
+	private void testGetNodeSize005() {
 		DmtSession session = null;
 		try {
-			tbc.log("#testGetNodeSize011");
-			
-			tbc.setPermissions(new PermissionInfo(DmtPermission.class.getName(), DmtTestControl.ALL_NODES,DmtTestControl.ALL_ACTIONS));
+			tbc.log("#testGetNodeSize005");
 			
 			session = tbc.getDmtAdmin().getSession(
 					TestExecPluginActivator.ROOT, DmtSession.LOCK_TYPE_ATOMIC);
 
-			session.getNodeSize(TestExecPluginActivator.LEAF_VALUE);
+			session.getNodeSize(TestExecPluginActivator.LEAF_RELATIVE);
 
 			tbc.pass("A relative URI can be used with getNodeSize.");
 		} catch (Exception e) {
@@ -404,5 +218,33 @@ public class GetNodeSize implements TestInterface {
 		} finally {
 			tbc.closeSession(session);
 		}
-	}		
+	}
+    /**
+     * Asserts that if the DmtAdmin service implementation does not support this method,
+     * DmtException.FEATURE_NOT_SUPPORTED is thrown 
+     * 
+     * @spec DmtSession.getNodeSize(String)
+     */
+    private void testGetNodeSizeFeatureNotSupported001() {
+        DmtSession session = null;
+        try {
+            tbc.log("#testGetNodeSizeFeatureNotSupported001");
+
+            session = tbc.getDmtAdmin().getSession(".",
+                    DmtSession.LOCK_TYPE_SHARED);
+            session.getNodeSize(TestExecPluginActivator.INTERIOR_NODE);
+            tbc.failException("", DmtException.class);
+
+        } catch (DmtException e) {
+            tbc.assertEquals(
+                    "Asserting that DmtException's code is FEATURE_NOT_SUPPORTED",
+                    DmtException.FEATURE_NOT_SUPPORTED, e.getCode());
+        } catch (Exception e) {
+            tbc.fail("Expected " + DmtException.class.getName() + " but was "
+                    + e.getClass().getName());
+        } finally {
+            tbc.closeSession(session);
+        }
+    }
+
 }

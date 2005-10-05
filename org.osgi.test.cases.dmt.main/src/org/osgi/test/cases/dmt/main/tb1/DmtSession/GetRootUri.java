@@ -43,16 +43,17 @@
 package org.osgi.test.cases.dmt.main.tb1.DmtSession;
 
 import org.osgi.service.dmt.DmtSession;
+import org.osgi.service.permissionadmin.PermissionInfo;
+import org.osgi.test.cases.dmt.main.tbc.DmtConstants;
 import org.osgi.test.cases.dmt.main.tbc.DmtTestControl;
 import org.osgi.test.cases.dmt.main.tbc.TestInterface;
-import org.osgi.test.cases.dmt.main.tbc.Plugin.TestExecPluginActivator;
+import org.osgi.test.cases.dmt.main.tbc.Plugin.ExecPlugin.TestExecPluginActivator;
 
 /**
- * @methodUnderTest org.osgi.service.dmt.DmtSession#getRootUri
- * @generalDescription This Test Case Validates the implementation of
- *                     <code>getRootUri<code> method, according to MEG reference
- *                     documentation (rfc0085).
+ * This test case validates the implementation of <code>getRootUri</code> method of DmtSession, 
+ * according to MEG specification
  */
+
 public class GetRootUri implements TestInterface {
 	private DmtTestControl tbc;
 
@@ -61,22 +62,28 @@ public class GetRootUri implements TestInterface {
 	}
 
 	public void run() {
+        prepare();
 		testGetRootUri001();
 		testGetRootUri002();
 		testGetRootUri003();
 	}
-
+    private void prepare() {
+        //This method do not throw any exceptions, so, if it is checking for DmtPermission an exception is
+        //incorrectly thrown.
+        tbc.setPermissions(new PermissionInfo[0]);
+    }
 	/**
-	 * @testID testGetRootUri001
-	 * @testDescription Test if the complete URI of the root node is returned.
+	 * Asserts that the complete URI of the root node is returned.
+	 * 
+	 * @spec DmtSession.getRootUri()
 	 */
 	private void testGetRootUri001() {
 		DmtSession session = null;
 		try {
 			tbc.log("#testGetRootUri001");
-			session = tbc.getDmtAdmin().getSession(DmtTestControl.OSGi_ROOT,
+			session = tbc.getDmtAdmin().getSession(DmtConstants.OSGi_ROOT,
 					DmtSession.LOCK_TYPE_ATOMIC);
-			tbc.assertEquals("Asserting root uri", DmtTestControl.OSGi_ROOT,
+			tbc.assertEquals("Asserting root uri", DmtConstants.OSGi_ROOT,
 					session.getRootUri());
 		} catch (Exception e) {
 			tbc.fail("Unexpected Exception: " + e.getClass().getName()
@@ -87,15 +94,15 @@ public class GetRootUri implements TestInterface {
 	}
 
 	/**
-	 * @testID testGetRootUri002
-	 * @testDescription tests that the value "." is returned when it is passed
-	 *                  as a parameter.
+	 * Asserts that "." is returned when the session is created without specifying a root
+	 * 
+	 * @spec DmtSession.getRootUri()
 	 */
 	private void testGetRootUri002() {
 		DmtSession session = null;
 		try {
 			tbc.log("#testGetRootUri002");
-			session = tbc.getDmtAdmin().getSession(".",
+			session = tbc.getDmtAdmin().getSession(null,
 					DmtSession.LOCK_TYPE_ATOMIC);
 			tbc.assertEquals("Asserting root uri", ".", session.getRootUri());
 		} catch (Exception e) {
@@ -107,9 +114,9 @@ public class GetRootUri implements TestInterface {
 	}
 	
 	/**
-	 * @testID testGetRootUri003
-	 * @testDescription tests that the complete URI for a leaf node is
-	 *                  returned when we pass it as parameter.
+	 * Asserts that the complete URI of the root node is returned when the root is a leaf node.
+	 * 
+	 * @spec DmtSession.getRootUri()
 	 */
 	private void testGetRootUri003() {
 		DmtSession session = null;

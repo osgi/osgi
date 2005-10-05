@@ -39,10 +39,7 @@ import org.osgi.service.dmt.DmtData;
 import org.osgi.test.cases.util.DefaultTestBundleControl;
 
 /**
- *
- * @generalDescription This Test Case Validates the values of all
- *                     <code>constants<code> of DmtData, according to MEG reference
- *                     documentation.
+ * This Test Case Validates the values of all constants> of DmtData, according to MEG specification
  */
 public class DmtDataConstants {
 	private DefaultTestBundleControl tbc;
@@ -56,22 +53,21 @@ public class DmtDataConstants {
 	}
 
 	/**
-	 * @testID testConstants001
-	 * @testDescription This method asserts the constants values
+	 * This method asserts the constants values
+	 * 
+	 * @spec 117.12.5
 	 */
 	private void testConstants001() {
 		tbc.log("#testConstants001");
-		tbc.assertEquals("Asserting FORMAT_BINARY value", 8,DmtData.FORMAT_BINARY);
-        tbc.assertEquals("Asserting FORMAT_BOOLEAN value", 4,DmtData.FORMAT_BOOLEAN);
+		tbc.assertEquals("Asserting FORMAT_BASE64 value", 128,DmtData.FORMAT_BASE64);
+		tbc.assertEquals("Asserting FORMAT_BINARY value", 64,DmtData.FORMAT_BINARY);
+        tbc.assertEquals("Asserting FORMAT_BOOLEAN value", 8,DmtData.FORMAT_BOOLEAN);
+        tbc.assertEquals("Asserting FORMAT_DATE value", 16,DmtData.FORMAT_DATE);
+        tbc.assertEquals("Asserting FORMAT_FLOAT value", 2,DmtData.FORMAT_FLOAT);
         tbc.assertEquals("Asserting FORMAT_INTEGER value", 1,DmtData.FORMAT_INTEGER);
-        tbc.assertEquals("Asserting FORMAT_NODE value", 64,DmtData.FORMAT_NODE);
-        tbc.assertEquals("Asserting FORMAT_NULL value", 32,DmtData.FORMAT_NULL);
-        tbc.assertEquals("Asserting FORMAT_STRING value", 2,DmtData.FORMAT_STRING);
-        tbc.assertEquals("Asserting FORMAT_XML value", 16,DmtData.FORMAT_XML);
-        
-        DmtData nullData = DmtData.NULL_VALUE;
-        tbc.assertEquals("Asserting that DmtData.NULL_VALUE returns an instance of a DmtData with FORMAT_NULL ", 
-        		DmtData.FORMAT_NULL,nullData.getFormat());
-
+        tbc.assertEquals("Asserting FORMAT_NODE value", 1024,DmtData.FORMAT_NODE);
+        tbc.assertEquals("Asserting FORMAT_NULL value", 512,DmtData.FORMAT_NULL);
+        tbc.assertEquals("Asserting FORMAT_STRING value", 4,DmtData.FORMAT_STRING);
+        tbc.assertEquals("Asserting FORMAT_XML value", 256,DmtData.FORMAT_XML);
 	}
 }

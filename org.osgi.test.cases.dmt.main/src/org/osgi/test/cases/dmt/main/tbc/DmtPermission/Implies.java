@@ -36,15 +36,14 @@
 
 package org.osgi.test.cases.dmt.main.tbc.DmtPermission;
 
+import org.osgi.service.dmt.security.DmtPermission;
+import org.osgi.test.cases.dmt.main.tbc.DmtConstants;
 import org.osgi.test.cases.dmt.main.tbc.DmtTestControl;
-import org.osgi.service.dmt.DmtPermission;
+import org.osgi.test.cases.dmt.main.tbc.Plugin.ExecPlugin.TestExecPluginActivator;
 
 /**
- * 
- * @methodUnderTest org.osgi.service.dmt.DmtPermission#implies
- * @generalDescription This Test Case Validates the implementation of
- *                     <code>implies<code> method, according to MEG reference
- *                     documentation.
+ * This test case validates the implementation of <code>implies</code> method of DmtPermission, 
+ * according to MEG specification
  */
 public class Implies {
 	private DmtTestControl tbc;
@@ -59,20 +58,21 @@ public class Implies {
 		testImplies003();
 		testImplies004();
 		testImplies005();
+        testImplies006();
 	}
 
 	/**
-	 * @testID testImplies001
-	 * @testDescription This method asserts that an object implies other object
-	 *                  using the same uri actions
+	 * This method asserts that an object implies other object using the same uri actions
+	 * 
+	 * @spec DmtPermission.implies(Permission)
 	 */
 	private void testImplies001() {
 		try {
 			tbc.log("#testImplies001");
 			DmtPermission permission = new DmtPermission(
-					DmtTestControl.OSGi_LOG, DmtTestControl.ACTIONS);
+					DmtConstants.OSGi_LOG, DmtConstants.ACTIONS);
 			DmtPermission permission2 = new DmtPermission(
-					DmtTestControl.OSGi_LOG, DmtTestControl.ACTIONS);
+					DmtConstants.OSGi_LOG, DmtConstants.ACTIONS);
 			tbc
 					.assertTrue(
 							"Asserts that an object implies other object using the same uri and actions",
@@ -83,18 +83,18 @@ public class Implies {
 	}
 
 	/**
-	 * @testID testImplies002
-	 * @testDescription Asserts that an object implies other object using the
-	 *                  same uri and the actions it contains
+	 * Asserts that an object implies other object using the same uri and the actions it contains
+	 * 
+	 * @spec DmtPermission.implies(Permission)
 	 */
 	private void testImplies002() {
 		try {
 			tbc.log("#testImplies002");
 			DmtPermission permission = new DmtPermission(
-					DmtTestControl.OSGi_LOG, DmtPermission.ADD + ","
+					DmtConstants.OSGi_LOG, DmtPermission.ADD + ","
 							+ DmtPermission.GET);
 			DmtPermission permission2 = new DmtPermission(
-					DmtTestControl.OSGi_LOG, DmtPermission.ADD);
+					DmtConstants.OSGi_LOG, DmtPermission.ADD);
 			tbc
 					.assertTrue(
 							"Asserts that an object implies other object using the same uri and the actions it contains",
@@ -105,17 +105,18 @@ public class Implies {
 	}
 
 	/**
-	 * @testID testImplies003
-	 * @testDescription Asserts that an object doesn't imply other object using
-	 *                  the same uri and the actions it doesn't contain
+	 * Asserts that an object doesn't imply other object using 
+	 * the same uri and the actions it doesn't contain
+	 * 
+	 * @spec DmtPermission.implies(Permission)
 	 */
 	private void testImplies003() {
 		try {
 			tbc.log("#testImplies003");
 			DmtPermission permission = new DmtPermission(
-					DmtTestControl.OSGi_LOG, DmtPermission.ADD);
+					DmtConstants.OSGi_LOG, DmtPermission.ADD);
 			DmtPermission permission2 = new DmtPermission(
-					DmtTestControl.OSGi_LOG, DmtPermission.ADD + ","
+					DmtConstants.OSGi_LOG, DmtPermission.ADD + ","
 							+ DmtPermission.GET);
 			tbc
 					.assertTrue(
@@ -127,17 +128,17 @@ public class Implies {
 	}
 
 	/**
-	 * @testID testImplies004
-	 * @testDescription Asserts that an object doesn't imply other object using
-	 *                  different uris and the same actions
+	 * Asserts that an object doesn't imply other object using different uris and the same actions
+	 * 
+	 * @spec DmtPermission.implies(Permission)
 	 */
 	private void testImplies004() {
 		try {
 			tbc.log("#testImplies004");
 			DmtPermission permission = new DmtPermission(
-					DmtTestControl.OSGi_LOG, DmtPermission.ADD);
+					DmtConstants.OSGi_LOG, DmtPermission.ADD);
 			DmtPermission permission2 = new DmtPermission(
-					DmtTestControl.OSGi_CFG, DmtPermission.ADD);
+					TestExecPluginActivator.ROOT, DmtPermission.ADD);
 			tbc
 					.assertTrue(
 							"Asserts that an object implies other object using the same uri and the same actions",
@@ -148,18 +149,18 @@ public class Implies {
 	}
 
 	/**
-	 * @testID testImplies005
-	 * @testDescription Asserts that an object imply other object using the same
-	 *                  uri and actions but in a different order
+	 * Asserts that an object imply other object using the same uri and actions but in a different order
+	 * 
+	 * @spec DmtPermission.implies(Permission)
 	 */
 	private void testImplies005() {
 		try {
 			tbc.log("#testImplies005");
 			DmtPermission permission = new DmtPermission(
-					DmtTestControl.OSGi_LOG, DmtPermission.ADD + ","
+					DmtConstants.OSGi_LOG, DmtPermission.ADD + ","
 							+ DmtPermission.REPLACE);
 			DmtPermission permission2 = new DmtPermission(
-					DmtTestControl.OSGi_LOG, DmtPermission.REPLACE + ","
+					DmtConstants.OSGi_LOG, DmtPermission.REPLACE + ","
 							+ DmtPermission.ADD);
 			tbc
 					.assertTrue(
@@ -169,5 +170,26 @@ public class Implies {
 			tbc.fail("Unexpected exception:" + e.getClass().getName());
 		}
 	}
+    
+    /**
+     * Asserts that an object implies other object when using wildcard to match the uri
+     * 
+     * @spec DmtPermission.implies(Permission)
+     */
+    private void testImplies006() {
+        try {
+            tbc.log("#testImplies006");
+            DmtPermission permission = new DmtPermission(
+                    TestExecPluginActivator.ROOT + "/a*", DmtPermission.ADD);
+            DmtPermission permission2 = new DmtPermission(
+                TestExecPluginActivator.ROOT + "/abc", DmtPermission.ADD);
+            tbc
+                    .assertTrue(
+                            "Asserts that an object implies other object when using wildcard to match the uri",
+                            permission.implies(permission2));
+        } catch (Exception e) {
+            tbc.fail("Unexpected exception:" + e.getClass().getName());
+        }
+    }
 
 }

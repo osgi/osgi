@@ -42,8 +42,7 @@ package org.osgi.test.cases.dmt.main.tbc.DmtException;
 import org.osgi.test.cases.dmt.main.tbc.DmtTestControl;
 
 /**
- * @generalDescription This class tests DmtExpcetion constants according with
- *                     MEG specification (rfc0085)
+ * This class tests DmtExpcetion constants according to MEG specification
  */
 
 public class DmtExceptionConstants {
@@ -58,8 +57,9 @@ public class DmtExceptionConstants {
 	}
 	
 	/**
-	 * @testID testConstants001
-	 * @testDescription Tests if constants have a correct value
+	 * Tests if constants contains the specified value
+	 * 
+	 * @spec 117.12.6 
 	 */
 	private void testConstants001(){
 		tbc.log("#testConstants001");
@@ -69,16 +69,14 @@ public class DmtExceptionConstants {
 		tbc.assertEquals("Asserts DmtException.CONCURRENT_ACCESS",4,org.osgi.service.dmt.DmtException.CONCURRENT_ACCESS);
 		tbc.assertEquals("Asserts DmtException.DATA_STORE_FAILURE",510,org.osgi.service.dmt.DmtException.DATA_STORE_FAILURE);
 		tbc.assertEquals("Asserts DmtException.FEATURE_NOT_SUPPORTED",406,org.osgi.service.dmt.DmtException.FEATURE_NOT_SUPPORTED);
-		tbc.assertEquals("Asserts DmtException.FORMAT_NOT_SUPPORTED",415,org.osgi.service.dmt.DmtException.FORMAT_NOT_SUPPORTED);
         tbc.assertEquals("Asserts DmtException.INVALID_URI",3,org.osgi.service.dmt.DmtException.INVALID_URI);
 		tbc.assertEquals("Asserts DmtException.METADATA_MISMATCH",2,org.osgi.service.dmt.DmtException.METADATA_MISMATCH);
 		tbc.assertEquals("Asserts DmtException.NODE_ALREADY_EXISTS",418,org.osgi.service.dmt.DmtException.NODE_ALREADY_EXISTS);
 		tbc.assertEquals("Asserts DmtException.NODE_NOT_FOUND",404,org.osgi.service.dmt.DmtException.NODE_NOT_FOUND);
-		tbc.assertEquals("Asserts DmtException.OTHER_ERROR",0,org.osgi.service.dmt.DmtException.OTHER_ERROR);
 		tbc.assertEquals("Asserts DmtException.PERMISSION_DENIED",425,org.osgi.service.dmt.DmtException.PERMISSION_DENIED);
 		tbc.assertEquals("Asserts DmtException.REMOTE_ERROR",1,org.osgi.service.dmt.DmtException.REMOTE_ERROR);
 		tbc.assertEquals("Asserts DmtException.ROLLBACK_FAILED",516,org.osgi.service.dmt.DmtException.ROLLBACK_FAILED);
-		tbc.assertEquals("Asserts DmtException.TIMEOUT",7,org.osgi.service.dmt.DmtException.TIMEOUT);
+		tbc.assertEquals("Asserts DmtException.SESSION_CREATION_TIMEOUT",7,org.osgi.service.dmt.DmtException.SESSION_CREATION_TIMEOUT);
 		tbc.assertEquals("Asserts DmtException.TRANSACTION_ERROR",6,org.osgi.service.dmt.DmtException.TRANSACTION_ERROR);
 		tbc.assertEquals("Asserts DmtException.URI_TOO_LONG",414,org.osgi.service.dmt.DmtException.URI_TOO_LONG);
 	}

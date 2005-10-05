@@ -39,23 +39,22 @@
 
 package org.osgi.test.cases.dmt.main.tb1.DmtSession;
 
-import org.osgi.service.dmt.DmtAcl;
+import org.osgi.service.dmt.Acl;
 import org.osgi.service.dmt.DmtException;
-import org.osgi.service.dmt.DmtPermission;
-import org.osgi.service.dmt.DmtPrincipalPermission;
+import org.osgi.service.dmt.security.DmtPermission;
+import org.osgi.service.dmt.security.DmtPrincipalPermission;
 import org.osgi.service.dmt.DmtSession;
 import org.osgi.service.permissionadmin.PermissionInfo;
+import org.osgi.test.cases.dmt.main.tbc.DmtConstants;
 import org.osgi.test.cases.dmt.main.tbc.DmtTestControl;
 import org.osgi.test.cases.dmt.main.tbc.TestInterface;
-import org.osgi.test.cases.dmt.main.tbc.Plugin.TestExecPluginActivator;
+import org.osgi.test.cases.dmt.main.tbc.Plugin.ExecPlugin.TestExecPluginActivator;
 
 /**
  * @author Andre Assad
  * 
- * @methodUnderTest org.osgi.service.dmt.DmtSession#isLeafNode
- * @generalDescription This Test Case Validates the implementation of
- *                     <code>isLeafNode<code> method, according to MEG reference
- *                     documentation (rfc0085).
+ * This test case validates the implementation of <code>isLeafNode</code> method of DmtSession, 
+ * according to MEG specification
  */
 public class IsLeafNode implements TestInterface  {
 	private DmtTestControl tbc;
@@ -65,33 +64,30 @@ public class IsLeafNode implements TestInterface  {
 	}
 
 	public void run() {
+        prepare();
 		testIsLeafNode001();
 		testIsLeafNode002();
         testIsLeafNode003();
 		testIsLeafNode004();
 		testIsLeafNode005();
         testIsLeafNode006();
-		testIsLeafNode007();
-		testIsLeafNode008();
-		testIsLeafNode009();
-		testIsLeafNode010();
-		testIsLeafNode011();
-		testIsLeafNode012();
 	}
-
+    private void prepare() {
+        tbc.setPermissions(new PermissionInfo(DmtPermission.class.getName(), DmtConstants.ALL_NODES,DmtConstants.ALL_ACTIONS));
+    }
 	/**
-	 * @testID testIsLeafNode001
-	 * @testDescription This method creates a new leaf node and test wheather
-	 *                  the node is a leaf or an interior node.
+	 * Asserts that isLeafNode returns 'true' when the node is a leaf node
+	 *  
+	 * @spec DmtSession.isLeafNode(String)
 	 */
 
 	private void testIsLeafNode001() {
 	    DmtSession session = null;
 		try {
 			tbc.log("#testIsLeafNode001");
-			session = tbc.getDmtAdmin().getSession(DmtTestControl.OSGi_ROOT,
+			session = tbc.getDmtAdmin().getSession(DmtConstants.OSGi_ROOT,
 					DmtSession.LOCK_TYPE_EXCLUSIVE);
-	        tbc.assertTrue("Asserting true for leaf node", session.isLeafNode(TestExecPluginActivator.LEAF_NODE));
+	        tbc.assertTrue("Asserting that isLeafNode() returns true when a leaf node is passed.", session.isLeafNode(TestExecPluginActivator.LEAF_NODE));
 	    } catch (DmtException e) {
 			tbc.fail("Unexpected Exception: " + e.getClass().getName()
 					+ " [Message: " + e.getMessage() + "]");         
@@ -101,9 +97,9 @@ public class IsLeafNode implements TestInterface  {
 	}
 
 	/**
-	 * @testID testIsLeafNode002
-	 * @testDescription This method tests wheather the OSGi_ROOT node is a leaf
-	 *                  or an interior node.
+	 * Asserts that isLeafNode returns 'false' when the node is an interior node
+	 * 
+	 * @spec DmtSession.isLeafNode(String)
 	 */
 	private void testIsLeafNode002() {
 	    DmtSession session = null;
@@ -111,7 +107,7 @@ public class IsLeafNode implements TestInterface  {
 			tbc.log("#testIsLeafNode002");
 			session = tbc.getDmtAdmin().getSession(".",
 					DmtSession.LOCK_TYPE_EXCLUSIVE);
-			tbc.assertTrue("Asserting true if isLeafNode() returns false when an interior node is passed.", 
+			tbc.assertTrue("Asserting that isLeafNode() returns false when an interior node is passed.", 
 					!session.isLeafNode(TestExecPluginActivator.INTERIOR_NODE));
         } catch (DmtException e) {
 			tbc.fail("Unexpected Exception: " + e.getClass().getName()
@@ -122,9 +118,10 @@ public class IsLeafNode implements TestInterface  {
 	}
 
    /**
-     * @testID testIsLeafNode003
-     * @testDescription This method asserts that a DmtException with error code equals to 
-     *                  NODE_NOT_FOUND is thrown using the constructor with only one argument.
+	 * This method asserts that DmtException.NODE_NOT_FOUND is thrown
+	 * if nodeUri points to a non-existing node
+	 * 
+	 * @spec DmtSession.isLeafNode(String) 
      */
     private void testIsLeafNode003() {
 	    DmtSession session = null;
@@ -143,210 +140,70 @@ public class IsLeafNode implements TestInterface  {
         }
         
     }	
-     
-    
+        
     /**
-     * @testID testIsLeafNode004
-     * @testDescription This method asserts that a DmtException with error code equals to 
-     *                  OTHER_ERROR is thrown using the constructor with only one argument.
-     */
-    private void testIsLeafNode004() {
+	 * This method asserts that isLeafNode is executed when the right Acl is set (Remote)
+	 * 
+	 * @spec DmtSession.isLeafNode(String)
+	 */
+	private void testIsLeafNode004() {
 	    DmtSession session = null;
-        try {
+		try {
 			tbc.log("#testIsLeafNode004");
-			session = tbc.getDmtAdmin().getSession(DmtTestControl.OSGi_LOG,DmtSession.LOCK_TYPE_EXCLUSIVE);
-        	session.isLeafNode(DmtTestControl.OSGi_CFG);
-            tbc.failException("", DmtException.class);
-        } catch (DmtException e) {
-            tbc.assertEquals("Asserting that DmtException code is OTHER_ERROR", DmtException.OTHER_ERROR, e.getCode());
-        } catch (Exception e) {
-            tbc.fail("Expected " + DmtException.class.getName() + " but was "+e.getClass().getName());
-        } finally {
-        	tbc.closeSession(session);
-        }
-        
-    }  
-	/**
-	 * @testID testIsLeafNode005
-	 * @testDescription This method asserts that a DmtException with error code
-	 *                  equals to PERMISSION_DENIED is thrown.
-	 */
-	private void testIsLeafNode005() {
-	    DmtSession localSession = null;
-	    DmtSession remoteSession = null;
-		try {
-			tbc.log("#testIsLeafNode005");
-			localSession = tbc.getDmtAdmin().getSession(".",DmtSession.LOCK_TYPE_EXCLUSIVE);
-			localSession.setNodeAcl(DmtTestControl.OSGi_LOG,new DmtAcl(new String[] { DmtTestControl.PRINCIPAL },new int[] { DmtAcl.EXEC } ));
-			localSession.close();
-			
-			tbc.setPermissions(new PermissionInfo(DmtPrincipalPermission.class.getName(),DmtTestControl.PRINCIPAL,"*"));
-			remoteSession = tbc.getDmtAdmin().getSession(DmtTestControl.PRINCIPAL,DmtTestControl.OSGi_LOG,DmtSession.LOCK_TYPE_ATOMIC);
-			remoteSession.isLeafNode(DmtTestControl.OSGi_LOG);
-			tbc.failException("", DmtException.class);
-		}  catch (DmtException e) {
-			tbc.assertEquals(
-					"Asserting that DmtException code is PERMISSION_DENIED",
-					DmtException.PERMISSION_DENIED, e.getCode());
-		} catch (Exception e) {
-			tbc.fail("Expected " + DmtException.class.getName() + " but was "
-					+ e.getClass().getName());
-		} finally {
-			tbc.cleanUp(localSession, remoteSession, DmtTestControl.OSGi_LOG);
-		}
 
-	}
-	
-    /**
-     * @testID testIsLeafNode006
-     * @testDescription This method asserts that a DmtException with error code equals to 
-     *                  URI_TOO_LONG is thrown using the constructor with only one argument.
-     */
-    private void testIsLeafNode006() {
-    	DmtSession session = null;
-        try {
-			tbc.log("#testIsLeafNode006");
-			session = tbc.getDmtAdmin().getSession(".",DmtSession.LOCK_TYPE_EXCLUSIVE);
-        	session.isLeafNode(DmtTestControl.URI_LONG);
-            tbc.failException("", DmtException.class);
-        } catch (DmtException e) {
-            tbc.assertEquals("Asserting that DmtException code is URI_TOO_LONG", DmtException.URI_TOO_LONG, e.getCode());
-        } catch (Exception e) {
-            tbc.fail("Expected " + DmtException.class.getName() + " but was "+e.getClass().getName());
-        } finally {
-        	tbc.closeSession(session);
-        }
-        
-    }    
-    
-    /**
-     * @testID testIsLeafNode007
-     * @testDescription This method asserts that a DmtException with error code equals to 
-     *                  INVALID_URI is thrown using the constructor with only one argument.
-     */
-    private void testIsLeafNode007() {
-    	DmtSession session = null;
-        try {
-			tbc.log("#testIsLeafNode007");
-			session = tbc.getDmtAdmin().getSession(".",DmtSession.LOCK_TYPE_EXCLUSIVE);
-        	session.isLeafNode(DmtTestControl.INVALID_URI);
-            tbc.failException("", DmtException.class);
-        } catch (DmtException e) {
-            tbc.assertEquals("Asserting that DmtException code is INVALID_URI", DmtException.INVALID_URI, e.getCode());
-        } catch (Exception e) {
-            tbc.fail("Expected " + DmtException.class.getName() + " but was "+e.getClass().getName());
-        } finally {
-        	tbc.closeSession(session);
-        }
-        
-    } 	
-    /**
-     * @testID testIsLeafNode008
-     * @testDescription This method asserts that an IllegalStateException is thrown when attemps to get a sessionId of a closed session.
-     */
-    private void testIsLeafNode008() {
-        DmtSession session = null;
-        try {
-			tbc.log("#testIsLeafNode008");
-			session = tbc.getDmtAdmin().getSession(".",DmtSession.LOCK_TYPE_EXCLUSIVE);
-            session.close();
-            session.isLeafNode(DmtTestControl.OSGi_ROOT);
-            tbc.failException("", IllegalStateException.class);
-        } catch (IllegalStateException e) {
-            tbc.pass("The Exception was IllegalStateException");
-        } catch (Exception e) {
-            tbc.fail("Expected " + IllegalStateException.class.getName() + " but was "+e.getClass().getName());
-        } finally {
-        	tbc.closeSession(session);
-        }
-        
-    }
-    
-    /**
-     * @testID testIsLeafNode009
-     * @testDescription This method asserts that SecurityException 
-	 *                  is thrown when isLeafNode is called without the right permission
-     */
-    private void testIsLeafNode009() {
-        DmtSession session = null;
-    	try {
-			tbc.log("#testIsLeafNode009");
-			tbc.setPermissions(new PermissionInfo(DmtPermission.class.getName(),DmtTestControl.ALL_NODES,DmtPermission.EXEC));
-			session = tbc.getDmtAdmin().getSession(".",DmtSession.LOCK_TYPE_EXCLUSIVE);
-			session.isLeafNode(DmtTestControl.OSGi_LOG);
-			tbc.failException("#",SecurityException.class);
-		} catch (SecurityException e) {
-			tbc.pass("The Exception was SecurityException");
-		} catch (Exception e) {
-			tbc.fail("Expected " + SecurityException.class.getName() + " but was " + e.getClass().getName());
-		} finally {
-			tbc.cleanUp(session, null, null);
-		}
-        
-    }   
-    /**
-	 * @testID testIsLeafNode010
-	 * @testDescription This method asserts that it is successfully executed 
-	 * 					when the correct permission is assigned
-	 */
-	private void testIsLeafNode010() {
-	    DmtSession localSession = null;
-	    DmtSession remoteSession = null;
-		try {
-			tbc.log("#testIsLeafNode010");
-			localSession = tbc.getDmtAdmin().getSession(".",DmtSession.LOCK_TYPE_EXCLUSIVE);
-			localSession.setNodeAcl(DmtTestControl.OSGi_LOG,new DmtAcl(new String[] { DmtTestControl.PRINCIPAL },new int[] { DmtAcl.GET } ));
-			localSession.close();
-			
-			tbc.setPermissions(new PermissionInfo(DmtPrincipalPermission.class.getName(),DmtTestControl.PRINCIPAL,"*"));
-			remoteSession = tbc.getDmtAdmin().getSession(DmtTestControl.PRINCIPAL,DmtTestControl.OSGi_LOG,DmtSession.LOCK_TYPE_ATOMIC);
-			remoteSession.isLeafNode(DmtTestControl.OSGi_LOG);
-			tbc.pass("getNodeTimestamp correctly executed");
-		} catch (Exception e) {
-			tbc.fail("Unexpected Exception: " + e.getClass().getName() + " [Message: " + e.getMessage() +"]");
-		} finally {
-			tbc.cleanUp(localSession, remoteSession, DmtTestControl.OSGi_LOG);
-		}
-
-	}
-	
-    /**
-     * @testID testIsLeafNode011
-     * @testDescription This method asserts that it is successfully executed 
-	 * 					when the correct permission is assigned
-     */
-    private void testIsLeafNode011() {
-        DmtSession session = null;
-    	try {
-			tbc.log("#testIsLeafNode011");
-			tbc.setPermissions(new PermissionInfo(DmtPermission.class.getName(),DmtTestControl.ALL_NODES,DmtPermission.GET));
-			session = tbc.getDmtAdmin().getSession(".",DmtSession.LOCK_TYPE_EXCLUSIVE);
-			session.isLeafNode(DmtTestControl.OSGi_LOG);
+            tbc.openSessionAndSetNodeAcl(DmtConstants.OSGi_LOG, DmtConstants.PRINCIPAL, Acl.GET );
+			tbc.setPermissions(new PermissionInfo(DmtPrincipalPermission.class.getName(),DmtConstants.PRINCIPAL,"*"));
+			session = tbc.getDmtAdmin().getSession(DmtConstants.PRINCIPAL,DmtConstants.OSGi_LOG,DmtSession.LOCK_TYPE_ATOMIC);
+			session.isLeafNode(DmtConstants.OSGi_LOG);
 			tbc.pass("isLeafNode correctly executed");
 		} catch (Exception e) {
 			tbc.fail("Unexpected Exception: " + e.getClass().getName() + " [Message: " + e.getMessage() +"]");
 		} finally {
-			tbc.cleanUp(session, null, null);
+            tbc.setPermissions(new PermissionInfo(DmtPermission.class.getName(), DmtConstants.ALL_NODES,DmtConstants.ALL_ACTIONS));
+            tbc.cleanUp(session,DmtConstants.OSGi_LOG);
+            
+		}
+
+	}
+	
+    /**
+     * This method asserts that isLeafNode is executed when the right DmtPermission is set (Local)
+     * 
+     * @spec DmtSession.isLeafNode(String)
+     */
+    private void testIsLeafNode005() {
+        DmtSession session = null;
+    	try {
+			tbc.log("#testIsLeafNode005");
+			tbc.setPermissions(new PermissionInfo(DmtPermission.class.getName(),DmtConstants.ALL_NODES,DmtPermission.GET));
+			session = tbc.getDmtAdmin().getSession(".",DmtSession.LOCK_TYPE_EXCLUSIVE);
+			session.isLeafNode(DmtConstants.OSGi_LOG);
+			tbc.pass("isLeafNode correctly executed");
+		} catch (Exception e) {
+			tbc.fail("Unexpected Exception: " + e.getClass().getName() + " [Message: " + e.getMessage() +"]");
+		} finally {
+            tbc.setPermissions(new PermissionInfo(DmtPermission.class.getName(), DmtConstants.ALL_NODES,DmtConstants.ALL_ACTIONS));
+            tbc.cleanUp(session, null);
+            
 		}
         
     }
     
 	/**
-	 * @testID testIsLeafNode012
-	 * @testDescription This method asserts that relative URI works as described.
+	 * This method asserts that relative URI works as described.
+	 * 
+	 * @spec DmtSession.isLeafNode(String)
 	 * 
 	 */
-	private void testIsLeafNode012() {
+	private void testIsLeafNode006() {
 		DmtSession session = null;
 		try {
-			tbc.log("#testIsLeafNode012");
-			
-			tbc.setPermissions(new PermissionInfo(DmtPermission.class.getName(), DmtTestControl.ALL_NODES,DmtTestControl.ALL_ACTIONS));
+			tbc.log("#testIsLeafNode006");
 			
 			session = tbc.getDmtAdmin().getSession(
 					TestExecPluginActivator.ROOT, DmtSession.LOCK_TYPE_ATOMIC);
 
-			session.isLeafNode(TestExecPluginActivator.LEAF_VALUE);
+			session.isLeafNode(TestExecPluginActivator.LEAF_RELATIVE);
 
 			tbc.pass("A relative URI can be used with isLeafNode.");
 		} catch (Exception e) {
@@ -355,5 +212,6 @@ public class IsLeafNode implements TestInterface  {
 		} finally {
 			tbc.closeSession(session);
 		}
-	}    
+	}
+
 }

@@ -40,16 +40,15 @@
 package org.osgi.test.cases.dmt.main.tb1.DmtSession;
 
 import org.osgi.service.dmt.DmtSession;
+import org.osgi.service.permissionadmin.PermissionInfo;
 import org.osgi.test.cases.dmt.main.tbc.DmtTestControl;
 import org.osgi.test.cases.dmt.main.tbc.TestInterface;
 
 /**
  * @author Andre Assad
  * 
- * @methodUnderTest org.osgi.service.dmt.DmtSession#getSessionId
- * @generalDescription This Test Case Validates the implementation of
- *                     <code>getSessionId<code> method, according to MEG reference
- *                     documentation (rfc0085).
+ * This test case validates the implementation of <code>getSessionId</code> method of DmtSession, 
+ * according to MEG specification
  */
 public class GetSessionId implements TestInterface {
 	private DmtTestControl tbc;
@@ -59,13 +58,18 @@ public class GetSessionId implements TestInterface {
 	}
 
 	public void run() {
+        prepare();
 		testGetSessionId001();
 	}
-
+    private void prepare() {
+        //This method do not throw any exceptions, so, if it is checking for DmtPermission an exception is
+        //incorrectly thrown.
+        tbc.setPermissions(new PermissionInfo[0]);
+    }
 	/**
-	 * @testID testGetSessionId001
-	 * @testDescription This method asserts that two different sessions has
-	 *                  differents ids
+	 * This method asserts that two different sessions have differents ids
+	 * 
+	 * @spec DmtSession.getSessionId()
 	 */
 	private void testGetSessionId001() {
 		DmtSession session1 = null;
@@ -83,7 +87,8 @@ public class GetSessionId implements TestInterface {
 			tbc.fail("Unexpected Exception: " + e.getClass().getName()
 					+ " [Message: " + e.getMessage() + "]");
 		} finally {
-			tbc.cleanUp(session1, session2, null);
+			tbc.closeSession(session1);
+            tbc.closeSession(session2);
 		}
 
 	}

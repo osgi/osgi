@@ -37,16 +37,15 @@
 package org.osgi.test.cases.dmt.main.tb1.DmtSession;
 
 import org.osgi.service.dmt.DmtSession;
+import org.osgi.service.permissionadmin.PermissionInfo;
 import org.osgi.test.cases.dmt.main.tbc.DmtTestControl;
 import org.osgi.test.cases.dmt.main.tbc.TestInterface;
 
 /**
  * @author Luiz Felipe Guimaraes
  * 
- * @methodUnderTest org.osgi.service.dmt.DmtSession#getState
- * @generalDescription This Test Case Validates the implementation of
- *                     <code>getState<code> method, according to MEG reference
- *                     documentation.
+ * This Test Case Validates the implementation of <code>getState</code> method of DmtSession, 
+ * according to MEG specification
  */
 public class GetState implements TestInterface {
 	private DmtTestControl tbc;
@@ -56,25 +55,27 @@ public class GetState implements TestInterface {
 	}
 
 	public void run() {
+        prepare();
+	    //STATE_INVALID is tested in org.osgi.test.cases.dmt.plugins.tbc.Others.UseCases
 		testGetState001();
 		testGetState002();
-		testGetState003();
-		testGetState004();
-		testGetState005();
-		testGetState006();
 	}
-
+    private void prepare() {
+        //This method do not throw any exceptions, so, if it is checking for DmtPermission an exception is
+        //incorrectly thrown.
+        tbc.setPermissions(new PermissionInfo[0]);
+    }
 	/**
-	 * @testID testGetState001
-	 * @testDescription This method asserts if the current state of the session
-	 *                  is really STATE_OPEN
+	 * Asserts that getState() returns STATE_OPEN after opening a DmtSession
+	 * 
+	 * @spec DmtSession.getState()
 	 */
 	private void testGetState001() {
 		DmtSession session = null;
 		try {
 			tbc.log("#testGetState001");
 			session = tbc.getDmtAdmin().getSession(".",
-					DmtSession.LOCK_TYPE_ATOMIC);
+					DmtSession.LOCK_TYPE_SHARED);
 
 			tbc.assertEquals("Asserting that the session is opened ",
 					DmtSession.STATE_OPEN, session.getState());
@@ -87,9 +88,9 @@ public class GetState implements TestInterface {
 	}
 
 	/**
-	 * @testID testGetState002
-	 * @testDescription This method asserts if the current state of the session
-	 *                  is really STATE_CLOSED
+	 * Asserts that getState() returns STATE_CLOSED after closing a DmtSession
+	 * 
+	 * @spec DmtSession.getState()
 	 */
 	private void testGetState002() {
 		DmtSession session = null;
@@ -97,52 +98,6 @@ public class GetState implements TestInterface {
 			tbc.log("#testGetState002");
 
 			session = tbc.getDmtAdmin().getSession(".",
-					DmtSession.LOCK_TYPE_ATOMIC);
-			session.close();
-			tbc.assertEquals("Asserting that the session is closed ",
-					DmtSession.STATE_CLOSED, session.getState());
-		} catch (Exception e) {
-			tbc.fail("Unexpected Exception: " + e.getClass().getName()
-					+ " [Message: " + e.getMessage() + "]");
-		} finally {
-			tbc.closeSession(session);
-		}
-	}
-
-	/**
-	 * @testID testGetState003
-	 * @testDescription This method asserts if the current state of the session
-	 *                  is really STATE_OPEN
-	 */
-	private void testGetState003() {
-		DmtSession session = null;
-		try {
-			tbc.log("#testGetState003");
-
-			session = tbc.getDmtAdmin().getSession(".",
-					DmtSession.LOCK_TYPE_SHARED);
-
-			tbc.assertEquals("Asserting that the session is opened ",
-					DmtSession.STATE_OPEN, session.getState());
-		} catch (Exception e) {
-			tbc.fail("Unexpected Exception: " + e.getClass().getName()
-					+ " [Message: " + e.getMessage() + "]");
-		} finally {
-			tbc.closeSession(session);
-		}
-	}
-
-	/**
-	 * @testID testGetState004
-	 * @testDescription This method asserts if the current state of the session
-	 *                  is really STATE_CLOSED
-	 */
-	private void testGetState004() {
-		DmtSession session = null;
-		try {
-			tbc.log("#testGetState004");
-
-			session = tbc.getDmtAdmin().getSession(".",
 					DmtSession.LOCK_TYPE_SHARED);
 			session.close();
 			tbc.assertEquals("Asserting that the session is closed ",
@@ -155,48 +110,5 @@ public class GetState implements TestInterface {
 		}
 	}
 
-	/**
-	 * @testID testGetState005
-	 * @testDescription This method asserts if the current state of the session
-	 *                  is really STATE_OPEN
-	 */
-	private void testGetState005() {
-		DmtSession session = null;
-		try {
-			tbc.log("#testGetState005");
-			
-			session = tbc.getDmtAdmin().getSession(".",
-					DmtSession.LOCK_TYPE_EXCLUSIVE);
-			tbc.assertEquals("Asserting that the session is opened ",
-					DmtSession.STATE_OPEN, session.getState());
-		} catch (Exception e) {
-			tbc.fail("Unexpected Exception: " + e.getClass().getName()
-					+ " [Message: " + e.getMessage() + "]");
-		} finally {
-			tbc.closeSession(session);
-		}
-	}
-
-	/**
-	 * @testID testGetState006
-	 * @testDescription This method asserts if the current state of the session
-	 *                  is really STATE_CLOSED
-	 */
-	private void testGetState006() {
-		DmtSession session = null;
-		try {
-			tbc.log("#testGetState006");
-
-			session = tbc.getDmtAdmin().getSession(".",
-					DmtSession.LOCK_TYPE_EXCLUSIVE);
-			session.close();
-			tbc.assertEquals("Asserting that the session is closed ",
-					DmtSession.STATE_CLOSED, session.getState());
-		} catch (Exception e) {
-			tbc.fail("Unexpected Exception: " + e.getClass().getName()
-					+ " [Message: " + e.getMessage() + "]");
-		} finally {
-			tbc.closeSession(session);
-		}
-	}
+	
 }

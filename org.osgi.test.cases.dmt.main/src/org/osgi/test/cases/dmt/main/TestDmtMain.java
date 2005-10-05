@@ -28,10 +28,10 @@ package org.osgi.test.cases.dmt.main;
 import org.osgi.test.cases.util.DefaultTestCase;
 
 /**
+ * This test case validates the implementation of <code>DmtAdmin<code> service, according to 
+ * MEG reference specification.
  * @author Andre Assad
- * 
- * @generalDescription This Test Case Validates the RFC-85
- *                     according to MEG reference documentation.
+ * @testcase org.osgi.service.dmt
  */
 public class TestDmtMain extends DefaultTestCase {
 

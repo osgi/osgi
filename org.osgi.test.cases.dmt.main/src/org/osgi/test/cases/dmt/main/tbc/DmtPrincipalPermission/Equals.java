@@ -36,14 +36,13 @@
  */
 package org.osgi.test.cases.dmt.main.tbc.DmtPrincipalPermission;
 
-import org.osgi.service.dmt.DmtPrincipalPermission;
+import org.osgi.service.dmt.security.DmtPrincipalPermission;
+import org.osgi.test.cases.dmt.main.tbc.DmtConstants;
 import org.osgi.test.cases.dmt.main.tbc.DmtTestControl;
 
 /**
- * @methodUnderTest org.osgi.service.dmt.DmtPrincipalPermission#equals
- * @generalDescription This Test Class Validates the implementation of
- *                     <code>equals<code> method, according to MEG reference
- *                     documentation.
+ * This test class validates the implementation of <code>equals<code> method of DmtPrincipalPermission, 
+ * according to MEG specification
  */
 public class Equals {
 	private DmtTestControl tbc;
@@ -57,11 +56,13 @@ public class Equals {
 		testEquals002();
 		testEquals003();
 		testEquals004();
+        testEquals005();
 	}
 
 	/**
-	 * @testID testEquals001
-	 * @testDescription Assert if two DmtPrincipalPermission instances are equal
+	 * Assert if two DmtPrincipalPermission instances are equal
+	 * 
+	 * DmtPrincipalPermission.equals(Object)
 	 */
 	private void testEquals001() {
 		try {
@@ -78,8 +79,10 @@ public class Equals {
 	}
 	
 	/**
-	 * @testID testEquals002
-	 * @testDescription Assert if two DmtPrincipalPermission instances are equal
+	 * Assert if two DmtPrincipalPermission instances are equal
+	 * using the constructor with 2 parameters
+	 * 
+	 * DmtPrincipalPermission.equals(Object)
 	 */
 	private void testEquals002() {
 		try {
@@ -96,14 +99,15 @@ public class Equals {
 	}
 
 	/**
-	 * @testID testEquals003
-	 * @testDescription Assert if two DmtPrincipalPermission instances are not equal
+	 * Assert if two DmtPrincipalPermission instances are different
+	 * 
+	 * DmtPrincipalPermission.equals(Object)
 	 */
 	private void testEquals003() {
 		try {
 			tbc.log("#testEquals003");
 
-			DmtPrincipalPermission d1 = new DmtPrincipalPermission(DmtTestControl.PRINCIPAL);
+			DmtPrincipalPermission d1 = new DmtPrincipalPermission(DmtConstants.PRINCIPAL);
 			DmtPrincipalPermission d2 = new DmtPrincipalPermission("*");
 
 			tbc.assertTrue("Assert if two DmtPrincipalPermission instances are not equal", !d1.equals(d2));
@@ -114,14 +118,16 @@ public class Equals {
 	}
 
 	/**
-	 * @testID testEquals004
-	 * @testDescription Assert if two DmtPrincipalPermission instances are not equal
+	 * Assert if two DmtPrincipalPermission instances are different
+	 * using the constructor with 2 parameters
+	 * 
+	 * DmtPrincipalPermission.equals(Object)
 	 */
 	private void testEquals004() {
 		try {
 			tbc.log("#testEquals004");
 
-			DmtPrincipalPermission d1 = new DmtPrincipalPermission(DmtTestControl.PRINCIPAL,"*");
+			DmtPrincipalPermission d1 = new DmtPrincipalPermission(DmtConstants.PRINCIPAL,"*");
 			DmtPrincipalPermission d2 = new DmtPrincipalPermission("*","*");
 
 			tbc.assertTrue("Assert if two DmtPrincipalPermission instances are not equal", !d1.equals(d2));
@@ -130,4 +136,23 @@ public class Equals {
 			tbc.fail("Unexpected exception: " + e.getClass().getName());
 		}
 	}
+    
+    /**
+     * Assert if two DmtPrincipalPermission instances are equal using different constructors
+     * 
+     * DmtPrincipalPermission.equals(Object)
+     */
+    private void testEquals005() {
+        try {
+            tbc.log("#testEquals005");
+
+            DmtPrincipalPermission d1 = new DmtPrincipalPermission(DmtConstants.PRINCIPAL,"*");
+            DmtPrincipalPermission d2 = new DmtPrincipalPermission(DmtConstants.PRINCIPAL);
+
+            tbc.assertTrue("Assert if two DmtPrincipalPermission instances are equal using different constructors", d1.equals(d2));
+
+        } catch (Exception e) {
+            tbc.fail("Unexpected exception: " + e.getClass().getName());
+        }
+    }
 }

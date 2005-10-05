@@ -36,14 +36,13 @@
  */
 package org.osgi.test.cases.dmt.main.tbc.DmtPrincipalPermission;
 
-import org.osgi.service.dmt.DmtPrincipalPermission;
+import org.osgi.service.dmt.security.DmtPrincipalPermission;
+import org.osgi.test.cases.dmt.main.tbc.DmtConstants;
 import org.osgi.test.cases.dmt.main.tbc.DmtTestControl;
 
 /**
- * @methodUnderTest org.osgi.service.dmt.DmtPrincipalPermission#hashCode
- * @generalDescription This Test Class Validates the implementation of
- *                     <code>hashCode<code> method, according to MEG reference
- *                     documentation.
+ * This test ccase validates the implementation of <code>hashCode</code> method of DmtPrincipalPermission, 
+ * according to MEG specification
  */
 public class HashCode {
 	private DmtTestControl tbc;
@@ -58,9 +57,9 @@ public class HashCode {
 	}
 
 	/**
-	 * @testID testHashCode001
-	 * @testDescription Assert if hashCodes are the same for two
-	 *                  DmtPrincipalPermission instances that are equal
+	 * Assert if hashCodes are the same for two DmtPrincipalPermission instances that are equal
+	 * 
+	 * @spec DmtPrincipalPermission.hashCode()
 	 */
 	private void testHashCode001() {
 		try {
@@ -79,16 +78,17 @@ public class HashCode {
 	}
 	
 	/**
-	 * @testID testHashCode002
-	 * @testDescription Assert if hashCodes are the same for two
-	 *                  DmtPrincipalPermission instances that are equal
+	 * Assert if hashCodes are the same for two DmtPrincipalPermission instances that are equal
+     * using the constructor with two parameters
+	 * 
+	 * @spec DmtPrincipalPermission.hashCode()
 	 */
 	private void testHashCode002() {
 		try {
 			tbc.log("#testHashCode002");
 
-			DmtPrincipalPermission d1 = new DmtPrincipalPermission(DmtTestControl.PRINCIPAL,"*");
-			DmtPrincipalPermission d2 = new DmtPrincipalPermission(DmtTestControl.PRINCIPAL,"*");
+			DmtPrincipalPermission d1 = new DmtPrincipalPermission(DmtConstants.PRINCIPAL,"*");
+			DmtPrincipalPermission d2 = new DmtPrincipalPermission(DmtConstants.PRINCIPAL,"*");
 
 			tbc.assertTrue(
 					"Assert if hashCodes are the same for two DmtPrincipalPermission instances that are equal",
