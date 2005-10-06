@@ -21,7 +21,11 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.net.URL;
+import java.security.AllPermission;
+import java.util.ArrayList;
+import java.util.Enumeration;
 import java.util.HashMap;
+import java.util.Hashtable;
 import java.util.Map;
 
 import org.osgi.framework.Bundle;
@@ -36,25 +40,34 @@ import org.osgi.framework.ServiceListener;
 import org.osgi.framework.ServiceReference;
 import org.osgi.service.application.ApplicationDescriptor;
 import org.osgi.service.application.ApplicationHandle;
+import org.osgi.service.condpermadmin.BundleSignerCondition;
+import org.osgi.service.condpermadmin.ConditionInfo;
+import org.osgi.service.condpermadmin.ConditionalPermissionAdmin;
+import org.osgi.service.condpermadmin.ConditionalPermissionInfo;
 import org.osgi.service.deploymentadmin.DeploymentAdmin;
 import org.osgi.service.deploymentadmin.DeploymentPackage;
+import org.osgi.service.event.Event;
+import org.osgi.service.event.EventConstants;
+import org.osgi.service.event.EventHandler;
 import org.osgi.service.log.LogEntry;
 import org.osgi.service.log.LogListener;
 import org.osgi.service.log.LogReaderService;
+import org.osgi.service.permissionadmin.PermissionInfo;
 import org.osgi.util.tracker.ServiceTracker;
 
 /**
  * Model part of the MVC pattern.
  */
 public class Model implements BundleListener, ServiceListener,
-        FrameworkListener, LogListener {
+        FrameworkListener, LogListener, EventHandler {
 
     private SimpleDesktop desktop;
 	private BundleContext context;
     private Map appDescrs = new HashMap();  
     private Map appInstances = new HashMap();
 
-    private ServiceTracker dadminTracker;
+    private ServiceTracker dAdminTracker;
+    private ServiceTracker cpAdminTracker;
     
     private ListenToAppDescriptor listenToAppDescriptor = 
         new ListenToAppDescriptor();
@@ -107,9 +120,13 @@ public class Model implements BundleListener, ServiceListener,
 		this.context = context;
 		this.desktop = desktop;
 
-        dadminTracker = 
+        dAdminTracker = 
             new ServiceTracker(context, DeploymentAdmin.class.getName(), null);
-        dadminTracker.open();
+        dAdminTracker.open();
+        
+        cpAdminTracker = 
+            new ServiceTracker(context, ConditionalPermissionAdmin.class.getName(), null);
+        cpAdminTracker.open();
         
         context.addServiceListener(listenToAppDescriptor, "(" + Constants.OBJECTCLASS +
                 "=" + ApplicationDescriptor.class.getName() + ")");
@@ -123,17 +140,24 @@ public class Model implements BundleListener, ServiceListener,
         ServiceReference logReference = context.getServiceReference(LogReaderService.class.getName());
         LogReaderService log =  (LogReaderService) context.getService(logReference);
         log.addLogListener(this);
+        
+        String[] topics = new String[] {EventConstants.EVENT_TOPIC, 
+                "org/osgi/service/deployment/COMPLETE"};
+        Hashtable ht = new Hashtable();
+        ht.put(EventConstants.EVENT_TOPIC, topics);
+        context.registerService(EventHandler.class.getName(), this, ht);
 	}
 
     // closes the resources. called by the DesktopActivator
     public void destroy() {
-        dadminTracker.close();
+        dAdminTracker.close();
+        cpAdminTracker.close();
     }
 
 	public String installDp(String aUrl) throws Exception {
         URL url = new URL(aUrl);
         InputStream is = url.openStream();
-	    DeploymentAdmin da = (DeploymentAdmin) dadminTracker.getService();
+	    DeploymentAdmin da = (DeploymentAdmin) dAdminTracker.getService();
         
         try {
             DeploymentPackage dp = da.installDeploymentPackage(is);
@@ -146,7 +170,7 @@ public class Model implements BundleListener, ServiceListener,
 
     public String installDp(File f) throws Exception {
         FileInputStream is = new FileInputStream(f);
-        DeploymentAdmin da = (DeploymentAdmin) dadminTracker.getService();
+        DeploymentAdmin da = (DeploymentAdmin) dAdminTracker.getService();
         
         try {
             DeploymentPackage dp = da.installDeploymentPackage(is);
@@ -158,7 +182,7 @@ public class Model implements BundleListener, ServiceListener,
     }
 
 	public void uninstallDp(String dpName) throws Exception {
-        DeploymentAdmin da = (DeploymentAdmin) dadminTracker.getService();
+        DeploymentAdmin da = (DeploymentAdmin) dAdminTracker.getService();
         DeploymentPackage dp = da.getDeploymentPackage(dpName);
         dp.uninstallForced();
     }
@@ -179,7 +203,7 @@ public class Model implements BundleListener, ServiceListener,
     }
 
     public boolean existsDp(String dpName) {
-        DeploymentAdmin da = (DeploymentAdmin) dadminTracker.getService();
+        DeploymentAdmin da = (DeploymentAdmin) dAdminTracker.getService();
         DeploymentPackage dp = da.getDeploymentPackage(dpName);
         return dp != null;
     }
@@ -221,6 +245,11 @@ public class Model implements BundleListener, ServiceListener,
     }
 
     public void bundleChanged(BundleEvent be) {
+        if (be.getType() == BundleEvent.INSTALLED) {
+            String location = be.getBundle().getLocation();
+            if (!location.startsWith("osgi-dp:"))
+                desktop.onBundleInstalled(location);
+        }
         desktop.onEvent("BUNDLE EVENT: "+be.toString());
     }
 
@@ -237,8 +266,80 @@ public class Model implements BundleListener, ServiceListener,
         desktop.onEvent("FRAMEWORK EVENT: " + event.toString() + tail);
     }
 
+    public void handleEvent(Event event) {
+        String symbName = (String) event.getProperty("deploymentpackage.name");
+        Boolean succ = (Boolean) event.getProperty("successful");
+        if (succ.booleanValue())
+            desktop.onDpInstalled(symbName);
+    }
+
     public void logged(LogEntry event) {        
         desktop.onEvent("LOG EVENT: ["+event.getBundle().getLocation()+ "] " + event.getMessage());
+    }
+
+    public String[] getCondPerms() {
+        ConditionalPermissionAdmin cpa = (ConditionalPermissionAdmin) cpAdminTracker.getService();
+        if (null == cpa)
+            return new String[] {};
+        ArrayList arr = new ArrayList(10);
+        for (Enumeration en = cpa.getConditionalPermissionInfos(); en.hasMoreElements();) {
+            ConditionalPermissionInfo cpi = (ConditionalPermissionInfo) en.nextElement();
+            arr.add(cpi.getName());
+        }
+        String[] ret = new String[arr.size()];
+        return (String[]) arr.toArray(ret);
+    }
+
+    public Object[] getInfo(String cpiName) {
+        ConditionalPermissionAdmin cpa = (ConditionalPermissionAdmin) cpAdminTracker.getService();
+        if (null == cpa)
+            return null;
+        ConditionalPermissionInfo cpi = cpa.getConditionalPermissionInfo(cpiName);
+        if (null == cpi)
+            return null;
+        ConditionInfo[] condInfos = cpi.getConditionInfos();
+        PermissionInfo[] permInfos = cpi.getPermissionInfos();
+        String[] sCondInfos = new String[0];
+        String[] sPermInfos = new String[0];
+        if (null != condInfos)
+            sCondInfos = new String[condInfos.length];
+        if (null != permInfos)
+            sPermInfos= new String[permInfos.length];
+        for (int i = 0; i < condInfos.length; i++) {
+            StringBuffer args = new StringBuffer();
+            for (int j = 0; j < condInfos[i].getArgs().length; j++) {
+                args.append(condInfos[i].getArgs()[j]);
+            }
+            sCondInfos[i] = condInfos[i].getType() + ": " + args; 
+        }
+        for (int i = 0; i < permInfos.length; i++) {
+            sPermInfos[i] = permInfos[i].getType() + ": " + permInfos[i].getName() + ": " +
+                    permInfos[i].getActions(); 
+        }
+        return new Object[] {sCondInfos, sPermInfos};
+    }
+
+    public void delPermission(String cpiName) {
+        ConditionalPermissionAdmin cpa = (ConditionalPermissionAdmin) cpAdminTracker.getService();
+        if (null == cpa)
+            return;
+        ConditionalPermissionInfo cpi = cpa.getConditionalPermissionInfo(cpiName);
+        if (null == cpi)
+            return;
+        cpi.delete();
+    }
+
+    public void addPermission(String subjectDN) {
+        ConditionalPermissionAdmin cpa = (ConditionalPermissionAdmin) cpAdminTracker.getService();
+        if (null == cpa)
+            return;
+
+        cpa.addConditionalPermissionInfo(
+                new ConditionInfo[] {new ConditionInfo(
+                        BundleSignerCondition.class.getName(),
+                        new String[] {"*; " + subjectDN})},
+                new PermissionInfo[] {new PermissionInfo(
+                                AllPermission.class.getName(), "*", "*")});
     }
    
 }

@@ -18,6 +18,7 @@
 package org.osgi.meg.demo.desktop;
 
 import java.io.File;
+import java.security.Principal;
 
 import org.osgi.framework.*;
 
@@ -38,11 +39,30 @@ public class Activator implements BundleActivator {
             desktop = new SimpleDesktop(this);
             model = new Model(context, desktop);
             desktop.setVisible(true);
+            
+//            setPermissions(context);
         }
         catch (Throwable t) {
             t.printStackTrace();
         }
     }
+
+//    private void setPermissions(BundleContext context) {
+//        ServiceReference sref = 
+//            context.getServiceReference(ConditionalPermissionAdmin.class.getName());
+//        ConditionalPermissionAdmin cpa = (ConditionalPermissionAdmin) context.getService(sref);
+//        
+//        ConditionalPermissionInfo info = cpa.addConditionalPermissionInfo(
+//                new ConditionInfo[] {
+//                        new ConditionInfo(BundleSignerCondition.class.getName(), new String[] {
+//                            "CN=Sarah Bar, OU=Informatical Infrastructure Management, O=ConstructionOy, C=HU;CN=People, OU=Informatical Infrastructure Maintenance, O=ConstructionOy, L=Budapest, C=HU;CN=Root1, OU=FAKEDONTUSE, O=CASoft, L=Budapest, C=HU"
+//                        })
+//                }, new PermissionInfo[] {
+//                        new PermissionInfo(AllPermission.class.getName(), "*", "*")
+//                });
+//        
+//        context.ungetService(sref);
+//    }
 
     public void stop(BundleContext context) throws Exception {
         model.destroy();
@@ -85,21 +105,20 @@ public class Activator implements BundleActivator {
         model.stopApp(pid);
     }
 
-//  public void scheduleOnEvent(String topic, String props,
-//          ApplicationDescriptor descr) {
-//      // TODO
-//      Hashtable ht = new Hashtable();
-//      ht.put("bundle.id", new Long(props));
-//      /*
-//       * String[] pairs = Splitter.split(props, ',', 0); for (int i = 0; i <
-//       * pairs.length; ++i) { String[] pair = Splitter.split(pairs[i], '=',
-//       * 0); ht.put(pair[0], pair[1]); }
-//       */
-//      model.scheduleOnEvent(topic, ht, descr);
-//  }
-//
-//  public void scheduleOnDate(Date date, ApplicationDescriptor descr) {
-//      model.scheduleOnDate(date, descr);
-//  }
+    public String[] getCondPerms() {
+        return model.getCondPerms();
+    }
+
+    public Object[] getInfo(String cpiName) {
+        return model.getInfo(cpiName);
+    }
+
+    public void delPermission(String cpiName) {
+        model.delPermission(cpiName);
+    }
+
+    public void addPermission(String subjectDN) {
+        model.addPermission(subjectDN);
+    }
     
 }
