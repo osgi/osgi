@@ -103,7 +103,7 @@ public class ServerTestGUI extends javax.swing.JFrame implements ActionListener,
         if (args.length > 2)
         	sto = Integer.parseInt(args[2]);
         
-		ServerTestGUI gui = new ServerTestGUI(port, root, sto);
+		new ServerTestGUI(port, root, sto);
 	}
 	
     public ServerTestGUI(int port, String root, int socketTimeout) {

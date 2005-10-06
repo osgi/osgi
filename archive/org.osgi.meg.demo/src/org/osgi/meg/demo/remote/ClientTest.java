@@ -25,8 +25,7 @@ public class ClientTest {
 		int port = Integer.parseInt(args[1]);
 		ClientAdaptor ca = new ClientAdaptor(null, args[0], port, 10);
 		BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
-		String cmd;
-		while (!(cmd = in.readLine()).equals("bye")) {
+		while (!in.readLine().equals("bye")) {
 			try {
 				ca.sendAlert("serverid", 1224, null, null);
 			}

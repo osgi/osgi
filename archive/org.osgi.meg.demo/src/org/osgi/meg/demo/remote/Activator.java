@@ -88,34 +88,6 @@ public class Activator implements BundleActivator {
 		}
 	}
 
-    // TODO remove this method
-	private void initRemotePermissions(BundleContext bc, String server)
-            throws Exception {
-	    System.out.println("Granting all permissions to remote server '" + server + "'.");
-
-        ServiceReference configRef = bc.getServiceReference(ConfigurationAdmin.class.getName());
-        if(configRef == null)
-            throw new Exception("Cannot find ConfigurationAdmin service.");
-
-        ConfigurationAdmin ca = (ConfigurationAdmin) bc.getService(configRef);
-        if(ca == null)
-            throw new Exception("ConfigurationAdmin service no longer registered.");
-
-
-        Configuration config = ca.getConfiguration("org.osgi.impl.service.dmt.permissions", null);
-        Dictionary properties = config.getProperties();
-        if(properties == null)
-            properties = new Hashtable();
-        properties.put("server", new String[] { 
-                new PermissionInfo(AdminPermission.class.getName(), "", "").getEncoded(), 
-                new PermissionInfo(ServicePermission.class.getName(), 
-                                   "org.osgi.*", ServicePermission.GET).getEncoded() 
-        });
-        config.update(properties);
-        
-        bc.ungetService(configRef);
-    }
-
     public void stop(BundleContext bc) throws BundleException {
 		remoteAlertSenderReg.unregister();
 		clientAdaptor.stop();

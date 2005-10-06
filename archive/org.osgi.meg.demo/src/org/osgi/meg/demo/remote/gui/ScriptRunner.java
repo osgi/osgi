@@ -111,10 +111,7 @@ public class ScriptRunner {
 	}
 	
 	private boolean isMacroCommand(String line) {
-		if (line.startsWith("<$"))
-			return true;
-		else
-			return false;
+		return line.startsWith("<$");
 	}
 	
 	private boolean isComment(String line) {

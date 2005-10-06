@@ -18,9 +18,8 @@
 package org.osgi.meg.demo.desktop;
 
 import java.io.File;
-import java.security.Principal;
-
-import org.osgi.framework.*;
+import org.osgi.framework.BundleActivator;
+import org.osgi.framework.BundleContext;
 
 /**
  * Controller part of the MVC pattern.
