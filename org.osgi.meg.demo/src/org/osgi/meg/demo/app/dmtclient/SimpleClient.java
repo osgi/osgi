@@ -37,6 +37,7 @@ import org.osgi.service.monitor.MonitorAdmin;
 import org.osgi.service.monitor.MonitorListener;
 import org.osgi.service.monitor.Monitorable;
 import org.osgi.service.monitor.StatusVariable;
+//import org.osgi.service.dmt.Acl;
 //import java.io.File;
 //import javax.xml.parsers.DocumentBuilder;
 //import javax.xml.parsers.DocumentBuilderFactory;
@@ -90,6 +91,9 @@ public class SimpleClient implements ManagedService, ManagedServiceFactory,
 
         
         try {
+            System.out.println("DMT root: " + 
+                    System.getProperty("org.osgi.service.dmt.root"));
+            
             /*
             ServiceReference refs[] = bc.getServiceReferences( SAXParserFactory.class.getName(), 
                     "(&(parser.namespaceAware=true)(parser.validating=false))" ); 
@@ -263,6 +267,45 @@ public class SimpleClient implements ManagedService, ManagedServiceFactory,
                                ", root=" + session.getRootUri());
             //printTree();
 
+            /*
+            try {
+                session.createInteriorNode(".");
+            } catch(DmtException e) {
+                System.out.println("createInteriorNode(\".\"): " + e.getMessage());
+            }
+            
+            try {
+                session.createLeafNode(".");
+            } catch(DmtException e) {
+                System.out.println("createLeafNode(\".\"): " + e.getMessage());
+            }
+            
+            try {
+                session.deleteNode(".");
+            } catch(DmtException e) {
+                System.out.println("deleteNode(\".\"): " + e.getMessage());
+            }
+
+            try {
+                session.renameNode(".", "alma");
+            } catch(DmtException e) {
+                System.out.println("renameNode(\".\"): " + e.getMessage());
+            }
+
+            try {
+                session.setNodeAcl(".", new Acl("Add=*&Replace=*&Get=*&Delete=*"));
+                session.setNodeAcl(".", null);
+            } catch(DmtException e) {
+                System.out.println("setNodeAcl(\".\", null): " + e.getMessage());
+            }
+            
+            try {
+                session.setNodeAcl(".", new Acl());
+            } catch(DmtException e) {
+                System.out.println("setNodeAcl(\".\", new Acl()): " + e.getMessage());
+            }
+            */
+            
             session.createInteriorNode("./OSGi/Configuration/future.service.pid");
             System.out.println("Created new configuration dictionary for service 'future.service.pid'.");
 
