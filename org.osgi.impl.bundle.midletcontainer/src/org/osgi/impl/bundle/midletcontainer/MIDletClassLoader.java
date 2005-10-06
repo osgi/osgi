@@ -3,27 +3,45 @@ package org.osgi.impl.bundle.midletcontainer;
 import java.io.InputStream;
 import java.net.URL;
 import java.net.URLConnection;
-import java.security.ProtectionDomain;
+import java.security.*;
 
 import javax.microedition.midlet.MIDlet;
 
 import org.osgi.framework.Bundle;
+import org.osgi.service.application.*;
+
+class MIDletProtectionDomain extends ProtectionDomain {
+	MIDletProtectionDomain(ProtectionDomain oldDomain) {
+		super( oldDomain.getCodeSource(), oldDomain.getPermissions() );
+	}
+
+  public boolean implies(Permission permission) {
+  	Permission newPermission = permission;
+  	
+  	if( permission instanceof ApplicationAdminPermission ) {
+  		newPermission = ((ApplicationAdminPermission)permission)
+				.setCurrentApplicationId( MidletContainer.getSelfID() );
+  	}
+  	return super.implies( newPermission );
+  }  
+}
 
 class MIDletClassLoader extends ClassLoader {
-	private Bundle				bundle;
-	private ProtectionDomain	protectionDomain;
-	private ClassLoader   parent;
-	private String        mainClassLocation;
-	private MIDlet        correspondingMidlet = null;
-    private static char[] hex = "0123456789ABCDEF".toCharArray();
-    private static final boolean DEBUG = false;
+	private Bundle									bundle;
+	private MIDletProtectionDomain	protectionDomain;
+	private ClassLoader   					parent;
+	private String        					mainClassLocation;
+	private MIDlet        					correspondingMidlet = null;
+	private String        					correspondingMidletID = null;
+  private static char[] hex = "0123456789ABCDEF".toCharArray();
+  private static final boolean DEBUG = false;
 
 	public MIDletClassLoader(ClassLoader parent, Bundle bundle,
 			ProtectionDomain protectionDomain, String mainClassLocation ) {
 		super(parent);
 		
 		this.bundle = bundle;
-		this.protectionDomain = protectionDomain;
+		this.protectionDomain = new MIDletProtectionDomain( protectionDomain );
 		this.parent = parent;
 		this.mainClassLocation = mainClassLocation;		
 	}
@@ -93,9 +111,14 @@ class MIDletClassLoader extends ClassLoader {
 	MIDlet getCorrespondingMIDlet() {
 		return correspondingMidlet;
 	}
+
+	String getCorrespondingMIDletID() {
+		return correspondingMidletID;
+	}
 	
-	void setCorrespondingMIDlet( MIDlet midlet ) {
+	void setCorrespondingMIDlet( MIDlet midlet, String Id ) {
 		correspondingMidlet = midlet;
+		correspondingMidletID = Id;
 	}
 
     // generates a hexadecimal dump of the given binary data
