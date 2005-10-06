@@ -55,6 +55,31 @@ public class AlertItem {
 
 
     /**
+     * Create an instance of the alert item, specifying the source node URI as
+     * an array of path segments. The constructor takes all possible data
+     * entries as parameters. Any of these parameters can be <code>null</code>. 
+     * The semantics of the parameters may be refined by the definition of a 
+     * specific alert, identified by its alert code (see
+     * {@link DmtAdmin#sendAlert sendAlert}). In case of Generic Alerts for
+     * example (code 1226), the <code>mark</code> parameter contains a
+     * severity string.
+     * 
+     * @param source the path of the node which is the source of the alert item
+     * @param type a MIME type or a URN that identifies the type of the data in
+     *        the alert item
+     * @param data a <code>DmtData</code> object that contains the format and
+     *        value of the data in the alert item
+     * @param mark the mark parameter of the alert item
+     */
+    public AlertItem(String[] source, String type, String mark, DmtData data) {
+        this.source = DmtException.pathToUri(source);
+        this.type   = type;
+        this.mark   = mark;
+        this.data   = data;
+    }
+
+
+    /**
      * Get the node which is the source of the alert. There might be no source
      * associated with the alert item.
      * 
