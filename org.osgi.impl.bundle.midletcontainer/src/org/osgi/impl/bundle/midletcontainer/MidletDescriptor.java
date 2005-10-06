@@ -112,11 +112,12 @@ public final class MidletDescriptor extends ApplicationDescriptor {
 	}
 
 	public ApplicationHandle launchSpecific(Map args) throws Exception {
-		MIDlet midlet = createMidletInstance();
+		String instID = createNewInstanceID(bc, pid);
+		MIDlet midlet = createMidletInstance( instID );
 		if (midlet == null)
 			throw new Exception("Cannot create meglet instance!");
 		else {
-			MidletHandle midHnd = new MidletHandle(bc, createNewInstanceID(bc, pid), this, 
+			MidletHandle midHnd = new MidletHandle(bc, instID, this, 
 					                                   midletContainer, midlet, startClass );
       midHnd.startHandle(args);
 			return midHnd;
@@ -153,7 +154,7 @@ public final class MidletDescriptor extends ApplicationDescriptor {
 		return false;
 	}	
 
-	public MIDlet createMidletInstance() throws Exception {
+	public MIDlet createMidletInstance( final String instID ) throws Exception {
 		return (MIDlet)AccessController.doPrivileged(new PrivilegedExceptionAction() {
 			public java.lang.Object run() throws Exception {
 				Class mainClass = bundle.loadClass(startClass);
@@ -174,7 +175,7 @@ public final class MidletDescriptor extends ApplicationDescriptor {
 						.getDeclaredConstructor(new Class[0]);
 				constructor.setAccessible(true);
 				MIDlet app = (MIDlet) constructor.newInstance(new Object[0]);
-				loader.setCorrespondingMIDlet( app );
+				loader.setCorrespondingMIDlet( app, instID );
 				return app;
 		  }});
 	}

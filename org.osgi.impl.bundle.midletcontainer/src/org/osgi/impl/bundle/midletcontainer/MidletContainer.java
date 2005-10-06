@@ -32,7 +32,10 @@ public class MidletContainer implements BundleListener, ServiceListener {
 	    throw new Exception("Cannot start the MidletContainer as OAT is not running!");
 		
 		bc.addBundleListener( this );
-		bc.addServiceListener( this );
+		
+		if( !oatRef.getBundle().equals( bc.getBundle() ) ) /* OAT is provided by me? */
+			bc.addServiceListener( this );
+		
 		Bundle bundles[] = bc.getBundles();
 		for (int i = 0; i < bundles.length; i++) {
 			if (!installedMidletBundles.contains( bundles[ i ] ) && isMidletBundle( bundles[ i ] ) )
@@ -294,6 +297,23 @@ public class MidletContainer implements BundleListener, ServiceListener {
 		for( int i=0; i != myClassContext.length; i++ ) {
 			if( myClassContext[ i ].getClassLoader() instanceof MIDletClassLoader ) {
 				return ((MIDletClassLoader)myClassContext[ i ].getClassLoader()).getCorrespondingMIDlet();
+			}
+		}		
+		return null; 
+	}
+	
+	public static String getSelfID() {
+		class MySecurityManager extends SecurityManager {
+			public Class [] getMyClassContext() {
+				return getClassContext();
+			}
+		}
+		
+		MySecurityManager mySecurityManager = new MySecurityManager();
+		Class []myClassContext = mySecurityManager.getMyClassContext();
+		for( int i=0; i != myClassContext.length; i++ ) {
+			if( myClassContext[ i ].getClassLoader() instanceof MIDletClassLoader ) {
+				return ((MIDletClassLoader)myClassContext[ i ].getClassLoader()).getCorrespondingMIDletID();
 			}
 		}		
 		return null; 
