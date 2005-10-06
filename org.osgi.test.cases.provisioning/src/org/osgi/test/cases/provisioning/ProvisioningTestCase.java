@@ -30,10 +30,7 @@ package org.osgi.test.cases.provisioning;
 
 import java.net.URL;
 
-import javax.servlet.ServletException;
-
 import org.osgi.framework.*;
-import org.osgi.service.http.*;
 import org.osgi.service.http.HttpService;
 import org.osgi.test.cases.util.DefaultTestCase;
 import org.osgi.util.tracker.ServiceTracker;
