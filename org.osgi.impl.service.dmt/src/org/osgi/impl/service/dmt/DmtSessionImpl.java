@@ -33,6 +33,7 @@ import org.osgi.service.permissionadmin.PermissionInfo;
 //import java.util.regex.Pattern;
 
 // TODO clean up plugin unregistration error case
+// TODO do not try to create automatic nodes during automatic ancestor creation
 
 // OPTIMIZE node handling (e.g. retrieve plugin from dispatcher only once per API call)
 // OPTIMIZE only retrieve meta-data once per API call
@@ -1102,12 +1103,7 @@ public class DmtSessionImpl implements DmtSession {
         if(wrappedPlugin != null) {
             if(writeOperation && 
                     wrappedPlugin.getSessionType() == LOCK_TYPE_SHARED)
-                throw new DmtException(node.getUri(), 
-                        DmtException.COMMAND_FAILED,
-                        "Write operation attempted on a plugin that is " +
-                        "read-only or does not support " +
-                        (lockMode == LOCK_TYPE_EXCLUSIVE ? "non-" : "") +
-                        "atomic writing.");
+                throw getWriteException(lockMode, node);
         } else {
             DataPluginFactory plugin = pluginRegistration.getDataPlugin();
 
@@ -1117,14 +1113,8 @@ public class DmtSessionImpl implements DmtSession {
             if(lockMode != LOCK_TYPE_SHARED) {
                 pluginSession = 
                     openPluginSession(plugin, root, pluginSessionType);
-                if(pluginSession == null && writeOperation) {
-                    boolean atomic = (lockMode == LOCK_TYPE_ATOMIC);
-                    // TODO exception code does not match javadoc, we need a way to decide whether the plugin is writable
-                    throw new DmtException(node.getUri(), 
-                            atomic ? DmtException.TRANSACTION_ERROR : DmtException.COMMAND_FAILED,
-                            "The plugin handling the requested node does not support " +
-                            (atomic ? "" : "non-") + "atomic writing.");
-                }
+                if(pluginSession == null && writeOperation) 
+                    throw getWriteException(lockMode, node);
             }
             
             // read-only session if lockMode is LOCK_TYPE_SHARED, or if the 
@@ -1362,6 +1352,14 @@ public class DmtSessionImpl implements DmtSession {
             checkNode(node, SHOULD_BE_INTERIOR);
     }
 
+    private static DmtException getWriteException(int lockMode, Node node) {
+        boolean atomic = (lockMode == LOCK_TYPE_ATOMIC);
+        return new DmtException(node.getUri(), 
+                atomic ? DmtException.TRANSACTION_ERROR : DmtException.COMMAND_NOT_ALLOWED,
+                "The plugin handling the requested node does not support " +
+                (atomic ? "" : "non-") + "atomic writing.");
+    }
+    
     // remove null entries from the returned array (if it is non-null)
     private static List normalizeChildNodeNames(String[] pluginChildNodes) {
         List processedChildNodes = new Vector();
