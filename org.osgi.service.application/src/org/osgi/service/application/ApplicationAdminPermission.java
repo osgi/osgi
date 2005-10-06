@@ -83,18 +83,11 @@ public class ApplicationAdminPermission extends Permission {
 	public ApplicationAdminPermission(String filter, String actions) {
 		super(filter == null ? "*" : filter);
 		
+		this.applicationDescriptor = null;
 		this.filter = (filter == null ? "*" : filter);
 		this.actions = actions;
-		
-		actionsVector = actionsVector( actions );
 
-		if ( actions.equals("*") )
-			actionsVector = actionsVector( LIFECYCLE + "," + SCHEDULE + "," + LOCK );
-		else if (!ACTIONS.containsAll(actionsVector))
-      throw new IllegalArgumentException("Illegal action!");
-		
-		applicationID = null;
-		this.applicationDescriptor = null;
+		init();
 	}
 	
 	/**
@@ -105,9 +98,12 @@ public class ApplicationAdminPermission extends Permission {
 	 */
 	public ApplicationAdminPermission(ApplicationDescriptor application, String actions) {
 		super(application.getApplicationId());
+		
 		this.filter = application.getApplicationId();
 		this.applicationDescriptor = application;
 		this.actions = actions;
+		
+		init();
 	}
 	
 	/**
@@ -120,6 +116,9 @@ public class ApplicationAdminPermission extends Permission {
 	 * @return the permission updated with the ID of the current application
 	 */
 	public ApplicationAdminPermission setCurrentApplicationId(String applicationId) {
+		if( this.applicationDescriptor == null )
+			throw new RuntimeException("No application descriptor found!");
+			
 		ApplicationAdminPermission newPerm = new ApplicationAdminPermission( this.applicationDescriptor, 
 				this.actions );
 		
@@ -155,29 +154,6 @@ public class ApplicationAdminPermission extends Permission {
       return true;
   }
 
-  private String applicationID;
-
-  private static final Vector ACTIONS = new Vector();
-  private Vector actionsVector;
-  private final String filter;
-  private final String actions;
-  
-  static {
-      ACTIONS.add(LIFECYCLE);
-      ACTIONS.add(SCHEDULE);
-      ACTIONS.add(LOCK);
-  }
-
-  private static Vector actionsVector(String actions) {
-      Vector v = new Vector();
-      StringTokenizer t = new StringTokenizer(actions.toUpperCase(), ",");
-      while (t.hasMoreTokens()) {
-          String action = t.nextToken().trim();
-          v.add(action.toLowerCase());
-      }
-      return v;
-  }
-
   public boolean equals(Object with) {
   	if( with == null || !(with instanceof ApplicationAdminPermission) )
   		return false;
@@ -200,5 +176,39 @@ public class ApplicationAdminPermission extends Permission {
 
   public String getActions() {
   	return actions;
+  }
+
+  private String applicationID;
+
+  private static final Vector ACTIONS = new Vector();
+  private Vector actionsVector;
+  private final String filter;
+  private final String actions;
+  
+  static {
+      ACTIONS.add(LIFECYCLE);
+      ACTIONS.add(SCHEDULE);
+      ACTIONS.add(LOCK);
+  }
+
+  private static Vector actionsVector(String actions) {
+      Vector v = new Vector();
+      StringTokenizer t = new StringTokenizer(actions.toUpperCase(), ",");
+      while (t.hasMoreTokens()) {
+          String action = t.nextToken().trim();
+          v.add(action.toLowerCase());
+      }
+      return v;
+  }
+  
+  private void init() {
+		actionsVector = actionsVector( actions );
+
+		if ( actions.equals("*") )
+			actionsVector = actionsVector( LIFECYCLE + "," + SCHEDULE + "," + LOCK );
+		else if (!ACTIONS.containsAll(actionsVector))
+      throw new IllegalArgumentException("Illegal action!");
+		
+		applicationID = null;
   }
 }

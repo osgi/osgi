@@ -69,7 +69,7 @@ public final class MidletHandle extends ApplicationHandle {
 
 	public void pause() throws Exception {
 		AccessController.checkPermission( new ApplicationAdminPermission(
-				midletDescriptor.getPID(), ApplicationAdminPermission.LIFECYCLE ) );
+				midletDescriptor, ApplicationAdminPermission.LIFECYCLE ) );
 		
 		if (!status.equals( MidletHandle.RUNNING ) )
 			throw new Exception("Invalid State");
@@ -84,7 +84,7 @@ public final class MidletHandle extends ApplicationHandle {
 
 	public void resume() throws Exception {
 		AccessController.checkPermission( new ApplicationAdminPermission(
-				midletDescriptor.getPID(), ApplicationAdminPermission.LIFECYCLE ) );
+				midletDescriptor, ApplicationAdminPermission.LIFECYCLE ) );
 		
 		if (!status.equals( MidletHandle.PAUSED ) )
 			throw new Exception("Invalid State");

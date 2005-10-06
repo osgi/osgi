@@ -74,14 +74,14 @@ public class ApplicationDescriptorImpl implements Delegate {
 	
 	public void lock() {
 		AccessController.checkPermission( new ApplicationAdminPermission(
-				pid, ApplicationAdminPermission.LOCK ) );
+				descriptor, ApplicationAdminPermission.LOCK ) );
 		
 		doLock(false, true);
 	}
 
 	public void unlock() {
 		AccessController.checkPermission( new ApplicationAdminPermission(
-				pid, ApplicationAdminPermission.LOCK ) );
+				descriptor, ApplicationAdminPermission.LOCK ) );
 		
 		doLock(false, false);
 	}
@@ -94,7 +94,7 @@ public class ApplicationDescriptorImpl implements Delegate {
 
 	public void launch(Map arguments) throws Exception {
   		AccessController.checkPermission( new ApplicationAdminPermission(
-  				pid, ApplicationAdminPermission.LIFECYCLE ) );
+  				descriptor, ApplicationAdminPermission.LIFECYCLE ) );
 
 			Map props = descriptor.getProperties("en");
 			Boolean isLocked = (Boolean)props.get(ApplicationDescriptor.APPLICATION_LOCKED);
