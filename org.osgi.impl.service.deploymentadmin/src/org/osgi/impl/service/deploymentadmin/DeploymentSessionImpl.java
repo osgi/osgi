@@ -217,10 +217,14 @@ public class DeploymentSessionImpl implements DeploymentSession {
     }
     
     private void openTrackers() {
-        trackCondPerm.open();
-        trackPerm.open();
-        trackRp.open();
-        trackPackAdmin.open();
+        AccessController.doPrivileged(new PrivilegedAction() {
+            public Object run() {
+                trackCondPerm.open();
+                trackPerm.open();
+                trackRp.open();
+                trackPackAdmin.open();
+                return null;
+            }});
     }
     
     private void closeTrackers() {
@@ -601,7 +605,12 @@ public class DeploymentSessionImpl implements DeploymentSession {
      * Finds a Resource processor to the given PID
      */
     private ResourceProcessor findProcessor(String pid) {
-        ServiceReference[] refs = trackRp.getServiceReferences();
+        ServiceReference[] refs = (ServiceReference[]) AccessController
+                .doPrivileged(new PrivilegedAction() {
+                    public Object run() {
+                        return trackRp.getServiceReferences();
+                    }
+                });
         if (null == refs)
             return null;
         for (int i = 0; i < refs.length; i++) {
