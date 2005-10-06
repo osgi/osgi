@@ -61,8 +61,9 @@ public class DmtException extends Exception {
      * versa (e.g. trying to retrieve the value of an interior node)
      * <li>an attempt is made to create a node where the parent is a leaf node
      * <li>an attempt is made to rename or delete the root node
-     * <li>a write operation (other than setting the ACL) is performed on a node
-     * provided by a read-only plugin
+     * <li>a write operation (other than setting the ACL) is performed in a
+     * non-atomic write session on a node provided by a plugin that is read-only
+     * or does not support non-atomic writing
      * <li>a node is copied to its descendant
      * <li>the ACL of the root node is changed not to include Add rights for all
      * principals
@@ -251,7 +252,8 @@ public class DmtException extends Exception {
      * caused by one of the following situations:
      * <ul>
      * <li>an updating method within an atomic session can not be executed
-     * because the underlying plugin does not support atomic transactions
+     * because the underlying plugin is read-only or does not support atomic 
+     * writing
      * <li>a commit operation at the end of an atomic session failed because 
      * one of the underlying plugins failed to close
      * </ul>
@@ -540,7 +542,7 @@ public class DmtException extends Exception {
      * @param path the path to convert
      * @return the URI string representing the same node as the given path
      */
-    private static String pathToUri(String[] path) {
+    static String pathToUri(String[] path) {
         if(path == null)
             return null;
         
