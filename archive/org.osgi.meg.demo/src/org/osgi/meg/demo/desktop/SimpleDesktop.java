@@ -2,44 +2,59 @@ package org.osgi.meg.demo.desktop;
 
 import java.awt.BorderLayout;
 import java.awt.Button;
+import java.awt.Dialog;
 import java.awt.FileDialog;
 import java.awt.Frame;
 import java.awt.GridLayout;
 import java.awt.Label;
 import java.awt.List;
 import java.awt.Panel;
+import java.awt.TextField;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStream;
+import java.security.KeyStore;
+import java.security.cert.X509Certificate;
+import java.util.Enumeration;
 
 
 public class SimpleDesktop extends Frame implements ActionListener {
     
-    private static final String INSTALL_URL   = "install_url";
-    private static final String INSTALL_LOCAL = "install_local";
-    private static final String UNINSTALL     = "uninstall";
-    private static final String LAUNCH        = "launch";
-    private static final String STOP          = "stop";
+    private static final String INSTALL_URL   = "Install url";
+    private static final String INSTALL_LOCAL = "Install local";
+    private static final String UNINSTALL     = "Uninstall";
+    private static final String LAUNCH        = "Launch";
+    private static final String STOP          = "Stop";
+    private static final String PERMS         = "Permissions";
     
     // in GetPane class
     static final String OK          = "OK";
     static final String CANCEL      = "Cancel";
     
-    //private Panel      pSouth = new Panel();
+    // in PermPane class
+    public static final String DEL_PERM = "Delete";
+    public static final String IMPORT = "Import";
+    public static final String CLOSE_PERMS = "Close";
+    
     private GetPane    pSouthGet = new GetPane(this);
     private StatusPane pSouthStatus = new StatusPane();
+    private PermPane   pSouthPerms;
     private Button     bInstallURL;
     private Button     bInstallLocal;
     private Button     bUninstall;
     private Button     bLaunch;
     private Button     bStop;
+    private Button     bPerm;
     private List       lInstPackages;
     private List       lInstApp;
     private List       lRunningApp;
 
     private Activator     controller;
+    private Panel actPane = pSouthStatus;
     
     public SimpleDesktop(Activator controller) {
         super("Desktop (OSGi MEG RI)");
@@ -47,6 +62,7 @@ public class SimpleDesktop extends Frame implements ActionListener {
 
         setLayout(new BorderLayout());
         setSize(400, 500);
+        pSouthPerms = new PermPane(this, controller);
         
         // it doesn't exist on CDC (Erin 9500)
         //setExtendedState(MAXIMIZED_BOTH);
@@ -62,104 +78,122 @@ public class SimpleDesktop extends Frame implements ActionListener {
         pNorth.setLayout(new GridLayout(0, 3));
         add(pNorth, BorderLayout.NORTH);
         
-        Panel pNorth1 = new Panel();
-        pNorth.add(pNorth1);
-        pNorth1.setLayout(new GridLayout(4, 0));
+        Panel pWest = new Panel();
+        pWest.setLayout(new GridLayout(3, 0));
+        add(pWest, BorderLayout.WEST);
             bInstallURL = new Button(INSTALL_URL);
             bInstallURL.setActionCommand(INSTALL_URL);
             bInstallURL.addActionListener(this);
-            pNorth1.add(bInstallURL);
+            pWest.add(bInstallURL);
 
             bInstallLocal = new Button(INSTALL_LOCAL);
             bInstallLocal.setActionCommand(INSTALL_LOCAL);
             bInstallLocal.addActionListener(this);
-            pNorth1.add(bInstallLocal);
+            pWest.add(bInstallLocal);
 
+            bPerm = new Button(PERMS);
+            bPerm.setActionCommand(PERMS);
+            bPerm.addActionListener(this);
+            pWest.add(bPerm);
+            
+        Panel pCenter = new Panel(); 
+        pCenter.setLayout(new BorderLayout());
+        add(pCenter, BorderLayout.CENTER);
+        
+        Panel pCenterCenter = new Panel(); 
+        pCenterCenter.setLayout(new GridLayout(0, 3));
+        pCenter.add(pCenterCenter, BorderLayout.CENTER);
+       		lInstPackages = new List();
+            pCenterCenter.add(lInstPackages);
+
+       		lInstApp = new List();
+            pCenterCenter.add(lInstApp);
+            
+            lRunningApp = new List();
+            pCenterCenter.add(lRunningApp);
+
+        Panel pCenterNorth = new Panel(); 
+        pCenterNorth.setLayout(new GridLayout(0, 3));
+        pCenter.add(pCenterNorth, BorderLayout.NORTH);
             bUninstall = new Button(UNINSTALL);
             bUninstall.setActionCommand(UNINSTALL);
             bUninstall.addActionListener(this);
-            pNorth1.add(bUninstall);
-            
-            pNorth1.add(new Label("Packages"));
-
-        Panel pNorth2 = new Panel();
-        pNorth.add(pNorth2);
-        pNorth2.setLayout(new GridLayout(4, 0));
-            pNorth2.add(new Panel());
-            
-            pNorth2.add(new Panel());
+            pCenterNorth.add(bUninstall);
         
             bLaunch = new Button(LAUNCH);
             bLaunch.setActionCommand(LAUNCH);
             bLaunch.addActionListener(this);
-            pNorth2.add(bLaunch);
+            pCenterNorth.add(bLaunch);
             
-            pNorth2.add(new Label("Applications"));
-
-        Panel pNorth3 = new Panel();
-        pNorth.add(pNorth3);
-        pNorth3.setLayout(new GridLayout(4, 0));
-            pNorth3.add(new Panel());
-            
-            pNorth3.add(new Panel());
-        
             bStop = new Button(STOP);
             bStop.setActionCommand(STOP);
             bStop.addActionListener(this);
-            pNorth3.add(bStop);
+            pCenterNorth.add(bStop);
             
-            pNorth3.add(new Label("Application instances"));
+            pCenterNorth.add(new Label("Packages"));
+            pCenterNorth.add(new Label("Applications"));
+            pCenterNorth.add(new Label("Application instances"));
 
-        add(pSouthStatus, BorderLayout.SOUTH);
-
-        Panel pCenter = new Panel(); 
-        pCenter.setLayout(new GridLayout(0, 3));
-        
-        add(pCenter, BorderLayout.CENTER);
-       		lInstPackages = new List();
-           	pCenter.add(lInstPackages);
-
-       		lInstApp = new List();
-       		pCenter.add(lInstApp);
-            
-            lRunningApp = new List();
-            pCenter.add(lRunningApp);
-            
+        setActPane(pSouthStatus);
         setVisible(true);
     }
 
     public void actionPerformed(ActionEvent event) {
         String command = event.getActionCommand();
         try {
-            if (OK.equals(command)) {
+            if (IMPORT.equals(command)) {
+                FileDialog fd = new FileDialog(new Frame(),  "", FileDialog.LOAD);
+                fd.setVisible(true);
+                if (fd.getFile() == null)
+                    return;
+                ImportKeyStoreDialog dialog = new ImportKeyStoreDialog(this);
+                if (dialog.getState() == ImportKeyStoreDialog.OK) {
+                    KeyStore ks = KeyStore.getInstance("JKS");
+                    if (null == ks)
+                        return;
+                    File f = new File(fd.getDirectory() + File.separator
+                            + fd.getFile());
+                    InputStream is = new FileInputStream(f);
+                    try {
+                        ks.load(is, dialog.getPwd().trim().toCharArray());
+                    } finally {
+                        if (null != is)
+                            is.close();
+                    }
+                    for (Enumeration en = ks.aliases(); en.hasMoreElements();) {
+                        X509Certificate cert = 
+                            (X509Certificate) ks.getCertificate((String) en.nextElement());
+                        controller.addPermission(cert.getSubjectDN().toString());
+                    }
+                    pSouthPerms.refresh();
+                }
+            } else if (DEL_PERM.equals(command)) {
+                controller.delPermission(pSouthPerms.getPermName());
+                pSouthPerms.refresh();
+            } else if (CLOSE_PERMS.equals(command)) {
+                setActPane(pSouthStatus);
+            } else if (PERMS.equals(command)) {
+                pSouthPerms.refresh();
+                setActPane(pSouthPerms);
+            } else if (OK.equals(command)) {
                 String url = pSouthGet.getText();
                 if (null != url) {
                     try {
                         if (url.endsWith(".dp")) {
-                            String symbName = 
-                                controller.installDp(url);
-                            lInstPackages.add(symbName);
+                            controller.installDp(url);
                         } else if (url.endsWith(".jar")) {
-                            String location = 
-                                controller.installBundle(url);
-                            lInstPackages.add(location);
+                            controller.installBundle(url);
                         }
                     } catch (Exception ex) {
                         // TODO
                         ex.printStackTrace();
                     }
                 }
-                remove(pSouthGet);
-                add(pSouthStatus, BorderLayout.SOUTH);
-                validate();
+                setActPane(pSouthStatus);
             } else if (CANCEL.equals(command)) {
-                remove(pSouthGet);
-                add(pSouthStatus, BorderLayout.SOUTH);
-                validate();
+                setActPane(pSouthStatus);
             } else if (INSTALL_URL.equals(command)) {
-                remove(pSouthStatus);
-                add(pSouthGet, BorderLayout.SOUTH);
-                validate();
+                setActPane(pSouthGet);
             } else if (INSTALL_LOCAL.equals(command)) {
                 FileDialog fd = new FileDialog(new Frame(),  "", FileDialog.LOAD);
                 fd.setVisible(true);
@@ -168,11 +202,9 @@ public class SimpleDesktop extends Frame implements ActionListener {
                   if (f.getName().endsWith(".dp")) {
                       String symbName = 
                           controller.installDp(f);
-                      lInstPackages.add(symbName);
                   } else if (f.getName().endsWith(".jar")) {
                       String location = 
                           controller.installBundle(f);
-                      lInstPackages.add(location);
                   }
                 }
 	        } else if (UNINSTALL.equals(command)) {
@@ -202,8 +234,26 @@ public class SimpleDesktop extends Frame implements ActionListener {
         }
     }
 
+    private void setActPane(Panel panel) {
+        if (panel == pSouthPerms)
+            pSouthPerms.refresh();
+        
+        remove(actPane);
+        add(panel, BorderLayout.SOUTH);
+        actPane = panel;
+        validate();
+    }
+
     public void onAppInstalled(String pid) {
         lInstApp.add(pid);
+    }
+
+    public void onDpInstalled(String symbName) {
+        lInstPackages.add(symbName);
+    }
+
+    public void onBundleInstalled(String location) {
+        lInstPackages.add(location);
     }
 
     public void onAppUninstalled(String pid) {
@@ -221,5 +271,63 @@ public class SimpleDesktop extends Frame implements ActionListener {
     public void onEvent(String string) {
         pSouthStatus.onEvent(string);
     }
+
+}
+
+class ImportKeyStoreDialog extends Dialog implements ActionListener {
+    
+    static final int OK     = 0;
+    static final int CANCEL = 1;
+
+    private int state = CANCEL;
+    
+    private TextField tType = new TextField("JKS");
+    private TextField tPwd = new TextField();
+    private Button bOK = new Button("OK");
+    private Button bCancel = new Button("Cancel");
+
+    public ImportKeyStoreDialog(Frame owner) {
+        super(owner);
+        
+        setLayout(new GridLayout(4, 0));
+        
+        add(tType);
+        
+        add(tPwd);
+        
+        bOK.addActionListener(this);
+        add(bOK);
+        
+        bCancel.addActionListener(this);
+        add(bCancel);
+        
+        pack();
+        setModal(true);
+        setVisible(true);
+    }
+    
+    String getType() {
+        return tType.getText();
+    }
+
+    String getPwd() {
+        return tPwd.getText();
+    }
+    
+    int getState() {
+        return state;
+    }
+
+    public void actionPerformed(ActionEvent e) {
+        if (e.getSource() == bOK) {
+            state = OK;
+            dispose();
+        }
+        if (e.getSource() == bCancel) {
+            state = CANCEL;
+            dispose();
+        }
+    }
+
 
 }
