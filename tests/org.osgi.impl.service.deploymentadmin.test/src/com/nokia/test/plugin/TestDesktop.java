@@ -17,7 +17,7 @@ import org.osgi.service.dmt.DmtSession;
 
 public class TestDesktop extends Frame implements ActionListener {
     
-    private String ROOT = "./OSGi/Configuration";
+    private String ROOT = "./OSGi/Deployment";
     private String TEST_FILE = "../../org.osgi.impl.service.deploymentadmin.test/" +
     		"DmtPluginTest.txt";
 

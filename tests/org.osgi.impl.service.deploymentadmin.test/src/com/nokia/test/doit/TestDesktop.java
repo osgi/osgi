@@ -4,50 +4,41 @@ import java.awt.BorderLayout;
 import java.awt.Button;
 import java.awt.Frame;
 import java.awt.GridLayout;
-import java.awt.Label;
 import java.awt.List;
 import java.awt.Panel;
 import java.awt.TextArea;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Hashtable;
-
 
 public class TestDesktop extends Frame implements ActionListener {
 
     private List      li_tests = new List();
     private TextArea  ta_descr = new TextArea();
-    private Method[]  methods;
-    private Hashtable fields = new Hashtable();
     
     private Panel pa_left = new Panel();
     private Panel pa_right = new Panel();
     private Panel pa_right_top = new Panel();
     private Panel pa_right_bottom = new Panel();
     
+    private static final String LOAD         = "Load";
     private static final String START        = "Start";
     private static final String DESELECT_ALL = "Deselect all";
     private static final String SELECT_ALL   = "Select all";
     private static final String COMMAND      = "Command";
     
+    private Button b_load = new Button(LOAD);
     private Button b_start = new Button(START);
     private Button b_deselect_all = new Button(DESELECT_ALL);
     private Button b_select_all = new Button(SELECT_ALL);
     private Button b_command = new Button(COMMAND);
     
-    private DoIt doit;
+    private DoIt doIt;
     
-    public TestDesktop(DoIt doit) throws Exception {
-        this.doit = doit;
+    public TestDesktop(DoIt doit) {
+        this.doIt = doit;
+        
         setLayout(new GridLayout(1, 0));
         addWindowListener(new WindowAdapter() {
         	public void windowClosing(WindowEvent e) {
@@ -59,11 +50,14 @@ public class TestDesktop extends Frame implements ActionListener {
         pa_left.setLayout(new GridLayout(0, 1));
         pa_right.setLayout(new GridLayout(2, 0));
         pa_right_top.setLayout(new GridLayout(0, 1));
-        pa_right_bottom.setLayout(new GridLayout(4, 0));
+        pa_right_bottom.setLayout(new GridLayout(5, 0));
         add(pa_left, BorderLayout.EAST);
         add(pa_right, BorderLayout.WEST);
         pa_right.add(pa_right_top);
         pa_right.add(pa_right_bottom);
+        pa_right_bottom.add(b_load);
+        b_load.setActionCommand(LOAD);
+        b_load.addActionListener(this);
         pa_right_bottom.add(b_start);
         b_start.setActionCommand(START);
         b_start.addActionListener(this);
@@ -77,42 +71,6 @@ public class TestDesktop extends Frame implements ActionListener {
         b_command.setActionCommand(DESELECT_ALL);
         b_command.addActionListener(this);
 
-        li_tests.setMultipleSelections(true);
-        li_tests.addItemListener(new ItemListener() {
-            public void itemStateChanged(ItemEvent e) {
-                String text = "";
-                String sel = li_tests.getSelectedItem();
-                if (null != sel) {
-	                Field f = (Field) fields.get(sel);
-	                if (null != f) {
-		                try {
-		                    text = (String) f.get(null);
-		                }
-		                catch (Exception ex) {
-		                    ex.printStackTrace();
-		                }
-	                }
-                }
-                ta_descr.setText(null == text ? "" : text);
-            }});
-        Class c = Class.forName("com.nokia.test.doit.DoIt");
-        methods = c.getDeclaredMethods();
-        ArrayList tests = new ArrayList();
-        for (int i = 0; i < methods.length; i++) {
-            if (methods[i].getName().startsWith("db_test") || 
-                methods[i].getName().startsWith("bad_db_test"))
-                	tests.add(methods[i].getName());
-        }
-        Collections.sort(tests);
-        for (int i = 0; i < tests.size(); i++) {
-            li_tests.add((String) tests.get(i));
-            li_tests.select(i);
-        }
-        
-        Field[] fs = c.getDeclaredFields();
-        for (int i = 0; i < fs.length; i++)
-            fields.put(fs[i].getName(), fs[i]);
-        
         pa_left.add(li_tests);
         pa_right_top.add(ta_descr);
         
@@ -120,47 +78,58 @@ public class TestDesktop extends Frame implements ActionListener {
         setSize(800, 600);
         setVisible(true);
     }
-
+    
     public void actionPerformed(ActionEvent ae) {
+        if (ae.getActionCommand().equals(LOAD)) {
+            refreshTests();
+            return;
+        }
         
-	        if (ae.getSource() == b_start) {
-	            int passed = 0;
-                int failed = 0;
-	            int[] indexes = li_tests.getSelectedIndexes();
-	            for (int i = 0; i < indexes.length; i++) {
-	                try {
-		                String mn = li_tests.getItem(indexes[i]);
-		                Method m = DoIt.class.getDeclaredMethod(mn, null);
-		                m.invoke(doit, null);
-		                li_tests.deselect(indexes[i]);
-		                ++passed;
-	                }
-	                catch (Exception e) {
-                        ++failed;
-                        e.printStackTrace();
-                    }
-	                setTitle("Passed / all: " + passed + " / " + (passed + failed));
-	            }
-	        }
-	        
-	        if (ae.getSource() == b_deselect_all) {
-	            for (int i = 0; i < li_tests.getItemCount(); i++)
-	                li_tests.deselect(i);
-	        }
-	        
-	        if (ae.getSource() == b_select_all) {
-	            for (int i = 0; i < li_tests.getItemCount(); i++)
-	                li_tests.select(i);
-	        }
-	        
-	        if (ae.getSource() == b_command) {
-	            try {
-                    doit.command();
+        if (ae.getSource() == b_start) {
+            int passed = 0;
+            int failed = 0;
+            int[] indexes = li_tests.getSelectedIndexes();
+            for (int i = 0; i < indexes.length; i++) {
+                try {
+	                String testId = li_tests.getItem(indexes[i]);
+                    doIt.runTest(testId);
+	                li_tests.deselect(indexes[i]);
+	                ++passed;
                 }
                 catch (Exception e) {
+                    ++failed;
                     e.printStackTrace();
                 }
-	        }
+                setTitle("Passed / all: " + passed + " / " + (passed + failed));
+            }
+        }
+        
+        if (ae.getSource() == b_deselect_all) {
+            for (int i = 0; i < li_tests.getItemCount(); i++)
+                li_tests.deselect(i);
+        }
+        
+        if (ae.getSource() == b_select_all) {
+            for (int i = 0; i < li_tests.getItemCount(); i++)
+                li_tests.select(i);
+        }
+        
+        if (ae.getSource() == b_command) {
+            try {
+                doIt.command();
+            }
+            catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public void refreshTests() {
+        String[] cases = doIt.getTestIds();
+        for (int i = 0; i < cases.length; i++) {
+            li_tests.add(cases[i]);
+            li_tests.select(i);
+        }
     }
 
 }
