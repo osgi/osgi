@@ -537,7 +537,7 @@ public interface DmtSession {
      *         is not supported by the Dmt Admin implementation or the 
      *         underlying plugin(s)
      *         <li><code>TRANSACTION_ERROR</code> in an atomic session if the
-     *         underlying plugin does not support atomic transactions
+     *         underlying plugin is read-only or does not support atomic writing
      *         <li><code>DATA_STORE_FAILURE</code> if an error occurred while
      *         accessing the data store
      *         <li><code>COMMAND_FAILED</code> if either URI is not within the
@@ -590,12 +590,13 @@ public interface DmtSession {
      *         <li><code>PERMISSION_DENIED</code> if the session is associated
      *         with a principal and the ACL of the parent node does not allow
      *         the <code>Add</code> operation for the associated principal
-     *         <li><code>COMMAND_NOT_ALLOWED</code> if the underlying plugin
-     *         is read-only or if the parent node is not an interior node
+     *         <li><code>COMMAND_NOT_ALLOWED</code> if the parent node is not an
+     *         interior node, or in non-atomic sessions if the underlying plugin
+     *         is read-only or does not support non-atomic writing 
      *         <li><code>METADATA_MISMATCH</code> if the node could not be
      *         created because of meta-data restrictions (see above)
      *         <li><code>TRANSACTION_ERROR</code> in an atomic session if the
-     *         underlying plugin does not support atomic transactions
+     *         underlying plugin is read-only or does not support atomic writing
      *         <li><code>DATA_STORE_FAILURE</code> if an error occurred while
      *         accessing the data store
      *         <li><code>COMMAND_FAILED</code> if the URI is not within the
@@ -633,6 +634,12 @@ public interface DmtSession {
      * possibly exist in the tree (it is not defined in the specification), the
      * <code>NODE_NOT_FOUND</code> error code is returned 
      * (see {@link #getMetaNode(String)}).
+     * <p>
+     * Interior node type identifiers must follow the format defined in section 
+     * 7.7.7.2 of the OMA Device Management Tree and Description document.
+     * Checking the validity of the type string does not have to be done by the
+     * Dmt Admin, this can be left to the plugin handling the node (if any), to
+     * avoid unnecessary double-checks.
      * 
      * @param nodeUri the URI of the node to create
      * @param type the type URI of the interior node, can be <code>null</code>
@@ -650,17 +657,18 @@ public interface DmtSession {
      *         <li><code>PERMISSION_DENIED</code> if the session is associated
      *         with a principal and the ACL of the parent node does not allow
      *         the <code>Add</code> operation for the associated principal
-     *         <li><code>COMMAND_NOT_ALLOWED</code> if the underlying plugin
-     *         is read-only or if the parent node is not an interior node
+     *         <li><code>COMMAND_NOT_ALLOWED</code> if the parent node is not an
+     *         interior node, or in non-atomic sessions if the underlying plugin
+     *         is read-only or does not support non-atomic writing 
      *         <li><code>METADATA_MISMATCH</code> if the node could not be
      *         created because of meta-data restrictions (see above)
      *         <li><code>TRANSACTION_ERROR</code> in an atomic session if the
-     *         underlying plugin does not support atomic transactions
+     *         underlying plugin is read-only or does not support atomic writing
      *         <li><code>DATA_STORE_FAILURE</code> if an error occurred while
      *         accessing the data store
      *         <li><code>COMMAND_FAILED</code> if the URI is not within the
-     *         current session's subtree, if the type string is
-     *         invalid, or if some unspecified error is encountered while
+     *         current session's subtree, if the type string is invalid (see
+     *         above), or if some unspecified error is encountered while
      *         attempting to complete the command
      *         </ul>
      * @throws IllegalStateException if the session was opened using the 
@@ -672,6 +680,8 @@ public interface DmtSession {
      *         <code>DmtPermission</code> for the parent node with the Add
      *         action present 
      * @see #createInteriorNode(String)
+     * @see <a href="http://member.openmobilealliance.org/ftp/public_documents/dm/Permanent_documents/OMA-TS-DM-TND-V1_2-20050615-C.zip">
+     *         OMA Device Management Tree and Description v1.2 draft</a> 
      */
     void createInteriorNode(String nodeUri, String type) throws DmtException;
 
@@ -712,12 +722,13 @@ public interface DmtSession {
      *         <li><code>PERMISSION_DENIED</code> if the session is associated
      *         with a principal and the ACL of the parent node does not allow
      *         the <code>Add</code> operation for the associated principal
-     *         <li><code>COMMAND_NOT_ALLOWED</code> if the underlying plugin
-     *         is read-only or if the parent node is not an interior node
+     *         <li><code>COMMAND_NOT_ALLOWED</code> if the parent node is not an
+     *         interior node, or in non-atomic sessions if the underlying plugin
+     *         is read-only or does not support non-atomic writing 
      *         <li><code>METADATA_MISMATCH</code> if the node could not be
      *         created because of meta-data restrictions (see above)
      *         <li><code>TRANSACTION_ERROR</code> in an atomic session if the
-     *         underlying plugin does not support atomic transactions
+     *         underlying plugin is read-only or does not support atomic writing
      *         <li><code>DATA_STORE_FAILURE</code> if an error occurred while
      *         accessing the data store
      *         <li><code>COMMAND_FAILED</code> if the URI is not within the
@@ -781,12 +792,13 @@ public interface DmtSession {
      *         <li><code>PERMISSION_DENIED</code> if the session is associated
      *         with a principal and the ACL of the parent node does not allow
      *         the <code>Add</code> operation for the associated principal
-     *         <li><code>COMMAND_NOT_ALLOWED</code> if the underlying plugin
-     *         is read-only or if the parent node is not an interior node
+     *         <li><code>COMMAND_NOT_ALLOWED</code> if the parent node is not an
+     *         interior node, or in non-atomic sessions if the underlying plugin
+     *         is read-only or does not support non-atomic writing 
      *         <li><code>METADATA_MISMATCH</code> if the node could not be
      *         created because of meta-data restrictions (see above)
      *         <li><code>TRANSACTION_ERROR</code> in an atomic session if the
-     *         underlying plugin does not support atomic transactions
+     *         underlying plugin is read-only or does not support atomic writing
      *         <li><code>DATA_STORE_FAILURE</code> if an error occurred while
      *         accessing the data store
      *         <li><code>COMMAND_FAILED</code> if the URI is not within the
@@ -833,6 +845,11 @@ public interface DmtSession {
      * <p>
      * Nodes of <code>null</code> format can be created by using 
      * {@link DmtData#NULL_VALUE} as second argument.
+     * <p>
+     * The MIME type string must conform to the definition in RFC 2045. Checking
+     * its validity does not have to be done by the Dmt Admin, this can be left 
+     * to the plugin handling the node (if any), to avoid unnecessary 
+     * double-checks.
      * 
      * @param nodeUri the URI of the node to create
      * @param value the value to be given to the new node, can be
@@ -852,18 +869,19 @@ public interface DmtSession {
      *         <li><code>PERMISSION_DENIED</code> if the session is associated
      *         with a principal and the ACL of the parent node does not allow
      *         the <code>Add</code> operation for the associated principal
-     *         <li><code>COMMAND_NOT_ALLOWED</code> if the underlying plugin
-     *         is read-only or if the parent node is not an interior node
+     *         <li><code>COMMAND_NOT_ALLOWED</code> if the parent node is not an
+     *         interior node, or in non-atomic sessions if the underlying plugin
+     *         is read-only or does not support non-atomic writing 
      *         <li><code>METADATA_MISMATCH</code> if the node could not be
      *         created because of meta-data restrictions (see above)
      *         <li><code>TRANSACTION_ERROR</code> in an atomic session if the
-     *         underlying plugin does not support atomic transactions
+     *         underlying plugin is read-only or does not support atomic writing
      *         <li><code>DATA_STORE_FAILURE</code> if an error occurred while
      *         accessing the data store
      *         <li><code>COMMAND_FAILED</code> if the URI is not within the
      *         current session's subtree, if <code>mimeType</code> is not a
-     *         proper MIME type string, or if some unspecified error is 
-     *         encountered while attempting to complete the command
+     *         proper MIME type string (see above), or if some unspecified error
+     *         is encountered while attempting to complete the command
      *         </ul>
      * @throws IllegalStateException if the session was opened using the 
      *         <code>LOCK_TYPE_SHARED</code> lock type, or if the session is 
@@ -874,6 +892,7 @@ public interface DmtSession {
      *         <code>DmtPermission</code> for the parent node with the Add
      *         action present 
      * @see #createLeafNode(String, DmtData)
+     * @see <a href="http://www.ietf.org/rfc/rfc2045.txt">RFC 2045</a> 
      */
     void createLeafNode(String nodeUri, DmtData value, String mimeType)
                     throws DmtException;
@@ -899,12 +918,13 @@ public interface DmtSession {
      *         <li><code>PERMISSION_DENIED</code> if the session is associated
      *         with a principal and the ACL of the node does not allow the
      *         <code>Delete</code> operation for the associated principal
-     *         <li><code>COMMAND_NOT_ALLOWED</code> if the underlying plugin
-     *         is read-only, or if the target node is the root of the tree
+     *         <li><code>COMMAND_NOT_ALLOWED</code> if the target node is the 
+     *         root of the tree, or in non-atomic sessions if the underlying 
+     *         plugin is read-only or does not support non-atomic writing 
      *         <li><code>METADATA_MISMATCH</code> if the node could not be
      *         deleted because of meta-data restrictions (see above)
      *         <li><code>TRANSACTION_ERROR</code> in an atomic session if the
-     *         underlying plugin does not support atomic transactions
+     *         underlying plugin is read-only or does not support atomic writing
      *         <li><code>DATA_STORE_FAILURE</code> if an error occurred while
      *         accessing the data store
      *         <li><code>COMMAND_FAILED</code> if the URI is not within the
@@ -954,12 +974,13 @@ public interface DmtSession {
      *         <li><code>PERMISSION_DENIED</code> if the session is associated
      *         with a principal and the ACL of the node does not allow the
      *         <code>Replace</code> operation for the associated principal
-     *         <li><code>COMMAND_NOT_ALLOWED</code> if the underlying plugin
-     *         is read-only, or if the target node is the root of the tree
+     *         <li><code>COMMAND_NOT_ALLOWED</code> if the target node is the 
+     *         root of the tree, or in non-atomic sessions if the underlying 
+     *         plugin is read-only or does not support non-atomic writing 
      *         <li><code>METADATA_MISMATCH</code> if the node could not be
      *         renamed because of meta-data restrictions (see above)
      *         <li><code>TRANSACTION_ERROR</code> in an atomic session if the
-     *         underlying plugin does not support atomic transactions
+     *         underlying plugin is read-only or does not support atomic writing
      *         <li><code>DATA_STORE_FAILURE</code> if an error occurred while
      *         accessing the data store
      *         <li><code>COMMAND_FAILED</code> if the URI is not within the
@@ -994,14 +1015,15 @@ public interface DmtSession {
      *         <li><code>PERMISSION_DENIED</code> if the session is associated
      *         with a principal and the ACL of the node does not allow the
      *         <code>Replace</code> operation for the associated principal
-     *         <li><code>COMMAND_NOT_ALLOWED</code> if the underlying plugin
-     *         is read-only, or if the specified node is not a leaf node
+     *         <li><code>COMMAND_NOT_ALLOWED</code> if the specified node is not
+     *         a leaf node, or in non-atomic sessions if the underlying plugin 
+     *         is read-only or does not support non-atomic writing 
      *         <li><code>METADATA_MISMATCH</code> if the node is permanent or
      *         cannot be modified according to the meta-data (does not have the 
      *         <code>MetaNode.CMD_REPLACE</code> access type), or if there is no
      *         default value defined for this node
      *         <li><code>TRANSACTION_ERROR</code> in an atomic session if the
-     *         underlying plugin does not support atomic transactions
+     *         underlying plugin is read-only or does not support atomic writing
      *         <li><code>DATA_STORE_FAILURE</code> if an error occurred while
      *         accessing the data store
      *         <li><code>COMMAND_FAILED</code> if the URI is not within the
@@ -1043,14 +1065,15 @@ public interface DmtSession {
      *         <li><code>PERMISSION_DENIED</code> if the session is associated
      *         with a principal and the ACL of the node does not allow the
      *         <code>Replace</code> operation for the associated principal
-     *         <li><code>COMMAND_NOT_ALLOWED</code> if the underlying plugin
-     *         is read-only, or if the specified node is not a leaf node
+     *         <li><code>COMMAND_NOT_ALLOWED</code> if the specified node is not
+     *         a leaf node, or in non-atomic sessions if the underlying plugin 
+     *         is read-only or does not support non-atomic writing 
      *         <li><code>METADATA_MISMATCH</code> if the node is permanent or
      *         cannot be modified according to the meta-data (does not have the 
      *         <code>MetaNode.CMD_REPLACE</code> access type), or if the given
      *         value does not conform to the meta-data value constraints
      *         <li><code>TRANSACTION_ERROR</code> in an atomic session if the
-     *         underlying plugin does not support atomic transactions
+     *         underlying plugin is read-only or does not support atomic writing
      *         <li><code>DATA_STORE_FAILURE</code> if an error occurred while
      *         accessing the data store
      *         <li><code>COMMAND_FAILED</code> if the URI is not within the
@@ -1085,8 +1108,9 @@ public interface DmtSession {
      *         <li><code>PERMISSION_DENIED</code> if the session is associated
      *         with a principal and the ACL of the node does not allow the
      *         <code>Replace</code> operation for the associated principal
-     *         <li><code>COMMAND_NOT_ALLOWED</code> if the underlying plugin
-     *         is read-only
+     *         <li><code>COMMAND_NOT_ALLOWED</code> in non-atomic sessions if 
+     *         the underlying plugin is read-only or does not support non-atomic
+     *         writing 
      *         <li><code>METADATA_MISMATCH</code> if the node cannot be modified
      *         according to the meta-data (does not have the 
      *         <code>MetaNode.CMD_REPLACE</code> access type)
@@ -1094,7 +1118,7 @@ public interface DmtSession {
      *         is not supported by the Dmt Admin implementation or the 
      *         underlying plugin
      *         <li><code>TRANSACTION_ERROR</code> in an atomic session if the
-     *         underlying plugin does not support atomic transactions
+     *         underlying plugin is read-only or does not support atomic writing
      *         <li><code>DATA_STORE_FAILURE</code> if an error occurred while
      *         accessing the data store
      *         <li><code>COMMAND_FAILED</code> if the title string is too long,
@@ -1115,8 +1139,8 @@ public interface DmtSession {
 
     /**
      * Set the type of a node. The type of leaf node is the MIME type of the
-     * data it contains. The type of an interior node is a URI identifying a DDF
-     * document.
+     * data it contains.  The type of an interior node is
+     * a URI identifying a DDF document.
      * <p>
      * For interior nodes, a <code>null</code> type string means that there is
      * no DDF document overriding the tree structure defined by the ancestors.
@@ -1124,6 +1148,13 @@ public interface DmtSession {
      * given node.  If the node does not have a default MIME type this method 
      * will throw a <code>DmtException</code> with error code 
      * <code>METADATA_MISMATCH</code>.
+     * <p>
+     * MIME types must conform to the definition in RFC 2045.  Interior node
+     * type identifiers must follow the format defined in section 7.7.7.2 of the
+     * OMA Device Management Tree and Description document.  Checking the 
+     * validity of the type string does not have to be done by the Dmt Admin, 
+     * this can be left to the plugin handling the node (if any), to avoid 
+     * unnecessary double-checks.  
      * 
      * @param nodeUri the URI of the node
      * @param type the type of the node, can be <code>null</code>
@@ -1138,20 +1169,21 @@ public interface DmtSession {
      *         <li><code>PERMISSION_DENIED</code> if the session is associated
      *         with a principal and the ACL of the node does not allow the
      *         <code>Replace</code> operation for the associated principal
-     *         <li><code>COMMAND_NOT_ALLOWED</code> if the underlying plugin
-     *         is read-only
+     *         <li><code>COMMAND_NOT_ALLOWED</code> in non-atomic sessions if 
+     *         the underlying plugin is read-only or does not support non-atomic
+     *         writing 
      *         <li><code>METADATA_MISMATCH</code> if the node is permanent or
      *         cannot be modified according to the meta-data (does not have the 
      *         <code>MetaNode.CMD_REPLACE</code> access type), and in case of
      *         leaf nodes, if the given MIME type is not allowed
      *         <li><code>TRANSACTION_ERROR</code> in an atomic session if the
-     *         underlying plugin does not support atomic transactions
+     *         underlying plugin is read-only or does not support atomic writing
      *         <li><code>DATA_STORE_FAILURE</code> if an error occurred while
      *         accessing the data store
      *         <li><code>COMMAND_FAILED</code> if the URI is not within the
-     *         current session's subtree, if the type string is invalid, or if
-     *         some unspecified error is encountered while attempting to 
-     *         complete the command
+     *         current session's subtree, if the type string is invalid (see 
+     *         above), or if some unspecified error is encountered while 
+     *         attempting to complete the command
      *         </ul>
      * @throws IllegalStateException if the session was opened using the 
      *         <code>LOCK_TYPE_SHARED</code> lock type, or if the session is 
@@ -1160,7 +1192,10 @@ public interface DmtSession {
      *         permissions to execute the underlying management operation, or,
      *         in case of local sessions, if the caller does not have 
      *         <code>DmtPermission</code> for the node with the Replace action
-     *         present 
+     *         present
+     * @see <a href="http://www.ietf.org/rfc/rfc2045.txt">RFC 2045</a> 
+     * @see <a href="http://member.openmobilealliance.org/ftp/public_documents/dm/Permanent_documents/OMA-TS-DM-TND-V1_2-20050615-C.zip">
+     *         OMA Device Management Tree and Description v1.2 draft</a> 
      */
     void setNodeType(String nodeUri, String type) throws DmtException;
 
