@@ -29,7 +29,7 @@ public class ServerTest implements RemoteReceiver {
         int port = 7777;
         if(args.length > 0)
             port = Integer.parseInt(args[0]);
-		ServerTest st = new ServerTest(port);
+		new ServerTest(port);
 	}
 
 	public ServerTest(int port) {

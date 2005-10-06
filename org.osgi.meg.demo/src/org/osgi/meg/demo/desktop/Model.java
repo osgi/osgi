@@ -229,7 +229,7 @@ public class Model implements BundleListener, ServiceListener,
         ApplicationDescriptor ad = (ApplicationDescriptor) context.getService(sref);
         
         // TODO app parameters
-        ApplicationHandle handle = ad.launch(new HashMap());
+        ad.launch(new HashMap());
 
         context.ungetService(sref);
     }

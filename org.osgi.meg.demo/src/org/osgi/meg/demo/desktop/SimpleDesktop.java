@@ -200,11 +200,9 @@ public class SimpleDesktop extends Frame implements ActionListener {
                 if (fd.getFile() != null) {
                   File f = new File(fd.getDirectory(), fd.getFile());
                   if (f.getName().endsWith(".dp")) {
-                      String symbName = 
-                          controller.installDp(f);
+                      controller.installDp(f);
                   } else if (f.getName().endsWith(".jar")) {
-                      String location = 
-                          controller.installBundle(f);
+                      controller.installBundle(f);
                   }
                 }
 	        } else if (UNINSTALL.equals(command)) {
