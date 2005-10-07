@@ -201,6 +201,10 @@ public abstract class ApplicationHandle {
 		}
 	}
 
+	/**
+	 * @skip
+	 *
+	 */
 	public interface Delegate {
 		void setApplicationHandle(ApplicationHandle d, ApplicationDescriptor.Delegate descriptor );
 		void destroy() throws Exception;

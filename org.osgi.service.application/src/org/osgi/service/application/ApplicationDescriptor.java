@@ -174,7 +174,7 @@ public abstract class ApplicationDescriptor {
 	 *            default locale. If the provided locale is the empty String 
 	 *            (<code>""</code>)then raw (non-localized) values are returned.
 	 * 
-	 * @return service properties of this application descriptor service,
+	 * @return copy of the service properties of this application descriptor service,
 	 *         according to the specified locale. If locale is null then the
 	 *         default locale's properties will be returned. (Since service
 	 *         properties are always exist it cannot return null.)
@@ -386,6 +386,9 @@ public abstract class ApplicationDescriptor {
 	 */
 	protected abstract void unlockSpecific();
 
+		/**
+		 * @skip
+		 */
 	public interface Delegate {
 		void setApplicationDescriptor(ApplicationDescriptor d, String pid );
 
