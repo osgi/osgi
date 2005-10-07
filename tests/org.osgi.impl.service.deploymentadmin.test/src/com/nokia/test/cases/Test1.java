@@ -17,8 +17,12 @@ import com.nokia.test.doit.TestCaseException;
 
 public class Test1 extends TestCaseClass {
 
-    public void doTest(Db db, DeploymentAdmin da, String dpHome) throws Exception {
-        InputStream is = new FileInputStream(dpHome + "db_test_01.dp");
+    protected Test1(String dpHome) throws Exception {
+        super(dpHome);
+    }
+
+    public void doTest(Db db, DeploymentAdmin da) throws Exception {
+        InputStream is = new FileInputStream(getFile("db_test_01.dp"));
         DeploymentPackage dp = da.installDeploymentPackage(is);
 
         if (-1 == Arrays.asList(db.tableNames(null)).indexOf("player"))
@@ -51,7 +55,7 @@ public class Test1 extends TestCaseClass {
             throw new TestCaseException(
                     "Header value (Other-header) should be 1");
 
-        is = new FileInputStream(dpHome + "db_test_01_update_01.dp");
+        is = new FileInputStream(getFile("db_test_01_update_01.dp"));
         dp = da.installDeploymentPackage(is);
 
         if (-1 == Arrays.asList(db.tableNames(null)).indexOf("player"))
@@ -86,15 +90,17 @@ public class Test1 extends TestCaseClass {
     public PermissionInfo[] getNeededPermissions() {
         return new PermissionInfo[] {
                 new PermissionInfo(FilePermission.class.getName(), 
-                        "<<ALL FILES>>", "read"),
+                        getFile("db_test_01.dp").getAbsolutePath(), "read"),
+                new PermissionInfo(FilePermission.class.getName(), 
+                        getFile("db_test_01_update_01.dp").getAbsolutePath(), "read"),
                 new PermissionInfo(DeploymentAdminPermission.class.getName(), 
                         "(name=db_test_01)", "install, uninstall")
             };
     }
 
     public String getDescription() {
-        return "Uses default RP, two resource files (one of them \n"
-            + "is updated the other removed)";
+        return "Uses default RP, two resource files (one of them " + 
+            "is updated the other removed)";
     }
     
     public String[] getAsserts() {

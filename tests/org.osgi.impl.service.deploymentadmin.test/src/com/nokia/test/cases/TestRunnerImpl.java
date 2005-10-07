@@ -9,13 +9,20 @@ import com.nokia.test.doit.TestCaseClass;
 import com.nokia.test.doit.TestCaseException;
 import com.nokia.test.doit.TestRunner;
 
-public class Tests implements BundleActivator, TestRunner {
+public class TestRunnerImpl implements BundleActivator, TestRunner {
+    
+    private static final String HOME = 
+        "../../org.osgi.impl.service.deploymentadmin.test/res/";
 
     private BundleContext context;
     
     private Hashtable testCases = new Hashtable();
     {
-        testCases.put("Test1", new Test1());
+        testCases.put("Test1", new Test1(HOME));
+        testCases.put("Test2", new Test2(HOME));
+    }
+    
+    public TestRunnerImpl() throws Exception {
     }
 
     public void start(BundleContext context) throws Exception {

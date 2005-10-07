@@ -1,6 +1,6 @@
 Manifest-Version: 1.0
-Bundle-Activator: com.nokia.test.cases.Tests
-Bundle-SymbolicName: com.nokia.test.cases.Tests
+Bundle-Activator: com.nokia.test.cases.TestRunnerImpl
+Bundle-SymbolicName: com.nokia.test.cases.TestRunnerImpl
 Bundle-Version: 1.0
 DynamicImport-Package: com.nokia.test.cases,
        com.nokia.test.doit

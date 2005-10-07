@@ -9,13 +9,16 @@ import java.awt.Panel;
 import java.awt.TextArea;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
-public class TestDesktop extends Frame implements ActionListener {
+public class TestDesktop extends Frame implements ActionListener, ItemListener {
 
     private List      li_tests = new List();
     private TextArea  ta_descr = new TextArea();
+    private TextArea  ta_asserts = new TextArea();
     
     private Panel pa_left = new Panel();
     private Panel pa_right = new Panel();
@@ -49,7 +52,7 @@ public class TestDesktop extends Frame implements ActionListener {
         
         pa_left.setLayout(new GridLayout(0, 1));
         pa_right.setLayout(new GridLayout(2, 0));
-        pa_right_top.setLayout(new GridLayout(0, 1));
+        pa_right_top.setLayout(new GridLayout(2, 0));
         pa_right_bottom.setLayout(new GridLayout(5, 0));
         add(pa_left, BorderLayout.EAST);
         add(pa_right, BorderLayout.WEST);
@@ -70,9 +73,12 @@ public class TestDesktop extends Frame implements ActionListener {
         pa_right_bottom.add(b_command);
         b_command.setActionCommand(DESELECT_ALL);
         b_command.addActionListener(this);
+        li_tests.setMultipleSelections(true);
+        li_tests.addItemListener(this);
 
         pa_left.add(li_tests);
         pa_right_top.add(ta_descr);
+        pa_right_top.add(ta_asserts);
         
         pack();
         setSize(800, 600);
@@ -85,7 +91,7 @@ public class TestDesktop extends Frame implements ActionListener {
             return;
         }
         
-        if (ae.getSource() == b_start) {
+        if (ae.getActionCommand().equals(START)) {
             int passed = 0;
             int failed = 0;
             int[] indexes = li_tests.getSelectedIndexes();
@@ -125,11 +131,31 @@ public class TestDesktop extends Frame implements ActionListener {
     }
 
     public void refreshTests() {
+        li_tests.removeAll();
         String[] cases = doIt.getTestIds();
         for (int i = 0; i < cases.length; i++) {
             li_tests.add(cases[i]);
             li_tests.select(i);
         }
+    }
+
+    public void itemStateChanged(ItemEvent ie) {
+        if (li_tests != ie.getSource())
+            return;
+        
+        String testId = li_tests.getSelectedItem();
+        if (null == testId)
+            return;
+        
+        ta_descr.setText(doIt.getDescription(testId));
+        StringBuffer sb = new StringBuffer("");
+        String[] asserts = doIt.getAsserts(testId);
+        if (null == asserts)
+            return;
+        for (int i = 0; i < asserts.length; i++) {
+            sb.append(asserts[i] + "\n");
+        }
+        ta_asserts.setText(sb.toString());
     }
 
 }

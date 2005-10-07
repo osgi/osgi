@@ -87,10 +87,23 @@ public class DoIt implements BundleActivator, ServiceListener {
         return tr.getTestIds();
     }
 
+    public String getDescription(String testId) {
+        TestRunner tr = (TestRunner) trackTestsRunner.getService();
+        TestCaseClass tc = tr.getTest(testId);
+        return tc.getDescription();
+    }
+
+    public String[] getAsserts(String testId) {
+        TestRunner tr = (TestRunner) trackTestsRunner.getService();
+        TestCaseClass tc = tr.getTest(testId);
+        return tc.getAsserts();
+    }
+
     public void runTest(String testId) throws Exception {
         TestRunner tr = (TestRunner) trackTestsRunner.getService();
         TestCaseClass tc = tr.getTest(testId);
         ConditionalPermissionAdmin cpa = getConditionalPermissionAdmin();
+        getDb().reset(null);
         
         ConditionalPermissionInfo cpi = cpa.addConditionalPermissionInfo(
                 new ConditionInfo[] {
@@ -102,7 +115,7 @@ public class DoIt implements BundleActivator, ServiceListener {
         );
 
         try {
-            tc.doTest((Db) trackDb.getService(), (DeploymentAdmin) trackDa.getService(), HOME);
+            tc.doTest((Db) trackDb.getService(), (DeploymentAdmin) trackDa.getService());
         } finally {
             cpi.delete();
         }
@@ -112,6 +125,11 @@ public class DoIt implements BundleActivator, ServiceListener {
         ServiceReference ret = trackDb.getServiceReference();
         if (null == ret)
             throw new RuntimeException("There is no Db");
+        return ret;
+    }
+
+    private Db getDb() {
+        Db ret = (Db) trackDb.getService();
         return ret;
     }
 
@@ -133,6 +151,8 @@ public class DoIt implements BundleActivator, ServiceListener {
         PermissionAdmin ret = (PermissionAdmin) trackPa.getService();
         return ret;
     }
+    
+
     
     private ConditionalPermissionAdmin getConditionalPermissionAdmin() {
         ConditionalPermissionAdmin ret = (ConditionalPermissionAdmin) trackCondPa.getService();
@@ -724,43 +744,6 @@ public class DoIt implements BundleActivator, ServiceListener {
         
     }
 
-    public static final String db_test_02 = "MISSING RESOURCE\n" +
-        "Uses default RP, two resource files (one of them \n" +
-		"is updated the other is a Missing resource)\n" +
-        "ASSERTS\n" +
-        " - table of the missing resource mustn't disappera after uninstall";
-    public void db_test_02() throws Exception {
-        ServiceReference ref = context.getServiceReference(Db.class.getName());
-        Db db = (Db) context.getService(ref);
-        
-        InputStream is = new FileInputStream(HOME + "db_test_02.dp");
-        DeploymentPackage dp = getDeploymentAdmin().installDeploymentPackage(is);
-		
-        if (-1 == Arrays.asList(db.tableNames(null)).indexOf("player"))
-            throw new Exception("Table 'player' is missing");
-        if (-1 == Arrays.asList(db.tableNames(null)).indexOf("game"))
-            throw new Exception("Table 'game' is missing");
-        if (-1 == Arrays.asList(db.tableNames(null)).indexOf("score"))
-            throw new Exception("Table 'score' is missing");
-        if (-1 == Arrays.asList(db.tableNames(null)).indexOf("tmp"))
-            throw new Exception("Table 'tmp' is missing");
-
-        is = new FileInputStream(HOME + "db_test_02_update_01.dp");
-		dp = getDeploymentAdmin().installDeploymentPackage(is);
-		
-        if (-1 == Arrays.asList(db.tableNames(null)).indexOf("player"))
-            throw new Exception("Table 'player' is missing");
-        if (-1 == Arrays.asList(db.tableNames(null)).indexOf("game"))
-            throw new Exception("Table 'game' is missing");
-        if (-1 != Arrays.asList(db.tableNames(null)).indexOf("score"))
-            throw new Exception("Table 'score' is missing");
-        if (-1 == Arrays.asList(db.tableNames(null)).indexOf("tmp"))
-            throw new Exception("Table 'tmp' is missing");
-        
-        dp.uninstall();
-        db.reset(null);
-    }
-    
     public static final String db_test_03 = "COMPOUND\n" +
         "Uses customizer, two resource files (one processed by the \n" +
         "preinstalled RP, one by the customizer). Two bundles \n" +
