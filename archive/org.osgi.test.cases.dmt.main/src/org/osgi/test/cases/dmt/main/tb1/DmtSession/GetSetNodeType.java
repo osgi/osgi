@@ -41,14 +41,15 @@ package org.osgi.test.cases.dmt.main.tb1.DmtSession;
 
 import org.osgi.service.dmt.Acl;
 import org.osgi.service.dmt.DmtException;
+import org.osgi.service.dmt.DmtSession;
 import org.osgi.service.dmt.security.DmtPermission;
 import org.osgi.service.dmt.security.DmtPrincipalPermission;
-import org.osgi.service.dmt.DmtSession;
 import org.osgi.service.permissionadmin.PermissionInfo;
 import org.osgi.test.cases.dmt.main.tbc.DmtConstants;
 import org.osgi.test.cases.dmt.main.tbc.DmtTestControl;
 import org.osgi.test.cases.dmt.main.tbc.TestInterface;
 import org.osgi.test.cases.dmt.main.tbc.Plugin.ExecPlugin.TestExecPluginActivator;
+import org.osgi.test.cases.dmt.main.tbc.Plugin.NonAtomic.TestNonAtomicPluginActivator;
 import org.osgi.test.cases.dmt.main.tbc.Plugin.ReadOnly.TestReadOnlyPluginActivator;
 
 /**
@@ -78,7 +79,10 @@ public class GetSetNodeType implements TestInterface {
 		testGetSetNodeType010();
 		testGetSetNodeType011();
 		testGetSetNodeType012();
-
+		testGetSetNodeType013();
+		testGetSetNodeType014();
+		testGetSetNodeType015();
+		testGetSetNodeType016();
 	}
     
     private void prepare() {
@@ -136,36 +140,28 @@ public class GetSetNodeType implements TestInterface {
 	}
 
 	
-
+    
+    /**
+     * This method asserts that null can be passed as type
+     * 
+     * @spec DmtSession.setNodeType(String,String)
+     */
+    private void testGetSetNodeType003() {
+        DmtSession session = null;
+        try {
+            tbc.log("#testGetSetNodeType003");
+            session = tbc.getDmtAdmin().getSession(DmtConstants.OSGi_ROOT,
+                    DmtSession.LOCK_TYPE_ATOMIC);
+            session.setNodeType(TestExecPluginActivator.INTERIOR_NODE,null);
+            tbc.pass("'null' could be passed as type parameter (DmtSession.setNodeType) ");
+        } catch (Exception e) {
+            tbc.fail("Unexpected Exception: " + e.getClass().getName() + " [Message: " + e.getMessage() +"]");
+        } finally {
+            tbc.closeSession(session);
+        }
+        
+    }
 	
-	/**
-	 * This method asserts that DmtException.COMMAND_FAILED is thrown
-	 * if the type string is invalid
-	 * 
-	 * @spec DmtSession.setNodeType(String,String)
-	 */
-	private void testGetSetNodeType003() {
-		DmtSession session = null;
-		try {
-			tbc.log("#testGetSetNodeType003");
-			session = tbc.getDmtAdmin().getSession(DmtConstants.OSGi_ROOT,
-					DmtSession.LOCK_TYPE_ATOMIC);
-			session.setNodeType(TestExecPluginActivator.INTERIOR_NODE,DmtConstants.INVALID);
-			tbc.failException("#",DmtException.class);
-		} catch (DmtException e) {
-			tbc.assertEquals(
-					"Asserting that DmtException code is COMMAND_FAILED",
-					DmtException.COMMAND_FAILED, e.getCode());
-		} catch (Exception e) {
-			tbc.fail("Expected " + DmtException.class.getName() + " but was " + e.getClass().getName());
-		} finally {
-			tbc.closeSession(session);
-		}
-		
-	}	
-	
-	
-
 	/**
 	 * This method asserts that getNodeType is executed when the right Acl is set (Remote)
 	 * 
@@ -332,8 +328,8 @@ public class GetSetNodeType implements TestInterface {
 		}
 	}
 	/**
-	 * This method asserts that DmtException.TRANSACTION_ERROR is thrown when this method is called
-	 * in a plugin that does not support atomic transactions and the session is LOCK_TYPE_ATOMIC
+	 * This method asserts that DmtException.TRANSACTION_ERROR is thrown 
+	 * if the session is atomic and the plugin is read-only
 	 * 
 	 * @spec DmtSession.setNodeType(String,String)
 	 */
@@ -341,7 +337,7 @@ public class GetSetNodeType implements TestInterface {
 		DmtSession session = null;
 		try {
 			tbc.log("#testGetSetNodeType011");
-			session = tbc.getDmtAdmin().getSession(TestReadOnlyPluginActivator.ROOT,
+			session = tbc.getDmtAdmin().getSession(".",
 			    DmtSession.LOCK_TYPE_ATOMIC);
 			session.setNodeType(TestReadOnlyPluginActivator.LEAF_NODE, DmtConstants.MIMETYPE);
 			tbc.failException("", DmtException.class);
@@ -355,9 +351,9 @@ public class GetSetNodeType implements TestInterface {
 			tbc.closeSession(session);
 		}
 	}
-	
 	/**
-	 * This method asserts that null can be passed as type
+	 * This method asserts that DmtException.TRANSACTION_ERROR is thrown 
+	 * if the session is atomic and the plugin does not support non-atomic writing
 	 * 
 	 * @spec DmtSession.setNodeType(String,String)
 	 */
@@ -365,15 +361,120 @@ public class GetSetNodeType implements TestInterface {
 		DmtSession session = null;
 		try {
 			tbc.log("#testGetSetNodeType012");
-			session = tbc.getDmtAdmin().getSession(DmtConstants.OSGi_ROOT,
-					DmtSession.LOCK_TYPE_ATOMIC);
-			session.setNodeType(TestExecPluginActivator.INTERIOR_NODE,null);
-			tbc.pass("'null' could be passed as type parameter (DmtSession.setNodeType) ");
+			session = tbc.getDmtAdmin().getSession(".",
+			    DmtSession.LOCK_TYPE_ATOMIC);
+			session.setNodeType(TestNonAtomicPluginActivator.LEAF_NODE, DmtConstants.MIMETYPE);
+			tbc.failException("", DmtException.class);
+		} catch (DmtException e) {
+			tbc.assertEquals("Asserting that DmtException code is TRANSACTION_ERROR",
+					DmtException.TRANSACTION_ERROR, e.getCode());
 		} catch (Exception e) {
-		    tbc.fail("Unexpected Exception: " + e.getClass().getName() + " [Message: " + e.getMessage() +"]");
+			tbc.fail("Expected " + DmtException.class.getName() + " but was "
+					+ e.getClass().getName());
 		} finally {
 			tbc.closeSession(session);
 		}
-		
 	}
+	
+	/**
+	 * This method asserts that DmtException.COMMAND_NOT_ALLOWED is thrown 
+	 * if the session is non-atomic (in this case, LOCK_TYPE_SHARED) and the plugin is read-only 
+	 * 
+	 * @spec DmtSession.setNodeType(String,String)
+	 */
+	private void testGetSetNodeType013() {
+		DmtSession session = null;
+		try {
+			tbc.log("#testGetSetNodeType013");
+			session = tbc.getDmtAdmin().getSession(".",
+			    DmtSession.LOCK_TYPE_SHARED);
+			session.setNodeType(TestReadOnlyPluginActivator.LEAF_NODE, DmtConstants.MIMETYPE);
+			tbc.failException("", DmtException.class);
+		} catch (DmtException e) {
+			tbc.assertEquals("Asserting that DmtException code is COMMAND_NOT_ALLOWED",
+					DmtException.COMMAND_NOT_ALLOWED, e.getCode());
+		} catch (Exception e) {
+			tbc.fail("Expected " + DmtException.class.getName() + " but was "
+					+ e.getClass().getName());
+		} finally {
+			tbc.closeSession(session);
+		}
+	}
+	/**
+	 * This method asserts that DmtException.COMMAND_NOT_ALLOWED is thrown 
+	 * if the session is non-atomic (in this case, LOCK_TYPE_EXCLUSIVE) and the plugin is read-only 
+	 * 
+	 * @spec DmtSession.setNodeType(String,String)
+	 */
+	private void testGetSetNodeType014() {
+		DmtSession session = null;
+		try {
+			tbc.log("#testGetSetNodeType014");
+			session = tbc.getDmtAdmin().getSession(".",
+			    DmtSession.LOCK_TYPE_EXCLUSIVE);
+			session.setNodeType(TestReadOnlyPluginActivator.LEAF_NODE, DmtConstants.MIMETYPE);
+			tbc.failException("", DmtException.class);
+		} catch (DmtException e) {
+			tbc.assertEquals("Asserting that DmtException code is COMMAND_NOT_ALLOWED",
+					DmtException.COMMAND_NOT_ALLOWED, e.getCode());
+		} catch (Exception e) {
+			tbc.fail("Expected " + DmtException.class.getName() + " but was "
+					+ e.getClass().getName());
+		} finally {
+			tbc.closeSession(session);
+		}
+	}
+	
+	/**
+	 * This method asserts that DmtException.COMMAND_NOT_ALLOWED is thrown 
+	 * if the session is non-atomic (in this case, LOCK_TYPE_SHARED) and the plugin 
+	 * does not support non-atomic writing
+	 * 
+	 * @spec DmtSession.setNodeType(String,String)
+	 */
+	private void testGetSetNodeType015() {
+		DmtSession session = null;
+		try {
+			tbc.log("#testGetSetNodeType015");
+			session = tbc.getDmtAdmin().getSession(".",
+			    DmtSession.LOCK_TYPE_SHARED);
+			session.setNodeType(TestNonAtomicPluginActivator.LEAF_NODE, DmtConstants.MIMETYPE);
+			tbc.failException("", DmtException.class);
+		} catch (DmtException e) {
+			tbc.assertEquals("Asserting that DmtException code is COMMAND_NOT_ALLOWED",
+					DmtException.COMMAND_NOT_ALLOWED, e.getCode());
+		} catch (Exception e) {
+			tbc.fail("Expected " + DmtException.class.getName() + " but was "
+					+ e.getClass().getName());
+		} finally {
+			tbc.closeSession(session);
+		}
+	}
+	/**
+	 * This method asserts that DmtException.COMMAND_NOT_ALLOWED is thrown 
+	 * if the session is non-atomic (in this case, LOCK_TYPE_EXCLUSIVE) and the plugin 
+	 * does not support non-atomic writing
+	 * 
+	 * @spec DmtSession.setNodeType(String,String)
+	 */
+	private void testGetSetNodeType016() {
+		DmtSession session = null;
+		try {
+			tbc.log("#testGetSetNodeType016");
+			session = tbc.getDmtAdmin().getSession(".",
+			    DmtSession.LOCK_TYPE_EXCLUSIVE);
+			session.setNodeType(TestNonAtomicPluginActivator.LEAF_NODE, DmtConstants.MIMETYPE);
+			tbc.failException("", DmtException.class);
+		} catch (DmtException e) {
+			tbc.assertEquals("Asserting that DmtException code is COMMAND_NOT_ALLOWED",
+					DmtException.COMMAND_NOT_ALLOWED, e.getCode());
+		} catch (Exception e) {
+			tbc.fail("Expected " + DmtException.class.getName() + " but was "
+					+ e.getClass().getName());
+		} finally {
+			tbc.closeSession(session);
+		}
+	}
+	
+
 }

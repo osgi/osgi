@@ -29,47 +29,54 @@
  * Date          Author(s)
  * CR            Headline
  * ============  ==============================================================
- * Jun 07, 2005  Luiz Felipe Guimaraes
- * 11            Implement TCK Use Cases
+ * Feb 25, 2005  Luiz Felipe Guimaraes
+ * 244           [MEGTCK][DMT] Implements the investigates after feedback.
  * ============  ==============================================================
  */
 
-package org.osgi.test.cases.dmt.plugins.tbc.Plugins;
+package org.osgi.test.cases.dmt.main.tbc.Plugin.NonAtomic;
 
 import java.util.Hashtable;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.dmt.spi.DataPluginFactory;
-import org.osgi.test.cases.dmt.plugins.tbc.DmtTestControl;
+import org.osgi.test.cases.dmt.main.tbc.DmtTestControl;
 
-
-public class FatalExceptionDataPluginActivator implements BundleActivator {
+/**
+ * @author Luiz Felipe Guimaraes
+ * 
+ */
+public class TestNonAtomicPluginActivator implements BundleActivator {
 
 	private ServiceRegistration servReg;
 	
-	public static final String TEST_EXCEPTION_PLUGIN_ROOT = "./OSGi/data_plugin_exception";
-	
-	public static final String INEXISTENT_NODE = TEST_EXCEPTION_PLUGIN_ROOT +"/inexistent";
-	
-	public static final String INEXISTENT_LEAF_NODE = TEST_EXCEPTION_PLUGIN_ROOT +"/inex_leaf";
-	
-    private DmtTestControl tbc;
-    
-	private FatalExceptionDataPlugin fatalExceptionDataPlugin;
+	private DmtTestControl tbc;
 
-    public FatalExceptionDataPluginActivator(DmtTestControl tbc) {
-        this.tbc = tbc;
-    }
+	public static final String ROOT = "./OSGi/non_atomic_plugin";
+	
+	public static final String INTERIOR_NODE = ROOT + "/interior";
+	
+	public static final String INEXISTENT_NODE = ROOT + "/inexistent";
+	
+	public static final String LEAF_NODE = ROOT + "/leaf";
+	
+	public static final String INEXISTENT_LEAF_NODE = ROOT + "/inexistent_leaf";
+	
+	private TestNonAtomicPlugin testNonAtomicPlugin;
+	
+	public TestNonAtomicPluginActivator(DmtTestControl tbc) {
+		this.tbc = tbc;
+	}
 
 	public void start(BundleContext bc) throws Exception {
 		// creating the service
-		fatalExceptionDataPlugin = new FatalExceptionDataPlugin(tbc);
+		testNonAtomicPlugin = new TestNonAtomicPlugin(tbc);
 		Hashtable props = new Hashtable();
-		props.put(DataPluginFactory.DATA_ROOT_URIS, new String[] { TEST_EXCEPTION_PLUGIN_ROOT });
+		props.put(DataPluginFactory.DATA_ROOT_URIS, new String[] { ROOT });
 		String[] ifs = new String[] { DataPluginFactory.class.getName() };
-		servReg = bc.registerService(ifs, fatalExceptionDataPlugin, props);
-		System.out.println("FatalExceptionDataPlugin activated.");
+		servReg = bc.registerService(ifs, testNonAtomicPlugin, props);
+		System.out.println("TestReadOnlyPlugin activated.");
 	}
 
 	public void stop(BundleContext bc) throws Exception {

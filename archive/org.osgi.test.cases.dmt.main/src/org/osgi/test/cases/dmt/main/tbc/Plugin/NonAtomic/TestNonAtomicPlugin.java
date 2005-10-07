@@ -29,12 +29,12 @@
  * Date          Author(s)
  * CR            Headline
  * ============  ==============================================================
- * Jun 08, 2005  Luiz Felipe Guimaraes
- * 11            Implement TCK Use Cases
+ * Feb 25, 2005  Luiz Felipe Guimaraes
+ * 244           [MEGTCK][DMT] Implements the investigates after feedback.
  * ============  ==============================================================
  */
 
-package org.osgi.test.cases.dmt.plugins.tbc.Plugins;
+package org.osgi.test.cases.dmt.main.tbc.Plugin.NonAtomic;
 
 import java.util.Date;
 import org.osgi.service.dmt.DmtData;
@@ -45,77 +45,49 @@ import org.osgi.service.dmt.spi.DataPluginFactory;
 import org.osgi.service.dmt.spi.ReadWriteDataSession;
 import org.osgi.service.dmt.spi.ReadableDataSession;
 import org.osgi.service.dmt.spi.TransactionalDataSession;
-import org.osgi.test.cases.dmt.plugins.tbc.DmtConstants;
-import org.osgi.test.cases.dmt.plugins.tbc.DmtTestControl;
+import org.osgi.test.cases.dmt.main.tbc.DmtTestControl;
 
-public class FatalExceptionDataPlugin implements DataPluginFactory, TransactionalDataSession {
+/**
+ * @author Luiz Felipe Guimaraes
+ * 
+ * A test implementation of DataPluginFactory. This implementation validates the
+ * DmtSession calls to a subtree handled by a DataPluginFactory.
+ * 
+ */
+public class TestNonAtomicPlugin implements DataPluginFactory, ReadableDataSession {
 	
-	public static final String ROLLBACK = "FatalExceptionDataPlugin.rollback,";
-	public static final String CLOSE = "FatalExceptionDataPlugin.close,";
-	public static final String COMMIT = "FatalExceptionDataPlugin.commit,";
-	
-    private DmtTestControl tbc;
+	private DmtTestControl tbc;
     
-	public FatalExceptionDataPlugin(DmtTestControl tbc) {
-        this.tbc = tbc;
+	public TestNonAtomicPlugin(DmtTestControl tbc) {
+		this.tbc = tbc;
+
 	}
 
+	public ReadableDataSession openReadOnlySession(String[] sessionRoot, DmtSession session) throws DmtException {
+		return this;
+	}
+
+	public ReadWriteDataSession openReadWriteSession(String[] sessionRoot, DmtSession session) throws DmtException {
+		return null;
+	}
+
+	public TransactionalDataSession openAtomicSession(String[] sessionRoot, DmtSession session) throws DmtException {
+		return null;
+	}
 	
-	public void rollback() throws DmtException {
-		DmtConstants.TEMPORARY += ROLLBACK; 
-	}
-
-	public void setNodeTitle(String[] nodeUri, String title) throws DmtException {
-		
-	}
-
-	public void setNodeValue(String[] nodeUri, DmtData data) throws DmtException {
-
-	}
-
-	public void setDefaultNodeValue(String[] nodeUri) throws DmtException {
-
-	}
-
-	public void setNodeType(String[] nodeUri, String type) throws DmtException {
-	
-	}
-
-	public void deleteNode(String[] nodeUri) throws DmtException {
-	
-	}
-
-
-	public void createInteriorNode(String[] nodeUri, String type)
-			throws DmtException {
-
-	}
-
-
-
-	public void createLeafNode(String[] nodeUri, DmtData value, String mimeType)
-			throws DmtException {
-		throw new DmtException(nodeUri,DmtException.COMMAND_NOT_ALLOWED,null,null,true);
-	}
-
-	public void copy(String[] nodeUri, String[] newNodeUri, boolean recursive)
-			throws DmtException {
-	}
-
-	public void renameNode(String[] nodeUri, String newName) throws DmtException {
-	}
 
 	public void close() throws DmtException {
-		DmtConstants.TEMPORARY += CLOSE; 
 	}
 
 	public boolean isNodeUri(String[] nodeUri) {
-        String nodeName = tbc.mangleUri(nodeUri);
-        if (nodeName.equals(FatalExceptionDataPluginActivator.INEXISTENT_NODE) ||
-    		nodeName.equals(FatalExceptionDataPluginActivator.INEXISTENT_LEAF_NODE)) {
-			return false;
-		} else {
+		String nodeName = tbc.mangleUri(nodeUri);
+		if (nodeName.equals(TestNonAtomicPluginActivator.ROOT)
+				|| nodeName.equals(TestNonAtomicPluginActivator.INTERIOR_NODE)
+				|| nodeName.equals(TestNonAtomicPluginActivator.LEAF_NODE)
+				) {
 			return true;
+		} else {
+			return false;
 		}
 	}
 
@@ -128,7 +100,7 @@ public class FatalExceptionDataPlugin implements DataPluginFactory, Transactiona
 	}
 
 	public String getNodeType(String[] nodeUri) throws DmtException {
-		throw new DmtException(nodeUri,DmtException.COMMAND_NOT_ALLOWED,null);
+		return null;
 	}
 
 	public int getNodeVersion(String[] nodeUri) throws DmtException {
@@ -144,21 +116,21 @@ public class FatalExceptionDataPlugin implements DataPluginFactory, Transactiona
 	}
 
 	public String[] getChildNodeNames(String[] nodeUri) throws DmtException {
-		return null;
+			return null;
 	}
 
 	public MetaNode getMetaNode(String[] nodeUri) throws DmtException {
-		return null;	
-
-
+		return null;
 	}
+
 	
-	public void commit() throws DmtException {
-		DmtConstants.TEMPORARY += COMMIT;
-	}
-
 	public boolean isLeafNode(String[] nodeUri) throws DmtException {
-		return false; 
+		String nodeName = tbc.mangleUri(nodeUri);
+		if (nodeName.equals(TestNonAtomicPluginActivator.LEAF_NODE)) {
+			return true;
+		} else {
+			return false;
+		}
 	}
 
 	public void nodeChanged(String[] nodeUri) throws DmtException {
@@ -166,16 +138,5 @@ public class FatalExceptionDataPlugin implements DataPluginFactory, Transactiona
 	}
 
 
-    public ReadableDataSession openReadOnlySession(String[] sessionRoot, DmtSession session) throws DmtException {
-        return null;
-    }
-    
-    public ReadWriteDataSession openReadWriteSession(String[] sessionRoot, DmtSession session) throws DmtException {
-        return null;
-    }
-
-    public TransactionalDataSession openAtomicSession(String[] sessionRoot, DmtSession session) throws DmtException {
-        return this;
-    }
 
 }

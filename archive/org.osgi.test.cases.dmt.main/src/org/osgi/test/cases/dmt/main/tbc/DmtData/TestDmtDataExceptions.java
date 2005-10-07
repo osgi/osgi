@@ -66,16 +66,90 @@ public class TestDmtDataExceptions {
 	    testDmtDataExceptions004();
 	    testDmtDataExceptions005();
 	    testDmtDataExceptions006();
+        testDmtDataExceptions007();
+        testDmtDataExceptions008();
+        testDmtDataExceptions009();
+        testDmtDataExceptions010();
 	}
-
+    /**
+     * Asserts that NullPointerException is thrown if a date format is constructed and value is null
+     * 
+     * @spec DmtData.DmtData(String,int)
+     */
+    private void testDmtDataExceptions001() {
+        try {       
+            tbc.log("#testDmtDataExceptions001");
+            new DmtData(null,DmtData.FORMAT_DATE);
+            tbc.failException("", NullPointerException.class);
+        } catch (NullPointerException e) {
+            tbc.pass("Asserts that NullPointerException is thrown if a date is constructed and value is null");
+        } catch (Exception e) {
+            tbc.fail("Unexpected Exception: " + e.getClass().getName()
+                    + " [Message: " + e.getMessage() + "]");
+        }
+    }
+    
+    /**
+     * Asserts that NullPointerException is thrown if a time format is constructed and value is null
+     * 
+     * @spec DmtData.DmtData(String,int)
+     */
+    private void testDmtDataExceptions002() {
+        try {       
+            tbc.log("#testDmtDataExceptions002");
+            new DmtData(null,DmtData.FORMAT_TIME);
+            tbc.failException("", NullPointerException.class);
+        } catch (NullPointerException e) {
+            tbc.pass("Asserts that NullPointerException is thrown if a date is constructed and value is null");
+        } catch (Exception e) {
+            tbc.fail("Unexpected Exception: " + e.getClass().getName()
+                    + " [Message: " + e.getMessage() + "]");
+        }
+    }
+    
+    /**
+     * Asserts that NullPointerException is thrown if a bin format is constructed and bytes parameter is null
+     * 
+     * @spec DmtData.DmtData(byte[])
+     */
+    private void testDmtDataExceptions003() {
+        try {       
+            tbc.log("#testDmtDataExceptions003");
+            new DmtData((byte[])null);
+            tbc.failException("", NullPointerException.class);
+        } catch (NullPointerException e) {
+            tbc.pass("Asserts that NullPointerException is thrown if a bin format is constructed and bytes parameter is null");
+        } catch (Exception e) {
+            tbc.fail("Unexpected Exception: " + e.getClass().getName()
+                    + " [Message: " + e.getMessage() + "]");
+        }
+    }
+    
+    /**
+     * Asserts that NullPointerException is thrown if a base64 format is constructed and bytes parameter is null
+     * 
+     * @spec DmtData.DmtData(byte[],boolean)
+     */
+    private void testDmtDataExceptions004() {
+        try {       
+            tbc.log("#testDmtDataExceptions004");
+            new DmtData((byte[])null,true);
+            tbc.failException("", NullPointerException.class);
+        } catch (NullPointerException e) {
+            tbc.pass("Asserts that NullPointerException is thrown if a base64 format is constructed and bytes parameter is null");
+        } catch (Exception e) {
+            tbc.fail("Unexpected Exception: " + e.getClass().getName()
+                    + " [Message: " + e.getMessage() + "]");
+        }
+    }
 	/**
 	 * Asserts that IllegalStateException is thrown when an incorrect DmtData is gotten (for all cases)
 	 * 
 	 * @spec 117.12.5 DmtData
 	 */
-	private void testDmtDataExceptions001() {
+	private void testDmtDataExceptions005() {
 		try {		
-			tbc.log("#testDmtDataExceptions001");
+			tbc.log("#testDmtDataExceptions005");
 			//A DmtData instance can not have FORMAT_NODE, so it is from FORMAT_INTEGER (1) to FORMAT_NULL(512). 
 			for (int i=1;i<=512;i=i<<1){
 				//FORMAT_NULL doesnt have a get associated, so it is from FORMAT_INTEGER (1) to FORMAT_XML(256).
@@ -99,9 +173,9 @@ public class TestDmtDataExceptions {
 	 * 
 	 * @spec DmtData.DmtData(String,int)
 	 */
-	private void testDmtDataExceptions002() {
+	private void testDmtDataExceptions006() {
 		try {		
-			tbc.log("#testDmtDataExceptions002");
+			tbc.log("#testDmtDataExceptions006");
 			
 			int[] invalidStringFormats =  new int[] {
 					org.osgi.service.dmt.DmtData.FORMAT_BASE64,
@@ -130,9 +204,9 @@ public class TestDmtDataExceptions {
 	 * 
 	 * @spec DmtData.DmtData(String,int)
 	 */
-	private void testDmtDataExceptions003() {
+	private void testDmtDataExceptions007() {
 		try {		
-			tbc.log("#testDmtDataExceptions003");
+			tbc.log("#testDmtDataExceptions007");
 			
 			String[] invalidTimes =  new String[] {
 			    	"12000", //Less than 6 digits
@@ -161,9 +235,9 @@ public class TestDmtDataExceptions {
 	 * 
 	 * @spec DmtData.DmtData(String,int)
 	 */
-	private void testDmtDataExceptions004() {
+	private void testDmtDataExceptions008() {
 		try {		
-			tbc.log("#testDmtDataExceptions004");
+			tbc.log("#testDmtDataExceptions008");
 			
 			String[] validTimes =  new String[] {
 			    	"000000",
@@ -189,9 +263,9 @@ public class TestDmtDataExceptions {
 	 * 
 	 * @spec DmtData.DmtData(String,int)
 	 */
-	private void testDmtDataExceptions005() {
+	private void testDmtDataExceptions009() {
 		try {		
-			tbc.log("#testDmtDataExceptions005");
+			tbc.log("#testDmtDataExceptions009");
 			
 			String[] invalidDates =  new String[] {
 					"2005010", //Less than 8 digits
@@ -222,9 +296,9 @@ public class TestDmtDataExceptions {
 	 * 
 	 * @spec DmtData.DmtData(String,int)
 	 */
-	private void testDmtDataExceptions006() {
+	private void testDmtDataExceptions010() {
 		try {		
-			tbc.log("#testDmtDataExceptions006");
+			tbc.log("#testDmtDataExceptions010");
 			
 			String[] validDates =  new String[] {
 					"20050131", 

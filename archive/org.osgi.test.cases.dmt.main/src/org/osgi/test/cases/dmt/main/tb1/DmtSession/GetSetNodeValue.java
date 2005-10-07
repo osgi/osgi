@@ -50,6 +50,7 @@ import org.osgi.test.cases.dmt.main.tbc.DmtConstants;
 import org.osgi.test.cases.dmt.main.tbc.DmtTestControl;
 import org.osgi.test.cases.dmt.main.tbc.TestInterface;
 import org.osgi.test.cases.dmt.main.tbc.Plugin.ExecPlugin.TestExecPluginActivator;
+import org.osgi.test.cases.dmt.main.tbc.Plugin.NonAtomic.TestNonAtomicPluginActivator;
 import org.osgi.test.cases.dmt.main.tbc.Plugin.ReadOnly.TestReadOnlyPluginActivator;
 
 /**
@@ -60,7 +61,9 @@ import org.osgi.test.cases.dmt.main.tbc.Plugin.ReadOnly.TestReadOnlyPluginActiva
  */
 public class GetSetNodeValue implements TestInterface {
 	private DmtTestControl tbc;
-
+	
+	private final DmtData dmtData = new DmtData(10);
+	
 	public GetSetNodeValue(DmtTestControl tbc) {
 		this.tbc = tbc;
 	}
@@ -80,6 +83,11 @@ public class GetSetNodeValue implements TestInterface {
 		testGetSetNodeValue011();
 		testGetSetNodeValue012();
         testGetSetNodeValue013();
+        testGetSetNodeValue014();
+		testGetSetNodeValue015();
+		testGetSetNodeValue016();
+		testGetSetNodeValue017();
+		testGetSetNodeValue018();
 	}
     
     private void prepare() {
@@ -96,8 +104,7 @@ public class GetSetNodeValue implements TestInterface {
 		try {
 			tbc.log("#testGetSetNodeValue001");
 			session = tbc.getDmtAdmin().getSession(".",DmtSession.LOCK_TYPE_EXCLUSIVE);
-			session.setNodeValue(TestExecPluginActivator.INEXISTENT_NODE,
-					new DmtData("value"));
+			session.setNodeValue(TestExecPluginActivator.INEXISTENT_NODE,dmtData);
 			tbc.failException("#", DmtException.class);
 		} catch (DmtException e) {
 			tbc.assertEquals(
@@ -146,7 +153,7 @@ public class GetSetNodeValue implements TestInterface {
 		try {
 			tbc.log("#testGetSetNodeValue003");
 			session = tbc.getDmtAdmin().getSession(".",DmtSession.LOCK_TYPE_EXCLUSIVE);
-			session.setNodeValue(TestExecPluginActivator.INTERIOR_NODE, new DmtData("value"));
+			session.setNodeValue(TestExecPluginActivator.INTERIOR_NODE, dmtData);
 			tbc.failException("#", DmtException.class);
 		} catch (DmtException e) {
 			tbc.assertEquals(
@@ -160,7 +167,7 @@ public class GetSetNodeValue implements TestInterface {
 		}
 	}
 	/**
-	 * This method asserts that DmtException.NODE_NOT_FOUND is thrown
+	 * This method asserts that DmtException.COMMAND_NOT_ALLOWED is thrown
 	 * if nodeUri is not a leaf node 
 	 * 
 	 * @spec DmtSession.getNodeValue(String)
@@ -222,7 +229,7 @@ public class GetSetNodeValue implements TestInterface {
             tbc.openSessionAndSetNodeAcl(TestExecPluginActivator.LEAF_NODE, DmtConstants.PRINCIPAL, Acl.REPLACE );
 			tbc.setPermissions(new PermissionInfo(DmtPrincipalPermission.class.getName(),DmtConstants.PRINCIPAL,"*"));
 			session = tbc.getDmtAdmin().getSession(DmtConstants.PRINCIPAL,TestExecPluginActivator.LEAF_NODE,DmtSession.LOCK_TYPE_ATOMIC);
-			session.setNodeValue(TestExecPluginActivator.LEAF_NODE,new DmtData("a"));
+			session.setNodeValue(TestExecPluginActivator.LEAF_NODE,dmtData);
 			tbc.pass("setNodeValue correctly executed");
 		} catch (Exception e) {
 			tbc.fail("Unexpected Exception: " + e.getClass().getName() + " [Message: " + e.getMessage() +"]");
@@ -244,7 +251,7 @@ public class GetSetNodeValue implements TestInterface {
 			tbc.setPermissions(new PermissionInfo(DmtPermission.class.getName(),DmtConstants.ALL_NODES,DmtPermission.REPLACE));
 			session = tbc.getDmtAdmin().getSession(DmtConstants.OSGi_ROOT,
 					DmtSession.LOCK_TYPE_ATOMIC);
-			session.setNodeValue(TestExecPluginActivator.LEAF_NODE, new DmtData(10));
+			session.setNodeValue(TestExecPluginActivator.LEAF_NODE, dmtData);
 			tbc.pass("setNodeValue correctly executed");
 		} catch (Exception e) {
 			tbc.fail("Unexpected Exception: " + e.getClass().getName() + " [Message: " + e.getMessage() +"]");
@@ -315,7 +322,7 @@ public class GetSetNodeValue implements TestInterface {
 			session = tbc.getDmtAdmin().getSession(
 					TestExecPluginActivator.ROOT, DmtSession.LOCK_TYPE_ATOMIC);
 
-			session.setNodeValue(TestExecPluginActivator.LEAF_RELATIVE, new DmtData("a"));
+			session.setNodeValue(TestExecPluginActivator.LEAF_RELATIVE, dmtData);
 
 			tbc.pass("A relative URI can be used with setNodeValue.");
 		} catch (Exception e) {
@@ -340,7 +347,7 @@ public class GetSetNodeValue implements TestInterface {
 			tbc.log("#testGetSetNodeValue011");
 			session = tbc.getDmtAdmin().getSession(
 				TestExecPluginActivator.ROOT, DmtSession.LOCK_TYPE_SHARED);
-			session.setNodeValue(TestExecPluginActivator.LEAF_RELATIVE, new DmtData("a"));
+			session.setNodeValue(TestExecPluginActivator.LEAF_RELATIVE, dmtData);
 			tbc.failException("", IllegalStateException.class);
 		} catch (IllegalStateException e) {
 			tbc.pass("IllegalStateException correctly thrown");
@@ -351,41 +358,17 @@ public class GetSetNodeValue implements TestInterface {
 			tbc.closeSession(session);
 		}
 	}
-	/**
-	 * This method asserts that DmtException.TRANSACTION_ERROR is thrown when this method is called
-	 * in a plugin that does not support atomic transactions and the session is LOCK_TYPE_ATOMIC
-	 * 
-	 * @spec DmtSession.setNodeValue(String,DmtData)
-	 */
-	private void testGetSetNodeValue012() {
-		DmtSession session = null;
-		try {
-			tbc.log("#testGetSetNodeValue012");
-			session = tbc.getDmtAdmin().getSession(TestReadOnlyPluginActivator.ROOT,
-			    DmtSession.LOCK_TYPE_ATOMIC);
-			
-			session.setNodeValue(TestReadOnlyPluginActivator.LEAF_NODE,new DmtData(10));
-			tbc.failException("", DmtException.class);
-		} catch (DmtException e) {
-			tbc.assertEquals("Asserting that DmtException code is TRANSACTION_ERROR",
-					DmtException.TRANSACTION_ERROR, e.getCode());
-		} catch (Exception e) {
-			tbc.fail("Expected " + DmtException.class.getName() + " but was "
-					+ e.getClass().getName());
-		} finally {
-			tbc.closeSession(session);
-		}
-	}
+
     
     /**
      * This method asserts that getNodeValue does not return 'null', even if the plugin does that 
      * 
      * @spec DmtSession.getNodeValue(String)
      */
-    private void testGetSetNodeValue013() {
+    private void testGetSetNodeValue012() {
         DmtSession session = null;
         try {
-            tbc.log("#testGetSetNodeValue013");
+            tbc.log("#testGetSetNodeValue012");
             
             session = tbc.getDmtAdmin().getSession(
                     TestExecPluginActivator.ROOT, DmtSession.LOCK_TYPE_ATOMIC);
@@ -400,4 +383,153 @@ public class GetSetNodeValue implements TestInterface {
             tbc.closeSession(session);
         }
     }
+	/**
+	 * This method asserts that DmtException.COMMAND_NOT_ALLOWED is thrown 
+	 * if the session is non-atomic (in this case, LOCK_TYPE_SHARED) and the plugin is read-only
+	 *
+	 * @spec DmtSession.setNodeValue(String,DmtData)
+	 */
+    private void testGetSetNodeValue013() {
+        DmtSession session = null;
+        try {
+            tbc.log("#testGetSetNodeValue013");
+			session = tbc.getDmtAdmin().getSession(".",DmtSession.LOCK_TYPE_SHARED);
+			session.setNodeValue(TestReadOnlyPluginActivator.LEAF_NODE,dmtData);
+			tbc.failException("#", DmtException.class);
+		} catch (DmtException e) {
+			tbc.assertEquals(
+					"Asserting that DmtException code is COMMAND_NOT_ALLOWED",
+					DmtException.COMMAND_NOT_ALLOWED, e.getCode());
+		} catch (Exception e) {
+			tbc.fail("Expected " + DmtException.class.getName() + " but was "
+					+ e.getClass().getName());
+		} finally {
+			tbc.closeSession(session);
+		}
+	}
+	/**
+	 * This method asserts that DmtException.COMMAND_NOT_ALLOWED is thrown 
+	 * if the session is non-atomic (in this case, LOCK_TYPE_EXCLUSIVE) and the plugin is read-only
+	 *
+	 * @spec DmtSession.setNodeValue(String,DmtData)
+	 */
+    private void testGetSetNodeValue014() {
+        DmtSession session = null;
+        try {
+            tbc.log("#testGetSetNodeValue014");
+			session = tbc.getDmtAdmin().getSession(".",DmtSession.LOCK_TYPE_EXCLUSIVE);
+			session.setNodeValue(TestReadOnlyPluginActivator.LEAF_NODE,dmtData);
+			tbc.failException("#", DmtException.class);
+		} catch (DmtException e) {
+			tbc.assertEquals(
+					"Asserting that DmtException code is COMMAND_NOT_ALLOWED",
+					DmtException.COMMAND_NOT_ALLOWED, e.getCode());
+		} catch (Exception e) {
+			tbc.fail("Expected " + DmtException.class.getName() + " but was "
+					+ e.getClass().getName());
+		} finally {
+			tbc.closeSession(session);
+		}
+	}
+	/**
+	 * This method asserts that DmtException.COMMAND_NOT_ALLOWED is thrown 
+	 * if the session is non-atomic (in this case, LOCK_TYPE_SHARED) and the plugin 
+	 * does not support non-atomic writing
+	 *
+	 * @spec DmtSession.setNodeValue(String,DmtData)
+	 */
+    private void testGetSetNodeValue015() {
+        DmtSession session = null;
+        try {
+            tbc.log("#testGetSetNodeValue015");
+			session = tbc.getDmtAdmin().getSession(".",DmtSession.LOCK_TYPE_SHARED);
+			session.setNodeValue(TestNonAtomicPluginActivator.LEAF_NODE,dmtData);
+			tbc.failException("#", DmtException.class);
+		} catch (DmtException e) {
+			tbc.assertEquals(
+					"Asserting that DmtException code is COMMAND_NOT_ALLOWED",
+					DmtException.COMMAND_NOT_ALLOWED, e.getCode());
+		} catch (Exception e) {
+			tbc.fail("Expected " + DmtException.class.getName() + " but was "
+					+ e.getClass().getName());
+		} finally {
+			tbc.closeSession(session);
+		}
+	}
+	/**
+	 * This method asserts that DmtException.COMMAND_NOT_ALLOWED is thrown 
+	 * if the session is non-atomic (in this case, LOCK_TYPE_EXCLUSIVE) and the plugin 
+	 * does not support non-atomic writing
+	 *
+	 * @spec DmtSession.setNodeValue(String,DmtData)
+	 */
+    private void testGetSetNodeValue016() {
+        DmtSession session = null;
+        try {
+            tbc.log("#testGetSetNodeValue016");
+			session = tbc.getDmtAdmin().getSession(".",DmtSession.LOCK_TYPE_EXCLUSIVE);
+			session.setNodeValue(TestNonAtomicPluginActivator.LEAF_NODE,dmtData);
+			tbc.failException("#", DmtException.class);
+		} catch (DmtException e) {
+			tbc.assertEquals(
+					"Asserting that DmtException code is COMMAND_NOT_ALLOWED",
+					DmtException.COMMAND_NOT_ALLOWED, e.getCode());
+		} catch (Exception e) {
+			tbc.fail("Expected " + DmtException.class.getName() + " but was "
+					+ e.getClass().getName());
+		} finally {
+			tbc.closeSession(session);
+		}
+	}
+    /**
+     * This method asserts that DmtException.TRANSACTION_ERROR is thrown 
+     * if the session is atomic and the plugin is read-only 
+     * 
+     * @spec DmtSession.setNodeValue(String,DmtData)
+     */
+    private void testGetSetNodeValue017() {
+        DmtSession session = null;
+        try {
+            tbc.log("#testGetSetNodeValue017");
+            session = tbc.getDmtAdmin().getSession(".",
+                DmtSession.LOCK_TYPE_ATOMIC);
+            
+            session.setNodeValue(TestReadOnlyPluginActivator.LEAF_NODE,dmtData);
+            tbc.failException("", DmtException.class);
+        } catch (DmtException e) {
+            tbc.assertEquals("Asserting that DmtException code is TRANSACTION_ERROR",
+                    DmtException.TRANSACTION_ERROR, e.getCode());
+        } catch (Exception e) {
+            tbc.fail("Expected " + DmtException.class.getName() + " but was "
+                    + e.getClass().getName());
+        } finally {
+            tbc.closeSession(session);
+        }
+    }
+    /**
+     * This method asserts that DmtException.TRANSACTION_ERROR is thrown 
+     * if the session is atomic and the plugin does not support non-atomic writing
+     * 
+     * @spec DmtSession.setNodeValue(String,DmtData)
+     */
+    private void testGetSetNodeValue018() {
+        DmtSession session = null;
+        try {
+            tbc.log("#testGetSetNodeValue018");
+            session = tbc.getDmtAdmin().getSession(".",
+                DmtSession.LOCK_TYPE_ATOMIC);
+            
+            session.setNodeValue(TestNonAtomicPluginActivator.LEAF_NODE,dmtData);
+            tbc.failException("", DmtException.class);
+        } catch (DmtException e) {
+            tbc.assertEquals("Asserting that DmtException code is TRANSACTION_ERROR",
+                    DmtException.TRANSACTION_ERROR, e.getCode());
+        } catch (Exception e) {
+            tbc.fail("Expected " + DmtException.class.getName() + " but was "
+                    + e.getClass().getName());
+        } finally {
+            tbc.closeSession(session);
+        }
+    }
+    
 }
