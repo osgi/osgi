@@ -21,7 +21,6 @@ import java.security.AccessController;
 import java.security.PrivilegedActionException;
 import java.security.PrivilegedExceptionAction;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Vector;
@@ -91,8 +90,8 @@ public class Transaction {
     public synchronized void commit() throws DeploymentException {
         // prepare !
         try {
-	        for (Iterator iter = steps.iterator(); iter.hasNext();) {
-	            TransactionRecord element = (TransactionRecord) iter.next();
+	        for (ListIterator iter = steps.listIterator(steps.size()); iter.hasPrevious();) {
+	            TransactionRecord element = (TransactionRecord) iter.previous();
 	            if (element.code == PROCESSOR) {
 	                element.rp.prepare();
 	                logger.log(Logger.LOG_INFO, "Prepare " + element);

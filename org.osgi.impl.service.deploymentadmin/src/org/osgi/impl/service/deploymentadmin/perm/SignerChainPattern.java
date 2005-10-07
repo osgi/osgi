@@ -41,6 +41,7 @@ import java.util.Vector;
 
 import org.osgi.impl.service.deploymentadmin.DAConstants;
 import org.osgi.impl.service.deploymentadmin.Splitter;
+import org.osgi.service.deploymentadmin.DeploymentException;
 
 
 class SignerChainPattern {
@@ -167,12 +168,41 @@ class SignerChainPattern {
                     int ioe = rdnsArr[i].indexOf("=");
                     String key = rdnsArr[i].substring(0, ioe).trim();
                     String value = rdnsArr[i].substring(ioe + 1).trim();
+                    checkRdnKey(key);
+                    checkRdnValue(value);
                     v.add(new String[] {key, value});
                 }
             }
             return v;
         }
         
+        // TODO
+        private void checkRdnValue(String value) {
+            for (int i = 0; i < value.length(); i++) {
+                char ch = value.charAt(i);
+                if (ch == '"' ||
+                    ch == '\\')
+                    throw new IllegalArgumentException("'" + ch + "' character is not allowed " +
+                            "in this position");
+            }
+        }
+
+        private void checkRdnKey(String key) {
+            for (int i = 0; i < key.length(); i++) {
+                char ch = key.charAt(i);
+                if (ch >= 'a' && ch <= 'z')
+                    continue;
+                if (ch >= 'A' && ch <= 'Z')
+                    continue;
+                if (ch >= '0' && ch <= '9')
+                    continue;
+                if (ch == '-' || ch == '.')
+                    continue;
+                throw new IllegalArgumentException("'" + ch + "' character is not allowed " +
+                        "in this position");
+            }
+        }
+
         public boolean match(String signer) {
             Vector v = createRdns(signer);
             boolean skip = false;

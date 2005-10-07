@@ -24,9 +24,11 @@ import java.security.PrivilegedAction;
 import java.security.PrivilegedActionException;
 import java.security.PrivilegedExceptionAction;
 
+import org.osgi.framework.ServiceReference;
 import org.osgi.service.deploymentadmin.DeploymentException;
 import org.osgi.service.deploymentadmin.DeploymentSession;
 import org.osgi.service.deploymentadmin.ResourceProcessor;
+import org.osgi.util.tracker.ServiceTracker;
 
 /*
  * The Deployment Admin service must execute all its operations, including calls 
@@ -39,22 +41,50 @@ import org.osgi.service.deploymentadmin.ResourceProcessor;
 public class WrappedResourceProcessor implements ResourceProcessor {
     
     // the wrapped processor
-    private final ResourceProcessor    rp;
+    private final ServiceReference     rpRef;
     // the context of the calls
     private final AccessControlContext ctx;
+    // tracks RPs
+    private ServiceTracker rpTracker;
+    // id
+    private final String id;
 
-    public WrappedResourceProcessor(ResourceProcessor rp, AccessControlContext ctx) {
-        this.rp = rp;
+    public WrappedResourceProcessor(ServiceReference rpRef, AccessControlContext ctx,
+            ServiceTracker rpTracker) {
+        this.rpRef = rpRef;
         this.ctx = ctx;
+        this.rpTracker = rpTracker;
+        this.id = "" + System.currentTimeMillis() + "_" + rpRef;
+    }
+    
+    public boolean equals(Object o) {
+        if (o == null)
+            return false;
+        if (!(o instanceof WrappedResourceProcessor))
+            return false;
+        WrappedResourceProcessor other = (WrappedResourceProcessor) o;
+        return id == other.id;
+    }
+    
+    public int hashCode() {
+        return id.hashCode();
+    }
+    
+    public String toString() {
+        return "WRP id: " + id;
+    }
+    
+    private ResourceProcessor getRp() {
+        return (ResourceProcessor) rpTracker.getService(rpRef);
     }
 
     public void begin(final DeploymentSession session) {
         if (null == ctx)
-            rp.begin(session);
+            getRp().begin(session);
         else {
             AccessController.doPrivileged(new PrivilegedAction() {
                     public Object run() {
-                        rp.begin(session);
+                        getRp().begin(session);
                         return null;
                     }
                 }, ctx);
@@ -63,12 +93,12 @@ public class WrappedResourceProcessor implements ResourceProcessor {
 
     public void process(final String name, final InputStream stream) throws DeploymentException {
         if (null == ctx)
-            rp.process(name, stream);
+            getRp().process(name, stream);
         else {
             try {
                 AccessController.doPrivileged(new PrivilegedExceptionAction() {
 	                    public Object run() throws DeploymentException {
-                        	rp.process(name, stream);
+                        	getRp().process(name, stream);
 	                        return null;
 	                    }
                     }, ctx);
@@ -81,12 +111,12 @@ public class WrappedResourceProcessor implements ResourceProcessor {
 
     public void dropped(final String name) throws DeploymentException {
         if (null == ctx)
-            rp.dropped(name);
+            getRp().dropped(name);
         else {
             try {
                 AccessController.doPrivileged(new PrivilegedExceptionAction() {
 	                    public Object run() throws DeploymentException {
-                        	rp.dropped(name);
+                        	getRp().dropped(name);
 	                        return null;
 	                    }
                     }, ctx);
@@ -99,12 +129,12 @@ public class WrappedResourceProcessor implements ResourceProcessor {
 
     public void dropAllResources() throws DeploymentException {
         if (null == ctx)
-            rp.dropAllResources();
+            getRp().dropAllResources();
         else {
             try {
                 AccessController.doPrivileged(new PrivilegedExceptionAction() {
 	                    public Object run() throws DeploymentException {
-                        	rp.dropAllResources();
+                        	getRp().dropAllResources();
 	                        return null;
 	                    }
                     }, ctx);
@@ -117,12 +147,12 @@ public class WrappedResourceProcessor implements ResourceProcessor {
 
     public void prepare() throws DeploymentException {
         if (null == ctx)
-            rp.prepare();
+            getRp().prepare();
         else {
             try {
                 AccessController.doPrivileged(new PrivilegedExceptionAction() {
 	                    public Object run() throws DeploymentException {
-                        	rp.prepare();
+                        	getRp().prepare();
 	                        return null;
 	                    }
                     }, ctx);
@@ -135,11 +165,11 @@ public class WrappedResourceProcessor implements ResourceProcessor {
 
     public void commit() {
         if (null == ctx)
-            rp.commit();
+            getRp().commit();
         else {
             AccessController.doPrivileged(new PrivilegedAction() {
                     public Object run() {
-                        rp.commit();
+                        getRp().commit();
                         return null;
                     }
                 }, ctx);
@@ -148,11 +178,11 @@ public class WrappedResourceProcessor implements ResourceProcessor {
 
     public void rollback() {
         if (null == ctx)
-            rp.rollback();
+            getRp().rollback();
         else {
             AccessController.doPrivileged(new PrivilegedAction() {
                     public Object run() {
-                        rp.rollback();
+                        getRp().rollback();
                         return null;
                     }
                 }, ctx);
@@ -161,11 +191,11 @@ public class WrappedResourceProcessor implements ResourceProcessor {
 
     public void cancel() {
         if (null == ctx)
-            rp.cancel();
+            getRp().cancel();
         else {
             AccessController.doPrivileged(new PrivilegedAction() {
                     public Object run() {
-                        rp.cancel();
+                        getRp().cancel();
                         return null;
                     }
                 }, ctx);

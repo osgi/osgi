@@ -52,23 +52,13 @@ public class DeploymentSessionImpl implements DeploymentSession {
     private DeploymentPackageImpl       srcDp;
     private DeploymentPackageImpl       targetDp;
     private Transaction                 transaction;
-    private TrackerRp                   trackRp;
+    private ServiceTracker              trackRp;
     private TrackerPerm                 trackPerm;
     private TrackerCondPerm             trackCondPerm;
     private TrackerPackageAdmin         trackPackAdmin;
     private boolean                     forced;
     
     DeploymentPackageJarInputStream.Entry actEntry;
-    
-    /*
-     * Class to track resource processors
-     */
-    private class TrackerRp extends ServiceTracker {
-        public TrackerRp() {
-            super(DeploymentSessionImpl.this.sessionCtx.getBundleContext(), 
-                    ResourceProcessor.class.getName(), null);
-        }
-    }
     
     /*
      * Class to track policy admin
@@ -107,7 +97,8 @@ public class DeploymentSessionImpl implements DeploymentSession {
         this.srcDp = srcDp;
         this.targetDp = targetDp;
         this.sessionCtx = sessionCtx;
-        trackRp = new TrackerRp();
+        trackRp = new ServiceTracker(sessionCtx.getBundleContext(), 
+                ResourceProcessor.class.getName(), null);
         trackPerm = new TrackerPerm();
         trackCondPerm = new TrackerCondPerm();
         trackPackAdmin = new TrackerPackageAdmin();
@@ -516,13 +507,13 @@ public class DeploymentSessionImpl implements DeploymentSession {
 	            if (null == pid)
 	                continue;
 	            
-	            ResourceProcessor proc = findProcessor(pid);
-	            if (null == proc)
+	            ServiceReference rpRef = findProcessor(pid);
+	            if (null == rpRef)
 	                throw new DeploymentException(DeploymentException.CODE_PROCESSOR_NOT_FOUND, 
 	                    "Resource processor for pid " + pid + " is not found");
 	            
-	            WrappedResourceProcessor wProc = new WrappedResourceProcessor(proc, 
-	                fetchAccessControlContext(re.getCertChains()));
+	            WrappedResourceProcessor wProc = new WrappedResourceProcessor(rpRef, 
+	                fetchAccessControlContext(re.getCertChains()), trackRp);
                         
 	            // each processor is called only once
 	            if (!procs.contains(pid)) {
@@ -579,12 +570,12 @@ public class DeploymentSessionImpl implements DeploymentSession {
      */
     private void dropResource(ResourceEntry re) throws DeploymentException {
         String pid = re.getValue(DAConstants.RP_PID);
-        ResourceProcessor proc = findProcessor(pid);
-        if (null == proc)
+        ServiceReference rpRef = findProcessor(pid);
+        if (null == rpRef)
             throw new DeploymentException(DeploymentException.CODE_PROCESSOR_NOT_FOUND,
                 "Resource processor for pid " + pid + "is not found");
         WrappedResourceProcessor wProc = new WrappedResourceProcessor(
-                proc, fetchAccessControlContext(re.getCertChains()));
+                rpRef, fetchAccessControlContext(re.getCertChains()), trackRp);
         transaction.addRecord(new TransactionRecord(Transaction.PROCESSOR, wProc));
         wProc.dropped(re.getResName());
     }
@@ -604,7 +595,7 @@ public class DeploymentSessionImpl implements DeploymentSession {
     /*
      * Finds a Resource processor to the given PID
      */
-    private ResourceProcessor findProcessor(String pid) {
+    private ServiceReference findProcessor(String pid) {
         ServiceReference[] refs = (ServiceReference[]) AccessController
                 .doPrivileged(new PrivilegedAction() {
                     public Object run() {
@@ -617,7 +608,7 @@ public class DeploymentSessionImpl implements DeploymentSession {
             ServiceReference ref = refs[i];
             String s_pid = (String) ref.getProperty(Constants.SERVICE_PID);
             if (pid.equals(s_pid))
-                return (ResourceProcessor) trackRp.getService(ref);
+                return ref;
         }
         return null;
     }
@@ -664,13 +655,13 @@ public class DeploymentSessionImpl implements DeploymentSession {
             throw new DeploymentException(DeploymentException.CODE_FOREIGN_CUSTOMIZER,
                     "PID '" + pid + "' belongs to another DP (" + dp + ")");
             
-        ResourceProcessor proc = findProcessor(pid);
-        if (null == proc)
+        ServiceReference rpRef = findProcessor(pid);
+        if (null == rpRef)
             throw new DeploymentException(DeploymentException.CODE_PROCESSOR_NOT_FOUND, 
                     "Resource processor (PID=" + pid + ") for '" + entry.getName() +
                     "' is not found.");
-        WrappedResourceProcessor wrProc = new WrappedResourceProcessor(
-                proc, fetchAccessControlContext(entry.getCertificateChainStringArrays()));
+        WrappedResourceProcessor wrProc = new WrappedResourceProcessor(rpRef, 
+                fetchAccessControlContext(entry.getCertificateChainStringArrays()), trackRp);
         transaction.addRecord(new TransactionRecord(Transaction.PROCESSOR, wrProc));
         wrProc.process(entry.getName(), entry.getInputStream());
         if (INSTALL == getDeploymentAction())

@@ -61,25 +61,7 @@ public class TransactionRecord {
         		"code:               " + Transaction.transactionCodes[code] + "\n" +
         		"resource processor: " + rp + "\n" +
         		"bundle:             " + bundle + "\n" +
-        		"----------------------------------------------------]";
+        		"----------------------------------------------------]\n";
     }
-
-//    private String breakLines(String str, int max) {
-//        String s = new String(str);
-//        Vector v = new Vector();
-//        while (s.length() > max) {
-//            String l = s.substring(0, Math.min(s.length(), max));
-//            v.add(l);
-//            s = s.substring(Math.min(s.length(), max));
-//        }
-//        v.add(s);
-//        
-//        StringBuffer ret = new StringBuffer();
-//        for (Iterator iter = v.iterator(); iter.hasNext();) {
-//            String element = (String) iter.next();
-//            ret.append(element);
-//        }
-//        return ret.toString();
-//    }
 
 }
