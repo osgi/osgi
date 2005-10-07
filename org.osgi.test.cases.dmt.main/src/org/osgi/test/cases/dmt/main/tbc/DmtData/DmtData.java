@@ -453,7 +453,7 @@ public class DmtData {
 
 			tbc.assertEquals("Asserting the size", 0, data.getSize());
 			
-			tbc.assertEquals("Asserting the string returned", "",data.toString());
+			tbc.assertNull("Asserting the string returned", data.toString());
 			
 		} catch(Exception e) {
 			tbc.fail("Unexpected Exception: " + e.getClass().getName()

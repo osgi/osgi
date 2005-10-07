@@ -49,6 +49,7 @@ import org.osgi.test.cases.dmt.main.tbc.DmtConstants;
 import org.osgi.test.cases.dmt.main.tbc.DmtTestControl;
 import org.osgi.test.cases.dmt.main.tbc.TestInterface;
 import org.osgi.test.cases.dmt.main.tbc.Plugin.ExecPlugin.TestExecPluginActivator;
+import org.osgi.test.cases.dmt.main.tbc.Plugin.NonAtomic.TestNonAtomicPluginActivator;
 import org.osgi.test.cases.dmt.main.tbc.Plugin.ReadOnly.TestReadOnlyPluginActivator;
 
 /**
@@ -72,6 +73,10 @@ public class DeleteNode implements TestInterface {
 		testDeleteNode006();
 		testDeleteNode007();
 		testDeleteNode008();
+		testDeleteNode009();
+		testDeleteNode010();
+		testDeleteNode011();
+		testDeleteNode012();
 	}
     private void prepare() {
         tbc.setPermissions(new PermissionInfo(DmtPermission.class.getName(), DmtConstants.ALL_NODES,DmtConstants.ALL_ACTIONS));
@@ -104,31 +109,7 @@ public class DeleteNode implements TestInterface {
 		}
 	}
 
-	/**
-	 * This method asserts that DmtException.TRANSACTION_ERROR is thrown when this method is called
-	 * in a plugin that does not support atomic transactions and the session is LOCK_TYPE_ATOMIC
-	 * 
-	 * @spec DmtSession.deleteNode(String)
-	 */
-	private void testDeleteNode002() {
-		DmtSession session = null;
-		try {
-			tbc.log("#testDeleteNode002");
-			session = tbc.getDmtAdmin().getSession(TestReadOnlyPluginActivator.ROOT,
-			    DmtSession.LOCK_TYPE_ATOMIC);
-			
-			session.deleteNode(TestReadOnlyPluginActivator.INTERIOR_NODE);
-			tbc.failException("", DmtException.class);
-		} catch (DmtException e) {
-			tbc.assertEquals("Asserting that DmtException code is TRANSACTION_ERROR",
-					DmtException.TRANSACTION_ERROR, e.getCode());
-		} catch (Exception e) {
-			tbc.fail("Expected " + DmtException.class.getName() + " but was "
-					+ e.getClass().getName());
-		} finally {
-			tbc.closeSession(session);
-		}
-	}
+
 
 	/**
 	 * This method asserts if IllegalStateException is thrown if this method is called 
@@ -136,10 +117,10 @@ public class DeleteNode implements TestInterface {
 	 * 
 	 * @spec DmtSession.deleteNode(String)
 	 */
-	private void testDeleteNode003() {
+	private void testDeleteNode002() {
 		DmtSession session = null;
 		try {
-			tbc.log("#testDeleteNode003");
+			tbc.log("#testDeleteNode002");
 			session = tbc.getDmtAdmin().getSession(".",DmtSession.LOCK_TYPE_SHARED);
 			session.deleteNode(TestExecPluginActivator.INTERIOR_NODE);
 			tbc.failException("", IllegalStateException.class);
@@ -157,10 +138,10 @@ public class DeleteNode implements TestInterface {
 	 * 
 	 * @spec DmtSession.deleteNode(String)
 	 */
-	private void testDeleteNode004() {
+	private void testDeleteNode003() {
 		DmtSession session = null;
 		try {
-			tbc.log("#testDeleteNode004");
+			tbc.log("#testDeleteNode003");
             tbc.openSessionAndSetNodeAcl(TestExecPluginActivator.INTERIOR_NODE, DmtConstants.PRINCIPAL, Acl.DELETE );
 			tbc.setPermissions(new PermissionInfo(DmtPrincipalPermission.class.getName(),DmtConstants.PRINCIPAL,"*"));
 			session = tbc.getDmtAdmin().getSession(DmtConstants.PRINCIPAL, TestExecPluginActivator.INTERIOR_NODE,
@@ -183,10 +164,10 @@ public class DeleteNode implements TestInterface {
 	 * 
 	 * @spec DmtSession.deleteNode(String)
 	 */
-	private void testDeleteNode005() {
+	private void testDeleteNode004() {
 		DmtSession session = null;
 		try {
-			tbc.log("#testDeleteNode005");
+			tbc.log("#testDeleteNode004");
             tbc.setPermissions(new PermissionInfo(DmtPermission.class.getName(), DmtConstants.ALL_NODES,DmtPermission.DELETE));
 			session = tbc.getDmtAdmin().getSession(TestExecPluginActivator.ROOT,
 					DmtSession.LOCK_TYPE_EXCLUSIVE);
@@ -211,10 +192,10 @@ public class DeleteNode implements TestInterface {
 	 * @spec DmtSession.deleteNode(String)
 	 * 
 	 */
-	private void testDeleteNode006() {
+	private void testDeleteNode005() {
 		DmtSession session = null;
 		try {
-			tbc.log("#testDeleteNode006");
+			tbc.log("#testDeleteNode005");
 			session = tbc.getDmtAdmin().getSession(
 					TestExecPluginActivator.ROOT, DmtSession.LOCK_TYPE_ATOMIC);
 
@@ -237,12 +218,12 @@ public class DeleteNode implements TestInterface {
 	 * 
 	 * @spec DmtSession.deleteNode(String)
 	 */
-	private void testDeleteNode007() {
+	private void testDeleteNode006() {
 		DmtSession session = null;
-		tbc.log("#testDeleteNode007");
+		tbc.log("#testDeleteNode006");
 		try {
-			session = tbc.getDmtAdmin().getSession(TestExecPluginActivator.ROOT,DmtSession.LOCK_TYPE_EXCLUSIVE);
-			session.deleteNode(TestExecPluginActivator.ROOT);
+			session = tbc.getDmtAdmin().getSession(".",DmtSession.LOCK_TYPE_EXCLUSIVE);
+			session.deleteNode(".");
 			tbc.failException("", DmtException.class);
 		} catch (DmtException e) {
 			tbc.assertEquals(
@@ -256,17 +237,18 @@ public class DeleteNode implements TestInterface {
 		}
 	}
 	/**
-	 * Asserts that DmtException with COMMAND_NOT_ALLOWED code is thrown when 
-	 * if the underlying plugin is read-only 
+	 * Asserts that DmtException with COMMAND_NOT_ALLOWED code is thrown 
+	 * if the session is non-atomic (in this case, LOCK_TYPE_SHARED) 
+	 * and the plugin is read-only
 	 * 
 	 * @spec DmtSession.deleteNode(String)
 	 */
-	private void testDeleteNode008() {
+	private void testDeleteNode007() {
 		DmtSession session = null;
-		tbc.log("#testDeleteNode008");
+		tbc.log("#testDeleteNode007");
 		try {
-			session = tbc.getDmtAdmin().getSession(TestExecPluginActivator.ROOT,DmtSession.LOCK_TYPE_EXCLUSIVE);
-			session.deleteNode(TestExecPluginActivator.INTERIOR_NODE);
+			session = tbc.getDmtAdmin().getSession(".",DmtSession.LOCK_TYPE_SHARED);
+			session.deleteNode(TestReadOnlyPluginActivator.INTERIOR_NODE);
 			tbc.failException("", DmtException.class);
 		} catch (DmtException e) {
 			tbc.assertEquals(
@@ -279,6 +261,129 @@ public class DeleteNode implements TestInterface {
 			tbc.closeSession(session);
 		}
 	}
-	
+	/**
+	 * Asserts that DmtException with COMMAND_NOT_ALLOWED code is thrown 
+	 * if the session is non-atomic (in this case, LOCK_TYPE_EXCLUSIVE) 
+	 * and the plugin is read-only
+	 * 
+	 * @spec DmtSession.deleteNode(String)
+	 */
+	private void testDeleteNode008() {
+		DmtSession session = null;
+		tbc.log("#testDeleteNode008");
+		try {
+			session = tbc.getDmtAdmin().getSession(".",DmtSession.LOCK_TYPE_EXCLUSIVE);
+			session.deleteNode(TestReadOnlyPluginActivator.INTERIOR_NODE);
+			tbc.failException("", DmtException.class);
+		} catch (DmtException e) {
+			tbc.assertEquals(
+					"Asserting that DmtException code is COMMAND_NOT_ALLOWED",
+					DmtException.COMMAND_NOT_ALLOWED, e.getCode());
+		} catch (Exception e) {
+			tbc.fail("Expected " + DmtException.class.getName() + " but was "
+					+ e.getClass().getName());
+		} finally {
+			tbc.closeSession(session);
+		}
+	}
+	/**
+	 * Asserts that DmtException with COMMAND_NOT_ALLOWED code is thrown 
+	 * if the session is non-atomic (in this case, LOCK_TYPE_SHARED) 
+	 * and the plugin does not support non-atomic writing
+	 * 
+	 * @spec DmtSession.deleteNode(String)
+	 */
+	private void testDeleteNode009() {
+		DmtSession session = null;
+		tbc.log("#testDeleteNode009");
+		try {
+			session = tbc.getDmtAdmin().getSession(".",DmtSession.LOCK_TYPE_SHARED);
+			session.deleteNode(TestNonAtomicPluginActivator.INTERIOR_NODE);
+			tbc.failException("", DmtException.class);
+		} catch (DmtException e) {
+			tbc.assertEquals(
+					"Asserting that DmtException code is COMMAND_NOT_ALLOWED",
+					DmtException.COMMAND_NOT_ALLOWED, e.getCode());
+		} catch (Exception e) {
+			tbc.fail("Expected " + DmtException.class.getName() + " but was "
+					+ e.getClass().getName());
+		} finally {
+			tbc.closeSession(session);
+		}
+	}
+	/**
+	 * Asserts that DmtException with COMMAND_NOT_ALLOWED code is thrown 
+	 * if the session is non-atomic (in this case, LOCK_TYPE_EXCLUSIVE) 
+	 * and the plugin does not support non-atomic writing
+	 * 
+	 * @spec DmtSession.deleteNode(String)
+	 */
+	private void testDeleteNode010() {
+		DmtSession session = null;
+		tbc.log("#testDeleteNode010");
+		try {
+			session = tbc.getDmtAdmin().getSession(".",DmtSession.LOCK_TYPE_EXCLUSIVE);
+			session.deleteNode(TestNonAtomicPluginActivator.INTERIOR_NODE);
+			tbc.failException("", DmtException.class);
+		} catch (DmtException e) {
+			tbc.assertEquals(
+					"Asserting that DmtException code is COMMAND_NOT_ALLOWED",
+					DmtException.COMMAND_NOT_ALLOWED, e.getCode());
+		} catch (Exception e) {
+			tbc.fail("Expected " + DmtException.class.getName() + " but was "
+					+ e.getClass().getName());
+		} finally {
+			tbc.closeSession(session);
+		}
+	}
+	/**
+	 * This method asserts that DmtException.TRANSACTION_ERROR is thrown 
+	 * if the session is atomic and the plugin is read-only 
+	 * 
+	 * @spec DmtSession.deleteNode(String)
+	 */
+	private void testDeleteNode011() {
+		DmtSession session = null;
+		try {
+			tbc.log("#testDeleteNode011");
+			session = tbc.getDmtAdmin().getSession(".",
+			    DmtSession.LOCK_TYPE_ATOMIC);
+			
+			session.deleteNode(TestReadOnlyPluginActivator.INTERIOR_NODE);
+			tbc.failException("", DmtException.class);
+		} catch (DmtException e) {
+			tbc.assertEquals("Asserting that DmtException code is TRANSACTION_ERROR",
+					DmtException.TRANSACTION_ERROR, e.getCode());
+		} catch (Exception e) {
+			tbc.fail("Expected " + DmtException.class.getName() + " but was "
+					+ e.getClass().getName());
+		} finally {
+			tbc.closeSession(session);
+		}
+	}
 
-}
+	/**
+	 * This method asserts that DmtException.TRANSACTION_ERROR is thrown 
+	 * if the session is atomic and the plugin does not support non-atomic writing
+	 * 
+	 * @spec DmtSession.deleteNode(String)
+	 */
+	private void testDeleteNode012() {
+		DmtSession session = null;
+		try {
+			tbc.log("#testDeleteNode012");
+			session = tbc.getDmtAdmin().getSession(".",
+			    DmtSession.LOCK_TYPE_ATOMIC);
+			
+			session.deleteNode(TestNonAtomicPluginActivator.INTERIOR_NODE);
+			tbc.failException("", DmtException.class);
+		} catch (DmtException e) {
+			tbc.assertEquals("Asserting that DmtException code is TRANSACTION_ERROR",
+					DmtException.TRANSACTION_ERROR, e.getCode());
+		} catch (Exception e) {
+			tbc.fail("Expected " + DmtException.class.getName() + " but was "
+					+ e.getClass().getName());
+		} finally {
+			tbc.closeSession(session);
+		}
+	}}

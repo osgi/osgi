@@ -89,7 +89,7 @@ public class GetMimeTypes {
 			tbc.fail("Unexpected Exception: " + e.getClass().getName()
 					+ " [Message: " + e.getMessage() + "]");
 		} finally {
-			tbc.closeSession(session);
+			tbc.cleanUp(session, true);
 		}
 	}
     
@@ -114,8 +114,7 @@ public class GetMimeTypes {
             tbc.fail("Unexpected Exception: " + e.getClass().getName()
                     + " [Message: " + e.getMessage() + "]");
         } finally {
-            tbc.closeSession(session);
-            DmtConstants.TEMPORARY = "";
+            tbc.cleanUp(session, true);
         }
     }
     
@@ -140,8 +139,7 @@ public class GetMimeTypes {
             tbc.fail("Unexpected Exception: " + e.getClass().getName()
                     + " [Message: " + e.getMessage() + "]");
         } finally {
-            tbc.closeSession(session);
-            DmtConstants.TEMPORARY = "";
+        	tbc.cleanUp(session, true);
         }
     }
     
@@ -166,8 +164,7 @@ public class GetMimeTypes {
             tbc.fail("Unexpected Exception: " + e.getClass().getName()
                     + " [Message: " + e.getMessage() + "]");
         } finally {
-            tbc.closeSession(session);
-            DmtConstants.TEMPORARY = "";
+        	tbc.cleanUp(session, true);
         }
     }
     /**
@@ -184,15 +181,14 @@ public class GetMimeTypes {
                     TestMetaNodeDataPluginActivator.ROOT,
                     DmtSession.LOCK_TYPE_EXCLUSIVE);
 
-            session.setNodeType(TestMetaNodeDataPluginActivator.INEXISTENT_LEAF_NODE_WITHOUT_METANODE,null);
+            session.setNodeType(TestMetaNodeDataPluginActivator.NODE_WITHOUT_METANODE,null);
             tbc.pass("If DmtSession.getMetaNode returns null for a node, DmtSession.createLeafNode can be called without throwing any exceptions");
 
         } catch (Exception e) {
             tbc.fail("Unexpected Exception: " + e.getClass().getName()
                     + " [Message: " + e.getMessage() + "]");
         } finally {
-            tbc.closeSession(session);
-            DmtConstants.TEMPORARY = "";
+        	tbc.cleanUp(session, true);
         }
     }
     /**
@@ -217,8 +213,7 @@ public class GetMimeTypes {
             tbc.fail("Unexpected Exception: " + e.getClass().getName()
                     + " [Message: " + e.getMessage() + "]");
         } finally {
-            tbc.closeSession(session);
-            DmtConstants.TEMPORARY = "";
+        	tbc.cleanUp(session, true);
         }
     }
     
@@ -246,8 +241,7 @@ public class GetMimeTypes {
             tbc.fail("Unexpected Exception: " + e.getClass().getName()
                     + " [Message: " + e.getMessage() + "]");
         } finally {
-            tbc.closeSession(session);
-            DmtConstants.TEMPORARY = "";
+        	tbc.cleanUp(session, true);
         }
     }
     
@@ -274,13 +268,9 @@ public class GetMimeTypes {
             tbc.fail("Unexpected Exception: " + e.getClass().getName()
                     + " [Message: " + e.getMessage() + "]");
         } finally {
-            tbc.closeSession(session);
-            DmtConstants.TEMPORARY = "";
+        	tbc.cleanUp(session, true);
         }
     }
-    
-    
-
     
 
 }

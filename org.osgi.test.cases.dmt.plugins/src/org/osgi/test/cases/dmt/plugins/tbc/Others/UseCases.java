@@ -164,7 +164,7 @@ public class UseCases {
 					DmtSession.LOCK_TYPE_ATOMIC);
 			session.createInteriorNode(NewDataPluginActivator.INEXISTENT_NODE);
 			//The method below throws a fatal exception
-			session.createInteriorNode(FatalExceptionDataPluginActivator.INEXISTENT_NODE,"test");
+			session.createLeafNode(FatalExceptionDataPluginActivator.INEXISTENT_NODE);
 			tbc.failException("",DmtException.class);
 		} catch (DmtException e) {
 			tbc.assertEquals("Asserts that if a plugin throws an exception, the order of the rollback() calls " +
