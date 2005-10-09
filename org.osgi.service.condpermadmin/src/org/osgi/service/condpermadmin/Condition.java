@@ -50,9 +50,8 @@ public interface Condition {
 	/**
 	 * Returns whether the Condition is satisfied.
 	 * 
-	 * @return <code>true</code> to indicate the Conditions is satisfied. must
-	 *         be postponed. Otherwise, <code>false</code> if the Condition is
-	 *         not satisfied.
+	 * @return <code>true</code> to indicate the Conditions is satisfied. 
+	 *         Otherwise, <code>false</code> if the Condition is not satisfied.
 	 */
 	boolean isSatisfied();
 
