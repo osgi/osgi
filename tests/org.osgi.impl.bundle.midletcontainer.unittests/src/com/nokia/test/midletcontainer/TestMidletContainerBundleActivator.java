@@ -1,8 +1,3 @@
-// Decompiled by Jad v1.5.8e. Copyright 2001 Pavel Kouznetsov.
-// Jad home page: http://www.geocities.com/kpdus/jad.html
-// Decompiler options: packimports(3) 
-// Source File Name:   TestMidletContainerBundleActivator.java
-
 package com.nokia.test.midletcontainer;
 
 import java.io.*;
@@ -556,8 +551,8 @@ public class TestMidletContainerBundleActivator
                 throw new Exception("The application type is " + (String)engProps.get(ApplicationDescriptor.APPLICATION_CONTAINER) + " instead of 'MIDlet'!");
             if(engProps.get("application.bundle.id") == null)
                 throw new Exception("No application bundle id found!");
-            if(!engProps.get(ApplicationDescriptor.APPLICATION_VISIBLE).equals("true"))
-                throw new Exception("Visible flag is " + (String)engProps.get(ApplicationDescriptor.APPLICATION_VISIBLE) + " instead of 'true'!");
+            if(!engProps.get(ApplicationDescriptor.APPLICATION_VISIBLE).equals( new Boolean( "true") ))
+                throw new Exception("Visible flag is " + (Boolean)engProps.get(ApplicationDescriptor.APPLICATION_VISIBLE) + " instead of 'true'!");
             if(!engProps.get(ApplicationDescriptor.APPLICATION_VENDOR).equals("Nokia"))
                 throw new Exception("Vendor flag is " + (String)engProps.get(ApplicationDescriptor.APPLICATION_VENDOR) + " instead of 'Nokia'!");
             else
@@ -590,8 +585,8 @@ public class TestMidletContainerBundleActivator
 
     private boolean isLaunchable(ApplicationDescriptor appDesc)
     {
-        String launchable = (String)appDesc.getProperties("en").get(ApplicationDescriptor.APPLICATION_LAUNCHABLE);
-        return launchable != null && launchable.equalsIgnoreCase("true");
+    		Boolean launchable = (Boolean)appDesc.getProperties("en").get(ApplicationDescriptor.APPLICATION_LAUNCHABLE);
+        return launchable != null && launchable.booleanValue();
     }
 
     private String  getResultFileContent() {
@@ -1391,7 +1386,7 @@ public class TestMidletContainerBundleActivator
   			args.put( "NullChecking", null );
   			if (args == null)
   				throw new Exception("Cannot create the arguments of launch!");
-  			appDesc.schedule(args, "org/osgi/timer", getFilterFromNow( 2 ), false);
+  			appDesc.schedule(args, "org/osgi/application/timer", getFilterFromNow( 2 ), false);
   			Thread.sleep(3000);
   			appHandle = lookupAppHandle(appDesc);
   			if (appHandle == null
@@ -1418,8 +1413,8 @@ public class TestMidletContainerBundleActivator
   			Map args = createArgs();
   			if (args == null)
   				throw new Exception("Cannot create the arguments of launch!");
-  			appDesc.schedule(args, "org/osgi/timer", getFilterFromNow( 4 ), false);
-  			appDesc.schedule(args, "org/osgi/timer", getFilterFromNow( 2 ), false);
+  			appDesc.schedule(args, "org/osgi/application/timer", getFilterFromNow( 4 ), false);
+  			appDesc.schedule(args, "org/osgi/application/timer", getFilterFromNow( 2 ), false);
   			Thread.sleep(3000);
   			appHandle = lookupAppHandle(appDesc);
   			if (appHandle == null
@@ -1455,7 +1450,7 @@ public class TestMidletContainerBundleActivator
   			Map args = createArgs();
   			if (args == null)
   				throw new Exception("Cannot create the arguments of launch!");
-  			appDesc.schedule(args, "org/osgi/timer", getFilterFromNow( 3 ), false);
+  			appDesc.schedule(args, "org/osgi/application/timer", getFilterFromNow( 3 ), false);
   			if (!restart_scheduler())
   				return false;
   			Thread.sleep(4000);
@@ -1486,7 +1481,7 @@ public class TestMidletContainerBundleActivator
   			if (args == null)
   				throw new Exception("Cannot create the arguments of launch!");
   			ScheduledApplication schedApp = appDesc.
-  					schedule(args, "org/osgi/timer", getFilterFromNow( 2 ), false);
+  					schedule(args, "org/osgi/application/timer", getFilterFromNow( 2 ), false);
   			
   			if( schedApp.getApplicationDescriptor() != appDesc )
   				throw new Exception( "Invalid application descriptor was received!" );

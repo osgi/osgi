@@ -100,8 +100,8 @@ public class ApplicationDescriptorImpl implements Delegate {
 			Boolean isLocked = (Boolean)props.get(ApplicationDescriptor.APPLICATION_LOCKED);
 			if (isLocked != null && isLocked.booleanValue() )
 				throw new Exception("Application is locked, can't launch!");
-			String isLaunchable = (String)props.get(ApplicationDescriptor.APPLICATION_LAUNCHABLE);
-	 		if (isLaunchable == null || !isLaunchable.equalsIgnoreCase("true"))
+			Boolean isLaunchable = (Boolean)props.get(ApplicationDescriptor.APPLICATION_LAUNCHABLE);
+	 		if (isLaunchable == null || !isLaunchable.booleanValue() )
 	 			throw new Exception("Cannot launch the application!");
 	}
 }

@@ -61,6 +61,9 @@ public class Scheduler implements Runnable, EventHandler {
 		if( topic == null )
 			throw new NullPointerException();
 		
+		if( topic.equals("") )
+			topic = "*";
+		
 		ScheduledApplicationImpl app = new ScheduledApplicationImpl(this, bc,
 				pid, arguments, topic, eventFilter, recurring);
 		
@@ -209,7 +212,7 @@ public class Scheduler implements Runnable, EventHandler {
 				EventAdmin eventAdmin = (EventAdmin) bc.getService(serviceRef);
 				if (eventAdmin != null) {
 					try {
-						eventAdmin.sendEvent( new Event( "org/osgi/timer", props ) );
+						eventAdmin.sendEvent( new Event( "org/osgi/application/timer", props ) );
 					}finally {
 						bc.ungetService(serviceRef);
 					}

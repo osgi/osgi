@@ -11,7 +11,7 @@ import javax.microedition.midlet.MIDlet;
 import org.osgi.framework.*;
 import org.osgi.service.application.*;
 
-public final class MidletDescriptor extends ApplicationDescriptor {
+public final class MidletDescriptor extends ApplicationDescriptor implements ServiceListener {
 	private Properties					props;
 	private Hashtable			  		names;
 	private Hashtable			  		icons;
@@ -21,6 +21,7 @@ public final class MidletDescriptor extends ApplicationDescriptor {
 	private Bundle				  		bundle;
 	private String				  		defaultLanguage;
 	private boolean				  		locked;
+	private boolean             registeredLaunchable;
 	private MidletContainer			midletContainer;
 	private static int			    instanceCounter;
 	private ServiceRegistration serviceReg;
@@ -65,6 +66,7 @@ public final class MidletDescriptor extends ApplicationDescriptor {
 	}
 
 	public Map getPropertiesSpecific(String locale) {
+		checkBundle();
 		Hashtable properties = new Hashtable();
 		if( locale == null )
 			locale = "";
@@ -93,9 +95,9 @@ public final class MidletDescriptor extends ApplicationDescriptor {
 				.getProperty(ApplicationDescriptor.APPLICATION_VENDOR));
 		String visible = props.getProperty(ApplicationDescriptor.APPLICATION_VISIBLE);
 		if (visible != null && visible.equalsIgnoreCase("false"))
-			properties.put(ApplicationDescriptor.APPLICATION_VISIBLE, "false");
+			properties.put(ApplicationDescriptor.APPLICATION_VISIBLE, new Boolean( false ) );
 		else
-			properties.put(ApplicationDescriptor.APPLICATION_VISIBLE, "true");
+			properties.put(ApplicationDescriptor.APPLICATION_VISIBLE, new Boolean( true ) );
 		boolean launchable = false;
 		try {
 			launchable = isLaunchable();
@@ -104,14 +106,15 @@ public final class MidletDescriptor extends ApplicationDescriptor {
 			Activator.log( LogService.LOG_ERROR ,"Exception occurred at searching the Midlet container reference!",e);
 		}
 		properties.put(ApplicationDescriptor.APPLICATION_LOCKED, new Boolean(locked));
-		properties.put(ApplicationDescriptor.APPLICATION_LAUNCHABLE, (new Boolean(launchable))
-				.toString());
+		properties.put(ApplicationDescriptor.APPLICATION_LAUNCHABLE, new Boolean(launchable));
 		properties.put(ApplicationDescriptor.APPLICATION_CONTAINER, "MIDlet");
 		properties.put(Constants.SERVICE_PID, new String(pid));
+		
 		return properties;
 	}
 
 	public ApplicationHandle launchSpecific(Map args) throws Exception {
+		checkBundle();
 		String instID = createNewInstanceID(bc, pid);
 		MIDlet midlet = createMidletInstance( instID );
 		if (midlet == null)
@@ -125,15 +128,23 @@ public final class MidletDescriptor extends ApplicationDescriptor {
 	}
 
 	public void lockSpecific() {
+		checkBundle();
 		locked = true;
-		if( serviceReg != null )
-		  register();  // if lock changes, change the service registration properties also
+		if( serviceReg != null ) {
+			Dictionary properties = new Hashtable( getProperties(Locale.getDefault().getLanguage()));
+			registeredLaunchable = ((Boolean)properties.get( ApplicationDescriptor.APPLICATION_LAUNCHABLE )).booleanValue();
+			serviceReg.setProperties( properties ); // if lock changes, change the service registration properties also
+		}
 	}
 
 	public void unlockSpecific() {
+		checkBundle();
 		locked = false;
-		if( serviceReg != null )
-   		register();  // if lock changes, change the service registration properties also
+		if( serviceReg != null ) {
+			Dictionary properties = new Hashtable( getProperties(Locale.getDefault().getLanguage()));
+			registeredLaunchable = ((Boolean)properties.get( ApplicationDescriptor.APPLICATION_LAUNCHABLE )).booleanValue();
+			serviceReg.setProperties( properties ); // if lock changes, change the service registration properties also
+		}
 	}
 
 	static synchronized String createNewInstanceID(BundleContext bc, String pid) {
@@ -183,18 +194,35 @@ public final class MidletDescriptor extends ApplicationDescriptor {
 	void register() {
 		unregister();
 		Dictionary properties = new Hashtable( getProperties(Locale.getDefault().getLanguage()));
+		registeredLaunchable = ((Boolean)properties.get( ApplicationDescriptor.APPLICATION_LAUNCHABLE )).booleanValue();
 		serviceReg = bc.registerService(ApplicationDescriptor.class.getName(),this, properties);		
+		bc.addServiceListener( this );
 	}
 	
 	void unregister() {
 		if (serviceReg != null) {
+			bc.removeServiceListener( this );
 			serviceReg.unregister();
 			serviceReg = null;
 		}
 	}
 
+	public void serviceChanged(ServiceEvent event) {
+		boolean launchable = isLaunchable();
+		if( launchable != registeredLaunchable ) {
+			Dictionary properties = new Hashtable( getProperties(Locale.getDefault().getLanguage()));
+			registeredLaunchable = ((Boolean)properties.get( ApplicationDescriptor.APPLICATION_LAUNCHABLE )).booleanValue();
+			serviceReg = bc.registerService(ApplicationDescriptor.class.getName(),this, properties);					
+		}
+	}
+
 	String getStartClass() {
 		return startClass;
+	}
+	
+	private void checkBundle() {
+		if( bundle.getState() != Bundle.ACTIVE )
+			throw new IllegalStateException();
 	}
 	
 	/**

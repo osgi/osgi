@@ -96,7 +96,7 @@ public class OATApplicationContextImpl implements ApplicationContext, ServiceLis
 
 	public void addBundleListener(BundleListener listener) {
 		if( appHandle == null )
-			throw new RuntimeException( "Application is not running!" );
+			throw new IllegalStateException( "Application is not running!" );
 		
 	  bc.addBundleListener( listener );
 	  bundleListenerList.add( listener );
@@ -104,7 +104,7 @@ public class OATApplicationContextImpl implements ApplicationContext, ServiceLis
 	
 	public void addFrameworkListener(FrameworkListener listener) {
 		if( appHandle == null )
-			throw new RuntimeException( "Application is not running!" );
+			throw new IllegalStateException( "Application is not running!" );
 		
     bc.addFrameworkListener( listener );
     frameworkListenerList.add( listener );
@@ -113,7 +113,7 @@ public class OATApplicationContextImpl implements ApplicationContext, ServiceLis
 	public void addServiceListener(ApplicationServiceListener listener, String filter)
 			throws InvalidSyntaxException {
 		if( appHandle == null )
-			throw new RuntimeException( "Application is not running!" );
+			throw new IllegalStateException( "Application is not running!" );
 		
 		Filter filterItem = (filter == null) ? null : bc.createFilter( filter );
 		serviceListenerList.add( new ServiceListener( listener, filterItem ) );
@@ -121,21 +121,21 @@ public class OATApplicationContextImpl implements ApplicationContext, ServiceLis
 	
 	public void addServiceListener(ApplicationServiceListener listener) {
 		if( appHandle == null )
-			throw new RuntimeException( "Application is not running!" );
+			throw new IllegalStateException( "Application is not running!" );
 		
     serviceListenerList.add( new ServiceListener( listener, null )  );
 	}
 	
 	public Map getStartupParameters() {
 		if( appHandle == null )
-			throw new RuntimeException( "Application is not running!" );
+			throw new IllegalStateException( "Application is not running!" );
 		
 		return startupParams;
 	}
 	
 	public Object locateService(String referenceName) {
 		if( appHandle == null )
-			throw new RuntimeException( "Application is not running!" );
+			throw new IllegalStateException( "Application is not running!" );
 		
 		for( int i=0; i != oatAppData.getServices().length; i++ ) {
 			if( oatAppData.getServices()[ i ].getName().equals( referenceName )) {				
@@ -209,7 +209,7 @@ public class OATApplicationContextImpl implements ApplicationContext, ServiceLis
 	
 	public Object[] locateServices(String referenceName) {
 		if( appHandle == null )
-			throw new RuntimeException( "Application is not running!" );
+			throw new IllegalStateException( "Application is not running!" );
 		
 		for( int i=0; i != oatAppData.getServices().length; i++ ) {
 			if( oatAppData.getServices()[ i ].getName().equals( referenceName )) {
@@ -235,7 +235,7 @@ public class OATApplicationContextImpl implements ApplicationContext, ServiceLis
 		    		requestTermination();
 		    		throw new RuntimeException( "The requested service not found!" );
 		    	}
-		    	return new Object[ 0 ];					
+		    	return null;					
 				}
 				
 				Object[] result = new Object[ refs.length ];
@@ -253,13 +253,13 @@ public class OATApplicationContextImpl implements ApplicationContext, ServiceLis
 				return result;
 			}
 		}
-		return new Object[ 0 ];
+		return null;
 	}
 	
 	public ServiceRegistration registerService(String clazz, Object service,
 			Dictionary properties) {
 		if( appHandle == null )
-			throw new RuntimeException( "Application is not running!" );
+			throw new IllegalStateException( "Application is not running!" );
 		
 		if( service == mainClass )
 			throw new SecurityException( "Registering the base class of the application is insecure and forbidden!" );
@@ -272,7 +272,7 @@ public class OATApplicationContextImpl implements ApplicationContext, ServiceLis
 	public ServiceRegistration registerService(String[] clazzes,
 			Object service, Dictionary properties) {
 		if( appHandle == null )
-			throw new RuntimeException( "Application is not running!" );
+			throw new IllegalStateException( "Application is not running!" );
 		
 		ServiceRegistration servReg = bc.registerService( clazzes, service, properties );
 		registeredServiceList.add( servReg );
@@ -281,7 +281,7 @@ public class OATApplicationContextImpl implements ApplicationContext, ServiceLis
 	
 	public void removeBundleListener(BundleListener listener) {
 		if( appHandle == null )
-			throw new RuntimeException( "Application is not running!" );
+			throw new IllegalStateException( "Application is not running!" );
 		
 		bc.removeBundleListener( listener );
     bundleListenerList.remove( listener );
@@ -289,7 +289,7 @@ public class OATApplicationContextImpl implements ApplicationContext, ServiceLis
 	
 	public void removeFrameworkListener(FrameworkListener listener) {
 		if( appHandle == null )
-			throw new RuntimeException( "Application is not running!" );
+			throw new IllegalStateException( "Application is not running!" );
 		
     bc.removeFrameworkListener( listener );
     frameworkListenerList.remove( listener );
@@ -297,7 +297,7 @@ public class OATApplicationContextImpl implements ApplicationContext, ServiceLis
 	
 	public void removeServiceListener(ApplicationServiceListener listener) {
 		if( appHandle == null )
-			throw new RuntimeException( "Application is not running!" );
+			throw new IllegalStateException( "Application is not running!" );
 		
 		Iterator iter = serviceListenerList.iterator();
 		
