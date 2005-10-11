@@ -33,7 +33,6 @@ import org.osgi.service.permissionadmin.PermissionInfo;
 //import java.util.regex.Pattern;
 
 // TODO clean up plugin unregistration error case
-// TODO do not try to create automatic nodes during automatic ancestor creation
 
 // OPTIMIZE node handling (e.g. retrieve plugin from dispatcher only once per API call)
 // OPTIMIZE only retrieve meta-data once per API call
@@ -658,13 +657,15 @@ public class DmtSessionImpl implements DmtSession {
 			throws DmtException {
     	checkWriteSession();
         Node node = makeAbsoluteUri(nodeUri);
-        commonCreateInteriorNode(node, type, true);
+        commonCreateInteriorNode(node, type, true, false);
 	}
     
-    // also used by copy() to pass an already validated Node instead of a URI
-    // and to create interior nodes without triggering an event
+    // - also used by copy() to pass an already validated Node instead of a URI
+    //   and to create interior nodes without triggering an event
+    // - also used by ensureInteriorAncestors, to create missing nodes while
+    //   skipping automatically created nodes
     private void commonCreateInteriorNode(Node node, String type,
-            boolean sendEvent) throws DmtException {
+            boolean sendEvent, boolean skipAutomatic) throws DmtException {
         checkNode(node, SHOULD_NOT_EXIST);
         
         Node parent = node.getParent();
@@ -672,7 +673,16 @@ public class DmtSessionImpl implements DmtSession {
             throw new DmtException(node.getUri(), DmtException.COMMAND_FAILED, 
                     "Cannot create root node.");
         
-        ensureInteriorAncestors(parent, sendEvent);
+        // Return silently if all of the following conditions are met:
+        // - the parent node has been created while ensuring that the ancestor
+        //   nodes all exist
+        // - this call is part of creating the ancestors for some sub-node (as
+        //   indicated by 'skipAutomatic')
+        // - this current node was created automatically, triggered by the 
+        //   creation of the parent (i.e. it has AUTOMATIC scope)
+        if(ensureInteriorAncestors(parent, sendEvent) && skipAutomatic &&
+                getReadableDataSession(node).isNodeUri(node.getPath())) 
+            return;
         
         checkNodePermission(parent, Acl.ADD);
         checkNodeCapability(node, MetaNode.CMD_ADD);
@@ -979,7 +989,7 @@ public class DmtSessionImpl implements DmtSession {
             commonCreateLeafNode(newNode, internalGetNodeValue(node), type, 
                     false);
 		else
-			commonCreateInteriorNode(newNode, type, false);
+			commonCreateInteriorNode(newNode, type, false, false);
         
 		// copy Title property (without sending event) if it is supported by 
         // both source and target plugins
@@ -1342,14 +1352,17 @@ public class DmtSessionImpl implements DmtSession {
                     "subtree of this session.");
     }
 
-    private void ensureInteriorAncestors(Node node, boolean sendEvent)
+    private boolean ensureInteriorAncestors(Node node, boolean sendEvent)
             throws DmtException {
         checkNodeIsInSession(node, "(needed to ensure " +
                 "a proper creation point for the new node) ");
-        if (!getReadableDataSession(node).isNodeUri(node.getPath()))
-            commonCreateInteriorNode(node, null, sendEvent);
-        else
-            checkNode(node, SHOULD_BE_INTERIOR);
+        if (!getReadableDataSession(node).isNodeUri(node.getPath())) {
+            commonCreateInteriorNode(node, null, sendEvent, true);
+            return true;
+        }
+        
+        checkNode(node, SHOULD_BE_INTERIOR);
+        return false;
     }
 
     private static DmtException getWriteException(int lockMode, Node node) {
