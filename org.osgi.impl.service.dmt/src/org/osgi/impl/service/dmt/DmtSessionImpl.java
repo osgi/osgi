@@ -32,8 +32,6 @@ import org.osgi.service.permissionadmin.PermissionInfo;
 // Needed for meta-data name and value pattern matching
 //import java.util.regex.Pattern;
 
-// TODO clean up plugin unregistration error case
-
 // OPTIMIZE node handling (e.g. retrieve plugin from dispatcher only once per API call)
 // OPTIMIZE only retrieve meta-data once per API call
 // OPTIMIZE only call commit/rollback for plugins that were actually modified since the last transaction boundary
@@ -152,7 +150,7 @@ public class DmtSessionImpl implements DmtSession {
         try {
             closeAndRelease(false);
         } catch(DmtException e) {
-            context.log(LogService.LOG_WARNING, "Error closing plugin while" +
+            context.log(LogService.LOG_WARNING, "Error closing plugin while " +
                     "invalidating session.", e);
         }
     }
@@ -1102,46 +1100,65 @@ public class DmtSessionImpl implements DmtSession {
     // 'synchronized' is just indication, all entry points are synch'd anyway
     private synchronized PluginSessionWrapper getPluginSession(Node node, 
             boolean writeOperation) throws DmtException {
+        PluginSessionWrapper wrappedPlugin = null;
         
-        PluginRegistration pluginRegistration = 
-            context.getPluginDispatcher().getDataPlugin(node);
-        Node root = getRootForPlugin(pluginRegistration, node);
+        Iterator i = dataPlugins.entrySet().iterator();
+        while (i.hasNext() && wrappedPlugin == null) {
+            Map.Entry element = (Map.Entry) i.next();
+            Node pluginRoot = (Node) element.getKey();
+            if(!pluginRoot.isRoot() && pluginRoot.isAncestorOf(node))
+                wrappedPlugin = (PluginSessionWrapper) element.getValue();
+        }
+
+        // The 'pluginRegistration' and 'root' variables are initialized to null
+        // to get rid of the compiler errors, but they will always be set to a
+        // non-null value before they are actually used.
+        PluginRegistration pluginRegistration = null;
+        Node root = null;
         
-        PluginSessionWrapper wrappedPlugin = (PluginSessionWrapper) 
-            dataPlugins.get(root.getUri());
+        if(wrappedPlugin == null) {
+            pluginRegistration = 
+                context.getPluginDispatcher().getDataPlugin(node);
+            root = getRootForPlugin(pluginRegistration, node);
+
+            if(root.equals(Node.ROOT_NODE))
+                wrappedPlugin = (PluginSessionWrapper) dataPlugins.get(root);
+        }
         
         if(wrappedPlugin != null) {
             if(writeOperation && 
                     wrappedPlugin.getSessionType() == LOCK_TYPE_SHARED)
                 throw getWriteException(lockMode, node);
-        } else {
-            DataPluginFactory plugin = pluginRegistration.getDataPlugin();
-
-            ReadableDataSession pluginSession = null;
-            int pluginSessionType = lockMode;
-            
-            if(lockMode != LOCK_TYPE_SHARED) {
-                pluginSession = 
-                    openPluginSession(plugin, root, pluginSessionType);
-                if(pluginSession == null && writeOperation) 
-                    throw getWriteException(lockMode, node);
-            }
-            
-            // read-only session if lockMode is LOCK_TYPE_SHARED, or if the 
-            // plugin did not support the writing lock mode, and the current 
-            // operation is for reading
-            if(pluginSession == null) {
-                pluginSessionType = LOCK_TYPE_SHARED;
-                pluginSession = 
-                    openPluginSession(plugin, root, pluginSessionType);
-            }
-
-            wrappedPlugin = new PluginSessionWrapper(pluginRegistration,
-                    pluginSession, pluginSessionType, root, securityContext);
-            
-            // this requires synchronized access
-            dataPlugins.put(root.getUri(), wrappedPlugin);
+            return wrappedPlugin;
         }
+
+        // No previously opened session found, attempting to open session with
+        // correct lock type.  The variables 'pluginRegistration' and 'root' are
+        // initialized at this point to the desired plugin and its root.
+        
+        DataPluginFactory plugin = pluginRegistration.getDataPlugin();
+        ReadableDataSession pluginSession = null;
+        int pluginSessionType = lockMode;
+            
+        if(lockMode != LOCK_TYPE_SHARED) {
+            pluginSession = openPluginSession(plugin, root, pluginSessionType);
+            if(pluginSession == null && writeOperation) 
+                throw getWriteException(lockMode, node);
+        }
+            
+        // read-only session if lockMode is LOCK_TYPE_SHARED, or if the 
+        // plugin did not support the writing lock mode, and the current 
+        // operation is for reading
+        if(pluginSession == null) {
+            pluginSessionType = LOCK_TYPE_SHARED;
+            pluginSession = openPluginSession(plugin, root, pluginSessionType);
+        }
+
+        wrappedPlugin = new PluginSessionWrapper(pluginRegistration,
+                pluginSession, pluginSessionType, root, securityContext);
+            
+        // this requires synchronized access
+        dataPlugins.put(root, wrappedPlugin);
         
         return wrappedPlugin;
     }
