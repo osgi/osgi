@@ -17,6 +17,8 @@
  */
 package org.osgi.impl.service.dmt.plugins;
 
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.util.*;
 import org.osgi.framework.*;
 import org.osgi.service.dmt.DmtData;
@@ -576,7 +578,14 @@ class LogPlugin implements DataPluginFactory, TransactionalDataSession {
 			String servRefStr = (servRef == null ) ? "" : servRef.toString();
 			
 			Throwable exception = le.getException();
-			String exceptionStr = (exception == null) ? "" : exception.toString();
+			String exceptionStr;
+            if(exception == null)
+                exceptionStr = "";
+            else {
+                StringWriter sw = new StringWriter();
+                exception.printStackTrace(new PrintWriter(sw));
+                exceptionStr = sw.toString();
+            }
 			
 			lr.logrecords.put( "LOG" + logIDCounter++, 
     			new LogResultItem( le.getLevel(), timeToString(le.getTime()), 
