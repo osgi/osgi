@@ -29,7 +29,7 @@ public class PluginUnregisteredException extends RuntimeException {
     private String uri;
     
     public PluginUnregisteredException(String[] path) {
-        uri = Node.convertPathToUri(path);
+        uri = path == null ? null : Node.convertPathToUri(path);
     }
     
     public String getMessage() {
