@@ -80,8 +80,12 @@ public class Context {
 
     // Find a better place for this method...
     void log(int severity, String message, Throwable throwable) {
-        System.out.println("Log entry | Serverity: " + severity + 
-                " Message: " + message + " Throwable: " + throwable);
+        System.out.print("Log entry | Serverity: " + severity + 
+                " Message: " + message + " Throwable: ");
+        if(throwable == null)
+            System.out.println("null");
+        else
+            throwable.printStackTrace(System.out);
 
         LogService logService = 
             (LogService) getTracker(LogService.class).getService();
