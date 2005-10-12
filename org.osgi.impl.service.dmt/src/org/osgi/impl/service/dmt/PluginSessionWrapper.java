@@ -92,7 +92,7 @@ public class PluginSessionWrapper implements TransactionalDataSession {
      * this call is ignored
      */
     public void commit() throws DmtException {
-        checkRegistration(null);
+        checkRegistration(sessionRoot.getPath());
         
         // ignore commit for non-transactional plugins
         if(transactionalDataSession == null)
@@ -120,7 +120,7 @@ public class PluginSessionWrapper implements TransactionalDataSession {
      * this call is ignored
      */
     public void rollback() throws DmtException {
-        checkRegistration(null);
+        checkRegistration(sessionRoot.getPath());
         
         // ignore rollback for non-transactional plugins
         if(transactionalDataSession == null)
@@ -319,7 +319,7 @@ public class PluginSessionWrapper implements TransactionalDataSession {
     }
 
     public void close() throws DmtException {
-        checkRegistration(null);
+        checkRegistration(sessionRoot.getPath());
         
         if (securityContext == null) {                      // local caller
             readableDataSession.close();
