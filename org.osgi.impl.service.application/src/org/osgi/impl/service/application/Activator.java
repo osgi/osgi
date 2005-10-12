@@ -17,7 +17,12 @@
  */
 package org.osgi.impl.service.application;
 
+import java.lang.reflect.Field;
+import java.security.AccessController;
+import java.security.PrivilegedAction;
+
 import org.osgi.framework.*;
+import org.osgi.service.application.ApplicationAdminPermission;
 import org.osgi.service.log.LogService;
 
 /**
@@ -36,6 +41,8 @@ public class Activator extends Object implements
 
 	public void start(BundleContext bc) throws Exception {
 		Activator.bc = bc;
+		setBundleContext( bc );
+		
 		scheduler = new Scheduler(bc);
 		
 		appPlugin = new ApplicationPlugin();
@@ -51,11 +58,32 @@ public class Activator extends Object implements
 		scheduler.stop();
 		scheduler = null;
 		
+		setBundleContext( null );
 		Activator.bc = null;
 		
 		System.out.println("Application service stopped successfully!");
 	}
 
+	void setBundleContext( final BundleContext bc ) throws Exception {
+		Exception t = (Exception)AccessController.doPrivileged(new PrivilegedAction() {
+			public Object run() {
+				try {
+					Class appAdmClass = ApplicationAdminPermission.class;
+				
+					Field bundleContext = appAdmClass.getDeclaredField( "bc" );
+					bundleContext.setAccessible( true );
+					bundleContext.set( null, bc );					
+					return null;
+				}catch( Exception t ) {
+					return t;
+				}
+			}
+		});
+		
+		if( t != null )
+			throw t;
+	}
+		
 
 	static boolean log( int severity, String message,	Throwable throwable) {
 		System.out.println("Serverity:" + severity + " Message:" + message

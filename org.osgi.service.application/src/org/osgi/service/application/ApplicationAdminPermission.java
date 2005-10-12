@@ -11,8 +11,13 @@
 package org.osgi.service.application;
 
 import java.security.Permission;
+import java.util.Hashtable;
 import java.util.StringTokenizer;
 import java.util.Vector;
+
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.Filter;
+import org.osgi.framework.InvalidSyntaxException;
 
 /**
  * This class implements permissions for manipulating applications and
@@ -144,8 +149,22 @@ public class ApplicationAdminPermission extends Permission {
       		if( !other.applicationID.equals( other.filter ) )
       			return false;
       	}
-      	else if( !filter.equals( other.filter ) ) /* TODO LDAP match */
-      		return false;
+      	else {
+      		Hashtable props = new Hashtable();
+      		props.put( "pid", other.applicationID );
+      		
+      		/* TODO signer misery */
+      		
+      		Filter flt = getFilter();
+      		if( flt == null )
+      			return false;
+      		
+      		if( !flt.match( props ) )
+      			return false;
+      		
+      		if( !filter.equals( other.filter ) ) 
+      			return false;
+      	}
       }
       
       if( !actionsVector.containsAll( other.actionsVector ) )
@@ -181,9 +200,10 @@ public class ApplicationAdminPermission extends Permission {
   private String applicationID;
 
   private static final Vector ACTIONS = new Vector();
-  private Vector actionsVector;
-  private final String filter;
-  private final String actions;
+  private              Vector actionsVector;
+  private final        String filter;
+  private final        String actions;
+  private              Filter appliedFilter = null; 
   
   static {
       ACTIONS.add(LIFECYCLE);
@@ -210,5 +230,80 @@ public class ApplicationAdminPermission extends Permission {
       throw new IllegalArgumentException("Illegal action!");
 		
 		applicationID = null;
+  }
+  
+  private static BundleContext bc = null;
+  
+  private Filter getFilter() {
+  	String transformedFilter = filter;
+  	
+  	if (appliedFilter == null) {
+  		try {
+  			int pos = filter.indexOf("signer"); //$NON-NLS-1$
+  			if (pos != -1){ 
+  			
+  				//there may be a signer attribute 
+    			StringBuffer filterBuf = new StringBuffer(filter);
+    			int numAsteriskFound = 0; //use as offset to replace in buffer
+    			
+    			int walkbackPos; //temp pos
+
+    			//find occurences of (signer= and escape out *'s
+    			while (pos != -1) {
+
+    				//walk back and look for '(' to see if this is an attr
+    				walkbackPos = pos-1; 
+    				
+    				//consume whitespace
+    				while(walkbackPos >= 0 && Character.isWhitespace(filter.charAt(walkbackPos))) {
+    					walkbackPos--;
+    				}
+    				if (walkbackPos <0) {
+    					//filter is invalid - FilterImpl will throw error
+    					break;
+    				}
+    				
+    				//check to see if we have unescaped '('
+    				if (filter.charAt(walkbackPos) != '(' || (walkbackPos > 0 && filter.charAt(walkbackPos-1) == '\\')) {
+    					//'(' was escaped or not there
+    					pos = filter.indexOf("signer",pos+6); //$NON-NLS-1$
+    					continue;
+    				}     				
+    				pos+=6; //skip over 'signer'
+
+    				//found signer - consume whitespace before '='
+    				while (Character.isWhitespace(filter.charAt(pos))) {
+    					pos++;
+    				}
+
+    				//look for '='
+    				if (filter.charAt(pos) != '=') {
+    					//attr was signerx - keep looking
+    					pos = filter.indexOf("signer",pos); //$NON-NLS-1$
+    					continue;
+    				}
+    				pos++; //skip over '='
+    				
+    				//found signer value - escape '*'s
+    				while (!(filter.charAt(pos) == ')' && filter.charAt(pos-1) != '\\')) {
+    					if (filter.charAt(pos) == '*') {
+    						filterBuf.insert(pos+numAsteriskFound,'\\');
+    						numAsteriskFound++;
+    					}
+    					pos++;
+    				}
+
+    				//end of signer value - look for more?
+    				pos = filter.indexOf("signer",pos); //$NON-NLS-1$
+    			} //end while (pos != -1)
+    			transformedFilter = filterBuf.toString();
+  			} //end if (pos != -1)
+
+  			appliedFilter = bc.createFilter( transformedFilter );
+		} catch (InvalidSyntaxException e) {
+			//we will return null
+		}
+  	}     		
+  	return appliedFilter;
   }
 }
