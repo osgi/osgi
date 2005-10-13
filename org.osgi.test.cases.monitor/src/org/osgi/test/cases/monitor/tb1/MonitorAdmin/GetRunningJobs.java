@@ -127,9 +127,8 @@ public class GetRunningJobs implements TestInterface {
 		} catch (Exception e) {
 			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": " + e.getClass().getName());
 		} finally {
-			mj.stop();				
-			tbc.getPermissionAdmin().setPermissions(
-					tbc.getTb1Location(), infos);			
+			mj.stop();		
+			tbc.setTb1Permission(infos);
 		}
 	}
 
@@ -190,8 +189,7 @@ public class GetRunningJobs implements TestInterface {
 		} catch (Exception e) {
 			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": " + e.getClass().getName());
 		} finally {
-			tbc.getPermissionAdmin().setPermissions(
-					tbc.getTb1Location(), infos);				
+			tbc.setTb1Permission(infos);
 			mj.stop();
 		}
 	}
@@ -274,8 +272,7 @@ public class GetRunningJobs implements TestInterface {
 		} catch (Exception e) {
 			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": " + e.getClass().getName());
 		} finally {			
-			tbc.getPermissionAdmin().setPermissions(
-					tbc.getTb1Location(), infos);			
+			tbc.setTb1Permission(infos);	
 			mj.stop();
 			mj2.stop();
 		}
@@ -289,7 +286,6 @@ public class GetRunningJobs implements TestInterface {
 	 */
 	private void testGetRunningJobs004() {
 		tbc.log("#testGetRunningJobs004");
-		MonitoringJob mj = null;
 		MonitoringJob[] mjs = null;
 		PermissionInfo[] infos = null;		
 		try {						
@@ -314,8 +310,7 @@ public class GetRunningJobs implements TestInterface {
 		} catch (Exception e) {
 			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": " + e.getClass().getName());
 		} finally {
-			tbc.getPermissionAdmin().setPermissions(
-					tbc.getTb1Location(), infos);					
+			tbc.setTb1Permission(infos);				
 		}
 	}	
 

@@ -105,17 +105,8 @@ public class TreeStructure {
 					.isZeroOccurrenceAllowed()
 					&& metaNode.getMaxOccurrence() == 1);
 
-			tbc.assertTrue("Asserts $/Monitor metanode ADD", !metaNode
-					.can(MetaNode.CMD_ADD));
 			tbc.assertTrue("Asserts $/Monitor metanode GET", metaNode
 					.can(MetaNode.CMD_GET));
-			tbc.assertTrue("Asserts $/Monitor metanode REPLACE", !metaNode
-					.can(MetaNode.CMD_REPLACE));
-			tbc.assertTrue("Asserts $/Monitor metanode DELETE", !metaNode
-					.can(MetaNode.CMD_DELETE));
-			tbc.assertTrue("Asserts $/Monitor metanode EXECUTE", !metaNode
-					.can(MetaNode.CMD_EXECUTE));
-
 		} catch (Exception e) {
 			tbc.fail(MessagesConstants.getMessage(
 					MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e
@@ -158,17 +149,8 @@ public class TreeStructure {
 							metaNode.isZeroOccurrenceAllowed()
 									&& metaNode.getMaxOccurrence() == Integer.MAX_VALUE);
 
-			tbc.assertTrue("Asserts $/Monitor/cesar metanode ADD", !metaNode
-					.can(MetaNode.CMD_ADD));
 			tbc.assertTrue("Asserts $/Monitor/cesar metanode GET", metaNode
 					.can(MetaNode.CMD_GET));
-			tbc.assertTrue("Asserts $/Monitor/cesar metanode REPLACE",
-					!metaNode.can(MetaNode.CMD_REPLACE));
-			tbc.assertTrue("Asserts $/Monitor/cesar metanode DELETE", !metaNode
-					.can(MetaNode.CMD_DELETE));
-			tbc.assertTrue("Asserts $/Monitor/cesar metanode EXECUTE",
-					!metaNode.can(MetaNode.CMD_EXECUTE));
-
 		} catch (Exception e) {
 			tbc.fail(MessagesConstants.getMessage(
 					MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e
@@ -214,16 +196,8 @@ public class TreeStructure {
 							metaNode.isZeroOccurrenceAllowed()
 									&& metaNode.getMaxOccurrence() == Integer.MAX_VALUE);
 
-			tbc.assertTrue("Asserts $/Monitor/cesar/test0 metanode ADD",
-					!metaNode.can(MetaNode.CMD_ADD));
 			tbc.assertTrue("Asserts $/Monitor/cesar/test0 metanode GET",
 					metaNode.can(MetaNode.CMD_GET));
-			tbc.assertTrue("Asserts $/Monitor/cesar/test0 metanode REPLACE",
-					!metaNode.can(MetaNode.CMD_REPLACE));
-			tbc.assertTrue("Asserts $/Monitor/cesar/test0 metanode DELETE",
-					!metaNode.can(MetaNode.CMD_DELETE));
-			tbc.assertTrue("Asserts $/Monitor/cesar/test0 metanode EXECUTE",
-					!metaNode.can(MetaNode.CMD_EXECUTE));
 
 		} catch (Exception e) {
 			tbc.fail(MessagesConstants.getMessage(
@@ -273,19 +247,8 @@ public class TreeStructure {
 							!metaNode.isZeroOccurrenceAllowed()
 									&& metaNode.getMaxOccurrence() == 1);
 
-			tbc.assertTrue("Asserts $/Monitor/cesar/test0/TrapID metanode ADD",
-					!metaNode.can(MetaNode.CMD_ADD));
 			tbc.assertTrue("Asserts $/Monitor/cesar/test0/TrapID metanode GET",
 					metaNode.can(MetaNode.CMD_GET));
-			tbc.assertTrue(
-					"Asserts $/Monitor/cesar/test0/TrapID metanode REPLACE",
-					!metaNode.can(MetaNode.CMD_REPLACE));
-			tbc.assertTrue(
-					"Asserts $/Monitor/cesar/test0/TrapID metanode DELETE",
-					!metaNode.can(MetaNode.CMD_DELETE));
-			tbc.assertTrue(
-					"Asserts $/Monitor/cesar/test0/TrapID metanode EXECUTE",
-					!metaNode.can(MetaNode.CMD_EXECUTE));
 
 			tbc
 					.assertEquals(
@@ -342,16 +305,8 @@ public class TreeStructure {
 					!metaNode.isZeroOccurrenceAllowed()
 							&& metaNode.getMaxOccurrence() == 1);
 
-			tbc.assertTrue("Asserts $/Monitor/cesar/test0/CM metanode ADD",
-					!metaNode.can(MetaNode.CMD_ADD));
 			tbc.assertTrue("Asserts $/Monitor/cesar/test0/CM metanode GET",
 					metaNode.can(MetaNode.CMD_GET));
-			tbc.assertTrue("Asserts $/Monitor/cesar/test0/CM metanode REPLACE",
-					!metaNode.can(MetaNode.CMD_REPLACE));
-			tbc.assertTrue("Asserts $/Monitor/cesar/test0/CM metanode DELETE",
-					!metaNode.can(MetaNode.CMD_DELETE));
-			tbc.assertTrue("Asserts $/Monitor/cesar/test0/CM metanode EXECUTE",
-					!metaNode.can(MetaNode.CMD_EXECUTE));
 
 			tbc.assertEquals(
 					"Asserting the value stored in /Monitor/cesar/test0/CM",
@@ -408,20 +363,8 @@ public class TreeStructure {
 									&& metaNode.getMaxOccurrence() == 1);
 
 			tbc.assertTrue(
-					"Asserts $/Monitor/cesar/test0/Results metanode ADD",
-					!metaNode.can(MetaNode.CMD_ADD));
-			tbc.assertTrue(
 					"Asserts $/Monitor/cesar/test0/Results metanode GET",
 					metaNode.can(MetaNode.CMD_GET));
-			tbc.assertTrue(
-					"Asserts $/Monitor/cesar/test0/Results metanode REPLACE",
-					!metaNode.can(MetaNode.CMD_REPLACE));
-			tbc.assertTrue(
-					"Asserts $/Monitor/cesar/test0/Results metanode DELETE",
-					!metaNode.can(MetaNode.CMD_DELETE));
-			tbc.assertTrue(
-					"Asserts $/Monitor/cesar/test0/Results metanode EXECUTE",
-					!metaNode.can(MetaNode.CMD_EXECUTE));
 
 			tbc
 					.assertEquals(
@@ -480,19 +423,8 @@ public class TreeStructure {
 							!metaNode.isZeroOccurrenceAllowed()
 									&& metaNode.getMaxOccurrence() == 1);
 
-			tbc.assertTrue("Asserts $/Monitor/cesar/test0/Server metanode ADD",
-					!metaNode.can(MetaNode.CMD_ADD));
 			tbc.assertTrue("Asserts $/Monitor/cesar/test0/Server metanode GET",
 					metaNode.can(MetaNode.CMD_GET));
-			tbc.assertTrue(
-					"Asserts $/Monitor/cesar/test0/Server metanode REPLACE",
-					!metaNode.can(MetaNode.CMD_REPLACE));
-			tbc.assertTrue(
-					"Asserts $/Monitor/cesar/test0/Server metanode DELETE",
-					!metaNode.can(MetaNode.CMD_DELETE));
-			tbc.assertTrue(
-					"Asserts $/Monitor/cesar/test0/Server metanode EXECUTE",
-					!metaNode.can(MetaNode.CMD_EXECUTE));
 
 		} catch (Exception e) {
 			tbc.fail(MessagesConstants.getMessage(
@@ -551,16 +483,8 @@ public class TreeStructure {
 							metaNode.can(MetaNode.CMD_GET));
 			tbc
 					.assertTrue(
-							"Asserts $/Monitor/cesar/test0/Server/remoteServer metanode REPLACE",
-							!metaNode.can(MetaNode.CMD_REPLACE));
-			tbc
-					.assertTrue(
 							"Asserts $/Monitor/cesar/test0/Server/remoteServer metanode DELETE",
 							metaNode.can(MetaNode.CMD_DELETE));
-			tbc
-					.assertTrue(
-							"Asserts $/Monitor/cesar/test0/Server/remoteServer metanode EXECUTE",
-							metaNode.can(MetaNode.CMD_EXECUTE));
 
 		} catch (Exception e) {
 			tbc.fail(MessagesConstants.getMessage(
@@ -614,24 +538,12 @@ public class TreeStructure {
 
 			tbc
 					.assertTrue(
-							"Asserts $/Monitor/cesar/test0/Server/remoteServer/ServerId metanode ADD",
-							!metaNode.can(MetaNode.CMD_ADD));
-			tbc
-					.assertTrue(
 							"Asserts $/Monitor/cesar/test0/Server/remoteServer/ServerId metanode GET",
 							metaNode.can(MetaNode.CMD_GET));
 			tbc
 					.assertTrue(
 							"Asserts $/Monitor/cesar/test0/Server/remoteServer/ServerId metanode REPLACE",
 							metaNode.can(MetaNode.CMD_REPLACE));
-			tbc
-					.assertTrue(
-							"Asserts $/Monitor/cesar/test0/Server/remoteServer/ServerId metanode DELETE",
-							!metaNode.can(MetaNode.CMD_DELETE));
-			tbc
-					.assertTrue(
-							"Asserts $/Monitor/cesar/test0/Server/remoteServer/ServerId metanode EXECUTE",
-							!metaNode.can(MetaNode.CMD_EXECUTE));
 
 			tbc
 					.assertEquals(
@@ -694,24 +606,12 @@ public class TreeStructure {
 
 			tbc
 					.assertTrue(
-							"Asserts $/Monitor/cesar/test0/Server/remoteServer/Enabled metanode ADD",
-							!metaNode.can(MetaNode.CMD_ADD));
-			tbc
-					.assertTrue(
 							"Asserts $/Monitor/cesar/test0/Server/remoteServer/Enabled metanode GET",
 							metaNode.can(MetaNode.CMD_GET));
 			tbc
 					.assertTrue(
 							"Asserts $/Monitor/cesar/test0/Server/remoteServer/Enabled metanode REPLACE",
 							metaNode.can(MetaNode.CMD_REPLACE));
-			tbc
-					.assertTrue(
-							"Asserts $/Monitor/cesar/test0/Server/remoteServer/Enabled metanode DELETE",
-							!metaNode.can(MetaNode.CMD_DELETE));
-			tbc
-					.assertTrue(
-							"Asserts $/Monitor/cesar/test0/Server/remoteServer/Enabled metanode EXECUTE",
-							!metaNode.can(MetaNode.CMD_EXECUTE));
 
 			tbc
 					.assertTrue(
@@ -774,24 +674,8 @@ public class TreeStructure {
 
 			tbc
 					.assertTrue(
-							"Asserts $/Monitor/cesar/test0/Server/remoteServer/Reporting metanode ADD",
-							!metaNode.can(MetaNode.CMD_ADD));
-			tbc
-					.assertTrue(
 							"Asserts $/Monitor/cesar/test0/Server/remoteServer/Reporting metanode GET",
 							metaNode.can(MetaNode.CMD_GET));
-			tbc
-					.assertTrue(
-							"Asserts $/Monitor/cesar/test0/Server/remoteServer/Reporting metanode REPLACE",
-							!metaNode.can(MetaNode.CMD_REPLACE));
-			tbc
-					.assertTrue(
-							"Asserts $/Monitor/cesar/test0/Server/remoteServer/Reporting metanode DELETE",
-							!metaNode.can(MetaNode.CMD_DELETE));
-			tbc
-					.assertTrue(
-							"Asserts $/Monitor/cesar/test0/Server/remoteServer/Reporting metanode EXECUTE",
-							!metaNode.can(MetaNode.CMD_EXECUTE));
 
 		} catch (Exception e) {
 			tbc.fail(MessagesConstants.getMessage(
@@ -846,24 +730,12 @@ public class TreeStructure {
 
 			tbc
 					.assertTrue(
-							"Asserts $/Monitor/cesar/test0/Server/remoteServer/Reporting/Type metanode ADD",
-							!metaNode.can(MetaNode.CMD_ADD));
-			tbc
-					.assertTrue(
 							"Asserts $/Monitor/cesar/test0/Server/remoteServer/Reporting/Type metanode GET",
 							metaNode.can(MetaNode.CMD_GET));
 			tbc
 					.assertTrue(
 							"Asserts $/Monitor/cesar/test0/Server/remoteServer/Reporting/Type metanode REPLACE",
 							metaNode.can(MetaNode.CMD_REPLACE));
-			tbc
-					.assertTrue(
-							"Asserts $/Monitor/cesar/test0/Server/remoteServer/Reporting/Type metanode DELETE",
-							!metaNode.can(MetaNode.CMD_DELETE));
-			tbc
-					.assertTrue(
-							"Asserts $/Monitor/cesar/test0/Server/remoteServer/Reporting/Type metanode EXECUTE",
-							!metaNode.can(MetaNode.CMD_EXECUTE));
 
 		} catch (Exception e) {
 			tbc.fail(MessagesConstants.getMessage(
@@ -918,24 +790,12 @@ public class TreeStructure {
 
 			tbc
 					.assertTrue(
-							"Asserts $/Monitor/cesar/test0/Server/remoteServer/Reporting/Value metanode ADD",
-							!metaNode.can(MetaNode.CMD_ADD));
-			tbc
-					.assertTrue(
 							"Asserts $/Monitor/cesar/test0/Server/remoteServer/Reporting/Value metanode GET",
 							metaNode.can(MetaNode.CMD_GET));
 			tbc
 					.assertTrue(
 							"Asserts $/Monitor/cesar/test0/Server/remoteServer/Reporting/Value metanode REPLACE",
 							metaNode.can(MetaNode.CMD_REPLACE));
-			tbc
-					.assertTrue(
-							"Asserts $/Monitor/cesar/test0/Server/remoteServer/Reporting/Value metanode DELETE",
-							!metaNode.can(MetaNode.CMD_DELETE));
-			tbc
-					.assertTrue(
-							"Asserts $/Monitor/cesar/test0/Server/remoteServer/Reporting/Value metanode EXECUTE",
-							!metaNode.can(MetaNode.CMD_EXECUTE));
 
 		} catch (Exception e) {
 			tbc.fail(MessagesConstants.getMessage(
@@ -989,24 +849,8 @@ public class TreeStructure {
 
 			tbc
 					.assertTrue(
-							"Asserts $/Monitor/cesar/test0/Server/remoteServer/TrapRef metanode ADD",
-							!metaNode.can(MetaNode.CMD_ADD));
-			tbc
-					.assertTrue(
 							"Asserts $/Monitor/cesar/test0/Server/remoteServer/TrapRef metanode GET",
 							metaNode.can(MetaNode.CMD_GET));
-			tbc
-					.assertTrue(
-							"Asserts $/Monitor/cesar/test0/Server/remoteServer/TrapRef metanode REPLACE",
-							!metaNode.can(MetaNode.CMD_REPLACE));
-			tbc
-					.assertTrue(
-							"Asserts $/Monitor/cesar/test0/Server/remoteServer/TrapRef metanode DELETE",
-							!metaNode.can(MetaNode.CMD_DELETE));
-			tbc
-					.assertTrue(
-							"Asserts $/Monitor/cesar/test0/Server/remoteServer/TrapRef metanode EXECUTE",
-							!metaNode.can(MetaNode.CMD_EXECUTE));
 
 		} catch (Exception e) {
 			tbc.fail(MessagesConstants.getMessage(
@@ -1072,16 +916,8 @@ public class TreeStructure {
 							metaNode.can(MetaNode.CMD_GET));
 			tbc
 					.assertTrue(
-							"Asserts $/Monitor/cesar/test0/Server/remoteServer/TrapRef/testId metanode REPLACE",
-							!metaNode.can(MetaNode.CMD_REPLACE));
-			tbc
-					.assertTrue(
 							"Asserts $/Monitor/cesar/test0/Server/remoteServer/TrapRef/testId metanode DELETE",
 							metaNode.can(MetaNode.CMD_DELETE));
-			tbc
-					.assertTrue(
-							"Asserts $/Monitor/cesar/test0/Server/remoteServer/TrapRef/testId metanode EXECUTE",
-							!metaNode.can(MetaNode.CMD_EXECUTE));
 
 		} catch (Exception e) {
 			tbc.fail(MessagesConstants.getMessage(
@@ -1138,24 +974,13 @@ public class TreeStructure {
 
 			tbc
 					.assertTrue(
-							"Asserts $/Monitor/cesar/test0/Server/remoteServer/TrapRef/testId/TrapRefID metanode ADD",
-							!metaNode.can(MetaNode.CMD_ADD));
-			tbc
-					.assertTrue(
 							"Asserts $/Monitor/cesar/test0/Server/remoteServer/TrapRef/testId/TrapRefID metanode GET",
 							metaNode.can(MetaNode.CMD_GET));
 			tbc
 					.assertTrue(
 							"Asserts $/Monitor/cesar/test0/Server/remoteServer/TrapRef/testId/TrapRefID metanode REPLACE",
 							metaNode.can(MetaNode.CMD_REPLACE));
-			tbc
-					.assertTrue(
-							"Asserts $/Monitor/cesar/test0/Server/remoteServer/TrapRef/testId/TrapRefID metanode DELETE",
-							!metaNode.can(MetaNode.CMD_DELETE));
-			tbc
-					.assertTrue(
-							"Asserts $/Monitor/cesar/test0/Server/remoteServer/TrapRef/testId/TrapRefID metanode EXECUTE",
-							!metaNode.can(MetaNode.CMD_EXECUTE));
+
 
 		} catch (Exception e) {
 			tbc.fail(MessagesConstants.getMessage(

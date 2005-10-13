@@ -132,7 +132,7 @@ public class SwitchEvents implements TestInterface {
 							IllegalArgumentException.class.getName(),
 							e.getClass().getName() }));
 		} finally {
-			tbc.getPermissionAdmin().setPermissions(tbc.getTb1Location(), infos);
+			tbc.setTb1Permission(infos);
 		}
 	}
 
@@ -168,8 +168,7 @@ public class SwitchEvents implements TestInterface {
 							SecurityException.class.getName(),
 							e.getClass().getName() }));
 		} finally {
-			tbc.getPermissionAdmin()
-					.setPermissions(tbc.getTb1Location(), infos);
+			tbc.setTb1Permission(infos);
 		}
 	}
 
@@ -204,8 +203,7 @@ public class SwitchEvents implements TestInterface {
 							SecurityException.class.getName(),
 							e.getClass().getName() }));
 		} finally {
-			tbc.getPermissionAdmin()
-					.setPermissions(tbc.getTb1Location(), infos);
+			tbc.setTb1Permission(infos);
 		}
 	}
 
@@ -271,8 +269,7 @@ public class SwitchEvents implements TestInterface {
 			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": "
 					+ e.getClass().getName());
 		} finally {
-			tbc.getPermissionAdmin()
-					.setPermissions(tbc.getTb1Location(), infos);
+			tbc.setTb1Permission(infos);
 		}
 	}
 
@@ -305,8 +302,7 @@ public class SwitchEvents implements TestInterface {
 							IllegalArgumentException.class.getName(),
 							e.getClass().getName() }));
 		} finally {
-			tbc.getPermissionAdmin()
-					.setPermissions(tbc.getTb1Location(), infos);
+			tbc.setTb1Permission(infos);
 		}
 	}
 
@@ -342,8 +338,7 @@ public class SwitchEvents implements TestInterface {
 							SecurityException.class.getName(),
 							e.getClass().getName() }));
 		} finally {
-			tbc.getPermissionAdmin()
-					.setPermissions(tbc.getTb1Location(), infos);
+			tbc.setTb1Permission(infos);
 		}
 	}
 
@@ -417,8 +412,7 @@ public class SwitchEvents implements TestInterface {
 			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": "
 					+ e.getClass().getName());
 		} finally {
-			tbc.getPermissionAdmin()
-					.setPermissions(tbc.getTb1Location(), infos);
+			tbc.setTb1Permission(infos);
 		}
 	}
 
@@ -480,8 +474,7 @@ public class SwitchEvents implements TestInterface {
 			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": "
 					+ e.getClass().getName());
 		} finally {
-			tbc.getPermissionAdmin()
-					.setPermissions(tbc.getTb1Location(), infos);
+			tbc.setTb1Permission(infos);
 		}
 	}
 
@@ -556,8 +549,7 @@ public class SwitchEvents implements TestInterface {
 					+ e.getClass().getName());
 		} finally {
 			tbc.uninstallNewTestMonitorable();
-			tbc.getPermissionAdmin()
-					.setPermissions(tbc.getTb1Location(), infos);
+			tbc.setTb1Permission(infos);
 		}
 	}
 	
@@ -609,8 +601,7 @@ public class SwitchEvents implements TestInterface {
 			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": "
 					+ e.getClass().getName());
 		} finally {
-			tbc.getPermissionAdmin()
-					.setPermissions(tbc.getTb1Location(), infos);
+			tbc.setTb1Permission(infos);
 		}
 	}	
 

@@ -69,7 +69,7 @@ public class MonitorConstants {
 	public final static String INVALID_MONITORABLE_SV = "tmp";
 	public static int EVENT_COUNT = 0;
 	public static int SWITCH_EVENTS_COUNT = 0;
-	public static final int TIMEOUT = 1000;
+	public static final int TIMEOUT = 180000;
 	public static final int SHORT_TIMEOUT = 2000;
 	public static final String CONST_STATUSVARIABLE_NAME = "mon.statusvariable.name";
 	public static final String CONST_STATUSVARIABLE_VALUE = "mon.statusvariable.value";

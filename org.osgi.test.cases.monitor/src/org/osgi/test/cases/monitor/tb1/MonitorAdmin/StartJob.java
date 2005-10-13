@@ -250,8 +250,7 @@ public class StartJob implements TestInterface {
 					+ e.getClass().getName());
 		} finally {
 			tbc.cleanUp(mj);
-			tbc.getPermissionAdmin()
-					.setPermissions(tbc.getTb1Location(), infos);
+			tbc.setTb1Permission(infos);
 		}
 	}
 
@@ -300,8 +299,7 @@ public class StartJob implements TestInterface {
 							e.getClass().getName() }));
 		} finally {
 			tbc.cleanUp(job);			
-			tbc.getPermissionAdmin()
-					.setPermissions(tbc.getTb1Location(), infos);
+			tbc.setTb1Permission(infos);
 		}
 	}
 
@@ -348,8 +346,7 @@ public class StartJob implements TestInterface {
 							e.getClass().getName() }));
 		} finally {
 			tbc.cleanUp(mj);			
-			tbc.getPermissionAdmin()
-					.setPermissions(tbc.getTb1Location(), infos);
+			tbc.setTb1Permission(infos);
 		}
 	}
 
@@ -386,7 +383,7 @@ public class StartJob implements TestInterface {
 							e.getClass().getName() }));
 		} finally {
 			tbc.cleanUp(job);			
-			tbc.getPermissionAdmin().setPermissions(tbc.getTb1Location(), infos);
+			tbc.setTb1Permission(infos);
 		}
 	}
 
@@ -511,8 +508,7 @@ public class StartJob implements TestInterface {
 					+ e.getClass().getName() + " " + e.getMessage());
 		} finally {
 			tbc.cleanUp(mj);
-			tbc.getPermissionAdmin()
-					.setPermissions(tbc.getTb1Location(), infos);
+			tbc.setTb1Permission(infos);
 		}
 	}
 

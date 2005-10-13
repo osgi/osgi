@@ -41,6 +41,7 @@
 package org.osgi.test.cases.monitor.tbc;
 
 import java.net.SocketPermission;
+
 import org.osgi.framework.AdminPermission;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.InvalidSyntaxException;
@@ -98,8 +99,6 @@ public class MonitorTestControl extends DefaultTestBundleControl {
 	
 	private TestInterface[] testInterfaces;
 	
-	private ServiceReference[] srvReferences;
-	
 	private String serverId = null;
 	
 	private String correlator = null;
@@ -121,6 +120,8 @@ public class MonitorTestControl extends DefaultTestBundleControl {
 	private String statusVariableValue = null;
 	private String monitorablePid = null;
 	private String listenerId = null;
+	
+	private PermissionWorker worker;
 	
 
 	
@@ -185,6 +186,19 @@ public class MonitorTestControl extends DefaultTestBundleControl {
 					+ e.getClass());			
 		}				
 	}
+	
+	private void setPermission(PermissionInfo[] permissions, String location) {
+		synchronized (worker) {
+			worker.setLocation(location);
+			worker.setPermissions(permissions);
+			worker.notifyAll();
+			try {
+				worker.wait(MonitorConstants.SHORT_TIMEOUT);
+			} catch (InterruptedException e) {
+				log("#error on PermissionWorker wait.");
+			}
+		}
+	}	
 
 	public void prepare() throws Exception {
 			installMonitorables();
@@ -213,8 +227,13 @@ public class MonitorTestControl extends DefaultTestBundleControl {
 							MonitorListener.class.getName()));
 			
 			dmtAdmin = (DmtAdmin) getContext().getService(getContext().getServiceReference(DmtAdmin.class.getName()));			
-
+			startPermissionWorker();
 	}
+	
+	private void startPermissionWorker() {
+		worker = new PermissionWorker(this);
+		worker.start();
+	}	
 	
 	public void setLocalPermission(PermissionInfo[] permissions) {
 		PermissionInfo[] defaults = new PermissionInfo[] {
@@ -231,7 +250,7 @@ public class MonitorTestControl extends DefaultTestBundleControl {
 		System.arraycopy(defaults, 0, permissao, 0, defaults.length);
 		System.arraycopy(permissions, 0, permissao, defaults.length, permissions.length);
 
-		getPermissionAdmin().setPermissions(getTb1Location(), permissao);
+		setPermission(permissao, getTb1Location());
 	}
 	
 	public void setLocalPermission(PermissionInfo permission) {
@@ -244,8 +263,8 @@ public class MonitorTestControl extends DefaultTestBundleControl {
 				new PermissionInfo(ServicePermission.class.getName(), "*", ServicePermission.REGISTER),
 				permission
 		};
-
-		getPermissionAdmin().setPermissions(getTb1Location(), defaults);
+		
+		setPermission(defaults, getTb1Location());
 	}
 	
 	public void setLocalPermission(String target, String action) {
@@ -259,8 +278,16 @@ public class MonitorTestControl extends DefaultTestBundleControl {
 				new PermissionInfo(org.osgi.service.monitor.MonitorPermission.class.getName(), target, action)
 		};
 
-		getPermissionAdmin().setPermissions(tb3.getLocation(), defaults);
+		setPermission(defaults, tb3.getLocation());
 	}	
+	
+	public void setTb1Permission(PermissionInfo[] infos) {
+		setPermission(infos, getTb1Location());
+	}
+	
+	public void setTb3Permission(PermissionInfo[] infos) {
+		setPermission(infos, tb3.getLocation());
+	}
 	
 	/*
 	 * Returns Tb3 location
@@ -336,42 +363,42 @@ public class MonitorTestControl extends DefaultTestBundleControl {
 	 * Executes MonitorAdmin.getStatusVariable test methods
 	 */
 	public void testMonitorAdminGetStatusVariable() {
-//		testInterfaces[3].run();
+		testInterfaces[3].run();
 	}
 
 	/*
 	 * Executes MonitorAdmin.getStatusVariables test methods
 	 */
 	public void testMonitorAdminGetStatusVariables() {
-//		testInterfaces[5].run();
+		testInterfaces[5].run();
 	}
 
 	/*
 	 * Executes MonitorAdmin.switchEvents test methods
 	 */
 	public void testMonitorAdminSwitchEvents() {
-//		testInterfaces[9].run();
+		testInterfaces[9].run();
 	}
 
 	/*
 	 * Executes MonitorAdmin.resetStatusVariable test methods
 	 */
 	public void testMonitorAdminResetStatusVariable() {
-//		testInterfaces[6].run();
+		testInterfaces[6].run();
 	}
 
 	/*
 	 * Executes MonitorAdmin.getStatusVariableNames test methods
 	 */
 	public void testMonitorAdminGetStatusVariableNames() {
-//		testInterfaces[4].run();
+		testInterfaces[4].run();
 	}
 
 	/*
 	 * Executes MonitorAdmin.getDescription test methods
 	 */
 	public void testMonitorAdminGetDescription() {
-//		testInterfaces[0].run();
+		testInterfaces[0].run();
 	}
 
 	/*
@@ -385,21 +412,21 @@ public class MonitorTestControl extends DefaultTestBundleControl {
 	 * Executes MonitorAdmin.getRunningJobs test methods
 	 */
 	public void testMonitorAdminGetRunningJobs() {
-//		testInterfaces[2].run();
+		testInterfaces[2].run();
 	}
 
 	/*
 	 * Executes MonitorAdmin.startJob test methods
 	 */
 	public void testMonitorAdminStartJob() {
-//		testInterfaces[7].run();		
+		testInterfaces[7].run();		
 	}
 
 	/*
 	 * Executes MonitorAdmin.startScheduledJob test methods
 	 */
 	public void testMonitorAdminStartScheduledJob() {
-//		testInterfaces[8].run();
+		testInterfaces[8].run();
 	}
 
 	/*

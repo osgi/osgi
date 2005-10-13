@@ -197,8 +197,7 @@ public class GetStatusVariableNames implements TestInterface {
 			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": "
 					+ e.getClass().getName());
 		} finally {
-			tbc.getPermissionAdmin()
-					.setPermissions(tbc.getTb1Location(), infos);
+			tbc.setTb1Permission(infos);
 		}
 	}
 
@@ -230,8 +229,7 @@ public class GetStatusVariableNames implements TestInterface {
 			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": "
 					+ e.getClass().getName());
 		} finally {
-			tbc.getPermissionAdmin()
-					.setPermissions(tbc.getTb1Location(), infos);
+			tbc.setTb1Permission(infos);
 		}
 	}
 
@@ -266,8 +264,7 @@ public class GetStatusVariableNames implements TestInterface {
 			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": "
 					+ e.getClass().getName());
 		} finally {
-			tbc.getPermissionAdmin()
-					.setPermissions(tbc.getTb1Location(), infos);
+			tbc.setTb1Permission(infos);
 		}
 	}
 
@@ -305,8 +302,7 @@ public class GetStatusVariableNames implements TestInterface {
 			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": "
 					+ e.getClass().getName());
 		} finally {
-			tbc.getPermissionAdmin()
-					.setPermissions(tbc.getTb1Location(), infos);
+			tbc.setTb1Permission(infos);
 		}
 	}
 
@@ -370,10 +366,8 @@ public class GetStatusVariableNames implements TestInterface {
 			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": "
 					+ e.getClass().getName());
 		} finally {
-			tbc.getPermissionAdmin().setPermissions(tbc.getTb1Location(),
-					infosTb1);
-			tbc.getPermissionAdmin().setPermissions(tbc.getTb3Location(),
-					infosTb3);
+			tbc.setTb1Permission(infosTb1);
+			tbc.setTb3Permission(infosTb3);
 		}
 	}
 	
@@ -418,8 +412,7 @@ public class GetStatusVariableNames implements TestInterface {
 			} catch (Exception e1) {
 				tbc.log("#error on stopping the monitorable.");
 			}
-			tbc.getPermissionAdmin()
-					.setPermissions(tbc.getTb1Location(), infos);
+			tbc.setTb1Permission(infos);
 		}
 	}	
 	
@@ -431,8 +424,17 @@ public class GetStatusVariableNames implements TestInterface {
 	 */		
 	private void testGetStatusVariableNames010() {
 		Bundle bundle = null;
+		PermissionInfo[] infos = null;
 		try {
 			tbc.log("#testGetStatusVariableNames010");	
+			
+			infos = tbc.getPermissionAdmin().getPermissions(
+					tbc.getTb1Location());
+
+			tbc.setLocalPermission(new PermissionInfo(MonitorPermission.class
+					.getName(), "*/*",
+					MonitorPermission.READ));			
+			
 			bundle = tbc.installBundle("tb4.jar");		
 			String[] names = tbc.getMonitorAdmin().getStatusVariableNames("sameSV");
 			tbc.assertEquals("Asserting if getStatusVariableNames returns an array of 1 element.", 1, names.length);
@@ -445,6 +447,7 @@ public class GetStatusVariableNames implements TestInterface {
 			} catch (BundleException e1) {
 				tbc.log("fail when we try to uninstall the tb4.");
 			}
+			tbc.setTb1Permission(infos);
 		}
 	}		
 	

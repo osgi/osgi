@@ -152,7 +152,7 @@ public class GetDescription implements TestInterface {
 							IllegalArgumentException.class.getName(),
 							e.getClass().getName() }));
 		} finally {
-			tbc.getPermissionAdmin().setPermissions(tbc.getTb1Location(), infos);
+			tbc.setTb1Permission(infos);
 		}
 	}
 
@@ -176,7 +176,7 @@ public class GetDescription implements TestInterface {
 		} catch (Exception e) {
 			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": " + e.getClass().getName());
 		} finally {
-			tbc.getPermissionAdmin().setPermissions(tbc.getTb1Location(), infos);
+			tbc.setTb1Permission(infos);
 		}
 	}
 
@@ -209,8 +209,7 @@ public class GetDescription implements TestInterface {
 							SecurityException.class.getName(),
 							e.getClass().getName() }));
 		} finally {
-			tbc.getPermissionAdmin().setPermissions(
-					tbc.getTb1Location(), infos);
+			tbc.setTb1Permission(infos);
 		}
 	}
 
@@ -243,8 +242,7 @@ public class GetDescription implements TestInterface {
 							SecurityException.class.getName(),
 							e.getClass().getName() }));
 		} finally {
-			tbc.getPermissionAdmin().setPermissions(
-					tbc.getTb1Location(), infos);
+			tbc.setTb1Permission(infos);
 		}
 	}
 	
@@ -277,8 +275,7 @@ public class GetDescription implements TestInterface {
 							SecurityException.class.getName(),
 							e.getClass().getName() }));
 		} finally {
-			tbc.getPermissionAdmin().setPermissions(
-					tbc.getTb1Location(), infos);
+			tbc.setTb1Permission(infos);
 		}
 	}
 	

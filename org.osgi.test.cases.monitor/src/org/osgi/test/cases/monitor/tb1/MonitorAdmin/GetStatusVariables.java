@@ -122,8 +122,7 @@ public class GetStatusVariables implements TestInterface {
 			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": "
 					+ e.getClass().getName());
 		} finally {
-			tbc.getPermissionAdmin()
-					.setPermissions(tbc.getTb1Location(), infos);
+			tbc.setTb1Permission(infos);
 		}
 	}
 
@@ -229,8 +228,7 @@ public class GetStatusVariables implements TestInterface {
 			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": "
 					+ e.getClass().getName());
 		} finally {
-			tbc.getPermissionAdmin()
-					.setPermissions(tbc.getTb1Location(), infos);
+			tbc.setTb1Permission(infos);
 		}
 	}
 
@@ -263,8 +261,7 @@ public class GetStatusVariables implements TestInterface {
 			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": "
 					+ e.getClass().getName());
 		} finally {
-			tbc.getPermissionAdmin()
-					.setPermissions(tbc.getTb1Location(), infos);
+			tbc.setTb1Permission(infos);
 		}
 	}
 
@@ -301,8 +298,7 @@ public class GetStatusVariables implements TestInterface {
 			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": "
 					+ e.getClass().getName());
 		} finally {
-			tbc.getPermissionAdmin()
-					.setPermissions(tbc.getTb1Location(), infos);
+			tbc.setTb1Permission(infos);
 		}
 	}
 	
@@ -344,9 +340,8 @@ public class GetStatusVariables implements TestInterface {
 			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": "
 					+ e.getClass().getName());
 		} finally {
-			tbc.getPermissionAdmin()
-					.setPermissions(tbc.getTb1Location(), infosTb1);
-			tbc.getPermissionAdmin().setPermissions(tbc.getTb3Location(), infosTb3);
+			tbc.setTb1Permission(infosTb1);
+			tbc.setTb3Permission(infosTb3);
 		}
 	}	
 	
@@ -358,8 +353,16 @@ public class GetStatusVariables implements TestInterface {
 	 */		
 	private void testGetStatusVariables009() {
 		Bundle bundle = null;
+		tbc.log("#testGetStatusVariables009");
+		PermissionInfo[] infos = null;
 		try {
-			tbc.log("#testGetStatusVariables009");	
+			infos = tbc.getPermissionAdmin().getPermissions(
+					tbc.getTb1Location());
+
+			tbc.setLocalPermission(new PermissionInfo(MonitorPermission.class
+					.getName(), "*/*",
+					MonitorPermission.READ));
+		
 			bundle = tbc.installBundle("tb4.jar");		
 			StatusVariable[] sv = tbc.getMonitorAdmin().getStatusVariables("sameSV");
 			tbc.assertEquals("Asserting if getStatusVariables returns an array of 1 element.", 1, sv.length);
@@ -372,6 +375,7 @@ public class GetStatusVariables implements TestInterface {
 			} catch (BundleException e1) {
 				tbc.log("fail when we try to uninstall the tb4.");
 			}
+			tbc.setTb1Permission(infos);
 		}
 	}	
 
