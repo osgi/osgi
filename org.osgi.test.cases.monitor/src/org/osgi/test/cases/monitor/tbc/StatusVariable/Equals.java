@@ -52,8 +52,6 @@ import org.osgi.test.cases.monitor.tbc.util.MessagesConstants;
  * documentation.
  */
 public class Equals {
-	private String[] CM = { "CC", "DER", "GAUGE", "SI" };
-
 	private MonitorTestControl tbc;
 
 	public Equals(MonitorTestControl tbc) {

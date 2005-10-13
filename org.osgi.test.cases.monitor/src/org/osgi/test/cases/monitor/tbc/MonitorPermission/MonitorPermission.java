@@ -94,7 +94,7 @@ public class MonitorPermission {
 	private void testMonitorPermission001() {
 		try {
 			tbc.log("#testMonitorPermission001");
-			org.osgi.service.monitor.MonitorPermission mp = new org.osgi.service.monitor.MonitorPermission(
+			new org.osgi.service.monitor.MonitorPermission(
 					"com.mycomp.myapp/queue_length",
 					org.osgi.service.monitor.MonitorPermission.READ);
 			tbc.pass("MonitorPermission object was created successfully");
@@ -113,7 +113,7 @@ public class MonitorPermission {
 	private void testMonitorPermission002() {
 		try {
 			tbc.log("#testMonitorPermission002");
-			org.osgi.service.monitor.MonitorPermission mp = new org.osgi.service.monitor.MonitorPermission(
+			new org.osgi.service.monitor.MonitorPermission(
 					"com.mycomp.myapp/*",
 					org.osgi.service.monitor.MonitorPermission.READ);
 
@@ -134,7 +134,7 @@ public class MonitorPermission {
 	private void testMonitorPermission003() {
 		try {
 			tbc.log("#testMonitorPermission003");
-			org.osgi.service.monitor.MonitorPermission mp = new org.osgi.service.monitor.MonitorPermission(
+			new org.osgi.service.monitor.MonitorPermission(
 					"com.mycomp.*/queue*",
 					org.osgi.service.monitor.MonitorPermission.READ);
 
@@ -155,7 +155,7 @@ public class MonitorPermission {
 	private void testMonitorPermission004() {
 		try {
 			tbc.log("#testMonitorPermission004");
-			org.osgi.service.monitor.MonitorPermission mp = new org.osgi.service.monitor.MonitorPermission(
+			new org.osgi.service.monitor.MonitorPermission(
 					"*/queue*", org.osgi.service.monitor.MonitorPermission.READ);
 
 			tbc.pass("MonitorPermission object was created successfully");
@@ -175,7 +175,7 @@ public class MonitorPermission {
 	private void testMonitorPermission005() {
 		try {
 			tbc.log("#testMonitorPermission005");
-			org.osgi.service.monitor.MonitorPermission mp = new org.osgi.service.monitor.MonitorPermission(
+			new org.osgi.service.monitor.MonitorPermission(
 					"*/queue_length",
 					org.osgi.service.monitor.MonitorPermission.READ);
 
@@ -196,7 +196,7 @@ public class MonitorPermission {
 	private void testMonitorPermission006() {
 		try {
 			tbc.log("#testMonitorPermission006");
-			org.osgi.service.monitor.MonitorPermission kp = new org.osgi.service.monitor.MonitorPermission(
+			new org.osgi.service.monitor.MonitorPermission(
 					"*/*", org.osgi.service.monitor.MonitorPermission.READ);
 
 			tbc.pass("MonitorPermission object was created successfully");
@@ -215,7 +215,7 @@ public class MonitorPermission {
 	private void testMonitorPermission007() {
 		try {
 			tbc.log("#testMonitorPermission007");
-			org.osgi.service.monitor.MonitorPermission mp = new org.osgi.service.monitor.MonitorPermission(
+			new org.osgi.service.monitor.MonitorPermission(
 					"*.myapp/queue_length",
 					org.osgi.service.monitor.MonitorPermission.READ);
 
@@ -242,7 +242,7 @@ public class MonitorPermission {
 	private void testMonitorPermission008() {
 		try {
 			tbc.log("#testMonitorPermission008");
-			org.osgi.service.monitor.MonitorPermission mp = new org.osgi.service.monitor.MonitorPermission(
+			new org.osgi.service.monitor.MonitorPermission(
 					"com.*.myapp/*",
 					org.osgi.service.monitor.MonitorPermission.READ);
 
@@ -268,7 +268,7 @@ public class MonitorPermission {
 	private void testMonitorPermission009() {
 		try {
 			tbc.log("#testMonitorPermission009");
-			org.osgi.service.monitor.MonitorPermission mp = new org.osgi.service.monitor.MonitorPermission(
+			new org.osgi.service.monitor.MonitorPermission(
 					"com.myapp.*/*_length",
 					org.osgi.service.monitor.MonitorPermission.READ);
 
@@ -294,7 +294,7 @@ public class MonitorPermission {
 	private void testMonitorPermission010() {
 		try {
 			tbc.log("#testMonitorPermission010");
-			org.osgi.service.monitor.MonitorPermission mp = new org.osgi.service.monitor.MonitorPermission(
+			new org.osgi.service.monitor.MonitorPermission(
 					"com.myapp.*/queue*length",
 					org.osgi.service.monitor.MonitorPermission.READ);
 
@@ -320,7 +320,7 @@ public class MonitorPermission {
 	private void testMonitorPermission011() {
 		try {
 			tbc.log("#testMonitorPermission011");
-			org.osgi.service.monitor.MonitorPermission mp = new org.osgi.service.monitor.MonitorPermission(
+			new org.osgi.service.monitor.MonitorPermission(
 					"*/*", "test");
 
 			tbc.failException("", IllegalArgumentException.class);
@@ -345,7 +345,7 @@ public class MonitorPermission {
 	private void testMonitorPermission012() {
 		try {
 			tbc.log("#testMonitorPermission012");
-			org.osgi.service.monitor.MonitorPermission mp = new org.osgi.service.monitor.MonitorPermission(
+			new org.osgi.service.monitor.MonitorPermission(
 					"*/*", org.osgi.service.monitor.MonitorPermission.READ
 							+ ",test");
 
@@ -575,7 +575,7 @@ public class MonitorPermission {
 	private void testMonitorPermission019() {
 		try {
 			tbc.log("#testMonitorPermission019");
-			org.osgi.service.monitor.MonitorPermission mp = new org.osgi.service.monitor.MonitorPermission(
+			new org.osgi.service.monitor.MonitorPermission(
 					null, org.osgi.service.monitor.MonitorPermission.READ);
 
 			tbc.failException("", IllegalArgumentException.class);
@@ -600,7 +600,7 @@ public class MonitorPermission {
 	private void testMonitorPermission020() {
 		try {
 			tbc.log("#testMonitorPermission020");
-			org.osgi.service.monitor.MonitorPermission mp = new org.osgi.service.monitor.MonitorPermission(
+			new org.osgi.service.monitor.MonitorPermission(
 					"*/*", null);
 
 			tbc.failException("", IllegalArgumentException.class);

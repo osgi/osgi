@@ -43,7 +43,6 @@ import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.monitor.Monitorable;
 import org.osgi.test.cases.monitor.tbc.MonitorConstants;
-import org.osgi.test.cases.monitor.tbc.MonitorTestControl;
 
 /**
  * @author Alexandre Santos
@@ -53,8 +52,6 @@ public class MonitorableActivator implements BundleActivator {
 
 	private ServiceRegistration servReg;
 	
-	private MonitorTestControl tbc;
-
 	private MonitorableImpl testMonitorableImpl;
 
 	public void start(BundleContext bc) throws Exception {

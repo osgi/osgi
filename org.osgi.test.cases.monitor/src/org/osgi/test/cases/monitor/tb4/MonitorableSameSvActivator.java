@@ -42,7 +42,6 @@ import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.monitor.Monitorable;
-import org.osgi.test.cases.monitor.tbc.MonitorTestControl;
 
 /**
  * @author Alexandre Santos
@@ -52,8 +51,6 @@ public class MonitorableSameSvActivator implements BundleActivator {
 
 	private ServiceRegistration servReg;
 	
-	private MonitorTestControl tbc;
-
 	private MonitorableSameSvImpl testMonitorableImpl;
 
 	public void start(BundleContext bc) throws Exception {

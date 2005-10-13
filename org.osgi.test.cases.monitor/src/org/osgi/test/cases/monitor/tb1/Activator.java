@@ -62,8 +62,6 @@ public class Activator implements BundleActivator, TB1Service {
 
 	private ServiceRegistration servReg;
 	
-	private MonitorTestControl tbc;
-
 	public void start(BundleContext bc) throws Exception {
 		
 		servReg = bc.registerService(TB1Service.class.getName(), this, null);

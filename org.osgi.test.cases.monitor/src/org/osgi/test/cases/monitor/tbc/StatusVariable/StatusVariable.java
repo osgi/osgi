@@ -1089,7 +1089,7 @@ public class StatusVariable {
 	private void testStatusVariable033() {
 		try {
 			tbc.log("#testStatusVariable033");
-			org.osgi.service.monitor.StatusVariable sv = new org.osgi.service.monitor.StatusVariable(
+			new org.osgi.service.monitor.StatusVariable(
 					MonitorConstants.LONGID,
 					org.osgi.service.monitor.StatusVariable.CM_CC,
 					MonitorConstants.SV_FLOAT_VALUE);
@@ -1115,7 +1115,7 @@ public class StatusVariable {
 	private void testStatusVariable034() {
 		try {
 			tbc.log("#testStatusVariable034");
-			org.osgi.service.monitor.StatusVariable sv = new org.osgi.service.monitor.StatusVariable(
+			new org.osgi.service.monitor.StatusVariable(
 					MonitorConstants.LONGID,
 					org.osgi.service.monitor.StatusVariable.CM_CC,
 					MonitorConstants.SV_BOOLEAN_VALUE);
@@ -1141,7 +1141,7 @@ public class StatusVariable {
 	private void testStatusVariable035() {
 		try {
 			tbc.log("#testStatusVariable035");
-			org.osgi.service.monitor.StatusVariable sv = new org.osgi.service.monitor.StatusVariable(
+			new org.osgi.service.monitor.StatusVariable(
 					MonitorConstants.LONGID,
 					org.osgi.service.monitor.StatusVariable.CM_CC,
 					MonitorConstants.SV_INT_VALUE);
@@ -1167,7 +1167,7 @@ public class StatusVariable {
 	private void testStatusVariable036() {
 		try {
 			tbc.log("#testStatusVariable036");
-			org.osgi.service.monitor.StatusVariable sv = new org.osgi.service.monitor.StatusVariable(
+			new org.osgi.service.monitor.StatusVariable(
 					MonitorConstants.LONGID,
 					org.osgi.service.monitor.StatusVariable.CM_CC,
 					MonitorConstants.SV_STRING_VALUE);
@@ -1193,7 +1193,7 @@ public class StatusVariable {
 	private void testStatusVariable037() {
 		try {
 			tbc.log("#testStatusVariable037");
-			org.osgi.service.monitor.StatusVariable sv = new org.osgi.service.monitor.StatusVariable(
+			new org.osgi.service.monitor.StatusVariable(
 					MonitorConstants.INEXISTENT_MONITORABLE,
 					org.osgi.service.monitor.StatusVariable.CM_CC,
 					MonitorConstants.SV_STRING_VALUE);
@@ -1213,7 +1213,7 @@ public class StatusVariable {
 	private void testStatusVariable038() {
 		try {
 			tbc.log("#testStatusVariable038");
-			org.osgi.service.monitor.StatusVariable sv = new org.osgi.service.monitor.StatusVariable(
+			new org.osgi.service.monitor.StatusVariable(
 					MonitorConstants.INEXISTENT_MONITORABLE,
 					org.osgi.service.monitor.StatusVariable.CM_CC,
 					MonitorConstants.SV_BOOLEAN_VALUE);
@@ -1233,7 +1233,7 @@ public class StatusVariable {
 	private void testStatusVariable039() {
 		try {
 			tbc.log("#testStatusVariable039");
-			org.osgi.service.monitor.StatusVariable sv = new org.osgi.service.monitor.StatusVariable(
+			new org.osgi.service.monitor.StatusVariable(
 					MonitorConstants.INEXISTENT_MONITORABLE,
 					org.osgi.service.monitor.StatusVariable.CM_CC,
 					MonitorConstants.SV_FLOAT_VALUE);
@@ -1253,7 +1253,7 @@ public class StatusVariable {
 	private void testStatusVariable040() {
 		try {
 			tbc.log("#testStatusVariable040");
-			org.osgi.service.monitor.StatusVariable sv = new org.osgi.service.monitor.StatusVariable(
+			new org.osgi.service.monitor.StatusVariable(
 					MonitorConstants.INEXISTENT_MONITORABLE,
 					org.osgi.service.monitor.StatusVariable.CM_CC,
 					MonitorConstants.SV_INT_VALUE);
