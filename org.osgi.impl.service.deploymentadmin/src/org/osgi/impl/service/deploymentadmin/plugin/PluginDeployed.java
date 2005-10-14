@@ -438,8 +438,7 @@ public class PluginDeployed implements DataPluginFactory, ReadableDataSession,
                     String[] bis = getBundleIDs(nodeUriArr[5]);
                     if (bis.length <= 0)
                         return new String[] {"Signers", "Manifest", "PackageType"};
-                    else
-                        return new String[] {"Signers", "Manifest", "Bundles", "PackageType"};
+                    return new String[] {"Signers", "Manifest", "Bundles", "PackageType"};
                 }
                 return new String[] {"Bundles", "PackageType"};
             }
@@ -622,18 +621,6 @@ public class PluginDeployed implements DataPluginFactory, ReadableDataSession,
         }
     }
     
-    private Bundle getBundleBySymbName(String symbName) {
-        Bundle[] bundles = pluginCtx.getBundleContext().getBundles();
-        for (int i = 0; i < bundles.length; i++) {
-            String bSymbName = bundles[i].getSymbolicName();
-            if (null == bSymbName)
-                continue;
-            if (bSymbName.equals(symbName))
-                return bundles[i];
-        }
-        return null;
-    }
-    
     private Bundle getBundleByBundleId(long id) {
         Bundle[] bundles = pluginCtx.getBundleContext().getBundles();
         for (int i = 0; i < bundles.length; i++) {
@@ -643,22 +630,6 @@ public class PluginDeployed implements DataPluginFactory, ReadableDataSession,
         return null;
     }
 
-    /*private String[] extractSigners(BundleEntry be) {
-        List list = be.getCertificateChainStringArrays();
-        if (null == list)
-            return new String[] {};
-        String[] signers = new String[list.size()];
-        for (int i = 0; i < list.size(); i++) {
-            String[] e = (String[]) list.get(i);
-            StringBuffer sb = new StringBuffer();
-            for (int j = 0; j < e.length; j++)
-                sb.append(e[j] + ";");
-            sb.deleteCharAt(sb.length() - 1);
-            signers[i] = sb.toString();
-        }
-        return signers;
-    }*/
-    
     private String getManifest(Bundle b) throws IOException {
         URL url = b.getEntry("/META-INF/MANIFEST.MF");
         StringBuffer sb = new StringBuffer();

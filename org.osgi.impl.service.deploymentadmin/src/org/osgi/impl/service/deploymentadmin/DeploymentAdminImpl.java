@@ -25,6 +25,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.net.URL;
 import java.security.AccessController;
 import java.security.cert.Certificate;
 import java.security.KeyStore;
@@ -380,29 +381,57 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
     }
 
     private void initKeyStore() throws Exception {
-        String ksType = System.getProperty(DAConstants.KEYSTORE_TYPE);
-        if (null == ksType)
-            ksType = "JKS";
-        String ks = System.getProperty(DAConstants.KEYSTORE_PATH);
-        if (null == ks) {
+        // get the keystore file
+        
+        String ksFile = System.getProperty(DAConstants.KEYSTORE_PATH);
+        if (null == ksFile) {
+            String sUrl = System.getProperty(DAConstants.KEYSTORE_FW_URL);
+            if (null != sUrl)
+                ksFile = new URL(sUrl).getFile();
+        }
+        if (null == ksFile) {
+            File f = new File(System.getProperty("user.home"));
+            f = new File(f, ".keystore");
+            if (f.exists())
+                ksFile = f.getPath();
+        }
+        if (null == ksFile || !(new File(ksFile).exists())) {
             logger.log(Logger.LOG_WARNING, "Keystore location is not defined. Set the " + 
-                    DAConstants.KEYSTORE_PATH + " system property!");
+                    DAConstants.KEYSTORE_PATH + " system property! Deployment Admin will " +
+                    "not work properly.");
             return;
         }
-        File file = new File(ks);
-        if (!file.exists())
-            throw new RuntimeException("Keystore is not found: " + file);
+
+        // get the keystore pwd
+        
         String pwd = System.getProperty(DAConstants.KEYSTORE_PWD);
         if (null == pwd)
-            throw new RuntimeException("There is no keystore password set. Set the " +
-                    DAConstants.KEYSTORE_PWD + " system property!");
+            logger.log(Logger.LOG_WARNING, "There is no keystore password set. Set the " +
+                    DAConstants.KEYSTORE_PWD + " system property! Keystore integrity will " +
+                    "not be checked.");
+        
+        // get the keystore type
+        
+        String ksType = System.getProperty(DAConstants.KEYSTORE_TYPE);
+        if (null == ksType) {
+            ksType = "JKS";
+            logger.log(Logger.LOG_WARNING, "There is no keystore type set. Set the " +
+                    DAConstants.KEYSTORE_TYPE + " system property! Default keystore type " +
+                    "(JKS) will be used.");
+        }
+        
+        // load the keystore
+        
         keystore = KeyStore.getInstance(ksType);
-        InputStream is = new FileInputStream(file);
+        InputStream is = new FileInputStream(new File(ksFile));
         try {
-            keystore.load(is, pwd.toCharArray());
-            if (null == keystore)
-                throw new RuntimeException("Loading keystore failed");
-        } finally {
+            keystore.load(is, null == pwd ? null : pwd.toCharArray());
+        } catch (Exception e) {
+            logger.log(Logger.LOG_WARNING, "Cannot load the keystore (" + 
+                    ksFile + ") Deployment Admin will " +
+                    "not work properly");
+        }
+        finally {
             if (null != is)
                 is.close();
         }
