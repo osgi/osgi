@@ -111,7 +111,6 @@ public class Transaction {
 	                case INSTALLBUNDLE :
 	                    break;
 	                case UPDATEBUNDLE :
-	                    
 	                    break;
 	                case UNINSTALLBUNDLE :
 	                	try {

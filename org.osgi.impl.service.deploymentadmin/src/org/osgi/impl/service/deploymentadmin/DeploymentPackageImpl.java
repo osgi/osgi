@@ -187,18 +187,10 @@ public class DeploymentPackageImpl implements DeploymentPackage, Serializable {
         }
     }
     
-    Set getBundleEntriesAsSet() {
-        return new HashSet(bundleEntries);
+    public List getBundleEntries() {
+        return bundleEntries;
     }
 
-    public Iterator getBundleEntryIterator() {
-        return bundleEntries.iterator();
-    }
-    
-    ListIterator getReverseBundleEntryIterator() {
-        return bundleEntries.listIterator(bundleEntries.size());
-    }
-    
     boolean contains(BundleEntry be) {
         return bundleEntries.contains(be);
     }
@@ -565,8 +557,8 @@ public class DeploymentPackageImpl implements DeploymentPackage, Serializable {
                 DeploymentPackageImpl eDp = (DeploymentPackageImpl) iter.next();
                 if (dp.getName().equals(eDp.getName()))
                     continue;
-                for (Iterator iterator = eDp.getBundleEntryIterator(); iterator.hasNext();) {
-                    BundleEntry	eBe	= (BundleEntry) iterator.next();
+                for (Iterator iter2 = eDp.getBundleEntries().iterator(); iter2.hasNext();) {
+                    BundleEntry	eBe	= (BundleEntry) iter2.next();
                     if (be.getSymbName().equals(eBe.getSymbName()))
                         throw new DeploymentException(DeploymentException.CODE_BUNDLE_SHARING_VIOLATION, 
                                 "Bundle " + be + " is already installed by the package " + eDp);
@@ -601,16 +593,12 @@ public class DeploymentPackageImpl implements DeploymentPackage, Serializable {
 
     }
 
-    Set getResourceEntriesAsSet() {
-        return new HashSet(resourceEntries);
+    public List getResourceEntries() {
+        return resourceEntries;
     }
 
     void remove(ResourceEntry re) {
         resourceEntries.remove(re);
-    }
-
-    public Iterator getResourceEntryIterator() {
-        return resourceEntries.iterator();
     }
 
     boolean contains(ResourceEntry re) {

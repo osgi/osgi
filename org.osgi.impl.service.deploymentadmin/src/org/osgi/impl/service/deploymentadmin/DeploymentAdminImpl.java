@@ -474,7 +474,7 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
             }
         }
         
-        for (Iterator iter = dp.getBundleEntryIterator(); iter.hasNext();) {
+        for (Iterator iter = dp.getBundleEntries().iterator(); iter.hasNext();) {
             BundleEntry be = (BundleEntry) iter.next();
             if (be.isCustomizer())
                 mappingRpDp.put(be.getPid(), dp.getName());
@@ -489,14 +489,14 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
         DeploymentPackageImpl srcDp = (DeploymentPackageImpl) session.getSourceDeploymentPackage();
         DeploymentPackageImpl tarDp = (DeploymentPackageImpl) session.getTargetDeploymentPackage();
         
-        for (Iterator iter = srcDp.getResourceEntryIterator(); iter.hasNext();) {
+        for (Iterator iter = srcDp.getResourceEntries().iterator(); iter.hasNext();) {
             ResourceEntry re = (ResourceEntry) iter.next();
             if (re.isMissing() && !tarDp.contains(re))
                 throw new DeploymentException(DeploymentException.CODE_MISSING_RESOURCE, 
                         "Resource '" + re + "' in the target Deployment Package is missing");            
         }
         
-        for (Iterator iter = srcDp.getBundleEntryIterator(); iter.hasNext();) {
+        for (Iterator iter = srcDp.getBundleEntries().iterator(); iter.hasNext();) {
             BundleEntry be = (BundleEntry) iter.next();
             if (be.isMissing() && !tarDp.contains(be))
                 throw new DeploymentException(DeploymentException.CODE_MISSING_BUNDLE, 

@@ -23,7 +23,10 @@ import java.util.*;
 
 import org.osgi.framework.*;
 import org.osgi.impl.service.deploymentadmin.DeploymentPackageJarInputStream.Entry;
+import org.osgi.service.condpermadmin.BundleLocationCondition;
+import org.osgi.service.condpermadmin.ConditionInfo;
 import org.osgi.service.condpermadmin.ConditionalPermissionAdmin;
+import org.osgi.service.condpermadmin.ConditionalPermissionInfo;
 import org.osgi.service.deploymentadmin.*;
 import org.osgi.service.permissionadmin.*;
 import org.osgi.util.tracker.ServiceTracker;
@@ -104,42 +107,45 @@ public class DeploymentSessionImpl implements DeploymentSession {
         trackPackAdmin = new TrackerPackageAdmin();
     }
 
-    private Hashtable setFilePermissionForCustomizers() {
-        Hashtable oldPerms = new Hashtable();
-        ServiceReference sref = trackPerm.getServiceReference();
-        if (null == sref)
-            return oldPerms;
+    private Set setFilePermissionForCustomizers() {
+        Set cpisForCusts = new HashSet();
         
-        for (Iterator iter = srcDp.getBundleEntryIterator(); iter.hasNext();) {
+        for (Iterator iter = srcDp.getBundleEntries().iterator(); iter.hasNext();) {
             BundleEntry be = (BundleEntry) iter.next();
             if (be.isCustomizer())
-                setFilePermissionForCustomizer(be, oldPerms);
+                setFilePermissionForCustomizer(be, cpisForCusts);
         }
         
-        return oldPerms;
+        return cpisForCusts;
     }
 
-    private void setFilePermissionForCustomizer(BundleEntry beCust, Hashtable oldPerms) {
+    private void setFilePermissionForCustomizer(BundleEntry beCust, Set cpisForCusts) {
         final String location = DeploymentAdminImpl.location(beCust.getSymbName(), 
                 beCust.getVersion());
-        final PermissionAdmin pa = (PermissionAdmin) trackPerm.getService();
+        final ConditionalPermissionAdmin cpa = (ConditionalPermissionAdmin) AccessController.doPrivileged(new PrivilegedAction() {
+            public Object run() {
+                return (ConditionalPermissionAdmin) trackCondPerm.getService();
+            }
+        });
         
-        PermissionInfo[] old = pa.getPermissions(location);
-        if (null != old)
-            oldPerms.put(location, old);
-        final ArrayList permInfos = null != old ? 
-                new ArrayList(Arrays.asList(old)) : new ArrayList();
-        for (Iterator iter = srcDp.getBundleEntryIterator(); iter.hasNext();) {
+        final ArrayList permInfos = new ArrayList();
+        for (Iterator iter = srcDp.getBundleEntries().iterator(); iter.hasNext();) {
             final BundleEntry be = (BundleEntry) iter.next();
             File f = new File(getBundleDir(be), "-"); 
             permInfos.add(new PermissionInfo(FilePermission.class.getName(), f.getAbsolutePath(), 
                     "read, write, execute, delete"));
         }
-        AccessController.doPrivileged(new PrivilegedAction(){
+        
+        ConditionalPermissionInfo cpi = (ConditionalPermissionInfo) AccessController.doPrivileged(new PrivilegedAction(){
             public Object run() {
-                pa.setPermissions(location, (PermissionInfo[]) permInfos.toArray(new PermissionInfo[] {}));
-                return null;
+                return cpa.addConditionalPermissionInfo(
+                    new ConditionInfo[] {
+                            new ConditionInfo(BundleLocationCondition.class.getName(), new String[] {location})
+                    },
+                    (PermissionInfo[]) permInfos.toArray(new PermissionInfo[] {})
+                );
             }});
+        cpisForCusts.add(cpi);
     }
 
     private String getBundleDir(final BundleEntry be) {
@@ -154,30 +160,16 @@ public class DeploymentSessionImpl implements DeploymentSession {
         });
     }
 
-    private void resetFilePermissionForCustomizers(Hashtable oldPerms) {
-        ServiceReference sref = trackPerm.getServiceReference();
-        if (null == sref)
-            return;
-        
-        for (Iterator iter = srcDp.getBundleEntryIterator(); iter.hasNext();) {
-            BundleEntry be = (BundleEntry) iter.next();
-            if (be.isCustomizer())
-                resetFilePermissionForCustomizer(be, oldPerms);
+    private void resetFilePermissionForCustomizers(Set cpisForCusts) {
+        for (Iterator iter = cpisForCusts.iterator(); iter.hasNext();) {
+            final ConditionalPermissionInfo cpi = (ConditionalPermissionInfo) iter.next();
+            AccessController.doPrivileged(new PrivilegedAction() {
+                public Object run() {
+                    cpi.delete();
+                    return null;
+                }
+            });
         }
-    }
-
-    private void resetFilePermissionForCustomizer(BundleEntry beCust, final Hashtable oldPerms) {
-        final String location = DeploymentAdminImpl.location(beCust.getSymbName(), 
-                beCust.getVersion());
-        final PermissionAdmin pa = (PermissionAdmin) trackPerm.getService();
-        AccessController.doPrivileged(new PrivilegedAction() {
-            public Object run() {
-                pa.setPermissions(location, null);
-                pa.setPermissions(location, (PermissionInfo[]) oldPerms.
-                        get(location));
-                return null;
-            }
-        });
     }
 
     int getDeploymentAction() {
@@ -246,8 +238,8 @@ public class DeploymentSessionImpl implements DeploymentSession {
         else //DeploymentSession.UNINSTALL == getDeploymentAction()
             dp = targetDp;
         
-        Set bes = dp.getBundleEntriesAsSet();
-        for (Iterator iter = bes.iterator(); iter.hasNext();) {
+        List bel = dp.getBundleEntries();
+        for (Iterator iter = bel.iterator(); iter.hasNext();) {
             BundleEntry be = (BundleEntry) iter.next();
             if (be.getBundleId() == b.getBundleId()) {
                 String dir = getBundleDir(be);
@@ -270,17 +262,20 @@ public class DeploymentSessionImpl implements DeploymentSession {
     void installUpdate(DeploymentPackageJarInputStream wjis) throws DeploymentException {
         openTrackers();
         transaction = Transaction.createTransaction(this, sessionCtx.getLogger());
-        Hashtable oldPerms = null;
+        
+        // ConditionalPermissionInfo-s for customizers
+        Set cpisForCusts = null;
+        
         int numOfErrors = 0;
         try {
             transaction.start();
             stopBundles();
             processBundles(wjis);
-            oldPerms = setFilePermissionForCustomizers();
+            cpisForCusts = setFilePermissionForCustomizers();
             startCustomizers();
             processResources(wjis);
-            dropResources();
             dropBundles();
+            dropResources();
             //refreshPackages();
             numOfErrors = startBundles();
         } catch (CancelException e) {
@@ -294,8 +289,7 @@ public class DeploymentSessionImpl implements DeploymentSession {
             throw new DeploymentException(DeploymentException.CODE_OTHER_ERROR, 
                     e.getMessage(), e);
         } finally {
-            if (null != oldPerms)
-                resetFilePermissionForCustomizers(oldPerms);
+            resetFilePermissionForCustomizers(cpisForCusts);
         }
         transaction.commit();
         closeTrackers();
@@ -325,8 +319,8 @@ public class DeploymentSessionImpl implements DeploymentSession {
             transaction.start();
             stopBundles();
             startCustomizers();
-            dropAllResources();
             dropBundles();
+            dropAllResources();
         } catch (CancelException e) {
             transaction.rollback();
             throw e;
@@ -353,7 +347,7 @@ public class DeploymentSessionImpl implements DeploymentSession {
         else //DeploymentSession.UNINSTALL == getDeploymentAction()
             dp = targetDp;
         int numOfErrors = 0;
-        for (Iterator iter = dp.getBundleEntryIterator(); iter.hasNext();) {
+        for (Iterator iter = dp.getBundleEntries().iterator(); iter.hasNext();) {
             BundleEntry entry = (BundleEntry) iter.next();
             Bundle b = sessionCtx.getBundleContext().getBundle(entry.getBundleId());
             if (entry.isCustomizer())
@@ -378,14 +372,14 @@ public class DeploymentSessionImpl implements DeploymentSession {
             dp = srcDp;
         else //DeploymentSession.UNINSTALL == getDeploymentAction()
             dp = targetDp;
-        for (Iterator iter = dp.getBundleEntryIterator(); iter.hasNext();) {
+        for (Iterator iter = dp.getBundleEntries().iterator(); iter.hasNext();) {
             BundleEntry entry = (BundleEntry) iter.next();
             try {
                 Bundle b = sessionCtx.getBundleContext().getBundle(entry.getBundleId());
                 if (!entry.isCustomizer())
                     continue;
                 startBundle(b);
-                ServiceReference sref = b.getRegisteredServices()[0];
+                ServiceReference sref = getRegServ(b);
                 String pid = (String) sref.getProperty(Constants.SERVICE_PID);
                 entry.setPid(pid);
             } catch (Exception e) {
@@ -397,6 +391,18 @@ public class DeploymentSessionImpl implements DeploymentSession {
         }
     }
     
+    private ServiceReference getRegServ(final Bundle b) {
+        ServiceReference srefs[] = (ServiceReference[]) AccessController.doPrivileged(new PrivilegedAction() {
+            public Object run() {
+                return b.getRegisteredServices();
+            }
+        });
+        if (null != srefs && srefs.length > 0)
+            return srefs[0];
+        
+        throw new RuntimeException("Internal error");
+    }
+
     private void startBundle(final Bundle b) throws BundleException {
         try {
             AccessController.doPrivileged(new PrivilegedExceptionAction() {
@@ -416,7 +422,7 @@ public class DeploymentSessionImpl implements DeploymentSession {
         if (INSTALL == getDeploymentAction())
             return;
         
-        for (ListIterator iter = targetDp.getReverseBundleEntryIterator(); iter.hasPrevious();) {
+        for (ListIterator iter = targetDp.getBundleEntries().listIterator(); iter.hasPrevious();) {
             BundleEntry entry = (BundleEntry) iter.previous();
             try {
 	            Bundle b = sessionCtx.getBundleContext().getBundle(entry.getBundleId());
@@ -424,7 +430,7 @@ public class DeploymentSessionImpl implements DeploymentSession {
             } catch (Exception e) {
                 // Exceptions are ignored in this phase to allow repairs 
                 // to always succeed, even if the existing package is corrupted.
-                sessionCtx.getLogger().log(e);
+                sessionCtx.getLogger().log(e, Logger.LOG_WARNING);
             }
         }
     }
@@ -475,8 +481,8 @@ public class DeploymentSessionImpl implements DeploymentSession {
      * marked as missing resources
      */
     private void dropResources() {
-        Set toDrop = targetDp.getResourceEntriesAsSet();
-        Set tmpSet = srcDp.getResourceEntriesAsSet();
+        List toDrop = new LinkedList(targetDp.getResourceEntries());
+        List tmpSet = srcDp.getResourceEntries();
         toDrop.removeAll(tmpSet);
         for (Iterator iter = toDrop.iterator(); iter.hasNext();) {
             try {
@@ -498,7 +504,7 @@ public class DeploymentSessionImpl implements DeploymentSession {
         // gathers resource processors that have alerady been called 
         Set procs = new HashSet();
 
-        Set toDrop = new HashSet(targetDp.getResourceEntriesAsSet());
+        List toDrop = targetDp.getResourceEntries();
         for (Iterator iter = toDrop.iterator(); iter.hasNext();) {
             try {
 	            ResourceEntry re = (ResourceEntry) iter.next();
@@ -535,17 +541,17 @@ public class DeploymentSessionImpl implements DeploymentSession {
      * marked as missing resources
      */
     private void dropBundles() {
-        // the sets contain SymbolicNames and not BundleEntries because
+        // the array contain SymbolicNames and not BundleEntries because
         // the BundleEntry.equals checks name and version but the version 
         // in the source is different from the version in the target.
-        Set toDrop = new HashSet();
-        for (Iterator iter = targetDp.getBundleEntryIterator(); iter.hasNext();) {
+        ArrayList toDrop = new ArrayList();
+        for (Iterator iter = targetDp.getBundleEntries().iterator(); iter.hasNext();) {
             BundleEntry be = (BundleEntry) iter.next();
             toDrop.add(be.getSymbName());
         }
 
         Set tmpSet = new HashSet();
-        for (Iterator iter = srcDp.getBundleEntryIterator(); iter.hasNext();) {
+        for (Iterator iter = srcDp.getBundleEntries().iterator(); iter.hasNext();) {
             BundleEntry be = (BundleEntry) iter.next();
             tmpSet.add(be.getSymbName());
         }

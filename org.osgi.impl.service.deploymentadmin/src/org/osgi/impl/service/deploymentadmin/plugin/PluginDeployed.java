@@ -107,7 +107,7 @@ public class PluginDeployed implements DataPluginFactory, ReadableDataSession,
             // ###vif ("System".equals(dps[i].getName()))
             //    continue;
             for (Iterator iter = ((DeploymentPackageImpl) dps[i]).
-                    getBundleEntryIterator(); iter.hasNext();) {
+                    getBundleEntries().iterator(); iter.hasNext();) {
                 BundleEntry be = (BundleEntry) iter.next();
                 bset.remove(new Long(be.getBundleId()));
             }
@@ -128,7 +128,7 @@ public class PluginDeployed implements DataPluginFactory, ReadableDataSession,
         if (dpNode(nodeId)) {
             DeploymentPackageImpl dp = (DeploymentPackageImpl) pluginCtx.
                     getDeploymentAdmin().getDeploymentPackage(str);
-            for (Iterator iter = dp.getBundleEntryIterator(); iter.hasNext();) {
+            for (Iterator iter = dp.getBundleEntries().iterator(); iter.hasNext();) {
                 BundleEntry be = (BundleEntry) iter.next();
                 ret.add(String.valueOf(be.getBundleId()));
             }
@@ -693,7 +693,7 @@ public class PluginDeployed implements DataPluginFactory, ReadableDataSession,
         manifest.append("\n");
         
         // create name sections for bundles
-        for (Iterator iter = dp.getBundleEntryIterator(); iter.hasNext();) {
+        for (Iterator iter = dp.getBundleEntries().iterator(); iter.hasNext();) {
             BundleEntry be = (BundleEntry) iter.next();
             CaseInsensitiveMap attrs = be.getAttrs();
             if (null == attrs)
@@ -709,7 +709,7 @@ public class PluginDeployed implements DataPluginFactory, ReadableDataSession,
         }
         
         // create name sections for resources
-        for (Iterator iter = dp.getResourceEntryIterator(); iter.hasNext();) {
+        for (Iterator iter = dp.getResourceEntries().iterator(); iter.hasNext();) {
             ResourceEntry re = (ResourceEntry) iter.next();
             manifest.append(keyValuePair("Name", re.getResName()) + "\n");
             for (Iterator reit = re.getAttrs().keySet().iterator(); reit.hasNext();) {
