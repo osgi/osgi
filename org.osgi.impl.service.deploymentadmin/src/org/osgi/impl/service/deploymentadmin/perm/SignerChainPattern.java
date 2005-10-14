@@ -230,7 +230,7 @@ class SignerChainPattern {
             }
             
             // check values
-            if (!allowedKeys.contains(key))
+            if (!allowedKeys.contains(key.toLowerCase()))
                 throw new IllegalArgumentException("Key (" + key + ") is not allowed");
         }
 
