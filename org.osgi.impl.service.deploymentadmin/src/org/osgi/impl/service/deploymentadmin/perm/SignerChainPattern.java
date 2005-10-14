@@ -36,15 +36,40 @@ import java.security.PrivilegedAction;
 import java.security.PrivilegedActionException;
 import java.security.PrivilegedExceptionAction;
 import java.security.cert.Certificate;
+import java.util.Arrays;
 import java.util.Enumeration;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.Vector;
 
 import org.osgi.impl.service.deploymentadmin.DAConstants;
 import org.osgi.impl.service.deploymentadmin.Splitter;
-import org.osgi.service.deploymentadmin.DeploymentException;
 
 
 class SignerChainPattern {
+    
+    private static final Set allowedKeys = new HashSet();
+    static {
+        String [] sa = new String[] { 
+            "commonName", "cn", "2.5.4.3",
+            "surName", "sn", "2.5.4.4",
+            "countryName", "c", "2.5.4.6",
+            "localityName", "l 2.5.4.7",
+            "stateOrProvinceName", "st", "2.5.4.8",
+            "organizationName", "o", "2.5.4.10",
+            "organizationalUnitName", "ou", "2.5.4.11",
+            "title", "2.5.4.12",
+            "givenName", "2.5.4.42",
+            "initials", "2.5.4.43",
+            "generationQualifier", "2.5.4.44",
+            "dnQualifier", "2.5.4.46",
+            "streetAddress", "street",
+            "domainComponent", "dc",
+            "userid", "uid",
+            "emailAddress",
+            "serialNumber" };
+        allowedKeys.addAll(Arrays.asList(sa));
+    }
 
     private static Object keystore;
     static {
@@ -188,6 +213,8 @@ class SignerChainPattern {
         }
 
         private void checkRdnKey(String key) {
+            // check characters
+            
             for (int i = 0; i < key.length(); i++) {
                 char ch = key.charAt(i);
                 if (ch >= 'a' && ch <= 'z')
@@ -201,6 +228,10 @@ class SignerChainPattern {
                 throw new IllegalArgumentException("'" + ch + "' character is not allowed " +
                         "in this position");
             }
+            
+            // check values
+            if (!allowedKeys.contains(key))
+                throw new IllegalArgumentException("Key (" + key + ") is not allowed");
         }
 
         public boolean match(String signer) {
