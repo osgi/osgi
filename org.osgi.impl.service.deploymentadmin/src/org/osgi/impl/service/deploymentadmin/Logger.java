@@ -69,7 +69,7 @@ public class Logger {
         
         LogService service = (LogService) tracker.getService();
         if (null != service && !DAConstants.DEBUG) {
-            service.log(level, baos.toString());
+            service.log(level, "", exception);
         } else {
             System.out.println(sevLevels[1 - 1] + ": " + baos.toString());
         }

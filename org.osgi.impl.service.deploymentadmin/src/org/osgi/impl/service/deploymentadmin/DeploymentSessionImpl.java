@@ -422,7 +422,8 @@ public class DeploymentSessionImpl implements DeploymentSession {
         if (INSTALL == getDeploymentAction())
             return;
         
-        for (ListIterator iter = targetDp.getBundleEntries().listIterator(); iter.hasPrevious();) {
+        List list = targetDp.getBundleEntries();
+        for (ListIterator iter = list.listIterator(list.size()); iter.hasPrevious();) {
             BundleEntry entry = (BundleEntry) iter.previous();
             try {
 	            Bundle b = sessionCtx.getBundleContext().getBundle(entry.getBundleId());
