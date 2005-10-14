@@ -386,14 +386,22 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
         String ksFile = System.getProperty(DAConstants.KEYSTORE_PATH);
         if (null == ksFile) {
             String sUrl = System.getProperty(DAConstants.KEYSTORE_FW_URL);
-            if (null != sUrl)
+            if (null != sUrl) {
                 ksFile = new URL(sUrl).getFile();
+                logger.log(Logger.LOG_INFO, "Keystore location is not defined. Set the " + 
+                        DAConstants.KEYSTORE_PATH + " system property! Framework keystore will " +
+                        "be used (" + ksFile + ").");
+            }
         }
         if (null == ksFile) {
             File f = new File(System.getProperty("user.home"));
             f = new File(f, ".keystore");
-            if (f.exists())
+            if (f.exists()) {
                 ksFile = f.getPath();
+                logger.log(Logger.LOG_INFO, "Keystore location is not defined. Set the " + 
+                        DAConstants.KEYSTORE_PATH + " system property! " + ksFile + 
+                        " will be used.");
+            }
         }
         if (null == ksFile || !(new File(ksFile).exists())) {
             logger.log(Logger.LOG_WARNING, "Keystore location is not defined. Set the " + 
@@ -406,7 +414,7 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
         
         String pwd = System.getProperty(DAConstants.KEYSTORE_PWD);
         if (null == pwd)
-            logger.log(Logger.LOG_WARNING, "There is no keystore password set. Set the " +
+            logger.log(Logger.LOG_INFO, "There is no keystore password set. Set the " +
                     DAConstants.KEYSTORE_PWD + " system property! Keystore integrity will " +
                     "not be checked.");
         
@@ -415,7 +423,7 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
         String ksType = System.getProperty(DAConstants.KEYSTORE_TYPE);
         if (null == ksType) {
             ksType = "JKS";
-            logger.log(Logger.LOG_WARNING, "There is no keystore type set. Set the " +
+            logger.log(Logger.LOG_INFO, "There is no keystore type set. Set the " +
                     DAConstants.KEYSTORE_TYPE + " system property! Default keystore type " +
                     "(JKS) will be used.");
         }
