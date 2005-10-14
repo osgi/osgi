@@ -51,23 +51,23 @@ class SignerChainPattern {
     private static final Set allowedKeys = new HashSet();
     static {
         String [] sa = new String[] { 
-            "commonName", "cn", "2.5.4.3",
-            "surName", "sn", "2.5.4.4",
-            "countryName", "c", "2.5.4.6",
-            "localityName", "l 2.5.4.7",
-            "stateOrProvinceName", "st", "2.5.4.8",
-            "organizationName", "o", "2.5.4.10",
-            "organizationalUnitName", "ou", "2.5.4.11",
+            "commonname", "cn", "2.5.4.3",
+            "surname", "sn", "2.5.4.4",
+            "countryname", "c", "2.5.4.6",
+            "localityname", "l 2.5.4.7",
+            "stateorprovincename", "st", "2.5.4.8",
+            "organizationname", "o", "2.5.4.10",
+            "organizationalunitname", "ou", "2.5.4.11",
             "title", "2.5.4.12",
-            "givenName", "2.5.4.42",
+            "givenname", "2.5.4.42",
             "initials", "2.5.4.43",
-            "generationQualifier", "2.5.4.44",
-            "dnQualifier", "2.5.4.46",
-            "streetAddress", "street",
-            "domainComponent", "dc",
+            "generationqualifier", "2.5.4.44",
+            "dnqualifier", "2.5.4.46",
+            "streetaddress", "street",
+            "domaincomponent", "dc",
             "userid", "uid",
-            "emailAddress",
-            "serialNumber" };
+            "emailaddress",
+            "serialnumber" };
         allowedKeys.addAll(Arrays.asList(sa));
     }
 
