@@ -316,10 +316,16 @@ public class DmtSessionImpl implements DmtSession {
 
     public synchronized void execute(String nodeUri, String data) 
             throws DmtException {
-        execute(nodeUri, null, data);
+        internalExecute(nodeUri, null, data);
     } 
    
-	public synchronized void execute(String nodeUri, final String correlator,
+	public synchronized void execute(String nodeUri, String correlator,
+            String data) throws DmtException {
+        internalExecute(nodeUri, correlator, data);
+	}
+    
+    // same as execute/3 but can be called internally, because it is not wrapped
+    private void internalExecute(String nodeUri, final String correlator,
             final String data) throws DmtException {
         checkSession();
         // not allowing to execute non-existent nodes, all Management Objects
@@ -345,7 +351,7 @@ public class DmtSessionImpl implements DmtSession {
         } catch(PrivilegedActionException e) {
             throw (DmtException) e.getException();
         }
-	}
+    }
 
     // requires DmtPermission with GET action, no ACL check done because there
     // are no ACLs stored for non-existing nodes (in theory)
@@ -648,7 +654,9 @@ public class DmtSessionImpl implements DmtSession {
     
 	public synchronized void createInteriorNode(String nodeUri)
             throws DmtException {
-    	createInteriorNode(nodeUri, null);
+        checkWriteSession();
+        Node node = makeAbsoluteUri(nodeUri);
+        commonCreateInteriorNode(node, null, true, false);
     }
 
 	public synchronized void createInteriorNode(String nodeUri, String type)
@@ -658,6 +666,7 @@ public class DmtSessionImpl implements DmtSession {
         commonCreateInteriorNode(node, type, true, false);
 	}
     
+    // - used by the other createInteriorNode variants 
     // - also used by copy() to pass an already validated Node instead of a URI
     //   and to create interior nodes without triggering an event
     // - also used by ensureInteriorAncestors, to create missing nodes while
@@ -709,12 +718,18 @@ public class DmtSessionImpl implements DmtSession {
     }
 
     public synchronized void createLeafNode(String nodeUri) throws DmtException {
-        createLeafNode(nodeUri, null, null);
+        // not calling createLeafNode/3, because it is wrapped
+        checkWriteSession();
+        Node node = makeAbsoluteUri(nodeUri);
+        commonCreateLeafNode(node, null, null, true);
     }
     
     public synchronized void createLeafNode(String nodeUri, DmtData value)
 			throws DmtException {
-        createLeafNode(nodeUri, value, null);
+        // not calling createLeafNode/3, because it is wrapped
+        checkWriteSession();
+        Node node = makeAbsoluteUri(nodeUri);
+        commonCreateLeafNode(node, value, null, true);
 	}
     
     public synchronized void createLeafNode(String nodeUri, DmtData value, 
@@ -724,8 +739,9 @@ public class DmtSessionImpl implements DmtSession {
         commonCreateLeafNode(node, value, mimeType, true);
     }
     
-    // also used by copy() to pass an already validated Node instead of a URI
-    // and to create leaf nodes without triggering an event
+    // - used by the other createLeafNode variants 
+    // - also used by copy() to pass an already validated Node instead of a URI
+    //   and to create leaf nodes without triggering an event
     private void commonCreateLeafNode(Node node, DmtData value,
             String mimeType, boolean sendEvent) throws DmtException {
         checkNode(node, SHOULD_NOT_EXIST);
