@@ -52,16 +52,20 @@ public class Transaction {
     private Logger                logger;
     private DeploymentSession	  session;
     private boolean 			  cancelled;
+    private String                trName;
     
     // Transaction is singleton
     private static Transaction instance;
     private Transaction() {
     }
-    public static Transaction createTransaction(DeploymentSession session, Logger logger) {
+    public static Transaction createTransaction(String trName, DeploymentSession session, Logger logger) {
         if (null == instance)
             instance = new Transaction();
+        instance.trName = trName;
         instance.logger = logger;
         instance.session = session;
+        instance.steps = null;
+        instance.processors = null;
         return instance;
     }
     
@@ -69,22 +73,20 @@ public class Transaction {
         steps = new Vector();
         processors = new HashSet();
         cancelled = false;
-        logger.log(Logger.LOG_INFO, "Transaction started");
+        logger.log(Logger.LOG_INFO, "Transaction started (trName=" + trName + ")");
     }
 
-    public synchronized boolean addRecord(TransactionRecord record) {
+    public synchronized void addRecord(TransactionRecord record) {
         if (cancelled)
             throw new CancelException();
         
         if (PROCESSOR == record.code) {
-            if (processors.contains(record.rp))
-                return true;
             record.rp.begin(session);
             processors.add(record.rp);
         }
+        
         steps.add(record);
-        logger.log(Logger.LOG_INFO, "Transaction record added:\n" + record);
-        return true;
+        logger.log(Logger.LOG_INFO, "Transaction record added (trName=" + trName + "):\n" + record);
     }
     
     public synchronized void commit() throws DeploymentException {
@@ -94,7 +96,7 @@ public class Transaction {
 	            TransactionRecord element = (TransactionRecord) iter.previous();
 	            if (element.code == PROCESSOR) {
 	                element.rp.prepare();
-	                logger.log(Logger.LOG_INFO, "Prepare " + element);
+	                logger.log(Logger.LOG_INFO, "Prepare  (trName=" + trName + "):\n" + element);
 	            }
 	        }
         } catch (DeploymentException e) {
@@ -106,7 +108,7 @@ public class Transaction {
         try {
 	        for (ListIterator iter = steps.listIterator(steps.size()); iter.hasPrevious();) {
 	            final TransactionRecord element = (TransactionRecord) iter.previous();
-	            logger.log(Logger.LOG_INFO, "Commit\n" + element);
+	            logger.log(Logger.LOG_INFO, "Commit (trName=" + trName + "):\n" + element);
 	            switch (element.code) {
 	                case INSTALLBUNDLE :
 	                    break;
@@ -138,22 +140,23 @@ public class Transaction {
 	            }
 	        }
         } catch (Exception e) {
-            logger.log(Logger.LOG_ERROR, "Error occured during transaction commit.");
+            logger.log(Logger.LOG_ERROR, "Error occured during transaction commit (trName=" 
+                    + trName + "):\n");
             logger.log(e);
         }
-        logger.log(Logger.LOG_INFO, "Transaction committed");
+        logger.log(Logger.LOG_INFO, "Transaction committed (trName=" + trName + ")");
     }
 
     public synchronized void rollback() {
         try {
             if (steps.size() <= 0) {
-                logger.log(Logger.LOG_INFO, "Transaction rolled back");
+                logger.log(Logger.LOG_INFO, "Transaction rolled back (trName=" + trName + ")");
                 return;
             }
             
             for (ListIterator iter = steps.listIterator(steps.size()); iter.hasPrevious();) {
                 final TransactionRecord element = (TransactionRecord) iter.previous();
-	            logger.log(Logger.LOG_INFO, "Rollback\n" + element);
+	            logger.log(Logger.LOG_INFO, "Rollback (trName=" + trName + "):\n" + element);
 	            switch (element.code) {
 	                case INSTALLBUNDLE : {
 	                	try {
@@ -206,10 +209,11 @@ public class Transaction {
 	            }
 	        }
         } catch (Exception e) {
-            logger.log(Logger.LOG_ERROR, "Error occured during transaction rollback.");
+            logger.log(Logger.LOG_ERROR, "Error occured during transaction rollback  (trName=" + 
+                    trName + "):\n");
             logger.log(e);
         }
-        logger.log(Logger.LOG_INFO, "Transaction rolled back");
+        logger.log(Logger.LOG_INFO, "Transaction rolled back (trName=" + trName + ")");
     }
 
     public synchronized void cancel() {

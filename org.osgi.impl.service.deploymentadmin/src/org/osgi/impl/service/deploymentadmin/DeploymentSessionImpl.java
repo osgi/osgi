@@ -261,7 +261,8 @@ public class DeploymentSessionImpl implements DeploymentSession {
 
     void installUpdate(DeploymentPackageJarInputStream wjis) throws DeploymentException {
         openTrackers();
-        transaction = Transaction.createTransaction(this, sessionCtx.getLogger());
+        transaction = Transaction.createTransaction(
+                "INSTALL " + srcDp.getName(), this, sessionCtx.getLogger());
         
         // ConditionalPermissionInfo-s for customizers
         Set cpisForCusts = null;
@@ -314,7 +315,8 @@ public class DeploymentSessionImpl implements DeploymentSession {
         this.forced = forced;
         boolean ret = true;
         openTrackers();
-        transaction = Transaction.createTransaction(this, sessionCtx.getLogger());
+        transaction = Transaction.createTransaction(
+                "UNINSTALL " + targetDp.getName(), this, sessionCtx.getLogger());
         try {
             transaction.start();
             stopBundles();
