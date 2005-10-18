@@ -1,8 +1,10 @@
 package org.osgi.impl.bundle.midletcontainer;
 
 import java.lang.reflect.Constructor;
+import java.lang.reflect.Method;
 import java.net.URL;
 import java.security.AccessController;
+import java.security.PrivilegedActionException;
 import java.security.PrivilegedExceptionAction;
 import java.util.*;
 import org.osgi.service.log.LogService;
@@ -225,12 +227,25 @@ public final class MidletDescriptor extends ApplicationDescriptor implements Ser
 			throw new IllegalStateException();
 	}
 	
-	/**
-	 * @param pattern
-	 * @return
-	 * @see org.osgi.service.application.ApplicationDescriptor#matchDNChain(java.lang.String)
-	 */
-	public boolean matchDNChain(String pattern) {
-		return false;
+	public boolean matchDNChain(final String pattern) {
+		final Bundle bundle = this.bundle;
+		try {
+		  return ((Boolean)AccessController.doPrivileged(new PrivilegedExceptionAction() {
+			  public Object run() throws Exception {			
+					Method getBundleData = bundle.getClass().getDeclaredMethod( "getBundleData", new Class[0] );
+					getBundleData.setAccessible( true );
+					
+					Object data = getBundleData.invoke( bundle, new Class [0] );
+					
+					Method matchDNChain = data.getClass().getDeclaredMethod( "matchDNChain", new Class[] { String.class } );
+					matchDNChain.setAccessible( true );
+					
+					return matchDNChain.invoke( data, new Object [] { pattern } );
+			  }
+		  })).booleanValue();
+		}catch(PrivilegedActionException e ) {
+			Activator.log( LogService.LOG_ERROR, "Exception occurred at matching the DN chain!",	e);
+			return false;
+		}
 	}
 }
