@@ -236,6 +236,8 @@ public final class MidletDescriptor extends ApplicationDescriptor implements Ser
 					getBundleData.setAccessible( true );
 					
 					Object data = getBundleData.invoke( bundle, new Class [0] );
+					if( data == null )
+						return new Boolean( false );
 					
 					Method matchDNChain = data.getClass().getDeclaredMethod( "matchDNChain", new Class[] { String.class } );
 					matchDNChain.setAccessible( true );
