@@ -141,7 +141,6 @@ public class ApplicationAdminPermission extends Permission {
 
       ApplicationAdminPermission other = (ApplicationAdminPermission) p;
 
-      /* TODO filter check */
       if( !filter.equals("*") ) {
       	if( filter.equals( "<<SELF>>") ) {
       		if( other.applicationID == null )
@@ -152,9 +151,8 @@ public class ApplicationAdminPermission extends Permission {
       	else {
       		Hashtable props = new Hashtable();
       		props.put( "pid", other.applicationID );
-      		
-      		/* TODO signer misery */
-      		
+      		props.put( "signer", new SignerWrapper( other.applicationDescriptor ) );
+      		      		
       		Filter flt = getFilter();
       		if( flt == null )
       			return false;
@@ -219,6 +217,29 @@ public class ApplicationAdminPermission extends Permission {
           v.add(action.toLowerCase());
       }
       return v;
+  }
+  
+
+  private static class SignerWrapper extends Object {
+  	private String pattern;
+  	private ApplicationDescriptor appDesc;
+  	
+  	public SignerWrapper(String pattern) {
+  		this.pattern = pattern;    			
+  	}
+  	
+  	SignerWrapper(ApplicationDescriptor appDesc) {
+  		this.appDesc = appDesc;
+  	}
+  	
+  	public boolean equals(Object o) {
+  		if (!(o instanceof SignerWrapper))
+  			return false;
+  		SignerWrapper other = (SignerWrapper) o;
+  		ApplicationDescriptor matchAppDesc = (ApplicationDescriptor) (appDesc != null ? appDesc : other.appDesc);
+  		String matchPattern = appDesc != null ? other.pattern : pattern;
+  		return matchAppDesc.matchDNChain(matchPattern);
+  	}
   }
   
   private void init() {
