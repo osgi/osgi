@@ -268,18 +268,8 @@ public abstract class ApplicationDescriptor {
 	 */
 	public final ApplicationHandle launch(Map arguments)
 			throws Exception {
-		delegate.launch(arguments);
-		
-		final Map launchArgs = arguments;		
-		try {
-		  return (ApplicationHandle)AccessController.doPrivileged(new PrivilegedExceptionAction() {
-			  public Object run() throws Exception {			
-				  return launchSpecific(launchArgs);
-			  }
-		  });
-		}catch(PrivilegedActionException e ) {
-			throw e.getException(); 
-		}
+		delegate.launch(arguments);		
+	  return launchSpecific(arguments);
 	}
 
 	/**
