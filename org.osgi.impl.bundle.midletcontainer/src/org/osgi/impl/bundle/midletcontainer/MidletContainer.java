@@ -58,7 +58,9 @@ public class MidletContainer implements BundleListener, ServiceListener {
 		
 		oat.registerOATBundle( bundle, startClasses );
 
-		registerApplicationDescriptors( bundle );		
+		if( bundle.getState() == Bundle.ACTIVE )
+			registerApplicationDescriptors( bundle );
+		
 		installedMidletBundles.add( bundle );
 	}
 
