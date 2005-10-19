@@ -68,7 +68,9 @@ public final class MidletHandle extends ApplicationHandle {
 	}
 
 	public void pause() throws Exception {
-		AccessController.checkPermission( new ApplicationAdminPermission(
+		SecurityManager sm = System.getSecurityManager();
+		if( sm != null )		
+			sm.checkPermission( new ApplicationAdminPermission(
 				midletDescriptor, ApplicationAdminPermission.LIFECYCLE ) );
 		
 		if (!status.equals( MidletHandle.RUNNING ) )
@@ -83,7 +85,9 @@ public final class MidletHandle extends ApplicationHandle {
 	}
 
 	public void resume() throws Exception {
-		AccessController.checkPermission( new ApplicationAdminPermission(
+		SecurityManager sm = System.getSecurityManager();
+		if( sm != null )
+			sm.checkPermission( new ApplicationAdminPermission(
 				midletDescriptor, ApplicationAdminPermission.LIFECYCLE ) );
 		
 		if (!status.equals( MidletHandle.PAUSED ) )

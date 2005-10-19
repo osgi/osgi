@@ -55,7 +55,9 @@ public class Scheduler implements Runnable, EventHandler {
 	public synchronized ScheduledApplication addScheduledApplication(String pid,
 			Map arguments, String topic, String eventFilter, boolean recurring) {
 
-		AccessController.checkPermission(new ApplicationAdminPermission(pid, 
+		SecurityManager sm = System.getSecurityManager();
+		if( sm != null )
+			sm.checkPermission(new ApplicationAdminPermission(pid, 
 				ApplicationAdminPermission.SCHEDULE));
 
 		if( topic == null )
@@ -78,7 +80,9 @@ public class Scheduler implements Runnable, EventHandler {
 	public synchronized void removeScheduledApplication(
 			ScheduledApplication scheduledApplication) throws Exception {
 
-		AccessController.checkPermission(new ApplicationAdminPermission(
+		SecurityManager sm = System.getSecurityManager();
+		if( sm != null )
+			sm.checkPermission(new ApplicationAdminPermission(
 				((ScheduledApplicationImpl)scheduledApplication).getPid(),
 				ApplicationAdminPermission.SCHEDULE));
 

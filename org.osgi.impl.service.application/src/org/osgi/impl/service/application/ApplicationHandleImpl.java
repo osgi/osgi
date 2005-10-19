@@ -41,7 +41,9 @@ public class ApplicationHandleImpl implements ApplicationHandle.Delegate {
 	}
 
 	public void destroy() throws Exception {
-		AccessController.checkPermission(new ApplicationAdminPermission( handle.getApplicationDescriptor(), 
+		SecurityManager sm = System.getSecurityManager();
+		if( sm != null )
+			sm.checkPermission(new ApplicationAdminPermission( handle.getApplicationDescriptor(), 
 				ApplicationAdminPermission.LIFECYCLE));
 	}
 }
