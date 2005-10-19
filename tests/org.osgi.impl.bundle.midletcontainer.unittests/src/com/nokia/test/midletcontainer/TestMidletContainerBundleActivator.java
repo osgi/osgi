@@ -359,9 +359,21 @@ public class TestMidletContainerBundleActivator
             if(resourceURL == null)
                 throw new Exception("Can't find " + resourceName + " in the resources!");
             midletBundle = bc.installBundle(resourceURL.toString(), resourceURL.openStream());
+            
+            ServiceReference appList[] = null;
+            
+            for( int counter = 0; counter != 5; counter ++ ) {
+              try {
+              	Thread.sleep(250L);
+              }catch(InterruptedException interruptedexception) {}
+          
+              appList = bc.getServiceReferences(ApplicationDescriptor.class.getName(), "(application.bundle.id=" + installedBundleID + ")");              
+              if( appList != null && appList.length != 0 )
+               	throw new Exception("ApplicationDescriptor was installed without starting the bundle!");
+            }
+            
             midletBundle.start();
             installedBundleID = midletBundle.getBundleId();
-            ServiceReference appList[] = (ServiceReference[])null;
             int tries = 0;
             do
             {
