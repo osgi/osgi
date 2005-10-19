@@ -274,6 +274,9 @@ public class OATApplicationContextImpl implements ApplicationContext, ServiceLis
 		if( appHandle == null )
 			throw new IllegalStateException( "Application is not running!" );
 		
+		if( service == mainClass )
+			throw new SecurityException( "Registering the base class of the application is insecure and forbidden!" );
+		
 		ServiceRegistration servReg = bc.registerService( clazzes, service, properties );
 		registeredServiceList.add( servReg );
 		return servReg;
