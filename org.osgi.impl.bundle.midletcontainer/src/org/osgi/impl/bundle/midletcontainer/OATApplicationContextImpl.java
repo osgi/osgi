@@ -116,6 +116,7 @@ public class OATApplicationContextImpl implements ApplicationContext, ServiceLis
 			throw new IllegalStateException( "Application is not running!" );
 		
 		Filter filterItem = (filter == null) ? null : bc.createFilter( filter );
+		removeServiceListener( listener );		
 		serviceListenerList.add( new ServiceListener( listener, filterItem ) );
 	}
 	
@@ -123,6 +124,7 @@ public class OATApplicationContextImpl implements ApplicationContext, ServiceLis
 		if( appHandle == null )
 			throw new IllegalStateException( "Application is not running!" );
 		
+		removeServiceListener( listener );		
     serviceListenerList.add( new ServiceListener( listener, null )  );
 	}
 	
