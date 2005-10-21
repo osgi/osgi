@@ -17,6 +17,7 @@
  */
 package org.osgi.impl.service.dmt;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Vector;
 import org.osgi.framework.ServiceReference;
@@ -25,9 +26,11 @@ import org.osgi.service.dmt.spi.ExecPlugin;
 
 class PluginRegistration {
 	private Object plugin;
-	private Node[] roots;
-	private Node[] execs;
+	private final Node[] roots;
+	private final Node[] execs;
     private ServiceReference pluginRef;
+    
+    private String infoString;
     
 	// precondition: roots != null && execs != null && 
     //               (roots.length != 0 || execs.length != 0)
@@ -46,6 +49,8 @@ class PluginRegistration {
         this.pluginRef = pluginRef;
 		this.roots = roots;
 		this.execs = execs;
+        
+        infoString = null;
 	}
 
     DataPluginFactory getDataPlugin() {
@@ -109,5 +114,13 @@ class PluginRegistration {
     
     boolean isRegistered() {
         return pluginRef == null || pluginRef.getBundle() != null;
+    }
+    
+    public String toString() {
+        if(infoString == null)
+            infoString = "PluginRegistration(" + Arrays.asList(roots) +
+                ", " + Arrays.asList(execs) + ")";
+
+        return infoString;
     }
 }

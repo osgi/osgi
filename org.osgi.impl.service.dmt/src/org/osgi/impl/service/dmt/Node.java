@@ -305,6 +305,10 @@ public class Node {
         return getUri().hashCode();
     }
     
+    public String toString() {
+        return getUri();
+    }
+    
     private static String[] convertUriToPath(String uri) {
         if(uri.length() == 0)
             return new String[] {};

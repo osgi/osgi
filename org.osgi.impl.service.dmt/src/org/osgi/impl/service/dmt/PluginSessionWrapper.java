@@ -42,17 +42,20 @@ public class PluginSessionWrapper implements TransactionalDataSession {
     private ReadWriteDataSession     readWriteDataSession     = null;
     private TransactionalDataSession transactionalDataSession = null;
     
-    private AccessControlContext securityContext;
+    private final AccessControlContext securityContext;
     
     // the root node of the session, either one of the plugin roots or a subnode
-    private Node sessionRoot;
+    private final Node sessionRoot;
     
     // the registration object for the plugin providing the session, used for
     // checking that the plugin has not been unregistered
-    private PluginRegistration pluginRegistration;
+    private final PluginRegistration pluginRegistration;
     
     // redundant information, could be calculated from session variables
-    private int sessionType;
+    private final int sessionType;
+    
+    // caches the output of the toString() method
+    private String infoString;
     
     // Note, that the session type reflects the kind of 
     public PluginSessionWrapper(PluginRegistration pluginRegistration, 
@@ -69,6 +72,8 @@ public class PluginSessionWrapper implements TransactionalDataSession {
         this.sessionRoot = sessionRoot;
         this.pluginRegistration = pluginRegistration;
         this.securityContext = securityContext;
+        
+        infoString = null;
     }
     
     int getSessionType() {
@@ -542,7 +547,22 @@ public class PluginSessionWrapper implements TransactionalDataSession {
     
     public int hashCode() {
         return sessionRoot.hashCode() ^ readableDataSession.hashCode();
-    } 
+    }
+    
+    public String toString() {
+        if(infoString == null) {
+            infoString = "PluginSessionWrapper(" + sessionRoot + ", ";
+            if(sessionType == DmtSession.LOCK_TYPE_EXCLUSIVE)
+                infoString += "exclusive";
+            else if(sessionType == DmtSession.LOCK_TYPE_ATOMIC)
+                infoString += "atomic";
+            else
+                infoString += "shared";
+            infoString += ", " + readableDataSession + ")";
+        }
+            
+        return infoString;
+    }
     
     private void checkRegistration(String[] path) {
         if(!pluginRegistration.isRegistered())
