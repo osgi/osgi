@@ -86,7 +86,8 @@ public class Transaction {
         }
         
         steps.add(record);
-        logger.log(Logger.LOG_INFO, "Transaction record added (trName=" + trName + "):\n" + record);
+        if (DAConstants.DEBUG)
+            logger.log(Logger.LOG_INFO, "Transaction record added (trName=" + trName + "):\n" + record);
     }
     
     public synchronized void commit() throws DeploymentException {
@@ -96,7 +97,8 @@ public class Transaction {
 	            TransactionRecord element = (TransactionRecord) iter.previous();
 	            if (element.code == PROCESSOR) {
 	                element.rp.prepare();
-	                logger.log(Logger.LOG_INFO, "Prepare  (trName=" + trName + "):\n" + element);
+                    if (DAConstants.DEBUG)
+                        logger.log(Logger.LOG_INFO, "Prepare  (trName=" + trName + "):\n" + element);
 	            }
 	        }
         } catch (DeploymentException e) {
@@ -108,7 +110,8 @@ public class Transaction {
         try {
 	        for (ListIterator iter = steps.listIterator(steps.size()); iter.hasPrevious();) {
 	            final TransactionRecord element = (TransactionRecord) iter.previous();
-	            logger.log(Logger.LOG_INFO, "Commit (trName=" + trName + "):\n" + element);
+                if (DAConstants.DEBUG)
+                    logger.log(Logger.LOG_INFO, "Commit (trName=" + trName + "):\n" + element);
 	            switch (element.code) {
 	                case INSTALLBUNDLE :
 	                    break;
@@ -156,7 +159,8 @@ public class Transaction {
             
             for (ListIterator iter = steps.listIterator(steps.size()); iter.hasPrevious();) {
                 final TransactionRecord element = (TransactionRecord) iter.previous();
-	            logger.log(Logger.LOG_INFO, "Rollback (trName=" + trName + "):\n" + element);
+                if (DAConstants.DEBUG)
+                    logger.log(Logger.LOG_INFO, "Rollback (trName=" + trName + "):\n" + element);
 	            switch (element.code) {
 	                case INSTALLBUNDLE : {
 	                	try {

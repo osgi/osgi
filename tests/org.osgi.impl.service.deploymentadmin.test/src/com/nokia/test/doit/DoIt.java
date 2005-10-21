@@ -6,9 +6,11 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.security.AccessController;
 import java.security.AllPermission;
+import java.security.PrivilegedActionException;
+import java.security.PrivilegedExceptionAction;
 import java.util.Arrays;
-import java.util.Set;
 
 import org.osgi.framework.AdminPermission;
 import org.osgi.framework.Bundle;
@@ -44,14 +46,12 @@ public class DoIt implements BundleActivator, ServiceListener {
     private ServiceTracker trackPa;
     private ServiceTracker trackTestsRunner;
     private ServiceTracker trackDb;
+    private ServiceTracker trackRp;
 
     private TestDesktop desktop;
 
     public void start(BundleContext context) throws Exception {
         this.context = context;
-
-        context.addServiceListener(this, "(" + Constants.OBJECTCLASS +
-                "=" + TestRunner.class.getName() + ")");
 
         trackDa = new ServiceTracker(context, DeploymentAdmin.class.getName(), null);
         trackDa.open();
@@ -63,6 +63,11 @@ public class DoIt implements BundleActivator, ServiceListener {
         trackTestsRunner.open();
         trackDb = new ServiceTracker(context, Db.class.getName(), null);
         trackDb.open();
+        trackRp = new ServiceTracker(context, ResourceProcessor.class.getName(), null);
+        trackRp.open();
+        
+        context.addServiceListener(this, "(" + Constants.OBJECTCLASS + "=" + 
+                TestRunner.class.getName() + ")");
         
         setPermissions();
         
@@ -75,6 +80,7 @@ public class DoIt implements BundleActivator, ServiceListener {
         trackCondPa.close();
         trackTestsRunner.close();
         trackDb.close();
+        trackRp.close();
         
         desktop.setVisible(false);
         desktop.dispose();
@@ -166,60 +172,67 @@ public class DoIt implements BundleActivator, ServiceListener {
         
         if (null == pa || null == cpa)
             throw new RuntimeException("Thereis no PermAdmin or CondPermAdmin");
+        
+        cpa.setConditionalPermissionInfo("cpi_DoIt",
+                new ConditionInfo[] {new ConditionInfo(
+                        BundleLocationCondition.class.getName(),
+                        new String[] {context.getBundle().getLocation()})},
+                new PermissionInfo[] {new PermissionInfo(AllPermission.class
+                        .getName(), "*", "*")});
 
         ref = getDeploymentAdminRef();
         cpa.setConditionalPermissionInfo("cpi_Deployment_Admin",
-                new ConditionInfo[] {
-                    new ConditionInfo(BundleLocationCondition.class.getName(), new String[] {
-                        ref.getBundle().getLocation()
-                    })
-                },
-                new PermissionInfo[] {
-                    new PermissionInfo(AllPermission.class.getName(), "*", "*")
-                }
-        );
+                new ConditionInfo[] {new ConditionInfo(
+                        BundleLocationCondition.class.getName(),
+                        new String[] {ref.getBundle().getLocation()})},
+                new PermissionInfo[] {new PermissionInfo(AllPermission.class
+                        .getName(), "*", "*")});
 
         ref = getDbRef();
         cpa.setConditionalPermissionInfo("cpi_Database",
-                new ConditionInfo[] {
-                new ConditionInfo(BundleLocationCondition.class.getName(), new String[] {
-                    ref.getBundle().getLocation()
-                })
-                },
+                new ConditionInfo[] {new ConditionInfo(
+                        BundleLocationCondition.class.getName(),
+                        new String[] {ref.getBundle().getLocation()})},
                 new PermissionInfo[] {
-                        new PermissionInfo(PackagePermission.class.getName(), "*", "export, import"),
-                        new PermissionInfo(ServicePermission.class.getName(), "*", "register")
-                }
-        );
+                        new PermissionInfo(PackagePermission.class.getName(),
+                                "*", "export, import"),
+                        new PermissionInfo(ServicePermission.class.getName(),
+                                "*", "register")});
 
-        ServiceReference[] refs = context.getServiceReferences(ResourceProcessor.class.getName(), 
-                "(type=db)");
+        ServiceReference[] refs = context.getServiceReferences(
+                ResourceProcessor.class.getName(), "(type=db)");
         for (int i = 0; i < refs.length; i++) {
-            cpa.setConditionalPermissionInfo("cpi_Preinstalled_RP_" + refs[i].getBundle().getLocation(),
-                    new ConditionInfo[] {
-                    new ConditionInfo(BundleLocationCondition.class.getName(), new String[] {
-                        refs[i].getBundle().getLocation()
-                    })
-                    },
+            cpa.setConditionalPermissionInfo("cpi_Preinstalled_RP_"
+                    + refs[i].getBundle().getLocation(),
+                    new ConditionInfo[] {new ConditionInfo(
+                            BundleLocationCondition.class.getName(),
+                            new String[] {refs[i].getBundle().getLocation()})},
                     new PermissionInfo[] {
-                        new PermissionInfo(PackagePermission.class.getName(), "*", "export, import"),
-                        new PermissionInfo(AdminPermission.class.getName(), "*", "metadata"),
-                        new PermissionInfo(ServicePermission.class.getName(), "*", "get"),
-                        new PermissionInfo(ServicePermission.class.getName(), "*", "register")
-                    }
-            );
+                            new PermissionInfo(PackagePermission.class
+                                    .getName(), "*", "export, import"),
+                            new PermissionInfo(AdminPermission.class.getName(),
+                                    "*", "metadata"),
+                            new PermissionInfo(ServicePermission.class
+                                    .getName(), "*", "get"),
+                            new PermissionInfo(ServicePermission.class
+                                    .getName(), "*", "register")});
         }
 
-        cpa.setConditionalPermissionInfo("cpi_DoIt",
-                new ConditionInfo[] {
-                new ConditionInfo(BundleLocationCondition.class.getName(), new String[] {
-                    context.getBundle().getLocation()
-                })
-                },
-                new PermissionInfo[] {
-                    new PermissionInfo(AllPermission.class.getName(), "*", "*")
-                }
-        );
+        // ### minor hack
+        cpa.setConditionalPermissionInfo(
+                        "cpi_Customizer_1",
+                        new ConditionInfo[] {new ConditionInfo(
+                                BundleLocationCondition.class.getName(),
+                                new String[] {"osgi-dp:com.nokia.test.exampleresourceprocessor.db.DbResourceProcessor_db_test_03"})},
+                        new PermissionInfo[] {
+                                new PermissionInfo(PackagePermission.class
+                                        .getName(), "*", "export, import"),
+                                new PermissionInfo(AdminPermission.class
+                                        .getName(), "*", "metadata"),
+                                new PermissionInfo(ServicePermission.class
+                                        .getName(), "*", "get"),
+                                new PermissionInfo(ServicePermission.class
+                                        .getName(), "*", "register")});
     }
 
     void command() throws Exception {
@@ -744,135 +757,6 @@ public class DoIt implements BundleActivator, ServiceListener {
         
     }
 
-    public static final String db_test_03 = "COMPOUND\n" +
-        "Uses customizer, two resource files (one processed by the \n" +
-        "preinstalled RP, one by the customizer). Two bundles \n" +
-    	"(one of them is updated the other removed).\n" +
-        "ASSERTS\n" +
-        " - tables exist and certains disappear after update\n" +
-        " - preinstalled RP gets the first res. file\n" +
-        " - customizer gets the other" +
-        " - 'hardgame' bundle has to disappear after update\n" +
-        " - 'easygame' bundle has to remain after update" +
-        " - 'easygame' version changes";
-    public void db_test_03() throws Exception {
-        ServiceReference ref = context.getServiceReference(Db.class.getName());
-        Db db = (Db) context.getService(ref);
-        DeploymentPackage dp = null;
-        
-        InputStream is = new FileInputStream(HOME + "db_test_03.dp");
-		dp = getDeploymentAdmin().installDeploymentPackage(is);
-        
-        if (-1 == Arrays.asList(db.tableNames(null)).indexOf("player"))
-            throw new Exception("Table 'player' is missing");
-        if (-1 == Arrays.asList(db.tableNames(null)).indexOf("game"))
-            throw new Exception("Table 'game' is missing");
-        if (-1 == Arrays.asList(db.tableNames(null)).indexOf("score"))
-            throw new Exception("Table 'score' is missing");
-        if (-1 == Arrays.asList(db.tableNames(null)).indexOf("tmp"))
-            throw new Exception("Table 'tmp' is missing");
-        
-        ServiceReference[] refs = context.getServiceReferences(
-                ResourceProcessor.class.getName(), "(" + Constants.SERVICE_PID + "=db_test_03)");
-        ResourceProcessor rp = (ResourceProcessor) context.getService(refs[0]);
-        Set s = ((DbRpTest) rp).getResources(dp, "db_test_01_t.dbscript");
-        if (null == s || !s.contains("tmp"))
-            throw new Exception("RP with id 'db_test_03' HASN'T receive the " +
-            		"'db_test_01_t.dbscript' resource");
-        refs = context.getServiceReferences(
-                ResourceProcessor.class.getName(), "(" + Constants.SERVICE_PID + "=default_pid)");
-        ResourceProcessor rp_def = (ResourceProcessor) context.getService(refs[0]);
-        s = ((DbRpTest) rp_def).getResources(dp, "db_test_01_t.dbscript");
-        if (null != s && s.contains("tmp"))
-            throw new Exception("RP with id 'default_id' HAS receive the " +
-            		"'db_test_01_t.dbscript' resource");
-        
-        is = new FileInputStream(HOME + "db_test_03_update_01.dp");
-		dp = getDeploymentAdmin().installDeploymentPackage(is);
-		
-        Bundle[] bs = context.getBundles();
-        Bundle b_eg = null;
-        Bundle b_hg = null;
-        for (int i = 0; i < bs.length; i++) {
-            String sn = bs[i].getSymbolicName();
-            if (null == sn)
-                continue;
-            if (sn.equals("easygame"))
-                b_eg = bs[i];
-            if (sn.equals("hardgame"))
-                b_hg = bs[i];
-        }
-        if (null == b_eg)
-            throw new Exception("Test Failed");
-        if (null != b_hg)
-            throw new Exception("Test Failed");
-        
-        String bv = (String) b_eg.getHeaders().get("Bundle-Version");
-        if (null == bv)
-            throw new Exception("Test Failed");
-        if ( !(new Version(bv).equals(new Version(2, 0, 0))) )
-            throw new Exception("Test Failed");
-        
-		dp.uninstall();
-        db.reset(null);
-    }
-
-    public static final String db_test_04 = "CANCELLING\n" +
-        "Tests cancelling an install operation";
-    public void db_test_04() throws Exception {
-        ServiceReference ref = context.getServiceReference(Db.class.getName());
-        Db db = (Db) context.getService(ref);
-        DeploymentPackage dp = null;
-        
-        // creates a thread that calls the cancel() methods
-        Thread cancelThread = new Thread(new Runnable() {
-            public void run() {
-        		try {Thread.sleep(3000);} catch (Exception e) {}
-        	    getDeploymentAdmin().cancel();                
-            }
-        });
-        cancelThread.start();
-        
-        InputStream is = new FileInputStream(HOME + "db_test_04.dp");
-		dp = getDeploymentAdmin().installDeploymentPackage(is);
-		
-		if (null != dp)
-		    throw new Exception("Operation has not been cancelled");
-		
-		DeploymentPackage[] dps = getDeploymentAdmin().listDeploymentPackages();
-		for (int i = 0; i < dps.length; i++) {
-            if (dps[i].getName().equals("db_test_04"))
-                throw new Exception("Operation has not been cancelled");
-        }
-		
-        db.reset(null);
-    }
-    
-    public static final String db_test_05 = "SIGNING\n" +
-        "Same as db_test_03 but the DP is signed\n";
-    public void db_test_05() throws Exception {
-        ServiceReference ref = context.getServiceReference(Db.class.getName());
-        Db db = (Db) context.getService(ref);
-        DeploymentPackage dp = null;
-        
-        InputStream is = new FileInputStream(HOME + "db_test_05.dp");
-		dp = getDeploymentAdmin().installDeploymentPackage(is);
-		
-        if (-1 == Arrays.asList(db.tableNames(null)).indexOf("player"))
-            throw new Exception("Table 'player' is missing");
-        if (-1 == Arrays.asList(db.tableNames(null)).indexOf("game"))
-            throw new Exception("Table 'game' is missing");
-        if (-1 == Arrays.asList(db.tableNames(null)).indexOf("score"))
-            throw new Exception("Table 'score' is missing");
-        if (-1 == Arrays.asList(db.tableNames(null)).indexOf("tmp"))
-            throw new Exception("Table 'tmp' is missing");
-        if (-1 == Arrays.asList(db.tableNames(null)).indexOf("tmp2"))
-            throw new Exception("Table 'tmp2' is missing");
-        
-        dp.uninstall();
-        db.reset(null);
-    }
-    
     public static final String db_test_06 = "PRIVATE AREA\n";
     public void db_test_06() throws Exception {
         DeploymentPackage dp = null;
@@ -1110,14 +994,40 @@ public class DoIt implements BundleActivator, ServiceListener {
         }
     }
     
-    public static void main(String[] args) throws Exception {
-        DoIt doit = new DoIt();
-        doit.desktop = new TestDesktop(doit);
-    }
+    ///////////////////////////////////////////////////////////////////////////
 
     public void serviceChanged(ServiceEvent event) {
-//        if (event.getType() == ServiceEvent.REGISTERED)
-//            desktop.refreshTests();
+        ((TestRunner) trackTestsRunner.getService()).setDoIt(this);
+    }
+
+    ///////////////////////////////////////////////////////////////////////////
+    
+    public File getFile(final String file) {
+        try { 
+            return (File) AccessController.doPrivileged(new PrivilegedExceptionAction() {
+                public Object run() throws Exception {
+                    return new File(new File(HOME).getCanonicalFile(), file);
+                }
+            });
+        }
+        catch (PrivilegedActionException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public ResourceProcessor getRp(String aPid) {
+        ServiceReference[] refs = trackRp.getServiceReferences();
+        for (int i = 0; i < refs.length; i++) {
+            String pid = (String) refs[i].getProperty(Constants.SERVICE_PID);
+            if (pid.equals(aPid))
+                return (ResourceProcessor) trackRp.getService(refs[i]);
+        }
+        return null;
+    }
+
+    public Bundle[] getBundles() {
+        return context.getBundles();
     }
 
 }

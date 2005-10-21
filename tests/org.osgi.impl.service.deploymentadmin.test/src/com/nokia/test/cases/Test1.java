@@ -17,82 +17,89 @@ import com.nokia.test.doit.TestCaseException;
 
 public class Test1 extends TestCaseClass {
 
-    protected Test1(String dpHome) throws Exception {
-        super(dpHome);
+    protected Test1(TestRunnerImpl tRunner) throws Exception {
+        super(tRunner);
     }
 
     public void doTest(Db db, DeploymentAdmin da) throws Exception {
-        InputStream is = new FileInputStream(getFile("db_test_01.dp"));
-        DeploymentPackage dp = da.installDeploymentPackage(is);
+        InputStream is = null;
+        DeploymentPackage dp = null;
+        try {
+            is = new FileInputStream(tRunner.getFile("db_test_01.dp"));
+            dp = da.installDeploymentPackage(is);
 
-        if (-1 == Arrays.asList(db.tableNames(null)).indexOf("player"))
-            throw new TestCaseException("Table 'player' is missing");
-        if (-1 == Arrays.asList(db.tableNames(null)).indexOf("game"))
-            throw new TestCaseException("Table 'game' is missing");
-        if (-1 == Arrays.asList(db.tableNames(null)).indexOf("score"))
-            throw new TestCaseException("Table 'score' is missing");
-        if (-1 == Arrays.asList(db.tableNames(null)).indexOf("tmp"))
-            throw new TestCaseException("Table 'tmp' is missing");
-        if (null == db.findRow(null, "player", new Integer(1)))
-            throw new TestCaseException(
-                    "Row with '1' primary key is missing");
-        if (null == db.findRow(null, "game", new Integer(1)))
-            throw new TestCaseException(
-                    "Row with '1' primary key is missing");
-        if (null == db.findRow(null, "score", new Integer(1)))
-            throw new TestCaseException(
-                    "Row with '1' primary key is missing");
-        if (null == db.findRow(null, "tmp", new Integer(1)))
-            throw new TestCaseException(
-                    "Row with '1' primary key is missing");
-        if (!dp.getVersion().equals(new Version("1.0")))
-            throw new TestCaseException("Version should be 1.0");
-        if (!dp.getHeader("Other-Main-header").equals("1"))
-            throw new TestCaseException(
-                    "Header value (Other-Main-header) should be 1");
-        if (!dp.getResourceHeader("db_test_01.dbscript", "Other-header")
-                .equals("1"))
-            throw new TestCaseException(
-                    "Header value (Other-header) should be 1");
-
-        is = new FileInputStream(getFile("db_test_01_update_01.dp"));
-        dp = da.installDeploymentPackage(is);
-
-        if (-1 == Arrays.asList(db.tableNames(null)).indexOf("player"))
-            throw new TestCaseException("Table 'player' is missing");
-        if (-1 == Arrays.asList(db.tableNames(null)).indexOf("game"))
-            throw new TestCaseException("Table 'game' is missing");
-        if (-1 != Arrays.asList(db.tableNames(null)).indexOf("score"))
-            throw new TestCaseException("Table 'score' is present");
-        if (-1 != Arrays.asList(db.tableNames(null)).indexOf("tmp"))
-            throw new TestCaseException("Table 'tmp' is present");
-        if (!db.findRow(null, "player", new Integer(1))[1]
-                .equals("Joe_Upd"))
-            throw new TestCaseException(
-                    "Row with '1' primary key is not updated");
-        if (!db.findRow(null, "game", new Integer(1))[1]
-                .equals("chess_Upd"))
-            throw new TestCaseException(
-                    "Row with '1' primary key is not updated");
-        if (!dp.getVersion().equals(new Version("2.0")))
-            throw new TestCaseException("Version should be 2.0");
-        if (!dp.getHeader("Other-Main-header").equals("2"))
-            throw new TestCaseException(
-                    "Header value (Other-Main-header) should be 2");
-        if (!dp.getResourceHeader("db_test_01.dbscript", "Other-header")
-                .equals("2"))
-            throw new TestCaseException(
-                    "Header value (Other-header) shoul dbe 2");
-
-        dp.uninstall();
+            if (-1 == Arrays.asList(db.tableNames(null)).indexOf("player"))
+                throw new TestCaseException("Table 'player' is missing");
+            if (-1 == Arrays.asList(db.tableNames(null)).indexOf("game"))
+                throw new TestCaseException("Table 'game' is missing");
+            if (-1 == Arrays.asList(db.tableNames(null)).indexOf("score"))
+                throw new TestCaseException("Table 'score' is missing");
+            if (-1 == Arrays.asList(db.tableNames(null)).indexOf("tmp"))
+                throw new TestCaseException("Table 'tmp' is missing");
+            if (null == db.findRow(null, "player", new Integer(1)))
+                throw new TestCaseException(
+                        "Row with '1' primary key is missing");
+            if (null == db.findRow(null, "game", new Integer(1)))
+                throw new TestCaseException(
+                        "Row with '1' primary key is missing");
+            if (null == db.findRow(null, "score", new Integer(1)))
+                throw new TestCaseException(
+                        "Row with '1' primary key is missing");
+            if (null == db.findRow(null, "tmp", new Integer(1)))
+                throw new TestCaseException(
+                        "Row with '1' primary key is missing");
+            if (!dp.getVersion().equals(new Version("1.0")))
+                throw new TestCaseException("Version should be 1.0");
+            if (!dp.getHeader("Other-Main-header").equals("1"))
+                throw new TestCaseException(
+                        "Header value (Other-Main-header) should be 1");
+            if (!dp.getResourceHeader("db_test_01.dbscript", "Other-header")
+                    .equals("1"))
+                throw new TestCaseException(
+                        "Header value (Other-header) should be 1");
+    
+            is = new FileInputStream(tRunner.getFile("db_test_01_update_01.dp"));
+            dp = da.installDeploymentPackage(is);
+    
+            if (-1 == Arrays.asList(db.tableNames(null)).indexOf("player"))
+                throw new TestCaseException("Table 'player' is missing");
+            if (-1 == Arrays.asList(db.tableNames(null)).indexOf("game"))
+                throw new TestCaseException("Table 'game' is missing");
+            if (-1 != Arrays.asList(db.tableNames(null)).indexOf("score"))
+                throw new TestCaseException("Table 'score' is present");
+            if (-1 != Arrays.asList(db.tableNames(null)).indexOf("tmp"))
+                throw new TestCaseException("Table 'tmp' is present");
+            if (!db.findRow(null, "player", new Integer(1))[1]
+                    .equals("Joe_Upd"))
+                throw new TestCaseException(
+                        "Row with '1' primary key is not updated");
+            if (!db.findRow(null, "game", new Integer(1))[1]
+                    .equals("chess_Upd"))
+                throw new TestCaseException(
+                        "Row with '1' primary key is not updated");
+            if (!dp.getVersion().equals(new Version("2.0")))
+                throw new TestCaseException("Version should be 2.0");
+            if (!dp.getHeader("Other-Main-header").equals("2"))
+                throw new TestCaseException(
+                        "Header value (Other-Main-header) should be 2");
+            if (!dp.getResourceHeader("db_test_01.dbscript", "Other-header")
+                    .equals("2"))
+                throw new TestCaseException(
+                        "Header value (Other-header) shoul dbe 2");
+        } finally {
+            if (null != dp)
+                dp.uninstall();
+            if (null != is)
+                is.close();
+        }
     }
 
     public PermissionInfo[] getNeededPermissions() {
         return new PermissionInfo[] {
                 new PermissionInfo(FilePermission.class.getName(), 
-                        getFile("db_test_01.dp").getAbsolutePath(), "read"),
+                        tRunner.getFile("db_test_01.dp").getAbsolutePath(), "read"),
                 new PermissionInfo(FilePermission.class.getName(), 
-                        getFile("db_test_01_update_01.dp").getAbsolutePath(), "read"),
+                        tRunner.getFile("db_test_01_update_01.dp").getAbsolutePath(), "read"),
                 new PermissionInfo(DeploymentAdminPermission.class.getName(), 
                         "(name=db_test_01)", "install, uninstall")
             };

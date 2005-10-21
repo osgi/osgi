@@ -51,11 +51,11 @@ public class Logger {
     
     public synchronized void log(int severity, String log) {
         LogService service = (LogService) tracker.getService();
-        if (null != service && !DAConstants.DEBUG) {
+        if (null != service)
             service.log(severity, log);
-        } else {
+
+        if (DAConstants.DEBUG)
             System.out.println(sevLevels[severity - 1] + ": " + log);
-        }
     }
     
     public synchronized void log(Exception exception) {
@@ -68,11 +68,11 @@ public class Logger {
         exception.printStackTrace(pw);
         
         LogService service = (LogService) tracker.getService();
-        if (null != service && !DAConstants.DEBUG) {
+        if (null != service)
             service.log(level, "", exception);
-        } else {
+        
+        if (DAConstants.DEBUG)
             System.out.println(sevLevels[1 - 1] + ": " + baos.toString());
-        }
     }
 
 }

@@ -1,32 +1,37 @@
 package com.nokia.test.cases;
 
+import java.io.File;
 import java.util.Hashtable;
 
+import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
+import org.osgi.service.deploymentadmin.ResourceProcessor;
 
+import com.nokia.test.doit.DoIt;
 import com.nokia.test.doit.TestCaseClass;
 import com.nokia.test.doit.TestCaseException;
 import com.nokia.test.doit.TestRunner;
 
 public class TestRunnerImpl implements BundleActivator, TestRunner {
     
-    private static final String HOME = 
-        "../../org.osgi.impl.service.deploymentadmin.test/res/";
-
-    private BundleContext context;
+    private DoIt doIt;
     
     private Hashtable testCases = new Hashtable();
     {
-        testCases.put("Test1", new Test1(HOME));
-        testCases.put("Test2", new Test2(HOME));
+        testCases.put("Test1", new Test1(this));
+        testCases.put("Test2", new Test2(this));
+        testCases.put("Test3", new Test3(this));
+        testCases.put("Test4", new Test4(this));
+        testCases.put("Test5", new Test5(this));
     }
     
     public TestRunnerImpl() throws Exception {
     }
-
+    
+    /////////////////////////////////////////////////////////////////////
+    
     public void start(BundleContext context) throws Exception {
-        this.context = context;
         context.registerService(TestRunner.class.getName(), this, null);
     }
 
@@ -34,6 +39,10 @@ public class TestRunnerImpl implements BundleActivator, TestRunner {
     }
 
     /////////////////////////////////////////////////////////////////////
+    
+    public void setDoIt(DoIt doIt) {
+        this.doIt = doIt;
+    }
     
     public String[] getTestIds() {
         String[] ret = new String[testCases.keySet().size()];
@@ -43,6 +52,18 @@ public class TestRunnerImpl implements BundleActivator, TestRunner {
     
     public TestCaseClass getTest(String testId) throws TestCaseException {
         return (TestCaseClass) testCases.get(testId);
+    }
+
+    public File getFile(String file) {
+        return doIt.getFile(file);
+    }
+    
+    public ResourceProcessor getRp(String pid) {
+        return doIt.getRp(pid);
+    }
+
+    public Bundle[] getBundles() {
+        return doIt.getBundles();
     }
 
 }
