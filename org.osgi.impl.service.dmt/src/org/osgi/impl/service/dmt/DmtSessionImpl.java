@@ -1546,7 +1546,7 @@ public class DmtSessionImpl implements DmtSession {
     
     public String toString() {
         StringBuffer info = new StringBuffer();
-        info.append(getClass()).append('(');
+        info.append("DmtSessionImpl(");
         info.append(principal).append(", ");
         info.append(subtreeNode).append(", ");
         
