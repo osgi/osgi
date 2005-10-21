@@ -801,7 +801,10 @@ public class DmtSessionImpl implements DmtSession {
 
 		    // DMTND 7.7.1.5: "needs correct access rights for the equivalent
 		    // Add, Delete, Get, and Replace commands"
-            checkNodePermissionRecursive(node, Acl.GET);
+            if(recursive)
+                checkNodePermissionRecursive(node, Acl.GET);
+            else
+                checkNodePermission(node, Acl.GET);
 			checkNodeCapability(node, MetaNode.CMD_GET);
 
             // ACL not copied, so parent does not need REPLACE permission even
@@ -1082,7 +1085,7 @@ public class DmtSessionImpl implements DmtSession {
     // returned by getChildNodeNames)
 	private void checkNodePermissionRecursive(Node node, int actions) 
 	        throws DmtException {
-	    //checkNodePermission(node, actions);
+	    checkNodePermission(node, actions);
 	    
 	    if (!isLeafNodeNoCheck(node)) {
 	        // 'children' is [] if there are no child nodes
@@ -1539,6 +1542,31 @@ public class DmtSessionImpl implements DmtSession {
     static void init_acls() {
         acls = new Hashtable();
         acls.put(Node.ROOT_NODE, new Acl("Add=*&Get=*&Replace=*"));
+    }
+    
+    public String toString() {
+        StringBuffer info = new StringBuffer();
+        info.append(getClass()).append('(');
+        info.append(principal).append(", ");
+        info.append(subtreeNode).append(", ");
+        
+        if(lockMode == LOCK_TYPE_ATOMIC)
+            info.append("atomic");
+        else if(lockMode == LOCK_TYPE_EXCLUSIVE)
+            info.append("exclusive");
+        else
+            info.append("shared");
+            
+        info.append(", ");
+        
+        if(state == STATE_CLOSED)
+            info.append("closed");
+        else if(state == STATE_OPEN)
+            info.append("open");
+        else
+            info.append("invalid");
+        
+        return info.append(')').toString();
     }
 }
 
