@@ -18,6 +18,7 @@
 package org.osgi.impl.service.dmt;
 
 import java.util.*;
+import org.osgi.framework.Constants;
 import org.osgi.framework.ServiceReference;
 import org.osgi.service.dmt.DmtException;
 import org.osgi.service.dmt.spi.DataPluginFactory;
@@ -43,12 +44,19 @@ public class PluginDispatcher implements ServiceTrackerCustomizer {
     public synchronized Object addingService(ServiceReference serviceRef) {
         Node[] roots = getURIs(serviceRef, "dataRootURIs");
         Node[] execs = getURIs(serviceRef, "execRootURIs");
+        
+        String description = (String) 
+            serviceRef.getProperty(Constants.SERVICE_DESCRIPTION);
+        if(description == null)
+            description = "";
+        else
+            description = " '" + description + "'";
 
         if (roots == null || execs == null)
             return null;
         if (roots.length == 0 && execs.length == 0) {
-            context.log(LogService.LOG_WARNING, "Plugin is not registered " +
-                    "for any nodes, ignoring plugin.", null);
+            context.log(LogService.LOG_WARNING, "Plugin" + description + 
+                    " is not registered for any nodes, ignoring plugin.", null);
             return null;
         }
 
@@ -56,7 +64,8 @@ public class PluginDispatcher implements ServiceTrackerCustomizer {
             context.log(LogService.LOG_WARNING, "Plugin data or exec roots (" +
                     Arrays.asList(Node.getUriArray(roots)) + ", " +
                     Arrays.asList(Node.getUriArray(execs)) +
-                    ") contain conflicting entries; ignoring this plugin.", 
+                    ") contain conflicting entries; ignoring plugin" + 
+                    description + ".", 
                     null);
             return null;
         }
@@ -66,15 +75,16 @@ public class PluginDispatcher implements ServiceTrackerCustomizer {
                     Arrays.asList(Node.getUriArray(roots)) + ", " +
                     Arrays.asList(Node.getUriArray(execs)) +
                     ") conflict with a previously registered plugin; " +
-                    "ignoring this plugin.", null);
+                    "ignoring plugin" + description + ".", null);
             return null;
         } 
         
         List invalidRootUris = getInvalidRoots(roots);
         if(invalidRootUris.size() != 0) {
-            context.log(LogService.LOG_WARNING, "Ignoring plugin because of " +
-                    "invalid plugin data roots '" + invalidRootUris +
-                    "': the node or the parent must already exist.", null);
+            context.log(LogService.LOG_WARNING, "Ignoring plugin" + 
+                    description + " because of invalid plugin data roots '" + 
+                    invalidRootUris + "': the node or the parent must " +
+                    "already exist.", null);
             return null;
         }
 
