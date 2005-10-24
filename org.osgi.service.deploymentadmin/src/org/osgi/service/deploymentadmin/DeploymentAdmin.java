@@ -31,6 +31,7 @@ public interface DeploymentAdmin {
 	 * @param  in the input stream the deployment package can be read from. It mustn't be null.
 	 * @return A DeploymentPackage object representing the newly installed/updated deployment package. 
 	 *         Return value can only be null if the action was cancelled (see {@link #cancel}).
+	 * @throws IllegalArgumentException if the got InputStream parameter is null         
 	 * @throws DeploymentException if the installation was not successful
 	 * @throws SecurityException if access is not permitted based on the current security policy.
 	 * @see DeploymentAdminPermission
@@ -38,12 +39,15 @@ public interface DeploymentAdmin {
     DeploymentPackage installDeploymentPackage(InputStream in) throws DeploymentException;
 
     /**
-      * Lists the deployment packages currently installed on the platform.
+      * Lists the deployment packages currently installed on the platform.<p>
       * <code>DeploymentAdminPermission("&lt;filter&gt;", "list")</code> is 
-      * needed for this operation.<p>
-      * During an installation of an existing package (update), the target must remain 
-      * in this list until the installation process is completed, after which the source 
-      * replaces the target.
+      * needed for this operation to the effect that only those packages are listed in  
+      * the array to which the caller has appropriate DeploymentAdminPermission. It has 
+      * the consequence that the method never throws SecurityException only doesn't 
+      * put certain deployment packages into the array.<p>
+      * During an installation of an existing package (update) or during an uninstallation, 
+      * the target must remain in this list until the installation process is completed, 
+      * after which the source replaces the target.
       * @return the array of <code>DeploymentPackage</code> objects representing all the 
       *         installed deployment packages (including the "System" deployment package). 
       *         The return value cannot be null. In case of missing permissions it may 
@@ -57,9 +61,9 @@ public interface DeploymentAdmin {
      * Gets the currenlty installed {@link DeploymentPackage} instance which has the given 
      * symbolic name. {@link DeploymentAdminPermission}("&lt;filter&gt;", "list") is 
      * needed for this operation.<p>
-     * During an installation of an existing package (update), the target deployment package 
-     * must remain the return value until the installation process is completed, after which 
-     * the source is the return value.
+     * During an installation of an existing package (update) or during an uninstallation, 
+     * the target deployment package must remain the return value until the installation process 
+     * is completed, after which the source is the return value.
      * @param  symbName the symbolic name of the deployment package to be retrieved. It mustn't be null.
      * @return The <code>DeploymentPackage</code> for the given symbolic name. 
      *         If there is no deployment package with that symbolic name currently installed, 

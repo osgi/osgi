@@ -17,11 +17,14 @@ import java.security.*;
 
 /**
  * The <code>DeploymentCustomizerPermission</code> permission gives the right to 
- * Resource Processors to access a bundle's private area.<p>
+ * Resource Processors to access a bundle's (residing in a Deployment Package) private area.<p>
  * The Resource Processor that has this permission is allowed to access the bundle's 
- * private area by calling the {@link DeploymentSession#getDataFile} method. The 
- * Resource Processor will have <code>FilePermission</code> with "read", "write" and "delete" 
- * actions for the returned {@link java.io.File} and its subdirectories.
+ * private area by calling the {@link DeploymentSession#getDataFile} method during the session 
+ * (see {@link DeploymentSession}). After the session ends the FilePermissions are withdrawn.
+ * The Resource Processor will have <code>FilePermission</code> with "read", "write" and "delete" 
+ * actions for the returned {@link java.io.File} that represents the the base directory of the 
+ * persistent storage area and its subdirectories.<p>
+ * The actions string is converted to lowercase before processing.
  */
 public class DeploymentCustomizerPermission extends Permission {
     
@@ -65,8 +68,8 @@ public class DeploymentCustomizerPermission extends Permission {
      * actions for the returned {@link java.io.File} and its subdirectories.
      * @param name Symbolic name of the target bundle, must not be null.
      * @param actions Action string (only the "privatearea" action is valid), must not be null.
-     * @throws IllegalArgumentException if the filter is invalid or the list of actions 
-     *         contains unknown operations
+     * @throws IllegalArgumentException if the filter is invalid, the list of actions 
+     *         contains unknown operations or one of the parameters is null
      */
     public DeploymentCustomizerPermission(String name, String actions) {
         super(name);
@@ -128,7 +131,13 @@ public class DeploymentCustomizerPermission extends Permission {
     }
 
     /**
-     * Checks if this DeploymentCustomizerPermission would imply the parameter permission.
+     * Checks if this DeploymentCustomizerPermission would imply the parameter permission.<p>
+     * This permission implies another DeploymentCustomizerPermission permission if:<p>
+     * both of them has the "privatearea" action (other actions are not allowed) and<p>
+     * their filters (only name attribute is allowed in the filters) match similarly to 
+     * {@link DeploymentAdminPermission}.<p>
+     * The value of the name attribute means bundle symbolic name and not deployment package 
+     * symbolic name here!
      * @param permission Permission to check.
      * @return true if this DeploymentCustomizerPermission object implies the 
      * specified permission.

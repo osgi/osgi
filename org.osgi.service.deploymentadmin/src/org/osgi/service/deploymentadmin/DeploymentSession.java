@@ -15,7 +15,9 @@ package org.osgi.service.deploymentadmin;
  * currently being deployed.<p>
  * When a deployment package is installed the target package, when uninstalled the 
  * source package is an empty deployment package. The empty package has version 
- * <code>0.0.0</code>, its name is an empty string, it has no bundles and no resources.   
+ * <code>0.0.0</code>, its name is an empty string, it has no bundles and no resources.
+ * The empty deployment package is a virtual entity it doesn't appear for the outside world.
+ * It is only visible on the DeploymentSession interface used by Resource processors. 
  */
 public interface DeploymentSession {
     
@@ -47,7 +49,7 @@ public interface DeploymentSession {
      * during the deployment action only.
      * <code>DeploymentCustomizerPermission("&lt;filter&gt;", "privatearea")</code> is also 
 	 * needed for this operation.
-     * @param bundle the bundle the private are belongs to
+     * @param bundle the bundle the private area belongs to
      * @return file representing the private area of the bundle. It cannot be null.
      * @throws SecurityException if the caller is not the customizer of the corresponding 
      *         deployment package.

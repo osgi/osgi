@@ -24,7 +24,7 @@ import java.security.*;
  * For example, installing a deployment package requires <code>DeploymentAdminPermission</code>
  * to access the <code>installDeploymentPackage</code> method and <code>AdminPermission</code> to access
  * the framework's install/update/uninstall methods. <p>
- * The permission uses a &lt;filter&gt; string formatted similarly to the filter in RFC 73.
+ * The permission uses a &lt;filter&gt; string formatted similarly to the {@link org.osgi.framework.Filter}.
  * The <code>DeploymentAdminPermission</code> filter does not use the id and location filters.
  * The "signer" filter is matched against the signer chain of the deployment package, and
  * the "name" filter is matched against the DeploymentPackage-Name header.
@@ -58,6 +58,7 @@ import java.security.*;
  * cancelled could correspond to the install, update or uninstall of a deployment package
  * that satisfies the  string. See {@link DeploymentAdmin#cancel}<p>
  * Wildcards can be used both in the name and the signer (see RFC-95) filters.<p>
+ * The actions string is converted to lowercase before processing.
  */
 public final class DeploymentAdminPermission extends Permission {
     
@@ -165,7 +166,9 @@ public final class DeploymentAdminPermission extends Permission {
     }
 
     /**
-     * Returns the String representation of the action list.
+     * Returns the String representation of the action list.<p>
+     * The method always gives back the actions in the following (alphabetical) order: 
+     * <code>cancel, install, list, uninstall, uninstallForced</code>
      * @return Action list of this permission instance. This is a comma-separated 
      * list that reflects the action parameter of the constructor.
      * @see java.security.Permission#getActions()
@@ -175,11 +178,34 @@ public final class DeploymentAdminPermission extends Permission {
     }
 
     /**
-     * Checks if this DeploymentAdminPermission would imply the parameter permission.
+     * Checks if this DeploymentAdminPermission would imply the parameter permission.<p>
+     * Precondition of the implication is that the action set of this permission is the superset 
+     * of the action set of the other permission. Further rules of implication are determined 
+     * by the {@link org.osgi.framework.Filter} rules and the "OSGi Service Platform, Core 
+     * Specification Release 4, Chapter Certificate Matching".<p>
+     * The allowed attributes are: <code>name</code> (the symbolic name of the deployment 
+     * package) and <code>signer</code> (the signer of the deployment package). In both cases 
+     * wildcards can be used.<p>
+     * Examples:
+     * <pre>
+     * 1. DeploymentAdminPermission("(name=org.osgi.ExampleApp)", "list")
+     * 2. DeploymentAdminPermission("(name=org.osgi.ExampleApp)", "list, install")
+     * 3. DeploymentAdminPermission p3 = new DeploymentAdminPermission("(name=org.osgi.*)", "list")
+     * 4. DeploymentAdminPermission("(signer=*, o=ACME, c=US)", "list")
+     * 5. DeploymentAdminPermission("(signer=cn = Bugs Bunny, o = ACME, c = US)", "list")
+     * </pre><p>
+     * <pre>  
+     * 1. implies 1.
+     * 2. implies 1.
+     * 1. doesn't implies 2.
+     * 3. implies 1.
+     * 4. implies 5.
+     * </pre>
      * @param permission Permission to check.
      * @return true if this DeploymentAdminPermission object implies the 
      * specified permission.
      * @see java.security.Permission#implies(java.security.Permission)
+     * @see org.osgi.framework.Filter
      */
     public boolean implies(Permission permission) {
         if (!(permission instanceof DeploymentAdminPermission))

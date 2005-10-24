@@ -44,7 +44,7 @@ public class DeploymentException extends Exception {
 	public static final int	CODE_MISSING_BUNDLE				= 4;
 
 	/**
-	 * A resource in the deployment package is marked as
+	 * A resource in the source deployment package is marked as
 	 * DeploymentPackage-Missing but there is no such resource in the target
 	 * deployment package.
 	 */
@@ -80,7 +80,7 @@ public class DeploymentException extends Exception {
 	public static final int	CODE_BUNDLE_SHARING_VIOLATION	= 10;
 
 	/**
-	 * A side effect of any resource already exists.
+	 * An artifact of any resource already exists.
 	 */
 	public static final int	CODE_RESOURCE_SHARING_VIOLATION	= 11;
 
@@ -98,8 +98,15 @@ public class DeploymentException extends Exception {
 	public static final int	CODE_PROCESSOR_NOT_FOUND		= 13;
 
 	/**
-	 * The manifest is not the first file in the stream or bundles don't precede
-	 * resource files.
+	 * Order of files in the deployment package is bad. The right order is the 
+	 * following:<p>
+	 * <pre>
+	 * META-INF/MANIFEST.MF
+	 * META-INF/*.SF, META-INF/*.DSA, META-INF/*.RS
+	 * Localization files
+	 * Bundles
+	 * Resources
+	 * </pre>
 	 */
 	public static final int	CODE_ORDER_ERROR				= 14;
 

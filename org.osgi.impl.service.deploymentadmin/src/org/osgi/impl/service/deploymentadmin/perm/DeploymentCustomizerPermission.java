@@ -38,7 +38,8 @@ import java.util.Vector;
  * The Resource Processor that has this permission is allowed to access the bundle's 
  * private area by calling the {@link DeploymentSession#getDataFile} method. The 
  * Resource Processor will have <code>FilePermission</code> with "read", "write" and "delete" 
- * actions for the returned {@link java.io.File} and its subdirectories.
+ * actions for the returned {@link java.io.File} and its subdirectories.<p>
+ * The actions string is converted to lowercase before processing.
  */
 public class DeploymentCustomizerPermission extends Permission {
     
@@ -68,12 +69,15 @@ public class DeploymentCustomizerPermission extends Permission {
      * actions for the returned {@link java.io.File} and its subdirectories.
      * @param name Symbolic name of the target bundle, must not be null.
      * @param action Action string (only the "privatearea" action is valid), must not be null.
-     * @throws IllegalArgumentException if the filter is invalid or the list of actions 
-     *         contains unknown operations
+     * @throws IllegalArgumentException if the filter is invalid, the list of actions 
+     *         contains unknown operations or one of the parameters is null
      */
     public DeploymentCustomizerPermission(String name, String actions) {
         super(name);
-        this.actions = actions;
+        if (null == name || null == actions)
+            throw new IllegalArgumentException("Neither of the parameters can be null");
+        
+        this.actions = actions.toLowerCase();
         rep = new Representation(getName());
         check();
     }
@@ -171,5 +175,9 @@ public class DeploymentCustomizerPermission extends Permission {
             throw new IllegalArgumentException("Illegal action");
     }
 
-
+ public static void main(String[] args) {
+	System.out.println(
+			new DeploymentCustomizerPermission("(name=alma)", "Privatearea")
+	);
+}
 }

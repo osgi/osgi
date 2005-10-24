@@ -25,11 +25,6 @@ public interface ResourceProcessor {
 	  * Called when the Deployment Admin starts a new operation on the given deployment package, 
 	  * and the resource processor is associated a resource within the package. Only one 
 	  * deployment package can be processed at a time.
-	  * It is important to note that the deployment action (i.e. install, update, uninstall) 
-	  * that is part of the deployment session instance passed to the begin method corresponds
-	  * to what is happening to the resources being processed by this resource processor. 
-	  * For example, an "update" of a deployment package, can result in the "install" of a new 
-	  * resource. 
 	  * @param session object that represents the current session to the resource processor
 	  */
     void begin(DeploymentSession session);

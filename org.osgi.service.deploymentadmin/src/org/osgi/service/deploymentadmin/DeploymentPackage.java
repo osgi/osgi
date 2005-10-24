@@ -24,7 +24,7 @@ import org.osgi.framework.Version;
   * (including bundles) which, once processed, will result in new artifacts (effects on 
   * the system) being added to the OSGi platform.  These new artifacts can include 
   * installed Bundles, new configuration objects added to the Configuration Admin service, 
-  * new Wire objects added to the Wire Admin service, or changed system properties. All 
+  * new Wire objects added to the Wire Admin service, or changed system properties, etc. All 
   * the changes caused by the processing of a deployment package are persistently 
   * associated with the deployment package, so that they can be appropriately cleaned 
   * up when the deployment package is uninstalled. There is a strict no overlap rule 
@@ -76,7 +76,7 @@ public interface DeploymentPackage {
      *         }	 
      * </pre>
  	 * @return The two-dimensional string array corresponding to bundle symbolic name 
-	 *         and version pairs. It cannot be null but can be zero dimensional.
+	 *         and version pairs. It cannot be null but the its length can be zero.
 	 */
     String[][] getBundleSymNameVersionPairs();  
  
@@ -107,8 +107,8 @@ public interface DeploymentPackage {
      *     Resource-Processor: foo.rp
      * </pre>
      * then the corresponding array element is the "foo/readme.txt" string.
-     * @return The string array corresponding to resources. It cannot be null but can be zero 
-     *         dimensional.
+     * @return The string array corresponding to resources. It cannot be null but its 
+     *         length can be zero.
      */
     String[] getResources();   
     
@@ -159,7 +159,11 @@ public interface DeploymentPackage {
     /**
      * This method is called to completely uninstall a deployment package, which couldn't be uninstalled
      * using traditional means due to exceptions. {@link DeploymentAdminPermission}("&lt;filter&gt;", 
-     * "uninstallForced") is needed for this operation.
+     * "uninstallForced") is needed for this operation.<p>
+     * The method forces removal of the Deployment Package from the repository maintained by the 
+     * Deployment Admin service. This method follows the same steps as {@link #uninstall}. However, 
+     * any errors or the absence of Resource Processor services are ignored, they must not cause a roll back.
+     * These errors should be logged.
      * @return true if the operation was successful
      * @throws SecurityException if access is not permitted based on the current security policy.
      */  

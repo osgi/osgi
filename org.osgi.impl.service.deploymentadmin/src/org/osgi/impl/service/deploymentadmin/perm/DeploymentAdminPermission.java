@@ -19,6 +19,8 @@ package org.osgi.impl.service.deploymentadmin.perm;
 
 import java.security.Permission;
 import java.security.PermissionCollection;
+import java.util.Collections;
+import java.util.Iterator;
 import java.util.StringTokenizer;
 import java.util.Vector;
 
@@ -67,6 +69,7 @@ import java.util.Vector;
  * cancelled could correspond to the install, update or uninstall of a deployment package
  * that satisfies the  string. See {@link DeploymentAdmin#cancel}<p>
  * Wildcards can be used both in the name and the signer (see RFC-95) filters.<p>
+ * The actions string is converted to lowercase before processing.
  */
 public class DeploymentAdminPermission extends Permission {
     
@@ -139,7 +142,6 @@ public class DeploymentAdminPermission extends Permission {
      * @see java.lang.Object#hashCode()
      */
     public int hashCode() {
-        // TODO
         return getActionVector().hashCode();
     }
 
@@ -150,7 +152,14 @@ public class DeploymentAdminPermission extends Permission {
      * @see java.security.Permission#getActions()
      */
     public String getActions() {
-        return actions;
+    	Vector v = getActionVector();
+    	Collections.sort(v);
+    	StringBuffer sb = new StringBuffer();
+    	for (Iterator it = v.iterator(); it.hasNext();) {
+			String action = (String) it.next();
+			sb.append(action + (it.hasNext() ? ", " : ""));
+		}
+        return sb.toString();
     }
 
     /**
@@ -202,5 +211,5 @@ public class DeploymentAdminPermission extends Permission {
         if (!ACTIONS.containsAll(getActionVector()))
             throw new IllegalArgumentException("Illegal action");
     }
-
+    
 }

@@ -189,6 +189,9 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
     public DeploymentPackage installDeploymentPackage(InputStream in)
             throws DeploymentException
     {
+    	if (null == in)
+    		throw new IllegalArgumentException("InputStream parameter cannot be null");
+    		
         waitIfBusy();
         DeploymentPackageJarInputStream wjis = null;
         DeploymentPackageImpl srcDp = null;
