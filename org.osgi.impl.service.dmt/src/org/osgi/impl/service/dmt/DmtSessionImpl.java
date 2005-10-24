@@ -65,7 +65,7 @@ public class DmtSessionImpl implements DmtSession {
     private final int    sessionId;
     
     private EventList eventList;
-	private Map       dataPlugins;
+	private Vector    dataPlugins;
     private int       state;
     
     // Session creation is done in two phases: 
@@ -106,7 +106,7 @@ public class DmtSessionImpl implements DmtSession {
         	eventList = new EventList();
         
         sessionId = (new Long(System.currentTimeMillis())).hashCode();
-        dataPlugins = Collections.synchronizedMap(new HashMap());
+        dataPlugins = new Vector();
         state = STATE_CLOSED;
 	}
     
@@ -211,10 +211,10 @@ public class DmtSessionImpl implements DmtSession {
     private void closePlugins() throws DmtException {
         Vector closeExceptions = new Vector();
         // this block requires synchronization
-        Iterator i = dataPlugins.values().iterator();
-        while (i.hasNext()) {
+        ListIterator i = dataPlugins.listIterator(dataPlugins.size());
+        while (i.hasPrevious()) {
             try {
-                ((PluginSessionWrapper) i.next()).close();
+                ((PluginSessionWrapper) i.previous()).close();
             } catch(Exception e) {
                 closeExceptions.add(e);
             }
@@ -247,10 +247,10 @@ public class DmtSessionImpl implements DmtSession {
     // precondition: lockMode == LOCK_TYPE_ATOMIC
     private void commitPlugins() throws DmtException {
         Vector commitExceptions = new Vector();
-        Iterator i = dataPlugins.values().iterator();
+        ListIterator i = dataPlugins.listIterator(dataPlugins.size());
         // this block requires synchronization
-        while (i.hasNext()) {
-            PluginSessionWrapper wrappedPlugin = (PluginSessionWrapper) i.next();
+        while (i.hasPrevious()) {
+            PluginSessionWrapper wrappedPlugin = (PluginSessionWrapper) i.previous();
             try {
                 // checks transaction support before calling commit on the plugin
                 wrappedPlugin.commit();
@@ -298,11 +298,11 @@ public class DmtSessionImpl implements DmtSession {
         
         Vector rollbackExceptions = new Vector();
         // this block requires synchronization
-        Iterator i = dataPlugins.values().iterator();
-        while (i.hasNext()) {
+        ListIterator i = dataPlugins.listIterator(dataPlugins.size());
+        while (i.hasPrevious()) {
             try {
                 // checks transaction support before calling rollback on the plugin
-                ((PluginSessionWrapper) i.next()).rollback();
+                ((PluginSessionWrapper) i.previous()).rollback();
             } catch(Exception e) {
                 rollbackExceptions.add(e);
             }
@@ -1120,13 +1120,16 @@ public class DmtSessionImpl implements DmtSession {
     private synchronized PluginSessionWrapper getPluginSession(Node node, 
             boolean writeOperation) throws DmtException {
         PluginSessionWrapper wrappedPlugin = null;
+        PluginSessionWrapper rootPlugin = null;
         
-        Iterator i = dataPlugins.entrySet().iterator();
+        Iterator i = dataPlugins.iterator();
         while (i.hasNext() && wrappedPlugin == null) {
-            Map.Entry element = (Map.Entry) i.next();
-            Node pluginRoot = (Node) element.getKey();
-            if(!pluginRoot.isRoot() && pluginRoot.isAncestorOf(node))
-                wrappedPlugin = (PluginSessionWrapper) element.getValue();
+        	PluginSessionWrapper plugin = (PluginSessionWrapper) i.next();
+            Node pluginRoot = plugin.getSessionRoot();
+            if(pluginRoot.isRoot())
+            	rootPlugin = plugin;
+            else if(pluginRoot.isAncestorOf(node))
+                wrappedPlugin = plugin;
         }
 
         // The 'pluginRegistration' and 'root' variables are initialized to null
@@ -1141,7 +1144,7 @@ public class DmtSessionImpl implements DmtSession {
             root = getRootForPlugin(pluginRegistration, node);
 
             if(root.equals(Node.ROOT_NODE))
-                wrappedPlugin = (PluginSessionWrapper) dataPlugins.get(root);
+                wrappedPlugin = rootPlugin; // may be null
         }
         
         if(wrappedPlugin != null) {
@@ -1177,7 +1180,7 @@ public class DmtSessionImpl implements DmtSession {
                 pluginSession, pluginSessionType, root, securityContext);
             
         // this requires synchronized access
-        dataPlugins.put(root, wrappedPlugin);
+        dataPlugins.add(wrappedPlugin);
         
         return wrappedPlugin;
     }
