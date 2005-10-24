@@ -251,7 +251,7 @@ class LogPlugin implements DataPluginFactory, TransactionalDataSession {
 
         // OSGi/Log/<search_id>/LogResult/<result_id>
         if (path.length == 3 && path[1].equals(LOGRESULT)) {
-                return new LogMetaNode(MetaNode.DYNAMIC,
+                return new LogMetaNode(MetaNode.AUTOMATIC,
                         !LogMetaNode.MODIFIABLE, LogMetaNode.ALLOW_INFINITE,
                         "Log result item node.");
         }
