@@ -25,10 +25,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.net.URL;
 import java.security.AccessController;
 import java.security.cert.Certificate;
-import java.security.KeyStore;
 import java.security.KeyStoreException;
 import java.security.PrivilegedAction;
 import java.security.PrivilegedActionException;
@@ -76,7 +74,7 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
     
     private Logger 				  logger;
     private DeploymentSessionImpl session;
-    private KeyStore              keystore;
+    private DAKeyStore            keystore;
     private TrackerEvent          trackEvent;         // tracks the EventAdmin
     private TrackerDmt            trackDmt;           // tracks the DmtAdmin
     private TrackerDownloadAgent  trackDownloadAgent; // tracks the DownloadAgent
@@ -147,7 +145,7 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
         registerService(new String[] { DeploymentAdmin.class.getName() }, this, null);
         
         // initialize logger
-        logger = new Logger(context);
+        logger = Logger.getLogger(context);
 
         // load persisten data (e.g. Deployment Package meta information)
         load();
@@ -159,7 +157,7 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
         initDmtPlugins();
 
         // initialize keystore
-        initKeyStore();
+        keystore = DAKeyStore.getKeyStore(context);
         
         // fetch session timeout system property
         String s = System.getProperty(DAConstants.SESSION_TIMEOUT);
@@ -380,71 +378,6 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
         for (Iterator iter = serviceRegs.iterator(); iter.hasNext();) {
             ServiceRegistration reg = (ServiceRegistration) iter.next();
             reg.unregister();
-        }
-    }
-
-    private void initKeyStore() throws Exception {
-        // get the keystore file
-        
-        String ksFile = System.getProperty(DAConstants.KEYSTORE_PATH);
-        if (null == ksFile) {
-            String sUrl = System.getProperty(DAConstants.KEYSTORE_FW_URL);
-            if (null != sUrl) {
-                ksFile = new URL(sUrl).getFile();
-                logger.log(Logger.LOG_INFO, "Keystore location is not defined. Set the " + 
-                        DAConstants.KEYSTORE_PATH + " system property! Framework keystore will " +
-                        "be used (" + ksFile + ").");
-            }
-        }
-        if (null == ksFile) {
-            File f = new File(System.getProperty("user.home"));
-            f = new File(f, ".keystore");
-            if (f.exists()) {
-                ksFile = f.getPath();
-                logger.log(Logger.LOG_INFO, "Keystore location is not defined. Set the " + 
-                        DAConstants.KEYSTORE_PATH + " system property! " + ksFile + 
-                        " will be used.");
-            }
-        }
-        if (null == ksFile || !(new File(ksFile).exists())) {
-            logger.log(Logger.LOG_WARNING, "Keystore location is not defined. Set the " + 
-                    DAConstants.KEYSTORE_PATH + " system property! Deployment Admin will " +
-                    "not work properly.");
-            return;
-        }
-
-        // get the keystore pwd
-        
-        String pwd = System.getProperty(DAConstants.KEYSTORE_PWD);
-        if (null == pwd)
-            logger.log(Logger.LOG_INFO, "There is no keystore password set. Set the " +
-                    DAConstants.KEYSTORE_PWD + " system property! Keystore integrity will " +
-                    "not be checked.");
-        
-        // get the keystore type
-        
-        String ksType = System.getProperty(DAConstants.KEYSTORE_TYPE);
-        if (null == ksType) {
-            ksType = "JKS";
-            logger.log(Logger.LOG_INFO, "There is no keystore type set. Set the " +
-                    DAConstants.KEYSTORE_TYPE + " system property! Default keystore type " +
-                    "(JKS) will be used.");
-        }
-        
-        // load the keystore
-        
-        keystore = KeyStore.getInstance(ksType);
-        InputStream is = new FileInputStream(new File(ksFile));
-        try {
-            keystore.load(is, null == pwd ? null : pwd.toCharArray());
-        } catch (Exception e) {
-            logger.log(Logger.LOG_WARNING, "Cannot load the keystore (" + 
-                    ksFile + ") Deployment Admin will " +
-                    "not work properly");
-        }
-        finally {
-            if (null != is)
-                is.close();
         }
     }
 
