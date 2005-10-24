@@ -40,22 +40,47 @@ public class Logger {
     
     private ServiceTracker tracker;
 
-    public Logger(BundleContext context) {
-        tracker = new ServiceTracker(context, LogService.class.getName(), null);
-        tracker.open();
+    private static Logger LOGGER;
+
+    public static Logger getLogger(BundleContext context) {
+        if (null == context)
+            throw new IllegalArgumentException();
+        
+        if (null == LOGGER)
+            LOGGER = new Logger();
+        
+        LOGGER.init(context);
+        
+        return LOGGER;
+    }
+    
+    public static Logger getLogger() {
+        if (null == LOGGER)
+            LOGGER = new Logger();
+        return LOGGER;
+    }
+    
+    private void init(BundleContext context) {
+        if (null == tracker) {
+            tracker = new ServiceTracker(context, LogService.class.getName(), null);
+            tracker.open();
+        }
     }
     
     public void stop() {
-        tracker.close();
+        if (null != tracker)
+            tracker.close();
     }
     
     public synchronized void log(int severity, String log) {
+        if (DAConstants.DEBUG || tracker == null) {
+            System.out.println(sevLevels[severity - 1] + ": " + log);
+            return;
+        }
+
         LogService service = (LogService) tracker.getService();
         if (null != service)
             service.log(severity, log);
-
-        if (DAConstants.DEBUG)
-            System.out.println(sevLevels[severity - 1] + ": " + log);
     }
     
     public synchronized void log(Exception exception) {
@@ -66,13 +91,15 @@ public class Logger {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         PrintWriter pw = new PrintWriter(baos, true);
         exception.printStackTrace(pw);
+
+        if (DAConstants.DEBUG || tracker == null) {
+            System.out.println(sevLevels[1 - 1] + ": " + baos.toString());
+            return;
+        }
         
         LogService service = (LogService) tracker.getService();
         if (null != service)
             service.log(level, "", exception);
-        
-        if (DAConstants.DEBUG)
-            System.out.println(sevLevels[1 - 1] + ": " + baos.toString());
     }
 
 }

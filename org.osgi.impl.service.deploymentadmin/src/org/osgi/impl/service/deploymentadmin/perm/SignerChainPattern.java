@@ -26,13 +26,9 @@
  */
 package org.osgi.impl.service.deploymentadmin.perm;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.InputStream;
 import java.lang.reflect.Method;
 import java.security.AccessController;
 import java.security.Principal;
-import java.security.PrivilegedAction;
 import java.security.PrivilegedActionException;
 import java.security.PrivilegedExceptionAction;
 import java.security.cert.Certificate;
@@ -42,7 +38,7 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.Vector;
 
-import org.osgi.impl.service.deploymentadmin.DAConstants;
+import org.osgi.impl.service.deploymentadmin.DAKeyStore;
 import org.osgi.impl.service.deploymentadmin.Splitter;
 
 
@@ -74,54 +70,10 @@ class SignerChainPattern {
     private static Object keystore;
     static {
         try {
-            String ksType = (String) AccessController.doPrivileged(new PrivilegedAction() {
-	                public Object run() {
-	                    return System.getProperty(DAConstants.KEYSTORE_TYPE);
-	                }
-                }); 
-            if (null == ksType)
-                ksType = "JKS";
-            String ksPath = (String) AccessController.doPrivileged(new PrivilegedAction() {
-                public Object run() {
-                    return System.getProperty(DAConstants.KEYSTORE_PATH);
-                }
-            }); 
-            if (null == ksPath)
-                throw new RuntimeException("Keystore path is not defined. Set the " +
-                        DAConstants.KEYSTORE_PATH + " system property!");
-            File file = new File(ksPath);
-            if (!file.exists())
-                throw new RuntimeException("Keystore is not found: " + file);
-            String pwd = (String) AccessController.doPrivileged(new PrivilegedAction() {
-                public Object run() {
-                    return System.getProperty(DAConstants.KEYSTORE_PWD);
-                }
-            }); 
-            if (null == pwd)
-                throw new RuntimeException("There is no keystore password. Set the " +
-                        DAConstants.KEYSTORE_PWD + " system property!");
-            
-            final String ksTypeF = ksType;
-            final String pwdF = pwd;
-            final File fileF = file;
-            try {
-	            AccessController.doPrivileged(new PrivilegedExceptionAction() {
-	                public Object run() throws Exception {
-	                    Class c = Class.forName("java.security.KeyStore");
-	                    Method m = c.getDeclaredMethod("getInstance", new Class[] {String.class});
-	                    keystore = m.invoke(null, new Object[] {ksTypeF});
-	                    m = keystore.getClass().getDeclaredMethod("load", new Class[] {InputStream.class,
-	                            char[].class});
-	                    m.invoke(keystore, new Object[] {new FileInputStream(fileF), pwdF.toCharArray()});
-	                    return null;
-	                }
-	            }); 
-            } catch (PrivilegedActionException  e) {
-                throw e.getException();
-            }
+            DAKeyStore.getKeyStore();
         }
         catch (Exception e) {
-            e.printStackTrace();
+            // keystore.XXX will check whether keystore is null
         }
     }
 
@@ -285,6 +237,8 @@ class SignerChainPattern {
         try {
             return ((Boolean) AccessController.doPrivileged(new PrivilegedExceptionAction() {
                 public Object run() throws Exception {
+                    if (null == keystore)
+                        throw new RuntimeException("There is no keystore");
     		        Method m = keystore.getClass().getMethod("aliases", null);
     		        Enumeration aliases = (Enumeration) m.invoke(keystore, null);
     		        while (aliases.hasMoreElements()) {
