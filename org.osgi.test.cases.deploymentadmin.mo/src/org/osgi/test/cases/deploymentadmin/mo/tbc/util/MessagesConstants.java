@@ -1,6 +1,4 @@
 /*
- * $Header$
- * 
  * Copyright (c) The OSGi Alliance (2004). All Rights Reserved.
  * 
  * Implementation of certain elements of the OSGi Specification may be subject
@@ -23,23 +21,35 @@
  * 
  * All Company, brand and product names may be trademarks that are the sole
  * property of their respective owners. All rights reserved.
+ * 
  */
 
-package org.osgi.test.cases.template.tb1;
-
-import org.osgi.framework.*;
-import org.osgi.test.cases.template.tbc.TBCService;
-
-/**
- * A bundle that registers a service with the marker interface
- * TBCService so it can be checked the exporter is correct.
+/*
+ * REVISION HISTORY:
  *
- * @version $Revision$
+ * Date         Author(s)
+ * CR           Headline
+ * ===========  ==============================================================
+ * 25/05/2005   Eduardo Oliveira
+ * 97           Implement MEG TCK
  */
-public class Activator implements BundleActivator, TBCService {
-	public void start(BundleContext context) throws Exception {
-		context.registerService(TBCService.class.getName(),this,null);
-	}
-	public void stop(BundleContext context) throws Exception {
+package org.osgi.test.cases.deploymentadmin.mo.tbc.util;
+
+import java.text.MessageFormat;
+
+public class MessagesConstants {
+	public static final String EXCEPTION_THROWN = "Expected the exception {0} and {1} was thrown.";
+	public static final String EXCEPTION_CORRECTLY_THROWN = "{0} correctly thrown.";
+	public static final String UNEXPECTED_EXCEPTION = "Unexpected {0} thrown.";
+	
+	public static final String ASSERT_EQUALS = "Asserting if the {0} is equals to value {1}.";
+	public static final String ASSERT_TRUE = "Asserting if {0}.";
+	public static final String ASSERT_NOT_NULL = "Asserting if {0} is not null.";
+	public static final String ASSERT_NULL = "Asserting if {0} is null.";
+	
+    public static final String FAIL_EXCEPTION = "No {0} thrown.";
+    
+	public static String getMessage(String msg, Object[] params) {
+		return MessageFormat.format(msg,params);
 	}
 }

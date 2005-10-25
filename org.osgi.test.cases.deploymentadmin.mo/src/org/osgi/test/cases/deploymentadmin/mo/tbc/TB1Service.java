@@ -1,6 +1,4 @@
 /*
- * $Header$
- * 
  * Copyright (c) The OSGi Alliance (2004). All Rights Reserved.
  * 
  * Implementation of certain elements of the OSGi Specification may be subject
@@ -23,14 +21,26 @@
  * 
  * All Company, brand and product names may be trademarks that are the sole
  * property of their respective owners. All rights reserved.
- */
-
-package org.osgi.test.cases.template.tbc;
-
-/**
- * Dummy service to check exporter
  * 
- * @version $Revision$
  */
-public interface TBCService {
+
+/*
+ * REVISION HISTORY:
+ *
+ * Date          Author(s)
+ * CR            Headline
+ * ============  ==============================================================
+ * 26/07/2005    Eduardo Oliveira
+ * 147           [MEGTCK][DEPLOYMENT MO] Implement Deployment Management Objects
+ * ============  ==============================================================
+ */
+
+package org.osgi.test.cases.deploymentadmin.mo.tbc;
+
+import org.osgi.test.cases.util.DefaultTestBundleControl;
+
+public interface TB1Service {
+	
+	public TestInterface[] getTestClasses(DefaultTestBundleControl tbc);
+
 }

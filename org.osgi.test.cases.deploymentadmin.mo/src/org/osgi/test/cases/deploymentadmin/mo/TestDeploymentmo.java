@@ -1,6 +1,4 @@
 /*
- * $Header$
- * 
  * Copyright (c) The OSGi Alliance (2004). All Rights Reserved.
  * 
  * Implementation of certain elements of the OSGi Specification may be subject
@@ -23,17 +21,32 @@
  * 
  * All Company, brand and product names may be trademarks that are the sole
  * property of their respective owners. All rights reserved.
+ * 
  */
 
-package org.osgi.test.cases.template;
+/*
+ * REVISION HISTORY:
+ *
+ * Date         Author(s)
+ * CR           Headline
+ * ===========  ==============================================================
+ * Jun 14, 2005 Leonardo Barros
+ * 97           Implement MEGTCK for the DeploymentMO Spec 
+ * ===========  ==============================================================
+ */
+package org.osgi.test.cases.deploymentadmin.mo;
 
 import org.osgi.test.cases.util.DefaultTestCase;
 
 /**
- * TODO Provide a description of the test case.
+ * This Test Case Validates the implementation of
+ * <code>Deployment Management Object<code> service, according to SPEC
+ * documentation.
  * 
- * @testcase org.osgi.template
+ * @testcase org.osgi.test.cases.deploymentmo
  * @version $Revision$
  */
-public class TestCase extends DefaultTestCase {
+
+public class TestDeploymentmo extends DefaultTestCase {
+
 }
