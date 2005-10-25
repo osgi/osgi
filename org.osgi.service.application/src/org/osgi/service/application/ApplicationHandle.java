@@ -165,7 +165,6 @@ public abstract class ApplicationHandle {
 	 *             if the application handle is unregistered
 	 */
 	public final void destroy() throws Exception {
-		getState(); // throws IllegalStateException if the handle is invalid 
 		delegate.destroy();
 		destroySpecific();
 	}
