@@ -12,7 +12,6 @@ package org.osgi.service.application;
 
 import java.io.IOException;
 import java.security.AccessController;
-import java.security.PrivilegedActionException;
 import java.security.PrivilegedExceptionAction;
 import java.util.Map;
 
