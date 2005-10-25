@@ -51,7 +51,6 @@ public class Transaction {
     private HashSet               processors;
     private Logger                logger;
     private DeploymentSession	  session;
-    private boolean 			  cancelled;
     private String                trName;
     
     // Transaction is singleton
@@ -72,14 +71,10 @@ public class Transaction {
     public synchronized void start() {
         steps = new Vector();
         processors = new HashSet();
-        cancelled = false;
         logger.log(Logger.LOG_INFO, "Transaction started (trName=" + trName + ")");
     }
 
     public synchronized void addRecord(TransactionRecord record) {
-        if (cancelled)
-            throw new CancelException();
-        
         if (PROCESSOR == record.code) {
             record.rp.begin(session);
             processors.add(record.rp);
@@ -220,8 +215,4 @@ public class Transaction {
         logger.log(Logger.LOG_INFO, "Transaction rolled back (trName=" + trName + ")");
     }
 
-    public synchronized void cancel() {
-        cancelled = true;
-    }
-    
 }

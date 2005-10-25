@@ -227,19 +227,17 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
                 bundleStartException = e;
             }
             
-            // update Deployment Package metainfo
-            updateDps();
-            
-            // persist
-            save();
-            
-            result = true;
+            if (!session.isCancelled()) {
+	            // update Deployment Package metainfo
+	            updateDps();
+	            // persist
+	            save();
+	            
+	            result = true;
+            } else
+            	; // TODO throw new DeploymentException(DeploymentException.CODE_CENCELLED);
         } catch (DeploymentException e) {
-            // DeploymentException during the process has to be propagated to the caller
             throw e;
-        } catch (CancelException e) {
-            // the operation was cancelled
-            return null;
         } catch (SecurityException e) {
             throw e;
         } catch (Exception e) {
@@ -294,7 +292,9 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
         else
             checkPermission((DeploymentPackageImpl) session.getSourceDeploymentPackage(), 
                     DeploymentAdminPermission.ACTION_CANCEL);
+        
         session.cancel();
+        
         return true;
     }
 
@@ -849,9 +849,12 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
             sendUninstallEvent(dp.getName());
             session = createUninstallSession(dp);
             session.uninstall(false);
-            removeDp(dp);
-            save();
-            result = true;
+            if (!session.isCancelled()) {
+	            removeDp(dp);
+	            save();
+	            result = true;
+            } else
+            	; // TODO throw new DeploymentException(DeploymentException.CODE_CENCELLED);
         } catch (DeploymentException e) {
             throw e;
         } catch (Exception e) {
@@ -872,6 +875,7 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
         try {
             waitIfBusy();
         } catch (DeploymentException e) {
+        	// TODO allow to throw DeploymentException.CODE_TIMEOUT 
             throw new RuntimeException("Timeout period (" + sessionTimeout + 
                 " ms) expired");
         }
@@ -881,9 +885,15 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
         try {
             session = createUninstallSession(dp);
             boolean r = session.uninstall(true);
-            removeDp(dp);
-            save();
-            result = r;
+            if (!session.isCancelled()) {
+	            // remove Deployment Package metainfo
+            	removeDp(dp);
+	            // persist
+	            save();
+	            
+	            result = r;
+            } else
+            	; //TODO throw new DeploymentException(DeploymentException.CODE_CENCELLED);
         } catch (Exception e) {
             logger.log(e);
         } finally {
