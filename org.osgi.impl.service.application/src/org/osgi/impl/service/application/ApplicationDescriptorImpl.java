@@ -29,7 +29,6 @@ package org.osgi.impl.service.application;
 
 import java.io.*;
 import java.util.*;
-import java.security.*;
 
 import org.osgi.service.application.*;
 import org.osgi.service.application.ApplicationDescriptor.Delegate;

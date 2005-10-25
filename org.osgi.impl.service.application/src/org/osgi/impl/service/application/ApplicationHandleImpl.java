@@ -28,7 +28,6 @@
 package org.osgi.impl.service.application;
 
 import org.osgi.service.application.*;
-import java.security.*;
 
 public class ApplicationHandleImpl implements ApplicationHandle.Delegate {
 	ApplicationHandle	handle;

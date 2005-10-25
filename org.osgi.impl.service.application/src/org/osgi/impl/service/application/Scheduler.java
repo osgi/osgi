@@ -18,7 +18,6 @@
 package org.osgi.impl.service.application;
 
 import java.io.*;
-import java.security.AccessController;
 import java.util.*;
 
 import org.osgi.framework.*;
