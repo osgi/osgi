@@ -194,11 +194,13 @@ public final class MidletDescriptor extends ApplicationDescriptor implements Ser
 	}
 	
 	void register() {
-		unregister();
 		Dictionary properties = new Hashtable( getProperties(Locale.getDefault().getLanguage()));
 		registeredLaunchable = ((Boolean)properties.get( ApplicationDescriptor.APPLICATION_LAUNCHABLE )).booleanValue();
-		serviceReg = bc.registerService(ApplicationDescriptor.class.getName(),this, properties);		
-		bc.addServiceListener( this );
+		if( serviceReg == null ) {
+			serviceReg = bc.registerService(ApplicationDescriptor.class.getName(),this, properties);		
+			bc.addServiceListener( this );
+		}else
+			serviceReg.setProperties( properties );
 	}
 	
 	void unregister() {
@@ -211,10 +213,10 @@ public final class MidletDescriptor extends ApplicationDescriptor implements Ser
 
 	public void serviceChanged(ServiceEvent event) {
 		boolean launchable = isLaunchable();
-		if( launchable != registeredLaunchable ) {
+		if( serviceReg != null && launchable != registeredLaunchable ) {
 			Dictionary properties = new Hashtable( getProperties(Locale.getDefault().getLanguage()));
 			registeredLaunchable = ((Boolean)properties.get( ApplicationDescriptor.APPLICATION_LAUNCHABLE )).booleanValue();
-			serviceReg = bc.registerService(ApplicationDescriptor.class.getName(),this, properties);					
+			serviceReg.setProperties( properties );
 		}
 	}
 
