@@ -94,20 +94,20 @@ public class DbResourceProcessor
     private transient DeploymentSession session;
     
     // It contains the following hierarchy (dp is the key).
-    // A side effect is a created table.
+    // A artifact is a created table.
     //
-    // dp_1 ----+---- res_1 ----+---- sideEff_1
-    //          |               +---- sideEff_2
-    //          |               +---- sideEff_3
+    // dp_1 ----+---- res_1 ----+---- artifact_1
+    //          |               +---- artifact_2
+    //          |               +---- artifact_3
     //          |
-    //          +---- res_2 ----+---- sideEff_1
-    //                          +---- sideEff_4
+    //          +---- res_2 ----+---- artifact_1
+    //                          +---- artifact_4
     //
-    // dp_2 ----+---- res_1 ----+---- sideEff_1
-    //          |               +---- sideEff_8
+    // dp_2 ----+---- res_1 ----+---- artifact_1
+    //          |               +---- artifact_8
     //          |
-    //          +---- res_3 ----+---- sideEff_1
-    //                          +---- sideEff_9
+    //          +---- res_3 ----+---- artifact_1
+    //                          +---- artifact_9
     private Hashtable		  	dps = new Hashtable();
     
     private transient Object                dbSession;
@@ -117,9 +117,9 @@ public class DbResourceProcessor
     private transient File                  bundlePrivateArea;
     
     /*
-     * Side effect means table creation in case of this Resource Processor
+     * Artifact means table creation in case of this Resource Processor
      */
-    private void putSideEffect(String resName, String tableName) {
+    private void putArtifact(String resName, String tableName) {
         Hashtable ht = (Hashtable) dps.get(actDp);
         if (null == ht) {
             ht = new Hashtable();
@@ -191,7 +191,7 @@ public class DbResourceProcessor
 	                
 	                FieldDef[] fieldDefs = getFieldDefs(parts);
 	                db.createTable(dbSession, tableName, fieldDefs);
-	                putSideEffect(resName, tableName);
+	                putArtifact(resName, tableName);
 	            } else if (line.startsWith("INSERT")) {
 	                String[] parts = Splitter.split(line, ' ', 0);
 	                String tableName = parts[1];
@@ -257,13 +257,13 @@ public class DbResourceProcessor
     }
 
     private void deleteTables(String resName) {
-        Hashtable sideEffs = (Hashtable) dps.get(actDp);
-        if (null == sideEffs)
+        Hashtable artifacts = (Hashtable) dps.get(actDp);
+        if (null == artifacts)
             return;
-        Set sideEffsForRes = (Set) sideEffs.get(resName);
-        if (null == sideEffsForRes)
+        Set artifactsForRes = (Set) artifacts.get(resName);
+        if (null == artifactsForRes)
             return;
-        for (Iterator iter = sideEffsForRes.iterator(); iter.hasNext();) {
+        for (Iterator iter = artifactsForRes.iterator(); iter.hasNext();) {
             String tableName = (String) iter.next();
             db.dropTable(dbSession, tableName);
             iter.remove();
