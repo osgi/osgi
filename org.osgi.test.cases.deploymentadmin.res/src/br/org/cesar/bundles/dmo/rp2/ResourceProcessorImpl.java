@@ -43,12 +43,14 @@ package br.org.cesar.bundles.dmo.rp2;
 import java.io.InputStream;
 import java.util.Dictionary;
 import java.util.Hashtable;
+
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.deploymentadmin.DeploymentException;
 import org.osgi.service.deploymentadmin.DeploymentSession;
 import org.osgi.service.deploymentadmin.ResourceProcessor;
+import org.osgi.test.cases.deploymentadmin.mo.tbc.DeploymentmoConstants;
 
 
 /**
@@ -64,7 +66,7 @@ public class ResourceProcessorImpl implements BundleActivator,ResourceProcessor 
 	
 	public void start(BundleContext bc) throws Exception {
 		Dictionary props = new Hashtable();
-		props.put("service.pid", "org.osgi.test.cases.deployment.bundles.rp2");
+		props.put("service.pid", DeploymentmoConstants.PID_RESOURCE_PROCESSOR2);
 		sr = bc.registerService(ResourceProcessor.class.getName(), this, props);
 		System.out.println("ResourceProcessor started.");
 

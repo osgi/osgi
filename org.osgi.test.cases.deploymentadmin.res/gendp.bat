@@ -333,7 +333,7 @@ move ..\res\block_session.dp ..\..\org.osgi.test.cases.deploymentadmin.tc2\res\
 
 jar -cvfM ..\res\manifest_not_1st_file.dp bundle001.jar bundle002.jar META-INF\README.txt META-INF\MANIFEST.mf
 jarsigner -keystore ..\megtck_keystore -storepass megtck -keypass megtck ..\res\manifest_not_1st_file.dp megtck
-copy ..\res\manifest_not ..\..\org.osgi.test.cases.deploymentadmin.mo\delivered\
+copy ..\res\manifest_not_1st_file.dp ..\..\org.osgi.test.cases.deploymentadmin.mo\delivered\
 move ..\res\manifest_not_1st_file.dp ..\..\org.osgi.test.cases.deploymentadmin.tc2\res\
 
 jar -cvfm ..\res\rp_from_other_dp.dp ..\res\rp_from_other_dp.mf rp_bundle3.jar conf.txt
@@ -379,8 +379,11 @@ move ..\res\simple_resource_rp3.dp ..\..\org.osgi.test.cases.deploymentadmin.tc2
 REM Renaming resource processors bundles to be compliant with deployment packages manifests
 del rp_bundle.jar
 del rp_bundle2.jar
+del rp_bundle3.jar
 del rp_bundle4.jar
 ren rp_bundle_dmo_rp1.jar rp_bundle.jar
+ren rp_bundle_dmo_rp2.jar rp_bundle2.jar
+ren rp_bundle_dmo_rp3.jar rp_bundle3.jar
 ren rp_bundle_dmo_rp4.jar rp_bundle4.jar
 
 ECHO Creating Deployment Management Object packages (only the new ones)

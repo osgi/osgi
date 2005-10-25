@@ -46,8 +46,8 @@ import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.deploymentadmin.DeploymentException;
 import org.osgi.service.deploymentadmin.DeploymentSession;
 import org.osgi.service.deploymentadmin.ResourceProcessor;
-import org.osgi.test.cases.deploymentmo.tbc.DeploymentmoConstants;
-import org.osgi.test.cases.deploymentmo.tbc.util.TestingBlockingResourceProcessor;
+import org.osgi.test.cases.deploymentadmin.mo.tbc.DeploymentmoConstants;
+import org.osgi.test.cases.deploymentadmin.mo.tbc.util.TestingBlockingResourceProcessor;
 
 /**
  * @author Andre Assad
