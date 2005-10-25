@@ -223,7 +223,8 @@ public final class MidletDescriptor extends ApplicationDescriptor implements Ser
 	}
 	
 	private void checkBundle() {
-		if( bundle.getState() != Bundle.ACTIVE )
+		if( bundle.getState() != Bundle.ACTIVE && bundle.getState() != Bundle.STARTING &&
+				bundle.getState() != Bundle.STOPPING )
 			throw new IllegalStateException();
 	}
 	

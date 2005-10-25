@@ -52,7 +52,7 @@ public final class MidletHandle extends ApplicationHandle {
 	}
 
 	public void destroySpecific() throws Exception {
-		if (status == null || status.equals( MidletHandle.STOPPING ) )
+		if (status == null )
 			throw new IllegalStateException();
 		
 		setStatus( MidletHandle.STOPPING );

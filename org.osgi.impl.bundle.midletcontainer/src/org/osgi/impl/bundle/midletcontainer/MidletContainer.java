@@ -78,7 +78,7 @@ public class MidletContainer implements BundleListener, ServiceListener {
 			for( int i=0; i != descs.length; i++ ) {
 				ServiceReference refs[] = bc.getServiceReferences( ApplicationHandle.class.getName(), 
 						 "(" + ApplicationHandle.APPLICATION_DESCRIPTOR + "=" + 
-						 descs[ i ].getProperties( null ).get( ApplicationDescriptor.APPLICATION_PID ) + ")" );
+						 descs[ i ].getPID() + ")" );
 			  if( refs != null && refs.length != 0 ) {
 				  for( int j=0; j != refs.length; j++ ) {
 				  	final ApplicationHandle appHandle = (ApplicationHandle)bc.getService( refs[ j ] );
@@ -109,7 +109,9 @@ public class MidletContainer implements BundleListener, ServiceListener {
 				  }		  				  	
 			  }
 			}
-		}catch( InvalidSyntaxException e ) {}
+		}catch( Exception e ) {
+			Activator.log( LogService.LOG_ERROR, "Exception occurred at stopping the MIDlet instances!", e );			
+		}
 	}
 	
 	private void registerApplicationDescriptors(Bundle bundle) {
@@ -122,8 +124,10 @@ public class MidletContainer implements BundleListener, ServiceListener {
 
 	private void unregisterApplicationDescriptors(Bundle bundle) {
 		MidletDescriptor descs[] = (MidletDescriptor []) bundleDescriptorHash.get( bundle );
-		if (descs == null)
+		if (descs == null) {
+			Activator.log( LogService.LOG_ERROR ,"INTERNAL ERROR: no application descriptors found for a MIDlet!", null );
 			return;
+		}
 
 		terminateApplications( descs );
 		
@@ -139,13 +143,16 @@ public class MidletContainer implements BundleListener, ServiceListener {
 					registerApplicationDescriptors(event.getBundle());
 					break;
 
-				case BundleEvent.STOPPED :
+				case BundleEvent.STOPPING:
+				case BundleEvent.STOPPED:
 					unregisterApplicationDescriptors(event.getBundle());
 					break;
 
 				case BundleEvent.UNINSTALLED :
-					installedMidletBundles.remove(event.getBundle());
-					unregisterApplicationDescriptors(event.getBundle());
+					if( event.getBundle().getState() == Bundle.ACTIVE )
+						unregisterApplicationDescriptors(event.getBundle());
+					
+  				installedMidletBundles.remove(event.getBundle());
 					bundleDescriptorHash.remove(event.getBundle());
 					break;
 
