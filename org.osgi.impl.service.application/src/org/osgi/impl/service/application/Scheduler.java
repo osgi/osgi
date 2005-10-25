@@ -156,8 +156,11 @@ public class Scheduler implements Runnable, EventHandler {
 		try {
 
 				while ( it.hasNext() ) {
-					ScheduledApplication schedApp = (ScheduledApplication) it.next();
+					ScheduledApplicationImpl schedApp = (ScheduledApplicationImpl) it.next();
 
+					if( !schedApp.isEnabled() )
+						continue;
+					
 				  if ((schedApp.getTopic() != null)
 						&& e.matches(bc.createFilter("("
 								+ EventConstants.EVENT_TOPIC + "="
@@ -166,9 +169,15 @@ public class Scheduler implements Runnable, EventHandler {
   					if ((schedApp.getEventFilter() == null) || e.matches(bc.createFilter(schedApp
 									.getEventFilter()))) {
   						
-						  ApplicationDescriptor appDesc = schedApp.getApplicationDescriptor();
-						  if( appDesc.launch(schedApp.getArguments()) == null )
-						  	throw new Exception("Can't launch the application!");
+  						try {
+  							schedApp.setEnabled( false ); // to avoid recursion problems
+  							ApplicationDescriptor appDesc = schedApp.getApplicationDescriptor();
+  							if( appDesc.launch(schedApp.getArguments()) == null )
+  								throw new Exception("Can't launch the application!");
+  						}finally {
+  							schedApp.setEnabled( true );
+  						}
+							
 						  if (!schedApp.isRecurring())
 							  removeList.add( schedApp );
 					}
