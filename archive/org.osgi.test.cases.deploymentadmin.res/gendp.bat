@@ -3,6 +3,7 @@
 ECHO cleaning up before begin
 del /q ..\org.osgi.test.cases.deploymentadmin.tc1\res\*.dp
 del /q ..\org.osgi.test.cases.deploymentadmin.tc2\res\*.dp
+del /q ..\org.osgi.test.cases.deploymentadmin.mo\delivered\*.dp
 del /q bundles\*.jar
 del /q bundles_update\*.jar
 
@@ -11,20 +12,25 @@ call ..\cnf\ant\bin\ant
 cd bundles
 
 copy bundle001.jar wrong(path)\
+copy bundle001.jar ..\..\org.osgi.test.cases.deploymentadmin.mo\delivered\
+
 
 ECHO Creating common deployment packages
 jar -cvfm ..\res\simple.dp ..\res\simple_dp.mf bundle001.jar bundle002.jar
 jarsigner -keystore ..\megtck_keystore -storepass megtck -keypass megtck ..\res\simple.dp megtck
+copy ..\res\simple.dp ..\..\org.osgi.test.cases.deploymentadmin.mo\delivered\
 copy ..\res\simple.dp ..\..\org.osgi.test.cases.deploymentadmin.tc1\res\
 move ..\res\simple.dp ..\..\org.osgi.test.cases.deploymentadmin.tc2\res\
 
 jar -cvfm ..\res\simple_no_resource.dp ..\res\simple_no_resource_dp.mf bundle001.jar
 jarsigner -keystore ..\megtck_keystore -storepass megtck -keypass megtck ..\res\simple_no_resource.dp megtck
+copy ..\res\simple_no_resource.dp ..\..\org.osgi.test.cases.deploymentadmin.mo\delivered\
 copy ..\res\simple_no_resource.dp ..\..\org.osgi.test.cases.deploymentadmin.tc1\res\
 move ..\res\simple_no_resource.dp ..\..\org.osgi.test.cases.deploymentadmin.tc2\res\
 
 jar -cvfm ..\res\simple_no_bundle.dp ..\res\simple_no_bundle_dp.mf simple_resource.xml
 jarsigner -keystore ..\megtck_keystore -storepass megtck -keypass megtck ..\res\simple_no_bundle.dp megtck
+copy ..\res\simple_no_bundle.dp ..\..\org.osgi.test.cases.deploymentadmin.mo\delivered\
 copy ..\res\simple_no_bundle.dp ..\..\org.osgi.test.cases.deploymentadmin.tc1\res\
 move ..\res\simple_no_bundle.dp ..\..\org.osgi.test.cases.deploymentadmin.tc2\res\
 
@@ -78,10 +84,12 @@ move ..\res\simple_resource_processor.dp ..\..\org.osgi.test.cases.deploymentadm
 
 jar -cvfm ..\res\bundle_from_other.dp ..\res\bundle_from_other_dp.mf bundle001.jar bundle003.jar
 jarsigner -keystore ..\megtck_keystore -storepass megtck -keypass megtck ..\res\bundle_from_other.dp megtck
+copy ..\res\bundle_from_other.dp ..\..\org.osgi.test.cases.deploymentadmin.mo\delivered\
 move ..\res\bundle_from_other.dp ..\..\org.osgi.test.cases.deploymentadmin.tc1\res\
 
 jar -cvfm ..\res\missing_name_header.dp ..\res\missing_name_header_dp.mf bundle001.jar
 jarsigner -keystore ..\megtck_keystore -storepass megtck -keypass megtck ..\res\missing_name_header.dp megtck
+copy ..\res\missing_name_header.dp ..\..\org.osgi.test.cases.deploymentadmin.mo\delivered\
 move ..\res\missing_name_header.dp ..\..\org.osgi.test.cases.deploymentadmin.tc1\res\
 
 jar -cvfm ..\res\missing_b_version_header.dp ..\res\missing_b_version_header_dp.mf bundle001.jar
@@ -114,6 +122,7 @@ move ..\res\missing_manifest.dp ..\..\org.osgi.test.cases.deploymentadmin.tc1\re
 
 jar -cvfm ..\res\symb_name_dif_from_manifest.dp ..\res\symb_name_dif_from_manifest_dp.mf bundle001.jar
 jarsigner -keystore ..\megtck_keystore -storepass megtck -keypass megtck ..\res\symb_name_dif_from_manifest.dp megtck
+copy ..\res\symb_name_dif_from_manifest.dp ..\..\org.osgi.test.cases.deploymentadmin.mo\delivered\
 move ..\res\symb_name_dif_from_manifest.dp ..\..\org.osgi.test.cases.deploymentadmin.tc1\res\
 
 jar -cvfm ..\res\version_dif_from_manifest.dp ..\res\version_dif_from_manifest_dp.mf bundle001.jar
@@ -126,10 +135,12 @@ move ..\res\resource_processor.dp ..\..\org.osgi.test.cases.deploymentadmin.tc1\
 
 jar -cvfm ..\res\missing_resource_fix_pack.dp ..\res\missing_resource_fix_pack_dp.mf
 jarsigner -keystore ..\megtck_keystore -storepass megtck -keypass megtck ..\res\missing_resource_fix_pack.dp megtck
+copy ..\res\missing_resource_fix_pack.dp ..\..\org.osgi.test.cases.deploymentadmin.mo\delivered\
 move ..\res\missing_resource_fix_pack.dp ..\..\org.osgi.test.cases.deploymentadmin.tc1\res\
 
 jar -cvfm ..\res\missing_bundle_fix_pack.dp ..\res\missing_bundle_fix_pack_dp.mf simple_resource.xml
 jarsigner -keystore ..\megtck_keystore -storepass megtck -keypass megtck ..\res\missing_bundle_fix_pack.dp megtck
+copy ..\res\missing_bundle_fix_pack.dp ..\..\org.osgi.test.cases.deploymentadmin.mo\delivered\
 move ..\res\missing_bundle_fix_pack.dp ..\..\org.osgi.test.cases.deploymentadmin.tc1\res\
 
 jar -cvfm ..\res\add_bundle_fix_pack.dp ..\res\add_bundle_fix_pack_dp.mf bundle003.jar
@@ -138,6 +149,7 @@ move ..\res\add_bundle_fix_pack.dp ..\..\org.osgi.test.cases.deploymentadmin.tc1
 
 jar -cvfm ..\res\simple_resource.dp ..\res\simple_resource_dp.mf simple_resource.xml conf.txt
 jarsigner -keystore ..\megtck_keystore -storepass megtck -keypass megtck ..\res\simple_resource.dp megtck
+copy ..\res\simple_resource.dp ..\..\org.osgi.test.cases.deploymentadmin.mo\delivered\
 move ..\res\simple_resource.dp ..\..\org.osgi.test.cases.deploymentadmin.tc1\res\
 
 jar -cvfm ..\res\add_resource_fix_pack.dp ..\res\add_resource_fix_pack_dp.mf simple_resource.xml
@@ -147,11 +159,13 @@ move ..\res\add_resource_fix_pack.dp ..\..\org.osgi.test.cases.deploymentadmin.t
 jar -cvfm ..\res\simple_unsigned_bundle.dp ..\res\simple_unsigned_bundle_dp.mf unsignedbundle.jar
 move ..\res\simple_unsigned_bundle.dp ..\..\org.osgi.test.cases.deploymentadmin.tc1\res\
 
-jar -cvfm ..\res\simple_unsigned.dp ..\res\simple_unsigned_bundle_dp.mf bundle001.jar
+jar -cvfm ..\res\simple_unsigned.dp ..\res\simple_unsigned_dp.mf bundle001.jar
+copy ..\res\simple_unsigned.dp ..\..\org.osgi.test.cases.deploymentadmin.mo\delivered\
 move ..\res\simple_unsigned.dp ..\..\org.osgi.test.cases.deploymentadmin.tc1\res\
 
 jar -cvfm ..\res\resource_from_other.dp ..\res\resource_from_other_dp.mf simple_resource.xml
 jarsigner -keystore ..\megtck_keystore -storepass megtck -keypass megtck ..\res\resource_from_other.dp megtck
+copy ..\res\resource_from_other.dp ..\..\org.osgi.test.cases.deploymentadmin.mo\delivered\
 move ..\res\resource_from_other.dp ..\..\org.osgi.test.cases.deploymentadmin.tc1\res\
 
 jar -cvfm ..\res\different_name_and_version.dp ..\res\different_name_and_version_dp.mf bundle001.jar bundle002.jar
@@ -249,6 +263,10 @@ move /y ..\bundles_update\bundle005.jar .\
 
 jar -cvfm ..\res\simple_fix_pack.dp ..\res\simple_fix_pack_dp.mf bundle001.jar
 jarsigner -keystore ..\megtck_keystore -storepass megtck -keypass megtck ..\res\simple_fix_pack.dp megtck
+copy ..\res\simple_fix_pack.dp ..\..\org.osgi.test.cases.deploymentadmin.mo\delivered\
+REM It copies the simple_fix_pack.dp to other directory the default, so we can use the same archive name when updating a deployment package
+copy ..\res\simple_fix_pack.dp ..\..\org.osgi.test.cases.deploymentadmin.mo\delivered\
+ren ..\..\org.osgi.test.cases.deploymentadmin.mo\res\simple_fix_pack.dp simple.dp
 move ..\res\simple_fix_pack.dp ..\..\org.osgi.test.cases.deploymentadmin.tc1\res\
 
 jar -cvfm ..\res\fix_pack_higher_range.dp ..\res\fix_pack_higher_range_dp.mf bundle001.jar
@@ -257,6 +275,7 @@ move ..\res\fix_pack_higher_range.dp ..\..\org.osgi.test.cases.deploymentadmin.t
 
 jar -cvfm ..\res\fix_pack_lower_range.dp ..\res\fix_pack_lower_range_dp.mf bundle001.jar
 jarsigner -keystore ..\megtck_keystore -storepass megtck -keypass megtck ..\res\fix_pack_lower_range.dp megtck
+copy ..\res\fix_pack_lower_range.dp ..\..\org.osgi.test.cases.deploymentadmin.mo\delivered\
 move ..\res\fix_pack_lower_range.dp ..\..\org.osgi.test.cases.deploymentadmin.tc1\res\
 
 jar -cvfm ..\res\bundle_from_other_dp_dif_vers.dp ..\res\bundle_from_other_dp_dif_vers.mf bundle001.jar
@@ -265,6 +284,7 @@ move ..\res\bundle_from_other_dp_dif_vers.dp ..\..\org.osgi.test.cases.deploymen
 
 jar -cvfm ..\res\bundle_throws_exception.dp ..\res\bundle_throws_exception_update.mf bundle005.jar
 jarsigner -keystore ..\megtck_keystore -storepass megtck -keypass megtck ..\res\bundle_throws_exception.dp megtck
+copy ..\res\bundle_throws_exception.dp ..\..\org.osgi.test.cases.deploymentadmin.mo\delivered\
 move ..\res\bundle_throws_exception.dp ..\..\org.osgi.test.cases.deploymentadmin.tc1\res\
 
 ECHO Generating wrong format deployment package
@@ -313,6 +333,7 @@ move ..\res\block_session.dp ..\..\org.osgi.test.cases.deploymentadmin.tc2\res\
 
 jar -cvfM ..\res\manifest_not_1st_file.dp bundle001.jar bundle002.jar META-INF\README.txt META-INF\MANIFEST.mf
 jarsigner -keystore ..\megtck_keystore -storepass megtck -keypass megtck ..\res\manifest_not_1st_file.dp megtck
+copy ..\res\manifest_not ..\..\org.osgi.test.cases.deploymentadmin.mo\delivered\
 move ..\res\manifest_not_1st_file.dp ..\..\org.osgi.test.cases.deploymentadmin.tc2\res\
 
 jar -cvfm ..\res\rp_from_other_dp.dp ..\res\rp_from_other_dp.mf rp_bundle3.jar conf.txt
@@ -354,6 +375,53 @@ move ..\res\resource_processor2.dp ..\..\org.osgi.test.cases.deploymentadmin.tc2
 jar -cvfm ..\res\simple_resource_rp3.dp ..\res\simple_resource_rp3.mf simple_resource.xml
 jarsigner -keystore ..\megtck_keystore -storepass megtck -keypass megtck ..\res\simple_resource_rp3.dp megtck
 move ..\res\simple_resource_rp3.dp ..\..\org.osgi.test.cases.deploymentadmin.tc2\res\
+
+REM Renaming resource processors bundles to be compliant with deployment packages manifests
+del rp_bundle.jar
+del rp_bundle2.jar
+del rp_bundle4.jar
+ren rp_bundle_dmo_rp1.jar rp_bundle.jar
+ren rp_bundle_dmo_rp4.jar rp_bundle4.jar
+
+ECHO Creating Deployment Management Object packages (only the new ones)
+jar -cvfm ..\res\rp_not_able_to_commit.dp ..\res\rp_not_able_to_commit.mf rp_bundle2.jar simple_resource.xml
+jarsigner -keystore ..\megtck_keystore -storepass megtck -keypass megtck ..\res\rp_not_able_to_commit.dp megtck
+move ..\res\rp_not_able_to_commit.dp ..\..\org.osgi.test.cases.deploymentadmin.mo\delivered\
+
+jar -cvfm ..\res\resource_processor_dmo.dp ..\res\resource_processor_dp.mf rp_bundle.jar
+jarsigner -keystore ..\megtck_keystore -storepass megtck -keypass megtck ..\res\resource_processor_dmo.dp megtck
+move ..\res\resource_processor_dmo.dp ..\..\org.osgi.test.cases.deploymentadmin.mo\delivered\
+ren ..\..\org.osgi.test.cases.deploymentadmin.mo\delivered\resource_processor_dmo.dp resource_processor.dp
+
+jar -cvfm ..\res\block_session.dp ..\res\block_session_dmo.mf rp_bundle3.jar
+jarsigner -keystore ..\megtck_keystore -storepass megtck -keypass megtck ..\res\block_session.dp megtck
+move ..\res\block_session.dp ..\..\org.osgi.test.cases.deploymentadmin.mo\delivered\
+
+jar -cvfm ..\res\rp_throws_no_such_resource.dp ..\res\rp_throws_no_such_resource.mf rp_bundle4.jar
+jarsigner -keystore ..\megtck_keystore -storepass megtck -keypass megtck ..\res\rp_throws_no_such_resource.dp megtck
+move ..\res\rp_throws_no_such_resource.dp ..\..\org.osgi.test.cases.deploymentadmin.mo\delivered\
+
+jar -cvfm ..\res\dp_installs_resource_for_rp4.dp ..\res\dp_installs_resource_for_rp4.mf simple_resource.xml
+jarsigner -keystore ..\megtck_keystore -storepass megtck -keypass megtck ..\res\dp_installs_resource_for_rp4.dp megtck
+move ..\res\dp_installs_resource_for_rp4.dp ..\..\org.osgi.test.cases.deploymentadmin.mo\delivered\
+
+jar -cvfm ..\res\resource_processor_customizer.dp ..\res\resource_processor_customizer.mf rp_bundle.jar simple_resource.xml
+jarsigner -keystore ..\megtck_keystore -storepass megtck -keypass megtck ..\res\resource_processor_customizer.dp megtck
+move ..\res\resource_processor_customizer.dp ..\..\org.osgi.test.cases.deploymentadmin.mo\delivered\
+
+jar -cvfm ..\res\non_customizer_rp.dp ..\res\non_customizer_rp.mf rp_bundle.jar simple_resource.xml
+jarsigner -keystore ..\megtck_keystore -storepass megtck -keypass megtck ..\res\non_customizer_rp.dp megtck
+move ..\res\non_customizer_rp.dp ..\..\org.osgi.test.cases.deploymentadmin.mo\delivered\
+
+jar -cvfm ..\res\dp_throws_resource_violation.dp ..\res\dp_throws_resource_violation.mf rp_bundle4.jar simple_resource.xml
+jarsigner -keystore ..\megtck_keystore -storepass megtck -keypass megtck ..\res\dp_throws_resource_violation.dp megtck
+move ..\res\dp_throws_resource_violation.dp ..\..\org.osgi.test.cases.deploymentadmin.mo\delivered\
+
+jar -cvfm ..\res\rp_from_other_dp_dmo.dp ..\res\rp_from_other_dp_dmo.mf rp_bundle.jar conf.txt
+jarsigner -keystore ..\megtck_keystore -storepass megtck -keypass megtck ..\res\rp_from_other_dp_dmo.dp megtck
+move ..\res\rp_from_other_dp_dmo.dp ..\..\org.osgi.test.cases.deploymentadmin.mo\delivered\
+ren ..\..\org.osgi.test.cases.deploymentadmin.mo\delivered\rp_from_other_dp_dmo.dp rp_from_other_dp.dp
+
 
 REM Backing to the previous directory
 cd ..
