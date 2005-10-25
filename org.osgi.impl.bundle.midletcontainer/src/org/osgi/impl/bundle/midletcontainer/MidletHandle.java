@@ -1,6 +1,5 @@
 package org.osgi.impl.bundle.midletcontainer;
 
-import java.security.AccessController;
 import java.util.*;
 
 import javax.microedition.midlet.MIDlet;
@@ -32,14 +31,14 @@ public final class MidletHandle extends ApplicationHandle {
 
 	public String getState() {
 		if (status == null)
-			throw new RuntimeException("Invalid state!");
+			throw new IllegalStateException();
 		else
 			return status;
 	}
 
 	public void startHandle(Map args) throws Exception {
 		if (status != null)
-			throw new Exception("Invalid State");
+			throw new IllegalStateException();
 		if (midlet != null) {
 			getMidletCommInterface( midlet ).setMidletHandle( this );
 			registerToOATHash( args );
@@ -54,7 +53,7 @@ public final class MidletHandle extends ApplicationHandle {
 
 	public void destroySpecific() throws Exception {
 		if (status == null || status.equals( MidletHandle.STOPPING ) )
-			throw new Exception("Invalid State");
+			throw new IllegalStateException();
 		
 		setStatus( MidletHandle.STOPPING );
 		
@@ -74,7 +73,7 @@ public final class MidletHandle extends ApplicationHandle {
 				midletDescriptor, ApplicationAdminPermission.LIFECYCLE ) );
 		
 		if (!status.equals( MidletHandle.RUNNING ) )
-			throw new Exception("Invalid State");
+			throw new IllegalStateException();
 		if (midlet != null) {
 			getMidletCommInterface( midlet ).pause();
 			setStatus( MidletHandle.PAUSED );
@@ -91,7 +90,7 @@ public final class MidletHandle extends ApplicationHandle {
 				midletDescriptor, ApplicationAdminPermission.LIFECYCLE ) );
 		
 		if (!status.equals( MidletHandle.PAUSED ) )
-			throw new Exception("Invalid State");
+			throw new IllegalStateException();
 		if (midlet != null) {
 			getMidletCommInterface( midlet ).resume();
 			setStatus( MidletHandle.RUNNING );
