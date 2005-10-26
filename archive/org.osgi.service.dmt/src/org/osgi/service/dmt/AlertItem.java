@@ -140,6 +140,6 @@ public class AlertItem {
      */
     public String toString() {
         return
-            "AlertItem(\"" + source + "\", \"" + type + "\", \"" + mark + "\", \"" + data + "\")";
+            "AlertItem(" + source + ", " + type + ", " + mark + ", " + data + ")";
     }
 }
