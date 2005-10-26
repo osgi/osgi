@@ -13,9 +13,7 @@ package org.osgi.application;
 import java.util.Dictionary;
 import java.util.Map;
 
-import org.osgi.framework.BundleListener;
-import org.osgi.framework.FrameworkListener;
-import org.osgi.framework.InvalidSyntaxException;
+import org.osgi.framework.Constants;
 import org.osgi.framework.ServiceRegistration;
 
 
@@ -24,7 +22,7 @@ import org.osgi.framework.ServiceRegistration;
  * application to the features of the OSGi Service Platform. Each application
  * instance will have its own <code>ApplicationContext</code> instance, which
  * will not be reused after destorying the corresponding application instace.
- * <p/>
+ * <p>
  * Application instances can obtain their <code>ApplicationContext</code>
  * using the {@link Framework#getApplicationContext} method.
  * 
@@ -33,146 +31,82 @@ import org.osgi.framework.ServiceRegistration;
 public interface ApplicationContext {
 
     /**
-     * Adds the specified {@link org.osgi.framework.BundleListener} object to this context
-     * application instance's list of listeners if not already present.
-     * {@link org.osgi.framework.BundleListener} objects are notified when a bundle has a
-     * lifecycle state change.
-     * <p/>
-     * If this context application's list of listeners already contains a
-     * listener <code>l</code> such that <code>(l==listener)</code>,this
-     * method does nothing.
+     * Adds the specified {@link ApplicationServiceListener} object to this context
+     * application instance's list of listeners. The specified <code>referenceName</code> is a 
+     * reference name specified in the descriptor of the corresponding application. The registered
+     * <code>listener> will only receive the {@link ApplicationServiceEvent}s realted to the referred service.
+     * <p>
      * 
      * @param listener
-     *            The {@link org.osgi.framework.BundleListener} to be added.
+     *            The {@link org.osgi.application.ApplicationServiceListener} to be added. It must
+     *            not be <code>null</code>
+     * @param referenceName the reference name of a service from the descriptor of the corresponding
+     *            application. It must not be <code>null</code>.
      * @throws java.lang.IllegalStateException
      *             If this context application instance has stopped.
+     * @throws java.lang.NullPointerException If <code>listener</code> or <code>referenceName</code>
+     *             is <code>null</code>      
+     * @throws java.lang.IllegalArgumentException If there is no service in the
+     *             application descriptor with the specified <code>referenceName</code>.
      */
-    public void addBundleListener(BundleListener listener);
+    public void addServiceListener(ApplicationServiceListener listener, String referenceName);
 
     /**
-     * Adds the specified {@link org.osgi.framework.FrameworkListener} object to this
-     * context application instance's list of listeners if not already present.
-     * {@link org.osgi.framework.FrameworkListener} objects are notified of general
-     * Framework events.
-     * <p/>
-     * If this context application's list of listeners already contains a
-     * listener <code>l</code> such that <code>(l==listener)</code>,this
-     * method does nothing.
+     * Adds the specified {@link ApplicationServiceListener} object to this context
+     * application instance's list of listeners. The <code>referenceNames</code> parameter is an 
+     * array of reference name specified in the descriptor of the corresponding application. The registered
+     * <code>listener> will only receive the {@link ApplicationServiceEvent}s realted to the referred 
+     * services.
+     * <p>
      * 
      * @param listener
-     *            The {@link org.osgi.framework.FrameworkListener} to be added.
+     *            The {@link org.osgi.application.ApplicationServiceListener} to be added. It must not
+     *            be <code>null</code>
+     * @param referenceNames and array of service reference names from the descriptor of the corresponding
+     *            application. It must not be <code>null</code> and it must not be empty.
      * @throws java.lang.IllegalStateException
      *             If this context application instance has stopped.
+     * @throws java.lang.NullPointerException If <code>listener</code> or <code>referenceNames</code>
+     *             is <code>null</code>      
+     * @throws java.lang.IllegalArgumentException If <code>referenceNames</code> array is empty or it 
+     *    contains unknown references
      */
-    public void addFrameworkListener(FrameworkListener listener);
+    public void addServiceListener(ApplicationServiceListener listener, String[] referenceNames);
 
     /**
-     * Adds the specified {@link org.osgi.framework.ApplicationServiceListener} object to this context
-     * application instance's list of listeners.
-     * <p/>
-     * This method is the same as calling
-     * {@link ApplicationContext#addServiceListener(ApplicationServiceListener,String)}
-     * with <code>filter</code> set to <code>null</code>.
-     * <p/>
-     * 
-     * @param listener
-     *            The {@link org.osgi.framework.ApplicationServiceListener} to be added.
-     * @throws java.lang.IllegalStateException
-     *             If this context application instance has stopped.
-     */
-    public void addServiceListener(ApplicationServiceListener listener);
-
-    /**
-     * Adds the specified {@link org.osgi.framework.ApplicationServiceListener} object with the
-     * specified filter to this context application instance's list of
-     * listeners. ApplicationServiceListener objects are notified when a service has a
-     * lifecycle state change.
-     * <p/>
-     * If this context bundle's list of listeners already contains a listener
-     * <code>l</code> such that <code>(l==listener)</code>, this method
-     * replaces that listener's filter (which may be <code>null</code>) with
-     * the specified one (which may be <code>null</code>).
-     * <p/>
-     * The <code>listener</code> is called if the <code>filter</code>
-     * criteria is met. To filter based upon the class of the service, the
-     * filter should reference the 
-     * {@link org.osgi.framework.Constants#OBJECTCLASS Constants.OBJECTCLASS} 
-     * property.
-     * If filter is <code>null</code>, all services are considered to match
-     * the filter.
-     * <p/>
-     * When using a filter, it is possible that the <code>ServiceEvents</code>
-     * for the complete life cycle of a service will not be delivered to the
-     * listener. For example, if the <code>filter</code> only matches when the
-     * property <code>x</code> has the value 1, the <code>listener</code>
-     * will not be called if the service is registered with the property <code>x</code>
-     * not set to the value 1. Subsequently, when the service is modified
-     * setting property <code>x</code> to the value 1, the <code>filter</code>
-     * will match and the <code>listener</code> will be called with a 
-     * {@link org.osgi.framework.ServiceEvent ServiceEvent}
-     * of type <code>MODIFIED</code>. Thus, the <code>listener</code> will
-     * not be called with a {@link org.osgi.framework.ServiceEvent} of type <code>REGISTERED</code>.
-     * <p/>
-     * If the Java Runtime Environment supports permissions, the {@link org.osgi.framework.ApplicationServiceListener}
-     * object will be notified of a service event only if the application that
-     * is registering it has the {@link org.osgi.framework.ServicePermission} to get the
-     * service using at least one of the named classes the service was
-     * registered under.
-     * 
-     * @param listener
-     *            The {@link org.osgi.framework.ApplicationServiceListener} object to be added.
-     * @param filter
-     *            The filter criteria.
-     * @throws org.osgi.framework.InvalidSyntaxException
-     *             If filter contains an invalid filter string which cannot be
-     *             parsed.
-     * @throws java.lang.IllegalStateException
-     *             If this context application instace has stopped.
-     */
-    public void addServiceListener(ApplicationServiceListener listener,
-            java.lang.String filter) throws InvalidSyntaxException;
-
-    /**
-     * Removes the specified {@link org.osgi.framework.BundleListener} object from this
+     * Removes the specified {@link org.osgi.application.ApplicationServiceListener} object from this
      * context application instances's list of listeners.
-     * <p/>
+     * <p>
      * If <code>listener</code> is not contained in this context application
      * instance's list of listeners, this method does nothing.
      * 
      * @param listener
-     *            The {@link org.osgi.framework.BundleListener} object to be removed.
-      * @throws java.lang.IllegalStateException
-     *             If this context application instance has stopped.
-    */
-    public void removeBundleListener(BundleListener listener);
-
-    /**
-     * Removes the specified {@link org.osgi.framework.FrameworkListener} object from this
-     * context application instances's list of listeners.
-     * <p/>
-     * If <code>listener</code> is not contained in this context application
-     * instance's list of listeners, this method does nothing.
-     * 
-     * @param listener
-     *            The {@link org.osgi.framework.FrameworkListener} object to be removed.
-     * @throws java.lang.IllegalStateException
-     *             If this context application instance has stopped.
-     */
-    public void removeFrameworkListener(FrameworkListener listener);
-
-    /**
-     * Removes the specified {@link org.osgi.framework.ApplicationServiceListener} object from this
-     * context application instances's list of listeners.
-     * <p/>
-     * If <code>listener</code> is not contained in this context application
-     * instance's list of listeners, this method does nothing.
-     * 
-     * @param listener
-     *            The {@link org.osgi.framework.ApplicationServiceListener} object to be removed.
+     *            The {@link org.osgi.application.ApplicationServiceListener} object to be removed.
      * @throws java.lang.IllegalStateException
      *             If this context application instance has stopped.
      */
     public void removeServiceListener(ApplicationServiceListener listener);
+    
+    /**
+     * This method returns the identifier of the corresponding application instace.
+     * This identifier is guarateed to be unique within the scope of the device.
+     * 
+     * @see org.osgi.service.application.ApplicationHandle#getInstanceId()
+     * 
+     * @return the unique identifier of the corresponding application instance
+     */
+    public String getInstanceId();
+    
+    /**
+     * This method return the identifier of the correspondig application type. This identifier
+     * is the same for the different instances of the same application but it is different for
+     * different application type.
+     * 
+     * @see org.osgi.service.application.ApplicationDescriptor#getApplicationId()
+     * 
+     * @return the identifier of the application type.
+     */
+    public String getApplicationId();
 
     /**
      * This method returns the service object for the specified
@@ -186,10 +120,13 @@ public interface ApplicationContext {
      * 
      * @param referenceName
      *            The name of a reference as specified in a reference element in
-     *            this context applications's description.
+     *            this context applications's description. It must not be <code>null</code>
      * @return A service object for the referenced service or <code>null</code>
      *         if the reference cardinality is 0..1 or 0..n and no bound service
      *         is available.
+     * @throws java.lang.NullPointerException If <code>referenceName</code> is <code>null</code>.
+     * @throws java.lang.IllegalArgumentException If there is no service in the
+     *             application descriptor with the specified <code>referenceName</code>.
      */
     public Object locateService(String referenceName);
 
@@ -203,6 +140,8 @@ public interface ApplicationContext {
      * @return An array of service object for the referenced service or
      *         <code>null</code> if the reference cardinality is 0..1 or 0..n
      *         and no bound service is available.
+     * @throws java.lang.IllegalArgumentException If there is no service in the
+     *             application descriptor with the specified <code>referenceName</code>.
      */
     public Object[] locateServices(String referenceName);
     
@@ -210,13 +149,14 @@ public interface ApplicationContext {
      * Returns the startup parameters specified when calling the 
      * {@link org.osgi.service.application.ApplicationDescriptor#launch}
      * method.
-     * <p/>
+     * <p>
      * Startup arguments can be specified as name, value pairs. The name
      * must be of type {@link java.lang.String}, which must not be
      * <code>null</code> or empty {@link java.lang.String} (<code>""</code>), 
      * the value can be any object including <code>null</code>.
      * 
-     * @return a {@link java.util.Map} containing the startup arguments.
+     * @return a {@link java.util.Map} containing the startup arguments. 
+     *     It can be <code>null</code>.
      */
     public Map getStartupParameters();
     
@@ -230,7 +170,9 @@ public interface ApplicationContext {
      *    It must not be null.
      * @return The service properties associated with the specified service
      *    object.
-     * @throws IllegalArgumentExceptions if the application is not
+     * @throws NullPointerException if the specified <code>serviceObject</code>
+     *    is <code>null</code>
+     * @throws IllegalArgumentException if the application is not
      *    bound to the specified service object or it is not a service
      *    object at all.
      */
@@ -238,24 +180,117 @@ public interface ApplicationContext {
 
     
     /**
-     * ### Missing doc
-     * TODO
-     * @param clazzes
-     * @param service
-     * @param properties
-     * @return The ServiceRegistrationn for this service
-     */
+	 * Registers the specified service object with the specified properties
+	 * under the specified class names into the Framework. A
+	 * {@link org.osgi.framework.ServiceRegistration} object is returned. The
+	 * {@link org.osgi.framework.ServiceRegistration} object is for the private use of the
+	 * application registering the service and should not be shared with other
+	 * applications. The registering application is defined to be the context application.
+	 * Bundles can locate the service by using either the
+	 * {@link org.osgi.framework.BundleContext#getServiceReferences} or 
+	 * {@link org.osgi.framework.BundleContext#getServiceReference} method. Other applications
+	 * can locate this service by using {@link #locateService(String)} or {@link #locateServices(String)}
+	 * method, if they declared their dependece on the registered service.
+	 * 
+	 * <p>
+	 * An application can register a service object that implements the
+	 * {@link org.osgi.framework.ServiceFactory} interface to have more flexibility in providing
+	 * service objects to other applications or bundles.
+	 * 
+	 * <p>
+	 * The following steps are required to register a service:
+	 * <ol>
+	 * <li>If <code>service</code> is not a <code>ServiceFactory</code>,
+	 * an <code>IllegalArgumentException</code> is thrown if
+	 * <code>service</code> is not an <code>instanceof</code> all the
+	 * classes named.
+	 * <li>The Framework adds these service properties to the specified
+	 * <code>Dictionary</code> (which may be <code>null</code>): a property
+	 * named {@link org.osgi.framework.Constants#SERVICE_ID} identifying the registration number of
+	 * the service and a property named {@link org.osgi.framework.Constants#OBJECTCLASS} containing
+	 * all the specified classes. If any of these properties have already been
+	 * specified by the registering bundle, their values will be overwritten by
+	 * the Framework.
+	 * <li>The service is added to the Framework service registry and may now
+	 * be used by others.
+	 * <li>A service event of type {@link org.osgi.framework.ServiceEvent#REGISTERED} is
+	 * fired. This event triggers the corresponding {@link ApplicationServiceEvent} to be 
+	 * delivered to the applications that registered the appropriate listener.
+	 * <li>A <code>ServiceRegistration</code> object for this registration is
+	 * returned.
+	 * </ol>
+	 * 
+	 * @param clazzes The class names under which the service can be located.
+	 *        The class names in this array will be stored in the service's
+	 *        properties under the key {@link org.osgi.framework.Constants#OBJECTCLASS}.
+	 * @param service The service object or a <code>ServiceFactory</code>
+	 *        object.
+	 * @param properties The properties for this service. The keys in the
+	 *        properties object must all be <code>String</code> objects. See
+	 *        {@link org.osgi.framework.Constants} for a list of standard service property keys.
+	 *        Changes should not be made to this object after calling this
+	 *        method. To update the service's properties the
+	 *        {@link org.osgi.framework.ServiceRegistration#setProperties} method must be called.
+	 *        The set of properties may be <code>null</code> if the service
+	 *        has no properties.
+	 * 
+	 * @return A {@link org.osgi.framework.ServiceRegistration} object for use by the application
+	 *         registering the service to update the service's properties or to
+	 *         unregister the service.
+	 * 
+	 * @throws java.lang.IllegalArgumentException If one of the following is
+	 *         true:
+	 *         <ul>
+	 *         <li><code>service</code> is <code>null</code>.
+	 *         <li><code>service</code> is not a <code>ServiceFactory</code>
+	 *         object and is not an instance of all the named classes in
+	 *         <code>clazzes</code>.
+	 *         <li><code>properties</code> contains case variants of the same
+	 *         key name.
+	 *         </ul>
+	 * 
+	 * @throws java.lang.SecurityException If the caller does not have the
+	 *         <code>ServicePermission</code> to register the service for all
+	 *         the named classes and the Java Runtime Environment supports
+	 *         permissions.
+	 * 
+	 * @throws java.lang.IllegalStateException If this ApplicationContext is no
+	 *         longer valid.
+	 * 
+	 * @see org.osgi.framework.BundleContext#registerService(java.lang.String[], java.lang.Object, java.util.Dictionary)
+	 * @see org.osgi.framework.ServiceRegistration
+	 * @see org.osgi.framework.ServiceFactory
+	 */
     public ServiceRegistration registerService(String[] clazzes,
             Object service, Dictionary properties);
 
     /**
-     * ### Missing doc
-     * TODO
-     * @param clazz
-     * @param service
-     * @param properties
-     * @return The ServiceRegistrationn for this service
-     */
+	 * Registers the specified service object with the specified properties
+	 * under the specified class name with the Framework.
+	 * 
+	 * <p>
+	 * This method is otherwise identical to
+	 * {@link #registerService(java.lang.String[], java.lang.Object,
+	 * java.util.Dictionary)} and is provided as a convenience when
+	 * <code>service</code> will only be registered under a single class name.
+	 * Note that even in this case the value of the service's
+	 * {@link Constants#OBJECTCLASS} property will be an array of strings,
+	 * rather than just a single string.
+	 * 
+	 * @param clazz The class name under which the service can be located.
+	 * @param service The service object or a <code>ServiceFactory</code>
+	 *        object.
+	 * @param properties The properties for this service. 
+	 * 
+	 * @return A <code>ServiceRegistration</code> object for use by the application
+	 *         registering the service to update the service's properties or to
+	 *         unregister the service.
+	 *         
+	 * @throws java.lang.IllegalStateException If this ApplicationContext is no
+	 *         longer valid.
+	 * @see #registerService(java.lang.String[], java.lang.Object,
+	 *      java.util.Dictionary)
+	 */
     public ServiceRegistration registerService(String clazz, Object service,
             Dictionary properties);
 }
