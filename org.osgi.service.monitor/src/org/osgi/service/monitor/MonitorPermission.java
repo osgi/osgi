@@ -286,6 +286,7 @@ public class MonitorPermission extends Permission {
      * <p>
      * This method returns <code>false</code> if and only if at least one of the
      * following conditions are fulfilled for the specified permission:
+     * <ul>
      * <li>it is not a <code>MonitorPermission</code>
      * <li>it has a broader set of actions allowed than this one
      * <li>it allows initiating time based monitoring jobs with a lower minimal
@@ -295,6 +296,7 @@ public class MonitorPermission extends Permission {
      * <li>the target set of <code>StatusVariable</code>s is not the same
      * nor a subset of the target set of <code>StatusVariable</code>s of this
      * permission
+     * </ul>
      * 
      * @param p the permission to be checked
      * @return <code>true</code> if the given permission is implied by this
