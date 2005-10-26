@@ -231,6 +231,9 @@ public final class MidletDescriptor extends ApplicationDescriptor implements Ser
 	}
 	
 	public boolean matchDNChain(final String pattern) {
+		if( pattern == null )
+			throw new NullPointerException( "Pattern cannot be null!" );
+			
 		final Bundle bundle = this.bundle;
 		try {
 		  return ((Boolean)AccessController.doPrivileged(new PrivilegedExceptionAction() {
@@ -255,7 +258,6 @@ public final class MidletDescriptor extends ApplicationDescriptor implements Ser
 	}
 
 	protected boolean isLaunchableSpecific() {
-		// TODO Auto-generated method stub
-		return false;
+		return isLaunchable();
 	}
 }
