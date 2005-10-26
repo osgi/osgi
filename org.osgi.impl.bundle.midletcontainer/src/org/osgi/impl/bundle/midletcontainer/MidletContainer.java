@@ -57,7 +57,7 @@ public class MidletContainer implements BundleListener, ServiceListener {
 			startClasses[ i ] = ((MidletDescriptor)appDescs[ i ]).getStartClass();
 		
 		oat.registerOATBundle( bundle, startClasses );
-
+		
 		if( bundle.getState() == Bundle.ACTIVE )
 			registerApplicationDescriptors( bundle );
 		
@@ -118,8 +118,9 @@ public class MidletContainer implements BundleListener, ServiceListener {
 		MidletDescriptor descs[] = (MidletDescriptor []) bundleDescriptorHash.get( bundle );
 		if (descs == null)
 			return;
-		for (int i = 0; i != descs.length; i++)
+		for (int i = 0; i != descs.length; i++) {
 			descs[ i ].register();
+		}
 	}
 
 	private void unregisterApplicationDescriptors(Bundle bundle) {

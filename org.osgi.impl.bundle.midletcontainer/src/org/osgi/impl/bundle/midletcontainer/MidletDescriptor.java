@@ -27,6 +27,8 @@ public final class MidletDescriptor extends ApplicationDescriptor implements Ser
 	private MidletContainer			midletContainer;
 	private static int			    instanceCounter;
 	private ServiceRegistration serviceReg;
+	private Hashtable           serviceProps;
+	private boolean             initlock;
 
 	public MidletDescriptor(BundleContext bc, Properties props, Map names, Map icons,
 			String defaultLang, String startClass, Bundle bundle,
@@ -55,8 +57,10 @@ public final class MidletDescriptor extends ApplicationDescriptor implements Ser
 		else {
 			defaultLanguage = defaultLang;
 			pid = props.getProperty(Constants.SERVICE_PID);
-			return;
 		}
+		
+		initlock = true;
+		getProperties( null );
 	}
 
 	Bundle getBundle() {
@@ -68,6 +72,12 @@ public final class MidletDescriptor extends ApplicationDescriptor implements Ser
 	}
 
 	public Map getPropertiesSpecific(String locale) {
+		if( initlock ) {
+			initlock = false;
+			Hashtable properties = new Hashtable();
+			properties.put(ApplicationDescriptor.APPLICATION_LOCKED, new Boolean(locked));
+			return properties;
+		}
 		checkBundle();
 		Hashtable properties = new Hashtable();
 		if( locale == null )
@@ -140,9 +150,10 @@ public final class MidletDescriptor extends ApplicationDescriptor implements Ser
 		checkBundle();
 		locked = true;
 		if( serviceReg != null ) {
-			Dictionary properties = new Hashtable( getProperties(Locale.getDefault().getLanguage()));
-			registeredLaunchable = ((Boolean)properties.get( ApplicationDescriptor.APPLICATION_LAUNCHABLE )).booleanValue();
-			serviceReg.setProperties( properties ); // if lock changes, change the service registration properties also
+			serviceProps.put( ApplicationDescriptor.APPLICATION_LOCKED, new Boolean( true ));
+			serviceProps.put( ApplicationDescriptor.APPLICATION_LAUNCHABLE, new Boolean( false ));
+			registeredLaunchable = false;
+			serviceReg.setProperties( serviceProps ); // if lock changes, change the service registration properties also
 		}
 	}
 
@@ -150,9 +161,10 @@ public final class MidletDescriptor extends ApplicationDescriptor implements Ser
 		checkBundle();
 		locked = false;
 		if( serviceReg != null ) {
-			Dictionary properties = new Hashtable( getProperties(Locale.getDefault().getLanguage()));
-			registeredLaunchable = ((Boolean)properties.get( ApplicationDescriptor.APPLICATION_LAUNCHABLE )).booleanValue();
-			serviceReg.setProperties( properties ); // if lock changes, change the service registration properties also
+			serviceProps.put( ApplicationDescriptor.APPLICATION_LOCKED, new Boolean( false ));
+			registeredLaunchable = isLaunchable();
+			serviceProps.put( ApplicationDescriptor.APPLICATION_LAUNCHABLE, new Boolean( registeredLaunchable ));
+			serviceReg.setProperties( serviceProps ); // if lock changes, change the service registration properties also
 		}
 	}
 
@@ -201,13 +213,13 @@ public final class MidletDescriptor extends ApplicationDescriptor implements Ser
 	}
 	
 	void register() {
-		Dictionary properties = new Hashtable( getProperties(Locale.getDefault().getLanguage()));
-		registeredLaunchable = ((Boolean)properties.get( ApplicationDescriptor.APPLICATION_LAUNCHABLE )).booleanValue();
+		serviceProps = new Hashtable( getProperties(Locale.getDefault().getLanguage()));
+		registeredLaunchable = ((Boolean)serviceProps.get( ApplicationDescriptor.APPLICATION_LAUNCHABLE )).booleanValue();
 		if( serviceReg == null ) {
-			serviceReg = bc.registerService(ApplicationDescriptor.class.getName(),this, properties);		
+			serviceReg = bc.registerService(ApplicationDescriptor.class.getName(),this, serviceProps);		
 			bc.addServiceListener( this );
 		}else
-			serviceReg.setProperties( properties );
+			serviceReg.setProperties( serviceProps );
 	}
 	
 	void unregister() {
@@ -221,9 +233,9 @@ public final class MidletDescriptor extends ApplicationDescriptor implements Ser
 	public void serviceChanged(ServiceEvent event) {
 		boolean launchable = isLaunchable();
 		if( serviceReg != null && launchable != registeredLaunchable ) {
-			Dictionary properties = new Hashtable( getProperties(Locale.getDefault().getLanguage()));
-			registeredLaunchable = ((Boolean)properties.get( ApplicationDescriptor.APPLICATION_LAUNCHABLE )).booleanValue();
-			serviceReg.setProperties( properties );
+			serviceProps.put( ApplicationDescriptor.APPLICATION_LAUNCHABLE, new Boolean( launchable ) );
+			registeredLaunchable = launchable;
+			serviceReg.setProperties( serviceProps );
 		}
 	}
 
