@@ -757,6 +757,7 @@ public class Activator extends Thread implements FrameworkListener,
 		String twoAvailableEEsOneMatch = "XX/YY,CC/DD";
 		String oneAvailableEENoMatch = "XX/YY";
 		String twoAvailableEEsNoMatch = "UU/VV,XX/YY";
+		String originalEE = System.getProperty(Constants.FRAMEWORK_EXECUTIONENVIRONMENT);
 		Bundle tb = null;
 		try {
 			// Install w/o available EE, should fail
@@ -833,7 +834,15 @@ public class Activator extends Thread implements FrameworkListener,
 					"Update: BundleException thrown when EE requirements fulfilled: "
 							+ extractNestedMessages(be), "Fail");
 		}
-		System.getProperties().remove(Constants.FRAMEWORK_EXECUTIONENVIRONMENT);
+		if (originalEE == null) { //restore original EE value
+			System.getProperties().remove(	
+					Constants.FRAMEWORK_EXECUTIONENVIRONMENT);
+		}
+		else {
+			System.getProperties().put(	
+					Constants.FRAMEWORK_EXECUTIONENVIRONMENT,
+					originalEE);
+		}
 		try {
 			tb.uninstall();
 		}
