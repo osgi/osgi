@@ -132,7 +132,7 @@ public class AlertItem {
     /**
      * Returns the string representation of this alert item. The returned string
      * includes all parameters of the alert item, and has the following format:
-     * <pre> AlertItem(&lt;source&gt;, &lt;type&gt;, &lt;mark&gt;, &lt;data&gt;)</pre>
+     * <pre>AlertItem(&lt;source&gt;, &lt;type&gt;, &lt;mark&gt;, &lt;data&gt;)</pre>
      * The last parameter is the string representation of the data value.  The 
      * format of the data is not explicitly included.
      * 
