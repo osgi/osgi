@@ -23,19 +23,26 @@ package org.osgi.service.dmt;
  * several valid MIME types, or to differentiate between normal and automatic
  * dynamic nodes.
  * <p>
- * The Dmt Admin calls the methods {@link #isValidName} before creating nodes
- * and {@link #isValidValue} before setting leaf nodes, to check the validity of
- * the name/value. These should perform some checks on their parameter and
- * return <code>false</code> if some constraint is not met. The plugin may
- * carry out more thorough (more expensive) checks when the node is actually
- * created or set, so returning <code>true</code> in the validation methods
- * does not guarantee that the following operation will succeed.
+ * Most methods in this interface receive no input, just return information 
+ * about some aspect of the node.  However, there are two methods that behave 
+ * differently, {@link #isValidName} and {@link #isValidValue}.  These 
+ * validation methods are given a potential node name or value (respectively), 
+ * and can decide whether it is valid for the given node.  Passing the 
+ * validation methods is a necessary condition for a name or value to be used, 
+ * but it is not necessarily sufficient: the plugin may carry out more thorough 
+ * (more expensive) checks when the node is actually created or set.
  * <p>
- * Some methods overlap the purpose of the validate methods (e.g.
- * {@link #getFormat} or {@link #getValidNames}), these are not checked by Dmt
- * Admin, but are only for external use, for example in user interfaces. It is
- * indicated in the description of the methods if the Dmt Admin does not enforce
- * the constraints defined by it.
+ * If a <code>MetaNode</code> is available for a node, the Dmt Admin must use 
+ * the information provided by it to filter out invalid requests on that node.
+ * However, not all methods on this interface are actually used for this 
+ * purpose, as many of them (e.g. {@link #getFormat} or 
+ * {@link #getValidNames}) can be substituted with the validating methods.  For
+ * example, {@link #isValidValue} can be expected to check the format, minimum,
+ * maximum, etc. of a given value, making it unnecessary for the Dmt Admin to
+ * call {@link #getFormat()}, {@link #getMin()}, {@link #getMax()} etc.
+ * separately.  It is indicated in the description of each method if the Dmt
+ * Admin does not enforce the constraints defined by it - such methods are only 
+ * for external use, for example in user interfaces.
  * <p>
  * Most of the methods of this class return <code>null</code> if a certain
  * piece of meta information is not defined for the node or providing this
@@ -190,13 +197,13 @@ public interface MetaNode {
     String[] getMimeTypes();
     
     /**
-     * Get the maximum allowed value associated with a number node. If no
-     * meta-data is provided for a node, there is no upper limit to its value.
-     * This method is only meaningful if the node has integer or float format.
-     * The returned limit has <code>double</code> type, as this can be used to
-     * denote both integer and float limits with full precision.  The actual
-     * maximum should be the largest integer or float number that does not
-     * exceed the returned value.
+     * Get the maximum allowed value associated with a node of numeric format.
+     * If no meta-data is provided for a node, there is no upper limit to its
+     * value. This method is only meaningful if the node has integer or float 
+     * format. The returned limit has <code>double</code> type, as this can be 
+     * used to denote both integer and float limits with full precision.  The 
+     * actual maximum should be the largest integer or float number that does 
+     * not exceed the returned value.
      * <p>
      * The information returned by this method is not checked by Dmt Admin, it
      * is only for external use, for example in user interfaces.  Dmt Admin
@@ -210,13 +217,13 @@ public interface MetaNode {
     double getMax();
 
     /**
-     * Get the minimum allowed value associated with a number node. If no
-     * meta-data is provided for a node, there is no lower limit to its value.
-     * This method is only meaningful if the node has integer or float format.
-     * The returned limit has <code>double</code> type, as this can be used to
-     * denote both integer and float limits with full precision.  The actual
-     * minimum should be the smallest integer or float number that is larger
-     * than the returned value.
+     * Get the minimum allowed value associated with a node of numeric format. 
+     * If no meta-data is provided for a node, there is no lower limit to its 
+     * value. This method is only meaningful if the node has integer or float 
+     * format. The returned limit has <code>double</code> type, as this can be 
+     * used to denote both integer and float limits with full precision.  The 
+     * actual minimum should be the smallest integer or float number that is 
+     * larger than the returned value.
      * <p>
      * The information returned by this method is not checked by Dmt Admin, it
      * is only for external use, for example in user interfaces.  Dmt Admin

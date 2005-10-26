@@ -20,11 +20,16 @@ import java.util.Iterator;
  * the constants specified in this class), and may optionally contain the URI of
  * the related node, and information about the cause of the exception.
  * <p>
- * The cause (if specified) can either be a single <code>Throwable</code>
- * instance, or a list of such instances if several problems occured during the
- * execution of a method. An example for the latter is the <code>close</code>
- * method of <code>DmtSession</code> that tries to close multiple plugins, and
- * has to report the exceptions of all failures.
+ * Some of the error codes defined in this class have a corresponding error code 
+ * defined in OMA DM, in these cases the name and numerical value from OMA DM is
+ * used.  Error codes without counterparts in OMA DM were given numbers from a
+ * different range, starting from 1.
+ * <p>
+ * The cause of the exception (if specified) can either be a single 
+ * <code>Throwable</code> instance, or a list of such instances if several 
+ * problems occured during the execution of a method. An example for the latter 
+ * is the <code>close</code> method of <code>DmtSession</code> that tries to 
+ * close multiple plugins, and has to report the exceptions of all failures.
  * <p>
  * Each constructor has two variants, one accepts a <code>String</code> node
  * URI, the other accepts a <code>String[]</code> node path.  The former is
@@ -95,8 +100,9 @@ public class DmtException extends Exception {
      * values can be found in the Non Functional Requirements section of the
      * OSGi specification.
      * <p>
-     * See the {@link DmtAdmin#mangle(String)} method for support making a URI 
-     * segment conforms to the length limits set by the implementation.
+     * The {@link DmtAdmin#mangle(String)} method provides support for ensuring
+     * that a URI segment conforms to the length limits set by the 
+     * implementation.
      * <p>
      * This error code corresponds to the OMA DM response status code 414
      * &quot;URI too long&quot;.

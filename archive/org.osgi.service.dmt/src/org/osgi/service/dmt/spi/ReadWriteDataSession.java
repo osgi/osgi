@@ -15,8 +15,8 @@ import org.osgi.service.dmt.DmtSession;
 import org.osgi.service.dmt.MetaNode;
 
 /**
- * Provides non-atomic read-write access to the part of the tree handled by this
- * plugin.
+ * Provides non-atomic read-write access to the part of the tree handled by the
+ * plugin that created this session.
  * <p>
  * The <code>nodePath</code> parameters appearing in this interface always
  * contain an array of path segments identifying a node in the subtree of this
@@ -62,7 +62,6 @@ import org.osgi.service.dmt.MetaNode;
  * should be used.
  */
 public interface ReadWriteDataSession extends ReadableDataSession {
-    // TODO should createLeafNode() accept null value/type, or should DmtSession retrieve the defaults from the metadata and pass those?
 
     /**
      * Create a copy of a node or a whole subtree.  Beside the structure and 
@@ -179,9 +178,11 @@ public interface ReadWriteDataSession extends ReadableDataSession {
     void deleteNode(String[] nodePath) throws DmtException;
 
     /**
-     * Rename a node. The value and the other properties of the node do not
-     * change.  The new name of the node must be provided, the new path is
-     * constructed from the base of the old path and the given name.
+     * Rename a node. This operation only changes the name of the node (updating
+     * the timestamp and version properties if they are supported), the value 
+     * and the other properties are not changed. The new name of the node must
+     * be provided, the new path is constructed from the base of the old path
+     * and the given name.
      * 
      * @param nodePath the absolute path of the node to rename
      * @param newName the new name property of the node
@@ -263,7 +264,9 @@ public interface ReadWriteDataSession extends ReadableDataSession {
     /**
      * Set the value of a leaf node. The format of the node is contained in the
      * <code>DmtData</code> object. If the specified value is <code>null</code>,
-     * the default value must be taken.
+     * the default value must be taken; if there is no default value, a
+     * <code>DmtException</code> with error code <code>METADATA_MISMATCH</code>
+     * must be thrown.
      * 
      * @param nodePath the absolute path of the node
      * @param data the data to be set, can be <code>null</code>
