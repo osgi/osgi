@@ -27,6 +27,7 @@ import org.osgi.framework.Constants;
 import org.osgi.framework.ServiceReference;
 import org.osgi.impl.service.dmt.api.DmtPrincipalPermissionAdmin;
 import org.osgi.service.dmt.*;
+import org.osgi.service.dmt.security.AlertPermission;
 import org.osgi.service.log.LogService;
 import org.osgi.service.permissionadmin.PermissionInfo;
 import org.osgi.util.tracker.ServiceTracker;
@@ -238,6 +239,13 @@ public class DmtAdminImpl implements DmtAdmin {
 
     public void sendAlert(String principal, int code, String correlator,
             AlertItem[] items) throws DmtException {
+        
+        SecurityManager sm = System.getSecurityManager();
+        if(sm != null)
+            sm.checkPermission(
+                    new AlertPermission(principal != null ? principal : "*"));
+
+        
         RemoteAlertSender alertSender = getAlertSender(principal);
         if (alertSender == null) {
             if (principal == null)
