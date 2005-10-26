@@ -112,6 +112,13 @@ public final class MidletDescriptor extends ApplicationDescriptor implements Ser
 		properties.put(ApplicationDescriptor.APPLICATION_CONTAINER, "MIDlet");
 		properties.put(Constants.SERVICE_PID, new String(pid));
 		
+		if( serviceReg != null ) {
+			ServiceReference ref = serviceReg.getReference();
+			String keys[] = ref.getPropertyKeys();
+			for( int q=0; q != keys.length; q++ )
+				properties.put( keys[ q ], ref.getProperty( keys[ q ] ) );
+		}
+		
 		return properties;
 	}
 
