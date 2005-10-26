@@ -137,8 +137,8 @@ public interface DmtAdmin {
     
     /**
      * Returns a node name that is valid for the tree operation methods, based
-     * on the given node name. This transformation does not have a fix point, so
-     * it must not be called with a parameter that is the result of a previous
+     * on the given node name. This transformation is not idempotent, so it must
+     * not be called with a parameter that is the result of a previous
      * <code>mangle</code> method call.
      * <p>
      * Node name mangling is needed in the following cases:
@@ -181,7 +181,8 @@ public interface DmtAdmin {
      * Sends an alert to a named principal. If OMA DM is used as a management
      * protocol the principal name is server ID that corresponds to a DMT node
      * value in <code>./SyncML/DMAcc/x/ServerId</code>. It is the DmtAdmin's
-     * responsibility to route the alert to the given principal.
+     * responsibility to route the alert to the given principal using the
+     * <code>RemoteAlertSender</code> services.
      * <p>
      * In remotely initiated sessions the principal name identifies the remote
      * server that created the session, this can be obtained using the session's
@@ -197,6 +198,12 @@ public interface DmtAdmin {
      * {@link DmtSession#execute(String, String, String) execute} command,
      * a correlation identifier can be specified to provide the association
      * between the execute and the alert.
+     * <p>
+     * In order to send an alert using this method, the caller must have an
+     * <code>AlertPermission</code> with a target string matching the specified
+     * principal name.  If the <code>principal</code> parameter is 
+     * <code>null</code> (the principal name is not known), the target of the
+     * <code>AlertPermission</code> must be &quot;*&quot;. 
      * 
      * @param principal the principal name which is the recepient of this alert,
      *        can be <code>null</code>
@@ -215,6 +222,9 @@ public interface DmtAdmin {
      *         <li><code>COMMAND_FAILED</code> for unspecified errors
      *         encountered while attempting to complete the command
      *         </ul>
+     * @throws SecurityException if the caller does not have the required
+     *         <code>AlertPermission</code> with a target matching the
+     *         <code>principal</code> parameter, as described above
      */
     void sendAlert(String principal, int code, String correlator, 
             AlertItem[] items) throws DmtException;
