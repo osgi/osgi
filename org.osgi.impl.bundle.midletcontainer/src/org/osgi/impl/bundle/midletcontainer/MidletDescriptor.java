@@ -47,7 +47,7 @@ public final class MidletDescriptor extends ApplicationDescriptor implements Ser
 				|| !props.containsKey("application.bundle.id")
 				|| !props.containsKey(Constants.SERVICE_PID)
 				|| !props.containsKey(ApplicationDescriptor.APPLICATION_VERSION)
-				|| !props.containsKey(ApplicationDescriptor.APPLICATION_PACKAGE ))
+				|| !props.containsKey(ApplicationDescriptor.APPLICATION_LOCATION ))
 			throw new Exception("Invalid MEG container input!");
 		if (!names.containsKey(defaultLang)) {
 			throw new Exception("Invalid default language!");
@@ -91,8 +91,8 @@ public final class MidletDescriptor extends ApplicationDescriptor implements Ser
 				.getProperty("application.bundle.id"));
 		properties.put(ApplicationDescriptor.APPLICATION_VERSION, props
 				.getProperty(ApplicationDescriptor.APPLICATION_VERSION));
-		properties.put(ApplicationDescriptor.APPLICATION_PACKAGE, props
-				.getProperty(ApplicationDescriptor.APPLICATION_PACKAGE));
+		properties.put(ApplicationDescriptor.APPLICATION_LOCATION, props
+				.getProperty(ApplicationDescriptor.APPLICATION_LOCATION));
 		properties.put(ApplicationDescriptor.APPLICATION_VENDOR, props
 				.getProperty(ApplicationDescriptor.APPLICATION_VENDOR));
 		String visible = props.getProperty(ApplicationDescriptor.APPLICATION_VISIBLE);
@@ -252,5 +252,10 @@ public final class MidletDescriptor extends ApplicationDescriptor implements Ser
 			Activator.log( LogService.LOG_ERROR, "Exception occurred at matching the DN chain!",	e);
 			return false;
 		}
+	}
+
+	protected boolean isLaunchableSpecific() {
+		// TODO Auto-generated method stub
+		return false;
 	}
 }

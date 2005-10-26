@@ -13,7 +13,7 @@ package org.osgi.application;
 import java.util.Hashtable;
 
 /**
- * Using this class, OSGi-aware applications can obtain their {@link ApplicationContext} 
+ * Using this class, OSGi-aware applications can obtain their {@link ApplicationContext}. 
  *
  */
 public final class Framework {
@@ -33,9 +33,9 @@ public final class Framework {
      * specified application instance. Subsequent calls to this method with the same 
      * application instance must return the same context object
      * 
-     * @param applicationInstance is the representative object of an application instance
+     * @param applicationInstance is the activator object of an application instance
      * @throws java.lang.IllegalArgumentException if  called with an object that is not 
-     *     the representative object of an application.
+     *     the activator object of an application.
      * @return the {@link ApplicationContext} of the specified application instance.
      */
     public static ApplicationContext getApplicationContext(Object applicationInstance) {

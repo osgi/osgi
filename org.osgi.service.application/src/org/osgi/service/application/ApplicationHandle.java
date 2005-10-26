@@ -61,7 +61,7 @@ public abstract class ApplicationHandle {
 	 * restarts for the same application instance. This value must be the same
 	 * as the <code>service.pid</code> service property of this application
 	 * handle.
-	 * 
+	 * <p>
 	 * The instance identifier should follow the following scheme: 
 	 * &lt;<i>application descriptor PID</i>&gt;.&lt;<i>index</i>&gt;
 	 * where &lt;<i>application descriptor PID</i>&gt; is the PID of the 
@@ -71,12 +71,18 @@ public abstract class ApplicationHandle {
 	 * be reused in a reasonably long timeframe.
 	 * 
 	 * @param instanceId the instance identifier of the represented application
-	 * instance.
+	 * instance. It must not be null.
 	 * 
 	 * @param descriptor the <code>ApplicationDescriptor</code> of the represented
-	 * application instance.
+	 * application instance. It must not be null.
+	 * 
+	 * @throws NullPointerException if any of the arguments is null.
 	 */
 	protected ApplicationHandle(String instanceId, ApplicationDescriptor descriptor ) {
+		if( (null == instanceId) || (null == descriptor) ) {
+			throw new NullPointerException("Parameters must not be null!");
+		}
+		
 		this.instanceId	= instanceId;
 		this.descriptor = descriptor;
 
@@ -123,19 +129,15 @@ public abstract class ApplicationHandle {
 	 * Returns the unique identifier of this instance. This value is also
 	 * available as a service property of this application handle's service.pid.
 	 * 
-	 * @throws IllegalStateException
-	 *             if the application handle is unregistered
-	 * 
 	 * @return the unique identifier of the instance
 	 */
 	public final String getInstanceId() {
-		getState(); // throws IllegalStateException if the handle is invalid 
 		return instanceId;
 	}
 
 	/**
 	 * The application instance's lifecycle state can be influenced by this
-	 * method. It lets the application instance to perform operations to stop
+	 * method. It lets the application instance perform operations to stop
 	 * the application safely, e.g. saving its state to a permanent storage.
 	 * <p>
 	 * The method must check if the lifecycle transition is valid; a STOPPING
@@ -145,8 +147,9 @@ public abstract class ApplicationHandle {
 	 * perform any application model specific steps for safe stopping of the
 	 * represented application instance.
 	 * <p>
-	 * At the end the ApplicationHandle must be unregistered. This method should
-	 * free all the resources related to this ApplicationHandle.
+	 * At the end the <code>ApplicationHandle</code> must be unregistered. 
+	 * This method should  free all the resources related to this 
+	 * <code>ApplicationHandle</code>.
 	 * <p>
 	 * When this method is completed the application instance has already made
 	 * its operations for safe stopping, the ApplicationHandle has been
@@ -155,8 +158,8 @@ public abstract class ApplicationHandle {
 	 * results.
 	 * 
 	 * @throws SecurityException
-	 *             if the caller doesn't have "manipulate"
-	 *             ApplicationAdminPermission for the corresponding application.
+	 *             if the caller doesn't have "lifecycle"
+	 *             <code>ApplicationAdminPermission</code> for the corresponding application.
 	 * 
 	 * @throws Exception
 	 *             is thrown if an exception or an error occurred during the
@@ -173,6 +176,8 @@ public abstract class ApplicationHandle {
 	 * Called by the destroy() method to perform application model specific
 	 * steps to stop and destroy an application instance safely.
 	 * 
+	 * @throws IllegalStateException
+	 *             if the application handle is unregistered
 	 * @throws Exception
 	 *             is thrown if an exception or an error occurred during the
 	 *             method execution.

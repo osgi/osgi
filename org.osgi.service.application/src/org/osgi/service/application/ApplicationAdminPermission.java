@@ -64,7 +64,7 @@ public class ApplicationAdminPermission extends Permission {
 	 * but according to the rules defined for a DN chain. The attribute 
 	 * <code>pid</code> is matched with the PID of the application according to
 	 * the filter string rules. 
-	 * 
+	 * <p>
 	 * If the <code>filter</code> is <code>null</code> then it matches 
 	 * <code>"*"</code>. If
 	 * <code>actions</code> is <code>"*"</code> then it identifies all the
@@ -72,7 +72,7 @@ public class ApplicationAdminPermission extends Permission {
 	 * 
 	 * @param filter
 	 *            filter to identify application. The value <code>null</code>
-	 *            indicates "all application".
+	 *            is equivalent to <code>"*"</code> and it indicates "all application".
 	 * @param actions
 	 *            comma-separated list of the desired actions granted on the
 	 *            applications or "*" means all the actions. It must not be
@@ -87,7 +87,7 @@ public class ApplicationAdminPermission extends Permission {
 	 */
 	public ApplicationAdminPermission(String filter, String actions) {
 		super(filter == null ? "*" : filter);
-		
+				
 		this.applicationDescriptor = null;
 		this.filter = (filter == null ? "*" : filter);
 		this.actions = actions;
@@ -100,9 +100,13 @@ public class ApplicationAdminPermission extends Permission {
 	 * instance for <code>checkPermission</code> call. 
 	 * @param application the tareget of the operation, it must not be <code>null</code>
 	 * @param actions the required operation. it must not be <code>null</code>
+	 * @throws NullPointerException if any of the arguments is null. 
 	 */
 	public ApplicationAdminPermission(ApplicationDescriptor application, String actions) {
 		super(application.getApplicationId());
+				
+		if( application == null || actions == null )
+			throw new NullPointerException( "ApplicationDescriptor and action string cannot be null!" );
 		
 		this.filter = application.getApplicationId();
 		this.applicationDescriptor = application;
@@ -116,8 +120,8 @@ public class ApplicationAdminPermission extends Permission {
 	 * implementation in the <code>implies</code> method to insert the
 	 * application ID of the current application into the permission being
 	 * checked. This enables the evaluation of the 
-	 * <code>&lt;$lt;SELF&gt;&gt;</code> pseudo targets.
-	 * @param applicationId the ID of the current application
+	 * <code>&lt;&lt;SELF&gt;&gt;</code> pseudo targets.
+	 * @param applicationId the ID of the current application.
 	 * @return the permission updated with the ID of the current application
 	 */
 	public ApplicationAdminPermission setCurrentApplicationId(String applicationId) {
@@ -132,14 +136,33 @@ public class ApplicationAdminPermission extends Permission {
 		return newPerm;
 	}
 
-  public boolean implies(Permission p) {
-  	  if( p == null )
+	/**
+	 * Checks if the specified <code>permission</code> is implied by this permission.
+	 * The method returns true under the following conditions:
+	 * <UL>
+	 * <LI> This permission was created by specifying a filter (see {@link #ApplicationAdminPermission(String, String)})
+	 * <LI> The implied <code>otherPermission</code> was created for a particular {@link ApplicationDescriptor}
+	 *      (see {@link #ApplicationAdminPermission(ApplicationDescriptor, String)})
+	 * <LI> The <code>filter</code> of this permission mathes the <code>ApplicationDescriptor</code> specified
+	 *      in the <code>otherPermission</code>. If the filter in this permission is the 
+	 *      <code>&lt;&lt;SELF&gt;&gt;</code> pseudo target, then the currentApplicationId set in the 
+	 *      <code>otherPermission</code> is compared to the application Id of the target 
+	 *      <code>ApplicationDescriptor</code>.
+	 * <LI> The list of permitted actions in this permission contains all actions required in the 
+	 *      <code>otherPermission</code>  
+	 * </UL> 
+	 * Otherwise the method returns false.
+	 * @param otherPermission the implied permission
+	 * @return true if this permission implies the <code>otherPermission</code>, false otherwise.
+	 */
+  public boolean implies(Permission otherPermission) {
+  	  if( otherPermission == null )
   	  	return false;
   	  	
-      if(!(p instanceof ApplicationAdminPermission))
+      if(!(otherPermission instanceof ApplicationAdminPermission))
           return false;
 
-      ApplicationAdminPermission other = (ApplicationAdminPermission) p;
+      ApplicationAdminPermission other = (ApplicationAdminPermission) otherPermission;
 
       if( !filter.equals("*") ) {
       	if( filter.equals( "<<SELF>>") ) {
@@ -177,6 +200,7 @@ public class ApplicationAdminPermission extends Permission {
   	
   	ApplicationAdminPermission other = (ApplicationAdminPermission)with;  	
   	
+  	// Compare actions:
   	if( other.actionsVector.size() != actionsVector.size() )
   		return false;
   	
@@ -184,13 +208,40 @@ public class ApplicationAdminPermission extends Permission {
   		if( !other.actionsVector.contains( actionsVector.get( i ) ) )
   			return false;
   	
-  	return filter.equals( other.filter );
+  	
+  	return equal(this.filter, other.filter ) && equal(this.applicationDescriptor, other.applicationDescriptor)
+  			&& equal(this.applicationID, other.applicationID);
+  }
+  
+  /**
+   * Compares parameters for equality. If both object are null, they are considered
+   * equal.
+   * @param a object to compare
+   * @param b other object to compare
+   * @return true if both objects are equal or both are null
+   */
+  private static boolean equal(Object a, Object b) {
+	  // This equation is true if both references are null or both point
+	  // to the same object. In both cases they are considered as equal.
+	  if( a == b ) {
+		  return true;
+	  }
+	  
+	  return a.equals(b);
   }
 
   public int hashCode() {
-	  return actions.hashCode() + filter.hashCode();
+	  int hc = actions.hashCode();
+	  hc ^= (null == this.filter )? 0 : this.filter.hashCode();
+	  hc ^= (null == this.applicationDescriptor) ? 0 : this.applicationDescriptor.hashCode();
+	  hc ^= (null == this.applicationID) ? 0 : this.applicationID.hashCode();
+	  return hc;
   }
 
+  /**
+   * Returns the actions of this permission.
+   * @return the actions specified when this permission was created
+   */
   public String getActions() {
   	return actions;
   }

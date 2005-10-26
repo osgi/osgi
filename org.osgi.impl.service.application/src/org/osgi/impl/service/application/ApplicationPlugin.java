@@ -896,7 +896,7 @@ class ApplicationIDNode extends ApplicationPluginBaseNode {
 		addChildNode( new ApplicationPropertyNode( "Version",       ApplicationDescriptor.APPLICATION_VERSION ) );
 		addChildNode( new ApplicationPropertyNode( "Vendor",        ApplicationDescriptor.APPLICATION_VENDOR ) );
 		addChildNode( new ApplicationPropertyNode( "Locked",        ApplicationDescriptor.APPLICATION_LOCKED, true ) );
-		addChildNode( new ApplicationPropertyNode( "PackageID",     ApplicationDescriptor.APPLICATION_PACKAGE ) );
+		addChildNode( new ApplicationPropertyNode( "PackageID",     ApplicationDescriptor.APPLICATION_LOCATION ) );
 		addChildNode( new ApplicationPropertyNode( "ContainerID",   ApplicationDescriptor.APPLICATION_CONTAINER ) );
 		addChildNode( new ApplicationPropertyNode( "ApplicationID", ApplicationDescriptor.APPLICATION_PID ) );
 		

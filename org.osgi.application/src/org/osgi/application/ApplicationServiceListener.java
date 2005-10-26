@@ -17,7 +17,7 @@ import org.osgi.framework.ServicePermission;
 import org.osgi.framework.ServiceReference;
 
 /**
- * An <code>ApplicationServiceEvent</code> listener. When an 
+ * An <code>ApplicationServiceEvent</code> listener. When a 
  * <code>ServiceEvent</code> is
  * fired, it is converted to an <code>ApplictionServiceEvent</code>
  * and it is synchronously delivered to an <code>ApplicationServiceListener</code>.

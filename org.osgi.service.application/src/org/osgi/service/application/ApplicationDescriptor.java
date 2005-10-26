@@ -16,6 +16,7 @@ import java.security.PrivilegedExceptionAction;
 import java.util.Map;
 
 import org.osgi.framework.Constants;
+import org.osgi.framework.InvalidSyntaxException;
 
 /**
  * An OSGi service that represents an installed application and stores
@@ -92,9 +93,9 @@ public abstract class ApplicationDescriptor {
 	public static final String APPLICATION_CONTAINER = "application.container";
 
 	/**
-	 * The property key for thepackage of the application.
+	 * The property key for the location of the application.
 	 */
-	public static final String APPLICATION_PACKAGE = "application.package";
+	public static final String APPLICATION_LOCATION = "application.location";
 
 	
 	/**
@@ -103,10 +104,16 @@ public abstract class ApplicationDescriptor {
 	 * @param applicationId
 	 *            The identifier of the application. Its value is also available
 	 *            as the <code>service.pid</code> service property of this 
-	 *            <code>ApplicationDescriptor</code> service.
+	 *            <code>ApplicationDescriptor</code> service. This parameter must not
+	 *            be <code>null</code>.
+	 * @throws NullPointerException if the specified <code>applicationId</code> is null.
 	 */
-	protected  ApplicationDescriptor(String pid) {
-		this.pid = pid;
+	protected  ApplicationDescriptor(String applicationId) {
+		if(null == applicationId ) {
+			throw new NullPointerException("Application ID must not be null!");
+		}
+		
+		this.pid = applicationId;
 		try {
 		  AccessController.doPrivileged(new PrivilegedExceptionAction() {
 			  public Object run() throws Exception {			
@@ -114,7 +121,7 @@ public abstract class ApplicationDescriptor {
 				  return null;
 			  }
 		  });
-	    delegate.setApplicationDescriptor( this, pid );
+	    delegate.setApplicationDescriptor( this, applicationId );
 		}
 		catch (Exception e) {
 			// Too bad ...
@@ -142,24 +149,27 @@ public abstract class ApplicationDescriptor {
 	 * The <code>pattern</code> must adhere to the 
 	 * syntax defined in {@link org.osgi.service.application.ApplicationAdminPermission}
 	 * for signer attributes. 
-	 *  
-	 * @param pattern a pattern for a chain of Distinguished Names
+	 * <p>
+	 * This method is used by {@link ApplicationAdminPermission#implies(java.security.Permission)} method
+	 * to match target <code>ApplicationDescriptor</code> and filter. 
+	 * 
+	 * @param pattern a pattern for a chain of Distinguished Names. It must not be null.
 	 * @return <code>true</code> if the specified pattern matches at least
 	 *   one of the certificate chains used to authenticate this application 
+	 * @throws NullPointerException if the specified <code>pattern</code> is null.
 	 */	
 	public abstract boolean matchDNChain( String pattern );
 	
 	/**
 	 * Returns the properties of the application descriptor as key-value pairs.
 	 * The return value contains the locale aware and unaware properties as
-	 * well. Some of the properties can be retrieved directly with methods in
-	 * this interface. The returned <code>Map</code> will include the service
+	 * well. The returned <code>Map</code> will include the service
 	 * properties of this <code>ApplicationDescriptor</code> as well.
-	 * 
+	 * <p>
 	 * This method will call the <code>getPropertiesSpecific</code> method
 	 * to enable the container implementation to insert application model and/or
 	 * container implementation specific properties.
-	 * 
+	 * <P>
 	 * The returned {@link java.util.Map} will contain the standard OSGi service 
 	 * properties as well
 	 * (e.g. service.id, service.vendor etc.) and specialized application
@@ -206,15 +216,27 @@ public abstract class ApplicationDescriptor {
 	 * Localizable properties must be returned localized if the provided
 	 * <code>locale</code> argument is not the empty String. The value
 	 * <code>null</code> indicates to use the default locale, for other
-	 * values the specified locale should be used. 
-	 *
+	 * values the specified locale should be used.
+	 *  
+	 * The returned {@link java.util.Map} must contain the standard OSGi service 
+	 * properties as well
+	 * (e.g. service.id, service.vendor etc.) and specialized application
+	 * descriptors may offer further service properties. 
+	 * The returned <code>Map</code>
+	 * contains a snapshot of the properties. It will not reflect further changes in the
+	 * property values nor will the update of the Map change the corresponding
+	 * service property.
+
 	 * @param locale the locale to be used for localizing the properties.
 	 * If <code>null</code> the default locale should be used. If it is
 	 * the empty String (<code>""</code>) then raw (non-localized) values
 	 * should be returned.
 	 * 
 	 * @return the application model specific and/or container implementation
-	 * specific properties of this application descriptor. 
+	 * specific properties of this application descriptor.
+	 *  
+	 * @throws IllegalStateException
+	 *             if the application descriptor is unregistered
 	 */
 	protected abstract Map getPropertiesSpecific(String locale);
 
@@ -234,11 +256,11 @@ public abstract class ApplicationDescriptor {
 	 * </UL>
 	 * The caller has to have ApplicationAdminPermission(applicationPID,
 	 * "launch") in order to be able to perform this operation.
-	 * 
+	 * <P>
 	 * The <code>Map</code> argument of the launch method contains startup 
 	 * arguments for the
 	 * application. The keys used in the Map can be standard or application
-	 * specific. MEG defines the <code>org.osgi.triggeringevent</code>
+	 * specific. OSGi defines the <code>org.osgi.triggeringevent</code>
 	 * key to be used to
 	 * pass the triggering event to a scheduled application, however
 	 * in the future it is possible that other well-known keys will be defined.
@@ -250,18 +272,24 @@ public abstract class ApplicationDescriptor {
 	 *       In particular, the keys standardized in OSGi should start with
 	 *       <code>org.osgi.</code>.</li>
 	 * </ul>
+	 * <P>
+	 * The method is synchonous, it return only when the application instance was
+	 * successfully started or the attempt to start it failed.
+	 * <P>
+	 * This method never returns <code>null</code>. If launching an application fails,
+	 * the appropriate exception is thrown.
 	 * 
 	 * @param arguments
 	 *            Arguments for the newly launched application, may be null
 	 * 
 	 * @return the registered ApplicationHandle, which represents the newly 
-	 *         launched application instance
+	 *         launched application instance. Never returns <code>null</code>.
 	 * 
 	 * @throws SecurityException
 	 *             if the caller doesn't have "launch"
 	 *             ApplicationAdminPermission for the application.
 	 * @throws Exception
-	 *             if starting the application(s) failed
+	 *             if starting the application failed
 	 * @throws IllegalStateException
 	 *             if the application descriptor is unregistered
 	 */
@@ -275,6 +303,11 @@ public abstract class ApplicationDescriptor {
 	 * Called by launch() to create and start a new instance in an application
 	 * model specific way. It also creates and registeres the application handle
 	 * to represent the newly created and started instance and registeres it.
+	 * The method is synchonous, it return only when the application instance was
+	 * successfully started or the attempt to start it failed.
+	 * <P>
+	 * This method must not return <code>null</code>. If launching the application
+	 * failed, and exception must be thrown.
 	 * 
 	 * @param arguments
 	 *            the startup parameters of the new application instance, may be
@@ -284,17 +317,32 @@ public abstract class ApplicationDescriptor {
 	 *         specific application handle for the newly created and started
 	 *         instance.
 	 * 
+	 * @throws IllegalStateException
+	 *             if the application descriptor is unregistered
 	 * @throws Exception
 	 *             if any problem occures.
 	 */
 	protected abstract ApplicationHandle launchSpecific(Map arguments)
 			throws Exception;
+	
+	/**
+	 * This method is called by launch() to verify that according to the
+	 * container, the application is launchable.
+	 * 
+	 * @return true, if the application is launchable according to the 
+	 *  container, false otherwise.
+	 *  
+	 * @throws IllegalStateException
+	 *             if the application descriptor is unregistered
+	 */
+	protected abstract boolean isLaunchableSpecific();
 
 	/**
 	 * Schedules the application at a specified event. Schedule information
 	 * should not get lost even if the framework or the device restarts so it
-	 * should be stored in a persistent storage. It has to register the returned
-	 * service.
+	 * should be stored in a persistent storage. The method registers a
+	 * {@link ScheduledApplication} service in Service Registry, representing
+	 * the created scheduling.
 	 * 
 	 * @param arguments
 	 *            the startup arguments for the scheduled application, may be
@@ -320,6 +368,8 @@ public abstract class ApplicationDescriptor {
 	 *             may be thrown if writing the information about the scheduled
 	 *             application requires operation on the permanent storage and
 	 *             I/O problem occurred.
+	 * @throws InvalidSyntaxException 
+	 * 			   if the specified <code>eventFilter</code> is not syntactically correct
 	 * @throws SecurityException
 	 *             if the caller doesn't have "schedule"
 	 *             ApplicationAdminPermission for the application.
@@ -327,7 +377,7 @@ public abstract class ApplicationDescriptor {
 	 *             if the application descriptor is unregistered
 	 */
 	public final ScheduledApplication schedule(Map arguments, String topic,
-			String eventFilter, boolean recurring) throws IOException {
+			String eventFilter, boolean recurring) throws IOException,  InvalidSyntaxException {
 		return delegate.schedule(arguments, topic, eventFilter, recurring);
 	}
 
@@ -372,6 +422,9 @@ public abstract class ApplicationDescriptor {
 	 * This method is used to notify the container implementation that the
 	 * corresponding application has been unlocked and it should update the
 	 * <code>application.locked</code> service property accordingly.
+
+	 * @throws IllegalStateException
+	 *             if the application descriptor is unregistered
 	 */
 	protected abstract void unlockSpecific();
 

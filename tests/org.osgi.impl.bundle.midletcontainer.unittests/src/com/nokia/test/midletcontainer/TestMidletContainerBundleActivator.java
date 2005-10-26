@@ -1643,7 +1643,7 @@ public class TestMidletContainerBundleActivator
   			values[ 2 ] = (String)( props.get( ApplicationDescriptor.APPLICATION_VERSION ) );
   			values[ 3 ] = (String)( props.get( ApplicationDescriptor.APPLICATION_VENDOR ) );
   			values[ 4 ] = (Boolean)(props.get( ApplicationDescriptor.APPLICATION_LOCKED ) );
-  			values[ 5 ] = (String)( props.get( ApplicationDescriptor.APPLICATION_PACKAGE ) );
+  			values[ 5 ] = (String)( props.get( ApplicationDescriptor.APPLICATION_LOCATION ) );
   			values[ 6 ] = (String)( props.get( ApplicationDescriptor.APPLICATION_CONTAINER ) );
   			values[ 7 ] = (String)( props.get( ApplicationDescriptor.APPLICATION_PID ) );
   			

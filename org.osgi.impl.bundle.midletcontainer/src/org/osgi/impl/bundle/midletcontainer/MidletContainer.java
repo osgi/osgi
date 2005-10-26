@@ -236,10 +236,10 @@ public class MidletContainer implements BundleListener, ServiceListener {
 							if( MIDletIcon == null )
 								MIDletIcon = "";
 							
-							String bundleName = bundle.getSymbolicName();
+							String bundleName = bundle.getLocation();
 							if( bundleName == null )
 								bundleName = Long.toString( bundle.getBundleId() );
-							props.setProperty(ApplicationDescriptor.APPLICATION_PACKAGE, bundleName );
+							props.setProperty(ApplicationDescriptor.APPLICATION_LOCATION, bundleName );
 							
 							props.setProperty("application.bundle.id", Long
 									.toString(bundle.getBundleId()));
