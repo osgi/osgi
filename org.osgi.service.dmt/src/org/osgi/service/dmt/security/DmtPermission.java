@@ -60,6 +60,8 @@ public class DmtPermission extends Permission {
      * Holders of DmtPermission with the Add action present can create new nodes
      * in the DMT, that is they are authorized to execute the
      * createInteriorNode() and createLeafNode() methods of the DmtSession.
+     * This action is also required for the copy() command, which needs to 
+     * perform node creation operations (among others). 
      */
     public static final String ADD = "Add";
 
@@ -83,15 +85,18 @@ public class DmtPermission extends Permission {
      * isLeafNode(), getNodeAcl(), getEffectiveNodeAcl(), getMetaNode(),
      * getNodeValue(), getChildNodeNames(), getNodeTitle(), getNodeVersion(),
      * getNodeTimeStamp(), getNodeSize() and getNodeType() methods of the
-     * DmtSession.
+     * DmtSession.  This action is also required for the copy() command, which
+     * needs to perform node query operations (among others).
      */
     public static final String GET = "Get";
 
     /**
      * Holders of DmtPermission with the Replace action present can update DMT
      * node value or properties, that is they are authorized to execute the
-     * setNodeAcl(), setNodeTitle(), setNodeValue(), setNodeType() and rename()
-     * methods of the DmtSession.
+     * setNodeAcl(), setNodeTitle(), setNodeValue(), setNodeType() and 
+     * renameNode() methods of the DmtSession.  This action is also be required 
+     * for the copy() command if the original node had a title property (which 
+     * must be set in the new node).
      */
     public static final String REPLACE = "Replace";
 
@@ -162,7 +167,8 @@ public class DmtPermission extends Permission {
     /**
      * Checks whether the given object is equal to this DmtPermission instance.
      * Two DmtPermission instances are equal if they have the same target string
-     * and the same action mask.
+     * and the same action mask.  The "*" action mask is considered equal to a
+     * mask containing all actions.
      * 
      * @param obj the object to compare to this DmtPermission instance
      * @return <code>true</code> if the parameter represents the same
@@ -212,7 +218,15 @@ public class DmtPermission extends Permission {
 
     /**
      * Checks if this DmtPermission object &quot;implies&quot; the
-     * specified permission.
+     * specified permission.  This method returns <code>false</code> if and only
+     * if at least one of the following conditions are fulfilled for the 
+     * specified permission:
+     * <ul>
+     * <li>it is not a DmtPermission
+     * <li>its set of actions contains an action not allowed by this permission
+     * <li>the set of nodes defined by its path contains a node not defined by
+     * the path of this permission 
+     * </ul>
      *
      * @param p the permission to check for implication
      * @return true if this DmtPermission instance implies the specified

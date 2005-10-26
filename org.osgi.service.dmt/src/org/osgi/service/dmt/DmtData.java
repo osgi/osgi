@@ -23,8 +23,8 @@ import java.util.Arrays;
 /**
  * A data structure representing a leaf node. This structure represents
  * only the value and the format property of the node, all other properties of 
- * the node (like MIME type) can be set and read using the <code>Dmt</code> 
- * and <code>DmtReadOnly</code> interfaces.
+ * the node (like MIME type) can be set and read using the 
+ * <code>DmtSession</code> interface.
  * <p> 
  * Different constructors are available to create nodes with different 
  * formats. Nodes of <code>null</code> format can be created using the static
@@ -147,7 +147,7 @@ public class DmtData {
      * The <code>null</code> string argument is only valid if the format is
      * string or XML.
      * 
-     * @param value the string or XML value to set
+     * @param value the string, XML, date or time value to set
      * @param format the format of the <code>DmtData</code> instance to be 
      *        created, must be one of the formats specified above
      * @throws IllegalArgumentException if <code>format</code> is not one of

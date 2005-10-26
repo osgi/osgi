@@ -22,10 +22,10 @@ import org.osgi.service.dmt.DmtSession;
  * <code>String</code> array in the <code>dataRootURIs</code> registration
  * parameter (as defined by the {@link #DATA_ROOT_URIS} constant).
  * <p>
- * When a reference is made to a node handled by this plugin, the Dmt Admin
- * calls one of the <code>open...</code> methods to retrieve a plugin session
- * object for processing the request.  The called method depends on the lock
- * type of the current session.  In case of 
+ * When the first reference in a session is made to a node handled by this 
+ * plugin, the Dmt Admin calls one of the <code>open...</code> methods to 
+ * retrieve a plugin session object for processing the request.  The called 
+ * method depends on the lock type of the current session.  In case of 
  * {@link #openReadWriteSession(String[], DmtSession)} and
  * {@link #openAtomicSession(String[], DmtSession)}, the plugin may return 
  * <code>null</code> to indicate that the specified lock type is not supported.
@@ -62,7 +62,7 @@ public interface DataPluginFactory {
      *        current session, must not be <code>null</code>
      * @param session the session from which this plugin instance is accessed,
      *        must not be <code>null</code>
-     * @return a plugin capable of executing read operations
+     * @return a plugin session capable of executing read operations
      * @throws DmtException with the following possible error codes:
      *         <ul>
      *         <li><code>NODE_NOT_FOUND</code> if <code>sessionRoot</code> 
@@ -89,7 +89,7 @@ public interface DataPluginFactory {
      *        session, must not be <code>null</code>
      * @param session the session from which this plugin instance is accessed,
      *        must not be <code>null</code>
-     * @return a plugin capable of executing read-write operations, or
+     * @return a plugin session capable of executing read-write operations, or
      *         <code>null</code> if the plugin does not support non-atomic
      *         read-write sessions
      * @throws DmtException with the following possible error codes:
@@ -118,8 +118,8 @@ public interface DataPluginFactory {
      *        session, must not be <code>null</code>
      * @param session the session from which this plugin instance is accessed,
      *        must not be <code>null</code>
-     * @return a plugin capable of executing read-write operations in an atomic 
-     *         block, or <code>null</code> if the plugin does not support 
+     * @return a plugin session capable of executing read-write operations in an 
+     *         atomic block, or <code>null</code> if the plugin does not support 
      *         atomic read-write sessions
      * @throws DmtException with the following possible error codes:
      *         <ul>

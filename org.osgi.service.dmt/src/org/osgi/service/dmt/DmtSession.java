@@ -85,7 +85,7 @@ public interface DmtSession {
     int getState();
 
     /**
-     * Gives the type of lock the session currently has.
+     * Gives the type of lock the session has.
      * 
      * @return the lock type of the session, one of {@link #LOCK_TYPE_SHARED},
      *         {@link #LOCK_TYPE_EXCLUSIVE} and {@link #LOCK_TYPE_ATOMIC}
@@ -125,9 +125,9 @@ public interface DmtSession {
      * easier access to the {@link DmtAdmin#mangle(String)} method for users of
      * this interface.
      * <p> 
-     * This transformation does not have a fix point, so
-     * it must not be called with a parameter that is the result of a previous
-     * <code>mangle</code> method call.
+     * This transformation is not idempotent, so it must not be called with a 
+     * parameter that is the result of a previous <code>mangle</code> method 
+     * call.
      * <p>
      * Node name mangling is needed in the following cases:
      * <ul>
@@ -296,8 +296,9 @@ public interface DmtSession {
      *         accessing the data store
      *         <li><code>COMMAND_FAILED</code> if the URI is not within the
      *         current session's subtree, if no DmtExecPlugin is associated with
-     *         the node, or if some unspecified error is encountered while 
-     *         attempting to complete the command
+     *         the node and the DmtAdmin can not execute the node, or if some 
+     *         unspecified error is encountered while attempting to complete the 
+     *         command
      *         </ul>
      * @throws IllegalStateException if the session is already closed or 
      *         invalidated
@@ -943,9 +944,11 @@ public interface DmtSession {
     void deleteNode(String nodeUri) throws DmtException;
 
     /**
-     * Rename a node. The value and the other properties of the node do not
-     * change.  The new name of the node must be provided, the new URI is
-     * constructed from the base of the old URI and the given name.
+     * Rename a node. This operation only changes the name of the node (updating
+     * the timestamp and version properties if they are supported), the value
+     * and the other properties are not changed.  The new name of the node must 
+     * be provided, the new URI is constructed from the base of the old URI and
+     * the given name.
      * <p>
      * If available, the meta-data of the original and the new nodes are checked
      * before performing the rename operation.  Neither node can be permanent,
@@ -1334,7 +1337,7 @@ public interface DmtSession {
     int getNodeSize(String nodeUri) throws DmtException;
 
     /**
-     * Get the timestamp when the node was last modified.
+     * Get the timestamp when the node was created or last modified.
      * 
      * @param nodeUri the URI of the node
      * @return the timestamp of the last modification
@@ -1488,9 +1491,9 @@ public interface DmtSession {
 
     /**
      * Get the version of a node. The version can not be set, it is calculated
-     * automatically by the device. It is incremented after every modification 
-     * for both a leaf and an interior node modulo 0x10000. When a node is 
-     * created the initial value is 0.
+     * automatically by the device. It is incremented modulo 0x10000 at every
+     * modification of the value or any other property of the node, for both 
+     * leaf and interior nodes. When a node is created the initial value is 0.
      * 
      * @param nodeUri the URI of the node
      * @return the version of the node

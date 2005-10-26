@@ -15,7 +15,8 @@ import org.osgi.service.dmt.DmtException;
 import org.osgi.service.dmt.MetaNode;
 
 /**
- * Provides read-only access to the part of the tree handled by this plugin.
+ * Provides read-only access to the part of the tree handled by the plugin that
+ * created this session.
  * <p>
  * The <code>nodePath</code> parameters appearing in this interface always
  * contain an array of path segments identifying a node in the subtree of this
@@ -135,11 +136,10 @@ public interface ReadableDataSession {
      * example, when a data plugin is implemented on top of a data store or 
      * another API that has their own metadata, such as a relational database, 
      * in order to avoid metadata duplication and inconsistency. The meta data 
-     * specific to the plugin returned by this method is complemented by Dmt 
-     * Admin with the engine level meta data before returning it to the client.
-     * If there are differences in the meta data elements known by the plugin 
-     * and the <code>DmtAdmin</code> then the plugin specific elements take 
-     * precedence.
+     * specific to the plugin returned by this method is complemented by meta
+     * data from the Dmt Admin before returning it to the client. If there are 
+     * differences in the meta data elements known by the plugin and the 
+     * <code>DmtAdmin</code> then the plugin specific elements take precedence.
      * <p>
      * Note, that a node does not have to exist for having meta-data associated
      * with it. This method may provide meta-data for any node that can possibly
@@ -319,23 +319,23 @@ public interface ReadableDataSession {
 
     /**
      * Get the version of a node. The version can not be set, it is calculated
-     * automatically by the device. It is incremented after every modification 
-     * for both a leaf and an interior node modulo 0x10000. When a node is 
-     * created the initial value is 0.
+     * automatically by the device. It is incremented modulo 0x10000 at every
+     * modification of the value or any other property of the node, for both
+     * leaf and interior nodes. When a node is created the initial value is 0.
      * 
      * @param nodePath the absolute path of the node
      * @return the version of the node
      * @throws DmtException with the following possible error codes:
      *         <ul>
-     *         <li><code>NODE_NOT_FOUND</code> if <code>nodePath</code> points
-     *         to a non-existing node
-     *         <li><code>METADATA_MISMATCH</code> if the information could not
-     *         be retrieved because of meta-data restrictions
-     *         <li><code>FEATURE_NOT_SUPPORTED</code> if the Version property is
-     *         not supported by the plugin
+     *         <li><code>NODE_NOT_FOUND</code> if <code>nodePath</code>
+     *         points to a non-existing node
+     *         <li><code>METADATA_MISMATCH</code> if the information could
+     *         not be retrieved because of meta-data restrictions
+     *         <li><code>FEATURE_NOT_SUPPORTED</code> if the Version property
+     *         is not supported by the plugin
      *         <li><code>DATA_STORE_FAILURE</code> if an error occurred while
      *         accessing the data store
-     *         <li><code>COMMAND_FAILED</code> if some unspecified error is 
+     *         <li><code>COMMAND_FAILED</code> if some unspecified error is
      *         encountered while attempting to complete the command
      *         </ul>
      * @throws SecurityException if the caller does not have the necessary

@@ -137,7 +137,10 @@ public class DmtPrincipalPermission extends Permission {
 
     /**
      * Checks if this DmtPrincipalPermission object implies the specified
-     * permission.
+     * permission.  Another DmtPrincipalPermission instance is implied by this 
+     * permission either if the target strings are identical, or if this target
+     * can be made identical to the other target by replacing a trailing 
+     * &quot;*&quot; with any string.
      * 
      * @param p the permission to check for implication
      * @return true if this DmtPrincipalPermission instance implies the

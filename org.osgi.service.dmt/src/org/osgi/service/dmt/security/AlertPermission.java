@@ -18,13 +18,14 @@ import java.util.Iterator;
 import java.util.List;
 
 /**
- * Indicates the callers authority to send alerts to management servers.
+ * Indicates the callers authority to send alerts to management servers,
+ * identified by their principal names.
  * <p>
- * <code>AlertPermission</code> has a target string which controls the name
- * of the server where alerts can be sent. A wildcard is allowed at the end of
- * the target string, to allow sending alerts to any server with a name matching
- * the given prefix. The &quot;*&quot; target means the adapter send alerts to
- * any management server.
+ * <code>AlertPermission</code> has a target string which controls the 
+ * principal names where alerts can be sent.  A wildcard is allowed at the end 
+ * of the target string, to allow sending alerts to any principal with a name 
+ * matching the given prefix. The &quot;*&quot; target means that alerts can be 
+ * sent to any destination.
  */
 public class AlertPermission extends Permission {
     // TODO add static final serialVersionUID
@@ -39,8 +40,8 @@ public class AlertPermission extends Permission {
      * Creates a new <code>AlertPermission</code> object with its name
      * set to the target string.  Name must be non-null and non-empty.
      * 
-     * @param target the name of the server, can end with <code>*</code> to
-     *        match any server identifier with the given prefix
+     * @param target the name of a principal, can end with <code>*</code> to
+     *        match any principal identifier with the given prefix
      * @throws NullPointerException if <code>name</code> is <code>null</code>
      * @throws IllegalArgumentException if <code>name</code> is empty
      */
@@ -134,7 +135,10 @@ public class AlertPermission extends Permission {
 
     /**
      * Checks if this AlertPermission object implies the specified
-     * permission.
+     * permission.  Another AlertPermission instance is implied by this 
+     * permission either if the target strings are identical, or if this target
+     * can be made identical to the other target by replacing a trailing 
+     * &quot;*&quot; with any string.
      * 
      * @param p the permission to check for implication
      * @return true if this AlertPermission instance implies the

@@ -13,8 +13,8 @@ package org.osgi.service.dmt.spi;
 import org.osgi.service.dmt.DmtException;
 
 /**
- * Provides atomic read-write access to the part of the tree handled by this
- * plugin.
+ * Provides atomic read-write access to the part of the tree handled by the
+ * plugin that created this session.
  */
 public interface TransactionalDataSession extends ReadWriteDataSession {
 

@@ -100,8 +100,8 @@ public class Acl implements Cloneable {
      * Create an instance of the ACL from its canonic string representation.
      * 
      * @param acl The string representation of the ACL as defined in OMA DM. If
-     *        <code>null</code> then it represents an empty list of principals
-     *        with no permissions.
+     *        <code>null</code> or empty then it represents an empty list of
+     *        principals with no permissions.
      * @throws IllegalArgumentException if acl is not a valid OMA DM ACL string
      */
     public Acl(String acl)
@@ -352,8 +352,8 @@ public class Acl implements Cloneable {
     /**
      * Get the list of principals who have any kind of permissions on this node.
      * The list only includes those principals that have been explicitly
-     * assigned permissions, globally set permissions naturally apply to all
-     * other principals as well.
+     * assigned permissions (so &quot;*&quot; is never returned), globally set 
+     * permissions naturally apply to all other principals as well.
      * 
      * @return The array of principals having permissions on this node.
      */
