@@ -18,12 +18,14 @@ import java.security.*;
 /**
  * The <code>DeploymentCustomizerPermission</code> permission gives the right to 
  * Resource Processors to access a bundle's (residing in a Deployment Package) private area.<p>
+ * 
  * The Resource Processor that has this permission is allowed to access the bundle's 
  * private area by calling the {@link DeploymentSession#getDataFile} method during the session 
  * (see {@link DeploymentSession}). After the session ends the FilePermissions are withdrawn.
  * The Resource Processor will have <code>FilePermission</code> with "read", "write" and "delete" 
  * actions for the returned {@link java.io.File} that represents the the base directory of the 
  * persistent storage area and its subdirectories.<p>
+ * 
  * The actions string is converted to lowercase before processing.
  */
 public class DeploymentCustomizerPermission extends Permission {
@@ -55,17 +57,21 @@ public class DeploymentCustomizerPermission extends Permission {
     /**
      * Creates a new <code>DeploymentCustomizerPermission</code> object for the given 
      * <code>name</code> and <code>action</code>.<p>
+     * 
      * The name parameter is a filter string. This filter has the same syntax as an OSGi filter 
      * but only the "name" attribute is allowed. The value of the attribute  
      * is a bundle Symbolic Name that represents a bundle. The only allowed action is the 
-     * "privatearea" action. E.g.<p>
+     * "privatearea" action. E.g.
+     * 
      * <pre>
      * 		Permission perm = new DeploymentCustomizerPermission("(name=com.acme.bundle)", "privatearea");
      * </pre>
+     * 
      * The Resource Processor that has this permission is allowed to access the bundle's 
      * private area by calling the {@link DeploymentSession#getDataFile} method. The 
      * Resource Processor will have <code>FilePermission</code> with "read", "write" and "delete" 
      * actions for the returned {@link java.io.File} and its subdirectories.
+     * 
      * @param name Symbolic name of the target bundle, must not be null.
      * @param actions Action string (only the "privatearea" action is valid), must not be null.
      * @throws IllegalArgumentException if the filter is invalid, the list of actions 
@@ -95,10 +101,12 @@ public class DeploymentCustomizerPermission extends Permission {
     /**
      * Checks two DeploymentCustomizerPermission objects for equality. 
      * Two permission objects are equal if: <p>
-     * - their target filters 
-     * are equal and<p>
+     * 
+     * - their target filters are equal (semantically and not character by 
+     *   character) and<p>
      * - their actions are the same. 
-     * @param obj The reference object with which to compare.
+     * 
+     * @param obj the reference object with which to compare.
      * @return true if the two objects are equal.
      * @see java.lang.Object#equals(java.lang.Object)
      */
@@ -113,6 +121,7 @@ public class DeploymentCustomizerPermission extends Permission {
 
     /**
      * Returns hash code for this permission object.
+     * 
      * @return Hash code for this permission object.
      * @see java.lang.Object#hashCode()
      */
@@ -122,8 +131,8 @@ public class DeploymentCustomizerPermission extends Permission {
 
     /**
      * Returns the String representation of the action list.
-     * @return Action list of this permission instance. This is a comma-separated 
-     * list that reflects the action parameter of the constructor.
+     * 
+     * @return Action list of this permission instance. It is always "privatearea".
      * @see java.security.Permission#getActions()
      */
     public String getActions() {
@@ -131,13 +140,16 @@ public class DeploymentCustomizerPermission extends Permission {
     }
 
     /**
-     * Checks if this DeploymentCustomizerPermission would imply the parameter permission.<p>
+     * Checks if this DeploymentCustomizerPermission would imply the parameter permission.
      * This permission implies another DeploymentCustomizerPermission permission if:<p>
+     * 
      * both of them has the "privatearea" action (other actions are not allowed) and<p>
      * their filters (only name attribute is allowed in the filters) match similarly to 
      * {@link DeploymentAdminPermission}.<p>
+     * 
      * The value of the name attribute means bundle symbolic name and not deployment package 
      * symbolic name here!
+     * 
      * @param permission Permission to check.
      * @return true if this DeploymentCustomizerPermission object implies the 
      * specified permission.
@@ -154,7 +166,8 @@ public class DeploymentCustomizerPermission extends Permission {
 
     /**
      * Returns a new PermissionCollection object for storing DeploymentCustomizerPermission 
-     * objects. 
+     * objects.
+     *  
      * @return The new PermissionCollection.
      * @see java.security.Permission#newPermissionCollection()
      */

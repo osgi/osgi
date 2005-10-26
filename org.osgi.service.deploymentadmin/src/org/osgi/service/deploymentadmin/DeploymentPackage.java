@@ -32,6 +32,7 @@ import org.osgi.framework.Version;
   * manipulate the same artifact. Obviously, this means that a bundle cannot be in two 
   * different deployment packagess. Any violation of this no overlap rule is considered 
   * an error and the install or update of the offending deployment package must be aborted.<p>
+  * 
   * The Deployment Admin service should do as much as possible to ensure transactionality. 
   * It means that if a deployment package installation, update or removal (uninstall) fails 
   * all the side effects caused by the process should be disappeared  and the system 
@@ -41,7 +42,17 @@ public interface DeploymentPackage {
  
 	/**
 	 * Gives back the state of the deployment package (it is stale or not).
-     * After uninstall of a deployment package it becomes stale.
+     * After uninstall of a deployment package it becomes stale. Any active method calls to a 
+     * stale deployment package raise {@link IllegalStateException}.
+     * Active methods are the following:<p>
+     * 
+     * <ul>
+     * 		<li>{@link #getBundle(String)}</li>
+     * 		<li>{@link #getResourceProcessor(String)}</li>
+     * 		<li>{@link #uninstall()}</li>
+     * 		<li>{@link #uninstallForced()}</li>
+     * </ul>
+     * 
 	 * @return <code>true</code> if the deployment package is stale. <code>false</code>
 	 *         otherwise
      * @see #uninstall
@@ -50,7 +61,7 @@ public interface DeploymentPackage {
     boolean isStale();
 	  
 	/**
-	 * Returns the name of the deployment package.
+	 * Returns the deployment pacakage symbolic name of the package.
 	 * @return The name of the deployment package. It cannot be null.
 	 */
 	String getName();
@@ -67,6 +78,7 @@ public interface DeploymentPackage {
 	 * bundles. Its size is equal to the number of the bundles in the deployment package. The size 
 	 * of the second dimension is 2. Its 0. value is the symbolic name and the 1. value is 
 	 * the version. E.g.:
+	 * 
 	 * <pre>
      *         String[][] bundles = dp.getBundleSymNameVersionPairs();
      *         for (int i = 0; i < bundles.length; i++) {
@@ -75,6 +87,7 @@ public interface DeploymentPackage {
      *             // ...
      *         }	 
      * </pre>
+     * 
  	 * @return The two-dimensional string array corresponding to bundle symbolic name 
 	 *         and version pairs. It cannot be null but the its length can be zero.
 	 */
@@ -85,28 +98,33 @@ public interface DeploymentPackage {
      * to the bundle's symbolic name passed in the <code>symbolicName</code> parameter.
      * This method will return null for request for bundles that are not part 
      * of this deployment package.<p>
+     * 
      * As this instance is transient (i.e. a bundle can be removed at any time because of the 
      * dynamic nature of the OSGi platform), this method may also return null if the bundle
      * is part of this deployment package, but is not currently defined to the framework.
+     * 
      * @param symbolicName the symbolic name of the requested bundle
      * @return The <code>Bundle</code> instance for a given bundle symbolic name.
      */
     Bundle getBundle(String symbolicName);
     
     /**
-     * Returns an array of strings representing the resources that are specified in 
-     * the  manifest of this deployment package. A string element of the array is the 
-     * same as the value of the "Name" attribute in the manifest. The array contains 
-     * the bundles as well.<p>
+     * Returns an array of strings representing the resources (including bundles) that 
+     * are specified in the  manifest of this deployment package. A string element of the 
+     * array is the same as the value of the "Name" attribute in the manifest. The array 
+     * contains the bundles as well.<p>
+     * 
      * E.g. if the "Name" section of the resource (or individual-section as the 
      * <a href="http://java.sun.com/j2se/1.4.2/docs/guide/jar/jar.html#Manifest%20Specification">Manifest Specification</a> 
      * calls it) in the manifest is the following
-     * ### Does this list include the bundles?
+
      * <pre>
      *     Name: foo/readme.txt
      *     Resource-Processor: foo.rp
      * </pre>
+     * 
      * then the corresponding array element is the "foo/readme.txt" string.
+     * 
      * @return The string array corresponding to resources. It cannot be null but its 
      *         length can be zero.
      */
@@ -115,12 +133,14 @@ public interface DeploymentPackage {
     /**
      * At the time of deployment, resource processor service instances are located to 
      * resources contained in a deployment package.<p> 
+     * 
      * This call returns a service reference to the corresponding service instance.
      * If the resource is not part of the deployment package or this call is made during 
      * deployment, prior to the locating of the service to process a given resource, null will 
      * be returned. Services can be updated after a deployment package has been deployed. 
      * In this event, this call will return a reference to the updated service, not to the 
      * instance that was used at deployment time.
+     * 
      * @param resource the name of the resource (it is the same as the value of the "Name" 
      *        attribute in the deployment package's manifest) 
      * @return resource processor for the resource 
@@ -129,7 +149,11 @@ public interface DeploymentPackage {
 
     /**
      * Returns the requested deployment package manifest header from the main section. 
-     * Header names are case insensitive. If the header doesn't exist it returns null.  
+     * Header names are case insensitive. If the header doesn't exist it returns null.<p>
+     * 
+     * If the header is localized then the localized value is returned (see OSGi Service Platform,
+     * Mobile Specification Release 4 - Localization related chapters).
+     * 
      * @param header the requested header
      * @return the value of the header
      */
@@ -138,7 +162,11 @@ public interface DeploymentPackage {
     /**
      * Returns the requested deployment package manifest header from the name 
      * section determined by the path parameter. Header names are case insensitive. 
-     * If the header doesn't exist it returns null.
+     * If the header doesn't exist it returns null.<p>
+     * 
+     * If the header is localized then the localized value is returned (see OSGi Service Platform,
+     * Mobile Specification Release 4 - Localization related chapters).
+
      * @param resource the name of the resoure (it is the same as the value of the "Name" 
      *        attribute in the deployment package's manifest)
      * @param header the requested header
@@ -148,9 +176,11 @@ public interface DeploymentPackage {
     
 	/**
 	  * Uninstalls the deployment package. After uninstallation, the deployment package 
-	  * object becomes stale. This can be checked by using <code>DeploymentPackage.getId()</code>, 
-	  * which will return a -1 when stale. {@link DeploymentAdminPermission}("&lt;filter&gt;", 
-	  * "uninstall") is needed for this operation.   
+	  * object becomes stale. This can be checked by using {@link #isStale()}, 
+	  * which will return <code>true</code> when stale.<p>
+	  * 
+	  * {@link DeploymentAdminPermission}("&lt;filter&gt;", "uninstall") is needed for this operation.
+	  *    
 	  * @throws DeploymentException if the deployment package could not be successfully uninstalled.
 	  * @throws SecurityException if access is not permitted based on the current security policy. 
 	  */
@@ -158,26 +188,35 @@ public interface DeploymentPackage {
  
     /**
      * This method is called to completely uninstall a deployment package, which couldn't be uninstalled
-     * using traditional means due to exceptions. {@link DeploymentAdminPermission}("&lt;filter&gt;", 
-     * "uninstallForced") is needed for this operation.<p>
+     * using traditional means ({@link #uninstall()}) due to exceptions. After uninstallation, the deployment 
+     * package object becomes stale. This can be checked by using {@link #isStale()}, 
+     * which will return <code>true</code> when stale.<p>
+     *  
+     * {@link DeploymentAdminPermission}("&lt;filter&gt;", "uninstallForced") is needed for this operation.<p>
+     * 
      * The method forces removal of the Deployment Package from the repository maintained by the 
      * Deployment Admin service. This method follows the same steps as {@link #uninstall}. However, 
      * any errors or the absence of Resource Processor services are ignored, they must not cause a roll back.
      * These errors should be logged.
+     * 
      * @return true if the operation was successful
+     * @throws DeploymentException only {@link DeploymentException#CODE_TIMEOUT} and 
+     *         {@link DeploymentException#CODE_CANCELLED} can be thrown
      * @throws SecurityException if access is not permitted based on the current security policy.
      */  
-    boolean uninstallForced();  
+    boolean uninstallForced() throws DeploymentException;  
  
     /**
      * Returns a hash code value for the object.
+     * 
      * @return a hash code value for this object
      */
     int hashCode();
   
     /**
      * Indicates whether some other object is "equal to" this one. Two deployment packages 
-     * are equal if they have the same name and version.
+     * are equal if they have the same deployment package symbolicname and version.
+     * 
      * @param other the reference object with which to compare.
      * @return true if this object is the same as the obj argument; false otherwise.
      */

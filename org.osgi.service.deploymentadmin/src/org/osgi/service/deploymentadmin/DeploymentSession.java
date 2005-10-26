@@ -10,14 +10,33 @@
 package org.osgi.service.deploymentadmin;
 
 /**
- * The session interface represents a currently running deployment session and provides 
- * information about the objects involved in the processing of the deployment package 
- * currently being deployed.<p>
+ * The session interface represents a currently running deployment session 
+ * (install/update/uninstall).<p>
+ * 
  * When a deployment package is installed the target package, when uninstalled the 
- * source package is an empty deployment package. The empty package has version 
- * <code>0.0.0</code>, its name is an empty string, it has no bundles and no resources.
- * The empty deployment package is a virtual entity it doesn't appear for the outside world.
- * It is only visible on the DeploymentSession interface used by Resource processors. 
+ * source package is an empty deployment package. The empty deployment package is a virtual 
+ * entity it doesn't appear for the outside world. It is only visible on the 
+ * DeploymentSession interface used by Resource processors. Although  the empty package 
+ * is only visible for Resource Processors it has the following characteristics:<p>
+ *  
+ * <ul>
+ *     <li>has version 0.0.0</li>
+ *     <li>its name is an empty string</li>
+ *     <li>it is stale</li>
+ *     <li>it has no bundles
+ *     		(see {@link DeploymentPackage#getBundle(String)})</li>
+ *     <li>it has no resources
+ *     		(see {@link DeploymentPackage#getResources()})</li>
+ *     <li>it has no headers (see 
+ *     		{@link DeploymentPackage#getHeader(String)})</li>
+ *     <li>it has no resource headers (see 
+ *     		{@link DeploymentPackage#getResourceHeader(String, String)})</li>
+ *     <li>{@link DeploymentPackage#uninstall()} throws
+ *     		{@link java.lang.IllegalStateException}</li>
+ *     <li>{@link DeploymentPackage#uninstallForced()} throws
+ *     		{@link java.lang.IllegalStateException}</li>
+ * </ul>
+ *  
  */
 public interface DeploymentSession {
     
@@ -26,6 +45,7 @@ public interface DeploymentSession {
      * the <code>DeploymentPackage</code> instance for the installed deployment package. If the 
      * deployment action is an install, this call returns the empty deploymet package (see
      * {@link DeploymentPackage}).
+     * 
      * @return the target deployment package
      * @see DeploymentPackage
      */
@@ -36,6 +56,7 @@ public interface DeploymentSession {
      * the <code>DeploymentPackage</code> instance that corresponds to the deployment package
      * being streamed in for this session. If the deployment action is an uninstall, this call 
      * returns the empty deploymet package (see {@link DeploymentPackage}).
+     * 
      * @return the source deployment package
      * @see DeploymentPackage
      */ 
@@ -46,9 +67,11 @@ public interface DeploymentSession {
      * either the source or the target deployment packages. The permission set the caller 
      * resource processor needs to manipulate the private area of the bundle is set by the 
      * Deployment Admin on the fly when this method is called. The permissions remain availble 
-     * during the deployment action only.
-     * <code>DeploymentCustomizerPermission("&lt;filter&gt;", "privatearea")</code> is also 
+     * during the deployment action only.<p>
+     * 
+     * {@link DeploymentCustomizerPermission}("&lt;filter&gt;", "privatearea")</code> is also 
 	 * needed for this operation.
+     * 
      * @param bundle the bundle the private area belongs to
      * @return file representing the private area of the bundle. It cannot be null.
      * @throws SecurityException if the caller is not the customizer of the corresponding 

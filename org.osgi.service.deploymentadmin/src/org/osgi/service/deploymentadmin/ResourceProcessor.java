@@ -16,8 +16,33 @@ import java.io.InputStream;
   * ResourceProcessor interface is implemented by processors handling resource files
   * in deployment packages. The ResourceProcessor interfaces are exported as OSGi services.
   * Bundles exporting the service may arrive in the deployment package (customizers) or may be 
-  * preregistered. Resource processors has to define the <code>service.pid</code> standard 
-  * OSGi service property which should be a unique string.
+  * preregistered (they are installed prevoiusly). Resource processors has to define the 
+  * <code>service.pid</code> standard OSGi service property which should be a unique string.<p>
+  * 
+  * The order of the method calls on a particular Resource Processor in case of install/update 
+  * session is the following:<p>
+  * 
+  * <ol>
+  * 	<li>{@link #begin(DeploymentSession)}</li>
+  * 	<li>{@link #process(String, InputStream)} till there are resources to process 
+  * 		or {@link #rollback()} and the further steps are ignored</li>
+  * 	<li>...</li>
+  * 	<li>{@link #dropped(String)} till there are resources to drop
+  * 		or {@link #rollback()} and the further steps are ignored</li>
+  * 	<li>...</li>
+  * 	<li>{@link #prepare()}</li>
+  * 	<li>{@link #commit()} or {@link #rollback()}</li>
+  * </ol>
+  * 
+  * The order of the method calls on a particular Resource Processor in case of uninstall 
+  * session is the following:<p>
+  * 
+  * <ol>
+  * 	<li>{@link #begin(DeploymentSession)}</li>
+  * 	<li>{@link #dropAllResources()}	or {@link #rollback()} and the further steps are ignored</li>
+  * 	<li>{@link #prepare()}</li>
+  * 	<li>{@link #commit()} or {@link #rollback()}</li>
+  * </ol>
   */
 public interface ResourceProcessor {
 
@@ -25,6 +50,7 @@ public interface ResourceProcessor {
 	  * Called when the Deployment Admin starts a new operation on the given deployment package, 
 	  * and the resource processor is associated a resource within the package. Only one 
 	  * deployment package can be processed at a time.
+	  * 
 	  * @param session object that represents the current session to the resource processor
 	  */
     void begin(DeploymentSession session);
@@ -32,6 +58,7 @@ public interface ResourceProcessor {
     /**
      * Called when a resource is encountered in the deployment package for which this resource 
      * processor has been  selected to handle the processing of that resource.
+     * 
      * @param name The name of the resource relative to the deployment package root directory. 
      * @param stream The stream for the resource. 
      * @throws DeploymentException if the resource cannot be processed.
@@ -44,8 +71,9 @@ public interface ResourceProcessor {
 	  * the deployment package.  This provides an opportunity for the processor to cleanup any 
 	  * memory and persistent data being maintained for the particular resource.  
 	  * This method will only be called during "update" deployment sessions.
+	  * 
 	  * @param resource the name of the resource to drop (it is the same as the value of the 
-	  *                 "Name" attribute in the deployment package's manifest)
+	  *        "Name" attribute in the deployment package's manifest)
 	  * @throws DeploymentException if the resource is not allowed to be dropped.
 	  */
     void dropped(String resource) throws DeploymentException;
@@ -55,6 +83,7 @@ public interface ResourceProcessor {
      * This method will be called on all resource processors that are associated with resources 
      * in the deployment package being uninstalled. This provides an opportunity for the processor 
      * to cleanup any memory and persistent data being maintained for the deployment package.
+     * 
      * @throws DeploymentException if all resources could not be dropped.
      */
     void dropAllResources() throws DeploymentException;
@@ -66,6 +95,7 @@ public interface ResourceProcessor {
      * that it is not able to commit the changes, it has to raise a 
      * <code>DeploymentException</code> with {@link DeploymentException#CODE_PREPARE} exception 
      * code (see {@link DeploymentException}).
+     * 
      * @throws DeploymentException if the resource processor is able to determine it is 
      *         not able to commit.
      */
