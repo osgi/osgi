@@ -311,10 +311,10 @@ public class DeploymentSessionImpl implements DeploymentSession {
         
         closeTrackers();
         
-        if (numOfErrors > 0) {
+        /* TODO if (numOfErrors > 0) {
             throw new DeploymentException(DeploymentException.CODE_BUNDLE_START, 
                     numOfErrors + " bundle(s) cannot be started");
-        }
+        }*/
     }
     
     /*private void refreshPackages() {

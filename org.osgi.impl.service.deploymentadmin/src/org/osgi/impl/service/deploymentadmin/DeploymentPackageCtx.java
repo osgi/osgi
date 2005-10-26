@@ -66,7 +66,7 @@ public class DeploymentPackageCtx {
         da.uninstall(dp);
     }
 
-    public boolean uninstallForced(DeploymentPackageImpl dp) {
+    public boolean uninstallForced(DeploymentPackageImpl dp) throws DeploymentException {
         return da.uninstallForced(dp);
     }
 

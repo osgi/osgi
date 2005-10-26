@@ -430,9 +430,10 @@ public class DeploymentPackageImpl implements DeploymentPackage, Serializable {
 
     /**
      * @return
+     * @throws DeploymentException 
      * @see org.osgi.service.deploymentadmin.DeploymentPackage#uninstallForced()
      */
-    public boolean uninstallForced() {
+    public boolean uninstallForced() throws DeploymentException {
         checkStale();
         if (isSystem())
             throw new RuntimeException("\"System\" deployment package cannot be uninstalled");

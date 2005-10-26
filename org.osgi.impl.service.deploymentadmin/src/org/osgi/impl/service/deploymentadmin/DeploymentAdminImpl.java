@@ -222,9 +222,9 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
             } catch (DeploymentException e) {
                 // if CODE_BUNDLE_START exception was thrown we remeber this 
                 // but it doesn't mean that the operation has failed
-                if (e.getCode() != DeploymentException.CODE_BUNDLE_START)
+                // TODO if (e.getCode() != DeploymentException.CODE_BUNDLE_START)
                     throw e;
-                bundleStartException = e;
+                // TODO bundleStartException = e;
             }
             
             if (!session.isCancelled()) {
@@ -235,7 +235,7 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
 	            
 	            result = true;
             } else
-            	; // TODO throw new DeploymentException(DeploymentException.CODE_CENCELLED);
+            	throw new DeploymentException(DeploymentException.CODE_CANCELLED);
         } catch (DeploymentException e) {
             throw e;
         } catch (SecurityException e) {
@@ -854,7 +854,7 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
 	            save();
 	            result = true;
             } else
-            	; // TODO throw new DeploymentException(DeploymentException.CODE_CENCELLED);
+            	throw new DeploymentException(DeploymentException.CODE_CANCELLED);
         } catch (DeploymentException e) {
             throw e;
         } catch (Exception e) {
@@ -871,14 +871,8 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
      * about uninstallation of a Deployment Package 
      * (DeploymentPackageImpl.uninstallForced(DeploymentPackageImpl) was called).
      */
-    boolean uninstallForced(DeploymentPackageImpl dp) {
-        try {
-            waitIfBusy();
-        } catch (DeploymentException e) {
-        	// TODO allow to throw DeploymentException.CODE_TIMEOUT 
-            throw new RuntimeException("Timeout period (" + sessionTimeout + 
-                " ms) expired");
-        }
+    boolean uninstallForced(DeploymentPackageImpl dp) throws DeploymentException {
+        waitIfBusy();
         checkPermission(dp, DeploymentAdminPermission.ACTION_UNINSTALL);
         sendUninstallEvent(dp.getName());
         boolean result = false;
@@ -893,7 +887,7 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
 	            
 	            result = r;
             } else
-            	; //TODO throw new DeploymentException(DeploymentException.CODE_CENCELLED);
+            	throw new DeploymentException(DeploymentException.CODE_CANCELLED);
         } catch (Exception e) {
             logger.log(e);
         } finally {
@@ -926,5 +920,10 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
     PluginDeployed getDeployedPlugin() {
         return pluginDeployed;
     }
+
+	public DeploymentPackage getDeploymentPackage(Bundle arg0) {
+		// TODO
+		return null;
+	}
     
 }

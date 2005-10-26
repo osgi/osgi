@@ -61,8 +61,8 @@ public class DeplAlertSender {
 
     private static int getResultCodeToExceptionCode(int code) {
         switch (code) {
-            case DeploymentException.CODE_BUNDLE_START :
-                return PluginConstants.RESULT_BUNDLE_START_WARNING;
+            // TODO case DeploymentException.CODE_BUNDLE_START :
+            //    return PluginConstants.RESULT_BUNDLE_START_WARNING;
             case DeploymentException.CODE_TIMEOUT :
                 return PluginConstants.RESULT_DEPL_TIMEOUT;
             case DeploymentException.CODE_ORDER_ERROR :
