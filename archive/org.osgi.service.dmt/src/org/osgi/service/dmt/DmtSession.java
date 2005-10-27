@@ -681,7 +681,7 @@ public interface DmtSession {
      *         <code>DmtPermission</code> for the parent node with the Add
      *         action present 
      * @see #createInteriorNode(String)
-     * @see <a href="http://member.openmobilealliance.org/ftp/public_documents/dm/Permanent_documents/OMA-TS-DM-TND-V1_2-20050615-C.zip">
+     * <a href="http://member.openmobilealliance.org/ftp/public_documents/dm/Permanent_documents/OMA-TS-DM-TND-V1_2-20050615-C.zip">
      *         OMA Device Management Tree and Description v1.2 draft</a> 
      */
     void createInteriorNode(String nodeUri, String type) throws DmtException;
