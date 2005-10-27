@@ -893,7 +893,7 @@ public interface DmtSession {
      *         <code>DmtPermission</code> for the parent node with the Add
      *         action present 
      * @see #createLeafNode(String, DmtData)
-     * @see <a href="http://www.ietf.org/rfc/rfc2045.txt">RFC 2045</a> 
+     * <a href="http://www.ietf.org/rfc/rfc2045.txt">RFC 2045</a> 
      */
     void createLeafNode(String nodeUri, DmtData value, String mimeType)
                     throws DmtException;
@@ -1196,8 +1196,8 @@ public interface DmtSession {
      *         in case of local sessions, if the caller does not have 
      *         <code>DmtPermission</code> for the node with the Replace action
      *         present
-     * @see <a href="http://www.ietf.org/rfc/rfc2045.txt">RFC 2045</a> 
-     * @see <a href="http://member.openmobilealliance.org/ftp/public_documents/dm/Permanent_documents/OMA-TS-DM-TND-V1_2-20050615-C.zip">
+     * <a href="http://www.ietf.org/rfc/rfc2045.txt">RFC 2045</a> 
+     * <a href="http://member.openmobilealliance.org/ftp/public_documents/dm/Permanent_documents/OMA-TS-DM-TND-V1_2-20050615-C.zip">
      *         OMA Device Management Tree and Description v1.2 draft</a> 
      */
     void setNodeType(String nodeUri, String type) throws DmtException;
