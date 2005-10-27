@@ -195,6 +195,7 @@ public class BundleTest extends TestCase {
 		public String location(String symbName, String version) { return location(symbName,version); }
 		public boolean cancel() { throw new IllegalStateException(); }
 		public DeploymentPackage getDeploymentPackage(String symbName) { throw new IllegalStateException(); }
+		public DeploymentPackage getDeploymentPackage(Bundle bundle) { throw new IllegalStateException(); }
 	}
 	
 	public final class DummyDeploymentPackage implements DeploymentPackage {
