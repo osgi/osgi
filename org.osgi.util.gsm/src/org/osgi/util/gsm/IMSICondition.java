@@ -38,22 +38,31 @@ public class IMSICondition {
 	 * Creates an IMSI condition object.
 	 * 
 	 * @param bundle ignored, as the IMSI number is the same for all bundles.
-	 * @param conditionInfo contains the IMSI value of the subscriber identity. Its
-	 * 		{@link ConditionInfo#getArgs()} method should return a String array with one String,
-	 * 		the IMSI value. The IMSI must be 15 digits, no hypens.
-	 * @throws NullPointerException if one of the parameters is null.
-	 * @throws IllegalArgumentException if the imsi is not a string of 15 digits.
+	 * @param conditionInfo contains the IMSI value to match the device's IMSI against. Its
+	 * 		{@link ConditionInfo#getArgs()} method should return a String array with one value, the
+	 * 		IMSI string. The IMSI is 15 digits without hypens. Limited pattern matching is allowed,
+	 * 		then the string is 0 to 14 digits, followed by an asterisk(<code>*</code>).
+	 * @return An IMSICondition object, that can tell whether its IMSI number matches that of the device.
+	 * 			If the number contains an asterisk(<code>*</code>), then the beginning
+	 * 			of the IMSI is compared to the pattern.
+	 * @throws NullPointerException if one of the parameters is <code>null</code>.
+	 * @throws IllegalArgumentException if the IMSI is not a string of 15 digits, or 
+	 * 		0 to 14 digits with an <code>*</code> at the end.
 	 */
 	public static Condition getCondition(Bundle bundle, ConditionInfo conditionInfo) {
 		if (bundle==null) throw new NullPointerException("bundle");
 		if (conditionInfo==null) throw new NullPointerException("conditionInfo");
 		String imsi = conditionInfo.getArgs()[0];
 		if (imsi==null) throw new NullPointerException("imsi");
-		if (imsi.length()!=15) throw new IllegalArgumentException("not a valid imei: "+imsi);
+		if (imsi.length()<15) {
+			if (!imsi.endsWith("*")) throw new IllegalArgumentException("not a valid imsi, and not a wildcard: "+imsi);
+			imsi = imsi.substring(0,imsi.length()-1);
+		}
+		if (imsi.length()>15) throw new IllegalArgumentException("imsi too long: "+imsi);
 		for(int i=0;i<imsi.length();i++) {
 			int c = imsi.charAt(i);
 			if (c<'0'||c>'9') throw new IllegalArgumentException("not a valid imei: "+imsi);
 		}
-		return (imsi.equals(IMSICondition.imsi))?Condition.TRUE:Condition.FALSE;
+		return (IMSICondition.imsi.startsWith(imsi))?Condition.TRUE:Condition.FALSE;
 	}
 }

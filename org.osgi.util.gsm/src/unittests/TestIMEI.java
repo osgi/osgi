@@ -89,4 +89,13 @@ public class TestIMEI extends TestCase {
 			fail();
 		} catch (IllegalArgumentException e) {}
 	}
+	
+	public void testWildcards() throws Exception {
+		Condition imei = (Condition) IMEICondition.getCondition(bundle,new ConditionInfo("",new String[]{SYSTEM_IMEI.substring(0,5)+"*"}));
+		assertTrue(imei.isSatisfied());	
+
+		imei = (Condition) IMEICondition.getCondition(bundle,new ConditionInfo("",new String[]{"777*"}));
+		assertFalse(imei.isSatisfied());
+		
+	}
 }

@@ -42,20 +42,28 @@ public class IMEICondition {
 	 * 					and thus the same for all bundles.
 	 * @param conditionInfo contains the IMEI value to match the device's IMEI against. Its
 	 * 		{@link ConditionInfo#getArgs()} method should return a String array with one value, the
-	 * 		IMEI string. The IMEI  must be 15 digits, no hypens.
+	 * 		IMEI string. The IMEI is 15 digits without hypens. Limited pattern matching is allowed,
+	 * 		then the string is 0 to 14 digits, followed by an asterisk(<code>*</code>).
 	 * @return An IMEICondition object, that can tell whether its IMEI number matches that of the device.
+	 * 			If the number contains an asterisk(<code>*</code>), then the beginning
+	 * 			of the imei is compared to the pattern.
 	 * @throws NullPointerException if one of the parameters is <code>null</code>.
-	 * @throws IllegalArgumentException if the IMEI is not a string of 15 digits.
+	 * @throws IllegalArgumentException if the IMEI is not a string of 15 digits, or 
+	 * 		0 to 14 digits with an <code>*</code> at the end.
 	 */
 	public static Condition getCondition(Bundle bundle, ConditionInfo conditionInfo) {
 		if (bundle==null) throw new NullPointerException("bundle");
 		String imei = conditionInfo.getArgs()[0];
 		if (imei==null) throw new NullPointerException("imei");
-		if (imei.length()!=15) throw new IllegalArgumentException("not a valid imei: "+imei);
+		if (imei.length()<15) {
+			if (!imei.endsWith("*")) throw new IllegalArgumentException("not a valid imei, and not a wildcard: "+imei);
+			imei = imei.substring(0,imei.length()-1);
+		}
+		if (imei.length()>15) throw new IllegalArgumentException("imei too long: "+imei);
 		for(int i=0;i<imei.length();i++) {
 			int c = imei.charAt(i);
 			if (c<'0'||c>'9') throw new IllegalArgumentException("not a valid imei: "+imei);
 		}
-		return imei.equals(IMEICondition.imei)?Condition.TRUE:Condition.FALSE;
+		return IMEICondition.imei.startsWith(imei)?Condition.TRUE:Condition.FALSE;
 	}
 }

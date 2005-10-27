@@ -28,6 +28,7 @@ import org.osgi.framework.BundleException;
 import org.osgi.framework.ServiceReference;
 import org.osgi.service.condpermadmin.Condition;
 import org.osgi.service.condpermadmin.ConditionInfo;
+import org.osgi.util.gsm.IMEICondition;
 import org.osgi.util.gsm.IMSICondition;
 import junit.framework.TestCase;
 
@@ -88,5 +89,14 @@ public class TestIMSI extends TestCase {
 			IMSICondition imsi = (IMSICondition) IMSICondition.getCondition(bundle,new ConditionInfo("",new String[]{"12345678901234a"}));
 			fail();
 		} catch (IllegalArgumentException e) {}
+	}
+
+	public void testWildcards() throws Exception {
+		Condition IMSI = (Condition) IMSICondition.getCondition(bundle,new ConditionInfo("",new String[]{SYSTEM_IMSI.substring(0,5)+"*"}));
+		assertTrue(IMSI.isSatisfied());	
+
+		IMSI = (Condition) IMSICondition.getCondition(bundle,new ConditionInfo("",new String[]{"777*"}));
+		assertFalse(IMSI.isSatisfied());
+		
 	}
 }
