@@ -87,6 +87,13 @@ public interface EventConstants {
 	/**
 	 * Must be equal to the name of the Exception class.
 	 */
+	public static final String	EXCEPTION_CLASS		= "exception.class";
+	
+	/**
+	 * Must be equal to the name of the Exception class. This constant was 
+	 * spelled wrong.
+	 * @deprecated
+	 */
 	public static final String	EXECPTION_CLASS		= "exception.class";
 
 	/**
