@@ -22,7 +22,14 @@ import org.osgi.service.condpermadmin.ConditionInfo;
  *  
  */
 public class UserPromptCondition implements Condition {
+	
+	/**
+	 * @skip
+	 */
 	protected static interface UserPromptConditionFactory {
+		/**
+		 * @skip
+		 */
 		public UserPromptCondition getInstance(
 				Bundle bundle,
 				String levels,
@@ -32,6 +39,9 @@ public class UserPromptCondition implements Condition {
 	}
 
 	private static UserPromptConditionFactory factory = null;
+	/**
+	 * @skip
+	 */
 	protected static void setFactory(UserPromptConditionFactory factory) {
 		SecurityManager sm = System.getSecurityManager();
 		if (sm!=null) {
@@ -46,6 +56,10 @@ public class UserPromptCondition implements Condition {
 	private final String catalogName;
 	private final String message;
 	private UserPromptCondition realUserPromptCondition;
+	
+	/**
+	 * @skip
+	 */
 	protected static UserPromptCondition unWrap(UserPromptCondition c) {
 		if (c.realUserPromptCondition==null) return c;
 		return c.realUserPromptCondition;
@@ -124,6 +138,10 @@ public class UserPromptCondition implements Condition {
 		this.message=message;
 	}
 	
+	/**
+	 * @skip
+	 */
+
 	protected UserPromptCondition() {
 		bundle=null;
 		levels=null;
