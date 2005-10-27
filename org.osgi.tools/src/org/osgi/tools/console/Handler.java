@@ -189,7 +189,7 @@ class Handler extends Thread {
 	}
 
 	public static String toString(int n, Bundle b) {
-		return spaces(n) + justify(b.getBundleId() + " ", 4, 'L') + " "
+		return spaces(n) + justify(b.getBundleId() + " ", 8, 'L') + " "
 				+ justify(status(b), 12, 'L') + justify(getName(b), 60, 'L');
 	}
 

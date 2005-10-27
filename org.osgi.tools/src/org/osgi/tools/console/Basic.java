@@ -38,12 +38,12 @@ public class Basic implements CommandProvider {
 			_password = props.getProperty("console.password");
 		}
 		catch (Exception _e) {
-			//   Ignored on purpose
+			// Ignored on purpose
 		}
 	}
 
 	//
-	//	Sets the console to ascii (normal) mode. Lines are terminated with \r\n.
+	// Sets the console to ascii (normal) mode. Lines are terminated with \r\n.
 	//
 	public Object _ascii(CommandInterpreter intp) throws Exception {
 		intp.setVariable("eol", "\r\n");
@@ -51,7 +51,7 @@ public class Basic implements CommandProvider {
 	}
 
 	//
-	//	Sets the console to binary mode. Lines are terminated with CTRL-A instead
+	// Sets the console to binary mode. Lines are terminated with CTRL-A instead
 	// of \r\n.
 	//  
 	public Object _bin(CommandInterpreter intp) throws Exception {
@@ -77,22 +77,23 @@ public class Basic implements CommandProvider {
 		return pwd;
 	}
 
-	public Object _decompile( CommandInterpreter intp ) throws InvalidSyntaxException {
+	public Object _decompile(CommandInterpreter intp)
+			throws InvalidSyntaxException {
 		ServiceReference[] refs = _context.getServiceReferences(null,
 				"(service.id=" + intp.nextArgument() + ")");
-		for ( int i=0; refs!= null && i<refs.length; i++ ) {
+		for (int i = 0; refs != null && i < refs.length; i++) {
 			Object o = _context.getService(refs[i]);
-			ByteArrayOutputStream out= new ByteArrayOutputStream();
-			PrintWriter pw= new PrintWriter( new OutputStreamWriter(out));
-			decompile(pw,o);
+			ByteArrayOutputStream out = new ByteArrayOutputStream();
+			PrintWriter pw = new PrintWriter(new OutputStreamWriter(out));
+			decompile(pw, o);
 			pw.flush();
-			return new String( out.toByteArray() );
+			return new String(out.toByteArray());
 		}
 		return null;
 	}
 
 	public Object _defaultpermissions(CommandInterpreter intp) throws Exception {
-		PermissionAdmin	admin = getPermissionAdmin();
+		PermissionAdmin admin = getPermissionAdmin();
 		return admin.getDefaultPermissions();
 	}
 
@@ -129,7 +130,7 @@ public class Basic implements CommandProvider {
 		if (ref != null) {
 			PackageAdmin pa = (PackageAdmin) _context.getService(ref);
 			if (pa != null) {
-				ExportedPackage packs[] = pa.getExportedPackages((Bundle)null);
+				ExportedPackage packs[] = pa.getExportedPackages((Bundle) null);
 				for (int i = 0; packs != null && i < packs.length; i++) {
 					if (filter == null
 							|| packs[i].getName().indexOf(filter) >= 0) {
@@ -290,15 +291,14 @@ public class Basic implements CommandProvider {
 		return null;
 	}
 
-		
 	//
 	// List the resources in the jar file
 	//
 	public Object _listresources(CommandInterpreter intp) throws Exception {
 		Bundle b = getBundle(intp);
-		if ( b == null )
+		if (b == null)
 			return "No bundle specified";
-		
+
 		String prefix = intp.nextArgument();
 		if (prefix == null)
 			prefix = "";
@@ -332,21 +332,16 @@ public class Basic implements CommandProvider {
 		while (n != null) {
 			if (n.equalsIgnoreCase("debug"))
 				mask |= 1;
-			else
-				if (n.equalsIgnoreCase("info"))
-					mask |= 2;
-				else
-					if (n.equalsIgnoreCase("warning"))
-						mask |= 4;
-					else
-						if (n.equalsIgnoreCase("error"))
-							mask |= 8;
-						else
-							if (n.equalsIgnoreCase("all"))
-								mask |= 0xF;
-							else
-								if (n.equalsIgnoreCase("bundle"))
-									bundle = getBundle(intp);
+			else if (n.equalsIgnoreCase("info"))
+				mask |= 2;
+			else if (n.equalsIgnoreCase("warning"))
+				mask |= 4;
+			else if (n.equalsIgnoreCase("error"))
+				mask |= 8;
+			else if (n.equalsIgnoreCase("all"))
+				mask |= 0xF;
+			else if (n.equalsIgnoreCase("bundle"))
+				bundle = getBundle(intp);
 			n = intp.nextArgument();
 		}
 		if (mask == 0)
@@ -385,12 +380,12 @@ public class Basic implements CommandProvider {
 					break;
 			}
 		}
-		Collections.reverse( result );
+		Collections.reverse(result);
 		return result;
 	}
 
 	//
-	//	Login user
+	// Login user
 	//
 	public Object _login(CommandInterpreter intp) throws Exception {
 		String user = intp.nextArgument();
@@ -405,9 +400,6 @@ public class Basic implements CommandProvider {
 	public Object _ls(CommandInterpreter intp) throws IOException {
 		return _v(intp);
 	}
-	
-	
-	
 
 	public Object _lsb(CommandInterpreter intp) throws Exception {
 		Bundle[] bundles = _context.getBundles();
@@ -421,16 +413,16 @@ public class Basic implements CommandProvider {
 	}
 
 	public Object _permissions(CommandInterpreter intp) throws Exception {
-		PermissionAdmin	admin = getPermissionAdmin();
-		Bundle b= getBundle(intp);
-		if ( b != null ) {
+		PermissionAdmin admin = getPermissionAdmin();
+		Bundle b = getBundle(intp);
+		if (b != null) {
 			return admin.getPermissions(b.getLocation());
 		}
-		else  {
-			Vector	v = new Vector();
-			String [] locations = admin.getLocations();
-			for ( int i=0; locations!=null && i <locations.length; i++ ) {
-				v.add( admin.getPermissions(locations[i]));
+		else {
+			Vector v = new Vector();
+			String[] locations = admin.getLocations();
+			for (int i = 0; locations != null && i < locations.length; i++) {
+				v.add(admin.getPermissions(locations[i]));
 			}
 			return v;
 		}
@@ -456,7 +448,7 @@ public class Basic implements CommandProvider {
 		system.update();
 		return null;
 	}
-	
+
 	public Object _service(CommandInterpreter intp) throws Exception {
 		Vector all = new Vector();
 		StringBuffer sb = new StringBuffer();
@@ -519,14 +511,13 @@ public class Basic implements CommandProvider {
 					char c = (char) (0xFF & buffer[i]);
 					if (c == 0x0D || c == 0x0A)
 						sb.append(c);
-					else
-						if (c >= ' ' && c < 0x7F && c != '%')
-							sb.append(c);
-						else {
-							sb.append("%");
-							sb.append(nibble(c >> 4));
-							sb.append(nibble(c));
-						}
+					else if (c >= ' ' && c < 0x7F && c != '%')
+						sb.append(c);
+					else {
+						sb.append("%");
+						sb.append(nibble(c >> 4));
+						sb.append(nibble(c));
+					}
 				}
 				size = in.read(buffer);
 			}
@@ -568,7 +559,7 @@ public class Basic implements CommandProvider {
 			sb.append("service.id=" + refs[i].getProperty("service.id"));
 			sb.append("\r\n");
 			for (int j = 0; keys != null && j < keys.length; j++) {
-				//sb.append( " " );
+				// sb.append( " " );
 				sb.append(keys[j] + "=");
 				sb.append(Handler.toString(4, refs[i].getProperty(keys[j])));
 				sb.append("\r\n");
@@ -591,8 +582,7 @@ public class Basic implements CommandProvider {
 		b.start();
 		return b;
 	}
-	
-	
+
 	public Object _stop(CommandInterpreter intp) throws Exception {
 		Bundle b = getBundle(intp);
 		b.stop();
@@ -609,7 +599,7 @@ public class Basic implements CommandProvider {
 		Runtime.getRuntime().exec(sb.toString());
 		return null;
 	}
-	
+
 	public Object _threads(CommandInterpreter intp) throws Exception {
 		return getThreads();
 	}
@@ -617,7 +607,7 @@ public class Basic implements CommandProvider {
 	public Object _total(CommandInterpreter intp) {
 		return new Long(Runtime.getRuntime().totalMemory());
 	}
-	
+
 	public Object _type(CommandInterpreter intp) throws IOException {
 		StringBuffer sb = new StringBuffer();
 		File file = new File(intp.nextArgument());
@@ -625,27 +615,24 @@ public class Basic implements CommandProvider {
 			String list[] = file.list();
 			sb.append(Handler.toString(list));
 		}
-		else
-			if (!file.exists()) {
-				return intp.error("No Such File: " + file);
+		else if (!file.exists()) {
+			return intp.error("No Such File: " + file);
+		}
+		else {
+			FileInputStream in = new FileInputStream(file);
+			BufferedReader reader = new BufferedReader(
+					new InputStreamReader(in));
+			String line = reader.readLine();
+			while (line != null) {
+				sb.append(line + "\r\n");
+				line = reader.readLine();
 			}
-			else {
-				FileInputStream in = new FileInputStream(file);
-				BufferedReader reader = new BufferedReader(
-						new InputStreamReader(in));
-				String line = reader.readLine();
-				while (line != null) {
-					sb.append(line + "\r\n");
-					line = reader.readLine();
-				}
-				reader.close();
-				in.close();
-			}
+			reader.close();
+			in.close();
+		}
 		return sb.toString();
 	}
-	
-	
-	
+
 	public Object _uninstall(CommandInterpreter intp) throws Exception {
 		Bundle b = getBundle(intp);
 		b.uninstall();
@@ -709,66 +696,112 @@ public class Basic implements CommandProvider {
 		return sb.toString();
 	}
 
-	void decompile(PrintWriter pw, Class c ) {
+	void decompile(PrintWriter pw, Class c) {
 		pw.print("interface ");
 		pw.print(c.getName());
 		pw.println("{");
 		Field f[] = c.getFields();
-		for ( int i=0; i<f.length; i++ ) {
+		for (int i = 0; i < f.length; i++) {
 			pw.print("   ");
-			decompile(pw,f[i]);
+			decompile(pw, f[i]);
 			pw.println(";");
 		}
 		Method m[] = c.getMethods();
-		for ( int i=0; i<m.length; i++ ) {
+		for (int i = 0; i < m.length; i++) {
 			pw.print("   ");
-			decompile(pw,m[i]);
+			decompile(pw, m[i]);
 			pw.println(";");
 		}
 		pw.println("}");
 		PackageAdmin admin = getPackageAdmin();
-		if ( admin != null ) {
+		if (admin != null) {
 			Bundle b = admin.getBundle(c);
-			pw.println("loaded from " + Handler.getName(b));
+			if (b != null)
+				pw.println("loaded from " + Handler.getName(b));
 		}
 	}
 
-	void decompile(PrintWriter pw, Field f ) {
+	void decompile(PrintWriter pw, Field f) {
 		Class c = f.getType();
-		pw.print( simpleName(c));		
-		pw.print( " ");
-		pw.print( f.getName());
+		pw.print(simpleName(c));
+		pw.print(" ");
+		pw.print(f.getName());
 	}
 
-	void decompile(PrintWriter pw, Method m ) {
+	void decompile(PrintWriter pw, Method m) {
 		Class c = m.getReturnType();
-		pw.print( simpleName(c));
+		pw.print(simpleName(c));
 		pw.print(" ");
-		pw.print( m.getName() );
+		pw.print(m.getName());
 		pw.print("(");
 		Class parameters[] = m.getParameterTypes();
 		String del = "";
-		for ( int i=0; i<parameters.length; i++ ) {
+		for (int i = 0; i < parameters.length; i++) {
 			pw.print(del);
 			pw.print(simpleName(parameters[i]));
-			del = ",";		
+			del = ",";
 		}
-		pw.print(")");		
+		pw.print(")");
 	}
 
 	void decompile(PrintWriter pw, Object o) {
 		pw.println(o.getClass().getName());
-		Class clazzes[] = o.getClass().getInterfaces(); 
-		for ( int i=0; i<clazzes.length; i++ ) {
-			decompile(pw,clazzes[i]);
+		Class clazzes[] = o.getClass().getInterfaces();
+		for (int i = 0; i < clazzes.length; i++) {
+			decompile(pw, clazzes[i]);
 		}
+	}
+
+	public Object _call(CommandInterpreter intp) throws Exception {
+		ServiceReference[] refs = _context.getServiceReferences(null,
+				"(service.id=" + intp.nextArgument() + ")");
+
+		String call = intp.nextArgument();
+		for (int i = 0; refs != null && i < refs.length; i++) {
+			Object o = _context.getService(refs[i]);
+
+			Vector v = new Vector();
+			String arg;
+			while ((arg = intp.nextArgument()) != null) {
+				v.addElement(arg);
+			}
+			Object[] args = v.toArray();
+			Method methods[] = o.getClass().getMethods();
+			outer: for (int j = 0; j < methods.length; j++) {
+				if (methods[j].getName().equals(call)) {
+					Class types[] = methods[i].getParameterTypes();
+					Object parms[] = new Object[types.length];
+					if (types.length != args.length)
+						continue;
+
+					try {
+						for (int k = 0; k < types.length; k++) {
+							Constructor constructor = types[k]
+									.getConstructor(new Class[] {String.class});
+							if (constructor == null)
+								continue outer;
+
+							parms[k] = constructor
+									.newInstance(new Object[] {args[k]});
+						}
+
+						return methods[j].invoke(o, parms);
+					}
+					catch (Exception e) {
+						continue outer;
+					}
+				}
+			}
+		}
+		return null;
+
 	}
 
 	public Bundle getBundle(CommandInterpreter intp) {
 		String bundle = intp.nextArgument();
-		if ( bundle == null )
+		if (bundle == null)
 			return null;
-		
+
 		Object var = intp.getVariable(bundle);
 		if (var != null && var instanceof String)
 			bundle = (String) var;
@@ -845,8 +878,8 @@ public class Basic implements CommandProvider {
 	}
 
 	PermissionAdmin getPermissionAdmin() {
-		ServiceReference ref = _context.getServiceReference(PermissionAdmin.class
-				.getName());
+		ServiceReference ref = _context
+				.getServiceReference(PermissionAdmin.class.getName());
 		if (ref == null)
 			throw new RuntimeException("No Permission Admin available");
 		PermissionAdmin pa = (PermissionAdmin) _context.getService(ref);
@@ -892,18 +925,19 @@ public class Basic implements CommandProvider {
 		int arrays = 0;
 		int last = 0;
 		String s = c.getName();
-		for ( int i=0; i<s.length(); i++ ) {
-			char ch= s.charAt(i);
-			switch(ch) {
-				case '[': arrays++; break;
-				case '.': last = i+1;
+		for (int i = 0; i < s.length(); i++) {
+			char ch = s.charAt(i);
+			switch (ch) {
+				case '[' :
+					arrays++;
+					break;
+				case '.' :
+					last = i + 1;
 			}
 		}
-		return s.substring(last,s.length());
+		return s.substring(last, s.length());
 	}
-	
-	
-	
+
 	String status(Bundle b) {
 		switch (b.getState()) {
 			case Bundle.ACTIVE :
@@ -922,7 +956,7 @@ public class Basic implements CommandProvider {
 				return "UNKNOWN STATE";
 		}
 	}
-	
+
 	public Object toString(Object o) {
 		return Handler.toString(o);
 	}
