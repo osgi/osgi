@@ -73,15 +73,15 @@
 				<xsl:apply-templates select="description" mode="html"/>
 				<xsl:call-template name="descriptors"><xsl:with-param name="target" select="."/></xsl:call-template>
 				<xsl:if test="field">
-					<xsl:apply-templates select="field">
+					<xsl:apply-templates select="field[not(skip)]">
 						<xsl:sort select="@name"/>
 					</xsl:apply-templates>
 				</xsl:if>
 				<xsl:if test="method[@isConstructor]">
-					<xsl:apply-templates select="method[@isConstructor]"/>
+					<xsl:apply-templates select="method[@isConstructor and not(skip)]"/>
 				</xsl:if>
 				<xsl:if test="method[not(@isConstructor)]">
-					<xsl:apply-templates select="method[not(@isConstructor)]">
+					<xsl:apply-templates select="method[not(@isConstructor) and not(skip)]">
 						<xsl:sort select="@name"/>
 					</xsl:apply-templates>
 				</xsl:if>
