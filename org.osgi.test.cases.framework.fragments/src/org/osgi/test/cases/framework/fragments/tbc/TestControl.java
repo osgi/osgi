@@ -1062,29 +1062,20 @@ public class TestControl extends DefaultTestBundleControl implements
 	}
 
 	/**
-	 * Tests a fragment bundle where extension directive is ignored because host
-	 * bundle is not system.bundle
+	 * Tests a fragment bundle where extension directive is not system.bundle.
+	 * The installation of the fragment must fail.
 	 * 
 	 * @throws Exception if an error occurs or an assertion fails in the test.
 	 * @spec Bundle.installBundle(String)
 	 */
 	public void testBadExtensionBundle() throws Exception {
 		// installing bad extension bundle
-		Bundle tb4 = getContext().installBundle(getWebServer() + "tb4.jar");
-		// installing regular fragment
-		Bundle tb20 = getContext().installBundle(getWebServer() + "tb20.jar");
-		String class20 = "org.osgi.test.cases.framework.fragments.tb20.FooTB20";
-		String class4 = "org.osgi.test.cases.framework.fragments.tb4.FooTB4";
-
 		try {
-			// classloader must be the same
-			assertEquals("loaded by host bundle classloader", tb20.loadClass(
-					class20).getClassLoader(), tb20.loadClass(class4)
-					.getClassLoader());
-		}
-		finally {
-			tb4.uninstall();
-			tb20.uninstall();
+			Bundle tb4 = getContext().installBundle(getWebServer() + "tb4.jar");
+			// instalation should fail
+			failException("Expected installation failure " + tb4.getLocation(), BundleException.class);
+		} catch (BundleException e) {
+			// expected
 		}
 	}
 
