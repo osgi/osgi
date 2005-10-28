@@ -17,6 +17,9 @@
  */
 package org.osgi.impl.service.policy;
 
+import java.security.AccessControlContext;
+import java.security.AccessController;
+import java.security.PrivilegedAction;
 import java.util.Date;
 
 import org.osgi.service.component.ComponentContext;
@@ -56,9 +59,17 @@ public abstract class AbstractPolicyPlugin implements TransactionalDataSession {
 		return dmtAdmin.mangle(nodename);
 	}
 	
-	public AbstractPolicyPlugin(ComponentContext context) {
+	public AbstractPolicyPlugin(final ComponentContext context) {
 		ROOT = (String) context.getProperties().get("dataRootURIs");
-		dmtAdmin = (DmtAdmin) context.locateService("dmtAdmin");
+
+		// The plugin may be created in the security context of a Dmt principal,
+		// and it may not have ServicePermission, that's why the doPrivileged
+		AccessController.doPrivileged(new PrivilegedAction() {
+			public Object run() {
+				dmtAdmin = (DmtAdmin) context.locateService("dmtAdmin");
+				return null;
+			}
+		});
 		dirty=false;
 	}
 

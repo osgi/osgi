@@ -133,9 +133,17 @@ public class DmtPrincipalPlugin extends AbstractPolicyPlugin {
 	};
 	private final SetPrincipalPermissions setPrincipalPermissions = new SetPrincipalPermissions();
 
-	public DmtPrincipalPlugin(ComponentContext context) {
+	public DmtPrincipalPlugin(final ComponentContext context) {
 		super(context);
-		dmtPrincipalPermissionAdmin = (DmtPrincipalPermissionAdmin) context.locateService("dmtPrincipalPermissionAdmin");
+
+		// The plugin may be created in the security context of a Dmt principal,
+		// and it may not have ServicePermission, that's why the doPrivileged
+		AccessController.doPrivileged(new PrivilegedAction(){
+			public Object run() {
+				dmtPrincipalPermissionAdmin = (DmtPrincipalPermissionAdmin) context.locateService("dmtPrincipalPermissionAdmin");
+				return null;
+			}
+		});
 
 		currentState = new HashMap();
 
