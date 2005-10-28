@@ -14,8 +14,8 @@ package org.osgi.service.monitor;
  * The <code>MonitorListener</code> is used by <code>Monitorable</code>
  * services to send notifications when a <code>StatusVariable</code> value is
  * changed. The <code>MonitorListener</code> should register itself as a
- * service at the OSGi Service Registry. This interface is implemented by the
- * Monitor Admin component.
+ * service at the OSGi Service Registry. This interface must (only) be 
+ * implemented by the Monitor Admin component.
  */
 public interface MonitorListener {
     /**

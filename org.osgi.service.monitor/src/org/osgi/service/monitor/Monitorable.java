@@ -16,14 +16,13 @@ package org.osgi.service.monitor;
  * register themselves at the OSGi Service Registry. The
  * <code>MonitorAdmin</code> listens to the registration of
  * <code>Monitorable</code> services, and makes the information they provide
- * available also through the Device Management Tree (DMT).
+ * available also through the Device Management Tree (DMT) for remote access.
  * <p>
  * The monitorable service is identified by its PID string which must be a non-
  * <code>null</code>, non-empty string that conforms to the "symbolic-name"
  * definition in the OSGi core specification. This means that only the
  * characters [-_.a-zA-Z0-9] may be used. The length of the PID must not exceed
- * 20 characters. As the PID is used as a node name in the DMT, the restrictions
- * on node names must also be observed.
+ * 20 characters.
  * <p>
  * A <code>Monitorable</code> may optionally support sending notifications
  * when the status of its <code>StatusVariables</code> change. Support for
@@ -45,7 +44,8 @@ public interface Monitorable {
      * contains the elements in no particular order. The returned value must not
      * be <code>null</code>.
      * 
-     * @return the name of <code>StatusVariable<code>s published by this object
+     * @return the <code>StatusVariable<code> identifiers published by this 
+     *         object, or an empty array if none are published
      */
     public String[] getStatusVariableNames();
     

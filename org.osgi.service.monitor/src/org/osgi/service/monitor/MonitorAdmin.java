@@ -104,10 +104,10 @@ public interface MonitorAdmin {
      * All other status variables are silently ignored, they are omitted from
      * the result.
      * <p>
-     * The returned array does not contain duplicates, and the elements are in 
-     * no particular order. It cannot be <code>null</code>, an empty array is 
-     * returned if no (authorized and readable) Status Variables are provided 
-     * by the given <code>Monitorable</code>.
+     * The elements in the returned array are in no particular order. The return
+     * value cannot be <code>null</code>, an empty array is returned if no 
+     * (authorized and readable) Status Variables are provided by the given 
+     * <code>Monitorable</code>.
      * 
      * @param monitorableId the identifier of a <code>Monitorable</code>
      *        instance
@@ -261,7 +261,7 @@ public interface MonitorAdmin {
      * <p>
      * The <code>count</code> parameter defines the number of measurements to be
      * taken, and must either be a positive integer, or 0 if the measurement is
-     * to run indefinitely.
+     * to run until explicitely stopped.
      * <p>
      * The entity which initiates a <code>MonitoringJob</code> needs to hold
      * <code>MonitorPermission</code> for all the specified target
@@ -276,7 +276,7 @@ public interface MonitorAdmin {
      *        [Monitorable_PID]/[StatusVariable_ID] format
      * @param schedule the time in seconds between two measurements
      * @param count the number of measurements to be taken, or 0 for the
-     *        measurement to run indefinitely
+     *        measurement to run until explicitely stopped
      * @return the successfully started job object, cannot be <code>null</code>
      * @throws java.lang.IllegalArgumentException if the list of
      *         <code>StatusVariable</code> names contains an invalid or 
