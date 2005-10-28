@@ -92,13 +92,13 @@ public class MonitorPermission extends Permission {
      * Create a <code>MonitorPermission</code> object, specifying the target
      * and actions.
      * <p>
-     * The meaning of the <code>statusVariable</code> parameter is slightly
-     * different depending on the <code>action</code> field, see the 
-     * descriptions of the individual actions.  In general, the wildcard 
-     * <code>*</code> is allowed in both fragments of the target string, but 
-     * only at the end of the fragments.
+     * The <code>statusVariable</code> parameter is the target of the 
+     * permission, defining one or more status variable names to which the
+     * specified actions apply. Multiple status variable names can be selected
+     * by using the wildcard <code>*</code> in the target string.  The wildcard
+     * is allowed in both fragments, but only at the end of the fragments.
      * <p>
-     * The following targets are valid:
+     * For example, the following targets are valid:
      * <code>com.mycomp.myapp/queue_length</code>,
      * <code>com.mycomp.myapp/*</code>, <code>com.mycomp.&#42;/*</code>,
      * <code>&#42;/*</code>, <code>&#42;/queue_length</code>, 
@@ -111,7 +111,8 @@ public class MonitorPermission extends Permission {
      * The <code>actions</code> parameter specifies the allowed action(s): 
      * <code>read</code>, <code>publish</code>, <code>startjob</code>,
      * <code>reset</code>, <code>switchevents</code>, or the combination of 
-     * these separated by commas. 
+     * these separated by commas. String constants are defined in this class for
+     * each valid action.
      * 
      * @param statusVariable the identifier of the <code>StatusVariable</code>
      *        in [Monitorable_id]/[StatusVariable_id] format 
@@ -253,7 +254,9 @@ public class MonitorPermission extends Permission {
     }
 
     /**
-     * Get the action string associated with this permission.
+     * Get the action string associated with this permission.  The actions are
+     * returned in the following order: <code>read</code>, <code>reset</code>, 
+     * <code>publish</code>, <code>startjob</code>, <code>switchevents</code>.
      * 
      * @return the allowed actions separated by commas, cannot be
      *         <code>null</code>
