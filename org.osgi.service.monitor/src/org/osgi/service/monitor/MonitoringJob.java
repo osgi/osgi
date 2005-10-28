@@ -78,7 +78,7 @@ public interface MonitoringJob {
      * @return the delay (in seconds) between samples, or 0 for change based
      *         jobs
      */
-    public long getSchedule();
+    public int getSchedule();
 
     /**
      * Returns the number of times <code>MonitorAdmin</code> will query the
@@ -96,11 +96,13 @@ public interface MonitoringJob {
     public int getReportCount();
 
     /**
-     * Returns whether the job was started locally or remotely.
+     * Returns whether the job was started locally or remotely.  Jobs started by
+     * the clients of this API are always local, remote jobs can only be started
+     * using the Device Management Tree.
      * 
      * @return <code>true</code> if the job was started from the local device,
-     *         <code>false</code> if the job was initiated from a remote
-     *         management server through the device management tree
+     *         <code>false</code> if the job was initiated from a management 
+     *         server through the device management tree
      */
     public boolean isLocal();
 }
