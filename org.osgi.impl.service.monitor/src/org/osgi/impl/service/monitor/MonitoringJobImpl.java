@@ -31,7 +31,7 @@ public class MonitoringJobImpl implements MonitoringJob, Runnable {
     private String initiator;
     private Path[] varPaths;
     private int reportCount;
-    private long schedule;
+    private int schedule;
 
     private boolean local;
     private boolean running;
@@ -44,7 +44,7 @@ public class MonitoringJobImpl implements MonitoringJob, Runnable {
     private int[] callCounters;
 
     MonitoringJobImpl(MonitorAdminImpl monitorAdmin, String initiator, 
-                      Path[] varPaths, long schedule, int reportCount, 
+                      Path[] varPaths, int schedule, int reportCount, 
                       boolean local) {
 
         this.monitorAdmin = monitorAdmin;
@@ -112,7 +112,7 @@ public class MonitoringJobImpl implements MonitoringJob, Runnable {
         return names;
     }
 
-    public long getSchedule() {
+    public int getSchedule() {
         return schedule;
     }
 
