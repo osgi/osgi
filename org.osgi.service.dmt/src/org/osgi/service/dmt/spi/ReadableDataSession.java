@@ -18,6 +18,12 @@ import org.osgi.service.dmt.MetaNode;
  * Provides read-only access to the part of the tree handled by the plugin that
  * created this session.
  * <p>
+ * Since the {@link ReadWriteDataSession} and {@link TransactionalDataSession}
+ * interfaces inherit from this interface, some of the method descriptions do
+ * not apply for an instance that is only a <code>ReadableDataSession</code>.
+ * For example, the {@link #close} method description also contains information 
+ * about its behaviour when invoked as part of a transactional session.
+ * <p>
  * The <code>nodePath</code> parameters appearing in this interface always
  * contain an array of path segments identifying a node in the subtree of this
  * plugin.  This parameter contains an absolute path, so the first segment is 
