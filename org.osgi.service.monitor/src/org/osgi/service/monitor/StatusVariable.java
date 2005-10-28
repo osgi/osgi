@@ -23,8 +23,7 @@ import java.util.Date;
  * <code>null</code>, non-empty string that conforms to the "symbolic-name"
  * definition in the OSGi core specification. This means that only the
  * characters [-_.a-zA-Z0-9] may be used. The length of the ID must not exceed
- * 20 characters. As the ID is used as a node name in the DMT, the restrictions
- * on node names must also be observed.
+ * 20 characters.
  */
 public final class StatusVariable {
     //----- Public constants -----//
@@ -194,10 +193,10 @@ public final class StatusVariable {
     }
 
     /**
-     * Returns the time when the <code>StatusVariable</code> value was
-     * queried. The <code>StatusVariable</code>'s timestamp is set when the
-     * {@link Monitorable#getStatusVariable Monitorable.getStatusVariable()}
-     * method is called.
+     * Returns the timestamp associated with the <code>StatusVariable</code>.
+     * The timestamp is stored when the <code>StatusVariable</code> instance is
+     * created, generally during the {@link Monitorable#getStatusVariable} 
+     * method call.
      * 
      * @return the time when the <code>StatusVariable</code> value was
      *         queried, cannot be <code>null</code>
@@ -333,6 +332,12 @@ public final class StatusVariable {
      * contains the full path, collection method, timestamp, type and value 
      * parameters of the <code>StatusVariable</code> in the following format:
      * <pre>StatusVariable(&lt;path&gt;, &lt;cm&gt;, &lt;timestamp&gt;, &lt;type&gt;, &lt;value&gt;)</pre>
+     * The collection method identifiers used in the string representation are
+     * "CC", "DER", "GAUGE" and "SI" (without the quotes).  The format of the 
+     * timestamp is defined by the <code>Date.toString</code> method, while the 
+     * type is identified by one of the strings "INTEGER", "FLOAT", "STRING" and
+     * "BOOLEAN".  The final field contains the string representation of the 
+     * value of the status variable.   
      * 
      * @return the <code>String</code> representation of this
      *         <code>StatusVariable</code>
