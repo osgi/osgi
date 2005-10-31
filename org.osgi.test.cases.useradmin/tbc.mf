@@ -1,8 +1,8 @@
 Manifest-Version: 1.0
 Bundle-Name: test.cases.url.tbc
-Bundle-Description: Tests the url extension
-Bundle-Vendor: ProSyst Software AG
-Bundle-Version: 1.0
+Bundle-Description: Tests the User Admin service
+Bundle-Vendor: ProSyst Software GmbH
+Bundle-Version: 1.1
 Bundle-DocURL: http://www.prosyst.com
 Bundle-ContactAddress: p_kosseff@prosyst.bg
 Bundle-Category: osgi,test

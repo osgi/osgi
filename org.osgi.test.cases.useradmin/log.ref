@@ -21,7 +21,6 @@ getRole: "user.anyone"
 
 [begin=testGetRoles]
 Roles: "3 roles: { role1, role2, role3 }"
-Roles: "4 roles: { role1, role2, role3, user.anyone }"
 [end=testGetRoles]
 
 [begin=testGetUser]
