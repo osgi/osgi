@@ -4,9 +4,7 @@ Bundle-SymbolicName: ${p}
 Bundle-Name: test.framework.fragments
 Bundle-Version: 4
 Bundle-Copyright: ${copyright}
-Bundle-Description: This is a template description. It should contain 
-  general information about the test case. The test tool allows this text to be
-  displayed by double clicking on the test case.
+Bundle-Description: Tests fragment bundles and extension bundles
 Bundle-Vendor: OSGi Alliance
 Bundle-DocUrl: http://www.osgi.org/testcases/4/test.cases.template
 Bundle-ContactAddress: speccomments@mail.osgi.org
