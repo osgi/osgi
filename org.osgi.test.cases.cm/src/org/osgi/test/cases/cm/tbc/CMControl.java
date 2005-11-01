@@ -29,6 +29,7 @@ package org.osgi.test.cases.cm.tbc;
 
 // import java.math.*;
 import java.util.Dictionary;
+import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Vector;
 
@@ -331,7 +332,7 @@ public class CMControl extends DefaultTestBundleControl {
 			 * List all configurations and make sure that only the active
 			 * configurations are returned
 			 */
-			Configuration[] confs = cm.listConfigurations(null);
+			Configuration[] confs = cm.listConfigurations("(service.pid=pid2)");
 			if (confs == null) {
 				fail("No configurations returned");
 			}
@@ -354,7 +355,7 @@ public class CMControl extends DefaultTestBundleControl {
 			}
 		}
 		/* List all configurations and make sure they are all gone */
-		Configuration[] leftConfs = cm.listConfigurations(null);
+		Configuration[] leftConfs = cm.listConfigurations("(|(service.pid=pid1)(service.pid=pid2))");
 		assertNull("Left configurations", leftConfs);
 	}
 
@@ -571,6 +572,7 @@ public class CMControl extends DefaultTestBundleControl {
 		final int NUMBER_OF_CONFIGS = 3;
 		String factorypid = "somefactorypid";
 		Vector pids = new Vector();
+		Vector configs = new Vector();
 		pids.addElement(factorypid);
 		for (int i = 0; i < NUMBER_OF_CONFIGS; i++) {
 			Configuration conf = null;
@@ -580,6 +582,7 @@ public class CMControl extends DefaultTestBundleControl {
 			else {
 				conf = cm.createFactoryConfiguration(factorypid);
 			}
+			configs.addElement(conf);
 			trace("pid: " + conf.getPid());
 			assertTrue("Unique pid", !pids.contains(conf.getPid()));
 			assertEquals("Correct factory pid", factorypid, conf
@@ -588,6 +591,10 @@ public class CMControl extends DefaultTestBundleControl {
 			assertEquals("Correct location", location, conf.getBundleLocation());
 			/* Add the pid to the list */
 			pids.addElement(conf.getPid());
+		}
+		for (int i = 0; i < configs.size(); i++) {
+			Configuration conf = (Configuration)configs.elementAt(i);
+			conf.delete();
 		}
 	}
 
@@ -615,20 +622,29 @@ public class CMControl extends DefaultTestBundleControl {
 			trace("pid: " + conf.getPid());
 			configs.put(conf.getPid(), conf);
 		}
-		Semaphore semaphore = new Semaphore();
-		/* Register a factory */
-		ManagedServiceFactoryImpl msf = new ManagedServiceFactoryImpl("msf",
-				"testprop", semaphore);
-		Hashtable properties = new Hashtable();
-		properties.put(Constants.SERVICE_PID, factorypid);
-		properties.put(SERVICE_FACTORY_PID, factorypid);
-		registerService(ManagedServiceFactory.class.getName(), msf, properties);
-		for (int i = 0; i < NUMBER_OF_CONFIGS; i++) {
-			trace("Wait for signal #" + i);
-			semaphore.waitForSignal();
-			trace("Signal #" + i + " arrived");
+		try {
+			Semaphore semaphore = new Semaphore();
+			/* Register a factory */
+			ManagedServiceFactoryImpl msf = new ManagedServiceFactoryImpl("msf",
+					"testprop", semaphore);
+			Hashtable properties = new Hashtable();
+			properties.put(Constants.SERVICE_PID, factorypid);
+			properties.put(SERVICE_FACTORY_PID, factorypid);
+			registerService(ManagedServiceFactory.class.getName(), msf, properties);
+			for (int i = 0; i < NUMBER_OF_CONFIGS; i++) {
+				trace("Wait for signal #" + i);
+				semaphore.waitForSignal();
+				trace("Signal #" + i + " arrived");
+			}
+			trace("All signals have arrived");
+		} finally {
+	      Enumeration keys = configs.keys();
+	      while (keys.hasMoreElements()) {
+    			Configuration conf = (Configuration)configs.get(keys.nextElement());
+    			conf.delete();
+	      }
 		}
-		trace("All signals has arrived");
+		
 	}
 
 	/**
@@ -780,8 +796,8 @@ public class CMControl extends DefaultTestBundleControl {
 			ConfigurationAdmin admin = (ConfigurationAdmin) getContext()
 					.getService(cl.getReference(2));
 			assertNotNull("Configuration Admin from event", admin);
-			Configuration[] configs = admin.listConfigurations(null);
-			assertNull("No configuration in cm", configs);
+			Configuration[] configs = admin.listConfigurations("(service.pid=" + pid + ")");
+			assertNull("The configuration exists in CM!", configs);
 		}
 		finally {
 			getContext().ungetService(cl.getReference());
@@ -832,8 +848,8 @@ public class CMControl extends DefaultTestBundleControl {
 			ConfigurationAdmin admin = (ConfigurationAdmin) getContext()
 					.getService(cl.getReference());
 			assertNotNull("Configuration Admin from event", admin);
-			Configuration[] configs = admin.listConfigurations(null);
-			assertNull("No configuration in cm", configs);
+			Configuration[] configs = admin.listConfigurations("(service.factoryPid=" + factorypid + ")");
+			assertNull("The configuration exists in CM!", configs);
 		}
 		finally {
 			getContext().ungetService(cl.getReference());
@@ -887,7 +903,6 @@ public class CMControl extends DefaultTestBundleControl {
 	 */
 	public void testConfigEventFromDifferentBundle() throws Exception {
 		Bundle tb = null;
-		String res;
 		ConfigurationListenerImpl cl = null;
 		trace("Create and register a new ConfigurationListener");
 		Synchronizer synchronizer = new Synchronizer();
@@ -907,7 +922,7 @@ public class CMControl extends DefaultTestBundleControl {
 			assertNull("Config Factory event pid null", cl.getFactoryPid(1));
 
 			assertTrue("Update done", synchronizer
-					.waitForSignal(SIGNAL_WAITING_TIME));
+					.waitForSignal(SIGNAL_WAITING_TIME, 2));
 			assertEquals("Config event pid match",
 					ConfigurationListenerImpl.RFC_0103_PID_PREFIX + "tb2pid",
 					cl.getPid(2));
@@ -916,7 +931,7 @@ public class CMControl extends DefaultTestBundleControl {
 			assertNull("Config Factory event pid null", cl.getFactoryPid(2));
 
 			assertTrue("Update done", synchronizer
-					.waitForSignal(SIGNAL_WAITING_TIME));
+					.waitForSignal(SIGNAL_WAITING_TIME, 3));
 			assertEquals("Config event facotory pid match",
 					ConfigurationListenerImpl.RFC_0103_PID_PREFIX
 							+ "tb2factorypid", cl.getFactoryPid(3));
@@ -924,7 +939,7 @@ public class CMControl extends DefaultTestBundleControl {
 					ConfigurationEvent.CM_UPDATED, cl.getType(3));
 
 			assertTrue("Update done", synchronizer
-					.waitForSignal(SIGNAL_WAITING_TIME));
+					.waitForSignal(SIGNAL_WAITING_TIME, 4));
 			assertEquals("Config event factory pid match",
 					ConfigurationListenerImpl.RFC_0103_PID_PREFIX
 							+ "tb2factorypid", cl.getFactoryPid(4));
@@ -1143,7 +1158,7 @@ public class CMControl extends DefaultTestBundleControl {
 	 */
 	private void cleanCM() throws Exception {
 		// Configuration[] configs = cm.listConfigurations(getFilter());
-		Configuration[] configs = cm.listConfigurations(null);
+		Configuration[] configs = cm.listConfigurations(getFilter());
 		if (configs != null) {
 			// log("Clearing " + configs.length + " Configurations");
 			for (int i = 0; i < configs.length; i++) {
