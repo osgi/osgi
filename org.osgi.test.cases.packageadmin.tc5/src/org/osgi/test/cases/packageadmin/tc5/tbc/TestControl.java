@@ -271,11 +271,11 @@ public class TestControl extends DefaultTestBundleControl {
 	 */
 	public void installTestBundles() throws Exception {
 		// Install test bundles
+		tb5 = getContext().installBundle(getWebServer() + "tb5.jar");
 		tb1 = installBundle("tb1.jar");
 		tb2 = installBundle("tb2.jar");
 		tb3 = installBundle("tb3.jar");
 		tb4 = installBundle("tb4.jar");
-		tb5 = getContext().installBundle(getWebServer() + "tb5.jar");
 
 		// Start test bundles
 		tb1.start();
