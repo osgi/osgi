@@ -359,16 +359,16 @@ public class TestControl extends DefaultTestBundleControl implements
 	public void testFragmentHostHeader02() throws Exception {
 		// Install and start host bundle version 1.0
 		Bundle tb3a = getContext().installBundle(getWebServer() + "tb3a.jar");
-		tb3a.start();
 
 		// Install and start host bundle version 2.0
 		Bundle tb3c = getContext().installBundle(getWebServer() + "tb3c.jar");
-		tb3c.start();
 
 		// Install fragment bundle with multiple-hosts=false
 		Bundle tb3d = getContext().installBundle(getWebServer() + "tb3d.jar");
 		PackageAdmin pa = (PackageAdmin) getService(PackageAdmin.class);
 		pa.resolveBundles(new Bundle[] {tb3d});
+    tb3a.start();
+    tb3c.start();
 
 		// Try recovering resource from host that is in classpath of fragment
 		try {
@@ -596,16 +596,14 @@ public class TestControl extends DefaultTestBundleControl implements
 		// Install the host bundle
 		Bundle tb1a = getContext().installBundle(getWebServer() + "tb1a.jar");
 
-		// Start the host bundle
-		tb1a.start();
 
 		// Install fragment bundle
-		InputStream in = tb1a.getResource("/resources/tb1g.jar").openStream();
-		Bundle tb1g = getContext().installBundle("tb1g.jar", in);
-		in.close();
+		Bundle tb1g = getContext().installBundle(getWebServer() + "tb1g.jar");
 
 		PackageAdmin pa = (PackageAdmin) getService(PackageAdmin.class);
 		pa.resolveBundles(new Bundle[] {tb1g});
+    // Start the host bundle
+    tb1a.start();
 
 		try {
 			// Verify that fragment bundle is in RESOLVED state
@@ -613,7 +611,7 @@ public class TestControl extends DefaultTestBundleControl implements
 					Bundle.RESOLVED, tb1g.getState());
 
 			// Update fragment bundle
-			in = tb1a.getResource("resources/tb1h.jar").openStream();
+			InputStream in = tb1a.getResource("resources/tb1h.jar").openStream();
 			tb1g.update(in);
 			in.close();
 
@@ -908,7 +906,11 @@ public class TestControl extends DefaultTestBundleControl implements
 		try {
 			assertEquals("Fragment bundle should be in the RESOLVED state.",
 					Bundle.RESOLVED, tb1b.getState());
-			Thread.sleep(2000); // wait a while
+      
+      // Try to get not existing resource
+      // it must generate FrameworkEvent.INFO event
+      tb1a.getResource("sss");  
+      Thread.sleep(2000); // wait a while
 			assertTrue("Expecting FrameworkEvent of type INFO.",
 					hasEventOccurred(tb1b, FrameworkEvent.class,
 							FrameworkEvent.INFO));
