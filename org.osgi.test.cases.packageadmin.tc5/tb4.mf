@@ -1,5 +1,6 @@
 Manifest-Version: 1.0
 Bundle-Name: ${p}.tb4
+Bundle-ManifestVersion: 2
 Bundle-SymbolicName: ${p}.tb4
 Bundle-Activator: $(p).tb4.Activator
 Bundle-Version: 1.0
