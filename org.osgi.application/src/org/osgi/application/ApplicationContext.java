@@ -36,6 +36,9 @@ public interface ApplicationContext {
      * reference name specified in the descriptor of the corresponding application. The registered
      * <code>listener> will only receive the {@link ApplicationServiceEvent}s realted to the referred service.
      * <p>
+     * If the <code>listener</code> was already added, calling this method will overwrite the previous
+     * registration.
+     * <p>
      * 
      * @param listener
      *            The {@link org.osgi.application.ApplicationServiceListener} to be added. It must
@@ -57,6 +60,9 @@ public interface ApplicationContext {
      * array of reference name specified in the descriptor of the corresponding application. The registered
      * <code>listener> will only receive the {@link ApplicationServiceEvent}s realted to the referred 
      * services.
+     * <p>
+     * If the <code>listener</code> was already added, calling this method will overwrite the previous
+     * registration.
      * <p>
      * 
      * @param listener
