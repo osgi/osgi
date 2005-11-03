@@ -9,8 +9,7 @@ import org.osgi.service.event.*;
 import org.osgi.framework.*;
 import java.util.*;
 
-public class TestMidlet extends MIDlet implements EventHandler, SynchronousBundleListener,
-                                                  ApplicationServiceListener, FrameworkListener {
+public class TestMidlet extends MIDlet implements EventHandler, ApplicationServiceListener {
 	String                      fileName;
 	String                      storedString;
 	boolean                     paused;
@@ -101,29 +100,13 @@ public class TestMidlet extends MIDlet implements EventHandler, SynchronousBundl
 			else				
 			  writeResult("PROPERTIES OK");
 		}
-		else if (event.getTopic().equals("com/nokia/megtest/AddBundleListener")) {
-			myApplicationContext.addBundleListener( this );
-			writeResult("BUNDLE LISTENER ADDED");			
-		}
-		else if (event.getTopic().equals("com/nokia/megtest/RemoveBundleListener")) {
-			myApplicationContext.removeBundleListener( this );
-			writeResult("BUNDLE LISTENER REMOVED");			
-		}
 		else if (event.getTopic().equals("com/nokia/megtest/AddServiceListener")) {
-			myApplicationContext.addServiceListener( this );
+			myApplicationContext.addServiceListener( this, "log" );
 			writeResult("SERVICE LISTENER ADDED");			
 		}
 		else if (event.getTopic().equals("com/nokia/megtest/RemoveServiceListener")) {
 			myApplicationContext.removeServiceListener( this );
 			writeResult("SERVICE LISTENER REMOVED");			
-		}
-		else if (event.getTopic().equals("com/nokia/megtest/AddFrameworkListener")) {
-			myApplicationContext.addFrameworkListener( this );
-			writeResult("FRAMEWORK LISTENER ADDED");			
-		}
-		else if (event.getTopic().equals("com/nokia/megtest/RemoveFrameworkListener")) {
-			myApplicationContext.removeFrameworkListener( this );
-			writeResult("FRAMEWORK LISTENER REMOVED");			
 		}
 		else if (event.getTopic().equals("com/nokia/megtest/CheckStartupParams")) {
 			Map startupArgs = myApplicationContext.getStartupParameters();
@@ -170,15 +153,7 @@ public class TestMidlet extends MIDlet implements EventHandler, SynchronousBundl
 		}
 	}
 
-	public void bundleChanged(BundleEvent event) {
-		writeResult("BUNDLE CHANGE RECEIVED");			
-	}
-
 	public void serviceChanged(ApplicationServiceEvent event) {
 		writeResult("SERVICE CHANGE RECEIVED");			
-	}
-
-	public void frameworkEvent(FrameworkEvent event) {
-		// TODO Auto-generated method stub		
 	}
 }

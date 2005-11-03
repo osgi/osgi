@@ -77,7 +77,7 @@ public interface ApplicationContext {
      * @throws java.lang.IllegalArgumentException If <code>referenceNames</code> array is empty or it 
      *    contains unknown references
      */
-    public void addServiceListener(ApplicationServiceListener listener, String[] referenceNames);
+    public void addServiceListener(ApplicationServiceListener listener, String[] referenceNames) throws java.lang.IllegalArgumentException;
 
     /**
      * Removes the specified {@link org.osgi.application.ApplicationServiceListener} object from this

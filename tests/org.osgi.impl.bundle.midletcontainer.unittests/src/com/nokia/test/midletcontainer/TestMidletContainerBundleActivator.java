@@ -304,18 +304,10 @@ public class TestMidletContainerBundleActivator
             System.out.println("Checking OAT locate services                     FAILED");
         else
             System.out.println("Checking OAT locate services                     PASSED");
-        if(!testCase_oatBundleListener())
-            System.out.println("Checking OAT bundle listener                     FAILED");
-        else
-            System.out.println("Checking OAT bundle listener                     PASSED");
         if(!testCase_oatServiceListener())
             System.out.println("Checking OAT service listener                    FAILED");
         else
             System.out.println("Checking OAT service listener                    PASSED");
-        if(!testCase_oatFrameworkListener())
-            System.out.println("Checking OAT framework listener                  FAILED");
-        else
-            System.out.println("Checking OAT framework listener                  PASSED");
         if(!testCase_oatStaticServiceDies())
             System.out.println("Checking OAT static service dies                 FAILED");
         else
@@ -1066,53 +1058,6 @@ public class TestMidletContainerBundleActivator
       return false;  		
   	}
 
-  	boolean testCase_oatBundleListener() {
-      try {
-      	if( !testCase_launchApplication() )
-      		return false;
-  	  	if( !checkResponseForEvent( "com/nokia/megtest/AddBundleListener", 
-                                    "BUNDLE LISTENER ADDED") )
-  		  	return false;
-  	  	
-        URL dummyBundleURL = bc.getBundle().getResource( "dummybundle.jar" );
-        if(dummyBundleURL == null)
-            throw new Exception("Can't find dummybundle.jar in the resources!");  	  	
-        Bundle bundle = bc.installBundle( dummyBundleURL.toString(), dummyBundleURL.openStream() );
-  	  	
-  			if (!checkResultFile( "BUNDLE CHANGE RECEIVED" ))
-  				throw new Exception("Event handler service was not registered!");
-  	  	
-  	  	if( !checkResponseForEvent( "com/nokia/megtest/RemoveBundleListener", 
-                                    "BUNDLE LISTENER REMOVED") )
-          return false;
-  	  	
-  	  	bundle.start();
-  	  	
-  			String content = getResultFileContent();
-  			if ( content != null && content.equals( "BUNDLE CHANGE RECEIVED" ) )
-  				throw new Exception("Bundle listener was not removed!");
-  	  	
-  	  	if( !checkResponseForEvent( "com/nokia/megtest/AddBundleListener", 
-                                    "BUNDLE LISTENER ADDED") )
-          return false;
-  	  	
-  		  if( !testCase_stopApplication() )
-	  	  	return false;
-  		  
-  		  bundle.uninstall();
-  	  	
-  			content = getResultFileContent();
-  			if ( content != null && content.equals( "BUNDLE CHANGE RECEIVED" ) )
-  				throw new Exception("Bundle listener was not removed after stop!");
-  		  
-        return true;  		
-      }
-      catch(Exception e) {
-          e.printStackTrace();
-      }
-      return false;  		
-  	}
-
   	boolean testCase_oatServiceListener() {
       try {     	
       	if( !testCase_launchApplication() )
@@ -1153,29 +1098,6 @@ public class TestMidletContainerBundleActivator
   				throw new Exception("Service listener was not removed after stop!");
   		  
         return true;  		
-      }
-      catch(Exception e) {
-          e.printStackTrace();
-      }
-      return false;  		
-  	}
-
-  	boolean testCase_oatFrameworkListener() {
-      try {     	
-      	if( !testCase_launchApplication() )
-      		return false;
-  	  	if( !checkResponseForEvent( "com/nokia/megtest/AddFrameworkListener", 
-                                    "FRAMEWORK LISTENER ADDED") )
-          return false;
-  	  	if( !checkResponseForEvent( "com/nokia/megtest/RemoveFrameworkListener", 
-                                    "FRAMEWORK LISTENER REMOVED") )
-          return false;
-  	  	if( !checkResponseForEvent( "com/nokia/megtest/AddFrameworkListener", 
-                                    "FRAMEWORK LISTENER ADDED") )  	
-  	  		return false;
-  		  if( !testCase_stopApplication() )
-	  	  	return false;
-  		  return true;
       }
       catch(Exception e) {
           e.printStackTrace();
