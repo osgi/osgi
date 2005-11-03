@@ -43,6 +43,6 @@ public class ApplicationHandleImpl implements ApplicationHandle.Delegate {
 		SecurityManager sm = System.getSecurityManager();
 		if( sm != null )
 			sm.checkPermission(new ApplicationAdminPermission( handle.getApplicationDescriptor(), 
-				ApplicationAdminPermission.LIFECYCLE));
+				ApplicationAdminPermission.LIFECYCLE_ACTION));
 	}
 }

@@ -70,7 +70,7 @@ public final class MidletHandle extends ApplicationHandle {
 		SecurityManager sm = System.getSecurityManager();
 		if( sm != null )		
 			sm.checkPermission( new ApplicationAdminPermission(
-				midletDescriptor, ApplicationAdminPermission.LIFECYCLE ) );
+				midletDescriptor, ApplicationAdminPermission.LIFECYCLE_ACTION ) );
 		
 		if (!status.equals( MidletHandle.RUNNING ) )
 			throw new IllegalStateException();
@@ -87,7 +87,7 @@ public final class MidletHandle extends ApplicationHandle {
 		SecurityManager sm = System.getSecurityManager();
 		if( sm != null )
 			sm.checkPermission( new ApplicationAdminPermission(
-				midletDescriptor, ApplicationAdminPermission.LIFECYCLE ) );
+				midletDescriptor, ApplicationAdminPermission.LIFECYCLE_ACTION ) );
 		
 		if (!status.equals( MidletHandle.PAUSED ) )
 			throw new IllegalStateException();

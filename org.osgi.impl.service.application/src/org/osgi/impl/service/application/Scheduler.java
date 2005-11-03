@@ -57,7 +57,7 @@ public class Scheduler implements Runnable, EventHandler {
 		SecurityManager sm = System.getSecurityManager();
 		if( sm != null )
 			sm.checkPermission(new ApplicationAdminPermission(pid, 
-				ApplicationAdminPermission.SCHEDULE));
+				ApplicationAdminPermission.SCHEDULE_ACTION));
 
 		if( topic == null )
 			throw new NullPointerException();
@@ -83,7 +83,7 @@ public class Scheduler implements Runnable, EventHandler {
 		if( sm != null )
 			sm.checkPermission(new ApplicationAdminPermission(
 				((ScheduledApplicationImpl)scheduledApplication).getPid(),
-				ApplicationAdminPermission.SCHEDULE));
+				ApplicationAdminPermission.SCHEDULE_ACTION));
 
 		scheduledApps.remove( scheduledApplication );
 		changeServiceReg();

@@ -74,7 +74,7 @@ public class ApplicationDescriptorImpl implements Delegate {
 	public void lock() {
 		SecurityManager sm = System.getSecurityManager();
 		if( sm != null )
-			sm.checkPermission( new ApplicationAdminPermission( descriptor, ApplicationAdminPermission.LOCK ) );
+			sm.checkPermission( new ApplicationAdminPermission( descriptor, ApplicationAdminPermission.LOCK_ACTION ) );
 		
 		doLock(false, true);
 	}
@@ -82,7 +82,7 @@ public class ApplicationDescriptorImpl implements Delegate {
 	public void unlock() {
 		SecurityManager sm = System.getSecurityManager();
 		if( sm != null )
-			sm.checkPermission( new ApplicationAdminPermission( descriptor, ApplicationAdminPermission.LOCK ) );
+			sm.checkPermission( new ApplicationAdminPermission( descriptor, ApplicationAdminPermission.LOCK_ACTION ) );
 		
 		doLock(false, false);
 	}
@@ -96,7 +96,7 @@ public class ApplicationDescriptorImpl implements Delegate {
 	public void launch(Map arguments) throws Exception {
 			SecurityManager sm = System.getSecurityManager();
 			if( sm != null )
-  			sm.checkPermission( new ApplicationAdminPermission(	descriptor, ApplicationAdminPermission.LIFECYCLE ) );
+  			sm.checkPermission( new ApplicationAdminPermission(	descriptor, ApplicationAdminPermission.LIFECYCLE_ACTION ) );
 
 			if ( isLocked() )
 				throw new Exception("Application is locked, can't launch!");

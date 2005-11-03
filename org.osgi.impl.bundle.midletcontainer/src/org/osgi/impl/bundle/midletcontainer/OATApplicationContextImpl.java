@@ -42,9 +42,7 @@ public class OATApplicationContextImpl implements ApplicationContext, ServiceLis
 	private Map startupParams = null;
 	private LinkedList serviceList = null;
 	private LinkedList registeredServiceList = null;
-	private LinkedList bundleListenerList = null;
 	private LinkedList serviceListenerList = null;
-	private LinkedList frameworkListenerList = null;
 	private Vector mandatoryServiceList = null;
 	private Vector mandatoryTargetList = null;
 	private OATApplicationData oatAppData = null;
@@ -74,9 +72,7 @@ public class OATApplicationContextImpl implements ApplicationContext, ServiceLis
 		this.mainClass = mainClass;
 		serviceList = new LinkedList();
 		registeredServiceList = new LinkedList();
-		bundleListenerList = new LinkedList();
 		serviceListenerList = new LinkedList();
-		frameworkListenerList = new LinkedList();
 		oatAppData = appData;
 		
 		mandatoryServiceList = new Vector();
@@ -94,38 +90,29 @@ public class OATApplicationContextImpl implements ApplicationContext, ServiceLis
 		bc.addServiceListener( this );
 	}
 
-	public void addBundleListener(BundleListener listener) {
+	public void addServiceListener(ApplicationServiceListener listener, String referenceName)
+			throws IllegalArgumentException {
+		String filter=null;
+		
 		if( appHandle == null )
 			throw new IllegalStateException( "Application is not running!" );
-		
-	  bc.addBundleListener( listener );
-	  bundleListenerList.add( listener );
-	}
-	
-	public void addFrameworkListener(FrameworkListener listener) {
-		if( appHandle == null )
-			throw new IllegalStateException( "Application is not running!" );
-		
-    bc.addFrameworkListener( listener );
-    frameworkListenerList.add( listener );
-	}
-	
-	public void addServiceListener(ApplicationServiceListener listener, String filter)
-			throws InvalidSyntaxException {
-		if( appHandle == null )
-			throw new IllegalStateException( "Application is not running!" );
-		
-		Filter filterItem = (filter == null) ? null : bc.createFilter( filter );
-		removeServiceListener( listener );		
-		serviceListenerList.add( new ServiceListener( listener, filterItem ) );
-	}
-	
-	public void addServiceListener(ApplicationServiceListener listener) {
-		if( appHandle == null )
-			throw new IllegalStateException( "Application is not running!" );
-		
-		removeServiceListener( listener );		
-    serviceListenerList.add( new ServiceListener( listener, null )  );
+
+		int i = 0;
+		for( ; i != oatAppData.getServices().length; i++ )
+			if( oatAppData.getServices()[ i ].getName().equals( referenceName )) {
+				filter = oatAppData.getServices()[ i ].getTarget();
+				break;
+			}
+		if( i == oatAppData.getServices().length )
+			throw new IllegalArgumentException();
+
+		try {
+			Filter filterItem = (filter == null) ? null : bc.createFilter( filter );
+			removeServiceListener( listener );		
+			serviceListenerList.add( new ServiceListener( listener, filterItem ) );
+		}catch( InvalidSyntaxException e ) {
+			throw new IllegalArgumentException();
+		}
 	}
 	
 	public Map getStartupParameters() {
@@ -170,7 +157,7 @@ public class OATApplicationContextImpl implements ApplicationContext, ServiceLis
 				}catch( InvalidSyntaxException e ) 
 				{
 					Activator.log( LogService.LOG_ERROR, "Invalid filter syntax for reference '" + referenceName + "'!", e );
-					return null;
+					throw new IllegalArgumentException();
 				}
 				
 		    if( refs == null || refs.length == 0 ) {
@@ -206,7 +193,7 @@ public class OATApplicationContextImpl implements ApplicationContext, ServiceLis
 		    return srv.serviceObject;
 			}
 		}
-		return null;
+		throw new IllegalArgumentException();
 	}
 	
 	public Object[] locateServices(String referenceName) {
@@ -255,7 +242,7 @@ public class OATApplicationContextImpl implements ApplicationContext, ServiceLis
 				return result;
 			}
 		}
-		return null;
+		throw new IllegalArgumentException();
 	}
 	
 	public ServiceRegistration registerService(String clazz, Object service,
@@ -282,22 +269,6 @@ public class OATApplicationContextImpl implements ApplicationContext, ServiceLis
 		ServiceRegistration servReg = bc.registerService( clazzes, service, properties );
 		registeredServiceList.add( servReg );
 		return servReg;
-	}
-	
-	public void removeBundleListener(BundleListener listener) {
-		if( appHandle == null )
-			throw new IllegalStateException( "Application is not running!" );
-		
-		bc.removeBundleListener( listener );
-    bundleListenerList.remove( listener );
-	}
-	
-	public void removeFrameworkListener(FrameworkListener listener) {
-		if( appHandle == null )
-			throw new IllegalStateException( "Application is not running!" );
-		
-    bc.removeFrameworkListener( listener );
-    frameworkListenerList.remove( listener );
 	}
 	
 	public void removeServiceListener(ApplicationServiceListener listener) {
@@ -327,15 +298,7 @@ public class OATApplicationContextImpl implements ApplicationContext, ServiceLis
 			if( servReg.getReference().getBundle() != null ) /* service was not unregistered? */
 				servReg.unregister();
 		}
-		
-		while( !bundleListenerList.isEmpty() ) {
-			bc.removeBundleListener( (BundleListener)bundleListenerList.removeFirst() );
-		}
 				
-		while( !frameworkListenerList.isEmpty() ) {
-			bc.removeFrameworkListener( (FrameworkListener)frameworkListenerList.removeFirst() );			
-		}
-		
 		bc.removeServiceListener( this );
 		
 		appHandle = null;
