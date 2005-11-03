@@ -73,7 +73,7 @@ public class Configuration extends DefaultTestBundleControl {
 	
 	public final static String CFG_PID_KEYS_KEY_VALUES = CFG_PID_KEYS_KEY + "/Values";
 	
-	public final static String CFG_PID_KEYS_KEY_VALUES_N = CFG_PID_KEYS_KEY_VALUES + "/n1";
+	public final static String CFG_PID_KEYS_KEY_VALUES_0 = CFG_PID_KEYS_KEY_VALUES + "/0";
 	
 	
 	private final DmtData defaultDataString = new DmtData("test");
@@ -282,7 +282,7 @@ public class Configuration extends DefaultTestBundleControl {
 			tbc.assertTrue("Asserts that $/Configuration/<pid>/Keys/<key> node can be added", metaNode.can(MetaNode.CMD_ADD));
 			tbc.assertTrue("Asserts that $/Configuration/<pid>/Keys/<key> node can be deleted", metaNode.can(MetaNode.CMD_DELETE));
 			tbc.assertEquals("Asserts that $/Configuration/<pid>/Keys/<key> node format is an interior node", DmtData.FORMAT_NODE,metaNode.getFormat());
-			tbc.assertTrue("Asserts $/Configuration/<pid>/Keys/<key> node cardinality", !metaNode.isZeroOccurrenceAllowed() && metaNode.getMaxOccurrence()==1);
+			tbc.assertTrue("Asserts $/Configuration/<pid>/Keys/<key> node cardinality", metaNode.isZeroOccurrenceAllowed() && metaNode.getMaxOccurrence()==Integer.MAX_VALUE);
 
 		} catch (Exception e) {
 			tbc.fail("Unexpected Exception: " + e.getClass().getName()
@@ -304,7 +304,7 @@ public class Configuration extends DefaultTestBundleControl {
 			session = tbc.getDmtAdmin().getSession(DmtConstants.OSGi_CFG,DmtSession.LOCK_TYPE_ATOMIC);
 			session.createInteriorNode(CFG_PID);
 			session.createInteriorNode(CFG_PID_KEYS_KEY);
-			session.createInteriorNode(CFG_PID_KEYS_KEY_TYPE);
+			session.createLeafNode(CFG_PID_KEYS_KEY_TYPE,new DmtData("a"));
 			
 			MetaNode metaNode = session.getMetaNode(CFG_PID_KEYS_KEY_TYPE);
 			
@@ -334,9 +334,9 @@ public class Configuration extends DefaultTestBundleControl {
 			session = tbc.getDmtAdmin().getSession(DmtConstants.OSGi_CFG,DmtSession.LOCK_TYPE_ATOMIC);
 			session.createInteriorNode(CFG_PID);
 			session.createInteriorNode(CFG_PID_KEYS_KEY);
-			session.createInteriorNode(CFG_PID_KEYS_KEY_CARDINALITY);
+			session.createLeafNode(CFG_PID_KEYS_KEY_CARDINALITY,new DmtData("scalar"));
 			
-			MetaNode metaNode = session.getMetaNode(CFG_PID_KEYS_KEY_TYPE);
+			MetaNode metaNode = session.getMetaNode(CFG_PID_KEYS_KEY_CARDINALITY);
 			
 			tbc.assertEquals("Asserts that $/Configuration/<pid>/Keys/<key>/Cardinality node is dynamic",MetaNode.DYNAMIC, metaNode.getScope());
 			tbc.assertTrue("Asserts that $/Configuration/<pid>/Keys/<key>/Cardinality node can be gotten", metaNode.can(MetaNode.CMD_GET));
@@ -364,7 +364,7 @@ public class Configuration extends DefaultTestBundleControl {
 			session = tbc.getDmtAdmin().getSession(DmtConstants.OSGi_CFG,DmtSession.LOCK_TYPE_ATOMIC);
 			session.createInteriorNode(CFG_PID);
 			session.createInteriorNode(CFG_PID_KEYS_KEY);
-			session.createInteriorNode(CFG_PID_KEYS_KEY_VALUE);
+			session.createLeafNode(CFG_PID_KEYS_KEY_VALUE,new DmtData("1"));
 			
 			MetaNode metaNode = session.getMetaNode(CFG_PID_KEYS_KEY_VALUE);
 			
@@ -428,9 +428,9 @@ public class Configuration extends DefaultTestBundleControl {
 			session = tbc.getDmtAdmin().getSession(DmtConstants.OSGi_CFG,DmtSession.LOCK_TYPE_ATOMIC);
 			session.createInteriorNode(CFG_PID);
 			session.createInteriorNode(CFG_PID_KEYS_KEY);
-			session.createInteriorNode(CFG_PID_KEYS_KEY_VALUES_N);
+			session.createLeafNode(CFG_PID_KEYS_KEY_VALUES_0,new DmtData(10));
 			
-			MetaNode metaNode = session.getMetaNode(CFG_PID_KEYS_KEY_VALUES_N);
+			MetaNode metaNode = session.getMetaNode(CFG_PID_KEYS_KEY_VALUES_0);
 			
 			int formatsAllowed = DmtData.FORMAT_STRING | DmtData.FORMAT_INTEGER | DmtData.FORMAT_BOOLEAN | DmtData.FORMAT_FLOAT;
 			

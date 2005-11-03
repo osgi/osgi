@@ -38,6 +38,7 @@ package org.osgi.test.cases.dmt.plugins.tbc.DataPluginFactory.TransactionalDataS
 
 import org.osgi.service.dmt.DmtException;
 import org.osgi.service.dmt.DmtSession;
+import org.osgi.test.cases.dmt.plugins.tbc.DmtConstants;
 import org.osgi.test.cases.dmt.plugins.tbc.DmtTestControl;
 import org.osgi.test.cases.dmt.plugins.tbc.DataPluginFactory.TestDataPlugin;
 import org.osgi.test.cases.dmt.plugins.tbc.DataPluginFactory.TestDataPluginActivator;
@@ -123,9 +124,10 @@ public class Commit {
             tbc.log("#testCommit002");
             
             session = tbc.getDmtAdmin().getSession(
-                    TestDataPluginActivator.ROOT,
+                    DmtConstants.OSGi_ROOT,
                     DmtSession.LOCK_TYPE_ATOMIC);
             //NewDataPlugin does not throw exceptions at commit, but TestDataPlugin does
+            session.getChildNodeNames(TestDataPluginActivator.ROOT);
             session.getChildNodeNames(NewDataPluginActivator.ROOT);
             TestDataPlugin.setCommitThrowsException(true);
             session.commit();

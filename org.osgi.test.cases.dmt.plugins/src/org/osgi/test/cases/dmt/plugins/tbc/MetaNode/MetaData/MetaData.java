@@ -129,7 +129,6 @@ public class MetaData {
         testMetaData070();
         testMetaData071();
         testMetaData072();
-        testMetaData073();
         
 	}
 
@@ -1515,7 +1514,7 @@ public class MetaData {
 					DmtSession.LOCK_TYPE_EXCLUSIVE);
 			
 			TestPluginMetaDataActivator.metaNodeDefault = new TestPluginMetaDataMetaNode();
-			TestPluginMetaDataActivator.metaNodeDefault.setMaxOccurrence(1);
+			TestPluginMetaDataActivator.metaNodeDefault.setMaxOccurrence(2);
 
 			session.createInteriorNode(TestPluginMetaDataActivator.INEXISTENT_NODE);
 			tbc.failException("",DmtException.class);
@@ -1549,7 +1548,7 @@ public class MetaData {
 					DmtSession.LOCK_TYPE_EXCLUSIVE);
 			
 			TestPluginMetaDataActivator.metaNodeDefault = new TestPluginMetaDataMetaNode();
-			TestPluginMetaDataActivator.metaNodeDefault.setMaxOccurrence(1);
+			TestPluginMetaDataActivator.metaNodeDefault.setMaxOccurrence(2);
 
 			session.createInteriorNode(TestPluginMetaDataActivator.INEXISTENT_NODE,DmtConstants.DDF);
 			tbc.failException("",DmtException.class);
@@ -1584,7 +1583,7 @@ public class MetaData {
 			
 			TestPluginMetaDataActivator.metaNodeDefault = new TestPluginMetaDataMetaNode();
 			TestPluginMetaDataActivator.metaNodeDefault.setLeaf(true);
-			TestPluginMetaDataActivator.metaNodeDefault.setMaxOccurrence(1);
+			TestPluginMetaDataActivator.metaNodeDefault.setMaxOccurrence(2);
 			TestPluginMetaDataActivator.metaNodeDefault.setFormat(DmtData.FORMAT_INTEGER);
 			
 			session.createLeafNode(TestPluginMetaDataActivator.INEXISTENT_LEAF_NODE,new DmtData(1));
@@ -1620,7 +1619,7 @@ public class MetaData {
 			
 			TestPluginMetaDataActivator.metaNodeDefault = new TestPluginMetaDataMetaNode();
 			TestPluginMetaDataActivator.metaNodeDefault.setLeaf(true);
-			TestPluginMetaDataActivator.metaNodeDefault.setMaxOccurrence(1);
+			TestPluginMetaDataActivator.metaNodeDefault.setMaxOccurrence(2);
 			TestPluginMetaDataActivator.metaNodeDefault.setFormat(DmtData.FORMAT_INTEGER);
 			
 			//It's not a valid operation for this node
@@ -1659,7 +1658,7 @@ public class MetaData {
 			TestPluginMetaDataActivator.metaNodeDefault = new TestPluginMetaDataMetaNode();
 			TestPluginMetaDataActivator.metaNodeDefault.setLeaf(true);
 			TestPluginMetaDataActivator.metaNodeDefault.setFormat(DmtData.FORMAT_INTEGER);
-			TestPluginMetaDataActivator.metaNodeDefault.setMaxOccurrence(1);
+			TestPluginMetaDataActivator.metaNodeDefault.setMaxOccurrence(2);
 			TestPluginMetaDataActivator.metaNodeDefault.setDefaultValue(new DmtData(10));
 			
 			session.createLeafNode(TestPluginMetaDataActivator.INEXISTENT_LEAF_NODE);
@@ -2086,43 +2085,45 @@ public class MetaData {
         }
     }  
     
+ 
     /**
-     * Asserts that DmtException.METADATA_MISMATCH is thrown if 
-     * metadata is not provided for the node
+     * Asserts that no exception is thrown if the node does not have a metanode
+     * and we create a node with all of DmtData types using the method with three
+     * parameters
      * 
-     * DmtSession.setNodeValue(String,DmtData)
+     * @spec DmtSession.createLeafNode(String,DmtData,String)
      */
     private void testMetaData057() {
         DmtSession session = null;
         try {
             tbc.log("#testMetaData057");
-
+            
             session = tbc.getDmtAdmin().getSession(
-                    TestPluginMetaDataActivator.ROOT,
-                    DmtSession.LOCK_TYPE_EXCLUSIVE);
-            
+                TestPluginMetaDataActivator.ROOT,
+                DmtSession.LOCK_TYPE_EXCLUSIVE);
+        
             TestPluginMetaDataActivator.metaNodeDefault = null;
-            session.setNodeValue(TestPluginMetaDataActivator.LEAF_NODE,null);
-            tbc.failException("",DmtException.class);
-            
-        } catch (DmtException e) {
-            tbc.assertEquals("Asserts that DmtException.METADATA_MISMATCH is thrown " +
-                    "if metadata is not provided for the node ",DmtException.METADATA_MISMATCH,e.getCode());
-            tbc.assertTrue("Asserts that the plugin's method was not called",DmtConstants.TEMPORARY=="");
-        } catch (Exception e) {
-            tbc.fail("Expected " + DmtException.class.getName() + " but was "
-                    + e.getClass().getName());
 
+            //A DmtData instance can not have FORMAT_NODE, so it is form FORMAT_INTEGER (1) to FORMAT_NULL(512).
+            for (int i=1;i<=512;i=i<<1){
+                session.createLeafNode(TestPluginMetaDataActivator.INEXISTENT_NODE,DmtConstants.getDmtData(i),null);
+                tbc.pass("No exception is thrown if the node does not have a metanode and a node is created using " + DmtConstants.getDmtDataCodeText(i));
+            }
+           
+            
+        } catch (Exception e) {
+            tbc.fail("Unexpected Exception: " + e.getClass().getName()
+                + " [Message: " + e.getMessage() + "]");
         } finally {
             tbc.cleanUp(session,true);
-            
-            
         }
+
     } 
     
     /**
-     * Asserts that no exception is thrown, even 
-     * if the target does not have any permission
+     * Asserts that no exception is thrown when the target meta-data does not have any access type
+     * (returns false for all operations). It ensures that only the original node needs to have the 
+     * specified access type.
      * 
      * @spec DmtSession.renameNode(String,String)
      */
@@ -2456,7 +2457,7 @@ public class MetaData {
                 TestMetaNodeDataPluginActivator.ROOT,
                     DmtSession.LOCK_TYPE_EXCLUSIVE);
 
-            session.renameNode(TestMetaNodeDataPluginActivator.PERMANENT_INTERIOR_NODE,TestMetaNodeDataPluginActivator.INEXISTENT_NODE);
+            session.renameNode(TestMetaNodeDataPluginActivator.PERMANENT_INTERIOR_NODE,TestMetaNodeDataPluginActivator.INEXISTENT_NODE_NAME);
             tbc.failException("",DmtException.class);
         } catch (DmtException e) {
             tbc.assertEquals("Asserts that DmtException.METADATA_MISMATCH is thrown " +
@@ -2535,39 +2536,6 @@ public class MetaData {
 
     } 
     
-    /**
-     * Asserts that no exception is thrown if the node does not have a metanode
-     * and we create a node with all of DmtData types using the method with three
-     * parameters
-     * 
-     * @spec DmtSession.createLeafNode(String,DmtData,String)
-     */
-    private void testMetaData073() {
-        DmtSession session = null;
-        try {
-            tbc.log("#testMetaData073");
-            
-            session = tbc.getDmtAdmin().getSession(
-                TestPluginMetaDataActivator.ROOT,
-                DmtSession.LOCK_TYPE_EXCLUSIVE);
-        
-            TestPluginMetaDataActivator.metaNodeDefault = null;
-
-            //A DmtData instance can not have FORMAT_NODE, so it is form FORMAT_INTEGER (1) to FORMAT_NULL(512).
-            for (int i=1;i<=512;i=i<<1){
-                session.createLeafNode(TestPluginMetaDataActivator.INEXISTENT_NODE,DmtConstants.getDmtData(i),null);
-                tbc.pass("No exception is thrown if the node does not have a metanode and a node is created using " + DmtConstants.getDmtDataCodeText(i));
-            }
-           
-            
-        } catch (Exception e) {
-            tbc.fail("Unexpected Exception: " + e.getClass().getName()
-                + " [Message: " + e.getMessage() + "]");
-        } finally {
-            tbc.cleanUp(session,true);
-        }
-
-    } 
 }
 
 
