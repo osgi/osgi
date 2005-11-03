@@ -52,7 +52,7 @@ public interface ApplicationContext {
      * @throws java.lang.IllegalArgumentException If there is no service in the
      *             application descriptor with the specified <code>referenceName</code>.
      */
-    public void addServiceListener(ApplicationServiceListener listener, String referenceName);
+    public void addServiceListener(ApplicationServiceListener listener, String referenceName) throws java.lang.IllegalArgumentException;
 
     /**
      * Adds the specified {@link ApplicationServiceListener} object to this context
