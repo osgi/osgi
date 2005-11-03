@@ -33,6 +33,13 @@ import org.osgi.framework.Version;
   * different deployment packagess. Any violation of this no overlap rule is considered 
   * an error and the install or update of the offending deployment package must be aborted.<p>
   * 
+  * There is a Deployment Package called <u>"System" Deployment Package</u> that is always present in 
+  * the system. The content of this package is implementation specific. It should contain those 
+  * bundles that are absolutely necessery for the proper working of the device the OSGi framework 
+  * runs on. The Deployment Package Symbolic Name of this package is "System" (case sensitive). 
+  * This Deployment Package Symbolic Name is reserved. Any attempt to install a Deployment Package 
+  * with this name has to fail.<p>
+  * 
   * The Deployment Admin service should do as much as possible to ensure transactionality. 
   * It means that if a deployment package installation, update or removal (uninstall) fails 
   * all the side effects caused by the process should be disappeared  and the system 
@@ -61,7 +68,8 @@ public interface DeploymentPackage {
     boolean isStale();
 	  
 	/**
-	 * Returns the deployment pacakage symbolic name of the package.
+	 * Returns the Deployment Pacakage Symbolic Name of the package.
+	 * 
 	 * @return The name of the deployment package. It cannot be null.
 	 */
 	String getName();
@@ -73,25 +81,15 @@ public interface DeploymentPackage {
 	Version getVersion();
 	  
 	/**
-	 * Returns a two-dimensional array of strings representing the bundles and their version that
-	 * are specified in the manifest of this deployment package. The first dimension represents the 
-	 * bundles. Its size is equal to the number of the bundles in the deployment package. The size 
-	 * of the second dimension is 2. Its 0. value is the symbolic name and the 1. value is 
-	 * the version. E.g.:
+	 * Returns an array of {@link BundleInfo} objects representing the bundles specified in the manifest 
+	 * of this deployment package. Its size is equal to the number of the bundles in the deployment package. 
+	 * the version.
 	 * 
-	 * <pre>
-     *         String[][] bundles = dp.getBundleSymNameVersionPairs();
-     *         for (int i = 0; i < bundles.length; i++) {
-     *             String symbolicName = bundles[i][0];
-     *             String version = bundles[i][1];
-     *             // ...
-     *         }	 
-     * </pre>
-     * 
- 	 * @return The two-dimensional string array corresponding to bundle symbolic name 
-	 *         and version pairs. It cannot be null but the its length can be zero.
+ 	 * @return array of <code>BundleInfo</code> objects 
+     * @throws SecurityException if the caller doesn't have the appropriate {@link DeploymentAdminPermission} 
+     *         with "metadata" action
 	 */
-    String[][] getBundleSymNameVersionPairs();  
+	BundleInfo[] getBundleInfos();  
  
     /**
      * Returns the bundle instance, which is part of this deployment package, that corresponds 
@@ -105,6 +103,8 @@ public interface DeploymentPackage {
      * 
      * @param symbolicName the symbolic name of the requested bundle
      * @return The <code>Bundle</code> instance for a given bundle symbolic name.
+     * @throws SecurityException if the caller doesn't have the appropriate {@link DeploymentAdminPermission} 
+     *         with "metadata" action
      */
     Bundle getBundle(String symbolicName);
     
@@ -123,10 +123,12 @@ public interface DeploymentPackage {
      *     Resource-Processor: foo.rp
      * </pre>
      * 
-     * then the corresponding array element is the "foo/readme.txt" string.
+     * then the corresponding array element is the "foo/readme.txt" string.<p>
      * 
      * @return The string array corresponding to resources. It cannot be null but its 
      *         length can be zero.
+     * @throws SecurityException if the caller doesn't have the appropriate {@link DeploymentAdminPermission} 
+     *         with "metadata" action
      */
     String[] getResources();   
     
@@ -143,7 +145,9 @@ public interface DeploymentPackage {
      * 
      * @param resource the name of the resource (it is the same as the value of the "Name" 
      *        attribute in the deployment package's manifest) 
-     * @return resource processor for the resource 
+     * @return resource processor for the resource or <code>null</cpde>.
+     * @throws SecurityException if the caller doesn't have the appropriate {@link DeploymentAdminPermission} 
+     *         with "metadata" action
      */
     ServiceReference getResourceProcessor(String resource);    
 
@@ -155,14 +159,16 @@ public interface DeploymentPackage {
      * Mobile Specification Release 4 - Localization related chapters).
      * 
      * @param header the requested header
-     * @return the value of the header
+     * @return the value of the header or <code>null</code> if the header does not exist
+     * @throws SecurityException if the caller doesn't have the appropriate {@link DeploymentAdminPermission} 
+     *         with "metadata" action
      */
     String getHeader(String header);
 
     /**
      * Returns the requested deployment package manifest header from the name 
      * section determined by the path parameter. Header names are case insensitive. 
-     * If the header doesn't exist it returns null.<p>
+     * If the resource or the header doesn't exist it returns null.<p>
      * 
      * If the header is localized then the localized value is returned (see OSGi Service Platform,
      * Mobile Specification Release 4 - Localization related chapters).
@@ -170,7 +176,9 @@ public interface DeploymentPackage {
      * @param resource the name of the resoure (it is the same as the value of the "Name" 
      *        attribute in the deployment package's manifest)
      * @param header the requested header
-     * @return the value of the header
+     * @return the value of the header or <code>null</code> if the resource or the header doesn't exist
+     * @throws SecurityException if the caller doesn't have the appropriate {@link DeploymentAdminPermission} 
+     *         with "metadata" action
      */
     String getResourceHeader(String resource, String header);
     
@@ -179,10 +187,10 @@ public interface DeploymentPackage {
 	  * object becomes stale. This can be checked by using {@link #isStale()}, 
 	  * which will return <code>true</code> when stale.<p>
 	  * 
-	  * {@link DeploymentAdminPermission}("&lt;filter&gt;", "uninstall") is needed for this operation.
-	  *    
-	  * @throws DeploymentException if the deployment package could not be successfully uninstalled.
-	  * @throws SecurityException if access is not permitted based on the current security policy. 
+	  * @throws DeploymentException if the deployment package could not be successfully uninstalled. 
+	  *         For detailed error code description see {@link DeploymentException}.
+	  * @throws SecurityException if the caller doesn't have the appropriate 
+	  * 		{@link DeploymentAdminPermission}("&lt;filter&gt;", "uninstall") permission. 
 	  */
     void uninstall() throws DeploymentException;
  
@@ -192,8 +200,6 @@ public interface DeploymentPackage {
      * package object becomes stale. This can be checked by using {@link #isStale()}, 
      * which will return <code>true</code> when stale.<p>
      *  
-     * {@link DeploymentAdminPermission}("&lt;filter&gt;", "uninstallForced") is needed for this operation.<p>
-     * 
      * The method forces removal of the Deployment Package from the repository maintained by the 
      * Deployment Admin service. This method follows the same steps as {@link #uninstall}. However, 
      * any errors or the absence of Resource Processor services are ignored, they must not cause a roll back.
@@ -201,8 +207,10 @@ public interface DeploymentPackage {
      * 
      * @return true if the operation was successful
      * @throws DeploymentException only {@link DeploymentException#CODE_TIMEOUT} and 
-     *         {@link DeploymentException#CODE_CANCELLED} can be thrown
-     * @throws SecurityException if access is not permitted based on the current security policy.
+     *         {@link DeploymentException#CODE_CANCELLED} can be thrown. For detailed error code description 
+	 *         see {@link DeploymentException}.
+     * @throws SecurityException if the caller doesn't have the appropriate 
+     *         {@link DeploymentAdminPermission}("&lt;filter&gt;", "uninstall_forced") permission.
      */  
     boolean uninstallForced() throws DeploymentException;  
  

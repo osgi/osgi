@@ -8,13 +8,13 @@
  * distribution, and is available at http://www.eclipse.org/legal/epl-v10.html.
  */
 
-package org.osgi.service.deploymentadmin;
+package org.osgi.service.deploymentadmin.spi;
 
 import java.io.InputStream;
 
 /**
   * ResourceProcessor interface is implemented by processors handling resource files
-  * in deployment packages. The ResourceProcessor interfaces are exported as OSGi services.
+  * in deployment packages. Resource Processors expose their services as standard OSGi services.
   * Bundles exporting the service may arrive in the deployment package (customizers) or may be 
   * preregistered (they are installed prevoiusly). Resource processors has to define the 
   * <code>service.pid</code> standard OSGi service property which should be a unique string.<p>
@@ -52,6 +52,7 @@ public interface ResourceProcessor {
 	  * deployment package can be processed at a time.
 	  * 
 	  * @param session object that represents the current session to the resource processor
+	  * @see DeploymentSession
 	  */
     void begin(DeploymentSession session);
   
@@ -61,9 +62,11 @@ public interface ResourceProcessor {
      * 
      * @param name The name of the resource relative to the deployment package root directory. 
      * @param stream The stream for the resource. 
-     * @throws DeploymentException if the resource cannot be processed.
+     * @throws ResourceProcessorException if the resource cannot be processed. Only 
+     *         {@link ResourceProcessorException#CODE_RESOURCE_SHARING_VIOLATION} and 
+     *         {@link ResourceProcessorException#CODE_OTHER_ERROR} error codes are allowed.
      */
-    void process(String name, InputStream stream) throws DeploymentException;
+    void process(String name, InputStream stream) throws ResourceProcessorException;
 
 	/**
 	  * Called when a resource, associated with a particular resource processor, had belonged to 
@@ -74,9 +77,11 @@ public interface ResourceProcessor {
 	  * 
 	  * @param resource the name of the resource to drop (it is the same as the value of the 
 	  *        "Name" attribute in the deployment package's manifest)
-	  * @throws DeploymentException if the resource is not allowed to be dropped.
+	  * @throws ResourceProcessorException if the resource is not allowed to be dropped. Only the 
+	  *         {@link ResourceProcessorException#CODE_NO_SUCH_RESOURCE} and the 
+	  *         {@link ResourceProcessorException#CODE_OTHER_ERROR} error codes are allowed
 	  */
-    void dropped(String resource) throws DeploymentException;
+    void dropped(String resource) throws ResourceProcessorException;
     
     /**
      * This method is called during an "uninstall" deployment session.
@@ -84,22 +89,24 @@ public interface ResourceProcessor {
      * in the deployment package being uninstalled. This provides an opportunity for the processor 
      * to cleanup any memory and persistent data being maintained for the deployment package.
      * 
-     * @throws DeploymentException if all resources could not be dropped.
+     * @throws ResourceProcessorException if all resources could not be dropped. Only the 
+     *         {@link ResourceProcessorException#CODE_OTHER_ERROR} is allowed.
      */
-    void dropAllResources() throws DeploymentException;
+    void dropAllResources() throws ResourceProcessorException;
   
     /**
      * This method is called on the Resource Processor immediately before calling the 
      * <code>commit</code> method. The Resource Processor has to check whether it is able 
      * to commit the operations since the last <code>begin</code> method call. If it determines 
      * that it is not able to commit the changes, it has to raise a 
-     * <code>DeploymentException</code> with {@link DeploymentException#CODE_PREPARE} exception 
-     * code (see {@link DeploymentException}).
+     * <code>ResourceProcessorException</code> with the {@link ResourceProcessorException#CODE_PREPARE} 
+     * error code.
      * 
-     * @throws DeploymentException if the resource processor is able to determine it is 
-     *         not able to commit.
+     * @throws ResourceProcessorException if the resource processor is able to determine it is 
+     *         not able to commit. Only the {@link ResourceProcessorException#CODE_PREPARE} error 
+     *         code is allowed.
      */
-    void prepare() throws DeploymentException;        
+    void prepare() throws ResourceProcessorException;        
    
     /**
      * Called when the processing of the current deployment package is finished. 

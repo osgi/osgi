@@ -7,7 +7,9 @@
  * terms of the Eclipse Public License v1.0 which accompanies this 
  * distribution, and is available at http://www.eclipse.org/legal/epl-v10.html.
  */
-package org.osgi.service.deploymentadmin;
+package org.osgi.service.deploymentadmin.spi;
+
+import org.osgi.service.deploymentadmin.DeploymentPackage;
 
 /**
  * The session interface represents a currently running deployment session 
@@ -16,7 +18,7 @@ package org.osgi.service.deploymentadmin;
  * When a deployment package is installed the target package, when uninstalled the 
  * source package is an empty deployment package. The empty deployment package is a virtual 
  * entity it doesn't appear for the outside world. It is only visible on the 
- * DeploymentSession interface used by Resource processors. Although  the empty package 
+ * DeploymentSession interface used by Resource Processors. Although  the empty package 
  * is only visible for Resource Processors it has the following characteristics:<p>
  *  
  * <ul>
@@ -69,13 +71,12 @@ public interface DeploymentSession {
      * Deployment Admin on the fly when this method is called. The permissions remain availble 
      * during the deployment action only.<p>
      * 
-     * {@link DeploymentCustomizerPermission}("&lt;filter&gt;", "privatearea")</code> is also 
-	 * needed for this operation.
+     * The bundle and the Resource Processor have to be in the same Deployment Package.
      * 
      * @param bundle the bundle the private area belongs to
      * @return file representing the private area of the bundle. It cannot be null.
-     * @throws SecurityException if the caller is not the customizer of the corresponding 
-     *         deployment package.
+     * @throws SecurityException if the caller doesn't have the appropriate 
+     *         {@link DeploymentCustomizerPermission}("&lt;filter&gt;", "privatearea") permission.
      * @see DeploymentPackage
      * @see DeploymentCustomizerPermission
      */     

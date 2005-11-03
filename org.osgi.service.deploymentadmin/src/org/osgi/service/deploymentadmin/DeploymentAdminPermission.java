@@ -15,56 +15,95 @@ import java.lang.reflect.InvocationTargetException;
 import java.security.*;
 
 /**
- * DeploymentAdminPermission controls access to MEG management framework functions.
- * This permission controls only Deployment Admin-specific functions;
- * framework-specific access is controlled by usual OSGi permissions
- * (see {@link org.osgi.framework.AdminPermission}, etc.)<p>
+ * DeploymentAdminPermission controls access to the Deployment Admin service.<p>
  * 
- * The permission uses a &lt;filter&gt; string formatted similarly to the {@link org.osgi.framework.Filter}.
- * The <code>DeploymentAdminPermission</code> filter does not use the id and location filters.
- * The "signer" filter is matched against the signer chain of the deployment package, and
- * the "name" filter is matched against the DeploymentPackage-Name header.
+ * The permission uses a filter string formatted similarly to the {@link org.osgi.framework.Filter}. 
+ * The filter determines the target of the permission. The <code>DeploymentAdminPermission</code> uses the 
+ * <code>name</code> and the <code>signer</code> filter attributes only. The value of the <code>signer</code> 
+ * attribute is matched against the signer chain (represented with its semicolon separated Distinguished Name chain) 
+ * of the Deployment Package, and the value of the <code>name</code> attribute is matched against the value of the 
+ * "DeploymentPackage-Name" manifest header of the Deployment Package. Example: 
  * 
- * <pre>
- * 		DeploymentAdminPermission( "&lt;filter&gt;", "list" )<p>
- * </pre>
+ * <ul>
+ * 		<li>(signer=cn = Bugs Bunny, o = ACME, c = US)</li>
+ * 		<li>(name=org.osgi.ExampleApp)</li>
+ * </ul>
+ * 
+ * Wildcards also can be used:<p>
+ * 
+ * <table border = "1">
+ * 		<tr>
+ * 			<td>(signer=cn=*,o=ACME,c=*)</td>
+ * 			<td>"cn" and "c" may have an arbitrary value</td>
+ * 		</tr>
+ * 		<tr>		
+ * 			<td>(signer=*, o=ACME, c=US)</td>
+ * 			<td>only the value of "o" and "c" are significant</td>
+ * 		</tr>
+ * 		<tr>		
+ * 			<td>(signer=* ; ou=S & V, o=Tweety Inc., c=US)</td>
+ * 			<td>the first element of the certificate chain is not important, only the second (the 
+ * 				Distingushed Name of the root certificate)</td>
+ * 		</tr>
+ * 		<tr>		
+ * 			<td>(signer=- ; *, o=Tweety Inc., c=US)</td>
+ * 			<td>the same as the previous but '-' represents zero or more certificates, 
+ * 				whereas the asterisk only represents a single certificate</td>
+ * 		</tr>
+ * 		<tr>		
+ * 			<td>(name=*)</td>
+ * 			<td>the name of the Deployment Package doesn't matter</td>
+ * 		</tr>
+ * 		<tr>		
+ * 			<td>(name=org.osgi.*)</td>
+ * 			<td>the name has to begin with "org.osgi."</td>
+ * 		</tr>
+ * </table>
+ * <p>
+ * 
+ * The following actions are allowed:<p>
+ * 
+ * <b><code>list</code></b><p>
  * 
  * A holder of this permission can access the inventory information of the deployment
  * packages selected by the &lt;filter&gt; string. The filter selects the deployment packages
  * on which the holder of the permission can acquire detailed inventory information.
- * See {@link DeploymentAdmin#getDeploymentPackage} and
- * {@link DeploymentAdmin#listDeploymentPackages}.
+ * See {@link DeploymentAdmin#getDeploymentPackage(Bundle)}, 
+ * {@link DeploymentAdmin#getDeploymentPackage(String)} and
+ * {@link DeploymentAdmin#listDeploymentPackages}.<p>
  * 
- * <pre>
- * 		DeploymentAdminPermission( "&lt;filter&gt;", "install" )
- * </pre>
+ * <b><code>install</code></b><p>
  * 
- * A holder of this permission can install/upgrade deployment packages if the deployment
- * package satisfies the &lt;filter&gt; string. See {@link DeploymentAdmin#installDeploymentPackage}.
+ * A holder of this permission can install/update deployment packages if the deployment
+ * package satisfies the &lt;filter&gt; string. See {@link DeploymentAdmin#installDeploymentPackage}.<p>
  * 
- * <pre>
- * 		DeploymentAdminPermission( "&lt;filter&gt;", "uninstall" )
- * </pre>
+ * <b><code>uninstall</code></b><p>
  * 
  * A holder of this permission can uninstall deployment packages if the deployment
- * package satisfies the &lt;filter&gt; string. See {@link DeploymentPackage#uninstall}.
+ * package satisfies the &lt;filter&gt; string. See {@link DeploymentPackage#uninstall}.<p>
  * 
- * <pre>
- * 		DeploymentAdminPermission( "&lt;filter&gt;", "uninstallForced" )
- * </pre>
+ * <b><code>uninstallforced</code></b><p>
  * 
  * A holder of this permission can forcefully uninstall deployment packages if the deployment
- * package satisfies the  string. See {@link DeploymentPackage#uninstallForced}.
+ * package satisfies the &lt;filter&gt; string. See {@link DeploymentPackage#uninstallForced}.<p>
  * 
- * <pre>
- * 		DeploymentAdminPermission( "&lt;filter&gt;", "cancel" )
- * </pre>
+ * <b><code>cancel</code></b><p>
  * 
  * A holder of this permission can cancel an active deployment action. This action being
  * cancelled could correspond to the install, update or uninstall of a deployment package
- * that satisfies the  string. See {@link DeploymentAdmin#cancel}<p>
+ * that satisfies the &lt;filter&gt; string. See {@link DeploymentAdmin#cancel}<p>
  * 
- * Wildcards can be used both in the name and the signer (see RFC-95) filters.<p>
+ * <b><code>metadata</code></b><p>
+ * 
+ * A holder of this permission is able to retrieve metadata information about a Deployment 
+ * Package (e.g. is able to ask its manifest hedares). 
+ * See {@link org.osgi.service.deploymentadmin.DeploymentPackage#getBundle(String)},
+ * {@link org.osgi.service.deploymentadmin.DeploymentPackage#getBundleSymNameVersionPairs()},
+ * {@link org.osgi.service.deploymentadmin.DeploymentPackage#getHeader(String)}, 
+ * {@link org.osgi.service.deploymentadmin.DeploymentPackage#getResourceHeader(String, String)},
+ * {@link org.osgi.service.deploymentadmin.DeploymentPackage#getResourceProcessor(String)}, 
+ * {@link org.osgi.service.deploymentadmin.DeploymentPackage#getResources()}<p>
+ *
  * The actions string is converted to lowercase before processing.
  */
 public final class DeploymentAdminPermission extends Permission {
@@ -93,11 +132,11 @@ public final class DeploymentAdminPermission extends Permission {
     public static final String ACTION_UNINSTALL          = "uninstall";
 
     /**
-     * Constant String to the "uninstallForced" action.<p>
+     * Constant String to the "uninstallforced" action.<p>
      * 
      * @see DeploymentPackage#uninstallForced()
      */
-    public static final String ACTION_UNINSTALL_FORCED   = "uninstallForced";
+    public static final String ACTION_UNINSTALL_FORCED   = "uninstall_forced";
     
     /**
      * Constant String to the "cancel" action.<p>
@@ -105,6 +144,18 @@ public final class DeploymentAdminPermission extends Permission {
      * @see DeploymentAdmin#cancel
      */
     public static final String ACTION_CANCEL             = "cancel";
+    
+    /**
+     * Constant String to the "metadata" action.<p>
+     * 
+     * @see org.osgi.service.deploymentadmin.DeploymentPackage#getBundle(String)
+     * @see org.osgi.service.deploymentadmin.DeploymentPackage#getBundleSymNameVersionPairs()
+     * @see org.osgi.service.deploymentadmin.DeploymentPackage#getHeader(String)
+     * @see org.osgi.service.deploymentadmin.DeploymentPackage#getResourceHeader(String, String)
+     * @see org.osgi.service.deploymentadmin.DeploymentPackage#getResourceProcessor(String)
+     * @see org.osgi.service.deploymentadmin.DeploymentPackage#getResources()
+     */
+    public static final String ACTION_METADATA           = "metadata";
     
     private static final String      delegateProperty = "org.osgi.vendor.deploymentadmin";
     private static final Constructor constructor;
@@ -162,7 +213,7 @@ public final class DeploymentAdminPermission extends Permission {
      * Two permission objects are equal if: <p>
      * 
      * <ul>
-     * 		<li>their target filters are equal and</li>
+     * 		<li>their target filters are semantically equal and</li>
      * 		<li>their actions are the same</li> 
      * </ul>
      * 
@@ -192,7 +243,7 @@ public final class DeploymentAdminPermission extends Permission {
     /**
      * Returns the String representation of the action list.<p>
      * The method always gives back the actions in the following (alphabetical) order: 
-     * <code>cancel, install, list, uninstall, uninstallForced</code>
+     * <code>cancel, install, list, metadata, uninstall, uninstall_forced</code>
      * 
      * @return Action list of this permission instance. This is a comma-separated 
      *         list that reflects the action parameter of the constructor.

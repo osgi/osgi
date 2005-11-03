@@ -12,163 +12,188 @@ package org.osgi.service.deploymentadmin;
 
 /**
  * Checked exception received when something fails during any deployment
- * processes. Beside the exception message, a <code>DeploymentException</code>
- * always contains an error code (one of the constants specified in this class),
- * and may optionally contain the textual description of the error condition and
- * a nested cause exception.
- * <p>
+ * processes. A <code>DeploymentException</code> always contains an error code 
+ * (one of the constants specified in this class), and may optionally contain 
+ * the textual description of the error condition and a nested cause exception.
  */
 public class DeploymentException extends Exception {
 
 	/**
-	 * Missing mandatory manifest header.<p> 
-	 * {@link DeploymentAdmin#installDeploymentPackage(InputStream)} 
-	 * can throw exception with this code.  
+	 * Missing mandatory manifest header.<p>
+	 *  
+	 * {@link DeploymentAdmin#installDeploymentPackage(InputStream)} can throw 
+	 * exception with this error code.  
 	 */
-	public static final int	CODE_MISSING_HEADER				= 1;
+	public static final int	CODE_MISSING_HEADER				= 451;
 
 	/**
 	 * Syntax error in any manifest header.<p>
+	 * 
 	 * {@link DeploymentAdmin#installDeploymentPackage(InputStream)}
-	 * throws exception with this code.  
+	 * throws exception with this error code.  
 	 */
-	public static final int	CODE_BAD_HEADER					= 2;
+	public static final int	CODE_BAD_HEADER					= 452;
 
 	/**
 	 * Fix pack version range doesn't fit to the version of the target
 	 * deployment package or the target deployment package of the fix pack
 	 * doesn't exist.<p>
+	 * 
 	 * {@link DeploymentAdmin#installDeploymentPackage(InputStream)}
-	 * throws exception with this code.  
+	 * throws exception with this error code.  
 	 */
-	public static final int	CODE_MISSING_FIXPACK_TARGET		= 3;
+	public static final int	CODE_MISSING_FIXPACK_TARGET		= 453;
 
 	/**
 	 * A bundle in the deployment package is marked as DeploymentPackage-Missing
 	 * but there is no such bundle in the target deployment package.<p>
+	 * 
 	 * {@link DeploymentAdmin#installDeploymentPackage(InputStream)}
-	 * throws exception with this code.  
+	 * throws exception with this error code.  
 	 */
-	public static final int	CODE_MISSING_BUNDLE				= 4;
+	public static final int	CODE_MISSING_BUNDLE				= 454;
 
 	/**
 	 * A resource in the source deployment package is marked as
 	 * DeploymentPackage-Missing but there is no such resource in the target
 	 * deployment package.<p>
+	 * 
 	 * {@link DeploymentAdmin#installDeploymentPackage(InputStream)}
-	 * throws exception with this code.  
+	 * throws exception with this error code.  
 	 */
-	public static final int	CODE_MISSING_RESOURCE			= 5;
+	public static final int	CODE_MISSING_RESOURCE			= 455;
 
 	/**
 	 * Bad deployment package signing.<p>
+	 * 
 	 * {@link DeploymentAdmin#installDeploymentPackage(InputStream)}
-	 * throws exception with this code.  
+	 * throws exception with this error code.  
 	 */
-	public static final int	CODE_SIGNING_ERROR				= 6;
+	public static final int	CODE_SIGNING_ERROR				= 456;
 
 	/**
 	 * Bundle symbolic name is not the same as defined by the deployment package
 	 * manifest.<p>
+	 * 
 	 * {@link DeploymentAdmin#installDeploymentPackage(InputStream)}
-	 * throws exception with this code.  
+	 * throws exception with this error code.  
 	 */
-	public static final int	CODE_BUNDLE_NAME_ERROR			= 7;
+	public static final int	CODE_BUNDLE_NAME_ERROR			= 457;
 
 	/**
 	 * Matched resource processor service is a customizer from another
 	 * deployment package.<p>
+	 * 
 	 * {@link DeploymentAdmin#installDeploymentPackage(InputStream)}
-	 * throws exception with this code.  
+	 * throws exception with this error code.  
 	 */
-	public static final int	CODE_FOREIGN_CUSTOMIZER			= 8;
+	public static final int	CODE_FOREIGN_CUSTOMIZER			= 458;
 
 	/**
 	 * The <code>dropped(String resource)</code> method was called on the
 	 * matched resource processor but the resource processor doesn't manage this
 	 * resource.<p>
-	 * {@link ResourceProcessor#dropped(String)} throws exception with this code.  
+	 * 
+	 * This exception is thrown when the called resource processor throws a 
+	 * <code>ResourceProcessorException</code> with the 
+	 * {@link org.osgi.service.deploymentadmin.spi.ResourceProcessorException#CODE_NO_SUCH_RESOURCE} 
+	 * error code.<p>
+	 * 
+	 * {@link DeploymentAdmin#installDeploymentPackage(InputStream)} or 
+	 * {@link DeploymentPackage#uninstall()} methods throw exception with this error code.  
 	 */
-	public static final int	CODE_NO_SUCH_RESOURCE			= 9;
+	public static final int	CODE_NO_SUCH_RESOURCE			= 459;
 
 	/**
 	 * Bundle with the same symbolic name alerady exists.<p>
+	 * 
 	 * {@link DeploymentAdmin#installDeploymentPackage(InputStream)}
-	 * throws exception with this code.  
+	 * throws exception with this error code.  
 	 */
-	public static final int	CODE_BUNDLE_SHARING_VIOLATION	= 10;
+	public static final int	CODE_BUNDLE_SHARING_VIOLATION	= 460;
 
 	/**
 	 * An artifact of any resource already exists.<p>
-	 * {@link ResourceProcessor#process(String, InputStream)}
-	 * throws exception with this code.  
+	 * 
+	 * This exception is thrown when the called resource processor throws a 
+	 * <code>ResourceProcessorException</code> with the 
+	 * {@link org.osgi.service.deploymentadmin.spi.ResourceProcessorException#CODE_RESOURCE_SHARING_VIOLATION} 
+	 * error code.<p>
+	 * 
+	 * {@link DeploymentAdmin#installDeploymentPackage(InputStream)}
+	 * throws exception with this error code.  
 	 */
-	public static final int	CODE_RESOURCE_SHARING_VIOLATION	= 11;
-
-	/**
-	 * Resource processors are allowed to raise such exceptions that indicates
-	 * that the processor is not able to commit the operations it made since the
-	 * last call of <code>begin</code> method.<p>
-	 * {@link ResourceProcessor#prepare()} throws exception with this code.  
-	 */
-	public static final int	CODE_PREPARE					= 12;
+	public static final int	CODE_RESOURCE_SHARING_VIOLATION	= 461;
 
 	/**
 	 * The Resource Processor service with the given PID (see
-	 * <code>Resource-Processor</code> manifest header) is not found.<p> 
+	 * <code>Resource-Processor</code> manifest header) is not found.<p>
+	 *  
 	 * {@link DeploymentAdmin#installDeploymentPackage(InputStream)},
 	 * {@link DeploymentPackage#uninstall()} and 
 	 * {@link DeploymentPackage#uninstallForced()}
-	 * throws exception with this code.  
+	 * throws exception with this error code.  
 	 */
-	public static final int	CODE_PROCESSOR_NOT_FOUND		= 13;
+	public static final int	CODE_PROCESSOR_NOT_FOUND		= 464;
 
 	/**
 	 * Order of files in the deployment package is bad. The right order is the 
 	 * following:<p>
 	 * 
-	 * <pre>
-	 *    META-INF/MANIFEST.MF
-	 *    META-INF/*.SF, META-INF/*.DSA, META-INF/*.RS
-	 *    Localization files
-	 *    Bundles
-	 *    Resources
-	 * </pre>
+	 * <ol>
+	 *    <li>META-INF/MANIFEST.MF</li>
+	 *    <li>META-INF/*.SF, META-INF/*.DSA, META-INF/*.RS</li>
+	 *    <li>Localization files</li>
+	 *    <li>Bundles</li>
+	 *    <li>Resources</li>
+	 * </ol>
 	 * 
 	 * {@link DeploymentAdmin#installDeploymentPackage(InputStream)}
-	 * throws exception with this code.  
+	 * throws exception with this error code.  
 	 */
-	public static final int	CODE_ORDER_ERROR				= 14;
+	public static final int	CODE_ORDER_ERROR				= 450;
 
 	/**
 	 * When a client requests a new session with an install or uninstall
 	 * operation, it must block that call until the earlier session is
 	 * completed. The Deployment Admin service must throw a Deployment Exception
-	 * with this code when the session can not be created after an appropriate
+	 * with this error code when the session can not be created after an appropriate
 	 * time out period.<p>
 	 * 
 	 * {@link DeploymentAdmin#installDeploymentPackage(InputStream)},
 	 * {@link DeploymentPackage#uninstall()} and 
 	 * {@link DeploymentPackage#uninstallForced()}
-	 * throws exception with this code.  
+	 * throws exception with this error code.  
 	 */
-	public static final int	CODE_TIMEOUT					= 15;
+	public static final int	CODE_TIMEOUT					= 465;
 
 	/**
 	 * {@link DeploymentAdmin#installDeploymentPackage(InputStream)}, 
 	 * {@link DeploymentPackage#uninstall()} and {@link DeploymentPackage#uninstallForced()} 
-	 * methods can throw {@link DeploymentException} with this code if the 
+	 * methods can throw {@link DeploymentException} with this error code if the 
 	 * {@link DeploymentAdmin#cancel()} method is called from another thread.
 	 */
-	public static final int	CODE_CANCELLED                   = 16;
+	public static final int	CODE_CANCELLED                  = 401;
 
 	/**
 	 * Other error condition.<p>
+	 * 
 	 * All Deployment Admin methods which throw <code>DeploymentException</code> 
-	 * can throw an exception with this code if the error condition cannot be 
+	 * can throw an exception with this error code if the error condition cannot be 
 	 * categorized. 
 	 */
-	public static final int	CODE_OTHER_ERROR				= 0;
+	public static final int	CODE_OTHER_ERROR				= 463;
+
+	/**
+	 * Exception with this error code is thrown when one of the Resource Processors 
+	 * involved in the deployment session threw a <code>ResourceProcessorException</code> with the 
+	 * {@link org.osgi.service.deploymentadmin.spi.ResourceProcessorException#CODE_PREPARE} error 
+	 * code.<p>
+	 * 
+	 * {@link DeploymentAdmin#installDeploymentPackage(InputStream)} and 
+	 * {@link DeploymentPackage#uninstall()} methods throw exception with this error code.  
+	 */
+	public static final int	CODE_COMMIT_ERROR				= 1;
 
 	private int				code;
 	private String			message;
