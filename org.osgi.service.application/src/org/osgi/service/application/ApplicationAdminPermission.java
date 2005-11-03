@@ -37,7 +37,7 @@ public class ApplicationAdminPermission extends Permission {
 	/**
 	 * Allows the lifecycle management of the target applications.
 	 */
-	public static final String LIFECYCLE = "lifecycle";
+	public static final String LIFECYCLE_ACTION = "lifecycle";
 
 	/**
 	 * Allows scheduling of the target applications. The permission to
@@ -45,12 +45,12 @@ public class ApplicationAdminPermission extends Permission {
 	 * manage the lifecycle of that application i.e. <code>schedule</code>
 	 * implies <code>lifecycle</code>
 	 */
-	public static final String SCHEDULE = "schedule";
+	public static final String SCHEDULE_ACTION = "schedule";
 
 	/**
 	 * Allows setting/unsetting the locking state of the target applications.
 	 */
-	public static final String LOCK = "lock";
+	public static final String LOCK_ACTION = "lock";
 
 	private ApplicationDescriptor	applicationDescriptor;
 
@@ -255,9 +255,9 @@ public class ApplicationAdminPermission extends Permission {
   private              Filter appliedFilter = null; 
   
   static {
-      ACTIONS.add(LIFECYCLE);
-      ACTIONS.add(SCHEDULE);
-      ACTIONS.add(LOCK);
+      ACTIONS.add(LIFECYCLE_ACTION);
+      ACTIONS.add(SCHEDULE_ACTION);
+      ACTIONS.add(LOCK_ACTION);
   }
 
   private static Vector actionsVector(String actions) {
@@ -297,7 +297,7 @@ public class ApplicationAdminPermission extends Permission {
 		actionsVector = actionsVector( actions );
 
 		if ( actions.equals("*") )
-			actionsVector = actionsVector( LIFECYCLE + "," + SCHEDULE + "," + LOCK );
+			actionsVector = actionsVector( LIFECYCLE_ACTION + "," + SCHEDULE_ACTION + "," + LOCK_ACTION );
 		else if (!ACTIONS.containsAll(actionsVector))
       throw new IllegalArgumentException("Illegal action!");
 		
