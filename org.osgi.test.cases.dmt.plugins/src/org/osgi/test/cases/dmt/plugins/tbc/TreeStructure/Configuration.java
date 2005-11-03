@@ -304,7 +304,7 @@ public class Configuration extends DefaultTestBundleControl {
 			session = tbc.getDmtAdmin().getSession(DmtConstants.OSGi_CFG,DmtSession.LOCK_TYPE_ATOMIC);
 			session.createInteriorNode(CFG_PID);
 			session.createInteriorNode(CFG_PID_KEYS_KEY);
-			session.createLeafNode(CFG_PID_KEYS_KEY_TYPE,new DmtData("a"));
+			session.createLeafNode(CFG_PID_KEYS_KEY_TYPE,new DmtData("java.lang.String"));
 			
 			MetaNode metaNode = session.getMetaNode(CFG_PID_KEYS_KEY_TYPE);
 			
