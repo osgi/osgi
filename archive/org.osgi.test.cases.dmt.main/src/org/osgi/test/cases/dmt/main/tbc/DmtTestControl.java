@@ -206,9 +206,10 @@ public class DmtTestControl extends DefaultTestBundleControl {
             perm = defaults;
         }
 
-        permissionWorker.setLocation(LOCATION);
-        permissionWorker.setPermissions(perm);
+
         synchronized (permissionWorker) {
+            permissionWorker.setLocation(LOCATION);
+            permissionWorker.setPermissions(perm);
             permissionWorker.notifyAll();
             try {
                 permissionWorker.wait(DmtConstants.WAIT_TIME);
@@ -228,9 +229,10 @@ public class DmtTestControl extends DefaultTestBundleControl {
             new PermissionInfo(PropertyPermission.class.getName(), "*","read"),
             permission
         };
-        permissionWorker.setLocation(LOCATION);
-        permissionWorker.setPermissions(perm);
+
         synchronized (permissionWorker) {
+            permissionWorker.setLocation(LOCATION);
+            permissionWorker.setPermissions(perm);
             permissionWorker.notifyAll();
             try {
                 permissionWorker.wait(DmtConstants.WAIT_TIME);

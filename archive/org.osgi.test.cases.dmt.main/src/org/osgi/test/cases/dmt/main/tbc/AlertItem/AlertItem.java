@@ -48,7 +48,7 @@ public class AlertItem {
 	private String mark = "mark";
 	private DmtData data = new DmtData("test");
 	private String[] nodeUri = {".","OSGi","Log"};
-	private String nodeUriMangled = tbc.mangleUri(nodeUri);
+	private String nodeUriMangled = "./OSGi/Log";
 	
 	public AlertItem(DmtTestControl tbc) {
 		this.tbc = tbc;
