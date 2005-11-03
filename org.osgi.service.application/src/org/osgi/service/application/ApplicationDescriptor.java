@@ -295,7 +295,9 @@ public abstract class ApplicationDescriptor {
 	 */
 	public final ApplicationHandle launch(Map arguments)
 			throws Exception {
-		delegate.launch(arguments);		
+		delegate.launch(arguments);
+		if( isLaunchableSpecific() )
+			throw new Exception("Cannot launch the application!");
 	  return launchSpecific(arguments);
 	}
 
