@@ -265,6 +265,8 @@ public class UserPromptCondition
 	}
 
 	protected UserPromptCondition(Bundle bundle, String levels, String defaultLevel, String catalogName, String message) {
+		levels=levels.toUpperCase();
+		defaultLevel=defaultLevel.toUpperCase();
 		this.bundleID = bundle.getBundleId();
 		this.catalogName = catalogName;
 		this.message = message;

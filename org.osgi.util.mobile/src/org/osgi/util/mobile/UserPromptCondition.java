@@ -76,11 +76,12 @@ public class UserPromptCondition implements Condition {
 	 * 			strings in it:
 	 * <ol start="0">
 	 * <li>the possible permission levels. This is a comma-separated list that can contain
-	 * 		following strings: ONESHOT SESSION BLANKET. The order is not important.
-	 * 
-	 * ### Is this case sensitive?</li>
+	 * 		following strings: ONESHOT SESSION BLANKET. The order is not important. This
+	 * 		parameter is case-insensitive.
+	 * 		</li>
 	 * <li>the default permission level, one chosen from the possible permission levels. If
-	 * 		it is an empty string, then there is no default.</li>
+	 * 		it is an empty string, then there is no default. This parameter
+	 * 		is case-insensitive.</li>
 	 * <li>the message catalog base name. It will be loaded by a {@link java.util.ResourceBundle},
 	 * 		or equivalent
 	 * 		from an exporting OSGi Bundle. Thus, if the catalogName is "com.provider.messages.userprompt",
