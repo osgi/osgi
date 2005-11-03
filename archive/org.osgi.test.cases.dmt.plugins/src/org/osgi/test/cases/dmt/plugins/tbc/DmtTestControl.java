@@ -406,12 +406,13 @@ public class DmtTestControl extends DefaultTestBundleControl {
 		}
 	}
 	public void cleanUp(DmtSession session,boolean cleanTemporary) {
-	    if (cleanTemporary) {
+	    closeSession(session);
+		if (cleanTemporary) {
 		    DmtConstants.TEMPORARY="";
 		    DmtConstants.PARAMETER_2="";
 		    DmtConstants.PARAMETER_3="";
 	    }
-	    closeSession(session);
+
 	    
 	}
 	public void closeSession(DmtSession session) {
@@ -420,7 +421,7 @@ public class DmtTestControl extends DefaultTestBundleControl {
 				try {
 					session.close();
 				} catch (DmtException e) {
-					log("#Exception closing the session: "+e.getClass().getName() + "Message: [" +e.getMessage() +"]");
+					log("#Exception closing the session: "+e.getClass().getName() + ". Message: [" +e.getMessage() +"]");
 				}
 			}
 		}

@@ -221,7 +221,7 @@ public class Log {
 			tbc.assertEquals("Asserts that $/Log/<search_id>/LogResult node is automatic",MetaNode.AUTOMATIC, metaNode.getScope());
 			tbc.assertTrue("Asserts $/Log/<search_id>/LogResult node can be gotten", metaNode.can(MetaNode.CMD_GET));
 			tbc.assertEquals("Asserts $/Log/<search_id>/LogResult node format is an interior node", DmtData.FORMAT_NODE,metaNode.getFormat());
-			tbc.assertTrue("Asserts $/Log/<search_id>/LogResult node cardinality", !metaNode.isZeroOccurrenceAllowed() && metaNode.getMaxOccurrence()==Integer.MAX_VALUE);
+			tbc.assertTrue("Asserts $/Log/<search_id>/LogResult node cardinality", !metaNode.isZeroOccurrenceAllowed() && metaNode.getMaxOccurrence()==1);
 		} catch (Exception e) {
 			tbc.fail("Unexpected Exception: " + e.getClass().getName()
 					+ " [Message: " + e.getMessage() + "]");

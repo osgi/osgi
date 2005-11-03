@@ -70,7 +70,6 @@ public class TestExecPluginActivator implements BundleActivator {
 		testExecPlugin = new TestExecPlugin(tbc);
 		Hashtable props = new Hashtable();
 		props.put(ExecPlugin.EXEC_ROOT_URIS, new String[] { ROOT });
-		props.put(DataPluginFactory.DATA_ROOT_URIS, new String[] { ROOT });
 		String[] ifs = new String[] { DataPluginFactory.class.getName(),ExecPlugin.class.getName() };
 		servReg = bc.registerService(ifs, testExecPlugin, props);
 		System.out.println("TestExecPlugin activated.");

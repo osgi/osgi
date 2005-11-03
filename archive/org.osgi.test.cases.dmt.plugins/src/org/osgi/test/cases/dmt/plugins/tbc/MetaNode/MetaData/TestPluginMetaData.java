@@ -210,7 +210,7 @@ public class TestPluginMetaData implements DataPluginFactory, ExecPlugin, ReadWr
 	}
 
 	public String[] getChildNodeNames(String[] nodeUri) throws DmtException {
-			return new String[] { GETCHILDNODENAMES };
+			return new String[] { GETCHILDNODENAMES, "newNode" };
 	}
 
 	public MetaNode getMetaNode(String[] nodeUri) throws DmtException {
