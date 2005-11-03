@@ -274,21 +274,24 @@ public class AclConstraints {
 		DmtSession session = null;
 		try {
 			tbc.log("#testAclConstraints008");
-
+            //We need to set that a parent of the node does not have Replace else the acl of the root "." is gotten
+            tbc.openSessionAndSetNodeAcl(TestExecPluginActivator.INTERIOR_NODE, DmtConstants.PRINCIPAL, Acl.DELETE );
             tbc.openSessionAndSetNodeAcl(TestExecPluginActivator.LEAF_NODE, DmtConstants.PRINCIPAL, Acl.REPLACE );
-			tbc.setPermissions(new PermissionInfo(DmtPrincipalPermission.class.getName(),DmtConstants.PRINCIPAL,"*"));
-			session = tbc.getDmtAdmin().getSession(DmtConstants.PRINCIPAL,TestExecPluginActivator.LEAF_NODE,DmtSession.LOCK_TYPE_EXCLUSIVE);
-			session.setNodeAcl(TestExecPluginActivator.LEAF_NODE,new org.osgi.service.dmt.Acl("Get=*"));
+
+            tbc.setPermissions(new PermissionInfo(DmtPrincipalPermission.class.getName(),DmtConstants.PRINCIPAL,"*"));
+            session = tbc.getDmtAdmin().getSession(DmtConstants.PRINCIPAL,TestExecPluginActivator.LEAF_NODE,DmtSession.LOCK_TYPE_EXCLUSIVE);
+            session.setNodeAcl(TestExecPluginActivator.LEAF_NODE,new org.osgi.service.dmt.Acl("Get=*"));
 			tbc.failException("",DmtException.class);
 		} catch (DmtException e) {	
 			tbc.assertEquals("Asserts that Replace access on a leaf node does not allow changing the ACL property itself.",
-			    DmtException.COMMAND_NOT_ALLOWED,e.getCode());
+			    DmtException.PERMISSION_DENIED,e.getCode());
 			
 		} catch (Exception e) {
 			tbc.fail("Unexpected Exception: " + e.getClass().getName()
 					+ " [Message: " + e.getMessage() + "]");
 		} finally {
 			tbc.cleanUp(session,TestExecPluginActivator.LEAF_NODE);
+            tbc.cleanAcl(TestExecPluginActivator.INTERIOR_NODE);
 			
 		}
 	}

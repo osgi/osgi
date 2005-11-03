@@ -80,6 +80,7 @@ public class Acl {
 		testAcl015();
         testAcl016();
         testAcl017();
+        testAcl018();
 	}
 
 	/**
@@ -105,8 +106,8 @@ public class Acl {
 
 			boolean found = false;
 			for (int i = 0; i < Acl.getPrincipals().length && !found; i++) {
-				String _principal = (String) Acl.getPrincipals()[i];
-				found = (_principal != null && _principal
+				String principal = (String) Acl.getPrincipals()[i];
+				found = (principal != null && principal
 						.equals(DmtConstants.PRINCIPAL)) ? true : false;
 			}
 			tbc.assertTrue("Asserting that the principal was found", found);
@@ -542,6 +543,30 @@ public class Acl {
             tbc.fail("Unexpected exception: " + e.getClass().getName());
         }
     }
+    
+	/**
+	 * Passes an empty string as argument in the constructor and asserts that an empty list of 
+	 * principals with no permissions is created.
+	 * 
+	 * @spec Acl.Acl(String)
+	 */
 
+	private void testAcl018() {
+		try {
+			tbc.log("#testAcl018");
+			org.osgi.service.dmt.Acl Acl = new org.osgi.service.dmt.Acl("");
+			String[] principals = Acl.getPrincipals();
+			int permissions = Acl.getPermissions("*");
+
+			tbc.assertNotNull("Principals are not null", principals);
+			
+			tbc.assertTrue("Asserting empty principals",(principals.length == 0));
+			
+			tbc.assertTrue("Asserting that no global permissions were granted",permissions == 0);
+		} catch (Exception e) {
+			tbc.fail("Unexpected exception: " + e.getClass().getName());
+		}
+
+	}
 }
 

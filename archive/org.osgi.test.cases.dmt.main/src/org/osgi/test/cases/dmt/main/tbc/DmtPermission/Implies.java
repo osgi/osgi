@@ -36,6 +36,7 @@
 
 package org.osgi.test.cases.dmt.main.tbc.DmtPermission;
 
+import org.osgi.service.dmt.security.AlertPermission;
 import org.osgi.service.dmt.security.DmtPermission;
 import org.osgi.test.cases.dmt.main.tbc.DmtConstants;
 import org.osgi.test.cases.dmt.main.tbc.DmtTestControl;
@@ -59,6 +60,7 @@ public class Implies {
 		testImplies004();
 		testImplies005();
         testImplies006();
+        testImplies007();
 	}
 
 	/**
@@ -78,7 +80,7 @@ public class Implies {
 							"Asserts that an object implies other object using the same uri and actions",
 							permission.implies(permission2));
 		} catch (Exception e) {
-			tbc.fail("Unexpected exception:" + e.getClass().getName());
+			tbc.fail("Unexpected exception: " + e.getClass().getName());
 		}
 	}
 
@@ -100,7 +102,7 @@ public class Implies {
 							"Asserts that an object implies other object using the same uri and the actions it contains",
 							permission.implies(permission2));
 		} catch (Exception e) {
-			tbc.fail("Unexpected exception:" + e.getClass().getName());
+			tbc.fail("Unexpected exception: " + e.getClass().getName());
 		}
 	}
 
@@ -123,7 +125,7 @@ public class Implies {
 							"Asserts that an object doesn't imply other object using the same uri and the actions it doesn't contain",
 							!permission.implies(permission2));
 		} catch (Exception e) {
-			tbc.fail("Unexpected exception:" + e.getClass().getName());
+			tbc.fail("Unexpected exception: " + e.getClass().getName());
 		}
 	}
 
@@ -144,7 +146,7 @@ public class Implies {
 							"Asserts that an object implies other object using the same uri and the same actions",
 							!permission.implies(permission2));
 		} catch (Exception e) {
-			tbc.fail("Unexpected exception:" + e.getClass().getName());
+			tbc.fail("Unexpected exception: " + e.getClass().getName());
 		}
 	}
 
@@ -167,7 +169,7 @@ public class Implies {
 							"Asserts that an object imply other object using the same uri and actions but in a different order",
 							permission.implies(permission2));
 		} catch (Exception e) {
-			tbc.fail("Unexpected exception:" + e.getClass().getName());
+			tbc.fail("Unexpected exception: " + e.getClass().getName());
 		}
 	}
     
@@ -188,8 +190,24 @@ public class Implies {
                             "Asserts that an object implies other object when using wildcard to match the uri",
                             permission.implies(permission2));
         } catch (Exception e) {
-            tbc.fail("Unexpected exception:" + e.getClass().getName());
+            tbc.fail("Unexpected exception: " + e.getClass().getName());
         }
     }
-
+	/**
+	 * Asserts that an object doesn't imply other object if they are from different types
+	 * 
+	 * @spec DmtPermission.implies(Permission)
+	 */
+	private void testImplies007() {
+		try {
+			tbc.log("#testImplies007");
+			DmtPermission permission = new DmtPermission("*","*");
+			AlertPermission permission2 = new AlertPermission("*","*");
+			tbc.assertTrue(
+						"Asserts that an object doesn't imply other object if they are from different types",
+						!permission.implies(permission2));
+		} catch (Exception e) {
+			tbc.fail("Unexpected exception: " + e.getClass().getName());
+		}
+	}
 }

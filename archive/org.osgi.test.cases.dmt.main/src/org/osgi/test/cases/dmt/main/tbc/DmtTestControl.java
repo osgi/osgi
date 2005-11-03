@@ -82,6 +82,7 @@ import org.osgi.test.cases.dmt.main.tbc.DmtException.DmtExceptionConstants;
 import org.osgi.test.cases.dmt.main.tbc.DmtException.PrintStackTrace;
 import org.osgi.test.cases.dmt.main.tbc.DmtPrincipalPermission.DmtPrincipalPermission;
 import org.osgi.test.cases.dmt.main.tbc.Plugin.ExecPlugin.TestExecPluginActivator;
+import org.osgi.test.cases.dmt.main.tbc.Plugin.NonAtomic.TestNonAtomicPluginActivator;
 import org.osgi.test.cases.dmt.main.tbc.Plugin.ReadOnly.TestReadOnlyPluginActivator;
 import org.osgi.test.cases.util.DefaultTestBundleControl;
 
@@ -89,6 +90,8 @@ public class DmtTestControl extends DefaultTestBundleControl {
 	
 	private TestExecPluginActivator testExecPluginActivator;
 	
+    private TestNonAtomicPluginActivator testNonAtomicPluginActivator;
+    
 	private TestReadOnlyPluginActivator testReadOnlyPluginActivator;
 	
 	private RemoteAlertSenderActivator remoteAlertSenderActivator;
@@ -125,9 +128,6 @@ public class DmtTestControl extends DefaultTestBundleControl {
 	            
     };
 	
-
-     
-
     //Invalid URIs, to be used simulating DmtException.INVALID_URI
     public final static Object[] INVALID_URIS = new Object[]{ 
         null, "", 
@@ -166,7 +166,7 @@ public class DmtTestControl extends DefaultTestBundleControl {
 		try {
 			installBundle("tb1.jar");
 		} catch (Exception e) {
-			log("#TestControl: Failed installing a bundle");
+			log("#TestControl: Failed installing tb1 bundle");
 		}
 		ServiceReference tb1SvrReference = getContext().getServiceReference(TB1Service.class.getName());
 		LOCATION = tb1SvrReference.getBundle().getLocation();		
@@ -177,11 +177,15 @@ public class DmtTestControl extends DefaultTestBundleControl {
 	private void installPlugins() {
 		try {
 			testExecPluginActivator = new TestExecPluginActivator(this);
-			testExecPluginActivator.start(getContext());		
+			testExecPluginActivator.start(getContext());
+            
+            testNonAtomicPluginActivator = new TestNonAtomicPluginActivator(this);
+            testNonAtomicPluginActivator.start(getContext());    
+            
 			testReadOnlyPluginActivator = new TestReadOnlyPluginActivator(this);
 			testReadOnlyPluginActivator.start(getContext());	
 		} catch (Exception e) {
-			log("#TestControl: Failed starting a plugin");
+			log("#TestControl: Failed starting plugins");
 		}
 	}
 	public void setPermissions(PermissionInfo[] permissions) {

@@ -65,7 +65,7 @@ public class GetNodeVersion implements TestInterface {
 
 	public void run() {
         prepare();
-        if (DmtConstants.SUPPORTS_NODE_SIZE) {
+        if (DmtConstants.SUPPORTS_NODE_VERSION) {
     		testGetNodeVersion001();
     		testGetNodeVersion002();
     		testGetNodeVersion003();
