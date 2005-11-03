@@ -66,7 +66,6 @@ public class Implies {
 	private void testImplies001() {
 		try {
 			tbc.log("#testImplies001");
-
 			DmtPrincipalPermission d1 = new DmtPrincipalPermission("*");
 			DmtPrincipalPermission d2 = new DmtPrincipalPermission("*");
 
@@ -128,7 +127,7 @@ public class Implies {
 	}
 
     /**
-     * Asserts that an object implies other object using thw wildcard
+     * Asserts that an object implies other object using a wildcard
      * 
      * @spec DmtPrincipalPermission.implies(Permission)
      */
@@ -137,13 +136,13 @@ public class Implies {
             tbc.log("#testImplies004");
 
 
-            DmtPrincipalPermission d1 = new DmtPrincipalPermission("*", "*");
+            DmtPrincipalPermission d1 = new DmtPrincipalPermission(DmtConstants.PRINCIPAL + "*", "*");
             DmtPrincipalPermission d2 = new DmtPrincipalPermission(
-                DmtConstants.PRINCIPAL, "*");
+                DmtConstants.PRINCIPAL +"a", "*");
 
             tbc
                     .assertTrue(
-                            "Asserts that an object implies other object using thw wildcard",
+                            "Asserts that an object implies other object using a wildcard",
                             d1.implies(d2));
 
         } catch (Exception e) {

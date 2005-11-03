@@ -74,13 +74,14 @@ public class ToString {
 			
 	}
 	/**
-	 * @testID testToString002
-	 * @testDescription Asserts that toString() returns null when it is passed in the constructor
+	 * Asserts that toString() returns null when it is passed in the constructor
+	 * 
+	 * @spec AlertItem.toString()
 	 */
 	private void testToString002() {
 		try {		
 			tbc.log("#testToString002");
-			org.osgi.service.dmt.AlertItem alert = new org.osgi.service.dmt.AlertItem(null,null,null,null);
+			org.osgi.service.dmt.AlertItem alert = new org.osgi.service.dmt.AlertItem((String)null,null,null,null);
 			tbc.assertEquals("Asserts that the expected string is returned","AlertItem(null, null, null, null)",alert.toString());
 		} catch(Exception e) {
 			tbc.fail("Unexpected Exception: " + e.getClass().getName() + " [Message: " + e.getMessage() +"]");

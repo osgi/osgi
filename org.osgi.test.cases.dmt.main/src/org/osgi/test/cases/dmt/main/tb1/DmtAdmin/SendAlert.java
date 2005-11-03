@@ -41,6 +41,7 @@ import org.osgi.framework.ServicePermission;
 import org.osgi.service.dmt.AlertItem;
 import org.osgi.service.dmt.DmtData;
 import org.osgi.service.dmt.DmtException;
+import org.osgi.service.dmt.security.AlertPermission;
 import org.osgi.service.dmt.security.DmtPermission;
 import org.osgi.service.permissionadmin.PermissionInfo;
 import org.osgi.test.cases.dmt.main.tbc.DmtConstants;
@@ -76,14 +77,14 @@ public class SendAlert implements TestInterface {
 		testSendAlert006();
 		testSendAlert007();
         testSendAlert008();
+        testSendAlert009();
 	}
     private void prepare() {
-        //This method do not throw SecurityException, so, if it is checking for DmtPermission 
-        //SecurityException is incorrectly thrown.
-        tbc.setPermissions(new PermissionInfo[0]);
+        tbc.setPermissions(new PermissionInfo(AlertPermission.class.getName(), "*", "*"));
     }
 	/**
-	 * It tests if the DmtAdmin.sendAlert really fowards the parameters to the RemoteAlertSender
+	 * It tests if the DmtAdmin.sendAlert really fowards the parameters to the RemoteAlertSender.
+	 * It also tests that only if the principal needs AlertPermission.
 	 * 
 	 * @spec DmtAdmin.sendAlert(String,int,String,AlertItem[]) 
 	 */
@@ -105,6 +106,9 @@ public class SendAlert implements TestInterface {
 			AlertItem[] items = new AlertItem[] { item, item2 };
 			
 			RemoteAlertSenderImpl.resetAlert();
+			
+			tbc.setPermissions(new PermissionInfo(AlertPermission.class.getName(), DmtConstants.PRINCIPAL, "*"));
+			
 			tbc.getDmtAdmin().sendAlert(DmtConstants.PRINCIPAL,code,correlator,items);
 			
 			tbc.assertTrue("Asserts that the code sent by sendAlert was the expected",RemoteAlertSenderImpl.codeFound == code);
@@ -118,6 +122,8 @@ public class SendAlert implements TestInterface {
 			tbc.fail("Unexpected Exception: " + e.getClass().getName()
 					+ " [Message: " + e.getMessage() + "]");
 
+		} finally {
+			prepare();
 		}
 	}
 	
@@ -326,5 +332,25 @@ public class SendAlert implements TestInterface {
 			tbc.setPermissions(new PermissionInfo(DmtPermission.class.getName(), DmtConstants.ALL_NODES,DmtConstants.ALL_ACTIONS));
 		}
 	}
+	/**
+	 * It tests if the SecurityException is thrown when there is no AlertPermission for that principal 
+	 * 
+	 * @spec DmtAdmin.sendAlert(String,int,String,AlertItem[])
+	 */
+	private void testSendAlert009() {
+		try {
+			tbc.log("#testSendAlert009");
+			tbc.setPermissions(new PermissionInfo[0]);
+			tbc.getDmtAdmin().sendAlert(DmtConstants.PRINCIPAL,1,"",new AlertItem[0]);
+		} catch (SecurityException e) {
+			tbc.pass("SecurityException correctly thrown");
+		} catch (Exception e) {
+			tbc.fail("Unexpected Exception: " + e.getClass().getName()
+					+ " [Message: " + e.getMessage() + "]");
+		} finally {
+			prepare();
+		}
+	}
+	
 	
 }

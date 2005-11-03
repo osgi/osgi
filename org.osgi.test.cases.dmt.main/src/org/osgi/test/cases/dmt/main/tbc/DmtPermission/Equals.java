@@ -58,6 +58,7 @@ public class Equals {
 		testEquals002();
 		testEquals003();
 		testEquals004();
+		testEquals005();
 	}
 
 	/**
@@ -125,5 +126,20 @@ public class Equals {
 			tbc.fail("Unexpected exception: " + e.getClass().getName());
 		}
 	}	
-
+	
+	/**
+	 * Asserts that the "*" action mask is considered equal to a mask containing all actions.
+	 * 
+	 * @spec DmtPermission.equals(Object)
+	 */
+	private void testEquals005() {
+		try {
+			tbc.log("#testEquals005");
+			tbc.assertTrue("Asserts that the \"*\" action mask is considered equal to a mask containing all actions.", 
+					new org.osgi.service.dmt.security.DmtPermission(DmtConstants.OSGi_LOG,DmtConstants.ACTIONS)
+					.equals(new org.osgi.service.dmt.security.DmtPermission(DmtConstants.OSGi_LOG,DmtConstants.ALL_ACTIONS)));
+		} catch (Exception e) { 
+			tbc.fail("Unexpected exception: " + e.getClass().getName());
+		}
+	}
 }
