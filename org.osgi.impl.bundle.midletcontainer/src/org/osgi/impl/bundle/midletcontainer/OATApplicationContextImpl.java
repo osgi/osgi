@@ -57,13 +57,23 @@ public class OATApplicationContextImpl implements ApplicationContext, ServiceLis
 	
 	class ServiceListener {
 		
-		public ServiceListener( ApplicationServiceListener listener, Filter filter ) {
+		public ServiceListener( ApplicationServiceListener listener, Filter []filters ) {
 			this.listener = listener;
-			this.filter = filter;
+			this.filters = filters;
+		}
+		
+		public boolean match( Hashtable props ) {
+			for( int w=0; w != filters.length; w++ ) {
+				if( filters[ w ] == null )
+					return true;
+				if( filters[ w ].match( props ) )
+					return true;
+			}
+			return false;
 		}
 		
 		ApplicationServiceListener listener;
-		Filter filter;
+		Filter []filters;
 	}
 		
 	public OATApplicationContextImpl( Bundle bundle, Map startupParams, OATApplicationData appData, ApplicationHandle appHandle, Object mainClass ) {
@@ -91,28 +101,37 @@ public class OATApplicationContextImpl implements ApplicationContext, ServiceLis
 	}
 
 	public void addServiceListener(ApplicationServiceListener listener, String referenceName)
+	throws IllegalArgumentException {
+		addServiceListener( listener, new String[] {referenceName} );
+	}
+
+	public void addServiceListener(ApplicationServiceListener listener, String []referenceNames)
 			throws IllegalArgumentException {
 		String filter=null;
 		
 		if( appHandle == null )
 			throw new IllegalStateException( "Application is not running!" );
 
-		int i = 0;
-		for( ; i != oatAppData.getServices().length; i++ )
-			if( oatAppData.getServices()[ i ].getName().equals( referenceName )) {
-				filter = oatAppData.getServices()[ i ].getTarget();
-				break;
-			}
-		if( i == oatAppData.getServices().length )
-			throw new IllegalArgumentException();
-
-		try {
-			Filter filterItem = (filter == null) ? null : bc.createFilter( filter );
-			removeServiceListener( listener );		
-			serviceListenerList.add( new ServiceListener( listener, filterItem ) );
-		}catch( InvalidSyntaxException e ) {
-			throw new IllegalArgumentException();
+		Filter filters[] = new Filter[ referenceNames.length ];
+		
+		for( int q=0 ; q != referenceNames.length; q++ ) {
+			int i = 0;
+			for( ; i != oatAppData.getServices().length; i++ )
+				if( oatAppData.getServices()[ i ].getName().equals( referenceNames[ q ] )) {
+					try {
+						String filterStr = oatAppData.getServices()[ i ].getTarget();
+						filters[ q ] = filterStr == null ? null : bc.createFilter( filterStr );
+					}catch( InvalidSyntaxException e ) {
+						throw new IllegalArgumentException();
+					}
+					break;
+				}
+			if( i == oatAppData.getServices().length )
+				throw new IllegalArgumentException();
 		}
+
+		removeServiceListener( listener );		
+		serviceListenerList.add( new ServiceListener( listener, filters ) );
 	}
 	
 	public Map getStartupParameters() {
@@ -430,7 +449,7 @@ public class OATApplicationContextImpl implements ApplicationContext, ServiceLis
 		while( iter.hasNext() ) {
 			ServiceListener servListener = (ServiceListener)  iter.next();
 			
-			if( servListener.filter != null && !servListener.filter.match( eventHash ) )
+			if( !servListener.match( eventHash ) )
 				continue;
 			
 			Object serviceObject = ( serv == null ) ? null : serv.serviceObject;
@@ -489,5 +508,13 @@ public class OATApplicationContextImpl implements ApplicationContext, ServiceLis
 			}
 		}
 		return null;
+	}
+
+	public String getInstanceId() {
+		return appHandle.getInstanceId();
+	}
+
+	public String getApplicationId() {
+		return appHandle.getApplicationDescriptor().getApplicationId();
 	}
 }
