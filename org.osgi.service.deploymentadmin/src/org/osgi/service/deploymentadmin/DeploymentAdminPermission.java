@@ -41,7 +41,7 @@ import java.security.*;
  * 			<td>only the value of "o" and "c" are significant</td>
  * 		</tr>
  * 		<tr>		
- * 			<td>(signer=* ; ou=S & V, o=Tweety Inc., c=US)</td>
+ * 			<td>(signer=* ; ou=S &amp; V, o=Tweety Inc., c=US)</td>
  * 			<td>the first element of the certificate chain is not important, only the second (the 
  * 				Distingushed Name of the root certificate)</td>
  * 		</tr>
@@ -98,7 +98,7 @@ import java.security.*;
  * A holder of this permission is able to retrieve metadata information about a Deployment 
  * Package (e.g. is able to ask its manifest hedares). 
  * See {@link org.osgi.service.deploymentadmin.DeploymentPackage#getBundle(String)},
- * {@link org.osgi.service.deploymentadmin.DeploymentPackage#getBundleSymNameVersionPairs()},
+ * {@link org.osgi.service.deploymentadmin.DeploymentPackage#getBundleInfos()},
  * {@link org.osgi.service.deploymentadmin.DeploymentPackage#getHeader(String)}, 
  * {@link org.osgi.service.deploymentadmin.DeploymentPackage#getResourceHeader(String, String)},
  * {@link org.osgi.service.deploymentadmin.DeploymentPackage#getResourceProcessor(String)}, 
@@ -149,7 +149,7 @@ public final class DeploymentAdminPermission extends Permission {
      * Constant String to the "metadata" action.<p>
      * 
      * @see org.osgi.service.deploymentadmin.DeploymentPackage#getBundle(String)
-     * @see org.osgi.service.deploymentadmin.DeploymentPackage#getBundleSymNameVersionPairs()
+     * @see org.osgi.service.deploymentadmin.DeploymentPackage#getBundleInfos()
      * @see org.osgi.service.deploymentadmin.DeploymentPackage#getHeader(String)
      * @see org.osgi.service.deploymentadmin.DeploymentPackage#getResourceHeader(String, String)
      * @see org.osgi.service.deploymentadmin.DeploymentPackage#getResourceProcessor(String)
