@@ -6,6 +6,7 @@ import java.io.InputStream;
 
 import org.osgi.service.deploymentadmin.DeploymentAdmin;
 import org.osgi.service.deploymentadmin.DeploymentAdminPermission;
+import org.osgi.service.deploymentadmin.DeploymentException;
 import org.osgi.service.deploymentadmin.DeploymentPackage;
 import org.osgi.service.permissionadmin.PermissionInfo;
 
@@ -34,16 +35,24 @@ public class Test4 extends TestCaseClass {
             cancelThread.start();
             
             is = new FileInputStream(tRunner.getFile("db_test_04.dp"));
-            dp = da.installDeploymentPackage(is);
             
-            if (null != dp)
-                throw new TestCaseException("Operation has not been cancelled");
+            DeploymentException de = null;
+            try {
+            	dp = da.installDeploymentPackage(is);
+            } catch (DeploymentException e) {
+            	if (DeploymentException.CODE_CANCELLED != e.getCode())
+            		throw new TestCaseException("Bad exception code");
+            	de = e;
+			}
             
             DeploymentPackage[] dps = da.listDeploymentPackages();
             for (int i = 0; i < dps.length; i++) {
                 if (dps[i].getName().equals("db_test_04"))
                     throw new TestCaseException("Operation has not been cancelled");
             }
+
+            if (null == de)
+            	throw new TestCaseException("Operation has not been cancelled");
         }
         finally {
             if (null != dp)
