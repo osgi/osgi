@@ -20,11 +20,10 @@ import java.util.StringTokenizer;
 import org.osgi.service.dmt.Acl;
 
 /**
- * DmtPermission controls access to management objects in the Device
- * Management Tree (DMT). It is intended to control local access to
- * the DMT. DmtPermission target string identifies the management
- * object URI and the action field lists the OMA DM commands that are
- * permitted on the management object. Example:
+ * Controls access to management objects in the Device Management Tree (DMT). 
+ * It is intended to control local access to the DMT. DmtPermission target 
+ * string identifies the management object URI and the action field lists the 
+ * OMA DM commands that are permitted on the management object. Example:
  *
  * <pre>
  * DmtPermission(&quot;./OSGi/bundles&quot;, &quot;Add,Replace,Get&quot;);
