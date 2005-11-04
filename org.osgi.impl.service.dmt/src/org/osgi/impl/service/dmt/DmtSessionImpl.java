@@ -819,8 +819,18 @@ public class DmtSessionImpl implements DmtSession {
             // plugin, checking the value and mime-type against the new 
             // meta-data is the responsibility of the plugin itself
 			
-            getReadWriteDataSession(newNode).copy(node.getPath(), 
-                    newNode.getPath(), recursive);
+            try {
+                getReadWriteDataSession(newNode).copy(node.getPath(), 
+                        newNode.getPath(), recursive);
+            } catch(DmtException e) {
+                // fall back to generic algorithm if plugin doesn't support copy 
+                if(e.getCode() != DmtException.FEATURE_NOT_SUPPORTED)
+                    throw e;
+                
+                // the above checks will be performed again, but we cannot even 
+                // attempt to call the plugin without them
+                copyNoCheck(node, newNode, recursive);
+            }
 		}
 		else
 			copyNoCheck(node, newNode, recursive); // does not trigger events  
