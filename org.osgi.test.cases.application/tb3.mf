@@ -1,0 +1,8 @@
+Manifest-Version: 1.0
+Bundle-Name: ${p}.tb3
+Bundle-SymbolicName: ${p}.tb3
+Bundle-Version: 1.0
+Bundle-Activator: org.osgi.test.cases.application.tb3.Activator
+$(EXPORT-PACKAGE)
+$(IMPORT-PACKAGE)
+$(PRIVATE-PACKAGE)

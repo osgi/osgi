@@ -5,7 +5,6 @@ Bundle-Activator: $(p).tbc.ApplicationTestControl
 Bundle-Version: 1.0
 Bundle-Copyright: Copyright (c) OSGi Alliance (2000, 2002). All Rights Reserved.
 CVS-Header: $Header$
-$(IMPORT-PACKAGE)
 $(EXPORT-PACKAGE)
+$(IMPORT-PACKAGE)
 $(PRIVATE-PACKAGE)
-

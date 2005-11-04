@@ -30,44 +30,49 @@
  * Date         Author(s)
  * CR           Headline
  * ===========  ==============================================================
- * Apr 5, 2005  Alexandre Santos
- * 38           Implement MEGTCK for the application RFC 
+ * 01/09/2005   Alexandre Santos
+ * 153          [MEGTCK][APP] Implement OAT test cases
  * ===========  ==============================================================
  */
-package org.osgi.test.cases.application.tbc.ApplicationAdminPermission;
+package org.osgi.test.cases.application.tbc.util;
 
-import org.osgi.service.application.ApplicationAdminPermission;
-import org.osgi.test.cases.application.tbc.ApplicationTestControl;
+import java.util.Hashtable;
+
+import org.osgi.framework.BundleActivator;
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.ServiceRegistration;
+
 
 /**
- * 
- * This Test Class Validates the <code>ApplicationAdminPermission</code> constants
- * according to MEG reference documentation.
+ * @author Alexandre Alves
+ *
  */
-public class ApplicationAdminPermissionConstants {
-	private ApplicationTestControl tbc;
-	/**
-	 * @param tbc
-	 */
-	public ApplicationAdminPermissionConstants(ApplicationTestControl tbc) {
-		this.tbc = tbc;
-	}	
-	
-	public void run() {
-		testConstants001();
-	}
-	
-    /**
-     * This method asserts if two equals ApplicationAdminPermission returns
-     * true to the equals method.
-     * 
-     * @spec 116.7.2 ApplicationAdminPermission
-     */
-	private void testConstants001() {
-		tbc.log("#testConstants001");
-		tbc.assertEquals("Asserting LIFECYCLE value", "lifecycle", ApplicationAdminPermission.LIFECYCLE);
-		tbc.assertEquals("Asserting LOCK value", "lock", ApplicationAdminPermission.LOCK);
-		tbc.assertEquals("Asserting SCHEDULE value", "schedule", ApplicationAdminPermission.SCHEDULE);
-	}	
+public class TestAppControllerImpl implements TestAppController, BundleActivator {
+    private Object instance = null;
+    private ServiceRegistration srvReg = null;
 
+    public void setApplicationInstance(Object instance) {
+   		this.instance = instance;
+    }
+
+    public Object getApplicationInstance() {
+        return instance;
+    }
+
+    public void start(BundleContext context) throws Exception {
+        srvReg = context.registerService(TestAppController.class.getName(), this, null);
+    }
+    
+    public void setProperties(Hashtable ht) {
+    	srvReg.setProperties(ht);
+    }
+    
+    public void resetProperties() {
+    	srvReg.setProperties(null);
+    }
+
+    public void stop(BundleContext context) throws Exception {
+        srvReg.unregister();
+    }   
+    
 }

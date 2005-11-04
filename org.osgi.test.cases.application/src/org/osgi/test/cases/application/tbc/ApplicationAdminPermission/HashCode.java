@@ -1,5 +1,5 @@
 /*
- * Copyright (c) The OSGi Alliance (2004). All Rights Reserved.
+ *  Copyright (c) The OSGi Alliance (2004). All Rights Reserved.
  * 
  * Implementation of certain elements of the OSGi Specification may be subject
  * to third party intellectual property rights, including without limitation,
@@ -30,44 +30,54 @@
  * Date         Author(s)
  * CR           Headline
  * ===========  ==============================================================
- * Apr 5, 2005  Alexandre Santos
- * 38           Implement MEGTCK for the application RFC 
+ * 13/10/2005   Alexandre Santos
+ * 153          Implement OAT test cases  
  * ===========  ==============================================================
  */
+
 package org.osgi.test.cases.application.tbc.ApplicationAdminPermission;
 
-import org.osgi.service.application.ApplicationAdminPermission;
+import org.osgi.test.cases.application.tbc.ApplicationConstants;
 import org.osgi.test.cases.application.tbc.ApplicationTestControl;
+import org.osgi.test.cases.application.tbc.util.MessagesConstants;
 
 /**
+ * @author Alexandre Santos
  * 
- * This Test Class Validates the <code>ApplicationAdminPermission</code> constants
- * according to MEG reference documentation.
+ * This test class validates the implementation of
+ * <code>hashCode</code> method, according to MEG reference
+ * documentation.
  */
-public class ApplicationAdminPermissionConstants {
+public class HashCode {
 	private ApplicationTestControl tbc;
+
 	/**
 	 * @param tbc
 	 */
-	public ApplicationAdminPermissionConstants(ApplicationTestControl tbc) {
+	public HashCode(ApplicationTestControl tbc) {
 		this.tbc = tbc;
-	}	
-	
-	public void run() {
-		testConstants001();
 	}
-	
-    /**
-     * This method asserts if two equals ApplicationAdminPermission returns
-     * true to the equals method.
-     * 
-     * @spec 116.7.2 ApplicationAdminPermission
-     */
-	private void testConstants001() {
-		tbc.log("#testConstants001");
-		tbc.assertEquals("Asserting LIFECYCLE value", "lifecycle", ApplicationAdminPermission.LIFECYCLE);
-		tbc.assertEquals("Asserting LOCK value", "lock", ApplicationAdminPermission.LOCK);
-		tbc.assertEquals("Asserting SCHEDULE value", "schedule", ApplicationAdminPermission.SCHEDULE);
-	}	
 
+	public void run() {
+		testHashCode001();
+	}
+
+    /**
+     * This method asserts if two equals permissions have the same
+     * hashCode number.
+     * 
+     * @spec ApplicationAdminPermission.hashCode()
+     */         
+	private void testHashCode001() {
+		try {
+			tbc.log("#testHashCode001");
+			org.osgi.service.application.ApplicationAdminPermission app = new org.osgi.service.application.ApplicationAdminPermission(
+					ApplicationConstants.APPLICATION_PERMISSION_FILTER1, ApplicationConstants.ACTIONS);
+			org.osgi.service.application.ApplicationAdminPermission app2 = new org.osgi.service.application.ApplicationAdminPermission(
+					ApplicationConstants.APPLICATION_PERMISSION_FILTER1, ApplicationConstants.ACTIONS_DIFFERENT_ORDER);
+			tbc.assertTrue("Asserting if two equals permissions have the same hashCode number.", app.hashCode()==app2.hashCode());
+		} catch (Exception e) {
+			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": " + e.getClass().getName());
+		}
+	}
 }

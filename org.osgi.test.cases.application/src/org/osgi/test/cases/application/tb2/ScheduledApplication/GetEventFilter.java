@@ -30,14 +30,8 @@
  * Date         Author(s)
  * CR           Headline
  * ===========  ==============================================================
- * 05/05/2005   Leonardo Barros
- * 38           Implement MEGTCK for the application RFC 
- * ===========  ==============================================================
- * 17/05/2005   Alexandre Alves
- * 38           update changes for TCK
- * ===========  ==============================================================
- * 24/05/2005   Alexandre Alves
- * 38           update changes after inspection
+ * 25/08/2005   Alexandre Santos
+ * 153          Implement OAT test cases  
  * ===========  ==============================================================
  */
 package org.osgi.test.cases.application.tb2.ScheduledApplication;
@@ -45,15 +39,17 @@ package org.osgi.test.cases.application.tb2.ScheduledApplication;
 import org.osgi.service.application.ApplicationAdminPermission;
 import org.osgi.service.application.ScheduledApplication;
 import org.osgi.service.permissionadmin.PermissionInfo;
+import org.osgi.test.cases.application.tbc.ApplicationConstants;
 import org.osgi.test.cases.application.tbc.ApplicationTestControl;
 import org.osgi.test.cases.application.tbc.TestInterface;
 import org.osgi.test.cases.application.tbc.util.MessagesConstants;
 
 /**
- * @methodUnderTest org.osgi.service.application.ScheduledApplication#getEventFilter
- * @generalDescription This Test Class Validates the implementation of
- *                     <code>getEventFilter<code> method, according to MEG reference
- *                     documentation.
+ * @author Alexandre Alves
+ * 
+ * This Test Class Validates the implementation of
+ * <code>getEventFilter</code> method, according to MEG reference
+ * documentation.
  */
 public class GetEventFilter implements TestInterface {
 	private ApplicationTestControl tbc;
@@ -68,33 +64,32 @@ public class GetEventFilter implements TestInterface {
 		testGetEventFilter003();
 	}
 
-	/**
-	 * @testID testGetEventFilter001
-	 * @testDescription Asserts if the event filter is correctly returned when
-	 *                  an application is scheduled
-	 */
+    /**
+     * This method asserts if null is returned when we
+     * have passed null as event filter parameter.
+     * 
+     * @spec ScheduleApplication.getEventFilter()
+     */    
 	public void testGetEventFilter001() {
 		tbc.log("#testGetEventFilter001");
 		PermissionInfo[] infos = null;
 		ScheduledApplication sa = null;
 		try {
-			infos = tbc.getPermissionAdmin().getPermissions(
-					tbc.getTb2Location());
+            infos = tbc.getPermissionAdmin().getPermissions(
+                tbc.getTb2Location());
 
-			tbc.setLocalPermission(new PermissionInfo(
-					ApplicationAdminPermission.class.getName(),
-					ApplicationTestControl.TEST2_PID,
-					ApplicationAdminPermission.LOCK+","+ApplicationAdminPermission.SCHEDULE));
+        tbc.setLocalPermission(
+            new PermissionInfo(ApplicationAdminPermission.class.getName(), ApplicationConstants.TEST_PID, ApplicationAdminPermission.SCHEDULE)
+        );
 
-			tbc.getAppDescriptor2().unlock();
+        sa = tbc.getAppDescriptor().schedule(null, "*", null, false);
 
-			sa = tbc.getAppDescriptor2().schedule(null, "*", "(second=0)",
-					false);
-
-			tbc
-					.assertEquals(
-							"Asserts if the event filter is correctly returned when an application is scheduled",
-							"(second=0)", sa.getEventFilter());
+        tbc.setDefaultPermission();
+        
+        tbc
+                .assertNull(
+                        "Asserts if the arguments is correctly returned.",
+                        sa.getEventFilter());
 
 		} catch (Exception e) {
 			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": " + e.getClass().getName());
@@ -103,32 +98,30 @@ public class GetEventFilter implements TestInterface {
 		}
 	}
 
-	/**
-	 * @testID testGetEventFilter002
-	 * @testDescription Asserts if the we passing null as event filter, it
-	 * 					returns null
-	 */
+    /**
+     * This method asserts if filter passed as parameter
+     * is returned.
+     * 
+     * @spec ScheduleApplication.getEventFilter()
+     */    
 	public void testGetEventFilter002() {
 		tbc.log("#testGetEventFilter002");
 		PermissionInfo[] infos = null;
 		ScheduledApplication sa = null;
 		try {
-			infos = tbc.getPermissionAdmin().getPermissions(
-					tbc.getTb2Location());
+            infos = tbc.getPermissionAdmin().getPermissions(
+                tbc.getTb2Location());
 
-			tbc.setLocalPermission(new PermissionInfo(
-					ApplicationAdminPermission.class.getName(),
-					ApplicationTestControl.TEST2_PID,
-					ApplicationAdminPermission.LOCK+","+ApplicationAdminPermission.SCHEDULE));
+        tbc.setLocalPermission(
+            new PermissionInfo(ApplicationAdminPermission.class.getName(), ApplicationConstants.TEST_PID, ApplicationAdminPermission.SCHEDULE)
+        );
 
-			tbc.getAppDescriptor2().unlock();
+        sa = tbc.getAppDescriptor().schedule(null, ApplicationConstants.TIMER_EVENT, ApplicationConstants.EVENT_FILTER, false);
 
-			sa = tbc.getAppDescriptor2().schedule(null, "*", null, false);
-
-			tbc.assertNull(MessagesConstants.getMessage(
-					MessagesConstants.ASSERT_NULL,
-					new String[] { "event filter" }), sa.getEventFilter());
-
+        tbc.setDefaultPermission();
+        
+		tbc.assertEquals("Asserting if the filter passed as parameter is returned.", ApplicationConstants.EVENT_FILTER, sa.getEventFilter());
+        
 		} catch (Exception e) {
 			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": " + e.getClass().getName());
 		} finally {
@@ -136,44 +129,43 @@ public class GetEventFilter implements TestInterface {
 		}
 	}
 
-	/**
-	 * @testID testGetEventFilter003
-	 * @testDescription Asserts if IllegalStateException is thrown when
-	 *                  application descriptor is unregistered
-	 */
-	public void testGetEventFilter003() {
-		tbc.log("#testGetEventFilter003");
-		PermissionInfo[] infos = null;
-		ScheduledApplication sa = null;
-		try {
-			infos = tbc.getPermissionAdmin().getPermissions(
-					tbc.getTb2Location());
+    /**
+     * This method asserts that if the ScheduledApplication is unregistered
+     * IllegalStateException will be thrown.
+     * 
+     * @spec ScheduleApplication.getEventFilter()
+     */     
+    public void testGetEventFilter003() {
+        tbc.log("#testGetEventFilter003");
+        PermissionInfo[] infos = null;
+        ScheduledApplication sa = null;
+        try {
+            infos = tbc.getPermissionAdmin().getPermissions(
+                    tbc.getTb2Location());
 
-			tbc.setLocalPermission(new PermissionInfo(
-					ApplicationAdminPermission.class.getName(),
-					ApplicationTestControl.TEST2_PID,
-					ApplicationAdminPermission.LOCK+","+ApplicationAdminPermission.SCHEDULE));
+            tbc.setLocalPermission(
+                new PermissionInfo(ApplicationAdminPermission.class.getName(), ApplicationConstants.TEST_PID, ApplicationAdminPermission.SCHEDULE)
+            );
 
-			sa = tbc.getAppDescriptor2().schedule(null, "*", null, false);
+            sa = tbc.getAppDescriptor().schedule(null, "*", null, false);
 
-			tbc.stopServices();
-			
-			sa.getEventFilter();
+            sa.remove();
+            
+            sa.getEventFilter();
 
-			tbc.failException("", IllegalStateException.class);
-		} catch (IllegalStateException e) {
-			tbc.pass(MessagesConstants.getMessage(
-					MessagesConstants.EXCEPTION_CORRECTLY_THROWN,
-					new String[] { IllegalStateException.class.getName() }));
-		} catch (Exception e) {
-			tbc.fail(MessagesConstants.getMessage(
-					MessagesConstants.EXCEPTION_THROWN, new String[] {
-							IllegalStateException.class.getName(),
-							e.getClass().getName() }));
-		} finally {
-			tbc.cleanUp(sa, infos);
-			tbc.installBundleMeglet();
-		}
-	}
+            tbc.failException("", IllegalStateException.class);
+        } catch (IllegalStateException e) {
+            tbc.pass(MessagesConstants.getMessage(
+                    MessagesConstants.EXCEPTION_CORRECTLY_THROWN,
+                    new String[] { IllegalStateException.class.getName() }));
+        } catch (Exception e) {
+            tbc.fail(MessagesConstants.getMessage(
+                    MessagesConstants.EXCEPTION_THROWN, new String[] {
+                            IllegalStateException.class.getName(),
+                            e.getClass().getName() }));
+        } finally {
+            tbc.cleanUp(sa, infos);
+        }
+    }
 	
 }

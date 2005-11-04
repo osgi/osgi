@@ -30,20 +30,23 @@
  * Date         Author(s)
  * CR           Headline
  * ===========  ==============================================================
- * Apr 5, 2005  Alexandre Santos
- * 38           Implement MEGTCK for the application RFC 
+ * 25/08/2005   Alexandre Santos
+ * 153          Implement OAT test cases  
  * ===========  ==============================================================
  */
 package org.osgi.test.cases.application.tbc.ApplicationAdminPermission;
 
+import org.osgi.service.application.ApplicationDescriptor;
+import org.osgi.test.cases.application.tbc.ApplicationConstants;
 import org.osgi.test.cases.application.tbc.ApplicationTestControl;
 import org.osgi.test.cases.application.tbc.util.MessagesConstants;
 
 /**
- * @methodUnderTest org.osgi.service.application.ApplicationAdminPermission#ApplicationAdminPermission
- * @generalDescription This Test Class Validates the implementation of
- *                     <code>ApplicationAdminPermission<code> method, according to MEG reference
- *                     documentation.
+ * @author Alexandre Santos
+ * 
+ * This test class validates the implementation of
+ * <code>ApplicationAdminPermission</code> constructor, according to MEG reference
+ * documentation.
  */
 public class ApplicationAdminPermission {
 	private ApplicationTestControl tbc;
@@ -60,45 +63,25 @@ public class ApplicationAdminPermission {
 		testApplicationAdminPermission002();
 		testApplicationAdminPermission003();
 		testApplicationAdminPermission004();
+		testApplicationAdminPermission005();
+		testApplicationAdminPermission006();
+		testApplicationAdminPermission007();
+		testApplicationAdminPermission008();
+		testApplicationAdminPermission009();
+		testApplicationAdminPermission010();
 	}
-
-	/**
-	 * @testID testApplicationAdminPermission001
-	 * @testDescription Assert if a NullPointerException is thrown when pass
-	 *                  null to actions parameter.
-	 */
-	public void testApplicationAdminPermission001() {
+	
+    /**
+     * This method asserts if a IllegalArgumentException is thrown when we pass
+     * null as actions parameter.
+     * 
+     * @spec ApplicationAdminPermission.ApplicationAdminPermission(String,String)
+     */         
+	private void testApplicationAdminPermission001() {
 		try {
 			tbc.log("#testApplicationAdminPermission001");
 			new org.osgi.service.application.ApplicationAdminPermission(
-					ApplicationTestControl.TEST1_PID, null);
-			tbc.failException("", NullPointerException.class);
-		} catch (NullPointerException e) {
-			tbc.pass(MessagesConstants.getMessage(
-					MessagesConstants.EXCEPTION_CORRECTLY_THROWN,
-					new String[] { e.getClass().getName() }));
-		} catch (Exception e) {
-			tbc.fail(MessagesConstants.getMessage(
-					MessagesConstants.EXCEPTION_THROWN, new String[] {
-							NullPointerException.class.getName(),
-							e.getClass().getName() }));
-		}
-	}
-
-	/**
-	 * @testID testApplicationAdminPermission002
-	 * @testDescription Assert if passing an invalid format as action parameter
-	 *                  it will thrown an IllegalArgumentException.
-	 */
-	public void testApplicationAdminPermission002() {
-
-		// TODO not specified what happens when pass invalid actions as
-		// parameter
-		try {
-			tbc.log("#testApplicationAdminPermission002");
-			new org.osgi.service.application.ApplicationAdminPermission(
-					ApplicationTestControl.TEST1_PID,
-					ApplicationTestControl.ACTIONS_INVALID_FORMAT);
+					ApplicationConstants.APPLICATION_PERMISSION_FILTER1, null);
 			tbc.failException("", IllegalArgumentException.class);
 		} catch (IllegalArgumentException e) {
 			tbc.pass(MessagesConstants.getMessage(
@@ -112,37 +95,199 @@ public class ApplicationAdminPermission {
 		}
 	}
 
-	/**
-	 * @testID testApplicationAdminPermission003
-	 * @testDescription Assert if a NullPointerException is not thrown when pass
-	 *                  null as pid.
-	 */
-	public void testApplicationAdminPermission003() {
+    /**
+     * This method asserts if passing an invalid format as action parameter
+     * it will thrown an IllegalArgumentException.
+     * 
+     * @spec ApplicationAdminPermission.ApplicationAdminPermission(String,String)
+     */    
+	private void testApplicationAdminPermission002() {
+
+		try {
+			tbc.log("#testApplicationAdminPermission002");
+			new org.osgi.service.application.ApplicationAdminPermission(
+					ApplicationConstants.APPLICATION_PERMISSION_FILTER1,
+					ApplicationConstants.ACTIONS_INVALID_FORMAT);
+			tbc.failException("", IllegalArgumentException.class);
+		} catch (IllegalArgumentException e) {
+			tbc.pass(MessagesConstants.getMessage(
+					MessagesConstants.EXCEPTION_CORRECTLY_THROWN,
+					new String[] { e.getClass().getName() }));
+		} catch (Exception e) {
+			tbc.fail(MessagesConstants.getMessage(
+					MessagesConstants.EXCEPTION_THROWN, new String[] {
+							IllegalArgumentException.class.getName(),
+							e.getClass().getName() }));
+		}
+	}
+
+    /**
+     * This method asserts if no exception is thrown when pass
+     * null as filter.
+     * 
+     * @spec ApplicationAdminPermission.ApplicationAdminPermission(String,String)
+     */        
+	private void testApplicationAdminPermission003() {
 		try {
 			tbc.log("#testApplicationAdminPermission003");
-			new org.osgi.service.application.ApplicationAdminPermission(null,
-					ApplicationTestControl.ACTIONS1);
-			tbc.pass("The ApplicationAdminPermission was created normally.");
+			org.osgi.service.application.ApplicationAdminPermission ap = new org.osgi.service.application.ApplicationAdminPermission((String) null,
+					ApplicationConstants.ACTIONS);
+			tbc.assertEquals("Asserting if the actions passed as parameter are the same returned.", ApplicationConstants.ACTIONS, ap.getActions());
 		} catch (Exception e) {
 			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": " + e.getClass().getName());
 		}
 	}
 
-	/**
-	 * @testID testApplicationAdminPermission004
-	 * @testDescription Assert if no Exception is thrown when pass valid
-	 *                  parameters.
-	 * 
-	 */
-	public void testApplicationAdminPermission004() {
+    /**
+     * This method asserts if no exception is thrown when we have passed
+     * valid parameters.
+     * 
+     * @spec ApplicationAdminPermission.ApplicationAdminPermission(String,String)
+     */ 
+	private void testApplicationAdminPermission004() {
 		try {
 			tbc.log("#testApplicationAdminPermission004");
-			new org.osgi.service.application.ApplicationAdminPermission(
-					ApplicationTestControl.TEST1_PID,
-					ApplicationTestControl.ACTIONS1);
-			tbc.pass("The ApplicationAdminPermission was created normally.");
+			org.osgi.service.application.ApplicationAdminPermission ap = new org.osgi.service.application.ApplicationAdminPermission(
+					ApplicationConstants.APPLICATION_PERMISSION_FILTER1,
+					ApplicationConstants.ACTIONS);
+			tbc.assertEquals("Asserting if the actions passed as parameter are the same returned.", ApplicationConstants.ACTIONS, ap.getActions());
 		} catch (Exception e) {
 			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": " + e.getClass().getName());
 		}
 	}
+	
+    /**
+     * This method asserts if IllegalArgumentException is thrown when we use
+     * invalid characters as filter.
+     * 
+     * @spec ApplicationAdminPermission.ApplicationAdminPermission(String,String)
+     */ 
+	private void testApplicationAdminPermission005() {
+		try {
+			//TODO waiting for nokia feedback for what exception will happen.
+			tbc.log("#testApplicationAdminPermission005");
+			new org.osgi.service.application.ApplicationAdminPermission(
+					ApplicationConstants.APPLICATION_PERMISSION_FILTER_INVALID1,
+					ApplicationConstants.ACTIONS);
+			tbc.failException("", IllegalArgumentException.class);
+		} catch (IllegalArgumentException e) {
+			tbc.pass(MessagesConstants.getMessage(
+					MessagesConstants.EXCEPTION_CORRECTLY_THROWN,
+					new String[] { e.getClass().getName() }));
+		} catch (Exception e) {
+			tbc.fail(MessagesConstants.getMessage(
+					MessagesConstants.EXCEPTION_THROWN, new String[] {
+							IllegalArgumentException.class.getName(),
+							e.getClass().getName() }));
+		}
+	}
+	
+    /**
+     * This method asserts if IllegalArgumentException is thrown when we use
+     * an option that does not exist.
+     * 
+     * @spec ApplicationAdminPermission.ApplicationAdminPermission(String,String)
+     */ 
+	private void testApplicationAdminPermission006() {
+		try {
+			tbc.log("#testApplicationAdminPermission006");
+			new org.osgi.service.application.ApplicationAdminPermission(
+					ApplicationConstants.APPLICATION_PERMISSION_FILTER_INVALID2,
+					ApplicationConstants.ACTIONS);
+			tbc.failException("", IllegalArgumentException.class);			
+		} catch (IllegalArgumentException e) {
+			tbc.pass(MessagesConstants.getMessage(
+					MessagesConstants.EXCEPTION_CORRECTLY_THROWN,
+					new String[] { e.getClass().getName() }));
+		} catch (Exception e) {
+			tbc.fail(MessagesConstants.getMessage(
+					MessagesConstants.EXCEPTION_THROWN, new String[] {
+							IllegalArgumentException.class.getName(),
+							e.getClass().getName() }));
+		}
+	}	
+	
+    /**
+     * This method asserts that no exception is thrown when we use
+     * wildcard in parameters.
+     * 
+     * @spec ApplicationAdminPermission.ApplicationAdminPermission(String,String)
+     */ 
+	private void testApplicationAdminPermission007() {
+		try {
+			tbc.log("#testApplicationAdminPermission007");
+			org.osgi.service.application.ApplicationAdminPermission ap = new org.osgi.service.application.ApplicationAdminPermission(
+					ApplicationConstants.APPLICATION_PERMISSION_FILTER2,
+					"*");
+			tbc.assertEquals("Asserting if the actions passed as parameter are the same returned.", "*", ap.getActions());
+		} catch (Exception e) {
+			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": " + e.getClass().getName());
+		}
+	}	
+	
+    /**
+     * This method asserts that IllegalArgumentException is thrown when null
+     * is passed as application.
+     * 
+     * @spec ApplicationAdminPermission.ApplicationAdminPermission(ApplicationDescriptor,String)
+     */ 
+	private void testApplicationAdminPermission008() {
+		try {
+			//TODO waiting for nokia feedkback.
+			tbc.log("#testApplicationAdminPermission008");
+			new org.osgi.service.application.ApplicationAdminPermission((ApplicationDescriptor) null,
+					"*");
+			tbc.failException("", IllegalArgumentException.class);
+		} catch (IllegalArgumentException e) {
+			tbc.pass(MessagesConstants.getMessage(
+					MessagesConstants.EXCEPTION_CORRECTLY_THROWN,
+					new String[] { e.getClass().getName() }));
+		} catch (Exception e) {
+			tbc.fail(MessagesConstants.getMessage(
+					MessagesConstants.EXCEPTION_THROWN, new String[] {
+							IllegalArgumentException.class.getName(),
+							e.getClass().getName() }));
+		}
+	}	
+	
+    /**
+     * This method asserts that the actions parameter cannot receive null
+     * 
+     * @spec ApplicationAdminPermission.ApplicationAdminPermission(ApplicationDescriptor,String)
+     */ 
+	private void testApplicationAdminPermission009() {
+		try {
+			tbc.log("#testApplicationAdminPermission009");
+			new org.osgi.service.application.ApplicationAdminPermission(tbc.getAppDescriptor(),
+					null);
+			tbc.failException("", IllegalArgumentException.class);
+		} catch (IllegalArgumentException e) {
+			tbc.pass(MessagesConstants.getMessage(
+					MessagesConstants.EXCEPTION_CORRECTLY_THROWN,
+					new String[] { e.getClass().getName() }));
+		} catch (Exception e) {
+			tbc.fail(MessagesConstants.getMessage(
+					MessagesConstants.EXCEPTION_THROWN, new String[] {
+							IllegalArgumentException.class.getName(),
+							e.getClass().getName() }));
+		}
+	}	
+    /**
+     * This method asserts if no exception is thrown when we have passed
+     * valid parameters. It also tests the getActions method.
+     * 
+     * @spec ApplicationAdminPermission.ApplicationAdminPermission(ApplicationDescriptor,String)
+     */ 
+	private void testApplicationAdminPermission010() {
+		try {
+			tbc.log("#testApplicationAdminPermission010");
+			org.osgi.service.application.ApplicationAdminPermission ap = new org.osgi.service.application.ApplicationAdminPermission(
+					tbc.getAppDescriptor(),
+					ApplicationConstants.ACTIONS);
+			tbc.assertEquals("Asserting if the actions passed as parameter are the same returned.", ApplicationConstants.ACTIONS, ap.getActions());
+		} catch (Exception e) {
+			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": " + e.getClass().getName());
+		}
+	}
+	
 }

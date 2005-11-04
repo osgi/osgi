@@ -30,44 +30,32 @@
  * Date         Author(s)
  * CR           Headline
  * ===========  ==============================================================
- * Apr 5, 2005  Alexandre Santos
- * 38           Implement MEGTCK for the application RFC 
+ * 23/08/2005   Alexandre Santos
+ * 153          [MEGTCK][APP] Implement OAT test cases
  * ===========  ==============================================================
  */
-package org.osgi.test.cases.application.tbc.ApplicationAdminPermission;
+package org.osgi.test.cases.application.tb3;
 
-import org.osgi.service.application.ApplicationAdminPermission;
-import org.osgi.test.cases.application.tbc.ApplicationTestControl;
+import org.osgi.framework.BundleActivator;
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.ServiceRegistration;
+
 
 /**
- * 
- * This Test Class Validates the <code>ApplicationAdminPermission</code> constants
- * according to MEG reference documentation.
+ * @Author Alexandre Santos
+ * A dummy bundle.
  */
-public class ApplicationAdminPermissionConstants {
-	private ApplicationTestControl tbc;
-	/**
-	 * @param tbc
-	 */
-	public ApplicationAdminPermissionConstants(ApplicationTestControl tbc) {
-		this.tbc = tbc;
-	}	
-	
-	public void run() {
-		testConstants001();
+
+public class Activator implements BundleActivator {
+	private ServiceRegistration servReg;
+
+	public void start(BundleContext context) throws Exception {
+		servReg = context.registerService(Activator.class.getName(), this, null);
+		System.out.println("Activator activated.");
 	}
 	
-    /**
-     * This method asserts if two equals ApplicationAdminPermission returns
-     * true to the equals method.
-     * 
-     * @spec 116.7.2 ApplicationAdminPermission
-     */
-	private void testConstants001() {
-		tbc.log("#testConstants001");
-		tbc.assertEquals("Asserting LIFECYCLE value", "lifecycle", ApplicationAdminPermission.LIFECYCLE);
-		tbc.assertEquals("Asserting LOCK value", "lock", ApplicationAdminPermission.LOCK);
-		tbc.assertEquals("Asserting SCHEDULE value", "schedule", ApplicationAdminPermission.SCHEDULE);
-	}	
+	public void stop(BundleContext context) throws Exception {
+		servReg.unregister();
+	}
 
 }

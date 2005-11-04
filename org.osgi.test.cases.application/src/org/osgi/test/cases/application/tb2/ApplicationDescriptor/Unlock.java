@@ -34,11 +34,10 @@
  * 153          Implement OAT test cases  
  * ===========  ==============================================================
  */
-package org.osgi.test.cases.application.tb2.ScheduledApplication;
+package org.osgi.test.cases.application.tb2.ApplicationDescriptor;
 
-import java.util.HashMap;
 import org.osgi.service.application.ApplicationAdminPermission;
-import org.osgi.service.application.ScheduledApplication;
+import org.osgi.service.application.ApplicationHandle;
 import org.osgi.service.permissionadmin.PermissionInfo;
 import org.osgi.test.cases.application.tbc.ApplicationConstants;
 import org.osgi.test.cases.application.tbc.ApplicationTestControl;
@@ -49,112 +48,105 @@ import org.osgi.test.cases.application.tbc.util.MessagesConstants;
  * @author Alexandre Alves
  * 
  * This Test Class Validates the implementation of
- * <code>getArguments</code> method, according to MEG reference
+ * <code>unlock</code> method, according to MEG reference
  * documentation.
  */
-public class GetArguments implements TestInterface {
+public class Unlock implements TestInterface {
 	private ApplicationTestControl tbc;
 
-	public GetArguments(ApplicationTestControl tbc) {
+	public Unlock(ApplicationTestControl tbc) {
 		this.tbc = tbc;
 	}
 
 	public void run() {
-		testGetArguments001();
-		testGetArguments002();
-		testGetArguments003();
+		testUnlock001();
+		testUnlock002();
+		testUnlock003();
+		testUnlock004();
 	}
 
-    
-    /**
-     * This method asserts if the passed map was returned
-     * by getArguments().
-     * 
-     * @spec ScheduleApplication.getArguments()
-     */     
-	public void testGetArguments001() {
-		tbc.log("#testGetArguments001");
+	/**
+	/**
+	 * This method asserts that SecurityException is thrown when
+	 * the caller doesn't have "lock" ApplicationAdminPermission
+	 * for the application.
+	 * 
+	 * @spec ApplicationDescriptor.unlock()
+	 */
+	public void testUnlock001() {
+		tbc.log("#testUnlock001");
 		PermissionInfo[] infos = null;
-		ScheduledApplication sa = null;
 		try {
 			infos = tbc.getPermissionAdmin().getPermissions(
 					tbc.getTb2Location());
 
-            tbc.setLocalPermission(
-                new PermissionInfo(ApplicationAdminPermission.class.getName(), ApplicationConstants.TEST_PID, ApplicationAdminPermission.SCHEDULE)
-            );
+			tbc.setDefaultPermission();
 
-            HashMap map = new HashMap();
-            sa = tbc.getAppDescriptor().schedule(map, "*", null, false);
+			tbc.getAppDescriptor().unlock();
 
-            tbc.setDefaultPermission();
-            
-			tbc
-					.assertEquals(
-							"Asserts if the arguments is correctly returned.",
-							map, sa.getArguments());
-
+			tbc.failException("", SecurityException.class);
+		} catch (SecurityException e) {
+			tbc.pass(MessagesConstants.getMessage(
+					MessagesConstants.EXCEPTION_CORRECTLY_THROWN,
+					new String[] { SecurityException.class.getName() }));
 		} catch (Exception e) {
-			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": " + e.getClass().getName());
+			tbc.fail(MessagesConstants.getMessage(
+					MessagesConstants.EXCEPTION_THROWN, new String[] {
+							SecurityException.class.getName(),
+							e.getClass().getName() }));
 		} finally {
-			tbc.cleanUp(sa, infos);
+			tbc.cleanUp(infos);
 		}
 	}
 
-    /**
-     * This method asserts if null was returned
-     * by getArguments().
-     * 
-     * @spec ScheduleApplication.getArguments()
-     */     
-	public void testGetArguments002() {
-		tbc.log("#testGetArguments002");
+	/**
+	 * This method asserts that a unlock call after other unlock call
+	 * will not thrown exception.
+	 * 
+	 * @spec ApplicationDescriptor.unlock()
+	 */
+	public void testUnlock002() {
+		tbc.log("#testUnlock002");
 		PermissionInfo[] infos = null;
-		ScheduledApplication sa = null;
 		try {
 			infos = tbc.getPermissionAdmin().getPermissions(
 					tbc.getTb2Location());
 
-            tbc.setLocalPermission(
-                new PermissionInfo(ApplicationAdminPermission.class.getName(), ApplicationConstants.TEST_PID, ApplicationAdminPermission.SCHEDULE)
-            );
+			tbc.setLocalPermission(
+				new PermissionInfo(ApplicationAdminPermission.class.getName(), ApplicationConstants.TEST_PID,	ApplicationAdminPermission.LOCK)
+			);
 
-            sa = tbc.getAppDescriptor().schedule(null, "*", null, false);
+			tbc.getAppDescriptor().unlock();
+			tbc.getAppDescriptor().unlock();
 
-            tbc.setDefaultPermission();
-            
-			tbc.assertNull("Asserting if the getArguments returns null", sa.getArguments());
-
+			tbc.pass("No Exception was thrown.");
 		} catch (Exception e) {
 			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": " + e.getClass().getName());
 		} finally {
-			tbc.cleanUp(sa, infos);
+			tbc.cleanUp(infos);
 		}
-	}
+	}	
 
-    /**
-     * This method asserts that if the ScheduledApplication is unregistered
-     * IllegalStateException will be thrown.
-     * 
-     * @spec ScheduleApplication.getArguments()
-     */     
-	public void testGetArguments003() {
-		tbc.log("#testGetArguments003");
+	/**
+	 * This method asserts that if the application descriptor is unregistered
+	 * IllegalStateException will be thrown.
+	 * 
+	 * @spec ApplicationDescriptor.unlock()
+	 */
+	public void testUnlock003() {
+		tbc.log("#testUnlock003");
 		PermissionInfo[] infos = null;
-		ScheduledApplication sa = null;
 		try {
 			infos = tbc.getPermissionAdmin().getPermissions(
 					tbc.getTb2Location());
 
-            tbc.setLocalPermission(
-                new PermissionInfo(ApplicationAdminPermission.class.getName(), ApplicationConstants.TEST_PID, ApplicationAdminPermission.SCHEDULE)
-            );
+			tbc.setLocalPermission(
+				new PermissionInfo(ApplicationAdminPermission.class.getName(), ApplicationConstants.TEST_PID,	ApplicationAdminPermission.LOCK)
+			);
 
-			sa = tbc.getAppDescriptor().schedule(null, "*", null, false);
+			tbc.unregisterDescriptor();
 
-			sa.remove();
-			
-			sa.getArguments();
+			tbc.getAppDescriptor().unlock();
 
 			tbc.failException("", IllegalStateException.class);
 		} catch (IllegalStateException e) {
@@ -167,8 +159,43 @@ public class GetArguments implements TestInterface {
 							IllegalStateException.class.getName(),
 							e.getClass().getName() }));
 		} finally {
-			tbc.cleanUp(sa, infos);
+			tbc.installDescriptor();
+			tbc.cleanUp(infos);			
 		}
+	}
+
+	/**
+	 * This method asserts if unlock is called after a lock call,
+	 * an application can be started without exceptions.
+	 * 
+	 * @spec ApplicationDescriptor.unlock()
+	 */
+	public void testUnlock004() {
+		tbc.log("#testUnlock004");
+		ApplicationHandle handle = null;
+		PermissionInfo[] infos = null;
+		try {
+			infos = tbc.getPermissionAdmin().getPermissions(
+					tbc.getTb2Location());
+
+			// TODO we must use the ApplicationAdminPermission.launch
+			// instead of the hard coded value.
+			// TODO Verify when this constant is added to the class.
+			tbc.setLocalPermission(new PermissionInfo(
+					ApplicationAdminPermission.class.getName(),
+					ApplicationConstants.TEST_PID, "launch,"+ApplicationAdminPermission.LOCK));
+
+			tbc.getAppDescriptor().lock();
+			tbc.getAppDescriptor().unlock();
+
+			handle = (ApplicationHandle) tbc.getAppDescriptor().launch(null);
+
+			tbc.pass("No exception was thrown.");
+		} catch (Exception e) {
+			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": " + e.getClass().getName());
+		} finally {
+			tbc.cleanUp(handle, infos);
+		}	
 	}
 	
 }

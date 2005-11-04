@@ -54,22 +54,32 @@ public class EventHandlerActivator implements BundleActivator {
 	private ServiceRegistration servReg;
 
 	private EventHandlerImpl testActivatorImpl;
+	
+	private Hashtable ht;
 
 	public void start(BundleContext bc) throws Exception {
 		// creating the service
 		testActivatorImpl = new EventHandlerImpl(tbc);
-
+		
 		String[] topics = new String[] {
 				"org/osgi/framework/ServiceEvent/REGISTERED",
 				"org/osgi/framework/ServiceEvent/MODIFIED",
-				"org/osgi/framework/ServiceEvent/UNREGISTERED",
-				"org/osgi/triggeringevent/OURMEGLET" };
-		Hashtable ht = new Hashtable();
+				"org/osgi/framework/ServiceEvent/UNREGISTERING" };	
+
+		ht = new Hashtable();
 		ht.put(org.osgi.service.event.EventConstants.EVENT_TOPIC, topics);
 		servReg = bc.registerService(EventHandler.class.getName(),
 				testActivatorImpl, ht);
 	}
-
+	
+	public void setProperties(Hashtable props) {
+		servReg.setProperties(props);
+	}
+	
+	public void resetProperties() {
+		servReg.setProperties(ht);
+	}	
+	
 	public void stop(BundleContext arg0) throws Exception {
 		// unregistering the service
 		servReg.unregister();

@@ -30,14 +30,8 @@
  * Date         Author(s)
  * CR           Headline
  * ===========  ==============================================================
- * 05/05/2005   Leonardo Barros
- * 38           Implement MEGTCK for the application RFC 
- * ===========  ==============================================================
- * 17/05/2005   Alexandre Alves
- * 38           Update changes/Fix errors 
- * ===========  ==============================================================
- * 24/05/2005   Alexandre Alves
- * 38           Update changes after inspection 
+ * 25/08/2005   Alexandre Santos
+ * 153          Implement OAT test cases  
  * ===========  ==============================================================
  */
 package org.osgi.test.cases.application.tb2.ScheduledApplication;
@@ -45,15 +39,17 @@ package org.osgi.test.cases.application.tb2.ScheduledApplication;
 import org.osgi.service.application.ApplicationAdminPermission;
 import org.osgi.service.application.ScheduledApplication;
 import org.osgi.service.permissionadmin.PermissionInfo;
+import org.osgi.test.cases.application.tbc.ApplicationConstants;
 import org.osgi.test.cases.application.tbc.ApplicationTestControl;
 import org.osgi.test.cases.application.tbc.TestInterface;
 import org.osgi.test.cases.application.tbc.util.MessagesConstants;
 
 /**
- * @methodUnderTest org.osgi.service.application.ScheduledApplication#isRecurring
- * @generalDescription This Test Class Validates the implementation of
- *                     <code>isRecurring<code> method, according to MEG reference
- *                     documentation.
+ * @author Alexandre Alves
+ *  
+ * This Test Class Validates the implementation of
+ * <code>isRecurring</code> method, according to MEG reference
+ * documentation.
  */
 public class IsRecurring implements TestInterface {
 	private ApplicationTestControl tbc;
@@ -68,11 +64,12 @@ public class IsRecurring implements TestInterface {
 		testIsRecurring003();
 	}
 
-	/**
-	 * @testID testIsRecurring001
-	 * @testDescription Asserts if the isRecurring method returns false when an
-	 *                  application is scheduled with false value parameter
-	 */
+    /**
+     * This method asserts if the isRecurring method returns false when an
+     * ApplicationScheduled was not started in recurring mode.
+     * 
+     * @spec ScheduleApplication.isRecurring()
+     */       
 	public void testIsRecurring001() {
 		tbc.log("#testIsRecurring001");
 		PermissionInfo[] infos = null;
@@ -81,18 +78,15 @@ public class IsRecurring implements TestInterface {
 			infos = tbc.getPermissionAdmin().getPermissions(
 					tbc.getTb2Location());
 
-			tbc.setLocalPermission(new PermissionInfo(
-					ApplicationAdminPermission.class.getName(),
-					ApplicationTestControl.TEST2_PID,
-					ApplicationAdminPermission.LOCK+","+ApplicationAdminPermission.SCHEDULE));
+            tbc.setLocalPermission(
+                new PermissionInfo(ApplicationAdminPermission.class.getName(), ApplicationConstants.TEST_PID, ApplicationAdminPermission.SCHEDULE)
+            );
 
-			tbc.getAppDescriptor2().unlock();
+			sa = tbc.getAppDescriptor().schedule(null, "*", null, false);
 
-			sa = tbc.getAppDescriptor2().schedule(null, "*", null, false);
-
-			tbc.assertTrue(MessagesConstants.getMessage(
-					MessagesConstants.ASSERT_TRUE,
-					new String[] { "isRecurring method returns false" }), !sa
+			tbc.setDefaultPermission();
+			
+			tbc.assertTrue("Asserting if isRecurring method returns false", !sa
 					.isRecurring());
 
 		} catch (Exception e) {
@@ -102,11 +96,12 @@ public class IsRecurring implements TestInterface {
 		}
 	}
 
-	/**
-	 * @testID testIsRecurring002
-	 * @testDescription Asserts if the isRecurring method returns true when an
-	 *                  application is scheduled with true value parameter
-	 */
+    /**
+     * This method asserts if the isRecurring method returns true when an
+     * ApplicationScheduled was started in recurring mode.
+     * 
+     * @spec ScheduleApplication.isRecurring()
+     */           
 	public void testIsRecurring002() {
 		tbc.log("#testIsRecurring002");
 		PermissionInfo[] infos = null;
@@ -115,18 +110,15 @@ public class IsRecurring implements TestInterface {
 			infos = tbc.getPermissionAdmin().getPermissions(
 					tbc.getTb2Location());
 
-			tbc.setLocalPermission(new PermissionInfo(
-					ApplicationAdminPermission.class.getName(),
-					ApplicationTestControl.TEST2_PID,
-					ApplicationAdminPermission.LOCK+","+ApplicationAdminPermission.SCHEDULE));
+            tbc.setLocalPermission(
+                new PermissionInfo(ApplicationAdminPermission.class.getName(), ApplicationConstants.TEST_PID, ApplicationAdminPermission.SCHEDULE)
+            );
 
-			tbc.getAppDescriptor2().unlock();
-
-			sa = tbc.getAppDescriptor2().schedule(null, "*", null, true);
-
-			tbc.assertTrue(MessagesConstants.getMessage(
-					MessagesConstants.ASSERT_TRUE,
-					new String[] { "isRecurring method returns true" }), sa
+			sa = tbc.getAppDescriptor().schedule(null, "*", null, true);
+			
+			tbc.setDefaultPermission();
+			
+			tbc.assertTrue("Asserting if isRecurring method returns true", sa
 					.isRecurring());
 
 		} catch (Exception e) {
@@ -136,11 +128,12 @@ public class IsRecurring implements TestInterface {
 		}
 	}
 
-	/**
-	 * @testID testIsRecurring003
-	 * @testDescription Asserts if IllegalStateException is thrown when
-	 *                  application descriptor is unregistered
-	 */
+    /**
+     * This method asserts that if the ScheduledApplication is unregistered
+     * IllegalStateException will be thrown.
+     * 
+     * @spec ScheduleApplication.isRecurring()
+     */      
 	public void testIsRecurring003() {
 		tbc.log("#testIsRecurring003");
 		PermissionInfo[] infos = null;
@@ -149,14 +142,13 @@ public class IsRecurring implements TestInterface {
 			infos = tbc.getPermissionAdmin().getPermissions(
 					tbc.getTb2Location());
 
-			tbc.setLocalPermission(new PermissionInfo(
-					ApplicationAdminPermission.class.getName(),
-					ApplicationTestControl.TEST2_PID,
-					ApplicationAdminPermission.LOCK+","+ApplicationAdminPermission.SCHEDULE));
+            tbc.setLocalPermission(
+                new PermissionInfo(ApplicationAdminPermission.class.getName(), ApplicationConstants.TEST_PID, ApplicationAdminPermission.SCHEDULE)
+            );
 
-			sa = tbc.getAppDescriptor2().schedule(null, "*", null, false);
+			sa = tbc.getAppDescriptor().schedule(null, "*", null, false);
 
-			tbc.stopServices();
+			sa.remove();
 			
 			sa.isRecurring();
 
@@ -172,7 +164,6 @@ public class IsRecurring implements TestInterface {
 							e.getClass().getName() }));
 		} finally {
 			tbc.cleanUp(sa, infos);
-			tbc.installBundleMeglet();
 		}
 	}
 	

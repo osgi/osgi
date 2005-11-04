@@ -36,37 +36,41 @@
  */
 package org.osgi.test.cases.application.tbc.Event;
 
+import org.osgi.framework.Constants;
 import org.osgi.service.event.Event;
 import org.osgi.service.event.EventHandler;
+import org.osgi.test.cases.application.tbc.ApplicationConstants;
 import org.osgi.test.cases.application.tbc.ApplicationTestControl;
 
 public class EventHandlerImpl implements EventHandler {
 	private ApplicationTestControl tbc;
-	
+
+	public static boolean waitNotify = true;
+
 	public EventHandlerImpl(ApplicationTestControl tbc) {
 		this.tbc = tbc;
 	}
 
 	public void handleEvent(Event arg0) {
-		if(arg0.equals("org/osgi/framework/ServiceEvent/REGISTERED")) {
-			tbc.setRegistered(true);
-			tbc.setModified(false);
-			tbc.setUnregistered(false);
+		String pid = (String) arg0.getProperty(Constants.SERVICE_PID);
+		if ((pid != null) && (pid.startsWith(ApplicationConstants.TEST_PID))) {
+			if (arg0.getTopic().equals(
+					"org/osgi/framework/ServiceEvent/REGISTERED")) {
+				tbc.setRegistered(true);
+			} else if (arg0.getTopic().equals(
+					"org/osgi/framework/ServiceEvent/MODIFIED")) {
+				tbc.setModified(true);
+			} else if (arg0.getTopic().equals(
+					"org/osgi/framework/ServiceEvent/UNREGISTERING")) {
+				tbc.setUnregistered(true);
+			}
+			if (waitNotify) {
+				synchronized (tbc) {
+					tbc.notifyAll();
+				}
+
+			}
 		}
-		else if(arg0.equals("org/osgi/framework/ServiceEvent/MODIFIED")) {
-			tbc.setRegistered(false);
-			tbc.setModified(true);
-			tbc.setUnregistered(false);
-		}
-		else if(arg0.equals("org/osgi/framework/ServiceEvent/UNREGISTERED")) {
-			tbc.setRegistered(false);
-			tbc.setModified(false);
-			tbc.setUnregistered(true);
-		}
-		else if(arg0.equals("org/osgi/triggeringevent/OURMEGLET")) {
-			tbc.setOurMegletActivated(true);
-		}		
-		notifyAll();
 	}
 
 }

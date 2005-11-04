@@ -30,26 +30,27 @@
  * Date         Author(s)
  * CR           Headline
  * ===========  ==============================================================
- * Apr 5, 2005  Alexandre Santos
+ * 08/04/2005   Alexandre Santos
  * 38           Implement MEGTCK for the application RFC 
  * ===========  ==============================================================
  */
-package org.osgi.test.cases.application.tbc.ApplicationAdminPermission;
+package org.osgi.test.cases.application.tb2.ApplicationHandle;
 
-import org.osgi.service.application.ApplicationAdminPermission;
+import org.osgi.service.application.ApplicationHandle;
 import org.osgi.test.cases.application.tbc.ApplicationTestControl;
+import org.osgi.test.cases.application.tbc.TestInterface;
 
 /**
  * 
- * This Test Class Validates the <code>ApplicationAdminPermission</code> constants
+ * This Test Class Validates the <code>ApplicationHandle</code> constants
  * according to MEG reference documentation.
  */
-public class ApplicationAdminPermissionConstants {
+public class ApplicationHandleConstants implements TestInterface {
 	private ApplicationTestControl tbc;
 	/**
 	 * @param tbc
 	 */
-	public ApplicationAdminPermissionConstants(ApplicationTestControl tbc) {
+	public ApplicationHandleConstants(ApplicationTestControl tbc) {
 		this.tbc = tbc;
 	}	
 	
@@ -57,17 +58,18 @@ public class ApplicationAdminPermissionConstants {
 		testConstants001();
 	}
 	
-    /**
-     * This method asserts if two equals ApplicationAdminPermission returns
-     * true to the equals method.
-     * 
-     * @spec 116.7.2 ApplicationAdminPermission
-     */
+	/**
+	 * This method tests all constants values according
+	 * to Constants fields values.
+	 * 
+	 * @spec 116.7.5 public abstract class ApplicationHandle
+	 */	
 	private void testConstants001() {
 		tbc.log("#testConstants001");
-		tbc.assertEquals("Asserting LIFECYCLE value", "lifecycle", ApplicationAdminPermission.LIFECYCLE);
-		tbc.assertEquals("Asserting LOCK value", "lock", ApplicationAdminPermission.LOCK);
-		tbc.assertEquals("Asserting SCHEDULE value", "schedule", ApplicationAdminPermission.SCHEDULE);
+		tbc.assertEquals("Asserting RUNNING value", "RUNNING", ApplicationHandle.RUNNING);
+		tbc.assertEquals("Asserting STOPPING value", "STOPPING", ApplicationHandle.STOPPING);
+		tbc.assertEquals("Asserting APPLICATION_DESCRIPTOR value", "application.descriptor", ApplicationHandle.APPLICATION_DESCRIPTOR);
+		tbc.assertEquals("Asserting APPLICATION_STATE value", "application.state", ApplicationHandle.APPLICATION_STATE);
 	}	
 
 }

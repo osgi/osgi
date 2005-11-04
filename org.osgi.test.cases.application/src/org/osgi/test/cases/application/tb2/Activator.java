@@ -30,8 +30,8 @@
  * Date         Author(s)
  * CR           Headline
  * ===========  ==============================================================
- * 03/05/2005   Leonardo Barros
- * 38           Implement MEG TCK
+ * 22/08/2005   Alexandre Santos
+ * 153          Implement OAT test cases 
  * ===========  ==============================================================
  */
 package org.osgi.test.cases.application.tb2;
@@ -39,17 +39,19 @@ package org.osgi.test.cases.application.tb2;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
-import org.osgi.test.cases.application.tb2.MegletDescriptor.GetProperties;
-import org.osgi.test.cases.application.tb2.MegletDescriptor.Launch;
-import org.osgi.test.cases.application.tb2.MegletDescriptor.Lock;
-import org.osgi.test.cases.application.tb2.MegletDescriptor.Schedule;
-import org.osgi.test.cases.application.tb2.MegletDescriptor.Unlock;
-import org.osgi.test.cases.application.tb2.MegletHandle.Destroy;
-import org.osgi.test.cases.application.tb2.MegletHandle.GetApplicationDescriptor;
-import org.osgi.test.cases.application.tb2.MegletHandle.GetInstanceID;
-import org.osgi.test.cases.application.tb2.MegletHandle.GetState;
-import org.osgi.test.cases.application.tb2.MegletHandle.Resume;
-import org.osgi.test.cases.application.tb2.MegletHandle.Suspend;
+import org.osgi.test.cases.application.tb2.ApplicationDescriptor.ApplicationDescriptorConstants;
+import org.osgi.test.cases.application.tb2.ApplicationDescriptor.GetApplicationId;
+import org.osgi.test.cases.application.tb2.ApplicationDescriptor.GetProperties;
+import org.osgi.test.cases.application.tb2.ApplicationDescriptor.Launch;
+import org.osgi.test.cases.application.tb2.ApplicationDescriptor.Lock;
+import org.osgi.test.cases.application.tb2.ApplicationDescriptor.MatchDNChain;
+import org.osgi.test.cases.application.tb2.ApplicationDescriptor.Schedule;
+import org.osgi.test.cases.application.tb2.ApplicationDescriptor.Unlock;
+import org.osgi.test.cases.application.tb2.ApplicationHandle.ApplicationHandleConstants;
+import org.osgi.test.cases.application.tb2.ApplicationHandle.Destroy;
+import org.osgi.test.cases.application.tb2.ApplicationHandle.GetApplicationDescriptor;
+import org.osgi.test.cases.application.tb2.ApplicationHandle.GetInstanceId;
+import org.osgi.test.cases.application.tb2.ApplicationHandle.GetState;
 import org.osgi.test.cases.application.tb2.ScheduledApplication.GetArguments;
 import org.osgi.test.cases.application.tb2.ScheduledApplication.GetEventFilter;
 import org.osgi.test.cases.application.tb2.ScheduledApplication.GetTopic;
@@ -58,14 +60,11 @@ import org.osgi.test.cases.application.tb2.ScheduledApplication.Remove;
 import org.osgi.test.cases.application.tbc.ApplicationTestControl;
 import org.osgi.test.cases.application.tbc.TB2Service;
 import org.osgi.test.cases.application.tbc.TestInterface;
-import org.osgi.test.cases.application.tbc.UseCases.LifecycleStates;
 import org.osgi.test.cases.util.DefaultTestBundleControl;
 
 public class Activator implements BundleActivator, TB2Service {
 	private ServiceRegistration servReg;
-
-	private ApplicationTestControl tbc;
-
+	
 	public void start(BundleContext bc) throws Exception {
 		servReg = bc.registerService(TB2Service.class.getName(), this, null);
 		System.out.println("TB2Service activated.");
@@ -80,12 +79,10 @@ public class Activator implements BundleActivator, TB2Service {
 				new Lock((ApplicationTestControl) tbc),
 				new Unlock((ApplicationTestControl) tbc),
 				new GetApplicationDescriptor((ApplicationTestControl) tbc),
-				new GetInstanceID((ApplicationTestControl) tbc),
+				new GetInstanceId((ApplicationTestControl) tbc),
 				new GetState((ApplicationTestControl) tbc),
-				new Suspend((ApplicationTestControl) tbc),
 				new GetProperties((ApplicationTestControl) tbc),
 				new Launch((ApplicationTestControl) tbc),
-				new Resume((ApplicationTestControl) tbc),
 				new Destroy((ApplicationTestControl) tbc),
 				new Schedule((ApplicationTestControl) tbc),
 				new GetTopic((ApplicationTestControl) tbc),
@@ -95,7 +92,11 @@ public class Activator implements BundleActivator, TB2Service {
 				new org.osgi.test.cases.application.tb2.ScheduledApplication.GetApplicationDescriptor(
 						(ApplicationTestControl) tbc),
 				new Remove((ApplicationTestControl) tbc),
-				new LifecycleStates((ApplicationTestControl) tbc)};
+				new ApplicationDescriptorConstants((ApplicationTestControl) tbc),
+				new ApplicationHandleConstants((ApplicationTestControl) tbc),
+				new GetApplicationId((ApplicationTestControl) tbc),
+				new MatchDNChain((ApplicationTestControl) tbc)
+				};
 	}
 
 }

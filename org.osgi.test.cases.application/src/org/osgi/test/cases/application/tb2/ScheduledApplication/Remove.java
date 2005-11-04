@@ -30,33 +30,26 @@
  * Date         Author(s)
  * CR           Headline
  * ===========  ==============================================================
- * 05/05/2005   Leonardo Barros
- * 38           Implement MEGTCK for the application RFC 
- * ===========  ==============================================================
- * 17/05/2005   Alexandre Alves
- * 38           Update changes/Fix errors 
- * ===========  ==============================================================
- * 24/05/2005   Alexandre Alves
- * 38           Update changes after inspection 
+ * 25/08/2005   Alexandre Santos
+ * 153          Implement OAT test cases  
  * ===========  ==============================================================
  */
 package org.osgi.test.cases.application.tb2.ScheduledApplication;
 
-import org.osgi.framework.InvalidSyntaxException;
-import org.osgi.framework.ServiceReference;
 import org.osgi.service.application.ApplicationAdminPermission;
 import org.osgi.service.application.ScheduledApplication;
-import org.osgi.service.application.meglet.MegletHandle;
 import org.osgi.service.permissionadmin.PermissionInfo;
+import org.osgi.test.cases.application.tbc.ApplicationConstants;
 import org.osgi.test.cases.application.tbc.ApplicationTestControl;
 import org.osgi.test.cases.application.tbc.TestInterface;
 import org.osgi.test.cases.application.tbc.util.MessagesConstants;
 
 /**
- * @methodUnderTest org.osgi.service.application.ScheduledApplication#remove
- * @generalDescription This Test Class Validates the implementation of
- *                     <code>remove<code> method, according to MEG reference
- *                     documentation.
+ * @author Alexandre Alves
+ *  
+ * This Test Class Validates the implementation of
+ * <code>remove</code> method, according to MEG reference
+ * documentation.
  */
 public class Remove implements TestInterface {
 	private ApplicationTestControl tbc;
@@ -71,12 +64,12 @@ public class Remove implements TestInterface {
 		testRemove003();
 	}
 
-	/**
-	 * @testID testRemove001
-	 * @testDescription Asserts if the SecurityException is thrown when the
-	 *                  caller does not have the correct
-	 *                  ApplicationAdminPermission action
-	 */
+    /**
+     * This method asserts if SecurityException is thrown when the
+     * caller does not have "schedule" ApplicationAdminPermission.
+     * 
+     * @spec ScheduleApplication.remove()
+     */     
 	public void testRemove001() {
 		tbc.log("#testRemove001");
 		PermissionInfo[] infos = null;
@@ -85,14 +78,11 @@ public class Remove implements TestInterface {
 			infos = tbc.getPermissionAdmin().getPermissions(
 					tbc.getTb2Location());
 
-			tbc.setLocalPermission(new PermissionInfo(
-					ApplicationAdminPermission.class.getName(),
-					ApplicationTestControl.TEST2_PID,
-					ApplicationAdminPermission.LOCK+","+ApplicationAdminPermission.SCHEDULE));
+            tbc.setLocalPermission(
+                new PermissionInfo(ApplicationAdminPermission.class.getName(), ApplicationConstants.TEST_PID, ApplicationAdminPermission.SCHEDULE)
+            );
 
-			tbc.getAppDescriptor2().unlock();
-
-			sa = tbc.getAppDescriptor2().schedule(null, "*", null, false);
+			sa = tbc.getAppDescriptor().schedule(null, "*", null, false);
 
 			tbc.setDefaultPermission();
 
@@ -109,128 +99,90 @@ public class Remove implements TestInterface {
 							SecurityException.class.getName(),
 							e.getClass().getName() }));
 		} finally {
-			tbc.cleanUpRemove(infos);
+			tbc.cleanUp(sa, infos);
 		}
 	}
+    
+    /**
+     * This method asserts if the ScheduledApplication is cancelled after
+     * a remove call.
+     * 
+     * @spec ScheduleApplication.remove()
+     */         
+    public void testRemove002() {
+        tbc.log("#testRemove002");
+        PermissionInfo[] infos = null;
+        ScheduledApplication sa = null;
+        try {
+            infos = tbc.getPermissionAdmin().getPermissions(
+                    tbc.getTb2Location());
 
-	/**
-	 * @testID testRemove002
-	 * @testDescription Asserts if IllegalStateException is thrown when
-	 *                  application descriptor is unregistered
-	 */
-	public void testRemove002() {
-		tbc.log("#testRemove002");
-		PermissionInfo[] infos = null;
-		ScheduledApplication sa = null;
-		try {
-			infos = tbc.getPermissionAdmin().getPermissions(
-					tbc.getTb2Location());
+            tbc.setLocalPermission(
+                new PermissionInfo(ApplicationAdminPermission.class.getName(), ApplicationConstants.TEST_PID, ApplicationAdminPermission.SCHEDULE)
+            );
 
-			tbc.setLocalPermission(new PermissionInfo(
-					ApplicationAdminPermission.class.getName(),
-					ApplicationTestControl.TEST2_PID,
-					ApplicationAdminPermission.LOCK+","+ApplicationAdminPermission.SCHEDULE));
+            sa = tbc.getAppDescriptor().schedule(null, ApplicationConstants.TIMER_EVENT, ApplicationConstants.EVENT_FILTER, true);
+            
+            synchronized (tbc) {
+                tbc.wait(ApplicationConstants.TIMEOUT);
+            }                                  
 
-			tbc.getAppDescriptor2().unlock();
+            sa.remove();
+            
+            int oldValue = tbc.getNumberAppHandle();
 
-			sa = tbc.getAppDescriptor2().schedule(null, "*", null, false);
+            synchronized (tbc) {
+                tbc.wait(ApplicationConstants.TIMEOUT);
+            }                                  
+            
+            int newValue = tbc.getNumberAppHandle();
+            
+            tbc.assertEquals("Asserting if the schedule of application was cancelled.", oldValue, newValue);
+            
+        } catch (Exception e) {
+            tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": " + e.getClass().getName());
+        } finally {
+            tbc.cleanUp(sa, infos);
+        }
+    }    
 
-			tbc.stopServices();
-			
-			sa.remove();
+    /**
+     * This method asserts that if the ScheduledApplication is unregistered
+     * IllegalStateException will be thrown.
+     * 
+     * @spec ScheduleApplication.remove()
+     */     
+    public void testRemove003() {
+        tbc.log("#testRemove003");
+        PermissionInfo[] infos = null;
+        ScheduledApplication sa = null;
+        try {
+            infos = tbc.getPermissionAdmin().getPermissions(
+                    tbc.getTb2Location());
 
-			tbc.failException("", IllegalStateException.class);
-		} catch (IllegalStateException e) {
-			tbc.pass(MessagesConstants.getMessage(
-					MessagesConstants.EXCEPTION_CORRECTLY_THROWN,
-					new String[] { IllegalStateException.class.getName() }));
-		} catch (Exception e) {
-			tbc.fail(MessagesConstants.getMessage(
-					MessagesConstants.EXCEPTION_THROWN, new String[] {
-							IllegalStateException.class.getName(),
-							e.getClass().getName() }));
-		} finally {
-			tbc.cleanUpRemove(infos);
-			tbc.installBundleMeglet();
-		}
-	}
+            tbc.setLocalPermission(
+                new PermissionInfo(ApplicationAdminPermission.class.getName(), ApplicationConstants.TEST_PID, ApplicationAdminPermission.SCHEDULE)
+            );
 
-	/**
-	 * @testID testRemove003
-	 * @testDescription Asserts if the application is unregistered after remove
-	 *                  method call
-	 */
-	public void testRemove003() {
-		tbc.log("#testRemove003");
-		PermissionInfo[] infos = null;
-		ScheduledApplication sa = null;
-		try {
-			infos = tbc.getPermissionAdmin().getPermissions(
-					tbc.getTb2Location());
+            sa = tbc.getAppDescriptor().schedule(null, "*", null, false);
 
-			tbc.setLocalPermission(new PermissionInfo(
-					ApplicationAdminPermission.class.getName(),
-					ApplicationTestControl.TEST2_PID,
-					ApplicationAdminPermission.LOCK+","+ApplicationAdminPermission.SCHEDULE));
+            sa.remove();
+            
+            sa.remove();
 
-			tbc.getAppDescriptor2().unlock();
-			
-			closeMeglets();
-
-			sa = tbc.getAppDescriptor2().schedule(null, "org/osgi/framework/ServiceEvent/UNREGISTERED", null, true);
-
-			MegletHandle meglet = (MegletHandle) tbc.getAppDescriptor2().launch(tbc.getMeg2Properties());
-			
-			meglet.destroy();
-			
-			tbc.assertTrue("Asserting if a meglet was started by ScheduledApplication", !isHandleStopped());
-
-			sa.remove();
-			
-			closeMeglets();
-			
-			meglet = (MegletHandle) tbc.getAppDescriptor2().launch(tbc.getMeg2Properties());
-			
-			meglet.destroy();
-			
-			tbc.assertTrue("Asserting if a meglet was started by ScheduledApplication", isHandleStopped());
-			
-		} catch (Exception e) {
-			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": " + e.getClass().getName());
-		} finally {
-			tbc.cleanUpRemove(infos);
-		}
-	}
-	
-	private void closeMeglets() {
-		MegletHandle meglet = tbc.getAppHandle(ApplicationTestControl.TEST2_PID);
-		while (meglet != null) {
-			try {
-				meglet.destroy();
-			} catch (Exception e) {
-				tbc.log("#Cant destroy the meglet");
-			}
-			meglet = tbc.getAppHandle(ApplicationTestControl.TEST2_PID);				
-		}			
-	}
-	
-	private boolean isHandleStopped() {
-		try {
-			ServiceReference[] appDescRefs = tbc.getContext()
-			.getServiceReferences(
-					"org.osgi.service.application.ApplicationHandle",
-					"(application.descriptor="
-							+ ApplicationTestControl.TEST2_PID + ")");
-			if (appDescRefs == null) {
-				return true;
-			} else {
-				return false;
-			}
-		} catch (InvalidSyntaxException e) {
-			return false;
-		}
-		
-		
-	}	
+            tbc.failException("", IllegalStateException.class);
+        } catch (IllegalStateException e) {
+            tbc.pass(MessagesConstants.getMessage(
+                    MessagesConstants.EXCEPTION_CORRECTLY_THROWN,
+                    new String[] { IllegalStateException.class.getName() }));
+        } catch (Exception e) {
+            tbc.fail(MessagesConstants.getMessage(
+                    MessagesConstants.EXCEPTION_THROWN, new String[] {
+                            IllegalStateException.class.getName(),
+                            e.getClass().getName() }));
+        } finally {
+            tbc.cleanUp(sa, infos);
+        }
+    }
 	
 }

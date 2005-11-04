@@ -30,27 +30,27 @@
  * Date         Author(s)
  * CR           Headline
  * ===========  ==============================================================
- * 05/05/2005   Leonardo Barros
- * 38           Implement MEGTCK for the application RFC 
- * ===========  ==============================================================
- * 24/05/2005   Alexandre Santos
- * 38           Rework after inspection 
+ * 24/08/2005   Alexandre Santos
+ * 153          Implement OAT test cases  
  * ===========  ==============================================================
  */
 package org.osgi.test.cases.application.tb2.ScheduledApplication;
 
 import org.osgi.service.application.ApplicationAdminPermission;
+import org.osgi.service.application.ApplicationDescriptor;
 import org.osgi.service.application.ScheduledApplication;
 import org.osgi.service.permissionadmin.PermissionInfo;
+import org.osgi.test.cases.application.tbc.ApplicationConstants;
 import org.osgi.test.cases.application.tbc.ApplicationTestControl;
 import org.osgi.test.cases.application.tbc.TestInterface;
 import org.osgi.test.cases.application.tbc.util.MessagesConstants;
 
 /**
- * @methodUnderTest org.osgi.service.application.ScheduledApplication#getApplicationDescriptor
- * @generalDescription This Test Class Validates the implementation of
- *                     <code>getApplicationDescriptor<code> method, according to MEG reference
- *                     documentation.
+ * @author Alexandre Alves
+ * 
+ *  This Test Class Validates the implementation of
+ *  <code>getApplicationDescriptor</code> method, according to MEG reference
+ *  documentation.
  */
 public class GetApplicationDescriptor implements TestInterface {
 	private ApplicationTestControl tbc;
@@ -59,85 +59,77 @@ public class GetApplicationDescriptor implements TestInterface {
 		this.tbc = tbc;
 	}
 
-	public void run() {
-		testGetApplicationDescriptor001();
-		testGetApplicationDescriptor002();
-	}
+    public void run() {
+        testGetApplicationDescriptor001();
+        testGetApplicationDescriptor002();
+    }
 
-	/**
-	 * @testID testGetApplicationDescriptor001
-	 * @testDescription Asserts if the application descriptor is correctly
-	 *                  returned when an application is scheduled
-	 */
-	public void testGetApplicationDescriptor001() {
-		tbc.log("#testGetApplicationDescriptor001");
-		PermissionInfo[] infos = null;
-		ScheduledApplication sa = null;
-		try {
-			infos = tbc.getPermissionAdmin().getPermissions(
-					tbc.getTb2Location());
+    
+    /**
+     * This method asserts that a getApplicationDescriptor retrieves
+     * the ApplicationDescriptor to which this ApplicationHandle belongs.
+     * 
+     * @spec ScheduleApplication.getApplicationDescriptor()
+     */         
+    public void testGetApplicationDescriptor001() {
+        tbc.log("#testGetApplicationDescriptor001");
+        ScheduledApplication schedule = null;
+        PermissionInfo[] infos = null;
+        try {
+            infos = tbc.getPermissionAdmin().getPermissions(
+                tbc.getTb2Location());
+            
+            tbc.setLocalPermission(new PermissionInfo(
+                ApplicationAdminPermission.class.getName(),
+                ApplicationConstants.TEST_PID, ApplicationAdminPermission.SCHEDULE));
+            
+            schedule = tbc.getAppDescriptor().schedule(null, "*", null, false);
+            
+            tbc.setDefaultPermission();
+            
+            ApplicationDescriptor descriptor = tbc
+                .getAppDescriptor();
+            
+            tbc.assertEquals("Asserting if the returned descriptor is equal to the descriptor in test control.", descriptor, schedule.getApplicationDescriptor());
+        } catch (Exception e) {
+            tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": "
+                + e.getClass().getName());
+        } finally {
+            tbc.cleanUp(schedule, infos);
+        }
+    }
 
-			tbc.setLocalPermission(new PermissionInfo(
-					ApplicationAdminPermission.class.getName(),
-					ApplicationTestControl.TEST2_PID,
-					ApplicationAdminPermission.LOCK+","+ApplicationAdminPermission.SCHEDULE));
+    /**
+     * This method asserts that if the ScheduledApplication is unregistered
+     * IllegalStateException will be thrown.
+     * 
+     * @spec ScheduleApplication.getApplicationDescriptor()
+     */     
+    public void testGetApplicationDescriptor002() {
+        tbc.log("#testGetApplicationDescriptor002");
+        ScheduledApplication schedule = null;
+        PermissionInfo[] infos = null;
+        try {
+            infos = tbc.getPermissionAdmin().getPermissions(
+                    tbc.getTb2Location());
 
-			tbc.getAppDescriptor2().unlock();
-
-			sa = tbc.getAppDescriptor2().schedule(null, "*", null, false);
-
-			tbc
-					.assertEquals(
-							"Asserts if application descriptor is correctly returned when an application is scheduled",
-							tbc.getAppDescriptor2().getProperties("en"), sa
-									.getApplicationDescriptor().getProperties(
-											"en"));
-
-		} catch (Exception e) {
-			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": " + e.getClass().getName());
-		} finally {
-			tbc.cleanUp(sa, infos);
-		}
-	}
-
-	/**
-	 * @testID testGetApplicationDescriptor002
-	 * @testDescription Asserts if IllegalStateException is thrown when
-	 *                  application descriptor is unregistered
-	 */
-	public void testGetApplicationDescriptor002() {
-		tbc.log("#testGetApplicationDescriptor002");
-		PermissionInfo[] infos = null;
-		ScheduledApplication sa = null;
-		try {
-			infos = tbc.getPermissionAdmin().getPermissions(
-					tbc.getTb2Location());
-
-			tbc.setLocalPermission(new PermissionInfo(
-					ApplicationAdminPermission.class.getName(),
-					ApplicationTestControl.TEST2_PID,
-					ApplicationAdminPermission.LOCK+","+ApplicationAdminPermission.SCHEDULE));
-
-			sa = tbc.getAppDescriptor2().schedule(null, "*", null, false);
-
-			tbc.stopServices();
-			
-			sa.getApplicationDescriptor();
-
-			tbc.failException("", IllegalStateException.class);
-		} catch (IllegalStateException e) {
-			tbc.pass(MessagesConstants.getMessage(
-					MessagesConstants.EXCEPTION_CORRECTLY_THROWN,
-					new String[] { IllegalStateException.class.getName() }));
-		} catch (Exception e) {
-			tbc.fail(MessagesConstants.getMessage(
-					MessagesConstants.EXCEPTION_THROWN, new String[] {
-							IllegalStateException.class.getName(),
-							e.getClass().getName() }));
-		} finally {
-			tbc.cleanUp(sa, infos);
-			tbc.installBundleMeglet();
-		}
-	}
-	
+            tbc.setLocalPermission(new PermissionInfo(
+                ApplicationAdminPermission.class.getName(),
+                ApplicationConstants.TEST_PID, ApplicationAdminPermission.SCHEDULE));
+            
+            schedule = tbc.getAppDescriptor().schedule(null, "*", null, false);
+            schedule.remove();
+            
+            schedule.getApplicationDescriptor();
+            
+            tbc.failException("", java.lang.IllegalStateException.class);
+        } catch (java.lang.IllegalStateException e) {
+            tbc.pass(MessagesConstants.getMessage(MessagesConstants.EXCEPTION_CORRECTLY_THROWN, new String[] {
+                    e.getClass().getName()}));
+        } catch (Exception e) {         
+            tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + " " + e.getClass().getName());
+        } finally {
+            tbc.cleanUp(schedule, infos);
+        }
+    }
 }

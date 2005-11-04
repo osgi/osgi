@@ -30,15 +30,13 @@
  * Date         Author(s)
  * CR           Headline
  * ===========  ==============================================================
- * 24/08/2005   Alexandre Santos
+ * 23/08/2005   Alexandre Santos
  * 153          Implement OAT test cases  
  * ===========  ==============================================================
  */
-package org.osgi.test.cases.application.tb2.ScheduledApplication;
+package org.osgi.test.cases.application.tb2.ApplicationDescriptor;
 
-import java.util.HashMap;
 import org.osgi.service.application.ApplicationAdminPermission;
-import org.osgi.service.application.ScheduledApplication;
 import org.osgi.service.permissionadmin.PermissionInfo;
 import org.osgi.test.cases.application.tbc.ApplicationConstants;
 import org.osgi.test.cases.application.tbc.ApplicationTestControl;
@@ -49,112 +47,103 @@ import org.osgi.test.cases.application.tbc.util.MessagesConstants;
  * @author Alexandre Alves
  * 
  * This Test Class Validates the implementation of
- * <code>getArguments</code> method, according to MEG reference
+ * <code>lock</code> method, according to MEG reference
  * documentation.
  */
-public class GetArguments implements TestInterface {
+public class Lock implements TestInterface {
 	private ApplicationTestControl tbc;
 
-	public GetArguments(ApplicationTestControl tbc) {
+	public Lock(ApplicationTestControl tbc) {
 		this.tbc = tbc;
 	}
 
 	public void run() {
-		testGetArguments001();
-		testGetArguments002();
-		testGetArguments003();
+		testLock001();
+		testLock002();
+		testLock003();
 	}
 
-    
-    /**
-     * This method asserts if the passed map was returned
-     * by getArguments().
-     * 
-     * @spec ScheduleApplication.getArguments()
-     */     
-	public void testGetArguments001() {
-		tbc.log("#testGetArguments001");
+	/**
+	 * This method asserts that SecurityException is thrown when
+	 * the caller doesn't have "lock" ApplicationAdminPermission
+	 * for the application.
+	 * 
+	 * @spec ApplicationDescriptor.lock()
+	 */
+	private void testLock001() {
+		tbc.log("#testLock001");
 		PermissionInfo[] infos = null;
-		ScheduledApplication sa = null;
 		try {
 			infos = tbc.getPermissionAdmin().getPermissions(
 					tbc.getTb2Location());
 
-            tbc.setLocalPermission(
-                new PermissionInfo(ApplicationAdminPermission.class.getName(), ApplicationConstants.TEST_PID, ApplicationAdminPermission.SCHEDULE)
-            );
+			tbc.setDefaultPermission();
 
-            HashMap map = new HashMap();
-            sa = tbc.getAppDescriptor().schedule(map, "*", null, false);
+			tbc.getAppDescriptor().lock();
 
-            tbc.setDefaultPermission();
-            
-			tbc
-					.assertEquals(
-							"Asserts if the arguments is correctly returned.",
-							map, sa.getArguments());
+			tbc.failException("", SecurityException.class);
+		} catch (SecurityException e) {
+			tbc.pass(MessagesConstants.getMessage(
+					MessagesConstants.EXCEPTION_CORRECTLY_THROWN,
+					new String[] { SecurityException.class.getName() }));
+		} catch (Exception e) {
+			tbc.fail(MessagesConstants.getMessage(
+					MessagesConstants.EXCEPTION_THROWN, new String[] {
+							SecurityException.class.getName(),
+							e.getClass().getName() }));
+		} finally {
+			tbc.cleanUp(infos);
+		}
+	}
+	
+	/**
+	 * This method asserts that a lock call after other lock call
+	 * will not thrown exception.
+	 * 
+	 * @spec ApplicationDescriptor.lock()
+	 */
+	private void testLock002() {
+		tbc.log("#testLock002");
+		PermissionInfo[] infos = null;
+		try {
+			infos = tbc.getPermissionAdmin().getPermissions(
+					tbc.getTb2Location());
 
+			tbc.setLocalPermission(
+				new PermissionInfo(ApplicationAdminPermission.class.getName(), ApplicationConstants.TEST_PID,	ApplicationAdminPermission.LOCK)
+			);
+
+			tbc.getAppDescriptor().lock();
+			tbc.getAppDescriptor().lock();
+
+			tbc.pass("No Exception was thrown.");
 		} catch (Exception e) {
 			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": " + e.getClass().getName());
 		} finally {
-			tbc.cleanUp(sa, infos);
+			tbc.cleanUp(infos);
 		}
-	}
+	}	
 
-    /**
-     * This method asserts if null was returned
-     * by getArguments().
-     * 
-     * @spec ScheduleApplication.getArguments()
-     */     
-	public void testGetArguments002() {
-		tbc.log("#testGetArguments002");
+	/**
+	 * This method asserts that if the application descriptor is unregistered
+	 * IllegalStateException will be thrown.
+	 * 
+	 * @spec ApplicationDescriptor.lock()
+	 */
+	private void testLock003() {
+		tbc.log("#testLock003");
 		PermissionInfo[] infos = null;
-		ScheduledApplication sa = null;
 		try {
 			infos = tbc.getPermissionAdmin().getPermissions(
 					tbc.getTb2Location());
 
-            tbc.setLocalPermission(
-                new PermissionInfo(ApplicationAdminPermission.class.getName(), ApplicationConstants.TEST_PID, ApplicationAdminPermission.SCHEDULE)
-            );
-
-            sa = tbc.getAppDescriptor().schedule(null, "*", null, false);
-
-            tbc.setDefaultPermission();
-            
-			tbc.assertNull("Asserting if the getArguments returns null", sa.getArguments());
-
-		} catch (Exception e) {
-			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": " + e.getClass().getName());
-		} finally {
-			tbc.cleanUp(sa, infos);
-		}
-	}
-
-    /**
-     * This method asserts that if the ScheduledApplication is unregistered
-     * IllegalStateException will be thrown.
-     * 
-     * @spec ScheduleApplication.getArguments()
-     */     
-	public void testGetArguments003() {
-		tbc.log("#testGetArguments003");
-		PermissionInfo[] infos = null;
-		ScheduledApplication sa = null;
-		try {
-			infos = tbc.getPermissionAdmin().getPermissions(
-					tbc.getTb2Location());
-
-            tbc.setLocalPermission(
-                new PermissionInfo(ApplicationAdminPermission.class.getName(), ApplicationConstants.TEST_PID, ApplicationAdminPermission.SCHEDULE)
-            );
-
-			sa = tbc.getAppDescriptor().schedule(null, "*", null, false);
-
-			sa.remove();
+			tbc.setLocalPermission(
+				new PermissionInfo(ApplicationAdminPermission.class.getName(), ApplicationConstants.TEST_PID,	ApplicationAdminPermission.LOCK)
+			);
 			
-			sa.getArguments();
+			tbc.unregisterDescriptor();
+			
+			tbc.getAppDescriptor().lock();
 
 			tbc.failException("", IllegalStateException.class);
 		} catch (IllegalStateException e) {
@@ -167,8 +156,9 @@ public class GetArguments implements TestInterface {
 							IllegalStateException.class.getName(),
 							e.getClass().getName() }));
 		} finally {
-			tbc.cleanUp(sa, infos);
+			tbc.installDescriptor();
+			tbc.cleanUp(infos);
 		}
 	}
-	
+
 }

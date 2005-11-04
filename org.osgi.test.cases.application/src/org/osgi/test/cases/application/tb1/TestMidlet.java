@@ -23,51 +23,44 @@
  * property of their respective owners. All rights reserved.
  * 
  */
-
 /*
  * REVISION HISTORY:
  *
  * Date         Author(s)
  * CR           Headline
  * ===========  ==============================================================
- * Apr 5, 2005  Alexandre Santos
- * 38           Implement MEGTCK for the application RFC 
+ * 25/08/2005   Alexandre Santos
+ * 153          Implement OAT test cases  
  * ===========  ==============================================================
  */
-package org.osgi.test.cases.application.tbc.ApplicationAdminPermission;
 
-import org.osgi.service.application.ApplicationAdminPermission;
-import org.osgi.test.cases.application.tbc.ApplicationTestControl;
+package org.osgi.test.cases.application.tb1;
 
-/**
- * 
- * This Test Class Validates the <code>ApplicationAdminPermission</code> constants
- * according to MEG reference documentation.
- */
-public class ApplicationAdminPermissionConstants {
-	private ApplicationTestControl tbc;
-	/**
-	 * @param tbc
-	 */
-	public ApplicationAdminPermissionConstants(ApplicationTestControl tbc) {
-		this.tbc = tbc;
-	}	
-	
-	public void run() {
-		testConstants001();
+import javax.microedition.midlet.MIDlet;
+import javax.microedition.midlet.MIDletStateChangeException;
+
+import org.osgi.application.ApplicationContext;
+import org.osgi.application.Framework;
+import org.osgi.test.cases.application.tbc.ApplicationConstants;
+import org.osgi.test.cases.application.tbc.util.TestAppController;
+
+
+public class TestMidlet extends MIDlet {
+    ApplicationContext appContext = null;
+    TestAppController appController = null;
+
+	protected void startApp() throws MIDletStateChangeException {
+        appContext = Framework.getApplicationContext(this);
+        appController = (TestAppController) appContext.locateService(ApplicationConstants.XML_APP);
+        appController.setApplicationInstance(this);		
 	}
-	
-    /**
-     * This method asserts if two equals ApplicationAdminPermission returns
-     * true to the equals method.
-     * 
-     * @spec 116.7.2 ApplicationAdminPermission
-     */
-	private void testConstants001() {
-		tbc.log("#testConstants001");
-		tbc.assertEquals("Asserting LIFECYCLE value", "lifecycle", ApplicationAdminPermission.LIFECYCLE);
-		tbc.assertEquals("Asserting LOCK value", "lock", ApplicationAdminPermission.LOCK);
-		tbc.assertEquals("Asserting SCHEDULE value", "schedule", ApplicationAdminPermission.SCHEDULE);
-	}	
 
+	protected void pauseApp() {
+		
+	}
+
+	protected void destroyApp(boolean arg0) throws MIDletStateChangeException {
+		//appController.setApplicationInstance(null); we need a reference to an old midlet for tests purposes.
+        appController = null;		
+	}
 }

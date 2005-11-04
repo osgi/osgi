@@ -30,14 +30,8 @@
  * Date         Author(s)
  * CR           Headline
  * ===========  ==============================================================
- * 05/05/2005   Leonardo Barros
- * 38           Implement MEGTCK for the application RFC 
- * ===========  ==============================================================
- * 17/05/2005   Alexandre Alves
- * 38           Update changes for TCK/Fix errors
- * ===========  ==============================================================
- * 24/05/2005   Alexandre Alves
- * 38           Update changes after inspection
+ * 25/08/2005   Alexandre Santos
+ * 153          Implement OAT test cases  
  * ===========  ==============================================================
  */
 package org.osgi.test.cases.application.tb2.ScheduledApplication;
@@ -45,15 +39,17 @@ package org.osgi.test.cases.application.tb2.ScheduledApplication;
 import org.osgi.service.application.ApplicationAdminPermission;
 import org.osgi.service.application.ScheduledApplication;
 import org.osgi.service.permissionadmin.PermissionInfo;
+import org.osgi.test.cases.application.tbc.ApplicationConstants;
 import org.osgi.test.cases.application.tbc.ApplicationTestControl;
 import org.osgi.test.cases.application.tbc.TestInterface;
 import org.osgi.test.cases.application.tbc.util.MessagesConstants;
 
 /**
- * @methodUnderTest org.osgi.service.application.ScheduledApplication#getTopic
- * @generalDescription This Test Class Validates the implementation of
- *                     <code>getTopic<code> method, according to MEG reference
- *                     documentation.
+ * @author Alexandre Alves
+ *  
+ * This Test Class Validates the implementation of
+ * <code>getTopic</code> method, according to MEG reference
+ * documentation.
  */
 public class GetTopic implements TestInterface {
 	private ApplicationTestControl tbc;
@@ -67,11 +63,12 @@ public class GetTopic implements TestInterface {
 		testGetTopic002();
 	}
 
-	/**
-	 * @testID testGetTopic001
-	 * @testDescription Asserts if the topic is correctly returned when an
-	 *                  application is scheduled
-	 */
+    /**
+     * This method asserts if the topic is correctly returned when an
+     * application is scheduled
+     * 
+     * @spec ScheduleApplication.getTopic()
+     */        
 	public void testGetTopic001() {
 		tbc.log("#testGetTopic001");
 		PermissionInfo[] infos = null;
@@ -80,21 +77,18 @@ public class GetTopic implements TestInterface {
 			infos = tbc.getPermissionAdmin().getPermissions(
 					tbc.getTb2Location());
 
-			tbc.setLocalPermission(new PermissionInfo(
-					ApplicationAdminPermission.class.getName(),
-					ApplicationTestControl.TEST2_PID,
-					ApplicationAdminPermission.LOCK + ","
-							+ ApplicationAdminPermission.SCHEDULE));
+            tbc.setLocalPermission(
+                new PermissionInfo(ApplicationAdminPermission.class.getName(), ApplicationConstants.TEST_PID, ApplicationAdminPermission.SCHEDULE)
+            );
 
-			tbc.getAppDescriptor2().unlock();
-
-			sa = tbc.getAppDescriptor2().schedule(null,
-					ApplicationTestControl.TIMER_EVENT_TOPIC, null, false);
-
+            sa = tbc.getAppDescriptor().schedule(null, ApplicationConstants.TIMER_EVENT, ApplicationConstants.EVENT_FILTER, false);
+            
+            tbc.setDefaultPermission();
+            
 			tbc
 					.assertEquals(
-							"Asserts if the topic is correctly returned when an application is scheduled",
-							ApplicationTestControl.TIMER_EVENT_TOPIC, sa
+							"Asserts if the topic is correctly returned by an ApplicationScheduled",
+							ApplicationConstants.TIMER_EVENT, sa
 									.getTopic());
 
 		} catch (Exception e) {
@@ -105,46 +99,43 @@ public class GetTopic implements TestInterface {
 		}
 	}
 
-	/**
-	 * @testID testGetTopic002
-	 * @testDescription Asserts if IllegalStateException is thrown when
-	 *                  application descriptor is unregistered
-	 */
-	public void testGetTopic002() {
-		tbc.log("#testGetTopic002");
-		PermissionInfo[] infos = null;
-		ScheduledApplication sa = null;
-		try {
-			infos = tbc.getPermissionAdmin().getPermissions(
-					tbc.getTb2Location());
+    /**
+     * This method asserts that if the ScheduledApplication is unregistered
+     * IllegalStateException will be thrown.
+     * 
+     * @spec ScheduleApplication.getTopic()
+     */     
+    public void testGetTopic002() {
+        tbc.log("#testGetTopic002");
+        PermissionInfo[] infos = null;
+        ScheduledApplication sa = null;
+        try {
+            infos = tbc.getPermissionAdmin().getPermissions(
+                    tbc.getTb2Location());
 
-			tbc.setLocalPermission(new PermissionInfo(
-					ApplicationAdminPermission.class.getName(),
-					ApplicationTestControl.TEST2_PID,
-					ApplicationAdminPermission.LOCK + ","
-							+ ApplicationAdminPermission.SCHEDULE));
+            tbc.setLocalPermission(
+                new PermissionInfo(ApplicationAdminPermission.class.getName(), ApplicationConstants.TEST_PID, ApplicationAdminPermission.SCHEDULE)
+            );
 
-			sa = tbc.getAppDescriptor2().schedule(null,
-					ApplicationTestControl.TIMER_EVENT_TOPIC, null, false);
+            sa = tbc.getAppDescriptor().schedule(null, "*", null, false);
 
-			tbc.stopServices();
+            sa.remove();
+            
+            sa.getTopic();
 
-			sa.getTopic();
-
-			tbc.failException("", IllegalStateException.class);
-		} catch (IllegalStateException e) {
-			tbc.pass(MessagesConstants.getMessage(
-					MessagesConstants.EXCEPTION_CORRECTLY_THROWN,
-					new String[] { IllegalStateException.class.getName() }));
-		} catch (Exception e) {
-			tbc.fail(MessagesConstants.getMessage(
-					MessagesConstants.EXCEPTION_THROWN, new String[] {
-							IllegalStateException.class.getName(),
-							e.getClass().getName() }));
-		} finally {
-			tbc.cleanUp(sa, infos);
-			tbc.installBundleMeglet();
-		}
-	}
+            tbc.failException("", IllegalStateException.class);
+        } catch (IllegalStateException e) {
+            tbc.pass(MessagesConstants.getMessage(
+                    MessagesConstants.EXCEPTION_CORRECTLY_THROWN,
+                    new String[] { IllegalStateException.class.getName() }));
+        } catch (Exception e) {
+            tbc.fail(MessagesConstants.getMessage(
+                    MessagesConstants.EXCEPTION_THROWN, new String[] {
+                            IllegalStateException.class.getName(),
+                            e.getClass().getName() }));
+        } finally {
+            tbc.cleanUp(sa, infos);
+        }
+    }
 
 }

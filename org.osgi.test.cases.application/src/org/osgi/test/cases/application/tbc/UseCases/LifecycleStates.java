@@ -23,240 +23,186 @@
  * property of their respective owners. All rights reserved.
  * 
  */
-
 /*
  * REVISION HISTORY:
  *
  * Date         Author(s)
  * CR           Headline
  * ===========  ==============================================================
- * 19/05/2005   Alexandre Alves
- * 38           Implement MEGTCK for the application RFC 
+ * 26/08/2005   Alexandre Santos
+ * 153          Implement OAT test cases  
  * ===========  ==============================================================
  */
+
 package org.osgi.test.cases.application.tbc.UseCases;
 
-import org.osgi.service.application.ApplicationAdminPermission;
-import org.osgi.service.application.meglet.MegletHandle;
-import org.osgi.service.permissionadmin.PermissionInfo;
+import org.osgi.service.application.ApplicationHandle;
+import org.osgi.test.cases.application.tbc.ApplicationConstants;
 import org.osgi.test.cases.application.tbc.ApplicationTestControl;
-import org.osgi.test.cases.application.tbc.TestInterface;
+import org.osgi.test.cases.application.tbc.Event.EventHandlerImpl;
 import org.osgi.test.cases.application.tbc.util.MessagesConstants;
 
 /**
- * @generalDescription This test class validates lifecycle states changes of an
- *                     application
+ * @author Alexandre Santos This test class validates lifecycle states changes
+ *         of an application
  */
-public class LifecycleStates implements TestInterface {
-	private ApplicationTestControl tbc;
+public class LifecycleStates {
 
-	public LifecycleStates(ApplicationTestControl tbc) {
-		this.tbc = tbc;
-	}
+    private ApplicationTestControl tbc;
 
-	public void run() {
-		testLifecycleStates001();
-		testLifecycleStates002();
-		testLifecycleStates003();
-		testLifecycleStates004();
-		testLifecycleStates005();
-	}
+    public LifecycleStates(ApplicationTestControl tbc) {
+        this.tbc = tbc;
+    }
 
-	/**
-	 * @testID testLifecycleStates001
-	 * @testDescription Asserts if the REGISTERED event is dispatch
-	 * 					correctly                 
-	 */
-	public synchronized void testLifecycleStates001() {
-		tbc.log("#testLifecycleStates001");
-		PermissionInfo[] infos = null;
-		MegletHandle ah = null;
-		try {
-			infos = tbc.getPermissionAdmin().getPermissions(
-					tbc.getTb2Location());
+    public void run() {
+        testLifecycleStates001();
+        testLifecycleStates002();
+        testLifecycleStates003();
+        testLifecycleStates004();
+    }
 
-			tbc.setLocalPermission(new PermissionInfo(
-					ApplicationAdminPermission.class.getName(),
-					ApplicationTestControl.TEST2_PID,
-					ApplicationAdminPermission.LIFECYCLE));
+    /**
+     * This method asserts if the REGISTERED,UNREGISTERED and MODIFIED events are fired
+     * when we launch and destroy an application.
+     * 
+     * @spec 116.2.8 Application Events
+     */
+    private void testLifecycleStates001() {
+        tbc.log("#testLifecycleStates001");
+        ApplicationHandle handle = null;
+        try {
+            tbc.resetEventProperties();
+            EventHandlerImpl.waitNotify = false;
+                                 
+            synchronized (tbc) {
+                handle = (ApplicationHandle) tbc.getAppDescriptor().launch(null);            	
+                tbc.wait(ApplicationConstants.SHORT_TIMEOUT);
+            }
+            
+            tbc.assertTrue("Asserting if the system has received a register event after the launch of the app.",
+                    tbc.isRegistered() && !tbc.isModified()
+                        && !tbc.isUnregistered());
+            
+            tbc.resetEventProperties();
+            
+            synchronized (tbc) {
+                handle.destroy();            	
+                tbc.wait(ApplicationConstants.SHORT_TIMEOUT);
+            }
+            
+            tbc.assertTrue("Asserting if the system has received an unregistered event and a modified event after the destroy of the app.",
+                !tbc.isRegistered() && tbc.isModified()
+                    && tbc.isUnregistered());
+            
+            
+        } catch (Exception e) {
+            tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": "
+                + e.getClass().getName());
+        } finally {
+        	EventHandlerImpl.waitNotify = true;
+        	tbc.cleanUp(handle);
+        }
+    }
 
-			tbc.getAppDescriptor2().unlock();
+    /**
+     * This method asserts if the UNREGISTERING event is fired
+     * when we install and uninstall an application.
+     * 
+     * @spec 116.2.8 Application Events
+     */
+    private void testLifecycleStates002() {
+        tbc.log("#testLifecycleStates002");
+        try {            
+            EventHandlerImpl.waitNotify = false;
+            
+            tbc.resetEventProperties();                       
+            
+            synchronized (tbc) {
+            	tbc.unregisterDescriptor();
+                tbc.wait(ApplicationConstants.SHORT_TIMEOUT);
+            }
+            
+            tbc.assertTrue("Asserting if the system has received a unregistering event after the uninstall of the app.",
+                !tbc.isRegistered() && !tbc.isModified()
+                    && tbc.isUnregistered());                                           
+                        
+        } catch (Exception e) {
+            tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": "
+                + e.getClass().getName());
+        } finally {
+        	EventHandlerImpl.waitNotify = true;
+        	tbc.installDescriptor();
+        }
+    }
+    
+    
+    /**
+     * This method asserts if the REGISTERED events is fired
+     * when we install an application.
+     * 
+     * @spec 116.2.8 Application Events
+     */
+    private void testLifecycleStates003() {
+        tbc.log("#testLifecycleStates003");
+        try {            
+            EventHandlerImpl.waitNotify = false;                                  
+            
+            synchronized (tbc) {
+            	tbc.unregisterDescriptor();
+                tbc.wait(ApplicationConstants.SHORT_TIMEOUT);
+            }
+            
+            tbc.resetEventProperties();                       
+            
+           	tbc.installDescriptor();
+            
+            tbc.assertTrue("Asserting if the system has received a registered event after the install of the app.",
+                tbc.isRegistered() && !tbc.isModified()
+                    && !tbc.isUnregistered());
+                        
+        } catch (Exception e) {
+            tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": "
+                + e.getClass().getName());
+        } finally {
+        	EventHandlerImpl.waitNotify = true;
+        }
+    }    
 
-			ah = (MegletHandle) tbc.getAppDescriptor2().launch(tbc.getMeg2Properties());
+    /**
+     * This method asserts if the MODIFIED event is fired
+     * when we have locked and unlocked the descriptor.
+     * 
+     * @spec 116.2.8 Application Events
+     */
+    private void testLifecycleStates004() {
+        tbc.log("#testLifecycleStates004");
+        try {           
+            tbc.resetEventProperties();                       
+            
+            synchronized (tbc) {
+            	tbc.getAppDescriptor().lock();
+                tbc.wait(ApplicationConstants.TIMEOUT);
+            }
+            
+            tbc.assertTrue("Asserting if the system has received a modified event after the lock of the descriptor.",
+                !tbc.isRegistered() && tbc.isModified()
+                    && !tbc.isUnregistered());
+            
+            tbc.resetEventProperties();                       
 
-			wait(ApplicationTestControl.TIME_OUT);
-			
-			tbc.assertTrue(MessagesConstants.getMessage(MessagesConstants.ASSERT_TRUE, new String[] { "the system has received a register event after launch an app." }),
-					tbc.isRegistered() && !tbc.isModified() && !tbc.isUnregistered());
-			
-			ah.destroy();
+            synchronized (tbc) {
+            	tbc.getAppDescriptor().unlock();
+                tbc.wait(ApplicationConstants.TIMEOUT);
+            }            
+            
+            tbc.assertTrue("Asserting if the system has received a modified event after the unlock of the descriptor.",
+                !tbc.isRegistered() && tbc.isModified()
+                    && !tbc.isUnregistered());
+                        
+        } catch (Exception e) {
+            tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": "
+                + e.getClass().getName());
+        }
+    }
 
-		} catch (Exception e) {
-			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": " + e.getClass().getName());
-		} finally {
-			tbc.getAppDescriptor2().lock();
-			tbc.getPermissionAdmin()
-					.setPermissions(tbc.getTb2Location(), infos);
-		}
-	}
-	
-	/**
-	 * @testID testLifecycleStates002
-	 * @testDescription Asserts if the MODIFIED event is dispatch   
-	 *                  correctly
-	 */
-	public synchronized void testLifecycleStates002() {
-		tbc.log("#testLifecycleStates002");
-		PermissionInfo[] infos = null;
-		MegletHandle ah = null;
-		try {
-			infos = tbc.getPermissionAdmin().getPermissions(
-					tbc.getTb2Location());
-
-			tbc.setLocalPermission(new PermissionInfo(
-					ApplicationAdminPermission.class.getName(),
-					ApplicationTestControl.TEST2_PID,
-					ApplicationAdminPermission.LIFECYCLE));
-
-			tbc.getAppDescriptor2().unlock();
-
-			ah = (MegletHandle) tbc.getAppDescriptor2().launch(tbc.getMeg2Properties());
-			
-			ah.suspend();
-
-			wait(ApplicationTestControl.TIME_OUT);
-			
-			tbc.assertTrue(MessagesConstants.getMessage(MessagesConstants.ASSERT_TRUE, new String[] { "the system has received a modified event after suspend an app." }),
-					!tbc.isRegistered() && tbc.isModified() && !tbc.isUnregistered());
-
-			ah.destroy();
-
-		} catch (Exception e) {
-			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": " + e.getClass().getName());
-		} finally {
-			tbc.getAppDescriptor2().lock();
-			tbc.getPermissionAdmin()
-					.setPermissions(tbc.getTb2Location(), infos);
-		}
-	}	
-	
-	/**
-	 * @testID testLifecycleStates003
-	 * @testDescription Asserts if the MODIFIED event is dispatch   
-	 *                  correctly
-	 */
-	public synchronized void testLifecycleStates003() {
-		tbc.log("#testLifecycleStates003");
-		PermissionInfo[] infos = null;
-		MegletHandle ah = null;
-		try {
-			infos = tbc.getPermissionAdmin().getPermissions(
-					tbc.getTb2Location());
-
-			tbc.setLocalPermission(new PermissionInfo(
-					ApplicationAdminPermission.class.getName(),
-					ApplicationTestControl.TEST2_PID,
-					ApplicationAdminPermission.LIFECYCLE));
-
-			tbc.getAppDescriptor2().unlock();
-
-			ah = (MegletHandle) tbc.getAppDescriptor2().launch(tbc.getMeg2Properties());
-			
-			ah.suspend();
-			
-			ah.resume();
-
-			wait(ApplicationTestControl.TIME_OUT);
-			
-			tbc.assertTrue(MessagesConstants.getMessage(MessagesConstants.ASSERT_TRUE, new String[] { "the system has received a modified event after resume an app." }),
-					!tbc.isRegistered() && tbc.isModified() && !tbc.isUnregistered());
-
-			ah.destroy();
-
-		} catch (Exception e) {
-			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": " + e.getClass().getName());
-		} finally {
-			tbc.getAppDescriptor2().lock();
-			tbc.getPermissionAdmin()
-					.setPermissions(tbc.getTb2Location(), infos);
-		}
-	}	
-	
-	/**
-	 * @testID testLifecycleStates004
-	 * @testDescription Asserts if the UNREGISTERED event is dispatch   
-	 *                  correctly
-	 */
-	public synchronized void testLifecycleStates004() {
-		tbc.log("#testLifecycleStates004");
-		PermissionInfo[] infos = null;
-		MegletHandle ah = null;
-		try {
-			infos = tbc.getPermissionAdmin().getPermissions(
-					tbc.getTb2Location());
-
-			tbc.setLocalPermission(new PermissionInfo(
-					ApplicationAdminPermission.class.getName(),
-					ApplicationTestControl.TEST2_PID,
-					ApplicationAdminPermission.LIFECYCLE));
-
-			tbc.getAppDescriptor2().unlock();
-
-			ah = (MegletHandle) tbc.getAppDescriptor2().launch(tbc.getMeg2Properties());
-			
-			ah.destroy();
-
-			wait(ApplicationTestControl.TIME_OUT);
-			
-			tbc.assertTrue(MessagesConstants.getMessage(MessagesConstants.ASSERT_TRUE, new String[] { "the system has received a unregistered event after destroy an app." }),
-					!tbc.isRegistered() && !tbc.isModified() && tbc.isUnregistered());
-
-		} catch (Exception e) {
-			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": " + e.getClass().getName());
-		} finally {
-			tbc.getAppDescriptor2().lock();
-			tbc.getPermissionAdmin()
-					.setPermissions(tbc.getTb2Location(), infos);
-		}
-	}		
-	
-	/**
-	 * @testID testLifecycleStates005
-	 * @testDescription Asserts if the UNREGISTERED event is dispatch 
-	 *                  when we destroy a suspended meglet.
-	 */
-	public synchronized void testLifecycleStates005() {
-		tbc.log("#testLifecycleStates005");
-		PermissionInfo[] infos = null;
-		MegletHandle ah = null;
-		try {
-			infos = tbc.getPermissionAdmin().getPermissions(
-					tbc.getTb2Location());
-
-			tbc.setLocalPermission(new PermissionInfo(
-					ApplicationAdminPermission.class.getName(),
-					ApplicationTestControl.TEST2_PID,
-					ApplicationAdminPermission.LIFECYCLE));
-
-			tbc.getAppDescriptor2().unlock();
-
-			ah = (MegletHandle) tbc.getAppDescriptor2().launch(tbc.getMeg2Properties());
-			
-			ah.suspend();
-			
-			ah.destroy();
-
-			wait(ApplicationTestControl.TIME_OUT);
-			
-			tbc.assertTrue(MessagesConstants.getMessage(MessagesConstants.ASSERT_TRUE, new String[] { "the system has received a unregistered event after destroy a suspended application." }),
-					!tbc.isRegistered() && !tbc.isModified() && tbc.isUnregistered());
-
-		} catch (Exception e) {
-			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": " + e.getClass().getName());
-		} finally {
-			tbc.getAppDescriptor2().lock();
-			tbc.getPermissionAdmin()
-					.setPermissions(tbc.getTb2Location(), infos);
-		}
-	}		
 }

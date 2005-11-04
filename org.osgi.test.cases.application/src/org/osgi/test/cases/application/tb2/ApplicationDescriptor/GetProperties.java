@@ -30,15 +30,14 @@
  * Date         Author(s)
  * CR           Headline
  * ===========  ==============================================================
- * 24/08/2005   Alexandre Santos
+ * 22/08/2005   Alexandre Santos
  * 153          Implement OAT test cases  
  * ===========  ==============================================================
  */
-package org.osgi.test.cases.application.tb2.ScheduledApplication;
+package org.osgi.test.cases.application.tb2.ApplicationDescriptor;
 
-import java.util.HashMap;
-import org.osgi.service.application.ApplicationAdminPermission;
-import org.osgi.service.application.ScheduledApplication;
+import java.util.Map;
+
 import org.osgi.service.permissionadmin.PermissionInfo;
 import org.osgi.test.cases.application.tbc.ApplicationConstants;
 import org.osgi.test.cases.application.tbc.ApplicationTestControl;
@@ -49,114 +48,83 @@ import org.osgi.test.cases.application.tbc.util.MessagesConstants;
  * @author Alexandre Alves
  * 
  * This Test Class Validates the implementation of
- * <code>getArguments</code> method, according to MEG reference
+ * <code>getDescription</code> method, according to MEG reference
  * documentation.
  */
-public class GetArguments implements TestInterface {
+public class GetProperties implements TestInterface {
 	private ApplicationTestControl tbc;
 
-	public GetArguments(ApplicationTestControl tbc) {
+	public GetProperties(ApplicationTestControl tbc) {
 		this.tbc = tbc;
 	}
 
 	public void run() {
-		testGetArguments001();
-		testGetArguments002();
-		testGetArguments003();
+		testGetProperties001();
+		testGetProperties002();
+		testGetProperties003();
 	}
 
-    
-    /**
-     * This method asserts if the passed map was returned
-     * by getArguments().
-     * 
-     * @spec ScheduleApplication.getArguments()
-     */     
-	public void testGetArguments001() {
-		tbc.log("#testGetArguments001");
-		PermissionInfo[] infos = null;
-		ScheduledApplication sa = null;
+	/**
+	 * This method asserts that null can be passed and
+	 * no exception is thrown and assert the returned values.
+	 * 
+	 * @spec ApplicationDescriptor.getProperties(String)
+	 */
+	private void testGetProperties001() {
+		PermissionInfo[] infos = null;	
 		try {
+			tbc.log("#testGetProperties001");
 			infos = tbc.getPermissionAdmin().getPermissions(
-					tbc.getTb2Location());
-
-            tbc.setLocalPermission(
-                new PermissionInfo(ApplicationAdminPermission.class.getName(), ApplicationConstants.TEST_PID, ApplicationAdminPermission.SCHEDULE)
-            );
-
-            HashMap map = new HashMap();
-            sa = tbc.getAppDescriptor().schedule(map, "*", null, false);
-
-            tbc.setDefaultPermission();
-            
-			tbc
-					.assertEquals(
-							"Asserts if the arguments is correctly returned.",
-							map, sa.getArguments());
-
+					tbc.getTb2Location());			
+			tbc.setDefaultPermission();
+			Map map = tbc.getAppDescriptor().getProperties(null);
+			assertMap(map);			
 		} catch (Exception e) {
 			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": " + e.getClass().getName());
 		} finally {
-			tbc.cleanUp(sa, infos);
+			tbc.cleanUp(infos);
 		}
 	}
-
-    /**
-     * This method asserts if null was returned
-     * by getArguments().
-     * 
-     * @spec ScheduleApplication.getArguments()
-     */     
-	public void testGetArguments002() {
-		tbc.log("#testGetArguments002");
-		PermissionInfo[] infos = null;
-		ScheduledApplication sa = null;
+	
+	/**
+	 * This method asserts that an empty string can be passed and
+	 * no exception is thrown and assert the returned values.
+	 * 
+	 * @spec ApplicationDescriptor.getProperties(String)
+	 */
+	private void testGetProperties002() {
+		PermissionInfo[] infos = null;	
 		try {
+			tbc.log("#testGetProperties002");
 			infos = tbc.getPermissionAdmin().getPermissions(
-					tbc.getTb2Location());
-
-            tbc.setLocalPermission(
-                new PermissionInfo(ApplicationAdminPermission.class.getName(), ApplicationConstants.TEST_PID, ApplicationAdminPermission.SCHEDULE)
-            );
-
-            sa = tbc.getAppDescriptor().schedule(null, "*", null, false);
-
-            tbc.setDefaultPermission();
-            
-			tbc.assertNull("Asserting if the getArguments returns null", sa.getArguments());
-
+					tbc.getTb2Location());			
+			tbc.setDefaultPermission();
+			Map map = tbc.getAppDescriptor().getProperties("");
+			assertMap(map);		
 		} catch (Exception e) {
 			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": " + e.getClass().getName());
 		} finally {
-			tbc.cleanUp(sa, infos);
+			tbc.cleanUp(infos);
 		}
-	}
-
-    /**
-     * This method asserts that if the ScheduledApplication is unregistered
-     * IllegalStateException will be thrown.
-     * 
-     * @spec ScheduleApplication.getArguments()
-     */     
-	public void testGetArguments003() {
-		tbc.log("#testGetArguments003");
-		PermissionInfo[] infos = null;
-		ScheduledApplication sa = null;
+	}	
+	
+	/**
+	 * This method asserts that if the application descriptor is unregistered
+	 * IllegalStateException will be thrown.
+	 * 
+	 * @spec ApplicationDescriptor.getProperties(String)
+	 */
+	private void testGetProperties003() {
+		PermissionInfo[] infos = null;	
 		try {
+			tbc.log("#testGetProperties003");
 			infos = tbc.getPermissionAdmin().getPermissions(
-					tbc.getTb2Location());
-
-            tbc.setLocalPermission(
-                new PermissionInfo(ApplicationAdminPermission.class.getName(), ApplicationConstants.TEST_PID, ApplicationAdminPermission.SCHEDULE)
-            );
-
-			sa = tbc.getAppDescriptor().schedule(null, "*", null, false);
-
-			sa.remove();
+					tbc.getTb2Location());			
+			tbc.setDefaultPermission();
+			tbc.unregisterDescriptor();
+			tbc.getAppDescriptor().getProperties(null);
 			
-			sa.getArguments();
-
-			tbc.failException("", IllegalStateException.class);
+			tbc.failException("#", IllegalStateException.class);
 		} catch (IllegalStateException e) {
 			tbc.pass(MessagesConstants.getMessage(
 					MessagesConstants.EXCEPTION_CORRECTLY_THROWN,
@@ -167,8 +135,22 @@ public class GetArguments implements TestInterface {
 							IllegalStateException.class.getName(),
 							e.getClass().getName() }));
 		} finally {
-			tbc.cleanUp(sa, infos);
+			tbc.installDescriptor();
+			tbc.cleanUp(infos);
 		}
 	}
 	
+	private void assertMap(Map map) {
+		tbc.assertEquals("Asserting the application.locked value", Boolean.FALSE, map.get("application.locked"));
+		tbc.assertEquals("Asserting the service.vendor value", "Cesar", map.get("service.vendor"));
+		tbc.assertEquals("Asserting the application.name value", ApplicationConstants.APPLICATION_NAME, map.get("application.name"));
+		tbc.assertEquals("Asserting the application.visible value", Boolean.TRUE, map.get("application.visible"));
+		tbc.assertEquals("Asserting the application.bundle.id value", tbc.getDescriptorBundleId(), map.get("application.bundle.id"));
+		tbc.assertEquals("Asserting the application.container value", "MIDlet", map.get("application.container"));
+		tbc.assertEquals("Asserting the service.pid value", ApplicationConstants.TEST_PID, map.get("service.pid"));
+		tbc.assertEquals("Asserting the application.launchable value", Boolean.TRUE, map.get("application.launchable"));
+		tbc.assertEquals("Asserting the application.version value", ApplicationConstants.APP_VERSION, map.get("application.version"));
+		tbc.assertEquals("Asserting the application.icon value", ApplicationConstants.APP_ICON, map.get("application.icon"));	
+	}
+
 }

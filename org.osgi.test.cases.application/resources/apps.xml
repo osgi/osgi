@@ -1,0 +1,5 @@
+<?xml version="1.0" ?> 
+<descriptor xmlns="http://www.osgi.org/xmlns/app/v1.0.0">
+	<application class="org.osgi.test.cases.application.tb1.TestLetImpl">
+	</application>
+</descriptor>

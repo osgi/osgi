@@ -30,44 +30,20 @@
  * Date         Author(s)
  * CR           Headline
  * ===========  ==============================================================
- * Apr 5, 2005  Alexandre Santos
- * 38           Implement MEGTCK for the application RFC 
+ * 01/09/2005   Alexandre Santos
+ * 153          [MEGTCK][APP] Implement OAT test cases
  * ===========  ==============================================================
  */
-package org.osgi.test.cases.application.tbc.ApplicationAdminPermission;
+package org.osgi.test.cases.application.tbc.util;
 
-import org.osgi.service.application.ApplicationAdminPermission;
-import org.osgi.test.cases.application.tbc.ApplicationTestControl;
 
 /**
+ * @author Alexandre Alves
  * 
- * This Test Class Validates the <code>ApplicationAdminPermission</code> constants
- * according to MEG reference documentation.
  */
-public class ApplicationAdminPermissionConstants {
-	private ApplicationTestControl tbc;
-	/**
-	 * @param tbc
-	 */
-	public ApplicationAdminPermissionConstants(ApplicationTestControl tbc) {
-		this.tbc = tbc;
-	}	
-	
-	public void run() {
-		testConstants001();
-	}
-	
-    /**
-     * This method asserts if two equals ApplicationAdminPermission returns
-     * true to the equals method.
-     * 
-     * @spec 116.7.2 ApplicationAdminPermission
-     */
-	private void testConstants001() {
-		tbc.log("#testConstants001");
-		tbc.assertEquals("Asserting LIFECYCLE value", "lifecycle", ApplicationAdminPermission.LIFECYCLE);
-		tbc.assertEquals("Asserting LOCK value", "lock", ApplicationAdminPermission.LOCK);
-		tbc.assertEquals("Asserting SCHEDULE value", "schedule", ApplicationAdminPermission.SCHEDULE);
-	}	
-
+public interface TestAppController {
+    
+    public void setApplicationInstance(Object instance);
+    public Object getApplicationInstance();       
+    
 }
