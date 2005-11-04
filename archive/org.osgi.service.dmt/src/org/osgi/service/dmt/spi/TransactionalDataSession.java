@@ -27,9 +27,9 @@ public interface TransactionalDataSession extends ReadWriteDataSession {
      * This method can fail even if all operations were successful. This can
      * happen due to some multi-node semantic constraints defined by a specific
      * implementation. For example, node A can be required to always have
-     * children A.B, A.C and A.D. If this condition is broken when
+     * children A/B, A/C and A/D. If this condition is broken when
      * <code>commit()</code> is executed, the method will fail, and throw a
-     * <code>COMMAND_FAILED</code> exception.
+     * <code>METADATA_MISMATCH</code> exception.
      * <p>
      * In many cases the tree is not the only way to manage a given part of the
      * system.  It may happen that while modifying some nodes in an atomic
@@ -46,10 +46,8 @@ public interface TransactionalDataSession extends ReadWriteDataSession {
      *         nodes affected in the session's operations
      *         <li><code>DATA_STORE_FAILURE</code> if an error occurred while
      *         accessing the data store
-     *         <li><code>COMMAND_FAILED</code> if some multi-node semantic
-     *         constraint was violated during the course of the session, or if 
-     *         some unspecified error is encountered while attempting to 
-     *         complete the command
+     *         <li><code>COMMAND_FAILED</code> if some unspecified error is 
+     *         encountered while attempting to complete the command
      *         </ul>
      * @throws SecurityException if the caller does not have the necessary
      *         permissions to execute the underlying management operation
