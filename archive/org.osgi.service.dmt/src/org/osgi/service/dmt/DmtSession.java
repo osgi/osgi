@@ -531,9 +531,6 @@ public interface DmtSession {
      *         <li><code>METADATA_MISMATCH</code> if any of the meta-data 
      *         constraints of the implied retrieval or update operations are
      *         violated
-     *         <li><code>FEATURE_NOT_SUPPORTED</code> if the copy operation
-     *         is not supported by the Dmt Admin implementation or the 
-     *         underlying plugin(s)
      *         <li><code>TRANSACTION_ERROR</code> in an atomic session if the
      *         underlying plugin is read-only or does not support atomic writing
      *         <li><code>DATA_STORE_FAILURE</code> if an error occurred while
