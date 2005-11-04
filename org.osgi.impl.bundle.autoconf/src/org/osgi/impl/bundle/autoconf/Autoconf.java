@@ -17,44 +17,21 @@
  */
 package org.osgi.impl.bundle.autoconf;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.security.AccessController;
-import java.security.PrivilegedActionException;
-import java.security.PrivilegedExceptionAction;
-import java.util.Dictionary;
-import java.util.Enumeration;
-import java.util.HashMap;
-import java.util.Hashtable;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Vector;
+import java.io.*;
+import java.security.*;
+import java.util.*;
 
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.parsers.SAXParserFactory;
+import javax.xml.parsers.*;
 
-import org.osgi.framework.Bundle;
-import org.osgi.framework.BundleContext;
-import org.osgi.impl.bundle.autoconf.MetaData.AD;
-import org.osgi.impl.bundle.autoconf.MetaData.Attribute;
-import org.osgi.impl.bundle.autoconf.MetaData.OCD;
+import org.osgi.framework.*;
+import org.osgi.impl.bundle.autoconf.MetaData.*;
 import org.osgi.impl.bundle.autoconf.MetaData.Object;
-import org.osgi.service.cm.Configuration;
-import org.osgi.service.cm.ConfigurationAdmin;
+import org.osgi.service.cm.*;
 import org.osgi.service.component.ComponentContext;
-import org.osgi.service.deploymentadmin.DeploymentException;
-import org.osgi.service.deploymentadmin.DeploymentPackage;
-import org.osgi.service.deploymentadmin.DeploymentSession;
-import org.osgi.service.deploymentadmin.ResourceProcessor;
-import org.osgi.service.metatype.AttributeDefinition;
-import org.osgi.service.metatype.MetaTypeInformation;
-import org.osgi.service.metatype.MetaTypeService;
-import org.osgi.service.metatype.ObjectClassDefinition;
-import org.xml.sax.InputSource;
-import org.xml.sax.SAXException;
+import org.osgi.service.deploymentadmin.*;
+import org.osgi.service.deploymentadmin.spi.*;
+import org.osgi.service.metatype.*;
+import org.xml.sax.*;
 
 public class Autoconf implements ResourceProcessor {
 	BundleContext context;
@@ -175,7 +152,7 @@ public class Autoconf implements ResourceProcessor {
 		}
 	}
 	
-	public void process(final String resourceName, final InputStream stream) throws DeploymentException {
+	public void process(final String resourceName, final InputStream stream) throws ResourceProcessorException {
 
 		// this contains those configurations that were created by the same package, and the same
 		// resource in some previous version
@@ -193,16 +170,16 @@ public class Autoconf implements ResourceProcessor {
 			m = new MetaData(saxParserFactory.newSAXParser(),is);
 		}
 		catch (ParserConfigurationException e) {
-			throw new DeploymentException(DeploymentException.CODE_OTHER_ERROR,"Cannot create XML parser",e);
+			throw new ResourceProcessorException(ResourceProcessorException.CODE_OTHER_ERROR,"Cannot create XML parser",e);
 		}
 		catch (IOException e) {
-			throw new DeploymentException(DeploymentException.CODE_MISSING_RESOURCE,"Cannot read configuration",e);
+			throw new ResourceProcessorException(ResourceProcessorException.CODE_OTHER_ERROR,"Cannot read configuration",e);
 		}
 		catch (SAXException e) {
-			throw new DeploymentException(DeploymentException.CODE_OTHER_ERROR,"Malformed configuration data in "+is.getSystemId(),e);
+			throw new ResourceProcessorException(ResourceProcessorException.CODE_OTHER_ERROR,"Malformed configuration data in "+is.getSystemId(),e);
 		}
 		catch (PrivilegedActionException e) {
-			throw new DeploymentException(DeploymentException.CODE_OTHER_ERROR,"",e);
+			throw new ResourceProcessorException(ResourceProcessorException.CODE_OTHER_ERROR,"",e);
 		}
 		
 		designates:
@@ -218,7 +195,7 @@ public class Autoconf implements ResourceProcessor {
 					// TODO should log something
 					continue; 
 				}
-				throw e;
+				throw new ResourceProcessorException(ResourceProcessorException.CODE_OTHER_ERROR,"Deployment Exception",e);
 			}
 		}
 		
@@ -231,7 +208,7 @@ public class Autoconf implements ResourceProcessor {
 				toWrite.configuration = configurationAdmin.getConfiguration(sc.pid);
 			}
 			catch (IOException e) {
-				throw new DeploymentException(DeploymentException.CODE_OTHER_ERROR,
+				throw new ResourceProcessorException(ResourceProcessorException.CODE_OTHER_ERROR,
 						"Configuration with pid "+sc.pid+" needs to be removed, but cannot be "+
 						"accessed",e);
 			}
@@ -444,7 +421,7 @@ public class Autoconf implements ResourceProcessor {
 	}
 
 
-	public void dropAllResources() throws DeploymentException {
+	public void dropAllResources() throws ResourceProcessorException {
 		List toDrop = storedConfigurations.getByPackageName(packageName);
 		for (Iterator iter = toDrop.iterator(); iter.hasNext();) {
 			StoredConfiguration sc = (StoredConfiguration) iter.next();
@@ -461,7 +438,7 @@ public class Autoconf implements ResourceProcessor {
 		}
 	}
 
-	public void prepare() throws DeploymentException {
+	public void prepare() throws ResourceProcessorException {
 		// everything is prepared in the 'process' call
 	}
 
