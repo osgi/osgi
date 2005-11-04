@@ -11,7 +11,7 @@
 package org.osgi.service.monitor;
 
 /**
- * A <code>MonitorAdmin</code> implementation handles
+ * The <code>MonitorAdmin</code> service is a singleton service that handles
  * <code>StatusVariable</code> query requests and measurement job control
  * requests.
  * <p>
