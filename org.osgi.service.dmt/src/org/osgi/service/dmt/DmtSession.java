@@ -174,9 +174,9 @@ public interface DmtSession {
      * This method can fail even if all operations were successful. This can
      * happen due to some multi-node semantic constraints defined by a specific
      * implementation. For example, node A can be required to always have
-     * children A.B, A.C and A.D. If this condition is broken when
+     * children A/B, A/C and A/D. If this condition is broken when
      * <code>commit()</code> is executed, the method will fail, and throw a
-     * <code>COMMAND_FAILED</code> exception.
+     * <code>METADATA_MISMATCH</code> exception.
      * <p>
      * An error situation can arise due to the lack of a two phase commit
      * mechanism in the underlying plugins. As an example, if plugin A has
@@ -204,10 +204,8 @@ public interface DmtSession {
      *         the commit of any of the underlying plugins
      *         <li><code>DATA_STORE_FAILURE</code> if an error occurred while
      *         accessing the data store
-     *         <li><code>COMMAND_FAILED</code> if some multi-node semantic
-     *         constraint was violated during the course of the session, or if 
-     *         some unspecified error is encountered while attempting to 
-     *         complete the command
+     *         <li><code>COMMAND_FAILED</code> if some unspecified error is 
+     *         encountered while attempting to complete the command
      *         </ul>
      * @throws IllegalStateException if the session was not opened using the 
      *         <code>LOCK_TYPE_ATOMIC</code> lock type, or if the session is 
@@ -257,9 +255,8 @@ public interface DmtSession {
      *         <li><code>DATA_STORE_FAILURE</code> if an error occurred while
      *         accessing the data store
      *         <li><code>COMMAND_FAILED</code> if an underlying plugin failed
-     *         to close, if (in case of atomic sessions) the commit failed
-     *         because of some multi-node constraint, or if some unspecified 
-     *         error is encountered while attempting to complete the command
+     *         to close, or if some unspecified error is encountered while 
+     *         attempting to complete the command
      *         </ul>
      * @throws IllegalStateException if the session is already closed or 
      *         invalidated
@@ -681,7 +678,7 @@ public interface DmtSession {
      *         <code>DmtPermission</code> for the parent node with the Add
      *         action present 
      * @see #createInteriorNode(String)
-     * <a href="http://member.openmobilealliance.org/ftp/public_documents/dm/Permanent_documents/OMA-TS-DM-TND-V1_2-20050615-C.zip">
+     * @see <a href="http://member.openmobilealliance.org/ftp/public_documents/dm/Permanent_documents/OMA-TS-DM-TND-V1_2-20050615-C.zip">
      *         OMA Device Management Tree and Description v1.2 draft</a> 
      */
     void createInteriorNode(String nodeUri, String type) throws DmtException;
@@ -893,7 +890,7 @@ public interface DmtSession {
      *         <code>DmtPermission</code> for the parent node with the Add
      *         action present 
      * @see #createLeafNode(String, DmtData)
-     * <a href="http://www.ietf.org/rfc/rfc2045.txt">RFC 2045</a> 
+     * @see <a href="http://www.ietf.org/rfc/rfc2045.txt">RFC 2045</a> 
      */
     void createLeafNode(String nodeUri, DmtData value, String mimeType)
                     throws DmtException;
@@ -1178,7 +1175,8 @@ public interface DmtSession {
      *         <li><code>METADATA_MISMATCH</code> if the node is permanent or
      *         cannot be modified according to the meta-data (does not have the 
      *         <code>MetaNode.CMD_REPLACE</code> access type), and in case of
-     *         leaf nodes, if the given MIME type is not allowed
+     *         leaf nodes, if <code>null</code> is given and there is no default
+     *         MIME type, or the given MIME type is not allowed
      *         <li><code>TRANSACTION_ERROR</code> in an atomic session if the
      *         underlying plugin is read-only or does not support atomic writing
      *         <li><code>DATA_STORE_FAILURE</code> if an error occurred while
@@ -1196,8 +1194,8 @@ public interface DmtSession {
      *         in case of local sessions, if the caller does not have 
      *         <code>DmtPermission</code> for the node with the Replace action
      *         present
-     * <a href="http://www.ietf.org/rfc/rfc2045.txt">RFC 2045</a> 
-     * <a href="http://member.openmobilealliance.org/ftp/public_documents/dm/Permanent_documents/OMA-TS-DM-TND-V1_2-20050615-C.zip">
+     * @see <a href="http://www.ietf.org/rfc/rfc2045.txt">RFC 2045</a> 
+     * @see <a href="http://member.openmobilealliance.org/ftp/public_documents/dm/Permanent_documents/OMA-TS-DM-TND-V1_2-20050615-C.zip">
      *         OMA Device Management Tree and Description v1.2 draft</a> 
      */
     void setNodeType(String nodeUri, String type) throws DmtException;
@@ -1205,7 +1203,8 @@ public interface DmtSession {
     /**
      * Get the list of children names of a node. The returned array contains the
      * names - not the URIs - of the immediate children nodes of the given node.
-     * The returned array must not contain <code>null</code> entries.
+     * The elements are in no particular order.  The returned array must not 
+     * contain <code>null</code> entries.
      * 
      * @param nodeUri the URI of the node
      * @return the list of child node names as a string array or an empty string

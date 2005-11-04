@@ -200,6 +200,11 @@ public class DmtException extends Exception {
      * <li>any node creation that would violate the allowed node names
      * </ul> 
      * <p>
+     * This error code can also be used to indicate any other meta data 
+     * violation, even if it cannot be described by the <code>MetaNode</code> 
+     * class.  For example, detecting a multi-node constraint violation while 
+     * commiting an atomic session should result in this error. 
+     * <p>
      * This error code does not correspond to any OMA DM response status code.
      * It should be translated to the code 405 &quot;Command not allowed&quot;
      * when transferring over OMA DM.
