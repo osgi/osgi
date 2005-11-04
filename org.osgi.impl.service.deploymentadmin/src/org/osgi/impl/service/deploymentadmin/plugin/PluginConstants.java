@@ -24,18 +24,19 @@ public final class PluginConstants {
     
     // alert codes
     static final int RESULT_SUCCESSFUL                           = 200;
-    static final int RESULT_BUNDLE_START_WARNING                 = 250;
+    static final int RESULT_SUCCESSFUL_BUNDLE_START_WARNING      = 250;
     
-    static final int RESULT_USER_CANCELLED                       = 401;
+    static final int RESULT_CANCELLED                            = 401;
     static final int RESULT_CORRUPTED_DEPLOYMENT_PACKAGE         = 402;
     static final int RESULT_PACKAGE_MISMATCH                     = 403;
     static final int RESULT_NOT_ACCEPTABLE_CONTENT               = 404;
-    static final int RESULT_AUTHORIZATION_FAILURE                = 405;
+    static final int RESULT_AUTHENTICATION_FAILURE               = 405;
     static final int RESULT_REQUEST_TIMED_OUT                    = 406;
     static final int RESULT_UNDEFINED_ERROR                      = 407;
     static final int RESULT_MALFORMED_URL                        = 408;
     static final int RESULT_DWNL_SERVER_NOT_AVAILABLE            = 409;
     static final int RESULT_DWNLD_DESCR_ERROR                    = 410;
+    static final int RESULT_AUTHORIZATION_FAILURE                = 411;
     
     static final int RESULT_DEPL_ORDER_ERROR                     = 450;
     static final int RESULT_DEPL_MISSING_HEADER                  = 451;

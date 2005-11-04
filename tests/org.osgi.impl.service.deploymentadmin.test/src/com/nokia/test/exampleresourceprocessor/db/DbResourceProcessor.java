@@ -347,7 +347,7 @@ public class DbResourceProcessor
     }
 
     /**
-     * @see org.osgi.service.deploymentadmin.ResourceProcessor#dropAllResources()
+     * @see org.osgi.service.deploymentadmin.spi.ResourceProcessor#dropAllResources()
      */
     public void dropAllResources() throws DeploymentException {
         Hashtable ht = (Hashtable) dps.get(actDp);
@@ -367,20 +367,20 @@ public class DbResourceProcessor
 
     /**
      * @throws DeploymentException
-     * @see org.osgi.service.deploymentadmin.ResourceProcessor#prepare()
+     * @see org.osgi.service.deploymentadmin.spi.ResourceProcessor#prepare()
      */
     public void prepare() throws DeploymentException {
     }
 
     /**
-     * @see org.osgi.service.deploymentadmin.ResourceProcessor#commit()
+     * @see org.osgi.service.deploymentadmin.spi.ResourceProcessor#commit()
      */
     public void commit() {
         db.commit(dbSession);
     }
 
     /**
-     * @see org.osgi.service.deploymentadmin.ResourceProcessor#rollback()
+     * @see org.osgi.service.deploymentadmin.spi.ResourceProcessor#rollback()
      */
     public void rollback() {
         db.rollback(dbSession);
@@ -396,7 +396,7 @@ public class DbResourceProcessor
     }
 
     /**
-     * @see org.osgi.service.deploymentadmin.ResourceProcessor#cancel()
+     * @see org.osgi.service.deploymentadmin.spi.ResourceProcessor#cancel()
      */
     public void cancel() {
         // TODO

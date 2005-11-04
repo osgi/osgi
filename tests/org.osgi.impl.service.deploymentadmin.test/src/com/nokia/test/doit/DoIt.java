@@ -7,20 +7,16 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.security.AccessController;
-import java.security.AllPermission;
 import java.security.PrivilegedActionException;
 import java.security.PrivilegedExceptionAction;
 import java.util.Arrays;
 
-import org.osgi.framework.AdminPermission;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.Constants;
-import org.osgi.framework.PackagePermission;
 import org.osgi.framework.ServiceEvent;
 import org.osgi.framework.ServiceListener;
-import org.osgi.framework.ServicePermission;
 import org.osgi.framework.ServiceReference;
 import org.osgi.framework.Version;
 import org.osgi.service.deploymentadmin.DeploymentAdmin;
@@ -28,7 +24,6 @@ import org.osgi.service.deploymentadmin.DeploymentException;
 import org.osgi.service.deploymentadmin.DeploymentPackage;
 import org.osgi.service.deploymentadmin.ResourceProcessor;
 import org.osgi.service.permissionadmin.PermissionAdmin;
-import org.osgi.service.permissionadmin.PermissionInfo;
 import org.osgi.service.condpermadmin.*;
 import org.osgi.util.tracker.ServiceTracker;
 
@@ -68,8 +63,6 @@ public class DoIt implements BundleActivator, ServiceListener {
         
         context.addServiceListener(this, "(" + Constants.OBJECTCLASS + "=" + 
                 TestRunner.class.getName() + ")");
-        
-        setPermissions();
         
         desktop = new TestDesktop(this);
     }
@@ -163,76 +156,6 @@ public class DoIt implements BundleActivator, ServiceListener {
     private ConditionalPermissionAdmin getConditionalPermissionAdmin() {
         ConditionalPermissionAdmin ret = (ConditionalPermissionAdmin) trackCondPa.getService();
         return ret;
-    }
-
-    private void setPermissions() throws Exception {
-        PermissionAdmin pa = getPermissionAdmin();
-        ConditionalPermissionAdmin cpa = getConditionalPermissionAdmin();
-        ServiceReference ref;
-        
-        if (null == pa || null == cpa)
-            throw new RuntimeException("Thereis no PermAdmin or CondPermAdmin");
-        
-        cpa.setConditionalPermissionInfo("cpi_DoIt",
-                new ConditionInfo[] {new ConditionInfo(
-                        BundleLocationCondition.class.getName(),
-                        new String[] {context.getBundle().getLocation()})},
-                new PermissionInfo[] {new PermissionInfo(AllPermission.class
-                        .getName(), "*", "*")});
-
-        ref = getDeploymentAdminRef();
-        cpa.setConditionalPermissionInfo("cpi_Deployment_Admin",
-                new ConditionInfo[] {new ConditionInfo(
-                        BundleLocationCondition.class.getName(),
-                        new String[] {ref.getBundle().getLocation()})},
-                new PermissionInfo[] {new PermissionInfo(AllPermission.class
-                        .getName(), "*", "*")});
-
-        ref = getDbRef();
-        cpa.setConditionalPermissionInfo("cpi_Database",
-                new ConditionInfo[] {new ConditionInfo(
-                        BundleLocationCondition.class.getName(),
-                        new String[] {ref.getBundle().getLocation()})},
-                new PermissionInfo[] {
-                        new PermissionInfo(PackagePermission.class.getName(),
-                                "*", "export, import"),
-                        new PermissionInfo(ServicePermission.class.getName(),
-                                "*", "register")});
-
-        ServiceReference[] refs = context.getServiceReferences(
-                ResourceProcessor.class.getName(), "(type=db)");
-        for (int i = 0; i < refs.length; i++) {
-            cpa.setConditionalPermissionInfo("cpi_Preinstalled_RP_"
-                    + refs[i].getBundle().getLocation(),
-                    new ConditionInfo[] {new ConditionInfo(
-                            BundleLocationCondition.class.getName(),
-                            new String[] {refs[i].getBundle().getLocation()})},
-                    new PermissionInfo[] {
-                            new PermissionInfo(PackagePermission.class
-                                    .getName(), "*", "export, import"),
-                            new PermissionInfo(AdminPermission.class.getName(),
-                                    "*", "metadata"),
-                            new PermissionInfo(ServicePermission.class
-                                    .getName(), "*", "get"),
-                            new PermissionInfo(ServicePermission.class
-                                    .getName(), "*", "register")});
-        }
-
-        // ### minor hack
-        cpa.setConditionalPermissionInfo(
-                        "cpi_Customizer_1",
-                        new ConditionInfo[] {new ConditionInfo(
-                                BundleLocationCondition.class.getName(),
-                                new String[] {"osgi-dp:com.nokia.test.exampleresourceprocessor.db.DbResourceProcessor_db_test_03"})},
-                        new PermissionInfo[] {
-                                new PermissionInfo(PackagePermission.class
-                                        .getName(), "*", "export, import"),
-                                new PermissionInfo(AdminPermission.class
-                                        .getName(), "*", "metadata"),
-                                new PermissionInfo(ServicePermission.class
-                                        .getName(), "*", "get"),
-                                new PermissionInfo(ServicePermission.class
-                                        .getName(), "*", "register")});
     }
 
     void command() throws Exception {

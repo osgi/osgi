@@ -58,7 +58,7 @@ import java.util.Vector;
  * A holder of this permission can uninstall deployment packages if the deployment
  * package satisfies the &lt;filter&gt; string. See {@link DeploymentPackage#uninstall}.
  * <pre>
- * DeploymentAdminPermission( "&lt;filter&gt;", "uninstallForced" )
+ * DeploymentAdminPermission( "&lt;filter&gt;", "uninstall_forced" )
  * </pre>
  * A holder of this permission can forcefully uninstall deployment packages if the deployment
  * package satisfies the  string. See {@link DeploymentPackage#uninstallForced}.

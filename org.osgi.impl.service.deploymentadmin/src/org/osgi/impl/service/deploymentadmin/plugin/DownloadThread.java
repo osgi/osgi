@@ -36,7 +36,7 @@ public class DownloadThread extends Thread {
     public static final int NOT_ACCEPTABLE_CONTENT    =  PluginConstants.RESULT_NOT_ACCEPTABLE_CONTENT;
     public static final int DWNL_SERVER_NOT_AVAILABLE =  PluginConstants.RESULT_DWNL_SERVER_NOT_AVAILABLE;
     public static final int DWNLD_DESCR_ERROR         =  PluginConstants.RESULT_DWNLD_DESCR_ERROR;
-    public static final int USER_CANCELLED            =  PluginConstants.RESULT_USER_CANCELLED;
+    public static final int USER_CANCELLED            =  PluginConstants.RESULT_CANCELLED;
     public static final int UNDEFINED_ERROR           =  PluginConstants.RESULT_UNDEFINED_ERROR;
     
     private SAXParser     parser;
