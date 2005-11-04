@@ -18,6 +18,8 @@
 package org.osgi.meg.demo.desktop;
 
 import java.io.File;
+import java.io.IOException;
+
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 
@@ -38,30 +40,11 @@ public class Activator implements BundleActivator {
             desktop = new SimpleDesktop(this);
             model = new Model(context, desktop);
             desktop.setVisible(true);
-            
-//            setPermissions(context);
         }
         catch (Throwable t) {
             t.printStackTrace();
         }
     }
-
-//    private void setPermissions(BundleContext context) {
-//        ServiceReference sref = 
-//            context.getServiceReference(ConditionalPermissionAdmin.class.getName());
-//        ConditionalPermissionAdmin cpa = (ConditionalPermissionAdmin) context.getService(sref);
-//        
-//        ConditionalPermissionInfo info = cpa.addConditionalPermissionInfo(
-//                new ConditionInfo[] {
-//                        new ConditionInfo(BundleSignerCondition.class.getName(), new String[] {
-//                            "CN=Sarah Bar, OU=Informatical Infrastructure Management, O=ConstructionOy, C=HU;CN=People, OU=Informatical Infrastructure Maintenance, O=ConstructionOy, L=Budapest, C=HU;CN=Root1, OU=FAKEDONTUSE, O=CASoft, L=Budapest, C=HU"
-//                        })
-//                }, new PermissionInfo[] {
-//                        new PermissionInfo(AllPermission.class.getName(), "*", "*")
-//                });
-//        
-//        context.ungetService(sref);
-//    }
 
     public void stop(BundleContext context) throws Exception {
         model.destroy();
@@ -112,12 +95,8 @@ public class Activator implements BundleActivator {
         return model.getInfo(cpiName);
     }
 
-    public void delPermission(String cpiName) {
-        model.delPermission(cpiName);
-    }
+	public void reloadPolicy() throws IOException {
+		model.reloadPolicy();
+	}
 
-    public void addPermission(String subjectDN) {
-        model.addPermission(subjectDN);
-    }
-    
 }

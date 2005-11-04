@@ -19,9 +19,9 @@ package org.osgi.meg.demo.desktop;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
-import java.security.AllPermission;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.HashMap;
@@ -63,6 +63,7 @@ public class Model implements BundleListener, ServiceListener,
 
     private SimpleDesktop desktop;
 	private BundleContext context;
+	private Policy        policy;
     private Map appDescrs = new HashMap();  
     private Map appInstances = new HashMap();
 
@@ -127,6 +128,9 @@ public class Model implements BundleListener, ServiceListener,
         cpAdminTracker = 
             new ServiceTracker(context, ConditionalPermissionAdmin.class.getName(), null);
         cpAdminTracker.open();
+        
+        policy = new Policy(cpAdminTracker);
+        policy.load();
         
         context.addServiceListener(listenToAppDescriptor, "(" + Constants.OBJECTCLASS +
                 "=" + ApplicationDescriptor.class.getName() + ")");
@@ -319,27 +323,9 @@ public class Model implements BundleListener, ServiceListener,
         return new Object[] {sCondInfos, sPermInfos};
     }
 
-    public void delPermission(String cpiName) {
-        ConditionalPermissionAdmin cpa = (ConditionalPermissionAdmin) cpAdminTracker.getService();
-        if (null == cpa)
-            return;
-        ConditionalPermissionInfo cpi = cpa.getConditionalPermissionInfo(cpiName);
-        if (null == cpi)
-            return;
-        cpi.delete();
-    }
+	public void reloadPolicy() throws IOException {
+		policy.clear();
+		policy.load();
+	}
 
-    public void addPermission(String subjectDN) {
-        ConditionalPermissionAdmin cpa = (ConditionalPermissionAdmin) cpAdminTracker.getService();
-        if (null == cpa)
-            return;
-
-        cpa.addConditionalPermissionInfo(
-                new ConditionInfo[] {new ConditionInfo(
-                        BundleSignerCondition.class.getName(),
-                        new String[] {"*; " + subjectDN})},
-                new PermissionInfo[] {new PermissionInfo(
-                                AllPermission.class.getName(), "*", "*")});
-    }
-   
 }
