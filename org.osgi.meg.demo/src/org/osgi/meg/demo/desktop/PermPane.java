@@ -34,12 +34,12 @@ public class PermPane extends Panel implements ItemListener {
         Panel pEast = new Panel();
         pEast.setLayout(new GridLayout(2, 0));
         add(pEast, BorderLayout.EAST);
-            bClose.setActionCommand(SimpleDesktop.CLOSE_PERMS);
-            bClose.addActionListener(desktop);
-            pEast.add(bClose, BorderLayout.EAST);
             bReload.setActionCommand(SimpleDesktop.RELOAD_PERMS);
             bReload.addActionListener(desktop);
             pEast.add(bReload, BorderLayout.EAST);
+            bClose.setActionCommand(SimpleDesktop.CLOSE_PERMS);
+            bClose.addActionListener(desktop);
+            pEast.add(bClose, BorderLayout.EAST);
     }
     
     void refresh() {
