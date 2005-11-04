@@ -36,9 +36,8 @@ public class SimpleDesktop extends Frame implements ActionListener {
     static final String CANCEL      = "Cancel";
     
     // in PermPane class
-    public static final String DEL_PERM = "Delete";
-    public static final String IMPORT = "Import";
-    public static final String CLOSE_PERMS = "Close";
+    public static final String CLOSE_PERMS  = "Close";
+	public static final String RELOAD_PERMS = "Reload";
     
     private GetPane    pSouthGet = new GetPane(this);
     private StatusPane pSouthStatus = new StatusPane();
@@ -54,7 +53,7 @@ public class SimpleDesktop extends Frame implements ActionListener {
     private List       lRunningApp;
 
     private Activator     controller;
-    private Panel actPane = pSouthStatus;
+    private Panel         actPane = pSouthStatus;
     
     public SimpleDesktop(Activator controller) {
         super("Desktop (OSGi MEG RI)");
@@ -141,37 +140,11 @@ public class SimpleDesktop extends Frame implements ActionListener {
     public void actionPerformed(ActionEvent event) {
         String command = event.getActionCommand();
         try {
-            if (IMPORT.equals(command)) {
-                FileDialog fd = new FileDialog(new Frame(),  "", FileDialog.LOAD);
-                fd.setVisible(true);
-                if (fd.getFile() == null)
-                    return;
-                ImportKeyStoreDialog dialog = new ImportKeyStoreDialog(this);
-                if (dialog.getState() == ImportKeyStoreDialog.OK) {
-                    KeyStore ks = KeyStore.getInstance("JKS");
-                    if (null == ks)
-                        return;
-                    File f = new File(fd.getDirectory() + File.separator
-                            + fd.getFile());
-                    InputStream is = new FileInputStream(f);
-                    try {
-                        ks.load(is, dialog.getPwd().trim().toCharArray());
-                    } finally {
-                        if (null != is)
-                            is.close();
-                    }
-                    for (Enumeration en = ks.aliases(); en.hasMoreElements();) {
-                        X509Certificate cert = 
-                            (X509Certificate) ks.getCertificate((String) en.nextElement());
-                        controller.addPermission(cert.getSubjectDN().toString());
-                    }
-                    pSouthPerms.refresh();
-                }
-            } else if (DEL_PERM.equals(command)) {
-                controller.delPermission(pSouthPerms.getPermName());
-                pSouthPerms.refresh();
-            } else if (CLOSE_PERMS.equals(command)) {
+            if (CLOSE_PERMS.equals(command)) {
                 setActPane(pSouthStatus);
+            } else if (RELOAD_PERMS.equals(command)) {
+            	controller.reloadPolicy();
+            	pSouthPerms.refresh();
             } else if (PERMS.equals(command)) {
                 pSouthPerms.refresh();
                 setActPane(pSouthPerms);

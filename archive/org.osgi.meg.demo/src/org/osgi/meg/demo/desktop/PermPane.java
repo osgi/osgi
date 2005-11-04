@@ -15,9 +15,8 @@ public class PermPane extends Panel implements ItemListener {
 
     private List     lCondPerms = new List();
     private TextArea taInfo = new TextArea();
-    private Button   bDelete = new Button(SimpleDesktop.DEL_PERM);
-    private Button   bImport = new Button(SimpleDesktop.IMPORT);
     private Button   bClose = new Button(SimpleDesktop.CLOSE_PERMS);
+    private Button   bReload = new Button(SimpleDesktop.RELOAD_PERMS);
 
     public PermPane(SimpleDesktop desktop, Activator controller) {
         this.controller = controller;
@@ -33,19 +32,14 @@ public class PermPane extends Panel implements ItemListener {
             pCenter.add(taInfo, BorderLayout.SOUTH);
         
         Panel pEast = new Panel();
-        pEast.setLayout(new GridLayout(3, 0));
+        pEast.setLayout(new GridLayout(2, 0));
         add(pEast, BorderLayout.EAST);
-            bImport.setActionCommand(SimpleDesktop.IMPORT);
-            bImport.addActionListener(desktop);
-            pEast.add(bImport, BorderLayout.EAST);
-            
-            bDelete.setActionCommand(SimpleDesktop.DEL_PERM);
-            bDelete.addActionListener(desktop);
-            pEast.add(bDelete, BorderLayout.EAST);
-            
             bClose.setActionCommand(SimpleDesktop.CLOSE_PERMS);
             bClose.addActionListener(desktop);
             pEast.add(bClose, BorderLayout.EAST);
+            bReload.setActionCommand(SimpleDesktop.RELOAD_PERMS);
+            bReload.addActionListener(desktop);
+            pEast.add(bReload, BorderLayout.EAST);
     }
     
     void refresh() {
