@@ -16,7 +16,7 @@
 
 <COND_CONT>  = | <CONDS>
 
-<COND>       = CONDITION cond_neve { 
+<COND>       = CONDITION cond_name { 
                    <PARAMS> 
                }
 
@@ -30,7 +30,7 @@
 
 <PERM_CONT>  = | <PERMS>
 
-<PERM>       = PERMISSION perm_neve { 
+<PERM>       = PERMISSION perm_name { 
                    "target" 
                    "actionlist" 
                }
