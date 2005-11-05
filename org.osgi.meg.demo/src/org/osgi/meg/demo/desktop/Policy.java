@@ -2,6 +2,7 @@ package org.osgi.meg.demo.desktop;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Enumeration;
 import java.util.Iterator;
@@ -48,15 +49,13 @@ public class Policy {
 	public void load() throws IOException {
 		String fn = System.getProperty(POLICY_FILE);
 		if (null == fn) {
-			; // TODO
-			return;
+            throw new IllegalArgumentException(POLICY_FILE + " property not set!");
 		}
 		
 		File f = new File(fn);
 		if (!f.exists()) {
-			; // TODO
-			return;
-		}
+		    throw new FileNotFoundException(fn);
+        }
 
 		cpInfos = new Vector();
 		loadPolicy(f);
