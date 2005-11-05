@@ -105,4 +105,14 @@ public interface MonitoringJob {
      *         server through the device management tree
      */
     public boolean isLocal();
+    
+    /**
+     * Returns whether the job is running.   A job is running until it is
+     * explicitely stopped, or, in case of time based jobs with a finite report
+     * count, until the given number of measurements have been made.
+     *   
+     * @return <code>true</code> if the job is still running, <code>false</code>
+     *         if it has finished
+     */
+    public boolean isRunning();
 }
