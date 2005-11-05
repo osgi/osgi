@@ -334,11 +334,18 @@ public interface MonitorAdmin {
 
     /**
      * Returns the list of currently running <code>MonitoringJob</code>s.
+     * Jobs are only visible to callers that have the necessary permissions: to 
+     * receive a Monitoring Job in the returned list, the caller must hold all 
+     * permissions required for starting the job.  This means that if the caller
+     * does not have <code>MonitorPermission</code> with the proper
+     * <code>startjob</code> action for all the Status Variables monitored by a 
+     * job, then that job will be silently omitted from the results.
      * <p>
      * The returned array cannot be <code>null</code>, an empty array is
-     * returned if there are no running jobs at the time of the call.
+     * returned if there are no running jobs visible to the caller at the time 
+     * of the call.
      * 
-     * @return the list of running jobs
+     * @return the list of running jobs visible to the caller
      */
     public MonitoringJob[] getRunningJobs();
 }
