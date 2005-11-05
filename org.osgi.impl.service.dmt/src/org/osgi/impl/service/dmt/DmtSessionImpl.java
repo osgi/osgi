@@ -983,16 +983,21 @@ public class DmtSessionImpl implements DmtSession {
         properties.put("nodes", Node.getUriArray(nodes));
         if(newNodes != null)
             properties.put("newnodes", Node.getUriArray(newNodes));
-        Event event = new Event(topic, properties);
+        final Event event = new Event(topic, properties);
         
         // it's an error if Event Admin is missing, but it could also be ignored
-        EventAdmin eventChannel = 
+        final EventAdmin eventChannel = 
             (EventAdmin) context.getTracker(EventAdmin.class).getService();
         if(eventChannel == null)
             throw new MissingResourceException("Event Admin not found.",
                     EventAdmin.class.getName(), null);
         
-        eventChannel.postEvent(event);
+        AccessController.doPrivileged(new PrivilegedAction() {
+            public Object run() {
+                eventChannel.postEvent(event);
+                return null;
+            }
+        });
     }
     
     private boolean isLeafNodeNoCheck(Node node) throws DmtException {
