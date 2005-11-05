@@ -33,10 +33,7 @@ import org.osgi.service.dmt.DmtSession;
 import org.osgi.service.event.Event;
 import org.osgi.service.event.EventConstants;
 import org.osgi.service.event.EventHandler;
-import org.osgi.service.monitor.MonitorAdmin;
-import org.osgi.service.monitor.MonitorListener;
-import org.osgi.service.monitor.Monitorable;
-import org.osgi.service.monitor.StatusVariable;
+import org.osgi.service.monitor.*;
 //import org.osgi.service.dmt.Acl;
 //import java.io.File;
 //import javax.xml.parsers.DocumentBuilder;
@@ -161,7 +158,12 @@ public class SimpleClient implements ManagedService, ManagedServiceFactory,
 
             ma.startJob("2nd-change-listener", new String[] { pid + "/NumOfChanges" }, 2);
             ma.startScheduledJob("scheduled-listener", new String[] { pid + "/Dummy" }, 5, 1);
-
+            
+            System.out.println("Running jobs:");
+            MonitoringJob[] jobs = ma.getRunningJobs();
+            for(int i = 0; i < jobs.length; i++)
+                System.out.println("* " + jobs[i]);
+            
             ma.switchEvents("meg*/Num*", false);
             
             // need to wait a bit with updating Dummy, because events are not 
