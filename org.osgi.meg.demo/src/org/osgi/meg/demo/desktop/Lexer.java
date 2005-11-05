@@ -22,6 +22,7 @@ public class Lexer {
 		tok.wordChars('.', '.');
 		tok.wordChars('{', '{');
 		tok.wordChars('}', '}');
+		tok.wordChars('/', '/');
 		tok.wordChars('*', '*');
 		tok.wordChars('$', '$');
 		
