@@ -202,7 +202,28 @@ public class MonitorAdminImpl implements MonitorAdmin, MonitorListener {
     }
     
     public synchronized MonitoringJob[] getRunningJobs() {
-        return (MonitoringJob[]) jobs.toArray(new MonitoringJob[jobs.size()]);
+        List visibleJobs = new Vector();
+        
+        Iterator iter = jobs.iterator();
+        while (iter.hasNext()) {
+            MonitoringJobImpl job = (MonitoringJobImpl) iter.next();
+            
+            String reqPermission = MonitorPermission.STARTJOB;
+            if(!job.isChangeBased()) // scheduled job
+                reqPermission += ":" + job.getSchedule();
+            
+            String[] names = job.getStatusVariableNames();
+            try {
+                for(int i = 0; i < names.length; i++)
+                    checkPermission(names[i], reqPermission);
+                visibleJobs.add(job);
+            } catch(SecurityException e) {
+                // job not added to visibleJobs
+            }
+        }
+        
+        return (MonitoringJob[]) 
+            visibleJobs.toArray(new MonitoringJob[visibleJobs.size()]);
     }
 
     // No read or publish permissions are checked for listing monitorable names,
@@ -278,8 +299,13 @@ public class MonitorAdminImpl implements MonitorAdmin, MonitorListener {
         properties.put("mon.statusvariable.value", getStatusVariableString(var));
         if(initiators != null)
             properties.put("mon.listener.id", initiators);
-        Event event = new Event(MONITOR_EVENT_TOPIC, properties);
-        eventChannel.postEvent(event);
+        final Event event = new Event(MONITOR_EVENT_TOPIC, properties);
+        AccessController.doPrivileged(new PrivilegedAction() {
+            public Object run() {
+                eventChannel.postEvent(event);
+                return null;
+            }
+        });
     }
 
     private void sendAlert(Path[] paths, String initiator) {
