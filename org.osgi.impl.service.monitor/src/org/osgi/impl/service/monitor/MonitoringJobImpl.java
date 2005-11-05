@@ -42,6 +42,8 @@ public class MonitoringJobImpl implements MonitoringJob, Runnable {
     
     // For change-based jobs, to count events for each monitored status var.
     private int[] callCounters;
+    
+    private String infoString;
 
     MonitoringJobImpl(MonitorAdminImpl monitorAdmin, String initiator, 
                       Path[] varPaths, int schedule, int reportCount, 
@@ -61,12 +63,13 @@ public class MonitoringJobImpl implements MonitoringJob, Runnable {
         else // the first var. is to be monitored, the rest are only references
             monitoredVarPaths = new Path[] { varPaths[0] };
 
+        infoString = null;
         running = true;
 
         if(isChangeBased()) {
             callCounters = new int[monitoredVarPaths.length];
             Arrays.fill(callCounters, 0);
-        } else                  // timer based
+        } else // time based
             (new Thread(this)).start();
     }
 
@@ -122,6 +125,32 @@ public class MonitoringJobImpl implements MonitoringJob, Runnable {
 
     public boolean isLocal() {
         return local;
+    }
+    
+    public boolean isRunning() {
+        return running;
+    }
+    
+    public String toString() {
+        if(infoString == null) {
+            StringBuffer sb = new StringBuffer();
+            sb.append("MonitoringJob(").append(initiator).append(", ");
+            sb.append(Arrays.asList(varPaths).toString()).append(", ");
+            if(isChangeBased())
+                sb.append("change:").append(reportCount);
+            else {
+                sb.append("scheduled:");
+                if(reportCount != 0)
+                    sb.append(reportCount).append('x');
+                sb.append(schedule).append("sec");
+            }
+            sb.append(", ").append(local ? "local" : "remote").append(", ");
+            sb.append(running ? "running" : "stopped").append(")");
+            
+            infoString = sb.toString();
+        }
+        
+        return infoString;
     }
 
     public void run() {
