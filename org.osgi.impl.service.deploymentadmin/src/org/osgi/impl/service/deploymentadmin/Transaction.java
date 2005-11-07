@@ -27,7 +27,8 @@ import java.util.Vector;
 
 import org.osgi.framework.BundleException;
 import org.osgi.service.deploymentadmin.DeploymentException;
-import org.osgi.service.deploymentadmin.DeploymentSession;
+import org.osgi.service.deploymentadmin.spi.DeploymentSession;
+import org.osgi.service.deploymentadmin.spi.ResourceProcessorException;
 
 public class Transaction {
     
@@ -85,7 +86,7 @@ public class Transaction {
             logger.log(Logger.LOG_INFO, "Transaction record added (trName=" + trName + "):\n" + record);
     }
     
-    public synchronized void commit() throws DeploymentException {
+    public synchronized void commit() throws ResourceProcessorException {
         // prepare !
         try {
 	        for (ListIterator iter = steps.listIterator(steps.size()); iter.hasPrevious();) {
@@ -96,7 +97,7 @@ public class Transaction {
                         logger.log(Logger.LOG_INFO, "Prepare  (trName=" + trName + "):\n" + element);
 	            }
 	        }
-        } catch (DeploymentException e) {
+        } catch (ResourceProcessorException e) {
             rollback();
             throw e;
         }

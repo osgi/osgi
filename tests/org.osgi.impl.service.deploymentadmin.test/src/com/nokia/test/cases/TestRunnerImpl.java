@@ -6,7 +6,7 @@ import java.util.Hashtable;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
-import org.osgi.service.deploymentadmin.ResourceProcessor;
+import org.osgi.service.deploymentadmin.spi.ResourceProcessor;
 
 import com.nokia.test.doit.DoIt;
 import com.nokia.test.doit.TestCaseClass;

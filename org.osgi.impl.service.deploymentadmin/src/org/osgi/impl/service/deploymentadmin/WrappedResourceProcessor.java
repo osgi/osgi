@@ -25,9 +25,9 @@ import java.security.PrivilegedActionException;
 import java.security.PrivilegedExceptionAction;
 
 import org.osgi.framework.ServiceReference;
-import org.osgi.service.deploymentadmin.DeploymentException;
-import org.osgi.service.deploymentadmin.DeploymentSession;
-import org.osgi.service.deploymentadmin.ResourceProcessor;
+import org.osgi.service.deploymentadmin.spi.DeploymentSession;
+import org.osgi.service.deploymentadmin.spi.ResourceProcessor;
+import org.osgi.service.deploymentadmin.spi.ResourceProcessorException;
 import org.osgi.util.tracker.ServiceTracker;
 
 /*
@@ -91,74 +91,74 @@ public class WrappedResourceProcessor implements ResourceProcessor {
         }
     }
 
-    public void process(final String name, final InputStream stream) throws DeploymentException {
+    public void process(final String name, final InputStream stream) throws ResourceProcessorException {
         if (null == ctx)
             getRp().process(name, stream);
         else {
             try {
                 AccessController.doPrivileged(new PrivilegedExceptionAction() {
-	                    public Object run() throws DeploymentException {
+	                    public Object run() throws ResourceProcessorException {
                         	getRp().process(name, stream);
 	                        return null;
 	                    }
                     }, ctx);
             }
             catch (PrivilegedActionException e) {
-                throw (DeploymentException) e.getException();
+                throw (ResourceProcessorException) e.getException();
             }
         }
     }
 
-    public void dropped(final String name) throws DeploymentException {
+    public void dropped(final String name) throws ResourceProcessorException {
         if (null == ctx)
             getRp().dropped(name);
         else {
             try {
                 AccessController.doPrivileged(new PrivilegedExceptionAction() {
-	                    public Object run() throws DeploymentException {
+	                    public Object run() throws ResourceProcessorException {
                         	getRp().dropped(name);
 	                        return null;
 	                    }
                     }, ctx);
             }
             catch (PrivilegedActionException e) {
-                throw (DeploymentException) e.getException();
+                throw (ResourceProcessorException) e.getException();
             }
         }
     }
 
-    public void dropAllResources() throws DeploymentException {
+    public void dropAllResources() throws ResourceProcessorException {
         if (null == ctx)
             getRp().dropAllResources();
         else {
             try {
                 AccessController.doPrivileged(new PrivilegedExceptionAction() {
-	                    public Object run() throws DeploymentException {
+	                    public Object run() throws ResourceProcessorException {
                         	getRp().dropAllResources();
 	                        return null;
 	                    }
                     }, ctx);
             }
             catch (PrivilegedActionException e) {
-                throw (DeploymentException) e.getException();
+                throw (ResourceProcessorException) e.getException();
             }
         }
     }
 
-    public void prepare() throws DeploymentException {
+    public void prepare() throws ResourceProcessorException {
         if (null == ctx)
             getRp().prepare();
         else {
             try {
                 AccessController.doPrivileged(new PrivilegedExceptionAction() {
-	                    public Object run() throws DeploymentException {
+	                    public Object run() throws ResourceProcessorException {
                         	getRp().prepare();
 	                        return null;
 	                    }
                     }, ctx);
             }
             catch (PrivilegedActionException e) {
-                throw (DeploymentException) e.getException();
+                throw (ResourceProcessorException) e.getException();
             }
         }
     }

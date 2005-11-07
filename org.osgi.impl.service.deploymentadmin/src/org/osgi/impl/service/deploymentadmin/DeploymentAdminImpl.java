@@ -189,11 +189,9 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
     {
     	if (null == in)
     		throw new IllegalArgumentException("InputStream parameter cannot be null");
-    		
         waitIfBusy();
         DeploymentPackageJarInputStream wjis = null;
         DeploymentPackageImpl srcDp = null;
-        DeploymentException bundleStartException = null;
         boolean result = false;
         try {
             // create the source DP
@@ -217,15 +215,7 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
             checkMissingEntities();
 
             // the real work take place here
-            try {
-                session.installUpdate(wjis);
-            } catch (DeploymentException e) {
-                // if CODE_BUNDLE_START exception was thrown we remeber this 
-                // but it doesn't mean that the operation has failed
-                // TODO if (e.getCode() != DeploymentException.CODE_BUNDLE_START)
-                    throw e;
-                // TODO bundleStartException = e;
-            }
+            session.installUpdate(wjis);
             
             if (!session.isCancelled()) {
 	            // update Deployment Package metainfo
@@ -248,10 +238,6 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
             sendCompleteEvent(result);
             clearSession();
         }
-        
-        if (null != bundleStartException)
-            throw bundleStartException;
-        
         return srcDp;
     }
 
@@ -278,6 +264,34 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
         
         return dp;
     }
+
+    /**
+     * @see DeploymentAdmin#getDeploymentPackage(Bundle)
+     */
+	public DeploymentPackage getDeploymentPackage(final Bundle bundle) {
+        if (null == bundle)
+            throw new IllegalArgumentException("The 'bundle' parameter cannot be null");
+        
+        DeploymentPackage dp = null;
+
+        for (Iterator iter = dps.iterator(); iter.hasNext();) {
+            final DeploymentPackageImpl tdp = (DeploymentPackageImpl) iter.next();
+            BundleEntry be = (BundleEntry) AccessController.doPrivileged(new PrivilegedAction() {
+				public Object run() {
+					return tdp.getBundleEntryByBundleId(bundle.getBundleId());
+				}
+            });
+            if (null != be) {
+            	dp = tdp;
+            	break;
+            }
+        }
+        
+        if (null != dp)
+            checkPermission((DeploymentPackageImpl) dp, DeploymentAdminPermission.ACTION_LIST);
+        
+        return dp;
+	}
     
     /**
      * @see org.osgi.service.deploymentadmin.DeploymentAdmin#cancel()
@@ -921,9 +935,4 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
         return pluginDeployed;
     }
 
-	public DeploymentPackage getDeploymentPackage(Bundle arg0) {
-		// TODO
-		return null;
-	}
-    
 }

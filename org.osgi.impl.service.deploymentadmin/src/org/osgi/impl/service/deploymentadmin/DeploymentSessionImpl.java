@@ -28,6 +28,10 @@ import org.osgi.service.condpermadmin.ConditionInfo;
 import org.osgi.service.condpermadmin.ConditionalPermissionAdmin;
 import org.osgi.service.condpermadmin.ConditionalPermissionInfo;
 import org.osgi.service.deploymentadmin.*;
+import org.osgi.service.deploymentadmin.spi.DeploymentCustomizerPermission;
+import org.osgi.service.deploymentadmin.spi.DeploymentSession;
+import org.osgi.service.deploymentadmin.spi.ResourceProcessor;
+import org.osgi.service.deploymentadmin.spi.ResourceProcessorException;
 import org.osgi.service.permissionadmin.*;
 import org.osgi.util.tracker.ServiceTracker;
 
@@ -305,8 +309,13 @@ public class DeploymentSessionImpl implements DeploymentSession {
             resetFilePermissionForCustomizers(cpisForCusts);
         }
         if (!isCancelled())
-        	transaction.commit();
-        else
+			try {
+				transaction.commit();
+			} catch (ResourceProcessorException e) {
+				throw new DeploymentException(
+						DeploymentException.CODE_COMMIT_ERROR, "", e);
+			}
+		else
         	transaction.rollback();
         
         closeTrackers();
@@ -354,7 +363,12 @@ public class DeploymentSessionImpl implements DeploymentSession {
         }
         
         if (!isCancelled())
-        	transaction.commit();
+        	try {
+				transaction.commit();
+			} catch (ResourceProcessorException e) {
+				throw new DeploymentException(
+						DeploymentException.CODE_COMMIT_ERROR, "", e);
+			}
         else {
         	succeed = false;
         	transaction.rollback();
@@ -650,7 +664,15 @@ public class DeploymentSessionImpl implements DeploymentSession {
         wrProc = new WrappedResourceProcessor(
             rpRef, fetchAccessControlContext(re.getCertChains()), trackRp);
         transaction.addRecord(new TransactionRecord(Transaction.PROCESSOR, wrProc));
-        wrProc.dropped(re.getResName());
+        try {
+			wrProc.dropped(re.getResName());
+		} catch (ResourceProcessorException e) {
+			if (e.getCode() == ResourceProcessorException.CODE_NO_SUCH_RESOURCE)
+				throw new DeploymentException(
+						DeploymentException.CODE_NO_SUCH_RESOURCE, "", e);
+			throw new DeploymentException(
+					DeploymentException.CODE_OTHER_ERROR, "", e);
+		}
     }
     
     /*
@@ -736,7 +758,15 @@ public class DeploymentSessionImpl implements DeploymentSession {
         wrProc = new WrappedResourceProcessor(rpRef, 
                 fetchAccessControlContext(entry.getCertificateChainStringArrays()), trackRp);
         transaction.addRecord(new TransactionRecord(Transaction.PROCESSOR, wrProc));
-        wrProc.process(entry.getName(), entry.getInputStream());
+        try {
+			wrProc.process(entry.getName(), entry.getInputStream());
+        } catch (ResourceProcessorException e) {
+			if (e.getCode() == ResourceProcessorException.CODE_NO_SUCH_RESOURCE)
+				throw new DeploymentException(
+						DeploymentException.CODE_NO_SUCH_RESOURCE, "", e);
+			throw new DeploymentException(
+					DeploymentException.CODE_OTHER_ERROR, "", e);
+		}
         if (INSTALL == getDeploymentAction())
             srcDp.setProcessorPid(entry.getName(), pid);
         else if (UPDATE == getDeploymentAction())

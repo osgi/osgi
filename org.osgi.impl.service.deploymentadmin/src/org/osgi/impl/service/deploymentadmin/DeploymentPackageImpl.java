@@ -36,10 +36,11 @@ import org.osgi.framework.Constants;
 import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
 import org.osgi.framework.Version;
+import org.osgi.service.deploymentadmin.BundleInfo;
 import org.osgi.service.deploymentadmin.DeploymentAdminPermission;
 import org.osgi.service.deploymentadmin.DeploymentException;
 import org.osgi.service.deploymentadmin.DeploymentPackage;
-import org.osgi.service.deploymentadmin.ResourceProcessor;
+import org.osgi.service.deploymentadmin.spi.ResourceProcessor;
 
 public class DeploymentPackageImpl implements DeploymentPackage, Serializable {
 
@@ -270,22 +271,23 @@ public class DeploymentPackageImpl implements DeploymentPackage, Serializable {
     }
 
     /**
-     * @see org.osgi.service.deploymentadmin.DeploymentPackage#getBundleSymNameVersionPairs()
+     * @see DeploymentPackage#getBundleInfos()
      */
-    public String[][] getBundleSymNameVersionPairs() {
-        checkStale();
-        
-        String[][] ret = new String[bundleEntries.size()][2];
+	public BundleInfo[] getBundleInfos() {
+		checkStale();
+
+		dpCtx.checkPermission(this, DeploymentAdminPermission.ACTION_METADATA);
+		
+		BundleInfo[] ret = new BundleInfo[bundleEntries.size()];
         int i = 0;
         for (Iterator iter = bundleEntries.iterator(); iter.hasNext();) {
             BundleEntry be = (BundleEntry) iter.next();
-            ret[i][0] = be.getSymbName();
-            ret[i][1] = be.getVersion().toString();
+            ret[i] = new BundleInfoImpl(be.getSymbName(), be.getVersion());
             ++i;    
         }
-        return ret;
-    }
-    
+        return ret;		
+	}
+
     private void checkStale() {
         if (isStale())
             throw new IllegalStateException("Deployment package is stale");
@@ -364,12 +366,12 @@ public class DeploymentPackageImpl implements DeploymentPackage, Serializable {
     }
 
     /**
-     * @param arg0
-     * @return
-     * @see org.osgi.service.deploymentadmin.DeploymentPackage#getBundle(java.lang.String)
+     * @see DeploymentPackage#getBundle(String)
      */
     public Bundle getBundle(final String symbName) {
         checkStale();
+        
+        dpCtx.checkPermission(this, DeploymentAdminPermission.ACTION_METADATA);
         
         Bundle[] bs = dpCtx.getBundleContext().getBundles();
         for (int i = 0; i < bs.length; i++) {

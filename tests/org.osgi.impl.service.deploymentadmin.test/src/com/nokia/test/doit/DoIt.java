@@ -22,7 +22,7 @@ import org.osgi.framework.Version;
 import org.osgi.service.deploymentadmin.DeploymentAdmin;
 import org.osgi.service.deploymentadmin.DeploymentException;
 import org.osgi.service.deploymentadmin.DeploymentPackage;
-import org.osgi.service.deploymentadmin.ResourceProcessor;
+import org.osgi.service.deploymentadmin.spi.ResourceProcessor;
 import org.osgi.service.permissionadmin.PermissionAdmin;
 import org.osgi.service.condpermadmin.*;
 import org.osgi.util.tracker.ServiceTracker;
@@ -180,14 +180,15 @@ public class DoIt implements BundleActivator, ServiceListener {
             for (int i = 0; i < dps.length; i++)
                 System.out.println(" " + i + " " + dps[i]);
         } else if ("dpbundles".equalsIgnoreCase(line)) {
-            DeploymentPackage[] dps = getDeploymentAdmin().listDeploymentPackages();
-            for (int i = 0; i < dps.length; i++)
-                System.out.println(" " + i + " " + dps[i]);
-            System.out.print(" which: ");
-            line = in.readLine();
-            String[][] bs = dps[Integer.parseInt(line)].getBundleSymNameVersionPairs();
-            for (int i = 0; i < bs.length; i++)
-                System.out.println(" " + bs[i][0] + " " + bs[i][1]);
+        	System.out.println("TODO");
+//            DeploymentPackage[] dps = getDeploymentAdmin().listDeploymentPackages();
+//            for (int i = 0; i < dps.length; i++)
+//                System.out.println(" " + i + " " + dps[i]);
+//            System.out.print(" which: ");
+//            line = in.readLine();
+//            String[][] bs = dps[Integer.parseInt(line)].getBundleSymNameVersionPairs();
+//            for (int i = 0; i < bs.length; i++)
+//                System.out.println(" " + bs[i][0] + " " + bs[i][1]);
         } else if ("geth".equalsIgnoreCase(line)) {
             DeploymentPackage[] dps = getDeploymentAdmin().listDeploymentPackages();
             for (int i = 0; i < dps.length; i++)
@@ -736,33 +737,33 @@ public class DoIt implements BundleActivator, ServiceListener {
         db.reset(null);
     }
     
-    public static final String db_test_09 = "GET BUNDLE SYMBOLIC NAME VERSION PAIRS\n" +
-        "Updates bundles and version has to be changed in \n" +
-    	"getBundleSymNameVersionPairs() result\n" +
-        "ASSERTS\n" +
-        " - bundle version changes from 1.0.0 to 1.5.0";
-    public void db_test_09() throws Exception {
-        InputStream is = new FileInputStream(HOME + "db_test_09.dp");
-        DeploymentPackage dp = getDeploymentAdmin().installDeploymentPackage(is);
-        is.close();
-        
-        dp = getDeploymentAdmin().getDeploymentPackage("db_test_09");
-		String[][] snvps = dp.getBundleSymNameVersionPairs();
-		boolean b1 = snvps[0][1].equals("1.0.0");
-
-        is = new FileInputStream(HOME + "db_test_09_update_01.dp");
-        dp = getDeploymentAdmin().installDeploymentPackage(is);
-        is.close();
-
-        dp = getDeploymentAdmin().getDeploymentPackage("db_test_09");
-		snvps = dp.getBundleSymNameVersionPairs();
-		boolean b2 = snvps[0][1].equals("1.5.0");
-		
-		if (!(b1 && b2))
-		    throw new Exception("Test failed");
-
-		dp.uninstall();
-    }
+//    public static final String db_test_09 = "GET BUNDLE SYMBOLIC NAME VERSION PAIRS\n" +
+//        "Updates bundles and version has to be changed in \n" +
+//    	"getBundleSymNameVersionPairs() result\n" +
+//        "ASSERTS\n" +
+//        " - bundle version changes from 1.0.0 to 1.5.0";
+//    public void db_test_09() throws Exception {
+//        InputStream is = new FileInputStream(HOME + "db_test_09.dp");
+//        DeploymentPackage dp = getDeploymentAdmin().installDeploymentPackage(is);
+//        is.close();
+//        
+//        dp = getDeploymentAdmin().getDeploymentPackage("db_test_09");
+//		String[][] snvps = dp.getBundleSymNameVersionPairs();
+//		boolean b1 = snvps[0][1].equals("1.0.0");
+//
+//        is = new FileInputStream(HOME + "db_test_09_update_01.dp");
+//        dp = getDeploymentAdmin().installDeploymentPackage(is);
+//        is.close();
+//
+//        dp = getDeploymentAdmin().getDeploymentPackage("db_test_09");
+//		snvps = dp.getBundleSymNameVersionPairs();
+//		boolean b2 = snvps[0][1].equals("1.5.0");
+//		
+//		if (!(b1 && b2))
+//		    throw new Exception("Test failed");
+//
+//		dp.uninstall();
+//    }
 
     public static final String db_test_10 = "INSTALL RESOURCE THAT HAS NO PID";
     public void db_test_10() throws Exception {
@@ -777,28 +778,28 @@ public class DoIt implements BundleActivator, ServiceListener {
         dp.uninstall();
     }
 
-    public static final String db_test_11 = "NEW BUNDLE DURING UPDATE\n" +
-            "Update adds a new bundle\n" +
-            " - new element in getBundleSymNameVersionPairs() result";
-    public void db_test_11() throws Exception {
-        InputStream is = new FileInputStream(HOME + "db_test_11.dp");
-        DeploymentPackage dp = getDeploymentAdmin().installDeploymentPackage(is);
-        is.close();
-        
-        String[][] bsnvps = dp.getBundleSymNameVersionPairs();
-        if (bsnvps.length != 2)
-            throw new Exception("Test failed");
-
-        is = new FileInputStream(HOME + "db_test_11_update_01.dp");
-        dp = getDeploymentAdmin().installDeploymentPackage(is);
-        is.close();
-        
-        bsnvps = dp.getBundleSymNameVersionPairs();
-        if (bsnvps.length != 3)
-            throw new Exception("Test failed");
-
-        dp.uninstall();
-    }
+//    public static final String db_test_11 = "NEW BUNDLE DURING UPDATE\n" +
+//            "Update adds a new bundle\n" +
+//            " - new element in getBundleSymNameVersionPairs() result";
+//    public void db_test_11() throws Exception {
+//        InputStream is = new FileInputStream(HOME + "db_test_11.dp");
+//        DeploymentPackage dp = getDeploymentAdmin().installDeploymentPackage(is);
+//        is.close();
+//        
+//        String[][] bsnvps = dp.getBundleSymNameVersionPairs();
+//        if (bsnvps.length != 2)
+//            throw new Exception("Test failed");
+//
+//        is = new FileInputStream(HOME + "db_test_11_update_01.dp");
+//        dp = getDeploymentAdmin().installDeploymentPackage(is);
+//        is.close();
+//        
+//        bsnvps = dp.getBundleSymNameVersionPairs();
+//        if (bsnvps.length != 3)
+//            throw new Exception("Test failed");
+//
+//        dp.uninstall();
+//    }
 
     public static final String db_test_12 = "\n" +
         "DeploymentPackage-Missing: false EQUALS WITH the lack of the header";

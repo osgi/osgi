@@ -3,7 +3,7 @@ package com.nokia.test.doit;
 import java.io.File;
 
 import org.osgi.framework.Bundle;
-import org.osgi.service.deploymentadmin.ResourceProcessor;
+import org.osgi.service.deploymentadmin.spi.ResourceProcessor;
 
 
 public interface TestRunner {

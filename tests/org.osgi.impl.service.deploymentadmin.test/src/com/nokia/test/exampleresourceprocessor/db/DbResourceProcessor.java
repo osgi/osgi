@@ -27,8 +27,9 @@ import org.osgi.framework.ServiceReference;
 import org.osgi.framework.Version;
 import org.osgi.service.deploymentadmin.DeploymentException;
 import org.osgi.service.deploymentadmin.DeploymentPackage;
-import org.osgi.service.deploymentadmin.DeploymentSession;
-import org.osgi.service.deploymentadmin.ResourceProcessor;
+import org.osgi.service.deploymentadmin.spi.DeploymentSession;
+import org.osgi.service.deploymentadmin.spi.ResourceProcessor;
+import org.osgi.service.deploymentadmin.spi.ResourceProcessorException;
 
 import com.nokia.test.db.Db;
 import com.nokia.test.db.FieldDef;
@@ -168,7 +169,7 @@ public class DbResourceProcessor
         return UNINSTALL;
     }
 
-    public void process(String resName, InputStream stream) throws DeploymentException {
+    public void process(String resName, InputStream stream) throws ResourceProcessorException {
         deleteTables(resName);
         
         try {
@@ -183,8 +184,8 @@ public class DbResourceProcessor
 	                if (null != tables) {
 	                    for (int i = 0; i < tables.length; i++) {
                             if (tables[i].equals(tableName))
-                                throw new DeploymentException(
-                                        DeploymentException.CODE_RESOURCE_SHARING_VIOLATION, 
+                                throw new ResourceProcessorException(
+                                		ResourceProcessorException.CODE_RESOURCE_SHARING_VIOLATION, 
                                         "Table '" + tableName + "' alrady exists");
                         }
 	                }
@@ -245,14 +246,11 @@ public class DbResourceProcessor
 	            }
 	            line = br.readLine();
 	        }
-        } catch (DeploymentException e) {
-            throw e;
-        } catch (IOException e) {
-            throw new DeploymentException(DeploymentException.CODE_OTHER_ERROR,
-                    e.getMessage(), e);
+        } catch (ResourceProcessorException e) {
+			throw e;
         } catch (Exception e) {
-            throw new DeploymentException(DeploymentException.CODE_OTHER_ERROR,
-                    e.getMessage(), e);
+            throw new ResourceProcessorException(
+            		ResourceProcessorException.CODE_OTHER_ERROR, e.getMessage(), e);
         }
     }
 
@@ -303,7 +301,7 @@ public class DbResourceProcessor
         return (FieldDef[]) ret.toArray(new FieldDef[] {});
     }
 
-    public void dropped(String resName) throws DeploymentException {
+    public void dropped(String resName) throws ResourceProcessorException {
         Hashtable ht = (Hashtable) dps.get(actDp);
         Set effects = (Set) ht.get(resName);
         for (Iterator iter = effects.iterator(); iter.hasNext();) {
@@ -349,7 +347,7 @@ public class DbResourceProcessor
     /**
      * @see org.osgi.service.deploymentadmin.spi.ResourceProcessor#dropAllResources()
      */
-    public void dropAllResources() throws DeploymentException {
+    public void dropAllResources() throws ResourceProcessorException {
         Hashtable ht = (Hashtable) dps.get(actDp);
         if (null == ht)
             return;
@@ -369,7 +367,7 @@ public class DbResourceProcessor
      * @throws DeploymentException
      * @see org.osgi.service.deploymentadmin.spi.ResourceProcessor#prepare()
      */
-    public void prepare() throws DeploymentException {
+    public void prepare() throws ResourceProcessorException {
     }
 
     /**
@@ -401,5 +399,5 @@ public class DbResourceProcessor
     public void cancel() {
         // TODO
     }
-    
+
 }
