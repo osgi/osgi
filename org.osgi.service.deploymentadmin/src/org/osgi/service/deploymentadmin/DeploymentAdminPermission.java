@@ -113,7 +113,7 @@ public final class DeploymentAdminPermission extends Permission {
      * 
      * @see DeploymentAdmin#installDeploymentPackage(InputStream)
      */
-    public static final String ACTION_INSTALL            = "install";
+    public static final String INSTALL            = "install";
 
     /**
      * Constant String to the "list" action.<p>
@@ -122,28 +122,28 @@ public final class DeploymentAdminPermission extends Permission {
      * @see DeploymentAdmin#getDeploymentPackage(String)
      * @see DeploymentAdmin#getDeploymentPackage(Bundle) 
      */
-    public static final String ACTION_LIST               = "list";
+    public static final String LIST               = "list";
     
     /**
      * Constant String to the "uninstall" action.<p>
      * 
      * @see DeploymentPackage#uninstall()
      */
-    public static final String ACTION_UNINSTALL          = "uninstall";
+    public static final String UNINSTALL          = "uninstall";
 
     /**
      * Constant String to the "uninstallforced" action.<p>
      * 
      * @see DeploymentPackage#uninstallForced()
      */
-    public static final String ACTION_UNINSTALL_FORCED   = "uninstall_forced";
+    public static final String UNINSTALL_FORCED   = "uninstall_forced";
     
     /**
      * Constant String to the "cancel" action.<p>
      * 
      * @see DeploymentAdmin#cancel
      */
-    public static final String ACTION_CANCEL             = "cancel";
+    public static final String CANCEL             = "cancel";
     
     /**
      * Constant String to the "metadata" action.<p>
@@ -155,7 +155,7 @@ public final class DeploymentAdminPermission extends Permission {
      * @see org.osgi.service.deploymentadmin.DeploymentPackage#getResourceProcessor(String)
      * @see org.osgi.service.deploymentadmin.DeploymentPackage#getResources()
      */
-    public static final String ACTION_METADATA           = "metadata";
+    public static final String METADATA           = "metadata";
     
     private static final String      delegateProperty = "org.osgi.vendor.deploymentadmin";
     private static final Constructor constructor;

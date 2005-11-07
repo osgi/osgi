@@ -36,7 +36,7 @@ public class DeploymentCustomizerPermission extends Permission {
     /**
      * Constant String to the "privatearea" action.
      */
-    public static final String ACTION_PRIVATEAREA = "privatearea";
+    public static final String PRIVATEAREA = "privatearea";
 
     private static final String      delegateProperty = "org.osgi.vendor.deploymentadmin";
     private static final Constructor constructor;
