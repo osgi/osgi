@@ -286,7 +286,7 @@ public abstract class ApplicationDescriptor {
 	 *         launched application instance. Never returns <code>null</code>.
 	 * 
 	 * @throws SecurityException
-	 *             if the caller doesn't have "launch"
+	 *             if the caller doesn't have "lifecycle"
 	 *             ApplicationAdminPermission for the application.
 	 * @throws Exception
 	 *             if starting the application failed
