@@ -78,6 +78,9 @@ public class ApplicationAdminPermission extends Permission {
 	 *            applications or "*" means all the actions. It must not be
 	 *            <code>null</code>. The order of the actions in the list is
 	 *            not significant.
+	 * @throws InvalidSyntaxException 
+	 *            is thrown if the specified <code>filter</code> is not syntactically
+	 *            correct.
 	 * 
 	 * @exception NullPointerException
 	 *                is thrown if the actions parameter is <code>null</code>
@@ -85,7 +88,7 @@ public class ApplicationAdminPermission extends Permission {
 	 * @see ApplicationDescriptor
 	 * @see org.osgi.framework.AdminPermission
 	 */
-	public ApplicationAdminPermission(String filter, String actions) {
+	public ApplicationAdminPermission(String filter, String actions) throws InvalidSyntaxException {
 		super(filter == null ? "*" : filter);
 				
 		this.applicationDescriptor = null;
