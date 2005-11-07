@@ -492,6 +492,8 @@ public class OATApplicationContextImpl implements ApplicationContext, ServiceLis
 	}
 
 	public Map getServiceProperties(Object serviceObject) {
+		if( serviceObject == null )
+			throw new NullPointerException();
 		Iterator iter = serviceList.iterator();
 		
 		while( iter.hasNext() ) {
@@ -507,7 +509,7 @@ public class OATApplicationContextImpl implements ApplicationContext, ServiceLis
 				return props;
 			}
 		}
-		return null;
+		throw new IllegalArgumentException( "Invalid service object!" );
 	}
 
 	public String getInstanceId() {
