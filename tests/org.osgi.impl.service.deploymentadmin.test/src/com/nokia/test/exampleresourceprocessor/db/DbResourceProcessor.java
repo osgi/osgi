@@ -4,11 +4,15 @@ import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.OutputStream;
 import java.io.Serializable;
 import java.security.AccessController;
 import java.security.PrivilegedExceptionAction;
@@ -55,7 +59,9 @@ public class DbResourceProcessor
      * The action value UNINSTALL indicates this session is associated with the 
      * uninstalling of a deployment package.  
      */
-    private static final int UNINSTALL = 2;   
+    private static final int UNINSTALL = 2;
+
+	private static final String DATAFILE = "dps.data";   
     
     // refrence to the database service
     private transient Db				db;
@@ -75,12 +81,11 @@ public class DbResourceProcessor
             if (!(obj instanceof DpRec))
                 return false;
             DpRec other = (DpRec) obj;
-            return name.equals(other.name) &&
-                   ver.equals(other.ver);
+            return name.equals(other.name);
         }
         
         public int hashCode() {
-            return (name + ver).hashCode();
+            return name.hashCode();
         }
         
         public String toString() {
@@ -117,6 +122,38 @@ public class DbResourceProcessor
     private transient BundleContext			context;
     private transient File                  bundlePrivateArea;
     
+    private void save(OutputStream out) {
+        try {
+            ObjectOutputStream oos = new ObjectOutputStream(out);
+            oos.writeObject(dps);
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    
+    private void load(InputStream in) {
+    	try {
+            ObjectInputStream ois = new ObjectInputStream(in);
+            dps = (Hashtable) ois.readObject();
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    
+    private void saveToStore() throws FileNotFoundException {
+    	File f = context.getDataFile(DATAFILE);
+    	save(new FileOutputStream(f));
+    }
+    
+    private void loadFromStore() throws FileNotFoundException {
+    	File f = context.getDataFile(DATAFILE);
+    	if (!f.exists())
+    		return;
+    	load(new FileInputStream(f));
+    }
+
     /*
      * Artifact means table creation in case of this Resource Processor
      */
@@ -149,13 +186,7 @@ public class DbResourceProcessor
         dbSession = db.begin();
         
         copy = new ByteArrayOutputStream();
-        try {
-            ObjectOutputStream oos = new ObjectOutputStream(copy);
-            oos.writeObject(dps);
-        }
-        catch (IOException e) {
-            e.printStackTrace();
-        }
+        save(copy);
     }
 
     private int getDeploymentAction() {
@@ -322,10 +353,15 @@ public class DbResourceProcessor
 		d.put("id", pid);
 		d.put(Constants.SERVICE_PID, pid);
         context.registerService(ResourceProcessor.class.getName(), this, d);
+        
+        loadFromStore();
+        
         System.out.println("DbResourceProcessor started. Id: " + pid);
     }
 
     public void stop(BundleContext context) throws Exception {
+    	saveToStore();
+    	
         System.out.println("DbResourceProcessor stopped. Id: " + pid);
     }
     
@@ -354,8 +390,8 @@ public class DbResourceProcessor
         for (Iterator iter = ht.keySet().iterator(); iter.hasNext();) {
             String resName = (String) iter.next();
             Set effects = (Set) ht.get(resName);
-            for (Iterator iter2 = effects.iterator(); iter.hasNext();) {
-                String tableName = (String) iter.next();
+            for (Iterator iter2 = effects.iterator(); iter2.hasNext();) {
+                String tableName = (String) iter2.next();
                 db.dropTable(dbSession, tableName);
             }
             iter.remove();
@@ -383,14 +419,7 @@ public class DbResourceProcessor
     public void rollback() {
         db.rollback(dbSession);
         
-        try {
-            ObjectInputStream ois = new ObjectInputStream(
-                    new ByteArrayInputStream(copy.toByteArray()));
-            dps = (Hashtable) ois.readObject();
-        }
-        catch (Exception e) {
-            e.printStackTrace();
-        }
+        load(new ByteArrayInputStream(copy.toByteArray()));
     }
 
     /**
