@@ -147,6 +147,26 @@
 		</xsl:for-each>
 	</xsl:template>
 	
+	
+	<xsl:template match="ul|ol" mode="inside">
+		<xsl:variable name="tag" select="name()"/>
+		
+		<xsl:for-each select="li">
+			<ParaLine>
+				<HardReturn/>
+			</ParaLine>
+			<xsl:call-template name="char">
+				<xsl:with-param name="tag">
+					<xsl:choose>
+						<xsl:when test="@class"><xsl:value-of select="@class"/></xsl:when>
+						<xsl:otherwise><xsl:value-of select="name()"/></xsl:otherwise>
+					</xsl:choose>
+				</xsl:with-param>
+				<xsl:with-param name="inside" select="."/>
+			</xsl:call-template>
+		</xsl:for-each>
+	</xsl:template>
+	
 	<xsl:template name="para">
 		<xsl:param name="tag" select=""/>
 		<xsl:param name="inside" select=""/>
