@@ -33,13 +33,6 @@ import org.osgi.framework.Version;
   * different deployment packagess. Any violation of this no overlap rule is considered 
   * an error and the install or update of the offending deployment package must be aborted.<p>
   * 
-  * There is a Deployment Package called <u>"System" Deployment Package</u> that is always present in 
-  * the system. The content of this package is implementation specific. It should contain those 
-  * bundles that are absolutely necessery for the proper working of the device the OSGi framework 
-  * runs on. The Deployment Package Symbolic Name of this package is "System" (case sensitive). 
-  * This Deployment Package Symbolic Name is reserved. Any attempt to install a Deployment Package 
-  * with this name has to fail.<p>
-  * 
   * The Deployment Admin service should do as much as possible to ensure transactionality. 
   * It means that if a deployment package installation, update or removal (uninstall) fails 
   * all the side effects caused by the process should be disappeared  and the system 
