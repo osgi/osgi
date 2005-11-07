@@ -76,15 +76,15 @@ public class DeploymentAdminPermission extends Permission {
     private static final Vector ACTIONS = new Vector();
     static {
         ACTIONS.add(org.osgi.service.deploymentadmin.DeploymentAdminPermission.
-                ACTION_INSTALL.toLowerCase());
+                INSTALL.toLowerCase());
         ACTIONS.add(org.osgi.service.deploymentadmin.DeploymentAdminPermission.
-                ACTION_LIST.toLowerCase());
+                LIST.toLowerCase());
         ACTIONS.add(org.osgi.service.deploymentadmin.DeploymentAdminPermission.
-                ACTION_UNINSTALL.toLowerCase());
+                UNINSTALL.toLowerCase());
         ACTIONS.add(org.osgi.service.deploymentadmin.DeploymentAdminPermission.
-                ACTION_UNINSTALL_FORCED.toLowerCase());
+                UNINSTALL_FORCED.toLowerCase());
         ACTIONS.add(org.osgi.service.deploymentadmin.DeploymentAdminPermission.
-                ACTION_CANCEL.toLowerCase());
+                CANCEL.toLowerCase());
     }
     
     private           String actions;

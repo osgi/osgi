@@ -205,7 +205,7 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
             srcDp.setResourceBundle(wjis.getResourceBundle());
         
             // does the caller have the install permission?
-            checkPermission(srcDp, DeploymentAdminPermission.ACTION_INSTALL);
+            checkPermission(srcDp, DeploymentAdminPermission.INSTALL);
             sendInstallEvent(srcDp.getName());
             session = createInstallUpdateSession(srcDp);
         
@@ -260,7 +260,7 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
         }
         
         if (null != dp)
-            checkPermission((DeploymentPackageImpl) dp, DeploymentAdminPermission.ACTION_LIST);
+            checkPermission((DeploymentPackageImpl) dp, DeploymentAdminPermission.LIST);
         
         return dp;
     }
@@ -288,7 +288,7 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
         }
         
         if (null != dp)
-            checkPermission((DeploymentPackageImpl) dp, DeploymentAdminPermission.ACTION_LIST);
+            checkPermission((DeploymentPackageImpl) dp, DeploymentAdminPermission.LIST);
         
         return dp;
 	}
@@ -302,10 +302,10 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
 
         if (DeploymentSessionImpl.UNINSTALL == session.getDeploymentAction())
             checkPermission((DeploymentPackageImpl) session.getTargetDeploymentPackage(), 
-                    DeploymentAdminPermission.ACTION_CANCEL);
+                    DeploymentAdminPermission.CANCEL);
         else
             checkPermission((DeploymentPackageImpl) session.getSourceDeploymentPackage(), 
-                    DeploymentAdminPermission.ACTION_CANCEL);
+                    DeploymentAdminPermission.CANCEL);
         
         session.cancel();
         
@@ -321,7 +321,7 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
                 new DeploymentPackageImpl[] {});
         for (int i = 0; i < src.length; i++) {
             try {
-                checkPermission(src[i], DeploymentAdminPermission.ACTION_LIST);
+                checkPermission(src[i], DeploymentAdminPermission.LIST);
                 ret.add(src[i]);
             } catch (SecurityException e) {
                 // do nothing
@@ -330,7 +330,7 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
         
         /*DeploymentPackageImpl sysDp = createSystemDp();
         try {
-            checkPermission(sysDp, DeploymentAdminPermission.ACTION_LIST);
+            checkPermission(sysDp, DeploymentAdminPermission.LIST);
             ret.add(sysDp);
         } catch (SecurityException e) {
             // do nothing
@@ -857,7 +857,7 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
      */
     void uninstall(DeploymentPackageImpl dp) throws DeploymentException {
         waitIfBusy();
-        checkPermission(dp, DeploymentAdminPermission.ACTION_UNINSTALL);
+        checkPermission(dp, DeploymentAdminPermission.UNINSTALL);
         boolean result = false;
         try {
             sendUninstallEvent(dp.getName());
@@ -887,7 +887,7 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
      */
     boolean uninstallForced(DeploymentPackageImpl dp) throws DeploymentException {
         waitIfBusy();
-        checkPermission(dp, DeploymentAdminPermission.ACTION_UNINSTALL);
+        checkPermission(dp, DeploymentAdminPermission.UNINSTALL);
         sendUninstallEvent(dp.getName());
         boolean result = false;
         try {

@@ -163,6 +163,8 @@ public class DeploymentPackageJarInputStream {
     private Entry          firstEntry;
     
     private Entry          actEntry;
+    private JarEntry       actJarEntry;
+    
     private boolean        fixPack;
     private String         locPath;
 
@@ -218,18 +220,21 @@ public class DeploymentPackageJarInputStream {
         if (null != actEntry)
             return actEntry;
         
-        JarEntry je = getNextJarEntry();
+        if (null == actJarEntry)
+        	actJarEntry = getNextJarEntry();
         
         // these Entries must precede resource entries in the subsequent nextEntry() calls
-        if ((null == je || !Entry.isBundle(je.getAttributes())) && 
-                !missingBundleEntries.isEmpty()) 
-        {
-            String name = (String) missingBundleEntries.removeFirst();
-            actEntry = new Entry(name, (Attributes) manifest.getEntries().remove(name));
-            return actEntry;
+        if (null == actJarEntry || !Entry.isBundle(actJarEntry.getAttributes())) {
+        	// there are no more bundles or the stream ended
+        	if (!missingBundleEntries.isEmpty()) {
+        		// ... and there are missing entries
+	            String name = (String) missingBundleEntries.removeFirst();
+	            actEntry = new Entry(name, (Attributes) manifest.getEntries().remove(name));
+	            return actEntry;
+        	}
         }
         
-        if (null == je) {
+        if (null == actJarEntry) {
             // The stream ended but we may have missing resources (in the manifest)
             Iterator it = manifest.getEntries().keySet().iterator();
             if (it.hasNext()) {
@@ -245,22 +250,24 @@ public class DeploymentPackageJarInputStream {
             }
         }
         else {
-            if (null == je.getAttributes())
+            if (null == actJarEntry.getAttributes())
                 throw new DeploymentException(DeploymentException.CODE_MISSING_HEADER,
-                        "There is no \"Name\"-section for JarEntry: " + je);
+                        "There is no \"Name\"-section for JarEntry: " + actJarEntry);
             
             ByteArrayOutputStream bos = readIntoBuffer();
             closeEntry();
             
-            if (je.getName().startsWith(locPath))
-                dprb.addPropertyFile(je.getName(), bos);
+            if (actJarEntry.getName().startsWith(locPath))
+                dprb.addPropertyFile(actJarEntry.getName(), bos);
 
             // We have opened a JarEntries so we have to close it 
             // when nextEntry() is called next time
-            actEntry = new Entry(je, bos);
+            actEntry = new Entry(actJarEntry, bos);
             
             // remove to ensure that the sequence of Entries ends
-            manifest.getEntries().remove(je.getName());
+            manifest.getEntries().remove(actJarEntry.getName());
+            
+            actJarEntry = null;
         }
         return actEntry;
     }
@@ -269,11 +276,11 @@ public class DeploymentPackageJarInputStream {
      * Skips uninterested JarEntries (directories, .sf files, etc.)
      */
     private JarEntry getNextJarEntry() throws IOException {
-        JarEntry je = jis.getNextJarEntry();
-        while (null != je && isUninterested(je))
-            je = jis.getNextJarEntry();
+        actJarEntry = jis.getNextJarEntry();
+        while (null != actJarEntry && isUninterested(actJarEntry))
+        	actJarEntry = jis.getNextJarEntry();
         
-        return je; 
+        return actJarEntry; 
     }
 
     private boolean isUninterested(JarEntry je) throws IOException {
@@ -312,5 +319,24 @@ public class DeploymentPackageJarInputStream {
     DeploymentPackageResourceBundle getResourceBundle() {
         return dprb;
     }
+    
+    // for test only
+    public static void main(String[] args) throws IOException, DeploymentException {
+    	FileInputStream fis = new FileInputStream(
+    			"/USERS/eclipse/workspaceMEG/org.osgi.impl.service.deploymentadmin.test/res/" +
+    			"db_test_03_update_01.dp");
+    	DeploymentPackageJarInputStream dpjis = 
+    		new DeploymentPackageJarInputStream(fis);
+    	Entry e = dpjis.nextEntry();
+    	while (null != e) {
+    		System.out.println(e);
+    		if (!e.isMissing()) {
+    			InputStream is = e.getInputStream();
+    			System.out.println(is);
+    		}
+    		dpjis.closeEntry();
+    		e = dpjis.nextEntry();
+    	}
+	}
 
 }

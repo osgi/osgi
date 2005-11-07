@@ -276,7 +276,7 @@ public class DeploymentPackageImpl implements DeploymentPackage, Serializable {
 	public BundleInfo[] getBundleInfos() {
 		checkStale();
 
-		dpCtx.checkPermission(this, DeploymentAdminPermission.ACTION_METADATA);
+		dpCtx.checkPermission(this, DeploymentAdminPermission.METADATA);
 		
 		BundleInfo[] ret = new BundleInfo[bundleEntries.size()];
         int i = 0;
@@ -371,7 +371,7 @@ public class DeploymentPackageImpl implements DeploymentPackage, Serializable {
     public Bundle getBundle(final String symbName) {
         checkStale();
         
-        dpCtx.checkPermission(this, DeploymentAdminPermission.ACTION_METADATA);
+        dpCtx.checkPermission(this, DeploymentAdminPermission.METADATA);
         
         Bundle[] bs = dpCtx.getBundleContext().getBundles();
         for (int i = 0; i < bs.length; i++) {
@@ -423,7 +423,7 @@ public class DeploymentPackageImpl implements DeploymentPackage, Serializable {
         if (isSystem())
             throw new RuntimeException("\"System\" deployment package cannot be uninstalled");
         
-        dpCtx.checkPermission(this, DeploymentAdminPermission.ACTION_UNINSTALL);
+        dpCtx.checkPermission(this, DeploymentAdminPermission.UNINSTALL);
         
         dpCtx.uninstall(this);
         
@@ -440,7 +440,7 @@ public class DeploymentPackageImpl implements DeploymentPackage, Serializable {
         if (isSystem())
             throw new RuntimeException("\"System\" deployment package cannot be uninstalled");
         
-        dpCtx.checkPermission(this, DeploymentAdminPermission.ACTION_UNINSTALL_FORCED);
+        dpCtx.checkPermission(this, DeploymentAdminPermission.UNINSTALL_FORCED);
         
         stale = Boolean.TRUE;
         

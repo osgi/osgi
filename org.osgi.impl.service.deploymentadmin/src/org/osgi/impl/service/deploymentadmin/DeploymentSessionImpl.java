@@ -243,7 +243,7 @@ public class DeploymentSessionImpl implements DeploymentSession {
     public File getDataFile(Bundle b) {
         Permission perm = new DeploymentCustomizerPermission(
             "(name=" + b.getSymbolicName() + ")", 
-            DeploymentCustomizerPermission.ACTION_PRIVATEAREA);
+            DeploymentCustomizerPermission.PRIVATEAREA);
         SecurityManager sm = System.getSecurityManager();
         if (null != sm)
             sm.checkPermission(perm);

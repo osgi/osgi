@@ -46,7 +46,7 @@ public class DeploymentCustomizerPermission extends Permission {
     private static final Vector ACTIONS = new Vector();
     static {
         ACTIONS.add(org.osgi.service.deploymentadmin.spi.DeploymentCustomizerPermission.
-                ACTION_PRIVATEAREA.toLowerCase());
+                PRIVATEAREA.toLowerCase());
     }
     
     private           String actions;
