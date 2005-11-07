@@ -31,40 +31,44 @@ import java.security.*;
  * 
  * Wildcards also can be used:<p>
  * 
- * <table border = "1">
- * 		<tr>
- * 			<td>(signer=cn=*,o=ACME,c=*)</td>
- * 			<td>"cn" and "c" may have an arbitrary value</td>
- * 		</tr>
- * 		<tr>		
- * 			<td>(signer=*, o=ACME, c=US)</td>
- * 			<td>only the value of "o" and "c" are significant</td>
- * 		</tr>
- * 		<tr>		
- * 			<td>(signer=* ; ou=S &amp; V, o=Tweety Inc., c=US)</td>
- * 			<td>the first element of the certificate chain is not important, only the second (the 
- * 				Distingushed Name of the root certificate)</td>
- * 		</tr>
- * 		<tr>		
- * 			<td>(signer=- ; *, o=Tweety Inc., c=US)</td>
- * 			<td>the same as the previous but '-' represents zero or more certificates, 
- * 				whereas the asterisk only represents a single certificate</td>
- * 		</tr>
- * 		<tr>		
- * 			<td>(name=*)</td>
- * 			<td>the name of the Deployment Package doesn't matter</td>
- * 		</tr>
- * 		<tr>		
- * 			<td>(name=org.osgi.*)</td>
- * 			<td>the name has to begin with "org.osgi."</td>
- * 		</tr>
- * </table>
+ * <pre>
+ * (signer=cn=*,o=ACME,c=*)  
+ * </pre>
+ * "cn" and "c" may have an arbitrary value
+ * 
+ * <pre>
+ * (signer=*, o=ACME, c=US)  
+ * </pre>
+ * Only the value of "o" and "c" are significant
+ * 
+ * <pre>
+ * (signer=* ; ou=S &amp; V, o=Tweety Inc., c=US)
+ * </pre>
+ * The first element of the certificate chain is 
+ * not important, only the second (the 
+ * Distingushed Name of the root certificate)
+ * 
+ * <pre>
+ * (signer=- ; *, o=Tweety Inc., c=US)
+ * </pre>
+ * The same as the previous but '-' represents 
+ * zero or more certificates, whereas the asterisk 
+ * only represents a single certificate
+ * 
+ * <pre>
+ * (name=*)                  
+ * </pre>
+ * The name of the Deployment Package doesn't matter
+ * 
+ * <pre>
+ * (name=org.osgi.*)         
+ * </pre>
+ * The name has to begin with "org.osgi."
+ * 
+ * <p>The following actions are allowed:<p>
+ * 
+ * <b>list</b>
  * <p>
- * 
- * The following actions are allowed:<p>
- * 
- * <b><code>list</code></b><p>
- * 
  * A holder of this permission can access the inventory information of the deployment
  * packages selected by the &lt;filter&gt; string. The filter selects the deployment packages
  * on which the holder of the permission can acquire detailed inventory information.
@@ -72,28 +76,28 @@ import java.security.*;
  * {@link DeploymentAdmin#getDeploymentPackage(String)} and
  * {@link DeploymentAdmin#listDeploymentPackages}.<p>
  * 
- * <b><code>install</code></b><p>
+ * <b>install</b><p>
  * 
  * A holder of this permission can install/update deployment packages if the deployment
  * package satisfies the &lt;filter&gt; string. See {@link DeploymentAdmin#installDeploymentPackage}.<p>
  * 
- * <b><code>uninstall</code></b><p>
+ * <b>uninstall</b><p>
  * 
  * A holder of this permission can uninstall deployment packages if the deployment
  * package satisfies the &lt;filter&gt; string. See {@link DeploymentPackage#uninstall}.<p>
  * 
- * <b><code>uninstallforced</code></b><p>
+ * <b>uninstallforced</b><p>
  * 
  * A holder of this permission can forcefully uninstall deployment packages if the deployment
  * package satisfies the &lt;filter&gt; string. See {@link DeploymentPackage#uninstallForced}.<p>
  * 
- * <b><code>cancel</code></b><p>
+ * <b>cancel</b><p>
  * 
  * A holder of this permission can cancel an active deployment action. This action being
  * cancelled could correspond to the install, update or uninstall of a deployment package
  * that satisfies the &lt;filter&gt; string. See {@link DeploymentAdmin#cancel}<p>
  * 
- * <b><code>metadata</code></b><p>
+ * <b>metadata</b><p>
  * 
  * A holder of this permission is able to retrieve metadata information about a Deployment 
  * Package (e.g. is able to ask its manifest hedares). 
@@ -113,7 +117,7 @@ public final class DeploymentAdminPermission extends Permission {
      * 
      * @see DeploymentAdmin#installDeploymentPackage(InputStream)
      */
-    public static final String INSTALL            = "install";
+    public static final String ACTION_INSTALL            = "install";
 
     /**
      * Constant String to the "list" action.<p>
@@ -122,28 +126,28 @@ public final class DeploymentAdminPermission extends Permission {
      * @see DeploymentAdmin#getDeploymentPackage(String)
      * @see DeploymentAdmin#getDeploymentPackage(Bundle) 
      */
-    public static final String LIST               = "list";
+    public static final String ACTION_LIST               = "list";
     
     /**
      * Constant String to the "uninstall" action.<p>
      * 
      * @see DeploymentPackage#uninstall()
      */
-    public static final String UNINSTALL          = "uninstall";
+    public static final String ACTION_UNINSTALL          = "uninstall";
 
     /**
      * Constant String to the "uninstallforced" action.<p>
      * 
      * @see DeploymentPackage#uninstallForced()
      */
-    public static final String UNINSTALL_FORCED   = "uninstall_forced";
+    public static final String ACTION_UNINSTALL_FORCED   = "uninstall_forced";
     
     /**
      * Constant String to the "cancel" action.<p>
      * 
      * @see DeploymentAdmin#cancel
      */
-    public static final String CANCEL             = "cancel";
+    public static final String ACTION_CANCEL             = "cancel";
     
     /**
      * Constant String to the "metadata" action.<p>
@@ -155,7 +159,7 @@ public final class DeploymentAdminPermission extends Permission {
      * @see org.osgi.service.deploymentadmin.DeploymentPackage#getResourceProcessor(String)
      * @see org.osgi.service.deploymentadmin.DeploymentPackage#getResources()
      */
-    public static final String METADATA           = "metadata";
+    public static final String ACTION_METADATA           = "metadata";
     
     private static final String      delegateProperty = "org.osgi.vendor.deploymentadmin";
     private static final Constructor constructor;
