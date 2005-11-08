@@ -103,7 +103,7 @@ public class DeploymentPackageImpl implements DeploymentPackage, Serializable {
         
         DeploymentPackageImpl dp = new DeploymentPackageImpl();
         dp.mainSection = new CaseInsensitiveMap(null, dp);
-        dp.mainSection.put(DAConstants.DP_NAME, "System");
+        dp.mainSection.put(DAConstants.DP_NAME, "system");
         dp.mainSection.put(DAConstants.DP_VERSION, "0.0.0");
         dp.bundleEntries = new LinkedList(bundleEntries);
         
@@ -120,7 +120,7 @@ public class DeploymentPackageImpl implements DeploymentPackage, Serializable {
         DeploymentPackageImpl dp = new DeploymentPackageImpl();
         dp.mainSection = new CaseInsensitiveMap(null, dp);
         dp.mainSection.put("Manifest-Version", "1.0");
-        dp.mainSection.put(DAConstants.DP_NAME, "System");
+        dp.mainSection.put(DAConstants.DP_NAME, "system");
         dp.mainSection.put(DAConstants.DP_VERSION, "0.0.0");
         dp.bundleEntries = new LinkedList(bundleEntries);
         
@@ -132,11 +132,11 @@ public class DeploymentPackageImpl implements DeploymentPackage, Serializable {
     }*/
     
     /*boolean isSystem() {
-        return getName().equals("System") && getVersion().equals(new Version("0.0.0"));
+        return getName().equals("system") && getVersion().equals(new Version("0.0.0"));
     }*/
     
     boolean isSystem() {
-        return getName().equals("System");
+        return getName().equals("system");
     }
     
     public boolean equals(Object obj) {
@@ -481,7 +481,7 @@ public class DeploymentPackageImpl implements DeploymentPackage, Serializable {
                 throw new DeploymentException(DeploymentException.CODE_MISSING_HEADER,
                         "Missing deployment package name");
             
-            if ("System".equals(dp.getName()))
+            if ("system".equals(dp.getName()))
                 throw new DeploymentException(DeploymentException.CODE_BAD_HEADER,
                 		"The \"System\" deployment package name is reserved");
             
