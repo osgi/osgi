@@ -95,6 +95,7 @@ public class ApplicationAdminPermission extends Permission {
 		this.filter = (filter == null ? "*" : filter);
 		this.actions = actions;
 
+		bc.createFilter( this.filter );
 		init();
 	}
 	
