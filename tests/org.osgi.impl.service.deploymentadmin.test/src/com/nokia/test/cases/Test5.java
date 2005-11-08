@@ -5,7 +5,6 @@ import java.io.FilePermission;
 import java.io.InputStream;
 import java.util.Arrays;
 
-import org.osgi.framework.ServiceReference;
 import org.osgi.service.deploymentadmin.DeploymentAdmin;
 import org.osgi.service.deploymentadmin.DeploymentAdminPermission;
 import org.osgi.service.deploymentadmin.DeploymentPackage;

@@ -256,24 +256,14 @@ public class DbResourceProcessor
 	            } else if (line.startsWith("GETDATAFILE")) {
 	                String[] parts = Splitter.split(line, ' ', 0);
 	                String symbName = parts[1];
-	                final Bundle b = session.getSourceDeploymentPackage().getBundle(symbName);
-	                File f = (File) AccessController.doPrivileged(new PrivilegedExceptionAction() {
-                        public Object run() throws Exception {
-                            return session.getDataFile(b);
-                        }
-                    });
-	                System.out.println("Bundle (" + b + ") file: " + f);
+	                Bundle b = session.getSourceDeploymentPackage().getBundle(symbName);
+	                File f = session.getDataFile(b);
 	                this.bundlePrivateArea = f;
 	            } else if (line.startsWith("CREATEFILE")) {
 	                String[] parts = Splitter.split(line, ' ', 0);
 	                String fileName = parts[1];
-	                final File newFile = new File(bundlePrivateArea, fileName);
-	                AccessController.doPrivileged(new PrivilegedExceptionAction() {
-	                        public Object run() throws Exception {
-	                            newFile.createNewFile();
-	                            return null;
-	                        }
-	                    });
+	                File newFile = new File(bundlePrivateArea, fileName);
+                    newFile.createNewFile();
 	            }
 	            line = br.readLine();
 	        }

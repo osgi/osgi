@@ -681,62 +681,6 @@ public class DoIt implements BundleActivator, ServiceListener {
         
     }
 
-    public static final String db_test_06 = "PRIVATE AREA\n";
-    public void db_test_06() throws Exception {
-        DeploymentPackage dp = null;
-        InputStream is = new FileInputStream(HOME + "db_test_06.dp");
-		dp = getDeploymentAdmin().installDeploymentPackage(is);
-		
-        ServiceReference[] refs = context.getServiceReferences(
-                ResourceProcessor.class.getName(), "(" + Constants.SERVICE_PID + "=db_test_06)");
-        ResourceProcessor rp = (ResourceProcessor) context.getService(refs[0]);
-        
-        File f = ((DbRpTest) rp).getBundlePrivateArea();
-        if (null == f)
-            throw new Exception("Private area error: null returned");
-        if (!f.exists())
-            throw new Exception("Private area error: does not exist");
-        File[] fs = f.listFiles();
-        System.out.println(Arrays.asList(fs));
-        
-        ServiceReference ref = context.getServiceReference(Db.class.getName());
-        Db db = (Db) context.getService(ref);
-        db.reset(null);
-        dp.uninstall();
-    }
-    
-    public static final String db_test_07 = "LIST DEPLOYMENT PACKAGES\n" +
-        "Shows only those DPs it has permissions to." +
-        "ASSERTS\n" +
-        " - 'System' DP should NOT be visble\n" +
-        " - 'db_test_01' DP should be visble";
-    public void db_test_07() throws Exception {
-        if (null == System.getSecurityManager())
-            return;
-        
-        InputStream is = new FileInputStream(HOME + "db_test_01.dp");
-        DeploymentPackage dp = getDeploymentAdmin().installDeploymentPackage(is);
-        
-		DeploymentPackage[] dps = getDeploymentAdmin().listDeploymentPackages();
-		boolean b1 = false;
-		boolean b2 = false;
-		for (int i = 0; i < dps.length; i++) {
-            if (dps[i].getName().equals("db_test_01"))
-                b1 = true;
-            if (dps[i].getName().equalsIgnoreCase("system"))
-                b2 = true;
-        }
-		if (!b1)
-            throw new Exception("'db_test_01' DP should be visble");
-		if (b2)
-            throw new Exception("'System' DP should NOT be visble");
-		
-		dp.uninstall();
-        ServiceReference ref = context.getServiceReference(Db.class.getName());
-        Db db = (Db) context.getService(ref);
-        db.reset(null);
-    }
-    
 //    public static final String db_test_09 = "GET BUNDLE SYMBOLIC NAME VERSION PAIRS\n" +
 //        "Updates bundles and version has to be changed in \n" +
 //    	"getBundleSymNameVersionPairs() result\n" +
