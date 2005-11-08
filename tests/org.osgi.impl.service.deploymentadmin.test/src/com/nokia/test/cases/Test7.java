@@ -39,7 +39,7 @@ public class Test7 extends TestCaseClass {
                     b1 = true;
                 if (dps[i].getName().equals("db_test_07"))
                 	b2 = true;
-                if (dps[i].getName().equalsIgnoreCase("System"))
+                if (dps[i].getName().equalsIgnoreCase("system"))
                     b3 = true;
             }
     		if (!b1)
