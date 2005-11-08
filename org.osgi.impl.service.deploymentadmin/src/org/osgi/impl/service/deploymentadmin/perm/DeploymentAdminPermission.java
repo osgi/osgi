@@ -85,6 +85,8 @@ public class DeploymentAdminPermission extends Permission {
                 UNINSTALL_FORCED.toLowerCase());
         ACTIONS.add(org.osgi.service.deploymentadmin.DeploymentAdminPermission.
                 CANCEL.toLowerCase());
+        ACTIONS.add(org.osgi.service.deploymentadmin.DeploymentAdminPermission.
+                METADATA.toLowerCase());
     }
     
     private           String actions;
