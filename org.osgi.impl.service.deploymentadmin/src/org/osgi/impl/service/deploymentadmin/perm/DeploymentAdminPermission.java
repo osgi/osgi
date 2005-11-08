@@ -86,7 +86,7 @@ public class DeploymentAdminPermission extends Permission {
         ACTIONS.add(org.osgi.service.deploymentadmin.DeploymentAdminPermission.
                 CANCEL.toLowerCase());
         ACTIONS.add(org.osgi.service.deploymentadmin.DeploymentAdminPermission.
-                METADATA.toLowerCase());
+        		METADATA.toLowerCase());
     }
     
     private           String actions;
