@@ -264,9 +264,9 @@ public class DmtException extends Exception {
      * <ul>
      * <li>an updating method within an atomic session can not be executed
      * because the underlying plugin is read-only or does not support atomic 
-     * writing
+     * writing</li>
      * <li>a commit operation at the end of an atomic session failed because 
-     * one of the underlying plugins failed to close
+     * one of the underlying plugins failed to close</li>
      * </ul>
      * The latter case may leave the tree in an inconsistent state due to the
      * lack of a two-phase commit system, see {@link DmtSession#commit} for
