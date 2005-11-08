@@ -28,6 +28,7 @@ package org.osgi.impl.service.deploymentadmin.perm;
 
 import java.security.Permission;
 import java.security.PermissionCollection;
+import java.util.Iterator;
 import java.util.StringTokenizer;
 import java.util.Vector;
 
@@ -74,11 +75,23 @@ public class DeploymentCustomizerPermission extends Permission {
      */
     public DeploymentCustomizerPermission(String name, String actions) {
         super(name);
+        
         if (null == name || null == actions)
             throw new IllegalArgumentException("Neither of the parameters can be null");
         
-        this.actions = actions.toLowerCase();
+        if ("*".equals(actions.trim())) {
+        	StringBuffer sb = new StringBuffer();
+        	for (Iterator iter = ACTIONS.iterator(); iter.hasNext();) {
+				String action = (String) iter.next();
+				sb.append(action + ", ");
+			}
+       		sb.delete(sb.length() - 2, sb.length());
+        	this.actions = sb.toString();
+        } else
+        	this.actions = actions;
+        
         rep = new Representation(getName());
+        
         check();
     }
 

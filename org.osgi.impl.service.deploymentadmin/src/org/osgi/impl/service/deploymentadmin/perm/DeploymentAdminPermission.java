@@ -105,12 +105,25 @@ public class DeploymentAdminPermission extends Permission {
      */
     public DeploymentAdminPermission(String name, String actions) {
         super(name);
+        
         if (null == name || null == actions)
             throw new IllegalArgumentException("Neither of the parameters can be null");
 
         // TODO canonicalize "name"
-        this.actions = actions;
+        
+        if ("*".equals(actions.trim())) {
+        	StringBuffer sb = new StringBuffer();
+        	for (Iterator iter = ACTIONS.iterator(); iter.hasNext();) {
+				String action = (String) iter.next();
+				sb.append(action + ", ");
+			}
+       		sb.delete(sb.length() - 2, sb.length());
+        	this.actions = sb.toString();
+        } else
+        	this.actions = actions;
+        
         rep = new Representation(getName());
+        
         check();
     }
 
