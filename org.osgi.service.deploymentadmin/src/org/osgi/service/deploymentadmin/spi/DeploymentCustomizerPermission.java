@@ -77,7 +77,8 @@ public class DeploymentCustomizerPermission extends Permission {
      * session.
      * 
      * @param name Bundle Symbolic Name of the target bundle, must not be <code>null</code>.
-     * @param actions Action string (only the "privatearea" action is valid), must not be <code>null</code>.
+     * @param actions action string (only the "privatearea" or "*" action is valid; "*" means all 
+     *        the possible actions), must not be <code>null</code>.
      * @throws IllegalArgumentException if the filter is invalid, the list of actions 
      *         contains unknown operations or one of the parameters is <code>null</code>
      */

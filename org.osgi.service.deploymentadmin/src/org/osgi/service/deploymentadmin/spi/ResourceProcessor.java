@@ -24,12 +24,10 @@ import java.io.InputStream;
   * 
   * <ol>
   * 	<li>{@link #begin(DeploymentSession)}</li>
-  * 	<li>{@link #process(String, InputStream)} till there are resources to process 
+  * 	<li>{@link #process(String, InputStream)} calls till there are resources to process 
   * 		or {@link #rollback()} and the further steps are ignored</li>
-  * 	<li>...</li>
-  * 	<li>{@link #dropped(String)} till there are resources to drop
+  * 	<li>{@link #dropped(String)} calls till there are resources to drop
   * 		or {@link #rollback()} and the further steps are ignored</li>
-  * 	<li>...</li>
   * 	<li>{@link #prepare()}</li>
   * 	<li>{@link #commit()} or {@link #rollback()}</li>
   * </ol>

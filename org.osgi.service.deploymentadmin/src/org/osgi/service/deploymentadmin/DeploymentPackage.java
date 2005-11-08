@@ -41,7 +41,7 @@ import org.osgi.framework.Version;
 public interface DeploymentPackage {
  
 	/**
-	 * Gives back the state of the deployment package (it is stale or not).
+	 * Gives back the state of the deployment package whether it is stale or not).
      * After uninstall of a deployment package it becomes stale. Any active method calls to a 
      * stale deployment package raise {@link IllegalStateException}.
      * Active methods are the following:<p>
@@ -76,7 +76,6 @@ public interface DeploymentPackage {
 	/**
 	 * Returns an array of {@link BundleInfo} objects representing the bundles specified in the manifest 
 	 * of this deployment package. Its size is equal to the number of the bundles in the deployment package. 
-	 * the version.
 	 * 
  	 * @return array of <code>BundleInfo</code> objects 
      * @throws SecurityException if the caller doesn't have the appropriate {@link DeploymentAdminPermission} 
@@ -98,6 +97,7 @@ public interface DeploymentPackage {
      * @return The <code>Bundle</code> instance for a given bundle symbolic name.
      * @throws SecurityException if the caller doesn't have the appropriate {@link DeploymentAdminPermission} 
      *         with "metadata" action
+     * @throws IllegalStateException if the package is stale
      */
     Bundle getBundle(String symbolicName);
     
@@ -141,6 +141,7 @@ public interface DeploymentPackage {
      * @return resource processor for the resource or <code>null</cpde>.
      * @throws SecurityException if the caller doesn't have the appropriate {@link DeploymentAdminPermission} 
      *         with "metadata" action
+     * @throws IllegalStateException if the package is stale        
      */
     ServiceReference getResourceProcessor(String resource);    
 
@@ -160,13 +161,13 @@ public interface DeploymentPackage {
 
     /**
      * Returns the requested deployment package manifest header from the name 
-     * section determined by the path parameter. Header names are case insensitive. 
+     * section determined by the resource parameter. Header names are case insensitive. 
      * If the resource or the header doesn't exist it returns null.<p>
      * 
      * If the header is localized then the localized value is returned (see OSGi Service Platform,
      * Mobile Specification Release 4 - Localization related chapters).
 
-     * @param resource the name of the resoure (it is the same as the value of the "Name" 
+     * @param resource the name of the resource (it is the same as the value of the "Name" 
      *        attribute in the deployment package's manifest)
      * @param header the requested header
      * @return the value of the header or <code>null</code> if the resource or the header doesn't exist
@@ -183,7 +184,8 @@ public interface DeploymentPackage {
 	  * @throws DeploymentException if the deployment package could not be successfully uninstalled. 
 	  *         For detailed error code description see {@link DeploymentException}.
 	  * @throws SecurityException if the caller doesn't have the appropriate 
-	  * 		{@link DeploymentAdminPermission}("&lt;filter&gt;", "uninstall") permission. 
+	  * 		{@link DeploymentAdminPermission}("&lt;filter&gt;", "uninstall") permission.
+	  * @throws IllegalStateException if the package is stale 
 	  */
     void uninstall() throws DeploymentException;
  
@@ -204,6 +206,7 @@ public interface DeploymentPackage {
 	 *         see {@link DeploymentException}.
      * @throws SecurityException if the caller doesn't have the appropriate 
      *         {@link DeploymentAdminPermission}("&lt;filter&gt;", "uninstall_forced") permission.
+     * @throws IllegalStateException if the package is stale
      */  
     boolean uninstallForced() throws DeploymentException;  
  

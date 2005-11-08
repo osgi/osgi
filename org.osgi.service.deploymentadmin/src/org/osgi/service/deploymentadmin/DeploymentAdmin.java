@@ -70,7 +70,7 @@ public interface DeploymentAdmin {
       * replaces the target.
       * 
       * @return the array of <code>DeploymentPackage</code> objects representing all the 
-      *         installed Deployment Packages (including the "System" Deployment Package). 
+      *         installed Deployment Packages (including the "system" Deployment Package). 
       *         The return value cannot be <code>null</code>. In case of missing permissions it may 
       *         give back an empty array.
       * @see DeploymentPackage
@@ -119,8 +119,8 @@ public interface DeploymentAdmin {
   
     /**
      * This method cancels the currently active deployment session. This method addresses the need
-     * to cancel the processing of excessively long running, or resource consuming installs, updates
-     * or uninstalls.<p>
+     * to cancel the processing of excessively long running, or resource consuming install, update
+     * or uninstall operations.<p>
      * 
      * @return true if there was an active session and it was successfully cancelled.
      * @throws SecurityException if the caller doesn't have the appropriate 

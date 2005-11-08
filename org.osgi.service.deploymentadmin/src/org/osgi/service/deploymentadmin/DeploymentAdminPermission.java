@@ -181,13 +181,13 @@ public final class DeploymentAdminPermission extends Permission {
     }
     
     /**
-     * Creates a new <code>DeploymentAdminPermission</code> object for the given name (containing the name
-     * of the target deployment package) and action.<p>
+     * Creates a new <code>DeploymentAdminPermission</code> object for the given <code>name</code> and 
+     * <code>action</code>.<p>
      * The <code>name</code> parameter identifies the target depolyment package the permission 
      * relates to. The <code>actions</code> parameter contains the comma separated list of allowed actions. 
      * 
-     * @param name Target string, must not be null.
-     * @param actions Action string, must not be null.
+     * @param name filter string, must not be null.
+     * @param actions action string, must not be null. "*" means all the possible actions.
      * @throws IllegalArgumentException if the filter is invalid, the list of actions 
      *         contains unknown operations or one of the parameters is null
      */
@@ -273,7 +273,7 @@ public final class DeploymentAdminPermission extends Permission {
      * <pre>
      * 		1. DeploymentAdminPermission("(name=org.osgi.ExampleApp)", "list")
      * 		2. DeploymentAdminPermission("(name=org.osgi.ExampleApp)", "list, install")
-     * 		3. DeploymentAdminPermission p3 = new DeploymentAdminPermission("(name=org.osgi.*)", "list")
+     * 		3. DeploymentAdminPermission("(name=org.osgi.*)", "list")
      * 		4. DeploymentAdminPermission("(signer=*, o=ACME, c=US)", "list")
      * 		5. DeploymentAdminPermission("(signer=cn = Bugs Bunny, o = ACME, c = US)", "list")
      * </pre><p>
