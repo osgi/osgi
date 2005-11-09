@@ -244,16 +244,20 @@ public class XmlDoclet extends Doclet {
 		
 		if ( currentPackage.equals( file ) )
 			file ="";
-		
+			
 		if ( text.startsWith("\"") ) {
 			sb.append( "   <a>" );
 			sb.append( text.substring(1,text.length()-1) );
+			sb.append( "</a>" );
+		}
+		else if ( text.trim().startsWith("<") ) {
+			sb.append(text);
 		}
 		else {
 			sb.append( "   <a href='" + file + "#" + ref + "'>" );
 			sb.append( makeName(text) );
+			sb.append( "</a>" );
 		}
-		sb.append( "</a>" );
 	}
 	
 	String makeName( String name ) {
