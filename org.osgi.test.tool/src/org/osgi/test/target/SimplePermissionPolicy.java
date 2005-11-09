@@ -95,14 +95,14 @@ public class SimplePermissionPolicy implements SynchronousBundleListener {
 	 * Get the resource and parse it into PermissionInfo objects.
 	 */
 	public PermissionInfo[] getPermissions(Bundle bundle) {
-		URL url = bundle.getResource(PERMISSION_RESOURCE);
+		URL url = bundle.getEntry(PERMISSION_RESOURCE);
 		if (url == null)
-			url = bundle.getResource(PERMISSION_RESOURCE.toUpperCase());
+			url = bundle.getEntry(PERMISSION_RESOURCE.toUpperCase());
 		
 		if (url == null)
-			url = bundle.getResource("/META-INF/permissions.perm");
+			url = bundle.getEntry("/META-INF/permissions.perm");
 		if (url == null)
-			url = bundle.getResource("/META-INF/permissions.perm".toUpperCase());
+			url = bundle.getEntry("/META-INF/permissions.perm".toUpperCase());
 		
 		PermissionInfo[] info = null;
 		if (url != null)
