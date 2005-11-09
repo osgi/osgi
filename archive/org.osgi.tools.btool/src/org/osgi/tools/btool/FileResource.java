@@ -14,8 +14,10 @@ public class FileResource extends Resource {
 		this.file = file;
 		this.preprocess = preprocess;
 	}
-	
-	protected int getLineLength()  { return 120; }
+
+	protected int getLineLength() {
+		return 120;
+	}
 
 	InputStream getInputStream() throws IOException {
 		if (!preprocess)
@@ -39,40 +41,44 @@ public class FileResource extends Resource {
 			String continuation) throws IOException {
 		String line = rdr.readLine();
 		while (line != null) {
-			line = process(line);
-			StringBuffer sb = new StringBuffer();
-			if (line != null && line.length() > 0) {
-				int n = 0;
-				for (int i = 0; i < line.length(); i++) {
-					char c = line.charAt(i);
-					switch (c) {
-						case '\n' :
-						case '\r' :
-							n = 0;
-							break;
-
-						case '$' :
-							if (i < line.length() - 2) {
-								int c2 = hex(line.charAt(i + 1), line
-										.charAt(i + 2));
-								if (c2 >= 0) {
-									c = (char) c2;
-									i += 2;
-								}
-							}
-					}
-					if (linewidth != 0 && n > linewidth) {
-						sb.append(continuation);
-						n = 1;
-					}
-					sb.append(c);
-					n++;
-				}
-				String s = sb.toString();
-				pw.print(s);
+			if (line.length() == 0)
 				pw.print("\r\n");
-				if (btool.showmanifest)
-					System.out.println(s);
+			else {
+				line = process(line);
+				StringBuffer sb = new StringBuffer();
+				if (line != null && line.length() > 0) {
+					int n = 0;
+					for (int i = 0; i < line.length(); i++) {
+						char c = line.charAt(i);
+						switch (c) {
+							case '\n' :
+							case '\r' :
+								n = 0;
+								break;
+
+							case '$' :
+								if (i < line.length() - 2) {
+									int c2 = hex(line.charAt(i + 1), line
+											.charAt(i + 2));
+									if (c2 >= 0) {
+										c = (char) c2;
+										i += 2;
+									}
+								}
+						}
+						if (linewidth != 0 && n > linewidth) {
+							sb.append(continuation);
+							n = 1;
+						}
+						sb.append(c);
+						n++;
+					}
+					String s = sb.toString();
+					pw.print(s);
+					pw.print("\r\n");
+					if (btool.showmanifest)
+						System.out.println(s);
+				}
 			}
 			line = rdr.readLine();
 		}
