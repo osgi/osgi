@@ -881,51 +881,6 @@ public class TestControl extends DefaultTestBundleControl implements
 	}
 
 	/**
-	 * Tests that the framework ignores a classpath entry in the
-	 * Bundle-Classpath header if the entry cannot be located. However, the
-	 * Framework should publish a Framework Event of type INFO with an
-	 * appropriate message for each entry that cannot be located.
-	 * 
-	 * @throws Exception if an error occurs or an assertion fails in the test.
-	 * @spec Bundle.installBundle(String)
-	 */
-	public void testBundleClassPathHeader01() throws Exception {
-		// Add framework listener
-		purgeEvents();
-		getContext().addFrameworkListener(this);
-
-		// Install fragment bundle with dummy jar in Bundle-ClassPath
-		Bundle tb1b = getContext().installBundle(getWebServer() + "tb1b.jar");
-
-		// Install the host bundle
-		Bundle tb1a = getContext().installBundle(getWebServer() + "tb1a.jar");
-
-		// Start the host bundle
-		tb1a.start();
-
-		try {
-			assertEquals("Fragment bundle should be in the RESOLVED state.",
-					Bundle.RESOLVED, tb1b.getState());
-      
-      // Try to get not existing resource
-      // it must generate FrameworkEvent.INFO event
-      tb1a.getResource("sss");  
-      Thread.sleep(2000); // wait a while
-			assertTrue("Expecting FrameworkEvent of type INFO.",
-					hasEventOccurred(tb1b, FrameworkEvent.class,
-							FrameworkEvent.INFO));
-		}
-		finally {
-			tb1a.stop();
-			tb1a.uninstall();
-			tb1b.uninstall();
-			getContext().removeFrameworkListener(this);
-			purgeEvents();
-		}
-
-	}
-
-	/**
 	 * When a URL object to a resource within a bundle is created, the caller is
 	 * checked for AdminPermission to access the resource if the resource is
 	 * located in another bundle. If the caller does not have the necessary
