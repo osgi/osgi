@@ -57,10 +57,10 @@ import org.osgi.framework.PackagePermission;
 import org.osgi.framework.ServicePermission;
 import org.osgi.framework.ServiceReference;
 import org.osgi.framework.Version;
-import org.osgi.service.deploymentadmin.DeploymentCustomizerPermission;
+import org.osgi.service.deploymentadmin.spi.DeploymentCustomizerPermission;
 import org.osgi.service.deploymentadmin.DeploymentException;
 import org.osgi.service.deploymentadmin.DeploymentPackage;
-import org.osgi.service.deploymentadmin.ResourceProcessor;
+import org.osgi.service.deploymentadmin.spi.ResourceProcessor;
 import org.osgi.service.permissionadmin.PermissionInfo;
 import org.osgi.test.cases.deploymentadmin.tc2.tbc.DeploymentConstants;
 import org.osgi.test.cases.deploymentadmin.tc2.tbc.DeploymentTestControl;
@@ -281,7 +281,7 @@ public class DeploymentSession {
 			DeploymentPackage dp = testSessionRP.getTargetDeploymentPackage();
 			tbc.assertEquals("The target deployment package version is 0.0.0", new Version(0,0,0), dp.getVersion());
 			tbc.assertTrue("The target deployment package has no resources", dp.getResources().length==0);
-			tbc.assertTrue("The target deployment package has no bundles", dp.getBundleSymNameVersionPairs().length==0);
+			tbc.assertTrue("The target deployment package has no bundles", dp.getBundleInfos().length==0);
 
 		} catch (Exception e) {
 			tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }));
@@ -316,10 +316,10 @@ public class DeploymentSession {
 			
 			if (rp1.sessionJoinTime() > rp2.sessionJoinTime()) {
 				tbc.assertTrue("The Resource Processor prepare method was called in the reverse order of joining.",
-								rp1.sessionPrepareTime() < rp2.sessionPrepareTime());
+								rp1.sessionPrepareTime() <= rp2.sessionPrepareTime());
 			} else { // (rp1.sessionJoinTime() < rp2.sessionJoinTime()) 
 				tbc.assertTrue("The Resource Processor prepare method was called in the reverse order of joining.",
-								rp1.sessionPrepareTime() > rp2.sessionPrepareTime());
+								rp1.sessionPrepareTime() >= rp2.sessionPrepareTime());
 			}
 		} catch (Exception e) {
 			tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }));
@@ -354,10 +354,10 @@ public class DeploymentSession {
 			
 			if (rp1.sessionJoinTime() > rp2.sessionJoinTime()) {
 				tbc.assertTrue("The Resource Processors commit methods were called in the reverse order of joining.",
-								rp1.sessionCommitTime() < rp2.sessionCommitTime());
+								rp1.sessionCommitTime() <= rp2.sessionCommitTime());
 			} else { // (rp1.sessionJoinTime() < rp2.sessionJoinTime())
 				tbc.assertTrue("The Resource Processors commit methods were called in the reverse order of joining.",
-								rp1.sessionCommitTime() > rp2.sessionCommitTime());
+								rp1.sessionCommitTime() >= rp2.sessionCommitTime());
 			}
 		} catch (Exception e) {
 			tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }));
@@ -425,11 +425,11 @@ public class DeploymentSession {
             if (rp1.sessionJoinTime() > rp2.sessionJoinTime()) {
                 tbc.assertTrue(
                         "The Resource Processors rollback methods were called in the reverse order of joining.",
-                        rp1.sessionRollbackTime() < rp2.sessionRollbackTime());
+                        rp1.sessionRollbackTime() <= rp2.sessionRollbackTime());
             } else { // if (rp1.sessionJoinTime() < rp2.sessionJoinTime())
                 tbc.assertTrue(
                         "The Resource Processor rollback methods were called in the reverse order of joining.",
-                        rp1.sessionRollbackTime() > rp2.sessionRollbackTime());
+                        rp1.sessionRollbackTime() >= rp2.sessionRollbackTime());
             }
         } catch (Exception e) {
 			tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }));
@@ -446,7 +446,7 @@ public class DeploymentSession {
 	 * 
 	 * @spec 114.7.2 Bundle Events During Deployment
 	 */
-	private void testDeploymentSession010()  {
+	private synchronized void testDeploymentSession010()  {
 		tbc.log("#testDeploymentSession010");
 		TestingDeploymentPackage testDP = tbc.getTestingDeploymentPackage(DeploymentConstants.TRANSACTIONAL_SESSION_DP);
 		DeploymentPackage targetDP = null;
@@ -476,12 +476,11 @@ public class DeploymentSession {
 
                 // assert UNINSTALLED events
                 it = events.iterator();
-                i = 0;
-                while (it.hasNext() && i < 2) {
+                while (it.hasNext() && i >= 0) {
                     event = (BundleEvent)it.next();
                     if (event.getType() == BundleEvent.UNINSTALLED) {
                         tbc.assertEquals("Bundle " + i + " UNINSTALLED",
-                            testBundles[i++].getName(), event.getBundle().getSymbolicName());
+                            testBundles[--i].getName(), event.getBundle().getSymbolicName());
                     }
                 }
             }
@@ -642,6 +641,7 @@ public class DeploymentSession {
             tbc.fail(MessagesConstants.getMessage(
                 MessagesConstants.UNEXPECTED_EXCEPTION, new String[]{e.getClass().getName()}));
         } finally {
+            tbc.uninstall(dp);
             cleanUp(testBlockRP);
         }
     }
@@ -728,7 +728,7 @@ public class DeploymentSession {
 	private void setResourceProcessorPermissions(String location, String filter) {
 		PermissionInfo info[] = {
 				new PermissionInfo(DeploymentCustomizerPermission.class.getName(), filter,
-						DeploymentCustomizerPermission.ACTION_PRIVATEAREA),
+						DeploymentCustomizerPermission.PRIVATEAREA),
 				new PermissionInfo(ServicePermission.class.getName(), "*",ServicePermission.GET + ","
 								+ ServicePermission.REGISTER),
 				new PermissionInfo(AdminPermission.class.getName(), "*", "*"),

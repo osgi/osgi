@@ -45,7 +45,7 @@ import org.osgi.framework.BundleEvent;
 import org.osgi.framework.BundleException;
 import org.osgi.service.deploymentadmin.DeploymentException;
 import org.osgi.service.deploymentadmin.DeploymentPackage;
-import org.osgi.service.deploymentadmin.ResourceProcessor;
+import org.osgi.service.deploymentadmin.spi.ResourceProcessor;
 import org.osgi.service.log.LogEntry;
 import org.osgi.service.log.LogService;
 import org.osgi.test.cases.deploymentadmin.tc2.tbc.DeploymentConstants;
@@ -94,11 +94,13 @@ public class InstallSession {
             testInstallSession005();
             testInstallSession006();
             testInstallSession007();
-            testInstallSession008();
+          testInstallSession008();
             testInstallSession009();
-            testInstallSession010();
-            testInstallSession011();
-            testInstallSession012();
+// TODO Spec changed, this test case is no longer valid.
+//            testInstallSession010();
+// TODO Test case is no longer valid according to lates decisions            
+//            testInstallSession011();
+//            testInstallSession012();
             testInstallSession013();
             testInstallSession014();
             testInstallSession015();
@@ -198,7 +200,6 @@ public class InstallSession {
         // cannot assert Resource Processor rollback method
         // resource from DP will not have been processed when Exception is thrown
         DeploymentPackage dp = null;
-        TestingSessionResourceProcessor tsrp = null;
         TestingDeploymentPackage testDP = null;
         try {
             testDP = tbc.getTestingDeploymentPackage(DeploymentConstants.BSN_DIFF_FROM_MANIFEST);
@@ -227,7 +228,6 @@ public class InstallSession {
         // resource from DP will not have been processed when Exception is thrown
         // Asserts only that bundles was uninstalled
         DeploymentPackage dp = null;
-        TestingSessionResourceProcessor tsrp = null;
         try {
             TestingDeploymentPackage testDP = tbc.getTestingDeploymentPackage(DeploymentConstants.BVERSION_DIFF_FROM_MANIFEST);
             dp = tbc.installDeploymentPackage(tbc.getWebServer() + testDP.getFilename());
@@ -272,6 +272,7 @@ public class InstallSession {
             tbc.fail(MessagesConstants.getMessage(
                 MessagesConstants.UNEXPECTED_EXCEPTION, new String[]{e.getClass().getName()}));
         } finally {
+            tbc.uninstall(dp);
             reset();
             prepare();
         }
@@ -320,7 +321,8 @@ public class InstallSession {
                 MessagesConstants.UNEXPECTED_EXCEPTION, new String[]{e.getClass().getName()}));
         } finally {
             tbc.uninstall(dp);
-            tsrp.reset();
+            if (tsrp != null)
+                tsrp.reset();
         }
     }
     
@@ -352,7 +354,8 @@ public class InstallSession {
             tbc.fail(MessagesConstants.getMessage(
                 MessagesConstants.UNEXPECTED_EXCEPTION, new String[]{e.getClass().getName()}));
         } finally {
-            tsrp.reset();
+            if (tsrp != null)
+                tsrp.reset();
             tbc.uninstall(dp);
         }
     }
@@ -365,7 +368,7 @@ public class InstallSession {
      */
     private void testInstallSession008() {
         tbc.log("#testInstallSession008");
-        DeploymentPackage dp1 = null, dp2 = null;
+        DeploymentPackage dp1 = null;
         TestingSessionResourceProcessor tsrp = null;
         try {
             TestingDeploymentPackage testDP1 = tbc.getTestingDeploymentPackage(DeploymentConstants.SIMPLE_BUNDLE_RES_DP);
@@ -409,7 +412,7 @@ public class InstallSession {
      */
     private void testInstallSession009() {
         tbc.log("#testInstallSession009");
-        DeploymentPackage dp1 = null, dp2 = null;
+        DeploymentPackage dp1 = null;
         TestingSessionResourceProcessor tsrp = null;
         try {
             TestingDeploymentPackage testDP1 = tbc.getTestingDeploymentPackage(DeploymentConstants.SIMPLE_BUNDLE_RES_DP);
@@ -438,6 +441,7 @@ public class InstallSession {
             tbc.fail(MessagesConstants.getMessage(
                 MessagesConstants.UNEXPECTED_EXCEPTION, new String[]{e.getClass().getName()}));
         } finally {
+            tbc.uninstall(dp1);
             cleanUp(tsrp);
         }
     }
@@ -558,7 +562,8 @@ public class InstallSession {
             tbc.fail(MessagesConstants.getMessage(
                 MessagesConstants.UNEXPECTED_EXCEPTION, new String[]{e.getClass().getName()}));
         } finally {
-            tsrp.reset();
+            if (tsrp != null)
+                tsrp.reset();
             tbc.uninstall(new DeploymentPackage[]{dp2, dp1});
         }
     }
@@ -597,7 +602,8 @@ public class InstallSession {
             tbc.fail(MessagesConstants.getMessage(
                 MessagesConstants.UNEXPECTED_EXCEPTION, new String[]{e.getClass().getName()}));
         } finally {
-            tsrp.reset();
+            if (tsrp != null)
+                tsrp.reset();
             tbc.uninstall(new DeploymentPackage[]{dp1, rp});
         }
     }
@@ -627,7 +633,8 @@ public class InstallSession {
             tbc.fail(MessagesConstants.getMessage(
                 MessagesConstants.UNEXPECTED_EXCEPTION, new String[]{e.getClass().getName()}));
         } finally {
-            tsrp.reset();
+            if (tsrp != null)
+                tsrp.reset();
             tbc.uninstall(dp1);
         }
     }
@@ -672,7 +679,8 @@ public class InstallSession {
             tbc.fail(MessagesConstants.getMessage(
                 MessagesConstants.UNEXPECTED_EXCEPTION, new String[]{e.getClass().getName()}));
         } finally {
-            tsrp.reset();
+            if (tsrp != null)
+                tsrp.reset();
             tbc.uninstall(dp1);
         }
     }
@@ -708,7 +716,8 @@ public class InstallSession {
             tbc.fail(MessagesConstants.getMessage(
                 MessagesConstants.UNEXPECTED_EXCEPTION, new String[]{e.getClass().getName()}));
         } finally {
-            tsrp.reset();
+            if (tsrp != null)
+                tsrp.reset();
             tbc.uninstall(dp1);
         }
     }
@@ -781,8 +790,7 @@ public class InstallSession {
                 // get the latest log
                 LogEntry log = (LogEntry)logsAfter.nextElement();
                 if ((log.getLevel() == LogService.LOG_WARNING)
-                    && (log.getException() instanceof BundleException)
-                    && (log.getBundle().getSymbolicName().indexOf("deployment") != -1))
+                    && (log.getException() instanceof BundleException))
                 {
                     tbc.pass("The log message is a WARNING and the Exception is a BundleException");
                     found = true;
@@ -881,7 +889,8 @@ public class InstallSession {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        tsrp.reset();
+        if (tsrp != null)
+            tsrp.reset();
         cleanupBarrier.reset();
         cleanupBarrier = null;
         releaseBarrier = null;
@@ -920,27 +929,12 @@ public class InstallSession {
                 // clean up must also be synchronized. Otherwise other TCs may be impacted.
                 tbc.uninstall(dp);
                 clean = true;
-                tbc.log("#Clean up successful");
+                tbc.log("#Clean up #+"+id+" successful");
                 try {
                     cleanupBarrier.waitCleanUp();
                 } catch (InterruptedException e1) {
                     e1.printStackTrace();
                 }
-            }
-        }
-        
-        private void release() {
-            try {
-                TestingSessionResourceProcessor tsrp = (TestingSessionResourceProcessor) tbc.getService(ResourceProcessor.class,
-                    "(service.pid=" + DeploymentConstants.PID_RESOURCE_PROCESSOR3 + ")");
-                if (tsrp != null) {
-                    tsrp.setReleased(true);
-                    tsrp.waitForRelease(false);
-                } else {
-                    tbc.fail("null reference of TestingBlockingResourceProcessor ");
-                }
-            } catch (Exception e) {
-                tbc.fail("Failed to get Testing Session Resource Processor from registry");
             }
         }
     }

@@ -74,9 +74,9 @@ public class DeploymentCustomizerPermission {
 	private void testDeploymentCustomizerPermission001() {
 		tbc.log("#testDeploymentCustomizerPermission001");
 		try {
-			org.osgi.service.deploymentadmin.DeploymentCustomizerPermission dpCustPerm = new org.osgi.service.deploymentadmin.DeploymentCustomizerPermission(
+			org.osgi.service.deploymentadmin.spi.DeploymentCustomizerPermission dpCustPerm = new org.osgi.service.deploymentadmin.spi.DeploymentCustomizerPermission(
 					DeploymentConstants.BUNDLE_NAME_FILTER,
-					org.osgi.service.deploymentadmin.DeploymentCustomizerPermission.ACTION_PRIVATEAREA);
+					org.osgi.service.deploymentadmin.spi.DeploymentCustomizerPermission.PRIVATEAREA);
 
 			tbc.assertEquals(
 					"DeploymentCustomizerPermission for a given name was correctly created ",
@@ -84,7 +84,7 @@ public class DeploymentCustomizerPermission {
 			
 			tbc.assertEquals(
 							"DeploymentCustomizerPermission for a given action was correctly created",
-							org.osgi.service.deploymentadmin.DeploymentCustomizerPermission.ACTION_PRIVATEAREA,
+							org.osgi.service.deploymentadmin.spi.DeploymentCustomizerPermission.PRIVATEAREA,
 							dpCustPerm.getActions());
 
 		} catch (Exception e) {
@@ -103,9 +103,9 @@ public class DeploymentCustomizerPermission {
 	private void testDeploymentCustomizerPermission002() {
 		tbc.log("#testDeploymentCustomizerPermission002");
 		try {
-			org.osgi.service.deploymentadmin.DeploymentCustomizerPermission dpCustPerm = new org.osgi.service.deploymentadmin.DeploymentCustomizerPermission(
+			new org.osgi.service.deploymentadmin.spi.DeploymentCustomizerPermission(
 					DeploymentConstants.BUNDLE_NAME_WRONG_FILTER,
-					org.osgi.service.deploymentadmin.DeploymentCustomizerPermission.ACTION_PRIVATEAREA);
+					org.osgi.service.deploymentadmin.spi.DeploymentCustomizerPermission.PRIVATEAREA);
 			
 			tbc.failException("#", IllegalArgumentException.class);
 
@@ -127,7 +127,7 @@ public class DeploymentCustomizerPermission {
 	private void testDeploymentCustomizerPermission003() {
 		tbc.log("#testDeploymentCustomizerPermission003");
 		try {
-			org.osgi.service.deploymentadmin.DeploymentCustomizerPermission dpCustPerm = new org.osgi.service.deploymentadmin.DeploymentCustomizerPermission(
+			new org.osgi.service.deploymentadmin.spi.DeploymentCustomizerPermission(
 					DeploymentConstants.BUNDLE_NAME_FILTER, "install");
 			
 			tbc.failException("#", IllegalArgumentException.class);
@@ -150,8 +150,8 @@ public class DeploymentCustomizerPermission {
 	private void testDeploymentCustomizerPermission004() {
 		tbc.log("#testDeploymentCustomizerPermission004");
 		try {
-			org.osgi.service.deploymentadmin.DeploymentCustomizerPermission dpCustPerm = new org.osgi.service.deploymentadmin.DeploymentCustomizerPermission(
-					null, org.osgi.service.deploymentadmin.DeploymentCustomizerPermission.ACTION_PRIVATEAREA);
+			new org.osgi.service.deploymentadmin.spi.DeploymentCustomizerPermission(
+					null, org.osgi.service.deploymentadmin.spi.DeploymentCustomizerPermission.PRIVATEAREA);
 			
 			tbc.failException("#", IllegalArgumentException.class);
 
@@ -173,7 +173,7 @@ public class DeploymentCustomizerPermission {
 	private void testDeploymentCustomizerPermission005() {
 		tbc.log("#testDeploymentCustomizerPermission005");
 		try {
-			org.osgi.service.deploymentadmin.DeploymentCustomizerPermission dpCustPerm = new org.osgi.service.deploymentadmin.DeploymentCustomizerPermission(
+			new org.osgi.service.deploymentadmin.spi.DeploymentCustomizerPermission(
 					DeploymentConstants.BUNDLE_NAME_FILTER, null);
 			
 			tbc.failException("#", IllegalArgumentException.class);
@@ -194,8 +194,8 @@ public class DeploymentCustomizerPermission {
 	private void testDeploymentCustomizerPermission006() {
 		tbc.log("#testDeploymentCustomizerPermission006");
 		try {
-			org.osgi.service.deploymentadmin.DeploymentCustomizerPermission dpCustPerm = new org.osgi.service.deploymentadmin.DeploymentCustomizerPermission(
-					"(name=)", org.osgi.service.deploymentadmin.DeploymentCustomizerPermission.ACTION_PRIVATEAREA);
+			new org.osgi.service.deploymentadmin.spi.DeploymentCustomizerPermission(
+					"(name=)", org.osgi.service.deploymentadmin.spi.DeploymentCustomizerPermission.PRIVATEAREA);
 			
 			tbc.failException("#", IllegalArgumentException.class);
 

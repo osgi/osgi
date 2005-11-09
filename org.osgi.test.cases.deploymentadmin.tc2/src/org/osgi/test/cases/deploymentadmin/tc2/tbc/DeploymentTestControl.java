@@ -47,6 +47,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.security.AccessControlContext;
 import java.util.Dictionary;
 import java.util.HashMap;
 import java.util.Hashtable;
@@ -55,6 +56,7 @@ import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
 import org.osgi.service.cm.ManagedService;
 import org.osgi.service.cm.ManagedServiceFactory;
+import org.osgi.service.condpermadmin.ConditionalPermissionAdmin;
 import org.osgi.service.deploymentadmin.DeploymentAdmin;
 import org.osgi.service.deploymentadmin.DeploymentException;
 import org.osgi.service.deploymentadmin.DeploymentPackage;
@@ -85,6 +87,7 @@ public class DeploymentTestControl extends DefaultTestBundleControl {
 	private DeploymentAdmin deploymentAdmin;
 	private PermissionAdmin permissionAdmin;
     private LogReaderService logReader;
+    private ConditionalPermissionAdmin condPermAdmin;
 	
 	private BundleListenerImpl bundleListener;
 	private boolean transactionalDA;
@@ -107,8 +110,8 @@ public class DeploymentTestControl extends DefaultTestBundleControl {
 		permissionAdmin = (PermissionAdmin) getContext().getService(getContext().getServiceReference(PermissionAdmin.class.getName()));
 		ServiceReference daServiveReference = getContext().getServiceReference(DeploymentAdmin.class.getName());
 		deploymentAdmin = (DeploymentAdmin) getContext().getService(daServiveReference);
-        
         logReader = (LogReaderService)getContext().getService(getContext().getServiceReference(LogReaderService.class.getName()));
+        condPermAdmin = (ConditionalPermissionAdmin)getContext().getService(getContext().getServiceReference(ConditionalPermissionAdmin.class.getName()));
 		
 		createTestingDeploymentPackages();
 		setManagedServiceAndFactoryProperties();
@@ -318,6 +321,18 @@ public class DeploymentTestControl extends DefaultTestBundleControl {
                 packages.put(""+i, dp);
                 break;
             }
+            case DeploymentConstants.RESOURCE_PROCESSOR_CUSTOMIZER: {
+                TestingBundle[] bundles = {new TestingBundle(DeploymentConstants.PID_RESOURCE_PROCESSOR1, "1.0", "rp_bundle.jar")};
+                dp = new TestingDeploymentPackage(DeploymentConstants.MAP_CODE_TO_DP[DeploymentConstants.RESOURCE_PROCESSOR_CUSTOMIZER], "1.0.0", "resource_processor_customizer.dp", bundles);
+                packages.put(""+i, dp);
+                break;
+            }
+            case DeploymentConstants.RESOURCE_FROM_OTHER_DP: {
+                TestingResource[] resources = {new TestingResource("simple_resource.xml", DeploymentConstants.PID_RESOURCE_PROCESSOR1)};
+                dp = new TestingDeploymentPackage(DeploymentConstants.MAP_CODE_TO_DP[DeploymentConstants.RESOURCE_FROM_OTHER_DP], "1.0.0", "resource_from_other_dp.dp", null, resources);
+                packages.put(""+i, dp);
+                break;
+            }
 			}
 		}
 	}
@@ -392,7 +407,7 @@ public class DeploymentTestControl extends DefaultTestBundleControl {
 	}
 	
 	//DeploymentCustomizerPermission Test Cases
-	public void DeploymentCustomizerPermission() {
+	public void testDeploymentCustomizerPermission() {
 		new org.osgi.test.cases.deploymentadmin.tc2.tbc.DeploymentCustomizerPermission.DeploymentCustomizerPermission(this).run();
 	}
 	
@@ -477,7 +492,11 @@ public class DeploymentTestControl extends DefaultTestBundleControl {
 				dp.uninstall();
 			} catch (DeploymentException e) {
 				log("#Deployment Package could not be uninstalled. Uninstalling forcefuly...");
-				dp.uninstallForced();
+				try {
+                    dp.uninstallForced();
+                } catch (DeploymentException e1) {
+                    log("Failed to uninstall deployment package: "+dp.getName());
+                }
 			} 
 		}
 	}
@@ -537,7 +556,6 @@ public class DeploymentTestControl extends DefaultTestBundleControl {
 		Bundle bundle = null;
 		Bundle[] bundles = getContext().getBundles();
 		String str = "";
-		boolean found = false;
 		int i = 0;
 		while ((bundle==null) && (i < bundles.length)) {
 			str = bundles[i].getSymbolicName();
@@ -564,6 +582,20 @@ public class DeploymentTestControl extends DefaultTestBundleControl {
         if (logReader==null)
             throw new NullPointerException("Log Reader Service instance is null");
         return logReader;
-        
+    }
+
+    
+    /**
+     * @return Returns the condPermAdmin.
+     */
+    public ConditionalPermissionAdmin getCondPermAdmin() {
+        if (condPermAdmin==null)
+            throw new NullPointerException("Conditional Permission Admin Service instance is null");
+        return condPermAdmin;
+    }
+    
+    public AccessControlContext getAccessControlContext() {
+        String[] signers = {DeploymentConstants.SIGNER_FILTER};
+        return getCondPermAdmin().getAccessControlContext(signers);
     }
 }

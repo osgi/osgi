@@ -66,7 +66,6 @@ public class DeploymentExceptionConstants {
 		tbc.assertEquals("Asserting CODE_BAD_HEADER value", 2, DeploymentException.CODE_BAD_HEADER);
 		tbc.assertEquals("Asserting CODE_BUNDLE_NAME_ERROR value", 7, DeploymentException.CODE_BUNDLE_NAME_ERROR);
 		tbc.assertEquals("Asserting CODE_BUNDLE_SHARING_VIOLATION value", 10, DeploymentException.CODE_BUNDLE_SHARING_VIOLATION);
-		tbc.assertEquals("Asserting CODE_BUNDLE_START value", 16, DeploymentException.CODE_BUNDLE_START);
 		tbc.assertEquals("Asserting CODE_FOREIGN_CUSTOMIZER value", 8, DeploymentException.CODE_FOREIGN_CUSTOMIZER);
 		tbc.assertEquals("Asserting CODE_MISSING_BUNDLE value", 4, DeploymentException.CODE_MISSING_BUNDLE);
 		tbc.assertEquals("Asserting CODE_MISSING_FIXPACK_TARGET value", 3, DeploymentException.CODE_MISSING_FIXPACK_TARGET);
@@ -75,7 +74,6 @@ public class DeploymentExceptionConstants {
 		tbc.assertEquals("Asserting CODE_NO_SUCH_RESOURCE value", 9, DeploymentException.CODE_NO_SUCH_RESOURCE);
 		tbc.assertEquals("Asserting CODE_ORDER_ERROR value", 14, DeploymentException.CODE_ORDER_ERROR);
 		tbc.assertEquals("Asserting CODE_OTHER_ERROR value", 0, DeploymentException.CODE_OTHER_ERROR);
-		tbc.assertEquals("Asserting CODE_PREPARE value", 12, DeploymentException.CODE_PREPARE);
 		tbc.assertEquals("Asserting CODE_RESOURCE_SHARING_VIOLATION value", 11, DeploymentException.CODE_RESOURCE_SHARING_VIOLATION);
 		tbc.assertEquals("Asserting CODE_SIGNING_ERROR value", 6, DeploymentException.CODE_SIGNING_ERROR);
 		tbc.assertEquals("Asserting CODE_PROCESSOR_NOT_FOUND value", 13, DeploymentException.CODE_PROCESSOR_NOT_FOUND);

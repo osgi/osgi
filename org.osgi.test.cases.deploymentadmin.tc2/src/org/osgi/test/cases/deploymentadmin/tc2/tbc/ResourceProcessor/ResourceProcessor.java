@@ -68,11 +68,12 @@ public class ResourceProcessor {
 		testResourceProcessor005();
 		testResourceProcessor006();
         testResourceProcessor007();
+        testResourceProcessor008();
 	}
 
 		
 	
-	/**
+    /**
 	 * Asserts that the action is INSTALL and that DeploymentAdmin calls the methods of a 
 	 * resource processor in the specified order
 	 * 
@@ -98,7 +99,6 @@ public class ResourceProcessor {
 			TestingResourceProcessor resourceProcessor = (TestingResourceProcessor)tbc.getContext().getService(reference);
 			
 			tbc.assertTrue("Asserts that DeploymentAdmin calls the methods of a resource processor in the specified order when it is installing",resourceProcessor.isInstallUpdateOrdered());
-			
 		} catch (Exception e) {
 			tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }));
 		} finally {
@@ -139,7 +139,6 @@ public class ResourceProcessor {
 			dpUpdateResource = tbc.installDeploymentPackage(tbc.getWebServer() + testDPUpdate.getFilename());
 			tbc.failException("#",DeploymentException.class);
 		} catch (DeploymentException e) {
-			tbc.assertEquals("Asserts that DeploymentException.CODE_PREPARE is thrown when a resource processor cannot commit",DeploymentException.CODE_PREPARE,e.getCode());
 			tbc.assertTrue("Asserts that DeploymentAdmin calls the methods of a resource processor in the specified order when it throws an exception in the prepare() method",resourceProcessor.exceptionAtPrepareOrdered());
 		} finally {
 			resourceProcessor.setSimulateExceptionOnPrepare(false);
@@ -192,10 +191,11 @@ public class ResourceProcessor {
 
 	
 	/**
-	 * Uninstall a resource (not the deployment package) in order no know if the dropped method is called.
-	 * 
-	 * @spec 114.10 Resource Processors					
-	 */
+     * Uninstall a resource (not the deployment package) in order no know if the
+     * dropped method is called.
+     * 
+     * @spec 114.10 Resource Processors
+     */
 	private void testResourceProcessor004() {
 		tbc.log("#testResourceProcessor004");
 		TestingResourceProcessor resourceProcessor = null;
@@ -231,11 +231,13 @@ public class ResourceProcessor {
 	}
 	
 	/**
-	 * Asserts that DeploymentException.CODE_NO_SUCH_RESOURCE is thrown when an exception is thrown on dropped() method of the ResourceProcessor
-	 * It also tests if DeploymentAdmin calls the correct order of methods, including rollback()
-	 * 
-	 * @spec 114.10 Resource Processors			
-	 */
+     * Asserts that DeploymentException.CODE_NO_SUCH_RESOURCE is thrown when an
+     * exception is thrown on dropped() method of the ResourceProcessor It also
+     * tests if DeploymentAdmin calls the correct order of methods, including
+     * rollback().
+     * 
+     * @spec 114.10 Resource Processors
+     */
 	private void testResourceProcessor005() {
 		tbc.log("#testResourceProcessor005");
 		TestingResourceProcessor resourceProcessor = null;
@@ -254,9 +256,9 @@ public class ResourceProcessor {
 			
 			ServiceReference reference = dpInstallResource.getResourceProcessor(testResource.getName());
 			tbc.assertNotNull(MessagesConstants.getMessage(MessagesConstants.ASSERT_NOT_NULL,new String[] {"Resource processor reference"}),reference);
-
+			
 			resourceProcessor = (TestingResourceProcessor)tbc.getContext().getService(reference);
-		
+			
 			resourceProcessor.setSimulateExceptionOnDropped(true);
 			resourceProcessor.resetCount();
 			TestingDeploymentPackage testDPUninstall = tbc.getTestingDeploymentPackage(DeploymentConstants.RP_RESOURCE_UNINSTALL_DP);
@@ -264,20 +266,19 @@ public class ResourceProcessor {
 			tbc.assertTrue("Asserts that DeploymentAdmin calls the methods of a resource processor in the specified order when it throws an exception in the dropped() method. It also ensures that no exception is thrown even if the resource does not exist.",resourceProcessor.exceptionAtDroppedOrdered());
 		} catch (Exception e) {
 			tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }));
-			
 		} finally {
 			resourceProcessor.setSimulateExceptionOnDropped(false);	
 			tbc.uninstall(new DeploymentPackage[] { dpUninstallResource,dpInstallResource,dpResourceProcessor });
 		}
-		
 	}
     
 	/**
-	 * Uninstalls a deployment package containing a resource. Asserts that DeploymentAdmin calls the methods of a
-	 * resource processor in the specified order
-	 * 
-	 * @spec 114.10 Resource Processors
-	 */
+     * Uninstalls a deployment package containing a resource. Asserts that
+     * DeploymentAdmin calls the methods of a resource processor in the
+     * specified order
+     * 
+     * @spec 114.10 Resource Processors
+     */
 	private void testResourceProcessor006() {
 		tbc.log("#testResourceProcessor006");
 		TestingDeploymentPackage testRP;
@@ -316,13 +317,45 @@ public class ResourceProcessor {
      * 
      * @spec 114.5 Customizer
      */
-    public void testResourceProcessor007() {
+    private void testResourceProcessor007() {
         tbc.log("#testResourceProcessor007");
         
         DeploymentPackage dp1 = null, dp2 = null;
-        TestingDeploymentPackage testDP1 = tbc.getTestingDeploymentPackage(DeploymentConstants.SESSION_RESOURCE_PROCESSOR_DP);
+        TestingDeploymentPackage testDP1 = tbc.getTestingDeploymentPackage(DeploymentConstants.RESOURCE_PROCESSOR_CUSTOMIZER);
         TestingDeploymentPackage testDP2 = tbc.getTestingDeploymentPackage(DeploymentConstants.RP_FROM_OTHER_DP);
+        try {
+            dp1 = tbc.installDeploymentPackage(tbc.getWebServer() + testDP1.getFilename());
+            tbc.assertNotNull("Deployment Package 1 installed", dp1);
+            
+            dp2 = tbc.installDeploymentPackage(tbc.getWebServer() + testDP2.getFilename());
+            tbc.failException("#", DeploymentException.class);
+        } catch (DeploymentException e) {
+            tbc.assertEquals("DeploymentException.CODE_FOREIGN_CUSTOMIZER correctly thrown", DeploymentException.CODE_FOREIGN_CUSTOMIZER, e.getCode());
+        } catch (Exception e) {
+            tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }));
+        } finally {
+            tbc.uninstall(new DeploymentPackage[]{dp1, dp2});
+        }
+    }
+    
+    /**
+     * Asserts that the Deployment Admin service must execute all its
+     * operations, including calls for handling bundles and all calls that are
+     * forwarded to a Resource Processor service, inside a doPrivileged block.
+     * This privileged block must use an AccessControlContext object that limits
+     * the permissions to the security scope. Therefore, a Resource Processor
+     * service must assume that it is always running inside the correct security
+     * scope. A Resource Processor can of course use its own security scope by
+     * doing a local doPrivileged block.
+     * 
+     * @spec 114.13.3 Permissions During an Install Session
+     */
+    private void testResourceProcessor008() {
+        tbc.log("#testResourceProcessor008");
         
+        DeploymentPackage dp1 = null, dp2 = null;
+        TestingDeploymentPackage testDP1 = tbc.getTestingDeploymentPackage(DeploymentConstants.RESOURCE_PROCESSOR_CUSTOMIZER);
+        TestingDeploymentPackage testDP2 = tbc.getTestingDeploymentPackage(DeploymentConstants.RP_FROM_OTHER_DP);
         try {
             dp1 = tbc.installDeploymentPackage(tbc.getWebServer() + testDP1.getFilename());
             tbc.assertNotNull("Deployment Package 1 installed", dp1);

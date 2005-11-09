@@ -70,13 +70,13 @@ public class Implies {
 	private void testImplies001() {
 		tbc.log("#testImplies001");
 		try {
-			org.osgi.service.deploymentadmin.DeploymentCustomizerPermission deployPermission = new org.osgi.service.deploymentadmin.DeploymentCustomizerPermission(
+			org.osgi.service.deploymentadmin.spi.DeploymentCustomizerPermission deployPermission = new org.osgi.service.deploymentadmin.spi.DeploymentCustomizerPermission(
 					DeploymentConstants.BUNDLE_NAME_FILTER,
-					org.osgi.service.deploymentadmin.DeploymentCustomizerPermission.ACTION_PRIVATEAREA);
+					org.osgi.service.deploymentadmin.spi.DeploymentCustomizerPermission.PRIVATEAREA);
 			
-			org.osgi.service.deploymentadmin.DeploymentCustomizerPermission deployPermission2 = new org.osgi.service.deploymentadmin.DeploymentCustomizerPermission(
+			org.osgi.service.deploymentadmin.spi.DeploymentCustomizerPermission deployPermission2 = new org.osgi.service.deploymentadmin.spi.DeploymentCustomizerPermission(
 					DeploymentConstants.BUNDLE_NAME_FILTER,
-					org.osgi.service.deploymentadmin.DeploymentCustomizerPermission.ACTION_PRIVATEAREA);
+					org.osgi.service.deploymentadmin.spi.DeploymentCustomizerPermission.PRIVATEAREA);
 			
 			tbc.assertTrue("Implies when both target and action are equal",
 					deployPermission.implies(deployPermission2));
@@ -96,13 +96,13 @@ public class Implies {
 	private void testImplies002() {
 		tbc.log("#testImplies002");
 		try {
-			org.osgi.service.deploymentadmin.DeploymentCustomizerPermission deployPermission = new org.osgi.service.deploymentadmin.DeploymentCustomizerPermission(
+			org.osgi.service.deploymentadmin.spi.DeploymentCustomizerPermission deployPermission = new org.osgi.service.deploymentadmin.spi.DeploymentCustomizerPermission(
 					"(name=bundle.tb1)",
-					org.osgi.service.deploymentadmin.DeploymentCustomizerPermission.ACTION_PRIVATEAREA);
+					org.osgi.service.deploymentadmin.spi.DeploymentCustomizerPermission.PRIVATEAREA);
 			
-			org.osgi.service.deploymentadmin.DeploymentCustomizerPermission deployPermission2 = new org.osgi.service.deploymentadmin.DeploymentCustomizerPermission(
+			org.osgi.service.deploymentadmin.spi.DeploymentCustomizerPermission deployPermission2 = new org.osgi.service.deploymentadmin.spi.DeploymentCustomizerPermission(
 					"(name=bundle.tb2)",
-					org.osgi.service.deploymentadmin.DeploymentCustomizerPermission.ACTION_PRIVATEAREA);
+					org.osgi.service.deploymentadmin.spi.DeploymentCustomizerPermission.PRIVATEAREA);
 			
 			tbc.assertTrue("Implies when target filters are different",
 					!deployPermission.implies(deployPermission2));

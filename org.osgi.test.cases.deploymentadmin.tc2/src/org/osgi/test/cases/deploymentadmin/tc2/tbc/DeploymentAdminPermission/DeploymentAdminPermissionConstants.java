@@ -60,11 +60,11 @@ public class DeploymentAdminPermissionConstants {
 	 */
 	public void testConstants001() {
 		tbc.log("#testConstants001");
-		tbc.assertEquals("Asserting ACTION_INSTALL value", "install", DeploymentAdminPermission.ACTION_INSTALL);
-		tbc.assertEquals("Asserting ACTION_CANCEL value", "cancel", DeploymentAdminPermission.ACTION_CANCEL);
-		tbc.assertEquals("Asserting ACTION_LIST value", "list", DeploymentAdminPermission.ACTION_LIST);
-		tbc.assertEquals("Asserting ACTION_UNINSTALL value", "uninstall", DeploymentAdminPermission.ACTION_UNINSTALL);
-		tbc.assertEquals("Asserting ACTION_UNINSTALL_FORCEFUL value", "uninstallForced", DeploymentAdminPermission.ACTION_UNINSTALL_FORCED);
+		tbc.assertEquals("Asserting ACTION_INSTALL value", "install", DeploymentAdminPermission.INSTALL);
+		tbc.assertEquals("Asserting ACTION_CANCEL value", "cancel", DeploymentAdminPermission.CANCEL);
+		tbc.assertEquals("Asserting ACTION_LIST value", "list", DeploymentAdminPermission.LIST);
+		tbc.assertEquals("Asserting ACTION_UNINSTALL value", "uninstall", DeploymentAdminPermission.UNINSTALL);
+		tbc.assertEquals("Asserting ACTION_UNINSTALL_FORCEFUL value", "uninstallForced", DeploymentAdminPermission.UNINSTALL_FORCED);
 	}
 
 }

@@ -49,12 +49,15 @@ public class DeploymentConstants {
 
 	public static final String SIGNER_FILTER = "CN=CESAR.ORG.BR, OU=CESAR, O=MOTOROLA, L=RECIFE, C=BR";
     public static final String SIGNER_FILTER_WILDCARD = "CN=*.ORG.BR, OU=CESAR, O=MOTOROLA, L=RECIFE, C=BR";
-    public static final String SIGNER_FILTER_INVALID1 = "CN=#@$.ORG.BR, OU=CESAR, O=MOTOROLA, L=RECIFE, C=BR";
+    public static final String SIGNER_FILTER_INVALID1 = "NAME=CESAR.ORG.BR, OU=CESAR, O=MOTOROLA, L=RECIFE, C=BR";
     public static final String SIGNER_FILTER_INVALID2 = "2=*.ORG.BR, TX=CESAR, R=MOTOROLA, L=RECIFE, C=BR";
+    
 	public static final String PID_RESOURCE_PROCESSOR1 = "org.osgi.test.cases.deployment.bundles.rp1";
 	public static final String PID_RESOURCE_PROCESSOR2 = "org.osgi.test.cases.deployment.bundles.rp2";
 	public static final String PID_RESOURCE_PROCESSOR3 = "org.osgi.test.cases.deployment.bundles.rp3";
     public static final String PID_RESOURCE_PROCESSOR4 = "org.osgi.test.cases.deployment.bundles.rp4";
+    public static final String PID_RESOURCE_PROCESSOR5 = "org.osgi.test.cases.deployment.bundles.rp5";
+    
 	public static final String PID_MANAGED_SERVICE_FACTORY = "org.osgi.test.cases.deploymentadmin.tc2.tb1";
 	public static final String PID_MANAGED_SERVICE = "br.org.cesar.bundles.tb4";
 	
@@ -83,6 +86,8 @@ public class DeploymentConstants {
     public static final int BUNDLE_FAIL_ON_STOP = 22;
     public static final int SIGNING_FILE_NOT_NEXT = 23;
     public static final int SIMPLE_UNINSTALL_BUNDLE = 24;
+    public static final int RESOURCE_PROCESSOR_CUSTOMIZER = 25;
+    public static final int RESOURCE_FROM_OTHER_DP = 26;
 	
 	//This array index is very important, and must be the same as the deployment code
 	//Use 31 characters. 
@@ -95,7 +100,8 @@ public class DeploymentConstants {
         "bsn_diff_from_manifest", "bversion_diff_from_manifest",
         "simple_resource_rp3", "simple_bundle_res_dp", "simple_no_bundle",
         "simple_no_resource", "bundle_fail_res_dp", "bundle_fail_on_stop_dp",
-        "signing_file_not_next", "simple_uninstall_bundle"};
+        "signing_file_not_next", "simple_uninstall_bundle",
+        "resource_processor_customizer", "resource_from_other_dp"};
 	
 	public static final String DEPLOYMENT_PACKAGE_NAME_ALL = "(&(name=*))";
 	public static final String BUNDLE_NAME_ALL = "(name=*)";
@@ -111,7 +117,7 @@ public class DeploymentConstants {
 	public static final String RESOURCE_PROCESSOR_PROPERTY_KEY = "property.key";
     
     public static final String OSGI_DP_LOCATION = "osgi-dp:";
-    public static final String MANAGED_BUNDLE_LOCATION = "BundleLocation/tb1.jar";
+    public static final String MANAGED_BUNDLE_LOCATION = "BundleLocation:tb1.jar";
     
 	public static final String BUNDLE_NAME_FILTER = "(name=bundle.tb1)";
 	public static final String BUNDLE_NAME_WRONG_FILTER = "(&(name=bundle.tb1)(location=-;osgi-dp: bundle001.jar))";

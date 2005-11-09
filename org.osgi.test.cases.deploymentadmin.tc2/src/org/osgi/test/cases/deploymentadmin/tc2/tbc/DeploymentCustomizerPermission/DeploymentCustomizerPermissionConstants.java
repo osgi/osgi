@@ -37,7 +37,7 @@
 package org.osgi.test.cases.deploymentadmin.tc2.tbc.DeploymentCustomizerPermission;
 
 import org.osgi.test.cases.deploymentadmin.tc2.tbc.DeploymentTestControl;
-import org.osgi.service.deploymentadmin.DeploymentCustomizerPermission;
+import org.osgi.service.deploymentadmin.spi.DeploymentCustomizerPermission;
 
 /**
  * @author Andre Assad
@@ -64,6 +64,6 @@ public class DeploymentCustomizerPermissionConstants {
 	 */
 	private void testConstants001() {
 		tbc.log("#testConstants001");
-		tbc.assertEquals("Asserting ACTION_PRIVATEAREA value", "privatearea", DeploymentCustomizerPermission.ACTION_PRIVATEAREA);
+		tbc.assertEquals("Asserting ACTION_PRIVATEAREA value", "privatearea", DeploymentCustomizerPermission.PRIVATEAREA);
 	}
 }

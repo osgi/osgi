@@ -83,11 +83,11 @@ public class Implies {
 		try {
 			DeploymentAdminPermission deployPermission = new DeploymentAdminPermission(
 					DeploymentConstants.DEPLOYMENT_PACKAGE_NAME0,
-					org.osgi.service.deploymentadmin.DeploymentAdminPermission.ACTION_INSTALL);
+					org.osgi.service.deploymentadmin.DeploymentAdminPermission.INSTALL);
 			
             DeploymentAdminPermission deployPermission2 = new DeploymentAdminPermission(
 					DeploymentConstants.DEPLOYMENT_PACKAGE_NAME0,
-					org.osgi.service.deploymentadmin.DeploymentAdminPermission.ACTION_INSTALL);
+					org.osgi.service.deploymentadmin.DeploymentAdminPermission.INSTALL);
 			
             tbc.assertTrue("Implies when both target and action are equal",
 					deployPermission.implies(deployPermission2));
@@ -109,12 +109,12 @@ public class Implies {
 		try {
 			DeploymentAdminPermission deployPermission = new DeploymentAdminPermission(
 					DeploymentConstants.DEPLOYMENT_PACKAGE_NAME0,
-					org.osgi.service.deploymentadmin.DeploymentAdminPermission.ACTION_INSTALL
+					org.osgi.service.deploymentadmin.DeploymentAdminPermission.INSTALL
 							+ ","
-							+ org.osgi.service.deploymentadmin.DeploymentAdminPermission.ACTION_CANCEL);
+							+ org.osgi.service.deploymentadmin.DeploymentAdminPermission.CANCEL);
 			DeploymentAdminPermission deployPermission2 = new DeploymentAdminPermission(
 					DeploymentConstants.DEPLOYMENT_PACKAGE_NAME0,
-					org.osgi.service.deploymentadmin.DeploymentAdminPermission.ACTION_INSTALL);
+					org.osgi.service.deploymentadmin.DeploymentAdminPermission.INSTALL);
 			
 			tbc.assertTrue(
 							"Asserts implies when an object has the actions that the other object contains.",
@@ -137,13 +137,13 @@ public class Implies {
 		try {
 			DeploymentAdminPermission deployPermission = new DeploymentAdminPermission(
 					DeploymentConstants.DEPLOYMENT_PACKAGE_NAME0,
-					org.osgi.service.deploymentadmin.DeploymentAdminPermission.ACTION_INSTALL);
+					org.osgi.service.deploymentadmin.DeploymentAdminPermission.INSTALL);
 			
             DeploymentAdminPermission deployPermission2 = new DeploymentAdminPermission(
 					DeploymentConstants.DEPLOYMENT_PACKAGE_NAME0,
-					org.osgi.service.deploymentadmin.DeploymentAdminPermission.ACTION_INSTALL
+					org.osgi.service.deploymentadmin.DeploymentAdminPermission.INSTALL
 							+ ","
-							+ org.osgi.service.deploymentadmin.DeploymentAdminPermission.ACTION_CANCEL);
+							+ org.osgi.service.deploymentadmin.DeploymentAdminPermission.CANCEL);
 			
             tbc.assertTrue(
 							"Asserts implies when an object does not contains the actions that the other object contains.",
@@ -166,11 +166,11 @@ public class Implies {
 		try {
 			DeploymentAdminPermission deployPermission = new DeploymentAdminPermission(
 					DeploymentConstants.DEPLOYMENT_PACKAGE_NAME0,
-					org.osgi.service.deploymentadmin.DeploymentAdminPermission.ACTION_INSTALL);
+					org.osgi.service.deploymentadmin.DeploymentAdminPermission.INSTALL);
 			
             DeploymentAdminPermission deployPermission2 = new DeploymentAdminPermission(
 					DeploymentConstants.DEPLOYMENT_PACKAGE_NAME2,
-					org.osgi.service.deploymentadmin.DeploymentAdminPermission.ACTION_INSTALL);
+					org.osgi.service.deploymentadmin.DeploymentAdminPermission.INSTALL);
 			
             tbc.assertTrue(
 							"Asserts implies when an object hasn't the same signal of the other.",
@@ -193,11 +193,11 @@ public class Implies {
 		try {
 			DeploymentAdminPermission deployPermission = new DeploymentAdminPermission(
 					DeploymentConstants.DEPLOYMENT_PACKAGE_NAME0,
-					org.osgi.service.deploymentadmin.DeploymentAdminPermission.ACTION_INSTALL);
+					org.osgi.service.deploymentadmin.DeploymentAdminPermission.INSTALL);
 			
             DeploymentAdminPermission deployPermission2 = new DeploymentAdminPermission(
 					DeploymentConstants.DEPLOYMENT_PACKAGE_NAME2,
-					org.osgi.service.deploymentadmin.DeploymentAdminPermission.ACTION_INSTALL);
+					org.osgi.service.deploymentadmin.DeploymentAdminPermission.INSTALL);
 			
             tbc.assertTrue(
 							"Asserts implies when an object hasn't the same name of the other.",
@@ -220,11 +220,11 @@ public class Implies {
         try {
             DeploymentAdminPermission deployPermission = new DeploymentAdminPermission(
                     DeploymentConstants.DEPLOYMENT_PACKAGE_NAME2,
-                    org.osgi.service.deploymentadmin.DeploymentAdminPermission.ACTION_INSTALL);
+                    org.osgi.service.deploymentadmin.DeploymentAdminPermission.INSTALL);
             
             DeploymentAdminPermission deployPermission2 = new DeploymentAdminPermission(
                     DeploymentConstants.DEPLOYMENT_PACKAGE_NAME_ALL,
-                    org.osgi.service.deploymentadmin.DeploymentAdminPermission.ACTION_INSTALL);
+                    org.osgi.service.deploymentadmin.DeploymentAdminPermission.INSTALL);
             
             tbc.assertTrue(
                     "Asserts that an object implies other object that use wildcard as filter name.",
@@ -246,11 +246,11 @@ public class Implies {
         tbc.log("#testImplies007");
         try {
             DeploymentAdminPermission deployPermission = new DeploymentAdminPermission(
-                "(&(name=a*))", org.osgi.service.deploymentadmin.DeploymentAdminPermission.ACTION_INSTALL);
+                "(&(name=a*))", org.osgi.service.deploymentadmin.DeploymentAdminPermission.INSTALL);
             
             DeploymentAdminPermission deployPermission2 = new DeploymentAdminPermission(
                 DeploymentConstants.DEPLOYMENT_PACKAGE_NAME_ALL,
-                org.osgi.service.deploymentadmin.DeploymentAdminPermission.ACTION_INSTALL);
+                org.osgi.service.deploymentadmin.DeploymentAdminPermission.INSTALL);
             
             tbc.assertTrue(
                     "Asserts that an object does not implies other object that use a more specific wildcard as filter name.",
@@ -273,11 +273,11 @@ public class Implies {
         try {
             DeploymentAdminPermission deployPermission = new DeploymentAdminPermission(
                 DeploymentConstants.DEPLOYMENT_PACKAGE_NAME3,
-                    org.osgi.service.deploymentadmin.DeploymentAdminPermission.ACTION_INSTALL);
+                    org.osgi.service.deploymentadmin.DeploymentAdminPermission.INSTALL);
             
             DeploymentAdminPermission deployPermission2 = new DeploymentAdminPermission(
                 DeploymentConstants.DEPLOYMENT_PACKAGE_NAME2,
-                    org.osgi.service.deploymentadmin.DeploymentAdminPermission.ACTION_INSTALL);
+                    org.osgi.service.deploymentadmin.DeploymentAdminPermission.INSTALL);
             
             tbc.assertTrue(
                             "Asserts that an object that has wildcard in certificate accept any certificate.",
@@ -301,11 +301,11 @@ public class Implies {
         try {
             DeploymentAdminPermission deployPermission = new DeploymentAdminPermission(
                 DeploymentConstants.DEPLOYMENT_PACKAGE_NAME2,
-                    org.osgi.service.deploymentadmin.DeploymentAdminPermission.ACTION_INSTALL);
+                    org.osgi.service.deploymentadmin.DeploymentAdminPermission.INSTALL);
             
             DeploymentAdminPermission deployPermission2 = new DeploymentAdminPermission(
                 DeploymentConstants.DEPLOYMENT_PACKAGE_NAME3,
-                    org.osgi.service.deploymentadmin.DeploymentAdminPermission.ACTION_INSTALL);
+                    org.osgi.service.deploymentadmin.DeploymentAdminPermission.INSTALL);
             
             tbc.assertTrue(
                             "Asserts that an object that has a specific certificate does not hold a DeploymentAdminPermission that has a wildcard to accept any certificate.",

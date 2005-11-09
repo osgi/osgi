@@ -72,13 +72,13 @@ public class Equals {
 	private void testEquals001() {
 		tbc.log("#testEquals001");
 		try {
-			org.osgi.service.deploymentadmin.DeploymentCustomizerPermission deployPermission = new org.osgi.service.deploymentadmin.DeploymentCustomizerPermission(
+			org.osgi.service.deploymentadmin.spi.DeploymentCustomizerPermission deployPermission = new org.osgi.service.deploymentadmin.spi.DeploymentCustomizerPermission(
 					DeploymentConstants.BUNDLE_NAME_FILTER,
-					org.osgi.service.deploymentadmin.DeploymentCustomizerPermission.ACTION_PRIVATEAREA);
+					org.osgi.service.deploymentadmin.spi.DeploymentCustomizerPermission.PRIVATEAREA);
 			
-			org.osgi.service.deploymentadmin.DeploymentCustomizerPermission deployPermission2 = new org.osgi.service.deploymentadmin.DeploymentCustomizerPermission(
+			org.osgi.service.deploymentadmin.spi.DeploymentCustomizerPermission deployPermission2 = new org.osgi.service.deploymentadmin.spi.DeploymentCustomizerPermission(
 					DeploymentConstants.BUNDLE_NAME_FILTER,
-					org.osgi.service.deploymentadmin.DeploymentCustomizerPermission.ACTION_PRIVATEAREA);
+					org.osgi.service.deploymentadmin.spi.DeploymentCustomizerPermission.PRIVATEAREA);
 
 			tbc.assertTrue(
 							"Both DeploymentCustomizerPermission objects are equal when both target and action are equals",
@@ -99,13 +99,13 @@ public class Equals {
 	private void testEquals002() {
 		tbc.log("#testEquals002");
 		try {
-			org.osgi.service.deploymentadmin.DeploymentCustomizerPermission deployPermission = new org.osgi.service.deploymentadmin.DeploymentCustomizerPermission(
+			org.osgi.service.deploymentadmin.spi.DeploymentCustomizerPermission deployPermission = new org.osgi.service.deploymentadmin.spi.DeploymentCustomizerPermission(
 					"(name=bundle.tb1)",
-					org.osgi.service.deploymentadmin.DeploymentCustomizerPermission.ACTION_PRIVATEAREA);
+					org.osgi.service.deploymentadmin.spi.DeploymentCustomizerPermission.PRIVATEAREA);
 			
-			org.osgi.service.deploymentadmin.DeploymentCustomizerPermission deployPermission2 = new org.osgi.service.deploymentadmin.DeploymentCustomizerPermission(
+			org.osgi.service.deploymentadmin.spi.DeploymentCustomizerPermission deployPermission2 = new org.osgi.service.deploymentadmin.spi.DeploymentCustomizerPermission(
 					"(name=bundle.tb2)",
-					org.osgi.service.deploymentadmin.DeploymentCustomizerPermission.ACTION_PRIVATEAREA);
+					org.osgi.service.deploymentadmin.spi.DeploymentCustomizerPermission.PRIVATEAREA);
 
 			tbc.assertTrue(
 							"Both DeploymentCustomizerPermission objects are different when their targets are different",

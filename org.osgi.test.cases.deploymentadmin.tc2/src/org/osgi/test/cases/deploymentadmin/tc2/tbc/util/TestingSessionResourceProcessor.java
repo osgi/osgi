@@ -42,7 +42,7 @@ import java.io.InputStream;
 
 import org.osgi.framework.Bundle;
 import org.osgi.service.deploymentadmin.DeploymentPackage;
-import org.osgi.service.deploymentadmin.ResourceProcessor;
+import org.osgi.service.deploymentadmin.spi.ResourceProcessor;
 
 /**
  * @author Andre Assad
