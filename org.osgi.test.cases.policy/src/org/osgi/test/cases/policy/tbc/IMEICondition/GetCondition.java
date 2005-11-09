@@ -83,7 +83,7 @@ public class GetCondition {
      * @spec IMEICondition.getCondition(Bundle,ConditionInfo)
      */
 
-    public void testGetCondition001() {
+    private void testGetCondition001() {
         tbc.log("#testGetCondition001");
         try {
             Condition cond = IMEICondition.getCondition(
@@ -109,10 +109,10 @@ public class GetCondition {
      * @spec IMEICondition.getCondition(Bundle,ConditionInfo)
      */
 
-    public void testGetCondition002() {
+    private void testGetCondition002() {
         tbc.log("#testGetCondition002");
         try {
-            Condition cond = IMEICondition.getCondition(null,
+            IMEICondition.getCondition(null,
                     new ConditionInfo("org.osgi.util.gsm.IMEICondition",new String[]{PolicyConstants.IMEI_VALID_CODE}));
 
             tbc.failException("", NullPointerException.class);
@@ -136,10 +136,10 @@ public class GetCondition {
      * @spec IMEICondition.getCondition(Bundle,ConditionInfo)
      */
 
-    public void testGetCondition003() {
+    private void testGetCondition003() {
         tbc.log("#testGetCondition003");
         try {
-            Condition cond = IMEICondition.getCondition(
+            IMEICondition.getCondition(
                     PolicyConstants.TEST_BUNDLE, null);
 
             tbc.failException("", NullPointerException.class);
@@ -163,10 +163,10 @@ public class GetCondition {
      * @spec IMEICondition.getCondition(Bundle,ConditionInfo)
      */
 
-    public void testGetCondition004() {
+    private void testGetCondition004() {
         tbc.log("#testGetCondition004");
         try {
-            Condition cond = IMEICondition.getCondition(
+            IMEICondition.getCondition(
                     PolicyConstants.TEST_BUNDLE,
                     new ConditionInfo("org.osgi.util.gsm.IMEICondition",new String[]{PolicyConstants.INVALID_CODE}));
 
@@ -191,10 +191,10 @@ public class GetCondition {
      * @spec IMEICondition.getCondition(Bundle,ConditionInfo)
      */
 
-    public void testGetCondition005() {
+    private void testGetCondition005() {
         tbc.log("#testGetCondition005");
         try {
-            Condition cond = IMEICondition.getCondition(
+            IMEICondition.getCondition(
                     PolicyConstants.TEST_BUNDLE,
                     new ConditionInfo("org.osgi.util.gsm.IMEICondition",new String[]{PolicyConstants.IMEI_LESS_DIGIT_CODE}));
 
@@ -219,10 +219,10 @@ public class GetCondition {
      * @spec IMEICondition.getCondition(Bundle,ConditionInfo)
      */
 
-    public void testGetCondition006() {
+    private void testGetCondition006() {
         tbc.log("#testGetCondition006");
         try {
-            Condition cond = IMEICondition.getCondition(
+            IMEICondition.getCondition(
                     PolicyConstants.TEST_BUNDLE,
                     new ConditionInfo("org.osgi.util.gsm.IMEICondition",new String[]{PolicyConstants.IMEI_MORE_DIGIT_CODE}));
 
@@ -247,10 +247,10 @@ public class GetCondition {
      * @spec IMEICondition.getCondition(Bundle,ConditionInfo)
      */
 
-    public void testGetCondition007() {
+    private void testGetCondition007() {
         tbc.log("#testGetCondition007");
         try {
-            Condition cond = IMEICondition.getCondition(PolicyConstants.TEST_BUNDLE,
+            IMEICondition.getCondition(PolicyConstants.TEST_BUNDLE,
                     new ConditionInfo("org.osgi.util.gsm.IMEICondition",new String[]{PolicyConstants.IMEI_CHAR_CODE}));
     
             tbc.failException("", IllegalArgumentException.class);
@@ -274,10 +274,10 @@ public class GetCondition {
      * @spec IMEICondition.getCondition(Bundle,ConditionInfo)
      */
 
-    public void testGetCondition008() {
+    private void testGetCondition008() {
         tbc.log("#testGetCondition008");
         try {
-            Condition cond = IMEICondition.getCondition(
+            IMEICondition.getCondition(
                     PolicyConstants.TEST_BUNDLE,
                     new ConditionInfo("org.osgi.util.gsm.IMEICondition",new String[]{PolicyConstants.IMEI_INVALID_CODE}));
 

@@ -79,6 +79,8 @@ public class PolicyConstants {
 	public static final String INVALID_CODE = "@#$%sA!&_";
 
 	public static final String CONDITION_HASH = "Egtd5i+S33Y94dHent1bFdlb_ak";
+	
+	public static final String CONDITION_HASH_NAME = CONDITION_HASH + "/Name"; 
 
 	public static final String PRINCIPAL = "www.cesar.org.br";
 

@@ -67,14 +67,19 @@ public class GetCondition {
 		testGetCondition010();
 		testGetCondition011();
 		testGetCondition012();
+		testGetCondition013();
+		testGetCondition014();
+		testGetCondition015();
+		testGetCondition016();
+		testGetCondition017();
 	}
 
 	/**
-	 * Tests if UserPrompt object is created with oneshot permission
+	 * Tests if UserPrompt object is created with oneshot permission.
 	 * 
 	 * @spec UserPromptCondition.getCondition(Bundle,ConditionInfo)
 	 */
-	public void testGetCondition001() {
+	private void testGetCondition001() {
 		tbc.log("#testGetCondition001");
 		
 		try {
@@ -82,11 +87,13 @@ public class GetCondition {
 					new ConditionInfo("", new String[] {
 							PolicyConstants.LEVEL_ONESHOT,
 							PolicyConstants.LEVEL_ONESHOT,
-							PolicyConstants.CATALOG_NAME, "" })
+							PolicyConstants.CATALOG_NAME, "Test for question" })
 							);
 			tbc.assertNotNull(MessagesConstants.getMessage(
 					MessagesConstants.ASSERT_NOT_NULL,
 					new String[] { "Created UserPrompt" }), condition);
+
+			tbc.assertTrue("Asserts that the returned Condition is an instanceof UserPromptCondition.",(condition instanceof UserPromptCondition));
 		} catch (Exception e) {
 			tbc.fail(MessagesConstants.getMessage(
 					MessagesConstants.UNEXPECTED_EXCEPTION, new String[] {
@@ -100,7 +107,7 @@ public class GetCondition {
 	 * 
 	 * @spec UserPromptCondition.getCondition(Bundle,ConditionInfo)
 	 */
-	public void testGetCondition002() {
+	private void testGetCondition002() {
         tbc.log("#testGetCondition002");
 		try {
 			Condition condition = UserPromptCondition.getCondition(tbc.getBundle(), 
@@ -128,7 +135,7 @@ public class GetCondition {
 	 * 
 	 * @spec UserPromptCondition.getCondition(Bundle,ConditionInfo)
 	 */
-	public void testGetCondition003() {
+	private void testGetCondition003() {
         tbc.log("#testGetCondition003");
 		try {
 			Condition condition = UserPromptCondition.getCondition(tbc.getBundle(), 
@@ -155,7 +162,7 @@ public class GetCondition {
 	 * 
 	 * @spec UserPromptCondition.getCondition(Bundle,ConditionInfo)
 	 */
-	public void testGetCondition004() {
+	private void testGetCondition004() {
         tbc.log("#testGetCondition004");
 		try {
 			Condition condition = UserPromptCondition.getCondition(tbc.getBundle(), 
@@ -182,7 +189,7 @@ public class GetCondition {
 	 * 
 	 * @spec UserPromptCondition.getCondition(Bundle,ConditionInfo)
 	 */
-	public void testGetCondition005() {
+	private void testGetCondition005() {
         tbc.log("#testGetCondition005");
 		try {
 			Condition condition = UserPromptCondition.getCondition(tbc.getBundle(), 
@@ -209,7 +216,7 @@ public class GetCondition {
 	 * 
 	 * @spec UserPromptCondition.getCondition(Bundle,ConditionInfo)
 	 */
-	public void testGetCondition006() {
+	private void testGetCondition006() {
         tbc.log("#testGetCondition006");
 		try {
 			Condition condition = UserPromptCondition.getCondition(tbc.getBundle(), 
@@ -236,7 +243,7 @@ public class GetCondition {
 	 * 
 	 * @spec UserPromptCondition.getCondition(Bundle,ConditionInfo)
 	 */
-	public void testGetCondition007() {
+	private void testGetCondition007() {
         tbc.log("#testGetCondition007");
 		try {
 			Condition condition = UserPromptCondition.getCondition(tbc.getBundle(),
@@ -265,10 +272,10 @@ public class GetCondition {
 	 * 
 	 * @spec UserPromptCondition.getCondition(Bundle,ConditionInfo)
  	 */
-	public void testGetCondition008() {
+	private void testGetCondition008() {
         tbc.log("#testGetCondition008");
 		try {
-			Condition condition = UserPromptCondition.getCondition(tbc.getBundle(),null);
+			UserPromptCondition.getCondition(tbc.getBundle(),null);
 			tbc.failException("#",NullPointerException.class);
 		} catch (NullPointerException e) {
 			tbc.pass(MessagesConstants.getMessage(
@@ -276,8 +283,8 @@ public class GetCondition {
 							e.getClass().getName() }));
 		} catch (Exception e) {
 			tbc.fail(MessagesConstants.getMessage(
-					MessagesConstants.UNEXPECTED_EXCEPTION, new String[] {
-							e.getClass().getName() }));
+					MessagesConstants.EXCEPTION_THROWN, new String[] {
+							NullPointerException.class.getName(), e.getClass().getName() }));
 		}
 		
 	}
@@ -287,10 +294,10 @@ public class GetCondition {
      * 
      * @spec UserPromptCondition.getCondition(Bundle,ConditionInfo)
      */
-	public void testGetCondition009() {
+	private void testGetCondition009() {
         tbc.log("#testGetCondition009");
 		try {
-			Condition condition = UserPromptCondition.getCondition(null,
+			UserPromptCondition.getCondition(null,
 					new ConditionInfo("", new String[] {
 							PolicyConstants.LEVEL_SESSION,
 							PolicyConstants.LEVEL_SESSION,
@@ -303,8 +310,8 @@ public class GetCondition {
 							e.getClass().getName() }));
 		} catch (Exception e) {
 			tbc.fail(MessagesConstants.getMessage(
-					MessagesConstants.UNEXPECTED_EXCEPTION, new String[] {
-							e.getClass().getName() }));
+					MessagesConstants.EXCEPTION_THROWN, new String[] {
+							NullPointerException.class.getName(), e.getClass().getName() }));
 		}
 		
 	}
@@ -316,10 +323,10 @@ public class GetCondition {
      * 
      * @spec UserPromptCondition.getCondition(Bundle,ConditionInfo)
      */
-	public void testGetCondition010() {
+	private void testGetCondition010() {
         tbc.log("#testGetCondition010");
 		try {
-			Condition condition = UserPromptCondition.getCondition(tbc.getBundle(),
+			UserPromptCondition.getCondition(tbc.getBundle(),
 					new ConditionInfo("", new String[] {
 							PolicyConstants.LEVEL_SESSION,
 							PolicyConstants.INVALID_CODE,							
@@ -332,8 +339,8 @@ public class GetCondition {
 							e.getClass().getName() }));
 		} catch (Exception e) {
 			tbc.fail(MessagesConstants.getMessage(
-					MessagesConstants.UNEXPECTED_EXCEPTION, new String[] {
-							e.getClass().getName() }));
+					MessagesConstants.EXCEPTION_THROWN, new String[] {
+							IllegalArgumentException.class.getName(), e.getClass().getName() }));
 		}
 		
 	}
@@ -344,10 +351,10 @@ public class GetCondition {
      * 
      * @spec UserPromptCondition.getCondition(Bundle,ConditionInfo)
      */
-	public void testGetCondition011() {
+	private void testGetCondition011() {
         tbc.log("#testGetCondition011");
 		try {
-			Condition condition = UserPromptCondition.getCondition(tbc.getBundle(),
+			UserPromptCondition.getCondition(tbc.getBundle(),
 					new ConditionInfo("", new String[] {
 							PolicyConstants.LEVEL_SESSION,
 							PolicyConstants.INVALID_CODE,							
@@ -360,26 +367,88 @@ public class GetCondition {
 							e.getClass().getName() }));
 		} catch (Exception e) {
 			tbc.fail(MessagesConstants.getMessage(
-					MessagesConstants.UNEXPECTED_EXCEPTION, new String[] {
-							e.getClass().getName() }));
+					MessagesConstants.EXCEPTION_THROWN, new String[] {
+							IllegalArgumentException.class.getName(), e.getClass().getName() }));
 		}
 		
 	}
 	
 	/**
-     * Asserts that the returned Condition is an instanceof UserPromptCondition.
+     * Tests if IllegalArgumentException is thrown when an invalid level
+     * is passed as parameter.
      * 
      * @spec UserPromptCondition.getCondition(Bundle,ConditionInfo)
      */
-	public void testGetCondition012() {
+	private void testGetCondition012() {
         tbc.log("#testGetCondition012");
 		try {
-			Condition condition = UserPromptCondition.getCondition(tbc.getBundle(),
+			UserPromptCondition.getCondition(tbc.getBundle(), 
 					new ConditionInfo("", new String[] {
-							PolicyConstants.LEVEL_SESSION,
-							PolicyConstants.INVALID_CODE,							
-							PolicyConstants.CATALOG_NAME, ""})
-							);			
+							PolicyConstants.TEST_NODE,
+							PolicyConstants.LEVEL_ONESHOT,
+							PolicyConstants.CATALOG_NAME, "" })
+							);		
+			tbc.failException("#",IllegalArgumentException.class);
+		} catch (IllegalArgumentException e) {
+			tbc.pass(MessagesConstants.getMessage(
+					MessagesConstants.EXCEPTION_CORRECTLY_THROWN, new String[] {
+							e.getClass().getName() }));
+		} catch (Exception e) {
+			tbc.fail(MessagesConstants.getMessage(
+					MessagesConstants.EXCEPTION_THROWN, new String[] {
+							IllegalArgumentException.class.getName(), e.getClass().getName() }));
+		}
+		
+	}	
+	
+	/**
+     * Tests if IllegalArgumentException is thrown when an invalid level
+     * is passed as default permission level.
+     * 
+     * @spec UserPromptCondition.getCondition(Bundle,ConditionInfo)
+     */
+	private void testGetCondition013() {
+        tbc.log("#testGetCondition013");
+		try {
+			UserPromptCondition.getCondition(tbc.getBundle(), 
+					new ConditionInfo("", new String[] {
+							PolicyConstants.LEVEL_BLANKET,
+							PolicyConstants.TEST_NODE,
+							PolicyConstants.CATALOG_NAME, "" })
+							);		
+			tbc.failException("#",IllegalArgumentException.class);
+		} catch (IllegalArgumentException e) {
+			tbc.pass(MessagesConstants.getMessage(
+					MessagesConstants.EXCEPTION_CORRECTLY_THROWN, new String[] {
+							e.getClass().getName() }));
+		} catch (Exception e) {
+			tbc.fail(MessagesConstants.getMessage(
+					MessagesConstants.EXCEPTION_THROWN, new String[] {
+							IllegalArgumentException.class.getName(), e.getClass().getName() }));
+		}
+		
+	}	
+	
+	/**
+	 * Tests if UserPrompt object is created when we pass
+	 * an empty string as default permission level.
+	 * 
+	 * @spec UserPromptCondition.getCondition(Bundle,ConditionInfo)
+	 */
+	private void testGetCondition014() {
+		tbc.log("#testGetCondition014");
+		
+		try {
+			Condition condition = UserPromptCondition.getCondition(tbc.getBundle(), 
+					new ConditionInfo("", new String[] {
+							PolicyConstants.LEVEL_ONESHOT,
+							"",
+							PolicyConstants.CATALOG_NAME, "" })
+							);
+			tbc.assertNotNull(MessagesConstants.getMessage(
+					MessagesConstants.ASSERT_NOT_NULL,
+					new String[] { "Created UserPrompt" }), condition);
+
 			tbc.assertTrue("Asserts that the returned Condition is an instanceof UserPromptCondition.",(condition instanceof UserPromptCondition));
 		} catch (Exception e) {
 			tbc.fail(MessagesConstants.getMessage(
@@ -388,5 +457,89 @@ public class GetCondition {
 		}
 		
 	}
+	
+	/**
+     * Tests if IllegalArgumentException is thrown when
+     * two defaults levels are passed in ConditionInfo constructor.
+     * 
+     * @spec UserPromptCondition.getCondition(Bundle,ConditionInfo)
+     */
+	private void testGetCondition015() {
+        tbc.log("#testGetCondition015");
+		try {
+			UserPromptCondition.getCondition(tbc.getBundle(),
+					new ConditionInfo("", new String[] {
+							PolicyConstants.LEVEL_SESSION,
+							PolicyConstants.LEVEL_SESSION+","+PolicyConstants.LEVEL_ONESHOT,							
+							PolicyConstants.CATALOG_NAME })
+							);			
+			tbc.failException("#",IllegalArgumentException.class);
+		} catch (IllegalArgumentException e) {
+			tbc.pass(MessagesConstants.getMessage(
+					MessagesConstants.EXCEPTION_CORRECTLY_THROWN, new String[] {
+							e.getClass().getName() }));
+		} catch (Exception e) {
+			tbc.fail(MessagesConstants.getMessage(
+					MessagesConstants.EXCEPTION_THROWN, new String[] {
+							IllegalArgumentException.class.getName(), e.getClass().getName() }));
+		}
+		
+	}	
+
+	/**
+     * Tests if IllegalArgumentException is thrown when
+     * an empty string is passed as level and default levels parameter.
+     * 
+     * @spec UserPromptCondition.getCondition(Bundle,ConditionInfo)
+     */
+	private void testGetCondition016() {
+        tbc.log("#testGetCondition016");
+		try {
+			UserPromptCondition.getCondition(tbc.getBundle(),
+					new ConditionInfo("", new String[] {
+							"",
+							"",							
+							PolicyConstants.CATALOG_NAME })
+							);			
+			tbc.failException("#",IllegalArgumentException.class);
+		} catch (IllegalArgumentException e) {
+			tbc.pass(MessagesConstants.getMessage(
+					MessagesConstants.EXCEPTION_CORRECTLY_THROWN, new String[] {
+							e.getClass().getName() }));
+		} catch (Exception e) {
+			tbc.fail(MessagesConstants.getMessage(
+					MessagesConstants.EXCEPTION_THROWN, new String[] {
+							IllegalArgumentException.class.getName(), e.getClass().getName() }));
+		}
+		
+	}	
+	
+	/**
+     * Tests if IllegalArgumentException is thrown when
+     * only the default level is passed, an empty string is passed as level.
+     * 
+     * @spec UserPromptCondition.getCondition(Bundle,ConditionInfo)
+     */
+	private void testGetCondition017() {
+        tbc.log("#testGetCondition017");
+		try {
+			UserPromptCondition.getCondition(tbc.getBundle(),
+					new ConditionInfo("", new String[] {
+							"",
+							PolicyConstants.LEVEL_SESSION,							
+							PolicyConstants.CATALOG_NAME })
+							);			
+			tbc.failException("#",IllegalArgumentException.class);
+		} catch (IllegalArgumentException e) {
+			tbc.pass(MessagesConstants.getMessage(
+					MessagesConstants.EXCEPTION_CORRECTLY_THROWN, new String[] {
+							e.getClass().getName() }));
+		} catch (Exception e) {
+			tbc.fail(MessagesConstants.getMessage(
+					MessagesConstants.EXCEPTION_THROWN, new String[] {
+							IllegalArgumentException.class.getName(), e.getClass().getName() }));
+		}
+		
+	}		
 	
 }

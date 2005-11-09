@@ -39,6 +39,7 @@ package org.osgi.test.cases.policy.tb1;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
+import org.osgi.test.cases.policy.tb1.TreeStructure.MetaNode;
 import org.osgi.test.cases.policy.tb1.TreeStructure.TreeStructure;
 import org.osgi.test.cases.policy.tbc.PolicyTestControl;
 import org.osgi.test.cases.policy.tbc.TB1Service;
@@ -56,7 +57,7 @@ public class Activator implements BundleActivator, TB1Service {
 	}
 
 	public TestInterface[] getTestClasses(DefaultTestBundleControl tbc) {
-		return new TestInterface[] { 
-				 new TreeStructure((PolicyTestControl)tbc)};		
+		return new TestInterface[]{new TreeStructure((PolicyTestControl) tbc),
+            new MetaNode((PolicyTestControl) tbc)};
 	}
 }

@@ -39,8 +39,10 @@
 package org.osgi.test.cases.policy.tbc;
 
 import java.security.AllPermission;
+
 import org.osgi.framework.AdminPermission;
 import org.osgi.framework.Bundle;
+import org.osgi.framework.BundleException;
 import org.osgi.framework.PackagePermission;
 import org.osgi.framework.ServicePermission;
 import org.osgi.framework.ServiceReference;
@@ -52,6 +54,9 @@ import org.osgi.service.dmt.security.DmtPermission;
 import org.osgi.service.event.TopicPermission;
 import org.osgi.service.permissionadmin.PermissionAdmin;
 import org.osgi.service.permissionadmin.PermissionInfo;
+import org.osgi.test.cases.policy.tbc.UserPromptCondition.IsMutable;
+import org.osgi.test.cases.policy.tbc.UserPromptCondition.IsPostponed;
+import org.osgi.test.cases.policy.tbc.UserPromptCondition.IsSatisfied;
 import org.osgi.test.cases.policy.tbc.util.TestBundle;
 import org.osgi.test.cases.util.DefaultTestBundleControl;
 
@@ -64,8 +69,6 @@ public class PolicyTestControl extends DefaultTestBundleControl {
 
 	private TestInterface[] testBundleTB1;
 
-	private DmtSession session;
-	
 	private ConditionalPermissionAdmin cpa;
 
 	private PermissionAdmin pa;
@@ -73,6 +76,8 @@ public class PolicyTestControl extends DefaultTestBundleControl {
 	private DmtAdmin da;
 
 	private Bundle bundle;
+	
+	private Bundle providerMessages;
 	
 	public void prepare() {
 		cpa = (ConditionalPermissionAdmin) getContext().getService(
@@ -87,6 +92,12 @@ public class PolicyTestControl extends DefaultTestBundleControl {
 				getContext().getServiceReference(DmtAdmin.class.getName()));
         
         bundle = new TestBundle();
+        
+        try {
+			providerMessages = installBundle("com.provider.messages.jar");
+		} catch (Exception e) {
+			log("#the installation of com.provider.messages.jar bundle has failed.");
+		}
         
         installBundle();		
 	}
@@ -130,6 +141,28 @@ public class PolicyTestControl extends DefaultTestBundleControl {
     public void testMetaNode() {
         testBundleTB1[1].run();
     }
+    
+    
+    /**
+     * Executes test methods for isSatisfied 
+     */
+    public void testIsSatisfied() {
+    	new IsSatisfied(this).run();
+    }
+    
+    /**
+     * Executes test methods for isMutable 
+     */
+    public void testIsMutable() {
+    	new IsMutable(this).run();
+    }    
+    
+    /**
+     * Executes test methods for isPostponed 
+     */
+    public void testIsPostponed() {
+    	new IsPostponed(this).run();
+    }        
 
 	public ConditionalPermissionAdmin getConditionalPermissionAdmin() {
 		return cpa;
@@ -228,4 +261,13 @@ public class PolicyTestControl extends DefaultTestBundleControl {
 	}
 
 	
+	public void unprepare() {
+		try {
+			providerMessages.stop();
+			providerMessages.uninstall();
+		} catch (BundleException e) {
+			log("#error uninstalling the com.provider.messages bundle");
+		}
+		
+	}
 }
