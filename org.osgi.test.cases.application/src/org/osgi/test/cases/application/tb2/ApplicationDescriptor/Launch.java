@@ -84,12 +84,9 @@ public class Launch implements TestInterface {
 			infos = tbc.getPermissionAdmin().getPermissions(
 					tbc.getTb2Location());
 
-			// TODO we must use the ApplicationAdminPermission.launch
-			// instead of the hard coded value.
-			// TODO Verify when this constant is added to the class.
 			tbc.setLocalPermission(new PermissionInfo(
 					ApplicationAdminPermission.class.getName(),
-					ApplicationConstants.TEST_PID, "launch"));
+					ApplicationConstants.TEST_PID, ApplicationAdminPermission.LIFECYCLE_ACTION));
 
 			handle = tbc.getAppDescriptor().launch(null);
 			
@@ -116,12 +113,9 @@ public class Launch implements TestInterface {
 			infos = tbc.getPermissionAdmin().getPermissions(
 					tbc.getTb2Location());
 
-			// TODO we must use the ApplicationAdminPermission.launch
-			// instead of the hard coded value.
-			// TODO Verify when this constant is added to the class.
 			tbc.setLocalPermission(new PermissionInfo(
 					ApplicationAdminPermission.class.getName(),
-					ApplicationConstants.TEST_PID, "launch,"+ApplicationAdminPermission.LOCK));
+					ApplicationConstants.TEST_PID, ApplicationAdminPermission.LIFECYCLE_ACTION+","+ApplicationAdminPermission.LOCK_ACTION));
 
 			tbc.getAppDescriptor().lock();
 
@@ -151,12 +145,9 @@ public class Launch implements TestInterface {
 			infos = tbc.getPermissionAdmin().getPermissions(
 					tbc.getTb2Location());
 
-			// TODO we must use the ApplicationAdminPermission.launch
-			// instead of the hard coded value.
-			// TODO Verify when this constant is added to the class.
 			tbc.setLocalPermission(new PermissionInfo(
 					ApplicationAdminPermission.class.getName(),
-					ApplicationConstants.TEST_PID, "launch"));		
+					ApplicationConstants.TEST_PID, ApplicationAdminPermission.LIFECYCLE_ACTION));		
 
 			tbc.unregisterDescriptor();
 			handle = (ApplicationHandle) tbc.getAppDescriptor().launch(null);
@@ -224,12 +215,9 @@ public class Launch implements TestInterface {
 			infos = tbc.getPermissionAdmin().getPermissions(
 					tbc.getTb2Location());
 
-			// TODO we must use the ApplicationAdminPermission.launch
-			// instead of the hard coded value.
-			// TODO Verify when this constant is added to the class.
 			tbc.setLocalPermission(new PermissionInfo(
 					ApplicationAdminPermission.class.getName(),
-					ApplicationConstants.TEST_PID, "launch"));
+					ApplicationConstants.TEST_PID, ApplicationAdminPermission.LIFECYCLE_ACTION));
 
 			handle = (ApplicationHandle) tbc.getAppDescriptor().launch(null);
 
@@ -260,12 +248,9 @@ public class Launch implements TestInterface {
 			infos = tbc.getPermissionAdmin().getPermissions(
 					tbc.getTb2Location());
 
-			// TODO we must use the ApplicationAdminPermission.launch
-			// instead of the hard coded value.
-			// TODO Verify when this constant is added to the class.
 			tbc.setLocalPermission(new PermissionInfo(
 					ApplicationAdminPermission.class.getName(),
-					ApplicationConstants.TEST_PID, "launch"));	
+					ApplicationConstants.TEST_PID, ApplicationAdminPermission.LIFECYCLE_ACTION));	
 
 			Map map = new HashMap();
 			map.put("" , "Reject");		
@@ -296,12 +281,9 @@ public class Launch implements TestInterface {
 			infos = tbc.getPermissionAdmin().getPermissions(
 					tbc.getTb2Location());
 
-			// TODO we must use the ApplicationAdminPermission.launch
-			// instead of the hard coded value.
-			// TODO Verify when this constant is added to the class.
 			tbc.setLocalPermission(new PermissionInfo(
 				ApplicationAdminPermission.class.getName(),
-				ApplicationConstants.TEST_PID, "launch"));
+				ApplicationConstants.TEST_PID, ApplicationAdminPermission.LIFECYCLE_ACTION));
 
 			Map map = new HashMap();
 			map.put("Test" , null);		

@@ -30,15 +30,14 @@
  * Date         Author(s)
  * CR           Headline
  * ===========  ==============================================================
- * 23/08/2005   Alexandre Santos
+ * 09/11/2005   Alexandre Santos
  * 153          Implement OAT test cases  
  * ===========  ==============================================================
  */
-package org.osgi.test.cases.application.tb2.ApplicationDescriptor;
+package org.osgi.test.cases.application.tbc.ApplicationContext;
 
-import org.osgi.service.application.ApplicationAdminPermission;
-import org.osgi.service.permissionadmin.PermissionInfo;
-import org.osgi.test.cases.application.tbc.ApplicationConstants;
+import org.osgi.application.ApplicationContext;
+import org.osgi.service.application.ApplicationHandle;
 import org.osgi.test.cases.application.tbc.ApplicationTestControl;
 import org.osgi.test.cases.application.tbc.TestInterface;
 import org.osgi.test.cases.application.tbc.util.MessagesConstants;
@@ -47,105 +46,92 @@ import org.osgi.test.cases.application.tbc.util.MessagesConstants;
  * @author Alexandre Alves
  * 
  * This Test Class Validates the implementation of
- * <code>lock</code> method, according to MEG reference
+ * <code>getApplicationId</code> method, according to MEG reference
  * documentation.
  */
-public class Lock implements TestInterface {
+public class GetApplicationId implements TestInterface {
 	private ApplicationTestControl tbc;
 
-	public Lock(ApplicationTestControl tbc) {
+	public GetApplicationId(ApplicationTestControl tbc) {
 		this.tbc = tbc;
 	}
 
 	public void run() {
-		testLock001();
-		testLock002();
-		testLock003();
+		testGetApplicationId001();
+		testGetApplicationId002();
+		testGetApplicationId003();
 	}
 
 	/**
-	 * This method asserts that SecurityException is thrown when
-	 * the caller doesn't have "lock" ApplicationAdminPermission
-	 * for the application.
+	 * This method asserts that no exception is thrown
+	 * when we try to get the application id.
 	 * 
-	 * @spec ApplicationDescriptor.lock()
+	 * @spec ApplicationContext.getApplicationId()
 	 */
-	private void testLock001() {
-		tbc.log("#testLock001");
-		PermissionInfo[] infos = null;
-		try {
-			infos = tbc.getPermissionAdmin().getPermissions(
-					tbc.getTb2Location());
-
-			tbc.setDefaultPermission();
-
-			tbc.getAppDescriptor().lock();
-
-			tbc.failException("", SecurityException.class);
-		} catch (SecurityException e) {
-			tbc.pass(MessagesConstants.getMessage(
-					MessagesConstants.EXCEPTION_CORRECTLY_THROWN,
-					new String[] { SecurityException.class.getName() }));
+	private void testGetApplicationId001() {
+		tbc.log("#testGetApplicationId001");
+        ApplicationHandle handle = null;
+        try {
+            handle = tbc.getAppDescriptor().launch(null);
+            
+            ApplicationContext appContext = org.osgi.application.Framework
+                .getApplicationContext(tbc.getAppInstance());
+            		
+            appContext.getApplicationId();
+            
+			tbc.pass("Asserting that no exception was thrown.");
 		} catch (Exception e) {
-			tbc.fail(MessagesConstants.getMessage(
-					MessagesConstants.EXCEPTION_THROWN, new String[] {
-							SecurityException.class.getName(),
-							e.getClass().getName() }));
+			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": " + e.getClass().getName());
 		} finally {
-			tbc.cleanUp(infos);
+			tbc.cleanUp(handle);
 		}
 	}
 	
 	/**
-	 * This method asserts that a lock call after other lock call
-	 * will not thrown exception.
+	 * This method asserts that the getApplicationId returns
+	 * a value equal to SERVICE_PID value.
 	 * 
-	 * @spec ApplicationDescriptor.lock()
+	 * @spec ApplicationContext.getApplicationId()
 	 */
-	private void testLock002() {
-		tbc.log("#testLock002");
-		PermissionInfo[] infos = null;
-		try {
-			infos = tbc.getPermissionAdmin().getPermissions(
-					tbc.getTb2Location());
-
-			tbc.setLocalPermission(
-				new PermissionInfo(ApplicationAdminPermission.class.getName(), ApplicationConstants.TEST_PID, ApplicationAdminPermission.LOCK_ACTION)
-			);
-
-			tbc.getAppDescriptor().lock();
-			tbc.getAppDescriptor().lock();
-
-			tbc.pass("No Exception was thrown.");
+	private void testGetApplicationId002() {
+		tbc.log("#testGetApplicationId002");
+        ApplicationHandle handle = null;
+        try {
+            handle = tbc.getAppDescriptor().launch(null);
+            
+            ApplicationContext appContext = org.osgi.application.Framework
+                .getApplicationContext(tbc.getAppInstance());
+            
+			String value = appContext.getApplicationId();
+			
+			tbc.assertEquals("Asserting if the getApplicationId returns a value equal to SERVICE_PID value.", tbc.getServicePid(), value);
 		} catch (Exception e) {
 			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": " + e.getClass().getName());
 		} finally {
-			tbc.cleanUp(infos);
+			tbc.cleanUp(handle);
 		}
 	}	
-
+	
 	/**
-	 * This method asserts that if the application descriptor is unregistered
+	 * This method asserts that if the application was stopped,
 	 * IllegalStateException will be thrown.
 	 * 
-	 * @spec ApplicationDescriptor.lock()
+	 * @spec ApplicationDescriptor.getApplicationId()
 	 */
-	private void testLock003() {
-		tbc.log("#testLock003");
-		PermissionInfo[] infos = null;
-		try {
-			infos = tbc.getPermissionAdmin().getPermissions(
-					tbc.getTb2Location());
-
-			tbc.setLocalPermission(
-				new PermissionInfo(ApplicationAdminPermission.class.getName(), ApplicationConstants.TEST_PID, ApplicationAdminPermission.LOCK_ACTION)
-			);
+	private void testGetApplicationId003() {
+		tbc.log("#testGetApplicationId003");
+        ApplicationHandle handle = null;
+        try {
+            handle = tbc.getAppDescriptor().launch(null);
+            
+            ApplicationContext appContext = org.osgi.application.Framework
+                .getApplicationContext(tbc.getAppInstance());
+            
+            handle.destroy();
+            
+            appContext.getApplicationId();
 			
-			tbc.unregisterDescriptor();
-			
-			tbc.getAppDescriptor().lock();
-
-			tbc.failException("", IllegalStateException.class);
+			tbc.failException("#", IllegalStateException.class);
 		} catch (IllegalStateException e) {
 			tbc.pass(MessagesConstants.getMessage(
 					MessagesConstants.EXCEPTION_CORRECTLY_THROWN,
@@ -156,9 +142,8 @@ public class Lock implements TestInterface {
 							IllegalStateException.class.getName(),
 							e.getClass().getName() }));
 		} finally {
-			tbc.installDescriptor();
-			tbc.cleanUp(infos);
+			tbc.cleanUp(handle);
 		}
-	}
+	}	
 
 }

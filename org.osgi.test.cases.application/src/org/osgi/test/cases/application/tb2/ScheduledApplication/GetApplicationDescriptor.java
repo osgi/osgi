@@ -81,7 +81,7 @@ public class GetApplicationDescriptor implements TestInterface {
             
             tbc.setLocalPermission(new PermissionInfo(
                 ApplicationAdminPermission.class.getName(),
-                ApplicationConstants.TEST_PID, ApplicationAdminPermission.SCHEDULE));
+                ApplicationConstants.TEST_PID, ApplicationAdminPermission.SCHEDULE_ACTION));
             
             schedule = tbc.getAppDescriptor().schedule(null, "*", null, false);
             
@@ -115,7 +115,7 @@ public class GetApplicationDescriptor implements TestInterface {
 
             tbc.setLocalPermission(new PermissionInfo(
                 ApplicationAdminPermission.class.getName(),
-                ApplicationConstants.TEST_PID, ApplicationAdminPermission.SCHEDULE));
+                ApplicationConstants.TEST_PID, ApplicationAdminPermission.SCHEDULE_ACTION));
             
             schedule = tbc.getAppDescriptor().schedule(null, "*", null, false);
             schedule.remove();

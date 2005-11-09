@@ -55,6 +55,7 @@ import org.osgi.test.cases.application.tbc.ApplicationAdminPermission.HashCode;
 import org.osgi.test.cases.application.tbc.ApplicationAdminPermission.Implies;
 import org.osgi.test.cases.application.tbc.ApplicationAdminPermission.SetCurrentApplicationId;
 import org.osgi.test.cases.application.tbc.ApplicationContext.AddServiceListener;
+import org.osgi.test.cases.application.tbc.ApplicationContext.GetApplicationId;
 import org.osgi.test.cases.application.tbc.ApplicationContext.GetServiceProperties;
 import org.osgi.test.cases.application.tbc.ApplicationContext.GetStartupParameters;
 import org.osgi.test.cases.application.tbc.ApplicationContext.LocateService;
@@ -417,6 +418,13 @@ public class ApplicationTestControl extends DefaultTestBundleControl {
 	 */
 	public void testApplicationAdminPermissionHashCode() {
 		new HashCode(this).run();
+	}
+	
+	/**
+	 * Executes Tcs for ApplicationContext#getApplicationId
+	 */
+	public void testApplicationContextGetApplicationId() {
+		new GetApplicationId(this).run();
 	}
 
 	/**

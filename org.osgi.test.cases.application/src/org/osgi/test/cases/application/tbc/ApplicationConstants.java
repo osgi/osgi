@@ -42,16 +42,15 @@ import org.osgi.service.application.ApplicationAdminPermission;
 public class ApplicationConstants {  
     
 	public static final String INVALID = ";`´$.,@";
-    public static final String ACTIONS_INVALID_FORMAT = ApplicationAdminPermission.LIFECYCLE
+    public static final String ACTIONS_INVALID_FORMAT = ApplicationAdminPermission.LIFECYCLE_ACTION
     + "&"
-    + ApplicationAdminPermission.LOCK
+    + ApplicationAdminPermission.LOCK_ACTION
     + "&"
-    + ApplicationAdminPermission.SCHEDULE;
-    public static final String ACTIONS = ApplicationAdminPermission.LIFECYCLE
-    + "," + ApplicationAdminPermission.LOCK;
-    public static final String ACTIONS_DIFFERENT_ORDER = ApplicationAdminPermission.LOCK
-    + "," + ApplicationAdminPermission.LIFECYCLE;    
-    //TODO it has to be "Cesar test MIDlet"
+    + ApplicationAdminPermission.SCHEDULE_ACTION;
+    public static final String ACTIONS = ApplicationAdminPermission.LIFECYCLE_ACTION
+    + "," + ApplicationAdminPermission.LOCK_ACTION;
+    public static final String ACTIONS_DIFFERENT_ORDER = ApplicationAdminPermission.LOCK_ACTION
+    + "," + ApplicationAdminPermission.LIFECYCLE_ACTION;    
     public static final String XML_INEXISTENT = "unknown";
     public static final String XML_APP = "app";
     public static final String XML_LOG = "log";

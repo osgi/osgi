@@ -86,7 +86,7 @@ public class Schedule implements TestInterface {
 					tbc.getTb2Location());
 
 			tbc.setLocalPermission(
-				new PermissionInfo(ApplicationAdminPermission.class.getName(), ApplicationConstants.TEST_PID,	ApplicationAdminPermission.SCHEDULE)
+				new PermissionInfo(ApplicationAdminPermission.class.getName(), ApplicationConstants.TEST_PID, ApplicationAdminPermission.SCHEDULE_ACTION)
 			);
 
 			HashMap map = new HashMap();
@@ -124,7 +124,7 @@ public class Schedule implements TestInterface {
 					tbc.getTb2Location());
 
 			tbc.setLocalPermission(
-				new PermissionInfo(ApplicationAdminPermission.class.getName(), ApplicationConstants.TEST_PID,	ApplicationAdminPermission.SCHEDULE)
+				new PermissionInfo(ApplicationAdminPermission.class.getName(), ApplicationConstants.TEST_PID, ApplicationAdminPermission.SCHEDULE_ACTION)
 			);
 
 
@@ -196,7 +196,7 @@ public class Schedule implements TestInterface {
 					tbc.getTb2Location());
 
 			tbc.setLocalPermission(
-				new PermissionInfo(ApplicationAdminPermission.class.getName(), ApplicationConstants.TEST_PID,	ApplicationAdminPermission.SCHEDULE)
+				new PermissionInfo(ApplicationAdminPermission.class.getName(), ApplicationConstants.TEST_PID, ApplicationAdminPermission.SCHEDULE_ACTION)
 			);
 			
 			tbc.unregisterDescriptor();
@@ -235,7 +235,7 @@ public class Schedule implements TestInterface {
 					tbc.getTb2Location());
 
 			tbc.setLocalPermission(
-				new PermissionInfo(ApplicationAdminPermission.class.getName(), ApplicationConstants.TEST_PID,	ApplicationAdminPermission.SCHEDULE)
+				new PermissionInfo(ApplicationAdminPermission.class.getName(), ApplicationConstants.TEST_PID, ApplicationAdminPermission.SCHEDULE_ACTION)
 			);
 
 			sa = tbc.getAppDescriptor().schedule(null, null,
@@ -271,7 +271,7 @@ public class Schedule implements TestInterface {
 					tbc.getTb2Location());
 
 			tbc.setLocalPermission(
-				new PermissionInfo(ApplicationAdminPermission.class.getName(), ApplicationConstants.TEST_PID,	ApplicationAdminPermission.SCHEDULE)
+				new PermissionInfo(ApplicationAdminPermission.class.getName(), ApplicationConstants.TEST_PID, ApplicationAdminPermission.SCHEDULE_ACTION)
 			);
 
 
@@ -312,7 +312,7 @@ public class Schedule implements TestInterface {
 					tbc.getTb2Location());
 
 			tbc.setLocalPermission(
-				new PermissionInfo(ApplicationAdminPermission.class.getName(), ApplicationConstants.TEST_PID,	ApplicationAdminPermission.SCHEDULE)
+				new PermissionInfo(ApplicationAdminPermission.class.getName(), ApplicationConstants.TEST_PID, ApplicationAdminPermission.SCHEDULE_ACTION)
 			);
 
 			sa = tbc.getAppDescriptor().schedule(null, ApplicationConstants.TIMER_EVENT, ApplicationConstants.EVENT_FILTER, false);
@@ -347,7 +347,7 @@ public class Schedule implements TestInterface {
 					tbc.getTb2Location());
 
 			tbc.setLocalPermission(
-				new PermissionInfo(ApplicationAdminPermission.class.getName(), ApplicationConstants.TEST_PID,	ApplicationAdminPermission.SCHEDULE)
+				new PermissionInfo(ApplicationAdminPermission.class.getName(), ApplicationConstants.TEST_PID, ApplicationAdminPermission.SCHEDULE_ACTION)
 			);
 			
 			sa = tbc.getAppDescriptor().schedule(null, ApplicationConstants.TIMER_EVENT, ApplicationConstants.EVENT_FILTER, true);
@@ -382,7 +382,7 @@ public class Schedule implements TestInterface {
 					tbc.getTb2Location());
 
 			tbc.setLocalPermission(
-				new PermissionInfo(ApplicationAdminPermission.class.getName(), ApplicationConstants.TEST_PID,	ApplicationAdminPermission.SCHEDULE)
+				new PermissionInfo(ApplicationAdminPermission.class.getName(), ApplicationConstants.TEST_PID, ApplicationAdminPermission.SCHEDULE_ACTION)
 			);
 
 			sa = tbc.getAppDescriptor().schedule(null, ApplicationConstants.TIMER_EVENT, ApplicationConstants.INVALID_FILTER, false);

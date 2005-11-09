@@ -65,9 +65,9 @@ public class ApplicationAdminPermissionConstants {
      */
 	private void testConstants001() {
 		tbc.log("#testConstants001");
-		tbc.assertEquals("Asserting LIFECYCLE value", "lifecycle", ApplicationAdminPermission.LIFECYCLE);
-		tbc.assertEquals("Asserting LOCK value", "lock", ApplicationAdminPermission.LOCK);
-		tbc.assertEquals("Asserting SCHEDULE value", "schedule", ApplicationAdminPermission.SCHEDULE);
+		tbc.assertEquals("Asserting LIFECYCLE value", "lifecycle", ApplicationAdminPermission.LIFECYCLE_ACTION);
+		tbc.assertEquals("Asserting LOCK value", "lock", ApplicationAdminPermission.LOCK_ACTION);
+		tbc.assertEquals("Asserting SCHEDULE value", "schedule", ApplicationAdminPermission.SCHEDULE_ACTION);
 	}	
 
 }

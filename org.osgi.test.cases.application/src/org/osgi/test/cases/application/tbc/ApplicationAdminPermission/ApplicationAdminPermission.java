@@ -36,6 +36,7 @@
  */
 package org.osgi.test.cases.application.tbc.ApplicationAdminPermission;
 
+import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.service.application.ApplicationDescriptor;
 import org.osgi.test.cases.application.tbc.ApplicationConstants;
 import org.osgi.test.cases.application.tbc.ApplicationTestControl;
@@ -68,11 +69,10 @@ public class ApplicationAdminPermission {
 		testApplicationAdminPermission007();
 		testApplicationAdminPermission008();
 		testApplicationAdminPermission009();
-		testApplicationAdminPermission010();
 	}
 	
     /**
-     * This method asserts if a IllegalArgumentException is thrown when we pass
+     * This method asserts if a NullPointerException is thrown when we pass
      * null as actions parameter.
      * 
      * @spec ApplicationAdminPermission.ApplicationAdminPermission(String,String)
@@ -82,15 +82,15 @@ public class ApplicationAdminPermission {
 			tbc.log("#testApplicationAdminPermission001");
 			new org.osgi.service.application.ApplicationAdminPermission(
 					ApplicationConstants.APPLICATION_PERMISSION_FILTER1, null);
-			tbc.failException("", IllegalArgumentException.class);
-		} catch (IllegalArgumentException e) {
+			tbc.failException("", NullPointerException.class);
+		} catch (NullPointerException e) {
 			tbc.pass(MessagesConstants.getMessage(
 					MessagesConstants.EXCEPTION_CORRECTLY_THROWN,
 					new String[] { e.getClass().getName() }));
 		} catch (Exception e) {
 			tbc.fail(MessagesConstants.getMessage(
 					MessagesConstants.EXCEPTION_THROWN, new String[] {
-							IllegalArgumentException.class.getName(),
+							NullPointerException.class.getName(),
 							e.getClass().getName() }));
 		}
 	}
@@ -157,52 +157,26 @@ public class ApplicationAdminPermission {
 	}
 	
     /**
-     * This method asserts if IllegalArgumentException is thrown when we use
-     * invalid characters as filter.
+     * This method asserts if InvalidSyntaxException is thrown when we use
+     * an option that does not exist.
      * 
      * @spec ApplicationAdminPermission.ApplicationAdminPermission(String,String)
      */ 
 	private void testApplicationAdminPermission005() {
 		try {
-			//TODO waiting for nokia feedback for what exception will happen.
 			tbc.log("#testApplicationAdminPermission005");
-			new org.osgi.service.application.ApplicationAdminPermission(
-					ApplicationConstants.APPLICATION_PERMISSION_FILTER_INVALID1,
-					ApplicationConstants.ACTIONS);
-			tbc.failException("", IllegalArgumentException.class);
-		} catch (IllegalArgumentException e) {
-			tbc.pass(MessagesConstants.getMessage(
-					MessagesConstants.EXCEPTION_CORRECTLY_THROWN,
-					new String[] { e.getClass().getName() }));
-		} catch (Exception e) {
-			tbc.fail(MessagesConstants.getMessage(
-					MessagesConstants.EXCEPTION_THROWN, new String[] {
-							IllegalArgumentException.class.getName(),
-							e.getClass().getName() }));
-		}
-	}
-	
-    /**
-     * This method asserts if IllegalArgumentException is thrown when we use
-     * an option that does not exist.
-     * 
-     * @spec ApplicationAdminPermission.ApplicationAdminPermission(String,String)
-     */ 
-	private void testApplicationAdminPermission006() {
-		try {
-			tbc.log("#testApplicationAdminPermission006");
 			new org.osgi.service.application.ApplicationAdminPermission(
 					ApplicationConstants.APPLICATION_PERMISSION_FILTER_INVALID2,
 					ApplicationConstants.ACTIONS);
-			tbc.failException("", IllegalArgumentException.class);			
-		} catch (IllegalArgumentException e) {
+			tbc.failException("", InvalidSyntaxException.class);			
+		} catch (InvalidSyntaxException e) {
 			tbc.pass(MessagesConstants.getMessage(
 					MessagesConstants.EXCEPTION_CORRECTLY_THROWN,
 					new String[] { e.getClass().getName() }));
 		} catch (Exception e) {
 			tbc.fail(MessagesConstants.getMessage(
 					MessagesConstants.EXCEPTION_THROWN, new String[] {
-							IllegalArgumentException.class.getName(),
+							InvalidSyntaxException.class.getName(),
 							e.getClass().getName() }));
 		}
 	}	
@@ -213,9 +187,9 @@ public class ApplicationAdminPermission {
      * 
      * @spec ApplicationAdminPermission.ApplicationAdminPermission(String,String)
      */ 
-	private void testApplicationAdminPermission007() {
+	private void testApplicationAdminPermission006() {
 		try {
-			tbc.log("#testApplicationAdminPermission007");
+			tbc.log("#testApplicationAdminPermission006");
 			org.osgi.service.application.ApplicationAdminPermission ap = new org.osgi.service.application.ApplicationAdminPermission(
 					ApplicationConstants.APPLICATION_PERMISSION_FILTER2,
 					"*");
@@ -226,49 +200,49 @@ public class ApplicationAdminPermission {
 	}	
 	
     /**
-     * This method asserts that IllegalArgumentException is thrown when null
+     * This method asserts that NullPointerException is thrown when null
      * is passed as application.
      * 
      * @spec ApplicationAdminPermission.ApplicationAdminPermission(ApplicationDescriptor,String)
      */ 
-	private void testApplicationAdminPermission008() {
+	private void testApplicationAdminPermission007() {
 		try {
-			//TODO waiting for nokia feedkback.
-			tbc.log("#testApplicationAdminPermission008");
+			tbc.log("#testApplicationAdminPermission007");
 			new org.osgi.service.application.ApplicationAdminPermission((ApplicationDescriptor) null,
 					"*");
-			tbc.failException("", IllegalArgumentException.class);
-		} catch (IllegalArgumentException e) {
+			tbc.failException("", NullPointerException.class);
+		} catch (NullPointerException e) {
 			tbc.pass(MessagesConstants.getMessage(
 					MessagesConstants.EXCEPTION_CORRECTLY_THROWN,
 					new String[] { e.getClass().getName() }));
 		} catch (Exception e) {
 			tbc.fail(MessagesConstants.getMessage(
 					MessagesConstants.EXCEPTION_THROWN, new String[] {
-							IllegalArgumentException.class.getName(),
+							NullPointerException.class.getName(),
 							e.getClass().getName() }));
 		}
 	}	
 	
     /**
-     * This method asserts that the actions parameter cannot receive null
+     * This method asserts that NullPointerException is thrown if the actions
+     * parameter is null. 
      * 
      * @spec ApplicationAdminPermission.ApplicationAdminPermission(ApplicationDescriptor,String)
      */ 
-	private void testApplicationAdminPermission009() {
+	private void testApplicationAdminPermission008() {
 		try {
-			tbc.log("#testApplicationAdminPermission009");
+			tbc.log("#testApplicationAdminPermission008");
 			new org.osgi.service.application.ApplicationAdminPermission(tbc.getAppDescriptor(),
 					null);
-			tbc.failException("", IllegalArgumentException.class);
-		} catch (IllegalArgumentException e) {
+			tbc.failException("", NullPointerException.class);
+		} catch (NullPointerException e) {
 			tbc.pass(MessagesConstants.getMessage(
 					MessagesConstants.EXCEPTION_CORRECTLY_THROWN,
 					new String[] { e.getClass().getName() }));
 		} catch (Exception e) {
 			tbc.fail(MessagesConstants.getMessage(
 					MessagesConstants.EXCEPTION_THROWN, new String[] {
-							IllegalArgumentException.class.getName(),
+							NullPointerException.class.getName(),
 							e.getClass().getName() }));
 		}
 	}	
@@ -278,9 +252,9 @@ public class ApplicationAdminPermission {
      * 
      * @spec ApplicationAdminPermission.ApplicationAdminPermission(ApplicationDescriptor,String)
      */ 
-	private void testApplicationAdminPermission010() {
+	private void testApplicationAdminPermission009() {
 		try {
-			tbc.log("#testApplicationAdminPermission010");
+			tbc.log("#testApplicationAdminPermission009");
 			org.osgi.service.application.ApplicationAdminPermission ap = new org.osgi.service.application.ApplicationAdminPermission(
 					tbc.getAppDescriptor(),
 					ApplicationConstants.ACTIONS);

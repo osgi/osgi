@@ -113,7 +113,7 @@ public class Unlock implements TestInterface {
 					tbc.getTb2Location());
 
 			tbc.setLocalPermission(
-				new PermissionInfo(ApplicationAdminPermission.class.getName(), ApplicationConstants.TEST_PID,	ApplicationAdminPermission.LOCK)
+				new PermissionInfo(ApplicationAdminPermission.class.getName(), ApplicationConstants.TEST_PID, ApplicationAdminPermission.LOCK_ACTION)
 			);
 
 			tbc.getAppDescriptor().unlock();
@@ -141,7 +141,7 @@ public class Unlock implements TestInterface {
 					tbc.getTb2Location());
 
 			tbc.setLocalPermission(
-				new PermissionInfo(ApplicationAdminPermission.class.getName(), ApplicationConstants.TEST_PID,	ApplicationAdminPermission.LOCK)
+				new PermissionInfo(ApplicationAdminPermission.class.getName(), ApplicationConstants.TEST_PID, ApplicationAdminPermission.LOCK_ACTION)
 			);
 
 			tbc.unregisterDescriptor();
@@ -178,12 +178,9 @@ public class Unlock implements TestInterface {
 			infos = tbc.getPermissionAdmin().getPermissions(
 					tbc.getTb2Location());
 
-			// TODO we must use the ApplicationAdminPermission.launch
-			// instead of the hard coded value.
-			// TODO Verify when this constant is added to the class.
 			tbc.setLocalPermission(new PermissionInfo(
 					ApplicationAdminPermission.class.getName(),
-					ApplicationConstants.TEST_PID, "launch,"+ApplicationAdminPermission.LOCK));
+					ApplicationConstants.TEST_PID, ApplicationAdminPermission.LIFECYCLE_ACTION+","+ApplicationAdminPermission.LOCK_ACTION));
 
 			tbc.getAppDescriptor().lock();
 			tbc.getAppDescriptor().unlock();
