@@ -8,6 +8,6 @@
 	<classpathentry kind="src" path="/org.osgi.service.startlevel"/>
 	<classpathentry kind="src" path="/org.osgi.service.url"/>
 	<classpathentry kind="src" path="/org.osgi.util.tracker"/>
-	<classpathentry exported="true" kind="lib" path="org.eclipse.osgi_3.1.1.jar"/>
+	<classpathentry kind="lib" path="org.osgi.impl.framework.eclipse.jar"/>
 	<classpathentry kind="output" path="src"/>
 </classpath>
