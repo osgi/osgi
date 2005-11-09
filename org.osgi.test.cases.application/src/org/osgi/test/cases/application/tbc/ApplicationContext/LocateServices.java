@@ -117,7 +117,7 @@ public class LocateServices {
     }    
     
     /**
-     * This method asserts if IllegalArgumentException is thrown when we
+     * This method asserts if NullPointerException is thrown when we
      * pass null as parameter.
      * 
      * @spec ApplicationContext.locateServices(String)
@@ -133,15 +133,15 @@ public class LocateServices {
                        
             appContext.locateServices(null);
             
-            tbc.failException("", IllegalArgumentException.class);            
-        } catch (IllegalArgumentException e) {
+            tbc.failException("", NullPointerException.class);            
+        } catch (NullPointerException e) {
             tbc.pass(MessagesConstants.getMessage(
                 MessagesConstants.EXCEPTION_CORRECTLY_THROWN,
-                new String[]{IllegalArgumentException.class.getName()}));
+                new String[]{NullPointerException.class.getName()}));
         } catch (Exception e) {
             tbc.fail(MessagesConstants.getMessage(
                 MessagesConstants.EXCEPTION_THROWN, new String[]{
-                		IllegalArgumentException.class.getName(),
+                		NullPointerException.class.getName(),
                     e.getClass().getName()}));
         } finally {
         	tbc.cleanUp(handle);

@@ -66,11 +66,10 @@ public class GetServiceProperties {
 		testGetServiceProperties002();
 		testGetServiceProperties003();
 		testGetServiceProperties004();
-		testGetServiceProperties005();
 	}
 
 	/**
-	 * This method asserts that IllegalArgumentException is thrown when we
+	 * This method asserts that NullPointerException is thrown when we
 	 * pass null as serviceObject.
 	 * 
 	 * @spec ApplicationContext.getServiceProperties(Object)
@@ -83,15 +82,15 @@ public class GetServiceProperties {
 			ApplicationContext appContext = org.osgi.application.Framework
 					.getApplicationContext(tbc.getAppInstance());
 			appContext.getServiceProperties(null);
-			tbc.failException("#", IllegalArgumentException.class);
-		} catch (IllegalArgumentException e) {
+			tbc.failException("#", NullPointerException.class);
+		} catch (NullPointerException e) {
 			tbc.pass(MessagesConstants.getMessage(
 					MessagesConstants.EXCEPTION_CORRECTLY_THROWN,
-					new String[] { IllegalArgumentException.class.getName() }));
+					new String[] { NullPointerException.class.getName() }));
 		} catch (Exception e) {
 			tbc.fail(MessagesConstants.getMessage(
 					MessagesConstants.EXCEPTION_THROWN, new String[] {
-							IllegalArgumentException.class.getName(),
+							NullPointerException.class.getName(),
 							e.getClass().getName() }));
 		} finally {
 			tbc.cleanUp(handle);
@@ -194,37 +193,4 @@ public class GetServiceProperties {
 		}
 	}
 	
-	/**
-	 * This method asserts that getServiceProperties can
-	 * be called passing a valid object and no exception is
-	 * thrown (using ApplicationContext.locateServices).
-	 * 
-	 * @spec ApplicationContext.getServiceProperties(Object)
-	 */
-	private void testGetServiceProperties005() {
-		tbc.log("#testGetServiceProperties005");
-		ApplicationHandle handle = null;
-		try {
-			handle = tbc.getAppDescriptor().launch(null);
-			ApplicationContext appContext = org.osgi.application.Framework
-					.getApplicationContext(tbc.getAppInstance());
-			Object[] services = appContext.locateServices(ApplicationConstants.XML_APP);
-
-			tbc.assertNotNull("Asserting that a non-null object was returned.", services);
-			tbc.assertTrue("Asserts that there is at least one service",services.length>0);
-			
-			TestAppController appController = (TestAppController) services[0];	
-			
-			tbc.assertNotNull("Asserting that a non-null object was returned.", appController);
-			
-			appContext.getServiceProperties(appContext);
-			
-			tbc.pass("No Exception was thrown.");
-        } catch (Exception e) {
-            tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": "
-                + e.getClass().getName());
-        } finally {
-        	tbc.cleanUp(handle);
-        }
-    }
 }

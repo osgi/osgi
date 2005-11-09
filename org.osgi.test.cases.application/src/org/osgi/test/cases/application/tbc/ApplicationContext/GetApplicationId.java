@@ -114,9 +114,9 @@ public class GetApplicationId implements TestInterface {
 	
 	/**
 	 * This method asserts that if the application was stopped,
-	 * IllegalStateException will be thrown.
+	 * no exception will be thrown.
 	 * 
-	 * @spec ApplicationDescriptor.getApplicationId()
+	 * @spec ApplicationContext.getApplicationId()
 	 */
 	private void testGetApplicationId003() {
 		tbc.log("#testGetApplicationId003");
@@ -129,18 +129,13 @@ public class GetApplicationId implements TestInterface {
             
             handle.destroy();
             
-            appContext.getApplicationId();
+			String value = appContext.getApplicationId();
 			
-			tbc.failException("#", IllegalStateException.class);
-		} catch (IllegalStateException e) {
-			tbc.pass(MessagesConstants.getMessage(
-					MessagesConstants.EXCEPTION_CORRECTLY_THROWN,
-					new String[] { IllegalStateException.class.getName() }));
+			tbc.assertEquals("Asserting if the getApplicationId returns a value equal to SERVICE_PID value.", tbc.getServicePid(), value);
+
+			tbc.assertEquals("Asserting if the getApplicationId returns a value equal to SERVICE_PID value.", tbc.getServicePid(), value);
 		} catch (Exception e) {
-			tbc.fail(MessagesConstants.getMessage(
-					MessagesConstants.EXCEPTION_THROWN, new String[] {
-							IllegalStateException.class.getName(),
-							e.getClass().getName() }));
+			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": " + e.getClass().getName());
 		} finally {
 			tbc.cleanUp(handle);
 		}

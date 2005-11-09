@@ -106,8 +106,8 @@ public class GetApplicationId implements TestInterface {
 	}	
 	
 	/**
-	 * This method asserts that if the application descriptor is unregistered
-	 * IllegalStateException will be thrown.
+	 * This method asserts that even if the application descriptor is unregistered
+	 * no exception will be thrown.
 	 * 
 	 * @spec ApplicationDescriptor.getApplicationId()
 	 */
@@ -120,19 +120,10 @@ public class GetApplicationId implements TestInterface {
 			tbc.setDefaultPermission();
 			tbc.unregisterDescriptor();
 			tbc.getAppDescriptor().getApplicationId();
-			
-			tbc.failException("#", IllegalStateException.class);
-		} catch (IllegalStateException e) {
-			tbc.pass(MessagesConstants.getMessage(
-					MessagesConstants.EXCEPTION_CORRECTLY_THROWN,
-					new String[] { IllegalStateException.class.getName() }));
+			tbc.pass("No exception was thrown.");
 		} catch (Exception e) {
-			tbc.fail(MessagesConstants.getMessage(
-					MessagesConstants.EXCEPTION_THROWN, new String[] {
-							IllegalStateException.class.getName(),
-							e.getClass().getName() }));
+			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": " + e.getClass().getName());
 		} finally {
-			tbc.installDescriptor();
 			tbc.cleanUp(infos);
 		}
 	}	

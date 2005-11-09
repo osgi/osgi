@@ -24,16 +24,15 @@
  * Date         Author(s)
  * CR           Headline
  * ===========  ==============================================================
- * 24/08/2005   Alexandre Santos
- * 153          Implement OAT test cases  
+ * 09/11/2005   Alexandre Santos
+ * 259          Implement OAT test cases  
  * ===========  ==============================================================
  */
 
-package org.osgi.test.cases.application.tb2.ApplicationHandle;
+package org.osgi.test.cases.application.tbc.ApplicationContext;
 
-import org.osgi.service.application.ApplicationAdminPermission;
+import org.osgi.application.ApplicationContext;
 import org.osgi.service.application.ApplicationHandle;
-import org.osgi.service.permissionadmin.PermissionInfo;
 import org.osgi.test.cases.application.tbc.ApplicationConstants;
 import org.osgi.test.cases.application.tbc.ApplicationTestControl;
 import org.osgi.test.cases.application.tbc.TestInterface;
@@ -62,62 +61,51 @@ public class GetInstanceId implements TestInterface {
 	/**
 	 * This method asserts if the instanceID is equals to Application PID.
 	 * 
-	 * @spec ApplicationHandle.getInstanceId()
+	 * @spec ApplicationContext.getInstanceId()
 	 */
 	public void testGetInstanceId001() {
 		tbc.log("#testGetInstanceID001");
-		ApplicationHandle handle = null;
-		PermissionInfo[] infos = null;
-		try {
-			infos = tbc.getPermissionAdmin().getPermissions(
-				tbc.getTb2Location());
-			
-			tbc.setLocalPermission(new PermissionInfo(
-				ApplicationAdminPermission.class.getName(),
-				ApplicationConstants.TEST_PID, ApplicationAdminPermission.LIFECYCLE_ACTION));	
-
-			handle = tbc.getAppDescriptor().launch(null);
-			
-			tbc.setDefaultPermission();
-			
-			tbc
+        ApplicationHandle handle = null;
+        try {
+            handle = tbc.getAppDescriptor().launch(null);
+            
+            ApplicationContext appContext = org.osgi.application.Framework
+                .getApplicationContext(tbc.getAppInstance());
+            
+            tbc
 				.assertTrue("Asserting if the instanceID is the same used in xml.",
-					handle.getInstanceId().startsWith(ApplicationConstants.TEST_PID));
+					appContext.getInstanceId().startsWith(ApplicationConstants.TEST_PID));
 		} catch (Exception e) {
 			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + " " + e.getClass().getName());			
 		} finally {
-			tbc.cleanUp(handle, infos);
+			tbc.cleanUp(handle);
 		}
 	}
 
 	/**
-	 * This method asserts that if the ApplicationHandle is unregistered
+	 * This method asserts that if the application was stopped,
 	 * no exception will be thrown.
 	 * 
-	 * @spec ApplicationHandle.getInstanceId()
+	 * @spec ApplicationContext.getInstanceId()
 	 */
 	public void testGetInstanceId002() {		
-		ApplicationHandle handle = null;
-		PermissionInfo[] infos = null;
-		try {
-			infos = tbc.getPermissionAdmin().getPermissions(
-					tbc.getTb2Location());
-
-			tbc.setLocalPermission(
-					new PermissionInfo(ApplicationAdminPermission.class.getName(), ApplicationConstants.TEST_PID, ApplicationAdminPermission.LIFECYCLE_ACTION)
-			);		
-				
-			handle = tbc.getAppDescriptor().launch(null);
-			
-			handle.destroy();
+		tbc.log("#testGetInstanceId002");
+        ApplicationHandle handle = null;
+        try {
+            handle = tbc.getAppDescriptor().launch(null);
+            
+            ApplicationContext appContext = org.osgi.application.Framework
+                .getApplicationContext(tbc.getAppInstance());
+            
+            handle.destroy();
 			
 			tbc
 			.assertTrue("Asserting if the instanceID is the same used in xml.",
-				handle.getInstanceId().startsWith(ApplicationConstants.TEST_PID));
+					appContext.getInstanceId().startsWith(ApplicationConstants.TEST_PID));
 		} catch (Exception e) {
 			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + " " + e.getClass().getName());			
 		} finally {
-			tbc.cleanUp(handle, infos);
+			tbc.cleanUp(handle);
 		}
 	}
 }

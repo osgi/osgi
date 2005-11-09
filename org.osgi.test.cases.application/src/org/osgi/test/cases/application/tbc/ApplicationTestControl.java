@@ -56,6 +56,7 @@ import org.osgi.test.cases.application.tbc.ApplicationAdminPermission.Implies;
 import org.osgi.test.cases.application.tbc.ApplicationAdminPermission.SetCurrentApplicationId;
 import org.osgi.test.cases.application.tbc.ApplicationContext.AddServiceListener;
 import org.osgi.test.cases.application.tbc.ApplicationContext.GetApplicationId;
+import org.osgi.test.cases.application.tbc.ApplicationContext.GetInstanceId;
 import org.osgi.test.cases.application.tbc.ApplicationContext.GetServiceProperties;
 import org.osgi.test.cases.application.tbc.ApplicationContext.GetStartupParameters;
 import org.osgi.test.cases.application.tbc.ApplicationContext.LocateService;
@@ -433,7 +434,14 @@ public class ApplicationTestControl extends DefaultTestBundleControl {
 	public void testApplicationServiceEvent() {
 		new ApplicationServiceEvent(this).run();
 	}
-
+	
+	/**
+	 * Executes Tcs for ApplicationContext#getInstanceId
+	 */
+	public void testApplicationContextGetInstanceId() {
+		new GetInstanceId(this).run();
+	}
+	
 	public PermissionAdmin getPermissionAdmin() {
 		return permissionAdmin;
 	}
@@ -751,6 +759,11 @@ public class ApplicationTestControl extends DefaultTestBundleControl {
 		ServiceReference refs = getContext().getServiceReference(className);
 		return refs == null ? -1 : ((Long) refs
 				.getProperty(Constants.SERVICE_ID)).intValue();
+	}
+	
+	public String getServiceProperty(String className, String key) {
+		ServiceReference refs = getContext().getServiceReference(className);
+		return refs == null ? null : ((String) refs.getProperty(key));
 	}
 
 	/**
