@@ -55,9 +55,14 @@ public class Scheduler implements Runnable, EventHandler {
 			Map arguments, String topic, String eventFilter, boolean recurring) {
 
 		SecurityManager sm = System.getSecurityManager();
-		if( sm != null )
-			sm.checkPermission(new ApplicationAdminPermission(pid, 
-				ApplicationAdminPermission.SCHEDULE_ACTION));
+		if( sm != null ) {
+			try {
+				sm.checkPermission(new ApplicationAdminPermission(pid, 
+						ApplicationAdminPermission.SCHEDULE_ACTION));
+			}catch( InvalidSyntaxException e ) {
+				throw new SecurityException( "Cannot check permissions because of an error!" );
+			}
+		}
 
 		if( topic == null )
 			throw new NullPointerException();
