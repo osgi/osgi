@@ -237,10 +237,18 @@ public class Node {
     
     // precondition: both nodes are absolute
     boolean isAncestorOf(Node other) {
+        return isAncestorOf(other, false);
+    }
+    
+    // precondition: both nodes are absolute
+    boolean isAncestorOf(Node other, boolean strict) {
         String[] otherPath = other.getPath();
         String[] path = getPath();
         
         if(otherPath.length < path.length)
+            return false;
+        
+        if(strict && otherPath.length == path.length)
             return false;
         
         for(int i = 0; i < path.length; i++)
