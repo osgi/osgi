@@ -4,7 +4,7 @@
 	<implementation class="org.osgi.impl.bundle.autoconf.Autoconf"/>
 	<property name="service.pid" value="org.osgi.deployment.rp.autoconf"/>
 	<service>
-		<provide interface="org.osgi.service.deploymentadmin.ResourceProcessor"/>
+		<provide interface="org.osgi.service.deploymentadmin.spi.ResourceProcessor"/>
 	</service>
 	<reference name="saxParserFactory"
 		interface="javax.xml.parsers.SAXParserFactory"
