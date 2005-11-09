@@ -179,6 +179,7 @@ public class DeploymentSessionImpl implements DeploymentSession {
     }
 
     private void resetFilePermissionForCustomizers(Set cpisForCusts) {
+    	if ( cpisForCusts != null )
         for (Iterator iter = cpisForCusts.iterator(); iter.hasNext();) {
             final ConditionalPermissionInfo cpi = (ConditionalPermissionInfo) iter.next();
             AccessController.doPrivileged(new PrivilegedAction() {
