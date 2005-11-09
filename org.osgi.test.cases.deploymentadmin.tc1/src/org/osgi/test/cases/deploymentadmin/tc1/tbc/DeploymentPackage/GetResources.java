@@ -78,7 +78,6 @@ public class GetResources {
             
             dp = tbc.installDeploymentPackage(tbc.getWebServer() + testDP.getFilename());
             String[] resources = dp.getResources();
-            boolean passed = false;
             int resourceLengthExpected = testResource.length + testBundle.length;
             int resourceLengthGot = resources.length;
             int found = 0;

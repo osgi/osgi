@@ -506,7 +506,7 @@ public class InstallDeploymentPackageUseCases implements TestInterface {
         } catch (Exception e) {
             tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }));
         } finally {
-            dp.uninstallForced();
+            tbc.uninstall(dp);
             deploymentEventHandler.reset();
         }
     }

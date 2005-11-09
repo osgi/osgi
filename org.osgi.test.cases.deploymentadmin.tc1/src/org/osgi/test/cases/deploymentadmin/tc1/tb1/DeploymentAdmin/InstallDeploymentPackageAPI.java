@@ -39,6 +39,7 @@ package org.osgi.test.cases.deploymentadmin.tc1.tb1.DeploymentAdmin;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.Version;
+import org.osgi.service.deploymentadmin.BundleInfo;
 import org.osgi.service.deploymentadmin.DeploymentAdminPermission;
 import org.osgi.service.deploymentadmin.DeploymentException;
 import org.osgi.service.deploymentadmin.DeploymentPackage;
@@ -130,21 +131,20 @@ public class InstallDeploymentPackageAPI implements TestInterface {
 		TestingDeploymentPackage testDP2 = tbc.getTestingDeploymentPackage(DeploymentConstants.SIMPLE_DP_CLONE);
 		DeploymentPackage dp1 = null, dp2 = null;
 		try {
-			DeploymentPackage[] initialList = tbc.getDeploymentAdmin().listDeploymentPackages();
 			dp1 = tbc.installDeploymentPackage(tbc.getWebServer() + testDP.getFilename());
 			tbc.assertNotNull(MessagesConstants.getMessage(MessagesConstants.ASSERT_NOT_NULL, new String[]{"deployment package"}), dp1);
 
 			dp2 = tbc.installDeploymentPackage(tbc.getWebServer() + testDP2.getFilename());
-			String[][] depBundles = dp2.getBundleSymNameVersionPairs();
+			BundleInfo[] depBundles = dp2.getBundleInfos();
             TestingBundle[] testBundles = testDP.getBundles();
             
             tbc.assertTrue("Returned DP has bundles", depBundles.length > 0);
             int count = 0;
             for (int i = 0; (i < depBundles.length) && (count < 2); i++) {
                 for (int j = 0; j < testBundles.length; j++) {
-                    if (depBundles[i][0].trim().equals(testBundles[j].getName())) {
+                    if (depBundles[i].getSymbolicName().trim().equals(testBundles[j].getName())) {
                         tbc.assertEquals("Assert Deployment Package bundle "
-                            + depBundles[i][0] + " Version", depBundles[i][1], testBundles[j].getVersion().toString());
+                            + depBundles[i].getSymbolicName() + " Version", depBundles[i].getVersion(), testBundles[j].getVersion().toString());
                         count++;
                         break;
                     }
@@ -168,9 +168,8 @@ public class InstallDeploymentPackageAPI implements TestInterface {
      */			
 	private void testInstallDeploymentPackageAPI003() {
 		tbc.log("#testInstallDeploymentPackageAPI003");
-		DeploymentPackage dp = null;
 		try {
-			dp = tbc.getDeploymentAdmin().installDeploymentPackage(null);
+            tbc.getDeploymentAdmin().installDeploymentPackage(null);
 			tbc.failException("#", DeploymentException.class);
 		} catch (DeploymentException e) {
 			tbc.pass(MessagesConstants.getMessage(MessagesConstants.EXCEPTION_CORRECTLY_THROWN, new String[] { e.getClass().getName() }));
@@ -381,7 +380,7 @@ public class InstallDeploymentPackageAPI implements TestInterface {
      */     
     private void testInstallDeploymentPackageAPI010() {
         tbc.log("#testInstallDeploymentPackageAPI010");
-        tbc.setDeploymentAdminPermission(DeploymentConstants.DEPLOYMENT_PACKAGE_NAME0, DeploymentAdminPermission.ACTION_LIST);
+        tbc.setDeploymentAdminPermission(DeploymentConstants.DEPLOYMENT_PACKAGE_NAME0, DeploymentAdminPermission.LIST);
         DeploymentPackage dp = null;
         try {
             TestingDeploymentPackage testDP = tbc.getTestingDeploymentPackage(DeploymentConstants.SIMPLE_DP);

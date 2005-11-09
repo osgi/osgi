@@ -45,11 +45,9 @@ import java.util.Hashtable;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.ServiceReference;
-import org.osgi.framework.ServiceRegistration;
-import org.osgi.service.deploymentadmin.DeploymentException;
 import org.osgi.service.deploymentadmin.DeploymentPackage;
-import org.osgi.service.deploymentadmin.DeploymentSession;
-import org.osgi.service.deploymentadmin.ResourceProcessor;
+import org.osgi.service.deploymentadmin.spi.DeploymentSession;
+import org.osgi.service.deploymentadmin.spi.ResourceProcessor;
 import org.osgi.test.cases.deploymentadmin.tc1.tbc.DeploymentConstants;
 import org.osgi.test.cases.deploymentadmin.tc1.tbc.DeploymentTestControl;
 import org.osgi.test.cases.deploymentadmin.tc1.tbc.util.MessagesConstants;
@@ -156,9 +154,6 @@ public class GetResourceProcessor {
 		props.put(dummy.key, dummy.value);
 
 		try {
-			ServiceRegistration sr = tbc.getContext().registerService(
-					ResourceProcessor.class.getName(), dummy, props);
-			
 			ServiceReference rp = dpRP.getResourceProcessor(testRPResource.getName());
 			tbc.assertEquals("The properties of the updated service is the same as the deployment package resource service",
 							dummy.value, (String) rp.getProperty(DeploymentConstants.RESOURCE_PROCESSOR_PROPERTY_KEY));
@@ -195,19 +190,19 @@ public class GetResourceProcessor {
 			
 		}
 
-		public void process(String name, InputStream stream) throws DeploymentException {
+		public void process(String name, InputStream stream) {
 			
 		}
 
-		public void dropped(String resource) throws DeploymentException {
+		public void dropped(String resource) {
 			
 		}
 
-		public void dropAllResources() throws DeploymentException {
+		public void dropAllResources() {
 			
 		}
 
-		public void prepare() throws DeploymentException {
+		public void prepare() {
 			
 		}
 

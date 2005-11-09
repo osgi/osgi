@@ -43,13 +43,16 @@
 
 package org.osgi.test.cases.deploymentadmin.tc1.tb1.DeploymentAdmin;
 
+import org.osgi.framework.BundleEvent;
 import org.osgi.service.deploymentadmin.DeploymentAdminPermission;
 import org.osgi.service.deploymentadmin.DeploymentException;
 import org.osgi.service.deploymentadmin.DeploymentPackage;
 import org.osgi.test.cases.deploymentadmin.tc1.tbc.DeploymentConstants;
 import org.osgi.test.cases.deploymentadmin.tc1.tbc.DeploymentTestControl;
 import org.osgi.test.cases.deploymentadmin.tc1.tbc.TestInterface;
+import org.osgi.test.cases.deploymentadmin.tc1.tbc.Event.BundleListenerImpl;
 import org.osgi.test.cases.deploymentadmin.tc1.tbc.util.MessagesConstants;
+import org.osgi.test.cases.deploymentadmin.tc1.tbc.util.TestingBlockingResourceProcessor;
 import org.osgi.test.cases.deploymentadmin.tc1.tbc.util.TestingDeploymentPackage;
 
 /**
@@ -62,6 +65,8 @@ import org.osgi.test.cases.deploymentadmin.tc1.tbc.util.TestingDeploymentPackage
 public class ListDeploymentPackage implements TestInterface {
 
 	private DeploymentTestControl tbc;
+    private boolean reachTC;
+    private boolean reach;
 
 	public ListDeploymentPackage(DeploymentTestControl tbc) {
 		this.tbc = tbc;
@@ -77,6 +82,7 @@ public class ListDeploymentPackage implements TestInterface {
         testListDeploymentPackage006();
         testListDeploymentPackage007();
         testListDeploymentPackage008();
+        testListDeploymentPackage009();
 	}
     
     /**
@@ -227,7 +233,9 @@ public class ListDeploymentPackage implements TestInterface {
            TestingDeploymentPackage testDP = tbc.getTestingDeploymentPackage(DeploymentConstants.SIMPLE_DP);
            dp = tbc.installDeploymentPackage(tbc.getWebServer() + testDP.getFilename());
            
-           Thread worker = new ListDeploymentPackageWorker();
+           ListDeploymentPackageWorker worker = new ListDeploymentPackageWorker(
+                tbc.getTestingDeploymentPackage(DeploymentConstants.ADD_BUNDLE_FIX_PACK_DP));
+           worker.setNotify(true);
            worker.start();
            // Not sure if this is going to be synchronized
            synchronized (tbc) {
@@ -284,7 +292,7 @@ public class ListDeploymentPackage implements TestInterface {
      */     
    private void testListDeploymentPackage007() {
        tbc.log("#testListDeploymentPackage007");
-       tbc.setDeploymentAdminPermission(DeploymentConstants.DEPLOYMENT_PACKAGE_NAME_ALL, DeploymentAdminPermission.ACTION_INSTALL);
+       tbc.setDeploymentAdminPermission(DeploymentConstants.DEPLOYMENT_PACKAGE_NAME_ALL, DeploymentAdminPermission.INSTALL);
        try {
            DeploymentPackage[] dp = tbc.getDeploymentAdmin().listDeploymentPackages();
            if (dp.length==0) {
@@ -304,9 +312,9 @@ public class ListDeploymentPackage implements TestInterface {
     */     
   private void testListDeploymentPackage008() {
       tbc.log("#testListDeploymentPackage008");
-      tbc.setDeploymentAdminPermission(DeploymentConstants.DEPLOYMENT_PACKAGE_NAME_ALL, DeploymentAdminPermission.ACTION_INSTALL);
+      tbc.setDeploymentAdminPermission(DeploymentConstants.DEPLOYMENT_PACKAGE_NAME_ALL, DeploymentAdminPermission.INSTALL);
       try {
-          DeploymentPackage[] dp = tbc.getDeploymentAdmin().listDeploymentPackages();
+          tbc.getDeploymentAdmin().listDeploymentPackages();
           tbc.failException("#", SecurityException.class);
       } catch (SecurityException e) {
           tbc.pass(MessagesConstants.getMessage(MessagesConstants.EXCEPTION_CORRECTLY_THROWN, new String[] { "SecurityException" }));
@@ -315,6 +323,54 @@ public class ListDeploymentPackage implements TestInterface {
                     "SecurityException", e.getClass().getName()}));
         }
     }
+  
+  /**
+     * Asserts that during an installation of an existing package (update),
+     * the target must remain in this list until the installation process is
+     * completed, after which the source replaces the target.
+     * 
+     * @spec DeploymentAdmin.listDeploymentPackage()
+     */ 
+  private void testListDeploymentPackage009() {
+      tbc.log("#testListDeploymentPackage009");
+      tbc.setDeploymentAdminPermission(DeploymentConstants.DEPLOYMENT_PACKAGE_NAME_ALL, DeploymentConstants.ALL_PERMISSION);
+      TestingDeploymentPackage testDP = tbc.getTestingDeploymentPackage(DeploymentConstants.SIMPLE_DP);
+      TestingDeploymentPackage testUpdateDP = tbc.getTestingDeploymentPackage(DeploymentConstants.BLOCK_SESSION_RESOURCE_PROCESSOR);
+      DeploymentPackage dp = null, dpAfter = null;
+      try {
+          dp = tbc.installDeploymentPackage(tbc.getWebServer() + testDP.getFilename());
+          
+          ListDeploymentPackageWorker worker = new ListDeploymentPackageWorker(testUpdateDP);
+          worker.start();
+          
+          int count = 0;
+          BundleListenerImpl listener = tbc.getBundleListener();
+          while ((count < DeploymentConstants.TIMEOUT) &&
+              !((listener.getCurrentType() == BundleEvent.STARTED) && 
+              (listener.getCurrentBundle().getSymbolicName().indexOf(DeploymentConstants.PID_RESOURCE_PROCESSOR3) != -1))) {
+              count++;
+              wait(1);
+          }
+
+          TestingBlockingResourceProcessor testBlockRP = (TestingBlockingResourceProcessor) tbc.getServiceInstance(DeploymentConstants.PID_RESOURCE_PROCESSOR3);
+          tbc.assertNotNull("Blocking Resource Processor was registered", testBlockRP);
+          // before installation process is complete
+          DeploymentPackage dpUntill = findDP(testDP.getName());
+          tbc.assertEquals("Deployment Package is equals to the target DP", dp, dpUntill);
+          
+          testBlockRP.setReleased(true);
+          reachTC = true;
+          waitForRelease();
+          
+          dpAfter = findDP(testDP.getName());
+          tbc.assertEquals("Deployment Package is equals to the target DP", testUpdateDP.getName(), dpAfter.getName());
+      } catch (Exception e) {
+          tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }));
+      } finally {
+          reach = reachTC = false;
+          tbc.uninstall(new DeploymentPackage[]{dp, dpAfter});
+      }
+  }
 	
 	//Returns if all deployment packages could be uninstalled.
 	private boolean uninstallAllDeploymentPackages() {
@@ -325,20 +381,34 @@ public class ListDeploymentPackage implements TestInterface {
 				if (!dps[i].getName().equals(DeploymentConstants.SYSTEM_DP_NAME))
 					dps[i].uninstall();
 			} catch (DeploymentException e) {
-				passed = passed && dps[i].uninstallForced();
-			} catch (Exception e) {
-				passed = false;
-			}
+				try {
+                    passed = passed && dps[i].uninstallForced();
+                } catch (DeploymentException e1) {
+                    passed = false;
+                }
+            } catch (Exception e) {
+                passed = false;
+            }
 		}
 		return passed;
 	}
     
+    private synchronized void waitForRelease() throws InterruptedException {
+        if (reach && reachTC) {
+            // if needed do some action
+            this.notifyAll();
+        } else {
+            while (!(reach && reachTC)) {
+                this.wait(DeploymentConstants.TIMEOUT);
+            }
+        }
+    }
+    
     private DeploymentPackage findDP(String name) {
-        boolean found = false;
         DeploymentPackage dp = null;
         DeploymentPackage[] list = tbc.getDeploymentAdmin().listDeploymentPackages();
         for (int i=0; (dp==null) && i<list.length; i++) {
-            if (list[i].getName().equals(name)){
+            if (list[i].getName().equals(name)) {
                 dp = list[i];
             }
         }
@@ -346,18 +416,29 @@ public class ListDeploymentPackage implements TestInterface {
     }
     
     class ListDeploymentPackageWorker extends Thread {
+        private TestingDeploymentPackage testDP;
+        private boolean notify;
         
-        public void run() {
-            TestingDeploymentPackage updateDP = tbc.getTestingDeploymentPackage(DeploymentConstants.ADD_BUNDLE_FIX_PACK_DP);
-            DeploymentPackage dp = null;
-            try {
-                dp = tbc.installDeploymentPackageAndNotify(tbc.getWebServer() + updateDP.getFilename());
-            } catch (Exception e) {
-                tbc.log("failed to install source deployment package");
-            } finally {
-                tbc.uninstall(dp);
-            }
+        ListDeploymentPackageWorker(TestingDeploymentPackage testDP) {
+            this.testDP = testDP;
         }
         
+        protected void setNotify(boolean notify) {
+            this.notify = notify;
+        }
+        
+        public void run() {
+            try {
+                if (notify) {
+                    tbc.installDeploymentPackageAndNotify(tbc.getWebServer()+ testDP.getFilename());
+                } else {
+                    tbc.installDeploymentPackage(tbc.getWebServer()+ testDP.getFilename());
+                    reach = true;
+                    waitForRelease();
+                }
+            } catch (Exception e) {
+                tbc.log("failed to install source deployment package");
+            } 
+        }
     }
 }

@@ -52,7 +52,6 @@ import java.io.OutputStream;
 import java.net.MalformedURLException;
 import java.net.SocketPermission;
 import java.net.URL;
-import java.security.AllPermission;
 import java.util.Dictionary;
 import java.util.HashMap;
 import java.util.PropertyPermission;
@@ -64,15 +63,14 @@ import org.osgi.framework.ServicePermission;
 import org.osgi.framework.ServiceReference;
 import org.osgi.service.deploymentadmin.DeploymentAdmin;
 import org.osgi.service.deploymentadmin.DeploymentAdminPermission;
-import org.osgi.service.deploymentadmin.DeploymentCustomizerPermission;
+import org.osgi.service.deploymentadmin.spi.DeploymentCustomizerPermission;
 import org.osgi.service.deploymentadmin.DeploymentException;
 import org.osgi.service.deploymentadmin.DeploymentPackage;
-import org.osgi.service.deploymentadmin.ResourceProcessor;
+import org.osgi.service.deploymentadmin.spi.ResourceProcessor;
 import org.osgi.service.permissionadmin.PermissionAdmin;
 import org.osgi.service.permissionadmin.PermissionInfo;
 import org.osgi.test.cases.deploymentadmin.tc1.tbc.DeploymentPackage.Equals;
 import org.osgi.test.cases.deploymentadmin.tc1.tbc.DeploymentPackage.GetBundle;
-import org.osgi.test.cases.deploymentadmin.tc1.tbc.DeploymentPackage.GetBundleSymNameVersionPairs;
 import org.osgi.test.cases.deploymentadmin.tc1.tbc.DeploymentPackage.GetHeader;
 import org.osgi.test.cases.deploymentadmin.tc1.tbc.DeploymentPackage.GetName;
 import org.osgi.test.cases.deploymentadmin.tc1.tbc.DeploymentPackage.GetResourceHeader;
@@ -159,8 +157,7 @@ public class DeploymentTestControl extends DefaultTestBundleControl {
 		// Activators must have ServicePermission to create a ResourceProcessor instance
 		PermissionInfo info[] = {
 				new PermissionInfo(DeploymentCustomizerPermission.class.getName(),
-						"(name=bundles.*)",
-						DeploymentCustomizerPermission.ACTION_PRIVATEAREA),
+						"(name=bundles.*)",DeploymentCustomizerPermission.PRIVATEAREA),
 				new PermissionInfo(ServicePermission.class.getName(), "*",
 						ServicePermission.GET + ","+ ServicePermission.REGISTER),
 				new PermissionInfo(AdminPermission.class.getName(), "*", "*"), 
@@ -626,7 +623,7 @@ public class DeploymentTestControl extends DefaultTestBundleControl {
     
     // UninstallDeploymentPackage
     public void testDeploymentAdminCancel() {
-      testClasses[6].run();
+//      testClasses[6].run();
     }
     
     // UninstallDeploymentPackage
@@ -645,11 +642,6 @@ public class DeploymentTestControl extends DefaultTestBundleControl {
 		new GetBundle(this).run();
 	}
 
-	// GetBundleSymNameVersionPairs
-	public void testDeploymentPackageGetBundleSymNameVersionPairs() {
-		new GetBundleSymNameVersionPairs(this).run();
-	}
-	
 	// GetHeader
 	public void testDeploymentPackageGetHeader() {
 		new GetHeader(this).run();
@@ -800,7 +792,11 @@ public class DeploymentTestControl extends DefaultTestBundleControl {
 				dp.uninstall();
 			} catch (DeploymentException e) {
 				log("#Deployment Package could not be uninstalled. Uninstalling forcefully...");
-				dp.uninstallForced();
+				try {
+                    dp.uninstallForced();
+                } catch (DeploymentException e1) {
+                    log("# Failed to uninstall deployment package: "+dp.getName());
+                }
 			} 
 		}
 	}
@@ -809,7 +805,6 @@ public class DeploymentTestControl extends DefaultTestBundleControl {
 		Bundle bundle = null;
 		Bundle[] bundles = getContext().getBundles();
 		String str = "";
-		boolean found = false;
 		int i = 0;
 		while ((bundle==null) && (i < bundles.length)) {
 			str = bundles[i].getSymbolicName();
@@ -852,8 +847,6 @@ public class DeploymentTestControl extends DefaultTestBundleControl {
                 new PermissionInfo(SocketPermission.class.getName(), "*", "accept,connect,listen,resolve"),
                 // to read, write in properties whenever necessary
                 new PermissionInfo(PropertyPermission.class.getName(), "*", "read,write"),
-                // to allow tb1 to reset permissions
-                new PermissionInfo(AllPermission.class.getName(), "<all permissions>", "<all actions>")
                 };
         
         setAssyncPermission(info);
@@ -867,7 +860,7 @@ public class DeploymentTestControl extends DefaultTestBundleControl {
     public void setCustomizerPermission(String location, String filter) {
         PermissionInfo info[] = {
                 new PermissionInfo(DeploymentCustomizerPermission.class.getName(), filter,
-                        DeploymentCustomizerPermission.ACTION_PRIVATEAREA),
+                        DeploymentCustomizerPermission.PRIVATEAREA),
                 new PermissionInfo(ServicePermission.class.getName(), "*",ServicePermission.GET + ","
                                 + ServicePermission.REGISTER),
                 new PermissionInfo(AdminPermission.class.getName(), "*", "*"),
@@ -898,8 +891,6 @@ public class DeploymentTestControl extends DefaultTestBundleControl {
             new PermissionInfo(PropertyPermission.class.getName(), "*", "read,write"),
             // to give Resource Processors the right to access a bundle's private area
             new PermissionInfo(DeploymentCustomizerPermission.class.getName(), bundleName, customizerAction), 
-            // to allow tb1 to reset permissions
-            new PermissionInfo(AllPermission.class.getName(), "<all permissions>", "<all actions>")
             };
         
         setAssyncPermission(info);
@@ -995,7 +986,6 @@ public class DeploymentTestControl extends DefaultTestBundleControl {
 	 * @return Returns the bundleEventHandler.
 	 */
 	public BundleListenerImpl getBundleListener() {
-        BundleListenerImpl registered = null;
 		if (bundleListener==null)
 			throw new NullPointerException("BundleListener implementation instance is null");
         return bundleListener;

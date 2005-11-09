@@ -36,7 +36,7 @@
  */
 package org.osgi.test.cases.deploymentadmin.tc1.tb1.DeploymentAdmin;
 
-import org.osgi.service.deploymentadmin.DeploymentCustomizerPermission;
+import org.osgi.service.deploymentadmin.spi.DeploymentCustomizerPermission;
 import org.osgi.service.deploymentadmin.DeploymentException;
 import org.osgi.service.deploymentadmin.DeploymentPackage;
 import org.osgi.test.cases.deploymentadmin.tc1.tbc.DeploymentConstants;
@@ -76,8 +76,6 @@ public class InstallExceptions implements TestInterface {
         testInstallExceptions011();
         testInstallExceptions012();
         testInstallExceptions013();
-        testInstallExceptions014();
-        testInstallExceptions015();
     }
     
     /**
@@ -307,68 +305,18 @@ public class InstallExceptions implements TestInterface {
     }
     
     /**
-     * Asserts that DeploymentException.CODE_BUNDLE_START is thrown when one
-     * or more bundles couldn't be started when installing a
-     * deployment package.
-     * 
-     * @spec DeploymentException.CODE_BUNDLE_START
-     */     
-    private void testInstallExceptions010() {
-        tbc.log("#testInstallExceptions010");
-        
-        DeploymentPackage dp = null;
-        try {
-            TestingDeploymentPackage testDP = tbc.getTestingDeploymentPackage(DeploymentConstants.BUNDLE_THROWS_EXCEPTION_DP);
-            dp = tbc.installDeploymentPackage(tbc.getWebServer() + testDP.getFilename());
-            tbc.failException("",DeploymentException.class);
-        } catch (DeploymentException e) {
-            tbc.assertEquals("Asserts that DeploymentException.CODE_BUNDLE_START is thrown when one or more bundles couldn't be started",DeploymentException.CODE_BUNDLE_START,e.getCode());
-        } catch (Exception e) {
-            tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }));
-        } finally {
-            tbc.uninstall(dp);
-        }
-    }
-    /**
-     * Asserts that DeploymentException.CODE_BUNDLE_START is thrown when one
-     * or more bundles couldn't be started when updating a
-     * deployment package.
-     * 
-     * @spec DeploymentException.CODE_BUNDLE_START
-     */     
-    private void testInstallExceptions011() {
-        tbc.log("#testInstallExceptions011");
-        
-        DeploymentPackage dp = null;
-        DeploymentPackage dp2 = null;
-        try {
-            TestingDeploymentPackage testDP = tbc.getTestingDeploymentPackage(DeploymentConstants.BUNDLE_DOESNT_THROW_EXCEPTION_DP);
-            dp = tbc.installDeploymentPackage(tbc.getWebServer() + testDP.getFilename());
-            TestingDeploymentPackage testDP2 = tbc.getTestingDeploymentPackage(DeploymentConstants.BUNDLE_THROWS_EXCEPTION_DP);
-            dp2 = tbc.installDeploymentPackage(tbc.getWebServer() + testDP2.getFilename());
-            tbc.failException("",DeploymentException.class);
-        } catch (DeploymentException e) {
-            tbc.assertEquals("Asserts that DeploymentException.CODE_BUNDLE_START is thrown when one or more bundles couldn't be started",DeploymentException.CODE_BUNDLE_START,e.getCode());
-        } catch (Exception e) {
-            tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }));
-        } finally {
-            tbc.uninstall(new DeploymentPackage[] { dp, dp2 });
-        }
-    }
-    
-    /**
      * Asserts that a DeploymentException.CODE_RESOURCE_SHARING_VIOLATION is
      * thrown when a resource already exists. 
      * 
      * @spec DeploymentException.CODE_RESOURCE_SHARING_VIOLATION
      */     
-    private void testInstallExceptions012() {
-        tbc.log("#testInstallExceptions012");
+    private void testInstallExceptions010() {
+        tbc.log("#testInstallExceptions010");
         tbc.setDeploymentAdminAndCustomizerPermission(
                 DeploymentConstants.DEPLOYMENT_PACKAGE_NAME_ALL,
                 DeploymentConstants.ALL_PERMISSION,
                 DeploymentConstants.BUNDLE_NAME_ALL,
-                DeploymentCustomizerPermission.ACTION_PRIVATEAREA);
+                DeploymentCustomizerPermission.PRIVATEAREA);
         DeploymentPackage dp2 = null, rp = null;
         try {
             TestingDeploymentPackage testRP = tbc.getTestingDeploymentPackage(DeploymentConstants.SESSION_TEST_DP);
@@ -392,8 +340,8 @@ public class InstallExceptions implements TestInterface {
      * 
      * @spec 114.14.5.15 CODE_SIGNING_ERROR
      */             
-    private void testInstallExceptions013() {
-        tbc.log("#testInstallExceptions013");
+    private void testInstallExceptions011() {
+        tbc.log("#testInstallExceptions011");
         
         TestingDeploymentPackage testDP = tbc.getTestingDeploymentPackage(DeploymentConstants.SIMPLE_UNSIGNED_BUNDLE_DP);
         DeploymentPackage dp = null;
@@ -414,8 +362,8 @@ public class InstallExceptions implements TestInterface {
      * 
      * @spec 114.14.5.15 CODE_SIGNING_ERROR
      */                 
-    private void testInstallExceptions014() {
-        tbc.log("#testInstallExceptions014");
+    private void testInstallExceptions012() {
+        tbc.log("#testInstallExceptions012");
         
         TestingDeploymentPackage testDP = tbc.getTestingDeploymentPackage(DeploymentConstants.SIMPLE_UNSIGNED_DP);
         DeploymentPackage dp = null;
@@ -437,8 +385,8 @@ public class InstallExceptions implements TestInterface {
      * 
      * @spec 114.14.5.14 CODE_PROCESSOR_NOT_FOUND
      */                 
-    private void testInstallExceptions015() {
-        tbc.log("#testInstallExceptions015");
+    private void testInstallExceptions013() {
+        tbc.log("#testInstallExceptions013");
         
         TestingDeploymentPackage testDP = tbc.getTestingDeploymentPackage(DeploymentConstants.SIMPLE_RESOURCE_DP);
         DeploymentPackage dp = null;

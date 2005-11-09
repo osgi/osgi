@@ -176,11 +176,11 @@ public class DeploymentConstants {
 	public static final String INVALID_NAME = "invalid";
 	public static final String RESOURCE_PROCESSOR_PROPERTY_KEY = "property.key";
 	
-	public static final String ALL_PERMISSION = DeploymentAdminPermission.ACTION_CANCEL + ","
-			+ DeploymentAdminPermission.ACTION_INSTALL + ","
-			+ DeploymentAdminPermission.ACTION_LIST + ","
-			+ DeploymentAdminPermission.ACTION_UNINSTALL + ","
-			+ DeploymentAdminPermission.ACTION_UNINSTALL_FORCED;
+	public static final String ALL_PERMISSION = DeploymentAdminPermission.CANCEL + ","
+			+ DeploymentAdminPermission.INSTALL + ","
+			+ DeploymentAdminPermission.LIST + ","
+			+ DeploymentAdminPermission.UNINSTALL + ","
+			+ DeploymentAdminPermission.UNINSTALL_FORCED;
 	
 	// very large, we don't know what kind of devices the TCK will be executed
 	public static final int TIMEOUT = 180000;

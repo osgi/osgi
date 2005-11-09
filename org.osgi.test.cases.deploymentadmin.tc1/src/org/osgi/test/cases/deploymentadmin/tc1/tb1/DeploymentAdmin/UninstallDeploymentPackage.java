@@ -41,7 +41,7 @@ import org.osgi.framework.Bundle;
 import org.osgi.service.deploymentadmin.DeploymentAdminPermission;
 import org.osgi.service.deploymentadmin.DeploymentException;
 import org.osgi.service.deploymentadmin.DeploymentPackage;
-import org.osgi.service.deploymentadmin.ResourceProcessor;
+import org.osgi.service.deploymentadmin.spi.ResourceProcessor;
 import org.osgi.test.cases.deploymentadmin.tc1.tbc.DeploymentConstants;
 import org.osgi.test.cases.deploymentadmin.tc1.tbc.DeploymentTestControl;
 import org.osgi.test.cases.deploymentadmin.tc1.tbc.TestInterface;
@@ -109,7 +109,7 @@ public class UninstallDeploymentPackage implements TestInterface {
 		try {
 			dp = tbc.installDeploymentPackage(tbc.getWebServer()+testDP.getFilename());
 			tbc.assertNotNull(MessagesConstants.getMessage(MessagesConstants.ASSERT_NOT_NULL, new String[]{"deployment package"}), dp);
-			tbc.setDeploymentAdminPermission(DeploymentConstants.DEPLOYMENT_PACKAGE_NAME0, DeploymentAdminPermission.ACTION_UNINSTALL);
+			tbc.setDeploymentAdminPermission(DeploymentConstants.DEPLOYMENT_PACKAGE_NAME0, DeploymentAdminPermission.UNINSTALL);
 			dp.uninstall();
 
             tbc.assertNull("Asserting that bundle001.jar was uninstalled.", tbc.getBundle("bundle001.jar"));
@@ -136,7 +136,7 @@ public class UninstallDeploymentPackage implements TestInterface {
 		try {
 			dp = tbc.installDeploymentPackage(tbc.getWebServer()+testDP.getFilename());
 			tbc.assertNotNull(MessagesConstants.getMessage(MessagesConstants.ASSERT_NOT_NULL, new String[]{"deployment package"}), dp);
-			tbc.setDeploymentAdminPermission(DeploymentConstants.DEPLOYMENT_PACKAGE_NAME0, DeploymentAdminPermission.ACTION_UNINSTALL_FORCED);
+			tbc.setDeploymentAdminPermission(DeploymentConstants.DEPLOYMENT_PACKAGE_NAME0, DeploymentAdminPermission.UNINSTALL_FORCED);
 			tbc.assertTrue("UninstallDeploymentPackage forced executed properly", dp.uninstallForced());
             
             tbc.assertNull("Asserting that bundle001.jar was uninstalled.", tbc.getBundle("bundle001.jar"));
@@ -468,7 +468,7 @@ public class UninstallDeploymentPackage implements TestInterface {
      */ 
     private void testUninstallDeploymentPackage014() {
         tbc.log("#testUninstallDeploymentPackage014");
-        tbc.setDeploymentAdminPermission(DeploymentConstants.DEPLOYMENT_PACKAGE_NAME_ALL, DeploymentAdminPermission.ACTION_INSTALL);
+        tbc.setDeploymentAdminPermission(DeploymentConstants.DEPLOYMENT_PACKAGE_NAME_ALL, DeploymentAdminPermission.INSTALL);
         DeploymentPackage dp = null;
         try {
             TestingDeploymentPackage testDP = tbc.getTestingDeploymentPackage(DeploymentConstants.SIMPLE_DP);
@@ -493,7 +493,7 @@ public class UninstallDeploymentPackage implements TestInterface {
      */     
     private void testUninstallDeploymentPackage015() {
         tbc.log("#testUninstallDeploymentPackage015");
-        tbc.setDeploymentAdminPermission(DeploymentConstants.DEPLOYMENT_PACKAGE_NAME_ALL, DeploymentAdminPermission.ACTION_INSTALL);
+        tbc.setDeploymentAdminPermission(DeploymentConstants.DEPLOYMENT_PACKAGE_NAME_ALL, DeploymentAdminPermission.INSTALL);
         DeploymentPackage dp = null;
         try {
             TestingDeploymentPackage testDP = tbc.getTestingDeploymentPackage(DeploymentConstants.SIMPLE_DP);

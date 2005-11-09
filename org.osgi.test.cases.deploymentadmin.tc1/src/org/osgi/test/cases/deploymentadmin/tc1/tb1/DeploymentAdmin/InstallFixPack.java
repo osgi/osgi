@@ -41,7 +41,7 @@
 package org.osgi.test.cases.deploymentadmin.tc1.tb1.DeploymentAdmin;
 
 import org.osgi.framework.Bundle;
-import org.osgi.framework.Version;
+import org.osgi.service.deploymentadmin.BundleInfo;
 import org.osgi.service.deploymentadmin.DeploymentException;
 import org.osgi.service.deploymentadmin.DeploymentPackage;
 import org.osgi.test.cases.deploymentadmin.tc1.tbc.DeploymentConstants;
@@ -117,10 +117,10 @@ public class InstallFixPack implements TestInterface {
 			
 			// the dp instance is is stale
 			DeploymentPackage newDP = tbc.getDeploymentAdmin().getDeploymentPackage(testDP.getName());
-			String[][] pairs = newDP.getBundleSymNameVersionPairs();
+			BundleInfo[] pairs = newDP.getBundleInfos();
 			
-			tbc.assertEquals("The symbolic name of the bundle is ", testFixDP.getBundles()[0].getName(), pairs[0][0]);
-			tbc.assertEquals("The new version of the bundle is ", testFixDP.getBundles()[0].getVersion(), new Version(pairs[0][1]));
+			tbc.assertEquals("The symbolic name of the bundle is ", testFixDP.getBundles()[0].getName(), pairs[0].getSymbolicName());
+			tbc.assertEquals("The new version of the bundle is ", testFixDP.getBundles()[0].getVersion(), pairs[0].getVersion());
 		} catch (Exception e) {
 			tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }));
 		} finally {
@@ -150,12 +150,12 @@ public class InstallFixPack implements TestInterface {
 			
 			// the dp instance is is stale
 			DeploymentPackage newDP = tbc.getDeploymentAdmin().getDeploymentPackage(testDP.getName());
-			String[][] pairs = newDP.getBundleSymNameVersionPairs();
+			BundleInfo[] pairs = newDP.getBundleInfos();
 			
 			// asserts dp bundles
 			tbc.assertTrue("There are no more bundles in deployment package", (pairs.length==1));
-			tbc.assertEquals("The remaining bundle name is correct", testDP.getBundles()[0].getName(), pairs[0][0]);
-			tbc.assertEquals("The remaining bundle version is correct",testDP.getBundles()[0].getVersion(), new Version(pairs[0][1]));
+			tbc.assertEquals("The remaining bundle name is correct", testDP.getBundles()[0].getName(), pairs[0].getSymbolicName());
+			tbc.assertEquals("The remaining bundle version is correct",testDP.getBundles()[0].getVersion(), pairs[0].getVersion());
 			
 			// assert that the bundles have been uninstalled from the framework
 			String b2Name = testDP.getBundles()[1].getName();
@@ -191,7 +191,7 @@ public class InstallFixPack implements TestInterface {
 			// This deployment package had two bundles; after the fix-pack installation it must have three.
 			// the dp instance is is stale
 			DeploymentPackage newDP = tbc.getDeploymentAdmin().getDeploymentPackage(testDP.getName());
-			String[][] pairs = newDP.getBundleSymNameVersionPairs();
+			BundleInfo[] pairs = newDP.getBundleInfos();
 			tbc.assertEquals("There are three bundles in "+testDP.getName(), 3, pairs.length);
 
 			TestingBundle[] bundles = testFixDP.getBundles();
@@ -199,9 +199,9 @@ public class InstallFixPack implements TestInterface {
 			int count = 0;
 			for(int i=0; i<pairs.length; i++) {
 				for(int j=0; j<bundles.length; j++) {
-					if (pairs[i][0].equals(bundles[j].getName())) {
-						tbc.assertEquals("The bundles "+bundles[j].getName() + "is installed in "+newDP.getName(), bundles[j].getName(), pairs[i][0]);
-						tbc.assertEquals("The bundles "+bundles[j].getName() + " version is the same as "+pairs[i][1] + " version", bundles[j].getVersion(), new Version(pairs[i][1]));
+					if (pairs[i].getSymbolicName().equals(bundles[j].getName())) {
+						tbc.assertEquals("The bundles "+bundles[j].getName() + "is installed in "+newDP.getName(), bundles[j].getName(), pairs[i].getSymbolicName());
+						tbc.assertEquals("The bundles "+bundles[j].getName() + " version is the same as "+pairs[i].getVersion() + " version", bundles[j].getVersion(), pairs[i].getVersion());
 						count++;
 					}
 				}
@@ -237,9 +237,9 @@ public class InstallFixPack implements TestInterface {
 			
 			// the dp instance is is stale
 			DeploymentPackage newDP = tbc.getDeploymentAdmin().getDeploymentPackage(testDP.getName());
-			String[][] pairs = newDP.getBundleSymNameVersionPairs();
-			tbc.assertEquals("The symbolic name of the bundle is ", testFixDP.getBundles()[0].getName(), pairs[0][0]);
-			tbc.assertEquals("The new version of the bundle is ", testFixDP.getBundles()[0].getVersion(), new Version(pairs[0][1]));
+			BundleInfo[] pairs = newDP.getBundleInfos();
+			tbc.assertEquals("The symbolic name of the bundle is ", testFixDP.getBundles()[0].getName(), pairs[0].getSymbolicName());
+			tbc.assertEquals("The new version of the bundle is ", testFixDP.getBundles()[0].getVersion(), pairs[0].getVersion());
 		} catch (Exception e) {
 			tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }));
 		} finally {
@@ -270,9 +270,9 @@ public class InstallFixPack implements TestInterface {
 			
 			// the dp instance is is stale
 			DeploymentPackage newDP = tbc.getDeploymentAdmin().getDeploymentPackage(testDP.getName());
-			String[][] pairs = newDP.getBundleSymNameVersionPairs();
-			tbc.assertEquals("The symbolic name of the bundle is ", testFixDP.getBundles()[0].getName(), pairs[0][0]);
-			tbc.assertEquals("The new version of the bundle is ", testFixDP.getBundles()[0].getVersion(), new Version(pairs[0][1]));
+			BundleInfo[] pairs = newDP.getBundleInfos();
+			tbc.assertEquals("The symbolic name of the bundle is ", testFixDP.getBundles()[0].getName(), pairs[0].getSymbolicName());
+			tbc.assertEquals("The new version of the bundle is ", testFixDP.getBundles()[0].getVersion(), pairs[0].getVersion());
 		} catch (Exception e) {
 			tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }));
 		} finally {
@@ -302,9 +302,9 @@ public class InstallFixPack implements TestInterface {
 			
 			// the dp instance is is stale
 			DeploymentPackage newDP = tbc.getDeploymentAdmin().getDeploymentPackage(testDP.getName());
-			String[][] pairs = newDP.getBundleSymNameVersionPairs();
-			tbc.assertEquals("The symbolic name of the bundle is ", testFixDP.getBundles()[0].getName(), pairs[0][0]);
-			tbc.assertEquals("The new version of the bundle is ", testFixDP.getBundles()[0].getVersion(), new Version(pairs[0][1]));
+			BundleInfo[] pairs = newDP.getBundleInfos();
+			tbc.assertEquals("The symbolic name of the bundle is ", testFixDP.getBundles()[0].getName(), pairs[0].getSymbolicName());
+			tbc.assertEquals("The new version of the bundle is ", testFixDP.getBundles()[0].getVersion(), pairs[0].getVersion());
 		} catch (Exception e) {
 			tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }));
 		} finally {

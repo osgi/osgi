@@ -72,7 +72,7 @@ public class Cancel implements TestInterface {
 
     public void run() {
         testCancel001();
-//        testCancel002();
+        testCancel002();
         testCancel003();
         testCancel004();
     }
@@ -91,7 +91,7 @@ public class Cancel implements TestInterface {
         boolean canceled = false;
 
         tbc.setDeploymentAdminPermission(
-            DeploymentConstants.DEPLOYMENT_PACKAGE_NAME_ALL, DeploymentAdminPermission.ACTION_CANCEL);
+            DeploymentConstants.DEPLOYMENT_PACKAGE_NAME_ALL, DeploymentAdminPermission.CANCEL);
         
         BundleListenerImpl listener = tbc.getBundleListener();
         listener.reset();
@@ -148,7 +148,7 @@ public class Cancel implements TestInterface {
         DeploymentPackage dp = null;
 
         tbc.setDeploymentAdminPermission(
-            DeploymentConstants.DEPLOYMENT_PACKAGE_NAME_ALL, DeploymentAdminPermission.ACTION_CANCEL);
+            DeploymentConstants.DEPLOYMENT_PACKAGE_NAME_ALL, DeploymentAdminPermission.CANCEL);
         
         BundleListenerImpl listener = tbc.getBundleListener();
         listener.reset();
@@ -228,7 +228,7 @@ public class Cancel implements TestInterface {
 
         tbc.setDeploymentAdminPermission(
             DeploymentConstants.DEPLOYMENT_PACKAGE_NAME_ALL,
-            DeploymentAdminPermission.ACTION_INSTALL + "," + DeploymentAdminPermission.ACTION_UNINSTALL + "," + DeploymentAdminPermission.ACTION_UNINSTALL_FORCED);
+            DeploymentAdminPermission.INSTALL + "," + DeploymentAdminPermission.UNINSTALL + "," + DeploymentAdminPermission.UNINSTALL_FORCED);
         
         BundleListenerImpl listener = tbc.getBundleListener();
         listener.reset();

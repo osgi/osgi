@@ -65,8 +65,6 @@ public class Activator implements BundleActivator, TB1Service {
 	
 	ServiceRegistration sr;
 	
-	private DeploymentTestControl tbc;
-
 	public void start(BundleContext bc) throws Exception {
 		sr = bc.registerService(TB1Service.class.getName(), this, null);
 		System.out.println("TB1Service started.");

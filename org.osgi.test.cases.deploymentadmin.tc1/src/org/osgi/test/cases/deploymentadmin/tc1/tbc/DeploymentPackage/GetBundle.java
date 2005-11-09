@@ -130,7 +130,7 @@ public class GetBundle {
             
             TestingBundle[] testBundle = testDP.getBundles();
             
-            tbc.assertEquals("Asserting the number of installed bundles.", 2, dp.getBundleSymNameVersionPairs().length);
+            tbc.assertEquals("Asserting the number of installed bundles.", 2, dp.getBundleInfos().length);
             
             fixDp = tbc.installDeploymentPackage(tbc.getWebServer() + testFixDP.getFilename());
             
