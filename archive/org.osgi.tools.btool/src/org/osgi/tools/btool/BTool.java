@@ -193,7 +193,7 @@ public class BTool extends Task {
 	 */
 	private void getPermissions() {
 		if (permissions == null)
-			permissions = replaceExt(zipname, ".jar", ".perm");
+			permissions = replaceExt(zipname, ".perm");
 		if (permissions == null)
 			return;
 		File f = new File(permissions);
@@ -221,7 +221,8 @@ public class BTool extends Task {
 			}
 		}
 		if (manifestSource == null) {
-			manifestSource = replaceExt(zipname, ".jar", ".mf");
+			
+			manifestSource = replaceExt(zipname, ".mf");
 		}
 		if (manifestSource == null)
 			return;
@@ -249,10 +250,10 @@ public class BTool extends Task {
 		this.showmanifest = showmanifest;
 	}
 
-	private String replaceExt(String name, String extFrom, String extTo) {
-		int n = name.lastIndexOf(extFrom);
+	private String replaceExt(String name, String extTo) {
+		int n = name.lastIndexOf(".");
 		if (n < 0) {
-			trace("Cannot find extension: " + name + " " + extFrom);
+			trace("Cannot find extension: " + name );
 			return null;
 		}
 		return name.substring(0, n) + extTo;
