@@ -13,6 +13,10 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Iterator;
 
 public class TestDesktop extends Frame implements ActionListener, ItemListener {
 
@@ -132,10 +136,15 @@ public class TestDesktop extends Frame implements ActionListener, ItemListener {
 
     public void refreshTests() {
         li_tests.removeAll();
-        String[] cases = doIt.getTestIds();
-        for (int i = 0; i < cases.length; i++) {
-            li_tests.add(cases[i]);
+        ArrayList tcs = new ArrayList(
+        		Arrays.asList(doIt.getTestIds()));
+        Collections.sort(tcs);
+        int i = 0;
+        for (Iterator iter = tcs.iterator(); iter.hasNext();) {
+			String tc = (String) iter.next();
+            li_tests.add(tc);
             li_tests.select(i);
+            ++i;
         }
     }
 

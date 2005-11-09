@@ -609,66 +609,6 @@ public class DoIt implements BundleActivator, ServiceListener {
         }
     }
 
-    public static final String db_test_14 = "When a client requests a new session \n" +
-    		"with an install or uninstall operation, it must block that call until \n" +
-    		"the earlier session is completed. The Deployment Admin service must \n" +
-    		"throw a DeploymentException when the session can not be created after \n" +
-    		"an appropriate time out period.";
-    public void db_test_14() throws Exception {
-        final DeploymentException[] ex = new DeploymentException[2];
-        
-        // INSTALL
-        
-        // creates a thread that calls install
-        Thread installThread = new Thread(new Runnable() {
-            public void run() {
-                try {
-                    try {Thread.sleep(1000);} catch (Exception e) {}
-                    InputStream is = new FileInputStream(HOME + "db_test_14_02.dp");
-                    DeploymentPackage dp = getDeploymentAdmin().installDeploymentPackage(is);
-                    is.close();
-                } catch (DeploymentException e) {
-                    ex[0] = e;
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-        installThread.start();
-
-        InputStream is = new FileInputStream(HOME + "db_test_14_01.dp");
-        final DeploymentPackage dp1 = getDeploymentAdmin().installDeploymentPackage(is);
-        is.close();
-
-        if (null == ex[0] || ex[0].getCode() != DeploymentException.CODE_TIMEOUT)
-            throw new Exception("Test failed");
-        
-        // UNINSTALL
-        
-        // creates a thread that calls uninstall
-        Thread uninstallThread = new Thread(new Runnable() {
-            public void run() {
-                try {
-                    try {Thread.sleep(1000);} catch (Exception e) {}
-                    dp1.uninstall();
-                } catch (DeploymentException e) {
-                    ex[1] = e;
-                }
-            }
-        });
-        uninstallThread.start();
-        
-        is = new FileInputStream(HOME + "db_test_14_02.dp");
-        DeploymentPackage dp2 = getDeploymentAdmin().installDeploymentPackage(is);
-        is.close();
-        
-        if (null == ex[1] || ex[1].getCode() != DeploymentException.CODE_TIMEOUT)
-            throw new Exception("Test failed");
-        
-        dp1.uninstall();
-        dp2.uninstall();
-    }
-
     public static final String db_test_15 = "Tests localization";
     public void db_test_15() throws Exception {
         InputStream is = new FileInputStream(HOME + "db_test_15.dp");
