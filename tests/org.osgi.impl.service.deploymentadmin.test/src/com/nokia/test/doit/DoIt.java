@@ -269,62 +269,6 @@ public class DoIt implements BundleActivator, ServiceListener {
         } 
     }
 
-    public void bad_db_test_01() throws Exception {
-        InputStream is = new FileInputStream(HOME + "bad_db_test_01.dp");
-        try {
-            DeploymentPackage dp = getDeploymentAdmin().installDeploymentPackage(is);
-        } catch (DeploymentException e) {
-            return;
-        } finally {
-            ServiceReference ref = context.getServiceReference(Db.class.getName());
-            Db db = (Db) context.getService(ref);
-            db.reset(null);
-        }
-        throw new Exception("Negative test failed");
-    }
-
-    public void bad_db_test_02() throws Exception {
-        InputStream is = new FileInputStream(HOME + "bad_db_test_02.dp");
-        try {
-            DeploymentPackage dp = getDeploymentAdmin().installDeploymentPackage(is);
-        } catch (DeploymentException e) {
-            return;
-        } finally {
-            ServiceReference ref = context.getServiceReference(Db.class.getName());
-            Db db = (Db) context.getService(ref);
-            db.reset(null);
-        }
-        throw new Exception("Negative test failed");
-    }
-
-    public void bad_db_test_03() throws Exception {
-        InputStream is = new FileInputStream(HOME + "bad_db_test_03.dp");
-        try {
-            DeploymentPackage dp = getDeploymentAdmin().installDeploymentPackage(is);
-        } catch (DeploymentException e) {
-            return;
-        } finally {
-            ServiceReference ref = context.getServiceReference(Db.class.getName());
-            Db db = (Db) context.getService(ref);
-            db.reset(null);
-        }
-        throw new Exception("Negative test failed");
-    }
-
-    /*public void bad_db_test_04() throws Exception {
-        InputStream is = new FileInputStream(HOME + "bad_db_test_04.dp");
-        try {
-            DeploymentPackage dp = getDeploymentAdmin().installDeploymentPackage(is);
-        } catch (DeploymentException e) {
-            return;
-        } finally {
-            ServiceReference ref = context.getServiceReference(Db.class.getName());
-            Db db = (Db) context.getService(ref);
-            db.reset(null);
-        }
-        throw new Exception("Negative test failed");
-    }*/
-    
     public void bad_db_test_05() throws Exception {
         InputStream is = new FileInputStream(HOME + "bad_db_test_05.dp");
         try {
@@ -633,24 +577,6 @@ public class DoIt implements BundleActivator, ServiceListener {
 
 		dp.uninstall();
     }
-    
-    /*public static final String db_test_16 = "BUNDLE START FAILS\n";
-    public void db_test_16() throws Exception {
-        InputStream is = new FileInputStream(HOME + "db_test_16.dp");
-        DeploymentPackage dp = null;
-        try {
-            dp = getDeploymentAdmin().installDeploymentPackage(is);
-            throw new Exception("Test failed");
-        } catch (DeploymentException e) {
-            // DeploymentException.CODE_BUNDLE_START means that Dp is installed
-            // but some bundles didn't start
-            dp = getDeploymentAdmin().getDeploymentPackage("db_test_16");
-            dp.uninstall();
-            
-            if (e.getCode() != DeploymentException.CODE_BUNDLE_START)
-                throw new Exception("Test failed");
-        }
-    }*/
     
     ///////////////////////////////////////////////////////////////////////////
 
