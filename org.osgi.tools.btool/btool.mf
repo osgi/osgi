@@ -17,5 +17,6 @@ $(IMPORT-PACKAGE)
 $(EXPORT-PACKAGE)
 $(PRIVATE-PACKAGE)
 
-
+Name: org/osgi/tools/btool/BTool.class
+Test: 1
 
