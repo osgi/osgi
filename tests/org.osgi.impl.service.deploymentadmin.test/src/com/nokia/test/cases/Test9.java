@@ -13,6 +13,7 @@ import org.osgi.service.permissionadmin.PermissionInfo;
 
 import com.nokia.test.db.Db;
 import com.nokia.test.doit.TestCaseClass;
+import com.nokia.test.doit.TestCaseException;
 
 public class Test9 extends TestCaseClass {
 
@@ -40,7 +41,7 @@ public class Test9 extends TestCaseClass {
               boolean b2 = bis[0].getVersion().equals(new Version("1.5.0"));
       		
               if (!(b1 && b2))
-            	  throw new Exception("Test failed");
+            	  throw new TestCaseException("Test failed");
         } finally {
             if (null != dp)
                 dp.uninstall();

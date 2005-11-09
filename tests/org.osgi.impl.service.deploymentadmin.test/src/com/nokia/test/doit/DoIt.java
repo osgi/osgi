@@ -609,56 +609,6 @@ public class DoIt implements BundleActivator, ServiceListener {
         }
     }
 
-    public static final String db_test_10 = "INSTALL RESOURCE THAT HAS NO PID";
-    public void db_test_10() throws Exception {
-        InputStream is = new FileInputStream(HOME + "db_test_10.dp");
-        DeploymentPackage dp = getDeploymentAdmin().installDeploymentPackage(is);
-        is.close();
-
-        is = new FileInputStream(HOME + "db_test_10_update_01.dp");
-        dp = getDeploymentAdmin().installDeploymentPackage(is);
-        is.close();
-
-        dp.uninstall();
-    }
-
-//    public static final String db_test_11 = "NEW BUNDLE DURING UPDATE\n" +
-//            "Update adds a new bundle\n" +
-//            " - new element in getBundleSymNameVersionPairs() result";
-//    public void db_test_11() throws Exception {
-//        InputStream is = new FileInputStream(HOME + "db_test_11.dp");
-//        DeploymentPackage dp = getDeploymentAdmin().installDeploymentPackage(is);
-//        is.close();
-//        
-//        String[][] bsnvps = dp.getBundleSymNameVersionPairs();
-//        if (bsnvps.length != 2)
-//            throw new Exception("Test failed");
-//
-//        is = new FileInputStream(HOME + "db_test_11_update_01.dp");
-//        dp = getDeploymentAdmin().installDeploymentPackage(is);
-//        is.close();
-//        
-//        bsnvps = dp.getBundleSymNameVersionPairs();
-//        if (bsnvps.length != 3)
-//            throw new Exception("Test failed");
-//
-//        dp.uninstall();
-//    }
-
-    public static final String db_test_12 = "\n" +
-        "DeploymentPackage-Missing: false EQUALS WITH the lack of the header";
-    public void db_test_12() throws Exception {
-        InputStream is = new FileInputStream(HOME + "db_test_12.dp");
-        DeploymentPackage dp = getDeploymentAdmin().installDeploymentPackage(is);
-        is.close();
-
-        is = new FileInputStream(HOME + "db_test_12_update_01.dp");
-        dp = getDeploymentAdmin().installDeploymentPackage(is);
-        is.close();
-
-        dp.uninstall();
-    }
-
     public static final String db_test_14 = "When a client requests a new session \n" +
     		"with an install or uninstall operation, it must block that call until \n" +
     		"the earlier session is completed. The Deployment Admin service must \n" +

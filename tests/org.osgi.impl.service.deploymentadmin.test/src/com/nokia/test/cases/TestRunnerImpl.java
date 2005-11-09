@@ -19,15 +19,18 @@ public class TestRunnerImpl implements BundleActivator, TestRunner {
     
     private Hashtable testCases = new Hashtable();
     {
-        testCases.put("Test1", new Test1(this));
-        testCases.put("Test2", new Test2(this));
-        testCases.put("Test3", new Test3(this));
-        testCases.put("Test4", new Test4(this));
-        testCases.put("Test5", new Test5(this));
-        testCases.put("Test6", new Test6(this));
-        testCases.put("Test7", new Test7(this));
-        //testCases.put("Test8", new Test8(this));
-        testCases.put("Test9", new Test9(this));
+        testCases.put("Test01", new Test1(this));
+        testCases.put("Test02", new Test2(this));
+        testCases.put("Test03", new Test3(this));
+        testCases.put("Test04", new Test4(this));
+        testCases.put("Test05", new Test5(this));
+        testCases.put("Test06", new Test6(this));
+        testCases.put("Test07", new Test7(this));
+        //testCases.put("Test08", new Test8(this));
+        testCases.put("Test09", new Test9(this));
+        testCases.put("Test10", new Test10(this));
+        testCases.put("Test11", new Test11(this));
+        testCases.put("Test12", new Test12(this));
     }
     
     public TestRunnerImpl() throws Exception {

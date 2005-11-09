@@ -13,6 +13,7 @@ import org.osgi.service.permissionadmin.PermissionInfo;
 
 import com.nokia.test.db.Db;
 import com.nokia.test.doit.TestCaseClass;
+import com.nokia.test.doit.TestCaseException;
 import com.nokia.test.exampleresourceprocessor.db.api.DbRpTest;
 
 public class Test6 extends TestCaseClass {
@@ -32,9 +33,9 @@ public class Test6 extends TestCaseClass {
             
             File f = ((DbRpTest) rp).getBundlePrivateArea();
             if (null == f)
-                throw new Exception("Private area error: null returned");
+                throw new TestCaseException("Private area error: null returned");
             if (!f.exists())
-                throw new Exception("Private area error: does not exist");
+                throw new TestCaseException("Private area error: does not exist");
             File[] fs = f.listFiles();
             System.out.println(Arrays.asList(fs));
         } finally {

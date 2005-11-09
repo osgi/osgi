@@ -11,6 +11,7 @@ import org.osgi.service.permissionadmin.PermissionInfo;
 
 import com.nokia.test.db.Db;
 import com.nokia.test.doit.TestCaseClass;
+import com.nokia.test.doit.TestCaseException;
 
 public class Test7 extends TestCaseClass {
 
@@ -43,11 +44,11 @@ public class Test7 extends TestCaseClass {
                     b3 = true;
             }
     		if (!b1)
-                throw new Exception("'db_test_01' DP should be visble");
+                throw new TestCaseException("'db_test_01' DP should be visble");
     		if (b2)
-    			throw new Exception("'db_test_07' DP should NOT be visble");
+    			throw new TestCaseException("'db_test_07' DP should NOT be visble");
     		if (b3)
-                throw new Exception("'System' DP should NOT be visble");
+                throw new TestCaseException("'System' DP should NOT be visble");
         } finally {
             if (null != dp1)
                 dp1.uninstall();
