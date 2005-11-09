@@ -1134,35 +1134,51 @@ public class DmtSessionImpl implements DmtSession {
     // 'synchronized' is just indication, all entry points are synch'd anyway
     private synchronized PluginSessionWrapper getPluginSession(Node node, 
             boolean writeOperation) throws DmtException {
-        PluginSessionWrapper wrappedPlugin = null;
-        PluginSessionWrapper rootPlugin = null;
+        /*
+         * szempontok: - unregistration: ha egy plugin-t elkezdtunk hasznalni,
+         *               es unregisztralodik, attol meg bele kell menni a 
+         *               session wrapper-ebe
+         *             - ha egy node-hoz csak egy gyoker plugin session van
+         *               nyitva, akkor meg kell probalni talalni egy 
+         *               specifikusabb plugin-t  
+         * 
+        - kikeressuk a legmelyebb node-ra passzolo nyitott session-t
+          -> nincs: get pluginReg, root, open session
+          -> van: get pluginReg, root
+             -> ha root lejjebb van, mint a nyitott session gyokere, akkor open session
+             -> egyebkent nyitott session visszaadasa
+         */
         
+        PluginSessionWrapper wrappedPlugin = null;
+        Node wrappedPluginRoot = null;
+        
+        // Look through the open plugin sessions, and find the session with the
+        // lowest root that handles the given node.
         Iterator i = dataPlugins.iterator();
-        while (i.hasNext() && wrappedPlugin == null) {
+        while (i.hasNext()) {
         	PluginSessionWrapper plugin = (PluginSessionWrapper) i.next();
             Node pluginRoot = plugin.getSessionRoot();
-            if(pluginRoot.isRoot())
-            	rootPlugin = plugin;
-            else if(pluginRoot.isAncestorOf(node))
-                wrappedPlugin = plugin;
+            if(pluginRoot.isAncestorOf(node) && (wrappedPluginRoot == null || 
+                    wrappedPluginRoot.isAncestorOf(pluginRoot))) {
+                wrappedPlugin = plugin; 
+                wrappedPluginRoot = pluginRoot;
+            }
         }
 
-        // The 'pluginRegistration' and 'root' variables are initialized to null
-        // to get rid of the compiler errors, but they will always be set to a
-        // non-null value before they are actually used.
-        PluginRegistration pluginRegistration = null;
-        Node root = null;
+        // Find the plugin that would/will handle the given node, and the root
+        // of the (potential) session opened on it. 
+        PluginRegistration pluginRegistration = 
+            context.getPluginDispatcher().getDataPlugin(node);
+        Node root = getRootForPlugin(pluginRegistration, node);
         
-        if(wrappedPlugin == null) {
-            pluginRegistration = 
-                context.getPluginDispatcher().getDataPlugin(node);
-            root = getRootForPlugin(pluginRegistration, node);
-
-            if(root.equals(Node.ROOT_NODE))
-                wrappedPlugin = rootPlugin; // may be null
-        }
-        
-        if(wrappedPlugin != null) {
+        // If we found a plugin session handling the node, and the potential
+        // new plugin session root (defined by 'root') is not in its subtree,
+        // then use the open session.  If there is no session yet, or if a new
+        // session could be opened with a deeper root, then a new session is
+        // opened.  (This guarantees that the proper plugin is used instead of
+        // the root plugin for nodes below the "root tree".) 
+        if(wrappedPlugin != null && 
+                !wrappedPluginRoot.isAncestorOf(root, true)) {
             if(writeOperation && 
                     wrappedPlugin.getSessionType() == LOCK_TYPE_SHARED)
                 throw getWriteException(lockMode, node);
@@ -1170,9 +1186,8 @@ public class DmtSessionImpl implements DmtSession {
         }
 
         // No previously opened session found, attempting to open session with
-        // correct lock type.  The variables 'pluginRegistration' and 'root' are
-        // initialized at this point to the desired plugin and its root.
-        
+        // correct lock type.
+
         DataPluginFactory plugin = pluginRegistration.getDataPlugin();
         ReadableDataSession pluginSession = null;
         int pluginSessionType = lockMode;
