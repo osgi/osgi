@@ -47,9 +47,12 @@ public class Policy {
 	}
 	
 	public void load() throws IOException {
+		cpInfos = new Vector();
+		
 		String fn = System.getProperty(POLICY_FILE);
 		if (null == fn) {
-            throw new IllegalArgumentException(POLICY_FILE + " property not set!");
+			// throw new IllegalArgumentException(POLICY_FILE + " property not set!");
+			return;
 		}
 		
 		File f = new File(fn);
@@ -57,7 +60,6 @@ public class Policy {
 		    throw new FileNotFoundException(fn);
         }
 
-		cpInfos = new Vector();
 		loadPolicy(f);
 	}
 
