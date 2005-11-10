@@ -71,34 +71,29 @@ public class Copy implements TestInterface {
 
 	public void run() {
         prepare();
-		if (DmtConstants.SUPPORTS_COPY) {
-            testCopy001();
-    		testCopy002();
-    		testCopy003();
-    		testCopy004();
-    		testCopy005();
-    		testCopy006();
-    		testCopy007();
-    		testCopy008();
-    		testCopy009();
-    		testCopy010();
-    		testCopy011();
-    		testCopy012();
-    		testCopy013();
-    		testCopy014();
-    		testCopy015();
-    		testCopy016();
-    		testCopy017();
-    		testCopy018();
-    		testCopy019();
-    		testCopy020();
-    		testCopy021();
-            testCopy022();
-            testCopy023();
-        } else {
-            testCopyFeatureNotSupported001();
-        }
-		
+        testCopy001();
+		testCopy002();
+		testCopy003();
+		testCopy004();
+		testCopy005();
+		testCopy006();
+		testCopy007();
+		testCopy008();
+		testCopy009();
+		testCopy010();
+		testCopy011();
+		testCopy012();
+		testCopy013();
+		testCopy014();
+		testCopy015();
+		testCopy016();
+		testCopy017();
+		testCopy018();
+		testCopy019();
+		testCopy020();
+		testCopy021();
+        testCopy022();
+        testCopy023();
 	}
 
 	private void prepare() {
@@ -358,8 +353,11 @@ public class Copy implements TestInterface {
 		DmtSession session = null;
 		try {
 			tbc.log("#testCopy009");
-			//The copied node allows the Get operation
+
+			tbc.openSessionAndSetNodeAcl(TestExecPluginActivator.ROOT, DmtConstants.PRINCIPAL, Acl.GET);
+			//The copied node allows the Get operation			
             tbc.openSessionAndSetNodeAcl(TestExecPluginActivator.INTERIOR_NODE, DmtConstants.PRINCIPAL, Acl.GET);
+            
 			tbc.setPermissions(new PermissionInfo(DmtPrincipalPermission.class
 					.getName(), DmtConstants.PRINCIPAL, "*"));
 
@@ -379,6 +377,7 @@ public class Copy implements TestInterface {
 		} finally {
             tbc.setPermissions(new PermissionInfo(DmtPermission.class.getName(), DmtConstants.ALL_NODES,DmtConstants.ALL_ACTIONS));
             tbc.cleanUp(session,TestExecPluginActivator.INTERIOR_NODE);
+            tbc.cleanAcl(TestExecPluginActivator.ROOT);
             
 		}
 
@@ -662,46 +661,15 @@ public class Copy implements TestInterface {
 	}
     
     /**
-     * This method asserts that the copy does not copy the Acl
-     * 
-     * @spec DmtSession.copy(String,String,boolean)
-     */
-    private void testCopy020() {
-        DmtSession session = null;
-        try {
-            tbc.log("#testCopy020");
-            session = tbc.getDmtAdmin().getSession(".",
-                    DmtSession.LOCK_TYPE_EXCLUSIVE);
-            session.setNodeAcl(TestExecPluginActivator.INTERIOR_NODE,
-                    new Acl(new String[] { DmtConstants.PRINCIPAL },
-                            new int[] { Acl.EXEC }));
-            session.copy(TestExecPluginActivator.INTERIOR_NODE,
-                    TestExecPluginActivator.INEXISTENT_NODE, true);
-            TestExecPlugin.setAllUriIsExistent(true);
-            
-            tbc.assertNull("Asserts that the copy does not copy the Acl",
-                session.getNodeAcl(TestExecPluginActivator.INEXISTENT_NODE));
-            
-        } catch (Exception e) {
-            tbc.fail("Unexpected Exception: " + e.getClass().getName()
-                + " [Message: " + e.getMessage() + "]");
-        } finally {
-            tbc.cleanUp(session, TestExecPluginActivator.INTERIOR_NODE);
-            TestExecPlugin.setAllUriIsExistent(false);
-        }
-
-    }
-    
-    /**
 	 * This method asserts that DmtException.TRANSACTION_ERROR is thrown 
 	 * if the session is atomic and the plugin is read-only
 	 * 
 	 * @spec DmtSession.copy(String,String,boolean)
 	 */
-	private void testCopy021() {
+	private void testCopy020() {
 		DmtSession session = null;
 		try {
-			tbc.log("#testCopy021");
+			tbc.log("#testCopy020");
 			session = tbc.getDmtAdmin().getSession(".",
 			    DmtSession.LOCK_TYPE_ATOMIC);
 			
@@ -726,10 +694,10 @@ public class Copy implements TestInterface {
 	 * 
 	 * @spec DmtSession.copy(String,String,boolean)
 	 */
-	private void testCopy022() {
+	private void testCopy021() {
 		DmtSession session = null;
 		try {
-			tbc.log("#testCopy022");
+			tbc.log("#testCopy021");
 			session = tbc.getDmtAdmin().getSession(".",
 			    DmtSession.LOCK_TYPE_ATOMIC);
 			
@@ -749,7 +717,48 @@ public class Copy implements TestInterface {
 	}
 	
 	/**
-	 * Asserts that COMMAND_NOT_ALLOWED is thrown if any of the implied Get or Add commands are not allowed
+	 * This method asserts that no exception is thrown if the caller has DmtPermission for the target node 
+	 * with the Replace action and the node has a title 
+	 * 
+	 * @spec DmtSession.copy(String,String,boolean)
+	 */
+	private void testCopy022() {
+		DmtSession session = null;
+		try {
+			tbc.log("#testCopy022");
+			session = tbc.getDmtAdmin().getSession(".",
+					DmtSession.LOCK_TYPE_EXCLUSIVE);
+			
+            tbc.setPermissions(new PermissionInfo[]{
+                    new PermissionInfo(DmtPermission.class.getName(),
+                        TestExecPluginActivator.ROOT, DmtPermission.ADD),
+                    new PermissionInfo(DmtPermission.class.getName(),
+                        TestExecPluginActivator.INTERIOR_NODE, DmtPermission.GET),
+                    new PermissionInfo(DmtPermission.class.getName(),
+                                TestExecPluginActivator.INEXISTENT_NODE, DmtPermission.REPLACE)});
+
+            //When doing this, getNodeTitle returns a value intead of null
+            TestExecPlugin.setDefaultNodeTitle(DmtConstants.TITLE);
+            
+			session.copy(TestExecPluginActivator.INTERIOR_NODE,
+					TestExecPluginActivator.INEXISTENT_NODE, true);
+			tbc.pass("Copy method could called when the caller has DmtPermission for the " +
+					"target node with the Replace action and the node has a title ");
+		} catch (Exception e) {
+            tbc.fail("Unexpected Exception: " + e.getClass().getName()
+                    + " [Message: " + e.getMessage() + "]");
+
+		} finally {
+            tbc.setPermissions(new PermissionInfo(DmtPermission.class.getName(), DmtConstants.ALL_NODES,DmtConstants.ALL_ACTIONS));
+            tbc.cleanUp(session, null);
+            TestExecPlugin.setDefaultNodeTitle(null);
+		}
+	}
+	
+	/**
+	 * This method asserts that an SecurityException is thrown if the caller does not 
+	 * have DmtPermission for the target node with the Replace action and the
+	 * node has a title (in this case is necessary Replace)
 	 * 
 	 * @spec DmtSession.copy(String,String,boolean)
 	 */
@@ -757,47 +766,31 @@ public class Copy implements TestInterface {
 		DmtSession session = null;
 		try {
 			tbc.log("#testCopy023");
-
 			session = tbc.getDmtAdmin().getSession(".",
 					DmtSession.LOCK_TYPE_EXCLUSIVE);
-			session.copy(TestExecPluginActivator.INTERIOR_NODE_COPY,
-					TestExecPluginActivator.INTERIOR_NODE2_COPY, false);
-			tbc.failException("",DmtException.class);
-		} catch (DmtException e) {
-			tbc.assertEquals(
-					"Asserting that DmtException code is COMMAND_NOT_ALLOWED",
-					DmtException.COMMAND_NOT_ALLOWED, e.getCode());
+			
+            tbc.setPermissions(new PermissionInfo[]{
+                    new PermissionInfo(DmtPermission.class.getName(),
+                        TestExecPluginActivator.ROOT, DmtPermission.ADD),
+                    new PermissionInfo(DmtPermission.class.getName(),
+                        TestExecPluginActivator.INTERIOR_NODE, DmtPermission.GET)});
+
+            //When doing this, getNodeTitle returns a value intead of null
+            TestExecPlugin.setDefaultNodeTitle(DmtConstants.TITLE);
+            
+			session.copy(TestExecPluginActivator.INTERIOR_NODE,
+					TestExecPluginActivator.INEXISTENT_NODE, true);
+			tbc.failException("#", SecurityException.class);
+		} catch (SecurityException e) {
+			tbc.pass("The Exception was SecurityException");
 		} catch (Exception e) {
-			tbc.fail("Expected " + DmtException.class.getName() + " but was "
-					+ e.getClass().getName());
+			tbc.fail("Expected " + SecurityException.class.getName()
+					+ " but was " + e.getClass().getName());
 		} finally {
-			tbc.cleanUp(session, null);
+            tbc.setPermissions(new PermissionInfo(DmtPermission.class.getName(), DmtConstants.ALL_NODES,DmtConstants.ALL_ACTIONS));
+            tbc.cleanUp(session, null);
+            TestExecPlugin.setDefaultNodeTitle(null);
 		}
 	}
-    /**
-     * Asserts that if the DmtAdmin service implementation does not support this method,
-     * DmtException.FEATURE_NOT_SUPPORTED is thrown
-     *  
-     * @spec DmtSession.copy(String,String,boolean)
-     */
-    private void testCopyFeatureNotSupported001() {
-        DmtSession session = null;
-        try {
-            tbc.log("#testCopyFeatureNotSupported001");
-            session = tbc.getDmtAdmin().getSession(DmtConstants.OSGi_ROOT,
-                    DmtSession.LOCK_TYPE_EXCLUSIVE);
-            session.copy(TestExecPluginActivator.INTERIOR_NODE,TestExecPluginActivator.INEXISTENT_NODE, true);
-            tbc.failException("", DmtException.class);
-        } catch (DmtException e) {
-            tbc.assertEquals(
-                    "Asserting that DmtException code is FEATURE_NOT_SUPPORTED",
-                    DmtException.FEATURE_NOT_SUPPORTED, e.getCode());
-        } catch (Exception e) {
-            tbc.fail("Expected " + DmtException.class.getName() + " but was "
-                    + e.getClass().getName());
-        } finally {
-            tbc.closeSession(session);
-        }
-    }
 	
 }

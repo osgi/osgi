@@ -110,12 +110,6 @@ public class CreateLeafNode implements TestInterface {
         testCreateLeafNode037();
         testCreateLeafNode038();
         testCreateLeafNode039();
-        testCreateLeafNode040();
-        testCreateLeafNode041();
-        testCreateLeafNode042();
-        testCreateLeafNode043();
-        testCreateLeafNode044();
-        testCreateLeafNode045();
         
     }
         
@@ -1045,7 +1039,7 @@ public class CreateLeafNode implements TestInterface {
     
     /**
      * Asserts that DmtException with COMMAND_NOT_ALLOWED code is thrown  
-     * if the session is non-atomic (in this case, LOCK_TYPE_EXCLUSIVE) and the plugin is read-only
+     * if the session is non-atomic (LOCK_TYPE_EXCLUSIVE) and the plugin is read-only
      * 
      * @spec DmtSession.createLeafNode(String,DmtData,String)
      */
@@ -1069,7 +1063,7 @@ public class CreateLeafNode implements TestInterface {
     }
     /**
      * Asserts that DmtException with COMMAND_NOT_ALLOWED code is thrown  
-     * if the session is non-atomic (in this case, LOCK_TYPE_EXCLUSIVE) and the plugin is read-only
+     * if the session is non-atomic (LOCK_TYPE_EXCLUSIVE) and the plugin is read-only
      * 
      * @spec DmtSession.createLeafNode(String,DmtData)
      */
@@ -1093,7 +1087,7 @@ public class CreateLeafNode implements TestInterface {
     }
     /**
      * Asserts that DmtException with COMMAND_NOT_ALLOWED code is thrown  
-     * if the session is non-atomic (in this case, LOCK_TYPE_EXCLUSIVE) and the plugin is read-only
+     * if the session is non-atomic (LOCK_TYPE_EXCLUSIVE) and the plugin is read-only
      * 
      * @spec DmtSession.createLeafNode(String)
      */
@@ -1116,9 +1110,12 @@ public class CreateLeafNode implements TestInterface {
         }
     }
     
+    
+    
     /**
      * Asserts that DmtException with COMMAND_NOT_ALLOWED code is thrown  
-     * if the session is non-atomic (in this case, LOCK_TYPE_SHARED) and the plugin is read-only
+     * if the session is non-atomic (LOCK_TYPE_EXCLUSIVE) and the plugin 
+     * does not support non-atomic writing
      * 
      * @spec DmtSession.createLeafNode(String,DmtData,String)
      */
@@ -1126,8 +1123,8 @@ public class CreateLeafNode implements TestInterface {
         DmtSession session = null;
         tbc.log("#testCreateLeafNode037");
         try {
-            session = tbc.getDmtAdmin().getSession(".",DmtSession.LOCK_TYPE_SHARED);
-            session.createLeafNode(TestReadOnlyPluginActivator.INEXISTENT_LEAF_NODE,new DmtData(10), DmtConstants.MIMETYPE);
+            session = tbc.getDmtAdmin().getSession(".",DmtSession.LOCK_TYPE_EXCLUSIVE);
+            session.createLeafNode(TestNonAtomicPluginActivator.INEXISTENT_LEAF_NODE,new DmtData(10), DmtConstants.MIMETYPE);
             tbc.failException("", DmtException.class);
         } catch (DmtException e) {
             tbc.assertEquals(
@@ -1142,7 +1139,8 @@ public class CreateLeafNode implements TestInterface {
     }
     /**
      * Asserts that DmtException with COMMAND_NOT_ALLOWED code is thrown  
-     * if the session is non-atomic (in this case, LOCK_TYPE_SHARED) and the plugin is read-only
+     * if the session is non-atomic (LOCK_TYPE_EXCLUSIVE) and the plugin 
+     * does not support non-atomic writing
      * 
      * @spec DmtSession.createLeafNode(String,DmtData)
      */
@@ -1150,8 +1148,8 @@ public class CreateLeafNode implements TestInterface {
         DmtSession session = null;
         tbc.log("#testCreateLeafNode038");
         try {
-            session = tbc.getDmtAdmin().getSession(".",DmtSession.LOCK_TYPE_SHARED);
-            session.createLeafNode(TestReadOnlyPluginActivator.INEXISTENT_LEAF_NODE,new DmtData(10));
+            session = tbc.getDmtAdmin().getSession(".",DmtSession.LOCK_TYPE_EXCLUSIVE);
+            session.createLeafNode(TestNonAtomicPluginActivator.INEXISTENT_LEAF_NODE,new DmtData(10));
             tbc.failException("", DmtException.class);
         } catch (DmtException e) {
             tbc.assertEquals(
@@ -1166,7 +1164,8 @@ public class CreateLeafNode implements TestInterface {
     }
     /**
      * Asserts that DmtException with COMMAND_NOT_ALLOWED code is thrown  
-     * if the session is non-atomic (in this case, LOCK_TYPE_SHARED) and the plugin is read-only
+     * if the session is non-atomic (LOCK_TYPE_EXCLUSIVE) and the plugin 
+     * does not support non-atomic writing
      * 
      * @spec DmtSession.createLeafNode(String)
      */
@@ -1174,82 +1173,6 @@ public class CreateLeafNode implements TestInterface {
         DmtSession session = null;
         tbc.log("#testCreateLeafNode039");
         try {
-            session = tbc.getDmtAdmin().getSession(".",DmtSession.LOCK_TYPE_SHARED);
-            session.createLeafNode(TestReadOnlyPluginActivator.INEXISTENT_LEAF_NODE);
-            tbc.failException("", DmtException.class);
-        } catch (DmtException e) {
-            tbc.assertEquals(
-                    "Asserting that DmtException code is COMMAND_NOT_ALLOWED",
-                    DmtException.COMMAND_NOT_ALLOWED, e.getCode());
-        } catch (Exception e) {
-            tbc.fail("Expected " + DmtException.class.getName() + " but was "
-                    + e.getClass().getName());
-        } finally {
-            tbc.closeSession(session);
-        }
-    }
-    
-    /**
-     * Asserts that DmtException with COMMAND_NOT_ALLOWED code is thrown  
-     * if the session is non-atomic (in this case, LOCK_TYPE_EXCLUSIVE) and the plugin 
-     * does not support non-atomic writing
-     * 
-     * @spec DmtSession.createLeafNode(String,DmtData,String)
-     */
-    private void testCreateLeafNode040() {
-        DmtSession session = null;
-        tbc.log("#testCreateLeafNode040");
-        try {
-            session = tbc.getDmtAdmin().getSession(".",DmtSession.LOCK_TYPE_EXCLUSIVE);
-            session.createLeafNode(TestNonAtomicPluginActivator.INEXISTENT_LEAF_NODE,new DmtData(10), DmtConstants.MIMETYPE);
-            tbc.failException("", DmtException.class);
-        } catch (DmtException e) {
-            tbc.assertEquals(
-                    "Asserting that DmtException code is COMMAND_NOT_ALLOWED",
-                    DmtException.COMMAND_NOT_ALLOWED, e.getCode());
-        } catch (Exception e) {
-            tbc.fail("Expected " + DmtException.class.getName() + " but was "
-                    + e.getClass().getName());
-        } finally {
-            tbc.closeSession(session);
-        }
-    }
-    /**
-     * Asserts that DmtException with COMMAND_NOT_ALLOWED code is thrown  
-     * if the session is non-atomic (in this case, LOCK_TYPE_EXCLUSIVE) and the plugin 
-     * does not support non-atomic writing
-     * 
-     * @spec DmtSession.createLeafNode(String,DmtData)
-     */
-    private void testCreateLeafNode041() {
-        DmtSession session = null;
-        tbc.log("#testCreateLeafNode041");
-        try {
-            session = tbc.getDmtAdmin().getSession(".",DmtSession.LOCK_TYPE_EXCLUSIVE);
-            session.createLeafNode(TestNonAtomicPluginActivator.INEXISTENT_LEAF_NODE,new DmtData(10));
-            tbc.failException("", DmtException.class);
-        } catch (DmtException e) {
-            tbc.assertEquals(
-                    "Asserting that DmtException code is COMMAND_NOT_ALLOWED",
-                    DmtException.COMMAND_NOT_ALLOWED, e.getCode());
-        } catch (Exception e) {
-            tbc.fail("Expected " + DmtException.class.getName() + " but was "
-                    + e.getClass().getName());
-        } finally {
-            tbc.closeSession(session);
-        }
-    }
-    /**
-     * Asserts that DmtException with COMMAND_NOT_ALLOWED code is thrown  
-     * if the session is non-atomic (in this case, LOCK_TYPE_EXCLUSIVE) and the plugin 
-     * does not support non-atomic writing
-     * 
-     * @spec DmtSession.createLeafNode(String)
-     */
-    private void testCreateLeafNode042() {
-        DmtSession session = null;
-        tbc.log("#testCreateLeafNode042");
-        try {
             session = tbc.getDmtAdmin().getSession(".",DmtSession.LOCK_TYPE_EXCLUSIVE);
             session.createLeafNode(TestNonAtomicPluginActivator.INEXISTENT_LEAF_NODE);
             tbc.failException("", DmtException.class);
@@ -1265,79 +1188,4 @@ public class CreateLeafNode implements TestInterface {
         }
     }
     
-    /**
-     * Asserts that DmtException with COMMAND_NOT_ALLOWED code is thrown  
-     * if the session is non-atomic (in this case, LOCK_TYPE_SHARED) and the plugin 
-     * does not support non-atomic writing
-     * 
-     * @spec DmtSession.createLeafNode(String,DmtData,String)
-     */
-    private void testCreateLeafNode043() {
-        DmtSession session = null;
-        tbc.log("#testCreateLeafNode043");
-        try {
-            session = tbc.getDmtAdmin().getSession(".",DmtSession.LOCK_TYPE_SHARED);
-            session.createLeafNode(TestNonAtomicPluginActivator.INEXISTENT_LEAF_NODE,new DmtData(10), DmtConstants.MIMETYPE);
-            tbc.failException("", DmtException.class);
-        } catch (DmtException e) {
-            tbc.assertEquals(
-                    "Asserting that DmtException code is COMMAND_NOT_ALLOWED",
-                    DmtException.COMMAND_NOT_ALLOWED, e.getCode());
-        } catch (Exception e) {
-            tbc.fail("Expected " + DmtException.class.getName() + " but was "
-                    + e.getClass().getName());
-        } finally {
-            tbc.closeSession(session);
-        }
-    }
-    /**
-     * Asserts that DmtException with COMMAND_NOT_ALLOWED code is thrown  
-     * if the session is non-atomic (in this case, LOCK_TYPE_SHARED) and the plugin 
-     * does not support non-atomic writing
-     * 
-     * @spec DmtSession.createLeafNode(String,DmtData)
-     */
-    private void testCreateLeafNode044() {
-        DmtSession session = null;
-        tbc.log("#testCreateLeafNode044");
-        try {
-            session = tbc.getDmtAdmin().getSession(".",DmtSession.LOCK_TYPE_SHARED);
-            session.createLeafNode(TestNonAtomicPluginActivator.INEXISTENT_LEAF_NODE,new DmtData(10));
-            tbc.failException("", DmtException.class);
-        } catch (DmtException e) {
-            tbc.assertEquals(
-                    "Asserting that DmtException code is COMMAND_NOT_ALLOWED",
-                    DmtException.COMMAND_NOT_ALLOWED, e.getCode());
-        } catch (Exception e) {
-            tbc.fail("Expected " + DmtException.class.getName() + " but was "
-                    + e.getClass().getName());
-        } finally {
-            tbc.closeSession(session);
-        }
-    }
-    /**
-     * Asserts that DmtException with COMMAND_NOT_ALLOWED code is thrown  
-     * if the session is non-atomic (in this case, LOCK_TYPE_SHARED) and the plugin 
-     * does not support non-atomic writing
-     * 
-     * @spec DmtSession.createLeafNode(String)
-     */
-    private void testCreateLeafNode045() {
-        DmtSession session = null;
-        tbc.log("#testCreateLeafNode045");
-        try {
-            session = tbc.getDmtAdmin().getSession(".",DmtSession.LOCK_TYPE_SHARED);
-            session.createLeafNode(TestNonAtomicPluginActivator.INEXISTENT_LEAF_NODE);
-            tbc.failException("", DmtException.class);
-        } catch (DmtException e) {
-            tbc.assertEquals(
-                    "Asserting that DmtException code is COMMAND_NOT_ALLOWED",
-                    DmtException.COMMAND_NOT_ALLOWED, e.getCode());
-        } catch (Exception e) {
-            tbc.fail("Expected " + DmtException.class.getName() + " but was "
-                    + e.getClass().getName());
-        } finally {
-            tbc.closeSession(session);
-        }
-    }
 }

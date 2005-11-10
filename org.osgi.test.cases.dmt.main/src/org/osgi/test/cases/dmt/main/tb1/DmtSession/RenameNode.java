@@ -82,10 +82,8 @@ public class RenameNode implements TestInterface {
 		testRenameNode014();
 		testRenameNode015();
 		testRenameNode016();
-		testRenameNode017();
-		testRenameNode018();
-		
 	}
+	
     private void prepare() {
         tbc.setPermissions(new PermissionInfo(DmtPermission.class.getName(), DmtConstants.ALL_NODES,DmtConstants.ALL_ACTIONS));
     }
@@ -408,9 +406,10 @@ public class RenameNode implements TestInterface {
 		}
 	}
 	
+	
 	/**
 	 * This method asserts that DmtException.COMMAND_NOT_ALLOWED is thrown 
-	 * if the session is non-atomic (in this case LOCK_TYPE_SHARED) and the plugin is read-only 
+	 * if the session is non-atomic (LOCK_TYPE_EXCLUSIVE) and the plugin is read-only 
 	 * 
 	 * @spec DmtSession.renameNode(String,String)
 	 */
@@ -418,32 +417,6 @@ public class RenameNode implements TestInterface {
 		DmtSession session = null;
 		try {
 			tbc.log("#testRenameNode014");
-			session = tbc.getDmtAdmin().getSession(".",
-			    DmtSession.LOCK_TYPE_SHARED);
-			
-			session.renameNode(TestReadOnlyPluginActivator.INTERIOR_NODE,"newName");
-			tbc.failException("", DmtException.class);
-		} catch (DmtException e) {
-			tbc.assertEquals("Asserting that DmtException code is COMMAND_NOT_ALLOWED",
-					DmtException.COMMAND_NOT_ALLOWED, e.getCode());
-		} catch (Exception e) {
-			tbc.fail("Expected " + DmtException.class.getName() + " but was "
-					+ e.getClass().getName());
-		} finally {
-			tbc.closeSession(session);
-		}
-	}
-	
-	/**
-	 * This method asserts that DmtException.COMMAND_NOT_ALLOWED is thrown 
-	 * if the session is non-atomic (in this case LOCK_TYPE_EXCLUSIVE) and the plugin is read-only 
-	 * 
-	 * @spec DmtSession.renameNode(String,String)
-	 */
-	private void testRenameNode015() {
-		DmtSession session = null;
-		try {
-			tbc.log("#testRenameNode015");
 			session = tbc.getDmtAdmin().getSession(".",
 			    DmtSession.LOCK_TYPE_EXCLUSIVE);
 			
@@ -460,44 +433,18 @@ public class RenameNode implements TestInterface {
 		}
 	}
 	
-	/**
-	 * This method asserts that DmtException.COMMAND_NOT_ALLOWED is thrown 
-	 * if the session is non-atomic (in this case LOCK_TYPE_SHARED) and the plugin 
-	 * does not support non-atomic writing
-	 * 
-	 * @spec DmtSession.renameNode(String,String)
-	 */
-	private void testRenameNode016() {
-		DmtSession session = null;
-		try {
-			tbc.log("#testRenameNode016");
-			session = tbc.getDmtAdmin().getSession(".",
-			    DmtSession.LOCK_TYPE_SHARED);
-			
-			session.renameNode(TestNonAtomicPluginActivator.INTERIOR_NODE,"newName");
-			tbc.failException("", DmtException.class);
-		} catch (DmtException e) {
-			tbc.assertEquals("Asserting that DmtException code is COMMAND_NOT_ALLOWED",
-					DmtException.COMMAND_NOT_ALLOWED, e.getCode());
-		} catch (Exception e) {
-			tbc.fail("Expected " + DmtException.class.getName() + " but was "
-					+ e.getClass().getName());
-		} finally {
-			tbc.closeSession(session);
-		}
-	}
 	
 	/**
 	 * This method asserts that DmtException.COMMAND_NOT_ALLOWED is thrown 
-	 * if the session is non-atomic (in this case LOCK_TYPE_EXCLUSIVE) and the plugin
+	 * if the session is non-atomic (LOCK_TYPE_EXCLUSIVE) and the plugin
 	 * does not support non-atomic writing
 	 * 
 	 * @spec DmtSession.renameNode(String,String)
 	 */
-	private void testRenameNode017() {
+	private void testRenameNode015() {
 		DmtSession session = null;
 		try {
-			tbc.log("#testRenameNode017");
+			tbc.log("#testRenameNode015");
 			session = tbc.getDmtAdmin().getSession(".",
 			    DmtSession.LOCK_TYPE_EXCLUSIVE);
 			
@@ -520,13 +467,13 @@ public class RenameNode implements TestInterface {
 	 * 
 	 * @spec DmtSession.renameNode(String,String)
 	 */
-	private void testRenameNode018() {
+	private void testRenameNode016() {
 		DmtSession session = null;
 		try {
-			tbc.log("#testRenameNode018");
+			tbc.log("#testRenameNode016");
 			session = tbc.getDmtAdmin().getSession(".",
 			    DmtSession.LOCK_TYPE_EXCLUSIVE);
-			
+			tbc.setPermissions(new PermissionInfo(DmtPermission.class.getName(), "*",DmtConstants.ALL_ACTIONS));
 			session.renameNode(".","newName");
 			tbc.failException("", DmtException.class);
 		} catch (DmtException e) {
@@ -536,6 +483,7 @@ public class RenameNode implements TestInterface {
 			tbc.fail("Expected " + DmtException.class.getName() + " but was "
 					+ e.getClass().getName());
 		} finally {
+			tbc.setPermissions(new PermissionInfo(DmtPermission.class.getName(), DmtConstants.ALL_NODES,DmtConstants.ALL_ACTIONS));
 			tbc.closeSession(session);
 		}
 	}

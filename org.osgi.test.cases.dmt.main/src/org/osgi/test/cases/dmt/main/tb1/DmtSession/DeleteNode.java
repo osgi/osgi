@@ -75,9 +75,8 @@ public class DeleteNode implements TestInterface {
 		testDeleteNode008();
 		testDeleteNode009();
 		testDeleteNode010();
-		testDeleteNode011();
-		testDeleteNode012();
 	}
+	
     private void prepare() {
         tbc.setPermissions(new PermissionInfo(DmtPermission.class.getName(), DmtConstants.ALL_NODES,DmtConstants.ALL_ACTIONS));
     }
@@ -236,10 +235,11 @@ public class DeleteNode implements TestInterface {
 			tbc.closeSession(session);
 		}
 	}
+	
 	/**
 	 * Asserts that DmtException with COMMAND_NOT_ALLOWED code is thrown 
-	 * if the session is non-atomic (in this case, LOCK_TYPE_SHARED) 
-	 * and the plugin is read-only
+	 * if the session is non-atomic (LOCK_TYPE_EXCLUSIVE) 
+	 * and the plugin does not support non-atomic writing
 	 * 
 	 * @spec DmtSession.deleteNode(String)
 	 */
@@ -247,8 +247,8 @@ public class DeleteNode implements TestInterface {
 		DmtSession session = null;
 		tbc.log("#testDeleteNode007");
 		try {
-			session = tbc.getDmtAdmin().getSession(".",DmtSession.LOCK_TYPE_SHARED);
-			session.deleteNode(TestReadOnlyPluginActivator.INTERIOR_NODE);
+			session = tbc.getDmtAdmin().getSession(".",DmtSession.LOCK_TYPE_EXCLUSIVE);
+			session.deleteNode(TestNonAtomicPluginActivator.INTERIOR_NODE);
 			tbc.failException("", DmtException.class);
 		} catch (DmtException e) {
 			tbc.assertEquals(
@@ -263,7 +263,7 @@ public class DeleteNode implements TestInterface {
 	}
 	/**
 	 * Asserts that DmtException with COMMAND_NOT_ALLOWED code is thrown 
-	 * if the session is non-atomic (in this case, LOCK_TYPE_EXCLUSIVE) 
+	 * if the session is non-atomic (LOCK_TYPE_EXCLUSIVE) 
 	 * and the plugin is read-only
 	 * 
 	 * @spec DmtSession.deleteNode(String)
@@ -286,66 +286,18 @@ public class DeleteNode implements TestInterface {
 			tbc.closeSession(session);
 		}
 	}
-	/**
-	 * Asserts that DmtException with COMMAND_NOT_ALLOWED code is thrown 
-	 * if the session is non-atomic (in this case, LOCK_TYPE_SHARED) 
-	 * and the plugin does not support non-atomic writing
-	 * 
-	 * @spec DmtSession.deleteNode(String)
-	 */
-	private void testDeleteNode009() {
-		DmtSession session = null;
-		tbc.log("#testDeleteNode009");
-		try {
-			session = tbc.getDmtAdmin().getSession(".",DmtSession.LOCK_TYPE_SHARED);
-			session.deleteNode(TestNonAtomicPluginActivator.INTERIOR_NODE);
-			tbc.failException("", DmtException.class);
-		} catch (DmtException e) {
-			tbc.assertEquals(
-					"Asserting that DmtException code is COMMAND_NOT_ALLOWED",
-					DmtException.COMMAND_NOT_ALLOWED, e.getCode());
-		} catch (Exception e) {
-			tbc.fail("Expected " + DmtException.class.getName() + " but was "
-					+ e.getClass().getName());
-		} finally {
-			tbc.closeSession(session);
-		}
-	}
-	/**
-	 * Asserts that DmtException with COMMAND_NOT_ALLOWED code is thrown 
-	 * if the session is non-atomic (in this case, LOCK_TYPE_EXCLUSIVE) 
-	 * and the plugin does not support non-atomic writing
-	 * 
-	 * @spec DmtSession.deleteNode(String)
-	 */
-	private void testDeleteNode010() {
-		DmtSession session = null;
-		tbc.log("#testDeleteNode010");
-		try {
-			session = tbc.getDmtAdmin().getSession(".",DmtSession.LOCK_TYPE_EXCLUSIVE);
-			session.deleteNode(TestNonAtomicPluginActivator.INTERIOR_NODE);
-			tbc.failException("", DmtException.class);
-		} catch (DmtException e) {
-			tbc.assertEquals(
-					"Asserting that DmtException code is COMMAND_NOT_ALLOWED",
-					DmtException.COMMAND_NOT_ALLOWED, e.getCode());
-		} catch (Exception e) {
-			tbc.fail("Expected " + DmtException.class.getName() + " but was "
-					+ e.getClass().getName());
-		} finally {
-			tbc.closeSession(session);
-		}
-	}
+	
+	
 	/**
 	 * This method asserts that DmtException.TRANSACTION_ERROR is thrown 
 	 * if the session is atomic and the plugin is read-only 
 	 * 
 	 * @spec DmtSession.deleteNode(String)
 	 */
-	private void testDeleteNode011() {
+	private void testDeleteNode009() {
 		DmtSession session = null;
 		try {
-			tbc.log("#testDeleteNode011");
+			tbc.log("#testDeleteNode009");
 			session = tbc.getDmtAdmin().getSession(".",
 			    DmtSession.LOCK_TYPE_ATOMIC);
 			
@@ -368,10 +320,10 @@ public class DeleteNode implements TestInterface {
 	 * 
 	 * @spec DmtSession.deleteNode(String)
 	 */
-	private void testDeleteNode012() {
+	private void testDeleteNode010() {
 		DmtSession session = null;
 		try {
-			tbc.log("#testDeleteNode012");
+			tbc.log("#testDeleteNode010");
 			session = tbc.getDmtAdmin().getSession(".",
 			    DmtSession.LOCK_TYPE_ATOMIC);
 			
@@ -386,4 +338,6 @@ public class DeleteNode implements TestInterface {
 		} finally {
 			tbc.closeSession(session);
 		}
-	}}
+	}
+	
+}

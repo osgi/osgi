@@ -160,6 +160,7 @@ public class GetSetNodeAcl implements TestInterface {
             
 			session.setNodeAcl(DmtConstants.OSGi_LOG, acl);
             session.close();
+            tbc.setPermissions(new PermissionInfo(DmtPermission.class.getName(), DmtConstants.ALL_NODES,DmtConstants.ALL_ACTIONS));
             session = tbc.getDmtAdmin().getSession(".",
                 DmtSession.LOCK_TYPE_EXCLUSIVE);
 
@@ -193,7 +194,9 @@ public class GetSetNodeAcl implements TestInterface {
                 new String[] { DmtConstants.PRINCIPAL },
                 new int[] { Acl.ADD });
 			session.setNodeAcl(DmtConstants.OSGi_LOG,acl);
-
+			
+			tbc.setPermissions(new PermissionInfo(DmtPermission.class.getName(), DmtConstants.ALL_NODES,DmtConstants.ALL_ACTIONS));
+			
             tbc.assertEquals("Asserts that setNodeAcl really sets the Acl of a node",acl,session.getNodeAcl(DmtConstants.OSGi_LOG));
 		} catch (Exception e) {
 			tbc.fail("Unexpected Exception: " + e.getClass().getName() + " [Message: " + e.getMessage() +"]");

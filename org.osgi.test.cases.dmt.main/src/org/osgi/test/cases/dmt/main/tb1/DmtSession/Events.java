@@ -92,10 +92,10 @@ public class Events implements TestInterface  {
 			synchronized (tbc) {
 				tbc.wait(DmtConstants.WAIT_TIME);
 			}
-			tbc.assertTrue("Asserts if the events has the correct properties.", EventHandlerImpl.isAllProperties());
-			tbc.assertEquals("Asserts that the number of events is correct",5,EventHandlerImpl.getEventCount());
+			tbc.assertTrue("Asserts if the events have the correct properties.", EventHandlerImpl.isAllProperties());
+			tbc.assertEquals("Asserts that the number of events are correct",5,EventHandlerImpl.getEventCount());
 			tbc.assertTrue("Asserts that all of the node names are in the correct event.",EventHandlerImpl.passed());
-			tbc.assertTrue("Asserts that the order of sent events is the expected.",EventHandlerImpl.isOrderedAtomic());
+			tbc.assertTrue("Asserts that the order of the sent events is the expected.",EventHandlerImpl.isOrderedAtomic());
 			tbc.assertTrue("Asserts that the property session.id contains the same value as DmtSession.getSessionId()",EventHandlerImpl.getSessionId() == session.getSessionId());
 		} catch (Exception e) {
 			tbc.fail("Unexpected Exception: " + e.getClass().getName() + " [Message: " + e.getMessage() +"]");
@@ -127,8 +127,8 @@ public class Events implements TestInterface  {
 			synchronized (tbc) {
 				tbc.wait(DmtConstants.WAIT_TIME);
 			}
-			tbc.assertTrue("Asserts if the events has the correct properties.", EventHandlerImpl.isAllProperties());
-			tbc.assertEquals("Asserts that the number of events is correct",5,EventHandlerImpl.getEventCount());
+			tbc.assertTrue("Asserts if the events have the correct properties.", EventHandlerImpl.isAllProperties());
+			tbc.assertEquals("Asserts that the number of events are correct",5,EventHandlerImpl.getEventCount());
 			tbc.assertTrue("Asserts that all of the node names are in the correct event.",EventHandlerImpl.passed());
             tbc.assertTrue("Asserts that the events are sent immediately in an exclusive session, following no order (as an atomic session).",
                 EventHandlerImpl.isOrderedExclusive());

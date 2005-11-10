@@ -590,13 +590,7 @@ public class DmtTestControl extends DefaultTestBundleControl {
 		try {
 			session = getDmtAdmin().getSession(".",DmtSession.LOCK_TYPE_EXCLUSIVE);
 			if (session.isNodeUri(nodeUri)) {
-                //TODO Remove
-//                PermissionInfo[] perm = permissionWorker.getPermissions();
-                //This method can be called without DmtPermission.REPLACE operation
-//                setPermissions(new PermissionInfo(DmtPermission.class.getName(), DmtConstants.ALL_NODES,DmtConstants.ALL_ACTIONS));
 			    session.setNodeAcl(nodeUri,null);
-                //Sets the old permissions
-//                setPermissions(perm);
 			}
 		} catch (Exception e) {
 			log("#Exception cleaning the acl from "+ nodeUri +" : "+e.getClass().getName() + "Message: [" +e.getMessage() +"]");

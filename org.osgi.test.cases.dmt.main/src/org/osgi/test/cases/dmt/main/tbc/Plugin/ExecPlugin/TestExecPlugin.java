@@ -63,6 +63,8 @@ public class TestExecPlugin implements DataPluginFactory, ExecPlugin, Transactio
     
     private static int createLeafNodeCount; 
     
+    private static String nodeTitle;
+    
     private static boolean exceptionAtCreateInteriorNode;
     
 	private static boolean allUriIsExistent = false;
@@ -153,7 +155,7 @@ public class TestExecPlugin implements DataPluginFactory, ExecPlugin, Transactio
 	}
 
 	public String getNodeTitle(String[] nodeUri) throws DmtException {
-		return null;
+		return nodeTitle;
 	}
 
 	public String getNodeType(String[] nodeUri) throws DmtException {
@@ -240,6 +242,10 @@ public class TestExecPlugin implements DataPluginFactory, ExecPlugin, Transactio
     public static void setExceptionAtCreateInteriorNode(
             boolean exceptionAtCreateInteriorNode) {
         TestExecPlugin.exceptionAtCreateInteriorNode = exceptionAtCreateInteriorNode;
+    }
+
+    public static void setDefaultNodeTitle(String nodeUri) {
+        nodeTitle = nodeUri;
     }
     
 }
