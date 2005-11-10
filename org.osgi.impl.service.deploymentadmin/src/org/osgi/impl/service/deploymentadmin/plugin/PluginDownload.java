@@ -30,6 +30,7 @@ import javax.xml.parsers.SAXParserFactory;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.ServiceReference;
+import org.osgi.impl.service.deploymentadmin.DAConstants;
 import org.osgi.impl.service.deploymentadmin.DeploymentPackageImpl;
 import org.osgi.impl.service.deploymentadmin.Metanode;
 import org.osgi.impl.service.deploymentadmin.PluginCtx;
@@ -152,7 +153,7 @@ public class PluginDownload extends DefaultHandler implements DataPluginFactory,
                 throw new RuntimeException("Internal error: " + e);
             }
             
-            if (dwnlThr.getStatus() != DownloadThread.OK) {
+            if (dwnlThr.getStatus() != DownloadThread.RESULT_OK) {
                 entry.setStatus(STATUS_DOWNLD_FAILED);
                 sendDownloadAlert(dwnlThr.getStatus(), 
                     principal, correlator, nodeUri);
@@ -163,34 +164,41 @@ public class PluginDownload extends DefaultHandler implements DataPluginFactory,
                     dwnlThr.getInputStream(), entry.id);
             deplThr.setDpListener(new DeploymentThread.ListenerDp() {
                 public void onFinish(DeploymentPackageImpl dp, Exception exception) {
+                	String nodeUriRes = null;
                     if (null == exception) {
                         entry.setStatus(STATUS_DEPLOYED);
-                        pluginCtx.getDeployedPlugin().associateID(dp, entry.id);
+                        nodeUriRes = DAConstants.DMT_DEPLOYMENT_ROOT + 
+                        	pluginCtx.getDeployedPlugin().associateID(dp, entry.id);
                         try {
                             pluginCtx.save();
                         }
                         catch (IOException e) {
                             pluginCtx.getLogger().log(e); 
                         }
-                    } else 
+                    } else {
+                    	nodeUriRes = nodeUri; // the original URI
                         entry.setStatus(STATUS_DEPLOYMENT_FAILED);
-                    DeplAlertSender.sendAlert(exception, principal, correlator, nodeUri, 
-                            pluginCtx.getDmtAdmin());
+                    }
+                    DeplAlertSender.sendAlert(exception, principal, correlator, nodeUriRes, 
+                    		pluginCtx.getDmtAdmin());
                 }});
             deplThr.setBundleListener(new DeploymentThread.ListenerBundle() {
                 public void onFinish(Bundle b, Exception exception) {
+                	String nodeUriRes = null;
                     if (null == exception) {
                         entry.setStatus(STATUS_DEPLOYED);
-                        pluginCtx.getDeployedPlugin().associateID(b, entry.id);
+                        nodeUriRes = pluginCtx.getDeployedPlugin().associateID(b, entry.id);
                         try {
                             pluginCtx.save();
                         }
                         catch (IOException e) {
                             pluginCtx.getLogger().log(e); 
                         }
-                    } else 
+                    } else {
+                    	nodeUriRes = nodeUri; // the original URI
                         entry.setStatus(STATUS_DEPLOYMENT_FAILED);
-                    DeplAlertSender.sendAlert(exception, principal, correlator, nodeUri,
+                    }
+                    DeplAlertSender.sendAlert(exception, principal, correlator, nodeUriRes,
                             pluginCtx.getDmtAdmin());
                 }});
             deplThr.start();

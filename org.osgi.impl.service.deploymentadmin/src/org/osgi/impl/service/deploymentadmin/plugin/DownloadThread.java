@@ -32,12 +32,7 @@ import org.xml.sax.helpers.DefaultHandler;
 
 public class DownloadThread extends Thread {
     
-    public static final int OK                        =  0;
-    public static final int NOT_ACCEPTABLE_CONTENT    =  PluginConstants.RESULT_NOT_ACCEPTABLE_CONTENT;
-    public static final int DWNL_SERVER_NOT_AVAILABLE =  PluginConstants.RESULT_DWNL_SERVER_NOT_AVAILABLE;
-    public static final int DWNLD_DESCR_ERROR         =  PluginConstants.RESULT_DWNLD_DESCR_ERROR;
-    public static final int USER_CANCELLED            =  PluginConstants.RESULT_CANCELLED;
-    public static final int UNDEFINED_ERROR           =  PluginConstants.RESULT_UNDEFINED_ERROR;
+    public static final int RESULT_OK =  0;
     
     private SAXParser     parser;
     private Handler       handler = new Handler();
@@ -152,10 +147,10 @@ public class DownloadThread extends Thread {
         try {
             parseDescriptor();
         } catch (SAXException e) {
-            setStatus(DWNLD_DESCR_ERROR);
+            setStatus(PluginConstants.RESULT_DWNLD_DESCR_ERROR);
             return;
         } catch (Exception e) {
-            setStatus(UNDEFINED_ERROR);
+            setStatus(PluginConstants.RESULT_UNDEFINED_ERROR);
             return;
         }
         
@@ -163,7 +158,7 @@ public class DownloadThread extends Thread {
         allowed.add("application/java-archive");
         allowed.add("application/vnd.osgi.dp");
         if (!allowed.contains(handler.getType())) {
-            setStatus(NOT_ACCEPTABLE_CONTENT);
+            setStatus(PluginConstants.RESULT_NOT_ACCEPTABLE_CONTENT);
             return;
         }
 
@@ -177,7 +172,7 @@ public class DownloadThread extends Thread {
                 "Do you allow to download it", "yes");
         boolean ok = result.trim().equalsIgnoreCase("yes");
         if (!ok) {
-            setStatus(USER_CANCELLED);
+            setStatus(PluginConstants.RESULT_CANCELLED);
             return;
         }
 
@@ -190,11 +185,11 @@ public class DownloadThread extends Thread {
             is = dwnlAgent.download("url", props);
         }
         catch (Exception e) {
-            setStatus(DWNL_SERVER_NOT_AVAILABLE);
+            setStatus(PluginConstants.RESULT_DWNL_SERVER_NOT_AVAILABLE);
             return;
         }
         
-        setStatus(OK, is);
+        setStatus(RESULT_OK, is);
     }
     
     private void parseDescriptor() throws Exception {
@@ -217,13 +212,13 @@ public class DownloadThread extends Thread {
     }
     
     private synchronized void setStatus(int status) {
-        if (OK == status)
+        if (RESULT_OK == status)
             throw new IllegalArgumentException();
         this.status = status;
     }
     
     private synchronized void setStatus(int status, InputStream is) {
-        if (OK != status)
+        if (RESULT_OK != status)
             throw new IllegalArgumentException();
         this.status = status;
         this.inputStream = is;

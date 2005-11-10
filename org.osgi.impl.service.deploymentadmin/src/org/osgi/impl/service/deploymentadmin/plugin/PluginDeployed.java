@@ -76,7 +76,6 @@ public class PluginDeployed implements DataPluginFactory, ReadableDataSession,
         return nodeId.substring(BUNDLE_PREF.length());
     }
 
-
     private String createIdForBundle(Bundle b) {
         String ret = b.getSymbolicName();
         if (null == ret)
@@ -715,12 +714,14 @@ public class PluginDeployed implements DataPluginFactory, ReadableDataSession,
         return bu.getDNChains(b);
     }
 
-    public void associateID(DeploymentPackageImpl dp, String id) {
+    public String associateID(DeploymentPackageImpl dp, String id) {
        dpIdMappings.put(dp.getName(), id);
+       return pluginCtx.getDmtAdmin().mangle(dp.getName());
     }
     
-    public void associateID(Bundle b, String id) {
+    public String associateID(Bundle b, String id) {
        bundleIdMappings.put(new Long(b.getBundleId()), id);
+       return pluginCtx.getDmtAdmin().mangle(bundleToNodeId(b.getBundleId()));
     }
 
     public void setPluginCtx(PluginCtx pluginCtx) {

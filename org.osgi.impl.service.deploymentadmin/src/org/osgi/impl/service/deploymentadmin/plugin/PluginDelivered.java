@@ -282,13 +282,12 @@ public class PluginDelivered implements DataPluginFactory, ReadableDataSession,
     ///////////////////////////////////////////////////////////////////////////
     // Private methods
     
-    private void install(String[] nodeUriArr) throws DmtException {
+    private void install(final String[] nodeUriArr) throws DmtException {
         File f = new File(store, nodeUriArr[5]);
         final FileInputStream is;
         try {
             is = new FileInputStream(f);
-        }
-        catch (FileNotFoundException e) {
+        } catch (FileNotFoundException e) {
             throw new DmtException(nodeUriArr, DmtException.COMMAND_FAILED, e.getMessage());
         }
         String mimeType;
@@ -302,34 +301,59 @@ public class PluginDelivered implements DataPluginFactory, ReadableDataSession,
                 pluginCtx, is, id);
         deplThr.setDpListener(new DeploymentThread.ListenerDp() {
             public void onFinish(DeploymentPackageImpl dp, Exception exception) {
-                if (null == exception) {
-                    pluginCtx.getDeployedPlugin().associateID(dp, id);
-                    try {
-                        pluginCtx.save();
-                        // TODO sendAlert
-                    }
-                    catch (IOException e) {
-                        pluginCtx.getLogger().log(e); 
-                    }
-                } else { 
-                    pluginCtx.getLogger().log(exception);
-                    // TODO sendAlert
-            }}});
+            	if (null != is)
+					try {
+						is.close();
+					} catch (IOException e1) {
+						e1.printStackTrace();
+					}
+				if (null == exception) {
+					pluginCtx.getDeployedPlugin().associateID(dp, id);
+
+					// removes the node
+		            File f = new File(store, nodeUriArr[5]);
+		            f.delete();
+					
+					try {
+						pluginCtx.save();
+						// TODO sendAlert
+					} catch (IOException e) {
+						pluginCtx.getLogger().log(e);
+					}
+				} else {
+					pluginCtx.getLogger().log(exception);
+					// TODO sendAlert
+				}
+			}
+		});
         deplThr.setBundleListener(new DeploymentThread.ListenerBundle() {
             public void onFinish(Bundle b, Exception exception) {
-                if (null == exception) {
-                    pluginCtx.getDeployedPlugin().associateID(b, id);
-                    try {
-                        pluginCtx.save();
-                        // TODO sendAlert
-                    }
-                    catch (IOException e) {
-                        pluginCtx.getLogger().log(e); 
-                    }
-                } else {
-                    pluginCtx.getLogger().log(exception);
-                    // TODO sendAlert
-            }}});
+            	if (null != is)
+					try {
+						is.close();
+					} catch (IOException e1) {
+						e1.printStackTrace();
+					}
+					
+				if (null == exception) {
+					pluginCtx.getDeployedPlugin().associateID(b, id);
+
+					// removes the node
+		            File f = new File(store, nodeUriArr[5]);
+		            f.delete();
+
+					try {
+						pluginCtx.save();
+						// TODO sendAlert
+					} catch (IOException e) {
+						pluginCtx.getLogger().log(e);
+					}
+				} else {
+					pluginCtx.getLogger().log(exception);
+					// TODO sendAlert
+				}
+			}
+		});
         deplThr.start();
     }
     

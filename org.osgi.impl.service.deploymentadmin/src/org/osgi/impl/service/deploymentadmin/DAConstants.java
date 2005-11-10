@@ -21,7 +21,7 @@ public class DAConstants {
     
     // debug mode
     public static final boolean DEBUG               = false;
-
+    
     // headers in the main section of DPs
     public static final String DP_NAME              = "DeploymentPackage-SymbolicName";
     public static final String DP_VERSION           = "DeploymentPackage-Version";
@@ -56,4 +56,14 @@ public class DAConstants {
     public static final String EVENTPROP_DPNAME		= "deploymentpackage.name";
     public static final String EVENTPROP_SUCCESSFUL	= "successful";
     
+    // Deployment subtree root
+    public static final String DMT_DEPLOYMENT_ROOT; 
+    static {
+    	String prop = "org.osgi.service.dmtroot";
+    	String val = System.getProperty(prop);
+    	if (null == val)
+    		throw new RuntimeException(prop + " system property is not defined.");
+    	DMT_DEPLOYMENT_ROOT = val + "/Deployment/Inventory/Deployed/";
+    }
+
 }
