@@ -41,14 +41,11 @@
 package br.org.cesar.bundles.dmo.rp4;
 
 import java.io.InputStream;
-import java.util.Dictionary;
-import java.util.Hashtable;
-import org.osgi.framework.BundleActivator;
-import org.osgi.framework.BundleContext;
-import org.osgi.framework.ServiceRegistration;
+import java.util.*;
+
+import org.osgi.framework.*;
 import org.osgi.service.deploymentadmin.DeploymentException;
-import org.osgi.service.deploymentadmin.DeploymentSession;
-import org.osgi.service.deploymentadmin.ResourceProcessor;
+import org.osgi.service.deploymentadmin.spi.*;
 
 
 /**
@@ -81,17 +78,17 @@ public class ResourceProcessorImpl implements BundleActivator,ResourceProcessor 
 	}
 
 	public void process(String arg0, InputStream arg1)
-			throws DeploymentException {
+			throws ResourceProcessorException {
 	}
 
-	public void dropped(String arg0) throws DeploymentException {
-		throw new DeploymentException(DeploymentException.CODE_NO_SUCH_RESOURCE);
+	public void dropped(String arg0) throws ResourceProcessorException {
+		throw new ResourceProcessorException(ResourceProcessorException.CODE_NO_SUCH_RESOURCE);
 	}
 
-	public void dropAllResources() throws DeploymentException {
+	public void dropAllResources() throws ResourceProcessorException {
 	}
 
-	public void prepare() throws DeploymentException {
+	public void prepare() throws ResourceProcessorException {
 		
 	}
 

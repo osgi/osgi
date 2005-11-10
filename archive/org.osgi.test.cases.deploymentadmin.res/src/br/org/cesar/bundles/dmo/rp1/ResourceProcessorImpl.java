@@ -48,8 +48,7 @@ import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.deploymentadmin.DeploymentException;
-import org.osgi.service.deploymentadmin.DeploymentSession;
-import org.osgi.service.deploymentadmin.ResourceProcessor;
+import org.osgi.service.deploymentadmin.spi.*;
 import org.osgi.test.cases.deploymentadmin.mo.tbc.DeploymentmoConstants;
 
 
@@ -84,17 +83,17 @@ public class ResourceProcessorImpl implements BundleActivator,ResourceProcessor 
 	}
 
 	public void process(String arg0, InputStream arg1)
-			throws DeploymentException {
+			throws ResourceProcessorException {
 	}
 
-	public void dropped(String arg0) throws DeploymentException {
+	public void dropped(String arg0) throws ResourceProcessorException {
 
 	}
 
-	public void dropAllResources() throws DeploymentException {
+	public void dropAllResources() throws ResourceProcessorException {
 	}
 
-	public void prepare() throws DeploymentException {
+	public void prepare() throws ResourceProcessorException {
 
 	}
 
