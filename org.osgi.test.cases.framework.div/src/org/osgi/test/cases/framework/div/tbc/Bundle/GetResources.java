@@ -146,7 +146,7 @@ public class GetResources {
 
 		if (bundle.getResources(
 				"/test/cases/framework/div/nonexistent/Nonexistent.class")
-				.hasMoreElements()) {
+				!= null) {
 			throw new BundleTestException(
 					"Testing the method getResources() with a nonexistent resource path");
 		}

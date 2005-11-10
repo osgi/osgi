@@ -9,3 +9,5 @@ Bundle-Activator: org.osgi.test.cases.framework.div.tb23.Activator
 Bundle-Category: %bundlecategory
 Bundle-Copyright: %bundlecopyright
 Fragment-Host: ${p}.tb9
+Bundle-ManifestVersion: 2
+Bundle-SymbolicName: tb23asd
