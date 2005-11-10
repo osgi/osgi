@@ -36,19 +36,12 @@
  */
 package br.org.cesar.bundles.tc2.rp3;
 
-import java.io.File;
-import java.io.InputStream;
-import java.util.Dictionary;
-import java.util.Hashtable;
+import java.io.*;
+import java.util.*;
 
-import org.osgi.framework.Bundle;
-import org.osgi.framework.BundleActivator;
-import org.osgi.framework.BundleContext;
-import org.osgi.framework.ServiceRegistration;
-import org.osgi.service.deploymentadmin.DeploymentException;
-import org.osgi.service.deploymentadmin.DeploymentPackage;
-import org.osgi.service.deploymentadmin.DeploymentSession;
-import org.osgi.service.deploymentadmin.ResourceProcessor;
+import org.osgi.framework.*;
+import org.osgi.service.deploymentadmin.*;
+import org.osgi.service.deploymentadmin.spi.*;
 import org.osgi.test.cases.deploymentadmin.tc2.tbc.DeploymentConstants;
 import org.osgi.test.cases.deploymentadmin.tc2.tbc.DeploymentSession.InstallSession;
 import org.osgi.test.cases.deploymentadmin.tc2.tbc.util.TestingSessionResourceProcessor;
@@ -134,33 +127,33 @@ public class ResourceProcessorImpl implements BundleActivator, TestingSessionRes
 	}
 
     public void process(String arg0, InputStream arg1)
-            throws DeploymentException {
+            throws ResourceProcessorException {
         if (exceptionAtProcess)
-            throw new DeploymentException(DeploymentException.CODE_OTHER_ERROR);
+            throw new ResourceProcessorException(ResourceProcessorException.CODE_OTHER_ERROR);
         processed = true;
         resourceName = arg0;
         resourceStream = arg1;
     }
 
-    public void dropped(String arg0) throws DeploymentException {
+    public void dropped(String arg0) throws ResourceProcessorException {
         dropped = true;
         resourceName = arg0;
         if (testDropped) {
             waitForRelease(false);
         }
         if (exceptionAtDropped)
-            throw new DeploymentException(DeploymentException.CODE_OTHER_ERROR);
+            throw new ResourceProcessorException(ResourceProcessorException.CODE_OTHER_ERROR);
     }
 
-    public void dropAllResources() throws DeploymentException {
+    public void dropAllResources() throws ResourceProcessorException {
         if (exceptionAtDropAllResources)
-            throw new DeploymentException(DeploymentException.CODE_OTHER_ERROR);
+            throw new ResourceProcessorException(ResourceProcessorException.CODE_OTHER_ERROR);
         droppedAllResources = true;
     }
 
-    public void prepare() throws DeploymentException {
+    public void prepare() throws ResourceProcessorException {
         if (exceptionAtPrepare)
-            throw new DeploymentException(DeploymentException.CODE_OTHER_ERROR);
+            throw new ResourceProcessorException(ResourceProcessorException.CODE_OTHER_ERROR);
         prepared = true;
     }
 

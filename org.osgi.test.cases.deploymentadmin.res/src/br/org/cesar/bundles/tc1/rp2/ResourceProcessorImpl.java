@@ -41,17 +41,12 @@
 package br.org.cesar.bundles.tc1.rp2;
 
 import java.io.InputStream;
-import java.util.Dictionary;
-import java.util.Hashtable;
+import java.util.*;
 
-import org.osgi.framework.BundleActivator;
-import org.osgi.framework.BundleContext;
-import org.osgi.framework.ServiceRegistration;
+import org.osgi.framework.*;
 import org.osgi.service.deploymentadmin.DeploymentException;
-import org.osgi.service.deploymentadmin.DeploymentSession;
-import org.osgi.service.deploymentadmin.ResourceProcessor;
-import org.osgi.test.cases.deploymentadmin.tc1.tbc.DeploymentConstants;
-import org.osgi.test.cases.deploymentadmin.tc1.tbc.DeploymentTestControl;
+import org.osgi.service.deploymentadmin.spi.*;
+import org.osgi.test.cases.deploymentadmin.tc1.tbc.*;
 
 /**
  * @author Andre Assad
@@ -86,18 +81,18 @@ public class ResourceProcessorImpl implements BundleActivator,ResourceProcessor 
 	}
 
 	public void process(String arg0, InputStream arg1)
-			throws DeploymentException {
+			throws ResourceProcessorException {
 	}
 
-	public void dropped(String arg0) throws DeploymentException {
+	public void dropped(String arg0) throws ResourceProcessorException {
 
 	}
 
-	public void dropAllResources() throws DeploymentException {
+	public void dropAllResources() throws ResourceProcessorException {
 		DeploymentConstants.DROPALLRESOURCES_COUNT++;
 	}
 
-	public void prepare() throws DeploymentException {
+	public void prepare() throws ResourceProcessorException {
 	
 	}
 
