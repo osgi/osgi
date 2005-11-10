@@ -15,8 +15,8 @@ import java.util.Hashtable;
 import java.util.StringTokenizer;
 import java.util.Vector;
 
-import org.osgi.framework.BundleContext;
 import org.osgi.framework.Filter;
+import org.osgi.framework.FrameworkUtil;
 import org.osgi.framework.InvalidSyntaxException;
 
 /**
@@ -95,7 +95,7 @@ public class ApplicationAdminPermission extends Permission {
 		this.filter = (filter == null ? "*" : filter);
 		this.actions = actions;
 
-		bc.createFilter( this.filter );
+		FrameworkUtil.createFilter( this.filter );
 		init();
 	}
 	
@@ -308,8 +308,6 @@ public class ApplicationAdminPermission extends Permission {
 		applicationID = null;
   }
   
-  private static BundleContext bc = null;
-  
   private Filter getFilter() {
   	String transformedFilter = filter;
   	
@@ -375,7 +373,7 @@ public class ApplicationAdminPermission extends Permission {
     			transformedFilter = filterBuf.toString();
   			} //end if (pos != -1)
 
-  			appliedFilter = bc.createFilter( transformedFilter );
+  			appliedFilter = FrameworkUtil.createFilter( transformedFilter );
 		} catch (InvalidSyntaxException e) {
 			//we will return null
 		}
