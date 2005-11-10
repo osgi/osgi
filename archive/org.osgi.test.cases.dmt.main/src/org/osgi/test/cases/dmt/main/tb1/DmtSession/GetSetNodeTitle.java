@@ -81,8 +81,6 @@ public class GetSetNodeTitle implements TestInterface {
     		testGetSetNodeTitle011();
     		testGetSetNodeTitle012();
     		testGetSetNodeTitle013();
-    		testGetSetNodeTitle014();
-    		testGetSetNodeTitle015();
         } else {
             testGetSetNodeTitleFeatureNotSupported001();
             testGetSetNodeTitleFeatureNotSupported002();
@@ -366,8 +364,8 @@ public class GetSetNodeTitle implements TestInterface {
 	
 	/**
 	 * This method asserts that DmtException.COMMAND_NOT_ALLOWED is thrown 
-	 * if the session is non-atomic (in this case, LOCK_TYPE_SHARED) and the plugin 
-	 * is read-only 
+	 * if the session is non-atomic (LOCK_TYPE_EXCLUSIVE) and the plugin 
+	 * does not support non-atomic writing
 	 * 
 	 * @spec DmtSession.setNodeTitle(String,DmtData)
 	 */
@@ -376,9 +374,9 @@ public class GetSetNodeTitle implements TestInterface {
 		try {
 			tbc.log("#testGetSetNodeTitle012");
 			session = tbc.getDmtAdmin().getSession(".",
-			    DmtSession.LOCK_TYPE_SHARED);
+			    DmtSession.LOCK_TYPE_EXCLUSIVE);
 			
-			session.setNodeTitle(TestReadOnlyPluginActivator.LEAF_NODE,DmtConstants.TITLE);
+			session.setNodeTitle(TestNonAtomicPluginActivator.LEAF_NODE,DmtConstants.TITLE);
 			tbc.failException("", DmtException.class);
 		} catch (DmtException e) {
 			tbc.assertEquals("Asserting that DmtException code is COMMAND_NOT_ALLOWED",
@@ -390,9 +388,10 @@ public class GetSetNodeTitle implements TestInterface {
 			tbc.closeSession(session);
 		}
 	}
+	
 	/**
 	 * This method asserts that DmtException.COMMAND_NOT_ALLOWED is thrown 
-	 * if the session is non-atomic (in this case, LOCK_TYPE_EXCLUSIVE) and the plugin 
+	 * if the session is non-atomic (LOCK_TYPE_EXCLUSIVE) and the plugin 
 	 * is read-only 
 	 * 
 	 * @spec DmtSession.setNodeTitle(String,DmtData)
@@ -417,58 +416,8 @@ public class GetSetNodeTitle implements TestInterface {
 		}
 	}
 	
-	/**
-	 * This method asserts that DmtException.COMMAND_NOT_ALLOWED is thrown 
-	 * if the session is non-atomic (in this case, LOCK_TYPE_SHARED) and the plugin 
-	 * does not support non-atomic writing
-	 * 
-	 * @spec DmtSession.setNodeTitle(String,DmtData)
-	 */
-	private void testGetSetNodeTitle014() {
-		DmtSession session = null;
-		try {
-			tbc.log("#testGetSetNodeTitle014");
-			session = tbc.getDmtAdmin().getSession(".",
-			    DmtSession.LOCK_TYPE_SHARED);
-			
-			session.setNodeTitle(TestNonAtomicPluginActivator.LEAF_NODE,DmtConstants.TITLE);
-			tbc.failException("", DmtException.class);
-		} catch (DmtException e) {
-			tbc.assertEquals("Asserting that DmtException code is COMMAND_NOT_ALLOWED",
-					DmtException.COMMAND_NOT_ALLOWED, e.getCode());
-		} catch (Exception e) {
-			tbc.fail("Expected " + DmtException.class.getName() + " but was "
-					+ e.getClass().getName());
-		} finally {
-			tbc.closeSession(session);
-		}
-	}
-	/**
-	 * This method asserts that DmtException.COMMAND_NOT_ALLOWED is thrown 
-	 * if the session is non-atomic (in this case, LOCK_TYPE_EXCLUSIVE) and the plugin 
-	 * does not support non-atomic writing
-	 * 
-	 * @spec DmtSession.setNodeTitle(String,DmtData)
-	 */
-	private void testGetSetNodeTitle015() {
-		DmtSession session = null;
-		try {
-			tbc.log("#testGetSetNodeTitle015");
-			session = tbc.getDmtAdmin().getSession(".",
-			    DmtSession.LOCK_TYPE_EXCLUSIVE);
-			
-			session.setNodeTitle(TestNonAtomicPluginActivator.LEAF_NODE,DmtConstants.TITLE);
-			tbc.failException("", DmtException.class);
-		} catch (DmtException e) {
-			tbc.assertEquals("Asserting that DmtException code is COMMAND_NOT_ALLOWED",
-					DmtException.COMMAND_NOT_ALLOWED, e.getCode());
-		} catch (Exception e) {
-			tbc.fail("Expected " + DmtException.class.getName() + " but was "
-					+ e.getClass().getName());
-		} finally {
-			tbc.closeSession(session);
-		}
-	}
+	
+	
     
     /**
      * Asserts that if the DmtAdmin service implementation does not support this method,

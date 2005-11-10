@@ -96,8 +96,6 @@ public class DmtConstants {
 	
 	public static final int MAXIMUM_NODE_SEGMENTS = 0;
 
-    public static final boolean SUPPORTS_COPY = true;
-    
     public static final boolean SUPPORTS_NODE_TITLE = true;
     
     public static final boolean SUPPORTS_NODE_TIMESTAMP = true;

@@ -42,7 +42,6 @@ import org.osgi.service.dmt.AlertItem;
 import org.osgi.service.dmt.DmtData;
 import org.osgi.service.dmt.DmtException;
 import org.osgi.service.dmt.security.AlertPermission;
-import org.osgi.service.dmt.security.DmtPermission;
 import org.osgi.service.permissionadmin.PermissionInfo;
 import org.osgi.test.cases.dmt.main.tbc.DmtConstants;
 import org.osgi.test.cases.dmt.main.tbc.DmtTestControl;
@@ -78,13 +77,15 @@ public class SendAlert implements TestInterface {
 		testSendAlert007();
         testSendAlert008();
         testSendAlert009();
+        testSendAlert010();
+        testSendAlert011();
 	}
     private void prepare() {
         tbc.setPermissions(new PermissionInfo(AlertPermission.class.getName(), "*", "*"));
     }
 	/**
 	 * It tests if the DmtAdmin.sendAlert really fowards the parameters to the RemoteAlertSender.
-	 * It also tests that only if the principal needs AlertPermission.
+	 * It also tests that only the specified principal needs AlertPermission.
 	 * 
 	 * @spec DmtAdmin.sendAlert(String,int,String,AlertItem[]) 
 	 */
@@ -130,7 +131,8 @@ public class SendAlert implements TestInterface {
 	/**
 	 * It tests if the DmtAdmin.sendAlert really fowards the parameters to the RemoteAlertSender,
 	 * even if no principal is specified (when there is only one protocol adapter). It also validates that
-     * an empty array for alert items can be passed and that null can be passed as principal
+     * an empty array for alert items can be passed and that null can be passed as principal. Finally, it
+     * tests that if the principal parameter is null, the target of the AlertPermission must be "*". 
 	 * 
 	 * @spec DmtAdmin.sendAlert(String,int,String,AlertItem[])
 	 */
@@ -228,7 +230,7 @@ public class SendAlert implements TestInterface {
 			tbc.log("#testSendAlert005");
 			
 			RemoteAlertSenderImpl.resetAlert();
-			tbc.getDmtAdmin().sendAlert(DmtConstants.PRINCIPAL_2,0,null,null);
+			tbc.getDmtAdmin().sendAlert(DmtConstants.PRINCIPAL_3,0,null,null);
 
 			tbc.failException("",DmtException.class);
 		} catch (DmtException e) {
@@ -271,7 +273,9 @@ public class SendAlert implements TestInterface {
 		HighestRankingRemoteAlertSenderActivator highestRankingRemoteAlertSenderActivator=null;
 		try {
 			tbc.log("#testSendAlert007");
-			tbc.setPermissions(new PermissionInfo(ServicePermission.class.getName(),"*",ServicePermission.REGISTER));
+			tbc.setPermissions(new PermissionInfo[] { 
+					new PermissionInfo(ServicePermission.class.getName(),"*",ServicePermission.REGISTER),
+					new PermissionInfo(AlertPermission.class.getName(), "*", "*") });
 			
 			//Installs the highest ranking remote alert sender 
 			highestRankingRemoteAlertSenderActivator = new HighestRankingRemoteAlertSenderActivator();
@@ -295,11 +299,12 @@ public class SendAlert implements TestInterface {
 			} catch (Exception e1) {
 				tbc.log("#Failed uninstalling the HighestRankingRemoteAlertSender");
 			}
-			tbc.setPermissions(new PermissionInfo(DmtPermission.class.getName(), DmtConstants.ALL_NODES,DmtConstants.ALL_ACTIONS));
+			prepare();
 		}
 	}	
 	/**
-	 * Asserts that if 'servers' property is not registered, the Remote Alert Sender service is treated as the default sender.
+	 * Asserts that if 'principals' property is not registered, the Remote Alert Sender service is treated 
+	 * as the default sender.
 	 * 
 	 * @spec DmtAdmin.sendAlert(String,int,String,AlertItem[]) 
 	 */
@@ -307,7 +312,9 @@ public class SendAlert implements TestInterface {
 		DefaultRemoteAlertSenderActivator defaultRemoteAlertSenderActivator = null;
 		try {
 			tbc.log("#testSendAlert008");
-			tbc.setPermissions(new PermissionInfo(ServicePermission.class.getName(),"*",ServicePermission.REGISTER));
+			tbc.setPermissions(new PermissionInfo[] { 
+					new PermissionInfo(ServicePermission.class.getName(),"*",ServicePermission.REGISTER),
+					new PermissionInfo(AlertPermission.class.getName(), "*", "*") });
 			// Installs a default alert sender (it doesnt specify the principal in its registration)
 			defaultRemoteAlertSenderActivator = new DefaultRemoteAlertSenderActivator();
 			defaultRemoteAlertSenderActivator.start(tbc.getContext());	
@@ -329,7 +336,7 @@ public class SendAlert implements TestInterface {
 			} catch (Exception e) {
 				tbc.log("#Failed stopping the default remote alert sender");
 			}
-			tbc.setPermissions(new PermissionInfo(DmtPermission.class.getName(), DmtConstants.ALL_NODES,DmtConstants.ALL_ACTIONS));
+			prepare();
 		}
 	}
 	/**
@@ -341,16 +348,69 @@ public class SendAlert implements TestInterface {
 		try {
 			tbc.log("#testSendAlert009");
 			tbc.setPermissions(new PermissionInfo[0]);
+			
 			tbc.getDmtAdmin().sendAlert(DmtConstants.PRINCIPAL,1,"",new AlertItem[0]);
+			tbc.failException("", SecurityException.class);
 		} catch (SecurityException e) {
 			tbc.pass("SecurityException correctly thrown");
 		} catch (Exception e) {
-			tbc.fail("Unexpected Exception: " + e.getClass().getName()
-					+ " [Message: " + e.getMessage() + "]");
+			tbc.fail("Expected " + SecurityException.class.getName() + " but was "
+					+ e.getClass().getName());
 		} finally {
 			prepare();
 		}
 	}
 	
+	/**
+	 * It tests if the DmtAdmin.sendAlert can foward the alert for many principals 
+	 * (when more than one principal is registered in the respective RemoteAlertSender)
+	 * 
+	 * @spec DmtAdmin.sendAlert(String,int,String,AlertItem[])
+	 */
+	private void testSendAlert010() {
+		try {
+			tbc.log("#testSendAlert010");
+			
+			int code = 11;
+			String correlator = "correlator2";
+			AlertItem[] items = new AlertItem[] { new AlertItem((String)null,null,null,null) };
+
+			RemoteAlertSenderImpl.resetAlert();
+			tbc.getDmtAdmin().sendAlert(DmtConstants.PRINCIPAL_2,code,correlator,items);
+			
+
+			tbc.assertEquals("Asserts that the RemoteAlertSender can have more than one principal",DmtConstants.PRINCIPAL_2,RemoteAlertSenderImpl.serverIdFound);
+			tbc.assertTrue("Asserts that the code sent by sendAlert was the expected",RemoteAlertSenderImpl.codeFound == code);
+			tbc.assertEquals("Asserts that the correlator sent by sendAlert was the expected",correlator,RemoteAlertSenderImpl.correlatorFound);
+			tbc.assertEquals("Asserts that the number of AlertItems sent by sendAlert was the expected",items.length,RemoteAlertSenderImpl.itemsFound.length);
+					
+		} catch (Exception e) {
+			tbc.fail("Unexpected Exception: " + e.getClass().getName()
+					+ " [Message: " + e.getMessage() + "]");
+
+		}
+	}
 	
+	/**
+	 * Asserts that if the principal parameter is null and the target of the AlertPermission is not "*"
+	 * SecurityException is thrown. 
+	 * 
+	 * @spec DmtAdmin.sendAlert(String,int,String,AlertItem[])
+	 */
+	private void testSendAlert011() {
+		try {
+			tbc.log("#testSendAlert011");
+			tbc.setPermissions(new PermissionInfo[0]);
+
+			tbc.getDmtAdmin().sendAlert(null,1,"",new AlertItem[0]);
+			tbc.failException("", SecurityException.class);
+		} catch (SecurityException e) {
+			tbc.pass("SecurityException correctly thrown");
+		} catch (Exception e) {
+			tbc.fail("Expected " + SecurityException.class.getName() + " but was "
+					+ e.getClass().getName());
+		} finally {
+			prepare();
+		}
+	}
 }

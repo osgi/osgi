@@ -61,6 +61,7 @@ public class DmtPermission {
 		testDmtPermission006();
 		testDmtPermission007();
 		testDmtPermission008();
+		testDmtPermission009();
 	}
 
 	/**
@@ -118,8 +119,9 @@ public class DmtPermission {
 	}
 
 	/**
-	 * Asserts that the list of actions is really all of the actions and that 
-	 * it is listed in this order: Add, Delete, Exec, Get, Replace.
+	 * Asserts that the list of actions is really all of the actions 
+	 * when using a wildcard "*" and that it is listed in this order: 
+	 * Add, Delete, Exec, Get, Replace.
 	 * 
 	 * @spec DmtPermission.DmtPermission(String,String)
 	 */
@@ -307,5 +309,33 @@ public class DmtPermission {
 			tbc.fail("Unexpected exception: " + e.getClass().getName());
 		}
 	}
+	
+	/**
+	 * Asserts that action names are interpreted case-insensitively, 
+	 * and that the canonical action string returned by getActions() 
+	 * uses the forms defined by the action constants. 
+	 * 
+	 * @spec DmtPermission.DmtPermission(String,String)
+	 */
+	private void testDmtPermission009() {
+		tbc.log("#testDmtPermission009");
+		try {
+			String expectedActions = org.osgi.service.dmt.security.DmtPermission.ADD + "," + 
+			org.osgi.service.dmt.security.DmtPermission.DELETE + "," +
+			org.osgi.service.dmt.security.DmtPermission.EXEC + "," + 
+			org.osgi.service.dmt.security.DmtPermission.GET + "," + 
+			org.osgi.service.dmt.security.DmtPermission.REPLACE;
+			
+			
+			String actions = new org.osgi.service.dmt.security.DmtPermission(
+					DmtConstants.OSGi_ROOT,expectedActions.toUpperCase()).getActions();
 
+			tbc.assertEquals("Asserts that action names are interpreted case-insensitively, " +
+					"and that the canonical action string returned by getActions() uses the " +
+					"forms defined by the action constants.",expectedActions,actions);
+
+		} catch (Exception e) {
+			tbc.fail("Unexpected exception: " + e.getClass().getName());
+		}
+	}
 }

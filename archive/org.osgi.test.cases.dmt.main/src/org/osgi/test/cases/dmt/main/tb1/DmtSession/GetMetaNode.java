@@ -51,7 +51,7 @@ import org.osgi.test.cases.dmt.main.tbc.DmtTestControl;
 import org.osgi.test.cases.dmt.main.tbc.TestInterface;
 import org.osgi.test.cases.dmt.main.tbc.Plugin.ExecPlugin.TestExecPluginActivator;
 import org.osgi.test.cases.dmt.main.tbc.Plugin.ExecPlugin.TestMetaNode;
-import org.osgi.test.cases.dmt.main.tbc.Plugin.ReadOnly.TestReadOnlyPluginActivator;
+import org.osgi.test.cases.dmt.main.tbc.Plugin.NonAtomic.TestNonAtomicPluginActivator;
 
 /**
  * @author Andre Assad
@@ -222,10 +222,10 @@ public class GetMetaNode implements TestInterface {
         try {
             tbc.log("#testGetMetaNode006");
             
-            session = tbc.getDmtAdmin().getSession(TestReadOnlyPluginActivator.ROOT, DmtSession.LOCK_TYPE_ATOMIC);
+            session = tbc.getDmtAdmin().getSession(TestNonAtomicPluginActivator.ROOT, DmtSession.LOCK_TYPE_ATOMIC);
 
             tbc.assertNull("Asserts that DmtSession.getMetaNode returns null if there is no meta data " +
-                    "available for the given node",session.getMetaNode(TestExecPluginActivator.INTERIOR_NODE_NAME));
+                    "available for the given node",session.getMetaNode(TestNonAtomicPluginActivator.INTERIOR_NODE));
             
         } catch (Exception e) {
             tbc.fail("Unexpected Exception: " + e.getClass().getName()

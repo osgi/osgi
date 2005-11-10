@@ -78,10 +78,8 @@ public class SetDefaultNodeValue implements TestInterface {
 		testSetDefaultNodeValue008();
 		testSetDefaultNodeValue009();
 		testSetDefaultNodeValue010();
-		testSetDefaultNodeValue011();
-		testSetDefaultNodeValue012();
-
 	}
+	
     private void prepare() {
         tbc.setPermissions(new PermissionInfo(DmtPermission.class.getName(), DmtConstants.ALL_NODES,DmtConstants.ALL_ACTIONS));
     }
@@ -229,9 +227,10 @@ public class SetDefaultNodeValue implements TestInterface {
 			tbc.closeSession(session);
 		}
 	}
+	
 	/**
 	 * This method asserts that DmtException.COMMAND_NOT_ALLOWED is thrown 
-	 * if the session is non-atomic (in this case, LOCK_TYPE_SHARED) and the plugin is read-only
+	 * if the session is non-atomic (LOCK_TYPE_EXCLUSIVE) and the plugin is read-only
 	 *
 	 * @spec DmtSession.setDefaultNodeValue(String)
 	 */
@@ -239,30 +238,6 @@ public class SetDefaultNodeValue implements TestInterface {
 		DmtSession session = null;
 		try {
 			tbc.log("#testSetDefaultNodeValue007");
-			session = tbc.getDmtAdmin().getSession(".",DmtSession.LOCK_TYPE_SHARED);
-			session.setDefaultNodeValue(TestReadOnlyPluginActivator.LEAF_NODE);
-			tbc.failException("#", DmtException.class);
-		} catch (DmtException e) {
-			tbc.assertEquals(
-					"Asserting that DmtException code is COMMAND_NOT_ALLOWED",
-					DmtException.COMMAND_NOT_ALLOWED, e.getCode());
-		} catch (Exception e) {
-			tbc.fail("Expected " + DmtException.class.getName() + " but was "
-					+ e.getClass().getName());
-		} finally {
-			tbc.closeSession(session);
-		}
-	}
-	/**
-	 * This method asserts that DmtException.COMMAND_NOT_ALLOWED is thrown 
-	 * if the session is non-atomic (in this case, LOCK_TYPE_EXCLUSIVE) and the plugin is read-only
-	 *
-	 * @spec DmtSession.setDefaultNodeValue(String)
-	 */
-	private void testSetDefaultNodeValue008() {
-		DmtSession session = null;
-		try {
-			tbc.log("#testSetDefaultNodeValue008");
 			session = tbc.getDmtAdmin().getSession(".",DmtSession.LOCK_TYPE_EXCLUSIVE);
 			session.setDefaultNodeValue(TestReadOnlyPluginActivator.LEAF_NODE);
 			tbc.failException("#", DmtException.class);
@@ -277,42 +252,18 @@ public class SetDefaultNodeValue implements TestInterface {
 			tbc.closeSession(session);
 		}
 	}
+	
 	/**
 	 * This method asserts that DmtException.COMMAND_NOT_ALLOWED is thrown 
-	 * if the session is non-atomic (in this case, LOCK_TYPE_SHARED) and the plugin 
+	 * if the session is non-atomic (LOCK_TYPE_EXCLUSIVE) and the plugin 
 	 * does not support non-atomic writing
 	 *
 	 * @spec DmtSession.setDefaultNodeValue(String)
 	 */
-	private void testSetDefaultNodeValue009() {
+	private void testSetDefaultNodeValue008() {
 		DmtSession session = null;
 		try {
-			tbc.log("#testSetDefaultNodeValue009");
-			session = tbc.getDmtAdmin().getSession(".",DmtSession.LOCK_TYPE_SHARED);
-			session.setDefaultNodeValue(TestNonAtomicPluginActivator.LEAF_NODE);
-			tbc.failException("#", DmtException.class);
-		} catch (DmtException e) {
-			tbc.assertEquals(
-					"Asserting that DmtException code is COMMAND_NOT_ALLOWED",
-					DmtException.COMMAND_NOT_ALLOWED, e.getCode());
-		} catch (Exception e) {
-			tbc.fail("Expected " + DmtException.class.getName() + " but was "
-					+ e.getClass().getName());
-		} finally {
-			tbc.closeSession(session);
-		}
-	}
-	/**
-	 * This method asserts that DmtException.COMMAND_NOT_ALLOWED is thrown 
-	 * if the session is non-atomic (in this case, LOCK_TYPE_EXCLUSIVE) and the plugin 
-	 * does not support non-atomic writing
-	 *
-	 * @spec DmtSession.setDefaultNodeValue(String)
-	 */
-	private void testSetDefaultNodeValue010() {
-		DmtSession session = null;
-		try {
-			tbc.log("#testSetDefaultNodeValue010");
+			tbc.log("#testSetDefaultNodeValue008");
 			session = tbc.getDmtAdmin().getSession(".",DmtSession.LOCK_TYPE_EXCLUSIVE);
 			session.setDefaultNodeValue(TestNonAtomicPluginActivator.LEAF_NODE);
 			tbc.failException("#", DmtException.class);
@@ -333,10 +284,10 @@ public class SetDefaultNodeValue implements TestInterface {
      * 
      * @spec DmtSession.setDefaultNodeValue(String)
      */
-    private void testSetDefaultNodeValue011() {
+    private void testSetDefaultNodeValue009() {
         DmtSession session = null;
         try {
-            tbc.log("#testRenameNode011");
+            tbc.log("#testRenameNode009");
             session = tbc.getDmtAdmin().getSession(".",
                 DmtSession.LOCK_TYPE_ATOMIC);
             
@@ -358,10 +309,10 @@ public class SetDefaultNodeValue implements TestInterface {
      * 
      * @spec DmtSession.setDefaultNodeValue(String)
      */
-    private void testSetDefaultNodeValue012() {
+    private void testSetDefaultNodeValue010() {
         DmtSession session = null;
         try {
-            tbc.log("#testRenameNode012");
+            tbc.log("#testRenameNode010");
             session = tbc.getDmtAdmin().getSession(".",
                 DmtSession.LOCK_TYPE_ATOMIC);
             

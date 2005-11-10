@@ -63,7 +63,7 @@ public class HighestRankingRemoteAlertSenderActivator implements BundleActivator
 		testHighestRankingRemoteAlertSenderImpl = new HighestRankingRemoteAlertSenderImpl();
 		
 		Hashtable ht = new Hashtable();
-		ht.put("servers", new String[] { DmtConstants.PRINCIPAL });
+		ht.put("principals", new String[] { DmtConstants.PRINCIPAL });
 		ht.put(Constants.SERVICE_RANKING, new Integer(RemoteAlertSenderActivator.RANKING + 1));
 			
 		String[] ifs = new String[] { RemoteAlertSender.class.getName() };

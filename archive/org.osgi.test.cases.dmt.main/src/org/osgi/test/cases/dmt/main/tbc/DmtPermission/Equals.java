@@ -136,7 +136,7 @@ public class Equals {
 		try {
 			tbc.log("#testEquals005");
 			tbc.assertTrue("Asserts that the \"*\" action mask is considered equal to a mask containing all actions.", 
-					new org.osgi.service.dmt.security.DmtPermission(DmtConstants.OSGi_LOG,DmtConstants.ACTIONS)
+					new org.osgi.service.dmt.security.DmtPermission(DmtConstants.OSGi_LOG,"*")
 					.equals(new org.osgi.service.dmt.security.DmtPermission(DmtConstants.OSGi_LOG,DmtConstants.ALL_ACTIONS)));
 		} catch (Exception e) { 
 			tbc.fail("Unexpected exception: " + e.getClass().getName());

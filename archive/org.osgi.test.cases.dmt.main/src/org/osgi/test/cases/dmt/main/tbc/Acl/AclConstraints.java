@@ -69,6 +69,8 @@ public class AclConstraints {
 		testAclConstraints007();
 		testAclConstraints008();
         testAclConstraints009();
+        testAclConstraints010();
+        testAclConstraints011();
 
 	}
 
@@ -320,6 +322,87 @@ public class AclConstraints {
                     + " [Message: " + e.getMessage() + "]");
         } finally {
             tbc.closeSession(session);
+        }
+    }
+    
+    /**
+     * This method asserts that the copy methods does not copy the Acl.
+     * It also tests that the copied nodes inherit the access rights 
+     * from the parent of the destination node.
+     * 
+     * @spec 117.4.10 Copying Nodes
+     */
+    private void testAclConstraints010() {
+        DmtSession session = null;
+        try {
+            tbc.log("#testAclConstraints010");
+            session = tbc.getDmtAdmin().getSession(".",
+                    DmtSession.LOCK_TYPE_EXCLUSIVE);
+            Acl aclParent = new Acl(new String[] { DmtConstants.PRINCIPAL },new int[] { Acl.REPLACE });
+            session.setNodeAcl(TestExecPluginActivator.ROOT,
+                    aclParent);
+            
+            session.setNodeAcl(TestExecPluginActivator.INTERIOR_NODE,
+                    new Acl(new String[] { DmtConstants.PRINCIPAL },
+                            new int[] { Acl.EXEC }));
+            session.copy(TestExecPluginActivator.INTERIOR_NODE,
+                    TestExecPluginActivator.INEXISTENT_NODE, true);
+            TestExecPlugin.setAllUriIsExistent(true);
+
+            tbc.assertTrue("Asserts that the copied nodes inherit the access rights from the parent of the destination node.",
+                aclParent.equals(session.getNodeAcl(TestExecPluginActivator.INEXISTENT_NODE)));
+            
+        } catch (Exception e) {
+            tbc.fail("Unexpected Exception: " + e.getClass().getName()
+                + " [Message: " + e.getMessage() + "]");
+        } finally {
+            tbc.cleanUp(session, TestExecPluginActivator.INTERIOR_NODE);
+            tbc.cleanAcl(TestExecPluginActivator.ROOT);
+            TestExecPlugin.setAllUriIsExistent(false);
+        }
+    }
+    
+    /**
+     * This method asserts that when copy method is called if the calling principal does not 
+     * have Replace rights for the parent, the destiny node must be set with an Acl having 
+     * Add, Delete and Replace permissions
+     * 
+     * @spec 117.4.10 Copying Nodes
+     */
+    private void testAclConstraints011() {
+        DmtSession session = null;
+        try {
+            tbc.log("#testAclConstraints011");
+            
+            tbc.openSessionAndSetNodeAcl(TestExecPluginActivator.INTERIOR_NODE, DmtConstants.PRINCIPAL, Acl.GET | Acl.ADD );
+            tbc.openSessionAndSetNodeAcl(TestExecPluginActivator.ROOT, DmtConstants.PRINCIPAL, Acl.ADD );
+
+            Acl aclExpected = new Acl(new String[] { DmtConstants.PRINCIPAL },new int[] { Acl.ADD | Acl.GET | Acl.REPLACE });
+
+            tbc.setPermissions(new PermissionInfo(DmtPrincipalPermission.class
+					.getName(), DmtConstants.PRINCIPAL, "*"));
+			
+            session = tbc.getDmtAdmin().getSession(DmtConstants.PRINCIPAL, ".",
+                    DmtSession.LOCK_TYPE_EXCLUSIVE);
+            
+            session.copy(TestExecPluginActivator.INTERIOR_NODE,
+                    TestExecPluginActivator.INEXISTENT_NODE, true);
+            TestExecPlugin.setAllUriIsExistent(true);
+
+            session.close();
+            session = tbc.getDmtAdmin().getSession(".",DmtSession.LOCK_TYPE_EXCLUSIVE);
+            
+            tbc.assertTrue("Asserts that if the calling principal does not have Replace rights for the parent, " +
+            		"the destiny node must be set with an Acl having Add, Delete and Replace permissions.",
+            		aclExpected.equals(session.getNodeAcl(TestExecPluginActivator.INEXISTENT_NODE)));
+            
+        } catch (Exception e) {
+            tbc.fail("Unexpected Exception: " + e.getClass().getName()
+                + " [Message: " + e.getMessage() + "]");
+        } finally {
+            tbc.cleanUp(session, TestExecPluginActivator.INTERIOR_NODE);
+            tbc.cleanAcl(TestExecPluginActivator.ROOT);
+            TestExecPlugin.setAllUriIsExistent(false);
         }
     }
 }
