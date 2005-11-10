@@ -51,17 +51,13 @@ public class Scheduler implements Runnable, EventHandler {
 		schedulerThread.interrupt();
 	}
 
-	public synchronized ScheduledApplication addScheduledApplication(String pid,
+	public synchronized ScheduledApplication addScheduledApplication(ApplicationDescriptor appDesc,
 			Map arguments, String topic, String eventFilter, boolean recurring) {
 
 		SecurityManager sm = System.getSecurityManager();
 		if( sm != null ) {
-			try {
-				sm.checkPermission(new ApplicationAdminPermission(pid, 
-						ApplicationAdminPermission.SCHEDULE_ACTION));
-			}catch( InvalidSyntaxException e ) {
-				throw new SecurityException( "Cannot check permissions because of an error!" );
-			}
+			sm.checkPermission(new ApplicationAdminPermission( appDesc, 
+					ApplicationAdminPermission.SCHEDULE_ACTION));
 		}
 
 		if( topic == null )
@@ -71,7 +67,7 @@ public class Scheduler implements Runnable, EventHandler {
 			topic = "*";
 		
 		ScheduledApplicationImpl app = new ScheduledApplicationImpl(this, bc,
-				pid, arguments, topic, eventFilter, recurring);
+				appDesc.getApplicationId(), arguments, topic, eventFilter, recurring);
 		
 		scheduledApps.add( app );
 		changeServiceReg();
@@ -87,7 +83,7 @@ public class Scheduler implements Runnable, EventHandler {
 		SecurityManager sm = System.getSecurityManager();
 		if( sm != null )
 			sm.checkPermission(new ApplicationAdminPermission(
-				((ScheduledApplicationImpl)scheduledApplication).getPid(),
+				((ScheduledApplicationImpl)scheduledApplication).getApplicationDescriptor(),
 				ApplicationAdminPermission.SCHEDULE_ACTION));
 
 		scheduledApps.remove( scheduledApplication );
