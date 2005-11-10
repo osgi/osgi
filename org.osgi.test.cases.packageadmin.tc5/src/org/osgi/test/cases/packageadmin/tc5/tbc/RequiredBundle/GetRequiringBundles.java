@@ -80,7 +80,8 @@ public class GetRequiringBundles {
 
 		requiredBundles = packageAdmin
 				.getRequiredBundles(TestControl.TEST_BUNDLE_1);
-		bundles = requiredBundles[0].getRequiringBundles();
+		Bundle tb2 = control.getTestBundle2();
+		bundles = (requiredBundles[0].getBundle() == tb2 ? requiredBundles[0] : requiredBundles[1]).getRequiringBundles();
 		control.assertNotNull("Checking the returned requiring bundles",
 				bundles);
 		control.assertEquals("Checking the number of requiring bundles", 1,
@@ -109,16 +110,18 @@ public class GetRequiringBundles {
 				serviceReference);
 
 		control.installTestBundles();
-
+		Bundle tb2 = control.getTestBundle2();
+		
 		requiredBundles = packageAdmin
 				.getRequiredBundles(TestControl.TEST_BUNDLE_1);
 
 		control.uninstallTestBundles();
 
 		control.refreshPackageAdmin();
-
+		
+		Bundle[] bundles = (requiredBundles[0].getBundle() == tb2 ? requiredBundles[0] : requiredBundles[1]).getRequiringBundles();
 		control.assertNull("Checking the result with a staled required bundle",
-				requiredBundles[0].getRequiringBundles());
+				bundles);
 
 		control.getContext().ungetService(serviceReference);
 	}

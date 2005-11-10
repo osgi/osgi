@@ -27,6 +27,7 @@
 
 package org.osgi.test.cases.packageadmin.tc5.tbc.RequiredBundle;
 
+import org.osgi.framework.Bundle;
 import org.osgi.framework.ServiceReference;
 import org.osgi.framework.Version;
 import org.osgi.service.packageadmin.PackageAdmin;
@@ -78,8 +79,10 @@ public class GetVersion {
 
 		requiredBundles = packageAdmin
 				.getRequiredBundles("org.osgi.test.cases.packageadmin.tc5.tb1");
+    Bundle tb2 = control.getTestBundle2();
 		control.assertEquals("Checking the required bundle version",
-				new Version("1.1.0"), requiredBundles[0].getVersion());
+				new Version("1.1.0"), 
+				(requiredBundles[0].getBundle() == tb2 ? requiredBundles[0] :  requiredBundles[1]).getVersion());
 
 		control.uninstallTestBundles();
 
@@ -105,13 +108,14 @@ public class GetVersion {
 
 		requiredBundles = packageAdmin
 				.getRequiredBundles("org.osgi.test.cases.packageadmin.tc5.tb1");
-
+    RequiredBundle tb2rb = requiredBundles[0].getBundle() == control.getTestBundle2() ? requiredBundles[0] :  requiredBundles[1];
 		control.uninstallTestBundles();
 
 		control.refreshPackageAdmin();
 
 		control.assertEquals("Checking the required bundle version",
-				new Version("1.1.0"), requiredBundles[0].getVersion());
+				new Version("1.1.0"),  
+        tb2rb.getVersion());
 
 		control.getContext().ungetService(serviceReference);
 	}
