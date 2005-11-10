@@ -87,7 +87,7 @@ public class MetaTypeProviderImpl implements ManagedService, MetaTypeProvider {
 		ObjectClassDefinition result;
 
 		if (id.equals("br.org.cesar.ocd1")
-				&& ((locale.equals("pt_BR") || locale == null))) {
+        && (locale == null || locale.equals("pt_BR")) ) {
 			result = new ObjectClassDefinitionImpl();
 		}
 		else {
