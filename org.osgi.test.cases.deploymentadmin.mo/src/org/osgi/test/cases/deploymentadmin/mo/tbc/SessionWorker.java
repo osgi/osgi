@@ -63,7 +63,13 @@ public class SessionWorker extends Thread {
                 try {
                     dp.uninstall();
                 } catch (DeploymentException e1) {
-                    dp.uninstallForced();
+                    try {
+						dp.uninstallForced();
+					}
+					catch (DeploymentException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
                 }
             }
         }

@@ -57,7 +57,7 @@ import org.osgi.framework.ServicePermission;
 import org.osgi.framework.ServiceReference;
 import org.osgi.service.deploymentadmin.DeploymentAdmin;
 import org.osgi.service.deploymentadmin.DeploymentAdminPermission;
-import org.osgi.service.deploymentadmin.DeploymentCustomizerPermission;
+import org.osgi.service.deploymentadmin.spi.DeploymentCustomizerPermission;
 import org.osgi.service.dmt.Acl;
 import org.osgi.service.dmt.AlertItem;
 import org.osgi.service.dmt.DmtAdmin;
@@ -167,7 +167,7 @@ public class DeploymentmoTestControl extends DefaultTestBundleControl {
        // Activators must have ServicePermission to create a ResourceProcessor instance
        PermissionInfo info[] = {
                new PermissionInfo(DeploymentCustomizerPermission.class.getName(),
-                       "(name=bundles.*)",DeploymentCustomizerPermission.ACTION_PRIVATEAREA),
+                       "(name=bundles.*)",DeploymentCustomizerPermission.PRIVATEAREA),
                new PermissionInfo(ServicePermission.class.getName(), "*",
                        ServicePermission.GET + ","+ ServicePermission.REGISTER),
                new PermissionInfo(AdminPermission.class.getName(), "*", "*"), 

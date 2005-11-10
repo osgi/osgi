@@ -36,7 +36,7 @@
  */
 package org.osgi.test.cases.deploymentadmin.mo.tbc.util;
 
-import org.osgi.service.deploymentadmin.ResourceProcessor;
+import org.osgi.service.deploymentadmin.spi.ResourceProcessor;
 
 
 /**

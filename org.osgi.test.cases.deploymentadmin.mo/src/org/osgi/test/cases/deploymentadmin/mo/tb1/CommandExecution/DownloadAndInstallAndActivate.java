@@ -47,7 +47,7 @@ import java.io.File;
 import java.util.Iterator;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleEvent;
-import org.osgi.service.deploymentadmin.ResourceProcessor;
+import org.osgi.service.deploymentadmin.spi.ResourceProcessor;
 import org.osgi.service.dmt.DmtData;
 import org.osgi.service.dmt.DmtException;
 import org.osgi.service.dmt.DmtSession;
