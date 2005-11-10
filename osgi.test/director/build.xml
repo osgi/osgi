@@ -17,11 +17,11 @@
 	</target>
 		
 	<target name="run-cmpn">
-		<antcall target="-run">
+		<ant target="-run">
 			<property name="tests" value="file:../osgi.cmpn.tests.jar"/>
 			<property name="script" value="file:cmpn.script"/>
 			<property name="out" value="run-cmpn.xml"/>
-		</antcall>
+		</ant>
 	</target>
 	
 	<target name="run-core">
@@ -33,11 +33,11 @@
 	</target>
 	
 	<target name="run-meg">
-		<antcall target="-run">
+		<ant target="-run">
 			<property name="tests" value="file:../osgi.meg.tests.jar"/>
 			<property name="script" value="file:meg.script"/>
 			<property name="out" value="run-meg.xml"/>
-		</antcall>
+		</ant>
 	</target>
 	
 	<target name="run-link">
