@@ -26,7 +26,6 @@ import java.util.ListIterator;
 import java.util.Vector;
 
 import org.osgi.framework.BundleException;
-import org.osgi.service.deploymentadmin.DeploymentException;
 import org.osgi.service.deploymentadmin.spi.DeploymentSession;
 import org.osgi.service.deploymentadmin.spi.ResourceProcessorException;
 

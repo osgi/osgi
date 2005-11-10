@@ -287,7 +287,6 @@ public class DeploymentSessionImpl implements DeploymentSession {
         // ConditionalPermissionInfo-s for customizers
         Set cpisForCusts = null;
         
-        int numOfErrors = 0;
         try {
             stopBundles();
             processBundles(wjis);
@@ -297,7 +296,7 @@ public class DeploymentSessionImpl implements DeploymentSession {
             dropBundles();
             dropResources();
             //refreshPackages();
-            numOfErrors = startBundles();
+            startBundles();
         } catch (DeploymentException e) {
             transaction.rollback();
             throw e;
@@ -320,11 +319,6 @@ public class DeploymentSessionImpl implements DeploymentSession {
         	transaction.rollback();
         
         closeTrackers();
-        
-        /* TODO if (numOfErrors > 0) {
-            throw new DeploymentException(DeploymentException.CODE_BUNDLE_START, 
-                    numOfErrors + " bundle(s) cannot be started");
-        }*/
     }
     
     /*private void refreshPackages() {
