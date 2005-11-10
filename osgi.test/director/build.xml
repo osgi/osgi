@@ -7,7 +7,7 @@
 			fork="true"
 		>
 			<jvmarg line="-Xverify:none"/>
-			<arg line="-console:2012"/>
+			<arg line="-console:2101"/>
 			<arg line="init"/>
 			<arg line="'install file:../osgi.jar start'"/>
 			<arg line="'install file:../osgi.min.jar start'"/>
@@ -18,10 +18,10 @@
 		
 	<target name="run-cmpn">
 		<antcall target="-run">
-			<param name="tests" value="file:../osgi.cmpn.tests.jar"/>
-			<param name="script" value="file:cmpn.script"/>
-			<param name="out" value="run-cmpn.xml"/>
-		</antcall>
+			<property name="tests" value="file:../osgi.cmpn.tests.jar"/>
+			<property name="script" value="file:cmpn.script"/>
+			<property name="out" value="run-cmpn.xml"/>
+		</ant>
 	</target>
 	
 	<target name="run-core">
@@ -30,6 +30,14 @@
 			<param name="script" value="file:core.script"/>
 			<param name="out" value="run-core.xml"/>
 		</antcall>
+	</target>
+	
+	<target name="run-meg">
+		<antcall target="-run">
+			<property name="tests" value="file:../osgi.meg.tests.jar"/>
+			<property name="script" value="file:meg.script"/>
+			<property name="out" value="run-meg.xml"/>
+		</ant>
 	</target>
 	
 	<target name="run-link">
@@ -48,7 +56,7 @@
 			<jvmarg line="-Dorg.osgi.test.batch.script=${script}"/>
 			<jvmarg line="-Dorg.osgi.test.batch.out=${out}"/>
 			
-			<arg line="-console:2012"/>
+			<arg line="-console:2101"/>
 			<arg line="init"/>
 			<arg line="'install file:../osgi.jar start'"/>
 			<arg line="'install file:../osgi.min.jar start'"/>
