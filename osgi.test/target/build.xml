@@ -15,6 +15,13 @@
 		</antcall>
 	</target>
 	
+	<target name="run-meg">
+		<antcall target="-run">
+			  <param name="impls" value="file:../osgi.meg.impls.jar"/>
+			  <param name="classpath" value=""/>
+		</antcall>
+	</target>
+	
 	<target name="-run">
 		<echo>Testing ${impls}</echo>
 		<java fork="true" classname="org.eclipse.osgi.framework.launcher.Launcher">	
