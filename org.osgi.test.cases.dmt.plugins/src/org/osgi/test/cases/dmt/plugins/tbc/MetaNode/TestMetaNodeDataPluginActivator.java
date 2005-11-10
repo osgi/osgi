@@ -88,6 +88,8 @@ public class TestMetaNodeDataPluginActivator implements BundleActivator {
     
     public static final String PERMANENT_INEXISTENT_NODE = ROOT +"/" + PERMANENT_INEXISTENT_NODE_NAME;
     
+    public static final String INTERIOR_NODE_WITHOUT_GET_PERMISSION = ROOT +"/withoutget";
+    
 	private DmtTestControl tbc;
     
 	private TestMetaNodeDataPlugin testMetaNodeDataPlugin;

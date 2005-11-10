@@ -41,6 +41,7 @@ import org.osgi.service.dmt.DmtSession;
 import org.osgi.service.dmt.MetaNode;
 import org.osgi.test.cases.dmt.plugins.tbc.DmtConstants;
 import org.osgi.test.cases.dmt.plugins.tbc.DmtTestControl;
+import org.osgi.test.cases.dmt.plugins.tbc.MetaNode.TestMetaNodeDataPlugin;
 import org.osgi.test.cases.dmt.plugins.tbc.MetaNode.TestMetaNodeDataPluginActivator;
 
 /**
@@ -129,6 +130,8 @@ public class MetaData {
         testMetaData070();
         testMetaData071();
         testMetaData072();
+        testMetaData073();
+        testMetaData074();
         
 	}
 
@@ -1904,7 +1907,7 @@ public class MetaData {
             TestPluginMetaDataActivator.metaNodeDefault = new TestPluginMetaDataMetaNode();
             TestPluginMetaDataActivator.metaNodeDefault.setLeaf(true);
 
-            session.setNodeType(TestPluginMetaDataActivator.LEAF_NODE,"text/html");
+            session.setNodeType(TestPluginMetaDataActivator.LEAF_NODE,null);
             tbc.failException("",DmtException.class);
         } catch (DmtException e) {
             tbc.assertEquals("Asserts that DmtException.METADATA_MISMATCH is thrown " +
@@ -1963,7 +1966,7 @@ public class MetaData {
         DmtSession session = null;
         try {
             tbc.log("#testMetaData053");
-            //Opened in a different plugin
+
             session = tbc.getDmtAdmin().getSession(
                 TestMetaNodeDataPluginActivator.ROOT,
                     DmtSession.LOCK_TYPE_EXCLUSIVE);
@@ -1994,7 +1997,7 @@ public class MetaData {
         DmtSession session = null;
         try {
             tbc.log("#testMetaData054");
-            //Opened in a different plugin
+
             session = tbc.getDmtAdmin().getSession(
                 TestMetaNodeDataPluginActivator.ROOT,
                     DmtSession.LOCK_TYPE_EXCLUSIVE);
@@ -2131,7 +2134,7 @@ public class MetaData {
         DmtSession session = null;
         try {
             tbc.log("#testMetaData058");
-            //Opened in a different plugin
+
             session = tbc.getDmtAdmin().getSession(
                 TestMetaNodeDataPluginActivator.ROOT,
                     DmtSession.LOCK_TYPE_EXCLUSIVE);
@@ -2452,7 +2455,7 @@ public class MetaData {
         DmtSession session = null;
         try {
             tbc.log("#testMetaData070");
-            //Opened in a different plugin
+
             session = tbc.getDmtAdmin().getSession(
                 TestMetaNodeDataPluginActivator.ROOT,
                     DmtSession.LOCK_TYPE_EXCLUSIVE);
@@ -2482,7 +2485,7 @@ public class MetaData {
         DmtSession session = null;
         try {
             tbc.log("#testMetaData071");
-            //Opened in a different plugin
+
             session = tbc.getDmtAdmin().getSession(
                 TestMetaNodeDataPluginActivator.ROOT,
                     DmtSession.LOCK_TYPE_EXCLUSIVE);
@@ -2532,6 +2535,69 @@ public class MetaData {
                 + " [Message: " + e.getMessage() + "]");
         } finally {
             tbc.cleanUp(session,true);
+        }
+
+    } 
+    
+    /**
+     * Asserts that DmtException.METADATA_MISMATCH is thrown 
+     * if meta-data of the copied node does not allow the Get operation
+     * 
+     * @spec DmtSession.renameNode(String,String)
+     */
+    private void testMetaData073() {
+        DmtSession session = null;
+        try {
+            tbc.log("#testMetaData073");
+
+            session = tbc.getDmtAdmin().getSession(
+            		TestMetaNodeDataPluginActivator.ROOT,
+                    DmtSession.LOCK_TYPE_EXCLUSIVE);
+           
+            session.copy(TestMetaNodeDataPluginActivator.INTERIOR_NODE_WITHOUT_GET_PERMISSION,TestMetaNodeDataPluginActivator.INEXISTENT_NODE,true);
+            tbc.failException("",DmtException.class);
+        } catch (DmtException e) {
+            tbc.assertEquals("Asserts that DmtException.METADATA_MISMATCH is thrown " +
+                    "if meta-data of the copied node does not allow the Get operation, ",DmtException.METADATA_MISMATCH,e.getCode());
+            tbc.assertTrue("Asserts that the plugin's method was not called",DmtConstants.TEMPORARY=="");
+        } catch (Exception e) {
+            tbc.fail("Expected " + DmtException.class.getName() + " but was "
+                    + e.getClass().getName());
+
+        } finally {
+            tbc.cleanUp(session,true);
+        }
+
+    } 
+    
+    /**
+     * Asserts that DmtException.METADATA_MISMATCH is thrown 
+     * if meta-data of the parent node does not allow the Add operation
+     * 
+     * @spec DmtSession.renameNode(String,String)
+     */
+    private void testMetaData074() {
+        DmtSession session = null;
+        try {
+            tbc.log("#testMetaData074");
+
+            session = tbc.getDmtAdmin().getSession(
+            		TestMetaNodeDataPluginActivator.ROOT,
+                    DmtSession.LOCK_TYPE_EXCLUSIVE);
+            TestMetaNodeDataPlugin.setRootNodeAllowsAddOperation(false);
+            session.copy(TestMetaNodeDataPluginActivator.INTERIOR_NODE,TestMetaNodeDataPluginActivator.INEXISTENT_NODE,true);
+            tbc.failException("",DmtException.class);
+        } catch (DmtException e) {
+            tbc.assertEquals("Asserts that DmtException.METADATA_MISMATCH is thrown " +
+                    "if meta-data of the parent node does not allow the Add operation ",DmtException.METADATA_MISMATCH,e.getCode());
+            tbc.assertTrue("Asserts that the plugin's method was not called",DmtConstants.TEMPORARY=="");
+        } catch (Exception e) {
+            tbc.fail("Expected " + DmtException.class.getName() + " but was "
+                    + e.getClass().getName());
+
+        } finally {
+            tbc.cleanUp(session,true);
+            TestMetaNodeDataPlugin.setRootNodeAllowsAddOperation(true);
         }
 
     } 
