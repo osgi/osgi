@@ -508,7 +508,7 @@ public class PluginDeployed implements DataPluginFactory, ReadableDataSession,
         if ("Operations".equals(nodeUriArr[6])) {
             if (nodeUriArr[7].equals("Remove"))
                 return new Metanode(MetaNode.CMD_GET, Metanode.IS_LEAF, MetaNode.AUTOMATIC,
-                        "", 1, !Metanode.ZERO_OCC, null, 0, 0, null, DmtData.FORMAT_BOOLEAN).
+                        "", 1, !Metanode.ZERO_OCC, null, 0, 0, null, DmtData.FORMAT_NULL).
                         orOperation(MetaNode.CMD_EXECUTE);
             throw new RuntimeException("Internal error");
         } else if ("Ext".equals(nodeUriArr[6])) {
