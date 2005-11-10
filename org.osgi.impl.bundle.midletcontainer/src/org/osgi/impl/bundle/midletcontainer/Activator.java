@@ -1,6 +1,5 @@
 package org.osgi.impl.bundle.midletcontainer;
 
-import java.util.*;
 import org.osgi.framework.*;
 import org.osgi.service.log.LogService;
 
@@ -19,7 +18,6 @@ public class Activator implements BundleActivator {
 		oat.start( bc );
 		
 		midletContainer = new MidletContainer(bc);
-		Hashtable serviceListenerProps = new Hashtable();
 		
 		System.out.println("Midlet container started successfully!");
 	}
