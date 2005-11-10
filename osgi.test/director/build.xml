@@ -21,7 +21,7 @@
 			<property name="tests" value="file:../osgi.cmpn.tests.jar"/>
 			<property name="script" value="file:cmpn.script"/>
 			<property name="out" value="run-cmpn.xml"/>
-		</ant>
+		</antcall>
 	</target>
 	
 	<target name="run-core">
@@ -37,7 +37,7 @@
 			<property name="tests" value="file:../osgi.meg.tests.jar"/>
 			<property name="script" value="file:meg.script"/>
 			<property name="out" value="run-meg.xml"/>
-		</ant>
+		</antcall>
 	</target>
 	
 	<target name="run-link">
