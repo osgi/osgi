@@ -51,6 +51,8 @@ import org.osgi.test.cases.dmt.plugins.tbc.DmtTestControl;
 
 public class TestMetaNodeDataPlugin implements DataPluginFactory, ExecPlugin, ReadWriteDataSession {
 	
+	private static boolean rootNodeAllowsAddOperation = true;
+	
     private DmtTestControl tbc;
     
 	public TestMetaNodeDataPlugin(DmtTestControl tbc) {
@@ -131,6 +133,11 @@ public class TestMetaNodeDataPlugin implements DataPluginFactory, ExecPlugin, Re
             return new TestMetaNode(false,null,null,true,true,true,true,true,MetaNode.PERMANENT);     
         } else if (nodeName.equals(TestMetaNodeDataPluginActivator.PERMANENT_INEXISTENT_NODE)){ 
             return new TestMetaNode(false,null,null,true,true,true,true,true,MetaNode.PERMANENT);                 
+        } else if (nodeName.equals(TestMetaNodeDataPluginActivator.INTERIOR_NODE_WITHOUT_GET_PERMISSION)){ 
+            return new TestMetaNode(false,null,null,true,false,true,true,true,MetaNode.DYNAMIC);
+            //It is needed for the test where DmtSession.copy is called and the parent node does not allow add operation
+        } else if (nodeName.equals(TestMetaNodeDataPluginActivator.ROOT) && !rootNodeAllowsAddOperation){ 
+            return new TestMetaNode(false,null,null,false,true,true,true,true,MetaNode.DYNAMIC);
         } else {
             return new TestMetaNode();
         }
@@ -178,4 +185,8 @@ public class TestMetaNodeDataPlugin implements DataPluginFactory, ExecPlugin, Re
     public void setNodeValue(String[] nodePath, DmtData data) throws DmtException {
        
     }
+	public static void setRootNodeAllowsAddOperation(
+			boolean rootNodeAllowsAddOperation) {
+		TestMetaNodeDataPlugin.rootNodeAllowsAddOperation = rootNodeAllowsAddOperation;
+	}
 }
