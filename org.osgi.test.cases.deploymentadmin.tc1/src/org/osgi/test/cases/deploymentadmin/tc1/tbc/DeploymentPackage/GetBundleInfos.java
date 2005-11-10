@@ -43,12 +43,9 @@
 
 package org.osgi.test.cases.deploymentadmin.tc1.tbc.DeploymentPackage;
 import org.osgi.framework.Version;
-import org.osgi.service.deploymentadmin.DeploymentPackage;
-import org.osgi.test.cases.deploymentadmin.tc1.tbc.DeploymentConstants;
-import org.osgi.test.cases.deploymentadmin.tc1.tbc.DeploymentTestControl;
-import org.osgi.test.cases.deploymentadmin.tc1.tbc.util.MessagesConstants;
-import org.osgi.test.cases.deploymentadmin.tc1.tbc.util.TestingBundle;
-import org.osgi.test.cases.deploymentadmin.tc1.tbc.util.TestingDeploymentPackage;
+import org.osgi.service.deploymentadmin.*;
+import org.osgi.test.cases.deploymentadmin.tc1.tbc.*;
+import org.osgi.test.cases.deploymentadmin.tc1.tbc.util.*;
 
 /**
  * @author Luiz Felipe Guimaraes
@@ -57,10 +54,10 @@ import org.osgi.test.cases.deploymentadmin.tc1.tbc.util.TestingDeploymentPackage
  * according to MEG specification.
  */
 
-public class GetBundleSymNameVersionPairs {
+public class GetBundleInfos {
 	private DeploymentTestControl tbc;
 	
-	public GetBundleSymNameVersionPairs(DeploymentTestControl tbc){
+	public GetBundleInfos(DeploymentTestControl tbc){
 		this.tbc = tbc;
 	}
 	
@@ -81,14 +78,14 @@ public class GetBundleSymNameVersionPairs {
 		DeploymentPackage dp = null;		
 		try {
 			dp = tbc.installDeploymentPackage(tbc.getWebServer() + testDP.getFilename());
-			String[][] symNameVersion = dp.getBundleSymNameVersionPairs();
+			BundleInfo[] symNameVersion = dp.getBundleInfos();
 			TestingBundle[] testBundle = testDP.getBundles();
 			
 			int count = 0;
 			for (int i = 0; i < testBundle.length; i++) {
 				for (int j=0; j < symNameVersion.length; j++) {
-					if (testBundle[i].getName().equals(symNameVersion[j][0])
-							&& testBundle[i].getVersion().equals(new Version(symNameVersion[j][1]))) {
+					if (testBundle[i].getName().equals(symNameVersion[j].getSymbolicName())
+							&& testBundle[i].getVersion().equals(symNameVersion[j].getVersion())) {
 						count++;
 						break;
 					}
@@ -115,7 +112,7 @@ public class GetBundleSymNameVersionPairs {
 		try {
 			rp = tbc.installDeploymentPackage(tbc.getWebServer() + testRP.getFilename());
 			dp = tbc.installDeploymentPackage(tbc.getWebServer() + testDP.getFilename());
-			String[][] symNameVersion = dp.getBundleSymNameVersionPairs();
+			BundleInfo[] symNameVersion = dp.getBundleInfos();
 			tbc.assertTrue("Asserts that it returns a zero dimensional array when there is no bundles.",symNameVersion.length == 0);
 		} catch (Exception e) {
 			tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }));
