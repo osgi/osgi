@@ -818,6 +818,11 @@ public class DeploymentSessionImpl implements DeploymentSession {
     
     private void checkDpBundleConformity(Bundle b) throws DeploymentException {
         BundleEntry be = new BundleEntry(b);
+        
+        // bundle doesn't have BSN the BSN in the DP manifest will be used
+        if (null == be.getSymbName())
+        	return;
+        
         if (!srcDp.contains(be))
             throw new DeploymentException(DeploymentException.CODE_BUNDLE_NAME_ERROR, 
                     "The symbolic name or version in the deployment package manifest is " +
