@@ -18,9 +18,15 @@ import java.util.StringTokenizer;
  * <code>StatusVariable</code>s, to switch event sending on or off or to
  * start monitoring jobs. The target of the permission is the identifier of the
  * <code>StatusVariable</code>, the action can be <code>read</code>,
- * <code>publish</code>,<code>reset</code>,<code>startjob</code>,
+ * <code>publish</code>, <code>reset</code>, <code>startjob</code>,
  * <code>switchevents</code>, or the combination of these separated by
- * commas.
+ * commas.  Action names are interpreted case-insensitively, but the canonical 
+ * action string returned by {@link #getActions} uses the forms defined by the 
+ * action constants.
+ * <p>
+ * If the wildcard <code>*</code> appears in the actions field, all legal 
+ * monitoring commands are allowed on the designated target(s) by the owner of 
+ * the permission.
  */
 public class MonitorPermission extends Permission {
     // TODO add static final serialVersionUID
@@ -80,6 +86,9 @@ public class MonitorPermission extends Permission {
     private static final int PUBLISH_FLAG      = 0x4;
     private static final int STARTJOB_FLAG     = 0x8;
     private static final int SWITCHEVENTS_FLAG = 0x10;
+    
+    private static final int ALL_FLAGS = READ_FLAG | RESET_FLAG | 
+        PUBLISH_FLAG | STARTJOB_FLAG | SWITCHEVENTS_FLAG;
 
     private String monId;
     private String varId;
@@ -112,11 +121,13 @@ public class MonitorPermission extends Permission {
      * <code>read</code>, <code>publish</code>, <code>startjob</code>,
      * <code>reset</code>, <code>switchevents</code>, or the combination of 
      * these separated by commas. String constants are defined in this class for
-     * each valid action.
+     * each valid action.  Passing <code>&quot;*&quot</code> as the action 
+     * string is equivalent to listing all actions. 
      * 
      * @param statusVariable the identifier of the <code>StatusVariable</code>
      *        in [Monitorable_id]/[StatusVariable_id] format 
-     * @param actions the list of allowed actions separated by commas
+     * @param actions the list of allowed actions separated by commas, or
+     *        <code>*</code> for all actions
      * @throws java.lang.IllegalArgumentException if either parameter is 
      *         <code>null</code>, or invalid with regard to the constraints
      *         defined above and in the documentation of the used actions 
@@ -152,42 +163,46 @@ public class MonitorPermission extends Permission {
         checkId(monId, "Monitorable ID part of the target");
         checkId(varId, "Status Variable ID part of the target");
 
-        mask = 0;
         minJobInterval = 0;
 
-        StringTokenizer st = new StringTokenizer(actions, ",");
-        while (st.hasMoreTokens()) {
-            String action = st.nextToken();
-            if (action.equalsIgnoreCase(READ)) {
-                addToMask(READ_FLAG, READ);
-            } else if (action.equalsIgnoreCase(RESET)) {
-                addToMask(RESET_FLAG, RESET);
-            } else if (action.equalsIgnoreCase(PUBLISH)) {
-                addToMask(PUBLISH_FLAG, PUBLISH);
-            } else if (action.equalsIgnoreCase(SWITCHEVENTS)) {
-                addToMask(SWITCHEVENTS_FLAG, SWITCHEVENTS);
-            } else if (action.toLowerCase().startsWith(STARTJOB)) {
-                minJobInterval = 0;
-
-                int slen = STARTJOB.length();
-                if (action.length() != slen) {
-                    if (action.charAt(slen) != ':')
-                        throw new IllegalArgumentException("Invalid action '"
-                                + action + "'.");
-
-                    try {
-                        minJobInterval = Integer.parseInt(action
-                                .substring(slen + 1));
-                    } catch (NumberFormatException e) {
-                        throw new IllegalArgumentException(
-                                "Invalid parameter in startjob action '"
-                                        + action + "'.");
+        if(actions.equals("*"))
+            mask = ALL_FLAGS;
+        else {
+            mask = 0;
+            StringTokenizer st = new StringTokenizer(actions, ",");
+            while (st.hasMoreTokens()) {
+                String action = st.nextToken();
+                if (action.equalsIgnoreCase(READ)) {
+                    addToMask(READ_FLAG, READ);
+                } else if (action.equalsIgnoreCase(RESET)) {
+                    addToMask(RESET_FLAG, RESET);
+                } else if (action.equalsIgnoreCase(PUBLISH)) {
+                    addToMask(PUBLISH_FLAG, PUBLISH);
+                } else if (action.equalsIgnoreCase(SWITCHEVENTS)) {
+                    addToMask(SWITCHEVENTS_FLAG, SWITCHEVENTS);
+                } else if (action.toLowerCase().startsWith(STARTJOB)) {
+                    minJobInterval = 0;
+    
+                    int slen = STARTJOB.length();
+                    if (action.length() != slen) {
+                        if (action.charAt(slen) != ':')
+                            throw new IllegalArgumentException(
+                                    "Invalid action '" + action + "'.");
+    
+                        try {
+                            minJobInterval = Integer.parseInt(action
+                                    .substring(slen + 1));
+                        } catch (NumberFormatException e) {
+                            throw new IllegalArgumentException(
+                                    "Invalid parameter in startjob action '"
+                                            + action + "'.");
+                        }
                     }
-                }
-                addToMask(STARTJOB_FLAG, STARTJOB);
-            } else
-                throw new IllegalArgumentException("Invalid action '" + action
-                        + "'");
+                    addToMask(STARTJOB_FLAG, STARTJOB);
+                } else
+                    throw new IllegalArgumentException("Invalid action '" + 
+                            action + "'");
+            }
         }
     }
     
