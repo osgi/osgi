@@ -59,6 +59,7 @@ import org.osgi.test.cases.deploymentadmin.mo.tbc.util.BundleListenerImpl;
 import org.osgi.test.cases.deploymentadmin.mo.tbc.util.MessagesConstants;
 import org.osgi.test.cases.deploymentadmin.mo.tbc.util.TestingArtifact;
 import org.osgi.test.cases.deploymentadmin.mo.tbc.util.TestingBlockingResourceProcessor;
+import org.osgi.test.cases.deploymentadmin.mo.tbc.util.TestingBundle;
 import org.osgi.test.cases.deploymentadmin.mo.tbc.util.TestingDeploymentPackage;
 import org.osgi.test.cases.deploymentadmin.mo.tbc.util.TestingDlota;
 
@@ -82,11 +83,16 @@ public class DownloadAndInstallAndActivate implements TestInterface {
     }
 
     public void run() {
-    	testDownloadAndInstallAndActivate001();
-        testDownloadAndInstallAndActivate002();
-        testDownloadAndInstallAndActivate003();
-        testDownloadAndInstallAndActivate004();
-        testDownloadAndInstallAndActivate005();
+    	if (DeploymentmoConstants.STATUS_NODE_REPORTS_PROGRESS) {
+    		testDownloadAndInstallAndActivate001();
+	        testDownloadAndInstallAndActivate002();
+	        testDownloadAndInstallAndActivate003();
+	        testDownloadAndInstallAndActivate004();
+	        testDownloadAndInstallAndActivate005();
+    	} else {
+        	tbc.log("$/Deployment/Download/<node_id>/Status node does not report progress in this implementation, these tests wont be tested");
+        }
+	        	
         testDownloadAndInstallAndActivate006();
         testDownloadAndInstallAndActivate007();
         testDownloadAndInstallAndActivate008();
@@ -111,6 +117,8 @@ public class DownloadAndInstallAndActivate implements TestInterface {
         testDownloadAndInstallAndActivate027();
         testDownloadAndInstallAndActivate028();
         testDownloadAndInstallAndActivate029();
+        testDownloadAndInstallAndActivate030();
+        testDownloadAndInstallAndActivate031();
     }
 
 
@@ -158,63 +166,13 @@ public class DownloadAndInstallAndActivate implements TestInterface {
     }
 
     /**
-     * This test asserts that a node is created at Deployed subtree when Deployment completes succesfully. 
-     * It also tests the alert values (result code 200).
-     *
-     * @spec 3.6.5.3 DownloadAndInstallAndActivate Command
-     */
-    private void testDownloadAndInstallAndActivate002() {
-        tbc.log("#testDownloadAndInstallAndActivate002");
-        TestingDlota dlota = null;
-        prepare();
-        String nodeId = "";
-        try {
-            TestingArtifact artifact = tbc.getArtifact(DeploymentmoConstants.SIMPLE_DP);
-            TestingDeploymentPackage dp = artifact.getDeploymentPackage();
-            dlota = artifact.getDlota();
-            tbc.generateDLOTA(dlota);
-            if (preCondition(dp.getFilename(), artifact.getDlota().getFilename())) {
-                String[] initialChildren = session.getChildNodeNames(DeploymentmoConstants.DEPLOYMENT_INVENTORY_DEPLOYED);
-                
-                synchronized (tbc) {
-                    session.execute(DeploymentmoConstants.DEPLOYMENT_DOWNLOAD_TEST_DOWN_INST_ACTIV, null);
-                    tbc.wait(DeploymentmoConstants.TIMEOUT);
-                }
-
-                String[] finalChildren= session.getChildNodeNames(DeploymentmoConstants.DEPLOYMENT_INVENTORY_DEPLOYED);
-
-                tbc.assertTrue("Asserts that the node was created",initialChildren.length+1==finalChildren.length);
-                
-                nodeId = DeploymentmoTestControl.getNodeId(initialChildren,finalChildren);
-                
-                tbc.assertAlertValues(DeploymentmoConstants.ALERT_TYPE_DOWNLOADANDINSTALLANDACTIVATE,
-                    DeploymentmoConstants.getDeployedNodeId(nodeId),
-                    new DmtData(200));
-                
-            } else {
-                tbc.log("Precondition for testDownloadAndInstallAndActivate002 not satisfied");
-            }
-        } catch (Exception e) {
-            tbc.fail(MessagesConstants.getMessage(
-                MessagesConstants.UNEXPECTED_EXCEPTION, new String[]{e.getClass().getName()}));
-        } finally {
-        	if (!nodeId.equals("")) {
-        		tbc.executeRemoveNode(session,DeploymentmoConstants.getDeployedOperationsRemove(nodeId));
-        	}
-            unprepare(dlota.getDlotaFile());
-            tbc.resetCommandValues();
-        }
-    }
-
-
-    /**
      * This test asserts that $/Deployment/Download/[node_id]/State is DOWNLOAD_FAILED (20)
      * when there is a failure in the download
      * 
      * @spec 3.6.5.3 DownloadAndInstallAndActivate Command
      */
-    private void testDownloadAndInstallAndActivate003() {
-        tbc.log("#testDownloadAndInstallAndActivate003");
+    private void testDownloadAndInstallAndActivate002() {
+        tbc.log("#testDownloadAndInstallAndActivate002");
 
         TestingDlota dlota = null;
         prepare();
@@ -258,8 +216,8 @@ public class DownloadAndInstallAndActivate implements TestInterface {
      *
      * @spec 3.6.5.3 DownloadAndInstallAndActivate Command
      */
-    private void testDownloadAndInstallAndActivate004() {
-        tbc.log("#testDownloadAndInstallAndActivate004");
+    private void testDownloadAndInstallAndActivate003() {
+        tbc.log("#testDownloadAndInstallAndActivate003");
         if (DeploymentmoConstants.IS_STREAMING) {
 	        TestingDlota dlota = null;
 	        prepare();
@@ -329,8 +287,8 @@ public class DownloadAndInstallAndActivate implements TestInterface {
      *
      * @spec 3.6.5.3 DownloadAndInstallAndActivate Command
      */
-    private void testDownloadAndInstallAndActivate005() {
-        tbc.log("#testDownloadAndInstallAndActivate005");
+    private void testDownloadAndInstallAndActivate004() {
+        tbc.log("#testDownloadAndInstallAndActivate004");
         if (!DeploymentmoConstants.IS_STREAMING) {
 	        TestingDlota dlota = null;
 	        prepare();
@@ -394,9 +352,9 @@ public class DownloadAndInstallAndActivate implements TestInterface {
      * 
      * @spec 3.6.5.3 DownloadAndInstallAndActivate Command
      */
-    private void testDownloadAndInstallAndActivate006() {
+    private void testDownloadAndInstallAndActivate005() {
         
-        tbc.log("#testDownloadAndInstallAndActivate006");
+        tbc.log("#testDownloadAndInstallAndActivate005");
         TestingDlota dlota = null;
         prepare();
         try {
@@ -434,7 +392,54 @@ public class DownloadAndInstallAndActivate implements TestInterface {
         }
     }
     
+    /**
+     * This test asserts that a node is created at Deployed subtree when Deployment completes succesfully. 
+     * It also tests the alert values (result code 200).
+     *
+     * @spec 3.6.5.3 DownloadAndInstallAndActivate Command
+     */
+    private void testDownloadAndInstallAndActivate006() {
+        tbc.log("#testDownloadAndInstallAndActivate006");
+        TestingDlota dlota = null;
+        prepare();
+        String nodeId = "";
+        try {
+            TestingArtifact artifact = tbc.getArtifact(DeploymentmoConstants.SIMPLE_DP);
+            TestingDeploymentPackage dp = artifact.getDeploymentPackage();
+            dlota = artifact.getDlota();
+            tbc.generateDLOTA(dlota);
+            if (preCondition(dp.getFilename(), artifact.getDlota().getFilename())) {
+                String[] initialChildren = session.getChildNodeNames(DeploymentmoConstants.DEPLOYMENT_INVENTORY_DEPLOYED);
+                
+                synchronized (tbc) {
+                    session.execute(DeploymentmoConstants.DEPLOYMENT_DOWNLOAD_TEST_DOWN_INST_ACTIV, null);
+                    tbc.wait(DeploymentmoConstants.TIMEOUT);
+                }
 
+                String[] finalChildren= session.getChildNodeNames(DeploymentmoConstants.DEPLOYMENT_INVENTORY_DEPLOYED);
+
+                tbc.assertTrue("Asserts that the node was created",initialChildren.length+1==finalChildren.length);
+                
+                nodeId = DeploymentmoTestControl.getNodeId(initialChildren,finalChildren);
+                
+                tbc.assertAlertValues(DeploymentmoConstants.ALERT_TYPE_DOWNLOADANDINSTALLANDACTIVATE,
+                    DeploymentmoConstants.getDeployedNodeId(nodeId),
+                    new DmtData(200));
+                
+            } else {
+                tbc.log("Precondition for testDownloadAndInstallAndActivate002 not satisfied");
+            }
+        } catch (Exception e) {
+            tbc.fail(MessagesConstants.getMessage(
+                MessagesConstants.UNEXPECTED_EXCEPTION, new String[]{e.getClass().getName()}));
+        } finally {
+        	if (!nodeId.equals("")) {
+        		tbc.executeRemoveNode(session,DeploymentmoConstants.getDeployedOperationsRemove(nodeId));
+        	}
+            unprepare(dlota.getDlotaFile());
+            tbc.resetCommandValues();
+        }
+    }
     /**
      * This test asserts that DmtException is thrown if $/Deployment/Download/[node_id]/EnvType 
      * is not "OSGi.R4"
@@ -486,7 +491,7 @@ public class DownloadAndInstallAndActivate implements TestInterface {
                 }
 
                 tbc.assertAlertValues(DeploymentmoConstants.ALERT_TYPE_DOWNLOADANDINSTALLANDACTIVATE,
-                    null, new DmtData(408));
+                		DeploymentmoConstants.DEPLOYMENT_DOWNLOAD_TEST, new DmtData(408));
                 
             } else {
                 tbc.log("Precondition for testDownloadAndInstallAndActivate008 not satisfied");
@@ -501,7 +506,8 @@ public class DownloadAndInstallAndActivate implements TestInterface {
     }
     
     /**
-     * This test asserts that the node values created at Deployed subtree are the specified.
+     * This test asserts that the node values created at Deployed subtree are the specified
+     * in case of Deployment Package
      *
      * @spec 3.6.5.3 DownloadAndInstallAndActivate Command
      */
@@ -580,9 +586,10 @@ public class DownloadAndInstallAndActivate implements TestInterface {
     					DeploymentmoConstants.SIMPLE_DP_BUNDLE1_STATE,
     					session.getNodeValue(DeploymentmoConstants.getDeployedExtBundlesState(nodeId, bundleId)).getInt());
     			
-    			tbc.assertEquals("Asserting that the manifest of the first bundle is the same as the specified",
-    					DeploymentmoConstants.SIMPLE_DP_BUNDLE1_MANIFEST,
-    					session.getNodeValue(DeploymentmoConstants.getDeployedExtBundlesManifest(nodeId, bundleId)).toString().trim());
+
+    			tbc.assertTrue("Asserting that the manifest of the first bundle is the same as the specified",
+    					session.getNodeValue(DeploymentmoConstants.getDeployedExtBundlesManifest(nodeId, bundleId)).toString().indexOf(DeploymentmoConstants.SIMPLE_DP_BUNDLE1_MANIFEST) > -1);
+    			
     			
     			tbc.assertEquals("Asserting that the location of the first bundle is the same as the specified",
     					DeploymentmoConstants.SIMPLE_DP_BUNDLE1_LOCATION,
@@ -600,9 +607,9 @@ public class DownloadAndInstallAndActivate implements TestInterface {
     					DeploymentmoConstants.SIMPLE_DP_BUNDLE2_STATE,
     					session.getNodeValue(DeploymentmoConstants.getDeployedExtBundlesState(nodeId, bundleId)).getInt());
     			
-    			tbc.assertEquals("Asserting that the manifest of the second bundle is the same as the specified",
-    					DeploymentmoConstants.SIMPLE_DP_BUNDLE2_MANIFEST,
-    					session.getNodeValue(DeploymentmoConstants.getDeployedExtBundlesManifest(nodeId, bundleId)).toString().trim());
+    			tbc.assertTrue("Asserting that the manifest of the bundle is the same as the specified",
+    					session.getNodeValue(DeploymentmoConstants.getDeployedExtBundlesManifest(nodeId, bundleId)).toString().
+    					indexOf(DeploymentmoConstants.SIMPLE_DP_BUNDLE2_MANIFEST) > -1);
     			
     			tbc.assertEquals("Asserting that the location of the second bundle is the same as the specified",
     					DeploymentmoConstants.SIMPLE_DP_BUNDLE2_LOCATION,
@@ -627,7 +634,7 @@ public class DownloadAndInstallAndActivate implements TestInterface {
     /**
 	 * This test asserts that DownloadAndInstallAndActivate command updates the subtree when 
 	 * a sub-tree under the $/Deployment/Inventory/Deployed node with the same ID node 
-	 * already exist.
+	 * already exist in case of Deployment Package.
 	 * 
 	 * @spec 3.6.5.2 InstallAndActivate Command
 	 */
@@ -644,15 +651,12 @@ public class DownloadAndInstallAndActivate implements TestInterface {
 			//Updates 'simple.dp' (which has the content of simple_fix_pack.dp)
             TestingArtifact artifact = tbc.getArtifact(DeploymentmoConstants.SIMPLE_DP);
 
-            String fileName = (artifact.isBundle())?artifact.getBundle().getFilename():artifact.getDeploymentPackage().getFilename();
-            
-            
             
             dlota = new TestingDlota("simple_dp.xml", DeploymentmoConstants.SERVER
                     + "www/update/" + artifact.getDeploymentPackage().getFilename(), 4768, DeploymentmoConstants.ENVIRONMENT_DP);
-            tbc.generateDLOTA(dlota,artifact.isBundle());
+            tbc.generateDLOTA(dlota);
             
-            if (!preCondition(fileName, dlota.getFilename())) {
+            if (!preCondition(artifact.getDeploymentPackage().getFilename(), dlota.getFilename())) {
             	tbc.log("Precondition for this method was not satisfied");
 
 
@@ -814,7 +818,7 @@ public class DownloadAndInstallAndActivate implements TestInterface {
                 tbc.wait(DeploymentmoConstants.TIMEOUT);
             }
 
-            tbc.assertAlertValues(DeploymentmoConstants.ALERT_TYPE_DOWNLOADANDINSTALLANDACTIVATE,null,new DmtData(410));
+            tbc.assertAlertValues(DeploymentmoConstants.ALERT_TYPE_DOWNLOADANDINSTALLANDACTIVATE,DeploymentmoConstants.DEPLOYMENT_DOWNLOAD_TEST,new DmtData(410));
             
         } catch (Exception e) {
             tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[]{ e.getClass().getName()}));
@@ -927,7 +931,7 @@ public class DownloadAndInstallAndActivate implements TestInterface {
             	session.execute(DeploymentmoConstants.getDeployedOperationsRemove(dp),null);
                 tbc.wait(DeploymentmoConstants.TIMEOUT);
             }
-            tbc.assertAlertValues(DeploymentmoConstants.ALERT_TYPE_DOWNLOADANDINSTALLANDACTIVATE,null,new DmtData(459));
+            tbc.assertAlertValues(DeploymentmoConstants.ALERT_TYPE_DOWNLOADANDINSTALLANDACTIVATE,DeploymentmoConstants.DEPLOYMENT_DOWNLOAD_TEST,new DmtData(459));
             
 		} catch (Exception e) {
 			tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[]{ e.getClass().getName()}));
@@ -1024,6 +1028,170 @@ public class DownloadAndInstallAndActivate implements TestInterface {
     }
  
     /**
+     * This test asserts that the node values created at Deployed subtree are the specified
+     * in case of a Bundle
+     *
+     * @spec 3.6.5.3 DownloadAndInstallAndActivate Command
+     */
+    private void testDownloadAndInstallAndActivate030() {
+        tbc.log("#testDownloadAndInstallAndActivate030");
+        TestingDlota dlota = null;
+        prepare();
+        String nodeId = "";
+        try {
+            TestingArtifact artifact = tbc.getArtifact(DeploymentmoConstants.SIMPLE_BUNDLE);
+            TestingBundle bundle = artifact.getBundle();
+            dlota = artifact.getDlota();
+            tbc.generateDLOTA(dlota,true);
+            if (preCondition(bundle.getFilename(), artifact.getDlota().getFilename())) {
+                String[] initialChildren = session.getChildNodeNames(DeploymentmoConstants.DEPLOYMENT_INVENTORY_DEPLOYED);
+                
+                synchronized (tbc) {
+                    session.execute(DeploymentmoConstants.DEPLOYMENT_DOWNLOAD_TEST_DOWN_INST_ACTIV, null);
+                    tbc.wait(DeploymentmoConstants.TIMEOUT);
+                }
+
+                String[] finalChildren= session.getChildNodeNames(DeploymentmoConstants.DEPLOYMENT_INVENTORY_DEPLOYED);
+                tbc.assertTrue("Asserts that the node was created",initialChildren.length+1==finalChildren.length);
+                nodeId = DeploymentmoTestControl.getNodeId(initialChildren,finalChildren);
+
+                //Bundle "bundle001.jar"
+    			tbc.assertEquals(
+    							"Asserting the node ID",
+    							bundle.getFilename(),
+    							session.getNodeValue(DeploymentmoConstants.getDeployedID(nodeId)).toString());
+
+    			tbc.assertEquals(
+    							"Asserting the node EnvType",
+    							DeploymentmoConstants.ENVTYPE,
+    							session.getNodeValue(DeploymentmoConstants.getDeployedEnvType(nodeId)).toString());
+    			
+    			Bundle bundle1 = tbc.getBundle(DeploymentmoConstants.SIMPLE_DP_BUNDLE1_SYMBNAME);
+
+    			
+    			tbc.assertNotNull("The bundle was installed in the framework", bundle1);
+
+    			String bundleId = bundle1.getBundleId() + "";
+    			
+    			tbc.assertTrue("Asserting that the bundle id is the same as the specified",
+    					session.isNodeUri(DeploymentmoConstants.getDeployedExtBundlesBundleId(nodeId, bundleId)));
+
+    			tbc.assertEquals("Asserting bundle's state",
+    					DeploymentmoConstants.SIMPLE_DP_BUNDLE1_STATE,
+    					session.getNodeValue(DeploymentmoConstants.getDeployedExtBundlesState(nodeId, bundleId)).getInt());
+    			
+    			tbc.assertTrue("Asserting that the manifest of the bundle is the same as the specified",
+    					session.getNodeValue(DeploymentmoConstants.getDeployedExtBundlesManifest(nodeId, bundleId)).toString().
+    					indexOf(DeploymentmoConstants.SIMPLE_DP_BUNDLE1_MANIFEST) > -1);
+    			
+    			tbc.assertEquals("Asserting that the location of the first bundle is the same as the specified",
+    					DeploymentmoConstants.SIMPLE_DP_BUNDLE1_LOCATION,
+    					session.getNodeValue(DeploymentmoConstants.getDeployedExtBundlesLocation(nodeId, bundleId)).toString());
+
+    			tbc.assertEquals(
+    							"Asserting the package type",
+    							DeploymentmoConstants.OSGI_BUNDLE,
+    							session.getNodeValue(DeploymentmoConstants.getDeployedExtPackageType(nodeId)).getInt());
+    			
+            } else {
+                tbc.log("Precondition for testDownloadAndInstallAndActivate030 not satisfied");
+            }
+        } catch (Exception e) {
+            tbc.fail(MessagesConstants.getMessage(
+                MessagesConstants.UNEXPECTED_EXCEPTION, new String[]{e.getClass().getName()}));
+        } finally {
+        	if (!nodeId.equals("")) {
+        		tbc.executeRemoveNode(session,DeploymentmoConstants.getDeployedOperationsRemove(nodeId));
+        	}
+            unprepare(dlota.getDlotaFile());
+            tbc.resetCommandValues();
+        }
+    }
+    
+    /**
+     * This test asserts that the node values created at Deployed subtree are the specified
+     * in case of a Bundle
+     *
+     * @spec 3.6.5.3 DownloadAndInstallAndActivate Command
+     */
+    private void testDownloadAndInstallAndActivate031() {
+        tbc.log("#testDownloadAndInstallAndActivate031");
+        TestingDlota dlota = null;
+        prepare();
+        String nodeId = executeNodeAndGetNewNodeName(DeploymentmoConstants.SIMPLE_BUNDLE);
+        try {
+            TestingArtifact artifact = tbc.getArtifact(DeploymentmoConstants.SIMPLE_BUNDLE);
+            TestingBundle bundle = artifact.getBundle();
+            
+            //The bundle version of the bundle below is different
+            dlota = new TestingDlota("bundle001.xml", DeploymentmoConstants.SERVER
+                    + "www/update/" + artifact.getBundle().getFilename(), 3637, DeploymentmoConstants.ENVIRONMENT_BUNDLE);
+            tbc.generateDLOTA(dlota,true);
+            if (preCondition(bundle.getFilename(), artifact.getDlota().getFilename())) {
+                String[] initialChildren = session.getChildNodeNames(DeploymentmoConstants.DEPLOYMENT_INVENTORY_DEPLOYED);
+                
+                synchronized (tbc) {
+                    session.execute(DeploymentmoConstants.DEPLOYMENT_DOWNLOAD_TEST_DOWN_INST_ACTIV, null);
+                    tbc.wait(DeploymentmoConstants.TIMEOUT);
+                }
+
+                String[] finalChildren= session.getChildNodeNames(DeploymentmoConstants.DEPLOYMENT_INVENTORY_DEPLOYED);
+				tbc.assertTrue("Asserts that the at Deployed subtree was not created (it is an update)",initialChildren.length==finalChildren.length);
+	             
+
+                //Bundle "bundle001.jar"
+    			tbc.assertEquals(
+    							"Asserting the node ID",
+    							bundle.getFilename(),
+    							session.getNodeValue(DeploymentmoConstants.getDeployedID(nodeId)).toString());
+
+    			tbc.assertEquals(
+    							"Asserting the node EnvType",
+    							DeploymentmoConstants.ENVTYPE,
+    							session.getNodeValue(DeploymentmoConstants.getDeployedEnvType(nodeId)).toString());
+    			
+    			Bundle bundle1 = tbc.getBundle(DeploymentmoConstants.SIMPLE_FIX_PACK_BUNDLE1_SYMBNAME);
+
+    			
+    			tbc.assertNotNull("The bundle was installed in the framework", bundle1);
+
+    			String bundleId = bundle1.getBundleId() + "";
+    			
+    			tbc.assertTrue("Asserting that the bundle id is the same as the specified",
+    					session.isNodeUri(DeploymentmoConstants.getDeployedExtBundlesBundleId(nodeId, bundleId)));
+
+    			tbc.assertEquals("Asserting bundle's state",
+    					DeploymentmoConstants.SIMPLE_FIX_PACK_BUNDLE1_STATE,
+    					session.getNodeValue(DeploymentmoConstants.getDeployedExtBundlesState(nodeId, bundleId)).getInt());
+    			
+    			tbc.assertTrue("Asserting that the manifest of the bundle is the same as the specified",
+    					session.getNodeValue(DeploymentmoConstants.getDeployedExtBundlesManifest(nodeId, bundleId)).toString().
+    					indexOf(DeploymentmoConstants.SIMPLE_FIX_PACK_BUNDLE1_MANIFEST) > -1);
+    			//The bundle version should be updated to the new one. 
+    			tbc.assertEquals("Asserting that the location of the first bundle is the same as the specified",
+    					DeploymentmoConstants.SIMPLE_FIX_PACK_BUNDLE1_LOCATION,
+    					session.getNodeValue(DeploymentmoConstants.getDeployedExtBundlesLocation(nodeId, bundleId)).toString());
+
+    			tbc.assertEquals(
+    							"Asserting the package type",
+    							DeploymentmoConstants.OSGI_BUNDLE,
+    							session.getNodeValue(DeploymentmoConstants.getDeployedExtPackageType(nodeId)).getInt());
+    			
+            } else {
+                tbc.log("Precondition for testDownloadAndInstallAndActivate031 not satisfied");
+            }
+        } catch (Exception e) {
+            tbc.fail(MessagesConstants.getMessage(
+                MessagesConstants.UNEXPECTED_EXCEPTION, new String[]{e.getClass().getName()}));
+        } finally {
+        	if (!nodeId.equals("")) {
+        		tbc.executeRemoveNode(session,DeploymentmoConstants.getDeployedOperationsRemove(nodeId));
+        	}
+            unprepare(dlota.getDlotaFile());
+            tbc.resetCommandValues();
+        }
+    }
+    /**
      * @param ID Artifact name
      * @param dlotaFileName Path to DLOTA
      * @return true if the pre-condition is satisfied
@@ -1061,7 +1229,7 @@ public class DownloadAndInstallAndActivate implements TestInterface {
                     tbc.wait(DeploymentmoConstants.TIMEOUT);
                 }
 
-                tbc.assertAlertValues(DeploymentmoConstants.ALERT_TYPE_DOWNLOADANDINSTALLANDACTIVATE,null,new DmtData(alertCode));
+                tbc.assertAlertValues(DeploymentmoConstants.ALERT_TYPE_DOWNLOADANDINSTALLANDACTIVATE,DeploymentmoConstants.DEPLOYMENT_DOWNLOAD_TEST,new DmtData(alertCode));
             } else {
                 tbc.log("Precondition for this method was not satisfied");
             }
@@ -1113,7 +1281,7 @@ public class DownloadAndInstallAndActivate implements TestInterface {
                         session.execute(DeploymentmoConstants.DEPLOYMENT_DOWNLOAD_TEST_DOWN_INST_ACTIV, null);
                         tbc.wait(DeploymentmoConstants.TIMEOUT);
                     }
-                    tbc.assertAlertValues(DeploymentmoConstants.ALERT_TYPE_DOWNLOADANDINSTALLANDACTIVATE,null,new DmtData(alertCode));
+                    tbc.assertAlertValues(DeploymentmoConstants.ALERT_TYPE_DOWNLOADANDINSTALLANDACTIVATE,DeploymentmoConstants.DEPLOYMENT_DOWNLOAD_TEST,new DmtData(alertCode));
                     
                 } else {
                     tbc.fail("Precondition for this method was not satisfied");

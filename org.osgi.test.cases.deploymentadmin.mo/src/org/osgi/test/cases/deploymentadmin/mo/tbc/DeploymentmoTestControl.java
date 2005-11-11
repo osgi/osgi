@@ -490,7 +490,7 @@ public class DeploymentmoTestControl extends DefaultTestBundleControl {
             }
         }
     }
-
+    
     public void setPermissions(PermissionInfo[] permissions) {
             PermissionInfo[] defaults = new PermissionInfo[] {
                 new PermissionInfo(PackagePermission.class.getName(), "*", "EXPORT, IMPORT"),

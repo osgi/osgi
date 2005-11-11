@@ -152,6 +152,8 @@ public class DeploymentmoConstants {
     //Manifest header can be shown in a different order
     public static Vector simpleDpManifest = new Vector();
     public static Vector simpleFixPackManifest = new Vector();
+
+    
     static {
         simpleDpManifest.add("Manifest-Version: 1.0");
 	    simpleDpManifest.add("DeploymentPackage-ContactAddress: Rua Bione, 220, Cais do Apolo - Bair\n o do Recife, Recife - PE, CEP: 50.030-390.");
@@ -177,6 +179,7 @@ public class DeploymentmoConstants {
 	    simpleFixPackManifest.add("Bundle-Version: 1.5");
 	    simpleFixPackManifest.add("Bundle-SymbolicName: bundles.tb1");
 	    simpleFixPackManifest.add("DeploymentPackage-Missing: false");
+
     }
     
     public static final String OSGI_DP_LOCATION = "osgi-dp:"; 
@@ -186,6 +189,7 @@ public class DeploymentmoConstants {
     public static final String SIMPLE_DP_BUNDLE1_LOCATION = "osgi-dp:" + SIMPLE_DP_BUNDLE1_SYMBNAME;
     public static final String SIMPLE_DP_BUNDLE1_MANIFEST = "Manifest-Version: 1.0\nBundle-SymbolicName: bundles.tb1\nBundle-Version: 1.0\nBundle-Activator: br.org.cesar.bundles.tb1.TB1Activator";
     public static final int SIMPLE_DP_BUNDLE1_STATE = 32;
+    
     public static final String SIMPLE_DP_BUNDLE2_SYMBNAME = "bundles.tb2";
     public static final String SIMPLE_DP_BUNDLE2_LOCATION = "osgi-dp:" + SIMPLE_DP_BUNDLE2_SYMBNAME;
     public static final String SIMPLE_DP_BUNDLE2_MANIFEST = "Manifest-Version: 1.0\nBundle-SymbolicName: bundles.tb2\nBundle-Version: 1.0\nBundle-Activator: br.org.cesar.bundles.tb2.TB2Activator";
@@ -209,14 +213,21 @@ public class DeploymentmoConstants {
     public static final String DEPLOYMENT_DOWNLOAD_TEST_OPERATIONS_EXT = DEPLOYMENT_DOWNLOAD_TEST_OPERATIONS + "/Ext";
     public static final String DEPLOYMENT_DOWNLOAD_TEST_DOWN_INST_ACTIV = DEPLOYMENT_DOWNLOAD_TEST_OPERATIONS + "/DownloadAndInstallAndActivate";
 
+    public static final String SIGNER_FILTER = "CN=CESAR.ORG.BR, OU=CESAR, O=MOTOROLA, L=RECIFE, C=BR";
+    
     //TODO Change for getting if the implementation is streaming from a properties file
     public static final boolean IS_STREAMING = true;
+
+    //This flag must be true if the implementation reports progress on the Status node  
+    public static final boolean STATUS_NODE_REPORTS_PROGRESS = true;
     
     public static final int TIMEOUT = 3000;
     
     public static final String ALL_DMT_PERMISSION = DmtPermission.ADD + ","
         + DmtPermission.DELETE + "," + DmtPermission.EXEC + ","
         + DmtPermission.GET + "," + DmtPermission.REPLACE;
+    
+    
     
     //---------------------------------------------------------------------------------------------
     
@@ -229,7 +240,7 @@ public class DeploymentmoConstants {
     public static String getDeployedExt(String nodeId) {
         return getDeployedNodeId(nodeId) + "/Ext";
     }
-    //Subtree $/Deployment/Inventory/Deployed/<node_id>/Ext/Manifest
+    //Subtree $/Dseployment/Inventory/Deployed/<node_id>/Ext/Manifest
     public static String getDeployedExtManifest(String nodeId) {
         return getDeployedExt(nodeId) + "/Manifest";
     }

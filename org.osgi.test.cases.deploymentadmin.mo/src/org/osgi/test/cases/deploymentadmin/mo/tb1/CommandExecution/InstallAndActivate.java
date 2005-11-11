@@ -557,7 +557,7 @@ public class InstallAndActivate implements TestInterface {
 				session.execute(DeploymentmoConstants.getDeployedOperationsRemove(nodeId2), null);
 				tbc.wait(DeploymentmoConstants.TIMEOUT);
 			}
-			tbc.assertAlertValues(DeploymentmoConstants.ALERT_TYPE_DOWNLOADANDINSTALLANDACTIVATE,null, new DmtData(459));
+			tbc.assertAlertValues(DeploymentmoConstants.ALERT_TYPE_DEPLOYED_REMOVE,DeploymentmoConstants.getDeployedNodeId(nodeId2), new DmtData(459));
 
 		} catch (Exception e) {
 			tbc.fail(MessagesConstants.getMessage(
@@ -678,7 +678,7 @@ public class InstallAndActivate implements TestInterface {
              }
 
 			 tbc.assertAlertValues(DeploymentmoConstants.ALERT_TYPE_INSTALLANDACTIVATE,
-                 null,
+				 DeploymentmoConstants.getDeliveredNodeId(dpCode),
                  new DmtData(resultCode));
 
 
