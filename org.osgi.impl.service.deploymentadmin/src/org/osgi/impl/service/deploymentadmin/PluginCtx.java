@@ -27,7 +27,12 @@
 package org.osgi.impl.service.deploymentadmin;
 
 import java.io.IOException;
+import java.security.AccessController;
+import java.security.PrivilegedAction;
+import java.util.ArrayList;
+import java.util.Iterator;
 
+import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.impl.service.deploymentadmin.plugin.PluginDeployed;
 import org.osgi.impl.service.dwnl.DownloadAgent;
@@ -73,10 +78,6 @@ public class PluginCtx {
         return da.getDownloadAgent();
     }
 
-//    public DeploymentPackageImpl installDeploymentPackage(InputStream is) throws DeploymentException {
-//        return (DeploymentPackageImpl) da.installDeploymentPackage(is);
-//    }
-
     public PluginDeployed getDeployedPlugin() {
         return da.getDeployedPlugin();
     }
@@ -88,10 +89,6 @@ public class PluginCtx {
     public DmtAdmin getDmtAdmin() {
         return da.getDmtAdmin();
     }
-
-//    public DeploymentPackage[] listDeploymentPackages() {
-//        return da.listDeploymentPackages();
-//    }
 
     public DeploymentAdmin getDeploymentAdmin() {
         return da;
@@ -110,4 +107,25 @@ public class PluginCtx {
 			sb.append('/').append(nodeUriArr[i]);
 		return sb.toString();
 	}
+	
+	public Long[] bundlesNotStarted(DeploymentPackageImpl dp) {
+		ArrayList ret = new ArrayList();
+		
+		if (null == dp)
+			return (Long[]) ret.toArray(new Long[] {});
+		
+		for (Iterator iter = dp.getBundleEntries().iterator(); iter.hasNext();) {
+			final BundleEntry be = (BundleEntry) iter.next();
+			Boolean b = (Boolean) AccessController.doPrivileged(new PrivilegedAction() {
+				public Object run() {
+					Bundle b = bundleContext.getBundle(be.getBundleId());
+					return new Boolean(b.getState() == Bundle.ACTIVE);
+				}});
+			if (!b.booleanValue())
+				ret.add(new Long(be.getBundleId()));
+		}
+		
+		return (Long[]) ret.toArray(new Long[] {});
+	}
+	
 }

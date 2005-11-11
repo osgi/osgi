@@ -34,7 +34,7 @@ public class AlertSender {
 		AlertSender.logger = logger; 
 	}
 
-    static void sendDeployAlert(Exception exception, String principal, 
+    static void sendDeployAlert(boolean bundlesNs, Exception exception, String principal, 
             String correlator, String nodeUri, String type, DmtAdmin dmtA) 
     {
         if (null == principal)
@@ -44,7 +44,9 @@ public class AlertSender {
             if (null == exception)
                 dmtA.sendAlert(principal, 1226, correlator, new AlertItem[] {
                       new AlertItem(nodeUri, type,
-                      null, new DmtData(PluginConstants.RESULT_SUCCESSFUL))});
+                      null, new DmtData(bundlesNs ? 
+                    		  PluginConstants.RESULT_SUCCESSFUL_BUNDLE_START_WARNING : 
+                    		  PluginConstants.RESULT_SUCCESSFUL))});
             else {
                 if (exception instanceof DeploymentException) {
                     DeploymentException de = (DeploymentException) exception;

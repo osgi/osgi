@@ -175,7 +175,8 @@ public class PluginDownload extends DefaultHandler implements DataPluginFactory,
                     	nodeUriRes = nodeUri; // the original URI
                         entry.setStatus(STATUS_DEPLOYMENT_FAILED);
                     }
-                    AlertSender.sendDeployAlert(exception, principal, correlator, nodeUriRes, 
+                    AlertSender.sendDeployAlert(pluginCtx.bundlesNotStarted(dp).length != 0, 
+                    		exception, principal, correlator, nodeUriRes, 
                     		DAConstants.ALERT_TYPE_DWNL_INS_ACT, pluginCtx.getDmtAdmin());
                 }});
             deplThr.setBundleListener(new DeploymentThread.ListenerBundle() {
@@ -194,7 +195,7 @@ public class PluginDownload extends DefaultHandler implements DataPluginFactory,
                     	nodeUriRes = nodeUri; // the original URI
                         entry.setStatus(STATUS_DEPLOYMENT_FAILED);
                     }
-                    AlertSender.sendDeployAlert(exception, principal, correlator, nodeUriRes,
+                    AlertSender.sendDeployAlert(false, exception, principal, correlator, nodeUriRes,
                             DAConstants.ALERT_TYPE_DWNL_INS_ACT, pluginCtx.getDmtAdmin());
                 }});
             deplThr.start();

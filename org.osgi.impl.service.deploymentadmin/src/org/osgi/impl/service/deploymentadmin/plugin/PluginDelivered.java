@@ -345,8 +345,8 @@ public class PluginDelivered implements DataPluginFactory, ReadableDataSession,
 					nodeUriRes = nodeUri; // the original URI
 					pluginCtx.getLogger().log(exception);
 				}
-				AlertSender.sendDeployAlert(exception, principal, correlator, nodeUriRes, 
-                		DAConstants.ALERT_TYPE_INS_ACT, pluginCtx.getDmtAdmin());
+				AlertSender.sendDeployAlert(false, exception, principal, correlator, nodeUriRes, 
+						DAConstants.ALERT_TYPE_INS_ACT, pluginCtx.getDmtAdmin());
 			}
 		});
 	}
@@ -376,7 +376,8 @@ public class PluginDelivered implements DataPluginFactory, ReadableDataSession,
 					nodeUriRes = nodeUri; // the original URI
 					pluginCtx.getLogger().log(exception);
 				}
-				AlertSender.sendDeployAlert(exception, principal, correlator, nodeUriRes, 
+				AlertSender.sendDeployAlert(pluginCtx.bundlesNotStarted(dp).length != 0,
+						exception, principal, correlator, nodeUriRes, 
                 		DAConstants.ALERT_TYPE_INS_ACT, pluginCtx.getDmtAdmin());
 			}
 		});
