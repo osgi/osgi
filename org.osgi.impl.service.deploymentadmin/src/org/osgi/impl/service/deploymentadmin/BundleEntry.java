@@ -107,7 +107,7 @@ public class BundleEntry implements Serializable {
             return false;
         BundleEntry other = (BundleEntry) obj;
         
-        // sometimes the bundle symbolic name is null
+        // sometimes the bundle symbolic name or version is null
         if (null == symbName || null == other.symbName || 
             null == version || null == other.version)
                 return bundleId.equals(other.bundleId);
