@@ -761,7 +761,7 @@ public class ApplicationTestControl extends DefaultTestBundleControl {
 				.getProperty(Constants.SERVICE_ID)).intValue();
 	}
 	
-	public String getServiceProperty(String className, String key) {
+	public Object getServiceProperty(String className, String key) {
 		ServiceReference refs = getContext().getServiceReference(className);
 		return refs == null ? null : ((String) refs.getProperty(key));
 	}

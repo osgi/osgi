@@ -170,7 +170,7 @@ public class Launch implements TestInterface {
 
 	/**
 	 * This method asserts that SecurityException is thrown when the caller
-	 * doesn't have "launch" ApplicationAdminPermission for the application.
+	 * doesn't have "lifecycle" ApplicationAdminPermission for the application.
 	 * 
 	 * @spec ApplicationDescriptor.launch(Map)
 	 */

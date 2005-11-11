@@ -108,11 +108,8 @@ public class AddServiceListener implements ApplicationServiceListener {
             Hashtable ht = new Hashtable();
             ht.put("MyName", "MyValue");
             
-            synchronized (tbc) {
-                serviceChanged = false;            	
-                tbc.getAppController().setProperties(ht);            	
-                tbc.wait(ApplicationConstants.TIMEOUT);
-            }
+            serviceChanged = false;            	
+            tbc.getAppController().setProperties(ht);            	
             
             tbc
                 .assertTrue(
@@ -124,11 +121,9 @@ public class AddServiceListener implements ApplicationServiceListener {
                         
             appContext.removeServiceListener(this);
             
-            synchronized (tbc) {
-            	serviceChanged = false;
-            	tbc.getAppController().setProperties(ht);
-                tbc.wait(ApplicationConstants.SHORT_TIMEOUT);
-            }
+           	serviceChanged = false;
+           	tbc.getAppController().setProperties(ht);
+
             tbc
                 .assertTrue(
                     "Asserting if the removeServiceListener remove this test class from the list of listeners for ServiceEvents.",
@@ -278,12 +273,9 @@ public class AddServiceListener implements ApplicationServiceListener {
             ht.put("MyName", "MyValue");
             TestAppController app = null;
             
-            synchronized (tbc) {
-                serviceChanged = false;            	
-                app = (TestAppController) appContext.locateService("app");                
-                tbc.getAppController().setProperties(ht);               
-                tbc.wait(ApplicationConstants.TIMEOUT);
-            }
+            serviceChanged = false;            	
+            app = (TestAppController) appContext.locateService("app");                
+            tbc.getAppController().setProperties(ht);               
             
             tbc
             .assertTrue(
@@ -292,11 +284,8 @@ public class AddServiceListener implements ApplicationServiceListener {
             tbc.assertTrue("Asserting if the serviceReference received by the event was org.osgi.test.cases.application.tbc.util.TestAppController", (serviceReference.toString().indexOf("org.osgi.test.cases.application.tbc.util.TestAppController") >= 0));           
             tbc.assertEquals("Asserting if the TestAppController was received by the event as serviceObject after a call for locateService.", app, serviceObject);            
                         
-            synchronized (tbc) {
-            	serviceChanged = false;
-            	tbc.getEventBundle().setProperties(ht);            	
-                tbc.wait(ApplicationConstants.SHORT_TIMEOUT);
-            }
+           	serviceChanged = false;
+           	tbc.getEventBundle().setProperties(ht);            	
             
             tbc
             .assertTrue(
@@ -429,12 +418,9 @@ public class AddServiceListener implements ApplicationServiceListener {
            ht.put("MyName", "MyValue");
            TestAppController app = null;
            
-           synchronized (tbc) {
-               serviceChanged = false;            	
-               app = (TestAppController) appContext.locateService("app");                
-               tbc.getAppController().setProperties(ht);               
-               tbc.wait(ApplicationConstants.TIMEOUT);
-           }
+           serviceChanged = false;            	
+           app = (TestAppController) appContext.locateService("app");                
+           tbc.getAppController().setProperties(ht);               
            
            tbc
            .assertTrue(
@@ -445,12 +431,9 @@ public class AddServiceListener implements ApplicationServiceListener {
                        
            tbc.startActivator(true);
            
-           synchronized (tbc) {
-           	serviceChanged = false;
-           	app = (TestAppController) appContext.locateService("app");
-           	tbc.getTestingActivator().setProperties(ht);            	
-            tbc.wait(ApplicationConstants.TIMEOUT);
-           }
+           serviceChanged = false;
+           app = (TestAppController) appContext.locateService("app");
+           tbc.getTestingActivator().setProperties(ht);            	
            
            tbc
            .assertTrue(
@@ -459,11 +442,8 @@ public class AddServiceListener implements ApplicationServiceListener {
            tbc.assertTrue("Asserting if the serviceReference received by the event was org.osgi.test.cases.application.tbc.util.TestAppController", (serviceReference.toString().indexOf("org.osgi.test.cases.application.tbc.util.TestAppController") >= 0));
            tbc.assertEquals("Asserting if the TestAppController was received by the event as serviceObject after a call for locateService.", app, serviceObject);                      
                       
-           synchronized (tbc) {
-           		serviceChanged = false;
-           		tbc.getEventBundle().setProperties(ht);            	
-                tbc.wait(ApplicationConstants.SHORT_TIMEOUT);
-           }                     
+           serviceChanged = false;
+           tbc.getEventBundle().setProperties(ht);            	
            
            tbc
            .assertTrue(
@@ -702,9 +682,6 @@ public class AddServiceListener implements ApplicationServiceListener {
 		serviceObject = event.getServiceObject();
 		serviceReference = event.getServiceReference();
 		serviceChanged = true;
-        synchronized (tbc) {
-            tbc.notifyAll();
-        }
 	}    
     
 }

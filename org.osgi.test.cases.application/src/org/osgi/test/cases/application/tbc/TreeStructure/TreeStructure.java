@@ -750,7 +750,7 @@ public class TreeStructure {
                     .getClass().getName()}));
         } finally {
             tbc.closeSession(session);
-            tbc.cleanUp(handle, null);
+            tbc.cleanUp(handle);
         }
     }
 
@@ -834,7 +834,7 @@ public class TreeStructure {
                     .getClass().getName()}));
         } finally {
             tbc.closeSession(session);
-            tbc.cleanUp(handle,null);
+            tbc.cleanUp(handle);
         }
     }
 
@@ -1111,7 +1111,7 @@ public class TreeStructure {
         } finally {
             tbc.cleanUp(session,
                     new String[]{ApplicationConstants.OSGI_APPLICATION_APPID_OPERATIONS_LAUNCH_LAUNCHID});
-            tbc.cleanUp(handle, null);
+            tbc.cleanUp(handle);
         }
     }
 
@@ -1271,7 +1271,7 @@ public class TreeStructure {
                     .getClass().getName()}));
         } finally {
             tbc.closeSession(session);
-            tbc.cleanUp(handle,null);
+            tbc.cleanUp(handle);
         }
     }
     
@@ -1326,7 +1326,7 @@ public class TreeStructure {
                     .getClass().getName()}));
         } finally {
             tbc.closeSession(session);
-            tbc.cleanUp(handle, null);
+            tbc.cleanUp(handle);
         }
     }
     
@@ -1381,7 +1381,7 @@ public class TreeStructure {
         } finally {
             tbc
                 .closeSession(session);
-            tbc.cleanUp(handle, null);
+            tbc.cleanUp(handle);
         }
     }
     
@@ -1440,7 +1440,7 @@ public class TreeStructure {
         } finally {
             tbc
                 .closeSession(session);
-            tbc.cleanUp(handle, null);
+            tbc.cleanUp(handle);
         }
     }      
     
@@ -1477,7 +1477,7 @@ public class TreeStructure {
         } finally {
             tbc
                 .closeSession(session);
-            tbc.cleanUp(handle, null);
+            tbc.cleanUp(handle);
         }
     }
     
@@ -1532,7 +1532,7 @@ public class TreeStructure {
         } finally {
             tbc
                 .closeSession(session);
-            tbc.cleanUp(handle, null);
+            tbc.cleanUp(handle);
         }
     }  
     

@@ -36,8 +36,15 @@
  */
 package org.osgi.test.cases.application.tbc.ApplicationContext;
 
+import java.util.Hashtable;
+
 import org.osgi.application.ApplicationContext;
+import org.osgi.application.ApplicationServiceEvent;
+import org.osgi.application.ApplicationServiceListener;
+import org.osgi.framework.Constants;
+import org.osgi.framework.ServiceReference;
 import org.osgi.service.application.ApplicationHandle;
+import org.osgi.test.cases.application.tbc.ApplicationConstants;
 import org.osgi.test.cases.application.tbc.ApplicationTestControl;
 import org.osgi.test.cases.application.tbc.util.MessagesConstants;
 
@@ -49,9 +56,13 @@ import org.osgi.test.cases.application.tbc.util.MessagesConstants;
  * <code>registerService</code> method, according to MEG reference
  * documentation.
  */
-public class RegisterService {
+public class RegisterService implements ApplicationServiceListener {
 
     private ApplicationTestControl tbc;
+	private Object serviceObject;
+	private ServiceReference serviceReference;
+	private boolean serviceChanged;
+	private int serviceType;
 
     public RegisterService(ApplicationTestControl tbc) {
         this.tbc = tbc;
@@ -70,6 +81,10 @@ public class RegisterService {
         testRegisterService010();
         testRegisterService011();
         testRegisterService012();
+        testRegisterService013();
+        testRegisterService014();
+        testRegisterService015();
+        testRegisterService016();
     }
     
     /**
@@ -97,7 +112,7 @@ public class RegisterService {
             tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": "
                 + e.getClass().getName());
         } finally {
-        	tbc.cleanUp(handle, null);
+        	tbc.cleanUp(handle);
         }
     }    
 
@@ -126,7 +141,7 @@ public class RegisterService {
             tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": "
                 + e.getClass().getName());
         } finally {           
-            tbc.cleanUp(handle, null);  
+            tbc.cleanUp(handle);  
         }
     }   
     
@@ -137,6 +152,7 @@ public class RegisterService {
      * @spec ApplicationContext.registerService(String,Object,Dictionary)
      */
     private void testRegisterService003() {
+    	//TODO what specified when null is passed as clazz parameter?
         tbc.log("#testRegisterService003");
         ApplicationHandle handle = null;
         try {
@@ -159,12 +175,12 @@ public class RegisterService {
                     NullPointerException.class.getName(),
                     e.getClass().getName()}));       
         } finally {
-        	tbc.cleanUp(handle, null);
+        	tbc.cleanUp(handle);
         }
     }    
     
     /**
-     * This method asserts if NullPointerException is thrown when we
+     * This method asserts if IllegalArgumentException is thrown when we
      * pass null as service parameter.
      * 
      * @spec ApplicationContext.registerService(String,Object,Dictionary)
@@ -180,21 +196,105 @@ public class RegisterService {
                         
             appContext.registerService(this.getClass().getName(), null, null);
             
-            tbc.failException("#", NullPointerException.class);
+            tbc.failException("#", IllegalArgumentException.class);
             
-        } catch (NullPointerException e) {
+        } catch (IllegalArgumentException e) {
             tbc.pass(MessagesConstants.getMessage(
                 MessagesConstants.EXCEPTION_CORRECTLY_THROWN,
-                new String[]{NullPointerException.class.getName()}));
+                new String[]{IllegalArgumentException.class.getName()}));
         } catch (Exception e) {
             tbc.fail(MessagesConstants.getMessage(
                 MessagesConstants.EXCEPTION_THROWN, new String[]{
-                    NullPointerException.class.getName(),
+                		IllegalArgumentException.class.getName(),
                     e.getClass().getName()}));       
         } finally {
-        	tbc.cleanUp(handle, null);
+        	tbc.cleanUp(handle);
         }
     }  
+    
+    /**
+     * This method asserts If any of the passed properties
+     * have already been specified by the registering bundle,
+     * their values will be overwritten by the Framework.
+     *  
+     * @spec ApplicationContext.registerService(String,Object,Dictionary)
+     */
+    private void testRegisterService005() {
+        tbc.log("#testRegisterService005");
+        ApplicationHandle handle = null;
+        try {
+            handle = tbc.getAppDescriptor().launch(null);
+            
+            ApplicationContext appContext = org.osgi.application.Framework
+                .getApplicationContext(tbc.getAppInstance());
+                        
+            Hashtable hash = new Hashtable();
+            hash.put(Constants.SERVICE_ID, "test1");
+            hash.put(Constants.OBJECTCLASS, new String[] { "test2" });
+            hash.put("test", "test");
+            
+            appContext.registerService(this.getClass().getName(), this, hash);            
+            
+            String value = (String) tbc.getServiceProperty(this.getClass().getName(), Constants.SERVICE_ID);
+            
+            tbc.assertTrue("Asserting if the Constants.SERVICE_ID passed as parameter was changed by the framework.", !value.equals("test1"));
+            
+            String[] values = (String[]) tbc.getServiceProperty(this.getClass().getName(), Constants.OBJECTCLASS);
+            
+            tbc.assertNotNull("Asserting if the OBJECTCLASS returned is not null.", values);
+            
+            tbc.assertTrue("Asserting if the Constants.OBJECTCLASS passed as parameter was changed by the framework.", !values[0].equals("test2"));
+            
+            value = (String) tbc.getServiceProperty(this.getClass().getName(), "test");
+            
+            tbc.assertTrue("Asserting if the other parameter passed was added to the framework parameters.", value.equals("test"));            
+            
+        } catch (Exception e) {
+            tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": "
+                + e.getClass().getName());
+        } finally {           
+            tbc.cleanUp(handle);  
+        }
+    }
+    
+    /**
+     * This method asserts if A service event of type ServiceEvent.REGISTERED is fired and
+     * if this event triggers the corresponding ApplicationServiceEvent to be delivered
+     * to the applications that registered the appropriate listener.
+     *  
+     * @spec ApplicationContext.registerService(String,Object,Dictionary)
+     */
+    private void testRegisterService006() {
+        tbc.log("#testRegisterService006");
+        ApplicationHandle handle = null;
+        try {
+            handle = tbc.getAppDescriptor().launch(null);
+            
+            ApplicationContext appContext = org.osgi.application.Framework
+                .getApplicationContext(tbc.getAppInstance());
+               
+            appContext.addServiceListener(this, ApplicationConstants.XML_REG);
+            
+            serviceChanged = false;            	
+            appContext.registerService(this.getClass().getName(), this, null);            	
+            
+            tbc
+            .assertTrue(
+                "Asserting if the addServiceListener add this test class as a listener for ApplicationServiceEvents.",
+                serviceChanged);
+        
+            //TODO have to change the serviceType expected.
+            tbc.assertEquals("Asserting if the type received was 10.", 10, serviceType);
+            tbc.assertTrue("Asserting if the serviceReference received by the event was org.osgi.test.cases.application.tbc.ApplicationContext.RegisterService", (serviceReference.toString().indexOf("org.osgi.test.cases.application.tbc.ApplicationContext.RegisterService") >= 0));
+            tbc.assertNull("Asserting if null was received as serviceObject", serviceObject);                                             
+            
+        } catch (Exception e) {
+            tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": "
+                + e.getClass().getName());
+        } finally {           
+            tbc.cleanUp(handle);  
+        }
+    }    
     
     /**
      * This method asserts that when the application instance was
@@ -202,8 +302,8 @@ public class RegisterService {
      * 
      * @spec ApplicationContext.registerService(String[],Object,Dictionary)
      */
-    private void testRegisterService005() {
-        tbc.log("#testRegisterService005");
+    private void testRegisterService007() {
+        tbc.log("#testRegisterService007");
         ApplicationHandle handle = null;
         try {
             handle = tbc.getAppDescriptor().launch(null);
@@ -222,7 +322,7 @@ public class RegisterService {
             tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": "
                 + e.getClass().getName());
         } finally {
-        	tbc.cleanUp(handle, null);
+        	tbc.cleanUp(handle);
         }
     }    
     
@@ -232,8 +332,8 @@ public class RegisterService {
      * 
      * @spec ApplicationContext.registerService(String[],Object,Dictionary)
      */
-    private void testRegisterService006() {
-        tbc.log("#testRegisterService006");
+    private void testRegisterService008() {
+        tbc.log("#testRegisterService008");
         ApplicationHandle handle = null;
         try {
             handle = tbc.getAppDescriptor().launch(null);
@@ -254,7 +354,7 @@ public class RegisterService {
             tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": "
                 + e.getClass().getName());
         } finally {
-        	tbc.cleanUp(handle, null);
+        	tbc.cleanUp(handle);
         }
     }    
     
@@ -265,8 +365,8 @@ public class RegisterService {
      * 
      * @spec ApplicationContext.registerService(String[],Object,Dictionary)
      */
-    private void testRegisterService007() {
-        tbc.log("#testRegisterService007");
+    private void testRegisterService009() {
+        tbc.log("#testRegisterService009");
         ApplicationHandle handle = null;
         try {
             handle = tbc.getAppDescriptor().launch(null);
@@ -287,7 +387,7 @@ public class RegisterService {
                 		IllegalArgumentException.class.getName(),
                     e.getClass().getName()}));       
         } finally {
-        	tbc.cleanUp(handle, null);
+        	tbc.cleanUp(handle);
         }
     }       
     
@@ -297,8 +397,8 @@ public class RegisterService {
      * 
      * @spec ApplicationContext.registerService(String[],Object,Dictionary)
      */
-    private void testRegisterService008() {
-        tbc.log("#testRegisterService008");
+    private void testRegisterService010() {
+        tbc.log("#testRegisterService010");
         ApplicationHandle handle = null;
         try {
             handle = tbc.getAppDescriptor().launch(null);
@@ -320,18 +420,18 @@ public class RegisterService {
                     NullPointerException.class.getName(),
                     e.getClass().getName()}));       
         } finally {
-        	tbc.cleanUp(handle, null);
+        	tbc.cleanUp(handle);
         }
     }    
     
     /**
-     * This method asserts if NullPointerException is thrown when we
+     * This method asserts if IllegalArgumentException is thrown when we
      * pass null as service parameter.
      * 
      * @spec ApplicationContext.registerService(String,Object,Dictionary)
      */
-    private void testRegisterService009() {
-        tbc.log("#testRegisterService009");
+    private void testRegisterService011() {
+        tbc.log("#testRegisterService011");
         ApplicationHandle handle = null;
         try {
             handle = tbc.getAppDescriptor().launch(null);
@@ -341,19 +441,19 @@ public class RegisterService {
                         
             appContext.registerService(new String[] { this.getClass().getName(), ApplicationTestControl.class.getName() }, null, null);
             
-            tbc.failException("#", NullPointerException.class);
+            tbc.failException("#", IllegalArgumentException.class);
             
-        } catch (NullPointerException e) {
+        } catch (IllegalArgumentException e) {
             tbc.pass(MessagesConstants.getMessage(
                 MessagesConstants.EXCEPTION_CORRECTLY_THROWN,
-                new String[]{NullPointerException.class.getName()}));
+                new String[]{IllegalArgumentException.class.getName()}));
         } catch (Exception e) {
             tbc.fail(MessagesConstants.getMessage(
                 MessagesConstants.EXCEPTION_THROWN, new String[]{
-                    NullPointerException.class.getName(),
+                		IllegalArgumentException.class.getName(),
                     e.getClass().getName()}));       
         } finally {
-        	tbc.cleanUp(handle, null);
+        	tbc.cleanUp(handle);
         }
     }     
     
@@ -363,8 +463,8 @@ public class RegisterService {
      * 
      * @spec ApplicationContext.registerService(String,Object,Dictionary)
      */
-    private void testRegisterService010() {
-        tbc.log("#testRegisterService010");
+    private void testRegisterService012() {
+        tbc.log("#testRegisterService012");
         ApplicationHandle handle = null;
         try {
             handle = tbc.getAppDescriptor().launch(null);
@@ -397,8 +497,8 @@ public class RegisterService {
      * 
      * @spec ApplicationContext.registerService(String,Object,Dictionary)
      */
-    private void testRegisterService011() {
-        tbc.log("#testRegisterService011");
+    private void testRegisterService013() {
+        tbc.log("#testRegisterService013");
         ApplicationHandle handle = null;
         try {
             handle = tbc.getAppDescriptor().launch(null);
@@ -432,8 +532,8 @@ public class RegisterService {
      * 
      * @spec ApplicationContext.registerService(String,Object,Dictionary)
      */
-    private void testRegisterService012() {
-        tbc.log("#testRegisterService012");
+    private void testRegisterService014() {
+        tbc.log("#testRegisterService014");
         ApplicationHandle handle = null;
         try {
             handle = tbc.getAppDescriptor().launch(null);
@@ -454,8 +554,113 @@ public class RegisterService {
                 		IllegalArgumentException.class.getName(),
                     e.getClass().getName()}));       
         } finally {
-        	tbc.cleanUp(handle, null);
+        	tbc.cleanUp(handle);
         }
-    }    
+    }
+    
+    /**
+     * This method asserts If any of the passed properties
+     * have already been specified by the registering bundle,
+     * their values will be overwritten by the Framework.
+     *  
+     * @spec ApplicationContext.registerService(String[],Object,Dictionary)
+     */
+    private void testRegisterService015() {
+        tbc.log("#testRegisterService015");
+        ApplicationHandle handle = null;
+        try {
+            handle = tbc.getAppDescriptor().launch(null);
+            
+            ApplicationContext appContext = org.osgi.application.Framework
+                .getApplicationContext(tbc.getAppInstance());
+                        
+            Hashtable hash = new Hashtable();
+            hash.put(Constants.SERVICE_ID, "test1");
+            hash.put(Constants.OBJECTCLASS, new String[] { "test1", "test2" });
+            hash.put("test", "test");                 
+            
+            appContext.registerService(new String[] { this.getClass().getName(), Object.class.getName() }, this, hash);            
+            
+            String value = (String) tbc.getServiceProperty(this.getClass().getName(), Constants.SERVICE_ID);
+            
+            tbc.assertTrue("Asserting if the Constants.SERVICE_ID passed as parameter was changed by the framework.", !value.equals("test1"));
+            
+            String[] values = (String[]) tbc.getServiceProperty(this.getClass().getName(), Constants.OBJECTCLASS);
+            
+            tbc.assertNotNull("Asserting if the OBJECTCLASS returned is not null.", values);
+            
+            tbc.assertTrue("Asserting if the Constants.OBJECTCLASS passed as parameter was changed by the framework.", !values[0].equals("test1") && !values[0].equals("test2"));
+            
+            value = (String) tbc.getServiceProperty(this.getClass().getName(), "test");
+            
+            tbc.assertTrue("Asserting if the other parameter passed was added to the framework parameters.", value.equals("test"));            
+            
+            value = (String) tbc.getServiceProperty(Object.class.getName(), Constants.SERVICE_ID);
+            
+            tbc.assertTrue("Asserting if the Constants.SERVICE_ID passed as parameter was changed by the framework.", !value.equals("test1"));
+            
+            values = (String[]) tbc.getServiceProperty(Object.class.getName(), Constants.OBJECTCLASS);
+            
+            tbc.assertNotNull("Asserting if the OBJECTCLASS returned is not null.", values);
+            
+            tbc.assertTrue("Asserting if the Constants.OBJECTCLASS passed as parameter was changed by the framework.", !values[0].equals("test1") && !values[0].equals("test2"));
+            
+            value = (String) tbc.getServiceProperty(Object.class.getName(), "test");
+            
+            tbc.assertTrue("Asserting if the other parameter passed was added to the framework parameters.", value.equals("test"));            
+            
+        } catch (Exception e) {
+            tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": "
+                + e.getClass().getName());
+        } finally {           
+            tbc.cleanUp(handle);  
+        }
+    }
+    
+    /**
+     * This method asserts if A service event of type ServiceEvent.REGISTERED is fired and
+     * if this event triggers the corresponding ApplicationServiceEvent to be delivered
+     * to the applications that registered the appropriate listener.
+     *  
+     * @spec ApplicationContext.registerService(String[],Object,Dictionary)
+     */
+    private void testRegisterService016() {
+        tbc.log("#testRegisterService016");
+        ApplicationHandle handle = null;
+        try {
+            handle = tbc.getAppDescriptor().launch(null);
+            
+            ApplicationContext appContext = org.osgi.application.Framework
+                .getApplicationContext(tbc.getAppInstance());
+               
+            appContext.addServiceListener(this, ApplicationConstants.XML_REG);
+            
+            serviceChanged = false;            	
+            appContext.registerService(new String[] { this.getClass().getName(), Object.class.getName() }, this, null);            	
+            
+            tbc
+            .assertTrue(
+                "Asserting if the addServiceListener add this test class as a listener for ApplicationServiceEvents.",
+                serviceChanged);
+        
+            //TODO have to change the serviceType expected.
+            tbc.assertEquals("Asserting if the type received was 10.", 10, serviceType);
+            tbc.assertTrue("Asserting if the serviceReference received by the event was org.osgi.test.cases.application.tbc.ApplicationContext.RegisterService", (serviceReference.toString().indexOf("org.osgi.test.cases.application.tbc.ApplicationContext.RegisterService") >= 0));
+            tbc.assertNull("Asserting if null was received as serviceObject", serviceObject);                                             
+            
+        } catch (Exception e) {
+            tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": "
+                + e.getClass().getName());
+        } finally {           
+            tbc.cleanUp(handle);  
+        }
+    }     
+
+	public void serviceChanged(ApplicationServiceEvent event) {
+		serviceType = event.getType();
+		serviceObject = event.getServiceObject();
+		serviceReference = event.getServiceReference();
+		serviceChanged = true;
+	}    
     
 }

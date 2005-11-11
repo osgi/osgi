@@ -54,6 +54,7 @@ public class ApplicationConstants {
     public static final String XML_INEXISTENT = "unknown";
     public static final String XML_APP = "app";
     public static final String XML_LOG = "log";
+    public static final String XML_REG = "reg";
     public static final String XML_ACTIVATOR = "activator";
     
     public static final String APP_VERSION = "1.0.0";
