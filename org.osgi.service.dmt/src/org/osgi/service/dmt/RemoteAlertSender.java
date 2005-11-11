@@ -47,6 +47,14 @@ public interface RemoteAlertSender {
      * Any exception thrown on this method will be propagated to the original
      * sender of the event, wrapped in a <code>DmtException</code> with the
      * code <code>REMOTE_ERROR</code>.
+     * <p>
+     * Since sending the alert and receiving acknowledgment for it is 
+     * potentially a very time-consuming operation, alerts are sent
+     * asynchronously.  This method should attempt to ensure that the alert can
+     * be sent successfully, and should throw an exception if it detects any 
+     * problems.  If the method returns without error, the alert is accepted for 
+     * sending and the implementation must make a best-effort attempt to 
+     * deliver it.
      * 
      * @param principal the name identifying the server where the alert should
      *        be sent, can be <code>null</code>

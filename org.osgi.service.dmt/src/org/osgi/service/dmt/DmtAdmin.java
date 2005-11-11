@@ -194,6 +194,14 @@ public interface DmtAdmin {
      * only connected to one protocol adapter, which is only connected to one 
      * management server).
      * <p>
+     * Since sending the alert and receiving acknowledgment for it is 
+     * potentially a very time-consuming operation, alerts are sent
+     * asynchronously.  This method should attempt to ensure that the alert can
+     * be sent successfully, and should throw an exception if it detects any 
+     * problems.  If the method returns without error, the alert is accepted for 
+     * sending and the implementation must make a best-effort attempt to 
+     * deliver it.
+     * <p>
      * In case the alert is an asynchronous response to a previous 
      * {@link DmtSession#execute(String, String, String) execute} command,
      * a correlation identifier can be specified to provide the association
