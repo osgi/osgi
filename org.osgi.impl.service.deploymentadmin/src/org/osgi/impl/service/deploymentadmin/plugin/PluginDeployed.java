@@ -60,6 +60,8 @@ public class PluginDeployed implements DataPluginFactory, ReadableDataSession,
 
     public PluginDeployed(PluginCtx pluginCtx) {
         this.pluginCtx = pluginCtx;
+        
+        AlertSender.setLogger(pluginCtx.getLogger());
     }
     
     private String dpToNodeId(String dpsn) {
@@ -103,8 +105,6 @@ public class PluginDeployed implements DataPluginFactory, ReadableDataSession,
         for (int i = 0; i < bs.length; i++)
             bset.add(new Long(bs[i].getBundleId()));
         for (int i = 0; i < dps.length; i++) {
-            // ###vif ("System".equals(dps[i].getName()))
-            //    continue;
             for (Iterator iter = ((DeploymentPackageImpl) dps[i]).
                     getBundleEntries().iterator(); iter.hasNext();) {
                 BundleEntry be = (BundleEntry) iter.next();
@@ -562,7 +562,8 @@ public class PluginDeployed implements DataPluginFactory, ReadableDataSession,
     public void nodeChanged(String[] nodeUriArr) throws DmtException {
     }
 
-    public void execute(DmtSession session, final String[] nodeUriArr, String correlator, String data) throws DmtException {
+    public void execute(final DmtSession session, final String[] nodeUriArr, 
+    		final String correlator, String data) throws DmtException {
         int l = nodeUriArr.length;
         
         if (l != 8 && !nodeUriArr[7].equals("Remove"))
@@ -585,7 +586,9 @@ public class PluginDeployed implements DataPluginFactory, ReadableDataSession,
                     }
                     else
                         pluginCtx.getLogger().log(exception);
-                    // TODO send alert
+                    final String nodeUri = PluginCtx.covertUri(nodeUriArr, 2);
+                    AlertSender.sendDeploymentRemoveAlert(exception, session.getPrincipal(), correlator, nodeUri, 
+                    		pluginCtx.getDmtAdmin());
                 }
             });
             undThread.start();

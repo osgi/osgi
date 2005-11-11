@@ -97,4 +97,17 @@ public class PluginCtx {
         return da;
     }
 
+	public static String covertUri(String[] nodeUriArr) {
+        return covertUri(nodeUriArr, 0);
+	}
+
+	public static String covertUri(String[] nodeUriArr, int delEnd) {
+		if (nodeUriArr.length < delEnd)
+			return "";
+		
+		StringBuffer sb = new StringBuffer(nodeUriArr[0]);
+		for (int i = 0; i < nodeUriArr.length - delEnd; i++)
+			sb.append('/').append(nodeUriArr[i]);
+		return sb.toString();
+	}
 }

@@ -22,6 +22,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.Serializable;
 import java.security.AccessController;
 import java.security.PrivilegedAction;
@@ -46,6 +47,8 @@ public class PluginDelivered implements DataPluginFactory, ReadableDataSession,
         ExecPlugin, Serializable {
     
 	private transient PluginCtx pluginCtx;
+	
+	// the directory that represents the delivered area
 	private transient File      store;
 
 	public PluginDelivered(PluginCtx pluginCtx) {
@@ -61,6 +64,8 @@ public class PluginDelivered implements DataPluginFactory, ReadableDataSession,
         }
         
 		this.pluginCtx = pluginCtx;		
+		
+		AlertSender.setLogger(pluginCtx.getLogger());
 	}
 
     ///////////////////////////////////////////////////////////////////////////
@@ -144,33 +149,12 @@ public class PluginDelivered implements DataPluginFactory, ReadableDataSession,
 		if (l == 7) {
 		    if (nodeUriArr[6].equals("ID"))
 		        return new DmtData(nodeUriArr[5]); // TODO globally unique
-		    if (nodeUriArr[6].equals("Data")) {
-		        File f = new File(store, nodeUriArr[5]);
-		        FileInputStream is = null;
-		        ByteArrayOutputStream os = new ByteArrayOutputStream();
-		        try {
-		            is = new FileInputStream(f);
-		            byte[] data = new byte[0x1000];
-		            int i = is.read(data);
-		            while (-1 != i) {
-		                os.write(data, 0, i);
-		                i = is.read(data);
-		            } 
-                }
-                catch (Exception e) {
-                    throw new DmtException(nodeUriArr, DmtException.COMMAND_FAILED, "", e);
-                }
-                finally {
-                    try {
-                        if (null != is)
-                            is.close();
-                    }
-                    catch (IOException ioe) {
-                        ioe.printStackTrace();
-                    }
-                }
-                return new DmtData(os.toByteArray());
-            }
+		    if (nodeUriArr[6].equals("Data"))
+				try {
+					return new DmtData(extractData(nodeUriArr[5]));
+				} catch (IOException e) {
+					throw new DmtException(nodeUriArr, DmtException.COMMAND_FAILED, "", e);
+				}
 		    if (nodeUriArr[6].equals("EnvType"))
 		        return new DmtData("OSGi.R4");
 		}
@@ -180,7 +164,7 @@ public class PluginDelivered implements DataPluginFactory, ReadableDataSession,
 		throw new RuntimeException("Internal error");
     }
 
-    public String getNodeTitle(String[] nodeUriArr) throws DmtException {
+	public String getNodeTitle(String[] nodeUriArr) throws DmtException {
         return null;
     }
 
@@ -268,94 +252,146 @@ public class PluginDelivered implements DataPluginFactory, ReadableDataSession,
         if (!Arrays.asList(getFiles(nodeUriArr)).contains(new File(store, nodeUriArr[5])))
             throw new DmtException(nodeUriArr, DmtException.NODE_NOT_FOUND, "");        
         if (nodeUriArr[7].equals("Remove")) {
-            File f = new File(store, nodeUriArr[5]);
-            f.delete();
+        	remove(nodeUriArr, session, correlator);
         }
         if (nodeUriArr[7].equals("InstallAndActivate")) {
-            install(nodeUriArr);
+            install(nodeUriArr, session, correlator);
         }
     }
     
-    public void nodeChanged(String[] nodeUriArr) throws DmtException {
+	public void nodeChanged(String[] nodeUriArr) throws DmtException {
     }
 
     ///////////////////////////////////////////////////////////////////////////
     // Private methods
     
-    private void install(final String[] nodeUriArr) throws DmtException {
-        File f = new File(store, nodeUriArr[5]);
-        final FileInputStream is;
+	private void remove(String[] nodeUriArr, DmtSession session, String correlator) {
+        boolean b = removeNode(new File(store, nodeUriArr[5]));
+        AlertSender.sendDeliveredRemoveAlert(b, session.getPrincipal(), correlator, 
+        		PluginCtx.covertUri(nodeUriArr, 2), pluginCtx.getDmtAdmin());
+    }
+	
+    private byte[] extractData(String fileName) throws IOException {
+        File f = new File(store, fileName);
+        FileInputStream is = null;
+        ByteArrayOutputStream os = new ByteArrayOutputStream();
         try {
             is = new FileInputStream(f);
+            byte[] data = new byte[0x1000];
+            int i = is.read(data);
+            while (-1 != i) {
+                os.write(data, 0, i);
+                i = is.read(data);
+            }
+            return os.toByteArray();
+        } finally {
+            try {
+                if (null != is)
+                    is.close();
+            } catch (IOException ioe) {
+                ioe.printStackTrace();
+            }
+        }
+	}
+    
+    private void install(final String[] nodeUriArr, DmtSession session, String correlator) throws DmtException {
+    	String fileName = nodeUriArr[5];
+        final File file = new File(store, fileName);
+        final FileInputStream is; 
+        try {
+            is = new FileInputStream(file);
         } catch (FileNotFoundException e) {
             throw new DmtException(nodeUriArr, DmtException.COMMAND_FAILED, e.getMessage());
         }
+        
         String mimeType;
-        if (f.getName().endsWith(".dp"))
+        if (file.getName().endsWith(".dp"))
             mimeType = PluginConstants.MIME_DP;
         else 
             mimeType = PluginConstants.MIME_BUNDLE;
 
-        final String id = nodeUriArr[5];
+        final String nodeId = fileName;
         DeploymentThread deplThr = new DeploymentThread(mimeType, 
-                pluginCtx, is, id);
-        deplThr.setDpListener(new DeploymentThread.ListenerDp() {
-            public void onFinish(DeploymentPackageImpl dp, Exception exception) {
-            	if (null != is)
-					try {
-						is.close();
-					} catch (IOException e1) {
-						e1.printStackTrace();
-					}
-				if (null == exception) {
-					pluginCtx.getDeployedPlugin().associateID(dp, id);
-
-					// removes the node
-		            File f = new File(store, nodeUriArr[5]);
-		            f.delete();
-					
-					try {
-						pluginCtx.save();
-						// TODO sendAlert
-					} catch (IOException e) {
-						pluginCtx.getLogger().log(e);
-					}
-				} else {
-					pluginCtx.getLogger().log(exception);
-					// TODO sendAlert
-				}
-			}
-		});
-        deplThr.setBundleListener(new DeploymentThread.ListenerBundle() {
-            public void onFinish(Bundle b, Exception exception) {
-            	if (null != is)
-					try {
-						is.close();
-					} catch (IOException e1) {
-						e1.printStackTrace();
-					}
-					
-				if (null == exception) {
-					pluginCtx.getDeployedPlugin().associateID(b, id);
-
-					// removes the node
-		            File f = new File(store, nodeUriArr[5]);
-		            f.delete();
-
-					try {
-						pluginCtx.save();
-						// TODO sendAlert
-					} catch (IOException e) {
-						pluginCtx.getLogger().log(e);
-					}
-				} else {
-					pluginCtx.getLogger().log(exception);
-					// TODO sendAlert
-				}
-			}
-		});
+                pluginCtx, is, nodeId);
+        String nodeUri = PluginCtx.covertUri(nodeUriArr);
+        setDpListener(deplThr, is, file, session.getPrincipal(), correlator, nodeUri);
+        setBundleListener(deplThr, is, file, session.getPrincipal(), correlator, nodeUri);
         deplThr.start();
     }
+
+    private void setBundleListener(DeploymentThread deplThr,
+			final FileInputStream is, final File file, final String principal,
+			final String correlator, final String nodeUri) {
+		deplThr.setBundleListener(new DeploymentThread.ListenerBundle() {
+			public void onFinish(Bundle b, Exception exception) {
+				if (null != is)
+					try {
+						is.close();
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+
+				String nodeUriRes = null;
+				if (null == exception) {
+					nodeUriRes = DAConstants.DMT_DEPLOYMENT_ROOT + 
+							pluginCtx.getDeployedPlugin().associateID(b, file.getName());
+					removeNode(file);
+					try {
+						pluginCtx.save();
+					} catch (IOException e) {
+						pluginCtx.getLogger().log(e);
+					}
+				} else {
+					nodeUriRes = nodeUri; // the original URI
+					pluginCtx.getLogger().log(exception);
+				}
+				AlertSender.sendDeployAlert(exception, principal, correlator, nodeUriRes, 
+                		DAConstants.ALERT_TYPE_INS_ACT, pluginCtx.getDmtAdmin());
+			}
+		});
+	}
+
+	private void setDpListener(DeploymentThread deplThr, final InputStream is, final File file, 
+			final String principal, final String correlator, final String nodeUri) {
+		deplThr.setDpListener(new DeploymentThread.ListenerDp() {
+			public void onFinish(DeploymentPackageImpl dp, Exception exception) {
+				if (null != is)
+					try {
+						is.close();
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+					
+				String nodeUriRes = null;
+				if (null == exception) {
+					nodeUriRes = DAConstants.DMT_DEPLOYMENT_ROOT + 
+							pluginCtx.getDeployedPlugin().associateID(dp, file.getName());
+					removeNode(file);
+					try {
+						pluginCtx.save();
+					} catch (IOException e) {
+						pluginCtx.getLogger().log(e);
+					}
+				} else {
+					nodeUriRes = nodeUri; // the original URI
+					pluginCtx.getLogger().log(exception);
+				}
+				AlertSender.sendDeployAlert(exception, principal, correlator, nodeUriRes, 
+                		DAConstants.ALERT_TYPE_INS_ACT, pluginCtx.getDmtAdmin());
+			}
+		});
+	}
+
+	private boolean removeNode(final File file) {
+		boolean ret = ((Boolean) AccessController.doPrivileged(new PrivilegedAction() {
+			public Object run() {
+				return new Boolean(file.delete());
+			}})).booleanValue();
+        if (!ret)
+        	pluginCtx.getLogger().log(Logger.LOG_WARNING, "Cannot remove the subtree under " +
+        			"the 'Delivered' node. Not able to delete file " + file);
+        return ret;
+   }
     
     private File[] getFiles(String[] nodeUriArr) {
         DmtAdmin dmtA = pluginCtx.getDmtAdmin();

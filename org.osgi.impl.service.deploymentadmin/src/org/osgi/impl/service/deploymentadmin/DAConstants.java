@@ -57,9 +57,16 @@ public class DAConstants {
     public static final String EVENTPROP_SUCCESSFUL	= "successful";
     
     // Deployment subtree root
-    public static final String DMT_DEPLOYMENT_ROOT; 
+    public static final String DMT_DEPLOYMENT_ROOT;
+
+	// generic alert types
+    public static final String ALERT_TYPE_INS_ACT          = "org.osgi.deployment.installandactivate";
+    public static final String ALERT_TYPE_DELIVERED_REMOVE = "org.osgi.deployment.delivered.remove";
+    public static final String ALERT_TYPE_DELOYED_REMOVE   = "org.osgi.deployment.deployed.remove";
+    public static final String ALERT_TYPE_DWNL_INS_ACT     = "org.osgi.deployment.downloadandinstallandactivate";
+	
     static {
-    	String prop = "org.osgi.service.dmtroot";
+    	String prop = "org.osgi.service.dmt.root";
     	String val = System.getProperty(prop);
     	if (null == val)
     		throw new RuntimeException(prop + " system property is not defined.");

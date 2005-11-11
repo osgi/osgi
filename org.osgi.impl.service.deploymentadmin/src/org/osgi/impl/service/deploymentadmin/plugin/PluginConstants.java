@@ -25,6 +25,7 @@ public final class PluginConstants {
     // alert codes
     static final int RESULT_SUCCESSFUL                           = 200;
     static final int RESULT_SUCCESSFUL_BUNDLE_START_WARNING      = 250;
+    static final int RESULT_REMOVAL_WARNING                      = 251;
     
     static final int RESULT_CANCELLED                            = 401;
     static final int RESULT_CORRUPTED_DEPLOYMENT_PACKAGE         = 402;

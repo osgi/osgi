@@ -35,7 +35,6 @@ import org.osgi.impl.service.deploymentadmin.DeploymentPackageImpl;
 import org.osgi.impl.service.deploymentadmin.Metanode;
 import org.osgi.impl.service.deploymentadmin.PluginCtx;
 import org.osgi.impl.service.dwnl.DownloadAgent;
-import org.osgi.service.dmt.AlertItem;
 import org.osgi.service.dmt.DmtData;
 import org.osgi.service.dmt.DmtException;
 import org.osgi.service.dmt.MetaNode;
@@ -60,6 +59,8 @@ public class PluginDownload extends DefaultHandler implements DataPluginFactory,
     
     public PluginDownload(PluginCtx pluginCtx) {
         this.pluginCtx = pluginCtx;       
+        
+        AlertSender.setLogger(pluginCtx.getLogger());
     }
 	
     ///////////////////////////////////////////////////////////////////////////
@@ -106,12 +107,7 @@ public class PluginDownload extends DefaultHandler implements DataPluginFactory,
         private void start(final String[] nodeUriArr, final String correlator, final String principal) 
                 throws DmtException 
         {
-            // convert nodeUriArr to a URI string for sending alert
-            StringBuffer sb = new StringBuffer(nodeUriArr[0]);
-            for (int i = 0; i < nodeUriArr.length; i++)
-                sb.append('/').append(nodeUriArr[i]);
-            
-            final String nodeUri = sb.toString();
+            final String nodeUri = PluginCtx.covertUri(nodeUriArr);
             final Entry entry = (Entry) ht.get(nodeUriArr[4]);
             
             entry.setStatus(STATUS_STREAMING);
@@ -155,8 +151,8 @@ public class PluginDownload extends DefaultHandler implements DataPluginFactory,
             
             if (dwnlThr.getStatus() != DownloadThread.RESULT_OK) {
                 entry.setStatus(STATUS_DOWNLD_FAILED);
-                sendDownloadAlert(dwnlThr.getStatus(), 
-                    principal, correlator, nodeUri);
+                AlertSender.sendDownloadAlert(dwnlThr.getStatus(), 
+                    principal, correlator, nodeUri, pluginCtx.getDmtAdmin());
                 return;
             }
 
@@ -179,8 +175,8 @@ public class PluginDownload extends DefaultHandler implements DataPluginFactory,
                     	nodeUriRes = nodeUri; // the original URI
                         entry.setStatus(STATUS_DEPLOYMENT_FAILED);
                     }
-                    DeplAlertSender.sendAlert(exception, principal, correlator, nodeUriRes, 
-                    		pluginCtx.getDmtAdmin());
+                    AlertSender.sendDeployAlert(exception, principal, correlator, nodeUriRes, 
+                    		DAConstants.ALERT_TYPE_DWNL_INS_ACT, pluginCtx.getDmtAdmin());
                 }});
             deplThr.setBundleListener(new DeploymentThread.ListenerBundle() {
                 public void onFinish(Bundle b, Exception exception) {
@@ -198,25 +194,10 @@ public class PluginDownload extends DefaultHandler implements DataPluginFactory,
                     	nodeUriRes = nodeUri; // the original URI
                         entry.setStatus(STATUS_DEPLOYMENT_FAILED);
                     }
-                    DeplAlertSender.sendAlert(exception, principal, correlator, nodeUriRes,
-                            pluginCtx.getDmtAdmin());
+                    AlertSender.sendDeployAlert(exception, principal, correlator, nodeUriRes,
+                            DAConstants.ALERT_TYPE_DWNL_INS_ACT, pluginCtx.getDmtAdmin());
                 }});
             deplThr.start();
-        }
-
-        private void sendDownloadAlert(int alertCode, String principal, String correlator, String nodeUri) {
-            if (null == principal)
-                return;
-
-            try {
-                pluginCtx.getDmtAdmin().sendAlert(principal, 1226, correlator, new AlertItem[] {
-                        new AlertItem(nodeUri, "org.osgi.deployment.downloadandinstallandactivate",
-                        null, new DmtData(alertCode))});
-            }
-            catch (DmtException e) {
-                // TODO log
-                e.printStackTrace();
-            }
         }
     }
     
