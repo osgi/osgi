@@ -147,7 +147,7 @@ public class DeploymentmoConstants {
     public static final String SIMPLE_DP_DELIVERED_OPERATIONS_EXT = SIMPLE_DP_DELIVERED_OPERATIONS + "/Ext";
     
     //The expected values of the simple_dp.dp after deployed
-    public static final String SIMPLE_DP_SIGNER = "CN=CESAR.ORG.BR, OU=CESAR, O=MOTOROLA, L=RECIFE, ST=PERNAMBUCO, C=BR";
+    public static final String SIMPLE_DP_SIGNER = "CN=John Smith, O=ACME Inc, OU=ACME Cert Authority, L=Austin, S=Texas, C=US";
     
     //Manifest header can be shown in a different order
     public static Vector simpleDpManifest = new Vector();
@@ -213,7 +213,7 @@ public class DeploymentmoConstants {
     public static final String DEPLOYMENT_DOWNLOAD_TEST_OPERATIONS_EXT = DEPLOYMENT_DOWNLOAD_TEST_OPERATIONS + "/Ext";
     public static final String DEPLOYMENT_DOWNLOAD_TEST_DOWN_INST_ACTIV = DEPLOYMENT_DOWNLOAD_TEST_OPERATIONS + "/DownloadAndInstallAndActivate";
 
-    public static final String SIGNER_FILTER = "CN=CESAR.ORG.BR, OU=CESAR, O=MOTOROLA, L=RECIFE, C=BR";
+    public static final String SIGNER_FILTER = "CN=John Smith, O=ACME Inc, OU=ACME Cert Authority, L=Austin, S=Texas, C=US";
     
     //TODO Change for getting if the implementation is streaming from a properties file
     public static final boolean IS_STREAMING = true;
