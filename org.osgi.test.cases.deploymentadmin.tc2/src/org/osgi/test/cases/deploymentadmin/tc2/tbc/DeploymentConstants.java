@@ -47,8 +47,8 @@ package org.osgi.test.cases.deploymentadmin.tc2.tbc;
  */
 public class DeploymentConstants {
 
-	public static final String SIGNER_FILTER = "CN=CESAR.ORG.BR, OU=CESAR, O=MOTOROLA, L=RECIFE, C=BR";
-    public static final String SIGNER_FILTER_WILDCARD = "CN=*.ORG.BR, OU=CESAR, O=MOTOROLA, L=RECIFE, C=BR";
+	public static final String SIGNER_FILTER = "CN=John Smith, O=ACME Inc, OU=ACME Cert Authority, L=Austin, S=Texas, C=US";
+    public static final String SIGNER_FILTER_WILDCARD = "CN=*, O=ACME Inc, OU=ACME Cert Authority, L=Austin, S=Texas, C=US";
     public static final String SIGNER_FILTER_INVALID1 = "NAME=CESAR.ORG.BR, OU=CESAR, O=MOTOROLA, L=RECIFE, C=BR";
     public static final String SIGNER_FILTER_INVALID2 = "2=*.ORG.BR, TX=CESAR, R=MOTOROLA, L=RECIFE, C=BR";
     
