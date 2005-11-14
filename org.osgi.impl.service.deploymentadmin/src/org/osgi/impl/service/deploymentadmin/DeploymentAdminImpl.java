@@ -430,8 +430,11 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
     private void updateDps() {
         if (session.getDeploymentAction() == DeploymentSessionImpl.INSTALL)
             addDp((DeploymentPackageImpl) session.getSourceDeploymentPackage());
-        else { // if (session.getDeploymentAction() == DeploymentSessionImpl.UPDATE) 
-            removeDp((DeploymentPackageImpl) session.getTargetDeploymentPackage());
+        else { // if (session.getDeploymentAction() == DeploymentSessionImpl.UPDATE)
+        	DeploymentPackageImpl dp = 
+        		(DeploymentPackageImpl) session.getTargetDeploymentPackage();
+        	dp.setStale();
+            removeDp(dp);
             addDp((DeploymentPackageImpl) session.getSourceDeploymentPackage());
         }    
     }

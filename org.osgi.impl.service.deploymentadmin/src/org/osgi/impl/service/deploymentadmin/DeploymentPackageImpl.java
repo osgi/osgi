@@ -344,7 +344,7 @@ public class DeploymentPackageImpl implements DeploymentPackage, Serializable {
         return (String) mainSection.get(name);
     }
 
-    public boolean isStale() {
+    public synchronized boolean isStale() {
         return stale.booleanValue();
     }
 
@@ -427,7 +427,7 @@ public class DeploymentPackageImpl implements DeploymentPackage, Serializable {
         
         dpCtx.uninstall(this);
         
-        stale = Boolean.TRUE;
+        setStale();
     }
 
     /**
@@ -442,7 +442,7 @@ public class DeploymentPackageImpl implements DeploymentPackage, Serializable {
         
         dpCtx.checkPermission(this, DeploymentAdminPermission.UNINSTALL_FORCED);
         
-        stale = Boolean.TRUE;
+        setStale();
         
         return dpCtx.uninstallForced(this);
     }
@@ -462,6 +462,10 @@ public class DeploymentPackageImpl implements DeploymentPackage, Serializable {
 
     void setVersion(Version version) {
         mainSection.put(DAConstants.DP_VERSION, version.toString());
+    }
+    
+    synchronized void setStale() {
+        stale = Boolean.TRUE;
     }
     
     /*
