@@ -781,8 +781,8 @@ public class ServiceTracker implements ServiceTrackerCustomizer {
 		 * before we track the service.
 		 * 
 		 * A service must not be in both the initial and adding lists at the
-		 * same time. A service must be removed from the initial list before
-		 * track is called to begin tracking it.
+		 * same time. A service must be moved from the initial list to the
+		 * adding list "atomically" before we begin tracking it.
 		 * 
 		 * Since the LinkedList implementation is not synchronized, all access
 		 * to this list must be protected by the same synchronized object for
@@ -811,15 +811,16 @@ public class ServiceTracker implements ServiceTrackerCustomizer {
 		 * @param references The initial list of services to be tracked.
 		 */
 		protected void setInitialServices(ServiceReference[] references) {
-			if (references != null) {
-				int size = references.length;
-				for (int i = 0; i < size; i++) {
-					if (DEBUG) {
-						System.out
-								.println("ServiceTracker.Tracked.setInitialServices: " + references[i]); //$NON-NLS-1$
-					}
-					initial.add(references[i]);
+			if (references == null) {
+				return;
+			}
+			int size = references.length;
+			for (int i = 0; i < size; i++) {
+				if (DEBUG) {
+					System.out
+							.println("ServiceTracker.Tracked.setInitialServices: " + references[i]); //$NON-NLS-1$
 				}
+				initial.add(references[i]);
 			}
 		}
 
@@ -842,15 +843,21 @@ public class ServiceTracker implements ServiceTrackerCustomizer {
 						return; /* we are done */
 					}
 					/*
-					 * remove the first service from the list
+					 * move the first service from the initial list to the
+					 * adding list within this synchronized block.
 					 */
 					reference = (ServiceReference) initial.removeFirst();
+					adding.add(reference);
 				}
 				if (DEBUG) {
 					System.out
 							.println("ServiceTracker.Tracked.trackInitialServices: " + reference); //$NON-NLS-1$
 				}
-				track(reference); /* and begin tracking it */
+				trackAdding(reference); /*
+										 * Begin tracking it. We call
+										 * trackAdding since we have already put
+										 * the reference in the adding list.
+										 */
 			}
 		}
 
@@ -931,19 +938,6 @@ public class ServiceTracker implements ServiceTrackerCustomizer {
 		protected void track(ServiceReference reference) {
 			Object object;
 			synchronized (this) {
-				if (initial.contains(reference)) { /*
-													 * if this service is
-													 * already in the list of
-													 * initial references to
-													 * process
-													 */
-					if (DEBUG) {
-						System.out
-								.println("ServiceTracker.Tracked.track[already in initial]: " + reference); //$NON-NLS-1$
-					}
-					return; /* it will be tracked later */
-				}
-
 				object = this.get(reference);
 			}
 			if (object != null) /* we are already tracking the service */
@@ -974,10 +968,26 @@ public class ServiceTracker implements ServiceTrackerCustomizer {
 				}
 				adding.add(reference); /* mark this service is being added */
 			}
+
+			trackAdding(reference); /*
+									 * call trackAdding now that we have put the
+									 * reference in the adding list
+									 */
+		}
+
+		/**
+		 * Common logic to add a service to the tracker used by track and
+		 * trackInitialServices. The specified reference must have been placed
+		 * in the adding list before calling this method.
+		 * 
+		 * @param reference Reference to a service to be tracked.
+		 */
+		private void trackAdding(ServiceReference reference) {
 			if (DEBUG) {
 				System.out
-						.println("ServiceTracker.Tracked.track[adding]: " + reference); //$NON-NLS-1$
+						.println("ServiceTracker.Tracked.trackAdding: " + reference); //$NON-NLS-1$
 			}
+			Object object = null;
 			boolean becameUntracked = false;
 			/* Call customizer outside of synchronized region */
 			try {
@@ -1011,7 +1021,7 @@ public class ServiceTracker implements ServiceTrackerCustomizer {
 			if (becameUntracked) {
 				if (DEBUG) {
 					System.out
-							.println("ServiceTracker.Tracked.track[removed]: " + reference); //$NON-NLS-1$
+							.println("ServiceTracker.Tracked.trackAdding[removed]: " + reference); //$NON-NLS-1$
 				}
 				/* Call customizer outside of synchronized region */
 				customizer.removedService(reference, object);
