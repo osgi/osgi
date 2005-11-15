@@ -433,6 +433,8 @@ public class DmtData {
      * the value is returned. Binary and base64 data is represented by two-digit
      * hexadecimal numbers for each byte separated by spaces. The 
      * {@link #NULL_VALUE} data has the string form of "<code>null</code>".
+     * Data of string or XML format containing the Java <code>null</code> value
+     * is represented by an empty string.  
      * 
      * @return the string representation of this <code>DmtData</code> instance
      */
@@ -441,7 +443,7 @@ public class DmtData {
         case FORMAT_STRING:
         case FORMAT_XML:
         case FORMAT_DATE:
-        case FORMAT_TIME:    return str;
+        case FORMAT_TIME:    return str == null ? "" : str;
         case FORMAT_INTEGER: return String.valueOf(integer);
         case FORMAT_FLOAT:   return String.valueOf(flt);
         case FORMAT_BOOLEAN: return String.valueOf(bool);
