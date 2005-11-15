@@ -187,12 +187,19 @@ public interface MetaNode {
     DmtData getDefault();
 
     /**
-     * Get the list of MIME types this node can hold.  The default MIME type
-     * of the node must be the first element in the returned list.  If no 
-     * meta-data is provided for a node, all MIME types are considered valid.
+     * Get the list of MIME types this node can hold. The first element of the
+     * returned list must be the default MIME type.
+     * <p>
+     * All MIME types are considered valid if no meta-data is provided for a 
+     * node or if <code>null</code> is returned by this method.  In this case
+     * the default MIME type cannot be retrieved from the meta-data, but the
+     * node may still have a default.  This hidden default (if it exists) can be
+     * utilized by passing <code>null</code> as the type parameter of
+     * {@link DmtSession#setNodeType(String, String)} or
+     * {@link DmtSession#createLeafNode(String, DmtData, String)}.
      * 
-     * @return The list of allowed MIME types for this node or <code>null</code>
-     *         if not defined
+     * @return the list of allowed MIME types for this node, starting with the
+     *         default MIME type, or <code>null</code> if all types are allowed
      */
     String[] getMimeTypes();
     
