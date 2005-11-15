@@ -684,6 +684,8 @@ public interface DmtSession {
      * Create a leaf node with default value and MIME type. If a node does not 
      * have a default value or MIME type, this method will throw a 
      * <code>DmtException</code> with error code <code>METADATA_MISMATCH</code>.
+     * Note that a node might have a default value or MIME type even if there is 
+     * no meta-data for the node or its meta-data does not specify the default.
      * <p>
      * If the parent node does not exist, it is created automatically, as if 
      * {@link #createInteriorNode(String)} were called for the parent URI. This 
@@ -747,7 +749,9 @@ public interface DmtSession {
      * specified value is <code>null</code>, the default value is taken.  If the
      * node does not have a default MIME type or value (if needed), this method 
      * will throw a <code>DmtException</code> with error code 
-     * <code>METADATA_MISMATCH</code>.
+     * <code>METADATA_MISMATCH</code>. Note that a node might have a default 
+     * value or MIME type even if there is no meta-data for the node or its 
+     * meta-data does not specify the default.
      * <p>
      * If the parent node does not exist, it is created automatically, as if 
      * {@link #createInteriorNode(String)} were called for the parent URI. This 
@@ -816,7 +820,9 @@ public interface DmtSession {
      * value or MIME type is <code>null</code>, their default values are taken.
      * If the node does not have the necessary defaults, this method will throw
      * a <code>DmtException</code> with error code 
-     * <code>METADATA_MISMATCH</code>.
+     * <code>METADATA_MISMATCH</code>.  Note that a node might have a default 
+     * value or MIME type even if there is no meta-data for the node or its 
+     * meta-data does not specify the default.
      * <p>
      * If the parent node does not exist, it is created automatically, as if 
      * {@link #createInteriorNode(String)} were called for the parent URI. This 
@@ -1144,7 +1150,9 @@ public interface DmtSession {
      * For leaf nodes, it requests that the default MIME type is used for the
      * given node.  If the node does not have a default MIME type this method 
      * will throw a <code>DmtException</code> with error code 
-     * <code>METADATA_MISMATCH</code>.
+     * <code>METADATA_MISMATCH</code>.  Note that a node might have a default 
+     * MIME type even if there is no meta-data for the node or its meta-data 
+     * does not specify the default.
      * <p>
      * MIME types must conform to the definition in RFC 2045.  Interior node
      * type identifiers must follow the format defined in section 7.7.7.2 of the
@@ -1242,7 +1250,7 @@ public interface DmtSession {
      * Get the meta data which describes a given node. Meta data can be only
      * inspected, it can not be changed.
      * <p>
-     * The <code>MetaNode</code> object returned to the the client is the
+     * The <code>MetaNode</code> object returned to the client is the
      * combination of the meta data returned by the data plugin (if any) plus
      * the meta data returned by the Dmt Admin. If there are differences in the
      * meta data elements known by the plugin and the Dmt Admin then the plugin
@@ -1568,6 +1576,11 @@ public interface DmtSession {
      * @return true if the given node exists in the DMT
      * @throws IllegalStateException if the session is already closed or 
      *         invalidated
+     * @throws SecurityException if the caller does not have the necessary 
+     *         permissions to execute the underlying management operation, or,
+     *         in case of local sessions, if the caller does not have 
+     *         <code>DmtPermission</code> for the node with the Get action
+     *         present
      */
     boolean isNodeUri(String nodeUri);
 }
