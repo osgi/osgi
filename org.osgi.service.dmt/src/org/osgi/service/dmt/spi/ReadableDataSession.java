@@ -306,7 +306,7 @@ public interface ReadableDataSession {
      * Get the data contained in a leaf node.
      * 
      * @param nodePath the absolute path of the node to retrieve
-     * @return the data of the leaf node, can not be <code>null</code>
+     * @return the data of the leaf node, must not be <code>null</code>
      * @throws DmtException with the following possible error codes:
      *         <ul>
      *         <li><code>NODE_NOT_FOUND</code> if <code>nodePath</code> points
