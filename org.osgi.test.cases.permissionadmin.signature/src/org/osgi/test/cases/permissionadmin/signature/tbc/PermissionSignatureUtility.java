@@ -252,45 +252,6 @@ public class PermissionSignatureUtility {
 				new Object[]{context}, SecurityException.class);
 	}
 
-	public Object allowed_StartLevel_setBundleStartLevel(String message, Bundle bundle, int startlevel) throws Exception {
-		return control.allowed_call("call StartLevel.setBundleStartLevel(Bundle, int) " + message,  
-				"callStartLevel_setBundleStartLevel", new Class[]{Bundle.class, Integer.class}, 
-				new Object[]{bundle, new Integer(startlevel)});
-	}
-
-
-	public boolean not_allowed_StartLevel_setBundleStartLevel(String message, Bundle bundle, int startlevel) throws Exception {
-		return control.not_allowed_call("call StartLevel.setBundleStartLevel(Bundle, int) " + message, 
-				"callStartLevel_setBundleStartLevel", new Class[]{Bundle.class, Integer.class}, 
-				new Object[]{bundle, new Integer(startlevel)}, SecurityException.class);
-	}
-	
-	public Object allowed_StartLevel_setStartLevel(String message, int startlevel) throws Exception {
-		return control.allowed_call("call StartLevel.setStartLevel(int) " + message,  
-				"callStartLevel_setStartLevel", new Class[]{Integer.class}, 
-				new Object[]{new Integer(startlevel)});
-	}
-
-
-	public boolean not_allowed_StartLevel_setStartLevel(String message, int startlevel) throws Exception {
-		return control.not_allowed_call("call StartLevel.setBundleStartLevel(int) " + message, 
-				"callStartLevel_setStartLevel", new Class[]{Integer.class}, 
-				new Object[]{new Integer(startlevel)}, SecurityException.class);
-	}
-
-	public Object allowed_StartLevel_setInitialBundleStartLevel(String message, int startlevel) throws Exception {
-		return control.allowed_call("call StartLevel.setInitialBundleStartLevel(int) " + message,  
-				"callStartLevel_setInitialBundleStartLevel", new Class[]{Integer.class}, 
-				new Object[]{new Integer(startlevel)});
-	}
-
-
-	public boolean not_allowed_StartLevel_setInitialBundleStartLevel(String message, int startlevel) throws Exception {
-		return control.not_allowed_call("call StartLevel.setInitialBundleStartLevel(int) " + message, 
-				"callStartLevel_setInitialBundleStartLevel", new Class[]{Integer.class}, 
-				new Object[]{new Integer(startlevel)}, SecurityException.class);
-	}
-
 
 	public Object allowed_PermissionAdmin_setPermissions(String message, String location, PermissionInfo[] permissions) throws Exception {
 		return control.allowed_call("call PermissionAdmin.setPermissions(String, PermissionInfo[]) " + message,  
