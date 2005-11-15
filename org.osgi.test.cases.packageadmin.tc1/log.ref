@@ -9,7 +9,6 @@ Is testpackage 2 still exported: true : 'true'
 Is testbundle 3 still active: true: 'true'
 Is TestPackage 1 scheduled for removal: true : 'true'
 The Framework is being refreshed.
-Wait 1 second for refresh to return. 
 After refresh. Is Testpackage 1 exported: false : 'false'
 Is testbundle 2 still active: false: 'false'
 Is TestPackage 2 still exported: false : 'false'

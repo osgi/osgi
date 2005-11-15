@@ -13,7 +13,6 @@ Is TestPackage 3 exported: true : 'true'
 Is testbundle 2 still active: true: 'true'
 Is testbundle 4 still active: true: 'true'
 Refresh all packages.
-Wait 10 second for refresh to return.
 Does TestBundle 1 contain Testpackage 1 after refresh: false : 'false'
 Does TestBundle 1 contain Testpackage 3 after refresh: true : 'true'
 Is TestPackage 1 exported after refresh: false : 'false'

@@ -49,7 +49,6 @@ public class TBC extends Thread {
 	 * This function performs the tests.
 	 */
 	public void run() {
-		int progress = 0;
 		sr = context.registerService(TBC.class.getName(), this, null);
 		try {
 			link.log("Test bundle control started Ok.");
@@ -82,17 +81,6 @@ public class TBC extends Thread {
 
 	void log(String test) throws IOException {
 		link.log(test);
-	}
-
-	synchronized void dosync() throws Exception {
-		try {
-			//Wait 1 sec
-			log("Wait 10 second for refresh to return.");
-			wait(10000);
-		}
-		catch (Exception e) {
-			log("Wait didn't work: " + e);
-		}
 	}
 
 	/**
@@ -191,8 +179,17 @@ public class TBC extends Thread {
 			b[1] = tb2;
 			b[2] = tb3;
 			log("Refresh all packages.");
-			pa.refreshPackages(b);
-			dosync();
+      
+      // refresh the packages
+      PackagesRefreshedListener prl = new PackagesRefreshedListener();
+      try {
+        context.addFrameworkListener(prl);
+        pa.refreshPackages(b);
+        prl.waitForPackagesRefreshedEvent();
+      } finally {
+        context.removeFrameworkListener(prl);
+      }
+      
 			//ExportingPackage.getExportingBundle() for package ...testpackage1
 			tp1 = pa.getExportedPackage(TP1);
 			eb = tp1.getExportingBundle();
@@ -228,4 +225,31 @@ public class TBC extends Thread {
 			log("PackageAdmin TestCase 3 is completed.");
 		}
 	}
+  
+  class PackagesRefreshedListener implements FrameworkListener {
+    int count = 0;
+
+    public void frameworkEvent(FrameworkEvent event) {
+      if (event.getType() == FrameworkEvent.PACKAGES_REFRESHED) {
+        count++;
+        synchronized (this) {
+          notify();
+        }
+      }
+    }
+    
+    public void waitForPackagesRefreshedEvent() {
+      if (count == 0) {
+        try {
+          synchronized (this) {
+            wait(30000); // wait maximum 30 sec to avoid infinite wait
+          }
+          if (count == 0) {
+            log("Timeout occured while waiting for PACKAGES_REFRESHED event");
+          }
+        } catch (Exception e) {}
+      }
+    }
+  }
+  
 }

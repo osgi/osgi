@@ -48,7 +48,6 @@ public class TBC extends Thread {
 	 * This function performs the tests.
 	 */
 	public void run() {
-		int progress = 0;
 		sr = context.registerService(TBC.class.getName(), this, null);
 		try {
 			link.log("Test bundle control started Ok.");
@@ -83,17 +82,6 @@ public class TBC extends Thread {
 		link.log(test);
 	}
 
-	synchronized void dosync() throws Exception {
-		try {
-			//Wait 1 sec
-			log("Wait 1 second for refresh to return. ");
-			wait(1000);
-		}
-		catch (Exception e) {
-			log("Wait didn't work: " + e);
-		}
-	}
-
 	/**
 	 *  
 	 */
@@ -101,7 +89,6 @@ public class TBC extends Thread {
 		Bundle tb1;
 		Bundle tb2;
 		Bundle tb3;
-		String res;
 		PackageAdmin pa = null;
 		// 2.15.1 Testcase1 (tc1), exporting packages and re-exporting packages
 		//Tb1 will export package ...testpackage1
@@ -193,8 +180,16 @@ public class TBC extends Thread {
 			b[1] = tb2;
 			b[2] = tb3;
 			log("The Framework is being refreshed.");
-			pa.refreshPackages(b);
-			dosync();
+      
+      PackagesRefreshedListener prl = new PackagesRefreshedListener();
+      try {
+        context.addFrameworkListener(prl);
+  			pa.refreshPackages(b);
+        prl.waitForPackagesRefreshedEvent();
+      } finally {
+        context.removeFrameworkListener(prl);
+      }
+      
 			//Call PackageAdmin.getExportedPackages(Bundle bundle) for tb1
 			//...testpackage1 still exported? (no)
 			boolean tp1present = false;
@@ -230,4 +225,30 @@ public class TBC extends Thread {
 			log("PackageAdmin TestCase 1 is completed.");
 		}
 	}
+  
+  class PackagesRefreshedListener implements FrameworkListener {
+    int count = 0;
+
+    public void frameworkEvent(FrameworkEvent event) {
+      if (event.getType() == FrameworkEvent.PACKAGES_REFRESHED) {
+        count++;
+        synchronized (this) {
+          notify();
+        }
+      }
+    }
+    
+    public void waitForPackagesRefreshedEvent() {
+      if (count == 0) {
+        try {
+          synchronized (this) {
+            wait(30000); // wait maximum 30 sec to avoid infinite wait
+          }
+          if (count == 0) {
+            log("Timeout occured while waiting for PACKAGES_REFRESHED event");
+          }
+        } catch (Exception e) {}
+      }
+    }
+  }
 }
