@@ -134,7 +134,7 @@ class ConfigEntry {
     Object getObject() throws ConfigPluginException {
         if(type == null || cardinality == null || 
                 (value == null && values == null))
-            throw new ConfigPluginException(DmtException.COMMAND_FAILED, 
+            throw new ConfigPluginException(DmtException.METADATA_MISMATCH, 
                     "A value is not fully defined in the tree: the type, " +
                     "cardinality or value is missing.");
         
@@ -155,7 +155,7 @@ class ConfigEntry {
         for (int i = 0; i < size; i++) {
             Value v = (Value) values.get(new Integer(i));
             if(v == null) // the indices are not continuous from 0 to size
-                throw new ConfigPluginException(DmtException.COMMAND_FAILED,
+                throw new ConfigPluginException(DmtException.METADATA_MISMATCH,
                         "An array or vector value " +
                         "is not in a consistent state in the tree: the " +
                         "index numbering is not continuous."); 
