@@ -30,6 +30,7 @@ import org.osgi.framework.*;
 
 import org.osgi.service.permissionadmin.PermissionAdmin;
 import org.osgi.service.permissionadmin.PermissionInfo;
+import org.osgi.service.startlevel.StartLevel;
 
 //import org.osgi.service.cm.ConfigurationPermission;
 
@@ -47,7 +48,7 @@ import java.util.Vector;
  * Contains the test methods of the permission signature test case.
  * 
  * @author Petia Sotirova
- * @version 1.0
+ * @version 1.1
  */
 public class PermissionSignatureTestControl extends DefaultTestBundleControl {
   
@@ -73,6 +74,10 @@ public class PermissionSignatureTestControl extends DefaultTestBundleControl {
   private String                        extensionEntryPath;
   private String                        extensionClassName;
   
+  private int                           startLevel = 10;
+  private int                           initialBundleStartLevel = 10;
+  private boolean                       checkStartLevel = false;
+  
   private String                        extensionBundleName;
   
   static String[] methods = new String[] {
@@ -84,6 +89,7 @@ public class PermissionSignatureTestControl extends DefaultTestBundleControl {
     "test_AdminPermission_execute",
     "test_AdminPermission_listener",
     "test_AdminPermission_resolve",
+    "test_AdminPermission_startlevel", 
     "test_AdminPermission_lifecycle",
     //"test_AdminPermission_extensionLifecycle",
     //"test_ConfigurationPermission_get",
@@ -115,6 +121,12 @@ public class PermissionSignatureTestControl extends DefaultTestBundleControl {
     
     tbc = (PermissionSignatureTBCService)getRegistry().getService(PermissionSignatureTBCService.class);
     permissionAdmin = (PermissionAdmin)getRegistry().getService(PermissionAdmin.class);
+    StartLevel startLevelService = (StartLevel)getRegistry().getService(StartLevel.class);
+    if (startLevelService != null) {
+      startLevel = startLevelService.getStartLevel();
+      initialBundleStartLevel = startLevelService.getInitialBundleStartLevel();
+      checkStartLevel = true;
+    }
 
     utility = new PermissionSignatureUtility(this, tbc, getContext()); 
   }
@@ -153,6 +165,11 @@ public class PermissionSignatureTestControl extends DefaultTestBundleControl {
     utility.not_allowed_Bundle_getResources(message, testSignatureBundle, resourcesName);
     utility.not_allowed_Bundle_getEntry(message, testSignatureBundle, entryName);
     utility.not_allowed_Bundle_getEntryPaths(message, testSignatureBundle, entryPath);
+    if (checkStartLevel) {
+      utility.not_allowed_StartLevel_setBundleStartLevel(message, testSignatureBundle, startLevel);
+      utility.not_allowed_StartLevel_setStartLevel(message, startLevel);
+      utility.not_allowed_StartLevel_setInitialBundleStartLevel(message, initialBundleStartLevel);
+    }
     utility.not_allowed_Bundle_loadClass(message, testSignatureBundle, className);
     utility.not_allowed_Bundle_stop(message, testSignatureBundle);
     utility.not_allowed_Bundle_start(message, testSignatureBundle);
@@ -185,6 +202,10 @@ public class PermissionSignatureTestControl extends DefaultTestBundleControl {
     utility.allowed_Bundle_getResources(message, testSignatureBundle, resourcesName);
     utility.allowed_Bundle_getEntry(message, testSignatureBundle, entryName);
     utility.allowed_Bundle_getEntryPaths(message, testSignatureBundle, entryPath);
+    if (checkStartLevel) {
+      utility.allowed_StartLevel_setStartLevel(message, startLevel);
+      utility.allowed_StartLevel_setInitialBundleStartLevel(message, initialBundleStartLevel);
+    }
     utility.allowed_Bundle_loadClass(message, testSignatureBundle, className);
     utility.allowed_Bundle_stop(message, testSignatureBundle);
     utility.allowed_Bundle_start(message, testSignatureBundle);
@@ -244,6 +265,12 @@ public class PermissionSignatureTestControl extends DefaultTestBundleControl {
       utility.not_allowed_Bundle_getResources(message, testSignatureBundle, resourcesName);
       utility.not_allowed_Bundle_getEntry(message, testSignatureBundle, entryName);
       utility.not_allowed_Bundle_getEntryPaths(message, testSignatureBundle, entryPath);
+      
+      if (checkStartLevel) {
+        utility.not_allowed_StartLevel_setBundleStartLevel(message, testSignatureBundle, startLevel);
+        utility.not_allowed_StartLevel_setStartLevel(message, startLevel);
+        utility.not_allowed_StartLevel_setInitialBundleStartLevel(message, initialBundleStartLevel);
+      }
       utility.not_allowed_Bundle_loadClass(message, testSignatureBundle, className);
       utility.not_allowed_Bundle_stop(message, testSignatureBundle);
       utility.not_allowed_Bundle_start(message, testSignatureBundle);
@@ -292,6 +319,12 @@ public class PermissionSignatureTestControl extends DefaultTestBundleControl {
       utility.not_allowed_Bundle_getHeaders(message, testSignatureBundle);
       utility.not_allowed_Bundle_getHeaders_byLocation(message, testSignatureBundle);
       utility.not_allowed_Bundle_getLocation(message, testSignatureBundle);
+      
+      if (checkStartLevel) {
+        utility.not_allowed_StartLevel_setBundleStartLevel(message, testSignatureBundle, startLevel);
+        utility.not_allowed_StartLevel_setStartLevel(message, startLevel);
+        utility.not_allowed_StartLevel_setInitialBundleStartLevel(message, initialBundleStartLevel);
+      }
       utility.not_allowed_Bundle_loadClass(message, testSignatureBundle, className);
       utility.not_allowed_Bundle_stop(message, testSignatureBundle);
       utility.not_allowed_Bundle_start(message, testSignatureBundle);
@@ -341,6 +374,11 @@ public class PermissionSignatureTestControl extends DefaultTestBundleControl {
       utility.not_allowed_Bundle_getResources(message, testSignatureBundle, resourcesName);
       utility.not_allowed_Bundle_getEntry(message, testSignatureBundle, entryName);
       utility.not_allowed_Bundle_getEntryPaths(message, testSignatureBundle, entryPath);
+      if (checkStartLevel) {
+        utility.not_allowed_StartLevel_setBundleStartLevel(message, testSignatureBundle, startLevel);
+        utility.not_allowed_StartLevel_setStartLevel(message, startLevel);
+        utility.not_allowed_StartLevel_setInitialBundleStartLevel(message, initialBundleStartLevel);
+      }
       utility.not_allowed_Bundle_stop(message, testSignatureBundle);
       utility.not_allowed_Bundle_start(message, testSignatureBundle);
       utility.not_allowed_Bundle_update(message, testSignatureBundle);
@@ -389,6 +427,11 @@ public class PermissionSignatureTestControl extends DefaultTestBundleControl {
       utility.not_allowed_Bundle_getResources(message, testSignatureBundle, resourcesName);
       utility.not_allowed_Bundle_getEntry(message, testSignatureBundle, entryName);
       utility.not_allowed_Bundle_getEntryPaths(message, testSignatureBundle, entryPath);
+      if (checkStartLevel) {
+        utility.not_allowed_StartLevel_setBundleStartLevel(message, testSignatureBundle, startLevel);
+        utility.not_allowed_StartLevel_setStartLevel(message, startLevel);
+        utility.not_allowed_StartLevel_setInitialBundleStartLevel(message, initialBundleStartLevel);
+      }
       utility.not_allowed_Bundle_loadClass(message, testSignatureBundle, className);
       utility.not_allowed_Bundle_stop(message, testSignatureBundle);
       utility.not_allowed_Bundle_start(message, testSignatureBundle);
@@ -444,6 +487,12 @@ public class PermissionSignatureTestControl extends DefaultTestBundleControl {
       utility.not_allowed_Bundle_getEntry(message, extensionBundle, extensionEntryName);
       utility.not_allowed_Bundle_getEntryPaths(message, extensionBundle, extensionEntryPath);
       
+      if (checkStartLevel) {
+        utility.not_allowed_StartLevel_setBundleStartLevel(message, extensionBundle, startLevel);
+        utility.not_allowed_StartLevel_setStartLevel(message, startLevel);
+        utility.not_allowed_StartLevel_setInitialBundleStartLevel(message, initialBundleStartLevel);
+      }
+      
       utility.not_allowed_Bundle_loadClass(message, extensionBundle, extensionClassName);
       
       utility.not_allowed_Bundle_stop(message, extensionBundle);
@@ -466,6 +515,7 @@ public class PermissionSignatureTestControl extends DefaultTestBundleControl {
    * Checks if a bundle with AdminPrmission - execute can execute:
    *  - Bundle.start
    *  - Bundle.stop
+   *  - StartLevel.setBundleStartLevel
    * and can not execute anything else that requires other AdminPermission.
    * 
    * The bundle is specified either by bundle id or by filter string.
@@ -496,6 +546,10 @@ public class PermissionSignatureTestControl extends DefaultTestBundleControl {
       utility.not_allowed_Bundle_getResources(message, testSignatureBundle, resourcesName);
       utility.not_allowed_Bundle_getEntry(message, testSignatureBundle, entryName);
       utility.not_allowed_Bundle_getEntryPaths(message, testSignatureBundle, entryPath);
+      if (checkStartLevel) {
+        utility.not_allowed_StartLevel_setStartLevel(message, startLevel);
+        utility.not_allowed_StartLevel_setInitialBundleStartLevel(message, initialBundleStartLevel);
+      }
       utility.not_allowed_Bundle_loadClass(message, testSignatureBundle, className);
       utility.not_allowed_Bundle_update(message, testSignatureBundle);
       utility.not_allowed_Bundle_update_by_InputStream(message, testSignatureBundle, getInputStream(signatureBundleName));
@@ -546,6 +600,11 @@ public class PermissionSignatureTestControl extends DefaultTestBundleControl {
       utility.not_allowed_Bundle_getResources(message, testSignatureBundle, resourcesName);
       utility.not_allowed_Bundle_getEntry(message, testSignatureBundle, entryName);
       utility.not_allowed_Bundle_getEntryPaths(message, testSignatureBundle, entryPath);
+      if (checkStartLevel) {
+        utility.not_allowed_StartLevel_setBundleStartLevel(message, testSignatureBundle, startLevel);
+        utility.not_allowed_StartLevel_setStartLevel(message, startLevel);
+        utility.not_allowed_StartLevel_setInitialBundleStartLevel(message, initialBundleStartLevel);
+      }
       utility.not_allowed_Bundle_loadClass(message, testSignatureBundle, className);
       utility.not_allowed_Bundle_stop(message, testSignatureBundle);
       utility.not_allowed_Bundle_start(message, testSignatureBundle);
@@ -605,6 +664,11 @@ public class PermissionSignatureTestControl extends DefaultTestBundleControl {
       utility.not_allowed_Bundle_getResources(message, testSignatureBundle, resourcesName);
       utility.not_allowed_Bundle_getEntry(message, testSignatureBundle, entryName);
       utility.not_allowed_Bundle_getEntryPaths(message, testSignatureBundle, entryPath);
+      if (checkStartLevel) {
+        utility.not_allowed_StartLevel_setBundleStartLevel(message, testSignatureBundle, startLevel);
+        utility.not_allowed_StartLevel_setStartLevel(message, startLevel);
+        utility.not_allowed_StartLevel_setInitialBundleStartLevel(message, initialBundleStartLevel);
+      }
       utility.not_allowed_Bundle_loadClass(message, testSignatureBundle, className);
       utility.not_allowed_Bundle_stop(message, testSignatureBundle);
       utility.not_allowed_Bundle_start(message, testSignatureBundle);
@@ -617,6 +681,68 @@ public class PermissionSignatureTestControl extends DefaultTestBundleControl {
     
     }
   
+  }
+  
+  /**
+   * Tests AdminPermission with an action parameter - startlevel. 
+   * Checks if a bundle with AdminPrmission - startlevel can execute:
+   *  - StartLevel.setStartLevel
+   *  - StartLevel.setInitialBundleStartLevel
+   * and can not execute anything else that requires other AdminPermission.
+   * 
+   * The bundle is specified either by bundle id or by filter string.
+   */
+  public void test_AdminPermission_startlevel() throws Throwable {
+    if (!checkStartLevel) {
+      return; // this method shall not be excecuted - no StartLevel service detected
+    }
+    String message = "";
+    Vector permissions = utility.getPInfosForAdminPermisssion(
+        AdminPermission.STARTLEVEL,
+        0, 
+        testSignatureBundle.getLocation(), 
+        testSignatureBundle.getSymbolicName()); 
+
+    PermissionInfo info; 
+    for (int i = 0; i < permissions.size(); ++i) {
+      info = (PermissionInfo)permissions.elementAt(i);
+
+      permissionAdmin.setPermissions(testBundleLocation, new PermissionInfo[]{info});
+      printPermissions(testBundleLocation);
+  
+      if (i < 2) {
+        utility.allowed_StartLevel_setStartLevel(message, startLevel);
+        utility.allowed_StartLevel_setInitialBundleStartLevel(message, initialBundleStartLevel);
+      } else {
+        utility.not_allowed_StartLevel_setStartLevel(message, startLevel);
+        utility.not_allowed_StartLevel_setInitialBundleStartLevel(message, initialBundleStartLevel);
+      }
+      
+      utility.not_allowed_BundleContext_addBundleListener(message);
+      utility.not_allowed_BundleContext_removeBundleListener(message);
+      utility.not_allowed_Bundle_getHeaders(message, testSignatureBundle);
+      utility.not_allowed_Bundle_getHeaders_byLocation(message, testSignatureBundle);
+      utility.not_allowed_Bundle_getLocation(message, testSignatureBundle);
+      utility.not_allowed_Bundle_getResource(message, testSignatureBundle, resourceName);
+      utility.not_allowed_Bundle_getResources(message, testSignatureBundle, resourcesName);
+      utility.not_allowed_Bundle_getEntry(message, testSignatureBundle, entryName);
+      utility.not_allowed_Bundle_getEntryPaths(message, testSignatureBundle, entryPath);
+      if (checkStartLevel) {
+        utility.not_allowed_StartLevel_setBundleStartLevel(message, testSignatureBundle, startLevel);
+      }
+      utility.not_allowed_Bundle_loadClass(message, testSignatureBundle, className);
+      utility.not_allowed_Bundle_stop(message, testSignatureBundle);
+      utility.not_allowed_Bundle_start(message, testSignatureBundle);
+      utility.not_allowed_Bundle_update(message, testSignatureBundle);
+      utility.not_allowed_Bundle_update_by_InputStream(message, testSignatureBundle, getInputStream(signatureBundleName));
+      utility.not_allowed_Bundle_uninstall(message, testSignatureBundle);
+      utility.not_allowed_PackageAdmin_refreshPackages(message, null);
+      utility.not_allowed_PackageAdmin_resolveBundles(message, null);
+      utility.not_allowed_PermissionAdmin_setPermissions(message, signatureBundleLocation, 
+          new PermissionInfo[]{new PermissionInfo(AdminPermission.class.getName(), "*", "*")});
+      utility.not_allowed_PermissionAdmin_setDefaultPermissions(message, permissionAdmin.getDefaultPermissions());
+    
+    }
   }
   
   

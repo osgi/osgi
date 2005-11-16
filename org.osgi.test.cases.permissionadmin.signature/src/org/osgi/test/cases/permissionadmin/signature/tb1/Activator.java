@@ -29,6 +29,8 @@ package org.osgi.test.cases.permissionadmin.signature.tb1;
 
 import org.osgi.framework.*;
 
+import org.osgi.service.startlevel.StartLevel;
+
 import org.osgi.service.permissionadmin.PermissionAdmin;
 import org.osgi.service.permissionadmin.PermissionInfo;
 
@@ -52,11 +54,12 @@ import java.net.URL;
  * and does a privileged operations.
  *
  * @author Petia Sotirova
- * @version 1.1
+ * @version 1.0
  */
 public class Activator implements BundleActivator, PermissionSignatureTBCService, SynchronousBundleListener {
 	
 	private BundleContext      bc;
+  private StartLevel         startLevel;
   private PermissionAdmin    permissionAdmin;
   private PackageAdmin       packageAdmin;
 //  private ConfigurationAdmin configurationAdmin;
@@ -64,6 +67,8 @@ public class Activator implements BundleActivator, PermissionSignatureTBCService
 	public void start(BundleContext context) throws Exception {
 		this.bc = context;
 		context.registerService(PermissionSignatureTBCService.class.getName(),this,null);
+	
+		startLevel = (StartLevel)getService(StartLevel.class.getName());
 		permissionAdmin = (PermissionAdmin)getService(PermissionAdmin.class.getName());
 		packageAdmin = (PackageAdmin)getService(PackageAdmin.class.getName());
 //		configurationAdmin = (ConfigurationAdmin)getService(ConfigurationAdmin.class.getName());
@@ -150,6 +155,19 @@ public class Activator implements BundleActivator, PermissionSignatureTBCService
 
 	public void callBundleContext_removeBundleListener(BundleContext context) {
 		context.removeBundleListener(this);
+	}
+	
+  // from StartLevel service
+	public void callStartLevel_setBundleStartLevel(Bundle bundle, Integer level) {
+		startLevel.setBundleStartLevel(bundle, level.intValue() + 1);
+	}
+	
+	public void callStartLevel_setStartLevel(Integer level) {
+		startLevel.setStartLevel(level.intValue());
+	}
+	
+	public void callStartLevel_setInitialBundleStartLevel(Integer level) {
+		startLevel.setInitialBundleStartLevel(level.intValue());
 	}
 
   // from PermisssionAdmin service

@@ -48,7 +48,7 @@ import java.util.Enumeration;
  * Used to exit from the permissions calling context.
  * 
  * @author Petia Sotirova
- * @version 1.1
+ * @version 1.0
  */
 public interface PermissionSignatureTBCService {
 
@@ -73,6 +73,11 @@ public interface PermissionSignatureTBCService {
 	public void callBundleContext_addBundleListener(BundleContext context);
 	public void callBundleContext_removeBundleListener(BundleContext context);
 	
+  // from StartLevel service
+	public void callStartLevel_setBundleStartLevel(Bundle bundle, Integer startlevel);
+	public void callStartLevel_setStartLevel(Integer startlevel);
+	public void callStartLevel_setInitialBundleStartLevel(Integer startlevel);
+
   // from PermisssionAdmin service
 	public void callPermissionAdmin_setPermissions(String location, PermissionInfo[] permissions);
 	public void callPermissionAdmin_setDefaultPermissions(PermissionInfo[] permissions);
