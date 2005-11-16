@@ -822,6 +822,7 @@ public class DmtSessionImpl implements DmtSession {
             try {
                 getReadWriteDataSession(newNode).copy(node.getPath(), 
                         newNode.getPath(), recursive);
+                assignNewNodePermissions(newNode, newParentNode);
             } catch(DmtException e) {
                 // fall back to generic algorithm if plugin doesn't support copy 
                 if(e.getCode() != DmtException.FEATURE_NOT_SUPPORTED)
