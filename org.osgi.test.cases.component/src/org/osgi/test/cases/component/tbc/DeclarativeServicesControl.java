@@ -61,7 +61,7 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 	private static final String	EVENT_CLASS		= "org.osgi.test.cases.component.tb3.ServiceConsumerEvent";
 	private static final String	NAMED_CLASS		= "org.osgi.test.cases.component.tb4.NamedService";
 
-	private static final int	SLEEP			= 200;
+	private static int	SLEEP			= 500;
 
 	private Bundle				tb1, tb2, tb3;
 
@@ -99,6 +99,22 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 	}
 
 	public void prepare() throws Exception {
+    String sleepTimeString = System.getProperty("osgi.tc.component.sleeptime");
+    int sleepTime = SLEEP;
+    if (sleepTimeString != null) {
+      try {
+        sleepTime = Integer.parseInt(sleepTimeString);
+      } catch (Exception e) {
+        e.printStackTrace();
+        System.out.println("Error while parsing sleep value! The default one will be used : "+SLEEP);
+      }
+      if (sleepTime < 100) {
+        System.out.println("The sleep value is too low : "+sleepTime+" ! The default one will be used : "+SLEEP);
+      } else {
+        SLEEP = sleepTime;
+      }
+    }
+    
 		// install test cases
 		tb1 = installBundle("tb1.jar");
 		tb2 = installBundle("tb2.jar");
@@ -402,7 +418,7 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 		// the bundle contains some illegal definitions
 		tb1 = installBundle("tb1.jar");
 		tb1.start();
-		Thread.sleep(SLEEP);
+		Thread.sleep(SLEEP*2); // log and scr have asynchronous processing 
 
     logService.removeLogListener(this);
 
@@ -562,7 +578,7 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 		config.update(props);
 
 		// let SCR & CM to complete it's job
-		Thread.sleep(1000);
+		Thread.sleep(SLEEP*2);
 
 		// verify that the service is updated
 		assertNotSame("The service shoud be restarted with a new instance",
@@ -582,7 +598,7 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 		// make sure that the SCR handles delete events!
 		config.delete();
 		// wait to complete - slow becase CM may use threads for notify
-		Thread.sleep(1000);
+		Thread.sleep(SLEEP*2);
 
 		assertNotSame(
 				"After delete the service shoud be restarted with a new instance",
@@ -614,7 +630,7 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 		props = new Hashtable(2);
 		props.put("instance", "1");
 		config.update(props);
-		Thread.sleep(1000); // let it finish update, CM + SCR
+		Thread.sleep(SLEEP*2); // let it finish update, CM + SCR
 
 		// verify the result
 		length = trackerConsumerEvent.getServices().length;
@@ -627,7 +643,7 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 		props = new Hashtable(2);
 		props.put("instance", "2");
 		config.update(props);
-		Thread.sleep(1000); // let it finish update, CM + SCR
+		Thread.sleep(SLEEP*2); // let it finish update, CM + SCR
 
 		// verify the result
 		length = trackerConsumerEvent.getServices().length;
