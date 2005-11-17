@@ -21,7 +21,6 @@ import java.io.Serializable;
 import java.security.AccessController;
 import java.security.PrivilegedAction;
 import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -47,8 +46,8 @@ public class DeploymentPackageImpl implements DeploymentPackage, Serializable {
 
     private DeploymentPackageResourceBundle dprb;
     private CaseInsensitiveMap              mainSection;
-    private LinkedList                      bundleEntries = new LinkedList();
-    private LinkedList                      resourceEntries = new LinkedList();
+    private Vector                      	bundleEntries = new Vector();
+    private Vector                      	resourceEntries = new Vector();
     
     // List of String[]s
     private List certChains = new Vector();
@@ -101,25 +100,35 @@ public class DeploymentPackageImpl implements DeploymentPackage, Serializable {
         DeploymentPackageImpl dp = new DeploymentPackageImpl();
         dp.mainSection = new CaseInsensitiveMap(null, dp);
         dp.mainSection.put("Manifest-Version", "1.0");
-        dp.mainSection.put(DAConstants.DP_NAME, "system");
+        dp.mainSection.put(DAConstants.DP_NAME, DAConstants.SYSTEM_DP_BSN);
         dp.mainSection.put(DAConstants.DP_VERSION, "0.0.0");
-        dp.bundleEntries = new LinkedList(bundleEntries);
+        dp.bundleEntries = new Vector(bundleEntries);
         
         return dp;
     }
     
+    synchronized void update(DeploymentPackageImpl dp) {
+    	this.dprb = dp.dprb;
+    	this.mainSection = dp.mainSection;
+    	this.bundleEntries = dp.bundleEntries;
+    	this.resourceEntries = dp.resourceEntries;
+    	this.certChains = dp.certChains;
+    }
+    
     boolean isSystem() {
-        return getName().equals("system");
+        return getName().equals(DAConstants.SYSTEM_DP_BSN);
     }
     
     public boolean equals(Object obj) {
         if (null == obj)
             return false;
+        if (this == obj)
+        	return true;
         if (!(obj instanceof DeploymentPackage))
             return false;
         DeploymentPackage other = (DeploymentPackage) obj;
         return getName().equals(other.getName()) &&
-               getVersion().equals(other.getVersion());
+        	getVersion().equals(other.getVersion());
     }
     
     boolean equalsIgnoreVersion(DeploymentPackage other) {
@@ -160,11 +169,11 @@ public class DeploymentPackageImpl implements DeploymentPackage, Serializable {
         }
     }
     
-    public List getBundleEntries() {
+    public synchronized List getBundleEntries() {
         return bundleEntries;
     }
 
-    boolean contains(BundleEntry be) {
+	boolean contains(BundleEntry be) {
         return bundleEntries.contains(be);
     }
     
@@ -176,7 +185,7 @@ public class DeploymentPackageImpl implements DeploymentPackage, Serializable {
         bundleEntries.remove(be);
     }
     
-    public BundleEntry getBundleEntryByBundleId(long id) {
+    BundleEntry getBundleEntryByBundleId(long id) {
         for (Iterator iter = bundleEntries.iterator(); iter.hasNext();) {
             BundleEntry be = (BundleEntry) iter.next();
             if (be.getBundleId() == id)
@@ -185,7 +194,7 @@ public class DeploymentPackageImpl implements DeploymentPackage, Serializable {
         return null;
     }
     
-    public BundleEntry getBundleEntryByPid(String pid) {
+    BundleEntry getBundleEntryByPid(String pid) {
         for (Iterator iter = bundleEntries.iterator(); iter.hasNext();) {
             BundleEntry be = (BundleEntry) iter.next();
             if (null == be.getPid())
@@ -239,14 +248,14 @@ public class DeploymentPackageImpl implements DeploymentPackage, Serializable {
         return null;
     }
     
-    public List getCertChains() {
+    public synchronized List getCertChains() {
         return certChains;
     }
 
     /**
      * @see DeploymentPackage#getBundleInfos()
      */
-	public BundleInfo[] getBundleInfos() {
+	public synchronized BundleInfo[] getBundleInfos() {
 		checkStale();
 
 		dpCtx.checkPermission(this, DeploymentAdminPermission.METADATA);
@@ -269,7 +278,7 @@ public class DeploymentPackageImpl implements DeploymentPackage, Serializable {
     /**
      * @see org.osgi.service.deploymentadmin.DeploymentPackage#getResources()
      */
-    public String[] getResources() {
+    public synchronized String[] getResources() {
         checkStale();
         
         String[]ret = new String[resourceEntries.size() + bundleEntries.size()];
@@ -290,7 +299,7 @@ public class DeploymentPackageImpl implements DeploymentPackage, Serializable {
     /**
      * @see org.osgi.service.deploymentadmin.DeploymentPackage#getResourceHeader(java.lang.String, java.lang.String)
      */
-    public String getResourceHeader(String name, String header) {
+    public synchronized String getResourceHeader(String name, String header) {
         checkStale();
         
         for (Iterator iter = resourceEntries.iterator(); iter.hasNext();) {
@@ -311,7 +320,7 @@ public class DeploymentPackageImpl implements DeploymentPackage, Serializable {
     /**
      * @see org.osgi.service.deploymentadmin.DeploymentPackage#getHeader(java.lang.String)
      */
-    public String getHeader(String name) {
+    public synchronized String getHeader(String name) {
         checkStale();
         
         return (String) mainSection.get(name);
@@ -331,7 +340,7 @@ public class DeploymentPackageImpl implements DeploymentPackage, Serializable {
     /**
      * @see org.osgi.service.deploymentadmin.DeploymentPackage#getVersion()
      */
-    public Version getVersion() {
+    public synchronized Version getVersion() {
         String s = (String) mainSection.get(DAConstants.DP_VERSION);
         if (null == s)
             return null;
@@ -341,7 +350,7 @@ public class DeploymentPackageImpl implements DeploymentPackage, Serializable {
     /**
      * @see DeploymentPackage#getBundle(String)
      */
-    public Bundle getBundle(final String symbName) {
+    public synchronized Bundle getBundle(final String symbName) {
         checkStale();
         
         dpCtx.checkPermission(this, DeploymentAdminPermission.METADATA);
@@ -366,7 +375,7 @@ public class DeploymentPackageImpl implements DeploymentPackage, Serializable {
      * @return
      * @see org.osgi.service.deploymentadmin.DeploymentPackage#getResourceProcessor(java.lang.String)
      */
-    public ServiceReference getResourceProcessor(String resName) {
+    public synchronized ServiceReference getResourceProcessor(String resName) {
         checkStale();
         
         for (Iterator iter = resourceEntries.iterator(); iter.hasNext();) {
@@ -440,8 +449,8 @@ public class DeploymentPackageImpl implements DeploymentPackage, Serializable {
     synchronized void setStale() {
         stale = Boolean.TRUE;
     }
-        
-    public List getResourceEntries() {
+    
+	public synchronized List getResourceEntries() {
         return resourceEntries;
     }
 
@@ -461,7 +470,7 @@ public class DeploymentPackageImpl implements DeploymentPackage, Serializable {
         return dprb;  
     }
     
-    public CaseInsensitiveMap getMainSection() {
+    public synchronized CaseInsensitiveMap getMainSection() {
         return mainSection;
     }
     

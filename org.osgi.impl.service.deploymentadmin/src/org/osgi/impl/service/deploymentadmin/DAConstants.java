@@ -45,6 +45,7 @@ public class DAConstants {
     public static final String USER_PROMPT          = "org.osgi.impl.service.deploymentadmin.userprompt";
     public static final String SESSION_TIMEOUT      = "org.osgi.impl.service.deploymentadmin.sessiontimeout";
     public static final String SYSTEM_DP            = "org.osgi.impl.service.deploymentadmin.systemdp";
+    public static final String SYSTEM_DP_BSN        = "system";
     
     // default location of the l10n files
     public static final String DEF_LOC_PATH         = "OSGI-INF/l10n/bundle";

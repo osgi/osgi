@@ -33,7 +33,7 @@ public class DeploymentPackageVerifier {
             throw new DeploymentException(DeploymentException.CODE_MISSING_HEADER,
                     "Missing deployment package name");
         
-        if ("system".equals(dp.getName()))
+        if (DAConstants.SYSTEM_DP_BSN.equals(dp.getName()))
             throw new DeploymentException(DeploymentException.CODE_BAD_HEADER,
             		"The \"System\" deployment package name is reserved");
         

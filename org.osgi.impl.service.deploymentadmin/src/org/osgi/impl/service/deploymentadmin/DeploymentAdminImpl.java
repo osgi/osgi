@@ -93,7 +93,7 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
     
     // persisted fields
     
-    private Set       dps = new HashSet(); // deployment packages
+    private Vector dps = new Vector(); // deployment packages
     
     // ease to find foreign customizers (when a resource processor service 
     // is a customizer from another deployment package) 
@@ -431,37 +431,40 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
      * Updates Deployment Package metainfo
      */
     private void updateDps() {
-        if (session.getDeploymentAction() == DeploymentSessionImpl.INSTALL)
-            addDp((DeploymentPackageImpl) session.getSourceDeploymentPackage());
-        else { // if (session.getDeploymentAction() == DeploymentSessionImpl.UPDATE)
-        	DeploymentPackageImpl dp = 
+        if (session.getDeploymentAction() == DeploymentSessionImpl.INSTALL) {
+        	DeploymentPackageImpl srcDp = 
+        		(DeploymentPackageImpl) session.getSourceDeploymentPackage();
+        	addDp(srcDp);
+        } else { // if (session.getDeploymentAction() == DeploymentSessionImpl.UPDATE)
+        	DeploymentPackageImpl targetDp = 
         		(DeploymentPackageImpl) session.getTargetDeploymentPackage();
-        	dp.setStale();
-            removeDp(dp);
-            addDp((DeploymentPackageImpl) session.getSourceDeploymentPackage());
+        	DeploymentPackageImpl srcDp = 
+        		(DeploymentPackageImpl) session.getSourceDeploymentPackage();
+        	targetDp.update(srcDp);
+        	updateRpDpMapping(targetDp);
         }    
     }
-
+    
     private void addDp(DeploymentPackageImpl dp) {
-        dps.add(dp);
-        updateRpDpMapping(dp);
-    }
+    	dps.add(dp);
+    	updateRpDpMapping(dp);
+	}
 
     private void removeDp(DeploymentPackageImpl dp) {
-        dps.remove(dp);
-        updateRpDpMapping(dp);
+    	dps.remove(dp);
+    	updateRpDpMapping(dp);
     }
-    
+
     /*
      * Ease to find foreign customizers (when a resource processor service 
      * is a customizer from another deployment package)  
      */
     private void updateRpDpMapping(DeploymentPackageImpl dp) {
         for (Iterator iter = mappingRpDp.keySet().iterator(); iter.hasNext();) {
-            String key = (String) iter.next();
-            String dpName = (String) mappingRpDp.get(key);
+            String pid = (String) iter.next();
+            String dpName = (String) mappingRpDp.get(pid);
             if (dpName.equals(dp.getName())) {
-                BundleEntry be = dp.getBundleEntryByPid(key);
+                BundleEntry be = dp.getBundleEntryByPid(pid);
                 if (null == be)
                     iter.remove();
             }
@@ -773,7 +776,7 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
         try {
             fis = new FileInputStream(f);
             DAObjectInputStream ois = new DAObjectInputStream(fis);
-            dps = (Set) ois.readObject();
+            dps = (Vector) ois.readObject();
             mappingRpDp = (Hashtable) ois.readObject();
             pluginDownload = (PluginDownload) ois.readObject();
             pluginDeployed = (PluginDeployed) ois.readObject();
@@ -919,7 +922,7 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
         return result;
     }
 
-    /*
+	/*
      * Says how the Deployment Admin creates location for bundles form the 
      * symbolic name and version.
      */
@@ -927,7 +930,7 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
         return "osgi-dp:" + symbName;
     }
 
-    Set getDeploymentPackages() {
+    Vector getDeploymentPackages() {
         return dps;
     }
     
