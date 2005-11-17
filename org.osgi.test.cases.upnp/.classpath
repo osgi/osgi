@@ -4,7 +4,7 @@
 	<classpathentry exported="true" kind="src" path="/org.osgi.service.upnp"/>
 	<classpathentry sourcepath="/osgi.released/ee.minimum.jar" kind="lib" path="/osgi.released/ee.minimum.jar"/>
 	<classpathentry sourcepath="/osgi.released/osgi.jar" kind="lib" path="/osgi.released/osgi.jar"/>
-	<classpathentry kind="lib" path="/cnf/jar/servlet.jar"/>
+	<classpathentry sourcepath="/org.osgi.impl.bundle.servlet/src" kind="lib" path="/cnf/jar/servlet.jar"/>
 	<classpathentry sourcepath="/osgi.released/osgi.internal.jar" kind="lib" path="/osgi.released/osgi.internal.jar"/>
 	<classpathentry kind="output" path="src"/>
 </classpath>

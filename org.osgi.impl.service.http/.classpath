@@ -2,7 +2,7 @@
 <classpath>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="src" path="/org.osgi.service.http"/>
-	<classpathentry kind="lib" path="/cnf/jar/servlet.jar"/>
+	<classpathentry sourcepath="/org.osgi.impl.bundle.servlet/src" kind="lib" path="/cnf/jar/servlet.jar"/>
 	<classpathentry kind="var" path="JRE_LIB"/>
 	<classpathentry sourcepath="/osgi.released/osgi.jar" kind="lib" path="/osgi.released/osgi.jar"/>
 	<classpathentry kind="output" path="src"/>
