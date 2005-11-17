@@ -94,6 +94,10 @@ public class Copy implements TestInterface {
 		testCopy021();
         testCopy022();
         testCopy023();
+        testCopy024();
+        testCopy025();
+        testCopy026();
+        testCopy027();
 	}
 
 	private void prepare() {
@@ -218,7 +222,6 @@ public class Copy implements TestInterface {
     }
 
 	/**
-	 * 
 	 * This method asserts that the method is called if it has the right Acl (remote)
 	 * 
 	 * @spec DmtSession.copy(String,String,boolean)
@@ -793,4 +796,123 @@ public class Copy implements TestInterface {
 		}
 	}
 	
+	/**
+	 * This method asserts that DmtException.COMMAND_NOT_ALLOWED is thrown 
+	 * if any of the implied retrieval or update operations are not allowed.
+	 * In this test a leaf node is copied (DmtAdmin calls DmtSession.createLeafNode(String)
+	 * that throws this DmtException because it is opened in a non-atomic session and 
+	 * the underlying plugin is read-only)
+	 * 
+	 * @spec DmtSession.copy(String,String,boolean)
+	 */
+	private void testCopy024() {
+		DmtSession session = null;
+		try {
+			tbc.log("#testCopy024");
+			session = tbc.getDmtAdmin().getSession(DmtConstants.OSGi_ROOT,
+					DmtSession.LOCK_TYPE_EXCLUSIVE);
+			session.copy(TestReadOnlyPluginActivator.LEAF_NODE,
+					TestReadOnlyPluginActivator.INEXISTENT_LEAF_NODE, true);
+			tbc.failException("", DmtException.class);
+		} catch (DmtException e) {
+			tbc.assertEquals(
+					"Asserting that DmtException code is COMMAND_NOT_ALLOWED",
+					DmtException.COMMAND_NOT_ALLOWED, e.getCode());
+		} catch (Exception e) {
+			tbc.fail("Expected " + DmtException.class.getName() + " but was "
+					+ e.getClass().getName());
+		} finally {
+			tbc.closeSession(session);
+		}
+	}
+	
+	/**
+	 * This method asserts that DmtException.COMMAND_NOT_ALLOWED is thrown 
+	 * if any of the implied retrieval or update operations are not allowed.
+	 * In this test a leaf node is copied (DmtAdmin calls DmtSession.createLeafNode(String)
+	 * that throws this DmtException because it is opened in a non-atomic session and 
+	 * the underlying plugin does not support non-atomic writing)
+	 * 
+	 * @spec DmtSession.copy(String,String,boolean)
+	 */
+	private void testCopy025() {
+		DmtSession session = null;
+		try {
+			tbc.log("#testCopy025");
+			session = tbc.getDmtAdmin().getSession(DmtConstants.OSGi_ROOT,
+					DmtSession.LOCK_TYPE_EXCLUSIVE);
+			session.copy(TestNonAtomicPluginActivator.LEAF_NODE,
+					TestNonAtomicPluginActivator.INEXISTENT_LEAF_NODE, true);
+			tbc.failException("", DmtException.class);
+		} catch (DmtException e) {
+			tbc.assertEquals(
+					"Asserting that DmtException code is COMMAND_NOT_ALLOWED",
+					DmtException.COMMAND_NOT_ALLOWED, e.getCode());
+		} catch (Exception e) {
+			tbc.fail("Expected " + DmtException.class.getName() + " but was "
+					+ e.getClass().getName());
+		} finally {
+			tbc.closeSession(session);
+		}
+	}
+	
+	/**
+	 * This method asserts that DmtException.COMMAND_NOT_ALLOWED is thrown 
+	 * if any of the implied retrieval or update operations are not allowed.
+	 * In this test an interior node is copied (DmtAdmin calls DmtSession.createInteriorNode(String)
+	 * that throws this DmtException because it is opened in a non-atomic session and 
+	 * the underlying plugin is read-only)
+	 * 
+	 * @spec DmtSession.copy(String,String,boolean)
+	 */
+	private void testCopy026() {
+		DmtSession session = null;
+		try {
+			tbc.log("#testCopy026");
+			session = tbc.getDmtAdmin().getSession(DmtConstants.OSGi_ROOT,
+					DmtSession.LOCK_TYPE_EXCLUSIVE);
+			session.copy(TestReadOnlyPluginActivator.INTERIOR_NODE,
+					TestReadOnlyPluginActivator.INEXISTENT_NODE, true);
+			tbc.failException("", DmtException.class);
+		} catch (DmtException e) {
+			tbc.assertEquals(
+					"Asserting that DmtException code is COMMAND_NOT_ALLOWED",
+					DmtException.COMMAND_NOT_ALLOWED, e.getCode());
+		} catch (Exception e) {
+			tbc.fail("Expected " + DmtException.class.getName() + " but was "
+					+ e.getClass().getName());
+		} finally {
+			tbc.closeSession(session);
+		}
+	}
+	
+	/**
+	 * This method asserts that DmtException.COMMAND_NOT_ALLOWED is thrown 
+	 * if any of the implied retrieval or update operations are not allowed.
+	 * In this test an interior node is copied (DmtAdmin calls DmtSession.createInteriorNode(String)
+	 * that throws this DmtException because it is opened in a non-atomic session and 
+	 * the underlying plugin does not support non-atomic writing)
+	 * 
+	 * @spec DmtSession.copy(String,String,boolean)
+	 */
+	private void testCopy027() {
+		DmtSession session = null;
+		try {
+			tbc.log("#testCopy027");
+			session = tbc.getDmtAdmin().getSession(DmtConstants.OSGi_ROOT,
+					DmtSession.LOCK_TYPE_EXCLUSIVE);
+			session.copy(TestNonAtomicPluginActivator.INTERIOR_NODE,
+					TestNonAtomicPluginActivator.INEXISTENT_NODE, true);
+			tbc.failException("", DmtException.class);
+		} catch (DmtException e) {
+			tbc.assertEquals(
+					"Asserting that DmtException code is COMMAND_NOT_ALLOWED",
+					DmtException.COMMAND_NOT_ALLOWED, e.getCode());
+		} catch (Exception e) {
+			tbc.fail("Expected " + DmtException.class.getName() + " but was "
+					+ e.getClass().getName());
+		} finally {
+			tbc.closeSession(session);
+		}
+	}
 }
