@@ -54,7 +54,7 @@ import org.osgi.service.dmt.spi.TransactionalDataSession;
  */
 public class ToBeOverlappedDataPlugin implements DataPluginFactory {
     
-    private final String MESSAGE = "ToBeOverlappedDataPlugin";
+    public static final String MESSAGE = "ToBeOverlappedDataPlugin";
     
     public ReadableDataSession openReadOnlySession(String[] sessionRoot, DmtSession session) throws DmtException {
         return new DefaultOverlappingPluginTransactionalDataSession(MESSAGE);

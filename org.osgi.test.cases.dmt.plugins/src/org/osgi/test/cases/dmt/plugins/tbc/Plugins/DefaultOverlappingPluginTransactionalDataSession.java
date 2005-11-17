@@ -130,7 +130,7 @@ public class DefaultOverlappingPluginTransactionalDataSession implements Transac
 
 	public String getNodeTitle(String[] nodeUri) throws DmtException {
 		DmtConstants.TEMPORARY = MESSAGE;
-		return null;
+		return MESSAGE;
 	}
 
 	public String getNodeType(String[] nodeUri) throws DmtException {
