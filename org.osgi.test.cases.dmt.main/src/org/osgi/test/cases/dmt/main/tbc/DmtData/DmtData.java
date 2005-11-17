@@ -66,7 +66,8 @@ public class DmtData {
 		testDmtData012();
 		testDmtData013();
         testDmtData014();
-
+        testDmtData015();
+        testDmtData016();
 
 	}
 
@@ -453,7 +454,7 @@ public class DmtData {
 
 			tbc.assertEquals("Asserting the size", 0, data.getSize());
 			
-			tbc.assertNull("Asserting the string returned", data.toString());
+			tbc.assertEquals("Asserting the string returned", "",data.toString());
 			
 		} catch(Exception e) {
 			tbc.fail("Unexpected Exception: " + e.getClass().getName()
@@ -462,6 +463,57 @@ public class DmtData {
 		}
 	}
 	
+	/**
+	 * This method asserts that when a DmtData(String,FORMAT_STRING) is created with null, the format is
+	 * DmtData.FORMAT_STRING, DmtData.getSize() and DmtData.getString() return the expected value
+	 * 
+	 * @spec DmtData.DmtData(String,int)
+	 */
+	private void testDmtData015() {
+		try {		
+			tbc.log("#testDmtData015");
+			org.osgi.service.dmt.DmtData data  = new org.osgi.service.dmt.DmtData(null,org.osgi.service.dmt.DmtData.FORMAT_STRING);
+			tbc.assertEquals("Asserting DmtData.FORMAT_STRING",
+					org.osgi.service.dmt.DmtData.FORMAT_STRING, data.getFormat());
+			
+			tbc.assertNull("Asserting the value", data.getString());
+
+			tbc.assertEquals("Asserting the size", 0, data.getSize());
+			
+			tbc.assertEquals("Asserting the string returned", "",data.toString());
+			
+		} catch(Exception e) {
+			tbc.fail("Unexpected Exception: " + e.getClass().getName()
+					+ " [Message: " + e.getMessage() + "]");
+
+		}
+	}
+	
+	/**
+	 * This method asserts that when a DmtData(String,FORMAT_XML) is created with null, the format is
+	 * DmtData.FORMAT_XML, DmtData.getSize() and DmtData.getString() return the expected value
+	 * 
+	 * @spec DmtData.DmtData(String,int)
+	 */
+	private void testDmtData016() {
+		try {		
+			tbc.log("#testDmtData016");
+			org.osgi.service.dmt.DmtData data  = new org.osgi.service.dmt.DmtData(null,org.osgi.service.dmt.DmtData.FORMAT_XML);
+			tbc.assertEquals("Asserting DmtData.FORMAT_XML",
+					org.osgi.service.dmt.DmtData.FORMAT_XML, data.getFormat());
+			
+			tbc.assertNull("Asserting the value", data.getXml());
+
+			tbc.assertEquals("Asserting the size", 0, data.getSize());
+			
+			tbc.assertEquals("Asserting the string returned", "",data.toString());
+			
+		} catch(Exception e) {
+			tbc.fail("Unexpected Exception: " + e.getClass().getName()
+					+ " [Message: " + e.getMessage() + "]");
+
+		}
+	}
 	
 	
 }
