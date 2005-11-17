@@ -36,7 +36,12 @@ import org.osgi.framework.Version;
   * The Deployment Admin service should do as much as possible to ensure transactionality. 
   * It means that if a deployment package installation, update or removal (uninstall) fails 
   * all the side effects caused by the process should be disappeared  and the system 
-  * should be in the state in which it was before the process.      
+  * should be in the state in which it was before the process.<p>
+  * 
+  * If a deployment package is being updated the old version is visible through the 
+  * <code>DeploymentPackage</code> interface until the update process ends. After the 
+  * package is updated the updated version is visible and the old one is not accessible 
+  * any more.
   */
 public interface DeploymentPackage {
  
