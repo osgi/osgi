@@ -1,5 +1,6 @@
 /*
  * Copyright 1999,2004 The Apache Software Foundation.
+ * Copyright 2005 OSGi Alliance
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,6 +14,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */ 
+/*
+ * Modified by the OSGi Alliance to provide the Servlet 2.1 API.
+ */
 
 package javax.servlet;
 
