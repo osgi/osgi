@@ -62,7 +62,7 @@ public class Commit implements TestInterface {
         testCommit004();
 	}
     private void prepare() {
-        //TODO JavaDoc says it can throw SecurityException but which DmtPermission is needed?
+        //No DmtPermission is needed. 
         tbc.setPermissions(new PermissionInfo[0]);
     }
 	/**
