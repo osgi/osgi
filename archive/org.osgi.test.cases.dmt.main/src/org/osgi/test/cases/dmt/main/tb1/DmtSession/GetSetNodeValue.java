@@ -87,7 +87,6 @@ public class GetSetNodeValue implements TestInterface {
 		testGetSetNodeValue015();
 		testGetSetNodeValue016();
 		testGetSetNodeValue017();
-		testGetSetNodeValue018();
 	}
     
     private void prepare() {
@@ -360,39 +359,17 @@ public class GetSetNodeValue implements TestInterface {
 	}
 
     
-    /**
-     * This method asserts that getNodeValue does not return 'null', even if the plugin does that 
-     * 
-     * @spec DmtSession.getNodeValue(String)
-     */
-    private void testGetSetNodeValue012() {
-        DmtSession session = null;
-        try {
-            tbc.log("#testGetSetNodeValue012");
-            
-            session = tbc.getDmtAdmin().getSession(
-                    TestExecPluginActivator.ROOT, DmtSession.LOCK_TYPE_ATOMIC);
 
-            DmtData data = session.getNodeValue(TestExecPluginActivator.LEAF_RELATIVE);
-            tbc.assertNotNull("Asserts that getNodeValue does not return 'null', even if the plugin does that",data);
-
-        } catch (Exception e) {
-            tbc.fail("Unexpected Exception: " + e.getClass().getName()
-                    + " [Message: " + e.getMessage() + "]");
-        } finally {
-            tbc.closeSession(session);
-        }
-    }
 	/**
 	 * This method asserts that DmtException.COMMAND_NOT_ALLOWED is thrown 
 	 * if the session is non-atomic (in this case, LOCK_TYPE_SHARED) and the plugin is read-only
 	 *
 	 * @spec DmtSession.setNodeValue(String,DmtData)
 	 */
-    private void testGetSetNodeValue013() {
+    private void testGetSetNodeValue012() {
         DmtSession session = null;
         try {
-            tbc.log("#testGetSetNodeValue013");
+            tbc.log("#testGetSetNodeValue012");
 			session = tbc.getDmtAdmin().getSession(".",DmtSession.LOCK_TYPE_SHARED);
 			session.setNodeValue(TestReadOnlyPluginActivator.LEAF_NODE,dmtData);
 			tbc.failException("#", DmtException.class);
@@ -413,10 +390,10 @@ public class GetSetNodeValue implements TestInterface {
 	 *
 	 * @spec DmtSession.setNodeValue(String,DmtData)
 	 */
-    private void testGetSetNodeValue014() {
+    private void testGetSetNodeValue013() {
         DmtSession session = null;
         try {
-            tbc.log("#testGetSetNodeValue014");
+            tbc.log("#testGetSetNodeValue013");
 			session = tbc.getDmtAdmin().getSession(".",DmtSession.LOCK_TYPE_EXCLUSIVE);
 			session.setNodeValue(TestReadOnlyPluginActivator.LEAF_NODE,dmtData);
 			tbc.failException("#", DmtException.class);
@@ -438,10 +415,10 @@ public class GetSetNodeValue implements TestInterface {
 	 *
 	 * @spec DmtSession.setNodeValue(String,DmtData)
 	 */
-    private void testGetSetNodeValue015() {
+    private void testGetSetNodeValue014() {
         DmtSession session = null;
         try {
-            tbc.log("#testGetSetNodeValue015");
+            tbc.log("#testGetSetNodeValue014");
 			session = tbc.getDmtAdmin().getSession(".",DmtSession.LOCK_TYPE_SHARED);
 			session.setNodeValue(TestNonAtomicPluginActivator.LEAF_NODE,dmtData);
 			tbc.failException("#", DmtException.class);
@@ -463,10 +440,10 @@ public class GetSetNodeValue implements TestInterface {
 	 *
 	 * @spec DmtSession.setNodeValue(String,DmtData)
 	 */
-    private void testGetSetNodeValue016() {
+    private void testGetSetNodeValue015() {
         DmtSession session = null;
         try {
-            tbc.log("#testGetSetNodeValue016");
+            tbc.log("#testGetSetNodeValue015");
 			session = tbc.getDmtAdmin().getSession(".",DmtSession.LOCK_TYPE_EXCLUSIVE);
 			session.setNodeValue(TestNonAtomicPluginActivator.LEAF_NODE,dmtData);
 			tbc.failException("#", DmtException.class);
@@ -487,10 +464,10 @@ public class GetSetNodeValue implements TestInterface {
      * 
      * @spec DmtSession.setNodeValue(String,DmtData)
      */
-    private void testGetSetNodeValue017() {
+    private void testGetSetNodeValue016() {
         DmtSession session = null;
         try {
-            tbc.log("#testGetSetNodeValue017");
+            tbc.log("#testGetSetNodeValue016");
             session = tbc.getDmtAdmin().getSession(".",
                 DmtSession.LOCK_TYPE_ATOMIC);
             
@@ -512,10 +489,10 @@ public class GetSetNodeValue implements TestInterface {
      * 
      * @spec DmtSession.setNodeValue(String,DmtData)
      */
-    private void testGetSetNodeValue018() {
+    private void testGetSetNodeValue017() {
         DmtSession session = null;
         try {
-            tbc.log("#testGetSetNodeValue018");
+            tbc.log("#testGetSetNodeValue017");
             session = tbc.getDmtAdmin().getSession(".",
                 DmtSession.LOCK_TYPE_ATOMIC);
             
