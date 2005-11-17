@@ -1,19 +1,19 @@
 /*
  * Copyright 1999,2004 The Apache Software Foundation.
  * Copyright 2005 OSGi Alliance
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- */ 
+ */
 /*
  * Modified by the OSGi Alliance to provide the Servlet 2.1 API.
  */
@@ -27,9 +27,9 @@ import java.util.Enumeration;
 /**
  *
  * Extends the {@link javax.servlet.ServletRequest} interface
- * to provide request information for HTTP servlets. 
+ * to provide request information for HTTP servlets.
  *
- * <p>The servlet container creates an <code>HttpServletRequest</code> 
+ * <p>The servlet container creates an <code>HttpServletRequest</code>
  * object and passes it as an argument to the servlet's service
  * methods (<code>doGet</code>, <code>doPost</code>, etc).
  *
@@ -44,27 +44,23 @@ public interface HttpServletRequest extends ServletRequest {
 
     /**
      * Returns the name of the authentication scheme used to protect
-     * the servlet. All servlet containers support basic, form and client 
-     * certificate authentication, and may additionally support digest 
-     * authentication.
-     * If the servlet is not authenticated <code>null</code> is returned. 
+     * the servlet, for example, "BASIC" or "SSL".
+     * If the servlet is not authenticated <code>null</code> is returned.
      *
      * <p>Same as the value of the CGI variable AUTH_TYPE.
      *
      *
-     * @return		one of the static members BASIC_AUTH, 
-     *			FORM_AUTH, CLIENT_CERT_AUTH, DIGEST_AUTH
-     *			(suitable for == comparison) 
-     *			indicating the authentication scheme, or 
-     *			<code>null</code> if the request was 
-     *			not authenticated.     
+     * @return		a <code>String</code> specifying the name of
+     *			the authentication scheme, or
+     *			<code>null</code> if the request was not
+     *			authenticated
      *
      */
-   
+
     public String getAuthType();
-    
-   
-    
+
+
+
 
     /**
      *
@@ -80,17 +76,17 @@ public interface HttpServletRequest extends ServletRequest {
      */
 
     public Cookie[] getCookies();
-    
-    
-    
+
+
+
 
     /**
      *
      * Returns the value of the specified request header
-     * as a <code>long</code> value that represents a 
+     * as a <code>long</code> value that represents a
      * <code>Date</code> object. Use this method with
      * headers that contain dates, such as
-     * <code>If-Modified-Since</code>. 
+     * <code>If-Modified-Since</code>.
      *
      * <p>The date is returned as
      * the number of milliseconds since January 1, 1970 GMT.
@@ -120,9 +116,9 @@ public interface HttpServletRequest extends ServletRequest {
      */
 
     public long getDateHeader(String name);
-    
-    
-    
+
+
+
 
     /**
      *
@@ -143,7 +139,7 @@ public interface HttpServletRequest extends ServletRequest {
      *
      */			
 
-    public String getHeader(String name); 
+    public String getHeader(String name);
 
 
 
@@ -170,9 +166,9 @@ public interface HttpServletRequest extends ServletRequest {
      */
 
     public Enumeration getHeaderNames();
-    
-    
-    
+
+
+
 
     /**
      *
@@ -187,7 +183,7 @@ public interface HttpServletRequest extends ServletRequest {
      * @param name		a <code>String</code> specifying the name
      *				of a request header
      *
-     * @return			an integer expressing the value 
+     * @return			an integer expressing the value
      * 				of the request header or -1
      *				if the request doesn't have a
      *				header of this name
@@ -198,27 +194,27 @@ public interface HttpServletRequest extends ServletRequest {
      */
 
     public int getIntHeader(String name);
-    
-    
-    
+
+
+
 
     /**
      *
-     * Returns the name of the HTTP method with which this 
+     * Returns the name of the HTTP method with which this
      * request was made, for example, GET, POST, or PUT.
      * Same as the value of the CGI variable REQUEST_METHOD.
      *
-     * @return			a <code>String</code> 
+     * @return			a <code>String</code>
      *				specifying the name
      *				of the method with which
      *				this request was made
      *
      */
- 
+
     public String getMethod();
-    
-    
-    
+
+
+
 
     /**
      *
@@ -233,7 +229,7 @@ public interface HttpServletRequest extends ServletRequest {
      *
      *
      * @return		a <code>String</code>, decoded by the
-     *			web container, specifying 
+     *			web container, specifying
      *			extra path information that comes
      *			after the servlet path but before
      *			the query string in the request URL;
@@ -241,11 +237,11 @@ public interface HttpServletRequest extends ServletRequest {
      *			any extra path information
      *
      */
-     
-    public String getPathInfo();
-    
 
- 
+    public String getPathInfo();
+
+
+
 
     /**
      *
@@ -256,7 +252,7 @@ public interface HttpServletRequest extends ServletRequest {
      * <p>If the URL does not have any extra path information,
      * this method returns <code>null</code>.
      *
-     * The web container does not decode thins string.
+     * The web container does not decode this string.
      *
      *
      * @return		a <code>String</code> specifying the
@@ -268,36 +264,36 @@ public interface HttpServletRequest extends ServletRequest {
      */
 
     public String getPathTranslated();
-    
 
- 
+
+
 
     /**
      *
      * Returns the query string that is contained in the request
      * URL after the path. This method returns <code>null</code>
      * if the URL does not have a query string. Same as the value
-     * of the CGI variable QUERY_STRING. 
+     * of the CGI variable QUERY_STRING.
      *
      * @return		a <code>String</code> containing the query
-     *			string or <code>null</code> if the URL 
+     *			string or <code>null</code> if the URL
      *			contains no query string. The value is not
      *			decoded by the container.
      *
      */
 
     public String getQueryString();
-    
-    
-    
+
+
+
 
     /**
      *
      * Returns the login of the user making this request, if the
-     * user has been authenticated, or <code>null</code> if the user 
+     * user has been authenticated, or <code>null</code> if the user
      * has not been authenticated.
      * Whether the user name is sent with each subsequent request
-     * depends on the browser and type of authentication. Same as the 
+     * depends on the browser and type of authentication. Same as the
      * value of the CGI variable REMOTE_USER.
      *
      * @return		a <code>String</code> specifying the login
@@ -307,9 +303,9 @@ public interface HttpServletRequest extends ServletRequest {
      */
 
     public String getRemoteUser();
-    
-    
-    
+
+
+
 
     /**
      *
@@ -331,10 +327,10 @@ public interface HttpServletRequest extends ServletRequest {
      */
 
     public String getRequestedSessionId();
-    
-    
-    
-    
+
+
+
+
     /**
      *
      * Returns the part of this request's URL from the protocol
@@ -342,7 +338,7 @@ public interface HttpServletRequest extends ServletRequest {
      * The web container does not decode this String.
      * For example:
      *
-     * 
+     *
 
      * <table>
      * <tr align=left><th>First line of HTTP request      </th>
@@ -352,12 +348,12 @@ public interface HttpServletRequest extends ServletRequest {
      * <td><td>/a.html
      * <tr><td>HEAD /xyz?a=b HTTP/1.1<td><td>/xyz
      * </table>
-     *      
+     *
      * <p>To reconstruct an URL with a scheme and host, use
      * {@link HttpUtils#getRequestURL}.
      *
      * @return		a <code>String</code> containing
-     *			the part of the URL from the 
+     *			the part of the URL from the
      *			protocol name up to the query string
      *
      * @see		HttpUtils#getRequestURL
@@ -365,13 +361,13 @@ public interface HttpServletRequest extends ServletRequest {
      */
 
     public String getRequestURI();
-    
+
     /**
      *
      * Returns the part of this request's URL that calls
      * the servlet. This includes either the servlet name or
      * a path to the servlet, but does not include any extra
-     * path information or a query string. Same as the value 
+     * path information or a query string. Same as the value
      * of the CGI variable SCRIPT_NAME.
      *
      *
@@ -384,15 +380,15 @@ public interface HttpServletRequest extends ServletRequest {
      */
 
     public String getServletPath();
-    
-    
-    
+
+
+
 
     /**
      *
      * Returns the current <code>HttpSession</code>
      * associated with this request or, if if there is no
-     * current session and <code>create</code> is true, returns 
+     * current session and <code>create</code> is true, returns
      * a new session.
      *
      * <p>If <code>create</code> is <code>false</code>
@@ -400,7 +396,7 @@ public interface HttpServletRequest extends ServletRequest {
      * this method returns <code>null</code>.
      *
      * <p>To make sure the session is properly maintained,
-     * you must call this method before 
+     * you must call this method before
      * the response is committed. If the container is using cookies
      * to maintain session integrity and is asked to create a new session
      * when the response is committed, an IllegalStateException is thrown.
@@ -409,12 +405,12 @@ public interface HttpServletRequest extends ServletRequest {
      *
      *
      * @param		<code>true</code> to create
-     *			a new session for this request if necessary; 
+     *			a new session for this request if necessary;
      *			<code>false</code> to return <code>null</code>
      *			if there's no current session
      *			
      *
-     * @return 		the <code>HttpSession</code> associated 
+     * @return 		the <code>HttpSession</code> associated
      *			with this request or <code>null</code> if
      * 			<code>create</code> is <code>false</code>
      *			and the request has no valid session
@@ -425,16 +421,16 @@ public interface HttpServletRequest extends ServletRequest {
      */
 
     public HttpSession getSession(boolean create);
-    
-    
-    
-   
+
+
+
+
 
     /**
      *
      * Returns the current session associated with this request,
      * or if the request does not have a session, creates one.
-     * 
+     *
      * @return		the <code>HttpSession</code> associated
      *			with this request
      *
@@ -443,11 +439,11 @@ public interface HttpServletRequest extends ServletRequest {
      */
 
     public HttpSession getSession();
-    
-    
-    
-    
-    
+
+
+
+
+
 
     /**
      *
@@ -465,9 +461,9 @@ public interface HttpServletRequest extends ServletRequest {
      */
 
     public boolean isRequestedSessionIdValid();
-    
-    
-    
+
+
+
 
     /**
      *
@@ -480,16 +476,16 @@ public interface HttpServletRequest extends ServletRequest {
      *
      * @see			#getSession
      *
-     */ 
+     */
 
     public boolean isRequestedSessionIdFromCookie();
-    
-    
-    
+
+
+
 
     /**
      *
-     * Checks whether the requested session ID came in as part of the 
+     * Checks whether the requested session ID came in as part of the
      * request URL.
      *
      * @return			<code>true</code> if the session ID
@@ -500,13 +496,13 @@ public interface HttpServletRequest extends ServletRequest {
      * @see			#getSession
      *
      */
-    
+
     public boolean isRequestedSessionIdFromURL();
-    
-    
-    
-    
-    
+
+
+
+
+
     /**
      *
      * @deprecated		As of Version 2.1 of the Java Servlet
@@ -518,5 +514,5 @@ public interface HttpServletRequest extends ServletRequest {
     public boolean isRequestedSessionIdFromUrl();
 
 
-    
+
 }

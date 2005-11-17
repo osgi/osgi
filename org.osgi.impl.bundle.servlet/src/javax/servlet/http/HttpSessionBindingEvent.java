@@ -1,19 +1,19 @@
 /*
  * Copyright 1999,2004 The Apache Software Foundation.
  * Copyright 2005 OSGi Alliance
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- */ 
+ */
 /*
  * Modified by the OSGi Alliance to provide the Servlet 2.1 API.
  */
@@ -26,24 +26,22 @@ import java.util.EventObject;
 
 /**
  *
- * Events of this type are either sent to an object that implements
- * {@link HttpSessionBindingListener} when it is bound or 
- * unbound from a session, or to a {@link HttpSessionAttributeListener} 
- * that has been configured in the deployment descriptor when any attribute is
- * bound, unbound or replaced in a session.
+ * Sent to an object that implements
+ * {@link HttpSessionBindingListener} when the object is
+ * bound to or unbound from the session.
  *
  * <p>The session binds the object by a call to
- * <code>HttpSession.setAttribute</code> and unbinds the object
- * by a call to <code>HttpSession.removeAttribute</code>.
+ * <code>HttpSession.putValue</code> and unbinds the object
+ * by a call to <code>HttpSession.removeValue</code>.
  *
  *
  *
  * @author		Various
  * @version		$Version$
- * 
+ *
  * @see 		HttpSession
  * @see 		HttpSessionBindingListener
- * @see			HttpSessionAttributeListener
+ *
  */
 
 public class HttpSessionBindingEvent extends EventObject {
@@ -54,13 +52,13 @@ public class HttpSessionBindingEvent extends EventObject {
     /* The name to which the object is being bound or unbound */
 
     private String name;
-    
-    /* The object is being bound or unbound */
+
+
 
     /**
      *
      * Constructs an event that notifies an object that it
-     * has been bound to or unbound from a session. 
+     * has been bound to or unbound from a session.
      * To receive the event, the object must implement
      * {@link HttpSessionBindingListener}.
      *
@@ -79,15 +77,15 @@ public class HttpSessionBindingEvent extends EventObject {
 	super(session);
 	this.name = name;
     }
-    
-    /** Return the session that changed. */
-	public HttpSession getSession () { 
-	return (HttpSession)getSource();
-	}
+
+
+
+
+
 
 	/**
 	 *
-	 * Returns the name with which the attribute is bound to or
+     * Returns the name with which the object is bound to or
 	 * unbound from the session.
 	 *
 	 *
@@ -101,7 +99,28 @@ public class HttpSessionBindingEvent extends EventObject {
 	public String getName() {
 	return name;
 	}
-    
+
+
+
+
+
+
+    /**
+     *
+     * Returns the session to or from which the object is
+     * bound or unbound.
+     *
+     * @return		the session to which the object is
+     *			bound or from which the object is
+     *			unbound
+     *
+     *
+     *
+     */
+
+    public HttpSession getSession() {
+	return (HttpSession) getSource();
+    }
 }
 
 

@@ -1,19 +1,19 @@
 /*
  * Copyright 1999,2004 The Apache Software Foundation.
  * Copyright 2005 OSGi Alliance
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- */ 
+ */
 /*
  * Modified by the OSGi Alliance to provide the Servlet 2.1 API.
  */
@@ -33,7 +33,7 @@ import java.io.IOException;
  * and passes it as an argument to the servlet's service methods
  * (<code>doGet</code>, <code>doPost</code>, etc).
  *
- * 
+ *
  * @author	Various
  * @version	$Version$
  *
@@ -56,12 +56,12 @@ public interface HttpServletResponse extends ServletResponse {
     public void addCookie(Cookie cookie);
 
     /**
-     * Returns a boolean indicating whether the named response header 
+     * Returns a boolean indicating whether the named response header
      * has already been set.
-     * 
+     *
      * @param	name	the header name
-     * @return		<code>true</code> if the named response header 
-     *			has already been set; 
+     * @return		<code>true</code> if the named response header
+     *			has already been set;
      * 			<code>false</code> otherwise
      */
 
@@ -74,8 +74,8 @@ public interface HttpServletResponse extends ServletResponse {
      * determine whether the session ID needs to be encoded in the URL.
      * For example, if the browser supports cookies, or session
      * tracking is turned off, URL encoding is unnecessary.
-     * 
-     * <p>For robust session tracking, all URLs emitted by a servlet 
+     *
+     * <p>For robust session tracking, all URLs emitted by a servlet
      * should be run through this
      * method.  Otherwise, URL rewriting cannot be used with browsers
      * which do not support cookies.
@@ -96,7 +96,7 @@ public interface HttpServletResponse extends ServletResponse {
      * this determination can differ from those used to decide whether to
      * encode a normal link, this method is seperate from the
      * <code>encodeURL</code> method.
-     * 
+     *
      * <p>All URLs sent to the <code>HttpServletResponse.sendRedirect</code>
      * method should be run through this method.  Otherwise, URL
      * rewriting cannot be used with browsers which do not support
@@ -116,18 +116,18 @@ public interface HttpServletResponse extends ServletResponse {
      * @deprecated	As of version 2.1, use encodeURL(String url) instead
      *
      * @param	url	the url to be encoded.
-     * @return		the encoded URL if encoding is needed; 
+     * @return		the encoded URL if encoding is needed;
      * 			the unchanged URL otherwise.
      */
 
     public String encodeUrl(String url);
-    
+
     /**
-     * @deprecated	As of version 2.1, use 
+     * @deprecated	As of version 2.1, use
      *			encodeRedirectURL(String url) instead
      *
      * @param	url	the url to be encoded.
-     * @return		the encoded URL if encoding is needed; 
+     * @return		the encoded URL if encoding is needed;
      * 			the unchanged URL otherwise.
      */
 
@@ -135,15 +135,15 @@ public interface HttpServletResponse extends ServletResponse {
 
     /**
      * Sends an error response to the client using the specified
-     * status clearing the buffer.  The server defaults to creating the 
+     * status clearing the buffer.  The server defaults to creating the
      * response to look like an HTML-formatted server error page containing the specified message, setting the content type
      * to "text/html", leaving cookies and other headers unmodified.
      *
      * If an error-page declaration has been made for the web application
-     * corresponding to the status code passed in, it will be served back in 
-     * preference to the suggested msg parameter. 
+     * corresponding to the status code passed in, it will be served back in
+     * preference to the suggested msg parameter.
      *
-     * <p>If the response has already been committed, this method throws 
+     * <p>If the response has already been committed, this method throws
      * an IllegalStateException.
      * After using this method, the response should be considered
      * to be committed and should not be written to.
@@ -153,13 +153,13 @@ public interface HttpServletResponse extends ServletResponse {
      * @exception	IOException	If an input or output exception occurs
      * @exception	IllegalStateException	If the response was committed
      */
-   
+
     public void sendError(int sc, String msg) throws IOException;
 
     /**
      * Sends an error response to the client using the specified status
-     * code and clearing the buffer. 
-     * <p>If the response has already been committed, this method throws 
+     * code and clearing the buffer.
+     * <p>If the response has already been committed, this method throws
      * an IllegalStateException.
      * After using this method, the response should be considered
      * to be committed and should not be written to.
@@ -176,12 +176,12 @@ public interface HttpServletResponse extends ServletResponse {
      * Sends a temporary redirect response to the client using the
      * specified redirect location URL.  This method can accept relative URLs;
      * the servlet container must convert the relative URL to an absolute URL
-     * before sending the response to the client. If the location is relative 
+     * before sending the response to the client. If the location is relative
      * without a leading '/' the container interprets it as relative to
      * the current request URI. If the location is relative with a leading
      * '/' the container interprets it as relative to the servlet container root.
      *
-     * <p>If the response has already been committed, this method throws 
+     * <p>If the response has already been committed, this method throws
      * an IllegalStateException.
      * After using this method, the response should be considered
      * to be committed and should not be written to.
@@ -192,25 +192,25 @@ public interface HttpServletResponse extends ServletResponse {
      */
 
     public void sendRedirect(String location) throws IOException;
-    
+
     /**
-     * 
+     *
      * Sets a response header with the given name and
      * date-value.  The date is specified in terms of
      * milliseconds since the epoch.  If the header had already
      * been set, the new value overwrites the previous one.  The
      * <code>containsHeader</code> method can be used to test for the
      * presence of a header before setting its value.
-     * 
+     *
      * @param	name	the name of the header to set
      * @param	value	the assigned date value
-     * 
+     *
      * @see #containsHeader
      * @see #addDateHeader
      */
 
     public void setDateHeader(String name, long date);
-    
+
     /**
      *
      * Sets a response header with the given name and value.
@@ -218,7 +218,7 @@ public interface HttpServletResponse extends ServletResponse {
      * previous one.  The <code>containsHeader</code> method can be
      * used to test for the presence of a header before setting its
      * value.
-     * 
+     *
      * @param	name	the name of the header
      * @param	value	the header value
      *
@@ -227,7 +227,7 @@ public interface HttpServletResponse extends ServletResponse {
      */
 
     public void setHeader(String name, String value);
-    
+
     /**
      * Sets a response header with the given name and
      * integer value.  If the header had already been set, the new value
@@ -248,8 +248,7 @@ public interface HttpServletResponse extends ServletResponse {
      * Sets the status code for this response.  This method is used to
      * set the return status code when there is no error (for example,
      * for the status codes SC_OK or SC_MOVED_TEMPORARILY).  If there
-     * is an error, and the caller wishes to invoke an <error-page> defined
-     * in the web applicaion, the <code>sendError</code> method should be used
+     * is an error, the <code>sendError</code> method should be used
      * instead.
      * <p> The container clears the buffer and sets the Location header, preserving
      * cookies and other headers.
@@ -260,22 +259,22 @@ public interface HttpServletResponse extends ServletResponse {
      */
 
     public void setStatus(int sc);
-  
+
     /**
-     * @deprecated As of version 2.1, due to ambiguous meaning of the 
-     * message parameter. To set a status code 
+     * @deprecated As of version 2.1, due to ambiguous meaning of the
+     * message parameter. To set a status code
      * use <code>setStatus(int)</code>, to send an error with a description
      * use <code>sendError(int, String)</code>.
      *
      * Sets the status code and message for this response.
-     * 
+     *
      * @param	sc	the status code
      * @param	sm	the status message
      */
 
     public void setStatus(int sc, String sm);
 
-    
+
     /*
      * Server status codes; see RFC 2068.
      */
@@ -286,7 +285,7 @@ public interface HttpServletResponse extends ServletResponse {
 
     public static final int SC_CONTINUE = 100;
 
-    
+
     /**
      * Status code (101) indicating the server is switching protocols
      * according to Upgrade header.
@@ -388,7 +387,7 @@ public interface HttpServletResponse extends ServletResponse {
 
     public static final int SC_USE_PROXY = 305;
 
-     /**
+    /**
      * Status code (400) indicating the request sent by the client was
      * syntactically incorrect.
      */

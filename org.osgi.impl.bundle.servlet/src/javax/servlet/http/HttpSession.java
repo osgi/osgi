@@ -1,13 +1,13 @@
 /*
  * Copyright 1999,2004 The Apache Software Foundation.
  * Copyright 2005 OSGi Alliance
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -29,34 +29,30 @@ package javax.servlet.http;
  * <p>The servlet container uses this interface to create a session
  * between an HTTP client and an HTTP server. The session persists
  * for a specified time period, across more than one connection or
- * page request from the user. A session usually corresponds to one 
- * user, who may visit a site many times. The server can maintain a 
+ * page request from the user. A session usually corresponds to one
+ * user, who may visit a site many times. The server can maintain a
  * session in many ways such as using cookies or rewriting URLs.
  *
- * <p>This interface allows servlets to 
+ * <p>This interface allows servlets to
  * <ul>
  * <li>View and manipulate information about a session, such as
  *     the session identifier, creation time, and last accessed time
- * <li>Bind objects to sessions, allowing user information to persist 
+ * <li>Bind objects to sessions, allowing user information to persist
  *     across multiple user connections
  * </ul>
  *
  * <p>When an application stores an object in or removes an object from a
  * session, the session checks whether the object implements
- * {@link HttpSessionBindingListener}. If it does, 
- * the servlet notifies the object that it has been bound to or unbound 
- * from the session. Notifications are sent after the binding methods complete. 
+ * {@link HttpSessionBindingListener}. If it does,
+ * the servlet notifies the object that it has been bound to or unbound
+ * from the session. Notifications are sent after the binding methods complete.
  * For session that are invalidated or expire, notifications are sent after
  * the session has been invalidatd or expired.
  *
- * <p> When container migrates a session between VMs in a distributed container
- * setting, all session atributes implementing the {@link HttpSessionActivationListener}
- * interface are notified.
- * 
  * <p>A servlet should be able to handle cases in which
  * the client does not choose to join a session, such as when cookies are
  * intentionally turned off. Until the client joins the session,
- * <code>isNew</code> returns <code>true</code>.  If the client chooses 
+ * <code>isNew</code> returns <code>true</code>.  If the client chooses
  * not to join
  * the session, <code>getSession</code> will return a different session
  * on each request, and <code>isNew</code> will always return
@@ -87,7 +83,7 @@ public interface HttpSession {
      *
      * @return				a <code>long</code> specifying
      * 					when this session was created,
-     *					expressed in 
+     *					expressed in
      *					milliseconds since 1/1/1970 GMT
      *
      * @exception IllegalStateException	if this method is called on an
@@ -96,16 +92,16 @@ public interface HttpSession {
      */
 
     public long getCreationTime();
-    
-    
-    
-    
+
+
+
+
     /**
      *
-     * Returns a string containing the unique identifier assigned 
-     * to this session. The identifier is assigned 
+     * Returns a string containing the unique identifier assigned
+     * to this session. The identifier is assigned
      * by the servlet container and is implementation dependent.
-     * 
+     *
      * @return				a string specifying the identifier
      *					assigned to this session
      *
@@ -115,24 +111,24 @@ public interface HttpSession {
      */
 
     public String getId();
-    
-    
-    
+
+
+
 
     /**
      *
      * Returns the last time the client sent a request associated with
      * this session, as the number of milliseconds since midnight
-     * January 1, 1970 GMT, and marked by the time the container recieved the request. 
+     * January 1, 1970 GMT, and marked by the time the container recieved the request.
      *
      * <p>Actions that your application takes, such as getting or setting
      * a value associated with the session, do not affect the access
      * time.
      *
      * @return				a <code>long</code>
-     *					representing the last time 
+     *					representing the last time
      *					the client sent a request associated
-     *					with this session, expressed in 
+     *					with this session, expressed in
      *					milliseconds since 1/1/1970 GMT
      *
      * @exeption IllegalStateException	if this method is called on an
@@ -141,32 +137,32 @@ public interface HttpSession {
      */
 
     public long getLastAccessedTime();
-    
-    
+
+
     /**
      *
-     * Specifies the time, in seconds, between client requests before the 
+     * Specifies the time, in seconds, between client requests before the
      * servlet container will invalidate this session.  A negative time
      * indicates the session should never timeout.
      *
      * @param interval		An integer specifying the number
-     * 				of seconds 
+     * 				of seconds
      *
      */
-    
+
     public void setMaxInactiveInterval(int interval);
 
 
 
 
    /**
-    * Returns the maximum time interval, in seconds, that 
-    * the servlet container will keep this session open between 
+    * Returns the maximum time interval, in seconds, that
+    * the servlet container will keep this session open between
     * client accesses. After this interval, the servlet container
     * will invalidate the session.  The maximum time interval can be set
     * with the <code>setMaxInactiveInterval</code> method.
     * A negative time indicates the session should never timeout.
-    *  
+    *
     *
     * @return		an integer specifying the number of
     *			seconds this session remains open
@@ -178,8 +174,8 @@ public interface HttpSession {
     */
 
     public int getMaxInactiveInterval();
-    
-    
+
+
 
 
    /**
@@ -192,10 +188,10 @@ public interface HttpSession {
     */
 
     public HttpSessionContext getSessionContext();
-    
-    
-    
-    
+
+
+
+
     /**
      *
      *
@@ -207,11 +203,11 @@ public interface HttpSession {
      *					invalidated session
      *
      */
-  
+
     public Object getValue(String name);
-    
-    
-    
+
+
+
 
     /**
      *
@@ -225,11 +221,11 @@ public interface HttpSession {
      *					invalidated session
      *
      */
-    
+
     public String[] getValueNames();
-    
-    
-    
+
+
+
 
     /**
      *
@@ -243,7 +239,7 @@ public interface HttpSession {
      *					invalidated session
      *
      */
- 
+
     public void putValue(String name, Object value);
 
 
@@ -268,7 +264,7 @@ public interface HttpSession {
     /**
      *
      * Invalidates this session then unbinds any objects bound
-     * to it. 
+     * to it.
      *
      * @exception IllegalStateException	if this method is called on an
      *					already invalidated session
@@ -276,20 +272,20 @@ public interface HttpSession {
      */
 
     public void invalidate();
-    
-    
-    
-    
+
+
+
+
     /**
      *
      * Returns <code>true</code> if the client does not yet know about the
-     * session or if the client chooses not to join the session.  For 
+     * session or if the client chooses not to join the session.  For
      * example, if the server used only cookie-based sessions, and
      * the client had disabled the use of cookies, then a session would
      * be new on each request.
      *
-     * @return 				<code>true</code> if the 
-     *					server has created a session, 
+     * @return 				<code>true</code> if the
+     *					server has created a session,
      *					but the client has not yet joined
      *
      * @exception IllegalStateException	if this method is called on an

@@ -1,19 +1,19 @@
 /*
  * Copyright 1999,2004 The Apache Software Foundation.
  * Copyright 2005 OSGi Alliance
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- */ 
+ */
 /*
  * Modified by the OSGi Alliance to provide the Servlet 2.1 API.
  */
@@ -36,7 +36,7 @@ import java.util.Enumeration;
  * Interfaces that extend <code>ServletRequest</code> can provide
  * additional protocol-specific data (for example, HTTP data is
  * provided by {@link javax.servlet.http.HttpServletRequest}.
- * 
+ *
  * @author 	Various
  * @version 	$Version$
  *
@@ -52,59 +52,59 @@ public interface ServletRequest {
     /**
      *
      * Returns the value of the named attribute as an <code>Object</code>,
-     * or <code>null</code> if no attribute of the given name exists. 
+     * or <code>null</code> if no attribute of the given name exists.
      *
      * <p> Attributes can be set two ways.  The servlet container may set
      * attributes to make available custom information about a request.
      * For example, for requests made using HTTPS, the attribute
      * <code>javax.servlet.request.X509Certificate</code> can be used to
      * retrieve information on the certificate of the client.  Attributes
-     * can also be set programatically using 
+     * can also be set programatically using
      * {@link ServletRequest#setAttribute}.  This allows information to be
      * embedded into a request before a {@link RequestDispatcher} call.
      *
      * <p>Attribute names should follow the same conventions as package
      * names. This specification reserves names matching <code>java.*</code>,
-     * <code>javax.*</code>, and <code>sun.*</code>. 
+     * <code>javax.*</code>, and <code>sun.*</code>.
      *
-     * @param name	a <code>String</code> specifying the name of 
+     * @param name	a <code>String</code> specifying the name of
      *			the attribute
      *
-     * @return		an <code>Object</code> containing the value 
+     * @return		an <code>Object</code> containing the value
      *			of the attribute, or <code>null</code> if
      *			the attribute does not exist
      *
      */
 
     public Object getAttribute(String name);
-    
-    
+
+
 
     /**
      * Returns an <code>Enumeration</code> containing the
-     * names of the attributes available to this request. 
+     * names of the attributes available to this request.
      * This method returns an empty <code>Enumeration</code>
      * if the request has no attributes available to it.
-     * 
      *
-     * @return		an <code>Enumeration</code> of strings 
-     *			containing the names 
+     *
+     * @return		an <code>Enumeration</code> of strings
+     *			containing the names
      * 			of the request's attributes
      *
      */
 
     public Enumeration getAttributeNames();
-    
-    
-    
-    
+
+
+
+
     /**
 	 * Returns the name of the character encoding used in the body of this
 	 * request. This method returns <code>null</code> if the request
 	 * does not specify a character encoding
-	 * 
 	 *
-	 * @return		a <code>String</code> containing the name of 
+	 *
+	 * @return		a <code>String</code> containing the name of
 	 *			the chararacter encoding, or <code>null</code>
 	 *			if the request does not specify a character encoding
 	 *
@@ -115,40 +115,40 @@ public interface ServletRequest {
 
 
 	/**
-     * Returns the length, in bytes, of the request body 
+     * Returns the length, in bytes, of the request body
      * and made available by the input stream, or -1 if the
      * length is not known. For HTTP servlets, same as the value
      * of the CGI variable CONTENT_LENGTH.
      *
-     * @return		an integer containing the length of the 
+     * @return		an integer containing the length of the
      * 			request body or -1 if the length is not known
      *
      */
 
     public int getContentLength();
-    
-    
-    
+
+
+
 
     /**
-     * Returns the MIME type of the body of the request, or 
-     * <code>null</code> if the type is not known. For HTTP servlets, 
+     * Returns the MIME type of the body of the request, or
+     * <code>null</code> if the type is not known. For HTTP servlets,
      * same as the value of the CGI variable CONTENT_TYPE.
      *
-     * @return		a <code>String</code> containing the name 
-     *			of the MIME type of 
+     * @return		a <code>String</code> containing the name
+     *			of the MIME type of
      * 			the request, or null if the type is not known
      *
      */
 
     public String getContentType();
-    
-    
-    
+
+
+
 
     /**
      * Retrieves the body of the request as binary data using
-     * a {@link ServletInputStream}.  Either this method or 
+     * a {@link ServletInputStream}.  Either this method or
      * {@link #getReader} may be called to read the body, not both.
      *
      * @return			a {@link ServletInputStream} object containing
@@ -161,10 +161,10 @@ public interface ServletRequest {
      *
      */
 
-    public ServletInputStream getInputStream() throws IOException; 
-     
-    
-    
+    public ServletInputStream getInputStream() throws IOException;
+
+
+
 
     /**
      * Returns the value of a request parameter as a <code>String</code>,
@@ -185,10 +185,10 @@ public interface ServletRequest {
      * #getInputStream} or {@link #getReader} can interfere
      * with the execution of this method.
      *
-     * @param name 	a <code>String</code> specifying the 
+     * @param name 	a <code>String</code> specifying the
      *			name of the parameter
      *
-     * @return		a <code>String</code> representing the 
+     * @return		a <code>String</code> representing the
      *			single value of the parameter
      *
      * @see 		#getParameterValues
@@ -196,43 +196,43 @@ public interface ServletRequest {
      */
 
     public String getParameter(String name);
-    
-    
-    
+
+
+
 
     /**
      *
      * Returns an <code>Enumeration</code> of <code>String</code>
      * objects containing the names of the parameters contained
-     * in this request. If the request has 
-     * no parameters, the method returns an 
-     * empty <code>Enumeration</code>. 
+     * in this request. If the request has
+     * no parameters, the method returns an
+     * empty <code>Enumeration</code>.
      *
      * @return		an <code>Enumeration</code> of <code>String</code>
      *			objects, each <code>String</code> containing
-     * 			the name of a request parameter; or an 
+     * 			the name of a request parameter; or an
      *			empty <code>Enumeration</code> if the
      *			request has no parameters
      *
      */
-     
+
     public Enumeration getParameterNames();
-    
-    
-    
+
+
+
 
     /**
-     * Returns an array of <code>String</code> objects containing 
-     * all of the values the given request parameter has, or 
+     * Returns an array of <code>String</code> objects containing
+     * all of the values the given request parameter has, or
      * <code>null</code> if the parameter does not exist.
      *
      * <p>If the parameter has a single value, the array has a length
      * of 1.
      *
-     * @param name	a <code>String</code> containing the name of 
+     * @param name	a <code>String</code> containing the name of
      *			the parameter whose value is requested
      *
-     * @return		an array of <code>String</code> objects 
+     * @return		an array of <code>String</code> objects
      *			containing the parameter's values
      *
      * @see		#getParameter
@@ -240,58 +240,58 @@ public interface ServletRequest {
      */
 
     public String[] getParameterValues(String name);
- 
+
     /**
      * Returns the name and version of the protocol the request uses
-     * in the form <i>protocol/majorVersion.minorVersion</i>, for 
+     * in the form <i>protocol/majorVersion.minorVersion</i>, for
      * example, HTTP/1.1. For HTTP servlets, the value
-     * returned is the same as the value of the CGI variable 
+     * returned is the same as the value of the CGI variable
      * <code>SERVER_PROTOCOL</code>.
      *
-     * @return		a <code>String</code> containing the protocol 
+     * @return		a <code>String</code> containing the protocol
      *			name and version number
      *
      */
-    
+
     public String getProtocol();
-    
-    
-    
+
+
+
 
     /**
-     * Returns the name of the scheme used to make this request, 
+     * Returns the name of the scheme used to make this request,
      * for example,
      * <code>http</code>, <code>https</code>, or <code>ftp</code>.
      * Different schemes have different rules for constructing URLs,
      * as noted in RFC 1738.
      *
-     * @return		a <code>String</code> containing the name 
+     * @return		a <code>String</code> containing the name
      *			of the scheme used to make this request
      *
      */
 
     public String getScheme();
-    
-    
-    
+
+
+
 
     /**
      * Returns the host name of the server that received the request.
-     * For HTTP servlets, same as the value of the CGI variable 
+     * For HTTP servlets, same as the value of the CGI variable
      * <code>SERVER_NAME</code>.
      *
-     * @return		a <code>String</code> containing the name 
+     * @return		a <code>String</code> containing the name
      *			of the server to which the request was sent
      */
 
     public String getServerName();
-    
-    
-    
+
+
+
 
     /**
      * Returns the port number on which this request was received.
-     * For HTTP servlets, same as the value of the CGI variable 
+     * For HTTP servlets, same as the value of the CGI variable
      * <code>SERVER_PORT</code>.
      *
      * @return		an integer specifying the port number
@@ -299,22 +299,22 @@ public interface ServletRequest {
      */
 
     public int getServerPort();
-    
-    
-    
+
+
+
     /**
      * Retrieves the body of the request as character data using
      * a <code>BufferedReader</code>.  The reader translates the character
      * data according to the character encoding used on the body.
      * Either this method or {@link #getInputStream} may be called to read the
      * body, not both.
-     * 
+     *
      *
      * @return					a <code>BufferedReader</code>
      *						containing the body of the request	
      *
      * @exception UnsupportedEncodingException 	if the character set encoding
-     * 						used is not supported and the 
+     * 						used is not supported and the
      *						text cannot be decoded
      *
      * @exception IllegalStateException   	if {@link #getInputStream} method
@@ -327,41 +327,41 @@ public interface ServletRequest {
      */
 
     public BufferedReader getReader() throws IOException;
-    
-    
-    
+
+
+
 
     /**
-     * Returns the Internet Protocol (IP) address of the client 
-     * that sent the request.  For HTTP servlets, same as the value of the 
+     * Returns the Internet Protocol (IP) address of the client
+     * that sent the request.  For HTTP servlets, same as the value of the
      * CGI variable <code>REMOTE_ADDR</code>.
      *
-     * @return		a <code>String</code> containing the 
+     * @return		a <code>String</code> containing the
      *			IP address of the client that sent the request
      *
      */
-    
+
     public String getRemoteAddr();
-    
-    
-    
+
+
+
 
     /**
      * Returns the fully qualified name of the client that sent the
-     * request. If the engine cannot or chooses not to resolve the hostname 
-     * (to improve performance), this method returns the dotted-string form of 
-     * the IP address. For HTTP servlets, same as the value of the CGI variable 
+     * request. If the engine cannot or chooses not to resolve the hostname
+     * (to improve performance), this method returns the dotted-string form of
+     * the IP address. For HTTP servlets, same as the value of the CGI variable
      * <code>REMOTE_HOST</code>.
      *
-     * @return		a <code>String</code> containing the fully 
+     * @return		a <code>String</code> containing the fully
      * qualified name of the client
      *
      */
 
     public String getRemoteHost();
-    
-    
-    
+
+
+
 
     /**
      *
@@ -373,12 +373,9 @@ public interface ServletRequest {
      * package names. Names beginning with <code>java.*</code>,
      * <code>javax.*</code>, and <code>com.sun.*</code>, are
      * reserved for use by Sun Microsystems.
-     *<br> If the value passed in is null, the effect is the same as
-     * calling {@link #removeAttribute}.
      *
      *
-     *
-     * @param name			a <code>String</code> specifying 
+     * @param name			a <code>String</code> specifying
      *					the name of the attribute
      *
      * @param o				the <code>Object</code> to be stored
@@ -386,19 +383,19 @@ public interface ServletRequest {
      */
 
     public void setAttribute(String name, Object o);
-    
-    
-    
+
+
+
 
     /**
-     * 
+     *
      * @deprecated 	As of Version 2.1 of the Java Servlet API,
      * 			use {@link ServletContext#getRealPath} instead.
      *
      */
 
     public String getRealPath(String path);
-    
-    
+
+
 }
 
