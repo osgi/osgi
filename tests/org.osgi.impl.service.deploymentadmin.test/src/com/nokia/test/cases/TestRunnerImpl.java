@@ -33,6 +33,9 @@ public class TestRunnerImpl implements BundleActivator, TestRunner {
         testCases.put("Test12", new Test12(this));
         //testCases.put("Test13", new Test13(this));
         testCases.put("Test14", new Test14(this));
+        //testCases.put("Test15", new Test15(this));
+        //testCases.put("Test16", new Test16(this));
+        testCases.put("Test17", new Test17(this));
 
         testCases.put("TestBad01", new TestBad1(this));
         testCases.put("TestBad02", new TestBad2(this));
