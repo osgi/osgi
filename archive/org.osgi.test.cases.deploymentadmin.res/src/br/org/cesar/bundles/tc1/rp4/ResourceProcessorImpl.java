@@ -37,11 +37,14 @@
 package br.org.cesar.bundles.tc1.rp4;
 
 import java.io.InputStream;
-import java.util.*;
+import java.util.Dictionary;
+import java.util.Hashtable;
 
-import org.osgi.framework.*;
-import org.osgi.service.deploymentadmin.DeploymentException;
-import org.osgi.service.deploymentadmin.spi.*;
+import org.osgi.framework.BundleActivator;
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.ServiceRegistration;
+import org.osgi.service.deploymentadmin.spi.DeploymentSession;
+import org.osgi.service.deploymentadmin.spi.ResourceProcessor;
 import org.osgi.test.cases.deploymentadmin.tc1.tb1.DeploymentAdmin.UninstallDeploymentPackage;
 import org.osgi.test.cases.deploymentadmin.tc1.tbc.DeploymentConstants;
 import org.osgi.test.cases.deploymentadmin.tc1.tbc.util.TestingRollbackCall;
@@ -72,21 +75,21 @@ public class ResourceProcessorImpl implements BundleActivator, TestingRollbackCa
     public void begin(DeploymentSession session) {
     }
 
-    public void process(String name, InputStream stream) throws ResourceProcessorException {
+    public void process(String name, InputStream stream)  {
         
     }
 
-    public void dropped(String resource) throws ResourceProcessorException {
+    public void dropped(String resource)  {
         
     }
 
-    public void dropAllResources() throws ResourceProcessorException {
-        throw new ResourceProcessorException(0);
+    public void dropAllResources()  {
+        throw new RuntimeException();
     }
 
-    public void prepare() throws ResourceProcessorException {
+    public void prepare()  {
         if (prepareException) {
-            throw new ResourceProcessorException(0);
+            throw new RuntimeException();
         }
                 
     }

@@ -47,9 +47,9 @@ import java.util.Hashtable;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
-import org.osgi.service.deploymentadmin.DeploymentException;
-import org.osgi.service.deploymentadmin.spi.*;
-import org.osgi.test.cases.deploymentadmin.mo.tbc.DeploymentmoConstants;
+import org.osgi.service.deploymentadmin.spi.DeploymentSession;
+import org.osgi.service.deploymentadmin.spi.ResourceProcessor;
+import org.osgi.test.cases.deploymentadmin.tc2.tbc.DeploymentConstants;
 
 
 /**
@@ -65,7 +65,7 @@ public class ResourceProcessorImpl implements BundleActivator,ResourceProcessor 
 	
 	public void start(BundleContext bc) throws Exception {
 		Dictionary props = new Hashtable();
-		props.put("service.pid", DeploymentmoConstants.PID_RESOURCE_PROCESSOR1);
+		props.put("service.pid", DeploymentConstants.PID_RESOURCE_PROCESSOR5);
 
 		sr = bc.registerService(ResourceProcessor.class.getName(), this, props);
 		System.out.println("ResourceProcessor started.");
@@ -82,18 +82,17 @@ public class ResourceProcessorImpl implements BundleActivator,ResourceProcessor 
 
 	}
 
-	public void process(String arg0, InputStream arg1)
-			throws ResourceProcessorException {
+	public void process(String arg0, InputStream arg1) {
 	}
 
-	public void dropped(String arg0) throws ResourceProcessorException {
+	public void dropped(String arg0) {
 
 	}
 
-	public void dropAllResources() throws ResourceProcessorException {
+	public void dropAllResources() {
 	}
 
-	public void prepare() throws ResourceProcessorException {
+	public void prepare() {
 
 	}
 
