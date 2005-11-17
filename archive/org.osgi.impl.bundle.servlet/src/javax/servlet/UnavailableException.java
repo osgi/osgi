@@ -1,19 +1,19 @@
 /*
  * Copyright 1999,2004 The Apache Software Foundation.
  * Copyright 2005 OSGi Alliance
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- */ 
+ */
 /*
  * Modified by the OSGi Alliance to provide the Servlet 2.1 API.
  */
@@ -22,26 +22,26 @@ package javax.servlet;
 
 
 /**
- * Defines an exception that a servlet or filter throws to indicate
- * that it is permanently or temporarily unavailable. 
+ * Defines an exception that a servlet throws to indicate
+ * that it is permanently or temporarily unavailable.
  *
- * <p>When a servlet or filter is permanently unavailable, something is wrong
- * with the it, and it cannot handle
- * requests until some action is taken. For example, a servlet
- * might be configured incorrectly, or a filter's state may be corrupted.
- * The component should log both the error and the corrective action
+ * <p>When a servlet is permanently unavailable, something is wrong
+ * with the servlet, and it cannot handle
+ * requests until some action is taken. For example, the servlet
+ * might be configured incorrectly, or its state may be corrupted.
+ * A servlet should log both the error and the corrective action
  * that is needed.
  *
- * <p>A servlet or filter is temporarily unavailable if it cannot handle
+ * <p>A servlet is temporarily unavailable if it cannot handle
  * requests momentarily due to some system-wide problem. For example,
- * a third-tier server might not be accessible, or there may be 
+ * a third-tier server might not be accessible, or there may be
  * insufficient memory or disk storage to handle requests. A system
  * administrator may need to take corrective action.
  *
  * <p>Servlet containers can safely treat both types of unavailable
  * exceptions in the same way. However, treating temporary unavailability
  * effectively makes the servlet container more robust. Specifically,
- * the servlet container might block requests to the servlet or filter for a period
+ * the servlet container might block requests to the servlet for a period
  * of time suggested by the exception, rather than rejecting them until
  * the servlet container restarts.
  *
@@ -59,7 +59,7 @@ extends ServletException {
     private int         seconds;           // unavailability estimate
 
     /**
-     * 
+     *
      * @param servlet 	the <code>Servlet</code> instance that is
      *                  unavailable
      *
@@ -73,7 +73,7 @@ extends ServletException {
 	this.servlet = servlet;
 	permanent = true;
     }
- 
+
     /**
      *
      * @param seconds	an integer specifying the number of seconds
@@ -82,13 +82,13 @@ extends ServletException {
      *			can't make an estimate
      *
      * @param servlet	the <code>Servlet</code> that is unavailable
-     * 
-     * @param msg	a <code>String</code> specifying the descriptive 
-     *			message, which can be written to a log file or 
+     *
+     * @param msg	a <code>String</code> specifying the descriptive
+     *			message, which can be written to a log file or
      *			displayed for the user.
      *
      */
-    
+
     public UnavailableException(int seconds, Servlet servlet, String msg) {
 	super(msg);
 	this.servlet = servlet;
@@ -112,27 +112,27 @@ extends ServletException {
      *			unavailable
      *
      */
-     
+
     public boolean isPermanent() {
 	return permanent;
     }
-  
+
     /**
      *
      * Returns the servlet that is reporting its unavailability.
-     * 
-     * @return		the <code>Servlet</code> object that is 
+     *
+     * @return		the <code>Servlet</code> object that is
      *			throwing the <code>UnavailableException</code>
      *
      */
-     
+
     public Servlet getServlet() {
 	return servlet;
     }
 
     /**
-     * Returns the number of seconds the servlet expects to 
-     * be temporarily unavailable.  
+     * Returns the number of seconds the servlet expects to
+     * be temporarily unavailable.
      *
      * <p>If this method returns a negative number, the servlet
      * is permanently unavailable or cannot provide an estimate of
@@ -146,7 +146,7 @@ extends ServletException {
      *			unavailable or cannot make an estimate
      *
      */
-     
+
     public int getUnavailableSeconds() {
 	return permanent ? -1 : seconds;
     }

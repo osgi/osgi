@@ -1,19 +1,19 @@
 /*
  * Copyright 1999,2004 The Apache Software Foundation.
  * Copyright 2005 OSGi Alliance
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- */ 
+ */
 /*
  * Modified by the OSGi Alliance to provide the Servlet 2.1 API.
  */
@@ -27,9 +27,12 @@ import java.util.ResourceBundle;
 import java.util.StringTokenizer;
 import java.io.IOException;
 
+
 /**
+ * Provides a collection of methods that are useful
+ * in writing HTTP servlets.
  *
-*/
+ */
 
 
 public class HttpUtils {
@@ -38,38 +41,38 @@ public class HttpUtils {
 	"javax.servlet.http.LocalStrings";
     private static ResourceBundle lStrings =
 	ResourceBundle.getBundle(LSTRING_FILE);
-    
+
     static Hashtable nullHashtable = new Hashtable();
-    
-    
-    
+
+
+
     /**
      * Constructs an empty <code>HttpUtils</code> object.
      *
      */
 
     public HttpUtils() {}
-    
-    
-    
-    
+
+
+
+
 
     /**
      *
      * Parses a query string passed from the client to the
      * server and builds a <code>HashTable</code> object
-     * with key-value pairs. 
+     * with key-value pairs.
      * The query string should be in the form of a string
      * packaged by the GET or POST method, that is, it
      * should have key-value pairs in the form <i>key=value</i>,
      * with each pair separated from the next by a & character.
      *
      * <p>A key can appear more than once in the query string
-     * with different values. However, the key appears only once in 
+     * with different values. However, the key appears only once in
      * the hashtable, with its value being
      * an array of strings containing the multiple values sent
      * by the query string.
-     * 
+     *
      * <p>The keys and values in the hashtable are stored in their
      * decoded form, so
      * any + characters are converted to spaces, and characters
@@ -81,7 +84,7 @@ public class HttpUtils {
      * @return		a <code>HashTable</code> object built
      * 			from the parsed key-value pairs
      *
-     * @exception IllegalArgumentException	if the query string 
+     * @exception IllegalArgumentException	if the query string
      *						is invalid
      *
      */
@@ -109,7 +112,7 @@ public class HttpUtils {
 	    if (ht.containsKey(key)) {
 		String oldVals[] = (String []) ht.get(key);
 		valArray = new String[oldVals.length + 1];
-		for (int i = 0; i < oldVals.length; i++) 
+		for (int i = 0; i < oldVals.length; i++)
 		    valArray[i] = oldVals[i];
 		valArray[oldVals.length] = val;
 	    } else {
@@ -126,13 +129,13 @@ public class HttpUtils {
 
     /**
      *
-     * Parses data from an HTML form that the client sends to 
-     * the server using the HTTP POST method and the 
+     * Parses data from an HTML form that the client sends to
+     * the server using the HTTP POST method and the
      * <i>application/x-www-form-urlencoded</i> MIME type.
      *
      * <p>The data sent by the POST method contains key-value
      * pairs. A key can appear more than once in the POST data
-     * with different values. However, the key appears only once in 
+     * with different values. However, the key appears only once in
      * the hashtable, with its value being
      * an array of strings containing the multiple values sent
      * by the POST method.
@@ -146,7 +149,7 @@ public class HttpUtils {
      *
      *
      * @param len	an integer specifying the length,
-     *			in characters, of the 
+     *			in characters, of the
      *			<code>ServletInputStream</code>
      *			object that is also passed to this
      *			method
@@ -154,7 +157,7 @@ public class HttpUtils {
      * @param in	the <code>ServletInputStream</code>
      *			object that contains the data sent
      *			from the client
-     * 
+     *
      * @return		a <code>HashTable</code> object built
      *			from the parsed key-value pairs
      *
@@ -163,9 +166,9 @@ public class HttpUtils {
      *			sent by the POST method is invalid
      *
      */
-     
 
-    static public Hashtable parsePostData(int len, 
+
+    static public Hashtable parsePostData(int len,
 					  ServletInputStream in)
     {
 	// XXX
@@ -184,7 +187,7 @@ public class HttpUtils {
         byte[] postedBytes = new byte [len];
         try {
             int offset = 0;
-       
+
 	    do {
 		int inputLen = in.read (postedBytes, offset, len - offset);
 		if (inputLen <= 0) {
@@ -223,14 +226,14 @@ public class HttpUtils {
     static private String parseName(String s, StringBuffer sb) {
 	sb.setLength(0);
 	for (int i = 0; i < s.length(); i++) {
-	    char c = s.charAt(i); 
+	    char c = s.charAt(i);
 	    switch (c) {
 	    case '+':
 		sb.append(' ');
 		break;
 	    case '%':
 		try {
-		    sb.append((char) Integer.parseInt(s.substring(i+1, i+3), 
+		    sb.append((char) Integer.parseInt(s.substring(i+1, i+3),
 						      16));
 		    i += 2;
 		} catch (NumberFormatException e) {
@@ -263,7 +266,7 @@ public class HttpUtils {
      * The returned URL contains a protocol, server name, port
      * number, and server path, but it does not include query
      * string parameters.
-     * 
+     *
      * <p>Because this method returns a <code>StringBuffer</code>,
      * not a string, you can modify the URL easily, for example,
      * to append query parameters.
@@ -273,7 +276,7 @@ public class HttpUtils {
      *
      * @param req	a <code>HttpServletRequest</code> object
      *			containing the client's request
-     * 
+     *
      * @return		a <code>StringBuffer</code> object containing
      *			the reconstructed URL
      *

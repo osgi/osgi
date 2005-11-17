@@ -1,19 +1,19 @@
 /*
  * Copyright 1999,2004 The Apache Software Foundation.
  * Copyright 2005 OSGi Alliance
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- */ 
+ */
 /*
  * Modified by the OSGi Alliance to provide the Servlet 2.1 API.
  */
@@ -26,7 +26,7 @@ import java.io.IOException;
 
 /**
  * Defines an object that receives requests from the client
- * and sends them to any resource (such as a servlet, 
+ * and sends them to any resource (such as a servlet,
  * HTML file, or JSP file) on the server. The servlet
  * container creates the <code>RequestDispatcher</code> object,
  * which is used as a wrapper around a server resource located
@@ -44,7 +44,7 @@ import java.io.IOException;
  * @see 	ServletRequest#getRequestDispatcher(java.lang.String)
  *
  */
- 
+
 public interface RequestDispatcher {
 
 
@@ -59,22 +59,20 @@ public interface RequestDispatcher {
  * a request and another resource to generate
  * the response.
  *
- * <p>For a <code>RequestDispatcher</code> obtained via 
- * <code>getRequestDispatcher()</code>, the <code>ServletRequest</code> 
+ * <p>For a <code>RequestDispatcher</code> obtained via
+ * <code>getRequestDispatcher()</code>, the <code>ServletRequest</code>
  * object has its path elements and parameters adjusted to match
  * the path of the target resource.
  *
- * <p><code>forward</code> should be called before the response has been 
- * committed to the client (before response body output has been flushed).  
+ * <p><code>forward</code> should be called before the response has been
+ * committed to the client (before response body output has been flushed).
  * If the response already has been committed, this method throws
  * an <code>IllegalStateException</code>.
- * Uncommitted output in the response buffer is automatically cleared 
+ * Uncommitted output in the response buffer is automatically cleared
  * before the forward.
  *
- * <p>The request and response parameters must be either the same
- * objects as were passed to the calling servlet's service method or be
- * subclasses of the {@link ServletRequestWrapper} or {@link ServletResponseWrapper} classes
- * that wrap them.
+ * <p>The request and response parameters must be the same
+ * objects as were passed to the calling servlet's service method.
  *
  *
  * @param request		a {@link ServletRequest} object
@@ -102,7 +100,7 @@ public interface RequestDispatcher {
     /**
      *
      * Includes the content of a resource (servlet, JSP page,
-     * HTML file) in the response. In essence, this method enables 
+     * HTML file) in the response. In essence, this method enables
      * programmatic server-side includes.
      *
      * <p>The {@link ServletResponse} object has its path elements
@@ -110,17 +108,14 @@ public interface RequestDispatcher {
      * servlet cannot change the response status code or set headers;
      * any attempt to make a change is ignored.
      *
-     * <p>The request and response parameters must be either the same
-     * objects as were passed to the calling servlet's service method or be
-     * subclasses of the {@link ServletRequestWrapper} or {@link ServletResponseWrapper} classes
-     * that wrap them.
-     * 
+     * <p>The request and response parameters must be the same
+     * objects as were passed to the calling servlet's service method.
      *
      *
-     * @param request 			a {@link ServletRequest} object 
+     * @param request 			a {@link ServletRequest} object
      *					that contains the client's request
      *
-     * @param response 			a {@link ServletResponse} object 
+     * @param response 			a {@link ServletResponse} object
      * 					that contains the servlet's response
      *
      * @exception ServletException 	if the included resource throws this exception
@@ -129,7 +124,7 @@ public interface RequestDispatcher {
      *
      *
      */
-     
+
     public void include(ServletRequest request, ServletResponse response)
 	throws ServletException, IOException;
 }
