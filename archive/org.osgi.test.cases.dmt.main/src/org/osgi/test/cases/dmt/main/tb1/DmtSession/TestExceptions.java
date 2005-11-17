@@ -88,7 +88,6 @@ public class TestExceptions implements TestInterface {
 	    methodsDontThrowAnyExceptions.add("mangle");
         
         //Theses methods below do not throw SecurityException 
-        methodsDontThrowSecurityException.add("isNodeUri");
         methodsDontThrowSecurityException.add("commit");
         methodsDontThrowSecurityException.add("rollback");
         methodsDontThrowSecurityException.add("close");
