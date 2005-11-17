@@ -65,9 +65,7 @@ public class IsNodeUri implements TestInterface {
 		testIsNodeUri003();
 	}
     private void prepare() {
-        //This method do not throw SecurityException, so, if it is checking for DmtPermission an exception is
-        //incorrectly thrown.
-        tbc.setPermissions(new PermissionInfo[0]);
+    	tbc.setPermissions(new PermissionInfo(DmtPermission.class.getName(), DmtConstants.ALL_NODES,DmtConstants.ALL_ACTIONS));
     }
 	/**
 	 * Asserts that 'true' is returned if the URI really exists.
@@ -114,7 +112,8 @@ public class IsNodeUri implements TestInterface {
 	}
 
 	/**
-	 * This method asserts that relative URI works as described.
+	 * This method asserts that relative URI works as described. Is also tests if 
+	 * only DmtPermission.GET is needed.
 	 * 
 	 * @spec DmtSession.isNodeUri(String)
 	 */
@@ -123,11 +122,11 @@ public class IsNodeUri implements TestInterface {
 		try {
 			tbc.log("#testIsNodeUri003");
 			
-			tbc.setPermissions(new PermissionInfo(DmtPermission.class.getName(), DmtConstants.ALL_NODES,DmtConstants.ALL_ACTIONS));
-			
 			session = tbc.getDmtAdmin().getSession(
 					TestExecPluginActivator.ROOT, DmtSession.LOCK_TYPE_ATOMIC);
-
+			
+			tbc.setPermissions(new PermissionInfo(DmtPermission.class.getName(), DmtConstants.ALL_NODES,DmtPermission.GET));
+			
 			session.isNodeUri(TestExecPluginActivator.INTERIOR_NODE_NAME);
 
 			tbc.pass("A relative URI can be used with isNodeUri.");
@@ -136,6 +135,8 @@ public class IsNodeUri implements TestInterface {
 					+ " [Message: " + e.getMessage() + "]");
 		} finally {
 			tbc.closeSession(session);
+			prepare();
 		}
-	}   	
+	}
+	
 }
