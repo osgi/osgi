@@ -1,0 +1,9 @@
+Manifest-Version: 1.0
+Bundle-SymbolicName: ${p}
+Bundle-Name: impl.bundle.servlet
+Bundle-Description: Servlet 2.1 API
+Bundle-Version: 2.1
+Bundle-Category: servlet
+$(IMPORT-PACKAGE)
+$(EXPORT-PACKAGE)
+CVS-Header: $Header$
