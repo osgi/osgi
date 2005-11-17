@@ -37,6 +37,7 @@
 package org.osgi.test.cases.dmt.plugins.tbc.Others;
 
 import org.osgi.service.dmt.DmtSession;
+import org.osgi.test.cases.dmt.plugins.tbc.DmtConstants;
 import org.osgi.test.cases.dmt.plugins.tbc.DmtTestControl;
 import org.osgi.test.cases.dmt.plugins.tbc.DataPluginFactory.TestDataPlugin;
 import org.osgi.test.cases.dmt.plugins.tbc.ExecPlugin.TestExecPlugin;
@@ -44,6 +45,7 @@ import org.osgi.test.cases.dmt.plugins.tbc.ExecPlugin.TestExecPluginActivator;
 import org.osgi.test.cases.dmt.plugins.tbc.Plugins.OverlappingDataPluginActivator;
 import org.osgi.test.cases.dmt.plugins.tbc.Plugins.OverlappingExecPluginActivator;
 import org.osgi.test.cases.dmt.plugins.tbc.Plugins.OverlappingSubtreeDataPluginActivator;
+import org.osgi.test.cases.dmt.plugins.tbc.Plugins.ToBeOverlappedDataPlugin;
 
 /**
  * @author Luiz Felipe Guimaraes
@@ -121,7 +123,11 @@ public class OverlappingPlugins {
 			session = tbc.getDmtAdmin().getSession(TestExecPluginActivator.ROOT,
 					DmtSession.LOCK_TYPE_SHARED);
 			String nodeTitle = session.getNodeTitle(TestExecPluginActivator.ROOT);
-			tbc.assertEquals("Asserts that DmtAdmin allows that an ExecPlugin overlaps a DataPlugin",TestExecPlugin.GETNODETITLE,nodeTitle);
+			tbc.assertEquals("Asserts that DmtAdmin allows that an ExecPlugin overlaps a DataPlugin",ToBeOverlappedDataPlugin.MESSAGE,nodeTitle);
+			
+			session.execute(TestExecPluginActivator.ROOT, "");
+			tbc.assertEquals("Asserts that DmtAdmin allows that an ExecPlugin overlaps a DataPlugin",TestExecPlugin.EXECUTE,DmtConstants.TEMPORARY);
+			
 		} catch (Exception e) {
 			tbc.fail("Unexpected Exception: " + e.getClass().getName() + " [Message: " + e.getMessage() +"]");
 		} finally {
@@ -142,7 +148,11 @@ public class OverlappingPlugins {
 			session = tbc.getDmtAdmin().getSession(OverlappingExecPluginActivator.ROOT,
 					DmtSession.LOCK_TYPE_SHARED);
 			String nodeTitle = session.getNodeTitle(OverlappingExecPluginActivator.ROOT);
-			tbc.assertEquals("Asserts that DmtAdmin does not allow that an ExecPlugin overlaps another ExecPlugin",TestExecPlugin.GETNODETITLE,nodeTitle);
+			tbc.assertEquals("Asserts that DmtAdmin does not allow that an ExecPlugin overlaps another ExecPlugin",ToBeOverlappedDataPlugin.MESSAGE,nodeTitle);
+			
+			session.execute(OverlappingExecPluginActivator.ROOT, "");
+			tbc.assertEquals("Asserts that DmtAdmin does not allow that an ExecPlugin overlaps another ExecPlugin",TestExecPlugin.EXECUTE,DmtConstants.TEMPORARY);
+			
 		} catch (Exception e) {
 			tbc.fail("Unexpected Exception: " + e.getClass().getName() + " [Message: " + e.getMessage() +"]");
 		} finally {

@@ -831,6 +831,7 @@ public class MetaData {
 
 			TestPluginMetaDataActivator.metaNodeDefault = new TestPluginMetaDataMetaNode();
 			TestPluginMetaDataActivator.metaNodeDefault.setZeroOccurrenceAllowed(false);
+			TestPluginMetaDataActivator.metaNodeDefault.setMaxOccurrence(1);
 
 			session.deleteNode(TestPluginMetaDataActivator.INTERIOR_NODE);
 			tbc.failException("",DmtException.class);
