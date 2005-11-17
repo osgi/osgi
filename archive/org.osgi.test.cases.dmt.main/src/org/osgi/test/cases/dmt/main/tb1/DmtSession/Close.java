@@ -69,7 +69,7 @@ public class Close implements TestInterface  {
         testClose002();
 	}
     private void prepare() {
-        //TODO JavaDoc says it can throw SecurityException but which DmtPermission is needed?
+        //No DmtPermission is needed. 
         tbc.setPermissions(new PermissionInfo[0]);
     }
 	/**
