@@ -38,7 +38,7 @@
  * ============  ==============================================================
  */
 
-package br.org.cesar.bundles.tc2.rp1;
+package br.org.cesar.bundles.tc2.rp2;
 
 import java.io.File;
 import java.io.InputStream;
@@ -91,7 +91,7 @@ public class ResourceProcessorImpl implements BundleActivator, TestingResourcePr
 	
 	public void start(BundleContext bc) throws Exception {
 		Dictionary props = new Hashtable();
-		props.put("service.pid", DeploymentConstants.PID_RESOURCE_PROCESSOR1);
+		props.put("service.pid", DeploymentConstants.PID_RESOURCE_PROCESSOR2);
 		sr = bc.registerService(ResourceProcessor.class.getName(), this, props);
 		System.out.println("Resource Processor started.");
 		resetCount();
@@ -128,7 +128,7 @@ public class ResourceProcessorImpl implements BundleActivator, TestingResourcePr
 	public void prepare()  {
 		addOrder(PREPARE);
 		prepareTime = System.currentTimeMillis();
-		if (simulateExceptionOnPrepare || org.osgi.test.cases.deploymentadmin.tc2.tbc.DeploymentSession.DeploymentSession.SIMULATING_EXCEPTION_ON_PREPARE) {
+		if (simulateExceptionOnPrepare) {
 			throw new RuntimeException("This resource processor cannot commit.");
 		}
 	}
@@ -136,7 +136,7 @@ public class ResourceProcessorImpl implements BundleActivator, TestingResourcePr
 	public void commit() {
 		addOrder(COMMIT);
 		commitedTime = System.currentTimeMillis();
-		if (simulateExceptionOnCommit || org.osgi.test.cases.deploymentadmin.tc2.tbc.DeploymentSession.DeploymentSession.SIMULATING_EXCEPTION_ON_COMMIT) {
+		if (simulateExceptionOnCommit) {
 			throw new RuntimeException("RuntimeException on commit.");
 		}
 	}
