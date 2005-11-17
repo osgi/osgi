@@ -13,7 +13,7 @@ cd bundles
 
 copy bundle001.jar wrong(path)\
 copy bundle001.jar ..\..\org.osgi.test.cases.deploymentadmin.mo\delivered\
-
+copy ..\bundles_update\bundle001.jar ..\..\org.osgi.test.cases.deploymentadmin.mo\res\
 
 ECHO Creating common deployment packages
 jar -cvfm ..\res\simple.dp ..\res\simple_dp.mf bundle001.jar bundle002.jar
@@ -264,7 +264,7 @@ move /y ..\bundles_update\bundle005.jar .\
 jar -cvfm ..\res\simple_fix_pack.dp ..\res\simple_fix_pack_dp.mf bundle001.jar
 jarsigner -keystore ..\megtck_keystore -storepass megtck -keypass megtck ..\res\simple_fix_pack.dp megtck
 copy ..\res\simple_fix_pack.dp ..\..\org.osgi.test.cases.deploymentadmin.mo\delivered\
-REM It copies the simple_fix_pack.dp to other directory the default, so we can use the same archive name when updating a deployment package
+REM It copies the simple_fix_pack.dp to other directory, so we can use the same archive name when updating a deployment package
 copy ..\res\simple_fix_pack.dp ..\..\org.osgi.test.cases.deploymentadmin.mo\delivered\
 ren ..\..\org.osgi.test.cases.deploymentadmin.mo\res\simple_fix_pack.dp simple.dp
 move ..\res\simple_fix_pack.dp ..\..\org.osgi.test.cases.deploymentadmin.tc1\res\
