@@ -37,10 +37,14 @@
 package br.org.cesar.bundles.dmo.rp3;
 
 import java.io.InputStream;
-import java.util.*;
+import java.util.Dictionary;
+import java.util.Hashtable;
 
-import org.osgi.framework.*;
-import org.osgi.service.deploymentadmin.spi.*;
+import org.osgi.framework.BundleActivator;
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.ServiceRegistration;
+import org.osgi.service.deploymentadmin.spi.DeploymentSession;
+import org.osgi.service.deploymentadmin.spi.ResourceProcessor;
 import org.osgi.test.cases.deploymentadmin.mo.tbc.DeploymentmoConstants;
 import org.osgi.test.cases.deploymentadmin.mo.tbc.util.TestingBlockingResourceProcessor;
 
@@ -51,7 +55,6 @@ import org.osgi.test.cases.deploymentadmin.mo.tbc.util.TestingBlockingResourcePr
 public class ResourceProcessorImpl implements BundleActivator, TestingBlockingResourceProcessor {
 
 	private ServiceRegistration sr;
-	private DeploymentSession session;
     private static boolean released = false;
 
 	public void start(BundleContext bc) throws Exception {
@@ -89,19 +92,19 @@ public class ResourceProcessorImpl implements BundleActivator, TestingBlockingRe
             }
     }
 
-    public void process(String name, InputStream stream) throws ResourceProcessorException {
+    public void process(String name, InputStream stream)  {
         
     }
 
-    public void dropped(String resource) throws ResourceProcessorException {
+    public void dropped(String resource)  {
         
     }
 
-    public void dropAllResources() throws ResourceProcessorException {
+    public void dropAllResources()  {
         
     }
 
-    public void prepare() throws ResourceProcessorException {
+    public void prepare()  {
         
     }
 

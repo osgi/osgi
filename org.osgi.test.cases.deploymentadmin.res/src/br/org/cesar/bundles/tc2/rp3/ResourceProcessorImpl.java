@@ -36,12 +36,18 @@
  */
 package br.org.cesar.bundles.tc2.rp3;
 
-import java.io.*;
-import java.util.*;
+import java.io.File;
+import java.io.InputStream;
+import java.util.Dictionary;
+import java.util.Hashtable;
 
-import org.osgi.framework.*;
-import org.osgi.service.deploymentadmin.*;
-import org.osgi.service.deploymentadmin.spi.*;
+import org.osgi.framework.Bundle;
+import org.osgi.framework.BundleActivator;
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.ServiceRegistration;
+import org.osgi.service.deploymentadmin.DeploymentPackage;
+import org.osgi.service.deploymentadmin.spi.DeploymentSession;
+import org.osgi.service.deploymentadmin.spi.ResourceProcessor;
 import org.osgi.test.cases.deploymentadmin.tc2.tbc.DeploymentConstants;
 import org.osgi.test.cases.deploymentadmin.tc2.tbc.DeploymentSession.InstallSession;
 import org.osgi.test.cases.deploymentadmin.tc2.tbc.util.TestingSessionResourceProcessor;
@@ -127,33 +133,33 @@ public class ResourceProcessorImpl implements BundleActivator, TestingSessionRes
 	}
 
     public void process(String arg0, InputStream arg1)
-            throws ResourceProcessorException {
+             {
         if (exceptionAtProcess)
-            throw new ResourceProcessorException(ResourceProcessorException.CODE_OTHER_ERROR);
+            throw new RuntimeException();
         processed = true;
         resourceName = arg0;
         resourceStream = arg1;
     }
 
-    public void dropped(String arg0) throws ResourceProcessorException {
+    public void dropped(String arg0)  {
         dropped = true;
         resourceName = arg0;
         if (testDropped) {
             waitForRelease(false);
         }
         if (exceptionAtDropped)
-            throw new ResourceProcessorException(ResourceProcessorException.CODE_OTHER_ERROR);
+            throw new RuntimeException();
     }
 
-    public void dropAllResources() throws ResourceProcessorException {
+    public void dropAllResources()  {
         if (exceptionAtDropAllResources)
-            throw new ResourceProcessorException(ResourceProcessorException.CODE_OTHER_ERROR);
+            throw new RuntimeException();
         droppedAllResources = true;
     }
 
-    public void prepare() throws ResourceProcessorException {
+    public void prepare()  {
         if (exceptionAtPrepare)
-            throw new ResourceProcessorException(ResourceProcessorException.CODE_OTHER_ERROR);
+            throw new RuntimeException();
         prepared = true;
     }
 
