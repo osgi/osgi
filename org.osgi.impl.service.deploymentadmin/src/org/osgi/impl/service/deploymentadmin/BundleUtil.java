@@ -1,6 +1,7 @@
 /*
  * ============================================================================
  * (c) Copyright 2004 Nokia
+ * (c) Copyright 2005 IBM
  * This material, including documentation and any related computer programs,
  * is protected by copyright controlled by Nokia and its licensors. 
  * All rights are reserved.
@@ -17,7 +18,7 @@
  */
 package org.osgi.impl.service.deploymentadmin;
 
-import java.io.File;
+import java.io.*;
 import java.lang.reflect.Method;
 import java.security.*;
 import java.security.cert.Certificate;
@@ -32,6 +33,7 @@ public class BundleUtil {
     private Class bundleFileClazz;
     private Method getSigningCertificates;
     private Method getSigningCertificateChains;
+	private Method getBaseFile;
 
     /**
      * Returns the certificate chains that signed the bundle. Only
@@ -97,6 +99,19 @@ public class BundleUtil {
         return null;
     }
 
+    public InputStream getBundleStream(Bundle bundle) {
+    	final Object bundleFile = getSignedBundle(bundle);
+    	if (bundleFile == null || getBaseFile == null)
+    		return null;
+    	try {
+    		File baseFile = (File) getBaseFile.invoke(bundleFile, null);
+    		return new FileInputStream(baseFile);
+    	} catch (Exception e) {
+    		e.printStackTrace();
+    	}
+    	return null;
+    }
+
     private Object getBundleData(Bundle bundle) {
         if (bundle.getBundleId() == 0)
             return null;
@@ -143,8 +158,9 @@ public class BundleUtil {
             return null;
         }
         bundleFileClazz = bundleFile.getClass();
-        if (getSigningCertificateChains == null || getSigningCertificates == null)
+        if (getBaseFile == null || getSigningCertificateChains == null || getSigningCertificates == null)
             try {
+            	getBaseFile = bundleFileClazz.getMethod("getBaseFile", new Class[0]);
                 getSigningCertificateChains = bundleFileClazz.getMethod("getSigningCertificateChains", new Class[0]);
                 getSigningCertificates = bundleFileClazz.getMethod("getSigningCertificates", new Class[0]);
             } catch (Exception e) {

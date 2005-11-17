@@ -20,7 +20,6 @@ package org.osgi.impl.service.deploymentadmin;
 import java.io.Serializable;
 import java.security.AccessController;
 import java.security.PrivilegedAction;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -74,8 +73,6 @@ public class DeploymentPackageImpl implements DeploymentPackage, Serializable {
 
         if (null != certChains)
             this.certChains = certChains;
-        
-        new DeploymentPackageVerifier().verify(this);
     }
 
     /*
@@ -97,22 +94,6 @@ public class DeploymentPackageImpl implements DeploymentPackage, Serializable {
     /*
      * Creates the Systemp DP
      */
-    /*static DeploymentPackageImpl createSystem(DeploymentAdminImpl da, Set bundleEntries) {
-        if (null == da)
-            throw new IllegalArgumentException("Internal error");
-        
-        DeploymentPackageImpl dp = new DeploymentPackageImpl();
-        dp.mainSection = new CaseInsensitiveMap(null, dp);
-        dp.mainSection.put(DAConstants.DP_NAME, "system");
-        dp.mainSection.put(DAConstants.DP_VERSION, "0.0.0");
-        dp.bundleEntries = new LinkedList(bundleEntries);
-        
-        return dp;
-    }*/
-
-    /*
-     * Creates the Systemp DP
-     */
     static DeploymentPackageImpl createOriginalSystemDp(DeploymentAdminImpl da, Set bundleEntries) {
         if (null == da)
             throw new IllegalArgumentException("Internal error");
@@ -126,14 +107,6 @@ public class DeploymentPackageImpl implements DeploymentPackage, Serializable {
         
         return dp;
     }
-
-    /*boolean isEmpty() {
-        return getName().equals("") && getVersion().equals(new Version("0.0.0"));
-    }*/
-    
-    /*boolean isSystem() {
-        return getName().equals("system") && getVersion().equals(new Version("0.0.0"));
-    }*/
     
     boolean isSystem() {
         return getName().equals("system");
@@ -467,138 +440,7 @@ public class DeploymentPackageImpl implements DeploymentPackage, Serializable {
     synchronized void setStale() {
         stale = Boolean.TRUE;
     }
-    
-    /*
-     * Checks whether the deployment package is valid.
-     */
-    private class DeploymentPackageVerifier {
         
-        public void verify(DeploymentPackageImpl dp) throws DeploymentException {
-            checkMainSection(dp);            
-            checkNameSections(dp);
-        }
-        
-        private void checkMainSection(DeploymentPackageImpl dp)
-        		throws DeploymentException
-        {
-            if (null == dp.getName())
-                throw new DeploymentException(DeploymentException.CODE_MISSING_HEADER,
-                        "Missing deployment package name");
-            
-            if ("system".equals(dp.getName()))
-                throw new DeploymentException(DeploymentException.CODE_BAD_HEADER,
-                		"The \"System\" deployment package name is reserved");
-            
-            if (null == dp.getVersion())
-                throw new DeploymentException(DeploymentException.CODE_MISSING_HEADER,
-                        "Missing deployment package version in: " + dp.getName());
-            
-            try {
-                String s = (String) dp.mainSection.get(DAConstants.DP_VERSION);
-                new Version(s);
-            }
-            catch (Exception e) {
-                throw new DeploymentException(DeploymentException.CODE_BAD_HEADER,
-                        "Bad version in: " + dp, e);
-            }
-            
-            if (null != dp.getFixPackRange()) {
-	            try {
-	                String s = (String) dp.mainSection.get(DAConstants.DP_FIXPACK);
-	                new VersionRange(s);
-	            }
-	            catch (Exception e) {
-	                throw new DeploymentException(DeploymentException.CODE_BAD_HEADER,
-	                        "Bad version range in: " + dp, e);
-	            }
-            }
-            
-            if (null == dp.getName())
-                throw new DeploymentException(DeploymentException.CODE_MISSING_HEADER, 
-                        "Missing header in: " + dp + " header: " + DAConstants.DP_NAME);
-         
-            if (null == dp.getVersion())
-                throw new DeploymentException(DeploymentException.CODE_MISSING_HEADER, 
-                        "Missing header in: " + dp + " header: " + DAConstants.DP_VERSION);        
-        }
-    
-        private void checkNameSections(DeploymentPackageImpl dp)
-        		throws DeploymentException
-        {
-            for (Iterator iter = dp.bundleEntries.iterator(); iter.hasNext();) {
-                BundleEntry be = (BundleEntry) iter.next();
-                checkBundleEntry(dp, be);
-            }
-            
-            for (Iterator iter = dp.resourceEntries.iterator(); iter.hasNext();) {
-                ResourceEntry re = (ResourceEntry) iter.next();
-                checkResourceEntry(dp, re);
-            }
-            
-            // this check only inside one dp
-            Set s = new HashSet();
-            for (Iterator iter = dp.bundleEntries.iterator(); iter.hasNext();) {
-                BundleEntry be = (BundleEntry) iter.next();
-                if (s.contains(be.getSymbName()))
-                    throw new DeploymentException(
-                            DeploymentException.CODE_BUNDLE_SHARING_VIOLATION,
-                            "Bundle with symbolic name \"" + be.getSymbName() + "\" " +
-                            "is allready present in the system");
-                s.add(be.getSymbName());
-            }
-        }
-
-        private void checkBundleEntry(DeploymentPackageImpl dp, BundleEntry be) 
-				throws DeploymentException
-        {
-            checkResourceName(be.getResName());
-            
-            if (null == dp.getFixPackRange() && be.isMissing())
-                	throw new DeploymentException(DeploymentException.CODE_BAD_HEADER, 
-                        DAConstants.MISSING + " header is only allowed in fix-pack (" +
-                        dp + ")");
-            
-            Set set = dpCtx.getDeploymentPackages();
-            for (Iterator iter = set.iterator(); iter.hasNext();) {
-                DeploymentPackageImpl eDp = (DeploymentPackageImpl) iter.next();
-                if (dp.getName().equals(eDp.getName()))
-                    continue;
-                for (Iterator iter2 = eDp.getBundleEntries().iterator(); iter2.hasNext();) {
-                    BundleEntry	eBe	= (BundleEntry) iter2.next();
-                    if (be.getSymbName().equals(eBe.getSymbName()))
-                        throw new DeploymentException(DeploymentException.CODE_BUNDLE_SHARING_VIOLATION, 
-                                "Bundle " + be + " is already installed by the package " + eDp);
-                }
-            }
-        }
-        
-        private void checkResourceName(String name) throws DeploymentException {
-            for (int i = 0; i < name.length(); i++) {
-                char ch = name.charAt(i);
-                if (ch >= 'a' && ch <= 'z')
-                    continue;
-                if (ch >= 'A' && ch <= 'Z')
-                    continue;
-                if (ch >= '0' && ch <= '9')
-                    continue;
-                if (ch == '_' || ch == '.' || ch == '-' || ch == '/')
-                    continue;
-                throw new DeploymentException(DeploymentException.CODE_BAD_HEADER, 
-                        "Character '" + ch + "' is not allowed in resource names");
-            }
-        }
-
-        private void checkResourceEntry(DeploymentPackageImpl dp, ResourceEntry re) 
-        		throws DeploymentException 
-        {
-            if (null == dp.getFixPackRange() && re.isMissing())
-            	throw new DeploymentException(DeploymentException.CODE_BAD_HEADER, 
-                    DAConstants.MISSING + " header is only allowed in fix-pack (" +
-                    dp + ")");
-        }
-
-    }
-
     public List getResourceEntries() {
         return resourceEntries;
     }
@@ -621,6 +463,10 @@ public class DeploymentPackageImpl implements DeploymentPackage, Serializable {
     
     public CaseInsensitiveMap getMainSection() {
         return mainSection;
+    }
+    
+    DeploymentPackageCtx getDpCtx() {
+    	return dpCtx;
     }
 
 }

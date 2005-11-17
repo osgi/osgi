@@ -193,21 +193,24 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
         DeploymentPackageJarInputStream wjis = null;
         DeploymentPackageImpl srcDp = null;
         boolean result = false;
+        Event startEvent = null;
         try {
             // create the source DP
             wjis = new DeploymentPackageJarInputStream(in);
-            if (!checkCertificateChains(wjis.getCertificateChains()))
-                throw new DeploymentException(DeploymentException.CODE_SIGNING_ERROR, 
-                    "No certificate was found in the keystore for the deployment package");
             srcDp = new DeploymentPackageImpl(DeploymentPackageCtx.
                     getInstance(logger, context, this), wjis.getManifest(), 
                     wjis.getCertificateChainStringArrays());
+            new DeploymentPackageVerifier(srcDp).verify();
             srcDp.setResourceBundle(wjis.getResourceBundle());
+            if (!checkCertificateChains(wjis.getCertificateChains()))
+            	throw new DeploymentException(DeploymentException.CODE_SIGNING_ERROR, 
+            	"No certificate was found in the keystore for the deployment package");
         
+            session = createInstallUpdateSession(srcDp);
+
             // does the caller have the install permission?
             checkPermission(srcDp, DeploymentAdminPermission.INSTALL);
-            sendInstallEvent(srcDp.getName());
-            session = createInstallUpdateSession(srcDp);
+            startEvent = sendInstallEvent(srcDp.getName());
         
             // checks the session
             if (equalSymbNameAndVersion())
@@ -235,7 +238,7 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
             throw new DeploymentException(DeploymentException.CODE_OTHER_ERROR,
                 e.getMessage(), e);
         } finally {
-            sendCompleteEvent(result);
+            sendCompleteEvent(startEvent, result);
             clearSession();
         }
         return srcDp;
@@ -568,16 +571,17 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
     /*
      * Convenience method to send events
      */
-    private void sendInstallEvent(String dpName) {
-        final EventAdmin ea = (EventAdmin) trackEvent.getService();
+    private Event sendInstallEvent(String dpName) {
+    	final Hashtable ht = new Hashtable();
+    	ht.put(DAConstants.EVENTPROP_DPNAME, dpName);
+    	final EventAdmin ea = (EventAdmin) trackEvent.getService();
         if (null == ea)
-            return;
-        final Hashtable ht = new Hashtable();
-        ht.put(DAConstants.EVENTPROP_DPNAME, dpName);
-        AccessController.doPrivileged(new PrivilegedAction() {
+            return null;
+        return (Event) AccessController.doPrivileged(new PrivilegedAction() {
             public Object run() {
-                ea.postEvent(new Event(DAConstants.TOPIC_INSTALL, ht));
-                return null;
+            	Event e = new Event(DAConstants.TOPIC_INSTALL, ht);
+                ea.postEvent(e);
+                return e;
             }
             });
     }
@@ -585,34 +589,34 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
     /*
      * Convenience method to send events
      */
-    private void sendUninstallEvent(String dpName) {
+    private Event sendUninstallEvent(String dpName) {
+    	final Hashtable ht = new Hashtable();
+    	ht.put(DAConstants.EVENTPROP_DPNAME, dpName);
         final EventAdmin ea = (EventAdmin) trackEvent.getService();
         if (null == ea)
-            return;
-        final Hashtable ht = new Hashtable();
-        ht.put(DAConstants.EVENTPROP_DPNAME, dpName);
-        AccessController.doPrivileged(new PrivilegedAction() {
+            return null;
+        return (Event) AccessController.doPrivileged(new PrivilegedAction() {
             public Object run() {
-                ea.postEvent(new Event(DAConstants.TOPIC_UNINSTALL, ht));
-                return null;
+            	Event e = new Event(DAConstants.TOPIC_UNINSTALL, ht);
+                ea.postEvent(e);
+                return e;
             }});
     }
 
     /*
      * Convenience method to send events
      */
-    private void sendCompleteEvent(boolean succ) {
+    private void sendCompleteEvent(Event startEvent, boolean succ) {
+    	if (null == startEvent)
+    		return;
+    	
+        final Hashtable ht = new Hashtable();
+        ht.put(DAConstants.EVENTPROP_DPNAME, startEvent.getProperty(DAConstants.EVENTPROP_DPNAME));
+        ht.put(DAConstants.EVENTPROP_SUCCESSFUL, new Boolean(succ));
+        
         final EventAdmin ea = (EventAdmin) trackEvent.getService();
         if (null == ea)
             return;
-        final Hashtable ht = new Hashtable();
-        if (null == session)
-            return;
-        DeploymentPackage srcDp = session.getSourceDeploymentPackage();
-        if (null == srcDp)
-            return;
-        ht.put(DAConstants.EVENTPROP_DPNAME, srcDp.getName());
-        ht.put(DAConstants.EVENTPROP_SUCCESSFUL, new Boolean(succ));
         AccessController.doPrivileged(new PrivilegedAction() {
             public Object run() {
                 ea.postEvent(new Event(DAConstants.TOPIC_COMPLETE, ht));
@@ -862,8 +866,9 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
         waitIfBusy();
         checkPermission(dp, DeploymentAdminPermission.UNINSTALL);
         boolean result = false;
+        Event startEvent = null;
         try {
-            sendUninstallEvent(dp.getName());
+        	startEvent = sendUninstallEvent(dp.getName());
             session = createUninstallSession(dp);
             session.uninstall(false);
             if (!session.isCancelled()) {
@@ -878,7 +883,7 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
             throw new DeploymentException(DeploymentException.CODE_OTHER_ERROR,
                 e.getMessage(), e);
         } finally {
-            sendCompleteEvent(result);
+            sendCompleteEvent(startEvent, result);
             clearSession();
         }
     }
@@ -891,7 +896,7 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
     boolean uninstallForced(DeploymentPackageImpl dp) throws DeploymentException {
         waitIfBusy();
         checkPermission(dp, DeploymentAdminPermission.UNINSTALL);
-        sendUninstallEvent(dp.getName());
+        Event startEvent = sendUninstallEvent(dp.getName());
         boolean result = false;
         try {
             session = createUninstallSession(dp);
@@ -908,7 +913,7 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
         } catch (Exception e) {
             logger.log(e);
         } finally {
-            sendCompleteEvent(result);
+            sendCompleteEvent(startEvent, result);
             clearSession();
         }
         return result;
