@@ -1,15 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry kind="src" path="src"/>
-	<classpathentry kind="lib" path="/cnf/jar/ifc112.jar"/>
-	<classpathentry kind="lib" path="/cnf/jar/servlet.jar"/>
 	<classpathentry kind="var" path="JRE_LIB">
 		<attributes>
 			<attribute value="http://java.sun.com/j2se/1.4.2/docs/api" name="javadoc_location"/>
 		</attributes>
 	</classpathentry>
 	<classpathentry sourcepath="/osgi.released/osgi.jar" kind="lib" path="/osgi.released/osgi.jar"/>
-	<classpathentry kind="lib" path="/cnf/jar/saxon.jar"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/osgi.internal"/>
+	<classpathentry kind="lib" path="/cnf/jar/ifc11.jar"/>
+	<classpathentry kind="lib" path="/cnf/jar/servlet.jar"/>
 	<classpathentry kind="output" path="src"/>
 </classpath>

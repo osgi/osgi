@@ -10,14 +10,16 @@ import java.io.*;
 import java.lang.reflect.*;
 import java.net.*;
 import java.util.*;
+
 import netscape.application.*;
 import netscape.application.Timer;
-import netscape.constructor.Plan;
+
 import org.osgi.framework.*;
 import org.osgi.test.director.*;
 import org.osgi.test.script.Tag;
 import org.osgi.test.service.*;
 import org.osgi.test.shared.*;
+
 
 /**
  * Applet that communicates with the handler to control the testcases.
@@ -152,8 +154,8 @@ public class TestApplet extends Application implements ExtendedTarget, IApplet,
 			root.setColor(Color.lightGray);
 			root.setBuffered(true);
 			handler.setApplet(this);
-			Plan plan = getPlan("test");
-			plan.unarchiveObjects();
+			NPlan plan = getPlan("test");
+			//plan.unarchiveObjects();
 			View view = plan.viewWithContents();
 			TargetChain.applicationChain().addTarget(this, true);
 			view.setBounds(4, 4, root.width() - 8, root.height() - 8);
@@ -231,15 +233,14 @@ public class TestApplet extends Application implements ExtendedTarget, IApplet,
 	 * Plans contain an archived version of the components.
 	 * 
 	 * @param name name of the plan file without extension (e.g. "test")
+	 * @throws Exception 
 	 * @returns The plan object or null if not found
 	 */
-	static Plan getPlan(String name) {
+	NPlan getPlan(String name) throws Exception {
 		String file = "plans/" + name + ".plana";
 		InputStream in = getResourceAsStream(file);
 		if (in != null) {
-			Plan plan = Plan.createPlan(in, Plan.ASCII_TYPE);
-			plan.unarchiveObjects(TargetChain.applicationChain());
-			return plan;
+			return new NPlan(in, this);
 		}
 		return null;
 	}
@@ -257,7 +258,7 @@ public class TestApplet extends Application implements ExtendedTarget, IApplet,
 			return PrivateBitmap.class;
 		if (name.equals("netscape.application.ListItem"))
 			return TabListItem.class;
-		return super.classForName(name);
+		return null;
 	}
 
 	/**
