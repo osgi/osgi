@@ -25,7 +25,7 @@ import java.util.Map;
  * {@link DmtAdmin#getSession(String, String, int) DmtAdmin.getSession}), as
  * well as &quot; <code>*</code> &quot; indicating any principal.
  */
-public class Acl implements Cloneable {
+public final class Acl implements Cloneable {
 
     //----- Public constants -----//
 
