@@ -1,8 +1,8 @@
 OSGi Distribution Licenses
 
 All JAR files in the licensed directory/project are -licensed- binaries. This means 
-that there are restrictions on their usage. They are NOT material in the 
-sense of the 3.2 clause in the membership agreement.
+that there are restrictions on their usage. They are NOT membership donated
+material in the  sense of the 3.2 clause in the membership agreement.
 
 SERVLET-----------------------------------------------------------------
 Copyright				Copyright (c) 1999-2005 Apache Software Foundation
