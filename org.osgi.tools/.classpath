@@ -2,15 +2,15 @@
 <classpath>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="lib" path="/cnf/ant/lib/ant.jar"/>
-	<classpathentry kind="lib" path="/cnf/jar/junit.jar"/>
+	<classpathentry kind="lib" path="/licensed/ant/lib/ant.jar"/>
+	<classpathentry kind="lib" path="/licensed/jar/junit.jar"/>
 	<classpathentry sourcepath="/osgi.released/osgi.internal.jar" kind="lib" path="/osgi.released/osgi.internal.jar"/>
-	<classpathentry kind="lib" path="/cnf/jar/saxon.jar"/>
-	<classpathentry kind="lib" path="/cnf/jar/nanoxml.jar"/>
+	<classpathentry kind="lib" path="/licensed/jar/saxon.jar"/>
+	<classpathentry kind="lib" path="/licensed/jar/nanoxml.jar"/>
 	<classpathentry kind="lib" path="jar/tools.jar"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/org.osgi.tools.btool"/>
 	<classpathentry sourcepath="/osgi.released/osgi.jar" kind="lib" path="/osgi.released/osgi.jar"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/org.osgi.test.tool"/>
-	<classpathentry kind="lib" path="/cnf/jar/bcel.jar"/>
+	<classpathentry kind="lib" path="/licensed/jar/bcel.jar"/>
 	<classpathentry kind="output" path="src"/>
 </classpath>

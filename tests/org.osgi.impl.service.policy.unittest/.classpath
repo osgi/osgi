@@ -4,7 +4,7 @@
 		<attributes>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="/cnf/jar/junit.jar">
+	<classpathentry kind="lib" path="/licensed/jar/junit.jar">
 		<attributes>
 		</attributes>
 	</classpathentry>

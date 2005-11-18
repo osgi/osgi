@@ -3,8 +3,8 @@
 	<classpathentry kind="src" path="/org.osgi.service.component"/>
 	<classpathentry sourcepath="/osgi.released/ee.minimum.jar" kind="lib" path="/osgi.released/ee.minimum.jar"/>
 	<classpathentry sourcepath="/osgi.released/osgi.jar" kind="lib" path="/osgi.released/osgi.jar"/>
-	<classpathentry kind="lib" path="/cnf/jar/saxon.jar"/>
 	<classpathentry kind="src" path="/org.osgi.impl.framework.eclipse"/>
 	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="lib" path="/licensed/jar/saxon.jar"/>
 	<classpathentry kind="output" path="src"/>
 </classpath>

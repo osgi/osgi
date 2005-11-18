@@ -53,7 +53,7 @@
 	                        name. I.e. tbc.jar=tc1/tbc/org.osgi.tc1.jar
 	                        Example:
 	                        	include.myjar.jar=embedded.jar,  \
-	                        	  ifc.jar=../cnf/jar/ifc.jar               
+	                        	  ifc.jar=../licensed/jar/ifc11.jar               
 	                        	  
 	  Miscellaneous properties that can be overridden are:
 	  
@@ -90,7 +90,7 @@
 		<property environment="env" />
 
 		<taskdef resource="org/osgi/tools/build/ant/taskdef.properties" classpath="${workspace}/cnf/jar/btool.jar" />
-		<taskdef resource="net/sf/antcontrib/antcontrib.properties" classpath="${workspace}/cnf/ant-contrib/ant-contrib-0.6.jar" />
+		<taskdef resource="net/sf/antcontrib/antcontrib.properties" classpath="${workspace}/licensed/ant-contrib/ant-contrib-0.6.jar" />
 
 		<!-- Include properies files in the following order:
 				Project properties
