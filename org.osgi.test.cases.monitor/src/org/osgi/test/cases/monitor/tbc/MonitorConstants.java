@@ -41,6 +41,7 @@ package org.osgi.test.cases.monitor.tbc;
  */
 public class MonitorConstants {
 
+	public static final String OSGI_ROOT = System.getProperty("org.osgi.service.dmt.root");
 	public static final String LONGID = "abcdefghjklmnoprstuvw";
 	public final static String INVALID_ID = ";/?:@&=+$,";
 	public final static String SV_MONITORABLEID1 = "cesar";
@@ -75,7 +76,7 @@ public class MonitorConstants {
 	public static final String CONST_STATUSVARIABLE_VALUE = "mon.statusvariable.value";
 	public static final String CONST_MONITORABLE_PID = "mon.monitorable.pid";
 	public static final String CONST_LISTENER_ID = "mon.listener.id";
-	public static final String DMT_OSGI_MONITOR = "./OSGi/Monitor";
+	public static final String DMT_OSGI_MONITOR = OSGI_ROOT+"/Monitor";
 	public final static String DMT_URI_MONITORABLE1 = DMT_OSGI_MONITOR + "/"+SV_MONITORABLEID1;
 	public final static String DMT_URI_MONITORABLE2 = DMT_OSGI_MONITOR + "/"+SV_MONITORABLEID2;
 	public final static String MONITOR_XML_MONITORABLE1_SV1 = "x-oma-trap:"+SV_MONITORABLEID1+"/"+SV_NAME1;

@@ -67,6 +67,7 @@ import org.osgi.test.cases.monitor.tbc.MonitorPermission.MonitorPermission;
 import org.osgi.test.cases.monitor.tbc.MonitorPermission.MonitorPermissionConstants;
 import org.osgi.test.cases.monitor.tbc.Monitorable.Monitorables;
 import org.osgi.test.cases.monitor.tbc.MonitoringJob.IsLocal;
+import org.osgi.test.cases.monitor.tbc.MonitoringJob.IsRunning;
 import org.osgi.test.cases.monitor.tbc.MonitoringJob.RemoteAlertSender;
 import org.osgi.test.cases.monitor.tbc.MonitoringJob.Stop;
 import org.osgi.test.cases.monitor.tbc.StatusVariable.StatusVariable;
@@ -428,7 +429,13 @@ public class MonitorTestControl extends DefaultTestBundleControl {
 	public void testMonitorAdminStartScheduledJob() {
 		testInterfaces[8].run();
 	}
-
+	
+	/**
+	 * Executes MonitoringJob.isRunning test methods
+	 */
+	public void testMonitoringJobIsRunning() {
+		new IsRunning(this).run();
+	}
 	/*
 	 * Executes the MonitoringJobs.Stop tests
 	 */

@@ -71,6 +71,8 @@ public class GetRunningJobs implements TestInterface {
 		testGetRunningJobs002();
 		testGetRunningJobs003();
 		testGetRunningJobs004();
+		testGetRunningJobs005();
+		testGetRunningJobs006();
 	}
 
 	/**
@@ -295,11 +297,6 @@ public class GetRunningJobs implements TestInterface {
 			infos = tbc.getPermissionAdmin().getPermissions(
 					tbc.getTb1Location());
 			
-			tbc.setLocalPermission(new PermissionInfo[] {
-					new PermissionInfo(org.osgi.service.monitor.MonitorPermission.class.getName(), MonitorConstants.SVS[0], org.osgi.service.monitor.MonitorPermission.STARTJOB),	
-					new PermissionInfo(org.osgi.service.monitor.MonitorPermission.class.getName(), MonitorConstants.SVS[1], org.osgi.service.monitor.MonitorPermission.STARTJOB)
-			});
-
 			mjs = tbc.getMonitorAdmin().getRunningJobs();
 			
 			tbc.assertNotNull("Asserting if a non-null value is returned by getRunningJobs().", mjs);
@@ -312,6 +309,94 @@ public class GetRunningJobs implements TestInterface {
 		} finally {
 			tbc.setTb1Permission(infos);				
 		}
-	}	
+	}
+	
+	/**
+	 * This method asserts if the caller does not have
+	 * MonitorPermission with the proper startjob action for all
+	 * the Status Variables monitored by a job, then that job
+	 * will be silently omitted from the results. This method uses
+	 * a change based job.
+	 * 
+	 * @spec MonitorAdmin.getRunningJobs()
+	 */
+	private void testGetRunningJobs005() {
+		tbc.log("#testGetRunningJobs005");
+		MonitoringJob mj = null;
+		MonitoringJob[] mjs = null;
+		PermissionInfo[] infos = null;		
+		try {									
+			tbc.stopRunningJobs();
+			
+			infos = tbc.getPermissionAdmin().getPermissions(
+					tbc.getTb1Location());
+			
+			tbc.setLocalPermission(new PermissionInfo[] {					
+					new PermissionInfo(org.osgi.service.monitor.MonitorPermission.class.getName(), MonitorConstants.SVS[1], org.osgi.service.monitor.MonitorPermission.STARTJOB)
+			});
+
+			mj = tbc.getMonitorAdmin().startJob(MonitorConstants.INITIATOR,
+					MonitorConstants.SVS, MonitorConstants.COUNT);
+
+			mjs = tbc.getMonitorAdmin().getRunningJobs();
+		
+			tbc.assertNotNull("Asserting if a non-null value is returned by getRunningJobs().", mjs);					
+			
+			tbc.assertEquals(MessagesConstants.getMessage(MessagesConstants.ASSERT_EQUALS, new String[] { "number of running jobs", 0+"" }),
+					0, mjs.length);
+						
+		} catch (Exception e) {
+			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": " + e.getClass().getName());
+		} finally {
+			mj.stop();		
+			tbc.setTb1Permission(infos);
+		}
+	}
+	
+	/**
+	 * This method asserts if the caller does not have
+	 * MonitorPermission with the proper startjob action for all
+	 * the Status Variables monitored by a job, then that job
+	 * will be silently omitted from the results. This method uses
+	 * a time based job.
+	 * 
+	 * @spec MonitorAdmin.getRunningJobs()
+	 */
+	private void testGetRunningJobs006() {
+		tbc.log("#testGetRunningJobs006");
+		MonitoringJob mj = null;
+		MonitoringJob[] mjs = null;
+		PermissionInfo[] infos = null;	
+		try {
+			tbc.stopRunningJobs();
+			
+			infos = tbc.getPermissionAdmin().getPermissions(
+					tbc.getTb1Location());			
+
+			tbc.setLocalPermission(new PermissionInfo[] {
+					new PermissionInfo(org.osgi.service.monitor.MonitorPermission.class.getName(), MonitorConstants.SVS[1], org.osgi.service.monitor.MonitorPermission.STARTJOB)
+			});
+			
+			
+			mj = tbc.getMonitorAdmin().startScheduledJob(
+					MonitorConstants.INITIATOR, MonitorConstants.SVS,
+					MonitorConstants.SCHEDULE, MonitorConstants.COUNT);
+
+
+			mjs = tbc.getMonitorAdmin().getRunningJobs();
+		
+			tbc.assertNotNull("Asserting if a non-null value is returned by getRunningJobs().", mjs);
+			
+			tbc.assertEquals(MessagesConstants.getMessage(MessagesConstants.ASSERT_EQUALS, new String[] { "number of running jobs", 0+""}),
+					0, mjs.length);
+			
+		} catch (Exception e) {
+			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": " + e.getClass().getName());
+		} finally {
+			tbc.setTb1Permission(infos);
+			mj.stop();
+		}
+	}
+	
 
 }

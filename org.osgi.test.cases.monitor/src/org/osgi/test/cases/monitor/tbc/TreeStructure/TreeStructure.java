@@ -89,7 +89,7 @@ public class TreeStructure {
 			session = tbc.getDmtAdmin().getSession(".",
 					DmtSession.LOCK_TYPE_SHARED);
 
-			tbc.assertTrue("Asserts if ./OSGi/Monitor is a valid node", session
+			tbc.assertTrue("Asserts if $/Monitor is a valid node", session
 					.isNodeUri(MonitorConstants.DMT_OSGI_MONITOR));
 
 			MetaNode metaNode = session
@@ -131,7 +131,7 @@ public class TreeStructure {
 					MonitorConstants.DMT_OSGI_MONITOR,
 					DmtSession.LOCK_TYPE_SHARED);
 
-			tbc.assertTrue("Asserts if ./OSGi/Monitor is a valid node", session
+			tbc.assertTrue("Asserts if .$/Monitor is a valid node", session
 					.isNodeUri(MonitorConstants.DMT_URI_MONITORABLE1));
 
 			MetaNode metaNode = session
@@ -177,7 +177,7 @@ public class TreeStructure {
 
 			tbc
 					.assertTrue(
-							"Asserts if ./OSGi/Monitor/cesar/test0 is a valid node",
+							"Asserts if .$/Monitor/cesar/test0 is a valid node",
 							session
 									.isNodeUri(MonitorConstants.DMT_URI_MONITORABLE1_SV1));
 
@@ -286,7 +286,7 @@ public class TreeStructure {
 
 			tbc
 					.assertTrue(
-							"Asserts if ./OSGi/Monitor/cesar/test0/CM is a valid node",
+							"Asserts if .$/Monitor/cesar/test0/CM is a valid node",
 							session
 									.isNodeUri(MonitorConstants.DMT_URI_MONITORABLE_SV1_CM));
 
@@ -402,7 +402,7 @@ public class TreeStructure {
 
 			tbc
 					.assertTrue(
-							"Asserts if ./OSGi/Monitor/cesar/test0/Server is a valid node",
+							"Asserts if .$/Monitor/cesar/test0/Server is a valid node",
 							session
 									.isNodeUri(MonitorConstants.DMT_URI_MONITORABLE_SV1_SERVER));
 
@@ -992,5 +992,7 @@ public class TreeStructure {
 					MonitorConstants.DMT_URI_MONITORABLE1_PROPERTIES[0] });
 		}
 	}
+	
+	
 
 }

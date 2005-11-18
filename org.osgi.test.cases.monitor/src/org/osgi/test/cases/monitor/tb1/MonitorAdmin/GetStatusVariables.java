@@ -45,8 +45,6 @@
  */
 package org.osgi.test.cases.monitor.tb1.MonitorAdmin;
 
-import org.osgi.framework.Bundle;
-import org.osgi.framework.BundleException;
 import org.osgi.service.monitor.MonitorPermission;
 import org.osgi.service.monitor.StatusVariable;
 import org.osgi.service.permissionadmin.PermissionInfo;
@@ -78,7 +76,6 @@ public class GetStatusVariables implements TestInterface {
 		testGetStatusVariables006();
 		testGetStatusVariables007();
 		testGetStatusVariables008();
-		testGetStatusVariables009();
 	}
 
 	/**
@@ -342,40 +339,6 @@ public class GetStatusVariables implements TestInterface {
 		} finally {
 			tbc.setTb1Permission(infosTb1);
 			tbc.setTb3Permission(infosTb3);
-		}
-	}	
-	
-	/**
-	 * This method asserts that when a Monitorable with two equals StatusVariable
-	 * is installed, getStatusVariableNames does not return two equals name. 
-	 * 
-	 * @spec MonitorAdmin.getStatusVariables(string)
-	 */		
-	private void testGetStatusVariables009() {
-		Bundle bundle = null;
-		tbc.log("#testGetStatusVariables009");
-		PermissionInfo[] infos = null;
-		try {
-			infos = tbc.getPermissionAdmin().getPermissions(
-					tbc.getTb1Location());
-
-			tbc.setLocalPermission(new PermissionInfo(MonitorPermission.class
-					.getName(), "*/*",
-					MonitorPermission.READ));
-		
-			bundle = tbc.installBundle("tb4.jar");		
-			StatusVariable[] sv = tbc.getMonitorAdmin().getStatusVariables("sameSV");
-			tbc.assertEquals("Asserting if getStatusVariables returns an array of 1 element.", 1, sv.length);
-			tbc.assertEquals("Asserting if getStatusVariables returns the correct element name.", MonitorConstants.SV_NAME1, sv[0].getID());
-		} catch (Exception e) {
-			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": " + e.getClass().getName());
-		} finally {
-			try {
-				bundle.uninstall();
-			} catch (BundleException e1) {
-				tbc.log("fail when we try to uninstall the tb4.");
-			}
-			tbc.setTb1Permission(infos);
 		}
 	}	
 
