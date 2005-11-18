@@ -8,7 +8,7 @@
 	</classpathentry>
 	<classpathentry sourcepath="/osgi.released/osgi.jar" kind="lib" path="/osgi.released/osgi.jar"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/osgi.internal"/>
-	<classpathentry kind="lib" path="/cnf/jar/ifc11.jar"/>
-	<classpathentry kind="lib" path="/cnf/jar/servlet.jar"/>
+	<classpathentry sourcepath="/aQute.constructor/IFC11SRC.ZIP" kind="lib" path="/licensed/jar/ifc11.jar"/>
+	<classpathentry kind="lib" path="/licensed/jar/servlet.jar"/>
 	<classpathentry kind="output" path="src"/>
 </classpath>

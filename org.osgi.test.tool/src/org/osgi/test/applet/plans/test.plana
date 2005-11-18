@@ -58,10 +58,10 @@
                 String-41 = { value = decreaseValue;};
                 String-42 = { value = increaseValue;};
                 String-43 = { value = FontKey;};
-                String-44 = { value = LinkColorKey;};
-                String-45 = { value = CaretColorKey;};
-                String-46 = { value = PressedLinkColorKey;};
-                String-47 = { value = ParagraphFormatKey;};
+                String-44 = { value = ParagraphFormatKey;};
+                String-45 = { value = PressedLinkColorKey;};
+                String-46 = { value = LinkColorKey;};
+                String-47 = { value = CaretColorKey;};
                 String-48 = { value = TextColorKey;};
                 String-49 = { value = when;};
                 String-50 = { value = kbdCmd;};
@@ -69,27 +69,27 @@
                 String-52 = { value = 0;};
                 String-53 = { value = click;};
                 String-54 = { value = cases;};
-                String-55 = { value = manual;};
-                String-56 = { value = debug;};
-                String-57 = { value = hosts;};
-                String-58 = { value = vm;};
+                String-55 = { value = sendURL;};
+                String-56 = { value = forever;};
+                String-57 = { value = debug;};
+                String-58 = { value = hosts;};
                 String-59 = { value = framework;};
-                String-60 = { value = sendURL;};
+                String-60 = { value = manual;};
                 String-61 = { value = local;};
                 String-62 = { value = progress;};
-                String-63 = { value = os;};
-                String-64 = { value = prefix;};
-                String-65 = { value = messages;};
-                String-66 = { value = properties;};
-                String-67 = { value = logging;};
-                String-68 = { value = script;};
-                String-69 = { value = single;};
-                String-70 = { value = forever;};
-                String-71 = { value = descriptionText;};
-                String-72 = { value = bundles;};
+                String-63 = { value = prefix;};
+                String-64 = { value = messages;};
+                String-65 = { value = properties;};
+                String-66 = { value = logging;};
+                String-67 = { value = script;};
+                String-68 = { value = single;};
+                String-69 = { value = os;};
+                String-70 = { value = descriptionText;};
+                String-71 = { value = bundles;};
+                String-72 = { value = manager;};
                 String-73 = { value = status;};
                 String-74 = { value = control;};
-                String-75 = { value = manager;};
+                String-75 = { value = vm;};
             };
         };
         netscape.application.BezelBorder = {
@@ -1153,7 +1153,7 @@
                     raisedBorder = BezelBorder-3;
                     raisedColor = Color-04;
                     repeatDelay = 75;
-                    resizeInstr = 4;
+                    resizeInstr = 8;
                     state = false;
                     target = TargetProxy-0;
                     title = properties;
@@ -1308,8 +1308,8 @@
                 Color-05 = { b = 174; g = 255; r = 255;};
                 Color-06 = { b = 174; g = 255; r = 255;};
                 Color-07 = { b = 128; g = 128; r = 252;};
-                Color-08 = { b = 255; g = 0; r = 0;};
-                Color-09 = { b = 0; g = 0; r = 255;};
+                Color-08 = { b = 0; g = 0; r = 255;};
+                Color-09 = { b = 255; g = 0; r = 0;};
                 Color-10 = { b = 174; g = 255; r = 255;};
             };
         };
@@ -3462,10 +3462,10 @@
                 Hashtable-071 = {
                     elements = [
                         Font-0,
-                        Color-08,
-                        Color-01,
-                        Color-09,
                         TextParagraphFormat-0,
+                        Color-08,
+                        Color-09,
+                        Color-01,
                         Color-01
                     ];
                     keys = [
@@ -3549,27 +3549,27 @@
                 Hashtable-096 = {
                     elements = [
                         ScrollGroup-0,
-                        TextField-11,
+                        TextField-13,
+                        Button-25,
                         Button-17,
                         Popup-0,
-                        TextField-10,
                         TextField-08,
-                        TextField-13,
+                        TextField-11,
                         Button-24,
                         Slider-0,
-                        TextField-07,
                         TextField-03,
                         ScrollGroup-2,
                         Button-28,
                         Button-16,
                         Button-26,
                         Button-27,
-                        Button-25,
+                        TextField-07,
                         ScrollGroup-3,
                         ScrollGroup-1,
+                        InternalWindow-1,
                         TextField-04,
                         Button-04,
-                        InternalWindow-1
+                        TextField-10
                     ];
                     keys = [
                         String-54,
@@ -3600,17 +3600,17 @@
                     elements = [
                         Font-0,
                         TextParagraphFormat-1,
-                        Color-09,
-                        Color-08,
                         Color-01,
+                        Color-08,
+                        Color-09,
                         Color-01
                     ];
                     keys = [
                         String-43,
-                        String-47,
-                        String-46,
                         String-44,
+                        String-47,
                         String-45,
+                        String-46,
                         String-48
                     ];
                 };

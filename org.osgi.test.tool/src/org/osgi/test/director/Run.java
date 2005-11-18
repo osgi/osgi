@@ -82,13 +82,7 @@ public class Run implements IRun, TestRun {
 		int errors = 0;
 		System.out
 				.println("\r\n----------------------------------------------\r\n"
-						+ "Opening to "
-						+ host
-						+ ":"
-						+ port
-						+ " for testcase "
-						+ tc.getName()
-						+ "\r\n----------------------------------------------");
+						+ tc.getName());
 		//
 		// Some test cases dont run when there is not at least a
 		// second in between.

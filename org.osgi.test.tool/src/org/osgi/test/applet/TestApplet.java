@@ -258,6 +258,8 @@ public class TestApplet extends Application implements ExtendedTarget, IApplet,
 			return PrivateBitmap.class;
 		if (name.equals("netscape.application.ListItem"))
 			return TabListItem.class;
+		if (name.equals("netscape.constructor.TargetProxy"))
+			return TargetProxy.class;
 		return null;
 	}
 
