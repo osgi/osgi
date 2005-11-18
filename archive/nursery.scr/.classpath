@@ -4,6 +4,6 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry sourcepath="/osgi.released/osgi.jar" kind="lib" path="/osgi.released/osgi.jar"/>
 	<classpathentry sourcepath="/org.osgi.test.cases/src" kind="lib" path="/osgi.released/osgi.internal.jar"/>
-	<classpathentry kind="lib" path="/cnf/jar/asm.jar"/>
+	<classpathentry kind="lib" path="asm.jar"/>
 	<classpathentry kind="output" path="src"/>
 </classpath>
