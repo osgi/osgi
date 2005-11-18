@@ -11,42 +11,140 @@
 package org.osgi.service.power;
 
 /**
- * This interface has to be implemented by services that play the role of a 
- * device with power management capabilities. 
+ * <p>
+ * Interface for identifying Power Device as defined in <a
+ * href="http://www.acpi.info">ACPI&nbsp;Specifications</a>.
+ * 
+ * <p>
+ * A service must implement this interface to indicate that it is a device power
+ * service.
  */
-public interface DevicePower 
-{
-   
-  /**
-   * Returns the current power state of the device.
-   * 
-   * @return the current device power value  
-   */
-   public int getPowerState();
+public interface DevicePower {
 
-   
-  /**
-   * Set the device power state.
-   * This method is generally called by Power Manager for a transition
-   * to another power state. The implementation of this method must perform
-   * a security check to guarantee that only privileged application can perform
-   * this call. The caller must have a <code>PowerPermission</code> with the device
-   * id, '*' or <<ALL DEVICES>> as name of the permission. 
-   *
-   * @param powerState the power state that the device must transit to
-   * @param urgency If urgency is set to true, force the device to change 
-   * state regardless of any objections which may be opposed by applications.
-   * If urgency is set to false, applications may be able to oppose the state change event. 
-   * 
-   * @throws PowerException A <code>PowerException</code> must be thrown with the 
-   * error code STATE_TRANSITION_FAILURE if the device power state transition fails. 
-   * A <code>PowerException</code> must be thrown with the error code 
-   * ILLEGAL_STATE_TRANSITION_REQUEST if the requested state is invalid or if the 
-   * transition request is invalid.
-   * @throws java.lang.SecurityException A <code>java.lang.SecurityException</code> 
-   * must be thrown if the caller does not have the valid <code>PowerPermission</code> 
-   * to initiate the call. 
-   * @see PowerPermission
-   */
-   void setPowerState(int powerState, boolean urgency) throws PowerException, java.lang.SecurityException;  
+	/**
+	 * <p>
+	 * 'D0' Device Power state as defined in <a
+	 * href="http://www.acpi.info">ACPI&nbsp;Specifications</a>.
+	 * 
+	 * <p>
+	 * This state is assumed to be the highest level of power consumption. The
+	 * device is completely active and responsive, and is expected to remember
+	 * all relevant context continuously.
+	 * 
+	 */
+	public static final int		D0							= 0x00000001;
+
+	/**
+	 * <p>
+	 * 'D1' Device Power State as defined in <a
+	 * href="http://www.acpi.info">ACPI&nbsp;Specifications</a>.
+	 * 
+	 * <p>
+	 * The meaning of the D1 Device State is defined by each device class. Many
+	 * device classes may not define D1. In general, D1 is expected to save less
+	 * power and preserve more device context than D2.
+	 */
+	public static final int		D1							= 0x00000002;
+
+	/**
+	 * <p>
+	 * 'D2' Device Power State as defined in <a
+	 * href="http://www.acpi.info">ACPI&nbsp;Specifications</a>.
+	 * 
+	 * <p>
+	 * The meaning of the D2 Device State is defined by each device class. Many
+	 * device classes may not define D2. In general, D2 is expected to save more
+	 * power and preserve less device context than D1 or D0. Buses in D2 may
+	 * cause the device to lose some context (for example, by reducing power on
+	 * the bus, thus forcing the device to turn off some of its functions).
+	 */
+	public static final int		D2							= 0x00000004;
+
+	/**
+	 * <p>
+	 * 'D3' Device Power State as defined in <a
+	 * href="http://www.acpi.info">ACPI&nbsp;Specifications</a>.
+	 * 
+	 * <p>
+	 * Power has been fully removed from the device. The device context is lost
+	 * when this state is entered, so the OS software will reinitialize the
+	 * device when powering it back on. Since device context and power are lost,
+	 * devices in this state do not decode their address lines. Devices in this
+	 * state have the longest restore times. All classes of devices define this
+	 * state.
+	 */
+	public static final int		D3							= 0x00000008;
+
+	/**
+	 * <p>
+	 * Unspecified device power state. This state can be used in the
+	 * {@link #DEVICE_POWER_MAPPINGS} property registration to express that the
+	 * transition is not defined.
+	 */
+	public static final int		UNSPECIFIED_STATE			= 0x00000000;
+
+	/**
+	 * Service registration property key (named
+	 * <code>power.device.capabilities</code>) for DevicePower indicating the
+	 * list of supported device power states, one or several of the following
+	 * values: {@link #D0}, {@link #D1}, {@link #D2} or {@link #D3}. The type
+	 * of this property must be an {@link Integer}. It represents a mask of all
+	 * supported device power states. If this property is not used then
+	 * {@link PowerManager} assumes that this DevicePower only supports
+	 * {@link #D0} and {@link #D3} states.
+	 */
+	public static final String	DEVICE_POWER_CAPABILITIES	= "power.device.capabilities";
+
+	/**
+	 * Service registration property key (named
+	 * <code>power.device.mapping</code> for DevicePower indicating the mapping
+	 * (System/Device Power States) that the device wants to propose to the
+	 * Power Manager. The Power Manager is allowed to override it. The type of
+	 * the property must be int[]. Each index position represents a system power
+	 * state from S0 to S5. Each value of the array represents the DevicePower
+	 * state value for a given system power state position. For example, the
+	 * following mapping
+	 * 
+	 * <pre>
+	 *          S0 -&gt; D0
+	 *          S1 -&gt; D1
+	 *          S2 -&gt; unspecified
+	 *          S3 -&gt; D3
+	 *          S4 -&gt; D3
+	 *          S5 -&gt; D3
+	 * </pre>
+	 * 
+	 * is represented as follows: <code>
+	 * int[] mappings = new int[]{{@link #D0}, {@link #D1},
+	 * 	{@link #UNSPECIFIED_STATE}, {@link #D3}, {@link #D3}, {@link #D3}};
+	 * </code>
+	 * If this property is not used or invalid then the default mapping (defined
+	 * in Power Manager) is used.
+	 * 
+	 */
+	public static final String	DEVICE_POWER_MAPPING		= "power.device.mapping";
+
+	/**
+	 * Returns the current power state of this device power.
+	 * 
+	 * @return the current device power state.
+	 */
+	public int getPowerState();
+
+	/**
+	 * Sets the device power state with the given value. This method is
+	 * generally called by {@link PowerManager} for a transition to another
+	 * system power state.
+	 * 
+	 * @param state the device power state that the device must transit to.
+	 * 
+	 * @throws IllegalArgumentException if the given state value is not one of
+	 *         the device power states or the transition is not allowed.
+	 * @throws java.lang.SecurityException If the caller does not have the
+	 *         appropriate <code>PowerPermission[this,setDevicePower]</code>,
+	 *         and the Java Runtime Environment supports permissions.
+	 * @see PowerPermission
+	 */
+	void setPowerState(int state) throws java.lang.SecurityException,
+			IllegalArgumentException;
 }
