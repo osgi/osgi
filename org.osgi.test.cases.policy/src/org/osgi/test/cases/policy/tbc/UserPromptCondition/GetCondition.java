@@ -72,6 +72,12 @@ public class GetCondition {
 		testGetCondition015();
 		testGetCondition016();
 		testGetCondition017();
+		testGetCondition018();
+		testGetCondition019();
+		testGetCondition020();
+		testGetCondition021();
+		testGetCondition022();
+		testGetCondition023();
 	}
 
 	/**
@@ -540,6 +546,169 @@ public class GetCondition {
 							IllegalArgumentException.class.getName(), e.getClass().getName() }));
 		}
 		
-	}		
+	}
+	
+	/**
+	 * Tests if the permission level parameter is case-insensitive. Passing
+	 * the LEVEL_ONESHOT as parameter.
+	 *  
+	 * @spec UserPromptCondition.getCondition(Bundle,ConditionInfo)
+	 */
+	private void testGetCondition018() {
+		tbc.log("#testGetCondition018");
+		
+		try {
+			Condition condition = UserPromptCondition.getCondition(tbc.getBundle(), 
+					new ConditionInfo("", new String[] {
+							PolicyConstants.LEVEL_ONESHOT.toLowerCase(),
+							PolicyConstants.LEVEL_ONESHOT,
+							PolicyConstants.CATALOG_NAME, "Test for permission level parameter case-isensitive" })
+							);
+			tbc.assertNotNull(MessagesConstants.getMessage(
+					MessagesConstants.ASSERT_NOT_NULL,
+					new String[] { "Created UserPrompt" }), condition);
+		} catch (Exception e) {
+			tbc.fail(MessagesConstants.getMessage(
+					MessagesConstants.UNEXPECTED_EXCEPTION, new String[] {
+							e.getClass().getName() }));
+		}
+		
+	}
+	
+	/**
+	 * Tests if the permission level parameter is case-insensitive. Passing
+	 * the LEVEL_BLANKET as parameter.
+	 *  
+	 * @spec UserPromptCondition.getCondition(Bundle,ConditionInfo)
+	 */
+	private void testGetCondition019() {
+		tbc.log("#testGetCondition019");
+		
+		try {
+			Condition condition = UserPromptCondition.getCondition(tbc.getBundle(), 
+					new ConditionInfo("", new String[] {
+							PolicyConstants.LEVEL_BLANKET.toLowerCase(),
+							PolicyConstants.LEVEL_BLANKET,
+							PolicyConstants.CATALOG_NAME, "Test for permission level parameter case-isensitive" })
+							);
+			tbc.assertNotNull(MessagesConstants.getMessage(
+					MessagesConstants.ASSERT_NOT_NULL,
+					new String[] { "Created UserPrompt" }), condition);
+		} catch (Exception e) {
+			tbc.fail(MessagesConstants.getMessage(
+					MessagesConstants.UNEXPECTED_EXCEPTION, new String[] {
+							e.getClass().getName() }));
+		}
+		
+	}	
+	
+	/**
+	 * Tests if the permission level parameter is case-insensitive. Passing
+	 * the LEVEL_SESSION as parameter.
+	 *  
+	 * @spec UserPromptCondition.getCondition(Bundle,ConditionInfo)
+	 */
+	private void testGetCondition020() {
+		tbc.log("#testGetCondition020");
+		
+		try {
+			Condition condition = UserPromptCondition.getCondition(tbc.getBundle(), 
+					new ConditionInfo("", new String[] {
+							PolicyConstants.LEVEL_SESSION.toLowerCase(),
+							PolicyConstants.LEVEL_SESSION,
+							PolicyConstants.CATALOG_NAME, "Test for permission level parameter case-isensitive" })
+							);
+			tbc.assertNotNull(MessagesConstants.getMessage(
+					MessagesConstants.ASSERT_NOT_NULL,
+					new String[] { "Created UserPrompt" }), condition);
+		} catch (Exception e) {
+			tbc.fail(MessagesConstants.getMessage(
+					MessagesConstants.UNEXPECTED_EXCEPTION, new String[] {
+							e.getClass().getName() }));
+		}
+		
+	}
+	
+	/**
+	 * Tests if the default permission level parameter is case-insensitive. Passing
+	 * the LEVEL_ONESHOT as parameter.
+	 *  
+	 * @spec UserPromptCondition.getCondition(Bundle,ConditionInfo)
+	 */
+	private void testGetCondition021() {
+		tbc.log("#testGetCondition021");
+		
+		try {
+			Condition condition = UserPromptCondition.getCondition(tbc.getBundle(), 
+					new ConditionInfo("", new String[] {
+							PolicyConstants.LEVEL_ONESHOT,
+							PolicyConstants.LEVEL_ONESHOT.toLowerCase(),
+							PolicyConstants.CATALOG_NAME, "Test for permission level parameter case-isensitive" })
+							);
+			tbc.assertNotNull(MessagesConstants.getMessage(
+					MessagesConstants.ASSERT_NOT_NULL,
+					new String[] { "Created UserPrompt" }), condition);
+		} catch (Exception e) {
+			tbc.fail(MessagesConstants.getMessage(
+					MessagesConstants.UNEXPECTED_EXCEPTION, new String[] {
+							e.getClass().getName() }));
+		}
+		
+	}
+	
+	/**
+	 * Tests if the default permission level parameter is case-insensitive. Passing
+	 * the LEVEL_BLANKET as parameter.
+	 *  
+	 * @spec UserPromptCondition.getCondition(Bundle,ConditionInfo)
+	 */
+	private void testGetCondition022() {
+		tbc.log("#testGetCondition022");
+		
+		try {
+			Condition condition = UserPromptCondition.getCondition(tbc.getBundle(), 
+					new ConditionInfo("", new String[] {
+							PolicyConstants.LEVEL_BLANKET,
+							PolicyConstants.LEVEL_BLANKET.toLowerCase(),
+							PolicyConstants.CATALOG_NAME, "Test for permission level parameter case-isensitive" })
+							);
+			tbc.assertNotNull(MessagesConstants.getMessage(
+					MessagesConstants.ASSERT_NOT_NULL,
+					new String[] { "Created UserPrompt" }), condition);
+		} catch (Exception e) {
+			tbc.fail(MessagesConstants.getMessage(
+					MessagesConstants.UNEXPECTED_EXCEPTION, new String[] {
+							e.getClass().getName() }));
+		}
+		
+	}	
+	
+	/**
+	 * Tests if the default permission level parameter is case-insensitive. Passing
+	 * the LEVEL_SESSION as parameter.
+	 *  
+	 * @spec UserPromptCondition.getCondition(Bundle,ConditionInfo)
+	 */
+	private void testGetCondition023() {
+		tbc.log("#testGetCondition023");
+		
+		try {
+			Condition condition = UserPromptCondition.getCondition(tbc.getBundle(), 
+					new ConditionInfo("", new String[] {
+							PolicyConstants.LEVEL_SESSION,
+							PolicyConstants.LEVEL_SESSION.toLowerCase(),
+							PolicyConstants.CATALOG_NAME, "Test for permission level parameter case-isensitive" })
+							);
+			tbc.assertNotNull(MessagesConstants.getMessage(
+					MessagesConstants.ASSERT_NOT_NULL,
+					new String[] { "Created UserPrompt" }), condition);
+		} catch (Exception e) {
+			tbc.fail(MessagesConstants.getMessage(
+					MessagesConstants.UNEXPECTED_EXCEPTION, new String[] {
+							e.getClass().getName() }));
+		}
+		
+	}	
+	
 	
 }

@@ -71,6 +71,8 @@ public class GetCondition {
         testGetCondition006();
         testGetCondition007();
         testGetCondition008();
+        testGetCondition009();
+        testGetCondition010();
     }
 
 
@@ -292,5 +294,56 @@ public class GetCondition {
                             e.getClass().getName() }));
         }
     }
+    
+    /**
+     * This test asserts if a condition is sucessfully created when the imei
+     * parameter ends with a wildcard 
+     *
+     * @spec IMSICondition.getCondition(Bundle,ConditionInfo)
+     */
+
+    private void testGetCondition009() {
+        tbc.log("#testGetCondition009");
+        try {
+        	Condition cond = IMSICondition.getCondition(
+                    PolicyConstants.TEST_BUNDLE,
+                    new ConditionInfo("org.osgi.util.gsm.IMSICondition",new String[]{PolicyConstants.IMSI_VALID_CODE_WILDCARD}));
+
+            tbc.assertNotNull(MessagesConstants.getMessage(
+                    MessagesConstants.ASSERT_NOT_NULL,
+                    new String[] { "created condition" }), cond);
+
+        } catch (Exception e) {
+            tbc.fail(MessagesConstants.getMessage(
+                    MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e
+                            .getClass().getName() }));
+        }
+    } 
+    
+
+    /**
+     * This test asserts if a condition is sucessfully created when the imei
+     * parameter has only one element, a wildcard.
+     *
+     * @spec IMSICondition.getCondition(Bundle,ConditionInfo)
+     */
+
+    private void testGetCondition010() {
+        tbc.log("#testGetCondition010");
+        try {
+        	Condition cond = IMSICondition.getCondition(
+                    PolicyConstants.TEST_BUNDLE,
+                    new ConditionInfo("org.osgi.util.gsm.IMSICondition",new String[]{"*"}));
+
+            tbc.assertNotNull(MessagesConstants.getMessage(
+                    MessagesConstants.ASSERT_NOT_NULL,
+                    new String[] { "created condition" }), cond);
+
+        } catch (Exception e) {
+            tbc.fail(MessagesConstants.getMessage(
+                    MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e
+                            .getClass().getName() }));
+        }
+    }    
 
 }
