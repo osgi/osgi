@@ -1,10 +1,15 @@
 OSGi Distribution Licenses
 
-All JAR files in the cnf/jar directory are licensed binaries. This means 
+All JAR files in the cnf/jar directory are -licensed- binaries. This means 
 that there are restrictions on their usage. They are NOT material in the 
 sense of the 3.2 clause in the membership agreement.
 
+In certain cases you must download the files yourself to use them for 
+development purposes.
+
 SERVLET-----------------------------------------------------------------
+Copyright				Copyright (c) 1999-2005 Apache Software Foundation
+                        All Rights Reserved
 Used					Used in the RI for the Http Service
                         All RIs that use Http require this 
                         lib. 
@@ -18,9 +23,35 @@ Apache Obligation		This product includes software developed
 						(http://www.apache.org/).
 
 IFC11-------------------------------------------------------------------
+Copyright				
 Used					Used in the Test Tool (org.osgi.test.tool)
 File					ifc11.jar
 License					NPL-1.0.html (Netscape Public License)
 URL						http://lxr.mozilla.org/classic/source/nav-java/stubs/classes/ifc11.jar
 Modifications			NONE, library used as is
 
+SAXON-------------------------------------------------------------------
+Copyright				Unclear
+Used					Used in the build, not in any applications
+File					saxon.jar
+License					http://saxon.sourceforge.net/saxon6.5.4/conditions.html
+URL						http://prdownloads.sourceforge.net/saxon/saxon6-5-4.zip
+Modifications			NONE, library used as is
+
+BCEL--------------------------------------------------------------------
+Copyright				1999,2005 Apache Software Foundation
+Used					In OSGi jar2xml (org.osgi.tools) to create an XML file from a JAR
+File					bcel.jar
+License					
+URL						http://bcel.apache.org
+Modifications			NONE, library used as is
+
+JUNIT-------------------------------------------------------------------
+Copyright				Part of Eclipse
+Used					Diverse JUNIT tests, the JUNIT perspective seems
+                        to calculate a variable that is not portable between
+                        environments.
+File					junit.jar
+License					EPL-1.0.html
+URL						http://www.eclipse.org
+Modifications			NONE, library uses as is
