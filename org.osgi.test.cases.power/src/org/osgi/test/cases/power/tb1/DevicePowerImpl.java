@@ -35,10 +35,12 @@ public class DevicePowerImpl implements DevicePower {
    */
   public void setPowerState(int powerState, boolean urgency) throws PowerException, SecurityException {
   	try {
-  		AccessController.checkPermission(new PowerPermission("*"));
+  		// TODO Added mask, please check
+  		AccessController.checkPermission(new PowerPermission("*", PowerPermission.SET_DEVICE_POWER+PowerPermission.SET_SYSTEM_POWER));
   	}
   	catch (SecurityException se) {
-  		AccessController.checkPermission(new PowerPermission("<<ALL DEVICES>>"));
+ 		// TODO Added mask, please check
+  		AccessController.checkPermission(new PowerPermission("<<ALL DEVICES>>", PowerPermission.SET_DEVICE_POWER+PowerPermission.SET_SYSTEM_POWER));
   	}
   	if (powerState == currentDevicePowerState) return;
     if (powerState < DevicePowerState.D0 || powerState > DevicePowerState.D3) {
@@ -72,5 +74,10 @@ public class DevicePowerImpl implements DevicePower {
 	  	}
     }
  	}
+
+public void setPowerState(int state) throws SecurityException, IllegalArgumentException {
+	// TODO Auto-generated method stub
+	
+}
   
 }
