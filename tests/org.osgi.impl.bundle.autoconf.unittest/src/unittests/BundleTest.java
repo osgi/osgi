@@ -51,10 +51,11 @@ import org.osgi.framework.Version;
 import org.osgi.impl.bundle.autoconf.Autoconf;
 import org.osgi.service.cm.Configuration;
 import org.osgi.service.cm.ConfigurationAdmin;
+import org.osgi.service.deploymentadmin.BundleInfo;
 import org.osgi.service.deploymentadmin.DeploymentAdmin;
 import org.osgi.service.deploymentadmin.DeploymentPackage;
-import org.osgi.service.deploymentadmin.DeploymentSession;
-import org.osgi.service.deploymentadmin.ResourceProcessor;
+import org.osgi.service.deploymentadmin.spi.DeploymentSession;
+import org.osgi.service.deploymentadmin.spi.ResourceProcessor;
 import org.osgi.service.metatype.MetaTypeInformation;
 import org.osgi.service.metatype.MetaTypeService;
 
@@ -227,6 +228,7 @@ public class BundleTest extends TestCase {
 		public String getResourceHeader(String path, String header) { throw new IllegalStateException(); }
 		public boolean uninstallForced() { throw new IllegalStateException(); }
 		public boolean isStale() { throw new IllegalStateException(); }
+		public BundleInfo[] getBundleInfos() { throw new IllegalStateException(); }
 	}
 
 	public final class DummyDeploymentSession implements DeploymentSession {

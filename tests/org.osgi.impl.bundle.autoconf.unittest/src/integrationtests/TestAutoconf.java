@@ -48,7 +48,7 @@ import org.osgi.service.condpermadmin.ConditionInfo;
 import org.osgi.service.deploymentadmin.DeploymentAdmin;
 import org.osgi.service.deploymentadmin.DeploymentException;
 import org.osgi.service.deploymentadmin.DeploymentPackage;
-import org.osgi.service.deploymentadmin.ResourceProcessor;
+import org.osgi.service.deploymentadmin.spi.ResourceProcessor;
 import org.osgi.service.metatype.MetaTypeService;
 import org.osgi.service.permissionadmin.PermissionInfo;
 
