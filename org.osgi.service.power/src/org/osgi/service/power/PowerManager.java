@@ -56,7 +56,7 @@ public interface PowerManager {
 	 * sleeping state is a low wake latency sleeping state. This state is
 	 * similar to the S1 sleeping state except that the CPU and system cache
 	 * context is lost (the OS is responsible for maintaining the caches and CPU
-	 * context). Control starts from the processor’s reset vector after the wake
+	 * context). Control starts from the processor's reset vector after the wake
 	 * event.
 	 */
 	public static final int	S2	= 2;
@@ -68,7 +68,7 @@ public interface PowerManager {
 	 * context is lost except system memory. CPU, cache, and chip set context
 	 * are lost in this state. Hardware maintains memory context and restores
 	 * some CPU and L2 configuration context. Control starts from the
-	 * processor’s reset vector after the wake event.
+	 * processor's reset vector after the wake event.
 	 */
 	public static final int	S3	= 3;
 
@@ -86,7 +86,7 @@ public interface PowerManager {
 	 * S5 system power state (Soft Off or G2) as defined in <a
 	 * href="http://www.acpi.info">ACPI&nbsp;Specifications</a>. The S5 state
 	 * is similar to the S4 state except that the OS does not save any context.
-	 * The system is in the “soft” off state and requires a complete boot when
+	 * The system is in the "soft" off state and requires a complete boot when
 	 * it wakes. Software uses a different state value to distinguish between
 	 * the S5 state and the S4 state to allow for initial boot operations within
 	 * the BIOS to distinguish whether or not the boot is going to wake from a
@@ -139,7 +139,7 @@ public interface PowerManager {
 	 *         appropriate <code>PowerPermission[system,setSystemPower]</code>,
 	 *         and the Java Runtime Environment supports permissions.
 	 */
-	ServiceReference[] setPowerState(int state, boolean urgent)
+	public ServiceReference[] setPowerState(int state, boolean urgent)
 			throws java.lang.SecurityException, IllegalArgumentException;
 
 }
