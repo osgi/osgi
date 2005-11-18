@@ -7,8 +7,8 @@
 	<classpathentry sourcepath="/osgi.released/osgi.jar" kind="lib" path="/osgi.released/osgi.jar"/>
 	<classpathentry kind="src" path="/org.osgi.impl.service.http"/>
 	<classpathentry kind="src" path="/org.osgi.service.http"/>
-	<classpathentry kind="lib" path="/cnf/jar/servlet.jar"/>
+	<classpathentry kind="lib" path="/licensed/jar/servlet.jar"/>
 	<classpathentry kind="lib" path="/osgi.test/osgi.director.jar"/>
-	<classpathentry kind="lib" path="/osgi.test/osgi.internal.jar"/>
+	<classpathentry sourcepath="/org.osgi.test.cases/src" kind="lib" path="/osgi.released/osgi.internal.jar"/>
 	<classpathentry kind="output" path="src"/>
 </classpath>
