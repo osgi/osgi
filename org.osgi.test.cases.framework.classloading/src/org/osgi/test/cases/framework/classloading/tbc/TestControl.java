@@ -1275,22 +1275,22 @@ public class TestControl extends DefaultTestBundleControl {
 		tb11e = getContext().installBundle(getWebServer() + "tb11e.jar");
 
 		try {
-			tb11b.start();
-			tb11d.start();
-			tb11e.start();
-
-			try {
+			PackageAdmin packageAdmin = (PackageAdmin) getService(PackageAdmin.class);
+			packageAdmin.resolveBundles(new Bundle[] {tb11b, tb11c, tb11d, tb11e});
+			ungetService(packageAdmin);
+			if ((tb11b.getState() & Bundle.RESOLVED) != 0)
+				tb11b.start();
+			if ((tb11c.getState() & Bundle.RESOLVED) != 0)
 				tb11c.start();
-				fail("The framework cannot resolve more than one singleton bundle, even with different versions");
-			}
-			catch (BundleException ex) {
-
-			}
+			if ((tb11d.getState() & Bundle.RESOLVED) != 0)
+				tb11d.start();
+			if ((tb11e.getState() & Bundle.RESOLVED) != 0)
+				tb11e.start();
 
 			assertTrue(
 					"Only one singleton bundle may be resolved at the same time",
-					tb11b.getState() == Bundle.ACTIVE
-							&& tb11c.getState() == Bundle.INSTALLED);
+					(tb11b.getState() == Bundle.ACTIVE && tb11c.getState() == Bundle.INSTALLED) ||
+					(tb11c.getState() == Bundle.ACTIVE && tb11b.getState() == Bundle.INSTALLED));
 			assertTrue(
 					"More than one non-singleton bundle may be resolved at the same time",
 					tb11d.getState() == Bundle.ACTIVE
