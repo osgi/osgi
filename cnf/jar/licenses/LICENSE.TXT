@@ -55,3 +55,11 @@ File					junit.jar
 License					EPL-1.0.html
 URL						http://www.eclipse.org
 Modifications			NONE, library uses as is
+
+NANOXML-----------------------------------------------------------------
+Copyright               Copyright ©2000-2002 Marc De Scheemaecker, All Rights Reserved. 
+Used					Used in org.osgi.tools
+License					ZIP-1.0.txt
+URL						http://nanoxml.cyberelf.be/download.html
+Modifications			NONE, library used as is
+
