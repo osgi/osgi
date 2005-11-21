@@ -90,7 +90,7 @@ public interface EventConstants {
 	public static final String	EXCEPTION_CLASS		= "exception.class";
 	
 	/**
-	 * The is constant was released with an incorrect spelling. It has been
+	 * This constant was released with an incorrect spelling. It has been
 	 * replaced by {@link #EXCEPTION_CLASS}
 	 * @deprecated As of 1.0.1, replaced by EXCEPTION_CLASS
 	 */
