@@ -207,8 +207,6 @@ public class DefaultTestCase
 		InputStream ref = getClass().getResourceAsStream(log=get( "Test-Log", "/log.ref" ));
 		if ( jar == null )
 			System.out.println( "No such jar file " + tbc );
-		if ( ref == null )
-			System.out.println( "No such reference file " + log );
 			
 		TestBundle testbundle = getRun().createTestBundle( name, jar, ref );
 		if ( testbundle == null )
