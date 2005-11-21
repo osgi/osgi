@@ -55,9 +55,9 @@ public class OATApplicationContextImpl implements ApplicationContext, ServiceLis
 		ServiceReference  serviceReference;
 	}
 	
-	class ServiceListener {
+	class ServiceListenerImpl {
 		
-		public ServiceListener( ApplicationServiceListener listener, Filter []filters ) {
+		public ServiceListenerImpl( ApplicationServiceListener listener, Filter []filters ) {
 			this.listener = listener;
 			this.filters = filters;
 		}
@@ -131,7 +131,7 @@ public class OATApplicationContextImpl implements ApplicationContext, ServiceLis
 		}
 
 		removeServiceListener( listener );		
-		serviceListenerList.add( new ServiceListener( listener, filters ) );
+		serviceListenerList.add( new ServiceListenerImpl( listener, filters ) );
 	}
 	
 	public Map getStartupParameters() {
@@ -297,7 +297,7 @@ public class OATApplicationContextImpl implements ApplicationContext, ServiceLis
 		Iterator iter = serviceListenerList.iterator();
 		
 		while( iter.hasNext() ) {
-			ServiceListener servListener = (ServiceListener)iter.next();
+			ServiceListenerImpl servListener = (ServiceListenerImpl)iter.next();
 			if( servListener.listener == listener )
 				iter.remove();
 		}
@@ -447,7 +447,7 @@ public class OATApplicationContextImpl implements ApplicationContext, ServiceLis
 		
 		Iterator iter = serviceListenerList.iterator();
 		while( iter.hasNext() ) {
-			ServiceListener servListener = (ServiceListener)  iter.next();
+			ServiceListenerImpl servListener = (ServiceListenerImpl)  iter.next();
 			
 			if( !servListener.match( eventHash ) )
 				continue;
