@@ -38,16 +38,16 @@ import org.osgi.service.log.LogService;
 
 public class OATApplicationContextImpl implements ApplicationContext, ServiceListener {
 	
-	private BundleContext bc = null;
-	private Map startupParams = null;
-	private LinkedList serviceList = null;
-	private LinkedList registeredServiceList = null;
-	private LinkedList serviceListenerList = null;
-	private Vector mandatoryServiceList = null;
-	private Vector mandatoryTargetList = null;
-	private OATApplicationData oatAppData = null;
-	private ApplicationHandle appHandle = null;
-	private Object mainClass = null;
+	BundleContext bc = null;
+	Map startupParams = null;
+	LinkedList serviceList = null;
+	LinkedList registeredServiceList = null;
+	LinkedList serviceListenerList = null;
+	Vector mandatoryServiceList = null;
+	Vector mandatoryTargetList = null;
+	OATApplicationData oatAppData = null;
+	ApplicationHandle appHandle = null;
+	Object mainClass = null;
 
 	class Service {
 		OATServiceData    serviceData;

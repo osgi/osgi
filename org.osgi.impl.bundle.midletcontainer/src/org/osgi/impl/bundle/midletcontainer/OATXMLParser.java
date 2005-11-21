@@ -47,72 +47,7 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 
-class OATServiceData {	
-	public final static int DYNAMIC = 1;
-	public final static int STATIC  = 2;
-	
-	public final static int CARDINALITY0_1 = 1;
-	public final static int CARDINALITY1_1 = 2;
-	public final static int CARDINALITY0_n = 3;
-	public final static int CARDINALITY1_n = 4;
-	
-	private String name_;	
-	private String interface_;
-	private int    policy_;
-	private int    cardinality_;
-	private String target_;
-	
-	public OATServiceData( String name, String iface, String target, int policy, int card ) {
-		name_ = name;
-		interface_ = iface;
-		target_ = target;
-		policy_ = policy;
-		cardinality_ = card;
-	}
-	
-	public String getName() {
-		return name_;
-	}
-	
-	public String getInterface() {
-		return interface_;
-	}
-	
-	public int getPolicy() {
-		return policy_;
-	}
-	
-	public int getCardinality() {
-		return cardinality_;
-	}
-	
-	public String getTarget() {
-		return target_;
-	}
-}
 
-
-class OATApplicationData {
-	private String           baseClass_;
-	private OATServiceData[] services_;
-	
-	public OATApplicationData( String baseClass, OATServiceData[] services ) {
-		baseClass_ = baseClass;
-		services_ = services;
-	}
-	
-	public String getBaseClass() {
-		return baseClass_;
-	}
-	
-	public void setBaseClass( String clazz ) {
-		baseClass_ = clazz;
-	}
-	
-	public OATServiceData[] getServices() {
-		return services_;
-	}
-}
 
 public class OATXMLParser {
   public static final String JAXP_SCHEMA_LANGUAGE = "http://java.sun.com/xml/jaxp/properties/schemaLanguage";
