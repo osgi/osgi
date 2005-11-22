@@ -24,6 +24,20 @@ public class ManifestResource extends FileResource {
 			return super.replace(key);
 		if (key.equals("IMPORT-PACKAGE")) {
 			Collection imports = btool.getImports();
+			for ( Iterator i = imports.iterator(); i.hasNext(); ) {
+				Package p = (Package) i.next();
+				try {
+					// We remove any micro numbers from the import
+					// version so that bug fixes do not force
+					// a new version for import.
+					Version	v = new Version(p.getVersion());
+					v = new Version( v.getMajor(), v.getMinor(), 0, null );
+					p.setVersion(v.toString());
+				}
+				catch( Exception e ) {
+					// We ignore this
+				}
+			}
 			Collection exports = btool.getExports();
 			Collection combined = new TreeSet();
 			combined.addAll(imports);
