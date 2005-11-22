@@ -67,7 +67,7 @@ public class PluginDownload extends DefaultHandler implements DataPluginFactory,
     // Private classes
     
     private class Entry implements Serializable {
-        private String  id;
+        private String  dwnlId;
         private String  uri;
         private String  envType;
         private Integer status = new Integer(STATUS_IDLE);
@@ -157,14 +157,14 @@ public class PluginDownload extends DefaultHandler implements DataPluginFactory,
             }
 
             DeploymentThread deplThr = new DeploymentThread(dwnlThr.getMimeType(), pluginCtx, 
-                    dwnlThr.getInputStream(), entry.id);
+                    dwnlThr.getInputStream(), entry.dwnlId);
             deplThr.setDpListener(new DeploymentThread.ListenerDp() {
                 public void onFinish(DeploymentPackageImpl dp, Exception exception) {
                 	String nodeUriRes = null;
                     if (null == exception) {
                         entry.setStatus(STATUS_DEPLOYED);
                         nodeUriRes = DAConstants.DMT_DEPLOYMENT_ROOT + 
-                        	pluginCtx.getDeployedPlugin().associateID(dp, entry.id);
+                        	pluginCtx.getDeployedPlugin().associateID(dp, entry.dwnlId);
                         try {
                             pluginCtx.save();
                         }
@@ -184,7 +184,7 @@ public class PluginDownload extends DefaultHandler implements DataPluginFactory,
                 	String nodeUriRes = null;
                     if (null == exception) {
                         entry.setStatus(STATUS_DEPLOYED);
-                        nodeUriRes = pluginCtx.getDeployedPlugin().associateID(b, entry.id);
+                        nodeUriRes = pluginCtx.getDeployedPlugin().associateID(b, entry.dwnlId);
                         try {
                             pluginCtx.save();
                         }
@@ -233,7 +233,7 @@ public class PluginDownload extends DefaultHandler implements DataPluginFactory,
         if (!entries.contains(nodeUriArr[4]))
             throw new DmtException(nodeUriArr, DmtException.NODE_NOT_FOUND, "");
         if (nodeUriArr[5].equals("ID"))
-            entries.get(nodeUriArr[4]).id = data.getString();            
+            entries.get(nodeUriArr[4]).dwnlId = data.getString();            
         if (nodeUriArr[5].equals("URI"))
             entries.get(nodeUriArr[4]).uri = data.getString();
         if (nodeUriArr[5].equals("EnvType"))
@@ -350,7 +350,7 @@ public class PluginDownload extends DefaultHandler implements DataPluginFactory,
         int l = nodeUriArr.length;
 		if (l == 6) {
 		    if (nodeUriArr[5].equals("ID"))
-		        return new DmtData(entries.get(nodeUriArr[4]).id);
+		        return new DmtData(entries.get(nodeUriArr[4]).dwnlId);
 		    if (nodeUriArr[5].equals("URI"))
                 return new DmtData(entries.get(nodeUriArr[4]).uri);
 		    if (nodeUriArr[5].equals("EnvType"))
@@ -431,7 +431,7 @@ public class PluginDownload extends DefaultHandler implements DataPluginFactory,
                         0, null, DmtData.FORMAT_STRING).orOperation(MetaNode.CMD_REPLACE);
 		    if (nodeUriArr[5].equals("Status"))
 		        return new Metanode(MetaNode.CMD_GET, Metanode.IS_LEAF,
-    					MetaNode.AUTOMATIC, "", 1, !Metanode.ZERO_OCC, null, 0,
+    					MetaNode.AUTOMATIC, "", 1, Metanode.ZERO_OCC, null, 0,
     					0, null, DmtData.FORMAT_INTEGER);
             if (nodeUriArr[5].equals("Operations"))
                 return new Metanode(MetaNode.CMD_GET, !Metanode.IS_LEAF,
@@ -461,7 +461,7 @@ public class PluginDownload extends DefaultHandler implements DataPluginFactory,
         if (null == envType || !envType.equals("OSGi.R4"))
             throw new DmtException(nodeUriArr, DmtException.COMMAND_FAILED, "EnvType has to " +
                     "be 'OSGi.R4'");
-        String id = entries.get(nodeUriArr[4]).id;
+        String id = entries.get(nodeUriArr[4]).dwnlId;
         if (null == id || id.trim().length() == 0)
             throw new DmtException(nodeUriArr, DmtException.COMMAND_FAILED, "ID has to " +
                     "be set");

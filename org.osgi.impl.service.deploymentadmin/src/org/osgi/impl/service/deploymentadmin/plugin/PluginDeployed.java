@@ -514,31 +514,29 @@ public class PluginDeployed implements DataPluginFactory, ReadableDataSession,
             if (l == 8) {
                 if ("Signers".equals(nodeUriArr[7]))
                     return new Metanode(MetaNode.CMD_GET, !Metanode.IS_LEAF, MetaNode.AUTOMATIC,
-                            "", 1, !Metanode.ZERO_OCC, null, 0, 0, null, DmtData.FORMAT_NODE);
+                            "", 1, Metanode.ZERO_OCC, null, 0, 0, null, DmtData.FORMAT_NODE);
                 if ("Manifest".equals(nodeUriArr[7]))
                     return new Metanode(MetaNode.CMD_GET, Metanode.IS_LEAF, MetaNode.AUTOMATIC,
-                            "", 1, !Metanode.ZERO_OCC, null, 0, 0, null, DmtData.FORMAT_STRING);
+                            "", 1, Metanode.ZERO_OCC, null, 0, 0, null, DmtData.FORMAT_STRING);
                 if ("PackageType".equals(nodeUriArr[7]))
                     return new Metanode(MetaNode.CMD_GET, !Metanode.IS_LEAF, MetaNode.AUTOMATIC,
-                            "", 1, Metanode.ZERO_OCC, null, 0, 0, null, DmtData.FORMAT_INTEGER);
+                            "", 1, !Metanode.ZERO_OCC, null, 0, 0, null, DmtData.FORMAT_INTEGER);
                 if ("Bundles".equals(nodeUriArr[7]))
                     return new Metanode(MetaNode.CMD_GET, !Metanode.IS_LEAF, MetaNode.AUTOMATIC,
-                            "", Integer.MAX_VALUE, Metanode.ZERO_OCC, null, 0, 0, null, DmtData.FORMAT_NODE);
+                            "", 1, Metanode.ZERO_OCC, null, 0, 0, null, DmtData.FORMAT_NODE);
             }
             if (l == 9) {
                 if ("Signers".equals(nodeUriArr[7]))
                     return new Metanode(MetaNode.CMD_GET, Metanode.IS_LEAF, MetaNode.AUTOMATIC,
                         "", 1, Metanode.ZERO_OCC, null, 0, 0, null, DmtData.FORMAT_NODE);
-                if ("Bundles".equals(nodeUriArr[8]))
+                if ("Bundles".equals(nodeUriArr[7]))
                     return new Metanode(MetaNode.CMD_GET, !Metanode.IS_LEAF, MetaNode.AUTOMATIC,
                         "", Integer.MAX_VALUE, !Metanode.ZERO_OCC, null, 0, 0, null, DmtData.FORMAT_NODE);
-                return new Metanode(MetaNode.CMD_GET, !Metanode.IS_LEAF, MetaNode.AUTOMATIC,
-                        "", 1, !Metanode.ZERO_OCC, null, 0, 0, null, DmtData.FORMAT_NODE);
             }
             if (l == 10) {
                 if ("Signers".equals(nodeUriArr[9]))
                     return new Metanode(MetaNode.CMD_GET, Metanode.IS_LEAF, MetaNode.AUTOMATIC,
-                            "", 1, !Metanode.ZERO_OCC, null, 0, 0, null, DmtData.FORMAT_NODE);
+                            "", 1, Metanode.ZERO_OCC, null, 0, 0, null, DmtData.FORMAT_NODE);
                 if ("State".equals(nodeUriArr[9]))
                     return new Metanode(MetaNode.CMD_GET, Metanode.IS_LEAF, MetaNode.AUTOMATIC,
                             "", 1, !Metanode.ZERO_OCC, null, 0, 0, null, DmtData.FORMAT_INTEGER);
@@ -717,13 +715,13 @@ public class PluginDeployed implements DataPluginFactory, ReadableDataSession,
         return bu.getDNChains(b);
     }
 
-    public String associateID(DeploymentPackageImpl dp, String id) {
-       dpIdMappings.put(dp.getName(), id);
-       return pluginCtx.getDmtAdmin().mangle(dp.getName());
+    public String associateID(DeploymentPackageImpl dp, String dwnlId) {
+       dpIdMappings.put(dp.getName(), dwnlId);
+       return pluginCtx.getDmtAdmin().mangle(dpToNodeId(dp.getName()));
     }
     
-    public String associateID(Bundle b, String id) {
-       bundleIdMappings.put(new Long(b.getBundleId()), id);
+    public String associateID(Bundle b, String dwnlId) {
+       bundleIdMappings.put(new Long(b.getBundleId()), dwnlId);
        return pluginCtx.getDmtAdmin().mangle(bundleToNodeId(b.getBundleId()));
     }
 
