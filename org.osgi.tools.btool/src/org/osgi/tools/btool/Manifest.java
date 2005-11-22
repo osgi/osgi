@@ -272,33 +272,3 @@ class Native {
 
 }
 
-class Parameter {
-	final static int	ATTRIBUTE	= 1;
-	final static int	DIRECTIVE	= 2;
-	final static int	SINGLE		= 0;
-
-	int					type;
-	String				key;
-	String				value;
-
-	public String toString() {
-		StringBuffer sb = new StringBuffer();
-		sb.append(key);
-		switch (type) {
-			case ATTRIBUTE :
-				sb.append("=");
-				break;
-			case DIRECTIVE :
-				sb.append(":=");
-				break;
-			case SINGLE :
-				return sb.toString();
-		}
-		sb.append(value);
-		return sb.toString();
-	}
-
-	boolean is(String s, int type) {
-		return this.type == type && key.equalsIgnoreCase(s);
-	}
-}
