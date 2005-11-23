@@ -53,6 +53,7 @@ public class BTool extends Task {
 	boolean				archiveChanged	= false;
 	String				signers;
 	int					manifestVersion = 1;
+	List				extraRoots = new ArrayList();
 
 	/**
 	 * Try out the Deliver program. Syntax: Please note that the classpath must
@@ -1118,5 +1119,25 @@ public class BTool extends Task {
 	public void setClasspath(String list) {
 		if ( list != null && list.length() > 0 )
 		classpath = list;
+	}
+
+	public List getExtraRoots() {
+		return extraRoots;
+	}
+
+	public void setExtraRoots(String extraRoots) {
+		String list = getProject().getProperty(extraRoots);
+		if ( list != null ) {
+			StringTokenizer st = new StringTokenizer(list,",");
+			List	roots = new ArrayList();
+			while (st.hasMoreTokens()) {
+				roots.add(st.nextToken().trim());
+			}
+			setExtraRoots(roots);
+		}
+	}
+	
+	public void setExtraRoots(List extraRoots) {
+		this.extraRoots = extraRoots;
 	}
 }
