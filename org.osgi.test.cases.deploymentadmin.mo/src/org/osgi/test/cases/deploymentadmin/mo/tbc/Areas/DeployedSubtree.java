@@ -34,6 +34,7 @@
 
 package org.osgi.test.cases.deploymentadmin.mo.tbc.Areas;
 
+import org.osgi.service.deploymentadmin.DeploymentPackage;
 import org.osgi.service.dmt.DmtData;
 import org.osgi.service.dmt.DmtException;
 import org.osgi.service.dmt.DmtSession;
@@ -950,6 +951,5 @@ public class DeployedSubtree {
 		    tbc.closeSession(session);
 		}
 	}
-
 	
 }

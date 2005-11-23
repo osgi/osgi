@@ -47,6 +47,7 @@ import java.util.Iterator;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleEvent;
+import org.osgi.service.deploymentadmin.DeploymentPackage;
 import org.osgi.service.deploymentadmin.spi.ResourceProcessor;
 import org.osgi.service.dmt.DmtData;
 import org.osgi.service.dmt.DmtSession;
@@ -97,6 +98,7 @@ public class InstallAndActivate implements TestInterface {
         testInstallAndActivate018();
         testInstallAndActivate019();
         testInstallAndActivate020();
+        testInstallAndActivate021();
         
 	}
 
@@ -143,89 +145,8 @@ public class InstallAndActivate implements TestInterface {
 			tbc.assertTrue(
 					"Asserting if the node was removed from DMT structure after being installed",
 					!session.isNodeUri(DeploymentmoConstants.SIMPLE_DP_DELIVERED));
-
-            //Deployment Package "simple.dp"
-			tbc.assertEquals(
-							"Asserting the node ID",
-							DeploymentmoConstants.SIMPLE_DP_NAME,
-							session.getNodeValue(DeploymentmoConstants.getDeployedID(nodeId)).toString());
-
-			tbc.assertEquals(
-							"Asserting the node EnvType",
-							DeploymentmoConstants.ENVTYPE,
-							session.getNodeValue(DeploymentmoConstants.getDeployedEnvType(nodeId)).toString());
 			
-			String manifest = session.getNodeValue(DeploymentmoConstants.getDeployedExtManifest(nodeId)).toString().trim();
-			boolean passed = true;
-			Iterator iterator = DeploymentmoConstants.simpleDpManifest.iterator();
-			while (iterator.hasNext()) {
-				String element = (String)iterator.next();
-				if (manifest.indexOf(element) < 0) {
-					passed=false;
-				}
-			}
-			
-			tbc.assertTrue("Asserting the content of the Deployment Package manifest",passed);
-									
-
-			tbc.assertEquals(
-							"Asserting the package type",
-							DeploymentmoConstants.OSGI_DP,
-							session.getNodeValue(DeploymentmoConstants.getDeployedExtPackageType(nodeId)).getInt());
-			
-			String[] signerChildren = session.getChildNodeNames(DeploymentmoConstants.getDeployedExtSigners(nodeId));
-			
-			if (signerChildren.length<=0) {
-				tbc.fail("./OSGi/Deployment/Inventory/Deployed/[node_id]/Ext/Signers/[signer] does not exist");
-			}
-			String signer = signerChildren[0];
-			
-			tbc.assertEquals("Asserting the signer of the deployment package",
-					DeploymentmoConstants.SIMPLE_DP_SIGNER,
-					session.getNodeValue(DeploymentmoConstants.getDeployedExtSignersSignerId(nodeId, signer)).toString());
-
-			
-			//Bundle "bundles.tb1"
-			Bundle bundle1 = tbc.getBundle(DeploymentmoConstants.SIMPLE_DP_BUNDLE1_SYMBNAME);
-			tbc.assertNotNull("The bundle was installed in the framework", bundle1);
-			String bundleId = bundle1.getBundleId() + "";
-			
-			tbc.assertTrue("Asserting that the bundle id is the same as the specified",
-					session.isNodeUri(DeploymentmoConstants.getDeployedExtBundlesBundleId(nodeId, bundleId)));
-
-			tbc.assertEquals("Asserting bundle's state",
-					DeploymentmoConstants.SIMPLE_DP_BUNDLE1_STATE,
-					session.getNodeValue(DeploymentmoConstants.getDeployedExtBundlesState(nodeId, bundleId)).getInt());
-			
-			tbc.assertTrue("Asserting that the manifest of the first bundle is the same as the specified",
-					session.getNodeValue(DeploymentmoConstants.getDeployedExtBundlesManifest(nodeId, bundleId)).toString().indexOf(DeploymentmoConstants.SIMPLE_DP_BUNDLE1_MANIFEST) > -1);
-			
-			tbc.assertEquals("Asserting that the location of the first bundle is the same as the specified",
-					DeploymentmoConstants.SIMPLE_DP_BUNDLE1_LOCATION,
-					session.getNodeValue(DeploymentmoConstants.getDeployedExtBundlesLocation(nodeId, bundleId)).toString());
-
-			//Bundle "bundles.tb2"
-			Bundle bundle2 = tbc.getBundle(DeploymentmoConstants.SIMPLE_DP_BUNDLE2_SYMBNAME);
-			tbc.assertNotNull("The bundle was installed in the framework", bundle2);
-			bundleId = bundle2.getBundleId() + "";
-			
-			tbc.assertTrue("Asserting that the bundle id is the same as the specified",
-					session.isNodeUri(DeploymentmoConstants.getDeployedExtBundlesBundleId(nodeId, bundleId)));
-
-			tbc.assertEquals("Asserting bundle's state",
-					DeploymentmoConstants.SIMPLE_DP_BUNDLE2_STATE,
-					session.getNodeValue(DeploymentmoConstants.getDeployedExtBundlesState(nodeId, bundleId)).getInt());
-			
-			tbc.assertTrue("Asserting that the manifest of the second bundle is the same as the specified",
-					session.getNodeValue(DeploymentmoConstants.getDeployedExtBundlesManifest(nodeId, bundleId)).toString().indexOf(DeploymentmoConstants.SIMPLE_DP_BUNDLE2_MANIFEST) > -1);
-			
-			tbc.assertEquals("Asserting that the location of the second bundle is the same as the specified",
-					DeploymentmoConstants.SIMPLE_DP_BUNDLE2_LOCATION,
-					session.getNodeValue(DeploymentmoConstants.getDeployedExtBundlesLocation(nodeId, bundleId)).toString());
-			
-			String[] children = session.getChildNodeNames(DeploymentmoConstants.getDeployedExtBundles(nodeId));
-			
-			tbc.assertTrue("Asserting that there is two bundle nodes in DMT",children.length==2);
+            assertSimpleDpSubtree(session,nodeId);
 			
 		} catch (Exception e) {
 			tbc.fail("Unexpected exception: " + e.getClass().getName());
@@ -235,9 +156,11 @@ public class InstallAndActivate implements TestInterface {
         	}
 			DeploymentmoTestControl.renameFileForced(fileSrc, fileDestiny);
 		    tbc.closeSession(session);
-			tbc.resetCommandValues();
+			
 		}
 	}
+	
+	
 	/**
 	 * This test asserts that InstallAndActivate command updates the subtree when 
 	 * a sub-tree under the $/Deployment/Inventory/Deployed node with the same ID node 
@@ -272,14 +195,16 @@ public class InstallAndActivate implements TestInterface {
                 tbc.wait(DeploymentmoConstants.TIMEOUT);
              }
 			String[] finalChildren= session.getChildNodeNames(DeploymentmoConstants.DEPLOYMENT_INVENTORY_DEPLOYED);
+			tbc.assertTrue("Asserts that the at Deployed subtree was created",initialChildren.length+1==finalChildren.length);
 			nodeId = DeploymentmoTestControl.getNodeId(initialChildren,finalChildren);
 			
             //Renames simple_fix_pack.dp to simple.dp, so the artifact id remains the same 
  			File file = DeploymentmoTestControl.getFile(archiveName2);
              tbc.assertTrue("Asserts that the file could be renamed",DeploymentmoTestControl.renameFileForced(file, fileDestiny));
              
+             tbc.resetCommandValues();
              //Installs 'simple.dp' (which has the content of simple_fix_pack.dp)
-             initialChildren = session.getChildNodeNames(DeploymentmoConstants.DEPLOYMENT_INVENTORY_DEPLOYED);
+             initialChildren = finalChildren;
 			 synchronized (tbc) {
 				session.execute(DeploymentmoConstants.getDeliveredOperationsInstallAndActivate(DeploymentmoConstants.SIMPLE_DP), null);
                 tbc.wait(DeploymentmoConstants.TIMEOUT);
@@ -297,10 +222,7 @@ public class InstallAndActivate implements TestInterface {
 					!session.isNodeUri(DeploymentmoConstants.SIMPLE_DP_DELIVERED));
 
             //Deployment Package "simple.dp" (which has the content of simple_fix_pack.dp)
-			tbc.assertEquals(
-							"Asserting the node ID",
-							DeploymentmoConstants.SIMPLE_DP_NAME,
-							session.getNodeValue(DeploymentmoConstants.getDeployedID(nodeId)).toString());
+
 
 			tbc.assertEquals(
 							"Asserting the node EnvType",
@@ -372,7 +294,7 @@ public class InstallAndActivate implements TestInterface {
         	DeploymentmoTestControl.renameFileForced(fileSrc, fileDestiny);
         	DeploymentmoTestControl.renameFileForced(fileSrc2, fileDestiny2);
 		    tbc.closeSession(session);
-			tbc.resetCommandValues();
+			
 		}
 	}
 
@@ -385,8 +307,47 @@ public class InstallAndActivate implements TestInterface {
      */
     private void testInstallAndActivate003() {
     	tbc.log("#testInstallAndActivate003");
-        assertResultCode(DeploymentmoConstants.SIMPLE_BUNDLE, 200);
-    }
+		DmtSession session = null;
+		String nodeId = "";
+        //Backups the artifact and, after the execute method removes, moves it again to the delivered area 
+        String archiveName =DeploymentmoConstants.MAP_CODE_TO_ARTIFACT[DeploymentmoConstants.SIMPLE_BUNDLE];
+        File fileSrc = DeploymentmoTestControl.copyArtifact(archiveName);
+        File fileDestiny =DeploymentmoTestControl.getFile(archiveName);
+        
+		
+		try {
+			
+			session = tbc.getDmtAdmin().getSession(
+					DeploymentmoConstants.PRINCIPAL,
+					DeploymentmoConstants.OSGI_ROOT,
+					DmtSession.LOCK_TYPE_ATOMIC);
+
+
+			String[] initialChildren = session.getChildNodeNames(DeploymentmoConstants.DEPLOYMENT_INVENTORY_DEPLOYED);
+			synchronized (tbc) {
+				session.execute(DeploymentmoConstants.getDeliveredOperationsInstallAndActivate(DeploymentmoConstants.SIMPLE_BUNDLE), null);
+                tbc.wait(DeploymentmoConstants.TIMEOUT);
+             }
+			String[] finalChildren= session.getChildNodeNames(DeploymentmoConstants.DEPLOYMENT_INVENTORY_DEPLOYED);
+			nodeId = DeploymentmoTestControl.getNodeId(initialChildren,finalChildren);
+			
+             tbc.assertAlertValues(DeploymentmoConstants.ALERT_TYPE_INSTALLANDACTIVATE,
+                 DeploymentmoConstants.getDeployedNodeId(nodeId),
+                 new DmtData(200));
+
+			
+
+		} catch (Exception e) {
+			tbc.fail("Unexpected exception: " + e.getClass().getName());
+		} finally {
+        	if (!nodeId.equals("")) {
+        		tbc.executeRemoveNode(session,DeploymentmoConstants.getDeployedOperationsRemove(nodeId));
+        	}
+        	DeploymentmoTestControl.renameFileForced(fileSrc, fileDestiny);
+		    tbc.closeSession(session);
+			
+		}
+	}
     
     /**
      * This test asserts that the result code is 250 if the installation was successful 
@@ -397,6 +358,46 @@ public class InstallAndActivate implements TestInterface {
     private void testInstallAndActivate004() {
     	tbc.log("#testInstallAndActivate004");
         assertResultCode(DeploymentmoConstants.BUNDLE_THROWS_EXCEPTION_DP, 250);
+		DmtSession session = null;
+		String nodeId = "";
+        //Backups the artifact and, after the execute method removes, moves it again to the delivered area 
+        String archiveName =DeploymentmoConstants.MAP_CODE_TO_ARTIFACT[DeploymentmoConstants.BUNDLE_THROWS_EXCEPTION_DP] + ".dp";
+        File fileSrc = DeploymentmoTestControl.copyArtifact(archiveName);
+        File fileDestiny =DeploymentmoTestControl.getFile(archiveName);
+        
+		
+		try {
+			
+			session = tbc.getDmtAdmin().getSession(
+					DeploymentmoConstants.PRINCIPAL,
+					DeploymentmoConstants.OSGI_ROOT,
+					DmtSession.LOCK_TYPE_ATOMIC);
+
+
+			String[] initialChildren = session.getChildNodeNames(DeploymentmoConstants.DEPLOYMENT_INVENTORY_DEPLOYED);
+			synchronized (tbc) {
+				session.execute(DeploymentmoConstants.getDeliveredOperationsInstallAndActivate(DeploymentmoConstants.BUNDLE_THROWS_EXCEPTION_DP), null);
+                tbc.wait(DeploymentmoConstants.TIMEOUT);
+             }
+			String[] finalChildren= session.getChildNodeNames(DeploymentmoConstants.DEPLOYMENT_INVENTORY_DEPLOYED);
+			nodeId = DeploymentmoTestControl.getNodeId(initialChildren,finalChildren);
+			
+             tbc.assertAlertValues(DeploymentmoConstants.ALERT_TYPE_INSTALLANDACTIVATE,
+                 DeploymentmoConstants.getDeployedNodeId(nodeId),
+                 new DmtData(250));
+
+			
+
+		} catch (Exception e) {
+			tbc.fail("Unexpected exception: " + e.getClass().getName());
+		} finally {
+        	if (!nodeId.equals("")) {
+        		tbc.executeRemoveNode(session,DeploymentmoConstants.getDeployedOperationsRemove(nodeId));
+        	}
+        	DeploymentmoTestControl.renameFileForced(fileSrc, fileDestiny);
+		    tbc.closeSession(session);
+			
+		}
     }
     /**
      * This test asserts the result code is 401 if the user cancelled the download.
@@ -405,7 +406,7 @@ public class InstallAndActivate implements TestInterface {
      */
     private void testInstallAndActivate005() {
         tbc.log("#testInstallAndActivate005");
-        tbc.log("#Test case only valid if the user cancelled the download");
+        tbc.log("#Test case is only valid if the user cancelled the download");
         assertResultCode(DeploymentmoConstants.SIMPLE_DP, 401);
     }
 
@@ -572,7 +573,7 @@ public class InstallAndActivate implements TestInterface {
 				tbc.executeRemoveNode(session, DeploymentmoConstants
 						.getDeployedOperationsRemove(nodeId2));
 			}
-			tbc.resetCommandValues();
+			
 		}
     }
    
@@ -661,7 +662,42 @@ public class InstallAndActivate implements TestInterface {
         }
     }
     
-    
+    /**
+     * Asserts that the Deployed area also reflects deployment artifacts deployed directly via 
+     * the Deployment Admin service or Framework API.
+     *
+     * @spec 3.6.4 Deployed
+     */
+    private void testInstallAndActivate021() {
+    	tbc.log("#testInstallAndActivate021");
+        TestingArtifact artifact = tbc.getArtifact(DeploymentmoConstants.SIMPLE_DP);
+        TestingDeploymentPackage testDP = artifact.getDeploymentPackage();
+		DeploymentPackage dp = null;
+		DmtSession session = null;
+		try {
+			session = tbc.getDmtAdmin().getSession(
+					DeploymentmoConstants.PRINCIPAL,
+					DeploymentmoConstants.OSGI_ROOT,
+					DmtSession.LOCK_TYPE_ATOMIC);
+			
+			String[] initialChildren = session.getChildNodeNames(DeploymentmoConstants.DEPLOYMENT_INVENTORY_DEPLOYED);
+
+			dp = tbc.installDeploymentPackage(DeploymentmoConstants.SERVER + "www/" +testDP.getFilename());
+			
+
+            String[] finalChildren= session.getChildNodeNames(DeploymentmoConstants.DEPLOYMENT_INVENTORY_DEPLOYED);
+            tbc.assertTrue("Asserts that the node at Deployed subtree was created",initialChildren.length+1==finalChildren.length);
+            
+            String nodeId = DeploymentmoTestControl.getNodeId(initialChildren,finalChildren);
+            assertSimpleDpSubtree(session, nodeId);
+            
+			} catch (Exception e) {
+			tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }));
+		} finally {
+			tbc.uninstall(dp);
+			tbc.closeSession(session);
+		}
+    }
 	
     
 	private void assertResultCode(int dpCode,int resultCode) {
@@ -686,7 +722,7 @@ public class InstallAndActivate implements TestInterface {
 			tbc.fail("Unexpected exception: " + e.getClass().getName());
 		} finally {
 		    tbc.closeSession(session);
-			tbc.resetCommandValues();
+			
 		}
 	}
 	
@@ -735,7 +771,7 @@ public class InstallAndActivate implements TestInterface {
         	}
         	DeploymentmoTestControl.renameFileForced(fileSrc, fileDestiny);
 		    tbc.closeSession(session);
-			tbc.resetCommandValues();
+			
 		}
 	}
 	
@@ -775,7 +811,91 @@ public class InstallAndActivate implements TestInterface {
         	}
         	DeploymentmoTestControl.renameFileForced(fileSrc, fileDestiny);
 		    tbc.closeSession(session);
-			tbc.resetCommandValues();
+			
+		}
+	}
+	
+	private void assertSimpleDpSubtree(DmtSession session, String nodeId) {
+		try { 
+			 //Deployment Package "simple.dp"
+			tbc.assertEquals(
+							"Asserting the node EnvType",
+							DeploymentmoConstants.ENVTYPE,
+							session.getNodeValue(DeploymentmoConstants.getDeployedEnvType(nodeId)).toString());
+			
+			String manifest = session.getNodeValue(DeploymentmoConstants.getDeployedExtManifest(nodeId)).toString().trim();
+			boolean passed = true;
+			Iterator iterator = DeploymentmoConstants.simpleDpManifest.iterator();
+			while (iterator.hasNext()) {
+				String element = (String)iterator.next();
+				if (manifest.indexOf(element) < 0) {
+					passed=false;
+				}
+			}
+			
+			tbc.assertTrue("Asserting the content of the Deployment Package manifest",passed);
+									
+	
+			tbc.assertEquals(
+							"Asserting the package type",
+							DeploymentmoConstants.OSGI_DP,
+							session.getNodeValue(DeploymentmoConstants.getDeployedExtPackageType(nodeId)).getInt());
+			
+			String[] signerChildren = session.getChildNodeNames(DeploymentmoConstants.getDeployedExtSigners(nodeId));
+			
+			if (signerChildren.length<=0) {
+				tbc.fail("./OSGi/Deployment/Inventory/Deployed/[node_id]/Ext/Signers/[signer] does not exist");
+			}
+			String signer = signerChildren[0];
+			
+			tbc.assertEquals("Asserting the signer of the deployment package",
+					DeploymentmoConstants.SIMPLE_DP_SIGNER,
+					session.getNodeValue(DeploymentmoConstants.getDeployedExtSignersSignerId(nodeId, signer)).toString());
+	
+			
+			//Bundle "bundles.tb1"
+			Bundle bundle1 = tbc.getBundle(DeploymentmoConstants.SIMPLE_DP_BUNDLE1_SYMBNAME);
+			tbc.assertNotNull("The bundle was installed in the framework", bundle1);
+			String bundleId = bundle1.getBundleId() + "";
+			
+			tbc.assertTrue("Asserting that the bundle id is the same as the specified",
+					session.isNodeUri(DeploymentmoConstants.getDeployedExtBundlesBundleId(nodeId, bundleId)));
+	
+			tbc.assertEquals("Asserting bundle's state",
+					DeploymentmoConstants.SIMPLE_DP_BUNDLE1_STATE,
+					session.getNodeValue(DeploymentmoConstants.getDeployedExtBundlesState(nodeId, bundleId)).getInt());
+			
+			tbc.assertTrue("Asserting that the manifest of the first bundle is the same as the specified",
+					session.getNodeValue(DeploymentmoConstants.getDeployedExtBundlesManifest(nodeId, bundleId)).toString().indexOf(DeploymentmoConstants.SIMPLE_DP_BUNDLE1_MANIFEST) > -1);
+			
+			tbc.assertEquals("Asserting that the location of the first bundle is the same as the specified",
+					DeploymentmoConstants.SIMPLE_DP_BUNDLE1_LOCATION,
+					session.getNodeValue(DeploymentmoConstants.getDeployedExtBundlesLocation(nodeId, bundleId)).toString());
+	
+			//Bundle "bundles.tb2"
+			Bundle bundle2 = tbc.getBundle(DeploymentmoConstants.SIMPLE_DP_BUNDLE2_SYMBNAME);
+			tbc.assertNotNull("The bundle was installed in the framework", bundle2);
+			bundleId = bundle2.getBundleId() + "";
+			
+			tbc.assertTrue("Asserting that the bundle id is the same as the specified",
+					session.isNodeUri(DeploymentmoConstants.getDeployedExtBundlesBundleId(nodeId, bundleId)));
+	
+			tbc.assertEquals("Asserting bundle's state",
+					DeploymentmoConstants.SIMPLE_DP_BUNDLE2_STATE,
+					session.getNodeValue(DeploymentmoConstants.getDeployedExtBundlesState(nodeId, bundleId)).getInt());
+			
+			tbc.assertTrue("Asserting that the manifest of the second bundle is the same as the specified",
+					session.getNodeValue(DeploymentmoConstants.getDeployedExtBundlesManifest(nodeId, bundleId)).toString().indexOf(DeploymentmoConstants.SIMPLE_DP_BUNDLE2_MANIFEST) > -1);
+			
+			tbc.assertEquals("Asserting that the location of the second bundle is the same as the specified",
+					DeploymentmoConstants.SIMPLE_DP_BUNDLE2_LOCATION,
+					session.getNodeValue(DeploymentmoConstants.getDeployedExtBundlesLocation(nodeId, bundleId)).toString());
+			
+			String[] children = session.getChildNodeNames(DeploymentmoConstants.getDeployedExtBundles(nodeId));
+			
+			tbc.assertTrue("Asserting that there is two bundle nodes in DMT",children.length==2);
+		} catch (Exception e) {
+			tbc.fail("Unexpected exception: " + e.getClass().getName());
 		}
 	}
 }

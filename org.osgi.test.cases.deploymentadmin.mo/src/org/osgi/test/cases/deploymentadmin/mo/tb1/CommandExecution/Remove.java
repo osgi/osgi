@@ -76,6 +76,12 @@ public class Remove implements TestInterface {
         tbc.log("#testRemove001");
         
         DmtSession session = null;
+        
+        //Backups the artifact and, after the execute method removes, moves it again to the delivered area 
+        String archiveName =DeploymentmoConstants.MAP_CODE_TO_ARTIFACT[DeploymentmoConstants.SIMPLE_DP] +".dp";
+        File fileSrc = DeploymentmoTestControl.copyArtifact(archiveName);
+		File fileDestiny = DeploymentmoTestControl.getFile(archiveName);
+		
 		try {
 			session = tbc.getDmtAdmin().getSession(
 					DeploymentmoConstants.PRINCIPAL,
@@ -96,7 +102,9 @@ public class Remove implements TestInterface {
              
              //Uninstalls a deployment package
              initialChildren = finalChildren;
-
+             
+             tbc.resetCommandValues();
+             
  			  synchronized (tbc) {
  	   			 session.execute(DeploymentmoConstants.getDeployedOperationsRemove(nodeId), null);
                   tbc.wait(DeploymentmoConstants.TIMEOUT);
@@ -113,8 +121,9 @@ public class Remove implements TestInterface {
 		} catch (Exception e) {
 			tbc.fail("Unexpected exception: " + e.getClass().getName());
 		} finally {
+			DeploymentmoTestControl.renameFileForced(fileSrc, fileDestiny);
 		    tbc.closeSession(session);
-			tbc.resetCommandValues();
+			
 		}
         
     }
@@ -145,7 +154,7 @@ public class Remove implements TestInterface {
 					"$/Deployment/Inventory/Delivered/[node_id]/Operations/Remove is executed",
 					!session.isNodeUri(DeploymentmoConstants.SIMPLE_DP_DELIVERED));
 
-             tbc.assertAlertValues(DeploymentmoConstants.ALERT_TYPE_DEPLOYED_REMOVE,
+             tbc.assertAlertValues(DeploymentmoConstants.ALERT_TYPE_DELIVERED_REMOVE,
                  DeploymentmoConstants.getDeliveredNodeId(DeploymentmoConstants.SIMPLE_DP),
                  new DmtData(200));
              
@@ -155,7 +164,7 @@ public class Remove implements TestInterface {
 		} finally {
 			DeploymentmoTestControl.renameFileForced(fileSrc, fileDestiny);
 		    tbc.closeSession(session);
-			tbc.resetCommandValues();
+			
 		}
         
     }
@@ -171,6 +180,12 @@ public class Remove implements TestInterface {
         tbc.log("#testRemove003");
         
         DmtSession session = null;
+        
+        //Backups the artifact and, after the execute method removes, copies it again to the delivered area 
+        String archiveName =DeploymentmoConstants.MAP_CODE_TO_ARTIFACT[DeploymentmoConstants.SIMPLE_BUNDLE];
+        File fileSrc = DeploymentmoTestControl.copyArtifact(archiveName);
+		File fileDestiny = DeploymentmoTestControl.getFile(archiveName);
+		
 		try {
 			session = tbc.getDmtAdmin().getSession(
 					DeploymentmoConstants.PRINCIPAL,
@@ -191,7 +206,7 @@ public class Remove implements TestInterface {
              
              //Uninstalls a bundle
              initialChildren = finalChildren;
-
+             tbc.resetCommandValues();
  			  synchronized (tbc) {
  	   			 session.execute(DeploymentmoConstants.getDeployedOperationsRemove(nodeId), null);
                   tbc.wait(DeploymentmoConstants.TIMEOUT);
@@ -209,8 +224,9 @@ public class Remove implements TestInterface {
 		} catch (Exception e) {
 			tbc.fail("Unexpected exception: " + e.getClass().getName());
 		} finally {
+			DeploymentmoTestControl.renameFileForced(fileSrc, fileDestiny);
 		    tbc.closeSession(session);
-			tbc.resetCommandValues();
+			
 		}
         
     }
@@ -245,7 +261,7 @@ public class Remove implements TestInterface {
 			tbc.assertTrue("Asserts that the artifact is removed from this subtree when " +
 					"$/Deployment/Inventory/Delivered/[node_id]/Operations/Remove is executed",
 					!session.isNodeUri(bundleNode));
-             tbc.assertAlertValues(DeploymentmoConstants.ALERT_TYPE_DEPLOYED_REMOVE,
+             tbc.assertAlertValues(DeploymentmoConstants.ALERT_TYPE_DELIVERED_REMOVE,
                  DeploymentmoConstants.getDeliveredNodeId(DeploymentmoConstants.SIMPLE_BUNDLE),
                  new DmtData(200));
 
@@ -255,7 +271,7 @@ public class Remove implements TestInterface {
 		} finally {
 			DeploymentmoTestControl.renameFileForced(fileSrc, fileDestiny);
 		    tbc.closeSession(session);
-			tbc.resetCommandValues();
+			
 		}
         
     }

@@ -44,6 +44,7 @@ import java.io.FilePermission;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStreamWriter;
+import java.net.MalformedURLException;
 import java.net.SocketPermission;
 import java.net.URL;
 import java.util.HashMap;
@@ -57,6 +58,8 @@ import org.osgi.framework.ServicePermission;
 import org.osgi.framework.ServiceReference;
 import org.osgi.service.deploymentadmin.DeploymentAdmin;
 import org.osgi.service.deploymentadmin.DeploymentAdminPermission;
+import org.osgi.service.deploymentadmin.DeploymentException;
+import org.osgi.service.deploymentadmin.DeploymentPackage;
 import org.osgi.service.deploymentadmin.spi.DeploymentCustomizerPermission;
 import org.osgi.service.dmt.Acl;
 import org.osgi.service.dmt.AlertItem;
@@ -617,6 +620,8 @@ public class DeploymentmoTestControl extends DefaultTestBundleControl {
         assertEquals("Asserting source", source, item.getSource());
         assertNull("Asserting mark", item.getMark());
         assertEquals("Asserting data " ,data,item.getData());
+        //Resets after the asserts.
+        resetCommandValues();
     }
     
     public static File copyArtifact(String name) {
@@ -655,6 +660,41 @@ public class DeploymentmoTestControl extends DefaultTestBundleControl {
     	}
     	return fileSrc.renameTo(fileDestiny);
     }
+    
+	public DeploymentPackage installDeploymentPackage(String urlStr) throws DeploymentException, SecurityException {
+		InputStream in = null;
+		URL url = null;
+		try {
+			url = new URL(urlStr);
+			in = url.openStream();
+			return getDeploymentAdmin().installDeploymentPackage(in);
+		} catch (MalformedURLException e) {
+			fail("Failed to open the URL");
+		} catch (IOException e) {
+			fail("Failed to open an InputStream");
+		} finally {
+			if (in != null)
+				try {
+					in.close();
+				} catch (Exception e1) {
+				}
+		}
+		return null;
+	}
+	public void uninstall(DeploymentPackage dp) {
+		if ((dp != null)&&!dp.isStale()) {
+			try {
+				dp.uninstall();
+			} catch (DeploymentException e) {
+				log("#Deployment Package could not be uninstalled. Uninstalling forcefully...");
+				try {
+                    dp.uninstallForced();
+                } catch (DeploymentException e1) {
+                    log("# Failed to uninstall deployment package: "+dp.getName());
+                }
+			} 
+		}
+	}
 	//Area test cases
 
     public void testAreaPermanentNodes(){
@@ -705,7 +745,9 @@ public class DeploymentmoTestControl extends DefaultTestBundleControl {
 	}
 	
 	public void resetCommandValues() {
-		code = 0;
+		setAlert(null);
+        setCode(0);
+        setReceivedAlert(false);
 	}
     
     public PermissionAdmin getPermissionAdmin() {

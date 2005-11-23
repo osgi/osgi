@@ -198,14 +198,13 @@ public class DownloadAndInstallAndActivate implements TestInterface {
                 tbc.assertTrue("Asserts that the node was not created",initialChildren.length==finalChildren.length);
                 
             } else {
-                tbc.log("Precondition for testDownloadAndInstallAndActivate003 not satisfied");
+                tbc.log("Precondition for testDownloadAndInstallAndActivate002 not satisfied");
             }
         } catch (Exception e) {
             tbc.fail(MessagesConstants.getMessage(
                 MessagesConstants.UNEXPECTED_EXCEPTION, new String[]{e.getClass().getName()}));
         } finally {
             unprepare(dlota.getDlotaFile());
-            tbc.resetCommandValues();
         }
     }
  
@@ -255,14 +254,14 @@ public class DownloadAndInstallAndActivate implements TestInterface {
 		                actual = System.currentTimeMillis();
 		            }
 		            
-		            tbc.assertEquals("Asserts if the idle code was gotten in the specified order",states[0], DeploymentmoConstants.CODE_IDLE);
-	                tbc.assertEquals("Asserts if the streaming code was gotten in the specified order",states[1], DeploymentmoConstants.CODE_STREAMING);
-	                tbc.assertEquals("Asserts if the deployed code was gotten in the specified order",states[2], DeploymentmoConstants.CODE_DEPLOYED);
+		            tbc.assertEquals("Asserts if the idle code was gotten in the specified order",DeploymentmoConstants.CODE_IDLE,states[0]);
+	                tbc.assertEquals("Asserts if the streaming code was gotten in the specified order",DeploymentmoConstants.CODE_STREAMING,states[1]);
+	                tbc.assertEquals("Asserts if the deployed code was gotten in the specified order",DeploymentmoConstants.CODE_DEPLOYED,states[2]);
 	                
 	                String[] finalChildren= session.getChildNodeNames(DeploymentmoConstants.DEPLOYMENT_INVENTORY_DEPLOYED);
 	                nodeId = DeploymentmoTestControl.getNodeId(initialChildren,finalChildren);
 	            } else {
-	                tbc.log("Precondition for testDownloadAndInstallAndActivate004 not satisfied");
+	                tbc.log("Precondition for testDownloadAndInstallAndActivate003 not satisfied");
 	            }
 	        } catch (Exception e) {
 	            tbc.fail(MessagesConstants.getMessage(
@@ -272,7 +271,7 @@ public class DownloadAndInstallAndActivate implements TestInterface {
 	        		tbc.executeRemoveNode(session,DeploymentmoConstants.getDeployedOperationsRemove(nodeId));
 	        	}
 	            unprepare(dlota.getDlotaFile());
-	            tbc.resetCommandValues();
+	            
 	        }
         } else {
             tbc.log("#Download is not done by streaming, STREMING code wont be tested");
@@ -323,23 +322,23 @@ public class DownloadAndInstallAndActivate implements TestInterface {
 		                actual = System.currentTimeMillis();
 		            }
 		            
-		            tbc.assertEquals("Asserts if the idle code was gotten in the specified order",states[0], DeploymentmoConstants.CODE_IDLE);
-	                tbc.assertEquals("Asserts if the downloading code was gotten in the specified order",states[1], DeploymentmoConstants.CODE_DOWNLOADING);
-	                tbc.assertEquals("Asserts if the downloaded code was gotten in the specified order",states[2], DeploymentmoConstants.CODE_DOWNLOADED);
-	                tbc.assertEquals("Asserts if the deploying code was gotten in the specified order",states[3], DeploymentmoConstants.CODE_DEPLOYING);
-	                tbc.assertEquals("Asserts if the deployed code was gotten in the specified order",states[4], DeploymentmoConstants.CODE_DEPLOYED);
+		            tbc.assertEquals("Asserts if the idle code was gotten in the specified order",DeploymentmoConstants.CODE_IDLE,states[0]);
+	                tbc.assertEquals("Asserts if the downloading code was gotten in the specified order",DeploymentmoConstants.CODE_DOWNLOADING,states[1]);
+	                tbc.assertEquals("Asserts if the downloaded code was gotten in the specified order",DeploymentmoConstants.CODE_DOWNLOADED,states[2]);
+	                tbc.assertEquals("Asserts if the deploying code was gotten in the specified order",DeploymentmoConstants.CODE_DEPLOYING,states[3]);
+	                tbc.assertEquals("Asserts if the deployed code was gotten in the specified order",DeploymentmoConstants.CODE_DEPLOYED,states[4]);
 	                
 
 	
 	            } else {
-	                tbc.log("Precondition for testDownloadAndInstallAndActivate005 not satisfied");
+	                tbc.log("Precondition for testDownloadAndInstallAndActivate004 not satisfied");
 	            }
 	        } catch (Exception e) {
 	            tbc.fail(MessagesConstants.getMessage(
 	                MessagesConstants.UNEXPECTED_EXCEPTION, new String[]{e.getClass().getName()}));
 	        } finally {
 	            unprepare(dlota.getDlotaFile());
-	            tbc.resetCommandValues();
+	            
 	        }
         } else {
             tbc.log("#Download is done by streaming, DOWNLOADING, DOWNLOADED and DEPLOYING codes wont be tested");
@@ -381,14 +380,14 @@ public class DownloadAndInstallAndActivate implements TestInterface {
                 tbc.assertTrue("Asserts that the node was not created",initialChildren.length==finalChildren.length);
                 
             } else {
-                tbc.log("Precondition for testDownloadAndInstallAndActivate006 not satisfied");
+                tbc.log("Precondition for testDownloadAndInstallAndActivate005 not satisfied");
             }
         } catch (Exception e) {
             tbc.fail(MessagesConstants.getMessage(
                 MessagesConstants.UNEXPECTED_EXCEPTION, new String[]{e.getClass().getName()}));
         } finally {
             unprepare(dlota.getDlotaFile());
-            tbc.resetCommandValues();
+            
         }
     }
     
@@ -427,7 +426,7 @@ public class DownloadAndInstallAndActivate implements TestInterface {
                     new DmtData(200));
                 
             } else {
-                tbc.log("Precondition for testDownloadAndInstallAndActivate002 not satisfied");
+                tbc.log("Precondition for testDownloadAndInstallAndActivate006 not satisfied");
             }
         } catch (Exception e) {
             tbc.fail(MessagesConstants.getMessage(
@@ -437,7 +436,7 @@ public class DownloadAndInstallAndActivate implements TestInterface {
         		tbc.executeRemoveNode(session,DeploymentmoConstants.getDeployedOperationsRemove(nodeId));
         	}
             unprepare(dlota.getDlotaFile());
-            tbc.resetCommandValues();
+            
         }
     }
     /**
@@ -469,7 +468,7 @@ public class DownloadAndInstallAndActivate implements TestInterface {
             tbc.fail(MessagesConstants.getMessage(MessagesConstants.EXCEPTION_THROWN, new String[]{ DmtException.class.getName(),e.getClass().getName()}));
         } finally {
             tbc.cleanUp(session, new String[]{DeploymentmoConstants.DEPLOYMENT_DOWNLOAD_TEST});
-            tbc.resetCommandValues();
+            
         }
     }
     
@@ -501,7 +500,7 @@ public class DownloadAndInstallAndActivate implements TestInterface {
                 MessagesConstants.UNEXPECTED_EXCEPTION, new String[]{e.getClass().getName()}));
         } finally {
             unprepare(null);
-            tbc.resetCommandValues();
+            
         }
     }
     
@@ -534,11 +533,10 @@ public class DownloadAndInstallAndActivate implements TestInterface {
                 nodeId = DeploymentmoTestControl.getNodeId(initialChildren,finalChildren);
                 
                 //Deployment Package "simple.dp"
-    			tbc.assertEquals(
-    							"Asserting the node ID",
-    							DeploymentmoConstants.SIMPLE_DP_NAME,
-    							session.getNodeValue(DeploymentmoConstants.getDeployedID(nodeId)).toString());
 
+                //The $/Deployment/Inventory/Deployed/<node_id>/ID node is set by the Device Management System, 
+                //so the value is not specified
+                
     			tbc.assertEquals(
     							"Asserting the node EnvType",
     							DeploymentmoConstants.ENVTYPE,
@@ -617,7 +615,7 @@ public class DownloadAndInstallAndActivate implements TestInterface {
 
                 
             } else {
-                tbc.log("Precondition for testDownloadAndInstallAndActivate002 not satisfied");
+                tbc.log("Precondition for testDownloadAndInstallAndActivate009 not satisfied");
             }
         } catch (Exception e) {
             tbc.fail(MessagesConstants.getMessage(
@@ -627,7 +625,7 @@ public class DownloadAndInstallAndActivate implements TestInterface {
         		tbc.executeRemoveNode(session,DeploymentmoConstants.getDeployedOperationsRemove(nodeId));
         	}
             unprepare(dlota.getDlotaFile());
-            tbc.resetCommandValues();
+            
         }
     }
     
@@ -678,10 +676,6 @@ public class DownloadAndInstallAndActivate implements TestInterface {
 	
 	
 	            //Deployment Package "simple.dp" (which has the content of simple_fix_pack.dp)
-				tbc.assertEquals(
-								"Asserting the node ID",
-								DeploymentmoConstants.SIMPLE_DP_NAME,
-								session.getNodeValue(DeploymentmoConstants.getDeployedID(nodeId)).toString());
 	
 				tbc.assertEquals(
 								"Asserting the node EnvType",
@@ -751,7 +745,7 @@ public class DownloadAndInstallAndActivate implements TestInterface {
         		tbc.executeRemoveNode(session,DeploymentmoConstants.getDeployedOperationsRemove(nodeId));
         	}
 		    unprepare(dlota.getDlotaFile());
-			tbc.resetCommandValues();
+			
 		}
 	}
     /**
@@ -782,7 +776,7 @@ public class DownloadAndInstallAndActivate implements TestInterface {
      */
     private void testDownloadAndInstallAndActivate013() {
         tbc.log("#testDownloadAndInstallAndActivate013");
-        tbc.log("#Test case only valid if the user cancelled the download");
+        tbc.log("#Test case is only valid if the user cancelled the download");
         assertResultCode(DeploymentmoConstants.SIMPLE_DP, 401);
     }
 
@@ -824,7 +818,6 @@ public class DownloadAndInstallAndActivate implements TestInterface {
             tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[]{ e.getClass().getName()}));
         } finally {
             tbc.cleanUp(session, new String[]{DeploymentmoConstants.DEPLOYMENT_DOWNLOAD_TEST});
-            tbc.resetCommandValues();
         }
     }
     
@@ -940,7 +933,7 @@ public class DownloadAndInstallAndActivate implements TestInterface {
         		tbc.executeRemoveNode(session,DeploymentmoConstants.getDeployedOperationsRemove(rp));
         	}
         	unprepare(null);
-            tbc.resetCommandValues();
+            
         }
     }
 
@@ -1056,10 +1049,6 @@ public class DownloadAndInstallAndActivate implements TestInterface {
                 nodeId = DeploymentmoTestControl.getNodeId(initialChildren,finalChildren);
 
                 //Bundle "bundle001.jar"
-    			tbc.assertEquals(
-    							"Asserting the node ID",
-    							bundle.getFilename(),
-    							session.getNodeValue(DeploymentmoConstants.getDeployedID(nodeId)).toString());
 
     			tbc.assertEquals(
     							"Asserting the node EnvType",
@@ -1104,7 +1093,7 @@ public class DownloadAndInstallAndActivate implements TestInterface {
         		tbc.executeRemoveNode(session,DeploymentmoConstants.getDeployedOperationsRemove(nodeId));
         	}
             unprepare(dlota.getDlotaFile());
-            tbc.resetCommandValues();
+            
         }
     }
     
@@ -1140,10 +1129,6 @@ public class DownloadAndInstallAndActivate implements TestInterface {
 	             
 
                 //Bundle "bundle001.jar"
-    			tbc.assertEquals(
-    							"Asserting the node ID",
-    							bundle.getFilename(),
-    							session.getNodeValue(DeploymentmoConstants.getDeployedID(nodeId)).toString());
 
     			tbc.assertEquals(
     							"Asserting the node EnvType",
@@ -1188,7 +1173,7 @@ public class DownloadAndInstallAndActivate implements TestInterface {
         		tbc.executeRemoveNode(session,DeploymentmoConstants.getDeployedOperationsRemove(nodeId));
         	}
             unprepare(dlota.getDlotaFile());
-            tbc.resetCommandValues();
+            
         }
     }
     /**
@@ -1238,7 +1223,7 @@ public class DownloadAndInstallAndActivate implements TestInterface {
                 MessagesConstants.UNEXPECTED_EXCEPTION, new String[]{e.getClass().getName()}));
         } finally {
             unprepare(dlota.getDlotaFile());
-            tbc.resetCommandValues();
+            
         }
     }
     /**
@@ -1301,7 +1286,7 @@ public class DownloadAndInstallAndActivate implements TestInterface {
             if (null!=dlota2) {
             	dlota2.getDlotaFile().delete();
             }
-            tbc.resetCommandValues();
+            
         }
     	
     }
@@ -1361,7 +1346,7 @@ public class DownloadAndInstallAndActivate implements TestInterface {
             tbc.fail(MessagesConstants.getMessage(
                 MessagesConstants.UNEXPECTED_EXCEPTION, new String[]{e.getClass().getName()}));
         } finally {
-            tbc.resetCommandValues();
+            
         }
         return nodeId;
     }

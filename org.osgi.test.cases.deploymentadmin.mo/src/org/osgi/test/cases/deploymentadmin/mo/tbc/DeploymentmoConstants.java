@@ -52,7 +52,7 @@ public class DeploymentmoConstants {
     public static final String PRINCIPAL = "admin";
 
     public static final String DELIVERED_AREA = System.getProperty("org.osgi.impl.service.deploymentadmin.deliveredarea");
-    //Values specified
+    //Specified values
     public static final String ENVTYPE = "OSGi.R4";
     public static final String ENVIRONMENT_DP = "http://www.osgi.org/xmlns/dd/DP";
     public static final String ENVIRONMENT_BUNDLE = "http://www.osgi.org/xmlns/dd/bundle";
@@ -147,7 +147,7 @@ public class DeploymentmoConstants {
     public static final String SIMPLE_DP_DELIVERED_OPERATIONS_EXT = SIMPLE_DP_DELIVERED_OPERATIONS + "/Ext";
     
     //The expected values of the simple_dp.dp after deployed
-    public static final String SIMPLE_DP_SIGNER = "CN=John Smith, O=ACME Inc, OU=ACME Cert Authority, L=Austin, S=Texas, C=US";
+    public static final String SIMPLE_DP_SIGNER = "CN=John Smith, O=ACME Inc, OU=ACME Cert Authority, L=Austin, ST=Texas, C=US";
     
     //Manifest header can be shown in a different order
     public static Vector simpleDpManifest = new Vector();
@@ -213,14 +213,14 @@ public class DeploymentmoConstants {
     public static final String DEPLOYMENT_DOWNLOAD_TEST_OPERATIONS_EXT = DEPLOYMENT_DOWNLOAD_TEST_OPERATIONS + "/Ext";
     public static final String DEPLOYMENT_DOWNLOAD_TEST_DOWN_INST_ACTIV = DEPLOYMENT_DOWNLOAD_TEST_OPERATIONS + "/DownloadAndInstallAndActivate";
 
-    public static final String SIGNER_FILTER = "CN=John Smith, O=ACME Inc, OU=ACME Cert Authority, L=Austin, S=Texas, C=US";
+    public static final String SIGNER_FILTER = "CN=John Smith, O=ACME Inc, OU=ACME Cert Authority, L=Austin, ST=Texas, C=US";
     
     //TODO Change for getting if the implementation is streaming from a properties file
     public static final boolean IS_STREAMING = true;
 
     //This flag must be true if the implementation reports progress on the Status node  
     public static final boolean STATUS_NODE_REPORTS_PROGRESS = true;
-    
+
     public static final int TIMEOUT = 3000;
     
     public static final String ALL_DMT_PERMISSION = DmtPermission.ADD + ","
@@ -310,10 +310,10 @@ public class DeploymentmoConstants {
     //Delivered subtree
     //Subtree $/Deployment/Inventory/Delivered/<node_id>
     public static String getDeliveredNodeId(int nodeId) {
-    	if (nodeId==DeploymentmoConstants.SIMPLE_BUNDLE) 
+    	if (nodeId==DeploymentmoConstants.SIMPLE_BUNDLE || nodeId==DeploymentmoConstants.NOT_ACCEPTABLE_CONTENT) 
     		return DEPLOYMENT_INVENTORY_DELIVERED + "/" + MAP_CODE_TO_ARTIFACT[nodeId];
-		else
-			return DEPLOYMENT_INVENTORY_DELIVERED + "/" + MAP_CODE_TO_ARTIFACT[nodeId] + ".dp";
+    	else
+    		return DEPLOYMENT_INVENTORY_DELIVERED + "/" + MAP_CODE_TO_ARTIFACT[nodeId] + ".dp";
     }
     //Subtree $/Deployment/Inventory/Delivered/<node_id>/Operations/InstallAndActivate
     public static String getDeliveredOperationsInstallAndActivate(int nodeId) {
