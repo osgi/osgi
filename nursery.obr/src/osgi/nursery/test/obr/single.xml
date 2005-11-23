@@ -1,0 +1,28 @@
+<repository time='20051123094929.321'>
+   <resource version='1.1.0' documentation='xyz' name='org.osgi.impl.service.http' url='org.osgi.impl.service.http-1.1.0.jar' size='119842'>
+    <description>
+      The OSGi HTTP service Reference Implementation by Gatespace
+       AB.
+    </description>
+    <copyright>
+      Copyright (c) OSGi Alliance (2000, 2005). All Rights Reserved.
+    </copyright>
+    <capability name='bundle'>
+      <p v='1' n='bundle-manifestversion'/>
+      <p v='org.osgi.impl.service.http' n='bundle-symbolicname'/>
+      <p v='1.1.0' t='version' n='bundle-version'/>
+    </capability>
+    <capability name='package'>
+      <p v='org.osgi.service.http' n='package'/>
+      <p v='1.2' n='specification-version'/>
+    </capability>
+    <request name='fragment' filter='(&amp;(host=org.osgi.impl.service.http)(version=0.0.0))'/>
+    <require name='package' filter='(&amp;(package=javax.servlet)(version=2.1.0))'/>
+    <require name='package' filter='(&amp;(package=javax.servlet.http)(version=2.1.0))'/>
+    <require name='package' filter='(&amp;(package=org.osgi.framework)(version=1.3.0))'/>
+    <require name='package' filter='(&amp;(package=org.osgi.service.log)(version=1.3.0))'/>
+    <require name='package' filter='(&amp;(package=org.osgi.util.tracker)(version=1.3.0))'/>
+    <require name='ee' filter='(|(ee=J2SE-1.4))'/>
+  </resource>
+ </repository>
+ 
