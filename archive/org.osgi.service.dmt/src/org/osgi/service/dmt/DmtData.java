@@ -30,7 +30,7 @@ import java.util.Arrays;
  * formats. Nodes of <code>null</code> format can be created using the static
  * {@link #NULL_VALUE} constant instance of this class.
  */
-public class DmtData {
+public final class DmtData {
 
     /**
      * The node holds an OMA DM <code>int</code> value.
@@ -99,13 +99,13 @@ public class DmtData {
      */
     public static DmtData NULL_VALUE = new DmtData(); 
 
-    private String  str;
-    private int     integer;
-    private float   flt;
-    private boolean bool;
-    private byte[]  bytes;
+    private final String  str;
+    private final int     integer;
+    private final float   flt;
+    private final boolean bool;
+    private final byte[]  bytes;
 
-    private int     format;
+    private final int     format;
 
     /**
      * Create a <code>DmtData</code> instance of <code>null</code> format.
@@ -114,6 +114,12 @@ public class DmtData {
      */
     private DmtData() {
         format = FORMAT_NULL;
+        
+        this.str     = null;
+        this.integer = 0;
+        this.flt     = 0;
+        this.bool    = false;
+        this.bytes   = null;
     }
 
     /**
@@ -126,6 +132,12 @@ public class DmtData {
     public DmtData(String str) {
         format = FORMAT_STRING;
         this.str = str;
+        
+        this.integer = 0;
+        this.flt     = 0;
+        this.bool    = false;
+        this.bytes   = null;
+
     }
 
     /**
@@ -157,7 +169,6 @@ public class DmtData {
      *         <code>value</code> is <code>null</code>
      */
     public DmtData(String value, int format) {
-        this(value);
         switch(format) {
         case FORMAT_DATE:
             checkDateFormat(value);
@@ -172,7 +183,12 @@ public class DmtData {
             throw new IllegalArgumentException(
                     "Invalid format in string constructor: " + format);
         }
-        this.format = format;
+        this.format  = format;
+        this.str     = value;
+        this.integer = 0;
+        this.flt     = 0;
+        this.bool    = false;
+        this.bytes   = null;
     }
     
     /**
@@ -184,6 +200,12 @@ public class DmtData {
     public DmtData(int integer) {
         format = FORMAT_INTEGER;
         this.integer = integer;
+        
+        this.str     = null;
+        this.flt     = 0;
+        this.bool    = false;
+        this.bytes   = null;
+
     }
 
     /**
@@ -195,6 +217,12 @@ public class DmtData {
     public DmtData(float flt) {
         format = FORMAT_FLOAT;
         this.flt = flt;
+        
+        this.str     = null;
+        this.integer = 0;
+        this.bool    = false;
+        this.bytes   = null;
+
     }
 
     /**
@@ -206,6 +234,12 @@ public class DmtData {
     public DmtData(boolean bool) {
         format = FORMAT_BOOLEAN;
         this.bool = bool;
+        
+        this.str     = null;
+        this.integer = 0;
+        this.flt     = 0;
+        this.bytes   = null;
+
     }
 
     /**
@@ -221,6 +255,11 @@ public class DmtData {
         
         format = FORMAT_BINARY;
         this.bytes = bytes;
+        
+        this.str     = null;
+        this.integer = 0;
+        this.flt     = 0;
+        this.bool    = false;
     }
 
     /**
@@ -240,6 +279,11 @@ public class DmtData {
         
         format = base64 ? FORMAT_BASE64 : FORMAT_BINARY;
         this.bytes = bytes;
+        
+        this.str     = null;
+        this.integer = 0;
+        this.flt     = 0;
+        this.bool    = false;
     }
 
     
@@ -515,7 +559,7 @@ public class DmtData {
     }
     
     // ENHANCE extend date check for number of days in month, leap years, etc.
-    private void checkDateFormat(String value) {
+    private static void checkDateFormat(String value) {
         if(value.length() != 8)
             throw new IllegalArgumentException("Date string '" + value + 
                     "' does not follow the format 'CCYYMMDD'.");
@@ -526,7 +570,7 @@ public class DmtData {
     }
     
     // ENHANCE extend time check for leap seconds, etc.
-    private void checkTimeFormat(String value) {
+    private static void checkTimeFormat(String value) {
         if(value.length() > 0 && value.charAt(value.length()-1) == 'Z')
             value = value.substring(0, value.length()-1);
         
@@ -540,8 +584,8 @@ public class DmtData {
         checkNumber(value, "Time", 4, 2, 0, 59);
     }
     
-    private void checkNumber(String value, String name, int from, int length, 
-            int min, int max) {
+    private static void checkNumber(String value, String name, int from, 
+            int length, int min, int max) {
         String part = value.substring(from, from+length);
         int number;
         try {

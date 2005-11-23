@@ -25,7 +25,7 @@ import java.util.Map;
  * {@link DmtAdmin#getSession(String, String, int) DmtAdmin.getSession}), as
  * well as &quot; <code>*</code> &quot; indicating any principal.
  */
-public final class Acl implements Cloneable {
+public final class Acl {
 
     //----- Public constants -----//
 
@@ -81,11 +81,11 @@ public final class Acl implements Cloneable {
     //----- Private fields -----//
 
         // the implementation takes advantage of this being a sorted map
-    private TreeMap principalPermissions;
-    private int globalPermissions;
+    private final TreeMap principalPermissions;
+    private final int globalPermissions;
 
 
-    //----- Constructors -----//
+    //----- Public constructors -----//
 
     /**
      * Create an instance of the ACL that represents an empty list of principals
@@ -93,7 +93,8 @@ public final class Acl implements Cloneable {
      */
     public Acl()
     {
-        clearPermissions();
+        principalPermissions = new TreeMap();
+        globalPermissions = 0;
     }
 
     /**
@@ -106,7 +107,52 @@ public final class Acl implements Cloneable {
      */
     public Acl(String acl)
     {
-        parseAcl(acl);
+        if(acl == null || acl.equals("")) {             // empty permission set
+            principalPermissions = new TreeMap();
+            globalPermissions = 0;
+            return;
+        }
+
+        TreeMap tempPrincipalPermissions = new TreeMap();
+        int tempGlobalPermissions = 0;
+        
+        String[] aclEntries = split(acl, '&', -1);
+        for(int i = 0; i < aclEntries.length; i++) {
+            if(aclEntries[i].length() == 0)
+                throw new IllegalArgumentException(
+                    "Invalid ACL string: empty ACL entry.");
+
+            String[] entryParts = split(aclEntries[i], '=', 2);
+            if(entryParts.length == 1)
+                throw new IllegalArgumentException(
+                    "Invalid ACL string: no '=' in ACL entry.");
+            if(entryParts[1].length() == 0)
+                throw new IllegalArgumentException(
+                    "Invalid ACL string: no server identifiers in ACL entry.");
+
+            int command = parseCommand(entryParts[0]);
+            String[] serverIds = split(entryParts[1], '+', -1);
+            for(int j = 0; j < serverIds.length; j++) {
+                if(serverIds[j].length() == 0)
+                    throw new IllegalArgumentException(
+                        "Invalid ACL string: empty server identifier.");
+
+                if(serverIds[j].equals(ALL_PRINCIPALS))
+                    tempGlobalPermissions |= command;
+                else {
+                    checkServerId(serverIds[j], "Invalid ACL string: " +
+                                  "server ID contains illegal character");
+                    Integer n = (Integer)
+                        tempPrincipalPermissions.get(serverIds[j]);
+                    int oldPermission = (n != null) ? n.intValue() : 0;
+                    tempPrincipalPermissions.put(serverIds[j],
+                        new Integer(oldPermission | command));
+                }
+            }
+        }
+        
+        principalPermissions = tempPrincipalPermissions;
+        globalPermissions = tempGlobalPermissions;
     }
     
     /**
@@ -131,7 +177,8 @@ public final class Acl implements Cloneable {
             throw new IllegalArgumentException(
                     "The lengths of the principal and permission arrays are not the same.");
         
-        clearPermissions();
+        TreeMap tempPrincipalPermissions = new TreeMap();
+        int tempGlobalPermissions = 0;
         
         for (int i = 0; i < principals.length; i++) {
             // allow one * in 'principals' array, remove after loop
@@ -141,7 +188,7 @@ public final class Acl implements Cloneable {
             // ### That previous line looks VERY fishy
         
             Integer permInt = new Integer(permissions[i]);
-            Object old = principalPermissions.put(principals[i], permInt);                
+            Object old = tempPrincipalPermissions.put(principals[i], permInt);                
             if(old != null)
                 throw new IllegalArgumentException("Principal '" + 
                         principals[i] + 
@@ -149,35 +196,65 @@ public final class Acl implements Cloneable {
         }
         
         // set the global permissions if there was a * in the array
-        Object globalPermObj = principalPermissions.remove(ALL_PRINCIPALS);
+        Object globalPermObj = tempPrincipalPermissions.remove(ALL_PRINCIPALS);
         if(globalPermObj != null)
-            globalPermissions = ((Integer) globalPermObj).intValue();
+            tempGlobalPermissions = ((Integer) globalPermObj).intValue();
+        
+        principalPermissions = tempPrincipalPermissions;
+        globalPermissions = tempGlobalPermissions;
     }
 
-    //----- Public methods -----//
-   
+    
+    //----- Private constructors -----//
+
     /**
-     * Creates a copy of this ACL object.
+     * Creates an instance identical to the <code>base</code> ACL except for the
+     * permissions of the given <code>principal</code>, which are overwritten
+     * with the given <code>permissions</code>.
+     * <p>
+     * Assumes that the permissions parameter has been checked. All
+     * modifications of an <code>Acl</code> (add, delete, set) are done through
+     * this method.
      * 
-     * @return a <code>Acl</code> instance describing the same permissions
-     *         as this instance
+     * @param base The ACL that provides all permissions except for permissions
+     *        of the given principal. 
+     * @param principal The entity to which permission should be granted.
+     * @param permissions The set of permissions to be given. The parameter can
+     *        be a logical <code>or</code> of the permission constants defined
+     *        in this class.
      */
-    public Object clone() {
-        Acl cloned = null;
-        try {
-            cloned = (Acl) super.clone();
-        } catch(CloneNotSupportedException e) {
-            // never happens because this class is Cloneable
-            throw new UnsupportedOperationException();
-        }
-        
+    private Acl(Acl base, String principal, int permissions) {
         // make a shallow copy of the permission table, the keys (String) and
         // values (Integer) are immutable anyway
-        cloned.principalPermissions = (TreeMap) principalPermissions.clone();
+        TreeMap tempPrincipalPermissions = 
+            (TreeMap) base.principalPermissions.clone(); 
+        int tempGlobalPermissions = base.globalPermissions;
         
-        return cloned;
-    }
+        int deletedGlobalPerm = tempGlobalPermissions & ~permissions;
+        if(ALL_PRINCIPALS.equals(principal)) {
+            deleteFromAll(tempPrincipalPermissions, deletedGlobalPerm);
+            tempGlobalPermissions = permissions;
+        }
+        else {
+            checkPrincipal(principal);
+            
+            if(deletedGlobalPerm != 0)
+                throw new IllegalArgumentException(
+                        "Cannot revoke globally set permissions (" +
+                        writeCommands(deletedGlobalPerm) +
+                        ") from a specific principal (" + principal + ").");
+            
+            setPrincipalPermission(tempPrincipalPermissions, 
+                    principal, permissions);
+        }
 
+        principalPermissions = tempPrincipalPermissions;
+        globalPermissions = tempGlobalPermissions;
+    }
+    
+    
+    //----- Public methods -----//
+   
     /**
      * Checks whether the given object is equal to this <code>Acl</code>
      * instance. Two <code>Acl</code> instances are equal if they allow the
@@ -344,8 +421,7 @@ public final class Acl implements Cloneable {
     {
         checkPermissions(permissions);
         
-        Acl newPermission = (Acl) clone();
-        newPermission.changePermission(principal, permissions);
+        Acl newPermission = new Acl(this, principal, permissions);
         return newPermission;
     }
 
@@ -404,109 +480,26 @@ public final class Acl implements Cloneable {
         return appendEntry(acl, '&', writeCommands(command) + '=' + aclEntry);
     }
 
-    /**
-     * Set the list of permissions a given principal has. All permissions the
-     * principal had will be overwritten.
-     * <p>
-     * Assumes that the permissions parameter has been checked. All
-     * modifications of a <code>Acl</code> instance (add, delete, set) are
-     * done through this method.
-     * 
-     * @param principal The entity to which permission should be granted.
-     * @param permissions The set of permissions to be given. The parameter can
-     *        be a logical <code>or</code> of the permission constants defined
-     *        in this class.
-     */
-    private void changePermission(String principal, int permissions) {
-        if(ALL_PRINCIPALS.equals(principal)) {
-            deleteFromAll(globalPermissions & ~permissions);
-            globalPermissions = permissions;
-        }
-        else {
-            checkPrincipal(principal);
-            
-            int deletedGlobalPerm = globalPermissions & ~permissions;
-            if(deletedGlobalPerm != 0)
-                throw new IllegalArgumentException(
-                        "Cannot revoke globally set permissions (" +
-                        writeCommands(deletedGlobalPerm) +
-                        ") from a specific principal (" + principal + ").");
-            
-            setPrincipalPermission(principal, permissions);
-        }
-    }
     
-    private void deleteFromAll(int perm)
+    private static void deleteFromAll(TreeMap principalPermissions, int perm)
     {
         Iterator i = principalPermissions.entrySet().iterator();
         while(i.hasNext()) {
             Map.Entry entry = (Map.Entry) i.next();
-            setPrincipalPermission((String) entry.getKey(),
-                ((Integer) entry.getValue()).intValue() & ~perm);
+            setPrincipalPermission(principalPermissions, 
+                    (String) entry.getKey(),
+                    ((Integer) entry.getValue()).intValue() & ~perm);
         }
     }
 
-    private void setPrincipalPermission(String principal, int perm)
+    private static void setPrincipalPermission(TreeMap principalPermissions, 
+            String principal, int perm)
     {
         if(perm == 0)
             principalPermissions.remove(principal);
         else
             principalPermissions.put(principal, new Integer(perm));
     }
-
-    private void clearPermissions()
-    {
-        principalPermissions = new TreeMap();
-        globalPermissions = 0;
-    }
-
-    // ACL commands and server IDs are treated case-sensitively
-    private void parseAcl(String acl)
-    {
-        clearPermissions();
-
-        if(acl == null)
-            return;
-
-        if(acl.equals(""))
-            return;             // empty permission set
-
-        String[] aclEntries = split(acl, '&', -1);
-        for(int i = 0; i < aclEntries.length; i++) {
-            if(aclEntries[i].length() == 0)
-                throw new IllegalArgumentException(
-                    "Invalid ACL string: empty ACL entry.");
-
-            String[] entryParts = split(aclEntries[i], '=', 2);
-            if(entryParts.length == 1)
-                throw new IllegalArgumentException(
-                    "Invalid ACL string: no '=' in ACL entry.");
-            if(entryParts[1].length() == 0)
-                throw new IllegalArgumentException(
-                    "Invalid ACL string: no server identifiers in ACL entry.");
-
-            int command = parseCommand(entryParts[0]);
-            String[] serverIds = split(entryParts[1], '+', -1);
-            for(int j = 0; j < serverIds.length; j++) {
-                if(serverIds[j].length() == 0)
-                    throw new IllegalArgumentException(
-                        "Invalid ACL string: empty server identifier.");
-
-                if(serverIds[j].equals(ALL_PRINCIPALS))
-                    globalPermissions |= command;
-                else {
-                    checkServerId(serverIds[j], "Invalid ACL string: " +
-                                  "server ID contains illegal character");
-                    Integer n = (Integer)
-                        principalPermissions.get(serverIds[j]);
-                    int oldPermission = (n != null) ? n.intValue() : 0;
-                    principalPermissions.put(serverIds[j],
-                        new Integer(oldPermission | command));
-                }
-            }
-        }
-    }
-
 
     private static String writeCommands(int command)
     {
