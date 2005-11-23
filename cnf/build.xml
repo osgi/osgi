@@ -202,6 +202,7 @@
 		       ignoreVersions="${btool.noversion}"
 			   manifestVersion="${btool.manifestVersion}"
 			   modified="${base.modified}"
+			   extraRoots = "root.${item.jarFile}"
 			   />
 	</target>
 
@@ -270,4 +271,13 @@
 		<fail message="This ant script should never be directly called." />
 	</target>
 
+	<!--
+		Check out the projects that are part of the build.
+	-->
+	<target name="co" depends="init">
+		<cvs cvsRoot=":pserver:membercvs.osgi.org:/cvshome/build"
+			dest="${workspace}"
+			package="${specs},${impls},${tests}"
+		/>
+	</target>
 </project>

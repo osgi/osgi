@@ -45,6 +45,9 @@ public class Dependencies {
 
 	public void calculate() throws IOException {
 		String bundleClasspath = manifest.getValue("bundle-classpath");
+		for ( Iterator i = btool.getExtraRoots().iterator(); i.hasNext(); ) {
+			referred.add(i.next());
+		}
 		if (bundleClasspath == null)
 			bundleClasspath = ".";
 		StringTokenizer st = new StringTokenizer(bundleClasspath, ",");
