@@ -1,11 +1,11 @@
 Manifest-Version: 1.0
 Bundle-Name: osgi.refimpl
 Bundle-Activator: org.osgi.tools.group.Group
-Bundle-Description: OSGi Service Platform Release 3, All Reference Implementations
+Bundle-Description: OSGi Service Platform Release 4, All Reference Implementations
 Bundle-Copyright: Copyright (c) The OSGi Alliance (2000, 2002). All Rights Reserved.
 CVS-Header: $Header$
 Bundle-Vendor: OSGi
-Bundle-Version: 3.0
+Bundle-Version: 4.0
 Bundle-Category: osgi
 Bundle-DocUrl: http://www.osgi.org/
 Import-Package: org.osgi.framework; specification-version=1.2

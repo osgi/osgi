@@ -1,7 +1,7 @@
 Manifest-Version: 1.0
 Bundle-Name: meg.impls
 Bundle-Activator: org.osgi.tools.group.Group
-Bundle-Description: OSGi Service Platform Release 3, MEG Reference Implementations
+Bundle-Description: OSGi Service Platform Release 4, MEG Reference Implementations
 Bundle-Copyright: ${copyright}
 CVS-Header: $Header$
 Bundle-Vendor: OSGi Alliance
