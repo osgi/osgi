@@ -1,7 +1,7 @@
 Structure:
 
 
-	repository	= resource *
+	repository	= ( referral | resource ) *
 	resource	= description copyright category* capability* requirement* request*
 	capability	= p*
 	
@@ -54,9 +54,13 @@ A named filter that must be matched with zero or more capabilities of
 the same name. The requested resources are not required, but are in some way
 useful for the resource.
 
-		
+REFERRAL
+	url
+	
+Refers to another repository file that must be included.		
 
 Example
+
 
  <resource version='3.0.0' documentation='http://www.osgi.org/' name='core.tests' url='core.tests-3.0.0.jar' size='1990923'>
     <description>
