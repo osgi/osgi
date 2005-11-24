@@ -80,7 +80,7 @@ public class TestMetaNodeDataPluginActivator implements BundleActivator {
     
     public static final String INEXISTENT_NODE_WITHOUT_PERMISSIONS_NAME = "without";
     
-    public static final String INEXISTENT_NODE_WITHOUT_PERMISSIONS = ROOT +"/" + INEXISTENT_NODE_NAME ;
+    public static final String INEXISTENT_NODE_WITHOUT_PERMISSIONS = ROOT +"/" + INEXISTENT_NODE_WITHOUT_PERMISSIONS_NAME ;
     
     public static final String PERMANENT_INTERIOR_NODE = ROOT +"/permanent";
     

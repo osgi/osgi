@@ -41,7 +41,6 @@ package org.osgi.test.cases.dmt.plugins.tbc.MetaNode;
 
 import org.osgi.service.dmt.DmtSession;
 import org.osgi.service.dmt.MetaNode;
-import org.osgi.test.cases.dmt.plugins.tbc.DmtConstants;
 import org.osgi.test.cases.dmt.plugins.tbc.DmtTestControl;
 
 /**
@@ -62,9 +61,6 @@ public class GetMimeTypes {
         testGetMimeTypes003();
         testGetMimeTypes004();
         testGetMimeTypes005();
-        testGetMimeTypes006();
-        testGetMimeTypes007();
-        testGetMimeTypes008();
 	}
 
 	/**
@@ -191,86 +187,5 @@ public class GetMimeTypes {
         	tbc.cleanUp(session, true);
         }
     }
-    /**
-     * Asserts that the default MIME type of the node must be the first element in the returned list
-     * using the DmtSession.createLeafNode(String)
-     * 
-     * @spec MetaNode.getMimeTypes()
-     */
-    private void testGetMimeTypes006() {
-        DmtSession session = null;
-        try {
-            tbc.log("#testGetMimeTypes006");
-            session = tbc.getDmtAdmin().getSession(
-                    TestMetaNodeDataPluginActivator.ROOT,
-                    DmtSession.LOCK_TYPE_EXCLUSIVE);
-
-            session.createLeafNode(TestMetaNodeDataPluginActivator.INEXISTENT_LEAF_NODE);
-            tbc.assertEquals("Asserts that the default MIME type of the node must be the first element in the returned list", 
-                TestMetaNode.DEFAULT_MIME_TYPES[0],DmtConstants.TEMPORARY);
-
-        } catch (Exception e) {
-            tbc.fail("Unexpected Exception: " + e.getClass().getName()
-                    + " [Message: " + e.getMessage() + "]");
-        } finally {
-        	tbc.cleanUp(session, true);
-        }
-    }
-    
-    /**
-     * Asserts that the default MIME type of the node must be the first element in the returned list
-     * using DmtSession.createLeafNode(String,DmtData)
-     * 
-     * @spec MetaNode.getMimeTypes()
-     */
-    private void testGetMimeTypes007() {
-        DmtSession session = null;
-        try {
-            tbc.log("#testGetMimeTypes007");
-            session = tbc.getDmtAdmin().getSession(
-                    TestMetaNodeDataPluginActivator.ROOT,
-                    DmtSession.LOCK_TYPE_EXCLUSIVE);
-
-
-            session.createLeafNode(TestMetaNodeDataPluginActivator.INEXISTENT_LEAF_NODE,null);
-            tbc.assertEquals("Asserts that the default MIME type of the node must be the first element in the returned list", 
-                TestMetaNode.DEFAULT_MIME_TYPES[0],DmtConstants.TEMPORARY);
-            
-            
-        } catch (Exception e) {
-            tbc.fail("Unexpected Exception: " + e.getClass().getName()
-                    + " [Message: " + e.getMessage() + "]");
-        } finally {
-        	tbc.cleanUp(session, true);
-        }
-    }
-    
-    /**
-     * Asserts that the default MIME type of the node must be the first element in the returned list
-     * using DmtSession.createLeafNode(String,DmtData,String)
-     * 
-     * @spec MetaNode.getMimeTypes()
-     */
-    private void testGetMimeTypes008() {
-        DmtSession session = null;
-        try {
-            tbc.log("#testGetMimeTypes008");
-            session = tbc.getDmtAdmin().getSession(
-                    TestMetaNodeDataPluginActivator.ROOT,
-                    DmtSession.LOCK_TYPE_EXCLUSIVE);
-
-            session.createLeafNode(TestMetaNodeDataPluginActivator.INEXISTENT_LEAF_NODE,null,null);
-            tbc.assertEquals("Asserts that the default MIME type of the node must be the first element in the returned list", 
-                TestMetaNode.DEFAULT_MIME_TYPES[0],DmtConstants.TEMPORARY);
-            
-            
-        } catch (Exception e) {
-            tbc.fail("Unexpected Exception: " + e.getClass().getName()
-                    + " [Message: " + e.getMessage() + "]");
-        } finally {
-        	tbc.cleanUp(session, true);
-        }
-    }
-    
 
 }
