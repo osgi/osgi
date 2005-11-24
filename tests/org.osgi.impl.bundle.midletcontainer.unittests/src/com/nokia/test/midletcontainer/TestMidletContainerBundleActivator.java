@@ -1229,6 +1229,9 @@ public class TestMidletContainerBundleActivator
   			
   			if (started)
   				throw new Exception("Application was launched inspite of lock!");
+
+  			appDesc.lock();
+
   			appDesc.unlock();
   			if (((Boolean)appDesc.getProperties("en").get(ApplicationDescriptor.APPLICATION_LOCKED)).booleanValue())
   				throw new Exception("Lock property is incorrect!");
@@ -1239,6 +1242,8 @@ public class TestMidletContainerBundleActivator
   						"Application was not launchable but started!");
   			if (!testCase_launchApplication())
   				return false;
+
+  			appDesc.unlock();
   			return testCase_stopApplication();
   		}
   		catch (Exception e) {
