@@ -224,25 +224,19 @@ public class UseCases {
 					DmtSession.LOCK_TYPE_ATOMIC);
 			session.createInteriorNode(NewDataPluginActivator.INEXISTENT_NODE);
 			session.createInteriorNode(FatalExceptionDataPluginActivator.INEXISTENT_NODE);
-			//a plugin is unregistered while in use by a session, an IllegalStateException is thrown 
+			//a plugin is unregistered while in use by a session
 			fatalExceptionActivator.stop(tbc.getContext());
+
+			//an IllegalStateException must thrown
+			session.getChildNodeNames(FatalExceptionDataPluginActivator.TEST_EXCEPTION_PLUGIN_ROOT);
 			tbc.failException("",IllegalStateException.class);
 		} catch (IllegalStateException e) {
-			try {
-				//Another plugin call is needed in order to throw DmtException
-				session.getChildNodeNames(FatalExceptionDataPluginActivator.TEST_EXCEPTION_PLUGIN_ROOT);
-			} catch (DmtException e1) {
+			tbc.assertEquals("Asserts that if a plugin is unregistered, rollback() is called in each plugin " +
+				"that participates of the session (in reverse order)",
+				NewDataPlugin.ROLLBACK + NewDataPlugin.CLOSE,DmtConstants.TEMPORARY);
+			
+			tbc.assertEquals("Asserts that when a fatal exception is thrown, the session becomes STATE_INVALID",DmtSession.STATE_INVALID,session.getState());
 				
-				tbc.assertEquals("Asserts that if a plugin is unregistered, rollback() is called in each plugin " +
-					"that participates of the session (in reverse order)",
-					NewDataPlugin.ROLLBACK + NewDataPlugin.CLOSE,DmtConstants.TEMPORARY);
-				
-				tbc.assertEquals("Asserts that when a fatal exception is thrown, the session becomes STATE_INVALID",DmtSession.STATE_INVALID,session.getState());
-				
-			} catch (Exception e1) {
-				tbc.fail("Expected " + DmtException.class.getName() + " but was "
-						+ e1.getClass().getName());
-			}
 		} catch (Exception e) {
 			tbc.fail("Expected " + IllegalStateException.class.getName() + " but was "
 					+ e.getClass().getName());
@@ -251,6 +245,7 @@ public class UseCases {
 			try {
 				fatalExceptionActivator.start(tbc.getContext());
 			} catch (Exception e1) {
+				e1.printStackTrace();
 			}
 		}
 

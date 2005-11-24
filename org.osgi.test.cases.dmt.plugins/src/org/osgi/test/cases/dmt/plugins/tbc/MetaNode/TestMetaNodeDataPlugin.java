@@ -79,6 +79,7 @@ public class TestMetaNodeDataPlugin implements DataPluginFactory, ExecPlugin, Re
             nodeName.equals(TestMetaNodeDataPluginActivator.INEXISTENT_LEAF_NODE_WITHOUT_METANODE) ||
             nodeName.equals(TestMetaNodeDataPluginActivator.INEXISTENT_NODE) ||
             nodeName.equals(TestMetaNodeDataPluginActivator.INEXISTENT_NODE_WITHOUT_METANODE) ||
+            nodeName.equals(TestMetaNodeDataPluginActivator.INEXISTENT_NODE_WITHOUT_PERMISSIONS) ||
             nodeName.equals(TestMetaNodeDataPluginActivator.PERMANENT_INEXISTENT_NODE)) {
             return false;
         } else {
