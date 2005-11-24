@@ -28,6 +28,9 @@
 package org.osgi.impl.service.application;
 
 import java.io.*;
+import java.security.AccessController;
+import java.security.PrivilegedActionException;
+import java.security.PrivilegedExceptionAction;
 import java.util.*;
 
 import org.osgi.service.application.*;
@@ -47,26 +50,30 @@ public class ApplicationDescriptorImpl implements Delegate {
 		return doLock(true, false );
 	}
 
-	synchronized boolean doLock(boolean query, boolean newState) {
-		try {
-			File f = Activator.bc.getDataFile("locks");
-			if ( locks == null ) {
-				locks = new Properties();
-				if ( f.exists() )
-					locks.load( new FileInputStream(f));
-			}
-			boolean current = locks.containsKey( pid ); 
-			if ( query || newState == current )
-				return current;
+	synchronized boolean doLock(final boolean query, final boolean newState) {
+		try {		  
+			return ((Boolean)AccessController.doPrivileged(new PrivilegedExceptionAction() {
+			  public Object run() throws Exception {			
+				File f = Activator.bc.getDataFile("locks");
+				if ( locks == null ) {
+					locks = new Properties();
+					if ( f.exists() )
+						locks.load( new FileInputStream(f));
+				}
+				boolean current = locks.containsKey( pid ); 
+				if ( query || newState == current )
+					return new Boolean( current );
 
-			if ( current )
-				locks.remove( pid );
-			else
-				locks.put( pid, "locked");
-			locks.save(new FileOutputStream(f), "Saved " + new Date());
-			return newState;
-		} catch( IOException ioe ) {
-			ioe.printStackTrace();
+				if ( current )
+					locks.remove( pid );
+				else
+					locks.put( pid, "locked");
+				locks.save(new FileOutputStream(f), "Saved " + new Date());
+				return new Boolean( newState );
+			  }
+		  })).booleanValue();
+		} catch( PrivilegedActionException pe ) {
+			pe.printStackTrace();
 		}
 		return false;
 	}
