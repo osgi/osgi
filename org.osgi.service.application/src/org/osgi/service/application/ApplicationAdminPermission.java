@@ -92,7 +92,7 @@ public class ApplicationAdminPermission extends Permission {
 		super(filter == null ? "*" : filter);
 				
 		this.applicationDescriptor = null;
-		this.filter = (filter == null ? "*" : filter);
+		this.filter = (filter == null ? "(pid=*)" : filter);
 		this.actions = actions;
 
 		FrameworkUtil.createFilter( this.filter );
