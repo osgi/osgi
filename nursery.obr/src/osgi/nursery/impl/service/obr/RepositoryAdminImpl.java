@@ -35,10 +35,9 @@ import org.osgi.framework.Version;
 import osgi.nursery.resource.*;
 import osgi.nursery.service.obr.*;
 
-
 /**
  * Prototype implementatation of the Repository Admin service.
- *
+ * 
  * TODO Add Javadoc comment for this type.
  * 
  * @version $Revision$
@@ -54,7 +53,7 @@ public class RepositoryAdminImpl implements RepositoryAdmin {
 
 	/**
 	 * Setup the environment resource.
-	 *
+	 * 
 	 */
 	public RepositoryAdminImpl() {
 		CapabilityImpl ee = new CapabilityImpl("ee");
@@ -93,138 +92,10 @@ public class RepositoryAdminImpl implements RepositoryAdmin {
 		return result.toArray(EMPTY_RESOURCE);
 	}
 
-	/**
-	 * Get the resources that provide all the given requirements.
-	 * 
-	 * @param requirements
-	 * @return
-	 */
-	List<ResourceImpl> select(List<RequirementImpl> requirements) {
-		List<ResourceImpl> result = new ArrayList<ResourceImpl>();
-		for (RepositoryImpl repository : repositories.values()) {
-			nextResource: for (ResourceImpl resource : repository
-					.getResourceList()) {
-				for (RequirementImpl requirement : requirements) {
-					if (!resource.isSatisfiedBy(requirement))
-						continue nextResource;
-				}
-				result.add(resource);
-			}
-		}
-		return result;
-	}
-
-	/**
-	 * Return the list of resources that provide the given requirement.
-	 * 
-	 * @param requirement
-	 * @return
-	 */
-	List<ResourceImpl> select(RequirementImpl requirement) {
-		List<ResourceImpl> result = new ArrayList<ResourceImpl>();
-		for (RepositoryImpl repository : repositories.values()) {
-			nextResource: for (ResourceImpl resource : repository
-					.getResourceList()) {
-				if (resource.isSatisfiedBy(requirement))
-					result.add(resource);
-			}
-		}
-		return result;
-	}
 
 	public ResourceImpl[] deployedResources() {
 		// TODO
 		return null;
-	}
-
-	/**
-	 * Find the list of resources that are needed to make the resources in the resolver
-	 * resolve.
-	 * 
-	 * @param resolver
-	 * @return
-	 */
-	boolean resolve(ResolverImpl resolver) {
-		Set<ResourceImpl> result = new HashSet<ResourceImpl>();
-		Set<RequirementImpl> unsatisfied = new HashSet<RequirementImpl>();
-		result.add(environment);
-		for (Iterator r = resolver.resources.iterator(); r.hasNext();) {
-			ResourceImpl resource = (ResourceImpl) r.next();
-			addDependent(result, unsatisfied, resource);
-		}
-		result.remove(environment);
-		result.removeAll(resolver.resources);
-		resolver.missing = unsatisfied;
-		resolver.required = result;
-		return unsatisfied.isEmpty();
-	}
-
-	/**
-	 * Dependency routine, recursive. This function will find 
-	 * resources that match the requirements of the resource. It
-	 * keeps a list of requirements that are not met.
-	 * 
-	 * @param result
-	 * @param unsatisfied
-	 * @param resource
-	 */
-	void addDependent(Set<ResourceImpl> result,
-			Set<RequirementImpl> unsatisfied, ResourceImpl resource) {
-		
-		//
-		// We already had it.
-		//
-		
-		if (result.contains(resource))
-			return;
-
-		result.add(resource);
-		
-		// For each requirement
-		
-		Set<RequirementImpl> requirements = new HashSet<RequirementImpl>(
-				resource.getRequirements());
-		for (Iterator<RequirementImpl> i = requirements.iterator(); i.hasNext();) {
-			RequirementImpl rq = i.next();
-			
-			//
-			// If the result can satisfy the requirements, do not bother.
-			//
-			if (canBeSatisfiedBy(result, rq)) {
-				i.remove();
-			}
-			else {
-				//
-				// Must find a resource that has the required
-				// capabilities.
-				//
-				List<ResourceImpl> select = select(rq);
-				if (select.isEmpty())
-					// No resource found
-					unsatisfied.add(rq);
-				else {
-					//  Very Primitive strategy to select one of many
-					ResourceImpl dependent = select.get(0);
-					addDependent(result, unsatisfied, dependent);
-				}
-			}
-		}
-
-	}
-
-	/**
-	 * Check if the set of resources matches the given requirement.
-	 * 
-	 * @param result
-	 * @param rq
-	 * @return
-	 */
-	boolean canBeSatisfiedBy(Set<ResourceImpl> result, RequirementImpl rq) {
-		for (ResourceImpl resource : result) {
-			if (resource.isSatisfiedBy(rq))
-				return true;
-		}
-		return false;
 	}
 
 	/**
@@ -270,5 +141,16 @@ public class RepositoryAdminImpl implements RepositoryAdmin {
 		Resolver resolver = new ResolverImpl(this);
 		resolver.add(resource);
 		return resolver;
+	}
+
+	public Set<ResourceImpl> getExtenders() {
+		Set<ResourceImpl>	extenders = new HashSet<ResourceImpl>();
+		for ( RepositoryImpl repository : repositories.values() ) {
+			for ( ResourceImpl resource : repository.getResourceList() ) {
+				if ( !resource.getExtendList().isEmpty())
+					extenders.add(resource);
+			}
+		}
+		return extenders;
 	}
 }
