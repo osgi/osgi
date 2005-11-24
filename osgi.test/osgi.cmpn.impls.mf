@@ -1,11 +1,12 @@
 Manifest-Version: 1.0
+Bundle-SymbolicName: cmpn.impls
+Bundle-Version: 4.0
 Bundle-Name: cmpn.impls
 Bundle-Activator: org.osgi.tools.group.Group
 Bundle-Description: OSGi Service Platform Release 4, Compendium Test Cases loader
 Bundle-Copyright: ${copyright}
 CVS-Header: $Header$
 Bundle-Vendor: OSGi Alliance
-Bundle-Version: 4.0
 Bundle-Category: osgi,test
 Bundle-DocUrl: http://www.osgi.org/
 Export-Package: javax.servlet;specification-version=2.1,
