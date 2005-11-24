@@ -403,6 +403,8 @@ public abstract class ApplicationDescriptor {
 	 * This method is used to notify the container implementation that the
 	 * corresponding application has been locked and it should update the
 	 * <code>application.locked</code> service property accordingly.
+     * @throws IllegalStateException
+     *             if the application descriptor is unregistered
 	 */
 	protected abstract void lockSpecific();
 
