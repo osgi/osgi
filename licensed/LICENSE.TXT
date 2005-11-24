@@ -11,7 +11,7 @@ Used					Used in the RI for the Http Service
                         All RIs that use Http require this 
                         lib. 
 File					servlet.jar
-License					licenses/ASL-1.1.txt  (Apache Software License)
+License					licenses/ASL-2.0.txt  (Apache Software License)
 URL						http://tomcat.apache.org/download-33.cgi
 						(Use servlet22.jar in bin directory)
 Modifications			NONE, library used as is
@@ -39,8 +39,8 @@ BCEL--------------------------------------------------------------------
 Copyright				1999,2005 Apache Software Foundation
 Used					In OSGi jar2xml (org.osgi.tools) to create an XML file from a JAR
 File					bcel.jar
-License					
-URL						http://bcel.apache.org
+License					http://jakarta.apache.org/bcel/license.html ASL 1.1
+URL						http://jakarta.apache.org/bcel/
 Modifications			NONE, library used as is
 
 JUNIT-------------------------------------------------------------------
