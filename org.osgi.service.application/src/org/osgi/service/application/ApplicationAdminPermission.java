@@ -168,10 +168,11 @@ public class ApplicationAdminPermission extends Permission {
 
       ApplicationAdminPermission other = (ApplicationAdminPermission) otherPermission;
 
+      if( other.applicationID == null )
+  		return false; /* it cannot be, this might be a bug */
+      
       if( !filter.equals("*") ) {
       	if( filter.equals( "<<SELF>>") ) {
-      		if( other.applicationID == null )
-      			return false; /* it cannot be, this might be a bug */
       		if( !other.applicationID.equals( other.filter ) )
       			return false;
       	}
