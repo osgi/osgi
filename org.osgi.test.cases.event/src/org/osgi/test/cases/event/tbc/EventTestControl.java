@@ -154,13 +154,18 @@ public class EventTestControl extends DefaultTestBundleControl {
     PermissionInfo topInfo1 = new PermissionInfo(TopicPermission.class.getName(), 
                                                  "org/*", 
                                                  TopicPermission.SUBSCRIBE);
+    PermissionInfo topInfo3 = new PermissionInfo(TopicPermission.class.getName(), 
+            "test/*", 
+            TopicPermission.SUBSCRIBE);
     addPermissions(permissionAdmin, tb1, new PermissionInfo[]{regInfo, topInfo1});
+    addPermissions(permissionAdmin, tb1, new PermissionInfo[]{regInfo, topInfo3});
     
     //set permissions to tb2
     PermissionInfo topInfo2 = new PermissionInfo(TopicPermission.class.getName(), 
                                                  "org/osgi/*", 
                                                  TopicPermission.SUBSCRIBE);
     addPermissions(permissionAdmin, tb2, new PermissionInfo[]{regInfo, topInfo2});
+    addPermissions(permissionAdmin, tb2, new PermissionInfo[]{regInfo, topInfo3});
     
     //try to send event and PUBLISH TopicPermission
     Hashtable properties = new Hashtable();
@@ -168,17 +173,6 @@ public class EventTestControl extends DefaultTestBundleControl {
     ht.put("topic", "org/osgi/test/cases/event");
     Event event1 = new Event("org/osgi/test/cases/event/ACTION1", properties);
     checkTestingPermissions(event1);
-    
-    PermissionInfo permInfo = new PermissionInfo(ServicePermission.class.getName(), 
-                                                 "org.osgi.service.event.EventAdmin", 
-                                                 ServicePermission.GET);    
-    addPermissions(permissionAdmin, getContext().getBundle(), new PermissionInfo[]{permInfo});
-    
-    PermissionInfo[] perm = permissionAdmin.getPermissions(getContext().getBundle().getLocation());
-    assertNotNull("Permissions of [" + getContext().getBundle().getLocation() + "]", perm);
-    for (int i = 0; i < perm.length; i++) {
-      pass("permission [" + i + "]: " + perm[i]);
-    }
     
     PermissionInfo[] perm1 = permissionAdmin.getPermissions(tb1.getLocation());
     assertNotNull("Permissions of [" + tb1.getLocation() + "]", perm1);
@@ -293,24 +287,26 @@ public class EventTestControl extends DefaultTestBundleControl {
     TBCService tbcService2 = (TBCService) trackerProvider2.getService();
     
     String[] topics;
-    topics = new String[] {"org/osgi/test/*", "org/osgi/newtest1/*", "org/osgi1/*", "Event1"};
+    topics = new String[] {"org/osgi/test/*", "org/osgi/newtest1/*", "org/osgi1/*", "org/Event1"};
     tbcService1.setTopics(topics);
     
     topics = new String[] {"org/osgi/test/*", "org/osgi/newtest1/newtest2/*", "org/osgi2/*"};
     tbcService2.setTopics(topics);    
     
-    String[] events = new String[] {"org/osgi/test/Event0", "Event1", "org/osgi1/Event2", "org/osgi1/test/Event3", 
+    String[] events = new String[] {"org/osgi/test/Event0", "org/Event1", "org/osgi1/Event2", "org/osgi1/test/Event3", 
                                     "org/osgi/newtest1/Event4", "org/osgi/newtest2/Event5", "org/osgi2/test/Event6"};
     Boolean[] eventsMap1 = new Boolean[] {Boolean.TRUE, Boolean.TRUE, Boolean.TRUE, Boolean.TRUE, 
                                           Boolean.TRUE, Boolean.FALSE, Boolean.FALSE};
     Boolean[] eventsMap2 = new Boolean[] {Boolean.TRUE, Boolean.FALSE, Boolean.FALSE, Boolean.FALSE, 
-                                          Boolean.FALSE, Boolean.FALSE, Boolean.TRUE};
+                                          Boolean.FALSE, Boolean.FALSE, Boolean.FALSE};
     
     Event event;
     for (int i = 0; i < events.length; i++) {
       event = new Event(events[i], new Hashtable());
       eventAdmin.sendEvent(event);
+      pass("before 1");
       assertEvent(event, tb1, tbcService1, eventsMap1[i].booleanValue());
+      pass("before 2");
       assertEvent(event, tb2, tbcService2, eventsMap2[i].booleanValue());
     }
     trackerProvider1.close();
