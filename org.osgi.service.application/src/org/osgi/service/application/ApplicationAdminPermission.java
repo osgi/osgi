@@ -235,7 +235,9 @@ public class ApplicationAdminPermission extends Permission {
   }
 
   public int hashCode() {
-	  int hc = actions.hashCode();
+	  int hc = 0;
+	  for( int i=0; i != actionsVector.size(); i++ )
+		  hc ^= ((String)actionsVector.get( i )).hashCode();
 	  hc ^= (null == this.filter )? 0 : this.filter.hashCode();
 	  hc ^= (null == this.applicationDescriptor) ? 0 : this.applicationDescriptor.hashCode();
 	  hc ^= (null == this.applicationID) ? 0 : this.applicationID.hashCode();
