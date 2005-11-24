@@ -17,7 +17,9 @@ public class RequirementImpl implements Requirement {
 	String	name;
 	String	filter;
 	Filter	_filter;
-
+	String	comment;
+	int	cardinality = UNARY;
+	
 	/**
 	 * Create a requirement with the given name.
 	 * 
@@ -35,11 +37,28 @@ public class RequirementImpl implements Requirement {
 	 * @throws Exception
 	 */
 	public RequirementImpl(XmlPullParser parser) throws Exception {
-		parser.require(XmlPullParser.START_TAG, null, "require");
+		parser.require(XmlPullParser.START_TAG, null, null );
 		name = parser.getAttributeValue(null, "name");
 		filter = parser.getAttributeValue(null, "filter");
-		parser.next();
-		parser.require(XmlPullParser.END_TAG, null, "require");
+		String c = parser.getAttributeValue(null,"cardinality");
+		cardinality = UNARY;
+		if ( c != null ) {
+			if ( "OPTIONAL".equalsIgnoreCase(c))
+				cardinality = OPTIONAL;
+			else if ( "MULTIPLE".equalsIgnoreCase(c))
+				cardinality = MULTIPLE;
+			else if ( "UNARY".equalsIgnoreCase(c))
+				cardinality = UNARY;
+		}
+		
+		StringBuffer sb = new StringBuffer();
+		while ( parser.next() == XmlPullParser.TEXT ) {
+			sb.append( parser.getText() );
+		}
+		if ( sb.length() > 0 )
+			setComment(sb.toString().trim());
+			
+		parser.require(XmlPullParser.END_TAG, null, null );
 	}
 
 	public void setFilter(String filter) {
@@ -51,16 +70,23 @@ public class RequirementImpl implements Requirement {
 		return filter;
 	}
 
-	public Tag toXML() {
-		Tag req = new Tag(getTagName());
+	public Tag toXML(String name) {
+		Tag req = new Tag(name);
 		req.addAttribute("name", getName());
 		req.addAttribute("filter", filter);
+		
+		String c = null;
+		switch(cardinality) {
+			case OPTIONAL: c = "OPTIONAL"; break ;
+			case UNARY: c = "UNARY"; break;
+			case MULTIPLE: c = "MULTIPLE"; break; 
+		}
+		req.addAttribute("cardinality", c);
+		if ( comment != null )
+			req.addContent(comment);
 		return req;
 	}
 
-	protected String getTagName() {
-		return "require";
-	}
 
 	public String getName() {
 		return name;
@@ -77,4 +103,26 @@ public class RequirementImpl implements Requirement {
 	public String toString() {
 		return name + " " + filter;
 	}
+
+
+	public String getComment() {
+		return comment;
+	}
+
+
+	public void setComment(String comment) {
+		this.comment=comment;
+	}
+
+
+	public int getCardinality() {
+		return cardinality;
+	}
+
+
+	public void setCardinality(int value) {
+		cardinality = value;
+	}
+
+
 }

@@ -72,6 +72,7 @@ public class RepositoryAdminTest extends TestCase {
 		Resource	http = resources[0];
 		Resolver resolver = admin.resolver(http);
 		assertTrue("Must resolve, all is in there" , resolver.resolve());
+		System.out.println("All Must be Resolved");
 		print(resolver);
 		
 		resources = adminSingle.discoverResources("(name=org.osgi.impl.service.http)");
@@ -79,30 +80,34 @@ public class RepositoryAdminTest extends TestCase {
 		http = resources[0];
 		resolver = adminSingle.resolver(http);
 		assertFalse("Must not resolve, only http is in there" , resolver.resolve());
+		System.out.println("Missing");
 		print(resolver);
 		
 	}
 
 
 	private void print(Resolver resolver) {
-		Resource[] included = resolver.getIncludedResources();
+		Resource[] required = resolver.getRequiredResources();
 		String del = "Needs: ";
-		for ( int i=0; i<included.length; i++ ) {
-			System.out.print(del);
-			System.out.print(included[i]);
-			del =", ";
-		}
-		System.out.println();
-		Resource[] required = resolver.getRequestedResources();
-		del = "Requested: ";
 		for ( int i=0; i<required.length; i++ ) {
 			System.out.print(del);
-			System.out.print(required[i]);
+			System.out.println(required[i]);
+			printCauses(resolver, required[i]);
+		}
+		if ( required.length > 0 )
+			System.out.println();
+		
+		Resource[] optional = resolver.getOptionalResources();
+		del = "Optional: ";
+		for ( int i=0; i<optional.length; i++ ) {
+			System.out.print(del);
+			System.out.print(optional[i]);
+			printCauses(resolver,optional[i]);
 			del =", ";
 		}
 		System.out.println();
 		
-		Requirement	missing[] = resolver.getMissingRequirements();
+		Requirement	missing[] = resolver.getUnsatisfiedRequirements();
 		del = "Missing: ";
 		for ( int i=0; i<missing.length; i++ ) {
 			System.out.print(del);
@@ -110,6 +115,18 @@ public class RepositoryAdminTest extends TestCase {
 			del =", ";
 		}
 		System.out.println();
+	}
+
+
+	private void printCauses(Resolver resolver, Resource required ) {
+		Requirement causes[] = resolver.getReason(required);
+		String del = "        ";
+		for ( Requirement cause : causes ) {
+			System.out.print(del);
+			System.out.print(cause);
+		}
+		if ( causes.length > 0 )
+			System.out.println();
 	}
 
 	/*

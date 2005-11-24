@@ -33,6 +33,10 @@ package osgi.nursery.service.obr;
  * @version $Revision$
  */
 public interface Requirement {
+	final static int OPTIONAL	= 0;
+	final static int UNARY		= 1;
+	final static int MULTIPLE	= 2;
+	
 	/**
 	 * Return the name of the requirement.
 	 */
@@ -43,4 +47,8 @@ public interface Requirement {
 	 * 
 	 */
 	String getFilter();	
+	
+	int getCardinality();
+	
+	String getComment();
 }

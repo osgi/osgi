@@ -6,6 +6,7 @@ import java.util.*;
 import java.util.zip.*;
 
 import osgi.nursery.resource.*;
+import osgi.nursery.service.obr.Requirement;
 
 
 /**
@@ -131,21 +132,6 @@ public class BundleInfo {
 		// Check if we are a fragment
 		Entry entry = manifest.getHost();
 		if (entry == null) {
-			// 
-			// We are not a fragment. So maybe we could
-			// host some fragments?
-			if (bsn != null) {
-				// Request any fragments that we could use
-				RequestImpl request = new RequestImpl("fragment");
-				StringBuffer sb = new StringBuffer();
-				sb.append("(&(host=");
-				sb.append(bsn.getName());
-				sb.append(")(version>=");
-				sb.append(bsn.getVersion());
-				sb.append("))");
-				request.setFilter(sb.toString());
-				resource.addRequirement(request);
-			}
 			return;
 		} else {
 			// We are a fragment, create a requirement
@@ -158,10 +144,15 @@ public class BundleInfo {
 			sb.append(entry.getVersion());
 			sb.append("))");
 			r.setFilter(sb.toString());
+			r.setComment("Required host for Fragment");
 			resource.addRequirement(r);
 	
+			// We are a fragment, this means we can extend
+			// our host. So created an extend to the host
+			resource.addExtend(r);
+			
 			// And insert a capability that we are available
-			// as a fragment.
+			// as a fragment. ### Do we need that with extend?
 			CapabilityImpl capability = new CapabilityImpl("fragment");
 			capability.addProperty("host", entry.getName());
 			capability.addProperty("version", entry.getVersion());
@@ -175,12 +166,7 @@ public class BundleInfo {
 			return;
 
 		for (Entry entry : entries) {
-			RequirementImpl r;
-			if ("true".equalsIgnoreCase((String) entry.directives
-					.get("resolution")))
-				r = new RequirementImpl("bundle");
-			else
-				r = new RequestImpl("bundle");
+			RequirementImpl r = new RequirementImpl("bundle");
 
 			StringBuffer sb = new StringBuffer();
 			sb.append("(&(symbolicname=");
@@ -189,6 +175,12 @@ public class BundleInfo {
 			sb.append(entry.getVersion());
 			sb.append("))");
 			r.setFilter(sb.toString());
+			r.setComment("Require-Bundle " + entry.getName() + "-" + entry.getVersion() );
+			if ("true".equalsIgnoreCase((String) entry.directives
+					.get("resolution")))
+				r.setCardinality(Requirement.UNARY);
+			else
+				r.setCardinality(Requirement.OPTIONAL);
 			resource.addRequirement(r);
 		}
 	}
@@ -209,6 +201,7 @@ public class BundleInfo {
 
 		RequirementImpl req = new RequirementImpl("ee");
 		req.setFilter(sb.toString());
+		req.setComment("Execution Environment");
 		return req;
 	}
 
@@ -233,6 +226,7 @@ public class BundleInfo {
 			doAttributes(filter, attributes);
 			filter.append(")");
 			requirement.setFilter(filter.toString());
+			requirement.setComment("Import package " + pack );
 			requirements.add(requirement);
 		}
 		return requirements;

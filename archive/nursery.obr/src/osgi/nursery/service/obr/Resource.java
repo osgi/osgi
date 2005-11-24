@@ -64,4 +64,9 @@ public interface Resource {
 	 * 
 	 */
 	public long getSize();
+	
+	Requirement [] getRequirements();
+	Requirement [] getRequests();
+	Requirement [] getExtends();
+	Capability [] getCapabilities();
 }

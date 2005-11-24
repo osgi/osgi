@@ -29,9 +29,11 @@ package osgi.nursery.service.obr;
 
 public interface Resolver {
 	void add( Resource resource );
-	Requirement	[] getMissingRequirements();
-	Resource [] getRequestedResources();
-	Resource[] getIncludedResources();
+	Requirement	[] getUnsatisfiedRequirements();
+	Resource [] getOptionalResources();
+	Requirement [] getReason(Resource resource);
+	Resource[] getRequiredResources();
+	Resource[] getAddedResources();
 	boolean resolve();
 	void deploy();
 }

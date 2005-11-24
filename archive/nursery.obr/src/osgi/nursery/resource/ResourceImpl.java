@@ -6,14 +6,14 @@ import java.util.*;
 import org.osgi.framework.Version;
 import org.xmlpull.v1.XmlPullParser;
 
-import osgi.nursery.service.obr.Resource;
-
+import osgi.nursery.service.obr.*;
 import aQute.lib.tag.Tag;
 
 public class ResourceImpl implements Resource {
 	List<CapabilityImpl>	capabilities	= new ArrayList<CapabilityImpl>();
 	List<RequirementImpl>	requirements	= new ArrayList<RequirementImpl>();
-	List<RequestImpl>		requests		= new ArrayList<RequestImpl>();
+	List<RequirementImpl>	requests		= new ArrayList<RequirementImpl>();
+	List<RequirementImpl>	extensions		= new ArrayList<RequirementImpl>();
 	URI						license;
 	URI						url;
 	URI						documentation;
@@ -53,8 +53,10 @@ public class ResourceImpl implements Resource {
 			}
 			else if (parser.getName().equals("require"))
 				addRequirement(new RequirementImpl(parser));
+			else if (parser.getName().equals("extend"))
+				addExtend(new RequirementImpl(parser));
 			else if (parser.getName().equals("request"))
-				addRequest(new RequestImpl(parser));
+				addRequest(new RequirementImpl(parser));
 			else if (parser.getName().equals("capability"))
 				addCapability(new CapabilityImpl(parser));
 			else if (parser.getName().equals("copyright")) {
@@ -65,9 +67,14 @@ public class ResourceImpl implements Resource {
 		parser.require(XmlPullParser.END_TAG, null, "resource");
 	}
 
-	void addRequest(RequestImpl request) {
+	public void addRequest(RequirementImpl request) {
 		if (request != null)
 			requests.add(request);
+	}
+
+	public void addExtend(RequirementImpl extend) {
+		if (extend != null)
+			extensions.add(extend);
 	}
 
 	private int toInteger(String value) {
@@ -110,10 +117,11 @@ public class ResourceImpl implements Resource {
 		this.description = description;
 	}
 
-	public List getCapabilities() {
-		return capabilities;
-	}
 
+	public Capability[] getCapabilities() {
+		return capabilities.toArray(new Capability[capabilities.size()]);
+	}
+	
 	public URI getLicense() {
 		return license;
 	}
@@ -122,8 +130,16 @@ public class ResourceImpl implements Resource {
 		return name;
 	}
 
-	public List<RequirementImpl> getRequirements() {
-		return requirements;
+	public Requirement[] getRequirements() {
+		return requirements.toArray(new Requirement[requirements.size()]);
+	}
+	
+	public Requirement[] getRequests() {
+		return requests.toArray(new Requirement[requests.size()]);
+	}
+
+	public Requirement[] getExtends() {
+		return extensions.toArray(new Requirement[extensions.size()]);
 	}
 
 	public Tag toXML() {
@@ -158,8 +174,12 @@ public class ResourceImpl implements Resource {
 			meta.addContent(cap);
 		}
 		for (RequirementImpl requirement : requirements) {
-			Tag rq = requirement.toXML();
+			Tag rq = requirement.toXML("require");
 			meta.addContent(rq);
+		}
+		for (RequirementImpl extend : extensions) {
+			Tag cap = extend.toXML("extend");
+			meta.addContent(cap);
 		}
 		return meta;
 	}
@@ -240,4 +260,29 @@ public class ResourceImpl implements Resource {
 		this.size = size;
 	}
 
+	public Collection<RequirementImpl> getRequirementList() {
+		return requirements;
+	}
+
+	public Collection<RequirementImpl> getExtendList() {
+		return extensions;
+	}
+
+	public Collection<RequirementImpl> getRequestList() {
+		return requests;
+	}
+
+	public Collection<CapabilityImpl> getCapabilityList() {
+		return capabilities;
+	}
+
+	public int hashCode() { return name.hashCode() ^ version.hashCode(); }
+	public boolean equals( Object o ) {
+		try {
+			ResourceImpl other = (ResourceImpl) o;
+			return name.equals(other.name) && version.equals(other.version);
+		} catch( ClassCastException e ) {
+			return false;
+		}
+	}
 }

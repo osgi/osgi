@@ -24,5 +24,44 @@
     <require name='package' filter='(&amp;(package=org.osgi.util.tracker)(version=1.3.0))'/>
     <require name='ee' filter='(|(ee=J2SE-1.4))'/>
   </resource>
+   <resource version='4.0.0' documentation='http://www.osgi.org/' name='osgi' url='osgi.core-4.0.0.jar' size='438229'>
+    <description>
+      OSGi Service Platform Release 4 Core Interface and Classes.
+    </description>
+    <copyright>
+      Copyright (c) OSGi Alliance (2000, 2004). All Rights Reserved.
+    </copyright>
+    <category id='osgi'/>
+    <capability name='bundle'>
+      <p v='1' n='manifestversion'/>
+      <p v='osgi' n='symbolicname'/>
+      <p v='4.0.0' t='version' n='version'/>
+    </capability>
+    <capability name='package'>
+      <p v='org.osgi.framework' n='package'/>
+      <p v='1.3.0' t='version' n='version'/>
+    </capability>
+    <capability name='package'>
+      <p v='org.osgi.service.condpermadmin' n='package'/>
+      <p v='1.0.0' t='version' n='version'/>
+    </capability>
+    <capability name='package'>
+      <p v='org.osgi.service.packageadmin' n='package'/>
+      <p v='1.2.0' t='version' n='version'/>
+    </capability>
+    <capability name='package'>
+      <p v='org.osgi.service.permissionadmin' n='package'/>
+      <p v='1.2.0' t='version' n='version'/>
+    </capability>
+    <capability name='package'>
+      <p v='org.osgi.service.startlevel' n='package'/>
+      <p v='1.0.0' t='version' n='version'/>
+    </capability>
+    <capability name='package'>
+      <p v='org.osgi.service.url' n='package'/>
+      <p v='1.0.0' t='version' n='version'/>
+    </capability>
+  </resource>
+ 
  </repository>
  
