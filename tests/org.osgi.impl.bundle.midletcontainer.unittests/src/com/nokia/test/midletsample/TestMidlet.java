@@ -38,9 +38,13 @@ public class TestMidlet extends MIDlet implements EventHandler, ApplicationServi
 		myApplicationContext = org.osgi.application.Framework.getApplicationContext( this );
 		if( myApplicationContext == null )
 			System.err.println( "OAT didn't create the ApplicationContext!" );
-		else
+		else {
+			Hashtable props = new Hashtable();
+			props.put( EventConstants.EVENT_TOPIC, new String [] {"*"} );
+			
 			myApplicationContext.registerService( EventHandler.class.getName(), 
-					new MyEventHandler(), null );
+					new MyEventHandler(), props );
+		}
 
 		if (paused) {
 			writeResult("RESUME");
