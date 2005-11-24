@@ -130,11 +130,12 @@ public class ResolverImpl implements Resolver {
 		// For each requirement of this resource
 
 		for (RequirementImpl requirement : installing.getRequirementList()) {
-
 			// If the requirements can satisfy the requirements, do not bother.
 			// ### should I also check the resources?
 
-			if (!canBeSatisfiedBy(requiredResources, requirement)) {
+			if (canBeSatisfiedBy(requiredResources, requirement)) {
+				//System.out.println("Can be satisfied locally" );
+			} else {
 				//
 				// Must find a resource that has the required
 				// capabilities.
@@ -143,12 +144,14 @@ public class ResolverImpl implements Resolver {
 				if (select.isEmpty()) {
 					// No resource found
 					unsatisfiedRequirements.add(requirement);
+					//System.out.println("Missing in repositories" );
 				}
 				else {
 					switch (requirement.getCardinality()) {
 						case Requirement.OPTIONAL :
 						case Requirement.MULTIPLE :
 							optionalResources.addAll(select);
+							//System.out.println("Optional" );
 							for (ResourceImpl dependent : select) {
 								addCause(dependent, requirement);
 							}

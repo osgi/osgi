@@ -2,7 +2,7 @@ Structure:
 
 
 	repository	= ( referral | resource ) *
-	resource	= description copyright category* capability* requirement* request*
+	resource	= description copyright category* capability* require* extend*
 	capability	= p*
 	
 REPOSITORY
@@ -45,14 +45,16 @@ java, but is limited to three basic types: version, string, nummeric. We only re
 this to handle comparison. Making it Java classses is easily making it non-portable, and 
 harder to implement in other languages.
 
-REQUIREMENT
-A named filter that must be matched with one or more capabilities of
-the same name.
+REQUIRE, EXTEND
+	filter
+	cardinality			OPTIONAL, UNARY, MULTIPLE
+	comment
 
-REQUEST
-A named filter that must be matched with zero or more capabilities of
-the same name. The requested resources are not required, but are in some way
-useful for the resource.
+A named filter that must be matched with one or more capabilities of
+the same name. require elements are putting a requirement on the world. The
+extend are requiring a host bundle. If a host bundle is selected to be installed,
+then a matching extend indicates an extension. I.e. if bundle A is installed,
+and bundle B has an extend(A), then B is an optional bundle for A.
 
 REFERRAL
 	url
