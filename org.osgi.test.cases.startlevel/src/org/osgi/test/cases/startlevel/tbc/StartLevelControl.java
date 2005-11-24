@@ -43,6 +43,8 @@ public class StartLevelControl extends DefaultTestBundleControl implements Frame
   private int sl_10;
   private int sl_15;
   private int sl_20;
+  
+  private int SLEEP = 1000;
 
 	String methods[] = {
 		"testInitialBundleStartLevel",
@@ -65,6 +67,22 @@ public class StartLevelControl extends DefaultTestBundleControl implements Frame
 
   public void prepare() throws Exception
   {
+    String sleepTimeString = System.getProperty("osgi.tc.startlevel.sleeptime");
+    int sleepTime = SLEEP;
+    if (sleepTimeString != null) {
+      try {
+        sleepTime = Integer.parseInt(sleepTimeString);
+      } catch (Exception e) {
+        e.printStackTrace();
+        System.out.println("Error while parsing sleep value! The default one will be used : "+SLEEP);
+      }
+      if (sleepTime < 200) {
+        System.out.println("The sleep value is too low : "+sleepTime+" ! The default one will be used : "+SLEEP);
+      } else {
+        SLEEP = sleepTime;
+      }
+    }
+    
     sl = (StartLevel)getService(StartLevel.class);
     ibsl = sl.getInitialBundleStartLevel();
     origSl = sl.getStartLevel();
@@ -91,7 +109,7 @@ public class StartLevelControl extends DefaultTestBundleControl implements Frame
     assertEquals("getInitialBundleStartLevel", sl_20,  sl.getInitialBundleStartLevel());
 
     sl.setStartLevel(sl_10);
-    Thread.sleep(1000);
+    Thread.sleep(SLEEP);
 
     Bundle tb1 = getContext().installBundle(getWebServer() + "tb1.jar");
     tb1.start();
@@ -112,7 +130,7 @@ public class StartLevelControl extends DefaultTestBundleControl implements Frame
   {
     sl.setInitialBundleStartLevel(sl_20);
     sl.setStartLevel(sl_10);
-    Thread.sleep(1000);
+    Thread.sleep(SLEEP);
     Bundle tb1 = getContext().installBundle(getWebServer() + "tb1.jar");
     tb1.start();
     Bundle tb2 = getContext().installBundle(getWebServer() + "tb2.jar");
@@ -120,23 +138,23 @@ public class StartLevelControl extends DefaultTestBundleControl implements Frame
 
     //start tb1 and tb2
     sl.setStartLevel(sl_20);
-    Thread.sleep(1000);
+    Thread.sleep(SLEEP);
 
     //stop tb2 and tb1
     sl.setStartLevel(sl_10);
-    Thread.sleep(1000);
+    Thread.sleep(SLEEP);
 
     //reverse the start order
     sl.setBundleStartLevel(tb2, sl_15);
-    Thread.sleep(1000);
+    Thread.sleep(SLEEP);
 
     //start tb2 and tb1
     sl.setStartLevel(sl_20);
-    Thread.sleep(1000);
+    Thread.sleep(SLEEP);
 
     //stop tb1 and tb2
     sl.setStartLevel(sl_10);
-    Thread.sleep(1000);
+    Thread.sleep(SLEEP);
 
     tb1.uninstall();
     tb2.uninstall();
@@ -146,31 +164,31 @@ public class StartLevelControl extends DefaultTestBundleControl implements Frame
   {
     sl.setInitialBundleStartLevel(sl_15);
     sl.setStartLevel(sl_10);
-    Thread.sleep(1000);
+    Thread.sleep(SLEEP);
     Bundle tb1 = getContext().installBundle(getWebServer() + "tb1.jar");
 
     sl.setStartLevel(sl_20);
-    Thread.sleep(1000);
+    Thread.sleep(SLEEP);
       assertEquals("getState() = INSTALLED | RESOLVED", true, inState(tb1, Bundle.INSTALLED | Bundle.RESOLVED));
 
     sl.setStartLevel(sl_10);
-    Thread.sleep(1000);
+    Thread.sleep(SLEEP);
       assertEquals("getState() = INSTALLED | RESOLVED", true, inState(tb1, Bundle.INSTALLED | Bundle.RESOLVED));
 
     tb1.start();
       assertEquals("getState() = INSTALLED | RESOLVED", true, inState(tb1, Bundle.INSTALLED | Bundle.RESOLVED));
 
     sl.setStartLevel(sl_20);
-    Thread.sleep(1000);
+    Thread.sleep(SLEEP);
       assertEquals("getState() = ACTIVE", true, inState(tb1, Bundle.ACTIVE));
 
     sl.setStartLevel(sl_10);
-    Thread.sleep(1000);
+    Thread.sleep(SLEEP);
       assertEquals("getState() = INSTALLED | RESOLVED", true, inState(tb1, Bundle.INSTALLED | Bundle.RESOLVED));
 
     tb1.stop();
     sl.setStartLevel(sl_20);
-    Thread.sleep(1000);
+    Thread.sleep(SLEEP);
       assertEquals("getState() = INSTALLED | RESOLVED", true, inState(tb1, Bundle.INSTALLED | Bundle.RESOLVED));
 
     tb1.uninstall();
@@ -180,30 +198,30 @@ public class StartLevelControl extends DefaultTestBundleControl implements Frame
   {
     sl.setInitialBundleStartLevel(sl_15);
     sl.setStartLevel(sl_10);
-    Thread.sleep(1000);
+    Thread.sleep(SLEEP);
     Bundle tb1 = getContext().installBundle(getWebServer() + "tb1.jar");
 
     sl.setBundleStartLevel(tb1, sl_5);
-    Thread.sleep(2000);
+    Thread.sleep(SLEEP*2);
     assertEquals("Startlevel 10/5 stop", true, inState(tb1, Bundle.INSTALLED | Bundle.RESOLVED));
 
     sl.setBundleStartLevel(tb1, sl_15);
-    Thread.sleep(2000);
+    Thread.sleep(SLEEP*2);
     assertEquals("StartLevel 10/15 stop", true, inState(tb1, Bundle.INSTALLED | Bundle.RESOLVED));
 
     tb1.start();
     assertEquals("StartLevel 10/15 start", true, inState(tb1, Bundle.INSTALLED | Bundle.RESOLVED));
 
     sl.setBundleStartLevel(tb1, sl_5);
-    Thread.sleep(2000);
+    Thread.sleep(SLEEP*2);
     assertEquals("StartLevel 10/5 start", true, inState(tb1, Bundle.ACTIVE));
 
     sl.setBundleStartLevel(tb1, sl_15);
-    Thread.sleep(2000);
+    Thread.sleep(SLEEP*2);
     assertEquals("StartLevel 10/15 start", true, inState(tb1, Bundle.INSTALLED | Bundle.RESOLVED));
 
     sl.setBundleStartLevel(tb1, sl_5);
-    Thread.sleep(2000);
+    Thread.sleep(SLEEP*2);
     assertEquals("StartLevel 10/5 start", true, inState(tb1, Bundle.ACTIVE));
 
     tb1.stop();
@@ -216,7 +234,7 @@ public class StartLevelControl extends DefaultTestBundleControl implements Frame
     assertEquals("setInitialBundleStartLevel", sl_15,  sl.getInitialBundleStartLevel());
 
     sl.setStartLevel(sl_10);
-    Thread.sleep(1000);
+    Thread.sleep(SLEEP);
 
     Bundle tb1 = getContext().installBundle(getWebServer() + "tb1.jar");
     assertEquals("isBundlePersistentlyStarted", false, sl.isBundlePersistentlyStarted(tb1));
@@ -225,19 +243,19 @@ public class StartLevelControl extends DefaultTestBundleControl implements Frame
     assertEquals("isBundlePersistentlyStarted", true, sl.isBundlePersistentlyStarted(tb1));
 
     sl.setStartLevel(sl_20);
-    Thread.sleep(1000);
+    Thread.sleep(SLEEP);
     assertEquals("isBundlePersistentlyStarted", true, sl.isBundlePersistentlyStarted(tb1));
 
     sl.setStartLevel(sl_10);
-    Thread.sleep(1000);
+    Thread.sleep(SLEEP);
     assertEquals("isBundlePersistentlyStarted", true, sl.isBundlePersistentlyStarted(tb1));
 
     sl.setBundleStartLevel(tb1, sl_5);
-    Thread.sleep(2000);
+    Thread.sleep(SLEEP*2);
     assertEquals("isBundlePersistentlyStarted", true, sl.isBundlePersistentlyStarted(tb1));
 
     sl.setBundleStartLevel(tb1, sl_15);
-    Thread.sleep(2000);
+    Thread.sleep(SLEEP*2);
     assertEquals("isBundlePersistentlyStarted", true, sl.isBundlePersistentlyStarted(tb1));
 
     tb1.uninstall();
@@ -247,9 +265,9 @@ public class StartLevelControl extends DefaultTestBundleControl implements Frame
   {
     logStartLevelChanged = true;
     sl.setStartLevel(sl_10);
-    Thread.sleep(2000);
+    Thread.sleep(SLEEP*2);
     sl.setStartLevel(sl_20);
-    Thread.sleep(2000);
+    Thread.sleep(SLEEP*2);
     logStartLevelChanged = false;
   }
 
@@ -269,7 +287,7 @@ public class StartLevelControl extends DefaultTestBundleControl implements Frame
   {
     sl.setInitialBundleStartLevel(sl_5);
     sl.setStartLevel(sl_10);
-    Thread.sleep(1000);
+    Thread.sleep(SLEEP);
     Bundle tb5 = getContext().installBundle(getWebServer() + "tb5.jar");
 
     try {
@@ -281,18 +299,18 @@ public class StartLevelControl extends DefaultTestBundleControl implements Frame
 
     //FrameworkEvent.ERROR due to active startlevel change
     sl.setStartLevel(sl_4);
-    Thread.sleep(1000);
+    Thread.sleep(SLEEP);
       assertEquals("getState() = INSTALLED | RESOLVED", true, inState(tb5, Bundle.INSTALLED | Bundle.RESOLVED));
 
     //no FrameworkEvent.ERROR
     sl.setStartLevel(sl_5);
-    Thread.sleep(1000);
+    Thread.sleep(SLEEP);
       assertEquals("getState() = ACTIVE", true, inState(tb5, Bundle.ACTIVE));
 
     
     //FrameworkEvent.ERROR due to bundle startlevel change
     sl.setBundleStartLevel(tb5, sl_6);
-    Thread.sleep(2000);
+    Thread.sleep(SLEEP*2);
       assertEquals("getState() = INSTALLED | RESOLVED", true, inState(tb5, Bundle.INSTALLED | Bundle.RESOLVED));
 
     tb5.uninstall();
@@ -302,20 +320,20 @@ public class StartLevelControl extends DefaultTestBundleControl implements Frame
   {
     sl.setInitialBundleStartLevel(sl_5);
     sl.setStartLevel(sl_10);
-    Thread.sleep(1000);
+    Thread.sleep(SLEEP);
     Bundle tb3 = getContext().installBundle(getWebServer() + "tb3.jar");
     tb3.start();
-    Thread.sleep(2000);
+    Thread.sleep(SLEEP*2);
     assertEquals("getBundleStartLevel", sl_15,  sl.getBundleStartLevel(tb3));
     tb3.uninstall();
 
     Bundle tb4 = getContext().installBundle(getWebServer() + "tb4.jar");
     tb4.start();
-    Thread.sleep(1000);
+    Thread.sleep(SLEEP);
     assertEquals("getStartLevel", sl_15,  sl.getStartLevel());
 
     tb4.stop();
-    Thread.sleep(1000);
+    Thread.sleep(SLEEP);
     assertEquals("getStartLevel", sl_10,  sl.getStartLevel());
 
     tb4.uninstall();
