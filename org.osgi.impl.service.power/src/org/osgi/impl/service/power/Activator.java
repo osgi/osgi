@@ -27,6 +27,7 @@
 package org.osgi.impl.service.power;
 
 import org.osgi.framework.*;
+import org.osgi.service.power.*;
 
 /**
  * 
@@ -35,8 +36,8 @@ import org.osgi.framework.*;
 public class Activator implements BundleActivator {
 	
 	private BundleContext context;
-	private SystemPowerImpl systemPower;
-	private ServiceRegistration systemPowerReg;
+	private PowerManagerImpl powerManager;
+	private ServiceRegistration powerManagerReg;
 	
 	/**
 	 * @param context
@@ -46,9 +47,10 @@ public class Activator implements BundleActivator {
 		this.context = context;
 		
 		// Create and register System Power
-		systemPower = new SystemPowerImpl(context);
-		systemPowerReg = context.registerService("org.osgi.service.power.SystemPower", systemPower, null);
-		System.out.println("Sytem Power Service registered");
+		powerManager = new PowerManagerImpl(context);
+		powerManagerReg = context.registerService(PowerManager.class.getName(), powerManager, null);
+		powerManager.setServiceRegistration(powerManagerReg);
+		System.out.println("Power Manager registered");
 	}
 
 	/**
@@ -57,9 +59,9 @@ public class Activator implements BundleActivator {
 	 */
 	public void stop(BundleContext context) throws Exception {
 		this.context = null;
-		if (systemPowerReg != null) {
-			systemPowerReg.unregister();
-			systemPowerReg = null;
+		if (powerManagerReg != null) {
+			powerManagerReg.unregister();
+			powerManagerReg = null;
 		}
 	}
 }
