@@ -558,18 +558,30 @@ public final class DmtData {
         return 0;               // never reached
     }
     
-    // ENHANCE extend date check for number of days in month, leap years, etc.
     private static void checkDateFormat(String value) {
         if(value.length() != 8)
             throw new IllegalArgumentException("Date string '" + value + 
                     "' does not follow the format 'CCYYMMDD'.");
         
-        checkNumber(value, "Date", 0, 4, 0, 9999);
-        checkNumber(value, "Date", 4, 2, 1, 12);
-        checkNumber(value, "Date", 6, 2, 1, 31);
+        int year = checkNumber(value, "Date", 0, 4, 0, 9999);
+        int month = checkNumber(value, "Date", 4, 2, 1, 12);
+        int day = checkNumber(value, "Date", 6, 2, 1, 31);
+        
+        // Date checking is not prepared for all special rules (for example
+        // historical leap years), production code could contain a full check.
+        
+        // Day 31 is invalid for April, June, September and November
+        if((month == 4 || month == 6 || month == 9 || month == 11) && day == 31)
+        	throw new IllegalArgumentException("Date string '" + value + 
+        			"' contains an invalid date.");
+        
+        // February 29 is invalid except for leap years, Feb. 30-31 are invalid 
+        if(month == 2 && day > 28 &&
+        	!(day == 29 && year%4 == 0 && (year%100 != 0 || year%400 == 0)))
+        	throw new IllegalArgumentException("Date string '" + value + 
+        			"' contains an invalid date.");
     }
     
-    // ENHANCE extend time check for leap seconds, etc.
     private static void checkTimeFormat(String value) {
         if(value.length() > 0 && value.charAt(value.length()-1) == 'Z')
             value = value.substring(0, value.length()-1);
@@ -578,13 +590,19 @@ public final class DmtData {
             throw new IllegalArgumentException("Time string '" + value + 
                     "' does not follow the format 'hhmmss' or 'hhmmssZ'.");
             
+        // Time checking is not prepared for all special rules (for example
+        // leap seconds), production code could contain a full check.
+        
         // if hour is 24, only 240000 should be allowed
         checkNumber(value, "Time", 0, 2, 0, 24);
         checkNumber(value, "Time", 2, 2, 0, 59);
         checkNumber(value, "Time", 4, 2, 0, 59);
+        
+        if(value.startsWith("24") && !value.startsWith("240000"))
+        	throw new IllegalArgumentException("Time string is out of range.");
     }
     
-    private static void checkNumber(String value, String name, int from, 
+    private static int checkNumber(String value, String name, int from, 
             int length, int min, int max) {
         String part = value.substring(from, from+length);
         int number;
@@ -597,6 +615,8 @@ public final class DmtData {
         if(number < min || number > max) 
             throw new IllegalArgumentException("A segment of the " + name +
                     " string '" + value + "' is out of range.");
+        
+        return number;
     }
 
 
