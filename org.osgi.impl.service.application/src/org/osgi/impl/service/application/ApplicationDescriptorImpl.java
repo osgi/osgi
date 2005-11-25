@@ -95,8 +95,6 @@ public class ApplicationDescriptorImpl implements Delegate {
 	}
 
 	public ScheduledApplication schedule(Map args, String topic, String filter, boolean recurs) {
-		String pid = (String)descriptor.getProperties( "" ).get( ApplicationDescriptor.APPLICATION_PID );
-		
 		return Activator.scheduler.addScheduledApplication( descriptor, args, topic, filter, recurs );
 	}
 
