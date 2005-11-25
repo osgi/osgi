@@ -198,11 +198,13 @@ public abstract class ApplicationDescriptor {
 		boolean isLocked = delegate.isLocked(); // the real locking state
 		Boolean containerLocked = (Boolean)props.remove( APPLICATION_LOCKED );
 		if( containerLocked != null && containerLocked.booleanValue() != isLocked ) {
-			if( isLocked )      /* if the container's information is not correct */
-				lockSpecific();   /* about the locking state (after loading the lock states) */
-			else
-				unlockSpecific();
-		}			
+			try {
+			  if( isLocked )      /* if the container's information is not correct */
+				  lockSpecific();   /* about the locking state (after loading the lock states) */
+			  else
+				  unlockSpecific();
+			}catch( Exception e ) {}
+		}
 		/* replace the container's lock with the application model's lock, that's the correct */
 		props.put( APPLICATION_LOCKED, new Boolean( isLocked ) ); 		
 		return props;
