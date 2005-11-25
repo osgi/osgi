@@ -104,6 +104,7 @@ public class ApplicationTestControl extends DefaultTestBundleControl {
 	private EventHandlerActivator eventBundle;
 
 	private TestingActivator testingActivator;
+
 	private TestingActivator2 testingActivator2;
 
 	public void prepare() {
@@ -420,7 +421,7 @@ public class ApplicationTestControl extends DefaultTestBundleControl {
 	public void testApplicationAdminPermissionHashCode() {
 		new HashCode(this).run();
 	}
-	
+
 	/**
 	 * Executes Tcs for ApplicationContext#getApplicationId
 	 */
@@ -434,14 +435,14 @@ public class ApplicationTestControl extends DefaultTestBundleControl {
 	public void testApplicationServiceEvent() {
 		new ApplicationServiceEvent(this).run();
 	}
-	
+
 	/**
 	 * Executes Tcs for ApplicationContext#getInstanceId
 	 */
 	public void testApplicationContextGetInstanceId() {
 		new GetInstanceId(this).run();
 	}
-	
+
 	public PermissionAdmin getPermissionAdmin() {
 		return permissionAdmin;
 	}
@@ -594,6 +595,18 @@ public class ApplicationTestControl extends DefaultTestBundleControl {
 		}
 	}
 
+	public void destroyHandles() {
+		try {
+			ApplicationHandle handle = getAppHandle();
+			while (handle != null) {
+				handle.destroy();
+				handle = getAppHandle();
+			}
+		} catch (Exception e) {
+			log("#error destroying the handles.");
+		}
+	}
+
 	public Bundle installTestBundle() {
 		try {
 			if (testBundle == null) {
@@ -609,17 +622,17 @@ public class ApplicationTestControl extends DefaultTestBundleControl {
 		try {
 			if (testingActivator == null) {
 				testingActivator = new TestingActivator();
-				if (highValue) {					
+				if (highValue) {
 					testingActivator.start(this.getContext());
 				} else {
 					testingActivator.startWithoutRanking(this.getContext());
-				}				
+				}
 			}
 		} catch (Exception e) {
 			fail("error starting the TestingActivator.");
 		}
 	}
-	
+
 	public void stopActivator() {
 		try {
 			if (testingActivator != null) {
@@ -630,12 +643,12 @@ public class ApplicationTestControl extends DefaultTestBundleControl {
 			fail("error stopping the TestingActivator.");
 		}
 	}
-	
+
 	public void startActivator2(boolean highValue) {
 		try {
 			if (testingActivator2 == null) {
 				testingActivator2 = new TestingActivator2();
-				if (highValue) {					
+				if (highValue) {
 					testingActivator2.start(this.getContext());
 				} else {
 					testingActivator2.startWithoutRanking(this.getContext());
@@ -645,7 +658,7 @@ public class ApplicationTestControl extends DefaultTestBundleControl {
 			fail("error starting the TestingActivator2.");
 		}
 	}
-	
+
 	public void stopActivator2() {
 		try {
 			if (testingActivator2 != null) {
@@ -655,7 +668,7 @@ public class ApplicationTestControl extends DefaultTestBundleControl {
 		} catch (Exception e) {
 			fail("error stopping the TestingActivator2.");
 		}
-	}		
+	}
 
 	public void uninstallTestBundle() {
 		try {
@@ -760,7 +773,7 @@ public class ApplicationTestControl extends DefaultTestBundleControl {
 		return refs == null ? -1 : ((Long) refs
 				.getProperty(Constants.SERVICE_ID)).intValue();
 	}
-	
+
 	public Object getServiceProperty(String className, String key) {
 		ServiceReference refs = getContext().getServiceReference(className);
 		return refs == null ? null : ((String) refs.getProperty(key));
