@@ -7,7 +7,7 @@
 package org.osgi.test.director;
 
 import java.io.*;
-import java.net.Socket;
+import java.net.*;
 import java.util.*;
 
 import org.osgi.test.script.Tag;
@@ -75,6 +75,12 @@ public class Run implements IRun, TestRun {
 	 * on the target.
 	 */
 	public Tag doTestCase(TestCase tc) throws Exception {
+		Tag testcase = new Tag("testcase");
+		this.history.addContent(testcase);
+		testcase.addAttribute("starting", new Date());
+		testcase.addAttribute("name", tc.getName());
+		testcase.addContent(handler.getDescription(tc));
+		
 		if (tc instanceof ScriptEditor) {
 			ScriptEditor editor = (ScriptEditor) tc;
 			return editor.execute();
@@ -90,21 +96,32 @@ public class Run implements IRun, TestRun {
 		long passed = System.currentTimeMillis() - lasttime;
 		if (passed < 2000)
 			Thread.sleep(2000 - passed);
-		target = new TargetLink(this);
-		target.open(new Socket(host, port));
-		if (isOption(IHandler.OPTION_FOREVER)) {
-			target.setTimeout(5 * 60000);
-			history.addContent(new Tag("forever"));
+
+		int i = 0;
+		while(true) {
+			try {
+				target = new TargetLink(this);
+				target.open(new Socket(host, port));
+				if (isOption(IHandler.OPTION_FOREVER)) {
+					target.setTimeout(5 * 60000);
+					history.addContent(new Tag("forever"));
+				}
+				updateTestProperties(target);
+				// Stack the history se we can call this method recursively
+				break;
+			}
+			catch (ConnectException e) {
+				if ( i++ == 9 ) {
+					// We have a bad error, better bail out.
+					testcase.addAttribute("exception", e.toString() );
+					return testcase;
+				}
+				System.out.println("Could not connect to: " + host + ":" + port + " (try " + i + ")");
+				Thread.sleep(2000);
+			}
 		}
 		
-		updateTestProperties(target);		
-		
-		Tag testcase = new Tag("testcase");
-		this.history.addContent(testcase);
-		testcase.addAttribute("starting", new Date());
-		testcase.addAttribute("name", tc.getName());
-		testcase.addContent(handler.getDescription(tc));
-		// Stack the history se we can call this method recursively
+
 		Tag previous = this.history;
 		this.history = testcase;
 		try {
@@ -147,15 +164,16 @@ public class Run implements IRun, TestRun {
 		return testcase;
 	}
 
-	private void updateTestProperties(TargetLink target) throws IOException, FileNotFoundException {
+	private void updateTestProperties(TargetLink target) throws IOException,
+			FileNotFoundException {
 		String targetProperties = System.getProperty(IRun.TEST_PROPERTIES_FILE);
-		if ( targetProperties != null ) {
-			File tp = new File( targetProperties );
-			if ( tp.exists() ) {
+		if (targetProperties != null) {
+			File tp = new File(targetProperties);
+			if (tp.exists()) {
 				Properties properties = new Properties();
-				properties.load( new FileInputStream( tp ));
+				properties.load(new FileInputStream(tp));
 				target.setTestProperties(properties);
-			} 
+			}
 		}
 	}
 
@@ -315,7 +333,7 @@ public class Run implements IRun, TestRun {
 			target = new TargetLink(this);
 			target.open(new Socket(host, port));
 			wait(15000);
-			target.updateFramework();			
+			target.updateFramework();
 			target.close();
 		}
 		catch (Exception e) {
