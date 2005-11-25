@@ -92,10 +92,11 @@ public class ApplicationAdminPermission extends Permission {
 		super(filter == null ? "*" : filter);
 				
 		this.applicationDescriptor = null;
-		this.filter = (filter == null ? "(pid=*)" : filter);
+		this.filter = (filter == null ? "*" : filter);
 		this.actions = actions;
 
-		FrameworkUtil.createFilter( this.filter );
+		if( !filter.equals( "*" ) )
+			FrameworkUtil.createFilter( this.filter ); // check if the filter is valid
 		init();
 	}
 	
@@ -168,17 +169,19 @@ public class ApplicationAdminPermission extends Permission {
 
       ApplicationAdminPermission other = (ApplicationAdminPermission) otherPermission;
 
-      if( other.applicationID == null )
-  		return false; /* it cannot be, this might be a bug */
-      
       if( !filter.equals("*") ) {
       	if( filter.equals( "<<SELF>>") ) {
+            if( other.applicationID == null )
+          		return false; /* it cannot be, this might be a bug */
+            
       		if( !other.applicationID.equals( other.filter ) )
       			return false;
       	}
       	else {
       		Hashtable props = new Hashtable();
-      		props.put( "pid", other.applicationID );
+      		if( other.applicationDescriptor == null )
+      			return false;
+      		props.put( "pid", other.applicationDescriptor.getApplicationId() );
       		props.put( "signer", new SignerWrapper( other.applicationDescriptor ) );
       		      		
       		Filter flt = getFilter();
@@ -186,10 +189,7 @@ public class ApplicationAdminPermission extends Permission {
       			return false;
       		
       		if( !flt.match( props ) )
-      			return false;
-      		
-      		if( !filter.equals( other.filter ) ) 
-      			return false;
+      			return false;      		
       	}
       }
       
