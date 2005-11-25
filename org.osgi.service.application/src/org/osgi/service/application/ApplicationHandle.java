@@ -111,7 +111,6 @@ public abstract class ApplicationHandle {
 	 * @return The corresponding <code>ApplicationDescriptor</code>
 	 */
 	public final ApplicationDescriptor getApplicationDescriptor() {
-		getState(); // throws IllegalStateException if the handle is invalid 
 		return descriptor;
 	}
 
