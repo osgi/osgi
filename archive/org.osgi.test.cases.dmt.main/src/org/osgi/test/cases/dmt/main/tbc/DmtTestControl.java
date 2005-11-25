@@ -64,7 +64,6 @@ import org.osgi.service.permissionadmin.PermissionInfo;
 import org.osgi.test.cases.dmt.main.tbc.Acl.AclConstants;
 import org.osgi.test.cases.dmt.main.tbc.Acl.AclConstraints;
 import org.osgi.test.cases.dmt.main.tbc.Acl.AddPermission;
-import org.osgi.test.cases.dmt.main.tbc.Acl.Clone;
 import org.osgi.test.cases.dmt.main.tbc.Acl.DeletePermission;
 import org.osgi.test.cases.dmt.main.tbc.Acl.Hashcode;
 import org.osgi.test.cases.dmt.main.tbc.Acl.IsPermitted;
@@ -431,9 +430,6 @@ public class DmtTestControl extends DefaultTestBundleControl {
 		new Hashcode(this).run();
 	}
 	
-	public void testAclClone() {
-		new Clone(this).run();
-	}
 	
 	public void testAclConstraints() {
 		new AclConstraints(this).run();
