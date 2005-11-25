@@ -500,6 +500,10 @@ public class OATApplicationContextImpl implements ApplicationContext, ServiceLis
 	public Map getServiceProperties(Object serviceObject) {
 		if( serviceObject == null )
 			throw new NullPointerException();
+
+		if( appHandle == null )
+			throw new IllegalStateException( "Application is not running!" );
+		
 		Iterator iter = serviceList.iterator();
 		
 		while( iter.hasNext() ) {
