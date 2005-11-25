@@ -45,9 +45,12 @@ public class ApplicationServiceEvent extends ServiceEvent {
 	 * @param type The event type. Available type codes are defines in 
 	 *        {@link org.osgi.framework.ServiceEvent}
 	 * @param reference A <code>ServiceReference</code> object to the service
-	 *        that had a lifecycle change.
+	 *        that had a lifecycle change. This reference will be used as the <code>source</code>
+	 *        in the {@link java.util.EventObject} baseclass, therefore, it must not be
+	 *        null.
 	 * @param serviceObject The service object bound to this application instance. It can
 	 *    be <code>null</code> if this application is not bound to this service yet.
+	 * @throws IllegalArgumentException if the specified <code>reference</code> is null. 
 	 */
 	public ApplicationServiceEvent(int type, ServiceReference reference, Object serviceObject) {
 		super(type, reference);
