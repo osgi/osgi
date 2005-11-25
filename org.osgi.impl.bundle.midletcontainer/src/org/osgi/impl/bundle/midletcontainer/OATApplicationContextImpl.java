@@ -48,6 +48,9 @@ public class OATApplicationContextImpl implements ApplicationContext, ServiceLis
 	OATApplicationData oatAppData = null;
 	ApplicationHandle appHandle = null;
 	Object mainClass = null;
+	
+	String instanceId = null;
+	String applicationId = null;
 
 	class Service {
 		OATServiceData    serviceData;
@@ -98,6 +101,9 @@ public class OATApplicationContextImpl implements ApplicationContext, ServiceLis
 		
 		this.appHandle = appHandle;
 		bc.addServiceListener( this );
+		
+		instanceId = appHandle.getInstanceId();
+		applicationId = appHandle.getApplicationDescriptor().getApplicationId();
 	}
 
 	public void addServiceListener(ApplicationServiceListener listener, String referenceName)
@@ -513,10 +519,10 @@ public class OATApplicationContextImpl implements ApplicationContext, ServiceLis
 	}
 
 	public String getInstanceId() {
-		return appHandle.getInstanceId();
+		return instanceId;
 	}
 
 	public String getApplicationId() {
-		return appHandle.getApplicationDescriptor().getApplicationId();
+		return applicationId;
 	}
 }
