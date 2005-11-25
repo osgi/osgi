@@ -37,6 +37,8 @@ public class SSDPMulticastListener extends Thread {
 				msock.receive(dpack);
 			}
 			catch (IOException e) {
+				if ( flag )
+					e.printStackTrace();
 			}
 			if (dpack != null) {
 				recvData = new String(data, 0, dpack.getLength());
@@ -53,6 +55,8 @@ public class SSDPMulticastListener extends Thread {
 				}
 			}
 			catch (Exception e) {
+				if ( flag )
+					e.printStackTrace();
 			}
 		}
 	}

@@ -34,10 +34,10 @@ public class SSDPMulticastListener extends Thread implements SSDPConstants {
 			}
 			try {
 				msock.receive(dpack);
-				
 			}
 			catch (IOException e) {
-				e.printStackTrace();
+				if ( flag )
+					e.printStackTrace();
 			}
 			if (dpack != null) {
 				recvData = new String(data, 0, dpack.getLength());
@@ -53,7 +53,8 @@ public class SSDPMulticastListener extends Thread implements SSDPConstants {
 				}
 			}
 			catch (Exception e) {
-				e.printStackTrace();
+				if ( flag )
+					e.printStackTrace();
 			}
 		}
 	}
