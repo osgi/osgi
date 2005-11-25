@@ -36,6 +36,8 @@
 
 package org.osgi.test.cases.dmt.main.tbc.Acl;
 
+import java.lang.reflect.Modifier;
+
 import org.osgi.service.dmt.Acl;
 import org.osgi.service.dmt.DmtException;
 import org.osgi.service.dmt.DmtSession;
@@ -71,6 +73,7 @@ public class AclConstraints {
         testAclConstraints009();
         testAclConstraints010();
         testAclConstraints011();
+        testAclConstraints012();
 
 	}
 
@@ -403,6 +406,22 @@ public class AclConstraints {
             tbc.cleanUp(session, TestExecPluginActivator.INTERIOR_NODE);
             tbc.cleanAcl(TestExecPluginActivator.ROOT);
             TestExecPlugin.setAllUriIsExistent(false);
+        }
+    }
+    
+    /**
+     * Asserts that Acl is a public final class
+     * 
+     * @spec 117.12.2 Acl
+     */
+    private void testAclConstraints012() {
+        try {
+            int aclModifiers = Acl.class.getModifiers();
+            tbc.assertTrue("Asserts that Acl is a public final class", aclModifiers == (Modifier.FINAL | Modifier.PUBLIC));
+            
+        } catch (Exception e) {
+            tbc.fail("Unexpected Exception: " + e.getClass().getName()
+                + " [Message: " + e.getMessage() + "]");
         }
     }
 }
