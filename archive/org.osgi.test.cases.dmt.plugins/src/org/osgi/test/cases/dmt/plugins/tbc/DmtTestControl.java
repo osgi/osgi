@@ -49,7 +49,7 @@ import org.osgi.framework.ServiceReference;
 import org.osgi.service.dmt.DmtAdmin;
 import org.osgi.service.dmt.DmtException;
 import org.osgi.service.dmt.DmtSession;
-import org.osgi.test.cases.dmt.plugins.tbc.DataPluginFactory.TestDataPluginActivator;
+import org.osgi.test.cases.dmt.plugins.tbc.DataPlugin.TestDataPluginActivator;
 import org.osgi.test.cases.dmt.plugins.tbc.ExecPlugin.TestExecPluginActivator;
 import org.osgi.test.cases.dmt.plugins.tbc.MetaNode.Can;
 import org.osgi.test.cases.dmt.plugins.tbc.MetaNode.DmtMetaNodeConstants;
@@ -172,94 +172,94 @@ public class DmtTestControl extends DefaultTestBundleControl {
 	public void testOverlappingPlugins() {
 		new OverlappingPlugins(this).run();
 	}
-	//DataPluginFactory methods
-	public void testDataPluginFactoryConstants() {
-		new org.osgi.test.cases.dmt.plugins.tbc.DataPluginFactory.TransactionalDataSession.PluginConstants(this).run();
+	//DataPlugin methods
+	public void testDataPluginConstants() {
+		new org.osgi.test.cases.dmt.plugins.tbc.DataPlugin.TransactionalDataSession.PluginConstants(this).run();
 	}
-	public void testDataPluginFactoryClose() {
-		new org.osgi.test.cases.dmt.plugins.tbc.DataPluginFactory.TransactionalDataSession.Close(this).run();
+	public void testDataPluginClose() {
+		new org.osgi.test.cases.dmt.plugins.tbc.DataPlugin.TransactionalDataSession.Close(this).run();
 	}
-	public void testDataPluginFactoryGetChildNodeNames() {
-		new org.osgi.test.cases.dmt.plugins.tbc.DataPluginFactory.TransactionalDataSession.GetChildNodeNames(this).run();
-	}
-
-	public void testDataPluginFactoryGetMetaNode() {
-		new org.osgi.test.cases.dmt.plugins.tbc.DataPluginFactory.TransactionalDataSession.GetMetaNode(this).run();
+	public void testDataPluginGetChildNodeNames() {
+		new org.osgi.test.cases.dmt.plugins.tbc.DataPlugin.TransactionalDataSession.GetChildNodeNames(this).run();
 	}
 
-	public void testDataPluginFactoryGetNodeSize() {
-		new org.osgi.test.cases.dmt.plugins.tbc.DataPluginFactory.TransactionalDataSession.GetNodeSize(this).run();
+	public void testDataPluginGetMetaNode() {
+		new org.osgi.test.cases.dmt.plugins.tbc.DataPlugin.TransactionalDataSession.GetMetaNode(this).run();
 	}
 
-	public void testDataPluginFactoryGetNodeTimestamp() {
-		new org.osgi.test.cases.dmt.plugins.tbc.DataPluginFactory.TransactionalDataSession.GetNodeTimestamp(this).run();
+	public void testDataPluginGetNodeSize() {
+		new org.osgi.test.cases.dmt.plugins.tbc.DataPlugin.TransactionalDataSession.GetNodeSize(this).run();
 	}
 
-	public void testDataPluginFactoryGetNodeTitle() {
-		new org.osgi.test.cases.dmt.plugins.tbc.DataPluginFactory.TransactionalDataSession.GetNodeTitle(this).run();
+	public void testDataPluginGetNodeTimestamp() {
+		new org.osgi.test.cases.dmt.plugins.tbc.DataPlugin.TransactionalDataSession.GetNodeTimestamp(this).run();
 	}
 
-	public void testDataPluginFactoryGetNodeType() {
-		new org.osgi.test.cases.dmt.plugins.tbc.DataPluginFactory.TransactionalDataSession.GetNodeType(this).run();
+	public void testDataPluginGetNodeTitle() {
+		new org.osgi.test.cases.dmt.plugins.tbc.DataPlugin.TransactionalDataSession.GetNodeTitle(this).run();
 	}
 
-	public void testDataPluginFactoryGetNodeValue() {
-		new org.osgi.test.cases.dmt.plugins.tbc.DataPluginFactory.TransactionalDataSession.GetNodeValue(this).run();
+	public void testDataPluginGetNodeType() {
+		new org.osgi.test.cases.dmt.plugins.tbc.DataPlugin.TransactionalDataSession.GetNodeType(this).run();
 	}
 
-	public void testDataPluginFactoryGetNodeVersion() {
-		new org.osgi.test.cases.dmt.plugins.tbc.DataPluginFactory.TransactionalDataSession.GetNodeVersion(this).run();
+	public void testDataPluginGetNodeValue() {
+		new org.osgi.test.cases.dmt.plugins.tbc.DataPlugin.TransactionalDataSession.GetNodeValue(this).run();
 	}
 
-	public void testDataPluginFactoryIsNodeUri() {
-		new org.osgi.test.cases.dmt.plugins.tbc.DataPluginFactory.TransactionalDataSession.IsNodeUri(this).run();
+	public void testDataPluginGetNodeVersion() {
+		new org.osgi.test.cases.dmt.plugins.tbc.DataPlugin.TransactionalDataSession.GetNodeVersion(this).run();
 	}
 
-	public void testDataPluginFactoryIsLeafNode() {
-		new org.osgi.test.cases.dmt.plugins.tbc.DataPluginFactory.TransactionalDataSession.IsLeafNode(this).run();
+	public void testDataPluginIsNodeUri() {
+		new org.osgi.test.cases.dmt.plugins.tbc.DataPlugin.TransactionalDataSession.IsNodeUri(this).run();
 	}
-	public void testDataPluginFactoryNodeChanged() {
-		new org.osgi.test.cases.dmt.plugins.tbc.DataPluginFactory.TransactionalDataSession.NodeChanged(this).run();
+
+	public void testDataPluginIsLeafNode() {
+		new org.osgi.test.cases.dmt.plugins.tbc.DataPlugin.TransactionalDataSession.IsLeafNode(this).run();
+	}
+	public void testDataPluginNodeChanged() {
+		new org.osgi.test.cases.dmt.plugins.tbc.DataPlugin.TransactionalDataSession.NodeChanged(this).run();
 	}	
 	
-	public void testDataPluginFactoryCommit() { 
-		new org.osgi.test.cases.dmt.plugins.tbc.DataPluginFactory.TransactionalDataSession.Commit(this).run();
+	public void testDataPluginCommit() { 
+		new org.osgi.test.cases.dmt.plugins.tbc.DataPlugin.TransactionalDataSession.Commit(this).run();
 	}
 	
-	public void testDataPluginFactoryCopy() {
-		new org.osgi.test.cases.dmt.plugins.tbc.DataPluginFactory.TransactionalDataSession.Copy(this).run();
+	public void testDataPluginCopy() {
+		new org.osgi.test.cases.dmt.plugins.tbc.DataPlugin.TransactionalDataSession.Copy(this).run();
 	}
 	
-	public void testDataPluginFactoryCreateInteriorNode() {
-		new org.osgi.test.cases.dmt.plugins.tbc.DataPluginFactory.TransactionalDataSession.CreateInteriorNode(this).run();
+	public void testDataPluginCreateInteriorNode() {
+		new org.osgi.test.cases.dmt.plugins.tbc.DataPlugin.TransactionalDataSession.CreateInteriorNode(this).run();
 	}
 	
-	public void testDataPluginFactoryCreateLeafNode() {
-		new org.osgi.test.cases.dmt.plugins.tbc.DataPluginFactory.TransactionalDataSession.CreateLeafNode(this).run();
+	public void testDataPluginCreateLeafNode() {
+		new org.osgi.test.cases.dmt.plugins.tbc.DataPlugin.TransactionalDataSession.CreateLeafNode(this).run();
 	}
 	
-	public void testDataPluginFactoryDeleteNode() {
-		new org.osgi.test.cases.dmt.plugins.tbc.DataPluginFactory.TransactionalDataSession.DeleteNode(this).run();
+	public void testDataPluginDeleteNode() {
+		new org.osgi.test.cases.dmt.plugins.tbc.DataPlugin.TransactionalDataSession.DeleteNode(this).run();
 	}
 
-	public void testDataPluginFactoryRenameNode() {
-		new org.osgi.test.cases.dmt.plugins.tbc.DataPluginFactory.TransactionalDataSession.RenameNode(this).run();
+	public void testDataPluginRenameNode() {
+		new org.osgi.test.cases.dmt.plugins.tbc.DataPlugin.TransactionalDataSession.RenameNode(this).run();
 	}
 
-	public void testDataPluginFactoryRollback() {
-		new org.osgi.test.cases.dmt.plugins.tbc.DataPluginFactory.TransactionalDataSession.Rollback(this).run();
+	public void testDataPluginRollback() {
+		new org.osgi.test.cases.dmt.plugins.tbc.DataPlugin.TransactionalDataSession.Rollback(this).run();
 	}
 
-	public void testDataPluginFactorySetNodeTitle() {
-		new org.osgi.test.cases.dmt.plugins.tbc.DataPluginFactory.TransactionalDataSession.SetNodeTitle(this).run();
+	public void testDataPluginSetNodeTitle() {
+		new org.osgi.test.cases.dmt.plugins.tbc.DataPlugin.TransactionalDataSession.SetNodeTitle(this).run();
 	}
 	
-	public void testDataPluginFactorySetNodeType() {
-		new org.osgi.test.cases.dmt.plugins.tbc.DataPluginFactory.TransactionalDataSession.SetNodeType(this).run();
+	public void testDataPluginSetNodeType() {
+		new org.osgi.test.cases.dmt.plugins.tbc.DataPlugin.TransactionalDataSession.SetNodeType(this).run();
 	}
 
-	public void testDataPluginFactorySetNodeValue() {
-		new org.osgi.test.cases.dmt.plugins.tbc.DataPluginFactory.TransactionalDataSession.SetNodeValue(this).run();
+	public void testDataPluginSetNodeValue() {
+		new org.osgi.test.cases.dmt.plugins.tbc.DataPlugin.TransactionalDataSession.SetNodeValue(this).run();
 	}
 	
 	

@@ -34,57 +34,54 @@
  * ============  ==============================================================
  */
 
-package org.osgi.test.cases.dmt.plugins.tbc.DataPluginFactory.TransactionalDataSession;
+package org.osgi.test.cases.dmt.plugins.tbc.DataPlugin.TransactionalDataSession;
 
 import org.osgi.service.dmt.DmtException;
 import org.osgi.service.dmt.DmtSession;
-import org.osgi.test.cases.dmt.plugins.tbc.DmtConstants;
 import org.osgi.test.cases.dmt.plugins.tbc.DmtTestControl;
-import org.osgi.test.cases.dmt.plugins.tbc.DataPluginFactory.TestDataPlugin;
-import org.osgi.test.cases.dmt.plugins.tbc.DataPluginFactory.TestDataPluginActivator;
-import org.osgi.test.cases.dmt.plugins.tbc.Plugins.NewDataPluginActivator;
+import org.osgi.test.cases.dmt.plugins.tbc.DataPlugin.TestDataPlugin;
+import org.osgi.test.cases.dmt.plugins.tbc.DataPlugin.TestDataPluginActivator;
 
 /**
  * @author Luiz Felipe Guimaraes
  * 
- * This test case validates the implementation of <code>commit</code> method, 
+ * This test case validates the implementation of <code>rollback</code> method, 
  * according to MEG specification
  */
-public class Commit {
+public class Rollback {
 
 	private DmtTestControl tbc;
 
-	public Commit(DmtTestControl tbc) {
+	public Rollback(DmtTestControl tbc) {
 		this.tbc = tbc;
 	}
 
 	public void run() {
-		testCommit001();
-        testCommit002();
+		testRollback001();
 	}
 
 	/**
-	 * Asserts that DmtAdmin correctly forwards the call of commit  
-	 * to the correct plugin.
+	 * Asserts that DmtAdmin correctly forwards the call of rollback  
+	 * to the correct plugin. 
 	 * 
-	 * @spec TransactionalDataSession.commit()
+	 * @spec TransactionalDataSession.rollback()
 	 */
-	private void testCommit001() {
+	private void testRollback001() {
 		DmtSession session = null;
 		try {
-			tbc.log("#testCommit001");
+			tbc.log("#testRollback001");
+
 			session = tbc.getDmtAdmin().getSession(
 					TestDataPluginActivator.ROOT,
 					DmtSession.LOCK_TYPE_ATOMIC);
-			TestDataPlugin.setCommitThrowsException(true);
-			session.commit();
+			TestDataPlugin.setRollbackThrowsException(true);
+			session.rollback();
 			tbc.failException("#", DmtException.class);
 		} catch (DmtException e) {
 			tbc
 					.assertEquals(
-							"Asserts that TRANSACTION_ERROR is thrown if an underlying plugin failed to commit:",
-							DmtException.TRANSACTION_ERROR, e.getCode());
-
+							"Asserts that DmtAdmin fowarded the DmtException with the correct code: ",
+							DmtException.ROLLBACK_FAILED, e.getCode());
 			if (e.getCause() instanceof DmtException) {
 				DmtException exception = (DmtException)e.getCause();
 				tbc
@@ -93,63 +90,24 @@ public class Commit {
 				tbc
 						.assertEquals(
 								"Asserts that DmtAdmin fowarded the DmtException with the correct code: ",
-								DmtException.COMMAND_FAILED, exception.getCode());
+								DmtException.ALERT_NOT_ROUTED, exception.getCode());
 				tbc
 						.assertTrue(
 								"Asserts that DmtAdmin fowarded the DmtException with the correct message. ",
 								exception.getMessage().indexOf(
-										TestDataPlugin.COMMIT) > -1);
+										TestDataPlugin.ROLLBACK) > -1);
 				
 			} else {
 				tbc.fail("Expected " + DmtException.class.getName() + " but was "
 						+ e.getCause().getClass().getName());
 			}
-				
 		} catch (Exception e) {
-			tbc.fail("Unexpected Exception: " + e.getClass().getName()
-					+ " [Message: " + e.getMessage() + "]");
+			tbc.fail("Expected " + DmtException.class.getName() + " but was "
+					+ e.getClass().getName());
 		} finally {
 			tbc.cleanUp(session,true);
-			TestDataPlugin.setCommitThrowsException(false);
+			TestDataPlugin.setRollbackThrowsException(false);
 		}
-	}
-    /**
-     * Asserts that if plugin A has committed successfully but plugin B failed, the whole session must fail
-     * 
-     * @spec TransactionalDataSession.commit()
-     */
-    private void testCommit002() {
-        DmtSession session = null;
-        try {
-            tbc.log("#testCommit002");
-            
-            session = tbc.getDmtAdmin().getSession(
-                    DmtConstants.OSGi_ROOT,
-                    DmtSession.LOCK_TYPE_ATOMIC);
-            //NewDataPlugin does not throw exceptions at commit, but TestDataPlugin does
-            session.getChildNodeNames(TestDataPluginActivator.ROOT);
-            session.getChildNodeNames(NewDataPluginActivator.ROOT);
-            TestDataPlugin.setCommitThrowsException(true);
-            session.commit();
-            tbc.failException("#", DmtException.class);
-        } catch (DmtException e) {
-            tbc
-                .assertEquals(
-                    "Asserts that TRANSACTION_ERROR is thrown if an underlying plugin failed to commit:",
-                    DmtException.TRANSACTION_ERROR, e.getCode());
-            tbc
-                .assertEquals(
-                    "Asserts that if plugin A has committed successfully but plugin B failed, the whole session must fail",
-                    DmtSession.STATE_INVALID, session.getState());
-            
-                
-        } catch (Exception e) {
-            tbc.fail("Unexpected Exception: " + e.getClass().getName()
-                    + " [Message: " + e.getMessage() + "]");
-        } finally {
-            tbc.cleanUp(session,true);
-            TestDataPlugin.setCommitThrowsException(false);
-        }
-    }
 
+	}
 }

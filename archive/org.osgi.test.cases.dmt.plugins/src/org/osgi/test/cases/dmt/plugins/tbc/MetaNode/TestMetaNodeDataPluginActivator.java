@@ -37,6 +37,7 @@
 package org.osgi.test.cases.dmt.plugins.tbc.MetaNode;
 
 import java.util.Hashtable;
+
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;

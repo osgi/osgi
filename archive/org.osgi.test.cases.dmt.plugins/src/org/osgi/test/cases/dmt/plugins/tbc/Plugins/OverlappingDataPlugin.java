@@ -36,8 +36,12 @@
 
 package org.osgi.test.cases.dmt.plugins.tbc.Plugins;
 
-import org.osgi.service.dmt.*;
-import org.osgi.service.dmt.spi.*;
+import org.osgi.service.dmt.DmtException;
+import org.osgi.service.dmt.DmtSession;
+import org.osgi.service.dmt.spi.DataPlugin;
+import org.osgi.service.dmt.spi.ReadWriteDataSession;
+import org.osgi.service.dmt.spi.ReadableDataSession;
+import org.osgi.service.dmt.spi.TransactionalDataSession;
 
 /**
  * 
@@ -46,7 +50,7 @@ import org.osgi.service.dmt.spi.*;
  * org.osgi.test.cases.dmt.tbc.DataPluginFactory.TestDataPlugin will be called) 
  * 
  */
-public class OverlappingDataPlugin implements DataPlugin {
+public class OverlappingDataPlugin implements DataPlugin{
 	private final String MESSAGE = "OverlappingDataPlugin";
 	
     public ReadableDataSession openReadOnlySession(String[] sessionRoot, DmtSession session) throws DmtException {

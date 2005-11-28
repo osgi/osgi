@@ -37,6 +37,7 @@
 package org.osgi.test.cases.dmt.plugins.tbc.MetaNode;
 
 import java.util.Date;
+
 import org.osgi.service.dmt.DmtData;
 import org.osgi.service.dmt.DmtException;
 import org.osgi.service.dmt.DmtSession;

@@ -38,7 +38,9 @@ package org.osgi.test.cases.dmt.plugins.tbc.Plugins;
 
 import java.util.Hashtable;
 
-import org.osgi.framework.*;
+import org.osgi.framework.BundleActivator;
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.dmt.spi.DataPlugin;
 
 public class OverlappingSubtreeDataPluginActivator implements BundleActivator {
@@ -47,7 +49,7 @@ public class OverlappingSubtreeDataPluginActivator implements BundleActivator {
 	
 	private OverlappingSubtreeDataPlugin overlappingSubtreeDataPlugin;
 	
-	public static final String ROOT = org.osgi.test.cases.dmt.plugins.tbc.DataPluginFactory.TestDataPluginActivator.INTERIOR_NODE;
+	public static final String ROOT = org.osgi.test.cases.dmt.plugins.tbc.DataPlugin.TestDataPluginActivator.INTERIOR_NODE;
 	
 	public void start(BundleContext bc) throws Exception {
 		// creating the service

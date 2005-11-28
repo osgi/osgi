@@ -38,9 +38,13 @@ package org.osgi.test.cases.dmt.plugins.tbc.MetaNode.MetaData;
 
 import java.util.Hashtable;
 
-import org.osgi.framework.*;
-import org.osgi.service.dmt.spi.*;
-import org.osgi.test.cases.dmt.plugins.tbc.*;
+import org.osgi.framework.BundleActivator;
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.ServiceRegistration;
+import org.osgi.service.dmt.spi.DataPlugin;
+import org.osgi.service.dmt.spi.ExecPlugin;
+import org.osgi.test.cases.dmt.plugins.tbc.DmtConstants;
+import org.osgi.test.cases.dmt.plugins.tbc.DmtTestControl;
 
 /**
  * @author Andre Assad

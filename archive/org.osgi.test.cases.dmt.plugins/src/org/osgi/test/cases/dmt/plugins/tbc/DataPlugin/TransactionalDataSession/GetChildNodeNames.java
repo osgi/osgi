@@ -23,86 +23,92 @@
  * property of their respective owners. All rights reserved.
  */
 
-/*
- * REVISION HISTORY:
+/* REVISION HISTORY:
  *
- * Date          Author(s)
- * CR            Headline
- * ============  ==============================================================
- * Feb 25, 2005  Andre Assad
- * 11            Implement DMT Use Cases 
- * ============  ==============================================================
+ * Date         Author(s)
+ * CR           Headline
+ * ===========  ==============================================================
+ * 26/01/2005   Andre Assad
+ * 1            Implement TCK
+ * ===========  ==============================================================
+ * 15/02/2005   Leonardo Barros
+ * 1            Updates after formal inspection (BTC_MEG_TCK_CODE-INSPR-002)
+ * ===========  ==============================================================
+ * 01/03/2005   Andre Assad
+ * 11           Implement TCK Use Cases
+ * ===========  ==============================================================
  */
 
-package org.osgi.test.cases.dmt.plugins.tbc.DataPluginFactory.TransactionalDataSession;
+package org.osgi.test.cases.dmt.plugins.tbc.DataPlugin.TransactionalDataSession;
 
 import org.osgi.service.dmt.DmtException;
 import org.osgi.service.dmt.DmtSession;
-import org.osgi.test.cases.dmt.plugins.tbc.DmtConstants;
 import org.osgi.test.cases.dmt.plugins.tbc.DmtTestControl;
-import org.osgi.test.cases.dmt.plugins.tbc.DataPluginFactory.TestDataPlugin;
-import org.osgi.test.cases.dmt.plugins.tbc.DataPluginFactory.TestDataPluginActivator;
+import org.osgi.test.cases.dmt.plugins.tbc.DataPlugin.TestDataPlugin;
+import org.osgi.test.cases.dmt.plugins.tbc.DataPlugin.TestDataPluginActivator;
 
 /**
- * @author Andre Assad
  * 
- * This test case validates the implementation of <code>deleteNode</code> method, 
+ * This test case validates the implementation of <code>getChildNodeNames<code> method, 
  * according to MEG specification
  */
-public class DeleteNode {
+public class GetChildNodeNames {
+
 	private DmtTestControl tbc;
 
-	public DeleteNode(DmtTestControl tbc) {
+	public GetChildNodeNames(DmtTestControl tbc) {
 		this.tbc = tbc;
 	}
 
 	public void run() {
-		testDeleteNode001();
-		testDeleteNode002();
+		testGetChildNodeNames001();
+		testGetChildNodeNames002();
+
 	}
 
 	/**
-	 * Asserts that DmtAdmin correctly forwards the call of deleteNode 
+	 * Asserts that DmtAdmin correctly forwards the call of getChildNodeNames 
 	 * to the correct plugin.
 	 * 
-	 * @spec ReadWriteDataSession.deleteNode(String[])
+	 * @spec ReadableDataSession.getChildNodeNames(String[])
 	 */
-	private void testDeleteNode001() {
+	private void testGetChildNodeNames001() {
 		DmtSession session = null;
 		try {
-			tbc.log("#testDeleteNode001");
+			tbc.log("#testGetChildNodeNames001");
 			session = tbc.getDmtAdmin().getSession(TestDataPluginActivator.ROOT,
 					DmtSession.LOCK_TYPE_ATOMIC);
-			session.deleteNode(TestDataPluginActivator.INTERIOR_NODE);
-			tbc.assertEquals("Asserts that DmtAdmin fowarded "+ TestDataPlugin.DELETENODE+" to the correct plugin",TestDataPlugin.DELETENODE,DmtConstants.TEMPORARY);
+			String[] child = session.getChildNodeNames(TestDataPluginActivator.ROOT);
+			tbc.assertEquals("Asserts that DmtAdmin fowarded "+ TestDataPlugin.GETCHILDNODENAMES+" to the correct plugin",TestDataPlugin.GETCHILDNODENAMES,child[0]);
 		} catch (Exception e) {
-			tbc.fail("Unexpected Exception: " + e.getClass().getName() + " [Message: " + e.getMessage() +"]");
+			tbc.fail("Unexpected Exception: " + e.getClass().getName()
+					+ " [Message: " + e.getMessage() + "]");
 		} finally {
 			tbc.cleanUp(session,true);
 		}
-
 	}
 
 	/**
 	 * Asserts that DmtAdmin correctly forwards the DmtException thrown by the plugin
 	 * 
-	 * @spec ReadWriteDataSession.deleteNode(String[])
+	 * @spec ReadableDataSession.getChildNodeNames(String[])
 	 */
-	private void testDeleteNode002() {
+	private void testGetChildNodeNames002() {
 		DmtSession session = null;
 		try {
-			tbc.log("#testDeleteNode002");
+			tbc.log("#testGetChildNodeNames002");
 			session = tbc.getDmtAdmin().getSession(TestDataPluginActivator.ROOT,
 					DmtSession.LOCK_TYPE_ATOMIC);
-			session.deleteNode(TestDataPluginActivator.INTERIOR_NODE_EXCEPTION);
-			tbc.failException("#", DmtException.class);
+			
+			session.getChildNodeNames(TestDataPluginActivator.INTERIOR_NODE_EXCEPTION);
+			tbc.failException("", DmtException.class);
 		} catch (DmtException e) {
 			tbc.assertEquals("Asserts that DmtAdmin fowarded the DmtException with the correct subtree: ", TestDataPluginActivator.INTERIOR_NODE_EXCEPTION, e
 					.getURI());			
-			tbc.assertEquals("Asserts that DmtAdmin fowarded the DmtException with the correct code: ", DmtException.REMOTE_ERROR, e
+			tbc.assertEquals("Asserts that DmtAdmin fowarded the DmtException with the correct code: ", DmtException.DATA_STORE_FAILURE, e
 					.getCode());
 			tbc.assertTrue("Asserts that DmtAdmin fowarded the DmtException with the correct message. ", e
-					.getMessage().indexOf(TestDataPlugin.DELETENODE)>-1);
+					.getMessage().indexOf(TestDataPlugin.GETCHILDNODENAMES)>-1);
 		} catch (Exception e) {
 			tbc.fail("Expected " + DmtException.class.getName() + " but was "
 					+ e.getClass().getName());
@@ -110,5 +116,4 @@ public class DeleteNode {
 			tbc.cleanUp(session,true);
 		}
 	}
-
 }

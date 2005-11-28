@@ -38,9 +38,16 @@ package org.osgi.test.cases.dmt.plugins.tbc.Plugins;
 
 import java.util.Date;
 
-import org.osgi.service.dmt.*;
-import org.osgi.service.dmt.spi.*;
-import org.osgi.test.cases.dmt.plugins.tbc.*;
+import org.osgi.service.dmt.DmtData;
+import org.osgi.service.dmt.DmtException;
+import org.osgi.service.dmt.DmtSession;
+import org.osgi.service.dmt.MetaNode;
+import org.osgi.service.dmt.spi.DataPlugin;
+import org.osgi.service.dmt.spi.ReadWriteDataSession;
+import org.osgi.service.dmt.spi.ReadableDataSession;
+import org.osgi.service.dmt.spi.TransactionalDataSession;
+import org.osgi.test.cases.dmt.plugins.tbc.DmtConstants;
+import org.osgi.test.cases.dmt.plugins.tbc.DmtTestControl;
 
 public class FatalExceptionDataPlugin implements DataPlugin, TransactionalDataSession {
 	
