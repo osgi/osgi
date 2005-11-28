@@ -40,7 +40,7 @@ import org.osgi.service.dmt.DmtSession;
  * characters appear escaped in the segments.
  * <p>
  */
-public interface DataPluginFactory {
+public interface DataPlugin {
     /**
      * The registration parameter that specifies the subtrees handled by this
      * plugin. The parameter with this name must contain the array of root URIs
