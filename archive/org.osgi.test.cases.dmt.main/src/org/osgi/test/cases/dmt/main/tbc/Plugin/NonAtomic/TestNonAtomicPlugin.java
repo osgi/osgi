@@ -37,6 +37,7 @@
 package org.osgi.test.cases.dmt.main.tbc.Plugin.NonAtomic;
 
 import java.util.Date;
+
 import org.osgi.service.dmt.DmtData;
 import org.osgi.service.dmt.DmtException;
 import org.osgi.service.dmt.DmtSession;
@@ -50,8 +51,8 @@ import org.osgi.test.cases.dmt.main.tbc.DmtTestControl;
 /**
  * @author Luiz Felipe Guimaraes
  * 
- * A test implementation of DataPlugin. This implementation validates the
- * DmtSession calls to a subtree handled by a DataPlugin.
+ * A test implementation of DataPluginFactory. This implementation validates the
+ * DmtSession calls to a subtree handled by a DataPluginFactory.
  * 
  */
 public class TestNonAtomicPlugin implements DataPlugin, ReadableDataSession {
