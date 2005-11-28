@@ -14,17 +14,15 @@ public final class MidletHandle extends ApplicationHandle {
 	private MidletDescriptor    	midletDescriptor;
 	private MidletContainer			  midletContainer;
 	private BundleContext			    bc;
-	private Object					      baseClass;
 
 	public final static String PAUSED = "PAUSED";
 	
 	public MidletHandle(BundleContext bc, String instanceId, MidletDescriptor descriptor,  
-			                MidletContainer midletContainer, MIDlet midlet, Object baseClass) {
+			                MidletContainer midletContainer, MIDlet midlet) {
 		super(instanceId, descriptor);
 		this.bc = bc;
 		this.midletContainer = midletContainer;
 		this.midlet = midlet;
-		this.baseClass = baseClass;
 		midletDescriptor = descriptor;
 		status = null;
 	}

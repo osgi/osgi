@@ -140,7 +140,7 @@ public final class MidletDescriptor extends ApplicationDescriptor implements Ser
 			throw new Exception("Cannot create meglet instance!");
 		else {
 			MidletHandle midHnd = new MidletHandle(bc, instID, this, 
-					                                   midletContainer, midlet, startClass );
+					                                   midletContainer, midlet );
       midHnd.startHandle(args);
 			return midHnd;
 		}
