@@ -69,13 +69,12 @@ public class OATApplicationContextImpl implements ApplicationContext, ServiceLis
 		public boolean match( String []ifaces, Hashtable props ) {
 			for( int n=0; n != ifaces.length; n++ )
 				for( int p=0; p != interfaces.length; p++ ) {
-					if( ifaces[ n ].equals( interfaces[ p ]))
-						for( int w=0; w != filters.length; w++ ) {
-							if( filters[ w ] == null )
-								return true;
-							if( filters[ w ].match( props ) )
-								return true;
-						}
+					if( ifaces[ n ].equals( interfaces[ p ])) {
+						if( filters[ n ] == null )
+							return true;
+						if( filters[ n ].match( props ) )
+							return true;
+					}
 				}
 			return false;
 		}
