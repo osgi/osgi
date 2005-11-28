@@ -702,7 +702,8 @@ public class BTool extends Task {
 		if (r.getPath().endsWith("CVS"))
 			return null;
 		if (r.getPath().endsWith(".java")
-				|| r.getPath().endsWith("package.html")) {
+				|| r.getPath().endsWith("package.html")
+				|| r.getPath().endsWith("packageinfo")) {
 			if (sources) {
 				Resource rr = new Resource(this, r.getSource(), sourcesPrefix
 						+ r.getPath());
