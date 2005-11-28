@@ -39,7 +39,7 @@ package org.osgi.test.cases.dmt.plugins.tbc.Others;
 import org.osgi.service.dmt.DmtSession;
 import org.osgi.test.cases.dmt.plugins.tbc.DmtConstants;
 import org.osgi.test.cases.dmt.plugins.tbc.DmtTestControl;
-import org.osgi.test.cases.dmt.plugins.tbc.DataPluginFactory.TestDataPlugin;
+import org.osgi.test.cases.dmt.plugins.tbc.DataPlugin.TestDataPlugin;
 import org.osgi.test.cases.dmt.plugins.tbc.ExecPlugin.TestExecPlugin;
 import org.osgi.test.cases.dmt.plugins.tbc.ExecPlugin.TestExecPluginActivator;
 import org.osgi.test.cases.dmt.plugins.tbc.Plugins.OverlappingDataPluginActivator;

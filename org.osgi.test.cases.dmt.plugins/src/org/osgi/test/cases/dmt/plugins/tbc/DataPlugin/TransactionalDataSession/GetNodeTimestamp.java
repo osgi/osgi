@@ -1,13 +1,13 @@
 /*
  * Copyright (c) The OSGi Alliance (2004). All Rights Reserved.
- * 
+ *
  * Implementation of certain elements of the OSGi Specification may be subject
  * to third party intellectual property rights, including without limitation,
  * patent rights (such a third party may or may not be a member of the OSGi
  * Alliance). The OSGi Alliance is not responsible and shall not be held
  * responsible in any manner for identifying or failing to identify any or all
  * such third party intellectual property rights.
- * 
+ *
  * This document and the information contained herein are provided on an "AS IS"
  * basis and THE OSGI ALLIANCE DISCLAIMS ALL WARRANTIES, EXPRESS OR IMPLIED,
  * INCLUDING BUT NOT LIMITED TO ANY WARRANTY THAT THE USE OF THE INFORMATION
@@ -18,7 +18,7 @@
  * EXEMPLARY, INCIDENTIAL, PUNITIVE OR CONSEQUENTIAL DAMAGES OF ANY KIND IN
  * CONNECTION WITH THIS DOCUMENT OR THE INFORMATION CONTAINED HEREIN, EVEN IF
  * ADVISED OF THE POSSIBILITY OF SUCH LOSS OR DAMAGE.
- * 
+ *
  * All Company, brand and product names may be trademarks that are the sole
  * property of their respective owners. All rights reserved.
  */
@@ -29,85 +29,91 @@
  * Date          Author(s)
  * CR            Headline
  * ============  ==============================================================
- * Mar 02, 2005  Andre Assad
- * 11            Implement DMT Use Cases
+ * Mar 04, 2005  Andre Assad
+ * 11		     Implement DMT Use Cases
  * ============  ==============================================================
  */
 
-package org.osgi.test.cases.dmt.plugins.tbc.DataPluginFactory.TransactionalDataSession;
+package org.osgi.test.cases.dmt.plugins.tbc.DataPlugin.TransactionalDataSession;
+
+import java.util.Date;
 
 import org.osgi.service.dmt.DmtException;
 import org.osgi.service.dmt.DmtSession;
-import org.osgi.test.cases.dmt.plugins.tbc.DmtConstants;
 import org.osgi.test.cases.dmt.plugins.tbc.DmtTestControl;
-import org.osgi.test.cases.dmt.plugins.tbc.DataPluginFactory.TestDataPlugin;
-import org.osgi.test.cases.dmt.plugins.tbc.DataPluginFactory.TestDataPluginActivator;
+import org.osgi.test.cases.dmt.plugins.tbc.DataPlugin.TestDataPlugin;
+import org.osgi.test.cases.dmt.plugins.tbc.DataPlugin.TestDataPluginActivator;
 
 /**
  * @author Andre Assad
  * 
- * This test case validates the implementation of <code>renameNode</code> method, 
+ * This test case validates the implementation of <code>getNodeTimestamp</code> method, 
  * according to MEG specification
  */
-public class RenameNode {
+public class GetNodeTimestamp {
 	private DmtTestControl tbc;
-	
-	public RenameNode(DmtTestControl tbc) {
+
+	public GetNodeTimestamp(DmtTestControl tbc) {
 		this.tbc = tbc;
 	}
+
 	public void run() {
-		testRenameNode001();
-		testRenameNode002();
+        testGetNodeTimestamp001();
+        testGetNodeTimestamp002();
 	}
 
 	/**
-	 * Asserts that DmtAdmin correctly forwards the call of renameNode to the correct plugin.
+	 * Asserts that DmtAdmin correctly forwards the call of getNodeTimestamp 
+	 * to the correct plugin.
 	 * 
-	 * @spec ReadWriteDataSession.renameNode(String[],String)
+	 * @spec ReadableDataSession.getNodeTimestamp(String[])
 	 */
-	private void testRenameNode001() {
+	private void testGetNodeTimestamp001() {
 		DmtSession session = null;
-		
 		try {
-			tbc.log("#testRenameNode001");
+			tbc.log("#testGetNodeTimestamp001");
 			session = tbc.getDmtAdmin().getSession(TestDataPluginActivator.ROOT,
 					DmtSession.LOCK_TYPE_ATOMIC);
-			String newName = "inexistent";
-			session.renameNode(TestDataPluginActivator.INTERIOR_NODE, newName);
-			tbc.assertEquals("Asserts that DmtAdmin fowarded "+ TestDataPlugin.RENAMENODE+" to the correct plugin",TestDataPlugin.RENAMENODE,DmtConstants.TEMPORARY);
-			tbc.assertEquals("Asserts that DmtAdmin the parameter was fowarded to the correct plugin without modification",newName,DmtConstants.PARAMETER_2);
+			Date date = session.getNodeTimestamp(TestDataPluginActivator.ROOT);
+			tbc.assertEquals("Asserts that DmtAdmin fowarded "+ TestDataPlugin.GETNODETIMESTAMP
+					+" to the correct plugin",TestDataPlugin.GETNODETIMESTAMP_VALUE,date);
 		} catch (Exception e) {
-			tbc.fail("Unexpected Exception: " + e.getClass().getName() + " [Message: " + e.getMessage() +"]");
+			tbc.fail("Unexpected Exception: " + e.getClass().getName()
+					+ " [Message: " + e.getMessage() + "]");
 		} finally {
 			tbc.cleanUp(session,true);
 		}
+
 	}
 
 	/**
 	 * Asserts that DmtAdmin correctly forwards the DmtException thrown by the plugin
 	 * 
-	 * @spec ReadWriteDataSession.renameNode(String[],String)
+	 * @spec ReadableDataSession.getNodeTimestamp(String[])
 	 */
-	private void testRenameNode002() {
+	private void testGetNodeTimestamp002() {
 		DmtSession session = null;
 		try {
-			tbc.log("#testRenameNode002");
+			tbc.log("#testGetNodeTimestamp002");
 			session = tbc.getDmtAdmin().getSession(TestDataPluginActivator.ROOT,
 					DmtSession.LOCK_TYPE_ATOMIC);
-			session.renameNode(TestDataPluginActivator.INTERIOR_NODE_EXCEPTION, "inexistent");
-			tbc.failException("#", DmtException.class);
+			session.getNodeTimestamp(TestDataPluginActivator.INTERIOR_NODE_EXCEPTION);
+			tbc.failException("", DmtException.class);
+			
 		} catch (DmtException e) {
-			tbc.assertEquals("Asserts that DmtAdmin fowarded the DmtException with the correct subtree: ", TestDataPluginActivator.INTERIOR_NODE_EXCEPTION, e
-					.getURI());			
-			tbc.assertEquals("Asserts that DmtAdmin fowarded the DmtException with the correct code: ", DmtException.NODE_ALREADY_EXISTS, e
-					.getCode());
-			tbc.assertTrue("Asserts that DmtAdmin fowarded the DmtException with the correct message. ", e
-					.getMessage().indexOf(TestDataPlugin.RENAMENODE)>-1);
+			
+			tbc.assertEquals("Asserts that DmtAdmin fowarded the DmtException with the correct subtree: ", 
+					TestDataPluginActivator.INTERIOR_NODE_EXCEPTION, e.getURI());			
+			tbc.assertEquals("Asserts that DmtAdmin fowarded the DmtException with the correct code: ", 
+					DmtException.URI_TOO_LONG, e.getCode());
+			tbc.assertTrue("Asserts that DmtAdmin fowarded the DmtException with the correct message. ", 
+					e.getMessage().indexOf(TestDataPlugin.GETNODETIMESTAMP)>-1);
 		} catch (Exception e) {
 			tbc.fail("Expected " + DmtException.class.getName() + " but was "
-					+ e.getClass().getName());
+					+ e.getClass().getName());	
 		} finally {
 			tbc.cleanUp(session,true);
 		}
 	}
+    
 }

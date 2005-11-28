@@ -29,77 +29,85 @@
  * Date          Author(s)
  * CR            Headline
  * ============  ==============================================================
- * July 18, 2005 Alexandre Santos
- * 11            Implement DMT Use Cases 
+ * Mar 02, 2005  Andre Assad
+ * 11            Implement DMT Use Cases
  * ============  ==============================================================
  */
 
-package org.osgi.test.cases.dmt.plugins.tbc.DataPluginFactory.TransactionalDataSession;
+package org.osgi.test.cases.dmt.plugins.tbc.DataPlugin.TransactionalDataSession;
 
-import org.osgi.service.dmt.Acl;
 import org.osgi.service.dmt.DmtException;
 import org.osgi.service.dmt.DmtSession;
+import org.osgi.test.cases.dmt.plugins.tbc.DmtConstants;
 import org.osgi.test.cases.dmt.plugins.tbc.DmtTestControl;
-import org.osgi.test.cases.dmt.plugins.tbc.DataPluginFactory.TestDataPlugin;
-import org.osgi.test.cases.dmt.plugins.tbc.DataPluginFactory.TestDataPluginActivator;
+import org.osgi.test.cases.dmt.plugins.tbc.DataPlugin.TestDataPlugin;
+import org.osgi.test.cases.dmt.plugins.tbc.DataPlugin.TestDataPluginActivator;
 
 /**
- * @author Alexandre Santos
+ * @author Andre Assad
  * 
- * This test case validates the implementation of <code>nodeChanged</code> method, 
+ * This test case validates the implementation of <code>renameNode</code> method, 
  * according to MEG specification
  */
-public class NodeChanged {
-
+public class RenameNode {
 	private DmtTestControl tbc;
-
-	public NodeChanged(DmtTestControl tbc) {
+	
+	public RenameNode(DmtTestControl tbc) {
 		this.tbc = tbc;
 	}
-
 	public void run() {
-		testNodeChanged001();
+		testRenameNode001();
+		testRenameNode002();
 	}
 
 	/**
-	 * Asserts that our plugin implementation is notified when the 
-	 * given node has changed outside the scope of our plugin.
+	 * Asserts that DmtAdmin correctly forwards the call of renameNode to the correct plugin.
 	 * 
-	 * @spec ReadableDataSession.nodeChanged(String[])
+	 * @spec ReadWriteDataSession.renameNode(String[],String)
 	 */
-	private void testNodeChanged001() {
+	private void testRenameNode001() {
 		DmtSession session = null;
+		
 		try {
-			tbc.log("#testNodeChanged001");
-			String[] principal = { "www.cesar.org.br" };
-			int[] perm = { org.osgi.service.dmt.Acl.GET
-					| org.osgi.service.dmt.Acl.EXEC };
-
-			Acl acl = new Acl(principal, perm);
-
+			tbc.log("#testRenameNode001");
 			session = tbc.getDmtAdmin().getSession(TestDataPluginActivator.ROOT,
 					DmtSession.LOCK_TYPE_ATOMIC);
-			TestDataPlugin.setNodeChangedThrowsException(true);
-			session.setNodeAcl(TestDataPluginActivator.INTERIOR_NODE_EXCEPTION, acl);
-			
-			tbc.failException("#", DmtException.class);
-		} catch (DmtException e) {
-			tbc.assertEquals("Asserts that DmtAdmin fowarded the DmtException with the correct subtree: ", TestDataPluginActivator.INTERIOR_NODE_EXCEPTION, e
-				.getURI());			
-			tbc.assertEquals("Asserts that DmtAdmin fowarded the DmtException with the correct code: ", DmtException.DATA_STORE_FAILURE, e
-				.getCode());
-			tbc.assertTrue(
-					"Asserts that DmtAdmin fowarded the DmtException with the correct message. ",
-					e.getMessage().indexOf(TestDataPlugin.NODECHANGED) > -1);
-
+			String newName = "inexistent";
+			session.renameNode(TestDataPluginActivator.INTERIOR_NODE, newName);
+			tbc.assertEquals("Asserts that DmtAdmin fowarded "+ TestDataPlugin.RENAMENODE+" to the correct plugin",TestDataPlugin.RENAMENODE,DmtConstants.TEMPORARY);
+			tbc.assertEquals("Asserts that DmtAdmin the parameter was fowarded to the correct plugin without modification",newName,DmtConstants.PARAMETER_2);
 		} catch (Exception e) {
-			tbc.fail("Expected " + DmtException.class.getName()
-					+ " but was " + e.getClass().getName());
+			tbc.fail("Unexpected Exception: " + e.getClass().getName() + " [Message: " + e.getMessage() +"]");
 		} finally {
 			tbc.cleanUp(session,true);
-			tbc.cleanAcl(TestDataPluginActivator.INTERIOR_NODE);
-			TestDataPlugin.setNodeChangedThrowsException(false);
 		}
 	}
 
+	/**
+	 * Asserts that DmtAdmin correctly forwards the DmtException thrown by the plugin
+	 * 
+	 * @spec ReadWriteDataSession.renameNode(String[],String)
+	 */
+	private void testRenameNode002() {
+		DmtSession session = null;
+		try {
+			tbc.log("#testRenameNode002");
+			session = tbc.getDmtAdmin().getSession(TestDataPluginActivator.ROOT,
+					DmtSession.LOCK_TYPE_ATOMIC);
+			session.renameNode(TestDataPluginActivator.INTERIOR_NODE_EXCEPTION, "inexistent");
+			tbc.failException("#", DmtException.class);
+		} catch (DmtException e) {
+			tbc.assertEquals("Asserts that DmtAdmin fowarded the DmtException with the correct subtree: ", TestDataPluginActivator.INTERIOR_NODE_EXCEPTION, e
+					.getURI());			
+			tbc.assertEquals("Asserts that DmtAdmin fowarded the DmtException with the correct code: ", DmtException.NODE_ALREADY_EXISTS, e
+					.getCode());
+			tbc.assertTrue("Asserts that DmtAdmin fowarded the DmtException with the correct message. ", e
+					.getMessage().indexOf(TestDataPlugin.RENAMENODE)>-1);
+		} catch (Exception e) {
+			tbc.fail("Expected " + DmtException.class.getName() + " but was "
+					+ e.getClass().getName());
+		} finally {
+			tbc.cleanUp(session,true);
+		}
+	}
 }

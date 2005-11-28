@@ -39,15 +39,12 @@ import org.osgi.service.dmt.DmtException;
 import org.osgi.service.dmt.DmtSession;
 import org.osgi.test.cases.dmt.plugins.tbc.DmtConstants;
 import org.osgi.test.cases.dmt.plugins.tbc.DmtTestControl;
-import org.osgi.test.cases.dmt.plugins.tbc.DataPluginFactory.TestDataPluginActivator;
+import org.osgi.test.cases.dmt.plugins.tbc.DataPlugin.TestDataPluginActivator;
 import org.osgi.test.cases.dmt.plugins.tbc.Plugins.FatalExceptionDataPlugin;
 import org.osgi.test.cases.dmt.plugins.tbc.Plugins.FatalExceptionDataPluginActivator;
 import org.osgi.test.cases.dmt.plugins.tbc.Plugins.NewDataPlugin;
 import org.osgi.test.cases.dmt.plugins.tbc.Plugins.NewDataPluginActivator;
-
-/**
- * This test case validates the use cases of the specification.
- */
+ 
 public class UseCases {
 
 	private DmtTestControl tbc;

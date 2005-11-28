@@ -1,13 +1,13 @@
 /*
  * Copyright (c) The OSGi Alliance (2004). All Rights Reserved.
- *
+ * 
  * Implementation of certain elements of the OSGi Specification may be subject
  * to third party intellectual property rights, including without limitation,
  * patent rights (such a third party may or may not be a member of the OSGi
  * Alliance). The OSGi Alliance is not responsible and shall not be held
  * responsible in any manner for identifying or failing to identify any or all
  * such third party intellectual property rights.
- *
+ * 
  * This document and the information contained herein are provided on an "AS IS"
  * basis and THE OSGI ALLIANCE DISCLAIMS ALL WARRANTIES, EXPRESS OR IMPLIED,
  * INCLUDING BUT NOT LIMITED TO ANY WARRANTY THAT THE USE OF THE INFORMATION
@@ -18,7 +18,7 @@
  * EXEMPLARY, INCIDENTIAL, PUNITIVE OR CONSEQUENTIAL DAMAGES OF ANY KIND IN
  * CONNECTION WITH THIS DOCUMENT OR THE INFORMATION CONTAINED HEREIN, EVEN IF
  * ADVISED OF THE POSSIBILITY OF SUCH LOSS OR DAMAGE.
- *
+ * 
  * All Company, brand and product names may be trademarks that are the sole
  * property of their respective owners. All rights reserved.
  */
@@ -29,54 +29,71 @@
  * Date          Author(s)
  * CR            Headline
  * ============  ==============================================================
- * Mar 04, 2005  Andre Assad
- * 11		     Implement DMT Use Cases
+ * Feb 25, 2005  Andre Assad
+ * 11            Implement DMT Use Cases 
  * ============  ==============================================================
  */
 
-package org.osgi.test.cases.dmt.plugins.tbc.DataPluginFactory.TransactionalDataSession;
+package org.osgi.test.cases.dmt.plugins.tbc.DataPlugin.TransactionalDataSession;
 
-import org.osgi.service.dmt.DmtData;
 import org.osgi.service.dmt.DmtException;
 import org.osgi.service.dmt.DmtSession;
+import org.osgi.test.cases.dmt.plugins.tbc.DmtConstants;
 import org.osgi.test.cases.dmt.plugins.tbc.DmtTestControl;
-import org.osgi.test.cases.dmt.plugins.tbc.DataPluginFactory.TestDataPlugin;
-import org.osgi.test.cases.dmt.plugins.tbc.DataPluginFactory.TestDataPluginActivator;
+import org.osgi.test.cases.dmt.plugins.tbc.DataPlugin.TestDataPlugin;
+import org.osgi.test.cases.dmt.plugins.tbc.DataPlugin.TestDataPluginActivator;
 
 /**
  * @author Andre Assad
  * 
- * This test case validates the implementation of <code>getNodeValue</code> method, 
+ * This test case validates the implementation of <code>copy</code> method,
  * according to MEG specification
  */
-public class GetNodeValue {
+public class Copy {
+
 	private DmtTestControl tbc;
 
-	public GetNodeValue(DmtTestControl tbc) {
+	public Copy(DmtTestControl tbc) {
 		this.tbc = tbc;
 	}
 
 	public void run() {
-        testGetNodeValue001();
-        testGetNodeValue002();
+		testCopy001();
+		testCopy002();
 	}
 
 	/**
-	 * Asserts that DmtAdmin correctly forwards the call of getNodeValue 
+	 * Asserts that DmtAdmin correctly forwards the call of DmtSession methods 
 	 * to the correct plugin.
 	 * 
-	 * @spec ReadableDataSession.getNodeValue(String[])
+	 * @spec ReadWriteDataSession.copy(String[],String[],boolean)
 	 */
-	private void testGetNodeValue001() {
+	private void testCopy001() {
 		DmtSession session = null;
 		try {
-			tbc.log("#testGetNodeValue001");
-			session = tbc.getDmtAdmin().getSession(TestDataPluginActivator.ROOT,
-					DmtSession.LOCK_TYPE_ATOMIC);
-			DmtData nodeValue = session.getNodeValue(TestDataPluginActivator.LEAF_NODE);
-			tbc.assertTrue("Asserts that DmtAdmin fowarded "+ TestDataPlugin.GETNODEVALUE
-					+" to the correct plugin",nodeValue.equals(TestDataPlugin.GETNODEVALUE_VALUE));
+			tbc.log("#testCopy001");
 
+			session = tbc.getDmtAdmin().getSession(
+					TestDataPluginActivator.ROOT,
+					DmtSession.LOCK_TYPE_ATOMIC);
+			session.copy(TestDataPluginActivator.INTERIOR_NODE,
+					TestDataPluginActivator.INEXISTENT_NODE, true);
+
+			tbc.assertEquals("Asserts that DmtAdmin fowarded "
+					+ TestDataPlugin.COPY
+					+ " to the correct plugin",
+					TestDataPlugin.COPY, DmtConstants.TEMPORARY);
+
+			tbc.assertEquals("Asserts that DmtAdmin fowarded "
+					+ TestDataPlugin.COPY
+					+ " to the correct plugin",
+					TestDataPluginActivator.INEXISTENT_NODE,
+					DmtConstants.PARAMETER_2);
+
+			tbc.assertEquals("Asserts that DmtAdmin fowarded "
+					+ TestDataPlugin.COPY
+					+ " to the correct plugin", String.valueOf(true),
+					DmtConstants.PARAMETER_3);
 		} catch (Exception e) {
 			tbc.fail("Unexpected Exception: " + e.getClass().getName()
 					+ " [Message: " + e.getMessage() + "]");
@@ -88,24 +105,33 @@ public class GetNodeValue {
 	/**
 	 * Asserts that DmtAdmin correctly forwards the DmtException thrown by the plugin
 	 * 
-	 * @spec ReadableDataSession.getNodeValue(String[])
+	 * @spec ReadWriteDataSession.copy(String[],String[],boolean)
 	 */
-	private void testGetNodeValue002() {
+	private void testCopy002() {
 		DmtSession session = null;
 		try {
-			tbc.log("#testGetNodeValue002");
-			session = tbc.getDmtAdmin().getSession(TestDataPluginActivator.ROOT,
+			tbc.log("#testCopy002");
+			session = tbc.getDmtAdmin().getSession(
+					TestDataPluginActivator.ROOT,
 					DmtSession.LOCK_TYPE_ATOMIC);
-			session.getNodeValue(TestDataPluginActivator.LEAF_NODE_EXCEPTION);
-			tbc.failException("", DmtException.class);
+			session.copy(TestDataPluginActivator.INTERIOR_NODE_EXCEPTION3,
+					TestDataPluginActivator.INEXISTENT_NODE, true);
+			tbc.failException("#", DmtException.class);
 		} catch (DmtException e) {
-			
-			tbc.assertEquals("Asserts that DmtAdmin fowarded the DmtException with the correct subtree: ", TestDataPluginActivator.LEAF_NODE_EXCEPTION, e
-					.getURI());			
-			tbc.assertEquals("Asserts that DmtAdmin fowarded the DmtException with the correct code: ", DmtException.COMMAND_NOT_ALLOWED, e
-					.getCode());
-			tbc.assertTrue("Asserts that DmtAdmin fowarded the DmtException with the correct message. ", e
-					.getMessage().indexOf(TestDataPlugin.GETNODEVALUE)>-1);
+			tbc
+					.assertEquals(
+							"Asserts that DmtAdmin fowarded the DmtException with the correct subtree: ",
+							TestDataPluginActivator.INTERIOR_NODE_EXCEPTION3, e
+									.getURI());
+			tbc
+					.assertEquals(
+							"Asserts that DmtAdmin fowarded the DmtException with the correct code: ",
+							DmtException.URI_TOO_LONG, e.getCode());
+			tbc
+					.assertTrue(
+							"Asserts that DmtAdmin fowarded the DmtException with the correct message. ",
+							e.getMessage().indexOf(
+									TestDataPlugin.COPY) > -1);
 		} catch (Exception e) {
 			tbc.fail("Expected " + DmtException.class.getName() + " but was "
 					+ e.getClass().getName());
@@ -113,5 +139,4 @@ public class GetNodeValue {
 			tbc.cleanUp(session,true);
 		}
 	}
-    
 }

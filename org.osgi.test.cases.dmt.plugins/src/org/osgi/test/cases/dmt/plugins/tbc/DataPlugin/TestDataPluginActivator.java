@@ -34,9 +34,10 @@
  * ============  ==============================================================
  */
 
-package org.osgi.test.cases.dmt.plugins.tbc.DataPluginFactory;
+package org.osgi.test.cases.dmt.plugins.tbc.DataPlugin;
 
 import java.util.Hashtable;
+
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;

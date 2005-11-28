@@ -29,77 +29,79 @@
  * Date          Author(s)
  * CR            Headline
  * ============  ==============================================================
- * Mar 04, 2005  Andre Assad
+ * Mar 14, 2005  Luiz Felipe Guimaraes
  * 11		     Implement DMT Use Cases
  * ============  ==============================================================
  */
 
-package org.osgi.test.cases.dmt.plugins.tbc.DataPluginFactory.TransactionalDataSession;
+package org.osgi.test.cases.dmt.plugins.tbc.DataPlugin.TransactionalDataSession;
 
 import org.osgi.service.dmt.DmtSession;
 import org.osgi.test.cases.dmt.plugins.tbc.DmtTestControl;
-import org.osgi.test.cases.dmt.plugins.tbc.DataPluginFactory.TestDataPlugin;
-import org.osgi.test.cases.dmt.plugins.tbc.DataPluginFactory.TestDataPluginActivator;
+import org.osgi.test.cases.dmt.plugins.tbc.DataPlugin.TestDataPlugin;
+import org.osgi.test.cases.dmt.plugins.tbc.DataPlugin.TestDataPluginActivator;
 
 /**
- * @author Andre Assad
+ * @author Luiz Felipe Guimaraes
  * 
- * This test case validates the implementation of <code>isNodeUri</code> method, 
+ * This test case validates the implementation of <code>isLeafNode</code> method, 
  * according to MEG specification
  */
-public class IsNodeUri {
+public class IsLeafNode {
 	private DmtTestControl tbc;
 
-	public IsNodeUri(DmtTestControl tbc) {
+	public IsLeafNode(DmtTestControl tbc) {
 		this.tbc = tbc;
 	}
 
 	public void run() {
-		testIsNodeUri001();
-		testIsNodeUri002();
+		testIsLeafNode001();
+		testIsLeafNode002();
 	}
 
 	/**
-	 * Asserts that DmtAdmin correctly forwards the call of isNodeUri to the correct plugin.
+	 * Asserts that DmtAdmin correctly forwards the call of isLeafNode to the correct plugin.
 	 * 
-	 * @spec ReadableDataSession.isNodeUri(String[])
+	 * @spec ReadableDataSession.isLeafNode(String[])
 	 */
-	private void testIsNodeUri001() {
+
+	private void testIsLeafNode001() {
 		DmtSession session = null;
 		try {
-			tbc.log("#testIsNodeUri001");
+			tbc.log("#testIsLeafNode001");
 			session = tbc.getDmtAdmin().getSession(TestDataPluginActivator.ROOT,
 					DmtSession.LOCK_TYPE_ATOMIC);
-			tbc.assertTrue("Asserts that DmtAdmin fowarded "+ TestDataPlugin.ISNODEURI
-					+" to the correct plugin",session.isNodeUri(TestDataPluginActivator.INTERIOR_NODE));
+			tbc.assertTrue("Asserts that DmtAdmin fowarded "+ TestDataPlugin.ISLEAFNODE
+					+" to the correct plugin",session.isLeafNode(TestDataPluginActivator.LEAF_NODE));
 
 		} catch (Exception e) {
 			tbc.fail("Unexpected Exception: " + e.getClass().getName()
 					+ " [Message: " + e.getMessage() + "]");
 		} finally {
-			tbc.closeSession(session);
+			tbc.cleanUp(session,true);
 		}
 	}
 
 	/**
-	 * Asserts that DmtAdmin correctly forwards the call of isNodeUri to the correct plugin.
+	 * Asserts that DmtAdmin correctly forwards the call of isLeafNode to the correct plugin.
 	 * 
-	 * @spec ReadableDataSession.isNodeUri(String[])
+	 * @spec ReadableDataSession.isLeafNode(String[])
 	 */
-	private void testIsNodeUri002() {
+
+	private void testIsLeafNode002() {
 		DmtSession session = null;
 		try {
-			tbc.log("#testIsNodeUri002");
+			tbc.log("#testIsLeafNode002");
 			session = tbc.getDmtAdmin().getSession(TestDataPluginActivator.ROOT,
 					DmtSession.LOCK_TYPE_ATOMIC);
-			tbc.assertTrue("Asserts that DmtAdmin fowarded "+ TestDataPlugin.ISNODEURI
-					+" to the correct plugin",!session.isNodeUri(TestDataPluginActivator.INEXISTENT_NODE));
+			tbc.assertTrue("Asserts that DmtAdmin fowarded "+ TestDataPlugin.ISLEAFNODE
+					+" to the correct plugin",!session.isLeafNode(TestDataPluginActivator.INTERIOR_NODE));
 
 		} catch (Exception e) {
 			tbc.fail("Unexpected Exception: " + e.getClass().getName()
 					+ " [Message: " + e.getMessage() + "]");
 		} finally {
-			tbc.closeSession(session);
+			tbc.cleanUp(session,true);
 		}
 	}
 }

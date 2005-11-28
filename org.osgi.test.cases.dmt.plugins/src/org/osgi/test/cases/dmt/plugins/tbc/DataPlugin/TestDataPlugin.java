@@ -34,9 +34,10 @@
  * ============  ==============================================================
  */
 
-package org.osgi.test.cases.dmt.plugins.tbc.DataPluginFactory;
+package org.osgi.test.cases.dmt.plugins.tbc.DataPlugin;
 
 import java.util.Date;
+
 import org.osgi.service.dmt.DmtData;
 import org.osgi.service.dmt.DmtException;
 import org.osgi.service.dmt.DmtSession;
@@ -52,8 +53,8 @@ import org.osgi.test.cases.dmt.plugins.tbc.TestPluginMetaNode;
 /**
  * @author Andre Assad
  * 
- * A test implementation of DataPlugin. This implementation validates the
- * DmtSession calls to a subtree handled by a DataPlugin.
+ * A test implementation of DataPluginFactory. This implementation validates the
+ * DmtSession calls to a subtree handled by a DataPluginFactory.
  * 
  */
 public class TestDataPlugin implements DataPlugin, TransactionalDataSession {
