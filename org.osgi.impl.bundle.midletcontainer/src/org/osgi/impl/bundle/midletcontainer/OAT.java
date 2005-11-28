@@ -35,7 +35,7 @@ import java.util.*;
 import org.osgi.service.application.*;
 import org.osgi.service.log.LogService;
 
-public class OAT implements OATContainerInterface, BundleListener {
+public class OAT implements OATContainerInterface, SynchronousBundleListener {
 	
 	private Hashtable oatHashtable = null;
 	private Hashtable oatAppDescHash = null;

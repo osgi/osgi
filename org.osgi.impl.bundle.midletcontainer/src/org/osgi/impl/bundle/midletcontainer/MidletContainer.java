@@ -12,7 +12,7 @@ import org.osgi.service.log.LogService;
 
 
 
-public class MidletContainer implements BundleListener, ServiceListener {
+public class MidletContainer implements SynchronousBundleListener, ServiceListener {
 	private BundleContext	        bc;
 	private Vector			          installedMidletBundles;
 	private Hashtable	           	bundleDescriptorHash;
