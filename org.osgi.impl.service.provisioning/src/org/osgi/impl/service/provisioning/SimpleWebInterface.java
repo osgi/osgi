@@ -295,11 +295,8 @@ public class SimpleWebInterface extends Thread {
 
 	/* Accept a request and process the request in the same thread. */
 	public void run() {
-		byte buffer[] = new byte[80];
-		int offset = 0, rc;
 		try {
 			Socket s = ss.accept();
-			String request = null;
 			/* Kick off a new thread to get the next request */
 			new SimpleWebInterface();
 			InputStream is = s.getInputStream();
@@ -316,14 +313,17 @@ public class SimpleWebInterface extends Thread {
 			s.close();
 		}
 		catch (Exception e) {
-			e.printStackTrace();
+			if ( ss != null )
+				e.printStackTrace();
 		}
 	}
 
 	void shutdown() {
+		
 		try {
-			ss.close();
+			ServerSocket sss = ss;
 			ss = null;
+			sss.close();
 			/*
 			 * It seems we can't return too quickly because the socket may not
 			 * be completely closed..
