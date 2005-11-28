@@ -109,7 +109,6 @@ public class PluginDownload extends DefaultHandler implements DataPluginFactory,
         {
             final String nodeUri = PluginCtx.covertUri(nodeUriArr, 2);
             final Entry entry = (Entry) ht.get(nodeUriArr[4]);
-            int i = 1;
             entry.setStatus(STATUS_STREAMING);
             
             DownloadAgent dwnlAgent = pluginCtx.getDownloadAgent();
