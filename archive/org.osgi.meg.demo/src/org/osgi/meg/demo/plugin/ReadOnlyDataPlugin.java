@@ -27,23 +27,16 @@
 
 package org.osgi.meg.demo.plugin;
 
-import java.util.Arrays;
-import java.util.Date;
-import java.util.Dictionary;
-import java.util.Hashtable;
-import org.osgi.framework.BundleActivator;
-import org.osgi.framework.BundleContext;
-import org.osgi.framework.ServiceRegistration;
-import org.osgi.service.dmt.DmtData;
-import org.osgi.service.dmt.DmtException;
-import org.osgi.service.dmt.DmtSession;
-import org.osgi.service.dmt.MetaNode;
+import java.util.*;
+
+import org.osgi.framework.*;
+import org.osgi.service.dmt.*;
 import org.osgi.service.dmt.spi.*;
 
 /**
  * Simple read-only data plugin for trial purposes.
  */
-public class ReadOnlyDataPlugin implements DataPluginFactory, 
+public class ReadOnlyDataPlugin implements DataPlugin, 
         ReadableDataSession, BundleActivator {
     private static final String[] PLUGIN_ROOT_PATH = new String[] {
         ".", "OSGi", "Application", "Test"
@@ -131,7 +124,7 @@ public class ReadOnlyDataPlugin implements DataPluginFactory,
         for(int i = 1; i < PLUGIN_ROOT_PATH.length; i++)
             rootUri.append('/').append(PLUGIN_ROOT_PATH[i]);
         properties.put("dataRootURIs", new String[] {rootUri.toString()});
-        reg = context.registerService(DataPluginFactory.class.getName(), 
+        reg = context.registerService(DataPlugin.class.getName(), 
                 this, properties);
     }
 
