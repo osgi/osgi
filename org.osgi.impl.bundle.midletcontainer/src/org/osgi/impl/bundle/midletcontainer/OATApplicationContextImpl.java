@@ -270,7 +270,7 @@ public class OATApplicationContextImpl implements ApplicationContext, ServiceLis
 				
 				Object[] result = new Object[ refs.length ];
 				for( int j=0; j != refs.length; j++ ) {
-					Service serv = getServiceByReference( refs[ i ] );
+					Service serv = getServiceByReference( refs[ j ] );
 					if( serv != null )
 						result[ j ] = serv.serviceObject;
 					else {
