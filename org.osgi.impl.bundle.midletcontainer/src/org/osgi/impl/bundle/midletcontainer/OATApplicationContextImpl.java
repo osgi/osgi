@@ -113,7 +113,6 @@ public class OATApplicationContextImpl implements ApplicationContext, ServiceLis
 
 	public void addServiceListener(ApplicationServiceListener listener, String []referenceNames)
 			throws IllegalArgumentException {
-		String filter=null;
 		
 		if( appHandle == null )
 			throw new IllegalStateException( "Application is not running!" );
