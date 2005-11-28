@@ -126,6 +126,8 @@ public class OATApplicationContextImpl implements ApplicationContext, ServiceLis
 			throw new NullPointerException( "ApplicationServiceListener cannot be null!" );
 		if( referenceNames == null )
 			throw new NullPointerException( "Reference names cannot be null!" );
+		if( referenceNames.length == 0 )
+			throw new IllegalArgumentException( "At least one reference name must be given!" );
 		
 		if( appHandle == null )
 			throw new IllegalStateException( "Application is not running!" );
