@@ -114,11 +114,19 @@ public class OATApplicationContextImpl implements ApplicationContext, ServiceLis
 
 	public void addServiceListener(ApplicationServiceListener listener, String referenceName)
 	throws IllegalArgumentException {
+		if( referenceName == null )
+			throw new NullPointerException( "Reference name cannot be null!" );
+		
 		addServiceListener( listener, new String[] {referenceName} );
 	}
 
 	public void addServiceListener(ApplicationServiceListener listener, String []referenceNames)
 			throws IllegalArgumentException {
+		
+		if( listener == null )
+			throw new NullPointerException( "ApplicationServiceListener cannot be null!" );
+		if( referenceNames == null )
+			throw new NullPointerException( "Reference names cannot be null!" );
 		
 		if( appHandle == null )
 			throw new IllegalStateException( "Application is not running!" );
