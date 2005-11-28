@@ -105,7 +105,7 @@ public class TestMidlet extends MIDlet implements EventHandler, ApplicationServi
 			  writeResult("PROPERTIES OK");
 		}
 		else if (event.getTopic().equals("com/nokia/megtest/AddServiceListener")) {
-			myApplicationContext.addServiceListener( this, "log" );
+			myApplicationContext.addServiceListener( this, "event" );
 			writeResult("SERVICE LISTENER ADDED");			
 		}
 		else if (event.getTopic().equals("com/nokia/megtest/RemoveServiceListener")) {
