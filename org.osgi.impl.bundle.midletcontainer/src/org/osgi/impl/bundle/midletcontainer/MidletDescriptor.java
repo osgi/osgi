@@ -85,8 +85,8 @@ public final class MidletDescriptor extends ApplicationDescriptor implements Ser
 		String localizedName = (String) names.get(locale);
 		if (localizedName == null) {
 			if ((localizedName = (String) names.get(defaultLanguage)) == null) {
-				Enumeration enum = names.keys();
-				String firstKey = (String) enum.nextElement();
+				Enumeration enumeration = names.keys();
+				String firstKey = (String) enumeration.nextElement();
 				localizedName = (String) names.get(firstKey);
 				locale = firstKey;
 			}
