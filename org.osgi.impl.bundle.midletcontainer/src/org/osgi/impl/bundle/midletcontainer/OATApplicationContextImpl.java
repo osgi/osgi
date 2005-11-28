@@ -331,7 +331,13 @@ public class OATApplicationContextImpl implements ApplicationContext, ServiceLis
 		
 		while( !serviceList.isEmpty() ) {
 			Service serv = (Service)serviceList.removeFirst();
-			bc.ungetService( serv.serviceReference );
+			if( serv.serviceObject != null ) {
+				try {
+					bc.ungetService( serv.serviceReference );
+				}catch( Exception e ){
+					Activator.log( LogService.LOG_ERROR, "Cannot unget reference '" + serv.serviceData.getInterface() + "'!", e );					
+				}
+			}
 		}
 		
 		while( !registeredServiceList.isEmpty() ) {
@@ -340,7 +346,11 @@ public class OATApplicationContextImpl implements ApplicationContext, ServiceLis
 				servReg.unregister();
 		}
 				
-		bc.removeServiceListener( this );
+		try {
+			bc.removeServiceListener( this );
+		}catch( Exception e ) {
+			Activator.log( LogService.LOG_ERROR, "Cannot remove application service listener!", e );								
+		}
 		
 		appHandle = null;
 		bc = null;
