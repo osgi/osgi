@@ -36,13 +36,8 @@
 
 package org.osgi.test.cases.dmt.plugins.tbc.Plugins;
 
-import org.osgi.service.dmt.DmtException;
-import org.osgi.service.dmt.DmtSession;
-import org.osgi.service.dmt.spi.DataPluginFactory;
-import org.osgi.service.dmt.spi.ExecPlugin;
-import org.osgi.service.dmt.spi.ReadWriteDataSession;
-import org.osgi.service.dmt.spi.ReadableDataSession;
-import org.osgi.service.dmt.spi.TransactionalDataSession;
+import org.osgi.service.dmt.*;
+import org.osgi.service.dmt.spi.*;
 import org.osgi.test.cases.dmt.plugins.tbc.DmtConstants;
 
 /**
@@ -53,7 +48,7 @@ import org.osgi.test.cases.dmt.plugins.tbc.DmtConstants;
  * will be called)
  *  
  */
-public class OverlappingExecPlugin implements ExecPlugin, DataPluginFactory {
+public class OverlappingExecPlugin implements ExecPlugin, DataPlugin {
 
 	private final String MESSAGE = "OverlappingExecPlugin";
 	

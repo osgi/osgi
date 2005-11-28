@@ -37,17 +37,10 @@
 package org.osgi.test.cases.dmt.plugins.tbc.MetaNode.MetaData;
 
 import java.util.Date;
-import org.osgi.service.dmt.DmtData;
-import org.osgi.service.dmt.DmtException;
-import org.osgi.service.dmt.DmtSession;
-import org.osgi.service.dmt.MetaNode;
-import org.osgi.service.dmt.spi.DataPluginFactory;
-import org.osgi.service.dmt.spi.ExecPlugin;
-import org.osgi.service.dmt.spi.ReadWriteDataSession;
-import org.osgi.service.dmt.spi.ReadableDataSession;
-import org.osgi.service.dmt.spi.TransactionalDataSession;
-import org.osgi.test.cases.dmt.plugins.tbc.DmtConstants;
-import org.osgi.test.cases.dmt.plugins.tbc.DmtTestControl;
+
+import org.osgi.service.dmt.*;
+import org.osgi.service.dmt.spi.*;
+import org.osgi.test.cases.dmt.plugins.tbc.*;
 
 /**
  * @author Andre Assad
@@ -56,7 +49,7 @@ import org.osgi.test.cases.dmt.plugins.tbc.DmtTestControl;
  * DmtSession calls to a subtree handled by a TestPluginMetaData.
  * 
  */
-public class TestPluginMetaData implements DataPluginFactory, ExecPlugin, ReadWriteDataSession {
+public class TestPluginMetaData implements DataPlugin, ExecPlugin, ReadWriteDataSession {
 
 	public static final String CLOSE = "TestPluginMetaData.close";
 	public static final String GETCHILDNODENAMES = "TestPluginMetaData.getChildNodeNames";

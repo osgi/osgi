@@ -37,18 +37,12 @@
 package org.osgi.test.cases.dmt.plugins.tbc.Plugins;
 
 import java.util.Date;
-import org.osgi.service.dmt.DmtData;
-import org.osgi.service.dmt.DmtException;
-import org.osgi.service.dmt.DmtSession;
-import org.osgi.service.dmt.MetaNode;
-import org.osgi.service.dmt.spi.DataPluginFactory;
-import org.osgi.service.dmt.spi.ReadWriteDataSession;
-import org.osgi.service.dmt.spi.ReadableDataSession;
-import org.osgi.service.dmt.spi.TransactionalDataSession;
-import org.osgi.test.cases.dmt.plugins.tbc.DmtConstants;
-import org.osgi.test.cases.dmt.plugins.tbc.DmtTestControl;
 
-public class NewDataPlugin implements DataPluginFactory, TransactionalDataSession {
+import org.osgi.service.dmt.*;
+import org.osgi.service.dmt.spi.*;
+import org.osgi.test.cases.dmt.plugins.tbc.*;
+
+public class NewDataPlugin implements DataPlugin, TransactionalDataSession {
 	
 	public static final String ROLLBACK = "NewDataPlugin.rollback,";
 	public static final String CLOSE = "NewDataPlugin.close,";

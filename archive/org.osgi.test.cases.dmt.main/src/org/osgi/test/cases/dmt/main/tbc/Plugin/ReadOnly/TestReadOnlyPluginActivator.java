@@ -40,7 +40,7 @@ import java.util.Hashtable;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
-import org.osgi.service.dmt.spi.DataPluginFactory;
+import org.osgi.service.dmt.spi.DataPlugin;
 import org.osgi.test.cases.dmt.main.tbc.DmtTestControl;
 
 /**
@@ -73,8 +73,8 @@ public class TestReadOnlyPluginActivator implements BundleActivator {
 		// creating the service
 		testReadOnlyPlugin = new TestReadOnlyPlugin(tbc);
 		Hashtable props = new Hashtable();
-		props.put(DataPluginFactory.DATA_ROOT_URIS, new String[] { ROOT });
-		String[] ifs = new String[] { DataPluginFactory.class.getName() };
+		props.put(DataPlugin.DATA_ROOT_URIS, new String[] { ROOT });
+		String[] ifs = new String[] { DataPlugin.class.getName() };
 		servReg = bc.registerService(ifs, testReadOnlyPlugin, props);
 		System.out.println("TestReadOnlyPlugin activated.");
 	}

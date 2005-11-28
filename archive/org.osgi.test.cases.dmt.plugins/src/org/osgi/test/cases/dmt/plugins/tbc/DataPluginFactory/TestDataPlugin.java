@@ -41,7 +41,7 @@ import org.osgi.service.dmt.DmtData;
 import org.osgi.service.dmt.DmtException;
 import org.osgi.service.dmt.DmtSession;
 import org.osgi.service.dmt.MetaNode;
-import org.osgi.service.dmt.spi.DataPluginFactory;
+import org.osgi.service.dmt.spi.DataPlugin;
 import org.osgi.service.dmt.spi.ReadWriteDataSession;
 import org.osgi.service.dmt.spi.ReadableDataSession;
 import org.osgi.service.dmt.spi.TransactionalDataSession;
@@ -52,11 +52,11 @@ import org.osgi.test.cases.dmt.plugins.tbc.TestPluginMetaNode;
 /**
  * @author Andre Assad
  * 
- * A test implementation of DataPluginFactory. This implementation validates the
- * DmtSession calls to a subtree handled by a DataPluginFactory.
+ * A test implementation of DataPlugin. This implementation validates the
+ * DmtSession calls to a subtree handled by a DataPlugin.
  * 
  */
-public class TestDataPlugin implements DataPluginFactory, TransactionalDataSession {
+public class TestDataPlugin implements DataPlugin, TransactionalDataSession {
 	
     public static final String CLASS = "TestDataPlugin.";
 	public static final String CLOSE = CLASS + "close";

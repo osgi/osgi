@@ -37,11 +37,9 @@
 package org.osgi.test.cases.dmt.plugins.tbc.Plugins;
 
 import java.util.Hashtable;
-import org.osgi.framework.BundleActivator;
-import org.osgi.framework.BundleContext;
-import org.osgi.framework.ServiceRegistration;
-import org.osgi.service.dmt.spi.DataPluginFactory;
-import org.osgi.service.dmt.spi.ExecPlugin;
+
+import org.osgi.framework.*;
+import org.osgi.service.dmt.spi.*;
 import org.osgi.test.cases.dmt.plugins.tbc.ExecPlugin.TestExecPluginActivator;
 
 public class OverlappingExecPluginActivator implements BundleActivator {
@@ -58,8 +56,8 @@ public class OverlappingExecPluginActivator implements BundleActivator {
 		overlappingExecPlugin = new OverlappingExecPlugin();
 		Hashtable props = new Hashtable();
 		props.put(ExecPlugin.EXEC_ROOT_URIS, new String[] { ROOT });
-		props.put(DataPluginFactory.DATA_ROOT_URIS, new String[] { ROOT });
-		String[] ifs = new String[] {DataPluginFactory.class.getName()};
+		props.put(DataPlugin.DATA_ROOT_URIS, new String[] { ROOT });
+		String[] ifs = new String[] {DataPlugin.class.getName()};
 		servReg = bc.registerService(ifs, overlappingExecPlugin, props);
 		System.out.println("OverlappingExecPluginActivator activated.");
 	}
