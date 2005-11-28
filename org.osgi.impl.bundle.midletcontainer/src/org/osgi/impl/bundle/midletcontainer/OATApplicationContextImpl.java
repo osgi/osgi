@@ -60,23 +60,29 @@ public class OATApplicationContextImpl implements ApplicationContext, ServiceLis
 	
 	class ServiceListenerImpl {
 		
-		public ServiceListenerImpl( ApplicationServiceListener listener, Filter []filters ) {
+		public ServiceListenerImpl( ApplicationServiceListener listener, String []interfaces, Filter []filters ) {
 			this.listener = listener;
 			this.filters = filters;
+			this.interfaces = interfaces;
 		}
 		
-		public boolean match( Hashtable props ) {
-			for( int w=0; w != filters.length; w++ ) {
-				if( filters[ w ] == null )
-					return true;
-				if( filters[ w ].match( props ) )
-					return true;
-			}
+		public boolean match( String []ifaces, Hashtable props ) {
+			for( int n=0; n != ifaces.length; n++ )
+				for( int p=0; p != interfaces.length; p++ ) {
+					if( ifaces[ n ].equals( interfaces[ p ]))
+						for( int w=0; w != filters.length; w++ ) {
+							if( filters[ w ] == null )
+								return true;
+							if( filters[ w ].match( props ) )
+								return true;
+						}
+				}
 			return false;
 		}
 		
 		ApplicationServiceListener listener;
 		Filter []filters;
+		String []interfaces;
 	}
 		
 	public OATApplicationContextImpl( Bundle bundle, Map startupParams, OATApplicationData appData, ApplicationHandle appHandle, Object mainClass ) {
@@ -118,11 +124,13 @@ public class OATApplicationContextImpl implements ApplicationContext, ServiceLis
 			throw new IllegalStateException( "Application is not running!" );
 
 		Filter filters[] = new Filter[ referenceNames.length ];
+		String interfaces[] = new String[ referenceNames.length ];
 		
 		for( int q=0 ; q != referenceNames.length; q++ ) {
 			int i = 0;
 			for( ; i != oatAppData.getServices().length; i++ )
 				if( oatAppData.getServices()[ i ].getName().equals( referenceNames[ q ] )) {
+					interfaces[ q ] = oatAppData.getServices()[ i ].getInterface();
 					try {
 						String filterStr = oatAppData.getServices()[ i ].getTarget();
 						filters[ q ] = filterStr == null ? null : bc.createFilter( filterStr );
@@ -136,7 +144,7 @@ public class OATApplicationContextImpl implements ApplicationContext, ServiceLis
 		}
 
 		removeServiceListener( listener );		
-		serviceListenerList.add( new ServiceListenerImpl( listener, filters ) );
+		serviceListenerList.add( new ServiceListenerImpl( listener, interfaces, filters ) );
 	}
 	
 	public Map getStartupParameters() {
@@ -454,7 +462,7 @@ public class OATApplicationContextImpl implements ApplicationContext, ServiceLis
 		while( iter.hasNext() ) {
 			ServiceListenerImpl servListener = (ServiceListenerImpl)  iter.next();
 			
-			if( !servListener.match( eventHash ) )
+			if( !servListener.match( (String [])event.getServiceReference().getProperty( Constants.OBJECTCLASS ), eventHash ) )
 				continue;
 			
 			Object serviceObject = ( serv == null ) ? null : serv.serviceObject;
