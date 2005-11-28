@@ -4,7 +4,7 @@
 	<implementation class="org.osgi.impl.service.policy.condpermadmin.PluginFactory"/>
 	<property name="dataRootURIs" value="./OSGi/Policy/Java/ConditionalPermission"/>
 	<service>
-		<provide interface="org.osgi.service.dmt.spi.DataPluginFactory"/>
+		<provide interface="org.osgi.service.dmt.spi.DataPlugin"/>
 	</service>
 	<reference name="condPermAdmin"
 		interface="org.osgi.service.condpermadmin.ConditionalPermissionAdmin"/>
