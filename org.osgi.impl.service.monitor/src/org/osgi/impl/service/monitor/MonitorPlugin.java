@@ -30,7 +30,7 @@ import org.osgi.service.dmt.spi.*;
 import org.osgi.service.monitor.MonitoringJob;
 import org.osgi.service.monitor.StatusVariable;
 
-public class MonitorPlugin implements DataPluginFactory, ReadWriteDataSession
+public class MonitorPlugin implements DataPlugin, ReadWriteDataSession
 {
     // ENHANCE use full path instead of chopped, make constants for indices
     // ENHANCE remove segment parameters where the whole path is given anyway
@@ -48,7 +48,7 @@ public class MonitorPlugin implements DataPluginFactory, ReadWriteDataSession
     }
 
 
-    //----- DataPluginFactory methods -----//
+    //----- DataPlugin methods -----//
 
     public ReadableDataSession openReadOnlySession(String[] sessionRoot,
             DmtSession session) {

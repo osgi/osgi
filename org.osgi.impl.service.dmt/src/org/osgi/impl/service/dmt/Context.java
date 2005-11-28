@@ -53,7 +53,7 @@ public class Context {
     synchronized PluginDispatcher getPluginDispatcher() {
         if(pluginDispatcher == null) { // create plugin tracker if it DNE yet
             pluginDispatcher = new PluginDispatcher(this);
-            String filter = "(|(objectClass=org.osgi.service.dmt.spi.DataPluginFactory)" +
+            String filter = "(|(objectClass=org.osgi.service.dmt.spi.DataPlugin)" +
                               "(objectClass=org.osgi.service.dmt.spi.ExecPlugin))";
             try {
                 pluginTracker = new ServiceTracker(bc, bc.createFilter(filter),

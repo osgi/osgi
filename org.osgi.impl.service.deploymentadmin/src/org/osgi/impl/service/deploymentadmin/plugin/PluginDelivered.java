@@ -43,7 +43,7 @@ import org.osgi.service.dmt.DmtSession;
 import org.osgi.service.dmt.MetaNode;
 import org.osgi.service.dmt.spi.*;
 
-public class PluginDelivered implements DataPluginFactory, ReadableDataSession, 
+public class PluginDelivered implements DataPlugin, ReadableDataSession, 
         ExecPlugin, Serializable {
     
 	private transient PluginCtx pluginCtx;

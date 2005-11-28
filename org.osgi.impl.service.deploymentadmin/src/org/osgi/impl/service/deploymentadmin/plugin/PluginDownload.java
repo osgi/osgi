@@ -42,7 +42,7 @@ import org.osgi.service.dmt.DmtSession;
 import org.osgi.service.dmt.spi.*;
 import org.xml.sax.helpers.DefaultHandler;
 
-public class PluginDownload extends DefaultHandler implements DataPluginFactory,
+public class PluginDownload extends DefaultHandler implements DataPlugin,
         ReadWriteDataSession, ExecPlugin, Serializable 
 {
     

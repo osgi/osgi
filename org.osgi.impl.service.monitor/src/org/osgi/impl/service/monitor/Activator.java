@@ -20,7 +20,7 @@ package org.osgi.impl.service.monitor;
 import java.util.Hashtable;
 import org.osgi.framework.*;
 import org.osgi.service.dmt.DmtAdmin;
-import org.osgi.service.dmt.spi.DataPluginFactory;
+import org.osgi.service.dmt.spi.DataPlugin;
 import org.osgi.service.event.EventAdmin;
 import org.osgi.service.monitor.MonitorAdmin;
 import org.osgi.service.monitor.MonitorListener;
@@ -89,7 +89,7 @@ public class Activator implements BundleActivator
         MonitorPlugin monitorPlugin = new MonitorPlugin(bc, monitorAdmin);
         Hashtable properties = new Hashtable();
         properties.put("dataRootURIs", new String[] { PLUGIN_ROOT });
-        monitorPluginReg = bc.registerService(DataPluginFactory.class.getName(),
+        monitorPluginReg = bc.registerService(DataPlugin.class.getName(),
                 monitorPlugin, properties);
 
         System.out.println("Monitor Admin and Plugin activation successful.");

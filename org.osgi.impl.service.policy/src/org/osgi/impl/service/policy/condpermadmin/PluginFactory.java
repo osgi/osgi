@@ -20,12 +20,12 @@ package org.osgi.impl.service.policy.condpermadmin;
 import org.osgi.service.component.ComponentContext;
 import org.osgi.service.dmt.DmtException;
 import org.osgi.service.dmt.DmtSession;
-import org.osgi.service.dmt.spi.DataPluginFactory;
+import org.osgi.service.dmt.spi.DataPlugin;
 import org.osgi.service.dmt.spi.ReadWriteDataSession;
 import org.osgi.service.dmt.spi.ReadableDataSession;
 import org.osgi.service.dmt.spi.TransactionalDataSession;
 
-public class PluginFactory implements DataPluginFactory {
+public class PluginFactory implements DataPlugin {
 
 	private ComponentContext	context;
 

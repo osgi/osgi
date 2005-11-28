@@ -1189,7 +1189,7 @@ public class DmtSessionImpl implements DmtSession {
         // No previously opened session found, attempting to open session with
         // correct lock type.
 
-        DataPluginFactory plugin = pluginRegistration.getDataPlugin();
+        DataPlugin plugin = pluginRegistration.getDataPlugin();
         ReadableDataSession pluginSession = null;
         int pluginSessionType = lockMode;
             
@@ -1229,7 +1229,7 @@ public class DmtSessionImpl implements DmtSession {
     }
     
     private ReadableDataSession openPluginSession(
-            final DataPluginFactory plugin, Node root, 
+            final DataPlugin plugin, Node root, 
             final int pluginSessionType) throws DmtException {
         
         final DmtSession session = this;

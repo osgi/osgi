@@ -47,7 +47,7 @@ import org.osgi.service.dmt.DmtSession;
 import org.osgi.service.dmt.MetaNode;
 import org.osgi.service.dmt.spi.*;
 
-public class PluginDeployed implements DataPluginFactory, ReadableDataSession, 
+public class PluginDeployed implements DataPlugin, ReadableDataSession, 
         ExecPlugin, Serializable {
 
     private static final String DP_PREF            = "DP:";

@@ -24,7 +24,7 @@ import org.osgi.framework.BundleException;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.cm.ConfigurationAdmin;
 import org.osgi.service.cm.ManagedService;
-import org.osgi.service.dmt.spi.DataPluginFactory;
+import org.osgi.service.dmt.spi.DataPlugin;
 import org.osgi.service.log.LogService;
 import org.osgi.util.tracker.ServiceTracker;
 
@@ -62,7 +62,7 @@ public class ConfigPluginActivator implements BundleActivator {
 		properties.put("dataRootURIs", new String[] { PLUGIN_ROOT_URI });
         properties.put("service.pid", DMT_CONFIG_PLUGIN_SERVICE_PID);
         String[] services = new String[] {
-                DataPluginFactory.class.getName(),
+                DataPlugin.class.getName(),
                 ManagedService.class.getName()
         };
 		servReg = bc.registerService(services, configPlugin, properties);

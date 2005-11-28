@@ -25,7 +25,7 @@ import org.osgi.service.dmt.DmtSession;
 import org.osgi.service.dmt.MetaNode;
 import org.osgi.service.dmt.spi.*;
 
-public class RootPlugin implements DataPluginFactory, ReadableDataSession {
+public class RootPlugin implements DataPlugin, ReadableDataSession {
 	private static Node	root	= 
         new Node(".", new Node[] {
                 new Node("OSGi", new Node[] {

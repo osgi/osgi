@@ -21,7 +21,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Vector;
 import org.osgi.framework.ServiceReference;
-import org.osgi.service.dmt.spi.DataPluginFactory;
+import org.osgi.service.dmt.spi.DataPlugin;
 import org.osgi.service.dmt.spi.ExecPlugin;
 
 class PluginRegistration {
@@ -36,9 +36,9 @@ class PluginRegistration {
     //               (roots.length != 0 || execs.length != 0)
 	PluginRegistration(ServiceReference pluginRef, Object plugin, 
             Node[] roots, Node[] execs) {
-		if (roots.length > 0 && !(plugin instanceof DataPluginFactory))
+		if (roots.length > 0 && !(plugin instanceof DataPlugin))
 			throw new IllegalArgumentException(
-					"The plugin must implement DataPluginFactory if data " +
+					"The plugin must implement DataPlugin if data " +
                     "roots are specified.");
 		if (execs.length > 0 && !(plugin instanceof ExecPlugin))
 			throw new IllegalArgumentException(
@@ -53,12 +53,12 @@ class PluginRegistration {
         infoString = null;
 	}
 
-    DataPluginFactory getDataPlugin() {
-        if(!(plugin instanceof DataPluginFactory))
+    DataPlugin getDataPlugin() {
+        if(!(plugin instanceof DataPlugin))
             throw new IllegalStateException("Plugin object is not a data " +
                     "plugin.");
         
-        return (DataPluginFactory) plugin;
+        return (DataPlugin) plugin;
     }
     
 	ExecPlugin getExecPlugin() {

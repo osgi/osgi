@@ -22,7 +22,7 @@ import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.BundleException;
 import org.osgi.framework.ServiceRegistration;
-import org.osgi.service.dmt.spi.DataPluginFactory;
+import org.osgi.service.dmt.spi.DataPlugin;
 import org.osgi.service.log.LogReaderService;
 import org.osgi.util.tracker.ServiceTracker;
 
@@ -46,7 +46,7 @@ public class LogPluginActivator implements BundleActivator {
 		logPlugin = new LogPlugin(bc, logReaderTracker);
 		Hashtable props = new Hashtable();
 		props.put("dataRootURIs", new String[] { PLUGIN_ROOT_URI });
-		String[] ifs = new String[] {DataPluginFactory.class.getName()};
+		String[] ifs = new String[] {DataPlugin.class.getName()};
 		servReg = bc.registerService(ifs, logPlugin, props);
 	}
 

@@ -33,7 +33,7 @@ import org.osgi.service.dmt.DmtSession;
 import org.osgi.service.dmt.spi.*;
 import org.osgi.util.tracker.ServiceTracker;
 
-class ConfigPlugin implements DataPluginFactory, ManagedService {
+class ConfigPlugin implements DataPlugin, ManagedService {
     private ServiceTracker configTracker;
 
     /**
@@ -54,7 +54,7 @@ class ConfigPlugin implements DataPluginFactory, ManagedService {
     }
 
     
-    //----- DataPluginFactory methods -----//
+    //----- DataPlugin methods -----//
 
     public ReadableDataSession openReadOnlySession(String[] sessionRoot,
             DmtSession session) throws DmtException {

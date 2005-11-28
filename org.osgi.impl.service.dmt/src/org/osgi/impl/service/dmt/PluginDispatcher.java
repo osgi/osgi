@@ -21,7 +21,7 @@ import java.util.*;
 import org.osgi.framework.Constants;
 import org.osgi.framework.ServiceReference;
 import org.osgi.service.dmt.DmtException;
-import org.osgi.service.dmt.spi.DataPluginFactory;
+import org.osgi.service.dmt.spi.DataPlugin;
 import org.osgi.service.dmt.spi.ExecPlugin;
 import org.osgi.service.log.LogService;
 import org.osgi.util.tracker.ServiceTrackerCustomizer;
@@ -35,7 +35,7 @@ public class PluginDispatcher implements ServiceTrackerCustomizer {
         this.context = context;
         plugins = new ArrayList();
         // root plugin could be a normal plugin when overlapping is allowed
-        DataPluginFactory root = new RootPlugin(this); 
+        DataPlugin root = new RootPlugin(this); 
         rootPlugin = 
             new PluginRegistration(null, root, new Node[] { Node.ROOT_NODE }, 
                     new Node[] {});

@@ -951,7 +951,7 @@ class ApplicationIDNode extends ApplicationPluginBaseNode {
 	}
 }
 
-public class ApplicationPlugin implements BundleActivator, DataPluginFactory,
+public class ApplicationPlugin implements BundleActivator, DataPlugin,
                                           ExecPlugin, ReadWriteDataSession {
 
 	static final String			          URI_ROOT_APP = "./OSGi/Application";
@@ -968,8 +968,8 @@ public class ApplicationPlugin implements BundleActivator, DataPluginFactory,
 		Dictionary dict = new Hashtable();
 		dict.put("dataRootURIs", new String[] {URI_ROOT_APP});
 		dict.put("execRootURIs", new String[] {URI_ROOT_APP});
-		String[] ifs = new String[] {DataPluginFactory.class.getName(),
-				DataPluginFactory.class.getName()};
+		String[] ifs = new String[] {DataPlugin.class.getName(),
+				DataPlugin.class.getName()};
 		// unregistered by the OSGi framework
 		pluginReg = bc.registerService(ifs, this, dict);
 		

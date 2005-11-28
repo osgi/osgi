@@ -30,7 +30,7 @@ import org.osgi.service.log.LogEntry;
 import org.osgi.service.log.LogReaderService;
 import org.osgi.util.tracker.ServiceTracker;
 
-class LogPlugin implements DataPluginFactory, TransactionalDataSession {
+class LogPlugin implements DataPlugin, TransactionalDataSession {
 	private static final String FILTER    = "Filter";
 	private static final String EXCLUDE   = "Exclude";
 	private static final String MAXR      = "MaxRecords";
@@ -65,7 +65,7 @@ class LogPlugin implements DataPluginFactory, TransactionalDataSession {
 		requests = new Hashtable();		
 	}
 
-	//----- DataPluginFactory methods -----//
+	//----- DataPlugin methods -----//
     
     public ReadableDataSession openReadOnlySession(String[] sessionRoot,
             DmtSession session) throws DmtException {
