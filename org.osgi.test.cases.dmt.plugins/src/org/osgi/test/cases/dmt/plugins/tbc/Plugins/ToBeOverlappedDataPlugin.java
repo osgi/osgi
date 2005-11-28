@@ -39,12 +39,8 @@
 
 package org.osgi.test.cases.dmt.plugins.tbc.Plugins;
 
-import org.osgi.service.dmt.DmtException;
-import org.osgi.service.dmt.DmtSession;
-import org.osgi.service.dmt.spi.DataPluginFactory;
-import org.osgi.service.dmt.spi.ReadWriteDataSession;
-import org.osgi.service.dmt.spi.ReadableDataSession;
-import org.osgi.service.dmt.spi.TransactionalDataSession;
+import org.osgi.service.dmt.*;
+import org.osgi.service.dmt.spi.*;
 
 /**
  * @author Andre Assad
@@ -52,7 +48,7 @@ import org.osgi.service.dmt.spi.TransactionalDataSession;
  * This plugin must be overlapped by the DmtExecPlugin, so these methods must not be called. 
  * Instead of that, org.osgi.test.cases.dmt.tbc.ExecPlugin.TestExecPlugin will be called.)
  */
-public class ToBeOverlappedDataPlugin implements DataPluginFactory {
+public class ToBeOverlappedDataPlugin implements DataPlugin {
     
     public static final String MESSAGE = "ToBeOverlappedDataPlugin";
     

@@ -36,7 +36,7 @@
 
 package org.osgi.test.cases.dmt.plugins.tbc.DataPluginFactory.TransactionalDataSession;
 
-import org.osgi.service.dmt.spi.DataPluginFactory;
+import org.osgi.service.dmt.spi.DataPlugin;
 import org.osgi.service.dmt.spi.ExecPlugin;
 import org.osgi.test.cases.dmt.plugins.tbc.DmtTestControl;
 
@@ -64,7 +64,7 @@ public class PluginConstants {
 	 */
 	private void testConstants001() {
 		tbc.log("#testConstants001");
-		tbc.assertEquals("Asserting DATA_ROOT_URIS value", DataPluginFactory.DATA_ROOT_URIS, DataPluginFactory.DATA_ROOT_URIS);
+		tbc.assertEquals("Asserting DATA_ROOT_URIS value", DataPlugin.DATA_ROOT_URIS, DataPlugin.DATA_ROOT_URIS);
 		tbc.assertEquals("Asserting EXEC_ROOT_URIS value", "execRootURIs", ExecPlugin.EXEC_ROOT_URIS);
 		
 	}

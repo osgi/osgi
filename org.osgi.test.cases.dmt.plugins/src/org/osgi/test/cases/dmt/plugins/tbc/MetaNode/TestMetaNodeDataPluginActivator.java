@@ -40,7 +40,7 @@ import java.util.Hashtable;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
-import org.osgi.service.dmt.spi.DataPluginFactory;
+import org.osgi.service.dmt.spi.DataPlugin;
 import org.osgi.service.dmt.spi.ExecPlugin;
 import org.osgi.test.cases.dmt.plugins.tbc.DmtTestControl;
 
@@ -101,9 +101,9 @@ public class TestMetaNodeDataPluginActivator implements BundleActivator {
 		// creating the service
 		testMetaNodeDataPlugin = new TestMetaNodeDataPlugin(tbc);
 		Hashtable props = new Hashtable();
-		props.put(DataPluginFactory.DATA_ROOT_URIS, new String[] { ROOT });
+		props.put(DataPlugin.DATA_ROOT_URIS, new String[] { ROOT });
         props.put(ExecPlugin.EXEC_ROOT_URIS, new String[] { ROOT });
-		String[] ifs = new String[] { DataPluginFactory.class.getName(),ExecPlugin.class.getName() };
+		String[] ifs = new String[] { DataPlugin.class.getName(),ExecPlugin.class.getName() };
 		servReg = bc.registerService(ifs, testMetaNodeDataPlugin, props);
 		System.out.println("TestMetaNodeDataPlugin activated.");
 	}

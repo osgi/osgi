@@ -40,17 +40,10 @@
 package org.osgi.test.cases.dmt.plugins.tbc.ExecPlugin;
 
 import java.util.Date;
-import org.osgi.service.dmt.DmtData;
-import org.osgi.service.dmt.DmtException;
-import org.osgi.service.dmt.DmtSession;
-import org.osgi.service.dmt.MetaNode;
-import org.osgi.service.dmt.spi.DataPluginFactory;
-import org.osgi.service.dmt.spi.ExecPlugin;
-import org.osgi.service.dmt.spi.ReadWriteDataSession;
-import org.osgi.service.dmt.spi.ReadableDataSession;
-import org.osgi.service.dmt.spi.TransactionalDataSession;
-import org.osgi.test.cases.dmt.plugins.tbc.DmtConstants;
-import org.osgi.test.cases.dmt.plugins.tbc.DmtTestControl;
+
+import org.osgi.service.dmt.*;
+import org.osgi.service.dmt.spi.*;
+import org.osgi.test.cases.dmt.plugins.tbc.*;
 
 /**
  * @author Andre Assad
@@ -58,7 +51,7 @@ import org.osgi.test.cases.dmt.plugins.tbc.DmtTestControl;
  * A test implementation of ExecPlugin. This implementation validates the
  * DmtSession calls to a subtree handled by the ExecPlugin.
  */
-public class TestExecPlugin implements ExecPlugin, DataPluginFactory, ReadableDataSession {
+public class TestExecPlugin implements ExecPlugin, DataPlugin, ReadableDataSession {
 
 	public static final String EXECUTE = "TestExecPlugin.execute";
 	

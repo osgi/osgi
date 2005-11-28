@@ -41,7 +41,7 @@ import org.osgi.service.dmt.DmtData;
 import org.osgi.service.dmt.DmtException;
 import org.osgi.service.dmt.DmtSession;
 import org.osgi.service.dmt.MetaNode;
-import org.osgi.service.dmt.spi.DataPluginFactory;
+import org.osgi.service.dmt.spi.DataPlugin;
 import org.osgi.service.dmt.spi.ReadWriteDataSession;
 import org.osgi.service.dmt.spi.ReadableDataSession;
 import org.osgi.service.dmt.spi.TransactionalDataSession;
@@ -50,11 +50,11 @@ import org.osgi.test.cases.dmt.main.tbc.DmtTestControl;
 /**
  * @author Luiz Felipe Guimaraes
  * 
- * A test implementation of DataPluginFactory. This implementation validates the
- * DmtSession calls to a subtree handled by a DataPluginFactory.
+ * A test implementation of DataPlugin. This implementation validates the
+ * DmtSession calls to a subtree handled by a DataPlugin.
  * 
  */
-public class TestNonAtomicPlugin implements DataPluginFactory, ReadableDataSession {
+public class TestNonAtomicPlugin implements DataPlugin, ReadableDataSession {
 	
 	private DmtTestControl tbc;
     
