@@ -18,38 +18,30 @@
 package org.osgi.impl.service.deploymentadmin;
 
 import java.io.Serializable;
-import java.util.Collection;
-import java.util.Hashtable;
+import java.util.Comparator;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.Set;
-import java.util.jar.*;
+import java.util.TreeMap;
 
 /**
  * Maintains a case insensitive map. It means that the keys are 
  * case insensitive.
  */
-public class CaseInsensitiveMap implements Map, Serializable {
+public class CaseInsensitiveMap extends TreeMap {
     
-    private Hashtable             table = new Hashtable();
     private DeploymentPackageImpl dp; // it has the ResourceBundle for
                                       // localization
     
-    /**
-     * The <code>table</code> Hashtable contains this type of objects.
-     * In this way the original (not capitalized) keys are also available.
-     */
-    private static class Entry implements Serializable {
-        private String originalKey;
-        private String value;
-        
-        private Entry(String rawKey, String value) {
-            this.originalKey = rawKey;
-            this.value = value;
-        }
+    private static class MyComparator implements Comparator, Serializable {
+		public int compare(Object left, Object right) {
+			String l = left.toString();
+			String r = right.toString();
+			return l.compareToIgnoreCase(r);
+		}
     }
-
+    
     public CaseInsensitiveMap(Map other, DeploymentPackageImpl dp) {
+    	super(new MyComparator());
         this.dp = dp;
         fill(other);
     }
@@ -63,102 +55,51 @@ public class CaseInsensitiveMap implements Map, Serializable {
             put(key, map.get(key));
         }
     }
-
-    public Object put(Object key, Object value) {
-        if (!(key instanceof String) && !(key instanceof Attributes.Name))
-            throw new IllegalArgumentException("Only String and java.util.jar.Attributes.Name " +
-                "keys are allowed");
-        if (!(value instanceof String))
-            throw new IllegalArgumentException("Only String value is allowed");
-        String upperKey = key.toString().toUpperCase(); 
-        return table.put(upperKey, new Entry(key.toString(), (String) value));
-    }
     
+    public Object put(Object key, Object value) {
+    	// because the entire map has to be serializable
+    	return super.put(key.toString(), value.toString());
+    }
+
     public Object get(Object key) {
-        if (!(key instanceof String))
-            throw new IllegalArgumentException("Only String key is allowed");
-        String upperKey = ((String) key).toUpperCase(); 
-        Entry entry = (Entry) table.get(upperKey);
-        
-        // key was not found
-        if (null == entry)
-            return null;
-        
+    	Object obj = super.get(key);
+    	
+    	if (null == obj)
+    		return null;
+    	
+        // only Strings can be localized
+    	if (!(obj instanceof String))
+            return obj;
+    	
         // there is no resource bundle so there is no need to localize
         if (null == dp || null == dp.getResourceBundle())
-            return entry.value;
+            return obj;
         
+        String str = (String) obj;
+
         // localize
-        if (entry.value.startsWith("%"))
-            return dp.getResourceBundle().getString(entry.value.substring(1));
+        if (str.startsWith("%"))
+            return dp.getResourceBundle().getString(str.substring(1));
         
         // there is resource bundle but the there is node need for 
         // localization (there is no '%' char at the begining of the value)
-        return entry.value;
+        return str;
     }
     
-    /**
-     * Return the original (not capitalized) key.  
-     * @param case insensitive key
-     * @return the original (not capitalized) key
-     */
-    public String getRawKey(Object key) {
-        if (!(key instanceof String))
-            throw new IllegalArgumentException("Only String key is allowed");
-        String upperKey = ((String) key).toUpperCase(); 
-        Entry entry = (Entry) table.get(upperKey);
-        
-        // key was not found
-        if (null == entry)
-            return null;
-        
-        return entry.originalKey;
-    }
-    
-    public Set keySet() {
-        return table.keySet();
-    }
+    // for test only
+    /*public static void main(String[] args) {
+    	Hashtable ht = new Hashtable();
+    	ht.put("almA", "v_alma");
+    	ht.put("KORte", "v_korte");
+    	CaseInsensitiveMap map = new CaseInsensitiveMap(ht, null);
+    	
+    	System.out.println(map.get("alma"));
+    	System.out.println(map.get("KORTE"));
+    	
+    	for (Iterator iter = map.keySet().iterator(); iter.hasNext();) {
+			String key = (String) iter.next();
+			System.out.println(key);
+		}
+	}*/
 
-    public void clear() {
-        table.clear();
-    }
-
-    public boolean containsKey(Object key) {
-        if (!(key instanceof String))
-            throw new IllegalArgumentException("Only String key is allowed");
-        String upperKey = ((String) key).toUpperCase();
-        return table.containsKey(upperKey);
-    }
-
-    public boolean containsValue(Object obj) {
-        return table.containsValue(obj);
-    }
-
-    public Set entrySet() {
-        return table.entrySet();
-    }
-
-    public boolean isEmpty() {
-        return table.isEmpty();
-    }
-
-    public void putAll(Map other) {
-        fill(other);
-    }
-
-    public Object remove(Object key) {
-        if (!(key instanceof String))
-            throw new IllegalArgumentException("Only String key is allowed");
-        String upperKey = ((String) key).toUpperCase();
-        return table.remove(upperKey);
-    }
-
-    public int size() {
-        return table.size();
-    }
-
-    public Collection values() {
-        return table.values();
-    }
-    
 }

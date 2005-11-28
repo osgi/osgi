@@ -99,11 +99,14 @@ public class PluginCtx {
 	}
 
 	public static String covertUri(String[] nodeUriArr, int delEnd) {
+		if (delEnd < 0)
+			delEnd = 0;
+			
 		if (nodeUriArr.length < delEnd)
 			return "";
 		
 		StringBuffer sb = new StringBuffer(nodeUriArr[0]);
-		for (int i = 0; i < nodeUriArr.length - delEnd; i++)
+		for (int i = 1; i < nodeUriArr.length - delEnd; i++)
 			sb.append('/').append(nodeUriArr[i]);
 		return sb.toString();
 	}

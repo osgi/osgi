@@ -107,9 +107,9 @@ public class PluginDownload extends DefaultHandler implements DataPluginFactory,
         private void start(final String[] nodeUriArr, final String correlator, final String principal) 
                 throws DmtException 
         {
-            final String nodeUri = PluginCtx.covertUri(nodeUriArr);
+            final String nodeUri = PluginCtx.covertUri(nodeUriArr, 2);
             final Entry entry = (Entry) ht.get(nodeUriArr[4]);
-            
+            int i = 1;
             entry.setStatus(STATUS_STREAMING);
             
             DownloadAgent dwnlAgent = pluginCtx.getDownloadAgent();
@@ -184,7 +184,8 @@ public class PluginDownload extends DefaultHandler implements DataPluginFactory,
                 	String nodeUriRes = null;
                     if (null == exception) {
                         entry.setStatus(STATUS_DEPLOYED);
-                        nodeUriRes = pluginCtx.getDeployedPlugin().associateID(b, entry.dwnlId);
+                        nodeUriRes = DAConstants.DMT_DEPLOYMENT_ROOT +
+                        	pluginCtx.getDeployedPlugin().associateID(b, entry.dwnlId);
                         try {
                             pluginCtx.save();
                         }

@@ -35,6 +35,7 @@ import org.osgi.framework.Bundle;
 import org.osgi.impl.service.deploymentadmin.BundleEntry;
 import org.osgi.impl.service.deploymentadmin.BundleUtil;
 import org.osgi.impl.service.deploymentadmin.CaseInsensitiveMap;
+import org.osgi.impl.service.deploymentadmin.DAConstants;
 import org.osgi.impl.service.deploymentadmin.DeploymentPackageImpl;
 import org.osgi.impl.service.deploymentadmin.Metanode;
 import org.osgi.impl.service.deploymentadmin.PluginCtx;
@@ -64,11 +65,11 @@ public class PluginDeployed implements DataPluginFactory, ReadableDataSession,
         AlertSender.setLogger(pluginCtx.getLogger());
     }
     
-    private String dpToNodeId(String dpsn) {
+    static String dpToNodeId(String dpsn) {
         return DP_PREF + dpsn;
     }
     
-    private String bundleToNodeId(long bid) {
+    static String bundleToNodeId(long bid) {
         return BUNDLE_PREF + String.valueOf(bid);
     }
     
@@ -573,7 +574,10 @@ public class PluginDeployed implements DataPluginFactory, ReadableDataSession,
             UndeployThread undThread = new UndeployThread(dp);
             undThread.setListener(new UndeployThread.Listener() {
                 public void onFinish(Exception exception) {
+                	String nodeUriRes = null;
                     if (null == exception) {
+                    	nodeUriRes = DAConstants.DMT_DEPLOYMENT_ROOT + 
+                    		pluginCtx.getDmtAdmin().mangle(dpToNodeId(dp.getName()));
                         dpIdMappings.remove(dp.getName());
                         try {
                             pluginCtx.save();
@@ -582,11 +586,12 @@ public class PluginDeployed implements DataPluginFactory, ReadableDataSession,
                             pluginCtx.getLogger().log(e);
                         }
                     }
-                    else
+                    else {
+                    	nodeUriRes = PluginCtx.covertUri(nodeUriArr, 2); // the original URI
                         pluginCtx.getLogger().log(exception);
-                    final String nodeUri = PluginCtx.covertUri(nodeUriArr, 2);
-                    AlertSender.sendDeploymentRemoveAlert(exception, session.getPrincipal(), correlator, nodeUri, 
-                    		pluginCtx.getDmtAdmin());
+                    }
+                    AlertSender.sendDeploymentRemoveAlert(exception, session.getPrincipal(), 
+                    		correlator, nodeUriRes, pluginCtx.getDmtAdmin());
                 }
             });
             undThread.start();
@@ -655,10 +660,9 @@ public class PluginDeployed implements DataPluginFactory, ReadableDataSession,
         // create main section
         for (Iterator iter = cm.keySet().iterator(); iter.hasNext();) {
             String key = (String) iter.next();
-            String rawKey = cm.getRawKey(key);
-            if ("Manifest-Version".equals(rawKey))
+            if ("Manifest-Version".equals(key))
                 continue;
-            String kvp = keyValuePair(rawKey, cm.get(key));
+            String kvp = keyValuePair(key, cm.get(key));
             manifest.append(kvp + "\n");
         }
         manifest.append("\n");
@@ -672,8 +676,7 @@ public class PluginDeployed implements DataPluginFactory, ReadableDataSession,
             manifest.append(keyValuePair("Name", be.getResName()) + "\n");
             for (Iterator beit = attrs.keySet().iterator(); beit.hasNext();) {
                 String key = (String) beit.next();
-                String rawKey = be.getAttrs().getRawKey(key);
-                String kvp = keyValuePair(rawKey, be.getAttrs().get(key));
+                String kvp = keyValuePair(key, be.getAttrs().get(key));
                 manifest.append(kvp + "\n");
             }
             manifest.append("\n");
@@ -685,8 +688,7 @@ public class PluginDeployed implements DataPluginFactory, ReadableDataSession,
             manifest.append(keyValuePair("Name", re.getResName()) + "\n");
             for (Iterator reit = re.getAttrs().keySet().iterator(); reit.hasNext();) {
                 String key = (String) reit.next();
-                String rawKey = re.getAttrs().getRawKey(key);
-                String kvp = keyValuePair(rawKey, re.getAttrs().get(key));
+                String kvp = keyValuePair(key, re.getAttrs().get(key));
                 manifest.append(kvp + "\n");
             }
             manifest.append("\n");
