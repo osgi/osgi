@@ -31,6 +31,8 @@ public class Scheduler implements Runnable, EventHandler {
 	private boolean							stopped;
 	private Thread							schedulerThread;
 	private ServiceRegistration	serviceReg;
+	private LinkedList                      eventQueue;
+	private boolean                         inEventHandling;
 
 	public Scheduler(BundleContext bc) {
 		this.bc = bc;
@@ -44,6 +46,9 @@ public class Scheduler implements Runnable, EventHandler {
 		props.put( EventConstants.EVENT_TOPIC, getRequiredTopics() );
 		
 		serviceReg = bc.registerService( "org.osgi.service.event.EventHandler", this, props );
+		
+		eventQueue = new LinkedList();
+		inEventHandling = false;
 	}
 
 	public void stop() {
@@ -153,56 +158,64 @@ public class Scheduler implements Runnable, EventHandler {
 		}
 	}
 
-	public synchronized void handleEvent(Event e) {
-		Iterator it = scheduledApps.iterator();
-		Vector removeList = new Vector();
+	public synchronized void handleEvent(Event event) {
+		eventQueue.add( event );
+		if( inEventHandling )
+			return;
 		
-		try {
-
+		inEventHandling = true;
+		
+		while( eventQueue.size() != 0 ) {
+		
+			Event e = (Event)eventQueue.removeFirst();
+			
+			Iterator it = scheduledApps.iterator();
+			Vector removeList = new Vector();
+		
+			try {
+				
 				while ( it.hasNext() ) {
 					ScheduledApplicationImpl schedApp = (ScheduledApplicationImpl) it.next();
 
-					if( !schedApp.isEnabled() )
-						continue;
-					
-				  if ((schedApp.getTopic() != null)
-						&& e.matches(bc.createFilter("("
-								+ EventConstants.EVENT_TOPIC + "="
-								+ schedApp.getTopic() + ")")))
+					if ((schedApp.getTopic() != null)
+							&& e.matches(bc.createFilter("("
+									+ EventConstants.EVENT_TOPIC + "="
+									+ schedApp.getTopic() + ")")))
 				  	
-  					if ((schedApp.getEventFilter() == null) || e.matches(bc.createFilter(schedApp
-									.getEventFilter()))) {
+					if ((schedApp.getEventFilter() == null) || e.matches(bc.createFilter(schedApp
+								.getEventFilter()))) {
   						
-  						try {
-  							schedApp.setEnabled( false ); // to avoid recursion problems
-  							ApplicationDescriptor appDesc = schedApp.getApplicationDescriptor();
-  							appDesc.launch(schedApp.getArguments());
+						ApplicationDescriptor appDesc = schedApp.getApplicationDescriptor();
+						appDesc.launch(schedApp.getArguments());
 
-  							if (!schedApp.isRecurring())
-							    removeList.add( schedApp );
-  							else
-  								schedApp.setEnabled( true );
-  						}catch( Exception ex ) {
-  							schedApp.setEnabled( true );
-  							throw ex;
-  						}
-							
-					}
+						if (!schedApp.isRecurring())
+							removeList.add( schedApp );
+  					}
 				}
-		
-				it = removeList.iterator();
-				while ( it.hasNext() ) {
-					ScheduledApplicationImpl schedApp = (ScheduledApplicationImpl) it.next();
+			}
+			catch (Exception ex) {
+				ex.printStackTrace();
+				Activator.log(
+						LogService.LOG_ERROR,
+						"Exception occurred at scheduling an application!",
+						ex);
+			}
+			
+			it = removeList.iterator();
+			while ( it.hasNext() ) {
+				ScheduledApplicationImpl schedApp = (ScheduledApplicationImpl) it.next();
+				try {
 					removeScheduledApplication( schedApp );
+				}catch( Exception exx ) {
+					Activator.log(
+							LogService.LOG_ERROR,
+							"Error at removing a scheduled application!",
+							exx);					
 				}
+			}
 		}
-		catch (Exception ex) {
-			ex.printStackTrace();
-			Activator.log(
-					LogService.LOG_ERROR,
-					"Exception occurred at scheduling an application!",
-					ex);
-		}
+		
+		inEventHandling = false;
 	}
 
 	public void run() {

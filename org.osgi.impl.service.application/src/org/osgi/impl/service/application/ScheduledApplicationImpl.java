@@ -37,7 +37,6 @@ public class ScheduledApplicationImpl implements ScheduledApplication, Serializa
 	private String  						eventFilter;
 	private boolean							recurring;
 	private boolean             invalid;
-	private boolean             enabled;
 
 	private ServiceRegistration	serviceReg;
 
@@ -55,7 +54,6 @@ public class ScheduledApplicationImpl implements ScheduledApplication, Serializa
 		this.recurring = recurring;
 		
 		invalid = false;
-		enabled = true;
 	}
 
 	void validate(Scheduler scheduler, BundleContext bc)
@@ -66,14 +64,6 @@ public class ScheduledApplicationImpl implements ScheduledApplication, Serializa
 	
 	String getPid() {
 		return pid;
-	}
-
-	boolean isEnabled() {
-		return !invalid && enabled;
-	}
-	
-	void setEnabled( boolean value ) {
-		enabled = value;
 	}
 	
 	public Map getArguments() {
@@ -158,7 +148,6 @@ public class ScheduledApplicationImpl implements ScheduledApplication, Serializa
 		eventFilter = (String) in.readObject();
 		Boolean recurring = (Boolean) in.readObject();		
 		this.recurring = recurring.booleanValue();
-		enabled = true;
 	}
 	
 	private void checkValidity() {
