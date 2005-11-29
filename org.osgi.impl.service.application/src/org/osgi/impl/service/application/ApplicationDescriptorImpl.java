@@ -33,6 +33,7 @@ import java.security.PrivilegedActionException;
 import java.security.PrivilegedExceptionAction;
 import java.util.*;
 
+import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.service.application.*;
 import org.osgi.service.application.ApplicationDescriptor.Delegate;
 
@@ -94,7 +95,7 @@ public class ApplicationDescriptorImpl implements Delegate {
 		doLock(false, false);
 	}
 
-	public ScheduledApplication schedule(Map args, String topic, String filter, boolean recurs) {
+	public ScheduledApplication schedule(Map args, String topic, String filter, boolean recurs) throws InvalidSyntaxException {
 		return Activator.scheduler.addScheduledApplication( descriptor, args, topic, filter, recurs );
 	}
 

@@ -52,7 +52,7 @@ public class Scheduler implements Runnable, EventHandler {
 	}
 
 	public synchronized ScheduledApplication addScheduledApplication(ApplicationDescriptor appDesc,
-			Map arguments, String topic, String eventFilter, boolean recurring) {
+			Map arguments, String topic, String eventFilter, boolean recurring) throws InvalidSyntaxException {
 
 		SecurityManager sm = System.getSecurityManager();
 		if( sm != null ) {
@@ -65,6 +65,9 @@ public class Scheduler implements Runnable, EventHandler {
 		
 		if( topic.equals("") )
 			topic = "*";
+		
+		if( eventFilter != null )
+			bc.createFilter( eventFilter ); // throws InvalidSyntaxException if any problem occurs
 		
 		ScheduledApplicationImpl app = new ScheduledApplicationImpl(this, bc,
 				appDesc.getApplicationId(), arguments, topic, eventFilter, recurring);
