@@ -304,6 +304,7 @@ public final class MidletDescriptor extends ApplicationDescriptor implements Ser
 	}
 
 	protected boolean isLaunchableSpecific() {
+		checkBundle();
 		return isLaunchable();
 	}
 }
