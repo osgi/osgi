@@ -295,6 +295,9 @@ public class OATApplicationContextImpl implements ApplicationContext, ServiceLis
 		if( appHandle == null )
 			throw new IllegalStateException( "Application is not running!" );
 		
+		if( service == null )
+			throw new IllegalArgumentException( "Service cannot be null!" );
+		
 		if( service == mainClass )
 			throw new SecurityException( "Registering the base class of the application is insecure and forbidden!" );
 		
@@ -307,6 +310,9 @@ public class OATApplicationContextImpl implements ApplicationContext, ServiceLis
 			Object service, Dictionary properties) {
 		if( appHandle == null )
 			throw new IllegalStateException( "Application is not running!" );
+		
+		if( service == null )
+			throw new IllegalArgumentException( "Service cannot be null!" );
 		
 		if( service == mainClass )
 			throw new SecurityException( "Registering the base class of the application is insecure and forbidden!" );
