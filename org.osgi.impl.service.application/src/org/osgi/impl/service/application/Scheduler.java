@@ -173,14 +173,17 @@ public class Scheduler implements Runnable, EventHandler {
   						try {
   							schedApp.setEnabled( false ); // to avoid recursion problems
   							ApplicationDescriptor appDesc = schedApp.getApplicationDescriptor();
-  							if( appDesc.launch(schedApp.getArguments()) == null )
-  								throw new Exception("Can't launch the application!");
-  						}finally {
+  							appDesc.launch(schedApp.getArguments());
+
+  							if (!schedApp.isRecurring())
+							    removeList.add( schedApp );
+  							else
+  								schedApp.setEnabled( true );
+  						}catch( Exception ex ) {
   							schedApp.setEnabled( true );
+  							throw ex;
   						}
 							
-						  if (!schedApp.isRecurring())
-							  removeList.add( schedApp );
 					}
 				}
 		
