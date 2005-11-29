@@ -164,6 +164,8 @@ public class OATApplicationContextImpl implements ApplicationContext, ServiceLis
 	}
 	
 	public Object locateService(String referenceName) {
+		if( referenceName == null )
+			throw new NullPointerException( "Reference name cannot be null!" );
 		if( appHandle == null )
 			throw new IllegalStateException( "Application is not running!" );
 		
@@ -238,6 +240,8 @@ public class OATApplicationContextImpl implements ApplicationContext, ServiceLis
 	}
 	
 	public Object[] locateServices(String referenceName) {
+		if( referenceName == null ) /* TODO: add it into the specification!!! */
+			throw new NullPointerException( "Reference name cannot be null!" );
 		if( appHandle == null )
 			throw new IllegalStateException( "Application is not running!" );
 		
