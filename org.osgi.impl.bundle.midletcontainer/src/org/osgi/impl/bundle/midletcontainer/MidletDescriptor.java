@@ -253,6 +253,8 @@ public final class MidletDescriptor extends ApplicationDescriptor implements Ser
 		if( pattern == null )
 			throw new NullPointerException( "Pattern cannot be null!" );
 			
+		checkBundle(); // TODO throw IllegalStateException if the AppDesc is invalid
+		
 		final Bundle bundle = this.bundle;
 		try {
 		  return ((Boolean)AccessController.doPrivileged(new PrivilegedExceptionAction() {
