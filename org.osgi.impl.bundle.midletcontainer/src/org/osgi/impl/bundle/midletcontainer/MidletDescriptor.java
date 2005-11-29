@@ -257,14 +257,39 @@ public final class MidletDescriptor extends ApplicationDescriptor implements Ser
 		try {
 		  return ((Boolean)AccessController.doPrivileged(new PrivilegedExceptionAction() {
 			  public Object run() throws Exception {			
-					Method getBundleData = bundle.getClass().getDeclaredMethod( "getBundleData", new Class[0] );
+					Method getBundleData = null;
+					
+					Class bundleClass = bundle.getClass();					
+					do {
+						try {
+							getBundleData = bundleClass.getDeclaredMethod( "getBundleData", new Class[0] );
+							break;
+						} catch( NoSuchMethodException e ) {
+							bundleClass = bundleClass.getSuperclass();
+							if( bundleClass == null )
+								throw e;
+						}
+					}while( true );
+					
 					getBundleData.setAccessible( true );
 					
 					Object data = getBundleData.invoke( bundle, new Class [0] );
 					if( data == null )
 						return new Boolean( false );
 					
-					Method matchDNChain = data.getClass().getDeclaredMethod( "matchDNChain", new Class[] { String.class } );
+					Method matchDNChain = null;
+					
+					Class  matchDNClass = data.getClass();					
+					do {
+						try {
+							matchDNChain = matchDNClass.getDeclaredMethod( "matchDNChain", new Class[] { String.class } );
+							break;
+						} catch( NoSuchMethodException e ) {
+							matchDNClass = matchDNClass.getSuperclass();
+							if( matchDNClass == null )
+								throw e;
+						}
+					}while( true );
 					matchDNChain.setAccessible( true );
 					
 					return matchDNChain.invoke( data, new Object [] { pattern } );
