@@ -219,7 +219,7 @@ public class OATApplicationContextImpl implements ApplicationContext, ServiceLis
 		    long             selectedServiceId = ((Long)refs[ 0 ].getProperty( Constants.SERVICE_ID )).longValue(); 
 		    
 		    for( int j=1; j < refs.length; j++ ) {
-			    Integer rankW = (Integer)refs[ 0 ].getProperty( Constants.SERVICE_RANKING );		    
+			    Integer rankW = (Integer)refs[ j ].getProperty( Constants.SERVICE_RANKING );		    
 			    int  rank = (rankW == null) ? 0 : rankW.intValue();
 		    	long serviceID = ((Long)refs[ j ].getProperty( Constants.SERVICE_ID )).longValue();
 		    	
