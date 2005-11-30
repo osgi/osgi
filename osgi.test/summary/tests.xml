@@ -1,0 +1,5 @@
+<tests>
+	<test type="core"/>
+	<test type="cmpn"/>
+	<test type="meg"/>
+</tests>
