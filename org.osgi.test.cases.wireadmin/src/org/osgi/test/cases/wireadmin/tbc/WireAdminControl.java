@@ -10,6 +10,9 @@ import org.osgi.test.cases.util.DefaultTestBundleControl;
  * Contains the test methods of the wireadmin test case
  * 
  * $Log$
+ * Revision 1.8  2005/11/30 08:44:34  sboshev
+ * Fixed a bug which caused sometimes the test case to fail
+ *
  * Revision 1.7  2005/08/03 16:32:17  pdobrev
  * fix last issues
  *
@@ -159,6 +162,11 @@ public class WireAdminControl extends DefaultTestBundleControl {
 		else {
 			log("Test wire properties after updateWire ", "NOT OK.");
 		}
+    try {
+      // Wait some seconds to avoid upcomming invalid sync notifications
+      Thread.sleep(1000); 
+    } catch (InterruptedException ie) {}
+    synchCounterx = 0; // reset the sync counter synce it may have been updated
 	}
 
 	/**
@@ -216,7 +224,10 @@ public class WireAdminControl extends DefaultTestBundleControl {
 				new Class[] {java.lang.String.class});
 		helper.registerConsumer("deletedWireConsumer",
 				new Class[] {java.lang.String.class});
-		delay(4, 200);
+    /* The number of the notifications is 5 : 
+    1 for "deletedWireProducer" with parameter null and 2x2 for each wire and each producer/consumer */ 
+		delay(5, 200);
+    checkForAdditionalNotifications(5);
 		log(subtest,
 				"Deleting wire. Must call consumersConnected and producersConnected");
 		wa.deleteWire(wire1);
