@@ -21,6 +21,9 @@
 			<xsl:attribute name="absent">
 				<xsl:value-of select="count($set//@absent)"/>	
 			</xsl:attribute>
+			<xsl:attribute name="title">
+				<xsl:value-of select="@title"/>	
+			</xsl:attribute>
 			
 			<failing>
 				<xsl:for-each select="$set//testcase[@errors]">
