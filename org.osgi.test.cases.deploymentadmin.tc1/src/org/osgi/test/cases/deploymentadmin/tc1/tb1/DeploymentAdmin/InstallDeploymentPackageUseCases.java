@@ -466,11 +466,15 @@ public class InstallDeploymentPackageUseCases implements TestInterface {
             }
             tbc.failException("#", DeploymentException.class);
         } catch (DeploymentException e) {
-            String dpNameProp = (String) deploymentEventHandler.getProperty("deploymentpackage.name");
-            Boolean successProp = (Boolean) deploymentEventHandler.getProperty("successful");
-            tbc.assertTrue("A complete event occured", deploymentEventHandler.isComplete());
-            tbc.assertEquals("The installed deployment package is " + testDP.getName(), testDP.getName(), dpNameProp);
-            tbc.assertTrue("The installation of deployment package was NOT successfull ", !successProp.booleanValue());
+            try {
+                String dpNameProp = (String) deploymentEventHandler.getProperty("deploymentpackage.name");
+                Boolean successProp = (Boolean) deploymentEventHandler.getProperty("successful");
+                tbc.assertTrue("A complete event occured", deploymentEventHandler.isComplete());
+                tbc.assertEquals("The installed deployment package is " + testDP.getName(), testDP.getName(), dpNameProp);
+                tbc.assertTrue("The installation of deployment package was NOT successfull ", !successProp.booleanValue());
+            } catch (Exception ex) {
+                tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[]{ex.getClass().getName()}));
+            }
         } catch (Exception e) {
             tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }));
         } finally {
