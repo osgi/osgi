@@ -128,6 +128,9 @@ public class ScheduledApplicationImpl implements ScheduledApplication, Serializa
 		catch (Exception e) {
 			Activator.log( LogService.LOG_ERROR,
 				"Exception occurred at removing a scheduled application!", e);
+			
+			if( e instanceof SecurityException )
+				throw (SecurityException)e;
 		}
 	}
 
