@@ -115,7 +115,7 @@ public class DeploymentmoTestControl extends DefaultTestBundleControl {
     public void setReceivedAlert(boolean receivedAlert) {
         this.receivedAlert = receivedAlert;
     }
- 
+    
 	public void prepare() throws Exception {
 		BundleContext bc = getContext();
 
@@ -619,7 +619,7 @@ public class DeploymentmoTestControl extends DefaultTestBundleControl {
         assertEquals("Asserting alert type", type, item.getType());
         assertEquals("Asserting source", source, item.getSource());
         assertNull("Asserting mark", item.getMark());
-        assertEquals("Asserting data " ,data,item.getData());
+        assertEquals("Asserting data" ,data,item.getData());
         //Resets after the asserts.
         resetCommandValues();
     }
@@ -773,6 +773,8 @@ public class DeploymentmoTestControl extends DefaultTestBundleControl {
      * @return The first different node name
      */
     public static String getNodeId(String[] initialNodes, String[] finalNodes) {
+    	if (finalNodes.length!=initialNodes.length+1) 
+    		throw new RuntimeException("The node was not created");
     	String nodeId = "";
         for (int i=0;i<finalNodes.length;i++) {
         	boolean found= false; 

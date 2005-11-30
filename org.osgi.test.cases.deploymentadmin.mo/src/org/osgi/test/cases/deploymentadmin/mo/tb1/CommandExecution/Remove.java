@@ -114,7 +114,7 @@ public class Remove implements TestInterface {
               tbc.assertTrue("Asserts that the Deployed subtree was removed ",initialChildren.length-1==finalChildren.length);
              
              tbc.assertAlertValues(DeploymentmoConstants.ALERT_TYPE_DEPLOYED_REMOVE,
-                 DeploymentmoConstants.getDeliveredNodeId(DeploymentmoConstants.SIMPLE_DP),
+                 DeploymentmoConstants.getDeployedNodeId(nodeId),
                  new DmtData(200));
 
 
@@ -217,7 +217,7 @@ public class Remove implements TestInterface {
              
              
              tbc.assertAlertValues(DeploymentmoConstants.ALERT_TYPE_DEPLOYED_REMOVE,
-                 DeploymentmoConstants.getDeliveredNodeId(DeploymentmoConstants.SIMPLE_BUNDLE),
+                 DeploymentmoConstants.getDeployedNodeId(nodeId),
                  new DmtData(200));
 
 

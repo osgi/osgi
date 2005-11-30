@@ -34,7 +34,6 @@
 
 package org.osgi.test.cases.deploymentadmin.mo.tbc.Areas;
 
-import org.osgi.service.deploymentadmin.DeploymentPackage;
 import org.osgi.service.dmt.DmtData;
 import org.osgi.service.dmt.DmtException;
 import org.osgi.service.dmt.DmtSession;
@@ -566,7 +565,7 @@ public class DeployedSubtree {
 			String signer = signerChildren[0];
 			
 			MetaNode metaNode = session
-				.getMetaNode(DeploymentmoConstants.getDeployedExtSigners(signer));
+				.getMetaNode(DeploymentmoConstants.getDeployedExtSignersSignerId(nodeId,signer));
 			tbc
 				.assertEquals(
 					"Asserts if $/Deployment/Inventory/Deployed/[node_id]/Ext/Signers/<signer> metanode has Automatic Scope",
@@ -918,7 +917,7 @@ public class DeployedSubtree {
 			String[] signerChildren = session.getChildNodeNames(DeploymentmoConstants.getDeployedExtBundlesSigners(nodeId, bundleId));
 			
 			if (signerChildren.length<=0) {
-				tbc.fail("./OSGi/Deployment/Inventory/Deployed/[node_id]/Ext/Signers/[signer] does not exist");
+				tbc.fail("$/Deployment/Inventory/Deployed/[node_id]/Ext/Bundles/<bundle_id>/Signers/<signer> does not exist");
 			}
 			String signer = signerChildren[0];
 			

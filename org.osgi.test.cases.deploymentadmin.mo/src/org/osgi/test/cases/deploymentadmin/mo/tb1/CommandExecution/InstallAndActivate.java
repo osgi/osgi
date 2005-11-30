@@ -98,7 +98,6 @@ public class InstallAndActivate implements TestInterface {
         testInstallAndActivate018();
         testInstallAndActivate019();
         testInstallAndActivate020();
-        testInstallAndActivate021();
         
 	}
 
@@ -135,7 +134,7 @@ public class InstallAndActivate implements TestInterface {
              }
 
              String[] finalChildren= session.getChildNodeNames(DeploymentmoConstants.DEPLOYMENT_INVENTORY_DEPLOYED);
-             tbc.assertTrue("Asserts that the at Deployed subtree was created",initialChildren.length+1==finalChildren.length);
+             tbc.assertTrue("Asserts that the node at Deployed subtree was created",initialChildren.length+1==finalChildren.length);
              
              nodeId = DeploymentmoTestControl.getNodeId(initialChildren,finalChildren);
              tbc.assertAlertValues(DeploymentmoConstants.ALERT_TYPE_INSTALLANDACTIVATE,
@@ -212,7 +211,7 @@ public class InstallAndActivate implements TestInterface {
 
 			 finalChildren= session.getChildNodeNames(DeploymentmoConstants.DEPLOYMENT_INVENTORY_DEPLOYED);
 			 
-			 tbc.assertTrue("Asserts that the at Deployed subtree was not created (it is an update)",initialChildren.length==finalChildren.length);
+			 tbc.assertTrue("Asserts that the node at Deployed subtree was not created (it is an update)",initialChildren.length==finalChildren.length);
              tbc.assertAlertValues(DeploymentmoConstants.ALERT_TYPE_INSTALLANDACTIVATE,
                  DeploymentmoConstants.getDeployedNodeId(nodeId),
                  new DmtData(200));
@@ -357,7 +356,6 @@ public class InstallAndActivate implements TestInterface {
      */
     private void testInstallAndActivate004() {
     	tbc.log("#testInstallAndActivate004");
-        assertResultCode(DeploymentmoConstants.BUNDLE_THROWS_EXCEPTION_DP, 250);
 		DmtSession session = null;
 		String nodeId = "";
         //Backups the artifact and, after the execute method removes, moves it again to the delivered area 
@@ -399,24 +397,14 @@ public class InstallAndActivate implements TestInterface {
 			
 		}
     }
-    /**
-     * This test asserts the result code is 401 if the user cancelled the download.
-     *
-     * @spec 3.6.5.2 InstallAndActivate Command
-     */
-    private void testInstallAndActivate005() {
-        tbc.log("#testInstallAndActivate005");
-        tbc.log("#Test case is only valid if the user cancelled the download");
-        assertResultCode(DeploymentmoConstants.SIMPLE_DP, 401);
-    }
 
     /**
      * This test asserts the result code is 404 if the content is not acceptable
      *
      * @spec 3.6.5.2 InstallAndActivate Command
      */
-    private void testInstallAndActivate006() {
-    	tbc.log("#testInstallAndActivate006");
+    private void testInstallAndActivate005() {
+    	tbc.log("#testInstallAndActivate005");
         assertResultCode(DeploymentmoConstants.NOT_ACCEPTABLE_CONTENT, 404);
     }
     
@@ -426,8 +414,8 @@ public class InstallAndActivate implements TestInterface {
      *
      * @spec 3.6.5.2 InstallAndActivate Command
      */
-    private void testInstallAndActivate007() {
-        tbc.log("#testInstallAndActivate007");
+    private void testInstallAndActivate006() {
+        tbc.log("#testInstallAndActivate006");
         assertResultCode(DeploymentmoConstants.MANIFEST_NOT_1ST_FILE, 450);
     }
     
@@ -436,8 +424,8 @@ public class InstallAndActivate implements TestInterface {
      *
      * @spec 3.6.5.2 InstallAndActivate Command
      */
-    private void testInstallAndActivate008() {
-        tbc.log("#testInstallAndActivate008");
+    private void testInstallAndActivate007() {
+        tbc.log("#testInstallAndActivate007");
         assertResultCode(DeploymentmoConstants.MISSING_NAME_HEADER_DP, 451);
     }
     
@@ -446,8 +434,8 @@ public class InstallAndActivate implements TestInterface {
      *
      * @spec 3.6.5.2 InstallAndActivate Command
      */
-    private void testInstallAndActivate009() {
-        tbc.log("#testInstallAndActivate009");
+    private void testInstallAndActivate008() {
+        tbc.log("#testInstallAndActivate008");
         assertResultCode(DeploymentmoConstants.FIX_PACK_LOWER_RANGE_DP, 453);
     }
     /**
@@ -457,8 +445,8 @@ public class InstallAndActivate implements TestInterface {
      *
      * @spec 3.6.5.2 InstallAndActivate Command
      */
-    private void testInstallAndActivate010() {
-    	tbc.log("#testInstallAndActivate010");
+    private void testInstallAndActivate009() {
+    	tbc.log("#testInstallAndActivate009");
         assertResultCode(DeploymentmoConstants.RESOURCE_PROCESSOR_DP,DeploymentmoConstants.SIMPLE_NO_BUNDLE_DP,DeploymentmoConstants.MISSING_BUNDLE_FIX_PACK, 454);
     }
     /**
@@ -468,8 +456,8 @@ public class InstallAndActivate implements TestInterface {
      *
      * @spec 3.6.5.2 InstallAndActivate Command
      */
-    private void testInstallAndActivate011() {
-    	tbc.log("#testInstallAndActivate011");
+    private void testInstallAndActivate010() {
+    	tbc.log("#testInstallAndActivate010");
         assertResultCode(DeploymentmoConstants.RESOURCE_PROCESSOR_DP,DeploymentmoConstants.SIMPLE_NO_RESOURCE_DP,DeploymentmoConstants.MISSING_RESOURCE_FIX_PACK, 455);
     }
     
@@ -478,8 +466,8 @@ public class InstallAndActivate implements TestInterface {
      *
      * @spec 3.6.5.2 InstallAndActivate Command
      */
-    private void testInstallAndActivate012() {
-        tbc.log("#testInstallAndActivate012");
+    private void testInstallAndActivate011() {
+        tbc.log("#testInstallAndActivate011");
         assertResultCode(DeploymentmoConstants.SIMPLE_UNSIGNED_DP, 456);
     }
     
@@ -489,8 +477,8 @@ public class InstallAndActivate implements TestInterface {
      *
      * @spec 3.6.5.2 InstallAndActivate Command
      */
-    private void testInstallAndActivate013() {
-        tbc.log("#testInstallAndActivate013");
+    private void testInstallAndActivate012() {
+        tbc.log("#testInstallAndActivate012");
         assertResultCode(DeploymentmoConstants.SYMB_NAME_DIFFERENT_FROM_MANIFEST_DP, 457);
     }
     
@@ -500,8 +488,8 @@ public class InstallAndActivate implements TestInterface {
      *
      * @spec 3.6.5.2 InstallAndActivate Command
      */
-    private void testInstallAndActivate014() {
-        tbc.log("#testInstallAndActivate014");
+    private void testInstallAndActivate013() {
+        tbc.log("#testInstallAndActivate013");
         assertResultCode(DeploymentmoConstants.RESOURCE_PROCESSOR_CUSTOMIZER, DeploymentmoConstants.RP_FROM_OTHER_DP,458);
     }
     
@@ -511,8 +499,8 @@ public class InstallAndActivate implements TestInterface {
      *
      * @spec 3.6.5.2 InstallAndActivate Command
      */
-    private void testInstallAndActivate015() {
-    	tbc.log("#testInstallAndActivate015");
+    private void testInstallAndActivate014() {
+    	tbc.log("#testInstallAndActivate014");
     	DmtSession session = null;
 		String nodeId = "";
 		String nodeId2 = "";
@@ -532,7 +520,7 @@ public class InstallAndActivate implements TestInterface {
 				tbc.wait(DeploymentmoConstants.TIMEOUT);
 			}
 			String[] finalChildren = session.getChildNodeNames(DeploymentmoConstants.DEPLOYMENT_INVENTORY_DEPLOYED);
-			tbc.assertTrue("Asserts that the at Deployed subtree was created",
+			tbc.assertTrue("Asserts that the node at Deployed subtree was created",
 					initialChildren.length + 1 == finalChildren.length);
 			
 			nodeId = DeploymentmoTestControl.getNodeId(initialChildren,finalChildren);
@@ -547,7 +535,7 @@ public class InstallAndActivate implements TestInterface {
 			
 			finalChildren = session.getChildNodeNames(DeploymentmoConstants.DEPLOYMENT_INVENTORY_DEPLOYED);
 			
-			tbc.assertTrue("Asserts that the at Deployed subtree was created",
+			tbc.assertTrue("Asserts that the node at Deployed subtree was created",
 					initialChildren.length + 1 == finalChildren.length);
 			nodeId2 = DeploymentmoTestControl.getNodeId(initialChildren,
 					finalChildren);
@@ -584,8 +572,8 @@ public class InstallAndActivate implements TestInterface {
 	 * 
 	 * @spec 3.6.5.2 InstallAndActivate Command
 	 */
-    private void testInstallAndActivate016() {
-    	tbc.log("#testInstallAndActivate016");
+    private void testInstallAndActivate015() {
+    	tbc.log("#testInstallAndActivate015");
         assertResultCode(DeploymentmoConstants.SIMPLE_DP, DeploymentmoConstants.DP_CONTAINING_A_BUNDLE_FROM_OTHER_DP,460);
     }
     
@@ -595,8 +583,8 @@ public class InstallAndActivate implements TestInterface {
      *
      * @spec 3.6.5.2 InstallAndActivate Command
      */
-    private void testInstallAndActivate017() {
-    	tbc.log("#testInstallAndActivate017");
+    private void testInstallAndActivate016() {
+    	tbc.log("#testInstallAndActivate016");
         assertResultCode(DeploymentmoConstants.NON_CUSTOMIZER_RP,DeploymentmoConstants.SIMPLE_RESOURCE_DP, DeploymentmoConstants.DP_THROWS_RESOURCE_VIOLATION,461);
     }
     
@@ -605,8 +593,8 @@ public class InstallAndActivate implements TestInterface {
      *
      * @spec 3.6.5.2 InstallAndActivate Command
      */
-    private void testInstallAndActivate018() {
-    	tbc.log("#testInstallAndActivate018");
+    private void testInstallAndActivate017() {
+    	tbc.log("#testInstallAndActivate017");
         assertResultCode(DeploymentmoConstants.RP_NOT_ABLE_TO_COMMIT, 462);
     }
     
@@ -616,8 +604,8 @@ public class InstallAndActivate implements TestInterface {
      *
      * @spec 3.6.5.2 InstallAndActivate Command
      */
-    private synchronized void testInstallAndActivate019() {
-        tbc.log("#testInstallAndActivate019");
+    private synchronized void testInstallAndActivate018() {
+        tbc.log("#testInstallAndActivate018");
         assertResultCode(DeploymentmoConstants.SIMPLE_RESOURCE_DP, 464);
     }
     
@@ -628,8 +616,8 @@ public class InstallAndActivate implements TestInterface {
      * 
      * @spec 3.6.5.2 InstallAndActivate Command
      */
-    private synchronized void testInstallAndActivate020() {
-        tbc.log("#testInstallAndActivate020");
+    private synchronized void testInstallAndActivate019() {
+        tbc.log("#testInstallAndActivate019");
         TestingBlockingResourceProcessor testBlockRP = null;
         try {
             TestingArtifact artifact = tbc.getArtifact(DeploymentmoConstants.BLOCK_SESSION_RESOURCE_PROCESSOR);
@@ -668,8 +656,8 @@ public class InstallAndActivate implements TestInterface {
      *
      * @spec 3.6.4 Deployed
      */
-    private void testInstallAndActivate021() {
-    	tbc.log("#testInstallAndActivate021");
+    private void testInstallAndActivate020() {
+    	tbc.log("#testInstallAndActivate020");
         TestingArtifact artifact = tbc.getArtifact(DeploymentmoConstants.SIMPLE_DP);
         TestingDeploymentPackage testDP = artifact.getDeploymentPackage();
 		DeploymentPackage dp = null;
@@ -707,8 +695,10 @@ public class InstallAndActivate implements TestInterface {
 					DeploymentmoConstants.PRINCIPAL,
 					DeploymentmoConstants.OSGI_ROOT,
 					DmtSession.LOCK_TYPE_ATOMIC);
-
-			 synchronized (tbc) {
+			
+			tbc.resetCommandValues();
+			
+			synchronized (tbc) {
 				session.execute(DeploymentmoConstants.getDeliveredOperationsInstallAndActivate(dpCode), null);
                 tbc.wait(DeploymentmoConstants.TIMEOUT);
              }
@@ -748,9 +738,11 @@ public class InstallAndActivate implements TestInterface {
                 tbc.wait(DeploymentmoConstants.TIMEOUT);
              }
              String[] finalChildren= session.getChildNodeNames(DeploymentmoConstants.DEPLOYMENT_INVENTORY_DEPLOYED);
-             tbc.assertTrue("Asserts that the at Deployed subtree was created",initialChildren.length+1==finalChildren.length);
+             tbc.assertTrue("Asserts that the node at Deployed subtree was created",initialChildren.length+1==finalChildren.length);
              
              nodeId = DeploymentmoTestControl.getNodeId(initialChildren,finalChildren);
+             
+             tbc.resetCommandValues();
              
 			 synchronized (tbc) {
 				 session.execute(DeploymentmoConstants.getDeliveredOperationsInstallAndActivate(secondDpCode), null);
@@ -758,7 +750,7 @@ public class InstallAndActivate implements TestInterface {
              }
 
              tbc.assertAlertValues(DeploymentmoConstants.ALERT_TYPE_INSTALLANDACTIVATE,
-                 null,
+        		 DeploymentmoConstants.getDeliveredNodeId(secondDpCode),
                  new DmtData(resultCode));
 
 
@@ -798,7 +790,7 @@ public class InstallAndActivate implements TestInterface {
                 tbc.wait(DeploymentmoConstants.TIMEOUT);
              }
              String[] finalChildren= session.getChildNodeNames(DeploymentmoConstants.DEPLOYMENT_INVENTORY_DEPLOYED);
-             tbc.assertTrue("Asserts that the at Deployed subtree was created",initialChildren.length+1==finalChildren.length);
+             tbc.assertTrue("Asserts that the node at Deployed subtree was created",initialChildren.length+1==finalChildren.length);
              
              nodeId = DeploymentmoTestControl.getNodeId(initialChildren,finalChildren);
 
