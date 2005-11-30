@@ -177,7 +177,7 @@ public class ApplicationAdminPermission extends Permission {
             if( other.applicationID == null )
           		return false; /* it cannot be, this might be a bug */
             
-      		if( !other.applicationID.equals( other.filter ) )
+      		if( !other.applicationID.equals( other.applicationDescriptor.getApplicationId() ) )
       			return false;
       	}
       	else {
