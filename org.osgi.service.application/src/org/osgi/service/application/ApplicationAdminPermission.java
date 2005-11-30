@@ -134,7 +134,7 @@ public class ApplicationAdminPermission extends Permission {
 	 */
 	public ApplicationAdminPermission setCurrentApplicationId(String applicationId) {
 		if( this.applicationDescriptor == null )
-			throw new RuntimeException("No application descriptor found!");
+			throw new NullPointerException("No application descriptor found!");
 			
 		ApplicationAdminPermission newPerm = new ApplicationAdminPermission( this.applicationDescriptor, 
 				this.actions );
