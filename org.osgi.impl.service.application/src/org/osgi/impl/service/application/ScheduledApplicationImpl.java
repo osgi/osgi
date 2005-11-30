@@ -53,7 +53,7 @@ public class ScheduledApplicationImpl implements ScheduledApplication, Serializa
 		this.eventFilter = eventFilter;
 		this.recurring = recurring;
 		
-		invalid = false;
+		invalid = true;
 	}
 
 	void validate(Scheduler scheduler, BundleContext bc)
@@ -73,6 +73,10 @@ public class ScheduledApplicationImpl implements ScheduledApplication, Serializa
 		return new HashMap( args );
 	}
 
+	String getRequiredTopic() {
+		return topic;
+	}
+	
 	public String getTopic() {
 		checkValidity();		
 		return topic;
@@ -110,6 +114,7 @@ public class ScheduledApplicationImpl implements ScheduledApplication, Serializa
 		
 		serviceReg = bc.registerService( "org.osgi.service.application.ScheduledApplication", 
 				this, props );
+		invalid = false;
 	}
 	
 	void unregister() {
@@ -151,6 +156,10 @@ public class ScheduledApplicationImpl implements ScheduledApplication, Serializa
 		eventFilter = (String) in.readObject();
 		Boolean recurring = (Boolean) in.readObject();		
 		this.recurring = recurring.booleanValue();
+	}
+	
+	boolean isValid() {
+		return !invalid;
 	}
 	
 	private void checkValidity() {

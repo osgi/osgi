@@ -78,21 +78,23 @@ public class Scheduler implements Runnable, EventHandler {
 				appDesc.getApplicationId(), arguments, topic, eventFilter, recurring);
 		
 		scheduledApps.add( app );
-		changeServiceReg();
 		saveScheduledApplications();
-		schedulerThread.interrupt();
+		changeServiceReg();
 		app.register();
+		schedulerThread.interrupt();
 		return app;
 	}
 
 	public synchronized void removeScheduledApplication(
 			ScheduledApplication scheduledApplication) throws Exception {
 
+		// if the appDesc of the schedule was already uninstalled, everyone can remove the schedule
+		ApplicationDescriptor appDesc = ((ScheduledApplicationImpl)scheduledApplication).getApplicationDescriptor(); 
+		
 		SecurityManager sm = System.getSecurityManager();
-		if( sm != null )
+		if( appDesc != null && sm != null )
 			sm.checkPermission(new ApplicationAdminPermission(
-				((ScheduledApplicationImpl)scheduledApplication).getApplicationDescriptor(),
-				ApplicationAdminPermission.SCHEDULE_ACTION));
+				appDesc, ApplicationAdminPermission.SCHEDULE_ACTION));
 
 		scheduledApps.remove( scheduledApplication );
 		changeServiceReg();
@@ -111,7 +113,7 @@ public class Scheduler implements Runnable, EventHandler {
 		
 		Iterator it = scheduledApps.iterator();
 		while( it.hasNext() )
-			topics.add( ((ScheduledApplication)it.next() ).getTopic() );
+			topics.add( ((ScheduledApplicationImpl)it.next() ).getRequiredTopic() );
 		
 		String topicsArray[] = new String [ topics.size() ];
 		for( int i=0; i != topics.size(); i++ )
@@ -177,6 +179,9 @@ public class Scheduler implements Runnable, EventHandler {
 				while ( it.hasNext() ) {
 					ScheduledApplicationImpl schedApp = (ScheduledApplicationImpl) it.next();
 
+					if( !schedApp.isValid() )
+						continue;
+					
 					if ((schedApp.getTopic() != null)
 							&& e.matches(bc.createFilter("("
 									+ EventConstants.EVENT_TOPIC + "="
@@ -186,10 +191,15 @@ public class Scheduler implements Runnable, EventHandler {
 								.getEventFilter()))) {
   						
 						ApplicationDescriptor appDesc = schedApp.getApplicationDescriptor();
-						appDesc.launch(schedApp.getArguments());
-
-						if (!schedApp.isRecurring())
+						
+						if( appDesc == null )        /* is the application descriptor uninstalled? */
 							removeList.add( schedApp );
+						else {
+							appDesc.launch(schedApp.getArguments());
+
+							if (!schedApp.isRecurring())
+								removeList.add( schedApp );
+						}
   					}
 				}
 			}
