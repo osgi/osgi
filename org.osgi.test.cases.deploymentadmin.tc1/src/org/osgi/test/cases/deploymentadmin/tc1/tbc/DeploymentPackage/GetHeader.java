@@ -84,9 +84,6 @@ public class GetHeader {
             testGetHeader021();
             testGetHeader022();
             testGetHeader023();
-            testGetHeader024();
-            testGetHeader025();
-            testGetHeader026();
 		} finally {
 			uninstallDeploymentPackage();
 		}
@@ -101,12 +98,11 @@ public class GetHeader {
 		try {
 			testDP = tbc.getTestingDeploymentPackage(DeploymentConstants.SIMPLE_DP);
 			dp = tbc.installDeploymentPackage(tbc.getWebServer() + testDP.getFilename());
-			testFixPackDP = tbc.getTestingDeploymentPackage(DeploymentConstants.SIMPLE_FIX_PACK_DP);
-			fixPackDP = tbc.installDeploymentPackage(tbc.getWebServer() + testFixPackDP.getFilename());
 		} catch (Exception e) {
 			tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }));
 		}
 	}
+    
 	/**
 	 * Asserts that it returns the requested deployment package manifest header (DeploymentPackage-Version) 
 	 * from the main section
@@ -118,7 +114,7 @@ public class GetHeader {
 		try {
 		String header = dp.getHeader(DeploymentConstants.DP_HEADER_VERSION);
 		tbc.assertEquals("Asserts that it returns the requested deployment package manifest header (DeploymentPackage-Version) from the main section",
-					testDP.getVersionString(),header);
+            testDP.getVersion().toString(), header);
 		} catch (Exception e) {
 			tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }));
 		}
@@ -346,37 +342,6 @@ public class GetHeader {
 			tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }));
 		}
 	}
-	/**
-	 * Asserts that it returns the requested deployment package manifest header (DeploymentPackage-FixPack) from the main section
-	 * 
-	 * @spec DeploymentPackage.getHeader(String)
-	 */
-	private void testGetHeader016() {
-		tbc.log("#testGetHeader016");
-		try {
-		String header = fixPackDP.getHeader(DeploymentConstants.DP_HEADER_FIXPACK);
-		tbc.assertEquals("Asserts that it returns the requested deployment package manifest header (DeploymentPackage-FixPack) from the main section",
-				DeploymentConstants.DP_MY_FIXPACK,header);
-		} catch (Exception e) {
-			tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }));
-		}
-	}
-	
-	/**
-	 * Asserts that header names are case insensitive (deploymentpackage-fixpack)
-	 * 
-	 * @spec DeploymentPackage.getHeader(String)
-	 */
-	private void testGetHeader017() {
-		tbc.log("#testGetHeader017");
-		try {
-		String header = fixPackDP.getHeader(DeploymentConstants.DP_HEADER_FIXPACK.toLowerCase());
-		tbc.assertEquals("Asserts that header names are case insensitive (deploymentpackage-fixpack)",
-				DeploymentConstants.DP_MY_FIXPACK,header);
-		} catch (Exception e) {
-			tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }));
-		}
-	}
 	
 	/**
 	 * Asserts that it returns the requested deployment package manifest header 
@@ -384,8 +349,8 @@ public class GetHeader {
 	 * 
 	 * @spec DeploymentPackage.getHeader(String)
 	 */
-	private void testGetHeader018() {
-		tbc.log("#testGetHeader018");
+	private void testGetHeader016() {
+		tbc.log("#testGetHeader016");
 		try {
 		String header = dp.getHeader(DeploymentConstants.DP_HEADER_LICENSE);
 		tbc.assertEquals("Asserts that it returns the requested deployment package manifest header (DeploymentPackage-License) from the main section",
@@ -400,8 +365,8 @@ public class GetHeader {
 	 * 
 	 * @spec DeploymentPackage.getHeader(String)
 	 */
-	private void testGetHeader019() {
-		tbc.log("#testGetHeader019");
+	private void testGetHeader017() {
+		tbc.log("#testGetHeader017");
 		try {
 		String header = dp.getHeader(DeploymentConstants.DP_HEADER_LICENSE.toLowerCase());
 		tbc.assertEquals("Asserts that header names are case insensitive (deploymentpackage-license)",
@@ -410,10 +375,44 @@ public class GetHeader {
 			tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }));
 		}
 	}
-
+    
     /**
-     * Asserts that it returns the requested deployment package manifest header 
-     * (DeploymentPackage-License) from the main section of DP-fixpack.
+     * Asserts that it returns the requested deployment package manifest header (DeploymentPackage-FixPack) from the main section
+     * 
+     * @spec DeploymentPackage.getHeader(String)
+     */
+    private void testGetHeader018() {
+        tbc.log("#testGetHeader018");
+        try {
+        testFixPackDP = tbc.getTestingDeploymentPackage(DeploymentConstants.SIMPLE_FIX_PACK_DP);
+        fixPackDP = tbc.installDeploymentPackage(tbc.getWebServer() + testFixPackDP.getFilename());
+        String header = fixPackDP.getHeader(DeploymentConstants.DP_HEADER_FIXPACK);
+        tbc.assertEquals("Asserts that it returns the requested deployment package manifest header (DeploymentPackage-FixPack) from the main section",
+                DeploymentConstants.DP_MY_FIXPACK, header);
+        } catch (Exception e) {
+            tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }));
+        }
+    }
+    
+    /**
+     * Asserts that header names are case insensitive (deploymentpackage-fixpack)
+     * 
+     * @spec DeploymentPackage.getHeader(String)
+     */
+    private void testGetHeader019() {
+        tbc.log("#testGetHeader019");
+        try {
+        String header = fixPackDP.getHeader(DeploymentConstants.DP_HEADER_FIXPACK.toLowerCase());
+        tbc.assertEquals("Asserts that header names are case insensitive (deploymentpackage-fixpack)",
+                DeploymentConstants.DP_MY_FIXPACK,header);
+        } catch (Exception e) {
+            tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }));
+        }
+    }
+    
+    /**
+     * Asserts that it returns null for the requested deployment package
+     * manifest header (DeploymentPackage-License) from the main section
      * 
      * @spec DeploymentPackage.getHeader(String)
      */    
@@ -428,8 +427,8 @@ public class GetHeader {
     }
     
     /**
-     * Asserts that it returns the requested deployment package manifest header 
-     * (DeploymentPackage-Vendor) from the main section of DP-fixpack.
+     * Asserts that it returns null the requested deployment package manifest
+     * header (DeploymentPackage-Vendor) from the main section
      * 
      * @spec DeploymentPackage.getHeader(String)
      */    
@@ -444,45 +443,13 @@ public class GetHeader {
     }  
     
     /**
-     * Asserts that it returns the requested deployment package manifest header 
-     * (DeploymentPackage-DocURL) from the main section of DP-fixpack.
+     * Asserts that it returns null the requested deployment package manifest header 
+     * (DeploymentPackage-ContactAddress) from the main section.
      * 
      * @spec DeploymentPackage.getHeader(String)
      */    
     private void testGetHeader022() {
         tbc.log("#testGetHeader022");
-        try {
-        String header = fixPackDP.getHeader(DeploymentConstants.DP_HEADER_DOC_URL);
-        tbc.assertNull("Asserts that it returns the requested deployment package manifest header (DeploymentPackage-DocURL) from the main section", header);
-        } catch (Exception e) {
-            tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }));
-        }   
-    }     
-    
-    /**
-     * Asserts that it returns the requested deployment package manifest header 
-     * (DeploymentPackage-Description) from the main section of DP-fixpack.
-     * 
-     * @spec DeploymentPackage.getHeader(String)
-     */    
-    private void testGetHeader023() {
-        tbc.log("#testGetHeader023");
-        try {
-        String header = fixPackDP.getHeader(DeploymentConstants.DP_HEADER_DESCRIPTION);
-        tbc.assertNull("Asserts that it returns the requested deployment package manifest header (DeploymentPackage-Description) from the main section", header);
-        } catch (Exception e) {
-            tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }));
-        }   
-    }
-    
-    /**
-     * Asserts that it returns the requested deployment package manifest header 
-     * (DeploymentPackage-ContactAddress) from the main section of DP-fixpack.
-     * 
-     * @spec DeploymentPackage.getHeader(String)
-     */    
-    private void testGetHeader024() {
-        tbc.log("#testGetHeader024");
         try {
         String header = fixPackDP.getHeader(DeploymentConstants.DP_HEADER_CONTACT_ADRESS);
         tbc.assertNull("Asserts that it returns the requested deployment package manifest header (DeploymentPackage-ContactAddress) from the main section", header);
@@ -492,29 +459,13 @@ public class GetHeader {
     }
     
     /**
-     * Asserts that it returns the requested deployment package manifest header 
-     * (DeploymentPackage-Copyright) from the main section of DP-fixpack.
-     * 
-     * @spec DeploymentPackage.getHeader(String)
-     */    
-    private void testGetHeader025() {
-        tbc.log("#testGetHeader025");
-        try {
-        String header = fixPackDP.getHeader(DeploymentConstants.DP_HEADER_COPYRIGHT);
-        tbc.assertNull("Asserts that it returns the requested deployment package manifest header (DeploymentPackage-Copyright) from the main section", header);
-        } catch (Exception e) {
-            tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }));
-        }        
-    }
-    
-    /**
      * Asserts that all human readable headers can be localized using the same
      * mechanism as that is used to localize the manifest of a bundle.
      * 
      * @spec 114.3.5 Localization
      */    
-    private void testGetHeader026() {
-        tbc.log("#testGetHeader026");
+    private void testGetHeader023() {
+        tbc.log("#testGetHeader023");
         DeploymentPackage testDp = null;
         TestingDeploymentPackage testingDp= null;        
         try {

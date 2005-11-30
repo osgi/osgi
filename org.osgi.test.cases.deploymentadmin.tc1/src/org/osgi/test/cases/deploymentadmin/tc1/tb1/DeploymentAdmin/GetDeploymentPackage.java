@@ -54,6 +54,7 @@ import org.osgi.test.cases.deploymentadmin.tc1.tbc.util.MessagesConstants;
 import org.osgi.test.cases.deploymentadmin.tc1.tbc.util.TestingBlockingResourceProcessor;
 import org.osgi.test.cases.deploymentadmin.tc1.tbc.util.TestingDeploymentPackage;
 import org.osgi.test.cases.deploymentadmin.tc1.tbc.Event.BundleListenerImpl;
+import org.osgi.test.cases.deploymentadmin.tc1.tbc.Event.DeploymentEventHandlerImpl;
 
 /**
  * @author Luiz Felipe Guimaraes
@@ -185,22 +186,30 @@ public class GetDeploymentPackage implements TestInterface {
      * 
      * @spec DeploymentAdmin.getDeploymentPackage(String)
      */     
-    private void testGetDeploymentPackage005() {
+    private synchronized void testGetDeploymentPackage005() {
         tbc.log("#testGetDeploymentPackage005");
         DeploymentPackage dp = null;
+        TestingDeploymentPackage testDP = tbc.getTestingDeploymentPackage(DeploymentConstants.SIMPLE_DP);
         try {
-            TestingDeploymentPackage testDP = tbc.getTestingDeploymentPackage(DeploymentConstants.SIMPLE_DP);
             dp = tbc.installDeploymentPackage(tbc.getWebServer() + testDP.getFilename());
             
+            DeploymentEventHandlerImpl handler = tbc.getDeploymentEventHandler();
+            handler.reset();
+            BundleListenerImpl listener = tbc.getBundleListener();
+            listener.reset();
+            
             GetDeploymentPackageWorker worker = new GetDeploymentPackageWorker(
-                tbc.getTestingDeploymentPackage(DeploymentConstants.ADD_BUNDLE_FIX_PACK_DP));
+                tbc.getTestingDeploymentPackage(DeploymentConstants.BLOCK_SESSION_RESOURCE_PROCESSOR));
             worker.setNotify(true);
             worker.start();
-            // Not sure if this is going to be synchronized
-            synchronized (tbc) {
-                tbc.wait();
-            }
             
+            int count = 0;
+            while ((count < DeploymentConstants.TIMEOUT) &&
+                !((listener.getCurrentType() == BundleEvent.STARTED) && 
+                (listener.getCurrentBundle().getSymbolicName().indexOf(DeploymentConstants.PID_RESOURCE_PROCESSOR3) != -1))) {
+                count++;
+                wait(1);
+            }
             DeploymentPackage got = tbc.getDeploymentAdmin().getDeploymentPackage(testDP.getName());
             
             tbc.assertEquals(
@@ -208,10 +217,20 @@ public class GetDeploymentPackage implements TestInterface {
                     dp.getName().trim() + "_" + dp.getVersion().toString().trim(), 
                     got.getName().trim() + "_" + got.getVersion().toString().trim());
             
+            TestingBlockingResourceProcessor tbrp = (TestingBlockingResourceProcessor)tbc.getServiceInstance(DeploymentConstants.PID_RESOURCE_PROCESSOR3);
+            tbrp.setReleased(true);
+
+            // to wait for installation finalization
+            while ((count < DeploymentConstants.TIMEOUT) && 
+                  !((handler.getTopic() == DeploymentEventHandlerImpl.TOPIC_COMPLETE))) {
+                count++;
+                wait(1);
+            }
         } catch (Exception e) {
             tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }));
         } finally {
-            tbc.uninstall(dp);
+            DeploymentPackage dep = tbc.getDeploymentAdmin().getDeploymentPackage(testDP.getName());
+            tbc.uninstall(dep);
         }
     }
     
@@ -300,7 +319,7 @@ public class GetDeploymentPackage implements TestInterface {
      * 
      * @spec DeploymentAdmin.getDeploymentPackage(String)
      */ 
-    private void testGetDeploymentPackage009() {
+    private synchronized void testGetDeploymentPackage009() {
         tbc.log("#testGetDeploymentPackage009");
         tbc.setDeploymentAdminPermission(DeploymentConstants.DEPLOYMENT_PACKAGE_NAME_ALL, DeploymentConstants.ALL_PERMISSION);
         TestingDeploymentPackage testDP = tbc.getTestingDeploymentPackage(DeploymentConstants.SIMPLE_DP);

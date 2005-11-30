@@ -352,7 +352,7 @@ public class InstallDeploymentPackageUseCases implements TestInterface {
 	 * 
 	 * @spec 114.8 Installing a Deployment Package
 	 */
-	private void testInstallDeploymentPackageUseCases010() {
+	private synchronized void testInstallDeploymentPackageUseCases010() {
 		tbc.log("#testInstallDeploymentPackageUseCases010");
 
 		DeploymentPackage dp = null;
@@ -362,35 +362,44 @@ public class InstallDeploymentPackageUseCases implements TestInterface {
 		int count = 1;
 		
 		BundleListenerImpl listener = tbc.getBundleListener();
-		// makes sure no old parameters will influence this test case 
-		listener.reset();
-        listener.setVerifying(true);
+        DeploymentEventHandlerImpl handler = tbc.getDeploymentEventHandler();
+
 		try {
 			TestingDeploymentPackage testDP = tbc.getTestingDeploymentPackage(DeploymentConstants.SIMPLE_DP);
 			TestingBundle[] tb = testDP.getBundles();
 
-			synchronized (tbc) {
-				// asserts bundle stop
-				dp = tbc.installDeploymentPackage(tbc.getWebServer() + testDP.getFilename());
-				do {
-					tbc.wait(DeploymentConstants.TIMEOUT);
-
-					currentBundle = listener.getCurrentBundle();
-					currentEventType = listener.getCurrentType();
-
-					if (currentEventType == BundleEvent.STOPPED) {
-						tbc.assertEquals("The bundles were stopped in reverse target resource order",
-										tb[count--].getName(), currentBundle.getSymbolicName());
-					}
-				} while ((listener.getCurrentType() == BundleEvent.STOPPED)
-						&& currentBundle.getSymbolicName().equals(tb[0].getName()));
-			}
+			// asserts bundle stop
+            dp = tbc.installDeploymentPackage(tbc.getWebServer() + testDP.getFilename());
+            // makes sure no old parameters will influence this test case
+            listener.reset();
+            listener.setVerifying(true);
+            handler.reset();
+            handler.setHandlingComplete(true);
+            tbc.uninstall(dp);
+            
+            while (handler.isComplete()) {
+                // do nothing
+                // wait untill uninstallation is finished
+            }
+            
+            Vector events = listener.getEvents();
+            Iterator it = events.iterator();
+            while (it.hasNext()) {
+                BundleEvent event = (BundleEvent)it.next();
+                currentBundle = event.getBundle();
+                currentEventType = event.getType();
+                if (currentEventType == BundleEvent.STOPPED) {
+                    tbc.assertEquals(
+                            "The bundles were stopped in reverse target resource order",
+                            tb[count--].getName(), currentBundle.getSymbolicName());
+                }
+            }
 			tbc.assertTrue("The two testing bundles in the deployment package were stopped", (count==-1));
 		} catch (Exception e) {
 			tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }));
 		} finally {
-			tbc.uninstall(dp);
             listener.reset();
+            handler.reset();
 		}
 	}
 	
@@ -506,7 +515,8 @@ public class InstallDeploymentPackageUseCases implements TestInterface {
         } catch (Exception e) {
             tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }));
         } finally {
-            tbc.uninstall(dp);
+            if (!dp.isStale())
+                tbc.uninstall(dp);
             deploymentEventHandler.reset();
         }
     }

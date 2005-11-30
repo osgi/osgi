@@ -45,7 +45,6 @@ package org.osgi.test.cases.deploymentadmin.tc1.tb1.DeploymentAdmin;
 
 import org.osgi.framework.BundleEvent;
 import org.osgi.service.deploymentadmin.DeploymentAdminPermission;
-import org.osgi.service.deploymentadmin.DeploymentException;
 import org.osgi.service.deploymentadmin.DeploymentPackage;
 import org.osgi.test.cases.deploymentadmin.tc1.tbc.DeploymentConstants;
 import org.osgi.test.cases.deploymentadmin.tc1.tbc.DeploymentTestControl;
@@ -76,13 +75,12 @@ public class ListDeploymentPackage implements TestInterface {
         prepare();
 		testListDeploymentPackage001();
 		testListDeploymentPackage002();
-		testListDeploymentPackage003();
+        testListDeploymentPackage003();
         testListDeploymentPackage004();
         testListDeploymentPackage005();
         testListDeploymentPackage006();
         testListDeploymentPackage007();
         testListDeploymentPackage008();
-        testListDeploymentPackage009();
 	}
     
     /**
@@ -97,24 +95,6 @@ public class ListDeploymentPackage implements TestInterface {
     }
 
 	/**
-     * Asserts that if there are no deployment packages installed it gives back
-     * an the array containing only the "System" deployment package.
-     * 
-     * @spec DeploymentAdmin.listDeploymentPackage()
-     */			
-	private void testListDeploymentPackage001() {
-		tbc.log("#testListDeploymentPackage001");
-		try {
-			tbc.assertTrue("Asserts that all of the deployment package had been uninstalled.",uninstallAllDeploymentPackages());
-			DeploymentPackage dps[] = tbc.getDeploymentAdmin().listDeploymentPackages();
-			tbc.assertTrue("There is only one DP", (dps.length==1));
-            tbc.assertEquals("The remaining DP is the System DP", DeploymentConstants.SYSTEM_DP_NAME, dps[0].getName());
-		} catch (Exception e) {
-			tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }));
-		}
-	}
-	
-	/**
      * Installs a deployment package and assert that an array of
      * DeploymentPackage objects representing all the installed deployment
      * packages is returned. After that, uninstall the deployment package and
@@ -122,8 +102,8 @@ public class ListDeploymentPackage implements TestInterface {
      * 
      * @spec DeploymentAdmin.listDeploymentPackage()
      */			
-	private void testListDeploymentPackage002() {
-		tbc.log("#testListDeploymentPackage002");
+	private void testListDeploymentPackage001() {
+		tbc.log("#testListDeploymentPackage001");
 		DeploymentPackage dp = null;
 		int initialNumberOfPackages;
 		int finalNumberOfPackages;
@@ -173,8 +153,8 @@ public class ListDeploymentPackage implements TestInterface {
 	 * 
 	 * @spec DeploymentAdmin.listDeploymentPackage()
 	 */			
-	private void testListDeploymentPackage003() {
-		tbc.log("#testListDeploymentPackage003");
+	private void testListDeploymentPackage002() {
+		tbc.log("#testListDeploymentPackage002");
 
 		TestingDeploymentPackage testDP = tbc.getTestingDeploymentPackage(DeploymentConstants.WRONG_VERSION_DP);
 		DeploymentPackage dp = null;
@@ -195,8 +175,8 @@ public class ListDeploymentPackage implements TestInterface {
      * 
      * @spec DeploymentAdmin.listDeploymentPackage()
      */         
-    private void testListDeploymentPackage004() {
-        tbc.log("#testListDeploymentPackage004");
+    private void testListDeploymentPackage003() {
+        tbc.log("#testListDeploymentPackage003");
         DeploymentPackage dp = null, updateDP = null;
         try {
             TestingDeploymentPackage testDP = tbc.getTestingDeploymentPackage(DeploymentConstants.SIMPLE_DP);
@@ -226,8 +206,8 @@ public class ListDeploymentPackage implements TestInterface {
      * 
      * @spec DeploymentAdmin.listDeploymentPackage()
      */
-   private void testListDeploymentPackage005() {
-       tbc.log("#testListDeploymentPackage005");
+   private void testListDeploymentPackage004() {
+       tbc.log("#testListDeploymentPackage004");
        DeploymentPackage dp = null;
        try {
            TestingDeploymentPackage testDP = tbc.getTestingDeploymentPackage(DeploymentConstants.SIMPLE_DP);
@@ -261,8 +241,8 @@ public class ListDeploymentPackage implements TestInterface {
     * 
     * @spec DeploymentAdmin.listDeploymentPackage()
     */     
-   private void testListDeploymentPackage006() {
-       tbc.log("#testListDeploymentPackage006");
+   private void testListDeploymentPackage005() {
+       tbc.log("#testListDeploymentPackage005");
        DeploymentPackage dp = null;
        try {
            TestingDeploymentPackage testDP = tbc.getTestingDeploymentPackage(DeploymentConstants.SIMPLE_DP);
@@ -290,8 +270,8 @@ public class ListDeploymentPackage implements TestInterface {
      * 
      * @spec DeploymentAdmin.listDeploymentPackage()
      */     
-   private void testListDeploymentPackage007() {
-       tbc.log("#testListDeploymentPackage007");
+   private void testListDeploymentPackage006() {
+       tbc.log("#testListDeploymentPackage006");
        tbc.setDeploymentAdminPermission(DeploymentConstants.DEPLOYMENT_PACKAGE_NAME_ALL, DeploymentAdminPermission.INSTALL);
        try {
            DeploymentPackage[] dp = tbc.getDeploymentAdmin().listDeploymentPackages();
@@ -310,10 +290,19 @@ public class ListDeploymentPackage implements TestInterface {
     * 
     * @spec DeploymentAdmin.listDeploymentPackage()
     */     
-  private void testListDeploymentPackage008() {
-      tbc.log("#testListDeploymentPackage008");
-      tbc.setDeploymentAdminPermission(DeploymentConstants.DEPLOYMENT_PACKAGE_NAME_ALL, DeploymentAdminPermission.INSTALL);
+  private void testListDeploymentPackage007() {
+      tbc.log("#testListDeploymentPackage007");
+      tbc.setDeploymentAdminPermission(
+            DeploymentConstants.DEPLOYMENT_PACKAGE_NAME_ALL,
+            DeploymentAdminPermission.INSTALL + ","
+            + DeploymentAdminPermission.UNINSTALL + ","
+            + DeploymentAdminPermission.UNINSTALL_FORCED);
+      DeploymentPackage dp = null;
       try {
+          // make sure there is at least 1 DP
+          TestingDeploymentPackage testDP = tbc.getTestingDeploymentPackage(DeploymentConstants.SIMPLE_DP);
+          dp = tbc.installDeploymentPackage(tbc.getWebServer() + testDP.getFilename());
+
           tbc.getDeploymentAdmin().listDeploymentPackages();
           tbc.failException("#", SecurityException.class);
       } catch (SecurityException e) {
@@ -321,6 +310,8 @@ public class ListDeploymentPackage implements TestInterface {
       } catch (Exception e) {
             tbc.fail(MessagesConstants.getMessage(MessagesConstants.EXCEPTION_THROWN, new String[]{
                     "SecurityException", e.getClass().getName()}));
+        } finally {
+            tbc.uninstall(dp);
         }
     }
   
@@ -331,8 +322,8 @@ public class ListDeploymentPackage implements TestInterface {
      * 
      * @spec DeploymentAdmin.listDeploymentPackage()
      */ 
-  private void testListDeploymentPackage009() {
-      tbc.log("#testListDeploymentPackage009");
+  private synchronized void testListDeploymentPackage008() {
+      tbc.log("#testListDeploymentPackage008");
       tbc.setDeploymentAdminPermission(DeploymentConstants.DEPLOYMENT_PACKAGE_NAME_ALL, DeploymentConstants.ALL_PERMISSION);
       TestingDeploymentPackage testDP = tbc.getTestingDeploymentPackage(DeploymentConstants.SIMPLE_DP);
       TestingDeploymentPackage testUpdateDP = tbc.getTestingDeploymentPackage(DeploymentConstants.BLOCK_SESSION_RESOURCE_PROCESSOR);
@@ -372,27 +363,6 @@ public class ListDeploymentPackage implements TestInterface {
       }
   }
 	
-	//Returns if all deployment packages could be uninstalled.
-	private boolean uninstallAllDeploymentPackages() {
-		boolean passed = true;
-		DeploymentPackage dps[] = tbc.getDeploymentAdmin().listDeploymentPackages();
-		for(int i=0; i<dps.length; i++) {
-			try {
-				if (!dps[i].getName().equals(DeploymentConstants.SYSTEM_DP_NAME))
-					dps[i].uninstall();
-			} catch (DeploymentException e) {
-				try {
-                    passed = passed && dps[i].uninstallForced();
-                } catch (DeploymentException e1) {
-                    passed = false;
-                }
-            } catch (Exception e) {
-                passed = false;
-            }
-		}
-		return passed;
-	}
-    
     private synchronized void waitForRelease() throws InterruptedException {
         if (reach && reachTC) {
             // if needed do some action

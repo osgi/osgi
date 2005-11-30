@@ -137,11 +137,12 @@ public class GetResourceProcessor {
 	}
 	
 	/**
-	 * This test cases updates the resource processor reference in the service register and 
-	 * checks if the deployment package returns the updated instance.
-	 * 
-	 * @spec DeploymentPackage.getResourceProcessor(String)
-	 */
+     * Asserts that services can be updated after a deployment package has been deployed. In
+     * this event, this call will return a reference to the updated service, not
+     * to the instance that was used at deployment time. 
+     * 
+     * @spec DeploymentPackage.getResourceProcessor(String)
+     */
 	private void testGetResourceProcessor003() {
 		tbc.log("#testGetResourceProcessor003");
 
@@ -152,8 +153,10 @@ public class GetResourceProcessor {
 		Dictionary props = new Hashtable();
 		props.put("service.pid", DeploymentConstants.PID_RESOURCE_PROCESSOR1);
 		props.put(dummy.key, dummy.value);
-
+        
 		try {
+            tbc.registerService(ResourceProcessor.class.getName(), dummy, props);
+            
 			ServiceReference rp = dpRP.getResourceProcessor(testRPResource.getName());
 			tbc.assertEquals("The properties of the updated service is the same as the deployment package resource service",
 							dummy.value, (String) rp.getProperty(DeploymentConstants.RESOURCE_PROCESSOR_PROPERTY_KEY));

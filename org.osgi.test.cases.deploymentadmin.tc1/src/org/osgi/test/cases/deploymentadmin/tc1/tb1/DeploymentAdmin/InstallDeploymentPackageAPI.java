@@ -144,7 +144,7 @@ public class InstallDeploymentPackageAPI implements TestInterface {
                 for (int j = 0; j < testBundles.length; j++) {
                     if (depBundles[i].getSymbolicName().trim().equals(testBundles[j].getName())) {
                         tbc.assertEquals("Assert Deployment Package bundle "
-                            + depBundles[i].getSymbolicName() + " Version", depBundles[i].getVersion(), testBundles[j].getVersion().toString());
+                            + depBundles[i].getSymbolicName() + " Version", depBundles[i].getVersion(), testBundles[j].getVersion());
                         count++;
                         break;
                     }
@@ -162,7 +162,8 @@ public class InstallDeploymentPackageAPI implements TestInterface {
 	}
 	
 	/**
-     * Asserts that the input stream of the deployment package must not be null.
+     * Asserts that IllegalArgumentException is thrown if the input stream of
+     * the deployment package is null.
      * 
      * @spec DeploymentAdmin.installDeploymentPackage(InputStream)
      */			
@@ -171,7 +172,7 @@ public class InstallDeploymentPackageAPI implements TestInterface {
 		try {
             tbc.getDeploymentAdmin().installDeploymentPackage(null);
 			tbc.failException("#", DeploymentException.class);
-		} catch (DeploymentException e) {
+		} catch (IllegalArgumentException e) {
 			tbc.pass(MessagesConstants.getMessage(MessagesConstants.EXCEPTION_CORRECTLY_THROWN, new String[] { e.getClass().getName() }));
 		} catch (Exception e) {
 			tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }));

@@ -60,7 +60,6 @@ public class GetName {
 	
 	public void run() {
 		testGetName001();
-        testGetName002();
 	}
 	
 	/**
@@ -83,21 +82,4 @@ public class GetName {
 			tbc.uninstall(dp);
 		}
 	}
-    
-    /**
-     * Assert that it returns the name of the deployment package System
-     * 
-     * @spec DeploymentPackage.getName()
-     */
-    private void testGetName002() {
-        tbc.log("#testGetName002");     
-        try {
-            DeploymentPackage dp = tbc.getDeploymentAdmin().getDeploymentPackage("System");
-            tbc.assertNotNull(MessagesConstants.getMessage(MessagesConstants.ASSERT_NOT_NULL, new String[]{"deployment package"}), dp);
-            String name = dp.getName();
-            tbc.assertEquals("The Deployment package name is correctly set:" , "System", name);
-        } catch (Exception e) {
-            tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }));
-        }
-    }    
 }

@@ -123,11 +123,11 @@ public class DeploymentConstants {
         "bundle_from_other_dp", "bundle_from_other_dp_dif_vers",
         "symb_name_dif_from_manifest_dp", "bad_header_dp",
         "resource_from_other_dp", "resource_processor_dp",
-        "add_bundle_fix_pack_dp", "fix_pack_higher_range_dp.jar",
+        "add_bundle_fix_pack_dp", "fix_pack_higher_range_dp",
         "simple_resource_dp", "simple_resource_dp",
         "simple_unsigned_bundle_dp", "simple_unsigned_dp",
         "simple_no_bundle_dp", "simple_no_resource_dp",
-        "fix_pack_lower_range_dp.jar", "missing_name_header_dp", "system",
+        "fix_pack_lower_range_dp", "missing_name_header_dp", "system",
         "wrong_order", "wrong_format", "untrusted", "wrong_path",
         "wrong_version", "simple_uninstall_bundle_dp",
         "simple_uninstall_bundle_dp", "bundle_throws_exception_dp",
@@ -180,10 +180,72 @@ public class DeploymentConstants {
 			+ DeploymentAdminPermission.INSTALL + ","
 			+ DeploymentAdminPermission.LIST + ","
 			+ DeploymentAdminPermission.UNINSTALL + ","
-			+ DeploymentAdminPermission.UNINSTALL_FORCED;
+			+ DeploymentAdminPermission.UNINSTALL_FORCED + ","
+            + DeploymentAdminPermission.METADATA;
 	
 	// very large, we don't know what kind of devices the TCK will be executed
 	public static final int TIMEOUT = 180000;
     public static final int SESSION_TIMEOUT = 1000;
-
+    
+    static String getCodeName(int code) {
+        switch (code) {
+            case SIMPLE_DP: return "simple_dp";
+            case SIMPLE_DP_CLONE: return "simple_clone_dp";
+            case SIMPLE_FIX_PACK_DP: return "simple_fix_pack_dp";
+            case MISSING_RESOURCE_FIX_PACK_DP: return "missing_resource_fix_pack_dp";
+            case MISSING_BUNDLE_FIX_PACK_DP: return "missing_bundle_fix_pack";
+            case SIMPLE_RESOURCE_PROCESSOR_DP: return "simple_resource_processor_dp";
+            case SIMPLE_HIGHER_MAJOR_VERSION_DP: return "simple_higher_major_version_dp";
+            case SIMPLE_HIGHER_MINOR_VERSION_DP: return "simple_higher_minor_version_dp";
+            case SIMPLE_HIGHER_MICRO_VERSION_DP: return "simple_higher_micro_version_dp";
+            case DP_CONTAINING_A_BUNDLE_FROM_OTHER_DP: return "bunbundle_from_other_dp";
+            case DP_CONTAINING_A_BUNDLE_FROM_OTHER_DP_DIF_VERS: return "bundle_from_other_dp_dif_vers";
+            case SYMB_NAME_DIFFERENT_FROM_MANIFEST_DP: return "symb_name_dif_from_manifest_dp";
+            case BAD_HEADER_DP: return "bad_header_dp";
+            case RESOURCE_FROM_OTHER_DP: return "resource_from_other_dp";
+            case RESOURCE_PROCESSOR_DP: return "resource_processor_dp";
+            case ADD_BUNDLE_FIX_PACK_DP: return "add_bundle_fix_pack_dp";
+            case FIX_PACK_HIGHER_RANGE_DP: return "fix_pack_higher_range_dp";
+            case SIMPLE_RESOURCE_DP: return "simple_resource_dp";
+            case ADD_RESOURCE_FIX_PACK: return "simple_dp";
+            case SIMPLE_UNSIGNED_BUNDLE_DP: return "simple_unsigned_bundle_dp";
+            case SIMPLE_UNSIGNED_DP: return "simple_unsigned_dp";
+            case SIMPLE_NO_BUNDLE_DP: return "simple_no_bundle_dp";
+            case SIMPLE_NO_RESOURCE_DP: return "simple_no_resource_dp";
+            case FIX_PACK_LOWER_RANGE_DP: return "fix_pack_lower_range_dp";
+            case MISSING_NAME_HEADER_DP: return "missing_name_header_dp";
+            case SYSTEM_DP: return "system";
+            case WRONG_ORDER_DP: return "wrong_order";
+            case WRONG_FORMAT_DP: return "wrong_format";
+            case UNTRUSTED_DP: return "untrusted";
+            case WRONG_PATH_DP: return "wrong_path";
+            case WRONG_VERSION_DP: return "wrong_version";
+            case SIMPLE_UNINSTALL_BUNDLE_DP: return "simple_uninstall_bundle_dp";
+            case BUNDLE_THROWS_EXCEPTION_DP: return "bundle_throws_exception_dp";
+            case BUNDLE_THROWS_EXCEPTION_STOP_DP: return "bundle_throws_exception_stop_dp";
+            case BUNDLE_DOESNT_THROW_EXCEPTION_DP: return "bundle_doesnt_throw_exception_dp";
+            case BLOCK_SESSION_RESOURCE_PROCESSOR: return "block_session";
+            case VERSION_DIFFERENT_FROM_MANIFEST_DP: return "version_dif_from_manifest_dp";
+            case MISSING_B_VERSION_HEADER: return "missing_b_version_header";
+            case MISSING_BSN_HEADER: return "missing_bsn_header";
+            case MISSING_FIX_PACK_HEADER: return "missing_fix_pack_header";
+            case MISSING_RES_NAME_HEADER: return "missing_res_name_header";
+            case MISSING_VERSION_HEADER: return "missing_version_header";
+            case SIMPLE_RESOURCE_PROCESSOR_UNINSTALL: return "simple_res_proc_uninstall";
+            case SIMPLE_RESOURCE_UNINSTALL_DP: return "simple_resource_uninstall_dp";
+            case WRONG_BSN: return "wrong_bsn";
+            case WRONG_BVERSION: return "wrong_bversion";
+            case WRONG_CUSTOMIZER: return "wrong_customizer";
+            case WRONG_DP_MISSING: return "wrong_dp_missing";
+            case WRONG_FIX_PACK: return "wrong_fix_pack";
+            case WRONG_NAME: return "wrong_name";
+            case WRONG_RP: return "wrong_rp";
+            case SESSION_TEST_DP: return "session_test_dp";
+            case RESOURCE_PROCESSOR_2_DP: return "resource_processor2_dp";
+            case STRANGE_PATH_DP: return "strange_path";
+            case LOCALIZED_DP: return "localized";
+            case SIGNING_FILE_NOT_NEXT: return "signed_file_not_next";
+            default: return null;
+        }
+    }
 }

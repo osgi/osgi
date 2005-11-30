@@ -70,7 +70,6 @@ public class Equals {
 		testEquals001();
 		testEquals002();
 		testEquals003();
-		testEquals004();
 	}
 	
 	/**
@@ -96,34 +95,12 @@ public class Equals {
 	}
 
 	/**
-	 * Asserts that two deployment packages are different when they have the same name and different versions
-	 * 
-	 * @spec DeploymentPackage.equals(Object)
-	 */
-	private void testEquals002() {
-		tbc.log("#testEquals002");
-		DeploymentPackage dp = null, dp2 = null;
-		try {
-			TestingDeploymentPackage testDP = tbc.getTestingDeploymentPackage(DeploymentConstants.SIMPLE_DP);
-			TestingDeploymentPackage testDP2 = tbc.getTestingDeploymentPackage(DeploymentConstants.SIMPLE_HIGHER_MAJOR_VERSION_DP);
-
-			dp = tbc.installDeploymentPackage(tbc.getWebServer() + testDP.getFilename());
-			dp2 = tbc.installDeploymentPackage(tbc.getWebServer() + testDP2.getFilename());
-			
-			tbc.assertTrue("Asserts that two deployment packages are different when they have the same name and different versions", !dp.equals(dp2));
-		} catch (Exception e) {
-			tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }));
-		} finally {
-			tbc.uninstall(dp2);
-		}
-	}
-	/**
 	 * Asserts that two deployment packages are different when they have the same version and different names
 	 * 
 	 * @spec DeploymentPackage.equals(Object) 
 	 */
-	private void testEquals003() {
-		tbc.log("#testEquals003");		
+	private void testEquals002() {
+		tbc.log("#testEquals002");		
 		DeploymentPackage dp = null, dp2 = null;
 		try {
 			TestingDeploymentPackage testDP = tbc.getTestingDeploymentPackage(DeploymentConstants.SIMPLE_DP);
@@ -144,8 +121,8 @@ public class Equals {
 	 * 
 	 * @spec DeploymentPackage.equals(Object)
 	 */
-	private void testEquals004() {
-		tbc.log("#testEquals004");
+	private void testEquals003() {
+		tbc.log("#testEquals003");
 		DeploymentPackage dp = null, dp2 = null, rp = null;
 		try {
 			TestingDeploymentPackage testDP = tbc.getTestingDeploymentPackage(DeploymentConstants.SIMPLE_DP);

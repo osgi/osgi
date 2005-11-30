@@ -119,6 +119,8 @@ public class UninstallDeploymentPackage implements TestInterface {
 		} catch (Exception e) {
 			tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }));
 		} finally {
+            // reset permissions
+            tbc.setDeploymentAdminPermission(DeploymentConstants.DEPLOYMENT_PACKAGE_NAME_ALL, DeploymentConstants.ALL_PERMISSION);
 			tbc.uninstall(dp);
 		}
 	}
@@ -135,7 +137,7 @@ public class UninstallDeploymentPackage implements TestInterface {
 		DeploymentPackage dp = null;
 		try {
 			dp = tbc.installDeploymentPackage(tbc.getWebServer()+testDP.getFilename());
-			tbc.assertNotNull(MessagesConstants.getMessage(MessagesConstants.ASSERT_NOT_NULL, new String[]{"deployment package"}), dp);
+			tbc.assertNotNull("deployment package is not null", dp);
 			tbc.setDeploymentAdminPermission(DeploymentConstants.DEPLOYMENT_PACKAGE_NAME0, DeploymentAdminPermission.UNINSTALL_FORCED);
 			tbc.assertTrue("UninstallDeploymentPackage forced executed properly", dp.uninstallForced());
             
@@ -144,6 +146,7 @@ public class UninstallDeploymentPackage implements TestInterface {
 		} catch (Exception e) {
 			tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }));
 		} finally {
+            tbc.setDeploymentAdminPermission(DeploymentConstants.DEPLOYMENT_PACKAGE_NAME_ALL, DeploymentConstants.ALL_PERMISSION);
 			tbc.uninstall(dp);
 		}
 	}
@@ -227,7 +230,6 @@ public class UninstallDeploymentPackage implements TestInterface {
             ROLL_BACK_CALLED = false;
             tbc.uninstall(new DeploymentPackage[] { dp, dpError } );
         }
-
     }    
     
     /**
@@ -254,7 +256,8 @@ public class UninstallDeploymentPackage implements TestInterface {
         } catch (Exception e) {
             tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }));
         } finally {
-            trbc.setPrepareException(false);
+            if (trbc != null)
+                trbc.setPrepareException(false);
             ROLL_BACK_CALLED = false;
             tbc.uninstall(new DeploymentPackage[] { dp, dpError } );
         }
@@ -285,7 +288,8 @@ public class UninstallDeploymentPackage implements TestInterface {
         } catch (Exception e) {
             tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }));
         } finally {
-            trbc.setPrepareException(false);
+            if (trbc != null)
+                trbc.setPrepareException(false);
             ROLL_BACK_CALLED = false;
             tbc.uninstall(new DeploymentPackage[] { dp, dpError } );
         }
@@ -345,8 +349,9 @@ public class UninstallDeploymentPackage implements TestInterface {
     } 
     
     /**
-     * This test case asserts that a deployment package that has two
-     * resource processors, both must call the commit method.
+     * This test case asserts that a deployment package that has two resource
+     * processors, both must call the commit method, at intallation and
+     * uninstallation.
      * 
      * @spec 114.9 Uninstalling a Deployment Package
      */     
@@ -358,7 +363,7 @@ public class UninstallDeploymentPackage implements TestInterface {
             TestingDeploymentPackage testDP = tbc.getTestingDeploymentPackage(DeploymentConstants.SESSION_TEST_DP);
             dp = tbc.installDeploymentPackage(tbc.getWebServer() + testDP.getFilename());
             dp.uninstall();
-            tbc.assertEquals("Asserting that Commit() was called only one time.", 2, DeploymentConstants.COMMIT_COUNT);
+            tbc.assertEquals("Asserting that Commit() was called only one time.", 4, DeploymentConstants.COMMIT_COUNT);
         } catch (Exception e) {
             tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }));
         } finally {
@@ -378,11 +383,11 @@ public class UninstallDeploymentPackage implements TestInterface {
         tbc.log("#testUninstallDeploymentPackage011");
         DeploymentPackage dp = null;
         try {
-        	DeploymentConstants.COMMIT_COUNT = 0;
             TestingDeploymentPackage testDP = tbc.getTestingDeploymentPackage(DeploymentConstants.SESSION_TEST_DP);
             dp = tbc.installDeploymentPackage(tbc.getWebServer() + testDP.getFilename());
+            DeploymentConstants.COMMIT_COUNT = 0;
             dp.uninstallForced();
-            tbc.assertEquals("Asserting that Commit() was called only one time.", 1, DeploymentConstants.COMMIT_COUNT);
+            tbc.assertEquals("Asserting that Commit() was called only one time.", 2, DeploymentConstants.COMMIT_COUNT);
         } catch (Exception e) {
             tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }));
         } finally {
