@@ -298,7 +298,7 @@ public class EventTestControl extends DefaultTestBundleControl {
     Boolean[] eventsMap1 = new Boolean[] {Boolean.TRUE, Boolean.TRUE, Boolean.TRUE, Boolean.TRUE, 
                                           Boolean.TRUE, Boolean.FALSE, Boolean.FALSE};
     Boolean[] eventsMap2 = new Boolean[] {Boolean.TRUE, Boolean.FALSE, Boolean.FALSE, Boolean.FALSE, 
-                                          Boolean.FALSE, Boolean.FALSE, Boolean.FALSE};
+                                          Boolean.FALSE, Boolean.FALSE, Boolean.TRUE};
     
     Event event;
     for (int i = 0; i < events.length; i++) {
