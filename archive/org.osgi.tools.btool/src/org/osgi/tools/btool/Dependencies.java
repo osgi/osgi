@@ -44,6 +44,7 @@ public class Dependencies {
 	}
 
 	public void calculate() throws IOException {
+		btool.trace("calculate");
 		String bundleClasspath = manifest.getValue("bundle-classpath");
 		for ( Iterator i = btool.getExtraRoots().iterator(); i.hasNext(); ) {
 			referred.add(i.next());
@@ -159,7 +160,8 @@ public class Dependencies {
 	 * the constant pool. This took me a couple of hours to figure out.
 	 */
 	Collection parseClassFile(DataInputStream in) throws IOException {
-		Vector classes = new Vector();
+		Set classes = new HashSet();
+		Set descriptors = new HashSet();
 		Hashtable pool = new Hashtable();
 		try {
 			int magic = in.readInt();
@@ -196,6 +198,14 @@ public class Dependencies {
 						in.skipBytes(8);
 						i++;
 						break;
+						
+					// Interface Method Ref
+					case 12 :
+						int nameIndex = in.readShort();
+						int descriptorIndex = in.readShort();
+						descriptors.add( new Integer(descriptorIndex));
+						break;
+						
 					// We get the skip count for each record type
 					// from the SkipTable. This will also automatically
 					// abort when
@@ -216,8 +226,9 @@ public class Dependencies {
 		// parse those as well. We skip duplicates
 		//
 		Collection set = new HashSet();
-		for (Enumeration e = classes.elements(); e.hasMoreElements();) {
-			Integer n = (Integer) e.nextElement();
+		
+		for (Iterator e = classes.iterator(); e.hasNext();) {
+			Integer n = (Integer) e.next();
 			String next = (String) pool.get(n);
 			if (next != null) {
 				String normalized = normalize(next);
@@ -228,7 +239,35 @@ public class Dependencies {
 			else
 				throw new IllegalArgumentException("Invalid class, parent=");
 		}
+		for (Iterator e = descriptors.iterator(); e.hasNext();) {
+			Integer n = (Integer) e.next();
+			String next = (String) pool.get(n);
+			if (next != null) 
+				parseDescriptor(set, next);
+		}
 		return set;
+	}
+
+	void parseDescriptor(Collection set, String next) {
+		StringTokenizer st = new StringTokenizer(next,"(;)", true );
+		while ( st.hasMoreTokens() ) {
+			if ( st.nextToken().equals("(")) {
+				String token = st.nextToken();
+				while ( ! token.equals(")")) {
+					addReference(set, token);
+					token = st.nextToken();
+				}
+				token = st.nextToken();
+				addReference(set,token);
+			}
+		}
+	}
+
+	private void addReference(Collection set, String token) {
+		if ( token.startsWith("L")) {
+			String clazz = normalize(token.substring(1));
+			set.add(clazz);
+		}
 	}
 
 	/**
