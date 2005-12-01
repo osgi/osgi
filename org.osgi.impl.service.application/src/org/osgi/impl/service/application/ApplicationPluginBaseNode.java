@@ -32,8 +32,12 @@ import org.osgi.service.dmt.*;
 import java.util.*;
 
 public class ApplicationPluginBaseNode implements MetaNode {
-	protected String name;
-	protected String type;
+	protected String 	name;
+	protected String 	type;
+	protected int    	scope = -1;
+	protected int    	format = -1;
+	protected int    	maxOccurrence = 1;
+	protected boolean	zeroOccurrenceAllowed = false;
 	
 	protected boolean	canDelete = false;
 	protected boolean	canAdd = false;
@@ -44,29 +48,24 @@ public class ApplicationPluginBaseNode implements MetaNode {
 	
 	protected Vector  children = new Vector();
 
-	static final boolean	CANDELETE	= true;
-	static final boolean	CANADD		= true;
-	static final boolean	CANGET		= true;
-	static final boolean	CANREPLACE	= true;
-	static final boolean	CANEXECUTE	= true;
-	static final boolean	ISLEAF		= true;
-
 	protected ApplicationPluginBaseNode() {
 		canDelete = canAdd = canReplace = canExecute = isLeaf = false;
 		canGet = true;
 		this.name = null;
 		this.type = null;
+		this.format = DmtData.FORMAT_NODE;
 	}
 
 	protected ApplicationPluginBaseNode( String name ) {
 		init( name, null, null, null );
 	}
 	
-	protected ApplicationPluginBaseNode( String name, String type ) {
+	protected ApplicationPluginBaseNode( String name, String type, int format ) {
 		canDelete = canAdd = canReplace = canExecute = false;
 		canGet = isLeaf = true;
+		this.format = format;
 		this.name = name;
-		this.type = null;
+		this.type = type;
 	}
 	
 	protected void init( String name, ApplicationPluginBaseNode child1, ApplicationPluginBaseNode child2, 
@@ -75,6 +74,7 @@ public class ApplicationPluginBaseNode implements MetaNode {
 		canGet = true;
 		this.name = name;
 		this.type = null;
+		this.format = DmtData.FORMAT_NODE;
 		
 		if( child1 != null )
 			addChildNode( child1 );
@@ -121,8 +121,34 @@ public class ApplicationPluginBaseNode implements MetaNode {
 		return null;		
 	}
 	
+	void recursiveSetScope( ApplicationPluginBaseNode node, int parentScope ) {
+		if( node.scope == -1 ) {
+			if( parentScope == MetaNode.DYNAMIC )
+				node.scope = MetaNode.AUTOMATIC;
+			else
+				node.scope = parentScope;
+		}
+		if( node.scope != -1 ) {
+			for( int j=0; j != node.children.size(); j++ )
+				recursiveSetScope( (ApplicationPluginBaseNode)node.children.get(j), node.scope );
+		}
+	}
+	
 	protected void addChildNode( ApplicationPluginBaseNode node ) {
+		recursiveSetScope( node, scope );
 		children.add( node );
+	}
+
+	void setScope( int value ) {
+		scope = value;
+	}
+	
+	void setZeroOccurrenceAllowed( boolean allowed ) {
+		zeroOccurrenceAllowed = allowed;
+	}
+	
+	void setMaxOccurrence( int max ) {
+		maxOccurrence = max;
 	}
 	
 	public String [] getChildNodeNames( String path[] ) {
@@ -199,8 +225,7 @@ public class ApplicationPluginBaseNode implements MetaNode {
 	}
 
 	public int getScope() {
-		// TODO Auto-generated method stub
-		return MetaNode.DYNAMIC;
+		return scope;
 	}
 
 	public String getDescription() {
@@ -209,12 +234,11 @@ public class ApplicationPluginBaseNode implements MetaNode {
 	}
 
 	public int getMaxOccurrence() {
-		// TODO Auto-generated method stub
-		return 0;
+		return maxOccurrence;
 	}
 
 	public boolean isZeroOccurrenceAllowed() {
-		return true;
+		return zeroOccurrenceAllowed;
 	}
 
 	public DmtData getDefault() {
@@ -248,8 +272,7 @@ public class ApplicationPluginBaseNode implements MetaNode {
 	}
 
 	public int getFormat() {
-		// TODO Auto-generated method stub
-		return 0;
+		return format;
 	}
 
 	public String[] getMimeTypes() {

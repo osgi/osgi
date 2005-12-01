@@ -45,11 +45,14 @@ interface ArgumentInterface {
 class ArgumentVariableNode extends ApplicationPluginBaseNode {
 	private ArgumentIDNode argIDRef;
 	
-	ArgumentVariableNode( ArgumentIDNode argIDRef, String name ) {
-		super( name, "text/plain" );
+	ArgumentVariableNode( ArgumentIDNode argIDRef, String name, int format ) {
+		super( name, "text/plain", format );
 		
 		this.argIDRef = argIDRef;		
 		canReplace = true;
+		
+		if( name.equals( "Value" ) )
+			setZeroOccurrenceAllowed( true );
 	}
 	public String[] getNames( String []path ) {
 		if( !name.equals( "Value" ) )
@@ -78,11 +81,18 @@ class ArgumentIDNode extends ApplicationPluginBaseNode {
 	ArgumentIDNode( ArgumentInterface callerRef, int treeDepth ) {
 		super();
 		
+		setMaxOccurrence( Integer.MAX_VALUE );
+		setZeroOccurrenceAllowed( true );
+		
+		setScope( MetaNode.DYNAMIC );
+		
 		this.callerRef = callerRef;
 		this.treeDepth = treeDepth;
 		
-		addChildNode( new ArgumentVariableNode(this, "Name" ) );
-		addChildNode( new ArgumentVariableNode(this, "Value" ) );
+		addChildNode( new ArgumentVariableNode(this, "Name", DmtData.FORMAT_STRING ) );
+		addChildNode( new ArgumentVariableNode(this, "Value", DmtData.FORMAT_NULL | DmtData.FORMAT_BINARY |
+				                                              DmtData.FORMAT_STRING | DmtData.FORMAT_INTEGER |
+				                                              DmtData.FORMAT_FLOAT | DmtData.FORMAT_BOOLEAN ) );
 		
 		canAdd = canDelete = true;
 	}
@@ -249,8 +259,8 @@ class ScheduleItemNode extends ApplicationPluginBaseNode {
 	private int kind;
 	private ScheduleIDNode schedIDNode;
 	
-	ScheduleItemNode( ScheduleIDNode schedIDNode, String name, int kind ) {
-		super( name, "text/plain" );
+	ScheduleItemNode( ScheduleIDNode schedIDNode, String name, int kind, int format ) {
+		super( name, "text/plain", format );
 		this.kind = kind;
 	  this.schedIDNode = schedIDNode;
 		canReplace = true;
@@ -271,12 +281,18 @@ class ScheduleIDNode extends ApplicationPluginBaseNode implements ArgumentInterf
 	
 	ScheduleIDNode() {
 		super();		
+
+		setMaxOccurrence( Integer.MAX_VALUE );
+		setZeroOccurrenceAllowed( true );
+		
+		setScope( MetaNode.DYNAMIC );
+		
 		canAdd = canDelete = true;
 		
-		addChildNode( new ScheduleItemNode( this, "Enabled", 0 ));
-		addChildNode( new ScheduleItemNode( this, "TopicFilter", 1 ));
-		addChildNode( new ScheduleItemNode( this, "EventFilter", 2 ));
-		addChildNode( new ScheduleItemNode( this, "Recurring", 3 ));
+		addChildNode( new ScheduleItemNode( this, "Enabled",     0, DmtData.FORMAT_BOOLEAN ));
+		addChildNode( new ScheduleItemNode( this, "TopicFilter", 1, DmtData.FORMAT_STRING ));
+		addChildNode( new ScheduleItemNode( this, "EventFilter", 2, DmtData.FORMAT_STRING ));
+		addChildNode( new ScheduleItemNode( this, "Recurring",   3, DmtData.FORMAT_BOOLEAN ));
 		
 		addChildNode( new ApplicationPluginBaseNode( "Arguments",
 				          argIDNode = new ArgumentIDNode( this, 7 )));
@@ -293,10 +309,10 @@ class ScheduleIDNode extends ApplicationPluginBaseNode implements ArgumentInterf
 		synchronizeHashWithRegistry( pid, scheduleHash );
 		
 		String result[] = new String [ scheduleHash.size() ];
-		Enumeration enum = scheduleHash.keys();
+		Enumeration enumeration = scheduleHash.keys();
 		int i=0;
-		while( enum.hasMoreElements() )
-			result[ i++ ] = (String)enum.nextElement();
+		while( enumeration.hasMoreElements() )
+			result[ i++ ] = (String)enumeration.nextElement();
 		
 		return result;
 	}	
@@ -426,9 +442,9 @@ class ScheduleIDNode extends ApplicationPluginBaseNode implements ArgumentInterf
 			for( int w=0; w != refs.length; w++ )
 				findInHash[ w ] = false;
 			
-			Enumeration enum = scheduleHash.keys();
-			while( enum.hasMoreElements() ) {
-				String key = (String)enum.nextElement();
+			Enumeration enumeration = scheduleHash.keys();
+			while( enumeration.hasMoreElements() ) {
+				String key = (String)enumeration.nextElement();
 				ScheduledItem item = (ScheduledItem)scheduleHash.get( key );
 				
 				boolean foundReference = false;
@@ -441,7 +457,7 @@ class ScheduleIDNode extends ApplicationPluginBaseNode implements ArgumentInterf
 				
 				if( !foundReference && item.enabled ) {  /* a real reference was deleted ? */
 					scheduleHash.remove( key ); /* remove the item from the hash as well */
-					enum = scheduleHash.keys(); /* restart check because of delete */
+					enumeration = scheduleHash.keys(); /* restart check because of delete */
 				}
 			}
 			
@@ -520,8 +536,8 @@ class LaunchResultNode extends ApplicationPluginBaseNode {
 	private LaunchIDNode launchIDRef;
 	private int          kind;
 	
-	LaunchResultNode( LaunchIDNode launchIDRef, String name, int kind ) {
-		super( name, "text/plain" );
+	LaunchResultNode( LaunchIDNode launchIDRef, String name, int kind, int format ) {
+		super( name, "text/plain", format );
 		
 		this.launchIDRef = launchIDRef;
 		this.kind = kind;
@@ -541,11 +557,15 @@ class LaunchIDNode extends ApplicationPluginBaseNode implements ArgumentInterfac
 	LaunchIDNode() {
 		super();
 		
+		setScope( MetaNode.DYNAMIC );
+		setMaxOccurrence( Integer.MAX_VALUE );
+		setZeroOccurrenceAllowed( true );
+		
 		addChildNode( new ApplicationPluginBaseNode( "Arguments", argIDNode = new ArgumentIDNode( this, 8 ) ) );
 		addChildNode( new ApplicationPluginBaseNode( "Result", 
-				new LaunchResultNode( this, "InstanceID", 0 ),
-				new LaunchResultNode( this, "Status", 1 ),
-				new LaunchResultNode( this, "Message", 2 ) ) );
+				new LaunchResultNode( this, "InstanceID", 0, DmtData.FORMAT_STRING ),
+				new LaunchResultNode( this, "Status",     1, DmtData.FORMAT_STRING ),
+				new LaunchResultNode( this, "Message",    2, DmtData.FORMAT_STRING ) ) );
 		
 		canAdd = canDelete = canExecute = true;
 	}
@@ -557,10 +577,10 @@ class LaunchIDNode extends ApplicationPluginBaseNode implements ArgumentInterfac
 			return new String[ 0 ];
 		
 		String elems[] = new String[ launchIDHash.size() ];
-		Enumeration enum = launchIDHash.keys();
+		Enumeration enumeration = launchIDHash.keys();
 		int i=0;
-		while( enum.hasMoreElements() )
-			elems[ i++ ] = (String)enum.nextElement();
+		while( enumeration.hasMoreElements() )
+			elems[ i++ ] = (String)enumeration.nextElement();
 		return elems;
 	}
 		
@@ -676,8 +696,8 @@ class LockerNode extends ApplicationPluginBaseNode {
 	LockerNode( String name, boolean isLock ) {
 		super( name );
 		this.isLock = isLock;
-		isLeaf = canExecute = true;
-		canGet = false;
+		isLeaf = canExecute = canGet = true;
+		format = DmtData.FORMAT_NULL;
 	}
 	
 	public void execute(DmtSession session, String path[], String correlator, String data) throws DmtException {
@@ -699,8 +719,9 @@ class InstanceOperationsStopNode extends ApplicationPluginBaseNode {
 	InstanceOperationsStopNode() {
 		super( "Stop" );
 		
-		isLeaf = canExecute = true;
-		canGet = false;
+		isLeaf = canExecute = canGet = true;
+		
+		format = DmtData.FORMAT_NULL;
 	}
 	
 	public void execute(DmtSession session, String path[], String correlator, String data) throws DmtException {
@@ -735,7 +756,7 @@ class InstanceOperationsStopNode extends ApplicationPluginBaseNode {
 
 class InstanceStateNode extends ApplicationPluginBaseNode {
 	InstanceStateNode() {
-		super( "State", "text/plain" );
+		super( "State", "text/plain", DmtData.FORMAT_STRING );
 	}
 	
 	public DmtData getNodeValue( String path[] ) throws DmtException {
@@ -753,7 +774,7 @@ class InstanceStateNode extends ApplicationPluginBaseNode {
 
 class InstanceIDPropertyNode extends ApplicationPluginBaseNode {
 	InstanceIDPropertyNode() {
-		super( "InstanceID", "text/plain" );
+		super( "InstanceID", "text/plain", DmtData.FORMAT_STRING );
 	}
 	
 	public DmtData getNodeValue( String path[] ) throws DmtException {
@@ -770,6 +791,9 @@ class InstanceIDNode extends ApplicationPluginBaseNode {
 	
 	InstanceIDNode() {
 		super();
+
+		setMaxOccurrence( Integer.MAX_VALUE );
+		setZeroOccurrenceAllowed( true );
 		
 		addChildNode( new ApplicationPluginBaseNode("Operations", 
 				                                        new ApplicationPluginBaseNode("Ext"),
@@ -832,24 +856,14 @@ class InstanceIDNode extends ApplicationPluginBaseNode {
 class ApplicationPropertyNode extends ApplicationPluginBaseNode {
 	private String  name;
 	private String  propertyName;
-	private boolean isBoolean;
 	
-	ApplicationPropertyNode( String name, String propertyName ) {
-		super( name, "text/plain" );
+	ApplicationPropertyNode( String name, String propertyName, int format ) {
+		super( name, "text/plain", format );
 		
 		this.name = name;
 		this.propertyName = propertyName;
-		this.isBoolean = false;
 	}
-	
-	ApplicationPropertyNode( String name, String propertyName, boolean isBoolean ) {
-		super( name, "text/plain" );
 		
-		this.name = name;
-		this.propertyName = propertyName;
-		this.isBoolean = isBoolean;
-	}
-	
 	public String [] getNames( String path[] ) {
 		try {
 		  if( getProperty( path ) != null )
@@ -862,16 +876,23 @@ class ApplicationPropertyNode extends ApplicationPluginBaseNode {
 	}
 	
 	public DmtData getNodeValue( String path[] ) throws DmtException {
-		if( !isBoolean )
-		  return new DmtData( (String)getProperty( path ) );
+		Object prop = getProperty( path );
+		if( prop == null )
+			throw new DmtException(path, DmtException.METADATA_MISMATCH, "Cannot get node value!" );
+		
+		if( getFormat() != DmtData.FORMAT_BOOLEAN )
+		  return new DmtData( (String)prop );
 		else
-			return new DmtData( ((Boolean)( getProperty( path ) )).booleanValue() );
+          return new DmtData( ((Boolean)prop ).booleanValue() );
 	}
 	
 	Object getProperty( String []path )  throws DmtException {
 		ServiceReference ref = ApplicationIDNode.getApplicationDescriptor( path );
-		if( ref == null )
-			throw new DmtException(path, DmtException.METADATA_MISMATCH, "Cannot get node value!" );
+		if( ref == null ) {
+			if( !isZeroOccurrenceAllowed() )
+				throw new DmtException(path, DmtException.METADATA_MISMATCH, "Cannot get node value!" );
+			return null;
+		}
 		return ref.getProperty( propertyName );
 	}
 }
@@ -883,6 +904,10 @@ class ApplicationIDNode extends ApplicationPluginBaseNode {
 	ApplicationIDNode() {
 		super();
 		
+		setScope( MetaNode.PERMANENT );
+		setMaxOccurrence( Integer.MAX_VALUE );
+		setZeroOccurrenceAllowed( true );
+		
 		addChildNode( new ApplicationPluginBaseNode( "Schedules", new ScheduleIDNode() ) );
 		
 		addChildNode( new ApplicationPluginBaseNode( "Operations",
@@ -891,14 +916,19 @@ class ApplicationIDNode extends ApplicationPluginBaseNode {
 		
 		addChildNode( new ApplicationPluginBaseNode( "Instances", new InstanceIDNode() ) );
 		
-		addChildNode( new ApplicationPropertyNode( "Name",          ApplicationDescriptor.APPLICATION_NAME ) );
-		addChildNode( new ApplicationPropertyNode( "IconURI",       ApplicationDescriptor.APPLICATION_ICON ) );
-		addChildNode( new ApplicationPropertyNode( "Version",       ApplicationDescriptor.APPLICATION_VERSION ) );
-		addChildNode( new ApplicationPropertyNode( "Vendor",        ApplicationDescriptor.APPLICATION_VENDOR ) );
-		addChildNode( new ApplicationPropertyNode( "Locked",        ApplicationDescriptor.APPLICATION_LOCKED, true ) );
-		addChildNode( new ApplicationPropertyNode( "PackageID",     ApplicationDescriptor.APPLICATION_LOCATION ) );
-		addChildNode( new ApplicationPropertyNode( "ContainerID",   ApplicationDescriptor.APPLICATION_CONTAINER ) );
-		addChildNode( new ApplicationPropertyNode( "ApplicationID", ApplicationDescriptor.APPLICATION_PID ) );
+		ApplicationPropertyNode vendor, version;
+		
+		addChildNode( new ApplicationPropertyNode( "Name",          ApplicationDescriptor.APPLICATION_NAME ,     DmtData.FORMAT_STRING ) );
+		addChildNode( new ApplicationPropertyNode( "IconURI",       ApplicationDescriptor.APPLICATION_ICON,      DmtData.FORMAT_STRING ) );
+		addChildNode( vendor = new ApplicationPropertyNode( "Version",       ApplicationDescriptor.APPLICATION_VERSION,   DmtData.FORMAT_STRING ) );
+		addChildNode( version = new ApplicationPropertyNode( "Vendor",        ApplicationDescriptor.APPLICATION_VENDOR,    DmtData.FORMAT_STRING ) );
+		addChildNode( new ApplicationPropertyNode( "Locked",        ApplicationDescriptor.APPLICATION_LOCKED,    DmtData.FORMAT_BOOLEAN ) );
+		addChildNode( new ApplicationPropertyNode( "PackageID",     ApplicationDescriptor.APPLICATION_LOCATION,  DmtData.FORMAT_STRING ) );
+		addChildNode( new ApplicationPropertyNode( "ContainerID",   ApplicationDescriptor.APPLICATION_CONTAINER, DmtData.FORMAT_STRING ) );
+		addChildNode( new ApplicationPropertyNode( "ApplicationID", ApplicationDescriptor.APPLICATION_PID,       DmtData.FORMAT_STRING ) );
+		
+		vendor.setZeroOccurrenceAllowed( true );
+		version.setZeroOccurrenceAllowed( true );
 		
 		addChildNode( new ApplicationPluginBaseNode("Ext") );
 	}
@@ -977,6 +1007,7 @@ public class ApplicationPlugin implements BundleActivator, DataPlugin,
 		dmtTracker.open();
 		
 		rootNode = new ApplicationPluginBaseNode( "Application", new ApplicationIDNode() );
+		rootNode.setScope( MetaNode.PERMANENT );
 	}
 
 	public void stop(BundleContext context) throws Exception {
@@ -1116,7 +1147,7 @@ public class ApplicationPlugin implements BundleActivator, DataPlugin,
 
 	public boolean isNodeUri(String[] path) {
 		try {
-		  ApplicationPluginBaseNode node = getNode( path );
+		  getNode( path );
 		  return true;
 		}catch( DmtException e ) {
 			return false;			

@@ -28,15 +28,16 @@ import org.osgi.service.log.LogService;
  * The realization of the ScheduledApplication interface
  */
 public class ScheduledApplicationImpl implements ScheduledApplication, Serializable {
-	private BundleContext				bc;
-	private Scheduler				scheduler;
+	private BundleContext                   bc;
+	private Scheduler                       scheduler;
 	
-	private String							pid;
-	private HashMap 						args;
-	private String							topic;
-	private String  						eventFilter;
-	private boolean							recurring;
-	private boolean             invalid;
+	private String                          pid;
+	private HashMap                         args;
+	private String                          topic;
+	private String                          eventFilter;
+	private boolean                         recurring;
+	private boolean                         invalid;
+	public static final long serialVersionUID = 0x81212314;
 
 	private ServiceRegistration	serviceReg;
 
