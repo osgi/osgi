@@ -70,7 +70,7 @@ public class ManifestFormat {
 
     /**
      * Asserts that Deployment Admin cannot install a deployment package with a
-     * DeploymentPackage-SymbolicName manifest.
+     * wrong DeploymentPackage-SymbolicName manifest.
      * 
      * @spec 114.3.4.1 DeploymentPackage-SymbolicName
      */
@@ -92,7 +92,7 @@ public class ManifestFormat {
     
     /**
      * Asserts that Deployment Admin cannot install a deployment package with a
-     * DeploymentPackage-Version manifest.
+     * wrong DeploymentPackage-Version manifest.
      * 
      * @spec 114.3.4.2 DeploymentPackage-Version
      */
@@ -114,7 +114,7 @@ public class ManifestFormat {
     
     /**
      * Asserts that Deployment Admin cannot install a deployment package with a
-     * DeploymentPackage-FixPack manifest.
+     * wrong DeploymentPackage-FixPack manifest.
      * 
      * @spec 114.3.4.3 DeploymentPackage-FixPack
      */
@@ -136,7 +136,7 @@ public class ManifestFormat {
     
     /**
      * Asserts that Deployment Admin cannot install a deployment package with a
-     * Bundle-SymbolicName manifest.
+     * wrong Bundle-SymbolicName manifest.
      * 
      * @spec 114.3.4.4 Bundle-SymbolicName (Name Section)
      */
@@ -158,7 +158,7 @@ public class ManifestFormat {
     
     /**
      * Asserts that Deployment Admin cannot install a deployment package with a
-     * Bundle-Version manifest.
+     * wrong Bundle-Version manifest.
      * 
      * @spec 114.3.4.5 Bundle-Version (Name Section)
      */
@@ -180,7 +180,7 @@ public class ManifestFormat {
     
     /**
      * Asserts that Deployment Admin cannot install a deployment package with a
-     * Resource-Processor manifest.
+     * wrong Resource-Processor manifest.
      * 
      * @spec 114.3.4.6 Resource-Processor (Name Section)
      */
@@ -202,7 +202,7 @@ public class ManifestFormat {
     
     /**
      * Asserts that Deployment Admin cannot install a deployment package with a
-     * DeploymentPackage-Missing manifest.
+     * wrong DeploymentPackage-Missing manifest.
      * 
      * @spec 114.3.4.7 DeploymentPackage-Missing (Name Section)
      */

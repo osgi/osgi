@@ -72,10 +72,9 @@ public class InstallExceptions implements TestInterface {
         testInstallExceptions007();
         testInstallExceptions008();
         testInstallExceptions009();
-        testInstallExceptions010();
+//        testInstallExceptions010();
         testInstallExceptions011();
         testInstallExceptions012();
-        testInstallExceptions013();
     }
     
     /**
@@ -317,55 +316,42 @@ public class InstallExceptions implements TestInterface {
                 DeploymentConstants.ALL_PERMISSION,
                 DeploymentConstants.BUNDLE_NAME_ALL,
                 DeploymentCustomizerPermission.PRIVATEAREA);
-        DeploymentPackage dp2 = null, rp = null;
+        DeploymentPackage rp1 = null, rp2 = null, res1 = null, res2 = null;
         try {
-            TestingDeploymentPackage testRP = tbc.getTestingDeploymentPackage(DeploymentConstants.SESSION_TEST_DP);
-            rp = tbc.installDeploymentPackage(tbc.getWebServer() + testRP.getFilename());
+            // resource processor for res1
+            TestingDeploymentPackage testRP1 = tbc.getTestingDeploymentPackage(DeploymentConstants.NON_CUSTOMIZER_DP);
+            rp1 = tbc.installDeploymentPackage(tbc.getWebServer() + testRP1.getFilename());
             
-            TestingDeploymentPackage testDP2 = tbc.getTestingDeploymentPackage(DeploymentConstants.SIMPLE_RESOURCE_DP);
-            dp2 = tbc.installDeploymentPackage(tbc.getWebServer() + testDP2.getFilename());
+            TestingDeploymentPackage testRES1 = tbc.getTestingDeploymentPackage(DeploymentConstants.SIMPLE_RESOURCE_DP);
+            res1 = tbc.installDeploymentPackage(tbc.getWebServer() + testRES1.getFilename());
+            
+            // resource processor for res2
+            TestingDeploymentPackage testRP2 = tbc.getTestingDeploymentPackage(DeploymentConstants.SIMPLE_RESOURCE_PROCESSOR_UNINSTALL);
+            rp2 = tbc.installDeploymentPackage(tbc.getWebServer() + testRP2.getFilename());
+            
+            // resource shared amog res1 and res2
+            TestingDeploymentPackage testRES2 = tbc.getTestingDeploymentPackage(DeploymentConstants.SIMPLE_RESOURCE_UNINSTALL_DP);
+            res2 = tbc.installDeploymentPackage(tbc.getWebServer() + testRES2.getFilename());
+            
             tbc.failException("#", DeploymentException.class);
         } catch (DeploymentException e) {
             tbc.assertEquals("The code of the DeploymentException is ", DeploymentException.CODE_RESOURCE_SHARING_VIOLATION, e.getCode());
         } catch (Exception e) {
             tbc.fail(MessagesConstants.getMessage(MessagesConstants.EXCEPTION_THROWN, new String[] {"DeploymentException", e.getClass().getName() }));
         } finally {
-            tbc.uninstall(new DeploymentPackage[] { rp, dp2 });
+            tbc.uninstall(new DeploymentPackage[] { rp1, rp2, res1, res2 });
         }
     }
     
     /**
-     * This test case installs a deployment package without
-     * signing its bundles. It must thrown DeploymentException.
-     * 
-     * @spec 114.14.5.15 CODE_SIGNING_ERROR
-     */             
-    private void testInstallExceptions011() {
-        tbc.log("#testInstallExceptions011");
-        
-        TestingDeploymentPackage testDP = tbc.getTestingDeploymentPackage(DeploymentConstants.SIMPLE_UNSIGNED_BUNDLE_DP);
-        DeploymentPackage dp = null;
-        try {
-            dp = tbc.installDeploymentPackage(tbc.getWebServer() + testDP.getFilename());
-            tbc.failException("#", DeploymentException.class);
-        } catch (DeploymentException e) {
-            tbc.assertEquals("Deployment Exception thrown signing code error", DeploymentException.CODE_SIGNING_ERROR, e.getCode());
-        } catch (Exception e) {
-            tbc.fail(MessagesConstants.getMessage(MessagesConstants.EXCEPTION_THROWN, new String[] {"DeploymentException", e.getClass().getName() }));
-        } finally {
-            tbc.uninstall(dp);
-        }
-    }
-    
-    /**
-     *  This test case installs a unsigned deployment package.
+     *  This test case installs an untrusted deployment package.
      * 
      * @spec 114.14.5.15 CODE_SIGNING_ERROR
      */                 
-    private void testInstallExceptions012() {
-        tbc.log("#testInstallExceptions012");
+    private void testInstallExceptions011() {
+        tbc.log("#testInstallExceptions011");
         
-        TestingDeploymentPackage testDP = tbc.getTestingDeploymentPackage(DeploymentConstants.SIMPLE_UNSIGNED_DP);
+        TestingDeploymentPackage testDP = tbc.getTestingDeploymentPackage(DeploymentConstants.UNTRUSTED_DP);
         DeploymentPackage dp = null;
         try {
             dp = tbc.installDeploymentPackage(tbc.getWebServer() + testDP.getFilename());
@@ -385,8 +371,8 @@ public class InstallExceptions implements TestInterface {
      * 
      * @spec 114.14.5.14 CODE_PROCESSOR_NOT_FOUND
      */                 
-    private void testInstallExceptions013() {
-        tbc.log("#testInstallExceptions013");
+    private void testInstallExceptions012() {
+        tbc.log("#testInstallExceptions012");
         
         TestingDeploymentPackage testDP = tbc.getTestingDeploymentPackage(DeploymentConstants.SIMPLE_RESOURCE_DP);
         DeploymentPackage dp = null;

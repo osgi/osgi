@@ -525,6 +525,12 @@ public class DeploymentTestControl extends DefaultTestBundleControl {
                 packages.put(""+i, dp);
                 break;
             }
+            case DeploymentConstants.NON_CUSTOMIZER_DP: {
+                TestingBundle[] bundles = {new TestingBundle(DeploymentConstants.PID_RESOURCE_PROCESSOR1, "1.0", "rp_bundle.jar")};
+                dp = new TestingDeploymentPackage(DeploymentConstants.getCodeName(DeploymentConstants.NON_CUSTOMIZER_DP), "1.0", "non_customizer_rp.dp", bundles);
+                packages.put(""+i, dp);
+                break;
+            }
 			}
 		}
 	}
@@ -633,12 +639,12 @@ public class DeploymentTestControl extends DefaultTestBundleControl {
     
     // BundleInfo Test Cases
     // GetSymbolicName
-    public void testGetSymbolicName() {
+    public void testBundleInfoGetSymbolicName() {
         new GetSymbolicName(this).run();
     }
     
     // GetSymbolicName
-    public void testGetVersion() {
+    public void testBundleInfoGetVersion() {
         new GetVersion(this).run();
     }
 

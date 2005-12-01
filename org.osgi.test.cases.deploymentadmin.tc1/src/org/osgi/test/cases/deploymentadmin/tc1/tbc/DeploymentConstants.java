@@ -112,6 +112,7 @@ public class DeploymentConstants {
     public static final int STRANGE_PATH_DP = 54;
     public static final int LOCALIZED_DP = 55;
     public static final int SIGNING_FILE_NOT_NEXT = 56;
+    public static final int NON_CUSTOMIZER_DP = 57;
     
 	//This array index is very important, and must be the same as the deployment code
 	//Use 31 characters.
@@ -139,12 +140,12 @@ public class DeploymentConstants {
         "simple_resource_uninstall_dp", "wrong_bsn", "wrong_bversion",
         "wrong_customizer", "wrong_dp_missing", "wrong_fix_pack", "wrong_name",
         "wrong_rp", "session_test_dp", "resource_processor2_dp",
-        "strange_path", "localized", "signing_file_not_next"};
+        "strange_path", "localized", "signing_file_not_next", "non_customizer_dp"};
 	
 	public static final String DEPLOYMENT_PACKAGE_NAME_ALL = "(name=*)";
 	public static final String BUNDLE_NAME_ALL = "(name=*)";
 
-	public static final String DEPLOYMENT_PACKAGE_NAME0 = "(name="+MAP_CODE_TO_DP[0]+")";
+	public static final String DEPLOYMENT_PACKAGE_NAME0 = "(name="+getCodeName(SIMPLE_DP)+")";
 
 	public static final String DP_HEADER_NAME              = "DeploymentPackage-SymbolicName";
     public static final String DP_HEADER_VERSION           = "DeploymentPackage-Version";
@@ -170,7 +171,6 @@ public class DeploymentConstants {
     public static final String DP_MY_VENDOR                = "CESAR.";
     public static final String DP_MY_LICENSE			   = "www.cesar.org.br/megtck/license.html";
     
-    public static final String SYSTEM_DP_NAME = "System";
     public static final String OSGI_DP_LOCATION = "osgi-dp:";
     
 	public static final String INVALID_NAME = "invalid";
@@ -245,6 +245,7 @@ public class DeploymentConstants {
             case STRANGE_PATH_DP: return "strange_path";
             case LOCALIZED_DP: return "localized";
             case SIGNING_FILE_NOT_NEXT: return "signed_file_not_next";
+            case NON_CUSTOMIZER_DP: return "non_customizer_rp";
             default: return null;
         }
     }

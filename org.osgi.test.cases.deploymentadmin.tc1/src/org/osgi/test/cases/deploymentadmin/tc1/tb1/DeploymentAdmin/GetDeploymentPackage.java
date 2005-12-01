@@ -79,12 +79,11 @@ public class GetDeploymentPackage implements TestInterface {
 		testGetDeploymentPackage002();
 		testGetDeploymentPackage003();
 		testGetDeploymentPackage004();
-// TODO RI thrown classnotfound exception
-//        testGetDeploymentPackage005();
+        testGetDeploymentPackage005();
         testGetDeploymentPackage006();
         testGetDeploymentPackage007();
         testGetDeploymentPackage008();
-//        testGetDeploymentPackage009();
+        testGetDeploymentPackage009();
 	}
 
 	
