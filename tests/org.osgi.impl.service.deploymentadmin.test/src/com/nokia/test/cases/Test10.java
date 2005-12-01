@@ -29,7 +29,8 @@ public class Test10 extends TestCaseClass {
             dp = da.installDeploymentPackage(is);
         } finally {
             if (null != dp)
-                dp.uninstall();
+            	// because of the missing RP
+                dp.uninstallForced();
             if (null != is)
                 is.close();
         }
@@ -42,7 +43,7 @@ public class Test10 extends TestCaseClass {
                 new PermissionInfo(FilePermission.class.getName(), 
                         tRunner.getFile("db_test_10_update_01.dp").getAbsolutePath(), "read"),
                 new PermissionInfo(DeploymentAdminPermission.class.getName(), 
-                        "(name=db_test_10)", "install, uninstall")
+                        "(name=db_test_10)", "install, uninstall_forced")
             };
     }
 

@@ -41,7 +41,7 @@ public class Test12 extends TestCaseClass {
             	throw new TestCaseException("Failed");
         } finally {
             if (null != dp)
-                dp.uninstall();
+                dp.uninstallForced();
             if (null != is1)
                 is1.close();
             if (null != is2)
@@ -56,7 +56,7 @@ public class Test12 extends TestCaseClass {
                 new PermissionInfo(FilePermission.class.getName(), 
                         tRunner.getFile("db_test_12_update_01.dp").getAbsolutePath(), "read"),
                 new PermissionInfo(DeploymentAdminPermission.class.getName(), 
-                        "(name=db_test_12)", "install, uninstall, metadata")
+                        "(name=db_test_12)", "install, uninstall_forced, metadata")
             };
     }
 
