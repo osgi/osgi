@@ -926,6 +926,7 @@ class ApplicationIDNode extends ApplicationPluginBaseNode {
 		addChildNode( new ApplicationPropertyNode( "PackageID",     ApplicationDescriptor.APPLICATION_LOCATION,  DmtData.FORMAT_STRING ) );
 		addChildNode( new ApplicationPropertyNode( "ContainerID",   ApplicationDescriptor.APPLICATION_CONTAINER, DmtData.FORMAT_STRING ) );
 		addChildNode( new ApplicationPropertyNode( "ApplicationID", ApplicationDescriptor.APPLICATION_PID,       DmtData.FORMAT_STRING ) );
+		addChildNode( new ApplicationPropertyNode( "Location",      ApplicationDescriptor.APPLICATION_LOCATION,  DmtData.FORMAT_STRING ) );
 		
 		vendor.setZeroOccurrenceAllowed( true );
 		version.setZeroOccurrenceAllowed( true );
