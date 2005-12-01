@@ -61,7 +61,7 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 	private static final String	EVENT_CLASS		= "org.osgi.test.cases.component.tb3.ServiceConsumerEvent";
 	private static final String	NAMED_CLASS		= "org.osgi.test.cases.component.tb4.NamedService";
 
-	private static int	SLEEP			= 500;
+	private static int	SLEEP			= 1000;
 
 	private Bundle				tb1, tb2, tb3;
 
