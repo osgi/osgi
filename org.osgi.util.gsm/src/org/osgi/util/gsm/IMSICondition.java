@@ -19,13 +19,14 @@ import org.osgi.service.condpermadmin.*;
  * string value that is matched against the IMSI of the subscriber.
  */
 public class IMSICondition {
+	private static final String ORG_OSGI_UTIL_GSM_IMSI = "org.osgi.util.gsm.imsi";
 	private static String imsi;
 	
 	static {
 		AccessController.doPrivileged(
 				new PrivilegedAction() {
 					public Object run() {
-					imsi = System.getProperty("org.osgi.util.gsm.imsi");
+					imsi = System.getProperty(ORG_OSGI_UTIL_GSM_IMSI);
 					return null;
 					}
 				}
@@ -53,7 +54,6 @@ public class IMSICondition {
 		if (bundle==null) throw new NullPointerException("bundle");
 		if (conditionInfo==null) throw new NullPointerException("conditionInfo");
 		String imsi = conditionInfo.getArgs()[0];
-		if (imsi==null) throw new NullPointerException("imsi");
 		if (imsi.length()<15) {
 			if (!imsi.endsWith("*")) throw new IllegalArgumentException("not a valid imsi, and not a wildcard: "+imsi);
 			imsi = imsi.substring(0,imsi.length()-1);
@@ -62,6 +62,11 @@ public class IMSICondition {
 		for(int i=0;i<imsi.length();i++) {
 			int c = imsi.charAt(i);
 			if (c<'0'||c>'9') throw new IllegalArgumentException("not a valid imei: "+imsi);
+		}
+		if (IMSICondition.imsi==null) {
+			System.err.println("The OSGI Reference Implementation of org.osgi.util.gsm.IMSICondition ");
+			System.err.println("needs the system property "+ORG_OSGI_UTIL_GSM_IMSI+" set.");
+			return Condition.FALSE;
 		}
 		return (IMSICondition.imsi.startsWith(imsi))?Condition.TRUE:Condition.FALSE;
 	}

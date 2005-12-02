@@ -19,13 +19,14 @@ import org.osgi.service.condpermadmin.*;
  * string value that is matched against the IMEI of the device.
  */
 public class IMEICondition {
+	private static final String ORG_OSGI_UTIL_GSM_IMEI = "org.osgi.util.gsm.imei";
 	private static String imei ;
 		
 	static {
 		AccessController.doPrivileged(
 				new PrivilegedAction() {
 					public Object run() {
-					imei = System.getProperty("org.osgi.util.gsm.imei");
+					imei = System.getProperty(ORG_OSGI_UTIL_GSM_IMEI);
 					return null;
 					}
 				}
@@ -54,7 +55,6 @@ public class IMEICondition {
 	public static Condition getCondition(Bundle bundle, ConditionInfo conditionInfo) {
 		if (bundle==null) throw new NullPointerException("bundle");
 		String imei = conditionInfo.getArgs()[0];
-		if (imei==null) throw new NullPointerException("imei");
 		if (imei.length()<15) {
 			if (!imei.endsWith("*")) throw new IllegalArgumentException("not a valid imei, and not a wildcard: "+imei);
 			imei = imei.substring(0,imei.length()-1);
@@ -63,6 +63,11 @@ public class IMEICondition {
 		for(int i=0;i<imei.length();i++) {
 			int c = imei.charAt(i);
 			if (c<'0'||c>'9') throw new IllegalArgumentException("not a valid imei: "+imei);
+		}
+		if (IMEICondition.imei==null) {
+			System.err.println("The OSGI Reference Implementation of org.osgi.util.gsm.IMEICondition ");
+			System.err.println("needs the system property "+ORG_OSGI_UTIL_GSM_IMEI+" set.");
+			return Condition.FALSE;
 		}
 		return IMEICondition.imei.startsWith(imei)?Condition.TRUE:Condition.FALSE;
 	}
