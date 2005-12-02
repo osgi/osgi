@@ -1,0 +1,19 @@
+Manifest-Version: 1.0
+Bundle-Name: FileInstaller
+Bundle-Description: Looks at a directory and installs bundles from this folder. If the file is removed
+  from this folder, it is uninstalled. It supports the following properties:
+  <ol>
+   <li>"org.osgi.fileinstall.poll" = Sleep time for loop, default 2 seconds</li>
+   <li>"org.osgi.fileinstall.dir" = Directory to watch</li>
+   <li>"org.osgi.fileinstall.delay" = Delay time before install and uninstall </li>
+   <li>"org.osgi.fileinstall.debug" = debug flag (!0).</li>
+  <ol>
+Bundle-Vendor: OSGi
+Bundle-Activator: ${p}.fileinstall.Init
+Bundle-Copyright: Copyright (c) The Open Services Gateway Initiative (2000-2001). All Rights Reserved.
+Bundle-Version: $(version)
+CVS-Header: $Header$
+$(IMPORT-PACKAGE)
+$(EXPORT-PACKAGE)
+$(PRIVATE-PACKAGE)
+
