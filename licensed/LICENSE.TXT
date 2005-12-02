@@ -68,3 +68,9 @@ License					licenses/ASL-2.0.txt (basic ant)
                         licenses/SAX.txt     (actually in public domain)
 URL						http://ant.apache.org
 Modifications			NONE, library and scripts used as is
+
+Equinox Framework--------------------------------------------------------------------
+Copyright				Copyright (c) IBM Corporation and others
+License					licenses/EPL-1.0.html
+URL						http://www.eclipse.org/equinox
+Modifications			NONE, library used as is
