@@ -189,6 +189,7 @@ public class CreateInteriorNode implements TestInterface {
             TestExecPlugin.setAllUriIsExistent(true);
             session.close();
             
+            tbc.setPermissions(new PermissionInfo(DmtPermission.class.getName(), DmtConstants.ALL_NODES,DmtConstants.ALL_ACTIONS));
             session = tbc.getDmtAdmin().getSession(TestExecPluginActivator.ROOT,DmtSession.LOCK_TYPE_EXCLUSIVE);
             Acl acl = session.getNodeAcl(TestExecPluginActivator.INEXISTENT_NODE);
             tbc.assertTrue("Asserts that if the principal does not have Replace access rights on the parent " +

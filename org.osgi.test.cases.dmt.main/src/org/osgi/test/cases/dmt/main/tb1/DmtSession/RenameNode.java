@@ -473,7 +473,7 @@ public class RenameNode implements TestInterface {
 			tbc.log("#testRenameNode016");
 			session = tbc.getDmtAdmin().getSession(".",
 			    DmtSession.LOCK_TYPE_EXCLUSIVE);
-			tbc.setPermissions(new PermissionInfo(DmtPermission.class.getName(), "*",DmtConstants.ALL_ACTIONS));
+			tbc.setPermissions(new PermissionInfo(DmtPermission.class.getName(), ".",DmtConstants.ALL_ACTIONS));
 			session.renameNode(".","newName");
 			tbc.failException("", DmtException.class);
 		} catch (DmtException e) {
