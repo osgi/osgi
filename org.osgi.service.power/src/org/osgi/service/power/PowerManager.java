@@ -30,7 +30,7 @@ public interface PowerManager {
 
 	/**
 	 * S0 (Working or G0) system power state as defined in <a
-	 * href="http://www.acpi.info">ACPI&nbsp;Specifications</a>. A computer
+	 * href="http://www.acpi.info">ACPISpecifications</a>. A computer
 	 * state where the system dispatches user mode (application) threads and
 	 * they execute. In this state, peripheral devices (peripherals) are having
 	 * their power state changed dynamically. The user can select, through some
@@ -43,7 +43,7 @@ public interface PowerManager {
 
 	/**
 	 * S1 Sleeping system power state as defined in <a
-	 * href="http://www.acpi.info">ACPI&nbsp;Specifications</a>. The S1
+	 * href="http://www.acpi.info">ACPISpecifications</a>. The S1
 	 * sleeping state is a low wake latency sleeping state. In this state, no
 	 * system context is lost (CPU or chip set) and hardware maintains all
 	 * system context.
@@ -52,7 +52,7 @@ public interface PowerManager {
 
 	/**
 	 * S2 Sleeping system power state as defined in <a
-	 * href="http://www.acpi.info">ACPI&nbsp;Specifications</a>. The S2
+	 * href="http://www.acpi.info">ACPISpecifications</a>. The S2
 	 * sleeping state is a low wake latency sleeping state. This state is
 	 * similar to the S1 sleeping state except that the CPU and system cache
 	 * context is lost (the OS is responsible for maintaining the caches and CPU
@@ -63,7 +63,7 @@ public interface PowerManager {
 
 	/**
 	 * S3 Sleeping system power state as defined in <a
-	 * href="http://www.acpi.info">ACPI&nbsp;Specifications</a>. The S3
+	 * href="http://www.acpi.info">ACPISpecifications</a>. The S3
 	 * sleeping state is a low wake latency sleeping state where all system
 	 * context is lost except system memory. CPU, cache, and chip set context
 	 * are lost in this state. Hardware maintains memory context and restores
@@ -74,7 +74,7 @@ public interface PowerManager {
 
 	/**
 	 * S4 Sleeping system power state as defined in <a
-	 * href="http://www.acpi.info">ACPI&nbsp;Specifications</a>. The S4
+	 * href="http://www.acpi.info">ACPISpecifications</a>. The S4
 	 * sleeping state is the lowest power, longest wake latency sleeping state
 	 * supported by ACPI. In order to reduce power to a minimum, it is assumed
 	 * that the hardware platform has powered off all devices. Platform context
@@ -84,7 +84,7 @@ public interface PowerManager {
 
 	/**
 	 * S5 system power state (Soft Off or G2) as defined in <a
-	 * href="http://www.acpi.info">ACPI&nbsp;Specifications</a>. The S5 state
+	 * href="http://www.acpi.info">ACPISpecifications</a>. The S5 state
 	 * is similar to the S4 state except that the OS does not save any context.
 	 * The system is in the "soft" off state and requires a complete boot when
 	 * it wakes. Software uses a different state value to distinguish between

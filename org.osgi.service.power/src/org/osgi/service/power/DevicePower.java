@@ -13,7 +13,7 @@ package org.osgi.service.power;
 /**
  * <p>
  * Interface for identifying Power Device as defined in <a
- * href="http://www.acpi.info">ACPI&nbsp;Specifications</a>.
+ * href="http://www.acpi.info">ACPISpecifications</a>.
  * 
  * <p>
  * A service must implement this interface to indicate that it is a device power
@@ -24,7 +24,7 @@ public interface DevicePower {
 	/**
 	 * <p>
 	 * 'D0' Device Power state as defined in <a
-	 * href="http://www.acpi.info">ACPI&nbsp;Specifications</a>.
+	 * href="http://www.acpi.info">ACPISpecifications</a>.
 	 * 
 	 * <p>
 	 * This state is assumed to be the highest level of power consumption. The
@@ -37,7 +37,7 @@ public interface DevicePower {
 	/**
 	 * <p>
 	 * 'D1' Device Power State as defined in <a
-	 * href="http://www.acpi.info">ACPI&nbsp;Specifications</a>.
+	 * href="http://www.acpi.info">ACPISpecifications</a>.
 	 * 
 	 * <p>
 	 * The meaning of the D1 Device State is defined by each device class. Many
@@ -49,7 +49,7 @@ public interface DevicePower {
 	/**
 	 * <p>
 	 * 'D2' Device Power State as defined in <a
-	 * href="http://www.acpi.info">ACPI&nbsp;Specifications</a>.
+	 * href="http://www.acpi.info">ACPISpecifications</a>.
 	 * 
 	 * <p>
 	 * The meaning of the D2 Device State is defined by each device class. Many
@@ -63,7 +63,7 @@ public interface DevicePower {
 	/**
 	 * <p>
 	 * 'D3' Device Power State as defined in <a
-	 * href="http://www.acpi.info">ACPI&nbsp;Specifications</a>.
+	 * href="http://www.acpi.info">ACPISpecifications</a>.
 	 * 
 	 * <p>
 	 * Power has been fully removed from the device. The device context is lost
@@ -78,7 +78,7 @@ public interface DevicePower {
 	/**
 	 * <p>
 	 * Unspecified device power state. This state can be used in the
-	 * {@link #DEVICE_POWER_MAPPINGS} property registration to express that the
+	 * {@link #DEVICE_POWER_MAPPING} property registration to express that the
 	 * transition is not defined.
 	 */
 	public static final int		UNSPECIFIED_STATE			= 0x00000000;
