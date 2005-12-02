@@ -71,9 +71,6 @@ public class Constraints {
 		testConstraints010();
 		testConstraints011();
 		testConstraints012();
-		testConstraints013();
-		testConstraints014();
-		testConstraints015();
 	}
 
 	/**
@@ -414,95 +411,5 @@ public class Constraints {
 			tbc.closeSession(session2);
 		}
 	}		
-	/**
-	 * Test if concurrent updating sessions cannot be opened within the 
-     * same plugin (different subtrees)
-     * 
-     * @spec 117.3 The DMT Admin Service
-	 */
-
-	private void testConstraints013() {
-		tbc.log("#testConstraints013");
-		DmtSession session1 = null;
-		DmtSession session2 = null;
-		try {
-			session1 = tbc.getDmtAdmin().getSession(
-					TestDataPluginActivator.ROOT,
-					DmtSession.LOCK_TYPE_ATOMIC);
-			session2 = tbc.getDmtAdmin().getSession(
-					TestDataPluginActivator.TEST_DATA_PLUGIN_ROOT2,
-					DmtSession.LOCK_TYPE_ATOMIC);
-			tbc
-					.fail("Two updating sessions could be opened within the same plugin (on different subtrees).");
-		} catch (DmtException e) {
-			tbc.assertEquals("Two updating sessions could NOT be opened within the same plugin (on different subtrees).",DmtException.SESSION_CREATION_TIMEOUT,e.getCode());
-		} catch (Exception e) {
-			tbc.fail("Expected " + DmtException.class.getName()
-					+ " but it was " + e.getClass().getName());
-		} finally {
-			tbc.closeSession(session1);
-			tbc.closeSession(session2);
-		}
-	}
 	
-	/**
-	 * Test if concurrent updating sessions cannot be opened within the same 
-     * plugin (different subtrees)
-     * 
-     * @spec 117.3 The DMT Admin Service
-	 */
-
-	private void testConstraints014() {
-		tbc.log("#testConstraints014");
-		DmtSession session1 = null;
-		DmtSession session2 = null;
-		try {
-			session1 = tbc.getDmtAdmin().getSession(
-					TestDataPluginActivator.ROOT,
-					DmtSession.LOCK_TYPE_EXCLUSIVE);
-			session2 = tbc.getDmtAdmin().getSession(
-					TestDataPluginActivator.TEST_DATA_PLUGIN_ROOT2,
-					DmtSession.LOCK_TYPE_EXCLUSIVE);
-			tbc
-					.fail("Two updating sessions could be opened within the same plugin (on different subtrees).");
-		} catch (DmtException e) {
-			tbc.assertEquals("Two updating sessions could NOT be opened within the same plugin (on different subtrees).",DmtException.SESSION_CREATION_TIMEOUT,e.getCode());
-		} catch (Exception e) {
-			tbc.fail("Expected " + DmtException.class.getName()
-					+ " but it was " + e.getClass().getName());
-		} finally {
-			tbc.closeSession(session1);
-			tbc.closeSession(session2);
-		}
-	}
-	/**
-	 * Test if concurrent updating sessions cannot be opened within the same plugin 
-     * (different subtrees)
-     * 
-     * @spec 117.3 The DMT Admin Service
-	 */
-
-	private void testConstraints015() {
-		tbc.log("#testConstraints015");
-		DmtSession session1 = null;
-		DmtSession session2 = null;
-		try {
-			session1 = tbc.getDmtAdmin().getSession(
-					TestDataPluginActivator.ROOT,
-					DmtSession.LOCK_TYPE_ATOMIC);
-			session2 = tbc.getDmtAdmin().getSession(
-					TestDataPluginActivator.TEST_DATA_PLUGIN_ROOT2,
-					DmtSession.LOCK_TYPE_EXCLUSIVE);
-			tbc
-					.fail("Two updating sessions could be opened within the same plugin (on different subtrees).");
-		} catch (DmtException e) {
-			tbc.assertEquals("Two updating sessions could NOT be opened within the same plugin (on different subtrees).",DmtException.SESSION_CREATION_TIMEOUT,e.getCode());
-		} catch (Exception e) {
-			tbc.fail("Expected " + DmtException.class.getName()
-					+ " but it was " + e.getClass().getName());
-		} finally {
-			tbc.closeSession(session1);
-			tbc.closeSession(session2);
-		}
-	}
 }
