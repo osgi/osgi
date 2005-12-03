@@ -3,11 +3,14 @@
 	
 	
 	<target name="director">
-		<java jar="../org.osgi.impl.framework.eclipse.jar"
-			fork="true"
-		>
+		<delete dir="bundles"/> <!-- delete bundles dir to clear permdata -->
+		<java fork="true" classname="org.eclipse.osgi.framework.launcher.Launcher">	
+			<classpath path="../org.osgi.impl.framework.eclipse.jar"/>
 			<jvmarg line="-Xverify:none"/>
+			<!-- bug in framework console hangs the framework until telnetted in
 			<arg line="-console:2101"/>
+			-->
+			<arg line="-console"/>
 			<arg line="init"/>
 			<arg line="'install file:../osgi.jar start'"/>
 			<arg line="'install file:../osgi.min.jar start'"/>
@@ -49,14 +52,16 @@
 	</target>
 	
 	<target name="-run">		
-		<java jar="../org.osgi.impl.framework.eclipse.jar"
-			fork="true"
-		>
+		<delete dir="bundles"/> <!-- delete bundles dir to clear permdata -->
+		<java fork="true" classname="org.eclipse.osgi.framework.launcher.Launcher">	
+			<classpath path="../org.osgi.impl.framework.eclipse.jar"/>
 			<jvmarg line="-Xverify:none"/>
 			<jvmarg line="-Dorg.osgi.test.batch.script=${script}"/>
 			<jvmarg line="-Dorg.osgi.test.batch.out=${out}"/>
-			
+			<!-- bug in framework console hangs the framework until telnetted in
 			<arg line="-console:2101"/>
+			-->
+			<arg line="-console"/>
 			<arg line="init"/>
 			<arg line="'install file:../osgi.jar start'"/>
 			<arg line="'install file:../osgi.min.jar start'"/>

@@ -24,13 +24,17 @@
 	
 	<target name="-run">
 		<echo>Testing ${impls}</echo>
+		<delete dir="bundles"/> <!-- delete bundles dir to clear permdata -->
 		<java fork="true" classname="org.eclipse.osgi.framework.launcher.Launcher">	
 			<classpath path="../org.osgi.impl.framework.eclipse.jar"/>
 			<classpath path="${classpath}"/>
 			<jvmarg line="-Djava.security.manager=org.eclipse.osgi.framework.internal.core.FrameworkSecurityManager"/>
 			<jvmarg line="-Djava.security.policy=policy"/>
 			<jvmarg line="-Xverify:none"/>
+			<!-- bug in framework console hangs the framework until telnetted in
 			<arg line="-console:2011"/>
+			-->
+			<arg line="-console"/>
 			<arg line="init"/>
 			<arg line="'install file:../osgi.jar start'"/>
 			<arg line="'install file:../osgi.target.jar start'"/>
