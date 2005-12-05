@@ -97,27 +97,26 @@ public interface DevicePower {
 
 	/**
 	 * Service registration property key (named
-	 * <code>power.device.mapping</code> for DevicePower indicating the mapping
-	 * (System/Device Power States) that the device wants to propose to the
-	 * Power Manager. The Power Manager is allowed to override it. The type of
-	 * the property must be int[]. Each index position represents a system power
-	 * state from S0 to S5. Each value of the array represents the DevicePower
-	 * state value for a given system power state position. For example, the
-	 * following mapping
+	 * <code>power.device.mapping</code> for DevicePower indicating the
+	 * mapping (System/Device Power States) that the device wants to propose to
+	 * the Power Manager. The Power Manager is allowed to override it. The type
+	 * of the property must be int[]. Each index position represents a system
+	 * power state from S0 to S5. Each value of the array represents the
+	 * DevicePower state value for a given system power state position. For
+	 * example, the following mapping
 	 * 
 	 * <pre>
-	 *          S0 -&gt; D0
-	 *          S1 -&gt; D1
-	 *          S2 -&gt; unspecified
-	 *          S3 -&gt; D3
-	 *          S4 -&gt; D3
-	 *          S5 -&gt; D3
+	 *           S0 -&gt; D0
+	 *           S1 -&gt; D1
+	 *           S2 -&gt; unspecified
+	 *           S3 -&gt; D3
+	 *           S4 -&gt; D3
+	 *           S5 -&gt; D3
 	 * </pre>
 	 * 
-	 * is represented as follows: <code>
-	 * int[] mappings = new int[]{{@link #D0}, {@link #D1},
-	 * 	{@link #UNSPECIFIED_STATE}, {@link #D3}, {@link #D3}, {@link #D3}};
-	 * </code>
+	 * is represented as follows: <pre>
+	 * int[] mappings = new int[]{D0,D1, UNSPECIFIED_STATE, D3, D3, D3};
+	 * </pre>
 	 * If this property is not used or invalid then the default mapping (defined
 	 * in Power Manager) is used.
 	 * 
