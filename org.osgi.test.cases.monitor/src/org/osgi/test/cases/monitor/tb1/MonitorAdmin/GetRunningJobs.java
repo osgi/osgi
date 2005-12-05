@@ -332,12 +332,17 @@ public class GetRunningJobs implements TestInterface {
 					tbc.getTb1Location());
 			
 			tbc.setLocalPermission(new PermissionInfo[] {					
-					new PermissionInfo(org.osgi.service.monitor.MonitorPermission.class.getName(), MonitorConstants.SVS[1], org.osgi.service.monitor.MonitorPermission.STARTJOB)
+					new PermissionInfo(org.osgi.service.monitor.MonitorPermission.class.getName(), MonitorConstants.SVS[1], org.osgi.service.monitor.MonitorPermission.STARTJOB),
+					new PermissionInfo(org.osgi.service.monitor.MonitorPermission.class.getName(), MonitorConstants.SVS[0], org.osgi.service.monitor.MonitorPermission.STARTJOB)
 			});
 
 			mj = tbc.getMonitorAdmin().startJob(MonitorConstants.INITIATOR,
 					MonitorConstants.SVS, MonitorConstants.COUNT);
 
+			tbc.setLocalPermission(new PermissionInfo[] {					
+					new PermissionInfo(org.osgi.service.monitor.MonitorPermission.class.getName(), MonitorConstants.SVS[0], org.osgi.service.monitor.MonitorPermission.STARTJOB)
+			});		
+			
 			mjs = tbc.getMonitorAdmin().getRunningJobs();
 		
 			tbc.assertNotNull("Asserting if a non-null value is returned by getRunningJobs().", mjs);					
@@ -373,15 +378,18 @@ public class GetRunningJobs implements TestInterface {
 			infos = tbc.getPermissionAdmin().getPermissions(
 					tbc.getTb1Location());			
 
-			tbc.setLocalPermission(new PermissionInfo[] {
-					new PermissionInfo(org.osgi.service.monitor.MonitorPermission.class.getName(), MonitorConstants.SVS[1], org.osgi.service.monitor.MonitorPermission.STARTJOB)
-			});
-			
+			tbc.setLocalPermission(new PermissionInfo[] {					
+					new PermissionInfo(org.osgi.service.monitor.MonitorPermission.class.getName(), MonitorConstants.SVS[1], org.osgi.service.monitor.MonitorPermission.STARTJOB),
+					new PermissionInfo(org.osgi.service.monitor.MonitorPermission.class.getName(), MonitorConstants.SVS[0], org.osgi.service.monitor.MonitorPermission.STARTJOB)
+			});		
 			
 			mj = tbc.getMonitorAdmin().startScheduledJob(
 					MonitorConstants.INITIATOR, MonitorConstants.SVS,
 					MonitorConstants.SCHEDULE, MonitorConstants.COUNT);
 
+			tbc.setLocalPermission(new PermissionInfo[] {
+					new PermissionInfo(org.osgi.service.monitor.MonitorPermission.class.getName(), MonitorConstants.SVS[1], org.osgi.service.monitor.MonitorPermission.STARTJOB)
+			});		
 
 			mjs = tbc.getMonitorAdmin().getRunningJobs();
 		

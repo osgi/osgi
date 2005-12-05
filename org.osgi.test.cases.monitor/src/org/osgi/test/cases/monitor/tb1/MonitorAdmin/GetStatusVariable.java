@@ -72,7 +72,6 @@ public class GetStatusVariable implements TestInterface {
 		testGetStatusVariable005();
 		testGetStatusVariable006();
 		testGetStatusVariable007();
-		testGetStatusVariable008();
 	}
 
 	/**
@@ -294,36 +293,5 @@ public class GetStatusVariable implements TestInterface {
 			tbc.setTb1Permission(infos);
 		}
 	}
-	
-	/**
-	 * This method asserts that null is returned
-	 * when we try to get a StatusVariable that does not
-	 * have publish permission.
-	 * 
-	 * @spec MonitorAdmin.getStatusVariable(string)
-	 */
-	private void testGetStatusVariable008() {
-		tbc.log("#testGetStatusVariable008");
-		PermissionInfo[] infos = null;
-		try {
-			infos = tbc.getPermissionAdmin().getPermissions(
-					tbc.getTb1Location());
-
-			tbc.setLocalPermission(new PermissionInfo[] {
-					new PermissionInfo(MonitorPermission.class.getName(),"cesar2/test0", MonitorPermission.READ)
-			});
-			
-			
-			StatusVariable sv = tbc.getMonitorAdmin().getStatusVariable("cesar2/test0");
-			
-			tbc.assertNull("Asserting that a null value was returned by MonitorAdmin.", sv);
-
-		} catch (Exception e) {
-			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": " + e.getClass().getName());
-		} finally {
-			tbc.setTb1Permission(infos);
-		}
-	}	
-	
 
 }
