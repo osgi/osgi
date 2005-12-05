@@ -380,7 +380,7 @@ public class AclConstraints {
             tbc.openSessionAndSetNodeAcl(TestExecPluginActivator.INTERIOR_NODE, DmtConstants.PRINCIPAL, Acl.GET | Acl.ADD );
             tbc.openSessionAndSetNodeAcl(TestExecPluginActivator.ROOT, DmtConstants.PRINCIPAL, Acl.ADD );
 
-            Acl aclExpected = new Acl(new String[] { DmtConstants.PRINCIPAL },new int[] { Acl.ADD | Acl.GET | Acl.REPLACE });
+            Acl aclExpected = new Acl(new String[] { DmtConstants.PRINCIPAL },new int[] { Acl.ADD | Acl.DELETE | Acl.REPLACE });
 
             tbc.setPermissions(new PermissionInfo(DmtPrincipalPermission.class
 					.getName(), DmtConstants.PRINCIPAL, "*"));
