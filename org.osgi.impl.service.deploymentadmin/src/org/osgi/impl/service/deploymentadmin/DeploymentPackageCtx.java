@@ -23,6 +23,9 @@ import java.util.Set;
 import org.osgi.framework.BundleContext;
 import org.osgi.service.deploymentadmin.DeploymentException;
 
+/**
+ * Represents the context of a DP   
+ */
 public class DeploymentPackageCtx {
     
     private final Logger              logger; 

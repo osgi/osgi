@@ -21,6 +21,9 @@ import java.util.Map;
 
 import org.osgi.framework.BundleContext;
 
+/**
+ * Represents the context of a Deployment Session   
+ */
 public class DeploymentSessionCtx {
     
     private final Logger        logger; 

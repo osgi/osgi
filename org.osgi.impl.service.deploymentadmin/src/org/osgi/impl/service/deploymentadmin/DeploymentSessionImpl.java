@@ -37,22 +37,8 @@ import org.osgi.util.tracker.ServiceTracker;
 
 public class DeploymentSessionImpl implements DeploymentSession {
     
-    /*
-     * The action value INSTALL indicates this session is associated with the 
-     * installation of a deployment package.  
-     */
-    static final int INSTALL = 0;
-    
-    /*
-     * The action value UPDATE indicates this session is associated with the 
-     * update of a deployment package.  
-     */
-    static final int UPDATE = 1;
-
-    /*
-     * The action value UNINSTALL indicates this session is associated with the 
-     * uninstalling of a deployment package.  
-     */
+    static final int INSTALL   = 0;
+    static final int UPDATE    = 1;
     static final int UNINSTALL = 2;   
     
     private DeploymentSessionCtx        sessionCtx;
@@ -67,7 +53,7 @@ public class DeploymentSessionImpl implements DeploymentSession {
     private boolean                     cancelled;
     
     private DeploymentPackageJarInputStream.Entry actEntry;
-    private WrappedResourceProcessor              wrProc;
+    private WrappedResourceProcessor              actWrProc;
     
     /*
      * Class to track policy admin
@@ -118,7 +104,7 @@ public class DeploymentSessionImpl implements DeploymentSession {
     }
     
     synchronized void cancel() {
-    	wrProc.cancel();
+    	actWrProc.cancel();
     	cancelled = true;
     }
     
@@ -191,14 +177,11 @@ public class DeploymentSessionImpl implements DeploymentSession {
     }
 
     int getDeploymentAction() {
-        Version verZero = new Version(0, 0, 0);
-        Version verSrc = srcDp.getVersion();
-        Version verTarget = targetDp.getVersion();
-        if (!verZero.equals(verSrc) && !verZero.equals(verTarget))
-            return UPDATE;
-        if (verZero.equals(verTarget))
+    	if (srcDp.isEmpty())
+    		return UNINSTALL;
+       	if (targetDp.isEmpty())
             return INSTALL;
-        return UNINSTALL;
+        return UPDATE;
     }
 
     /**
@@ -226,6 +209,8 @@ public class DeploymentSessionImpl implements DeploymentSession {
                 trackPackAdmin.open();
                 return null;
             }});
+        
+        WrappedResourceProcessor.setRpTracker(trackRp);
     }
     
     private void closeTrackers() {
@@ -281,20 +266,24 @@ public class DeploymentSessionImpl implements DeploymentSession {
         openTrackers();
         
         transaction = Transaction.createTransaction(
-                "INSTALL " + srcDp.getName(), this, sessionCtx.getLogger());
+                "INSTALL/UPDATE " + srcDp.getName(), this, sessionCtx.getLogger());
         transaction.start();
         
         // ConditionalPermissionInfo-s for customizers
         Set cpisForCusts = null;
-        
         try {
-            stopBundles();
+        	// "true" since customizers also have to be stopped because they 
+        	// may be updated during processBundles call
+            stopBundles(true);
             processBundles(wjis);
             cpisForCusts = setFilePermissionForCustomizers();
             startCustomizers();
-            processResources(wjis);
+            Set wrProcs = processResources(wjis);
+            Set wrProcsD = dropResources();
+            wrProcs.addAll(wrProcsD);
             dropBundles();
-            dropResources();
+            prepareProcessors(wrProcs);
+            commitProcessors(wrProcs);
             //refreshPackages();
             startBundles();
         } catch (DeploymentException e) {
@@ -308,15 +297,8 @@ public class DeploymentSessionImpl implements DeploymentSession {
         	if (null != cpisForCusts)
         		resetFilePermissionForCustomizers(cpisForCusts);
         }
-        if (!isCancelled())
-			try {
-				transaction.commit();
-			} catch (ResourceProcessorException e) {
-				throw new DeploymentException(
-						DeploymentException.CODE_COMMIT_ERROR, "", e);
-			}
-		else
-        	transaction.rollback();
+        if (isCancelled())
+			transaction.rollback();
         
         closeTrackers();
     }
@@ -335,18 +317,19 @@ public class DeploymentSessionImpl implements DeploymentSession {
     boolean uninstall(boolean forced) throws DeploymentException {
         this.forced = forced;
         boolean succeed = true;
-        
         openTrackers();
         
         transaction = Transaction.createTransaction(
                 "UNINSTALL " + targetDp.getName(), this, sessionCtx.getLogger());
         transaction.start();
         
+        // "false" since customizers will not be updated because it is an uinstall
+        stopBundles(false);
         try {
-            stopBundles();
-            startCustomizers();
+            Set wrProcs = dropAllResources();
+            prepareProcessors(wrProcs);
+            commitProcessors(wrProcs);
             dropBundles();
-            dropAllResources();
         } catch (Exception e) {
             if (!forced) {
                 transaction.rollback();
@@ -357,14 +340,7 @@ public class DeploymentSessionImpl implements DeploymentSession {
             succeed = false;
         }
         
-        if (!isCancelled())
-        	try {
-				transaction.commit();
-			} catch (ResourceProcessorException e) {
-				throw new DeploymentException(
-						DeploymentException.CODE_COMMIT_ERROR, "", e);
-			}
-        else {
+        if (isCancelled()) {
         	succeed = false;
         	transaction.rollback();
         }
@@ -373,7 +349,23 @@ public class DeploymentSessionImpl implements DeploymentSession {
         return succeed;
     }
     
-    private int startBundles() {
+    private void prepareProcessors(Set wrProcs) throws ResourceProcessorException {
+    	for (Iterator iter = wrProcs.iterator(); iter.hasNext();) {
+			WrappedResourceProcessor wrProc = 
+				(WrappedResourceProcessor) iter.next();
+			wrProc.prepare();
+		}
+	}
+
+    private void commitProcessors(Set wrProcs) {
+    	for (Iterator iter = wrProcs.iterator(); iter.hasNext();) {
+    		WrappedResourceProcessor wrProc = 
+    			(WrappedResourceProcessor) iter.next();
+    		wrProc.commit();
+    	}
+    }
+    
+	private int startBundles() {
         if (isCancelled())
         	return 0;
 
@@ -421,15 +413,15 @@ public class DeploymentSessionImpl implements DeploymentSession {
             if (isCancelled())
             	break;
 
-            BundleEntry entry = (BundleEntry) iter.next();
+            BundleEntry be = (BundleEntry) iter.next();
             try {
-                Bundle b = sessionCtx.getBundleContext().getBundle(entry.getBundleId());
-                if (!entry.isCustomizer())
+                Bundle b = sessionCtx.getBundleContext().getBundle(be.getBundleId());
+                if (!be.isCustomizer())
                     continue;
                 startBundle(b);
                 ServiceReference sref = getRegServ(b);
                 String pid = (String) sref.getProperty(Constants.SERVICE_PID);
-                entry.setPid(pid);
+                be.setPid(pid);
             } catch (Exception e) {
                 if (forced)
                     sessionCtx.getLogger().log(e);
@@ -466,7 +458,7 @@ public class DeploymentSessionImpl implements DeploymentSession {
         transaction.addRecord(new TransactionRecord(Transaction.STARTBUNDLE, b));
     }
 
-    private void stopBundles() {
+    private void stopBundles(boolean stopCustomizers) {
         if (INSTALL == getDeploymentAction())
             return;
         
@@ -477,10 +469,11 @@ public class DeploymentSessionImpl implements DeploymentSession {
         for (ListIterator iter = list.listIterator(list.size()); iter.hasPrevious();) {
         	if (isCancelled())
             	break;
-        	
-            BundleEntry entry = (BundleEntry) iter.previous();
+            BundleEntry be = (BundleEntry) iter.previous();
+            if (!stopCustomizers && be.isCustomizer())
+            	continue;
             try {
-	            Bundle b = sessionCtx.getBundleContext().getBundle(entry.getBundleId());
+	            Bundle b = sessionCtx.getBundleContext().getBundle(be.getBundleId());
 	            stopBundle(b);
             } catch (Exception e) {
                 // Exceptions are ignored in this phase to allow repairs 
@@ -504,9 +497,10 @@ public class DeploymentSessionImpl implements DeploymentSession {
         transaction.addRecord(new TransactionRecord(Transaction.STOPBUNDLE, b));
     }
 
-    private void processResources(DeploymentPackageJarInputStream wjis) 
+    private Set processResources(DeploymentPackageJarInputStream wjis) 
     		throws DeploymentException, IOException 
     {
+    	Set wrProcs = new HashSet();
         while (null != actEntry && !isCancelled()) {
             if (isCancelled())
             	break;
@@ -516,14 +510,21 @@ public class DeploymentSessionImpl implements DeploymentSession {
                         "Bundles have to precede resources in the deployment package");
             
             if (!actEntry.isMissing()) {
-                processResource(actEntry);
+                WrappedResourceProcessor wrProc = processResource(actEntry);
+                if (null != wrProc)
+                	wrProcs.add(wrProc);
                 ResourceEntry re = srcDp.getResourceEntryByName(actEntry.getName());
                 re.updateCertificates(actEntry);
-            } else
-                ; // do nothing
+            } else {
+            	// ResourceEntry must be updated
+            	ResourceEntry reT = targetDp.getResourceEntryByName(actEntry.getName());
+            	ResourceEntry reS = srcDp.getResourceEntryByName(actEntry.getName());
+            	reS.update(reT);
+            }
             wjis.closeEntry();
             actEntry = wjis.nextEntry();
         }
+        return wrProcs;
     }
 
     /*private boolean isLocalizationEntry(Entry entry) {
@@ -538,9 +539,11 @@ public class DeploymentSessionImpl implements DeploymentSession {
      * Drops resources that don't present in the source package and are not 
      * marked as missing resources
      */
-    private void dropResources() {
+    private Set dropResources() {
+    	Set wrProcs = new HashSet();
+    	
         if (isCancelled())
-        	return;
+        	return wrProcs;
 
         List toDrop = new LinkedList(targetDp.getResourceEntries());
         List tmpSet = srcDp.getResourceEntries();
@@ -552,25 +555,30 @@ public class DeploymentSessionImpl implements DeploymentSession {
             try {
                 ResourceEntry re = (ResourceEntry) iter.next();
                 targetDp.remove(re);
-                dropResource(re);
+                WrappedResourceProcessor wrProc = dropResource(re);
+                wrProcs.add(wrProc);
             } catch (Exception e) {
                 // Exceptions are ignored in this phase to allow repairs 
                 // to always succeed, even if the existing package is corrupted.
                 sessionCtx.getLogger().log(e);
             }
         }
+        return wrProcs;
     }
     
     /*
      * Drops all rsources of the target DP
      */
-    private void dropAllResources() throws Exception {
+    private Set dropAllResources() throws Exception {
+        // ensures that only one entry per RP is in the return set 
+        Set pids = new HashSet();
+        
+        // this is the returned set
+        Set wrProcs = new HashSet();
+        
         if (isCancelled())
-        	return;
-
-        // gathers resource processors that have alerady been called 
-        Set procs = new HashSet();
-
+        	return wrProcs;
+        
         List toDrop = targetDp.getResourceEntries();
         for (Iterator iter = toDrop.iterator(); iter.hasNext();) {
             if (isCancelled())
@@ -578,24 +586,20 @@ public class DeploymentSessionImpl implements DeploymentSession {
 
             try {
 	            ResourceEntry re = (ResourceEntry) iter.next();
-	            
 	            String pid = re.getValue(DAConstants.RP_PID);
-	            if (null == pid)
-	                continue;
 	            
-	            ServiceReference rpRef = findProcessor(pid);
-	            if (null == rpRef)
-	                throw new DeploymentException(DeploymentException.CODE_PROCESSOR_NOT_FOUND, 
-	                    "Resource processor for pid " + pid + " is not found");
+	            if (null == WrappedResourceProcessor.findProcessor(pid))
+	            	throw new DeploymentException(DeploymentException.CODE_PROCESSOR_NOT_FOUND, 
+		                "Resource processor for pid " + pid + " is not found");
 	            
-	            wrProc = new WrappedResourceProcessor(rpRef, 
-	                fetchAccessControlContext(re.getCertChains()), trackRp);
-                        
 	            // each processor is called only once
-	            if (!procs.contains(pid)) {
+	            if (!pids.contains(pid)) {
+	            	WrappedResourceProcessor wrProc = new WrappedResourceProcessor(pid, 
+	            			fetchAccessControlContext(re.getCertChains()), trackRp);
 	                transaction.addRecord(new TransactionRecord(Transaction.PROCESSOR, wrProc));
 	                wrProc.dropAllResources();
-	                procs.add(pid);
+	                pids.add(pid);
+	                wrProcs.add(wrProc);
 	            }
             } catch (Exception e) {
                 if (forced)
@@ -604,6 +608,7 @@ public class DeploymentSessionImpl implements DeploymentSession {
                     throw e;
             }
         }
+        return wrProcs;
     }
     
     /*
@@ -650,17 +655,18 @@ public class DeploymentSessionImpl implements DeploymentSession {
     /*
      * Drops a particluar resource
      */
-    private void dropResource(ResourceEntry re) throws DeploymentException {
+    private WrappedResourceProcessor dropResource(ResourceEntry re) throws DeploymentException {
         String pid = re.getValue(DAConstants.RP_PID);
-        ServiceReference rpRef = findProcessor(pid);
-        if (null == rpRef)
+        ResourceProcessor proc = WrappedResourceProcessor.findProcessor(pid);
+        if (null == proc)
             throw new DeploymentException(DeploymentException.CODE_PROCESSOR_NOT_FOUND,
                 "Resource processor for pid " + pid + "is not found");
-        wrProc = new WrappedResourceProcessor(
-            rpRef, fetchAccessControlContext(re.getCertChains()), trackRp);
-        transaction.addRecord(new TransactionRecord(Transaction.PROCESSOR, wrProc));
+        actWrProc = new WrappedResourceProcessor(
+            pid, fetchAccessControlContext(re.getCertChains()), trackRp);
+        transaction.addRecord(new TransactionRecord(Transaction.PROCESSOR, actWrProc));
         try {
-			wrProc.dropped(re.getResName());
+			actWrProc.dropped(re.getResName());
+			return actWrProc;
 		} catch (ResourceProcessorException e) {
 			if (e.getCode() == ResourceProcessorException.CODE_NO_SUCH_RESOURCE)
 				throw new DeploymentException(
@@ -674,33 +680,61 @@ public class DeploymentSessionImpl implements DeploymentSession {
      * Drops a bundle
      */
     private void dropBundle(BundleEntry be) throws BundleException, DeploymentException {
-        Bundle b = sessionCtx.getBundleContext().getBundle(be.getBundleId());
+        final Bundle b = sessionCtx.getBundleContext().getBundle(be.getBundleId());
         if (null == b)
             throw new DeploymentException(DeploymentException.CODE_OTHER_ERROR,
                 "Bundle " + b + " was removed directly");
+        
+        ByteArrayOutputStream bos = saveBundle(b);
+		try {
+            AccessController.doPrivileged(new PrivilegedExceptionAction() {
+                public Object run() throws BundleException {
+                    b.uninstall();
+                    return null;
+                }});
+        } catch (PrivilegedActionException e) {
+        	if (e.getException() instanceof BundleException)
+        		throw (BundleException) e.getException();
+        }
+        targetDp.remove(be);
+        
         transaction.addRecord(new TransactionRecord(Transaction.UNINSTALLBUNDLE, 
-                b, be, targetDp));
+                be, sessionCtx.getBundleContext(), targetDp, 
+                new ByteArrayInputStream(bos.toByteArray())));
     }
 
-    /*
-     * Finds a Resource processor to the given PID
-     */
-    private ServiceReference findProcessor(String pid) {
-        ServiceReference[] refs = (ServiceReference[]) AccessController
-                .doPrivileged(new PrivilegedAction() {
-                    public Object run() {
-                        return trackRp.getServiceReferences();
-                    }
-                });
-        if (null == refs)
-            return null;
-        for (int i = 0; i < refs.length; i++) {
-            ServiceReference ref = refs[i];
-            String s_pid = (String) ref.getProperty(Constants.SERVICE_PID);
-            if (pid.equals(s_pid))
-                return ref;
+    private ByteArrayOutputStream saveBundle(final Bundle b) throws DeploymentException {
+    	final ByteArrayOutputStream bos = new ByteArrayOutputStream();
+		try {
+            AccessController.doPrivileged(new PrivilegedExceptionAction() {
+                public Object run() throws BundleException, DeploymentException {
+                	BundleUtil bu = new BundleUtil();
+			        InputStream is = bu.getBundleStream(b);
+			        try {
+			            byte[] data = new byte[0x1000];
+			            int i = is.read(data);
+			            while (-1 != i) {
+			                bos.write(data, 0, i);
+			                i = is.read(data);
+			            }
+			        } catch (IOException e) {
+						throw new DeploymentException(DeploymentException.CODE_OTHER_ERROR, "", e);
+					} finally {
+			        	try {
+							if (null != bos)
+								bos.close();
+							if (null != is)
+								is.close();
+						} catch (IOException e) {
+							throw new DeploymentException(DeploymentException.CODE_OTHER_ERROR, "", e);
+						}
+			        }
+                    return null;
+                }});
+        } catch (PrivilegedActionException e) {
+       		throw (DeploymentException) e.getException();
         }
-        return null;
+        return bos;
     }
     
     private AccessControlContext fetchAccessControlContext(List certChains) {
@@ -734,27 +768,29 @@ public class DeploymentSessionImpl implements DeploymentSession {
         return null;
     }
 
-    private void processResource(final DeploymentPackageJarInputStream.Entry entry) 
+    private WrappedResourceProcessor processResource(final DeploymentPackageJarInputStream.Entry entry) 
     		throws DeploymentException, IOException 
     {
         String pid = entry.getAttributes().getValue(DAConstants.RP_PID);
+        
         if (null == pid)
-            return;
+            return null;
+        
         Object dp = sessionCtx.getMappedDp(pid);
         if (null != dp && !srcDp.getName().equals(dp))
             throw new DeploymentException(DeploymentException.CODE_FOREIGN_CUSTOMIZER,
                     "PID '" + pid + "' belongs to another DP (" + dp + ")");
             
-        ServiceReference rpRef = findProcessor(pid);
-        if (null == rpRef)
+        ResourceProcessor proc = WrappedResourceProcessor.findProcessor(pid);
+        if (null == proc)
             throw new DeploymentException(DeploymentException.CODE_PROCESSOR_NOT_FOUND, 
                     "Resource processor (PID=" + pid + ") for '" + entry.getName() +
                     "' is not found.");
-        wrProc = new WrappedResourceProcessor(rpRef, 
+        actWrProc = new WrappedResourceProcessor(pid, 
                 fetchAccessControlContext(entry.getCertificateChainStringArrays()), trackRp);
-        transaction.addRecord(new TransactionRecord(Transaction.PROCESSOR, wrProc));
+        transaction.addRecord(new TransactionRecord(Transaction.PROCESSOR, actWrProc));
         try {
-			wrProc.process(entry.getName(), entry.getInputStream());
+			actWrProc.process(entry.getName(), entry.getInputStream());
         } catch (ResourceProcessorException e) {
 			if (e.getCode() == ResourceProcessorException.CODE_NO_SUCH_RESOURCE)
 				throw new DeploymentException(
@@ -762,10 +798,8 @@ public class DeploymentSessionImpl implements DeploymentSession {
 			throw new DeploymentException(
 					DeploymentException.CODE_OTHER_ERROR, "", e);
 		}
-        if (INSTALL == getDeploymentAction())
-            srcDp.setProcessorPid(entry.getName(), pid);
-        else if (UPDATE == getDeploymentAction())
-            targetDp.setProcessorPid(entry.getName(), pid);    
+        
+        return actWrProc;
     }
     
     private void processBundles(DeploymentPackageJarInputStream wjis) 
@@ -780,14 +814,21 @@ public class DeploymentSessionImpl implements DeploymentSession {
             checkManifestEntryPresence(actEntry);
             
             if (!actEntry.isMissing()) {
-                Bundle b = processBundle(actEntry);
-                srcDp.getBundleEntryByName(actEntry.getName()).
-                	setBundleId(b.getBundleId());
+                final Bundle b = processBundle(actEntry);
+                if (null != b) {
+	                BundleEntry be = srcDp.getBundleEntryByName(actEntry.getName());
+	                be.setBundleId(b.getBundleId());
+	                String location = (String) AccessController.doPrivileged(new PrivilegedAction() {
+						public Object run() {
+							return b.getLocation();
+						}});
+	                be.setLocation(location);
+                }
             } else {
-                BundleEntry beS = srcDp.getBundleEntryByName(actEntry.getName());
-                BundleEntry beT = targetDp.getBundleEntryByName(actEntry.getName());
-                srcDp.remove(beS);
-                srcDp.add(beT);
+            	// BundleEntry must be updated
+            	BundleEntry beT = targetDp.getBundleEntryByName(actEntry.getName());
+            	BundleEntry beS = srcDp.getBundleEntryByName(actEntry.getName());
+            	beS.update(beT);
             }
             wjis.closeEntry();
             actEntry = wjis.nextEntry();
@@ -805,14 +846,16 @@ public class DeploymentSessionImpl implements DeploymentSession {
     private Bundle processBundle(DeploymentPackageJarInputStream.Entry entry) 
     		throws BundleException, IOException, DeploymentException 
     {
-        BundleEntry be = new BundleEntry(entry);
+        BundleEntry srcBe = new BundleEntry(entry);
+        BundleEntry targetBe = getTargetBundleEntry(srcBe);  
         Bundle b;
-        if (null != targetDp.getBundleEntry(be.getSymbName())) {
-            b = updateBundle(be, entry.getInputStream());
+        if (null != targetBe) {
+            b = updateBundle(targetBe, entry.getInputStream());
         } else {
-            b = installBundle(be, entry.getInputStream());
+            b = installBundle(srcBe, entry.getInputStream());
         }
-        checkDpBundleConformity(b);
+        if (null != b)
+        	checkDpBundleConformity(b);
         return b;
     }
     
@@ -842,45 +885,47 @@ public class DeploymentSessionImpl implements DeploymentSession {
                     Bundle ret = sessionCtx.getBundleContext().installBundle(location, is);
                     return ret;
                 }});
-        }
-        catch (PrivilegedActionException e) {
+        } catch (PrivilegedActionException e) {
             throw (BundleException) e.getException();
         }
-        be.setBundleId(b.getBundleId());
 		transaction.addRecord(new TransactionRecord(Transaction.INSTALLBUNDLE, b));
 		return b;
     }
     
-    private Bundle updateBundle(BundleEntry be, final InputStream is)
-			throws BundleException 
+    private Bundle updateBundle(final BundleEntry be, final InputStream is)
+			throws BundleException, DeploymentException 
     {
-        final String location = DeploymentAdminImpl.location(be.getSymbName(),
-                be.getVersion());
-        final Bundle[] bundles = sessionCtx.getBundleContext().getBundles();
-        for (int i = 0; i < bundles.length; i++) {
-            final Bundle b = bundles[i];
-            Boolean found;
-           	try {
-                found = (Boolean) AccessController.doPrivileged(new PrivilegedExceptionAction() {
-                    public Object run() throws BundleException {
-                        if (b.getLocation().equals(location)) {
-                            // TODO use framework backdoor for transactionality
-                            b.update(is);
-                            return new Boolean(true);
-                        }
-                        return new Boolean(false);
-                    }});
-            }
-            catch (PrivilegedActionException e) {
-                throw (BundleException) e.getException();
-            }
-            if (found.booleanValue()) { 
-                transaction.addRecord(new TransactionRecord(Transaction.UPDATEBUNDLE, b));
-            	be.setBundleId(b.getBundleId());
-            	return b;
-            }
+    	final Bundle b = sessionCtx.getBundleContext().
+    		getBundle(be.getBundleId());
+    	if (null == b) {
+    		// TODO is it OK?
+    		Bundle ret = installBundle(be, is);
+    		sessionCtx.getLogger().log(Logger.LOG_WARNING, 
+				"The target bundle " + be + " was not found during the update. " +
+				"It was installed instead of updated.");
+    		return ret;
+    	}
+    	
+    	ByteArrayOutputStream bos = saveBundle(b);
+       	try {
+            AccessController.doPrivileged(new PrivilegedExceptionAction() {
+				public Object run() throws BundleException {
+					b.update(is);
+					return null;
+				}
+			});
+        } catch (PrivilegedActionException e) {
+            throw (BundleException) e.getException();
         }
-        return null;
+        
+        transaction.addRecord(new TransactionRecord(Transaction.UPDATEBUNDLE, 
+            b, new ByteArrayInputStream(bos.toByteArray())));
+
+        return b;
+    }
+    
+    private BundleEntry getTargetBundleEntry(BundleEntry srcBe) {
+    	return targetDp.getBundleEntry(srcBe.getSymbName());
     }
 
 }

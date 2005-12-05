@@ -18,12 +18,14 @@
 package org.osgi.impl.service.deploymentadmin;
 
 import java.io.InputStream;
+import java.io.Serializable;
 import java.security.AccessControlContext;
 import java.security.AccessController;
 import java.security.PrivilegedAction;
 import java.security.PrivilegedActionException;
 import java.security.PrivilegedExceptionAction;
 
+import org.osgi.framework.Constants;
 import org.osgi.framework.ServiceReference;
 import org.osgi.service.deploymentadmin.spi.DeploymentSession;
 import org.osgi.service.deploymentadmin.spi.ResourceProcessor;
@@ -38,53 +40,84 @@ import org.osgi.util.tracker.ServiceTracker;
  * Wraps resource processor calls into doPrivileged calls with the got 
  * AccessControlContext.  
  */
-public class WrappedResourceProcessor implements ResourceProcessor {
+public class WrappedResourceProcessor implements ResourceProcessor, Serializable {
     
     // the wrapped processor
-    private final ServiceReference     rpRef;
+    private final String                   pid;
     // the context of the calls
-    private final AccessControlContext ctx;
+    private transient AccessControlContext ctx;
     // tracks RPs
-    private ServiceTracker rpTracker;
-    // id
-    private final String id;
+    private static ServiceTracker          trackRp;
+    
+    // TODO after deserialize set the ctx
 
-    public WrappedResourceProcessor(ServiceReference rpRef, AccessControlContext ctx,
+    public WrappedResourceProcessor(String pid, AccessControlContext ctx,
             ServiceTracker rpTracker) {
-        this.rpRef = rpRef;
+        this.pid = pid;
         this.ctx = ctx;
-        this.rpTracker = rpTracker;
-        this.id = "" + System.currentTimeMillis() + "_" + rpRef;
+        trackRp = rpTracker;
     }
     
-    public boolean equals(Object o) {
-        if (o == null)
+    void setCtx(AccessControlContext ctx) {
+    	this.ctx = ctx;
+    }
+    
+    public boolean equals(Object obj) {
+        if (obj == null)
             return false;
-        if (!(o instanceof WrappedResourceProcessor))
+        if (obj == this)
+        	return true;
+        if (!(obj instanceof WrappedResourceProcessor))
             return false;
-        WrappedResourceProcessor other = (WrappedResourceProcessor) o;
-        return id == other.id;
+        WrappedResourceProcessor other = (WrappedResourceProcessor) obj;
+        return pid == other.pid;
     }
     
     public int hashCode() {
-        return id.hashCode();
+        return pid.hashCode();
     }
     
     public String toString() {
-        return "WRP id: " + id;
+        return "[WrappedResourceProcessor pid: " + pid + "]";
     }
     
-    private ResourceProcessor getRp() {
-        return (ResourceProcessor) rpTracker.getService(rpRef);
+    String getPid() {
+    	return pid;
+    }
+    
+    /*
+     * Finds a Resource processor to the given PID
+     */
+    static ResourceProcessor findProcessor(String pid) {
+        ServiceReference[] refs = (ServiceReference[]) AccessController
+                .doPrivileged(new PrivilegedAction() {
+                    public Object run() {
+                        return trackRp.getServiceReferences();
+                    }
+                });
+        
+        if (null == refs)
+            throw new RuntimeException("Resource processor for pid " + pid + 
+            	" is not found.");
+            
+        for (int i = 0; i < refs.length; i++) {
+            ServiceReference ref = refs[i];
+            String s_pid = (String) ref.getProperty(Constants.SERVICE_PID);
+            if (pid.equals(s_pid))
+                return (ResourceProcessor) trackRp.getService(ref);
+        }
+        
+        throw new RuntimeException("Resource processor for pid " + pid + 
+        	" is not found.");
     }
 
     public void begin(final DeploymentSession session) {
         if (null == ctx)
-            getRp().begin(session);
+        	findProcessor(pid).begin(session);
         else {
             AccessController.doPrivileged(new PrivilegedAction() {
                     public Object run() {
-                        getRp().begin(session);
+                        findProcessor(pid).begin(session);
                         return null;
                     }
                 }, ctx);
@@ -93,12 +126,12 @@ public class WrappedResourceProcessor implements ResourceProcessor {
 
     public void process(final String name, final InputStream stream) throws ResourceProcessorException {
         if (null == ctx)
-            getRp().process(name, stream);
+            findProcessor(pid).process(name, stream);
         else {
             try {
                 AccessController.doPrivileged(new PrivilegedExceptionAction() {
 	                    public Object run() throws ResourceProcessorException {
-                        	getRp().process(name, stream);
+                        	findProcessor(pid).process(name, stream);
 	                        return null;
 	                    }
                     }, ctx);
@@ -111,12 +144,12 @@ public class WrappedResourceProcessor implements ResourceProcessor {
 
     public void dropped(final String name) throws ResourceProcessorException {
         if (null == ctx)
-            getRp().dropped(name);
+            findProcessor(pid).dropped(name);
         else {
             try {
                 AccessController.doPrivileged(new PrivilegedExceptionAction() {
 	                    public Object run() throws ResourceProcessorException {
-                        	getRp().dropped(name);
+                        	findProcessor(pid).dropped(name);
 	                        return null;
 	                    }
                     }, ctx);
@@ -129,12 +162,12 @@ public class WrappedResourceProcessor implements ResourceProcessor {
 
     public void dropAllResources() throws ResourceProcessorException {
         if (null == ctx)
-            getRp().dropAllResources();
+            findProcessor(pid).dropAllResources();
         else {
             try {
                 AccessController.doPrivileged(new PrivilegedExceptionAction() {
 	                    public Object run() throws ResourceProcessorException {
-                        	getRp().dropAllResources();
+                        	findProcessor(pid).dropAllResources();
 	                        return null;
 	                    }
                     }, ctx);
@@ -147,12 +180,12 @@ public class WrappedResourceProcessor implements ResourceProcessor {
 
     public void prepare() throws ResourceProcessorException {
         if (null == ctx)
-            getRp().prepare();
+            findProcessor(pid).prepare();
         else {
             try {
                 AccessController.doPrivileged(new PrivilegedExceptionAction() {
 	                    public Object run() throws ResourceProcessorException {
-                        	getRp().prepare();
+                        	findProcessor(pid).prepare();
 	                        return null;
 	                    }
                     }, ctx);
@@ -165,11 +198,11 @@ public class WrappedResourceProcessor implements ResourceProcessor {
 
     public void commit() {
         if (null == ctx)
-            getRp().commit();
+            findProcessor(pid).commit();
         else {
             AccessController.doPrivileged(new PrivilegedAction() {
                     public Object run() {
-                        getRp().commit();
+                        findProcessor(pid).commit();
                         return null;
                     }
                 }, ctx);
@@ -178,11 +211,11 @@ public class WrappedResourceProcessor implements ResourceProcessor {
 
     public void rollback() {
         if (null == ctx)
-            getRp().rollback();
+            findProcessor(pid).rollback();
         else {
             AccessController.doPrivileged(new PrivilegedAction() {
                     public Object run() {
-                        getRp().rollback();
+                        findProcessor(pid).rollback();
                         return null;
                     }
                 }, ctx);
@@ -191,15 +224,19 @@ public class WrappedResourceProcessor implements ResourceProcessor {
 
     public void cancel() {
         if (null == ctx)
-            getRp().cancel();
+            findProcessor(pid).cancel();
         else {
             AccessController.doPrivileged(new PrivilegedAction() {
                     public Object run() {
-                        getRp().cancel();
+                        findProcessor(pid).cancel();
                         return null;
                     }
                 }, ctx);
         }
     }
+
+	static void setRpTracker(ServiceTracker trackRp) {
+		WrappedResourceProcessor.trackRp = trackRp; 	
+	}
 
 }

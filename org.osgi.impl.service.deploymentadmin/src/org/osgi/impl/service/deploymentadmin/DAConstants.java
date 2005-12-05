@@ -50,6 +50,9 @@ public class DAConstants {
     // default location of the l10n files
     public static final String DEF_LOC_PATH         = "OSGI-INF/l10n/bundle";
     
+    // location of bundles are in a DP will have this location prefix 
+    public static final String LOCATION_PREFIX      = "osgi-dp:";
+
     // event related constants
     public static final String TOPIC_INSTALL		= "org/osgi/service/deployment/INSTALL";
     public static final String TOPIC_UNINSTALL		= "org/osgi/service/deployment/UNINSTALL";
@@ -57,15 +60,15 @@ public class DAConstants {
     public static final String EVENTPROP_DPNAME		= "deploymentpackage.name";
     public static final String EVENTPROP_SUCCESSFUL	= "successful";
     
-    // Deployment subtree root
-    public static final String DMT_DEPLOYMENT_ROOT;
-
 	// generic alert types
     public static final String ALERT_TYPE_INS_ACT          = "org.osgi.deployment.installandactivate";
     public static final String ALERT_TYPE_DELIVERED_REMOVE = "org.osgi.deployment.delivered.remove";
     public static final String ALERT_TYPE_DELOYED_REMOVE   = "org.osgi.deployment.deployed.remove";
     public static final String ALERT_TYPE_DWNL_INS_ACT     = "org.osgi.deployment.downloadandinstallandactivate";
 	
+    // Deployment subtree root
+    public static final String DMT_DEPLOYMENT_ROOT;
+
     static {
     	String prop = "org.osgi.service.dmt.root";
     	String val = System.getProperty(prop);

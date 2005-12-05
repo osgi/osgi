@@ -17,35 +17,43 @@
  */
 package org.osgi.impl.service.deploymentadmin;
 
+import java.io.ByteArrayInputStream;
+
 import org.osgi.framework.Bundle;
+import org.osgi.framework.BundleContext;
 
 public class TransactionRecord {
     
     public int                      code;
-    public WrappedResourceProcessor rp;
+    public WrappedResourceProcessor wrProc;
     public Bundle			        bundle;
+    public BundleContext			context;
     public BundleEntry              be;
     public DeploymentPackageImpl    dp;
+    public ByteArrayInputStream     bis;
     
     public TransactionRecord(int code, 
-                             WrappedResourceProcessor rp, 
+                             WrappedResourceProcessor wrProc, 
                              Bundle b,
+                             BundleContext context,
                              BundleEntry be,
-                             DeploymentPackageImpl dp) 
+                             DeploymentPackageImpl dp,
+                             ByteArrayInputStream bis) 
     {
         this.code = code;
-        this.rp = rp;
+        this.wrProc = wrProc;
         this.bundle = b;
         this.be = be;
         this.dp = dp;
+        this.bis = bis;
     }
     
     public TransactionRecord(int code, WrappedResourceProcessor rp) {
-        this(code, rp, null, null, null);
+        this(code, rp, null, null, null, null, null);
     }
     
     public TransactionRecord(int code, Bundle b) {
-        this(code, null, b, null, null);
+        this(code, null, b, null, null, null, null);
     }
     
     public TransactionRecord(int code, 
@@ -53,13 +61,29 @@ public class TransactionRecord {
                              BundleEntry be, 
                              DeploymentPackageImpl dp) 
     {
-        this(code, null, b, be, dp);
+        this(code, null, b, null, be, dp, null);
+    }
+    
+    public TransactionRecord(int code, 
+    		BundleEntry be, 
+    		BundleContext context,
+    		DeploymentPackageImpl dp,
+    		ByteArrayInputStream bis) 
+    {
+    	this(code, null, null, context, be, dp, bis);
+    }
+
+    public TransactionRecord(int code, 
+    		Bundle bundle, 
+    		ByteArrayInputStream bis) 
+    {
+    	this(code, null, bundle, null, null, null, bis);
     }
     
     public String toString() {
         return "[----------------------------------------------------\n" +
         		"code:               " + Transaction.transactionCodes[code] + "\n" +
-        		"resource processor: " + rp + "\n" +
+        		"resource processor: " + wrProc + "\n" +
         		"bundle:             " + bundle + "\n" +
         		"----------------------------------------------------]\n";
     }

@@ -35,6 +35,8 @@ import org.osgi.impl.service.deploymentadmin.DeploymentPackageJarInputStream.Ent
  * PID (in case of customizers), etc.
  */
 public class BundleEntry implements Serializable {
+	
+	private static final int UNDEFINED_BUNDLEID = -1;
     
     private String             resName;    // name in the manifest
     private String             symbName;   // Bundle-SymbolicName
@@ -42,35 +44,43 @@ public class BundleEntry implements Serializable {
     private Long               bundleId;   // ID returned by Bundle.getBundleId() 
     private Boolean            missing;    // is it a mising entry (see DeploymentPackage-Missing)
     private String             pid;        // if it's a customizer
-                                         
+    private String             location;   // the location of the bundle
     private CaseInsensitiveMap attrs;      // attributes in the manifest for the bundle
     
-    private BundleEntry(String name,
+    private BundleEntry(String resName,
             String symbName, 
             String version, 
-            long id,
+            long bundleId,
             boolean missing,
             Map jarAttrs,
             DeploymentPackageImpl dp) 
 	{
-        this.resName = name;
+        this.resName = resName;
 		this.symbName = symbName;
 		this.version = version;
-		this.bundleId = new Long(id);
+		this.bundleId = new Long(bundleId);
 		this.missing = new Boolean(missing);
 		this.attrs = new CaseInsensitiveMap(jarAttrs, dp);
 	}
 
-    public BundleEntry(String name,
+    /**
+     * This constructor is used when the BundleEntry is created from the 
+     * corresponding manifest individual-section (name section).
+     */
+    public BundleEntry(String resName,
             		   String symbName, 
                        String version, 
                        boolean missing,
                        Attributes attrs, 
                        DeploymentPackageImpl dp) 
     {
-        this(name, symbName, version, -1, missing, attrs, dp);
+        this(resName, symbName, version, UNDEFINED_BUNDLEID, missing, attrs, dp);
     }
 
+    /**
+     * This constructor is used when the BundleEntry is created from a Bundle object. 
+     * It is needed when creating e.g. the "system" DP that has no manifest at all. 
+     */
     public BundleEntry(final Bundle b) {
         Object[] triple = (Object[]) AccessController.doPrivileged(new PrivilegedAction() {
             public Object run() {
@@ -87,11 +97,20 @@ public class BundleEntry implements Serializable {
         missing = new Boolean(false);
     }
     
+    /**
+     * This constructor is used when the BundleEntry is created from a jar entry. 
+     */
     public BundleEntry(Entry entry) {
         this(entry.getName(), entry.getAttributes().getValue(DAConstants.BUNDLE_SYMBOLIC_NAME),
-             entry.getAttributes().getValue(DAConstants.BUNDLE_VERSION), -1, entry.isMissing(),
+             entry.getAttributes().getValue(DAConstants.BUNDLE_VERSION), UNDEFINED_BUNDLEID, entry.isMissing(),
              entry.getAttributes(), null);
     }
+
+	public void update(BundleEntry upd) {
+		bundleId = upd.bundleId;
+		location = upd.location;
+		pid = upd.pid;
+	}
 
     /**
      * Two BundleEntries are equal if they have equal symbolic names and 
@@ -103,16 +122,22 @@ public class BundleEntry implements Serializable {
     public boolean equals(Object obj) {
         if (null == obj)
             return false;
+        if (this == obj)
+        	return true;
         if (!(obj instanceof BundleEntry))
             return false;
         BundleEntry other = (BundleEntry) obj;
         
         // sometimes the bundle symbolic name or version is null
-        if (null == symbName || null == other.symbName || 
-            null == version || null == other.version)
-                return bundleId.equals(other.bundleId);
+        if (null != symbName && null != other.symbName && 
+            null != version && null != other.version)
+        	return symbName.equals(other.symbName) && version.equals(other.version);
+
+        if (null != location && null != other.location)
+        	return location.equals(other.location);
         
-        return symbName.equals(other.symbName) && version.equals(other.version);
+        // it cannot happen
+        throw new RuntimeException("Internal error.");
     }
 
     /**
@@ -121,12 +146,20 @@ public class BundleEntry implements Serializable {
      * @see java.lang.Object#hashCode()
      */
     public int hashCode() {
-        return (symbName + version).hashCode();
+        // sometimes the bundle symbolic name or version is null
+        if (null != symbName && null != version)
+        	return (symbName + version).hashCode();
+
+        if (null != location)
+        	return location.hashCode();
+        
+        // it cannot happen
+        throw new RuntimeException("Internal error.");
     }
     
     public String toString() {
-        return "[SymbolicName: " + symbName + " Version: " + version + " BundleId: " + 
-                bundleId + "]";
+        return "[BundleEntry SymbolicName: " + symbName + " Version: " + 
+        		version + " BundleId: " + bundleId + "]";
     }
 
     public boolean isCustomizer() {
@@ -172,6 +205,14 @@ public class BundleEntry implements Serializable {
 
     public String getPid() {
         return pid;
+    }
+
+    public void setLocation(String location) {
+    	this.location = location;
+    }
+    
+    public String getLocation() {
+    	return location;
     }
 
 }

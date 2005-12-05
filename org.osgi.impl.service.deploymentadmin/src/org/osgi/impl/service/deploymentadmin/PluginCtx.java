@@ -39,6 +39,9 @@ import org.osgi.impl.service.dwnl.DownloadAgent;
 import org.osgi.service.deploymentadmin.DeploymentAdmin;
 import org.osgi.service.dmt.DmtAdmin;
 
+/**
+ * Represents the context of a DMT plugin 
+ */
 public class PluginCtx {
     
     private final Logger              logger; 

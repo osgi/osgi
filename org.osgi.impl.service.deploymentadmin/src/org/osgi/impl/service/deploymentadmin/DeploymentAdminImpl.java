@@ -871,7 +871,7 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
      */
     boolean uninstallForced(DeploymentPackageImpl dp) throws DeploymentException {
         waitIfBusy();
-        checkPermission(dp, DeploymentAdminPermission.UNINSTALL);
+        checkPermission(dp, DeploymentAdminPermission.UNINSTALL_FORCED);
         Event startEvent = sendUninstallEvent(dp.getName());
         boolean result = false;
         try {
@@ -900,7 +900,7 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
      * symbolic name and version.
      */
     static String location(String symbName, Version version) {
-        return "osgi-dp:" + symbName;
+        return DAConstants.LOCATION_PREFIX + symbName;
     }
 
     Vector getDeploymentPackages() {

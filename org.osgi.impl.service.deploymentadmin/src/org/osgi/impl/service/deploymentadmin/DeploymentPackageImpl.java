@@ -119,6 +119,10 @@ public class DeploymentPackageImpl implements DeploymentPackage, Serializable {
         return getName().equals(DAConstants.SYSTEM_DP_BSN);
     }
     
+    boolean isEmpty() {
+    	return getName().equals("");
+    }
+    
     public boolean equals(Object obj) {
         if (null == obj)
             return false;
@@ -427,15 +431,6 @@ public class DeploymentPackageImpl implements DeploymentPackage, Serializable {
         setStale();
         
         return dpCtx.uninstallForced(this);
-    }
-
-    void setProcessorPid(String resName, String pid) {
-        for (Iterator iter = resourceEntries.iterator(); iter.hasNext();) {
-            ResourceEntry re = (ResourceEntry) iter.next();
-            if (re.getResName().equals(resName)) {
-                re.setPid(pid);
-            }
-        }
     }
 
     void setDeploymentPackageCtx(DeploymentPackageCtx dpCtx) {

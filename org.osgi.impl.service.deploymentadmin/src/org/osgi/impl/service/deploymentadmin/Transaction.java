@@ -27,7 +27,6 @@ import java.util.Vector;
 
 import org.osgi.framework.BundleException;
 import org.osgi.service.deploymentadmin.spi.DeploymentSession;
-import org.osgi.service.deploymentadmin.spi.ResourceProcessorException;
 
 public class Transaction {
     
@@ -51,16 +50,16 @@ public class Transaction {
     private HashSet               processors;
     private Logger                logger;
     private DeploymentSession	  session;
-    private String                trName;
+    private String                name;
     
     // Transaction is singleton
     private static Transaction instance;
     private Transaction() {
     }
-    public static Transaction createTransaction(String trName, DeploymentSession session, Logger logger) {
+    public static Transaction createTransaction(String name, DeploymentSession session, Logger logger) {
         if (null == instance)
             instance = new Transaction();
-        instance.trName = trName;
+        instance.name = name;
         instance.logger = logger;
         instance.session = session;
         instance.steps = null;
@@ -71,91 +70,31 @@ public class Transaction {
     public synchronized void start() {
         steps = new Vector();
         processors = new HashSet();
-        logger.log(Logger.LOG_INFO, "Transaction started (trName=" + trName + ")");
+        logger.log(Logger.LOG_INFO, "Transaction started (name=" + name + ")");
     }
 
     public synchronized void addRecord(TransactionRecord record) {
-        if (PROCESSOR == record.code) {
-            record.rp.begin(session);
-            processors.add(record.rp);
+        if (PROCESSOR == record.code && !processors.contains(record.wrProc.getPid())) {
+            record.wrProc.begin(session);
+            processors.add(record.wrProc.getPid());
         }
         
         steps.add(record);
         if (DAConstants.DEBUG)
-            logger.log(Logger.LOG_INFO, "Transaction record added (trName=" + trName + "):\n" + record);
+            logger.log(Logger.LOG_INFO, "Transaction record added (name=" + name + "):\n" + record);
     }
     
-    public synchronized void commit() throws ResourceProcessorException {
-        // prepare !
-        try {
-	        for (ListIterator iter = steps.listIterator(steps.size()); iter.hasPrevious();) {
-	            TransactionRecord element = (TransactionRecord) iter.previous();
-	            if (element.code == PROCESSOR) {
-	                element.rp.prepare();
-                    if (DAConstants.DEBUG)
-                        logger.log(Logger.LOG_INFO, "Prepare  (trName=" + trName + "):\n" + element);
-	            }
-	        }
-        } catch (ResourceProcessorException e) {
-            rollback();
-            throw e;
-        }
-        
-        // commit !
-        try {
-	        for (ListIterator iter = steps.listIterator(steps.size()); iter.hasPrevious();) {
-	            final TransactionRecord element = (TransactionRecord) iter.previous();
-                if (DAConstants.DEBUG)
-                    logger.log(Logger.LOG_INFO, "Commit (trName=" + trName + "):\n" + element);
-	            switch (element.code) {
-	                case INSTALLBUNDLE :
-	                    break;
-	                case UPDATEBUNDLE :
-	                    break;
-	                case UNINSTALLBUNDLE :
-	                	try {
-	                        AccessController.doPrivileged(new PrivilegedExceptionAction() {
-	                            public Object run() throws BundleException {
-	                                element.bundle.uninstall();
-	                                return null;
-	                            }});
-	                    }
-	                    catch (PrivilegedActionException e) {
-	                        throw (BundleException) e.getException();
-	                    }
-	                    element.dp.remove(
-	                            element.be);
-	                    break;
-	                case STARTBUNDLE :
-	                    break;
-	                case STOPBUNDLE :
-	                    break;
-	                case PROCESSOR:
-	                    element.rp.commit();
-	                    break;
-	                default :
-	                    break;
-	            }
-	        }
-        } catch (Exception e) {
-            logger.log(Logger.LOG_ERROR, "Error occured during transaction commit (trName=" 
-                    + trName + "):\n");
-            logger.log(e);
-        }
-        logger.log(Logger.LOG_INFO, "Transaction committed (trName=" + trName + ")");
-    }
-
     public synchronized void rollback() {
         try {
             if (steps.size() <= 0) {
-                logger.log(Logger.LOG_INFO, "Transaction rolled back (trName=" + trName + ")");
+                logger.log(Logger.LOG_INFO, "Transaction rolled back (name=" + name + ")");
                 return;
             }
             
             for (ListIterator iter = steps.listIterator(steps.size()); iter.hasPrevious();) {
                 final TransactionRecord element = (TransactionRecord) iter.previous();
                 if (DAConstants.DEBUG)
-                    logger.log(Logger.LOG_INFO, "Rollback (trName=" + trName + "):\n" + element);
+                    logger.log(Logger.LOG_INFO, "Rollback (name=" + name + "):\n" + element);
 	            switch (element.code) {
 	                case INSTALLBUNDLE : {
 	                	try {
@@ -171,9 +110,31 @@ public class Transaction {
 	                    break;
 	                } 
 	                case UPDATEBUNDLE :
-                        // TODO use framework backdoor for transactionality
+	                	try {
+	                        AccessController.doPrivileged(new PrivilegedExceptionAction() {
+	                            public Object run() throws BundleException {
+	                            	element.bundle.update(element.bis);
+	                                return null;
+	                            }});
+	                    }
+	                    catch (PrivilegedActionException e) {
+	                        throw (BundleException) e.getException();
+	                    }
+	                    element.dp.add(element.be);
 	                    break;
 	                case UNINSTALLBUNDLE : {
+	                	try {
+	                        AccessController.doPrivileged(new PrivilegedExceptionAction() {
+	                            public Object run() throws BundleException {
+	                                element.context.installBundle(
+	                                    element.be.getLocation(), element.bis);
+	                                return null;
+	                            }});
+	                    }
+	                    catch (PrivilegedActionException e) {
+	                        throw (BundleException) e.getException();
+	                    }
+	                    element.dp.add(element.be);
 	                    break;
 	                } case STARTBUNDLE :
 	                	try {
@@ -200,19 +161,18 @@ public class Transaction {
 	                    }
 	                    break;
 	                case PROCESSOR:
-	                    // TODO security !
-	                    element.rp.rollback();
+	                    element.wrProc.rollback();
 	                    break;
 	                default :
 	                    break;
 	            }
 	        }
         } catch (Exception e) {
-            logger.log(Logger.LOG_ERROR, "Error occured during transaction rollback  (trName=" + 
-                    trName + "):\n");
+            logger.log(Logger.LOG_ERROR, "Error occured during transaction rollback  (name=" + 
+                    name + "):\n");
             logger.log(e);
         }
-        logger.log(Logger.LOG_INFO, "Transaction rolled back (trName=" + trName + ")");
+        logger.log(Logger.LOG_INFO, "Transaction rolled back (name=" + name + ")");
     }
 
 }

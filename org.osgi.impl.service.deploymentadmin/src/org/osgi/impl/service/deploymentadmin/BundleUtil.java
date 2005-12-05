@@ -24,6 +24,9 @@ import java.security.*;
 import java.security.cert.Certificate;
 import org.osgi.framework.Bundle;
 
+/**
+ * Framework backdoors are implemented here 
+ */
 public class BundleUtil {
     private Class bundleClazz;
     private Method getBundleData;

@@ -24,6 +24,12 @@ import java.util.jar.Attributes;
 
 import org.osgi.impl.service.deploymentadmin.DeploymentPackageJarInputStream.Entry;
 
+/**
+ * Represents a resource contained by a Deployment Package.<p> 
+ * A Deployment Package maintains a list of its contained resources. 
+ * The list consists of ResourceEntry. A ResourceEntry contains additional 
+ * meta information about the bundle. E.g. PID.
+ */
 public class ResourceEntry implements Serializable {
 
     private String             resName;
@@ -31,17 +37,16 @@ public class ResourceEntry implements Serializable {
     private String	           pid;
     private List   	           certChains = new LinkedList();
 
-    public ResourceEntry(String name, Attributes jarAttrs, DeploymentPackageImpl dp) {
-        this.resName = name;
+    public ResourceEntry(String resName, Attributes jarAttrs, DeploymentPackageImpl dp) {
+        this.resName = resName;
         this.attrs = new CaseInsensitiveMap(jarAttrs, dp);
     }
     
-    public ResourceEntry(Entry entry, DeploymentPackageImpl dp) {
-        resName = entry.getName();
-        this.attrs = new CaseInsensitiveMap(entry.getAttributes(), dp);
-    }
-    
     public boolean equals(Object o) {
+    	if (null == o)
+    		return false;
+    	if (this == o)
+    		return true;
         if (!(o instanceof ResourceEntry))
             return false;
         ResourceEntry other = (ResourceEntry) o;
@@ -76,13 +81,9 @@ public class ResourceEntry implements Serializable {
     }
 
     public String getPid() {
-        return pid;
+    	return (String) attrs.get(DAConstants.RP_PID);
     }
 
-    public void setPid(String pid) {
-        this.pid = pid;
-    }
-    
     public List getCertChains() {
         return certChains;
     }
@@ -90,5 +91,9 @@ public class ResourceEntry implements Serializable {
     public void updateCertificates(Entry entry) {
         certChains = entry.getCertificateChainStringArrays();
     }
+
+	public void update(ResourceEntry upd) {
+	    this.pid = upd.pid;
+	}
 
 }

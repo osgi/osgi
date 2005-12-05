@@ -22,6 +22,7 @@ public class BundleInfoImpl implements BundleInfo {
 	}
 
 	public String toString() {
-		return symbName + " " + version;
+		return "[BundleInfo SymbolicName: " + symbName + " Version: " + 
+			version + "]";
 	}
 }

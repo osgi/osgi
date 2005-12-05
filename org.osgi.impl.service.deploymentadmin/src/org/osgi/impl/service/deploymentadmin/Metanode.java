@@ -20,6 +20,9 @@ package org.osgi.impl.service.deploymentadmin;
 import org.osgi.service.dmt.DmtData;
 import org.osgi.service.dmt.MetaNode;
 
+/**
+ * DMT MetaNode implementation
+ */
 public class Metanode implements MetaNode {
     
     public static final boolean IS_LEAF = true;
@@ -39,7 +42,7 @@ public class Metanode implements MetaNode {
     private int       format;
     
     public String toString() {
-        return "(ops: " + ops + 
+        return "[ Metanode ops: " + ops + 
                ", leaf: " + isLeaf + 
                ", scope: " + scope + 
                ", descr: " + description + 
@@ -49,7 +52,7 @@ public class Metanode implements MetaNode {
                ", min: " + min + 
                ", max: " + max + 
                ", validVals: " + validValues + 
-               ", format: " + format + ")";
+               ", format: " + format + "]";
     }
     
     public Metanode(int op,

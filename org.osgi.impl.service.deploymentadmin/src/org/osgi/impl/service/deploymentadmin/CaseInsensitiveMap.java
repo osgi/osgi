@@ -25,7 +25,7 @@ import java.util.TreeMap;
 
 /**
  * Maintains a case insensitive map. It means that the keys are 
- * case insensitive.
+ * case insensitive. It also has localization support.
  */
 public class CaseInsensitiveMap extends TreeMap {
     
@@ -86,20 +86,4 @@ public class CaseInsensitiveMap extends TreeMap {
         return str;
     }
     
-    // for test only
-    /*public static void main(String[] args) {
-    	Hashtable ht = new Hashtable();
-    	ht.put("almA", "v_alma");
-    	ht.put("KORte", "v_korte");
-    	CaseInsensitiveMap map = new CaseInsensitiveMap(ht, null);
-    	
-    	System.out.println(map.get("alma"));
-    	System.out.println(map.get("KORTE"));
-    	
-    	for (Iterator iter = map.keySet().iterator(); iter.hasNext();) {
-			String key = (String) iter.next();
-			System.out.println(key);
-		}
-	}*/
-
 }
