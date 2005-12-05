@@ -40,7 +40,6 @@
 package org.osgi.test.cases.dmt.main.tb1.DmtSession;
 
 import org.osgi.service.dmt.Acl;
-import org.osgi.service.dmt.DmtException;
 import org.osgi.service.dmt.DmtSession;
 import org.osgi.service.dmt.MetaNode;
 import org.osgi.service.dmt.security.DmtPermission;
@@ -73,7 +72,6 @@ public class GetMetaNode implements TestInterface {
 		testGetMetaNode003();
 		testGetMetaNode004();
 		testGetMetaNode005();
-        testGetMetaNode006();
 	}
     
     private void prepare() {
@@ -102,46 +100,16 @@ public class GetMetaNode implements TestInterface {
 			tbc.closeSession(session);
 		}
 	}
-	/**
-	 * This method asserts that DmtException.NODE_NOT_FOUND is thrown
-	 * if nodeUri points to a non-existing node 
-	 * 
-	 * @spec DmtSession.getMetaNode(String)
-	 */
-	
-	private void testGetMetaNode002() {
-		DmtSession session = null;
-		try {
-			tbc.log("#testGetMetaNode002");
-
-			session = tbc.getDmtAdmin().getSession(".",
-					DmtSession.LOCK_TYPE_SHARED);
-
-			session.getMetaNode(TestExecPluginActivator.INEXISTENT_NODE);
-
-			tbc.failException("", DmtException.class);
-		} catch (DmtException e) {
-				tbc.assertEquals(
-						"Asserting that DmtException code is NODE_NOT_FOUND",
-						DmtException.NODE_NOT_FOUND, e.getCode());
-		} catch (Exception e) {
-			tbc.fail("Expected " + DmtException.class.getName() + " but was "
-					+ e.getClass().getName());
-		} finally {
-			tbc.closeSession(session);
-		}
-	}
-	
 	
 	/**
 	 * This method asserts that getMetaNode is executed when the right Acl is set (Remote)
 	 * 
 	 * @spec DmtSession.getMetaNode(String)
 	 */
-	private void testGetMetaNode003() {
+	private void testGetMetaNode002() {
 		DmtSession session = null;
 		try {
-			tbc.log("#testGetMetaNode003");
+			tbc.log("#testGetMetaNode002");
 
             tbc.openSessionAndSetNodeAcl(TestExecPluginActivator.INTERIOR_NODE, DmtConstants.PRINCIPAL, Acl.GET );
 			tbc.setPermissions(new PermissionInfo(DmtPrincipalPermission.class.getName(),DmtConstants.PRINCIPAL,"*"));
@@ -165,10 +133,10 @@ public class GetMetaNode implements TestInterface {
 	 * 
 	 * @spec DmtSession.getMetaNode(String)
 	 */
-	private void testGetMetaNode004() {
+	private void testGetMetaNode003() {
 		DmtSession session = null;
 		try {
-			tbc.log("#testGetMetaNode004");
+			tbc.log("#testGetMetaNode003");
 
 			session = tbc.getDmtAdmin().getSession(DmtConstants.OSGi_LOG,
 					DmtSession.LOCK_TYPE_EXCLUSIVE);
@@ -193,10 +161,10 @@ public class GetMetaNode implements TestInterface {
 	 * 
 	 * @spec DmtSession.getMetaNode(String)
 	 */
-	private void testGetMetaNode005() {
+	private void testGetMetaNode004() {
 		DmtSession session = null;
 		try {
-			tbc.log("#testGetMetaNode005");
+			tbc.log("#testGetMetaNode004");
 			
 			session = tbc.getDmtAdmin().getSession(
 					TestExecPluginActivator.ROOT, DmtSession.LOCK_TYPE_ATOMIC);
@@ -217,10 +185,10 @@ public class GetMetaNode implements TestInterface {
      * 
      * @spec DmtSession.getMetaNode(String)
      */
-    private void testGetMetaNode006() {
-        DmtSession session = null;
-        try {
-            tbc.log("#testGetMetaNode006");
+	private void testGetMetaNode005() {
+		DmtSession session = null;
+		try {
+			tbc.log("#testGetMetaNode005");
             
             session = tbc.getDmtAdmin().getSession(TestNonAtomicPluginActivator.ROOT, DmtSession.LOCK_TYPE_ATOMIC);
 
