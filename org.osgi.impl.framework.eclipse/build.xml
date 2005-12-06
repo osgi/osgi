@@ -7,5 +7,12 @@
 	-->
 	<target name="init" depends="master.init">
 		<copy file="${workspace}/licensed/jar/org.eclipse.osgi_3.1.2.jar" tofile="${project}/${project.name}.jar" verbose="${verbose}" preservelastmodified="true"/>
+		<!-- Copy jarverifier code into the jar and set the main class. -->
+		<jar destfile="${project}/${project.name}.jar" update="true">
+			<zipfileset src="${workspace}/licensed/jar/org.eclipse.osgi.jarverifier_1.0.0.jar" includes="org/eclipse/osgi/**"/>
+			<manifest>
+				<attribute name="Main-Class" value="org.eclipse.osgi.framework.launcher.Launcher"/>
+			</manifest>
+		</jar>
 	</target>
 </project>
