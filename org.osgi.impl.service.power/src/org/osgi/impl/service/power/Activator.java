@@ -33,24 +33,22 @@ import org.osgi.service.power.*;
  * 
  * @version $Revision$
  */
-public class Activator implements BundleActivator {
-	
-	private BundleContext context;
-	private PowerManagerImpl powerManager;
-	private ServiceRegistration powerManagerReg;
-	
+public class Activator implements BundleActivator, ServiceFactory {
+
+	private BundleContext		context;
+	private PowerManagerImpl	powerManager;
+	private ServiceRegistration	powerManagerReg;
+
 	/**
 	 * @param context
 	 * @throws java.lang.Exception
 	 */
 	public void start(BundleContext context) throws Exception {
 		this.context = context;
-		
+
 		// Create and register System Power
-		powerManager = new PowerManagerImpl(context);
-		powerManagerReg = context.registerService(PowerManager.class.getName(), powerManager, null);
-		powerManager.setServiceRegistration(powerManagerReg);
-		System.out.println("Power Manager registered");
+		powerManagerReg = context.registerService(ServiceFactory.class
+				.getName(), this, null);
 	}
 
 	/**
@@ -63,5 +61,29 @@ public class Activator implements BundleActivator {
 			powerManagerReg.unregister();
 			powerManagerReg = null;
 		}
+	}
+
+	/**
+	 * @param bundle
+	 * @param registration
+	 * @return
+	 * @see org.osgi.framework.ServiceFactory#getService(org.osgi.framework.Bundle,
+	 *      org.osgi.framework.ServiceRegistration)
+	 */
+	public Object getService(Bundle bundle, ServiceRegistration registration) {
+		if (powerManager == null)
+			powerManager = new PowerManagerImpl(context, registration);
+		return powerManager;
+	}
+
+	/**
+	 * @param bundle
+	 * @param registration
+	 * @param service
+	 * @see org.osgi.framework.ServiceFactory#ungetService(org.osgi.framework.Bundle,
+	 *      org.osgi.framework.ServiceRegistration, java.lang.Object)
+	 */
+	public void ungetService(Bundle bundle, ServiceRegistration registration,
+			Object service) {
 	}
 }
