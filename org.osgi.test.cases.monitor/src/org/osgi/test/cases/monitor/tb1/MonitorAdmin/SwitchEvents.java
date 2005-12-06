@@ -216,6 +216,7 @@ public class SwitchEvents implements TestInterface {
 	private void testSwitchEvents005() {
 		tbc.log("#testSwitchEvents005");
 		PermissionInfo[] infos = null;
+		MonitoringJob mj = null;
 		try {
 			infos = tbc.getPermissionAdmin().getPermissions(
 					tbc.getTb1Location());
@@ -226,42 +227,38 @@ public class SwitchEvents implements TestInterface {
 									org.osgi.service.monitor.MonitorPermission.class
 											.getName(),
 									MonitorConstants.SVS[0],
-									org.osgi.service.monitor.MonitorPermission.STARTJOB),
+									org.osgi.service.monitor.MonitorPermission.STARTJOB+","+org.osgi.service.monitor.MonitorPermission.SWITCHEVENTS),
 							new PermissionInfo(
 									org.osgi.service.monitor.MonitorPermission.class
 											.getName(),
 									MonitorConstants.SVS[1],
-									org.osgi.service.monitor.MonitorPermission.STARTJOB),
-							new PermissionInfo(MonitorPermission.class
-									.getName(), MonitorConstants.SVS[0],
-									MonitorPermission.SWITCHEVENTS) });
+									org.osgi.service.monitor.MonitorPermission.STARTJOB)});
 
-			MonitorConstants.EVENT_COUNT = 0;
+			MonitorConstants.SWITCH_EVENTS_COUNT = 0;
 
 			tbc.resetEvent();
 			
 			tbc.setBroadcast(true); 
 
-			MonitoringJob mj = tbc.getMonitorAdmin().startJob(
+			mj = tbc.getMonitorAdmin().startJob(
 					MonitorConstants.INITIATOR, MonitorConstants.SVS,
 					MonitorConstants.COUNT);			
 
 			tbc.getMonitorAdmin()
 					.switchEvents(MonitorConstants.SVS[0], false);
 
-			tbc.getMonitorListener().updated(
-					MonitorConstants.SV_MONITORABLEID1,
-					new StatusVariable(MonitorConstants.SV_NAME1,
-							StatusVariable.CM_CC, "test1"));
-
 			synchronized (tbc) {
+				tbc.getMonitorListener().updated(
+						MonitorConstants.SV_MONITORABLEID1,
+						new StatusVariable(MonitorConstants.SV_NAME1,
+								StatusVariable.CM_CC, "test1"));				
 				tbc.wait(MonitorConstants.TIMEOUT);
 			}
 
 			tbc.assertEquals(MessagesConstants.getMessage(
 					MessagesConstants.ASSERT_EQUALS, new String[] {
 							"variable of event modification", 1 + "" }), 1,
-					MonitorConstants.EVENT_COUNT);
+					MonitorConstants.SWITCH_EVENTS_COUNT);
 
 			mj.stop();
 
@@ -269,6 +266,7 @@ public class SwitchEvents implements TestInterface {
 			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": "
 					+ e.getClass().getName());
 		} finally {
+			tbc.cleanUp(mj);
 			tbc.setTb1Permission(infos);
 		}
 	}
@@ -378,12 +376,11 @@ public class SwitchEvents implements TestInterface {
 							"variable of event modification", 0 + "" }), 0,
 					MonitorConstants.SWITCH_EVENTS_COUNT);
 
-			tbc.getMonitorListener().updated(
-					MonitorConstants.SV_MONITORABLEID2,
-					new StatusVariable(MonitorConstants.SV_NAME1,
-							StatusVariable.CM_CC, "test1"));
-
 			synchronized (tbc) {
+				tbc.getMonitorListener().updated(
+						MonitorConstants.SV_MONITORABLEID2,
+						new StatusVariable(MonitorConstants.SV_NAME1,
+								StatusVariable.CM_CC, "test1"));			
 				tbc.wait(MonitorConstants.TIMEOUT);
 			}
 
@@ -394,12 +391,11 @@ public class SwitchEvents implements TestInterface {
 
 			tbc.getMonitorAdmin().switchEvents("cesa*/test*", true);
 
-			tbc.getMonitorListener().updated(
-					MonitorConstants.SV_MONITORABLEID1,
-					new StatusVariable(MonitorConstants.SV_NAME1,
-							StatusVariable.CM_DER, "test1"));
-
 			synchronized (tbc) {
+				tbc.getMonitorListener().updated(
+						MonitorConstants.SV_MONITORABLEID1,
+						new StatusVariable(MonitorConstants.SV_NAME1,
+								StatusVariable.CM_DER, "test1"));				
 				tbc.wait(MonitorConstants.TIMEOUT);
 			}
 
@@ -445,13 +441,10 @@ public class SwitchEvents implements TestInterface {
 			tbc.setBroadcast(true); // listen only for broadcast events
 
 			tbc.getMonitorListener().updated(
-					MonitorConstants.SV_MONITORABLEID1,
-					new StatusVariable(MonitorConstants.SV_NAME1,
-							StatusVariable.CM_CC, "test1"));
-
-			synchronized (tbc) {
-				tbc.wait(MonitorConstants.TIMEOUT);
-			}
+						MonitorConstants.SV_MONITORABLEID1,
+						new StatusVariable(MonitorConstants.SV_NAME1,
+								StatusVariable.CM_CC, "test1"));			
+			wait(MonitorConstants.SHORT_TIMEOUT);
 
 			tbc.assertEquals(MessagesConstants.getMessage(
 					MessagesConstants.ASSERT_EQUALS, new String[] {
@@ -532,13 +525,12 @@ public class SwitchEvents implements TestInterface {
 			
 			tbc.setBroadcast(true); // listen only for broadcast events
 
-			tbc.getMonitorListener().updated(
-					MonitorConstants.SV_MONITORABLEID3,
-					new StatusVariable(MonitorConstants.SV_NAME1,
-							StatusVariable.CM_CC, "test1"));
-
 			synchronized (tbc) {
-				tbc.wait(MonitorConstants.TIMEOUT);
+				tbc.getMonitorListener().updated(
+						MonitorConstants.SV_MONITORABLEID3,
+						new StatusVariable(MonitorConstants.SV_NAME1,
+								StatusVariable.CM_CC, "test1"));				
+				tbc.wait(MonitorConstants.TIMEOUT);				
 			}
 
 			tbc.assertEquals("Asserting that when a statusvariable is registered(published), its event sending state is ON by default", 1,
@@ -560,7 +552,7 @@ public class SwitchEvents implements TestInterface {
 	 * 
 	 * @spec MonitorAdmin.switchEvents(String,boolean)
 	 */	
-	private void testSwitchEvents012() {
+	private synchronized void testSwitchEvents012() {
 		tbc.log("#testSwitchEvents012");
 		PermissionInfo[] infos = null;
 		try {
@@ -588,9 +580,7 @@ public class SwitchEvents implements TestInterface {
 					new StatusVariable(MonitorConstants.SV_NAME1,
 							StatusVariable.CM_CC, "test1"));
 
-			synchronized (tbc) {
-				tbc.wait(MonitorConstants.TIMEOUT);
-			}
+			wait(MonitorConstants.SHORT_TIMEOUT);
 
 			tbc.assertEquals(MessagesConstants.getMessage(
 					MessagesConstants.ASSERT_EQUALS, new String[] {

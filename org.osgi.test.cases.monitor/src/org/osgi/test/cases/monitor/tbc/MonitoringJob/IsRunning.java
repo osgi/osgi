@@ -109,7 +109,7 @@ public class IsRunning {
 			mj = tbc.getMonitorAdmin().startScheduledJob(
 					MonitorConstants.INITIATOR, MonitorConstants.SVS,
 					MonitorConstants.SCHEDULE+1,
-					MonitorConstants.COUNT + 1); // schedule for 5 seconds and count for 2 measurements 
+					MonitorConstants.COUNT + 1); // schedule for 2 seconds and count for 2 measurements 
 
 			tbc
 			.assertTrue(MessagesConstants.getMessage(MessagesConstants.ASSERT_TRUE, new String[] { "a monitoring job returns true to isRunning()." }),

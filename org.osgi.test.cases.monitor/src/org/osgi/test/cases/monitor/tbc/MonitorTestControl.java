@@ -753,8 +753,12 @@ public class MonitorTestControl extends DefaultTestBundleControl {
 	}
 	
 	public void cleanUp(MonitoringJob job) {
-		if (job != null) {
-			job.stop();
+		try {
+			if (job != null) {
+				job.stop();
+			}
+		} catch (Exception e) {
+			log("#already stopped.");
 		}
 	}
 	

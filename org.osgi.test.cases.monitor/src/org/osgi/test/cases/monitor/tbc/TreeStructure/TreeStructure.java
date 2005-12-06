@@ -354,7 +354,7 @@ public class TreeStructure {
 
 			tbc.assertEquals(
 					"Asserts $/Monitor/cesar/test0/Results metanode format",
-					DmtData.FORMAT_STRING, metaNode.getFormat());
+					DmtData.FORMAT_STRING | DmtData.FORMAT_BOOLEAN | DmtData.FORMAT_INTEGER | DmtData.FORMAT_FLOAT , metaNode.getFormat());
 
 			tbc
 					.assertTrue(
@@ -618,7 +618,7 @@ public class TreeStructure {
 							"Asserting the value stored in /Monitor/cesar/test0/Server/remoteServer/Enabled",
 							!session
 									.getNodeValue(
-											MonitorConstants.DMT_URI_MONITORABLE1_PROPERTIES[4])
+											MonitorConstants.DMT_URI_MONITORABLE1_PROPERTIES[3])
 									.getBoolean());
 
 		} catch (Exception e) {
