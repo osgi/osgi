@@ -219,7 +219,8 @@ public class MonitorPlugin implements DataPlugin, ReadWriteDataSession
         String[] path = chopPath(fullPath);
 
         if(path.length == 0)
-            return new MonitorMetaNodeImpl("Root node of the monitoring subtree.", false, false, false, true);
+            return new MonitorMetaNodeImpl("Root node of the monitoring subtree.", 
+                    false, false, false, MetaNode.PERMANENT);
 
         try { 
             Path.checkName(path[0], "Monitorable ID");
@@ -228,7 +229,8 @@ public class MonitorPlugin implements DataPlugin, ReadWriteDataSession
         }
         
         if(path.length == 1) {
-            return new MonitorMetaNodeImpl("Root node for a Monitorable service.", false, false, true, false);
+            return new MonitorMetaNodeImpl("Root node for a Monitorable service.",
+                    false, false, true, MetaNode.PERMANENT);
         }
 
         try { 
@@ -238,30 +240,31 @@ public class MonitorPlugin implements DataPlugin, ReadWriteDataSession
         }
 
         if(path.length == 2)
-            return new MonitorMetaNodeImpl("Root node for a Performance Indicator.", false, false, true, false);
+            return new MonitorMetaNodeImpl("Root node for a Performance Indicator.", 
+                    false, false, true, MetaNode.PERMANENT);
 
         if(path.length == 3) {
             if(path[2].equals("TrapID"))
                 return new MonitorMetaNodeImpl("Full name of the Performance Indicator.", 
-                                               false, false, null, null, DmtData.FORMAT_STRING);
+                                               false, true, null, null, DmtData.FORMAT_STRING);
 
             if(path[2].equals("CM")) {
                 DmtData[] validValues = 
                     new DmtData[] { new DmtData("CC"), new DmtData("DER"), 
                                     new DmtData("GAUGE"), new DmtData("SI") };
                 return new MonitorMetaNodeImpl("Collection method of data in the Performance Indicator.",
-                                               false, false, null, validValues, DmtData.FORMAT_STRING);
+                                               false, true, null, validValues, DmtData.FORMAT_STRING);
             }
 
             if(path[2].equals("Results"))
                 return new MonitorMetaNodeImpl("Current value of the Performance Indicator.",
-                                               false, false, null, null, 
+                                               false, true, null, null, 
                                                DmtData.FORMAT_STRING | DmtData.FORMAT_BOOLEAN |
                                                DmtData.FORMAT_INTEGER | DmtData.FORMAT_FLOAT);
 
             if(path[2].equals("Server"))
                 return new MonitorMetaNodeImpl("Root node for server monitoring requests.", 
-                                               false, false, false, false);
+                                               false, false, false, MetaNode.PERMANENT);
             
             throw new DmtException(fullPath, DmtException.NODE_NOT_FOUND, 
                     "No such node defined in the monitoring tree");
@@ -272,7 +275,8 @@ public class MonitorPlugin implements DataPlugin, ReadWriteDataSession
                     "No such node defined in the monitoring tree");
         
         if(path.length == 4)
-            return new MonitorMetaNodeImpl("Root node of a server monitoring request.", true, true, true, false);
+            return new MonitorMetaNodeImpl("Root node of a server monitoring request.", 
+                    true, true, true, MetaNode.DYNAMIC);
 
         if(path.length == 5) {
             if(path[4].equals("ServerID"))
@@ -285,11 +289,11 @@ public class MonitorPlugin implements DataPlugin, ReadWriteDataSession
 
             if(path[4].equals("Reporting"))
                 return new MonitorMetaNodeImpl("Root node for request scheduling parameters.", 
-                                               false, false, false, false);
+                                               false, false, false, MetaNode.AUTOMATIC);
 
             if(path[4].equals("TrapRef"))
                 return new MonitorMetaNodeImpl("Root node for references to other required monitoring data.",
-                                               false, false, false, false);
+                                               false, false, false, MetaNode.AUTOMATIC);
 
             throw new DmtException(fullPath, DmtException.NODE_NOT_FOUND,
                     "No such node defined in the monitoring tree");
@@ -306,7 +310,7 @@ public class MonitorPlugin implements DataPlugin, ReadWriteDataSession
 
                 if(path[5].equals("Value"))
                     return new MonitorMetaNodeImpl("Time or occurrence number parameter of the " +
-                                                   "request (depending on the type).", true, false, 
+                                                   "request (depending on the type).", true, false,
                                                    new DmtData(Server.DEFAULT_SCHEDULE), null, 
                                                    DmtData.FORMAT_INTEGER);
                 
@@ -316,7 +320,7 @@ public class MonitorPlugin implements DataPlugin, ReadWriteDataSession
 
             if(path[4].equals("TrapRef"))
                 return new MonitorMetaNodeImpl("Placeholder for a reference to other monitoring data.", 
-                                               true, true, true, false);
+                                               true, true, true, MetaNode.DYNAMIC);
 
 
             throw new DmtException(fullPath, DmtException.NODE_NOT_FOUND,

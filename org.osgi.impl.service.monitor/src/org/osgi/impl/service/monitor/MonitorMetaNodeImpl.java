@@ -51,11 +51,12 @@ public class MonitorMetaNodeImpl implements MetaNode
 
     // Leaf node in MonitorPlugin
     public MonitorMetaNodeImpl(String description, boolean replaceable, 
-                               boolean allowInfinte, DmtData defaultData,
+                               boolean isPermanent, DmtData defaultData, 
                                DmtData[] validValues, int format)
     {
         leaf = true;
-        scope = DYNAMIC;
+        // No leaf nodes can be created (they are either permanent or automatic)
+        scope = isPermanent ? PERMANENT : AUTOMATIC;
         mimeTypes = new String[] { LEAF_MIME_TYPE };
 
         this.replaceable = replaceable;
@@ -63,19 +64,19 @@ public class MonitorMetaNodeImpl implements MetaNode
         this.validValues = validValues;
         this.format      = format;
 
-        setCommon(description, allowInfinte);
+        setCommon(description, false);
     }
 
     // Interior node in ConfigurationPlugin
     public MonitorMetaNodeImpl(String description, boolean deletable, 
                                boolean addable, boolean allowInfinte, 
-                               boolean isPermanent)
+                               int scope)
     {
         // TODO merge deletable and addable parameter into one (they are always the same at the time of reading)
         leaf = false;
         format = DmtData.FORMAT_NODE;
 
-        scope = isPermanent ? PERMANENT : DYNAMIC;
+        this.scope = scope;
         this.deletable = deletable;
         this.addable = addable;
 
