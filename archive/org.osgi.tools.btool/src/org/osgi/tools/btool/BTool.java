@@ -702,8 +702,7 @@ public class BTool extends Task {
 		if (r.getPath().endsWith("CVS"))
 			return null;
 		if (r.getPath().endsWith(".java")
-				|| r.getPath().endsWith("package.html")
-				|| r.getPath().endsWith("packageinfo")) {
+				|| r.getPath().endsWith("package.html")) {
 			if (sources) {
 				Resource rr = new Resource(this, r.getSource(), sourcesPrefix
 						+ r.getPath());
@@ -711,6 +710,14 @@ public class BTool extends Task {
 				return rr;
 			}
 			return null;
+		}
+		// File must also be added to sources!
+		// but must also be present in binary
+		if (r.getPath().endsWith("packageinfo")) {
+			Resource rr = new Resource(this, r.getSource(), sourcesPrefix
+					+ r.getPath());
+			rr.setSourcePath(r.getPath());
+			addContents(rr);
 		}
 		return r;
 	}
