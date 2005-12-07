@@ -763,7 +763,7 @@ public class BuildDispose {
 							1,
 							"[SCR] IllegalAccessException attempting to activate component ",
 							e);
-			throw new ComponentException(e.getMessage());
+			throw new ComponentException(e.getMessage(), e);
 		}
 		catch (InvocationTargetException e) {
 			Log
@@ -771,7 +771,7 @@ public class BuildDispose {
 							1,
 							"[SCR] InvocationTargetException attempting to activate component ",
 							e);
-			throw new ComponentException(e.getMessage());
+			throw new ComponentException(e.getMessage(), e);
 		}
 	}
 
