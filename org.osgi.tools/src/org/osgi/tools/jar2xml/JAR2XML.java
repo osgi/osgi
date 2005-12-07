@@ -1,12 +1,13 @@
 package org.osgi.tools.jar2xml;
 
-import java.util.jar.*;
-import java.util.zip.*;
-import org.osgi.test.script.Tag;
-import org.apache.bcel.classfile.*;
 import java.io.*;
-import java.util.*;
 import java.security.cert.*;
+import java.util.*;
+import java.util.jar.*;
+import java.util.zip.ZipEntry;
+
+import org.apache.bcel.classfile.*;
+import org.osgi.test.script.Tag;
 
 public class JAR2XML {
 	Tag					top;

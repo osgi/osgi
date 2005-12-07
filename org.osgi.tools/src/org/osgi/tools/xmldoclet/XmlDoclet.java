@@ -1,8 +1,9 @@
 package org.osgi.tools.xmldoclet;
 
-import com.sun.javadoc.*;
 import java.io.*;
 import java.util.*;
+
+import com.sun.javadoc.*;
 
 public class XmlDoclet extends Doclet {
 	PrintWriter				pw;

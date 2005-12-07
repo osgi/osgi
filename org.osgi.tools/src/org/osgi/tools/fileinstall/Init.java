@@ -1,8 +1,9 @@
 package org.osgi.tools.fileinstall;
 
-import org.osgi.framework.*;
-import java.io.*;
+import java.io.File;
 import java.util.*;
+
+import org.osgi.framework.*;
 
 /**
     This clever little bundle watches a directory and will

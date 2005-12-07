@@ -2,7 +2,9 @@ package test;
 
 import java.io.*;
 import java.util.*;
+
 import junit.framework.TestCase;
+
 import org.osgi.tools.btool.*;
 
 public class DependenciesCheck extends TestCase {

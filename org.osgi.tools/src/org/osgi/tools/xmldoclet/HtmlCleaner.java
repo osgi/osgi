@@ -10,6 +10,8 @@ public class HtmlCleaner {
 	String source;
 	int cnt =0;
 	int line =0;
+	String tokens[] = new String[16];
+	int rover;
 	
 	int 		type = 0;
 	String		tag = null;
@@ -79,8 +81,18 @@ public class HtmlCleaner {
 			while( ! eof ) {
 				next();
 				element( -1);
-				if ( !eof ) 
-					error( "Invalid tag on top level " + token  );
+				if ( !eof ) {
+					StringBuffer sb = new StringBuffer();
+					for ( int i= 0; i<tokens.length; i++ ) {
+						sb.append(" ");
+						String tmp = tokens[(i+rover)%tokens.length];
+						if ( tmp != null )
+							sb.append(tmp);
+					}
+					next();
+					sb.append(token);
+					error( "Invalid tag on top level " + sb  );
+				}
 			}
 			return result.toString();
 		}
@@ -188,6 +200,7 @@ public class HtmlCleaner {
 	
 	
 	void next() {
+		tokens[rover++%tokens.length] = token;
 		if ( ! pushed.empty() ) {
 			token = (String) pushed.pop();
 			//System.out.println( "pushed " + token );

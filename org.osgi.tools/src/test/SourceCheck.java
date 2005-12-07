@@ -7,7 +7,9 @@
 package test;
 
 import java.io.*;
+
 import junit.framework.TestCase;
+
 import org.osgi.tools.btool.*;
 
 /**

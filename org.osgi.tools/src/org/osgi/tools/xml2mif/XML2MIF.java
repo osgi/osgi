@@ -4,9 +4,12 @@ package org.osgi.tools.xml2mif;
  * what I am talking about, then DO NOT SAVE this file.
  */
 import java.io.*;
+
 import javax.xml.parsers.SAXParser;
+
 import org.xml.sax.Attributes;
 import org.xml.sax.helpers.DefaultHandler;
+
 import com.icl.saxon.aelfred.SAXParserImpl;
 
 public class XML2MIF extends DefaultHandler {	

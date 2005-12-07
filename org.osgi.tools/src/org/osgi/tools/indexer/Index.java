@@ -1,8 +1,8 @@
 package org.osgi.tools.indexer;
 
-import java.io.*;
-import java.util.zip.*;
+import java.io.File;
 import java.util.*;
+import java.util.zip.*;
 
 public class Index {
 
