@@ -31,7 +31,7 @@ public final class PermissionInfoMetaNode implements MetaNode {
 	public static final String[] PERMISSIONINFO_ARRAY = new String[] { PERMISSIONINFO };
 	public boolean can(int operation) {	return (operation==CMD_GET)||(operation==CMD_REPLACE);}
 	public boolean isLeaf() { return true;	}
-	public int getScope() { return DYNAMIC; }
+	public int getScope() { return AUTOMATIC; }
 	public String getDescription() { return "Permission Info array"; }
 	public int getMaxOccurrence() {	return 1; }
 	public boolean isZeroOccurrenceAllowed() { return false; }

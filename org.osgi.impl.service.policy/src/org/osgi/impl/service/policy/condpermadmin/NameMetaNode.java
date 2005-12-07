@@ -31,7 +31,7 @@ public final class NameMetaNode implements MetaNode {
 	public static final String[] NAME_ARRAY = new String[] { NAME };
 	public boolean can(int operation) { return (operation==CMD_GET)||(operation==CMD_REPLACE); }
 	public boolean isLeaf() { return true;	}
-	public int getScope() { return DYNAMIC; }
+	public int getScope() { return AUTOMATIC; }
 	public String getDescription() { return "Name of the ConditionPermission"; }
 	public int getMaxOccurrence() {	return 1; }
 	public boolean isZeroOccurrenceAllowed() { return false; }
