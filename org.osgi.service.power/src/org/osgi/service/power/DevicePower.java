@@ -113,9 +113,10 @@ public interface DevicePower {
 	 *           S4 -&gt; D3
 	 *           S5 -&gt; D3
 	 * </pre>
-	 * 
-	 * is represented as follows: <pre>
-	 * int[] mappings = new int[]{D0,D1, UNSPECIFIED_STATE, D3, D3, D3};
+	 * Is represented as follows: <pre>
+	 * int[] mappings = new int[]{
+	 *   D0,D1, UNSPECIFIED_STATE, D3, D3, D3
+	 * };
 	 * </pre>
 	 * If this property is not used or invalid then the default mapping (defined
 	 * in Power Manager) is used.
