@@ -121,7 +121,7 @@ public class MonitorPermission extends Permission {
      * <code>read</code>, <code>publish</code>, <code>startjob</code>,
      * <code>reset</code>, <code>switchevents</code>, or the combination of 
      * these separated by commas. String constants are defined in this class for
-     * each valid action.  Passing <code>&quot;*&quot</code> as the action 
+     * each valid action.  Passing <code>&quot;*&quot;</code> as the action 
      * string is equivalent to listing all actions. 
      * 
      * @param statusVariable the identifier of the <code>StatusVariable</code>
