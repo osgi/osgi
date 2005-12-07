@@ -1,6 +1,7 @@
 package org.osgi.tools.cmadmin;
 
 import java.util.*;
+
 import org.osgi.framework.*;
 import org.osgi.service.cm.*;
 import org.osgi.tools.command.*;
