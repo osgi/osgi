@@ -26,8 +26,8 @@ public interface MonitorListener {
      * @param statusVariable the <code>StatusVariable</code> that has changed
      * @throws java.lang.IllegalArgumentException if the specified monitorable
      *         ID is invalid (<code>null</code>, empty, or contains illegal
-     *         characters), or if <code>statusVariable</code> is
-     *         <code>null</code>
+     *         characters) or points to a non-existing <code>Monitorable</code>, 
+     *         or if <code>statusVariable</code> is <code>null</code>
      */
     public void updated(String monitorableId, StatusVariable statusVariable)
             throws IllegalArgumentException;
