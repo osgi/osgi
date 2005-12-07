@@ -61,8 +61,8 @@ class Handler extends Thread {
 	}
 
 	public static String toString(int n, Object o) {
-		if (o instanceof Vector)
-			return toString(n, (Vector) o);
+		if (o instanceof Collection)
+			return toString(n, (Collection) o);
 		if (o instanceof Object[])
 			return toString(n, (Object[]) o);
 		if (o instanceof Bundle)
@@ -77,6 +77,8 @@ class Handler extends Thread {
 			return toString(n, (Dictionary) o);
 		if (o instanceof ExportedPackage)
 			return toString(n, (ExportedPackage) o);
+		if (o instanceof Throwable)
+			return toString(n, (Throwable) o);
 		return "" + o;
 	}
 
@@ -84,7 +86,7 @@ class Handler extends Thread {
 		StringBuffer sb = new StringBuffer();
 		sb.append(ep.getName());
 		sb.append(spaces(30 - ep.getName().length()));
-		sb.append(ep.getSpecificationVersion());
+		sb.append(ep.getVersion());
 		return sb.toString();
 	}
 
@@ -110,6 +112,27 @@ class Handler extends Thread {
 		}
 		return sb.toString();
 	}
+	
+	public static String toString( int n, Throwable throwable ) {
+		StringBuffer sb = new StringBuffer();
+		String del = "";
+		while ( throwable != null ) {
+			sb.append(del);
+			sb.append(spaces(n));
+			sb.append(throwable);
+			try {
+				StackTraceElement elements[]= throwable.getStackTrace();
+				sb.append(" ");
+				sb.append(elements[0]);
+			} catch( Throwable t ) {
+				// Only works on 1.4
+			}
+			throwable = throwable.getCause();
+			del = "\r\n";
+			n+=4;
+		}
+		return sb.toString();
+	}
 
 	public static String toString(int n, Object s[]) {
 		StringBuffer sb = new StringBuffer();
@@ -119,20 +142,22 @@ class Handler extends Thread {
 				sb.append(del);
 				sb.append(toString(s[i]));
 				del = "\r\n" + spaces(n);
-				//del = ",";
+				// del = ",";
 			}
 		return sb.toString();
 	}
 
-	public static String toString(int n, Vector v) {
+	public static String toString(int n, Collection v) {
 		StringBuffer sb = new StringBuffer();
 		String del = "";
-		for (int i = 0; i < v.size(); i++)
-			if (v.elementAt(i) != null) {
+		for (Iterator i = v.iterator(); i.hasNext(); ) {
+			Object element = i.next();
+			if (element != null) {
 				sb.append(del);
 				del = "\r\n" + spaces(n);
-				sb.append(toString(v.elementAt(i)));
+				sb.append(toString(element));
 			}
+		}
 		return sb.toString();
 	}
 
@@ -156,17 +181,48 @@ class Handler extends Thread {
 		String id = "0";
 		if (b != null)
 			id = "" + b.getBundleId();
-		String exception = "";
-		if (l.getException() != null)
-			exception = " : " + l.getException();
+		StringBuffer exception = new StringBuffer();
+		Throwable e = l.getException();
+		while (e != null) {
+			exception.append(" : ");
+			exception.append(e.getMessage());
+			e = e.getCause();
+		}
+		String date = getDate(l.getTime());
 		Calendar cal = Calendar.getInstance();
 		cal.setTime(new Date(l.getTime()));
-		return spaces(n)
-				+ (cal.get(Calendar.YEAR) + "/" + cal.get(Calendar.MONTH) + "/"
-						+ cal.get(Calendar.DAY_OF_MONTH) + " "
-						+ cal.get(Calendar.HOUR_OF_DAY) + ":" + cal
-						.get(Calendar.MINUTE)) + " : " + level + " : " + id
-				+ " : " + l.getMessage() + exception;
+		return spaces(n) + date 
+				+ ":" + level
+				+ ":" + id + ": " + l.getMessage() + exception.toString();
+	}
+
+	/**
+	 * I know, there is SimpleDateFormat ... it is just not part of the
+	 * min. exec. env. ...
+	 * 
+	 * @param time
+	 * @return
+	 */
+	public static String getDate(long time) {
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(new Date(time));
+		StringBuffer sb = new StringBuffer();
+		sb.append( cal.get(Calendar.YEAR));
+		sb.append( fit(cal.get(Calendar.MONTH),2));
+		sb.append( fit(cal.get(Calendar.DAY_OF_MONTH),2));
+		sb.append( fit(cal.get(Calendar.HOUR_OF_DAY),2));
+		sb.append( fit(cal.get(Calendar.MINUTE),2));
+		return sb.toString();
+	}
+
+	// TODO innefficient
+	public static String fit( int n, int width ) {
+		String number = Integer.toString(n);
+		int diff = width - number.length();
+		if ( diff <= 0 )
+			return number;
+		
+		return "000000000000".substring(0,diff) + number;
 	}
 
 	static String status(Bundle b) {
@@ -195,9 +251,9 @@ class Handler extends Thread {
 
 	static String getName(Bundle b) {
 		String name = (String) b.getSymbolicName();
-		if ( name != null )
+		if (name != null)
 			return name;
-		
+
 		name = (String) b.getHeaders().get("Bundle-Name");
 		if (name != null)
 			return name;
@@ -214,7 +270,7 @@ class Handler extends Thread {
 	/**
 	 * -11 ACTIVE file:C:\framework\.\load\org.osgi.impl.service.automation.ja
 	 * objectClass org.osgi.service.automation.WireAdmin service.id 9
-	 *  
+	 * 
 	 */
 	public static String toString(int n, ServiceReference ref) {
 		StringBuffer sb = new StringBuffer();
@@ -264,7 +320,7 @@ class Handler extends Thread {
 						index--;
 						if (_echo) {
 							_out.write(new byte[] {0x08, 0x20, 0x08});
-							//_out.flush();
+							// _out.flush();
 						}
 					}
 					break;
@@ -317,7 +373,7 @@ class Handler extends Thread {
 		boolean loggedIn = false;
 		try {
 			context.setVariable("eol", new String("\r\n"));
-			//_user = System.getProperty("user.name", "");
+			// _user = System.getProperty("user.name", "");
 			_user = "not logged in";
 			_in = _socket.getInputStream();
 			_out = _socket.getOutputStream();
@@ -379,15 +435,15 @@ class Handler extends Thread {
 				Object translation = null;
 				if (result != null) {
 					// Hangs for some reason, looks like deadlock???
-					//for ( Enumeration e=_targets.elements();
+					// for ( Enumeration e=_targets.elements();
 					// translation==null && e.hasMoreElements(); )
-					//{
-					//  CommandProvider p = (CommandProvider) e.nextElement();
-					//  System.out.println( "Will translate " + p );
-					//  translation = p.toString( result );
-					//  System.out.println( "Hase done translate " + p + " " +
+					// {
+					// CommandProvider p = (CommandProvider) e.nextElement();
+					// System.out.println( "Will translate " + p );
+					// translation = p.toString( result );
+					// System.out.println( "Hase done translate " + p + " " +
 					// translation );
-					//}
+					// }
 					if (translation == null)
 						translation = handleEol(toString(result), context);
 					_wrt.print(translation);

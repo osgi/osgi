@@ -325,8 +325,21 @@ public class Basic implements CommandProvider {
 		return null;
 	}
 
+	public Object _logcause( CommandInterpreter intp ) throws Exception {
+		Collection list = (Collection) _log(intp);
+		List result = new ArrayList();
+		for ( Iterator i= list.iterator(); i.hasNext(); ) {
+			LogEntry entry = (LogEntry) i.next();
+			Throwable throwable = entry.getException();
+			if ( throwable != null ) 
+				result.add(throwable);
+		}
+		return result;
+	}
 	public Object _log(CommandInterpreter intp) throws Exception {
 		String n = intp.nextArgument();
+		String datePrefix = null;
+		
 		int mask = 0;
 		Bundle bundle = null;
 		while (n != null) {
@@ -342,6 +355,8 @@ public class Basic implements CommandProvider {
 				mask |= 0xF;
 			else if (n.equalsIgnoreCase("bundle"))
 				bundle = getBundle(intp);
+			else if (n.equalsIgnoreCase("date"))
+				datePrefix = intp.nextArgument();
 			n = intp.nextArgument();
 		}
 		if (mask == 0)
@@ -353,32 +368,44 @@ public class Basic implements CommandProvider {
 		LogReaderService rdr = (LogReaderService) _context.getService(ref);
 		if (rdr == null)
 			return intp.error("Could not get log reader service from context");
-		Vector result = new Vector();
+		List result = new ArrayList();
 		for (Enumeration e = rdr.getLog(); e.hasMoreElements();) {
 			LogEntry entry = (LogEntry) e.nextElement();
+			boolean selected = false;
+			
 			if (bundle != null && bundle != entry.getBundle())
 				continue;
+			
 			switch (entry.getLevel()) {
 				case LogService.LOG_DEBUG :
 					if ((mask & 1) != 0)
-						result.addElement(entry);
+						selected = true;
 					break;
 				case LogService.LOG_INFO :
 					if ((mask & 2) != 0)
-						result.addElement(entry);
+						selected = true;
 					break;
 				case LogService.LOG_WARNING :
 					if ((mask & 4) != 0)
-						result.addElement(entry);
+						selected = true;
 					break;
 				case LogService.LOG_ERROR :
 					if ((mask & 8) != 0)
-						result.addElement(entry);
+						selected = true;
 					break;
 				default :
-					result.addElement(entry);
+					selected = true;
 					break;
 			}
+			String date = Handler.getDate(entry.getTime());
+			if ( datePrefix != null ) {
+				if ( selected ) {
+					selected = date.startsWith(datePrefix);
+				}
+			}
+				
+			if ( selected ) 
+				result.add(entry);
 		}
 		Collections.reverse(result);
 		return result;
