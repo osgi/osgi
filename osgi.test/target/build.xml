@@ -31,7 +31,7 @@
 			<jvmarg line="-Djava.security.manager=org.eclipse.osgi.framework.internal.core.FrameworkSecurityManager"/>
 			<jvmarg line="-Djava.security.policy=policy"/>
 			<jvmarg line="-Xverify:none"/>
-			<arg line="-console:2012"/>
+			<arg line="-console"/>
 			<arg line="init"/>
 			<arg line="'install file:../osgi.jar start'"/>
 			<arg line="'install file:../osgi.target.jar start'"/>
