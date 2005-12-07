@@ -208,8 +208,8 @@ public class SwitchEvents implements TestInterface {
 	}
 
 	/**
-	 * This method asserts if the SwitchEvents is ignored when a
-	 * MonitoringJob exist with the passed StatusVariable.
+	 * This method asserts if the SwitchEvents really stops
+	 * the broadcast events.
 	 * 
 	 * @spec MonitorAdmin.switchEvents(String,boolean)
 	 */
@@ -252,12 +252,12 @@ public class SwitchEvents implements TestInterface {
 						MonitorConstants.SV_MONITORABLEID1,
 						new StatusVariable(MonitorConstants.SV_NAME1,
 								StatusVariable.CM_CC, "test1"));				
-				tbc.wait(MonitorConstants.TIMEOUT);
+				tbc.wait(MonitorConstants.SHORT_TIMEOUT);
 			}
 
 			tbc.assertEquals(MessagesConstants.getMessage(
 					MessagesConstants.ASSERT_EQUALS, new String[] {
-							"variable of event modification", 1 + "" }), 1,
+							"variable of event modification", 0 + "" }), 0,
 					MonitorConstants.SWITCH_EVENTS_COUNT);
 
 			mj.stop();

@@ -115,7 +115,7 @@ public class IsRunning {
 			.assertTrue(MessagesConstants.getMessage(MessagesConstants.ASSERT_TRUE, new String[] { "a monitoring job returns true to isRunning()." }),
 					mj.isRunning());
 			
-			wait(MonitorConstants.SHORT_TIMEOUT*2);
+			wait(MonitorConstants.SHORT_TIMEOUT*3);
 			
 			tbc
 			.assertTrue(MessagesConstants.getMessage(MessagesConstants.ASSERT_TRUE, new String[] { "a monitoring job returns false to isRunning()." }),
