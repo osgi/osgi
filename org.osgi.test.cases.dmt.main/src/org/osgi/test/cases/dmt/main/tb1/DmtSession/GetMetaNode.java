@@ -72,6 +72,7 @@ public class GetMetaNode implements TestInterface {
 		testGetMetaNode003();
 		testGetMetaNode004();
 		testGetMetaNode005();
+		testGetMetaNode006();
 	}
     
     private void prepare() {
@@ -194,6 +195,28 @@ public class GetMetaNode implements TestInterface {
 
             tbc.assertNull("Asserts that DmtSession.getMetaNode returns null if there is no meta data " +
                     "available for the given node",session.getMetaNode(TestNonAtomicPluginActivator.INTERIOR_NODE));
+            
+        } catch (Exception e) {
+            tbc.fail("Unexpected Exception: " + e.getClass().getName()
+                    + " [Message: " + e.getMessage() + "]");
+        } finally {
+            tbc.closeSession(session);
+        }
+    }
+	
+    /**
+     * Asserts that a node does not have to exist for having meta-data associated with it
+     * 
+     * @spec DmtSession.getMetaNode(String)
+     */
+	private void testGetMetaNode006() {
+		DmtSession session = null;
+		try {
+			tbc.log("#testGetMetaNode006");
+            
+            session = tbc.getDmtAdmin().getSession(TestExecPluginActivator.ROOT, DmtSession.LOCK_TYPE_ATOMIC);
+
+            tbc.assertNotNull("Asserts that a node does not have to exist for having meta-data associated with it",session.getMetaNode(TestExecPluginActivator.INEXISTENT_LEAF_NODE));
             
         } catch (Exception e) {
             tbc.fail("Unexpected Exception: " + e.getClass().getName()
