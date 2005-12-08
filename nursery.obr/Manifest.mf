@@ -1,0 +1,11 @@
+Manifest-Version: 1.0
+Bundle-SymbolicName: ${p}
+Bundle-Name: ${p}
+Bundle-Vendor: OSGi Alliance
+Bundle-Copyright: (c) Copyright OSGi Alliance, All Rights Reserved
+Bundle-Version: 0.0
+Service-Component: OSGI-INF/admin.xml, OSGI-INF/web.xml
+Bundle-Classpath: .,kxml2-min.jar
+$(IMPORT-PACKAGE)
+$(EXPORT-PACKAGE)
+$(PRIVATE-PACKAGE)

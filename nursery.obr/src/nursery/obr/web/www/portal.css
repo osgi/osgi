@@ -1,0 +1,26 @@
+TT,A,OL,LI,BODY		{ font-family: Helvetica, Arial, sans-serif; font-size: x-small; font-weight: plain; }
+H1  		{ font-size: medium; font-weight: bold; font-family: Helvetica, Arial, sans-serif;}
+H2  		{ font-size: small; font-weight: bold; font-family: Helvetica, Arial, sans-serif;}
+H3  		{ font-size: x-small; font-weight: bold; font-family: Helvetica, Arial, sans-serif;}
+H4  		{ font-size: x-small; font-weight: bold; font-family: Helvetica, Arial, sans-serif;}
+TD  		{ vertical-align:top; text-align:left; font-family: Helvetica, Arial, sans-serif; font-size: x-small; font-weight: plain;}
+TH  		{ background-color: #FFFFDD; color:blue; vertical-align:top; text-align:left; font-family: Helvetica, Arial, sans-serif; font-size: x-small; font-weight: plain; }
+TH.title	{ background-color: #FFFFFF; vertical-align:top; text-align:left; font-family: Helvetica, Arial, sans-serif; font-size: x-small; font-weight: plain; }
+TABLE.list  { background-color: #B0B0FF}
+EM  		{ font-weight: bold }
+DIV.body	{ width:600;margin-left:50; }
+P.footer	{ font-size:xx-small; font-family: Helvetica, Arial, sans-serif;}
+A.navigate  { font-weight: bold }
+P   		{ font-size:x-small; font-weight:plain;  font-family: Helvetica, Arial, sans-serif;}
+PRE 		{ font-family: Courier }
+TD.index	{ background-color: #B0B0FF; font-size: larger; font-weight:bold; }
+TD.categories    { background-color: #B0B0FF; font-size: larger; font-weight: bold; }
+.done	 	{ background-color: #A0A0A0; color: #FFFFFF }
+.passed 	{ background-color: #FF9090; color: #FFFFFF }
+.early  	{ background-color: #509050; color: #FFFFFF }
+.pointer	{ font-size: larger; font-weight:bold;}
+.topmenu    { font-size:x-small; font-weight:bold; font-family: Helvetica, Arial, sans-serif; 
+    color:white; text-decoration:none; margin-top:0;
+}
+.topmenux    { text-align:center; background-color:blue; margin-top:2px; border-color:red; border:1px; margin-left: 5px; border-style:solid;}
+TT			{ font-family: Courier New; }
