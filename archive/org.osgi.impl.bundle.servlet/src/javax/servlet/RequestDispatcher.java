@@ -40,8 +40,6 @@ import java.io.IOException;
  * @version 	$Version$
  *
  * @see 	ServletContext#getRequestDispatcher(java.lang.String)
- * @see 	ServletContext#getNamedDispatcher(java.lang.String)
- * @see 	ServletRequest#getRequestDispatcher(java.lang.String)
  *
  */
 

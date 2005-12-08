@@ -313,10 +313,6 @@ public interface ServletRequest {
      * @return					a <code>BufferedReader</code>
      *						containing the body of the request	
      *
-     * @exception UnsupportedEncodingException 	if the character set encoding
-     * 						used is not supported and the
-     *						text cannot be decoded
-     *
      * @exception IllegalStateException   	if {@link #getInputStream} method
      * 						has been called on this request
      *

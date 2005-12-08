@@ -204,7 +204,7 @@ public interface ServletContext {
      * to a servlet from any location, without using a class loader.
      *
      *
-     * @param name 	a <code>String</code> specifying the path
+     * @param path 	a <code>String</code> specifying the path
      *			to the resource
      *
      * @return 		the <code>InputStream</code> returned to the

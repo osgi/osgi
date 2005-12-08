@@ -404,7 +404,7 @@ public interface HttpServletRequest extends ServletRequest {
      *
      *
      *
-     * @param		<code>true</code> to create
+     * @param	create	<code>true</code> to create
      *			a new session for this request if necessary;
      *			<code>false</code> to return <code>null</code>
      *			if there's no current session
@@ -455,7 +455,7 @@ public interface HttpServletRequest extends ServletRequest {
      *				<code>false</code> otherwise
      *
      * @see			#getRequestedSessionId
-     * @see			#getSession
+     * @see			#getSession(boolean)
      * @see			HttpSessionContext
      *
      */
@@ -474,7 +474,7 @@ public interface HttpServletRequest extends ServletRequest {
      *				cookie; otherwise, <code>false</code>
      *
      *
-     * @see			#getSession
+     * @see			#getSession(boolean)
      *
      */
 
@@ -493,7 +493,7 @@ public interface HttpServletRequest extends ServletRequest {
      *				<code>false</code>
      *
      *
-     * @see			#getSession
+     * @see			#getSession(boolean)
      *
      */
 
