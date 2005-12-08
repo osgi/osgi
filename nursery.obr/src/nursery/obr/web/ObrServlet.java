@@ -33,7 +33,9 @@ import java.util.*;
 
 import javax.servlet.http.*;
 
-import org.osgi.framework.*;
+import nursery.obr.resource.ResourceImpl;
+
+import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.service.component.ComponentContext;
 import org.osgi.service.http.*;
 import org.osgi.service.obr.*;
@@ -73,7 +75,7 @@ public class ObrServlet extends HttpServlet implements HttpContext {
 	}
 
 	private void doSearch(Tag tag, String parameter) throws InvalidSyntaxException {
-		Filter filter = null;
+		String filter = null;
 		if (parameter != null) {
 			String keywords[] = parameter.split("[^\\w]");
 			StringBuffer	sb = new StringBuffer();
@@ -89,11 +91,14 @@ public class ObrServlet extends HttpServlet implements HttpContext {
 				sb.append("(copyright=*");
 				sb.append(keywords[i]);
 				sb.append("*)");
+				sb.append("(category=*");
+				sb.append(keywords[i]);
+				sb.append("*)");
 				sb.append(")");
 			}
 			sb.append(")");
 			tag.addAttribute("filter", sb.toString());
-			filter= context.getBundleContext().createFilter(sb.toString());
+			filter= sb.toString();
 		}
 		showResources(tag,filter);
 	}
@@ -101,8 +106,15 @@ public class ObrServlet extends HttpServlet implements HttpContext {
 	
 	
 	
-	private void showResources(Tag tag, Filter filter) {
-		
+	private void showResources(Tag tag, String filter) {
+		Resource [] resources = admin.discoverResources(filter);
+		for ( int i = 0; resources != null && i<resources.length; i++ ) {
+			showResource(tag,resources[i]);
+		}
+	}
+
+	private void showResource(Tag tag, Resource resource) {
+		tag.addContent(ResourceImpl.toXML(resource));
 	}
 
 	private void doRepository(Tag tag, String add) {

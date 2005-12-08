@@ -71,20 +71,9 @@ public class RequirementImpl implements Requirement {
 	}
 
 	public Tag toXML(String name) {
-		Tag req = new Tag(name);
-		req.addAttribute("name", getName());
-		req.addAttribute("filter", filter);
-		
-		String c = null;
-		switch(cardinality) {
-			case OPTIONAL: c = "OPTIONAL"; break ;
-			case UNARY: c = "UNARY"; break;
-			case MULTIPLE: c = "MULTIPLE"; break; 
-		}
-		req.addAttribute("cardinality", c);
-		if ( comment != null )
-			req.addContent(comment);
-		return req;
+		Tag tag = toXML(this);
+		tag.rename(name);
+		return tag;
 	}
 
 
@@ -122,6 +111,24 @@ public class RequirementImpl implements Requirement {
 
 	public void setCardinality(int value) {
 		cardinality = value;
+	}
+
+
+	public static Tag toXML(Requirement requirement) {
+		Tag req = new Tag("require");
+		req.addAttribute("name", requirement.getName());
+		req.addAttribute("filter", requirement.getFilter());
+		
+		String c = null;
+		switch(requirement.getCardinality()) {
+			case OPTIONAL: c = "OPTIONAL"; break ;
+			case UNARY: c = "UNARY"; break;
+			case MULTIPLE: c = "MULTIPLE"; break; 
+		}
+		req.addAttribute("cardinality", c);
+		if ( requirement.getComment() != null )
+			req.addContent(requirement.getComment());
+		return req;
 	}
 
 
