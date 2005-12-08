@@ -38,6 +38,7 @@ public class Group
 				try {
 					InputStream in = url.openStream();
 					File stored = context.getDataFile(  path );
+					stored.getParentFile().mkdirs(); // make directory for file
 					OutputStream out = new FileOutputStream( stored );
 					copy( in, out );
 					in.close();
@@ -52,6 +53,7 @@ public class Group
 				}
 				catch( IOException e ) {
 					System.err.println( "No inputstream for " + url );
+					e.printStackTrace();
 				}
 				catch( BundleException ee ) {
 					System.out.println( "Cannot install " + location + " because " + ee);
