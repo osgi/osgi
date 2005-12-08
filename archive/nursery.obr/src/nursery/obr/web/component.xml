@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scr:component name="component.${p}.web" 
+	xmlns:scr="http://www.osgi.org/xmlns/scr/v1.0.0">
+	<implementation class="${p}.web.ObrServlet"/>
+	<reference name="HTTP"
+		interface="org.osgi.service.http.HttpService"/>
+	<reference name="LOG"
+		interface="org.osgi.service.log.LogService"/>
+	<reference name="RA"
+		interface="org.osgi.service.obr.RepositoryAdmin"/>
+	
+</scr:component>
