@@ -13,4 +13,4 @@ $(EXPORT-PACKAGE)
 $(IMPORT-PACKAGE)
 group-load:   org.osgi.impl.service.log.jar,
   org.osgi.impl.service.http.jar,
-  servlet.jar
+  apache/servlet.jar

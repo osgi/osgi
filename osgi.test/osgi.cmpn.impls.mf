@@ -11,6 +11,6 @@ Bundle-Category: osgi,test
 Bundle-DocUrl: http://www.osgi.org/
 $(EXPORT-PACKAGE)
 $(IMPORT-PACKAGE)
-group-load:  ${cmpn.impls.jars}, servlet.jar
+group-load:  ${cmpn.impls.jars}, apache/servlet.jar
 
 
