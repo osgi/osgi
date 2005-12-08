@@ -9,11 +9,8 @@ CVS-Header: $Header$
 Bundle-Vendor: OSGi Alliance
 Bundle-Category: osgi,test
 Bundle-DocUrl: http://www.osgi.org/
-Export-Package: javax.servlet;specification-version=2.1,
- javax.servlet.http;specification-version=2.1,
- javax.microedition.io
-Bundle-Classpath: .,servlet.jar
+$(EXPORT-PACKAGE)
 $(IMPORT-PACKAGE)
-group-load:  ${cmpn.impls.jars}
+group-load:  ${cmpn.impls.jars}, servlet.jar
 
 

@@ -12,4 +12,5 @@ Bundle-DocUrl: http://www.osgi.org/
 $(EXPORT-PACKAGE)
 $(IMPORT-PACKAGE)
 group-load:   org.osgi.impl.service.log.jar,
-  org.osgi.impl.service.http.jar
+  org.osgi.impl.service.http.jar,
+  servlet.jar
