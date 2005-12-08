@@ -714,10 +714,12 @@ public class BTool extends Task {
 		// File must also be added to sources!
 		// but must also be present in binary
 		if (r.getPath().endsWith("packageinfo")) {
-			Resource rr = new Resource(this, r.getSource(), sourcesPrefix
-					+ r.getPath());
-			rr.setSourcePath(r.getPath());
-			addContents(rr);
+			if (sources) {
+				Resource rr = new Resource(this, r.getSource(), sourcesPrefix
+						+ r.getPath());
+				rr.setSourcePath(r.getPath());
+				addContents(rr);
+			}
 		}
 		return r;
 	}
