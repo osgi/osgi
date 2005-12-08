@@ -143,50 +143,56 @@ public class ResourceImpl implements Resource {
 	}
 
 	public Tag toXML() {
-		Tag meta = new Tag("resource");
-		meta.addAttribute("url", url.toString());
-		meta.addAttribute("name", getName());
-		meta.addAttribute("version", getVersion().toString());
-
-		String description = getDescription();
-		if (description != null)
-			meta.addContent(new Tag("description", description));
-
-		if (getDocumentation() != null)
-			meta.addAttribute("documentation", getDocumentation().toString());
-
-		if (getCopyright() != null)
-			meta.addContent(new Tag("copyright", getCopyright()));
-
-		if (getLicense() != null)
-			meta.addAttribute("license", getLicense().toString());
-
-		if (size > 0)
-			meta.addAttribute("size", String.valueOf(size));
-
-		for (Iterator i = categories.iterator(); i.hasNext(); ) {
-			String category = (String) i.next();
-			meta.addContent(new Tag("category", new String[] {"id",
-					category.toLowerCase()}));
-		}
-
-		for (Iterator i= capabilities.iterator(); i.hasNext(); ) {
-			CapabilityImpl capability = (CapabilityImpl) i.next();
-			Tag cap = capability.toXML();
-			meta.addContent(cap);
-		}
-		for ( Iterator i= requirements.iterator(); i.hasNext(); ) {
-			RequirementImpl requirement = (RequirementImpl) i.next();
-			Tag rq = requirement.toXML("require");
-			meta.addContent(rq);
-		}
-		for (  Iterator i= extensions.iterator(); i.hasNext(); ) {
-			RequirementImpl extend = (RequirementImpl) i.next();
-			Tag cap = extend.toXML("extend");
-			meta.addContent(cap);
-		}
-		return meta;
+		return toXML(this);
 	}
+
+public static Tag toXML(Resource resource) {
+	Tag meta = new Tag("resource");
+	meta.addAttribute("url", resource.getURI());
+	meta.addAttribute("name", resource.getName());
+	meta.addAttribute("version", resource.getVersion().toString());
+
+	String description = resource.getDescription();
+	if (description != null)
+		meta.addContent(new Tag("description", description));
+
+	if (resource.getDocumentation() != null)
+		meta.addAttribute("documentation", resource.getDocumentation()
+				.toString());
+
+	if (resource.getCopyright() != null)
+		meta.addContent(new Tag("copyright", resource.getCopyright()));
+
+	if (resource.getLicense() != null)
+		meta.addAttribute("license", resource.getLicense().toString());
+
+	if (resource.getSize() > 0)
+		meta.addAttribute("size", String.valueOf(resource.getSize()));
+
+	String[] categories = resource.getCategories();
+	for (int i = 0; i < categories.length; i++) {
+		String category = categories[i];
+		meta.addContent(new Tag("category", new String[] {"id",
+				category.toLowerCase()}));
+	}
+
+	Capability[] capabilities = resource.getCapabilities();
+	for (int i = 0; i < capabilities.length; i++) {
+		meta.addContent(CapabilityImpl.toXML(capabilities[i]));
+	}
+
+	Requirement[] requirements = resource.getRequirements();
+	for (int i = 0; i < requirements.length; i++) {
+		meta.addContent(RequirementImpl.toXML(requirements[i]));
+	}
+	Requirement[] exts = resource.getExtends();
+	for (int i = 0; i < exts.length; i++) {
+		Tag cap = RequirementImpl.toXML(exts[i]);
+		cap.rename("extend");
+		meta.addContent(cap);
+	}
+	return meta;
+}
 
 	public URI getURI() {
 		return url;
@@ -289,5 +295,9 @@ public class ResourceImpl implements Resource {
 		} catch( ClassCastException e ) {
 			return false;
 		}
+	}
+
+	public String[] getCategories() {
+		return (String[]) categories.toArray(new String[categories.size()]);
 	}
 }

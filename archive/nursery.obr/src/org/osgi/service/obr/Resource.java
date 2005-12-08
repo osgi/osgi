@@ -69,4 +69,5 @@ public interface Resource {
 	Requirement [] getRequests();
 	Requirement [] getExtends();
 	Capability [] getCapabilities();
+	String [] getCategories();
 }

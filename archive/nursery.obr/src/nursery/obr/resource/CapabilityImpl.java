@@ -51,8 +51,13 @@ public class CapabilityImpl implements Capability {
 	}
 
 	public Tag toXML() {
+		return toXML(this);
+	}
+	
+	public static Tag toXML(Capability capability) {
 		Tag tag = new Tag("capability");
-		tag.addAttribute("name", name);
+		tag.addAttribute("name", capability.getName());
+		Map properties = capability.getProperties();
 		for ( Iterator k= properties.keySet().iterator(); k.hasNext(); ) {
 			String key = (String) k.next();
 			List values = (List) properties.get(key);
