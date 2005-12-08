@@ -2,8 +2,8 @@ This license came from:
 http://www.w3.org/Consortium/Legal/copyright-software-19980720
 
 
-W3C® SOFTWARE NOTICE AND LICENSE
-Copyright © 1994-2001 World
+W3CÂ® SOFTWARE NOTICE AND LICENSE
+Copyright Â© 1994-2001 World
 Wide Web Consortium, <a href="http://www.w3.org/">World
 Wide Web Consortium</a>, (<a href=
 "http://www.lcs.mit.edu/">Massachusetts Institute of
@@ -18,7 +18,7 @@ following license. By obtaining, using and/or copying this work,
 you (the licensee) agree that you have read, understood, and will
 comply with the following terms and conditions:
 Permission to use, copy, modify, and distribute this software
-and its documentation, with or without modification,  for any
+and its documentation, with or without modification,Â  for any
 purpose and without fee or royalty is hereby granted, provided that
 you include the following on ALL copies of the software and
 documentation or portions thereof, including modifications, that
@@ -31,7 +31,7 @@ Any pre-existing intellectual property disclaimers, notices, or
 terms and conditions. If none exist, a short notice of the
 following form (hypertext is preferred, text is permitted) should
 be used within the body of any redistributed or derivative code:
-"Copyright © [$date-of-software] World Wide Web Consortium, (Massachusetts Institute of
+"Copyright Â© [$date-of-software] World Wide Web Consortium, (Massachusetts Institute of
 Technology, Institut National de
 Recherche en Informatique et en Automatique, Keio University). All Rights Reserved.
 http://www.w3.org/Consortium/Legal/"
