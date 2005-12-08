@@ -203,10 +203,9 @@ public interface HttpServletResponse extends ServletResponse {
      * presence of a header before setting its value.
      *
      * @param	name	the name of the header to set
-     * @param	value	the assigned date value
+     * @param	date	the assigned date value
      *
      * @see #containsHeader
-     * @see #addDateHeader
      */
 
     public void setDateHeader(String name, long date);
@@ -223,7 +222,6 @@ public interface HttpServletResponse extends ServletResponse {
      * @param	value	the header value
      *
      * @see #containsHeader
-     * @see #addHeader
      */
 
     public void setHeader(String name, String value);
@@ -239,7 +237,6 @@ public interface HttpServletResponse extends ServletResponse {
      * @param	value	the assigned integer value
      *
      * @see #containsHeader
-     * @see #addIntHeader
      */
 
     public void setIntHeader(String name, int value);
@@ -255,7 +252,7 @@ public interface HttpServletResponse extends ServletResponse {
      *
      * @param	sc	the status code
      *
-     * @see #sendError
+     * @see #sendError(int, String)
      */
 
     public void setStatus(int sc);

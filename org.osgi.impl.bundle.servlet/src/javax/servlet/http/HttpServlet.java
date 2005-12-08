@@ -780,7 +780,7 @@ public abstract class HttpServlet extends GenericServlet
      *			the servlet
      *
      *
-     * @param resp	the {@link HttpServletResponse} object that
+     * @param res	the {@link HttpServletResponse} object that
      *			contains the response the servlet returns
      *			to the client				
      *

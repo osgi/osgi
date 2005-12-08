@@ -20,8 +20,7 @@
 
 package javax.servlet;
 
-import java.io.IOException;
-import java.io.PrintWriter;
+import java.io.*;
 
 
 /**
@@ -39,7 +38,6 @@ import java.io.PrintWriter;
  *
  * <p>The charset for the MIME body response can be specified with 
  * {@link #setContentType}.  For example, "text/html; charset=Shift_JIS".
- * The charset can alternately be set using {@link #setLocale}.
  * If no charset is specified, ISO-8859-1 will be used.  
  * The <code>setContentType</code> or <code>setLocale</code> method 
  * must be called before <code>getWriter</code> for the charset to 
