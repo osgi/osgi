@@ -73,19 +73,26 @@ public class TestIMEI extends TestCase {
 	
 	public void testIMEIValidator() throws Exception {
 		try {
-			IMEICondition imei = (IMEICondition) IMEICondition.getCondition(bundle,new ConditionInfo("",new String[]{""}));
+			IMEICondition.getCondition(bundle,new ConditionInfo("",new String[]{""}));
 			fail();
 		} catch (IllegalArgumentException e) {}
 		try {
-			IMEICondition imei = (IMEICondition) IMEICondition.getCondition(bundle,new ConditionInfo("",new String[]{"12345678901234"}));
+			IMEICondition.getCondition(bundle,new ConditionInfo("",new String[]{"12345678901234"}));
 			fail();
 		} catch (IllegalArgumentException e) {}
 		try {
-			IMEICondition imei = (IMEICondition) IMEICondition.getCondition(bundle,new ConditionInfo("",new String[]{"1234567890123456"}));
+			IMEICondition.getCondition(bundle,new ConditionInfo("",new String[]{"1234567890123456"}));
 			fail();
 		} catch (IllegalArgumentException e) {}
 		try {
-			IMEICondition imei = (IMEICondition) IMEICondition.getCondition(bundle,new ConditionInfo("",new String[]{"12345678901234a"}));
+			IMEICondition.getCondition(bundle,new ConditionInfo("",new String[]{"12345678901234a"}));
+			fail();
+		} catch (IllegalArgumentException e) {}
+
+		IMEICondition.getCondition(bundle,new ConditionInfo("",new String[]{"01234567891234*"}));
+
+		try {
+			IMEICondition.getCondition(bundle,new ConditionInfo("",new String[]{"012345678901234*"}));
 			fail();
 		} catch (IllegalArgumentException e) {}
 	}

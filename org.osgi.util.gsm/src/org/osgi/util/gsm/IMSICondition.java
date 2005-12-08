@@ -54,11 +54,12 @@ public class IMSICondition {
 		if (bundle==null) throw new NullPointerException("bundle");
 		if (conditionInfo==null) throw new NullPointerException("conditionInfo");
 		String imsi = conditionInfo.getArgs()[0];
-		if (imsi.length()<15) {
-			if (!imsi.endsWith("*")) throw new IllegalArgumentException("not a valid imsi, and not a wildcard: "+imsi);
-			imsi = imsi.substring(0,imsi.length()-1);
-		}
 		if (imsi.length()>15) throw new IllegalArgumentException("imsi too long: "+imsi);
+		if (imsi.endsWith("*")) {
+			imsi = imsi.substring(0,imsi.length()-1);
+		} else {
+			if (imsi.length()!=15) throw new IllegalArgumentException("not a valid imei: "+imsi);
+		}
 		for(int i=0;i<imsi.length();i++) {
 			int c = imsi.charAt(i);
 			if (c<'0'||c>'9') throw new IllegalArgumentException("not a valid imei: "+imsi);

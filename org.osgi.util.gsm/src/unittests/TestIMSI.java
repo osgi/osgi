@@ -74,19 +74,24 @@ public class TestIMSI extends TestCase {
 	
 	public void testIMSIValidator() throws Exception {
 		try {
-			IMSICondition imsi = (IMSICondition) IMSICondition.getCondition(bundle,new ConditionInfo("",new String[]{""}));
+			IMSICondition.getCondition(bundle,new ConditionInfo("",new String[]{""}));
 			fail();
 		} catch (IllegalArgumentException e) {}
 		try {
-			IMSICondition imsi = (IMSICondition) IMSICondition.getCondition(bundle,new ConditionInfo("",new String[]{"12345678901234"}));
+			IMSICondition.getCondition(bundle,new ConditionInfo("",new String[]{"12345678901234"}));
 			fail();
 		} catch (IllegalArgumentException e) {}
 		try {
-			IMSICondition imsi = (IMSICondition) IMSICondition.getCondition(bundle,new ConditionInfo("",new String[]{"1234567890123456"}));
+			IMSICondition.getCondition(bundle,new ConditionInfo("",new String[]{"1234567890123456"}));
 			fail();
 		} catch (IllegalArgumentException e) {}
 		try {
-			IMSICondition imsi = (IMSICondition) IMSICondition.getCondition(bundle,new ConditionInfo("",new String[]{"12345678901234a"}));
+			IMSICondition.getCondition(bundle,new ConditionInfo("",new String[]{"12345678901234a"}));
+			fail();
+		} catch (IllegalArgumentException e) {}
+		IMSICondition.getCondition(bundle,new ConditionInfo("",new String[]{"12345678901234*"}));
+		try {
+			IMSICondition.getCondition(bundle,new ConditionInfo("",new String[]{"123456789012345*"}));
 			fail();
 		} catch (IllegalArgumentException e) {}
 	}

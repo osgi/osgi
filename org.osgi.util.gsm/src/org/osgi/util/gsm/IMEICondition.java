@@ -55,11 +55,12 @@ public class IMEICondition {
 	public static Condition getCondition(Bundle bundle, ConditionInfo conditionInfo) {
 		if (bundle==null) throw new NullPointerException("bundle");
 		String imei = conditionInfo.getArgs()[0];
-		if (imei.length()<15) {
-			if (!imei.endsWith("*")) throw new IllegalArgumentException("not a valid imei, and not a wildcard: "+imei);
-			imei = imei.substring(0,imei.length()-1);
-		}
 		if (imei.length()>15) throw new IllegalArgumentException("imei too long: "+imei);
+		if (imei.endsWith("*")) {
+			imei = imei.substring(0,imei.length()-1);
+		} else {
+			if (imei.length()!=15) throw new IllegalArgumentException("not a valid imei: "+imei);
+		}
 		for(int i=0;i<imei.length();i++) {
 			int c = imei.charAt(i);
 			if (c<'0'||c>'9') throw new IllegalArgumentException("not a valid imei: "+imei);
