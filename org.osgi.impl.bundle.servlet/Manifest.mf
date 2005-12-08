@@ -9,4 +9,3 @@ Bundle-Copyright: Copyright 1999,2004 The Apache Software Foundation.
 $(IMPORT-PACKAGE)
 $(EXPORT-PACKAGE)
 CVS-Header: $Header$
-Bundle-RequiredExecutionEnvironment: CDC-1.0/Foundation-1.0
