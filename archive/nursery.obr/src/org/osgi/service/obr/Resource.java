@@ -14,6 +14,15 @@ import org.osgi.framework.Version;
  * @version $Revision$
  */
 public interface Resource {
+	
+	/**
+	 * A locally generated unique id for one Repository Admin service. This id
+	 * is not persistent.
+	 * 
+	 * @return
+	 */
+	String getLocalId();
+	
 	/**
 	 * Answer the description of the resource
 	 */

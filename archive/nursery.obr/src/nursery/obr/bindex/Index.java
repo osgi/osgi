@@ -116,6 +116,7 @@ public class Index {
 			try {
 				String base = resource.getName() + "-" + resource.getVersion();
 				String path = base + ".jar";
+				path = path.replaceAll("[^\\w0-9_.-]","_");
 				addToZip(collected, path, resource.getURI().toURL()
 						.openStream());
 				resource.setURI(new URI(path));

@@ -65,7 +65,8 @@ public class BundleInfo {
 			// set when no license is included.
 			String license = translated("Bundle-License)");
 			if (license != null)
-				resource.setLicense(new URL(location, license).toURI());
+				resource.setLicense(new URI(new URL(location, license)
+						.toString()));
 			else if (this.license != null)
 				resource.setLicense(new URI(this.license));
 
@@ -79,12 +80,13 @@ public class BundleInfo {
 
 			String documentation = translated("Bundle-DocURL");
 			if (documentation != null)
-				resource.setDocumentation(new URL(location, documentation)
-						.toURI());
+				resource.setDocumentation(new URI(new URL(location,
+						documentation).toString()));
 
 			String source = manifest.getValue("Bundle-Source");
 			if (source != null)
-				resource.setSource(new URL(location, source).toURI());
+				resource
+						.setSource(new URI(new URL(location, source).toString()));
 
 			long size = zipFile.length();
 			if (size > 0) {
@@ -94,6 +96,10 @@ public class BundleInfo {
 				String category = manifest.getCategories()[i];
 				resource.addCategory(category);
 			}
+
+			doImportExportServices(resource);
+
+			doDeclarativeServices(resource);
 
 			doFragment(resource);
 			doRequires(resource);
@@ -115,6 +121,50 @@ public class BundleInfo {
 				zip.close();
 			}
 			catch (Exception e) {
+			}
+		}
+	}
+
+	private void doDeclarativeServices(ResourceImpl resource) throws Exception {
+		String serviceComponent = manifest.getValue("service-component");
+		if (serviceComponent == null)
+			return;
+
+		String parts[] = serviceComponent.split("[ ,\t]+");
+		for (int i = 0; i < parts.length; i++) {
+			ZipEntry entry = zip.getEntry(parts[i]);
+			if (entry == null) {
+				System.err.println("Bad Service-Component header: "
+						+ serviceComponent + ", no such file " + parts[i]);
+			}
+			InputStream in = zip.getInputStream(entry);
+			// TODO parse declarative services files.
+			in.close();
+		}
+	}
+
+	private void doImportExportServices(ResourceImpl resource)
+			throws IOException {
+		String importServices = manifest.getValue("import-service");
+		if (importServices != null) {
+			List entries = manifest.getEntries(importServices);
+			for (Iterator i = entries.iterator(); i.hasNext();) {
+				Entry entry = (Entry) i.next();
+				RequirementImpl ri = new RequirementImpl("service");
+				ri.setFilter(createFilter("service", entry));
+				ri.setComment("Import service " + entry.getName());
+				ri.setCardinality(Requirement.MULTIPLE);
+				resource.addRequirement(ri);
+			}
+		}
+
+		String exportServices = manifest.getValue("export-service");
+		if (exportServices != null) {
+			List entries = manifest.getEntries(exportServices);
+			for (Iterator i = entries.iterator(); i.hasNext();) {
+				Entry entry = (Entry) i.next();
+				CapabilityImpl cap = createCapability("service", entry);
+				resource.addCapability(cap);
 			}
 		}
 	}
@@ -214,23 +264,31 @@ public class BundleInfo {
 		for (Iterator i = packages.iterator(); i.hasNext();) {
 			Entry pack = (Entry) i.next();
 			RequirementImpl requirement = new RequirementImpl("package");
-			StringBuffer filter = new StringBuffer();
-			filter.append("(&(package=");
-			filter.append(pack.getName());
-			filter.append(")");
-			if (pack.getVersion() != null) {
-				filter.append("(version>=");
-				filter.append(pack.getVersion());
-				filter.append(")");
-			}
-			Map attributes = pack.getAttributes();
-			doAttributes(filter, attributes);
-			filter.append(")");
-			requirement.setFilter(filter.toString());
+
+			String filter = createFilter("package", pack);
+			requirement.setFilter(filter);
 			requirement.setComment("Import package " + pack);
 			requirements.add(requirement);
 		}
 		return requirements;
+	}
+
+	private String createFilter(String name, Entry pack) {
+		StringBuffer filter = new StringBuffer();
+		filter.append("(&(");
+		filter.append(name);
+		filter.append("=");
+		filter.append(pack.getName());
+		filter.append(")");
+		if (pack.getVersion() != null) {
+			filter.append("(version>=");
+			filter.append(pack.getVersion());
+			filter.append(")");
+		}
+		Map attributes = pack.getAttributes();
+		doAttributes(filter, attributes);
+		filter.append(")");
+		return filter.toString();
 	}
 
 	private void doAttributes(StringBuffer filter, Map attributes) {
@@ -272,33 +330,38 @@ public class BundleInfo {
 		if (packages != null)
 			for (Iterator i = packages.iterator(); i.hasNext();) {
 				Entry pack = (Entry) i.next();
-				CapabilityImpl capability = new CapabilityImpl("package");
+				CapabilityImpl capability = createCapability("package", pack);
 				capabilities.add(capability);
-				capability.addProperty("package", pack.getName());
-				capability.addProperty("version", pack.getVersion());
-				Map attributes = pack.getAttributes();
-				if (attributes != null)
-					for (Iterator at = attributes.keySet().iterator(); at
-							.hasNext();) {
-						String key = (String) at.next();
-						if (key.equalsIgnoreCase("specification-version")
-								|| key.equalsIgnoreCase("version"))
-							continue;
-						else {
-							Object value = attributes.get(key);
-							capability.addProperty(key, value);
-						}
-					}
 			}
 		return capabilities;
+	}
+
+	private CapabilityImpl createCapability(String name, Entry pack) {
+		CapabilityImpl capability = new CapabilityImpl(name);
+		capability.addProperty(name, pack.getName());
+		capability.addProperty("version", pack.getVersion());
+		Map attributes = pack.getAttributes();
+		if (attributes != null)
+			for (Iterator at = attributes.keySet().iterator(); at.hasNext();) {
+				String key = (String) at.next();
+				if (key.equalsIgnoreCase("specification-version")
+						|| key.equalsIgnoreCase("version"))
+					continue;
+				else {
+					Object value = attributes.get(key);
+					capability.addProperty(key, value);
+				}
+			}
+		return capability;
 	}
 
 	public String translate(String s) {
 		if (s == null)
 			return null;
 
-		if (!s.startsWith("%"))
+		if (!s.startsWith("%")) {
 			return s;
+		}
 
 		if (localization == null)
 			try {
@@ -315,6 +378,7 @@ public class BundleInfo {
 			catch (IOException e) {
 				e.printStackTrace();
 			}
-		return localization.getProperty(s, s.substring(1));
+		s = s.substring(1);
+		return localization.getProperty(s, s);
 	}
 }

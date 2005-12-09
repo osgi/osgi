@@ -86,8 +86,10 @@ public class ResolverImpl implements Resolver {
 				RequirementImpl requirementOnHost = (RequirementImpl) rq.next();
 				// Extends are an OR, any one that matches selects
 				// the host
-				if (canBeSatisfiedBy(installSet, requirementOnHost)) {
+				Resource resource = canBeSatisfiedBy(installSet, requirementOnHost); 
+				if (resource!=null) {
 					optionalResources.add(extension);
+					// TODO not sure if this is resource or extension?
 					addCause(extension, requirementOnHost);
 					continue outer;
 				}
@@ -109,13 +111,13 @@ public class ResolverImpl implements Resolver {
 	 * @param rq
 	 * @return
 	 */
-	boolean canBeSatisfiedBy(Collection result, RequirementImpl rq) {
+	ResourceImpl canBeSatisfiedBy(Collection result, RequirementImpl rq) {
 		for (Iterator r = result.iterator(); r.hasNext();) {
 			ResourceImpl resource = (ResourceImpl) r.next();
 			if (resource.isSatisfiedBy(rq))
-				return true;
+				return resource;
 		}
-		return false;
+		return null;
 	}
 
 	/**
@@ -142,8 +144,10 @@ public class ResolverImpl implements Resolver {
 			// If the requirements can satisfy the requirements, do not bother.
 			// ### should I also check the resources?
 
-			if (canBeSatisfiedBy(requiredResources, requirement)) {
+			ResourceImpl satisficant = canBeSatisfiedBy(requiredResources, requirement);
+			if (satisficant!=null) {
 				// System.out.println("Can be satisfied locally" );
+				addCause(satisficant, requirement);
 			}
 			else {
 				//
@@ -151,7 +155,7 @@ public class ResolverImpl implements Resolver {
 				// capabilities.
 				//
 				Set select = select(requirement);
-				if (select.isEmpty()) {
+				if (select.isEmpty() && requirement.getCardinality() == Requirement.UNARY) {
 					// No resource found
 					unsatisfiedRequirements.add(requirement);
 					// System.out.println("Missing in repositories" );
@@ -173,10 +177,30 @@ public class ResolverImpl implements Resolver {
 							// Hmm, could optimize with a smarter
 							// strategy here ... Just get the first one.
 							// ### invent an optimizing strategy
-							ResourceImpl dependent = (ResourceImpl) select
-									.iterator().next();
-							addCause(dependent, requirement);
-							addDependent(dependent);
+							// Lets try the one with the least nr of
+							// required resources, or if equal, with 
+							// the max nr of capabilities.
+							ResourceImpl selected = null;
+							for (Iterator i = select.iterator(); i.hasNext();) {
+								ResourceImpl dependent = (ResourceImpl) i
+										.next();
+								if (selected == null )
+									selected = dependent;
+								
+								if ( selected.getRequirementList().size() 
+										== dependent.getRequirementList().size()) {
+									if (selected.getCapabilityList().size() 
+											< dependent.getCapabilityList().size() )
+										selected = dependent;
+								} else {
+									if ( selected.getRequirementList().size() > dependent.getRequirementList().size())
+										selected = dependent;
+								}
+
+							}
+
+							addCause(selected, requirement);
+							addDependent(selected);
 							break;
 					}
 				}
