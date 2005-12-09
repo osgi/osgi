@@ -690,7 +690,7 @@ public interface Bundle {
 
 	/**
 	 * Returns this bundle's Manifest headers and values localized to the
-	 * specifed locale.
+	 * specified locale.
 	 * 
 	 * <p>
 	 * This method performs the same function as
