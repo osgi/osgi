@@ -1063,18 +1063,16 @@ public class DmtSessionImpl implements DmtSession {
 		// DMTND 7.7.1.3: if parent does not have Replace permissions, give Add, 
         // Delete and Replace permissions to child.  (This rule cannot be 
         // applied to Java permissions, only to ACLs.)
-        if(principal != null) {
-            try {
-                checkNodePermission(parent, Acl.REPLACE);
-            } catch (DmtException e) {
-                if (e.getCode() != DmtException.PERMISSION_DENIED)
-                    throw e; // should not happen
-                Acl parentAcl = getEffectiveNodeAclNoCheck(parent);
-                Acl newAcl = parentAcl.addPermission(principal, Acl.ADD
-                        | Acl.DELETE | Acl.REPLACE);
-				acls.put(node, newAcl);
-			}
-		}
+	    try {
+	        checkNodePermission(parent, Acl.REPLACE);
+	    } catch (DmtException e) {
+	        if (e.getCode() != DmtException.PERMISSION_DENIED)
+	            throw e; // should not happen
+	        Acl parentAcl = getEffectiveNodeAclNoCheck(parent);
+	        Acl newAcl = parentAcl.addPermission(principal, Acl.ADD
+	                | Acl.DELETE | Acl.REPLACE);
+	        acls.put(node, newAcl);
+	    }
 	}
 
     private void checkOperation(Node node, int actions, int capability)
