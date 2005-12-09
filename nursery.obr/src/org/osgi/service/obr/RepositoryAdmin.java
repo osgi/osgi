@@ -87,8 +87,9 @@ public interface RepositoryAdmin {
 	 * @param resource
 	 * @return
 	 */
-	Resolver resolver(Resource resource);
+	Resolver resolver();
 
+	
 	/**
 	 * Add a new repository to the federation. 
 	 * 
@@ -107,5 +108,7 @@ public interface RepositoryAdmin {
 	 * @return
 	 */
 	Repository[] listRepositories();
+
+	Resource getResourceById(String string);
 
 }

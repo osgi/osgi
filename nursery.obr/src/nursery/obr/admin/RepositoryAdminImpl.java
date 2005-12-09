@@ -80,14 +80,17 @@ public class RepositoryAdminImpl implements RepositoryAdmin {
 	 * @see org.osgi.service.obr.RepositoryAdmin#discoverResources(java.util.List)
 	 */
 	public Resource[] discoverResources(String filterExpr) {
-		Filter f = new Filter(filterExpr);
+		Filter	f = null;
+		if ( filterExpr != null )
+			f = new Filter(filterExpr);
+		
 		List result = new ArrayList();
 		for (Iterator i = repositories.values().iterator(); i.hasNext();) {
 			RepositoryImpl repository = (RepositoryImpl) i.next();
 			for (Iterator r = repository.getResourceList().iterator(); r
 					.hasNext();) {
 				ResourceImpl resource = (ResourceImpl) r.next();
-				if (f.match(resource.asMap()))
+				if (f == null || f.match(resource.asMap()))
 					result.add(resource);
 			}
 		}
@@ -138,9 +141,8 @@ public class RepositoryAdminImpl implements RepositoryAdmin {
 	 * @return
 	 * @see org.osgi.service.obr.RepositoryAdmin#resolver(org.osgi.service.obr.Resource)
 	 */
-	public Resolver resolver(Resource resource) {
+	public Resolver resolver() {
 		Resolver resolver = new ResolverImpl(this);
-		resolver.add(resource);
 		return resolver;
 	}
 
@@ -156,5 +158,15 @@ public class RepositoryAdminImpl implements RepositoryAdmin {
 			}
 		}
 		return extenders;
+	}
+	
+	public Resource getResourceById(String id) {
+		for (Iterator i = repositories.values().iterator(); i.hasNext();) {
+			RepositoryImpl	repository = (RepositoryImpl) i.next();
+			Resource resource = repository.getResourceById(id);
+			if ( resource != null )
+				return resource;
+		}
+		return null;
 	}
 }

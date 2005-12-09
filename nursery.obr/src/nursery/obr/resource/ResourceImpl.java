@@ -10,20 +10,26 @@ import org.xmlpull.v1.XmlPullParser;
 import aQute.lib.tag.Tag;
 
 public class ResourceImpl implements Resource {
-	List	capabilities	= new ArrayList();
-	List	requirements	= new ArrayList();
-	List	requests		= new ArrayList();
-	List	extensions		= new ArrayList();
-	URI						license;
-	URI						url;
-	URI						documentation;
-	String					name;
-	Version					version;
-	String					description;
-	List			categories		= new ArrayList();
-	String					copyright;
-	URI						source;
-	long					size			= -1;
+	List		capabilities	= new ArrayList();
+	List		requirements	= new ArrayList();
+	List		requests		= new ArrayList();
+	List		extensions		= new ArrayList();
+	URI			license;
+	URI			url;
+	URI			documentation;
+	String		name;
+	Version		version;
+	String		description;
+	List		categories		= new ArrayList();
+	String		copyright;
+	URI			source;
+	long		size			= -1;
+	String			localId;
+	static int	id=1;
+
+	{
+		localId = Integer.toString(id++);
+	}
 
 	public ResourceImpl(String name, Version version) {
 		this.version = version;
@@ -117,11 +123,11 @@ public class ResourceImpl implements Resource {
 		this.description = description;
 	}
 
-
 	public Capability[] getCapabilities() {
-		return (Capability[]) capabilities.toArray(new Capability[capabilities.size()]);
+		return (Capability[]) capabilities.toArray(new Capability[capabilities
+				.size()]);
 	}
-	
+
 	public URI getLicense() {
 		return license;
 	}
@@ -131,68 +137,74 @@ public class ResourceImpl implements Resource {
 	}
 
 	public Requirement[] getRequirements() {
-		return (Requirement[]) requirements.toArray(new Requirement[requirements.size()]);
+		return (Requirement[]) requirements
+				.toArray(new Requirement[requirements.size()]);
 	}
-	
+
 	public Requirement[] getRequests() {
-		return (Requirement[]) requests.toArray(new Requirement[requests.size()]);
+		return (Requirement[]) requests
+				.toArray(new Requirement[requests.size()]);
 	}
 
 	public Requirement[] getExtends() {
-		return (Requirement[]) extensions.toArray(new Requirement[extensions.size()]);
+		return (Requirement[]) extensions.toArray(new Requirement[extensions
+				.size()]);
 	}
 
 	public Tag toXML() {
 		return toXML(this);
 	}
+	
+	public String getLocalId() { return localId; }
 
-public static Tag toXML(Resource resource) {
-	Tag meta = new Tag("resource");
-	meta.addAttribute("url", resource.getURI());
-	meta.addAttribute("name", resource.getName());
-	meta.addAttribute("version", resource.getVersion().toString());
+	public static Tag toXML(Resource resource) {
+		Tag meta = new Tag("resource");
+		meta.addAttribute("id", resource.getLocalId());
+		meta.addAttribute("url", resource.getURI());
+		meta.addAttribute("name", resource.getName());
+		meta.addAttribute("version", resource.getVersion().toString());
 
-	String description = resource.getDescription();
-	if (description != null)
-		meta.addContent(new Tag("description", description));
+		String description = resource.getDescription();
+		if (description != null)
+			meta.addContent(new Tag("description", description));
 
-	if (resource.getDocumentation() != null)
-		meta.addAttribute("documentation", resource.getDocumentation()
-				.toString());
+		if (resource.getDocumentation() != null)
+			meta.addAttribute("documentation", resource.getDocumentation()
+					.toString());
 
-	if (resource.getCopyright() != null)
-		meta.addContent(new Tag("copyright", resource.getCopyright()));
+		if (resource.getCopyright() != null)
+			meta.addContent(new Tag("copyright", resource.getCopyright()));
 
-	if (resource.getLicense() != null)
-		meta.addAttribute("license", resource.getLicense().toString());
+		if (resource.getLicense() != null)
+			meta.addAttribute("license", resource.getLicense().toString());
 
-	if (resource.getSize() > 0)
-		meta.addAttribute("size", String.valueOf(resource.getSize()));
+		if (resource.getSize() > 0)
+			meta.addAttribute("size", String.valueOf(resource.getSize()));
 
-	String[] categories = resource.getCategories();
-	for (int i = 0; i < categories.length; i++) {
-		String category = categories[i];
-		meta.addContent(new Tag("category", new String[] {"id",
-				category.toLowerCase()}));
+		String[] categories = resource.getCategories();
+		for (int i = 0; i < categories.length; i++) {
+			String category = categories[i];
+			meta.addContent(new Tag("category", new String[] {"id",
+					category.toLowerCase()}));
+		}
+
+		Capability[] capabilities = resource.getCapabilities();
+		for (int i = 0; i < capabilities.length; i++) {
+			meta.addContent(CapabilityImpl.toXML(capabilities[i]));
+		}
+
+		Requirement[] requirements = resource.getRequirements();
+		for (int i = 0; i < requirements.length; i++) {
+			meta.addContent(RequirementImpl.toXML(requirements[i]));
+		}
+		Requirement[] exts = resource.getExtends();
+		for (int i = 0; i < exts.length; i++) {
+			Tag cap = RequirementImpl.toXML(exts[i]);
+			cap.rename("extend");
+			meta.addContent(cap);
+		}
+		return meta;
 	}
-
-	Capability[] capabilities = resource.getCapabilities();
-	for (int i = 0; i < capabilities.length; i++) {
-		meta.addContent(CapabilityImpl.toXML(capabilities[i]));
-	}
-
-	Requirement[] requirements = resource.getRequirements();
-	for (int i = 0; i < requirements.length; i++) {
-		meta.addContent(RequirementImpl.toXML(requirements[i]));
-	}
-	Requirement[] exts = resource.getExtends();
-	for (int i = 0; i < exts.length; i++) {
-		Tag cap = RequirementImpl.toXML(exts[i]);
-		cap.rename("extend");
-		meta.addContent(cap);
-	}
-	return meta;
-}
 
 	public URI getURI() {
 		return url;
@@ -233,7 +245,7 @@ public static Tag toXML(Resource resource) {
 	}
 
 	public boolean isSatisfiedBy(RequirementImpl requirement) {
-		for ( Iterator i= capabilities.iterator(); i.hasNext();) {
+		for (Iterator i = capabilities.iterator(); i.hasNext();) {
 			CapabilityImpl capability = (CapabilityImpl) i.next();
 			if (requirement.isSatisfied(capability))
 				return true;
@@ -287,12 +299,16 @@ public static Tag toXML(Resource resource) {
 		return capabilities;
 	}
 
-	public int hashCode() { return name.hashCode() ^ version.hashCode(); }
-	public boolean equals( Object o ) {
+	public int hashCode() {
+		return name.hashCode() ^ version.hashCode();
+	}
+
+	public boolean equals(Object o) {
 		try {
 			ResourceImpl other = (ResourceImpl) o;
 			return name.equals(other.name) && version.equals(other.version);
-		} catch( ClassCastException e ) {
+		}
+		catch (ClassCastException e) {
 			return false;
 		}
 	}

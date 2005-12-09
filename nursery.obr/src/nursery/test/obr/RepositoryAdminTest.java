@@ -77,7 +77,8 @@ public class RepositoryAdminTest extends TestCase {
 		assertTrue("Must get at least one", resources != null
 				&& resources.length > 0);
 		Resource http = resources[0];
-		Resolver resolver = admin.resolver(http);
+		Resolver resolver = admin.resolver();
+		resolver.add(http);
 		assertTrue("Must resolve, all is in there", resolver.resolve());
 		System.out.println("All Must be Resolved");
 		print(resolver);
@@ -87,7 +88,8 @@ public class RepositoryAdminTest extends TestCase {
 		assertTrue("Must get at least one", resources != null
 				&& resources.length > 0);
 		http = resources[0];
-		resolver = adminSingle.resolver(http);
+		resolver = adminSingle.resolver();
+		resolver.add(http);
 		assertFalse("Must not resolve, only http is in there", resolver
 				.resolve());
 		System.out.println("Missing");
