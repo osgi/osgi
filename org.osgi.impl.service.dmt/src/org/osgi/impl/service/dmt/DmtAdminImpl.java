@@ -44,9 +44,9 @@ public class DmtAdminImpl implements DmtAdmin {
     public static final long OPEN_TIMEOUT = 10000;
     
     // session idle timeout: session is invalidated after 5 minutes inactivity
-    public static final long IDLE_TIMEOUT = 300000;
+    //public static final long IDLE_TIMEOUT = 300000;
     // half-minute idle timeout for demonstration purposes 
-    //public static final long IDLE_TIMEOUT = 30000;
+    public static final long IDLE_TIMEOUT = 30000;
     
     // contains the maximum length of node names or 0 if there is no limit
     static final int segmentLengthLimit;
@@ -255,7 +255,7 @@ public class DmtAdminImpl implements DmtAdmin {
                         "route alert without principal name.");
             throw new DmtException((String) null, DmtException.ALERT_NOT_ROUTED,
                     "Cannot find remote adapter that can send the alert to " +
-                    "server '" + principal + "'.");
+                    "principal '" + principal + "'.");
         }
         
         try {
@@ -264,7 +264,7 @@ public class DmtAdminImpl implements DmtAdmin {
         catch (Exception e) {
             String message = "Error sending remote alert";
             if (principal != null)
-                message = message + " to server '" + principal + "'";
+                message = message + " to principal '" + principal + "'";
             throw new DmtException((String) null, DmtException.REMOTE_ERROR, 
                     message + ".", e);
         }
@@ -304,13 +304,13 @@ public class DmtAdminImpl implements DmtAdmin {
     
     // precondition: parameters are not null
     private boolean acceptsServerId(ServiceReference ref, String principal) {
-        Object param = ref.getProperty("servers");
+        Object param = ref.getProperty("principals");
         if(param == null || !(param instanceof String[]))
             return false;
 
-        String[] servers = (String[]) param;
-        for (int i = 0; i < servers.length; i++)
-            if(principal.equals(servers[i]))
+        String[] principals = (String[]) param;
+        for (int i = 0; i < principals.length; i++)
+            if(principal.equals(principals[i]))
                 return true;
         
         return false;
