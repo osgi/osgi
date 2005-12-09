@@ -216,12 +216,14 @@ public class DmtException extends Exception {
      * <code>null</code> or syntactically invalid. This covers the following
      * cases:
      * <ul>
-     * <li>the URI or node name is an empty string
      * <li>the URI or node name ends with the '\' or '/' character
+     * <li>the URI is an empty string (only invalid if the method does not 
+     * accept relative URIs)
      * <li>the URI contains the segment &quot;<code>.</code>&quot; at a position
      * other than the beginning of the URI
      * <li>the node name is &quot;<code>..</code>&quot; or the URI contains such
      * a segment
+     * <li>the node name is an empty string or the URI contains an empty segment
      * <li>the node name contains an unescaped '/' character
      * </ul>
      * <p>

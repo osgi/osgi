@@ -79,8 +79,8 @@ public interface DmtAdmin {
      *         <li><code>NODE_NOT_FOUND</code> if <code>subtreeUri</code>
      *         specifies a non-existing node
      *         <li><code>FEATURE_NOT_SUPPORTED</code> if atomic sessions are
-     *         not supported and <code>lockMode</code> requests an atomic 
-     *         session
+     *         not supported by the implementation and <code>lockMode</code> 
+     *         requests an atomic session
      *         <li><code>TIMEOUT</code> if the operation timed out because of
      *         another ongoing session
      *         <li><code>COMMAND_FAILED</code> if <code>lockMode</code> is
@@ -120,8 +120,8 @@ public interface DmtAdmin {
      *         <li><code>NODE_NOT_FOUND</code> if <code>subtreeUri</code>
      *         specifies a non-existing node
      *         <li><code>FEATURE_NOT_SUPPORTED</code> if atomic sessions are
-     *         not supported and <code>lockMode</code> requests an atomic 
-     *         session
+     *         not supported by the implementation and <code>lockMode</code> 
+     *         requests an atomic session
      *         <li><code>TIMEOUT</code> if the operation timed out because of
      *         another ongoing session
      *         <li><code>COMMAND_FAILED</code> if <code>lockMode</code> is
