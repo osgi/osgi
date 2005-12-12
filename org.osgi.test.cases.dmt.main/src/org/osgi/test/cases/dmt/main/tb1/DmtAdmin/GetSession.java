@@ -49,7 +49,6 @@ import org.osgi.test.cases.dmt.main.tbc.DmtConstants;
 import org.osgi.test.cases.dmt.main.tbc.DmtTestControl;
 import org.osgi.test.cases.dmt.main.tbc.TestInterface;
 import org.osgi.test.cases.dmt.main.tbc.Plugin.ExecPlugin.TestExecPluginActivator;
-import org.osgi.test.cases.dmt.main.tbc.Plugin.ReadOnly.TestReadOnlyPluginActivator;
 
 /**
  * @author Andre Assad
@@ -90,9 +89,6 @@ public class GetSession implements TestInterface {
 		testGetSession022();
 		testGetSession023();
 		testGetSession024();
-		testGetSession025();
-		testGetSession026();
-
 	}
 
     private void prepare() {
@@ -724,57 +720,6 @@ public class GetSession implements TestInterface {
 		} catch (Exception e) {
 			tbc.fail("Unexpected Exception: " + e.getClass().getName()
 				+ " [Message: " + e.getMessage() + "]");
-		} finally {
-			tbc.closeSession(session);
-		}
-	}
-	/**
-	 * This method asserts that DmtException.FEATURE_NOT_SUPPORTED is thrown 
-	 * if atomic sessions are not supported and lockMode requests an atomic session 
-	 * 
-	 * @spec DmtAdmin.getSession(String,int)
-	 */
-	private void testGetSession025() {
-		DmtSession session = null;
-		try {
-			tbc.log("#testGetSession025");
-			
-			session = tbc.getDmtAdmin().getSession(TestReadOnlyPluginActivator.ROOT,
-					DmtSession.LOCK_TYPE_ATOMIC);
-			tbc.failException("#", DmtException.class);
-		} catch (DmtException e) {
-			tbc.assertEquals(
-					"Asserting if the exception's code is FEATURE_NOT_SUPPORTED.",
-					DmtException.FEATURE_NOT_SUPPORTED, e.getCode());
-		} catch (Exception e) {
-			tbc.fail("Expected " + DmtException.class.getName() + " but was "
-					+ e.getClass().getName());
-		} finally {
-			tbc.closeSession(session);
-		}
-	}
-	
-	/**
-	 * This method asserts that DmtException.FEATURE_NOT_SUPPORTED is thrown 
-	 * if atomic sessions are not supported and lockMode requests an atomic session 
-	 * 
-	 * @spec DmtAdmin.getSession(String,String,int)
-	 */
-	private void testGetSession026() {
-		DmtSession session = null;
-		try {
-			tbc.log("#testGetSession026");
-			
-			session = tbc.getDmtAdmin().getSession(DmtConstants.PRINCIPAL,TestReadOnlyPluginActivator.ROOT,
-					DmtSession.LOCK_TYPE_ATOMIC);
-			tbc.failException("#", DmtException.class);
-		} catch (DmtException e) {
-			tbc.assertEquals(
-					"Asserting if the exception's code is FEATURE_NOT_SUPPORTED.",
-					DmtException.FEATURE_NOT_SUPPORTED, e.getCode());
-		} catch (Exception e) {
-			tbc.fail("Expected " + DmtException.class.getName() + " but was "
-					+ e.getClass().getName());
 		} finally {
 			tbc.closeSession(session);
 		}
