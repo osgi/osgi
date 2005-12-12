@@ -133,7 +133,7 @@ public class GetNodeSize implements TestInterface {
 					+ " [Message: " + e.getMessage() + "]");
 		} finally {
             tbc.setPermissions(new PermissionInfo(DmtPermission.class.getName(), DmtConstants.ALL_NODES,DmtConstants.ALL_ACTIONS));
-            tbc.cleanUp(session,TestExecPluginActivator.LEAF_NODE);
+            tbc.cleanUp(session,TestExecPluginActivator.ROOT);
             
 		}
 

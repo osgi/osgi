@@ -50,6 +50,7 @@
 package org.osgi.test.cases.dmt.main.tbc;
 import java.security.MessageDigest;
 import java.util.PropertyPermission;
+
 import org.osgi.framework.AdminPermission;
 import org.osgi.framework.PackagePermission;
 import org.osgi.framework.ServicePermission;
@@ -80,6 +81,7 @@ import org.osgi.test.cases.dmt.main.tbc.DmtData.TestDmtDataExceptions;
 import org.osgi.test.cases.dmt.main.tbc.DmtException.DmtExceptionConstants;
 import org.osgi.test.cases.dmt.main.tbc.DmtException.PrintStackTrace;
 import org.osgi.test.cases.dmt.main.tbc.DmtPrincipalPermission.DmtPrincipalPermission;
+import org.osgi.test.cases.dmt.main.tbc.Plugin.ExecPlugin.TestExecPlugin;
 import org.osgi.test.cases.dmt.main.tbc.Plugin.ExecPlugin.TestExecPluginActivator;
 import org.osgi.test.cases.dmt.main.tbc.Plugin.NonAtomic.TestNonAtomicPluginActivator;
 import org.osgi.test.cases.dmt.main.tbc.Plugin.ReadOnly.TestReadOnlyPluginActivator;
@@ -585,9 +587,12 @@ public class DmtTestControl extends DefaultTestBundleControl {
 		DmtSession session = null;
 		try {
 			session = getDmtAdmin().getSession(".",DmtSession.LOCK_TYPE_EXCLUSIVE);
+			//TODO Remove
+			TestExecPlugin.setAllUriIsExistent(true);
 			if (session.isNodeUri(nodeUri)) {
 			    session.setNodeAcl(nodeUri,null);
 			}
+			TestExecPlugin.setAllUriIsExistent(false);
 		} catch (Exception e) {
 			log("#Exception cleaning the acl from "+ nodeUri +" : "+e.getClass().getName() + "Message: [" +e.getMessage() +"]");
 		} finally {
@@ -704,4 +709,5 @@ public class DmtTestControl extends DefaultTestBundleControl {
         }
     
     }
+    
 }
