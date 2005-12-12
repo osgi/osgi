@@ -353,7 +353,7 @@ public class AclConstraints {
             TestExecPlugin.setAllUriIsExistent(true);
 
             tbc.assertTrue("Asserts that the copied nodes inherit the access rights from the parent of the destination node.",
-                aclParent.equals(session.getNodeAcl(TestExecPluginActivator.INEXISTENT_NODE)));
+                aclParent.equals(session.getEffectiveNodeAcl(TestExecPluginActivator.INEXISTENT_NODE)));
             
         } catch (Exception e) {
             tbc.fail("Unexpected Exception: " + e.getClass().getName()
