@@ -366,7 +366,11 @@ public class PermissionAdminPlugin extends AbstractPolicyPlugin {
 	public void createLeafNode(String path[], DmtData value, String mimeType) throws DmtException {
 		switchToWriteMode();
 		// only one leaf node can be created: Default
-		defaultPermissions = stringToPermissionInfos(value.getString());
+		if (value==null) {
+			defaultPermissions=new PermissionInfo[0];
+		} else {
+			defaultPermissions = stringToPermissionInfos(value.getString());
+		}
 	}
 	
 }
