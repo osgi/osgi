@@ -213,7 +213,6 @@ public class TestDmtDataExceptions {
 					"120000Z0", //More than 7 characters
 					"120000z", // the 7th character is not 'Z'
 					"12000Z", // A character is not expected within the time
-					"240000", // 24th hour is invalid, it should be 00
 					"126000", // 60th minute is invalid
 					"120060", // 60th second is invalid
 			};
@@ -242,8 +241,10 @@ public class TestDmtDataExceptions {
 			String[] validTimes =  new String[] {
 			    	"000000",
 			    	"235959",
+					"240000", // 24th hour is valid			    	
 			    	"000000Z",
-			    	"235959Z", 
+			    	"235959Z",
+			    	"240000Z"
 			};
 			
 			for (int i=0; i<validTimes.length; i++) {
