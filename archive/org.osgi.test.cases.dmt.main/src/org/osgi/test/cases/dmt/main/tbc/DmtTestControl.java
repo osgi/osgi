@@ -587,7 +587,6 @@ public class DmtTestControl extends DefaultTestBundleControl {
 		DmtSession session = null;
 		try {
 			session = getDmtAdmin().getSession(".",DmtSession.LOCK_TYPE_EXCLUSIVE);
-			//TODO Remove
 			TestExecPlugin.setAllUriIsExistent(true);
 			if (session.isNodeUri(nodeUri)) {
 			    session.setNodeAcl(nodeUri,null);
