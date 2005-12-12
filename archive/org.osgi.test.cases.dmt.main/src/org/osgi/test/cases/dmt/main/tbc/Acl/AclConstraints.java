@@ -339,6 +339,8 @@ public class AclConstraints {
         DmtSession session = null;
         try {
             tbc.log("#testAclConstraints010");
+            tbc.cleanAcl(TestExecPluginActivator.INEXISTENT_NODE);
+            
             session = tbc.getDmtAdmin().getSession(".",
                     DmtSession.LOCK_TYPE_EXCLUSIVE);
             Acl aclParent = new Acl(new String[] { DmtConstants.PRINCIPAL },new int[] { Acl.REPLACE });
@@ -351,7 +353,6 @@ public class AclConstraints {
             session.copy(TestExecPluginActivator.INTERIOR_NODE,
                     TestExecPluginActivator.INEXISTENT_NODE, true);
             TestExecPlugin.setAllUriIsExistent(true);
-
             tbc.assertTrue("Asserts that the copied nodes inherit the access rights from the parent of the destination node.",
                 aclParent.equals(session.getEffectiveNodeAcl(TestExecPluginActivator.INEXISTENT_NODE)));
             
@@ -405,6 +406,7 @@ public class AclConstraints {
         } finally {
             tbc.cleanUp(session, TestExecPluginActivator.INTERIOR_NODE);
             tbc.cleanAcl(TestExecPluginActivator.ROOT);
+            tbc.cleanAcl(TestExecPluginActivator.INEXISTENT_NODE);
             TestExecPlugin.setAllUriIsExistent(false);
         }
     }
