@@ -152,7 +152,6 @@ public class MonitorPlugin implements DataPlugin, ReadWriteDataSession
 
         // path.length == 6, path[4].equals("TrapRef") because only this is deletable
 
-        // ENHANCE make TrapRefID node separately deletable if it is separately creatable
         server.deleteTrapRef(path[5], fullPath);
     }
 
@@ -220,7 +219,7 @@ public class MonitorPlugin implements DataPlugin, ReadWriteDataSession
 
         if(path.length == 0)
             return new MonitorMetaNodeImpl("Root node of the monitoring subtree.", 
-                    false, false, false, MetaNode.PERMANENT);
+                    false, false, MetaNode.PERMANENT);
 
         try { 
             Path.checkName(path[0], "Monitorable ID");
@@ -230,7 +229,7 @@ public class MonitorPlugin implements DataPlugin, ReadWriteDataSession
         
         if(path.length == 1) {
             return new MonitorMetaNodeImpl("Root node for a Monitorable service.",
-                    false, false, true, MetaNode.PERMANENT);
+                    false, true, MetaNode.PERMANENT);
         }
 
         try { 
@@ -241,30 +240,31 @@ public class MonitorPlugin implements DataPlugin, ReadWriteDataSession
 
         if(path.length == 2)
             return new MonitorMetaNodeImpl("Root node for a Performance Indicator.", 
-                    false, false, true, MetaNode.PERMANENT);
+                    false, true, MetaNode.PERMANENT);
 
         if(path.length == 3) {
             if(path[2].equals("TrapID"))
                 return new MonitorMetaNodeImpl("Full name of the Performance Indicator.", 
-                                               false, true, null, null, DmtData.FORMAT_STRING);
+                                               true, null, null, DmtData.FORMAT_STRING, true);
 
             if(path[2].equals("CM")) {
                 DmtData[] validValues = 
                     new DmtData[] { new DmtData("CC"), new DmtData("DER"), 
                                     new DmtData("GAUGE"), new DmtData("SI") };
                 return new MonitorMetaNodeImpl("Collection method of data in the Performance Indicator.",
-                                               false, true, null, validValues, DmtData.FORMAT_STRING);
+                                               true, null, validValues, DmtData.FORMAT_STRING, true);
             }
 
             if(path[2].equals("Results"))
                 return new MonitorMetaNodeImpl("Current value of the Performance Indicator.",
-                                               false, true, null, null, 
+                                               true, null, null, 
                                                DmtData.FORMAT_STRING | DmtData.FORMAT_BOOLEAN |
-                                               DmtData.FORMAT_INTEGER | DmtData.FORMAT_FLOAT);
+                                               DmtData.FORMAT_INTEGER | DmtData.FORMAT_FLOAT,
+                                               true);
 
             if(path[2].equals("Server"))
                 return new MonitorMetaNodeImpl("Root node for server monitoring requests.", 
-                                               false, false, false, MetaNode.PERMANENT);
+                                               false, false, MetaNode.PERMANENT);
             
             throw new DmtException(fullPath, DmtException.NODE_NOT_FOUND, 
                     "No such node defined in the monitoring tree");
@@ -276,24 +276,24 @@ public class MonitorPlugin implements DataPlugin, ReadWriteDataSession
         
         if(path.length == 4)
             return new MonitorMetaNodeImpl("Root node of a server monitoring request.", 
-                    true, true, true, MetaNode.DYNAMIC);
+                    true, true, MetaNode.DYNAMIC);
 
         if(path.length == 5) {
             if(path[4].equals("ServerID"))
                 return new MonitorMetaNodeImpl("Identifier of the DM server that should receive the requested " +
-                                               "monitoring data.", true, false, null, null, DmtData.FORMAT_STRING);
+                                               "monitoring data.", false, null, null, DmtData.FORMAT_STRING, false);
 
             if(path[4].equals("Enabled"))
                 return new MonitorMetaNodeImpl("A switch to start and stop monitoring.", 
-                                               true, false, new DmtData(Server.DEFAULT_ENABLED), null, DmtData.FORMAT_BOOLEAN);
+                                               false, new DmtData(Server.DEFAULT_ENABLED), null, DmtData.FORMAT_BOOLEAN, false);
 
             if(path[4].equals("Reporting"))
                 return new MonitorMetaNodeImpl("Root node for request scheduling parameters.", 
-                                               false, false, false, MetaNode.AUTOMATIC);
+                                               false, false, MetaNode.AUTOMATIC);
 
             if(path[4].equals("TrapRef"))
                 return new MonitorMetaNodeImpl("Root node for references to other required monitoring data.",
-                                               false, false, false, MetaNode.AUTOMATIC);
+                                               false, false, MetaNode.AUTOMATIC);
 
             throw new DmtException(fullPath, DmtException.NODE_NOT_FOUND,
                     "No such node defined in the monitoring tree");
@@ -304,15 +304,15 @@ public class MonitorPlugin implements DataPlugin, ReadWriteDataSession
                 if(path[5].equals("Type")) {
                     DmtData[] validValues = new DmtData[] { new DmtData("TM"), new DmtData("EV") };
                     return new MonitorMetaNodeImpl("Indicates if the data reporting is time or event based.",
-                                                   true, false, new DmtData(Server.DEFAULT_TYPE), 
-                                                   validValues, DmtData.FORMAT_STRING);
+                                                   false, new DmtData(Server.DEFAULT_TYPE), 
+                                                   validValues, DmtData.FORMAT_STRING, false);
                 }
 
                 if(path[5].equals("Value"))
                     return new MonitorMetaNodeImpl("Time or occurrence number parameter of the " +
-                                                   "request (depending on the type).", true, false,
+                                                   "request (depending on the type).", false,
                                                    new DmtData(Server.DEFAULT_SCHEDULE), null, 
-                                                   DmtData.FORMAT_INTEGER);
+                                                   DmtData.FORMAT_INTEGER, false);
                 
                 throw new DmtException(fullPath, DmtException.NODE_NOT_FOUND,
                         "No such node defined in the monitoring tree");
@@ -320,7 +320,7 @@ public class MonitorPlugin implements DataPlugin, ReadWriteDataSession
 
             if(path[4].equals("TrapRef"))
                 return new MonitorMetaNodeImpl("Placeholder for a reference to other monitoring data.", 
-                                               true, true, true, MetaNode.DYNAMIC);
+                                               true, true, MetaNode.DYNAMIC);
 
 
             throw new DmtException(fullPath, DmtException.NODE_NOT_FOUND,
@@ -334,8 +334,8 @@ public class MonitorPlugin implements DataPlugin, ReadWriteDataSession
 
         if(path.length == 7)
             return new MonitorMetaNodeImpl("A reference to other monitoring data.", 
-                                           true, false, null, null, 
-                                           DmtData.FORMAT_STRING);
+                                           false, null, null, 
+                                           DmtData.FORMAT_STRING, true);
         
         // path.length > 7
         throw new DmtException(fullPath, DmtException.NODE_NOT_FOUND,
@@ -614,7 +614,6 @@ public class MonitorPlugin implements DataPlugin, ReadWriteDataSession
 
         // path.length == 6, path[4].equals("TrapRef")
 
-        // ENHANCE make this optional if TrapRefID nodes are creatable/deletable
         return new String[] { "TrapRefID" };
     }
 
@@ -811,29 +810,12 @@ class Server {
     }
 
     void setServerId(DmtData data, String[] fullPath) throws DmtException {
-        // data format is FORMAT_STRING because of meta-data
-        /* // TODO remove this
-        if(data.getFormat() != DmtData.FORMAT_STRING)
-            throw new DmtException(nodeUri, DmtException.FORMAT_NOT_SUPPORTED, 
-                                   "Server ID leaf must have string format.");
-        */
-
-        String id = data.getString();
-        // TODO add to metanode
-        if(id == null || id.length() == 0)
-            throw new DmtException(fullPath, DmtException.METADATA_MISMATCH, 
-                    "Server ID string must not be null or empty.");
-
+        // data format is FORMAT_STRING, data is non-empty because of meta-data
         serverId = data.getString();
     }
 
     void setEnabled(DmtData data, String[] fullPath) throws DmtException {
         // data format is FORMAT_BOOLEAN because of meta-data
-        /* // TODO remove this
-        if(data.getFormat() != DmtData.FORMAT_BOOLEAN)
-            throw new DmtException(nodeUri, DmtException.FORMAT_NOT_SUPPORTED, 
-                                   "Enabled leaf must have boolean format.");
-        */
         
         enabled = data.getBoolean();
 
@@ -857,38 +839,12 @@ class Server {
     void setType(DmtData data, String[] fullPath) throws DmtException {
         // data format is FORMAT_STRING because of meta-data
         // data content is "TM" or "EV" because of meta-data
-        /* // TODO remove this
-        if(data.getFormat() != DmtData.FORMAT_STRING)
-            throw new DmtException(nodeUri, DmtException.FORMAT_NOT_SUPPORTED, 
-                                   "Reporting type leaf must have string format.");
-
-        String newType = data.getString();
-        if(newType == null || !(newType.equals("TM") || newType.equals("EV")))
-            throw new DmtException(nodeUri, DmtException.METADATA_MISMATCH, 
-                    "Type string must 'TM' or 'EV'.");
-            
-        type = newType;
-        */
-
         type = data.getString();
     }
 
     void setValue(DmtData data, String[] fullPath) throws DmtException {
-        // data format is FORMAT_INTEGER because of meta-data
-        /* // TODO remove this
-        if(data.getFormat() != DmtData.FORMAT_INTEGER)
-            throw new DmtException(nodeUri, DmtException.FORMAT_NOT_SUPPORTED, 
-                                   "Reporting schedule value leaf must have integer format.");
-        */
-
-        int newInt = data.getInt();
-
-        // TODO add to metanode
-        if(newInt < 0)
-            throw new DmtException(fullPath, DmtException.METADATA_MISMATCH, 
-                    "Reporting schedule value parameter must be non-negative.");
-
-        value = newInt;
+        // data format is FORMAT_INTEGER and data is not <0 because of meta-data
+        value = data.getInt();
     }
 
     void setTrapRefId(String name, DmtData data, String[] fullPath) 
@@ -898,16 +854,9 @@ class Server {
                     "The trap reference with the specified ID does not exist.");
         
         // data format is FORMAT_STRING because of meta-data
-        /* // TODO remove this
-        if(data.getFormat() != DmtData.FORMAT_STRING)
-            throw new DmtException(nodeUri, DmtException.FORMAT_NOT_SUPPORTED,
-                                   "Trap reference leaf must have string format.");
-        */
-        
         trapRef.put(name, data.getString());
     }
 
-    // ENHANCE allow separate creation of TrapRef/<X>/TrapRefID nodes
     void addTrapRef(String name, String[] fullPath) throws DmtException {
     	if(trapRef.put(name, unescape(name)) != null)
     		throw new DmtException(fullPath, DmtException.NODE_ALREADY_EXISTS,
