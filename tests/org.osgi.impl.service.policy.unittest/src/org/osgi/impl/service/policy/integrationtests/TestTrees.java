@@ -40,7 +40,7 @@ import org.osgi.service.dmt.DmtData;
 import org.osgi.service.dmt.DmtException;
 import org.osgi.service.dmt.DmtSession;
 import org.osgi.service.dmt.security.DmtPermission;
-import org.osgi.service.dmt.spi.DataPluginFactory;
+import org.osgi.service.dmt.spi.DataPlugin;
 import org.osgi.service.permissionadmin.PermissionInfo;
 
 public class TestTrees extends IntegratedTest {
@@ -79,11 +79,11 @@ public class TestTrees extends IntegratedTest {
 
 		// check if all three policy trees are registered
 		ServiceReference[] sr;
-		sr = systemBundleContext.getServiceReferences(DataPluginFactory.class.getName(),"(dataRootURIs="+permissionAdminPlugin_dataRootURI+")");
+		sr = systemBundleContext.getServiceReferences(DataPlugin.class.getName(),"(dataRootURIs="+permissionAdminPlugin_dataRootURI+")");
 		assertNotNull(sr[0]);
-		sr = systemBundleContext.getServiceReferences(DataPluginFactory.class.getName(),"(dataRootURIs="+conditionalPermissionAdminPlugin_dataRootURI+")");
+		sr = systemBundleContext.getServiceReferences(DataPlugin.class.getName(),"(dataRootURIs="+conditionalPermissionAdminPlugin_dataRootURI+")");
 		assertNotNull(sr[0]);
-		sr = systemBundleContext.getServiceReferences(DataPluginFactory.class.getName(),"(dataRootURIs="+dmtPrincipalPlugin_dataRootURI+")");
+		sr = systemBundleContext.getServiceReferences(DataPlugin.class.getName(),"(dataRootURIs="+dmtPrincipalPlugin_dataRootURI+")");
 		assertNotNull(sr[0]);
 		stopFramework();
 	}
