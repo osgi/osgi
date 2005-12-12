@@ -335,6 +335,7 @@ public class Node {
                 segments.add(segment.toString());
                 segment = new StringBuffer();
             } else if(ch == '\\') {
+                segment.append(ch);
                 escape = true;
             } else
                 segment.append(ch);
