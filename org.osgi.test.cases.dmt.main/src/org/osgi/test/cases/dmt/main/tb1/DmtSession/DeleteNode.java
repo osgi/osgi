@@ -75,6 +75,7 @@ public class DeleteNode implements TestInterface {
 		testDeleteNode008();
 		testDeleteNode009();
 		testDeleteNode010();
+		testDeleteNode011();
 	}
 	
     private void prepare() {
@@ -335,6 +336,31 @@ public class DeleteNode implements TestInterface {
 		} catch (Exception e) {
 			tbc.fail("Expected " + DmtException.class.getName() + " but was "
 					+ e.getClass().getName());
+		} finally {
+			tbc.closeSession(session);
+		}
+	}
+	/**
+	 * This method asserts that an empty string as relative URI means the root 
+	 * URI the session was opened with
+	 * 
+	 * @spec DmtSession.deleteNode(String)
+	 * 
+	 */
+	private void testDeleteNode011() {
+		DmtSession session = null;
+		try {
+			tbc.log("#testDeleteNode011");
+			session = tbc.getDmtAdmin().getSession(
+					TestExecPluginActivator.INTERIOR_NODE, DmtSession.LOCK_TYPE_ATOMIC);
+
+			session.deleteNode("");
+
+			tbc.pass("Asserts that an empty string as relative URI means the root" +
+					" URI the session was opened with");
+		} catch (Exception e) {
+			tbc.fail("Unexpected Exception: " + e.getClass().getName()
+					+ " [Message: " + e.getMessage() + "]");
 		} finally {
 			tbc.closeSession(session);
 		}

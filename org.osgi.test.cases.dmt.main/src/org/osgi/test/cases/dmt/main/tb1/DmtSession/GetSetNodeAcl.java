@@ -78,6 +78,8 @@ public class GetSetNodeAcl implements TestInterface {
 		testGetSetNodeAcl010();
 		testGetSetNodeAcl011();
 		testGetSetNodeAcl012();
+		testGetSetNodeAcl013();
+		testGetSetNodeAcl014();
 
 	}
     private void prepare() {
@@ -420,6 +422,64 @@ public class GetSetNodeAcl implements TestInterface {
 		} finally {
             tbc.setPermissions(new PermissionInfo(DmtPermission.class.getName(), DmtConstants.ALL_NODES,DmtConstants.ALL_ACTIONS));
             tbc.closeSession(session);
+		}
+	}
+	
+	
+	
+	/**
+	 * This method asserts that an empty string as relative URI means the root 
+	 * URI the session was opened with
+	 * 
+	 * @spec DmtSession.getNodeAcl(String)
+	 */
+	private void testGetSetNodeAcl013() {
+		DmtSession session = null;
+		try {
+			tbc.log("#testGetSetNodeAcl013");
+			
+		
+			session = tbc.getDmtAdmin().getSession(
+					TestExecPluginActivator.LEAF_NODE, DmtSession.LOCK_TYPE_ATOMIC);
+
+			session.getNodeAcl("");
+
+
+			tbc.pass("Asserts that an empty string as relative URI means the root " +
+					"URI the session was opened with");
+		} catch (Exception e) {
+			tbc.fail("Unexpected Exception: " + e.getClass().getName()
+					+ " [Message: " + e.getMessage() + "]");
+		} finally {
+			tbc.closeSession(session);
+		}
+	}	
+	
+	/**
+	 * This method asserts that an empty string as relative URI means the root 
+	 * URI the session was opened with
+	 * 
+	 * @spec DmtSession.setNodeAcl(String,Acl)
+	 */
+	private void testGetSetNodeAcl014() {
+		DmtSession session = null;
+		try {
+			tbc.log("#testGetSetNodeAcl014");
+			
+		
+			session = tbc.getDmtAdmin().getSession(
+					TestExecPluginActivator.LEAF_NODE, DmtSession.LOCK_TYPE_ATOMIC);
+			Acl acl =  new Acl(DmtConstants.ACLSTR);
+			session.setNodeAcl("",acl);
+			
+            tbc.assertEquals("Asserts that an empty string as relative URI means the root " +
+					"URI the session was opened with",acl,session.getNodeAcl(TestExecPluginActivator.LEAF_NODE));
+
+		} catch (Exception e) {
+			tbc.fail("Unexpected Exception: " + e.getClass().getName()
+					+ " [Message: " + e.getMessage() + "]");
+		} finally {
+			tbc.closeSession(session);
 		}
 	}
 }

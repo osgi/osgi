@@ -71,6 +71,7 @@ public class IsLeafNode implements TestInterface  {
 		testIsLeafNode004();
 		testIsLeafNode005();
         testIsLeafNode006();
+        testIsLeafNode007();
 	}
     private void prepare() {
         tbc.setPermissions(new PermissionInfo(DmtPermission.class.getName(), DmtConstants.ALL_NODES,DmtConstants.ALL_ACTIONS));
@@ -213,5 +214,30 @@ public class IsLeafNode implements TestInterface  {
 			tbc.closeSession(session);
 		}
 	}
+	/**
+	 * This method asserts that an empty string as relative URI means the root 
+	 * URI the session was opened with
+	 * 
+	 * @spec DmtSession.isLeafNode(String)
+	 * 
+	 */
+	private void testIsLeafNode007() {
+		DmtSession session = null;
+		try {
+			tbc.log("#testIsLeafNode007");
+			
+			session = tbc.getDmtAdmin().getSession(
+					TestExecPluginActivator.LEAF_NODE, DmtSession.LOCK_TYPE_ATOMIC);
 
+			session.isLeafNode("");
+
+			tbc.pass("Asserts that an empty string as relative URI means the root " +
+					"URI the session was opened with");
+		} catch (Exception e) {
+			tbc.fail("Unexpected Exception: " + e.getClass().getName()
+					+ " [Message: " + e.getMessage() + "]");
+		} finally {
+			tbc.closeSession(session);
+		}
+	}
 }

@@ -78,6 +78,7 @@ public class SetDefaultNodeValue implements TestInterface {
 		testSetDefaultNodeValue008();
 		testSetDefaultNodeValue009();
 		testSetDefaultNodeValue010();
+		testSetDefaultNodeValue011();
 	}
 	
     private void prepare() {
@@ -329,4 +330,29 @@ public class SetDefaultNodeValue implements TestInterface {
         }
     }
 	
+	/**
+	 * This method asserts that an empty string as relative URI means the root 
+	 * URI the session was opened with
+	 *
+	 * @spec DmtSession.setDefaultNodeValue(String)
+	 */
+	private void testSetDefaultNodeValue011() {
+		DmtSession session = null;
+		try {
+			tbc.log("#testSetDefaultNodeValue011");
+			
+			session = tbc.getDmtAdmin().getSession(
+					TestExecPluginActivator.LEAF_NODE, DmtSession.LOCK_TYPE_ATOMIC);
+
+			session.setDefaultNodeValue("");
+
+			tbc.pass("Asserts that an empty string as relative URI means the root " +
+				"URI the session was opened with");
+		} catch (Exception e) {
+			tbc.fail("Unexpected Exception: " + e.getClass().getName()
+					+ " [Message: " + e.getMessage() + "]");
+		} finally {
+			tbc.closeSession(session);
+		}
+	}	
 }

@@ -71,6 +71,7 @@ public class GetNodeSize implements TestInterface {
     		testGetNodeSize003();
     		testGetNodeSize004();
     		testGetNodeSize005();
+    		testGetNodeSize006();
         } else {
             testGetNodeSizeFeatureNotSupported001();
         }
@@ -212,6 +213,33 @@ public class GetNodeSize implements TestInterface {
 			session.getNodeSize(TestExecPluginActivator.LEAF_RELATIVE);
 
 			tbc.pass("A relative URI can be used with getNodeSize.");
+		} catch (Exception e) {
+			tbc.fail("Unexpected Exception: " + e.getClass().getName()
+					+ " [Message: " + e.getMessage() + "]");
+		} finally {
+			tbc.closeSession(session);
+		}
+	}
+	
+	/**
+	 * This method asserts that an empty string as relative URI means the root 
+	 * URI the session was opened with
+
+	 * 
+	 * @spec DmtSession.getNodeSize(String)
+	 */
+	private void testGetNodeSize006() {
+		DmtSession session = null;
+		try {
+			tbc.log("#testGetNodeSize006");
+			
+			session = tbc.getDmtAdmin().getSession(
+					TestExecPluginActivator.LEAF_NODE, DmtSession.LOCK_TYPE_ATOMIC);
+
+			session.getNodeSize("");
+
+			tbc.pass("Asserts that an empty string as relative URI means the root " +
+					"URI the session was opened with");
 		} catch (Exception e) {
 			tbc.fail("Unexpected Exception: " + e.getClass().getName()
 					+ " [Message: " + e.getMessage() + "]");

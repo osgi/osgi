@@ -68,6 +68,7 @@ public class GetEffectiveNodeAcl implements TestInterface {
 		testGetEffectiveNodeAcl004();
 		testGetEffectiveNodeAcl005();
 		testGetEffectiveNodeAcl006();
+		testGetEffectiveNodeAcl007();
 	}
 
     private void prepare() {
@@ -240,5 +241,29 @@ public class GetEffectiveNodeAcl implements TestInterface {
 			tbc.closeSession(session);
 		}
 	}		
-	
+	/**
+	 * This method asserts that an empty string as relative URI means the root 
+	 * URI the session was opened with
+	 * 
+	 * @spec DmtSession.getEffectiveNodeAcl(String)
+	 */
+	private void testGetEffectiveNodeAcl007() {
+		DmtSession session = null;
+		try {
+			tbc.log("#testGetEffectiveNodeAcl007");
+			
+			session = tbc.getDmtAdmin().getSession(
+					TestExecPluginActivator.INTERIOR_NODE, DmtSession.LOCK_TYPE_ATOMIC);
+
+			session.getEffectiveNodeAcl("");
+
+			tbc.pass("Asserts that an empty string as relative URI means the root " +
+					"URI the session was opened with");
+		} catch (Exception e) {
+			tbc.fail("Unexpected Exception: " + e.getClass().getName()
+					+ " [Message: " + e.getMessage() + "]");
+		} finally {
+			tbc.closeSession(session);
+		}
+	}	
 }

@@ -82,6 +82,8 @@ public class Execute implements TestInterface {
 		testExecute010();
 		testExecute011();
 		testExecute012();
+		testExecute013();
+		testExecute014();
 		
 	}
     private void prepare() {
@@ -426,5 +428,55 @@ public class Execute implements TestInterface {
 		}
 	}
 	
+	/**
+	 * This method asserts that an empty string as relative URI means the root 
+	 * URI the session was opened with
+	 * 
+	 * @spec DmtSession.execute(String,String)
+	 */
+	private void testExecute013() {
+		DmtSession session = null;
+		try {
+			tbc.log("#testExecute013");
+			
+			session = tbc.getDmtAdmin().getSession(
+					TestExecPluginActivator.INTERIOR_NODE, DmtSession.LOCK_TYPE_ATOMIC);
+
+			session.execute("", DATA);
+
+			tbc.pass("Asserts that an empty string as relative URI means the root " +
+					"URI the session was opened with");
+		} catch (Exception e) {
+			tbc.fail("Unexpected Exception: " + e.getClass().getName()
+					+ " [Message: " + e.getMessage() + "]");
+		} finally {
+			tbc.closeSession(session);
+		}
+	}
 	
+	/**
+	 * This method asserts that an empty string as relative URI means the root 
+	 * URI the session was opened with
+	 * 
+	 * @spec DmtSession.execute(String,String)
+	 */
+	private void testExecute014() {
+		DmtSession session = null;
+		try {
+			tbc.log("#testExecute014");
+			
+			session = tbc.getDmtAdmin().getSession(
+					TestExecPluginActivator.INTERIOR_NODE, DmtSession.LOCK_TYPE_ATOMIC);
+
+			session.execute("", CORRELATOR,null);
+
+			tbc.pass("Asserts that an empty string as relative URI means the root " +
+					"URI the session was opened with");
+		} catch (Exception e) {
+			tbc.fail("Unexpected Exception: " + e.getClass().getName()
+					+ " [Message: " + e.getMessage() + "]");
+		} finally {
+			tbc.closeSession(session);
+		}
+	}
 }
