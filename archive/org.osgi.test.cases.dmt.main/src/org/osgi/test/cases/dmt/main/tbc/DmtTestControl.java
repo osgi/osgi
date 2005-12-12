@@ -129,7 +129,7 @@ public class DmtTestControl extends DefaultTestBundleControl {
 	
     //Invalid URIs, to be used simulating DmtException.INVALID_URI
     public final static Object[] INVALID_URIS = new Object[]{ 
-        null, "", 
+        null, 
         TestExecPluginActivator.INTERIOR_NODE + "/", 
         TestExecPluginActivator.INTERIOR_NODE + "\\", 
         TestExecPluginActivator.ROOT + "/./" + TestExecPluginActivator.INTERIOR_NODE_NAME, 

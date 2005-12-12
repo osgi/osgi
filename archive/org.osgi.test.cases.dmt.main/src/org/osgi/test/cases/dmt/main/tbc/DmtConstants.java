@@ -88,8 +88,8 @@ public class DmtConstants {
 	public static final String DDF = "http://www.openmobilealliance.org/tech/DTD/OMA-SyncML-DMDDF-V1_2_0.dtd";
 
 	public static final int WAIT_TIME = 800;
-	
-    public static final int TIMEOUT = 5000;
+
+	public static final int TIMEOUT = 31000;
 	
 	//The maximum node length and maximum node segments may not be 0 else the tests of URI_TOO_LONG wont be executed. 
 	public static final int MAXIMUM_NODE_LENGTH = 32;
@@ -103,7 +103,6 @@ public class DmtConstants {
     public static final boolean SUPPORTS_NODE_SIZE= true;
     
     public static final boolean SUPPORTS_NODE_VERSION = true;
-    
     
 	//TODO Change for checking in the properties file, but it is not working. Put them in a static block
 	/*
