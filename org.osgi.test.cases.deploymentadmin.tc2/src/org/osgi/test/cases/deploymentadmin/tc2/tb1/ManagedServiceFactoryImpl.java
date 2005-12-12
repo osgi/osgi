@@ -60,10 +60,8 @@ public class ManagedServiceFactoryImpl implements BundleActivator, TestingManage
 	private boolean updated;
 	private Dictionary props;
 	private String pid;
-	private BundleContext bc;
 
 	public void start(BundleContext bc) throws Exception {
-		this.bc = bc;
 		Dictionary props = new Hashtable();
 		props.put(Constants.SERVICE_PID, DeploymentConstants.PID_MANAGED_SERVICE_FACTORY);
 		

@@ -71,6 +71,7 @@ import org.osgi.test.cases.deploymentadmin.tc2.tbc.DeploymentSession.DeploymentS
 import org.osgi.test.cases.deploymentadmin.tc2.tbc.DeploymentSession.InstallSession;
 import org.osgi.test.cases.deploymentadmin.tc2.tbc.Event.BundleListenerImpl;
 import org.osgi.test.cases.deploymentadmin.tc2.tbc.ResourceProcessor.ResourceProcessor;
+import org.osgi.test.cases.deploymentadmin.tc2.tbc.ResourceProcessorException.ResourceProcessorException;
 import org.osgi.test.cases.deploymentadmin.tc2.tbc.util.TestingBundle;
 import org.osgi.test.cases.deploymentadmin.tc2.tbc.util.TestingDeploymentPackage;
 import org.osgi.test.cases.deploymentadmin.tc2.tbc.util.TestingManagedService;
@@ -451,6 +452,12 @@ public class DeploymentTestControl extends DefaultTestBundleControl {
 	public void testResourceProcessor() {
 		new ResourceProcessor(this).run();
 	}
+    
+    // ResourceProcessorException Test Cases
+    public void testResourceProcessorException() {
+        new ResourceProcessorException(this).run();
+    }
+    
 	/**
 	 * @return Returns the permissionAdmin.
 	 */

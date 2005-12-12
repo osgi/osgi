@@ -47,8 +47,8 @@ package org.osgi.test.cases.deploymentadmin.tc2.tbc;
  */
 public class DeploymentConstants {
 
-	public static final String SIGNER_FILTER = "CN=John Smith, O=ACME Inc, OU=ACME Cert Authority, L=Austin, S=Texas, C=US";
-    public static final String SIGNER_FILTER_WILDCARD = "CN=*, O=ACME Inc, OU=ACME Cert Authority, L=Austin, S=Texas, C=US";
+	public static final String SIGNER_FILTER = "CN=John Smith, O=ACME Inc, OU=ACME Cert Authority, L=Austin, ST=Texas, C=US";
+    public static final String SIGNER_FILTER_WILDCARD = "CN=*, O=ACME Inc, OU=ACME Cert Authority, L=Austin, ST=Texas, C=US";
     public static final String SIGNER_FILTER_INVALID1 = "NAME=CESAR.ORG.BR, OU=CESAR, O=MOTOROLA, L=RECIFE, C=BR";
     public static final String SIGNER_FILTER_INVALID2 = "2=*.ORG.BR, TX=CESAR, R=MOTOROLA, L=RECIFE, C=BR";
     
@@ -107,7 +107,7 @@ public class DeploymentConstants {
 	public static final String BUNDLE_NAME_ALL = "(name=*)";
 	public static final String DEPLOYMENT_PACKAGE_NAME0 = "(name="+MAP_CODE_TO_DP[0]+")";
 	public static final String DEPLOYMENT_PACKAGE_NAME1 = "(&(name="+MAP_CODE_TO_DP[1]+")"+"(signer=-;"+SIGNER_FILTER+"))";
-	public static final String DEPLOYMENT_PACKAGE_NAME2 = "(&(name="+MAP_CODE_TO_DP[2]+")"+"(signer=-;"+SIGNER_FILTER+"))";
+	public static final String DEPLOYMENT_PACKAGE_NAME2 = "(signer="+SIGNER_FILTER+")(name=*)";
     public static final String DEPLOYMENT_PACKAGE_NAME3 = "(&(name="+MAP_CODE_TO_DP[2]+")"+"(signer=-;"+SIGNER_FILTER_WILDCARD+"))";
     public static final String DEPLOYMENT_PACKAGE_NAME4 = "(&(name="+MAP_CODE_TO_DP[0]+")"+"(signer=-;"+SIGNER_FILTER_INVALID1+"))";
     public static final String DEPLOYMENT_PACKAGE_NAME5 = "(&(name="+MAP_CODE_TO_DP[0]+")"+"(signer=-;"+SIGNER_FILTER_INVALID2+"))";

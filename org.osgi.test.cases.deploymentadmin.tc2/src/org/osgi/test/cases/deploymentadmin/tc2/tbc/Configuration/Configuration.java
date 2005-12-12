@@ -103,13 +103,14 @@ public class Configuration {
 
 	/**
 	 * Installs the managed service factory bundle with a fixed location
+     * 
 	 */
 	private void installManagedFactoryBundle() {
 		tbc.log("#Installing Managed Service Factory Bundle");
 		URL url = null;
 		InputStream is = null;
 		try {
-			url = new URL(tbc.getWebServer() + "tb2.jar");
+			url = new URL(tbc.getWebServer() + "tb1.jar");
 			is = url.openStream();
 			tbc.getContext().installBundle(DeploymentConstants.MANAGED_BUNDLE_LOCATION, is);
 		} catch (MalformedURLException e) {
@@ -121,7 +122,13 @@ public class Configuration {
 		} catch (Exception e) {
 			tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { 
 					e.getClass().getName() }));
-		}
+		} finally {
+            try {
+                is.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
 	}
 
 	/**

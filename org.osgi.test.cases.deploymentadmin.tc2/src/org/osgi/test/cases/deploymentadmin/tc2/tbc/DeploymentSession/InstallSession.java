@@ -94,13 +94,9 @@ public class InstallSession {
             testInstallSession005();
             testInstallSession006();
             testInstallSession007();
-          testInstallSession008();
+            testInstallSession008();
             testInstallSession009();
-// TODO Spec changed, this test case is no longer valid.
-//            testInstallSession010();
-// TODO Test case is no longer valid according to lates decisions            
-//            testInstallSession011();
-//            testInstallSession012();
+            testInstallSession012();
             testInstallSession013();
             testInstallSession014();
             testInstallSession015();
@@ -361,21 +357,22 @@ public class InstallSession {
     }
     
     /**
-     * This test case asserts the following order is followed: "first the bundles
-     * are uninstalled and then later the resources are dropped"
+     * This test case asserts the following order is followed: "First the stale
+     * resources are dropped and then later the bundles are uninstalled"
      * 
      * @spec 114.8 Installing a Deployment Package
      */
     private void testInstallSession008() {
         tbc.log("#testInstallSession008");
-        DeploymentPackage dp1 = null;
         TestingSessionResourceProcessor tsrp = null;
+        DeploymentPackage dp1 = null;
         try {
             TestingDeploymentPackage testDP1 = tbc.getTestingDeploymentPackage(DeploymentConstants.SIMPLE_BUNDLE_RES_DP);
             dp1 = tbc.installDeploymentPackage(tbc.getWebServer() + testDP1.getFilename());
 
             tsrp = (TestingSessionResourceProcessor) tbc.getService(ResourceProcessor.class,
                 "(service.pid=" + DeploymentConstants.PID_RESOURCE_PROCESSOR3 + ")");
+            tbc.assertNotNull("TestingSessionResourceProcessor installed correctly", tsrp);
             tsrp.setTest(TestingSessionResourceProcessor.DROPPED);
             
             TestingDeploymentPackage testDP2 = tbc.getTestingDeploymentPackage(DeploymentConstants.SIMPLE_DP);
@@ -385,9 +382,12 @@ public class InstallSession {
             worker = new SessionWorker(testDP2, 0);
             worker.start();
             
-            // asserts bundle.tb3 were uninstalled
+            while (!tsrp.isDropped()) {
+                // do nothing
+            }
+            // asserts bundle.tb3 were not uninstalled
             Bundle b = tbc.getBundle("bundles.tb3");
-            tbc.assertNull("Bundle bundle.tb3 was uninstalled", b);
+            tbc.assertTrue("Bundle bundle.tb3 is not uninstalled yet", b.getState() != Bundle.UNINSTALLED);
             
             tsrp.setReleased(true);
             tsrp.waitForRelease(false);
@@ -400,13 +400,14 @@ public class InstallSession {
                 MessagesConstants.UNEXPECTED_EXCEPTION, new String[]{e.getClass().getName()}));
         } finally {
             cleanUp(tsrp);
+            tbc.uninstall(dp1);
         }
     }
     
     /**
-     * First the bundles are uninstalled and then later the resources are
-     * dropped. Asserts that <b>Exceptions are ignored in this phase to allow
-     * repairs to always succeed</b>. 
+     * First the stale resources are dropped and then later the bundles are
+     * uninstalled. Asserts that <b>Exceptions are ignored in this phase to
+     * allow repairs to always succeed</b>.
      * 
      * @spec 114.8 Installing a Deployment Package
      */
@@ -430,19 +431,22 @@ public class InstallSession {
             worker = new SessionWorker(testDP2, 0);
             worker.start();
             
-            reachTC = true;
-            releaseBarrier.waitForRelease();
-            
-            // asserts bundles were uninstalled
+            while (!tsrp.isDropped()) {
+                // do nothing
+            }
+            // asserts bundle.tb3 were uninstalled
             Bundle b = tbc.getBundle("bundles.tb3");
-            tbc.assertNull("Bundle bundle.tb3 was uninstalled", b);
+            tbc.assertTrue("Bundle bundle.tb3 is not uninstalled yet", b.getState() != Bundle.UNINSTALLED);
+            
+            reachTC = true;
+            releaseBarrier.waitCleanUp();
             
         } catch (Exception e) {
             tbc.fail(MessagesConstants.getMessage(
                 MessagesConstants.UNEXPECTED_EXCEPTION, new String[]{e.getClass().getName()}));
         } finally {
-            tbc.uninstall(dp1);
             cleanUp(tsrp);
+            tbc.uninstall(dp1);
         }
     }
     
@@ -882,7 +886,10 @@ public class InstallSession {
         EXCEPTION_AT_START = false;
         ROLL_BACK = false;
 
+        // unlock
         reachTC = true;
+        reach = true;
+        clean = true;
         try {
             releaseBarrier.waitForRelease();
             cleanupBarrier.waitCleanUp();
@@ -926,11 +933,11 @@ public class InstallSession {
                 tbc.fail(MessagesConstants.getMessage(
                     MessagesConstants.UNEXPECTED_EXCEPTION, new String[]{e.getClass().getName()}));
             } finally {
-                // clean up must also be synchronized. Otherwise other TCs may be impacted.
-                tbc.uninstall(dp);
-                clean = true;
-                tbc.log("#Clean up #+"+id+" successful");
                 try {
+                    // clean up must also be synchronized. Otherwise other TCs may be impacted.
+                    tbc.uninstall(dp);
+                    clean = true;
+                    tbc.log("#Clean up #" + id + " successful");
                     cleanupBarrier.waitCleanUp();
                 } catch (InterruptedException e1) {
                     e1.printStackTrace();
