@@ -282,9 +282,27 @@ public class MonitorTestControl extends DefaultTestBundleControl {
 		setPermission(defaults, tb3.getLocation());
 	}	
 	
+	public void setTb2Permission(String target, String action) {
+		PermissionInfo[] defaults = new PermissionInfo[] {
+				new PermissionInfo(PackagePermission.class.getName(), "*", "EXPORT, IMPORT"),	
+				new PermissionInfo(ServicePermission.class.getName(), "*", "GET"),
+				new PermissionInfo(AdminPermission.class.getName(), "*", "*"),
+				new PermissionInfo(TopicPermission.class.getName(),"org/osgi/service/monitor/MonitorEvent",TopicPermission.PUBLISH),
+				new PermissionInfo(SocketPermission.class.getName(), "*", "connect,resolve"),
+				new PermissionInfo(ServicePermission.class.getName(), "*", ServicePermission.REGISTER),
+				new PermissionInfo(org.osgi.service.monitor.MonitorPermission.class.getName(), target, action)
+		};
+
+		setPermission(defaults, tb2.getLocation());
+	}		
+	
 	public void setTb1Permission(PermissionInfo[] infos) {
 		setPermission(infos, getTb1Location());
 	}
+	
+	public void setTb2Permission(PermissionInfo[] infos) {
+		setPermission(infos, tb2.getLocation());
+	}	
 	
 	public void setTb3Permission(PermissionInfo[] infos) {
 		setPermission(infos, tb3.getLocation());
@@ -296,6 +314,10 @@ public class MonitorTestControl extends DefaultTestBundleControl {
 	public String getTb3Location() {
 		return tb3.getLocation();
 	}
+	
+	public String getTb2Location() {
+		return tb2.getLocation();
+	}	
 	
 
 	/*

@@ -316,11 +316,15 @@ public class GetStatusVariableNames implements TestInterface {
 	private void testGetStatusVariableNames008() {
 		tbc.log("#testGetStatusVariableNames008");
 		PermissionInfo[] infosTb1 = null;
+		PermissionInfo[] infosTb2 = null;
 		PermissionInfo[] infosTb3 = null;
 		try {
 			infosTb1 = tbc.getPermissionAdmin().getPermissions(
 					tbc.getTb1Location());
 
+			infosTb2 = tbc.getPermissionAdmin().getPermissions(
+					tbc.getTb2Location());
+			
 			infosTb3 = tbc.getPermissionAdmin().getPermissions(
 					tbc.getTb3Location());
 
@@ -342,7 +346,7 @@ public class GetStatusVariableNames implements TestInterface {
 							"Asserting if the MonitorAdmin returns the StatusVariable that we expect.",
 							MonitorConstants.SV_NAME1, statusVariables[0]);
 
-			tbc.setLocalPermission(MonitorConstants.SV_MONITORABLEID1 + "/*",
+			tbc.setTb2Permission(MonitorConstants.SV_MONITORABLEID1 + "/*",
 					org.osgi.service.monitor.MonitorPermission.PUBLISH);
 
 			statusVariables = tbc.getMonitorAdmin()
@@ -367,6 +371,7 @@ public class GetStatusVariableNames implements TestInterface {
 					+ e.getClass().getName());
 		} finally {
 			tbc.setTb1Permission(infosTb1);
+			tbc.setTb2Permission(infosTb2);
 			tbc.setTb3Permission(infosTb3);
 		}
 	}
