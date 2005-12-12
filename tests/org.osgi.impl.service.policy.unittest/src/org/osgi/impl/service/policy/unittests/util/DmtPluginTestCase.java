@@ -21,9 +21,11 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Dictionary;
 import java.util.Enumeration;
 import java.util.Hashtable;
+import java.util.List;
 
 import junit.framework.TestCase;
 
@@ -31,6 +33,7 @@ import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.BundleException;
 import org.osgi.framework.BundleListener;
+import org.osgi.framework.Constants;
 import org.osgi.framework.Filter;
 import org.osgi.framework.FrameworkListener;
 import org.osgi.framework.InvalidSyntaxException;
@@ -46,7 +49,7 @@ import org.osgi.service.cm.ConfigurationAdmin;
 import org.osgi.service.cm.ManagedService;
 import org.osgi.service.dmt.DmtAdmin;
 import org.osgi.service.dmt.RemoteAlertSender;
-import org.osgi.service.dmt.spi.DataPluginFactory;
+import org.osgi.service.dmt.spi.DataPlugin;
 import org.osgi.service.event.Event;
 import org.osgi.service.event.EventAdmin;
 
@@ -67,8 +70,9 @@ public abstract class DmtPluginTestCase extends TestCase {
 	public DmtPrincipalPermissionAdmin dmtPrincipalPermissionAdmin;
 	public DummyConfigurationAdmin	configurationAdmin;
     static final String DMT_PERMISSION_ADMIN_SERVICE_PID = 
-        "org.osgi.impl.service.dmt.permissions";
+        "org.osgi.impl.service.dmt.perms";
 	public DummyComponentContext context;
+	public List deferredPluginReferences;
 	
 	public class DummyContext implements BundleContext {
 		public ServiceReference getServiceReference(String clazz) {
@@ -89,7 +93,7 @@ public abstract class DmtPluginTestCase extends TestCase {
 		}
 
 		public Filter createFilter(String filter) throws InvalidSyntaxException {
-			if (filter.equals("(|(objectClass=org.osgi.service.dmt.DmtDataPlugin)(objectClass=org.osgi.service.dmt.DmtExecPlugin)(objectClass=org.osgi.service.dmt.DmtReadOnlyDataPlugin))")){
+			if (filter.equals("(|(objectClass=org.osgi.service.dmt.spi.DataPlugin)(objectClass=org.osgi.service.dmt.spi.ExecPlugin))")){
 				return new DummyFilter("plugin");
 			}
 			if (filter.equals("(objectClass=org.osgi.service.dmt.RemoteAlertSender)")) {
@@ -135,7 +139,7 @@ public abstract class DmtPluginTestCase extends TestCase {
 				return new ServiceReference[] { new DummyServiceReference(configurationAdmin) };
 			}
 			if ("plugin".equals(filter)) {
-				return new ServiceReference[0];
+				return (ServiceReference[]) deferredPluginReferences.toArray(new ServiceReference[deferredPluginReferences.size()]);
 			}
 			throw new IllegalStateException(filter);
 		}
@@ -229,6 +233,9 @@ public abstract class DmtPluginTestCase extends TestCase {
 			if ("execRootURIs".equals(key)) {
 				return null;
 			}
+			if (Constants.SERVICE_DESCRIPTION.equals(key)) {
+				return this.serviceObject.getClass().toString();
+			}
 			throw new IllegalStateException();
 		}
 
@@ -250,7 +257,7 @@ public abstract class DmtPluginTestCase extends TestCase {
 		public boolean match(ServiceReference reference) {
 			if (reference instanceof DummyServiceReference) {
 				DummyServiceReference dummyRef = (DummyServiceReference)reference;
-				if (dummyRef.serviceObject instanceof DataPluginFactory) {
+				if (dummyRef.serviceObject instanceof DataPlugin) {
 					return true;
 				}
 			}
@@ -292,6 +299,7 @@ public abstract class DmtPluginTestCase extends TestCase {
 		dmtAdminActivator.start(dmtBundleContext);
 		context = new DummyComponentContext();
 		context.services.put("dmtAdmin",dmtFactory);
+		deferredPluginReferences = new ArrayList();
 	}
 	
 	public void tearDown() throws Exception {
@@ -302,12 +310,17 @@ public abstract class DmtPluginTestCase extends TestCase {
 		configurationAdminServiceListener = null;
 		dmtAdminActivator = null;
 		dmtBundleContext = null;
+		deferredPluginReferences = null;
 	}
 	
-	public void addDataPlugin(String URI,DataPluginFactory plugin) {
+	public void addDataPlugin(String URI,DataPlugin plugin) {
 		DummyServiceReference ref = new DummyServiceReference(plugin);
 		ref.dataRootURIs = new String[] {URI};
-		ServiceEvent e = new ServiceEvent(ServiceEvent.REGISTERED,ref);
-		newServiceTracker.serviceChanged(e);
+		if (newServiceTracker!=null) {
+			ServiceEvent e = new ServiceEvent(ServiceEvent.REGISTERED,ref);
+			newServiceTracker.serviceChanged(e);
+		} else {
+			deferredPluginReferences.add(ref);
+		}
 	}
 }
