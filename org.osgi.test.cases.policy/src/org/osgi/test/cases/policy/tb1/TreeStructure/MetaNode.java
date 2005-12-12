@@ -132,7 +132,7 @@ public class MetaNode implements TestInterface {
         DmtSession session = null;
         try {
             session = tbc.getDmtAdmin().getSession(PolicyConstants.LOCATION_PERMISSION_NODE,
-                DmtSession.LOCK_TYPE_SHARED);
+                DmtSession.LOCK_TYPE_ATOMIC);
             
             if (!session.isNodeUri(PolicyConstants.DEFAULT_PERMISSION_NODE)) {
                 session.createLeafNode(PolicyConstants.DEFAULT_PERMISSION_NODE, new DmtData(""));
