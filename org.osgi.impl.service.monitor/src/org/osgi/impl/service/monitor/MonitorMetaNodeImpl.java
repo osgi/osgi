@@ -21,8 +21,6 @@ import java.util.Arrays;
 import org.osgi.service.dmt.MetaNode;
 import org.osgi.service.dmt.DmtData;
 
-// TODO update meta-info based on spec (e.g. wrt permanent/automatic nodes)
-
 public class MonitorMetaNodeImpl implements MetaNode
 {
     static final String LEAF_MIME_TYPE = "text/plain";
@@ -48,37 +46,43 @@ public class MonitorMetaNodeImpl implements MetaNode
     DmtData[] validValues           = null;
     int       format                = DmtData.FORMAT_NULL;
     String[]  mimeTypes             = null;
+    
+    boolean allowEmptyString        = true; 
 
     // Leaf node in MonitorPlugin
-    public MonitorMetaNodeImpl(String description, boolean replaceable, 
-                               boolean isPermanent, DmtData defaultData, 
-                               DmtData[] validValues, int format)
+    public MonitorMetaNodeImpl(String description, boolean isPermanent, 
+                               DmtData defaultData, DmtData[] validValues, 
+                               int format, boolean allowEmptyOrNegative)
     {
         leaf = true;
+
         // No leaf nodes can be created (they are either permanent or automatic)
         scope = isPermanent ? PERMANENT : AUTOMATIC;
+        replaceable = !isPermanent;
+        
         mimeTypes = new String[] { LEAF_MIME_TYPE };
 
-        this.replaceable = replaceable;
         this.defaultData = defaultData;
         this.validValues = validValues;
         this.format      = format;
+        
+        allowEmptyString = allowEmptyOrNegative;
+        if(!allowEmptyOrNegative)
+            min = 0;
 
         setCommon(description, false);
     }
 
     // Interior node in ConfigurationPlugin
-    public MonitorMetaNodeImpl(String description, boolean deletable, 
-                               boolean addable, boolean allowInfinte, 
-                               int scope)
+    public MonitorMetaNodeImpl(String description, boolean addable, 
+                               boolean allowInfinte, int scope)
     {
-        // TODO merge deletable and addable parameter into one (they are always the same at the time of reading)
         leaf = false;
         format = DmtData.FORMAT_NODE;
 
         this.scope = scope;
-        this.deletable = deletable;
         this.addable = addable;
+        this.deletable = addable; // whatever can be added can also be deleted
 
         setCommon(description, allowInfinte);        
     }
@@ -168,7 +172,13 @@ public class MonitorMetaNodeImpl implements MetaNode
             if(intValue < min || intValue > max)
                 return false;
         }
-            
+          
+        if(valueFormat == DmtData.FORMAT_STRING && !allowEmptyString) {
+            String stringValue = value.getString();
+            if(stringValue == null || stringValue.length() == 0)
+                return false;
+        }
+                                
         return validValues == null ? true :
             Arrays.asList(validValues).contains(value);
     }
@@ -180,7 +190,6 @@ public class MonitorMetaNodeImpl implements MetaNode
         if(allowInfinte) {
             maxOccurrence = Integer.MAX_VALUE; // infinite
             zeroOccurrenceAllowed = true;
-            deletable = true;
         }
     }
 }
