@@ -81,6 +81,8 @@ public class GetSetNodeType implements TestInterface {
 		testGetSetNodeType012();
 		testGetSetNodeType013();
 		testGetSetNodeType014();
+		testGetSetNodeType015();
+		testGetSetNodeType016();
 	}
     
     private void prepare() {
@@ -419,6 +421,59 @@ public class GetSetNodeType implements TestInterface {
 		} catch (Exception e) {
 			tbc.fail("Expected " + DmtException.class.getName() + " but was "
 					+ e.getClass().getName());
+		} finally {
+			tbc.closeSession(session);
+		}
+	}
+	
+	/**
+	 * This method asserts that an empty string as relative URI means the root 
+	 * URI the session was opened with
+	 * 
+	 * @spec DmtSession.getNodeType(String)
+	 */
+	private void testGetSetNodeType015() {
+		DmtSession session = null;
+		try {
+			tbc.log("#testGetSetNodeType015");
+			
+			session = tbc.getDmtAdmin().getSession(
+					TestExecPluginActivator.LEAF_NODE, DmtSession.LOCK_TYPE_ATOMIC);
+
+			session.getNodeType("");
+
+
+			tbc.pass("Asserts that an empty string as relative URI means the root " +
+					"URI the session was opened with");
+		} catch (Exception e) {
+			tbc.fail("Unexpected Exception: " + e.getClass().getName()
+					+ " [Message: " + e.getMessage() + "]");
+		} finally {
+			tbc.closeSession(session);
+		}
+	}	
+	
+	/**
+	 * This method asserts that an empty string as relative URI means the root 
+	 * URI the session was opened with
+	 * 
+	 * @spec DmtSession.setNodeType(String,String)
+	 */
+	private void testGetSetNodeType016() {
+		DmtSession session = null;
+		try {
+			tbc.log("#testGetSetNodeType016");
+			session = tbc.getDmtAdmin().getSession(
+					TestExecPluginActivator.LEAF_NODE, DmtSession.LOCK_TYPE_ATOMIC);
+
+			session.setNodeType("", "text/xml");
+
+
+			tbc.pass("Asserts that an empty string as relative URI means the root " +
+					"URI the session was opened with");
+		} catch (Exception e) {
+			tbc.fail("Unexpected Exception: " + e.getClass().getName()
+					+ " [Message: " + e.getMessage() + "]");
 		} finally {
 			tbc.closeSession(session);
 		}

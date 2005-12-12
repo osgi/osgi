@@ -71,6 +71,7 @@ public class GetNodeTimestamp implements TestInterface {
     		testGetNodeTimestamp002();
     		testGetNodeTimestamp003();
     		testGetNodeTimestamp004();
+    		testGetNodeTimestamp005();
         } else {
             testGetNodeTimestampFeatureNotSupported001();
         }
@@ -186,7 +187,33 @@ public class GetNodeTimestamp implements TestInterface {
 		} finally {
 			tbc.closeSession(session);
 		}
-	}		
+	}	
+	
+	/**
+	 * This method asserts that an empty string as relative URI means the root 
+	 * URI the session was opened with
+	 * 
+	 * @spec DmtSession.getNodeTimestamp(String)
+	 */
+	private void testGetNodeTimestamp005() {
+		DmtSession session = null;
+		try {
+			tbc.log("#testGetNodeTimestamp005");
+			
+			session = tbc.getDmtAdmin().getSession(
+					TestExecPluginActivator.INTERIOR_NODE, DmtSession.LOCK_TYPE_ATOMIC);
+
+			session.getNodeTimestamp("");
+
+			tbc.pass("Asserts that an empty string as relative URI means the root " +
+				"URI the session was opened with");
+		} catch (Exception e) {
+			tbc.fail("Unexpected Exception: " + e.getClass().getName()
+					+ " [Message: " + e.getMessage() + "]");
+		} finally {
+			tbc.closeSession(session);
+		}
+	}
     /**
      * Asserts that if the DmtAdmin service implementation does not support this method,
      * DmtException.FEATURE_NOT_SUPPORTED is thrown

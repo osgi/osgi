@@ -63,6 +63,7 @@ public class IsNodeUri implements TestInterface {
 		testIsNodeUri001();
 		testIsNodeUri002();
 		testIsNodeUri003();
+		testIsNodeUri004();
 	}
     private void prepare() {
     	tbc.setPermissions(new PermissionInfo(DmtPermission.class.getName(), DmtConstants.ALL_NODES,DmtConstants.ALL_ACTIONS));
@@ -136,6 +137,31 @@ public class IsNodeUri implements TestInterface {
 		} finally {
 			tbc.closeSession(session);
 			prepare();
+		}
+	}
+	
+	/**
+	 * This method asserts that an empty string as relative URI means the root 
+	 * URI the session was opened with
+	 * 
+	 * @spec DmtSession.isNodeUri(String)
+	 */
+	private void testIsNodeUri004() {
+		DmtSession session = null;
+		try {
+			tbc.log("#testIsNodeUri004");
+			
+			session = tbc.getDmtAdmin().getSession(
+					TestExecPluginActivator.INTERIOR_NODE, DmtSession.LOCK_TYPE_ATOMIC);
+			
+			tbc.assertTrue("Asserts that an empty string as relative URI means the root " +
+					"URI the session was opened with",session.isNodeUri(""));
+			
+		} catch (Exception e) {
+			tbc.fail("Unexpected Exception: " + e.getClass().getName()
+					+ " [Message: " + e.getMessage() + "]");
+		} finally {
+			tbc.closeSession(session);
 		}
 	}
 	

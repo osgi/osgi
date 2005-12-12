@@ -73,6 +73,7 @@ public class GetMetaNode implements TestInterface {
 		testGetMetaNode004();
 		testGetMetaNode005();
 		testGetMetaNode006();
+		testGetMetaNode007();
 	}
     
     private void prepare() {
@@ -224,5 +225,32 @@ public class GetMetaNode implements TestInterface {
         } finally {
             tbc.closeSession(session);
         }
-    }   
+    }  
+	
+	/**
+	 * This method asserts that an empty string as relative URI means the root 
+	 * URI the session was opened with
+
+	 * 
+	 * @spec DmtSession.getMetaNode(String)
+	 */
+	private void testGetMetaNode007() {
+		DmtSession session = null;
+		try {
+			tbc.log("#testGetMetaNode007");
+			
+			session = tbc.getDmtAdmin().getSession(
+					TestExecPluginActivator.INTERIOR_NODE, DmtSession.LOCK_TYPE_ATOMIC);
+
+			session.getMetaNode("");
+
+			tbc.pass("Asserts that an empty string as relative URI means the root " +
+					"URI the session was opened with");
+		} catch (Exception e) {
+			tbc.fail("Unexpected Exception: " + e.getClass().getName()
+					+ " [Message: " + e.getMessage() + "]");
+		} finally {
+			tbc.closeSession(session);
+		}
+	}	
 }

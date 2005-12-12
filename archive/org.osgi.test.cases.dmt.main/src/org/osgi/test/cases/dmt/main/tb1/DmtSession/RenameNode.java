@@ -82,6 +82,7 @@ public class RenameNode implements TestInterface {
 		testRenameNode014();
 		testRenameNode015();
 		testRenameNode016();
+		testRenameNode017();
 	}
 	
     private void prepare() {
@@ -484,6 +485,33 @@ public class RenameNode implements TestInterface {
 					+ e.getClass().getName());
 		} finally {
 			tbc.setPermissions(new PermissionInfo(DmtPermission.class.getName(), DmtConstants.ALL_NODES,DmtConstants.ALL_ACTIONS));
+			tbc.closeSession(session);
+		}
+	}
+	
+	/**
+	 * This method asserts that an empty string as relative URI means the root 
+	 * URI the session was opened with
+	 * 
+	 * @spec DmtSession.renameNode(String,String)
+	 */
+	private void testRenameNode017() {
+		DmtSession session = null;
+		try {
+			tbc.log("#testRenameNode017");
+
+			session = tbc.getDmtAdmin().getSession(
+					TestExecPluginActivator.INTERIOR_NODE, DmtSession.LOCK_TYPE_ATOMIC);
+
+			session.renameNode("",
+					TestExecPluginActivator.INEXISTENT_NODE_NAME);
+
+			tbc.pass("Asserts that an empty string as relative URI means the root " +
+				"URI the session was opened with");
+		} catch (Exception e) {
+			tbc.fail("Unexpected Exception: " + e.getClass().getName()
+					+ " [Message: " + e.getMessage() + "]");
+		} finally {
 			tbc.closeSession(session);
 		}
 	}

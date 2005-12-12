@@ -81,6 +81,8 @@ public class GetSetNodeTitle implements TestInterface {
     		testGetSetNodeTitle011();
     		testGetSetNodeTitle012();
     		testGetSetNodeTitle013();
+    		testGetSetNodeTitle014();
+    		testGetSetNodeTitle015();
         } else {
             testGetSetNodeTitleFeatureNotSupported001();
             testGetSetNodeTitleFeatureNotSupported002();
@@ -416,7 +418,59 @@ public class GetSetNodeTitle implements TestInterface {
 		}
 	}
 	
+	/**
+	 * This method asserts that an empty string as relative URI means the root 
+	 * URI the session was opened with
+	 * 
+	 * @spec DmtSession.getNodeTitle(String)
+	 * 
+	 */
+	private void testGetSetNodeTitle014() {
+		DmtSession session = null;
+		try {
+			tbc.log("#testGetSetNodeTitle014");
+			
+			
+			session = tbc.getDmtAdmin().getSession(
+					TestExecPluginActivator.LEAF_NODE, DmtSession.LOCK_TYPE_ATOMIC);
+
+			session.getNodeTitle("");
+
+			tbc.pass("Asserts that an empty string as relative URI means the root " +
+			"URI the session was opened with");
+		} catch (Exception e) {
+			tbc.fail("Unexpected Exception: " + e.getClass().getName()
+					+ " [Message: " + e.getMessage() + "]");
+		} finally {
+			tbc.closeSession(session);
+		}
+	}	
 	
+	/**
+	 * This method asserts that an empty string as relative URI means the root 
+	 * URI the session was opened with
+	 * 
+	 * @spec DmtSession.setNodeTitle(String,String)
+	 */
+	private void testGetSetNodeTitle015() {
+		DmtSession session = null;
+		try {
+			tbc.log("#testGetSetNodeTitle015");
+			
+			session = tbc.getDmtAdmin().getSession(
+					TestExecPluginActivator.LEAF_NODE, DmtSession.LOCK_TYPE_ATOMIC);
+
+			session.setNodeTitle("", "temp");
+
+			tbc.pass("Asserts that an empty string as relative URI means the root " +
+			"URI the session was opened with");
+		} catch (Exception e) {
+			tbc.fail("Unexpected Exception: " + e.getClass().getName()
+					+ " [Message: " + e.getMessage() + "]");
+		} finally {
+			tbc.closeSession(session);
+		}
+	}	
 	
     
     /**

@@ -98,6 +98,7 @@ public class Copy implements TestInterface {
         testCopy025();
         testCopy026();
         testCopy027();
+        testCopy028();
 	}
 
 	private void prepare() {
@@ -911,6 +912,32 @@ public class Copy implements TestInterface {
 		} catch (Exception e) {
 			tbc.fail("Expected " + DmtException.class.getName() + " but was "
 					+ e.getClass().getName());
+		} finally {
+			tbc.closeSession(session);
+		}
+	}
+	
+	/**
+	 * This method asserts that an empty string as relative URI means the root 
+	 * URI the session was opened with
+	 * 
+	 * @spec DmtSession.copy(String,String,boolean)
+	 */
+	private void testCopy028() {
+		DmtSession session = null;
+		try {
+			tbc.log("#testCopy028");
+			session = tbc.getDmtAdmin().getSession(
+					TestExecPluginActivator.INTERIOR_NODE, DmtSession.LOCK_TYPE_ATOMIC);
+
+			session.copy("",
+					TestExecPluginActivator.INEXISTENT_NODE_NAME, false);
+
+			tbc.pass("This method asserts that an empty string as relative URI means the root " +
+					"URI the session was opened with");
+		} catch (Exception e) {
+			tbc.fail("Unexpected Exception: " + e.getClass().getName()
+					+ " [Message: " + e.getMessage() + "]");
 		} finally {
 			tbc.closeSession(session);
 		}
