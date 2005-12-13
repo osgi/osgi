@@ -92,6 +92,8 @@ public class CreateInteriorNode implements TestInterface {
         testCreateInteriorNode020();
         testCreateInteriorNode021();
         testCreateInteriorNode022();
+        testCreateInteriorNode023();
+        testCreateInteriorNode024();
 	}
     private void prepare() {
         tbc.setPermissions(new PermissionInfo(DmtPermission.class.getName(), DmtConstants.ALL_NODES,DmtConstants.ALL_ACTIONS));
@@ -682,5 +684,61 @@ public class CreateInteriorNode implements TestInterface {
             tbc.closeSession(session);
         }
     }
+    
+	/**
+	 * This method asserts that an empty string as relative URI means the root 
+	 * URI the session was opened with (it throws DmtException.NODE_ALREADY_EXISTS)
+	 * using the method with one parameter
+	 * 
+	 * @spec DmtSession.createInteriorNode(String)
+	 */
+	private void testCreateInteriorNode023() {
+		DmtSession session = null;
+		try {
+			tbc.log("#testCreateInteriorNode023");
+			session = tbc.getDmtAdmin().getSession(
+					TestExecPluginActivator.INTERIOR_NODE, DmtSession.LOCK_TYPE_ATOMIC);
+			
+			session.createInteriorNode("");
+			tbc.failException("", DmtException.class);
+		} catch (DmtException e) {
+			tbc.assertEquals(
+					"Asserting that DmtException code is NODE_ALREADY_EXISTS",
+					DmtException.NODE_ALREADY_EXISTS, e.getCode());
+		} catch (Exception e) {
+			tbc.fail("Expected " + DmtException.class.getName() + " but was "
+					+ e.getClass().getName());
+		}  finally {
+			tbc.closeSession(session);
+		}		
+	}	
+	
+	/**
+	 * This method asserts that an empty string as relative URI means the root 
+	 * URI the session was opened with (it throws DmtException.NODE_ALREADY_EXISTS)
+	 * using the method with two parameters
+	 * 
+	 * @spec DmtSession.createInteriorNode(String,String)
+	 */
+	private void testCreateInteriorNode024() {
+		DmtSession session = null;
+		try {
+			tbc.log("#testCreateInteriorNode024");
+			session = tbc.getDmtAdmin().getSession(
+					TestExecPluginActivator.INTERIOR_NODE, DmtSession.LOCK_TYPE_ATOMIC);
+			
+			session.createInteriorNode("",DmtConstants.MIMETYPE);
+			tbc.failException("", DmtException.class);
+		} catch (DmtException e) {
+			tbc.assertEquals(
+					"Asserting that DmtException code is NODE_ALREADY_EXISTS",
+					DmtException.NODE_ALREADY_EXISTS, e.getCode());
+		} catch (Exception e) {
+			tbc.fail("Expected " + DmtException.class.getName() + " but was "
+					+ e.getClass().getName());
+		}  finally {
+			tbc.closeSession(session);
+		}		
+	}	
     
 }
