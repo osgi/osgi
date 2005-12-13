@@ -472,8 +472,9 @@ public class Copy implements TestInterface {
 		}
 	}
 	/**
-	 * This method asserts that DmtException.INVALID_URI is thrown when  
-	 * newNodeUri is syntactically invalid (empty newNodeUri)
+	 * This method asserts that an empty string as newNodeUri means the root 
+	 * URI the session was opened with  (DmtException.NODE_ALREADY_EXISTS is thrown 
+	 * because the root already exist)
 	 * 
 	 * @spec DmtSession.copy(String,String,boolean)
 	 */
@@ -481,14 +482,13 @@ public class Copy implements TestInterface {
 		DmtSession session = null;
 		try {
 			tbc.log("#testCopy013");
-			session = tbc.getDmtAdmin().getSession(DmtConstants.OSGi_ROOT,
-					DmtSession.LOCK_TYPE_EXCLUSIVE);
+			session = tbc.getDmtAdmin().getSession(TestExecPluginActivator.INTERIOR_NODE);
 			session.copy(TestExecPluginActivator.INTERIOR_NODE,"", true);
 			tbc.failException("", DmtException.class);
 		} catch (DmtException e) {
 			tbc.assertEquals(
-					"Asserting that DmtException code is INVALID_URI",
-					DmtException.INVALID_URI, e.getCode());
+					"Asserting that DmtException code is NODE_ALREADY_EXISTS",
+					DmtException.NODE_ALREADY_EXISTS, e.getCode());
 		} catch (Exception e) {
 			tbc.fail("Expected " + DmtException.class.getName() + " but was "
 					+ e.getClass().getName());
@@ -919,7 +919,8 @@ public class Copy implements TestInterface {
 	
 	/**
 	 * This method asserts that an empty string as relative URI means the root 
-	 * URI the session was opened with
+	 * URI the session was opened with (it throws DmtException.COMMAND_FAILED 
+	 * because they arent in the same session's subtree)
 	 * 
 	 * @spec DmtSession.copy(String,String,boolean)
 	 */
@@ -931,13 +932,15 @@ public class Copy implements TestInterface {
 					TestExecPluginActivator.INTERIOR_NODE, DmtSession.LOCK_TYPE_ATOMIC);
 
 			session.copy("",
-					TestExecPluginActivator.INEXISTENT_NODE_NAME, false);
-
-			tbc.pass("This method asserts that an empty string as relative URI means the root " +
-					"URI the session was opened with");
+					TestExecPluginActivator.INEXISTENT_NODE, false);
+			tbc.failException("", DmtException.class);
+		} catch (DmtException e) {
+			tbc.assertEquals(
+					"Asserting that DmtException code is COMMAND_FAILED",
+					DmtException.COMMAND_FAILED, e.getCode());
 		} catch (Exception e) {
-			tbc.fail("Unexpected Exception: " + e.getClass().getName()
-					+ " [Message: " + e.getMessage() + "]");
+			tbc.fail("Expected " + DmtException.class.getName() + " but was "
+					+ e.getClass().getName());
 		} finally {
 			tbc.closeSession(session);
 		}
