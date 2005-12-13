@@ -164,8 +164,13 @@ public class EventTestControl extends DefaultTestBundleControl {
     PermissionInfo topInfo2 = new PermissionInfo(TopicPermission.class.getName(), 
                                                  "org/osgi/*", 
                                                  TopicPermission.SUBSCRIBE);
+    PermissionInfo topInfo4 = new PermissionInfo(TopicPermission.class.getName(),
+    		"org/osgi2/*",
+    		TopicPermission.SUBSCRIBE); 
+    
     addPermissions(permissionAdmin, tb2, new PermissionInfo[]{regInfo, topInfo2});
     addPermissions(permissionAdmin, tb2, new PermissionInfo[]{regInfo, topInfo3});
+    addPermissions(permissionAdmin, tb2, new PermissionInfo[]{regInfo, topInfo4}); 
     
     //try to send event and PUBLISH TopicPermission
     Hashtable properties = new Hashtable();
