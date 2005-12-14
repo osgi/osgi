@@ -802,15 +802,15 @@ public class DmtSessionImpl implements DmtSession {
 
 		    // DMTND 7.7.1.5: "needs correct access rights for the equivalent
 		    // Add, Delete, Get, and Replace commands"
-            if(recursive)
-                checkNodePermissionRecursive(node, Acl.GET);
-            else
-                checkNodePermission(node, Acl.GET);
+            
+            boolean hasTitle = copySourceCheck(node, recursive);
 			checkNodeCapability(node, MetaNode.CMD_GET);
 
-            // ACL not copied, so parent does not need REPLACE permission even
-            // if the copied node is a leaf
-            checkNodePermission(newParentNode, Acl.ADD);
+            // ACL not copied, so the parent of the target node only needs 
+            // REPLACE permission if the copied node (or any node in the copied 
+            // subtree) has a title
+            int targetPermissions = Acl.ADD | (hasTitle ? Acl.REPLACE : 0);
+            checkNodePermission(newParentNode, targetPermissions);
             checkNodeCapability(newNode, MetaNode.CMD_ADD);
 
 			checkNewNode(newNode);
@@ -1028,7 +1028,11 @@ public class DmtSessionImpl implements DmtSession {
 		// copy Title property (without sending event) if it is supported by 
         // both source and target plugins
 		try {
-			internalSetNodeTitle(newNode, internalGetNodeTitle(node), false);
+            String title = internalGetNodeTitle(node);
+            // It could be valid to copy "null" Titles as well, if the 
+            // implementation has default values for the Title property. 
+            if(title != null) 
+                internalSetNodeTitle(newNode, title, false);
 		} catch (DmtException e) {
 		    if (e.getCode() != DmtException.FEATURE_NOT_SUPPORTED)
 		        throw new DmtException(node.getUri(), 
@@ -1097,21 +1101,51 @@ public class DmtSessionImpl implements DmtSession {
 		checkNodeOrParentPermission(principal, node, actions, true);
 	}
 
-    // precondition: 'uri' must point be valid (checked with isNodeUri or
+    // Checks that the caller has GET rights for the given node (or all nodes
+    // in its subtree), and throws an exception if not.  The return value 
+    // indicates whether the given node has a non-null Title property, or in
+    // the recursive case if the given subtree contains any nodes with a title.
+    // This is used to decide whether the caller needs REPLACE rights for the 
+    // target node in a copy operation.  
+    // Precondition: 'uri' must point be valid (checked with isNodeUri or
     // returned by getChildNodeNames)
-	private void checkNodePermissionRecursive(Node node, int actions) 
-	        throws DmtException {
-	    checkNodePermission(node, actions);
+	private boolean copySourceCheck(Node node, boolean recursive) 
+            throws DmtException {
+
+        // check that the caller has GET rights for the current node
+	    checkNodePermission(node, Acl.GET);
+        
+        // check whether the node has a non-null title
+        boolean hasTitle = nodeHasTitle(node);
 	    
-	    if (!isLeafNodeNoCheck(node)) {
+        // perform the checks recursively for the subtree if requested 
+        if (recursive && !isLeafNodeNoCheck(node)) {
 	        // 'children' is [] if there are no child nodes
 	        String[] children = internalGetChildNodeNames(node);
 	        for (int i = 0; i < children.length; i++)
-	            checkNodePermissionRecursive(
-                        node.appendSegment(children[i]), actions);
+	            if(copySourceCheck(node.appendSegment(children[i]), true))
+	                hasTitle = true;
 	    }
+        
+        return hasTitle;
 	}
 	
+	// Returns true if the plugin handling the given node supports the Title 
+    // property and value of the property is non-null.  This is used for
+    // determining whether the caller needs to have REPLACE rights for the
+    // target node of the enclosing copy operation.
+    private boolean nodeHasTitle(Node node) throws DmtException {
+        try {
+            return internalGetNodeTitle(node) != null;
+        } catch (DmtException e) {
+            // FEATURE_NOT_SUPPORTED means that Title is not supported
+            if (e.getCode() != DmtException.FEATURE_NOT_SUPPORTED)
+                throw e;
+        }
+        
+        return false;
+    }
+    
 	private Node makeAbsoluteUriAndCheck(String nodeUri, int check)
 			throws DmtException {
 		Node node = makeAbsoluteUri(nodeUri);
