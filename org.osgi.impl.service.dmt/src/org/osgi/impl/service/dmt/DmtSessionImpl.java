@@ -29,9 +29,6 @@ import org.osgi.service.event.EventAdmin;
 import org.osgi.service.log.LogService;
 import org.osgi.service.permissionadmin.PermissionInfo;
 
-// Needed for meta-data name and value pattern matching
-//import java.util.regex.Pattern;
-
 // OPTIMIZE node handling (e.g. retrieve plugin from dispatcher only once per API call)
 // OPTIMIZE only retrieve meta-data once per API call
 // OPTIMIZE only call commit/rollback for plugins that were actually modified since the last transaction boundary
@@ -802,15 +799,9 @@ public class DmtSessionImpl implements DmtSession {
 
 		    // DMTND 7.7.1.5: "needs correct access rights for the equivalent
 		    // Add, Delete, Get, and Replace commands"
-            
-            boolean hasTitle = copySourceCheck(node, recursive);
-			checkNodeCapability(node, MetaNode.CMD_GET);
+            copyPermissionCheck(node, newParentNode, newNode, recursive);
 
-            // ACL not copied, so the parent of the target node only needs 
-            // REPLACE permission if the copied node (or any node in the copied 
-            // subtree) has a title
-            int targetPermissions = Acl.ADD | (hasTitle ? Acl.REPLACE : 0);
-            checkNodePermission(newParentNode, targetPermissions);
+            checkNodeCapability(node, MetaNode.CMD_GET);
             checkNodeCapability(newNode, MetaNode.CMD_ADD);
 
 			checkNewNode(newNode);
@@ -1101,34 +1092,65 @@ public class DmtSessionImpl implements DmtSession {
 		checkNodeOrParentPermission(principal, node, actions, true);
 	}
 
-    // Checks that the caller has GET rights for the given node (or all nodes
-    // in its subtree), and throws an exception if not.  The return value 
-    // indicates whether the given node has a non-null Title property, or in
-    // the recursive case if the given subtree contains any nodes with a title.
-    // This is used to decide whether the caller needs REPLACE rights for the 
-    // target node in a copy operation.  
-    // Precondition: 'uri' must point be valid (checked with isNodeUri or
+    // Performs the necessary permission checks for a copy operation:
+    // - checks that the caller has GET rights (ACL or Java permission) for all 
+    //   source nodes
+    // - in case of local sessions, checks that the caller has REPLACE Java 
+    //   permissions on all nodes where a title needs to be set, and ADD Java
+    //   permissions for the parents of all added nodes
+    // - in case of remote sessions, only the ACL of the parent of the target
+    //   node needs to be checked, because ACLs cannot be set for nonexitent
+    //   nodes; in this case the ADD ACL is always required, while REPLACE is 
+    //   checked only if any of the copied nodes has a non-null Title string
+	//
+    // Precondition: 'node' must point be valid (checked with isNodeUri or
     // returned by getChildNodeNames)
-	private boolean copySourceCheck(Node node, boolean recursive) 
+    private void copyPermissionCheck(Node node, Node newParentNode, 
+            Node newNode, boolean recursive) throws DmtException {
+        boolean hasTitle = copyPermissionCheckRecursive(node, newParentNode, 
+                newNode, recursive);
+        
+        // ACL not copied, so the parent of the target node only needs 
+        // REPLACE permission if the copied node (or any node in the copied 
+        // subtree) has a title
+
+        // remote access permissions for the target only need to be checked once 
+        if(principal != null) { 
+            checkNodePermission(newParentNode, Acl.ADD);
+            if(hasTitle)
+                checkNodePermission(newNode, Acl.REPLACE);
+        }
+    }
+
+    private boolean copyPermissionCheckRecursive(Node node, 
+            Node newParentNode, Node newNode, boolean recursive) 
             throws DmtException {
 
         // check that the caller has GET rights for the current node
-	    checkNodePermission(node, Acl.GET);
+        checkNodePermission(node, Acl.GET);
         
         // check whether the node has a non-null title
         boolean hasTitle = nodeHasTitle(node);
-	    
+        
+        // local access permissions need to be checked for each target node
+        if(principal == null) { 
+            checkLocalPermission(newParentNode, writeAclCommands(Acl.ADD));
+            if(hasTitle)
+                checkLocalPermission(newNode, writeAclCommands(Acl.REPLACE));
+        }
+        
         // perform the checks recursively for the subtree if requested 
         if (recursive && !isLeafNodeNoCheck(node)) {
-	        // 'children' is [] if there are no child nodes
-	        String[] children = internalGetChildNodeNames(node);
-	        for (int i = 0; i < children.length; i++)
-	            if(copySourceCheck(node.appendSegment(children[i]), true))
-	                hasTitle = true;
-	    }
+            // 'children' is [] if there are no child nodes
+            String[] children = internalGetChildNodeNames(node);
+            for (int i = 0; i < children.length; i++)
+                if(copyPermissionCheckRecursive(node.appendSegment(children[i]), 
+                        newNode, newNode.appendSegment(children[i]), true))
+                    hasTitle = true;
+        }
         
         return hasTitle;
-	}
+    }
 	
 	// Returns true if the plugin handling the given node supports the Title 
     // property and value of the property is non-null.  This is used for
@@ -1169,21 +1191,7 @@ public class DmtSessionImpl implements DmtSession {
     // 'synchronized' is just indication, all entry points are synch'd anyway
     private synchronized PluginSessionWrapper getPluginSession(Node node, 
             boolean writeOperation) throws DmtException {
-        /*
-         * szempontok: - unregistration: ha egy plugin-t elkezdtunk hasznalni,
-         *               es unregisztralodik, attol meg bele kell menni a 
-         *               session wrapper-ebe
-         *             - ha egy node-hoz csak egy gyoker plugin session van
-         *               nyitva, akkor meg kell probalni talalni egy 
-         *               specifikusabb plugin-t  
-         * 
-        - kikeressuk a legmelyebb node-ra passzolo nyitott session-t
-          -> nincs: get pluginReg, root, open session
-          -> van: get pluginReg, root
-             -> ha root lejjebb van, mint a nyitott session gyokere, akkor open session
-             -> egyebkent nyitott session visszaadasa
-         */
-        
+
         PluginSessionWrapper wrappedPlugin = null;
         Node wrappedPluginRoot = null;
         
