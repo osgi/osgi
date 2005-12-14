@@ -117,6 +117,9 @@ public class Node {
             throw new DmtException(uri, DmtException.INVALID_URI,
                     "The URI parameter is null.");
         
+        if (uri.length() == 0) // empty relative URI
+            return new Node(uri);
+        
         StringBuffer sb = new StringBuffer();
         int len = uri.length();
         int start = 0;
