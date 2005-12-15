@@ -55,12 +55,12 @@ public class TestingActivatorImplLow implements TestingActivator {
 	public void start(BundleContext context) throws Exception {
 		ht = new Hashtable();
 		ht.put(Constants.SERVICE_RANKING, new Integer(5) );		
-		servReg = context.registerService(TestingActivatorImplLow.class.getName(), this, ht);
+		servReg = context.registerService(TestingActivator.class.getName(), this, ht);
 		System.out.println("Activator activated.");
 	}
 	
 	public void startWithoutRanking(BundleContext context) throws Exception {
-		servReg = context.registerService(TestingActivatorImplLow.class.getName(), this, null);
+		servReg = context.registerService(TestingActivator.class.getName(), this, null);
 		System.out.println("Activator activated.");
 	}	
 
