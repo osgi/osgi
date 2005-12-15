@@ -857,7 +857,7 @@ public class ApplicationTestControl extends DefaultTestBundleControl {
 
 	public Object getServiceProperty(String className, String key) {
 		ServiceReference refs = getContext().getServiceReference(className);
-		return refs == null ? null : ((String) refs.getProperty(key));
+		return refs == null ? null : (refs.getProperty(key));
 	}
 
 	/**

@@ -124,6 +124,7 @@ public class GetApplicationId implements TestInterface {
 		} catch (Exception e) {
 			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": " + e.getClass().getName());
 		} finally {
+			tbc.installDescriptor();
 			tbc.cleanUp(infos);
 		}
 	}	

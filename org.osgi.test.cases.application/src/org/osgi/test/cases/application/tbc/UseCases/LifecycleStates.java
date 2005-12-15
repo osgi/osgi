@@ -76,7 +76,7 @@ public class LifecycleStates {
                                  
             synchronized (tbc) {
                 handle = (ApplicationHandle) tbc.getAppDescriptor().launch(null);            	
-                tbc.wait(ApplicationConstants.TIMEOUT);
+                tbc.wait(ApplicationConstants.SHORT_TIMEOUT);
             }
             
             tbc.assertTrue("Asserting if the system has received a register event after the launch of the app.",
@@ -87,7 +87,7 @@ public class LifecycleStates {
             
             synchronized (tbc) {
                 handle.destroy();            	
-                tbc.wait(ApplicationConstants.TIMEOUT);
+                tbc.wait(ApplicationConstants.SHORT_TIMEOUT);
             }
             
             tbc.assertTrue("Asserting if the system has received an unregistered event and a modified event after the destroy of the app.",
@@ -119,7 +119,7 @@ public class LifecycleStates {
             
             synchronized (tbc) {
             	tbc.unregisterDescriptor();
-                tbc.wait(ApplicationConstants.TIMEOUT);
+                tbc.wait(ApplicationConstants.SHORT_TIMEOUT);
             }
             
             tbc.assertTrue("Asserting if the system has received a unregistering event after the uninstall of the app.",
@@ -149,7 +149,7 @@ public class LifecycleStates {
             
             synchronized (tbc) {
             	tbc.unregisterDescriptor();
-                tbc.wait(ApplicationConstants.TIMEOUT);
+                tbc.wait(ApplicationConstants.SHORT_TIMEOUT);
             }
             
             tbc.resetEventProperties();                       
@@ -178,10 +178,11 @@ public class LifecycleStates {
         tbc.log("#testLifecycleStates004");
         try {           
             tbc.resetEventProperties();                       
+            EventHandlerImpl.waitNotify = false;  
             
             synchronized (tbc) {
             	tbc.getAppDescriptor().lock();
-                tbc.wait(ApplicationConstants.TIMEOUT);
+                tbc.wait(ApplicationConstants.SHORT_TIMEOUT);
             }
             
             tbc.assertTrue("Asserting if the system has received a modified event after the lock of the descriptor.",
@@ -192,7 +193,7 @@ public class LifecycleStates {
 
             synchronized (tbc) {
             	tbc.getAppDescriptor().unlock();
-                tbc.wait(ApplicationConstants.TIMEOUT);
+                tbc.wait(ApplicationConstants.SHORT_TIMEOUT);
             }            
             
             tbc.assertTrue("Asserting if the system has received a modified event after the unlock of the descriptor.",
@@ -202,6 +203,8 @@ public class LifecycleStates {
         } catch (Exception e) {
             tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": "
                 + e.getClass().getName());
+        } finally {
+        	EventHandlerImpl.waitNotify = true;
         }
     }
 

@@ -97,7 +97,7 @@ public class Schedule implements TestInterface {
 			tbc.assertNotNull("Asserting that a ScheduledApplication was returned when we pass null as eventFilter parameter.", sa);
 			
 			synchronized (tbc) {
-				tbc.wait(ApplicationConstants.TIMEOUT);
+				tbc.wait(ApplicationConstants.SHORT_TIMEOUT);
 			}
 			
 			tbc.assertEquals("Asserting that a ApplicationHandle was registered.", 1, tbc.getNumberAppHandle());
@@ -135,7 +135,7 @@ public class Schedule implements TestInterface {
 			tbc.assertNotNull("Asserting that a ScheduledApplication was returned when we pass null as arguments parameter.", sa);
 			
 			synchronized (tbc) {
-				tbc.wait(ApplicationConstants.TIMEOUT);
+				tbc.wait(ApplicationConstants.SHORT_TIMEOUT);
 			}
 			
 			tbc.assertEquals("Asserting that a ApplicationHandle was registered.", 1, tbc.getNumberAppHandle());
@@ -282,7 +282,7 @@ public class Schedule implements TestInterface {
 			tbc.assertNotNull("Asserting that an empty string works as a wildcard(*) in topic parameter.", sa);
 			
 			synchronized (tbc) {
-				tbc.wait(ApplicationConstants.TIMEOUT);
+				tbc.wait(ApplicationConstants.SHORT_TIMEOUT);
 			}
 			
 			tbc.assertEquals("Asserting that a ApplicationHandle was registered.", 1, tbc.getNumberAppHandle());
@@ -320,7 +320,7 @@ public class Schedule implements TestInterface {
 			tbc.assertNotNull("Asserting that a ScheduledApplication was returned according to the used filter.", sa);
 			
 			synchronized (tbc) {
-				tbc.wait(ApplicationConstants.TIMEOUT);
+				tbc.wait(ApplicationConstants.SHORT_TIMEOUT);
 			}
 					
 			tbc.assertEquals("Asserting that a ApplicationHandle was registered.", 1, tbc.getNumberAppHandle());
@@ -354,11 +354,23 @@ public class Schedule implements TestInterface {
 			
 			tbc.assertNotNull("Asserting that a ScheduledApplication was returned according to the used filter.", sa);
 			
-			synchronized (tbc) {
-				tbc.wait(ApplicationConstants.TIMEOUT*2);
+			long ticks = System.currentTimeMillis();
+			
+			for( int counter = 0; counter != 10; counter++ ) {
+				try {
+					Thread.sleep( 200 );
+				}catch( InterruptedException e ) {};
+				
+				if( tbc.getNumberAppHandle() == 2 )
+					break;
 			}
+			
+			long outTicks = System.currentTimeMillis();
+		
+			if( outTicks - ticks < 1000 || outTicks - ticks > 2100 )
+				tbc.fail("Timer too fast!");
 					
-			tbc.assertTrue("Asserting that two ApplicationHandles were registered.", (tbc.getNumberAppHandle()==2));
+			tbc.assertEquals("Asserting that two ApplicationHandles were registered.", 2, tbc.getNumberAppHandle());
 			
 		} catch (Exception e) {
 			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": " + e.getClass().getName());

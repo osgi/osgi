@@ -82,7 +82,7 @@ public class GetInstanceId implements TestInterface {
 			
 			tbc
 				.assertTrue("Asserting if the instanceID is the same used in xml.",
-					handle.getInstanceId().indexOf(ApplicationConstants.APPLICATION_PERMISSION_FILTER1) != -1);
+					handle.getInstanceId().indexOf(ApplicationConstants.TEST_PID) != -1);
 		} catch (Exception e) {
 			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + " " + e.getClass().getName());			
 		} finally {
@@ -113,7 +113,7 @@ public class GetInstanceId implements TestInterface {
 			
 			tbc
 			.assertTrue("Asserting if the instanceID is the same used in xml.",
-				handle.getInstanceId().indexOf(ApplicationConstants.APPLICATION_PERMISSION_FILTER1) != -1);
+				handle.getInstanceId().indexOf(ApplicationConstants.TEST_PID) != -1);
 		} catch (Exception e) {
 			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + " " + e.getClass().getName());			
 		} finally {
