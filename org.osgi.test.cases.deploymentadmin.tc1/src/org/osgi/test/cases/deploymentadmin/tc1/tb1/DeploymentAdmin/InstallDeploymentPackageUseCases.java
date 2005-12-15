@@ -455,7 +455,7 @@ public class InstallDeploymentPackageUseCases implements TestInterface {
 
         TestingDeploymentPackage testDP = null;
         try {
-            testDP = tbc.getTestingDeploymentPackage(DeploymentConstants.MISSING_NAME_HEADER_DP);
+            testDP = tbc.getTestingDeploymentPackage(DeploymentConstants.WRONG_ORDER_DP);
             
             deploymentEventHandler.reset();
             deploymentEventHandler.setHandlingComplete(true);

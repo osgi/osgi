@@ -80,7 +80,6 @@ public class ListDeploymentPackage implements TestInterface {
         testListDeploymentPackage005();
         testListDeploymentPackage006();
         testListDeploymentPackage007();
-        testListDeploymentPackage008();
 	}
     
     /**
@@ -285,36 +284,6 @@ public class ListDeploymentPackage implements TestInterface {
        }
    }
    
-   /**
-    * Asserts that SecurityException is thrown if the caller does not have "list" permission
-    * 
-    * @spec DeploymentAdmin.listDeploymentPackage()
-    */     
-  private void testListDeploymentPackage007() {
-      tbc.log("#testListDeploymentPackage007");
-      tbc.setDeploymentAdminPermission(
-            DeploymentConstants.DEPLOYMENT_PACKAGE_NAME_ALL,
-            DeploymentAdminPermission.INSTALL + ","
-            + DeploymentAdminPermission.UNINSTALL + ","
-            + DeploymentAdminPermission.UNINSTALL_FORCED);
-      DeploymentPackage dp = null;
-      try {
-          // make sure there is at least 1 DP
-          TestingDeploymentPackage testDP = tbc.getTestingDeploymentPackage(DeploymentConstants.SIMPLE_DP);
-          dp = tbc.installDeploymentPackage(tbc.getWebServer() + testDP.getFilename());
-
-          tbc.getDeploymentAdmin().listDeploymentPackages();
-          tbc.failException("#", SecurityException.class);
-      } catch (SecurityException e) {
-          tbc.pass(MessagesConstants.getMessage(MessagesConstants.EXCEPTION_CORRECTLY_THROWN, new String[] { "SecurityException" }));
-      } catch (Exception e) {
-            tbc.fail(MessagesConstants.getMessage(MessagesConstants.EXCEPTION_THROWN, new String[]{
-                    "SecurityException", e.getClass().getName()}));
-        } finally {
-            tbc.uninstall(dp);
-        }
-    }
-  
   /**
      * Asserts that during an installation of an existing package (update),
      * the target must remain in this list until the installation process is
@@ -322,8 +291,8 @@ public class ListDeploymentPackage implements TestInterface {
      * 
      * @spec DeploymentAdmin.listDeploymentPackage()
      */ 
-  private synchronized void testListDeploymentPackage008() {
-      tbc.log("#testListDeploymentPackage008");
+  private synchronized void testListDeploymentPackage007() {
+      tbc.log("#testListDeploymentPackage007");
       tbc.setDeploymentAdminPermission(DeploymentConstants.DEPLOYMENT_PACKAGE_NAME_ALL, DeploymentConstants.ALL_PERMISSION);
       TestingDeploymentPackage testDP = tbc.getTestingDeploymentPackage(DeploymentConstants.SIMPLE_DP);
       TestingDeploymentPackage testUpdateDP = tbc.getTestingDeploymentPackage(DeploymentConstants.BLOCK_SESSION_RESOURCE_PROCESSOR);

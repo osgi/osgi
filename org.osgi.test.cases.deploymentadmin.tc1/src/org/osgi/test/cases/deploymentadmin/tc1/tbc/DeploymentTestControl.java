@@ -441,7 +441,7 @@ public class DeploymentTestControl extends DefaultTestBundleControl {
             }
             case DeploymentConstants.MISSING_VERSION_HEADER: {
                 TestingBundle[] bundles = {new TestingBundle("bundles.tb1", "1.0", "bundle001.jar")};
-                dp = new TestingDeploymentPackage(DeploymentConstants.getCodeName(DeploymentConstants.SIMPLE_DP), "1.0", "missing_name_header.dp", bundles);
+                dp = new TestingDeploymentPackage(DeploymentConstants.getCodeName(DeploymentConstants.SIMPLE_DP), "1.0", "missing_version_header.dp", bundles);
                 packages.put(""+i, dp);
                 break;
             }

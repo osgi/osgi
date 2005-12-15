@@ -83,7 +83,6 @@ public class GetDeploymentPackage implements TestInterface {
         testGetDeploymentPackage006();
         testGetDeploymentPackage007();
         testGetDeploymentPackage008();
-        testGetDeploymentPackage009();
 	}
 
 	
@@ -309,55 +308,6 @@ public class GetDeploymentPackage implements TestInterface {
             tbc.fail(MessagesConstants.getMessage(MessagesConstants.EXCEPTION_THROWN, new String[] {"SecurityException", e.getClass().getName() }));
         } finally {
             tbc.cleanUp(dp);
-        }
-    }
-    
-    /**
-     * Asserts that during an <b>update</b> of an existing package, the target
-     * deployment package must remain the return value until the installation
-     * process is completed, after which the source is the return value
-     * 
-     * @spec DeploymentAdmin.getDeploymentPackage(String)
-     */ 
-    private synchronized void testGetDeploymentPackage009() {
-        tbc.log("#testGetDeploymentPackage009");
-        tbc.setDeploymentAdminPermission(DeploymentConstants.DEPLOYMENT_PACKAGE_NAME_ALL, DeploymentConstants.ALL_PERMISSION);
-        TestingDeploymentPackage testDP = tbc.getTestingDeploymentPackage(DeploymentConstants.SIMPLE_DP);
-        TestingDeploymentPackage testUpdateDP = tbc.getTestingDeploymentPackage(DeploymentConstants.BLOCK_SESSION_RESOURCE_PROCESSOR);
-        DeploymentPackage dp = null, dpAfter = null;
-        try {
-            dp = tbc.installDeploymentPackage(tbc.getWebServer() + testDP.getFilename());
-            
-            GetDeploymentPackageWorker worker = new GetDeploymentPackageWorker(testUpdateDP);
-            worker.start();
-            
-            int count = 0;
-            BundleListenerImpl listener = tbc.getBundleListener();
-            while ((count < DeploymentConstants.TIMEOUT) &&
-                !((listener.getCurrentType() == BundleEvent.STARTED) && 
-                (listener.getCurrentBundle().getSymbolicName().indexOf(DeploymentConstants.PID_RESOURCE_PROCESSOR3) != -1))) {
-                count++;
-                wait(1);
-            }
-
-            TestingBlockingResourceProcessor testBlockRP = (TestingBlockingResourceProcessor) tbc.getServiceInstance(DeploymentConstants.PID_RESOURCE_PROCESSOR3);
-            tbc.assertNotNull("Blocking Resource Processor was registered", testBlockRP);
-            // before installation process is complete
-            DeploymentPackage dpUntill = tbc.getDeploymentAdmin().getDeploymentPackage(testDP.getName());
-            tbc.assertEquals("Deployment Package is equals to the target DP", dp, dpUntill);
-            
-            testBlockRP.setReleased(true);
-            reachTC = true;
-            waitForRelease();
-            
-            dpAfter = tbc.getDeploymentAdmin().getDeploymentPackage(testDP.getName());
-            tbc.assertEquals("Deployment Package is equals to the target DP",
-                testUpdateDP.getName(), dpAfter.getName());
-        } catch (Exception e) {
-            tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }));
-        } finally {
-            reach = reachTC = false;
-            tbc.uninstall(new DeploymentPackage[]{dp, dpAfter});
         }
     }
     
