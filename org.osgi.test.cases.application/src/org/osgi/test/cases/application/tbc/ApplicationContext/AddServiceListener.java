@@ -118,7 +118,7 @@ public class AddServiceListener implements ApplicationServiceListener {
                     serviceChanged);
             
             tbc.assertTrue("Asserting if the serviceReference received by the event was org.osgi.test.cases.application.tbc.util.TestAppController", (serviceReference.toString().indexOf("org.osgi.test.cases.application.tbc.util.TestAppController") >= 0));
-            tbc.assertEquals("Asserting if the TestAppController was received by the event as serviceObject after a call for locateService.", tbc.getAppInstance(), serviceObject);
+            tbc.assertEquals("Asserting if the TestAppController was received by the event as serviceObject after a call for locateService.", tbc.getAppController(), serviceObject);
                         
             appContext.removeServiceListener(this);
             
