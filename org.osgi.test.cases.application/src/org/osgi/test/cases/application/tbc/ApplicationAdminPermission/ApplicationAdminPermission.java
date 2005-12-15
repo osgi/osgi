@@ -166,7 +166,7 @@ public class ApplicationAdminPermission {
 		try {
 			tbc.log("#testApplicationAdminPermission005");
 			new org.osgi.service.application.ApplicationAdminPermission(
-					ApplicationConstants.APPLICATION_PERMISSION_FILTER_INVALID2,
+					ApplicationConstants.APPLICATION_PERMISSION_FILTER_INVALID1,
 					ApplicationConstants.ACTIONS);
 			tbc.failException("", InvalidSyntaxException.class);			
 		} catch (InvalidSyntaxException e) {

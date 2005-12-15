@@ -42,6 +42,7 @@ import org.osgi.application.ApplicationContext;
 import org.osgi.application.ApplicationServiceEvent;
 import org.osgi.application.ApplicationServiceListener;
 import org.osgi.framework.Constants;
+import org.osgi.framework.ServiceEvent;
 import org.osgi.framework.ServiceReference;
 import org.osgi.service.application.ApplicationHandle;
 import org.osgi.test.cases.application.tbc.ApplicationConstants;
@@ -229,15 +230,15 @@ public class RegisterService implements ApplicationServiceListener {
                 .getApplicationContext(tbc.getAppInstance());
                         
             Hashtable hash = new Hashtable();
-            hash.put(Constants.SERVICE_ID, "test1");
+            hash.put(Constants.SERVICE_ID, new Long(2355));
             hash.put(Constants.OBJECTCLASS, new String[] { "test2" });
             hash.put("test", "test");
             
             appContext.registerService(this.getClass().getName(), this, hash);            
             
-            String value = (String) tbc.getServiceProperty(this.getClass().getName(), Constants.SERVICE_ID);
+            Long val = (Long) tbc.getServiceProperty(this.getClass().getName(), Constants.SERVICE_ID);
             
-            tbc.assertTrue("Asserting if the Constants.SERVICE_ID passed as parameter was changed by the framework.", !value.equals("test1"));
+            tbc.assertTrue("Asserting if the Constants.SERVICE_ID passed as parameter was changed by the framework.", !(val.intValue()==2355));
             
             String[] values = (String[]) tbc.getServiceProperty(this.getClass().getName(), Constants.OBJECTCLASS);
             
@@ -245,7 +246,7 @@ public class RegisterService implements ApplicationServiceListener {
             
             tbc.assertTrue("Asserting if the Constants.OBJECTCLASS passed as parameter was changed by the framework.", !values[0].equals("test2"));
             
-            value = (String) tbc.getServiceProperty(this.getClass().getName(), "test");
+            String value = (String) tbc.getServiceProperty(this.getClass().getName(), "test");
             
             tbc.assertTrue("Asserting if the other parameter passed was added to the framework parameters.", value.equals("test"));            
             
@@ -283,8 +284,7 @@ public class RegisterService implements ApplicationServiceListener {
                 "Asserting if the addServiceListener add this test class as a listener for ApplicationServiceEvents.",
                 serviceChanged);
         
-            //TODO have to change the serviceType expected.
-            tbc.assertEquals("Asserting if the type received was 10.", 10, serviceType);
+            tbc.assertEquals("Asserting if the type received was the ServiceEvent.REGISTERED value.", ServiceEvent.REGISTERED, serviceType);
             tbc.assertTrue("Asserting if the serviceReference received by the event was org.osgi.test.cases.application.tbc.ApplicationContext.RegisterService", (serviceReference.toString().indexOf("org.osgi.test.cases.application.tbc.ApplicationContext.RegisterService") >= 0));
             tbc.assertNull("Asserting if null was received as serviceObject", serviceObject);                                             
             
@@ -575,15 +575,15 @@ public class RegisterService implements ApplicationServiceListener {
                 .getApplicationContext(tbc.getAppInstance());
                         
             Hashtable hash = new Hashtable();
-            hash.put(Constants.SERVICE_ID, "test1");
+            hash.put(Constants.SERVICE_ID, new Long(2355));
             hash.put(Constants.OBJECTCLASS, new String[] { "test1", "test2" });
             hash.put("test", "test");                 
             
             appContext.registerService(new String[] { this.getClass().getName(), Object.class.getName() }, this, hash);            
             
-            String value = (String) tbc.getServiceProperty(this.getClass().getName(), Constants.SERVICE_ID);
+            Long val = (Long) tbc.getServiceProperty(this.getClass().getName(), Constants.SERVICE_ID);
             
-            tbc.assertTrue("Asserting if the Constants.SERVICE_ID passed as parameter was changed by the framework.", !value.equals("test1"));
+            tbc.assertTrue("Asserting if the Constants.SERVICE_ID passed as parameter was changed by the framework.", !(val.intValue()==2355));
             
             String[] values = (String[]) tbc.getServiceProperty(this.getClass().getName(), Constants.OBJECTCLASS);
             
@@ -591,13 +591,13 @@ public class RegisterService implements ApplicationServiceListener {
             
             tbc.assertTrue("Asserting if the Constants.OBJECTCLASS passed as parameter was changed by the framework.", !values[0].equals("test1") && !values[0].equals("test2"));
             
-            value = (String) tbc.getServiceProperty(this.getClass().getName(), "test");
+            String value = (String) tbc.getServiceProperty(this.getClass().getName(), "test");
             
             tbc.assertTrue("Asserting if the other parameter passed was added to the framework parameters.", value.equals("test"));            
             
-            value = (String) tbc.getServiceProperty(Object.class.getName(), Constants.SERVICE_ID);
+            val = (Long) tbc.getServiceProperty(Object.class.getName(), Constants.SERVICE_ID);
             
-            tbc.assertTrue("Asserting if the Constants.SERVICE_ID passed as parameter was changed by the framework.", !value.equals("test1"));
+            tbc.assertTrue("Asserting if the Constants.SERVICE_ID passed as parameter was changed by the framework.", !(val.intValue()==2355));
             
             values = (String[]) tbc.getServiceProperty(Object.class.getName(), Constants.OBJECTCLASS);
             
@@ -643,8 +643,7 @@ public class RegisterService implements ApplicationServiceListener {
                 "Asserting if the addServiceListener add this test class as a listener for ApplicationServiceEvents.",
                 serviceChanged);
         
-            //TODO have to change the serviceType expected.
-            tbc.assertEquals("Asserting if the type received was 10.", 10, serviceType);
+            tbc.assertEquals("Asserting if the type received was ServiceEvent.REGISTERED value.", ServiceEvent.REGISTERED, serviceType);
             tbc.assertTrue("Asserting if the serviceReference received by the event was org.osgi.test.cases.application.tbc.ApplicationContext.RegisterService", (serviceReference.toString().indexOf("org.osgi.test.cases.application.tbc.ApplicationContext.RegisterService") >= 0));
             tbc.assertNull("Asserting if null was received as serviceObject", serviceObject);                                             
             

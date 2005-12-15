@@ -40,45 +40,21 @@ import java.util.Hashtable;
 
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
-import org.osgi.framework.Constants;
-import org.osgi.framework.ServiceRegistration;
 
 
 /**
  * @Author Alexandre Santos
- * A dummy bundle.
+ * 
  */
 
-public class TestingActivator implements BundleActivator {
-	private ServiceRegistration servReg;
-	private Hashtable ht;
+public interface TestingActivator extends BundleActivator {
+	
+	public void startWithoutRanking(BundleContext context) throws Exception;
 
-	public void start(BundleContext context) throws Exception {
-		ht = new Hashtable();
-		ht.put(Constants.SERVICE_RANKING, new String[] { String.valueOf(5) });		
-		servReg = context.registerService(TestingActivator.class.getName(), this, ht);
-		System.out.println("Activator activated.");
-	}
+	public void setProperties(Hashtable props);
 	
-	public void startWithoutRanking(BundleContext context) throws Exception {
-		servReg = context.registerService(TestingActivator.class.getName(), this, null);
-		System.out.println("Activator activated.");
-	}	
-
-	public void stop(BundleContext context) throws Exception {
-		servReg.unregister();
-	}
+	public void resetProperties();
 	
-	public void setProperties(Hashtable props) {
-		servReg.setProperties(props);
-	}
-	
-	public void resetProperties() {
-		servReg.setProperties(ht);
-	}	
-	
-	public boolean isHighest() {
-		return false;
-	}
+	public boolean isHighest();
 	
 }

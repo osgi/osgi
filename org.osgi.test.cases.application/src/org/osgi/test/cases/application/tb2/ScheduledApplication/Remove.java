@@ -79,7 +79,7 @@ public class Remove implements TestInterface {
 					tbc.getTb2Location());
 
             tbc.setLocalPermission(
-                new PermissionInfo(ApplicationAdminPermission.class.getName(), ApplicationConstants.TEST_PID, ApplicationAdminPermission.SCHEDULE_ACTION)
+                new PermissionInfo(ApplicationAdminPermission.class.getName(), ApplicationConstants.APPLICATION_PERMISSION_FILTER1, ApplicationAdminPermission.SCHEDULE_ACTION)
             );
 
 			sa = tbc.getAppDescriptor().schedule(null, "*", null, false);
@@ -118,13 +118,13 @@ public class Remove implements TestInterface {
                     tbc.getTb2Location());
 
             tbc.setLocalPermission(
-                new PermissionInfo(ApplicationAdminPermission.class.getName(), ApplicationConstants.TEST_PID, ApplicationAdminPermission.SCHEDULE_ACTION)
+                new PermissionInfo(ApplicationAdminPermission.class.getName(), ApplicationConstants.APPLICATION_PERMISSION_FILTER1, ApplicationAdminPermission.SCHEDULE_ACTION)
             );
 
             sa = tbc.getAppDescriptor().schedule(null, ApplicationConstants.TIMER_EVENT, ApplicationConstants.EVENT_FILTER, true);
             
             synchronized (tbc) {
-                tbc.wait(ApplicationConstants.TIMEOUT);
+                tbc.wait(ApplicationConstants.SHORT_TIMEOUT);
             }                                  
 
             sa.remove();
@@ -132,7 +132,7 @@ public class Remove implements TestInterface {
             int oldValue = tbc.getNumberAppHandle();
 
             synchronized (tbc) {
-                tbc.wait(ApplicationConstants.TIMEOUT);
+                tbc.wait(ApplicationConstants.SHORT_TIMEOUT);
             }                                  
             
             int newValue = tbc.getNumberAppHandle();
@@ -161,7 +161,7 @@ public class Remove implements TestInterface {
                     tbc.getTb2Location());
 
             tbc.setLocalPermission(
-                new PermissionInfo(ApplicationAdminPermission.class.getName(), ApplicationConstants.TEST_PID, ApplicationAdminPermission.SCHEDULE_ACTION)
+                new PermissionInfo(ApplicationAdminPermission.class.getName(), ApplicationConstants.APPLICATION_PERMISSION_FILTER1, ApplicationAdminPermission.SCHEDULE_ACTION)
             );
 
             sa = tbc.getAppDescriptor().schedule(null, "*", null, false);

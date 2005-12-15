@@ -63,6 +63,7 @@ public class Equals {
 		testEquals002();
 		testEquals003();
 		testEquals004();
+		testEquals005();
 	}
 
     /**
@@ -97,7 +98,7 @@ public class Equals {
 					ApplicationConstants.APPLICATION_PERMISSION_FILTER1, ApplicationConstants.ACTIONS);
 			org.osgi.service.application.ApplicationAdminPermission app2 = new org.osgi.service.application.ApplicationAdminPermission(
 					ApplicationConstants.APPLICATION_PERMISSION_FILTER2, ApplicationConstants.ACTIONS);
-			tbc.assertTrue("Asserting if two different permissions returns false to the equals method.", app.equals(app2));
+			tbc.assertTrue("Asserting if two different permissions returns false to the equals method.", !app.equals(app2));
 		} catch (Exception e) {
 			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": " + e.getClass().getName());
 		}
@@ -134,8 +135,27 @@ public class Equals {
 			org.osgi.service.application.ApplicationAdminPermission app = new org.osgi.service.application.ApplicationAdminPermission(
 					ApplicationConstants.APPLICATION_PERMISSION_FILTER1, ApplicationConstants.ACTIONS);
 			org.osgi.service.application.ApplicationAdminPermission app2 = new org.osgi.service.application.ApplicationAdminPermission(
-					ApplicationConstants.APPLICATION_PERMISSION_FILTER_DIFFERENT, ApplicationConstants.ACTIONS);
+					ApplicationConstants.APPLICATION_PERMISSION_FILTER_DIFFERENT_PID, ApplicationConstants.ACTIONS);
 			tbc.assertTrue("Asserting if two equals permissions with different pid returns false in an equals call.", !app.equals(app2));
+		} catch (Exception e) {
+			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": " + e.getClass().getName());
+		}
+	}	
+	
+    /**
+     * This method asserts if two equals ApplicationAdminPermission with different signer
+     * returns false in an equals call.
+     * 
+     * @spec ApplicationAdminPermission.equals(Object)
+     */         
+	private void testEquals005() {
+		try {
+			tbc.log("#testEquals005");
+			org.osgi.service.application.ApplicationAdminPermission app = new org.osgi.service.application.ApplicationAdminPermission(
+					ApplicationConstants.APPLICATION_PERMISSION_FILTER1, ApplicationConstants.ACTIONS);
+			org.osgi.service.application.ApplicationAdminPermission app2 = new org.osgi.service.application.ApplicationAdminPermission(
+					ApplicationConstants.APPLICATION_PERMISSION_FILTER_DIFFERENT_SIGNER, ApplicationConstants.ACTIONS);
+			tbc.assertTrue("Asserting if two equals permissions with different signer returns false in an equals call.", !app.equals(app2));
 		} catch (Exception e) {
 			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": " + e.getClass().getName());
 		}

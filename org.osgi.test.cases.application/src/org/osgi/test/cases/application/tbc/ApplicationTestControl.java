@@ -69,7 +69,8 @@ import org.osgi.test.cases.application.tbc.TreeStructure.TreeStructure;
 import org.osgi.test.cases.application.tbc.UseCases.LifecycleStates;
 import org.osgi.test.cases.application.tbc.util.TestAppControllerImpl;
 import org.osgi.test.cases.application.tbc.util.TestingActivator;
-import org.osgi.test.cases.application.tbc.util.TestingActivator2;
+import org.osgi.test.cases.application.tbc.util.TestingActivatorImplHigh;
+import org.osgi.test.cases.application.tbc.util.TestingActivatorImplLow;
 import org.osgi.test.cases.util.DefaultTestBundleControl;
 
 /**
@@ -105,11 +106,13 @@ public class ApplicationTestControl extends DefaultTestBundleControl {
 
 	private TestingActivator testingActivator;
 
-	private TestingActivator2 testingActivator2;
+	private TestingActivator testingActivator2;
 
 	public void prepare() {
 		try {
-
+			dmtAdmin = (DmtAdmin) getContext().getService(
+					getContext().getServiceReference(DmtAdmin.class.getName()));
+			updateConstants();
 			permissionAdmin = (PermissionAdmin) getContext().getService(
 					getContext().getServiceReference(
 							PermissionAdmin.class.getName()));
@@ -123,14 +126,52 @@ public class ApplicationTestControl extends DefaultTestBundleControl {
 			TB2Service tcb1Service = (TB2Service) getContext().getService(
 					srvReference);
 			testInterfaces = tcb1Service.getTestClasses(this);
-			dmtAdmin = (DmtAdmin) getContext().getService(
-					getContext().getServiceReference(DmtAdmin.class.getName()));
 			appController = new TestAppControllerImpl();
 			appController.start(this.getContext());
 			startPermissionWorker();
 		} catch (Exception e) {
 			this.log("Unexpected exception at prepare.");
 		}
+	}
+
+	private void updateConstants() {
+	    ApplicationConstants.OSGI_APPLICATION_APPID = ApplicationConstants.OSGI_APPLICATION + "/" + getDmtAdmin().mangle(ApplicationConstants.APPLICATION_NAME);
+	    ApplicationConstants.OSGI_APPLICATION_APPID_NAME = ApplicationConstants.OSGI_APPLICATION_APPID + "/Name";
+	    ApplicationConstants.OSGI_APPLICATION_APPID_APPLICATION_ID = ApplicationConstants.OSGI_APPLICATION_APPID + "/ApplicationID";
+	    ApplicationConstants.OSGI_APPLICATION_APPID_ICONURI = ApplicationConstants.OSGI_APPLICATION_APPID + "/IconURI";
+	    ApplicationConstants.OSGI_APPLICATION_APPID_VENDOR = ApplicationConstants.OSGI_APPLICATION_APPID + "/Vendor";
+	    ApplicationConstants.OSGI_APPLICATION_APPID_VERSION = ApplicationConstants.OSGI_APPLICATION_APPID + "/Version";
+	    ApplicationConstants.OSGI_APPLICATION_APPID_LOCKED = ApplicationConstants.OSGI_APPLICATION_APPID + "/Locked";
+	    ApplicationConstants.OSGI_APPLICATION_APPID_CONTAINERID = ApplicationConstants.OSGI_APPLICATION_APPID + "/ContainerID";
+	    ApplicationConstants.OSGI_APPLICATION_APPID_PACKAGEID = ApplicationConstants.OSGI_APPLICATION_APPID + "/PackageID";
+	    ApplicationConstants.OSGI_APPLICATION_APPID_LOCATION = ApplicationConstants.OSGI_APPLICATION_APPID + "/Location";
+	    ApplicationConstants.OSGI_APPLICATION_APPID_EXT = ApplicationConstants.OSGI_APPLICATION_APPID + "/Ext";    
+	    ApplicationConstants.OSGI_APPLICATION_APPID_OPERATIONS = ApplicationConstants.OSGI_APPLICATION_APPID + "/Operations";
+	    ApplicationConstants.OSGI_APPLICATION_APPID_SCHEDULES = ApplicationConstants.OSGI_APPLICATION_APPID + "/Schedules";
+	    ApplicationConstants.OSGI_APPLICATION_APPID_OPERATIONS_LOCK = ApplicationConstants.OSGI_APPLICATION_APPID_OPERATIONS + "/Lock";
+	    ApplicationConstants.OSGI_APPLICATION_APPID_OPERATIONS_UNLOCK = ApplicationConstants.OSGI_APPLICATION_APPID_OPERATIONS + "/Unlock";
+	    ApplicationConstants.OSGI_APPLICATION_APPID_OPERATIONS_LAUNCH = ApplicationConstants.OSGI_APPLICATION_APPID_OPERATIONS + "/Launch";
+	    ApplicationConstants.OSGI_APPLICATION_APPID_OPERATIONS_LAUNCH_LAUNCHID = ApplicationConstants.OSGI_APPLICATION_APPID_OPERATIONS_LAUNCH + "/Cesar";
+	    ApplicationConstants.OSGI_APPLICATION_APPID_OPERATIONS_LAUNCH_LAUNCHID_RESULT = ApplicationConstants.OSGI_APPLICATION_APPID_OPERATIONS_LAUNCH_LAUNCHID + "/Result";
+	    ApplicationConstants.OSGI_APPLICATION_APPID_OPERATIONS_LAUNCH_LAUNCHID_RESULT_INSTANCEID = ApplicationConstants.OSGI_APPLICATION_APPID_OPERATIONS_LAUNCH_LAUNCHID_RESULT + "/InstanceID";
+	    ApplicationConstants.OSGI_APPLICATION_APPID_OPERATIONS_LAUNCH_LAUNCHID_RESULT_STATUS = ApplicationConstants.OSGI_APPLICATION_APPID_OPERATIONS_LAUNCH_LAUNCHID_RESULT + "/Status";
+	    ApplicationConstants.OSGI_APPLICATION_APPID_OPERATIONS_LAUNCH_LAUNCHID_RESULT_MESSAGE = ApplicationConstants.OSGI_APPLICATION_APPID_OPERATIONS_LAUNCH_LAUNCHID_RESULT + "/Message";
+	    ApplicationConstants.OSGI_APPLICATION_APPID_OPERATIONS_LAUNCH_LAUNCHID_ARGUMENTS = ApplicationConstants.OSGI_APPLICATION_APPID_OPERATIONS_LAUNCH_LAUNCHID + "/Arguments";
+	    ApplicationConstants.OSGI_APPLICATION_APPID_OPERATIONS_LAUNCH_LAUNCHID_ARGUMENTS_ID = ApplicationConstants.OSGI_APPLICATION_APPID_OPERATIONS_LAUNCH_LAUNCHID_ARGUMENTS + "/1";
+	    ApplicationConstants.OSGI_APPLICATION_APPID_OPERATIONS_LAUNCH_LAUNCHID_ARGUMENTS_ID_NAME = ApplicationConstants.OSGI_APPLICATION_APPID_OPERATIONS_LAUNCH_LAUNCHID_ARGUMENTS_ID + "/Name";
+	    ApplicationConstants.OSGI_APPLICATION_APPID_OPERATIONS_LAUNCH_LAUNCHID_ARGUMENTS_ID_VALUE = ApplicationConstants.OSGI_APPLICATION_APPID_OPERATIONS_LAUNCH_LAUNCHID_ARGUMENTS_ID + "/Value";
+	    ApplicationConstants.OSGI_APPLICATION_APPID_INSTANCES = ApplicationConstants.OSGI_APPLICATION_APPID + "/Instances";
+	    ApplicationConstants.OSGI_APPLICATION_APPID_INSTANCES_ID_STATE = ApplicationConstants.OSGI_APPLICATION_APPID_INSTANCES_ID + "/State";
+	    ApplicationConstants.OSGI_APPLICATION_APPID_INSTANCES_ID_INSTANCEID = ApplicationConstants.OSGI_APPLICATION_APPID_INSTANCES_ID + "/InstanceID";
+	    ApplicationConstants.OSGI_APPLICATION_APPID_INSTANCES_ID_OPERATIONS = ApplicationConstants.OSGI_APPLICATION_APPID_INSTANCES_ID + "/Operations";
+	    ApplicationConstants.OSGI_APPLICATION_APPID_INSTANCES_ID_OPERATIONS_STOP = ApplicationConstants.OSGI_APPLICATION_APPID_INSTANCES_ID_OPERATIONS + "/Stop";
+	    ApplicationConstants.OSGI_APPLICATION_APPID_INSTANCES_ID_OPERATIONS_EXT = ApplicationConstants.OSGI_APPLICATION_APPID_INSTANCES_ID_OPERATIONS + "/Ext";
+	    ApplicationConstants.OSGI_APPLICATION_APPID_SCHEDULES_ID = ApplicationConstants.OSGI_APPLICATION_APPID + "/Schedule/Cesar";
+	    ApplicationConstants.OSGI_APPLICATION_APPID_SCHEDULES_ID_ARGUMENTS = ApplicationConstants.OSGI_APPLICATION_APPID_SCHEDULES_ID + "Cesar/Arguments";
+	    ApplicationConstants.OSGI_APPLICATION_APPID_SCHEDULES_ID_ENABLED = ApplicationConstants.OSGI_APPLICATION_APPID_SCHEDULES_ID + "Cesar/Enabled";
+	    ApplicationConstants.OSGI_APPLICATION_APPID_SCHEDULES_ID_TOPICFILTER = ApplicationConstants.OSGI_APPLICATION_APPID_SCHEDULES_ID + "Cesar/TopicFilter";
+	    ApplicationConstants.OSGI_APPLICATION_APPID_SCHEDULES_ID_EVENTFILTER = ApplicationConstants.OSGI_APPLICATION_APPID_SCHEDULES_ID + "Cesar/EventFilter";
+	    ApplicationConstants.OSGI_APPLICATION_APPID_SCHEDULES_ID_RECURRING = ApplicationConstants.OSGI_APPLICATION_APPID_SCHEDULES_ID + "Cesar/Recurring";		
 	}
 
 	private void startPermissionWorker() {
@@ -455,21 +496,54 @@ public class ApplicationTestControl extends DefaultTestBundleControl {
 	}
 
 	public void installDescriptor() {
-		ServiceReference[] appDescRefs;
+		ServiceReference[] appDescRefsOld, appDescRefsNew;
 		try {
+			appDescRefsOld = getContext().getServiceReferences("org.osgi.service.application.ApplicationDescriptor", null);
+			
 			bundleTestApplication = installBundle("tb1.jar");
 			bundleTestApplication.start();
 			synchronized (this) {
 				this.wait(ApplicationConstants.SHORT_TIMEOUT);
 			}
-			appDescRefs = getContext().getServiceReferences(
-					"org.osgi.service.application.ApplicationDescriptor",
-					"(service.pid=" + ApplicationConstants.TEST_PID + ")");
-			appDescriptor = (ApplicationDescriptor) getContext().getService(
-					appDescRefs[0]);
+			
+			
+			appDescRefsNew = getContext().getServiceReferences("org.osgi.service.application.ApplicationDescriptor", null);
+			
+			if (appDescRefsOld == null) {
+				appDescriptor = (ApplicationDescriptor) getContext().getService(appDescRefsNew[0]);
+				updateTestPid((String) appDescRefsNew[0].getProperty("service.pid"));
+			}
+			else if (appDescRefsOld.length+1 == appDescRefsNew.length) {
+				boolean found = false;
+				for (int i=0; i<appDescRefsNew.length && !found; i++) {
+					found=true;
+					for (int j=0; j<appDescRefsOld.length; j++) {
+						if (appDescRefsOld[j].equals(appDescRefsNew[i])) {
+							found = false;							
+						}
+					}
+					if (found) {
+						appDescriptor = (ApplicationDescriptor) getContext().getService(appDescRefsNew[i]);
+						updateTestPid((String) appDescRefsNew[i].getProperty("service.pid"));						
+					}
+				}
+			} 
+			else {
+				fail("the application descriptor was not found.");
+			}
 		} catch (Exception e) {
 			fail("installation of tb1.jar has failed");
 		}
+	}
+	
+	public void updateTestPid(String pid) {
+		ApplicationConstants.TEST_PID = pid;
+		//updating the constants
+		ApplicationConstants.APPLICATION_PERMISSION_FILTER1 = "(&(signer="+ApplicationConstants.SIGNER_FILTER+")"+"(pid="+ApplicationConstants.TEST_PID+"))";
+		ApplicationConstants.APPLICATION_PERMISSION_FILTER2 = "(&(signer="+ApplicationConstants.SIGNER_FILTER_WILDCARD+")"+"(pid="+ApplicationConstants.TEST_PID+"))";
+		ApplicationConstants.APPLICATION_PERMISSION_FILTER_DIFFERENT_PID = "(&(signer="+ApplicationConstants.SIGNER_FILTER+")"+"(pid="+ApplicationConstants.TEST_PID2+"))";
+		ApplicationConstants.APPLICATION_PERMISSION_FILTER_DIFFERENT_SIGNER = "(&(signer="+ApplicationConstants.SIGNER_FILTER2+")"+"(pid="+ApplicationConstants.TEST_PID+"))";
+		ApplicationConstants.APPLICATION_PERMISSION_FILTER_INVALID1 = "(&(signer="+ApplicationConstants.SIGNER_FILTER_INVALID1+")"+"(pid="+ApplicationConstants.TEST_PID+"))";							
 	}
 
 	public void unregisterDescriptor() {
@@ -516,10 +590,15 @@ public class ApplicationTestControl extends DefaultTestBundleControl {
 			setPermission(infos);
 			if (handle != null) {
 				handle.destroy();
-			}
-			getAppDescriptor().unlock();
+			}			
 		} catch (Exception e) {
 			log("#fail at handle destroy.");
+		} finally {
+			try {
+				getAppDescriptor().unlock();
+			} catch (Exception e) {
+				log("#failt at unlock method.");
+			}
 		}
 	}
 
@@ -530,10 +609,11 @@ public class ApplicationTestControl extends DefaultTestBundleControl {
 				for (int i = 0; i < nodes.length; i++) {
 					session.deleteNode(nodes[i]);
 				}
-				closeSession(session);
 			}
 		} catch (Exception e) {
 			log("#error deleting the nodes.");
+		} finally {
+			closeSession(session);
 		}
 	}
 
@@ -577,9 +657,10 @@ public class ApplicationTestControl extends DefaultTestBundleControl {
 	public void cleanUp(ScheduledApplication sa, PermissionInfo[] infos) {
 		try {
 			setPermission(infos);
-			// uninstallTestBundle(); where it is been used ?
 			if (sa != null) {
-				sa.remove();
+				try {
+					sa.remove();
+				}catch( Exception e ) {}
 			}
 		} catch (Exception e) {
 			log("#error removing the scheduled application. " + e.getMessage());
@@ -617,11 +698,11 @@ public class ApplicationTestControl extends DefaultTestBundleControl {
 		}
 		return testBundle;
 	}
-
+	
 	public void startActivator(boolean highValue) {
 		try {
 			if (testingActivator == null) {
-				testingActivator = new TestingActivator();
+				testingActivator = new TestingActivatorImplLow();
 				if (highValue) {
 					testingActivator.start(this.getContext());
 				} else {
@@ -647,7 +728,7 @@ public class ApplicationTestControl extends DefaultTestBundleControl {
 	public void startActivator2(boolean highValue) {
 		try {
 			if (testingActivator2 == null) {
-				testingActivator2 = new TestingActivator2();
+				testingActivator2 = new TestingActivatorImplHigh();
 				if (highValue) {
 					testingActivator2.start(this.getContext());
 				} else {

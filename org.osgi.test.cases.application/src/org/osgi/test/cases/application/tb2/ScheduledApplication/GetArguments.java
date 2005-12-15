@@ -81,11 +81,11 @@ public class GetArguments implements TestInterface {
 					tbc.getTb2Location());
 
             tbc.setLocalPermission(
-                new PermissionInfo(ApplicationAdminPermission.class.getName(), ApplicationConstants.TEST_PID, ApplicationAdminPermission.SCHEDULE_ACTION)
+                new PermissionInfo(ApplicationAdminPermission.class.getName(), ApplicationConstants.APPLICATION_PERMISSION_FILTER1, ApplicationAdminPermission.SCHEDULE_ACTION)
             );
 
             HashMap map = new HashMap();
-            sa = tbc.getAppDescriptor().schedule(map, "*", null, false);
+            sa = tbc.getAppDescriptor().schedule(map, "*", null, true);
 
             tbc.setDefaultPermission();
             
@@ -116,7 +116,7 @@ public class GetArguments implements TestInterface {
 					tbc.getTb2Location());
 
             tbc.setLocalPermission(
-                new PermissionInfo(ApplicationAdminPermission.class.getName(), ApplicationConstants.TEST_PID, ApplicationAdminPermission.SCHEDULE_ACTION)
+                new PermissionInfo(ApplicationAdminPermission.class.getName(), ApplicationConstants.APPLICATION_PERMISSION_FILTER1, ApplicationAdminPermission.SCHEDULE_ACTION)
             );
 
             sa = tbc.getAppDescriptor().schedule(null, "*", null, false);
@@ -147,7 +147,7 @@ public class GetArguments implements TestInterface {
 					tbc.getTb2Location());
 
             tbc.setLocalPermission(
-                new PermissionInfo(ApplicationAdminPermission.class.getName(), ApplicationConstants.TEST_PID, ApplicationAdminPermission.SCHEDULE_ACTION)
+                new PermissionInfo(ApplicationAdminPermission.class.getName(), ApplicationConstants.APPLICATION_PERMISSION_FILTER1, ApplicationAdminPermission.SCHEDULE_ACTION)
             );
 
 			sa = tbc.getAppDescriptor().schedule(null, "*", null, false);

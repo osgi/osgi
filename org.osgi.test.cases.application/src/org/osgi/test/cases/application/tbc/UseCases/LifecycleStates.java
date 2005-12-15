@@ -76,7 +76,7 @@ public class LifecycleStates {
                                  
             synchronized (tbc) {
                 handle = (ApplicationHandle) tbc.getAppDescriptor().launch(null);            	
-                tbc.wait(ApplicationConstants.SHORT_TIMEOUT);
+                tbc.wait(ApplicationConstants.TIMEOUT);
             }
             
             tbc.assertTrue("Asserting if the system has received a register event after the launch of the app.",
@@ -87,7 +87,7 @@ public class LifecycleStates {
             
             synchronized (tbc) {
                 handle.destroy();            	
-                tbc.wait(ApplicationConstants.SHORT_TIMEOUT);
+                tbc.wait(ApplicationConstants.TIMEOUT);
             }
             
             tbc.assertTrue("Asserting if the system has received an unregistered event and a modified event after the destroy of the app.",
@@ -119,7 +119,7 @@ public class LifecycleStates {
             
             synchronized (tbc) {
             	tbc.unregisterDescriptor();
-                tbc.wait(ApplicationConstants.SHORT_TIMEOUT);
+                tbc.wait(ApplicationConstants.TIMEOUT);
             }
             
             tbc.assertTrue("Asserting if the system has received a unregistering event after the uninstall of the app.",
@@ -149,7 +149,7 @@ public class LifecycleStates {
             
             synchronized (tbc) {
             	tbc.unregisterDescriptor();
-                tbc.wait(ApplicationConstants.SHORT_TIMEOUT);
+                tbc.wait(ApplicationConstants.TIMEOUT);
             }
             
             tbc.resetEventProperties();                       

@@ -47,6 +47,7 @@ import org.osgi.test.cases.application.tbc.ApplicationConstants;
 import org.osgi.test.cases.application.tbc.ApplicationTestControl;
 import org.osgi.test.cases.application.tbc.util.MessagesConstants;
 import org.osgi.test.cases.application.tbc.util.TestAppController;
+import org.osgi.test.cases.application.tbc.util.TestingActivator;
 
 
 /**
@@ -117,7 +118,7 @@ public class AddServiceListener implements ApplicationServiceListener {
                     serviceChanged);
             
             tbc.assertTrue("Asserting if the serviceReference received by the event was org.osgi.test.cases.application.tbc.util.TestAppController", (serviceReference.toString().indexOf("org.osgi.test.cases.application.tbc.util.TestAppController") >= 0));
-            tbc.assertNull("Asserting if null was received as serviceObject", serviceObject);
+            tbc.assertEquals("Asserting if the TestAppController was received by the event as serviceObject after a call for locateService.", tbc.getAppInstance(), serviceObject);
                         
             appContext.removeServiceListener(this);
             
@@ -274,7 +275,7 @@ public class AddServiceListener implements ApplicationServiceListener {
             TestAppController app = null;
             
             serviceChanged = false;            	
-            app = (TestAppController) appContext.locateService("app");                
+            app = (TestAppController) appContext.locateService(ApplicationConstants.XML_APP);                
             tbc.getAppController().setProperties(ht);               
             
             tbc
@@ -406,10 +407,11 @@ public class AddServiceListener implements ApplicationServiceListener {
     private void testAddServiceListener010() {
        tbc.log("#testAddServiceListener010");
        ApplicationHandle handle = null;
+       ApplicationContext appContext = null;
        try {
            handle = tbc.getAppDescriptor().launch(null);
            
-           ApplicationContext appContext = org.osgi.application.Framework
+           appContext = org.osgi.application.Framework
                .getApplicationContext(tbc.getAppInstance());
            
            appContext.addServiceListener(this, new String[] { ApplicationConstants.XML_APP, ApplicationConstants.XML_ACTIVATOR });       
@@ -419,28 +421,28 @@ public class AddServiceListener implements ApplicationServiceListener {
            TestAppController app = null;
            
            serviceChanged = false;            	
-           app = (TestAppController) appContext.locateService("app");                
+           app = (TestAppController) appContext.locateService(ApplicationConstants.XML_APP);                
            tbc.getAppController().setProperties(ht);               
            
            tbc
            .assertTrue(
                "Asserting if the addServiceListener add this test class as a listener for ServiceEvents.",
                serviceChanged);
-           tbc.assertTrue("Asserting if the serviceReference received by the event was org.osgi.test.cases.application.tb3.Activator", (serviceReference.toString().indexOf("org.osgi.test.cases.application.tb3.Activator") >= 0));
+           tbc.assertTrue("Asserting if the serviceReference received by the event was org.osgi.test.cases.application.tbc.util.TestAppController", (serviceReference.toString().indexOf("org.osgi.test.cases.application.tbc.util.TestAppController") >= 0));
            tbc.assertEquals("Asserting if the TestAppController was received by the event as serviceObject after a call for locateService.", app, serviceObject);            
                        
-           tbc.startActivator(true);
+           tbc.startActivator(false);
            
            serviceChanged = false;
-           app = (TestAppController) appContext.locateService("app");
-           tbc.getTestingActivator().setProperties(ht);            	
+           TestingActivator activator = (TestingActivator) appContext.locateService(ApplicationConstants.XML_ACTIVATOR);
+           activator.setProperties(ht);           
            
            tbc
            .assertTrue(
                "Asserting if the addServiceListener add this test class as a listener for ServiceEvents.",
                serviceChanged);
-           tbc.assertTrue("Asserting if the serviceReference received by the event was org.osgi.test.cases.application.tbc.util.TestAppController", (serviceReference.toString().indexOf("org.osgi.test.cases.application.tbc.util.TestAppController") >= 0));
-           tbc.assertEquals("Asserting if the TestAppController was received by the event as serviceObject after a call for locateService.", app, serviceObject);                      
+           tbc.assertTrue("Asserting if the serviceReference received by the event was org.osgi.test.cases.application.tbc.util.TestingActivator", (serviceReference.toString().indexOf("org.osgi.test.cases.application.tbc.util.TestingActivator") >= 0));
+           tbc.assertEquals("Asserting if the TestAppController was received by the event as serviceObject after a call for locateService.", activator, serviceObject);                      
                       
            serviceChanged = false;
            tbc.getEventBundle().setProperties(ht);            	
@@ -454,6 +456,7 @@ public class AddServiceListener implements ApplicationServiceListener {
            tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": "
                + e.getClass().getName());
        } finally {
+			appContext.removeServiceListener(this);
 			tbc.stopActivator();
 			tbc.getEventBundle().resetProperties();
 			tbc.getAppController().resetProperties();

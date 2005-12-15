@@ -147,7 +147,6 @@ public class GetProperties implements TestInterface {
 		tbc.assertEquals("Asserting the application.visible value", Boolean.TRUE, map.get("application.visible"));
 		tbc.assertEquals("Asserting the application.bundle.id value", tbc.getDescriptorBundleId(), map.get("application.bundle.id"));
 		tbc.assertEquals("Asserting the application.container value", "MIDlet", map.get("application.container"));
-		tbc.assertEquals("Asserting the service.pid value", ApplicationConstants.TEST_PID, map.get("service.pid"));
 		tbc.assertEquals("Asserting the application.launchable value", Boolean.TRUE, map.get("application.launchable"));
 		tbc.assertEquals("Asserting the application.version value", ApplicationConstants.APP_VERSION, map.get("application.version"));
 		tbc.assertEquals("Asserting the application.icon value", ApplicationConstants.APP_ICON, map.get("application.icon"));	

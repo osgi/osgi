@@ -34,12 +34,12 @@
  * 153          [MEGTCK][APP] Implement OAT test cases
  * ===========  ==============================================================
  */
-package org.osgi.test.cases.application.tb3;
+package org.osgi.test.cases.application.tbc.util;
 
 import java.util.Hashtable;
 
-import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
+import org.osgi.framework.Constants;
 import org.osgi.framework.ServiceRegistration;
 
 
@@ -48,20 +48,37 @@ import org.osgi.framework.ServiceRegistration;
  * A dummy bundle.
  */
 
-public class Activator implements BundleActivator {
+public class TestingActivatorImplHigh implements TestingActivator {
 	private ServiceRegistration servReg;
+	private Hashtable ht;
 
 	public void start(BundleContext context) throws Exception {
-		servReg = context.registerService(Activator.class.getName(), this, null);
-		System.out.println("Activator activated.");
+		ht = new Hashtable();
+		ht.put(Constants.SERVICE_RANKING, new Integer(9) );
+		
+		servReg = context.registerService(TestingActivator.class.getName(), this, ht);
+		System.out.println("Activator2 activated.");
 	}
 	
+	public void startWithoutRanking(BundleContext context) throws Exception {
+		servReg = context.registerService(TestingActivator.class.getName(), this, null);
+		System.out.println("Activator2 activated.");
+	}	
+
 	public void stop(BundleContext context) throws Exception {
 		servReg.unregister();
 	}
 	
-    public void setProperties(Hashtable ht) {
-    	servReg.setProperties(ht);
-    }	
-
+	public void setProperties(Hashtable props) {
+		servReg.setProperties(props);
+	}
+	
+	public void resetProperties() {
+		servReg.setProperties(ht);
+	}	
+	
+	public boolean isHighest() {
+		return true;
+	}
+	
 }

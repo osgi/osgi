@@ -60,23 +60,28 @@ public class ApplicationServiceEvent {
     }    
     
     /**
-     * This method asserts that no exception is thrown when
+     * This method asserts that IllegalArgumentException is thrown when
      * null is passed as reference parameter.
      * 
      * @spec ApplicationServiceEvent.ApplicationServiceEvent(int,ServiceReference,Object)
      */
     private void testApplicationServiceEvent001() {
-    	//TODO waiting for nokia feedback
         tbc.log("#testApplicationServiceEvent001");
         try {
         	Object obj = new Object();
-        	org.osgi.application.ApplicationServiceEvent evt = new org.osgi.application.ApplicationServiceEvent(0, null, obj);
-            tbc.assertEquals("Asserting that the expected object is returned by getServiceObject()", obj,evt.getServiceObject());
+        	new org.osgi.application.ApplicationServiceEvent(0, null, obj);
+            tbc.failException("#", IllegalArgumentException.class);
+        } catch (IllegalArgumentException e) {
+            tbc.pass(MessagesConstants.getMessage(
+                MessagesConstants.EXCEPTION_CORRECTLY_THROWN,
+                new String[]{IllegalArgumentException.class.getName()}));
         } catch (Exception e) {
-            tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": "
-                + e.getClass().getName());
+            tbc.fail(MessagesConstants.getMessage(
+                MessagesConstants.EXCEPTION_THROWN, new String[]{
+                		IllegalArgumentException.class.getName(),
+                    e.getClass().getName()}));
         }
-    }
+    }  
     
     /**
      * This method asserts that no exception is thrown when

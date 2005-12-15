@@ -62,7 +62,6 @@ public class SetCurrentApplicationId {
 	public void run() {
 		testSetCurrentApplicationId001();
 		testSetCurrentApplicationId002();
-		testSetCurrentApplicationId003();
 	}
 
     /**
@@ -84,44 +83,18 @@ public class SetCurrentApplicationId {
 	}
 	
     /**
-     * This method asserts if an IllegalArgumentException is thrown when we pass
-     * invalid characters as parameter.
+     * This method asserts if no exception is thrown when
+     * invalid characters is passed as parameter.
      * 
      * @spec ApplicationAdminPermission.setCurrentApplicationId(String)
      */         
 	private void testSetCurrentApplicationId002() {
 		try {
-//			TODO waiting for nokia feedback
 			tbc.log("#testSetCurrentApplicationId002");
 			org.osgi.service.application.ApplicationAdminPermission app = new org.osgi.service.application.ApplicationAdminPermission(
 					ApplicationConstants.APPLICATION_PERMISSION_FILTER1, ApplicationConstants.ACTIONS);
 			app.setCurrentApplicationId(ApplicationConstants.INVALID);
-			tbc.failException("", IllegalArgumentException.class);
-		} catch (IllegalArgumentException e) {
-			tbc.pass(MessagesConstants.getMessage(
-					MessagesConstants.EXCEPTION_CORRECTLY_THROWN,
-					new String[] { e.getClass().getName() }));
-		} catch (Exception e) {
-			tbc.fail(MessagesConstants.getMessage(
-					MessagesConstants.EXCEPTION_THROWN, new String[] {
-							IllegalArgumentException.class.getName(),
-							e.getClass().getName() }));
-		}
-	}	
-	
-    /**
-     * This method asserts if no Exception is thrown when we pass 
-     * a valid id.
-     * 
-     * @spec ApplicationAdminPermission.setCurrentApplicationId(String)
-     */         
-	private void testSetCurrentApplicationId003() {
-		try {
-			tbc.log("#testSetCurrentApplicationId003");
-			org.osgi.service.application.ApplicationAdminPermission app = new org.osgi.service.application.ApplicationAdminPermission(
-					ApplicationConstants.APPLICATION_PERMISSION_FILTER1, ApplicationConstants.ACTIONS);
-			app.setCurrentApplicationId(ApplicationConstants.TEST_PID);
-			tbc.pass("No Exception was thrown");
+			tbc.pass("No exception was thrown.");
 		} catch (Exception e) {
 			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": " + e.getClass().getName());
 		}

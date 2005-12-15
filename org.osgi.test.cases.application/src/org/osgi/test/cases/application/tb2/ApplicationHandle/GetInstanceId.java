@@ -74,7 +74,7 @@ public class GetInstanceId implements TestInterface {
 			
 			tbc.setLocalPermission(new PermissionInfo(
 				ApplicationAdminPermission.class.getName(),
-				ApplicationConstants.TEST_PID, ApplicationAdminPermission.LIFECYCLE_ACTION));	
+				ApplicationConstants.APPLICATION_PERMISSION_FILTER1, ApplicationAdminPermission.LIFECYCLE_ACTION));	
 
 			handle = tbc.getAppDescriptor().launch(null);
 			
@@ -82,7 +82,7 @@ public class GetInstanceId implements TestInterface {
 			
 			tbc
 				.assertTrue("Asserting if the instanceID is the same used in xml.",
-					handle.getInstanceId().startsWith(ApplicationConstants.TEST_PID));
+					handle.getInstanceId().indexOf(ApplicationConstants.APPLICATION_PERMISSION_FILTER1) != -1);
 		} catch (Exception e) {
 			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + " " + e.getClass().getName());			
 		} finally {
@@ -104,7 +104,7 @@ public class GetInstanceId implements TestInterface {
 					tbc.getTb2Location());
 
 			tbc.setLocalPermission(
-					new PermissionInfo(ApplicationAdminPermission.class.getName(), ApplicationConstants.TEST_PID, ApplicationAdminPermission.LIFECYCLE_ACTION)
+					new PermissionInfo(ApplicationAdminPermission.class.getName(), ApplicationConstants.APPLICATION_PERMISSION_FILTER1, ApplicationAdminPermission.LIFECYCLE_ACTION)
 			);		
 				
 			handle = tbc.getAppDescriptor().launch(null);
@@ -113,7 +113,7 @@ public class GetInstanceId implements TestInterface {
 			
 			tbc
 			.assertTrue("Asserting if the instanceID is the same used in xml.",
-				handle.getInstanceId().startsWith(ApplicationConstants.TEST_PID));
+				handle.getInstanceId().indexOf(ApplicationConstants.APPLICATION_PERMISSION_FILTER1) != -1);
 		} catch (Exception e) {
 			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + " " + e.getClass().getName());			
 		} finally {

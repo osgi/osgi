@@ -23,45 +23,44 @@
  * property of their respective owners. All rights reserved.
  * 
  */
-
 /*
  * REVISION HISTORY:
  *
  * Date         Author(s)
  * CR           Headline
  * ===========  ==============================================================
- * 23/08/2005   Alexandre Santos
- * 153          [MEGTCK][APP] Implement OAT test cases
+ * 25/08/2005   Alexandre Santos
+ * 153          Implement OAT test cases  
  * ===========  ==============================================================
  */
-package org.osgi.test.cases.application.tb3;
 
-import java.util.Hashtable;
+package org.osgi.test.cases.application.tb1;
 
-import org.osgi.framework.BundleActivator;
-import org.osgi.framework.BundleContext;
-import org.osgi.framework.ServiceRegistration;
+import javax.microedition.midlet.MIDlet;
+import javax.microedition.midlet.MIDletStateChangeException;
+
+import org.osgi.application.ApplicationContext;
+import org.osgi.application.Framework;
+import org.osgi.test.cases.application.tbc.ApplicationConstants;
+import org.osgi.test.cases.application.tbc.util.TestAppController;
 
 
-/**
- * @Author Alexandre Santos
- * A dummy bundle.
- */
+public class TestApplication extends MIDlet {
+    ApplicationContext appContext = null;
+    TestAppController appController = null;
 
-public class Activator implements BundleActivator {
-	private ServiceRegistration servReg;
-
-	public void start(BundleContext context) throws Exception {
-		servReg = context.registerService(Activator.class.getName(), this, null);
-		System.out.println("Activator activated.");
+	protected void startApp() throws MIDletStateChangeException {
+        appContext = Framework.getApplicationContext(this);
+        appController = (TestAppController) appContext.locateService(ApplicationConstants.XML_APP);
+        appController.setApplicationInstance(this);		
 	}
-	
-	public void stop(BundleContext context) throws Exception {
-		servReg.unregister();
-	}
-	
-    public void setProperties(Hashtable ht) {
-    	servReg.setProperties(ht);
-    }	
 
+	protected void pauseApp() {
+		
+	}
+
+	protected void destroyApp(boolean arg0) throws MIDletStateChangeException {
+		//appController.setApplicationInstance(null); we need a reference to an old midlet for tests purposes.
+        appController = null;		
+	}
 }

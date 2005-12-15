@@ -79,10 +79,10 @@ public class IsRecurring implements TestInterface {
 					tbc.getTb2Location());
 
             tbc.setLocalPermission(
-                new PermissionInfo(ApplicationAdminPermission.class.getName(), ApplicationConstants.TEST_PID, ApplicationAdminPermission.SCHEDULE_ACTION)
+                new PermissionInfo(ApplicationAdminPermission.class.getName(), ApplicationConstants.APPLICATION_PERMISSION_FILTER1, ApplicationAdminPermission.SCHEDULE_ACTION)
             );
 
-			sa = tbc.getAppDescriptor().schedule(null, "*", null, false);
+			sa = tbc.getAppDescriptor().schedule(null, ApplicationConstants.TIMER_EVENT, "(second=0)", false);
 
 			tbc.setDefaultPermission();
 			
@@ -103,6 +103,7 @@ public class IsRecurring implements TestInterface {
      * @spec ScheduleApplication.isRecurring()
      */           
 	public void testIsRecurring002() {
+		//TODO waiting feedback
 		tbc.log("#testIsRecurring002");
 		PermissionInfo[] infos = null;
 		ScheduledApplication sa = null;
@@ -111,7 +112,7 @@ public class IsRecurring implements TestInterface {
 					tbc.getTb2Location());
 
             tbc.setLocalPermission(
-                new PermissionInfo(ApplicationAdminPermission.class.getName(), ApplicationConstants.TEST_PID, ApplicationAdminPermission.SCHEDULE_ACTION)
+                new PermissionInfo(ApplicationAdminPermission.class.getName(), ApplicationConstants.APPLICATION_PERMISSION_FILTER1, ApplicationAdminPermission.SCHEDULE_ACTION)
             );
 
 			sa = tbc.getAppDescriptor().schedule(null, "*", null, true);
@@ -143,7 +144,7 @@ public class IsRecurring implements TestInterface {
 					tbc.getTb2Location());
 
             tbc.setLocalPermission(
-                new PermissionInfo(ApplicationAdminPermission.class.getName(), ApplicationConstants.TEST_PID, ApplicationAdminPermission.SCHEDULE_ACTION)
+                new PermissionInfo(ApplicationAdminPermission.class.getName(), ApplicationConstants.APPLICATION_PERMISSION_FILTER1, ApplicationAdminPermission.SCHEDULE_ACTION)
             );
 
 			sa = tbc.getAppDescriptor().schedule(null, "*", null, false);

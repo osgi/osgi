@@ -115,7 +115,7 @@ public class GetServiceProperties {
 			
 			tbc.assertNotNull("Asserting that a non-null object was returned.", appController);
 			
-			appContext.getServiceProperties(appContext);
+			appContext.getServiceProperties(appController);
 			
 			tbc.pass("No Exception was thrown.");
         } catch (Exception e) {
@@ -147,7 +147,7 @@ public class GetServiceProperties {
 			
 			handle.destroy();
 			
-			appContext.getServiceProperties(appContext);            
+			appContext.getServiceProperties(appController);            
             
             tbc.failException("", IllegalStateException.class);            
         } catch (IllegalStateException e) {

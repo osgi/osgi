@@ -78,10 +78,10 @@ public class GetTopic implements TestInterface {
 					tbc.getTb2Location());
 
             tbc.setLocalPermission(
-                new PermissionInfo(ApplicationAdminPermission.class.getName(), ApplicationConstants.TEST_PID, ApplicationAdminPermission.SCHEDULE_ACTION)
+                new PermissionInfo(ApplicationAdminPermission.class.getName(), ApplicationConstants.APPLICATION_PERMISSION_FILTER1, ApplicationAdminPermission.SCHEDULE_ACTION)
             );
 
-            sa = tbc.getAppDescriptor().schedule(null, ApplicationConstants.TIMER_EVENT, ApplicationConstants.EVENT_FILTER, false);
+            sa = tbc.getAppDescriptor().schedule(null, ApplicationConstants.TIMER_EVENT, ApplicationConstants.EVENT_FILTER, true);
             
             tbc.setDefaultPermission();
             
@@ -114,7 +114,7 @@ public class GetTopic implements TestInterface {
                     tbc.getTb2Location());
 
             tbc.setLocalPermission(
-                new PermissionInfo(ApplicationAdminPermission.class.getName(), ApplicationConstants.TEST_PID, ApplicationAdminPermission.SCHEDULE_ACTION)
+                new PermissionInfo(ApplicationAdminPermission.class.getName(), ApplicationConstants.APPLICATION_PERMISSION_FILTER1, ApplicationAdminPermission.SCHEDULE_ACTION)
             );
 
             sa = tbc.getAppDescriptor().schedule(null, "*", null, false);

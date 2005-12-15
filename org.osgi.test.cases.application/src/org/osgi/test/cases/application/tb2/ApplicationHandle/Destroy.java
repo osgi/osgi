@@ -81,7 +81,7 @@ public class Destroy implements TestInterface  {
 					tbc.getTb2Location());
 
 			tbc.setLocalPermission(
-				new PermissionInfo(ApplicationAdminPermission.class.getName(), ApplicationConstants.TEST_PID, ApplicationAdminPermission.LIFECYCLE_ACTION)				
+				new PermissionInfo(ApplicationAdminPermission.class.getName(), ApplicationConstants.APPLICATION_PERMISSION_FILTER1, ApplicationAdminPermission.LIFECYCLE_ACTION)				
 			);
 			
 			handle = tbc.getAppDescriptor().launch(null);
@@ -110,7 +110,7 @@ public class Destroy implements TestInterface  {
 					tbc.getTb2Location());
 
 			tbc.setLocalPermission(
-					new PermissionInfo(ApplicationAdminPermission.class.getName(), ApplicationConstants.TEST_PID, ApplicationAdminPermission.LIFECYCLE_ACTION)				
+					new PermissionInfo(ApplicationAdminPermission.class.getName(), ApplicationConstants.APPLICATION_PERMISSION_FILTER1, ApplicationAdminPermission.LIFECYCLE_ACTION)				
 			);
 				
 			handle = tbc.getAppDescriptor().launch(null);
@@ -145,10 +145,12 @@ public class Destroy implements TestInterface  {
 					tbc.getTb2Location());
 
 			tbc.setLocalPermission(
-					new PermissionInfo(ApplicationAdminPermission.class.getName(), ApplicationConstants.TEST_PID, ApplicationAdminPermission.LIFECYCLE_ACTION)
+					new PermissionInfo(ApplicationAdminPermission.class.getName(), ApplicationConstants.APPLICATION_PERMISSION_FILTER1, ApplicationAdminPermission.LIFECYCLE_ACTION)
 			);
 			
-			handle = tbc.getAppDescriptor().launch(null);			
+			handle = tbc.getAppDescriptor().launch(null);		
+			
+			tbc.setDefaultPermission();
 
 			handle.destroy();
 

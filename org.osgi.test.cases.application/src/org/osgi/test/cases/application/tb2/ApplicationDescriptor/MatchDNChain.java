@@ -68,14 +68,14 @@ public class MatchDNChain implements TestInterface {
 	}
 
 	/**
-	 * This method asserts that NullPointerException is thrown
-	 * when we pass null as parameter.
+	 * This method asserts that NullPointerException is thrown when we pass null
+	 * as parameter.
 	 * 
 	 * @spec ApplicationDescriptor.matchDNChain(String)
 	 */
 	private void testMatchDNChain001() {
 		tbc.log("#testMatchDNChain001");
-		PermissionInfo[] infos = null;		
+		PermissionInfo[] infos = null;
 		try {
 			infos = tbc.getPermissionAdmin().getPermissions(
 					tbc.getTb2Location());
@@ -104,7 +104,7 @@ public class MatchDNChain implements TestInterface {
 	 */
 	private void testMatchDNChain002() {
 		tbc.log("#testMatchDNChain002");
-		PermissionInfo[] infos = null;		
+		PermissionInfo[] infos = null;
 		try {
 			infos = tbc.getPermissionAdmin().getPermissions(
 					tbc.getTb2Location());
@@ -112,10 +112,8 @@ public class MatchDNChain implements TestInterface {
 			tbc
 					.assertTrue(
 							"Asserting that true is returned when we have passed a pattern that correspond to this descriptor.",
-							tbc
-									.getAppDescriptor()
-									.matchDNChain(
-											ApplicationConstants.APPLICATION_PERMISSION_FILTER1));
+							tbc.getAppDescriptor().matchDNChain(
+									ApplicationConstants.SIGNER_FILTER));
 		} catch (Exception e) {
 			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": "
 					+ e.getClass().getName());
@@ -132,7 +130,7 @@ public class MatchDNChain implements TestInterface {
 	 */
 	private void testMatchDNChain003() {
 		tbc.log("#testMatchDNChain003");
-		PermissionInfo[] infos = null;		
+		PermissionInfo[] infos = null;
 		try {
 			infos = tbc.getPermissionAdmin().getPermissions(
 					tbc.getTb2Location());
@@ -140,10 +138,8 @@ public class MatchDNChain implements TestInterface {
 			tbc
 					.assertTrue(
 							"Asserting that false is returned when we have passed a pattern that does not correspond to this descriptor.",
-							tbc
-									.getAppDescriptor()
-									.matchDNChain(
-											ApplicationConstants.APPLICATION_PERMISSION_FILTER_DIFFERENT));
+							!tbc.getAppDescriptor().matchDNChain(
+									ApplicationConstants.SIGNER_FILTER2));
 		} catch (Exception e) {
 			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": "
 					+ e.getClass().getName());
@@ -153,34 +149,31 @@ public class MatchDNChain implements TestInterface {
 	}
 
 	/**
-	 * This method asserts that IllegalArgumentException is thrown when we have
-	 * passed invalid characters as parameter.
+	 * This method asserts that false is returned when we have passed an 
+	 * invalid format of signer.
 	 * 
 	 * @spec ApplicationDescriptor.matchDNChain(String)
 	 */
 	private void testMatchDNChain004() {
 		tbc.log("#testMatchDNChain004");
-		PermissionInfo[] infos = null;		
+		PermissionInfo[] infos = null;
 		try {
 			infos = tbc.getPermissionAdmin().getPermissions(
 					tbc.getTb2Location());
 			tbc.setDefaultPermission();
-			tbc.getAppDescriptor().matchDNChain(ApplicationConstants.INVALID);
-			tbc.failException("", IllegalArgumentException.class);
-		} catch (IllegalArgumentException e) {
-			tbc.pass(MessagesConstants.getMessage(
-					MessagesConstants.EXCEPTION_CORRECTLY_THROWN,
-					new String[] { IllegalArgumentException.class.getName() }));
+			
+			tbc
+					.assertTrue(
+							"Asserting that false is returned when we have passed an invalid format of signer.",
+							!tbc.getAppDescriptor().matchDNChain(ApplicationConstants.INVALID));
 		} catch (Exception e) {
-			tbc.fail(MessagesConstants.getMessage(
-					MessagesConstants.EXCEPTION_THROWN, new String[] {
-							IllegalArgumentException.class.getName(),
-							e.getClass().getName() }));
+			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": "
+					+ e.getClass().getName());
 		} finally {
 			tbc.cleanUp(infos);
 		}
 	}
-	
+
 	/**
 	 * This method asserts that if the application descriptor is unregistered
 	 * IllegalStateException will be thrown.
@@ -188,15 +181,16 @@ public class MatchDNChain implements TestInterface {
 	 * @spec ApplicationDescriptor.matchDNChain(String)
 	 */
 	private void testMatchDNChain005() {
-		PermissionInfo[] infos = null;		
+		PermissionInfo[] infos = null;
 		try {
 			tbc.log("#testMatchDNChain005");
 			infos = tbc.getPermissionAdmin().getPermissions(
-					tbc.getTb2Location());			
+					tbc.getTb2Location());
 			tbc.setDefaultPermission();
 			tbc.unregisterDescriptor();
-			tbc.getAppDescriptor().matchDNChain(ApplicationConstants.APPLICATION_PERMISSION_FILTER1);
-			
+			tbc.getAppDescriptor().matchDNChain(
+					ApplicationConstants.SIGNER_FILTER);
+
 			tbc.failException("#", IllegalStateException.class);
 		} catch (IllegalStateException e) {
 			tbc.pass(MessagesConstants.getMessage(
@@ -211,6 +205,6 @@ public class MatchDNChain implements TestInterface {
 			tbc.installDescriptor();
 			tbc.cleanUp(infos);
 		}
-	}		
+	}
 
 }

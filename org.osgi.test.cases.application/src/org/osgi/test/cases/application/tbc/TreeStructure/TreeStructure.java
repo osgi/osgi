@@ -125,7 +125,7 @@ public class TreeStructure {
 		tbc.log("#testTreeStructure001");
 		DmtSession session = null;
 		try {
-			session = tbc.getDmtAdmin().getSession(".",
+			session = tbc.getDmtAdmin().getSession(ApplicationConstants.OSGI_APPLICATION,
 					DmtSession.LOCK_TYPE_SHARED);
 
 			tbc.assertTrue("Asserts if $/Application is a valid node", session
@@ -162,7 +162,7 @@ public class TreeStructure {
 		tbc.log("#testTreeStructure002");
 		DmtSession session = null;
 		try {
-			session = tbc.getDmtAdmin().getSession(".",
+			session = tbc.getDmtAdmin().getSession(ApplicationConstants.OSGI_APPLICATION,
 					DmtSession.LOCK_TYPE_SHARED);
 
 			tbc
@@ -205,7 +205,7 @@ public class TreeStructure {
 		tbc.log("#testTreeStructure003");
 		DmtSession session = null;
 		try {
-			session = tbc.getDmtAdmin().getSession(".",
+			session = tbc.getDmtAdmin().getSession(ApplicationConstants.OSGI_APPLICATION,
 					DmtSession.LOCK_TYPE_SHARED);
 
 			tbc
@@ -234,7 +234,7 @@ public class TreeStructure {
 							"Asserting the value of $/Application/<app_id>/Name",
 							ApplicationConstants.APPLICATION_NAME,
 							session
-									.getNodeValue(ApplicationConstants.OSGI_APPLICATION_APPID_NAME));
+									.getNodeValue(ApplicationConstants.OSGI_APPLICATION_APPID_NAME).getString());
 		} catch (Exception e) {
 			tbc.fail(MessagesConstants.getMessage(
 					MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e
@@ -255,7 +255,7 @@ public class TreeStructure {
 		tbc.log("#testTreeStructure004");
 		DmtSession session = null;
 		try {
-			session = tbc.getDmtAdmin().getSession(".",
+			session = tbc.getDmtAdmin().getSession(ApplicationConstants.OSGI_APPLICATION,
 					DmtSession.LOCK_TYPE_SHARED);
 
 			tbc
@@ -286,7 +286,7 @@ public class TreeStructure {
 							"Asserting the value of $/Application/<app_id>/IconURI",
 							"/TestIcon.gif",
 							session
-									.getNodeValue(ApplicationConstants.OSGI_APPLICATION_APPID_ICONURI));
+									.getNodeValue(ApplicationConstants.OSGI_APPLICATION_APPID_ICONURI).getString());
 		} catch (Exception e) {
 			tbc.fail(MessagesConstants.getMessage(
 					MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e
@@ -307,7 +307,7 @@ public class TreeStructure {
 		tbc.log("#testTreeStructure005");
 		DmtSession session = null;
 		try {
-			session = tbc.getDmtAdmin().getSession(".",
+			session = tbc.getDmtAdmin().getSession(ApplicationConstants.OSGI_APPLICATION,
 					DmtSession.LOCK_TYPE_SHARED);
 
 			tbc
@@ -338,7 +338,7 @@ public class TreeStructure {
 							"Asserting the value of $/Application/<app_id>/Vendor",
 							"Cesar",
 							session
-									.getNodeValue(ApplicationConstants.OSGI_APPLICATION_APPID_VENDOR));
+									.getNodeValue(ApplicationConstants.OSGI_APPLICATION_APPID_VENDOR).getString());
 		} catch (Exception e) {
 			tbc.fail(MessagesConstants.getMessage(
 					MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e
@@ -359,7 +359,7 @@ public class TreeStructure {
 		tbc.log("#testTreeStructure006");
 		DmtSession session = null;
 		try {
-			session = tbc.getDmtAdmin().getSession(".",
+			session = tbc.getDmtAdmin().getSession(ApplicationConstants.OSGI_APPLICATION,
 					DmtSession.LOCK_TYPE_SHARED);
 			tbc
 					.assertTrue(
@@ -385,9 +385,9 @@ public class TreeStructure {
 			tbc
 					.assertEquals(
 							"Asserting the value of $/Application/<app_id>/Version",
-							ApplicationConstants.OSGI_APPLICATION_VERSION,
+							ApplicationConstants.APP_VERSION,
 							session
-									.getNodeValue(ApplicationConstants.OSGI_APPLICATION_APPID_VERSION));
+									.getNodeValue(ApplicationConstants.OSGI_APPLICATION_APPID_VERSION).getString());
 		} catch (Exception e) {
 			tbc.fail(MessagesConstants.getMessage(
 					MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e
@@ -408,7 +408,7 @@ public class TreeStructure {
 		tbc.log("#testTreeStructure007");
 		DmtSession session = null;
 		try {
-			session = tbc.getDmtAdmin().getSession(".",
+			session = tbc.getDmtAdmin().getSession(ApplicationConstants.OSGI_APPLICATION,
 					DmtSession.LOCK_TYPE_SHARED);
 			tbc
 					.assertTrue(
@@ -465,7 +465,7 @@ public class TreeStructure {
 		tbc.log("#testTreeStructure008");
 		DmtSession session = null;
 		try {
-			session = tbc.getDmtAdmin().getSession(".",
+			session = tbc.getDmtAdmin().getSession(ApplicationConstants.OSGI_APPLICATION,
 					DmtSession.LOCK_TYPE_SHARED);
 			tbc
 					.assertTrue(
@@ -490,12 +490,7 @@ public class TreeStructure {
 			tbc.assertTrue(
 					"Asserts $/Application/<app_id>/ContainerID metanode GET",
 					metaNode.can(MetaNode.CMD_GET));
-			tbc
-					.assertEquals(
-							"Asserting the value of $/Application/<app_id>/ContainerID",
-							ApplicationConstants.OSGI_APPLICATION_CONTAINER,
-							session
-									.getNodeValue(ApplicationConstants.OSGI_APPLICATION_APPID_CONTAINERID));
+
 		} catch (Exception e) {
 			tbc.fail(MessagesConstants.getMessage(
 					MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e
@@ -516,7 +511,7 @@ public class TreeStructure {
 		DmtSession session = null;
 		ScheduledApplication sa = null;
 		try {
-			session = tbc.getDmtAdmin().getSession(".",
+			session = tbc.getDmtAdmin().getSession(ApplicationConstants.OSGI_APPLICATION,
 					DmtSession.LOCK_TYPE_SHARED);
 
 			Map hash = new HashMap();
@@ -541,11 +536,11 @@ public class TreeStructure {
 			String name = session
 					.getNodeValue(
 							ApplicationConstants.OSGI_APPLICATION_APPID_SCHEDULES_ID_ARGUMENTS
-									+ nodes[0] + "/Name").getString();
+									+ "/Name").getString();
 			String value = session
 					.getNodeValue(
 							ApplicationConstants.OSGI_APPLICATION_APPID_SCHEDULES_ID_ARGUMENTS
-									+ nodes[0] + "/Value").getString();
+									+ "/Value").getString();
 
 			tbc
 					.assertEquals(
@@ -584,8 +579,7 @@ public class TreeStructure {
 			tbc.fail(MessagesConstants.getMessage(
 					MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e
 							.getClass().getName() }));
-		} finally {
-			updateScheduleIdConstants("Cesar");
+		} finally {			
 			sa.remove();
 			tbc.destroyHandles();
 			tbc.closeSession(session);
@@ -602,7 +596,7 @@ public class TreeStructure {
 		tbc.log("#testTreeStructure010");
 		DmtSession session = null;
 		try {
-			session = tbc.getDmtAdmin().getSession(".",
+			session = tbc.getDmtAdmin().getSession(ApplicationConstants.OSGI_APPLICATION,
 					DmtSession.LOCK_TYPE_SHARED);
 			tbc
 					.assertTrue(
@@ -642,7 +636,7 @@ public class TreeStructure {
 		tbc.log("#testTreeStructure011");
 		DmtSession session = null;
 		try {
-			session = tbc.getDmtAdmin().getSession(".",
+			session = tbc.getDmtAdmin().getSession(ApplicationConstants.OSGI_APPLICATION,
 					DmtSession.LOCK_TYPE_SHARED);
 			tbc
 					.assertTrue(
@@ -684,7 +678,7 @@ public class TreeStructure {
 		tbc.log("#testTreeStructure012");
 		DmtSession session = null;
 		try {
-			session = tbc.getDmtAdmin().getSession(".",
+			session = tbc.getDmtAdmin().getSession(ApplicationConstants.OSGI_APPLICATION,
 					DmtSession.LOCK_TYPE_SHARED);
 			tbc
 					.assertTrue(
@@ -727,7 +721,7 @@ public class TreeStructure {
 		tbc.log("#testTreeStructure013");
 		DmtSession session = null;
 		try {
-			session = tbc.getDmtAdmin().getSession(".",
+			session = tbc.getDmtAdmin().getSession(ApplicationConstants.OSGI_APPLICATION,
 					DmtSession.LOCK_TYPE_SHARED);
 			tbc
 					.assertTrue(
@@ -770,7 +764,7 @@ public class TreeStructure {
 		tbc.log("#testTreeStructure014");
 		DmtSession session = null;
 		try {
-			session = tbc.getDmtAdmin().getSession(".",
+			session = tbc.getDmtAdmin().getSession(ApplicationConstants.OSGI_APPLICATION,
 					DmtSession.LOCK_TYPE_SHARED);
 			tbc
 					.assertTrue(
@@ -820,7 +814,7 @@ public class TreeStructure {
 		DmtSession session = null;
 		ApplicationHandle handle = null;
 		try {
-			session = tbc.getDmtAdmin().getSession(".",
+			session = tbc.getDmtAdmin().getSession(ApplicationConstants.OSGI_APPLICATION,
 					DmtSession.LOCK_TYPE_SHARED);
 			tbc.getAppDescriptor().unlock();
 			session
@@ -851,7 +845,7 @@ public class TreeStructure {
 		tbc.log("#testTreeStructure016");
 		DmtSession session = null;
 		try {
-			session = tbc.getDmtAdmin().getSession(".",
+			session = tbc.getDmtAdmin().getSession(ApplicationConstants.OSGI_APPLICATION,
 					DmtSession.LOCK_TYPE_SHARED);
 			tbc
 					.assertTrue(
@@ -902,7 +896,7 @@ public class TreeStructure {
 		DmtSession session = null;
 		ApplicationHandle handle = null;
 		try {
-			session = tbc.getDmtAdmin().getSession(".",
+			session = tbc.getDmtAdmin().getSession(ApplicationConstants.OSGI_APPLICATION,
 					DmtSession.LOCK_TYPE_SHARED);
 			tbc.getAppDescriptor().lock();
 			session
@@ -935,7 +929,7 @@ public class TreeStructure {
 		tbc.log("#testTreeStructure018");
 		DmtSession session = null;
 		try {
-			session = tbc.getDmtAdmin().getSession(".",
+			session = tbc.getDmtAdmin().getSession(ApplicationConstants.OSGI_APPLICATION,
 					DmtSession.LOCK_TYPE_SHARED);
 			tbc
 					.assertTrue(
@@ -983,8 +977,11 @@ public class TreeStructure {
 		tbc.log("#testTreeStructure019");
 		DmtSession session = null;
 		try {
-			session = tbc.getDmtAdmin().getSession(".",
-					DmtSession.LOCK_TYPE_SHARED);
+			session = tbc.getDmtAdmin().getSession(ApplicationConstants.OSGI_APPLICATION,
+					DmtSession.LOCK_TYPE_EXCLUSIVE);
+			
+			updateLaunchIdConstants("/Cesar");
+			
 			session
 					.createInteriorNode(ApplicationConstants.OSGI_APPLICATION_APPID_OPERATIONS_LAUNCH_LAUNCHID);
 
@@ -1044,8 +1041,11 @@ public class TreeStructure {
 		tbc.log("#testTreeStructure020");
 		DmtSession session = null;
 		try {
-			session = tbc.getDmtAdmin().getSession(".",
-					DmtSession.LOCK_TYPE_SHARED);
+			session = tbc.getDmtAdmin().getSession(ApplicationConstants.OSGI_APPLICATION,
+					DmtSession.LOCK_TYPE_EXCLUSIVE);
+			
+			updateLaunchIdConstants("/Cesar");
+			
 			session
 					.createInteriorNode(ApplicationConstants.OSGI_APPLICATION_APPID_OPERATIONS_LAUNCH_LAUNCHID);
 			session
@@ -1103,10 +1103,15 @@ public class TreeStructure {
 		tbc.log("#testTreeStructure021");
 		DmtSession session = null;
 		try {
-			session = tbc.getDmtAdmin().getSession(".",
-					DmtSession.LOCK_TYPE_SHARED);
+			session = tbc.getDmtAdmin().getSession(ApplicationConstants.OSGI_APPLICATION,
+					DmtSession.LOCK_TYPE_EXCLUSIVE);
+			
+			updateLaunchIdConstants("/Cesar");
+			
 			session
 					.createInteriorNode(ApplicationConstants.OSGI_APPLICATION_APPID_OPERATIONS_LAUNCH_LAUNCHID);
+			
+			session.createInteriorNode(ApplicationConstants.OSGI_APPLICATION_APPID_OPERATIONS_LAUNCH_LAUNCHID_ARGUMENTS_ID);
 
 			MetaNode metaNode = session
 					.getMetaNode(ApplicationConstants.OSGI_APPLICATION_APPID_OPERATIONS_LAUNCH_LAUNCHID_ARGUMENTS_ID_NAME);
@@ -1156,10 +1161,15 @@ public class TreeStructure {
 		tbc.log("#testTreeStructure022");
 		DmtSession session = null;
 		try {
-			session = tbc.getDmtAdmin().getSession(".",
-					DmtSession.LOCK_TYPE_SHARED);
+			session = tbc.getDmtAdmin().getSession(ApplicationConstants.OSGI_APPLICATION,
+					DmtSession.LOCK_TYPE_EXCLUSIVE);
+			
+			updateLaunchIdConstants("/Cesar");
+			
 			session
 					.createInteriorNode(ApplicationConstants.OSGI_APPLICATION_APPID_OPERATIONS_LAUNCH_LAUNCHID);
+			
+			session.createInteriorNode(ApplicationConstants.OSGI_APPLICATION_APPID_OPERATIONS_LAUNCH_LAUNCHID_ARGUMENTS_ID);
 
 			MetaNode metaNode = session
 					.getMetaNode(ApplicationConstants.OSGI_APPLICATION_APPID_OPERATIONS_LAUNCH_LAUNCHID_ARGUMENTS_ID_VALUE);
@@ -1216,9 +1226,12 @@ public class TreeStructure {
 		DmtSession session = null;
 		ApplicationHandle handle = null;
 		try {
-			session = tbc.getDmtAdmin().getSession(".",
-					DmtSession.LOCK_TYPE_SHARED);
+			tbc.destroyHandles();
+			session = tbc.getDmtAdmin().getSession(ApplicationConstants.OSGI_APPLICATION,
+					DmtSession.LOCK_TYPE_EXCLUSIVE);
 
+			updateLaunchIdConstants("/Cesar");
+			
 			session
 					.createInteriorNode(ApplicationConstants.OSGI_APPLICATION_APPID_OPERATIONS_LAUNCH_LAUNCHID);
 			session
@@ -1280,11 +1293,14 @@ public class TreeStructure {
 		tbc.log("#testTreeStructure024");
 		DmtSession session = null;
 		try {
-			session = tbc.getDmtAdmin().getSession(".",
-					DmtSession.LOCK_TYPE_SHARED);
+			session = tbc.getDmtAdmin().getSession(ApplicationConstants.OSGI_APPLICATION,
+					DmtSession.LOCK_TYPE_EXCLUSIVE);
+			
+			updateLaunchIdConstants("/Cesar");
+			
 			session
-					.createInteriorNode(ApplicationConstants.OSGI_APPLICATION_APPID_OPERATIONS_LAUNCH_LAUNCHID);
-
+					.createInteriorNode(ApplicationConstants.OSGI_APPLICATION_APPID_OPERATIONS_LAUNCH_LAUNCHID);		
+			
 			tbc
 					.assertTrue(
 							"Asserts if $/Application/<app_id>/Operations/Launch/Arguments is a valid node",
@@ -1339,7 +1355,7 @@ public class TreeStructure {
 			hash.put("Name", "Value");
 			tbc.getAppDescriptor().launch(hash);
 
-			session = tbc.getDmtAdmin().getSession(".",
+			session = tbc.getDmtAdmin().getSession(ApplicationConstants.OSGI_APPLICATION,
 					DmtSession.LOCK_TYPE_SHARED);
 
 			String[] nodes = session
@@ -1354,7 +1370,7 @@ public class TreeStructure {
 					.assertTrue(
 							"Asserting if the name of the returned node is equal to the service.pid of the ApplicationHandle.",
 							nodes[0]
-									.startsWith(ApplicationConstants.APPLICATION_NAME));
+									.indexOf(ApplicationConstants.APPLICATION_NAME)>=0);
 			
 			updateLaunchIdConstants("/"+nodes[0]);
 			
@@ -1431,7 +1447,7 @@ public class TreeStructure {
 		try {
 			handle = tbc.getAppDescriptor().launch(null);
 
-			session = tbc.getDmtAdmin().getSession(".",
+			session = tbc.getDmtAdmin().getSession(ApplicationConstants.OSGI_APPLICATION,
 					DmtSession.LOCK_TYPE_SHARED);
 
 			String[] nodes = session
@@ -1497,7 +1513,7 @@ public class TreeStructure {
 		try {
 			handle = tbc.getAppDescriptor().launch(null);
 
-			session = tbc.getDmtAdmin().getSession(".",
+			session = tbc.getDmtAdmin().getSession(ApplicationConstants.OSGI_APPLICATION,
 					DmtSession.LOCK_TYPE_SHARED);
 			
 			String[] nodes = session
@@ -1560,7 +1576,7 @@ public class TreeStructure {
 		try {
 			handle = tbc.getAppDescriptor().launch(null);
 
-			session = tbc.getDmtAdmin().getSession(".",
+			session = tbc.getDmtAdmin().getSession(ApplicationConstants.OSGI_APPLICATION,
 					DmtSession.LOCK_TYPE_SHARED);
 			
 			String[] nodes = session
@@ -1624,7 +1640,7 @@ public class TreeStructure {
 		DmtSession session = null;
 		ApplicationHandle handle = null;
 		try {
-			session = tbc.getDmtAdmin().getSession(".",
+			session = tbc.getDmtAdmin().getSession(ApplicationConstants.OSGI_APPLICATION,
 					DmtSession.LOCK_TYPE_SHARED);
 
 			handle = tbc.getAppDescriptor().launch(null);
@@ -1675,7 +1691,7 @@ public class TreeStructure {
 		try {
 			handle = tbc.getAppDescriptor().launch(null);
 
-			session = tbc.getDmtAdmin().getSession(".",
+			session = tbc.getDmtAdmin().getSession(ApplicationConstants.OSGI_APPLICATION,
 					DmtSession.LOCK_TYPE_SHARED);
 			
 			String[] nodes = session
@@ -1735,8 +1751,10 @@ public class TreeStructure {
 		tbc.log("#testTreeStructure031");
 		DmtSession session = null;
 		try {
-			session = tbc.getDmtAdmin().getSession(".",
-					DmtSession.LOCK_TYPE_SHARED);
+			session = tbc.getDmtAdmin().getSession(ApplicationConstants.OSGI_APPLICATION,
+					DmtSession.LOCK_TYPE_EXCLUSIVE);
+			
+			updateScheduleIdConstants("Cesar");			
 
 			session
 					.createInteriorNode(ApplicationConstants.OSGI_APPLICATION_APPID_SCHEDULES_ID);
@@ -1792,9 +1810,11 @@ public class TreeStructure {
 		tbc.log("#testTreeStructure032");
 		DmtSession session = null;
 		try {
-			session = tbc.getDmtAdmin().getSession(".",
-					DmtSession.LOCK_TYPE_SHARED);
+			session = tbc.getDmtAdmin().getSession(ApplicationConstants.OSGI_APPLICATION,
+					DmtSession.LOCK_TYPE_EXCLUSIVE);
 
+			updateScheduleIdConstants("Cesar");
+			
 			session
 					.createInteriorNode(ApplicationConstants.OSGI_APPLICATION_APPID_SCHEDULES_ID);
 
@@ -1847,8 +1867,10 @@ public class TreeStructure {
 		tbc.log("#testTreeStructure033");
 		DmtSession session = null;
 		try {
-			session = tbc.getDmtAdmin().getSession(".",
-					DmtSession.LOCK_TYPE_SHARED);
+			session = tbc.getDmtAdmin().getSession(ApplicationConstants.OSGI_APPLICATION,
+					DmtSession.LOCK_TYPE_EXCLUSIVE);
+			
+			updateScheduleIdConstants("Cesar");
 
 			session
 					.createInteriorNode(ApplicationConstants.OSGI_APPLICATION_APPID_SCHEDULES_ID);
@@ -1914,9 +1936,11 @@ public class TreeStructure {
 		tbc.log("#testTreeStructure034");
 		DmtSession session = null;
 		try {
-			session = tbc.getDmtAdmin().getSession(".",
-					DmtSession.LOCK_TYPE_SHARED);
+			session = tbc.getDmtAdmin().getSession(ApplicationConstants.OSGI_APPLICATION,
+					DmtSession.LOCK_TYPE_EXCLUSIVE);
 
+			updateScheduleIdConstants("Cesar");
+			
 			session
 					.createInteriorNode(ApplicationConstants.OSGI_APPLICATION_APPID_SCHEDULES_ID);
 
@@ -1982,9 +2006,11 @@ public class TreeStructure {
 		tbc.log("#testTreeStructure035");
 		DmtSession session = null;
 		try {
-			session = tbc.getDmtAdmin().getSession(".",
-					DmtSession.LOCK_TYPE_SHARED);
+			session = tbc.getDmtAdmin().getSession(ApplicationConstants.OSGI_APPLICATION,
+					DmtSession.LOCK_TYPE_EXCLUSIVE);
 
+			updateScheduleIdConstants("Cesar");
+			
 			session
 					.createInteriorNode(ApplicationConstants.OSGI_APPLICATION_APPID_SCHEDULES_ID);
 
@@ -2050,9 +2076,11 @@ public class TreeStructure {
 		tbc.log("#testTreeStructure036");
 		DmtSession session = null;
 		try {
-			session = tbc.getDmtAdmin().getSession(".",
-					DmtSession.LOCK_TYPE_SHARED);
+			session = tbc.getDmtAdmin().getSession(ApplicationConstants.OSGI_APPLICATION,
+					DmtSession.LOCK_TYPE_EXCLUSIVE);
 
+			updateScheduleIdConstants("Cesar");
+			
 			session
 					.createInteriorNode(ApplicationConstants.OSGI_APPLICATION_APPID_SCHEDULES_ID);
 
@@ -2117,28 +2145,21 @@ public class TreeStructure {
 		tbc.log("#testTreeStructure037");
 		DmtSession session = null;
 		try {
-			session = tbc.getDmtAdmin().getSession(".",
-					DmtSession.LOCK_TYPE_SHARED);
+			session = tbc.getDmtAdmin().getSession(ApplicationConstants.OSGI_APPLICATION,
+					DmtSession.LOCK_TYPE_EXCLUSIVE);
 
-			session
-					.createInteriorNode(ApplicationConstants.OSGI_APPLICATION_APPID_SCHEDULES_ID);
-
-			String[] nodes = session
-					.getChildNodeNames(ApplicationConstants.OSGI_APPLICATION_APPID_SCHEDULES_ID_ARGUMENTS);
-
-			tbc.assertEquals("Asserting that one parameter was created.", 1,
-					nodes.length);
-
+			updateScheduleIdConstants("Cesar");
+			
+			session.createInteriorNode(ApplicationConstants.OSGI_APPLICATION_APPID_SCHEDULES_ID_ARGUMENTS_ID);
+			
 			tbc
 					.assertTrue(
 							"Asserts if $/Application/<app_id>/Schedules/<schedule_id>/Arguments/<arg_id>/Name is a valid node",
 							session
-									.isNodeUri(ApplicationConstants.OSGI_APPLICATION_APPID_SCHEDULES_ID_ARGUMENTS
-											+ nodes[0] + "/Name"));
+									.isNodeUri(ApplicationConstants.OSGI_APPLICATION_APPID_SCHEDULES_ID_ARGUMENTS_ID_NAME));
 
 			MetaNode metaNode = session
-					.getMetaNode(ApplicationConstants.OSGI_APPLICATION_APPID_SCHEDULES_ID_ARGUMENTS
-							+ nodes[0] + "/Name");
+					.getMetaNode(ApplicationConstants.OSGI_APPLICATION_APPID_SCHEDULES_ID_ARGUMENTS_ID_NAME);
 
 			tbc
 					.assertEquals(
@@ -2185,27 +2206,22 @@ public class TreeStructure {
 		tbc.log("#testTreeStructure038");
 		DmtSession session = null;
 		try {
-			session = tbc.getDmtAdmin().getSession(".",
-					DmtSession.LOCK_TYPE_SHARED);
+			session = tbc.getDmtAdmin().getSession(ApplicationConstants.OSGI_APPLICATION,
+					DmtSession.LOCK_TYPE_EXCLUSIVE);
+			
+			updateScheduleIdConstants("Cesar");
+			
 			session
-					.createInteriorNode(ApplicationConstants.OSGI_APPLICATION_APPID_SCHEDULES_ID);
-
-			String[] nodes = session
-					.getChildNodeNames(ApplicationConstants.OSGI_APPLICATION_APPID_SCHEDULES_ID_ARGUMENTS);
-
-			tbc.assertEquals("Asserting that one parameter was created.", 1,
-					nodes.length);
+					.createInteriorNode(ApplicationConstants.OSGI_APPLICATION_APPID_SCHEDULES_ID_ARGUMENTS_ID);
 
 			tbc
 					.assertTrue(
 							"Asserts if $/Application/<app_id>/Schedules/<schedule_id>/Arguments/<arg_id>/Value is a valid node",
 							session
-									.isNodeUri(ApplicationConstants.OSGI_APPLICATION_APPID_SCHEDULES_ID_ARGUMENTS
-											+ nodes[0] + "/Value"));
+									.isNodeUri(ApplicationConstants.OSGI_APPLICATION_APPID_SCHEDULES_ID_ARGUMENTS_ID_VALUE));
 
 			MetaNode metaNode = session
-					.getMetaNode(ApplicationConstants.OSGI_APPLICATION_APPID_SCHEDULES_ID_ARGUMENTS
-							+ nodes[0] + "/Value");
+					.getMetaNode(ApplicationConstants.OSGI_APPLICATION_APPID_SCHEDULES_ID_ARGUMENTS_ID_VALUE);
 
 			tbc
 					.assertEquals(
@@ -2214,11 +2230,14 @@ public class TreeStructure {
 			tbc
 					.assertEquals(
 							"Asserts $/Application/<app_id>/Schedules/<schedule_id>/Arguments/<arg_id>/Value metanode format",
-							DmtData.FORMAT_STRING, metaNode.getFormat());
+							(DmtData.FORMAT_BINARY | DmtData.FORMAT_STRING
+									| DmtData.FORMAT_INTEGER
+									| DmtData.FORMAT_FLOAT
+									| DmtData.FORMAT_BOOLEAN | DmtData.FORMAT_NULL), metaNode.getFormat());
 			tbc
 					.assertTrue(
 							"Asserts $/Application/<app_id>/Schedules/<schedule_id>/Arguments/<arg_id>/Value metanode cardinality",
-							!metaNode.isZeroOccurrenceAllowed()
+							metaNode.isZeroOccurrenceAllowed()
 									&& metaNode.getMaxOccurrence() == 1);
 			tbc
 					.assertTrue(
@@ -2252,7 +2271,7 @@ public class TreeStructure {
 		tbc.log("#testTreeStructure039");
 		DmtSession session = null;
 		try {
-			session = tbc.getDmtAdmin().getSession(".",
+			session = tbc.getDmtAdmin().getSession(ApplicationConstants.OSGI_APPLICATION,
 					DmtSession.LOCK_TYPE_SHARED);
 
 			tbc
@@ -2304,7 +2323,7 @@ public class TreeStructure {
 		tbc.log("#testTreeStructure040");
 		DmtSession session = null;
 		try {
-			session = tbc.getDmtAdmin().getSession(".",
+			session = tbc.getDmtAdmin().getSession(ApplicationConstants.OSGI_APPLICATION,
 					DmtSession.LOCK_TYPE_SHARED);
 
 			tbc
@@ -2366,14 +2385,17 @@ public class TreeStructure {
 		tbc.log("#testTreeStructure041");
 		DmtSession session = null;
 		try {
-			session = tbc.getDmtAdmin().getSession(".",
-					DmtSession.LOCK_TYPE_SHARED);
+			session = tbc.getDmtAdmin().getSession(ApplicationConstants.OSGI_APPLICATION,
+					DmtSession.LOCK_TYPE_EXCLUSIVE);
+			
+			updateLaunchIdConstants("/Cesar");
+			
 			session
 					.createInteriorNode(ApplicationConstants.OSGI_APPLICATION_APPID_OPERATIONS_LAUNCH_LAUNCHID);
 
 			tbc
 					.assertTrue(
-							"Asserts if $/Application/<app_id>/Schedules/<launch_id>/Result is a valid node",
+							"Asserts if $/Application/<app_id>/Operations/<launch_id>/Result is a valid node",
 							session
 									.isNodeUri(ApplicationConstants.OSGI_APPLICATION_APPID_OPERATIONS_LAUNCH_LAUNCHID_RESULT));
 
@@ -2420,8 +2442,11 @@ public class TreeStructure {
 		tbc.log("#testTreeStructure042");
 		DmtSession session = null;
 		try {
-			session = tbc.getDmtAdmin().getSession(".",
-					DmtSession.LOCK_TYPE_SHARED);
+			session = tbc.getDmtAdmin().getSession(ApplicationConstants.OSGI_APPLICATION,
+					DmtSession.LOCK_TYPE_EXCLUSIVE);
+			
+			updateLaunchIdConstants("/Cesar");
+			
 			session
 					.createInteriorNode(ApplicationConstants.OSGI_APPLICATION_APPID_OPERATIONS_LAUNCH_LAUNCHID);
 
@@ -2474,8 +2499,11 @@ public class TreeStructure {
 		tbc.log("#testTreeStructure043");
 		DmtSession session = null;
 		try {
-			session = tbc.getDmtAdmin().getSession(".",
-					DmtSession.LOCK_TYPE_SHARED);
+			session = tbc.getDmtAdmin().getSession(ApplicationConstants.OSGI_APPLICATION,
+					DmtSession.LOCK_TYPE_EXCLUSIVE);
+			
+			updateLaunchIdConstants("/Cesar");
+			
 			session
 					.createInteriorNode(ApplicationConstants.OSGI_APPLICATION_APPID_OPERATIONS_LAUNCH_LAUNCHID);
 
@@ -2528,8 +2556,11 @@ public class TreeStructure {
 		tbc.log("#testTreeStructure044");
 		DmtSession session = null;
 		try {
-			session = tbc.getDmtAdmin().getSession(".",
-					DmtSession.LOCK_TYPE_SHARED);
+			session = tbc.getDmtAdmin().getSession(ApplicationConstants.OSGI_APPLICATION,
+					DmtSession.LOCK_TYPE_EXCLUSIVE);
+			
+			updateLaunchIdConstants("/Cesar");
+			
 			session
 					.createInteriorNode(ApplicationConstants.OSGI_APPLICATION_APPID_OPERATIONS_LAUNCH_LAUNCHID);
 
@@ -2581,8 +2612,8 @@ public class TreeStructure {
 		tbc.log("#testTreeStructure045");
 		DmtSession session = null;
 		try {
-			session = tbc.getDmtAdmin().getSession(".",
-					DmtSession.LOCK_TYPE_SHARED);
+			session = tbc.getDmtAdmin().getSession(ApplicationConstants.OSGI_APPLICATION,
+					DmtSession.LOCK_TYPE_EXCLUSIVE);
 			
 			ScheduledApplication sa = tbc.getScheduledApplication();
 			while (sa != null) {
@@ -2590,17 +2621,13 @@ public class TreeStructure {
 				sa = tbc.getScheduledApplication();
 			}
 
+			updateScheduleIdConstants("Cesar");
+			
 			session
-					.createInteriorNode(ApplicationConstants.OSGI_APPLICATION_APPID_SCHEDULES_ID);
-
-			session
-					.createLeafNode(
-							ApplicationConstants.OSGI_APPLICATION_APPID_SCHEDULES_ID_ARGUMENTS
-									+ "/Name", new DmtData("Name"));
-			session
-					.createLeafNode(
-							ApplicationConstants.OSGI_APPLICATION_APPID_SCHEDULES_ID_ARGUMENTS
-									+ "/Value", new DmtData("Value"));
+					.createInteriorNode(ApplicationConstants.OSGI_APPLICATION_APPID_SCHEDULES_ID_ARGUMENTS_ID);
+			
+			session.setNodeValue(ApplicationConstants.OSGI_APPLICATION_APPID_SCHEDULES_ID_ARGUMENTS_ID_NAME, new DmtData("Name"));
+			session.setNodeValue(ApplicationConstants.OSGI_APPLICATION_APPID_SCHEDULES_ID_ARGUMENTS_ID_VALUE, new DmtData("Value"));
 
 			session
 					.setNodeValue(
@@ -2629,9 +2656,8 @@ public class TreeStructure {
 
 			Map map = sa.getArguments();
 
-			tbc.assertNotNull(
-					"Asserting that exist a property name called 'Name'", map
-							.get("Name"));
+			tbc.assertTrue(
+					"Asserting that exist a property name called 'Name'", map.containsKey( "Name"));
 			tbc.assertEquals(
 					"Asserting if the value in 'Name' property is Value",
 					"Value", map.get("Name"));
@@ -2688,7 +2714,7 @@ public class TreeStructure {
 		try {
 			handle = tbc.getAppDescriptor().launch(null);
 
-			session = tbc.getDmtAdmin().getSession(".",
+			session = tbc.getDmtAdmin().getSession(ApplicationConstants.OSGI_APPLICATION,
 					DmtSession.LOCK_TYPE_SHARED);
 			
 			String[] nodes = session
@@ -2745,8 +2771,10 @@ public class TreeStructure {
 		tbc.log("#testTreeStructure047");
 		DmtSession session = null;
 		try {
-			session = tbc.getDmtAdmin().getSession(".",
-					DmtSession.LOCK_TYPE_SHARED);
+			session = tbc.getDmtAdmin().getSession(ApplicationConstants.OSGI_APPLICATION,
+					DmtSession.LOCK_TYPE_EXCLUSIVE);
+			
+			updateLaunchIdConstants("/Cesar");
 
 			session
 					.createInteriorNode(ApplicationConstants.OSGI_APPLICATION_APPID_OPERATIONS_LAUNCH_LAUNCHID);
@@ -2808,7 +2836,7 @@ public class TreeStructure {
 		try {
 			handle = tbc.getAppDescriptor().launch(null);
 
-			session = tbc.getDmtAdmin().getSession(".",
+			session = tbc.getDmtAdmin().getSession(ApplicationConstants.OSGI_APPLICATION,
 					DmtSession.LOCK_TYPE_SHARED);
 			
 			String[] nodes = session
@@ -2877,11 +2905,14 @@ public class TreeStructure {
 	
 	private void updateScheduleIdConstants(String value) {
 		ApplicationConstants.OSGI_APPLICATION_APPID_SCHEDULES_ID = ApplicationConstants.OSGI_APPLICATION_APPID + "/Schedule/" + value;
-		ApplicationConstants.OSGI_APPLICATION_APPID_SCHEDULES_ID_ARGUMENTS = ApplicationConstants.OSGI_APPLICATION_APPID_SCHEDULES_ID + "Cesar/Arguments";
-		ApplicationConstants.OSGI_APPLICATION_APPID_SCHEDULES_ID_ENABLED = ApplicationConstants.OSGI_APPLICATION_APPID_SCHEDULES_ID + "Cesar/Enabled";
-		ApplicationConstants.OSGI_APPLICATION_APPID_SCHEDULES_ID_TOPICFILTER = ApplicationConstants.OSGI_APPLICATION_APPID_SCHEDULES_ID + "Cesar/TopicFilter";
-		ApplicationConstants.OSGI_APPLICATION_APPID_SCHEDULES_ID_EVENTFILTER = ApplicationConstants.OSGI_APPLICATION_APPID_SCHEDULES_ID + "Cesar/EventFilter";
-		ApplicationConstants.OSGI_APPLICATION_APPID_SCHEDULES_ID_RECURRING = ApplicationConstants.OSGI_APPLICATION_APPID_SCHEDULES_ID + "Cesar/Recurring";		
+		ApplicationConstants.OSGI_APPLICATION_APPID_SCHEDULES_ID_ARGUMENTS = ApplicationConstants.OSGI_APPLICATION_APPID_SCHEDULES_ID + "/Arguments";
+		ApplicationConstants.OSGI_APPLICATION_APPID_SCHEDULES_ID_ARGUMENTS_ID = ApplicationConstants.OSGI_APPLICATION_APPID_SCHEDULES_ID_ARGUMENTS + "/Id";
+		ApplicationConstants.OSGI_APPLICATION_APPID_SCHEDULES_ID_ARGUMENTS_ID_NAME = ApplicationConstants.OSGI_APPLICATION_APPID_SCHEDULES_ID_ARGUMENTS_ID + "/Name";
+		ApplicationConstants.OSGI_APPLICATION_APPID_SCHEDULES_ID_ARGUMENTS_ID_VALUE = ApplicationConstants.OSGI_APPLICATION_APPID_SCHEDULES_ID_ARGUMENTS_ID + "/Value";
+		ApplicationConstants.OSGI_APPLICATION_APPID_SCHEDULES_ID_ENABLED = ApplicationConstants.OSGI_APPLICATION_APPID_SCHEDULES_ID + "/Enabled";
+		ApplicationConstants.OSGI_APPLICATION_APPID_SCHEDULES_ID_TOPICFILTER = ApplicationConstants.OSGI_APPLICATION_APPID_SCHEDULES_ID + "/TopicFilter";
+		ApplicationConstants.OSGI_APPLICATION_APPID_SCHEDULES_ID_EVENTFILTER = ApplicationConstants.OSGI_APPLICATION_APPID_SCHEDULES_ID + "/EventFilter";
+		ApplicationConstants.OSGI_APPLICATION_APPID_SCHEDULES_ID_RECURRING = ApplicationConstants.OSGI_APPLICATION_APPID_SCHEDULES_ID + "/Recurring";		
 	}
 	
 

@@ -86,7 +86,7 @@ public class Schedule implements TestInterface {
 					tbc.getTb2Location());
 
 			tbc.setLocalPermission(
-				new PermissionInfo(ApplicationAdminPermission.class.getName(), ApplicationConstants.TEST_PID, ApplicationAdminPermission.SCHEDULE_ACTION)
+				new PermissionInfo(ApplicationAdminPermission.class.getName(), ApplicationConstants.APPLICATION_PERMISSION_FILTER1, ApplicationAdminPermission.SCHEDULE_ACTION)
 			);
 
 			HashMap map = new HashMap();
@@ -97,7 +97,7 @@ public class Schedule implements TestInterface {
 			tbc.assertNotNull("Asserting that a ScheduledApplication was returned when we pass null as eventFilter parameter.", sa);
 			
 			synchronized (tbc) {
-				tbc.wait(ApplicationConstants.SHORT_TIMEOUT);
+				tbc.wait(ApplicationConstants.TIMEOUT);
 			}
 			
 			tbc.assertEquals("Asserting that a ApplicationHandle was registered.", 1, tbc.getNumberAppHandle());
@@ -124,7 +124,7 @@ public class Schedule implements TestInterface {
 					tbc.getTb2Location());
 
 			tbc.setLocalPermission(
-				new PermissionInfo(ApplicationAdminPermission.class.getName(), ApplicationConstants.TEST_PID, ApplicationAdminPermission.SCHEDULE_ACTION)
+				new PermissionInfo(ApplicationAdminPermission.class.getName(), ApplicationConstants.APPLICATION_PERMISSION_FILTER1, ApplicationAdminPermission.SCHEDULE_ACTION)
 			);
 
 
@@ -135,7 +135,7 @@ public class Schedule implements TestInterface {
 			tbc.assertNotNull("Asserting that a ScheduledApplication was returned when we pass null as arguments parameter.", sa);
 			
 			synchronized (tbc) {
-				tbc.wait(ApplicationConstants.SHORT_TIMEOUT);
+				tbc.wait(ApplicationConstants.TIMEOUT);
 			}
 			
 			tbc.assertEquals("Asserting that a ApplicationHandle was registered.", 1, tbc.getNumberAppHandle());
@@ -196,7 +196,7 @@ public class Schedule implements TestInterface {
 					tbc.getTb2Location());
 
 			tbc.setLocalPermission(
-				new PermissionInfo(ApplicationAdminPermission.class.getName(), ApplicationConstants.TEST_PID, ApplicationAdminPermission.SCHEDULE_ACTION)
+				new PermissionInfo(ApplicationAdminPermission.class.getName(), ApplicationConstants.APPLICATION_PERMISSION_FILTER1, ApplicationAdminPermission.SCHEDULE_ACTION)
 			);
 			
 			tbc.unregisterDescriptor();
@@ -235,7 +235,7 @@ public class Schedule implements TestInterface {
 					tbc.getTb2Location());
 
 			tbc.setLocalPermission(
-				new PermissionInfo(ApplicationAdminPermission.class.getName(), ApplicationConstants.TEST_PID, ApplicationAdminPermission.SCHEDULE_ACTION)
+				new PermissionInfo(ApplicationAdminPermission.class.getName(), ApplicationConstants.APPLICATION_PERMISSION_FILTER1, ApplicationAdminPermission.SCHEDULE_ACTION)
 			);
 
 			sa = tbc.getAppDescriptor().schedule(null, null,
@@ -271,7 +271,7 @@ public class Schedule implements TestInterface {
 					tbc.getTb2Location());
 
 			tbc.setLocalPermission(
-				new PermissionInfo(ApplicationAdminPermission.class.getName(), ApplicationConstants.TEST_PID, ApplicationAdminPermission.SCHEDULE_ACTION)
+				new PermissionInfo(ApplicationAdminPermission.class.getName(), ApplicationConstants.APPLICATION_PERMISSION_FILTER1, ApplicationAdminPermission.SCHEDULE_ACTION)
 			);
 
 
@@ -282,7 +282,7 @@ public class Schedule implements TestInterface {
 			tbc.assertNotNull("Asserting that an empty string works as a wildcard(*) in topic parameter.", sa);
 			
 			synchronized (tbc) {
-				tbc.wait(ApplicationConstants.SHORT_TIMEOUT);
+				tbc.wait(ApplicationConstants.TIMEOUT);
 			}
 			
 			tbc.assertEquals("Asserting that a ApplicationHandle was registered.", 1, tbc.getNumberAppHandle());
@@ -312,7 +312,7 @@ public class Schedule implements TestInterface {
 					tbc.getTb2Location());
 
 			tbc.setLocalPermission(
-				new PermissionInfo(ApplicationAdminPermission.class.getName(), ApplicationConstants.TEST_PID, ApplicationAdminPermission.SCHEDULE_ACTION)
+				new PermissionInfo(ApplicationAdminPermission.class.getName(), ApplicationConstants.APPLICATION_PERMISSION_FILTER1, ApplicationAdminPermission.SCHEDULE_ACTION)
 			);
 
 			sa = tbc.getAppDescriptor().schedule(null, ApplicationConstants.TIMER_EVENT, ApplicationConstants.EVENT_FILTER, false);
@@ -347,7 +347,7 @@ public class Schedule implements TestInterface {
 					tbc.getTb2Location());
 
 			tbc.setLocalPermission(
-				new PermissionInfo(ApplicationAdminPermission.class.getName(), ApplicationConstants.TEST_PID, ApplicationAdminPermission.SCHEDULE_ACTION)
+				new PermissionInfo(ApplicationAdminPermission.class.getName(), ApplicationConstants.APPLICATION_PERMISSION_FILTER1, ApplicationAdminPermission.SCHEDULE_ACTION)
 			);
 			
 			sa = tbc.getAppDescriptor().schedule(null, ApplicationConstants.TIMER_EVENT, ApplicationConstants.EVENT_FILTER, true);
@@ -382,7 +382,7 @@ public class Schedule implements TestInterface {
 					tbc.getTb2Location());
 
 			tbc.setLocalPermission(
-				new PermissionInfo(ApplicationAdminPermission.class.getName(), ApplicationConstants.TEST_PID, ApplicationAdminPermission.SCHEDULE_ACTION)
+				new PermissionInfo(ApplicationAdminPermission.class.getName(), ApplicationConstants.APPLICATION_PERMISSION_FILTER1, ApplicationAdminPermission.SCHEDULE_ACTION)
 			);
 
 			sa = tbc.getAppDescriptor().schedule(null, ApplicationConstants.TIMER_EVENT, ApplicationConstants.INVALID_FILTER, false);

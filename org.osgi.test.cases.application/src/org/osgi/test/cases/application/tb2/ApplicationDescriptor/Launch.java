@@ -86,7 +86,7 @@ public class Launch implements TestInterface {
 
 			tbc.setLocalPermission(new PermissionInfo(
 					ApplicationAdminPermission.class.getName(),
-					ApplicationConstants.TEST_PID, ApplicationAdminPermission.LIFECYCLE_ACTION));
+					ApplicationConstants.APPLICATION_PERMISSION_FILTER1, ApplicationAdminPermission.LIFECYCLE_ACTION));
 
 			handle = tbc.getAppDescriptor().launch(null);
 			
@@ -115,7 +115,7 @@ public class Launch implements TestInterface {
 
 			tbc.setLocalPermission(new PermissionInfo(
 					ApplicationAdminPermission.class.getName(),
-					ApplicationConstants.TEST_PID, ApplicationAdminPermission.LIFECYCLE_ACTION+","+ApplicationAdminPermission.LOCK_ACTION));
+					ApplicationConstants.APPLICATION_PERMISSION_FILTER1, ApplicationAdminPermission.LIFECYCLE_ACTION+","+ApplicationAdminPermission.LOCK_ACTION));
 
 			tbc.getAppDescriptor().lock();
 
@@ -147,7 +147,7 @@ public class Launch implements TestInterface {
 
 			tbc.setLocalPermission(new PermissionInfo(
 					ApplicationAdminPermission.class.getName(),
-					ApplicationConstants.TEST_PID, ApplicationAdminPermission.LIFECYCLE_ACTION));		
+					ApplicationConstants.APPLICATION_PERMISSION_FILTER1, ApplicationAdminPermission.LIFECYCLE_ACTION));		
 
 			tbc.unregisterDescriptor();
 			handle = (ApplicationHandle) tbc.getAppDescriptor().launch(null);
@@ -217,7 +217,7 @@ public class Launch implements TestInterface {
 
 			tbc.setLocalPermission(new PermissionInfo(
 					ApplicationAdminPermission.class.getName(),
-					ApplicationConstants.TEST_PID, ApplicationAdminPermission.LIFECYCLE_ACTION));
+					ApplicationConstants.APPLICATION_PERMISSION_FILTER1, ApplicationAdminPermission.LIFECYCLE_ACTION));
 
 			handle = (ApplicationHandle) tbc.getAppDescriptor().launch(null);
 
@@ -250,7 +250,7 @@ public class Launch implements TestInterface {
 
 			tbc.setLocalPermission(new PermissionInfo(
 					ApplicationAdminPermission.class.getName(),
-					ApplicationConstants.TEST_PID, ApplicationAdminPermission.LIFECYCLE_ACTION));	
+					ApplicationConstants.APPLICATION_PERMISSION_FILTER1, ApplicationAdminPermission.LIFECYCLE_ACTION));	
 
 			Map map = new HashMap();
 			map.put("" , "Reject");		
@@ -283,7 +283,7 @@ public class Launch implements TestInterface {
 
 			tbc.setLocalPermission(new PermissionInfo(
 				ApplicationAdminPermission.class.getName(),
-				ApplicationConstants.TEST_PID, ApplicationAdminPermission.LIFECYCLE_ACTION));
+				ApplicationConstants.APPLICATION_PERMISSION_FILTER1, ApplicationAdminPermission.LIFECYCLE_ACTION));
 
 			Map map = new HashMap();
 			map.put("Test" , null);		

@@ -110,7 +110,7 @@ public class Lock implements TestInterface {
 					tbc.getTb2Location());
 
 			tbc.setLocalPermission(
-				new PermissionInfo(ApplicationAdminPermission.class.getName(), ApplicationConstants.TEST_PID, ApplicationAdminPermission.LOCK_ACTION)
+				new PermissionInfo(ApplicationAdminPermission.class.getName(), ApplicationConstants.APPLICATION_PERMISSION_FILTER1, ApplicationAdminPermission.LOCK_ACTION)
 			);
 
 			tbc.getAppDescriptor().lock();
@@ -138,7 +138,7 @@ public class Lock implements TestInterface {
 					tbc.getTb2Location());
 
 			tbc.setLocalPermission(
-				new PermissionInfo(ApplicationAdminPermission.class.getName(), ApplicationConstants.TEST_PID, ApplicationAdminPermission.LOCK_ACTION)
+				new PermissionInfo(ApplicationAdminPermission.class.getName(), ApplicationConstants.APPLICATION_PERMISSION_FILTER1, ApplicationAdminPermission.LOCK_ACTION)
 			);
 			
 			tbc.unregisterDescriptor();
