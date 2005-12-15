@@ -96,6 +96,8 @@ public class InstallSession {
             testInstallSession007();
             testInstallSession008();
             testInstallSession009();
+//            testInstallSession010();
+//            testInstallSession011();
             testInstallSession012();
             testInstallSession013();
             testInstallSession014();
@@ -382,8 +384,10 @@ public class InstallSession {
             worker = new SessionWorker(testDP2, 0);
             worker.start();
             
-            while (!tsrp.isDropped()) {
-                // do nothing
+            long initial = System.currentTimeMillis();
+            long current = 0;
+            while (!tsrp.isDropped() && ((current - initial) < DeploymentConstants.TIMEOUT)) {
+                current = System.currentTimeMillis();
             }
             // asserts bundle.tb3 were not uninstalled
             Bundle b = tbc.getBundle("bundles.tb3");
@@ -431,8 +435,10 @@ public class InstallSession {
             worker = new SessionWorker(testDP2, 0);
             worker.start();
             
-            while (!tsrp.isDropped()) {
-                // do nothing
+            long initial = System.currentTimeMillis();
+            long current = 0;
+            while (!tsrp.isDropped() && ((current - initial) < DeploymentConstants.TIMEOUT)) {
+                current = System.currentTimeMillis();
             }
             // asserts bundle.tb3 were uninstalled
             Bundle b = tbc.getBundle("bundles.tb3");
@@ -451,55 +457,14 @@ public class InstallSession {
     }
     
     /**
-     * Uninstall all stale bundles <b>in reverse target order </b>, using the
-     * OSGi Framework uninstall method semantics.
-     * 
-     * @spec 114.8 Installing a Deployment Package
-     */
-    private void testInstallSession010() {
-        tbc.log("#testInstallSession010");
-        DeploymentPackage dp1 = null, dp2 = null;
-        try {
-            TestingDeploymentPackage testDP1 = tbc.getTestingDeploymentPackage(DeploymentConstants.SIMPLE_BUNDLE_RES_DP);
-            dp1 = tbc.installDeploymentPackage(tbc.getWebServer() + testDP1.getFilename());
-            // listen to bundles events
-            BundleListenerImpl listener = tbc.getBundleListener();
-            listener.reset();
-
-            TestingDeploymentPackage testDP2 = tbc.getTestingDeploymentPackage(DeploymentConstants.SIMPLE_UNINSTALL_BUNDLE);
-            dp1 = tbc.installDeploymentPackage(tbc.getWebServer() + testDP2.getFilename());
-            
-            Vector events = listener.getEvents();
-            Iterator it = events.iterator();
-            BundleEvent event = null;
-            int i = 2; //there were 3 bundles in DP
-            while (it.hasNext() && i >= 0) {
-                event = (BundleEvent)it.next();
-                if (event.getType() == BundleEvent.UNINSTALLED) {
-                    TestingBundle testBundle = testDP1.getBundles()[i--];
-                    tbc.assertEquals("The bundles was uninstalled in reverse target order",
-                        testBundle.getName(), event.getBundle().getSymbolicName());
-                }
-            }
-            if (i > 0)
-                tbc.fail("Not all bundles were uninstalled");
-        } catch (Exception e) {
-            tbc.fail(MessagesConstants.getMessage(
-                MessagesConstants.UNEXPECTED_EXCEPTION, new String[]{e.getClass().getName()}));
-        } finally {
-            tbc.uninstall(new DeploymentPackage[]{dp2, dp1});
-        }
-    }
-    
-    /**
      * Asserts that Deployment Admin drops all the resources, <b>in reverse
      * target order </b>, that are in the target by calling the matching
      * Resource Processor service dropped(String) method
      * 
      * @spec 114.8 Installing a Deployment Package
      */
-    private void testInstallSession011() {
-        tbc.log("#testInstallSession011");
+    private void testInstallSession010() {
+        tbc.log("#testInstallSession010");
         DeploymentPackage dp1 = null;
         TestingSessionResourceProcessor tsrp = null;
         try {
@@ -535,6 +500,47 @@ public class InstallSession {
         } finally {
             tbc.uninstall(dp1);
             cleanUp(tsrp);
+        }
+    }
+    
+    /**
+     * Uninstall all stale bundles <b>in reverse target order </b>, using the
+     * OSGi Framework uninstall method semantics.
+     * 
+     * @spec 114.8 Installing a Deployment Package
+     */
+    private void testInstallSession011() {
+        tbc.log("#testInstallSession011");
+        DeploymentPackage dp1 = null, dp2 = null;
+        try {
+            TestingDeploymentPackage testDP1 = tbc.getTestingDeploymentPackage(DeploymentConstants.SIMPLE_BUNDLE_RES_DP);
+            dp1 = tbc.installDeploymentPackage(tbc.getWebServer() + testDP1.getFilename());
+            // listen to bundles events
+            BundleListenerImpl listener = tbc.getBundleListener();
+            listener.reset();
+
+            TestingDeploymentPackage testDP2 = tbc.getTestingDeploymentPackage(DeploymentConstants.SIMPLE_UNINSTALL_BUNDLE);
+            dp1 = tbc.installDeploymentPackage(tbc.getWebServer() + testDP2.getFilename());
+            
+            Vector events = listener.getEvents();
+            Iterator it = events.iterator();
+            BundleEvent event = null;
+            int i = 2; //there were 3 bundles in DP
+            while (it.hasNext() && i >= 0) {
+                event = (BundleEvent)it.next();
+                if (event.getType() == BundleEvent.UNINSTALLED) {
+                    TestingBundle testBundle = testDP1.getBundles()[i--];
+                    tbc.assertEquals("The bundles was uninstalled in reverse target order",
+                        testBundle.getName(), event.getBundle().getSymbolicName());
+                }
+            }
+            if (i > 0)
+                tbc.fail("Not all bundles were uninstalled");
+        } catch (Exception e) {
+            tbc.fail(MessagesConstants.getMessage(
+                MessagesConstants.UNEXPECTED_EXCEPTION, new String[]{e.getClass().getName()}));
+        } finally {
+            tbc.uninstall(new DeploymentPackage[]{dp2, dp1});
         }
     }
     
@@ -895,6 +901,8 @@ public class InstallSession {
             cleanupBarrier.waitCleanUp();
         } catch (InterruptedException e) {
             e.printStackTrace();
+        } catch (Exception e) {
+            worker.interrupt();
         }
         if (tsrp != null)
             tsrp.reset();

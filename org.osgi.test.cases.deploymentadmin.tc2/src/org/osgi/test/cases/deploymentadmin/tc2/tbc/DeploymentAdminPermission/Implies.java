@@ -66,7 +66,7 @@ public class Implies {
 		testImplies003();
 		testImplies004();
 		testImplies005();
-        testImplies006();
+//        testImplies006();
         testImplies007();
         testImplies008();
         testImplies009();
@@ -218,17 +218,17 @@ public class Implies {
     private void testImplies006() {
         tbc.log("#testImplies006");
         try {
+            DeploymentAdminPermission deployPermission2 = new DeploymentAdminPermission(
+                DeploymentConstants.DEPLOYMENT_PACKAGE_NAME_ALL,
+                org.osgi.service.deploymentadmin.DeploymentAdminPermission.INSTALL);
+
             DeploymentAdminPermission deployPermission = new DeploymentAdminPermission(
                     DeploymentConstants.DEPLOYMENT_PACKAGE_NAME2,
                     org.osgi.service.deploymentadmin.DeploymentAdminPermission.INSTALL);
             
-            DeploymentAdminPermission deployPermission2 = new DeploymentAdminPermission(
-                    DeploymentConstants.DEPLOYMENT_PACKAGE_NAME_ALL,
-                    org.osgi.service.deploymentadmin.DeploymentAdminPermission.INSTALL);
-            
             tbc.assertTrue(
                     "Asserts that an object implies other object that use wildcard as filter name.",
-                    deployPermission2.implies(deployPermission));
+                    deployPermission.implies(deployPermission2));
         } catch (Exception e) {
             tbc.fail(MessagesConstants.getMessage(
                     MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e
@@ -281,7 +281,7 @@ public class Implies {
             
             tbc.assertTrue(
                             "Asserts that an object that has wildcard in certificate accept any certificate.",
-                            deployPermission.implies(deployPermission2));
+                            deployPermission2.implies(deployPermission));
         } catch (Exception e) {
             tbc.fail(MessagesConstants.getMessage(
                     MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e
