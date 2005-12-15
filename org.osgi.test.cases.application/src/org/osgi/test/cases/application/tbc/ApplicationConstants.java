@@ -126,6 +126,6 @@ public class ApplicationConstants {
 	public static String APPLICATION_PERMISSION_FILTER2 = "(&(signer="+SIGNER_FILTER_WILDCARD+")"+"(pid="+TEST_PID+"))";
 	public static String APPLICATION_PERMISSION_FILTER_DIFFERENT_PID = "(&(signer="+SIGNER_FILTER+")"+"(pid="+TEST_PID2+"))";
 	public static String APPLICATION_PERMISSION_FILTER_DIFFERENT_SIGNER = "(&(signer="+SIGNER_FILTER2+")"+"(pid="+TEST_PID+"))";
-	public static String APPLICATION_PERMISSION_FILTER_INVALID1 = "(&(signer="+SIGNER_FILTER_INVALID1+")"+"(pid="+TEST_PID+"))";
+	public static String APPLICATION_PERMISSION_FILTER_INVALID1 = "(&!!!dfs#"+SIGNER_FILTER_INVALID1+")"+"(pid="+TEST_PID+")]";
 	
 }

@@ -79,6 +79,8 @@ public class Implies {
 		testImplies017();
 		testImplies018();
 		testImplies019();
+		testImplies020();
+		testImplies021();
 	}
 
     /**
@@ -306,8 +308,8 @@ public class Implies {
     /**
      * This method asserts that true is returned when all
      * the steps are followed using <<SELF>> as filter and
-     * are using LOCK action for the first AppAdminPerm and LIFECYCLE
-     * and LOCK actions for the second.
+     * are using LOCK action for the second AppAdminPerm and LIFECYCLE
+     * and LOCK actions for the first.
      * 
      * @spec ApplicationAdminPermission.implies(Permission)
      */         
@@ -315,12 +317,12 @@ public class Implies {
 		try {
 			tbc.log("#testImplies012");
 			org.osgi.service.application.ApplicationAdminPermission app = new org.osgi.service.application.ApplicationAdminPermission(
-					"<<SELF>>", ApplicationAdminPermission.LOCK_ACTION);
+					"<<SELF>>", ApplicationConstants.ACTIONS);
 			org.osgi.service.application.ApplicationAdminPermission app2 = new org.osgi.service.application.ApplicationAdminPermission(
-					tbc.getAppDescriptor(), ApplicationConstants.ACTIONS);
+					tbc.getAppDescriptor(), ApplicationAdminPermission.LOCK_ACTION);
 			app.setCurrentApplicationId(tbc.getAppDescriptor().getApplicationId());
 			tbc.assertTrue("Asserting if true is returned using <<SELF>> as filter when all the steps are followed " +
-					"and using LOCK action for the first AppAdminPerm and LIFECYCLE and LOCK actions for the second.", app.implies(app2));
+					"and using LOCK action for the second AppAdminPerm and LIFECYCLE and LOCK actions for the first.", app.implies(app2));
 		} catch (Exception e) {
 			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": " + e.getClass().getName());
 		}
@@ -376,8 +378,8 @@ public class Implies {
      * This method asserts that true is returned to
      * an implies call of an ApplicationAdminPermission filter
      * that matches the application certificate but are
-     * using LOCK action for the first AppAdminPerm and LIFECYCLE
-     * and LOCK actions for the second.
+     * using LOCK action for the second AppAdminPerm and LIFECYCLE
+     * and LOCK actions for the first.
      * 
      * @spec ApplicationAdminPermission.implies(Permission)
      */         
@@ -385,11 +387,11 @@ public class Implies {
 		try {
 			tbc.log("#testImplies015");
 			org.osgi.service.application.ApplicationAdminPermission app = new org.osgi.service.application.ApplicationAdminPermission(
-					ApplicationConstants.APPLICATION_PERMISSION_FILTER1, ApplicationAdminPermission.LOCK_ACTION);
+					ApplicationConstants.APPLICATION_PERMISSION_FILTER1, ApplicationConstants.ACTIONS);
 			org.osgi.service.application.ApplicationAdminPermission app2 = new org.osgi.service.application.ApplicationAdminPermission(
-					tbc.getAppDescriptor(), ApplicationConstants.ACTIONS);
+					tbc.getAppDescriptor(), ApplicationAdminPermission.LOCK_ACTION);
 			tbc.assertTrue("Asserting if true is returned to an implies call of an AppAdminPerm filter that matches the application certificate" +
-					" but are using LOCK action for the first AppAdminPerm and LIFECYCLE and LOCK actions for the second.", app.implies(app2));
+					" but are using LOCK action for the second AppAdminPerm and LIFECYCLE and LOCK actions for the first.", app.implies(app2));
 		} catch (Exception e) {
 			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": " + e.getClass().getName());
 		}
@@ -482,6 +484,52 @@ public class Implies {
 			tbc.assertTrue("Asserting if false is returned to an implies call of an AppAdminPerm filter that matches the application certificate" +
 					" and have LIFECYCLE action for the first AppAdminPerm and SCHEDULE action for the second in order to " +
 					" validate if LIFECYCLE action does not implies SCHEDULE.", !app.implies(app2));
+		} catch (Exception e) {
+			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": " + e.getClass().getName());
+		}
+	}
+		
+    /**
+     * This method asserts that false is returned to
+     * an implies call of an ApplicationAdminPermission filter
+     * that matches the application certificate but are
+     * using LOCK action for the first AppAdminPerm and LIFECYCLE
+     * and LOCK actions for the second.
+     * 
+     * @spec ApplicationAdminPermission.implies(Permission)
+     */         
+	private void testImplies020() {
+		try {
+			tbc.log("#testImplies020");
+			org.osgi.service.application.ApplicationAdminPermission app = new org.osgi.service.application.ApplicationAdminPermission(
+					ApplicationConstants.APPLICATION_PERMISSION_FILTER1, ApplicationConstants.ACTIONS);
+			org.osgi.service.application.ApplicationAdminPermission app2 = new org.osgi.service.application.ApplicationAdminPermission(
+					tbc.getAppDescriptor(), ApplicationAdminPermission.LOCK_ACTION);
+			tbc.assertTrue("Asserting if false is returned to an implies call of an AppAdminPerm filter that matches the application certificate" +
+					" but are using LOCK action for the first AppAdminPerm and LIFECYCLE and LOCK actions for the second.", app.implies(app2));
+		} catch (Exception e) {
+			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": " + e.getClass().getName());
+		}
+	}	
+	
+    /**
+     * This method asserts that false is returned when all
+     * the steps are followed using <<SELF>> as filter and
+     * are using LOCK action for the first AppAdminPerm and LIFECYCLE
+     * and LOCK actions for the second.
+     * 
+     * @spec ApplicationAdminPermission.implies(Permission)
+     */         
+	private void testImplies021() {
+		try {
+			tbc.log("#testImplies021");
+			org.osgi.service.application.ApplicationAdminPermission app = new org.osgi.service.application.ApplicationAdminPermission(
+					"<<SELF>>", ApplicationAdminPermission.LOCK_ACTION);
+			org.osgi.service.application.ApplicationAdminPermission app2 = new org.osgi.service.application.ApplicationAdminPermission(
+					tbc.getAppDescriptor(), ApplicationConstants.ACTIONS);
+			app.setCurrentApplicationId(tbc.getAppDescriptor().getApplicationId());
+			tbc.assertTrue("Asserting if false is returned using <<SELF>> as filter when all the steps are followed " +
+					"and using LOCK action for the first AppAdminPerm and LIFECYCLE and LOCK actions for the second.", app.implies(app2));
 		} catch (Exception e) {
 			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": " + e.getClass().getName());
 		}

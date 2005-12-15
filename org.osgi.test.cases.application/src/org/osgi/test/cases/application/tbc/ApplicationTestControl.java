@@ -543,7 +543,7 @@ public class ApplicationTestControl extends DefaultTestBundleControl {
 		ApplicationConstants.APPLICATION_PERMISSION_FILTER2 = "(&(signer="+ApplicationConstants.SIGNER_FILTER_WILDCARD+")"+"(pid="+ApplicationConstants.TEST_PID+"))";
 		ApplicationConstants.APPLICATION_PERMISSION_FILTER_DIFFERENT_PID = "(&(signer="+ApplicationConstants.SIGNER_FILTER+")"+"(pid="+ApplicationConstants.TEST_PID2+"))";
 		ApplicationConstants.APPLICATION_PERMISSION_FILTER_DIFFERENT_SIGNER = "(&(signer="+ApplicationConstants.SIGNER_FILTER2+")"+"(pid="+ApplicationConstants.TEST_PID+"))";
-		ApplicationConstants.APPLICATION_PERMISSION_FILTER_INVALID1 = "(&(signer="+ApplicationConstants.SIGNER_FILTER_INVALID1+")"+"(pid="+ApplicationConstants.TEST_PID+"))";							
+		ApplicationConstants.APPLICATION_PERMISSION_FILTER_INVALID1 = "(&!!!dfs#"+ApplicationConstants.SIGNER_FILTER_INVALID1+")"+"(pid="+ApplicationConstants.TEST_PID+"))";							
 	}
 
 	public void unregisterDescriptor() {
