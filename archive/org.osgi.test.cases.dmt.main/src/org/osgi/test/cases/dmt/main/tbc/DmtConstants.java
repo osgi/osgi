@@ -87,7 +87,7 @@ public class DmtConstants {
 	
 	public static final String DDF = "http://www.openmobilealliance.org/tech/DTD/OMA-SyncML-DMDDF-V1_2_0.dtd";
 
-	public static final int WAIT_TIME = 800;
+	public static final int WAIT_TIME = 1200;
 
 	public static final int TIMEOUT = 31000;
 	
@@ -104,14 +104,6 @@ public class DmtConstants {
     
     public static final boolean SUPPORTS_NODE_VERSION = true;
     
-	//TODO Change for checking in the properties file, but it is not working. Put them in a static block
-	/*
-	public static final int TIMEOUT = Integer.parseInt(System.getProperty("timeout"));
-	
-	public static final int MAXIMUM_NODE_LENGTH =  Integer.parseInt(System.getProperty("maximum_node_length"));
-	    
-	public static final int MAXIMUM_NODE_SEGMENTS = Integer.parseInt(System.getProperty("maximum_node_segments"));
-	*/
 	public static final String REMOTE_SERVER = "remoteServer";
 
 
