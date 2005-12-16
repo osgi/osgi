@@ -50,21 +50,23 @@ public class PermissionWorker extends Thread {
     private DmtTestControl tbc;
     private PermissionInfo[] permissions;
     private String location;
-    
     public PermissionWorker(DmtTestControl tbc) {
         this.tbc = tbc;
     }
-
-    public void run() {
+    
+    public synchronized void run() {
+        try {
+            this.wait();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         while (true) {
-            synchronized (this) {
-                try {
-                    this.wait();
-                    tbc.getPermissionAdmin().setPermissions(location, permissions);
-                    this.notifyAll();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
+            try {
+                tbc.getPermissionAdmin().setPermissions(location, permissions);
+                this.notifyAll();
+                this.wait();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
             }
         }
     }
