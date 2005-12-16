@@ -273,13 +273,6 @@ public class DmtAdminImpl implements DmtAdmin {
     private RemoteAlertSender getAlertSender(String principal) {
         ServiceTracker remoteAdapterTracker = 
             context.getTracker(RemoteAlertSender.class);
-        if (principal == null) { // return adapter if it is unique 
-            Object[] alertSenders = remoteAdapterTracker.getServices();
-            if(alertSenders == null || alertSenders.length != 1)
-                return null;
-            
-            return (RemoteAlertSender) alertSenders[0];
-        }
        
         ServiceReference[] alertSenderRefs = 
             remoteAdapterTracker.getServiceReferences(); 
@@ -288,18 +281,38 @@ public class DmtAdminImpl implements DmtAdmin {
             return null;
         
         ServiceReference bestRef = null;
+        ServiceReference bestDefaultRef = null;
         
-        // find best adapter that accepts alerts for the given principal
-        for(int i = 0; i < alertSenderRefs.length; i++)
-            if(acceptsServerId(alertSenderRefs[i], principal))
+        // find the best adapter that accepts alerts for the given principal and
+        // the best "default" adapter that is not associated with principals  
+        for(int i = 0; i < alertSenderRefs.length; i++) {
+            if(isDefaultSender(alertSenderRefs[i]))
+                bestDefaultRef = betterRef(alertSenderRefs[i], bestDefaultRef);
+            else if(principal != null && acceptsServerId(alertSenderRefs[i], principal))
                 bestRef = betterRef(alertSenderRefs[i], bestRef);
-
-        if(bestRef == null)
-            return null;
+        }
         
-        // return service object for the best reference
+        if(bestRef == null) {
+            if(bestDefaultRef != null)
+                // use the best default sender if no principal was given, or if 
+                // no alert senders accept the given principal 
+                bestRef = bestDefaultRef;
+            else if(principal == null && alertSenderRefs.length == 1)
+                // if there is exactly one (non-default) sender, then it can be
+                // used if no principal was given
+                bestRef = alertSenderRefs[0];
+            else 
+                return null;
+        }
+        
+        // return service object for the overall best reference
         // can still be null if service was unregistered in the meantime
         return (RemoteAlertSender) remoteAdapterTracker.getService(bestRef);
+    }
+    
+    // precondition: reference parameter is not null
+    private boolean isDefaultSender(ServiceReference ref) {
+        return ref.getProperty("principals") == null;
     }
     
     // precondition: parameters are not null
