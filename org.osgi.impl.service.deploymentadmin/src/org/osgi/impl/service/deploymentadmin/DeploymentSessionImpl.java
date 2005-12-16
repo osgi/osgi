@@ -32,12 +32,13 @@ import org.osgi.service.deploymentadmin.spi.DeploymentCustomizerPermission;
 import org.osgi.service.deploymentadmin.spi.DeploymentSession;
 import org.osgi.service.deploymentadmin.spi.ResourceProcessor;
 import org.osgi.service.deploymentadmin.spi.ResourceProcessorException;
+import org.osgi.service.packageadmin.PackageAdmin;
 import org.osgi.service.permissionadmin.*;
 import org.osgi.util.tracker.ServiceTracker;
 
-public class DeploymentSessionImpl implements DeploymentSession {
-    
-    static final int INSTALL   = 0;
+public class DeploymentSessionImpl implements DeploymentSession, FrameworkListener {
+
+	static final int INSTALL   = 0;
     static final int UPDATE    = 1;
     static final int UNINSTALL = 2;   
     
@@ -51,6 +52,9 @@ public class DeploymentSessionImpl implements DeploymentSession {
     private TrackerPackageAdmin         trackPackAdmin;
     private boolean                     forced;
     private boolean                     cancelled;
+    
+    // for refreshing packages
+    private Semaphore					semPckgRefreshed;
     
     private DeploymentPackageJarInputStream.Entry actEntry;
     private WrappedResourceProcessor              actWrProc;
@@ -97,9 +101,21 @@ public class DeploymentSessionImpl implements DeploymentSession {
         trackPerm = new TrackerPerm();
         trackCondPerm = new TrackerCondPerm();
         trackPackAdmin = new TrackerPackageAdmin();
+        
+        registerFwListener();
     }
 
-    synchronized boolean isCancelled() {
+    private void registerFwListener() {
+    	AccessController.doPrivileged(new PrivilegedAction() {
+			public Object run() {
+				sessionCtx.getBundleContext().
+					addFrameworkListener(DeploymentSessionImpl.this);
+				return null;
+			}
+    	});
+	}
+
+	synchronized boolean isCancelled() {
     	return cancelled;
     }
     
@@ -265,8 +281,8 @@ public class DeploymentSessionImpl implements DeploymentSession {
     void installUpdate(DeploymentPackageJarInputStream wjis) throws DeploymentException {
         openTrackers();
         
-        transaction = Transaction.createTransaction(
-                "INSTALL/UPDATE " + srcDp.getName(), this, sessionCtx.getLogger());
+        transaction = Transaction.createTransaction("INSTALL/UPDATE " + srcDp.getName(), 
+        	sessionCtx.getBundleContext(), this, sessionCtx.getLogger());
         transaction.start();
         
         // ConditionalPermissionInfo-s for customizers
@@ -281,11 +297,12 @@ public class DeploymentSessionImpl implements DeploymentSession {
             Set wrProcs = processResources(wjis);
             Set wrProcsD = dropResources();
             wrProcs.addAll(wrProcsD);
-            dropBundles();
             prepareProcessors(wrProcs);
             commitProcessors(wrProcs);
-            //refreshPackages();
+            // TODO refreshPackages();
+            dropBundles();
             startBundles();
+            //refreshPackages();
         } catch (DeploymentException e) {
             transaction.rollback();
             throw e;
@@ -303,24 +320,27 @@ public class DeploymentSessionImpl implements DeploymentSession {
         closeTrackers();
     }
     
-    /*private void refreshPackages() {
+    private void refreshPackages() {
         final PackageAdmin packAdmin = (PackageAdmin) trackPackAdmin.getService();
         if (null != packAdmin) {
-            AccessController.doPrivileged(new PrivilegedAction() {
+            semPckgRefreshed = new Semaphore();
+            //semPckgRefreshed.hold();
+        	AccessController.doPrivileged(new PrivilegedAction() {
                 public Object run() {
                     packAdmin.refreshPackages(null);
                     return null;
                 }});
+        	//semPckgRefreshed.hold();
         }
-    }*/
+    }
 
     boolean uninstall(boolean forced) throws DeploymentException {
         this.forced = forced;
         boolean succeed = true;
         openTrackers();
         
-        transaction = Transaction.createTransaction(
-                "UNINSTALL " + targetDp.getName(), this, sessionCtx.getLogger());
+        transaction = Transaction.createTransaction("UNINSTALL " + targetDp.getName(), 
+        	sessionCtx.getBundleContext(), this, sessionCtx.getLogger());
         transaction.start();
         
         // "false" since customizers will not be updated because it is an uinstall
@@ -358,11 +378,15 @@ public class DeploymentSessionImpl implements DeploymentSession {
 	}
 
     private void commitProcessors(Set wrProcs) {
-    	for (Iterator iter = wrProcs.iterator(); iter.hasNext();) {
-    		WrappedResourceProcessor wrProc = 
-    			(WrappedResourceProcessor) iter.next();
-    		wrProc.commit();
-    	}
+    	try {
+	    	for (Iterator iter = wrProcs.iterator(); iter.hasNext();) {
+	    		WrappedResourceProcessor wrProc = 
+	    			(WrappedResourceProcessor) iter.next();
+	    		wrProc.commit();
+	    	}
+    	} catch (Exception e) {
+			sessionCtx.getLogger().log(e);
+		}
     }
     
 	private int startBundles() {
@@ -928,4 +952,10 @@ public class DeploymentSessionImpl implements DeploymentSession {
     	return targetDp.getBundleEntry(srcBe.getSymbName());
     }
 
+	public void frameworkEvent(FrameworkEvent event) {
+		if (event.getType() == FrameworkEvent.PACKAGES_REFRESHED) {
+			semPckgRefreshed.release();
+		}
+	}
+	
 }

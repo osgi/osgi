@@ -78,7 +78,7 @@ public class DeploymentThread extends Thread {
             }
         } else if (mimeType.equals(PluginConstants.MIME_BUNDLE)) {
             try {
-                // TODO is the update correct in this way?
+                // ??? is the update correct in this way ???
                 Bundle[] bs = pluginCtx.getBundleContext().getBundles();
                 Bundle b = null;
                 for (int i = 0; i < bs.length; i++) {

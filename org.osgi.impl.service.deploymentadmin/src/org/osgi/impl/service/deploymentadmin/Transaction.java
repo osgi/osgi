@@ -17,6 +17,7 @@
  */
 package org.osgi.impl.service.deploymentadmin;
 
+import java.io.Serializable;
 import java.security.AccessController;
 import java.security.PrivilegedActionException;
 import java.security.PrivilegedExceptionAction;
@@ -25,10 +26,12 @@ import java.util.List;
 import java.util.ListIterator;
 import java.util.Vector;
 
+import org.osgi.framework.Bundle;
+import org.osgi.framework.BundleContext;
 import org.osgi.framework.BundleException;
 import org.osgi.service.deploymentadmin.spi.DeploymentSession;
 
-public class Transaction {
+public class Transaction implements Serializable {
     
     public static final int INSTALLBUNDLE   = 0;
     public static final int UPDATEBUNDLE    = 1;
@@ -46,20 +49,24 @@ public class Transaction {
         "PROCESSOR"
     };
     
-    private List                  steps;
-    private HashSet               processors;
-    private Logger                logger;
-    private DeploymentSession	  session;
-    private String                name;
+    private List                        steps;
+    private HashSet                     processors;
+    private String                      name;
+    private transient Logger            logger;
+    private transient DeploymentSession session;
+    private transient BundleContext     bundleCtx;
     
     // Transaction is singleton
     private static Transaction instance;
     private Transaction() {
     }
-    public static Transaction createTransaction(String name, DeploymentSession session, Logger logger) {
+    public static Transaction createTransaction(String name, BundleContext bundleCtx,  
+    		DeploymentSession session, Logger logger) 
+    {
         if (null == instance)
             instance = new Transaction();
         instance.name = name;
+        instance.bundleCtx = bundleCtx;
         instance.logger = logger;
         instance.session = session;
         instance.steps = null;
@@ -100,7 +107,7 @@ public class Transaction {
 	                	try {
 	                        AccessController.doPrivileged(new PrivilegedExceptionAction() {
 	                            public Object run() throws BundleException {
-	                                element.bundle.uninstall();
+	                                getBundle(element.bundleId).uninstall();
 	                                return null;
 	                            }});
 	                    }
@@ -113,7 +120,7 @@ public class Transaction {
 	                	try {
 	                        AccessController.doPrivileged(new PrivilegedExceptionAction() {
 	                            public Object run() throws BundleException {
-	                            	element.bundle.update(element.bis);
+	                            	getBundle(element.bundleId).update(element.bis);
 	                                return null;
 	                            }});
 	                    }
@@ -124,9 +131,10 @@ public class Transaction {
 	                    break;
 	                case UNINSTALLBUNDLE : {
 	                	try {
+	                		final BundleContext ctx = bundleCtx;
 	                        AccessController.doPrivileged(new PrivilegedExceptionAction() {
 	                            public Object run() throws BundleException {
-	                                element.context.installBundle(
+	                               ctx.installBundle(
 	                                    element.be.getLocation(), element.bis);
 	                                return null;
 	                            }});
@@ -140,7 +148,7 @@ public class Transaction {
 	                	try {
 	                        AccessController.doPrivileged(new PrivilegedExceptionAction() {
 	                            public Object run() throws BundleException {
-	                                element.bundle.stop();
+	                                getBundle(element.bundleId).stop();
 	                                return null;
 	                            }});
 	                    }
@@ -152,7 +160,7 @@ public class Transaction {
 	                	try {
 	                        AccessController.doPrivileged(new PrivilegedExceptionAction() {
 	                            public Object run() throws BundleException {
-	                                element.bundle.start();
+	                                getBundle(element.bundleId).start();
 	                                return null;
 	                            }});
 	                    }
@@ -173,6 +181,10 @@ public class Transaction {
             logger.log(e);
         }
         logger.log(Logger.LOG_INFO, "Transaction rolled back (name=" + name + ")");
+    }
+    
+    private Bundle getBundle(long bundleId) {
+    	return bundleCtx.getBundle(bundleId);
     }
 
 }

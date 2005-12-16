@@ -34,9 +34,9 @@ import java.util.Vector;
 
 class Representation {
     
-    public static class Node {
-        // TODO eliminate ROOT level (not nice)
-        private static final int ROOT  = 0;
+    public class Node {
+
+    	private static final int ROOT  = 0;
         private static final int LEAF  = 1; 
         private static final int AND   = 2;
         private static final int OR    = 3;
@@ -123,12 +123,10 @@ class Representation {
             return false;
         Representation other = (Representation) o;
         
-        // TODO
         return new String(filter).equals(new String(other.filter));
     }
     
     public int hashCode() {
-        // TODO
         return new String(filter).hashCode();
     }
     
@@ -161,13 +159,11 @@ class Representation {
                 parse_filter_list(node);
                 break;
             case '|' :
-                // TODO not allowed in case of concrete permissions
                 accept('|');
                 node.setOp(Node.OR);
                 parse_filter_list(node);
                 break;
             case '!' :
-                // TODO not allowed in case of concrete permissions
                 accept('!');
                 node.setOp(Node.NOT);
                 parse_filter(node);

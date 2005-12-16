@@ -73,7 +73,7 @@ class SignerChainPattern {
             DAKeyStore.getKeyStore();
         }
         catch (Exception e) {
-            // keystore.XXX will check whether keystore is null
+            // keystore.something will check whether keystore is null
         }
     }
 
@@ -225,8 +225,8 @@ class SignerChainPattern {
                     return checkInKeystore(signer);
                 }
                 catch (Exception e) {
-                    // TODO
                     e.printStackTrace();
+                    return false;
                 }
             }
             return ret;

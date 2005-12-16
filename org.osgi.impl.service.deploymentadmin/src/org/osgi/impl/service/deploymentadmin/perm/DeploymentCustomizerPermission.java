@@ -28,6 +28,7 @@ package org.osgi.impl.service.deploymentadmin.perm;
 
 import java.security.Permission;
 import java.security.PermissionCollection;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.StringTokenizer;
 import java.util.Vector;
@@ -112,11 +113,13 @@ public class DeploymentCustomizerPermission extends Permission {
             return false;
         DeploymentCustomizerPermission other = (DeploymentCustomizerPermission) obj;
         
-        Vector avThis = getActionVector();
+        return this.implies(other) && other.implies(this);
+        
+        /*Vector avThis = getActionVector();
         Vector avOther = other.getActionVector();
         boolean eqActions = (avThis.containsAll(avOther) &&
                 avOther.containsAll(avThis));
-        return getRepresentation().equals(other.getRepresentation()) && eqActions;
+        return getRepresentation().equals(other.getRepresentation()) && eqActions;*/
     }
 
     /**
@@ -125,8 +128,7 @@ public class DeploymentCustomizerPermission extends Permission {
      * @see java.lang.Object#hashCode()
      */
     public int hashCode() {
-        // TODO
-        return getActionVector().hashCode();
+    	return getActionVector().hashCode();
     }
 
     /**
@@ -136,7 +138,12 @@ public class DeploymentCustomizerPermission extends Permission {
      * @see java.security.Permission#getActions()
      */
     public String getActions() {
-        return actions;
+    	StringBuffer sb = new StringBuffer();
+    	for (Iterator it = getActionVector().iterator(); it.hasNext();) {
+			String action = (String) it.next();
+			sb.append(action + (it.hasNext() ? ", " : ""));
+		}
+        return sb.toString();
     }
 
     /**
@@ -176,6 +183,7 @@ public class DeploymentCustomizerPermission extends Permission {
             String action = t.nextToken().trim();
             actionsVector.add(action.toLowerCase());
         }
+        Collections.sort(actionsVector);
         return actionsVector;
     }
 
@@ -188,9 +196,4 @@ public class DeploymentCustomizerPermission extends Permission {
             throw new IllegalArgumentException("Illegal action");
     }
 
- public static void main(String[] args) {
-	System.out.println(
-			new DeploymentCustomizerPermission("(name=alma)", "Privatearea")
-	);
-}
 }

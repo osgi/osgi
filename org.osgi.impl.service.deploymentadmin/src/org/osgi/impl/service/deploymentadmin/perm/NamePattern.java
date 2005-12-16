@@ -32,9 +32,9 @@ class NamePattern {
     private String pattern;
     
     NamePattern(String str) {
-        if (null == str)
-            throw new IllegalArgumentException("Deployment package name must not be empty");
-        pattern = str;
+    	if (0 == str.trim().length())
+    		throw new IllegalArgumentException("Deployment package name must not be empty");
+    	pattern = str;
     }
     
     public boolean match(String str) {
@@ -46,7 +46,9 @@ class NamePattern {
 			
 			if (pch == '*') {
 				closeupAsterixs(p);
-				String aa = afterAsterix(p); 
+				String aa = afterAsterix(p);
+				if ("".equals(aa))
+					return true;
 				int pos = find(aa, s);
 				if (pos < 0)
 					return false;

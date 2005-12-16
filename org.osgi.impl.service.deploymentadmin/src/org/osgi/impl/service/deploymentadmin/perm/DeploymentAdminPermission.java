@@ -167,10 +167,8 @@ public class DeploymentAdminPermission extends Permission {
      * @see java.security.Permission#getActions()
      */
     public String getActions() {
-    	Vector v = getActionVector();
-    	Collections.sort(v);
     	StringBuffer sb = new StringBuffer();
-    	for (Iterator it = v.iterator(); it.hasNext();) {
+    	for (Iterator it = getActionVector().iterator(); it.hasNext();) {
 			String action = (String) it.next();
 			sb.append(action + (it.hasNext() ? ", " : ""));
 		}
@@ -215,6 +213,7 @@ public class DeploymentAdminPermission extends Permission {
             String action = t.nextToken().trim();
             actionsVector.add(action.toLowerCase());
         }
+        Collections.sort(actionsVector);
         return actionsVector;
     }
 

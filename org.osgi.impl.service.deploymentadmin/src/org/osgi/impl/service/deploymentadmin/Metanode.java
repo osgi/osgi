@@ -124,11 +124,10 @@ public class Metanode implements MetaNode {
     }
 
     public DmtData[] getValidValues() {
-        return validValues;
+        return null;
     }
 
     public String[] getValidNames() {
-        // TODO
         return null;
     }
 
@@ -137,17 +136,15 @@ public class Metanode implements MetaNode {
     }
 
     public String[] getMimeTypes() {
-        // TODO
         return null;
     }
 
     public boolean isValidValue(DmtData value) {
-        // TODO
+    	
         return true;
     }
 
     public boolean isValidName(String name) {
-        // TODO
         return true;
     }
 

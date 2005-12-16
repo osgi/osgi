@@ -27,6 +27,7 @@ import org.osgi.framework.*;
 import org.osgi.impl.service.deploymentadmin.plugin.*;
 import org.osgi.impl.service.dwnl.DownloadAgent;
 import org.osgi.service.deploymentadmin.*;
+import org.osgi.service.deploymentadmin.spi.DeploymentSession;
 import org.osgi.service.dmt.DmtAdmin;
 import org.osgi.service.dmt.spi.ExecPlugin;
 import org.osgi.service.dmt.spi.DataPlugin;
@@ -383,9 +384,16 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
             } catch (InterruptedException e) {
                 logger.log(e);
             }
-            if (busy)
+            if (busy) {
+            	String dpName;
+            	if (session.getDeploymentAction() == DeploymentSessionImpl.UNINSTALL)
+            		dpName = session.getTargetDeploymentPackage().toString();
+            	else
+            		dpName = session.getSourceDeploymentPackage().toString();
 	            throw new DeploymentException(DeploymentException.CODE_TIMEOUT,
-	                "Timeout period (" + sessionTimeout + " ms) expired");
+	                "Timeout period (" + sessionTimeout + " ms) expired. " + 
+	                dpName + " is being processed.");
+            }
         }
         busy = true;
     }
@@ -399,7 +407,7 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
         busy = false;
         notify();
     }
-        
+    
     /*
      * Updates Deployment Package metainfo
      */
@@ -780,6 +788,9 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
 	    SecurityManager sm = System.getSecurityManager();
 	    if (null == sm)
 	        return;
+	    
+	    if (dp.isEmpty())
+	    	return;
 	    
 	    if (dp.getCertChains().isEmpty()) {
 	        DeploymentAdminPermission perm = 
