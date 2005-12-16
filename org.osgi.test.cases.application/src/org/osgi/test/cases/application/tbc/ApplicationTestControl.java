@@ -42,6 +42,7 @@ import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.PackagePermission;
 import org.osgi.framework.ServicePermission;
 import org.osgi.framework.ServiceReference;
+import org.osgi.service.application.ApplicationAdminPermission;
 import org.osgi.service.application.ApplicationDescriptor;
 import org.osgi.service.application.ApplicationHandle;
 import org.osgi.service.application.ScheduledApplication;
@@ -653,10 +654,12 @@ public class ApplicationTestControl extends DefaultTestBundleControl {
 			return 0;
 		}
 	}
-
+	
 	public void cleanUp(ScheduledApplication sa, PermissionInfo[] infos) {
 		try {
-			setPermission(infos);
+			setLocalPermission(new PermissionInfo(
+					ApplicationAdminPermission.class.getName(),
+					"(pid=*)", ApplicationAdminPermission.SCHEDULE_ACTION+","+ApplicationAdminPermission.LIFECYCLE_ACTION));// only schedule, schedule implies lifecycle 			
 			if (sa != null) {
 				try {
 					sa.remove();
@@ -665,17 +668,18 @@ public class ApplicationTestControl extends DefaultTestBundleControl {
 		} catch (Exception e) {
 			log("#error removing the scheduled application. " + e.getMessage());
 		}
-		try {
+		try {	
 			ApplicationHandle handle = getAppHandle();
 			while (handle != null) {
 				handle.destroy();
 				handle = getAppHandle();
-			}
+			}	
 		} catch (Exception e) {
 			log("#error destroying the handle. " + e.getMessage());
-		}
-	}
-
+		}	
+		setPermission(infos);			
+	}	
+	
 	public void destroyHandles() {
 		try {
 			ApplicationHandle handle = getAppHandle();

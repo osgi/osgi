@@ -82,7 +82,7 @@ public class IsRecurring implements TestInterface {
                 new PermissionInfo(ApplicationAdminPermission.class.getName(), ApplicationConstants.APPLICATION_PERMISSION_FILTER1, ApplicationAdminPermission.SCHEDULE_ACTION)
             );
 
-			sa = tbc.getAppDescriptor().schedule(null, ApplicationConstants.TIMER_EVENT, "(second=0)", false);
+			sa = tbc.getAppDescriptor().schedule(null, "TestingPurposes*", null, false);
 
 			tbc.setDefaultPermission();
 			
@@ -103,7 +103,6 @@ public class IsRecurring implements TestInterface {
      * @spec ScheduleApplication.isRecurring()
      */           
 	public void testIsRecurring002() {
-		//TODO waiting feedback
 		tbc.log("#testIsRecurring002");
 		PermissionInfo[] infos = null;
 		ScheduledApplication sa = null;
@@ -115,7 +114,7 @@ public class IsRecurring implements TestInterface {
                 new PermissionInfo(ApplicationAdminPermission.class.getName(), ApplicationConstants.APPLICATION_PERMISSION_FILTER1, ApplicationAdminPermission.SCHEDULE_ACTION)
             );
 
-			sa = tbc.getAppDescriptor().schedule(null, "*", null, true);
+            sa = tbc.getAppDescriptor().schedule(null, "TestingPurposes*", null, true);
 			
 			tbc.setDefaultPermission();
 			

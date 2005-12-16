@@ -83,7 +83,7 @@ public class GetApplicationDescriptor implements TestInterface {
                 ApplicationAdminPermission.class.getName(),
                 ApplicationConstants.APPLICATION_PERMISSION_FILTER1, ApplicationAdminPermission.SCHEDULE_ACTION));
             
-            schedule = tbc.getAppDescriptor().schedule(null, "*", null, true);
+            schedule = tbc.getAppDescriptor().schedule(null, "testingPurposes*", null, true);
             
             tbc.setDefaultPermission();
             
@@ -94,7 +94,7 @@ public class GetApplicationDescriptor implements TestInterface {
         } catch (Exception e) {
             tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": "
                 + e.getClass().getName());
-        } finally {
+        } finally { 	
             tbc.cleanUp(schedule, infos);
         }
     }

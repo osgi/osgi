@@ -96,8 +96,8 @@ public class GetApplicationDescriptor implements TestInterface {
 	}
 
 	/**
-     * This method asserts that if the ApplicationHandle is unregistered
-     * IllegalStateException will be thrown.
+     * This method asserts if the ApplicationHandle is unregistered
+     * no exception will be thrown.
 	 * 
 	 * @spec ApplicationHandle.getApplicationDescriptor()
 	 */		
@@ -119,12 +119,10 @@ public class GetApplicationDescriptor implements TestInterface {
 						
 			handle.getApplicationDescriptor();
 			
-			tbc.failException("", java.lang.IllegalStateException.class);
-		} catch (java.lang.IllegalStateException e) {
-			tbc.pass(MessagesConstants.getMessage(MessagesConstants.EXCEPTION_CORRECTLY_THROWN, new String[] {
-					e.getClass().getName()}));
-		} catch (Exception e) {			
-			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + " " + e.getClass().getName());
+			tbc.pass("No exception thrown.");
+		} catch (Exception e) {
+			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": "
+				+ e.getClass().getName());
 		} finally {
 			tbc.cleanUp(handle, infos);
 		}

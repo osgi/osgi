@@ -62,6 +62,8 @@ public class SetCurrentApplicationId {
 	public void run() {
 		testSetCurrentApplicationId001();
 		testSetCurrentApplicationId002();
+		testSetCurrentApplicationId003();
+		testSetCurrentApplicationId004();
 	}
 
     /**
@@ -99,6 +101,44 @@ public class SetCurrentApplicationId {
 			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": " + e.getClass().getName());
 		}
 	}
+	
+    /**
+     * This method asserts that no exceptions is thrown when
+     * null is passed as parameter using the constructor that receives
+     * an ApplicationDescriptor as parameter.
+     * 
+     * @spec ApplicationAdminPermission.setCurrentApplicationId(String)
+     */         
+	private void testSetCurrentApplicationId003() {
+		try {
+			tbc.log("#testSetCurrentApplicationId001");
+			org.osgi.service.application.ApplicationAdminPermission app = new org.osgi.service.application.ApplicationAdminPermission(
+					tbc.getAppDescriptor(), ApplicationConstants.ACTIONS);
+			app.setCurrentApplicationId(null);
+			tbc.pass("No exception was thrown.");
+		} catch (Exception e) {
+			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": " + e.getClass().getName());
+		}
+	}
+	
+    /**
+     * This method asserts if no exception is thrown when
+     * invalid characters is passed as parameter using the 
+     * constructor that receives an ApplicationDescriptor as parameter.
+     * 
+     * @spec ApplicationAdminPermission.setCurrentApplicationId(String)
+     */         
+	private void testSetCurrentApplicationId004() {
+		try {
+			tbc.log("#testSetCurrentApplicationId002");
+			org.osgi.service.application.ApplicationAdminPermission app = new org.osgi.service.application.ApplicationAdminPermission(
+					tbc.getAppDescriptor(), ApplicationConstants.ACTIONS);
+			app.setCurrentApplicationId(ApplicationConstants.INVALID);
+			tbc.pass("No exception was thrown.");
+		} catch (Exception e) {
+			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": " + e.getClass().getName());
+		}
+	}	
 	
 
 }

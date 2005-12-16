@@ -82,7 +82,7 @@ public class Remove implements TestInterface {
                 new PermissionInfo(ApplicationAdminPermission.class.getName(), ApplicationConstants.APPLICATION_PERMISSION_FILTER1, ApplicationAdminPermission.SCHEDULE_ACTION)
             );
 
-			sa = tbc.getAppDescriptor().schedule(null, "*", null, false);
+			sa = tbc.getAppDescriptor().schedule(null, "TestingPurposes*", null, true);
 
 			tbc.setDefaultPermission();
 
