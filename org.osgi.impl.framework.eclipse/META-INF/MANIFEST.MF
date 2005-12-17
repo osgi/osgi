@@ -1,0 +1,56 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Export-Package: org.osgi.framework; version=1.3,
+ org.osgi.service.packageadmin; version=1.2,
+ org.osgi.service.permissionadmin; version=1.2,
+ org.osgi.service.condpermadmin; version=1.0,
+ org.osgi.service.url; version=1.0,
+ org.osgi.service.startlevel; version=1.0,
+ org.osgi.util.tracker; version=1.3,
+ org.eclipse.osgi.event,
+ org.eclipse.osgi.framework.console,
+ org.eclipse.osgi.framework.eventmgr,
+ org.eclipse.osgi.framework.log,
+ org.eclipse.osgi.service.debug,
+ org.eclipse.osgi.service.datalocation,
+ org.eclipse.osgi.service.environment,
+ org.eclipse.osgi.service.localization,
+ org.eclipse.osgi.service.pluginconversion,
+ org.eclipse.osgi.service.resolver,
+ org.eclipse.osgi.service.runnable,
+ org.eclipse.osgi.service.urlconversion,
+ org.eclipse.osgi.util,
+ org.eclipse.core.runtime.adaptor; x-friends:=org.eclipse.core.runtime,
+ org.eclipse.core.runtime.internal.adaptor; x-internal:=true,
+ org.eclipse.core.runtime.internal.stats; x-friends:="org.eclipse.core.runtime, org.eclipse.core.tools",
+ org.eclipse.osgi.framework.adaptor; x-internal:=true,
+ org.eclipse.osgi.framework.adaptor.core; x-internal:=true,
+ org.eclipse.osgi.framework.debug; x-internal:=true,
+ org.eclipse.osgi.framework.internal.core; x-internal:=true,
+ org.eclipse.osgi.framework.internal.defaultadaptor; x-internal:=true,
+ org.eclipse.osgi.framework.internal.protocol; x-internal:=true,
+ org.eclipse.osgi.framework.internal.protocol.bundleentry; x-internal:=true,
+ org.eclipse.osgi.framework.internal.protocol.bundleresource; x-internal:=true,
+ org.eclipse.osgi.framework.internal.protocol.reference; x-internal:=true,
+ org.eclipse.osgi.framework.internal.reliablefile; x-internal:=true,
+ org.eclipse.osgi.framework.launcher; x-internal:=true,
+ org.eclipse.osgi.framework.util; x-internal:=true,
+ org.eclipse.osgi.internal.module; x-internal:=true,
+ org.eclipse.osgi.internal.resolver; x-internal:=true,
+ org.eclipse.osgi.internal.profile; x-internal:=true
+Export-Service: org.osgi.service.packageadmin.PackageAdmin,
+ org.osgi.service.permissionadmin.PermissionAdmin,
+ org.osgi.service.startlevel.StartLevel,
+ org.eclipse.osgi.service.debug.DebugOptions
+Bundle-Name: %systemBundle
+Bundle-SymbolicName: org.eclipse.osgi; singleton:=true
+Bundle-Activator: org.eclipse.osgi.framework.internal.core.SystemBundleActivator
+Bundle-Description: %systemBundle
+Bundle-Copyright: %copyright
+Bundle-Vendor: %eclipse.org
+Bundle-Version: 3.1.2
+Bundle-Localization: systembundle
+Bundle-DocUrl: http://www.eclipse.org
+Eclipse-ExtensibleAPI: true
+Eclipse-SystemBundle: true
+Main-Class: org.eclipse.osgi.framework.launcher.Launcher

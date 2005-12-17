@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
+	<classpathentry kind="src" path="src"/>
 	<classpathentry sourcepath="/osgi.released/ee.foundation.jar" kind="lib" path="/osgi.released/ee.foundation.jar"/>
 	<classpathentry kind="src" path="/org.osgi.framework"/>
 	<classpathentry kind="src" path="/org.osgi.service.condpermadmin"/>
@@ -8,6 +9,5 @@
 	<classpathentry kind="src" path="/org.osgi.service.startlevel"/>
 	<classpathentry kind="src" path="/org.osgi.service.url"/>
 	<classpathentry kind="src" path="/org.osgi.util.tracker"/>
-	<classpathentry exported="true" kind="lib" path="/licensed/jar/org.eclipse.osgi_3.1.2.jar"/>
 	<classpathentry kind="output" path="src"/>
 </classpath>
