@@ -430,8 +430,8 @@ public class IsSatisfied {
 			tbc.log("#If the user does not accept all the questions, this test will fail.");
 			
 			tbc.assertTrue("Asserting that isSatisfied returns true.", condition3.isSatisfied(conditions, null));
-			tbc.log("#This is the second time for this question, if it appears you must reject to make this test fail.");
-			tbc.assertTrue("Asserting that isSatisfied returns true.", condition3.isSatisfied(conditions, null));
+			tbc.log("#This is the second time for this question, it must appear for you again and you must REJECT this test to make it pass.");
+			tbc.assertTrue("Asserting that isSatisfied returns true.", !condition3.isSatisfied(conditions, null));
        } catch (Exception e) {
            tbc.fail("Unexpected exception was thrown + : " 
                + e.getClass().getName());

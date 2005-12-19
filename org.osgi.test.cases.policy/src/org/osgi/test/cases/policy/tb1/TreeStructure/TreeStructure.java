@@ -78,8 +78,6 @@ public class TreeStructure implements TestInterface {
         testTreeStructure007();
         testTreeStructure008();
         testTreeStructure009();
-        testTreeStructure010();
-        testTreeStructure011();
     }
 
     /**
@@ -288,106 +286,13 @@ public class TreeStructure implements TestInterface {
 
 
     /**
-     * This test asserts if the absence of a Default node is equivalent
-     * to having All Permission as the default permission
-     *
-     * @spec 3.7.2 Location Permission Management Object, Table 15 
-     */
-    private void testTreeStructure008() {
-        tbc.log("#testTreeStructure008");
-        DmtSession session = null;
-        PermissionInfo info[] = null;
-        try {
-            info = tbc.getPermissionAdmin().getDefaultPermissions();
-
-            PermissionInfo perm = new PermissionInfo(
-                java.security.AllPermission.class.getName(), null, null);
-            
-            session = tbc.getDmtAdmin().getSession(PolicyConstants.LOCATION_PERMISSION_NODE,
-                DmtSession.LOCK_TYPE_ATOMIC);
-            
-            if (session.isNodeUri(PolicyConstants.DEFAULT_PERMISSION_NODE)) {
-                session.deleteNode(PolicyConstants.DEFAULT_PERMISSION_NODE);
-            }
-            session.close();
-            PermissionInfo infos[] = tbc.getPermissionAdmin().getDefaultPermissions();
-            
-            tbc.assertEquals(
-                    "Asserts if the absence of a Default node is equivalent to having AllPermission as the default permission",
-                    perm.getEncoded(), infos[0].getEncoded());
-            
-            session = tbc.getDmtAdmin().getSession(PolicyConstants.LOCATION_PERMISSION_NODE,
-                DmtSession.LOCK_TYPE_ATOMIC);
-            
-            session.createLeafNode(PolicyConstants.DEFAULT_PERMISSION_NODE);
-            session.setNodeValue(PolicyConstants.DEFAULT_PERMISSION_NODE, new DmtData(perm.getEncoded() + "\n"));
-            session.close();
-            
-            tbc.assertEquals("Asserts if the default permission is restored",
-                perm.getEncoded(), tbc.getPermissionAdmin().getDefaultPermissions()[0].getEncoded());
-        } catch (Exception e) {
-            tbc.fail(MessagesConstants.getMessage(
-                MessagesConstants.UNEXPECTED_EXCEPTION, new String[]{e.getClass().getName()}));
-        } finally {
-            tbc.closeSession(session);
-            tbc.getPermissionAdmin().setDefaultPermissions(info);
-        }
-    }
-
-
-    /**
-     * This test asserts that creating a Default node with an empty
-     * string makes the default permissions empty
-     *
-     * @spec 3.7.2 Location Permission Management Object, Table 15
-     */
-	private void testTreeStructure009() {
-        tbc.log("#testTreeStructure009");
-        DmtSession session = null;
-        PermissionInfo info[] = null;
-        try {
-            info = tbc.getPermissionAdmin().getDefaultPermissions();
-            PermissionInfo perm = new PermissionInfo(
-                java.security.AllPermission.class.getName(), null, null);
-            
-            session = tbc.getDmtAdmin().getSession(PolicyConstants.LOCATION_PERMISSION_NODE,
-                DmtSession.LOCK_TYPE_ATOMIC);
-            
-            if (!session.isNodeUri(PolicyConstants.DEFAULT_PERMISSION_NODE)) {
-                session.createLeafNode(PolicyConstants.DEFAULT_PERMISSION_NODE, new DmtData(""));
-            } else {
-                session.setNodeValue(PolicyConstants.DEFAULT_PERMISSION_NODE, new DmtData(""));
-            }
-            session.close();
-            PermissionInfo infos[] = tbc.getPermissionAdmin().getDefaultPermissions();
-            
-            tbc.assertNull( "Asserts if permission was removed from permission admin", infos);
-            
-            session = tbc.getDmtAdmin().getSession(PolicyConstants.LOCATION_PERMISSION_NODE,
-                DmtSession.LOCK_TYPE_ATOMIC);
-            session.setNodeValue(PolicyConstants.DEFAULT_PERMISSION_NODE, new DmtData(perm.getEncoded() + "\n"));
-            session.close();
-            
-            tbc.assertEquals("Asserts if the default permission is restored",
-                perm.getEncoded(), tbc.getPermissionAdmin() .getDefaultPermissions()[0].getEncoded());
-        } catch (Exception e) {
-            tbc.fail(MessagesConstants.getMessage(
-                MessagesConstants.UNEXPECTED_EXCEPTION, new String[]{e.getClass().getName()}));
-        } finally {
-            tbc.closeSession(session);
-            tbc.getPermissionAdmin().setDefaultPermissions(info);
-        }
-    }
-
-
-    /**
      * This test asserts if ConditionPermission is added in conditional
      * permission service when setting the permission in DMT
      *
      * @spec 3.7.4 Conditional Permission Management Object
      */
-	private void testTreeStructure010() {
-        tbc.log("#testTreeStructure010");
+	private void testTreeStructure008() {
+        tbc.log("#testTreeStructure008");
         DmtSession session = null;
         try {
             PermissionInfo pInfo1 = new PermissionInfo(ServicePermission.class.getName(), "org.osgi.service.http.HttpService", "register");
@@ -469,8 +374,8 @@ public class TreeStructure implements TestInterface {
      *
      * @spec 3.7.4 Conditional Permission Management Object
      */
-	private void testTreeStructure011() {
-        tbc.log("#testTreeStructure011");
+	private void testTreeStructure009() {
+        tbc.log("#testTreeStructure009");
         DmtSession session = null;
         try {
             PermissionInfo pInfo1 = new PermissionInfo(ServicePermission.class.getName(), 
@@ -480,7 +385,8 @@ public class TreeStructure implements TestInterface {
             ConditionInfo cInfo = new ConditionInfo(BundleLocationCondition.class.getName(),
                 new String[]{PolicyConstants.PRINCIPAL});
             
-            tbc.getConditionalPermissionAdmin().addConditionalPermissionInfo(
+            tbc.getConditionalPermissionAdmin().setConditionalPermissionInfo(
+            		PolicyConstants.CONDITION_HASH,
                 new ConditionInfo[]{cInfo},
                 new PermissionInfo[]{pInfo1, pInfo2});
             
