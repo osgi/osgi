@@ -277,6 +277,10 @@ public class ApplicationAdminPermission extends Permission {
           String action = t.nextToken().trim();
           v.add(action.toLowerCase());
       }
+      
+      if( v.contains( SCHEDULE_ACTION ) && !v.contains( LIFECYCLE_ACTION ) )
+    	  v.add( LIFECYCLE_ACTION );
+      
       return v;
   }
   
