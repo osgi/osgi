@@ -91,6 +91,9 @@ public class ApplicationAdminPermission extends Permission {
 	public ApplicationAdminPermission(String filter, String actions) throws InvalidSyntaxException {
 		super(filter == null ? "*" : filter);
 		
+		if( filter == null )
+			filter = "*";
+		
 		if( actions == null )
 			throw new NullPointerException( "Action string cannot be null!" );
 		
