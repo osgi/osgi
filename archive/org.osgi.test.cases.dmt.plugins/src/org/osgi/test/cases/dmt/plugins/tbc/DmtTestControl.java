@@ -70,6 +70,7 @@ import org.osgi.test.cases.dmt.plugins.tbc.MetaNode.IsZeroOccurrenceAllowed;
 import org.osgi.test.cases.dmt.plugins.tbc.MetaNode.TestMetaNodeDataPluginActivator;
 import org.osgi.test.cases.dmt.plugins.tbc.MetaNode.MetaData.MetaData;
 import org.osgi.test.cases.dmt.plugins.tbc.MetaNode.MetaData.TestPluginMetaDataActivator;
+import org.osgi.test.cases.dmt.plugins.tbc.Others.Constraints;
 import org.osgi.test.cases.dmt.plugins.tbc.Others.OpenSession;
 import org.osgi.test.cases.dmt.plugins.tbc.Others.OverlappingPlugins;
 import org.osgi.test.cases.dmt.plugins.tbc.Others.UseCases;
@@ -353,8 +354,7 @@ public class DmtTestControl extends DefaultTestBundleControl {
 		new MetaData(this).run();
 	}
 	public void testConstraints() {
-        //TODO Remove when test framework timeout is bigger than session creation timeout
-//	    new Constraints(this).run();
+	    new Constraints(this).run();
 	}		
     public void testOpenSession() {
         new OpenSession(this).run();
