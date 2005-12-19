@@ -134,6 +134,7 @@ public class ApplicationAdminPermission {
 					ApplicationConstants.ACTIONS);
 			tbc.assertEquals("Asserting if the actions passed as parameter are the same returned.", ApplicationConstants.ACTIONS, ap.getActions());
 		} catch (Exception e) {
+			e.printStackTrace();
 			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": " + e.getClass().getName());
 		}
 	}
