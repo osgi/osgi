@@ -201,7 +201,7 @@ public class Constraints {
 			tbc
 					.fail("An EXCLUSIVE session could be shared with a SHARED session");
 		} catch (DmtException e) {
-			tbc.assertEquals("An EXCLUSIVE session could NOT be shared with aa SHARED session",DmtException.SESSION_CREATION_TIMEOUT,e.getCode());
+			tbc.assertEquals("An EXCLUSIVE session could NOT be shared with an SHARED session",DmtException.SESSION_CREATION_TIMEOUT,e.getCode());
 		} catch (Exception e) {
 			tbc.fail("Expected " + DmtException.class.getName()
 					+ " but it was " + e.getClass().getName());
