@@ -32,7 +32,7 @@ import org.osgi.service.deploymentadmin.spi.DeploymentCustomizerPermission;
 import org.osgi.service.deploymentadmin.spi.DeploymentSession;
 import org.osgi.service.deploymentadmin.spi.ResourceProcessor;
 import org.osgi.service.deploymentadmin.spi.ResourceProcessorException;
-import org.osgi.service.packageadmin.PackageAdmin;
+//import org.osgi.service.packageadmin.PackageAdmin;
 import org.osgi.service.permissionadmin.*;
 import org.osgi.util.tracker.ServiceTracker;
 
@@ -320,7 +320,7 @@ public class DeploymentSessionImpl implements DeploymentSession, FrameworkListen
         closeTrackers();
     }
     
-    private void refreshPackages() {
+    /*private void refreshPackages() {
         final PackageAdmin packAdmin = (PackageAdmin) trackPackAdmin.getService();
         if (null != packAdmin) {
             semPckgRefreshed = new Semaphore();
@@ -332,7 +332,7 @@ public class DeploymentSessionImpl implements DeploymentSession, FrameworkListen
                 }});
         	//semPckgRefreshed.hold();
         }
-    }
+    }*/
 
     boolean uninstall(boolean forced) throws DeploymentException {
         this.forced = forced;

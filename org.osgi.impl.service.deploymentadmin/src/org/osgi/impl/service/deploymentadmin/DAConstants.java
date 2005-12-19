@@ -17,6 +17,8 @@
  */
 package org.osgi.impl.service.deploymentadmin;
 
+import org.osgi.framework.Constants;
+
 public class DAConstants {
     
     // debug mode
@@ -26,13 +28,13 @@ public class DAConstants {
     public static final String DP_NAME              = "DeploymentPackage-SymbolicName";
     public static final String DP_VERSION           = "DeploymentPackage-Version";
     public static final String DP_FIXPACK           = "DeploymentPackage-FixPack";
-    public static final String LOC_PATH             = "Bundle-Localization";
-    public static final String BUNDLE_LOCALIZATION  = "Bundle-Localization";
+    public static final String LOC_PATH             = Constants.BUNDLE_LOCALIZATION;
+    public static final String BUNDLE_LOCALIZATION  = Constants.BUNDLE_LOCALIZATION;
     
     // headers in the name sections of DPs
     public static final String MISSING              = "DeploymentPackage-Missing";
-    public static final String BUNDLE_SYMBOLIC_NAME = "Bundle-SymbolicName";
-    public static final String BUNDLE_VERSION       = "Bundle-Version";
+    public static final String BUNDLE_SYMBOLIC_NAME = Constants.BUNDLE_SYMBOLICNAME;
+    public static final String BUNDLE_VERSION       = Constants.BUNDLE_VERSION;
     public static final String RP_PID               = "Resource-Processor";
     public static final String CUSTOMIZER           = "DeploymentPackage-Customizer";
 

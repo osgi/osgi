@@ -1,8 +1,9 @@
 package org.osgi.impl.service.deploymentadmin;
 
-import java.util.HashSet;
+import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Set;
+import java.util.Vector;
 
 import org.eclipse.osgi.service.resolver.VersionRange;
 import org.osgi.framework.Version;
@@ -14,11 +15,13 @@ import org.osgi.service.deploymentadmin.DeploymentException;
 public class DeploymentPackageVerifier {
     
     private DeploymentPackageCtx  dpCtx;
-    private DeploymentPackageImpl dp;
+    private DeploymentPackageImpl srcDp;
+    private Vector                dps;
     
-    DeploymentPackageVerifier(DeploymentPackageImpl dp) {
+    DeploymentPackageVerifier(DeploymentPackageImpl dp, Vector dps) {
     	this.dpCtx = dp.getDpCtx();
-    	this.dp = dp;
+    	this.srcDp = dp;
+    	this.dps = dps;
     }
 
 	public void verify() throws DeploymentException {
@@ -29,70 +32,83 @@ public class DeploymentPackageVerifier {
     private void checkMainSection()
     		throws DeploymentException
     {
-        if (null == dp.getName())
+        if (null == srcDp.getName())
             throw new DeploymentException(DeploymentException.CODE_MISSING_HEADER,
                     "Missing deployment package name");
         
-        if (DAConstants.SYSTEM_DP_BSN.equals(dp.getName()))
+        if (DAConstants.SYSTEM_DP_BSN.equals(srcDp.getName()))
             throw new DeploymentException(DeploymentException.CODE_BAD_HEADER,
             		"The \"System\" deployment package name is reserved");
         
-        if (null == dp.getVersion())
+        if (null == srcDp.getVersion())
             throw new DeploymentException(DeploymentException.CODE_MISSING_HEADER,
-                    "Missing deployment package version in: " + dp.getName());
+                    "Missing deployment package version in: " + srcDp.getName());
         
         try {
-            String s = (String) dp.getMainSection().get(DAConstants.DP_VERSION);
+            String s = (String) srcDp.getMainSection().get(DAConstants.DP_VERSION);
             new Version(s);
         }
         catch (Exception e) {
             throw new DeploymentException(DeploymentException.CODE_BAD_HEADER,
-                    "Bad version in: " + dp, e);
+                    "Bad version in: " + srcDp, e);
         }
         
-        if (null != dp.getFixPackRange()) {
+        if (null != srcDp.getFixPackRange()) {
             try {
-                String s = (String) dp.getMainSection().get(DAConstants.DP_FIXPACK);
+                String s = (String) srcDp.getMainSection().get(DAConstants.DP_FIXPACK);
                 new VersionRange(s);
             }
             catch (Exception e) {
                 throw new DeploymentException(DeploymentException.CODE_BAD_HEADER,
-                        "Bad version range in: " + dp, e);
+                        "Bad version range in: " + srcDp, e);
             }
         }
         
-        if (null == dp.getName())
+        if (null == srcDp.getName())
             throw new DeploymentException(DeploymentException.CODE_MISSING_HEADER, 
-                    "Missing header in: " + dp + " header: " + DAConstants.DP_NAME);
+                    "Missing header in: " + srcDp + " header: " + DAConstants.DP_NAME);
      
-        if (null == dp.getVersion())
+        if (null == srcDp.getVersion())
             throw new DeploymentException(DeploymentException.CODE_MISSING_HEADER, 
-                    "Missing header in: " + dp + " header: " + DAConstants.DP_VERSION);        
+                    "Missing header in: " + srcDp + " header: " + DAConstants.DP_VERSION);        
     }
 
     private void checkNameSections()
     		throws DeploymentException
     {
-        for (Iterator iter = dp.getBundleEntries().iterator(); iter.hasNext();) {
+        for (Iterator iter = srcDp.getBundleEntries().iterator(); iter.hasNext();) {
             BundleEntry be = (BundleEntry) iter.next();
-            checkBundleEntry(dp, be);
+            checkBundleEntry(srcDp, be);
         }
         
-        for (Iterator iter = dp.getResourceEntries().iterator(); iter.hasNext();) {
+        for (Iterator iter = srcDp.getResourceEntries().iterator(); iter.hasNext();) {
             ResourceEntry re = (ResourceEntry) iter.next();
-            checkResourceEntry(dp, re);
+            checkResourceEntry(srcDp, re);
         }
         
-        // this check only inside one dp
-        Set s = new HashSet();
-        for (Iterator iter = dp.getBundleEntries().iterator(); iter.hasNext();) {
+        Hashtable bSns = new Hashtable();
+        for (Iterator iter = dps.iterator(); iter.hasNext();) {
+			DeploymentPackageImpl dp = (DeploymentPackageImpl) iter.next();
+			
+			// update
+			if (dp.getName().equals(srcDp.getName()))
+				continue;
+			
+			for (Iterator iterDp = dp.getBundleEntries().iterator(); iterDp.hasNext();) {
+				BundleEntry be = (BundleEntry) iterDp.next();
+				bSns.put(be.getSymbName(), dp);
+			}
+		}
+        // check 
+        for (Iterator iter = srcDp.getBundleEntries().iterator(); iter.hasNext();) {
             BundleEntry be = (BundleEntry) iter.next();
-            if (s.contains(be.getSymbName()))
+            DeploymentPackageImpl dp = (DeploymentPackageImpl) bSns.get(be.getSymbName());
+            if (null != dp)
                 throw new DeploymentException(
                         DeploymentException.CODE_BUNDLE_SHARING_VIOLATION,
                         "Bundle with symbolic name \"" + be.getSymbName() + "\" " +
-                        "is allready present in the system");
-            s.add(be.getSymbName());
+                        "is allready present in " + dp);
+            bSns.put(be.getSymbName(), srcDp);
         }
     }
 

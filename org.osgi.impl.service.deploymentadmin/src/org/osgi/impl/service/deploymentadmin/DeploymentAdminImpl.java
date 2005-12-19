@@ -27,7 +27,6 @@ import org.osgi.framework.*;
 import org.osgi.impl.service.deploymentadmin.plugin.*;
 import org.osgi.impl.service.dwnl.DownloadAgent;
 import org.osgi.service.deploymentadmin.*;
-import org.osgi.service.deploymentadmin.spi.DeploymentSession;
 import org.osgi.service.dmt.DmtAdmin;
 import org.osgi.service.dmt.spi.ExecPlugin;
 import org.osgi.service.dmt.spi.DataPlugin;
@@ -174,7 +173,7 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
             srcDp = new DeploymentPackageImpl(DeploymentPackageCtx.
                     getInstance(logger, context, this), wjis.getManifest(), 
                     wjis.getCertificateChainStringArrays());
-            new DeploymentPackageVerifier(srcDp).verify();
+            new DeploymentPackageVerifier(srcDp, dps).verify();
             srcDp.setResourceBundle(wjis.getResourceBundle());
             if (!checkCertificateChains(wjis.getCertificateChains()))
             	throw new DeploymentException(DeploymentException.CODE_SIGNING_ERROR, 
