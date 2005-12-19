@@ -18,17 +18,20 @@ package org.osgi.service.dmt;
  * interface have to be able to connect and send alerts to one or more
  * management servers in a protocol specific way.
  * <p>
- * The properties of the service registration must specify a list of
+ * The properties of the service registration should specify a list of
  * destinations (principals) where the service is capable of sending alerts.
- * This must be done by providing a <code>String</code> array of principal
- * names in the <code>principals</code> registration property.
+ * This can be done by providing a <code>String</code> array of principal
+ * names in the <code>principals</code> registration property.  If this property
+ * is not registered, the service will be treated as the default sender. The 
+ * default alert sender is only used when a more specific alert sender cannot be
+ * found.
  * <p>
  * The <code>principals</code> registration property is used when the
  * {@link DmtAdmin#sendAlert DmtAdmin.sendAlert} method is called, to find the
  * proper <code>RemoteAlertSender</code> for the given destination. If the
  * caller does not specify a principal, the alert is only sent if the Dmt Admin
- * finds an appropriate default alert sender (for example if there is only one
- * registered).
+ * finds a default alert sender, or if the choice is unambiguous for some other 
+ * reason (for example if only one alert sender is registered).
  */
 public interface RemoteAlertSender {
     /**
