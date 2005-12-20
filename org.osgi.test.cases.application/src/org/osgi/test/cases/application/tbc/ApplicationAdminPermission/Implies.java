@@ -153,7 +153,7 @@ public class Implies {
 					"<<SELF>>", ApplicationConstants.ACTIONS);
 			org.osgi.service.application.ApplicationAdminPermission app2 = new org.osgi.service.application.ApplicationAdminPermission(
 					tbc.getAppDescriptor(), ApplicationConstants.ACTIONS_DIFFERENT_ORDER);
-			app.setCurrentApplicationId(tbc.getAppDescriptor().getApplicationId());
+			app2 = app2.setCurrentApplicationId(tbc.getAppDescriptor().getApplicationId());
 			tbc.assertTrue("Asserting if true is returned using <<SELF>> as filter when all the steps are followed.", app.implies(app2));
 		} catch (Exception e) {
 			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": " + e.getClass().getName());
@@ -174,7 +174,7 @@ public class Implies {
 					"<<SELF>>", ApplicationConstants.ACTIONS);
 			org.osgi.service.application.ApplicationAdminPermission app2 = new org.osgi.service.application.ApplicationAdminPermission(
 					tbc.getAppDescriptor(), ApplicationConstants.ACTIONS);
-			app.setCurrentApplicationId(ApplicationConstants.APPLICATION_LOCATION); //just a different value to make a false result.
+			app2 = app2.setCurrentApplicationId(ApplicationConstants.APPLICATION_LOCATION); //just a different value to make a false result.
 			tbc.assertTrue("Asserting if false is returned using <<SELF>> as filter when all the steps are followed but a different applicationId is used.", !app.implies(app2));
 		} catch (Exception e) {
 			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": " + e.getClass().getName());
@@ -273,7 +273,7 @@ public class Implies {
 					"<<SELF>>", ApplicationAdminPermission.LOCK_ACTION);
 			org.osgi.service.application.ApplicationAdminPermission app2 = new org.osgi.service.application.ApplicationAdminPermission(
 					tbc.getAppDescriptor(), ApplicationAdminPermission.SCHEDULE_ACTION);
-			app.setCurrentApplicationId(tbc.getAppDescriptor().getApplicationId());
+			app2 = app2.setCurrentApplicationId(tbc.getAppDescriptor().getApplicationId());
 			tbc.assertTrue("Asserting if false is returned using <<SELF>> as filter when all the steps are followed but using different actions.", !app.implies(app2));
 		} catch (Exception e) {
 			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": " + e.getClass().getName());
@@ -296,7 +296,7 @@ public class Implies {
 					"<<SELF>>", ApplicationAdminPermission.SCHEDULE_ACTION);
 			org.osgi.service.application.ApplicationAdminPermission app2 = new org.osgi.service.application.ApplicationAdminPermission(
 					tbc.getAppDescriptor(), ApplicationAdminPermission.LIFECYCLE_ACTION);
-			app.setCurrentApplicationId(tbc.getAppDescriptor().getApplicationId());
+			app2 = app2.setCurrentApplicationId(tbc.getAppDescriptor().getApplicationId());
 			tbc.assertTrue("Asserting if true is returned using <<SELF>> as filter when all the steps are followed using SCHEDULE" +
 					" action for the first AppAdminPerm and LIFECYCLE action for the second in order to validate if " +
 					"SCHEDULE action implies LIFECYCLE.", app.implies(app2));
@@ -320,7 +320,7 @@ public class Implies {
 					"<<SELF>>", ApplicationConstants.ACTIONS);
 			org.osgi.service.application.ApplicationAdminPermission app2 = new org.osgi.service.application.ApplicationAdminPermission(
 					tbc.getAppDescriptor(), ApplicationAdminPermission.LOCK_ACTION);
-			app.setCurrentApplicationId(tbc.getAppDescriptor().getApplicationId());
+			app2 = app2.setCurrentApplicationId(tbc.getAppDescriptor().getApplicationId());
 			tbc.assertTrue("Asserting if true is returned using <<SELF>> as filter when all the steps are followed " +
 					"and using LOCK action for the second AppAdminPerm and LIFECYCLE and LOCK actions for the first.", app.implies(app2));
 		} catch (Exception e) {
@@ -455,7 +455,7 @@ public class Implies {
 					"<<SELF>>", ApplicationAdminPermission.LIFECYCLE_ACTION);
 			org.osgi.service.application.ApplicationAdminPermission app2 = new org.osgi.service.application.ApplicationAdminPermission(
 					tbc.getAppDescriptor(), ApplicationAdminPermission.SCHEDULE_ACTION);
-			app.setCurrentApplicationId(tbc.getAppDescriptor().getApplicationId());
+			app2 = app2.setCurrentApplicationId(tbc.getAppDescriptor().getApplicationId());
 			tbc.assertTrue("Asserting if false is returned using <<SELF>> as filter when all the steps are followed using LIFECYCLE" +
 					" action for the first AppAdminPerm and SCHEDULE action for the second in order to validate if " +
 					"LIFECYCLE action does not implies SCHEDULE.", !app.implies(app2));
@@ -527,9 +527,9 @@ public class Implies {
 					"<<SELF>>", ApplicationAdminPermission.LOCK_ACTION);
 			org.osgi.service.application.ApplicationAdminPermission app2 = new org.osgi.service.application.ApplicationAdminPermission(
 					tbc.getAppDescriptor(), ApplicationConstants.ACTIONS);
-			app.setCurrentApplicationId(tbc.getAppDescriptor().getApplicationId());
+			app2 = app2.setCurrentApplicationId(tbc.getAppDescriptor().getApplicationId());
 			tbc.assertTrue("Asserting if false is returned using <<SELF>> as filter when all the steps are followed " +
-					"and using LOCK action for the first AppAdminPerm and LIFECYCLE and LOCK actions for the second.", app.implies(app2));
+					"and using LOCK action for the first AppAdminPerm and LIFECYCLE and LOCK actions for the second.", !app.implies(app2));
 		} catch (Exception e) {
 			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": " + e.getClass().getName());
 		}

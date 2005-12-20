@@ -37,9 +37,9 @@
 package org.osgi.test.cases.application.tbc.TreeStructure;
 
 import java.util.HashMap;
-import java.util.Hashtable;
 import java.util.Map;
 
+import org.osgi.service.application.ApplicationException;
 import org.osgi.service.application.ApplicationHandle;
 import org.osgi.service.application.ScheduledApplication;
 import org.osgi.service.dmt.DmtData;
@@ -112,7 +112,6 @@ public class TreeStructure {
 		testTreeStructure045();
 		testTreeStructure046();
 		testTreeStructure047();
-		testTreeStructure048();
 	}
 
 	/**
@@ -533,14 +532,14 @@ public class TreeStructure {
 					.getChildNodeNames(ApplicationConstants.OSGI_APPLICATION_APPID_SCHEDULES_ID_ARGUMENTS);
 			tbc.assertNotNull("Scheduled arguments subtree was created", args);
 
+			updateScheduleArgumentsIdConstants(args[0]);
+			
 			String name = session
 					.getNodeValue(
-							ApplicationConstants.OSGI_APPLICATION_APPID_SCHEDULES_ID_ARGUMENTS
-									+ "/Name").getString();
+							ApplicationConstants.OSGI_APPLICATION_APPID_SCHEDULES_ID_ARGUMENTS_ID_NAME).getString();
 			String value = session
 					.getNodeValue(
-							ApplicationConstants.OSGI_APPLICATION_APPID_SCHEDULES_ID_ARGUMENTS
-									+ "/Value").getString();
+							ApplicationConstants.OSGI_APPLICATION_APPID_SCHEDULES_ID_ARGUMENTS_ID_VALUE).getString();
 
 			tbc
 					.assertEquals(
@@ -732,7 +731,7 @@ public class TreeStructure {
 					.getMetaNode(ApplicationConstants.OSGI_APPLICATION_APPID_SCHEDULES);
 			tbc.assertEquals(
 					"Asserts $/Application/<app_id>/Schedules metanode scope",
-					MetaNode.DYNAMIC, metaNode.getScope());
+					MetaNode.PERMANENT, metaNode.getScope());
 			tbc.assertEquals(
 					"Asserts $/Application/<app_id>/Schedules metanode format",
 					DmtData.FORMAT_NODE, metaNode.getFormat());
@@ -1341,107 +1340,14 @@ public class TreeStructure {
 	}
 
 	/**
-	 * This method asserts if launching an application locally, it reflets on
-	 * Dmt.
-	 * 
-	 * @spec 3.5.6 Application Instances
-	 */
-	private void testTreeStructure025() {
-		tbc.log("#testTreeStructure025");
-		DmtSession session = null;
-		ApplicationHandle handle = null;
-		try {
-			Hashtable hash = new Hashtable();
-			hash.put("Name", "Value");
-			tbc.getAppDescriptor().launch(hash);
-
-			session = tbc.getDmtAdmin().getSession(ApplicationConstants.OSGI_APPLICATION,
-					DmtSession.LOCK_TYPE_SHARED);
-
-			String[] nodes = session
-					.getChildNodeNames(ApplicationConstants.OSGI_APPLICATION_APPID_OPERATIONS_LAUNCH);
-
-			tbc
-					.assertEquals(
-							"Asserting that there is only one ApplicationHandle running.",
-							1, nodes.length);
-
-			tbc
-					.assertTrue(
-							"Asserting if the name of the returned node is equal to the service.pid of the ApplicationHandle.",
-							nodes[0]
-									.indexOf(ApplicationConstants.APPLICATION_NAME)>=0);
-			
-			updateLaunchIdConstants("/"+nodes[0]);
-			
-			tbc
-					.assertEquals(
-							"Asserting if the Result/InstanceID node is updated with the instance identifier of the newly created application instance.",
-							handle.getInstanceId(),
-							session
-									.getNodeValue(
-											ApplicationConstants.OSGI_APPLICATION_APPID_OPERATIONS_LAUNCH_LAUNCHID_RESULT_INSTANCEID)
-									.getString());
-			tbc
-					.assertEquals(
-							"Asserting if the Result/Status node is updated to OK",
-							"OK",
-							session
-									.getNodeValue(
-											ApplicationConstants.OSGI_APPLICATION_APPID_OPERATIONS_LAUNCH_LAUNCHID_RESULT_STATUS)
-									.getString());
-			tbc
-					.assertEquals(
-							"Asserting if the Result/Message node is set to an empty string",
-							"",
-							session
-									.getNodeValue(
-											ApplicationConstants.OSGI_APPLICATION_APPID_OPERATIONS_LAUNCH_LAUNCHID_RESULT_MESSAGE)
-									.getString());
-
-			nodes = session
-					.getChildNodeNames(ApplicationConstants.OSGI_APPLICATION_APPID_OPERATIONS_LAUNCH_LAUNCHID_ARGUMENTS);
-
-			tbc
-					.assertEquals(
-							"Asserting that there is only one ApplicationHandle running.",
-							1, nodes.length);
-
-			DmtData value = session
-					.getNodeValue(ApplicationConstants.OSGI_APPLICATION_APPID_OPERATIONS_LAUNCH_LAUNCHID_ARGUMENTS
-							+ "\\" + nodes[0] + "\\Name");
-			tbc
-					.assertEquals(
-							"Asserting if the passed parameters name is stored in Dmt.",
-							"Name", value.getString());
-			value = session
-					.getNodeValue(ApplicationConstants.OSGI_APPLICATION_APPID_OPERATIONS_LAUNCH_LAUNCHID_ARGUMENTS
-							+ "\\" + nodes[0] + "\\Value");
-			tbc
-					.assertEquals(
-							"Asserting if the passed parameters value is stored in Dmt.",
-							"Value", value.getString());
-
-		} catch (Exception e) {
-			tbc.fail(MessagesConstants.getMessage(
-					MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e
-							.getClass().getName() }));
-		} finally {
-			updateLaunchIdConstants("/Cesar");
-			tbc.closeSession(session);
-			tbc.cleanUp(handle);
-		}
-	}
-
-	/**
 	 * This method asserts if $/Application/<app_id>/Instances/<instance_id>/State
 	 * is a valid node and asserts Type, Cardinality, Get Permission according to
 	 * Table 3.9 .
 	 * 
 	 * @spec 3.5.6 Application Instances
 	 */
-	private void testTreeStructure026() {
-		tbc.log("#testTreeStructure026");
+	private void testTreeStructure025() {
+		tbc.log("#testTreeStructure025");
 		DmtSession session = null;
 		ApplicationHandle handle = null;
 		try {
@@ -1487,7 +1393,7 @@ public class TreeStructure {
 							metaNode.can(MetaNode.CMD_GET));
 
 			DmtData value = session.getNodeValue(ApplicationConstants.OSGI_APPLICATION_APPID_INSTANCES_ID_STATE);
-			tbc.assertEquals("Asserting if the node value matches the application.state value", (String) tbc.getServiceProperty("org.osgi.service.application.ApplicationDescriptor", ApplicationConstants.APPLICATION_STATE), value.getString());
+			tbc.assertEquals("Asserting if the node value matches the application.state value", ApplicationHandle.RUNNING, value.getString());
 			
 		} catch (Exception e) {
 			tbc.fail(MessagesConstants.getMessage(
@@ -1506,8 +1412,8 @@ public class TreeStructure {
 	 * 
 	 * @spec 3.5.6 Application Instances
 	 */
-	private void testTreeStructure027() {
-		tbc.log("#testTreeStructure027");
+	private void testTreeStructure026() {
+		tbc.log("#testTreeStructure026");
 		DmtSession session = null;
 		ApplicationHandle handle = null;
 		try {
@@ -1569,8 +1475,8 @@ public class TreeStructure {
 	 * 
 	 * @spec 3.5.6 Application Instances
 	 */
-	private void testTreeStructure028() {
-		tbc.log("#testTreeStructure028");
+	private void testTreeStructure027() {
+		tbc.log("#testTreeStructure027");
 		DmtSession session = null;
 		ApplicationHandle handle = null;
 		try {
@@ -1635,8 +1541,8 @@ public class TreeStructure {
 	 * 
 	 * @spec 3.5.6 Application Instances
 	 */
-	private void testTreeStructure029() {
-		tbc.log("#testTreeStructure029");
+	private void testTreeStructure028() {
+		tbc.log("#testTreeStructure028");
 		DmtSession session = null;
 		ApplicationHandle handle = null;
 		try {
@@ -1684,8 +1590,8 @@ public class TreeStructure {
 	 * 
 	 * @spec 3.5.6 Application Instances
 	 */
-	private void testTreeStructure030() {
-		tbc.log("#testTreeStructure030");
+	private void testTreeStructure029() {
+		tbc.log("#testTreeStructure029");
 		DmtSession session = null;
 		ApplicationHandle handle = null;
 		try {
@@ -1747,8 +1653,8 @@ public class TreeStructure {
 	 * 
 	 * @spec 3.5.7 Scheduling applications
 	 */
-	private void testTreeStructure031() {
-		tbc.log("#testTreeStructure031");
+	private void testTreeStructure030() {
+		tbc.log("#testTreeStructure030");
 		DmtSession session = null;
 		try {
 			session = tbc.getDmtAdmin().getSession(ApplicationConstants.OSGI_APPLICATION,
@@ -1806,8 +1712,8 @@ public class TreeStructure {
 	 * 
 	 * @spec 3.5.7 Scheduling applications
 	 */
-	private void testTreeStructure032() {
-		tbc.log("#testTreeStructure032");
+	private void testTreeStructure031() {
+		tbc.log("#testTreeStructure031");
 		DmtSession session = null;
 		try {
 			session = tbc.getDmtAdmin().getSession(ApplicationConstants.OSGI_APPLICATION,
@@ -1863,8 +1769,8 @@ public class TreeStructure {
 	 * 
 	 * @spec 3.5.7 Scheduling applications
 	 */
-	private void testTreeStructure033() {
-		tbc.log("#testTreeStructure033");
+	private void testTreeStructure032() {
+		tbc.log("#testTreeStructure032");
 		DmtSession session = null;
 		try {
 			session = tbc.getDmtAdmin().getSession(ApplicationConstants.OSGI_APPLICATION,
@@ -1932,8 +1838,8 @@ public class TreeStructure {
 	 * 
 	 * @spec 3.5.7 Scheduling applications
 	 */
-	private void testTreeStructure034() {
-		tbc.log("#testTreeStructure034");
+	private void testTreeStructure033() {
+		tbc.log("#testTreeStructure033");
 		DmtSession session = null;
 		try {
 			session = tbc.getDmtAdmin().getSession(ApplicationConstants.OSGI_APPLICATION,
@@ -2002,8 +1908,8 @@ public class TreeStructure {
 	 * 
 	 * @spec 3.5.7 Scheduling applications
 	 */
-	private void testTreeStructure035() {
-		tbc.log("#testTreeStructure035");
+	private void testTreeStructure034() {
+		tbc.log("#testTreeStructure034");
 		DmtSession session = null;
 		try {
 			session = tbc.getDmtAdmin().getSession(ApplicationConstants.OSGI_APPLICATION,
@@ -2072,8 +1978,8 @@ public class TreeStructure {
 	 * 
 	 * @spec 3.5.7 Scheduling applications
 	 */
-	private void testTreeStructure036() {
-		tbc.log("#testTreeStructure036");
+	private void testTreeStructure035() {
+		tbc.log("#testTreeStructure035");
 		DmtSession session = null;
 		try {
 			session = tbc.getDmtAdmin().getSession(ApplicationConstants.OSGI_APPLICATION,
@@ -2141,8 +2047,8 @@ public class TreeStructure {
 	 * 
 	 * @spec 3.5.7 Scheduling applications
 	 */
-	private void testTreeStructure037() {
-		tbc.log("#testTreeStructure037");
+	private void testTreeStructure036() {
+		tbc.log("#testTreeStructure036");
 		DmtSession session = null;
 		try {
 			session = tbc.getDmtAdmin().getSession(ApplicationConstants.OSGI_APPLICATION,
@@ -2202,8 +2108,8 @@ public class TreeStructure {
 	 * 
 	 * @spec 3.5.7 Scheduling applications
 	 */
-	private void testTreeStructure038() {
-		tbc.log("#testTreeStructure038");
+	private void testTreeStructure037() {
+		tbc.log("#testTreeStructure037");
 		DmtSession session = null;
 		try {
 			session = tbc.getDmtAdmin().getSession(ApplicationConstants.OSGI_APPLICATION,
@@ -2267,8 +2173,8 @@ public class TreeStructure {
 	 * 
 	 * @spec 3.5.1 Applications Descriptors
 	 */
-	private void testTreeStructure039() {
-		tbc.log("#testTreeStructure039");
+	private void testTreeStructure038() {
+		tbc.log("#testTreeStructure038");
 		DmtSession session = null;
 		try {
 			session = tbc.getDmtAdmin().getSession(ApplicationConstants.OSGI_APPLICATION,
@@ -2319,8 +2225,8 @@ public class TreeStructure {
 	 * 
 	 * @spec 3.5.1 Applications Descriptors
 	 */
-	private void testTreeStructure040() {
-		tbc.log("#testTreeStructure040");
+	private void testTreeStructure039() {
+		tbc.log("#testTreeStructure039");
 		DmtSession session = null;
 		try {
 			session = tbc.getDmtAdmin().getSession(ApplicationConstants.OSGI_APPLICATION,
@@ -2381,8 +2287,8 @@ public class TreeStructure {
 	 * 
 	 * @spec 3.5.4 Launching new application instances
 	 */
-	private void testTreeStructure041() {
-		tbc.log("#testTreeStructure041");
+	private void testTreeStructure040() {
+		tbc.log("#testTreeStructure040");
 		DmtSession session = null;
 		try {
 			session = tbc.getDmtAdmin().getSession(ApplicationConstants.OSGI_APPLICATION,
@@ -2438,8 +2344,8 @@ public class TreeStructure {
 	 * 
 	 * @spec 3.5.4 Launching new application instances
 	 */
-	private void testTreeStructure042() {
-		tbc.log("#testTreeStructure042");
+	private void testTreeStructure041() {
+		tbc.log("#testTreeStructure041");
 		DmtSession session = null;
 		try {
 			session = tbc.getDmtAdmin().getSession(ApplicationConstants.OSGI_APPLICATION,
@@ -2495,8 +2401,8 @@ public class TreeStructure {
 	 * 
 	 * @spec 3.5.4 Launching new application instances
 	 */
-	private void testTreeStructure043() {
-		tbc.log("#testTreeStructure043");
+	private void testTreeStructure042() {
+		tbc.log("#testTreeStructure042");
 		DmtSession session = null;
 		try {
 			session = tbc.getDmtAdmin().getSession(ApplicationConstants.OSGI_APPLICATION,
@@ -2552,8 +2458,8 @@ public class TreeStructure {
 	 * 
 	 * @spec 3.5.4 Launching new application instances
 	 */
-	private void testTreeStructure044() {
-		tbc.log("#testTreeStructure044");
+	private void testTreeStructure043() {
+		tbc.log("#testTreeStructure043");
 		DmtSession session = null;
 		try {
 			session = tbc.getDmtAdmin().getSession(ApplicationConstants.OSGI_APPLICATION,
@@ -2608,8 +2514,8 @@ public class TreeStructure {
 	 * 
 	 * @spec 3.5.7 Scheduling applications
 	 */
-	private void testTreeStructure045() {
-		tbc.log("#testTreeStructure045");
+	private void testTreeStructure044() {
+		tbc.log("#testTreeStructure044");
 		DmtSession session = null;
 		try {
 			session = tbc.getDmtAdmin().getSession(ApplicationConstants.OSGI_APPLICATION,
@@ -2707,8 +2613,8 @@ public class TreeStructure {
 	 * 
 	 * @spec 3.5.6 Application Instances
 	 */
-	private void testTreeStructure046() {
-		tbc.log("#testTreeStructure046");
+	private void testTreeStructure045() {
+		tbc.log("#testTreeStructure045");
 		DmtSession session = null;
 		ApplicationHandle handle = null;
 		try {
@@ -2767,8 +2673,8 @@ public class TreeStructure {
 	 * 
 	 * @spec 3.5.4 Launching new application instaces
 	 */
-	private void testTreeStructure047() {
-		tbc.log("#testTreeStructure047");
+	private void testTreeStructure046() {
+		tbc.log("#testTreeStructure046");
 		DmtSession session = null;
 		try {
 			session = tbc.getDmtAdmin().getSession(ApplicationConstants.OSGI_APPLICATION,
@@ -2798,7 +2704,7 @@ public class TreeStructure {
 			tbc
 					.assertEquals(
 							"Asserting if the Result/Status has the fully wualified class name of the Java Exception.",
-							Exception.class.getName(),
+							ApplicationException.class.getName(),
 							session
 									.getNodeValue(
 											ApplicationConstants.OSGI_APPLICATION_APPID_OPERATIONS_LAUNCH_LAUNCHID_RESULT_STATUS)
@@ -2815,6 +2721,7 @@ public class TreeStructure {
 					MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e
 							.getClass().getName() }));
 		} finally {
+			tbc.getAppDescriptor().unlock();
 			tbc
 					.cleanUp(
 							session,
@@ -2829,8 +2736,8 @@ public class TreeStructure {
 	 * 
 	 * @spec 3.5.6 Application Instances
 	 */
-	private void testTreeStructure048() {
-		tbc.log("#testTreeStructure048");
+	private void testTreeStructure047() {
+		tbc.log("#testTreeStructure047");
 		DmtSession session = null;
 		ApplicationHandle handle = null;
 		try {
@@ -2904,7 +2811,7 @@ public class TreeStructure {
 	}	
 	
 	private void updateScheduleIdConstants(String value) {
-		ApplicationConstants.OSGI_APPLICATION_APPID_SCHEDULES_ID = ApplicationConstants.OSGI_APPLICATION_APPID + "/Schedule/" + value;
+		ApplicationConstants.OSGI_APPLICATION_APPID_SCHEDULES_ID = ApplicationConstants.OSGI_APPLICATION_APPID + "/Schedules/" + value;
 		ApplicationConstants.OSGI_APPLICATION_APPID_SCHEDULES_ID_ARGUMENTS = ApplicationConstants.OSGI_APPLICATION_APPID_SCHEDULES_ID + "/Arguments";
 		ApplicationConstants.OSGI_APPLICATION_APPID_SCHEDULES_ID_ARGUMENTS_ID = ApplicationConstants.OSGI_APPLICATION_APPID_SCHEDULES_ID_ARGUMENTS + "/Id";
 		ApplicationConstants.OSGI_APPLICATION_APPID_SCHEDULES_ID_ARGUMENTS_ID_NAME = ApplicationConstants.OSGI_APPLICATION_APPID_SCHEDULES_ID_ARGUMENTS_ID + "/Name";
@@ -2913,6 +2820,13 @@ public class TreeStructure {
 		ApplicationConstants.OSGI_APPLICATION_APPID_SCHEDULES_ID_TOPICFILTER = ApplicationConstants.OSGI_APPLICATION_APPID_SCHEDULES_ID + "/TopicFilter";
 		ApplicationConstants.OSGI_APPLICATION_APPID_SCHEDULES_ID_EVENTFILTER = ApplicationConstants.OSGI_APPLICATION_APPID_SCHEDULES_ID + "/EventFilter";
 		ApplicationConstants.OSGI_APPLICATION_APPID_SCHEDULES_ID_RECURRING = ApplicationConstants.OSGI_APPLICATION_APPID_SCHEDULES_ID + "/Recurring";		
+	}
+	
+	private void updateScheduleArgumentsIdConstants(String value) {
+		ApplicationConstants.OSGI_APPLICATION_APPID_SCHEDULES_ID_ARGUMENTS = ApplicationConstants.OSGI_APPLICATION_APPID_SCHEDULES_ID + "/Arguments";
+		ApplicationConstants.OSGI_APPLICATION_APPID_SCHEDULES_ID_ARGUMENTS_ID = ApplicationConstants.OSGI_APPLICATION_APPID_SCHEDULES_ID_ARGUMENTS + "/" + value;
+		ApplicationConstants.OSGI_APPLICATION_APPID_SCHEDULES_ID_ARGUMENTS_ID_NAME = ApplicationConstants.OSGI_APPLICATION_APPID_SCHEDULES_ID_ARGUMENTS_ID + "/Name";
+		ApplicationConstants.OSGI_APPLICATION_APPID_SCHEDULES_ID_ARGUMENTS_ID_VALUE = ApplicationConstants.OSGI_APPLICATION_APPID_SCHEDULES_ID_ARGUMENTS_ID + "/Value";				
 	}
 	
 

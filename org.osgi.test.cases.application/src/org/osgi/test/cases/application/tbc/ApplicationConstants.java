@@ -59,7 +59,6 @@ public class ApplicationConstants {
     public static final String XML_REG = "reg";
     public static final String XML_ACTIVATOR = "activator";
     public static final String APPLICATION_LOCATION = "application.location";
-    public static final String APPLICATION_STATE = "application.state";
     
     public static final String APP_VERSION = "1.0.0";
     public static final String APP_ICON = "/TestIcon.gif";    

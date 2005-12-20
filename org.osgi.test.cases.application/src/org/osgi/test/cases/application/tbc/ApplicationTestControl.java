@@ -113,7 +113,6 @@ public class ApplicationTestControl extends DefaultTestBundleControl {
 		try {
 			dmtAdmin = (DmtAdmin) getContext().getService(
 					getContext().getServiceReference(DmtAdmin.class.getName()));
-			updateConstants();
 			permissionAdmin = (PermissionAdmin) getContext().getService(
 					getContext().getServiceReference(
 							PermissionAdmin.class.getName()));
@@ -136,7 +135,7 @@ public class ApplicationTestControl extends DefaultTestBundleControl {
 	}
 
 	private void updateConstants() {
-	    ApplicationConstants.OSGI_APPLICATION_APPID = ApplicationConstants.OSGI_APPLICATION + "/" + getDmtAdmin().mangle(ApplicationConstants.APPLICATION_NAME);
+	    ApplicationConstants.OSGI_APPLICATION_APPID = ApplicationConstants.OSGI_APPLICATION + "/" + getDmtAdmin().mangle(ApplicationConstants.TEST_PID);
 	    ApplicationConstants.OSGI_APPLICATION_APPID_NAME = ApplicationConstants.OSGI_APPLICATION_APPID + "/Name";
 	    ApplicationConstants.OSGI_APPLICATION_APPID_APPLICATION_ID = ApplicationConstants.OSGI_APPLICATION_APPID + "/ApplicationID";
 	    ApplicationConstants.OSGI_APPLICATION_APPID_ICONURI = ApplicationConstants.OSGI_APPLICATION_APPID + "/IconURI";
@@ -513,6 +512,7 @@ public class ApplicationTestControl extends DefaultTestBundleControl {
 			if (appDescRefsOld == null) {
 				appDescriptor = (ApplicationDescriptor) getContext().getService(appDescRefsNew[0]);
 				updateTestPid((String) appDescRefsNew[0].getProperty("service.pid"));
+				updateConstants();
 			}
 			else if (appDescRefsOld.length+1 == appDescRefsNew.length) {
 				boolean found = false;
@@ -525,7 +525,8 @@ public class ApplicationTestControl extends DefaultTestBundleControl {
 					}
 					if (found) {
 						appDescriptor = (ApplicationDescriptor) getContext().getService(appDescRefsNew[i]);
-						updateTestPid((String) appDescRefsNew[i].getProperty("service.pid"));						
+						updateTestPid((String) appDescRefsNew[i].getProperty("service.pid"));	
+						updateConstants();
 					}
 				}
 			} 
