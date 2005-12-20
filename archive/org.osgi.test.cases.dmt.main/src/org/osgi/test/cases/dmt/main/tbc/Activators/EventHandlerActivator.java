@@ -66,12 +66,12 @@ public class EventHandlerActivator implements BundleActivator {
 	public void start(BundleContext bc) throws Exception {
 		// creating the service
 		testDmtHandlerImpl = new EventHandlerImpl(tbc);
-			
 		String[] topics = new String[] {"org/osgi/service/dmt/*"};
-		String[] subtrees = new String[] {"(nodes="+TestExecPluginActivator.ROOT + "/*)" };
+		String subtree = "(nodes="+TestExecPluginActivator.ROOT + "/*)";
+		
 		Hashtable ht = new Hashtable();
 		ht.put(org.osgi.service.event.EventConstants.EVENT_TOPIC, topics);
-		ht.put(org.osgi.service.event.EventConstants.EVENT_FILTER, subtrees);
+		ht.put(org.osgi.service.event.EventConstants.EVENT_FILTER, subtree);
 		servReg = bc.registerService(EventHandler.class.getName(), testDmtHandlerImpl, ht);
 	}
 	
