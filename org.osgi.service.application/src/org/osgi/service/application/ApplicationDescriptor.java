@@ -363,6 +363,10 @@ public abstract class ApplicationDescriptor {
 	 * should be stored in a persistent storage. The method registers a
 	 * {@link ScheduledApplication} service in Service Registry, representing
 	 * the created scheduling.
+	 * <p>
+	 * The <code>Map</code> argument of the  method contains startup 
+	 * arguments for the application. The keys used in the Map must be non-null, 
+	 * non-empty <code>String<code> objects.
 	 * 
 	 * @param arguments
 	 *            the startup arguments for the scheduled application, may be
@@ -391,6 +395,10 @@ public abstract class ApplicationDescriptor {
 	 *             ApplicationAdminPermission for the application.
 	 * @throws IllegalStateException
 	 *             if the application descriptor is unregistered
+	 * @throws IllegalArgumentException
+	 *             if the specified <code>Map</code> contains invalid keys
+	 *             (null objects, empty <code>String</code> or a key that is not
+	 *              <code>String</code>)
 	 */
 	public final ScheduledApplication schedule(Map arguments, String topic,
 			String eventFilter, boolean recurring) throws InvalidSyntaxException {
