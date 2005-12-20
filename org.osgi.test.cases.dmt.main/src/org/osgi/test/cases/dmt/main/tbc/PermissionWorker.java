@@ -55,16 +55,16 @@ public class PermissionWorker extends Thread {
     }
     
     public synchronized void run() {
-		try {
-			this.wait();
-			while (true) {
-				tbc.getPermissionAdmin().setPermissions(location, permissions);
-				this.notifyAll();
-				this.wait();
-			}
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
+        while (true) {
+            try {
+                this.wait();
+                tbc.getPermissionAdmin().setPermissions(location, permissions);
+                this.notifyAll();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
+        }
 	}
     /**
 	 * @return Returns the location.
