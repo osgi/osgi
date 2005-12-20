@@ -150,7 +150,7 @@ public class DeployedSubtree {
 			
             String[] children = session.getChildNodeNames(DeploymentmoConstants.getDeployedExtBundles(nodeId));
 			if (children.length==0) {
-			    tbc.fail("$/Deployment/Inventory/Deployed/[node_id]/Ext/Bundles/[<bundle_id] was not created");
+			    tbc.fail("$/Deployment/Inventory/Deployed/[node_id]/Ext/Bundles/[bundle_id] was not created");
 			} else {
 			    bundleId = children[0];
 			}

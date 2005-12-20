@@ -40,7 +40,11 @@
 
 package org.osgi.test.cases.deploymentadmin.mo.tbc;
 
-import java.util.Vector;
+import java.io.File;
+import java.io.IOException;
+import java.util.jar.JarFile;
+import java.util.jar.Manifest;
+
 import org.osgi.service.dmt.security.DmtPermission;
 
 public class DeploymentmoConstants {
@@ -52,6 +56,8 @@ public class DeploymentmoConstants {
     public static final String PRINCIPAL = "admin";
 
     public static final String DELIVERED_AREA = System.getProperty("org.osgi.impl.service.deploymentadmin.deliveredarea");
+    public static final File TEMP_DIR = new File(new File(DeploymentmoConstants.DELIVERED_AREA).getParent() + File.separatorChar + "tmp");
+    
     //Specified values
     public static final String ENVTYPE = "OSGi.R4";
     public static final String ENVIRONMENT_DP = "http://www.osgi.org/xmlns/dd/DP";
@@ -115,21 +121,25 @@ public class DeploymentmoConstants {
     public static final int RP_THROWS_NO_SUCH_RESOURCE = 26;
     public static final int DP_INSTALLS_RESOURCE_FOR_RP4 = 27;
     public static final int DP_THROWS_RESOURCE_VIOLATION = 28;
+    public static final int DP_REMOVES_RESOURCE_FOR_RP4 = 29;
 
     public static final String[] MAP_CODE_TO_ARTIFACT = {"simple",
-        "resource_processor", "bundle_from_other_dp",
+        "resource_processor", "bundle_from_other",
         "resource_from_other_dp", "missing_name_header", "symb_name_different_from_manifest",
-        "simple_no_bundle", "simple_no_resource", "download_failed","timeout","bundle_from_other_dp",
-        "manifest_not_1st_file","fix_pack_lower_range","simple_unsigned_dp",
+        "simple_no_bundle", "simple_no_resource", "download_failed","timeout","bundle_from_other",
+        "manifest_not_1st_file","fix_pack_lower_range","simple_unsigned",
         "resource_processor_customizer","rp_from_other_dp","bundle_throws_exception","non_customizer_rp",
-        "simple_resource_dp","java.gif","bundle001.jar","rp_not_able_to_commit","missing_resource_fix_pack",
+        "simple_resource","java.gif","bundle001.jar","rp_not_able_to_commit","missing_resource_fix_pack",
         "missing_bundle_fix_pack", "blocking_session","simple_fix_pack","rp_throws_no_such_resource",
-        "dp_installs_resource_for_rp4","dp_throws_resource_violation"};
+        "dp_installs_resource_for_rp4","dp_throws_resource_violation","dp_removes_resource_for_rp4"};
+    
+    public static String[] MAP_CODE_TO_ARTIFACT_MANGLED = new String[MAP_CODE_TO_ARTIFACT.length];
     
     public static final String PID_RESOURCE_PROCESSOR1 = "org.osgi.test.cases.deployment.bundles.rp1";
     public static final String PID_RESOURCE_PROCESSOR2 = "org.osgi.test.cases.deployment.bundles.rp2";
     public static final String PID_RESOURCE_PROCESSOR3 = "org.osgi.test.cases.deployment.bundles.rp3";
     public static final String PID_RESOURCE_PROCESSOR4 = "org.osgi.test.cases.deployment.bundles.rp4";
+    public static final String PID_RESOURCE_PROCESSOR5 = "org.osgi.test.cases.deployment.bundles.rp5";
     
     public static final String SIMPLE_DP_NAME = "simple.dp";
     public static final String SIMPLE_DP_XML = "download.xml";
@@ -149,58 +159,63 @@ public class DeploymentmoConstants {
     //The expected values of the simple_dp.dp after deployed
     public static final String SIMPLE_DP_SIGNER = "CN=John Smith, O=ACME Inc, OU=ACME Cert Authority, L=Austin, ST=Texas, C=US";
     
-    //Manifest header can be shown in a different order
-    public static Vector simpleDpManifest = new Vector();
-    public static Vector simpleFixPackManifest = new Vector();
-
-    
-    static {
-        simpleDpManifest.add("Manifest-Version: 1.0");
-	    simpleDpManifest.add("DeploymentPackage-ContactAddress: Rua Bione, 220, Cais do Apolo - Bair\n o do Recife, Recife - PE, CEP: 50.030-390.");
-	    simpleDpManifest.add("DeploymentPackage-Description: A testing deployment package.");
-	    simpleDpManifest.add("DeploymentPackage-SymbolicName: simple_dp");
-	    simpleDpManifest.add("DeploymentPackage-Copyright: Motorola (c).");
-	    simpleDpManifest.add("DeploymentPackage-Vendor: CESAR.");
-	    simpleDpManifest.add("DeploymentPackage-License: www.cesar.org.br/megtck/license.html");
-	    simpleDpManifest.add("DeploymentPackage-DocURL: www.cesar.org.br.");
-	    simpleDpManifest.add("DeploymentPackage-Version: 1.0.0");
-	    simpleDpManifest.add("Name: bundle001.jar");
-	    simpleDpManifest.add("Bundle-Version: 1.0");
-	    simpleDpManifest.add("Bundle-SymbolicName: bundles.tb1");
-	    simpleDpManifest.add("Name: bundle002.jar");
-	    simpleDpManifest.add("Bundle-Version: 1.0");
-	    simpleDpManifest.add("Bundle-SymbolicName: bundles.tb2");
-	    
-	    simpleFixPackManifest.add("Manifest-Version: 1.0");
-	    simpleFixPackManifest.add("DeploymentPackage-Version: 1.1.1");
-	    simpleFixPackManifest.add("DeploymentPackage-SymbolicName: simple_dp");
-	    simpleFixPackManifest.add("DeploymentPackage-FixPack: [1.0,2.0]");
-	    simpleFixPackManifest.add("Name: bundle001.jar");
-	    simpleFixPackManifest.add("Bundle-Version: 1.5");
-	    simpleFixPackManifest.add("Bundle-SymbolicName: bundles.tb1");
-	    simpleFixPackManifest.add("DeploymentPackage-Missing: false");
-
-    }
     
     public static final String OSGI_DP_LOCATION = "osgi-dp:"; 
     public static final String SIMPLE_DP_LOCATION = "";
+    public static Manifest SIMPLE_DP_MANIFEST;
+    public static Manifest SIMPLE_FIX_PACK_MANIFEST;
+    
     public static final int SIMPLE_DP_APPLICATION_TYPE = 1;
     public static final String SIMPLE_DP_BUNDLE1_SYMBNAME = "bundles.tb1";
     public static final String SIMPLE_DP_BUNDLE1_LOCATION = "osgi-dp:" + SIMPLE_DP_BUNDLE1_SYMBNAME;
-    public static final String SIMPLE_DP_BUNDLE1_MANIFEST = "Manifest-Version: 1.0\nBundle-SymbolicName: bundles.tb1\nBundle-Version: 1.0\nBundle-Activator: br.org.cesar.bundles.tb1.TB1Activator";
+    public static Manifest SIMPLE_DP_BUNDLE1_MANIFEST;
     public static final int SIMPLE_DP_BUNDLE1_STATE = 32;
     
     public static final String SIMPLE_DP_BUNDLE2_SYMBNAME = "bundles.tb2";
     public static final String SIMPLE_DP_BUNDLE2_LOCATION = "osgi-dp:" + SIMPLE_DP_BUNDLE2_SYMBNAME;
-    public static final String SIMPLE_DP_BUNDLE2_MANIFEST = "Manifest-Version: 1.0\nBundle-SymbolicName: bundles.tb2\nBundle-Version: 1.0\nBundle-Activator: br.org.cesar.bundles.tb2.TB2Activator";
+    public static Manifest SIMPLE_DP_BUNDLE2_MANIFEST;
     public static final int SIMPLE_DP_BUNDLE2_STATE = 32;
+    
     
     public static final String SIMPLE_FIX_PACK_BUNDLE1_SYMBNAME = "bundles.tb1";
     public static final String SIMPLE_FIX_PACK_BUNDLE1_LOCATION = "osgi-dp:" + SIMPLE_FIX_PACK_BUNDLE1_SYMBNAME;
-    public static final String SIMPLE_FIX_PACK_BUNDLE1_MANIFEST = "Manifest-Version: 1.0\nBundle-SymbolicName: bundles.tb1\nBundle-Version: 1.5\nBundle-Activator: br.org.cesar.bundles.tb1.TB1Activator";
+    public static Manifest SIMPLE_FIX_PACK_BUNDLE1_MANIFEST;
     public static final int SIMPLE_FIX_PACK_BUNDLE1_STATE = 32;
     
+    public static JarFile getJarFile(int dpCode) {
+    	try {
+			return new JarFile(DELIVERED_AREA + File.separatorChar + MAP_CODE_TO_ARTIFACT[dpCode] + ((dpCode!=SIMPLE_BUNDLE)?".dp":""));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return null;
+    }
     
+    public static JarFile getTempJarFile(String name) {
+    	try {
+			return new JarFile(TEMP_DIR.getAbsolutePath() + File.separatorChar + name);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return null;
+    }
+    static {
+    	try {
+    		//We need to get the Manifest from the jar because it is modified when it is generated.
+    		JarFile simpleDp =getJarFile(SIMPLE_DP);
+    		SIMPLE_DP_MANIFEST = simpleDp.getManifest();
+    		SIMPLE_FIX_PACK_MANIFEST = getJarFile(SIMPLE_FIX_PACK_DP).getManifest();
+  
+    		DeploymentmoTestControl.copyTempBundles();
+    		SIMPLE_DP_BUNDLE1_MANIFEST = getTempJarFile(DeploymentmoTestControl.getTempFileName(SIMPLE_DP, "bundle001.jar")).getManifest();
+    		SIMPLE_DP_BUNDLE2_MANIFEST = getTempJarFile(DeploymentmoTestControl.getTempFileName(SIMPLE_DP, "bundle002.jar")).getManifest();
+    		SIMPLE_FIX_PACK_BUNDLE1_MANIFEST = getTempJarFile(DeploymentmoTestControl.getTempFileName(SIMPLE_FIX_PACK_DP, "bundle001.jar")).getManifest();
+    		
+    	} catch (Exception e) {
+    		e.printStackTrace();
+    	}
+
+    }
     
     // Path to Downloaded Subtree
     public static final String DEPLOYMENT_DOWNLOAD_TEST = DEPLOYMENT_DOWNLOAD + "/test";
@@ -215,13 +230,13 @@ public class DeploymentmoConstants {
 
     public static final String SIGNER_FILTER = "CN=John Smith, O=ACME Inc, OU=ACME Cert Authority, L=Austin, ST=Texas, C=US";
     
-    //TODO Change for getting if the implementation is streaming from a properties file
+    //True if the implementation is streaming
     public static final boolean IS_STREAMING = true;
 
     //This flag must be true if the implementation reports progress on the Status node  
     public static final boolean STATUS_NODE_REPORTS_PROGRESS = true;
 
-    public static final int TIMEOUT = 3000;
+    public static final int TIMEOUT = 2000;
     
     public static final String ALL_DMT_PERMISSION = DmtPermission.ADD + ","
         + DmtPermission.DELETE + "," + DmtPermission.EXEC + ","
@@ -310,10 +325,10 @@ public class DeploymentmoConstants {
     //Delivered subtree
     //Subtree $/Deployment/Inventory/Delivered/<node_id>
     public static String getDeliveredNodeId(int nodeId) {
-    	if (nodeId==DeploymentmoConstants.SIMPLE_BUNDLE || nodeId==DeploymentmoConstants.NOT_ACCEPTABLE_CONTENT) 
-    		return DEPLOYMENT_INVENTORY_DELIVERED + "/" + MAP_CODE_TO_ARTIFACT[nodeId];
-    	else
-    		return DEPLOYMENT_INVENTORY_DELIVERED + "/" + MAP_CODE_TO_ARTIFACT[nodeId] + ".dp";
+//    	if (nodeId==DeploymentmoConstants.SIMPLE_BUNDLE || nodeId==DeploymentmoConstants.NOT_ACCEPTABLE_CONTENT) 
+    		return DEPLOYMENT_INVENTORY_DELIVERED + "/" + MAP_CODE_TO_ARTIFACT_MANGLED[nodeId];
+//    	else
+//    		return DEPLOYMENT_INVENTORY_DELIVERED + "/" + MAP_CODE_TO_ARTIFACT_MANGLED[nodeId] + ".dp";
     }
     //Subtree $/Deployment/Inventory/Delivered/<node_id>/Operations/InstallAndActivate
     public static String getDeliveredOperationsInstallAndActivate(int nodeId) {

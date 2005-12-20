@@ -49,6 +49,7 @@ import java.net.SocketPermission;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.PropertyPermission;
+import java.util.jar.JarFile;
 
 import org.osgi.framework.AdminPermission;
 import org.osgi.framework.Bundle;
@@ -152,6 +153,7 @@ public class DeploymentmoTestControl extends DefaultTestBundleControl {
 		DeploymentmoConstants.SERVER = getWebServer();
         
         generateArtifacts();
+        mangleDPNames();
         
         try {
             //Sets all Acls for all principals, so METADATA_MISMATCH is not thrown.
@@ -490,6 +492,15 @@ public class DeploymentmoTestControl extends DefaultTestBundleControl {
                 artifacts.put(""+i, artifact);
 				break;
             }
+			case DeploymentmoConstants.DP_REMOVES_RESOURCE_FOR_RP4: {
+				TestingDeploymentPackage dp = new TestingDeploymentPackage(DeploymentmoConstants.MAP_CODE_TO_ARTIFACT[DeploymentmoConstants.DP_INSTALLS_RESOURCE_FOR_RP4], "1.1.1", "dp_removes_resource_for_rp4.dp", null,null);
+				packages.put(""+i, dp);
+				
+				artifact = new TestingArtifact(new TestingDlota("dp_removes_resource_for_rp4.xml",
+                		DeploymentmoConstants.SERVER + "www/" +  dp.getFilename(), 1896, DeploymentmoConstants.ENVIRONMENT_DP), dp);
+                artifacts.put(""+i, artifact);
+				break;
+            }
             }
         }
     }
@@ -610,7 +621,7 @@ public class DeploymentmoTestControl extends DefaultTestBundleControl {
     }
     
 
-    public void assertAlertValues(String type,String source,DmtData data) throws Exception {
+    public void assertAlertValues(String type,String source,DmtData data) {
     	assertTrue("Asserting if our implementation of RemoteAlertSender was called.", receivedAlert());
         assertTrue("Asserting alert code", getCode() == 1226);
 
@@ -627,7 +638,7 @@ public class DeploymentmoTestControl extends DefaultTestBundleControl {
     public static File copyArtifact(String name) {
     	InputStream in = null;
     	FileOutputStream fos = null;
-    	File file=new File(name);
+    	File file = new File(name);
     	try {
 			URL url = new URL(DeploymentmoConstants.SERVER + "www/" + name);
 		    in = url.openStream();
@@ -650,6 +661,55 @@ public class DeploymentmoTestControl extends DefaultTestBundleControl {
         }
         return file;
     }
+    //It is needed because of the Manifest tests. We need to get the bundle's manifests after it is compiled,
+    //otherwise these tests would fail.
+    public static void copyTempBundles() {
+    	try {
+    		JarFile jarFile = DeploymentmoConstants.getJarFile(DeploymentmoConstants.SIMPLE_FIX_PACK_DP);
+    		
+    		InputStream in = jarFile.getInputStream(jarFile.getEntry("bundle001.jar"));
+    		generateTempBundles(getTempFileName(DeploymentmoConstants.SIMPLE_FIX_PACK_DP,"bundle001.jar"), in);
+    		
+    		jarFile = DeploymentmoConstants.getJarFile(DeploymentmoConstants.SIMPLE_DP);
+    		
+    		in = jarFile.getInputStream(jarFile.getEntry("bundle001.jar"));
+    		generateTempBundles(getTempFileName(DeploymentmoConstants.SIMPLE_DP,"bundle001.jar"), in);
+    		
+    		in = jarFile.getInputStream(jarFile.getEntry("bundle002.jar"));
+    		generateTempBundles(getTempFileName(DeploymentmoConstants.SIMPLE_DP,"bundle002.jar"), in);
+    		
+    		
+    	}catch (IOException e) {
+        	e.printStackTrace();
+    	}
+
+    }
+    public static String getTempFileName(int dp, String bundleName) {
+    	return DeploymentmoConstants.MAP_CODE_TO_ARTIFACT[dp] + "_" + bundleName;
+    }
+    public static void generateTempBundles(String name, InputStream in) {
+		FileOutputStream fos = null;
+		try {
+			File tmpFile = new File(DeploymentmoConstants.TEMP_DIR.getAbsolutePath() + File.separatorChar + name);
+			fos = new FileOutputStream(tmpFile);
+			byte buffer[] = new byte[1024];
+			int count;
+			while ((count = in.read(buffer, 0, buffer.length)) > 0) {
+				fos.write(buffer, 0, count);
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				fos.close();
+				in.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			in = null;
+		}
+	}
+    
     public static File getFile(String archiveName) {
     	return new File(DeploymentmoConstants.DELIVERED_AREA + File.separator + archiveName);
     }
@@ -819,4 +879,23 @@ public class DeploymentmoTestControl extends DefaultTestBundleControl {
     public BundleListenerImpl getListener() {
         return listener;
     }
+    
+    public void unprepare() {
+    	File[] files = DeploymentmoConstants.TEMP_DIR.listFiles();
+    	for (int i=0;i<files.length;i++) {
+    		files[i].delete();
+    	}
+    }
+    //Some DP names can be longer than the DmtAdmin limit
+	public void mangleDPNames() {
+		for (int i=0;i<DeploymentmoConstants.MAP_CODE_TO_ARTIFACT_MANGLED.length;i++) {
+	    	String name = DeploymentmoConstants.MAP_CODE_TO_ARTIFACT[i];
+			if (i!=DeploymentmoConstants.SIMPLE_BUNDLE && i!=DeploymentmoConstants.NOT_ACCEPTABLE_CONTENT) {
+				name = name + ".dp";
+	    	}
+			DeploymentmoConstants.MAP_CODE_TO_ARTIFACT_MANGLED[i] = getDmtAdmin().mangle(name); 
+		}
+	}
+	
+	
 }

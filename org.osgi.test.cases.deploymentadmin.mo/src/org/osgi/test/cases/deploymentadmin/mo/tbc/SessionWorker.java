@@ -49,13 +49,14 @@ public class SessionWorker extends Thread {
         
         public SessionWorker(DeploymentmoTestControl tbc, TestingDeploymentPackage testDP) {
             this.testDP = testDP;
+            this.tbc = tbc;
         }
         
         public void run() {
             DeploymentPackage dp = null;
             URL url = null;
             try {
-                url = new URL(tbc.getWebServer() + testDP.getFilename());
+                url = new URL(DeploymentmoConstants.SERVER + "www/" + testDP.getFilename());
                 dp = tbc.getDeploymentAdmin().installDeploymentPackage(url.openStream());
             } catch (Exception e) {
                 e.printStackTrace();

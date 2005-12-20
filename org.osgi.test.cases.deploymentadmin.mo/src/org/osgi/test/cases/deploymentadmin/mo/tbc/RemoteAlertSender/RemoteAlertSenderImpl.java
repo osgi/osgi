@@ -75,7 +75,7 @@ public class RemoteAlertSenderImpl implements RemoteAlertSender, BundleActivator
     
     public void start(BundleContext bc) throws Exception {
         Hashtable ht = new Hashtable();
-        ht.put("servers", new String[] { DeploymentmoConstants.PRINCIPAL });       
+        ht.put("principals", new String[] { DeploymentmoConstants.PRINCIPAL });       
 
         String[] ifs = new String[] { RemoteAlertSender.class.getName() };
         servReg = bc.registerService(ifs, this, ht);
