@@ -160,13 +160,10 @@ public abstract class ApplicationHandle {
 	 *             if the caller doesn't have "lifecycle"
 	 *             <code>ApplicationAdminPermission</code> for the corresponding application.
 	 * 
-	 * @throws Exception
-	 *             is thrown if an exception or an error occurred during the
-	 *             method execution.
 	 * @throws IllegalStateException
 	 *             if the application handle is unregistered
 	 */
-	public final void destroy() throws Exception {
+	public final void destroy() {
 		delegate.destroy();
 		destroySpecific();
 	}
@@ -177,11 +174,8 @@ public abstract class ApplicationHandle {
 	 * 
 	 * @throws IllegalStateException
 	 *             if the application handle is unregistered
-	 * @throws Exception
-	 *             is thrown if an exception or an error occurred during the
-	 *             method execution.
 	 */
-	protected abstract void destroySpecific() throws Exception;
+	protected abstract void destroySpecific();
 	
 	ApplicationDescriptor		descriptor;
 	Delegate	delegate;
@@ -210,6 +204,6 @@ public abstract class ApplicationHandle {
 	 */
 	public interface Delegate {
 		void setApplicationHandle(ApplicationHandle d, ApplicationDescriptor.Delegate descriptor );
-		void destroy() throws Exception;
+		void destroy();
 	}
 }
