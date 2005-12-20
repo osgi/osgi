@@ -182,6 +182,9 @@ public class ApplicationAdminPermission extends Permission {
       ApplicationAdminPermission other = (ApplicationAdminPermission) otherPermission;
 
       if( !filter.equals("*") ) {
+       	if( other.applicationDescriptor == null )
+       		return false;
+       	
       	if( filter.equals( "<<SELF>>") ) {
             if( other.applicationID == null )
           		return false; /* it cannot be, this might be a bug */
@@ -191,8 +194,6 @@ public class ApplicationAdminPermission extends Permission {
       	}
       	else {
       		Hashtable props = new Hashtable();
-      		if( other.applicationDescriptor == null )
-      			return false;
       		props.put( "pid", other.applicationDescriptor.getApplicationId() );
       		props.put( "signer", new SignerWrapper( other.applicationDescriptor ) );
       		      		
@@ -201,7 +202,7 @@ public class ApplicationAdminPermission extends Permission {
       			return false;
       		
       		if( !flt.match( props ) )
-      			return false;      		
+      			return false;
       	}
       }
       
