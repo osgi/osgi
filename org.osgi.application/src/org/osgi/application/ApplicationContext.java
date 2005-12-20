@@ -146,6 +146,7 @@ public interface ApplicationContext {
      * @return An array of service object for the referenced service or
      *         <code>null</code> if the reference cardinality is 0..1 or 0..n
      *         and no bound service is available.
+     * @throws java.lang.NullPointerException If <code>referenceName</code> is <code>null</code>.
      * @throws java.lang.IllegalArgumentException If there is no service in the
      *             application descriptor with the specified <code>referenceName</code>.
      */
