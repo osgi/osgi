@@ -101,7 +101,7 @@ public class ApplicationAdminPermission extends Permission {
 		this.filter = (filter == null ? "*" : filter);
 		this.actions = actions;
 
-		if( !filter.equals( "*" ) )
+		if( !filter.equals( "*" ) && !filter.equals( "<<SELF>>" ) )
 			FrameworkUtil.createFilter( this.filter ); // check if the filter is valid
 		init();
 	}
@@ -136,11 +136,17 @@ public class ApplicationAdminPermission extends Permission {
 	 * @return the permission updated with the ID of the current application
 	 */
 	public ApplicationAdminPermission setCurrentApplicationId(String applicationId) {
-		if( this.applicationDescriptor == null )
-			throw new NullPointerException("No application descriptor found!");
-			
-		ApplicationAdminPermission newPerm = new ApplicationAdminPermission( this.applicationDescriptor, 
-				this.actions );
+		ApplicationAdminPermission newPerm = null;
+		
+		if( this.applicationDescriptor == null ) {
+			try {
+				newPerm = new ApplicationAdminPermission( this.filter, this.actions );
+			}catch( InvalidSyntaxException e ) {
+				throw new RuntimeException( "Internal error" ); /* this can never happen */
+			}
+		}
+		else	
+		    newPerm = new ApplicationAdminPermission( this.applicationDescriptor, this.actions );
 		
 		newPerm.applicationID = applicationId;
 		
