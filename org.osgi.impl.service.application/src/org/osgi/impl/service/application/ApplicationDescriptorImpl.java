@@ -99,12 +99,28 @@ public class ApplicationDescriptorImpl implements Delegate {
 		return Activator.scheduler.addScheduledApplication( descriptor, args, topic, filter, recurs );
 	}
 
-	public void launch(Map arguments) throws ApplicationException {
+	public void launch(Map arguments) throws ApplicationException, IllegalArgumentException {
 			SecurityManager sm = System.getSecurityManager();
 			if( sm != null )
-  			sm.checkPermission( new ApplicationAdminPermission(	descriptor, ApplicationAdminPermission.LIFECYCLE_ACTION ) );
+				sm.checkPermission( new ApplicationAdminPermission(	descriptor, ApplicationAdminPermission.LIFECYCLE_ACTION ) );
 
 			if ( isLocked() )
 				throw new ApplicationException( ApplicationException.APPLICATION_LOCKED, "Application is locked, can't launch!");
+			
+			Set set = arguments.keySet();
+			Iterator iter = set.iterator();
+			
+			while( iter.hasNext() ) {
+				Object o = iter.next();
+				if( o == null )
+					throw new IllegalArgumentException( "Argument key cannot be null!" );
+				
+				if( !(o instanceof String ) )
+					throw new IllegalArgumentException( "Argument keys must be strings!" );
+				
+				String s = (String)o;
+				if( s.equals("") )
+					throw new IllegalArgumentException( "Empty string not allowed as key!" );
+			}
 	}
 }
