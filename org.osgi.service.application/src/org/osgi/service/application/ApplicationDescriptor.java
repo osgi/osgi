@@ -261,7 +261,8 @@ public abstract class ApplicationDescriptor {
 	 * <P>
 	 * The <code>Map</code> argument of the launch method contains startup 
 	 * arguments for the
-	 * application. The keys used in the Map can be standard or application
+	 * application. The keys used in the Map must be non-null, non-empty <code>String<code>
+	 * objects. They can be standard or application
 	 * specific. OSGi defines the <code>org.osgi.triggeringevent</code>
 	 * key to be used to
 	 * pass the triggering event to a scheduled application, however
@@ -290,17 +291,32 @@ public abstract class ApplicationDescriptor {
 	 * @throws SecurityException
 	 *             if the caller doesn't have "lifecycle"
 	 *             ApplicationAdminPermission for the application.
-	 * @throws Exception
+	 * @throws ApplicationException
 	 *             if starting the application failed
 	 * @throws IllegalStateException
 	 *             if the application descriptor is unregistered
+	 * @throws IllegalArgumentException 
+	 *             if the specified <code>Map</code> contains invalid keys
+	 *             (null objects, empty <code>String</code> or a key that is not
+	 *              <code>String</code>)
 	 */
 	public final ApplicationHandle launch(Map arguments)
-			throws Exception {
+			throws ApplicationException {
 		delegate.launch(arguments);
 		if( !isLaunchableSpecific() )
-			throw new Exception("Cannot launch the application!");
-	  return launchSpecific(arguments);
+			throw new ApplicationException(ApplicationException.APPLICAITON_NOT_LAUNCHABLE,
+					 "Cannot launch the application!");
+		try {
+			return launchSpecific(arguments);
+		} catch(IllegalStateException ise) {
+			throw ise;
+		} catch(SecurityException se) {
+			throw se;
+		} catch( ApplicationException ae) {
+			throw ae;
+		} catch(Exception t) {
+			throw new ApplicationException(ApplicationException.APPLICATION_INTERNAL_ERROR, t);
+		}
 	}
 
 	/**
@@ -368,10 +384,6 @@ public abstract class ApplicationDescriptor {
 	 * 
 	 * @throws NullPointerException
 	 *             if the topic is <code>null</code>
-	 * @throws IOException
-	 *             may be thrown if writing the information about the scheduled
-	 *             application requires operation on the permanent storage and
-	 *             I/O problem occurred.
 	 * @throws InvalidSyntaxException 
 	 * 			   if the specified <code>eventFilter</code> is not syntactically correct
 	 * @throws SecurityException
@@ -381,7 +393,7 @@ public abstract class ApplicationDescriptor {
 	 *             if the application descriptor is unregistered
 	 */
 	public final ScheduledApplication schedule(Map arguments, String topic,
-			String eventFilter, boolean recurring) throws IOException,  InvalidSyntaxException {
+			String eventFilter, boolean recurring) throws InvalidSyntaxException {
 		isLaunchableSpecific(); // checks if the ApplicationDescriptor was already unregistered
 		return delegate.schedule(arguments, topic, eventFilter, recurring);
 	}
@@ -450,7 +462,7 @@ public abstract class ApplicationDescriptor {
 		ScheduledApplication schedule(Map args, String topic, String filter,
 				boolean recurs) throws InvalidSyntaxException;
 
-		void launch(Map arguments) throws Exception;
+		void launch(Map arguments) throws ApplicationException;
 	}
 
 	Delegate	delegate;
