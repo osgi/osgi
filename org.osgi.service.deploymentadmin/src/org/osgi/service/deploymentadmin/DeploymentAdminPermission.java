@@ -86,7 +86,7 @@ import java.security.*;
  * A holder of this permission can uninstall deployment packages if the deployment
  * package satisfies the &lt;filter&gt; string. See {@link DeploymentPackage#uninstall}.<p>
  * 
- * <b>uninstallforced</b><p>
+ * <b>uninstall_forced</b><p>
  * 
  * A holder of this permission can forcefully uninstall deployment packages if the deployment
  * package satisfies the &lt;filter&gt; string. See {@link DeploymentPackage#uninstallForced}.<p>
@@ -136,7 +136,7 @@ public final class DeploymentAdminPermission extends Permission {
     public static final String UNINSTALL          = "uninstall";
 
     /**
-     * Constant String to the "uninstallforced" action.<p>
+     * Constant String to the "uninstall_forced" action.<p>
      * 
      * @see DeploymentPackage#uninstallForced()
      */
