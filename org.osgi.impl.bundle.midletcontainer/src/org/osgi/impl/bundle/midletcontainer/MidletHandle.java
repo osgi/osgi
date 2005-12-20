@@ -5,6 +5,7 @@ import java.util.*;
 import javax.microedition.midlet.MIDlet;
 import org.osgi.framework.*;
 import org.osgi.service.application.*;
+import org.osgi.service.log.LogService;
 
 public final class MidletHandle extends ApplicationHandle {
 	
@@ -49,16 +50,25 @@ public final class MidletHandle extends ApplicationHandle {
 		}
 	}
 
-	public void destroySpecific() throws Exception {
+	public void destroySpecific() {
 		if (status == null )
 			throw new IllegalStateException();
 		
 		setStatus( MidletHandle.STOPPING );
 		
-		if (midlet != null)
-			getMidletCommInterface( midlet ).destroy( true );
+		if (midlet != null) {
+			try {
+				getMidletCommInterface( midlet ).destroy( true );
+			}catch( Exception e ) {
+				Activator.log( LogService.LOG_ERROR, "Exception occurred at destroying the MIDlet!", e);				
+			}
+		}
 		
-		unregisterFromOATHash();
+		try {
+			unregisterFromOATHash();
+		}catch( Exception e ) {
+			Activator.log( LogService.LOG_ERROR, "Exception occurred at destroying the MIDlet!", e);				
+		}
 		unregisterAppHandle();
 		setStatus(null);
 		midlet = null;

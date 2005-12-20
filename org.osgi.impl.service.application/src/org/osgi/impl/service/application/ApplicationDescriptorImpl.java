@@ -99,12 +99,12 @@ public class ApplicationDescriptorImpl implements Delegate {
 		return Activator.scheduler.addScheduledApplication( descriptor, args, topic, filter, recurs );
 	}
 
-	public void launch(Map arguments) throws Exception {
+	public void launch(Map arguments) throws ApplicationException {
 			SecurityManager sm = System.getSecurityManager();
 			if( sm != null )
   			sm.checkPermission( new ApplicationAdminPermission(	descriptor, ApplicationAdminPermission.LIFECYCLE_ACTION ) );
 
 			if ( isLocked() )
-				throw new Exception("Application is locked, can't launch!");
+				throw new ApplicationException( ApplicationException.APPLICATION_LOCKED, "Application is locked, can't launch!");
 	}
 }

@@ -141,7 +141,7 @@ public final class MidletDescriptor extends ApplicationDescriptor implements Ser
 		else {
 			MidletHandle midHnd = new MidletHandle(bc, instID, this, 
 					                                   midletContainer, midlet );
-      midHnd.startHandle(args);
+			midHnd.startHandle(args);
 			return midHnd;
 		}
 	}

@@ -39,7 +39,7 @@ public class ApplicationHandleImpl implements ApplicationHandle.Delegate {
 		this.descriptor = (ApplicationDescriptorImpl) descriptor;
 	}
 
-	public void destroy() throws Exception {
+	public void destroy() {
 		SecurityManager sm = System.getSecurityManager();
 		if( sm != null )
 			sm.checkPermission(new ApplicationAdminPermission( handle.getApplicationDescriptor(), 
