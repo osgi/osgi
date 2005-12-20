@@ -100,13 +100,14 @@ public class ApplicationDescriptorImpl implements Delegate {
 	}
 
 	public void launch(Map arguments) throws ApplicationException, IllegalArgumentException {
-			SecurityManager sm = System.getSecurityManager();
-			if( sm != null )
-				sm.checkPermission( new ApplicationAdminPermission(	descriptor, ApplicationAdminPermission.LIFECYCLE_ACTION ) );
+		SecurityManager sm = System.getSecurityManager();
+		if( sm != null )
+			sm.checkPermission( new ApplicationAdminPermission(	descriptor, ApplicationAdminPermission.LIFECYCLE_ACTION ) );
 
-			if ( isLocked() )
-				throw new ApplicationException( ApplicationException.APPLICATION_LOCKED, "Application is locked, can't launch!");
+		if ( isLocked() )
+			throw new ApplicationException( ApplicationException.APPLICATION_LOCKED, "Application is locked, can't launch!");
 			
+		if( arguments != null ) {
 			Set set = arguments.keySet();
 			Iterator iter = set.iterator();
 			
@@ -122,5 +123,6 @@ public class ApplicationDescriptorImpl implements Delegate {
 				if( s.equals("") )
 					throw new IllegalArgumentException( "Empty string not allowed as key!" );
 			}
+		}
 	}
 }
