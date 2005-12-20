@@ -118,5 +118,12 @@ public class StubBundle implements org.osgi.framework.Bundle {
 		// TODO Auto-generated method stub
 		return null;
 	}
+	
+	public static void main(String[] args) {
+		byte[] ba = "Bundle-Version: ".getBytes();
+		for (int i = 0; i < ba.length; i++) {
+			System.out.print(ba[i] + ", ");
+		}
+	}
 
 }
