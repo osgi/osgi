@@ -1,11 +1,13 @@
 package org.osgi.impl.service.deploymentadmin;
 
-import java.util.Hashtable;
+import java.security.AccessController;
+import java.security.PrivilegedAction;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
-import java.util.Vector;
 
 import org.eclipse.osgi.service.resolver.VersionRange;
+import org.osgi.framework.Bundle;
 import org.osgi.framework.Version;
 import org.osgi.service.deploymentadmin.DeploymentException;
 
@@ -15,13 +17,11 @@ import org.osgi.service.deploymentadmin.DeploymentException;
 public class DeploymentPackageVerifier {
     
     private DeploymentPackageCtx  dpCtx;
-    private DeploymentPackageImpl srcDp;
-    private Vector                dps;
+    private DeploymentPackageImpl dp;
     
-    DeploymentPackageVerifier(DeploymentPackageImpl dp, Vector dps) {
+    DeploymentPackageVerifier(DeploymentPackageImpl dp) {
     	this.dpCtx = dp.getDpCtx();
-    	this.srcDp = dp;
-    	this.dps = dps;
+    	this.dp = dp;
     }
 
 	public void verify() throws DeploymentException {
@@ -32,83 +32,66 @@ public class DeploymentPackageVerifier {
     private void checkMainSection()
     		throws DeploymentException
     {
-        if (null == srcDp.getName())
+        if (null == dp.getName())
             throw new DeploymentException(DeploymentException.CODE_MISSING_HEADER,
                     "Missing deployment package name");
         
-        if (DAConstants.SYSTEM_DP_BSN.equals(srcDp.getName()))
-            throw new DeploymentException(DeploymentException.CODE_BAD_HEADER,
-            		"The \"System\" deployment package name is reserved");
-        
-        if (null == srcDp.getVersion())
+        if (null == dp.getVersion())
             throw new DeploymentException(DeploymentException.CODE_MISSING_HEADER,
-                    "Missing deployment package version in: " + srcDp.getName());
+                    "Missing deployment package version in: " + dp.getName());
         
         try {
-            String s = (String) srcDp.getMainSection().get(DAConstants.DP_VERSION);
+            String s = (String) dp.getMainSection().get(DAConstants.DP_VERSION);
             new Version(s);
         }
         catch (Exception e) {
             throw new DeploymentException(DeploymentException.CODE_BAD_HEADER,
-                    "Bad version in: " + srcDp, e);
+                    "Bad version in: " + dp, e);
         }
         
-        if (null != srcDp.getFixPackRange()) {
+        if (null != dp.getFixPackRange()) {
             try {
-                String s = (String) srcDp.getMainSection().get(DAConstants.DP_FIXPACK);
+                String s = (String) dp.getMainSection().get(DAConstants.DP_FIXPACK);
                 new VersionRange(s);
             }
             catch (Exception e) {
                 throw new DeploymentException(DeploymentException.CODE_BAD_HEADER,
-                        "Bad version range in: " + srcDp, e);
+                        "Bad version range in: " + dp, e);
             }
         }
         
-        if (null == srcDp.getName())
+        if (null == dp.getName())
             throw new DeploymentException(DeploymentException.CODE_MISSING_HEADER, 
-                    "Missing header in: " + srcDp + " header: " + DAConstants.DP_NAME);
+                    "Missing header in: " + dp + " header: " + DAConstants.DP_NAME);
      
-        if (null == srcDp.getVersion())
+        if (null == dp.getVersion())
             throw new DeploymentException(DeploymentException.CODE_MISSING_HEADER, 
-                    "Missing header in: " + srcDp + " header: " + DAConstants.DP_VERSION);        
+                    "Missing header in: " + dp + " header: " + DAConstants.DP_VERSION);        
     }
 
     private void checkNameSections()
     		throws DeploymentException
     {
-        for (Iterator iter = srcDp.getBundleEntries().iterator(); iter.hasNext();) {
+        for (Iterator iter = dp.getBundleEntries().iterator(); iter.hasNext();) {
             BundleEntry be = (BundleEntry) iter.next();
-            checkBundleEntry(srcDp, be);
+            checkBundleEntry(dp, be);
         }
         
-        for (Iterator iter = srcDp.getResourceEntries().iterator(); iter.hasNext();) {
+        for (Iterator iter = dp.getResourceEntries().iterator(); iter.hasNext();) {
             ResourceEntry re = (ResourceEntry) iter.next();
-            checkResourceEntry(srcDp, re);
+            checkResourceEntry(dp, re);
         }
         
-        Hashtable bSns = new Hashtable();
-        for (Iterator iter = dps.iterator(); iter.hasNext();) {
-			DeploymentPackageImpl dp = (DeploymentPackageImpl) iter.next();
-			
-			// update
-			if (dp.getName().equals(srcDp.getName()))
-				continue;
-			
-			for (Iterator iterDp = dp.getBundleEntries().iterator(); iterDp.hasNext();) {
-				BundleEntry be = (BundleEntry) iterDp.next();
-				bSns.put(be.getSymbName(), dp);
-			}
-		}
-        // check 
-        for (Iterator iter = srcDp.getBundleEntries().iterator(); iter.hasNext();) {
+        // this check only inside one dp
+        Set s = new HashSet();
+        for (Iterator iter = dp.getBundleEntries().iterator(); iter.hasNext();) {
             BundleEntry be = (BundleEntry) iter.next();
-            DeploymentPackageImpl dp = (DeploymentPackageImpl) bSns.get(be.getSymbName());
-            if (null != dp)
+            if (s.contains(be.getSymbName()))
                 throw new DeploymentException(
                         DeploymentException.CODE_BUNDLE_SHARING_VIOLATION,
                         "Bundle with symbolic name \"" + be.getSymbName() + "\" " +
-                        "is allready present in " + dp);
-            bSns.put(be.getSymbName(), srcDp);
+                        "is allready present in the system");
+            s.add(be.getSymbName());
         }
     }
 
@@ -122,18 +105,48 @@ public class DeploymentPackageVerifier {
                     DAConstants.MISSING + " header is only allowed in fix-pack (" +
                     dp + ")");
         
-        Set set = dpCtx.getDeploymentPackages();
-        for (Iterator iter = set.iterator(); iter.hasNext();) {
+        // among DPs?
+        Set bundlesInDps = new HashSet();
+        for (Iterator iter = dpCtx.getDeploymentPackages().iterator(); iter.hasNext();) {
             DeploymentPackageImpl eDp = (DeploymentPackageImpl) iter.next();
-            if (dp.getName().equals(eDp.getName()))
-                continue;
-            for (Iterator iter2 = eDp.getBundleEntries().iterator(); iter2.hasNext();) {
-                BundleEntry	eBe	= (BundleEntry) iter2.next();
+
+            for (Iterator iterDp = eDp.getBundleEntries().iterator(); iterDp.hasNext();) {
+                BundleEntry	eBe	= (BundleEntry) iterDp.next();
+                bundlesInDps.add(DeploymentAdminImpl.location(
+                		eBe.getSymbName(), eBe.getVersion()));
+
+                // it's the DP is going to be updated
+                if (dp.getName().equals(eDp.getName()))
+                    continue;
+
                 if (be.getSymbName().equals(eBe.getSymbName()))
                     throw new DeploymentException(DeploymentException.CODE_BUNDLE_SHARING_VIOLATION, 
                             "Bundle " + be + " is already installed by the package " + eDp);
             }
         }
+        // standalone bundle with the same location?
+        Bundle[] bundles  = (Bundle[]) AccessController.doPrivileged(new PrivilegedAction() {
+			public Object run() {
+				return dpCtx.getBundleContext().getBundles();
+			}});
+        String location = DeploymentAdminImpl.location(be.getSymbName(), be.getVersion());
+        for (int i = 0; i < bundles.length; i++) {
+        	final Bundle bundle = bundles[i];
+        	String l = (String) AccessController.doPrivileged(new PrivilegedAction() {
+        		public Object run() {
+        			return bundle.getLocation();
+        		}
+        	});
+
+        	// it is not standalone
+        	if (bundlesInDps.contains(l))
+        		continue;
+
+			if (l.equals(location))
+				throw new DeploymentException(DeploymentException.CODE_OTHER_ERROR, 
+						"Standalone bundle " + bundles[i].getBundleId() + 
+						" already uses location '" + location + "'.");
+		}
     }
     
     private void checkResourceName(String name) throws DeploymentException {

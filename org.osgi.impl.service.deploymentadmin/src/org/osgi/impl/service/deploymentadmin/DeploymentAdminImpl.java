@@ -123,9 +123,6 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
         // load persisten data (e.g. Deployment Package meta information)
         load();
         
-        // creates the System DP if needed
-        createSystemDp();
-        
         // initialise DMT plugins
         initDmtPlugins();
 
@@ -173,7 +170,7 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
             srcDp = new DeploymentPackageImpl(DeploymentPackageCtx.
                     getInstance(logger, context, this), wjis.getManifest(), 
                     wjis.getCertificateChainStringArrays());
-            new DeploymentPackageVerifier(srcDp, dps).verify();
+            new DeploymentPackageVerifier(srcDp).verify();
             srcDp.setResourceBundle(wjis.getResourceBundle());
             if (!checkCertificateChains(wjis.getCertificateChains()))
             	throw new DeploymentException(DeploymentException.CODE_SIGNING_ERROR, 
@@ -303,14 +300,6 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
                 // do nothing
             }
         }
-        
-        /*DeploymentPackageImpl sysDp = createSystemDp();
-        try {
-            checkPermission(sysDp, DeploymentAdminPermission.LIST);
-            ret.add(sysDp);
-        } catch (SecurityException e) {
-            // do nothing
-        }*/
         
         return (DeploymentPackage[]) ret.toArray(new DeploymentPackage[] {});
     }
@@ -677,40 +666,6 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
                 return dp;
         }
         return null;
-    }
-
-    /*
-     * Creates the System Dp if there is no System DP yet
-     */
-    private void createSystemDp() {
-        for (Iterator iter = dps.iterator(); iter.hasNext();) {
-            DeploymentPackageImpl dp = (DeploymentPackageImpl) iter.next();
-            if (dp.isSystem())
-                return;
-        }
-        
-        Set bundles = new HashSet();
-        
-        String s = System.getProperty(DAConstants.SYSTEM_DP);
-        if (null == s)
-            bundles.add(new BundleEntry(context.getBundle(0)));
-        else {
-            StringTokenizer st = new StringTokenizer(s, ",");
-            while (st.hasMoreTokens()) {
-                long l = Long.parseLong(st.nextToken());
-                Bundle b = context.getBundle(l);
-                if (null == b) {
-                    logger.log(Logger.LOG_WARNING, "Error while creating the initial " +
-                            "\"System\" bundle. Bundle with bundleid " + l + 
-                            " has not found. Check the " + DAConstants.SYSTEM_DP +
-                            " system property!");
-                    continue;
-                }
-                bundles.add(new BundleEntry(b));
-            }
-        }
-        
-        dps.add(DeploymentPackageImpl.createOriginalSystemDp(this, bundles));
     }
 
     /*

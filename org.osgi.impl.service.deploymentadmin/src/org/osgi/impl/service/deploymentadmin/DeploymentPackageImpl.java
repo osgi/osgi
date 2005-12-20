@@ -23,7 +23,6 @@ import java.security.PrivilegedAction;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.Vector;
 import java.util.jar.Attributes;
 import java.util.jar.Manifest;
@@ -90,33 +89,12 @@ public class DeploymentPackageImpl implements DeploymentPackage, Serializable {
         return dp;
     }
 
-    /*
-     * Creates the Systemp DP
-     */
-    static DeploymentPackageImpl createOriginalSystemDp(DeploymentAdminImpl da, Set bundleEntries) {
-        if (null == da)
-            throw new IllegalArgumentException("Internal error");
-        
-        DeploymentPackageImpl dp = new DeploymentPackageImpl();
-        dp.mainSection = new CaseInsensitiveMap(null, dp);
-        dp.mainSection.put("Manifest-Version", "1.0");
-        dp.mainSection.put(DAConstants.DP_NAME, DAConstants.SYSTEM_DP_BSN);
-        dp.mainSection.put(DAConstants.DP_VERSION, "0.0.0");
-        dp.bundleEntries = new Vector(bundleEntries);
-        
-        return dp;
-    }
-    
     synchronized void update(DeploymentPackageImpl dp) {
     	this.dprb = dp.dprb;
     	this.mainSection = dp.mainSection;
     	this.bundleEntries = dp.bundleEntries;
     	this.resourceEntries = dp.resourceEntries;
     	this.certChains = dp.certChains;
-    }
-    
-    boolean isSystem() {
-        return getName().equals(DAConstants.SYSTEM_DP_BSN);
     }
     
     boolean isEmpty() {
@@ -406,13 +384,8 @@ public class DeploymentPackageImpl implements DeploymentPackage, Serializable {
      */
     public void uninstall() throws DeploymentException {
         checkStale();
-        if (isSystem())
-            throw new RuntimeException("\"System\" deployment package cannot be uninstalled");
-        
         dpCtx.checkPermission(this, DeploymentAdminPermission.UNINSTALL);
-        
         dpCtx.uninstall(this);
-        
         setStale();
     }
 
@@ -423,13 +396,8 @@ public class DeploymentPackageImpl implements DeploymentPackage, Serializable {
      */
     public boolean uninstallForced() throws DeploymentException {
         checkStale();
-        if (isSystem())
-            throw new RuntimeException("\"System\" deployment package cannot be uninstalled");
-        
         dpCtx.checkPermission(this, DeploymentAdminPermission.UNINSTALL_FORCED);
-        
         setStale();
-        
         return dpCtx.uninstallForced(this);
     }
 
