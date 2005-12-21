@@ -53,7 +53,7 @@ public class TransactionRecord implements Serializable {
     }
     
     public TransactionRecord(int code, Bundle b) {
-        this(code, null, -1, null, null, null, null);
+        this(code, null, b.getBundleId(), null, null, null, null);
     }
     
     public TransactionRecord(int code, 
