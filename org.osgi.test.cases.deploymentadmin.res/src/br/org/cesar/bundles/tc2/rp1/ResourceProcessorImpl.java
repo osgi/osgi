@@ -40,15 +40,21 @@
 
 package br.org.cesar.bundles.tc2.rp1;
 
-import java.io.*;
-import java.util.*;
+import java.io.File;
+import java.io.InputStream;
+import java.util.Dictionary;
+import java.util.Hashtable;
 
-import org.osgi.framework.*;
-import org.osgi.service.deploymentadmin.*;
-import org.osgi.service.deploymentadmin.spi.*;
+import org.osgi.framework.Bundle;
+import org.osgi.framework.BundleActivator;
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.ServiceRegistration;
+import org.osgi.service.deploymentadmin.DeploymentPackage;
+import org.osgi.service.deploymentadmin.spi.DeploymentSession;
+import org.osgi.service.deploymentadmin.spi.ResourceProcessor;
+import org.osgi.service.deploymentadmin.spi.ResourceProcessorException;
 import org.osgi.test.cases.deploymentadmin.tc2.tbc.DeploymentConstants;
 import org.osgi.test.cases.deploymentadmin.tc2.tbc.util.TestingResourceProcessor;
-import org.osgi.test.cases.util.DefaultTestBundleControl;
 
 /**
  * @author Luiz Felipe Guimaraes
@@ -57,7 +63,6 @@ import org.osgi.test.cases.util.DefaultTestBundleControl;
  * installation.
  */
 public class ResourceProcessorImpl implements BundleActivator, TestingResourceProcessor {
-	private File file;
 	private ServiceRegistration sr;
 	private boolean simulateExceptionOnDropped;
 	private boolean simulateExceptionOnPrepare;
@@ -78,7 +83,6 @@ public class ResourceProcessorImpl implements BundleActivator, TestingResourcePr
 	private final int ROLLBACK=6;
 	private final int CANCEL=7;
 	
-	private DefaultTestBundleControl tbc;
 	private boolean joined;
 	private long joinedTime;
 	private long prepareTime;

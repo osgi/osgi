@@ -49,6 +49,7 @@ import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.deploymentadmin.spi.DeploymentSession;
 import org.osgi.service.deploymentadmin.spi.ResourceProcessor;
+import org.osgi.service.deploymentadmin.spi.ResourceProcessorException;
 import org.osgi.test.cases.deploymentadmin.mo.tbc.DeploymentmoConstants;
 
 
@@ -92,8 +93,8 @@ public class ResourceProcessorImpl implements BundleActivator,ResourceProcessor 
 	public void dropAllResources()  {
 	}
 
-	public void prepare()  {
-		throw new RuntimeException();
+	public void prepare() throws ResourceProcessorException {
+		throw new ResourceProcessorException(ResourceProcessorException.CODE_PREPARE);
 	}
 
 	public void commit() {

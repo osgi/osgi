@@ -38,30 +38,35 @@
  * ============  ==============================================================
  */
 
-package br.org.cesar.bundles.tc1.rp1;
+package br.org.cesar.bundles.dmo.rp5;
 
 import java.io.InputStream;
-import java.util.*;
+import java.util.Dictionary;
+import java.util.Hashtable;
 
-import org.osgi.framework.*;
-import org.osgi.service.deploymentadmin.spi.*;
-import org.osgi.test.cases.deploymentadmin.tc1.tbc.*;
+import org.osgi.framework.BundleActivator;
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.ServiceRegistration;
+import org.osgi.service.deploymentadmin.spi.DeploymentSession;
+import org.osgi.service.deploymentadmin.spi.ResourceProcessor;
+import org.osgi.service.deploymentadmin.spi.ResourceProcessorException;
+import org.osgi.test.cases.deploymentadmin.mo.tbc.DeploymentmoConstants;
+
 
 /**
- * @author Andre Assad
+ * @author Luiz Felipe Guimaraes
  * 
  * A testing resource processor to test deployment packages
- * installation.
+ * installation (deployment management object). It throws an exception at process method.
  */
 public class ResourceProcessorImpl implements BundleActivator,ResourceProcessor {
 
 	private ServiceRegistration sr;
+ 
 	
 	public void start(BundleContext bc) throws Exception {
 		Dictionary props = new Hashtable();
-		props.put("service.pid", DeploymentConstants.PID_RESOURCE_PROCESSOR1);
-		props.put(DeploymentConstants.RESOURCE_PROCESSOR_PROPERTY_KEY, "initial value for it");
-
+		props.put("service.pid", DeploymentmoConstants.PID_RESOURCE_PROCESSOR5);
 		sr = bc.registerService(ResourceProcessor.class.getName(), this, props);
 		System.out.println("ResourceProcessor started.");
 
@@ -77,23 +82,24 @@ public class ResourceProcessorImpl implements BundleActivator,ResourceProcessor 
 
 	}
 
-	public void process(String arg0, InputStream arg1)
-			throws ResourceProcessorException {
+	public void process(String arg0, InputStream arg1) throws ResourceProcessorException 
+			 {
+		throw new ResourceProcessorException(ResourceProcessorException.CODE_RESOURCE_SHARING_VIOLATION);
+		
 	}
 
-	public void dropped(String arg0) throws ResourceProcessorException {
-
+	public void dropped(String arg0)  {
 	}
 
-	public void dropAllResources() throws ResourceProcessorException {
-		DeploymentConstants.DROPALLRESOURCES_COUNT++;
+	public void dropAllResources()  {
 	}
 
-	public void prepare() throws ResourceProcessorException {
+	public void prepare()  {
+		
 	}
 
 	public void commit() {
-		DeploymentConstants.COMMIT_COUNT++;
+		
 	}
 
 	public void rollback() {

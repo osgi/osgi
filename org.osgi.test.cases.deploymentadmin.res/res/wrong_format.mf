@@ -10,7 +10,3 @@ DeploymentPackage-Vendor: CESAR.
 Name: bundle001.jar
 Bundle-SymbolicName: bundles.tb1
 Bundle-Version: 1.0
-
-Name: bundle002.jar
-Bundle-SymbolicName: bundles.tb2
-Bundle-Version: 1.0
