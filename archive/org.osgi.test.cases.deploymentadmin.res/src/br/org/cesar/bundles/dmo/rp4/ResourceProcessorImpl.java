@@ -49,6 +49,8 @@ import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.deploymentadmin.spi.DeploymentSession;
 import org.osgi.service.deploymentadmin.spi.ResourceProcessor;
+import org.osgi.service.deploymentadmin.spi.ResourceProcessorException;
+import org.osgi.test.cases.deploymentadmin.mo.tbc.DeploymentmoConstants;
 
 
 /**
@@ -64,7 +66,7 @@ public class ResourceProcessorImpl implements BundleActivator,ResourceProcessor 
 	
 	public void start(BundleContext bc) throws Exception {
 		Dictionary props = new Hashtable();
-		props.put("service.pid", "org.osgi.test.cases.deployment.bundles.rp4");
+		props.put("service.pid", DeploymentmoConstants.PID_RESOURCE_PROCESSOR4);
 		sr = bc.registerService(ResourceProcessor.class.getName(), this, props);
 		System.out.println("ResourceProcessor started.");
 
@@ -84,8 +86,8 @@ public class ResourceProcessorImpl implements BundleActivator,ResourceProcessor 
 			 {
 	}
 
-	public void dropped(String arg0)  {
-		throw new RuntimeException();
+	public void dropped(String arg0) throws ResourceProcessorException  {
+		throw new ResourceProcessorException(ResourceProcessorException.CODE_NO_SUCH_RESOURCE);
 	}
 
 	public void dropAllResources()  {

@@ -2,10 +2,10 @@ Manifest-Version: 1.0
 DeploymentPackage-SymbolicName: dp_throws_resource_violation
 DeploymentPackage-Version: 1.0.0
 
-Name: rp_bundle4.jar
-Bundle-SymbolicName: org.osgi.test.cases.deployment.bundles.rp4
+Name: rp_bundle5.jar
+Bundle-SymbolicName: org.osgi.test.cases.deployment.bundles.rp5
 Bundle-Version: 1.0
 DeploymentPackage-Customizer: true
 
 Name: simple_resource.xml
-Resource-Processor: org.osgi.test.cases.deployment.bundles.rp4
+Resource-Processor: org.osgi.test.cases.deployment.bundles.rp5

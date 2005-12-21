@@ -37,11 +37,15 @@
 package br.org.cesar.bundles.tc1.rp3;
 
 import java.io.InputStream;
-import java.util.*;
+import java.util.Dictionary;
+import java.util.Hashtable;
 
-import org.osgi.framework.*;
-import org.osgi.service.deploymentadmin.DeploymentException;
-import org.osgi.service.deploymentadmin.spi.*;
+import org.osgi.framework.BundleActivator;
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.ServiceRegistration;
+import org.osgi.service.deploymentadmin.spi.DeploymentSession;
+import org.osgi.service.deploymentadmin.spi.ResourceProcessor;
+import org.osgi.service.deploymentadmin.spi.ResourceProcessorException;
 import org.osgi.test.cases.deploymentadmin.tc1.tbc.DeploymentConstants;
 import org.osgi.test.cases.deploymentadmin.tc1.tbc.util.TestingBlockingResourceProcessor;
 
@@ -52,7 +56,6 @@ import org.osgi.test.cases.deploymentadmin.tc1.tbc.util.TestingBlockingResourceP
 public class ResourceProcessorImpl implements BundleActivator, TestingBlockingResourceProcessor {
 
 	private ServiceRegistration sr;
-	private DeploymentSession session;
     private static boolean released;
     private boolean cancelled;
 
