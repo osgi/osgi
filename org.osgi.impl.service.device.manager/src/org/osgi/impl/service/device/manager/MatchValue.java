@@ -17,16 +17,17 @@
 package org.osgi.impl.service.device.manager;
 
 import org.osgi.framework.ServiceReference;
-import org.osgi.service.device.Driver;
 
-public class DriverRef {
-    int ranking;
+public class MatchValue {
+    MatchValue next;
 
-    long servid;
+    Integer key;
 
-    String id;
+    String drvid;
 
-    ServiceReference sr;
+    String pid;
 
-    Driver drv;
+    ServiceReference dev;
+
+    int match;
 }
