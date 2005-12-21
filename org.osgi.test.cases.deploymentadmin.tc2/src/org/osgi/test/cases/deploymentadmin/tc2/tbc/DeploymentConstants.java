@@ -107,8 +107,8 @@ public class DeploymentConstants {
 	public static final String BUNDLE_NAME_ALL = "(name=*)";
 	public static final String DEPLOYMENT_PACKAGE_NAME0 = "(name="+MAP_CODE_TO_DP[0]+")";
 	public static final String DEPLOYMENT_PACKAGE_NAME1 = "(&(name="+MAP_CODE_TO_DP[1]+")"+"(signer=-;"+SIGNER_FILTER+"))";
-	public static final String DEPLOYMENT_PACKAGE_NAME2 = "(&(name=*)(signer="+SIGNER_FILTER+"))";
-    public static final String DEPLOYMENT_PACKAGE_NAME3 = "(&(name="+MAP_CODE_TO_DP[2]+")"+"(signer="+SIGNER_FILTER_WILDCARD+"))";
+	public static final String DEPLOYMENT_PACKAGE_NAME2 = "(&(name=*)(signer="+SIGNER_FILTER_WILDCARD+"))";
+    public static final String DEPLOYMENT_PACKAGE_NAME3 = "(&(name=*)"+"(signer="+SIGNER_FILTER+"))";
     public static final String DEPLOYMENT_PACKAGE_NAME4 = "(&(name="+MAP_CODE_TO_DP[0]+")"+"(signer=-;"+SIGNER_FILTER_INVALID1+"))";
     public static final String DEPLOYMENT_PACKAGE_NAME5 = "(&(name="+MAP_CODE_TO_DP[0]+")"+"(signer=-;"+SIGNER_FILTER_INVALID2+"))";
 	
