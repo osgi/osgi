@@ -66,7 +66,7 @@ public class Implies {
 		testImplies003();
 		testImplies004();
 		testImplies005();
-//        testImplies006();
+        testImplies006();
         testImplies007();
         testImplies008();
         testImplies009();
@@ -299,14 +299,15 @@ public class Implies {
     private void testImplies009() {
         tbc.log("#testImplies009");
         try {
-            DeploymentAdminPermission deployPermission = new DeploymentAdminPermission(
-                DeploymentConstants.DEPLOYMENT_PACKAGE_NAME2,
-                    org.osgi.service.deploymentadmin.DeploymentAdminPermission.INSTALL);
             
-            DeploymentAdminPermission deployPermission2 = new DeploymentAdminPermission(
+            DeploymentAdminPermission deployPermission = new DeploymentAdminPermission(
                 DeploymentConstants.DEPLOYMENT_PACKAGE_NAME3,
                     org.osgi.service.deploymentadmin.DeploymentAdminPermission.INSTALL);
-            
+
+            DeploymentAdminPermission deployPermission2 = new DeploymentAdminPermission(
+                    DeploymentConstants.DEPLOYMENT_PACKAGE_NAME2,
+                        org.osgi.service.deploymentadmin.DeploymentAdminPermission.INSTALL);
+
             tbc.assertTrue(
                             "Asserts that an object that has a specific certificate does not hold a DeploymentAdminPermission that has a wildcard to accept any certificate.",
                             !deployPermission.implies(deployPermission2));
