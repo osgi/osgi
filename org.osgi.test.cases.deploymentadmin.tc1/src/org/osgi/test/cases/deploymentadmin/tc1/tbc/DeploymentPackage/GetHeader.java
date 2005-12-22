@@ -474,11 +474,11 @@ public class GetHeader {
 
             String header = testDp.getHeader(DeploymentConstants.DP_HEADER_COPYRIGHT);
             tbc.assertEquals("Asserting the DeploymentPackage-Copyright value.", DeploymentConstants.DP_MY_COPYRIGHT, header);
-            header = testDp.getHeader(DeploymentConstants.DP_MY_VENDOR);
+            header = testDp.getHeader(DeploymentConstants.DP_HEADER_VENDOR);
             tbc.assertEquals("Asserting the DeploymentPackage-Vendor value.", DeploymentConstants.DP_MY_VENDOR, header);
-            header = testDp.getHeader(DeploymentConstants.DP_MY_LICENSE);
+            header = testDp.getHeader(DeploymentConstants.DP_HEADER_LICENSE);
             tbc.assertEquals("DeploymentPackage-License value.", DeploymentConstants.DP_MY_LICENSE, header);
-            header = testDp.getHeader(DeploymentConstants.DP_MY_DESCRIPTION);
+            header = testDp.getHeader(DeploymentConstants.DP_HEADER_DESCRIPTION);
             tbc.assertEquals("Asserting the DeploymentPackage-Description value.", DeploymentConstants.DP_MY_DESCRIPTION, header);
         } catch (Exception e) {
             tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }));
