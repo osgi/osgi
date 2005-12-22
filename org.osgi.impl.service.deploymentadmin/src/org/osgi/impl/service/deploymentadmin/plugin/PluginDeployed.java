@@ -529,7 +529,7 @@ public class PluginDeployed implements DataPlugin, ReadableDataSession,
             if (l == 9) {
                 if ("Signers".equals(nodeUriArr[7]))
                     return new Metanode(MetaNode.CMD_GET, Metanode.IS_LEAF, MetaNode.AUTOMATIC,
-                        "", 1, Metanode.ZERO_OCC, null, 0, 0, null, DmtData.FORMAT_NODE);
+                        "", 1, Metanode.ZERO_OCC, null, 0, 0, null, DmtData.FORMAT_STRING);
                 if ("Bundles".equals(nodeUriArr[7]))
                     return new Metanode(MetaNode.CMD_GET, !Metanode.IS_LEAF, MetaNode.AUTOMATIC,
                         "", Integer.MAX_VALUE, !Metanode.ZERO_OCC, null, 0, 0, null, DmtData.FORMAT_NODE);
