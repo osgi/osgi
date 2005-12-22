@@ -525,6 +525,12 @@ public class DeploymentTestControl extends DefaultTestBundleControl {
                 packages.put(""+i, dp);
                 break;
             }
+            case DeploymentConstants.SIGNING_FILE_NOT_NEXT: {
+            	TestingBundle[] bundles = {new TestingBundle("bundles.tb1", "1.0", "bundle001.jar"), new TestingBundle("bundles.tb2", "1.0", "bundle002.jar")};
+                dp = new TestingDeploymentPackage(DeploymentConstants.getCodeName(DeploymentConstants.SIGNING_FILE_NOT_NEXT), "1.0", "signing_files_not_next.dp", bundles);
+                packages.put(""+i, dp);
+                break;
+            }            
             case DeploymentConstants.NON_CUSTOMIZER_DP: {
                 TestingBundle[] bundles = {new TestingBundle(DeploymentConstants.PID_RESOURCE_PROCESSOR1, "1.0", "rp_bundle.jar")};
                 dp = new TestingDeploymentPackage(DeploymentConstants.getCodeName(DeploymentConstants.NON_CUSTOMIZER_DP), "1.0", "non_customizer_rp.dp", bundles);

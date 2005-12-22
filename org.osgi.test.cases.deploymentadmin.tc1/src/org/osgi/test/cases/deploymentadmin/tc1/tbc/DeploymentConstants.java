@@ -186,6 +186,7 @@ public class DeploymentConstants {
 	// very large, we don't know what kind of devices the TCK will be executed
 	public static final int TIMEOUT = 180000;
     public static final int SESSION_TIMEOUT = 1000;
+    public static final int WAIT_EVENT = 2000;
     
     static String getCodeName(int code) {
         switch (code) {
