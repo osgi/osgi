@@ -63,6 +63,8 @@ import org.osgi.test.cases.application.tbc.ApplicationContext.GetStartupParamete
 import org.osgi.test.cases.application.tbc.ApplicationContext.LocateService;
 import org.osgi.test.cases.application.tbc.ApplicationContext.LocateServices;
 import org.osgi.test.cases.application.tbc.ApplicationContext.RegisterService;
+import org.osgi.test.cases.application.tbc.ApplicationException.ApplicationException;
+import org.osgi.test.cases.application.tbc.ApplicationException.ApplicationExceptionConstants;
 import org.osgi.test.cases.application.tbc.Event.EventHandlerActivator;
 import org.osgi.test.cases.application.tbc.Framework.GetApplicationContext;
 import org.osgi.test.cases.application.tbc.Others.ApplicationServiceEvent;
@@ -377,6 +379,22 @@ public class ApplicationTestControl extends DefaultTestBundleControl {
 		new org.osgi.test.cases.application.tbc.ApplicationAdminPermission.ApplicationAdminPermission(
 				this).run();
 	}
+	
+	/**
+	 * Executes Tcs for
+	 * ApplicationException#ApplicationException
+	 */
+	public void testApplicationException() {
+		new ApplicationException(this).run();
+	}
+	
+	/**
+	 * Executes Tcs for
+	 * ApplicationException#ApplicationExceptionConstants
+	 */
+	public void testApplicationExceptionConstants() {
+		new ApplicationExceptionConstants(this).run();
+	}	
 
 	/**
 	 * Executes Tcs for
@@ -941,5 +959,9 @@ public class ApplicationTestControl extends DefaultTestBundleControl {
 	public TestingActivator getTestingActivator() {
 		return testingActivator;
 	}
+	
+	public TestingActivator getTestingActivator2() {
+		return testingActivator2;
+	}	
 
 }

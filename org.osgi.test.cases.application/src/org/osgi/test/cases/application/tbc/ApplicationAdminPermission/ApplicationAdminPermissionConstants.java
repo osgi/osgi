@@ -58,8 +58,7 @@ public class ApplicationAdminPermissionConstants {
 	}
 	
     /**
-     * This method asserts if two equals ApplicationAdminPermission returns
-     * true to the equals method.
+     * This method asserts the ApplicationAdminPermission constants
      * 
      * @spec 116.7.2 ApplicationAdminPermission
      */

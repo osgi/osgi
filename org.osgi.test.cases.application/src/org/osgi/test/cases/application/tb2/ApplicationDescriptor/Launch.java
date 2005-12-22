@@ -40,6 +40,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.osgi.service.application.ApplicationAdminPermission;
+import org.osgi.service.application.ApplicationException;
 import org.osgi.service.application.ApplicationHandle;
 import org.osgi.service.permissionadmin.PermissionInfo;
 import org.osgi.test.cases.application.tbc.ApplicationConstants;
@@ -68,6 +69,13 @@ public class Launch implements TestInterface {
 		testLaunch005();
 		testLaunch006();
 		testLaunch007();
+		testLaunch008();
+		testLaunch009();
+		testLaunch010();
+		testLaunch011();
+		testLaunch012();
+		testLaunch013();
+		testLaunch014();
 	}
 
 	/**
@@ -100,8 +108,8 @@ public class Launch implements TestInterface {
 	}
 
 	/**
-	 * This method asserts that when the ApplicationDescriptor is locked, an Exception
-	 * is thrown.
+	 * This method asserts that when the ApplicationDescriptor is locked, an
+	 * ApplicationException is thrown.
 	 * 
 	 * @spec ApplicationDescriptor.launch(Map)
 	 */
@@ -121,11 +129,16 @@ public class Launch implements TestInterface {
 
 			handle = (ApplicationHandle) tbc.getAppDescriptor().launch(null);
 
-			tbc.failException("", Exception.class);
-		} catch (Exception e) {
+			tbc.failException("", ApplicationException.class);
+		} catch (ApplicationException e) {
 			tbc.pass(MessagesConstants.getMessage(
 					MessagesConstants.EXCEPTION_CORRECTLY_THROWN,
 					new String[] { Exception.class.getName() }));
+		} catch (Exception e) {
+			tbc.fail(MessagesConstants.getMessage(
+					MessagesConstants.EXCEPTION_THROWN, new String[] {
+							ApplicationException.class.getName(),
+							e.getClass().getName() }));				
 		} finally {
 			tbc.cleanUp(handle, infos);
 		}
@@ -257,11 +270,16 @@ public class Launch implements TestInterface {
 						
 			handle = (ApplicationHandle) tbc.getAppDescriptor().launch(map);
 
-			tbc.failException("", Exception.class);
-		} catch (Exception e) {
+			tbc.failException("", IllegalArgumentException.class);
+		} catch (IllegalArgumentException e) {
 			tbc.pass(MessagesConstants.getMessage(
 					MessagesConstants.EXCEPTION_CORRECTLY_THROWN,
-					new String[] { Exception.class.getName() }));
+					new String[] { IllegalArgumentException.class.getName() }));
+		} catch (Exception e) {
+			tbc.fail(MessagesConstants.getMessage(
+					MessagesConstants.EXCEPTION_THROWN, new String[] {
+							IllegalArgumentException.class.getName(),
+							e.getClass().getName() }));			
 		} finally {
 			tbc.cleanUp(handle, infos);
 		}
@@ -294,6 +312,272 @@ public class Launch implements TestInterface {
 		} catch (Exception e) {
 			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": "
 					+ e.getClass().getName());
+		} finally {
+			tbc.cleanUp(handle, infos);
+		}
+	}
+	
+	/**
+	 * This method asserts that an Exception is thrown when we pass
+	 * a Map with null as MapName.
+	 * 
+	 * @spec ApplicationDescriptor.launch(Map)
+	 */
+	private void testLaunch008() {
+		tbc.log("#testLaunch008");
+		ApplicationHandle handle = null;
+		PermissionInfo[] infos = null;
+		try {
+			infos = tbc.getPermissionAdmin().getPermissions(
+					tbc.getTb2Location());
+
+			tbc.setLocalPermission(new PermissionInfo(
+					ApplicationAdminPermission.class.getName(),
+					ApplicationConstants.APPLICATION_PERMISSION_FILTER1, ApplicationAdminPermission.LIFECYCLE_ACTION));	
+
+			Map map = new HashMap();
+			map.put(null , "Reject");		
+						
+			handle = (ApplicationHandle) tbc.getAppDescriptor().launch(map);
+
+			tbc.failException("", IllegalArgumentException.class);
+		} catch (IllegalArgumentException e) {
+			tbc.pass(MessagesConstants.getMessage(
+					MessagesConstants.EXCEPTION_CORRECTLY_THROWN,
+					new String[] { IllegalArgumentException.class.getName() }));
+		} catch (Exception e) {
+			tbc.fail(MessagesConstants.getMessage(
+					MessagesConstants.EXCEPTION_THROWN, new String[] {
+							IllegalArgumentException.class.getName(),
+							e.getClass().getName() }));	
+		} finally {
+			tbc.cleanUp(handle, infos);
+		}
+	}	
+	
+	/**
+	 * This method asserts that an Exception is thrown when we pass
+	 * a Map with an Integer as MapName.
+	 * 
+	 * @spec ApplicationDescriptor.launch(Map)
+	 */
+	private void testLaunch009() {
+		tbc.log("#testLaunch009");
+		ApplicationHandle handle = null;
+		PermissionInfo[] infos = null;
+		try {
+			infos = tbc.getPermissionAdmin().getPermissions(
+					tbc.getTb2Location());
+
+			tbc.setLocalPermission(new PermissionInfo(
+					ApplicationAdminPermission.class.getName(),
+					ApplicationConstants.APPLICATION_PERMISSION_FILTER1, ApplicationAdminPermission.LIFECYCLE_ACTION));	
+
+			Map map = new HashMap();
+			map.put(new Integer(2) , "Reject");		
+						
+			handle = (ApplicationHandle) tbc.getAppDescriptor().launch(map);
+
+			tbc.failException("", IllegalArgumentException.class);
+		} catch (IllegalArgumentException e) {
+			tbc.pass(MessagesConstants.getMessage(
+					MessagesConstants.EXCEPTION_CORRECTLY_THROWN,
+					new String[] { IllegalArgumentException.class.getName() }));
+		} catch (Exception e) {
+			tbc.fail(MessagesConstants.getMessage(
+					MessagesConstants.EXCEPTION_THROWN, new String[] {
+							IllegalArgumentException.class.getName(),
+							e.getClass().getName() }));	
+		} finally {
+			tbc.cleanUp(handle, infos);
+		}
+	}
+	
+	/**
+	 * This method asserts that an Exception is thrown when we pass
+	 * a Map with an Object as MapName.
+	 * 
+	 * @spec ApplicationDescriptor.launch(Map)
+	 */
+	private void testLaunch010() {
+		tbc.log("#testLaunch010");
+		ApplicationHandle handle = null;
+		PermissionInfo[] infos = null;
+		try {
+			infos = tbc.getPermissionAdmin().getPermissions(
+					tbc.getTb2Location());
+
+			tbc.setLocalPermission(new PermissionInfo(
+					ApplicationAdminPermission.class.getName(),
+					ApplicationConstants.APPLICATION_PERMISSION_FILTER1, ApplicationAdminPermission.LIFECYCLE_ACTION));	
+
+			Map map = new HashMap();
+			map.put(new Object() , "Reject");		
+						
+			handle = (ApplicationHandle) tbc.getAppDescriptor().launch(map);
+
+			tbc.failException("", IllegalArgumentException.class);
+		} catch (IllegalArgumentException e) {
+			tbc.pass(MessagesConstants.getMessage(
+					MessagesConstants.EXCEPTION_CORRECTLY_THROWN,
+					new String[] { IllegalArgumentException.class.getName() }));
+		} catch (Exception e) {
+			tbc.fail(MessagesConstants.getMessage(
+					MessagesConstants.EXCEPTION_THROWN, new String[] {
+							IllegalArgumentException.class.getName(),
+							e.getClass().getName() }));	
+		} finally {
+			tbc.cleanUp(handle, infos);
+		}
+	}	
+	
+	/**
+	 * This method asserts that an Exception is thrown when we pass
+	 * a Map with a Boolean as MapName.
+	 * 
+	 * @spec ApplicationDescriptor.launch(Map)
+	 */
+	private void testLaunch011() {
+		tbc.log("#testLaunch011");
+		ApplicationHandle handle = null;
+		PermissionInfo[] infos = null;
+		try {
+			infos = tbc.getPermissionAdmin().getPermissions(
+					tbc.getTb2Location());
+
+			tbc.setLocalPermission(new PermissionInfo(
+					ApplicationAdminPermission.class.getName(),
+					ApplicationConstants.APPLICATION_PERMISSION_FILTER1, ApplicationAdminPermission.LIFECYCLE_ACTION));	
+
+			Map map = new HashMap();
+			map.put(new Boolean(true) , "Reject");		
+						
+			handle = (ApplicationHandle) tbc.getAppDescriptor().launch(map);
+
+			tbc.failException("", IllegalArgumentException.class);
+		} catch (IllegalArgumentException e) {
+			tbc.pass(MessagesConstants.getMessage(
+					MessagesConstants.EXCEPTION_CORRECTLY_THROWN,
+					new String[] { IllegalArgumentException.class.getName() }));
+		} catch (Exception e) {
+			tbc.fail(MessagesConstants.getMessage(
+					MessagesConstants.EXCEPTION_THROWN, new String[] {
+							IllegalArgumentException.class.getName(),
+							e.getClass().getName() }));	
+		} finally {
+			tbc.cleanUp(handle, infos);
+		}
+	}
+	
+	/**
+	 * This method asserts that an Exception is thrown when we pass
+	 * a Map with a Float as MapName.
+	 * 
+	 * @spec ApplicationDescriptor.launch(Map)
+	 */
+	private void testLaunch012() {
+		tbc.log("#testLaunch012");
+		ApplicationHandle handle = null;
+		PermissionInfo[] infos = null;
+		try {
+			infos = tbc.getPermissionAdmin().getPermissions(
+					tbc.getTb2Location());
+
+			tbc.setLocalPermission(new PermissionInfo(
+					ApplicationAdminPermission.class.getName(),
+					ApplicationConstants.APPLICATION_PERMISSION_FILTER1, ApplicationAdminPermission.LIFECYCLE_ACTION));	
+
+			Map map = new HashMap();
+			map.put(new Float(0.2f) , "Reject");		
+						
+			handle = (ApplicationHandle) tbc.getAppDescriptor().launch(map);
+
+			tbc.failException("", IllegalArgumentException.class);
+		} catch (IllegalArgumentException e) {
+			tbc.pass(MessagesConstants.getMessage(
+					MessagesConstants.EXCEPTION_CORRECTLY_THROWN,
+					new String[] { IllegalArgumentException.class.getName() }));
+		} catch (Exception e) {
+			tbc.fail(MessagesConstants.getMessage(
+					MessagesConstants.EXCEPTION_THROWN, new String[] {
+							IllegalArgumentException.class.getName(),
+							e.getClass().getName() }));	
+		} finally {
+			tbc.cleanUp(handle, infos);
+		}
+	}
+	
+	/**
+	 * This method asserts that an Exception is thrown when we pass
+	 * a Map with a Byte as MapName.
+	 * 
+	 * @spec ApplicationDescriptor.launch(Map)
+	 */
+	private void testLaunch013() {
+		tbc.log("#testLaunch013");
+		ApplicationHandle handle = null;
+		PermissionInfo[] infos = null;
+		try {
+			infos = tbc.getPermissionAdmin().getPermissions(
+					tbc.getTb2Location());
+
+			tbc.setLocalPermission(new PermissionInfo(
+					ApplicationAdminPermission.class.getName(),
+					ApplicationConstants.APPLICATION_PERMISSION_FILTER1, ApplicationAdminPermission.LIFECYCLE_ACTION));	
+
+			Map map = new HashMap();
+			map.put(new Byte("a") , "Reject");		
+						
+			handle = (ApplicationHandle) tbc.getAppDescriptor().launch(map);
+
+			tbc.failException("", IllegalArgumentException.class);
+		} catch (IllegalArgumentException e) {
+			tbc.pass(MessagesConstants.getMessage(
+					MessagesConstants.EXCEPTION_CORRECTLY_THROWN,
+					new String[] { IllegalArgumentException.class.getName() }));
+		} catch (Exception e) {
+			tbc.fail(MessagesConstants.getMessage(
+					MessagesConstants.EXCEPTION_THROWN, new String[] {
+							IllegalArgumentException.class.getName(),
+							e.getClass().getName() }));	
+		} finally {
+			tbc.cleanUp(handle, infos);
+		}
+	}	
+	
+	/**
+	 * This method asserts that an Exception is thrown when we pass
+	 * a Map with a Double as MapName.
+	 * 
+	 * @spec ApplicationDescriptor.launch(Map)
+	 */
+	private void testLaunch014() {
+		tbc.log("#testLaunch014");
+		ApplicationHandle handle = null;
+		PermissionInfo[] infos = null;
+		try {
+			infos = tbc.getPermissionAdmin().getPermissions(
+					tbc.getTb2Location());
+
+			tbc.setLocalPermission(new PermissionInfo(
+					ApplicationAdminPermission.class.getName(),
+					ApplicationConstants.APPLICATION_PERMISSION_FILTER1, ApplicationAdminPermission.LIFECYCLE_ACTION));	
+
+			Map map = new HashMap();
+			map.put(new Double(12.1) , "Reject");		
+						
+			handle = (ApplicationHandle) tbc.getAppDescriptor().launch(map);
+
+			tbc.failException("", IllegalArgumentException.class);
+		} catch (IllegalArgumentException e) {
+			tbc.pass(MessagesConstants.getMessage(
+					MessagesConstants.EXCEPTION_CORRECTLY_THROWN,
+					new String[] { IllegalArgumentException.class.getName() }));
+		} catch (Exception e) {
+			tbc.fail(MessagesConstants.getMessage(
+					MessagesConstants.EXCEPTION_THROWN, new String[] {
+							IllegalArgumentException.class.getName(),
+							e.getClass().getName() }));	
 		} finally {
 			tbc.cleanUp(handle, infos);
 		}

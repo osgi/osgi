@@ -37,6 +37,9 @@
 
 package org.osgi.test.cases.application.tbc.ApplicationContext;
 
+import java.util.Hashtable;
+import java.util.Map;
+
 import org.osgi.application.ApplicationContext;
 import org.osgi.service.application.ApplicationHandle;
 import org.osgi.test.cases.application.tbc.ApplicationConstants;
@@ -66,6 +69,7 @@ public class GetServiceProperties {
 		testGetServiceProperties002();
 		testGetServiceProperties003();
 		testGetServiceProperties004();
+		testGetServiceProperties005();
 	}
 
 	/**
@@ -192,5 +196,43 @@ public class GetServiceProperties {
 			tbc.cleanUp(handle);
 		}
 	}
+	
+	/**
+	 * This method asserts if it returns the properties of the
+	 * highest object.
+	 * 
+	 * @spec ApplicationContext.getServiceProperties(Object)
+	 */
+	private void testGetServiceProperties005() {
+		tbc.log("#testGetServiceProperties005");
+		ApplicationHandle handle = null;
+		try {
+			handle = tbc.getAppDescriptor().launch(null);
+			ApplicationContext appContext = org.osgi.application.Framework
+					.getApplicationContext(tbc.getAppInstance());
+			
+        	tbc.startActivator(true);
+        	tbc.startActivator2(true);
+        	
+        	Hashtable hash = new Hashtable();
+        	hash.put("Test", "Test2");
+        	tbc.getTestingActivator2().setProperties(hash);
+        	       	
+        	appContext.locateServices(ApplicationConstants.XML_ACTIVATOR);
+        	
+			Map map = appContext.getServiceProperties(tbc.getTestingActivator2()); 
+						
+			tbc.assertTrue("Assering if the returned map contains the key Test", map.containsKey("Test"));
+			tbc.assertEquals("Assering if the returned map contains the value Test2 for the key Test", "Test2", map.get("Test"));
+
+        } catch (Exception e) {
+            tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": "
+                + e.getClass().getName());
+        } finally {
+        	tbc.stopActivator();
+        	tbc.stopActivator2();
+        	tbc.cleanUp(handle);
+        }
+    }
 	
 }

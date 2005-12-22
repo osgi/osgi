@@ -23,44 +23,50 @@
  * property of their respective owners. All rights reserved.
  * 
  */
+
 /*
  * REVISION HISTORY:
  *
  * Date         Author(s)
  * CR           Headline
  * ===========  ==============================================================
- * 25/08/2005   Alexandre Santos
- * 153          Implement OAT test cases  
+ * Apr 5, 2005  Alexandre Santos
+ * 38           Implement MEGTCK for the application RFC 
  * ===========  ==============================================================
  */
+package org.osgi.test.cases.application.tbc.ApplicationException;
 
-package org.osgi.test.cases.application.tb1;
+import org.osgi.service.application.ApplicationException;
+import org.osgi.test.cases.application.tbc.ApplicationTestControl;
 
-import javax.microedition.midlet.MIDlet;
-import javax.microedition.midlet.MIDletStateChangeException;
-
-import org.osgi.application.ApplicationContext;
-import org.osgi.application.Framework;
-import org.osgi.test.cases.application.tbc.ApplicationConstants;
-import org.osgi.test.cases.application.tbc.util.TestAppController;
-
-
-public class TestMidlet extends MIDlet {
-    ApplicationContext appContext = null;
-    TestAppController appController = null;
-
-	protected void startApp() throws MIDletStateChangeException {
-        appContext = Framework.getApplicationContext(this);
-        appController = (TestAppController) appContext.locateService(ApplicationConstants.XML_APP);
-        appController.setApplicationInstance(this);		
+/**
+ * 
+ * This Test Class Validates the <code>ApplicationException</code> constants
+ * according to MEG reference documentation.
+ */
+public class ApplicationExceptionConstants {
+	private ApplicationTestControl tbc;
+	/**
+	 * @param tbc
+	 */
+	public ApplicationExceptionConstants(ApplicationTestControl tbc) {
+		this.tbc = tbc;
+	}	
+	
+	public void run() {
+		testConstants001();
 	}
+	
+    /**
+     * This method asserts the ApplicationException constants.
+     * 
+     * @spec ApplicationException.ApplicationException()
+     */
+	private void testConstants001() {
+		tbc.log("#testConstants001");
+		tbc.assertEquals("Asserting APPLICAITON_NOT_LAUNCHABLE value", 2, ApplicationException.APPLICAITON_NOT_LAUNCHABLE);
+		tbc.assertEquals("Asserting APPLICATION_INTERNAL_ERROR value", 3, ApplicationException.APPLICATION_INTERNAL_ERROR);
+		tbc.assertEquals("Asserting APPLICATION_LOCKED value", 1, ApplicationException.APPLICATION_LOCKED);
+	}	
 
-	protected void pauseApp() {
-		
-	}
-
-	protected void destroyApp(boolean arg0) throws MIDletStateChangeException {
-		//appController.setApplicationInstance(null); we need a reference to an old midlet for tests purposes.
-        appController = null;		
-	}
 }

@@ -70,6 +70,15 @@ public class Schedule implements TestInterface {
 		testSchedule007();
 		testSchedule008();
 		testSchedule009();
+		testSchedule010();
+		testSchedule011();
+		testSchedule012();
+		testSchedule013();
+		testSchedule014();
+		testSchedule015();
+		testSchedule016();
+		testSchedule017();
+		testSchedule018();
 	}
 	
 	/**
@@ -408,6 +417,339 @@ public class Schedule implements TestInterface {
 			tbc.fail(MessagesConstants.getMessage(
 					MessagesConstants.EXCEPTION_THROWN, new String[] {
 							org.osgi.framework.InvalidSyntaxException.class.getName(),
+							e.getClass().getName() }));
+		} finally {
+			tbc.cleanUp(sa, infos);
+		}
+	}	
+	
+	/**
+	 * This method asserts that IllegalArgumentException is thrown when 
+	 * with have passed an empty string as key for the map. 
+	 * 
+	 * @spec ApplicationDescriptor.schedule(Map,String,String,boolean)
+	 */	
+	private void testSchedule010() {
+		tbc.log("#testSchedule010");
+		PermissionInfo[] infos = null;
+		ScheduledApplication sa = null;
+		try {
+			infos = tbc.getPermissionAdmin().getPermissions(
+					tbc.getTb2Location());
+
+			tbc.setLocalPermission(
+				new PermissionInfo(ApplicationAdminPermission.class.getName(), ApplicationConstants.APPLICATION_PERMISSION_FILTER1, ApplicationAdminPermission.SCHEDULE_ACTION)
+			);
+
+			HashMap map = new HashMap();
+			map.put("", "Rejected");
+			sa = tbc.getAppDescriptor().schedule(map, ApplicationConstants.TIMER_EVENT, ApplicationConstants.EVENT_FILTER, true);
+
+			tbc.failException("", IllegalArgumentException.class);
+		} catch (IllegalArgumentException e) {
+			tbc.pass(MessagesConstants.getMessage(
+					MessagesConstants.EXCEPTION_CORRECTLY_THROWN,
+					new String[] { IllegalArgumentException.class.getName() }));
+		} catch (Exception e) {
+			tbc.fail(MessagesConstants.getMessage(
+					MessagesConstants.EXCEPTION_THROWN, new String[] {
+							IllegalArgumentException.class.getName(),
+							e.getClass().getName() }));
+		} finally {
+			tbc.cleanUp(sa, infos);
+		}
+	}	
+	
+	/**
+	 * This method asserts that no exception is thrown
+	 * when we have passed null as map value. 
+	 * 
+	 * @spec ApplicationDescriptor.schedule(Map,String,String,boolean)
+	 */	
+	private void testSchedule011() {
+		tbc.log("#testSchedule011");
+		PermissionInfo[] infos = null;
+		ScheduledApplication sa = null;
+		try {
+			infos = tbc.getPermissionAdmin().getPermissions(
+					tbc.getTb2Location());
+
+			tbc.setLocalPermission(
+				new PermissionInfo(ApplicationAdminPermission.class.getName(), ApplicationConstants.APPLICATION_PERMISSION_FILTER1, ApplicationAdminPermission.SCHEDULE_ACTION)
+			);
+
+			HashMap map = new HashMap();
+			map.put("Test", null);
+			sa = tbc.getAppDescriptor().schedule(map, ApplicationConstants.TIMER_EVENT, ApplicationConstants.EVENT_FILTER, true);
+
+			tbc.failException("", IllegalArgumentException.class);
+		} catch (IllegalArgumentException e) {
+			tbc.pass(MessagesConstants.getMessage(
+					MessagesConstants.EXCEPTION_CORRECTLY_THROWN,
+					new String[] { IllegalArgumentException.class.getName() }));
+		} catch (Exception e) {
+			tbc.fail(MessagesConstants.getMessage(
+					MessagesConstants.EXCEPTION_THROWN, new String[] {
+							IllegalArgumentException.class.getName(),
+							e.getClass().getName() }));
+		} finally {
+			tbc.cleanUp(sa, infos);
+		}
+	}
+	
+	/**
+	 * This method asserts that IllegalArgumentException
+	 * is thrown when we have passed null as mapKey.
+	 * 
+	 * @spec ApplicationDescriptor.schedule(Map,String,String,boolean)
+	 */	
+	private void testSchedule012() {
+		tbc.log("#testSchedule012");
+		PermissionInfo[] infos = null;
+		ScheduledApplication sa = null;
+		try {
+			infos = tbc.getPermissionAdmin().getPermissions(
+					tbc.getTb2Location());
+
+			tbc.setLocalPermission(
+				new PermissionInfo(ApplicationAdminPermission.class.getName(), ApplicationConstants.APPLICATION_PERMISSION_FILTER1, ApplicationAdminPermission.SCHEDULE_ACTION)
+			);
+
+			HashMap map = new HashMap();
+			map.put(null, "Rejected");
+			sa = tbc.getAppDescriptor().schedule(map, ApplicationConstants.TIMER_EVENT, ApplicationConstants.EVENT_FILTER, true);
+
+			tbc.failException("", IllegalArgumentException.class);
+		} catch (IllegalArgumentException e) {
+			tbc.pass(MessagesConstants.getMessage(
+					MessagesConstants.EXCEPTION_CORRECTLY_THROWN,
+					new String[] { IllegalArgumentException.class.getName() }));
+		} catch (Exception e) {
+			tbc.fail(MessagesConstants.getMessage(
+					MessagesConstants.EXCEPTION_THROWN, new String[] {
+							IllegalArgumentException.class.getName(),
+							e.getClass().getName() }));
+		} finally {
+			tbc.cleanUp(sa, infos);
+		}
+	}	
+	
+	/**
+	 * This method asserts that IllegalArgumentException
+	 * is thrown when we have passed an Integer as mapKey.
+	 * 
+	 * @spec ApplicationDescriptor.schedule(Map,String,String,boolean)
+	 */	
+	private void testSchedule013() {
+		tbc.log("#testSchedule013");
+		PermissionInfo[] infos = null;
+		ScheduledApplication sa = null;
+		try {
+			infos = tbc.getPermissionAdmin().getPermissions(
+					tbc.getTb2Location());
+
+			tbc.setLocalPermission(
+				new PermissionInfo(ApplicationAdminPermission.class.getName(), ApplicationConstants.APPLICATION_PERMISSION_FILTER1, ApplicationAdminPermission.SCHEDULE_ACTION)
+			);
+
+			HashMap map = new HashMap();
+			map.put(new Integer(2), "Rejected");
+			sa = tbc.getAppDescriptor().schedule(map, ApplicationConstants.TIMER_EVENT, ApplicationConstants.EVENT_FILTER, true);
+
+			tbc.failException("", IllegalArgumentException.class);
+		} catch (IllegalArgumentException e) {
+			tbc.pass(MessagesConstants.getMessage(
+					MessagesConstants.EXCEPTION_CORRECTLY_THROWN,
+					new String[] { IllegalArgumentException.class.getName() }));
+		} catch (Exception e) {
+			tbc.fail(MessagesConstants.getMessage(
+					MessagesConstants.EXCEPTION_THROWN, new String[] {
+							IllegalArgumentException.class.getName(),
+							e.getClass().getName() }));
+		} finally {
+			tbc.cleanUp(sa, infos);
+		}
+	}	
+	
+	/**
+	 * This method asserts that IllegalArgumentException
+	 * is thrown when we have passed an Object as mapKey.
+	 * 
+	 * @spec ApplicationDescriptor.schedule(Map,String,String,boolean)
+	 */	
+	private void testSchedule014() {
+		tbc.log("#testSchedule014");
+		PermissionInfo[] infos = null;
+		ScheduledApplication sa = null;
+		try {
+			infos = tbc.getPermissionAdmin().getPermissions(
+					tbc.getTb2Location());
+
+			tbc.setLocalPermission(
+				new PermissionInfo(ApplicationAdminPermission.class.getName(), ApplicationConstants.APPLICATION_PERMISSION_FILTER1, ApplicationAdminPermission.SCHEDULE_ACTION)
+			);
+
+			HashMap map = new HashMap();
+			map.put(new Object(), "Rejected");
+			sa = tbc.getAppDescriptor().schedule(map, ApplicationConstants.TIMER_EVENT, ApplicationConstants.EVENT_FILTER, true);
+
+			tbc.failException("", IllegalArgumentException.class);
+		} catch (IllegalArgumentException e) {
+			tbc.pass(MessagesConstants.getMessage(
+					MessagesConstants.EXCEPTION_CORRECTLY_THROWN,
+					new String[] { IllegalArgumentException.class.getName() }));
+		} catch (Exception e) {
+			tbc.fail(MessagesConstants.getMessage(
+					MessagesConstants.EXCEPTION_THROWN, new String[] {
+							IllegalArgumentException.class.getName(),
+							e.getClass().getName() }));
+		} finally {
+			tbc.cleanUp(sa, infos);
+		}
+	}	
+	
+	/**
+	 * This method asserts that IllegalArgumentException
+	 * is thrown when we have passed a Boolean as mapKey.
+	 * 
+	 * @spec ApplicationDescriptor.schedule(Map,String,String,boolean)
+	 */	
+	private void testSchedule015() {
+		tbc.log("#testSchedule015");
+		PermissionInfo[] infos = null;
+		ScheduledApplication sa = null;
+		try {
+			infos = tbc.getPermissionAdmin().getPermissions(
+					tbc.getTb2Location());
+
+			tbc.setLocalPermission(
+				new PermissionInfo(ApplicationAdminPermission.class.getName(), ApplicationConstants.APPLICATION_PERMISSION_FILTER1, ApplicationAdminPermission.SCHEDULE_ACTION)
+			);
+
+			HashMap map = new HashMap();
+			map.put(new Boolean(true), "Rejected");
+			sa = tbc.getAppDescriptor().schedule(map, ApplicationConstants.TIMER_EVENT, ApplicationConstants.EVENT_FILTER, true);
+
+			tbc.failException("", IllegalArgumentException.class);
+		} catch (IllegalArgumentException e) {
+			tbc.pass(MessagesConstants.getMessage(
+					MessagesConstants.EXCEPTION_CORRECTLY_THROWN,
+					new String[] { IllegalArgumentException.class.getName() }));
+		} catch (Exception e) {
+			tbc.fail(MessagesConstants.getMessage(
+					MessagesConstants.EXCEPTION_THROWN, new String[] {
+							IllegalArgumentException.class.getName(),
+							e.getClass().getName() }));
+		} finally {
+			tbc.cleanUp(sa, infos);
+		}
+	}
+	
+	/**
+	 * This method asserts that IllegalArgumentException
+	 * is thrown when we have passed a Float as mapKey.
+	 * 
+	 * @spec ApplicationDescriptor.schedule(Map,String,String,boolean)
+	 */	
+	private void testSchedule016() {
+		tbc.log("#testSchedule016");
+		PermissionInfo[] infos = null;
+		ScheduledApplication sa = null;
+		try {
+			infos = tbc.getPermissionAdmin().getPermissions(
+					tbc.getTb2Location());
+
+			tbc.setLocalPermission(
+				new PermissionInfo(ApplicationAdminPermission.class.getName(), ApplicationConstants.APPLICATION_PERMISSION_FILTER1, ApplicationAdminPermission.SCHEDULE_ACTION)
+			);
+
+			HashMap map = new HashMap();
+			map.put(new Float(2.3f), "Rejected");
+			sa = tbc.getAppDescriptor().schedule(map, ApplicationConstants.TIMER_EVENT, ApplicationConstants.EVENT_FILTER, true);
+
+			tbc.failException("", IllegalArgumentException.class);
+		} catch (IllegalArgumentException e) {
+			tbc.pass(MessagesConstants.getMessage(
+					MessagesConstants.EXCEPTION_CORRECTLY_THROWN,
+					new String[] { IllegalArgumentException.class.getName() }));
+		} catch (Exception e) {
+			tbc.fail(MessagesConstants.getMessage(
+					MessagesConstants.EXCEPTION_THROWN, new String[] {
+							IllegalArgumentException.class.getName(),
+							e.getClass().getName() }));
+		} finally {
+			tbc.cleanUp(sa, infos);
+		}
+	}
+	
+	/**
+	 * This method asserts that IllegalArgumentException
+	 * is thrown when we have passed a Byte as mapKey.
+	 * 
+	 * @spec ApplicationDescriptor.schedule(Map,String,String,boolean)
+	 */	
+	private void testSchedule017() {
+		tbc.log("#testSchedule017");
+		PermissionInfo[] infos = null;
+		ScheduledApplication sa = null;
+		try {
+			infos = tbc.getPermissionAdmin().getPermissions(
+					tbc.getTb2Location());
+
+			tbc.setLocalPermission(
+				new PermissionInfo(ApplicationAdminPermission.class.getName(), ApplicationConstants.APPLICATION_PERMISSION_FILTER1, ApplicationAdminPermission.SCHEDULE_ACTION)
+			);
+
+			HashMap map = new HashMap();
+			map.put(new Byte("a"), "Rejected");
+			sa = tbc.getAppDescriptor().schedule(map, ApplicationConstants.TIMER_EVENT, ApplicationConstants.EVENT_FILTER, true);
+
+			tbc.failException("", IllegalArgumentException.class);
+		} catch (IllegalArgumentException e) {
+			tbc.pass(MessagesConstants.getMessage(
+					MessagesConstants.EXCEPTION_CORRECTLY_THROWN,
+					new String[] { IllegalArgumentException.class.getName() }));
+		} catch (Exception e) {
+			tbc.fail(MessagesConstants.getMessage(
+					MessagesConstants.EXCEPTION_THROWN, new String[] {
+							IllegalArgumentException.class.getName(),
+							e.getClass().getName() }));
+		} finally {
+			tbc.cleanUp(sa, infos);
+		}
+	}
+	
+	/**
+	 * This method asserts that IllegalArgumentException
+	 * is thrown when we have passed a Double as mapKey.
+	 * 
+	 * @spec ApplicationDescriptor.schedule(Map,String,String,boolean)
+	 */	
+	private void testSchedule018() {
+		tbc.log("#testSchedule018");
+		PermissionInfo[] infos = null;
+		ScheduledApplication sa = null;
+		try {
+			infos = tbc.getPermissionAdmin().getPermissions(
+					tbc.getTb2Location());
+
+			tbc.setLocalPermission(
+				new PermissionInfo(ApplicationAdminPermission.class.getName(), ApplicationConstants.APPLICATION_PERMISSION_FILTER1, ApplicationAdminPermission.SCHEDULE_ACTION)
+			);
+
+			HashMap map = new HashMap();
+			map.put(new Double(0.2), "Rejected");
+			sa = tbc.getAppDescriptor().schedule(map, ApplicationConstants.TIMER_EVENT, ApplicationConstants.EVENT_FILTER, true);
+
+			tbc.failException("", IllegalArgumentException.class);
+		} catch (IllegalArgumentException e) {
+			tbc.pass(MessagesConstants.getMessage(
+					MessagesConstants.EXCEPTION_CORRECTLY_THROWN,
+					new String[] { IllegalArgumentException.class.getName() }));
+		} catch (Exception e) {
+			tbc.fail(MessagesConstants.getMessage(
+					MessagesConstants.EXCEPTION_THROWN, new String[] {
+							IllegalArgumentException.class.getName(),
 							e.getClass().getName() }));
 		} finally {
 			tbc.cleanUp(sa, infos);
