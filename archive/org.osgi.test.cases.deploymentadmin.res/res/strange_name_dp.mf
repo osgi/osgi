@@ -8,6 +8,6 @@ DeploymentPackage-DocURL: www.cesar.org.br.
 DeploymentPackage-Vendor: CESAR.
 DeploymentPackage-License: www.cesar.org.br/megtck/license.html
 
-Name: 	st_ra.ge-path/bundle001.jar
+Name: st_ra.ge-dir/bundle001.jar
 Bundle-SymbolicName: bundles.tb1
 Bundle-Version: 1.0

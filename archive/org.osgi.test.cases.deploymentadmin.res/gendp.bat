@@ -367,8 +367,7 @@ jar -cvfm ..\res\simple_bundle_res.dp ..\res\simple_bundle_res_dp.mf bundle001.j
 jarsigner -keystore ..\..\cnf\certificate\.keystore -storepass testtest -keypass testtest ..\res\simple_bundle_res.dp test
 move ..\res\simple_bundle_res.dp ..\..\org.osgi.test.cases.deploymentadmin.tc2\res\
 
-jar -cvf ..\res\signing_files_not_next.dp bundle001.jar bundle002.jar META-INF\MANIFEST.mf META-INF\README.txt META-INF\test.RSA META-INF\test.SF
-jarsigner -keystore ..\..\cnf\certificate\.keystore -storepass testtest -keypass testtest ..\res\signing_files_not_next.dp test
+jar -cvfM ..\res\signing_files_not_next.dp META-INF\MANIFEST.MF META-INF\README.TXT META-INF\TEST.SF META-INF\TEST.RSA bundle001.jar bundle002.jar
 copy ..\res\signing_files_not_next.dp ..\..\org.osgi.test.cases.deploymentadmin.tc1\res\
 move ..\res\signing_files_not_next.dp ..\..\org.osgi.test.cases.deploymentadmin.tc2\res\
 
