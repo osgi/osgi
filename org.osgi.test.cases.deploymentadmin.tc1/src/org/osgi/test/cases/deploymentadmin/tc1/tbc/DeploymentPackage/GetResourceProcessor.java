@@ -39,20 +39,19 @@
  */
 
 package org.osgi.test.cases.deploymentadmin.tc1.tbc.DeploymentPackage;
-import java.io.InputStream;
 import java.util.Dictionary;
 import java.util.Hashtable;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.ServiceReference;
+import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.deploymentadmin.DeploymentPackage;
-import org.osgi.service.deploymentadmin.spi.DeploymentSession;
-import org.osgi.service.deploymentadmin.spi.ResourceProcessor;
 import org.osgi.test.cases.deploymentadmin.tc1.tbc.DeploymentConstants;
 import org.osgi.test.cases.deploymentadmin.tc1.tbc.DeploymentTestControl;
 import org.osgi.test.cases.deploymentadmin.tc1.tbc.util.MessagesConstants;
 import org.osgi.test.cases.deploymentadmin.tc1.tbc.util.TestingBundle;
 import org.osgi.test.cases.deploymentadmin.tc1.tbc.util.TestingDeploymentPackage;
+import org.osgi.test.cases.deploymentadmin.tc1.tbc.util.TestingGetServiceRegistrationResourceProcessor;
 import org.osgi.test.cases.deploymentadmin.tc1.tbc.util.TestingResource;
 
 /**
@@ -146,20 +145,20 @@ public class GetResourceProcessor {
 	private void testGetResourceProcessor003() {
 		tbc.log("#testGetResourceProcessor003");
 
-		ResourceProcessorService dummy = new ResourceProcessorService(
-				DeploymentConstants.RESOURCE_PROCESSOR_PROPERTY_KEY,
-				"property value");
+		String value = "new value";
 		
 		Dictionary props = new Hashtable();
 		props.put("service.pid", DeploymentConstants.PID_RESOURCE_PROCESSOR1);
-		props.put(dummy.key, dummy.value);
-        
+		props.put(DeploymentConstants.RESOURCE_PROCESSOR_PROPERTY_KEY, value);
+		ServiceReference rp = null;
 		try {
-            tbc.registerService(ResourceProcessor.class.getName(), dummy, props);
-            
-			ServiceReference rp = dpRP.getResourceProcessor(testRPResource.getName());
+			TestingGetServiceRegistrationResourceProcessor test = (TestingGetServiceRegistrationResourceProcessor) tbc.getServiceInstance(DeploymentConstants.PID_RESOURCE_PROCESSOR1);
+			ServiceRegistration registration = test.getServiceRegistration();
+			registration.setProperties(props);
+			rp = dpRP.getResourceProcessor(testRPResource.getName());
+			
 			tbc.assertEquals("The properties of the updated service is the same as the deployment package resource service",
-							dummy.value, (String) rp.getProperty(DeploymentConstants.RESOURCE_PROCESSOR_PROPERTY_KEY));
+							value, (String) rp.getProperty(DeploymentConstants.RESOURCE_PROCESSOR_PROPERTY_KEY));
 
 		} catch (Exception e) {
 			tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }));
@@ -173,52 +172,4 @@ public class GetResourceProcessor {
 		tbc.uninstall(dpRP);
 	}
 	
-	/**
-	 * @author Andre Assad
-	 * 
-	 * Dummy Service to test updates of resource processors services references
-	 *
-	 */
-	class ResourceProcessorService implements ResourceProcessor {
-		
-		String key;
-		String value;
-		
-		public ResourceProcessorService(String key, String value) {
-			this.key = key;
-			this.value = value;
-		}
-
-		public void begin(DeploymentSession session) {
-			
-		}
-
-		public void process(String name, InputStream stream) {
-			
-		}
-
-		public void dropped(String resource) {
-			
-		}
-
-		public void dropAllResources() {
-			
-		}
-
-		public void prepare() {
-			
-		}
-
-		public void commit() {
-			
-		}
-
-		public void rollback() {
-			
-		}
-
-		public void cancel() {
-			
-		}
-	}
 }

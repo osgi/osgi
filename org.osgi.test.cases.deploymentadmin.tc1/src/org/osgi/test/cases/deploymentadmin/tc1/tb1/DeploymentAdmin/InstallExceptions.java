@@ -36,9 +36,9 @@
  */
 package org.osgi.test.cases.deploymentadmin.tc1.tb1.DeploymentAdmin;
 
-import org.osgi.service.deploymentadmin.spi.DeploymentCustomizerPermission;
 import org.osgi.service.deploymentadmin.DeploymentException;
 import org.osgi.service.deploymentadmin.DeploymentPackage;
+import org.osgi.service.deploymentadmin.spi.DeploymentCustomizerPermission;
 import org.osgi.test.cases.deploymentadmin.tc1.tbc.DeploymentConstants;
 import org.osgi.test.cases.deploymentadmin.tc1.tbc.DeploymentTestControl;
 import org.osgi.test.cases.deploymentadmin.tc1.tbc.TestInterface;
@@ -49,7 +49,7 @@ import org.osgi.test.cases.deploymentadmin.tc1.tbc.util.TestingDeploymentPackage
 /**
  * @author Andre Assad
  *  
- * This Test Class Validates exceptions accured during
+ * This Test Class Validates exceptions occured during
  * installations of deployment packages, according to MEG reference
  * documentation.
  */
@@ -380,7 +380,7 @@ public class InstallExceptions implements TestInterface {
             dp = tbc.installDeploymentPackage(tbc.getWebServer() + testDP.getFilename());
             tbc.failException("#", DeploymentException.class);
         } catch (DeploymentException e) {
-            tbc.assertEquals("DeploymentException thrown signing code error", DeploymentException.CODE_PROCESSOR_NOT_FOUND, e.getCode());
+            tbc.assertEquals("DeploymentException thrown if the resource processor was not found.", DeploymentException.CODE_PROCESSOR_NOT_FOUND, e.getCode());
         } catch (Exception e) {
             tbc.fail(MessagesConstants.getMessage(MessagesConstants.EXCEPTION_THROWN, new String[] {"DeploymentException", e.getClass().getName() }));
         } finally {
