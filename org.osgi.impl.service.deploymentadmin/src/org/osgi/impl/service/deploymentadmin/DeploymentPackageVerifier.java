@@ -15,7 +15,19 @@ import org.osgi.service.deploymentadmin.DeploymentException;
  * Checks whether the deployment package is valid.
  */
 public class DeploymentPackageVerifier {
+	
+	// allowed chars in DeploymentPackage-SymbolicName values
+	String allowedDpSnChars = "abcdefghijklmnopqrstuvwxyz" +
+	                          "ABCDEFGHIJKLMNOPQRSTUVWXYZ" + 
+	                          "0123456789" + 
+	                          "-_./";
     
+	// allowed chars in resource names
+	String allowedResNameChars = "abcdefghijklmnopqrstuvwxyz" +
+	                             "ABCDEFGHIJKLMNOPQRSTUVWXYZ" +
+	                             "0123456789" +
+	                             "-_.";
+	
     private DeploymentPackageCtx  dpCtx;
     private DeploymentPackageImpl dp;
     
@@ -35,6 +47,7 @@ public class DeploymentPackageVerifier {
         if (null == dp.getName())
             throw new DeploymentException(DeploymentException.CODE_MISSING_HEADER,
                     "Missing deployment package name");
+        checkHeaderChars(DAConstants.DP_NAME, dp.getName(), allowedDpSnChars);
         
         if (null == dp.getVersion())
             throw new DeploymentException(DeploymentException.CODE_MISSING_HEADER,
@@ -69,7 +82,7 @@ public class DeploymentPackageVerifier {
                     "Missing header in: " + dp + " header: " + DAConstants.DP_VERSION);        
     }
 
-    private void checkNameSections()
+	private void checkNameSections()
     		throws DeploymentException
     {
         for (Iterator iter = dp.getBundleEntries().iterator(); iter.hasNext();) {
@@ -98,7 +111,7 @@ public class DeploymentPackageVerifier {
     private void checkBundleEntry(DeploymentPackageImpl dp, BundleEntry be) 
 			throws DeploymentException
     {
-        checkResourceName(be.getResName());
+    	checkHeaderChars(DAConstants.RES_NAME, be.getResName(), allowedResNameChars);
         
         if (null == dp.getFixPackRange() && be.isMissing())
             	throw new DeploymentException(DeploymentException.CODE_BAD_HEADER, 
@@ -149,21 +162,24 @@ public class DeploymentPackageVerifier {
 		}
     }
     
-    private void checkResourceName(String name) throws DeploymentException {
-        for (int i = 0; i < name.length(); i++) {
-            char ch = name.charAt(i);
-            if (ch >= 'a' && ch <= 'z')
-                continue;
-            if (ch >= 'A' && ch <= 'Z')
-                continue;
-            if (ch >= '0' && ch <= '9')
-                continue;
-            if (ch == '_' || ch == '.' || ch == '-' || ch == '/')
-                continue;
-            throw new DeploymentException(DeploymentException.CODE_BAD_HEADER, 
-                    "Character '" + ch + "' is not allowed in resource names");
-        }
-    }
+	private void checkHeaderChars(String header, String value, String allowed) 
+			throws DeploymentException 
+	{
+		if (!checkAllowedChars(value, allowed))
+			throw new DeploymentException(DeploymentException.CODE_BAD_HEADER, 
+					"Illegal character in '" + header + "' header");
+	}
+
+    private boolean checkAllowedChars(String str, String allowed) 
+    		throws DeploymentException 
+    {
+    	for (int i = 0; i < str.length(); i++) {
+    		String ch = "" + str.charAt(i);
+    		if (allowed.indexOf(ch) == -1)
+    			return false;
+    	}
+    	return true;
+	}
 
     private void checkResourceEntry(DeploymentPackageImpl dp, ResourceEntry re) 
     		throws DeploymentException 

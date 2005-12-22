@@ -32,6 +32,7 @@ public class DAConstants {
     public static final String BUNDLE_LOCALIZATION  = Constants.BUNDLE_LOCALIZATION;
     
     // headers in the name sections of DPs
+    public static final String RES_NAME             = "Name";
     public static final String MISSING              = "DeploymentPackage-Missing";
     public static final String BUNDLE_SYMBOLIC_NAME = Constants.BUNDLE_SYMBOLICNAME;
     public static final String BUNDLE_VERSION       = Constants.BUNDLE_VERSION;
