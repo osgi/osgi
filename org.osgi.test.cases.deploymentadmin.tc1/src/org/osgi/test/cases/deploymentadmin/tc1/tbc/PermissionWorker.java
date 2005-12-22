@@ -55,17 +55,15 @@ public class PermissionWorker extends Thread {
         this.tbc = tbc;
     }
 
-    public void run() {
+    public synchronized void run() {
         while (true) {
-            synchronized (this) {
-                try {
-                    this.wait();
-                    tbc.getPermissionAdmin().setPermissions(location, permissions);
-                    // notify TBC that permission is set
-                    this.notifyAll();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
+            try {
+                this.wait();
+                tbc.getPermissionAdmin().setPermissions(location, permissions);
+                // notify TBC that permission is set
+                this.notifyAll();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
             }
         }
     }
