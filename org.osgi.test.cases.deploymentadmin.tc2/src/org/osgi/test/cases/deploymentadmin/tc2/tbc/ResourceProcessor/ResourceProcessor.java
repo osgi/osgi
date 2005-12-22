@@ -68,7 +68,6 @@ public class ResourceProcessor {
 		testResourceProcessor005();
 		testResourceProcessor006();
         testResourceProcessor007();
-        testResourceProcessor008();
 	}
 
 		
@@ -326,40 +325,6 @@ public class ResourceProcessor {
         try {
             dp1 = tbc.installDeploymentPackage(tbc.getWebServer() + testDP1.getFilename());
             tbc.assertNotNull("Deployment Package 1 installed", dp1);
-            
-            dp2 = tbc.installDeploymentPackage(tbc.getWebServer() + testDP2.getFilename());
-            tbc.failException("#", DeploymentException.class);
-        } catch (DeploymentException e) {
-            tbc.assertEquals("DeploymentException.CODE_FOREIGN_CUSTOMIZER correctly thrown", DeploymentException.CODE_FOREIGN_CUSTOMIZER, e.getCode());
-        } catch (Exception e) {
-            tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }));
-        } finally {
-            tbc.uninstall(new DeploymentPackage[]{dp1, dp2});
-        }
-    }
-    
-    /**
-     * Asserts that the Deployment Admin service must execute all its
-     * operations, including calls for handling bundles and all calls that are
-     * forwarded to a Resource Processor service, inside a doPrivileged block.
-     * This privileged block must use an AccessControlContext object that limits
-     * the permissions to the security scope. Therefore, a Resource Processor
-     * service must assume that it is always running inside the correct security
-     * scope. A Resource Processor can of course use its own security scope by
-     * doing a local doPrivileged block.
-     * 
-     * @spec 114.13.3 Permissions During an Install Session
-     */
-    private void testResourceProcessor008() {
-        tbc.log("#testResourceProcessor008");
-        
-        DeploymentPackage dp1 = null, dp2 = null;
-        TestingDeploymentPackage testDP1 = tbc.getTestingDeploymentPackage(DeploymentConstants.RESOURCE_PROCESSOR_CUSTOMIZER);
-        TestingDeploymentPackage testDP2 = tbc.getTestingDeploymentPackage(DeploymentConstants.RP_FROM_OTHER_DP);
-        try {
-            dp1 = tbc.installDeploymentPackage(tbc.getWebServer() + testDP1.getFilename());
-            tbc.assertNotNull("Deployment Package 1 installed", dp1);
-            
             dp2 = tbc.installDeploymentPackage(tbc.getWebServer() + testDP2.getFilename());
             tbc.failException("#", DeploymentException.class);
         } catch (DeploymentException e) {
