@@ -61,6 +61,8 @@ public interface TestingSessionResourceProcessor extends ResourceProcessor {
     public static final int ROLL_BACK = 5;
     public static final int CANCEL = 6;
     public static final int START = 7;
+    //--
+    public static final int ORDER_OF_UNINSTALLING = 8;
     
     public File getDataFile(Bundle bundle);
 	public DeploymentPackage getTargetDeploymentPackage();
@@ -84,4 +86,8 @@ public interface TestingSessionResourceProcessor extends ResourceProcessor {
     public void waitForRelease(boolean waitAgain);
     public void setReleased(boolean release);
     public boolean isReleased();
+    
+    public String[] getResourcesDropped();
+    
+    public boolean uninstallOrdered();
 }
