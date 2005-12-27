@@ -46,4 +46,8 @@ import org.osgi.service.deploymentadmin.spi.ResourceProcessor;
  */
 public interface TestingGetServiceRegistrationResourceProcessor extends ResourceProcessor {
     public ServiceRegistration getServiceRegistration();
+    public void waitForRelease();
+    public void setRelease(boolean release);
+    
+    
 }
