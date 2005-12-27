@@ -42,10 +42,13 @@
  */
 
 package org.osgi.test.cases.deploymentadmin.tc1.tbc.DeploymentPackage;
-import org.osgi.framework.Version;
-import org.osgi.service.deploymentadmin.*;
-import org.osgi.test.cases.deploymentadmin.tc1.tbc.*;
-import org.osgi.test.cases.deploymentadmin.tc1.tbc.util.*;
+import org.osgi.service.deploymentadmin.BundleInfo;
+import org.osgi.service.deploymentadmin.DeploymentPackage;
+import org.osgi.test.cases.deploymentadmin.tc1.tbc.DeploymentConstants;
+import org.osgi.test.cases.deploymentadmin.tc1.tbc.DeploymentTestControl;
+import org.osgi.test.cases.deploymentadmin.tc1.tbc.util.MessagesConstants;
+import org.osgi.test.cases.deploymentadmin.tc1.tbc.util.TestingBundle;
+import org.osgi.test.cases.deploymentadmin.tc1.tbc.util.TestingDeploymentPackage;
 
 /**
  * @author Luiz Felipe Guimaraes

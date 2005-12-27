@@ -465,7 +465,7 @@ public class InstallDeploymentPackageUseCases implements TestInterface {
         } catch (DeploymentException e) {
             try {
                 synchronized (tbc) {
-                    tbc.wait(DeploymentConstants.WAIT_EVENT);
+                    tbc.wait(DeploymentConstants.SHORT_TIMEOUT);
                 }
                 String dpNameProp = (String) deploymentEventHandler.getProperty("deploymentpackage.name");
                 Boolean successProp = (Boolean) deploymentEventHandler.getProperty("successful");
@@ -510,7 +510,7 @@ public class InstallDeploymentPackageUseCases implements TestInterface {
         } catch (DeploymentException e) {
 			try {
 				synchronized (tbc) {
-					tbc.wait(DeploymentConstants.WAIT_EVENT);
+					tbc.wait(DeploymentConstants.SHORT_TIMEOUT);
 				}
 				String dpNameProp = (String) deploymentEventHandler.getProperty("deploymentpackage.name");
 				Boolean successProp = (Boolean) deploymentEventHandler.getProperty("successful");

@@ -63,9 +63,9 @@ import org.osgi.framework.ServicePermission;
 import org.osgi.framework.ServiceReference;
 import org.osgi.service.deploymentadmin.DeploymentAdmin;
 import org.osgi.service.deploymentadmin.DeploymentAdminPermission;
-import org.osgi.service.deploymentadmin.spi.DeploymentCustomizerPermission;
 import org.osgi.service.deploymentadmin.DeploymentException;
 import org.osgi.service.deploymentadmin.DeploymentPackage;
+import org.osgi.service.deploymentadmin.spi.DeploymentCustomizerPermission;
 import org.osgi.service.deploymentadmin.spi.ResourceProcessor;
 import org.osgi.service.permissionadmin.PermissionAdmin;
 import org.osgi.service.permissionadmin.PermissionInfo;
@@ -95,7 +95,6 @@ import org.osgi.test.cases.util.DefaultTestBundleControl;
 public class DeploymentTestControl extends DefaultTestBundleControl {
 
 	private DeploymentAdmin deploymentAdmin;
-	private ResourceProcessor resourceProcessor;
 	private PermissionAdmin permissionAdmin;
 	private TB1Service tb1Srv;
 	
@@ -125,7 +124,7 @@ public class DeploymentTestControl extends DefaultTestBundleControl {
 		permissionAdmin = (PermissionAdmin) getContext().getService(getContext().getServiceReference(PermissionAdmin.class.getName()));
 		ServiceReference daServiveReference = getContext().getServiceReference(DeploymentAdmin.class.getName());
 		deploymentAdmin = (DeploymentAdmin) getContext().getService(daServiveReference);
-        
+		
         installHandlersAndListeners();
 		try {
 			install("tb1.jar");
@@ -136,10 +135,13 @@ public class DeploymentTestControl extends DefaultTestBundleControl {
 		} catch (Exception e) {
 			log("Failed to install bundle tb1.jar");
 		}
-        
+
+		// set this permissions to all resource processors
+		//---------
 		createTestingDeploymentPackages();
 		setBundleServicePermissions();
         startPermissionWorker();
+        //
 	}
 	
     /**
@@ -155,6 +157,7 @@ public class DeploymentTestControl extends DefaultTestBundleControl {
 	 */
 	private void setBundleServicePermissions() {
 		// Activators must have ServicePermission to create a ResourceProcessor instance
+
 		PermissionInfo info[] = {
 				new PermissionInfo(DeploymentCustomizerPermission.class.getName(),
 						"(name=bundles.*)",DeploymentCustomizerPermission.PRIVATEAREA),
@@ -164,7 +167,6 @@ public class DeploymentTestControl extends DefaultTestBundleControl {
 				new PermissionInfo(PackagePermission.class.getName(), "*", "EXPORT, IMPORT"),
 				new PermissionInfo(FilePermission.class.getName(), "<<ALL FILES>>", "READ, WRITE, EXECUTE, DELETE"),
 				};
-		
 		// set this permissions to all resource processors
         setPermissionInfo(DeploymentConstants.OSGI_DP_LOCATION + DeploymentConstants.PID_RESOURCE_PROCESSOR1, info);
         setPermissionInfo(DeploymentConstants.OSGI_DP_LOCATION + DeploymentConstants.PID_RESOURCE_PROCESSOR2, info);
@@ -600,13 +602,6 @@ public class DeploymentTestControl extends DefaultTestBundleControl {
 		return deploymentAdmin;
 	}
 
-	/**
-	 * @return Returns the resourceProcessor.
-	 */
-	public ResourceProcessor getResourceProcessor() {
-		return resourceProcessor;
-	}
-
 	// DeploymentAdmin Test Cases. Belong to tb1.jar bundle
 	// InstallDeploymentPackageAPI
 	public void testDeploymentAdminInstallDeploymentPackageAPI() {
@@ -734,30 +729,7 @@ public class DeploymentTestControl extends DefaultTestBundleControl {
 		return null;
 	}
     
-    public DeploymentPackage installDeploymentPackageAndNotify(String urlStr) throws DeploymentException, SecurityException {
-        InputStream in = null;
-        URL url = null;
-        try {
-            url = new URL(urlStr);
-            in = url.openStream();
-            synchronized (this) {
-                this.notifyAll();
-            }
-            return getDeploymentAdmin().installDeploymentPackage(in);
-        } catch (MalformedURLException e) {
-            fail("Failed to open the URL");
-        } catch (IOException e) {
-            fail("Failed to open an InputStream");
-        } finally {
-            if (in != null)
-                try {
-                    in.close();
-                } catch (Exception e1) {
-                }
-        }
-        return null;
-    }
-	
+  	
 	public DeploymentPackage installDeploymentPackage(String urlStr, String rename) throws DeploymentException, SecurityException {
 		URL url = null;
 		try {
@@ -870,25 +842,7 @@ public class DeploymentTestControl extends DefaultTestBundleControl {
         setAssyncPermission(info);
 	}
     
-    /**
-     * Sets a PermissionInfo for a resource processor bundle
-     * @param location
-     * @param name filter
-     */
-    public void setCustomizerPermission(String location, String filter) {
-        PermissionInfo info[] = {
-                new PermissionInfo(DeploymentCustomizerPermission.class.getName(), filter,
-                        DeploymentCustomizerPermission.PRIVATEAREA),
-                new PermissionInfo(ServicePermission.class.getName(), "*",ServicePermission.GET + ","
-                                + ServicePermission.REGISTER),
-                new PermissionInfo(AdminPermission.class.getName(), "*", "*"),
-                new PermissionInfo(PackagePermission.class.getName(), "*", "EXPORT, IMPORT"),
-                new PermissionInfo(FilePermission.class.getName(), "<<ALL FILES>>", "READ, WRITE, EXECUTE, DELETE"), };
-
-        setAssyncPermission(location, info);
-    }
-	
-    /**
+   /**
 	 * Give's the Resource Processors the right to access a bundle's private
 	 * area and set the DeploymentAdminPermission for the caller.
 	 */
@@ -919,10 +873,10 @@ public class DeploymentTestControl extends DefaultTestBundleControl {
      * @param info
      */
     private void setAssyncPermission(PermissionInfo[] info) {
-        permWorker.setLocation(bundleLocation);
-        permWorker.setPermissions(info);
         synchronized (permWorker) {
             try {
+                permWorker.setLocation(bundleLocation);
+                permWorker.setPermissions(info);
                 permWorker.notifyAll();
                 // wait for worker to notify tha permission is set
                 permWorker.wait(DeploymentConstants.TIMEOUT);
@@ -932,23 +886,6 @@ public class DeploymentTestControl extends DefaultTestBundleControl {
         }
     }
     
-    /**
-     * @param location
-     * @param info
-     */
-    private void setAssyncPermission(String location, PermissionInfo[] info) {
-        permWorker.setLocation(location);
-        permWorker.setPermissions(info);
-        synchronized (permWorker) {
-            try {
-                permWorker.notifyAll();
-                // wait for worker to notify tha permission is set
-                permWorker.wait(DeploymentConstants.TIMEOUT);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
-    }
     
     /**
      * Set the a PermissionInfo for a bundle location for the caller
@@ -957,25 +894,7 @@ public class DeploymentTestControl extends DefaultTestBundleControl {
         getPermissionAdmin().setPermissions(location, info);
     }
 	
-	/**
-	 * @return Returns the tb1Srv.
-	 */
-	public TB1Service getTB1Service() {
-		if (tb1Srv == null) {
-			throw new NullPointerException("TB1Service service reference is null"); 
-		}
-		return tb1Srv;
-	}
-
-	/**
-	 * @return Returns the testClasses.
-	 */
-	public TestInterface[] getTestClasses() {
-		if (testClasses == null) {
-			throw new NullPointerException("Test Classes instance is null");
-		}
-		return testClasses;
-	}
+	
 	
 	/**
 	 * @return Returns the deploymentEventHandler.

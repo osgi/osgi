@@ -57,9 +57,9 @@ import org.osgi.framework.PackagePermission;
 import org.osgi.framework.ServicePermission;
 import org.osgi.framework.ServiceReference;
 import org.osgi.framework.Version;
-import org.osgi.service.deploymentadmin.spi.DeploymentCustomizerPermission;
 import org.osgi.service.deploymentadmin.DeploymentException;
 import org.osgi.service.deploymentadmin.DeploymentPackage;
+import org.osgi.service.deploymentadmin.spi.DeploymentCustomizerPermission;
 import org.osgi.service.deploymentadmin.spi.ResourceProcessor;
 import org.osgi.service.permissionadmin.PermissionInfo;
 import org.osgi.test.cases.deploymentadmin.tc2.tbc.DeploymentConstants;
@@ -86,12 +86,6 @@ public class DeploymentSession {
     public static boolean SIMULATING_EXCEPTION_ON_COMMIT = false;
     public static boolean SIMULATING_EXCEPTION_ON_PREPARE = false;
     
-    private boolean reach1 = false, reach2= false, reachTC = false;
-    private boolean clean1, clean2;
-    
-    private SessionWorker worker1, worker2;
-    private static Barrier releaseBarrier, cleanupBarrier;
-	
 	public DeploymentSession(DeploymentTestControl tbc) {
 		this.tbc = tbc;
 	}
@@ -421,6 +415,7 @@ public class DeploymentSession {
             
             SIMULATING_EXCEPTION_ON_PREPARE = true;
             targetDP.uninstall();
+            tbc.failException("#", DeploymentException.class);
 		} catch (DeploymentException e) {
             if (rp1.sessionJoinTime() > rp2.sessionJoinTime()) {
                 tbc.assertTrue(
@@ -456,6 +451,7 @@ public class DeploymentSession {
 		listener.reset();
 		try {
 			targetDP = tbc.installDeploymentPackage(tbc.getWebServer() + testDP.getFilename());
+			tbc.failException("#", DeploymentException.class);
 		} catch (DeploymentException e) {
             TestingBundle[] testBundles = testDP.getBundles();
             events = listener.getEvents();
@@ -538,53 +534,68 @@ public class DeploymentSession {
      * 
      * @spec 114.12 Threading
      */
-    private synchronized void testDeploymentSession012() {
-        tbc.log("#testDeploymentSession012");
-        setResourceProcessorPermissions(DeploymentConstants.OSGI_DP_LOCATION
-            + DeploymentConstants.PID_RESOURCE_PROCESSOR4, "(name=*)");
-        
-        TestingBlockingResourceProcessor testBlockRP = null;
-        try {
-            releaseBarrier = new Barrier();
-            cleanupBarrier = new Barrier();
+	
+	 private synchronized void testDeploymentSession012() {
+	        tbc.log("#testDeploymentSession012");
+	        setResourceProcessorPermissions(DeploymentConstants.OSGI_DP_LOCATION
+	            + DeploymentConstants.PID_RESOURCE_PROCESSOR4, "(name=*)");
+	        
+	        TestingBlockingResourceProcessor testBlockRP = null;
+	        SessionWorker worker1 = null,worker2 = null;
+	        
+	        try {
             
-            TestingDeploymentPackage blockDP = tbc.getTestingDeploymentPackage(DeploymentConstants.BLOCK_SESSION_RESOURCE_PROCESSOR);
-            TestingDeploymentPackage testDP = tbc.getTestingDeploymentPackage(DeploymentConstants.SIMPLE_DP);
-            
-            worker1 = new SessionWorker(blockDP, 1);
-            worker1.start();
-            tbc.assertTrue("Installation of blocking session DP not completed", !reach1);
-            
-            int count = 0;
-            BundleListenerImpl listener = tbc.getBundleListener();
-            while ((count < DeploymentConstants.TIMEOUT) &&
-                !((listener.getCurrentType() == BundleEvent.STARTED) && 
-                (listener.getCurrentBundle().getSymbolicName().indexOf(DeploymentConstants.PID_RESOURCE_PROCESSOR4) != -1))) {
-                count++;
-                wait(1);
-            }
-            
-            testBlockRP = (TestingBlockingResourceProcessor) getTestSessionRP(DeploymentConstants.PID_RESOURCE_PROCESSOR4);
-            tbc.assertNotNull("Blocking Resource Processor was registered", testBlockRP);
-            
-            worker2 = new SessionWorker(testDP, 2);
-            worker2.start();
-            tbc.assertTrue("Installation of test DP not completed", !reach2);
-            
-            // releases blocking resource processor
-            testBlockRP.setReleased(true);
-            testBlockRP.waitForRelease();
-            
-            tbc.pass("DeploymentAdmin only processed a single session at a time");
-            
-        } catch (Exception e) {
-            tbc.fail(MessagesConstants.getMessage(
-                MessagesConstants.UNEXPECTED_EXCEPTION, new String[]{e.getClass().getName()}));
-        } finally {
-            cleanUp(testBlockRP);
-        }
-    }
-    
+	            TestingDeploymentPackage blockDP = tbc.getTestingDeploymentPackage(DeploymentConstants.BLOCK_SESSION_RESOURCE_PROCESSOR);
+	            TestingDeploymentPackage testDP = tbc.getTestingDeploymentPackage(DeploymentConstants.SIMPLE_DP);
+	            
+	            worker1 = new SessionWorker(blockDP);
+	            worker1.start();
+	            
+	            //Just to guarantee that this Thread is executed before the second one
+	            while (!worker1.isRunning()) {
+	            	this.wait(500);
+	            }
+	            
+	            
+	            worker2 = new SessionWorker(testDP);
+	            worker2.start();
+	            //To assure it is blocked on the tests below
+	            while (!worker2.isRunning()) {
+	            	this.wait(500);
+	            }
+	            
+	            testBlockRP = (TestingBlockingResourceProcessor) getTestSessionRP(DeploymentConstants.PID_RESOURCE_PROCESSOR4);
+	            tbc.assertNotNull("TestingBlockingResourceProcessor is not null", testBlockRP);
+	            
+	            tbc.assertTrue("The installation of Block DP was not completed",!worker1.isInstalled());
+	            
+	            tbc.assertTrue("Installation of test DP was not completed", !worker2.isInstalled());
+	            
+	            // releases blocking resource processor
+	            testBlockRP.setReleased(true);
+	            
+	            
+	            long initial = System.currentTimeMillis();
+	            long actual = System.currentTimeMillis();
+	            
+	            while ((!worker1.isInstalled() || !worker2.isInstalled()) && (actual - initial < DeploymentConstants.SHORT_TIMEOUT)) {
+		            	actual = System.currentTimeMillis();
+	            }
+
+	            //The second deployment package can be installed or not, depending on how long is the RI timeout
+	            //Due to that, we only check is the first DP is installed.
+	            tbc.assertTrue("DeploymentAdmin only processed a single session at a time",worker1.isInstalled());
+	            
+	        } catch (Exception e) {
+	            tbc.fail(MessagesConstants.getMessage(
+	                MessagesConstants.UNEXPECTED_EXCEPTION, new String[]{e.getClass().getName()}));
+	        } finally {
+	            worker1.uninstallDP();
+	            worker2.uninstallDP();
+	        }
+	    }
+	 
+
     /**
      * Asserts that <code>DeploymentAdmin</code> <b>must only process a single
      * session at a time </b>. When a client requests a new session with an
@@ -595,116 +606,105 @@ public class DeploymentSession {
      * 
      * @spec 114.12 Threading
      */
-    private synchronized void testDeploymentSession013() {
-        tbc.log("#testDeploymentSession013");
-        setResourceProcessorPermissions(DeploymentConstants.OSGI_DP_LOCATION
-            + DeploymentConstants.PID_RESOURCE_PROCESSOR4, "(name=*)");
-        
-        DeploymentPackage dp = null;
-        TestingBlockingResourceProcessor testBlockRP = null;
-        try {
-            releaseBarrier = new Barrier();
-            cleanupBarrier = new Barrier();
-            
+	 private synchronized void testDeploymentSession013() {
+	        tbc.log("#testDeploymentSession013");
+	        setResourceProcessorPermissions(DeploymentConstants.OSGI_DP_LOCATION
+	            + DeploymentConstants.PID_RESOURCE_PROCESSOR4, "(name=*)");
+	        SessionWorker worker1 = null,worker2 = null;
+	        
+	        TestingBlockingResourceProcessor testBlockRP = null;
             TestingDeploymentPackage blockDP = tbc.getTestingDeploymentPackage(DeploymentConstants.BLOCK_SESSION_RESOURCE_PROCESSOR);
             TestingDeploymentPackage testDP = tbc.getTestingDeploymentPackage(DeploymentConstants.SIMPLE_DP);
-            
-            dp = tbc.installDeploymentPackage(tbc.getWebServer() + testDP.getFilename());
-            
-            worker1 = new SessionWorker(blockDP, 1);
-            worker1.start();
-            tbc.assertTrue("Installation of blocking session DP not completed", !reach1);
-            
-            int count = 0;
-            BundleListenerImpl listener = tbc.getBundleListener();
-            while ((count < DeploymentConstants.TIMEOUT) &&
-                !((listener.getCurrentType() == BundleEvent.STARTED) && 
-                (listener.getCurrentBundle().getSymbolicName().indexOf(DeploymentConstants.PID_RESOURCE_PROCESSOR4) != -1))) {
-                count++;
-                wait(1);
-            }
-            
-            testBlockRP = (TestingBlockingResourceProcessor) getTestSessionRP(DeploymentConstants.PID_RESOURCE_PROCESSOR4);
-            tbc.assertNotNull("Blocking Resource Processor was registered", testBlockRP);
-            
-            worker2 = new SessionWorker(testDP, 2, false);
-            worker2.start();
-            tbc.assertTrue("Uninstallation of test DP not completed", !reach2);
-            
-            // releases blocking resource processor
-            testBlockRP.setReleased(true);
-            testBlockRP.waitForRelease();
-            
-            tbc.pass("DeploymentAdmin only processed a single session at a time");
-            
-        } catch (Exception e) {
-            tbc.fail(MessagesConstants.getMessage(
-                MessagesConstants.UNEXPECTED_EXCEPTION, new String[]{e.getClass().getName()}));
-        } finally {
-            tbc.uninstall(dp);
-            cleanUp(testBlockRP);
-        }
-    }
-    
+
+	        try {
+	            worker1 = new SessionWorker(testDP);
+	            worker1.start();
+	            
+	            //Installs the simple.dp
+	            while (!worker1.isInstalled()) {
+	            	this.wait(500);
+	            }
+	            
+	            worker2 = new SessionWorker(blockDP);
+	            worker2.start();
+	            //It blocks the session
+	            while (!worker2.isRunning()) {
+	            	this.wait(500);
+	            }
+	            
+	            testBlockRP = (TestingBlockingResourceProcessor) getTestSessionRP(DeploymentConstants.PID_RESOURCE_PROCESSOR4);
+	            tbc.assertNotNull("TestingBlockingResourceProcessor is not null", testBlockRP);
+	            
+	            tbc.assertTrue("The installation of Block DP was not completed",!worker2.isInstalled());
+	            
+	            worker1.uninstallDP();
+	            
+	            tbc.assertTrue("Uninstallation of test DP was not completed, DeploymentAdmin only processed a single session at a time", 
+	            		!worker1.isUninstalled());
+	            
+	            // releases blocking resource processor
+	            testBlockRP.setReleased(true);
+	            
+	            
+	        } catch (Exception e) {
+	            tbc.fail(MessagesConstants.getMessage(
+	                MessagesConstants.UNEXPECTED_EXCEPTION, new String[]{e.getClass().getName()}));
+	        } finally {
+	            worker1.uninstallDP();
+	            worker2.uninstallDP();
+	            //If the uninstallation was not completed, we need to remove this DP in order to not affect other TCs 
+	            cleanUp(testDP);
+	        }
+	    }
+	
     /**
      * The Deployment Admin service <b>must throw a Deployment Exception</b> when the
      * session can not be created after an <b>appropriate time out</b> period.
      * 
      * @spec 114.12 Threading
      */
-    private synchronized void testDeploymentSession014() {
-        tbc.log("#testDeploymentSession014");
-        setResourceProcessorPermissions(DeploymentConstants.OSGI_DP_LOCATION
-            + DeploymentConstants.PID_RESOURCE_PROCESSOR4, "(name=*)");
-        
-        TestingBlockingResourceProcessor testBlockRP = null;
-        try {
-            releaseBarrier = new Barrier();
-            cleanupBarrier = new Barrier();
-            
-            TestingDeploymentPackage blockDP = tbc.getTestingDeploymentPackage(DeploymentConstants.BLOCK_SESSION_RESOURCE_PROCESSOR);
-            TestingDeploymentPackage testDP = tbc.getTestingDeploymentPackage(DeploymentConstants.SIMPLE_DP);
-            
-            worker1 = new SessionWorker(blockDP, 1);
-            worker1.start();
-            tbc.assertTrue("Installation of blocking session DP not completed", !reach1);
-            
-            int count = 0;
-            BundleListenerImpl listener = tbc.getBundleListener();
-            while ((count < DeploymentConstants.TIMEOUT) &&
-                !((listener.getCurrentType() == BundleEvent.STARTED) && 
-                (listener.getCurrentBundle().getSymbolicName().indexOf(DeploymentConstants.PID_RESOURCE_PROCESSOR4) != -1))) {
-                count++;
-                wait(1);
-            }
-            
-            testBlockRP = (TestingBlockingResourceProcessor) getTestSessionRP(DeploymentConstants.PID_RESOURCE_PROCESSOR4);
-            tbc.assertNotNull("Blocking Resource Processor was registered", testBlockRP);
-            
-            worker2 = new SessionWorker(testDP, 2, true, true);
-            worker2.start();
-            tbc.assertTrue("Installation of test DP not completed", !reach2);
-            
-            // Do not release 
-        } catch (Exception e) {
-            tbc.fail(MessagesConstants.getMessage(
-                MessagesConstants.UNEXPECTED_EXCEPTION, new String[]{e.getClass().getName()}));
-        } finally {
-            cleanUp(testBlockRP);
-        }
-    }
-    
-    private void cleanUp(TestingBlockingResourceProcessor testBlockRP) {
-        reachTC = true;
-        try {
-            cleanupBarrier.waitCleanUp();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        testBlockRP.setReleased(false);
-        cleanupBarrier.reset();
-        cleanupBarrier = null;
-        releaseBarrier = null;
+	 
+	 private synchronized void testDeploymentSession014() {
+	        tbc.log("#testDeploymentSession014");
+	        setResourceProcessorPermissions(DeploymentConstants.OSGI_DP_LOCATION
+	            + DeploymentConstants.PID_RESOURCE_PROCESSOR4, "(name=*)");
+	        
+	        SessionWorker worker1 = null;
+	        TestingBlockingResourceProcessor testBlockRP = null;
+	        
+	        try {
+	            TestingDeploymentPackage blockDP = tbc.getTestingDeploymentPackage(DeploymentConstants.BLOCK_SESSION_RESOURCE_PROCESSOR);
+	            TestingDeploymentPackage testDP = tbc.getTestingDeploymentPackage(DeploymentConstants.SIMPLE_DP);
+	            
+	            worker1 = new SessionWorker(blockDP);
+	            worker1.start();
+	            
+	            //Just to guarantee that this Thread is executed before the second one
+	            while (!worker1.isRunning()) {
+	            	this.wait(500);
+	            }
+	            testBlockRP = (TestingBlockingResourceProcessor) getTestSessionRP(DeploymentConstants.PID_RESOURCE_PROCESSOR4);
+	            
+	            tbc.installDeploymentPackage(tbc.getWebServer() + testDP.getFilename());
+	            tbc.failException("", DeploymentException.class);
+	        } catch (DeploymentException e) {
+	        	tbc.assertEquals("DeploymentException.CODE_TIMEOUT is thrown when the session cannot be created after an appropriate time out period.", 
+	        			DeploymentException.CODE_TIMEOUT,e.getCode());
+	        } catch (Exception e) {
+	            tbc.fail(MessagesConstants.getMessage(
+	                MessagesConstants.UNEXPECTED_EXCEPTION, new String[]{e.getClass().getName()}));
+	        } finally {
+	        	testBlockRP.setReleased(true);
+	            worker1.uninstallDP();
+	        }
+	    }
+	 
+	
+    private void cleanUp(TestingDeploymentPackage testDP) {
+    	DeploymentPackage dp = tbc.getDeploymentAdmin().getDeploymentPackage(testDP.getName());
+    	if (null!=dp) {
+    		tbc.uninstall(dp);
+    	}
     }
 	
     /**
@@ -737,134 +737,72 @@ public class DeploymentSession {
 		
 		tbc.setPermissionInfo(location, info);
 	}
-    
+	
+	
 	class SessionWorker extends Thread {
-        
-        private TestingDeploymentPackage testDP;
-        private int id;
-        private boolean installation;
-        private boolean handlingException;
-        
-        protected SessionWorker(TestingDeploymentPackage testDP, int id) {
-            this(testDP, id, true, false);
-        }
-        
-        protected SessionWorker(TestingDeploymentPackage testDP, int id, boolean installation) {
-            this(testDP, id, installation, false);
-        }
-        
-        protected SessionWorker(TestingDeploymentPackage testDP, int id, boolean installation, boolean handlingException) {
+		private TestingDeploymentPackage testDP;
+		private boolean installed=false;
+		private boolean uninstalled=false;
+		
+		private boolean uninstall=false;
+		private boolean running=false;
+		
+		
+		
+        protected SessionWorker(TestingDeploymentPackage testDP) {
             this.testDP = testDP;
-            this.id = id;
-            this.installation = installation;
-            this.handlingException = handlingException;
         }
         
-        public void run() {
-            DeploymentPackage dp = null;
-            String log = null;
-            try {                
-                if (installation) {
-                    log = "Installation";
-                    dp = tbc.installDeploymentPackage(tbc.getWebServer() + testDP.getFilename());
-                } else {
-                    log = "Uninstallation";
-                    tbc.uninstall(tbc.getDeploymentAdmin().getDeploymentPackage(testDP.getName()));
-                }
-                // after worker action
-                if (handlingException) {
-                    tbc.failException("#", DeploymentException.class);
-                } else if (id == 1) {
-                    reach1 = true;
-                } else {
-                    reach2 = true;
-                }
-                tbc.log("#" + log + " session of " + testDP.getName() + " completed successfuly");
-                // wait for other threads
-                releaseBarrier.waitForRelease();
-            } catch (DeploymentException e) {
-                if (id == 2) {
-                    reach2 = true;
-                    release();
-                    tbc.assertEquals("Session TIMEOUT Exception correctly thrown",
-                        DeploymentException.CODE_TIMEOUT, e.getCode());
-                } else {
-                    tbc.fail(MessagesConstants.getMessage(
-                        MessagesConstants.UNEXPECTED_EXCEPTION, new String[]{e.getClass().getName()}));
-                }
-            } catch (Exception e) {
-                tbc.fail(MessagesConstants.getMessage(
-                    MessagesConstants.UNEXPECTED_EXCEPTION, new String[]{e.getClass().getName()}));
-            } finally {
-                // clean up must also be synchronized. Otherwise other TCs may be impacted.
-                tbc.uninstall(dp);
-                if (id == 1) {
-                    clean1 = true;
-                } else {
-                    clean2 = true;
-                }
-                tbc.log("#Clean up #"+id+" successful");
-                try {
-                    cleanupBarrier.waitCleanUp();
-                } catch (InterruptedException e1) {
-                    e1.printStackTrace();
-                }
-            }
+        public void uninstallDP() {
+        	if (isAlive()) {
+        		uninstall=true;
+	        	try {
+					this.join(DeploymentConstants.SHORT_TIMEOUT);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+        	}
+        	
         }
         
-        private void release() {
-            try {
-                TestingBlockingResourceProcessor testBlockRP = (TestingBlockingResourceProcessor) getTestSessionRP(DeploymentConstants.PID_RESOURCE_PROCESSOR4);
-                if (testBlockRP != null) {
-                    testBlockRP.setReleased(true);
-                    testBlockRP.waitForRelease();
-                } else {
-                    tbc.fail("null reference of TestingBlockingResourceProcessor ");
-                }
-            } catch (InvalidSyntaxException e) {
-                tbc.fail("Failed to get TestingBlockingResourceProcessor from registry");
-            }
-        }
-    }
-    
-    class Barrier {
-        
-        protected synchronized void waitForRelease() throws InterruptedException {
-            if (reach1 && reach2) {
-                tbc.log("#Both sessions finished in the correct sequence");
-                // if needed do some action
-                this.notifyAll();
-            } else {
-                while (!(reach1 && reach2)) {
-                    if (reach1 && !reach2) {
-                        tbc.log("#Installation of blocking session DP completed successfuly. \nWaiting for blocking DP...");
-                    } else if (!reach1 && reach2) {
-                        tbc.fail("Testing DP installation finished before blocking session DP");
-                    }
-                    this.wait(DeploymentConstants.SESSION_TIMEOUT);
-                }
-            }
+        public boolean isInstalled() {
+        	return installed;
         }
         
-        protected synchronized void waitCleanUp() throws InterruptedException {
-            if (clean1 && clean2 && reachTC) {
-                // if needed do some action
-                this.notifyAll();
-            } else {
-                while (!(clean1 && clean2 && reachTC)) {
-                    this.wait(DeploymentConstants.TIMEOUT);
-                }
-            }
+        public boolean isRunning() {
+        	return running;
         }
-        
-        public void reset() {
-            worker1 = null;
-            worker2 = null;
-            reach1 = false;
-            reach2 = false;
-            reachTC = false;
-            clean1 = false;
-            clean2 = false;
+        public boolean isUninstalled() {
+        	return uninstalled;
         }
-    }
+		public synchronized void run() {
+			DeploymentPackage dp = null;
+			try {
+				try {
+					running=true;
+					dp = tbc.installDeploymentPackage(tbc.getWebServer() + testDP.getFilename());
+					installed=(dp==null?false:true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			} finally {
+				while (!uninstall) {
+					try {
+						this.wait(100);
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
+				}
+				if (isInstalled()) {
+					try {
+						dp.uninstall();
+						uninstalled=true;
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+				}
+			}
+			
+		}
+	}
 }

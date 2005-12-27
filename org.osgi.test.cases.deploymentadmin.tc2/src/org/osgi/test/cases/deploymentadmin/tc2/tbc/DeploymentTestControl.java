@@ -356,7 +356,6 @@ public class DeploymentTestControl extends DefaultTestBundleControl {
 	public void setState() {
 		log("#before each method");
 	}
-
 	/**
 	 * Clean up after each method. Notice that during debugging many times the
 	 * unsetState is never reached.
