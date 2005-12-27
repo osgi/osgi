@@ -89,7 +89,7 @@ public class Configuration {
 	 * Installs the auto config deployment package
 	 */
 	private void installAutoConfigDP() {
-		tbc.log("Installing config deployment package");
+		tbc.log("#Installing config deployment package");
 		TestingDeploymentPackage testDP = tbc.getTestingDeploymentPackage(DeploymentConstants.AUTO_CONFIG_DP);
 		try {
 			dp = tbc.installDeploymentPackage(tbc.getWebServer() + testDP.getFilename());

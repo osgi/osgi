@@ -125,6 +125,8 @@ public class DeploymentConstants {
     
 	// very large, we don't know what kind of devices the TCK will be executed
 	public static final int TIMEOUT = 180000;
+	
+	public static final int SHORT_TIMEOUT = 2000;
     
     //set default value and then reset if present in TCK properties file
     public static int SESSION_TIMEOUT = 1000;

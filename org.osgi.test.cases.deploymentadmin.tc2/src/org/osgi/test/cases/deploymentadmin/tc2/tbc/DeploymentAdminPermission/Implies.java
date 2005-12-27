@@ -157,7 +157,7 @@ public class Implies {
 
 	/**
 	 * This method asserts that an object does not implies other object with
-	 * different signal.
+	 * different signer.
 	 * 
 	 * @spec DeploymentAdminPermission.implies(Permission)
 	 */
@@ -173,7 +173,7 @@ public class Implies {
 					org.osgi.service.deploymentadmin.DeploymentAdminPermission.INSTALL);
 			
             tbc.assertTrue(
-							"Asserts implies when an object hasn't the same signal of the other.",
+							"Asserts implies when an object hasn't the same signer of the other.",
 							!deployPermission.implies(deployPermission2));
 		} catch (Exception e) {
 			tbc.fail(MessagesConstants.getMessage(
