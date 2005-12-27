@@ -50,7 +50,7 @@ public class DeploymentConstants {
 	public static int DROPALLRESOURCES_COUNT = 0;
 	public static int COMMIT_COUNT = 0;
 	
-	public static final String SIGNER_FILTER = "CN=John Smith, O=ACME Inc, OU=ACME Cert Authority, L=Austin, S=Texas, C=US";
+	public static final String SIGNER_FILTER = "CN=John Smith, O=ACME Inc, OU=ACME Cert Authority, L=Austin, ST=Texas, C=US";
 	public static final String PID_RESOURCE_PROCESSOR1 = "org.osgi.test.cases.deployment.bundles.rp1";
     public static final String PID_RESOURCE_PROCESSOR2 = "org.osgi.test.cases.deployment.bundles.rp2";
     public static final String PID_RESOURCE_PROCESSOR3 = "org.osgi.test.cases.deployment.bundles.rp3";
@@ -143,6 +143,7 @@ public class DeploymentConstants {
         "strange_path", "localized", "signing_file_not_next", "non_customizer_dp"};
 	
 	public static final String DEPLOYMENT_PACKAGE_NAME_ALL = "(name=*)";
+	
 	public static final String BUNDLE_NAME_ALL = "(name=*)";
 
 	public static final String DEPLOYMENT_PACKAGE_NAME0 = "(name="+getCodeName(SIMPLE_DP)+")";
@@ -186,7 +187,7 @@ public class DeploymentConstants {
 	// very large, we don't know what kind of devices the TCK will be executed
 	public static final int TIMEOUT = 180000;
     public static final int SESSION_TIMEOUT = 1000;
-    public static final int WAIT_EVENT = 2000;
+    public static final int SHORT_TIMEOUT = 2000;
     
     static String getCodeName(int code) {
         switch (code) {
