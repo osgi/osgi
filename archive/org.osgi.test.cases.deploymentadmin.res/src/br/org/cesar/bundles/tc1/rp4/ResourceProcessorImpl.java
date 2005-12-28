@@ -45,6 +45,7 @@ import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.deploymentadmin.spi.DeploymentSession;
 import org.osgi.service.deploymentadmin.spi.ResourceProcessor;
+import org.osgi.service.deploymentadmin.spi.ResourceProcessorException;
 import org.osgi.test.cases.deploymentadmin.tc1.tb1.DeploymentAdmin.UninstallDeploymentPackage;
 import org.osgi.test.cases.deploymentadmin.tc1.tbc.DeploymentConstants;
 import org.osgi.test.cases.deploymentadmin.tc1.tbc.util.TestingRollbackCall;
@@ -83,13 +84,13 @@ public class ResourceProcessorImpl implements BundleActivator, TestingRollbackCa
         
     }
 
-    public void dropAllResources()  {
-        throw new RuntimeException();
+    public void dropAllResources() throws ResourceProcessorException  {
+        throw new ResourceProcessorException(ResourceProcessorException.CODE_OTHER_ERROR);
     }
 
-    public void prepare()  {
+    public void prepare() throws ResourceProcessorException  {
         if (prepareException) {
-            throw new RuntimeException();
+        	throw new ResourceProcessorException(ResourceProcessorException.CODE_PREPARE);
         }
                 
     }

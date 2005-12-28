@@ -48,6 +48,7 @@ import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.deploymentadmin.DeploymentPackage;
 import org.osgi.service.deploymentadmin.spi.DeploymentSession;
 import org.osgi.service.deploymentadmin.spi.ResourceProcessor;
+import org.osgi.service.deploymentadmin.spi.ResourceProcessorException;
 import org.osgi.test.cases.deploymentadmin.tc2.tbc.DeploymentConstants;
 import org.osgi.test.cases.deploymentadmin.tc2.tbc.DeploymentSession.InstallSession;
 import org.osgi.test.cases.deploymentadmin.tc2.tbc.util.TestingSessionResourceProcessor;
@@ -91,15 +92,23 @@ public class ResourceProcessorImpl implements BundleActivator, TestingSessionRes
     
     private boolean testDropped;
 
+    private String[] droppedOrder= new String[8];
+    
+    private BundleContext bc;
+    
+    private boolean orderOfUninstall=false;
+    
 	public void start(BundleContext bc) throws Exception {
         if (InstallSession.EXCEPTION_AT_START)
             throw new Exception();
 
         Dictionary props = new Hashtable();
 		props.put("service.pid", DeploymentConstants.PID_RESOURCE_PROCESSOR3);
+		this.bc=bc;
 		sr = bc.registerService(ResourceProcessor.class.getName(), this, props);
 		
 		System.out.println("Resource Processor started.");
+		
 	}
 
 	public void stop(BundleContext context) throws Exception {
@@ -132,34 +141,57 @@ public class ResourceProcessorImpl implements BundleActivator, TestingSessionRes
 		this.session = session;
 	}
 
-    public void process(String arg0, InputStream arg1)
+    public void process(String arg0, InputStream arg1) throws ResourceProcessorException
              {
         if (exceptionAtProcess)
-            throw new RuntimeException();
+            throw new ResourceProcessorException(ResourceProcessorException.CODE_RESOURCE_SHARING_VIOLATION);
         processed = true;
         resourceName = arg0;
         resourceStream = arg1;
     }
 
-    public void dropped(String arg0)  {
+    public void dropped(String resource) throws ResourceProcessorException {
         dropped = true;
-        resourceName = arg0;
-        if (testDropped) {
+        resourceName = resource;
+        addResourceToBeDropped(resource);
+
+        if (orderOfUninstall) {
+			Bundle bundle = null;
+			Bundle[] bundles = bc.getBundles();
+			String str = "";
+			int i = 0;
+			while ((bundle==null) && (i < bundles.length)) {
+				str = bundles[i].getSymbolicName();
+				if ((str != null) && (str.equals("bundles.tb3"))) {
+					bundle = bundles[i];
+				}
+				i++;
+			}
+			if (bundle!=null) {
+				if (bundle.getState()!=Bundle.UNINSTALLED) {
+					orderOfUninstall=true;
+				} else {
+					orderOfUninstall=false;
+				}
+			}
+        } else if (testDropped) {
             waitForRelease(false);
         }
+        
         if (exceptionAtDropped)
-            throw new RuntimeException();
+            throw new ResourceProcessorException(ResourceProcessorException.CODE_NO_SUCH_RESOURCE);
+
     }
 
-    public void dropAllResources()  {
+    public void dropAllResources() throws ResourceProcessorException   {
         if (exceptionAtDropAllResources)
-            throw new RuntimeException();
+            throw new ResourceProcessorException(ResourceProcessorException.CODE_OTHER_ERROR);
         droppedAllResources = true;
     }
 
-    public void prepare()  {
+    public void prepare() throws ResourceProcessorException {
         if (exceptionAtPrepare)
-            throw new RuntimeException();
+            throw new ResourceProcessorException(ResourceProcessorException.CODE_PREPARE);
         prepared = true;
     }
 
@@ -176,7 +208,7 @@ public class ResourceProcessorImpl implements BundleActivator, TestingSessionRes
         InstallSession.ROLL_BACK = true;
     }
 
-    public void cancel() {
+    public void cancel()  {
         if (exceptionAtCancel)
             throw new RuntimeException();
         cancelled = true;
@@ -237,6 +269,8 @@ public class ResourceProcessorImpl implements BundleActivator, TestingSessionRes
         released = false;
         resourceName = null;
         resourceStream = null;
+        droppedOrder= new String[8];
+        orderOfUninstall = false;
     }
     /**
      * @param exceptionAtCancel The exceptionAtCancel to set.
@@ -258,6 +292,7 @@ public class ResourceProcessorImpl implements BundleActivator, TestingSessionRes
     public void setTest(int type) {
         switch (type) {
             case TestingSessionResourceProcessor.DROPPED: { testDropped = true; break;}
+            case TestingSessionResourceProcessor.ORDER_OF_UNINSTALLING: { orderOfUninstall = true; break;}
             default: ; // do nothing
         }
     }
@@ -308,4 +343,21 @@ public class ResourceProcessorImpl implements BundleActivator, TestingSessionRes
     public boolean isReleased() {
         return released;
     }
+    
+    private void addResourceToBeDropped(String resource) {
+    	for (int i=0;i<droppedOrder.length;i++) {
+    		if (null==droppedOrder[i]) {
+    			droppedOrder[i]=resource;
+    			break;
+    		}
+    	}
+    }
+    
+    public String[] getResourcesDropped() {
+    	return droppedOrder;
+    }
+
+	public boolean uninstallOrdered() {
+		return orderOfUninstall;
+	}
 }

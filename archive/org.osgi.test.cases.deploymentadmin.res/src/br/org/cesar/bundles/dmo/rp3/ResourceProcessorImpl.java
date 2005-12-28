@@ -131,4 +131,5 @@ public class ResourceProcessorImpl implements BundleActivator, TestingBlockingRe
     public boolean isReleased() {
         return released;
     }
+
 }
