@@ -11,8 +11,6 @@ ECHO Building
 call ..\licensed\ant\bin\ant
 cd bundles
 
-
-
 copy bundle001.jar wrong(path)\
 copy bundle001.jar ..\..\org.osgi.test.cases.deploymentadmin.mo\delivered\
 copy ..\bundles_update\bundle001.jar ..\..\org.osgi.test.cases.deploymentadmin.mo\res\
@@ -268,6 +266,10 @@ jar -cvfm ..\res\non_customizer_rp.dp ..\res\non_customizer_rp.mf rp_bundle.jar 
 jarsigner -keystore ..\..\cnf\certificate\.keystore -storepass testtest -keypass testtest ..\res\non_customizer_rp.dp test
 move /y ..\res\non_customizer_rp.dp ..\..\org.osgi.test.cases.deploymentadmin.tc1\res\
 
+jar -cvfM ..\res\signing_files_not_next.dp META-INF\MANIFEST.MF META-INF\README.TXT META-INF\TEST.SF META-INF\TEST.RSA bundle001.jar bundle002.jar
+copy ..\res\signing_files_not_next.dp ..\..\org.osgi.test.cases.deploymentadmin.tc1\res\
+move ..\res\signing_files_not_next.dp ..\..\org.osgi.test.cases.deploymentadmin.tc2\res\
+
 ECHO Moving update bundles to current dir
 move /y ..\bundles_update\bundle001.jar .\
 move /y ..\bundles_update\bundle002.jar .\
@@ -343,7 +345,7 @@ jarsigner -keystore ..\..\cnf\certificate\.keystore -storepass testtest -keypass
 copy ..\res\manifest_not_1st_file.dp ..\..\org.osgi.test.cases.deploymentadmin.mo\delivered\
 move ..\res\manifest_not_1st_file.dp ..\..\org.osgi.test.cases.deploymentadmin.tc2\res\
 
-jar -cvfm ..\res\rp_from_other_dp.dp ..\res\rp_from_other_dp.mf rp_bundle3.jar conf.txt
+jar -cvfm ..\res\rp_from_other_dp.dp ..\res\rp_from_other_dp.mf conf.txt
 jarsigner -keystore ..\..\cnf\certificate\.keystore -storepass testtest -keypass testtest ..\res\rp_from_other_dp.dp test
 move ..\res\rp_from_other_dp.dp ..\..\org.osgi.test.cases.deploymentadmin.tc2\res\
 
@@ -382,6 +384,10 @@ move ..\res\resource_processor2.dp ..\..\org.osgi.test.cases.deploymentadmin.tc2
 jar -cvfm ..\res\simple_resource_rp3.dp ..\res\simple_resource_rp3.mf simple_resource.xml
 jarsigner -keystore ..\..\cnf\certificate\.keystore -storepass testtest -keypass testtest ..\res\simple_resource_rp3.dp test
 move ..\res\simple_resource_rp3.dp ..\..\org.osgi.test.cases.deploymentadmin.tc2\res\
+
+jar -cvfm ..\res\resource_processor_customizer.dp ..\res\resource_processor_customizer.mf rp_bundle.jar simple_resource.xml
+jarsigner -keystore ..\..\cnf\certificate\.keystore -storepass testtest -keypass testtest ..\res\resource_processor_customizer.dp test
+move ..\res\resource_processor_customizer.dp ..\..\org.osgi.test.cases.deploymentadmin.tc2\res\
 
 REM Renaming resource processors bundles to be compliant with deployment packages manifests
 del rp_bundle.jar

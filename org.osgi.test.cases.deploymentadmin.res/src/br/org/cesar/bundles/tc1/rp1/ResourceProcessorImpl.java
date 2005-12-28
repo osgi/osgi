@@ -41,11 +41,17 @@
 package br.org.cesar.bundles.tc1.rp1;
 
 import java.io.InputStream;
-import java.util.*;
+import java.util.Dictionary;
+import java.util.Hashtable;
 
-import org.osgi.framework.*;
-import org.osgi.service.deploymentadmin.spi.*;
-import org.osgi.test.cases.deploymentadmin.tc1.tbc.*;
+import org.osgi.framework.BundleActivator;
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.ServiceRegistration;
+import org.osgi.service.deploymentadmin.spi.DeploymentSession;
+import org.osgi.service.deploymentadmin.spi.ResourceProcessor;
+import org.osgi.service.deploymentadmin.spi.ResourceProcessorException;
+import org.osgi.test.cases.deploymentadmin.tc1.tbc.DeploymentConstants;
+import org.osgi.test.cases.deploymentadmin.tc1.tbc.util.TestingGetServiceRegistrationResourceProcessor;
 
 /**
  * @author Andre Assad
@@ -53,18 +59,19 @@ import org.osgi.test.cases.deploymentadmin.tc1.tbc.*;
  * A testing resource processor to test deployment packages
  * installation.
  */
-public class ResourceProcessorImpl implements BundleActivator,ResourceProcessor {
+public class ResourceProcessorImpl implements BundleActivator,TestingGetServiceRegistrationResourceProcessor {
 
 	private ServiceRegistration sr;
-	
+	private boolean released = true;
 	public void start(BundleContext bc) throws Exception {
+		
 		Dictionary props = new Hashtable();
 		props.put("service.pid", DeploymentConstants.PID_RESOURCE_PROCESSOR1);
 		props.put(DeploymentConstants.RESOURCE_PROCESSOR_PROPERTY_KEY, "initial value for it");
-
+		
 		sr = bc.registerService(ResourceProcessor.class.getName(), this, props);
 		System.out.println("ResourceProcessor started.");
-
+		
 	}
 
 	public void stop(BundleContext bc) throws Exception {
@@ -73,8 +80,9 @@ public class ResourceProcessorImpl implements BundleActivator,ResourceProcessor 
 	}
 
 	public void begin(DeploymentSession session) {
-
-
+		if (!released) {
+			waitForRelease();
+		}
 	}
 
 	public void process(String arg0, InputStream arg1)
@@ -102,6 +110,25 @@ public class ResourceProcessorImpl implements BundleActivator,ResourceProcessor 
 
 	public void cancel() {
 
+	}
+
+	public ServiceRegistration getServiceRegistration() {
+		return sr;
+	}
+
+	public synchronized void waitForRelease() {
+        while (!released) {
+            try {
+                wait(DeploymentConstants.SHORT_TIMEOUT);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+		
+	}
+
+	public void setRelease(boolean released) {
+		this.released = released;	
 	}
 
 }

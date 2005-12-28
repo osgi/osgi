@@ -55,9 +55,9 @@ import org.osgi.test.cases.deploymentadmin.tc2.tbc.util.TestingBlockingResourceP
 public class ResourceProcessorImpl implements BundleActivator, TestingBlockingResourceProcessor {
 
 	private ServiceRegistration sr;
-    private static boolean released = false;
-
-	public void start(BundleContext bc) throws Exception {
+    private boolean released = false;
+    
+    public void start(BundleContext bc) throws Exception {
 		Dictionary props = new Hashtable();
 		props.put("service.pid", DeploymentConstants.PID_RESOURCE_PROCESSOR4);
 		
@@ -78,14 +78,9 @@ public class ResourceProcessorImpl implements BundleActivator, TestingBlockingRe
      * 
      */
     public synchronized void waitForRelease() {
-        if (released) {
-            // do some action in future
-            System.out.println("Blocking Resource Processor released: "+System.currentTimeMillis());
-            notifyAll();
-        } else
             while (!released) {
                 try {
-                    wait(DeploymentConstants.TIMEOUT);
+                    wait(DeploymentConstants.SHORT_TIMEOUT);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -123,7 +118,7 @@ public class ResourceProcessorImpl implements BundleActivator, TestingBlockingRe
      * @param released The released to set.
      */
     public synchronized void setReleased(boolean released) {
-        ResourceProcessorImpl.released = released;
+        this.released = released;
     }
     /**
      * @return Returns the released.
@@ -131,4 +126,5 @@ public class ResourceProcessorImpl implements BundleActivator, TestingBlockingRe
     public boolean isReleased() {
         return released;
     }
+
 }
