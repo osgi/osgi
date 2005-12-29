@@ -34,12 +34,13 @@
  * 179           Implement review issues
  * ============  ==============================================================
  */
-package org.osgi.test.cases.deploymentadmin.tc1.tbc.DeploymentPackage;
+package org.osgi.test.cases.deploymentadmin.tc1.tb1.DeploymentPackage;
 
 import org.osgi.service.deploymentadmin.DeploymentException;
 import org.osgi.service.deploymentadmin.DeploymentPackage;
 import org.osgi.test.cases.deploymentadmin.tc1.tbc.DeploymentConstants;
 import org.osgi.test.cases.deploymentadmin.tc1.tbc.DeploymentTestControl;
+import org.osgi.test.cases.deploymentadmin.tc1.tbc.TestInterface;
 import org.osgi.test.cases.deploymentadmin.tc1.tbc.util.MessagesConstants;
 import org.osgi.test.cases.deploymentadmin.tc1.tbc.util.TestingDeploymentPackage;
 
@@ -49,7 +50,7 @@ import org.osgi.test.cases.deploymentadmin.tc1.tbc.util.TestingDeploymentPackage
  * 
  * @author Andre Assad
  */
-public class ManifestFormat {
+public class ManifestFormat implements TestInterface {
     
     private DeploymentTestControl tbc;
     
@@ -58,6 +59,7 @@ public class ManifestFormat {
     }
     
     public void run() {
+    	prepare();
         testManifestFormat001();
         testManifestFormat002();
         testManifestFormat003();
@@ -67,7 +69,13 @@ public class ManifestFormat {
         testManifestFormat007();
     }
     
-
+    private void prepare() {
+        try {
+            tbc.setDeploymentAdminPermission(DeploymentConstants.DEPLOYMENT_PACKAGE_NAME_ALL, DeploymentConstants.ALL_PERMISSION);
+        } catch (Exception e) {
+            tbc.fail("Failed to set Permission necessary for testing #getDeploymentPackage");
+        }
+    }
     /**
      * Asserts that Deployment Admin cannot install a deployment package with a
      * wrong DeploymentPackage-SymbolicName manifest.

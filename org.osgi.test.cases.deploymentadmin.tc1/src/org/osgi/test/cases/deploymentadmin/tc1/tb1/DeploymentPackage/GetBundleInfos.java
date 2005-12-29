@@ -41,11 +41,13 @@
  * ============  ==============================================================
  */
 
-package org.osgi.test.cases.deploymentadmin.tc1.tbc.DeploymentPackage;
+package org.osgi.test.cases.deploymentadmin.tc1.tb1.DeploymentPackage;
 import org.osgi.service.deploymentadmin.BundleInfo;
+import org.osgi.service.deploymentadmin.DeploymentAdminPermission;
 import org.osgi.service.deploymentadmin.DeploymentPackage;
 import org.osgi.test.cases.deploymentadmin.tc1.tbc.DeploymentConstants;
 import org.osgi.test.cases.deploymentadmin.tc1.tbc.DeploymentTestControl;
+import org.osgi.test.cases.deploymentadmin.tc1.tbc.TestInterface;
 import org.osgi.test.cases.deploymentadmin.tc1.tbc.util.MessagesConstants;
 import org.osgi.test.cases.deploymentadmin.tc1.tbc.util.TestingBundle;
 import org.osgi.test.cases.deploymentadmin.tc1.tbc.util.TestingDeploymentPackage;
@@ -57,7 +59,7 @@ import org.osgi.test.cases.deploymentadmin.tc1.tbc.util.TestingDeploymentPackage
  * according to MEG specification.
  */
 
-public class GetBundleInfos {
+public class GetBundleInfos implements TestInterface  {
 	private DeploymentTestControl tbc;
 	
 	public GetBundleInfos(DeploymentTestControl tbc){
@@ -65,17 +67,26 @@ public class GetBundleInfos {
 	}
 	
 	public void run() {
-		testGetBundleSymNameVersionPairs001();
-		testGetBundleSymNameVersionPairs002();
+		prepare();
+		testGetBundleInfos001();
+		testGetBundleInfos002();
+		testGetBundleInfos003();
 	}
+    private void prepare() {
+        try {
+            tbc.setDeploymentAdminPermission(DeploymentConstants.DEPLOYMENT_PACKAGE_NAME_ALL, DeploymentConstants.ALL_PERMISSION);
+        } catch (Exception e) {
+            tbc.fail("Failed to set Permission necessary for testing #getDeploymentPackage");
+        }
+    }
 	/**
 	 * Asserts that it returns a two-dimensional array of strings representing the bundles and their version 
 	 * that are specified in the manifest  
 	 * 
-	 * DeploymentPackage.getBundleSymNameVersionPairs()
+	 * DeploymentPackage.getBundleInfos()
 	 */
-	private void testGetBundleSymNameVersionPairs001() {
-		tbc.log("#testGetBundleSymNameVersionPairs001");
+	private void testGetBundleInfos001() {
+		tbc.log("#testGetBundleInfos001");
 		
 		TestingDeploymentPackage testDP = tbc.getTestingDeploymentPackage(DeploymentConstants.SIMPLE_DP);
 		DeploymentPackage dp = null;		
@@ -103,11 +114,12 @@ public class GetBundleInfos {
 	}
 	/**
 	 * Asserts that it returns a zero dimensional array when there are no bundles.
+	 * It also tests if only DeploymentAdminPermission with "metadata" is needed.
 	 * 
-	 * @spec DeploymentPackage.getBundleSymNameVersionPairs()
+	 * @spec DeploymentPackage.getBundleInfos()
 	 */
-	private void testGetBundleSymNameVersionPairs002() {
-		tbc.log("#testGetBundleSymNameVersionPairs002");
+	private void testGetBundleInfos002() {
+		tbc.log("#testGetBundleInfos002");
 
 		TestingDeploymentPackage testDP = tbc.getTestingDeploymentPackage(DeploymentConstants.SIMPLE_NO_BUNDLE_DP);
 		TestingDeploymentPackage testRP = tbc.getTestingDeploymentPackage(DeploymentConstants.RESOURCE_PROCESSOR_DP);
@@ -115,12 +127,41 @@ public class GetBundleInfos {
 		try {
 			rp = tbc.installDeploymentPackage(tbc.getWebServer() + testRP.getFilename());
 			dp = tbc.installDeploymentPackage(tbc.getWebServer() + testDP.getFilename());
+			
+			tbc.setDeploymentAdminPermission(DeploymentConstants.getDPNameFilter(testDP.getName()), DeploymentAdminPermission.METADATA);
 			BundleInfo[] symNameVersion = dp.getBundleInfos();
 			tbc.assertTrue("Asserts that it returns a zero dimensional array when there is no bundles.",symNameVersion.length == 0);
 		} catch (Exception e) {
 			tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }));
 		} finally {
+			prepare();
 			tbc.uninstall(new DeploymentPackage[] { rp, dp });
 		}
-	}		
+	}	
+	/**
+	 * Asserts that SecurityException is thrown if the caller doesn't have 
+	 * DeploymentAdminPermission with "metadata" action 
+	 * 
+	 * @spec DeploymentPackage.getBundleInfos()
+	 */
+	private void testGetBundleInfos003() {
+		tbc.log("#testGetBundleInfos003");
+		DeploymentPackage dp = null;
+		try {
+			TestingDeploymentPackage testDP = tbc.getTestingDeploymentPackage(DeploymentConstants.SIMPLE_DP);
+			dp = tbc.installDeploymentPackage(tbc.getWebServer() + testDP.getFilename());
+			
+			tbc.setMininumPermission();
+			dp.getBundleInfos();
+			
+			tbc.failException("", SecurityException.class);
+        } catch (SecurityException e) {
+            tbc.pass(MessagesConstants.getMessage(MessagesConstants.EXCEPTION_CORRECTLY_THROWN, new String[] { "SecurityException" }));			
+		} catch (Exception e) {
+            tbc.fail(MessagesConstants.getMessage(MessagesConstants.EXCEPTION_THROWN, new String[] {"SecurityException", e.getClass().getName() }));
+		} finally {
+			prepare();
+			tbc.uninstall(dp);
+		}
+	}
 }

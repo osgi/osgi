@@ -35,11 +35,12 @@
  * ============  ==============================================================
  */
 
-package org.osgi.test.cases.deploymentadmin.tc1.tbc.DeploymentPackage;
+package org.osgi.test.cases.deploymentadmin.tc1.tb1.DeploymentPackage;
 
 import org.osgi.service.deploymentadmin.DeploymentPackage;
 import org.osgi.test.cases.deploymentadmin.tc1.tbc.DeploymentConstants;
 import org.osgi.test.cases.deploymentadmin.tc1.tbc.DeploymentTestControl;
+import org.osgi.test.cases.deploymentadmin.tc1.tbc.TestInterface;
 import org.osgi.test.cases.deploymentadmin.tc1.tbc.util.MessagesConstants;
 import org.osgi.test.cases.deploymentadmin.tc1.tbc.util.TestingDeploymentPackage;
 
@@ -50,7 +51,7 @@ import org.osgi.test.cases.deploymentadmin.tc1.tbc.util.TestingDeploymentPackage
  * according to MEG specification.
  */
 
-public class GetName {
+public class GetName implements TestInterface {
 	
 	private DeploymentTestControl tbc;
 	
@@ -59,11 +60,19 @@ public class GetName {
 	}
 	
 	public void run() {
+		prepare();
 		testGetName001();
 	}
-	
+    private void prepare() {
+        try {
+            tbc.setDeploymentAdminPermission(DeploymentConstants.DEPLOYMENT_PACKAGE_NAME_ALL, DeploymentConstants.ALL_PERMISSION);
+        } catch (Exception e) {
+            tbc.fail("Failed to set Permission necessary for testing #getDeploymentPackage");
+        }
+    }
 	/**
-	 * Assert that it returns the name of the deployment package
+	 * Assert that it returns the name of the deployment package.
+	 * It also assures that no DeploymentAdminPermission is needed.
 	 * 
 	 * @spec DeploymentPackage.getName()
 	 */
@@ -74,11 +83,13 @@ public class GetName {
 			TestingDeploymentPackage testDP = tbc.getTestingDeploymentPackage(DeploymentConstants.SIMPLE_DP);
 			dp = tbc.installDeploymentPackage(tbc.getWebServer() + testDP.getFilename());
 			tbc.assertNotNull(MessagesConstants.getMessage(MessagesConstants.ASSERT_NOT_NULL, new String[]{"deployment package"}), dp);
+			tbc.setMininumPermission();
 			String name = dp.getName();
 			tbc.assertEquals("The Deployment package name is correctly set:" , testDP.getName(), name);
 		} catch (Exception e) {
 			tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }));
 		} finally {
+			prepare();
 			tbc.uninstall(dp);
 		}
 	}

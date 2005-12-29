@@ -38,16 +38,18 @@
  * ============  ==============================================================
  */
 
-package org.osgi.test.cases.deploymentadmin.tc1.tbc.DeploymentPackage;
+package org.osgi.test.cases.deploymentadmin.tc1.tb1.DeploymentPackage;
 import java.util.Dictionary;
 import java.util.Hashtable;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.ServiceReference;
 import org.osgi.framework.ServiceRegistration;
+import org.osgi.service.deploymentadmin.DeploymentAdminPermission;
 import org.osgi.service.deploymentadmin.DeploymentPackage;
 import org.osgi.test.cases.deploymentadmin.tc1.tbc.DeploymentConstants;
 import org.osgi.test.cases.deploymentadmin.tc1.tbc.DeploymentTestControl;
+import org.osgi.test.cases.deploymentadmin.tc1.tbc.TestInterface;
 import org.osgi.test.cases.deploymentadmin.tc1.tbc.util.MessagesConstants;
 import org.osgi.test.cases.deploymentadmin.tc1.tbc.util.TestingBundle;
 import org.osgi.test.cases.deploymentadmin.tc1.tbc.util.TestingDeploymentPackage;
@@ -61,7 +63,7 @@ import org.osgi.test.cases.deploymentadmin.tc1.tbc.util.TestingResource;
  * according to MEG specification.
  */
 
-public class GetResourceProcessor {
+public class GetResourceProcessor implements TestInterface {
 	
 	private DeploymentTestControl tbc;
 	
@@ -77,15 +79,23 @@ public class GetResourceProcessor {
 	
 	public void run() {
 		try {
+			prepare();
 			installDeploymentPackage();
 			testGetResourceProcessor001();
 			testGetResourceProcessor002();
 			testGetResourceProcessor003();
+			testGetResourceProcessor004();
 		} finally {
 			uninstallDeploymentPackage();
 		}
 	}
-	
+    private void prepare() {
+        try {
+            tbc.setDeploymentAdminPermission(DeploymentConstants.DEPLOYMENT_PACKAGE_NAME_ALL, DeploymentConstants.ALL_PERMISSION);
+        } catch (Exception e) {
+            tbc.fail("Failed to set Permission necessary for testing #getDeploymentPackage");
+        }
+    }
 	/**
 	 * Installs a DeploymentPackage to be used by the methods below
 	 */
@@ -121,17 +131,21 @@ public class GetResourceProcessor {
 		}
 	}
 	/**
-	 * This test case asserts that getResourceProcessor returns null for an unexistent resource name
+	 * This test case asserts that getResourceProcessor returns null for an unexistent resource name.
+	 * It also tests if only DeploymentAdminPermission with "metadata" is needed.
 	 * 
 	 * @spec DeploymentPackage.getResourceProcessor(String)
 	 */
 	private void testGetResourceProcessor002() {
 		tbc.log("#testGetResourceProcessor002");
 		try {
+			tbc.setDeploymentAdminPermission(DeploymentConstants.getDPNameFilter(dpRP.getName()), DeploymentAdminPermission.METADATA);
 			ServiceReference rp = dpRP.getResourceProcessor("UNEXISTENT_RESOURCE.rp");
 			tbc.assertNull("Asserts that it returns null when a resource is not part of the deployment package", rp);
 		} catch (Exception e) {
 			tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }));
+		} finally {
+			prepare();
 		}
 	}
 	
@@ -164,7 +178,26 @@ public class GetResourceProcessor {
 			tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }));
 		}
 	}
-
+	/**
+	 * Asserts that SecurityException is thrown if the caller doesn't have 
+	 * DeploymentAdminPermission with "metadata" action 
+	 * 
+	 * @spec DeploymentPackage.getResourceProcessor(String)
+	 */
+	private void testGetResourceProcessor004() {
+		tbc.log("#testGetResourceProcessor004");
+		try {
+			tbc.setMininumPermission();
+			dpRP.getResourceProcessor(testRPResource.getName());
+			tbc.failException("", SecurityException.class);
+        } catch (SecurityException e) {
+            tbc.pass(MessagesConstants.getMessage(MessagesConstants.EXCEPTION_CORRECTLY_THROWN, new String[] { "SecurityException" }));			
+		} catch (Exception e) {
+            tbc.fail(MessagesConstants.getMessage(MessagesConstants.EXCEPTION_THROWN, new String[] {"SecurityException", e.getClass().getName() }));
+		} finally {
+			prepare();
+		}
+	}
 	/**
 	 * Uninstalls the deployment packages previously installed.
 	 */

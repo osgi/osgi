@@ -38,10 +38,12 @@
  * ============  ==============================================================
  */
 
-package org.osgi.test.cases.deploymentadmin.tc1.tbc.DeploymentPackage;
+package org.osgi.test.cases.deploymentadmin.tc1.tb1.DeploymentPackage;
+import org.osgi.service.deploymentadmin.DeploymentAdminPermission;
 import org.osgi.service.deploymentadmin.DeploymentPackage;
 import org.osgi.test.cases.deploymentadmin.tc1.tbc.DeploymentConstants;
 import org.osgi.test.cases.deploymentadmin.tc1.tbc.DeploymentTestControl;
+import org.osgi.test.cases.deploymentadmin.tc1.tbc.TestInterface;
 import org.osgi.test.cases.deploymentadmin.tc1.tbc.util.MessagesConstants;
 import org.osgi.test.cases.deploymentadmin.tc1.tbc.util.TestingBundle;
 import org.osgi.test.cases.deploymentadmin.tc1.tbc.util.TestingDeploymentPackage;
@@ -53,7 +55,7 @@ import org.osgi.test.cases.deploymentadmin.tc1.tbc.util.TestingDeploymentPackage
  * according to MEG reference documentation (rfc0088).
  */
 
-public class GetResourceHeader {
+public class GetResourceHeader implements TestInterface {
 	private DeploymentTestControl tbc;
 	private DeploymentPackage dp = null;
 	private TestingDeploymentPackage testDP= null;
@@ -65,17 +67,25 @@ public class GetResourceHeader {
 	
 	public void run() {
 		try {
+			prepare();
 			installDeploymentPackage();
 			testGetResourceHeader001();
 			testGetResourceHeader002();
 			testGetResourceHeader003();
 			testGetResourceHeader004();
 			testGetResourceHeader005();
+			testGetResourceHeader006();
 		} finally {
 			uninstallDeploymentPackage();
 		}
 	}
-	
+    private void prepare() {
+        try {
+            tbc.setDeploymentAdminPermission(DeploymentConstants.DEPLOYMENT_PACKAGE_NAME_ALL, DeploymentConstants.ALL_PERMISSION);
+        } catch (Exception e) {
+            tbc.fail("Failed to set Permission necessary for testing #getDeploymentPackage");
+        }
+    }
 	/**
 	 * Installs a DeploymentPackage to be used by the methods below
 	 * 
@@ -151,19 +161,43 @@ public class GetResourceHeader {
 	}	
 	/**
 	 * Asserts that it returns null if the requested resource header doesn't exist.
+	 * It also tests if only DeploymentAdminPermission with "metadata" is needed.
 	 * 
 	 * @spec DeploymentPackage.getResourceHeader(String)
 	 */
 	private void testGetResourceHeader005() {
 		tbc.log("#testGetResourceHeader005");
 		try {
-		String resourceHeader = dp.getResourceHeader(testBundle.getFilename(),DeploymentConstants.INVALID_NAME);
-		tbc.assertNull("Asserts that it returns null if the requested resource header doesn't exist.", resourceHeader);
+			tbc.setDeploymentAdminPermission(DeploymentConstants.getDPNameFilter(testDP.getName()), DeploymentAdminPermission.METADATA);	
+			String resourceHeader = dp.getResourceHeader(testBundle.getFilename(),DeploymentConstants.INVALID_NAME);
+			tbc.assertNull("Asserts that it returns null if the requested resource header doesn't exist.", resourceHeader);
 		} catch (Exception e) {
 			tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }));
+		}finally {
+			prepare();
 		}
 	}
-    
+	/**
+	 * Asserts that SecurityException is thrown if the caller doesn't have 
+	 * DeploymentAdminPermission with "metadata" action 
+	 * 
+	 * @spec DeploymentPackage.getResourceHeader(String)
+	 */
+
+	private void testGetResourceHeader006() {
+		tbc.log("#testGetResourceHeader006");
+		try {
+			tbc.setMininumPermission();	
+			dp.getResourceHeader(testBundle.getFilename(),DeploymentConstants.INVALID_NAME);
+			tbc.failException("", SecurityException.class);
+        } catch (SecurityException e) {
+            tbc.pass(MessagesConstants.getMessage(MessagesConstants.EXCEPTION_CORRECTLY_THROWN, new String[] { "SecurityException" }));			
+		} catch (Exception e) {
+            tbc.fail(MessagesConstants.getMessage(MessagesConstants.EXCEPTION_THROWN, new String[] {"SecurityException", e.getClass().getName() }));
+		} finally {
+			prepare();
+		}
+	}
 	/**
 	 * Uninstalls the deployment packages previously installed.
 	 */

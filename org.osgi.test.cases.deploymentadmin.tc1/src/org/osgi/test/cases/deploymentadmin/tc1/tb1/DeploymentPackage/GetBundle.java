@@ -38,14 +38,16 @@
  * ============  ==============================================================
  */
 
-package org.osgi.test.cases.deploymentadmin.tc1.tbc.DeploymentPackage;
+package org.osgi.test.cases.deploymentadmin.tc1.tb1.DeploymentPackage;
 
 
 
 import org.osgi.framework.Bundle;
+import org.osgi.service.deploymentadmin.DeploymentAdminPermission;
 import org.osgi.service.deploymentadmin.DeploymentPackage;
 import org.osgi.test.cases.deploymentadmin.tc1.tbc.DeploymentConstants;
 import org.osgi.test.cases.deploymentadmin.tc1.tbc.DeploymentTestControl;
+import org.osgi.test.cases.deploymentadmin.tc1.tbc.TestInterface;
 import org.osgi.test.cases.deploymentadmin.tc1.tbc.util.MessagesConstants;
 import org.osgi.test.cases.deploymentadmin.tc1.tbc.util.TestingBundle;
 import org.osgi.test.cases.deploymentadmin.tc1.tbc.util.TestingDeploymentPackage;
@@ -57,7 +59,7 @@ import org.osgi.test.cases.deploymentadmin.tc1.tbc.util.TestingDeploymentPackage
  *  according to MEG specification
  */
 
-public class GetBundle {
+public class GetBundle implements TestInterface  {
 	private DeploymentTestControl tbc;
 	
 	public GetBundle(DeploymentTestControl tbc){
@@ -65,11 +67,19 @@ public class GetBundle {
 	}
 	
 	public void run() {
+		prepare();
 		testGetBundle001();
 		testGetBundle002();
         testGetBundle003();
+        testGetBundle004();
 	}
-	
+    private void prepare() {
+        try {
+            tbc.setDeploymentAdminPermission(DeploymentConstants.DEPLOYMENT_PACKAGE_NAME_ALL, DeploymentConstants.ALL_PERMISSION);
+        } catch (Exception e) {
+            tbc.fail("Failed to set Permission necessary for testing #getDeploymentPackage");
+        }
+    }
 	/**
 	 * Asserts that a bundle instance is part of the installed deployment package.
 	 * 
@@ -115,7 +125,8 @@ public class GetBundle {
     
     /**
      * Asserts that when a fix-pack removes a bundle then getBundle mustn't
-     * return it. 
+     * return it. It also assures that only DeploymentAdminPermission.METADATA
+     * is needed to call this method.
      * 
      * @spec DeploymentPackage.getBundle(String)
      */
@@ -134,13 +145,42 @@ public class GetBundle {
             
             fixDp = tbc.installDeploymentPackage(tbc.getWebServer() + testFixDP.getFilename());
             
+            tbc.setDeploymentAdminPermission(DeploymentConstants.getDPNameFilter(testDP.getName()), DeploymentAdminPermission.METADATA);
+            
             Bundle bundle = dp.getBundle(testBundle[0].getName());
 
             tbc.assertNull("The removed bundles was not returned by getBundle after an installation of a fix-pack that removes that bundles.", bundle);
         } catch (Exception e) {
             tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }));
         } finally {
+        	prepare();
             tbc.uninstall(new DeploymentPackage[] { dp, fixDp });
         }
     }    
+    
+	/**
+	 * Asserts that SecurityException is thrown if the caller doesn't have 
+	 * DeploymentAdminPermission with "metadata" action 
+	 * 
+	 * @spec DeploymentPackage.getBundle(String)
+	 */
+	private void testGetBundle004() {
+		tbc.log("#testGetBundle004");
+		DeploymentPackage dp = null;
+		try {
+			TestingDeploymentPackage testDP = tbc.getTestingDeploymentPackage(DeploymentConstants.SIMPLE_DP);
+			dp = tbc.installDeploymentPackage(tbc.getWebServer() + testDP.getFilename());
+			
+			tbc.setMininumPermission();
+			dp.getBundle(testDP.getBundles()[0].getName());
+			tbc.failException("", SecurityException.class);
+        } catch (SecurityException e) {
+            tbc.pass(MessagesConstants.getMessage(MessagesConstants.EXCEPTION_CORRECTLY_THROWN, new String[] { "SecurityException" }));			
+		} catch (Exception e) {
+            tbc.fail(MessagesConstants.getMessage(MessagesConstants.EXCEPTION_THROWN, new String[] {"SecurityException", e.getClass().getName() }));
+		} finally {
+			prepare();
+			tbc.uninstall(dp);
+		}
+	}
 }

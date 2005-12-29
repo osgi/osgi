@@ -35,11 +35,16 @@
  * ============  ====================================================================
  */
 
-package org.osgi.test.cases.deploymentadmin.tc1.tbc.DeploymentPackage;
+package org.osgi.test.cases.deploymentadmin.tc1.tb1.DeploymentPackage;
+
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.ArrayList;
 
 import org.osgi.service.deploymentadmin.DeploymentPackage;
 import org.osgi.test.cases.deploymentadmin.tc1.tbc.DeploymentConstants;
 import org.osgi.test.cases.deploymentadmin.tc1.tbc.DeploymentTestControl;
+import org.osgi.test.cases.deploymentadmin.tc1.tbc.TestInterface;
 import org.osgi.test.cases.deploymentadmin.tc1.tbc.util.MessagesConstants;
 
 /**
@@ -49,7 +54,7 @@ import org.osgi.test.cases.deploymentadmin.tc1.tbc.util.MessagesConstants;
  * according to MEG specification.
  */
 
-public class IsStale {
+public class IsStale implements TestInterface {
 
 	private DeploymentTestControl tbc;
 
@@ -58,11 +63,18 @@ public class IsStale {
 	}
 
 	public void run() {
+		prepare();
 		testIsStale001();
 		testIsStale002();
-		
+		testIsStale003();
 	}
-	
+    private void prepare() {
+        try {
+            tbc.setDeploymentAdminPermission(DeploymentConstants.DEPLOYMENT_PACKAGE_NAME_ALL, DeploymentConstants.ALL_PERMISSION);
+        } catch (Exception e) {
+            tbc.fail("Failed to set Permission necessary for testing #getDeploymentPackage");
+        }
+    }
 	/**
 	 * This test case asserts that a deployment package is not stale after installation.
 	 * 
@@ -83,7 +95,8 @@ public class IsStale {
 	}
 	
 	/**
-	 * This test case asserts that a deployment package is stale after uninstallation.
+	 * This test case asserts that a deployment package is stale after uninstallation forced.
+	 * It also tests if no DeploymentAdminPermission is needed.
 	 * 
 	 * @spec DeploymentPackage.isStale()
 	 */
@@ -93,10 +106,81 @@ public class IsStale {
 		try {
 			dp = tbc.installDeploymentPackage(tbc.getWebServer() + tbc.getTestingDeploymentPackage(DeploymentConstants.SIMPLE_DP).getFilename());
 			tbc.assertNotNull(MessagesConstants.getMessage(MessagesConstants.ASSERT_NOT_NULL, new String[]{"deployment package"}), dp);
-			tbc.uninstall(dp);
+			dp.uninstallForced();
+			
+			tbc.setMininumPermission();
 			tbc.assertTrue("Deployment Package is stale", dp.isStale());
 		} catch (Exception e) {
 			tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }));
+		} finally {
+			prepare();
 		}
+	}
+	
+	/**
+	 * This test case asserts 
+	 * 1) A deployment package is stale after uninstallation.
+	 * 2) getBundle(String), getResourceProcessor(String), uninstall() and uninstallForced()
+	 *    throws IllegalStateException if called. 
+	 * 3) All other methods do not throw this Exception if called.
+	 * 
+	 * @spec DeploymentPackage.isStale()
+	 */
+	private void testIsStale003() {
+		tbc.log("#testIsStale003");
+		DeploymentPackage dp = null;
+		try {
+			dp = tbc.installDeploymentPackage(tbc.getWebServer() + tbc.getTestingDeploymentPackage(DeploymentConstants.SIMPLE_DP).getFilename());
+			tbc.assertNotNull(MessagesConstants.getMessage(MessagesConstants.ASSERT_NOT_NULL, new String[]{"deployment package"}), dp);
+			dp.uninstall();
+			
+			tbc.assertTrue("Deployment Package is stale", dp.isStale());
+			ArrayList methodsThrowsException = new ArrayList();
+			methodsThrowsException.add("getBundle");
+			methodsThrowsException.add("getResourceProcessor");
+			methodsThrowsException.add("uninstall");
+			methodsThrowsException.add("uninstallForced");
+			
+			Method[] methods = DeploymentPackage.class.getMethods();
+			for (int i=0;i<methods.length;i++) {
+				if (methodsThrowsException.contains(methods[i].getName())) {
+					tbc.assertTrue("Asserts that IllegalStateException is thrown if the Deployment Package is stale and " + methods[i].getName() +" is called", assertIllegalStateException(dp,methods[i]));
+				} else {
+					tbc.assertTrue("Asserts that no Exception is thrown if the Deployment Package is stale and " + methods[i].getName() +" is called", !assertIllegalStateException(dp,methods[i]));
+				}
+			}
+			
+		} catch (Exception e) {
+			tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }));
+		}
+	}
+	
+	
+	private boolean assertIllegalStateException(DeploymentPackage dp, Method method) {
+		boolean threw=false;
+		try {
+			Object[] objs = getValuesToParameters(method);
+			method.invoke(dp,objs);
+		} catch (InvocationTargetException e) {
+			Throwable exceptionReturned = e.getTargetException();
+			if (exceptionReturned instanceof IllegalStateException) {
+				threw=true;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return threw;
+	}
+	
+	private Object[] getValuesToParameters(Method method) {
+		Class[] parameters = method.getParameterTypes();
+		int numberOfParameters= parameters.length;
+		Object[] objs = new Object[numberOfParameters];
+		
+		for (int i=0;i<numberOfParameters;i++) {
+			objs[i]= "";
+		}
+		
+		return objs;
 	}
 }

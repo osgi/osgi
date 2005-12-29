@@ -35,12 +35,13 @@
  * ============  ==============================================================
  */
 
-package org.osgi.test.cases.deploymentadmin.tc1.tbc.DeploymentPackage;
+package org.osgi.test.cases.deploymentadmin.tc1.tb1.DeploymentPackage;
 
 import org.osgi.framework.Version;
 import org.osgi.service.deploymentadmin.DeploymentPackage;
 import org.osgi.test.cases.deploymentadmin.tc1.tbc.DeploymentConstants;
 import org.osgi.test.cases.deploymentadmin.tc1.tbc.DeploymentTestControl;
+import org.osgi.test.cases.deploymentadmin.tc1.tbc.TestInterface;
 import org.osgi.test.cases.deploymentadmin.tc1.tbc.util.MessagesConstants;
 import org.osgi.test.cases.deploymentadmin.tc1.tbc.util.TestingDeploymentPackage;
 
@@ -51,7 +52,7 @@ import org.osgi.test.cases.deploymentadmin.tc1.tbc.util.TestingDeploymentPackage
  * according to MEG specification.
  */
 
-public class GetVersion {
+public class GetVersion implements TestInterface {
 	
 	private DeploymentTestControl tbc;
 	
@@ -60,11 +61,19 @@ public class GetVersion {
 	}
 	
 	public void run() {
+		prepare();
 		testGetVersion001();
 	}
-	
+    private void prepare() {
+        try {
+            tbc.setDeploymentAdminPermission(DeploymentConstants.DEPLOYMENT_PACKAGE_NAME_ALL, DeploymentConstants.ALL_PERMISSION);
+        } catch (Exception e) {
+            tbc.fail("Failed to set Permission necessary for testing #getDeploymentPackage");
+        }
+    }
 	/**
 	 * Asserts that it returns the version of the deployment package.
+	 * It also tests if no DeploymentAdminPermission is needed.
 	 * 
 	 * @spec DeploymentPackage.getVersion()
 	 */
@@ -76,11 +85,13 @@ public class GetVersion {
 			dp = tbc.installDeploymentPackage(tbc.getWebServer() + testDP.getFilename());
 			tbc.assertNotNull(MessagesConstants.getMessage(MessagesConstants.ASSERT_NOT_NULL, new String[]{"deployment package"}), dp);
 			
+			tbc.setMininumPermission();
 			Version version = dp.getVersion();
 			tbc.assertEquals("The version of the deployment package was correctly set", testDP.getVersion(), version);
 		} catch (Exception e) {
 			tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }));
 		} finally {
+			prepare();
 			tbc.uninstall(dp);
 		}
 	}

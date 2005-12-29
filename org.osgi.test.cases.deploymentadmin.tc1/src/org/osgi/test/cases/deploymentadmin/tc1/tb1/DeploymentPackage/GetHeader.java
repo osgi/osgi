@@ -35,10 +35,12 @@
  * ============  ==============================================================
  */
 
-package org.osgi.test.cases.deploymentadmin.tc1.tbc.DeploymentPackage;
+package org.osgi.test.cases.deploymentadmin.tc1.tb1.DeploymentPackage;
+import org.osgi.service.deploymentadmin.DeploymentAdminPermission;
 import org.osgi.service.deploymentadmin.DeploymentPackage;
 import org.osgi.test.cases.deploymentadmin.tc1.tbc.DeploymentConstants;
 import org.osgi.test.cases.deploymentadmin.tc1.tbc.DeploymentTestControl;
+import org.osgi.test.cases.deploymentadmin.tc1.tbc.TestInterface;
 import org.osgi.test.cases.deploymentadmin.tc1.tbc.util.MessagesConstants;
 import org.osgi.test.cases.deploymentadmin.tc1.tbc.util.TestingDeploymentPackage;
 
@@ -49,7 +51,7 @@ import org.osgi.test.cases.deploymentadmin.tc1.tbc.util.TestingDeploymentPackage
  * according to MEG specification.
  */
 
-public class GetHeader {
+public class GetHeader implements TestInterface {
 	private DeploymentTestControl tbc;
 	private DeploymentPackage dp = null, fixPackDP = null;
 	private TestingDeploymentPackage testDP= null, testFixPackDP = null;
@@ -60,6 +62,7 @@ public class GetHeader {
 	
 	public void run() {
 		try {
+			prepare();
 			installDeploymentPackage();
 			testGetHeader001();
 			testGetHeader002();
@@ -84,10 +87,18 @@ public class GetHeader {
             testGetHeader021();
             testGetHeader022();
             testGetHeader023();
+            testGetHeader024();
 		} finally {
 			uninstallDeploymentPackage();
 		}
 	} 
+    private void prepare() {
+        try {
+            tbc.setDeploymentAdminPermission(DeploymentConstants.DEPLOYMENT_PACKAGE_NAME_ALL, DeploymentConstants.ALL_PERMISSION);
+        } catch (Exception e) {
+            tbc.fail("Failed to set Permission necessary for testing #getDeploymentPackage");
+        }
+    }
 	/**
 	 * Installs a FixPack DeploymentPackage, so DeploymentPackage-FixPack header
 	 * can be gotten as well. We need to install a deployment package before
@@ -444,18 +455,23 @@ public class GetHeader {
     
     /**
      * Asserts that it returns null the requested deployment package manifest header 
-     * (DeploymentPackage-ContactAddress) from the main section.
+     * (DeploymentPackage-ContactAddress) from the main section. It also tests if 
+     * only DeploymentAdminPermission with "metadata" is needed.
      * 
      * @spec DeploymentPackage.getHeader(String)
      */    
     private void testGetHeader022() {
         tbc.log("#testGetHeader022");
         try {
-        String header = fixPackDP.getHeader(DeploymentConstants.DP_HEADER_CONTACT_ADRESS);
-        tbc.assertNull("Asserts that it returns the requested deployment package manifest header (DeploymentPackage-ContactAddress) from the main section", header);
+        
+	        tbc.setDeploymentAdminPermission(DeploymentConstants.getDPNameFilter(fixPackDP.getName()), DeploymentAdminPermission.METADATA);
+	        String header = fixPackDP.getHeader(DeploymentConstants.DP_HEADER_CONTACT_ADRESS);
+	        tbc.assertNull("Asserts that it returns the requested deployment package manifest header (DeploymentPackage-ContactAddress) from the main section", header);
         } catch (Exception e) {
             tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }));
-        }   
+        } finally {
+        	prepare();
+        }
     }
     
     /**
@@ -486,6 +502,28 @@ public class GetHeader {
             tbc.uninstall(testDp);
         }
     }    
+    
+    /**
+	 * Asserts that SecurityException is thrown if the caller doesn't have 
+	 * DeploymentAdminPermission with "metadata" action 
+     * 
+     * @spec DeploymentPackage.getHeader(String)
+     */    
+    private void testGetHeader024() {
+        tbc.log("#testGetHeader024");
+        try {
+        	tbc.setMininumPermission();
+        	fixPackDP.getHeader(DeploymentConstants.DP_HEADER_CONTACT_ADRESS);
+        	tbc.failException("", SecurityException.class);
+        } catch (SecurityException e) {
+            tbc.pass(MessagesConstants.getMessage(MessagesConstants.EXCEPTION_CORRECTLY_THROWN, new String[] { "SecurityException" }));			
+		} catch (Exception e) {
+            tbc.fail(MessagesConstants.getMessage(MessagesConstants.EXCEPTION_THROWN, new String[] {"SecurityException", e.getClass().getName() }));
+		} finally {
+			prepare();
+		}
+    }
+		
 	
 	/**
 	 * Uninstalls the deployment packages previously installed.

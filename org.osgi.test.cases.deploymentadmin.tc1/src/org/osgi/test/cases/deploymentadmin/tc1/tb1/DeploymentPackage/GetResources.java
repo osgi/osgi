@@ -34,11 +34,13 @@
  * ============  ==============================================================
  */
 
-package org.osgi.test.cases.deploymentadmin.tc1.tbc.DeploymentPackage;
+package org.osgi.test.cases.deploymentadmin.tc1.tb1.DeploymentPackage;
 
+import org.osgi.service.deploymentadmin.DeploymentAdminPermission;
 import org.osgi.service.deploymentadmin.DeploymentPackage;
 import org.osgi.test.cases.deploymentadmin.tc1.tbc.DeploymentConstants;
 import org.osgi.test.cases.deploymentadmin.tc1.tbc.DeploymentTestControl;
+import org.osgi.test.cases.deploymentadmin.tc1.tbc.TestInterface;
 import org.osgi.test.cases.deploymentadmin.tc1.tbc.util.MessagesConstants;
 import org.osgi.test.cases.deploymentadmin.tc1.tbc.util.TestingBundle;
 import org.osgi.test.cases.deploymentadmin.tc1.tbc.util.TestingDeploymentPackage;
@@ -49,7 +51,7 @@ import org.osgi.test.cases.deploymentadmin.tc1.tbc.util.TestingResource;
  *         <code>getResources</code> method of DeploymenPackage, according to
  *         MEG specification
  */
-public class GetResources {
+public class GetResources implements TestInterface  {
 
     private DeploymentTestControl tbc;
 
@@ -58,10 +60,18 @@ public class GetResources {
     }
 
     public void run() {
-        testGetResources001();
+    	prepare();
+    	testGetResources001();
         testGetResources002();
+        testGetResources003();
     }
-
+    private void prepare() {
+        try {
+            tbc.setDeploymentAdminPermission(DeploymentConstants.DEPLOYMENT_PACKAGE_NAME_ALL, DeploymentConstants.ALL_PERMISSION);
+        } catch (Exception e) {
+            tbc.fail("Failed to set Permission necessary for testing #getDeploymentPackage");
+        }
+    }
     /**
      * Asserts that it returns an array of strings representing the resources
      * that are specified in the manifest of the deployment package
@@ -114,7 +124,7 @@ public class GetResources {
 
     /**
      * Asserts that it returns an array zero dimensional if there is no
-     * resources
+     * resources. It also tests if only DeploymentAdminPermission with "metadata" is needed.
      * 
      * @spec DeploymentPackage.getResources()
      */
@@ -127,12 +137,44 @@ public class GetResources {
             dp = tbc.installDeploymentPackage(tbc.getWebServer() + testDP.getFilename());
             TestingDeploymentPackage testFixDP = tbc.getTestingDeploymentPackage(DeploymentConstants.SIMPLE_UNINSTALL_BUNDLE_DP);
             fixDP = tbc.installDeploymentPackage(tbc.getWebServer()+ testFixDP.getFilename());
+            
+            tbc.setDeploymentAdminPermission(DeploymentConstants.getDPNameFilter(fixDP.getName()), DeploymentAdminPermission.METADATA);
             String[] resources = fixDP.getResources();
             tbc.assertTrue("Asserts that it returns the requested resources", resources.length == 0);
         } catch (Exception e) {
             tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[]{e.getClass().getName()}));
         } finally {
+        	prepare();
             tbc.uninstall(new DeploymentPackage[]{dp, fixDP});
+        }
+    }
+    
+    /**
+	 * Asserts that SecurityException is thrown if the caller doesn't have 
+	 * DeploymentAdminPermission with "metadata" action
+     * 
+     * @spec DeploymentPackage.getResources()
+     */
+    private void testGetResources003() {
+        tbc.log("#testGetResources003");
+        DeploymentPackage dp = null;
+        DeploymentPackage fixDP = null;
+        try {
+            TestingDeploymentPackage testDP = tbc.getTestingDeploymentPackage(DeploymentConstants.SIMPLE_DP);
+            dp = tbc.installDeploymentPackage(tbc.getWebServer() + testDP.getFilename());
+            TestingDeploymentPackage testFixDP = tbc.getTestingDeploymentPackage(DeploymentConstants.SIMPLE_UNINSTALL_BUNDLE_DP);
+            fixDP = tbc.installDeploymentPackage(tbc.getWebServer()+ testFixDP.getFilename());
+            
+            tbc.setMininumPermission();
+            fixDP.getResources();
+			tbc.failException("", SecurityException.class);
+        } catch (SecurityException e) {
+            tbc.pass(MessagesConstants.getMessage(MessagesConstants.EXCEPTION_CORRECTLY_THROWN, new String[] { "SecurityException" }));			
+		} catch (Exception e) {
+            tbc.fail(MessagesConstants.getMessage(MessagesConstants.EXCEPTION_THROWN, new String[] {"SecurityException", e.getClass().getName() }));
+		} finally {
+			prepare();
+			tbc.uninstall(new DeploymentPackage[]{dp, fixDP});
         }
     }
 }

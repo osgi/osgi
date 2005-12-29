@@ -41,13 +41,14 @@
  * ============  ==============================================================
  */
 
-package org.osgi.test.cases.deploymentadmin.tc1.tbc.DeploymentPackage;
+package org.osgi.test.cases.deploymentadmin.tc1.tb1.DeploymentPackage;
 
 
 
 import org.osgi.service.deploymentadmin.DeploymentPackage;
 import org.osgi.test.cases.deploymentadmin.tc1.tbc.DeploymentConstants;
 import org.osgi.test.cases.deploymentadmin.tc1.tbc.DeploymentTestControl;
+import org.osgi.test.cases.deploymentadmin.tc1.tbc.TestInterface;
 import org.osgi.test.cases.deploymentadmin.tc1.tbc.util.MessagesConstants;
 import org.osgi.test.cases.deploymentadmin.tc1.tbc.util.TestingDeploymentPackage;
 
@@ -58,7 +59,7 @@ import org.osgi.test.cases.deploymentadmin.tc1.tbc.util.TestingDeploymentPackage
  * according to MEG specification.
  */
 
-public class Equals {
+public class Equals implements TestInterface {
 	
 	private DeploymentTestControl tbc;
 	
@@ -67,11 +68,19 @@ public class Equals {
 	}
 	
 	public void run() {
+		prepare();
 		testEquals001();
 		testEquals002();
 		testEquals003();
 	}
 	
+    private void prepare() {
+        try {
+            tbc.setDeploymentAdminPermission(DeploymentConstants.DEPLOYMENT_PACKAGE_NAME_ALL, DeploymentConstants.ALL_PERMISSION);
+        } catch (Exception e) {
+            tbc.fail("Failed to set Permission necessary for testing #getDeploymentPackage");
+        }
+    }
 	/**
 	 * Asserts that two deployment packages are equal when they have the same name and version
 	 * 
@@ -90,6 +99,7 @@ public class Equals {
 		} catch (Exception e) {
 			tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }));
 		} finally {
+			prepare();
 			tbc.uninstall(dp);
 		}
 	}
@@ -118,6 +128,7 @@ public class Equals {
 	}
 	/**
 	 * Asserts that two deployment packages are different when they have different versions and names
+	 * It also assures that no DeploymentAdminPermission is needed.
 	 * 
 	 * @spec DeploymentPackage.equals(Object)
 	 */
@@ -133,11 +144,14 @@ public class Equals {
 			dp = tbc.installDeploymentPackage(tbc.getWebServer() + testDP.getFilename());
 			dp2 = tbc.installDeploymentPackage(tbc.getWebServer() + testDP2.getFilename());
 			
+			tbc.setMininumPermission();
+			//Check whether no DeploymentAdminPermission is needed when calling this method.
 			tbc.assertTrue("Asserts that two deployment packages are different when they have different versions and names",
 							!dp.equals(dp2));
 		} catch (Exception e) {
 			tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }));
 		} finally {
+			prepare();
 			tbc.uninstall(new DeploymentPackage[] { rp, dp, dp2 });
 			
 		}
