@@ -38,7 +38,6 @@ package org.osgi.test.cases.deploymentadmin.tc1.tb1.DeploymentAdmin;
 
 import org.osgi.service.deploymentadmin.DeploymentException;
 import org.osgi.service.deploymentadmin.DeploymentPackage;
-import org.osgi.service.deploymentadmin.spi.DeploymentCustomizerPermission;
 import org.osgi.test.cases.deploymentadmin.tc1.tbc.DeploymentConstants;
 import org.osgi.test.cases.deploymentadmin.tc1.tbc.DeploymentTestControl;
 import org.osgi.test.cases.deploymentadmin.tc1.tbc.TestInterface;
@@ -72,9 +71,8 @@ public class InstallExceptions implements TestInterface {
         testInstallExceptions007();
         testInstallExceptions008();
         testInstallExceptions009();
-//        testInstallExceptions010();
+        testInstallExceptions010();
         testInstallExceptions011();
-        testInstallExceptions012();
     }
     
     /**
@@ -304,52 +302,12 @@ public class InstallExceptions implements TestInterface {
     }
     
     /**
-     * Asserts that a DeploymentException.CODE_RESOURCE_SHARING_VIOLATION is
-     * thrown when a resource already exists. 
-     * 
-     * @spec DeploymentException.CODE_RESOURCE_SHARING_VIOLATION
-     */     
-    private void testInstallExceptions010() {
-        tbc.log("#testInstallExceptions010");
-        tbc.setDeploymentAdminAndCustomizerPermission(
-                DeploymentConstants.DEPLOYMENT_PACKAGE_NAME_ALL,
-                DeploymentConstants.ALL_PERMISSION,
-                DeploymentConstants.BUNDLE_NAME_ALL,
-                DeploymentCustomizerPermission.PRIVATEAREA);
-        DeploymentPackage rp1 = null, rp2 = null, res1 = null, res2 = null;
-        try {
-            // resource processor for res1
-            TestingDeploymentPackage testRP1 = tbc.getTestingDeploymentPackage(DeploymentConstants.NON_CUSTOMIZER_DP);
-            rp1 = tbc.installDeploymentPackage(tbc.getWebServer() + testRP1.getFilename());
-            
-            TestingDeploymentPackage testRES1 = tbc.getTestingDeploymentPackage(DeploymentConstants.SIMPLE_RESOURCE_DP);
-            res1 = tbc.installDeploymentPackage(tbc.getWebServer() + testRES1.getFilename());
-            
-            // resource processor for res2
-            TestingDeploymentPackage testRP2 = tbc.getTestingDeploymentPackage(DeploymentConstants.SIMPLE_RESOURCE_PROCESSOR_UNINSTALL);
-            rp2 = tbc.installDeploymentPackage(tbc.getWebServer() + testRP2.getFilename());
-            
-            // resource shared amog res1 and res2
-            TestingDeploymentPackage testRES2 = tbc.getTestingDeploymentPackage(DeploymentConstants.SIMPLE_RESOURCE_UNINSTALL_DP);
-            res2 = tbc.installDeploymentPackage(tbc.getWebServer() + testRES2.getFilename());
-            
-            tbc.failException("#", DeploymentException.class);
-        } catch (DeploymentException e) {
-            tbc.assertEquals("The code of the DeploymentException is ", DeploymentException.CODE_RESOURCE_SHARING_VIOLATION, e.getCode());
-        } catch (Exception e) {
-            tbc.fail(MessagesConstants.getMessage(MessagesConstants.EXCEPTION_THROWN, new String[] {"DeploymentException", e.getClass().getName() }));
-        } finally {
-            tbc.uninstall(new DeploymentPackage[] { rp1, rp2, res1, res2 });
-        }
-    }
-    
-    /**
      *  This test case installs an untrusted deployment package.
      * 
      * @spec 114.14.5.15 CODE_SIGNING_ERROR
      */                 
-    private void testInstallExceptions011() {
-        tbc.log("#testInstallExceptions011");
+    private void testInstallExceptions010() {
+        tbc.log("#testInstallExceptions010");
         
         TestingDeploymentPackage testDP = tbc.getTestingDeploymentPackage(DeploymentConstants.UNTRUSTED_DP);
         DeploymentPackage dp = null;
@@ -371,8 +329,8 @@ public class InstallExceptions implements TestInterface {
      * 
      * @spec 114.14.5.14 CODE_PROCESSOR_NOT_FOUND
      */                 
-    private void testInstallExceptions012() {
-        tbc.log("#testInstallExceptions012");
+    private void testInstallExceptions011() {
+        tbc.log("#testInstallExceptions011");
         
         TestingDeploymentPackage testDP = tbc.getTestingDeploymentPackage(DeploymentConstants.SIMPLE_RESOURCE_DP);
         DeploymentPackage dp = null;

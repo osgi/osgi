@@ -238,7 +238,7 @@ public class GetDeploymentPackage implements TestInterface {
         } catch (Exception e) {
             tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }));
         } finally {
-       	 installThread.uninstallDP();
+       	 installThread.uninstallDP(false);
             tbc.uninstall(new DeploymentPackage[] { rp, initialDP, fixDP });
         }
     }

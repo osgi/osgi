@@ -36,41 +36,49 @@
  */
 package org.osgi.test.cases.deploymentadmin.tc1.tb1.DeploymentAdmin;
 
+import org.osgi.service.deploymentadmin.DeploymentException;
 import org.osgi.service.deploymentadmin.DeploymentPackage;
 import org.osgi.test.cases.deploymentadmin.tc1.tbc.DeploymentConstants;
 import org.osgi.test.cases.deploymentadmin.tc1.tbc.DeploymentTestControl;
 import org.osgi.test.cases.deploymentadmin.tc1.tbc.util.TestingDeploymentPackage;
 
-
+/**
+ * @author Luiz Felipe Guimarães
+ * 
+ */
 public class InstallPackageThread extends Thread {
 	private DeploymentTestControl tbc;
 	private TestingDeploymentPackage testDP;
-	private boolean installed=false;
-	private boolean uninstalled=false;
-	
-	private boolean uninstall=false;
-	private boolean running=false;
-	
 	DeploymentPackage dp = null;
 	
+	private boolean installed=false;//true if the DP is already installed
+	private boolean uninstalled=false;//true if the DP is already uninstalled
+
+	private boolean uninstall=false;//true if you want to uninstall the DP
+	private boolean running=false;//true if this Thread is running
+	
+	private int exceptionCode = -1;
 	
     protected InstallPackageThread(DeploymentTestControl tbc, TestingDeploymentPackage testDP) {
     	this.tbc = tbc;
         this.testDP = testDP;
     }
-    
-    public void uninstallDP() {
+
+    public void uninstallDP(boolean blockDP) {
     	if (isAlive()) {
     		uninstall=true;
-        	try {
-				this.join(DeploymentConstants.SHORT_TIMEOUT);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
+    		//If a blocked DP is being uninstalled, you cannot wait until this Thread die, otherwise it waits forever
+    		if (!blockDP) {
+	        	try {
+					this.join(DeploymentConstants.SHORT_TIMEOUT);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+    		}
     	}
     	
     }
-    
+ 
     public boolean isInstalled() {
     	return installed;
     }
@@ -80,6 +88,10 @@ public class InstallPackageThread extends Thread {
     }
     public boolean isUninstalled() {
     	return uninstalled;
+    }
+    
+    public int getDeploymentExceptionCode() {
+    	return exceptionCode;
     }
     
     public DeploymentPackage getDeploymentPackage() {
@@ -93,6 +105,9 @@ public class InstallPackageThread extends Thread {
 				installed=(dp==null?false:true);
 			} catch (Exception e) {
 				e.printStackTrace();
+				if (e instanceof DeploymentException) {
+					exceptionCode = ((DeploymentException)e).getCode();
+				}
 			}
 		} finally {
 			while (!uninstall) {
