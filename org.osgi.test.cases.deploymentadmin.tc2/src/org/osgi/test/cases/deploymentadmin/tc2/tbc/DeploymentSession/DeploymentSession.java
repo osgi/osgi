@@ -275,12 +275,12 @@ public class DeploymentSession {
 			DeploymentPackage dp = testSessionRP.getTargetDeploymentPackage();
 			tbc.assertEquals("The target deployment package version is 0.0.0", Version.emptyVersion, dp.getVersion());
 			tbc.assertTrue("The target deployment package name is an empty string", dp.getName().equals(""));
-			tbc.assertTrue("The target deployment package name is stale", dp.isStale());
+			tbc.assertTrue("The target deployment package is stale", dp.isStale());
 			tbc.assertTrue("The target deployment package has no bundles", dp.getBundleInfos().length==0);
 			tbc.assertTrue("The target deployment package has no resources", dp.getResources().length==0);
-			// A mandatory header, so if this header doesn't exist, there is no header in this dp
-			tbc.assertNull("The target deployment package name has no headers", dp.getHeader("DeploymentPackage-SymbolicName"));
-			//The tests of IllegalStateException is done at IsStale class
+			// The mandatory headers, just to check if it really doesnt have headers
+			tbc.assertTrue("The target deployment package name has no headers", dp.getHeader("DeploymentPackage-SymbolicName")==null && dp.getHeader("DeploymentPackage-Version")==null);
+			//The tests of IllegalStateException is done at IsStale class. The dp does not have any resources, so getResourceHeader is not checked. 
 			
 
 
