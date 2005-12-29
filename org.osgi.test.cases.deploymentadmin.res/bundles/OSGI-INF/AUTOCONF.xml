@@ -16,17 +16,9 @@
   <Designate pid="br.org.cesar.bundles.tb4" 
   				bundle="osgi-dp:bundle004.jar">
   	<Object ocdref="ocd1">
-  		<Attribute adref="ATTRIBUTE_A">
-  			<Value>1</Value>
-  			<Value>2</Value>
-  			<Value>3</Value>
-  		</Attribute>
+  		<Attribute adref="ATTRIBUTE_A" content="0,1,2" />
   		<Attribute adref="ATTRIBUTE_B" content="3.1415" />
-  		<Attribute adref="ATTRIBUTE_C">
-  			<Value>"String_1"</Value>
-  			<Value>"String_2"</Value>
-  			<Value>"String_3"</Value>
-  		</Attribute>
+  		<Attribute adref="ATTRIBUTE_C" content="a,b" />
   	</Object>
   </Designate>
   
@@ -35,10 +27,7 @@
   	<Object ocdref="ocd2">
   		<Attribute adref="ATTRIBUTE_A" content="1" />
   		<Attribute adref="ATTRIBUTE_B" content="9.98" />
-  		<Attribute adref="ATTRIBUTE_C">
-  			<Value>"CESAR"</Value>
-  			<Value>"MOTOROLA"</Value>
-  		</Attribute>
+  		<Attribute adref="ATTRIBUTE_C" content="CESAR,MOTOROLA" />
   	</Object>
   </Designate>
 
