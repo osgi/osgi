@@ -55,6 +55,7 @@ import java.net.URL;
 import java.util.Dictionary;
 import java.util.HashMap;
 import java.util.PropertyPermission;
+
 import org.osgi.framework.AdminPermission;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.InvalidSyntaxException;
@@ -70,16 +71,7 @@ import org.osgi.service.deploymentadmin.spi.ResourceProcessor;
 import org.osgi.service.permissionadmin.PermissionAdmin;
 import org.osgi.service.permissionadmin.PermissionInfo;
 import org.osgi.test.cases.deploymentadmin.tc1.tbc.BundleInfo.GetSymbolicName;
-import org.osgi.test.cases.deploymentadmin.tc1.tbc.DeploymentPackage.Equals;
-import org.osgi.test.cases.deploymentadmin.tc1.tbc.DeploymentPackage.GetBundle;
-import org.osgi.test.cases.deploymentadmin.tc1.tbc.DeploymentPackage.GetHeader;
-import org.osgi.test.cases.deploymentadmin.tc1.tbc.DeploymentPackage.GetName;
-import org.osgi.test.cases.deploymentadmin.tc1.tbc.DeploymentPackage.GetResourceHeader;
-import org.osgi.test.cases.deploymentadmin.tc1.tbc.DeploymentPackage.GetResourceProcessor;
-import org.osgi.test.cases.deploymentadmin.tc1.tbc.DeploymentPackage.GetResources;
-import org.osgi.test.cases.deploymentadmin.tc1.tbc.DeploymentPackage.GetVersion;
-import org.osgi.test.cases.deploymentadmin.tc1.tbc.DeploymentPackage.IsStale;
-import org.osgi.test.cases.deploymentadmin.tc1.tbc.DeploymentPackage.ManifestFormat;
+import org.osgi.test.cases.deploymentadmin.tc1.tbc.BundleInfo.GetVersion;
 import org.osgi.test.cases.deploymentadmin.tc1.tbc.Event.BundleListenerImpl;
 import org.osgi.test.cases.deploymentadmin.tc1.tbc.Event.DeploymentEventHandlerActivator;
 import org.osgi.test.cases.deploymentadmin.tc1.tbc.Event.DeploymentEventHandlerImpl;
@@ -630,7 +622,7 @@ public class DeploymentTestControl extends DefaultTestBundleControl {
     
     // Cancel
     public void testDeploymentAdminCancel() {
-//      testClasses[6].run();
+      testClasses[6].run();
     }
     
     // UninstallDeploymentPackage
@@ -652,51 +644,55 @@ public class DeploymentTestControl extends DefaultTestBundleControl {
 	// DeploymentPackage Test Cases
 	// Equals
 	public void testDeploymentPackageEquals() {
-		new Equals(this).run();
+		testClasses[8].run();
 	}
 	
 	// GetBundle
 	public void testDeploymentPackageGetBundle() {
-		new GetBundle(this).run();
+		testClasses[9].run();
 	}
 
-	// GetHeader
-	public void testDeploymentPackageGetHeader() {
-		new GetHeader(this).run();
+	// GetBundleInfos
+	public void testDeploymentPackageGetBundleInfos() {
+		testClasses[10].run();
 	}
 	
-	// IsStale
-	public void testDeploymentPackageIsStale() {
-		new IsStale(this).run();
+	// GetHeader
+	public void testDeploymentPackageGetHeader() {
+		testClasses[11].run();
 	}
-
+	
 	// GetName
 	public void testDeploymentPackageGetName() {
-		new GetName(this).run();
+		testClasses[12].run();
 	}
 
-	// GetResourceHeader
+	//GetResourceHeader
 	public void testDeploymentPackageGetResourceHeader() {
-		new GetResourceHeader(this).run();
+		testClasses[13].run();
 	}
 	
 	// GetResourceProcessor
 	public void testDeploymentPackageGetResourceProcessor() {
-		new GetResourceProcessor(this).run();
+		testClasses[14].run();
 	}
 
 	// GetResources
 	public void testDeploymentPackageGetResources() {
-		new GetResources(this).run();
+		testClasses[15].run();
 	}	
 	// GetVersion
 	public void testDeploymentPackageGetVersion() {
-		new GetVersion(this).run();
+		testClasses[16].run();
 	}
-	
+	// IsStale
+	public void testDeploymentPackageIsStale() {
+		testClasses[17].run();
+	}
+
     //Manifest Format
     public void testManifestFormat() {
-        new ManifestFormat(this).run();
+    	testClasses[18].run();
     }
 	
 	/**
@@ -867,6 +863,24 @@ public class DeploymentTestControl extends DefaultTestBundleControl {
         
         setAssyncPermission(info);
     }
+	
+	public void setMininumPermission() {
+        PermissionInfo[] info = new PermissionInfo[] {
+                new PermissionInfo(PackagePermission.class.getName(), "*", "EXPORT, IMPORT"),
+                // to find the Deployment Admin
+                new PermissionInfo(ServicePermission.class.getName(), "*", "GET"),
+                // to load files that are passed to the Deployment Admin
+                new PermissionInfo(FilePermission.class.getName(), "<<ALL FILES>>", "READ, WRITE, EXECUTE, DELETE"),
+                // to manipulate bundles
+                new PermissionInfo(AdminPermission.class.getName(), "*", "*"),
+                // to connect to director webserver
+                new PermissionInfo(SocketPermission.class.getName(), "*", "accept,connect,listen,resolve"),
+                // to read, write in properties whenever necessary
+                new PermissionInfo(PropertyPermission.class.getName(), "*", "read,write"),
+                };
+            
+            setAssyncPermission(info);
+	}
     
     /**
      * @param bundleLocation2

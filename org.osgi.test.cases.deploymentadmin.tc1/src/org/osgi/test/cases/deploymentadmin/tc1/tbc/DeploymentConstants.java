@@ -189,7 +189,10 @@ public class DeploymentConstants {
     public static final int SESSION_TIMEOUT = 1000;
     public static final int SHORT_TIMEOUT = 2000;
     
-    static String getCodeName(int code) {
+    public static String getDPNameFilter(String dpName) {
+    	return "(name="+dpName+")";
+    }
+    public static String getCodeName(int code) {
         switch (code) {
             case SIMPLE_DP: return "simple_dp";
             case SIMPLE_DP_CLONE: return "simple_clone_dp";

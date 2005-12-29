@@ -50,6 +50,17 @@ import org.osgi.test.cases.deploymentadmin.tc1.tb1.DeploymentAdmin.InstallExcept
 import org.osgi.test.cases.deploymentadmin.tc1.tb1.DeploymentAdmin.InstallFixPack;
 import org.osgi.test.cases.deploymentadmin.tc1.tb1.DeploymentAdmin.ListDeploymentPackage;
 import org.osgi.test.cases.deploymentadmin.tc1.tb1.DeploymentAdmin.UninstallDeploymentPackage;
+import org.osgi.test.cases.deploymentadmin.tc1.tb1.DeploymentPackage.Equals;
+import org.osgi.test.cases.deploymentadmin.tc1.tb1.DeploymentPackage.GetBundle;
+import org.osgi.test.cases.deploymentadmin.tc1.tb1.DeploymentPackage.GetBundleInfos;
+import org.osgi.test.cases.deploymentadmin.tc1.tb1.DeploymentPackage.GetHeader;
+import org.osgi.test.cases.deploymentadmin.tc1.tb1.DeploymentPackage.GetName;
+import org.osgi.test.cases.deploymentadmin.tc1.tb1.DeploymentPackage.GetResourceHeader;
+import org.osgi.test.cases.deploymentadmin.tc1.tb1.DeploymentPackage.GetResourceProcessor;
+import org.osgi.test.cases.deploymentadmin.tc1.tb1.DeploymentPackage.GetResources;
+import org.osgi.test.cases.deploymentadmin.tc1.tb1.DeploymentPackage.GetVersion;
+import org.osgi.test.cases.deploymentadmin.tc1.tb1.DeploymentPackage.IsStale;
+import org.osgi.test.cases.deploymentadmin.tc1.tb1.DeploymentPackage.ManifestFormat;
 import org.osgi.test.cases.deploymentadmin.tc1.tbc.DeploymentTestControl;
 import org.osgi.test.cases.deploymentadmin.tc1.tbc.TB1Service;
 import org.osgi.test.cases.deploymentadmin.tc1.tbc.TestInterface;
@@ -85,7 +96,18 @@ public class Activator implements BundleActivator, TB1Service {
 				new GetDeploymentPackage((DeploymentTestControl) tbc),
 				new UninstallDeploymentPackage((DeploymentTestControl) tbc),
                 new Cancel((DeploymentTestControl) tbc),
-                new InstallExceptions((DeploymentTestControl) tbc)
+                new InstallExceptions((DeploymentTestControl) tbc),
+                new Equals((DeploymentTestControl) tbc),
+                new GetBundle((DeploymentTestControl) tbc),
+                new GetBundleInfos((DeploymentTestControl) tbc),
+                new GetHeader((DeploymentTestControl) tbc),
+                new GetName((DeploymentTestControl) tbc),
+                new GetResourceHeader((DeploymentTestControl) tbc),
+                new GetResourceProcessor((DeploymentTestControl) tbc),
+                new GetResources((DeploymentTestControl) tbc),
+                new GetVersion((DeploymentTestControl) tbc),
+                new IsStale((DeploymentTestControl) tbc),
+                new ManifestFormat((DeploymentTestControl) tbc)
 				};
 	}
 }
