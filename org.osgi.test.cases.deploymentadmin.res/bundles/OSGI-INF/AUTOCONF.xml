@@ -13,7 +13,7 @@
     <AD id="ATTRIBUTE_C" name="%ATTRIBUTE_C" type="String" cardinality="-2" />
   </OCD>
   
-  <Designate pid="br.org.cesar.bundles.tb4" factory="false"
+  <Designate pid="br.org.cesar.bundles.tb4" 
   				bundle="osgi-dp:bundle004.jar">
   	<Object ocdref="ocd1">
   		<Attribute adref="ATTRIBUTE_A">
@@ -30,7 +30,7 @@
   	</Object>
   </Designate>
   
-  <Designate pid="org.osgi.test.cases.deployment.tb2" factory="true"
+  <Designate pid="org.osgi.test.cases.deployment.tb2" factoryPid="org.osgi.test.cases.deploymentadmin.tc2.tb1"
   				bundle="BundleLocation/tb2.jar">
   	<Object ocdref="ocd2">
   		<Attribute adref="ATTRIBUTE_A" content="1" />
