@@ -51,9 +51,9 @@ public interface TestingManagedService extends ManagedService {
 	public static final String ATTRIBUTE_A = "ATTRIBUTE_A";
 	public static Integer[] ATTRIBUTE_A_VALUE = {new Integer(0), new Integer(1), new Integer(2)};
 	public static final String ATTRIBUTE_B = "ATTRIBUTE_B";
-	public static Float ATTRIBUTE_B_VALUE = new Float(2.14f);
+	public static Float ATTRIBUTE_B_VALUE = new Float(3.1415f);
 	public static final String ATTRIBUTE_C = "ATTRIBUTE_C";
-	public static final String[] ATTRIBUTE_C_VALUE = {"", ""};
+	public static final String[] ATTRIBUTE_C_VALUE = {"a", "b"};
 	
 	public Dictionary getProperties();
 	public boolean isUpdated();
