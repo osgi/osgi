@@ -273,9 +273,16 @@ public class DeploymentSession {
 			TestingSessionResourceProcessor testSessionRP = (TestingSessionResourceProcessor)getTestSessionRP(DeploymentConstants.PID_RESOURCE_PROCESSOR3);
 			
 			DeploymentPackage dp = testSessionRP.getTargetDeploymentPackage();
-			tbc.assertEquals("The target deployment package version is 0.0.0", new Version(0,0,0), dp.getVersion());
-			tbc.assertTrue("The target deployment package has no resources", dp.getResources().length==0);
+			tbc.assertEquals("The target deployment package version is 0.0.0", Version.emptyVersion, dp.getVersion());
+			tbc.assertTrue("The target deployment package name is an empty string", dp.getName().equals(""));
+			tbc.assertTrue("The target deployment package name is stale", dp.isStale());
 			tbc.assertTrue("The target deployment package has no bundles", dp.getBundleInfos().length==0);
+			tbc.assertTrue("The target deployment package has no resources", dp.getResources().length==0);
+			// A mandatory header, so if this header doesn't exist, there is no header in this dp
+			tbc.assertNull("The target deployment package name has no headers", dp.getHeader("DeploymentPackage-SymbolicName"));
+			//The tests of IllegalStateException is done at IsStale class
+			
+
 
 		} catch (Exception e) {
 			tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }));

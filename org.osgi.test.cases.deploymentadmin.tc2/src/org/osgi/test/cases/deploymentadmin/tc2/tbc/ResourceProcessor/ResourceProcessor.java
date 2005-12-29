@@ -47,6 +47,7 @@ import org.osgi.test.cases.deploymentadmin.tc2.tbc.util.MessagesConstants;
 import org.osgi.test.cases.deploymentadmin.tc2.tbc.util.TestingDeploymentPackage;
 import org.osgi.test.cases.deploymentadmin.tc2.tbc.util.TestingResource;
 import org.osgi.test.cases.deploymentadmin.tc2.tbc.util.TestingResourceProcessor;
+import org.osgi.test.cases.deploymentadmin.tc2.tbc.util.TestingSessionResourceProcessor;
 /**
  * @author Andre Assad
  * 
@@ -68,6 +69,7 @@ public class ResourceProcessor {
 		testResourceProcessor005();
 		testResourceProcessor006();
         testResourceProcessor007();
+        testResourceProcessor008();
 	}
 
 		
@@ -333,6 +335,37 @@ public class ResourceProcessor {
             tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }));
         } finally {
             tbc.uninstall(new DeploymentPackage[]{dp1, dp2});
+        }
+    }
+    
+    /**
+     * It also tests if DeploymentException.CODE_RESOURCE_SHARING_VIOLATION is thrown if
+     * the ResourceProcessor throws ResourceProcessorException.CODE_RESOURCE_SHARING_VIOLATION 
+     * 
+     * @spec 114.8 Installing a Deployment Package
+     */
+    private void testResourceProcessor008() {
+        tbc.log("#testResourceProcessor008");
+        DeploymentPackage dp = null;
+        TestingSessionResourceProcessor tsrp = null;
+        TestingDeploymentPackage testDP = null;
+        try {
+            tsrp = (TestingSessionResourceProcessor) tbc.getService(ResourceProcessor.class,
+                "(service.pid=" + DeploymentConstants.PID_RESOURCE_PROCESSOR3 + ")");
+            tsrp.setException(TestingSessionResourceProcessor.PROCESS);
+
+            testDP = tbc.getTestingDeploymentPackage(DeploymentConstants.SIMPLE_RESOURCE_RP3);
+            dp = tbc.installDeploymentPackage(tbc.getWebServer() + testDP.getFilename());
+            tbc.failException("", DeploymentException.class);
+        } catch (DeploymentException e) {
+        	tbc.assertEquals("The code of the DeploymentException is ", DeploymentException.CODE_RESOURCE_SHARING_VIOLATION, e.getCode());
+        } catch (Exception e) {
+            tbc.fail(MessagesConstants.getMessage(
+                MessagesConstants.UNEXPECTED_EXCEPTION, new String[]{e.getClass().getName()}));
+        } finally {
+            if (tsrp != null)
+                tsrp.reset();
+            tbc.uninstall(dp);
         }
     }
 }
