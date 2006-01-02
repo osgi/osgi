@@ -205,8 +205,17 @@ public class PowerManagerImpl implements PowerManager {
 			if (refs.length > 0) {
 				for (int i = refs.length - 1; i == 0; i--) {
 					handler = (PowerHandler) context.getService(refs[i]);
-					if (handler != null)
-						handler.handleQueryFailed(state);
+					if (handler != null) {
+						try {
+							handler.handleQueryFailed(state);
+						}
+						catch (Throwable t) {
+							log(
+									LogService.LOG_ERROR,
+									"Error while sending cancelation request to Power Handlers",
+									t);
+						}
+					}
 				}
 			}
 
@@ -224,7 +233,7 @@ public class PowerManagerImpl implements PowerManager {
 				currentPowerState = state;
 
 				// Set power state to D0 by default
-				setPowerStateToDevices(state);
+				handleDevices(state);
 
 				// Send event to handlers
 				sendEvent(state);
@@ -239,7 +248,7 @@ public class PowerManagerImpl implements PowerManager {
 				sendEvent(state);
 
 				// Set power state to D3 by default
-				setPowerStateToDevices(state);
+				handleDevices(state);
 
 				// Sets the current state
 				currentPowerState = state;
@@ -257,9 +266,11 @@ public class PowerManagerImpl implements PowerManager {
 	 * 
 	 * @param systemPowerState The new system power state.
 	 */
-	private void setPowerStateToDevices(int systemPowerState) {
+	private void handleDevices(int systemPowerState) {
 		ServiceReference refs[];
-
+		int devicePowerState;
+		DevicePower device;
+		
 		try {
 			refs = context.getServiceReferences(DevicePower.class.getName(),
 					null);
@@ -268,28 +279,15 @@ public class PowerManagerImpl implements PowerManager {
 				if (refs[i] == null)
 					continue;
 
-				final DevicePower device = (DevicePower) context.getService(refs[i]);
+				device = (DevicePower) context.getService(refs[i]);
 				try {
 					// Determine the right device power state and set it to the
 					// device
-					final int devicePowerState = determineDevicePowerState(refs[i],
+					devicePowerState = determineDevicePowerState(refs[i],
 							systemPowerState);
 					if ((devicePowerState != DevicePower.UNSPECIFIED_STATE)
 							&& (device != null))
-						try {
-							AccessController.doPrivileged(new PrivilegedAction() {
-								public Object run() {
-									device.setPowerState(devicePowerState);
-									return null;
-								}
-							});
-						}
-						catch (Throwable t) {
-							log(
-									LogService.LOG_ERROR,
-									"Error while setting a new power state to the device",
-									t);
-						}
+						setDevicePowerState(device, devicePowerState);
 				}
 				catch (IllegalArgumentException iae) {
 					log(
@@ -391,6 +389,26 @@ public class PowerManagerImpl implements PowerManager {
 		return eventTopic;
 	}
 
+	private void setDevicePowerState(final DevicePower device, final int devicePowerState) {
+
+		// Send event to handlers
+		try {
+			AccessController.doPrivileged(new PrivilegedAction() {
+				public Object run() {
+					device.setPowerState(devicePowerState);
+					return null;
+				}
+			});
+		}
+		catch (Throwable t) {
+			log(
+					LogService.LOG_ERROR,
+					"Error while setting a new power state to the device",
+					t);
+		}
+	}
+	
+	
 	private void sendEvent(final int systemPowerState) {
 
 		// Send event to handlers
