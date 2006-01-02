@@ -239,7 +239,7 @@ public class DeploymentPackageImpl implements DeploymentPackage, Serializable {
      * @see DeploymentPackage#getBundleInfos()
      */
 	public synchronized BundleInfo[] getBundleInfos() {
-		checkStale();
+		//checkStale();
 
 		dpCtx.checkPermission(this, DeploymentAdminPermission.METADATA);
 		
@@ -262,8 +262,10 @@ public class DeploymentPackageImpl implements DeploymentPackage, Serializable {
      * @see org.osgi.service.deploymentadmin.DeploymentPackage#getResources()
      */
     public synchronized String[] getResources() {
-        checkStale();
+        //checkStale();
         
+    	dpCtx.checkPermission(this, DeploymentAdminPermission.METADATA);
+    	
         String[]ret = new String[resourceEntries.size() + bundleEntries.size()];
         int i = 0;
         for (Iterator iter = bundleEntries.iterator(); iter.hasNext();) {
@@ -283,8 +285,10 @@ public class DeploymentPackageImpl implements DeploymentPackage, Serializable {
      * @see org.osgi.service.deploymentadmin.DeploymentPackage#getResourceHeader(java.lang.String, java.lang.String)
      */
     public synchronized String getResourceHeader(String name, String header) {
-        checkStale();
+        //checkStale();
         
+    	dpCtx.checkPermission(this, DeploymentAdminPermission.METADATA);
+    	
         for (Iterator iter = resourceEntries.iterator(); iter.hasNext();) {
             ResourceEntry re = (ResourceEntry) iter.next();
             if (re.getResName().equals(name))
@@ -304,7 +308,9 @@ public class DeploymentPackageImpl implements DeploymentPackage, Serializable {
      * @see org.osgi.service.deploymentadmin.DeploymentPackage#getHeader(java.lang.String)
      */
     public synchronized String getHeader(String name) {
-        checkStale();
+        //checkStale();
+    	
+    	dpCtx.checkPermission(this, DeploymentAdminPermission.METADATA);
         
         return (String) mainSection.get(name);
     }
@@ -360,6 +366,8 @@ public class DeploymentPackageImpl implements DeploymentPackage, Serializable {
      */
     public synchronized ServiceReference getResourceProcessor(String resName) {
         checkStale();
+        
+        dpCtx.checkPermission(this, DeploymentAdminPermission.METADATA);
         
         for (Iterator iter = resourceEntries.iterator(); iter.hasNext();) {
             ResourceEntry re = (ResourceEntry) iter.next();
