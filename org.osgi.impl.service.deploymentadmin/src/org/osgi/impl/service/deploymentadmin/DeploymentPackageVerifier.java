@@ -26,7 +26,7 @@ public class DeploymentPackageVerifier {
 	String allowedResNameChars = "abcdefghijklmnopqrstuvwxyz" +
 	                             "ABCDEFGHIJKLMNOPQRSTUVWXYZ" +
 	                             "0123456789" +
-	                             "-_.";
+	                             "-_./";
 	
     private DeploymentPackageCtx  dpCtx;
     private DeploymentPackageImpl dp;
