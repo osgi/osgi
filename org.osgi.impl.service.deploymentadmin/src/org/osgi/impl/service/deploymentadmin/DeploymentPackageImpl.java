@@ -85,6 +85,7 @@ public class DeploymentPackageImpl implements DeploymentPackage, Serializable {
         dp.mainSection = new CaseInsensitiveMap(null, dp);
         dp.mainSection.put(DAConstants.DP_NAME, "");
         dp.mainSection.put(DAConstants.DP_VERSION, "0.0.0");
+        dp.stale = new Boolean(true);
         
         return dp;
     }
