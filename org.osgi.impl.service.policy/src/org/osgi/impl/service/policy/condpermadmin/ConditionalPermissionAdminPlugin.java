@@ -179,7 +179,12 @@ public class ConditionalPermissionAdminPlugin extends AbstractPolicyPlugin {
 		for(Enumeration en = condPermAdmin.getConditionalPermissionInfos(); en.hasMoreElements();) {
 			ConditionalPermissionInfo e = (ConditionalPermissionInfo)en.nextElement();
 
-			conditionalPermissions.put(mangle(e.getName()),
+			String name = e.getName();
+			// Spec bug #130  workaround
+			// This is made so that other parts of the RI can still be tested
+			// TODO: remove this when spec is fixed
+			if (name.equals("")) { name = "specbug130workaround"; }
+			conditionalPermissions.put(mangle(name),
 					new ConditionalPermission(e.getName(),e.getConditionInfos(),e.getPermissionInfos()));
 		}
 }
