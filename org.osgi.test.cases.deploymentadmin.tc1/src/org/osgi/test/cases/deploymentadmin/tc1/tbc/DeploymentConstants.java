@@ -83,7 +83,7 @@ public class DeploymentConstants {
 	public static final int MISSING_NAME_HEADER_DP = 25;
 	public static final int SYSTEM_DP = 26;
 	public static final int WRONG_ORDER_DP = 27;
-	public static final int WRONG_FORMAT_DP = 28;
+	public static final int NON_CUSTOMIZER_DP = 28;
 	public static final int UNTRUSTED_DP = 29;
 	public static final int WRONG_PATH_DP = 30;
 	public static final int WRONG_VERSION_DP = 31;
@@ -112,7 +112,6 @@ public class DeploymentConstants {
     public static final int STRANGE_PATH_DP = 54;
     public static final int LOCALIZED_DP = 55;
     public static final int SIGNING_FILE_NOT_NEXT = 56;
-    public static final int NON_CUSTOMIZER_DP = 57;
     
 	//This array index is very important, and must be the same as the deployment code
 	//Use 31 characters.
@@ -129,7 +128,7 @@ public class DeploymentConstants {
         "simple_unsigned_bundle_dp", "simple_unsigned_dp",
         "simple_no_bundle_dp", "simple_no_resource_dp",
         "fix_pack_lower_range_dp", "missing_name_header_dp", "system",
-        "wrong_order", "wrong_format", "untrusted", "wrong_path",
+        "wrong_order", "non_customizer_dp", "untrusted", "wrong_path",
         "wrong_version", "simple_uninstall_bundle_dp",
         "simple_uninstall_bundle_dp", "bundle_throws_exception_dp",
         "bundle_throws_exception_stop_dp", "bundle_doesnt_throw_exception_dp",
@@ -140,7 +139,7 @@ public class DeploymentConstants {
         "simple_resource_uninstall_dp", "wrong_bsn", "wrong_bversion",
         "wrong_customizer", "wrong_dp_missing", "wrong_fix_pack", "wrong_name",
         "wrong_rp", "session_test_dp", "resource_processor2_dp",
-        "strange_path", "localized", "signing_file_not_next", "non_customizer_dp"};
+        "strange_path", "localized", "signing_file_not_next"};
 	
 	public static final String DEPLOYMENT_PACKAGE_NAME_ALL = "(name=*)";
 	
@@ -221,7 +220,6 @@ public class DeploymentConstants {
             case MISSING_NAME_HEADER_DP: return "missing_name_header_dp";
             case SYSTEM_DP: return "system";
             case WRONG_ORDER_DP: return "wrong_order";
-            case WRONG_FORMAT_DP: return "wrong_format";
             case UNTRUSTED_DP: return "untrusted";
             case WRONG_PATH_DP: return "wrong_path";
             case WRONG_VERSION_DP: return "wrong_version";

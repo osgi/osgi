@@ -86,7 +86,6 @@ public class InstallDeploymentPackageUseCases implements TestInterface {
 		testInstallDeploymentPackageUseCases013();
         testInstallDeploymentPackageUseCases014();
         testInstallDeploymentPackageUseCases015();
-        testInstallDeploymentPackageUseCases016();
 	}
     
     /**
@@ -258,35 +257,13 @@ public class InstallDeploymentPackageUseCases implements TestInterface {
 	}
 	
 	/**
-     * This test case asserts that the extension of a Deployment Package JAR
-     * file name SHOULD be .dp
-     * 
-     * @spec 114.3 File Format
-     */		
-	private void testInstallDeploymentPackageUseCases006() {
-		tbc.log("#testInstallDeploymentPackageUseCases006");
-		DeploymentPackage dp = null;
-		try {
-			TestingDeploymentPackage testDP = tbc.getTestingDeploymentPackage(DeploymentConstants.WRONG_FORMAT_DP);
-			dp = tbc.installDeploymentPackage(tbc.getWebServer() + testDP.getFilename());
-            tbc.log("DeploymentAdmin accepted a deployment package without .dp format");
-		} catch (DeploymentException e) {
-			tbc.pass("Correctly failed to install a deployment package with wrong extension");
-		} catch (Exception e) {
-			tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }));
-		} finally {
-			tbc.uninstall(dp);
-		}
-	}
-	
-	/**
 	 * Asserts that resources must come after bundles in a
 	 * deployment package jar file.
 	 * 
 	 * @spec 114.3 File Format
 	 */		
-	private void testInstallDeploymentPackageUseCases007() {
-		tbc.log("#testInstallDeploymentPackageUseCases007");
+	private void testInstallDeploymentPackageUseCases006() {
+		tbc.log("#testInstallDeploymentPackageUseCases006");
 		DeploymentPackage dp = null;
 		try {
 			TestingDeploymentPackage testDP = tbc.getTestingDeploymentPackage(DeploymentConstants.WRONG_ORDER_DP);
@@ -307,8 +284,8 @@ public class InstallDeploymentPackageUseCases implements TestInterface {
 	 * 
 	 * @spec 114.3.1 Signing
 	 */		
-	private void testInstallDeploymentPackageUseCases008() {
-		tbc.log("#testInstallDeploymentPackageUseCases008");
+	private void testInstallDeploymentPackageUseCases007() {
+		tbc.log("#testInstallDeploymentPackageUseCases007");
 		DeploymentPackage dp = null;
 		try {
 			TestingDeploymentPackage testDP = tbc.getTestingDeploymentPackage(DeploymentConstants.UNTRUSTED_DP);
@@ -329,8 +306,8 @@ public class InstallDeploymentPackageUseCases implements TestInterface {
 	 * 
 	 * @spec 114.3.2 Path Names
 	 */		
-	private void testInstallDeploymentPackageUseCases009() {
-		tbc.log("#testInstallDeploymentPackageUseCases009");
+	private void testInstallDeploymentPackageUseCases008() {
+		tbc.log("#testInstallDeploymentPackageUseCases008");	
 		DeploymentPackage dp = null;
 		try {
 			TestingDeploymentPackage testDP = tbc.getTestingDeploymentPackage(DeploymentConstants.WRONG_PATH_DP);
@@ -352,8 +329,8 @@ public class InstallDeploymentPackageUseCases implements TestInterface {
 	 * 
 	 * @spec 114.8 Installing a Deployment Package
 	 */
-	private synchronized void testInstallDeploymentPackageUseCases010() {
-		tbc.log("#testInstallDeploymentPackageUseCases010");
+	private synchronized void testInstallDeploymentPackageUseCases009() {
+		tbc.log("#testInstallDeploymentPackageUseCases009");
 
 		DeploymentPackage dp = null;
 		Bundle currentBundle = null;
@@ -408,8 +385,8 @@ public class InstallDeploymentPackageUseCases implements TestInterface {
 	 * 
 	 * @spec 114.8 Installing a Deployment Package
 	 */		
-	private void testInstallDeploymentPackageUseCases011() {
-		tbc.log("#testInstallDeploymentPackageUseCases011");
+	private void testInstallDeploymentPackageUseCases010() {
+		tbc.log("#testInstallDeploymentPackageUseCases010");
 		DeploymentPackage dp = null;
 		try {
 			TestingDeploymentPackage testDP = tbc.getTestingDeploymentPackage(DeploymentConstants.BUNDLE_THROWS_EXCEPTION_STOP_DP);
@@ -427,8 +404,8 @@ public class InstallDeploymentPackageUseCases implements TestInterface {
      * 
      * @spec DeploymentException.DeploymentException()
      */     
-    private void testInstallDeploymentPackageUseCases012() {
-        tbc.log("#testInstallDeploymentPackageUseCases012");
+    private void testInstallDeploymentPackageUseCases011() {
+        tbc.log("#testInstallDeploymentPackageUseCases011");
         DeploymentPackage dp = null;
         try {
             TestingDeploymentPackage testDP = tbc.getTestingDeploymentPackage(DeploymentConstants.VERSION_DIFFERENT_FROM_MANIFEST_DP);
@@ -449,8 +426,8 @@ public class InstallDeploymentPackageUseCases implements TestInterface {
      * 
      * @spec 114.11 Events
      */             
-    private void testInstallDeploymentPackageUseCases013() {
-        tbc.log("#testInstallDeploymentPackageUseCases013");
+    private void testInstallDeploymentPackageUseCases012() {
+        tbc.log("#testInstallDeploymentPackageUseCases012");
         DeploymentPackage dp = null;
 
         TestingDeploymentPackage testDP = null;
@@ -488,8 +465,8 @@ public class InstallDeploymentPackageUseCases implements TestInterface {
      * 
      * @spec 114.11 Events
      */             
-    private void testInstallDeploymentPackageUseCases014() {
-        tbc.log("#testInstallDeploymentPackageUseCases014");
+    private void testInstallDeploymentPackageUseCases013() {
+        tbc.log("#testInstallDeploymentPackageUseCases013");
         DeploymentPackage dp = null;
 
         TestingDeploymentPackage testDP = null;
@@ -540,8 +517,8 @@ public class InstallDeploymentPackageUseCases implements TestInterface {
      * 
      * @spec 114.3.2 Path Names
      */
-    private void testInstallDeploymentPackageUseCases015() {
-        tbc.log("#testInstallDeploymentPackageUseCases015");
+    private void testInstallDeploymentPackageUseCases014() {
+        tbc.log("#testInstallDeploymentPackageUseCases014");
         DeploymentPackage dp = null;
         TestingDeploymentPackage testDP = null;
         try {
@@ -561,8 +538,8 @@ public class InstallDeploymentPackageUseCases implements TestInterface {
      * 
      * @spec 114.3 File Format
      */
-    private void testInstallDeploymentPackageUseCases016() {
-        tbc.log("#testInstallDeploymentPackageUseCases016");
+    private void testInstallDeploymentPackageUseCases015() {
+        tbc.log("#testInstallDeploymentPackageUseCases015");
         DeploymentPackage dp = null;
         try {
             TestingDeploymentPackage testDP = tbc.getTestingDeploymentPackage(DeploymentConstants.SIGNING_FILE_NOT_NEXT);

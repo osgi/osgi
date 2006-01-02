@@ -349,12 +349,7 @@ public class DeploymentTestControl extends DefaultTestBundleControl {
 				packages.put(""+i, dp);
 				break;
 			}
-			case DeploymentConstants.WRONG_FORMAT_DP: {
-				TestingBundle[] bundles = {new TestingBundle("bundles.tb1", "1.0", "bundle001.jar"), new TestingBundle("bundles.tb2", "1.0", "bundle002.jar")};
-				dp = new TestingDeploymentPackage(DeploymentConstants.getCodeName(DeploymentConstants.WRONG_FORMAT_DP), "1.0", "wrong_format.wrg", bundles);
-				packages.put(""+i, dp);
-				break;
-			}
+
 			case DeploymentConstants.UNTRUSTED_DP: {
 				TestingBundle[] bundles = {new TestingBundle("bundles.tb1", "1.0", "bundle001.jar"), new TestingBundle("bundles.tb2", "1.0", "bundle002.jar")};
 				dp = new TestingDeploymentPackage(DeploymentConstants.getCodeName(DeploymentConstants.UNTRUSTED_DP), "1.0", "untrusted.dp", bundles);
