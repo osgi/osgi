@@ -29,8 +29,10 @@ import org.osgi.service.deploymentadmin.DeploymentPackage;
  *     		(see {@link DeploymentPackage#getBundle(String)})</li>
  *     <li>it has no resources
  *     		(see {@link DeploymentPackage#getResources()})</li>
- *     <li>it has no headers (see 
- *     		{@link DeploymentPackage#getHeader(String)})</li>
+ *     <li>it has no headers except <p>
+ *     		<code>DeploymentPackage-SymbolicName</code> and <p>
+ *     		<code>DeploymentPackage-Version</code> <p>
+ *     		(see {@link DeploymentPackage#getHeader(String)})</li>
  *     <li>it has no resource headers (see 
  *     		{@link DeploymentPackage#getResourceHeader(String, String)})</li>
  *     <li>{@link DeploymentPackage#uninstall()} throws
