@@ -551,14 +551,6 @@ public class DeploymentSessionImpl implements DeploymentSession, FrameworkListen
         return wrProcs;
     }
 
-    /*private boolean isLocalizationEntry(Entry entry) {
-        String prefix = srcDp.getHeader(DAConstants.BUNDLE_LOCALIZATION);
-        if (null == prefix || prefix.trim().equals(""))
-            prefix = "OSGI-INF/l10n/bundle";
-        
-        return entry.getName().startsWith(prefix);
-    }*/
-
     /*
      * Drops resources that don't present in the source package and are not 
      * marked as missing resources
@@ -572,12 +564,12 @@ public class DeploymentSessionImpl implements DeploymentSession, FrameworkListen
         List toDrop = new LinkedList(targetDp.getResourceEntries());
         List tmpSet = srcDp.getResourceEntries();
         toDrop.removeAll(tmpSet);
-        for (Iterator iter = toDrop.iterator(); iter.hasNext();) {
+        for (ListIterator iter = toDrop.listIterator(toDrop.size()); iter.hasPrevious();) {
             if (isCancelled())
             	break;
 
             try {
-                ResourceEntry re = (ResourceEntry) iter.next();
+                ResourceEntry re = (ResourceEntry) iter.previous();
                 targetDp.remove(re);
                 WrappedResourceProcessor wrProc = dropResource(re);
                 wrProcs.add(wrProc);
