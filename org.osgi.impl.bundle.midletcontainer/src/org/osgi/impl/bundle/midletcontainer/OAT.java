@@ -39,12 +39,14 @@ public class OAT implements OATContainerInterface, SynchronousBundleListener {
 	
 	private Hashtable oatHashtable = null;
 	private Hashtable oatAppDescHash = null;
+	private Hashtable oatBaseClasses = null;
 	private ServiceRegistration containerService = null;
 	private BundleContext bc = null;
 
 	public OAT() {
 		oatHashtable = new Hashtable();
 		oatAppDescHash = new Hashtable();
+		oatBaseClasses = new Hashtable();
 	}
 	
 	public void start( BundleContext bc ) throws Exception {
@@ -64,27 +66,8 @@ public class OAT implements OATContainerInterface, SynchronousBundleListener {
 	}
 	
 	public void registerOATBundle(Bundle bundle, String baseClasses[] ) throws Exception {
-		URL url = bc.getBundle( bundle.getBundleId() ).getResource(	"OSGI-INF/app/apps.xml");
-		OATApplicationData []oatAppDatas;
-		try {
-		  oatAppDatas = (new OATXMLParser( bc )).parse( url );
-		  if( oatAppDatas.length != baseClasses.length )
-		  	throw new Exception( "Inconsistency between the apps.xml and container settings!" );
-		  
-		  List asList = Arrays.asList( baseClasses );
-		  for( int q = 0; q != baseClasses.length; q++ )
-		  	if( !asList.contains( oatAppDatas[ q ].getBaseClass() ) )
-			  	throw new Exception( "Inconsistency between the apps.xml and container settings!" );
-		  
-		}catch( Exception e ) {
-		  Activator.log( LogService.LOG_ERROR, "Exception occurred at parsing apps.xml file!", e );
-		  
-			oatAppDatas = new OATApplicationData[ baseClasses.length ];
-			for( int i=0; i != baseClasses.length; i++ )
-				oatAppDatas[ i ] = new OATApplicationData( baseClasses[ i ], new OATServiceData[ 0 ] );
-		}
-		
-		oatAppDescHash.put( bundle, oatAppDatas );
+		oatBaseClasses.put( bundle, baseClasses );
+		getOATAppDatas( bundle );
 	}
 	
 	public void createApplicationContext(Object mainClass, ApplicationHandle appHandle, Map args, Bundle bundle )
@@ -93,7 +76,7 @@ public class OAT implements OATContainerInterface, SynchronousBundleListener {
 		if( !isLaunchable( bundle, mainClass.getClass().getName() ) )
 			throw new Exception( "ApplicationContext can only be created for launchable applications!" );
 		
-		OATApplicationData []oatAppDatas = (OATApplicationData [])oatAppDescHash.get( bundle );
+		OATApplicationData []oatAppDatas = getOATAppDatas( bundle );
 		if( oatAppDatas == null )
 			throw new Exception( "Application bundle is not registered in OAT" );
 		
@@ -109,26 +92,27 @@ public class OAT implements OATContainerInterface, SynchronousBundleListener {
 
 	public void removeApplicationContext(Object mainClass) throws Exception {
 		OATApplicationContextImpl appCtx = (OATApplicationContextImpl)oatHashtable.remove( mainClass );
-    appCtx.destroy();
+		appCtx.destroy();
 	}
 	
 	private void setApplicationContextHashRef() throws Exception {
 		Class appFrameworkClass = org.osgi.application.Framework.class;
 		Field field = appFrameworkClass.getDeclaredField( "appContextHash" );
 		field.setAccessible(true);
-    field.set( null, oatHashtable);		
+		field.set( null, oatHashtable);		
 	}
 
 	public void bundleChanged(BundleEvent event) {
 		if( event.getType() == BundleEvent.UNINSTALLED ) {
 			oatAppDescHash.remove( event.getBundle() );
+			oatBaseClasses.remove( event.getBundle() );
 			/* Do we need to terminate all of the applications? */
 		}
 	}
 
 	public boolean isLaunchable(Bundle bundle, String baseClass) {
 		try {
-			OATApplicationData []oatAppDatas = (OATApplicationData [])oatAppDescHash.get( bundle );
+			OATApplicationData []oatAppDatas = getOATAppDatas( bundle );
 			if( oatAppDatas == null )
 				return false;
 
@@ -161,5 +145,41 @@ public class OAT implements OATContainerInterface, SynchronousBundleListener {
 			return false;			
 		}
 		return false;
+	}
+
+	private OATApplicationData [] getOATAppDatas(Bundle bundle) throws Exception {
+		OATApplicationData []oatAppDatas = (OATApplicationData [])oatAppDescHash.get( bundle );
+		if( oatAppDatas != null )
+			return oatAppDatas;
+
+		if( bundle.getState() != Bundle.ACTIVE )
+			return null;
+		
+		String []baseClasses = (String [])oatBaseClasses.get( bundle );
+		if( baseClasses == null )
+			return null;
+		
+		URL url = bc.getBundle( bundle.getBundleId() ).getResource(	"OSGI-INF/app/apps.xml");
+
+		try {
+		  oatAppDatas = (new OATXMLParser( bc )).parse( url );
+		  if( oatAppDatas.length != baseClasses.length )
+		  	throw new Exception( "Inconsistency between the apps.xml and container settings!" );
+		  
+		  List asList = Arrays.asList( baseClasses );
+		  for( int q = 0; q != baseClasses.length; q++ )
+		  	if( !asList.contains( oatAppDatas[ q ].getBaseClass() ) )
+			  	throw new Exception( "Inconsistency between the apps.xml and container settings!" );
+		  
+		}catch( Exception e ) {
+		  Activator.log( LogService.LOG_ERROR, "Exception occurred at parsing apps.xml file!", e );
+		  
+			oatAppDatas = new OATApplicationData[ baseClasses.length ];
+			for( int i=0; i != baseClasses.length; i++ )
+				oatAppDatas[ i ] = new OATApplicationData( baseClasses[ i ], new OATServiceData[ 0 ] );
+		}
+
+		oatAppDescHash.put( bundle, oatAppDatas );
+		return oatAppDatas;
 	}
 }
