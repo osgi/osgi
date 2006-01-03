@@ -174,14 +174,13 @@ public class Scheduler implements Runnable, EventHandler {
 			Iterator it = scheduledApps.iterator();
 			Vector removeList = new Vector();
 		
-			try {
-				
-				while ( it.hasNext() ) {
-					ScheduledApplicationImpl schedApp = (ScheduledApplicationImpl) it.next();
+			while ( it.hasNext() ) {
+				ScheduledApplicationImpl schedApp = (ScheduledApplicationImpl) it.next();
 
-					if( !schedApp.isValid() )
-						continue;
+				if( !schedApp.isValid() )
+					continue;
 					
+				try {						
 					if ((schedApp.getTopic() != null)
 							&& e.matches(bc.createFilter("("
 									+ EventConstants.EVENT_TOPIC + "="
@@ -193,7 +192,7 @@ public class Scheduler implements Runnable, EventHandler {
 						ApplicationDescriptor appDesc = schedApp.getApplicationDescriptor();
 						
 						if( appDesc == null )        /* is the application descriptor uninstalled? */
-							removeList.add( schedApp );
+							throw new Exception( "Doesn't find the registered application descriptor!" );
 						else {
 							appDesc.launch(schedApp.getArguments());
 
@@ -202,13 +201,13 @@ public class Scheduler implements Runnable, EventHandler {
 						}
   					}
 				}
-			}
-			catch (Exception ex) {
-				ex.printStackTrace();
-				Activator.log(
-						LogService.LOG_ERROR,
-						"Exception occurred at scheduling an application!",
-						ex);
+				catch (Exception ex) {
+					ex.printStackTrace();
+					Activator.log(
+							LogService.LOG_ERROR,
+							"Exception occurred at scheduling an application!",
+							ex);
+				}
 			}
 			
 			it = removeList.iterator();
