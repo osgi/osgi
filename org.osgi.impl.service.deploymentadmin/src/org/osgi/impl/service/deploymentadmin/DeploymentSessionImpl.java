@@ -612,7 +612,7 @@ public class DeploymentSessionImpl implements DeploymentSession, FrameworkListen
 	            ResourceEntry re = (ResourceEntry) iter.next();
 	            String pid = re.getValue(DAConstants.RP_PID);
 	            
-	            if (null == WrappedResourceProcessor.findProcessor(pid))
+	            if (null == WrappedResourceProcessor.findProcessorSilent(pid))
 	            	throw new DeploymentException(DeploymentException.CODE_PROCESSOR_NOT_FOUND, 
 		                "Resource processor for pid " + pid + " is not found");
 	            
@@ -681,7 +681,7 @@ public class DeploymentSessionImpl implements DeploymentSession, FrameworkListen
      */
     private WrappedResourceProcessor dropResource(ResourceEntry re) throws DeploymentException {
         String pid = re.getValue(DAConstants.RP_PID);
-        ResourceProcessor proc = WrappedResourceProcessor.findProcessor(pid);
+        ResourceProcessor proc = WrappedResourceProcessor.findProcessorSilent(pid);
         if (null == proc)
             throw new DeploymentException(DeploymentException.CODE_PROCESSOR_NOT_FOUND,
                 "Resource processor for pid " + pid + "is not found");
@@ -805,7 +805,7 @@ public class DeploymentSessionImpl implements DeploymentSession, FrameworkListen
             throw new DeploymentException(DeploymentException.CODE_FOREIGN_CUSTOMIZER,
                     "PID '" + pid + "' belongs to another DP (" + dp + ")");
             
-        ResourceProcessor proc = WrappedResourceProcessor.findProcessor(pid);
+        ResourceProcessor proc = WrappedResourceProcessor.findProcessorSilent(pid);
         if (null == proc)
             throw new DeploymentException(DeploymentException.CODE_PROCESSOR_NOT_FOUND, 
                     "Resource processor (PID=" + pid + ") for '" + entry.getName() +

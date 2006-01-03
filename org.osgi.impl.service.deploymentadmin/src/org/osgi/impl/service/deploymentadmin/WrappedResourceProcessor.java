@@ -86,6 +86,17 @@ public class WrappedResourceProcessor implements ResourceProcessor, Serializable
     }
     
     /*
+     * Finds a Resource processor to the given PID silently
+     */
+    static ResourceProcessor findProcessorSilent(String pid) {
+    	try {
+    		return findProcessor(pid);
+    	} catch (RuntimeException e) {
+			return null;
+		}
+    }
+    
+    /*
      * Finds a Resource processor to the given PID
      */
     static ResourceProcessor findProcessor(String pid) {
