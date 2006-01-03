@@ -38,7 +38,7 @@ import org.osgi.service.deploymentadmin.DeploymentException;
  * packages (DPs).
  */
 public class DeploymentPackageJarInputStream {
-    
+	
     /**
      * Extends the JarEntry functionality according to the needs of 
      * the deployment packages (DPs). It is able to recognise bundles, 
@@ -152,6 +152,17 @@ public class DeploymentPackageJarInputStream {
         }
     }
     
+    // Are used to check right file order
+    private static final int FT_UNKNOWN   = -1; 
+    private static final int FT_MANIFEST  = 0; 
+	private static final int FT_SIGNATURE = 1; 
+	private static final int FT_L10N      = 2; 
+	private static final int FT_BUNDLE    = 3; 
+	private static final int FT_RESOURCE  = 4;
+	
+	//Is used to check right file order
+	private int lastFileType = FT_UNKNOWN;
+	
     private JarInputStream                  jis;
     private DeploymentPackageResourceBundle dprb = new DeploymentPackageResourceBundle();
     
@@ -248,8 +259,7 @@ public class DeploymentPackageJarInputStream {
                 // remove to ensure that the sequence of Entries ends
                 it.remove();
             }
-        }
-        else {
+        } else {
             if (null == actJarEntry.getAttributes())
                 throw new DeploymentException(DeploymentException.CODE_MISSING_HEADER,
                         "There is no \"Name\"-section for JarEntry: " + actJarEntry);
@@ -275,15 +285,41 @@ public class DeploymentPackageJarInputStream {
     /*
      * Skips uninterested JarEntries (directories, .sf files, etc.)
      */
-    private JarEntry getNextJarEntry() throws IOException {
+    private JarEntry getNextJarEntry() throws IOException, DeploymentException {
         actJarEntry = jis.getNextJarEntry();
+
+        if (null != actJarEntry) {
+        	int actFileType = getFileType(actJarEntry);
+	        checkFileOrder(lastFileType, actFileType);
+	        lastFileType = actFileType;
+        }
+        
         while (null != actJarEntry && isUninterested(actJarEntry))
         	actJarEntry = jis.getNextJarEntry();
         
         return actJarEntry; 
     }
 
-    private boolean isUninterested(JarEntry je) throws IOException {
+    private void checkFileOrder(int last, int act) throws DeploymentException {
+		if (act < last)
+			throw new DeploymentException(DeploymentException.CODE_ORDER_ERROR);
+	}
+
+	private int getFileType(JarEntry je) throws IOException {
+		String name = je.getName().toLowerCase();
+		if ("meta-inf/manifest.mf".equals(name))
+			return FT_MANIFEST;
+		else if (name.startsWith("meta-inf/") &&
+				(name.endsWith(".sf") || name.endsWith(".dsa") || name.endsWith(".rf")))
+			return FT_SIGNATURE;
+		else if (name.startsWith(locPath) && name.endsWith(".properties"))
+			return FT_L10N;
+		if (Entry.isBundle(je.getAttributes()))
+			return FT_BUNDLE;
+		return FT_RESOURCE;
+	}
+
+	private boolean isUninterested(JarEntry je) throws IOException {
         if (je.isDirectory())
             return true;
         if (je.getName().toLowerCase().startsWith("meta-inf/"))
