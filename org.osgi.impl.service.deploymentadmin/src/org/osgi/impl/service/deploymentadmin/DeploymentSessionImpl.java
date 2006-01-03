@@ -651,12 +651,12 @@ public class DeploymentSessionImpl implements DeploymentSession, FrameworkListen
         }
         
         toDrop.removeAll(tmpSet);
-        for (Iterator iter = toDrop.iterator(); iter.hasNext();) {
+        for (ListIterator iter = toDrop.listIterator(toDrop.size()); iter.hasPrevious();) {
             if (isCancelled())
             	break;
 
             try {	
-                String bsn = (String) iter.next();
+                String bsn = (String) iter.previous();
             	BundleEntry be = targetDp.getBundleEntry(bsn);
             	targetDp.remove(be);
                 dropBundle(be);
