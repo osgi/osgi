@@ -102,7 +102,6 @@ public class InstallSession {
             testInstallSession016();
             testInstallSession017();
             testInstallSession018();
-            testInstallSession019();
         } finally {
             unprepare();
         }
@@ -468,7 +467,7 @@ public class InstallSession {
             tbc.assertTrue("Asserts that Deployment Admin drops all the resources in reverse target order", 
             		resourcesDroppedOrder[0].equals(testRes[1].getName()) && 
     				resourcesDroppedOrder[1].equals(testRes[0].getName()) && 
-					resourcesDroppedOrder[2].equals(""));
+					resourcesDroppedOrder[2]==null);
             
             
         } catch (Exception e) {
@@ -569,6 +568,10 @@ public class InstallSession {
         TestingSessionResourceProcessor tsrp = null;
         TestingResourceProcessor trp = null;
         try {
+            tsrp = (TestingSessionResourceProcessor) tbc.getService(ResourceProcessor.class,
+                    "(service.pid=" + DeploymentConstants.PID_RESOURCE_PROCESSOR3 + ")");
+                
+            tsrp.reset();
             TestingDeploymentPackage testRP = tbc.getTestingDeploymentPackage(DeploymentConstants.RESOURCE_PROCESSOR_2_DP);
             rp = tbc.installDeploymentPackage(tbc.getWebServer() + testRP.getFilename());
             
@@ -576,9 +579,7 @@ public class InstallSession {
             dp1 = tbc.installDeploymentPackage(tbc.getWebServer() + source.getFilename());
             // handles session operations
 
-            tsrp = (TestingSessionResourceProcessor) tbc.getService(ResourceProcessor.class,
-                "(service.pid=" + DeploymentConstants.PID_RESOURCE_PROCESSOR3 + ")");
-            
+
             tbc.assertTrue(DeploymentConstants.PID_RESOURCE_PROCESSOR3 + " have NOT to prepared to commit", 
                 !tsrp.isPrepared());
 
@@ -798,57 +799,6 @@ public class InstallSession {
         }
     }
     
-    /**
-     * Asserts that any exceptions thrown during uninstallation of stale bundles
-     * <b>should be logged as a warning but must be ignored.</b>
-     * 
-     * @spec 114.8 Installing a Deployment Package
-     */
-    private void testInstallSession019() {
-        tbc.log("#testInstallSession019");
-        DeploymentPackage dp1 = null;
-        try {
-            Enumeration logsBefore = tbc.getLogReader().getLog();
-            TestingDeploymentPackage target = tbc.getTestingDeploymentPackage(DeploymentConstants.SIMPLE_BUNDLE_RES_DP);
-            dp1 = tbc.installDeploymentPackage(tbc.getWebServer() + target.getFilename());
-
-            // uninstall bundle before DP update
-            TestingBundle tBundle = target.getBundle("bundles.tb3");
-            Bundle b = tbc.getBundle(tBundle.getName());
-            b.uninstall();
-            
-            TestingDeploymentPackage source = tbc.getTestingDeploymentPackage(DeploymentConstants.SIMPLE_UNINSTALL_BUNDLE);
-            dp1 = tbc.installDeploymentPackage(tbc.getWebServer() + source.getFilename());
-            
-            tbc.pass("Exception thrown during uninstallation of stale bundle (bundles.tb3) was ignored");
-            
-            Enumeration logsAfter = tbc.getLogReader().getLog();
-            tbc.assertTrue("Logs after are the same as logs before uninstallation", !logsAfter.equals(logsBefore));
-            
-            boolean found = false;
-            // assert Exception was logged
-            while (logsAfter.hasMoreElements()) {
-                // get the latest log
-                LogEntry log = (LogEntry)logsAfter.nextElement();
-                if ((log.getLevel() == LogService.LOG_WARNING)
-                    && (log.getException() instanceof IllegalStateException)
-                    && (log.getBundle().getSymbolicName().indexOf("deployment") != -1))
-                {
-                    tbc.pass("The log message is a WARNING and the Exception is a IllegalStateException");
-                    found = true;
-                    break;
-                }
-            }
-            if (!found){
-                tbc.log("The log message is NOT a WARNING and the Exception is NOT a IllegalStateException");
-            }
-        } catch (Exception e) {
-            tbc.fail(MessagesConstants.getMessage(
-                MessagesConstants.UNEXPECTED_EXCEPTION, new String[]{e.getClass().getName()}));
-        } finally {
-            tbc.uninstall(dp1);
-        }
-    }
     
     
 }

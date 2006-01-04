@@ -279,7 +279,7 @@ public class DeploymentSession {
 			tbc.assertTrue("The target deployment package has no bundles", dp.getBundleInfos().length==0);
 			tbc.assertTrue("The target deployment package has no resources", dp.getResources().length==0);
 			// The mandatory headers, just to check if it really doesnt have headers
-			tbc.assertTrue("The target deployment package name has no headers", dp.getHeader("DeploymentPackage-SymbolicName")==null && dp.getHeader("DeploymentPackage-Version")==null);
+			tbc.assertTrue("The target deployment package name has no headers", dp.getHeader("DeploymentPackage-SymbolicName").equals("") && dp.getHeader("DeploymentPackage-Version").equals(Version.emptyVersion.toString()));
 			//The tests of IllegalStateException is done at IsStale class. The dp does not have any resources, so getResourceHeader is not checked. 
 			
 
@@ -465,6 +465,12 @@ public class DeploymentSession {
             if (tbc.isTransactionalDA()){
                 tbc.assertTrue("In a transactional session no event is sent if the installation fails", events.isEmpty());
             } else { //non-transactional
+        		try {
+					Thread.sleep(3000);
+				} catch (InterruptedException e1) {
+					e1.printStackTrace();
+				}
+        		
                 Iterator it = events.iterator();
                 BundleEvent event = null;
                 int i = 0;

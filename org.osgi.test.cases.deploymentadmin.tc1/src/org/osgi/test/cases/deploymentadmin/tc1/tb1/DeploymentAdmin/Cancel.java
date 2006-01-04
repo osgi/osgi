@@ -65,7 +65,7 @@ public class Cancel implements TestInterface {
     public void run() {
     	prepare();
         testCancel001();
-//        testCancel002();
+        testCancel002();
         testCancel003();
         testCancel004();
     }
@@ -90,11 +90,12 @@ public class Cancel implements TestInterface {
     	TestingDeploymentPackage testFixDP = tbc.getTestingDeploymentPackage(DeploymentConstants.ADD_RESOURCE_FIX_PACK);
         TestingDeploymentPackage testRP = tbc.getTestingDeploymentPackage(DeploymentConstants.RESOURCE_PROCESSOR_DP);
         InstallPackageThread installThread = null;
+        TestingGetServiceRegistrationResourceProcessor test = null;
         
         try {
    			rp = tbc.installDeploymentPackage(tbc.getWebServer()+testRP.getFilename());
    			
-   			TestingGetServiceRegistrationResourceProcessor test = (TestingGetServiceRegistrationResourceProcessor) tbc.getServiceInstance(DeploymentConstants.PID_RESOURCE_PROCESSOR1);
+   			test = (TestingGetServiceRegistrationResourceProcessor) tbc.getServiceInstance(DeploymentConstants.PID_RESOURCE_PROCESSOR1);
    			
    			tbc.assertNotNull("Resource Processor was registered", test);
    			
@@ -131,6 +132,7 @@ public class Cancel implements TestInterface {
         } catch (Exception e) {
             tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }));
         } finally {
+        	test.setRelease(true);
        	 	installThread.uninstallDP(false);
             tbc.uninstall(new DeploymentPackage[] { rp, initialDP, fixDP });
         }
@@ -149,11 +151,12 @@ public class Cancel implements TestInterface {
     	TestingDeploymentPackage testFixDP = tbc.getTestingDeploymentPackage(DeploymentConstants.ADD_RESOURCE_FIX_PACK);
         TestingDeploymentPackage testRP = tbc.getTestingDeploymentPackage(DeploymentConstants.RESOURCE_PROCESSOR_DP);
         InstallPackageThread installThread = null;
+        TestingGetServiceRegistrationResourceProcessor test = null;
         
         try {
    			rp = tbc.installDeploymentPackage(tbc.getWebServer()+testRP.getFilename());
    			
-   			TestingGetServiceRegistrationResourceProcessor test = (TestingGetServiceRegistrationResourceProcessor) tbc.getServiceInstance(DeploymentConstants.PID_RESOURCE_PROCESSOR1);
+   			test = (TestingGetServiceRegistrationResourceProcessor) tbc.getServiceInstance(DeploymentConstants.PID_RESOURCE_PROCESSOR1);
    			
    			tbc.assertNotNull("Resource Processor was registered", test);
    			
@@ -192,6 +195,7 @@ public class Cancel implements TestInterface {
         } catch (Exception e) {
             tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }));
         } finally {
+        	test.setRelease(true);
        	 	installThread.uninstallDP(true);
             tbc.uninstall(new DeploymentPackage[] { rp, initialDP, fixDP });
         }
