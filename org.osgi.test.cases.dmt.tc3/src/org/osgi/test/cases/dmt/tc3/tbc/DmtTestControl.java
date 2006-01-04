@@ -70,7 +70,7 @@ import org.osgi.test.cases.dmt.tc3.tbc.MetaNode.IsZeroOccurrenceAllowed;
 import org.osgi.test.cases.dmt.tc3.tbc.MetaNode.TestMetaNodeDataPluginActivator;
 import org.osgi.test.cases.dmt.tc3.tbc.MetaNode.MetaData.MetaData;
 import org.osgi.test.cases.dmt.tc3.tbc.MetaNode.MetaData.TestPluginMetaDataActivator;
-import org.osgi.test.cases.dmt.tc3.tbc.Others.DmtSessionContraints;
+import org.osgi.test.cases.dmt.tc3.tbc.Others.DmtSessionConstraints;
 import org.osgi.test.cases.dmt.tc3.tbc.Others.OpenSession;
 import org.osgi.test.cases.dmt.tc3.tbc.Others.OverlappingPlugins;
 import org.osgi.test.cases.dmt.tc3.tbc.Others.UseCases;
@@ -353,8 +353,8 @@ public class DmtTestControl extends DefaultTestBundleControl {
 	public void testMetaData() {
 		new MetaData(this).run();
 	}
-	public void testConstraints() {
-	    new DmtSessionContraints(this).run();
+	public void testDmtSessionConstraints() {
+	    new DmtSessionConstraints(this).run();
 	}		
     public void testOpenSession() {
         new OpenSession(this).run();

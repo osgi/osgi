@@ -43,28 +43,34 @@ import org.osgi.service.dmt.DmtException;
 import org.osgi.service.dmt.DmtSession;
 import org.osgi.test.cases.dmt.tc3.tbc.DmtConstants;
 import org.osgi.test.cases.dmt.tc3.tbc.DmtTestControl;
+import org.osgi.test.cases.dmt.tc3.tbc.DataPlugin.TestDataPluginActivator;
 
 /**
  * @author Andre Assad
  * 
  * This test case validates the constraints according to MEG specification
  */
-public class DmtSessionContraints {
+public class DmtSessionConstraints {
 
 	private DmtTestControl tbc;
 
-	public DmtSessionContraints(DmtTestControl tbc) {
+	public DmtSessionConstraints(DmtTestControl tbc) {
 		this.tbc = tbc;
 	}
 
 	public void run() {
-		//This classes was splitted in two parts for preventing the TCK of timeout.	The first one is this class
-		//and the second one is at org.osgi.test.cases.dmt.main.tbc.Constraints.DmtSessionContrainsts
 		testConstraints001();
 		testConstraints002();
 		testConstraints003();
 		testConstraints004();
 		testConstraints005();
+		testConstraints006();
+		testConstraints007();
+		testConstraints008();
+		testConstraints009();
+		testConstraints010();
+		testConstraints011();
+		testConstraints012();
 	}
 
 	/**
@@ -205,4 +211,205 @@ public class DmtSessionContraints {
 		}
 	}
 
+	/**
+	 * Tests if a session (with the LOCK_TYPE_EXCLUSIVE) can not be shared 
+     * with LOCK_TYPE_EXCLUSIVE lock
+     * 
+     * @spec 117.3 The DMT Admin Service
+	 */
+	private void testConstraints006() {
+		tbc.log("#testConstraints006");
+		DmtSession session1 = null;
+		DmtSession session2 = null;
+		try {
+			session1 = tbc.getDmtAdmin().getSession(DmtConstants.OSGi_LOG,
+					DmtSession.LOCK_TYPE_EXCLUSIVE);
+			session2 = tbc.getDmtAdmin().getSession(DmtConstants.OSGi_LOG,
+					DmtSession.LOCK_TYPE_EXCLUSIVE);
+			tbc
+					.fail("An EXCLUSIVE session could be shared with an EXCLUSIVE session");
+		} catch (DmtException e) {
+			tbc.assertEquals("An EXCLUSIVE session could NOT be shared with an EXCLUSIVE session",DmtException.SESSION_CREATION_TIMEOUT,e.getCode());
+		} catch (Exception e) {
+			tbc.fail("Expected " + DmtException.class.getName()
+					+ " but it was " + e.getClass().getName());
+		} finally {
+			tbc.closeSession(session1);
+			tbc.closeSession(session2);
+		}
+	}
+
+	/**
+	 * Test if concurrent updating sessions cannot be opened within the same plugin.
+     * Both session have LOCK_TYPE_ATOMIC
+     * 
+     * 
+     * @spec 117.3 The DMT Admin Service
+	 */
+	private void testConstraints007() {
+		tbc.log("#testConstraints007");
+		DmtSession session1 = null;
+		DmtSession session2 = null;
+		try {
+			session1 = tbc.getDmtAdmin().getSession(
+					TestDataPluginActivator.ROOT,
+					DmtSession.LOCK_TYPE_ATOMIC);
+			session2 = tbc.getDmtAdmin().getSession(
+					TestDataPluginActivator.INTERIOR_NODE,
+					DmtSession.LOCK_TYPE_ATOMIC);
+			tbc
+					.fail("An ATOMIC session could be shared with an ATOMIC session");
+		} catch (DmtException e) {
+			tbc.assertEquals("An ATOMIC session could NOT be shared with an ATOMIC session",DmtException.SESSION_CREATION_TIMEOUT,e.getCode());
+		} catch (Exception e) {
+			tbc.fail("Expected " + DmtException.class.getName()
+					+ " but it was " + e.getClass().getName());
+		} finally {
+			tbc.closeSession(session1);
+			tbc.closeSession(session2);
+		}
+	}
+
+	/**
+	 * Test if concurrent updating sessions cannot be opened within the same plugin.
+     * One session has LOCK_TYPE_ATOMIC and other has LOCK_TYPE_EXCLUSIVE
+     * 
+     * @spec 117.3 The DMT Admin Service
+	 */
+
+	private void testConstraints008() {
+		tbc.log("#testConstraints008");
+		DmtSession session1 = null;
+		DmtSession session2 = null;
+		try {
+			session1 = tbc.getDmtAdmin().getSession(
+					TestDataPluginActivator.ROOT,
+					DmtSession.LOCK_TYPE_ATOMIC);
+			session2 = tbc.getDmtAdmin().getSession(
+					TestDataPluginActivator.ROOT,
+					DmtSession.LOCK_TYPE_EXCLUSIVE);
+			tbc
+					.fail("An ATOMIC session could be shared with an EXCLUSIVE session");
+		} catch (DmtException e) {
+			tbc.assertEquals("An ATOMIC session could NOT be shared with an EXCLUSIVE session",DmtException.SESSION_CREATION_TIMEOUT,e.getCode());
+		} catch (Exception e) {
+			tbc.fail("Expected " + DmtException.class.getName()
+					+ " but it was " + e.getClass().getName());
+		} finally {
+			tbc.closeSession(session1);
+			tbc.closeSession(session2);
+		}
+	}
+
+	/**
+	 * Test if concurrent updating sessions cannot be shared with a shared session.
+     * 
+     * @spec 117.3 The DMT Admin Service
+	 */
+
+	private void testConstraints009() {
+		tbc.log("#testConstraints009");
+		DmtSession session1 = null;
+		DmtSession session2 = null;
+		try {
+			session1 = tbc.getDmtAdmin().getSession(
+					TestDataPluginActivator.ROOT,
+					DmtSession.LOCK_TYPE_ATOMIC);
+			session2 = tbc.getDmtAdmin().getSession(
+					TestDataPluginActivator.ROOT,
+					DmtSession.LOCK_TYPE_SHARED);
+			tbc
+					.fail("An ATOMIC session could be shared with a SHARED session");
+		} catch (DmtException e) {
+			tbc.assertEquals("An ATOMIC session could NOT be shared with a SHARED session",DmtException.SESSION_CREATION_TIMEOUT,e.getCode());
+		} catch (Exception e) {
+			tbc.fail("Expected " + DmtException.class.getName()
+					+ " but it was " + e.getClass().getName());
+		} finally {
+			tbc.closeSession(session1);
+			tbc.closeSession(session2);
+		}
+	}
+
+	
+
+	/**
+	 * Test if concurrent updating sessions can be opened within different plugins
+     * 
+     * @spec 117.3 The DMT Admin Service
+	 */
+
+	private void testConstraints010() {
+		tbc.log("#testConstraints010");
+		DmtSession session1 = null;
+		DmtSession session2 = null;
+		try {
+			session1 = tbc.getDmtAdmin().getSession(DmtConstants.OSGi_LOG,
+					DmtSession.LOCK_TYPE_ATOMIC);
+			session2 = tbc.getDmtAdmin().getSession(
+					TestDataPluginActivator.ROOT,
+					DmtSession.LOCK_TYPE_ATOMIC);
+			tbc.pass("Two sessions could be opened with different plugins.");
+		} catch (Exception e) {
+			tbc.fail("Unexpected Exception: " + e.getClass().getName()
+					+ " [Message: " + e.getMessage() + "]");
+		} finally {
+			tbc.closeSession(session1);
+			tbc.closeSession(session2);
+		}
+	}
+	
+	
+	/**
+	 * Test if concurrent updating sessions can be opened within different plugins
+     * 
+     * @spec 117.3 The DMT Admin Service
+	 */
+
+	private void testConstraints011() {
+		tbc.log("#testConstraints011");
+		DmtSession session1 = null;
+		DmtSession session2 = null;
+		try {
+			session1 = tbc.getDmtAdmin().getSession(DmtConstants.OSGi_LOG,
+					DmtSession.LOCK_TYPE_EXCLUSIVE);
+			session2 = tbc.getDmtAdmin().getSession(
+					TestDataPluginActivator.ROOT,
+					DmtSession.LOCK_TYPE_EXCLUSIVE);
+			tbc.pass("Two sessions could be opened with different plugins.");
+		} catch (Exception e) {
+			tbc.fail("Unexpected Exception: " + e.getClass().getName()
+					+ " [Message: " + e.getMessage() + "]");
+		} finally {
+			tbc.closeSession(session1);
+			tbc.closeSession(session2);
+		}
+	}	
+	
+	/**
+	 * Test if concurrent updating sessions can be opened within different plugins
+     * 
+     * @spec 117.3 The DMT Admin Service
+	 */
+
+	private void testConstraints012() {
+		tbc.log("#testConstraints012");
+		DmtSession session1 = null;
+		DmtSession session2 = null;
+		try {
+			session1 = tbc.getDmtAdmin().getSession(DmtConstants.OSGi_LOG,
+					DmtSession.LOCK_TYPE_ATOMIC);
+			session2 = tbc.getDmtAdmin().getSession(
+					TestDataPluginActivator.ROOT,
+					DmtSession.LOCK_TYPE_EXCLUSIVE);
+			tbc.pass("Two sessions could be opened with different plugins.");
+		} catch (Exception e) {
+			tbc.fail("Unexpected Exception: " + e.getClass().getName()
+					+ " [Message: " + e.getMessage() + "]");
+		} finally {
+			tbc.closeSession(session1);
+			tbc.closeSession(session2);
+		}
+	}		
+	
 }

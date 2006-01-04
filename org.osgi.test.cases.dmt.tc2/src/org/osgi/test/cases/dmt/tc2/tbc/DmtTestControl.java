@@ -65,7 +65,6 @@ import org.osgi.service.permissionadmin.PermissionInfo;
 import org.osgi.test.cases.dmt.tc2.tbc.Activators.EventHandlerActivator;
 import org.osgi.test.cases.dmt.tc2.tbc.Activators.RemoteAlertSenderActivator;
 import org.osgi.test.cases.dmt.tc2.tbc.Constraints.AclConstraints;
-import org.osgi.test.cases.dmt.tc2.tbc.Constraints.DmtSessionConstraints;
 import org.osgi.test.cases.dmt.tc2.tbc.Plugin.ExecPlugin.TestExecPlugin;
 import org.osgi.test.cases.dmt.tc2.tbc.Plugin.ExecPlugin.TestExecPluginActivator;
 import org.osgi.test.cases.dmt.tc2.tbc.Plugin.NonAtomic.TestNonAtomicPluginActivator;
@@ -381,14 +380,10 @@ public class DmtTestControl extends DefaultTestBundleControl {
 	}
 	
 	//Acl Constraints test cases 
-	//(it is not at org.osgi.test.cases.dmt.classes because it uses the DmtAdmin)
+	//(it is not at org.osgi.test.cases.dmt.tc1 because it uses the DmtAdmin and there we cannot get any services)
 	
 	public void testAclConstraints() {
 		new AclConstraints(this).run();
-	}	
-	
-	public void testDmtSessionConstraints() {
-		new DmtSessionConstraints(this).run();
 	}	
 	
 	//DmtAdmin Test cases
