@@ -617,7 +617,7 @@ public class InstallSession {
             
             TestingDeploymentPackage source = tbc.getTestingDeploymentPackage(DeploymentConstants.SIMPLE_BUNDLE_RES_DP);
             dp1 = tbc.installDeploymentPackage(tbc.getWebServer() + source.getFilename());
-
+            tbc.failException("#", DeploymentException.class);
         } catch (DeploymentException e) {
             tbc.assertTrue("Session was Rolled back", tsrp.isRolledback());
         } catch (Exception e) {
