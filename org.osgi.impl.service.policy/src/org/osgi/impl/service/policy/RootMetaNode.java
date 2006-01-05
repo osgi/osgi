@@ -28,8 +28,14 @@ import org.osgi.service.dmt.MetaNode;
  */
 public final class RootMetaNode implements MetaNode {
 	private final String description;
+	private final boolean isZeroOccurenceAllowed;
 	public RootMetaNode(String description) {
+		this(description,false);
+	}
+	
+	public RootMetaNode(String description,boolean isZeroOccurenceAllowed) {
 		this.description = description;
+		this.isZeroOccurenceAllowed = isZeroOccurenceAllowed;
 	}
 
 	public boolean can(int operation) { return (operation==CMD_GET); }
@@ -37,7 +43,7 @@ public final class RootMetaNode implements MetaNode {
 	public int getScope() { return PERMANENT; }
 	public String getDescription() { return description; }
 	public int getMaxOccurrence() {	return 1; }
-	public boolean isZeroOccurrenceAllowed() { return false; }
+	public boolean isZeroOccurrenceAllowed() { return isZeroOccurenceAllowed; }
 	public DmtData getDefault() { return null; }
 	public double getMax() { return Double.MAX_VALUE; }
 	public double getMin() { return Double.MIN_VALUE;	}

@@ -70,7 +70,7 @@ public class ConditionalPermissionAdminPlugin extends AbstractPolicyPlugin {
 	/**
 	 * metanode given back when asked about ./OSGi/Policy/Java/ConditionalPermission
 	 */
-	private static final MetaNode rootMetaNode = new RootMetaNode("permissions specified by conditions");
+	private static final MetaNode rootMetaNode = new RootMetaNode("permissions specified by conditions",true);
 
 	/**
 	 * metanode given back when asked about ./OSGi/Policy/Java/ConditionalPermission/[...]/PermissionInfo
