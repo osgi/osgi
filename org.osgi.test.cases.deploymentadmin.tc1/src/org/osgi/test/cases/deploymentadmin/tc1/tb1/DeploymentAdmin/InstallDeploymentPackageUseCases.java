@@ -351,12 +351,12 @@ public class InstallDeploymentPackageUseCases implements TestInterface {
             listener.reset();
             listener.setVerifying(true);
             handler.reset();
+            handler.setVerifying(true);
             handler.setHandlingComplete(true);
             tbc.uninstall(dp);
             
-            while (handler.isComplete()) {
-                // do nothing
-                // wait untill uninstallation is finished
+            while (!handler.isComplete()) {
+                this.wait(500);
             }
             
             Vector events = listener.getEvents();
