@@ -55,9 +55,12 @@ public class InstallPackageThread extends Thread {
 	private boolean uninstalled=false;//true if the DP is already uninstalled
 
 	private boolean uninstall=false;//true if you want to uninstall the DP
+	private boolean uninstalling=false;//true if the DP is uninstalling
 	private boolean running=false;//true if this Thread is running
 	
-	private int exceptionCode = -1;
+	public static final int EXCEPTION_NOT_THROWN = -1;
+	private int exceptionCodeInstall = EXCEPTION_NOT_THROWN;
+	private int exceptionCodeUninstall = EXCEPTION_NOT_THROWN;
 	
     protected InstallPackageThread(DeploymentTestControl tbc, TestingDeploymentPackage testDP) {
     	this.tbc = tbc;
@@ -72,7 +75,7 @@ public class InstallPackageThread extends Thread {
 	        	try {
 					this.join(DeploymentConstants.SHORT_TIMEOUT);
 				} catch (InterruptedException e) {
-					e.printStackTrace();
+					
 				}
     		}
     	}
@@ -90,13 +93,21 @@ public class InstallPackageThread extends Thread {
     	return uninstalled;
     }
     
-    public int getDeploymentExceptionCode() {
-    	return exceptionCode;
+    public int getDepExceptionCodeInstall() {
+    	return exceptionCodeInstall;
     }
     
+    public int getDepExceptionCodeUninstall() {
+    	return exceptionCodeUninstall;
+    }
     public DeploymentPackage getDeploymentPackage() {
     	return dp;
     }
+    
+    public boolean isUninstalling() {
+    	return uninstalling;
+    }
+    
 	public synchronized void run() {
 		try {
 			try {
@@ -104,25 +115,25 @@ public class InstallPackageThread extends Thread {
 				dp = tbc.installDeploymentPackage(tbc.getWebServer() + testDP.getFilename());
 				installed=(dp==null?false:true);
 			} catch (Exception e) {
-				e.printStackTrace();
 				if (e instanceof DeploymentException) {
-					exceptionCode = ((DeploymentException)e).getCode();
+					exceptionCodeInstall = ((DeploymentException)e).getCode();
 				}
 			}
 		} finally {
 			while (!uninstall) {
 				try {
 					this.wait(100);
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
+				} catch (InterruptedException e) { }
 			}
 			if (isInstalled()) {
 				try {
+					uninstalling = true;
 					dp.uninstall();
 					uninstalled=true;
 				} catch (Exception e) {
-					e.printStackTrace();
+					if (e instanceof DeploymentException) {
+						exceptionCodeUninstall = ((DeploymentException)e).getCode();
+					}
 				}
 			}
 		}

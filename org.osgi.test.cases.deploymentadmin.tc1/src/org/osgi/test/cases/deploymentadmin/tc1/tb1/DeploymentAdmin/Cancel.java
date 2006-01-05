@@ -121,12 +121,14 @@ public class Cancel implements TestInterface {
             
             test.setRelease(true);
             
-            this.wait(3000);
+            while (installThread.getDepExceptionCodeInstall() == InstallPackageThread.EXCEPTION_NOT_THROWN) {
+            	this.wait(500);
+            }
             
             tbc.assertTrue("Asserts that the installation is still not completed", !installThread.isInstalled());
             
             tbc.assertTrue("Asserts that DeploymentException.CODE_CANCELLED was thrown by another Thread", 
-            		installThread.getDeploymentExceptionCode() == DeploymentException.CODE_CANCELLED);
+            		installThread.getDepExceptionCodeInstall() == DeploymentException.CODE_CANCELLED);
    			
             
         } catch (Exception e) {
@@ -175,7 +177,9 @@ public class Cancel implements TestInterface {
             
             installThread.uninstallDP(true);
             
-           	this.wait(500);
+            while (!installThread.isUninstalling()) {
+               	this.wait(500);
+            }
             
             tbc.assertTrue("Asserts that the uninstallation was not completed", !installThread.isUninstalled());
             
@@ -185,12 +189,13 @@ public class Cancel implements TestInterface {
             
             test.setRelease(true);
             
-            this.wait(500);
-            
+            while (installThread.getDepExceptionCodeUninstall() == InstallPackageThread.EXCEPTION_NOT_THROWN) {
+            	this.wait(500);
+            }
             tbc.assertTrue("Asserts that the uninstallation is still not completed", !installThread.isUninstalled());
-   			
+               
             tbc.assertTrue("Asserts that DeploymentException.CODE_CANCELLED is throw by another Thread", 
-            		installThread.getDeploymentExceptionCode() == DeploymentException.CODE_CANCELLED);
+            		installThread.getDepExceptionCodeUninstall() == DeploymentException.CODE_CANCELLED);
             
         } catch (Exception e) {
             tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }));
