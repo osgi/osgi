@@ -132,8 +132,7 @@ public class PluginDownload extends DefaultHandler implements DataPlugin,
                                 getService(refs[0]);
                         return factory.newSAXParser();
                     }});
-            }
-            catch (PrivilegedActionException e) {
+            } catch (PrivilegedActionException e) {
                 entry.setStatus(STATUS_DOWNLD_FAILED);
                 throw new RuntimeException("Internal error: " + e);
             }

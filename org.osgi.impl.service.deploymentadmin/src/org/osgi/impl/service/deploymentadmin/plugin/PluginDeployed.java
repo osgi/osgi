@@ -253,10 +253,12 @@ public class PluginDeployed implements DataPlugin, ReadableDataSession,
                     !"Manifest".equals(nodeUriArr[9]) && 
                     !"State".equals(nodeUriArr[9]))
                     	return false;
+                String[] signers = getStandaloneBundleSigners(nodeUriArr[8]);
+                if ("Signers".equals(nodeUriArr[9]))
+                	return signers.length > 0;
                 if (l == 10)
                     return true;
                 if ("Signers".equals(nodeUriArr[9])) {
-                    String[] signers = getStandaloneBundleSigners(nodeUriArr[8]);
                     int lim = signers.length - 1;
                     int n = Integer.parseInt(nodeUriArr[10]);
                     return n >= 0 && n <= lim;
@@ -464,8 +466,6 @@ public class PluginDeployed implements DataPlugin, ReadableDataSession,
             if (l == 10) {
                 if ("Signers".equals(nodeUriArr[9])) {
                     String[] signers = getStandaloneBundleSigners(nodeUriArr[8]);
-                    if (null == signers)
-                        return new String[] {};
                     ArrayList al = new ArrayList();
                     for (int i = 0; i < signers.length; i++)
                         al.add(String.valueOf(i));
@@ -703,7 +703,7 @@ public class PluginDeployed implements DataPlugin, ReadableDataSession,
         String tmp = key + ": " + value;
         while (tmp.length() > 70) {
             String s = tmp.substring(0, 70);
-            tmp = tmp.substring(71);
+            tmp = tmp.substring(70);
             ret.append(s + "\n ");
         }
         ret.append(tmp);
@@ -714,7 +714,10 @@ public class PluginDeployed implements DataPlugin, ReadableDataSession,
         Bundle b = pluginCtx.getBundleContext().getBundle(
                 Long.parseLong(bStr));
         BundleUtil bu = new BundleUtil();
-        return bu.getDNChains(b);
+        String[] ret = bu.getDNChains(b);
+        if (null == ret)
+        	ret = new String[] {};
+        return ret; 
     }
 
     public String associateID(DeploymentPackageImpl dp, String dwnlId) {
