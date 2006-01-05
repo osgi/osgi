@@ -95,18 +95,12 @@ public class ApplicationDescriptorImpl implements Delegate {
 		doLock(false, false);
 	}
 
-	public ScheduledApplication schedule(Map args, String topic, String filter, boolean recurs) throws InvalidSyntaxException {
+	public ScheduledApplication schedule(Map args, String topic, String filter, boolean recurs) throws InvalidSyntaxException, IllegalArgumentException {
+		checkArguments( args );
 		return Activator.scheduler.addScheduledApplication( descriptor, args, topic, filter, recurs );
 	}
 
-	public void launch(Map arguments) throws ApplicationException, IllegalArgumentException {
-		SecurityManager sm = System.getSecurityManager();
-		if( sm != null )
-			sm.checkPermission( new ApplicationAdminPermission(	descriptor, ApplicationAdminPermission.LIFECYCLE_ACTION ) );
-
-		if ( isLocked() )
-			throw new ApplicationException( ApplicationException.APPLICATION_LOCKED, "Application is locked, can't launch!");
-			
+	private void checkArguments( Map arguments ) throws IllegalArgumentException {
 		if( arguments != null ) {
 			Set set = arguments.keySet();
 			Iterator iter = set.iterator();
@@ -123,6 +117,17 @@ public class ApplicationDescriptorImpl implements Delegate {
 				if( s.equals("") )
 					throw new IllegalArgumentException( "Empty string not allowed as key!" );
 			}
-		}
+		}		
+	}
+	
+	public void launch(Map arguments) throws ApplicationException, IllegalArgumentException {
+		SecurityManager sm = System.getSecurityManager();
+		if( sm != null )
+			sm.checkPermission( new ApplicationAdminPermission(	descriptor, ApplicationAdminPermission.LIFECYCLE_ACTION ) );
+
+		if ( isLocked() )
+			throw new ApplicationException( ApplicationException.APPLICATION_LOCKED, "Application is locked, can't launch!");
+		
+		checkArguments( arguments );
 	}
 }
