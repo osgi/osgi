@@ -282,6 +282,7 @@ public class OATApplicationContextImpl implements ApplicationContext, ServiceLis
 				    serv.serviceData = service;
 				    serv.serviceReference = refs[ j ];
 				    result[ j ] = serv.serviceObject = bc.getService( refs[ j ] );						
+				    serviceList.add( serv );
 					}
 				}
 				return result;
