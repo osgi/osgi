@@ -232,7 +232,7 @@ public class TestMidletContainerBundleActivator
     			  System.out.println("Save the locking state of the application        FAILED");
     		else
     			  System.out.println("Save the locking state of the application        PASSED");
-/*    		if (!testCase_scheduleAnApplication())
+    		if (!testCase_scheduleAnApplication())
        			System.out.println("Scheduling an application                        FAILED");
     		else
     			  System.out.println("Scheduling an application                        PASSED");
@@ -255,7 +255,7 @@ public class TestMidletContainerBundleActivator
     		if (!testCase_schedulerFilterMatching())
     			  System.out.println("Checking the filter matching of the scheduler    FAILED");
     		else
-    			  System.out.println("Checking the filter matching of the scheduler    PASSED");*/
+    			  System.out.println("Checking the filter matching of the scheduler    PASSED");
     		if (!testCase_appPluginCheckInstalledApps())
     			  System.out.println("AppPlugin: checking the installed application    FAILED");
     		else
@@ -2189,10 +2189,12 @@ public class TestMidletContainerBundleActivator
   				throw new Exception("Cannot set the enabled field to true!");
 
   			session.createInteriorNode( "./OSGi/Application/" + mangledAppUID + "/Schedules/" + schedID + "/Arguments/Arg0" );
+  			session.setNodeValue( "./OSGi/Application/" + mangledAppUID + "/Schedules/" + schedID + "/Arguments/Arg0/Name", new DmtData( "nyuszi") );
 
   			if( session.getNodeValue( "./OSGi/Application/" + mangledAppUID + "/Schedules/" + schedID + "/Enabled" ).getBoolean() )
   				throw new Exception("Schedule was not disabled after adding a new argument node!");
   			session.setNodeValue( "./OSGi/Application/" + mangledAppUID + "/Schedules/" + schedID + "/Enabled", new DmtData( true ));
+  			  			
   			if( !session.getNodeValue( "./OSGi/Application/" + mangledAppUID + "/Schedules/" + schedID + "/Enabled" ).getBoolean() )
   				throw new Exception("Cannot set the enabled field to true!");
 
