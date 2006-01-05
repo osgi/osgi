@@ -51,6 +51,8 @@ import org.osgi.service.permissionadmin.PermissionInfo;
 public class ConditionalPermissionAdminPlugin extends AbstractPolicyPlugin {
 	
 	
+	private static final String EMPTY_STRING_MANGLED = "2jmj7l5rSw0yVb_vlWAYkK_YBwk";
+
 	private static final String	PERMISSIONINFO	= PermissionInfoMetaNode.PERMISSIONINFO;
 	private static final String CONDITIONINFO = ConditionInfoMetaNode.CONDITIONINFO;
 	private static final String NAME = NameMetaNode.NAME;
@@ -181,9 +183,8 @@ public class ConditionalPermissionAdminPlugin extends AbstractPolicyPlugin {
 
 			String name = e.getName();
 			// Spec bug #130  workaround
-			// This is made so that other parts of the RI can still be tested
-			// TODO: remove this when spec is fixed
-			if (name.equals("")) { name = "specbug130workaround"; }
+			// Possibly this will be the official behavior
+			if (name.equals("")) { name = EMPTY_STRING_MANGLED; }
 			conditionalPermissions.put(mangle(name),
 					new ConditionalPermission(e.getName(),e.getConditionInfos(),e.getPermissionInfos()));
 		}
