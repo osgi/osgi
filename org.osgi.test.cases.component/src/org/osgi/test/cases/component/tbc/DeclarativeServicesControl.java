@@ -478,7 +478,7 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 			int count = refs.length;
 
 			scr.stop();
-			Thread.sleep(SLEEP);
+			Thread.sleep(SLEEP*2);
 
 			try {
 				refs = bc.getServiceReferences(null, filter);
@@ -490,7 +490,7 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 				// make sure that after SCR is being started it will activate
 				// the components which bundles are active
 				scr.start();
-				Thread.sleep(SLEEP);
+				Thread.sleep(SLEEP*2);
 			}
 
 			refs = bc.getServiceReferences(null, filter);
