@@ -108,7 +108,7 @@ public class ResourceProcessor {
 	}
 	
 	/**
-	 * Asserts that DeploymentException.CODE_PREPARE is thrown when an exception is thrown on prepare() method of the ResourceProcessor
+	 * Asserts that DeploymentException.CODE_COMMIT_ERROR is thrown when an exception is thrown on prepare() method of the ResourceProcessor
 	 * It also tests if DeploymentAdmin calls the correct order of methods, including rollback()
 	 * 
 	 * @spec 114.10 Resource Processors			
@@ -141,6 +141,7 @@ public class ResourceProcessor {
 			tbc.failException("#",DeploymentException.class);
 		} catch (DeploymentException e) {
 			tbc.assertTrue("Asserts that DeploymentAdmin calls the methods of a resource processor in the specified order when it throws an exception in the prepare() method",resourceProcessor.exceptionAtPrepareOrdered());
+			tbc.assertEquals("The code of the DeploymentException is ", DeploymentException.CODE_COMMIT_ERROR, e.getCode());
 		} finally {
 			resourceProcessor.setSimulateExceptionOnPrepare(false);
 			tbc.uninstall(new DeploymentPackage[] { dpUpdateResource,dpInstallResource,dpResourceProcessor });
@@ -346,12 +347,18 @@ public class ResourceProcessor {
      */
     private void testResourceProcessor008() {
         tbc.log("#testResourceProcessor008");
-        DeploymentPackage dp = null;
+        DeploymentPackage dp = null, rp=null;
         TestingSessionResourceProcessor tsrp = null;
         TestingDeploymentPackage testDP = null;
+        TestingDeploymentPackage testRP = tbc.getTestingDeploymentPackage(DeploymentConstants.RESOURCE_PROCESSOR_RP3);
+            
         try {
-            tsrp = (TestingSessionResourceProcessor) tbc.getService(ResourceProcessor.class,
-                "(service.pid=" + DeploymentConstants.PID_RESOURCE_PROCESSOR3 + ")");
+        	rp = tbc.installDeploymentPackage(tbc.getWebServer() + testRP.getFilename());
+        	
+        	ServiceReference[] sr = tbc.getContext().getServiceReferences(org.osgi.service.deploymentadmin.spi.ResourceProcessor.class.getName(), "(service.pid=" + DeploymentConstants.PID_RESOURCE_PROCESSOR3 + ")");
+        	
+            tsrp = (TestingSessionResourceProcessor) tbc.getContext().getService(sr[0]);
+            
             tsrp.setException(TestingSessionResourceProcessor.PROCESS);
 
             testDP = tbc.getTestingDeploymentPackage(DeploymentConstants.SIMPLE_RESOURCE_RP3);
@@ -365,7 +372,7 @@ public class ResourceProcessor {
         } finally {
             if (tsrp != null)
                 tsrp.reset();
-            tbc.uninstall(dp);
+            tbc.uninstall(new DeploymentPackage[]{rp, dp});
         }
     }
 }
