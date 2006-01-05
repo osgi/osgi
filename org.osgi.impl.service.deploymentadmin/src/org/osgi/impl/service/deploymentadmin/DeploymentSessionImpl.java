@@ -120,7 +120,8 @@ public class DeploymentSessionImpl implements DeploymentSession, FrameworkListen
     }
     
     synchronized void cancel() {
-    	actWrProc.cancel();
+    	if (null != actWrProc)
+	    	actWrProc.cancel();
     	cancelled = true;
     }
     
