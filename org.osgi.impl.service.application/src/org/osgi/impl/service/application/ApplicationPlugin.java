@@ -500,7 +500,7 @@ class ScheduleIDNode extends ApplicationPluginBaseNode implements ArgumentInterf
 		item.enabled = false;
 	}
 	
-	void enable( ScheduledItem item, String path[] ) {
+	void enable( ScheduledItem item, String path[] ) throws DmtException {
 		if( item.enabled )
 			disable( item );
 		
@@ -511,7 +511,10 @@ class ScheduleIDNode extends ApplicationPluginBaseNode implements ArgumentInterf
 		  item.servRef = schedApp.getReference();
 		  item.enabled = true;		  
 		  ApplicationPlugin.bc.ungetService( appDescRef );
-		}catch( Exception e ) {}
+		}catch( Exception e ) {
+			Activator.log( LogService.LOG_ERROR, "Error occured at enabling the schedule!", e );
+			throw new DmtException( path, DmtException.COMMAND_FAILED, "Schedule throwed an exception!" );
+		}
 	}
 	
 	String generateKey( Hashtable scheduleHash ) {
