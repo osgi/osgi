@@ -232,7 +232,7 @@ public class TestMidletContainerBundleActivator
     			  System.out.println("Save the locking state of the application        FAILED");
     		else
     			  System.out.println("Save the locking state of the application        PASSED");
-    		if (!testCase_scheduleAnApplication())
+/*    		if (!testCase_scheduleAnApplication())
        			System.out.println("Scheduling an application                        FAILED");
     		else
     			  System.out.println("Scheduling an application                        PASSED");
@@ -255,7 +255,7 @@ public class TestMidletContainerBundleActivator
     		if (!testCase_schedulerFilterMatching())
     			  System.out.println("Checking the filter matching of the scheduler    FAILED");
     		else
-    			  System.out.println("Checking the filter matching of the scheduler    PASSED");
+    			  System.out.println("Checking the filter matching of the scheduler    PASSED");*/
     		if (!testCase_appPluginCheckInstalledApps())
     			  System.out.println("AppPlugin: checking the installed application    FAILED");
     		else
@@ -1299,9 +1299,9 @@ public class TestMidletContainerBundleActivator
   		}
   	}  	
   	
-  	String getFilterFromNow( int delaySec ) {
+  	String getFilterFromNow( int minute ) {
   		Calendar calendar = Calendar.getInstance();
-  		calendar.add( Calendar.SECOND, delaySec );
+  		calendar.add( Calendar.SECOND, 60*minute + 2 );
   		
   		String filter = "(&";
   		filter += "(year=" 		+ calendar.get( Calendar.YEAR ) +")";
@@ -1309,7 +1309,6 @@ public class TestMidletContainerBundleActivator
   		filter += "(day=" 		+	calendar.get( Calendar.DAY_OF_MONTH ) +")";
   		filter += "(hour=" 		+	calendar.get( Calendar.HOUR_OF_DAY ) +")";
   		filter += "(minute="	+ calendar.get( Calendar.MINUTE ) +")";
-  		filter += "(second="	+ calendar.get( Calendar.SECOND ) +")";
   		filter += ")";
   		
   		return filter;
@@ -1325,8 +1324,8 @@ public class TestMidletContainerBundleActivator
   			args.put( "NullChecking", null );
   			if (args == null)
   				throw new Exception("Cannot create the arguments of launch!");
-  			appDesc.schedule(args, "org/osgi/application/timer", getFilterFromNow( 2 ), false);
-  			Thread.sleep(3000);
+  			appDesc.schedule(args, "org/osgi/application/timer", getFilterFromNow( 1 ), false);
+  			Thread.sleep(62000);
   			appHandle = lookupAppHandle(appDesc);
   			if (appHandle == null
   					|| !appHandle.getState().equals( ApplicationHandle.RUNNING ) )
@@ -1352,9 +1351,9 @@ public class TestMidletContainerBundleActivator
   			Map args = createArgs();
   			if (args == null)
   				throw new Exception("Cannot create the arguments of launch!");
-  			appDesc.schedule(args, "org/osgi/application/timer", getFilterFromNow( 4 ), false);
   			appDesc.schedule(args, "org/osgi/application/timer", getFilterFromNow( 2 ), false);
-  			Thread.sleep(3000);
+  			appDesc.schedule(args, "org/osgi/application/timer", getFilterFromNow( 1 ), false);
+  			Thread.sleep( 92000 );
   			appHandle = lookupAppHandle(appDesc);
   			if (appHandle == null
   					|| !appHandle.getState().equals( ApplicationHandle.RUNNING ) )
@@ -1363,7 +1362,7 @@ public class TestMidletContainerBundleActivator
   				throw new Exception("Result of the schedule is not START!");
   			if (!testCase_stopApplication())
   				return false;
-  			Thread.sleep(2000);
+  			Thread.sleep( 30000);
   			appHandle = lookupAppHandle(appDesc);
   			if (appHandle == null
   					|| !appHandle.getState().equals( ApplicationHandle.RUNNING ) ) 
@@ -1389,10 +1388,10 @@ public class TestMidletContainerBundleActivator
   			Map args = createArgs();
   			if (args == null)
   				throw new Exception("Cannot create the arguments of launch!");
-  			appDesc.schedule(args, "org/osgi/application/timer", getFilterFromNow( 3 ), false);
+  			appDesc.schedule(args, "org/osgi/application/timer", getFilterFromNow( 1 ), false);
   			if (!restart_scheduler())
   				return false;
-  			Thread.sleep(4000);
+  			Thread.sleep( 62000 );
   			appDesc = appDescs[0];
   			appHandle = lookupAppHandle(appDesc);
   			if (appHandle == null
@@ -1420,13 +1419,13 @@ public class TestMidletContainerBundleActivator
   			if (args == null)
   				throw new Exception("Cannot create the arguments of launch!");
   			ScheduledApplication schedApp = appDesc.
-  					schedule(args, "org/osgi/application/timer", getFilterFromNow( 2 ), false);
+  					schedule(args, "org/osgi/application/timer", getFilterFromNow( 1 ), false);
   			
   			if( schedApp.getApplicationDescriptor() != appDesc )
   				throw new Exception( "Invalid application descriptor was received!" );
   			
   			schedApp.remove();
-  			Thread.sleep(3000);
+  			Thread.sleep( 64000);
   			appHandle = lookupAppHandle(appDesc);
   			if (appHandle != null )
   				throw new Exception("Application was scheduled inspite of removing!");
