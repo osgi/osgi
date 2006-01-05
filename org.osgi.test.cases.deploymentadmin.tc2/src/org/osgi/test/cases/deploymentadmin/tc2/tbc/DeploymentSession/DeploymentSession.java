@@ -772,7 +772,7 @@ public class DeploymentSession {
 	        	try {
 					this.join(DeploymentConstants.SHORT_TIMEOUT);
 				} catch (InterruptedException e) {
-					e.printStackTrace();
+					
 				}
         	}
         	
@@ -796,14 +796,14 @@ public class DeploymentSession {
 					dp = tbc.installDeploymentPackage(tbc.getWebServer() + testDP.getFilename());
 					installed=(dp==null?false:true);
 				} catch (Exception e) {
-					e.printStackTrace();
+					
 				}
 			} finally {
 				while (!uninstall) {
 					try {
 						this.wait(100);
 					} catch (InterruptedException e) {
-						e.printStackTrace();
+						
 					}
 				}
 				if (isInstalled()) {
@@ -811,7 +811,7 @@ public class DeploymentSession {
 						dp.uninstall();
 						uninstalled=true;
 					} catch (Exception e) {
-						e.printStackTrace();
+						
 					}
 				}
 			}
