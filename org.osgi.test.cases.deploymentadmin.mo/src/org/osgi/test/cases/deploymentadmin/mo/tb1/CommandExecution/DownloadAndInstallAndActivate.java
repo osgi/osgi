@@ -450,11 +450,12 @@ public class DownloadAndInstallAndActivate implements TestInterface {
         DmtSession session = openDefaultSession();
         try {
             TestingArtifact artifact = tbc.getArtifact(DeploymentmoConstants.SIMPLE_DP);
-            session = tbc.getDmtAdmin().getSession(DeploymentmoConstants.PRINCIPAL,DeploymentmoConstants.DEPLOYMENT, DmtSession.LOCK_TYPE_EXCLUSIVE);
-            
-            session.createInteriorNode(DeploymentmoConstants.DEPLOYMENT_DOWNLOAD_TEST);
-            
-            session.setNodeValue(DeploymentmoConstants.DEPLOYMENT_DOWNLOAD_TEST_URI, new DmtData(DeploymentmoConstants.DLOTA_PATH + artifact.getDlota().getFilename()));
+        	
+            if (!session.isNodeUri(DeploymentmoConstants.DEPLOYMENT_DOWNLOAD_TEST)) {
+        		session.createInteriorNode(DeploymentmoConstants.DEPLOYMENT_DOWNLOAD_TEST);
+        	}
+
+        	session.setNodeValue(DeploymentmoConstants.DEPLOYMENT_DOWNLOAD_TEST_URI, new DmtData(DeploymentmoConstants.DLOTA_PATH + artifact.getDlota().getFilename()));
 
             session.setNodeValue(DeploymentmoConstants.DEPLOYMENT_DOWNLOAD_TEST_ID, new DmtData(DeploymentmoConstants.SIMPLE_DP_NAME));
 
@@ -482,6 +483,11 @@ public class DownloadAndInstallAndActivate implements TestInterface {
         tbc.log("#testDownloadAndInstallAndActivate008");
         DmtSession session = openDefaultSession();
         try {
+
+        	if (!session.isNodeUri(DeploymentmoConstants.DEPLOYMENT_DOWNLOAD_TEST)) {
+        		session.createInteriorNode(DeploymentmoConstants.DEPLOYMENT_DOWNLOAD_TEST);
+        	}
+            
         	session.setNodeValue(DeploymentmoConstants.DEPLOYMENT_DOWNLOAD_TEST_ID, new DmtData("id"));
             session.setNodeValue(DeploymentmoConstants.DEPLOYMENT_DOWNLOAD_TEST_URI, new DmtData("invalid:uri"));
             session.setNodeValue(DeploymentmoConstants.DEPLOYMENT_DOWNLOAD_TEST_ENVTYPE, new DmtData(DeploymentmoConstants.ENVTYPE));
@@ -547,7 +553,6 @@ public class DownloadAndInstallAndActivate implements TestInterface {
     			
 				ByteArrayInputStream bais = new ByteArrayInputStream(session.getNodeValue(DeploymentmoConstants.getDeployedExtManifest(nodeId)).toString().getBytes());
     			Manifest manifest = new Manifest(bais);
-
     			tbc.assertTrue("Asserting that the manifest of the deployment package is the same as the specified",
     					manifest.equals(DeploymentmoConstants.SIMPLE_DP_MANIFEST));
     			
