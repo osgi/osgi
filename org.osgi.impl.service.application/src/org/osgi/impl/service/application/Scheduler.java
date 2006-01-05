@@ -230,7 +230,7 @@ public class Scheduler implements Runnable, EventHandler {
 	public void run() {
 		while (!stopped) {
 			try {
-				Thread.sleep( 1000 );
+				Thread.sleep( 60000 );
 			}
 			catch (InterruptedException e) {}
 			
@@ -243,7 +243,7 @@ public class Scheduler implements Runnable, EventHandler {
 			props.put( "day_of_week", new Byte( (byte)calendar.get( Calendar.DAY_OF_WEEK ) ) );
 			props.put( "hour", 				new Byte( (byte)calendar.get( Calendar.HOUR_OF_DAY ) ) );
 			props.put( "minute", 			new Byte( (byte)calendar.get( Calendar.MINUTE ) ) );
-			props.put( "second", 			new Byte( (byte)calendar.get( Calendar.SECOND ) ) );
+//			props.put( "second", 			new Byte( (byte)calendar.get( Calendar.SECOND ) ) );
 			
 			if( stopped ) /* avoid exception */
 				break;
