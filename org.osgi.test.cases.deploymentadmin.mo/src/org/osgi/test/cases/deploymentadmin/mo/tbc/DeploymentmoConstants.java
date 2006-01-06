@@ -105,7 +105,7 @@ public class DeploymentmoConstants {
     public static final int BUNDLE_FROM_OTHER_DP = 10;
     public static final int MANIFEST_NOT_1ST_FILE = 11;
     public static final int FIX_PACK_LOWER_RANGE_DP= 12;
-    public static final int SIMPLE_UNSIGNED_DP = 13;
+    public static final int UNTRUSTED_DP = 13;
     public static final int RESOURCE_PROCESSOR_CUSTOMIZER = 14;
     public static final int RP_FROM_OTHER_DP = 15;
     public static final int BUNDLE_THROWS_EXCEPTION_DP = 16;
@@ -127,7 +127,7 @@ public class DeploymentmoConstants {
         "resource_processor", "bundle_from_other",
         "resource_from_other_dp", "missing_name_header", "symb_name_different_from_manifest",
         "simple_no_bundle", "simple_no_resource", "download_failed","timeout","bundle_from_other",
-        "manifest_not_1st_file","fix_pack_lower_range","simple_unsigned",
+        "manifest_not_1st_file","fix_pack_lower_range","untrusted",
         "resource_processor_customizer","rp_from_other_dp","bundle_throws_exception","non_customizer_rp",
         "simple_resource","java.gif","bundle001.jar","rp_not_able_to_commit","missing_resource_fix_pack",
         "missing_bundle_fix_pack", "blocking_session","simple_fix_pack","rp_throws_no_such_resource",
@@ -338,4 +338,7 @@ public class DeploymentmoConstants {
     public static String getDeliveredOperationsRemove(int nodeId) {
     	return getDeliveredNodeId(nodeId) + "/Operations/Remove";
     }
+    
+    public static boolean RP4_SIMULATE_EXCEPTION_ON_DROPPED = false;
+    public static boolean RP4_SIMULATE_EXCEPTION_ON_PROCESS = false;
 }

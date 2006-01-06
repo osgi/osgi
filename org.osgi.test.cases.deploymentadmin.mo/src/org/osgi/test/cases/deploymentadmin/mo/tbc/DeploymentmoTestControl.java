@@ -321,12 +321,12 @@ public class DeploymentmoTestControl extends DefaultTestBundleControl {
                 artifacts.put(""+i, artifact);
                 break;
 			}
-			case DeploymentmoConstants.SIMPLE_UNSIGNED_DP: {
-				TestingBundle[] bundles = {new TestingBundle("bundles.tb1", "1.0", "bundle001.jar")};
-				TestingDeploymentPackage dp = new TestingDeploymentPackage(DeploymentmoConstants.MAP_CODE_TO_ARTIFACT[DeploymentmoConstants.SIMPLE_UNSIGNED_DP], "1.0", "simple_unsigned.dp", bundles);
+			case DeploymentmoConstants.UNTRUSTED_DP: {
+				TestingBundle[] bundles = {new TestingBundle("bundles.tb1", "1.0", "bundle001.jar"),new TestingBundle("bundles.tb2", "1.0", "bundle002.jar")};
+				TestingDeploymentPackage dp = new TestingDeploymentPackage(DeploymentmoConstants.MAP_CODE_TO_ARTIFACT[DeploymentmoConstants.UNTRUSTED_DP], "1.0", "untrusted.dp", bundles);
 				packages.put(""+i, dp);
 				
-                artifact = new TestingArtifact(new TestingDlota("simple_unsigned.xml",
+                artifact = new TestingArtifact(new TestingDlota("untrusted.xml",
                 		DeploymentmoConstants.SERVER + "www/" +  dp.getFilename(), 1867, DeploymentmoConstants.ENVIRONMENT_DP), dp);
                 artifacts.put(""+i, artifact);
 				break;
