@@ -29,6 +29,7 @@ import java.util.jar.Attributes;
 import java.util.jar.JarEntry;
 import java.util.jar.JarInputStream;
 import java.util.jar.Manifest;
+import java.util.zip.ZipException;
 
 import org.osgi.service.deploymentadmin.DeploymentException;
 
@@ -38,6 +39,39 @@ import org.osgi.service.deploymentadmin.DeploymentException;
  * packages (DPs).
  */
 public class DeploymentPackageJarInputStream {
+
+	/*
+	 * Is used to figure out whether it is a jar file
+	 */
+	private static class DPInputStream extends InputStream {
+
+		// Every jar begins with this 
+		private static final int[] patter = new int[] {'P', 'K', '\3', '\4'};
+		
+		private InputStream is;
+		private int[]       buffer = new int[4];
+		private int         index;
+
+		private DPInputStream(InputStream is) throws IOException, DeploymentException {
+			this.is = is;
+			while (index < 4) {
+				int data = is.read();
+				if (data == -1 || patter[index] != data)
+					throw new DeploymentException(DeploymentException.CODE_NOT_A_JAR, 
+							"Bad jar file");
+				buffer[index] = data;
+				++index;
+			}
+			index = 0;
+		}
+
+		public int read() throws IOException {
+			if (index < 4)
+				return buffer[index++];
+			return is.read();
+		}
+		
+	}
 	
     /**
      * Extends the JarEntry functionality according to the needs of 
@@ -154,11 +188,11 @@ public class DeploymentPackageJarInputStream {
     
     // Are used to check right file order
     private static final int FT_UNKNOWN   = -1; 
-    private static final int FT_MANIFEST  = 0; 
-	private static final int FT_SIGNATURE = 1; 
-	private static final int FT_L10N      = 2; 
-	private static final int FT_BUNDLE    = 3; 
-	private static final int FT_RESOURCE  = 4;
+    private static final int FT_MANIFEST  =  0; 
+	private static final int FT_SIGNATURE =  1; 
+	private static final int FT_L10N      =  2; 
+	private static final int FT_BUNDLE    =  3; 
+	private static final int FT_RESOURCE  =  4;
 	
 	//Is used to check right file order
 	private int lastFileType = FT_UNKNOWN;
@@ -182,11 +216,12 @@ public class DeploymentPackageJarInputStream {
     public DeploymentPackageJarInputStream(InputStream is) 
     		throws IOException, DeploymentException 
     {
-	    this.jis = new JarInputStream(is);
+	    this.jis = new JarInputStream(new DPInputStream(is));
+	    
         Manifest mf = getManifest();
         if (null == mf)
             throw new DeploymentException(DeploymentException.CODE_ORDER_ERROR,
-                "META-INF/MANIFEST.MF is not the first file or completely missing");
+                "META-INF/MANIFEST.MF is missing or not the first entry");
 	    manifest = (Manifest) mf.clone();
 	    
 	    locPath = manifest.getMainAttributes().getValue(DAConstants.LOC_PATH);
@@ -202,7 +237,7 @@ public class DeploymentPackageJarInputStream {
         }
 	    
 	    fixPack = (null != manifest.getMainAttributes().getValue(DAConstants.DP_FIXPACK));
-	
+	    
 	    // this skips the "uninterested" part of the stream (manifest, sign. files, etc.)
 	    firstEntry = nextEntry();
 	}
@@ -245,8 +280,8 @@ public class DeploymentPackageJarInputStream {
         	}
         }
         
+        // The stream ended but we may have missing resources (in the manifest)
         if (null == actJarEntry) {
-            // The stream ended but we may have missing resources (in the manifest)
             Iterator it = manifest.getEntries().keySet().iterator();
             if (it.hasNext()) {
                 String name = (String) it.next();
@@ -286,7 +321,12 @@ public class DeploymentPackageJarInputStream {
      * Skips uninterested JarEntries (directories, .sf files, etc.)
      */
     private JarEntry getNextJarEntry() throws IOException, DeploymentException {
-        actJarEntry = jis.getNextJarEntry();
+    	try {
+    		actJarEntry = jis.getNextJarEntry();
+    	} catch (ZipException ze) {
+			throw new DeploymentException(DeploymentException.CODE_NOT_A_JAR, 
+					"Bad jar file");
+		}
 
         if (null != actJarEntry) {
         	int actFileType = getFileType(actJarEntry);
