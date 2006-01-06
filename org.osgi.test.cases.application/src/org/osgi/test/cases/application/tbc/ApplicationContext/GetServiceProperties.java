@@ -41,6 +41,7 @@ import java.util.Hashtable;
 import java.util.Map;
 
 import org.osgi.application.ApplicationContext;
+import org.osgi.framework.Constants;
 import org.osgi.service.application.ApplicationHandle;
 import org.osgi.test.cases.application.tbc.ApplicationConstants;
 import org.osgi.test.cases.application.tbc.ApplicationTestControl;
@@ -207,20 +208,23 @@ public class GetServiceProperties {
 		tbc.log("#testGetServiceProperties005");
 		ApplicationHandle handle = null;
 		try {
-			handle = tbc.getAppDescriptor().launch(null);
-			ApplicationContext appContext = org.osgi.application.Framework
-					.getApplicationContext(tbc.getAppInstance());
-			
         	tbc.startActivator(true);
         	tbc.startActivator2(true);
         	
+			handle = tbc.getAppDescriptor().launch(null);
+        	
+			ApplicationContext appContext = org.osgi.application.Framework
+					.getApplicationContext(tbc.getAppInstance());
+			        	
         	Hashtable hash = new Hashtable();
         	hash.put("Test", "Test2");
+        	hash.put(Constants.SERVICE_RANKING, new Integer(9) );
+        	
         	tbc.getTestingActivator2().setProperties(hash);
         	       	
-        	appContext.locateServices(ApplicationConstants.XML_ACTIVATOR);
+        	Object service = appContext.locateService(ApplicationConstants.XML_ACTIVATOR);
         	
-			Map map = appContext.getServiceProperties(tbc.getTestingActivator2()); 
+			Map map = appContext.getServiceProperties(service); 
 						
 			tbc.assertTrue("Assering if the returned map contains the key Test", map.containsKey("Test"));
 			tbc.assertEquals("Assering if the returned map contains the value Test2 for the key Test", "Test2", map.get("Test"));

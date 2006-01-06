@@ -359,26 +359,13 @@ public class Schedule implements TestInterface {
 				new PermissionInfo(ApplicationAdminPermission.class.getName(), ApplicationConstants.APPLICATION_PERMISSION_FILTER1, ApplicationAdminPermission.SCHEDULE_ACTION)
 			);
 			
-			sa = tbc.getAppDescriptor().schedule(null, ApplicationConstants.TIMER_EVENT, ApplicationConstants.EVENT_FILTER, true);
+			sa = tbc.getAppDescriptor().schedule(null, ApplicationConstants.TOPIC_EVENT, null, true);
 			
 			tbc.assertNotNull("Asserting that a ScheduledApplication was returned according to the used filter.", sa);
 			
-			long ticks = System.currentTimeMillis();
-			
-			for( int counter = 0; counter != 10; counter++ ) {
-				try {
-					Thread.sleep( 200 );
-				}catch( InterruptedException e ) {};
-				
-				if( tbc.getNumberAppHandle() == 2 )
-					break;
-			}
-			
-			long outTicks = System.currentTimeMillis();
-		
-			if( outTicks - ticks < 1000 || outTicks - ticks > 2100 )
-				tbc.fail("Timer too fast!");
-					
+			tbc.sendEvent(ApplicationConstants.TOPIC_EVENT);
+			tbc.sendEvent(ApplicationConstants.TOPIC_EVENT);
+								
 			tbc.assertEquals("Asserting that two ApplicationHandles were registered.", 2, tbc.getNumberAppHandle());
 			
 		} catch (Exception e) {
@@ -482,7 +469,7 @@ public class Schedule implements TestInterface {
 			map.put("Test", null);
 			sa = tbc.getAppDescriptor().schedule(map, ApplicationConstants.TIMER_EVENT, ApplicationConstants.EVENT_FILTER, true);
 
-			tbc.failException("", IllegalArgumentException.class);
+			tbc.pass("No exception was thrown.");
 		} catch (IllegalArgumentException e) {
 			tbc.pass(MessagesConstants.getMessage(
 					MessagesConstants.EXCEPTION_CORRECTLY_THROWN,

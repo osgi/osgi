@@ -34,6 +34,7 @@ package org.osgi.test.cases.application.tbc;
 import java.io.FilePermission;
 import java.lang.reflect.ReflectPermission;
 import java.net.SocketPermission;
+import java.util.Hashtable;
 
 import org.osgi.framework.AdminPermission;
 import org.osgi.framework.Bundle;
@@ -48,6 +49,9 @@ import org.osgi.service.application.ApplicationHandle;
 import org.osgi.service.application.ScheduledApplication;
 import org.osgi.service.dmt.DmtAdmin;
 import org.osgi.service.dmt.DmtSession;
+import org.osgi.service.event.Event;
+import org.osgi.service.event.EventAdmin;
+import org.osgi.service.event.TopicPermission;
 import org.osgi.service.permissionadmin.PermissionAdmin;
 import org.osgi.service.permissionadmin.PermissionInfo;
 import org.osgi.test.cases.application.tbc.ApplicationAdminPermission.ApplicationAdminPermissionConstants;
@@ -192,6 +196,8 @@ public class ApplicationTestControl extends DefaultTestBundleControl {
 				new PermissionInfo(AdminPermission.class.getName(), "*", "*"),
 				new PermissionInfo(PackagePermission.class.getName(), "*",
 						"EXPORT, IMPORT"),
+						new PermissionInfo(TopicPermission.class.getName(), "*",
+						"PUBLISH, SUBSCRIBE"),
 				new PermissionInfo(ServicePermission.class.getName(), "*",
 						"GET,REGISTER"), permission };
 
@@ -416,6 +422,11 @@ public class ApplicationTestControl extends DefaultTestBundleControl {
 	 */
 	public void testLocateService() {
 		new LocateService(this).run();
+	}
+	
+	public void sendEvent(String topic) {
+		EventAdmin event = (EventAdmin) getContext().getService(getContext().getServiceReference(EventAdmin.class.getName()));
+		event.sendEvent(new Event(topic, new Hashtable()));	
 	}
 
 	/**
