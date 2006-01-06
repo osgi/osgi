@@ -57,7 +57,9 @@ public class DeploymentPackageJarInputStream {
 			while (index < 4) {
 				int data = is.read();
 				if (data == -1 || patter[index] != data)
-					throw new DeploymentException(DeploymentException.CODE_NOT_A_JAR, 
+//					throw new DeploymentException(DeploymentException.CODE_NOT_A_JAR, 
+//							"Bad jar file");
+					throw new DeploymentException(DeploymentException.CODE_OTHER_ERROR, 
 							"Bad jar file");
 				buffer[index] = data;
 				++index;
@@ -324,8 +326,10 @@ public class DeploymentPackageJarInputStream {
     	try {
     		actJarEntry = jis.getNextJarEntry();
     	} catch (ZipException ze) {
-			throw new DeploymentException(DeploymentException.CODE_NOT_A_JAR, 
-					"Bad jar file");
+//			throw new DeploymentException(DeploymentException.CODE_NOT_A_JAR, 
+//					"Bad jar file");
+    		throw new DeploymentException(DeploymentException.CODE_OTHER_ERROR, 
+    				"Bad jar file");
 		}
 
         if (null != actJarEntry) {
