@@ -6,7 +6,7 @@ package org.osgi.tools.command;
 	is invoked.
 */
 public interface CommandInterpreter {
-	public final static String NAME = "org.osgi.nursery.command.CommandInterpreter";
+	public final static String NAME = "org.osgi.tools.command.CommandInterpreter";
 	
 	/**
 		Get the next argument in the input.
