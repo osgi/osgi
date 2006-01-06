@@ -19,6 +19,7 @@ package org.osgi.impl.service.deploymentadmin.plugin;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.MalformedURLException;
 import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.Set;
@@ -146,6 +147,9 @@ public class DownloadThread extends Thread {
         
         try {
             parseDescriptor();
+        } catch (MalformedURLException e) {
+        	setStatus(PluginConstants.RESULT_MALFORMED_URL);
+        	return;
         } catch (SAXException e) {
             setStatus(PluginConstants.RESULT_DWNLD_DESCR_ERROR);
             return;
