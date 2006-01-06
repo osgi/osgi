@@ -75,7 +75,7 @@ public final class HttpTransaction extends Thread {
 			log.debug("Stopping HttpTransaction: " + getName()
 					+ " - client connection timed out");
 		}
-		catch (IOException e) {
+		catch (Exception e) {
 			log.error("IOException in client: " + e);
 		}
 		finally {
