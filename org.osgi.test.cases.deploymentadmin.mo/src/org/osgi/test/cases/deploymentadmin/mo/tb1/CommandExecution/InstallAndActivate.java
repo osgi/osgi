@@ -483,7 +483,7 @@ public class InstallAndActivate implements TestInterface {
         tbc.log("#testInstallAndActivate011");
         DmtSession session = openDefaultSession();
         try {
-        	assertResultCode(session, DeploymentmoConstants.SIMPLE_UNSIGNED_DP, 456);
+        	assertResultCode(session, DeploymentmoConstants.UNTRUSTED_DP, 456);
         } finally {
         	tbc.closeSession(session);
         }
@@ -537,6 +537,7 @@ public class InstallAndActivate implements TestInterface {
         File fileDestiny =DeploymentmoTestControl.getFile(archiveName);
         
 		String rp = "";
+		DeploymentmoConstants.RP4_SIMULATE_EXCEPTION_ON_DROPPED = true;
 		try {
 			String[] initialChildren = session
 					.getChildNodeNames(DeploymentmoConstants.DEPLOYMENT_INVENTORY_DEPLOYED);
@@ -566,6 +567,7 @@ public class InstallAndActivate implements TestInterface {
 					MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e
 							.getClass().getName() }));
 		} finally {
+			DeploymentmoConstants.RP4_SIMULATE_EXCEPTION_ON_DROPPED = false;
 			if (!rp.equals("")) {
 				tbc.executeRemoveNode(session, DeploymentmoConstants
 						.getDeployedOperationsRemove(rp));
@@ -603,14 +605,16 @@ public class InstallAndActivate implements TestInterface {
     	tbc.log("#testInstallAndActivate016");
     	DmtSession session = openDefaultSession();
     	try {
-    		assertResultCode(session,DeploymentmoConstants.NON_CUSTOMIZER_RP, DeploymentmoConstants.SIMPLE_RESOURCE_DP,DeploymentmoConstants.DP_THROWS_RESOURCE_VIOLATION, 461);
+    		DeploymentmoConstants.RP4_SIMULATE_EXCEPTION_ON_PROCESS = true;
+    		assertResultCode(session,DeploymentmoConstants.DP_THROWS_RESOURCE_VIOLATION, 461);
         } finally {
+        	DeploymentmoConstants.RP4_SIMULATE_EXCEPTION_ON_PROCESS = false;
         	tbc.closeSession(session);
         }    		
     }
     
     /**
-     * This test asserts the result code is 462 if resource processor is not able to commit
+     * This test asserts the result code is 1 if resource processor is not able to commit
      *
      * @spec 3.6.5.2 InstallAndActivate Command
      */
@@ -618,7 +622,7 @@ public class InstallAndActivate implements TestInterface {
     	tbc.log("#testInstallAndActivate017");
     	DmtSession session = openDefaultSession();
     	try {
-    		assertResultCode(session, DeploymentmoConstants.RP_NOT_ABLE_TO_COMMIT, 462);
+    		assertResultCode(session, DeploymentmoConstants.RP_NOT_ABLE_TO_COMMIT, 1);
         } finally {
         	tbc.closeSession(session);
         }

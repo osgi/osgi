@@ -77,7 +77,7 @@ public class DownloadAndInstallAndActivate implements TestInterface {
     private DeploymentmoTestControl tbc;
     
     private SessionWorker worker1;
-
+    
     public DownloadAndInstallAndActivate(DeploymentmoTestControl tbc) {
         this.tbc = tbc;
     }
@@ -684,7 +684,7 @@ public class DownloadAndInstallAndActivate implements TestInterface {
 	            //Deployment Package "simple.dp" (which has the content of simple_fix_pack.dp)
    			    ByteArrayInputStream bais = new ByteArrayInputStream(session.getNodeValue(DeploymentmoConstants.getDeployedExtManifest(nodeId)).toString().getBytes());
     			Manifest manifest = new Manifest(bais);
-    			
+
     			tbc.assertTrue("Asserting that the manifest of the deployment package is the same as the specified",
     					manifest.equals(DeploymentmoConstants.SIMPLE_FIX_PACK_MANIFEST));
 				tbc.assertEquals(
@@ -943,7 +943,7 @@ public class DownloadAndInstallAndActivate implements TestInterface {
         tbc.log("#testDownloadAndInstallAndActivate021");
         DmtSession session = openDefaultSession();
         try {
-        	assertResultCode(session, DeploymentmoConstants.SIMPLE_UNSIGNED_DP, 456);
+        	assertResultCode(session, DeploymentmoConstants.UNTRUSTED_DP, 456);
         } finally {
         	tbc.closeSession(session);
         }
@@ -990,7 +990,7 @@ public class DownloadAndInstallAndActivate implements TestInterface {
     private void testDownloadAndInstallAndActivate024() {
     	tbc.log("#testDownloadAndInstallAndActivate024");
     	DmtSession session = openDefaultSession();
-    	 
+    	DeploymentmoConstants.RP4_SIMULATE_EXCEPTION_ON_DROPPED = true; 
         String rp = executeNodeAndGetNewNodeName(session,DeploymentmoConstants.RP_THROWS_NO_SUCH_RESOURCE);
         try {
         	assertResultCode(session, DeploymentmoConstants.DP_INSTALLS_RESOURCE_FOR_RP4,DeploymentmoConstants.DP_REMOVES_RESOURCE_FOR_RP4, 459);
@@ -998,6 +998,7 @@ public class DownloadAndInstallAndActivate implements TestInterface {
 		} catch (Exception e) {
 			tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[]{ e.getClass().getName()}));
         } finally {
+        	DeploymentmoConstants.RP4_SIMULATE_EXCEPTION_ON_DROPPED = false;
         	if (!rp.equals("")) {
         		tbc.executeRemoveNode(session,DeploymentmoConstants.getDeployedOperationsRemove(rp));
         	}
@@ -1031,14 +1032,16 @@ public class DownloadAndInstallAndActivate implements TestInterface {
     	tbc.log("#testDownloadAndInstallAndActivate026");
         DmtSession session = openDefaultSession();
         try {
-        	assertResultCode(session,DeploymentmoConstants.NON_CUSTOMIZER_RP, DeploymentmoConstants.SIMPLE_RESOURCE_DP,DeploymentmoConstants.DP_THROWS_RESOURCE_VIOLATION, 461);
+        	DeploymentmoConstants.RP4_SIMULATE_EXCEPTION_ON_PROCESS = true;
+        	assertResultCode(session,DeploymentmoConstants.DP_THROWS_RESOURCE_VIOLATION, 461);
         } finally {
+        	DeploymentmoConstants.RP4_SIMULATE_EXCEPTION_ON_PROCESS = false;
         	tbc.closeSession(session);
         }
     }
     
     /**
-     * This test asserts the result code is 462 if resource processor is not able to commit
+     * This test asserts the result code is 1 if resource processor is not able to commit
      *
      * @spec 3.6.5.3 DownloadAndInstallAndActivate Command
      */
@@ -1046,7 +1049,7 @@ public class DownloadAndInstallAndActivate implements TestInterface {
     	tbc.log("#testDownloadAndInstallAndActivate027");
         DmtSession session = openDefaultSession();
         try {
-        	assertResultCode(session, DeploymentmoConstants.RP_NOT_ABLE_TO_COMMIT, 462);
+        	assertResultCode(session, DeploymentmoConstants.RP_NOT_ABLE_TO_COMMIT, 1);
         } finally {
         	tbc.closeSession(session);
         }
