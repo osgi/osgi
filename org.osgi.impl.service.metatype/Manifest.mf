@@ -10,6 +10,7 @@ Bundle-Vendor: OSGi Alliance
 Bundle-Version: 1.0
 Bundle-Category: osgi
 Export-Service: org.osgi.service.metatype.MetaTypeService
+Import-Service: javax.xml.parsers.SAXParserFactory
 $(IMPORT-PACKAGE)
 $(EXPORT-PACKAGE)
 $(PRIVATE-PACKAGE)

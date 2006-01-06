@@ -12,5 +12,7 @@ ${EXPORT-PACKAGE}
 ${PRIVATE-PACKAGE}
 CVS-Header: $Header$
 $(PRIVATE-PACKAGE)
+Import-Service: org.osgi.service.provisioning.ProvisioningService
+Export-Service: org.osgi.service.url.URLStreamHandlerService
 
 

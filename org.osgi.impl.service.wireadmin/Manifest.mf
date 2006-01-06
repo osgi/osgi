@@ -8,7 +8,9 @@ Bundle-Vendor: OSGi Alliance
 Bundle-Version: 1.0
 Bundle-Category: osgi
 Export-Package: org.osgi.service.wireadmin; specification-version=1.0
-Import-Package: org.osgi.framework, org.osgi.service.cm, org.osgi.tools.command, org.osgi.util.tracker; specification-version=1.1, org.osgi.service.log
+${IMPORT-PACKAGE}
+${EXPORT-PACKAGE}
+${PRIVATE-PACKAGE}
 Export-Service: org.osgi.service.wireadmin.WireAdmin
 CVS-Header: $Header$
 

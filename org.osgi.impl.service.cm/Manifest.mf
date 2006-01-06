@@ -10,5 +10,7 @@ Bundle-Category: osgi
 $(IMPORT-PACKAGE)
 $(EXPORT-PACKAGE)
 $(PRIVATE-PACKAGE)
+Export-Service: org.osgi.service.cm.ConfigurationAdmin
+Import-Service: org.osgi.service.log.LogService
 CVS-Header: $Header$
 

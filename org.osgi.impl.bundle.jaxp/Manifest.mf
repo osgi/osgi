@@ -12,3 +12,5 @@ $(IMPORT-PACKAGE)
 $(PRIVATE-PACKAGE)
 CVS-Header: $Header$
 Bundle-RequiredExecutionEnvironment: J2SE-1.4
+Export-Service: javax.xml.parsers.SAXParserFactory, 
+  javax.xml.parsers.DocumentBuilderFactory

@@ -5,6 +5,11 @@ Bundle-Vendor: Nokia
 Bundle-Version: 1.0
 Bundle-Activator: $(p).Activator
 Bundle-Copyright: ${copyright}
+Export-Service: org.osgi.service.monitorable.MonitorAdmin, 
+  org.osgi.service.dmt.spi.DataPlugin
+Import-Service:   org.osgi.service.monitor.Monitorable,
+  org.osgi.service.event.EventAdmin,
+  org.osgi.service.dmt.DmtAdmin
 $(EXPORT-PACKAGE)
 $(IMPORT-PACKAGE)
 $(PRIVATE-PACKAGE)

@@ -9,6 +9,7 @@ Bundle-Copyright: (C) Copyright IBM Corporation 2000-2005.
 Bundle-Vendor: OSGi Alliance
 Bundle-Version: 1.3
 Bundle-Category: osgi
+Export-Service: org.osgi.service.log.LogService
 $(EXPORT-PACKAGE)
 $(IMPORT-PACKAGE)
 $(PRIVATE-PACKAGE)

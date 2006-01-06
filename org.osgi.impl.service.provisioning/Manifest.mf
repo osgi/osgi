@@ -7,6 +7,8 @@ Bundle-Category: osgi
 Bundle-Copyright: ${copyright}
 Bundle-Description: Provides the Initial Provisioning Service for the framework.
 Bundle-Vendor: OSGi Alliance
+Import-Service: org.osgi.service.LogService
+Export-Service: org.osgi.service.provisioning.ProvisioningService
 ${IMPORT-PACKAGE}
 ${EXPORT-PACKAGE}
 ${PRIVATE-PACKAGE}
