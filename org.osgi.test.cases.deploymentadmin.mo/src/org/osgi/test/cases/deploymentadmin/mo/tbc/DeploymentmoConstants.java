@@ -53,6 +53,17 @@ public class DeploymentmoConstants {
     public static String SERVER;
     public static String LOCATION;
     
+//  True if the implementation supports cancelling  
+    public static final boolean USER_CANCEL_IMPLEMENTED = true;
+    
+    //True if the implementation is streaming
+    public static final boolean IS_STREAMING = true;
+
+    //This flag must be true if the implementation reports progress on the Status node  
+    public static final boolean STATUS_NODE_REPORTS_PROGRESS = true;
+
+    public static final int TIMEOUT = 2000;
+    
     public static final String PRINCIPAL = "admin";
 
     public static final File DELIVERED_AREA = new File(System.getProperty("org.osgi.impl.service.deploymentadmin.deliveredarea"));
@@ -229,14 +240,6 @@ public class DeploymentmoConstants {
     public static final String DEPLOYMENT_DOWNLOAD_TEST_DOWN_INST_ACTIV = DEPLOYMENT_DOWNLOAD_TEST_OPERATIONS + "/DownloadAndInstallAndActivate";
 
     public static final String SIGNER_FILTER = "CN=John Smith, O=ACME Inc, OU=ACME Cert Authority, L=Austin, ST=Texas, C=US";
-    
-    //True if the implementation is streaming
-    public static final boolean IS_STREAMING = true;
-
-    //This flag must be true if the implementation reports progress on the Status node  
-    public static final boolean STATUS_NODE_REPORTS_PROGRESS = true;
-
-    public static final int TIMEOUT = 2000;
     
     public static final String ALL_DMT_PERMISSION = DmtPermission.ADD + ","
         + DmtPermission.DELETE + "," + DmtPermission.EXEC + ","

@@ -801,12 +801,16 @@ public class DownloadAndInstallAndActivate implements TestInterface {
      */
     private void testDownloadAndInstallAndActivate013() {
         tbc.log("#testDownloadAndInstallAndActivate013");
-        tbc.log("#Test case is only valid if the user cancelled the download");
-        DmtSession session = openDefaultSession();
-        try {
-        	assertResultCode(session, DeploymentmoConstants.SIMPLE_DP, 401);
-        } finally {
-        	tbc.closeSession(session);
+        if (DeploymentmoConstants.USER_CANCEL_IMPLEMENTED) {
+	        tbc.log("#Test case is only valid if the user cancelled the download");
+	        DmtSession session = openDefaultSession();
+	        try {
+	        	assertResultCode(session, DeploymentmoConstants.SIMPLE_DP, 401);
+	        } finally {
+	        	tbc.closeSession(session);
+	        }
+        } else {
+        	tbc.log("#This implementation does not support cancelling a download");
         }
         
     }
