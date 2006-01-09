@@ -551,7 +551,7 @@ public class PluginDeployed implements DataPlugin, ReadableDataSession,
             if (l == 11) {
                 if ("Signers".equals(nodeUriArr[9]))
                     return new Metanode(MetaNode.CMD_GET, Metanode.IS_LEAF, MetaNode.AUTOMATIC,
-                    		"", 1, Metanode.ZERO_OCC, null, 0, 0, null, DmtData.FORMAT_NODE);        
+                    		"", Integer.MAX_VALUE, !Metanode.ZERO_OCC, null, 0, 0, null, DmtData.FORMAT_STRING);        
             }
         }
        
