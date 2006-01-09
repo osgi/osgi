@@ -1165,7 +1165,7 @@ public class DownloadAndInstallAndActivate implements TestInterface {
     			
     			ByteArrayInputStream bais = new ByteArrayInputStream(session.getNodeValue(DeploymentmoConstants.getDeployedExtBundlesManifest(nodeId, bundleId)).toString().getBytes());
     			Manifest manifest = new Manifest(bais);
-    			
+
     			tbc.assertTrue("Asserting that the manifest of the bundle is the same as the specified",
     					manifest.equals(DeploymentmoConstants.getJarFile(DeploymentmoConstants.SIMPLE_BUNDLE).getManifest()));
 

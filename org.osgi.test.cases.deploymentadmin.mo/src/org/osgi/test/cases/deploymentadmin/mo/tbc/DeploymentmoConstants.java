@@ -55,8 +55,8 @@ public class DeploymentmoConstants {
     
     public static final String PRINCIPAL = "admin";
 
-    public static final String DELIVERED_AREA = System.getProperty("org.osgi.impl.service.deploymentadmin.deliveredarea");
-    public static final File TEMP_DIR = new File(new File(DeploymentmoConstants.DELIVERED_AREA).getParent() + File.separatorChar + "tmp");
+    public static final File DELIVERED_AREA = new File(System.getProperty("org.osgi.impl.service.deploymentadmin.deliveredarea"));
+    public static final File TEMP_DIR = new File(DeploymentmoConstants.DELIVERED_AREA.getParent() + File.separatorChar + "tmp");
     
     //Specified values
     public static final String ENVTYPE = "OSGi.R4";
@@ -184,7 +184,7 @@ public class DeploymentmoConstants {
     
     public static JarFile getJarFile(int dpCode) {
     	try {
-			return new JarFile(DELIVERED_AREA + File.separatorChar + MAP_CODE_TO_ARTIFACT[dpCode] + ((dpCode!=SIMPLE_BUNDLE)?".dp":""));
+			return new JarFile(new File(DELIVERED_AREA, MAP_CODE_TO_ARTIFACT[dpCode] + ((dpCode!=SIMPLE_BUNDLE)?".dp":"")));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

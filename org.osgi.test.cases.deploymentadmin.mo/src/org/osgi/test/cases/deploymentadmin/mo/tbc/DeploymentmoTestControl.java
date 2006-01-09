@@ -711,7 +711,7 @@ public class DeploymentmoTestControl extends DefaultTestBundleControl {
 	}
     
     public static File getFile(String archiveName) {
-    	return new File(DeploymentmoConstants.DELIVERED_AREA + File.separator + archiveName);
+    	return new File(DeploymentmoConstants.DELIVERED_AREA,archiveName);
     }
     
     public static boolean renameFileForced(File fileSrc,File fileDestiny) {
