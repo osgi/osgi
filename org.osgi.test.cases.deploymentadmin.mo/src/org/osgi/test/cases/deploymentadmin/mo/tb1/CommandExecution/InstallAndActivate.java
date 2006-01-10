@@ -72,8 +72,6 @@ public class InstallAndActivate implements TestInterface {
 
 	private DeploymentmoTestControl tbc;
 	
-    private SessionWorker worker1;
-    
 	public InstallAndActivate(DeploymentmoTestControl tbc) {
 		this.tbc = tbc;
 	}
@@ -98,7 +96,6 @@ public class InstallAndActivate implements TestInterface {
         testInstallAndActivate017();
         testInstallAndActivate018();
         testInstallAndActivate019();
-        testInstallAndActivate020();
         
 	}
 	
@@ -522,62 +519,6 @@ public class InstallAndActivate implements TestInterface {
         }        	
     }
     
-    /**
-     * This test asserts the result code is 459 (no such resource). A resource was passed to a 
-     * matched resource processor but the resource processor can not manage this resource.
-     *
-     * @spec 3.6.5.2 InstallAndActivate Command
-     */
-    private void testInstallAndActivate014() {
-		tbc.log("#testInstallAndActivate014");
-		DmtSession session = openDefaultSession();
-        //Backups the artifact and, after the execute method removes, moves it again to the delivered area 
-        String archiveName =DeploymentmoConstants.MAP_CODE_TO_ARTIFACT[DeploymentmoConstants.RP_THROWS_NO_SUCH_RESOURCE] + ".dp";
-        File fileSrc = DeploymentmoTestControl.copyArtifact(archiveName);
-        File fileDestiny =DeploymentmoTestControl.getFile(archiveName);
-        
-		String rp = "";
-		DeploymentmoConstants.RP4_SIMULATE_EXCEPTION_ON_DROPPED = true;
-		try {
-			String[] initialChildren = session
-					.getChildNodeNames(DeploymentmoConstants.DEPLOYMENT_INVENTORY_DEPLOYED);
-
-			synchronized (tbc) {
-				session.execute(
-						DeploymentmoConstants.getDeliveredOperationsInstallAndActivate(
-								DeploymentmoConstants.RP_THROWS_NO_SUCH_RESOURCE),null);
-
-				tbc.wait(DeploymentmoConstants.TIMEOUT);
-			}
-			String[] finalChildren = session.getChildNodeNames(DeploymentmoConstants.DEPLOYMENT_INVENTORY_DEPLOYED);
-			
-			tbc.assertTrue(
-					"Asserts that the node at Deployed subtree was created",
-					initialChildren.length + 1 == finalChildren.length);
-
-			rp = DeploymentmoTestControl.getNodeId(initialChildren,
-					finalChildren);
-			
-			assertResultCode(session,
-					DeploymentmoConstants.DP_INSTALLS_RESOURCE_FOR_RP4,
-					DeploymentmoConstants.DP_REMOVES_RESOURCE_FOR_RP4, 459);
-
-		} catch (Exception e) {
-			tbc.fail(MessagesConstants.getMessage(
-					MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e
-							.getClass().getName() }));
-		} finally {
-			DeploymentmoConstants.RP4_SIMULATE_EXCEPTION_ON_DROPPED = false;
-			if (!rp.equals("")) {
-				tbc.executeRemoveNode(session, DeploymentmoConstants
-						.getDeployedOperationsRemove(rp));
-			}
-			DeploymentmoTestControl.renameFileForced(fileSrc, fileDestiny);
-			tbc.closeSession(session);
-
-		}
-	}
- 
 
     /**
 	 * This test asserts the result code is 460 if a bundle with the same
@@ -585,8 +526,8 @@ public class InstallAndActivate implements TestInterface {
 	 * 
 	 * @spec 3.6.5.2 InstallAndActivate Command
 	 */
-    private void testInstallAndActivate015() {
-    	tbc.log("#testInstallAndActivate015");
+    private void testInstallAndActivate014() {
+    	tbc.log("#testInstallAndActivate014");
     	DmtSession session = openDefaultSession();
         try {
         	assertResultCode(session, DeploymentmoConstants.SIMPLE_DP,DeploymentmoConstants.DP_CONTAINING_A_BUNDLE_FROM_OTHER_DP, 460);
@@ -601,8 +542,8 @@ public class InstallAndActivate implements TestInterface {
      *
      * @spec 3.6.5.2 InstallAndActivate Command
      */
-    private void testInstallAndActivate016() {
-    	tbc.log("#testInstallAndActivate016");
+    private void testInstallAndActivate015() {
+    	tbc.log("#testInstallAndActivate015");
     	DmtSession session = openDefaultSession();
     	try {
     		DeploymentmoConstants.RP4_SIMULATE_EXCEPTION_ON_PROCESS = true;
@@ -618,8 +559,8 @@ public class InstallAndActivate implements TestInterface {
      *
      * @spec 3.6.5.2 InstallAndActivate Command
      */
-    private void testInstallAndActivate017() {
-    	tbc.log("#testInstallAndActivate017");
+    private void testInstallAndActivate016() {
+    	tbc.log("#testInstallAndActivate016");
     	DmtSession session = openDefaultSession();
     	try {
     		assertResultCode(session, DeploymentmoConstants.RP_NOT_ABLE_TO_COMMIT, 1);
@@ -634,8 +575,8 @@ public class InstallAndActivate implements TestInterface {
      *
      * @spec 3.6.5.2 InstallAndActivate Command
      */
-    private synchronized void testInstallAndActivate018() {
-        tbc.log("#testInstallAndActivate018");
+    private synchronized void testInstallAndActivate017() {
+        tbc.log("#testInstallAndActivate017");
         DmtSession session = openDefaultSession();
         try {
         	assertResultCode(session, DeploymentmoConstants.SIMPLE_RESOURCE_DP, 464);
@@ -651,10 +592,11 @@ public class InstallAndActivate implements TestInterface {
      * 
      * @spec 3.6.5.2 InstallAndActivate Command
      */
-    private synchronized void testInstallAndActivate019() {
-        tbc.log("#testInstallAndActivate019");
+    private synchronized void testInstallAndActivate018() {
+        tbc.log("#testInstallAndActivate018");
         TestingBlockingResourceProcessor testBlockRP = null;
         DmtSession session = openDefaultSession();
+        SessionWorker worker1 = null;
         try {
             TestingArtifact artifact = tbc.getArtifact(DeploymentmoConstants.BLOCK_SESSION_RESOURCE_PROCESSOR);
             TestingDeploymentPackage testDP = artifact.getDeploymentPackage();
@@ -682,6 +624,11 @@ public class InstallAndActivate implements TestInterface {
         } finally {
             if (testBlockRP != null) {
                 testBlockRP.setReleased(true);
+                try {
+					worker1.join();
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
             }
             tbc.closeSession(session);
         }
@@ -693,8 +640,8 @@ public class InstallAndActivate implements TestInterface {
      *
      * @spec 3.6.4 Deployed
      */
-    private void testInstallAndActivate020() {
-    	tbc.log("#testInstallAndActivate020");
+    private void testInstallAndActivate019() {
+    	tbc.log("#testInstallAndActivate019");
         TestingArtifact artifact = tbc.getArtifact(DeploymentmoConstants.SIMPLE_DP);
         TestingDeploymentPackage testDP = artifact.getDeploymentPackage();
 		DeploymentPackage dp = null;

@@ -76,8 +76,6 @@ public class DownloadAndInstallAndActivate implements TestInterface {
    
     private DeploymentmoTestControl tbc;
     
-    private SessionWorker worker1;
-    
     public DownloadAndInstallAndActivate(DeploymentmoTestControl tbc) {
         this.tbc = tbc;
     }
@@ -117,7 +115,6 @@ public class DownloadAndInstallAndActivate implements TestInterface {
         testDownloadAndInstallAndActivate028();
         testDownloadAndInstallAndActivate029();
         testDownloadAndInstallAndActivate030();
-        testDownloadAndInstallAndActivate031();
     }
 
 
@@ -985,39 +982,14 @@ public class DownloadAndInstallAndActivate implements TestInterface {
         }
     }
     
-    /**
-     * This test asserts the result code is 459 (no such resource). A resource was passed to a 
-     * matched resource processor but the resource processor can not manage this resource.
-     *
-     * @spec 3.6.5.3 DownloadAndInstallAndActivate Command
-     */
-    private void testDownloadAndInstallAndActivate024() {
-    	tbc.log("#testDownloadAndInstallAndActivate024");
-    	DmtSession session = openDefaultSession();
-    	DeploymentmoConstants.RP4_SIMULATE_EXCEPTION_ON_DROPPED = true; 
-        String rp = executeNodeAndGetNewNodeName(session,DeploymentmoConstants.RP_THROWS_NO_SUCH_RESOURCE);
-        try {
-        	assertResultCode(session, DeploymentmoConstants.DP_INSTALLS_RESOURCE_FOR_RP4,DeploymentmoConstants.DP_REMOVES_RESOURCE_FOR_RP4, 459);
-            
-		} catch (Exception e) {
-			tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[]{ e.getClass().getName()}));
-        } finally {
-        	DeploymentmoConstants.RP4_SIMULATE_EXCEPTION_ON_DROPPED = false;
-        	if (!rp.equals("")) {
-        		tbc.executeRemoveNode(session,DeploymentmoConstants.getDeployedOperationsRemove(rp));
-        	}
-        	tbc.closeSession(session);
-            
-        }
-    }
 
     /**
      * This test asserts the result code is 460 if a bundle with the same symbolic name already exists.
      *
      * @spec 3.6.5.3 DownloadAndInstallAndActivate Command
      */
-    private void testDownloadAndInstallAndActivate025() {
-    	tbc.log("#testDownloadAndInstallAndActivate025");
+    private void testDownloadAndInstallAndActivate024() {
+    	tbc.log("#testDownloadAndInstallAndActivate024");
         DmtSession session = openDefaultSession();
         try {
         	assertResultCode(session, DeploymentmoConstants.SIMPLE_DP,DeploymentmoConstants.DP_CONTAINING_A_BUNDLE_FROM_OTHER_DP, 460);
@@ -1032,8 +1004,8 @@ public class DownloadAndInstallAndActivate implements TestInterface {
      *
      * @spec 3.6.5.3 DownloadAndInstallAndActivate Command
      */
-    private void testDownloadAndInstallAndActivate026() {
-    	tbc.log("#testDownloadAndInstallAndActivate026");
+    private void testDownloadAndInstallAndActivate025() {
+    	tbc.log("#testDownloadAndInstallAndActivate025");
         DmtSession session = openDefaultSession();
         try {
         	DeploymentmoConstants.RP4_SIMULATE_EXCEPTION_ON_PROCESS = true;
@@ -1049,8 +1021,8 @@ public class DownloadAndInstallAndActivate implements TestInterface {
      *
      * @spec 3.6.5.3 DownloadAndInstallAndActivate Command
      */
-    private void testDownloadAndInstallAndActivate027() {
-    	tbc.log("#testDownloadAndInstallAndActivate027");
+    private void testDownloadAndInstallAndActivate026() {
+    	tbc.log("#testDownloadAndInstallAndActivate026");
         DmtSession session = openDefaultSession();
         try {
         	assertResultCode(session, DeploymentmoConstants.RP_NOT_ABLE_TO_COMMIT, 1);
@@ -1065,8 +1037,8 @@ public class DownloadAndInstallAndActivate implements TestInterface {
      *
      * @spec 3.6.5.3 DownloadAndInstallAndActivate Command
      */
-    private void testDownloadAndInstallAndActivate028() {
-    	tbc.log("#testDownloadAndInstallAndActivate028");
+    private void testDownloadAndInstallAndActivate027() {
+    	tbc.log("#testDownloadAndInstallAndActivate027");
         DmtSession session = openDefaultSession();
         try {
         	assertResultCode(session, DeploymentmoConstants.SIMPLE_RESOURCE_DP, 464);
@@ -1082,10 +1054,12 @@ public class DownloadAndInstallAndActivate implements TestInterface {
      * 
      * @spec 3.6.5.3 DownloadAndInstallAndActivate Command
      */
-    private synchronized void testDownloadAndInstallAndActivate029() {
-        tbc.log("#testDownloadAndInstallAndActivate029");
+    private synchronized void testDownloadAndInstallAndActivate028() {
+        tbc.log("#testDownloadAndInstallAndActivate028");
         TestingBlockingResourceProcessor testBlockRP = null;
+        SessionWorker worker1 = null;
         DmtSession session = openDefaultSession();
+        
         try {
             TestingArtifact artifact = tbc.getArtifact(DeploymentmoConstants.BLOCK_SESSION_RESOURCE_PROCESSOR);
             TestingDeploymentPackage testDP = artifact.getDeploymentPackage();
@@ -1107,12 +1081,18 @@ public class DownloadAndInstallAndActivate implements TestInterface {
             tbc.assertNotNull("Blocking Resource Processor was registered", testBlockRP);
             
             assertResultCode(session, DeploymentmoConstants.SIMPLE_DP, 465);
+            
         } catch (Exception e) {
             tbc.fail(MessagesConstants.getMessage(
                 MessagesConstants.UNEXPECTED_EXCEPTION, new String[]{e.getClass().getName()}));
         } finally {
             if (testBlockRP != null) {
                 testBlockRP.setReleased(true);
+                try {
+					worker1.join();
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
             }
             tbc.closeSession(session);
         }
@@ -1124,8 +1104,8 @@ public class DownloadAndInstallAndActivate implements TestInterface {
      *
      * @spec 3.6.5.3 DownloadAndInstallAndActivate Command
      */
-    private void testDownloadAndInstallAndActivate030() {
-        tbc.log("#testDownloadAndInstallAndActivate030");
+    private void testDownloadAndInstallAndActivate029() {
+        tbc.log("#testDownloadAndInstallAndActivate029");
         TestingDlota dlota = null;
     	DmtSession session = openDefaultSession();
         String nodeId = "";
@@ -1205,8 +1185,8 @@ public class DownloadAndInstallAndActivate implements TestInterface {
      *
      * @spec 3.6.5.3 DownloadAndInstallAndActivate Command
      */
-    private void testDownloadAndInstallAndActivate031() {
-        tbc.log("#testDownloadAndInstallAndActivate031");
+    private void testDownloadAndInstallAndActivate030() {
+        tbc.log("#testDownloadAndInstallAndActivate030");
         TestingDlota dlota = null;
     	DmtSession session = openDefaultSession();
         String nodeId = executeNodeAndGetNewNodeName(session,DeploymentmoConstants.SIMPLE_BUNDLE);
