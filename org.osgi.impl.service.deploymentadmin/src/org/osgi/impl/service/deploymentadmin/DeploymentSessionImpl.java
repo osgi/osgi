@@ -815,9 +815,9 @@ public class DeploymentSessionImpl implements DeploymentSession, FrameworkListen
         try {
 			actWrProc.process(entry.getName(), entry.getInputStream());
         } catch (ResourceProcessorException e) {
-			if (e.getCode() == ResourceProcessorException.CODE_NO_SUCH_RESOURCE)
+			if (e.getCode() == ResourceProcessorException.CODE_RESOURCE_SHARING_VIOLATION)
 				throw new DeploymentException(
-						DeploymentException.CODE_NO_SUCH_RESOURCE, "", e);
+						DeploymentException.CODE_RESOURCE_SHARING_VIOLATION, "", e);
 			throw new DeploymentException(
 					DeploymentException.CODE_OTHER_ERROR, "", e);
 		}
