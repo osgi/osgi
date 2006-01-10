@@ -304,6 +304,9 @@ public class DeploymentSessionImpl implements DeploymentSession, FrameworkListen
             dropBundles();
             startBundles();
             //refreshPackages();
+        } catch (ResourceProcessorException e) {
+			if (e.getCode() == ResourceProcessorException.CODE_PREPARE)
+				throw new DeploymentException(DeploymentException.CODE_COMMIT_ERROR);
         } catch (DeploymentException e) {
             transaction.rollback();
             throw e;
@@ -351,6 +354,9 @@ public class DeploymentSessionImpl implements DeploymentSession, FrameworkListen
             prepareProcessors(wrProcs);
             commitProcessors(wrProcs);
             dropBundles();
+        } catch (ResourceProcessorException e) {
+			if (e.getCode() == ResourceProcessorException.CODE_PREPARE)
+				throw new DeploymentException(DeploymentException.CODE_COMMIT_ERROR);
         } catch (Exception e) {
             if (!forced) {
                 transaction.rollback();

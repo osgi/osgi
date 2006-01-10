@@ -97,11 +97,11 @@ public class PluginCtx {
         return da;
     }
 
-	public static String covertUri(String[] nodeUriArr) {
-        return covertUri(nodeUriArr, 0);
+	public static String convertUri(String[] nodeUriArr) {
+        return convertUri(nodeUriArr, 0);
 	}
 
-	public static String covertUri(String[] nodeUriArr, int delEnd) {
+	public static String convertUri(String[] nodeUriArr, int delEnd) {
 		if (delEnd < 0)
 			delEnd = 0;
 			
