@@ -233,10 +233,9 @@ public class ResourceProcessor {
 	}
 	
 	/**
-     * Asserts that DeploymentException.CODE_NO_SUCH_RESOURCE is thrown when an
-     * exception is thrown on dropped() method of the ResourceProcessor It also
-     * tests if DeploymentAdmin calls the correct order of methods, including
-     * rollback().
+     * Asserts that no exceptionis thrown when an
+     * exception is thrown on dropped() method of the ResourceProcessor. 
+     * It also tests if DeploymentAdmin calls the correct order of methods.
      * 
      * @spec 114.10 Resource Processors
      */

@@ -522,10 +522,8 @@ public class InstallSession {
     }
     
     /**
-     * Asserts that Deployment Admin drops all the resources, in reverse target
-     * order, that are in the target by calling the matching Resource Processor
-     * service dropped(String) method. <b>Any exceptions thrown during this method
-     * must initiate a roll back</b>.
+     * <b>Any exceptions thrown during ResourceProcessor.dropped(String) method
+     * must be ignored</b>.
      * 
      * @spec 114.8 Installing a Deployment Package
      */
@@ -542,9 +540,9 @@ public class InstallSession {
             tsrp.setException(TestingSessionResourceProcessor.DROPPED);
 
             TestingDeploymentPackage source = tbc.getTestingDeploymentPackage(DeploymentConstants.SIMPLE_UNINSTALL_BUNDLE);
-            dp2 = tbc.installDeploymentPackage(tbc.getWebServer() + source.getFilename()); // will throw a DAException
+            dp2 = tbc.installDeploymentPackage(tbc.getWebServer() + source.getFilename()); // If must not thrown any exceptions
             
-            tbc.assertTrue("Asserts that any exceptions thrown during dropped() method must initiate a roll back", tsrp.isRolledback());
+            tbc.pass("Asserts that any exceptions thrown during dropped() method must ignored");
         } catch (Exception e) {
             tbc.fail(MessagesConstants.getMessage(
                 MessagesConstants.UNEXPECTED_EXCEPTION, new String[]{e.getClass().getName()}));
