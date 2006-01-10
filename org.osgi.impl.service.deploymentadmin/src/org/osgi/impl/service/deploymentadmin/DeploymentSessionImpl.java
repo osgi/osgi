@@ -575,15 +575,17 @@ public class DeploymentSessionImpl implements DeploymentSession, FrameworkListen
             if (isCancelled())
             	break;
 
+            WrappedResourceProcessor wrProc = null;
             try {
                 ResourceEntry re = (ResourceEntry) iter.previous();
                 targetDp.remove(re);
-                WrappedResourceProcessor wrProc = dropResource(re);
-                wrProcs.add(wrProc);
+                wrProc = dropResource(re);
             } catch (Exception e) {
                 // Exceptions are ignored in this phase to allow repairs 
                 // to always succeed, even if the existing package is corrupted.
                 sessionCtx.getLogger().log(e);
+            } finally {
+            	wrProcs.add(wrProc);
             }
         }
         return wrProcs;
