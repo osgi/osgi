@@ -53,7 +53,7 @@ public class DeploymentmoConstants {
     public static String SERVER;
     public static String LOCATION;
     
-//  True if the implementation supports cancelling  
+    //True if the implementation supports cancelling  
     public static final boolean USER_CANCEL_IMPLEMENTED = true;
     
     //True if the implementation is streaming
@@ -136,7 +136,7 @@ public class DeploymentmoConstants {
 
     public static final String[] MAP_CODE_TO_ARTIFACT = {"simple",
         "resource_processor", "bundle_from_other",
-        "resource_from_other_dp", "missing_name_header", "symb_name_different_from_manifest",
+        "resource_from_other_dp", "missing_name_header", "symb_name_dif_from_manifest",
         "simple_no_bundle", "simple_no_resource", "download_failed","timeout","bundle_from_other",
         "manifest_not_1st_file","fix_pack_lower_range","untrusted",
         "resource_processor_customizer","rp_from_other_dp","bundle_throws_exception","non_customizer_rp",
@@ -328,10 +328,7 @@ public class DeploymentmoConstants {
     //Delivered subtree
     //Subtree $/Deployment/Inventory/Delivered/<node_id>
     public static String getDeliveredNodeId(int nodeId) {
-//    	if (nodeId==DeploymentmoConstants.SIMPLE_BUNDLE || nodeId==DeploymentmoConstants.NOT_ACCEPTABLE_CONTENT) 
     		return DEPLOYMENT_INVENTORY_DELIVERED + "/" + MAP_CODE_TO_ARTIFACT_MANGLED[nodeId];
-//    	else
-//    		return DEPLOYMENT_INVENTORY_DELIVERED + "/" + MAP_CODE_TO_ARTIFACT_MANGLED[nodeId] + ".dp";
     }
     //Subtree $/Deployment/Inventory/Delivered/<node_id>/Operations/InstallAndActivate
     public static String getDeliveredOperationsInstallAndActivate(int nodeId) {
