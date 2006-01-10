@@ -107,7 +107,7 @@ public class PluginDownload extends DefaultHandler implements DataPlugin,
         private void start(final String[] nodeUriArr, final String correlator, final String principal) 
                 throws DmtException 
         {
-            final String nodeUri = PluginCtx.covertUri(nodeUriArr, 2);
+            final String nodeUri = PluginCtx.convertUri(nodeUriArr, 2);
             final Entry entry = (Entry) ht.get(nodeUriArr[4]);
             entry.setStatus(STATUS_STREAMING);
             

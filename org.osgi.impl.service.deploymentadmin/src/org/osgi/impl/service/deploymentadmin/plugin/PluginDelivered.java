@@ -268,7 +268,7 @@ public class PluginDelivered implements DataPlugin, ReadableDataSession,
 	private void remove(String[] nodeUriArr, DmtSession session, String correlator) {
         boolean b = removeNode(new File(store, nodeUriArr[5]));
         AlertSender.sendDeliveredRemoveAlert(b, session.getPrincipal(), correlator, 
-        		PluginCtx.covertUri(nodeUriArr, 2), pluginCtx.getDmtAdmin());
+        		PluginCtx.convertUri(nodeUriArr, 2), pluginCtx.getDmtAdmin());
     }
 	
     private byte[] extractData(String fileName) throws IOException {
@@ -313,7 +313,7 @@ public class PluginDelivered implements DataPlugin, ReadableDataSession,
         final String nodeId = fileName;
         DeploymentThread deplThr = new DeploymentThread(mimeType, 
                 pluginCtx, is, nodeId);
-        String nodeUri = PluginCtx.covertUri(nodeUriArr);
+        String nodeUri = PluginCtx.convertUri(nodeUriArr, 2);
         setDpListener(deplThr, is, file, session.getPrincipal(), correlator, nodeUri);
         setBundleListener(deplThr, is, file, session.getPrincipal(), correlator, nodeUri);
         deplThr.start();

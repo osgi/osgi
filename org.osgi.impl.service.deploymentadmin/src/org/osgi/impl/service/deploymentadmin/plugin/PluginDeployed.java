@@ -587,7 +587,7 @@ public class PluginDeployed implements DataPlugin, ReadableDataSession,
                         }
                     }
                     else {
-                    	nodeUriRes = PluginCtx.covertUri(nodeUriArr, 2); // the original URI
+                    	nodeUriRes = PluginCtx.convertUri(nodeUriArr, 2); // the original URI
                         pluginCtx.getLogger().log(exception);
                     }
                     AlertSender.sendDeploymentRemoveAlert(exception, session.getPrincipal(), 
