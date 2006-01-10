@@ -585,8 +585,7 @@ public class PluginDeployed implements DataPlugin, ReadableDataSession,
                         catch (IOException e) {
                             pluginCtx.getLogger().log(e);
                         }
-                    }
-                    else {
+                    } else {
                     	nodeUriRes = PluginCtx.convertUri(nodeUriArr, 2); // the original URI
                         pluginCtx.getLogger().log(exception);
                     }
@@ -603,11 +602,14 @@ public class PluginDeployed implements DataPlugin, ReadableDataSession,
             } catch (NumberFormatException e) {
                 return;
             }
-            Bundle bundle = getBundleByBundleId(id);
+            final Bundle bundle = getBundleByBundleId(id);
             UndeployThread undThread = new UndeployThread(bundle);
             undThread.setListener(new UndeployThread.Listener() {
                 public void onFinish(Exception exception) {
+                	String nodeUriRes = null;
                     if (null == exception) {
+                    	nodeUriRes = DAConstants.DMT_DEPLOYMENT_ROOT + 
+                			pluginCtx.getDmtAdmin().mangle(bundleToNodeId(bundle.getBundleId()));
                         bundleIdMappings.remove(fromNodeId(nodeUriArr[5]));
                         try {
                             pluginCtx.save();
@@ -615,11 +617,12 @@ public class PluginDeployed implements DataPlugin, ReadableDataSession,
                         catch (IOException e) {
                             pluginCtx.getLogger().log(e);
                         }
-                    }
-                    else {
+                    } else {
+                    	nodeUriRes = PluginCtx.convertUri(nodeUriArr, 2); // the original URI
                         pluginCtx.getLogger().log(exception);
-                        // TODO send alert
                     }
+                    AlertSender.sendDeploymentRemoveAlert(exception, session.getPrincipal(), 
+                    		correlator, nodeUriRes, pluginCtx.getDmtAdmin());
                 }
             });
             undThread.start();
