@@ -578,17 +578,25 @@ public class DeploymentSessionImpl implements DeploymentSession, FrameworkListen
             if (isCancelled())
             	break;
 
-            WrappedResourceProcessor wrProc = null;
             try {
                 ResourceEntry re = (ResourceEntry) iter.previous();
                 targetDp.remove(re);
-                wrProc = dropResource(re);
+                
+                String pid = re.getValue(DAConstants.RP_PID);
+                ResourceProcessor proc = WrappedResourceProcessor.findProcessorSilent(pid);
+                if (null == proc)
+                    throw new DeploymentException(DeploymentException.CODE_PROCESSOR_NOT_FOUND,
+                        "Resource processor for pid " + pid + "is not found");
+                actWrProc = new WrappedResourceProcessor(
+                    pid, fetchAccessControlContext(re.getCertChains()), trackRp);
+                
+                dropResource(re);
             } catch (Exception e) {
                 // Exceptions are ignored in this phase to allow repairs 
                 // to always succeed, even if the existing package is corrupted.
                 sessionCtx.getLogger().log(e);
             } finally {
-            	wrProcs.add(wrProc);
+            	wrProcs.add(actWrProc);
             }
         }
         return wrProcs;
@@ -683,18 +691,10 @@ public class DeploymentSessionImpl implements DeploymentSession, FrameworkListen
     /*
      * Drops a particluar resource
      */
-    private WrappedResourceProcessor dropResource(ResourceEntry re) throws DeploymentException {
-        String pid = re.getValue(DAConstants.RP_PID);
-        ResourceProcessor proc = WrappedResourceProcessor.findProcessorSilent(pid);
-        if (null == proc)
-            throw new DeploymentException(DeploymentException.CODE_PROCESSOR_NOT_FOUND,
-                "Resource processor for pid " + pid + "is not found");
-        actWrProc = new WrappedResourceProcessor(
-            pid, fetchAccessControlContext(re.getCertChains()), trackRp);
+    private void dropResource(ResourceEntry re) throws DeploymentException {
         transaction.addRecord(new TransactionRecord(Transaction.PROCESSOR, actWrProc));
         try {
 			actWrProc.dropped(re.getResName());
-			return actWrProc;
 		} catch (ResourceProcessorException e) {
 			if (e.getCode() == ResourceProcessorException.CODE_NO_SUCH_RESOURCE)
 				throw new DeploymentException(
