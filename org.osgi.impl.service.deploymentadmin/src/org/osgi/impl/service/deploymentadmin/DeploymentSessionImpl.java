@@ -307,6 +307,7 @@ public class DeploymentSessionImpl implements DeploymentSession, FrameworkListen
         } catch (ResourceProcessorException e) {
 			if (e.getCode() == ResourceProcessorException.CODE_PREPARE)
 				throw new DeploymentException(DeploymentException.CODE_COMMIT_ERROR);
+			transaction.rollback();
         } catch (DeploymentException e) {
             transaction.rollback();
             throw e;
