@@ -357,8 +357,10 @@ public class DeploymentSessionImpl implements DeploymentSession, FrameworkListen
             commitProcessors(wrProcs);
             dropBundles();
         } catch (ResourceProcessorException e) {
-			if (e.getCode() == ResourceProcessorException.CODE_PREPARE)
+        	if (e.getCode() == ResourceProcessorException.CODE_PREPARE) {
+				transaction.rollback();
 				throw new DeploymentException(DeploymentException.CODE_COMMIT_ERROR);
+			}
         } catch (Exception e) {
             if (!forced) {
                 transaction.rollback();
