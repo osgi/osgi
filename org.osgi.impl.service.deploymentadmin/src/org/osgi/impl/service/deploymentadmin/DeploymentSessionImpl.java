@@ -696,9 +696,6 @@ public class DeploymentSessionImpl implements DeploymentSession, FrameworkListen
         try {
 			actWrProc.dropped(re.getResName());
 		} catch (ResourceProcessorException e) {
-			if (e.getCode() == ResourceProcessorException.CODE_NO_SUCH_RESOURCE)
-				throw new DeploymentException(
-						DeploymentException.CODE_NO_SUCH_RESOURCE, "", e);
 			throw new DeploymentException(
 					DeploymentException.CODE_OTHER_ERROR, "", e);
 		}
