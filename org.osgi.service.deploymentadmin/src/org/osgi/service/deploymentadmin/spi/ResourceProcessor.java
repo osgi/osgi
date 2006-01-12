@@ -27,7 +27,6 @@ import java.io.InputStream;
   * 	<li>{@link #process(String, InputStream)} calls till there are resources to process 
   * 		or {@link #rollback()} and the further steps are ignored</li>
   * 	<li>{@link #dropped(String)} calls till there are resources to drop
-  * 		or {@link #rollback()} and the further steps are ignored</li>
   * 	<li>{@link #prepare()}</li>
   * 	<li>{@link #commit()} or {@link #rollback()}</li>
   * </ol>
@@ -76,8 +75,7 @@ public interface ResourceProcessor {
 	  * @param resource the name of the resource to drop (it is the same as the value of the 
 	  *        "Name" attribute in the deployment package's manifest)
 	  * @throws ResourceProcessorException if the resource is not allowed to be dropped. Only the 
-	  *         {@link ResourceProcessorException#CODE_NO_SUCH_RESOURCE} and the 
-	  *         {@link ResourceProcessorException#CODE_OTHER_ERROR} error codes are allowed
+	  *         {@link ResourceProcessorException#CODE_OTHER_ERROR} error code is allowed
 	  */
     void dropped(String resource) throws ResourceProcessorException;
     

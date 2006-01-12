@@ -90,21 +90,6 @@ public class DeploymentException extends Exception {
 	public static final int	CODE_FOREIGN_CUSTOMIZER			= 458;
 
 	/**
-	 * The <code>dropped(String resource)</code> method was called on the
-	 * matched resource processor but the resource processor doesn't manage this
-	 * resource.<p>
-	 * 
-	 * This exception is thrown when the called resource processor throws a 
-	 * <code>ResourceProcessorException</code> with the 
-	 * {@link org.osgi.service.deploymentadmin.spi.ResourceProcessorException#CODE_NO_SUCH_RESOURCE} 
-	 * error code.<p>
-	 * 
-	 * {@link DeploymentAdmin#installDeploymentPackage(InputStream)} or 
-	 * {@link DeploymentPackage#uninstall()} methods throw exception with this error code.  
-	 */
-	public static final int	CODE_NO_SUCH_RESOURCE			= 459;
-
-	/**
 	 * Bundle with the same symbolic name alerady exists.<p>
 	 * 
 	 * {@link DeploymentAdmin#installDeploymentPackage(InputStream)}
@@ -175,6 +160,13 @@ public class DeploymentException extends Exception {
 	 */
 	public static final int	CODE_CANCELLED                  = 401;
 
+	/**
+	 * {@link DeploymentAdmin#installDeploymentPackage(InputStream)} 
+	 * methods can throw {@link DeploymentException} with this error code if 
+	 * the got InputStream is not a jar. 
+	 */
+	public static final int	CODE_NOT_A_JAR                  = 404;
+	
 	/**
 	 * Other error condition.<p>
 	 * 

@@ -18,16 +18,16 @@ import org.osgi.service.deploymentadmin.spi.ResourceProcessor;
  * the textual description of the error condition and a nested cause exception.
  */
 public class ResourceProcessorException extends Exception {
-
+	
 	/**
-	 * The {@link ResourceProcessor#dropped(String)} method was called on a
-	 * Resource Processor but the Resource Processor doesn't manage (doesn't know) 
-	 * this resource.<p>
+	 * Resource Processors are allowed to raise an exception with this error code 
+	 * to indicate that the processor is not able to commit the operations it made 
+	 * since the last call of {@link ResourceProcessor#begin(DeploymentSession)} method.<p>
 	 * 
-	 * Only the {@link ResourceProcessor#dropped(String)} method is allowed to throw 
-	 * exception with this error code.
+	 * Only the {@link ResourceProcessor#prepare()} method is allowed to throw exception 
+	 * with this error code.  
 	 */
-	public static final int	CODE_NO_SUCH_RESOURCE			= 459;
+	public static final int	CODE_PREPARE					= 1;
 
 	/**
 	 * An artifact of any resource already exists.<p>
@@ -45,16 +45,6 @@ public class ResourceProcessorException extends Exception {
 	 * categorized. 
 	 */
 	public static final int	CODE_OTHER_ERROR				= 463;
-
-	/**
-	 * Resource Processors are allowed to raise an exception with this error code 
-	 * to indicate that the processor is not able to commit the operations it made 
-	 * since the last call of {@link ResourceProcessor#begin(DeploymentSession)} method.<p>
-	 * 
-	 * Only the {@link ResourceProcessor#prepare()} method is allowed to throw exception 
-	 * with this error code.  
-	 */
-	public static final int	CODE_PREPARE					= 1;
 
 	private int				code;
 	private String			message;
