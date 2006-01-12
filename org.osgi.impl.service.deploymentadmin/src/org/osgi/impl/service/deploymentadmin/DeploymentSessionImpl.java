@@ -356,16 +356,15 @@ public class DeploymentSessionImpl implements DeploymentSession, FrameworkListen
             prepareProcessors(wrProcs);
             commitProcessors(wrProcs);
             dropBundles();
-        } catch (ResourceProcessorException e) {
-        	if (e.getCode() == ResourceProcessorException.CODE_PREPARE) {
-				transaction.rollback();
-				throw new DeploymentException(DeploymentException.CODE_COMMIT_ERROR);
-			}
         } catch (Exception e) {
             if (!forced) {
                 transaction.rollback();
+                if (e instanceof ResourceProcessorException &&
+                	((ResourceProcessorException) e).getCode() == ResourceProcessorException.CODE_PREPARE)
+		                throw new DeploymentException(DeploymentException.CODE_OTHER_ERROR, 
+		                        e.getMessage(), e);
                 throw new DeploymentException(DeploymentException.CODE_OTHER_ERROR, 
-                        e.getMessage(), e);
+                		e.getMessage(), e);
             }  
             sessionCtx.getLogger().log(e);
             succeed = false;
