@@ -305,9 +305,10 @@ public class DeploymentSessionImpl implements DeploymentSession, FrameworkListen
             startBundles();
             //refreshPackages();
         } catch (ResourceProcessorException e) {
-			if (e.getCode() == ResourceProcessorException.CODE_PREPARE)
+			if (e.getCode() == ResourceProcessorException.CODE_PREPARE) {
+				transaction.rollback();
 				throw new DeploymentException(DeploymentException.CODE_COMMIT_ERROR);
-			transaction.rollback();
+			}
         } catch (DeploymentException e) {
             transaction.rollback();
             throw e;
