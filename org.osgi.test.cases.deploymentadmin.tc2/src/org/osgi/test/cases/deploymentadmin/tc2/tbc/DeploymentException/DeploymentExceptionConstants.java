@@ -73,7 +73,7 @@ public class DeploymentExceptionConstants {
 		tbc.assertEquals("Asserting CODE_MISSING_FIXPACK_TARGET value", 453, DeploymentException.CODE_MISSING_FIXPACK_TARGET);
 		tbc.assertEquals("Asserting CODE_MISSING_HEADER value", 451, DeploymentException.CODE_MISSING_HEADER);
 		tbc.assertEquals("Asserting CODE_MISSING_RESOURCE value", 455, DeploymentException.CODE_MISSING_RESOURCE);		
-		tbc.assertEquals("Asserting CODE_NO_SUCH_RESOURCE value", 459, DeploymentException.CODE_NO_SUCH_RESOURCE);
+		tbc.assertEquals("Asserting CODE_NO_SUCH_RESOURCE value", 404, DeploymentException.CODE_NOT_A_JAR);
 		tbc.assertEquals("Asserting CODE_ORDER_ERROR value", 450, DeploymentException.CODE_ORDER_ERROR);
 		tbc.assertEquals("Asserting CODE_OTHER_ERROR value", 463, DeploymentException.CODE_OTHER_ERROR);
         tbc.assertEquals("Asserting CODE_PROCESSOR_NOT_FOUND value", 464, DeploymentException.CODE_PROCESSOR_NOT_FOUND);

@@ -58,28 +58,6 @@ public class ResourceProcessorException {
     public void run() {
         testResourceProcessorException001();
         testResourceProcessorException002();
-        testResourceProcessorException003();
-    }
-    
-    /**
-     * Tests ResourceProcessorException constructor that receives one parameter
-     * 
-     * @spec ResourceProcessorException.ResourceProcessorException(int) 
-     */
-    private void testResourceProcessorException001() {
-        tbc.log("#testResourceProcessorException001");
-        try {
-            org.osgi.service.deploymentadmin.spi.ResourceProcessorException e = new org.osgi.service.deploymentadmin.spi.ResourceProcessorException(
-                org.osgi.service.deploymentadmin.spi.ResourceProcessorException.CODE_NO_SUCH_RESOURCE);
-            
-            tbc.assertEquals("The code of the exception was correctly set",
-                org.osgi.service.deploymentadmin.spi.ResourceProcessorException.CODE_NO_SUCH_RESOURCE, e.getCode());
-            tbc.assertNull("The cause of the exception is correctly set to null", e.getCause());
-            tbc.assertNull("The message of the exception is correctly set to null", e.getMessage());
-            
-        } catch (Exception e) {
-            tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }));
-        }
     }
     
     /**
@@ -87,8 +65,8 @@ public class ResourceProcessorException {
      * 
      * @spec ResourceProcessorException.ResourceProcessorException(int, String) 
      */
-    private void testResourceProcessorException002() {
-        tbc.log("#testResourceProcessorException002");
+    private void testResourceProcessorException001() {
+        tbc.log("#testResourceProcessorException001");
         try {
             org.osgi.service.deploymentadmin.spi.ResourceProcessorException e = new org.osgi.service.deploymentadmin.spi.ResourceProcessorException(
                 org.osgi.service.deploymentadmin.spi.ResourceProcessorException.CODE_PREPARE, DeploymentConstants.EXCEPTION_MESSAGE);
@@ -108,8 +86,8 @@ public class ResourceProcessorException {
      * 
      * @spec ResourceProcessorException.ResourceProcessorException(int, String, Throwable) 
      */
-    private void testResourceProcessorException003() {
-        tbc.log("#testResourceProcessorException003");
+    private void testResourceProcessorException002() {
+        tbc.log("#testResourceProcessorException002");
         try {
             Exception ex = new Exception("test");
             org.osgi.service.deploymentadmin.spi.ResourceProcessorException e = new org.osgi.service.deploymentadmin.spi.ResourceProcessorException(
