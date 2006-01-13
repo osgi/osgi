@@ -40,39 +40,6 @@ import org.osgi.service.deploymentadmin.DeploymentException;
  */
 public class DeploymentPackageJarInputStream {
 
-	/*
-	 * Is used to figure out whether it is a jar file
-	 */
-	private static class DPInputStream extends InputStream {
-
-		// Every jar begins with this 
-		private static final int[] patter = new int[] {'P', 'K', '\3', '\4'};
-		
-		private InputStream is;
-		private int[]       buffer = new int[4];
-		private int         index;
-
-		private DPInputStream(InputStream is) throws IOException, DeploymentException {
-			this.is = is;
-			while (index < 4) {
-				int data = is.read();
-				if (data == -1 || patter[index] != data)
-					throw new DeploymentException(DeploymentException.CODE_NOT_A_JAR, 
-							"Bad jar file");
-				buffer[index] = data;
-				++index;
-			}
-			index = 0;
-		}
-
-		public int read() throws IOException {
-			if (index < 4)
-				return buffer[index++];
-			return is.read();
-		}
-		
-	}
-	
     /**
      * Extends the JarEntry functionality according to the needs of 
      * the deployment packages (DPs). It is able to recognise bundles, 
@@ -216,7 +183,7 @@ public class DeploymentPackageJarInputStream {
     public DeploymentPackageJarInputStream(InputStream is) 
     		throws IOException, DeploymentException 
     {
-	    this.jis = new JarInputStream(new DPInputStream(is));
+	    this.jis = new JarInputStream(new DeploymentInputStream(is));
 	    
         Manifest mf = getManifest();
         if (null == mf)

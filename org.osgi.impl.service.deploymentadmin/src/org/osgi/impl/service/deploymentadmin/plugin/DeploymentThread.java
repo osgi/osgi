@@ -21,6 +21,7 @@ import java.io.IOException;
 import java.io.InputStream;
 
 import org.osgi.framework.Bundle;
+import org.osgi.impl.service.deploymentadmin.DeploymentInputStream;
 import org.osgi.impl.service.deploymentadmin.DeploymentPackageImpl;
 import org.osgi.impl.service.deploymentadmin.PluginCtx;
 
@@ -61,6 +62,7 @@ public class DeploymentThread extends Thread {
     public void run() {
         if (mimeType.equals(PluginConstants.MIME_DP)) {
             try {
+            	//DeploymentInputStream dis = new DeploymentInputStream(is);
                 DeploymentPackageImpl dp = (DeploymentPackageImpl) pluginCtx.
                         getDeploymentAdmin().installDeploymentPackage(is);
                 listenerDp.onFinish(dp, null);
@@ -87,11 +89,12 @@ public class DeploymentThread extends Thread {
                         break;
                     }
                 }
+                DeploymentInputStream dis = new DeploymentInputStream(is);
                 if (null == b) {
-                    b = pluginCtx.getBundleContext().installBundle(location, is);
+                    b = pluginCtx.getBundleContext().installBundle(location, dis);
                     b.start();
                 } else {
-                    b.update(is);
+                    b.update(dis);
                 }
                 
                 listenerBundle.onFinish(b, null);
