@@ -304,7 +304,7 @@ public abstract class ApplicationDescriptor {
 			throws ApplicationException {
 		delegate.launch(arguments);
 		if( !isLaunchableSpecific() )
-			throw new ApplicationException(ApplicationException.APPLICAITON_NOT_LAUNCHABLE,
+			throw new ApplicationException(ApplicationException.APPLICATION_NOT_LAUNCHABLE,
 					 "Cannot launch the application!");
 		try {
 			return launchSpecific(arguments);

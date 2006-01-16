@@ -2,20 +2,19 @@ package org.osgi.service.application;
 
 /**
  * This exception is used to indicate problems related to application 
- * lifecycle management
+ * lifecycle management.
  * 
- * <p>
  * <code>ApplicationException</code> object is created by the Application Admin to denote
  * an exception condition in the lifecycle of an application.
  * <code>ApplicationException</code>s should not be created by developers.
- * <p>
+ * <br/>
  * <code>ApplicationException</code>s are associated with an error code. This code
  * describes the type of problem reported in this exception. The possible codes are:
  * <ul>
- * <li> {@link #APPLICATION_LOCKED} - The application couldn't be launched because it is locked.
- * <li> {@link #APPLICAITON_NOT_LAUNCHABLE} - The application is not in launchable state.
+ * <li> {@link #APPLICATION_LOCKED} - The application couldn't be launched because it is locked.</li>
+ * <li> {@link #APPLICAITON_NOT_LAUNCHABLE} - The application is not in launchable state.</li>
  * <li> {@link #APPLICATION_INTERNAL_ERROR} - An exception was thrown by the application or its
- *       container during launch.
+ *       container during launch.</li>
  * </ul>
  * 
  */
@@ -34,7 +33,7 @@ public class ApplicationException extends Exception {
 	 * {@link ApplicationDescriptor#APPLICATION_LAUNCHABLE}
 	 * attribute is false.
 	 */
-	public static final int APPLICAITON_NOT_LAUNCHABLE = 0x02;
+	public static final int APPLICATION_NOT_LAUNCHABLE = 0x02;
 	
 	/**
 	 * An exception was thrown by the application or the corresponding
