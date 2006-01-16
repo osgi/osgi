@@ -275,6 +275,42 @@ public class UserPromptCondition
 		return all_satisfied;
 	}
 
+	static void checkConstructorParams(String levels,String defaultLevel) {
+		levels=levels.toUpperCase();
+		defaultLevel=defaultLevel.toUpperCase();
+		
+		if (levels.equals("")) {
+			throw new IllegalArgumentException("Userprompt levels is empty string");
+		}
+
+		boolean oneshot = false;
+		boolean session = false;
+		boolean blanket = false;
+		String[] alevels = Splitter.split(levels,',',-1);
+		for(int i=0;i<alevels.length;i++) {
+			if (alevels[i].equals(ONESHOT_STRING)) { oneshot = true; }
+			else if (alevels[i].equals(SESSION_STRING)) { session = true; }
+			else if (alevels[i].equals(BLANKET_STRING)) { blanket = true; }
+			else throw new IllegalArgumentException("Unknown userprompt level: "+alevels[i]);
+		}
+
+		if (!defaultLevel.equals("") &&
+			!defaultLevel.equals(ONESHOT_STRING)&&
+			!defaultLevel.equals(SESSION_STRING)&&
+			!defaultLevel.equals(BLANKET_STRING)) 
+		{
+			throw new IllegalArgumentException("Unknown default userprompt level: "+defaultLevel);
+		}
+		
+		if ((!oneshot && defaultLevel.equals(ONESHOT_STRING)) ||
+			(!session && defaultLevel.equals(SESSION_STRING)) ||
+			(!blanket && defaultLevel.equals(BLANKET_STRING))) 
+		{
+			throw new IllegalArgumentException("Default userprompt level is not among possible levels: "+defaultLevel);
+		}
+		
+	}
+
 	protected UserPromptCondition(Bundle bundle, String levels, String defaultLevel, String catalogName, String message) {
 		levels=levels.toUpperCase();
 		defaultLevel=defaultLevel.toUpperCase();
@@ -319,6 +355,7 @@ public class UserPromptCondition
 
 	public static class Factory implements org.osgi.util.mobile.UserPromptCondition.UserPromptConditionFactory {
 		public org.osgi.util.mobile.UserPromptCondition getInstance(Bundle bundle, String levels, String defaultLevel, String catalogName, String message) {
+			checkConstructorParams(levels,defaultLevel);
 			String id = generateUniqueID(bundle,catalogName,message);
 			UserPromptCondition condition = (UserPromptCondition) conditions.get(id);
 			if (condition==null) {
