@@ -64,7 +64,7 @@
 
 	<complexType name="Attribute">
 		<sequence>
-			<element name="Content" type="string" minOccurs="0"
+			<element name="Value" type="string" minOccurs="0"
 				maxOccurs="unbounded" />
 		</sequence>
 		<attribute name="adref" type="string" use="required" />
