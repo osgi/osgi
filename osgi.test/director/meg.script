@@ -8,8 +8,9 @@
 	<testcase>test.deploymentadmin.tc1</testcase> 	<!-- Tests the Deployment Admin --> 
 	<testcase>test.deploymentadmin.tc2</testcase> 	<!-- Tests the Deployment Admin --> 
 	<testcase>test.deploymentadmin.mo</testcase> 	<!-- Tests the Deployment Admin Managed Object --> 
-	<testcase>test.dmt.main</testcase> 				<!-- Tests the Dmt Main functionality --> 
-	<testcase>test.dmt.plugins</testcase> 			<!-- Tests the Dmt Plugin functionality --> 
+	<testcase>test.dmt.tc1</testcase> 				<!-- Tests the Dmt Main functionality --> 
+	<testcase>test.dmt.tc2</testcase> 				<!-- Tests the Dmt Plugin functionality --> 
+	<testcase>test.dmt.tc3</testcase> 			`	<!-- Tests the Dmt Other functionality --> 
 	<testcase>test.event</testcase> 				<!-- Tests the Event Admin --> 
 	<testcase>test.io</testcase> 					<!-- Tests IO Service (generic conncetion framework) -->
 	<testcase>test.log</testcase> 					<!-- Tests the Log Service -->
