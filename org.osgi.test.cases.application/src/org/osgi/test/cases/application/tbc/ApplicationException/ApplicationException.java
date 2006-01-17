@@ -35,15 +35,15 @@ public class ApplicationException {
     
     /**
      * This method asserts if the passed errorcode
-     * is returned correctly (APPLICAITON_NOT_LAUNCHABLE)
+     * is returned correctly (APPLICATION_NOT_LAUNCHABLE)
      * 
      * @spec ApplicationException.ApplicationException(int)
      */
     private void testApplicationException001() {
         tbc.log("#testApplicationException001");
         try {        	
-        	org.osgi.service.application.ApplicationException exception = new org.osgi.service.application.ApplicationException(org.osgi.service.application.ApplicationException.APPLICAITON_NOT_LAUNCHABLE);
-            tbc.assertEquals("Asserting if the errorcode returned was APPLICAITON_NOT_LAUNCHABLE.", org.osgi.service.application.ApplicationException.APPLICAITON_NOT_LAUNCHABLE, exception.getErrorCode());
+        	org.osgi.service.application.ApplicationException exception = new org.osgi.service.application.ApplicationException(org.osgi.service.application.ApplicationException.APPLICATION_NOT_LAUNCHABLE);
+            tbc.assertEquals("Asserting if the errorcode returned was APPLICATION_NOT_LAUNCHABLE.", org.osgi.service.application.ApplicationException.APPLICATION_NOT_LAUNCHABLE, exception.getErrorCode());
         } catch (Exception e) {
             tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": "
                 + e.getClass().getName());
@@ -122,15 +122,15 @@ public class ApplicationException {
     
     /**
      * This method asserts if the passed parameters
-     * are returned correctly (APPLICAITON_NOT_LAUNCHABLE).
+     * are returned correctly (APPLICATION_NOT_LAUNCHABLE).
      * 
      * @spec ApplicationException.ApplicationException(int,String)
      */
     private void testApplicationException006() {
         tbc.log("#testApplicationException006");
         try {        	
-        	org.osgi.service.application.ApplicationException exception = new org.osgi.service.application.ApplicationException(org.osgi.service.application.ApplicationException.APPLICAITON_NOT_LAUNCHABLE,"test");
-            tbc.assertEquals("Asserting if the errorcode returned was APPLICAITON_NOT_LAUNCHABLE.", org.osgi.service.application.ApplicationException.APPLICAITON_NOT_LAUNCHABLE, exception.getErrorCode());
+        	org.osgi.service.application.ApplicationException exception = new org.osgi.service.application.ApplicationException(org.osgi.service.application.ApplicationException.APPLICATION_NOT_LAUNCHABLE,"test");
+            tbc.assertEquals("Asserting if the errorcode returned was APPLICATION_NOT_LAUNCHABLE.", org.osgi.service.application.ApplicationException.APPLICATION_NOT_LAUNCHABLE, exception.getErrorCode());
             tbc.assertEquals("Asserting if the message returned was test.", "test", exception.getMessage());            
         } catch (Exception e) {
             tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": "
@@ -140,7 +140,7 @@ public class ApplicationException {
     
     /**
      * This method asserts if the passed parameters
-     * are returned correctly (APPLICAITON_NOT_LAUNCHABLE).
+     * are returned correctly (APPLICATION_NOT_LAUNCHABLE).
      * 
      * @spec ApplicationException.ApplicationException(int,String,Throwable)
      */
@@ -148,8 +148,8 @@ public class ApplicationException {
         tbc.log("#testApplicationException007");
         try {        	
         	Throwable cause =  new IllegalArgumentException();
-        	org.osgi.service.application.ApplicationException exception = new org.osgi.service.application.ApplicationException(org.osgi.service.application.ApplicationException.APPLICAITON_NOT_LAUNCHABLE,"test", cause);
-            tbc.assertEquals("Asserting if the errorcode returned was APPLICAITON_NOT_LAUNCHABLE.", org.osgi.service.application.ApplicationException.APPLICAITON_NOT_LAUNCHABLE, exception.getErrorCode());
+        	org.osgi.service.application.ApplicationException exception = new org.osgi.service.application.ApplicationException(org.osgi.service.application.ApplicationException.APPLICATION_NOT_LAUNCHABLE,"test", cause);
+            tbc.assertEquals("Asserting if the errorcode returned was APPLICATION_NOT_LAUNCHABLE.", org.osgi.service.application.ApplicationException.APPLICATION_NOT_LAUNCHABLE, exception.getErrorCode());
             tbc.assertEquals("Asserting if the message returned was test.", "test", exception.getMessage());   
             tbc.assertEquals("Asserting if the cause returned is IllegalArgumentException", cause, exception.getCause());
         } catch (Exception e) {
@@ -244,8 +244,8 @@ public class ApplicationException {
     private void testApplicationException012() {
         tbc.log("#testApplicationException012");
         try {        	
-        	org.osgi.service.application.ApplicationException exception = new org.osgi.service.application.ApplicationException(org.osgi.service.application.ApplicationException.APPLICAITON_NOT_LAUNCHABLE, (Throwable) null);
-            tbc.assertEquals("Asserting if the errorcode returned was APPLICATION_INTERNAL_ERROR.", org.osgi.service.application.ApplicationException.APPLICAITON_NOT_LAUNCHABLE, exception.getErrorCode());  
+        	org.osgi.service.application.ApplicationException exception = new org.osgi.service.application.ApplicationException(org.osgi.service.application.ApplicationException.APPLICATION_NOT_LAUNCHABLE, (Throwable) null);
+            tbc.assertEquals("Asserting if the errorcode returned was APPLICATION_INTERNAL_ERROR.", org.osgi.service.application.ApplicationException.APPLICATION_NOT_LAUNCHABLE, exception.getErrorCode());  
             tbc.assertNull("Asserting if the returned cause was null", exception.getCause());
         } catch (Exception e) {
             tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": "

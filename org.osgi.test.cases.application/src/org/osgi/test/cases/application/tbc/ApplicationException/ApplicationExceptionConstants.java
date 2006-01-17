@@ -64,7 +64,7 @@ public class ApplicationExceptionConstants {
      */
 	private void testConstants001() {
 		tbc.log("#testConstants001");
-		tbc.assertEquals("Asserting APPLICAITON_NOT_LAUNCHABLE value", 2, ApplicationException.APPLICAITON_NOT_LAUNCHABLE);
+		tbc.assertEquals("Asserting APPLICATION_NOT_LAUNCHABLE value", 2, ApplicationException.APPLICATION_NOT_LAUNCHABLE);
 		tbc.assertEquals("Asserting APPLICATION_INTERNAL_ERROR value", 3, ApplicationException.APPLICATION_INTERNAL_ERROR);
 		tbc.assertEquals("Asserting APPLICATION_LOCKED value", 1, ApplicationException.APPLICATION_LOCKED);
 	}	
