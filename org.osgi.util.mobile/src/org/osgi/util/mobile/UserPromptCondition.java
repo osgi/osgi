@@ -163,14 +163,16 @@ public class UserPromptCondition implements Condition {
 	/**
 	 * Checks if the {@link #isSatisfied()} method needs to prompt the user, thus cannot
 	 * give results instantly. 
-	 * This depends on the possible permission levels given in 
+	 * This depends on the permission level given in 
 	 * {@link UserPromptCondition#getCondition(Bundle, ConditionInfo)}. 
 	 * <ul>
-	 * <li>ONESHOT - isPostponed always returns true. The user is prompted for question every time.
-	 * <li>SESSION - isPostponed returns true until the user decides either yes or no for the current session.
-	 * <li>BLANKET - isPostponed returns true until the user decides either always or never.
-	 * 			After that, it is always false.
+	 * <li>ONESHOT - isPostponed always returns true. The user is prompted for question every time.</li>
+	 * <li>SESSION - isPostponed returns true until the user decides either yes or no for the current session.</li>
+	 * <li>BLANKET - isPostponed returns true until the user decides either always or never.</li>
 	 * </ul>
+	 * If the system supports an separately accessible permission management GUI,
+	 * that may reset the condition
+	 * to its initial state.
 	 * 
 	 * @return True, if user interaction is needed.
 	 */
@@ -185,12 +187,18 @@ public class UserPromptCondition implements Condition {
 
 	/**
 	 * Checks whether the condition may change during the lifetime of the UserPromptCondition object.
-	 * 
-	 * @return
+	 * This depends on the permission level given in 
+	 * {@link UserPromptCondition#getCondition(Bundle, ConditionInfo)}. 
 	 * <ul>
-	 * <li>false, if it is a BLANKET condition, and the user already answered to the question.
-	 * <li>true otherwise
+	 * 	<li>ONESHOT - true</li>
+	 *  <li>SESSION - true, if the application model's session lifetime is
+	 *  		shorter than the UserPromptCondition object lifetime</li>
+	 *  <li>BLANKET - false</li>
 	 * </ul>
+	 * If the system supports separately accessible permission management GUI,
+	 * then this function may also return true for SESSION and BLANKET.
+	 * 
+	 * @return True, if the condition can change.
 	 */
 	public boolean isMutable() {
 		lookForImplementation();
@@ -235,6 +243,7 @@ public class UserPromptCondition implements Condition {
 	 * 		will be used to store results of ONESHOT questions. This way asking the same question
 	 * 		twice in a row can be avoided. If context is null, temporary results will not be stored.
 	 * @return True, if all conditions are satisfied.
+	 * @throws NullPointerException if conds is null.
 	 */
 	public boolean isSatisfied(Condition[] conds, Dictionary context) {
 		lookForImplementation();
