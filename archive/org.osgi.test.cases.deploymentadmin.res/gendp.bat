@@ -15,7 +15,9 @@ copy bundle001.jar wrong(path)\
 copy bundle001.jar ..\..\org.osgi.test.cases.deploymentadmin.mo\delivered\
 copy ..\bundles_update\bundle001.jar ..\..\org.osgi.test.cases.deploymentadmin.mo\res\
 copy bundle001.jar bundle001_signed.jar
+copy bundle002.jar bundle002_signed.jar
 jarsigner -keystore ..\..\cnf\certificate\.keystore -storepass testtest -keypass testtest bundle001_signed.jar test
+jarsigner -keystore ..\..\cnf\certificate\.keystore -storepass testtest -keypass testtest bundle002_signed.jar test
 
 ECHO Creating common deployment packages
 jar -cvfm ..\res\simple.dp ..\res\simple_dp.mf bundle001.jar bundle002.jar
@@ -161,7 +163,6 @@ jar -cvfm ..\res\simple_unsigned_bundle.dp ..\res\simple_unsigned_bundle_dp.mf u
 move ..\res\simple_unsigned_bundle.dp ..\..\org.osgi.test.cases.deploymentadmin.tc1\res\
 
 jar -cvfm ..\res\simple_unsigned.dp ..\res\simple_unsigned_dp.mf bundle001.jar
-copy ..\res\simple_unsigned.dp ..\..\org.osgi.test.cases.deploymentadmin.mo\delivered\
 move ..\res\simple_unsigned.dp ..\..\org.osgi.test.cases.deploymentadmin.tc1\res\
 
 jar -cvfm ..\res\resource_from_other.dp ..\res\resource_from_other_dp.mf simple_resource.xml
@@ -183,6 +184,7 @@ move ..\res\wrong_order.dp ..\..\org.osgi.test.cases.deploymentadmin.tc1\res\
 
 jar -cvfm ..\res\untrusted.dp ..\res\untrusted.mf bundle001.jar bundle002.jar
 jarsigner -keystore ..\invalid_keystore -storepass invalid -keypass invalid ..\res\untrusted.dp invalid
+copy ..\res\untrusted.dp ..\..\org.osgi.test.cases.deploymentadmin.mo\delivered\
 move ..\res\untrusted.dp ..\..\org.osgi.test.cases.deploymentadmin.tc1\res\
 
 jar -cvfm ..\res\wrong_path.dp ..\res\wrong_path.mf wrong(path)\bundle001.jar
@@ -257,11 +259,6 @@ jar -cvfm ..\res\resource_processor2.dp ..\res\resource_processor2_dp.mf rp_bund
 jarsigner -keystore ..\..\cnf\certificate\.keystore -storepass testtest -keypass testtest ..\res\resource_processor2.dp test
 move ..\res\resource_processor2.dp ..\..\org.osgi.test.cases.deploymentadmin.tc1\res\
 
-ECHO Generating wrong format deployment package
-jar -cvfm ..\res\wrong_format.wrg ..\res\wrong_format.mf bundle001.jar
-jarsigner -keystore ..\..\cnf\certificate\.keystore -storepass testtest -keypass testtest ..\res\wrong_format.wrg test
-move /y ..\res\wrong_format.wrg ..\..\org.osgi.test.cases.deploymentadmin.tc1\res\
-
 jar -cvfm ..\res\non_customizer_rp.dp ..\res\non_customizer_rp.mf rp_bundle.jar simple_resource.xml
 jarsigner -keystore ..\..\cnf\certificate\.keystore -storepass testtest -keypass testtest ..\res\non_customizer_rp.dp test
 move /y ..\res\non_customizer_rp.dp ..\..\org.osgi.test.cases.deploymentadmin.tc1\res\
@@ -279,7 +276,8 @@ jar -cvfm ..\res\simple_fix_pack.dp ..\res\simple_fix_pack_dp.mf bundle001.jar
 jarsigner -keystore ..\..\cnf\certificate\.keystore -storepass testtest -keypass testtest ..\res\simple_fix_pack.dp test
 copy ..\res\simple_fix_pack.dp ..\..\org.osgi.test.cases.deploymentadmin.mo\delivered\
 REM It copies the simple_fix_pack.dp to other directory, so we can use the same archive name when updating a deployment package
-copy ..\res\simple_fix_pack.dp ..\..\org.osgi.test.cases.deploymentadmin.mo\delivered\
+copy /y ..\res\simple_fix_pack.dp ..\..\org.osgi.test.cases.deploymentadmin.mo\res\
+del ..\..\org.osgi.test.cases.deploymentadmin.mo\res\simple.dp
 ren ..\..\org.osgi.test.cases.deploymentadmin.mo\res\simple_fix_pack.dp simple.dp
 move ..\res\simple_fix_pack.dp ..\..\org.osgi.test.cases.deploymentadmin.tc1\res\
 
@@ -340,8 +338,7 @@ jar -cvfm ..\res\block_session.dp ..\res\block_session_tc2.mf rp_bundle4.jar con
 jarsigner -keystore ..\..\cnf\certificate\.keystore -storepass testtest -keypass testtest ..\res\block_session.dp test
 move ..\res\block_session.dp ..\..\org.osgi.test.cases.deploymentadmin.tc2\res\
 
-jar -cvfM ..\res\manifest_not_1st_file.dp bundle001.jar bundle002.jar META-INF\README.txt META-INF\MANIFEST.mf
-jarsigner -keystore ..\..\cnf\certificate\.keystore -storepass testtest -keypass testtest ..\res\manifest_not_1st_file.dp test
+jar -cvfM ..\res\manifest_not_1st_file.dp META-INF\README.TXT META-INF\MANIFEST.MF META-INF\TEST.SF META-INF\TEST.RSA bundle001.jar bundle002.jar
 copy ..\res\manifest_not_1st_file.dp ..\..\org.osgi.test.cases.deploymentadmin.mo\delivered\
 move ..\res\manifest_not_1st_file.dp ..\..\org.osgi.test.cases.deploymentadmin.tc2\res\
 
@@ -394,22 +391,25 @@ del rp_bundle.jar
 del rp_bundle2.jar
 del rp_bundle3.jar
 del rp_bundle4.jar
-del rp_bundle5.jar
+
 ren rp_bundle_dmo_rp1.jar rp_bundle.jar
 ren rp_bundle_dmo_rp2.jar rp_bundle2.jar
 ren rp_bundle_dmo_rp3.jar rp_bundle3.jar
 ren rp_bundle_dmo_rp4.jar rp_bundle4.jar
-ren rp_bundle_dmo_rp5.jar rp_bundle5.jar
 
 ECHO Creating Deployment Management Object packages (only the new ones)
 REM Deployment Management Object uses a sgined bundle001 to verify the MetaNode of the Deployed subtree
 ren bundle001.jar bundle001_temp.jar
 ren bundle001_signed.jar bundle001.jar
+ren bundle002.jar bundle002_temp.jar
+ren bundle002_signed.jar bundle002.jar
 jar -cvfm ..\res\simple.dp ..\res\simple_dp.mf bundle001.jar bundle002.jar
 jarsigner -keystore ..\..\cnf\certificate\.keystore -storepass testtest -keypass testtest ..\res\simple.dp test
 move ..\res\simple.dp ..\..\org.osgi.test.cases.deploymentadmin.mo\delivered\
 del bundle001.jar
 ren bundle001_temp.jar bundle001.jar
+del bundle002.jar
+ren bundle002_temp.jar bundle002.jar
 
 jar -cvfm ..\res\rp_not_able_to_commit.dp ..\res\rp_not_able_to_commit.mf rp_bundle2.jar simple_resource.xml
 jarsigner -keystore ..\..\cnf\certificate\.keystore -storepass testtest -keypass testtest ..\res\rp_not_able_to_commit.dp test
@@ -440,7 +440,7 @@ jar -cvfm ..\res\non_customizer_rp.dp ..\res\non_customizer_rp.mf rp_bundle.jar 
 jarsigner -keystore ..\..\cnf\certificate\.keystore -storepass testtest -keypass testtest ..\res\non_customizer_rp.dp test
 move ..\res\non_customizer_rp.dp ..\..\org.osgi.test.cases.deploymentadmin.mo\delivered\
 
-jar -cvfm ..\res\dp_throws_resource_violation.dp ..\res\dp_throws_resource_violation.mf rp_bundle5.jar simple_resource.xml
+jar -cvfm ..\res\dp_throws_resource_violation.dp ..\res\dp_throws_resource_violation.mf rp_bundle4.jar simple_resource.xml
 jarsigner -keystore ..\..\cnf\certificate\.keystore -storepass testtest -keypass testtest ..\res\dp_throws_resource_violation.dp test
 move ..\res\dp_throws_resource_violation.dp ..\..\org.osgi.test.cases.deploymentadmin.mo\delivered\
 

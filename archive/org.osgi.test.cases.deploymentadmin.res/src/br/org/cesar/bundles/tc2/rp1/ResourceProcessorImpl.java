@@ -115,11 +115,8 @@ public class ResourceProcessorImpl implements BundleActivator, TestingResourcePr
 		addOrder(PROCESS);
 	}
 
-	public void dropped(String arg0) throws ResourceProcessorException {
+	public void dropped(String arg0)  {
 		addOrder(DROPPED);
-		if (simulateExceptionOnDropped) {
-			throw new ResourceProcessorException(ResourceProcessorException.CODE_NO_SUCH_RESOURCE,"This resource processor doesn't manage it.");
-		}
 	}
 
 	public void dropAllResources() throws ResourceProcessorException {
@@ -190,7 +187,7 @@ public class ResourceProcessorImpl implements BundleActivator, TestingResourcePr
 	}
 	
 	public boolean exceptionAtDroppedOrdered() {
-		if (order[0]==BEGIN && order[1]==DROPPED && order[2]==ROLLBACK && order[3]==FINISH) {
+		if (order[0]==BEGIN && order[1]==PROCESS && order[2]==DROPPED && order[3]==COMMIT && order[4]==FINISH) {
 			return true;
 		} 
 		else {

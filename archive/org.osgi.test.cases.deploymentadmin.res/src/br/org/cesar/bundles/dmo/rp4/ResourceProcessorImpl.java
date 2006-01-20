@@ -82,12 +82,14 @@ public class ResourceProcessorImpl implements BundleActivator,ResourceProcessor 
 
 	}
 
-	public void process(String arg0, InputStream arg1)
-			 {
+	public void process(String arg0, InputStream arg1) throws ResourceProcessorException  {
+		if (DeploymentmoConstants.RP4_SIMULATE_EXCEPTION_ON_PROCESS) {
+			throw new ResourceProcessorException(ResourceProcessorException.CODE_RESOURCE_SHARING_VIOLATION);
+		}
 	}
 
-	public void dropped(String arg0) throws ResourceProcessorException  {
-		throw new ResourceProcessorException(ResourceProcessorException.CODE_NO_SUCH_RESOURCE);
+	public void dropped(String arg0)  {
+
 	}
 
 	public void dropAllResources()  {
