@@ -263,9 +263,10 @@ jar -cvfm ..\res\non_customizer_rp.dp ..\res\non_customizer_rp.mf rp_bundle.jar 
 jarsigner -keystore ..\..\cnf\certificate\.keystore -storepass testtest -keypass testtest ..\res\non_customizer_rp.dp test
 move /y ..\res\non_customizer_rp.dp ..\..\org.osgi.test.cases.deploymentadmin.tc1\res\
 
-jar -cvfM ..\res\signing_files_not_next.dp META-INF\MANIFEST.MF META-INF\README.TXT META-INF\TEST.SF META-INF\TEST.RSA bundle001.jar bundle002.jar
-copy ..\res\signing_files_not_next.dp ..\..\org.osgi.test.cases.deploymentadmin.tc1\res\
-move ..\res\signing_files_not_next.dp ..\..\org.osgi.test.cases.deploymentadmin.tc2\res\
+REM This jar is not generated because these signature files only are not valid for the newest created bundles
+REM jar -cvfM ..\res\signing_files_not_next.dp META-INF\MANIFEST.MF META-INF\README.TXT META-INF\TEST.SF META-INF\TEST.RSA bundle001.jar bundle002.jar
+REM copy ..\res\signing_files_not_next.dp ..\..\org.osgi.test.cases.deploymentadmin.tc1\res\
+REM move ..\res\signing_files_not_next.dp ..\..\org.osgi.test.cases.deploymentadmin.tc2\res\
 
 ECHO Moving update bundles to current dir
 move /y ..\bundles_update\bundle001.jar .\
