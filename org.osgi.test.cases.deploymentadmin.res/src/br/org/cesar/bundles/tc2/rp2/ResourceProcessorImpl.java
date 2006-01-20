@@ -52,6 +52,7 @@ import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.deploymentadmin.DeploymentPackage;
 import org.osgi.service.deploymentadmin.spi.DeploymentSession;
 import org.osgi.service.deploymentadmin.spi.ResourceProcessor;
+import org.osgi.service.deploymentadmin.spi.ResourceProcessorException;
 import org.osgi.test.cases.deploymentadmin.tc2.tbc.DeploymentConstants;
 import org.osgi.test.cases.deploymentadmin.tc2.tbc.util.TestingResourceProcessor;
 
@@ -118,6 +119,7 @@ public class ResourceProcessorImpl implements BundleActivator, TestingResourcePr
 		addOrder(DROPPED);
 		if (simulateExceptionOnDropped) {
 			throw new RuntimeException("This resource processor doesn't manage it.");
+			
 		}
 	}
 
@@ -125,11 +127,11 @@ public class ResourceProcessorImpl implements BundleActivator, TestingResourcePr
 		addOrder(DROP_ALL_RESOURCES);	
 	}
 
-	public void prepare()  {
+	public void prepare() throws ResourceProcessorException {
 		addOrder(PREPARE);
 		prepareTime = System.currentTimeMillis();
 		if (simulateExceptionOnPrepare) {
-			throw new RuntimeException("This resource processor cannot commit.");
+			throw new ResourceProcessorException(ResourceProcessorException.CODE_PREPARE,"This resource processor cannot commit.");
 		}
 	}
 
@@ -189,7 +191,7 @@ public class ResourceProcessorImpl implements BundleActivator, TestingResourcePr
 	}
 	
 	public boolean exceptionAtDroppedOrdered() {
-		if (order[0]==BEGIN && order[1]==DROPPED && order[2]==ROLLBACK && order[3]==FINISH) {
+		if (order[0]==BEGIN && order[1]==DROPPED && order[2]==PREPARE && order[3]==COMMIT && order[4]==FINISH) {
 			return true;
 		} 
 		else {

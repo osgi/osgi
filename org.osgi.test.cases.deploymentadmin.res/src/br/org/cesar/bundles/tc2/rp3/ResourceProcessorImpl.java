@@ -178,9 +178,6 @@ public class ResourceProcessorImpl implements BundleActivator, TestingSessionRes
             waitForRelease(false);
         }
         
-        if (exceptionAtDropped)
-            throw new ResourceProcessorException(ResourceProcessorException.CODE_NO_SUCH_RESOURCE);
-
     }
 
     public void dropAllResources() throws ResourceProcessorException   {
