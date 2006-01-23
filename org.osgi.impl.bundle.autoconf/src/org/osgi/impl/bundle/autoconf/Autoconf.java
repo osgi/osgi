@@ -401,8 +401,11 @@ public class Autoconf implements ResourceProcessor {
 			if (!bundleLocation.startsWith("osgi-dp:")) throw new IllegalArgumentException(
 					"the bundle at location \""+bundleLocation+
 					"\" needs to be configured but the location string doesn't start with osgi-dp:");
-			String bundleSymbolicName = bundleLocation.substring(8);
-			return sourceDeploymentPackage.getBundle(bundleSymbolicName);
+			final String bundleSymbolicName = bundleLocation.substring(8);
+			return (Bundle) AccessController.doPrivileged(new PrivilegedAction() {
+				public java.lang.Object run() {
+					return sourceDeploymentPackage.getBundle(bundleSymbolicName);
+				}});
 		} else {
 			// linear search is "fast enough" here
 			Bundle[] bundles = context.getBundles();
