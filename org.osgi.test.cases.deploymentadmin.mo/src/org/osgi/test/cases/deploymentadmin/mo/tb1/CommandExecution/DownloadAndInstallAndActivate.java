@@ -1154,9 +1154,10 @@ public class DownloadAndInstallAndActivate implements TestInterface {
     					manifest.equals(DeploymentmoConstants.getJarFile(DeploymentmoConstants.SIMPLE_BUNDLE).getManifest()));
 
     			//It is not installed by the DeploymentAdmin, so the location does not change to osgi-dp: bsn 
-    			tbc.assertEquals("Asserting that the location of the bundle is the same as the specified",
-    					DeploymentmoConstants.MAP_CODE_TO_ARTIFACT[DeploymentmoConstants.SIMPLE_BUNDLE],
-    					session.getNodeValue(DeploymentmoConstants.getDeployedExtBundlesLocation(nodeId, bundleId)).toString());
+    			String bundleLocation = session.getNodeValue(DeploymentmoConstants.getDeployedExtBundlesLocation(nodeId, bundleId)).toString();
+    			
+    			tbc.assertTrue("Asserting that the location of the bundle is the same as the specified",
+    					!bundleLocation.startsWith("osgi-dp:") && bundleLocation.endsWith(DeploymentmoConstants.MAP_CODE_TO_ARTIFACT[DeploymentmoConstants.SIMPLE_BUNDLE]));
 
     			tbc.assertEquals(
     							"Asserting the package type",
@@ -1164,7 +1165,7 @@ public class DownloadAndInstallAndActivate implements TestInterface {
     							session.getNodeValue(DeploymentmoConstants.getDeployedExtPackageType(nodeId)).getInt());
     			
             } else {
-                tbc.log("Precondition for testDownloadAndInstallAndActivate030 not satisfied");
+                tbc.log("Precondition for testDownloadAndInstallAndActivate029 not satisfied");
             }
         } catch (Exception e) {
             tbc.fail(MessagesConstants.getMessage(
@@ -1240,9 +1241,10 @@ public class DownloadAndInstallAndActivate implements TestInterface {
     					manifest.equals(DeploymentmoConstants.getJarFile(DeploymentmoConstants.SIMPLE_BUNDLE).getManifest()));
     			
     			//It is not installed by the DeploymentAdmin, so the location does not change to osgi-dp: bsn 
-    			tbc.assertEquals("Asserting that the location of the bundle is the same as the specified",
-    					DeploymentmoConstants.MAP_CODE_TO_ARTIFACT[DeploymentmoConstants.SIMPLE_BUNDLE],
-    					session.getNodeValue(DeploymentmoConstants.getDeployedExtBundlesLocation(nodeId, bundleId)).toString());
+    			String bundleLocation = session.getNodeValue(DeploymentmoConstants.getDeployedExtBundlesLocation(nodeId, bundleId)).toString();
+    			
+    			tbc.assertTrue("Asserting that the location of the bundle is the same as the specified",
+    					!bundleLocation.startsWith("osgi-dp:") && bundleLocation.endsWith(DeploymentmoConstants.MAP_CODE_TO_ARTIFACT[DeploymentmoConstants.SIMPLE_BUNDLE]));
 
 
     			tbc.assertEquals(
@@ -1251,7 +1253,7 @@ public class DownloadAndInstallAndActivate implements TestInterface {
     							session.getNodeValue(DeploymentmoConstants.getDeployedExtPackageType(nodeId)).getInt());
     			
             } else {
-                tbc.log("Precondition for testDownloadAndInstallAndActivate031 not satisfied");
+                tbc.log("Precondition for testDownloadAndInstallAndActivate030 not satisfied");
             }
         } catch (Exception e) {
             tbc.fail(MessagesConstants.getMessage(
