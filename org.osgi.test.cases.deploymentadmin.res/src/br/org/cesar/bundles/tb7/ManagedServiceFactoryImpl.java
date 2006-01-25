@@ -34,7 +34,7 @@
  * 76            Implement Test Cases for Deployment Configuration
  * ============  ==============================================================
  */
-package br.org.cesar.bundles.tb4;
+package br.org.cesar.bundles.tb7;
 
 import java.util.Dictionary;
 import java.util.Hashtable;
@@ -44,10 +44,9 @@ import org.osgi.framework.BundleContext;
 import org.osgi.framework.Constants;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.cm.ConfigurationException;
-import org.osgi.service.cm.ManagedService;
+import org.osgi.service.cm.ManagedServiceFactory;
 import org.osgi.test.cases.deploymentadmin.tc2.tbc.DeploymentConstants;
-import org.osgi.test.cases.deploymentadmin.tc2.tbc.util.TestingManagedService;
-
+import org.osgi.test.cases.deploymentadmin.tc2.tbc.util.TestingManagedServiceFactory;
 
 /**
  * @author Andre Assad
@@ -55,35 +54,55 @@ import org.osgi.test.cases.deploymentadmin.tc2.tbc.util.TestingManagedService;
  * Activates a ManagedSericeFactory
  *
  */
-public class ManagedServiceImpl implements BundleActivator, TestingManagedService {
+public class ManagedServiceFactoryImpl implements BundleActivator, TestingManagedServiceFactory {
 	
 	private ServiceRegistration sr;
+	private boolean updated;
 	private Dictionary props;
-	private boolean updated; 
+	private String pid;
 
-	public synchronized void start(BundleContext bc) throws Exception {
-		props = new Hashtable();
-		props.put(Constants.SERVICE_PID, DeploymentConstants.PID_MANAGED_SERVICE);
+	public void start(BundleContext bc) throws Exception {
+		Dictionary props = new Hashtable();
+		props.put(Constants.SERVICE_PID, DeploymentConstants.PID_MANAGED_SERVICE_FACTORY);
 		
-		sr = bc.registerService(ManagedService.class.getName(), this, props);
-		System.out.println("TestingManagedService started");
+		sr = bc.registerService(ManagedServiceFactory.class.getName(), this, props);
+		System.out.println("Testing Managed Service Factory started");
 	}
 
 	public void stop(BundleContext bc) throws Exception {
 		sr.unregister();
 	}
 
-	public synchronized void updated(Dictionary props) throws ConfigurationException {
+	public void updated(String pid, Dictionary props) throws ConfigurationException {
+		this.pid = pid;
 		this.props = props;
 		updated = true;
 	}
 
+	public void deleted(String arg0) {
+		
+	}
+	
+	/**
+	 * @return Returns the pid.
+	 */
+	public String getPid() {
+		return pid;
+	}
+	/**
+	 * @return Returns the props.
+	 */
 	public Dictionary getProperties() {
 		return props;
 	}
-
+	/**
+	 * @return Returns the updated.
+	 */
 	public boolean isUpdated() {
 		return updated;
 	}
 
+	public String getName() {
+		return this.getClass().getName();
+	}
 }
