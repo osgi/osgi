@@ -37,12 +37,8 @@
 
 package org.osgi.test.cases.deploymentadmin.tc2.tbc.Configuration;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.MalformedURLException;
-import java.net.URL;
+import java.util.Dictionary;
 
-import org.osgi.framework.BundleException;
 import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.service.deploymentadmin.DeploymentPackage;
 import org.osgi.test.cases.deploymentadmin.tc2.tbc.DeploymentConstants;
@@ -81,7 +77,6 @@ public class Configuration {
 	 * Installs the managed service factory and the auto config deployment package
 	 */
 	private void prepare() {
-		installManagedFactoryBundle();
 		installAutoConfigDP();
 	}
 
@@ -102,36 +97,6 @@ public class Configuration {
 	}
 
 	/**
-	 * Installs the managed service factory bundle with a fixed location
-     * 
-	 */
-	private void installManagedFactoryBundle() {
-		tbc.log("#Installing Managed Service Factory Bundle");
-		URL url = null;
-		InputStream is = null;
-		try {
-			url = new URL(tbc.getWebServer() + "tb1.jar");
-			is = url.openStream();
-			tbc.getContext().installBundle(DeploymentConstants.MANAGED_BUNDLE_LOCATION, is);
-		} catch (MalformedURLException e) {
-			tbc.fail("Failed to open an URL connection with Director");
-		} catch (IOException e1) {
-			tbc.fail("Failed to open bundle InputStream");
-		} catch (BundleException e2) {
-			tbc.fail("Failed to Install Managed Service Bundle");
-		} catch (Exception e) {
-			tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { 
-					e.getClass().getName() }));
-		} finally {
-            try {
-                is.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-	}
-
-	/**
 	 * This test case verifies that the Autoconf Resource Processor has
 	 * updated ManagedService properties passing the same properties as
 	 * extracted from AUTOCONF.xml
@@ -141,10 +106,12 @@ public class Configuration {
 	private void testConfiguration001() {
 		tbc.log("#testConfiguration001");
 		try {
-			TestingManagedService managedService = tbc.getManagedService();
-			
-			tbc.assertEquals("The Resource Processor updated the same Dictionary properties as received by ManagedServiceFactory",
-							tbc.getManagedProps(), managedService.getProperties());
+			Dictionary properties = tbc.getManagedService().getProperties();
+			tbc.assertTrue("The Resource Processor updated the same Dictionary properties as received by the ManagedService",
+					properties.get(TestingManagedService.ATTRIBUTE_A).equals(TestingManagedService.ATTRIBUTE_A_VALUE) &&
+					properties.get(TestingManagedService.ATTRIBUTE_B).equals(TestingManagedService.ATTRIBUTE_B_VALUE) &&
+					properties.get(TestingManagedService.ATTRIBUTE_C).equals(TestingManagedService.ATTRIBUTE_C_VALUE)
+					);
 		} catch (InvalidSyntaxException e) {
 			tbc.fail("InvalidSyntaxException: Failed to get service");
 		} catch (Exception e) {
@@ -163,13 +130,14 @@ public class Configuration {
 	private void testConfiguration002() {
 		tbc.log("#testConfiguration002");
 		 try {
-			TestingManagedServiceFactory managedFactory = tbc.getManagedServiceFactory();
+			Dictionary properties = tbc.getManagedServiceFactory().getProperties();
+			//We check only our properties because there are some automatic properties added by the Configuration Admin
+			tbc.assertTrue("The Resource Processor updated the same Dictionary properties as received by the ManagedServiceFactory",
+					properties.get(TestingManagedServiceFactory.ATTRIBUTE_A).equals(TestingManagedServiceFactory.ATTRIBUTE_A_VALUE) &&
+					properties.get(TestingManagedServiceFactory.ATTRIBUTE_B).equals(TestingManagedServiceFactory.ATTRIBUTE_B_VALUE) &&
+					properties.get(TestingManagedServiceFactory.ATTRIBUTE_C).equals(TestingManagedServiceFactory.ATTRIBUTE_C_VALUE)
+					);
 			
-			tbc.assertEquals("The Resource Processor updated the same Dictionary properties as received by ManagedServiceFactory",
-					DeploymentConstants.PID_MANAGED_SERVICE_FACTORY, managedFactory.getPid());
-			
-			tbc.assertEquals("The Resource Processor updated the same Dictionary properties as received by ManagedServiceFactory",
-							tbc.getManagedFactoryProps(), managedFactory.getProperties());
 		} catch (InvalidSyntaxException e) {
 			tbc.fail("InvalidSyntaxException: Failed to get service");
 		} catch (Exception e) {
