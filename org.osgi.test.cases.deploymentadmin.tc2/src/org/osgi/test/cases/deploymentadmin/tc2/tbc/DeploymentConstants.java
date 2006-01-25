@@ -84,10 +84,9 @@ public class DeploymentConstants {
     public static final int SIMPLE_NO_RESOURCE_DP = 20;
     public static final int BUNDLE_FAIL_RES_DP = 21;
     public static final int BUNDLE_FAIL_ON_STOP = 22;
-    public static final int SIGNING_FILE_NOT_NEXT = 23;
-    public static final int SIMPLE_UNINSTALL_BUNDLE = 24;
-    public static final int RESOURCE_PROCESSOR_CUSTOMIZER = 25;
-    public static final int RESOURCE_FROM_OTHER_DP = 26;
+    public static final int SIMPLE_UNINSTALL_BUNDLE = 23;
+    public static final int RESOURCE_PROCESSOR_CUSTOMIZER = 24;
+    public static final int RESOURCE_FROM_OTHER_DP = 25;
 	
 	//This array index is very important, and must be the same as the deployment code
 	//Use 31 characters. 
@@ -100,7 +99,7 @@ public class DeploymentConstants {
         "bsn_diff_from_manifest", "bversion_diff_from_manifest",
         "simple_resource_rp3", "simple_bundle_res_dp", "simple_no_bundle",
         "simple_no_resource", "bundle_fail_res_dp", "bundle_fail_on_stop_dp",
-        "signing_file_not_next", "simple_uninstall_bundle",
+        "simple_uninstall_bundle",
         "resource_processor_customizer", "resource_from_other_dp"};
 	
 	public static final String DEPLOYMENT_PACKAGE_NAME_ALL = "(&(name=*))";

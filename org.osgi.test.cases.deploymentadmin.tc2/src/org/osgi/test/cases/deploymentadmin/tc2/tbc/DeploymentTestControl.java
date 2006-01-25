@@ -296,12 +296,6 @@ public class DeploymentTestControl extends DefaultTestBundleControl {
                 packages.put(""+i, dp);
                 break;
             }
-            case DeploymentConstants.SIGNING_FILE_NOT_NEXT: {
-                TestingBundle[] bundles = {new TestingBundle("bundles.tb1", "1.0", "bundle001.jar"), new TestingBundle("bundles.tb2", "1.0", "bundle002.jar")};
-                dp = new TestingDeploymentPackage(DeploymentConstants.MAP_CODE_TO_DP[DeploymentConstants.SIMPLE_DP], "1.0.0", "bundle_fail_on_stop_res.dp", bundles);
-                packages.put(""+i, dp);
-                break;
-            }
             case DeploymentConstants.SIMPLE_UNINSTALL_BUNDLE: {
                 dp = new TestingDeploymentPackage(DeploymentConstants.MAP_CODE_TO_DP[DeploymentConstants.SIMPLE_DP], "1.1.1", "simple_uninstall_bundle.dp", null);
                 packages.put(""+i, dp);
