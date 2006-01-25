@@ -36,19 +36,15 @@
  */ 
 package org.osgi.test.cases.deploymentadmin.tc2.tbc.DeploymentSession;
 
-import java.io.InputStream;
 import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.Vector;
-
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleEvent;
-import org.osgi.framework.BundleException;
 import org.osgi.service.deploymentadmin.DeploymentException;
 import org.osgi.service.deploymentadmin.DeploymentPackage;
 import org.osgi.service.deploymentadmin.spi.ResourceProcessor;
 import org.osgi.service.log.LogEntry;
-import org.osgi.service.log.LogService;
 import org.osgi.test.cases.deploymentadmin.tc2.tbc.DeploymentConstants;
 import org.osgi.test.cases.deploymentadmin.tc2.tbc.DeploymentTestControl;
 import org.osgi.test.cases.deploymentadmin.tc2.tbc.Event.BundleListenerImpl;
@@ -101,7 +97,6 @@ public class InstallSession {
             testInstallSession015();
             testInstallSession016();
             testInstallSession017();
-            testInstallSession018();
         } finally {
             unprepare();
         }
@@ -296,23 +291,16 @@ public class InstallSession {
             
             // installed
             String resourceName = tsrp.getResourceName();
-            InputStream resourceStream = tsrp.getResourceStream();
+            String resourceString = tsrp.getResourceString();
             
             //tested
             String testResource = testDP.getResources()[0].getName();
             
             tbc.assertEquals("The name of the resource is correct", testResource, resourceName);
             
-            int in = 0;
-            StringBuffer sb = new StringBuffer();
-            // read the stream so we can validate if is really correct
-            while ((in=resourceStream.read()) != -1) {
-                sb.append((char)in);
-            }
-            
-            tbc.log("#"+sb);
+            tbc.log("#"+resourceString);
             tbc.assertTrue("The input string correctly returned the right characters", 
-                (sb.toString().indexOf("TCK") != -1));
+                (resourceString.indexOf("MEG TCK") != -1));
             
         } catch (Exception e) {
             tbc.fail(MessagesConstants.getMessage(
@@ -657,7 +645,7 @@ public class InstallSession {
                 if (event.getType() == BundleEvent.STARTED) {
                     Bundle b = event.getBundle();
                     tbc.assertEquals("Bundle " + bundles[i].getName()
-                        + "started in the correct order", bundles[i++].getName(), b.getSymbolicName());
+                        + " started in the correct order", bundles[i++].getName(), b.getSymbolicName());
                 }
             }
             if (i <= 2) {
@@ -739,7 +727,7 @@ public class InstallSession {
                 if (event.getType() == BundleEvent.STOPPED) {
                     Bundle b = event.getBundle();
                     tbc.assertEquals("Bundle " + bundles[i].getName()
-                        + "stopped in the correct order", bundles[i--].getName(), b.getSymbolicName());
+                        + " stopped in the correct order", bundles[i--].getName(), b.getSymbolicName());
                 }
             }
             if (i > 0) {
@@ -752,50 +740,5 @@ public class InstallSession {
             tbc.uninstall(new DeploymentPackage[]{dp2, dp1});
         }
     }
-    
-    /**
-     * Asserts that Exceptions thrown during stopping of target bundles must be
-     * ignored but <b>should be logged as a warning </b>.
-     * 
-     * @spec 114.8 Installing a Deployment Package
-     */
-    private void testInstallSession018() {
-        tbc.log("#testInstallSession018");
-        DeploymentPackage dp1 = null, dp2 = null;
-        try {
-            TestingDeploymentPackage target = tbc.getTestingDeploymentPackage(DeploymentConstants.BUNDLE_FAIL_ON_STOP);
-            dp1 = tbc.installDeploymentPackage(tbc.getWebServer() + target.getFilename());
-
-            TestingDeploymentPackage source = tbc.getTestingDeploymentPackage(DeploymentConstants.SIMPLE_UNINSTALL_BUNDLE);
-            dp2 = tbc.installDeploymentPackage(tbc.getWebServer() + source.getFilename());
-            
-            tbc.pass("Exception thrown during bundles stop was ignored");
-            
-            boolean found = false;
-            // assert Exception was logged
-            Enumeration logsAfter = tbc.getLogReader().getLog();
-            while (logsAfter.hasMoreElements()) {
-                // get the latest log
-                LogEntry log = (LogEntry)logsAfter.nextElement();
-                if ((log.getLevel() == LogService.LOG_WARNING)
-                    && (log.getException() instanceof BundleException))
-                {
-                    tbc.pass("The log message is a WARNING and the Exception is a BundleException");
-                    found = true;
-                    break;
-                }
-            }
-            if (!found){
-                tbc.log("The log message is NOT a WARNING and the Exception is NOT a BundleException");
-            }
-        } catch (Exception e) {
-            tbc.fail(MessagesConstants.getMessage(
-                MessagesConstants.UNEXPECTED_EXCEPTION, new String[]{e.getClass().getName()}));
-        } finally {
-            tbc.uninstall(new DeploymentPackage[]{dp2, dp1});
-        }
-    }
-    
-    
     
 }
