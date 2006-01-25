@@ -37,6 +37,7 @@
 package br.org.cesar.bundles.tc2.rp3;
 
 import java.io.File;
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.Dictionary;
 import java.util.Hashtable;
@@ -63,7 +64,8 @@ public class ResourceProcessorImpl implements BundleActivator, TestingSessionRes
 	private DeploymentSession session;
     
     private String resourceName;
-    private InputStream resourceStream;
+//    private InputStream resourceStream;
+    private String stringResource;
     
     private boolean processed;
     private static boolean exceptionAtProcess;
@@ -147,7 +149,19 @@ public class ResourceProcessorImpl implements BundleActivator, TestingSessionRes
             throw new ResourceProcessorException(ResourceProcessorException.CODE_RESOURCE_SHARING_VIOLATION);
         processed = true;
         resourceName = arg0;
-        resourceStream = arg1;
+        StringBuffer sb = new StringBuffer();
+        // read the stream so we can validate if is really correct
+        int in = 0;
+        try {
+			while ((in=arg1.read()) != -1) {
+			    sb.append((char)in);
+			}
+			stringResource = sb.toString();
+		} catch (IOException e) {
+			
+		}
+
+        
     }
 
     public void dropped(String resource) throws ResourceProcessorException {
@@ -265,7 +279,7 @@ public class ResourceProcessorImpl implements BundleActivator, TestingSessionRes
         // vars
         released = false;
         resourceName = null;
-        resourceStream = null;
+        stringResource = null;
         droppedOrder= new String[8];
         orderOfUninstall = false;
     }
@@ -303,8 +317,8 @@ public class ResourceProcessorImpl implements BundleActivator, TestingSessionRes
     /**
      * @return Returns the resourceStream.
      */
-    public InputStream getResourceStream() {
-        return resourceStream;
+    public String getResourceString() {
+        return stringResource;
     }
     
     /**

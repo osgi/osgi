@@ -38,7 +38,6 @@
 package org.osgi.test.cases.deploymentadmin.tc2.tbc.util;
 
 import java.io.File;
-import java.io.InputStream;
 
 import org.osgi.framework.Bundle;
 import org.osgi.service.deploymentadmin.DeploymentPackage;
@@ -68,7 +67,7 @@ public interface TestingSessionResourceProcessor extends ResourceProcessor {
 	public DeploymentPackage getTargetDeploymentPackage();
 	public DeploymentPackage getSourceDeploymentPackage();
     public String getResourceName();
-    public InputStream getResourceStream();
+    public String getResourceString();
     
     public boolean isProcessed();
     public boolean isDropped();
