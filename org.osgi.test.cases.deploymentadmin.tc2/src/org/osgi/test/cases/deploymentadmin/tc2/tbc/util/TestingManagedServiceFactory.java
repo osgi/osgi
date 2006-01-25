@@ -49,11 +49,11 @@ import org.osgi.service.cm.ManagedServiceFactory;
 public interface TestingManagedServiceFactory extends ManagedServiceFactory {
 	
 	public static final String ATTRIBUTE_A = "ATTRIBUTE_A";
-	public static Integer[] ATTRIBUTE_A_VALUE = {new Integer(1)};
+	public static final Integer ATTRIBUTE_A_VALUE = new Integer(1);
 	public static final String ATTRIBUTE_B = "ATTRIBUTE_B";
-	public static Float[] ATTRIBUTE_B_VALUE = {new Float(9.98)};
+	public static final Float ATTRIBUTE_B_VALUE = new Float(9.98F);
 	public static final String ATTRIBUTE_C = "ATTRIBUTE_C";
-	public static String[] ATTRIBUTE_C_VALUE = {"CESAR", "MOTOROLA"};
+	public static final String ATTRIBUTE_C_VALUE = "FACTORY";
 	
 	public String getPid();
 	public Dictionary getProperties();
