@@ -48,9 +48,8 @@ import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.security.AccessControlContext;
-import java.util.Dictionary;
 import java.util.HashMap;
-import java.util.Hashtable;
+
 import org.osgi.framework.Bundle;
 import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
@@ -93,8 +92,6 @@ public class DeploymentTestControl extends DefaultTestBundleControl {
 	private BundleListenerImpl bundleListener;
 	private boolean transactionalDA;
 	private HashMap packages = new HashMap();
-	private Dictionary managedProps;
-	private Dictionary managedFactoryProps;
 	
 	/**
 	 * <remove>Prepare for each run. It is important that a test run is properly
@@ -115,7 +112,6 @@ public class DeploymentTestControl extends DefaultTestBundleControl {
         condPermAdmin = (ConditionalPermissionAdmin)getContext().getService(getContext().getServiceReference(ConditionalPermissionAdmin.class.getName()));
 		
 		createTestingDeploymentPackages();
-		setManagedServiceAndFactoryProperties();
 		installListener();
 		
 		//TODO change after conf file implementation
@@ -130,18 +126,7 @@ public class DeploymentTestControl extends DefaultTestBundleControl {
 			log("#TestControl: Failed starting a Listener");
 		}
 	}
-	
-	private void setManagedServiceAndFactoryProperties() {
-		managedFactoryProps = new Hashtable();
-		managedFactoryProps.put(TestingManagedServiceFactory.ATTRIBUTE_A, TestingManagedServiceFactory.ATTRIBUTE_A_VALUE);
-		managedFactoryProps.put(TestingManagedServiceFactory.ATTRIBUTE_B, TestingManagedServiceFactory.ATTRIBUTE_B_VALUE);
-		managedFactoryProps.put(TestingManagedServiceFactory.ATTRIBUTE_C, TestingManagedServiceFactory.ATTRIBUTE_C_VALUE);
 
-		managedProps = new Hashtable();
-		managedProps.put(TestingManagedService.ATTRIBUTE_A, TestingManagedService.ATTRIBUTE_A_VALUE);
-		managedProps.put(TestingManagedService.ATTRIBUTE_B, TestingManagedService.ATTRIBUTE_B_VALUE);
-		managedProps.put(TestingManagedService.ATTRIBUTE_C, TestingManagedService.ATTRIBUTE_C_VALUE);
-	}
 
 	/**
 	 * 
@@ -543,19 +528,6 @@ public class DeploymentTestControl extends DefaultTestBundleControl {
 	 */
 	public void setTransactionalDA(boolean transactionalDA) {
 		this.transactionalDA = transactionalDA;
-	}
-	/**
-	 * @return Returns the managedFactoryProps.
-	 */
-	public Dictionary getManagedFactoryProps() {
-		return managedFactoryProps;
-	}
-	
-	/**
-	 * @return Returns the managedProps.
-	 */
-	public Dictionary getManagedProps() {
-		return managedProps;
 	}
 	
 	public Bundle getBundle(String name) {
