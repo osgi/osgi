@@ -3,7 +3,11 @@ DeploymentPackage-SymbolicName: auto_config_dp
 DeploymentPackage-Version: 1.0.0
 
 Name: bundle004.jar
-Bundle-SymbolicName: br.org.cesar.bundles.tb4
+Bundle-SymbolicName: bundles.tb4
+Bundle-Version: 1.0
+
+Name: bundle007.jar
+Bundle-SymbolicName: bundles.tb7
 Bundle-Version: 1.0
 
 Name: OSGI-INF/AUTOCONF.xml
