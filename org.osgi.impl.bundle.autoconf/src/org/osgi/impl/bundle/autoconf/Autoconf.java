@@ -85,7 +85,7 @@ public class Autoconf implements ResourceProcessor {
 		MetaData.Object o = d.objects[0]; // There can be only one!
 
 		// unfortunately the bundle name is in symbName-version format
-		Bundle bundle = searchForBundle(d.bundle,d.factoryPid==null);
+		final Bundle bundle = searchForBundle(d.bundle,d.factoryPid==null);
 
 		if (bundle==null) {
 			throw new IllegalArgumentException(
@@ -111,15 +111,27 @@ public class Autoconf implements ResourceProcessor {
 		}
 
 		Map values = createData(ocd,realOCD,o);
-		String location = bundle.getLocation();
+		String location = (String) AccessController.doPrivileged(new PrivilegedAction(){
+			public java.lang.Object run() {
+				return bundle.getLocation();
+			}});
 		
 		if (d.factoryPid!=null) {
 			CommitTask toWrite = new CommitTask();
 			try {
-				toWrite.configuration = configurationAdmin.createFactoryConfiguration(d.factoryPid,location);
-			}
-			catch (IOException e) {
-				throw new DeploymentException(DeploymentException.CODE_OTHER_ERROR,"Cannot create new factory configuration",e);
+				final String fp = d.factoryPid;
+				final String l = location;
+				toWrite.configuration = (Configuration) AccessController.doPrivileged(new PrivilegedExceptionAction() {
+					public java.lang.Object run() throws Exception {
+						return configurationAdmin.createFactoryConfiguration(fp,l);
+					}});
+			} catch (PrivilegedActionException e) {
+				Exception cause = e.getException();
+				if (cause instanceof IOException) {
+					throw new DeploymentException(DeploymentException.CODE_OTHER_ERROR,"Cannot create new factory configuration",e);
+				}  else {
+					throw new DeploymentException(DeploymentException.CODE_OTHER_ERROR,e.getClass().getName()+":"+e.getMessage());
+				}
 			}
 
 			toWrite.properties = new Hashtable(values);
@@ -205,12 +217,17 @@ public class Autoconf implements ResourceProcessor {
 			StoredConfiguration sc = (StoredConfiguration) iter.next();
 			CommitTask toWrite = new CommitTask();
 			try {
-				toWrite.configuration = configurationAdmin.getConfiguration(sc.pid);
+				final String p = sc.pid;
+				toWrite.configuration = (Configuration) AccessController.doPrivileged(new PrivilegedExceptionAction(){
+					public java.lang.Object run() throws Exception {
+						return configurationAdmin.getConfiguration(p);
+					}}); 
 			}
-			catch (IOException e) {
+			catch (PrivilegedActionException e) {
+				Exception cause = e.getException();
 				throw new ResourceProcessorException(ResourceProcessorException.CODE_OTHER_ERROR,
 						"Configuration with pid "+sc.pid+" needs to be removed, but cannot be "+
-						"accessed",e);
+						"accessed",cause);
 			}
 			toWrite.properties = null;
 			commitTasks.add(toWrite);
@@ -430,11 +447,15 @@ public class Autoconf implements ResourceProcessor {
 			StoredConfiguration sc = (StoredConfiguration) iter.next();
 			CommitTask ct = new CommitTask();
 			try {
-				ct.configuration = configurationAdmin.getConfiguration(sc.pid);
+				final String p = sc.pid;
+				ct.configuration = (Configuration) AccessController.doPrivileged(new PrivilegedExceptionAction() {
+					public java.lang.Object run() throws Exception {
+						return configurationAdmin.getConfiguration(p);
+					}});
 				ct.properties = null;
 				commitTasks.add(ct);
 			}
-			catch (IOException e) {
+			catch (PrivilegedActionException e) {
 				// TODO what to do here? forceful/non-forceful things?
 				e.printStackTrace();
 			}
