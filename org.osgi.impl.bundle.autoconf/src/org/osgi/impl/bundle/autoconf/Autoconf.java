@@ -427,10 +427,12 @@ public class Autoconf implements ResourceProcessor {
 			// linear search is "fast enough" here
 			Bundle[] bundles = context.getBundles();
 			for (int i = 0; i < bundles.length; i++) {
-				Bundle b = bundles[i];
-				if (bundleLocation.equals(b.getLocation())) {
-					return b;
-				}
+				final Bundle b = bundles[i];
+				String l = (String) AccessController.doPrivileged(new PrivilegedAction() {
+					public java.lang.Object run() {
+						return b.getLocation();
+					}});
+				if (bundleLocation.equals(l)) return b;
 			}
 			return null;
 		}
