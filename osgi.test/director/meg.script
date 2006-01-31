@@ -1,5 +1,6 @@
 <script name="meg-compliance" version="4.0">
 	<delay duration="2" type="sec"/>
+	<property location="test.properties"/>
 	<separate duration="1" type="sec"/>
 	
 	<testcase>test.application</testcase> 			<!-- Tests the Configuration Management service -->
