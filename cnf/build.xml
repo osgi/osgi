@@ -97,14 +97,14 @@
 				User properties
 				Default properties
 		-->
-		
-		
 
-		<expand propertyFile="${workspace}/cnf/global.properties"/>
-		<expand propertyFile="${project}/build.properties"/>
-		<property file="${env.HOME}/osgi.properties"/>
-		<expand propertyFile="${workspace}/cnf/build.properties"/>
-		
+
+
+		<expand propertyFile="${workspace}/cnf/global.properties" />
+		<expand propertyFile="${project}/build.properties" />
+		<property file="${env.HOME}/osgi.properties" />
+		<expand propertyFile="${workspace}/cnf/build.properties" />
+
 		<property name="prebuild" value="" />
 		<!-- get the classpath and build info from eclipse -->
 		<btool eclipse="${project}" prebuild="${prebuild}" />
@@ -116,8 +116,12 @@
 		<!-- mark init has been run -->
 		<property name="initialized" value="set" />
 		<echo>Enter project ${project.name}</echo>
+	<!--	<antcall target="_extra" /> -->
 	</target>
 
+	<target name="_extra" if="extra">
+		<antcall target="extra" />
+	</target>
 	<!-- 
 		DEPENDENCIES
 		Build project dependencies.
@@ -134,19 +138,7 @@
 	-->
 	<target name="compile" depends="init" if="project.sourcepath">
 		<echo>"${project.sourcepath}"</echo>
-		<javac fork="yes"
-		       executable="${javac}"
-		       srcdir="${project.sourcepath}"
-		       destdir="${project.bindir}"
-		       classpath="${project.classpath}"
-		       bootclasspath="${project.bootclasspath}"
-		       deprecation="true"
-		       listfiles="true"
-		       target="${javac.target}"
-		       source="${javac.source}"
-		       debug="${javac.debug}"
-		       includeAntRuntime="no"
-		       verbose="${verbose}" />
+		<javac fork="yes" executable="${javac}" srcdir="${project.sourcepath}" destdir="${project.bindir}" classpath="${project.classpath}" bootclasspath="${project.bootclasspath}" deprecation="true" listfiles="true" target="${javac.target}" source="${javac.source}" debug="${javac.debug}" includeAntRuntime="no" verbose="${verbose}" />
 	</target>
 
 	<!-- 
@@ -160,8 +152,8 @@
 		<foreach list="${jars.compile.order}" delimiter=" ," target="-jar" param="item.jarFile" inheritAll="true" />
 	</target>
 
-	<target name="-jar" depends="-btool,-signjar"/>
-	
+	<target name="-jar" depends="-btool,-signjar" />
+
 	<!--
 	     BTOOL
 	     Build the jar file with btool. Due to ants fantastic lack of
@@ -186,32 +178,11 @@
 	-->
 	<target name="-btool">
 		<echo>JAR ${item.jarFile}</echo>
-		<btool jar="${project}/${item.jarFile}"
-		       failok="${btool.failok}"
-		       eclipse="${project}"
-		       analyse="${btool.analyse}"
-		       showmanifest="${btool.showmanifest}"
-		       includeProperty="include.${item.jarFile}"
-		       expandProperty="expand.${item.jarFile}"
-		       contentFoldersProperty="source.${item.jarFile}"
-		       excludeImportProperty="excludeImport.${item.jarFile}"
-		       includeExportProperty="includeExport.${item.jarFile}"
-		       ipaProperty="ipa.${item.jarFile}"
-		       verbose="${verbose}"
-		       sources="${btool.sources}"
-		       ignoreVersions="${btool.noversion}"
-			   manifestVersion="${btool.manifestVersion}"
-			   modified="${base.modified}"
-			   extraRoots = "root.${item.jarFile}"
-			   />
+		<btool jar="${project}/${item.jarFile}" failok="${btool.failok}" eclipse="${project}" analyse="${btool.analyse}" showmanifest="${btool.showmanifest}" includeProperty="include.${item.jarFile}" expandProperty="expand.${item.jarFile}" contentFoldersProperty="source.${item.jarFile}" excludeImportProperty="excludeImport.${item.jarFile}" includeExportProperty="includeExport.${item.jarFile}" ipaProperty="ipa.${item.jarFile}" verbose="${verbose}" sources="${btool.sources}" ignoreVersions="${btool.noversion}" manifestVersion="${btool.manifestVersion}" modified="${base.modified}" extraRoots="root.${item.jarFile}" />
 	</target>
 
 	<target name="-signjar" if="sign.${item.jarFile}">
-		<signjar jar="${item.jarFile}" 
-			keystore="${workspace}/cnf/certificate/.keystore" 
-			storepass="testtest" 
-			keypass="testtest"
-			alias="test"/>
+		<signjar jar="${item.jarFile}" keystore="${workspace}/cnf/certificate/.keystore" storepass="testtest" keypass="testtest" alias="test" />
 	</target>
 
 	<!--
@@ -261,7 +232,7 @@
 		<echo>bin.includes:           ${bin.includes}</echo>
 		<echo>prebuild:               ${prebuild}</echo>
 		<echo>base.modfied:           ${base.modified} (${base.modified.readable})</echo>
-		
+
 	</target>
 
 	<!--
@@ -275,9 +246,6 @@
 		Check out the projects that are part of the build.
 	-->
 	<target name="co" depends="init">
-		<cvs cvsRoot=":pserver:membercvs.osgi.org:/cvshome/build"
-			dest="${workspace}"
-			package="${specs},${impls},${tests}"
-		/>
+		<cvs cvsRoot=":pserver:membercvs.osgi.org:/cvshome/build" dest="${workspace}" package="${specs},${impls},${tests}" />
 	</target>
 </project>

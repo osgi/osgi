@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project name="project" default="_prepare"> 
+<project name="project" default="publish"> 
 
-	<target name="_prepare" depends="init">
+	<property name="extra"  value="yes"/>
+	<target name="extra">
 		<copy todir="target/delivered" overwrite="true">
 			<fileset dir="${workspace}/org.osgi.test.cases.deploymentadmin.mo/delivered" />
 		</copy>
 		<copy file="${workspace}/cnf/certificate/.keystore" tofile="target/keystore" overwrite="true"/>
-		<subant target="publish" inheritAll="false" buildpath="${project.buildpath}" />
 	</target>
 
 	<import file="../cnf/build.xml"/>
