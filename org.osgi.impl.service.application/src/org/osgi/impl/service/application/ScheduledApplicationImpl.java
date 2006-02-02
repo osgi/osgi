@@ -37,12 +37,14 @@ public class ScheduledApplicationImpl implements ScheduledApplication, Serializa
 	private String                          eventFilter;
 	private boolean                         recurring;
 	private boolean                         invalid;
+	private String                          id;
+	
 	public static final long serialVersionUID = 0x81212314;
 
 	private ServiceRegistration	serviceReg;
 
 	public ScheduledApplicationImpl(Scheduler scheduler, BundleContext bc,
-			String pid, Map args, String topic, String eventFilter, boolean recurring ) {
+			String pid, Map args, String topic, String eventFilter, boolean recurring, String id ) {
 		this.scheduler = (Scheduler)scheduler;
 		this.bc = bc;
 		this.pid = pid;
@@ -53,6 +55,7 @@ public class ScheduledApplicationImpl implements ScheduledApplication, Serializa
 		this.topic = topic;
 		this.eventFilter = eventFilter;
 		this.recurring = recurring;
+		this.id = id;
 		
 		invalid = true;
 	}
@@ -112,6 +115,7 @@ public class ScheduledApplicationImpl implements ScheduledApplication, Serializa
 	void register() {
 		Hashtable props = new Hashtable();
 		props.put( ApplicationDescriptor.APPLICATION_PID, getPid() );
+		props.put( "scheduledapplication.id", id );
 		
 		serviceReg = bc.registerService( "org.osgi.service.application.ScheduledApplication", 
 				this, props );
@@ -146,6 +150,7 @@ public class ScheduledApplicationImpl implements ScheduledApplication, Serializa
 		out.writeObject(topic);
 		out.writeObject(eventFilter);
 		out.writeObject( new Boolean( recurring ) );
+		out.writeObject(id);
 	}
 
 	private void readObject(java.io.ObjectInputStream in) throws IOException,
@@ -157,6 +162,7 @@ public class ScheduledApplicationImpl implements ScheduledApplication, Serializa
 		eventFilter = (String) in.readObject();
 		Boolean recurring = (Boolean) in.readObject();		
 		this.recurring = recurring.booleanValue();
+		id= (String)in.readObject();		
 	}
 	
 	boolean isValid() {

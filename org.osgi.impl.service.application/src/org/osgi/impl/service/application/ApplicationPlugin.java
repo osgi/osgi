@@ -319,11 +319,11 @@ class ScheduleIDNode extends ApplicationPluginBaseNode implements ArgumentInterf
 	
 	public DmtData getItemValue( String path[], int kind ) throws DmtException {
 		String pid = ApplicationIDNode.getPID( path );
-    String key = path[ path.length - 2 ];    		
+		String key = path[ path.length - 2 ];    		
 		Hashtable scheduleHash = (Hashtable)schedulesByPidHash.get( pid );
 		if( scheduleHash == null )
 			throw new DmtException(path, DmtException.NODE_NOT_FOUND, "Node not found.");
-	  ScheduledItem item = (ScheduledItem)scheduleHash.get( key );
+		ScheduledItem item = (ScheduledItem)scheduleHash.get( key );
 		if( item == null )
 			throw new DmtException(path, DmtException.NODE_NOT_FOUND, "Node not found.");
 		switch( kind ) {
@@ -344,17 +344,17 @@ class ScheduleIDNode extends ApplicationPluginBaseNode implements ArgumentInterf
 
 	public void setItemValue(String path[], int kind, DmtData value) throws DmtException {
 		String pid = ApplicationIDNode.getPID( path );
-    String key = path[ path.length - 2 ];    		
+		String key = path[ path.length - 2 ];    		
 		Hashtable scheduleHash = (Hashtable)schedulesByPidHash.get( pid );
 		if( scheduleHash == null )
 			throw new DmtException(path, DmtException.NODE_NOT_FOUND, "Node not found.");
-	  ScheduledItem item = (ScheduledItem)scheduleHash.get( key );
+		ScheduledItem item = (ScheduledItem)scheduleHash.get( key );
 		if( item == null )
 			throw new DmtException(path, DmtException.NODE_NOT_FOUND, "Node not found.");
 		switch( kind ) {
 			case 0:
 				if( value.getBoolean() )
-					enable( item, path );				
+					enable( item, path, key );				
 				else
 					disable( item );
 				break;
@@ -406,7 +406,7 @@ class ScheduleIDNode extends ApplicationPluginBaseNode implements ArgumentInterf
 	
 	public void createInteriorNode(String path[], String type) throws DmtException {
 		String pid = ApplicationIDNode.getPID( path );
-    String key = path[ path.length - 1 ];    
+		String key = path[ path.length - 1 ];    
 		Hashtable scheduleHash = (Hashtable)schedulesByPidHash.get( pid );
 		if( scheduleHash == null ) {
 			scheduleHash = new Hashtable();
@@ -417,7 +417,7 @@ class ScheduleIDNode extends ApplicationPluginBaseNode implements ArgumentInterf
 	
 	public void deleteNode(String path[]) throws DmtException {
 		String pid = ApplicationIDNode.getPID( path );
-    String key = path[ path.length - 1 ];    
+		String key = path[ path.length - 1 ];    
 		Hashtable scheduleHash = (Hashtable)schedulesByPidHash.get( pid );
 		if( scheduleHash == null )
 			throw new DmtException(path, DmtException.NODE_NOT_FOUND, "Node not found.");
@@ -463,7 +463,14 @@ class ScheduleIDNode extends ApplicationPluginBaseNode implements ArgumentInterf
 			
 			for( int j=0; j != findInHash.length; j++ ) {
 				if( !findInHash[ j ] ) {       /* the reference is missing from the hash table? */
-					String key = generateKey( scheduleHash );  /* place it into the hash */
+					Object schedID = refs[ j ].getProperty( "scheduledapplication.id" );
+					
+					if( schedID == null ) {
+						System.err.println( "No scheduling ID found, schedule ignored!" );
+						continue;
+					}
+					
+					String key = (String)schedID;  /* place it into the hash */
 					ScheduledItem item = new ScheduledItem();
 					item.servRef = refs[ j ];
 					item.enabled = true;
@@ -500,28 +507,23 @@ class ScheduleIDNode extends ApplicationPluginBaseNode implements ArgumentInterf
 		item.enabled = false;
 	}
 	
-	void enable( ScheduledItem item, String path[] ) throws DmtException {
+	void enable( ScheduledItem item, String path[], String key ) throws DmtException {
 		if( item.enabled )
 			disable( item );
 		
 		try {
 			ServiceReference appDescRef = ApplicationIDNode.getApplicationDescriptor( path );
 			ApplicationDescriptor appDesc = (ApplicationDescriptor)ApplicationPlugin.bc.getService( appDescRef );
-		  ScheduledApplicationImpl schedApp = (ScheduledApplicationImpl)appDesc.schedule( argIDNode.getArguments( item.arguments ), item.topicFilter, item.eventFilter, item.recurring );
-		  item.servRef = schedApp.getReference();
-		  item.enabled = true;		  
-		  ApplicationPlugin.bc.ungetService( appDescRef );
+			ScheduledApplicationImpl schedApp = (ScheduledApplicationImpl)
+				ApplicationDescriptorImpl.schedule( appDesc, argIDNode.getArguments( item.arguments ), 
+						item.topicFilter, item.eventFilter, item.recurring, key );
+			item.servRef = schedApp.getReference();
+			item.enabled = true;		  
+			ApplicationPlugin.bc.ungetService( appDescRef );
 		}catch( Exception e ) {
 			Activator.log( LogService.LOG_ERROR, "Error occured at enabling the schedule!", e );
 			throw new DmtException( path, DmtException.COMMAND_FAILED, "Schedule throwed an exception!" );
 		}
-	}
-	
-	String generateKey( Hashtable scheduleHash ) {
-		int schedNum = 1;
-		while( scheduleHash.containsKey( "S" + schedNum ) )
-			schedNum++;
-		return "S"+schedNum;
 	}
 	
 	class ScheduledItem {

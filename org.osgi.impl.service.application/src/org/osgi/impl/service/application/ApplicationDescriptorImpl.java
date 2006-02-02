@@ -99,8 +99,15 @@ public class ApplicationDescriptorImpl implements Delegate {
 		checkArguments( args );
 		return Activator.scheduler.addScheduledApplication( descriptor, args, topic, filter, recurs );
 	}
+	
+	static ScheduledApplication schedule( ApplicationDescriptor appDesc, Map args, String topic, 
+			                                     String filter, boolean recurs, String id)  
+	                                            throws InvalidSyntaxException, IllegalArgumentException  {
+		checkArguments( args );
+		return Activator.scheduler.addScheduledApplication( appDesc, args, topic, filter, recurs, id );		
+	}
 
-	private void checkArguments( Map arguments ) throws IllegalArgumentException {
+	private static void checkArguments( Map arguments ) throws IllegalArgumentException {
 		if( arguments != null ) {
 			Set set = arguments.keySet();
 			Iterator iter = set.iterator();

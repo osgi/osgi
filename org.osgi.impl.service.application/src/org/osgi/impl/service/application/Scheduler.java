@@ -30,9 +30,10 @@ public class Scheduler implements Runnable, EventHandler {
 	private Vector							scheduledApps;
 	private boolean							stopped;
 	private Thread							schedulerThread;
-	private ServiceRegistration	serviceReg;
+	private ServiceRegistration	            serviceReg;
 	private LinkedList                      eventQueue;
 	private boolean                         inEventHandling;
+	private static int                      schedNum = 1;
 
 	public Scheduler(BundleContext bc) {
 		this.bc = bc;
@@ -58,7 +59,15 @@ public class Scheduler implements Runnable, EventHandler {
 
 	public synchronized ScheduledApplication addScheduledApplication(ApplicationDescriptor appDesc,
 			Map arguments, String topic, String eventFilter, boolean recurring) throws InvalidSyntaxException {
+		return addScheduledApplication( appDesc, arguments, topic, eventFilter, recurring, null );
+	}
+		
+	synchronized ScheduledApplication addScheduledApplication(ApplicationDescriptor appDesc,
+				Map arguments, String topic, String eventFilter, boolean recurring, String id) throws InvalidSyntaxException {
 
+		if( id == null )
+			id = generateKey();
+		
 		SecurityManager sm = System.getSecurityManager();
 		if( sm != null ) {
 			sm.checkPermission(new ApplicationAdminPermission( appDesc, 
@@ -75,7 +84,7 @@ public class Scheduler implements Runnable, EventHandler {
 			bc.createFilter( eventFilter ); // throws InvalidSyntaxException if any problem occurs
 		
 		ScheduledApplicationImpl app = new ScheduledApplicationImpl(this, bc,
-				appDesc.getApplicationId(), arguments, topic, eventFilter, recurring);
+				appDesc.getApplicationId(), arguments, topic, eventFilter, recurring, id);
 		
 		scheduledApps.add( app );
 		saveScheduledApplications();
@@ -145,6 +154,26 @@ public class Scheduler implements Runnable, EventHandler {
 		}
 	}
 
+	String generateKey() throws InvalidSyntaxException {
+		ServiceReference refs[] = bc.getServiceReferences( ScheduledApplication.class.getName(), null );
+		while(true) {
+			String plannedSchedID = "S" + schedNum++;
+			
+			boolean found = true;
+			if( refs != null ) {
+				for( int p=0; p != refs.length; p++ ) {
+					Object actID = refs[ p ].getProperty( "scheduledapplication.id" );
+					if( actID != null && actID.equals( plannedSchedID ) ) {
+						found = false;
+						break;
+					}
+				}
+			}
+			if( found )
+				return plannedSchedID;
+		}
+	}
+	
 	private synchronized void saveScheduledApplications() {
 		try {
 			File schedApps = bc.getDataFile("ScheduledApplications");
@@ -243,7 +272,6 @@ public class Scheduler implements Runnable, EventHandler {
 			props.put( "day_of_week", new Byte( (byte)calendar.get( Calendar.DAY_OF_WEEK ) ) );
 			props.put( "hour", 				new Byte( (byte)calendar.get( Calendar.HOUR_OF_DAY ) ) );
 			props.put( "minute", 			new Byte( (byte)calendar.get( Calendar.MINUTE ) ) );
-//			props.put( "second", 			new Byte( (byte)calendar.get( Calendar.SECOND ) ) );
 			
 			if( stopped ) /* avoid exception */
 				break;
