@@ -34,14 +34,18 @@ public final class Framework {
      * application instance must return the same context object
      * 
      * @param applicationInstance is the activator object of an application instance
+     * @throws java.lang.NullPointerException If <code>applicationInstance</code>
+     *     is <code>null</code>      
      * @throws java.lang.IllegalArgumentException if  called with an object that is not 
      *     the activator object of an application.
      * @return the {@link ApplicationContext} of the specified application instance.
      */
     public static ApplicationContext getApplicationContext(Object applicationInstance) {
+    	  if( applicationInstance == null )
+    		  throw new NullPointerException( "Instance cannot be null!" );
     	  ApplicationContext appContext = (ApplicationContext)appContextHash.get( applicationInstance );
     	  if( appContext == null )
-    	  	throw new IllegalArgumentException( "ApplicationContext not found!" );
+    		  throw new IllegalArgumentException( "ApplicationContext not found!" );
         return appContext;        
     }
 }
