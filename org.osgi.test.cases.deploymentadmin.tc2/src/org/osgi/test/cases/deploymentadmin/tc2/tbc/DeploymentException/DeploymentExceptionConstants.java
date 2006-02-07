@@ -67,7 +67,7 @@ public class DeploymentExceptionConstants {
 		tbc.assertEquals("Asserting CODE_BUNDLE_NAME_ERROR value", 457, DeploymentException.CODE_BUNDLE_NAME_ERROR);
 		tbc.assertEquals("Asserting CODE_BUNDLE_SHARING_VIOLATION value", 460, DeploymentException.CODE_BUNDLE_SHARING_VIOLATION);
         tbc.assertEquals("Asserting CODE_CANCELLED value", 401, DeploymentException.CODE_CANCELLED);
-        tbc.assertEquals("Asserting CODE_COMMIT_ERROR value", 1, DeploymentException.CODE_COMMIT_ERROR);
+        tbc.assertEquals("Asserting CODE_COMMIT_ERROR value", 462, DeploymentException.CODE_COMMIT_ERROR);
         tbc.assertEquals("Asserting CODE_FOREIGN_CUSTOMIZER value", 458, DeploymentException.CODE_FOREIGN_CUSTOMIZER);
 		tbc.assertEquals("Asserting CODE_MISSING_BUNDLE value", 454, DeploymentException.CODE_MISSING_BUNDLE);
 		tbc.assertEquals("Asserting CODE_MISSING_FIXPACK_TARGET value", 453, DeploymentException.CODE_MISSING_FIXPACK_TARGET);
