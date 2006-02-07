@@ -563,7 +563,7 @@ public class InstallAndActivate implements TestInterface {
     	tbc.log("#testInstallAndActivate016");
     	DmtSession session = openDefaultSession();
     	try {
-    		assertResultCode(session, DeploymentmoConstants.RP_NOT_ABLE_TO_COMMIT, 1);
+    		assertResultCode(session, DeploymentmoConstants.RP_NOT_ABLE_TO_COMMIT, 462);
         } finally {
         	tbc.closeSession(session);
         }
