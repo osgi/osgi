@@ -329,7 +329,7 @@ public class Schedule implements TestInterface {
 			tbc.assertNotNull("Asserting that a ScheduledApplication was returned according to the used filter.", sa);
 			
 			synchronized (tbc) {
-				tbc.wait(ApplicationConstants.SHORT_TIMEOUT);
+				tbc.wait(ApplicationConstants.SHORT_TIMEOUT*100);
 			}
 					
 			tbc.assertEquals("Asserting that a ApplicationHandle was registered.", 1, tbc.getNumberAppHandle());
