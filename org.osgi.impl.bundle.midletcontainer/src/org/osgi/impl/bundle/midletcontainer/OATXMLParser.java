@@ -57,6 +57,9 @@ public class OATXMLParser {
   private boolean errorAtParse;
   private BundleContext bc = null;
   
+  private static ServiceReference validatorReference = null;
+  private static boolean supportsValidation = true;
+  
   public OATXMLParser( BundleContext bc ) {
   	this.bc = bc;
   }
@@ -74,13 +77,13 @@ public class OATXMLParser {
 				throw new Exception( "Cannot open the OAT XML file!" );
 		}
 		
-	  validateXMLStream( bc, in );
-	  in.close();
+		validateXMLStream( bc, in );
+		in.close();
 		in = url.openStream();
 		if ( in == null ) {
 			Activator.log( LogService.LOG_ERROR, "Cannot open the OAT XML file!", null );
 			throw new Exception( "Cannot open the OAT XML file!" );
-	  } 
+		} 
 		
 		ServiceReference domParserReference = bc.getServiceReference( DocumentBuilderFactory.class.getName() );
 		if (domParserReference == null) {
@@ -91,7 +94,7 @@ public class OATXMLParser {
 		DocumentBuilderFactory domFactory = (DocumentBuilderFactory) bc.getService( domParserReference );
 		domFactory.setValidating( false );
 
-    DocumentBuilder domParser = domFactory.newDocumentBuilder();
+		DocumentBuilder domParser = domFactory.newDocumentBuilder();
 		
 		if( domParser == null ) {
 				Activator.log( LogService.LOG_ERROR, "Cannot create DOM parser!", null );
@@ -218,16 +221,32 @@ public class OATXMLParser {
 			throw new Exception( "Cannot find the SAX parser factory!" );
 		}		
 		
+		if( validatorReference == null || !validatorReference.equals( saxParserReferences[ 0 ] ) ) {
+			validatorReference = saxParserReferences[ 0 ];
+			supportsValidation = true;
+		}else if( !supportsValidation )
+			return;
+		
 		SAXParserFactory saxParserFactory = (SAXParserFactory)bc.getService( saxParserReferences[ 0 ] );
 		
 		try {
-		  saxParserFactory.setValidating(true);
-		  saxParserFactory.setNamespaceAware(true);
+			saxParserFactory.setValidating(true);
+			saxParserFactory.setNamespaceAware(true);
 
-		  SAXParser saxParser = saxParserFactory.newSAXParser();
-		  saxParser.setProperty( JAXP_SCHEMA_LANGUAGE, W3C_XML_SCHEMA );
-			URL oatSchemaURL = OATXMLParser.class.getResource("OATXMLSchema.xsd");
-			saxParser.setProperty(JAXP_SCHEMA_SOURCE, oatSchemaURL.openStream() );
+			SAXParser saxParser = saxParserFactory.newSAXParser();
+			try {
+				saxParser.setProperty( JAXP_SCHEMA_LANGUAGE, W3C_XML_SCHEMA );
+				URL oatSchemaURL = OATXMLParser.class.getResource("OATXMLSchema.xsd");
+				saxParser.setProperty(JAXP_SCHEMA_SOURCE, oatSchemaURL.openStream() );
+			}catch( SAXNotRecognizedException snre ) {
+				supportsValidation = false;
+				Activator.log( LogService.LOG_ERROR, "SAX Parser doesn't support schema validation! Schema validation skipped.", null );
+				return;
+			}catch( SAXNotSupportedException snre ) {
+				supportsValidation = false;
+				Activator.log( LogService.LOG_ERROR, "SAX Parser doesn't support schema validation! Schema validation skipped.", null );
+				return;
+			}
 			
 			final XMLReader xr = saxParser.getXMLReader();
 			xr.setErrorHandler( new ErrorHandler() {
