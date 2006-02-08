@@ -925,11 +925,6 @@ public class ApplicationTestControl extends DefaultTestBundleControl {
 		return appController;
 	}
 
-	public String getDescriptorBundleId() {
-		return (bundleTestApplication == null) ? "" : String
-				.valueOf(bundleTestApplication.getBundleId());
-	}
-
 	public boolean isTestClassRegistered(String className) {
 		ServiceReference rfs = getContext().getServiceReference(className);
 		if (rfs != null) {
