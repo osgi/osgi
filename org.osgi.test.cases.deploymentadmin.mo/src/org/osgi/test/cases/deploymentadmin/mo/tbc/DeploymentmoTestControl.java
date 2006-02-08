@@ -138,7 +138,7 @@ public class DeploymentmoTestControl extends DefaultTestBundleControl {
         
         File file = bc.getDataFile("");
         DeploymentmoConstants.DLOTA_RELATIVE_PATH = file.getPath();
-        DeploymentmoConstants.DLOTA_PATH = "file:///" + file.getAbsolutePath() + "\\";
+        DeploymentmoConstants.DLOTA_PATH = "file:///" + file.getAbsolutePath() + File.separatorChar;
         
 		tb1Srv = (TB1Service) bc.getService(tb1Ref);
 
