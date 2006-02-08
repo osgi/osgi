@@ -156,7 +156,8 @@ public interface ApplicationContext {
      * 
      * @param referenceName
      *            The name of a reference as specified in a reference element in
-     *            this context applications's description.
+     *            this context applications's description. It must not be 
+     *            <code>null</code>.
      * @return An array of service object for the referenced service or
      *         <code>null</code> if the reference cardinality is 0..1 or 0..n
      *         and no bound service is available.
@@ -250,6 +251,7 @@ public interface ApplicationContext {
 	 * @param clazzes The class names under which the service can be located.
 	 *        The class names in this array will be stored in the service's
 	 *        properties under the key {@link org.osgi.framework.Constants#OBJECTCLASS}.
+     *        This parameter must not be <code>null</code>.
 	 * @param service The service object or a <code>ServiceFactory</code>
 	 *        object.
 	 * @param properties The properties for this service. The keys in the
@@ -275,7 +277,8 @@ public interface ApplicationContext {
 	 *         <li><code>properties</code> contains case variants of the same
 	 *         key name.
 	 *         </ul>
-	 * 
+	 * @throws NullPointerException if <code>clazzes</code> is <code>null</code>
+     * 
 	 * @throws java.lang.SecurityException If the caller does not have the
 	 *         <code>ServicePermission</code> to register the service for all
 	 *         the named classes and the Java Runtime Environment supports
@@ -304,7 +307,8 @@ public interface ApplicationContext {
 	 * {@link Constants#OBJECTCLASS} property will be an array of strings,
 	 * rather than just a single string.
 	 * 
-	 * @param clazz The class name under which the service can be located.
+	 * @param clazz The class name under which the service can be located. It
+     *        must not be <code>null</code>
 	 * @param service The service object or a <code>ServiceFactory</code>
 	 *        object.
 	 * @param properties The properties for this service. 
@@ -313,6 +317,23 @@ public interface ApplicationContext {
 	 *         registering the service to update the service's properties or to
 	 *         unregister the service.
 	 *         
+     * @throws java.lang.IllegalArgumentException If one of the following is
+     *         true:
+     *         <ul>
+     *         <li><code>service</code> is <code>null</code>.
+     *         <li><code>service</code> is not a <code>ServiceFactory</code>
+     *         object and is not an instance of the named class in
+     *         <code>clazz</code>.
+     *         <li><code>properties</code> contains case variants of the same
+     *         key name.
+     *         </ul>
+     * @throws NullPointerException if <code>clazz</code> is <code>null</code>
+     * 
+     * @throws java.lang.SecurityException If the caller does not have the
+     *         <code>ServicePermission</code> to register the service 
+     *         the named class and the Java Runtime Environment supports
+     *         permissions.
+     *
 	 * @throws java.lang.IllegalStateException If this ApplicationContext is no
 	 *         longer valid.
 	 * @see #registerService(java.lang.String[], java.lang.Object,
