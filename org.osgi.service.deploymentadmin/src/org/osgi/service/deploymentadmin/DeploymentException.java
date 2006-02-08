@@ -19,6 +19,38 @@ package org.osgi.service.deploymentadmin;
 public class DeploymentException extends Exception {
 
 	/**
+	 * {@link DeploymentAdmin#installDeploymentPackage(InputStream)}, 
+	 * {@link DeploymentPackage#uninstall()} and {@link DeploymentPackage#uninstallForced()} 
+	 * methods can throw {@link DeploymentException} with this error code if the 
+	 * {@link DeploymentAdmin#cancel()} method is called from another thread.
+	 */
+	public static final int	CODE_CANCELLED                  = 401;
+
+	/**
+	 * {@link DeploymentAdmin#installDeploymentPackage(InputStream)} 
+	 * methods can throw {@link DeploymentException} with this error code if 
+	 * the got InputStream is not a jar. 
+	 */
+	public static final int	CODE_NOT_A_JAR                  = 404;
+
+	/**
+	 * Order of files in the deployment package is bad. The right order is the 
+	 * following:<p>
+	 * 
+	 * <ol>
+	 *    <li>META-INF/MANIFEST.MF</li>
+	 *    <li>META-INF/*.SF, META-INF/*.DSA, META-INF/*.RS</li>
+	 *    <li>Localization files</li>
+	 *    <li>Bundles</li>
+	 *    <li>Resources</li>
+	 * </ol>
+	 * 
+	 * {@link DeploymentAdmin#installDeploymentPackage(InputStream)}
+	 * throws exception with this error code.  
+	 */
+	public static final int	CODE_ORDER_ERROR				= 450;
+
+	/**
 	 * Missing mandatory manifest header.<p>
 	 *  
 	 * {@link DeploymentAdmin#installDeploymentPackage(InputStream)} can throw 
@@ -111,6 +143,26 @@ public class DeploymentException extends Exception {
 	public static final int	CODE_RESOURCE_SHARING_VIOLATION	= 461;
 
 	/**
+	 * Exception with this error code is thrown when one of the Resource Processors 
+	 * involved in the deployment session threw a <code>ResourceProcessorException</code> with the 
+	 * {@link org.osgi.service.deploymentadmin.spi.ResourceProcessorException#CODE_PREPARE} error 
+	 * code.<p>
+	 * 
+	 * {@link DeploymentAdmin#installDeploymentPackage(InputStream)} and 
+	 * {@link DeploymentPackage#uninstall()} methods throw exception with this error code.  
+	 */
+	public static final int	CODE_COMMIT_ERROR				= 462;
+
+	/**
+	 * Other error condition.<p>
+	 * 
+	 * All Deployment Admin methods which throw <code>DeploymentException</code> 
+	 * can throw an exception with this error code if the error condition cannot be 
+	 * categorized. 
+	 */
+	public static final int	CODE_OTHER_ERROR				= 463;
+
+	/**
 	 * The Resource Processor service with the given PID (see
 	 * <code>Resource-Processor</code> manifest header) is not found.<p>
 	 *  
@@ -120,23 +172,6 @@ public class DeploymentException extends Exception {
 	 * throws exception with this error code.  
 	 */
 	public static final int	CODE_PROCESSOR_NOT_FOUND		= 464;
-
-	/**
-	 * Order of files in the deployment package is bad. The right order is the 
-	 * following:<p>
-	 * 
-	 * <ol>
-	 *    <li>META-INF/MANIFEST.MF</li>
-	 *    <li>META-INF/*.SF, META-INF/*.DSA, META-INF/*.RS</li>
-	 *    <li>Localization files</li>
-	 *    <li>Bundles</li>
-	 *    <li>Resources</li>
-	 * </ol>
-	 * 
-	 * {@link DeploymentAdmin#installDeploymentPackage(InputStream)}
-	 * throws exception with this error code.  
-	 */
-	public static final int	CODE_ORDER_ERROR				= 450;
 
 	/**
 	 * When a client requests a new session with an install or uninstall
@@ -151,41 +186,6 @@ public class DeploymentException extends Exception {
 	 * throws exception with this error code.  
 	 */
 	public static final int	CODE_TIMEOUT					= 465;
-
-	/**
-	 * {@link DeploymentAdmin#installDeploymentPackage(InputStream)}, 
-	 * {@link DeploymentPackage#uninstall()} and {@link DeploymentPackage#uninstallForced()} 
-	 * methods can throw {@link DeploymentException} with this error code if the 
-	 * {@link DeploymentAdmin#cancel()} method is called from another thread.
-	 */
-	public static final int	CODE_CANCELLED                  = 401;
-
-	/**
-	 * {@link DeploymentAdmin#installDeploymentPackage(InputStream)} 
-	 * methods can throw {@link DeploymentException} with this error code if 
-	 * the got InputStream is not a jar. 
-	 */
-	public static final int	CODE_NOT_A_JAR                  = 404;
-	
-	/**
-	 * Other error condition.<p>
-	 * 
-	 * All Deployment Admin methods which throw <code>DeploymentException</code> 
-	 * can throw an exception with this error code if the error condition cannot be 
-	 * categorized. 
-	 */
-	public static final int	CODE_OTHER_ERROR				= 463;
-
-	/**
-	 * Exception with this error code is thrown when one of the Resource Processors 
-	 * involved in the deployment session threw a <code>ResourceProcessorException</code> with the 
-	 * {@link org.osgi.service.deploymentadmin.spi.ResourceProcessorException#CODE_PREPARE} error 
-	 * code.<p>
-	 * 
-	 * {@link DeploymentAdmin#installDeploymentPackage(InputStream)} and 
-	 * {@link DeploymentPackage#uninstall()} methods throw exception with this error code.  
-	 */
-	public static final int	CODE_COMMIT_ERROR				= 1;
 
 	private int				code;
 	private String			message;
