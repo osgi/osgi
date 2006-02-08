@@ -17,8 +17,35 @@ import java.util.Map;
  * ScheduledApplication service keeps the scheduling information. When the
  * specified event is fired a new instance must be launched. Note that launching
  * operation may fail because e.g. the application is locked.
+ * <p>
+ * Each <code>ScheduledApplication</code> instance has an identified which is
+ * unique within the scope of the application being scheduled.
+ * <p>
+ * <code>ScheduledApplication</code> instances are registered as services.
+ * the {@link #APPLICATION_PID} service property contains the PID of the
+ * application being scheduled, the {@link #SCHEDULE_ID} service property
+ * contains the scheduling identifier.
  */
 public interface ScheduledApplication {
+    
+    /**
+     * The property key for the identifier of the application being scheduled.
+     */
+    public static final String APPLICATION_PID = ApplicationDescriptor.APPLICATION_PID;
+    
+    /**
+     * The property key for the scheduling identifier. The identifier is unique
+     * within the scope of the application being scheduled.
+     */
+    public static final String SCHEDULE_ID = "schedule.id";
+    
+    /**
+     * Returns the identifier of this scheduling. The identifier is unique within
+     * the scope of the applicale the scheduling is related to. 
+     * @return the identifier of this scheduling
+     * 
+     */
+    public String getScheduleId();
 
 	/**
 	 * Queries the topic of the triggering event. The topic may contain a

@@ -48,6 +48,12 @@ public class ApplicationException extends Exception {
      * e.g. the scheduling information couldn't be saved).
      */
     public static final int APPLICATION_SCHEDULING_FAILED = 0x04;
+    
+    /**
+     * The application scheduling failed because the specified identifier
+     * is already in use.
+     */
+    public static final int APPLICATION_DUPLICATE_SCHEDULE_ID = 0x05;
 
 	/**
 	 * Creates an <code>ApplicationException</code> with the specified error code.

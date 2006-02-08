@@ -367,7 +367,15 @@ public abstract class ApplicationDescriptor {
 	 * The <code>Map</code> argument of the  method contains startup 
 	 * arguments for the application. The keys used in the Map must be non-null, 
 	 * non-empty <code>String<code> objects.
-	 * 
+     * <p>
+     * The created schedulings have a unique identifier withing the scope of this
+     * <code>ApplicationDescriptor</code>. This identifier can be specified
+     * in the <code>scheduleId</code> argument. If this argument is <code>null</code>,
+     * the identifier is automatically generated.
+     * 
+	 * @param scheduleId 
+	 *             the identifier of the created scheduling. It can be <code>null</code>,
+     *             in this case the identifier is automatically generated.
 	 * @param arguments
 	 *            the startup arguments for the scheduled application, may be
 	 *            null
@@ -390,8 +398,17 @@ public abstract class ApplicationDescriptor {
 	 *             if the topic is <code>null</code>
 	 * @throws InvalidSyntaxException 
 	 * 			   if the specified <code>eventFilter</code> is not syntactically correct
-	 * @throws ApplicationException 
-     *              if the scheduling couldn't be created.
+	 * @throws ApplicationException
+     *              if the scheduling couldn't be created. The possible error
+     *              codes are 
+     *              <ul>
+     *               <li> {@link ApplicationException#APPLICATION_DUPLICATE_SCHEDULE_ID}
+     *                 if the specified <code>scheduleId</code> is already used
+     *                 for this <code>ApplicationDescriptor</code>
+     *               <li> {@link ApplicationException#APPLICATION_SCHEDULING_FAILED}
+     *                 if the scheduling failed due to some internal reason
+     *                 (e.g. persistent storage error).
+     *              </ul>
 	 * @throws SecurityException
 	 *             if the caller doesn't have "schedule"
 	 *             ApplicationAdminPermission for the application.
@@ -402,7 +419,7 @@ public abstract class ApplicationDescriptor {
 	 *             (null objects, empty <code>String</code> or a key that is not
 	 *              <code>String</code>)
 	 */
-	public final ScheduledApplication schedule(Map arguments, String topic,
+	public final ScheduledApplication schedule(String scheduleId, Map arguments, String topic,
 			String eventFilter, boolean recurring) throws InvalidSyntaxException, 
             ApplicationException {
 		isLaunchableSpecific(); // checks if the ApplicationDescriptor was already unregistered
