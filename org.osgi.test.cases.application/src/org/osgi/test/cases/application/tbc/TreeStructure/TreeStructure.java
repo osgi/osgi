@@ -2358,7 +2358,7 @@ public class TreeStructure {
 
 			tbc
 					.assertTrue(
-							"Asserts if $/Application/<app_id>/Operations/Launch/<launch_id>/Result is a valid node",
+							"Asserts if $/Application/<app_id>/Operations/Launch/<launch_id>/Result/InstanceID is a valid node",
 							session
 									.isNodeUri(ApplicationConstants.OSGI_APPLICATION_APPID_OPERATIONS_LAUNCH_LAUNCHID_RESULT_INSTANCEID));
 
@@ -2367,20 +2367,20 @@ public class TreeStructure {
 
 			tbc
 					.assertEquals(
-							"Asserts $/Application/<app_id>/Operations/Launch/<launch_id>/Result metanode scope",
+							"Asserts $/Application/<app_id>/Operations/Launch/<launch_id>/Result/InstanceID metanode scope",
 							MetaNode.AUTOMATIC, metaNode.getScope());
 			tbc
 					.assertEquals(
-							"Asserts $/Application/<app_id>/Operations/Launch/<launch_id>/Result metanode format",
+							"Asserts $/Application/<app_id>/Operations/Launch/<launch_id>/Result/InstanceID metanode format",
 							DmtData.FORMAT_STRING, metaNode.getFormat());
 			tbc
 					.assertTrue(
-							"Asserts $/Application/<app_id>/Operations/Launch/<launch_id>/Result metanode cardinality",
+							"Asserts $/Application/<app_id>/Operations/Launch/<launch_id>/Result/InstanceID metanode cardinality",
 							!metaNode.isZeroOccurrenceAllowed()
 									&& metaNode.getMaxOccurrence() == 1);
 			tbc
 					.assertTrue(
-							"Asserts $/Application/<app_id>/Operations/Launch/<launch_id>/Result metanode GET",
+							"Asserts $/Application/<app_id>/Operations/Launch/<launch_id>/Result/InstanceID metanode GET",
 							metaNode.can(MetaNode.CMD_GET));
 
 		} catch (Exception e) {
@@ -2415,7 +2415,7 @@ public class TreeStructure {
 
 			tbc
 					.assertTrue(
-							"Asserts if $/Application/<app_id>/Operations/Launch/<launch_id>/Status is a valid node",
+							"Asserts if $/Application/<app_id>/Operations/Launch/<launch_id>/Result/Status is a valid node",
 							session
 									.isNodeUri(ApplicationConstants.OSGI_APPLICATION_APPID_OPERATIONS_LAUNCH_LAUNCHID_RESULT_STATUS));
 
@@ -2424,20 +2424,20 @@ public class TreeStructure {
 
 			tbc
 					.assertEquals(
-							"Asserts $/Application/<app_id>/Operations/Launch/<launch_id>/Status metanode scope",
+							"Asserts $/Application/<app_id>/Operations/Launch/<launch_id>/Result/Status metanode scope",
 							MetaNode.AUTOMATIC, metaNode.getScope());
 			tbc
 					.assertEquals(
-							"Asserts $/Application/<app_id>/Operations/Launch/<launch_id>/Status metanode format",
+							"Asserts $/Application/<app_id>/Operations/Launch/<launch_id>/Result/Status metanode format",
 							DmtData.FORMAT_STRING, metaNode.getFormat());
 			tbc
 					.assertTrue(
-							"Asserts $/Application/<app_id>/Operations/Launch/<launch_id>/Status metanode cardinality",
+							"Asserts $/Application/<app_id>/Operations/Launch/<launch_id>/Result/Status metanode cardinality",
 							!metaNode.isZeroOccurrenceAllowed()
 									&& metaNode.getMaxOccurrence() == 1);
 			tbc
 					.assertTrue(
-							"Asserts $/Application/<app_id>/Operations/Launch/<launch_id>/Status metanode GET",
+							"Asserts $/Application/<app_id>/Operations/Launch/<launch_id>/Result/Status metanode GET",
 							metaNode.can(MetaNode.CMD_GET));
 
 		} catch (Exception e) {
@@ -2472,7 +2472,7 @@ public class TreeStructure {
 
 			tbc
 					.assertTrue(
-							"Asserts if $/Application/<app_id>/Operations/Launch/<launch_id>/Status is a valid node",
+							"Asserts if $/Application/<app_id>/Operations/Launch/<launch_id>/Result/Message is a valid node",
 							session
 									.isNodeUri(ApplicationConstants.OSGI_APPLICATION_APPID_OPERATIONS_LAUNCH_LAUNCHID_RESULT_MESSAGE));
 
@@ -2481,20 +2481,20 @@ public class TreeStructure {
 
 			tbc
 					.assertEquals(
-							"Asserts $/Application/<app_id>/Operations/Launch/<launch_id>/Status metanode scope",
+							"Asserts $/Application/<app_id>/Operations/Launch/<launch_id>/Result/Message metanode scope",
 							MetaNode.AUTOMATIC, metaNode.getScope());
 			tbc
 					.assertEquals(
-							"Asserts $/Application/<app_id>/Operations/Launch/<launch_id>/Status metanode format",
+							"Asserts $/Application/<app_id>/Operations/Launch/<launch_id>/Result/Message metanode format",
 							DmtData.FORMAT_STRING, metaNode.getFormat());
 			tbc
 					.assertTrue(
-							"Asserts $/Application/<app_id>/Operations/Launch/<launch_id>/Status metanode cardinality",
+							"Asserts $/Application/<app_id>/Operations/Launch/<launch_id>/Result/Message metanode cardinality",
 							!metaNode.isZeroOccurrenceAllowed()
 									&& metaNode.getMaxOccurrence() == 1);
 			tbc
 					.assertTrue(
-							"Asserts $/Application/<app_id>/Operations/Launch/<launch_id>/Status metanode GET",
+							"Asserts $/Application/<app_id>/Operations/Launch/<launch_id>/Result/Message metanode GET",
 							metaNode.can(MetaNode.CMD_GET));
 
 		} catch (Exception e) {
