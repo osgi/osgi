@@ -31,7 +31,8 @@ import org.osgi.framework.ServiceRegistration;
  * <code>ApplicationContext</code> becomes available when the application is
  * started and it is invalidated when the application instance is stopped (i.e.
  * the "stop" method of the application activator object returned).
- * All method calls to an invalidated context object result an 
+ * All method calls (except {@link #getApplicationId()} and 
+ * {@link #getInstanceId()}) to an invalidated context object result an 
  * <code>IllegalStateException</code>.
  * 
  * @see org.osgi.application.Framework
@@ -105,11 +106,12 @@ public interface ApplicationContext {
      * This method returns the identifier of the corresponding application instace.
      * This identifier is guarateed to be unique within the scope of the device.
      * 
+      * Note: this method can safely be called on an invalid 
+     * <code>ApplicationContext</code> as well.
+     * 
      * @see org.osgi.service.application.ApplicationHandle#getInstanceId()
      * 
      * @return the unique identifier of the corresponding application instance
-     * @throws java.lang.IllegalStateException
-     *             If this context application instance has stopped.
      */
     public String getInstanceId();
     
@@ -117,12 +119,13 @@ public interface ApplicationContext {
      * This method return the identifier of the correspondig application type. This identifier
      * is the same for the different instances of the same application but it is different for
      * different application type.
+     * <p>
+     * Note: this method can safely be called on an invalid 
+     * <code>ApplicationContext</code> as well.
      * 
      * @see org.osgi.service.application.ApplicationDescriptor#getApplicationId()
      * 
      * @return the identifier of the application type.
-     * @throws java.lang.IllegalStateException
-     *             If this context application instance has stopped.
      */
     public String getApplicationId();
 
