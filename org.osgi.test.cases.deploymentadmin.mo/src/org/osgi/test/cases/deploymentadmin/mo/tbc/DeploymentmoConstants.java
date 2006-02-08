@@ -54,7 +54,7 @@ public class DeploymentmoConstants {
     public static String LOCATION;
     
     //True if the implementation supports cancelling  
-    public static final boolean USER_CANCEL_IMPLEMENTED = true;
+    public static final boolean USER_CANCEL_IMPLEMENTED = false;
     
     //True if the implementation is streaming
     public static final boolean IS_STREAMING = true;
@@ -67,7 +67,7 @@ public class DeploymentmoConstants {
     public static final String PRINCIPAL = "admin";
 
     public static final File DELIVERED_AREA = new File(System.getProperty("org.osgi.impl.service.deploymentadmin.deliveredarea"));
-    public static final File TEMP_DIR = new File(DeploymentmoConstants.DELIVERED_AREA.getParent() + File.separatorChar + "tmp");
+    public static File TEMP_DIR;
     
     //Specified values
     public static final String ENVTYPE = "OSGi.R4";
@@ -213,6 +213,13 @@ public class DeploymentmoConstants {
     static {
     	try {
     		//We need to get the Manifest from the jar because it is modified when it is generated.
+    		if (DeploymentmoConstants.DELIVERED_AREA.getParent()!=null) {
+    			TEMP_DIR = new File(DeploymentmoConstants.DELIVERED_AREA.getParent() + File.separatorChar + "tmp");
+    		} else {
+    			TEMP_DIR = new File("tmp");	
+    		}
+    			
+    		TEMP_DIR.mkdir();
     		JarFile simpleDp =getJarFile(SIMPLE_DP);
     		SIMPLE_DP_MANIFEST = simpleDp.getManifest();
     		SIMPLE_FIX_PACK_MANIFEST = getJarFile(SIMPLE_FIX_PACK_DP).getManifest();
