@@ -390,6 +390,8 @@ public abstract class ApplicationDescriptor {
 	 *             if the topic is <code>null</code>
 	 * @throws InvalidSyntaxException 
 	 * 			   if the specified <code>eventFilter</code> is not syntactically correct
+	 * @throws ApplicationException 
+     *              if the scheduling couldn't be created.
 	 * @throws SecurityException
 	 *             if the caller doesn't have "schedule"
 	 *             ApplicationAdminPermission for the application.
@@ -401,7 +403,8 @@ public abstract class ApplicationDescriptor {
 	 *              <code>String</code>)
 	 */
 	public final ScheduledApplication schedule(Map arguments, String topic,
-			String eventFilter, boolean recurring) throws InvalidSyntaxException {
+			String eventFilter, boolean recurring) throws InvalidSyntaxException, 
+            ApplicationException {
 		isLaunchableSpecific(); // checks if the ApplicationDescriptor was already unregistered
 		return delegate.schedule(arguments, topic, eventFilter, recurring);
 	}
