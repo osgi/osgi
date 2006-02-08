@@ -18,6 +18,7 @@
 package org.osgi.impl.bundle.autoconf;
 
 import java.io.*;
+import java.net.URL;
 import java.security.*;
 import java.util.*;
 
@@ -178,8 +179,19 @@ public class Autoconf implements ResourceProcessor {
 		try {
 			saxParserFactory.setValidating(true);
 			saxParserFactory.setNamespaceAware(true);
-
-			m = new MetaData(saxParserFactory.newSAXParser(),is);
+			SAXParser sp = saxParserFactory.newSAXParser();
+			
+			try {
+				sp.setProperty(MetaData.JAXP_SCHEMA_LANGUAGE,MetaData.W3C_XML_SCHEMA);
+				URL autoconfURL = MetaData.class.getResource("autoconf.xsd");
+				sp.setProperty(MetaData.JAXP_SCHEMA_SOURCE,autoconfURL.toExternalForm());
+			} catch (SAXNotRecognizedException e) {
+				// ok, if the parser doesn't do schemas, don't validate
+				System.err.println("Warning: no schema-capable xml parser available, autoconf file won't be validated");
+				saxParserFactory.setValidating(false);
+				sp = saxParserFactory.newSAXParser();
+			}
+			m = new MetaData(sp,is);
 		}
 		catch (ParserConfigurationException e) {
 			throw new ResourceProcessorException(ResourceProcessorException.CODE_OTHER_ERROR,"Cannot create XML parser",e);

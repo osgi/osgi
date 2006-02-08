@@ -390,9 +390,6 @@ public class MetaData  {
 	}
 	
     public MetaData(SAXParser sp,final InputSource is) throws ParserConfigurationException, IOException, SAXException, PrivilegedActionException {
-		sp.setProperty(JAXP_SCHEMA_LANGUAGE,W3C_XML_SCHEMA);
-		URL autoconfURL = MetaData.class.getResource("autoconf.xsd");
-		sp.setProperty(JAXP_SCHEMA_SOURCE,autoconfURL.toExternalForm());
 		final XMLReader xr = sp.getXMLReader();
 		xr.setErrorHandler(errorHandler);
 		xr.setContentHandler(new Parser());
