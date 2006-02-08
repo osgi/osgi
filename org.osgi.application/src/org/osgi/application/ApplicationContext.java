@@ -25,6 +25,14 @@ import org.osgi.framework.ServiceRegistration;
  * <p>
  * Application instances can obtain their <code>ApplicationContext</code>
  * using the {@link Framework#getApplicationContext} method.
+ * <p>
+ * The lifecycle of an <code>ApplicationContext</code> instance is bound to
+ * the lifecycle of the corresponding application instance. The 
+ * <code>ApplicationContext</code> becomes available when the application is
+ * started and it is invalidated when the application instance is stopped (i.e.
+ * the "stop" method of the application activator object returned).
+ * All method calls to an invalidated context object result an 
+ * <code>IllegalStateException</code>.
  * 
  * @see org.osgi.application.Framework
  */
@@ -100,6 +108,8 @@ public interface ApplicationContext {
      * @see org.osgi.service.application.ApplicationHandle#getInstanceId()
      * 
      * @return the unique identifier of the corresponding application instance
+     * @throws java.lang.IllegalStateException
+     *             If this context application instance has stopped.
      */
     public String getInstanceId();
     
@@ -111,6 +121,8 @@ public interface ApplicationContext {
      * @see org.osgi.service.application.ApplicationDescriptor#getApplicationId()
      * 
      * @return the identifier of the application type.
+     * @throws java.lang.IllegalStateException
+     *             If this context application instance has stopped.
      */
     public String getApplicationId();
 
@@ -133,6 +145,8 @@ public interface ApplicationContext {
      * @throws java.lang.NullPointerException If <code>referenceName</code> is <code>null</code>.
      * @throws java.lang.IllegalArgumentException If there is no service in the
      *             application descriptor with the specified <code>referenceName</code>.
+     * @throws java.lang.IllegalStateException
+     *             If this context application instance has stopped.
      */
     public Object locateService(String referenceName);
 
@@ -149,6 +163,8 @@ public interface ApplicationContext {
      * @throws java.lang.NullPointerException If <code>referenceName</code> is <code>null</code>.
      * @throws java.lang.IllegalArgumentException If there is no service in the
      *             application descriptor with the specified <code>referenceName</code>.
+     * @throws java.lang.IllegalStateException
+     *             If this context application instance has stopped.
      */
     public Object[] locateServices(String referenceName);
     
@@ -164,6 +180,8 @@ public interface ApplicationContext {
      * 
      * @return a {@link java.util.Map} containing the startup arguments. 
      *     It can be <code>null</code>.
+     * @throws java.lang.IllegalStateException
+     *             If this context application instance has stopped.
      */
     public Map getStartupParameters();
     
@@ -182,6 +200,8 @@ public interface ApplicationContext {
      * @throws IllegalArgumentException if the application is not
      *    bound to the specified service object or it is not a service
      *    object at all.
+     * @throws java.lang.IllegalStateException
+     *             If this context application instance has stopped.
      */
     public Map getServiceProperties(Object serviceObject);
 
