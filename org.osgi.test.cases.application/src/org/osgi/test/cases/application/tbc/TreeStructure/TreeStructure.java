@@ -526,7 +526,7 @@ public class TreeStructure {
 
 			Map hash = new HashMap();
 			hash.put("name", "value");
-			sa = tbc.getAppDescriptor().schedule(hash,
+			sa = tbc.getAppDescriptor().schedule(null, hash,
 					ApplicationConstants.TIMER_EVENT,
 					ApplicationConstants.EVENT_FILTER, true);
 

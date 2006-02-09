@@ -85,7 +85,7 @@ public class GetArguments implements TestInterface {
             );
 
             HashMap map = new HashMap();
-            sa = tbc.getAppDescriptor().schedule(map, "TestingPurposes*", null, true);
+            sa = tbc.getAppDescriptor().schedule(null, map, "TestingPurposes*", null, true);
 
             tbc.setDefaultPermission();
             
@@ -119,7 +119,7 @@ public class GetArguments implements TestInterface {
                 new PermissionInfo(ApplicationAdminPermission.class.getName(), ApplicationConstants.APPLICATION_PERMISSION_FILTER1, ApplicationAdminPermission.SCHEDULE_ACTION)
             );
 
-            sa = tbc.getAppDescriptor().schedule(null, "TestingPurposes*", null, true);
+            sa = tbc.getAppDescriptor().schedule(null, null, "TestingPurposes*", null, true);
 
             tbc.setDefaultPermission();
             
@@ -150,7 +150,7 @@ public class GetArguments implements TestInterface {
                 new PermissionInfo(ApplicationAdminPermission.class.getName(), ApplicationConstants.APPLICATION_PERMISSION_FILTER1, ApplicationAdminPermission.SCHEDULE_ACTION)
             );
 
-			sa = tbc.getAppDescriptor().schedule(null, "*", null, false);
+			sa = tbc.getAppDescriptor().schedule(null, null, "*", null, false);
 
 			sa.remove();
 			

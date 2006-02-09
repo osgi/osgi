@@ -82,7 +82,7 @@ public class Remove implements TestInterface {
                 new PermissionInfo(ApplicationAdminPermission.class.getName(), ApplicationConstants.APPLICATION_PERMISSION_FILTER1, ApplicationAdminPermission.SCHEDULE_ACTION)
             );
 
-			sa = tbc.getAppDescriptor().schedule(null, "TestingPurposes*", null, true);
+			sa = tbc.getAppDescriptor().schedule(null, null, "TestingPurposes*", null, true);
 
 			tbc.setDefaultPermission();
 
@@ -121,7 +121,7 @@ public class Remove implements TestInterface {
                 new PermissionInfo(ApplicationAdminPermission.class.getName(), ApplicationConstants.APPLICATION_PERMISSION_FILTER1, ApplicationAdminPermission.SCHEDULE_ACTION)
             );
 
-            sa = tbc.getAppDescriptor().schedule(null, ApplicationConstants.TIMER_EVENT, ApplicationConstants.EVENT_FILTER, true);
+            sa = tbc.getAppDescriptor().schedule(null, null, ApplicationConstants.TIMER_EVENT, ApplicationConstants.EVENT_FILTER, true);
             
             synchronized (tbc) {
                 tbc.wait(ApplicationConstants.SHORT_TIMEOUT);
@@ -164,7 +164,7 @@ public class Remove implements TestInterface {
                 new PermissionInfo(ApplicationAdminPermission.class.getName(), ApplicationConstants.APPLICATION_PERMISSION_FILTER1, ApplicationAdminPermission.SCHEDULE_ACTION)
             );
 
-            sa = tbc.getAppDescriptor().schedule(null, "*", null, false);
+            sa = tbc.getAppDescriptor().schedule(null, null, "*", null, false);
 
             sa.remove();
             
