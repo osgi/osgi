@@ -67,6 +67,9 @@ public class ApplicationExceptionConstants {
 		tbc.assertEquals("Asserting APPLICATION_NOT_LAUNCHABLE value", 2, ApplicationException.APPLICATION_NOT_LAUNCHABLE);
 		tbc.assertEquals("Asserting APPLICATION_INTERNAL_ERROR value", 3, ApplicationException.APPLICATION_INTERNAL_ERROR);
 		tbc.assertEquals("Asserting APPLICATION_LOCKED value", 1, ApplicationException.APPLICATION_LOCKED);
+		tbc.assertEquals("Asserting APPLICATION_SCHEDULING_FAILED value", 4, ApplicationException.APPLICATION_SCHEDULING_FAILED);
+		tbc.assertEquals("Asserting APPLICATION_DUPLICATE_SCHEDULE_ID value", 5, ApplicationException.APPLICATION_DUPLICATE_SCHEDULE_ID);
+		
 	}	
 
 }
