@@ -36,13 +36,17 @@
 
 package org.osgi.test.cases.application.tbc.TreeStructure;
 
+import java.io.InputStream;
+import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.osgi.service.application.ApplicationDescriptor;
 import org.osgi.service.application.ApplicationException;
 import org.osgi.service.application.ApplicationHandle;
 import org.osgi.service.application.ScheduledApplication;
 import org.osgi.service.dmt.DmtData;
+import org.osgi.service.dmt.DmtException;
 import org.osgi.service.dmt.DmtSession;
 import org.osgi.service.dmt.MetaNode;
 import org.osgi.test.cases.application.tbc.ApplicationConstants;
@@ -283,9 +287,14 @@ public class TreeStructure {
 			tbc
 					.assertEquals(
 							"Asserting the value of $/Application/<app_id>/IconURI",
-							"/TestIcon.gif",
+							tbc.getServiceProperty(ApplicationDescriptor.class.getName(), "application.icon").toString(),
 							session
 									.getNodeValue(ApplicationConstants.OSGI_APPLICATION_APPID_ICONURI).getString());
+			
+			InputStream stream = new URL(session
+									.getNodeValue(ApplicationConstants.OSGI_APPLICATION_APPID_ICONURI).getString()).openStream();
+			
+			tbc.assertNotNull("Asserting if the icon stream was returned.", stream);
 		} catch (Exception e) {
 			tbc.fail(MessagesConstants.getMessage(
 					MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e
@@ -512,6 +521,8 @@ public class TreeStructure {
 		try {
 			session = tbc.getDmtAdmin().getSession(ApplicationConstants.OSGI_APPLICATION,
 					DmtSession.LOCK_TYPE_SHARED);
+			
+			cleanSchedulesNodes(session);
 
 			Map hash = new HashMap();
 			hash.put("name", "value");
@@ -583,6 +594,20 @@ public class TreeStructure {
 			tbc.destroyHandles();
 			tbc.closeSession(session);
 		}
+	}
+
+	private void cleanSchedulesNodes(DmtSession session) {
+		try {
+			String[] nodes = session.getChildNodeNames(ApplicationConstants.OSGI_APPLICATION_APPID_SCHEDULES);
+			for (int i=0; i<nodes.length; i++) {
+				session.deleteNode(nodes[i]);
+			}
+		} catch (DmtException e) {
+			tbc.fail(MessagesConstants.getMessage(
+					MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e
+							.getClass().getName() }));
+		}
+		
 	}
 
 	/**
