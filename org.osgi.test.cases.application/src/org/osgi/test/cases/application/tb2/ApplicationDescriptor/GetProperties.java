@@ -36,6 +36,8 @@
  */
 package org.osgi.test.cases.application.tb2.ApplicationDescriptor;
 
+import java.io.InputStream;
+import java.net.URL;
 import java.util.Map;
 
 import org.osgi.service.permissionadmin.PermissionInfo;
@@ -148,7 +150,14 @@ public class GetProperties implements TestInterface {
 		tbc.assertTrue("Asserting if the application.container property exist.", map.containsKey("application.container"));
 		tbc.assertEquals("Asserting the application.launchable value", Boolean.TRUE, map.get("application.launchable"));
 		tbc.assertEquals("Asserting the application.version value", ApplicationConstants.APP_VERSION, map.get("application.version"));
-		tbc.assertEquals("Asserting the application.icon value", ApplicationConstants.APP_ICON, map.get("application.icon"));	
+		
+		try {
+			InputStream stream = new URL(map.get("application.icon").toString()).openStream();
+			tbc.assertNotNull("Asserting if a stream was returned property.", stream);
+		} catch (Exception e) {
+			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": " + e.getClass().getName());			
+		}
+			
 	}
 
 }
