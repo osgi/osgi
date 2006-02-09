@@ -463,7 +463,7 @@ class ScheduleIDNode extends ApplicationPluginBaseNode implements ArgumentInterf
 			
 			for( int j=0; j != findInHash.length; j++ ) {
 				if( !findInHash[ j ] ) {       /* the reference is missing from the hash table? */
-					Object schedID = refs[ j ].getProperty( "scheduledapplication.id" );
+					Object schedID = refs[ j ].getProperty( ScheduledApplication.SCHEDULE_ID );
 					
 					if( schedID == null ) {
 						System.err.println( "No scheduling ID found, schedule ignored!" );
@@ -515,8 +515,8 @@ class ScheduleIDNode extends ApplicationPluginBaseNode implements ArgumentInterf
 			ServiceReference appDescRef = ApplicationIDNode.getApplicationDescriptor( path );
 			ApplicationDescriptor appDesc = (ApplicationDescriptor)ApplicationPlugin.bc.getService( appDescRef );
 			ScheduledApplicationImpl schedApp = (ScheduledApplicationImpl)
-				ApplicationDescriptorImpl.schedule( appDesc, argIDNode.getArguments( item.arguments ), 
-						item.topicFilter, item.eventFilter, item.recurring, key );
+				appDesc.schedule( key, argIDNode.getArguments( item.arguments ), 
+						item.topicFilter, item.eventFilter, item.recurring );
 			item.servRef = schedApp.getReference();
 			item.enabled = true;		  
 			ApplicationPlugin.bc.ungetService( appDescRef );

@@ -1324,7 +1324,7 @@ public class TestMidletContainerBundleActivator
   			args.put( "NullChecking", null );
   			if (args == null)
   				throw new Exception("Cannot create the arguments of launch!");
-  			appDesc.schedule(args, "org/osgi/application/timer", getFilterFromNow( 1 ), false);
+  			appDesc.schedule(null, args, "org/osgi/application/timer", getFilterFromNow( 1 ), false);
   			Thread.sleep(62000);
   			appHandle = lookupAppHandle(appDesc);
   			if (appHandle == null
@@ -1351,8 +1351,8 @@ public class TestMidletContainerBundleActivator
   			Map args = createArgs();
   			if (args == null)
   				throw new Exception("Cannot create the arguments of launch!");
-  			appDesc.schedule(args, "org/osgi/application/timer", getFilterFromNow( 2 ), false);
-  			appDesc.schedule(args, "org/osgi/application/timer", getFilterFromNow( 1 ), false);
+  			appDesc.schedule(null, args, "org/osgi/application/timer", getFilterFromNow( 2 ), false);
+  			appDesc.schedule(null, args, "org/osgi/application/timer", getFilterFromNow( 1 ), false);
   			Thread.sleep( 92000 );
   			appHandle = lookupAppHandle(appDesc);
   			if (appHandle == null
@@ -1388,7 +1388,7 @@ public class TestMidletContainerBundleActivator
   			Map args = createArgs();
   			if (args == null)
   				throw new Exception("Cannot create the arguments of launch!");
-  			appDesc.schedule(args, "org/osgi/application/timer", getFilterFromNow( 1 ), false);
+  			appDesc.schedule(null, args, "org/osgi/application/timer", getFilterFromNow( 1 ), false);
   			if (!restart_scheduler())
   				return false;
   			Thread.sleep( 62000 );
@@ -1419,7 +1419,7 @@ public class TestMidletContainerBundleActivator
   			if (args == null)
   				throw new Exception("Cannot create the arguments of launch!");
   			ScheduledApplication schedApp = appDesc.
-  					schedule(args, "org/osgi/application/timer", getFilterFromNow( 1 ), false);
+  					schedule(null, args, "org/osgi/application/timer", getFilterFromNow( 1 ), false);
   			
   			if( schedApp.getApplicationDescriptor() != appDesc )
   				throw new Exception( "Invalid application descriptor was received!" );
@@ -1446,7 +1446,7 @@ public class TestMidletContainerBundleActivator
   			Map args = createArgs();
   			if (args == null)
   				throw new Exception("Cannot create the arguments of launch!");
-  			appDesc.schedule(args, "com/nokia/test/ScheduleEvent", null, false);
+  			appDesc.schedule(null, args, "com/nokia/test/ScheduleEvent", null, false);
   			
   			sendEvent(new Event("com/nokia/test/ScheduleEvent", null), false);
   			
@@ -1464,7 +1464,7 @@ public class TestMidletContainerBundleActivator
   			if (appHandle != null )
   				throw new Exception("Application was scheduled inspite of non-recurring!");
 
-  			ScheduledApplication schedApp = appDesc.schedule(args, "com/nokia/test/ScheduleEvent", null, true);
+  			ScheduledApplication schedApp = appDesc.schedule(null, args, "com/nokia/test/ScheduleEvent", null, true);
   			sendEvent(new Event("com/nokia/test/ScheduleEvent", null), false);
   			
   			appHandle = lookupAppHandle(appDesc);
@@ -1505,7 +1505,7 @@ public class TestMidletContainerBundleActivator
   			Map args = createArgs();
   			if (args == null)
   				throw new Exception("Cannot create the arguments of launch!");
-  			appDesc.schedule(args, "com/nokia/test/ScheduleEvent", "(propi=hallo)", false);
+  			appDesc.schedule(null, args, "com/nokia/test/ScheduleEvent", "(propi=hallo)", false);
   			
   			Hashtable propi = new Hashtable();
   			propi.put( "propi", "hello" );
@@ -2006,7 +2006,7 @@ public class TestMidletContainerBundleActivator
   			String eventFilter = "(Zizi=OKSA)";
   			boolean recurring = false;
   			
-  			ScheduledApplication schedApp = appDesc.schedule( args, topicFilter, eventFilter, recurring );
+  			ScheduledApplication schedApp = appDesc.schedule( null, args, topicFilter, eventFilter, recurring );
   			
   			scheduleNames = session.getChildNodeNames( "./OSGi/Application/" + mangledAppUID + "/Schedules" );  			
   			if( scheduleNames != null && scheduleNames.length != 1 )
@@ -2137,7 +2137,7 @@ public class TestMidletContainerBundleActivator
   			String topicFilter = "x/y/z/*";
   			String eventFilter = "(Zizi=OKSA)";
   			boolean recurring = true;  			
-  			ScheduledApplication schedApp = appDesc.schedule( args, topicFilter, eventFilter, recurring );
+  			ScheduledApplication schedApp = appDesc.schedule( null, args, topicFilter, eventFilter, recurring );
 
   			String[] scheduleNames = session.getChildNodeNames( "./OSGi/Application/" + mangledAppUID + "/Schedules" );  			
   			if( scheduleNames == null || scheduleNames.length != 1 )

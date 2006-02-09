@@ -95,18 +95,11 @@ public class ApplicationDescriptorImpl implements Delegate {
 		doLock(false, false);
 	}
 
-	public ScheduledApplication schedule(Map args, String topic, String filter, boolean recurs) throws InvalidSyntaxException, IllegalArgumentException {
+	public ScheduledApplication schedule(String schedId, Map args, String topic, String filter, boolean recurs) throws InvalidSyntaxException, ApplicationException {
 		checkArguments( args );
-		return Activator.scheduler.addScheduledApplication( descriptor, args, topic, filter, recurs );
+		return Activator.scheduler.addScheduledApplication( schedId, descriptor, args, topic, filter, recurs );
 	}
 	
-	static ScheduledApplication schedule( ApplicationDescriptor appDesc, Map args, String topic, 
-			                                     String filter, boolean recurs, String id)  
-	                                            throws InvalidSyntaxException, IllegalArgumentException  {
-		checkArguments( args );
-		return Activator.scheduler.addScheduledApplication( appDesc, args, topic, filter, recurs, id );		
-	}
-
 	private static void checkArguments( Map arguments ) throws IllegalArgumentException {
 		if( arguments != null ) {
 			Set set = arguments.keySet();

@@ -114,8 +114,8 @@ public class ScheduledApplicationImpl implements ScheduledApplication, Serializa
 
 	void register() {
 		Hashtable props = new Hashtable();
-		props.put( ApplicationDescriptor.APPLICATION_PID, getPid() );
-		props.put( "scheduledapplication.id", id );
+		props.put( ScheduledApplication.APPLICATION_PID, getPid() );
+		props.put( ScheduledApplication.SCHEDULE_ID, id );
 		
 		serviceReg = bc.registerService( "org.osgi.service.application.ScheduledApplication", 
 				this, props );
@@ -176,5 +176,9 @@ public class ScheduledApplicationImpl implements ScheduledApplication, Serializa
 	
 	ServiceReference getReference() {
 		return serviceReg.getReference();
+	}
+
+	public String getScheduleId() {
+		return id;
 	}
 }

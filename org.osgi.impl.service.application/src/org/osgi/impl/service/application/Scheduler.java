@@ -57,16 +57,13 @@ public class Scheduler implements Runnable, EventHandler {
 		schedulerThread.interrupt();
 	}
 
-	public synchronized ScheduledApplication addScheduledApplication(ApplicationDescriptor appDesc,
-			Map arguments, String topic, String eventFilter, boolean recurring) throws InvalidSyntaxException {
-		return addScheduledApplication( appDesc, arguments, topic, eventFilter, recurring, null );
-	}
-		
-	synchronized ScheduledApplication addScheduledApplication(ApplicationDescriptor appDesc,
-				Map arguments, String topic, String eventFilter, boolean recurring, String id) throws InvalidSyntaxException {
+	public synchronized ScheduledApplication addScheduledApplication( String id, ApplicationDescriptor appDesc,
+				Map arguments, String topic, String eventFilter, boolean recurring) throws InvalidSyntaxException, ApplicationException {
 
 		if( id == null )
-			id = generateKey();
+			id = generateKey( appDesc.getApplicationId() );
+		else
+			checkKey( id, appDesc.getApplicationId() );
 		
 		SecurityManager sm = System.getSecurityManager();
 		if( sm != null ) {
@@ -154,15 +151,16 @@ public class Scheduler implements Runnable, EventHandler {
 		}
 	}
 
-	String generateKey() throws InvalidSyntaxException {
-		ServiceReference refs[] = bc.getServiceReferences( ScheduledApplication.class.getName(), null );
+	String generateKey( String pid ) throws InvalidSyntaxException {
+		ServiceReference refs[] = bc.getServiceReferences( ScheduledApplication.class.getName(), 
+				"(" + ApplicationDescriptor.class.getName() + "=" + pid + ")" );
 		while(true) {
 			String plannedSchedID = "S" + schedNum++;
 			
 			boolean found = true;
 			if( refs != null ) {
 				for( int p=0; p != refs.length; p++ ) {
-					Object actID = refs[ p ].getProperty( "scheduledapplication.id" );
+					Object actID = refs[ p ].getProperty( ScheduledApplication.SCHEDULE_ID );
 					if( actID != null && actID.equals( plannedSchedID ) ) {
 						found = false;
 						break;
@@ -171,6 +169,18 @@ public class Scheduler implements Runnable, EventHandler {
 			}
 			if( found )
 				return plannedSchedID;
+		}
+	}
+
+	void checkKey( String key, String pid ) throws ApplicationException, InvalidSyntaxException {
+		ServiceReference refs[] = bc.getServiceReferences( ScheduledApplication.class.getName(), 
+				"(" + ApplicationDescriptor.class.getName() + "=" + pid + ")" );
+		if( refs != null ) {
+			for( int p=0; p != refs.length; p++ ) {
+				Object actID = refs[ p ].getProperty( ScheduledApplication.SCHEDULE_ID );
+				if( actID != null && actID.equals( key ) )
+					throw new ApplicationException( ApplicationException.APPLICATION_DUPLICATE_SCHEDULE_ID );
+			}
 		}
 	}
 	

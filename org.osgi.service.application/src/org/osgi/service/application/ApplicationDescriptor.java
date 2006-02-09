@@ -423,7 +423,7 @@ public abstract class ApplicationDescriptor {
 			String eventFilter, boolean recurring) throws InvalidSyntaxException, 
             ApplicationException {
 		isLaunchableSpecific(); // checks if the ApplicationDescriptor was already unregistered
-		return delegate.schedule(arguments, topic, eventFilter, recurring);
+		return delegate.schedule(scheduleId, arguments, topic, eventFilter, recurring);
 	}
 
 	/**
@@ -487,8 +487,8 @@ public abstract class ApplicationDescriptor {
 
 		void unlock();
 
-		ScheduledApplication schedule(Map args, String topic, String filter,
-				boolean recurs) throws InvalidSyntaxException;
+		ScheduledApplication schedule(String scheduleId, Map args, String topic, String filter,
+				boolean recurs) throws InvalidSyntaxException, ApplicationException;
 
 		void launch(Map arguments) throws ApplicationException;
 	}
