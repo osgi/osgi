@@ -184,8 +184,7 @@ public class TestControl extends DefaultTestBundleControl {
 
 		// Test the methods with default locale
 		ocd = mti.getObjectClassDefinition("com.acme.ocd1", null);
-		assertEquals("ObjectClassDefinition.getID()", ocd.getID(),
-				"com.acme.ocd1");
+		assertEquals("ObjectClassDefinition.getID()", "ocd1", ocd.getID());
 		assertEquals("ObjectClassDefinition.getName()", "Person(default)", ocd
 				.getName());
 		assertEquals("ObjectClassDefinition.getDescription()",
@@ -201,8 +200,7 @@ public class TestControl extends DefaultTestBundleControl {
 
 		// Test the methods with Dutch locale
 		ocd = mti.getObjectClassDefinition("com.acme.ocd1", "du");
-		assertEquals("ObjectClassDefinition.getID()", ocd.getID(),
-				"com.acme.ocd1");
+		assertEquals("ObjectClassDefinition.getID()", "ocd1", ocd.getID());
 		assertEquals("ObjectClassDefinition.getName()", "Persoon(du)", ocd
 				.getName());
 		assertEquals("ObjectClassDefinition.getDescription()",
@@ -218,8 +216,7 @@ public class TestControl extends DefaultTestBundleControl {
 
 		// Test the methods with Dutch (du_NL) locale
 		ocd = mti.getObjectClassDefinition("com.acme.ocd1", "du_NL");
-		assertEquals("ObjectClassDefinition.getID()", ocd.getID(),
-				"com.acme.ocd1");
+		assertEquals("ObjectClassDefinition.getID()", "ocd1", ocd.getID());
 		assertEquals("ObjectClassDefinition.getName()", "Persoon(du_NL)", ocd
 				.getName());
 		assertEquals("ObjectClassDefinition.getDescription()",
