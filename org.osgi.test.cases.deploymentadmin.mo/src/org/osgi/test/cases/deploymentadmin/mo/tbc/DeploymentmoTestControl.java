@@ -138,7 +138,7 @@ public class DeploymentmoTestControl extends DefaultTestBundleControl {
         
         File file = bc.getDataFile("");
         DeploymentmoConstants.DLOTA_RELATIVE_PATH = file.getPath();
-        DeploymentmoConstants.DLOTA_PATH = "file:///" + file.getAbsolutePath() + File.separatorChar;
+        DeploymentmoConstants.DLOTA_PATH = "file:///" + file.getAbsolutePath() + "//";
         
 		tb1Srv = (TB1Service) bc.getService(tb1Ref);
 
@@ -603,7 +603,7 @@ public class DeploymentmoTestControl extends DefaultTestBundleControl {
     
     }
     public void generateDLOTA(TestingDlota dlota,boolean isBundle) throws IOException {
-        OutputStreamWriter out = new OutputStreamWriter(new FileOutputStream(DeploymentmoConstants.DLOTA_RELATIVE_PATH + "/"+ dlota.getFilename()),"UTF-8");
+        OutputStreamWriter out = new OutputStreamWriter(new FileOutputStream(DeploymentmoConstants.DLOTA_RELATIVE_PATH + File.separatorChar + dlota.getFilename()),"UTF-8");
         
         out.write("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
         out.write("<media xmlns=\"http://www.openmobilealliance.org/xmlns/dd\" xmlns:dd=\"http://www.osgi.org/xmlns/dd/v.1.0\" >\n");
