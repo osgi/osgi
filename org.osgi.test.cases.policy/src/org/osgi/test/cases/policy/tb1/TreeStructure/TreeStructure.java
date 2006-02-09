@@ -76,8 +76,9 @@ public class TreeStructure implements TestInterface {
         testTreeStructure005();
         testTreeStructure006();
         testTreeStructure007();
-        testTreeStructure008();
-        testTreeStructure009();
+		testTreeStructure008();
+		testTreeStructure009();
+        testTreeStructure010();
     }
 
     /**
@@ -433,5 +434,51 @@ public class TreeStructure implements TestInterface {
         }
     }
 	
+    /**
+     * This test asserts if the absence of a Default node is equivalent
+     * to having All Permission as the default permission
+     *
+     * @spec 3.7.3 Dmt Principal Permission Management Object, Table 3-10
+     */
+
+    public void testTreeStructure010() {
+		tbc.log("#testTreeStructure010");
+		DmtSession session = null;
+		PermissionInfo info[] = null;
+		try {
+			info = tbc.getPermissionAdmin().getDefaultPermissions();
+
+			PermissionInfo perm = new PermissionInfo(
+					java.security.AllPermission.class.getName(), null, null);
+
+			session = tbc.getDmtAdmin().getSession(
+					PolicyConstants.LOCATION_PERMISSION_NODE,
+					DmtSession.LOCK_TYPE_ATOMIC);
+
+			if (session.isNodeUri(PolicyConstants.DEFAULT_PERMISSION_NODE)) {
+				session.deleteNode(PolicyConstants.DEFAULT_PERMISSION_NODE);
+			}
+
+			session.close();
+
+			PermissionInfo infos[] = tbc.getPermissionAdmin()
+					.getDefaultPermissions();
+			
+			tbc.assertNotNull("Asserts if the permisison returned is different from null.", infos);
+
+			tbc
+					.assertEquals(
+							"Asserts if the absence of a Default node is equivalent to having AllPermission as the default permission",
+							perm.getEncoded(), infos[0].getEncoded());
+
+		} catch (Exception e) {
+			tbc.fail(MessagesConstants.getMessage(
+					MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e
+							.getClass().getName() }));
+		} finally {
+			tbc.closeSession(session);
+			tbc.getPermissionAdmin().setDefaultPermissions(info);
+		}
+	}	   
 
 }
