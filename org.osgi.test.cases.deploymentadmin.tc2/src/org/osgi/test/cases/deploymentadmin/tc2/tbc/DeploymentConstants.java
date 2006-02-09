@@ -37,6 +37,11 @@
 
 package org.osgi.test.cases.deploymentadmin.tc2.tbc;
 
+import java.security.AllPermission;
+import org.osgi.service.condpermadmin.BundleSignerCondition;
+import org.osgi.service.condpermadmin.ConditionInfo;
+import org.osgi.service.permissionadmin.PermissionInfo;
+
 
 
 /**
@@ -51,6 +56,10 @@ public class DeploymentConstants {
     public static final String SIGNER_FILTER_WILDCARD = "CN=*, O=ACME Inc, OU=ACME Cert Authority, L=Austin, ST=Texas, C=US";
     public static final String SIGNER_FILTER_INVALID1 = "NAME=CESAR.ORG.BR, OU=CESAR, O=MOTOROLA, L=RECIFE, C=BR";
     public static final String SIGNER_FILTER_INVALID2 = "2=*.ORG.BR, TX=CESAR, R=MOTOROLA, L=RECIFE, C=BR";
+    
+    // ConditionInfo for testing AutoConf
+    public static final ConditionInfo[] CONDITION_SIGNER =  new ConditionInfo[] {new ConditionInfo(BundleSignerCondition.class.getName(),new String[] {SIGNER_FILTER})};
+    public static final PermissionInfo[] ALL_PERMISSION = new PermissionInfo[] { new PermissionInfo(AllPermission.class.getName(),"*","*")};
     
 	public static final String PID_RESOURCE_PROCESSOR1 = "org.osgi.test.cases.deployment.bundles.rp1";
 	public static final String PID_RESOURCE_PROCESSOR2 = "org.osgi.test.cases.deployment.bundles.rp2";

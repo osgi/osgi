@@ -87,6 +87,7 @@ public class Configuration {
 		tbc.log("#Installing config deployment package");
 		TestingDeploymentPackage testDP = tbc.getTestingDeploymentPackage(DeploymentConstants.AUTO_CONFIG_DP);
 		try {
+            tbc.getCondPermAdmin().addConditionalPermissionInfo(DeploymentConstants.CONDITION_SIGNER, DeploymentConstants.ALL_PERMISSION);
 			dp = tbc.installDeploymentPackage(tbc.getWebServer() + testDP.getFilename());
 			tbc.assertNotNull(MessagesConstants.getMessage(MessagesConstants.ASSERT_NOT_NULL,
 					new String[] { "Deployment Package" }), dp);
