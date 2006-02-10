@@ -39,6 +39,7 @@ package org.osgi.test.cases.application.tb2.ApplicationDescriptor;
 import java.util.HashMap;
 
 import org.osgi.service.application.ApplicationAdminPermission;
+import org.osgi.service.application.ApplicationException;
 import org.osgi.service.application.ScheduledApplication;
 import org.osgi.service.permissionadmin.PermissionInfo;
 import org.osgi.test.cases.application.tbc.ApplicationConstants;
@@ -79,12 +80,13 @@ public class Schedule implements TestInterface {
 		testSchedule016();
 		testSchedule017();
 		testSchedule018();
+		testSchedule019();
 	}
 	
 	/**
 	 * This method asserts if null can be passed as eventFilter parameter.
 	 * 
-	 * @spec ApplicationDescriptor.schedule(Map,String,String,boolean)
+	 * @spec ApplicationDescriptor.schedule(String,Map,String,String,boolean)
 	 */	
 	private void testSchedule001() {
 		tbc.log("#testSchedule001");
@@ -122,7 +124,7 @@ public class Schedule implements TestInterface {
 	/**
 	 * This method asserts if null can be passed as arguments parameter.
 	 * 
-	 * @spec ApplicationDescriptor.schedule(Map,String,String,boolean)
+	 * @spec ApplicationDescriptor.schedule(String,Map,String,String,boolean)
 	 */	
 	private void testSchedule002() {
 		tbc.log("#testSchedule002");
@@ -161,7 +163,7 @@ public class Schedule implements TestInterface {
 	 * This method asserts if SecurityException is thrown when the caller
 	 * does not have "schedule" ApplicationAdminPermission for the application.
 	 * 
-	 * @spec ApplicationDescriptor.schedule(Map,String,String,boolean)
+	 * @spec ApplicationDescriptor.schedule(String,Map,String,String,boolean)
 	 */	
 	private void testSchedule003() {
 		tbc.log("#testSchedule003");
@@ -194,7 +196,7 @@ public class Schedule implements TestInterface {
 	 * This method asserts that if the application descriptor is unregistered
 	 * IllegalStateException will be thrown.
 	 * 
-	 * @spec ApplicationDescriptor.schedule(Map,String,String,boolean)
+	 * @spec ApplicationDescriptor.schedule(String,Map,String,String,boolean)
 	 */
 	private void testSchedule004() {
 		tbc.log("#testSchedule004");
@@ -233,7 +235,7 @@ public class Schedule implements TestInterface {
 	 * This method asserts that NullPointerException is thrown when the topic 
 	 * parameter is null.
 	 * 
-	 * @spec ApplicationDescriptor.schedule(Map,String,String,boolean)
+	 * @spec ApplicationDescriptor.schedule(String,Map,String,String,boolean)
 	 */	
 	private void testSchedule005() {
 		tbc.log("#testSchedule005");
@@ -269,7 +271,7 @@ public class Schedule implements TestInterface {
 	 * This method asserts if an empty string works as a wildcard (*) 
 	 * passed in topic parameter.
 	 * 
-	 * @spec ApplicationDescriptor.schedule(Map,String,String,boolean)
+	 * @spec ApplicationDescriptor.schedule(String,Map,String,String,boolean)
 	 */	
 	private void testSchedule006() {
 		tbc.log("#testSchedule006");
@@ -310,7 +312,7 @@ public class Schedule implements TestInterface {
 	 * as a filter for the events an the application will be started
 	 * only once.
 	 * 
-	 * @spec ApplicationDescriptor.schedule(Map,String,String,boolean)
+	 * @spec ApplicationDescriptor.schedule(String,Map,String,String,boolean)
 	 */	
 	private void testSchedule007() {
 		tbc.log("#testSchedule007");
@@ -345,7 +347,7 @@ public class Schedule implements TestInterface {
 	 * This method asserts if when recurring is true, the scheduling
 	 * will take place for every event occurrence.
 	 * 
-	 * @spec ApplicationDescriptor.schedule(Map,String,String,boolean)
+	 * @spec ApplicationDescriptor.schedule(String,Map,String,String,boolean)
 	 */	
 	private void testSchedule008() {
 		tbc.log("#testSchedule008");
@@ -379,7 +381,7 @@ public class Schedule implements TestInterface {
 	 * This method asserts that InvalidSyntaxException is thrown when 
 	 * the the specified eventFilter is not syntactically correct . 
 	 * 
-	 * @spec ApplicationDescriptor.schedule(Map,String,String,boolean)
+	 * @spec ApplicationDescriptor.schedule(String,Map,String,String,boolean)
 	 */	
 	private void testSchedule009() {
 		tbc.log("#testSchedule009");
@@ -414,7 +416,7 @@ public class Schedule implements TestInterface {
 	 * This method asserts that IllegalArgumentException is thrown when 
 	 * with have passed an empty string as key for the map. 
 	 * 
-	 * @spec ApplicationDescriptor.schedule(Map,String,String,boolean)
+	 * @spec ApplicationDescriptor.schedule(String,Map,String,String,boolean)
 	 */	
 	private void testSchedule010() {
 		tbc.log("#testSchedule010");
@@ -451,7 +453,7 @@ public class Schedule implements TestInterface {
 	 * This method asserts that no exception is thrown
 	 * when we have passed null as map value. 
 	 * 
-	 * @spec ApplicationDescriptor.schedule(Map,String,String,boolean)
+	 * @spec ApplicationDescriptor.schedule(String,Map,String,String,boolean)
 	 */	
 	private void testSchedule011() {
 		tbc.log("#testSchedule011");
@@ -488,7 +490,7 @@ public class Schedule implements TestInterface {
 	 * This method asserts that IllegalArgumentException
 	 * is thrown when we have passed null as mapKey.
 	 * 
-	 * @spec ApplicationDescriptor.schedule(Map,String,String,boolean)
+	 * @spec ApplicationDescriptor.schedule(String,Map,String,String,boolean)
 	 */	
 	private void testSchedule012() {
 		tbc.log("#testSchedule012");
@@ -525,7 +527,7 @@ public class Schedule implements TestInterface {
 	 * This method asserts that IllegalArgumentException
 	 * is thrown when we have passed an Integer as mapKey.
 	 * 
-	 * @spec ApplicationDescriptor.schedule(Map,String,String,boolean)
+	 * @spec ApplicationDescriptor.schedule(String,Map,String,String,boolean)
 	 */	
 	private void testSchedule013() {
 		tbc.log("#testSchedule013");
@@ -562,7 +564,7 @@ public class Schedule implements TestInterface {
 	 * This method asserts that IllegalArgumentException
 	 * is thrown when we have passed an Object as mapKey.
 	 * 
-	 * @spec ApplicationDescriptor.schedule(Map,String,String,boolean)
+	 * @spec ApplicationDescriptor.schedule(String,Map,String,String,boolean)
 	 */	
 	private void testSchedule014() {
 		tbc.log("#testSchedule014");
@@ -599,7 +601,7 @@ public class Schedule implements TestInterface {
 	 * This method asserts that IllegalArgumentException
 	 * is thrown when we have passed a Boolean as mapKey.
 	 * 
-	 * @spec ApplicationDescriptor.schedule(Map,String,String,boolean)
+	 * @spec ApplicationDescriptor.schedule(String,Map,String,String,boolean)
 	 */	
 	private void testSchedule015() {
 		tbc.log("#testSchedule015");
@@ -636,7 +638,7 @@ public class Schedule implements TestInterface {
 	 * This method asserts that IllegalArgumentException
 	 * is thrown when we have passed a Float as mapKey.
 	 * 
-	 * @spec ApplicationDescriptor.schedule(Map,String,String,boolean)
+	 * @spec ApplicationDescriptor.schedule(String,Map,String,String,boolean)
 	 */	
 	private void testSchedule016() {
 		tbc.log("#testSchedule016");
@@ -673,7 +675,7 @@ public class Schedule implements TestInterface {
 	 * This method asserts that IllegalArgumentException
 	 * is thrown when we have passed a Byte as mapKey.
 	 * 
-	 * @spec ApplicationDescriptor.schedule(Map,String,String,boolean)
+	 * @spec ApplicationDescriptor.schedule(String,Map,String,String,boolean)
 	 */	
 	private void testSchedule017() {
 		tbc.log("#testSchedule017");
@@ -710,7 +712,7 @@ public class Schedule implements TestInterface {
 	 * This method asserts that IllegalArgumentException
 	 * is thrown when we have passed a Double as mapKey.
 	 * 
-	 * @spec ApplicationDescriptor.schedule(Map,String,String,boolean)
+	 * @spec ApplicationDescriptor.schedule(String,Map,String,String,boolean)
 	 */	
 	private void testSchedule018() {
 		tbc.log("#testSchedule018");
@@ -742,5 +744,40 @@ public class Schedule implements TestInterface {
 			tbc.cleanUp(sa, infos);
 		}
 	}	
+	
+    /**
+     * This method asserts if ApplicationException is thrown when two ScheduledApplication
+     * is created with the same id.  
+     * 
+     * @spec ApplicationDescriptor.schedule(String,Map,String,String,boolean)
+     */    
+	private void testSchedule019() {
+		tbc.log("#testSchedule019");
+		PermissionInfo[] infos = null;
+		ScheduledApplication sa1 = null, sa2 = null;
+		String id = "scheduleId";
+		try {
+            infos = tbc.getPermissionAdmin().getPermissions(tbc.getTb2Location());
+
+            tbc.setLocalPermission(new PermissionInfo(ApplicationAdminPermission.class.getName(), 
+        		                       ApplicationConstants.APPLICATION_PERMISSION_FILTER1, 
+        		                       ApplicationAdminPermission.SCHEDULE_ACTION));
+            
+            sa1 = tbc.getAppDescriptor().schedule(id, null, "TestingPurposes*", null, true);
+            sa2 = tbc.getAppDescriptor().schedule(id, null, "TestingPurposes*", null, true);            
+            tbc.failException("", ApplicationException.class);
+		} catch (ApplicationException e) {
+			tbc.assertEquals("Asserting if the error code is APPLICATION_DUPLICATE_SCHEDULED_ID.", ApplicationException.APPLICATION_DUPLICATE_SCHEDULE_ID, e.getErrorCode());
+		} catch (Exception e) {
+			tbc.fail(MessagesConstants.getMessage(
+					MessagesConstants.EXCEPTION_THROWN, new String[] {
+							ApplicationException.class.getName(),
+							e.getClass().getName() }));
+		} finally {
+			tbc.cleanUp(sa1, infos);
+			tbc.cleanUp(sa2, infos);
+		}
+	}	
+	
 
 }

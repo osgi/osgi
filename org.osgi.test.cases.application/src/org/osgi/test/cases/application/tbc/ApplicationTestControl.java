@@ -463,6 +463,13 @@ public class ApplicationTestControl extends DefaultTestBundleControl {
 	public void testMatchDNChain() {
 		testInterfaces[18].run();
 	}
+	
+	/**
+	 * Executes Tcs for ScheduledApplication#getScheduleId
+	 */
+	public void testGetScheduleId() {
+		testInterfaces[19].run();
+	}	
 
 	/**
 	 * Executes Tcs for ApplicationAdminPermission#setCurrentApplicationId

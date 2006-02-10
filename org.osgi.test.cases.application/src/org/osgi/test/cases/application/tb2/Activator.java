@@ -54,6 +54,7 @@ import org.osgi.test.cases.application.tb2.ApplicationHandle.GetInstanceId;
 import org.osgi.test.cases.application.tb2.ApplicationHandle.GetState;
 import org.osgi.test.cases.application.tb2.ScheduledApplication.GetArguments;
 import org.osgi.test.cases.application.tb2.ScheduledApplication.GetEventFilter;
+import org.osgi.test.cases.application.tb2.ScheduledApplication.GetScheduleId;
 import org.osgi.test.cases.application.tb2.ScheduledApplication.GetTopic;
 import org.osgi.test.cases.application.tb2.ScheduledApplication.IsRecurring;
 import org.osgi.test.cases.application.tb2.ScheduledApplication.Remove;
@@ -95,7 +96,8 @@ public class Activator implements BundleActivator, TB2Service {
 				new ApplicationDescriptorConstants((ApplicationTestControl) tbc),
 				new ApplicationHandleConstants((ApplicationTestControl) tbc),
 				new GetApplicationId((ApplicationTestControl) tbc),
-				new MatchDNChain((ApplicationTestControl) tbc)
+				new MatchDNChain((ApplicationTestControl) tbc),
+				new GetScheduleId((ApplicationTestControl) tbc)
 				};
 	}
 
