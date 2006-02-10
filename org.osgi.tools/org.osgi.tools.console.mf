@@ -1,5 +1,6 @@
 Manifest-Version: 1.0
-Bundle-Name: tools.console
+Bundle-Name: OSGi Console
+Bundle-SymbolicName: org.osgi.tools.console
 Comment: Created by $(DELIVER) on $(DATE)
 Bundle-Description: Implements a console listening on port 2011. 
  Once this bundle is started, you can telnet into this console 
