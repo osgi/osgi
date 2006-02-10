@@ -26,11 +26,11 @@
 		<AD id="string" name="%String" type="String" default="test"/>
 	</OCD>
 	
-	<Designate pid="com.acme.ocd1">
+	<Designate pid="com.acme.foo">
 		<Object ocdref="ocd1"/>
 	</Designate>
 	
-	<Designate pid="com.acme.ocd2">
+	<Designate pid="com.acme.bar">
 		<Object ocdref="ocd2"/>
 	</Designate>
 </md:MetaData>

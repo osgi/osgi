@@ -154,7 +154,7 @@ public class TestControl extends DefaultTestBundleControl {
 		}
 
 		// Test the method getObjectClassDefinition() with valid id and locale
-		ocd = mti.getObjectClassDefinition("com.acme.ocd1", "du");
+		ocd = mti.getObjectClassDefinition("com.acme.foo", "du");
 		assertNotNull(
 				"MetaTypeProvider.getObjectClassDefinition() cannot return null (as expected)",
 				ocd);
@@ -183,7 +183,7 @@ public class TestControl extends DefaultTestBundleControl {
 		mti = mts.getMetaTypeInformation(bundle);
 
 		// Test the methods with default locale
-		ocd = mti.getObjectClassDefinition("com.acme.ocd1", null);
+		ocd = mti.getObjectClassDefinition("com.acme.foo", null);
 		assertEquals("ObjectClassDefinition.getID()", "ocd1", ocd.getID());
 		assertEquals("ObjectClassDefinition.getName()", "Person(default)", ocd
 				.getName());
@@ -199,7 +199,7 @@ public class TestControl extends DefaultTestBundleControl {
 		assertNotNull("ObjectClassDefinition.getIcon()", ocd.getIcon(16));
 
 		// Test the methods with Dutch locale
-		ocd = mti.getObjectClassDefinition("com.acme.ocd1", "du");
+		ocd = mti.getObjectClassDefinition("com.acme.foo", "du");
 		assertEquals("ObjectClassDefinition.getID()", "ocd1", ocd.getID());
 		assertEquals("ObjectClassDefinition.getName()", "Persoon(du)", ocd
 				.getName());
@@ -215,7 +215,7 @@ public class TestControl extends DefaultTestBundleControl {
 		assertNotNull("ObjectClassDefinition.getIcon()", ocd.getIcon(16));
 
 		// Test the methods with Dutch (du_NL) locale
-		ocd = mti.getObjectClassDefinition("com.acme.ocd1", "du_NL");
+		ocd = mti.getObjectClassDefinition("com.acme.foo", "du_NL");
 		assertEquals("ObjectClassDefinition.getID()", "ocd1", ocd.getID());
 		assertEquals("ObjectClassDefinition.getName()", "Persoon(du_NL)", ocd
 				.getName());
@@ -253,7 +253,7 @@ public class TestControl extends DefaultTestBundleControl {
 		mti = mts.getMetaTypeInformation(bundle);
 
 		// Get an object for tests
-		ocd = mti.getObjectClassDefinition("com.acme.ocd1", "du");
+		ocd = mti.getObjectClassDefinition("com.acme.foo", "du");
 		attributes = ocd.getAttributeDefinitions(ObjectClassDefinition.ALL);
 
 		// Find the attribute 'sex' and run some tests
@@ -324,7 +324,7 @@ public class TestControl extends DefaultTestBundleControl {
 		assertTrue("Attribute with id 'sex' found (as expected)", found);
 
 		// Get other object for tests
-		ocd = mti.getObjectClassDefinition("com.acme.ocd2", "du");
+		ocd = mti.getObjectClassDefinition("com.acme.bar", "du");
 		attributes = ocd.getAttributeDefinitions(ObjectClassDefinition.ALL);
 
 		// Execute attribute type tests
