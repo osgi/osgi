@@ -1,6 +1,8 @@
 package org.osgi.impl.bundle.midletcontainer;
 
 import java.io.*;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.*;
 
 import javax.microedition.midlet.MIDlet;
@@ -251,7 +253,13 @@ public class MidletContainer implements SynchronousBundleListener, ServiceListen
 							String defaultLang = Locale.getDefault()
 									.getLanguage();
 							names.put(defaultLang, MIDletName);
-							icons.put(defaultLang, MIDletIcon);
+							
+							if( !MIDletIcon.equals("") ) {
+								URL url = bundle.getResource( MIDletIcon );
+								
+								if( url != null )
+									icons.put(defaultLang, url);
+							}
 							String uniqueID = "MIDlet: " + MIDletName + "-" + MIDletVersion + "-" + MIDletSuiteName;
 								
 							props.put(Constants.SERVICE_PID, uniqueID);

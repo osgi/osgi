@@ -27,6 +27,7 @@
 
 package org.osgi.impl.service.application;
 
+import java.net.URL;
 import java.util.*;
 
 import org.osgi.framework.*;
@@ -885,9 +886,12 @@ class ApplicationPropertyNode extends ApplicationPluginBaseNode {
 		if( prop == null )
 			throw new DmtException(path, DmtException.METADATA_MISMATCH, "Cannot get node value!" );
 		
-		if( getFormat() != DmtData.FORMAT_BOOLEAN )
-		  return new DmtData( (String)prop );
-		else
+		if( getFormat() != DmtData.FORMAT_BOOLEAN ) {
+			if( prop instanceof URL )
+				return new DmtData( ((URL)prop).toString() );
+			else  
+				return new DmtData( (String)prop );
+		} else
           return new DmtData( ((Boolean)prop ).booleanValue() );
 	}
 	

@@ -547,7 +547,7 @@ public class TestMidletContainerBundleActivator
             Map engProps = appDesc.getProperties("en");
             if(!engProps.get(ApplicationDescriptor.APPLICATION_NAME).equals("TestMidlet"))
                 throw new Exception("The application name is " + (String)engProps.get(ApplicationDescriptor.APPLICATION_NAME) + " instead of 'TestMidlet'!");
-            if(!((String)engProps.get(ApplicationDescriptor.APPLICATION_ICON)).endsWith("/TestIcon.gif"))
+            if(!((URL)engProps.get(ApplicationDescriptor.APPLICATION_ICON)).toString().endsWith("/TestIcon.gif"))
                 throw new Exception("The icon path " + (String)engProps.get(ApplicationDescriptor.APPLICATION_ICON) + " doesn't ends with '/TestIcon.gif'!");
             if(!engProps.get(ApplicationDescriptor.APPLICATION_VERSION).equals("1.0.0"))
                 throw new Exception("The application version is " + (String)engProps.get(ApplicationDescriptor.APPLICATION_VERSION) + " instead of '1.0.0'!");
@@ -1556,16 +1556,16 @@ public class TestMidletContainerBundleActivator
   	
   			String[] properties = session.getChildNodeNames( "./OSGi/Application/" + mangledAppUID );
   			
-  			String names[]  = new String [] { "Name", "IconURI", "Version", "Vendor", 
-  					                              "Locked", "PackageID", "ContainerID",
-																					"ApplicationID", "Instances", "Ext", 
-																					"Operations", "Schedules" };
+  			String names[]  = new String [] { 	"Name", "IconURI", "Version", "Vendor", 
+  					                          	"Locked", "PackageID", "ContainerID",
+  					                          	"ApplicationID", "Instances", "Ext", 
+												"Operations", "Schedules" };
   			Object values[] = new Object [ names.length ];
   			
   			Map props = appDesc.getProperties( Locale.getDefault().getLanguage() );
   			
   			values[ 0 ] = (String)( props.get( ApplicationDescriptor.APPLICATION_NAME ) );
-  			values[ 1 ] = (String)( props.get( ApplicationDescriptor.APPLICATION_ICON ) );
+  			values[ 1 ] = ((URL)( props.get( ApplicationDescriptor.APPLICATION_ICON ) )).toString();
   			values[ 2 ] = (String)( props.get( ApplicationDescriptor.APPLICATION_VERSION ) );
   			values[ 3 ] = (String)( props.get( ApplicationDescriptor.APPLICATION_VENDOR ) );
   			values[ 4 ] = (Boolean)(props.get( ApplicationDescriptor.APPLICATION_LOCKED ) );

@@ -96,7 +96,10 @@ public final class MidletDescriptor extends ApplicationDescriptor implements Ser
 			locale = defaultLanguage;
 		}
 		properties.put(ApplicationDescriptor.APPLICATION_NAME, localizedName);
-		properties.put(ApplicationDescriptor.APPLICATION_ICON, icons.get(locale));
+		if( icons.get( locale ) != null )
+			properties.put(ApplicationDescriptor.APPLICATION_ICON, icons.get(locale));
+		else
+			properties.put(ApplicationDescriptor.APPLICATION_ICON, bc.getBundle().getResource( "TestIcon.gif" ) );
 		properties.put("application.bundle.id", props
 				.getProperty("application.bundle.id"));
 		properties.put(ApplicationDescriptor.APPLICATION_VERSION, props
