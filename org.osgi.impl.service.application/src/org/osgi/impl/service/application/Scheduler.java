@@ -233,7 +233,9 @@ public class Scheduler implements Runnable, EventHandler {
 						if( appDesc == null )        /* is the application descriptor uninstalled? */
 							throw new Exception( "Doesn't find the registered application descriptor!" );
 						else {
-							appDesc.launch(schedApp.getArguments());
+							Map args = schedApp.getArguments();
+							args.put( "org.osgi.triggeringevent", event );
+							appDesc.launch( args );
 
 							if (!schedApp.isRecurring())
 								removeList.add( schedApp );
