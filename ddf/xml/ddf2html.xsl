@@ -127,9 +127,9 @@
 		</xsl:variable>
 		<table style="border:0px solid white;margin:0;padding:0;" border="0" cellpadding="0" cellspacing="0">
 			<tr style="margin:0;padding:0;">
-				<td style="vertical-align:middle;width:150px;">
+				<td style="vertical-align:middle;width:200px;">
 					<div style="background-color:yellow;width:80%; text-align:left;font-height:smaller;">
-						<a href="#{$path}">
+						<a style="font-size:10px" href="#{$path}">
 							<xsl:value-of select="@name"/>
 						</a>
 					</div>
