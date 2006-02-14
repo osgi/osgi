@@ -9,7 +9,7 @@
 					<xsl:value-of select="Node/@name"/> Managed Object</title>
 				<link rel="stylesheet" href="http://bundles.osgi.org/www/osgi.css" type="text/css"/>
 			</head>
-			<body>
+			<body style="width:800px">
 				<h1>OSGi DMT Node Definitions</h1>
 				<h2>
 					<xsl:value-of select="Node/@name"/> Managed Object</h2>
@@ -127,8 +127,8 @@
 		</xsl:variable>
 		<table style="border:0px solid white;margin:0;padding:0;" border="0" cellpadding="0" cellspacing="0">
 			<tr style="margin:0;padding:0;">
-				<td style="vertical-align:middle;width:200px;">
-					<div style="background-color:yellow;width:80%; text-align:left;font-height:smaller;">
+				<td style="vertical-align:middle;width:180px;">
+					<div style="background-color:yellow;width:100%; text-align:left;font-height:smaller;">
 						<a style="font-size:10px" href="#{$path}">
 							<xsl:value-of select="@name"/>
 						</a>
