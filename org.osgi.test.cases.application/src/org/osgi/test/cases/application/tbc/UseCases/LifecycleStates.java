@@ -123,8 +123,7 @@ public class LifecycleStates {
             }
             
             tbc.assertTrue("Asserting if the system has received a unregistering event after the uninstall of the app.",
-                !tbc.isRegistered() && !tbc.isModified()
-                    && tbc.isUnregistered());                                           
+                !tbc.isRegistered() && tbc.isUnregistered());                                           
                         
         } catch (Exception e) {
             tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": "
@@ -157,8 +156,7 @@ public class LifecycleStates {
            	tbc.installDescriptor();
             
             tbc.assertTrue("Asserting if the system has received a registered event after the install of the app.",
-                tbc.isRegistered() && !tbc.isModified()
-                    && !tbc.isUnregistered());
+                tbc.isRegistered() && !tbc.isUnregistered());
                         
         } catch (Exception e) {
             tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": "
