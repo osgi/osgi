@@ -8,7 +8,7 @@
 	<Node name="PowerplantControl" type="node" min="1" max="1" scope="P">
 		<Description/>
 		
-		<Node name="/Throttle" type="node" min="1" max="1" scope="P">
+		<Node name="Throttle" type="node" min="1" max="1" scope="P">
 			<Description/>
 			
 			<Node name="ThrottleAngle" type="float" min="1" max="1" scope="P" unit="deg">
@@ -456,7 +456,7 @@
 				<Description>Gets the level of the transfer case fluid in percent of maximum</Description>
 			</Node>
 		</Node>
-		<Node name="/Differential" type="node" min="1" max="1" scope="P">
+		<Node name="Differential" type="node" min="1" max="1" scope="P">
 			<Description/>
 		</Node>
 		<Node name="&lt;differential-instance&gt;" type="Node" min="1" scope="P">
