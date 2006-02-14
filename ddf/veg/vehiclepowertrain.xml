@@ -231,142 +231,139 @@
 				<Value value="3">Fault</Value>
 			</Node>
 		</Node>
+	</Node>
+	<Node name="Transmission" type="Node" min="1" scope="P">
+		<Description>Interior node representing the characteristics of the transmission</Description>
+		<Node name="TransmissionType" type="int" min="1" max="1" scope="P">
+			<Description>Gets the transmission type in the vehicle</Description>
+			<Value value="1">Manual</Value>
+			<Value value="2">Automatic</Value>
+			<Value value="3">Semiautomatic</Value>
+			<Value value="4">Continuously Variable</Value>
+		</Node>
+		<Node name="TransmissionIdentification" type="chr" min="1" max="1" scope="P">
+			<Description>Gets the manufacturer's designation for the transmission.</Description>
+		</Node>
+		<Node name="GearNames" type="chr" min="1" max="1" scope="P">
+			<Description>Gets an array containing the gear numbers and their corresponding names (negative gear numbers
+				correspond to reverse gears) (####??)</Description>
+		</Node>
+		<Node name="ModeNames" type="chr" min="1" max="1" scope="P">
+			<Description>Gets an array containing the operating mode numbers and their corresponding names
+				(###???)</Description>
+		</Node>
+		<Node name="Mode" type="int" min="1" max="1" scope="P">
+			<Description>Gets and/or Sets the Transmission operating Mode</Description>
+		</Node>
+		<Node name="Gear" type="int" min="1" max="1" scope="P">
+			<Description>Gets and/or Sets the Transmission operating Gear</Description>
+		</Node>
+		<Node name="GearSelectorPosition" type="int" min="1" max="1" scope="P">
+			<Description>Gets the current positionof the gear selector</Description>
+		</Node>
+		<Node name="Ratio" type="float" min="1" max="1" scope="P">
+			
+			<Description>Gest and/or sets the ratio of a continuously variable transmission</Description>
+		</Node>
+		<Node name="MaximumTemp" type="int" min="1" max="1" scope="P" unit="K">
+			<Description>Gets the manufacturerï¿½s maximum recommended operating temperature in degrees
+				Kelvin</Description>
+		</Node>
 		
-		<Node name="Transmission" type="Node" min="1" scope="P">
-			<Description>Interior node representing the characteristics of the transmission</Description>
-			<Node name="TransmissionType" type="int" min="1" max="1" scope="P">
-				<Description>Gets the transmission type in the vehicle</Description>
-				<Value value="1">Manual</Value>
-				<Value value="2">Automatic</Value>
-				<Value value="3">Semiautomatic</Value>
-				<Value value="4">Continuously Variable</Value>
-			</Node>
-			<Node name="TransmissionIdentification" type="chr" min="1" max="1" scope="P">
-				<Description>Gets the manufacturer's designation for the transmission.</Description>
-			</Node>
-			<Node name="GearNames" type="chr" min="1" max="1" scope="P">
-				<Description>Gets an array containing the gear numbers and their corresponding names (negative gear
-					numbers correspond to reverse gears) (####??)</Description>
-			</Node>
-			<Node name="ModeNames" type="chr" min="1" max="1" scope="P">
-				<Description>Gets an array containing the operating mode numbers and their corresponding names
-					(###???)</Description>
-			</Node>
-			<Node name="Mode" type="int" min="1" max="1" scope="P">
-				<Description>Gets and/or Sets the Transmission operating Mode</Description>
-			</Node>
-			<Node name="Gear" type="int" min="1" max="1" scope="P">
-				<Description>Gets and/or Sets the Transmission operating Gear</Description>
-			</Node>
-			<Node name="GearSelectorPosition" type="int" min="1" max="1" scope="P">
-				<Description>Gets the current positionof the gear selector</Description>
-			</Node>
-			<Node name="Ratio" type="float" min="1" max="1" scope="P">
-				
-				<Description>Gest and/or sets the ratio of a continuously variable transmission</Description>
-			</Node>
-			<Node name="MaximumTemp" type="int" min="1" max="1" scope="P" unit="K">
-				<Description>Gets the manufacturerï¿½s maximum recommended operating temperature in degrees
-					Kelvin</Description>
-			</Node>
+		<Node name="MaximumTorque" type="int" min="1" max="1" scope="P" unit="N/m">
+			<Description>Gets the manufacturerï¿½s maximum recommended operating torque in
+				newton-meters</Description>
+		</Node>
+		
+		<Node name="NumberInputs" type="int" min="1" max="1" scope="P">
+			<Description>Gets the number of input shafts</Description>
+		</Node>
+		
+		<Node name="NumberOutputs" type="int" min="1" max="1" scope="P">
+			<Description>Gets the number of output shafts</Description>
+		</Node>
+		
+		<Node name="GearRatios" type="Array" min="1" max="1" scope="p">
+			<Description>Gets a 3-dimensional array containing the gear ratios indexed by gear number, input shaft
+				number and output shaft number. Form is: Ratio(Gear,Input,Output). (### there is no such thing as an
+				array)</Description>
+		</Node>
+		
+		<Node name="TransFluidType" type="chr" min="1" max="1" scope="P">
+			<Description>Gets the manufacturerï¿½s recommended brake fluid type according to the applicable
+				specification for the OBD region</Description>
+		</Node>
+		
+		<Node name="TransFluidWeight" type="chr" min="1" max="1" scope="P">
+			<Description>Gets the manufacturers recommended transmission oil weight according to the applicable
+				specification for the OBD region</Description>
+		</Node>
+		
+		<Node name="TransFluidCapacity" type="float" min="1" max="1" scope="P">
 			
-			<Node name="MaximumTorque" type="int" min="1" max="1" scope="P" unit="N/m">
-				<Description>Gets the manufacturerï¿½s maximum recommended operating torque in
-					newton-meters</Description>
-			</Node>
+			<Description>Gets the Brake Fluid capacity in liters</Description>
+		</Node>
+		
+		<Node name="TransFluidLevel" type="int" min="1" max="1" scope="P">
+			<Description>Getsa the transmission fluid level in percent of maximum</Description>
+		</Node>
+	</Node>
+	<Node name="TransferCase" type="Node" min="1" scope="P">
+		<Description>Interior node representing the characteristics of the transfer case</Description>
+		<Node name="TransferCaseType" type="int" min="1" max="1" scope="P">
+			<Description>Gets the transfer case type in the vehicle</Description>
+		</Node>
+		<Value value="1">Manual Shift</Value>
+		<Value value="2">Electric Shift</Value>
+		<Node name="TransCaseIdentification" type="chr" min="1" max="1" scope="P">
+			<Description>Gets the manufacturer's designation for the transmission.</Description>
+		</Node>
+		<Node name="GearNames" type="chr" min="1" max="1" scope="P">
+			<Description>Gets an array containing the gear numbers and their corresponding names (negative gear numbers
+				correspond to reverse gears)</Description>
+		</Node>
+		<Node name="ModeNames" type="chr" min="1" max="1" scope="P">
+			<Description>Gets an array containing the operating mode numbers and their corresponding
+				names</Description>
+		</Node>
+		<Node name="ModeNames" type="chr" min="1" max="1" scope="P">
+			<Description>Gets the names of the transfer case modes</Description>
+		</Node>
+		<Node name="MaximumTemp" type="int" min="1" max="1" scope="P">
+			<Description>Gets the manufacturerï¿½s maximum recommended operating temperature in degrees
+				Kelvin</Description>
+		</Node>
+		
+		<Node name="MaximumTorque" type="float" min="1" max="1" scope="P">
 			
-			<Node name="NumberInputs" type="int" min="1" max="1" scope="P">
-				<Description>Gets the number of input shafts</Description>
-			</Node>
-			
-			<Node name="NumberOutputs" type="int" min="1" max="1" scope="P">
-				<Description>Gets the number of output shafts</Description>
-			</Node>
-			
-			<Node name="GearRatios" type="Array" min="1" max="1" scope="p">
-				<Description>Gets a 3-dimensional array containing the gear ratios indexed by gear number, input shaft
-					number and output shaft number. Form is: Ratio(Gear,Input,Output). (### there is no such thing as an
-					array)</Description>
-			</Node>
-			
-			<Node name="TransFluidType" type="chr" min="1" max="1" scope="P">
-				<Description>Gets the manufacturerï¿½s recommended brake fluid type according to the applicable
-					specification for the OBD region</Description>
-			</Node>
-			
-			<Node name="TransFluidWeight" type="chr" min="1" max="1" scope="P">
-				<Description>Gets the manufacturers recommended transmission oil weight according to the applicable
-					specification for the OBD region</Description>
-			</Node>
-			
-			<Node name="TransFluidCapacity" type="float" min="1" max="1" scope="P">
-				
-				<Description>Gets the Brake Fluid capacity in liters</Description>
-			</Node>
-			
-			<Node name="TransFluidLevel" type="int" min="1" max="1" scope="P">
-				<Description>Getsa the transmission fluid level in percent of maximum</Description>
-			</Node>
-			
-			<Node name="TransferCase" type="Node" min="1" scope="P">
-				<Description>Interior node representing the characteristics of the transfer case</Description>
-				<Node name="TransferCaseType" type="int" min="1" max="1" scope="P">
-					<Description>Gets the transfer case type in the vehicle</Description>
-				</Node>
-				<Value value="1">Manual Shift</Value>
-				<Value value="2">Electric Shift</Value>
-				<Node name="TransCaseIdentification" type="chr" min="1" max="1" scope="P">
-					<Description>Gets the manufacturer's designation for the transmission.</Description>
-				</Node>
-				<Node name="GearNames" type="chr" min="1" max="1" scope="P">
-					<Description>Gets an array containing the gear numbers and their corresponding names (negative gear
-						numbers correspond to reverse gears)</Description>
-				</Node>
-				<Node name="ModeNames" type="chr" min="1" max="1" scope="P">
-					<Description>Gets an array containing the operating mode numbers and their corresponding
-						names</Description>
-				</Node>
-				<Node name="ModeNames" type="chr" min="1" max="1" scope="P">
-					<Description>Gets the names of the transfer case modes</Description>
-				</Node>
-				<Node name="MaximumTemp" type="int" min="1" max="1" scope="P">
-					<Description>Gets the manufacturerï¿½s maximum recommended operating temperature in degrees
-						Kelvin</Description>
-				</Node>
-				
-				<Node name="MaximumTorque" type="float" min="1" max="1" scope="P">
-					
-					<Description>Gets the maximum rated torque for the transfer case in newton-meters</Description>
-				</Node>
-				<Node name="NumberInputs" type="int" min="1" max="1" scope="P">
-					<Description>Gets the number of input shafts</Description>
-				</Node>
-				<Node name="NumberOutputs" type="int" min="1" max="1" scope="P">
-					<Description>Gets the number of output shafts</Description>
-				</Node>
-				<Node name="GearRatios" type="Array" min="1" max="1" scope="p">
-					<Description>Gets a 3-dimensional array containing the input to output gear ratios indexed by gear
-						number, input shaft number and output shaft number. Form is:
-						Ratio(Gear,Input,Output)</Description>
-				</Node>
-				<Node name="Mode" type="int" min="1" max="1" scope="P">
-					<Description>Gets and/or Sets the Transfer Case operating Mode</Description>
-				</Node>
-				<Node name="Gear" type="int" min="1" max="1" scope="P">
-					<Description>Gets and/or Sets the Transfer Case operating Gear</Description>
-				</Node>
-				<Node name="TClFluidType" type="chr" min="1" max="1" scope="P">
-					<Description>Gets the manufacturers recommended transfer case fluid type oil weight according to the
-						applicable specification for the OBD region</Description>
-				</Node>
-				<Node name="TCFluidWeight" type="chr" min="1" max="1" scope="P">
-					<Description>Gets the manufacturers recommended transfer case fluid weight according to the
-						applicable specification for the OBD region</Description>
-				</Node>
-				<Node name="TCFluidLevel" type="int" min="1" max="1" scope="P">
-					<Description>Gets the level of the transfer case fluid in percent of maximum</Description>
-				</Node>
-			</Node>
+			<Description>Gets the maximum rated torque for the transfer case in newton-meters</Description>
+		</Node>
+		<Node name="NumberInputs" type="int" min="1" max="1" scope="P">
+			<Description>Gets the number of input shafts</Description>
+		</Node>
+		<Node name="NumberOutputs" type="int" min="1" max="1" scope="P">
+			<Description>Gets the number of output shafts</Description>
+		</Node>
+		<Node name="GearRatios" type="Array" min="1" max="1" scope="p">
+			<Description>Gets a 3-dimensional array containing the input to output gear ratios indexed by gear number,
+				input shaft number and output shaft number. Form is: Ratio(Gear,Input,Output)</Description>
+		</Node>
+		<Node name="Mode" type="int" min="1" max="1" scope="P">
+			<Description>Gets and/or Sets the Transfer Case operating Mode</Description>
+		</Node>
+		<Node name="Gear" type="int" min="1" max="1" scope="P">
+			<Description>Gets and/or Sets the Transfer Case operating Gear</Description>
+		</Node>
+		<Node name="TClFluidType" type="chr" min="1" max="1" scope="P">
+			<Description>Gets the manufacturers recommended transfer case fluid type oil weight according to the
+				applicable specification for the OBD region</Description>
+		</Node>
+		<Node name="TCFluidWeight" type="chr" min="1" max="1" scope="P">
+			<Description>Gets the manufacturers recommended transfer case fluid weight according to the applicable
+				specification for the OBD region</Description>
+		</Node>
+		<Node name="TCFluidLevel" type="int" min="1" max="1" scope="P">
+			<Description>Gets the level of the transfer case fluid in percent of maximum</Description>
 		</Node>
 	</Node>
 	<Node name="Differential" type="node" min="1" max="1" scope="P">
@@ -407,5 +404,5 @@
 				<Value value="TRUE">Locked</Value>
 			</Node>
 		</Node>
-	</Node> 
+	</Node>
 </Node>
