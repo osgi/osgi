@@ -234,6 +234,9 @@ public class Scheduler implements Runnable, EventHandler {
 							throw new Exception( "Doesn't find the registered application descriptor!" );
 						else {
 							Map args = schedApp.getArguments();
+							if( args == null )
+								args = new Hashtable();
+							
 							args.put( "org.osgi.triggeringevent", event );
 							appDesc.launch( args );
 
