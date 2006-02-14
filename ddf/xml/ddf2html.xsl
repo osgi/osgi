@@ -125,18 +125,17 @@
 				<xsl:value-of select="normalize-space(.)"/>
 			</xsl:for-each>
 		</xsl:variable>
-		<table>
-			<tr>
-				<td colspan="{$cnt}" style="vertical-align:middle; width:200px;margin-top:30px;">
-					<div style="background-color:yellow;width:100%">
+		<table style="border:0px solid white;margin:0;padding:0;" border="0" cellpadding="0" cellspacing="0">
+			<tr style="margin:0;padding:0;">
+				<td colspan="{$cnt}" style="vertical-align:middle; width:200px">
+					<div style="background-color:yellow;width:100%; align:left;">
 						<a href="#{$path}">
 							<xsl:value-of select="@name"/>
 						</a>
 					</div>
 				</td>
 				<xsl:if test="Node">
-					<td style="width:1px;background-color:black;height:60%;padding:0"/>
-					<td style="vertical-align:bottom;">
+					<td style="vertical-align:bottom;border:1px solid black;padding:4px; margin:4px;">
 						
 						<xsl:for-each select="Node">
 							<xsl:apply-templates select="." mode="tree"/>
