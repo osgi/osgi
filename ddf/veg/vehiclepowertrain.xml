@@ -373,39 +373,39 @@
 		<Description/>
 		<Node name="&lt;differential-instance&gt;" type="Node" min="1" scope="P">
 			<Description>Interior node representing the differential instance</Description>
-		</Node>
-		<Value value="FD">Front</Value>
-		<Value value="RD">Rear</Value>
-		<Node name="DiffType" type="int" min="1" max="1" scope="P">
-			<Description>Gets the type of the differential instance</Description>
-		</Node>
-		<Value value="1">Open</Value>
-		<Value value="2">Limited Slip</Value>
-		<Value value="3">Locker</Value>
-		<Value value="4">Manual Lock</Value>
-		<Value value="5">Fixed</Value>
-		<Node name="DiffIdentification" type="chr" min="1" max="1" scope="P">
-			<Description>Gets the manufacturer's designation for the differential instance</Description>
-		</Node>
-		<Node name="FinalDriveRatio" type="float" min="1" max="1" scope="P">
-			
-			<Description>Gets the final drive output to input ratio of the differential instance</Description>
-		</Node>
-		<Node name="DifferentialFluidType" type="chr" min="1" max="1" scope="P">
-			<Description>Gets the manufacturers recommended differential or transaxle fluid type oil weight according
-				to the applicable specification for the OBD region</Description>
-		</Node>
-		<Node name="DifferentialFluidWeight" type="chr" min="1" max="1" scope="P">
-			<Description>Gets the manufacturers recommended differential or transaxle fluid weight according to the
-				applicable specification for the OBD region</Description>
-		</Node>
-		<Node name="DifferentialFluidLevel" type="int" min="1" max="1" scope="P">
-			<Description>Gets the level of the differential fluid in percent of maximum</Description>
-		</Node>
-		<Node name="LockState" type="bool" min="1" max="1" scope="P">
-			<Description>Gets and/or Sets the lock state of a manual locking differential</Description>
-			<Value value="FALSE">Unlocked</Value>
-			<Value value="TRUE">Locked</Value>
+			<Value value="FD">Front</Value>
+			<Value value="RD">Rear</Value>
+			<Node name="DiffType" type="int" min="1" max="1" scope="P">
+				<Description>Gets the type of the differential instance</Description>
+			</Node>
+			<Value value="1">Open</Value>
+			<Value value="2">Limited Slip</Value>
+			<Value value="3">Locker</Value>
+			<Value value="4">Manual Lock</Value>
+			<Value value="5">Fixed</Value>
+			<Node name="DiffIdentification" type="chr" min="1" max="1" scope="P">
+				<Description>Gets the manufacturer's designation for the differential instance</Description>
+			</Node>
+			<Node name="FinalDriveRatio" type="float" min="1" max="1" scope="P">
+				
+				<Description>Gets the final drive output to input ratio of the differential instance</Description>
+			</Node>
+			<Node name="DifferentialFluidType" type="chr" min="1" max="1" scope="P">
+				<Description>Gets the manufacturers recommended differential or transaxle fluid type oil weight
+					according to the applicable specification for the OBD region</Description>
+			</Node>
+			<Node name="DifferentialFluidWeight" type="chr" min="1" max="1" scope="P">
+				<Description>Gets the manufacturers recommended differential or transaxle fluid weight according to the
+					applicable specification for the OBD region</Description>
+			</Node>
+			<Node name="DifferentialFluidLevel" type="int" min="1" max="1" scope="P">
+				<Description>Gets the level of the differential fluid in percent of maximum</Description>
+			</Node>
+			<Node name="LockState" type="bool" min="1" max="1" scope="P">
+				<Description>Gets and/or Sets the lock state of a manual locking differential</Description>
+				<Value value="FALSE">Unlocked</Value>
+				<Value value="TRUE">Locked</Value>
+			</Node>
 		</Node>
 	</Node> 
 </Node>
