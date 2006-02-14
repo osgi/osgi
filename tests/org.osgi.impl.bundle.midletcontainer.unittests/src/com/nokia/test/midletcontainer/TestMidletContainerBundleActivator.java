@@ -1304,11 +1304,11 @@ public class TestMidletContainerBundleActivator
   		calendar.add( Calendar.SECOND, 60*minute + 2 );
   		
   		String filter = "(&";
-  		filter += "(year=" 		+ calendar.get( Calendar.YEAR ) +")";
-  		filter += "(month=" 	+	calendar.get( Calendar.MONTH ) +")";
-  		filter += "(day=" 		+	calendar.get( Calendar.DAY_OF_MONTH ) +")";
-  		filter += "(hour=" 		+	calendar.get( Calendar.HOUR_OF_DAY ) +")";
-  		filter += "(minute="	+ calendar.get( Calendar.MINUTE ) +")";
+  		filter += "(year=" 			+ calendar.get( Calendar.YEAR ) +")";
+  		filter += "(month=" 		+	calendar.get( Calendar.MONTH ) +")";
+  		filter += "(day=" 			+	calendar.get( Calendar.DAY_OF_MONTH ) +")";
+  		filter += "(hour_of_day=" 	+	calendar.get( Calendar.HOUR_OF_DAY ) +")";
+  		filter += "(minute="		+ calendar.get( Calendar.MINUTE ) +")";
   		filter += ")";
   		
   		return filter;

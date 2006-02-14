@@ -284,8 +284,8 @@ public class Scheduler implements Runnable, EventHandler {
 			props.put( "year", 				new Integer( calendar.get( Calendar.YEAR ) ) );
 			props.put( "month", 			new Byte( (byte)calendar.get( Calendar.MONTH ) ) );
 			props.put( "day", 				new Byte( (byte)calendar.get( Calendar.DAY_OF_MONTH ) ) );
-			props.put( "day_of_week", new Byte( (byte)calendar.get( Calendar.DAY_OF_WEEK ) ) );
-			props.put( "hour", 				new Byte( (byte)calendar.get( Calendar.HOUR_OF_DAY ) ) );
+			props.put( "day_of_week",		new Byte( (byte)calendar.get( Calendar.DAY_OF_WEEK ) ) );
+			props.put( "hour_of_day", 		new Byte( (byte)calendar.get( Calendar.HOUR_OF_DAY ) ) );
 			props.put( "minute", 			new Byte( (byte)calendar.get( Calendar.MINUTE ) ) );
 			
 			if( stopped ) /* avoid exception */
