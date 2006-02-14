@@ -10,14 +10,15 @@
 				<link rel="stylesheet" href="http://bundles.osgi.org/www/osgi.css" type="text/css"/>
 			</head>
 			<body>
-				<h1>
-					<xsl:value-of select="Node/@name"/> Managed Object</h1>
+				<h1>OSGi DMT Node Definitions</h1>
+				<h2>
+					<xsl:value-of select="Node/@name"/> Managed Object</h2>
 				<p>
 					<xsl:copy-of select="Node/Description"/></p>
 				
-				<h2>Overview Tree</h2>
+				<h3>Overview Tree</h3>
 				<xsl:apply-templates select="Node" mode="tree"/>
-				<h2>Tables</h2>
+				<h3>Tables</h3> 
 				<table>
 					<tr>
 						<th>Path</th>
@@ -34,8 +35,15 @@
 	</xsl:template>
 	
 	<xsl:template match="Node">
+		<xsl:variable name="path">
+			<xsl:for-each select="ancestor-or-self::node()/@name">
+				<xsl:text>/</xsl:text>
+				<xsl:value-of select="normalize-space(.)"/>
+			</xsl:for-each>
+		</xsl:variable>
 		<tr>
 			<td>
+				<a name="{$path}"/>
 				<code>
 					<xsl:for-each select="ancestor::node()[parent::node()]">
 						<xsl:text>-</xsl:text>
@@ -63,9 +71,9 @@
 				<xsl:value-of select="Description"/>
 				<xsl:if test="Name">
 					<table style="width:100%; ">
-							<tr>
-								<th colspan="2">Names</th>
-							</tr>
+						<tr>
+							<th colspan="2">Names</th>
+						</tr>
 						<xsl:for-each select="Name">
 							<tr>
 								<td style="width:150px">
@@ -74,7 +82,7 @@
 									</i>
 								</td>
 								<td>
-										<xsl:value-of select="."/>
+									<xsl:value-of select="."/>
 								</td>
 							</tr>
 						</xsl:for-each>
@@ -102,20 +110,28 @@
 							</tr>
 						</xsl:for-each>
 					</table>
-								<hr/>
-								</xsl:if>
-								</td>
-							</tr>
+					<hr/>
+				</xsl:if>
+			</td>
+		</tr>
 		<xsl:apply-templates select="Node"/>
 	</xsl:template>
 	
 	<xsl:template match="Node" mode="tree">
 		<xsl:variable name="cnt" select="count(child::node())"/>
+		<xsl:variable name="path">
+			<xsl:for-each select="ancestor-or-self::node()/@name">
+				<xsl:text>/</xsl:text>
+				<xsl:value-of select="normalize-space(.)"/>
+			</xsl:for-each>
+		</xsl:variable>
 		<table>
 			<tr>
 				<td colspan="{$cnt}" style="vertical-align:middle; width:200px;margin-top:30px;">
 					<div style="background-color:yellow;width:100%">
-						<xsl:value-of select="@name"/>
+						<a href="#{$path}">
+							<xsl:value-of select="@name"/>
+						</a>
 					</div>
 				</td>
 				<xsl:if test="Node">
