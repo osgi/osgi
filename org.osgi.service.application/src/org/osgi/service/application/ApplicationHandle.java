@@ -164,7 +164,13 @@ public abstract class ApplicationHandle {
 	 *             if the application handle is unregistered
 	 */
 	public final void destroy() {
-		delegate.destroy();
+		try {
+			delegate.destroy();
+		}catch( SecurityException se ) {
+			descriptor.isLaunchableSpecific(); /* check whether the bundle was uninstalled */
+			                                   /* if yes, throws IllegalStateException */
+			throw se;                          /* otherwise throw the catched SecurityException */
+		}
 		destroySpecific();
 	}
 

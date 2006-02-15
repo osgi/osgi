@@ -303,7 +303,13 @@ public abstract class ApplicationDescriptor {
 	 */
 	public final ApplicationHandle launch(Map arguments)
 			throws ApplicationException {
-		delegate.launch(arguments);
+		try {
+			delegate.launch(arguments);
+		}catch( SecurityException se ) {
+			isLaunchableSpecific(); /* check whether the bundle was uninstalled */
+			                        /* if yes, throws IllegalStateException */
+			throw se;               /* otherwise throw the catched SecurityException */
+		}
 		if( !isLaunchableSpecific() )
 			throw new ApplicationException(ApplicationException.APPLICATION_NOT_LAUNCHABLE,
 					 "Cannot launch the application!");
@@ -424,7 +430,13 @@ public abstract class ApplicationDescriptor {
 			String eventFilter, boolean recurring) throws InvalidSyntaxException, 
             ApplicationException {
 		isLaunchableSpecific(); // checks if the ApplicationDescriptor was already unregistered
-		return delegate.schedule(scheduleId, arguments, topic, eventFilter, recurring);
+		try {
+			return delegate.schedule(scheduleId, arguments, topic, eventFilter, recurring);
+		}catch( SecurityException se ) {
+			isLaunchableSpecific(); /* check whether the bundle was uninstalled */
+			                        /* if yes, throws IllegalStateException */
+			throw se;               /* otherwise throw the catched SecurityException */
+		}
 	}
 
 	/**
@@ -439,7 +451,13 @@ public abstract class ApplicationDescriptor {
 	 *             if the application descriptor is unregistered
 	 */
 	public final void lock() {
-		delegate.lock();
+		try {
+			delegate.lock();
+		}catch( SecurityException se ) {
+			isLaunchableSpecific(); /* check whether the bundle was uninstalled */
+			                        /* if yes, throws IllegalStateException */
+			throw se;               /* otherwise throw the catched SecurityException */
+		}
 		lockSpecific();
 	}
 	
@@ -462,7 +480,13 @@ public abstract class ApplicationDescriptor {
 	 *             if the application descriptor is unregistered
 	 */
 	public final void unlock() {
-		delegate.unlock();
+		try {
+			delegate.unlock();
+		}catch( SecurityException se ) {
+			isLaunchableSpecific(); /* check whether the bundle was uninstalled */
+			                        /* if yes, throws IllegalStateException */
+			throw se;               /* otherwise throw the catched SecurityException */
+		}
 		unlockSpecific();
 	}
 	
