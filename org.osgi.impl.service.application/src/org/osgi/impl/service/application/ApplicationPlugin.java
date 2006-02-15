@@ -802,8 +802,7 @@ class InstanceIDNode extends ApplicationPluginBaseNode {
 		setZeroOccurrenceAllowed( true );
 		
 		addChildNode( new ApplicationPluginBaseNode("Operations", 
-				                                        new ApplicationPluginBaseNode("Ext"),
-																								new InstanceOperationsStopNode()) );
+				      new InstanceOperationsStopNode()) );
 		addChildNode( new InstanceStateNode() );
 		addChildNode( new InstanceIDPropertyNode() );
 	}
@@ -938,9 +937,7 @@ class ApplicationIDNode extends ApplicationPluginBaseNode {
 		addChildNode( new ApplicationPropertyNode( "Location",      ApplicationDescriptor.APPLICATION_LOCATION,  DmtData.FORMAT_STRING ) );
 		
 		vendor.setZeroOccurrenceAllowed( true );
-		version.setZeroOccurrenceAllowed( true );
-		
-		addChildNode( new ApplicationPluginBaseNode("Ext") );
+		version.setZeroOccurrenceAllowed( true );		
 	}
 	
 	public String[]  getNames( String []path ) {

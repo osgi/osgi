@@ -1558,7 +1558,7 @@ public class TestMidletContainerBundleActivator
   			
   			String names[]  = new String [] { 	"Name", "IconURI", "Version", "Vendor", 
   					                          	"Locked", "PackageID", "ContainerID",
-  					                          	"ApplicationID", "Instances", "Ext", 
+  					                          	"ApplicationID", "Instances", 
 												"Operations", "Schedules" };
   			Object values[] = new Object [ names.length ];
   			
@@ -1888,11 +1888,11 @@ public class TestMidletContainerBundleActivator
   			String instanceName = nodeNames[ 0 ];
   			
   			String[] operationNames = session.getChildNodeNames( "./OSGi/Application/" + mangledAppUID + "/Instances/" + instanceName + "/Operations" );  			
-  			if( operationNames == null || operationNames.length != 2 )
+  			if( operationNames == null || operationNames.length == 0 || operationNames.length > 2 )
   				throw new Exception( "Invalid child nodes of the application instance operations!" );
 
   			List childList = Arrays.asList( operationNames );  			
-  			if( childList.indexOf( "Stop" ) == -1 || childList.indexOf( "Ext" ) == -1 )
+  			if( childList.indexOf( "Stop" ) == -1 )
   				throw new Exception( "Invalid child nodes of the application instance operations!" );
   			
   			session.execute( "./OSGi/Application/" + mangledAppUID + "/Instances/" + instanceName + "/Operations/Stop", "STOP" );			
