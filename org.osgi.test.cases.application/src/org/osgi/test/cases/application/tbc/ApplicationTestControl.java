@@ -896,9 +896,19 @@ public class ApplicationTestControl extends DefaultTestBundleControl {
 				.getProperty(Constants.SERVICE_ID)).intValue();
 	}
 
-	public Object getServiceProperty(String className, String key) {
-		ServiceReference refs = getContext().getServiceReference(className);
-		return refs == null ? null : (refs.getProperty(key));
+	public Object getServiceProperty(String className, String key, String filter) {
+		if (filter == null) {
+			ServiceReference refs = getContext().getServiceReference(className);
+			return refs == null ? null : (refs.getProperty(key));
+		} else {
+			ServiceReference[] refs;
+			try {
+				refs = getContext().getServiceReferences(className, "("+Constants.SERVICE_PID+"="+filter+")");
+			} catch (InvalidSyntaxException e) {
+				return null;
+			}
+			return refs == null ? null : (refs[0].getProperty(key));
+		}
 	}
 
 	/**

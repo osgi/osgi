@@ -287,7 +287,7 @@ public class TreeStructure {
 			tbc
 					.assertEquals(
 							"Asserting the value of $/Application/<app_id>/IconURI",
-							tbc.getServiceProperty(ApplicationDescriptor.class.getName(), "application.icon").toString(),
+							tbc.getServiceProperty(ApplicationDescriptor.class.getName(), "application.icon", ApplicationConstants.TEST_PID).toString(),
 							session
 									.getNodeValue(ApplicationConstants.OSGI_APPLICATION_APPID_ICONURI).getString());
 			
@@ -2292,7 +2292,7 @@ public class TreeStructure {
 											tbc
 													.getServiceProperty(
 															"org.osgi.service.application.ApplicationDescriptor",
-															ApplicationConstants.APPLICATION_LOCATION)));
+															ApplicationConstants.APPLICATION_LOCATION, ApplicationConstants.TEST_PID)));
 
 		} catch (Exception e) {
 			tbc.fail(MessagesConstants.getMessage(

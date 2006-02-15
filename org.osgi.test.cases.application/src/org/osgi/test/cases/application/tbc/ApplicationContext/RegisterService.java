@@ -236,17 +236,17 @@ public class RegisterService implements ApplicationServiceListener {
             
             appContext.registerService(this.getClass().getName(), this, hash);            
             
-            Long val = (Long) tbc.getServiceProperty(this.getClass().getName(), Constants.SERVICE_ID);
+            Long val = (Long) tbc.getServiceProperty(this.getClass().getName(), Constants.SERVICE_ID, null);
             
             tbc.assertTrue("Asserting if the Constants.SERVICE_ID passed as parameter was changed by the framework.", !(val.intValue()==2355));
             
-            String[] values = (String[]) tbc.getServiceProperty(this.getClass().getName(), Constants.OBJECTCLASS);
+            String[] values = (String[]) tbc.getServiceProperty(this.getClass().getName(), Constants.OBJECTCLASS, null);
             
             tbc.assertNotNull("Asserting if the OBJECTCLASS returned is not null.", values);
             
             tbc.assertTrue("Asserting if the Constants.OBJECTCLASS passed as parameter was changed by the framework.", !values[0].equals("test2"));
             
-            String value = (String) tbc.getServiceProperty(this.getClass().getName(), "test");
+            String value = (String) tbc.getServiceProperty(this.getClass().getName(), "test", null);
             
             tbc.assertTrue("Asserting if the other parameter passed was added to the framework parameters.", value.equals("test"));            
             
@@ -581,31 +581,31 @@ public class RegisterService implements ApplicationServiceListener {
             
             appContext.registerService(new String[] { this.getClass().getName(), Object.class.getName() }, this, hash);            
             
-            Long val = (Long) tbc.getServiceProperty(this.getClass().getName(), Constants.SERVICE_ID);
+            Long val = (Long) tbc.getServiceProperty(this.getClass().getName(), Constants.SERVICE_ID, null);
             
             tbc.assertTrue("Asserting if the Constants.SERVICE_ID passed as parameter was changed by the framework.", !(val.intValue()==2355));
             
-            String[] values = (String[]) tbc.getServiceProperty(this.getClass().getName(), Constants.OBJECTCLASS);
+            String[] values = (String[]) tbc.getServiceProperty(this.getClass().getName(), Constants.OBJECTCLASS, null);
             
             tbc.assertNotNull("Asserting if the OBJECTCLASS returned is not null.", values);
             
             tbc.assertTrue("Asserting if the Constants.OBJECTCLASS passed as parameter was changed by the framework.", !values[0].equals("test1") && !values[0].equals("test2"));
             
-            String value = (String) tbc.getServiceProperty(this.getClass().getName(), "test");
+            String value = (String) tbc.getServiceProperty(this.getClass().getName(), "test", null);
             
             tbc.assertTrue("Asserting if the other parameter passed was added to the framework parameters.", value.equals("test"));            
             
-            val = (Long) tbc.getServiceProperty(Object.class.getName(), Constants.SERVICE_ID);
+            val = (Long) tbc.getServiceProperty(Object.class.getName(), Constants.SERVICE_ID, null);
             
             tbc.assertTrue("Asserting if the Constants.SERVICE_ID passed as parameter was changed by the framework.", !(val.intValue()==2355));
             
-            values = (String[]) tbc.getServiceProperty(Object.class.getName(), Constants.OBJECTCLASS);
+            values = (String[]) tbc.getServiceProperty(Object.class.getName(), Constants.OBJECTCLASS, null);
             
             tbc.assertNotNull("Asserting if the OBJECTCLASS returned is not null.", values);
             
             tbc.assertTrue("Asserting if the Constants.OBJECTCLASS passed as parameter was changed by the framework.", !values[0].equals("test1") && !values[0].equals("test2"));
             
-            value = (String) tbc.getServiceProperty(Object.class.getName(), "test");
+            value = (String) tbc.getServiceProperty(Object.class.getName(), "test", null);
             
             tbc.assertTrue("Asserting if the other parameter passed was added to the framework parameters.", value.equals("test"));            
             
