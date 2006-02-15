@@ -40,6 +40,52 @@ public interface ScheduledApplication {
     public static final String SCHEDULE_ID = "schedule.id";
     
     /**
+     * The key for the startup argument used to pass the event object that 
+     * triggered the scheduling to the launched application instance.
+     * The event is passed in a {@link java.security.GuardedObject}
+     * protected by the corresponding 
+     * {@link org.osgi.service.event.TopicPermission}.
+     */
+    public static final String TRIGGERING_EVENT = "org.osgi.triggeringevent";
+    
+    /**
+     * The topic name for the virtual timer topic. Time based schedulings
+     * shold be created using this topic.
+     */
+    public static final String TIMER_TOPIC = "org/osgi/application/timer";
+    
+    /**
+     * The name of the <i>year</i> attribute of a virtual timer event. The value is
+     * defined by {@link java.util.Calendar#YEAR}.
+     */
+    public static final String YEAR = "year";
+    
+    /**
+     * The name of the <i>month</i> attribute of a virtual timer event. The value is
+     * defined by {@link java.util.Calendar#MONTH}.
+     */
+    public static final String MONTH = "month";
+    
+    /**
+     * The name of the <i>day of month</i> attribute of a virtual timer event. The value is
+     * defined by {@link java.util.Calendar#DAY_OF_MONTH}.
+     */
+    public static final String DAY_OF_MONTH = "day_of_month";
+    
+    /**
+     * The name of the <i>hour of day</i> attribute of a virtual timer event. The value is
+     * defined by {@link java.util.Calendar#HOUR_OF_DAY}.
+     */
+    public static final String HOUR_OF_DAY = "hour_of_day";
+    
+    /**
+     * The name of the <i>minute</i> attribute of a virtual timer event. The value is
+     * defined by {@link java.util.Calendar#MINUTE}.
+     */
+    public static final String MINUTE = "minute";
+    
+    
+    /**
      * Returns the identifier of this scheduling. The identifier is unique within
      * the scope of the applicale the scheduling is related to. 
      * @return the identifier of this scheduling
