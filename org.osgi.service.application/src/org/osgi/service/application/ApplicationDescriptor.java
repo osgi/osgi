@@ -10,7 +10,6 @@
 
 package org.osgi.service.application;
 
-import java.io.IOException;
 import java.security.AccessController;
 import java.security.PrivilegedExceptionAction;
 import java.util.Map;
@@ -157,6 +156,8 @@ public abstract class ApplicationDescriptor {
 	 * @return <code>true</code> if the specified pattern matches at least
 	 *   one of the certificate chains used to authenticate this application 
 	 * @throws NullPointerException if the specified <code>pattern</code> is null.
+     * @throws IllegalStateException if the application descriptor was
+     *   unregistered
 	 */	
 	public abstract boolean matchDNChain( String pattern );
 	
