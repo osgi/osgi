@@ -237,7 +237,7 @@ public class Scheduler implements Runnable, EventHandler {
 							if( args == null )
 								args = new Hashtable();
 							
-							args.put( "org.osgi.triggeringevent", event );
+							args.put( ScheduledApplication.TRIGGERING_EVENT, event );
 							appDesc.launch( args );
 
 							if (!schedApp.isRecurring())
@@ -281,22 +281,22 @@ public class Scheduler implements Runnable, EventHandler {
 			Calendar calendar = Calendar.getInstance();
 
 			Hashtable props = new Hashtable();
-			props.put( "year", 				new Integer( calendar.get( Calendar.YEAR ) ) );
-			props.put( "month", 			new Byte( (byte)calendar.get( Calendar.MONTH ) ) );
-			props.put( "day", 				new Byte( (byte)calendar.get( Calendar.DAY_OF_MONTH ) ) );
-			props.put( "day_of_week",		new Byte( (byte)calendar.get( Calendar.DAY_OF_WEEK ) ) );
-			props.put( "hour_of_day", 		new Byte( (byte)calendar.get( Calendar.HOUR_OF_DAY ) ) );
-			props.put( "minute", 			new Byte( (byte)calendar.get( Calendar.MINUTE ) ) );
+			props.put( ScheduledApplication.YEAR,			new Integer( calendar.get( Calendar.YEAR ) ) );
+			props.put( ScheduledApplication.MONTH,			new Byte( (byte)calendar.get( Calendar.MONTH ) ) );
+			props.put( ScheduledApplication.DAY_OF_MONTH,	new Byte( (byte)calendar.get( Calendar.DAY_OF_MONTH ) ) );
+			props.put( "day_of_week",						new Byte( (byte)calendar.get( Calendar.DAY_OF_WEEK ) ) );
+			props.put( ScheduledApplication.HOUR_OF_DAY,	new Byte( (byte)calendar.get( Calendar.HOUR_OF_DAY ) ) );
+			props.put( ScheduledApplication.MINUTE,			new Byte( (byte)calendar.get( Calendar.MINUTE ) ) );
 			
 			if( stopped ) /* avoid exception */
 				break;
 			
-		  ServiceReference serviceRef = bc.getServiceReference("org.osgi.service.event.EventAdmin");
+			ServiceReference serviceRef = bc.getServiceReference("org.osgi.service.event.EventAdmin");
 			if (serviceRef != null) {
 				EventAdmin eventAdmin = (EventAdmin) bc.getService(serviceRef);
 				if (eventAdmin != null) {
 					try {
-						eventAdmin.sendEvent( new Event( "org/osgi/application/timer", props ) );
+						eventAdmin.sendEvent( new Event( ScheduledApplication.TIMER_TOPIC, props ) );
 					}finally {
 						bc.ungetService(serviceRef);
 					}
