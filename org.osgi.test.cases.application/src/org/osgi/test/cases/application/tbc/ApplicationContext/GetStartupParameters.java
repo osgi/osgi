@@ -36,9 +36,17 @@
  */
 package org.osgi.test.cases.application.tbc.ApplicationContext;
 
+import java.security.GuardedObject;
 import java.util.Hashtable;
+import java.util.Map;
+
 import org.osgi.application.ApplicationContext;
+import org.osgi.service.application.ApplicationAdminPermission;
 import org.osgi.service.application.ApplicationHandle;
+import org.osgi.service.application.ScheduledApplication;
+import org.osgi.service.event.Event;
+import org.osgi.service.permissionadmin.PermissionInfo;
+import org.osgi.test.cases.application.tbc.ApplicationConstants;
 import org.osgi.test.cases.application.tbc.ApplicationTestControl;
 import org.osgi.test.cases.application.tbc.util.MessagesConstants;
 
@@ -61,6 +69,8 @@ public class GetStartupParameters {
         testGetStartupParameters001();
         testGetStartupParameters002();
         testGetStartupParameters003();
+        testGetStartupParameters004();
+        testGetStartupParameters005();
     }    
     
     /**
@@ -150,6 +160,90 @@ public class GetStartupParameters {
         	tbc.cleanUp(handle);
         }
     }    
+    
+	/**
+	 * This method asserts if a "org.osgi.triggeringevent" property is passed as arguments
+	 * to the schedule, it is replaced by the RI with the event fired.
+	 * 
+	 * @spec ApplicationContext.getStartupParameters()
+	 */	
+	private void testGetStartupParameters004() {
+		tbc.log("#testGetStartupParameters004");
+		PermissionInfo[] infos = null;
+		ScheduledApplication sa = null;
+		try {
+			infos = tbc.getPermissionAdmin().getPermissions(
+					tbc.getTb2Location());
+
+			tbc.setLocalPermission(
+				new PermissionInfo(ApplicationAdminPermission.class.getName(), ApplicationConstants.APPLICATION_PERMISSION_FILTER1, ApplicationAdminPermission.SCHEDULE_ACTION)
+			);
+			
+			Hashtable hash = new Hashtable();
+			hash.put(ScheduledApplication.TRIGGERING_EVENT, "test");
+			
+			sa = tbc.getAppDescriptor().schedule(null, hash, ApplicationConstants.TOPIC_EVENT, null, true);
+			
+			tbc.assertNotNull("Asserting that a ScheduledApplication was returned according to the used filter.", sa);
+			
+			tbc.sendEvent(ApplicationConstants.TOPIC_EVENT);
+			
+			ApplicationContext appContext = org.osgi.application.Framework
+            .getApplicationContext(tbc.getAppInstance());
+			
+			Map hash2 = appContext.getStartupParameters();
+			
+			tbc.assertTrue("Asserting if the returned map has a different value for the org.osgi.triggeringevent.", hash2.get(ScheduledApplication.TRIGGERING_EVENT) instanceof GuardedObject);
+						
+		} catch (Exception e) {
+			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": " + e.getClass().getName());
+		} finally {
+			tbc.cleanUp(sa, infos);
+		}
+	}
+	
+	/**
+	 * This method asserts if when null was passed as parameter for the arguments,
+	 * the Scheduler creates a Map and put a value for org.osgi.triggeringevent.
+	 * 
+	 * @spec ApplicationContext.getStartupParameters()
+	 */	
+	private void testGetStartupParameters005() {
+		tbc.log("#testGetStartupParameters005");
+		PermissionInfo[] infos = null;
+		ScheduledApplication sa = null;
+		try {
+			infos = tbc.getPermissionAdmin().getPermissions(
+					tbc.getTb2Location());
+
+			tbc.setLocalPermission(
+				new PermissionInfo(ApplicationAdminPermission.class.getName(), ApplicationConstants.APPLICATION_PERMISSION_FILTER1, ApplicationAdminPermission.SCHEDULE_ACTION)
+			);
+					
+			sa = tbc.getAppDescriptor().schedule(null, null, ApplicationConstants.TOPIC_EVENT, null, true);
+			
+			tbc.assertNotNull("Asserting that a ScheduledApplication was returned according to the used filter.", sa);
+			
+			tbc.sendEvent(ApplicationConstants.TOPIC_EVENT);
+			
+			ApplicationContext appContext = org.osgi.application.Framework
+            .getApplicationContext(tbc.getAppInstance());
+			
+			Map hash = appContext.getStartupParameters();
+			
+			tbc.assertTrue("Asserting if the returned map has a different value for the org.osgi.triggeringevent.", hash.get(ScheduledApplication.TRIGGERING_EVENT) instanceof GuardedObject);
+			
+			GuardedObject obj = (GuardedObject) hash.get(ScheduledApplication.TRIGGERING_EVENT);
+
+			Event evt = (Event) obj.getObject();
+			
+			tbc.assertEquals("Asserting if the event inside the GuardedObject has org/cesar/topic as topic", ApplicationConstants.TOPIC_EVENT, evt.getTopic());
+		} catch (Exception e) {
+			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": " + e.getClass().getName());
+		} finally {
+			tbc.cleanUp(sa, infos);
+		}
+	}	
     
     
 }
