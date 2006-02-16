@@ -555,7 +555,7 @@ public class InstallAndActivate implements TestInterface {
     }
     
     /**
-     * This test asserts the result code is 1 if resource processor is not able to commit
+     * This test asserts the result code is 462 if resource processor is not able to commit
      *
      * @spec 3.6.5.2 InstallAndActivate Command
      */
