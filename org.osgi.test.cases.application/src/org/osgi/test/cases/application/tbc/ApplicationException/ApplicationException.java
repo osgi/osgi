@@ -31,6 +31,14 @@ public class ApplicationException {
         testApplicationException010();
         testApplicationException011();
         testApplicationException012();
+        testApplicationException013();
+        testApplicationException014();
+        testApplicationException015();
+        testApplicationException016();
+        testApplicationException017();
+        testApplicationException018();
+        testApplicationException019();
+        testApplicationException020();
     }    
     
     /**
@@ -251,6 +259,169 @@ public class ApplicationException {
             tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": "
                 + e.getClass().getName());
         }
-    }       
+    }
+    
+    /**
+     * This method asserts if the passed errorcode
+     * is returned correctly (APPLICATION_SCHEDULING_FAILED)
+     * 
+     * @spec ApplicationException.ApplicationException(int)
+     */
+    private void testApplicationException013() {
+        tbc.log("#testApplicationException013");
+        try {        	
+        	org.osgi.service.application.ApplicationException exception = new org.osgi.service.application.ApplicationException(org.osgi.service.application.ApplicationException.APPLICATION_SCHEDULING_FAILED);
+            tbc.assertEquals("Asserting if the errorcode returned was APPLICATION_SCHEDULING_FAILED.", org.osgi.service.application.ApplicationException.APPLICATION_SCHEDULING_FAILED, exception.getErrorCode());
+        } catch (Exception e) {
+            tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": "
+                + e.getClass().getName());
+        }
+    } 	
+    
+    /**
+     * This method asserts if the passed errorcode
+     * is returned correctly (APPLICATION_DUPLICATE_SCHEDULE_ID)
+     * 
+     * @spec ApplicationException.ApplicationException(int)
+     */
+    private void testApplicationException014() {
+        tbc.log("#testApplicationException014");
+        try {        	
+        	org.osgi.service.application.ApplicationException exception = new org.osgi.service.application.ApplicationException(org.osgi.service.application.ApplicationException.APPLICATION_DUPLICATE_SCHEDULE_ID);
+            tbc.assertEquals("Asserting if the errorcode returned was APPLICATION_DUPLICATE_SCHEDULE_ID.", org.osgi.service.application.ApplicationException.APPLICATION_DUPLICATE_SCHEDULE_ID, exception.getErrorCode());
+        } catch (Exception e) {
+            tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": "
+                + e.getClass().getName());
+        }
+    }
+    
+
+	/**
+	 * This method asserts if the passed parameters are returned correctly
+	 * (APPLICATION_SCHEDULING_FAILED).
+	 * 
+	 * @spec ApplicationException.ApplicationException(int,String)
+	 */
+	private void testApplicationException015() {
+		tbc.log("#testApplicationException015");
+		try {
+			org.osgi.service.application.ApplicationException exception = new org.osgi.service.application.ApplicationException(
+					org.osgi.service.application.ApplicationException.APPLICATION_SCHEDULING_FAILED,
+					"test");
+			tbc
+					.assertEquals(
+							"Asserting if the errorcode returned was APPLICATION_SCHEDULING_FAILED.",
+							org.osgi.service.application.ApplicationException.APPLICATION_SCHEDULING_FAILED,
+							exception.getErrorCode());
+			tbc.assertEquals("Asserting if the message returned was test.",
+					"test", exception.getMessage());
+		} catch (Exception e) {
+			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": "
+					+ e.getClass().getName());
+		}
+	}
+	
+	/**
+	 * This method asserts if the passed parameters are returned correctly
+	 * (APPLICATION_DUPLICATE_SCHEDULE_ID).
+	 * 
+	 * @spec ApplicationException.ApplicationException(int,String)
+	 */
+	private void testApplicationException016() {
+		tbc.log("#testApplicationException016");
+		try {
+			org.osgi.service.application.ApplicationException exception = new org.osgi.service.application.ApplicationException(
+					org.osgi.service.application.ApplicationException.APPLICATION_DUPLICATE_SCHEDULE_ID,
+					"test");
+			tbc
+					.assertEquals(
+							"Asserting if the errorcode returned was APPLICATION_DUPLICATE_SCHEDULE_ID.",
+							org.osgi.service.application.ApplicationException.APPLICATION_DUPLICATE_SCHEDULE_ID,
+							exception.getErrorCode());
+			tbc.assertEquals("Asserting if the message returned was test.",
+					"test", exception.getMessage());
+		} catch (Exception e) {
+			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": "
+					+ e.getClass().getName());
+		}
+	}
+	
+    /**
+     * This method asserts if the passed parameters
+     * are returned correctly (APPLICATION_SCHEDULING_FAILED).
+     * 
+     * @spec ApplicationException.ApplicationException(int,String,Throwable)
+     */
+    private void testApplicationException017() {
+        tbc.log("#testApplicationException017");
+        try {        	
+        	Throwable cause =  new IllegalArgumentException();
+        	org.osgi.service.application.ApplicationException exception = new org.osgi.service.application.ApplicationException(org.osgi.service.application.ApplicationException.APPLICATION_SCHEDULING_FAILED,"test", cause);
+            tbc.assertEquals("Asserting if the errorcode returned was APPLICATION_SCHEDULING_FAILED.", org.osgi.service.application.ApplicationException.APPLICATION_SCHEDULING_FAILED, exception.getErrorCode());
+            tbc.assertEquals("Asserting if the message returned was test.", "test", exception.getMessage());   
+            tbc.assertEquals("Asserting if the cause returned is IllegalArgumentException", cause, exception.getCause());
+        } catch (Exception e) {
+            tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": "
+                + e.getClass().getName());
+        }
+    } 	
+    
+    /**
+     * This method asserts if the passed parameters
+     * are returned correctly (APPLICATION_DUPLICATE_SCHEDULE_ID).
+     * 
+     * @spec ApplicationException.ApplicationException(int,String,Throwable)
+     */
+    private void testApplicationException018() {
+        tbc.log("#testApplicationException018");
+        try {        	
+        	Throwable cause =  new IllegalArgumentException();
+        	org.osgi.service.application.ApplicationException exception = new org.osgi.service.application.ApplicationException(org.osgi.service.application.ApplicationException.APPLICATION_DUPLICATE_SCHEDULE_ID,"test", cause);
+            tbc.assertEquals("Asserting if the errorcode returned was APPLICATION_DUPLICATE_SCHEDULE_ID.", org.osgi.service.application.ApplicationException.APPLICATION_DUPLICATE_SCHEDULE_ID, exception.getErrorCode());
+            tbc.assertEquals("Asserting if the message returned was test.", "test", exception.getMessage());   
+            tbc.assertEquals("Asserting if the cause returned is IllegalArgumentException", cause, exception.getCause());
+        } catch (Exception e) {
+            tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": "
+                + e.getClass().getName());
+        }
+    }     
+    
+    /**
+     * This method asserts if the passed parameters
+     * are returned correctly (APPLICATION_SCHEDULING_FAILED). 
+     * 
+     * @spec ApplicationException.ApplicationException(int,Throwable)
+     */
+    private void testApplicationException019() {
+        tbc.log("#testApplicationException019");
+        try {        	
+        	Throwable cause =  new IllegalArgumentException();
+        	org.osgi.service.application.ApplicationException exception = new org.osgi.service.application.ApplicationException(org.osgi.service.application.ApplicationException.APPLICATION_SCHEDULING_FAILED, cause);
+            tbc.assertEquals("Asserting if the errorcode returned was APPLICATION_SCHEDULING_FAILED.", org.osgi.service.application.ApplicationException.APPLICATION_SCHEDULING_FAILED, exception.getErrorCode());  
+            tbc.assertEquals("Asserting if the cause returned is IllegalArgumentException", cause, exception.getCause());
+        } catch (Exception e) {
+            tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": "
+                + e.getClass().getName());
+        }
+    }  
+    
+    /**
+     * This method asserts if the passed parameters
+     * are returned correctly (APPLICATION_DUPLICATE_SCHEDULE_ID). 
+     * 
+     * @spec ApplicationException.ApplicationException(int,Throwable)
+     */
+    private void testApplicationException020() {
+        tbc.log("#testApplicationException020");
+        try {        	
+        	Throwable cause =  new IllegalArgumentException();
+        	org.osgi.service.application.ApplicationException exception = new org.osgi.service.application.ApplicationException(org.osgi.service.application.ApplicationException.APPLICATION_DUPLICATE_SCHEDULE_ID, cause);
+            tbc.assertEquals("Asserting if the errorcode returned was APPLICATION_DUPLICATE_SCHEDULE_ID.", org.osgi.service.application.ApplicationException.APPLICATION_DUPLICATE_SCHEDULE_ID, exception.getErrorCode());  
+            tbc.assertEquals("Asserting if the cause returned is IllegalArgumentException", cause, exception.getCause());
+        } catch (Exception e) {
+            tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": "
+                + e.getClass().getName());
+        }
+    }    
 	
 }
