@@ -45,15 +45,10 @@ public interface TestingResourceProcessor extends ResourceProcessor {
 	public boolean isUninstallOrdered();
 	public boolean isUninstallResourceOrdered();
 	public void resetCount();
-	public void setSimulateExceptionOnPrepare(boolean simulateExceptionOnPrepare);
-	public void setSimulateExceptionOnDropped(boolean simulateExceptionOnDropped);
-	public void setSimulateExceptionOnCommit(boolean simulateExceptionOnCommit);
+	public void setSimulateExceptionAtPrepare(boolean simulateExceptionAtPrepare);
+	public void setSimulateExceptionAtDropped(boolean simulateExceptionAtDropped);
 	public boolean exceptionAtDroppedOrdered();	
 	public boolean exceptionAtPrepareOrdered();
-	public boolean joinedSession();
 	public boolean rollbackCalled();
-	public long sessionJoinTime();
 	public long sessionPrepareTime();
-	public long sessionCommitTime();
-	public long sessionRollbackTime();
 }

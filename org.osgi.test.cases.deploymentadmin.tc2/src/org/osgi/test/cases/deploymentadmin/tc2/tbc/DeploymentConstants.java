@@ -138,5 +138,15 @@ public class DeploymentConstants {
     
     //set default value and then reset if present in TCK properties file
     public static int SESSION_TIMEOUT = 1000;
+    
+    public static final int FINISH=-1;
+    public static final int BEGIN=0;
+    public static final int PROCESS=1;
+    public static final int DROPPED=2;
+    public static final int DROP_ALL_RESOURCES=3;
+    public static final int PREPARE=4;
+    public static final int COMMIT=5;
+    public static final int ROLLBACK=6;
+    public static final int CANCEL=7;
 
 }

@@ -50,6 +50,7 @@ import java.io.File;
 import java.io.FilePermission;
 import java.util.Iterator;
 import java.util.Vector;
+
 import org.osgi.framework.AdminPermission;
 import org.osgi.framework.BundleEvent;
 import org.osgi.framework.InvalidSyntaxException;
@@ -310,18 +311,21 @@ public class DeploymentSession {
 		TestingDeploymentPackage testRP = tbc.getTestingDeploymentPackage(DeploymentConstants.SESSION_TEST_DP);
 		DeploymentPackage targetDP = null;
 		try {
+			DeploymentTestControl.resetResourceProcessorOrder();
 			targetDP = tbc.installDeploymentPackage(tbc.getWebServer() + testRP.getFilename());
 			
-			TestingResourceProcessor rp1 = (TestingResourceProcessor)getTestSessionRP(DeploymentConstants.PID_RESOURCE_PROCESSOR1);
-			TestingResourceProcessor rp2 = (TestingResourceProcessor)getTestSessionRP(DeploymentConstants.PID_RESOURCE_PROCESSOR2);
-			
-			if (rp1.sessionJoinTime() > rp2.sessionJoinTime()) {
+			//RP1 joined the session first
+			if (DeploymentTestControl.isResourceProcessorCallOrdered(DeploymentConstants.PID_RESOURCE_PROCESSOR1,DeploymentConstants.PID_RESOURCE_PROCESSOR2,DeploymentConstants.BEGIN)) {
+				//RP2 prepare method must be called first
 				tbc.assertTrue("The Resource Processor prepare method was called in the reverse order of joining.",
-								rp1.sessionPrepareTime() <= rp2.sessionPrepareTime());
-			} else { // (rp1.sessionJoinTime() < rp2.sessionJoinTime()) 
+						DeploymentTestControl.isResourceProcessorCallOrdered(DeploymentConstants.PID_RESOURCE_PROCESSOR2,DeploymentConstants.PID_RESOURCE_PROCESSOR1,DeploymentConstants.PREPARE));				
+			} else {
+				//RP2 joined the session first, RP1 prepare method must be called first
 				tbc.assertTrue("The Resource Processor prepare method was called in the reverse order of joining.",
-								rp1.sessionPrepareTime() >= rp2.sessionPrepareTime());
+						DeploymentTestControl.isResourceProcessorCallOrdered(DeploymentConstants.PID_RESOURCE_PROCESSOR1,DeploymentConstants.PID_RESOURCE_PROCESSOR2,DeploymentConstants.PREPARE));				
 			}
+			
+			
 		} catch (Exception e) {
 			tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }));
 		} finally {
@@ -348,18 +352,19 @@ public class DeploymentSession {
 		TestingDeploymentPackage testRP = tbc.getTestingDeploymentPackage(DeploymentConstants.SESSION_TEST_DP);
 		DeploymentPackage targetDP = null;
 		try {
+			DeploymentTestControl.resetResourceProcessorOrder();
 			targetDP = tbc.installDeploymentPackage(tbc.getWebServer() + testRP.getFilename());
 			
-			TestingResourceProcessor rp1 = (TestingResourceProcessor)getTestSessionRP(DeploymentConstants.PID_RESOURCE_PROCESSOR1);
-			TestingResourceProcessor rp2 = (TestingResourceProcessor)getTestSessionRP(DeploymentConstants.PID_RESOURCE_PROCESSOR2);
-			
-			if (rp1.sessionJoinTime() > rp2.sessionJoinTime()) {
+			//RP1 joined the session first
+			if (DeploymentTestControl.isResourceProcessorCallOrdered(DeploymentConstants.PID_RESOURCE_PROCESSOR1,DeploymentConstants.PID_RESOURCE_PROCESSOR2,DeploymentConstants.BEGIN)) {
+				//RP2 commit method must be called first
 				tbc.assertTrue("The Resource Processors commit methods were called in the reverse order of joining.",
-								rp1.sessionCommitTime() <= rp2.sessionCommitTime());
-			} else { // (rp1.sessionJoinTime() < rp2.sessionJoinTime())
+						DeploymentTestControl.isResourceProcessorCallOrdered(DeploymentConstants.PID_RESOURCE_PROCESSOR2,DeploymentConstants.PID_RESOURCE_PROCESSOR1,DeploymentConstants.COMMIT));				
+			} else {
+				//RP2 joined the session first, RP1 commit method must be called first
 				tbc.assertTrue("The Resource Processors commit methods were called in the reverse order of joining.",
-								rp1.sessionCommitTime() >= rp2.sessionCommitTime());
-			}
+						DeploymentTestControl.isResourceProcessorCallOrdered(DeploymentConstants.PID_RESOURCE_PROCESSOR1,DeploymentConstants.PID_RESOURCE_PROCESSOR2,DeploymentConstants.COMMIT));				
+			}			
 		} catch (Exception e) {
 			tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }));
 		} finally {
@@ -412,27 +417,26 @@ public class DeploymentSession {
 		tbc.log("#testDeploymentSession009");
 		TestingDeploymentPackage testRP = tbc.getTestingDeploymentPackage(DeploymentConstants.SESSION_TEST_DP);
 		DeploymentPackage targetDP = null;
-        TestingResourceProcessor rp1 = null, rp2 = null;
 		try {
             // to register TestingResourceProcessor
             targetDP = tbc.installDeploymentPackage(tbc.getWebServer() + testRP.getFilename());
-            // to hold testing resource processor service instance
-            rp1 = (TestingResourceProcessor) getTestSessionRP(DeploymentConstants.PID_RESOURCE_PROCESSOR1);
-            rp2 = (TestingResourceProcessor) getTestSessionRP(DeploymentConstants.PID_RESOURCE_PROCESSOR2);
             
             SIMULATING_EXCEPTION_ON_PREPARE = true;
+			DeploymentTestControl.resetResourceProcessorOrder();            
             targetDP.uninstall();
             tbc.failException("#", DeploymentException.class);
 		} catch (DeploymentException e) {
-            if (rp1.sessionJoinTime() > rp2.sessionJoinTime()) {
-                tbc.assertTrue(
-                        "The Resource Processors rollback methods were called in the reverse order of joining.",
-                        rp1.sessionRollbackTime() <= rp2.sessionRollbackTime());
-            } else { // if (rp1.sessionJoinTime() < rp2.sessionJoinTime())
-                tbc.assertTrue(
-                        "The Resource Processor rollback methods were called in the reverse order of joining.",
-                        rp1.sessionRollbackTime() >= rp2.sessionRollbackTime());
-            }
+			//RP1 joined the session first
+			if (DeploymentTestControl.isResourceProcessorCallOrdered(DeploymentConstants.PID_RESOURCE_PROCESSOR1,DeploymentConstants.PID_RESOURCE_PROCESSOR2,DeploymentConstants.BEGIN)) {
+				//RP2 rollback method must be called first
+				tbc.assertTrue("The Resource Processors rollback methods were called in the reverse order of joining.",
+						DeploymentTestControl.isResourceProcessorCallOrdered(DeploymentConstants.PID_RESOURCE_PROCESSOR2,DeploymentConstants.PID_RESOURCE_PROCESSOR1,DeploymentConstants.ROLLBACK));				
+			} else {
+				//RP2 joined the session first, RP1 rollback method must be called first
+				tbc.assertTrue("The Resource Processors rollback methods were called in the reverse order of joining.",
+						DeploymentTestControl.isResourceProcessorCallOrdered(DeploymentConstants.PID_RESOURCE_PROCESSOR1,DeploymentConstants.PID_RESOURCE_PROCESSOR2,DeploymentConstants.ROLLBACK));				
+			}			
+
         } catch (Exception e) {
 			tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }));
 		} finally {

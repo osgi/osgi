@@ -49,6 +49,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.security.AccessControlContext;
 import java.util.HashMap;
+import java.util.Vector;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.InvalidSyntaxException;
@@ -92,6 +93,7 @@ public class DeploymentTestControl extends DefaultTestBundleControl {
 	private BundleListenerImpl bundleListener;
 	private boolean transactionalDA;
 	private HashMap packages = new HashMap();
+	private static Vector resourceProcessorOrder = new Vector();
 	
 	/**
 	 * <remove>Prepare for each run. It is important that a test run is properly
@@ -570,4 +572,29 @@ public class DeploymentTestControl extends DefaultTestBundleControl {
         String[] signers = {DeploymentConstants.SIGNER_FILTER};
         return getCondPermAdmin().getAccessControlContext(signers);
     }
+    
+    //These three methods below are static because the RP cannot access the instance of TestControl. 
+    //As the Vector is synchronized by itself, they dont need the synchronized modifier.
+    public static void resetResourceProcessorOrder() {
+    	 resourceProcessorOrder.clear();
+    }
+    public static void addResourceProcessorOrder(String rp,int method) {
+    	 resourceProcessorOrder.add(rp + "=" + method);
+    }
+    
+    public static boolean isResourceProcessorCallOrdered (String rpFirst,String rpSecond, int method) {
+   	 	boolean found = false;
+
+    	int indexFirst = resourceProcessorOrder.indexOf(rpFirst + "=" + method);
+    	int indexSecond = resourceProcessorOrder.indexOf(rpSecond + "=" + method);
+    	
+    	if (indexFirst==-1 || indexSecond==-1) {
+    		return false;
+    	} else if (indexFirst<indexSecond) {
+    		return true;
+    	}
+    	
+    	return found;
+   }
+    
 }
