@@ -54,6 +54,7 @@ import org.osgi.service.deploymentadmin.spi.DeploymentSession;
 import org.osgi.service.deploymentadmin.spi.ResourceProcessor;
 import org.osgi.service.deploymentadmin.spi.ResourceProcessorException;
 import org.osgi.test.cases.deploymentadmin.tc2.tbc.DeploymentConstants;
+import org.osgi.test.cases.deploymentadmin.tc2.tbc.DeploymentTestControl;
 import org.osgi.test.cases.deploymentadmin.tc2.tbc.util.TestingResourceProcessor;
 
 /**
@@ -64,30 +65,15 @@ import org.osgi.test.cases.deploymentadmin.tc2.tbc.util.TestingResourceProcessor
  */
 public class ResourceProcessorImpl implements BundleActivator, TestingResourceProcessor {
 	private ServiceRegistration sr;
-	private boolean simulateExceptionOnDropped;
-	private boolean simulateExceptionOnPrepare;
-	private boolean simulateExceptionOnCommit;
+	private boolean simulateExceptionAtPrepare;
 
 	private DeploymentSession session;
 
 	//Order that DeploymentAdmin calls the methods.
 	private int order[] = new int[8];
 	private int count;
-	private final int FINISH=-1;
-	private final int BEGIN=0;
-	private final int PROCESS=1;
-	private final int DROPPED=2;
-	private final int DROP_ALL_RESOURCES=3;
-	private final int PREPARE=4;
-	private final int COMMIT=5;
-	private final int ROLLBACK=6;
-	private final int CANCEL=7;
-	
-	private boolean joined;
-	private long joinedTime;
+
 	private long prepareTime;
-	private long commitedTime;
-	private long rollbackTime;
 	private boolean rollbackCalled;
 	
 	public void start(BundleContext bc) throws Exception {
@@ -105,48 +91,45 @@ public class ResourceProcessorImpl implements BundleActivator, TestingResourcePr
 
 	public void begin(DeploymentSession session) {
 		this.session = session;
-		addOrder(BEGIN);
-		joinedTime = System.currentTimeMillis();
-		joined = true;
+		addOrder(DeploymentConstants.BEGIN);
+		DeploymentTestControl.addResourceProcessorOrder(DeploymentConstants.PID_RESOURCE_PROCESSOR1, DeploymentConstants.BEGIN);
 	}
 	
 	public void process(String arg0, InputStream arg1)
 			throws ResourceProcessorException {
-		addOrder(PROCESS);
+		addOrder(DeploymentConstants.PROCESS);
 	}
 
 	public void dropped(String arg0)  {
-		addOrder(DROPPED);
+		addOrder(DeploymentConstants.DROPPED);
 	}
 
 	public void dropAllResources() throws ResourceProcessorException {
-		addOrder(DROP_ALL_RESOURCES);	
+		addOrder(DeploymentConstants.DROP_ALL_RESOURCES);	
 	}
 
 	public void prepare() throws ResourceProcessorException {
-		addOrder(PREPARE);
+		addOrder(DeploymentConstants.PREPARE);
+		DeploymentTestControl.addResourceProcessorOrder(DeploymentConstants.PID_RESOURCE_PROCESSOR1, DeploymentConstants.PREPARE);
 		prepareTime = System.currentTimeMillis();
-		if (simulateExceptionOnPrepare || org.osgi.test.cases.deploymentadmin.tc2.tbc.DeploymentSession.DeploymentSession.SIMULATING_EXCEPTION_ON_PREPARE) {
+		if (simulateExceptionAtPrepare || org.osgi.test.cases.deploymentadmin.tc2.tbc.DeploymentSession.DeploymentSession.SIMULATING_EXCEPTION_ON_PREPARE) {
 			throw new ResourceProcessorException(ResourceProcessorException.CODE_PREPARE,"This resource processor cannot commit.");
 		}
 	}
 
 	public void commit() {
-		addOrder(COMMIT);
-		commitedTime = System.currentTimeMillis();
-		if (simulateExceptionOnCommit || org.osgi.test.cases.deploymentadmin.tc2.tbc.DeploymentSession.DeploymentSession.SIMULATING_EXCEPTION_ON_COMMIT) {
-			throw new RuntimeException("RuntimeException on commit.");
-		}
+		addOrder(DeploymentConstants.COMMIT);
+		DeploymentTestControl.addResourceProcessorOrder(DeploymentConstants.PID_RESOURCE_PROCESSOR1, DeploymentConstants.COMMIT);
 	}
 
 	public void rollback() {
-		addOrder(ROLLBACK);
+		addOrder(DeploymentConstants.ROLLBACK);
+		DeploymentTestControl.addResourceProcessorOrder(DeploymentConstants.PID_RESOURCE_PROCESSOR1, DeploymentConstants.ROLLBACK);
 		rollbackCalled = true;
-		rollbackTime = System.currentTimeMillis();
 	}
 
 	public void cancel() {
-		addOrder(CANCEL);
+		addOrder(DeploymentConstants.CANCEL);
 
 	}
 
@@ -158,7 +141,11 @@ public class ResourceProcessorImpl implements BundleActivator, TestingResourcePr
 	}
 	
 	public boolean isUninstallResourceOrdered() {
-		if (order[0]==BEGIN && order[1]==DROPPED && order[2]==PREPARE && order[3]==COMMIT && order[4]==FINISH) {
+		if (order[0] == DeploymentConstants.BEGIN
+				&& order[1] == DeploymentConstants.DROPPED
+				&& order[2] == DeploymentConstants.PREPARE
+				&& order[3] == DeploymentConstants.COMMIT
+				&& order[4] == DeploymentConstants.FINISH) {
 			return true;
 		}
 		else {
@@ -168,7 +155,11 @@ public class ResourceProcessorImpl implements BundleActivator, TestingResourcePr
 	}
 	
 	public boolean isInstallUpdateOrdered() {
-		if (order[0]==BEGIN && order[1]==PROCESS && order[2]==PREPARE && order[3]==COMMIT && order[4]==FINISH) {
+		if (order[0] == DeploymentConstants.BEGIN
+				&& order[1] == DeploymentConstants.PROCESS
+				&& order[2] == DeploymentConstants.PREPARE
+				&& order[3] == DeploymentConstants.COMMIT
+				&& order[4] == DeploymentConstants.FINISH) {
 			return true;
 		} 
 		else {
@@ -178,7 +169,11 @@ public class ResourceProcessorImpl implements BundleActivator, TestingResourcePr
 	}
 
 	public boolean isUninstallOrdered() {
-		if (order[0]==BEGIN && order[1]==DROP_ALL_RESOURCES && order[2]==PREPARE && order[3]==COMMIT && order[4]==FINISH) {
+		if (order[0] == DeploymentConstants.BEGIN
+				&& order[1] == DeploymentConstants.DROP_ALL_RESOURCES
+				&& order[2] == DeploymentConstants.PREPARE
+				&& order[3] == DeploymentConstants.COMMIT
+				&& order[4] == DeploymentConstants.FINISH) {
 			return true;
 		} 
 		else {
@@ -187,7 +182,11 @@ public class ResourceProcessorImpl implements BundleActivator, TestingResourcePr
 	}
 	
 	public boolean exceptionAtDroppedOrdered() {
-		if (order[0]==BEGIN && order[1]==PROCESS && order[2]==DROPPED && order[3]==COMMIT && order[4]==FINISH) {
+		if (order[0] == DeploymentConstants.BEGIN
+				&& order[1] == DeploymentConstants.PROCESS
+				&& order[2] == DeploymentConstants.DROPPED
+				&& order[3] == DeploymentConstants.COMMIT
+				&& order[4] == DeploymentConstants.FINISH) {
 			return true;
 		} 
 		else {
@@ -196,7 +195,11 @@ public class ResourceProcessorImpl implements BundleActivator, TestingResourcePr
 	}
 	
 	public boolean exceptionAtPrepareOrdered() {
-		if (order[0]==BEGIN && order[1]==PROCESS && order[2]==PREPARE && order[3]==ROLLBACK && order[4]==FINISH) {
+		if (order[0] == DeploymentConstants.BEGIN
+				&& order[1] == DeploymentConstants.PROCESS
+				&& order[2] == DeploymentConstants.PREPARE
+				&& order[3] == DeploymentConstants.ROLLBACK
+				&& order[4] == DeploymentConstants.FINISH) {
 			return true;
 		} 
 		else {
@@ -207,7 +210,7 @@ public class ResourceProcessorImpl implements BundleActivator, TestingResourcePr
 	
 	public void resetCount() {
 		for (int i=0;i<order.length;i++) {
-			order[i]=FINISH;
+			order[i]=DeploymentConstants.FINISH;
 		}
 		count=0;
 	}
@@ -232,17 +235,17 @@ public class ResourceProcessorImpl implements BundleActivator, TestingResourcePr
 	}
 
 	/**
-	 * @param simulateExceptionOnDropped The simulateExceptionOnDropped to set.
+	 * @param simulateExceptionAtDropped The simulateExceptionAtDropped to set.
 	 */
-	public void setSimulateExceptionOnDropped(boolean simulateExceptionOnDropped) {
-		this.simulateExceptionOnDropped = simulateExceptionOnDropped;
+	public void setSimulateExceptionAtDropped(boolean simulateExceptionAtDropped) {
+		//It's not used by this RP
 	}
 	
 	/**
-	 * @param simulateExceptionOnPrepare The simulateExceptionOnPrepare to set.
+	 * @param simulateExceptionAtPrepare The simulateExceptionAtPrepare to set.
 	 */
-	public void setSimulateExceptionOnPrepare(boolean simulateExceptionOnPrepare) {
-		this.simulateExceptionOnPrepare = simulateExceptionOnPrepare;
+	public void setSimulateExceptionAtPrepare(boolean simulateExceptionAtPrepare) {
+		this.simulateExceptionAtPrepare = simulateExceptionAtPrepare;
 	}
 
 	public File getDataFile(Bundle bundle) {
@@ -253,38 +256,17 @@ public class ResourceProcessorImpl implements BundleActivator, TestingResourcePr
 		}
 	}
 
-	public boolean joinedSession() {
-		return joined;
-	}
-
-	public long sessionJoinTime() {
-		return joinedTime;
-	}
-	
 	public long sessionPrepareTime() {
 		return prepareTime;
 	}
 	
-	public long sessionCommitTime() {
-		return commitedTime;
-	}
-
-	public void setSimulateExceptionOnCommit(boolean simulateExceptionOnCommit) {
-		this.simulateExceptionOnCommit = simulateExceptionOnCommit;
-		
-	}
-
 	public boolean rollbackCalled() {
 		return rollbackCalled;
 	}
 
-	public long sessionRollbackTime() {
-		return rollbackTime;
-	}
-
 	public boolean isUpdateRemoveResourceOrdered() {
-		if (order[0]==BEGIN && order[1]==PROCESS && order[2]==DROPPED && 
-				order[3]==PREPARE && order[4]==COMMIT && order[5]==FINISH) {
+		if (order[0]==DeploymentConstants.BEGIN && order[1]==DeploymentConstants.PROCESS && order[2]==DeploymentConstants.DROPPED && 
+				order[3]==DeploymentConstants.PREPARE && order[4]==DeploymentConstants.COMMIT && order[5]==DeploymentConstants.FINISH) {
 			return true;
 		} 
 		else {
