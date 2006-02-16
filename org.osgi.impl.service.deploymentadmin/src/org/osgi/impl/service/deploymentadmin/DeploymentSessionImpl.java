@@ -295,8 +295,8 @@ public class DeploymentSessionImpl implements DeploymentSession, FrameworkListen
             processBundles(wjis);
             cpisForCusts = setFilePermissionForCustomizers();
             startCustomizers();
-            Set wrProcs = processResources(wjis);
-            Set wrProcsD = dropResources();
+            Vector wrProcs = processResources(wjis);
+            Vector wrProcsD = dropResources();
             wrProcs.addAll(wrProcsD);
             prepareProcessors(wrProcs);
             commitProcessors(wrProcs);
@@ -352,7 +352,7 @@ public class DeploymentSessionImpl implements DeploymentSession, FrameworkListen
         // "false" since customizers will not be updated because it is an uinstall
         stopBundles(false);
         try {
-            Set wrProcs = dropAllResources();
+            Vector wrProcs = dropAllResources();
             prepareProcessors(wrProcs);
             commitProcessors(wrProcs);
             dropBundles();
@@ -379,19 +379,19 @@ public class DeploymentSessionImpl implements DeploymentSession, FrameworkListen
         return succeed;
     }
     
-    private void prepareProcessors(Set wrProcs) throws ResourceProcessorException {
-    	for (Iterator iter = wrProcs.iterator(); iter.hasNext();) {
+    private void prepareProcessors(Vector wrProcs) throws ResourceProcessorException {
+    	for (ListIterator iter = wrProcs.listIterator(wrProcs.size()); iter.hasPrevious();) {
 			WrappedResourceProcessor wrProc = 
-				(WrappedResourceProcessor) iter.next();
+				(WrappedResourceProcessor) iter.previous();
 			wrProc.prepare();
 		}
 	}
 
-    private void commitProcessors(Set wrProcs) {
+    private void commitProcessors(Vector wrProcs) {
     	try {
-	    	for (Iterator iter = wrProcs.iterator(); iter.hasNext();) {
+	    	for (ListIterator iter = wrProcs.listIterator(wrProcs.size()); iter.hasPrevious();) {
 	    		WrappedResourceProcessor wrProc = 
-	    			(WrappedResourceProcessor) iter.next();
+	    			(WrappedResourceProcessor) iter.previous();
 	    		wrProc.commit();
 	    	}
     	} catch (Exception e) {
@@ -531,10 +531,10 @@ public class DeploymentSessionImpl implements DeploymentSession, FrameworkListen
         transaction.addRecord(new TransactionRecord(Transaction.STOPBUNDLE, b));
     }
 
-    private Set processResources(DeploymentPackageJarInputStream wjis) 
+    private Vector processResources(DeploymentPackageJarInputStream wjis) 
     		throws DeploymentException, IOException 
     {
-    	Set wrProcs = new HashSet();
+    	Vector wrProcs = new Vector();
         while (null != actEntry && !isCancelled()) {
             if (isCancelled())
             	break;
@@ -565,8 +565,8 @@ public class DeploymentSessionImpl implements DeploymentSession, FrameworkListen
      * Drops resources that don't present in the source package and are not 
      * marked as missing resources
      */
-    private Set dropResources() {
-    	Set wrProcs = new HashSet();
+    private Vector dropResources() {
+    	Vector wrProcs = new Vector();
     	
         if (isCancelled())
         	return wrProcs;
@@ -605,12 +605,12 @@ public class DeploymentSessionImpl implements DeploymentSession, FrameworkListen
     /*
      * Drops all rsources of the target DP
      */
-    private Set dropAllResources() throws Exception {
+    private Vector dropAllResources() throws Exception {
         // ensures that only one entry per RP is in the return set 
         Set pids = new HashSet();
         
         // this is the returned set
-        Set wrProcs = new HashSet();
+        Vector wrProcs = new Vector();
         
         if (isCancelled())
         	return wrProcs;
