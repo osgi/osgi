@@ -134,7 +134,7 @@ public class ResourceProcessor {
 
 			resourceProcessor = (TestingResourceProcessor)tbc.getContext().getService(reference);
 			
-			resourceProcessor.setSimulateExceptionOnPrepare(true);
+			resourceProcessor.setSimulateExceptionAtPrepare(true);
 			resourceProcessor.resetCount();
 			TestingDeploymentPackage testDPUpdate = tbc.getTestingDeploymentPackage(DeploymentConstants.RP_RESOURCE_UPDATE_DP);			
 			dpUpdateResource = tbc.installDeploymentPackage(tbc.getWebServer() + testDPUpdate.getFilename());
@@ -143,7 +143,7 @@ public class ResourceProcessor {
 			tbc.assertTrue("Asserts that DeploymentAdmin calls the methods of a resource processor in the specified order when it throws an exception in the prepare() method",resourceProcessor.exceptionAtPrepareOrdered());
 			tbc.assertEquals("The code of the DeploymentException is ", DeploymentException.CODE_COMMIT_ERROR, e.getCode());
 		} finally {
-			resourceProcessor.setSimulateExceptionOnPrepare(false);
+			resourceProcessor.setSimulateExceptionAtPrepare(false);
 			tbc.uninstall(new DeploymentPackage[] { dpUpdateResource,dpInstallResource,dpResourceProcessor });
 		}
 	}
@@ -260,7 +260,7 @@ public class ResourceProcessor {
 			
 			resourceProcessor = (TestingResourceProcessor)tbc.getContext().getService(reference);
 			
-			resourceProcessor.setSimulateExceptionOnDropped(true);
+			resourceProcessor.setSimulateExceptionAtDropped(true);
 			resourceProcessor.resetCount();
 			TestingDeploymentPackage testDPUninstall = tbc.getTestingDeploymentPackage(DeploymentConstants.RP_RESOURCE_UNINSTALL_DP);
 			dpUninstallResource = tbc.installDeploymentPackage(tbc.getWebServer() + testDPUninstall.getFilename());
@@ -268,7 +268,7 @@ public class ResourceProcessor {
 		} catch (Exception e) {
 			tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }));
 		} finally {
-			resourceProcessor.setSimulateExceptionOnDropped(false);	
+			resourceProcessor.setSimulateExceptionAtDropped(false);	
 			tbc.uninstall(new DeploymentPackage[] { dpUninstallResource,dpInstallResource,dpResourceProcessor });
 		}
 	}
