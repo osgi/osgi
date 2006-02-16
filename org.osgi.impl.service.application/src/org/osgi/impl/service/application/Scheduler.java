@@ -18,12 +18,23 @@
 package org.osgi.impl.service.application;
 
 import java.io.*;
+import java.security.Guard;
+import java.security.GuardedObject;
 import java.util.*;
 
 import org.osgi.framework.*;
 import org.osgi.service.application.*;
 import org.osgi.service.event.*;
 import org.osgi.service.log.LogService;
+
+class Defender implements Guard {
+	public void checkGuard(Object var0) throws SecurityException {
+		SecurityManager sm = System.getSecurityManager();
+		if( sm != null ) {
+			sm.checkPermission(new TopicPermission( ScheduledApplication.TRIGGERING_EVENT, TopicPermission.SUBSCRIBE ));
+		}		
+	}
+}
 
 public class Scheduler implements Runnable, EventHandler {
 	private BundleContext	bc;
@@ -237,7 +248,7 @@ public class Scheduler implements Runnable, EventHandler {
 							if( args == null )
 								args = new Hashtable();
 							
-							args.put( ScheduledApplication.TRIGGERING_EVENT, event );
+							args.put( ScheduledApplication.TRIGGERING_EVENT, new GuardedObject( event, new Defender() ) );
 							appDesc.launch( args );
 
 							if (!schedApp.isRecurring())
