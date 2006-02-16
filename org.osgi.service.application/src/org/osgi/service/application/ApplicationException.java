@@ -54,7 +54,7 @@ public class ApplicationException extends Exception {
 	public static final int APPLICATION_INTERNAL_ERROR = 0x03;
     
     /**
-     * The application scheduling could be created due to some internal error (
+     * The application scheduling could not be created due to some internal error (
      * e.g. the scheduling information couldn't be saved).
      */
     public static final int APPLICATION_SCHEDULING_FAILED = 0x04;
