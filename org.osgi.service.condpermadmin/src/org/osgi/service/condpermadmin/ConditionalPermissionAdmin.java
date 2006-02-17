@@ -52,7 +52,7 @@ public interface ConditionalPermissionAdmin {
 	 * Permissions.
 	 * 
 	 * @param name The name of the Conditional Permission Info, or
-	 *        <code>null</code>.
+	 *        <code>null</code>. The name must not an empty String.
 	 * @param conds The Conditions that need to be satisfied to enable the
 	 *        corresponding Permissions.
 	 * @param perms The Permissions that are enable when the corresponding
