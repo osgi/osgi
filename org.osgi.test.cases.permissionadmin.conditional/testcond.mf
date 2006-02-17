@@ -1,4 +1,5 @@
 Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
 Bundle-Name: ${p}.testcond
 Bundle-SymbolicName: ${p}.testcond
 Bundle-Version: 4
