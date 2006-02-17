@@ -390,7 +390,12 @@ public class DataParser {
 				ObjectClassDefinitionImpl ocd =
 						(ObjectClassDefinitionImpl) _dp_OCDs.get(designateHandler._ocdref);
 				if (ocd != null) {
-					ocd.setID(designateHandler._pid_val);
+					// Bug #188
+					// The OCD must NOT change to the PID
+					// PID and OCD.id are completely unrelated. Many PIDS
+					// can share the same id 
+					// Removed: ocd.setID(designateHandler._pid_val);
+					// The existing OCD.id shoudl be correct.
 					if (designateHandler._factory_val == true) {
 						ocd.setType(ObjectClassDefinitionImpl.FPID);
 					}
