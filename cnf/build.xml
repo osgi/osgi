@@ -178,7 +178,12 @@
 	-->
 	<target name="-btool">
 		<echo>JAR ${item.jarFile}</echo>
-		<btool jar="${project}/${item.jarFile}" failok="${btool.failok}" eclipse="${project}" analyse="${btool.analyse}" showmanifest="${btool.showmanifest}" includeProperty="include.${item.jarFile}" expandProperty="expand.${item.jarFile}" contentFoldersProperty="source.${item.jarFile}" excludeImportProperty="excludeImport.${item.jarFile}" includeExportProperty="includeExport.${item.jarFile}" ipaProperty="ipa.${item.jarFile}" verbose="${verbose}" sources="${btool.sources}" ignoreVersions="${btool.noversion}" manifestVersion="${btool.manifestVersion}" modified="${base.modified}" extraRoots="root.${item.jarFile}" />
+		<btool jar="${project}/${item.jarFile}" failok="${btool.failok}" eclipse="${project}" analyse="${btool.analyse}" 
+			showmanifest="${btool.showmanifest}" includeProperty="include.${item.jarFile}" expandProperty="expand.${item.jarFile}" 
+			contentFoldersProperty="source.${item.jarFile}" excludeImportProperty="excludeImport.${item.jarFile}" 
+			includeExportProperty="includeExport.${item.jarFile}" ipaProperty="ipa.${item.jarFile}" verbose="${verbose}" 
+			sources="${btool.sources}" ignoreVersions="${btool.noversion}" manifestVersion="${btool.manifestVersion}" 
+			modified="${base.modified}" extraRoots="root.${item.jarFile}" noExtraHeaders="${btool.noextraheaders}"/>
 	</target>
 
 	<target name="-signjar" if="sign.${item.jarFile}">
@@ -228,6 +233,7 @@
 		<echo>btool.showmanifest:     ${btool.showmanifest}</echo>
 		<echo>btool.noversion:     	  ${btool.noversion}</echo>
 		<echo>btool.sources:     	  ${btool.sources}</echo>
+		<echo>btool.noextraheaders:   ${btool.noextraheaders}</echo>
 		<echo>jars.compile.order:     ${jars.compile.order}</echo>
 		<echo>bin.includes:           ${bin.includes}</echo>
 		<echo>prebuild:               ${prebuild}</echo>

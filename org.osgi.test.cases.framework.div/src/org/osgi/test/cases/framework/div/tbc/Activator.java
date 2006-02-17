@@ -104,7 +104,6 @@ public class Activator extends Thread implements FrameworkListener,
 	 * This function performs the tests.
 	 */
 	public void run() {
-		int progress = 0;
 		try {
 			_link.log("Test bundle control started Ok.");
 			_tcHome = (String) _link.receive(10000);
