@@ -185,7 +185,7 @@ public class Scheduler implements Runnable, EventHandler {
 
 	void checkKey( String key, String pid ) throws ApplicationException, InvalidSyntaxException {
 		ServiceReference refs[] = bc.getServiceReferences( ScheduledApplication.class.getName(), 
-				"(" + ApplicationDescriptor.class.getName() + "=" + pid + ")" );
+				"(" + ScheduledApplication.APPLICATION_PID + "=" + pid + ")" );
 		if( refs != null ) {
 			for( int p=0; p != refs.length; p++ ) {
 				Object actID = refs[ p ].getProperty( ScheduledApplication.SCHEDULE_ID );
