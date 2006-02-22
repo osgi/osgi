@@ -174,24 +174,24 @@ public class TestMidletContainerBundleActivator
             return;
         } else
             System.out.println("Looking up the log service                       PASSED");
-    		if (!testCase_lookUpDmtAdmin()) {
-    			  System.out.println("Looking up the DMT admin                         FAILED");
-    			return;
-    		} else
-    			  System.out.println("Looking up the DMT admin                         PASSED");
-    		if (!testCase_lookUpScheduler()) {
-    			  System.out.println("Looking up the scheduler                         FAILED");
-    			  return;
-    		} else
-    			  System.out.println("Looking up the scheduler                         PASSED");
+    	if (!testCase_lookUpDmtAdmin()) {
+    		System.out.println("Looking up the DMT admin                         FAILED");
+    		return;
+    	} else
+    		System.out.println("Looking up the DMT admin                         PASSED");
+    	if (!testCase_lookUpScheduler()) {
+    		System.out.println("Looking up the scheduler                         FAILED");
+    		return;
+    	} else
+    		System.out.println("Looking up the scheduler                         PASSED");
         if(!testCase_installMidletBundle())
             System.out.println("Midlet bundle install onto Midlet container      FAILED");
         else
             System.out.println("Midlet bundle install onto Midlet container      PASSED");
-    		if (!testCase_appPluginCheckInstalledApps()) 																
-      			System.out.println("AppPlugin: checking the installed application    FAILED"); 	
-    		else 																																				
-    			  System.out.println("AppPlugin: checking the installed application    PASSED"); 	
+    	if (!testCase_appPluginCheckInstalledApps()) 																
+      		System.out.println("AppPlugin: checking the installed application    FAILED"); 	
+    	else 																																				
+    		System.out.println("AppPlugin: checking the installed application    PASSED"); 	
         if(!testCase_checkAppDescs())
             System.out.println("Checking the installed Midlet app descriptors    FAILED");
         else
@@ -224,70 +224,70 @@ public class TestMidletContainerBundleActivator
             System.out.println("Checking MIDlet::resumeRequest                   FAILED");
         else
             System.out.println("Checking MIDlet::resumeRequest                   PASSED");        
-    		if (!testCase_lockApplication())
-    			  System.out.println("Locking the application                          FAILED");
-    		else
-    			  System.out.println("Locking the application                          PASSED");
-    		if (!testCase_saveLockingState())
-    			  System.out.println("Save the locking state of the application        FAILED");
-    		else
-    			  System.out.println("Save the locking state of the application        PASSED");
-    		if (!testCase_scheduleAnApplication())
-       			System.out.println("Scheduling an application                        FAILED");
-    		else
-    			  System.out.println("Scheduling an application                        PASSED");
-    		if (!testCase_scheduleTwoApplications())
-    			  System.out.println("Scheduling two applications                      FAILED");
-    		else
-    			  System.out.println("Scheduling two applications                      PASSED");
-    		if (!testCase_scheduleApplicationsWithAARestart())
-    			  System.out.println("Scheduling an applications with AA restart       FAILED");
-    		else
-    			  System.out.println("Scheduling an applications with AA restart       PASSED");
-    		if (!testCase_removeScheduledApplication())
-    			  System.out.println("Checking scheduled application remove            FAILED");
-    		else
-    			  System.out.println("Checking scheduled application remove            PASSED");
-    		if (!testCase_recurringSchedule())
-    			  System.out.println("Checking the recurring schedule                  FAILED");
-    		else
-    			  System.out.println("Checking the recurring schedule                  PASSED");
-    		if (!testCase_schedulerFilterMatching())
-    			  System.out.println("Checking the filter matching of the scheduler    FAILED");
-    		else
-    			  System.out.println("Checking the filter matching of the scheduler    PASSED");
-    		if (!testCase_appPluginCheckInstalledApps())
-    			  System.out.println("AppPlugin: checking the installed application    FAILED");
-    		else
-    			  System.out.println("AppPlugin: checking the installed application    PASSED");
-    		if (!testCase_appPluginCheckRunningApps()) 																	
-    			  System.out.println("AppPlugin: checking a running application        FAILED"); 	
-    		else 																																				
-    			  System.out.println("AppPlugin: checking a running application        PASSED"); 	
-    		if (!testCase_appPluginCheckApplicationLaunch()) 														
-    			  System.out.println("AppPlugin: checking the application launching    FAILED"); 	
-    		else 																																				
-    			  System.out.println("AppPlugin: checking the application launching    PASSED"); 	
-    		if (!testCase_appPluginCheckApplicationStop()) 															
-    			  System.out.println("AppPlugin: checking the application stopping     FAILED"); 	
-    		else 																																				
-    			  System.out.println("AppPlugin: checking the application stopping     PASSED"); 	
-    		if (!testCase_appPluginLock()) 															
-    			  System.out.println("AppPlugin: checking the lock changing            FAILED"); 	
-    		else 																																				
-    			  System.out.println("AppPlugin: checking the lock changing            PASSED"); 	
-    		if (!testCase_appPluginScheduleSynchronization()) 															
-  			    System.out.println("AppPlugin: schedule synchronization check        FAILED"); 	
-  		  else 																																				
-  			    System.out.println("AppPlugin: schedule synchronization check        PASSED"); 	
-    		if (!testCase_appPluginModifySchedule()) 															
-	  		    System.out.println("AppPlugin: schedule modification                 FAILED"); 	
-  		  else 																																				
-		  	    System.out.println("AppPlugin: schedule modification                 PASSED"); 	
-    		if (!testCase_appPluginCreateAndDeleteSchedule()) 															
-  		      System.out.println("AppPlugin: create and delete schedule            FAILED"); 	
-		    else 																																				
-	  	      System.out.println("AppPlugin: create and delete schedule            PASSED"); 	
+    	if (!testCase_lockApplication())
+    		System.out.println("Locking the application                          FAILED");
+    	else
+    		System.out.println("Locking the application                          PASSED");
+    	if (!testCase_saveLockingState())
+    		System.out.println("Save the locking state of the application        FAILED");
+    	else
+    		System.out.println("Save the locking state of the application        PASSED");
+    	if (!testCase_scheduleAnApplication())
+       		System.out.println("Scheduling an application                        FAILED");
+    	else
+    		System.out.println("Scheduling an application                        PASSED");
+    	if (!testCase_scheduleTwoApplications())
+    		System.out.println("Scheduling two applications                      FAILED");
+    	else
+    		System.out.println("Scheduling two applications                      PASSED");
+    	if (!testCase_scheduleApplicationsWithAARestart())
+    		System.out.println("Scheduling an applications with AA restart       FAILED");
+    	else
+    		System.out.println("Scheduling an applications with AA restart       PASSED");
+    	if (!testCase_removeScheduledApplication())
+    		System.out.println("Checking scheduled application remove            FAILED");
+    	else
+    		System.out.println("Checking scheduled application remove            PASSED");
+    	if (!testCase_recurringSchedule())
+    		System.out.println("Checking the recurring schedule                  FAILED");
+    	else
+    		System.out.println("Checking the recurring schedule                  PASSED");
+    	if (!testCase_schedulerFilterMatching())
+    		System.out.println("Checking the filter matching of the scheduler    FAILED");
+    	else
+    		System.out.println("Checking the filter matching of the scheduler    PASSED");
+    	if (!testCase_appPluginCheckInstalledApps())
+    		System.out.println("AppPlugin: checking the installed application    FAILED");
+    	else
+    		System.out.println("AppPlugin: checking the installed application    PASSED");
+    	if (!testCase_appPluginCheckRunningApps()) 																	
+    		System.out.println("AppPlugin: checking a running application        FAILED"); 	
+    	else 																																				
+    		System.out.println("AppPlugin: checking a running application        PASSED"); 	
+    	if (!testCase_appPluginCheckApplicationLaunch()) 														
+    		System.out.println("AppPlugin: checking the application launching    FAILED"); 	
+    	else 																																				
+    		System.out.println("AppPlugin: checking the application launching    PASSED"); 	
+    	if (!testCase_appPluginCheckApplicationStop()) 															
+    		System.out.println("AppPlugin: checking the application stopping     FAILED"); 	
+    	else 																																				
+    		System.out.println("AppPlugin: checking the application stopping     PASSED"); 	
+    	if (!testCase_appPluginLock()) 															
+    		System.out.println("AppPlugin: checking the lock changing            FAILED"); 	
+    	else 																																				
+    		System.out.println("AppPlugin: checking the lock changing            PASSED"); 	
+    	if (!testCase_appPluginScheduleSynchronization()) 															
+  		    System.out.println("AppPlugin: schedule synchronization check        FAILED"); 	
+  		else 																																				
+  		    System.out.println("AppPlugin: schedule synchronization check        PASSED"); 	
+    	if (!testCase_appPluginModifySchedule()) 															
+	  	    System.out.println("AppPlugin: schedule modification                 FAILED"); 	
+  		else 																																				
+		    System.out.println("AppPlugin: schedule modification                 PASSED"); 	
+    	if (!testCase_appPluginCreateAndDeleteSchedule()) 															
+  		    System.out.println("AppPlugin: create and delete schedule            FAILED"); 	
+		else 																																				
+	  	    System.out.println("AppPlugin: create and delete schedule            PASSED"); 	
         if(!testCase_oatRegisterService())
             System.out.println("Checking OAT service registration                FAILED");
         else
@@ -340,10 +340,15 @@ public class TestMidletContainerBundleActivator
             System.out.println("Midlet bundle uninstall from Midlet container    FAILED");
         else
             System.out.println("Midlet bundle uninstall from Midlet container    PASSED");
+        if(!testCase_checkOrphanedSchedules())
+            System.out.println("AppPlugin: checking orphaned schedules           FAILED");
+        else
+            System.out.println("AppPlugin: checking orphaned schedules           PASSED");
+        
         System.out.println("\n\nMidlet container tester thread finished!");
     }
 
-	  boolean installMidletBundle(String resourceName)
+	boolean installMidletBundle(String resourceName)
     {
         try
         {
@@ -1557,8 +1562,8 @@ public class TestMidletContainerBundleActivator
   			String[] properties = session.getChildNodeNames( "./OSGi/Application/" + mangledAppUID );
   			
   			String names[]  = new String [] { 	"Name", "IconURI", "Version", "Vendor", 
-  					                          	"Locked", "PackageID", "ContainerID",
-  					                          	"ApplicationID", "Instances", 
+  					                          	"Locked", "Location", "ContainerID",
+  					                          	"ApplicationID", "Valid", "Instances", 
 												"Operations", "Schedules" };
   			Object values[] = new Object [ names.length ];
   			
@@ -1572,6 +1577,7 @@ public class TestMidletContainerBundleActivator
   			values[ 5 ] = (String)( props.get( ApplicationDescriptor.APPLICATION_LOCATION ) );
   			values[ 6 ] = (String)( props.get( ApplicationDescriptor.APPLICATION_CONTAINER ) );
   			values[ 7 ] = (String)( props.get( ApplicationDescriptor.APPLICATION_PID ) );
+  			values[ 8 ] = new Boolean( true );
   			
   			boolean found[] = new boolean[ names.length ];				
   			for( int i = 0; i != names.length; i++ )
@@ -1609,7 +1615,7 @@ public class TestMidletContainerBundleActivator
   						
   						break;
   					}
-  					if( j == properties.length )
+  					if( j == names.length )
   						throw new Exception( "Invalid parameter:" +  properties[ i ] + "!" );
   			}
 
@@ -2435,4 +2441,189 @@ public class TestMidletContainerBundleActivator
   			return false;
   		}							  		
   	}  
+
+  	boolean testCase_checkOrphanedSchedules() {
+  		try {
+  			if( !testCase_installMidletBundle() )
+  				return false;
+  			
+  			ApplicationDescriptor appDesc = appDescs[0];
+  			String pid = appDesc.getApplicationId();
+  			String mangledAppUID = mangle( pid );  			
+  			
+  			String eventTopic = ScheduledApplication.TIMER_TOPIC;
+  			String eventFilter = getFilterFromNow( 1 );
+  			Map args = createArgs();
+  			
+  			appDesc.schedule(null, args, eventTopic, eventFilter, false);
+  			
+  			if( !testCase_uninstallMidletBundle() )
+  				return false;
+  			
+  			DmtSession session = dmtFactory.getSession("./OSGi/Application" );
+
+  			String[] appPids = session.getChildNodeNames( "./OSGi/Application" );  			
+  			if( appPids == null || appPids.length != 1 )
+  				throw new Exception( "Orphaned schedule node mnot found!" );
+  			if( !appPids[ 0 ].equals( mangledAppUID ) )
+  				throw new Exception( "Invalid PID for the schedule!" );
+  			
+  			
+  			String[] properties = session.getChildNodeNames( "./OSGi/Application/" + mangledAppUID );
+  			
+  			String names[]  = new String [] { 	"Name", "IconURI", "Version", "Vendor", 
+  					                          	"Locked", "Location", "ContainerID",
+  					                          	"ApplicationID", "Valid", "Instances", 
+												"Operations", "Schedules" };
+  			Object values[] = new Object [] {   "", "", "", "", new Boolean( false ), "", "", pid, 
+  				                                new Boolean( false ), null, null, null };
+  			
+  			
+  			boolean found[] = new boolean[ names.length ];				
+  			for( int i = 0; i != names.length; i++ )
+  				found [ i ] = false;
+  			
+  			for( int i = 0; i != properties.length; i++ ) {
+  				int j = 0;
+  				for(; j != names.length; j++ )
+  					if( properties[ i ].equals( names [ j ] ) ) {
+  						if( found [ j ] )
+  							throw new Exception( "Parameter duplication:" + properties[ i ] + "!" );
+  						found[ j ] = true;
+  						if( values[ j ] == null )
+  							break;
+  						
+  						DmtData value = session.getNodeValue( "./OSGi/Application/" + mangledAppUID + "/" + names[ j ] );
+  						
+  						switch( value.getFormat() )
+  						{
+  						case DmtData.FORMAT_BOOLEAN:
+  							if( ((Boolean)values[j]).booleanValue() != value.getBoolean() )
+  								throw new Exception( "Invalid value of " + names[ j ] + " (" + values [ j ] + "!=" + value.getBoolean() + ") !" );
+  							break;
+  						case DmtData.FORMAT_STRING:
+  							if( !((String)values[j]).equals( value.getString() ) )
+  								throw new Exception( "Invalid value of " + names[ j ] + " (" + values [ j ] + "!=" + value.getString() + ") !" );														
+  							break;
+  						case DmtData.FORMAT_INTEGER:
+  							if( ((Integer)values[j]).intValue() != value.getInt() )
+  								throw new Exception( "Invalid value of " + names[ j ] + " (" + values [ j ] + "!=" + value.getInt() +  ") !" );
+  							break;
+  						default:
+  							throw new Exception( "Illegal type for " + names [ j ] + "parameter !" );
+  						}
+  						
+  						break;
+  					}
+  				if( j == names.length )
+  					throw new Exception( "Invalid parameter:" +  properties[ i ] + "!" );
+  			}
+  			
+  			String[] scheduleNames = session.getChildNodeNames( "./OSGi/Application/" + mangledAppUID + "/Schedules" );  			
+  			if( scheduleNames == null || scheduleNames.length != 1 )
+  				throw new Exception( "Schedule was not registered in the ApplicationPlugin!" );
+  			String schedID = scheduleNames[ 0 ];
+
+  			if( !session.getNodeValue( "./OSGi/Application/" + mangledAppUID + "/Schedules/" + schedID + "/Enabled" ).getBoolean() )
+  				throw new Exception("Illegal value for Enabled node!");
+  			
+  			if( !session.getNodeValue( "./OSGi/Application/" + mangledAppUID + "/Schedules/" + schedID + "/TopicFilter" )
+  					.getString().equals( eventTopic ))
+				throw new Exception("Illegal value for EventTopic node!");
+
+  			if( !session.getNodeValue( "./OSGi/Application/" + mangledAppUID + "/Schedules/" + schedID + "/EventFilter" )
+					.getString().equals( eventFilter ))
+				throw new Exception("Illegal value for EventFilter node!");
+  			
+  			if( session.getNodeValue( "./OSGi/Application/" + mangledAppUID + "/Schedules/" + schedID + "/Recurring" ).getBoolean() )
+   				throw new Exception("Illegal value for Recurring node!");
+  			
+  			String[] argumentPairs = session.getChildNodeNames( "./OSGi/Application/" + mangledAppUID + "/Schedules/" + schedID + "/Arguments" );
+  			if( argumentPairs == null || argumentPairs.length != args.size() )
+  				throw new Exception( "Invalid argument number was received!" );
+  			
+  			for( int q=0; q != argumentPairs.length; q++ ) {
+  				String argID = argumentPairs[ q ];
+  				String [] pairElems =  session.getChildNodeNames( "./OSGi/Application/" + mangledAppUID + "/Schedules/" + schedID + "/Arguments/" + argID );
+  				if( pairElems == null || ( pairElems.length != 2 && pairElems.length != 1) )
+  					throw new Exception( "Invalid element number!" );
+
+  				List pairElemList = Arrays.asList( pairElems );
+    			
+    			if( pairElemList.indexOf( "Name" ) == -1 )
+    				throw new Exception( "Name is missing from the list" );
+    			
+    			if( pairElems.length == 2 && pairElemList.indexOf( "Value" ) == -1 )
+    				throw new Exception( "Value is missing from the list" );
+  				
+    			String key = session.getNodeValue( "./OSGi/Application/" + mangledAppUID + "/Schedules/" + schedID + "/Arguments/" + argID + "/Name" ).getString();
+    			Object content = args.get( key );
+    			if( key.equals( "Unmappable" ) ) {
+    				if( pairElems.length != 1 )
+    					throw new Exception("AppPlugin mapped an unmappable element!");
+    				continue;    			
+    			}
+    			if( pairElems.length != 2 )
+    				throw new Exception("Value is missing from a mappable element!");
+    			
+    			DmtData argValue = session.getNodeValue( "./OSGi/Application/" + mangledAppUID + "/Schedules/" + schedID + "/Arguments/" + argID + "/Value" );
+    			
+    			if( content == null ) {
+    				if( argValue.getFormat() != DmtData.FORMAT_NULL )
+    					throw new Exception("Invalid null value");
+    				continue;
+    			}
+    			else if( content instanceof Boolean ) {
+    				if( argValue.getBoolean() != ((Boolean)content).booleanValue() )
+    					throw new Exception("Invalid Boolean value");
+    				continue;
+    			}
+    			else if( content instanceof Integer ) {
+    				if( argValue.getInt() != ((Integer)content).intValue() )
+    					throw new Exception("Invalid Integer value");
+    				continue;
+    			}
+    			else if( content instanceof Float ) {
+    				if( argValue.getFloat() != ((Float)content).floatValue() )
+    					throw new Exception("Invalid Float value");
+    				continue;
+    			}
+    			else if( content instanceof byte [] ) {
+    				byte recvBin[] = argValue.getBinary();
+    				byte expBin[] = (byte [])content;
+    				
+    				if( recvBin.length != expBin.length )
+    					throw new Exception( "Invalid binary value" );
+    				
+    				for( int p=0; p != expBin.length; p++ )
+    					if( recvBin[ p ] != expBin[ p ] )
+    						throw new Exception( "Invalid binary value" );    				
+    				continue;
+    			}
+    			else if( content instanceof String ) {
+    				if( !argValue.getString().equals( content ) )
+  						throw new Exception( "Invalid string value" );    				    					
+    				continue;
+    			}
+    			throw new Exception("Invalid mapping received!");
+  			}
+  			
+  			session.deleteNode( "./OSGi/Application/" + mangledAppUID + "/Schedules/"  + schedID );
+
+  			appPids = session.getChildNodeNames( "./OSGi/Application" );  			
+  			if( appPids != null && appPids.length != 0 )
+  				throw new Exception( "Orphaned schedule was not removed after delete!" );
+
+  			ServiceReference refs[] = bc.getServiceReferences( ScheduledApplication.class.getName(), null );
+  			if( refs != null && refs.length != 0 )
+  				throw new Exception("Orphaned schedule was not unregistered after delete!");
+
+  			session.close();  			
+  			return true;
+  		}
+  		catch (Exception e) {
+  			e.printStackTrace();
+  			return false;
+  		}							  		
+	}
 }

@@ -344,6 +344,10 @@ class ScheduleIDNode extends ApplicationPluginBaseNode implements ArgumentInterf
 	}
 
 	public void setItemValue(String path[], int kind, DmtData value) throws DmtException {
+		if( ApplicationIDNode.getApplicationDescriptor( path ) == null ) {
+			Activator.log( LogService.LOG_ERROR, "Cannot modify properties of an orphaned schedule!", null );
+			throw new DmtException( path, DmtException.COMMAND_FAILED, "Cannot modify properties of an orphaned schedule!" );							
+		}
 		String pid = ApplicationIDNode.getPID( path );
 		String key = path[ path.length - 2 ];    		
 		Hashtable scheduleHash = (Hashtable)schedulesByPidHash.get( pid );
@@ -406,6 +410,10 @@ class ScheduleIDNode extends ApplicationPluginBaseNode implements ArgumentInterf
 	}
 	
 	public void createInteriorNode(String path[], String type) throws DmtException {
+		if( ApplicationIDNode.getApplicationDescriptor( path ) == null ) {
+			Activator.log( LogService.LOG_ERROR, "Cannot create schedule for an uninstalled applivation!", null );
+			throw new DmtException( path, DmtException.COMMAND_FAILED, "Cannot create schedule for an uninstalled applivation!" );							
+		}
 		String pid = ApplicationIDNode.getPID( path );
 		String key = path[ path.length - 1 ];    
 		Hashtable scheduleHash = (Hashtable)schedulesByPidHash.get( pid );
@@ -514,6 +522,10 @@ class ScheduleIDNode extends ApplicationPluginBaseNode implements ArgumentInterf
 		
 		try {
 			ServiceReference appDescRef = ApplicationIDNode.getApplicationDescriptor( path );
+			if( appDescRef == null ) {
+				Activator.log( LogService.LOG_ERROR, "Cannot enable schedule for an uninstalled application!", null );
+				throw new DmtException( path, DmtException.COMMAND_FAILED, "Cannot enable schedule for an uninstalled application!" );				
+			}
 			ApplicationDescriptor appDesc = (ApplicationDescriptor)ApplicationPlugin.bc.getService( appDescRef );
 			ScheduledApplicationImpl schedApp = (ScheduledApplicationImpl)
 				appDesc.schedule( key, argIDNode.getArguments( item.arguments ), 
@@ -614,7 +626,8 @@ class LaunchIDNode extends ApplicationPluginBaseNode implements ArgumentInterfac
 	
 	public void execute(DmtSession session, String path[], String correlator, String data) throws DmtException {
 		String pid = ApplicationIDNode.getPID( path );
-    String key = path[ path.length - 1 ];
+
+		String key = path[ path.length - 1 ];
 		Hashtable launchIDHash = (Hashtable)launchIDsHash.get( pid );
 		if( launchIDHash == null )
 			throw new DmtException(path, DmtException.NODE_NOT_FOUND, "Node not found.");
@@ -622,10 +635,15 @@ class LaunchIDNode extends ApplicationPluginBaseNode implements ArgumentInterfac
 		LaunchableItem item = (LaunchableItem) launchIDHash.get( key );
 		if( item == null )
 			throw new DmtException(path, DmtException.NODE_NOT_FOUND, "Node not found.");
-		
+
+		ServiceReference appDescRef = ApplicationIDNode.getApplicationDescriptor( path );
+		if( appDescRef == null ) {
+			Activator.log( LogService.LOG_ERROR, "Cannot execute an uninstalled application!", null );
+			throw new DmtException( path, DmtException.COMMAND_FAILED, "Cannot execute an uninstalled application!" );				
+		}
+				
 		HashMap args = argIDNode.getArguments( item.argumentHash );
 		
-		ServiceReference appDescRef = ApplicationIDNode.getApplicationDescriptor( path );
 		ApplicationDescriptor appDesc = (ApplicationDescriptor)Activator.bc.getService( appDescRef );
 		
 		item.resultInstanceID = "";
@@ -708,8 +726,10 @@ class LockerNode extends ApplicationPluginBaseNode {
 	
 	public void execute(DmtSession session, String path[], String correlator, String data) throws DmtException {
 		ServiceReference ref = ApplicationIDNode.getApplicationDescriptor( path );
-		if( ref == null )
-			throw new DmtException(path, DmtException.METADATA_MISMATCH, "Cannot execute the node!" );
+		if( ref == null ) {
+			Activator.log( LogService.LOG_ERROR, "Cannot lock/unlock an uninstalled application!", null );
+			throw new DmtException(path, DmtException.METADATA_MISMATCH, "Cannot lock/unlock an uninstalled application!" );
+		}
 		ApplicationDescriptor appDesc = (ApplicationDescriptor)ApplicationPlugin.bc.getService( ref );
 		
 		if( isLock )
@@ -858,6 +878,21 @@ class InstanceIDNode extends ApplicationPluginBaseNode {
 	}
 }
 
+class ApplicationValidityNode extends ApplicationPluginBaseNode {
+	ApplicationValidityNode() {
+		super( "Valid", "text/plain", DmtData.FORMAT_BOOLEAN );
+	}
+	
+	public DmtData getNodeValue( String path[] ) throws DmtException {
+		ServiceReference appDescRef = ApplicationIDNode.getApplicationDescriptor( path );
+		if( appDescRef == null )
+			return new DmtData( false );
+		else
+			return new DmtData( true );
+	}
+}
+
+
 class ApplicationPropertyNode extends ApplicationPluginBaseNode {
 	private String  name;
 	private String  propertyName;
@@ -897,8 +932,17 @@ class ApplicationPropertyNode extends ApplicationPluginBaseNode {
 	Object getProperty( String []path )  throws DmtException {
 		ServiceReference ref = ApplicationIDNode.getApplicationDescriptor( path );
 		if( ref == null ) {
-			if( !isZeroOccurrenceAllowed() )
-				throw new DmtException(path, DmtException.METADATA_MISMATCH, "Cannot get node value!" );
+			if( name.equals( "ApplicationID" ) )
+				return ApplicationIDNode.getPID( path );
+			if( isZeroOccurrenceAllowed() )
+				return null;
+			
+			switch( getFormat() ) {
+			case DmtData.FORMAT_BOOLEAN:
+				return new Boolean( false );
+			case DmtData.FORMAT_STRING:
+				return new String();
+			}			
 			return null;
 		}
 		return ref.getProperty( propertyName );
@@ -923,6 +967,7 @@ class ApplicationIDNode extends ApplicationPluginBaseNode {
 				new LockerNode("Unlock",false), new LockerNode("Lock",true)) );
 		
 		addChildNode( new ApplicationPluginBaseNode( "Instances", new InstanceIDNode() ) );
+		addChildNode( new ApplicationValidityNode() );
 		
 		ApplicationPropertyNode vendor, version;
 		
@@ -931,7 +976,6 @@ class ApplicationIDNode extends ApplicationPluginBaseNode {
 		addChildNode( vendor = new ApplicationPropertyNode( "Version",       ApplicationDescriptor.APPLICATION_VERSION,   DmtData.FORMAT_STRING ) );
 		addChildNode( version = new ApplicationPropertyNode( "Vendor",        ApplicationDescriptor.APPLICATION_VENDOR,    DmtData.FORMAT_STRING ) );
 		addChildNode( new ApplicationPropertyNode( "Locked",        ApplicationDescriptor.APPLICATION_LOCKED,    DmtData.FORMAT_BOOLEAN ) );
-		addChildNode( new ApplicationPropertyNode( "PackageID",     ApplicationDescriptor.APPLICATION_LOCATION,  DmtData.FORMAT_STRING ) );
 		addChildNode( new ApplicationPropertyNode( "ContainerID",   ApplicationDescriptor.APPLICATION_CONTAINER, DmtData.FORMAT_STRING ) );
 		addChildNode( new ApplicationPropertyNode( "ApplicationID", ApplicationDescriptor.APPLICATION_PID,       DmtData.FORMAT_STRING ) );
 		addChildNode( new ApplicationPropertyNode( "Location",      ApplicationDescriptor.APPLICATION_LOCATION,  DmtData.FORMAT_STRING ) );
@@ -946,20 +990,35 @@ class ApplicationIDNode extends ApplicationPluginBaseNode {
 		
 		ServiceReference[] refs = null;
 		
+		Vector appPids = new Vector();
+		
 		try {
-		  refs = ApplicationPlugin.bc.getServiceReferences( ApplicationDescriptor.class.getName(), null );
+			refs = ApplicationPlugin.bc.getServiceReferences( ApplicationDescriptor.class.getName(), null );		  
+		  	if( refs != null ) {
+				for( int i=0; i != refs.length; i++ ) {
+					String appID = (String)refs[ i ].getProperty( Constants.SERVICE_PID );
+					String mangledAppId = ApplicationPlugin.mangle( appID );
+					mangledAppIDHash.put( mangledAppId, appID );
+					appPids.add( mangledAppId );
+				}			  				
+		  	}
+		  	
+			refs = ApplicationPlugin.bc.getServiceReferences( ScheduledApplication.class.getName(), null );		  
+		  	if( refs != null ) {
+				for( int i=0; i != refs.length; i++ ) {
+					String appID = (String)refs[ i ].getProperty( ScheduledApplication.APPLICATION_PID );
+					String mangledAppId = ApplicationPlugin.mangle( appID );
+					if( mangledAppIDHash.get( mangledAppId ) == null ) {
+						mangledAppIDHash.put( mangledAppId, appID );
+						appPids.add( mangledAppId );
+					}
+				}			  				
+		  	}
 		}catch( InvalidSyntaxException e) {}
-		
-		if( refs == null || refs.length == 0 )
-			return new String [ 0 ];
-		
-		String result[] = new String[ refs.length ];
-		for( int i=0; i != refs.length; i++ ) {
-			String appID = (String)refs[ i ].getProperty( Constants.SERVICE_PID );
-			String mangledAppId = ApplicationPlugin.mangle( appID );
-			mangledAppIDHash.put( mangledAppId, appID );
-			result[ i ] = mangledAppId;
-		}
+				
+		String result[] = new String[ appPids.size() ];
+		for( int i=0; i != result.length; i++ )
+			result[ i ] = (String)appPids.remove( 0 );
 		
 		return result;
 	}
