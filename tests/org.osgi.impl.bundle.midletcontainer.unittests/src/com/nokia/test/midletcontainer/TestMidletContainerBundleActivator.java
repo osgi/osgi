@@ -2301,10 +2301,10 @@ public class TestMidletContainerBundleActivator
   					   .getString().equals( topicFilter.getString() ))
   				throw new Exception("TopicFilter cannot be modified!");
 
-  			DmtData eventFilter = DmtData.NULL_VALUE;
+  			DmtData eventFilter = new DmtData( "" );
   			session.setNodeValue( "./OSGi/Application/" + mangledAppUID + "/Schedules/my_schedule_id/EventFilter", eventFilter);
-  			if( session.getNodeValue( "./OSGi/Application/" + mangledAppUID + "/Schedules/my_schedule_id/EventFilter" )
-  					   .getFormat() != DmtData.FORMAT_NULL )
+  			if( !session.getNodeValue( "./OSGi/Application/" + mangledAppUID + "/Schedules/my_schedule_id/EventFilter" )
+  					   .getString().equals("") )
   				throw new Exception("EventFilter cannot be modified!");
   			
   			DmtData recurring = new DmtData( true );

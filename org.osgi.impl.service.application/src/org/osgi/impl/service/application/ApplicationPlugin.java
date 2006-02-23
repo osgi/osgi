@@ -333,10 +333,7 @@ class ScheduleIDNode extends ApplicationPluginBaseNode implements ArgumentInterf
 			case 1:
 				return new DmtData( item.topicFilter );
 			case 2:
-				if( item.eventFilter == null )
-					return DmtData.NULL_VALUE;
-				else
-				  return new DmtData( item.eventFilter );
+			    return new DmtData( item.eventFilter );
 			case 3:
 				return new DmtData( item.recurring );
 		}
@@ -368,10 +365,7 @@ class ScheduleIDNode extends ApplicationPluginBaseNode implements ArgumentInterf
 				disable( item );
 				break;
 			case 2:
-				if( value.getFormat() == DmtData.FORMAT_NULL )
-					item.eventFilter = null;
-				else
-				  item.eventFilter = value.getString();
+			    item.eventFilter = value.getString();
 				disable( item );
 				break;
 			case 3:
@@ -487,7 +481,8 @@ class ScheduleIDNode extends ApplicationPluginBaseNode implements ArgumentInterf
 					ScheduledApplication schedApp = (ScheduledApplication)ApplicationPlugin.bc
 					                                      .getService( refs[ j ] );
 					
-					item.eventFilter = schedApp.getEventFilter();
+					if( (item.eventFilter = schedApp.getEventFilter() ) == null )
+						item.eventFilter = "";					
 					item.topicFilter = schedApp.getTopic();
 					Map args = schedApp.getArguments();
 					if( args == null )
@@ -529,7 +524,7 @@ class ScheduleIDNode extends ApplicationPluginBaseNode implements ArgumentInterf
 			ApplicationDescriptor appDesc = (ApplicationDescriptor)ApplicationPlugin.bc.getService( appDescRef );
 			
 			String eventFilter = item.eventFilter;
-			if( eventFilter != null && eventFilter.equals( "" ) )
+			if( eventFilter.equals( "" ) )
 				eventFilter = null;
 			ScheduledApplicationImpl schedApp = (ScheduledApplicationImpl)
 				appDesc.schedule( key, argIDNode.getArguments( item.arguments ), 
