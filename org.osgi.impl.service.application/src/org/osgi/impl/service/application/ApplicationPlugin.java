@@ -534,7 +534,6 @@ class ScheduleIDNode extends ApplicationPluginBaseNode implements ArgumentInterf
 			item.enabled = true;		  
 			ApplicationPlugin.bc.ungetService( appDescRef );
 		}catch( Exception e ) {
-			e.printStackTrace();
 			Activator.log( LogService.LOG_ERROR, "Error occured at enabling the schedule!", e );
 			throw new DmtException( path, DmtException.COMMAND_FAILED, "Schedule throwed an exception!" );
 		}
