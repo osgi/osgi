@@ -529,11 +529,12 @@ class ScheduleIDNode extends ApplicationPluginBaseNode implements ArgumentInterf
 			ApplicationDescriptor appDesc = (ApplicationDescriptor)ApplicationPlugin.bc.getService( appDescRef );
 			ScheduledApplicationImpl schedApp = (ScheduledApplicationImpl)
 				appDesc.schedule( key, argIDNode.getArguments( item.arguments ), 
-						item.topicFilter, item.eventFilter, item.recurring );
+						item.topicFilter, item.eventFilter.equals("") ? null : item.eventFilter, item.recurring );
 			item.servRef = schedApp.getReference();
 			item.enabled = true;		  
 			ApplicationPlugin.bc.ungetService( appDescRef );
 		}catch( Exception e ) {
+			e.printStackTrace();
 			Activator.log( LogService.LOG_ERROR, "Error occured at enabling the schedule!", e );
 			throw new DmtException( path, DmtException.COMMAND_FAILED, "Schedule throwed an exception!" );
 		}
