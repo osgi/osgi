@@ -527,9 +527,13 @@ class ScheduleIDNode extends ApplicationPluginBaseNode implements ArgumentInterf
 				throw new DmtException( path, DmtException.COMMAND_FAILED, "Cannot enable schedule for an uninstalled application!" );				
 			}
 			ApplicationDescriptor appDesc = (ApplicationDescriptor)ApplicationPlugin.bc.getService( appDescRef );
+			
+			String eventFilter = item.eventFilter;
+			if( eventFilter != null && eventFilter.equals( "" ) )
+				eventFilter = null;
 			ScheduledApplicationImpl schedApp = (ScheduledApplicationImpl)
 				appDesc.schedule( key, argIDNode.getArguments( item.arguments ), 
-						item.topicFilter, item.eventFilter.equals("") ? null : item.eventFilter, item.recurring );
+						item.topicFilter, eventFilter, item.recurring );
 			item.servRef = schedApp.getReference();
 			item.enabled = true;		  
 			ApplicationPlugin.bc.ungetService( appDescRef );
