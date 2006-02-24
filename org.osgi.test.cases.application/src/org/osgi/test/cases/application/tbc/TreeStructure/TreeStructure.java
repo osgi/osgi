@@ -520,7 +520,7 @@ public class TreeStructure {
 		ScheduledApplication sa = null;
 		try {
 			session = tbc.getDmtAdmin().getSession(ApplicationConstants.OSGI_APPLICATION,
-					DmtSession.LOCK_TYPE_SHARED);
+					DmtSession.LOCK_TYPE_EXCLUSIVE);
 			
 			cleanSchedulesNodes(session);
 
@@ -600,7 +600,7 @@ public class TreeStructure {
 		try {
 			String[] nodes = session.getChildNodeNames(ApplicationConstants.OSGI_APPLICATION_APPID_SCHEDULES);
 			for (int i=0; i<nodes.length; i++) {
-				session.deleteNode(nodes[i]);
+				session.deleteNode(ApplicationConstants.OSGI_APPLICATION_APPID_SCHEDULES + "/" + nodes[i]);
 			}
 		} catch (DmtException e) {
 			tbc.fail(MessagesConstants.getMessage(
@@ -609,7 +609,7 @@ public class TreeStructure {
 		}
 		
 	}
-
+	
 	/**
 	 * This method asserts if $/Application/<app_id>/Ext is a valid node and
 	 * asserts Type, Cardinality, Get Permission according to Table 3.6 .
@@ -622,6 +622,7 @@ public class TreeStructure {
 		try {
 			session = tbc.getDmtAdmin().getSession(ApplicationConstants.OSGI_APPLICATION,
 					DmtSession.LOCK_TYPE_SHARED);
+			
 			tbc
 					.assertTrue(
 							"Asserts if $/Application/<app_id>/Ext is a valid node",
@@ -637,7 +638,7 @@ public class TreeStructure {
 					DmtData.FORMAT_NODE, metaNode.getFormat());
 			tbc.assertTrue(
 					"Asserts $/Application/<app_id>/Ext metanode cardinality",
-					!metaNode.isZeroOccurrenceAllowed()
+					metaNode.isZeroOccurrenceAllowed()
 							&& metaNode.getMaxOccurrence() == 1);
 			tbc.assertTrue("Asserts $/Application/<app_id>/Ext metanode GET",
 					metaNode.can(MetaNode.CMD_GET));
@@ -1654,7 +1655,7 @@ public class TreeStructure {
 			tbc
 					.assertTrue(
 							"Asserts $/Application/<app_id>/Instances/<instance_id>/Operations/Ext metanode cardinality",
-							!metaNode.isZeroOccurrenceAllowed()
+							metaNode.isZeroOccurrenceAllowed()
 									&& metaNode.getMaxOccurrence() == 1);
 			tbc
 					.assertTrue(
