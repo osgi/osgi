@@ -215,6 +215,7 @@ public class UserPromptCondition
 				System.arraycopy(conds,0,c2,0,i);
 				System.arraycopy(conds,i+i,c2,i,conds.length-1-i);
 				conds = c2;
+				i--;
 				continue;
 			}
 			questions[i]=cond.getLocalizedMessage();
