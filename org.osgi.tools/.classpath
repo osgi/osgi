@@ -8,9 +8,9 @@
 	<classpathentry kind="lib" path="/licensed/jar/saxon.jar"/>
 	<classpathentry kind="lib" path="/licensed/jar/nanoxml.jar"/>
 	<classpathentry kind="lib" path="jar/tools.jar"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/org.osgi.tools.btool"/>
 	<classpathentry sourcepath="/osgi.released/osgi.jar" kind="lib" path="/osgi.released/osgi.jar"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/org.osgi.test.tool"/>
 	<classpathentry kind="lib" path="/licensed/jar/bcel.jar"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/org.osgi.tools.btool"/>
 	<classpathentry kind="output" path="src"/>
 </classpath>
