@@ -56,6 +56,7 @@ public abstract class IntegratedTest extends TestCase {
 	public static final String	ORG_OSGI_IMPL_SERVICE_COMPONENT_JAR = "file:../../org.osgi.impl.service.component/org.osgi.impl.service.component.jar";
 	public static final String	INTEGRATIONTESTS_BUNDLE1_JAR = "file:../../org.osgi.impl.service.policy.unittest/integrationtests.bundle1.jar";
 	public static final String	INTEGRATIONTESTS_BUNDLE2_JAR = "file:../../org.osgi.impl.service.policy.unittest/integrationtests.bundle2.jar";
+	public static final String  CONSOLE_JAR = "file:../../osgi.test/org.osgi.tools.console.jar";
 
 	public FrameworkSecurityManager	secMan;
 	public DefaultAdaptor adaptor;
@@ -69,6 +70,7 @@ public abstract class IntegratedTest extends TestCase {
 	public Bundle	serviceComponent;
 	public Bundle	integrationTestBundle1;
 	public Bundle	integrationTestBundle2;
+	public Bundle	console;
 	public OSGi	framework;
 	public PermissionAdmin	permissionAdmin;
 	public ConditionalPermissionAdmin	conditionalPermissionAdmin;
@@ -143,6 +145,7 @@ public abstract class IntegratedTest extends TestCase {
 			setBundleAsAdministrator(ORG_OSGI_IMPL_SERVICE_LOG_JAR);
 			setBundleAsAdministrator(ORG_OSGI_IMPL_SERVICE_DMT_JAR);
 			setBundleAsAdministrator(ORG_OSGI_IMPL_SERVICE_COMPONENT_JAR);
+			setBundleAsAdministrator(CONSOLE_JAR);
 		} 
 
 		jaxp = systemBundleContext.installBundle(ORG_OSGI_IMPL_BUNDLE_JAXP_JAR);
@@ -153,6 +156,7 @@ public abstract class IntegratedTest extends TestCase {
 		serviceComponent = systemBundleContext.installBundle(ORG_OSGI_IMPL_SERVICE_COMPONENT_JAR);
 		integrationTestBundle1 = systemBundleContext.installBundle(INTEGRATIONTESTS_BUNDLE1_JAR);
 		integrationTestBundle2 = systemBundleContext.installBundle(INTEGRATIONTESTS_BUNDLE2_JAR);
+		console = systemBundleContext.installBundle(CONSOLE_JAR);
 
 		jaxp.start();
 		eventBundle.start();
@@ -160,6 +164,7 @@ public abstract class IntegratedTest extends TestCase {
 		logBundle.start();
 		dmtBundle.start();
 		serviceComponent.start();
+		console.start();
 
 		Class cl = integrationTestBundle1.loadClass("org.osgi.impl.service.policy.integrationtests.bundle1.Test");
 		bundle1DoAction = cl.getDeclaredMethod("doAction",new Class[]{PrivilegedExceptionAction.class});
