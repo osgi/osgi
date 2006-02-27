@@ -11,8 +11,6 @@ import java.util.*;
 import org.osgi.framework.*;
 
 public class DummyBundle
-	extends
-		Thread
 	implements
 		BundleActivator
 {

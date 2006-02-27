@@ -32,6 +32,7 @@ import java.util.Dictionary;
 import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Vector;
+import java.util.Locale;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleException;
@@ -272,7 +273,7 @@ public class CMControl extends DefaultTestBundleControl {
 		Hashtable illegalprops = new Hashtable();
 		Vector v = new Vector();
 		v.addElement("a string");
-		v.addElement(new Thread());
+		v.addElement(Locale.getDefault());
 		illegalprops.put("somekey", "somevalue");
 		illegalprops.put("antoherkey", v);
 		String message = "updating with illegal properties";
