@@ -216,8 +216,10 @@ public class UserPromptCondition implements Condition {
 	 * the user and returns true if the user accepts. Depending on the
 	 * amount of levels the condition is assigned to, the prompt may have
 	 * multiple accept buttons and one of them can be selected by default (see
-	 * default level parameter at {@link UserPromptCondition#getCondition(Bundle, ConditionInfo)}). It must be always possible
-	 * to deny the permission (e.g. by a separate "deny" button). In case of BLANKET
+	 * default level parameter at {@link UserPromptCondition#getCondition(Bundle, ConditionInfo)}).
+	 * It must always be possible for the user
+	 * to stop further prompting of this question, even with ONESHOT and SESSION levels.
+	 * In case of BLANKET
 	 * and SESSION levels, it is possible that the user has already answered the question,
 	 * in this case there will be no prompting, but immediate return with the previous answer.
 	 * 
