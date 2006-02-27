@@ -22,14 +22,12 @@ import java.security.*;
 import java.security.cert.Certificate;
 import java.util.*;
 
-import org.eclipse.osgi.service.resolver.VersionRange;
 import org.osgi.framework.*;
 import org.osgi.impl.service.deploymentadmin.plugin.*;
 import org.osgi.impl.service.dwnl.DownloadAgent;
 import org.osgi.service.deploymentadmin.*;
 import org.osgi.service.dmt.DmtAdmin;
-import org.osgi.service.dmt.spi.ExecPlugin;
-import org.osgi.service.dmt.spi.DataPlugin;
+import org.osgi.service.dmt.spi.*;
 import org.osgi.service.event.*;
 import org.osgi.util.tracker.ServiceTracker;
 

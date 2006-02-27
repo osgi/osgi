@@ -1,14 +1,9 @@
 package org.osgi.impl.service.deploymentadmin;
 
-import java.security.AccessController;
-import java.security.PrivilegedAction;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Set;
+import java.security.*;
+import java.util.*;
 
-import org.eclipse.osgi.service.resolver.VersionRange;
-import org.osgi.framework.Bundle;
-import org.osgi.framework.Version;
+import org.osgi.framework.*;
 import org.osgi.service.deploymentadmin.DeploymentException;
 
 /*

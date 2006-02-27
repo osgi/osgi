@@ -18,25 +18,12 @@
 package org.osgi.impl.service.deploymentadmin;
 
 import java.io.Serializable;
-import java.security.AccessController;
-import java.security.PrivilegedAction;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Vector;
-import java.util.jar.Attributes;
-import java.util.jar.Manifest;
+import java.security.*;
+import java.util.*;
+import java.util.jar.*;
 
-import org.eclipse.osgi.service.resolver.VersionRange;
-import org.osgi.framework.Bundle;
-import org.osgi.framework.Constants;
-import org.osgi.framework.InvalidSyntaxException;
-import org.osgi.framework.ServiceReference;
-import org.osgi.framework.Version;
-import org.osgi.service.deploymentadmin.BundleInfo;
-import org.osgi.service.deploymentadmin.DeploymentAdminPermission;
-import org.osgi.service.deploymentadmin.DeploymentException;
-import org.osgi.service.deploymentadmin.DeploymentPackage;
+import org.osgi.framework.*;
+import org.osgi.service.deploymentadmin.*;
 import org.osgi.service.deploymentadmin.spi.ResourceProcessor;
 
 public class DeploymentPackageImpl implements DeploymentPackage, Serializable {
