@@ -160,7 +160,7 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 			}
 		}
 
-		Thread.sleep(1000);
+		Thread.sleep(SLEEP);
 	}
 
 	/**
