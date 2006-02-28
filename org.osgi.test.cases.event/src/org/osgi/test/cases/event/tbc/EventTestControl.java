@@ -190,8 +190,9 @@ public class EventTestControl extends DefaultTestBundleControl {
     for (int i = 0; i < perm2.length; i++) {
       pass("permission [" + i + "]: " + perm2[i]);
     }
+    
 		
-	}
+  }
   
   /**
    * Checks if the SecurityException is got if the caller bundle does 
@@ -649,6 +650,9 @@ public class EventTestControl extends DefaultTestBundleControl {
     uninstallBundle(tb1);
     tb2.stop();
     uninstallBundle(tb2);
+    PermissionAdmin permissionAdmin = (PermissionAdmin)getRegistry().getService(PermissionAdmin.class);
+    permissionAdmin.setPermissions(tb1.getLocation(), null);
+    permissionAdmin.setPermissions(tb2.getLocation(), null);
 	}
   
   private void addPermissions(PermissionAdmin permissionAdmin, Bundle bundle, PermissionInfo[] toAdd) {

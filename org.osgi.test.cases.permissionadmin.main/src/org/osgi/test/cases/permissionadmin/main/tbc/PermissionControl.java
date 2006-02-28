@@ -55,7 +55,8 @@ public class PermissionControl extends DefaultTestBundleControl {
 	}
 
 	public void unprepare() throws Exception {
-	}
+    permissionAdmin.setPermissions(getContext().getBundle().getLocation(), null);
+  }
 
 	public void setState() throws Exception {
 	}

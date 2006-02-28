@@ -833,8 +833,9 @@ public class PermissionSignatureTestControl extends DefaultTestBundleControl {
    * Clean up after a run. Notice that during debugging
    * many times the unprepare is never reached.
    */
-  public void unprepare() {
+  public void unprepare() {    
     log("#after each run");
+    permissionAdmin.setPermissions(testBundleLocation, null);    
   }
   
   // returns true if 'method' failed
