@@ -32,6 +32,7 @@ import java.io.StreamCorruptedException;
 import java.util.ArrayList;
 import java.util.Dictionary;
 import java.util.HashMap;
+import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -200,6 +201,7 @@ public class UserPromptCondition
 	}
 	
 	public boolean isSatisfied(Condition[] conds, Dictionary context) {
+		if (context==null) context = new Hashtable();
 		String[] questions = new String[conds.length];
 		Bundle[] bundles = new Bundle[conds.length];
 		List[] possibleAnswers = new List[conds.length];
@@ -208,7 +210,7 @@ public class UserPromptCondition
 		for(int i=0;i<conds.length;i++) {
 			org.osgi.util.mobile.UserPromptCondition ucond = (org.osgi.util.mobile.UserPromptCondition) conds[i];
 			UserPromptCondition cond = (UserPromptCondition) org.osgi.util.mobile.UserPromptCondition.unWrap(ucond);
-			if (!cond.isPostponed()) {
+			if (!cond.isPostponed()||(context.get(cond)!=null)) {
 				if (!cond.isSatisfied()) return false; // no need to do anything
 				// remove this from every array, it has been asked already
 				Condition[] c2 = new Condition[conds.length-1];
@@ -270,6 +272,7 @@ public class UserPromptCondition
 			org.osgi.util.mobile.UserPromptCondition ucond = (org.osgi.util.mobile.UserPromptCondition) conds[i];
 			UserPromptCondition cond = (UserPromptCondition) org.osgi.util.mobile.UserPromptCondition.unWrap(ucond);
 			boolean satisfied = cond.setAnswer(answers[i]);
+			if (satisfied) context.put(cond,Boolean.TRUE);
 			all_satisfied&=satisfied;
 		}
 		
@@ -413,4 +416,10 @@ public class UserPromptCondition
 		}
 		org.osgi.util.mobile.UserPromptCondition.setFactory(new Factory());
 	}
+
+	public boolean equals(Object var0) {
+		return this==var0;
+	}
+	
+	
 }
