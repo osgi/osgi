@@ -629,7 +629,7 @@ public class DeploymentmoTestControl extends DefaultTestBundleControl {
         
         assertEquals("Asserting alert type", type, item.getType());
         assertEquals("Asserting source", source, item.getSource());
-        assertNull("Asserting mark", item.getMark());
+
         assertEquals("Asserting data" ,data,item.getData());
         //Resets after the asserts.
         resetCommandValues();
