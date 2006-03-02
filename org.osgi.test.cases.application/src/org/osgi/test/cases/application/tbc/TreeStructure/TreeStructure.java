@@ -1907,8 +1907,8 @@ public class TreeStructure {
 							metaNode.can(MetaNode.CMD_REPLACE));
 
 			tbc
-					.assertNull(
-							"Asserting if the default value is null.",
+					.assertEquals(
+							"Asserting if the default value is an empty string.", "",
 							session
 									.getNodeValue(
 											ApplicationConstants.OSGI_APPLICATION_APPID_SCHEDULES_ID_TOPICFILTER)
