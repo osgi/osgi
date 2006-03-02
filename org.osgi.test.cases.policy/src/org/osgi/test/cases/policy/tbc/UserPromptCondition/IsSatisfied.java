@@ -408,7 +408,7 @@ public class IsSatisfied {
 							PolicyConstants.LEVEL_ONESHOT,
 							PolicyConstants.LEVEL_ONESHOT,
 							PolicyConstants.CATALOG_NAME, "12- You must ACCEPT this question to make this test pass with success." +
-					"[PS: If this is the second time that you receive this question there is an error in the implementation because the same question must remember your previous answer even if the level is ONESHOT so, you have to do the opposite that it says, you have to REJECT this question.]" }));
+					"[PS: If this is the second time that you receive this question the implementation is ok and you have to REJECT this question.]" }));
     	   
     	   
 			Condition condition2 = UserPromptCondition.getCondition(tbc.getBundle(), 
@@ -416,7 +416,7 @@ public class IsSatisfied {
 							PolicyConstants.LEVEL_BLANKET,
 							PolicyConstants.LEVEL_BLANKET,
 							PolicyConstants.CATALOG_NAME, "13- You must ACCEPT this question to make this test pass with success. " +
-									"[PS: If this is the second time that you receive this question there is an error in the implementation because the same question must remember your previous answer so, you have to do the opposite that it says, you have to REJECT this question.]" })
+					"[PS: If this is the second time that you receive this question the implementation is ok and you have to REJECT this question.]" })
 							);
 			
 			Condition condition3 = UserPromptCondition.getCondition(tbc.getBundle(), 
@@ -424,7 +424,7 @@ public class IsSatisfied {
 							PolicyConstants.LEVEL_SESSION,
 							PolicyConstants.LEVEL_SESSION,
 							PolicyConstants.CATALOG_NAME, "14- You must ACCEPT this question to make this test pass with success." +
-					"[PS: If this is the second time that you receive this question there is an error in the implementation because the same question must remember your previous answer so, you have to do the opposite that it says, you have to REJECT this question.]" })
+					"[PS: If this is the second time that you receive this question the implementation is ok and you have to REJECT this question.]" })
 							);
 			
 						
@@ -433,8 +433,8 @@ public class IsSatisfied {
 			tbc.log("#If the user does not accept all the questions, this test will fail.");
 			
 			tbc.assertTrue("Asserting that isSatisfied returns true.", condition3.isSatisfied(conditions, null));
-			tbc.log("#This is the second time for this question, it must appear for you again and you must REJECT this test to make it pass.");
-			tbc.assertTrue("Asserting that isSatisfied returns true.", !condition3.isSatisfied(conditions, null));
+			tbc.log("#The second question must appear because null was passed as context. Otherwise the test will fail.");
+			tbc.assertTrue("Asserting that isSatisfied returns false.", !condition3.isSatisfied(conditions, null));
        } catch (Exception e) {
            tbc.fail("Unexpected exception was thrown + : " 
                + e.getClass().getName());
