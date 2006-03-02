@@ -230,7 +230,7 @@ public class InstallAndActivate implements TestInterface {
  			
 
  			tbc.assertTrue("Asserting that the manifest of the deployment package is the same as the specified",
- 					manifest.equals(DeploymentmoConstants.SIMPLE_FIX_PACK_MANIFEST));
+ 					manifest.getMainAttributes().equals(DeploymentmoConstants.SIMPLE_FIX_PACK_MANIFEST.getMainAttributes()));
 
 			tbc.assertEquals(
 							"Asserting the package type",
@@ -265,7 +265,7 @@ public class InstallAndActivate implements TestInterface {
 			manifest = new Manifest(bais);
 
 			tbc.assertTrue("Asserting that the manifest of the first bundle is the same as the specified",
-					manifest.equals(DeploymentmoConstants.SIMPLE_FIX_PACK_BUNDLE1_MANIFEST));
+					manifest.getMainAttributes().equals(DeploymentmoConstants.SIMPLE_FIX_PACK_BUNDLE1_MANIFEST.getMainAttributes()));
 
 			
 			tbc.assertEquals("Asserting that the location of the first bundle is the same as the specified",
@@ -777,7 +777,7 @@ public class InstallAndActivate implements TestInterface {
 			ByteArrayInputStream bais = new ByteArrayInputStream(session.getNodeValue(DeploymentmoConstants.getDeployedExtManifest(nodeId)).toString().getBytes());
 			Manifest manifest = new Manifest(bais);
 			tbc.assertTrue("Asserting that the manifest of the deployment package is the same as the specified",
-					manifest.equals(DeploymentmoConstants.SIMPLE_DP_MANIFEST));
+					manifest.getMainAttributes().equals(DeploymentmoConstants.SIMPLE_DP_MANIFEST.getMainAttributes()));
 									
 	
 			tbc.assertEquals(
@@ -813,7 +813,7 @@ public class InstallAndActivate implements TestInterface {
 			manifest = new Manifest(bais);
 			
 			tbc.assertTrue("Asserting that the manifest of the bundle is the same as the specified",
-					manifest.equals(DeploymentmoConstants.SIMPLE_DP_BUNDLE1_MANIFEST));
+					manifest.getMainAttributes().equals(DeploymentmoConstants.SIMPLE_DP_BUNDLE1_MANIFEST.getMainAttributes()));
 			
 			tbc.assertEquals("Asserting that the location of the first bundle is the same as the specified",
 					DeploymentmoConstants.SIMPLE_DP_BUNDLE1_LOCATION,
@@ -835,7 +835,7 @@ public class InstallAndActivate implements TestInterface {
 			manifest = new Manifest(bais);
 			
 			tbc.assertTrue("Asserting that the manifest of the second bundle is the same as the specified",
-					manifest.equals(DeploymentmoConstants.SIMPLE_DP_BUNDLE2_MANIFEST));
+					manifest.getMainAttributes().equals(DeploymentmoConstants.SIMPLE_DP_BUNDLE2_MANIFEST.getMainAttributes()));
 			
 			tbc.assertEquals("Asserting that the location of the second bundle is the same as the specified",
 					DeploymentmoConstants.SIMPLE_DP_BUNDLE2_LOCATION,

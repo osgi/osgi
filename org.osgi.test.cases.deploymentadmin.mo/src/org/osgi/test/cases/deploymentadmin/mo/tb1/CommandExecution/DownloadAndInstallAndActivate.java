@@ -551,7 +551,7 @@ public class DownloadAndInstallAndActivate implements TestInterface {
 				ByteArrayInputStream bais = new ByteArrayInputStream(session.getNodeValue(DeploymentmoConstants.getDeployedExtManifest(nodeId)).toString().getBytes());
     			Manifest manifest = new Manifest(bais);
     			tbc.assertTrue("Asserting that the manifest of the deployment package is the same as the specified",
-    					manifest.equals(DeploymentmoConstants.SIMPLE_DP_MANIFEST));
+    					manifest.getMainAttributes().equals(DeploymentmoConstants.SIMPLE_DP_MANIFEST.getMainAttributes()));
     			
 
     			tbc.assertEquals(
@@ -588,7 +588,7 @@ public class DownloadAndInstallAndActivate implements TestInterface {
     			manifest = new Manifest(bais);
     			
     			tbc.assertTrue("Asserting that the manifest of the bundle is the same as the specified",
-    					manifest.equals(DeploymentmoConstants.SIMPLE_DP_BUNDLE1_MANIFEST));
+    					manifest.getMainAttributes().equals(DeploymentmoConstants.SIMPLE_DP_BUNDLE1_MANIFEST.getMainAttributes()));
     			
     			
     			tbc.assertEquals("Asserting that the location of the first bundle is the same as the specified",
@@ -611,7 +611,7 @@ public class DownloadAndInstallAndActivate implements TestInterface {
     			manifest = new Manifest(bais);
     			
     			tbc.assertTrue("Asserting that the manifest of the bundle is the same as the specified",
-    					manifest.equals(DeploymentmoConstants.SIMPLE_DP_BUNDLE2_MANIFEST));
+    					manifest.getMainAttributes().equals(DeploymentmoConstants.SIMPLE_DP_BUNDLE2_MANIFEST.getMainAttributes()));
     			
     			tbc.assertEquals("Asserting that the location of the second bundle is the same as the specified",
     					DeploymentmoConstants.SIMPLE_DP_BUNDLE2_LOCATION,
@@ -683,7 +683,7 @@ public class DownloadAndInstallAndActivate implements TestInterface {
     			Manifest manifest = new Manifest(bais);
 
     			tbc.assertTrue("Asserting that the manifest of the deployment package is the same as the specified",
-    					manifest.equals(DeploymentmoConstants.SIMPLE_FIX_PACK_MANIFEST));
+    					manifest.getMainAttributes().equals(DeploymentmoConstants.SIMPLE_FIX_PACK_MANIFEST.getMainAttributes()));
 				tbc.assertEquals(
 								"Asserting the node EnvType",
 								DeploymentmoConstants.ENVTYPE,
@@ -722,7 +722,7 @@ public class DownloadAndInstallAndActivate implements TestInterface {
     			manifest = new Manifest(bais);
 
     			tbc.assertTrue("Asserting that the manifest of the first bundle is the same as the specified",
-    					manifest.equals(DeploymentmoConstants.SIMPLE_FIX_PACK_BUNDLE1_MANIFEST));
+    					manifest.getMainAttributes().equals(DeploymentmoConstants.SIMPLE_FIX_PACK_BUNDLE1_MANIFEST.getMainAttributes()));
     			
 				tbc.assertEquals("Asserting that the location of the first bundle is the same as the specified",
 						DeploymentmoConstants.SIMPLE_FIX_PACK_BUNDLE1_LOCATION,
@@ -1151,7 +1151,7 @@ public class DownloadAndInstallAndActivate implements TestInterface {
     			Manifest manifest = new Manifest(bais);
 
     			tbc.assertTrue("Asserting that the manifest of the bundle is the same as the specified",
-    					manifest.equals(DeploymentmoConstants.getJarFile(DeploymentmoConstants.SIMPLE_BUNDLE).getManifest()));
+    					manifest.getMainAttributes().equals(DeploymentmoConstants.getJarFile(DeploymentmoConstants.SIMPLE_BUNDLE).getManifest().getMainAttributes()));
 
     			//It is not installed by the DeploymentAdmin, so the location does not change to osgi-dp: bsn 
     			String bundleLocation = session.getNodeValue(DeploymentmoConstants.getDeployedExtBundlesLocation(nodeId, bundleId)).toString();
@@ -1238,7 +1238,7 @@ public class DownloadAndInstallAndActivate implements TestInterface {
     			
     			Manifest manifest = new Manifest(bais);
     			tbc.assertTrue("Asserting that the manifest of the bundle is the same as the specified",
-    					manifest.equals(DeploymentmoConstants.getJarFile(DeploymentmoConstants.SIMPLE_BUNDLE).getManifest()));
+    					manifest.getMainAttributes().equals(DeploymentmoConstants.getJarFile(DeploymentmoConstants.SIMPLE_BUNDLE).getManifest().getMainAttributes()));
     			
     			//It is not installed by the DeploymentAdmin, so the location does not change to osgi-dp: bsn 
     			String bundleLocation = session.getNodeValue(DeploymentmoConstants.getDeployedExtBundlesLocation(nodeId, bundleId)).toString();
