@@ -71,6 +71,8 @@ public class IsMutable {
         testIsMutable010();
         testIsMutable011();
         testIsMutable012();
+        testIsMutable013();
+        testIsMutable014();
     }
     
     /**
@@ -471,6 +473,54 @@ public class IsMutable {
             tbc.fail("Unexpected exception was thrown + : " 
                     + e.getClass().getName());
         }
-    }    
+    }  
+    
+    /**
+     * This method asserts that when a call to isSatisfied
+     * was made using ONESHOT as level and the user chose never
+     * as answer, isMutable returns false.
+     * 
+     * @spec UserPromptCondition.isMutable()
+     */
+    private void testIsMutable013() {
+         tbc.log("#testIsMutable013");
+        try {
+			Condition condition = UserPromptCondition.getCondition(tbc.getBundle(), 
+					new ConditionInfo(UserPromptCondition.class.getName(), new String[] {
+							PolicyConstants.LEVEL_ONESHOT,
+							PolicyConstants.LEVEL_ONESHOT,
+							PolicyConstants.CATALOG_NAME, "13-Choose NEVER as answer. Otherwise this test method will fail." }));
+			tbc.assertTrue("Asserting if false is returned.", !condition.isSatisfied());
+			tbc.assertTrue("Asserting if false is returned when a call to isSatisfied was made using ONESHOT as level and the user chose NEVER as answer.", !condition.isMutable());
+			
+        } catch (Exception e) {
+            tbc.fail("Unexpected exception was thrown + : " 
+                    + e.getClass().getName());
+        }
+    }     
+    
+    /**
+     * This method asserts that when a call to isSatisfied
+     * was made using SESSION as level and the user chose never as answer
+     * false is returned.
+     * 
+     * @spec UserPromptCondition.isMutable()
+     */
+    private void testIsMutable014() {
+         tbc.log("#testIsMutable014");
+        try {
+			Condition condition = UserPromptCondition.getCondition(tbc.getBundle(), 
+					new ConditionInfo(UserPromptCondition.class.getName(), new String[] {
+							PolicyConstants.LEVEL_SESSION,
+							PolicyConstants.LEVEL_SESSION,
+							PolicyConstants.CATALOG_NAME, "14-Choose NEVER as answer. Otherwise this test method will fail." }));
+			tbc.assertTrue("Asserting if false is returned.", !condition.isSatisfied());
+			tbc.assertTrue("Asserting if false is returned when a call to isSatisfied was made using SESSION as level and the user chose NEVER as answer.", !condition.isMutable());
+			
+        } catch (Exception e) {
+            tbc.fail("Unexpected exception was thrown + : " 
+                    + e.getClass().getName());
+        }
+    }     
     
 }
