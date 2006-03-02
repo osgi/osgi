@@ -71,6 +71,9 @@ public class IsPostponed {
         testIsPostponed010();
         testIsPostponed011();
         testIsPostponed012();
+        testIsPostponed013();
+        testIsPostponed014();
+        testIsPostponed015();
     }
     
     /**
@@ -182,37 +185,35 @@ public class IsPostponed {
                     + e.getClass().getName());
         }
     }     
-          
+    
     /**
      * This method asserts that when an user interaction is needed
-     * true is returned and after an isSatisified call, the interaction
-     * still need an user interaction using ALL levels and the isSatisfied() method.
+     * true is returned and after an isSatisified call, if never was choose
+     * the interaction is stiil needed.
      * 
      * @spec UserPromptCondition.isPostponed()
      */
     private void testIsPostponed004() {
          tbc.log("#testIsPostponed04");
         try {
-        	//TODO waiting for nokia feedback
 			Condition condition = UserPromptCondition.getCondition(tbc.getBundle(), 
 					new ConditionInfo(UserPromptCondition.class.getName(), new String[] {
-							PolicyConstants.ALL_LEVELS,
-							PolicyConstants.LEVEL_BLANKET,
-							PolicyConstants.CATALOG_NAME, "4: Choose whatever you want." }));
+							PolicyConstants.LEVEL_SESSION,
+							PolicyConstants.LEVEL_SESSION,
+							PolicyConstants.CATALOG_NAME, "4: Choose NEVER as answer. Otherwise this test method will fail." }));
 						
-			tbc.assertTrue("Asserting that true is returned when an user interaction is needed.", condition.isPostponed());
-			condition.isSatisfied();
-			tbc.assertTrue("Asserting that true is returned when an user interaction is needed.", condition.isPostponed());			
+			tbc.assertTrue("Asserting if false is returned.", !condition.isSatisfied());
+			tbc.assertTrue("Asserting that true is returned after the user choose NEVER as answer.", condition.isPostponed());			
         } catch (Exception e) {
             tbc.fail("Unexpected exception was thrown + : " 
                     + e.getClass().getName());
         }
-    }    
-    
+    }     
+             
     /**
      * This method asserts that when an user interaction is needed
      * true is returned and after an isSatisified call, the interaction
-     * still need an user interaction using BLANKET
+     * is not needed anymore using BLANKET
      * as level and the isSatisfied(Condition[],Dictionary) method passing
      * null as Dictionary.
      * 
@@ -234,21 +235,21 @@ public class IsPostponed {
 			
 			tbc.assertTrue("Asserting if true is returned.", condition.isSatisfied(conditions, null));
 			
-			tbc.assertTrue("Asserting that true is returned when an user interaction is needed.", condition.isPostponed());
+			tbc.assertTrue("Asserting that false is returned when an user interaction is not needed.", !condition.isPostponed());
 			
 			condition = UserPromptCondition.getCondition(tbc.getBundle(), 
 					new ConditionInfo(UserPromptCondition.class.getName(), new String[] {
 							PolicyConstants.LEVEL_BLANKET,
 							PolicyConstants.LEVEL_BLANKET,
 							PolicyConstants.CATALOG_NAME, "5: Choose never as answer. Otherwise this test method will fail." }));
-						
+									
 			tbc.assertTrue("Asserting that true is returned when an user interaction is needed.", condition.isPostponed());
 			
 			conditions = new Condition[] { condition };
 			
 			tbc.assertTrue("Asserting if false is returned.", !condition.isSatisfied(conditions, null));
 			
-			tbc.assertTrue("Asserting that true is returned when an user interaction is needed.", condition.isPostponed());					
+			tbc.assertTrue("Asserting that false is returned when an user interaction is not needed.", !condition.isPostponed());					
         } catch (Exception e) {
             tbc.fail("Unexpected exception was thrown + : " 
                     + e.getClass().getName());
@@ -258,7 +259,7 @@ public class IsPostponed {
     /**
      * This method asserts that when an user interaction is needed
      * true is returned and after an isSatisified call, the interaction
-     * still need an user interaction using SESSION
+     * is not needed anymore even USING SESSION
      * as level and the isSatisfied(Condition[],Dictionary) method passing
      * null as Dictionary.
      * 
@@ -279,21 +280,21 @@ public class IsPostponed {
 			
 			tbc.assertTrue("Asserting if true is returned.", condition.isSatisfied(conditions, null));
 			
-			tbc.assertTrue("Asserting that true is returned when an user interaction is needed.", condition.isPostponed());
+			tbc.assertTrue("Asserting that false is returned when an user interaction is not needed.", !condition.isPostponed());
 			
 			condition = UserPromptCondition.getCondition(tbc.getBundle(), 
 					new ConditionInfo(UserPromptCondition.class.getName(), new String[] {
 							PolicyConstants.LEVEL_SESSION,
 							PolicyConstants.LEVEL_SESSION,
 							PolicyConstants.CATALOG_NAME, "6: Choose a negative answer. Otherwise this test method will fail." }));
-						
+							
 			tbc.assertTrue("Asserting that true is returned when an user interaction is needed.", condition.isPostponed());
 			
 			conditions = new Condition[] { condition };
 			
 			tbc.assertTrue("Asserting if false is returned.", !condition.isSatisfied(conditions, null));
 			
-			tbc.assertTrue("Asserting that true is returned when an user interaction is needed.", condition.isPostponed());			
+			tbc.assertTrue("Asserting that false is returned when an user interaction is not needed.", !condition.isPostponed());			
 			
         } catch (Exception e) {
             tbc.fail("Unexpected exception was thrown + : " 
@@ -332,7 +333,7 @@ public class IsPostponed {
 							PolicyConstants.LEVEL_ONESHOT,
 							PolicyConstants.LEVEL_ONESHOT,
 							PolicyConstants.CATALOG_NAME, "7: Choose no as answer. Otherwise this test method will fail." }));
-						
+								
 			tbc.assertTrue("Asserting that true is returned when an user interaction is needed.", condition.isPostponed());
 			
 			conditions = new Condition[] { condition };
@@ -349,8 +350,8 @@ public class IsPostponed {
     /**
      * This method asserts that when an user interaction is needed
      * true is returned and after an isSatisified call, the interaction
-     * still need an user interaction using ALL levels and the 
-     * isSatisfied(Condition[],Dictionary) method passing
+     * is still needed when the user has chose NEVER as answer even USING SESSION
+     * as level and the isSatisfied(Condition[],Dictionary) method passing
      * null as Dictionary.
      * 
      * @spec UserPromptCondition.isPostponed()
@@ -360,15 +361,13 @@ public class IsPostponed {
         try {
 			Condition condition = UserPromptCondition.getCondition(tbc.getBundle(), 
 					new ConditionInfo(UserPromptCondition.class.getName(), new String[] {
-							PolicyConstants.ALL_LEVELS,
-							PolicyConstants.LEVEL_ONESHOT,
-							PolicyConstants.CATALOG_NAME, "8: Choose whatever you want." }));
-						
-			tbc.assertTrue("Asserting that true is returned when an user interaction is needed.", condition.isPostponed());
-			
+							PolicyConstants.LEVEL_SESSION,
+							PolicyConstants.LEVEL_SESSION,
+							PolicyConstants.CATALOG_NAME, "8: Choose NEVER as answer. Otherwise this test method will fail." }));
+									
 			Condition[] conditions = { condition };
 			
-			condition.isSatisfied(conditions, null);
+			tbc.assertTrue("Asserting if false is returned.", !condition.isSatisfied(conditions, null));
 			
 			tbc.assertTrue("Asserting that true is returned when an user interaction is needed.", condition.isPostponed());			
         } catch (Exception e) {
@@ -521,8 +520,9 @@ public class IsPostponed {
     /**
      * This method asserts that when an user interaction is needed
      * true is returned and after an isSatisified call, the interaction
-     * still need an user interaction using ALL levels and the 
-     * isSatisfied(Condition[],Dictionary) method passing
+     * is still needed if the user choose NEVER as answer. Therefore, 
+     * isPostponed must return true using SESSION
+     * as level and the isSatisfied(Condition[],Dictionary) method passing
      * a hashtable as Dictionary.
      * 
      * @spec UserPromptCondition.isPostponed()
@@ -532,23 +532,108 @@ public class IsPostponed {
         try {
 			Condition condition = UserPromptCondition.getCondition(tbc.getBundle(), 
 					new ConditionInfo(UserPromptCondition.class.getName(), new String[] {
-							PolicyConstants.ALL_LEVELS,
-							PolicyConstants.LEVEL_BLANKET,
-							PolicyConstants.CATALOG_NAME, "12: Choose whatever you want." }));
-						
-			tbc.assertTrue("Asserting that true is returned when an user interaction is needed.", condition.isPostponed());
-			
+							PolicyConstants.LEVEL_SESSION,
+							PolicyConstants.LEVEL_SESSION,
+							PolicyConstants.CATALOG_NAME, "12: Choose NEVER as answer. Otherwise this test method will fail." }));
+							
 			Hashtable hash = new Hashtable();
 			
 			Condition[] conditions = { condition };
 			
-			condition.isSatisfied(conditions, hash);
+			tbc.assertTrue("Asserting if false is returned.", !condition.isSatisfied(conditions, hash));
 			
-			tbc.assertTrue("Asserting that false is returned when an user interaction is not needed.", !condition.isPostponed());			
+			tbc.assertTrue("Asserting that true is returned when an user interaction is needed.", condition.isPostponed());
+			
         } catch (Exception e) {
             tbc.fail("Unexpected exception was thrown + : " 
                     + e.getClass().getName());
         }
-    }        
+    }
+    
+    /**
+     * This method asserts that when an user interaction is needed
+     * true is returned and after an isSatisified call, if never was choose
+     * the interaction is stiil needed.
+     * 
+     * @spec UserPromptCondition.isPostponed()
+     */
+    private void testIsPostponed013() {
+         tbc.log("#testIsPostponed013");
+        try {
+			Condition condition = UserPromptCondition.getCondition(tbc.getBundle(), 
+					new ConditionInfo(UserPromptCondition.class.getName(), new String[] {
+							PolicyConstants.LEVEL_ONESHOT,
+							PolicyConstants.LEVEL_ONESHOT,
+							PolicyConstants.CATALOG_NAME, "13: Choose NEVER as answer. Otherwise this test method will fail." }));
+						
+			tbc.assertTrue("Asserting if false is returned.", !condition.isSatisfied());
+			tbc.assertTrue("Asserting that true is returned after the user choose NEVER as answer.", condition.isPostponed());			
+        } catch (Exception e) {
+            tbc.fail("Unexpected exception was thrown + : " 
+                    + e.getClass().getName());
+        }
+    }    
+    
+    /**
+     * This method asserts that when an user interaction is needed
+     * true is returned and after an isSatisified call, the interaction
+     * is still needed when the user has chose NEVER as answer even USING ONESHOT
+     * as level and the isSatisfied(Condition[],Dictionary) method passing
+     * null as Dictionary.
+     * 
+     * @spec UserPromptCondition.isPostponed()
+     */
+    private void testIsPostponed014() {
+         tbc.log("#testIsPostponed014");
+        try {
+			Condition condition = UserPromptCondition.getCondition(tbc.getBundle(), 
+					new ConditionInfo(UserPromptCondition.class.getName(), new String[] {
+							PolicyConstants.LEVEL_ONESHOT,
+							PolicyConstants.LEVEL_ONESHOT,
+							PolicyConstants.CATALOG_NAME, "14: Choose NEVER as answer. Otherwise this test method will fail." }));
+									
+			Condition[] conditions = { condition };
+			
+			tbc.assertTrue("Asserting if false is returned.", !condition.isSatisfied(conditions, null));
+			
+			tbc.assertTrue("Asserting that true is returned when an user interaction is needed.", condition.isPostponed());			
+        } catch (Exception e) {
+            tbc.fail("Unexpected exception was thrown + : " 
+                    + e.getClass().getName());
+        }
+    }
+    
+    /**
+     * This method asserts that when an user interaction is needed
+     * true is returned and after an isSatisified call, the interaction
+     * is still needed if the user choose NEVER as answer. Therefore, 
+     * isPostponed must return true using ONESHOT
+     * as level and the isSatisfied(Condition[],Dictionary) method passing
+     * a hashtable as Dictionary.
+     * 
+     * @spec UserPromptCondition.isPostponed()
+     */
+    private void testIsPostponed015() {
+         tbc.log("#testIsPostponed015");
+        try {
+			Condition condition = UserPromptCondition.getCondition(tbc.getBundle(), 
+					new ConditionInfo(UserPromptCondition.class.getName(), new String[] {
+							PolicyConstants.LEVEL_ONESHOT,
+							PolicyConstants.LEVEL_ONESHOT,
+							PolicyConstants.CATALOG_NAME, "15: Choose NEVER as answer. Otherwise this test method will fail." }));
+							
+			Hashtable hash = new Hashtable();
+			
+			Condition[] conditions = { condition };
+			
+			tbc.assertTrue("Asserting if false is returned.", !condition.isSatisfied(conditions, hash));
+			
+			tbc.assertTrue("Asserting that true is returned when an user interaction is needed.", condition.isPostponed());
+			
+        } catch (Exception e) {
+            tbc.fail("Unexpected exception was thrown + : " 
+                    + e.getClass().getName());
+        }
+    }
     
 }

@@ -72,6 +72,10 @@ public class IsSatisfied {
     	testIsSatisfied010();
     	testIsSatisfied011();
     	testIsSatisfied012();
+    	testIsSatisfied013();
+    	testIsSatisfied014();
+    	testIsSatisfied015();
+    	testIsSatisfied016();
     }
     
     /**
@@ -246,74 +250,73 @@ public class IsSatisfied {
     }
     
     /**
-     * This method asserts that if the user accepts the question,
-     * true is returned by isSatisfied using all the levels.
+     * This method asserts that if the user choose never as answer
+     * to the question, false is returned by isSatisfied using LEVEL_ONESHOT.
      * 
      * @spec UserPromptCondition.isSatisfied()
      */
     private void testIsSatisfied006() {
-         tbc.log("#testIsSatisfied006");
+        tbc.log("#testIsSatisfied006");
         try {
-        	//TODO waiting nokia feedback: when using all levels, the behavior will be the same as using blanket and session?
-			Condition condition = UserPromptCondition.getCondition(tbc.getBundle(), 
-					new ConditionInfo(UserPromptCondition.class.getName(), new String[] {
-							PolicyConstants.ALL_LEVELS,
-							"",
-							PolicyConstants.CATALOG_NAME, "6- You must ACCEPT this question to make this test pass with success." +
-					"[PS: If this is the second time that you receive this question there is an error in the implementation because the same question must remember your previous answer so, you have to do the opposite that it says, you have to REJECT this question.]" })
-							);
-			tbc.log("#If the user does not accept this question, this test will fail.");
-			tbc.assertTrue("Asserting that true is returned by the selection of the user.", condition.isSatisfied());
-			
-			condition = UserPromptCondition.getCondition(tbc.getBundle(), 
-					new ConditionInfo(UserPromptCondition.class.getName(), new String[] {
-							PolicyConstants.ALL_LEVELS,
-							"",
-							PolicyConstants.CATALOG_NAME, "6- You must ACCEPT this question to make this test pass with success." +
-					"[PS: If this is the second time that you receive this question there is an error in the implementation because the same question must remember your previous answer so, you have to do the opposite that it says, you have to REJECT this question.]" })
-							);			
-			tbc.log("#This is the second time of this question and the system must remember your previous answer.");
-			tbc.assertTrue("Asserting if the system remember your previous answer.", condition.isSatisfied());					
+ 			Condition condition = UserPromptCondition.getCondition(tbc.getBundle(), 
+ 					new ConditionInfo(UserPromptCondition.class.getName(), new String[] {
+ 							PolicyConstants.LEVEL_ONESHOT,
+ 							PolicyConstants.LEVEL_ONESHOT,
+ 							PolicyConstants.CATALOG_NAME, "6- You must choose NO to this question to make this test pass with success. " +
+ 									"[PS: If this is the second time that you receive this question there is an error in the implementation and you have to choose yes as answer because when the user choose NEVER as answer, the RI never ask the user again.]" })
+ 							);
+ 			tbc.log("#If the user does choose NEVER to this question, this test will fail.");
+ 			tbc.assertTrue("Asserting that false is returned by the selection of the user.", !condition.isSatisfied());
+ 			
+ 			condition = UserPromptCondition.getCondition(tbc.getBundle(), 
+ 					new ConditionInfo(UserPromptCondition.class.getName(), new String[] {
+ 							PolicyConstants.LEVEL_ONESHOT,
+ 							PolicyConstants.LEVEL_ONESHOT,
+ 							PolicyConstants.CATALOG_NAME, "6- You must choose NO to this question to make this test pass with success. " +
+ 									"[PS: If this is the second time that you receive this question there is an error in the implementation and you have to choose yes as answer because when the user choose NEVER as answer, the RI never ask the user again.]" })
+ 							);
+ 			tbc.log("#This is the second time of this question and the system must remember your previous answer.");
+ 			tbc.assertTrue("Asserting if the system remember your previous answer.", !condition.isSatisfied());			
         } catch (Exception e) {
             tbc.fail("Unexpected exception was thrown + : " 
                     + e.getClass().getName());
         }
-    }
+    }   
     
-   /** 
-    * This method asserts that if the user rejects the question,
-    * false is returned by isSatisfied using all the levels.
-    * 
-    * @spec UserPromptCondition.isSatisfied()
-    */
-   private void testIsSatisfied007() {
+    /**
+     * This method asserts that if the user choose never as answer
+     * to the question, false is returned by isSatisfied using LEVEL_SESSION.
+     * 
+     * @spec UserPromptCondition.isSatisfied()
+     */
+    private void testIsSatisfied007() {
         tbc.log("#testIsSatisfied007");
-       try {
-			Condition condition = UserPromptCondition.getCondition(tbc.getBundle(), 
-					new ConditionInfo(UserPromptCondition.class.getName(), new String[] {
-							PolicyConstants.ALL_LEVELS,
-							"",
-							PolicyConstants.CATALOG_NAME, "7- You must REJECT this question to make this test pass with success." +
-					"[PS: If this is the second time that you receive this question there is an error in the implementation because the same question must remember your previous answer so, you have to do the opposite that it says, you have to ACCEPT this question.]" })
-							);			
-			tbc.log("#If the user does not reject this question, this test will fail.");
-			tbc.assertTrue("Asserting that false is returned by the selection of the user.", !condition.isSatisfied());
-
-			condition = UserPromptCondition.getCondition(tbc.getBundle(), 
-					new ConditionInfo(UserPromptCondition.class.getName(), new String[] {
-							PolicyConstants.ALL_LEVELS,
-							"",
-							PolicyConstants.CATALOG_NAME, "7- You must REJECT this question to make this test pass with success." +
-					"[PS: If this is the second time that you receive this question there is an error in the implementation because the same question must remember your previous answer so, you have to do the opposite that it says, you have to ACCEPT this question.]" })
-							);
-			tbc.log("#This is the second time of this question and the system must remember your previous answer.");
-			tbc.assertTrue("Asserting if the system remember your previous answer.", !condition.isSatisfied());					
-       } catch (Exception e) {
-           tbc.fail("Unexpected exception was thrown + : " 
-                   + e.getClass().getName());
-       }
-   }
-   
+        try {
+ 			Condition condition = UserPromptCondition.getCondition(tbc.getBundle(), 
+ 					new ConditionInfo(UserPromptCondition.class.getName(), new String[] {
+ 							PolicyConstants.LEVEL_SESSION,
+ 							PolicyConstants.LEVEL_SESSION,
+ 							PolicyConstants.CATALOG_NAME, "7- You must choose NEVER to this question to make this test pass with success. " +
+ 									"[PS: If this is the second time that you receive this question there is an error in the implementation and you have to choose yes as answer because when the user choose NEVER as answer, the RI never ask the user again until the system is restarted.]" })
+ 							);
+ 			tbc.log("#If the user does choose NEVER to this question, this test will fail.");
+ 			tbc.assertTrue("Asserting that false is returned by the selection of the user.", !condition.isSatisfied());
+ 			
+ 			condition = UserPromptCondition.getCondition(tbc.getBundle(), 
+ 					new ConditionInfo(UserPromptCondition.class.getName(), new String[] {
+ 							PolicyConstants.LEVEL_SESSION,
+ 							PolicyConstants.LEVEL_SESSION,
+ 							PolicyConstants.CATALOG_NAME, "7- You must choose NEVER to this question to make this test pass with success. " +
+ 									"[PS: If this is the second time that you receive this question there is an error in the implementation and you have to choose yes as answer because when the user choose NEVER as answer, the RI never ask the user again until the system is restarted.]" })
+ 							);
+ 			tbc.log("#This is the second time of this question and the system must remember your previous answer.");
+ 			tbc.assertTrue("Asserting if the system remember your previous answer.", !condition.isSatisfied());			
+        } catch (Exception e) {
+            tbc.fail("Unexpected exception was thrown + : " 
+                    + e.getClass().getName());
+        }
+    }       
+      
    /** 
     * This method asserts if the user receive the message
     * "8-Did you see this question?" and the user
@@ -506,6 +509,143 @@ public class IsSatisfied {
 							NullPointerException.class.getName(), e.getClass().getName() }));
 		}
 		
-	}  
+	}
+   
+   /**
+    * This method asserts that if the user choose never as answer
+    * to the question, false is returned by isSatisfied using LEVEL_BLANKET.
+    * 
+    * @spec UserPromptCondition.isSatisfied()
+    */
+   private void testIsSatisfied013() {
+       tbc.log("#testIsSatisfied013");
+       try {
+			Condition condition = UserPromptCondition.getCondition(tbc.getBundle(), 
+					new ConditionInfo(UserPromptCondition.class.getName(), new String[] {
+							PolicyConstants.LEVEL_BLANKET,
+							PolicyConstants.LEVEL_BLANKET,
+							PolicyConstants.CATALOG_NAME, "18- You must choose NEVER to this question to make this test pass with success. " +
+									"[PS: If this is the second time that you receive this question there is an error in the implementation and you have to choose yes as answer because when the user choose NEVER as answer, the RI never ask the user again even if the system is restarted.]" })
+							);
+			tbc.log("#If the user does choose NEVER to this question, this test will fail.");
+			tbc.assertTrue("Asserting that false is returned by the selection of the user.", !condition.isSatisfied());
+			
+			condition = UserPromptCondition.getCondition(tbc.getBundle(), 
+					new ConditionInfo(UserPromptCondition.class.getName(), new String[] {
+							PolicyConstants.LEVEL_BLANKET,
+							PolicyConstants.LEVEL_BLANKET,
+							PolicyConstants.CATALOG_NAME, "18- You must choose NEVER to this question to make this test pass with success. " +
+									"[PS: If this is the second time that you receive this question there is an error in the implementation and you have to choose yes as answer because when the user choose NEVER as answer, the RI never ask the user again even if the system is restarted.]" })
+							);
+			tbc.log("#This is the second time of this question and the system must remember your previous answer.");
+			tbc.assertTrue("Asserting if the system remember your previous answer.", !condition.isSatisfied());			
+       } catch (Exception e) {
+           tbc.fail("Unexpected exception was thrown + : " 
+                   + e.getClass().getName());
+       }
+   }    
+   
+   /**
+    * This method asserts that if the user choose always as answer
+    * to the question, true is returned by isSatisfied using LEVEL_BLANKET.
+    * 
+    * @spec UserPromptCondition.isSatisfied()
+    */
+   private void testIsSatisfied014() {
+       tbc.log("#testIsSatisfied014");
+       try {
+			Condition condition = UserPromptCondition.getCondition(tbc.getBundle(), 
+					new ConditionInfo(UserPromptCondition.class.getName(), new String[] {
+							PolicyConstants.LEVEL_BLANKET,
+							PolicyConstants.LEVEL_BLANKET,
+							PolicyConstants.CATALOG_NAME, "19- You must choose ALWAYS to this question to make this test pass with success. " +
+									"[PS: If this is the second time that you receive this question there is an error in the implementation and you have to choose never as answer because when the user choose ALWAYS as answer, the RI never ask the user again even if the system is restarted.]" })
+							);
+			tbc.log("#If the user does choose ALWAYS to this question, this test will fail.");
+			tbc.assertTrue("Asserting that true is returned by the selection of the user.", condition.isSatisfied());
+			
+			condition = UserPromptCondition.getCondition(tbc.getBundle(), 
+					new ConditionInfo(UserPromptCondition.class.getName(), new String[] {
+							PolicyConstants.LEVEL_BLANKET,
+							PolicyConstants.LEVEL_BLANKET,
+							PolicyConstants.CATALOG_NAME, "19- You must choose ALWAYS to this question to make this test pass with success. " +
+									"[PS: If this is the second time that you receive this question there is an error in the implementation and you have to choose never as answer because when the user choose ALWAYS as answer, the RI never ask the user again even if the system is restarted.]" })
+							);
+			tbc.log("#This is the second time of this question and the system must remember your previous answer.");
+			tbc.assertTrue("Asserting if the system remember your previous answer.", condition.isSatisfied());			
+       } catch (Exception e) {
+           tbc.fail("Unexpected exception was thrown + : " 
+                   + e.getClass().getName());
+       }
+   }   
+   
+   /**
+    * This method asserts that if the user choose never
+    * as answer, the question will not be prompted anymore.
+    * 
+    * @spec UserPromptCondition.isSatisfied()
+    */
+   private void testIsSatisfied015() {    	
+   	tbc.log("#testIsSatisfied015");
+       try {
+			Condition condition = UserPromptCondition.getCondition(tbc.getBundle(), 
+					new ConditionInfo(UserPromptCondition.class.getName(), new String[] {
+							PolicyConstants.LEVEL_ONESHOT,
+							PolicyConstants.LEVEL_ONESHOT,
+							PolicyConstants.CATALOG_NAME, "20- You must choose NEVER to this question to make this test pass with success." +
+					"[PS: If this is the second time that you receive this question there is an error in implementation and you have to ACCEPT this question to make the test fail because when you choose NEVER as answer, the RI must never ask the user again and always return false.]" })
+							);
+				tbc.log("#If the user does not reject this question, this test will fail.");
+				tbc.assertTrue("Asserting that false is returned by the selection of the user.", !condition.isSatisfied());
+
+				condition = UserPromptCondition.getCondition(tbc.getBundle(), 
+						new ConditionInfo(UserPromptCondition.class.getName(), new String[] {
+								PolicyConstants.LEVEL_ONESHOT,
+								PolicyConstants.LEVEL_ONESHOT,
+								PolicyConstants.CATALOG_NAME, "20- You must choose NEVER to this question to make this test pass with success." +
+						"[PS: If this is the second time that you receive this question there is an error in implementation and you have to ACCEPT this question to make the test fail because when you choose NEVER as answer, the RI must never ask the user again and always return false.]" })
+								);
+								
+				tbc.log("#This is the second time that you receive this question, you have to accept this question.");
+				tbc.assertTrue("Asserting that false is returned by the selection of the user.", !condition.isSatisfied());			
+       } catch (Exception e) {
+           tbc.fail("Unexpected exception was thrown + : " 
+                   + e.getClass().getName());
+       }
+   }
+   
+   /**
+    * This method asserts that if the user rejects the question,
+    * false is returned by isSatisfied using LEVEL_SESSION.
+    * 
+    * @spec UserPromptCondition.isSatisfied()
+    */
+   private void testIsSatisfied016() {
+        tbc.log("#testIsSatisfied016");
+       try {
+			Condition condition = UserPromptCondition.getCondition(tbc.getBundle(), 
+					new ConditionInfo(UserPromptCondition.class.getName(), new String[] {
+							PolicyConstants.LEVEL_SESSION,
+							PolicyConstants.LEVEL_SESSION,
+							PolicyConstants.CATALOG_NAME, "21- You must choose NEVER to this question to make this test pass with success." +
+					"[PS: If this is the second time that you receive this question there is an error in implementation and you have to ACCEPT this question to make the test fail because when you choose NEVER as answer, the RI must never ask the user again and always return false until the system is restarted.]" })
+							);
+			tbc.log("#If the user does not reject this question, this test will fail.");
+			tbc.assertTrue("Asserting that false is returned by the selection of the user.", !condition.isSatisfied());
+			
+			condition = UserPromptCondition.getCondition(tbc.getBundle(), 
+					new ConditionInfo(UserPromptCondition.class.getName(), new String[] {
+							PolicyConstants.LEVEL_SESSION,
+							PolicyConstants.LEVEL_SESSION,
+							PolicyConstants.CATALOG_NAME, "21- You must choose NEVER to this question to make this test pass with success." +
+					"[PS: If this is the second time that you receive this question there is an error in implementation and you have to ACCEPT this question to make the test fail because when you choose NEVER as answer, the RI must never ask the user again and always return false until the system is restarted.]" })
+							);
+			tbc.log("#This is the second time that you receive this question, you have to accept this question.");
+			tbc.assertTrue("Asserting if the system remember your previous answer.", !condition.isSatisfied());				
+       } catch (Exception e) {
+           tbc.fail("Unexpected exception was thrown + : " 
+                   + e.getClass().getName());
+       }
+   }    
  
 }

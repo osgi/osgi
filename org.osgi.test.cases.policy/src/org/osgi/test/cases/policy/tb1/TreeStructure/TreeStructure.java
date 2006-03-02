@@ -441,15 +441,12 @@ public class TreeStructure implements TestInterface {
      * @spec 3.7.3 Dmt Principal Permission Management Object, Table 3-10
      */
 
-    public void testTreeStructure010() {
+    private void testTreeStructure010() {
 		tbc.log("#testTreeStructure010");
 		DmtSession session = null;
 		PermissionInfo info[] = null;
 		try {
 			info = tbc.getPermissionAdmin().getDefaultPermissions();
-
-			PermissionInfo perm = new PermissionInfo(
-					java.security.AllPermission.class.getName(), null, null);
 
 			session = tbc.getDmtAdmin().getSession(
 					PolicyConstants.LOCATION_PERMISSION_NODE,
@@ -464,12 +461,15 @@ public class TreeStructure implements TestInterface {
 			PermissionInfo infos[] = tbc.getPermissionAdmin()
 					.getDefaultPermissions();
 			
-			tbc.assertNotNull("Asserts if the permisison returned is different from null.", infos);
-
 			tbc
-					.assertEquals(
-							"Asserts if the absence of a Default node is equivalent to having AllPermission as the default permission",
-							perm.getEncoded(), infos[0].getEncoded());
+					.assertNull(
+							"Asserts if null is returned by getDefaultPermissions when there is no default permission set.",
+							infos);
+			
+			tbc.getPermissionAdmin()
+			.setDefaultPermissions(null);
+			
+			tbc.pass("Asserts if this bundle can execute commands, like setDefaultPermissions when there is no default permission set.");
 
 		} catch (Exception e) {
 			tbc.fail(MessagesConstants.getMessage(
