@@ -203,7 +203,7 @@ public class IsPostponed {
 							PolicyConstants.CATALOG_NAME, "4: Choose NEVER as answer. Otherwise this test method will fail." }));
 						
 			tbc.assertTrue("Asserting if false is returned.", !condition.isSatisfied());
-			tbc.assertTrue("Asserting that true is returned after the user choose NEVER as answer.", condition.isPostponed());			
+			tbc.assertTrue("Asserting that false is returned after the user choose NEVER as answer.", !condition.isPostponed());			
         } catch (Exception e) {
             tbc.fail("Unexpected exception was thrown + : " 
                     + e.getClass().getName());
@@ -369,7 +369,7 @@ public class IsPostponed {
 			
 			tbc.assertTrue("Asserting if false is returned.", !condition.isSatisfied(conditions, null));
 			
-			tbc.assertTrue("Asserting that true is returned when an user interaction is needed.", condition.isPostponed());			
+			tbc.assertTrue("Asserting that false is returned when an user interaction is not needed.", !condition.isPostponed());			
         } catch (Exception e) {
             tbc.fail("Unexpected exception was thrown + : " 
                     + e.getClass().getName());
@@ -542,7 +542,7 @@ public class IsPostponed {
 			
 			tbc.assertTrue("Asserting if false is returned.", !condition.isSatisfied(conditions, hash));
 			
-			tbc.assertTrue("Asserting that true is returned when an user interaction is needed.", condition.isPostponed());
+			tbc.assertTrue("Asserting that false is returned when an user interaction is not needed.", !condition.isPostponed());
 			
         } catch (Exception e) {
             tbc.fail("Unexpected exception was thrown + : " 
@@ -567,7 +567,7 @@ public class IsPostponed {
 							PolicyConstants.CATALOG_NAME, "13: Choose NEVER as answer. Otherwise this test method will fail." }));
 						
 			tbc.assertTrue("Asserting if false is returned.", !condition.isSatisfied());
-			tbc.assertTrue("Asserting that true is returned after the user choose NEVER as answer.", condition.isPostponed());			
+			tbc.assertTrue("Asserting that false is returned after the user choose NEVER as answer.", !condition.isPostponed());			
         } catch (Exception e) {
             tbc.fail("Unexpected exception was thrown + : " 
                     + e.getClass().getName());
@@ -596,7 +596,7 @@ public class IsPostponed {
 			
 			tbc.assertTrue("Asserting if false is returned.", !condition.isSatisfied(conditions, null));
 			
-			tbc.assertTrue("Asserting that true is returned when an user interaction is needed.", condition.isPostponed());			
+			tbc.assertTrue("Asserting that false is returned when an user interaction is not needed.", !condition.isPostponed());			
         } catch (Exception e) {
             tbc.fail("Unexpected exception was thrown + : " 
                     + e.getClass().getName());
@@ -628,7 +628,7 @@ public class IsPostponed {
 			
 			tbc.assertTrue("Asserting if false is returned.", !condition.isSatisfied(conditions, hash));
 			
-			tbc.assertTrue("Asserting that true is returned when an user interaction is needed.", condition.isPostponed());
+			tbc.assertTrue("Asserting that false is returned when an user interaction is not needed.", !condition.isPostponed());
 			
         } catch (Exception e) {
             tbc.fail("Unexpected exception was thrown + : " 
