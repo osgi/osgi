@@ -570,7 +570,8 @@ public class ApplicationTestControl extends DefaultTestBundleControl {
 				fail("the application descriptor was not found.");
 			}
 		} catch (Exception e) {
-			fail("installation of tb1.jar has failed");
+			fail("installation of tb1.jar has failed: " + e.toString());
+			e.printStackTrace();
 		}
 	}
 	
