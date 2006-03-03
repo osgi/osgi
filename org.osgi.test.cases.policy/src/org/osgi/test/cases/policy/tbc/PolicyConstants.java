@@ -82,9 +82,9 @@ public class PolicyConstants {
 
 	public static final String INVALID_CODE = "@#$%sA!&_";
 
-	public static final String CONDITION_HASH = "Egtd5i+S33Y94dHent1bFdlb_ak";
+	public static final String CONDITION_NAME = "conditionName";
 	
-	public static final String CONDITION_HASH_NAME = CONDITION_HASH + "/Name"; 
+	public static final String CONDITION_NAME_NODE = CONDITION_NAME + "/Name"; 
 
 	public static final String PRINCIPAL = "www.cesar.org.br";
 
@@ -99,10 +99,10 @@ public class PolicyConstants {
 	public static final String PRINCIPAL_PERMISSION = PRINCIPAL
 			+ "/PermissionInfo";
 
-	public static final String CONDITIONAL_PERMISSIONINFO = CONDITION_HASH
+	public static final String CONDITIONAL_PERMISSIONINFO = CONDITION_NAME
 			+ "/PermissionInfo";
 
-	public static final String CONDITIONAL_CONDITIONINFO = CONDITION_HASH
+	public static final String CONDITIONAL_CONDITIONINFO = CONDITION_NAME
 			+ "/ConditionInfo";
 
 	public static final String TEST_NODE_PERMISSION = "test/PermissionInfo";

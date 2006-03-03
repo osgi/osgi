@@ -546,10 +546,10 @@ public class MetaNode implements TestInterface {
             session = tbc.getDmtAdmin().getSession(PolicyConstants.POLICY_JAVA_NODE, DmtSession.LOCK_TYPE_ATOMIC);
             
             session.createInteriorNode(PolicyConstants.CONDITIONAL_PERMISSION_NODE
-                    + "/" + PolicyConstants.CONDITION_HASH);
+                    + "/" + PolicyConstants.CONDITION_NAME);
             
             org.osgi.service.dmt.MetaNode metaNode = session
-                .getMetaNode(PolicyConstants.CONDITIONAL_PERMISSION_NODE + "/"+ PolicyConstants.CONDITION_HASH);
+                .getMetaNode(PolicyConstants.CONDITIONAL_PERMISSION_NODE + "/"+ PolicyConstants.CONDITION_NAME);
             
             tbc.assertEquals(
                     "Asserts if $/Policy/Java/ConditionalPermission/<hash> node is dynamic",
@@ -581,7 +581,7 @@ public class MetaNode implements TestInterface {
         } finally {
             tbc.cleanUp(session,
                 new String[]{PolicyConstants.CONDITIONAL_PERMISSION_NODE + "/"
-                    + PolicyConstants.CONDITION_HASH});
+                    + PolicyConstants.CONDITION_NAME});
         }
     }
 
@@ -598,7 +598,7 @@ public class MetaNode implements TestInterface {
             session = tbc.getDmtAdmin().getSession(PolicyConstants.POLICY_JAVA_NODE, DmtSession.LOCK_TYPE_ATOMIC);
             
             session.createInteriorNode(PolicyConstants.CONDITIONAL_PERMISSION_NODE
-                    + "/" + PolicyConstants.CONDITION_HASH);
+                    + "/" + PolicyConstants.CONDITION_NAME);
             
             org.osgi.service.dmt.MetaNode metaNode = session
                 .getMetaNode(PolicyConstants.CONDITIONAL_PERMISSION_NODE + "/"
@@ -630,7 +630,7 @@ public class MetaNode implements TestInterface {
         } finally {
             tbc.cleanUp(session,
                 new String[]{PolicyConstants.CONDITIONAL_PERMISSION_NODE + "/"
-                    + PolicyConstants.CONDITION_HASH});
+                    + PolicyConstants.CONDITION_NAME});
         }
     }
 
@@ -648,7 +648,7 @@ public class MetaNode implements TestInterface {
                 PolicyConstants.POLICY_JAVA_NODE, DmtSession.LOCK_TYPE_ATOMIC);
             
             session.createInteriorNode(PolicyConstants.CONDITIONAL_PERMISSION_NODE
-                    + "/" + PolicyConstants.CONDITION_HASH);
+                    + "/" + PolicyConstants.CONDITION_NAME);
             
             org.osgi.service.dmt.MetaNode metaNode = session
                 .getMetaNode(PolicyConstants.CONDITIONAL_PERMISSION_NODE + "/"
@@ -680,7 +680,7 @@ public class MetaNode implements TestInterface {
         } finally {
             tbc.cleanUp(session,
                 new String[]{PolicyConstants.CONDITIONAL_PERMISSION_NODE + "/"
-                    + PolicyConstants.CONDITION_HASH});
+                    + PolicyConstants.CONDITION_NAME});
         }
     }
     
@@ -698,11 +698,11 @@ public class MetaNode implements TestInterface {
                 PolicyConstants.POLICY_JAVA_NODE, DmtSession.LOCK_TYPE_ATOMIC);
             
             session.createInteriorNode(PolicyConstants.CONDITIONAL_PERMISSION_NODE
-                    + "/" + PolicyConstants.CONDITION_HASH);
+                    + "/" + PolicyConstants.CONDITION_NAME);
             
             org.osgi.service.dmt.MetaNode metaNode = session
                 .getMetaNode(PolicyConstants.CONDITIONAL_PERMISSION_NODE + "/"
-                    + PolicyConstants.CONDITION_HASH_NAME);
+                    + PolicyConstants.CONDITION_NAME_NODE);
             
             tbc.assertEquals(
                     "Asserts if $/Policy/Java/ConditionalPermission/<hash>/Name node is automatic",
@@ -730,7 +730,7 @@ public class MetaNode implements TestInterface {
         } finally {
             tbc.cleanUp(session,
                 new String[]{PolicyConstants.CONDITIONAL_PERMISSION_NODE + "/"
-                    + PolicyConstants.CONDITION_HASH});
+                    + PolicyConstants.CONDITION_NAME});
         }
     }    
 }

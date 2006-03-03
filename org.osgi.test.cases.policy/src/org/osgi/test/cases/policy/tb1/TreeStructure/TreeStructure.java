@@ -304,7 +304,9 @@ public class TreeStructure implements TestInterface {
             session = tbc.getDmtAdmin().getSession(PolicyConstants.CONDITIONAL_PERMISSION_NODE,
                 DmtSession.LOCK_TYPE_ATOMIC);
             
-            session.createInteriorNode(PolicyConstants.CONDITION_HASH);
+            String conditionNameMangled = session.mangle(PolicyConstants.CONDITION_NAME);
+            
+            session.createInteriorNode(conditionNameMangled);
             session.setNodeValue(PolicyConstants.CONDITIONAL_PERMISSIONINFO,
                 new DmtData(pInfo1.getEncoded() + "\n" + pInfo2.getEncoded() + "\n"));
             session.setNodeValue(PolicyConstants.CONDITIONAL_CONDITIONINFO,
@@ -336,7 +338,7 @@ public class TreeStructure implements TestInterface {
             session = tbc.getDmtAdmin().getSession(PolicyConstants.CONDITIONAL_PERMISSION_NODE,
                 DmtSession.LOCK_TYPE_ATOMIC);
             
-            session.deleteNode(PolicyConstants.CONDITION_HASH);
+            session.deleteNode(conditionNameMangled);
             session.close();
             
             conditionInserted = false;
@@ -387,7 +389,7 @@ public class TreeStructure implements TestInterface {
                 new String[]{PolicyConstants.PRINCIPAL});
             
             tbc.getConditionalPermissionAdmin().setConditionalPermissionInfo(
-            		PolicyConstants.CONDITION_HASH,
+            		PolicyConstants.CONDITION_NAME,
                 new ConditionInfo[]{cInfo},
                 new PermissionInfo[]{pInfo1, pInfo2});
             
@@ -395,14 +397,14 @@ public class TreeStructure implements TestInterface {
                 DmtSession.LOCK_TYPE_ATOMIC);
             
             tbc.assertTrue("Asserts if ConditionalPermission is added in DMT",
-                session.isNodeUri(PolicyConstants.CONDITION_HASH));
+                session.isNodeUri(PolicyConstants.CONDITION_NAME));
             tbc.assertEquals("Asserts ConditionInfo node value", cInfo.getEncoded() + "\n", 
                 session.getNodeValue(PolicyConstants.CONDITIONAL_CONDITIONINFO).getString());
             tbc.assertEquals("Asserts PermissionInfo node value", pInfo1.getEncoded()
                 + "\n" + pInfo2.getEncoded() + "\n", session.getNodeValue(
                 PolicyConstants.CONDITIONAL_PERMISSIONINFO).getString());
             
-            session.deleteNode(PolicyConstants.CONDITION_HASH);
+            session.deleteNode(PolicyConstants.CONDITION_NAME);
             session.close();
             
             boolean conditionInserted = false;
