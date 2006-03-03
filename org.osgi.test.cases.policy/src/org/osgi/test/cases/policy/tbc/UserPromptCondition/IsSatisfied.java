@@ -76,6 +76,7 @@ public class IsSatisfied {
     	testIsSatisfied014();
     	testIsSatisfied015();
     	testIsSatisfied016();
+    	testIsSatisfied017();
     }
     
     /**
@@ -646,6 +647,36 @@ public class IsSatisfied {
            tbc.fail("Unexpected exception was thrown + : " 
                    + e.getClass().getName());
        }
-   }    
+   }
+   
+   /**
+    * This method asserts that if isSatisfied is called passing a dictionary,
+    * the oneshot questions will be prompted only one time.
+
+    * 
+    * @spec UserPromptCondition.isSatisfied(Condition[],Dictionary)
+    */
+   private void testIsSatisfied017() {
+        tbc.log("#testIsPostponed017");
+       try {
+			Condition condition = UserPromptCondition.getCondition(tbc.getBundle(), 
+					new ConditionInfo(UserPromptCondition.class.getName(), new String[] {
+							PolicyConstants.LEVEL_ONESHOT,
+							PolicyConstants.LEVEL_ONESHOT,
+							PolicyConstants.CATALOG_NAME, "22- Choose yes as answer. PS: If this is the second time that you receive this question, there is an error in the implementation and you must reject this test choosing no as answer." }));
+								
+			Hashtable hash = new Hashtable();
+			
+			Condition[] conditions = { condition };
+			
+			tbc.assertTrue("Asserting if true is returned.", condition.isSatisfied(conditions, hash));
+			
+			tbc.assertTrue("Asserting if true is returned.", condition.isSatisfied(conditions, hash));
+			
+       } catch (Exception e) {
+           tbc.fail("Unexpected exception was thrown + : " 
+                   + e.getClass().getName());
+       }
+   }      
  
 }
