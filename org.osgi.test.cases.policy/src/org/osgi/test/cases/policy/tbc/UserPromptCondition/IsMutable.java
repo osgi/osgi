@@ -64,15 +64,6 @@ public class IsMutable {
         testIsMutable003();
         testIsMutable004();
         testIsMutable005();
-        testIsMutable006();
-        testIsMutable007();
-        testIsMutable008();
-        testIsMutable009();
-        testIsMutable010();
-        testIsMutable011();
-        testIsMutable012();
-        testIsMutable013();
-        testIsMutable014();
     }
     
     /**
@@ -98,7 +89,7 @@ public class IsMutable {
     
     /**
      * This method asserts that when a call to isSatisfied
-     * was made using BLANKET as level, false is returned using isSatisfied().
+     * was made using ONESHOT as level, true is returned using isSatisfied().
      * 
      * @spec UserPromptCondition.isMutable()
      */
@@ -107,28 +98,30 @@ public class IsMutable {
         try {
 			Condition condition = UserPromptCondition.getCondition(tbc.getBundle(), 
 					new ConditionInfo(UserPromptCondition.class.getName(), new String[] {
-							PolicyConstants.LEVEL_BLANKET,
-							PolicyConstants.LEVEL_BLANKET,
-							PolicyConstants.CATALOG_NAME, "2-Choose always as answer. Otherwise this test method will fail." }));
+							PolicyConstants.LEVEL_ONESHOT,
+							PolicyConstants.LEVEL_ONESHOT,
+							PolicyConstants.CATALOG_NAME, "2-Choose yes as answer. Otherwise this test method will fail." }));
 			tbc.assertTrue("Asserting if true is returned.", condition.isSatisfied());
-			tbc.assertTrue("Asserting if false is returned when a call to isSatisfied was made.", !condition.isMutable());
+			tbc.assertTrue("Asserting if true is returned when a call to isSatisfied was made using ONESHOT as level.", condition.isMutable());
 			
 			condition = UserPromptCondition.getCondition(tbc.getBundle(), 
 					new ConditionInfo(UserPromptCondition.class.getName(), new String[] {
-							PolicyConstants.LEVEL_BLANKET,
-							PolicyConstants.LEVEL_BLANKET,
-							PolicyConstants.CATALOG_NAME, "2-Choose never as answer. Otherwise this test method will fail." }));
+							PolicyConstants.LEVEL_ONESHOT,
+							PolicyConstants.LEVEL_ONESHOT,
+							PolicyConstants.CATALOG_NAME, "2-Choose no as answer. Otherwise this test method will fail." }));
 			tbc.assertTrue("Asserting if false is returned.", !condition.isSatisfied());
-			tbc.assertTrue("Asserting if false is returned when a call to isSatisfied was made.", !condition.isMutable());			
+			tbc.assertTrue("Asserting if true is returned when a call to isSatisfied was made using ONESHOT as level.", condition.isMutable());			
         } catch (Exception e) {
             tbc.fail("Unexpected exception was thrown + : " 
                     + e.getClass().getName());
         }
     } 
-
+        
     /**
      * This method asserts that when a call to isSatisfied
-     * was made using ONESHOT as level, true is returned using isSatisfied().
+     * was made using ONESHOT as level, true is returned
+     * using isSatisfied(Condition[],Dictionary) passing null
+     as context.
      * 
      * @spec UserPromptCondition.isMutable()
      */
@@ -140,7 +133,10 @@ public class IsMutable {
 							PolicyConstants.LEVEL_ONESHOT,
 							PolicyConstants.LEVEL_ONESHOT,
 							PolicyConstants.CATALOG_NAME, "3-Choose yes as answer. Otherwise this test method will fail." }));
-			tbc.assertTrue("Asserting if true is returned.", condition.isSatisfied());
+
+			Condition[] conditions = { condition };
+			tbc.assertTrue("Asserting if true is returned.", condition.isSatisfied(conditions, null));
+			
 			tbc.assertTrue("Asserting if true is returned when a call to isSatisfied was made using ONESHOT as level.", condition.isMutable());
 			
 			condition = UserPromptCondition.getCondition(tbc.getBundle(), 
@@ -148,139 +144,6 @@ public class IsMutable {
 							PolicyConstants.LEVEL_ONESHOT,
 							PolicyConstants.LEVEL_ONESHOT,
 							PolicyConstants.CATALOG_NAME, "3-Choose no as answer. Otherwise this test method will fail." }));
-			tbc.assertTrue("Asserting if false is returned.", !condition.isSatisfied());
-			tbc.assertTrue("Asserting if true is returned when a call to isSatisfied was made using ONESHOT as level.", condition.isMutable());			
-        } catch (Exception e) {
-            tbc.fail("Unexpected exception was thrown + : " 
-                    + e.getClass().getName());
-        }
-    } 
-    
-    /**
-     * This method asserts that when a call to isSatisfied
-     * was made using SESSION as level, true is returned using isSatisfied().
-     * 
-     * @spec UserPromptCondition.isMutable()
-     */
-    private void testIsMutable004() {
-         tbc.log("#testIsMutable004");
-        try {
-			Condition condition = UserPromptCondition.getCondition(tbc.getBundle(), 
-					new ConditionInfo(UserPromptCondition.class.getName(), new String[] {
-							PolicyConstants.LEVEL_SESSION,
-							PolicyConstants.LEVEL_SESSION,
-							PolicyConstants.CATALOG_NAME, "4-Choose a posistive answer. Otherwise this test method will fail." }));
-			tbc.assertTrue("Asserting if true is returned.", condition.isSatisfied());
-			tbc.assertTrue("Asserting if true is returned when a call to isSatisfied was made using SESSION as level.", condition.isMutable());
-			
-			condition = UserPromptCondition.getCondition(tbc.getBundle(), 
-					new ConditionInfo(UserPromptCondition.class.getName(), new String[] {
-							PolicyConstants.LEVEL_SESSION,
-							PolicyConstants.LEVEL_SESSION,
-							PolicyConstants.CATALOG_NAME, "4-Choose a negative answer. Otherwise this test method will fail." }));
-			tbc.assertTrue("Asserting if false is returned.", !condition.isSatisfied());
-			tbc.assertTrue("Asserting if true is returned when a call to isSatisfied was made using SESSION as level.", condition.isMutable());			
-        } catch (Exception e) {
-            tbc.fail("Unexpected exception was thrown + : " 
-                    + e.getClass().getName());
-        }
-    } 
-    
-    /**
-     * This method asserts that when a call to isSatisfied
-     * was made using BLANKET and SESSION as level, true is returned using isSatisfied().
-     * 
-     * @spec UserPromptCondition.isMutable()
-     */
-    private void testIsMutable005() {
-         tbc.log("#testIsMutable005");
-        try {
-			Condition condition = UserPromptCondition.getCondition(tbc.getBundle(), 
-					new ConditionInfo(UserPromptCondition.class.getName(), new String[] {
-							PolicyConstants.LEVEL_SESSION+","+PolicyConstants.LEVEL_BLANKET,
-							PolicyConstants.LEVEL_SESSION,
-							PolicyConstants.CATALOG_NAME, "5-Choose a positive answer. Otherwise this test method will fail." }));
-			tbc.assertTrue("Asserting if true is returned.", condition.isSatisfied());
-			tbc.assertTrue("Asserting if true is returned when a call to isSatisfied was made using BLANKET and SESSION as level.", condition.isMutable());
-			
-			condition = UserPromptCondition.getCondition(tbc.getBundle(), 
-					new ConditionInfo(UserPromptCondition.class.getName(), new String[] {
-							PolicyConstants.LEVEL_SESSION+","+PolicyConstants.LEVEL_BLANKET,
-							PolicyConstants.LEVEL_SESSION,
-							PolicyConstants.CATALOG_NAME, "5-Choose a negative answer. Otherwise this test method will fail." }));
-			tbc.assertTrue("Asserting if false is returned.", !condition.isSatisfied());
-			tbc.assertTrue("Asserting if true is returned when a call to isSatisfied was made using BLANKET and SESSION as level.", condition.isMutable());			
-        } catch (Exception e) {
-            tbc.fail("Unexpected exception was thrown + : " 
-                    + e.getClass().getName());
-        }
-    }    
-   
-    /**
-     * This method asserts that when a call to isSatisfied
-     * was made using BLANKET as level, true is returned using
-     * isSatisfied(Condition[],Dictionary) because null was passed
-     * as context.
-     * 
-     * @spec UserPromptCondition.isMutable()
-     */
-    private void testIsMutable006() {
-         tbc.log("#testIsMutable006");
-        try {
-			Condition condition = UserPromptCondition.getCondition(tbc.getBundle(), 
-					new ConditionInfo(UserPromptCondition.class.getName(), new String[] {
-							PolicyConstants.LEVEL_BLANKET,
-							PolicyConstants.LEVEL_BLANKET,
-							PolicyConstants.CATALOG_NAME, "6-Choose always as answer. Otherwise this test method will fail." }));
-
-			Condition[] conditions = { condition };
-			
-			tbc.assertTrue("Asserting if true is returned.", condition.isSatisfied(conditions, null));
-			tbc.assertTrue("Asserting if true is returned when a call to isSatisfied was made.", condition.isMutable());
-			
-			condition = UserPromptCondition.getCondition(tbc.getBundle(), 
-					new ConditionInfo(UserPromptCondition.class.getName(), new String[] {
-							PolicyConstants.LEVEL_BLANKET,
-							PolicyConstants.LEVEL_BLANKET,
-							PolicyConstants.CATALOG_NAME, "6-Choose never as answer. Otherwise this test method will fail." }));
-
-			conditions = new Condition[] { condition };
-			
-			tbc.assertTrue("Asserting if false is returned.", !condition.isSatisfied(conditions, null));
-			tbc.assertTrue("Asserting if true is returned when a call to isSatisfied was made.", condition.isMutable());			
-        } catch (Exception e) {
-            tbc.fail("Unexpected exception was thrown + : " 
-                    + e.getClass().getName());
-        }
-    } 
-
-    /**
-     * This method asserts that when a call to isSatisfied
-     * was made using ONESHOT as level, true is returned
-     * using isSatisfied(Condition[],Dictionary) passing null
-     as context.
-     * 
-     * @spec UserPromptCondition.isMutable()
-     */
-    private void testIsMutable007() {
-         tbc.log("#testIsMutable007");
-        try {
-			Condition condition = UserPromptCondition.getCondition(tbc.getBundle(), 
-					new ConditionInfo(UserPromptCondition.class.getName(), new String[] {
-							PolicyConstants.LEVEL_ONESHOT,
-							PolicyConstants.LEVEL_ONESHOT,
-							PolicyConstants.CATALOG_NAME, "7-Choose yes as answer. Otherwise this test method will fail." }));
-
-			Condition[] conditions = { condition };
-			tbc.assertTrue("Asserting if true is returned.", condition.isSatisfied(conditions, null));
-			
-			tbc.assertTrue("Asserting if true is returned when a call to isSatisfied was made using ONESHOT as level.", condition.isMutable());
-			
-			condition = UserPromptCondition.getCondition(tbc.getBundle(), 
-					new ConditionInfo(UserPromptCondition.class.getName(), new String[] {
-							PolicyConstants.LEVEL_ONESHOT,
-							PolicyConstants.LEVEL_ONESHOT,
-							PolicyConstants.CATALOG_NAME, "7-Choose no as answer. Otherwise this test method will fail." }));
 
 			conditions = new Condition[] { condition };
 			tbc.assertTrue("Asserting if false is returned.", !condition.isSatisfied(conditions, null));
@@ -292,111 +155,6 @@ public class IsMutable {
         }
     } 
     
-    /**
-     * This method asserts that when a call to isSatisfied
-     * was made using SESSION as level, true is returned
-     * using isSatisfied(Condition[],Dictionary) passing null
-     * as context.
-     * 
-     * @spec UserPromptCondition.isMutable()
-     */
-    private void testIsMutable008() {
-         tbc.log("#testIsMutable008");
-        try {
-			Condition condition = UserPromptCondition.getCondition(tbc.getBundle(), 
-					new ConditionInfo(UserPromptCondition.class.getName(), new String[] {
-							PolicyConstants.LEVEL_SESSION,
-							PolicyConstants.LEVEL_SESSION,
-							PolicyConstants.CATALOG_NAME, "8-Choose a positive answer. Otherwise this test method will fail." }));
-			
-			Condition[] conditions = { condition };
-			tbc.assertTrue("Asserting if true is returned.", condition.isSatisfied(conditions, null));
-			
-			tbc.assertTrue("Asserting if true is returned when a call to isSatisfied was made using SESSION as level.", condition.isMutable());
-			
-			condition = UserPromptCondition.getCondition(tbc.getBundle(), 
-					new ConditionInfo(UserPromptCondition.class.getName(), new String[] {
-							PolicyConstants.LEVEL_SESSION,
-							PolicyConstants.LEVEL_SESSION,
-							PolicyConstants.CATALOG_NAME, "8-Choose a negative answer. Otherwise this test method will fail." }));
-			
-			conditions = new Condition[] { condition };
-			tbc.assertTrue("Asserting if false is returned.", !condition.isSatisfied(conditions, null));
-			
-			tbc.assertTrue("Asserting if true is returned when a call to isSatisfied was made using SESSION as level.", condition.isMutable());			
-        } catch (Exception e) {
-            tbc.fail("Unexpected exception was thrown + : " 
-                    + e.getClass().getName());
-        }
-    } 
-    
-    /**
-     * This method asserts that when a call to isSatisfied
-     * was made using BLANKET and SESSION as level, true is returned
-     * using isSatisfied(Condition[],Dictionary) passing null as context.
-     * 
-     * @spec UserPromptCondition.isMutable()
-     */
-    private void testIsMutable009() {
-         tbc.log("#testIsMutable009");
-        try {
-			Condition condition = UserPromptCondition.getCondition(tbc.getBundle(), 
-					new ConditionInfo(UserPromptCondition.class.getName(), new String[] {
-							PolicyConstants.LEVEL_SESSION+","+PolicyConstants.LEVEL_BLANKET,
-							PolicyConstants.LEVEL_SESSION,
-							PolicyConstants.CATALOG_NAME, "9-Choose whatever you want." })
-							);
-			
-			Condition[] conditions = { condition };
-			condition.isSatisfied(conditions, null);
-			
-			tbc.assertTrue("Asserting if true is returned when a call to isSatisfied was made using BLANKET and SESSION as level.", condition.isMutable());
-        } catch (Exception e) {
-            tbc.fail("Unexpected exception was thrown + : " 
-                    + e.getClass().getName());
-        }
-    }
-    
-    /**
-     * This method asserts that when a call to isSatisfied
-     * was made using BLANKET as level, false is returned using
-     * isSatisfied(Condition[],Dictionary) because a hashtable
-     * was passed as context.
-     * 
-     * @spec UserPromptCondition.isMutable()
-     */
-    private void testIsMutable010() {
-         tbc.log("#testIsMutable010");
-        try {
-			Condition condition = UserPromptCondition.getCondition(tbc.getBundle(), 
-					new ConditionInfo(UserPromptCondition.class.getName(), new String[] {
-							PolicyConstants.LEVEL_BLANKET,
-							PolicyConstants.LEVEL_BLANKET,
-							PolicyConstants.CATALOG_NAME, "10-Choose always as answer. Otherwise this test method will fail." }));
-
-			Condition[] conditions = { condition };
-			Hashtable hash = new Hashtable();
-			
-			
-			tbc.assertTrue("Asserting if true is returned.", condition.isSatisfied(conditions, hash));
-			tbc.assertTrue("Asserting if false is returned when a call to isSatisfied was made.", !condition.isMutable());
-			
-			condition = UserPromptCondition.getCondition(tbc.getBundle(), 
-					new ConditionInfo(UserPromptCondition.class.getName(), new String[] {
-							PolicyConstants.LEVEL_BLANKET,
-							PolicyConstants.LEVEL_BLANKET,
-							PolicyConstants.CATALOG_NAME, "10-Choose never as answer. Otherwise this test method will fail." }));
-
-			conditions = new Condition[] { condition };
-			
-			tbc.assertTrue("Asserting if false is returned.", !condition.isSatisfied(conditions, hash));
-			tbc.assertTrue("Asserting if false is returned when a call to isSatisfied was made.", !condition.isMutable());			
-        } catch (Exception e) {
-            tbc.fail("Unexpected exception was thrown + : " 
-                    + e.getClass().getName());
-        }
-    } 
-
     /**
      * This method asserts that when a call to isSatisfied
      * was made using ONESHOT as level, true is returned
@@ -405,14 +163,14 @@ public class IsMutable {
      * 
      * @spec UserPromptCondition.isMutable()
      */
-    private void testIsMutable011() {
-         tbc.log("#testIsMutable011");
+    private void testIsMutable004() {
+         tbc.log("#testIsMutable004");
         try {
 			Condition condition = UserPromptCondition.getCondition(tbc.getBundle(), 
 					new ConditionInfo(UserPromptCondition.class.getName(), new String[] {
 							PolicyConstants.LEVEL_ONESHOT,
 							PolicyConstants.LEVEL_ONESHOT,
-							PolicyConstants.CATALOG_NAME, "11-Choose yes as answer. Otherwise this test method will fail." }));
+							PolicyConstants.CATALOG_NAME, "4-Choose yes as answer. Otherwise this test method will fail." }));
 
 			Condition[] conditions = { condition };
 			Hashtable hash = new Hashtable();
@@ -424,7 +182,7 @@ public class IsMutable {
 					new ConditionInfo(UserPromptCondition.class.getName(), new String[] {
 							PolicyConstants.LEVEL_ONESHOT,
 							PolicyConstants.LEVEL_ONESHOT,
-							PolicyConstants.CATALOG_NAME, "11-Choose no as answer. Otherwise this test method will fail." }));
+							PolicyConstants.CATALOG_NAME, "4-Choose no as answer. Otherwise this test method will fail." }));
 
 			conditions = new Condition[] { condition };
 			tbc.assertTrue("Asserting if false is returned.", !condition.isSatisfied(conditions, hash));
@@ -435,46 +193,7 @@ public class IsMutable {
                     + e.getClass().getName());
         }
     } 
-    
-    /**
-     * This method asserts that when a call to isSatisfied
-     * was made using SESSION as level, true is returned
-     * using isSatisfied(Condition[],Dictionary) passing a
-     * hashtable as context.
-     * 
-     * @spec UserPromptCondition.isMutable()
-     */
-    private void testIsMutable012() {
-         tbc.log("#testIsMutable012");
-        try {
-			Condition condition = UserPromptCondition.getCondition(tbc.getBundle(), 
-					new ConditionInfo(UserPromptCondition.class.getName(), new String[] {
-							PolicyConstants.LEVEL_SESSION,
-							PolicyConstants.LEVEL_SESSION,
-							PolicyConstants.CATALOG_NAME, "12-Choose a positive answer. Otherwise this test method will fail." }));
-			
-			Condition[] conditions = { condition };
-			Hashtable hash = new Hashtable();
-			tbc.assertTrue("Asserting if true is returned.", condition.isSatisfied(conditions, hash));
-			
-			tbc.assertTrue("Asserting if true is returned when a call to isSatisfied was made using SESSION as level.", condition.isMutable());
-			
-			condition = UserPromptCondition.getCondition(tbc.getBundle(), 
-					new ConditionInfo(UserPromptCondition.class.getName(), new String[] {
-							PolicyConstants.LEVEL_SESSION,
-							PolicyConstants.LEVEL_SESSION,
-							PolicyConstants.CATALOG_NAME, "12-Choose a negative answer. Otherwise this test method will fail." }));
-			
-			conditions = new Condition[] { condition };
-			tbc.assertTrue("Asserting if false is returned.", !condition.isSatisfied(conditions, hash));
-			
-			tbc.assertTrue("Asserting if true is returned when a call to isSatisfied was made using SESSION as level.", condition.isMutable());			
-        } catch (Exception e) {
-            tbc.fail("Unexpected exception was thrown + : " 
-                    + e.getClass().getName());
-        }
-    }  
-    
+       
     /**
      * This method asserts that when a call to isSatisfied
      * was made using ONESHOT as level and the user chose never
@@ -482,8 +201,8 @@ public class IsMutable {
      * 
      * @spec UserPromptCondition.isMutable()
      */
-    private void testIsMutable013() {
-         tbc.log("#testIsMutable013");
+    private void testIsMutable005() {
+         tbc.log("#testIsMutable005");
         try {
 			Condition condition = UserPromptCondition.getCondition(tbc.getBundle(), 
 					new ConditionInfo(UserPromptCondition.class.getName(), new String[] {
@@ -497,30 +216,6 @@ public class IsMutable {
             tbc.fail("Unexpected exception was thrown + : " 
                     + e.getClass().getName());
         }
-    }     
-    
-    /**
-     * This method asserts that when a call to isSatisfied
-     * was made using SESSION as level and the user chose never as answer
-     * false is returned.
-     * 
-     * @spec UserPromptCondition.isMutable()
-     */
-    private void testIsMutable014() {
-         tbc.log("#testIsMutable014");
-        try {
-			Condition condition = UserPromptCondition.getCondition(tbc.getBundle(), 
-					new ConditionInfo(UserPromptCondition.class.getName(), new String[] {
-							PolicyConstants.LEVEL_SESSION,
-							PolicyConstants.LEVEL_SESSION,
-							PolicyConstants.CATALOG_NAME, "14-Choose NEVER as answer. Otherwise this test method will fail." }));
-			tbc.assertTrue("Asserting if false is returned.", !condition.isSatisfied());
-			tbc.assertTrue("Asserting if false is returned when a call to isSatisfied was made using SESSION as level and the user chose NEVER as answer.", !condition.isMutable());
-			
-        } catch (Exception e) {
-            tbc.fail("Unexpected exception was thrown + : " 
-                    + e.getClass().getName());
-        }
-    }     
+    }      
     
 }
