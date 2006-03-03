@@ -472,8 +472,8 @@ public class IsPostponed {
     
     /**
      * This method asserts that when an user interaction is needed
-     * true is returned and after an isSatisified call, the interaction
-     * still need an user interaction using ONESHOT as level and the
+     * true is returned and after an isSatisified call, the isPostponed
+     * still returns true using LEVEL_ONESHOT and
      * isSatisfied(Condition[],Dictionary) method passing
      * a hashtable as Dictionary.
      * 
@@ -496,7 +496,7 @@ public class IsPostponed {
 			
 			tbc.assertTrue("Asserting if true is returned.", condition.isSatisfied(conditions, hash));
 			
-			tbc.assertTrue("Asserting that false is returned when an user interaction is not needed.", !condition.isPostponed());
+			tbc.assertTrue("Asserting that true is returned when an user interaction is not needed.", condition.isPostponed());
 			
 			condition = UserPromptCondition.getCondition(tbc.getBundle(), 
 					new ConditionInfo(UserPromptCondition.class.getName(), new String[] {
@@ -510,7 +510,7 @@ public class IsPostponed {
 			
 			tbc.assertTrue("Asserting if false is returned.", !condition.isSatisfied(conditions, hash));
 			
-			tbc.assertTrue("Asserting that false is returned when an user interaction is not needed.", !condition.isPostponed());			
+			tbc.assertTrue("Asserting that true is returned when an user interaction is not needed.", condition.isPostponed());			
         } catch (Exception e) {
             tbc.fail("Unexpected exception was thrown + : " 
                     + e.getClass().getName());
