@@ -918,7 +918,7 @@ public class TestApplet extends Application implements ExtendedTarget, IApplet,
 		fc.showModally();
 		targetProperties = fc.file();
 		if ( targetProperties != null )
-			System.getProperties().setProperty("org.osgi.test.target.properties", targetProperties);
+			System.getProperties().setProperty("org.osgi.test.properties.file", targetProperties);
 		setMessage("Set properties file to " + targetProperties );
 	}
 
