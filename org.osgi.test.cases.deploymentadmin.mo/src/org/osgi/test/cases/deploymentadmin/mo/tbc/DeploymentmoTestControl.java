@@ -126,7 +126,7 @@ public class DeploymentmoTestControl extends DefaultTestBundleControl {
 		permissionAdmin = (PermissionAdmin) bc.getService(bc.getServiceReference("org.osgi.service.permissionadmin.PermissionAdmin"));
 		
 		deploymentAdmin = (DeploymentAdmin) bc.getService(bc.getServiceReference(DeploymentAdmin.class.getName()));
-        
+
 		try {
 			installBundle("tb1.jar");
 		} catch (Exception e) {
@@ -163,6 +163,8 @@ public class DeploymentmoTestControl extends DefaultTestBundleControl {
         } catch (Exception e) {
 			log("# Failed to set the acl");
         }
+        DeploymentmoConstants.init();
+
 	}
     
     /**
@@ -515,7 +517,7 @@ public class DeploymentmoTestControl extends DefaultTestBundleControl {
                     new PermissionInfo(AdminPermission.class.getName(), "*", "*"),
                     new PermissionInfo(TopicPermission.class.getName(),"org/osgi/service/dmt/*", TopicPermission.PUBLISH),
                     new PermissionInfo(SocketPermission.class.getName(), "*", "accept,connect,listen,resolve"),
-                    new PermissionInfo(DeploymentAdminPermission.class.getName(), "(name=*)", "install,uninstall"),
+                    new PermissionInfo(DeploymentAdminPermission.class.getName(), "(name=*)", "install,uninstall,metadata"),
                     new PermissionInfo(PropertyPermission.class.getName(), "*", "read,write")
             };
             int size = permissions.length + defaults.length;
@@ -669,6 +671,7 @@ public class DeploymentmoTestControl extends DefaultTestBundleControl {
     		
     		InputStream in = jarFile.getInputStream(jarFile.getEntry("bundle001.jar"));
     		generateTempBundles(getTempFileName(DeploymentmoConstants.SIMPLE_FIX_PACK_DP,"bundle001.jar"), in);
+    		jarFile.close();
     		
     		jarFile = DeploymentmoConstants.getJarFile(DeploymentmoConstants.SIMPLE_DP);
     		
@@ -677,6 +680,7 @@ public class DeploymentmoTestControl extends DefaultTestBundleControl {
     		
     		in = jarFile.getInputStream(jarFile.getEntry("bundle002.jar"));
     		generateTempBundles(getTempFileName(DeploymentmoConstants.SIMPLE_DP,"bundle002.jar"), in);
+    		jarFile.close();
     		
     		
     	}catch (IOException e) {

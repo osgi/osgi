@@ -62,7 +62,7 @@ public class DeploymentmoConstants {
     //This flag must be true if the implementation reports progress on the Status node  
     public static final boolean STATUS_NODE_REPORTS_PROGRESS = true;
 
-    public static final int TIMEOUT = 2000;
+    public static final int TIMEOUT;
     
     public static final String PRINCIPAL = "admin";
 
@@ -93,7 +93,7 @@ public class DeploymentmoConstants {
     public static final String ALERT_TYPE_DOWNLOADANDINSTALLANDACTIVATE = "org.osgi.deployment.downloadandinstallandactivate";
     
     //Deployment, Download and Deployed subtrees
-    public static final String OSGI_ROOT = "./OSGi";
+    public static final String OSGI_ROOT = System.getProperty("org.osgi.service.dmt.root");
     public static final String DEPLOYMENT = OSGI_ROOT + "/Deployment";
     public static final String DEPLOYMENT_DOWNLOAD = DEPLOYMENT + "/Download";
     public static final String DEPLOYMENT_INVENTORY = DEPLOYMENT + "/Inventory";
@@ -210,32 +210,48 @@ public class DeploymentmoConstants {
 		}
 		return null;
     }
-    static {
-    	try {
-    		//We need to get the Manifest from the jar because it is modified when it is generated.
-    		if (DeploymentmoConstants.DELIVERED_AREA.getParent()!=null) {
-    			TEMP_DIR = new File(DeploymentmoConstants.DELIVERED_AREA.getParent() + File.separatorChar + "tmp");
-    		} else {
-    			TEMP_DIR = new File("tmp");	
-    		}
-    			
-    		TEMP_DIR.mkdir();
-    		JarFile simpleDp =getJarFile(SIMPLE_DP);
-    		SIMPLE_DP_MANIFEST = simpleDp.getManifest();
-    		SIMPLE_FIX_PACK_MANIFEST = getJarFile(SIMPLE_FIX_PACK_DP).getManifest();
-  
-    		DeploymentmoTestControl.copyTempBundles();
-    		SIMPLE_DP_BUNDLE1_MANIFEST = getTempJarFile(DeploymentmoTestControl.getTempFileName(SIMPLE_DP, "bundle001.jar")).getManifest();
-    		SIMPLE_DP_BUNDLE2_MANIFEST = getTempJarFile(DeploymentmoTestControl.getTempFileName(SIMPLE_DP, "bundle002.jar")).getManifest();
-    		SIMPLE_FIX_PACK_BUNDLE1_MANIFEST = getTempJarFile(DeploymentmoTestControl.getTempFileName(SIMPLE_FIX_PACK_DP, "bundle001.jar")).getManifest();
-    		
-    	} catch (Exception e) {
-    		e.printStackTrace();
-    	}
+    
+    public static void init(){
+        JarFile simpleDp = null;
+      	try {
+      		//We need to get the Manifest from the jar because it is modified when it is generated.
+      		if (DeploymentmoConstants.DELIVERED_AREA.getParent()!=null) {
+      			TEMP_DIR = new File(DeploymentmoConstants.DELIVERED_AREA.getParent() + File.separatorChar + "tmp");
+      		} else {
+      			TEMP_DIR = new File("tmp");	
+      		}
+      			
+      		TEMP_DIR.mkdir();
+      		simpleDp =getJarFile(SIMPLE_DP);
+      		SIMPLE_DP_MANIFEST = simpleDp.getManifest();
+      		SIMPLE_FIX_PACK_MANIFEST = getJarFile(SIMPLE_FIX_PACK_DP).getManifest();
+    
+      		DeploymentmoTestControl.copyTempBundles();
+      		SIMPLE_DP_BUNDLE1_MANIFEST = getTempJarFile(DeploymentmoTestControl.getTempFileName(SIMPLE_DP, "bundle001.jar")).getManifest();
+      		SIMPLE_DP_BUNDLE2_MANIFEST = getTempJarFile(DeploymentmoTestControl.getTempFileName(SIMPLE_DP, "bundle002.jar")).getManifest();
+      		SIMPLE_FIX_PACK_BUNDLE1_MANIFEST = getTempJarFile(DeploymentmoTestControl.getTempFileName(SIMPLE_FIX_PACK_DP, "bundle001.jar")).getManifest();
+      	} catch (Exception e) {
+      		e.printStackTrace();
+      	} finally {
+          try{
+            simpleDp.close();
+          }catch(Exception ex){
+        	  ex.printStackTrace();
+          }
+        }
+    }
+      	
+    static { 
+		//Properties files
+		if (System.getProperty("org.osgi.test.cases.deploymentadmin.mo.timeout")!=null) {
+			TIMEOUT = Integer.parseInt(System.getProperty("org.osgi.test.cases.deploymentadmin.mo.timeout"));  	
+		} else {
+			TIMEOUT = 2000;
+		}
 
     }
-    
-    // Path to Downloaded Subtree
+    //----------------------------------------------------------------------------------------------------
+    // Path to Download Subtree
     public static final String DEPLOYMENT_DOWNLOAD_TEST = DEPLOYMENT_DOWNLOAD + "/test";
     public static final String DEPLOYMENT_DOWNLOAD_TEST_ID = DEPLOYMENT_DOWNLOAD_TEST + "/ID";
     public static final String DEPLOYMENT_DOWNLOAD_TEST_ENVTYPE = DEPLOYMENT_DOWNLOAD_TEST + "/EnvType";
