@@ -263,7 +263,7 @@ public class IsSatisfied {
  					new ConditionInfo(UserPromptCondition.class.getName(), new String[] {
  							PolicyConstants.LEVEL_ONESHOT,
  							PolicyConstants.LEVEL_ONESHOT,
- 							PolicyConstants.CATALOG_NAME, "6- You must choose NO to this question to make this test pass with success. " +
+ 							PolicyConstants.CATALOG_NAME, "6- You must choose NEVER to this question to make this test pass with success. " +
  									"[PS: If this is the second time that you receive this question there is an error in the implementation and you have to choose yes as answer because when the user choose NEVER as answer, the RI never ask the user again.]" })
  							);
  			tbc.log("#If the user does choose NEVER to this question, this test will fail.");
@@ -273,7 +273,7 @@ public class IsSatisfied {
  					new ConditionInfo(UserPromptCondition.class.getName(), new String[] {
  							PolicyConstants.LEVEL_ONESHOT,
  							PolicyConstants.LEVEL_ONESHOT,
- 							PolicyConstants.CATALOG_NAME, "6- You must choose NO to this question to make this test pass with success. " +
+ 							PolicyConstants.CATALOG_NAME, "6- You must choose NEVER to this question to make this test pass with success. " +
  									"[PS: If this is the second time that you receive this question there is an error in the implementation and you have to choose yes as answer because when the user choose NEVER as answer, the RI never ask the user again.]" })
  							);
  			tbc.log("#This is the second time of this question and the system must remember your previous answer.");
