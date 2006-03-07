@@ -88,7 +88,7 @@ public class DownloadAndInstallAndActivate implements TestInterface {
 	        testDownloadAndInstallAndActivate004();
 	        testDownloadAndInstallAndActivate005();
     	} else {
-        	tbc.log("$/Deployment/Download/<node_id>/Status node does not report progress in this implementation, these tests wont be tested");
+        	tbc.log("# -> $/Deployment/Download/<node_id>/Status node does not report progress in this implementation, these tests wont be tested");
         }
         testDownloadAndInstallAndActivate006();
         testDownloadAndInstallAndActivate007();

@@ -106,13 +106,13 @@ public class DeploymentmoConstants {
     public static final int SIMPLE_DP = 0;
     public static final int RESOURCE_PROCESSOR_DP = 1;
     public static final int DP_CONTAINING_A_BUNDLE_FROM_OTHER_DP = 2;
-    public static final int RESOURCE_FROM_OTHER_DP = 3;
+    public static final int DP_REMOVES_RESOURCE_FOR_RP4 = 3;
     public static final int MISSING_NAME_HEADER_DP = 4;
     public static final int SYMB_NAME_DIFFERENT_FROM_MANIFEST_DP = 5;
     public static final int SIMPLE_NO_BUNDLE_DP = 6;
     public static final int SIMPLE_NO_RESOURCE_DP = 7;
     public static final int DOWNLOAD_FAILED_DP = 8;
-    public static final int TIMEOUT_DP = 9;
+    public static final int DP_THROWS_RESOURCE_VIOLATION = 9;
     public static final int BUNDLE_FROM_OTHER_DP = 10;
     public static final int MANIFEST_NOT_1ST_FILE = 11;
     public static final int FIX_PACK_LOWER_RANGE_DP= 12;
@@ -131,18 +131,18 @@ public class DeploymentmoConstants {
     public static final int SIMPLE_FIX_PACK_DP = 25;
     public static final int RP_THROWS_NO_SUCH_RESOURCE = 26;
     public static final int DP_INSTALLS_RESOURCE_FOR_RP4 = 27;
-    public static final int DP_THROWS_RESOURCE_VIOLATION = 28;
-    public static final int DP_REMOVES_RESOURCE_FOR_RP4 = 29;
+    
+    
 
     public static final String[] MAP_CODE_TO_ARTIFACT = {"simple",
         "resource_processor", "bundle_from_other",
-        "resource_from_other_dp", "missing_name_header", "symb_name_dif_from_manifest",
-        "simple_no_bundle", "simple_no_resource", "download_failed","timeout","bundle_from_other",
-        "manifest_not_1st_file","fix_pack_lower_range","untrusted",
+        "dp_removes_resource_for_rp4", "missing_name_header", "symb_name_dif_from_manifest",
+        "simple_no_bundle", "simple_no_resource", "download_failed","dp_throws_resource_violation",
+        "bundle_from_other","manifest_not_1st_file","fix_pack_lower_range","untrusted",
         "resource_processor_customizer","rp_from_other_dp","bundle_throws_exception","non_customizer_rp",
         "simple_resource","java.gif","bundle001.jar","rp_not_able_to_commit","missing_resource_fix_pack",
-        "missing_bundle_fix_pack", "blocking_session","simple_fix_pack","rp_throws_no_such_resource",
-        "dp_installs_resource_for_rp4","dp_throws_resource_violation","dp_removes_resource_for_rp4"};
+        "missing_bundle_fix_pack", "block_session","simple_fix_pack","rp_throws_no_such_resource",
+        "dp_installs_resource_for_rp4"};
     
     public static String[] MAP_CODE_TO_ARTIFACT_MANGLED = new String[MAP_CODE_TO_ARTIFACT.length];
     

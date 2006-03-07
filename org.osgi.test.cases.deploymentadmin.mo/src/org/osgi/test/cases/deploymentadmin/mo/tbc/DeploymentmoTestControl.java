@@ -149,7 +149,6 @@ public class DeploymentmoTestControl extends DefaultTestBundleControl {
         setPermissions(new PermissionInfo[] {});
         setBundlesPermissions();
         addBundleListener();
-
 		DeploymentmoConstants.SERVER = getWebServer();
         
         generateArtifacts();
@@ -158,11 +157,29 @@ public class DeploymentmoTestControl extends DefaultTestBundleControl {
         try {
             //Sets all Acls for all principals, so METADATA_MISMATCH is not thrown.
             DmtSession session = getDmtAdmin().getSession(".");
+            if (session.isNodeUri(DeploymentmoConstants.DEPLOYMENT_DOWNLOAD_TEST)) {
+            	session.deleteNode(DeploymentmoConstants.DEPLOYMENT_DOWNLOAD_TEST);
+            }
             session.setNodeAcl(DeploymentmoConstants.DEPLOYMENT,new Acl(new String[] {"*"}, new int[] {Acl.ALL_PERMISSION }));
             session.close();
         } catch (Exception e) {
 			log("# Failed to set the acl");
         }
+        
+        for (int i=0;i<DeploymentmoConstants.MAP_CODE_TO_ARTIFACT.length;i++){
+            String fileName = DeploymentmoConstants.MAP_CODE_TO_ARTIFACT[i];
+            //Download failed does not use a deployment package, it uses a dlota containing an invalid url
+            if (!"download_failed".equals(fileName)) { 
+                if (fileName.indexOf(".")<0){
+                    fileName = fileName+".dp";
+                  }
+                  try{
+                    copyArtifact(fileName, ""+DeploymentmoConstants.DELIVERED_AREA);
+                  }catch(Exception ex){
+                    System.out.println(fileName+" not copied into delivered!");
+                  }
+            }
+          }
         DeploymentmoConstants.init();
 
 	}
@@ -235,18 +252,7 @@ public class DeploymentmoTestControl extends DefaultTestBundleControl {
                 artifacts.put(""+i, artifact);
                 break;
             }
-            case DeploymentmoConstants.RESOURCE_FROM_OTHER_DP: {
-                TestingDeploymentPackage dp = new TestingDeploymentPackage(
-                        DeploymentmoConstants.MAP_CODE_TO_ARTIFACT[DeploymentmoConstants.RESOURCE_FROM_OTHER_DP],
-                        "1.0", "resource_from_other.dp", null);
-                packages.put(""+i, dp);
-                //
-                artifact = new TestingArtifact(new TestingDlota(
-                        "resource_from_other_dp.xml",DeploymentmoConstants.SERVER + "www/" +  dp.getFilename(), 1892,
-                        DeploymentmoConstants.ENVIRONMENT_DP), dp);
-                artifacts.put(""+i, artifact);
-                break;
-            }
+           
             case DeploymentmoConstants.MISSING_NAME_HEADER_DP: {
                 TestingBundle[] bundles = {new TestingBundle("bundles.tb1", "1.0", "bundle001.jar")};
                 TestingDeploymentPackage dp = new TestingDeploymentPackage(
@@ -638,31 +644,37 @@ public class DeploymentmoTestControl extends DefaultTestBundleControl {
     }
     
     public static File copyArtifact(String name) {
-    	InputStream in = null;
-    	FileOutputStream fos = null;
-    	File file = new File(name);
-    	try {
-			URL url = new URL(DeploymentmoConstants.SERVER + "www/" + name);
-		    in = url.openStream();
-		    fos = new FileOutputStream(file);
-		    byte buffer[] = new byte[1024];
-		    int count;
-		    while ((count = in.read(buffer, 0, buffer.length)) > 0) {
-		        fos.write(buffer, 0, count);
-		    }
-        }catch (IOException e) {
-        	e.printStackTrace();
-        } finally {
-	        try {
-				fos.close();
-				in.close();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-	        in = null;
-        }
-        return file;
-    }
+        return copyArtifact(name, ".");
+      }
+      
+
+      public static File copyArtifact(String name, String destDirectory) {
+      	InputStream in = null;
+      	FileOutputStream fos = null;
+      	File file = new File(destDirectory+ File.separator+name);
+      	try {
+  			URL url = new URL(DeploymentmoConstants.SERVER + "www/" + name);
+  		    in = url.openStream();
+  		    fos = new FileOutputStream(file);
+  		    byte buffer[] = new byte[1024];
+  		    int count;
+  		    while ((count = in.read(buffer, 0, buffer.length)) > 0) {
+  		        fos.write(buffer, 0, count);
+  		    }
+          }catch (IOException e) {
+          	e.printStackTrace();
+          } finally {
+  	        try {
+  				fos.close();
+  				in.close();
+  			} catch (IOException e) {
+  				e.printStackTrace();
+  			}
+  	        in = null;
+          }
+          return file;
+      }
+
     //It is needed because of the Manifest tests. We need to get the bundle's manifests after it is compiled,
     //otherwise these tests would fail.
     public static void copyTempBundles() {
