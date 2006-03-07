@@ -304,13 +304,14 @@ public class TreeStructure implements TestInterface {
             session = tbc.getDmtAdmin().getSession(PolicyConstants.CONDITIONAL_PERMISSION_NODE,
                 DmtSession.LOCK_TYPE_ATOMIC);
             
-            String conditionNameMangled = session.mangle(PolicyConstants.CONDITION_NAME);
             
-            session.createInteriorNode(conditionNameMangled);
+            session.createInteriorNode(PolicyConstants.CONDITION_NAME);
             session.setNodeValue(PolicyConstants.CONDITIONAL_PERMISSIONINFO,
                 new DmtData(pInfo1.getEncoded() + "\n" + pInfo2.getEncoded() + "\n"));
             session.setNodeValue(PolicyConstants.CONDITIONAL_CONDITIONINFO,
                 new DmtData(cInfo.getEncoded() + "\n"));
+            session.setNodeValue(PolicyConstants.CONDITION_NAME_NODE,
+                    new DmtData(PolicyConstants.CONDITION_NAME));
             session.close();
             
             boolean conditionInserted = false;
@@ -338,7 +339,7 @@ public class TreeStructure implements TestInterface {
             session = tbc.getDmtAdmin().getSession(PolicyConstants.CONDITIONAL_PERMISSION_NODE,
                 DmtSession.LOCK_TYPE_ATOMIC);
             
-            session.deleteNode(conditionNameMangled);
+            session.deleteNode(PolicyConstants.CONDITION_NAME);
             session.close();
             
             conditionInserted = false;
