@@ -657,7 +657,7 @@ public class IsSatisfied {
     * @spec UserPromptCondition.isSatisfied(Condition[],Dictionary)
     */
    private void testIsSatisfied017() {
-        tbc.log("#testIsPostponed017");
+        tbc.log("#testIsSatisfied017");
        try {
 			Condition condition = UserPromptCondition.getCondition(tbc.getBundle(), 
 					new ConditionInfo(UserPromptCondition.class.getName(), new String[] {
