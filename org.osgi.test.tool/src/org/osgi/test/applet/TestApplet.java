@@ -916,11 +916,12 @@ public class TestApplet extends Application implements ExtendedTarget, IApplet,
 		}
 		
 		fc.showModally();
-		File dir  = new File(fc.directory());
-		targetProperties = new File(dir, fc.file()).getAbsolutePath();
-		if ( targetProperties != null )
+		if ( fc.file() != null ) {
+			File dir  = new File(fc.directory());
+			targetProperties = new File(dir, fc.file()).getAbsolutePath();
 			System.getProperties().setProperty("org.osgi.test.properties.file", targetProperties);
-		setMessage("Set properties file to " + targetProperties );
+			setMessage("Set properties file to " + targetProperties );
+		}
 	}
 
 	/**
