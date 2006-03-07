@@ -210,8 +210,13 @@ public class UserPromptCondition
 		for(int i=0;i<conds.length;i++) {
 			org.osgi.util.mobile.UserPromptCondition ucond = (org.osgi.util.mobile.UserPromptCondition) conds[i];
 			UserPromptCondition cond = (UserPromptCondition) org.osgi.util.mobile.UserPromptCondition.unWrap(ucond);
-			if (!cond.isPostponed()||(context.get(cond)!=null)) {
-				if (!cond.isSatisfied()) return false; // no need to do anything
+			Boolean prevAns = (Boolean) context.get(cond);
+			if ((prevAns!=null)||!cond.isPostponed()) {
+				if ((prevAns!=null)) {
+					if (!prevAns.booleanValue()) return false;
+				} else {
+					if (!cond.isSatisfied()) return false; // no need to do anything
+				}
 				// remove this from every array, it has been asked already
 				Condition[] c2 = new Condition[conds.length-1];
 				System.arraycopy(conds,0,c2,0,i);
@@ -272,7 +277,7 @@ public class UserPromptCondition
 			org.osgi.util.mobile.UserPromptCondition ucond = (org.osgi.util.mobile.UserPromptCondition) conds[i];
 			UserPromptCondition cond = (UserPromptCondition) org.osgi.util.mobile.UserPromptCondition.unWrap(ucond);
 			boolean satisfied = cond.setAnswer(answers[i]);
-			if (satisfied) context.put(cond,Boolean.TRUE);
+			context.put(cond,satisfied?Boolean.TRUE:Boolean.FALSE);
 			all_satisfied&=satisfied;
 		}
 		
