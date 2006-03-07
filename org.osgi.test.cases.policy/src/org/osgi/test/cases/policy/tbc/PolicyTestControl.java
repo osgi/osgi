@@ -101,6 +101,34 @@ public class PolicyTestControl extends DefaultTestBundleControl {
         
         installBundle();		
 	}
+	
+	/**
+	 * override getMethods()
+	 *
+	 */
+	public String[] getMethods() {
+		String value = System.getProperty("org.osgi.test.cases.policy.automatic");
+		if (value != null && value.equals("false")) {
+			return new String[] {
+					"testIMEIConditionGetCondition",
+					"testIMSIConditionGetCondition",
+					"testIsMutable",
+					"testIsPostponed",
+					"testIsSatisfied",
+					"testMetaNode",
+					"testTreeStructure",
+					"testUserPromptConditionGetCondition"			
+			};
+		} else {
+			return new String[] {
+					"testIMEIConditionGetCondition",
+					"testIMSIConditionGetCondition",
+					"testMetaNode",
+					"testTreeStructure",
+					"testUserPromptConditionGetCondition"		
+				};
+		}
+	}
 
 	/*
 	 * Calls IMSICondition.getCondition test methods
