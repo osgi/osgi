@@ -6,5 +6,5 @@ Bundle-Version: 1.0
 Bundle-Copyright: Copyright (c) OSGi Alliance (2000, 2002). All Rights Reserved.
 CVS-Header: $Header$
 $(EXPORT-PACKAGE)
-$(IMPORT-PACKAGE)
+$(IMPORT-PACKAGE), javax.microedition.midlet
 $(PRIVATE-PACKAGE)
