@@ -406,7 +406,14 @@ class LogPlugin implements DataPlugin, TransactionalDataSession {
 	}
 
 	public String getNodeType(String[] fullPath) throws DmtException {
-		return isLeafNode(fullPath) ? LogMetaNode.LEAF_MIME_TYPE : null;
+        if(isLeafNode(fullPath))
+            return LogMetaNode.LEAF_MIME_TYPE;
+        
+        String[] path = chopPath(fullPath);
+        if(path.length == 0) // ./OSGi/Log
+            return LogMetaNode.LOG_MO_TYPE;
+        
+        return null;
 	}
 
 	public int getNodeVersion(String[] fullPath) throws DmtException {

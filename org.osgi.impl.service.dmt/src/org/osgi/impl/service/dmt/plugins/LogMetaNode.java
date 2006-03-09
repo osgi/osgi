@@ -27,6 +27,7 @@ class LogMetaNode implements MetaNode {
     static final boolean ALLOW_INFINITE = true; 
 
 	static final String  LEAF_MIME_TYPE = "text/plain";
+	static final String  LOG_MO_TYPE = "org.osgi/1.0/LogManagementObject";
     
 	// private fields
 	private boolean	  canDelete;
