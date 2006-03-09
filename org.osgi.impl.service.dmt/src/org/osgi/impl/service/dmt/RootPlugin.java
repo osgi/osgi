@@ -26,29 +26,29 @@ import org.osgi.service.dmt.MetaNode;
 import org.osgi.service.dmt.spi.*;
 
 public class RootPlugin implements DataPlugin, ReadableDataSession {
-	private static Node	root	= 
-        new Node(".", new Node[] {
-                new Node("OSGi", new Node[] {
-                        new Node("Application", null),
-                        new Node("Configuration", null), 
-                        new Node("Deployment", new Node[] {
-                                new Node("Inventory", new Node[] {
-                                        new Node("Deployed", null),
-                                        new Node("Delivered", null)
-                                }),
-                                new Node("Download", null)
+    private static final Node osgi =
+        new Node("OSGi", new Node[] {
+                new Node("Application", null),
+                new Node("Configuration", null), 
+                new Node("Deployment", new Node[] {
+                        new Node("Inventory", new Node[] {
+                                new Node("Deployed", null),
+                                new Node("Delivered", null)
                         }),
-                        new Node("Log", null), 
-                        new Node("Monitor", null),
-                        new Node("Policy", new Node[] {
-                                new Node("Java", new Node[] { 
-                                        new Node("LocationPermission", null),
-                                        new Node("DmtPrincipalPermission", null),
-                                        new Node("ConditionalPermission", null)
-                                })
+                        new Node("Download", null)
+                }),
+                new Node("Log", null), 
+                new Node("Monitor", null),
+                new Node("Policy", new Node[] {
+                        new Node("Java", new Node[] { 
+                                new Node("LocationPermission", null),
+                                new Node("DmtPrincipalPermission", null),
+                                new Node("ConditionalPermission", null)
                         })
                 })
         });
+    
+    private static final Node root = new Node(".", new Node[] { osgi });
     
     private PluginDispatcher dispatcher;
 
@@ -116,6 +116,8 @@ public class RootPlugin implements DataPlugin, ReadableDataSession {
 	}
 
 	public String getNodeType(String[] nodePath) throws DmtException {
+        if(findNode(nodePath).equals(osgi))
+            return "org.osgi/1.0/OSGiMobileManagementObject";
 		return null;
 	}
 
