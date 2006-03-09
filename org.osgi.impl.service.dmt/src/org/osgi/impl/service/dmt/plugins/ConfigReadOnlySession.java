@@ -264,7 +264,10 @@ class ConfigReadOnlySession implements ReadableDataSession {
         if(isLeafNode(fullPath))
             return ConfigMetaNode.LEAF_MIME_TYPE;
         
-        // TODO config root type should identify DDF
+        String[] path = chopPath(fullPath);
+        if(path.length == 0) // $/Configuration
+            return ConfigMetaNode.CONFIGURATION_MO_TYPE;
+        
         return null;
     }
 

@@ -30,7 +30,9 @@ class ConfigMetaNode implements MetaNode {
     static final boolean IS_INDEX       = true;
     
     static final String  LEAF_MIME_TYPE = "text/plain";
-    
+    static final String  CONFIGURATION_MO_TYPE = 
+        "org.osgi/1.0/ConfigurationManagementObject";
+
     
 	private boolean		canAdd                  = false;
 	private boolean		canDelete               = false;
