@@ -667,8 +667,10 @@ public interface Bundle {
 	/**
 	 * Find the specified resource from this bundle.
 	 * 
-	 * This bundle's class loader is called to search for the named resource. If
-	 * this bundle's state is <code>INSTALLED</code>, then only this bundle
+	 * This bundle's class loader is called to search for the specified resource. 
+	 * If this bundle's state is <code>INSTALLED</code>, this method must
+	 * attempt to resolve the bundle before attempting to get the specified resource.
+	 * If this bundle cannot be resolved, then only this bundle
 	 * must be searched for the specified resource. Imported packages cannot be
 	 * searched when a bundle has not been resolved. If this bundle is a
 	 * fragment bundle then <code>null</code> is returned.
@@ -800,9 +802,11 @@ public interface Bundle {
 	/**
 	 * Find the specified resources from this bundle.
 	 * 
-	 * This bundle's class loader is called to search for the named resource. If
-	 * this bundle's state is <code>INSTALLED</code>, then only this bundle
-	 * must be searched for the specified resource. Imported packages cannot be
+	 * This bundle's class loader is called to search for the specified resources. 
+	 * If this bundle's state is <code>INSTALLED</code>, this method must
+	 * attempt to resolve the bundle before attempting to get the specified resources.
+	 * If this bundle cannot be resolved, then only this bundle
+	 * must be searched for the specified resources. Imported packages cannot be
 	 * searched when a bundle has not been resolved. If this bundle is a
 	 * fragment bundle then <code>null</code> is returned.
 	 * 
