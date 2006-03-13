@@ -54,13 +54,13 @@ public class DeploymentmoConstants {
     public static String LOCATION;
     
     //True if the implementation supports cancelling  
-    public static final boolean USER_CANCEL_IMPLEMENTED = false;
+    public static final boolean USER_CANCEL_IMPLEMENTED;
     
     //True if the implementation is streaming
-    public static final boolean IS_STREAMING = true;
+    public static final boolean IS_STREAMING;
 
     //This flag must be true if the implementation reports progress on the Status node  
-    public static final boolean STATUS_NODE_REPORTS_PROGRESS = true;
+    public static final boolean STATUS_NODE_REPORTS_PROGRESS;
 
     public static final int TIMEOUT;
     
@@ -248,6 +248,24 @@ public class DeploymentmoConstants {
 		} else {
 			TIMEOUT = 2000;
 		}
+		if (System.getProperty("org.osgi.test.cases.deploymentadmin.mo.usercancel")!=null) {
+			USER_CANCEL_IMPLEMENTED = Boolean.getBoolean("org.osgi.test.cases.deploymentadmin.mo.usercancel");  	
+		} else {
+			USER_CANCEL_IMPLEMENTED = false;
+		}
+		if (System.getProperty("org.osgi.test.cases.deploymentadmin.mo.status_node_progress")!=null) {
+			STATUS_NODE_REPORTS_PROGRESS = Boolean.getBoolean("org.osgi.test.cases.deploymentadmin.mo.status_node_progress");  	
+		} else {
+			STATUS_NODE_REPORTS_PROGRESS = true;
+		}
+		if (System.getProperty("org.osgi.test.cases.deploymentadmin.mo.streaming")!=null) {
+			IS_STREAMING = Boolean.getBoolean("org.osgi.test.cases.deploymentadmin.mo.streaming");  	
+		} else {
+			IS_STREAMING = true;
+		}
+	
+		
+		
 
     }
     //----------------------------------------------------------------------------------------------------
