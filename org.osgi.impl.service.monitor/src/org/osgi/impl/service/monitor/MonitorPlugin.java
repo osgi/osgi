@@ -506,9 +506,15 @@ public class MonitorPlugin implements DataPlugin, ReadWriteDataSession
                 "Title property not supported.");
     }
 
-    // TODO return DDF location for root
     public String getNodeType(String[] fullPath) throws DmtException {
-        return isLeafNode(fullPath) ? MonitorMetaNodeImpl.LEAF_MIME_TYPE : null;
+        if(isLeafNode(fullPath))
+            return MonitorMetaNodeImpl.LEAF_MIME_TYPE;
+        
+        String[] path = chopPath(fullPath);
+        if(path.length == 0)
+            return MonitorMetaNodeImpl.MONITOR_MO_TYPE;
+        
+        return null;
     }
 
     public int getNodeVersion(String[] fullPath) throws DmtException {
@@ -817,9 +823,9 @@ class Server {
     void setEnabled(DmtData data, String[] fullPath) throws DmtException {
         // data format is FORMAT_BOOLEAN because of meta-data
         
-        enabled = data.getBoolean();
+        boolean toBeEnabled = data.getBoolean();
 
-        if(enabled) {
+        if(toBeEnabled) {
             try { // expecting SecurityException and IllegalArgumentException
                 startJob();
             } catch(Exception e) {
@@ -834,6 +840,8 @@ class Server {
                                        "Error stopping monitoring job.", e);
             }
         }
+        
+        enabled = toBeEnabled;
     }
 
     void setType(DmtData data, String[] fullPath) throws DmtException {

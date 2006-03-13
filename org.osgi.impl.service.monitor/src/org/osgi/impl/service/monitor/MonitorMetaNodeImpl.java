@@ -24,6 +24,8 @@ import org.osgi.service.dmt.DmtData;
 public class MonitorMetaNodeImpl implements MetaNode
 {
     static final String LEAF_MIME_TYPE = "text/plain";
+    static final String MONITOR_MO_TYPE = 
+        "org.osgi/1.0/MonitorManagementObject";
     
     boolean   deletable             = false;
     boolean   addable               = false;
