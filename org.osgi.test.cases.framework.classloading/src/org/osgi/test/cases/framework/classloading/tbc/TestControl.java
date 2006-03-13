@@ -2472,7 +2472,7 @@ public class TestControl extends DefaultTestBundleControl {
 					.openStream()));
 			String line = bufr.readLine();
 			bufr.close();
-			assertEquals("Expecting to get resource from tb16b", "tb16b", line);
+			assertEquals("Expecting to get resource from tb16c", "tb16c", line);
 
 			// Test that own resources are available to requiring bundle
 			url = tb16a
@@ -2823,7 +2823,7 @@ public class TestControl extends DefaultTestBundleControl {
 					.openStream()));
 			String line = bufr.readLine();
 			bufr.close();
-			assertEquals("Expecting to get resource from tb16b", "tb16b", line);
+			assertEquals("Expecting to get resource from tb16c", "tb16c", line);
 		}
 		finally {
 			tb16a.stop();
