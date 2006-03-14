@@ -66,6 +66,7 @@ public class SwitchEvents implements TestInterface {
 	}
 
 	public void run() {
+		prepare();
 		testSwitchEvents001();
 		testSwitchEvents002();
 		testSwitchEvents003();
@@ -78,6 +79,10 @@ public class SwitchEvents implements TestInterface {
 		testSwitchEvents010();
 		testSwitchEvents011();
 		testSwitchEvents012();
+	}
+
+	private void prepare() {
+		tbc.getMonitorAdmin().switchEvents("*/*", true);		
 	}
 
 	/**
@@ -591,7 +596,7 @@ public class SwitchEvents implements TestInterface {
 			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": "
 					+ e.getClass().getName());
 		} finally {
-			tbc.setTb1Permission(infos);
+			tbc.setTb1Permission(infos);			
 		}
 	}	
 
