@@ -18,6 +18,8 @@
 
 package org.osgi.impl.service.monitor;
 
+import java.io.UnsupportedEncodingException;
+
 // Utility class to parse and store Status Variable path entries
 class Path {
     //----- Static fields and methods -----//
@@ -28,7 +30,7 @@ class Path {
         "-_.";   // a subset of the characters allowed in DMT URIs  
      
     // duplicated in org.osgi.service.monitor.StatusVariable, keep synchronized!
-    private static final int MAX_ID_LENGTH = 20;
+    private static final int MAX_ID_LENGTH = 32;
     
     static void checkString(String str, String errorPrefix) 
             throws IllegalArgumentException {
@@ -42,9 +44,16 @@ class Path {
             throws IllegalArgumentException {
         checkString(name, errorPrefix);
         
-        if(name.length() > MAX_ID_LENGTH)
-            throw new IllegalArgumentException(errorPrefix + 
-                    " is too long (over " + MAX_ID_LENGTH + " characters).");
+        byte[] nameBytes;
+        try {
+            nameBytes = name.getBytes("UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            // never happens, "UTF-8" must always be supported
+            throw new IllegalStateException(e.getMessage());
+        }
+        if(nameBytes.length > MAX_ID_LENGTH)
+            throw new IllegalArgumentException(errorPrefix + " is too long " + 
+                    "(over " + MAX_ID_LENGTH + " bytes in UTF-8 encoding).");
         if(name.equals(".") || name.equals(".."))
             throw new IllegalArgumentException(errorPrefix + " is invalid.");
         
