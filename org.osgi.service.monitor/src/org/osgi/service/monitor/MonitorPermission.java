@@ -18,6 +18,7 @@
 
 package org.osgi.service.monitor;
 
+import java.io.UnsupportedEncodingException;
 import java.security.Permission;
 import java.util.StringTokenizer;
 
@@ -225,9 +226,17 @@ public class MonitorPermission extends Permission {
     private void checkId(String id, String idName)
             throws IllegalArgumentException {
         
-        if (id.length() > StatusVariable.MAX_ID_LENGTH)
-            throw new IllegalArgumentException(idName + " is too long (over "
-                    + StatusVariable.MAX_ID_LENGTH + " characters).");
+        byte[] nameBytes;
+        try {
+            nameBytes = id.getBytes("UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            // never happens, "UTF-8" must always be supported
+            throw new IllegalStateException(e.getMessage());
+        }
+        if(nameBytes.length > StatusVariable.MAX_ID_LENGTH)
+            throw new IllegalArgumentException(idName + " is too long (over " +
+                    StatusVariable.MAX_ID_LENGTH + " bytes in UTF-8 encoding).");
+
         
         if (id.equals(".") || id.equals(".."))
             throw new IllegalArgumentException(idName + " is invalid.");
@@ -235,8 +244,8 @@ public class MonitorPermission extends Permission {
         char[] chars = id.toCharArray();
         for (int i = 0; i < chars.length; i++)
             if (StatusVariable.SYMBOLIC_NAME_CHARACTERS.indexOf(chars[i]) == -1)
-                throw new IllegalArgumentException(idName
-                        + " contains invalid characters.");
+                throw new IllegalArgumentException(idName +
+                        " contains invalid characters.");
     }
     
     /**

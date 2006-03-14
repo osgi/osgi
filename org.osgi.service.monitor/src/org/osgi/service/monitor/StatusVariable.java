@@ -18,6 +18,7 @@
 
 package org.osgi.service.monitor;
 
+import java.io.UnsupportedEncodingException;
 import java.util.Date;
 
 /**
@@ -31,7 +32,7 @@ import java.util.Date;
  * <code>null</code>, non-empty string that conforms to the "symbolic-name"
  * definition in the OSGi core specification. This means that only the
  * characters [-_.a-zA-Z0-9] may be used. The length of the ID must not exceed
- * 20 characters.
+ * 32 bytes when UTF-8 encoded.
  */
 public final class StatusVariable {
     //----- Public constants -----//
@@ -82,8 +83,7 @@ public final class StatusVariable {
         "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ" + "0123456789" +
         "-_.";   // a subset of the characters allowed in DMT URIs 
 
-    // TODO increase to minimum node segment length (currently 32), also in class javadoc above
-    static final int MAX_ID_LENGTH = 20;
+    static final int MAX_ID_LENGTH = 32;
     
     //----- Private fields -----//
     private String  id;
@@ -402,9 +402,18 @@ public final class StatusVariable {
             throw new NullPointerException(idName + " is null.");
         if(id.length() == 0)
             throw new IllegalArgumentException(idName + " is empty.");
-        if(id.length() > MAX_ID_LENGTH)
-            throw new IllegalArgumentException(idName + 
-                    " is too long (over " + MAX_ID_LENGTH + " characters).");
+        
+        byte[] nameBytes;
+        try {
+            nameBytes = id.getBytes("UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            // never happens, "UTF-8" must always be supported
+            throw new IllegalStateException(e.getMessage());
+        }
+        if(nameBytes.length > MAX_ID_LENGTH)
+            throw new IllegalArgumentException(idName + " is too long " + 
+                    "(over " + MAX_ID_LENGTH + " bytes in UTF-8 encoding).");
+
         if(id.equals(".") || id.equals(".."))
             throw new IllegalArgumentException(idName + " is invalid.");
         
