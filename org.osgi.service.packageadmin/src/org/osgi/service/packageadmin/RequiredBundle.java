@@ -44,6 +44,7 @@ import org.osgi.framework.Version;
  * and <code>getRequiringBundles()</code> return <code>null</code>.
  * 
  * @since 1.2
+ * @version $Revision$
  */
 public interface RequiredBundle {
 	/**
