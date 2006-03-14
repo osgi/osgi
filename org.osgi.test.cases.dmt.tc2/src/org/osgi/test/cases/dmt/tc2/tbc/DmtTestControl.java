@@ -180,6 +180,7 @@ public class DmtTestControl extends DefaultTestBundleControl {
 			new PermissionInfo(ServicePermission.class.getName(), "*",
 					ServicePermission.GET + ","+ ServicePermission.REGISTER),
 			new PermissionInfo(AdminPermission.class.getName(), "*", "*"),
+			new PermissionInfo(RuntimePermission.class.getName(),"*", "accessDeclaredMembers"), 
 			new PermissionInfo(PropertyPermission.class.getName(), "*","read"),
 		};
         PermissionInfo[] perm;
