@@ -33,5 +33,6 @@
 	<classpathentry kind="src" path="/org.osgi.service.metatype2"/>
 	<classpathentry kind="src" path="/org.osgi.service.power"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/org.osgi.application"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/org.osgi.service.obr"/>
 	<classpathentry kind="output" path=""/>
 </classpath>
