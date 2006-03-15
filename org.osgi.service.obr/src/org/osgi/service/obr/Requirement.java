@@ -46,6 +46,8 @@ public interface Requirement {
 
 	boolean isOptional();
 
+	boolean isExtend();
+	
 	String getComment();
 
 	boolean isSatisfied(Capability capability);

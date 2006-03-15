@@ -59,7 +59,6 @@ public interface Resource {
 	URI getURI();
 	Requirement [] getRequirements();
 	Requirement [] getRequests();
-	Requirement [] getExtends();
 	Capability [] getCapabilities();
 	String [] getCategories();
 	Repository getRepository();
