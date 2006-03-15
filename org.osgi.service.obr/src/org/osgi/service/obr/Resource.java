@@ -1,12 +1,8 @@
 /*
  * $Header$
  *
- * Copyright (c) OSGi Alliance (2000, 2006). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2006). All Rights Reserved.
  *
- * This document is an experimental draft to enable interoperability
- * between bundle repositories. There is currently no plan to 
- * turn this draft into an official specification.  
- * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -19,9 +15,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
+// This document is an experimental draft to enable interoperability
+// between bundle repositories. There is currently no plan to 
+// turn this draft into an official specification.  
+
 package org.osgi.service.obr;
 
-import java.net.URI;
+import java.net.URL;
 import java.util.Map;
 
 import org.osgi.framework.Version;
@@ -35,19 +36,19 @@ import org.osgi.framework.Version;
  * @version $Revision$
  */
 public interface Resource {
-	final String LICENSE_URI = "license";
+	final String LICENSE_URL = "license";
 	final String DESCRIPTION = "description";
-	final String DOCUMENTATION_URI = "documentation";
+	final String DOCUMENTATION_URL = "documentation";
 	final String COPYRIGHT = "copyright";
-	final String SOURCE_URI = "source";
+	final String SOURCE_URL = "source";
 	final String SYMBOLIC_NAME = "symbolicname";
 	final String PRESENTATION_NAME = "presentationname";
 	final String ID = "id";
 	final String VERSION = "version";
-	final String URI = "uri";
+	final String URL = "url";
 	final String SIZE = "size";
 	
-	final static String [] KEYS = { DESCRIPTION, SIZE, ID, LICENSE_URI, DOCUMENTATION_URI, COPYRIGHT, SOURCE_URI, PRESENTATION_NAME, SYMBOLIC_NAME, VERSION, URI };
+	final static String [] KEYS = { DESCRIPTION, SIZE, ID, LICENSE_URL, DOCUMENTATION_URL, COPYRIGHT, SOURCE_URL, PRESENTATION_NAME, SYMBOLIC_NAME, VERSION, URL };
 	
 	// get readable name
 	
@@ -56,7 +57,7 @@ public interface Resource {
 	String getPresentationName();
 	Version getVersion();
 	String getId();
-	URI getURI();
+	URL getURL();
 	Requirement [] getRequirements();
 	Requirement [] getRequests();
 	Capability [] getCapabilities();
