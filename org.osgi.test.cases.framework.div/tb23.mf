@@ -5,7 +5,6 @@ Bundle-Vendor: %bundlevendor
 Bundle-Version: 1.0
 Bundle-DocURL: %docurl
 Bundle-ContactAddress: %contactinfo
-Bundle-Activator: org.osgi.test.cases.framework.div.tb23.Activator
 Bundle-Category: %bundlecategory
 Bundle-Copyright: %bundlecopyright
 Fragment-Host: ${p}.tb9

@@ -1,7 +1,6 @@
 Manifest-Version: 1.0
 Bundle-Name: ${p}.tb6
 Bundle-SymbolicName: ${p}.tb6
-Bundle-Activator: $(p).tb6.Activator
 Bundle-ManifestVersion: 2
 Bundle-Version: 1.0
 Bundle-Copyright: Copyright (c) OSGi Alliance (2000, 2002). All Rights Reserved.
