@@ -108,6 +108,8 @@ public class DmtTestControl extends DefaultTestBundleControl {
 	        }
 	    } else if (DmtConstants.MAXIMUM_NODE_SEGMENTS>0) { 
 	        URIS_TOO_LONG = new String[] { getExcedingSegmentsUri(TestExecPluginActivator.ROOT)};
+	    } else {
+	    	URIS_TOO_LONG = new String[0];
 	    }
 	    
 	            
