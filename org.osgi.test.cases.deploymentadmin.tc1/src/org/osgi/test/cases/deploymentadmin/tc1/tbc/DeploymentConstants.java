@@ -183,10 +183,23 @@ public class DeploymentConstants {
 			+ DeploymentAdminPermission.UNINSTALL_FORCED + ","
             + DeploymentAdminPermission.METADATA;
 	
-	// very large, we don't know what kind of devices the TCK will be executed
-	public static final int TIMEOUT = 180000;
-    public static final int SESSION_TIMEOUT = 1000;
-    public static final int SHORT_TIMEOUT = 2000;
+	
+	public static final int TIMEOUT;
+    public static final int SHORT_TIMEOUT;
+    
+    static {
+    	if (System.getProperty("org.osgi.test.cases.deploymentadmin.timeout")!=null) {
+    		TIMEOUT = Integer.parseInt(System.getProperty("org.osgi.test.cases.deploymentadmin.timeout"));
+    	} else {
+    		TIMEOUT = 180000;
+    	}
+    	
+    	if (System.getProperty("org.osgi.test.cases.deploymentadmin.short_timeout")!=null) {
+    		SHORT_TIMEOUT = Integer.parseInt(System.getProperty("org.osgi.test.cases.deploymentadmin.short_timeout"));
+    	} else {
+    		SHORT_TIMEOUT = 2000;
+    	}
+    }
     
     public static String getDPNameFilter(String dpName) {
     	return "(name="+dpName+")";

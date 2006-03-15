@@ -131,13 +131,22 @@ public class DeploymentConstants {
 	public static final String BUNDLE_NAME_WRONG_FILTER = "(&(name=bundle.tb1)(location=-;osgi-dp: bundle001.jar))";
 	public static final String EXCEPTION_MESSAGE = "Unknown failure";
     
-	// very large, we don't know what kind of devices the TCK will be executed
-	public static final int TIMEOUT = 180000;
-	
-	public static final int SHORT_TIMEOUT = 2000;
+	public static final int TIMEOUT;
+    public static final int SHORT_TIMEOUT;
     
-    //set default value and then reset if present in TCK properties file
-    public static int SESSION_TIMEOUT = 1000;
+    static {
+    	if (System.getProperty("org.osgi.test.cases.deploymentadmin.timeout")!=null) {
+    		TIMEOUT = Integer.parseInt(System.getProperty("org.osgi.test.cases.deploymentadmin.timeout"));
+    	} else {
+    		TIMEOUT = 180000;
+    	}
+    	
+    	if (System.getProperty("org.osgi.test.cases.deploymentadmin.short_timeout")!=null) {
+    		SHORT_TIMEOUT = Integer.parseInt(System.getProperty("org.osgi.test.cases.deploymentadmin.short_timeout"));
+    	} else {
+    		SHORT_TIMEOUT = 2000;
+    	}
+    }    
     
     public static final int FINISH=-1;
     public static final int BEGIN=0;
