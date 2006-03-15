@@ -82,14 +82,14 @@ public interface MetaNode {
     
     /**
      * Constant for the REPLACE access type. If {@link #can(int)} returns
-     * <code>true</code> for this operation, the value (in case of leaf nodes)
-     * and properties of the node can can potentially be modified.  
+     * <code>true</code> for this operation, the value 
+     * and other properties of the node can can potentially be modified.  
      */
     public int CMD_REPLACE = 3;
 
     /**
      * Constant for the GET access type. If {@link #can(int)} returns
-     * <code>true</code> for this operation, the value (in case of leaf nodes),
+     * <code>true</code> for this operation, the value, or
      * the list of child nodes (in case of interior nodes) and the properties
      * of the node can potentially be retrieved.  
      */

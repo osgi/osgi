@@ -96,8 +96,11 @@ public final class DmtData {
     public static final int FORMAT_NULL    = 0x0200;
 
     /**
-     * Format specifier of an internal node. A <code>DmtData</code> instance
-     * can not have this value. This is used only as a return value of the
+     * Format specifier of an internal node. An interior node
+     * can hold a Java object as value ({@link DmtData#DmtData(Object)}
+     * and {@link DmtData#getNode()}). This value can be
+     * used by Java programs that know a specific URI understand the
+     * associated Java type. This type is further used as a return value of the
      * {@link MetaNode#getFormat} method.
      */
     public static final int FORMAT_NODE    = 0x0400;
@@ -112,7 +115,7 @@ public final class DmtData {
     private final float   flt;
     private final boolean bool;
     private final byte[]  bytes;
-
+    private final Object  complex;
     private final int     format;
 
     /**
@@ -122,12 +125,12 @@ public final class DmtData {
      */
     private DmtData() {
         format = FORMAT_NULL;
-        
         this.str     = null;
         this.integer = 0;
         this.flt     = 0;
         this.bool    = false;
         this.bytes   = null;
+        this.complex = null;
     }
 
     /**
@@ -141,11 +144,31 @@ public final class DmtData {
         format = FORMAT_STRING;
         this.str = str;
         
+        this.complex = null;
         this.integer = 0;
         this.flt     = 0;
         this.bool    = false;
         this.bytes   = null;
 
+    }
+
+    /**
+     * Create a <code>DmtData</code> instance of <code>node</code> format
+     * with the given object value. This value must not be null. The complex value
+     * should be immutable. 
+     * 
+     * @param complex the object value to set
+     */
+    public DmtData(Object complex) {
+    	if ( complex != null )
+    		throw new NullPointerException("Complex value must not be null");
+        format = FORMAT_NODE;
+        this.complex = complex;
+        this.str = null;        
+        this.integer = 0;
+        this.flt     = 0;
+        this.bool    = false;
+        this.bytes   = null;
     }
 
     /**
@@ -197,6 +220,7 @@ public final class DmtData {
         this.flt     = 0;
         this.bool    = false;
         this.bytes   = null;
+        this.complex = null;
     }
     
     /**
@@ -213,7 +237,7 @@ public final class DmtData {
         this.flt     = 0;
         this.bool    = false;
         this.bytes   = null;
-
+        this.complex = null;
     }
 
     /**
@@ -230,7 +254,7 @@ public final class DmtData {
         this.integer = 0;
         this.bool    = false;
         this.bytes   = null;
-
+        this.complex = null;
     }
 
     /**
@@ -247,7 +271,7 @@ public final class DmtData {
         this.integer = 0;
         this.flt     = 0;
         this.bytes   = null;
-
+        this.complex = null;
     }
 
     /**
@@ -268,6 +292,7 @@ public final class DmtData {
         this.integer = 0;
         this.flt     = 0;
         this.bool    = false;
+        this.complex = null;
     }
 
     /**
@@ -292,6 +317,7 @@ public final class DmtData {
         this.integer = 0;
         this.flt     = 0;
         this.bool    = false;
+        this.complex = null;
     }
 
     
@@ -475,6 +501,24 @@ public final class DmtData {
         
         return 0; // never reached
     }
+    
+    /**
+     * Gets the complex Java object associated with an interior node.
+     * 
+     * Certain interior nodes can be associated with a complex
+     * Java object. This object can be accessed through the node's leaf nodes,
+     * or as a complex object.
+     * 
+     * @return Java object representing a node.
+     */
+    public Object getNode() { 
+        if(format == FORMAT_NODE) {
+            return complex;
+        }
+
+        throw new 
+            IllegalStateException("DmtData value is not in base Node format.");
+    }
 
     /**
      * Gets the string representation of the <code>DmtData</code>. This
@@ -502,9 +546,10 @@ public final class DmtData {
         case FORMAT_BINARY:  
         case FORMAT_BASE64:  return getHexDump(bytes);
         case FORMAT_NULL:    return "null";
+        case FORMAT_NODE: 	 return complex+"";
         }
 
-        return null; // never reached
+        return "<unknown>"; // never reached
     }
 
     /**
@@ -536,6 +581,7 @@ public final class DmtData {
         case FORMAT_BOOLEAN: return bool == other.bool;
         case FORMAT_BINARY:
         case FORMAT_BASE64:  return Arrays.equals(bytes, other.bytes);
+        case FORMAT_NODE:    return complex == null ? false : complex.equals(other.complex);
         case FORMAT_NULL:    return true;
         }
 
@@ -560,6 +606,7 @@ public final class DmtData {
         case FORMAT_BOOLEAN: return new Boolean(bool).hashCode();
         case FORMAT_BINARY:
         case FORMAT_BASE64:  return new String(bytes).hashCode();
+        case FORMAT_NODE:  return complex == null ? 1 : complex.hashCode();
         case FORMAT_NULL:    return 0;
         }
 
