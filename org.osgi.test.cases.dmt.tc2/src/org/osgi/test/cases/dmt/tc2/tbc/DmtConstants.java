@@ -67,23 +67,66 @@ public class DmtConstants {
     
 	public static final String DDF = "http://www.openmobilealliance.org/tech/DTD/OMA-SyncML-DMDDF-V1_2_0.dtd";
 
-	public static final int WAIT_TIME = 1200;
+	public static final int WAIT_TIME;
 
-	public static final int TIMEOUT = 31000;
+	public static final int TIMEOUT;
 	
 	//The maximum node length and maximum node segments may not be 0 else the tests of URI_TOO_LONG wont be executed. 
-	public static final int MAXIMUM_NODE_LENGTH = 32;
+	public static final int MAXIMUM_NODE_LENGTH;
 	
-	public static final int MAXIMUM_NODE_SEGMENTS = 0;
+	public static final int MAXIMUM_NODE_SEGMENTS;
 
-    public static final boolean SUPPORTS_NODE_TITLE = true;
+    public static final boolean SUPPORTS_NODE_TITLE;
     
-    public static final boolean SUPPORTS_NODE_TIMESTAMP = true;
+    public static final boolean SUPPORTS_NODE_TIMESTAMP;
     
-    public static final boolean SUPPORTS_NODE_SIZE= true;
+    public static final boolean SUPPORTS_NODE_SIZE;
     
-    public static final boolean SUPPORTS_NODE_VERSION = true;
+    public static final boolean SUPPORTS_NODE_VERSION;
     
+    static {
+    	if (System.getProperty("org.osgi.test.cases.dmt.tc2.maximum_node_length")!=null) {
+    		MAXIMUM_NODE_LENGTH = Integer.parseInt(System.getProperty("org.osgi.test.cases.dmt.tc2.maximum_node_length"));
+    	} else {
+    		MAXIMUM_NODE_LENGTH = 32;
+    	}
+    	if (System.getProperty("org.osgi.test.cases.dmt.tc2.maximum_node_segments")!=null) {
+    		MAXIMUM_NODE_SEGMENTS = Integer.parseInt(System.getProperty("org.osgi.test.cases.dmt.tc2.maximum_node_segments"));
+    	} else {
+    		MAXIMUM_NODE_SEGMENTS = 0;
+    	}
+    	if (System.getProperty("org.osgi.test.cases.dmt.tc2.supports_node_title")!=null) {
+    		SUPPORTS_NODE_TITLE = Boolean.getBoolean("org.osgi.test.cases.dmt.tc2.supports_node_title");
+    	} else {
+    		SUPPORTS_NODE_TITLE = true;
+    	}
+    	if (System.getProperty("org.osgi.test.cases.dmt.tc2.supports_node_timestamp")!=null) {
+    		SUPPORTS_NODE_TIMESTAMP = Boolean.getBoolean("org.osgi.test.cases.dmt.tc2.supports_node_timestamp");
+    	} else {
+    		SUPPORTS_NODE_TIMESTAMP = true;
+    	}
+    	if (System.getProperty("org.osgi.test.cases.dmt.tc2.supports_node_size")!=null) {
+    		SUPPORTS_NODE_SIZE= Boolean.getBoolean("org.osgi.test.cases.dmt.tc2.supports_node_size");
+    	} else {
+    		SUPPORTS_NODE_SIZE= true;
+    	}
+    	if (System.getProperty("org.osgi.test.cases.dmt.tc2.supports_node_version")!=null) {
+    		SUPPORTS_NODE_VERSION = Boolean.getBoolean("org.osgi.test.cases.dmt.tc2.supports_node_version");
+    	} else {
+    		SUPPORTS_NODE_VERSION = true;
+    	}
+    	if (System.getProperty("org.osgi.test.cases.dmt.tc2.timeout")!=null) {
+    		TIMEOUT = Integer.parseInt(System.getProperty("org.osgi.test.cases.dmt.tc2.timeout")) + 1000;
+    	} else {
+    		TIMEOUT = 31000;
+    	}
+    	if (System.getProperty("org.osgi.test.cases.dmt.tc2.wait_for_event")!=null) {
+    		WAIT_TIME = Integer.parseInt(System.getProperty("org.osgi.test.cases.dmt.tc2.wait_for_event"));
+    	} else {
+    		WAIT_TIME = 1200;
+    	}
+    	
+    }
 	
     
     
