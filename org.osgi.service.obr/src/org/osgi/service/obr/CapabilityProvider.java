@@ -17,7 +17,7 @@
  */
 
 // This document is an experimental draft to enable interoperability
-// between bundle repositories. There is currently no plan to 
+// between bundle repositories. There is currently no commitment to 
 // turn this draft into an official specification.  
 
 package org.osgi.service.obr;
