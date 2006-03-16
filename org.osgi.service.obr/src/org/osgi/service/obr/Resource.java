@@ -59,7 +59,6 @@ public interface Resource {
 	String getId();
 	URL getURL();
 	Requirement [] getRequirements();
-	Requirement [] getRequests();
 	Capability [] getCapabilities();
 	String [] getCategories();
 	Repository getRepository();
