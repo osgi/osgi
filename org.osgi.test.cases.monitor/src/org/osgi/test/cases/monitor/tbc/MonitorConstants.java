@@ -42,7 +42,7 @@ package org.osgi.test.cases.monitor.tbc;
 public class MonitorConstants {
 
 	public static final String OSGI_ROOT = System.getProperty("org.osgi.service.dmt.root");
-	public static final String LONGID = "abcdefghjklmnoprstuvw";
+	public static final String LONGID = "abcdefghjklmnoprstuvwyzabcdfghijk";
 	public final static String INVALID_ID = ";/?:@&=+$,";
 	public final static String SV_MONITORABLEID1 = "cesar";
 	public final static String SV_MONITORABLEID2 = "cesar2";
