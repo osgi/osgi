@@ -40,7 +40,11 @@ package org.osgi.test.cases.deploymentadmin.tc2.tbc.Configuration;
 import java.util.Dictionary;
 
 import org.osgi.framework.InvalidSyntaxException;
+import org.osgi.service.cm.ConfigurationPermission;
+import org.osgi.service.condpermadmin.ConditionalPermissionInfo;
+import org.osgi.service.deploymentadmin.DeploymentException;
 import org.osgi.service.deploymentadmin.DeploymentPackage;
+import org.osgi.service.permissionadmin.PermissionInfo;
 import org.osgi.test.cases.deploymentadmin.tc2.tbc.DeploymentConstants;
 import org.osgi.test.cases.deploymentadmin.tc2.tbc.DeploymentTestControl;
 import org.osgi.test.cases.deploymentadmin.tc2.tbc.util.MessagesConstants;
@@ -58,43 +62,41 @@ public class Configuration {
 	
 	private DeploymentTestControl tbc;
 	private DeploymentPackage dp;
-	
 	public Configuration(DeploymentTestControl tbc) {
 		this.tbc = tbc;
 	}
 	
 	public void run() {
-		try {
-			prepare();
-			testConfiguration001();
-			testConfiguration002();
-		} finally {
-			unprepare();
-		}
+		testConfiguration001();
+		testConfiguration002();
+		testConfiguration003();
+		testConfiguration004();
 	}
 
-	/**
-	 * Installs the managed service factory and the auto config deployment package
-	 */
-	private void prepare() {
-		installAutoConfigDP();
-	}
+
 
 	/**
 	 * Installs the auto config deployment package
 	 */
-	private void installAutoConfigDP() {
+	private DeploymentPackage installAutoConfigDP() {
 		tbc.log("#Installing config deployment package");
 		TestingDeploymentPackage testDP = tbc.getTestingDeploymentPackage(DeploymentConstants.AUTO_CONFIG_DP);
+		ConditionalPermissionInfo info = null;
 		try {
-            tbc.getCondPermAdmin().addConditionalPermissionInfo(DeploymentConstants.CONDITION_SIGNER, DeploymentConstants.ALL_PERMISSION);
+			info = tbc.getCondPermAdmin().addConditionalPermissionInfo(DeploymentConstants.CONDITION_SIGNER, DeploymentConstants.ALL_PERMISSION);
 			dp = tbc.installDeploymentPackage(tbc.getWebServer() + testDP.getFilename());
 			tbc.assertNotNull(MessagesConstants.getMessage(MessagesConstants.ASSERT_NOT_NULL,
 					new String[] { "Deployment Package" }), dp);
+			return dp;
 		} catch (Exception e) {
 			tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { 
 					e.getClass().getName() }));
+		} finally {
+			if (info!=null) {
+				info.delete();
+			}
 		}
+		return null;
 	}
 
 	/**
@@ -102,11 +104,13 @@ public class Configuration {
 	 * updated ManagedService properties passing the same properties as
 	 * extracted from AUTOCONF.xml
 	 * 
-	 * @spec 116.2 Configuration Data
+	 * @spec 115.2 Configuration Data
 	 */
 	private void testConfiguration001() {
 		tbc.log("#testConfiguration001");
+		DeploymentPackage dp = null;
 		try {
+			dp = installAutoConfigDP();
 			Dictionary properties = tbc.getManagedService().getProperties();
 			tbc.assertTrue("The Resource Processor updated the same Dictionary properties as received by the ManagedService",
 					properties.get(TestingManagedService.ATTRIBUTE_A).equals(TestingManagedService.ATTRIBUTE_A_VALUE) &&
@@ -118,6 +122,10 @@ public class Configuration {
 		} catch (Exception e) {
 			tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { 
 					e.getClass().getName() }));
+		} finally {
+			if (dp!=null) {
+				tbc.uninstall(dp);
+			}
 		}
 	}
 	
@@ -126,11 +134,13 @@ public class Configuration {
 	 * called the updated method of the ManagedServiceFactory passing the
 	 * same properties as extracted from AUTOCONF.xml
 	 * 
-	 * @spec 116.2 Configuration Data
+	 * @spec 115.2 Configuration Data
 	 */
 	private void testConfiguration002() {
 		tbc.log("#testConfiguration002");
-		 try {
+		DeploymentPackage dp = null;
+		try {
+			dp = installAutoConfigDP();
 			Dictionary properties = tbc.getManagedServiceFactory().getProperties();
 			//We check only our properties because there are some automatic properties added by the Configuration Admin
 			tbc.assertTrue("The Resource Processor updated the same Dictionary properties as received by the ManagedServiceFactory",
@@ -144,14 +154,58 @@ public class Configuration {
 		} catch (Exception e) {
 			tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { 
 					e.getClass().getName() }));
+		} finally {
+			if (dp!=null) {
+				tbc.uninstall(dp);
+			}
 		}
 	}
 	
 	/**
-	 * Uninstalls the Autoconf Deployment Package used in the tests.
+	 * This test case assures that a Deployment Package that requires any activity from 
+	 * the Autoconf Resource processor must at least provide ConfigurationPermission[*,CONFIGURE].
+	 * 
+	 * @spec 115.4.2 Autoconf Resource Permissions
 	 */
-	private void unprepare() {
-		tbc.log("#Uninstalling Deployment Package Configurator");
-		tbc.uninstall(dp);
-	}		
+	private void testConfiguration003() {
+		tbc.log("#testConfiguration003");
+		TestingDeploymentPackage testDP = tbc.getTestingDeploymentPackage(DeploymentConstants.AUTO_CONFIG_DP);
+		try {
+			dp = tbc.installDeploymentPackage(tbc.getWebServer() + testDP.getFilename());
+			tbc.assertNotNull(MessagesConstants.getMessage(MessagesConstants.ASSERT_NOT_NULL,
+					new String[] { "Deployment Package" }), dp);
+			tbc.failException("", DeploymentException.class);
+		} catch (DeploymentException e) {
+			tbc.pass("A DeploymentException was correctly thrown if the Autoconf Resource processor does not have ConfigurationPermission[*,CONFIGURE]. Message: " + e.getMessage());
+		} catch (Exception e) {
+			tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { 
+					e.getClass().getName() }));
+		}
+
+	}
+	
+	/**
+	 * This test case assures that a Deployment Package can be installed using only 
+	 * ConfigurationPermission[*,CONFIGURE].
+	 * 
+	 * @spec 115.4.2 Autoconf Resource Permissions
+	 */
+	private void testConfiguration004() {
+		tbc.log("#testConfiguration004");
+		TestingDeploymentPackage testDP = tbc.getTestingDeploymentPackage(DeploymentConstants.AUTO_CONFIG_DP);
+		ConditionalPermissionInfo info = null;
+		try {
+			info = tbc.getCondPermAdmin().addConditionalPermissionInfo(DeploymentConstants.CONDITION_SIGNER, new PermissionInfo[] { new PermissionInfo(ConfigurationPermission.class.getName(),"*",ConfigurationPermission.CONFIGURE)});
+			dp = tbc.installDeploymentPackage(tbc.getWebServer() + testDP.getFilename());
+			tbc.pass("A Deployment Package was installed using only ConfigurationPermission[*,CONFIGURE].");
+		} catch (Exception e) {
+			tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { 
+					e.getClass().getName() }));
+		} finally {
+			if (info!=null) {
+				info.delete();
+			}
+		}
+	}
+	
 }
