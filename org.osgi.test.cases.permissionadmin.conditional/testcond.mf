@@ -2,7 +2,8 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: ${p}.testcond
 Bundle-SymbolicName: ${p}.testcond
-Bundle-Version: 4
+Bundle-ManifestVersion: 2
+Bundle-Version: 1.0.0
 Bundle-Copyright: Copyright (c) OSGi Alliance (2000, 2002). All Rights Reserved.
 Fragment-Host: system.bundle; extension:=framework
 CVS-Header: $Header$
