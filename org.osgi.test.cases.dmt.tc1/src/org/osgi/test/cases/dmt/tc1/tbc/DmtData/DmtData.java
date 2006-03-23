@@ -37,6 +37,8 @@
 
 package org.osgi.test.cases.dmt.tc1.tbc.DmtData;
 
+import java.util.Vector;
+
 import org.osgi.test.cases.dmt.tc1.tbc.DmtTestControl;
 
 /**
@@ -68,6 +70,7 @@ public class DmtData {
         testDmtData014();
         testDmtData015();
         testDmtData016();
+        testDmtData017();
 
 	}
 
@@ -507,6 +510,29 @@ public class DmtData {
 			tbc.assertEquals("Asserting the size", 0, data.getSize());
 			
 			tbc.assertEquals("Asserting the string returned", "",data.toString());
+			
+		} catch(Exception e) {
+			tbc.fail("Unexpected Exception: " + e.getClass().getName()
+					+ " [Message: " + e.getMessage() + "]");
+
+		}
+	}
+	
+	/**
+	 * This method asserts that when a DmtData(Object) is created the format is
+	 * DmtData.FORMAT_NODE and the value is returned by DmtData.getNode()
+	 * 
+	 * @spec DmtData.DmtData(Object)
+	 */
+	private void testDmtData017() {
+		try {		
+			tbc.log("#testDmtData017");
+			Vector value = null;
+			org.osgi.service.dmt.DmtData data  = new org.osgi.service.dmt.DmtData(value);
+			tbc.assertEquals("Asserting DmtData.FORMAT_NODE",
+					org.osgi.service.dmt.DmtData.FORMAT_NODE, data.getFormat());
+			
+			tbc.assertEquals("Asserting the value", value, data.getNode());
 			
 		} catch(Exception e) {
 			tbc.fail("Unexpected Exception: " + e.getClass().getName()
