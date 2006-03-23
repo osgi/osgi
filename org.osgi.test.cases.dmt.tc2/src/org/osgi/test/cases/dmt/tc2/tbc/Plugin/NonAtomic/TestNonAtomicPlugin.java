@@ -93,7 +93,7 @@ public class TestNonAtomicPlugin implements DataPlugin, ReadableDataSession {
 	}
 
 	public DmtData getNodeValue(String[] nodeUri) throws DmtException {
-		return null;
+		return new DmtData("");
 	}
 
 	public String getNodeTitle(String[] nodeUri) throws DmtException {
