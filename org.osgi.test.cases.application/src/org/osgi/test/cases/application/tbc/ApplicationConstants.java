@@ -76,6 +76,7 @@ public class ApplicationConstants {
     public static final String OSGI_APPLICATION_VERSION = "1.0";   
     public static final String OSGI_APPLICATION_PACKAGE = "org.osgi.test.cases.application.tb1";
     public static String OSGI_APPLICATION_APPID = "";
+    public static String OSGI_APPLICATION_APPID_VALID = "";
     public static String OSGI_APPLICATION_APPID_NAME = "";
     public static String OSGI_APPLICATION_APPID_APPLICATION_ID = "";
     public static String OSGI_APPLICATION_APPID_ICONURI = "";

@@ -143,6 +143,7 @@ public class ApplicationTestControl extends DefaultTestBundleControl {
 	private void updateConstants() {
 	    ApplicationConstants.OSGI_APPLICATION_APPID = ApplicationConstants.OSGI_APPLICATION + "/" + getDmtAdmin().mangle(ApplicationConstants.TEST_PID);
 	    ApplicationConstants.OSGI_APPLICATION_APPID_NAME = ApplicationConstants.OSGI_APPLICATION_APPID + "/Name";
+	    ApplicationConstants.OSGI_APPLICATION_APPID_VALID = ApplicationConstants.OSGI_APPLICATION_APPID + "/Valid";
 	    ApplicationConstants.OSGI_APPLICATION_APPID_APPLICATION_ID = ApplicationConstants.OSGI_APPLICATION_APPID + "/ApplicationID";
 	    ApplicationConstants.OSGI_APPLICATION_APPID_ICONURI = ApplicationConstants.OSGI_APPLICATION_APPID + "/IconURI";
 	    ApplicationConstants.OSGI_APPLICATION_APPID_VENDOR = ApplicationConstants.OSGI_APPLICATION_APPID + "/Vendor";

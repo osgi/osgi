@@ -116,6 +116,10 @@ public class TreeStructure {
 		testTreeStructure045();
 		testTreeStructure046();
 		testTreeStructure047();
+		testTreeStructure048();
+		testTreeStructure049();
+		testTreeStructure050();
+		testTreeStructure051();
 	}
 
 	/**
@@ -623,25 +627,26 @@ public class TreeStructure {
 			session = tbc.getDmtAdmin().getSession(ApplicationConstants.OSGI_APPLICATION,
 					DmtSession.LOCK_TYPE_SHARED);
 			
-			tbc
-					.assertTrue(
-							"Asserts if $/Application/<app_id>/Ext is a valid node",
-							session
-									.isNodeUri(ApplicationConstants.OSGI_APPLICATION_APPID_EXT));
-			MetaNode metaNode = session
-					.getMetaNode(ApplicationConstants.OSGI_APPLICATION_APPID_EXT);
-			tbc.assertEquals(
-					"Asserts $/Application/<app_id>/Ext metanode scope",
-					MetaNode.PERMANENT, metaNode.getScope());
-			tbc.assertEquals(
-					"Asserts $/Application/<app_id>/Ext metanode format",
-					DmtData.FORMAT_NODE, metaNode.getFormat());
-			tbc.assertTrue(
-					"Asserts $/Application/<app_id>/Ext metanode cardinality",
-					metaNode.isZeroOccurrenceAllowed()
-							&& metaNode.getMaxOccurrence() == 1);
-			tbc.assertTrue("Asserts $/Application/<app_id>/Ext metanode GET",
-					metaNode.can(MetaNode.CMD_GET));
+			if (session
+					.isNodeUri(ApplicationConstants.OSGI_APPLICATION_APPID_EXT)) {
+				MetaNode metaNode = session
+						.getMetaNode(ApplicationConstants.OSGI_APPLICATION_APPID_EXT);
+				tbc.assertEquals(
+						"Asserts $/Application/<app_id>/Ext metanode scope",
+						MetaNode.PERMANENT, metaNode.getScope());
+				tbc.assertEquals(
+						"Asserts $/Application/<app_id>/Ext metanode format",
+						DmtData.FORMAT_NODE, metaNode.getFormat());
+				tbc
+						.assertTrue(
+								"Asserts $/Application/<app_id>/Ext metanode cardinality",
+								metaNode.isZeroOccurrenceAllowed()
+										&& metaNode.getMaxOccurrence() == 1);
+				tbc.assertTrue(
+						"Asserts $/Application/<app_id>/Ext metanode GET",
+						metaNode.can(MetaNode.CMD_GET));
+			}
+			
 		} catch (Exception e) {
 			tbc.fail(MessagesConstants.getMessage(
 					MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e
@@ -1636,31 +1641,35 @@ public class TreeStructure {
 			
 			updateInstanceIdConstants("/"+nodes[0]);			
 
-			tbc
-					.assertTrue(
-							"Asserts if $/Application/<app_id>/Instances/<instance_id>/Operations/Ext is a valid node",
-							session
-									.isNodeUri(ApplicationConstants.OSGI_APPLICATION_APPID_INSTANCES_ID_OPERATIONS_EXT));
+			if (session
+					.isNodeUri(ApplicationConstants.OSGI_APPLICATION_APPID_INSTANCES_ID_OPERATIONS_EXT)) {
 
-			MetaNode metaNode = session
-					.getMetaNode(ApplicationConstants.OSGI_APPLICATION_APPID_INSTANCES_ID_OPERATIONS_EXT);
-			tbc
-					.assertEquals(
-							"Asserts $/Application/<app_id>/Instances/<instance_id>/Operations/Ext metanode scope",
-							MetaNode.PERMANENT, metaNode.getScope());
-			tbc
-					.assertEquals(
-							"Asserts $/Application/<app_id>/Instances/<instance_id>/Operations/Ext metanode format",
-							DmtData.FORMAT_NODE, metaNode.getFormat());
-			tbc
-					.assertTrue(
-							"Asserts $/Application/<app_id>/Instances/<instance_id>/Operations/Ext metanode cardinality",
-							metaNode.isZeroOccurrenceAllowed()
-									&& metaNode.getMaxOccurrence() == 1);
-			tbc
-					.assertTrue(
-							"Asserts $/Application/<app_id>/Instances/<instance_id>/Operations/Ext metanode GET",
-							metaNode.can(MetaNode.CMD_GET));
+				tbc
+						.assertTrue(
+								"Asserts if $/Application/<app_id>/Instances/<instance_id>/Operations/Ext is a valid node",
+								session
+										.isNodeUri(ApplicationConstants.OSGI_APPLICATION_APPID_INSTANCES_ID_OPERATIONS_EXT));
+
+				MetaNode metaNode = session
+						.getMetaNode(ApplicationConstants.OSGI_APPLICATION_APPID_INSTANCES_ID_OPERATIONS_EXT);
+				tbc
+						.assertEquals(
+								"Asserts $/Application/<app_id>/Instances/<instance_id>/Operations/Ext metanode scope",
+								MetaNode.PERMANENT, metaNode.getScope());
+				tbc
+						.assertEquals(
+								"Asserts $/Application/<app_id>/Instances/<instance_id>/Operations/Ext metanode format",
+								DmtData.FORMAT_NODE, metaNode.getFormat());
+				tbc
+						.assertTrue(
+								"Asserts $/Application/<app_id>/Instances/<instance_id>/Operations/Ext metanode cardinality",
+								metaNode.isZeroOccurrenceAllowed()
+										&& metaNode.getMaxOccurrence() == 1);
+				tbc
+						.assertTrue(
+								"Asserts $/Application/<app_id>/Instances/<instance_id>/Operations/Ext metanode GET",
+								metaNode.can(MetaNode.CMD_GET));
+			}
 
 		} catch (Exception e) {
 			tbc.fail(MessagesConstants.getMessage(
@@ -2814,6 +2823,218 @@ public class TreeStructure {
 		}
 	}	
 	
+	/**
+	 * This method asserts if $/Application/<app_id>/Valid is a valid node and
+	 * asserts Type, Cardinality, Get Permission according to Table 3.6 . Then,
+	 * asserts the value of the node.
+	 * 
+	 * @spec 3.5.1 Applications Descriptors
+	 */
+	private void testTreeStructure048() {
+		tbc.log("#testTreeStructure048");
+		DmtSession session = null;
+		try {
+			session = tbc.getDmtAdmin().getSession(ApplicationConstants.OSGI_APPLICATION,
+					DmtSession.LOCK_TYPE_SHARED);
+
+			tbc
+					.assertTrue(
+							"Asserts if $/Application/<app_id>/Valid is a valid node",
+							session
+									.isNodeUri(ApplicationConstants.OSGI_APPLICATION_APPID_VALID));
+
+			MetaNode metaNode = session
+					.getMetaNode(ApplicationConstants.OSGI_APPLICATION_APPID_VALID);
+
+			tbc.assertEquals(
+					"Asserts $/Application/<app_id>/Valid metanode scope",
+					MetaNode.PERMANENT, metaNode.getScope());
+			tbc.assertEquals(
+					"Asserts $/Application/<app_id>/Valid metanode format",
+					DmtData.FORMAT_BOOLEAN, metaNode.getFormat());
+			tbc.assertTrue(
+					"Asserts $/Application/<app_id>/Valid metanode cardinality",
+					!metaNode.isZeroOccurrenceAllowed()
+							&& metaNode.getMaxOccurrence() == 1);
+			tbc.assertTrue("Asserts $/Application/<app_id>/Valid metanode GET",
+					metaNode.can(MetaNode.CMD_GET));
+			tbc
+					.assertTrue("Asserting the value of $/Application/<app_id>/Valid",							
+							session
+									.getNodeValue(ApplicationConstants.OSGI_APPLICATION_APPID_VALID).getBoolean());
+		} catch (Exception e) {
+			tbc.fail(MessagesConstants.getMessage(
+					MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e
+							.getClass().getName() }));
+		} finally {
+			tbc.closeSession(session);
+		}
+	}	
+	
+	/**
+	 * This method asserts that when the ApplicationDescriptor is unregistered, the 
+	 * $/Application/<app_id>/Valid is set to false.
+	 * 
+	 * @spec 3.5.1 Applications Descriptors
+	 */
+	private void testTreeStructure049() {
+		tbc.log("#testTreeStructure049");
+		DmtSession session = null;
+		ScheduledApplication sa = null;
+		try {
+			session = tbc.getDmtAdmin().getSession(ApplicationConstants.OSGI_APPLICATION,
+					DmtSession.LOCK_TYPE_SHARED);
+
+			tbc
+					.assertTrue(
+							"Asserts if $/Application/<app_id>/Valid is a valid node",
+							session
+									.isNodeUri(ApplicationConstants.OSGI_APPLICATION_APPID_VALID));
+
+			sa = tbc.getAppDescriptor().schedule(null, null, ApplicationConstants.TIMER_EVENT, ApplicationConstants.EVENT_FILTER, true);
+			
+			tbc.unregisterDescriptor();
+
+			tbc
+					.assertTrue("Asserting the value of $/Application/<app_id>/Valid",							
+							!session
+									.getNodeValue(ApplicationConstants.OSGI_APPLICATION_APPID_VALID).getBoolean());
+		} catch (Exception e) {
+			tbc.fail(MessagesConstants.getMessage(
+					MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e
+							.getClass().getName() }));
+		} finally {
+			sa.remove();
+			tbc.installDescriptor();
+			tbc.closeSession(session);
+		}
+	}	
+	
+	/**
+	 * This method asserts that when the ApplicationDescriptor is unregistered and
+	 * still exist a ScheduledApplication, the node $/Application/<app_id>/Valid is 
+	 * not removed and returns an empty value for every nodes except Valid, 
+	 * ApplicationId and Schedules.
+	 * 
+	 * @spec 3.5.1 Applications Descriptors
+	 */
+	private void testTreeStructure050() {
+		tbc.log("#testTreeStructure050");
+		DmtSession session = null;
+		ScheduledApplication sa = null;
+		try {
+			session = tbc.getDmtAdmin().getSession(ApplicationConstants.OSGI_APPLICATION,
+					DmtSession.LOCK_TYPE_SHARED);
+
+			tbc
+					.assertTrue(
+							"Asserts if $/Application/<app_id>/Valid is a valid node",
+							session
+									.isNodeUri(ApplicationConstants.OSGI_APPLICATION_APPID_VALID));
+
+			sa = tbc.getAppDescriptor().schedule(null, null, ApplicationConstants.TIMER_EVENT, ApplicationConstants.EVENT_FILTER, true);
+			
+			tbc.unregisterDescriptor();
+
+			tbc
+					.assertEquals("Asserting the value of $/Application/<app_id>/Name", "",														
+							session
+									.getNodeValue(ApplicationConstants.OSGI_APPLICATION_APPID_NAME).getString());
+			
+			tbc
+			.assertTrue("Asserting the value of $/Application/<app_id>/ApplicationID", session
+							.getNodeValue(ApplicationConstants.OSGI_APPLICATION_APPID_NAME).getString().equals(""));
+			
+			tbc
+			.assertEquals("Asserting the value of $/Application/<app_id>/IconURI", "",														
+					session
+							.getNodeValue(ApplicationConstants.OSGI_APPLICATION_APPID_ICONURI).getString());
+			
+			if (session.isNodeUri(ApplicationConstants.OSGI_APPLICATION_APPID_VENDOR)) {
+
+				tbc.assertEquals("Asserting the value of $/Application/<app_id>/Vendor",
+								"", session.getNodeValue(ApplicationConstants.OSGI_APPLICATION_APPID_VENDOR).getString());
+
+			}
+			
+			if (session.isNodeUri(ApplicationConstants.OSGI_APPLICATION_APPID_VERSION)) {
+				tbc
+					.assertEquals("Asserting the value of $/Application/<app_id>/Version", "",														
+							session
+								.getNodeValue(ApplicationConstants.OSGI_APPLICATION_APPID_VERSION).getString());
+			}
+			
+			tbc
+			.assertTrue("Asserting the value of $/Application/<app_id>/Locked", !session
+							.getNodeValue(ApplicationConstants.OSGI_APPLICATION_APPID_LOCKED).getBoolean());
+			
+			tbc
+			.assertEquals("Asserting the value of $/Application/<app_id>/ContainerID", "",														
+					session
+							.getNodeValue(ApplicationConstants.OSGI_APPLICATION_APPID_CONTAINERID).getString());
+			
+			tbc
+			.assertEquals("Asserting the value of $/Application/<app_id>/Location", "",														
+					session
+							.getNodeValue(ApplicationConstants.OSGI_APPLICATION_APPID_LOCATION).getString());
+			
+		} catch (Exception e) {
+			tbc.fail(MessagesConstants.getMessage(
+					MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e
+							.getClass().getName() }));
+		} finally {
+			sa.remove();
+			tbc.installDescriptor();
+			tbc.closeSession(session);
+		}
+	}
+	
+	/**
+	 * This method asserts that after removing the schedules, the 
+	 * $/Application/<app_id> must be removed.
+	 * 
+	 * @spec 3.5.1 Applications Descriptors
+	 */
+	private void testTreeStructure051() {
+		tbc.log("#testTreeStructure051");
+		DmtSession session = null;
+		ScheduledApplication sa = null;
+		try {
+			session = tbc.getDmtAdmin().getSession(ApplicationConstants.OSGI_APPLICATION,
+					DmtSession.LOCK_TYPE_SHARED);
+
+			tbc
+					.assertTrue(
+							"Asserts if $/Application/<app_id>/Valid is a valid node",
+							session
+									.isNodeUri(ApplicationConstants.OSGI_APPLICATION_APPID_VALID));
+
+			sa = tbc.getAppDescriptor().schedule(null, null, ApplicationConstants.TIMER_EVENT, ApplicationConstants.EVENT_FILTER, true);
+			
+			tbc.unregisterDescriptor();
+			
+			sa.remove();
+			
+			while (tbc.getScheduledApplication() != null) {
+				
+			}
+
+			tbc
+			.assertTrue(
+					"Asserts if $/Application/<app_id>/Valid is a valid node",
+					!session
+							.isNodeUri(ApplicationConstants.OSGI_APPLICATION_APPID_VALID));
+						
+		} catch (Exception e) {
+			tbc.fail(MessagesConstants.getMessage(
+					MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e
+							.getClass().getName() }));
+		} finally {			
+			tbc.installDescriptor();
+			tbc.closeSession(session);
+		}
+	}	
+		
 	private void updateLaunchIdConstants(String value) {	
 	    ApplicationConstants.OSGI_APPLICATION_APPID_OPERATIONS_LAUNCH_LAUNCHID = ApplicationConstants.OSGI_APPLICATION_APPID_OPERATIONS_LAUNCH + value;
 	    ApplicationConstants.OSGI_APPLICATION_APPID_OPERATIONS_LAUNCH_LAUNCHID_RESULT = ApplicationConstants.OSGI_APPLICATION_APPID_OPERATIONS_LAUNCH_LAUNCHID + "/Result";
