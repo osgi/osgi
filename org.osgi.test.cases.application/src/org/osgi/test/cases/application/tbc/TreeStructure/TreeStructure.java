@@ -120,6 +120,7 @@ public class TreeStructure {
 		testTreeStructure049();
 		testTreeStructure050();
 		testTreeStructure051();
+		testTreeStructure052();
 	}
 
 	/**
@@ -3033,7 +3034,48 @@ public class TreeStructure {
 			tbc.installDescriptor();
 			tbc.closeSession(session);
 		}
-	}	
+	}
+    
+    /**
+     * This method validates $/Application/<app_id>/Schedules/<schedule_id>/EventFilter
+     * according to Table 3.9. If the default value of this node is empty, then
+     * an empty string must be converted to a null object in the associated
+     * method call.
+     * 
+     * @spec 3.5.7 Scheduling applications
+     */
+    private void testTreeStructure052() {
+        tbc.log("#testTreeStructure052");
+        DmtSession session = null;
+        ScheduledApplication sa = null;
+        try {
+            session = tbc.getDmtAdmin().getSession(ApplicationConstants.OSGI_APPLICATION,
+                    DmtSession.LOCK_TYPE_EXCLUSIVE);
+            
+            sa = tbc.getAppDescriptor().schedule("temp", null, ApplicationConstants.TIMER_EVENT, null, true);
+
+            updateScheduleIdConstants("temp");
+
+            tbc.assertTrue(
+                            "Asserts if $/Application/<app_id>/Schedules/<schedule_id>/EventFilter is a valid node",
+                            session.isNodeUri(ApplicationConstants.OSGI_APPLICATION_APPID_SCHEDULES_ID_EVENTFILTER));
+
+            // asserting the default value of this node is empty
+            tbc.assertEquals("Asserting if the default value is an empty string.",
+                            "",session.getNodeValue(
+                            ApplicationConstants.OSGI_APPLICATION_APPID_SCHEDULES_ID_EVENTFILTER).getString());
+            
+            
+            // asserts empty string must be converted to a null object
+            tbc.assertNull("An empty string must be converted to a null object", sa.getEventFilter());
+
+        } catch (Exception e) {
+            tbc.fail(MessagesConstants.getMessage(
+                    MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }));
+        } finally {
+            tbc.cleanUp(session,new String[] { ApplicationConstants.OSGI_APPLICATION_APPID_SCHEDULES_ID });
+        }
+    }   
 		
 	private void updateLaunchIdConstants(String value) {	
 	    ApplicationConstants.OSGI_APPLICATION_APPID_OPERATIONS_LAUNCH_LAUNCHID = ApplicationConstants.OSGI_APPLICATION_APPID_OPERATIONS_LAUNCH + value;
