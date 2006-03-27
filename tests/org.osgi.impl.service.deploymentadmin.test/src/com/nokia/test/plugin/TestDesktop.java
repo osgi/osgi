@@ -17,9 +17,12 @@ import org.osgi.service.dmt.DmtSession;
 
 public class TestDesktop extends Frame implements ActionListener {
     
-    private String ROOT = "./OSGi/Deployment";
-    private String TEST_FILE = "../../org.osgi.impl.service.deploymentadmin.test/" +
-    		"DmtPluginTest.txt";
+    private static final String TEST_ROOT_PROPERTY = "com.nokia.test.plugin.root"; 
+    private static final String TEST_FILE_PROPERTY = "com.nokia.test.plugin.file"; 
+    
+    private static final String TEST_ROOT_DEFAULT = "./OSGi/Deployment";
+    private static final String TEST_FILE_DEFAULT = 
+        "../../org.osgi.impl.service.deploymentadmin.test/DmtPluginTest.txt";
 
     private Panel pa_left = new Panel();
     private Panel pa_right = new Panel();
@@ -67,9 +70,15 @@ public class TestDesktop extends Frame implements ActionListener {
     private String lastCommand;
     private String lastValue;
     
+    private String root;
+    private String testFile;
+    
     public TestDesktop(DmtAdmin admin) throws Exception {
+        root     = System.getProperty(TEST_ROOT_PROPERTY, TEST_ROOT_DEFAULT);
+        testFile = System.getProperty(TEST_FILE_PROPERTY, TEST_FILE_DEFAULT);
+        
         this.admin = admin;
-        session = admin.getSession(ROOT, DmtSession.LOCK_TYPE_ATOMIC);
+        session = admin.getSession(root, DmtSession.LOCK_TYPE_ATOMIC);
         setLayout(new GridLayout(1, 0));
         addWindowListener(new WindowAdapter() {
             	public void windowClosing(WindowEvent e) {
@@ -87,7 +96,7 @@ public class TestDesktop extends Frame implements ActionListener {
         pa_right.add(pa_right_top);
         pa_right.add(pa_right_bottom);
         
-        tf_uri.setText(ROOT);
+        tf_uri.setText(root);
         pa_right_top.add(tf_uri);
         pa_right_top.add(tf_result);
         
@@ -218,11 +227,11 @@ public class TestDesktop extends Frame implements ActionListener {
         } else if (REOPEN.equals(acc)) {
                 lastCommand = acc;
                 session.close();
-                session = admin.getSession(ROOT, DmtSession.LOCK_TYPE_ATOMIC);
+                session = admin.getSession(root, DmtSession.LOCK_TYPE_ATOMIC);
         } else if (MAKE_TEST.equals(acc)) {
             if (null == lastCommand)
                 return null;
-            File f = new File(TEST_FILE);
+            File f = new File(testFile);
             if (!f.exists())
                 f.createNewFile();
             PrintWriter pw = new PrintWriter(new FileWriter(f, true));
@@ -248,7 +257,7 @@ public class TestDesktop extends Frame implements ActionListener {
     }
     
     private void runTests() throws IOException {
-        File f = new File(TEST_FILE);
+        File f = new File(testFile);
         BufferedReader r = new BufferedReader(new FileReader(f));
         String line = r.readLine();
         int passedC = 0;
@@ -340,5 +349,4 @@ public class TestDesktop extends Frame implements ActionListener {
         }
         return value;
     }
-
 }
