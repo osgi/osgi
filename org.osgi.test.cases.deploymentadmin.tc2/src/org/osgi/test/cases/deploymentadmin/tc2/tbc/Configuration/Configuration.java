@@ -123,9 +123,7 @@ public class Configuration {
 			tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { 
 					e.getClass().getName() }));
 		} finally {
-			if (dp!=null) {
-				tbc.uninstall(dp);
-			}
+			tbc.uninstall(dp);
 		}
 	}
 	
@@ -155,9 +153,7 @@ public class Configuration {
 			tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { 
 					e.getClass().getName() }));
 		} finally {
-			if (dp!=null) {
-				tbc.uninstall(dp);
-			}
+			tbc.uninstall(dp);
 		}
 	}
 	
@@ -180,6 +176,8 @@ public class Configuration {
 		} catch (Exception e) {
 			tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { 
 					e.getClass().getName() }));
+		} finally {
+			tbc.uninstall(dp);
 		}
 
 	}
@@ -205,6 +203,7 @@ public class Configuration {
 			if (info!=null) {
 				info.delete();
 			}
+			tbc.uninstall(dp);
 		}
 	}
 	
