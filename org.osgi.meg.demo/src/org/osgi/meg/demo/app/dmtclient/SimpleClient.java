@@ -323,6 +323,14 @@ public class SimpleClient implements ManagedService, ManagedServiceFactory,
             System.out.println("Created node: ./OSGi/Log/interior");
             */
 
+            System.out.println("Node types for management objects:");
+            System.out.println("OSGi: " + session.getNodeType("./OSGi"));
+            String[] roots = new String[] { "Deployment", "Policy", 
+                    "Configuration", "Log", "Monitor", "Application" };
+            for(int i = 0; i < roots.length; i++)
+                System.out.println(roots[i] + ": " + 
+                        session.getNodeType("./OSGi/" + roots[i]));
+                
             session.close();
             System.out.println("Closed session.");
 
