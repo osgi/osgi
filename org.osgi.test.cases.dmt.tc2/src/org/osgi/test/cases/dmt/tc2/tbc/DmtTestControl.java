@@ -412,6 +412,11 @@ public class DmtTestControl extends DefaultTestBundleControl {
 	
 	public void unprepare() {
 		uninstallHandler();
+        synchronized (permissionWorker) {
+        	permissionWorker.setRunning(false);
+        	permissionWorker.notifyAll();
+        }
+
 	}
 
 
