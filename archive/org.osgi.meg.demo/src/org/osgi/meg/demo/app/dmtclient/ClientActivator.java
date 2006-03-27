@@ -29,7 +29,7 @@ import org.osgi.service.monitor.Monitorable;
 
 public class ClientActivator implements BundleActivator 
 {
-    static final String SERVICE_PID = "meg.test.monitorable";
+    static final String SERVICE_PID = "org.osgi.meg.demo.app.dmtclient";
 
     private BundleContext bc;
     private ServiceReference factoryRef;
