@@ -385,8 +385,14 @@ public class InstallAndActivate implements TestInterface {
     private void testInstallAndActivate005() {
     	tbc.log("#testInstallAndActivate005");
     	DmtSession session = openDefaultSession();
+    	
     	try {
-    		assertResultCode(session, DeploymentmoConstants.NOT_ACCEPTABLE_CONTENT, 404);
+            if (session.isNodeUri(DeploymentmoConstants.getDeliveredOperationsInstallAndActivate(DeploymentmoConstants.NOT_ACCEPTABLE_CONTENT))) {
+				assertResultCode(session,DeploymentmoConstants.NOT_ACCEPTABLE_CONTENT, 404);
+			} else {
+				tbc.log("#Deployment artifact file ignored in the Inventory Tree");
+			}
+
         } finally {
         	tbc.closeSession(session);
         }
