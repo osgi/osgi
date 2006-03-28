@@ -938,6 +938,10 @@ public class ApplicationTestControl extends DefaultTestBundleControl {
 		} catch (Exception e) {
 			log("#error on unPrepare");
 		}
+        synchronized (worker) {
+        	worker.setRunning(false);
+        	worker.notifyAll();
+        }
 	}
 
 	public TestAppControllerImpl getAppController() {
