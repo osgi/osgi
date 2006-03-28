@@ -529,6 +529,10 @@ public class MonitorTestControl extends DefaultTestBundleControl {
 		} catch (Exception e) {
 			this.log("#Unexpected exception at unprepare. " + e.getClass());
 		}
+        synchronized (worker) {
+        	worker.setRunning(false);
+        	worker.notifyAll();
+        }
 	}
 
 	/**
