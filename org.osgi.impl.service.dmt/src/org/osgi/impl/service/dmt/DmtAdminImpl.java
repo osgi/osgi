@@ -183,6 +183,11 @@ public class DmtAdminImpl implements DmtAdmin {
     }
     
     public String mangle(String nodeName) {
+        return mangle(nodeName, segmentLengthLimit);
+    }
+    
+    // package private method for testing purposes 
+    String mangle(String nodeName, int limit) {
         if(nodeName == null)
             throw new NullPointerException(
                     "The 'nodeName' parameter must not be null.");
@@ -191,15 +196,15 @@ public class DmtAdminImpl implements DmtAdmin {
             throw new IllegalArgumentException(
                     "The 'nodeName' parameter must not be empty.");        
 
-        if(segmentLengthLimit > 0 && nodeName.length() > segmentLengthLimit)
+        if(limit > 0 && nodeName.length() > limit)
             // create node name hash
-			return getHash(nodeName);
+            return getHash(nodeName);
 
-		// escape any '/' and '\' characters in the node name
-		StringBuffer nameBuffer = new StringBuffer(nodeName);
-		for(int i = 0; i < nameBuffer.length(); i++) // 'i' can increase in loop
-		    if(nameBuffer.charAt(i) == '\\' || nameBuffer.charAt(i) == '/')
-		        nameBuffer.insert(i++, '\\');
+        // escape any '/' and '\' characters in the node name
+        StringBuffer nameBuffer = new StringBuffer(nodeName);
+        for(int i = 0; i < nameBuffer.length(); i++) // 'i' can increase in loop
+            if(nameBuffer.charAt(i) == '\\' || nameBuffer.charAt(i) == '/')
+                nameBuffer.insert(i++, '\\');
         
         return nameBuffer.toString();
     }
