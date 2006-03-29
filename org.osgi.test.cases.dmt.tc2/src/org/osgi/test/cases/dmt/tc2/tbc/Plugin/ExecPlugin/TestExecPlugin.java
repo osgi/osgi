@@ -37,6 +37,7 @@
 package org.osgi.test.cases.dmt.tc2.tbc.Plugin.ExecPlugin;
 
 import java.util.Date;
+import java.util.Vector;
 
 import org.osgi.service.dmt.DmtData;
 import org.osgi.service.dmt.DmtException;
@@ -69,7 +70,13 @@ public class TestExecPlugin implements DataPlugin, ExecPlugin, TransactionalData
     private static boolean exceptionAtCreateInteriorNode;
     
 	private static boolean allUriIsExistent = false;
-
+	
+	private DmtData dataString = new DmtData("");
+	
+	private DmtData dataComplex = new DmtData(new Vector());
+	
+	public static final String[] CHILDREN_NAMES = new String[] { "leaf_b","leaf_a" };
+	
 	public TestExecPlugin(DmtTestControl tbc) {
 		this.tbc = tbc;
 
@@ -143,7 +150,8 @@ public class TestExecPlugin implements DataPlugin, ExecPlugin, TransactionalData
 				|| nodeName.equals(TestExecPluginActivator.INTERIOR_NODE2)
 				|| nodeName.equals(TestExecPluginActivator.CHILD_INTERIOR_NODE)
 				|| nodeName.equals(TestExecPluginActivator.LEAF_NODE)
-				|| nodeName.equals(TestExecPluginActivator.INTERIOR_NODE_WITH_NULL_VALUES)) {
+				|| nodeName.equals(TestExecPluginActivator.INTERIOR_NODE_WITH_NULL_VALUES)
+				|| nodeName.startsWith(TestExecPluginActivator.INTERIOR_NODE_WITH_TWO_CHILDREN)) {
 
 			return true;
 		} else {
@@ -152,7 +160,11 @@ public class TestExecPlugin implements DataPlugin, ExecPlugin, TransactionalData
 	}
 
 	public DmtData getNodeValue(String[] nodeUri) throws DmtException {
-		return new DmtData("");
+		if (tbc.mangleUri(nodeUri).equals(TestExecPluginActivator.INTERIOR_NODE)) {
+			return dataComplex;
+		} else {
+			return dataString;
+		}
 	}
 
 	public String getNodeTitle(String[] nodeUri) throws DmtException {
@@ -180,6 +192,8 @@ public class TestExecPlugin implements DataPlugin, ExecPlugin, TransactionalData
 		if (nodeName.equals(TestExecPluginActivator.INTERIOR_NODE_WITH_NULL_VALUES)) {
 			return new String[] { TestExecPluginActivator.INTERIOR_NODE, null,
 					TestExecPluginActivator.INTERIOR_NODE2, null };
+		} else if (nodeName.equals(TestExecPluginActivator.INTERIOR_NODE_WITH_TWO_CHILDREN)){
+			return CHILDREN_NAMES;
 		} else {
 			return null;
 		}
@@ -204,7 +218,7 @@ public class TestExecPlugin implements DataPlugin, ExecPlugin, TransactionalData
 	
 	public boolean isLeafNode(String[] nodeUri) throws DmtException {
 		String nodeName = tbc.mangleUri(nodeUri);
-		if (nodeName.equals(TestExecPluginActivator.LEAF_NODE)) {
+		if (nodeName.equals(TestExecPluginActivator.LEAF_NODE) || nodeName.startsWith(TestExecPluginActivator.INTERIOR_NODE_WITH_TWO_CHILDREN + "/")) { 
 			return true;
 		} else {
 			return false;

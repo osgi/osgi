@@ -74,6 +74,8 @@ public class TestExecPluginActivator implements BundleActivator {
 	
 	public static final String INTERIOR_NODE_WITH_NULL_VALUES = ROOT + "/nullValues";
 	
+	public static final String INTERIOR_NODE_WITH_TWO_CHILDREN = ROOT + "/two_children";
+	
 	public static final String CHILD_INTERIOR_NODE = INTERIOR_NODE +"/child";
 	
 	public static final String INEXISTENT_LEAF_NODE_NAME = INTERIOR_NODE_NAME + "/inexistent_leaf";

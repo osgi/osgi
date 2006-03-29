@@ -177,7 +177,7 @@ public class DmtTestControl extends DefaultTestBundleControl {
 	}
 	public void setPermissions(PermissionInfo[] permissions) {
 		PermissionInfo[] defaults = new PermissionInfo[] {
-			new PermissionInfo(TopicPermission.class.getName(), "org/osgi/service/dmt/*", TopicPermission.PUBLISH),
+			new PermissionInfo(TopicPermission.class.getName(), "org/osgi/service/dmt/*", TopicPermission.PUBLISH +","+TopicPermission.SUBSCRIBE),
 			new PermissionInfo(PackagePermission.class.getName(), "*", "EXPORT, IMPORT"),
 			new PermissionInfo(ServicePermission.class.getName(), "*",
 					ServicePermission.GET + ","+ ServicePermission.REGISTER),

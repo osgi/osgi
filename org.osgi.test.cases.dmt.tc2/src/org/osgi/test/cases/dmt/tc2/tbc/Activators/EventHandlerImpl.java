@@ -40,6 +40,7 @@ package org.osgi.test.cases.dmt.tc2.tbc.Activators;
 
 import org.osgi.service.event.Event;
 import org.osgi.service.event.EventHandler;
+import org.osgi.test.cases.dmt.tc2.tbc.DmtConstants;
 import org.osgi.test.cases.dmt.tc2.tbc.DmtTestControl;
 import org.osgi.test.cases.dmt.tc2.tbc.Plugin.ExecPlugin.TestExecPluginActivator;
 
@@ -49,24 +50,6 @@ import org.osgi.test.cases.dmt.tc2.tbc.Plugin.ExecPlugin.TestExecPluginActivator
 public class EventHandlerImpl implements EventHandler {
 
 	private static int EVENT_COUNT = 0;
-
-	private static final String ADDED = "org/osgi/service/dmt/ADDED";
-
-	private static final String DELETED = "org/osgi/service/dmt/DELETED";
-
-	private static final String REPLACED = "org/osgi/service/dmt/REPLACED";
-
-	private static final String RENAMED = "org/osgi/service/dmt/RENAMED";
-
-	private static final String COPIED = "org/osgi/service/dmt/COPIED";
-
-	private static final String SESSION_ID = "session.id";
-
-	private static final String NODES = "nodes";
-
-	private static final String NEWNODES = "newnodes";
-
-	private static final String TOPIC = "event.topics";
 
 	private static boolean addedInexistentNode = false;
 
@@ -113,27 +96,27 @@ public class EventHandlerImpl implements EventHandler {
 
 		// validate the values in properties
 		for (int z = 0; z < properties.length; z++) {
-			if (properties[z].equals(SESSION_ID)) {
+			if (properties[z].equals(DmtConstants.SESSION_ID)) {
 				isSessionId = true;
-			} else if (properties[z].equals(NODES)) {
+			} else if (properties[z].equals(DmtConstants.NODES)) {
 				isNodes = true;
-			} else if (properties[z].equals(TOPIC)) {
+			} else if (properties[z].equals(DmtConstants.TOPIC)) {
 				isTopic = true;
 			}
 		}
 		try { 
-		    sessionId = Integer.parseInt(event.getProperty(SESSION_ID).toString());
+		    sessionId = Integer.parseInt(event.getProperty(DmtConstants.SESSION_ID).toString());
 		} catch (Exception e) {
 		    sessionId=-1;
 		}
 		
 		if (isMandatoryProperties()) {
 		    
-			String topic = (String) event.getProperty(TOPIC);
-			String[] nodes = (String[]) event.getProperty(NODES);
+			String topic = (String) event.getProperty(DmtConstants.TOPIC);
+			String[] nodes = (String[]) event.getProperty(DmtConstants.NODES);
 			String[] newNodes = null;
 			for (int i = 0; i < nodes.length; i++) {
-				if (topic.equals(ADDED)) {
+				if (topic.equals(DmtConstants.ADDED)) {
 					if (nodes[i].equals(TestExecPluginActivator.INEXISTENT_NODE)) {
 						addedInexistentNode = true;
 					}
@@ -145,7 +128,7 @@ public class EventHandlerImpl implements EventHandler {
                     }
 
 
-				} else if (topic.equals(DELETED)) {
+				} else if (topic.equals(DmtConstants.DELETED)) {
 					if (nodes[i].equals(TestExecPluginActivator.INTERIOR_NODE)) {
 						deletedInteriorNode = true;
 					}
@@ -157,7 +140,7 @@ public class EventHandlerImpl implements EventHandler {
                     }
 
 
-				} else if (topic.equals(REPLACED)) {
+				} else if (topic.equals(DmtConstants.REPLACED)) {
 					if (nodes[i].equals(TestExecPluginActivator.LEAF_NODE)) {
 						replacedLeafNode = true;
 					}
@@ -167,8 +150,8 @@ public class EventHandlerImpl implements EventHandler {
                     if (EVENT_COUNT != 1) {
                         orderedExclusive= false;
                     }
-				} else if (topic.equals(RENAMED)) {
-					newNodes = (String[]) event.getProperty(NEWNODES);
+				} else if (topic.equals(DmtConstants.RENAMED)) {
+					newNodes = (String[]) event.getProperty(DmtConstants.NEWNODES);
 					isNewNodes = true;
 					if (nodes[i].equals(TestExecPluginActivator.INTERIOR_NODE)) {
 						renamedInteriorNode = true;
@@ -184,8 +167,8 @@ public class EventHandlerImpl implements EventHandler {
                         orderedExclusive = false;
                     }
 
-				} else if (topic.equals(COPIED)) {
-					newNodes = (String[]) event.getProperty(NEWNODES);
+				} else if (topic.equals(DmtConstants.COPIED)) {
+					newNodes = (String[]) event.getProperty(DmtConstants.NEWNODES);
 					isNewNodes = true;		
 					if (nodes[i].equals(TestExecPluginActivator.INTERIOR_NODE)) {
 						copiedFromInteriorNode = true;

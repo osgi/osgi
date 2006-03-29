@@ -66,6 +66,27 @@ public class DmtConstants {
 	public static final String ALL_NODES = "./*";
     
 	public static final String DDF = "http://www.openmobilealliance.org/tech/DTD/OMA-SyncML-DMDDF-V1_2_0.dtd";
+	
+	//Events constants
+	public static final String ADDED = "org/osgi/service/dmt/ADDED";
+
+	public static final String DELETED = "org/osgi/service/dmt/DELETED";
+
+	public static final String REPLACED = "org/osgi/service/dmt/REPLACED";
+
+	public static final String RENAMED = "org/osgi/service/dmt/RENAMED";
+
+	public static final String COPIED = "org/osgi/service/dmt/COPIED";
+
+	public static final String SESSION_ID = "session.id";
+
+	public static final String NODES = "nodes";
+
+	public static final String NEWNODES = "newnodes";
+
+	public static final String TOPIC = "event.topics";
+	
+	//--
 
 	public static final int WAIT_TIME;
 
@@ -172,5 +193,9 @@ public class DmtConstants {
         }
         return null;
     }
+
+
+
+	
 
 }

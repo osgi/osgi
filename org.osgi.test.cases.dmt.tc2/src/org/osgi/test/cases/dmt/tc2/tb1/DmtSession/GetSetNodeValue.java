@@ -39,16 +39,23 @@
 
 package org.osgi.test.cases.dmt.tc2.tb1.DmtSession;
 
+import java.util.Hashtable;
+import java.util.Vector;
+
+import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.dmt.Acl;
 import org.osgi.service.dmt.DmtData;
 import org.osgi.service.dmt.DmtException;
 import org.osgi.service.dmt.DmtSession;
 import org.osgi.service.dmt.security.DmtPermission;
 import org.osgi.service.dmt.security.DmtPrincipalPermission;
+import org.osgi.service.event.Event;
+import org.osgi.service.event.EventHandler;
 import org.osgi.service.permissionadmin.PermissionInfo;
 import org.osgi.test.cases.dmt.tc2.tbc.DmtConstants;
 import org.osgi.test.cases.dmt.tc2.tbc.DmtTestControl;
 import org.osgi.test.cases.dmt.tc2.tbc.TestInterface;
+import org.osgi.test.cases.dmt.tc2.tbc.Plugin.ExecPlugin.TestExecPlugin;
 import org.osgi.test.cases.dmt.tc2.tbc.Plugin.ExecPlugin.TestExecPluginActivator;
 import org.osgi.test.cases.dmt.tc2.tbc.Plugin.NonAtomic.TestNonAtomicPluginActivator;
 import org.osgi.test.cases.dmt.tc2.tbc.Plugin.ReadOnly.TestReadOnlyPluginActivator;
@@ -87,6 +94,7 @@ public class GetSetNodeValue implements TestInterface {
 		testGetSetNodeValue015();
 		testGetSetNodeValue016();
 		testGetSetNodeValue017();
+		testGetSetNodeValue018();
 	}
     
     private void prepare() {
@@ -142,8 +150,7 @@ public class GetSetNodeValue implements TestInterface {
 	}
 
 	/**
-	 * This method asserts that DmtException.NODE_NOT_FOUND is thrown
-	 * if nodeUri is not a leaf node 
+	 * This method asserts that no Exception is thrown if nodeUri is an interior node
 	 * 
 	 * @spec DmtSession.setNodeValue(String,DmtData)
 	 */
@@ -152,22 +159,16 @@ public class GetSetNodeValue implements TestInterface {
 		try {
 			tbc.log("#testGetSetNodeValue003");
 			session = tbc.getDmtAdmin().getSession(".",DmtSession.LOCK_TYPE_EXCLUSIVE);
-			session.setNodeValue(TestExecPluginActivator.INTERIOR_NODE, dmtData);
-			tbc.failException("#", DmtException.class);
-		} catch (DmtException e) {
-			tbc.assertEquals(
-					"Asserting that DmtException code is COMMAND_NOT_ALLOWED",
-					DmtException.COMMAND_NOT_ALLOWED, e.getCode());
+			session.setNodeValue(TestExecPluginActivator.INTERIOR_NODE, new DmtData(new Vector()));
+			tbc.pass("Asserts that no Exception is thrown if nodeUri is an interior node and DmtSession.setNodeValue(String,DmtData) is called");
 		} catch (Exception e) {
-			tbc.fail("Expected " + DmtException.class.getName() + " but was "
-					+ e.getClass().getName());
+			tbc.fail("Unexpected exception:" + e.getClass().getName());
 		} finally {
 			tbc.closeSession(session);
 		}
 	}
 	/**
-	 * This method asserts that DmtException.COMMAND_NOT_ALLOWED is thrown
-	 * if nodeUri is not a leaf node 
+	 * This method asserts that no Exception is thrown if nodeUri is an interior node
 	 * 
 	 * @spec DmtSession.getNodeValue(String)
 	 */
@@ -177,14 +178,9 @@ public class GetSetNodeValue implements TestInterface {
 			tbc.log("#testGetSetNodeValue004");
 			session = tbc.getDmtAdmin().getSession(".",DmtSession.LOCK_TYPE_EXCLUSIVE);
 			session.getNodeValue(TestExecPluginActivator.INTERIOR_NODE);
-			tbc.failException("#", DmtException.class);
-		} catch (DmtException e) {
-			tbc.assertEquals(
-					"Asserting that DmtException code is COMMAND_NOT_ALLOWED",
-					DmtException.COMMAND_NOT_ALLOWED, e.getCode());
+			tbc.pass("Asserts that no Exception is thrown if nodeUri is an interior node and DmtSession.getNodeValue(String) is called");
 		} catch (Exception e) {
-			tbc.fail("Expected " + DmtException.class.getName() + " but was "
-					+ e.getClass().getName());
+			tbc.fail("Unexpected exception:" + e.getClass().getName());
 		} finally {
 			tbc.closeSession(session);
 		}
@@ -239,7 +235,7 @@ public class GetSetNodeValue implements TestInterface {
 		}
 	}
 	/**
-	 * This method asserts that it is successfully executed  when the correct DmtPermission is set (Local)
+	 * This method asserts that it is successfully executed when the correct DmtPermission is set (Local)
 	 * 
 	 * @spec DmtSession.setNodeValue(String,DmtData)
 	 */
@@ -261,7 +257,7 @@ public class GetSetNodeValue implements TestInterface {
 		}
 	}
 	/**
-	 * This method asserts that it is successfully executed when the correct permission is assigned
+	 * This method asserts that it is successfully executed when the correct DmtPermission is set (Local)
 	 * 
 	 * @spec DmtSession.getNodeValue(String)
 	 */
@@ -511,5 +507,79 @@ public class GetSetNodeValue implements TestInterface {
 		} finally {
 			tbc.closeSession(session);
 		}
+	}
+	
+	
+	/**
+	 * This method asserts that a replaced interior node sends out events for 
+	 * each of its children in depth first order and node names sorted with 
+	 * Arrays.sort(String[]). 
+	 * 
+	 * @spec DmtSession.setNodeValue(String,DmtData)
+	 */
+	private void testGetSetNodeValue018() {
+		DmtSession session = null;
+		EventTest events = null;
+		ServiceRegistration servReg = null;
+		try {
+			tbc.log("#testGetSetNodeValue018");
+			
+			Hashtable ht = new Hashtable();
+			ht.put(org.osgi.service.event.EventConstants.EVENT_TOPIC, new String[] {"org/osgi/service/dmt/*"});
+			ht.put(org.osgi.service.event.EventConstants.EVENT_FILTER, "(nodes="+TestExecPluginActivator.INTERIOR_NODE_WITH_TWO_CHILDREN+ "/*)");
+			events = new EventTest(); 
+			servReg = tbc.getContext().registerService(EventHandler.class.getName(),events, ht);
+			
+			session = tbc.getDmtAdmin().getSession(".",DmtSession.LOCK_TYPE_ATOMIC);
+			session.setNodeValue(TestExecPluginActivator.INTERIOR_NODE_WITH_TWO_CHILDREN, new DmtData(new Vector()));
+			
+			session.commit();
+			synchronized (tbc) {
+				tbc.wait(DmtConstants.WAIT_TIME);
+			}
+			
+			tbc.assertTrue("Asserts that a replaced interior node sends out events for " +
+					"each of its children in depth first order and node names sorted with" +
+					" Arrays.sort(String[]). ", events.isSorted());
+			
+			
+		} catch (Exception e) {
+			tbc.fail("Unexpected exception:" + e.getClass().getName());
+		} finally {
+			tbc.closeSession(session);
+			if (servReg!=null) {
+				servReg.unregister();
+			}
+		}
+	}
+	
+	public class EventTest implements EventHandler {
+		private int count=0;
+		private String[] nodeNames = new String[2];
+		
+		public void handleEvent(Event event) {
+			String topic = (String) event.getProperty(DmtConstants.TOPIC);
+			String[] nodes = (String[]) event.getProperty(DmtConstants.NODES);
+			if (topic.equals(DmtConstants.REPLACED) && nodes.length==2) {
+					nodeNames[0] = nodes[0];
+					nodeNames[1] = nodes[1];
+					count++;
+				}
+
+		}
+
+		
+		public boolean isSorted() {
+			//The node names are must be sorted
+			String childA = (TestExecPluginActivator.INTERIOR_NODE_WITH_TWO_CHILDREN + "/" + TestExecPlugin.CHILDREN_NAMES[1]);
+			String childB = (TestExecPluginActivator.INTERIOR_NODE_WITH_TWO_CHILDREN + "/" + TestExecPlugin.CHILDREN_NAMES[0]);			
+			if (count==1 && childA.equals(nodeNames[0]) && 
+					childB.equals(nodeNames[1])) {
+				return true;
+			} else {
+				return false;
+			}
+		}
+		
 	}
 }
