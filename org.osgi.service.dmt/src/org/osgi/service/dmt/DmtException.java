@@ -70,8 +70,8 @@ public class DmtException extends Exception {
      * The requested command is not allowed on the target node.  This includes
      * the following situations:
      * <ul>
-     * <li>an interior node operation is requested for a leaf node, or vica
-     * versa (e.g. trying to retrieve the value of an interior node)
+     * <li>an interior node operation is requested for a leaf node, or vice
+     * versa (e.g. trying to retrieve the children of a leaf node)
      * <li>an attempt is made to create a node where the parent is a leaf node
      * <li>an attempt is made to rename or delete the root node
      * <li>a write operation (other than setting the ACL) is performed in a
@@ -94,6 +94,10 @@ public class DmtException extends Exception {
      * transactions.  Similarly, accessing the optional node properties (Title,
      * Timestamp, Version, Size) might not succeed if either the Dmt Admin 
      * implementation or the underlying plugin does not support the property.
+     * <p>
+     * When getting or setting values for interior nodes (an optional 
+     * optimization feature), a plugin can use this error code to indicate that 
+     * the given interior node does not support values.
      * <p>
      * This error code corresponds to the OMA DM response status code 406
      * &quot;Optional feature not supported&quot;.

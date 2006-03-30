@@ -1010,9 +1010,10 @@ public interface DmtSession {
     void renameNode(String nodeUri, String newName) throws DmtException;
 
     /**
-     * Set the value of a leaf node to its default as defined by the node's meta
-     * data. The method throws a <code>METADATA_MISMATCH</code> exception if
-     * there is no default defined.
+     * Set the value of a leaf or interior node to its default.  In case of leaf
+     * nodes the default can be defined by the node's <code>MetaNode</code>. The
+     * method throws a <code>METADATA_MISMATCH</code> exception if the node does
+     * not have a default value.
      * 
      * @param nodeUri the URI of the node
      * @throws DmtException with the following possible error codes:
@@ -1026,13 +1027,15 @@ public interface DmtSession {
      *         <li><code>PERMISSION_DENIED</code> if the session is associated
      *         with a principal and the ACL of the node does not allow the
      *         <code>Replace</code> operation for the associated principal
-     *         <li><code>COMMAND_NOT_ALLOWED</code> if the specified node is not
-     *         a leaf node, or in non-atomic sessions if the underlying plugin 
-     *         is read-only or does not support non-atomic writing 
+     *         <li><code>COMMAND_NOT_ALLOWED</code> in non-atomic sessions if 
+     *         the underlying plugin is read-only or does not support non-atomic
+     *         writing 
      *         <li><code>METADATA_MISMATCH</code> if the node is permanent or
      *         cannot be modified according to the meta-data (does not have the 
      *         <code>MetaNode.CMD_REPLACE</code> access type), or if there is no
      *         default value defined for this node
+     *         <li><code>FEATURE_NOT_SUPPORTED</code> if the specified node is
+     *         an interior node and does not support Java object values
      *         <li><code>TRANSACTION_ERROR</code> in an atomic session if the
      *         underlying plugin is read-only or does not support atomic writing
      *         <li><code>DATA_STORE_FAILURE</code> if an error occurred while
@@ -1082,14 +1085,16 @@ public interface DmtSession {
      *         <li><code>PERMISSION_DENIED</code> if the session is associated
      *         with a principal and the ACL of the node does not allow the
      *         <code>Replace</code> operation for the associated principal
-     *         <li><code>COMMAND_NOT_ALLOWED</code> if the specified node is not
-     *         a leaf node and does not support Java object values, or in
-     *         non-atomic sessions if the underlying plugin is read-only or does
-     *         not support non-atomic writing 
+     *         <li><code>COMMAND_NOT_ALLOWED</code> if the given data has
+     *         <code>FORMAT_NODE</code> format but the node is a leaf node (or
+     *         vice versa), or in non-atomic sessions if the underlying plugin
+     *         is read-only or does not support non-atomic writing 
      *         <li><code>METADATA_MISMATCH</code> if the node is permanent or
      *         cannot be modified according to the meta-data (does not have the 
      *         <code>MetaNode.CMD_REPLACE</code> access type), or if the given
      *         value does not conform to the meta-data value constraints
+     *         <li><code>FEATURE_NOT_SUPPORTED</code> if the specified node is
+     *         an interior node and does not support Java object values
      *         <li><code>TRANSACTION_ERROR</code> in an atomic session if the
      *         underlying plugin is read-only or does not support atomic writing
      *         <li><code>DATA_STORE_FAILURE</code> if an error occurred while
@@ -1487,11 +1492,11 @@ public interface DmtSession {
      *         <li><code>PERMISSION_DENIED</code> if the session is associated
      *         with a principal and the ACL of the node does not allow the
      *         <code>Get</code> operation for the associated principal
-     *         <li><code>COMMAND_NOT_ALLOWED</code> if the specified node is not
-     *         a leaf node and does not support Java object values
      *         <li><code>METADATA_MISMATCH</code> if the node value cannot be
      *         retrieved according to the meta-data (it does not have 
      *         <code>MetaNode.CMD_GET</code> access type)
+     *         <li><code>FEATURE_NOT_SUPPORTED</code> if the specified node is
+     *         an interior node and does not support Java object values
      *         <li><code>DATA_STORE_FAILURE</code> if an error occurred while
      *         accessing the data store
      *         <li><code>COMMAND_FAILED</code> if the URI is not within the
