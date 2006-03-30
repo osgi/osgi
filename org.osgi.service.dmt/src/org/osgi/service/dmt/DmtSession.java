@@ -1054,15 +1054,16 @@ public interface DmtSession {
     void setDefaultNodeValue(String nodeUri) throws DmtException;
 
     /**
-     * Set the value of a leaf or interior node. The format of the node is contained in the
-     * <code>DmtData</code> object. For an interior node, this format must be <code>FORMAT_NODE</code>
-     * and the value is a Java object. If the specified value is <code>null</code>,
-     * the default value is taken. In this case, if the node does not have a 
-     * default value, this method will throw a <code>DmtException</code> with 
-     * error code <code>METADATA_MISMATCH</code>. 
+     * Set the value of a leaf or interior node. The format of the node is
+     * contained in the <code>DmtData</code> object. For interior nodes, the
+     * format must be <code>FORMAT_NODE</code>, while for leaf nodes this
+     * format must not be used. 
      * <p>
-     * Nodes of <code>null</code> format can be set by using 
-     * {@link DmtData#NULL_VALUE} as second argument.
+     * If the specified value is <code>null</code>, the default value is taken. 
+     * In this case, if the node does not have a default value, this method will
+     * throw a <code>DmtException</code> with error code 
+     * <code>METADATA_MISMATCH</code>. Nodes of <code>null</code> format can be 
+     * set by using {@link DmtData#NULL_VALUE} as second argument.
      * <p/>
      * An Event of type REPLACE is sent out for a leaf node. A replaced interior
      * node sends out events for each of its children in depth first order
@@ -1082,8 +1083,9 @@ public interface DmtSession {
      *         with a principal and the ACL of the node does not allow the
      *         <code>Replace</code> operation for the associated principal
      *         <li><code>COMMAND_NOT_ALLOWED</code> if the specified node is not
-     *         a leaf node and does not support Java object values, or in non-atomic sessions if the underlying plugin 
-     *         is read-only or does not support non-atomic writing. 
+     *         a leaf node and does not support Java object values, or in
+     *         non-atomic sessions if the underlying plugin is read-only or does
+     *         not support non-atomic writing 
      *         <li><code>METADATA_MISMATCH</code> if the node is permanent or
      *         cannot be modified according to the meta-data (does not have the 
      *         <code>MetaNode.CMD_REPLACE</code> access type), or if the given
@@ -1486,8 +1488,7 @@ public interface DmtSession {
      *         with a principal and the ACL of the node does not allow the
      *         <code>Get</code> operation for the associated principal
      *         <li><code>COMMAND_NOT_ALLOWED</code> if the specified node is not
-     *         a leaf node or an interior node that does not support a 
-     *         complex value.
+     *         a leaf node and does not support Java object values
      *         <li><code>METADATA_MISMATCH</code> if the node value cannot be
      *         retrieved according to the meta-data (it does not have 
      *         <code>MetaNode.CMD_GET</code> access type)
