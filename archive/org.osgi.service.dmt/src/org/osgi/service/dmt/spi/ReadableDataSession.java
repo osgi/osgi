@@ -311,7 +311,7 @@ public interface ReadableDataSession {
     boolean isLeafNode(String[] nodePath) throws DmtException;
 
     /**
-     * Get the data contained in a leaf node.
+     * Get the data contained in a leaf or interior node.
      * 
      * @param nodePath the absolute path of the node to retrieve
      * @return the data of the leaf node, must not be <code>null</code>
@@ -321,6 +321,8 @@ public interface ReadableDataSession {
      *         to a non-existing node
      *         <li><code>METADATA_MISMATCH</code> if the information could not
      *         be retrieved because of meta-data restrictions
+     *         <li><code>FEATURE_NOT_SUPPORTED</code> if the specified node is
+     *         an interior node and does not support Java object values
      *         <li><code>DATA_STORE_FAILURE</code> if an error occurred while
      *         accessing the data store
      *         <li><code>COMMAND_FAILED</code> if some unspecified error is 
