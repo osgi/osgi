@@ -527,7 +527,7 @@ public class DmtData {
 	private void testDmtData017() {
 		try {		
 			tbc.log("#testDmtData017");
-			Vector value = null;
+			Vector value = new Vector();
 			org.osgi.service.dmt.DmtData data  = new org.osgi.service.dmt.DmtData(value);
 			tbc.assertEquals("Asserting DmtData.FORMAT_NODE",
 					org.osgi.service.dmt.DmtData.FORMAT_NODE, data.getFormat());
