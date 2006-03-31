@@ -29,13 +29,13 @@ import java.util.Arrays;
 // TODO add constructors and get/set methods for date/time, for more convenient Java access
 // TODO define proper toString, hashCode, equals and getSize behaviour for date/time/binary/base64 formats
 /**
- * A data structure representing a leaf node. This structure represents
- * only the value and the format property of the node, all other properties of 
- * the node (like MIME type) can be set and read using the 
+ * A data structure representing the contents of a leaf or interior node. This
+ * structure represents only the value and the format property of the node, all
+ * other properties (like MIME type) can be set and read using the
  * <code>DmtSession</code> interface.
- * <p> 
- * Different constructors are available to create nodes with different 
- * formats. Nodes of <code>null</code> format can be created using the static
+ * <p>
+ * Different constructors are available to create nodes with different formats.
+ * Nodes of <code>null</code> format can be created using the static
  * {@link #NULL_VALUE} constant instance of this class.
  */
 public final class DmtData {
@@ -96,12 +96,12 @@ public final class DmtData {
     public static final int FORMAT_NULL    = 0x0200;
 
     /**
-     * Format specifier of an internal node. An interior node
-     * can hold a Java object as value (see {@link DmtData#DmtData(Object)}
-     * and {@link DmtData#getNode()}). This value can be
-     * used by Java programs that know a specific URI understands the
-     * associated Java type. This type is further used as a return value of the
-     * {@link MetaNode#getFormat} method for interior nodes.
+     * Format specifier of an internal node. An interior node can hold a Java
+     * object as value (see {@link DmtData#DmtData(Object)} and
+     * {@link DmtData#getNode()}). This value can be used by Java programs that
+     * know a specific URI understands the associated Java type. This type is
+     * further used as a return value of the {@link MetaNode#getFormat} method
+     * for interior nodes.
      */
     public static final int FORMAT_NODE    = 0x0400;
 
