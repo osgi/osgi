@@ -110,8 +110,8 @@ public class SetDefaultNodeValue implements TestInterface {
 	}
 	
 	/**
-	 * This method asserts that DmtException.COMMAND_NOT_ALLOWED is thrown 
-	 * if the specified node is not a leaf node 
+	 * This method asserts that no exception is thrown 
+	 * if the specified node is an interior node 
 	 *
 	 * @spec DmtSession.setDefaultNodeValue(String)
 	 */
@@ -121,14 +121,9 @@ public class SetDefaultNodeValue implements TestInterface {
 			tbc.log("#testSetDefaultNodeValue002");
 			session = tbc.getDmtAdmin().getSession(".",DmtSession.LOCK_TYPE_EXCLUSIVE);
 			session.setDefaultNodeValue(TestExecPluginActivator.INTERIOR_NODE);
-			tbc.failException("#", DmtException.class);
-		} catch (DmtException e) {
-			tbc.assertEquals(
-					"Asserting that DmtException code is COMMAND_NOT_ALLOWED",
-					DmtException.COMMAND_NOT_ALLOWED, e.getCode());
+			tbc.pass("Asserts that no Exception is thrown if nodeUri is an interior node and DmtSession.setDefaultNodeValue(String) is called");
 		} catch (Exception e) {
-			tbc.fail("Expected " + DmtException.class.getName() + " but was "
-					+ e.getClass().getName());
+			tbc.fail("Unexpected exception:" + e.getClass().getName());		
 		} finally {
 			tbc.closeSession(session);
 		}
