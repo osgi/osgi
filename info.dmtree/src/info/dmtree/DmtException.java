@@ -130,16 +130,6 @@ public class DmtException extends Exception {
      */
     public static final int URI_TOO_LONG = 414;
 
-    
-    /**
-     * The media type of format for the data item is not allowed for the
-     * node.
-     * <p>
-     * This error code corresponds to the OMA DM response status code 414
-     * &quot;Unsupported media type or format&quot;.
-     */
-    public static final int FORMAT_NOT_SUPPORTED = 415;
-
     /**
      * The requested node creation operation failed because the target already
      * exists. This can occur if the node is created directly (with one of the
