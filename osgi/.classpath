@@ -34,5 +34,6 @@
 	<classpathentry kind="src" path="/org.osgi.service.power"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/org.osgi.application"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/org.osgi.service.obr"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/info.dmtree"/>
 	<classpathentry kind="output" path=""/>
 </classpath>
