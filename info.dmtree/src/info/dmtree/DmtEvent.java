@@ -96,7 +96,7 @@ public interface DmtEvent {
      * This method returns the identifier of the session in which this event
      * took place. The indetifier of the session is a unique opaque value.
      * 
-     * @return the unique indetifier
+     * @return the unique indetifier of the session that triggered the event
      */
     public String getSessionId();
 
@@ -118,12 +118,12 @@ public interface DmtEvent {
      * <p>
      * The array returned by this method runs parallel to the array returned by
      * {@link #getNodes}, the elements in the two arrays contain the source and
-     * destination URIs for the renamed or copied nodes in the same order.
+     * destination URIs for the renamed or copied nodes in the same order. All 
+     * returned URIs are absolute.
      * <p>
      * This method returns only those nodes where the caller has the GET 
      * permission for both the source and destination node of the operation.
-     * Therefore, it is possible that the method returns an empty array. All 
-     * returned URIs are absolute.
+     * Therefore, it is possible that the method returns an empty array.
      * 
      * @return the array of newly created nodes
      */
