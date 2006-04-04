@@ -27,15 +27,9 @@ import info.dmtree.DmtSession;
  * In an OSGi environment such implementations should be registered at the OSGi
  * service registry specifying the list of root node URIs in a
  * <code>String</code> array in the <code>execRootURIs</code> registration
- * parameter (as defined by the {@link #EXEC_ROOT_URIS} constant).
+ * parameter.
  */
 public interface ExecPlugin {
-    /**
-     * The registration parameter that specifies the subtrees handled by this
-     * plugin. The parameter with this name must contain the array of root URIs
-     * of all subtrees in which this plugin handles the execute operations.
-     */
-    String EXEC_ROOT_URIS = "execRootURIs";
 
     /**
      * Execute the given node with the given data. This operation corresponds to

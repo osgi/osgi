@@ -28,7 +28,7 @@ import info.dmtree.DmtSession;
  * In an OSGi environment such implementations should be registered at the OSGi
  * service registry specifying the list of root node URIs in a
  * <code>String</code> array in the <code>dataRootURIs</code> registration
- * parameter (as defined by the {@link #DATA_ROOT_URIS} constant).
+ * parameter.
  * <p>
  * When the first reference in a session is made to a node handled by this
  * plugin, the DmtAdmin calls one of the <code>open...</code> methods to
@@ -49,13 +49,6 @@ import info.dmtree.DmtSession;
  * <p>
  */
 public interface DataPlugin {
-    /**
-     * The registration parameter that specifies the subtrees handled by this
-     * plugin. The parameter with this name must contain the array of root URIs
-     * of all subtrees in which this plugin handles the data manipulation
-     * operations.
-     */
-    String DATA_ROOT_URIS = "dataRootURIs";
 
     /**
      * This method is called to signal the start of a read-only session when the
