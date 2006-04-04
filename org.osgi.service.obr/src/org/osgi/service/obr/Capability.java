@@ -33,6 +33,7 @@ public interface Capability {
 	/**
 	 * Return the name of the capability.
 	 * 
+	 * @return capability name
 	 */
 	String getName();
 	
@@ -41,7 +42,7 @@ public interface Capability {
 	 * 
 	 * Notice that the value of the properties is a list of values.
 	 * 
-	 * @return a Map<String,List>
+	 * @return a Map
 	 */
 	Map	getProperties();	
 }
