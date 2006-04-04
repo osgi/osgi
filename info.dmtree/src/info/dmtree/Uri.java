@@ -238,6 +238,9 @@ public final class Uri {
     /**
      * Returns the maximum allowed number of URI segments. The returned value is
      * implementation specific.
+     * <p>
+     * The return value of <code>Integer.MAX_VALUE</code> indicates that there
+     * is no upper limit on the number of URI segments.
      * 
      * @return maximum number of URI segments supported by the implementation
      */
@@ -249,6 +252,9 @@ public final class Uri {
      * Returns the maximum allowed length of a URI. The value is implementation
      * specific. The length of the URI is defined as the number of bytes in the
      * unescaped, UTF-8 encoded represenation of the URI.
+     * <p>
+     * The return value of <code>Integer.MAX_VALUE</code> indicates that there
+     * is no upper limit on the length of URIs.
      * 
      * @return maximum URI length supported by the implementation
      */
@@ -261,6 +267,9 @@ public final class Uri {
      * value is implementation specific. The length of the URI segment is
      * defined as the number of bytes in the unescaped, UTF-8 encoded
      * represenation of the segment.
+     * <p>
+     * The return value of <code>Integer.MAX_VALUE</code> indicates that there
+     * is no upper limit on the length of segment names.
      * 
      * @return maximum URI segment length supported by the implementation
      */
