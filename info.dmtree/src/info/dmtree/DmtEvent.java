@@ -78,7 +78,7 @@ public interface DmtEvent {
     /**
      * Event type indicating that a new session was opened.
      */
-    public static final int SESSION_OPEN = 0x10;
+    public static final int SESSION_OPENED = 0x10;
 
     /**
      * Event type indicating that a session was closed.
@@ -102,7 +102,7 @@ public interface DmtEvent {
 
     /**
      * This method can be used to query the subject nodes of this event. The
-     * method returns <code>null</code> for {@link #SESSION_OPEN} and
+     * method returns <code>null</code> for {@link #SESSION_OPENED} and
      * {@link #SESSION_CLOSED}. The method returns only those affected nodes
      * that the caller has the GET permission for. Therefore, it is possible
      * that the method returns an empty array. All returned URIs are absolute.
