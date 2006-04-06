@@ -22,7 +22,8 @@ import info.dmtree.DmtSession;
 
 /**
  * NotificationService enables sending aynchronous notifications to a management
- * server.
+ * server. The implementation of <code>NotificationService</code> should
+ * register itself in the OSGi service registry as a service.
  */
 public interface NotificationService {
 
