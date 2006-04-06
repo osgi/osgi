@@ -160,7 +160,7 @@ public interface DmtAdmin {
      * delivered to the registered listener if at least one affected node is
      * within this subtree. The events can also be filtered by specifying a
      * bitmask of relevant event types (e.g.
-     * <code>DmtEvent.ADDED | DmtEvent.REPLACED | DmtEvent.SESSION_CLOSE</code>).
+     * <code>DmtEvent.ADDED | DmtEvent.REPLACED | DmtEvent.SESSION_CLOSED</code>).
      * Only event types included in the bitmask will be delivered to the
      * listener.
      * <p>
@@ -190,7 +190,7 @@ public interface DmtAdmin {
      * delivered to the registered listener if at least one affected node is
      * within this subtree. The events can also be filtered by specifying a
      * bitmask of relevant event types (e.g.
-     * <code>DmtEvent.ADDED | DmtEvent.REPLACED | DmtEvent.SESSION_CLOSE</code>).
+     * <code>DmtEvent.ADDED | DmtEvent.REPLACED | DmtEvent.SESSION_CLOSED</code>).
      * Only event types included in the bitmask will be delivered to the
      * listener.
      * <p>
