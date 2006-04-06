@@ -18,6 +18,7 @@
 package info.dmtree;
 
 /**
+ * ### I assume this is asynchronous?
  * Registered implementations of this class are notified via {@link DmtEvent}
  * objects about important changes in the tree. Events are generated after every
  * successful DMT change, and also when sessions are opened or closed. If a
