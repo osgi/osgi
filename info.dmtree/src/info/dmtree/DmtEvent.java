@@ -103,26 +103,31 @@ public interface DmtEvent {
     /**
      * This method can be used to query the subject nodes of this event. The
      * method returns <code>null</code> for {@link #SESSION_OPENED} and
-     * {@link #SESSION_CLOSED}. The method returns only those affected nodes
-     * that the caller has the GET permission for. Therefore, it is possible
-     * that the method returns an empty array. All returned URIs are absolute.
+     * {@link #SESSION_CLOSED}.
+     * <p>
+     * The method returns only those affected nodes that the caller has the GET
+     * permission for (or in case of {@link #COPIED} or {@link #RENAMED} events,
+     * where the caller has GET permissions for either the source or the
+     * destination nodes). Therefore, it is possible that the method returns an
+     * empty array. All returned URIs are absolute.
      * 
      * @return the array of affected nodes
+     * @see #getNewNodes
      */
     public String[] getNodes();
 
     /**
      * This method can be used to query the new nodes, when the type of the
      * event is {@link #COPIED} or {@link #RENAMED}. For all other event types
-     * this method returns <code>null</code>. 
+     * this method returns <code>null</code>.
      * <p>
      * The array returned by this method runs parallel to the array returned by
      * {@link #getNodes}, the elements in the two arrays contain the source and
-     * destination URIs for the renamed or copied nodes in the same order. All 
+     * destination URIs for the renamed or copied nodes in the same order. All
      * returned URIs are absolute.
      * <p>
-     * This method returns only those nodes where the caller has the GET 
-     * permission for both the source and destination node of the operation.
+     * This method returns only those nodes where the caller has the GET
+     * permission for the source or destination node of the operation.
      * Therefore, it is possible that the method returns an empty array.
      * 
      * @return the array of newly created nodes
