@@ -18,7 +18,6 @@
 package info.dmtree;
 
 /**
- * ### I assume this is asynchronous?
  * Registered implementations of this class are notified via {@link DmtEvent}
  * objects about important changes in the tree. Events are generated after every
  * successful DMT change, and also when sessions are opened or closed. If a
@@ -29,7 +28,8 @@ public interface DmtEventListener {
 
     /**
      * <code>DmtAdmin</code> uses this method to notify the registered
-     * listeners about the change.
+     * listeners about the change. This method is called asynchronously from the
+     * actual event occurrence.
      * 
      * @param event the <code>DmtEvent</code> describing the change in detail
      */
