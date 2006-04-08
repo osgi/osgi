@@ -34,7 +34,8 @@ public interface ComponentFactory {
 	 * Create and activate a new component configuration. Additional properties
 	 * may be provided for the component configuration.
 	 * 
-	 * @param properties Additional properties for the component configuration.
+	 * @param properties Additional properties for the component configuration
+	 *        or <code>null</code> if there are no additional properties.
 	 * @return A <code>ComponentInstance</code> object encapsulating the
 	 *         component instance of the component configuration. The component
 	 *         configuration has been activated and, if the component specifies
