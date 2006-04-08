@@ -43,7 +43,7 @@ import org.osgi.test.cases.deploymentadmin.tc1.tbc.DeploymentTestControl;
 import org.osgi.test.cases.deploymentadmin.tc1.tbc.util.TestingDeploymentPackage;
 
 /**
- * @author Luiz Felipe Guimar„es
+ * @author Luiz Felipe Guimar√£es
  * 
  */
 public class InstallPackageThread extends Thread {
