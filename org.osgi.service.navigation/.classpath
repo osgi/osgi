@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry sourcepath="/ee.minimum" kind="lib" path="/osgi.released/ee.minimum.jar"/>
+	<classpathentry kind="lib" path="/osgi.released/osgi.jar"/>
+	<classpathentry kind="output" path="src"/>
+</classpath>
