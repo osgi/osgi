@@ -117,6 +117,7 @@ public class ApplicationTestControl extends DefaultTestBundleControl {
 
 	public void prepare() {
 		try {
+			log("#prepare");
 			dmtAdmin = (DmtAdmin) getContext().getService(
 					getContext().getServiceReference(DmtAdmin.class.getName()));
 			permissionAdmin = (PermissionAdmin) getContext().getService(
@@ -124,8 +125,11 @@ public class ApplicationTestControl extends DefaultTestBundleControl {
 							PermissionAdmin.class.getName()));
 			eventBundle = new EventHandlerActivator(this);
 			eventBundle.start(getContext());
+			log("#after eventbundle start");
 			installBundle("tb2.jar");
+			log("#after install tb2");
 			installDescriptor();
+			log("#after install descriptor");
 			ServiceReference srvReference = getContext().getServiceReference(
 					TB2Service.class.getName());
 			tb2Location = srvReference.getBundle().getLocation();
@@ -134,6 +138,7 @@ public class ApplicationTestControl extends DefaultTestBundleControl {
 			testInterfaces = tcb1Service.getTestClasses(this);
 			appController = new TestAppControllerImpl();
 			appController.start(this.getContext());
+			log("#after app controller start");
 			startPermissionWorker();
 		} catch (Exception e) {
 			this.log("Unexpected exception at prepare.");
