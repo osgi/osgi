@@ -550,11 +550,10 @@ public class ApplicationTestControl extends DefaultTestBundleControl {
 			appDescRefsNew = getContext().getServiceReferences("org.osgi.service.application.ApplicationDescriptor", null);
 			
 			if (appDescRefsOld == null) {
-				log("#null");
-				appDescriptor = (ApplicationDescriptor) getContext().getService(appDescRefsNew[0]);
-				if (appDescriptor == null) {
+				if (appDescRefsNew == null) {
 					fail("After the tb1 installation, no descriptor was registered. Check for the xml parser.");
 				}
+				appDescriptor = (ApplicationDescriptor) getContext().getService(appDescRefsNew[0]);
 				log("#other line");
 				updateTestPid((String) appDescRefsNew[0].getProperty("service.pid"));
 				updateConstants();
