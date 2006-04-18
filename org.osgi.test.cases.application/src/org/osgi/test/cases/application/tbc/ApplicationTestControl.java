@@ -125,11 +125,8 @@ public class ApplicationTestControl extends DefaultTestBundleControl {
 							PermissionAdmin.class.getName()));
 			eventBundle = new EventHandlerActivator(this);
 			eventBundle.start(getContext());
-			log("#after eventbundle start");
 			installBundle("tb2.jar");
-			log("#after install tb2");
 			installDescriptor();
-			log("#after install descriptor");
 			ServiceReference srvReference = getContext().getServiceReference(
 					TB2Service.class.getName());
 			tb2Location = srvReference.getBundle().getLocation();
@@ -138,7 +135,6 @@ public class ApplicationTestControl extends DefaultTestBundleControl {
 			testInterfaces = tcb1Service.getTestClasses(this);
 			appController = new TestAppControllerImpl();
 			appController.start(this.getContext());
-			log("#after app controller start");
 			startPermissionWorker();
 		} catch (Exception e) {
 			this.log("Unexpected exception at prepare." + e.toString() + " : " + e.getMessage());
@@ -541,11 +537,8 @@ public class ApplicationTestControl extends DefaultTestBundleControl {
 		ServiceReference[] appDescRefsOld, appDescRefsNew;
 		try {
 			appDescRefsOld = getContext().getServiceReferences("org.osgi.service.application.ApplicationDescriptor", null);
-			log("#installDescriptor");
 			bundleTestApplication = installBundle("tb1.jar");
-			log("#after tb1 install");
 			bundleTestApplication.start();
-			log("#after bundle start");
 			synchronized (this) {
 				this.wait(ApplicationConstants.SHORT_TIMEOUT);
 			}
@@ -554,13 +547,14 @@ public class ApplicationTestControl extends DefaultTestBundleControl {
 			appDescRefsNew = getContext().getServiceReferences("org.osgi.service.application.ApplicationDescriptor", null);
 			
 			if (appDescRefsOld == null) {
-				log("#null");
 				appDescriptor = (ApplicationDescriptor) getContext().getService(appDescRefsNew[0]);
+				if (appDescriptor == null) {
+					fail("After the tb1 installation, no descriptor was registered. Check for the xml parser.");
+				}
 				updateTestPid((String) appDescRefsNew[0].getProperty("service.pid"));
 				updateConstants();
 			}
 			else if (appDescRefsOld.length+1 == appDescRefsNew.length) {
-				log("#else if");
 				boolean found = false;
 				for (int i=0; i<appDescRefsNew.length && !found; i++) {
 					found=true;
