@@ -538,6 +538,9 @@ public class ApplicationTestControl extends DefaultTestBundleControl {
 		try {
 			appDescRefsOld = getContext().getServiceReferences("org.osgi.service.application.ApplicationDescriptor", null);
 			bundleTestApplication = installBundle("tb1.jar");
+			if (bundleTestApplication == null) {
+				fail("The tb1 installation returns null as bundle.");
+			}
 			bundleTestApplication.start();
 			synchronized (this) {
 				this.wait(ApplicationConstants.SHORT_TIMEOUT);
@@ -547,10 +550,12 @@ public class ApplicationTestControl extends DefaultTestBundleControl {
 			appDescRefsNew = getContext().getServiceReferences("org.osgi.service.application.ApplicationDescriptor", null);
 			
 			if (appDescRefsOld == null) {
+				log("#null");
 				appDescriptor = (ApplicationDescriptor) getContext().getService(appDescRefsNew[0]);
 				if (appDescriptor == null) {
 					fail("After the tb1 installation, no descriptor was registered. Check for the xml parser.");
 				}
+				log("#other line");
 				updateTestPid((String) appDescRefsNew[0].getProperty("service.pid"));
 				updateConstants();
 			}
