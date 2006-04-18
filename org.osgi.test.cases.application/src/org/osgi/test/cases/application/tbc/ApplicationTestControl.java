@@ -141,7 +141,7 @@ public class ApplicationTestControl extends DefaultTestBundleControl {
 			log("#after app controller start");
 			startPermissionWorker();
 		} catch (Exception e) {
-			this.log("Unexpected exception at prepare.");
+			this.log("Unexpected exception at prepare." + e.toString() + " : " + e.getMessage());
 		}
 	}
 
