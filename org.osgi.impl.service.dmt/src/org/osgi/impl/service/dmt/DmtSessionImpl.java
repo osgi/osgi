@@ -1626,13 +1626,13 @@ public class DmtSessionImpl implements DmtSession {
     
 	// ENHANCE define constants for the action names in the Acl class
 	private static String writeAclCommands(int actions) {
-		String commands = null;
-		commands = writeCommand(commands, actions, Acl.ADD,     "Add");
-		commands = writeCommand(commands, actions, Acl.DELETE,  "Delete");
-		commands = writeCommand(commands, actions, Acl.EXEC,    "Exec");
-		commands = writeCommand(commands, actions, Acl.GET,     "Get");
-		commands = writeCommand(commands, actions, Acl.REPLACE, "Replace");
-		return (commands != null) ? commands : "";
+		String cmds = null;
+		cmds = writeCommand(cmds, actions, Acl.ADD,     DmtPermission.ADD);
+		cmds = writeCommand(cmds, actions, Acl.DELETE,  DmtPermission.DELETE);
+		cmds = writeCommand(cmds, actions, Acl.EXEC,    DmtPermission.EXEC);
+		cmds = writeCommand(cmds, actions, Acl.GET,     DmtPermission.GET);
+		cmds = writeCommand(cmds, actions, Acl.REPLACE, DmtPermission.REPLACE);
+		return (cmds != null) ? cmds : "";
 	}
 
 	private static String writeCommand(String base, int actions, int action,
