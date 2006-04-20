@@ -18,8 +18,6 @@
 package org.osgi.service.navigation2;
 //### This should be moved to org.osgi.util.position (or coordinate)
 
-import org.osgi.util.position.Position;
-
 /**
  * Defines a WGS84 coordinate with latitude, longitude and altitude.
  */

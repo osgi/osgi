@@ -18,6 +18,9 @@
 
 package org.osgi.service.navigation2;
 
+import org.osgi.service.navigation.Coordinate;
+import org.osgi.service.navigation.Location;
+
 public interface NavigationService  {
    
    /**
@@ -26,7 +29,16 @@ public interface NavigationService  {
     * @param address The textual address where the user wants to go.
     * @return The complete Location information if the address has been resolved
     */
-   public AddressLocation locate(Address address);
+   public AddressLocation[] locate(Address address);
+   
+   /**
+    * Returns a Location object relative to the coordinate given as parameter.
+    * 
+    * @param coordinate The WGS84 coordinate where the user wants to go.
+    * @return The nearset Location of the given coordinate.
+    */
+   public Location locate(Coordinate coordinate);
+   
    
    /**
     * Returns a list of POI (Point Of Interest) in a certain zone.
@@ -37,7 +49,7 @@ public interface NavigationService  {
     * @param filter The filter to apply to the search.
     * @return List of POIs found.
     */
-   public PointOfInterest[] getPOIs(String local, Coordinate coordinate, String filter);
+   public PointOfInterest[] getPOIs(String locale, Coordinate coordinate, String filter);
 
    
    Route calculate(RoutePlan plan);
