@@ -64,6 +64,9 @@ public class ClientActivator implements BundleActivator
                     "org/osgi/service/dmt/*"
             });
             
+            // ProtectedUri doesn't work with wildcard filters, Comparable IF
+            // is not adequate for checking matches 
+            //config.put(EventConstants.EVENT_FILTER, "(proba=./guarded*)");
             
             // TODO try this property instead of topic when event manager works properly
             /*
