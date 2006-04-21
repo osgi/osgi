@@ -1,80 +1,48 @@
 /*
  * $Header$
- *
- * Copyright (c) OSGi Alliance (2006). All Rights Reserved.
  * 
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * Copyright (c) The OSGi Alliance (2006). All Rights Reserved.
+ * 
+ * Implementation of certain elements of the OSGi Specification may be subject
+ * to third party intellectual property rights, including without limitation,
+ * patent rights (such a third party may or may not be a member of the OSGi
+ * Alliance). The OSGi Alliance is not responsible and shall not be held
+ * responsible in any manner for identifying or failing to identify any or all
+ * such third party intellectual property rights.
+ * 
+ * This document and the information contained herein are provided on an "AS IS"
+ * basis and THE OSGI ALLIANCE DISCLAIMS ALL WARRANTIES, EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO ANY WARRANTY THAT THE USE OF THE INFORMATION
+ * HEREIN WILL NOT INFRINGE ANY RIGHTS AND ANY IMPLIED WARRANTIES OF
+ * MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE. IN NO EVENT WILL THE
+ * OSGI ALLIANCE BE LIABLE FOR ANY LOSS OF PROFITS, LOSS OF BUSINESS, LOSS OF
+ * USE OF DATA, INTERRUPTION OF BUSINESS, OR FOR DIRECT, INDIRECT, SPECIAL OR
+ * EXEMPLARY, INCIDENTIAL, PUNITIVE OR CONSEQUENTIAL DAMAGES OF ANY KIND IN
+ * CONNECTION WITH THIS DOCUMENT OR THE INFORMATION CONTAINED HEREIN, EVEN IF
+ * ADVISED OF THE POSSIBILITY OF SUCH LOSS OR DAMAGE.
+ * 
+ * All Company, brand and product names may be trademarks that are the sole
+ * property of their respective owners. All rights reserved.
  */
+
 package org.osgi.service.navigation;
 
-import org.osgi.util.measurement.Measurement;
+public class CircularZone implements Location {
+	Coordinates		coordinate;
+	double			radius;
+	
+	public CircularZone(Coordinates coordinate, double radius ) {
+		this.coordinate  = coordinate;
+		this.radius = radius;
+	}
+	
+	public Coordinates getCoordinate() {
+		return coordinate;
+	}
 
+	public boolean contains(Coordinates coordinate) {
+		double [] distance = coordinate.distance(this.coordinate);
+		return Math.sqrt(distance[0]*distance[0] + distance[1]*distance[2])<= radius;		
+	}
 
-/**
- * A Circular Zone is defined by a center expressed by a WGS84 coordinate
- * and a radius expressed in meter.
- */
-public class CircularZone implements Zone 
-{
-   private Measurement radius;
-   private Coordinate center;
-   
-   /**
-    * Create a new CircularZone object.
-    * @param center The center of the zone.
-    * @param radius The radius of the zone expressed in meter.
-    */
-   public CircularZone(Coordinate center, Measurement radius) 
-   {
-	   this.radius = radius;
-	   this.center = center;
-   }
-   
-   /**
-    * Returns the radius of the zone expressed in meter.
-    * @return The radius of the Circular Zone expressed in meter.
-    */
-   public Measurement getRadius() 
-   {
-    return radius;
-   }
-   
-   /**
-    * Returns the center of the zone expressed by a Coordinate object.
-    * @return The center of the zone.
-    */
-   public Coordinate getCenter() 
-   {
-    return center;
-   }
-   
-   /**
-    * Indicates if the coordinate is contained in the this object.
-    * @param coordinate The coordinate that needs to be checked
-    * @return true if the coordinate is inside the zone, false otherwise.
-    */
-   public boolean contains(Coordinate coordinate) 
-   {
-    return true;
-   }
-   
-   /**
-    * Indicates if the area is contained in this object. 
-    * @param zone The zone that needs to be checked
-    * @return boolean true if the given zone is inside the zone, false otherwise.
-    */
-   public boolean contains(Zone zone) 
-   {
-    return true;
-   }
 }

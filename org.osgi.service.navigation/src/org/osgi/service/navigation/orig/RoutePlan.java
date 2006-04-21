@@ -16,7 +16,7 @@
  * limitations under the License.
  */
 
-package org.osgi.service.navigation;
+package org.osgi.service.navigation.orig;
 
 
 /**

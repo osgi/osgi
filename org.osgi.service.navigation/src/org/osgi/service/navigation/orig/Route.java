@@ -16,21 +16,29 @@
  * limitations under the License.
  */
 
-package org.osgi.service.navigation2;
+package org.osgi.service.navigation.orig;
 
 
 /**
  * Interface to the route definition. 
  * The route has several states:
  */
-public interface Route extends Location  { 
+public interface Route extends RouteBoundary 
+{ 
    /**
-    * Returns the list of Locations that match to the filter.
+    * Returns the list of all route elements contained on the route.
+    * 
+    * @return The list of route elements found
+    */
+   public RouteElement[] getRouteElements();
+   
+   /**
+    * Returns the list of Route Elements that match to the filter.
     * 
     * @param filter A LDAP query used to filter route elements
     * @return The list of route elements found
     */
-   public Location[] getRouteElements(String filter);
+   public RouteElement[] getRouteElements(String filter);
    
    /**
     * Returns the Route plan associated with the Route.
@@ -38,5 +46,12 @@ public interface Route extends Location  {
     * @return The route plan
     */
    public RoutePlan getRoutePlan();
-      
+   
+   /**
+    * Returns the boundaries of the current route.
+    * 
+    * @return The list of route boundaries.
+    */
+   public RouteBoundary[] getBoundaries();
+   
 }

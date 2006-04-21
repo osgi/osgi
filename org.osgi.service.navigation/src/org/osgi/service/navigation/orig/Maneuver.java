@@ -16,13 +16,13 @@
  * limitations under the License.
  */
 
-package org.osgi.service.navigation2;
+package org.osgi.service.navigation.orig;
 
 /**
  * A maneuver is the action that the driver has to perform at a junction. 
  * Several advices can be rendered at a maneuver.
  */
-public interface Maneuver extends RouteElement 
+public interface Maneuver extends Hint 
 {
    
    /**
@@ -75,26 +75,9 @@ public interface Maneuver extends RouteElement
    public boolean isMultipleTurn();
    
    /**
-    * Returns the list of segments that are inside the maneuver geometry.
-    * @return org.osgi.nursery.util.maneuver.JunctionSegment[]
+    * Returns the junction geometry defined by the JunctionGeometry class.
+    * This geometry is used to render one or several detailed advices.
+    * @return The junction geometry
     */
-   public JunctionSegment[] getInnerSegment();
-   
-   /**
-    * Returns the list of segments that are outside the maneuver geometry.
-    * @return org.osgi.nursery.util.maneuver.JunctionSegment[]
-    */
-   public JunctionSegment[] getOuterSegment();
-   
-   /**
-    * Returns the segment from where the traveler is entering the maneuver
-    * @return org.osgi.nursery.util.maneuver.JunctionSegment
-    */
-   public JunctionSegment getFromSegment();
-   
-   /**
-    * Returns the segment where the traveler is leaving the maneuver.
-    * @return org.osgi.nursery.util.maneuver.JunctionSegment
-    */
-   public JunctionSegment getToSegment();
+   public JunctionGeometry getGeometry();
 }

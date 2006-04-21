@@ -15,7 +15,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.osgi.service.navigation2;
+package org.osgi.service.navigation;
 
 /**
  * The Address is made of a list of places. Each place is represented by a key

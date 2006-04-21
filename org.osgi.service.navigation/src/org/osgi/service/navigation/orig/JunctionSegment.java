@@ -16,7 +16,7 @@
  * limitations under the License.
  */
 
-package org.osgi.service.navigation2;
+package org.osgi.service.navigation.orig;
 
 import org.osgi.util.measurement.Measurement;
 

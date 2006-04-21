@@ -16,26 +16,30 @@
  * limitations under the License.
  */
 
-package org.osgi.service.navigation;
+package org.osgi.service.navigation.control;
 
-public interface NavigationService 
-{
+import org.osgi.service.navigation.*;
+import org.osgi.util.position.Position;
+
+public interface NavigationService  {
    
    /**
     * Returns a Location object relative to the Address given as parameter.
-    * 
+    * ### I think this needs to become iterative
     * @param address The textual address where the user wants to go.
     * @return The complete Location information if the address has been resolved
     */
-   public Location locate(Address address);
+   public AddressLocation[] locate(Address address);
    
    /**
-    * Returns a Location object relative to the coordinate given as parameter.
+    * Returns a Location object relative to the coordinate given as 
+    * parameter. This is necessary because a
     * 
     * @param coordinate The WGS84 coordinate where the user wants to go.
     * @return The nearset Location of the given coordinate.
     */
-   public Location locate(Coordinate coordinate);
+   public Location locate(Coordinates where);
+   
    
    /**
     * Returns a list of POI (Point Of Interest) in a certain zone.
@@ -46,16 +50,11 @@ public interface NavigationService
     * @param filter The filter to apply to the search.
     * @return List of POIs found.
     */
-   public PointOfInterest[] getPOIs(String local, Zone zone, String filter);
+   public PointOfInterest[] getPOIs(String locale, Coordinates coordinate, String filter);
+
+   Position getCurrentLocation();
    
-   /**
-    * Computes a route between two Route boundaries (from and to) with the
-    * given route plan.
-    * 
-    * @param from The source. 
-    * @param to The destination.
-    * @param plan The route plan that contains criteria for route computation.
-    * @return The planned route
-    */
-   public Route compute(RouteBoundary from, RouteBoundary to, RoutePlan plan);
+   NavigationSession navigate(RoutePlan route);
+   
 }
+ 

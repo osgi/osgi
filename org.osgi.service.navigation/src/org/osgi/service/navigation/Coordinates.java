@@ -15,13 +15,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.osgi.service.navigation2;
+package org.osgi.service.navigation;
 //### This should be moved to org.osgi.util.position (or coordinate)
 
 /**
  * Defines a WGS84 coordinate with latitude, longitude and altitude.
  */
-public class Coordinate {
+public class Coordinates {
 	private double	latitude;
 	private double	longitude;
 	private float	altitude;
@@ -32,7 +32,7 @@ public class Coordinate {
 	 * @param longitude a double value specifying the longitude in radians
 	 * @param altitude a float value specifying the altitude in meters
 	 */
-	public Coordinate(double latitude, double longitude, float altitude) {
+	public Coordinates(double latitude, double longitude, float altitude) {
 		this.latitude = latitude;
 		this.longitude = longitude;
 		this.altitude = altitude;
@@ -72,7 +72,7 @@ public class Coordinate {
 	 * @param coordinate
 	 * @return the x, y, and z distance in meters
 	 */
-	public double[] distance(Coordinate coordinate) {
+	public double[] distance(Coordinates coordinate) {
 		// TODO Auto-generated method stub
 		return new double[3];
 	}
@@ -86,7 +86,7 @@ public class Coordinate {
 	 * @param z altidude direction translatation
 	 * @return a translated coordinate
 	 */
-	public Coordinate translate(double x, double y, double z) {
+	public Coordinates translate(double x, double y, double z) {
 		// TODO Auto-generated method stub
 		return null;
 	}

@@ -16,27 +16,12 @@
  * limitations under the License.
  */
 
-package org.osgi.service.navigation;
-
+package org.osgi.service.navigation.orig;
 
 /**
- * Defines a geographical area.
+ * Basic interface for any hints along the route. The hints could be maneuvers, scenic
+ * advice, alert zones or any additional information that are linked to a Location.
  */
-public interface Zone 
+public interface Hint 
 {
-   
-   /**
-    * Indicates if the coordinate is contained in the this object.
-    * @param coordinate The coordinate that needs to be checked
-    * @return true if the coordinate is inside the object, otherwise false
-    */
-   public boolean contains(Coordinate coordinate);
-   
-   /**
-    * Indicates if the Shape object given as parameter is in this object.
-    * @param shape The Shape
-    * @param zone
-    * @return true if the shape is completely inside the object, otherwise false
-    */
-   public boolean contains(Zone zone);
 }

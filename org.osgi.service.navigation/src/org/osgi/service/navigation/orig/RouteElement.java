@@ -16,38 +16,40 @@
  * limitations under the License.
  */
 
-package org.osgi.service.navigation;
+
+package org.osgi.service.navigation.orig;
 
 import org.osgi.util.measurement.Measurement;
 
-/**
- * A JunctionSegment is a part of the JunctionGeometry.
- */
-public interface JunctionSegment 
+public interface RouteElement extends Location 
 {
-   
    /**
-    * Returns the angle of this segment with the North in degrees.
+    * Returns the heading of the route element expressed in radian.
+    * 
     * @return Measurement
     */
-   public Measurement getAngle();
+   public Measurement getHeading(); 
    
    /**
-    * Returns the coordinate where this segment is attached to the maneuver.
-    * @return org.osgi.nursery.util.geo.Coordinate
+    * Returns the form of way of the route element. The list of possible
+    * values are defined in FormOfWay interface.
+    * 
+    * @return org.osgi.service.navigation.FormOfWay
     */
-   public Coordinates getCoordinate();
+   public FormOfWay getFormOfWay(); 
    
    /**
-    * Returns true if this JunctionSegment object is part of the inner segments
-    * otherwise false.
-    * @return boolean
+    * Returns the road class of the route element. The list of possible
+    * values are defined in RoadClass interface.
+    * 
+    * @return org.osgi.service.navigation.RoadClass
     */
-   public boolean isInnerSegment();
+   public RoadClass getRoadClass();
    
    /**
-    * Returns true if this JunctionSegment object is in the itinerary otherwise false.
-    * @return boolean
+    * Return the list of hints associated with this location.
+    * 
+    * @return org.osgi.service.navigation.Hint
     */
-   public boolean isOnRoute();
+   public Hint[] getHints();
 }

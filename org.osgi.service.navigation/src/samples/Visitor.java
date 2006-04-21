@@ -25,9 +25,45 @@
  * property of their respective owners. All rights reserved.
  */
 
-package org.osgi.service.navigation2;
+package samples;
 
-public interface Location {
-	Coordinate getCoordinate();
-	boolean contains(Coordinate coordinate);
+import java.util.List;
+
+import org.osgi.service.navigation.Location;
+import org.osgi.service.navigation.control.*;
+
+public class Visitor {
+	NavigationService nav;
+	NavigationSession session;
+	
+	List		visits;
+	
+	public void patientVisitor(Patient patients[]){
+		if ( session != null ) 
+			session.destroy();
+		
+		Location locations[] = new Location[patients.length];
+		for ( int i=0; i<locations.length; i++ ) {
+			locations[i] = calcAddress(patients[i]);
+		}
+		RoutePlan	plan = new RoutePlan(RoutePlan.SHORTEST, patients);
+		session = nav.navigate(plan);
+		session.resume();
+	}
+	
+	
+	private Location calcAddress(Patient patient) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
+	public void setNavigationService(NavigationService ns) {
+		nav = ns;
+	}
+	
+}
+
+interface Patient extends Location {
+	
 }

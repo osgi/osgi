@@ -32,7 +32,7 @@ import java.util.Dictionary;
  * National (or country specific) POI means of "national" importance such as 
  * international airports, Disney Land, London Tower, etc.
  */
-public interface PointOfInterest 
+public interface PointOfInterest extends Location
 {
    /**
     * Returns the POI name.
@@ -41,17 +41,11 @@ public interface PointOfInterest
    public String getName();
    
    /**
-    * Returns the location of the POI.
-    * @return The location of the POI
-    */
-   public Location getLocation();
-   
-   /**
     * Returns the location (WGS84 coordinates) of possible entries to the POI.
     * These location can be used to determine a route.
     * @return The list of entry points to the POI
     */
-   public Location[] getEntryPoints();
+   public Coordinates[] getEntryPoints();
    
    /**
     * Returns additional properties of the POI.

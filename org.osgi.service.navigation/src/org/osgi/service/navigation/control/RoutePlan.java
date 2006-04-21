@@ -16,9 +16,9 @@
  * limitations under the License.
  */
 
-package org.osgi.service.navigation2;
+package org.osgi.service.navigation.control;
 
-import org.osgi.service.navigation.FeaturePreference;
+import org.osgi.service.navigation.Location;
 
 /**
  * Defines the complete route plan that the user would like to realise. This
@@ -28,9 +28,14 @@ import org.osgi.service.navigation.FeaturePreference;
 public class RoutePlan {
 
 	/**
-	 * FeaturePreference object to set HIGHWAY preference.
+	 * Indicates that the shortest way must be found.
 	 */
-	public static final int	HIGHWAY			= 1;
+	public static final int	SHORTEST		= 0;
+
+	/**
+	 * Indicates that the fastest way must be found.
+	 */
+	public static final int	FASTEST			= 1;
 
 	/**
 	 * FeaturePreference object to set AVOID_HIGHWAY preference.
@@ -38,30 +43,23 @@ public class RoutePlan {
 	public static final int	AVOID_HIGHWAY	= 2;
 
 	/**
-	 * FeaturePreference object to set TOLLWAY preference.
-	 */
-	public static final int	TOLLWAY			= 4;
-
-	/**
 	 * FeaturePreference object to set AVOID_TOLLWAY preference.
 	 */
-	public static final int	AVOID_TOLLWAY	= 8;
-
-	/**
-	 * FeaturePreference object to set FERRY preference.
-	 */
-	public static final int	FERRY			= 16;
+	public static final int	AVOID_TOLLWAY	= 4;
 
 	/**
 	 * FeaturePreference object to set AVOID_FERRY preference.
 	 */
-	public static final int	AVOID_FERRY		= 16;
+	public static final int	AVOID_FERRY		= 8;
 
-	int[]					features;
+	int						features;
 	Location[]				included;
 	Location[]				avoid;
 
-	public RoutePlan(int[] features, Location included[], Location avoid[]) {
+	public RoutePlan(int features, Location included[]) {
+		this(features,included,null);
+	}
+	public RoutePlan(int features, Location included[], Location avoid[]) {
 		this.features = features;
 		this.included = included;
 		this.avoid = avoid;
@@ -90,7 +88,7 @@ public class RoutePlan {
 	 * 
 	 * @return org.osgi.nursery.util.route.FeaturePreference[]
 	 */
-	public int[] getFeaturePreferences() {
+	public int getFeaturePreferences() {
 		return features;
 	}
 }

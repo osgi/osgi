@@ -16,12 +16,10 @@
  * limitations under the License.
  */
 
-package org.osgi.service.navigation2;
+package org.osgi.service.navigation.orig;
 
-import org.osgi.service.navigation.Coordinate;
-import org.osgi.service.navigation.Location;
-
-public interface NavigationService  {
+public interface NavigationService 
+{
    
    /**
     * Returns a Location object relative to the Address given as parameter.
@@ -29,7 +27,7 @@ public interface NavigationService  {
     * @param address The textual address where the user wants to go.
     * @return The complete Location information if the address has been resolved
     */
-   public AddressLocation[] locate(Address address);
+   public Location locate(Address address);
    
    /**
     * Returns a Location object relative to the coordinate given as parameter.
@@ -38,7 +36,6 @@ public interface NavigationService  {
     * @return The nearset Location of the given coordinate.
     */
    public Location locate(Coordinate coordinate);
-   
    
    /**
     * Returns a list of POI (Point Of Interest) in a certain zone.
@@ -49,11 +46,16 @@ public interface NavigationService  {
     * @param filter The filter to apply to the search.
     * @return List of POIs found.
     */
-   public PointOfInterest[] getPOIs(String locale, Coordinate coordinate, String filter);
-
+   public PointOfInterest[] getPOIs(String local, Zone zone, String filter);
    
-   Route calculate(RoutePlan plan);
-   
-   NavigationSession navigate(Route route);
+   /**
+    * Computes a route between two Route boundaries (from and to) with the
+    * given route plan.
+    * 
+    * @param from The source. 
+    * @param to The destination.
+    * @param plan The route plan that contains criteria for route computation.
+    * @return The planned route
+    */
+   public Route compute(RouteBoundary from, RouteBoundary to, RoutePlan plan);
 }
- 

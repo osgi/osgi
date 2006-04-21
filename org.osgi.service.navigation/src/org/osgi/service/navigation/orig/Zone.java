@@ -16,11 +16,27 @@
  * limitations under the License.
  */
 
-package org.osgi.service.navigation;
+package org.osgi.service.navigation.orig;
+
 
 /**
- *  Basic interface of route boundaries. Can be a single Location or another complete route.
+ * Defines a geographical area.
  */
-public interface RouteBoundary 
+public interface Zone 
 {
+   
+   /**
+    * Indicates if the coordinate is contained in the this object.
+    * @param coordinate The coordinate that needs to be checked
+    * @return true if the coordinate is inside the object, otherwise false
+    */
+   public boolean contains(Coordinate coordinate);
+   
+   /**
+    * Indicates if the Shape object given as parameter is in this object.
+    * @param shape The Shape
+    * @param zone
+    * @return true if the shape is completely inside the object, otherwise false
+    */
+   public boolean contains(Zone zone);
 }

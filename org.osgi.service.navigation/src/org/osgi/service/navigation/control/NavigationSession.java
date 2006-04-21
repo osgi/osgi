@@ -25,29 +25,14 @@
  * property of their respective owners. All rights reserved.
  */
 
-package org.osgi.service.navigation2;
+package org.osgi.service.navigation.control;
 
-public class RectangularZone implements Location {
-	Coordinate		coordinate;
-	double			width;
-	double			height;
-	
-	public RectangularZone(Coordinate coordinate, double width, double height ) {
-		this.coordinate  = coordinate;
-		this.width = width;
-		this.height = height;
-	}
-	
-	public Coordinate getCoordinate() {
-		return coordinate;
-	}
+import org.osgi.service.navigation.*;
 
-	public boolean contains(Coordinate coordinate) {
-		double distance[] = this.coordinate.distance(coordinate);
-		return distance[0] >= width/2 && distance[1] >= height/2;
-	}
-
-	double getWidth() { return width; }
-	double getHeight() { return height; }
-	
+public interface NavigationSession  {
+	void destroy();
+	void pause();
+	void resume();
+	boolean isPaused();
+	Route getRoute();
 }
