@@ -45,6 +45,7 @@ import org.osgi.service.monitor.*;
 //import org.osgi.service.permissionadmin.PermissionInfo;
 //import org.xml.sax.helpers.DefaultHandler;
 //import org.xml.sax.Attributes;
+//import info.dmtree.security.ProtectedUri;
 
 public class SimpleClient implements ManagedService, ManagedServiceFactory,
         Monitorable, EventHandler
@@ -807,5 +808,13 @@ public class SimpleClient implements ManagedService, ManagedServiceFactory,
             System.out.println("Error retrieving new value of Status Variable from event.");
         else
             System.out.println("Value in event: " + eventVar);
+
+        // Temporary code for testing the filterability of an event property
+        // with ProtectedUri class
+        //String proba = ((ProtectedUri) event.getProperty("proba")).getUri();
+        //if(proba == null)
+        //    System.out.println("Error retrieving value of proba.");
+        //else
+        //    System.out.println("Value of proba: " + proba);
     }
 }
