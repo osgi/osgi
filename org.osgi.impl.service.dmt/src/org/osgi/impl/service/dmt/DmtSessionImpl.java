@@ -448,17 +448,21 @@ public class DmtSessionImpl implements DmtSession {
     
     // also used by copy() to pass an already validated Node instead of a URI
     private DmtData internalGetNodeValue(Node node) throws DmtException {
-        checkNode(node, SHOULD_EXIST);
+        // VEG CR supporting values for interior nodes
+        // checkNode(node, SHOULD_EXIST);
+        checkNode(node, SHOULD_BE_LEAF);
+        
         checkOperation(node, Acl.GET, MetaNode.CMD_GET);
         ReadableDataSession pluginSession = getReadableDataSession(node);
         DmtData data = pluginSession.getNodeValue(node.getPath());
         
-        boolean isLeafNode = pluginSession.isLeafNode(node.getPath());
-        boolean isLeafData = data.getFormat() != DmtData.FORMAT_NODE;
-        if(isLeafNode != isLeafData)
-            throw new DmtException(node.getUri(), DmtException.COMMAND_FAILED, 
-                    "Error retrieving node value, the type of the data " +
-                    "returned by the plugin does not match the node type.");
+        // VEG CR supporting values for interior nodes
+        //boolean isLeafNode = pluginSession.isLeafNode(node.getPath());
+        //boolean isLeafData = data.getFormat() != DmtData.FORMAT_NODE;
+        //if(isLeafNode != isLeafData)
+        //    throw new DmtException(node.getUri(), DmtException.COMMAND_FAILED, 
+        //            "Error retrieving node value, the type of the data " +
+        //            "returned by the plugin does not match the node type.");
         
         return data;
     }
@@ -582,19 +586,23 @@ public class DmtSessionImpl implements DmtSession {
     private void commonSetNodeValue(String nodeUri, DmtData data)
             throws DmtException {
         checkWriteSession();
-
-        int nodeConstraint =
-            data == null ? SHOULD_EXIST :
-            data.getFormat() == DmtData.FORMAT_NODE ?
-                SHOULD_BE_INTERIOR : SHOULD_BE_LEAF;
+        
+        // VEG CR supporting values for interior nodes
+        //int nodeConstraint =
+        //    data == null ? SHOULD_EXIST :
+        //    data.getFormat() == DmtData.FORMAT_NODE ?
+        //        SHOULD_BE_INTERIOR : SHOULD_BE_LEAF;
+        int nodeConstraint = SHOULD_BE_LEAF;
 
         Node node = makeAbsoluteUriAndCheck(nodeUri, nodeConstraint); 
         checkOperation(node, Acl.REPLACE, MetaNode.CMD_REPLACE);
         
+        // VEG CR supporting values for interior nodes
         // check data against meta-data in case of leaf nodes (meta-data does
         // not contain constraints for interior node values)
-        if(isLeafNodeNoCheck(node))
-            checkValue(node, data);
+        //if(isLeafNodeNoCheck(node))
+        //    checkValue(node, data);
+        checkValue(node, data);
 
         MetaNode metaNode = getMetaNodeNoCheck(node);
         if (metaNode != null && metaNode.getScope() == MetaNode.PERMANENT)
@@ -602,9 +610,14 @@ public class DmtSessionImpl implements DmtSession {
                     "Cannot set the value of a permanent node.");
         
         getReadWriteDataSession(node).setNodeValue(node.getPath(), data);
-        traverseEvents(EventList.REPLACE, node);
+
+        // VEG CR supporting values for interior nodes
+        //traverseEvents(EventList.REPLACE, node);
+        enqueueEvent(EventList.REPLACE, node);
     }
 
+    // VEG CR supporting values for interior nodes
+    /*
     private void traverseEvents(int mode, Node node) throws DmtException {
         if(isLeafNodeNoCheck(node))
             enqueueEvent(mode, node);
@@ -615,6 +628,7 @@ public class DmtSessionImpl implements DmtSession {
                 traverseEvents(mode, node.appendSegment(children[i]));
         }
     }
+    */
     
     // SyncML DMTND 7.5 (p16) Type: only the Get command is applicable!
     public synchronized void setNodeType(String nodeUri, String type)
