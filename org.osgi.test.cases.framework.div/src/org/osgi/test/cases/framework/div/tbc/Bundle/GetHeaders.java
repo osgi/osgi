@@ -117,34 +117,49 @@ public class GetHeaders {
 			"org.osgi.test.cases.framework.div.tb9.CheckManifestGetHeadersLocale",
 			"bundlecategory", "bundlecopyright"							};
 
+	private String[]		tb14_manifestHeadersKeys					= {
+			"Bundle-Name", "Bundle-Description", "Bundle-Vendor",
+			"Bundle-Version", "Bundle-DocURL", "Bundle-ContactAddress",
+			"Bundle-Category", "Bundle-Copyright"	};
+
 	private String[]		tb14_manifestHeadersValues_en_US			= {
 			"test.cases.framework.div.tb14",
 			"Contains the manifest headers localized by bundle_en_US.properties test case.",
-			"CESAR.ORG", "1.0", "http://www.cesar.org.br", "info@cesar.org.br",
-			"org.osgi.test.cases.framework.div.tb14.Activator",
+			"CESAR.ORG", 
+			"1.0", 
+			"http://www.cesar.org.br", 
+			"info@cesar.org.br",
 			"Should contain the bundle category for tb14",
 			"Should contain the bundle copyright for tb14"				};
 
 	private String[]		tb14_manifestHeadersValues_pt_BR			= {
 			"test.cases.framework.div.tb14",
 			"Contains the manifest headers localized by bundle_pt_BR.properties test case.",
-			"CESAR.ORG", "1.0", "http://www.cesar.org.br", "info@cesar.org.br",
-			"org.osgi.test.cases.framework.div.tb14.Activator",
+			"CESAR.ORG",
+			"1.0", 
+			"http://www.cesar.org.br", 
+			"info@cesar.org.br",
 			"Should contain the bundle category for tb14",
 			"Should contain the bundle copyright for tb14"				};
 
 	private String[]		tb14_manifestHeadersValues_es_ES			= {
 			"test.cases.framework.div.tb23",
 			"Contains the manifest headers localized by bundle_es_ES.properties test case.",
-			"CESAR.ORG", "1.0", "http://www.cesar.org.br", "info@cesar.org.br",
-			"org.osgi.test.cases.framework.div.tb14.Activator",
+			"CESAR.ORG", 
+			"1.0", 
+			"http://www.cesar.org.br", "info@cesar.org.br",
 			"Should contain the bundle category for tb23",
 			"Should contain the bundle copyright for tb23"				};
 
 	private String[]		tb14_manifestHeadersValues_missingLocale	= {
-			"bundlename", "bundledescription", "bundlevendor", "1.0", "docurl",
-			"contactinfo", "org.osgi.test.cases.framework.div.tb14.Activator",
-			"bundlecategory", "bundlecopyright"							};
+			"bundlename", 
+			"bundledescription", 
+			"bundlevendor", 
+			"1.0", 
+			"docurl",
+			"contactinfo", 
+			"bundlecategory", 
+			"bundlecopyright"							};
 
 	/**
 	 * Creates a new GetHeaders
@@ -503,26 +518,26 @@ public class GetHeaders {
 		Dictionary h = tb14.getHeaders("pt_BR");
 
 		for (int i = 0; i < tb14_manifestHeadersValues_pt_BR.length; i++) {
-			if (!h.get(manifestHeadersKeys[i]).equals(
+			if (!h.get(tb14_manifestHeadersKeys[i]).equals(
 					tb14_manifestHeadersValues_pt_BR[i]))
 				throw new Exception(
 						"Exception on testGetHeaders010-1. Manifest header localization does not match. Expected "
 								+ tb14_manifestHeadersValues_pt_BR[i]
 								+ " was "
-								+ h.get(manifestHeadersKeys[i]));
+								+ h.get(tb14_manifestHeadersKeys[i]));
 		}
 
 		h = tb14.getHeaders("en_US");
 
 		// manifest localization before bundle is resolved.
 		for (int i = 0; i < tb14_manifestHeadersValues_pt_BR.length; i++) {
-			if (!h.get(manifestHeadersKeys[i]).equals(
+			if (!h.get(tb14_manifestHeadersKeys[i]).equals(
 					tb14_manifestHeadersValues_pt_BR[i]))
 				throw new Exception(
 						"Exception on testGetHeaders010-2. Manifest header localization does not match. Expected "
 								+ tb14_manifestHeadersValues_pt_BR[i]
 								+ " was "
-								+ h.get(manifestHeadersKeys[i]));
+								+ h.get(tb14_manifestHeadersKeys[i]));
 		}
 
 		tb14.uninstall();
@@ -583,13 +598,13 @@ public class GetHeaders {
 		// manifest localization after bundle is resolved.
 		Dictionary h = tb14.getHeaders("en_US");
 		for (int i = 0; i < tb14_manifestHeadersValues_en_US.length; i++) {
-			if (!h.get(manifestHeadersKeys[i]).equals(
+			if (!h.get(tb14_manifestHeadersKeys[i]).equals(
 					tb14_manifestHeadersValues_en_US[i]))
 				throw new Exception(
 						"Exception on testGetHeaders012. Manifest header localization does not match. Expected "
 								+ tb14_manifestHeadersValues_en_US[i]
 								+ " was "
-								+ h.get(manifestHeadersKeys[i]));
+								+ h.get(tb14_manifestHeadersKeys[i]));
 		}
 		tb14.uninstall();
 		tb9.stop();
@@ -617,24 +632,24 @@ public class GetHeaders {
 		Dictionary h = tb14.getHeaders("fr_FR");
 
 		for (int i = 0; i < tb14_manifestHeadersValues_missingLocale.length; i++) {
-			if (!h.get(manifestHeadersKeys[i]).equals(
+			if (!h.get(tb14_manifestHeadersKeys[i]).equals(
 					tb14_manifestHeadersValues_missingLocale[i]))
 				throw new Exception(
 						"Exception on testGetHeaders013-1. Manifest header localization does not match. Expected "
 								+ tb14_manifestHeadersValues_missingLocale[i]
-								+ " was " + h.get(manifestHeadersKeys[i]));
+								+ " was " + h.get(tb14_manifestHeadersKeys[i]));
 		}
 
 		h = tb14.getHeaders("es_ES");
 
 		for (int i = 0; i < tb14_manifestHeadersValues_es_ES.length; i++) {
-			if (!h.get(manifestHeadersKeys[i]).equals(
+			if (!h.get(tb14_manifestHeadersKeys[i]).equals(
 					tb14_manifestHeadersValues_es_ES[i]))
 				throw new Exception(
 						"Exception on testGetHeaders013-2. Manifest header localization does not match. Expected "
 								+ tb14_manifestHeadersValues_es_ES[i]
 								+ " was "
-								+ h.get(manifestHeadersKeys[i]));
+								+ h.get(tb14_manifestHeadersKeys[i]));
 		}
 
 		tb9.stop();
