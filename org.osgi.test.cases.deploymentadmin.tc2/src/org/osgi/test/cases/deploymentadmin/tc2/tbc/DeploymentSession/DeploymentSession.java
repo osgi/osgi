@@ -91,6 +91,7 @@ public class DeploymentSession {
 		this.tbc = tbc;
 	}
 
+
 	public void run() {
 		testDeploymentSession001();
 		testDeploymentSession002();
@@ -592,23 +593,23 @@ public class DeploymentSession {
 	            testBlockRP.setReleased(true);
 	            
 	            
-	            long initial = System.currentTimeMillis();
-	            long actual = System.currentTimeMillis();
-	            
-	            while ((!worker1.isInstalled() || !worker2.isInstalled()) && (actual - initial < DeploymentConstants.SHORT_TIMEOUT)) {
-		            	actual = System.currentTimeMillis();
+	            if (!worker1.isInstalled()) {
+	            	//If it's not yet installed, wait an acceptable time
+	            	this.wait(DeploymentConstants.SHORT_TIMEOUT);
 	            }
-
-	            //The second deployment package can be installed or not, depending on how long is the RI timeout
-	            //Due to that, we only check is the first DP is installed.
+	            
+	            //The second deployment package can be installed or not, depending on how long the RI timeout is
+	            //Due to that, we only check if the first DP is installed.
 	            tbc.assertTrue("DeploymentAdmin only processed a single session at a time",worker1.isInstalled());
 	            
 	        } catch (Exception e) {
 	            tbc.fail(MessagesConstants.getMessage(
 	                MessagesConstants.UNEXPECTED_EXCEPTION, new String[]{e.getClass().getName()}));
 	        } finally {
-	            worker1.uninstallDP();
-	            worker2.uninstallDP();
+	        	if (null!=worker1)
+	        		worker1.uninstallDP();
+	        	if (null!=worker2)
+	        		worker2.uninstallDP();
 	        }
 	    }
 	 
@@ -667,8 +668,10 @@ public class DeploymentSession {
 	            tbc.fail(MessagesConstants.getMessage(
 	                MessagesConstants.UNEXPECTED_EXCEPTION, new String[]{e.getClass().getName()}));
 	        } finally {
-	            worker1.uninstallDP();
-	            worker2.uninstallDP();
+	        	if (null!=worker1)
+	        		worker1.uninstallDP();
+	        	if (null!=worker2)
+	        		worker2.uninstallDP();
 	            //If the uninstallation was not completed, we need to remove this DP in order to not affect other TCs 
 	            cleanUp(testDP);
 	        }
@@ -712,7 +715,8 @@ public class DeploymentSession {
 	                MessagesConstants.UNEXPECTED_EXCEPTION, new String[]{e.getClass().getName()}));
 	        } finally {
 	        	testBlockRP.setReleased(true);
-	            worker1.uninstallDP();
+	        	if (null!=worker1)
+	        		worker1.uninstallDP();
 	        }
 	    }
 	 
