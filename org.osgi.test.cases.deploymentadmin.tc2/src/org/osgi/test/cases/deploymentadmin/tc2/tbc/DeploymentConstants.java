@@ -144,7 +144,7 @@ public class DeploymentConstants {
     	if (System.getProperty("org.osgi.test.cases.deploymentadmin.short_timeout")!=null) {
     		SHORT_TIMEOUT = Integer.parseInt(System.getProperty("org.osgi.test.cases.deploymentadmin.short_timeout"));
     	} else {
-    		SHORT_TIMEOUT = 2000;
+    		SHORT_TIMEOUT = 3500;
     	}
     }    
     

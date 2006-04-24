@@ -559,57 +559,58 @@ public class DeploymentSession {
 	            + DeploymentConstants.PID_RESOURCE_PROCESSOR4, "(name=*)");
 	        
 	        TestingBlockingResourceProcessor testBlockRP = null;
-	        SessionWorker worker1 = null,worker2 = null;
+	        SessionWorker workerBlockDP = null,workerSimpleDP = null;
 	        
 	        try {
             
 	            TestingDeploymentPackage blockDP = tbc.getTestingDeploymentPackage(DeploymentConstants.BLOCK_SESSION_RESOURCE_PROCESSOR);
 	            TestingDeploymentPackage testDP = tbc.getTestingDeploymentPackage(DeploymentConstants.SIMPLE_DP);
 	            
-	            worker1 = new SessionWorker(blockDP);
-	            worker1.start();
+	            workerBlockDP = new SessionWorker(blockDP);
+	            workerBlockDP.start();
 	            
-	            //Just to guarantee that this Thread is executed before the second one
-	            while (!worker1.isRunning()) {
-	            	this.wait(500);
+	            //It guarantees that this Thread is executed before the second one
+	            //Before workerBlockDP installation is blocked, it registers a resource processor 
+	            while (null==testBlockRP) {
+	            	testBlockRP = (TestingBlockingResourceProcessor) getTestSessionRP(DeploymentConstants.PID_RESOURCE_PROCESSOR4);
 	            }
 	            
-	            
-	            worker2 = new SessionWorker(testDP);
-	            worker2.start();
+
+	            workerSimpleDP = new SessionWorker(testDP);
+	            workerSimpleDP.start();
 	            //To assure it is blocked on the tests below
-	            while (!worker2.isRunning()) {
-	            	this.wait(500);
+	            while (!workerSimpleDP.isRunning()) {
+
 	            }
 	            
-	            testBlockRP = (TestingBlockingResourceProcessor) getTestSessionRP(DeploymentConstants.PID_RESOURCE_PROCESSOR4);
-	            tbc.assertNotNull("TestingBlockingResourceProcessor is not null", testBlockRP);
+	            tbc.assertTrue("The installation of Block DP was not completed",!workerBlockDP.isInstalled());
 	            
-	            tbc.assertTrue("The installation of Block DP was not completed",!worker1.isInstalled());
-	            
-	            tbc.assertTrue("Installation of test DP was not completed", !worker2.isInstalled());
+	            tbc.assertTrue("Installation of test DP was not completed", !workerSimpleDP.isInstalled());
 	            
 	            // releases blocking resource processor
 	            testBlockRP.setReleased(true);
 	            
+	            long initial = System.currentTimeMillis();
+	            long actual = System.currentTimeMillis();
 	            
-	            if (!worker1.isInstalled()) {
-	            	//If it's not yet installed, wait an acceptable time
-	            	this.wait(DeploymentConstants.SHORT_TIMEOUT);
+	            while (!workerBlockDP.isInstalled() && (actual - initial < DeploymentConstants.SHORT_TIMEOUT)) {
+		            	actual = System.currentTimeMillis();
 	            }
 	            
 	            //The second deployment package can be installed or not, depending on how long the RI timeout is
 	            //Due to that, we only check if the first DP is installed.
-	            tbc.assertTrue("DeploymentAdmin only processed a single session at a time",worker1.isInstalled());
+	            tbc.assertTrue("DeploymentAdmin only processed a single session at a time",workerBlockDP.isInstalled());
 	            
 	        } catch (Exception e) {
 	            tbc.fail(MessagesConstants.getMessage(
 	                MessagesConstants.UNEXPECTED_EXCEPTION, new String[]{e.getClass().getName()}));
 	        } finally {
-	        	if (null!=worker1)
-	        		worker1.uninstallDP();
-	        	if (null!=worker2)
-	        		worker2.uninstallDP();
+	        	if (null!=testBlockRP) 
+	        		testBlockRP.setReleased(true);
+	        	if (null!=workerBlockDP)
+	        		workerBlockDP.uninstallDP();
+	        	if (null!=workerSimpleDP)
+	        		workerSimpleDP.uninstallDP();
 	        }
 	    }
 	 
@@ -628,37 +629,35 @@ public class DeploymentSession {
 	        tbc.log("#testDeploymentSession013");
 	        setResourceProcessorPermissions(DeploymentConstants.OSGI_DP_LOCATION
 	            + DeploymentConstants.PID_RESOURCE_PROCESSOR4, "(name=*)");
-	        SessionWorker worker1 = null,worker2 = null;
+	        SessionWorker workerSimpleDP = null,workerBlockDP = null;
 	        
 	        TestingBlockingResourceProcessor testBlockRP = null;
             TestingDeploymentPackage blockDP = tbc.getTestingDeploymentPackage(DeploymentConstants.BLOCK_SESSION_RESOURCE_PROCESSOR);
             TestingDeploymentPackage testDP = tbc.getTestingDeploymentPackage(DeploymentConstants.SIMPLE_DP);
 
 	        try {
-	            worker1 = new SessionWorker(testDP);
-	            worker1.start();
+	            workerSimpleDP = new SessionWorker(testDP);
+	            workerSimpleDP.start();
 	            
 	            //Installs the simple.dp
-	            while (!worker1.isInstalled()) {
-	            	this.wait(500);
+	            while (!workerSimpleDP.isInstalled()) {
+
 	            }
 	            
-	            worker2 = new SessionWorker(blockDP);
-	            worker2.start();
-	            //It blocks the session
-	            while (!worker2.isRunning()) {
-	            	this.wait(500);
+	            workerBlockDP = new SessionWorker(blockDP);
+	            workerBlockDP.start();
+	            
+	            //Before the workerBlockDP installation is blocked, it registers a resource processor 
+	            while (null==testBlockRP) {
+	            	testBlockRP = (TestingBlockingResourceProcessor) getTestSessionRP(DeploymentConstants.PID_RESOURCE_PROCESSOR4);
 	            }
 	            
-	            testBlockRP = (TestingBlockingResourceProcessor) getTestSessionRP(DeploymentConstants.PID_RESOURCE_PROCESSOR4);
-	            tbc.assertNotNull("TestingBlockingResourceProcessor is not null", testBlockRP);
+	            tbc.assertTrue("The installation of Block DP was not completed",!workerBlockDP.isInstalled());
 	            
-	            tbc.assertTrue("The installation of Block DP was not completed",!worker2.isInstalled());
-	            
-	            worker1.uninstallDP();
+	            workerSimpleDP.uninstallDP();
 	            
 	            tbc.assertTrue("Uninstallation of test DP was not completed, DeploymentAdmin only processed a single session at a time", 
-	            		!worker1.isUninstalled());
+	            		!workerSimpleDP.isUninstalled());
 	            
 	            // releases blocking resource processor
 	            testBlockRP.setReleased(true);
@@ -668,10 +667,12 @@ public class DeploymentSession {
 	            tbc.fail(MessagesConstants.getMessage(
 	                MessagesConstants.UNEXPECTED_EXCEPTION, new String[]{e.getClass().getName()}));
 	        } finally {
-	        	if (null!=worker1)
-	        		worker1.uninstallDP();
-	        	if (null!=worker2)
-	        		worker2.uninstallDP();
+	        	if (null!=testBlockRP) 
+	        		testBlockRP.setReleased(true);
+	        	if (null!=workerSimpleDP)
+	        		workerSimpleDP.uninstallDP();
+	        	if (null!=workerBlockDP)
+	        		workerBlockDP.uninstallDP();
 	            //If the uninstallation was not completed, we need to remove this DP in order to not affect other TCs 
 	            cleanUp(testDP);
 	        }
@@ -701,9 +702,13 @@ public class DeploymentSession {
 	            
 	            //Just to guarantee that this Thread is executed before the second one
 	            while (!worker1.isRunning()) {
-	            	this.wait(500);
+
 	            }
-	            testBlockRP = (TestingBlockingResourceProcessor) getTestSessionRP(DeploymentConstants.PID_RESOURCE_PROCESSOR4);
+	          //Before the workerBlockDP installation is blocked, it registers a resource processor 
+	            while (null==testBlockRP) {
+	            	testBlockRP = (TestingBlockingResourceProcessor) getTestSessionRP(DeploymentConstants.PID_RESOURCE_PROCESSOR4);
+	            }
+
 	            
 	            tbc.installDeploymentPackage(tbc.getWebServer() + testDP.getFilename());
 	            tbc.failException("", DeploymentException.class);
@@ -714,7 +719,8 @@ public class DeploymentSession {
 	            tbc.fail(MessagesConstants.getMessage(
 	                MessagesConstants.UNEXPECTED_EXCEPTION, new String[]{e.getClass().getName()}));
 	        } finally {
-	        	testBlockRP.setReleased(true);
+	        	if (null!=testBlockRP) 
+	        		testBlockRP.setReleased(true);
 	        	if (null!=worker1)
 	        		worker1.uninstallDP();
 	        }
@@ -804,14 +810,12 @@ public class DeploymentSession {
 					dp = tbc.installDeploymentPackage(tbc.getWebServer() + testDP.getFilename());
 					installed=(dp==null?false:true);
 				} catch (Exception e) {
-					
 				}
 			} finally {
 				while (!uninstall) {
 					try {
 						this.wait(100);
 					} catch (InterruptedException e) {
-						
 					}
 				}
 				if (isInstalled()) {
@@ -819,7 +823,6 @@ public class DeploymentSession {
 						dp.uninstall();
 						uninstalled=true;
 					} catch (Exception e) {
-						
 					}
 				}
 			}
