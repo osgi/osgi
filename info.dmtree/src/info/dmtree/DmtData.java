@@ -122,10 +122,6 @@ public final class DmtData {
      */
     public static final int FORMAT_RAW_BINARY = 0x1000;
 
-    /**
-     * Constant instance representing a leaf node of <code>null</code> format.
-     */
-    public static DmtData NULL_VALUE = new DmtData();
     
     private static final Hashtable FORMAT_NAMES = new Hashtable();
     
@@ -143,6 +139,12 @@ public final class DmtData {
         FORMAT_NAMES.put(new Integer(FORMAT_XML),       "xml");
     }
 
+    /**
+     * Constant instance representing a leaf node of <code>null</code> format.
+     */
+    public static DmtData NULL_VALUE = new DmtData(); // FORMAT_NAME must be
+        // initialized by the time the constructor is called 
+    
     private final String str;
 
     private final int integer;
