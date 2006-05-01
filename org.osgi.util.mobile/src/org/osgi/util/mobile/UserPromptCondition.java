@@ -180,7 +180,7 @@ public class UserPromptCondition implements Condition {
 	 * </ul>
 	 * Regardless of the session level, the user is always given the option to reject the prompt
 	 * permanently, as if BLANKET/never was chosen. In this case, the question is not postponed
-	 * anymore, and {@link #isSatisfied()} returns false.<br></br>
+	 * anymore, and {@link #isSatisfied()} returns false.<br/>
 	 * If the system supports an separately accessible permission management GUI,
 	 * that may reset the condition
 	 * to its initial state.
