@@ -35,5 +35,6 @@
 	<classpathentry combineaccessrules="false" kind="src" path="/org.osgi.application"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/org.osgi.service.obr"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/info.dmtree"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/org.osgi.service.navigation"/>
 	<classpathentry kind="output" path=""/>
 </classpath>
