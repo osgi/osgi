@@ -5,12 +5,10 @@ package org.osgi.tools.xml2mif;
  */
 import java.io.*;
 
-import javax.xml.parsers.SAXParser;
+import javax.xml.parsers.*;
 
 import org.xml.sax.Attributes;
 import org.xml.sax.helpers.DefaultHandler;
-
-import com.icl.saxon.aelfred.SAXParserImpl;
 
 public class XML2MIF extends DefaultHandler {	
 	boolean			para;
@@ -18,6 +16,7 @@ public class XML2MIF extends DefaultHandler {
 	boolean			auto;
 	boolean			trimStartPara;
 	boolean			doubleSpace;
+	boolean			cellContent;
 	
 	static String	symbols =
 		"Tab"
@@ -183,8 +182,9 @@ public class XML2MIF extends DefaultHandler {
 				throw new RuntimeException("Do not understand " + args[i]);
 		}
 		XML2MIF handler = new XML2MIF();
-				
-		SAXParser parser = new SAXParserImpl();	
+		
+		SAXParserFactory sp = SAXParserFactory.newInstance();
+		SAXParser parser = sp.newSAXParser();	
 		parser.parse(in, handler );
 	}
 	
@@ -193,11 +193,18 @@ public class XML2MIF extends DefaultHandler {
 	public void endDocument () {out.println("# eod"); }
 	
 	public void startElement (String uri, String elname, String qname, Attributes attributes ) {
+		if (elname == null || elname.trim().length() == 0 )
+			elname = qname;
+		
 		if ( elname.equals("MIFFile") )
 			return;
 		if ( elname.equals("String") ) {
 			para = true;
 			return;
+		}
+		
+		if ( elname.equals("CellContent")) {
+			cellContent = true;
 		}
 		
 		if ( elname.equals("OpenPara")  ) {
@@ -212,11 +219,13 @@ public class XML2MIF extends DefaultHandler {
 		if ( elname.equals( "Tab" ) ) {
 			trimStartPara = true;
 		}
+		
 		if ( elname.equals( "Para" ) ) {
 			trimStartPara = true;
 			inPara=true;
 			if ( auto ) {
 				auto=false;
+				
 				out.println( "> #AUTO" );
 			}
 		}
@@ -249,11 +258,24 @@ public class XML2MIF extends DefaultHandler {
 		
 		for ( int i=0; i<attributes.getLength(); i++ ) {
 			String key = attributes.getLocalName(i);
+			if ( key == null || key.trim().length()==0)
+				key = attributes.getQName(i);
 			String value = attributes.getValue(i);
+			if ( ! value.matches("[0-9]+"))
+				value = "`" + value + "'";
+
+			value = value.replaceAll(">","\\\\>");
+			value = value.replaceAll("<","\\\\<");
+			if ( ! value.startsWith("`"))
+				value = value.replaceAll("'","\\\\'");
+			
 			out.println( "<" + key +" " + value + ">" );		
 		}
 	}
 	public void endElement (String uri, String elname, String qname) { 
+		if (elname == null || elname.trim().length() == 0 )
+			elname = qname;
+		
 		if ( elname.equals("MIFFile") )
 			return;
 		if ( elname.equals("HardReturn") )
@@ -261,6 +283,9 @@ public class XML2MIF extends DefaultHandler {
 		if ( elname.equals("String") ) {
 			para = false;
 			return;
+		}
+		if ( elname.equals("CellContent")) {
+			cellContent = false;
 		}
 		if ( elname.equals("OpenPara") ) {
 			return;
