@@ -9,6 +9,5 @@ MIDlet-Vendor: Cesar
 MIDlet-1: TestApplication,/TestIcon.gif,org.osgi.test.cases.application.tb1.TestApplication
 MicroEdition-Profile: MIDP-2.0
 MicroEdition-Configuration: CLDC-1.1
-$(EXPORT-PACKAGE)
 $(IMPORT-PACKAGE)
 $(PRIVATE-PACKAGE)
