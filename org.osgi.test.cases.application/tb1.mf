@@ -9,4 +9,6 @@ MIDlet-Vendor: Cesar
 MIDlet-1: TestApplication,/TestIcon.gif,org.osgi.test.cases.application.tb1.TestApplication
 MicroEdition-Profile: MIDP-2.0
 MicroEdition-Configuration: CLDC-1.1
-Import-Package: org.osgi.service.log, org.osgi.service.application, org.osgi.service.event, org.osgi.application, org.osgi.framework, org.osgi.test.cases.application.tbc.util
+$(EXPORT-PACKAGE)
+$(IMPORT-PACKAGE)
+$(PRIVATE-PACKAGE)
