@@ -1,5 +1,7 @@
 Manifest-Version: 1.0
 Bundle-Name: tools.fileinstall
+Bundle-SymbolicName: tools.fileinstall
+Bundle-Version: 1.0.0
 Bundle-Description: Looks at a directory and installs bundles from this folder. 
  If the file is removed from this folder, it is uninstalled. It supports the 
  following properties:
