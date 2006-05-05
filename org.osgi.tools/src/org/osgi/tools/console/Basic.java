@@ -858,6 +858,7 @@ public class Basic implements CommandProvider {
 		return ""
 				+ "BASIC\r\n"
 				+ "cd <dir>                        Change directory (for v cmd -> sets PWD)\r\n"
+				+ "capture                         Capture the console until a <cr> is hit\r\n"
 				+ "exports [-s]                    List all exports\r\n"
 				+ "decompile <service_id>          Decompile the interfaces of the given interface\r\n"
 				+ "free                            free memory\r\n"
@@ -986,5 +987,10 @@ public class Basic implements CommandProvider {
 
 	public Object toString(Object o) {
 		return Handler.toString(o);
+	}
+
+	public Object _capture( CommandInterpreter intp ) throws IOException {
+		BufferedReader rdr = new BufferedReader(new InputStreamReader(System.in));
+		return rdr.readLine();
 	}
 }

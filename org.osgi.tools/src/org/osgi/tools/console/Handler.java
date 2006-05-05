@@ -112,24 +112,25 @@ class Handler extends Thread {
 		}
 		return sb.toString();
 	}
-	
-	public static String toString( int n, Throwable throwable ) {
+
+	public static String toString(int n, Throwable throwable) {
 		StringBuffer sb = new StringBuffer();
 		String del = "";
-		while ( throwable != null ) {
+		while (throwable != null) {
 			sb.append(del);
 			sb.append(spaces(n));
 			sb.append(throwable);
 			try {
-				StackTraceElement elements[]= throwable.getStackTrace();
+				StackTraceElement elements[] = throwable.getStackTrace();
 				sb.append(" ");
 				sb.append(elements[0]);
-			} catch( Throwable t ) {
+			}
+			catch (Throwable t) {
 				// Only works on 1.4
 			}
 			throwable = throwable.getCause();
 			del = "\r\n";
-			n+=4;
+			n += 4;
 		}
 		return sb.toString();
 	}
@@ -150,7 +151,7 @@ class Handler extends Thread {
 	public static String toString(int n, Collection v) {
 		StringBuffer sb = new StringBuffer();
 		String del = "";
-		for (Iterator i = v.iterator(); i.hasNext(); ) {
+		for (Iterator i = v.iterator(); i.hasNext();) {
 			Object element = i.next();
 			if (element != null) {
 				sb.append(del);
@@ -191,14 +192,13 @@ class Handler extends Thread {
 		String date = getDate(l.getTime());
 		Calendar cal = Calendar.getInstance();
 		cal.setTime(new Date(l.getTime()));
-		return spaces(n) + date 
-				+ ":" + level
-				+ ":" + id + ": " + l.getMessage() + exception.toString();
+		return spaces(n) + date + ":" + level + ":" + id + ": "
+				+ l.getMessage() + exception.toString();
 	}
 
 	/**
-	 * I know, there is SimpleDateFormat ... it is just not part of the
-	 * min. exec. env. ...
+	 * I know, there is SimpleDateFormat ... it is just not part of the min.
+	 * exec. env. ...
 	 * 
 	 * @param time
 	 * @return
@@ -207,22 +207,22 @@ class Handler extends Thread {
 		Calendar cal = Calendar.getInstance();
 		cal.setTime(new Date(time));
 		StringBuffer sb = new StringBuffer();
-		sb.append( cal.get(Calendar.YEAR));
-		sb.append( fit(cal.get(Calendar.MONTH),2));
-		sb.append( fit(cal.get(Calendar.DAY_OF_MONTH),2));
-		sb.append( fit(cal.get(Calendar.HOUR_OF_DAY),2));
-		sb.append( fit(cal.get(Calendar.MINUTE),2));
+		sb.append(cal.get(Calendar.YEAR));
+		sb.append(fit(cal.get(Calendar.MONTH), 2));
+		sb.append(fit(cal.get(Calendar.DAY_OF_MONTH), 2));
+		sb.append(fit(cal.get(Calendar.HOUR_OF_DAY), 2));
+		sb.append(fit(cal.get(Calendar.MINUTE), 2));
 		return sb.toString();
 	}
 
 	// TODO innefficient
-	public static String fit( int n, int width ) {
+	public static String fit(int n, int width) {
 		String number = Integer.toString(n);
 		int diff = width - number.length();
-		if ( diff <= 0 )
+		if (diff <= 0)
 			return number;
-		
-		return "000000000000".substring(0,diff) + number;
+
+		return "000000000000".substring(0, diff) + number;
 	}
 
 	static String status(Bundle b) {
@@ -431,28 +431,25 @@ class Handler extends Thread {
 				}
 				// user is logged in
 				Object task = setTimer();
-				Object result = context.execute(line);
-				Object translation = null;
-				if (result != null) {
-					// Hangs for some reason, looks like deadlock???
-					// for ( Enumeration e=_targets.elements();
-					// translation==null && e.hasMoreElements(); )
-					// {
-					// CommandProvider p = (CommandProvider) e.nextElement();
-					// System.out.println( "Will translate " + p );
-					// translation = p.toString( result );
-					// System.out.println( "Hase done translate " + p + " " +
-					// translation );
-					// }
-					if (translation == null)
-						translation = handleEol(toString(result), context);
-					_wrt.print(translation);
-					_wrt.print("\r\n");
-					cancel(task);
+				PrintStream err = System.err;
+				PrintStream out = System.out;
+				InputStream in  = System.in;
+				try {
+					System.setErr(new PrintStream(_out));
+					System.setOut(new PrintStream(_out));
+					if ( _in.available() > 0 )
+						_in.skip(_in.available());
+					
+					System.setIn(_in);
+					Object result = context.execute(line);
+					doTranslation(context, task, result);
 				}
-				else {
-					_wrt.print("\r\n");
-					_wrt.flush();
+				finally {
+					err.flush();
+					out.flush();
+					System.setErr(err);
+					System.setOut(out);
+					System.setIn(in);
 				}
 			}
 		}
@@ -461,6 +458,21 @@ class Handler extends Thread {
 			return;
 		}
 		context.close();
+	}
+
+	private void doTranslation(Context context, Object task, Object result) {
+		Object translation = null;
+		if (result != null) {
+			if (translation == null)
+				translation = handleEol(toString(result), context);
+			_wrt.print(translation);
+			_wrt.print("\r\n");
+			cancel(task);
+		}
+		else {
+			_wrt.print("\r\n");
+			_wrt.flush();
+		}
 	}
 
 	static String justify(String s, int w, int type) {
