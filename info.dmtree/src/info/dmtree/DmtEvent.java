@@ -18,12 +18,13 @@
 package info.dmtree;
 
 /**
- * Event class storing the details of a change in the tree. <code>DmtEvent</code>
- * is used by <code>DmtAdmin</code> to notify registered {@link DmtEventListener EventListeners} 
- * about important changes. Events are generated after every
- * successful DMT change, and also when sessions are opened or closed. If a
- * {@link DmtSession} is opened in atomic mode, DMT events are only sent when
- * the session is comitted, when the changes are actually performed.
+ * Event class storing the details of a change in the tree.
+ * <code>DmtEvent</code> is used by <code>DmtAdmin</code> to notify registered
+ * {@link DmtEventListener EventListeners} about important changes. Events are
+ * generated after every successful DMT change, and also when sessions are
+ * opened or closed. If a {@link DmtSession} is opened in atomic mode, DMT
+ * events are only sent when the session is comitted, when the changes are
+ * actually performed.
  * <p>
  * An event is generated for each group of nodes added, deleted, replaced,
  * renamed or copied, in this order.
@@ -73,17 +74,17 @@ public interface DmtEvent {
     /**
      * Event type indicating nodes that were replaced.
      */
-    public static final int REPLACED = 0x0F;
+    public static final int REPLACED = 0x10;
 
     /**
      * Event type indicating that a new session was opened.
      */
-    public static final int SESSION_OPENED = 0x10;
+    public static final int SESSION_OPENED = 0x20;
 
     /**
      * Event type indicating that a session was closed.
      */
-    public static final int SESSION_CLOSED = 0x20;
+    public static final int SESSION_CLOSED = 0x40;
 
     /**
      * This method returns the type of this event.
