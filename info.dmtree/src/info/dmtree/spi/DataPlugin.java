@@ -32,8 +32,8 @@ import info.dmtree.DmtSession;
  * <p>
  * When the first reference in a session is made to a node handled by this
  * plugin, the DmtAdmin calls one of the <code>open...</code> methods to
- * retrieve a plugin session object for processing the request.  The called
- * method depends on the lock type of the current session.  In case of
+ * retrieve a plugin session object for processing the request. The called
+ * method depends on the lock type of the current session. In case of
  * {@link #openReadWriteSession(String[], DmtSession)} and
  * {@link #openAtomicSession(String[], DmtSession)}, the plugin may return
  * <code>null</code> to indicate that the specified lock type is not
