@@ -89,7 +89,7 @@ public class GetCondition {
         tbc.log("#testGetCondition001");
         try {
             Condition cond = IMEICondition.getCondition(
-                    PolicyConstants.TEST_BUNDLE,
+                    tbc.getBundle(),
                     new ConditionInfo("org.osgi.util.gsm.IMEICondition",new String[]{PolicyConstants.IMEI_VALID_CODE}));
 
             tbc.assertNotNull(MessagesConstants.getMessage(
@@ -142,7 +142,7 @@ public class GetCondition {
         tbc.log("#testGetCondition003");
         try {
             IMEICondition.getCondition(
-                    PolicyConstants.TEST_BUNDLE, null);
+            		tbc.getBundle(), null);
 
             tbc.failException("", NullPointerException.class);
         } catch (NullPointerException e) {
@@ -169,7 +169,7 @@ public class GetCondition {
         tbc.log("#testGetCondition004");
         try {
             IMEICondition.getCondition(
-                    PolicyConstants.TEST_BUNDLE,
+            		tbc.getBundle(),
                     new ConditionInfo("org.osgi.util.gsm.IMEICondition",new String[]{PolicyConstants.INVALID_CODE}));
 
             tbc.failException("", IllegalArgumentException.class);
@@ -197,7 +197,7 @@ public class GetCondition {
         tbc.log("#testGetCondition005");
         try {
             IMEICondition.getCondition(
-                    PolicyConstants.TEST_BUNDLE,
+            		tbc.getBundle(),
                     new ConditionInfo("org.osgi.util.gsm.IMEICondition",new String[]{PolicyConstants.IMEI_LESS_DIGIT_CODE}));
 
             tbc.failException("", IllegalArgumentException.class);
@@ -225,7 +225,7 @@ public class GetCondition {
         tbc.log("#testGetCondition006");
         try {
             IMEICondition.getCondition(
-                    PolicyConstants.TEST_BUNDLE,
+            		tbc.getBundle(),
                     new ConditionInfo("org.osgi.util.gsm.IMEICondition",new String[]{PolicyConstants.IMEI_MORE_DIGIT_CODE}));
 
             tbc.failException("", IllegalArgumentException.class);
@@ -252,7 +252,7 @@ public class GetCondition {
     private void testGetCondition007() {
         tbc.log("#testGetCondition007");
         try {
-            IMEICondition.getCondition(PolicyConstants.TEST_BUNDLE,
+            IMEICondition.getCondition(tbc.getBundle(),
                     new ConditionInfo("org.osgi.util.gsm.IMEICondition",new String[]{PolicyConstants.IMEI_CHAR_CODE}));
     
             tbc.failException("", IllegalArgumentException.class);
@@ -280,7 +280,7 @@ public class GetCondition {
         tbc.log("#testGetCondition008");
         try {
             IMEICondition.getCondition(
-                    PolicyConstants.TEST_BUNDLE,
+            		tbc.getBundle(),
                     new ConditionInfo("org.osgi.util.gsm.IMEICondition",new String[]{PolicyConstants.IMEI_INVALID_CODE}));
 
             tbc.failException("", IllegalArgumentException.class);
@@ -307,7 +307,7 @@ public class GetCondition {
         tbc.log("#testGetCondition009");
         try {
             Condition cond = IMEICondition.getCondition(
-                    PolicyConstants.TEST_BUNDLE,
+            		tbc.getBundle(),
                     new ConditionInfo("org.osgi.util.gsm.IMEICondition",new String[]{PolicyConstants.IMEI_VALID_CODE_WILDCARD}));
 
             tbc.assertNotNull(MessagesConstants.getMessage(
@@ -332,7 +332,7 @@ public class GetCondition {
         tbc.log("#testGetCondition010");
         try {
             Condition cond = IMEICondition.getCondition(
-                    PolicyConstants.TEST_BUNDLE,
+            		tbc.getBundle(),
                     new ConditionInfo("org.osgi.util.gsm.IMEICondition",new String[]{"*"}));
 
             tbc.assertNotNull(MessagesConstants.getMessage(

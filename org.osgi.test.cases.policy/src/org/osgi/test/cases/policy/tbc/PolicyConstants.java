@@ -38,7 +38,6 @@ package org.osgi.test.cases.policy.tbc;
 
 import org.osgi.framework.Bundle;
 import org.osgi.service.dmt.security.DmtPermission;
-import org.osgi.test.cases.policy.tbc.util.TestBundle;
 
 public class PolicyConstants {
 
@@ -123,8 +122,6 @@ public class PolicyConstants {
 
 	public static final String CONDITIONAL_PERMISSION_NODE = POLICY_JAVA_NODE
 			+ "/ConditionalPermission";
-
-	public static final Bundle TEST_BUNDLE = new TestBundle();
 
 	public static final String INVALID_COST_LIMIT = "TEST";
 

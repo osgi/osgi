@@ -57,7 +57,6 @@ import org.osgi.service.permissionadmin.PermissionInfo;
 import org.osgi.test.cases.policy.tbc.UserPromptCondition.IsMutable;
 import org.osgi.test.cases.policy.tbc.UserPromptCondition.IsPostponed;
 import org.osgi.test.cases.policy.tbc.UserPromptCondition.IsSatisfied;
-import org.osgi.test.cases.policy.tbc.util.TestBundle;
 import org.osgi.test.cases.util.DefaultTestBundleControl;
 
 /**
@@ -91,7 +90,7 @@ public class PolicyTestControl extends DefaultTestBundleControl {
 		da = (DmtAdmin) getContext().getService(
 				getContext().getServiceReference(DmtAdmin.class.getName()));
         
-        bundle = new TestBundle();
+        bundle = this.getContext().getBundle();
         
         try {
 			providerMessages = installBundle("com.provider.messages.jar");
