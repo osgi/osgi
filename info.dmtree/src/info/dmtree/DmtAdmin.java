@@ -156,7 +156,7 @@ public interface DmtAdmin {
     /**
      * Registers an event listener on behalf of a local application. The given
      * listener will recieve notification on all changes affecting the specified
-     * subtree. The substree is specified by its root node URI. An event is
+     * subtree. The subtree is specified by its root node URI. An event is
      * delivered to the registered listener if at least one affected node is
      * within this subtree. The events can also be filtered by specifying a
      * bitmask of relevant event types (e.g.
@@ -176,7 +176,7 @@ public interface DmtAdmin {
      *        <code>null</code>
      * @param listener the listener to be registered, must not be
      *        <code>null</code>
-     * @throws SecurityException if the caller doesn't have the necessary
+     * @throws SecurityException if the caller doesn't have the necessary GET
      *         <code>DmtPermission</code> for the given URI
      * @throws NullPointerException if the <code>uri</code> or
      *         <code>listener</code> parameter is <code>null</code>
@@ -186,7 +186,7 @@ public interface DmtAdmin {
     /**
      * Registers an event listener on behalf of a remote principal. The given
      * listener will recieve notification on all changes affecting the specified
-     * subtree. The substree is specified by its root node URI. An event is
+     * subtree. The subtree is specified by its root node URI. An event is
      * delivered to the registered listener if at least one affected node is
      * within this subtree. The events can also be filtered by specifying a
      * bitmask of relevant event types (e.g.
