@@ -187,7 +187,6 @@ public final class Acl {
             if (!ALL_PRINCIPALS.equals(principals[i]))
                 checkPrincipal(principals[i]);
             checkPermissions(permissions[i]);
-            // ### That previous line looks VERY fishy
 
             Integer permInt = new Integer(permissions[i]);
             Object old = tempPrincipalPermissions.put(principals[i], permInt);
