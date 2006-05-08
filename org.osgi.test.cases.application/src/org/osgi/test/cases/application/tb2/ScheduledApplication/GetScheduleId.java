@@ -81,7 +81,7 @@ public class GetScheduleId implements TestInterface {
 	
     /**
      * This method asserts that if the ScheduledApplication is unregistered
-     * IllegalStateException will be thrown.
+     * no exception is thrown.
      * 
      * @spec ScheduleApplication.getScheduleId()
      */     
@@ -103,16 +103,9 @@ public class GetScheduleId implements TestInterface {
             
             sa.getScheduleId();
 
-            tbc.failException("", IllegalStateException.class);
-        } catch (IllegalStateException e) {
-            tbc.pass(MessagesConstants.getMessage(
-                    MessagesConstants.EXCEPTION_CORRECTLY_THROWN,
-                    new String[] { IllegalStateException.class.getName() }));
-        } catch (Exception e) {
-            tbc.fail(MessagesConstants.getMessage(
-                    MessagesConstants.EXCEPTION_THROWN, new String[] {
-                            IllegalStateException.class.getName(),
-                            e.getClass().getName() }));
+            tbc.pass("No exception was thrown.");
+		} catch (Exception e) {
+			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": " + e.getClass().getName());
         } finally {
             tbc.cleanUp(sa, infos);
         }
