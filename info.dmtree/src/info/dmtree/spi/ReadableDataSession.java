@@ -120,6 +120,7 @@ public interface ReadableDataSession {
     /**
      * Get the list of children names of a node. The returned array contains the
      * names - not the URIs - of the immediate children nodes of the given node.
+     * The returned child names must be mangled ({@link info.dmtree.Uri#mangle}).
      * The returned array may contain <code>null</code> entries, but these are
      * removed by the DmtAdmin before returning it to the client.
      * 
@@ -311,7 +312,7 @@ public interface ReadableDataSession {
     boolean isLeafNode(String[] nodePath) throws DmtException;
 
     /**
-     * Get the data contained in a leaf node.
+     * Get the data contained in a leaf or interior node.
      * 
      * @param nodePath the absolute path of the node to retrieve
      * @return the data of the leaf node, must not be <code>null</code>
@@ -321,6 +322,8 @@ public interface ReadableDataSession {
      *         points to a non-existing node
      *         <li><code>METADATA_MISMATCH</code> if the information could
      *         not be retrieved because of meta-data restrictions
+     *         <li><code>FEATURE_NOT_SUPPORTED</code> if the specified node is
+     *         an interior node and does not support Java object values
      *         <li><code>DATA_STORE_FAILURE</code> if an error occurred while
      *         accessing the data store
      *         <li><code>COMMAND_FAILED</code> if some unspecified error is

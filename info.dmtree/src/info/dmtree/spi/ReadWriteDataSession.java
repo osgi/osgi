@@ -268,11 +268,14 @@ public interface ReadWriteDataSession extends ReadableDataSession {
     void setNodeType(String[] nodePath, String type) throws DmtException;
 
     /**
-     * Set the value of a leaf node. The format of the node is contained in the
-     * <code>DmtData</code> object. If the specified value is
-     * <code>null</code>, the default value must be taken; if there is no
-     * default value, a <code>DmtException</code> with error code
-     * <code>METADATA_MISMATCH</code> must be thrown.
+     * Set the value of a leaf or interior node. The format of the node is
+     * contained in the <code>DmtData</code> object. For interior nodes, the
+     * format is <code>FORMAT_NODE</code>, while for leaf nodes this format is
+     * never used.
+     * <p>
+     * If the specified value is <code>null</code>, the default value must be
+     * taken; if there is no default value, a <code>DmtException</code> with
+     * error code <code>METADATA_MISMATCH</code> must be thrown.
      * 
      * @param nodePath the absolute path of the node
      * @param data the data to be set, can be <code>null</code>
@@ -282,6 +285,8 @@ public interface ReadWriteDataSession extends ReadableDataSession {
      *         points to a non-existing node
      *         <li><code>METADATA_MISMATCH</code> if the value could not be
      *         set because of meta-data restrictions
+     *         <li><code>FEATURE_NOT_SUPPORTED</code> if the specified node is
+     *         an interior node and does not support Java object values
      *         <li><code>DATA_STORE_FAILURE</code> if an error occurred while
      *         accessing the data store
      *         <li><code>COMMAND_FAILED</code> if some unspecified error is
