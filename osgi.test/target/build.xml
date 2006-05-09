@@ -24,20 +24,22 @@
 	
 	<target name="-run">
 		<echo>Testing ${impls}</echo>
-		<delete dir="bundles"/> <!-- delete bundles dir to clear permdata -->
+		<delete dir="configuration"/> <!-- delete bundles dir to clear permdata -->
 		<delete dir="cdresources"/> <!-- delete upnp cd resources -->
 		<java fork="true" classname="org.eclipse.osgi.framework.launcher.Launcher">	
 			<classpath path="../org.osgi.impl.framework.eclipse.jar"/>
 			<classpath path="${classpath}"/>
-			<jvmarg line="-Djava.security.manager=org.eclipse.osgi.framework.internal.core.FrameworkSecurityManager"/>
-			<jvmarg line="-Djava.security.policy=policy"/>
-			<jvmarg line="-Xverify:none"/>
-			<arg line="-console"/>
-			<arg line="init"/>
-			<arg line="'install file:../osgi.jar start'"/>
-			<arg line="'install file:../osgi.target.jar start'"/>
-			<arg line="'install ${impls} start'"/>
-			<arg line="launch"/>
+			<jvmarg value="-Djava.security.manager=org.eclipse.osgi.framework.internal.core.FrameworkSecurityManager"/>
+			<jvmarg value="-Djava.security.policy=policy"/>
+			<jvmarg value="-Dosgi.install.area=&quot;file:&quot;"/>
+			<jvmarg value="-Dosgi.support.signature.verify=true"/>
+			<jvmarg value="-Xverify:none"/>
+			<arg value="-console:2102"/>
+			<arg value="init"/>
+			<arg value="launch"/>
+			<arg value="install file:../osgi.jar start"/>
+			<arg value="install file:../osgi.target.jar start"/>
+			<arg value="install ${impls} start"/>
 		</java>
 	</target>
 </project>
