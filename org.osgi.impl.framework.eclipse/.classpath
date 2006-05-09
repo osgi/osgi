@@ -1,13 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry path="src" kind="src"/>
-	<classpathentry path="/org.osgi.framework" kind="src"/>
-	<classpathentry path="/org.osgi.service.condpermadmin" kind="src"/>
-	<classpathentry path="/org.osgi.service.packageadmin" kind="src"/>
-	<classpathentry path="/org.osgi.service.permissionadmin" kind="src"/>
-	<classpathentry path="/org.osgi.service.startlevel" kind="src"/>
-	<classpathentry path="/org.osgi.service.url" kind="src"/>
-	<classpathentry path="/org.osgi.util.tracker" kind="src"/>
 	<classpathentry path="org.eclipse.jdt.launching.JRE_CONTAINER" kind="con"/>
 	<classpathentry path="/licensed/jar/org.eclipse.osgi_3.2.0.jar" kind="lib" exported="true"/>
 	<classpathentry path="src" kind="output"/>
