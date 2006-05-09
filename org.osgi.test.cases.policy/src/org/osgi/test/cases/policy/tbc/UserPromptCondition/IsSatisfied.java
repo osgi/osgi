@@ -40,7 +40,6 @@ import java.util.Hashtable;
 
 import org.osgi.service.condpermadmin.Condition;
 import org.osgi.service.condpermadmin.ConditionInfo;
-import org.osgi.test.cases.policy.tbc.PolicyConstants;
 import org.osgi.test.cases.policy.tbc.PolicyTestControl;
 import org.osgi.test.cases.policy.tbc.util.MessagesConstants;
 import org.osgi.util.mobile.UserPromptCondition;
@@ -86,6 +85,7 @@ public class IsSatisfied {
     testIsSatisfied015();
     testIsSatisfied016();
     testIsSatisfied017();
+    testIsSatisfied018();
   }
 
   /**
@@ -470,16 +470,7 @@ public class IsSatisfied {
       propertiesIndex++;
       answerIndex++;
       ConditionConstants.CURRENT_ANSWER_INDEX = -1;
-      ConditionConstants.CURRENT_ANSWERS_INDICES = new int[3];      
-      Condition condition1 = UserPromptCondition.getCondition(tbc.getBundle(), 
-          new ConditionInfo(UserPromptCondition.class.getName(), new String[] {
-            ConditionConstants.IS_CONDITIONS_LEVELS[propertiesIndex],
-            ConditionConstants.IS_CONDITIONS_DEFAULT[propertiesIndex],
-            ConditionConstants.IS_CONDITIONS_CATALOG[propertiesIndex],
-            ConditionConstants.IS_CONDITIONS_MESSAGE[propertiesIndex]
-          }));
-      
-      propertiesIndex++;
+      ConditionConstants.CURRENT_ANSWERS_INDICES = new int[2];            
       ConditionConstants.CURRENT_ANSWERS_INDICES[0] = answerIndex++;
       Condition condition2 = UserPromptCondition.getCondition(tbc.getBundle(), 
           new ConditionInfo(UserPromptCondition.class.getName(), new String[] {
@@ -489,7 +480,7 @@ public class IsSatisfied {
             ConditionConstants.IS_CONDITIONS_MESSAGE[propertiesIndex]
           }));
       propertiesIndex++;
-      ConditionConstants.CURRENT_ANSWERS_INDICES[1] = answerIndex++;
+      ConditionConstants.CURRENT_ANSWERS_INDICES[1] = answerIndex;
       Condition condition3 = UserPromptCondition.getCondition(tbc.getBundle(), 
           new ConditionInfo(UserPromptCondition.class.getName(), new String[] {
             ConditionConstants.IS_CONDITIONS_LEVELS[propertiesIndex],
@@ -497,17 +488,16 @@ public class IsSatisfied {
             ConditionConstants.IS_CONDITIONS_CATALOG[propertiesIndex],
             ConditionConstants.IS_CONDITIONS_MESSAGE[propertiesIndex]
           }));
-      ConditionConstants.CURRENT_ANSWERS_INDICES[2] = answerIndex;
-      Condition[] conditions = { condition1, condition2, condition3 };				
+      Condition[] conditions = { condition2, condition3 };				
 
       tbc.log("#If the user does not accept all the questions, this test will fail.");
 
       tbc.assertTrue("Asserting that isSatisfied returns true.", condition3.isSatisfied(conditions, null));
-      tbc.log("#The second question must appear because null was passed as context. Otherwise the test will fail.");
+      tbc.log("#The second question must not appear because SESSION and BLANKET levels were used. Otherwise the test will fail.");
       
       ConditionConstants.CURRENT_ANSWERS_INDICES = null;//there should be only one answer in next evaluation
       ConditionConstants.CURRENT_ANSWER_INDEX = ++answerIndex;
-      tbc.assertTrue("Asserting that isSatisfied returns false.", !condition3.isSatisfied(conditions, null));
+      tbc.assertTrue("Asserting that isSatisfied returns true.", condition3.isSatisfied(conditions, null));
     } catch (Exception e) {
       tbc.fail("Unexpected exception was thrown + : " 
           + e.getClass().getName());
@@ -784,6 +774,44 @@ public class IsSatisfied {
       ConditionConstants.CURRENT_ANSWER_INDEX = ++answerIndex;
       tbc.assertTrue("Asserting if true is returned.", condition.isSatisfied(conditions, hash));
 
+    } catch (Exception e) {
+      tbc.fail("Unexpected exception was thrown + : " 
+          + e.getClass().getName());
+    }
+  }  
+  
+  /**
+   * This method asserts that if the user receives one question
+   * using null as context, each oneshot question will be prompted.
+   * 
+   * @spec UserPromptCondition.isSatisfied(Condition[],Dictionary)
+   */
+  private void testIsSatisfied018() {
+    tbc.log("#testIsSatisfied018");
+    try {
+      propertiesIndex++;
+      answerIndex++;
+      ConditionConstants.CURRENT_ANSWERS_INDICES = null;//there should be only one answer in next evaluation
+      ConditionConstants.CURRENT_ANSWER_INDEX = answerIndex++;
+       
+      Condition condition1 = UserPromptCondition.getCondition(tbc.getBundle(), 
+          new ConditionInfo(UserPromptCondition.class.getName(), new String[] {
+            ConditionConstants.IS_CONDITIONS_LEVELS[propertiesIndex],
+            ConditionConstants.IS_CONDITIONS_DEFAULT[propertiesIndex],
+            ConditionConstants.IS_CONDITIONS_CATALOG[propertiesIndex],
+            ConditionConstants.IS_CONDITIONS_MESSAGE[propertiesIndex]
+          }));
+      
+      Condition[] conditions = { condition1 };				
+
+      tbc.log("#If the user does not accept the questions, this test will fail.");
+
+      tbc.assertTrue("Asserting that isSatisfied returns true.", condition1.isSatisfied(conditions, null));
+      tbc.log("#The second question must appear because null was passed as context. Otherwise the test will fail.");
+      
+      ConditionConstants.CURRENT_ANSWERS_INDICES = null;//there should be only one answer in next evaluation
+      ConditionConstants.CURRENT_ANSWER_INDEX = answerIndex;
+      tbc.assertTrue("Asserting that isSatisfied returns false.", !condition1.isSatisfied(conditions, null));
     } catch (Exception e) {
       tbc.fail("Unexpected exception was thrown + : " 
           + e.getClass().getName());

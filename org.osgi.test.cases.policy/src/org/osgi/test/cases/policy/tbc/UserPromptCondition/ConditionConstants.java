@@ -104,7 +104,6 @@ public class ConditionConstants {
     PolicyConstants.LEVEL_SESSION,
     PolicyConstants.LEVEL_ONESHOT,
     //testIsSatisfied010
-    PolicyConstants.LEVEL_ONESHOT,
     PolicyConstants.LEVEL_BLANKET,
     PolicyConstants.LEVEL_SESSION,
     //testIsSatisfied011
@@ -126,6 +125,8 @@ public class ConditionConstants {
     PolicyConstants.LEVEL_SESSION,
     //testIsSatisfied017
     PolicyConstants.LEVEL_ONESHOT,
+    //testIsSatisfied018
+    PolicyConstants.LEVEL_ONESHOT
   };
 
   //IsSatisfied
@@ -161,7 +162,6 @@ public class ConditionConstants {
     PolicyConstants.LEVEL_SESSION,
     PolicyConstants.LEVEL_ONESHOT,
     //testIsSatisfied010
-    PolicyConstants.LEVEL_ONESHOT,
     PolicyConstants.LEVEL_BLANKET,
     PolicyConstants.LEVEL_SESSION,
     //testIsSatisfied011
@@ -183,6 +183,8 @@ public class ConditionConstants {
     PolicyConstants.LEVEL_SESSION,
     //testIsSatisfied017    
     PolicyConstants.LEVEL_ONESHOT,
+    //testIsSatisfied018
+    PolicyConstants.LEVEL_ONESHOT
   };
   
   //IsSatisfied
@@ -220,7 +222,6 @@ public class ConditionConstants {
     //testIsSatisfied010
     PolicyConstants.CATALOG_NAME,
     PolicyConstants.CATALOG_NAME,
-    PolicyConstants.CATALOG_NAME,
     //testIsSatisfied011
     PolicyConstants.CATALOG_NAME,
     //testIsSatisfied012
@@ -240,6 +241,8 @@ public class ConditionConstants {
     PolicyConstants.CATALOG_NAME,
     //testIsSatisfied017    
     PolicyConstants.CATALOG_NAME,
+    //testIsSatisfied018
+    PolicyConstants.CATALOG_NAME
   };  
 
   //IsSatisfied
@@ -292,41 +295,42 @@ public class ConditionConstants {
     "11- You must REJECT this question to make this test pass with success." +
     "[PS: If this is the second time that you receive this question there is an error in the implementation because the same question must remember your previous answer even if the level is ONESHOT so, you have to do the opposite that it says, you have to ACCEPT this question.]",
     //testIsSatisfied010
-    "12- You must ACCEPT this question to make this test pass with success." +
-    "[PS: If this is the second time that you receive this question the implementation is ok and you have to REJECT this question.]",
-    "13- You must ACCEPT this question to make this test pass with success. " +
-    "[PS: If this is the second time that you receive this question the implementation is ok and you have to REJECT this question.]",
-    "14- You must ACCEPT this question to make this test pass with success." +
-    "[PS: If this is the second time that you receive this question the implementation is ok and you have to REJECT this question.]",
+    "12- You must ACCEPT this question to make this test pass with success. " +
+    "[PS: If this is the second time that you receive this question there is an error in the implementation because the same question must remeber your previous answer so, you have to do the opposite that it says, you have to REJECT this question.]",
+    "13- You must ACCEPT this question to make this test pass with success." +
+    "[PS: If this is the second time that you receive this question there is an error in the implementation because the same question must remeber your previous answer so, you have to do the opposite that it says, you have to REJECT this question.]",
     //testIsSatisfied011
-    "15- You must ACCEPT this question to make this test pass with success.",
+    "14- You must ACCEPT this question to make this test pass with success.",
     //testIsSatisfied012
-    "16- You must ACCEPT this question to make this test pass with success." +
+    "15- You must ACCEPT this question to make this test pass with success." +
     "[PS: If this is the second time that you receive this question there is an error in the implementation because the same question must remember your previous answer even if the level is ONESHOT so, you have to do the opposite that it says, you have to REJECT this question.]",
-    "17- You must ACCEPT this question to make this test pass with success. " +
+    "16- You must ACCEPT this question to make this test pass with success. " +
     "[PS: If this is the second time that you receive this question there is an error in the implementation because the same question must remember your previous answer so, you have to do the opposite that it says, you have to REJECT this question.]",
     //testIsSatisfied013
-    "18- You must choose NEVER to this question to make this test pass with success. " +
+    "17- You must choose NEVER to this question to make this test pass with success. " +
     "[PS: If this is the second time that you receive this question there is an error in the implementation and you have to choose yes as answer because when the user choose NEVER as answer, the RI never ask the user again even if the system is restarted.]",
-    "18- You must choose NEVER to this question to make this test pass with success. " +
+    "17- You must choose NEVER to this question to make this test pass with success. " +
     "[PS: If this is the second time that you receive this question there is an error in the implementation and you have to choose yes as answer because when the user choose NEVER as answer, the RI never ask the user again even if the system is restarted.]",
     //testIsSatisfied014
-    "19- You must choose ALWAYS to this question to make this test pass with success. " +
+    "18- You must choose ALWAYS to this question to make this test pass with success. " +
     "[PS: If this is the second time that you receive this question there is an error in the implementation and you have to choose never as answer because when the user choose ALWAYS as answer, the RI never ask the user again even if the system is restarted.]",
-    "19- You must choose ALWAYS to this question to make this test pass with success. " +
+    "18- You must choose ALWAYS to this question to make this test pass with success. " +
     "[PS: If this is the second time that you receive this question there is an error in the implementation and you have to choose never as answer because when the user choose ALWAYS as answer, the RI never ask the user again even if the system is restarted.]",
     //testIsSatisfied015
-    "20- You must choose NEVER to this question to make this test pass with success." +
+    "19- You must choose NEVER to this question to make this test pass with success." +
     "[PS: If this is the second time that you receive this question there is an error in implementation and you have to ACCEPT this question to make the test fail because when you choose NEVER as answer, the RI must never ask the user again and always return false.]",
-    "20- You must choose NEVER to this question to make this test pass with success." +
+    "19- You must choose NEVER to this question to make this test pass with success." +
     "[PS: If this is the second time that you receive this question there is an error in implementation and you have to ACCEPT this question to make the test fail because when you choose NEVER as answer, the RI must never ask the user again and always return false.]",    
     //testIsSatisfied016
-    "21- You must choose NEVER to this question to make this test pass with success." +
+    "20- You must choose NEVER to this question to make this test pass with success." +
     "[PS: If this is the second time that you receive this question there is an error in implementation and you have to ACCEPT this question to make the test fail because when you choose NEVER as answer, the RI must never ask the user again and always return false until the system is restarted.]",
-    "21- You must choose NEVER to this question to make this test pass with success." +
+    "20- You must choose NEVER to this question to make this test pass with success." +
     "[PS: If this is the second time that you receive this question there is an error in implementation and you have to ACCEPT this question to make the test fail because when you choose NEVER as answer, the RI must never ask the user again and always return false until the system is restarted.]",    
     //testIsSatisfied017
-    "22- Choose yes as answer. PS: If this is the second time that you receive this question, there is an error in the implementation and you must reject this test choosing no as answer."    
+    "21- Choose yes as answer. PS: If this is the second time that you receive this question, there is an error in the implementation and you must reject this test choosing no as answer.",
+    //testIsSatisfied018
+    "22- You must ACCEPT this question to make this test pass with success." +
+    "[PS: If this is the second time that you receive this question the implementation is ok and you have to REJECT this question.]"
   };
   
   //IsSatisfied
@@ -366,11 +370,8 @@ public class ConditionConstants {
     SESSION_YES,
     ONESHOT_YES,
     //testIsSatisfied010
-    ONESHOT_YES,
     BLANKET_ALWAYS,
     SESSION_YES,
-    //answers for second isSatisfy call
-    ONESHOT_NO,
     //the second two must not show another message dialogs they are already evaluetated in previous isSatisfied call
     //testIsSatisfied011
     ONESHOT_YES,//this one should never be used because if the implementation is correct an earlier exception should be thrown
@@ -391,6 +392,9 @@ public class ConditionConstants {
     SESSION_NEVER,
     SESSION_YES,
     //testIsSatisfied017
+    ONESHOT_YES,
+    ONESHOT_NO,
+    //testIsSatisfied018
     ONESHOT_YES,
     ONESHOT_NO
   };
