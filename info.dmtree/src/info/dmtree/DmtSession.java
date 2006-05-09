@@ -977,9 +977,10 @@ public interface DmtSession {
     void renameNode(String nodeUri, String newName) throws DmtException;
 
     /**
-     * Set the value of a leaf node to its default as defined by the node's meta
-     * data. The method throws a <code>METADATA_MISMATCH</code> exception if
-     * the node does not have a default value.
+     * Set the value of a leaf or interior node to its default.  In case of leaf
+     * nodes the default can be defined by the node's <code>MetaNode</code>. The
+     * method throws a <code>METADATA_MISMATCH</code> exception if the node does
+     * not have a default value.
      * 
      * @param nodeUri the URI of the node
      * @throws DmtException with the following possible error codes:
@@ -994,13 +995,15 @@ public interface DmtSession {
      *         associated with a principal and the ACL of the node does not
      *         allow the <code>Replace</code> operation for the associated
      *         principal
-     *         <li><code>COMMAND_NOT_ALLOWED</code> if the specified node is
-     *         not a leaf node, or in non-atomic sessions if the underlying
-     *         plugin is read-only or does not support non-atomic writing
+     *         <li><code>COMMAND_NOT_ALLOWED</code> in non-atomic sessions if 
+     *         the underlying plugin is read-only or does not support non-atomic
+     *         writing 
      *         <li><code>METADATA_MISMATCH</code> if the node is permanent or
      *         cannot be modified according to the meta-data (does not have the
      *         <code>MetaNode.CMD_REPLACE</code> access type), or if there is
      *         no default value defined for this node
+     *         <li><code>FEATURE_NOT_SUPPORTED</code> if the specified node is
+     *         an interior node and does not support Java object values
      *         <li><code>TRANSACTION_ERROR</code> in an atomic session if the
      *         underlying plugin is read-only or does not support atomic writing
      *         <li><code>DATA_STORE_FAILURE</code> if an error occurred while
@@ -1022,15 +1025,22 @@ public interface DmtSession {
     void setDefaultNodeValue(String nodeUri) throws DmtException;
 
     /**
-     * Set the value of a leaf node. The format of the node is contained in the
-     * <code>DmtData</code> object. If the specified value is
-     * <code>null</code>, the default value is taken. In this case, if the
-     * node does not have a default value, this method will throw a
-     * <code>DmtException</code> with error code
-     * <code>METADATA_MISMATCH</code>.
+     * Set the value of a leaf or interior node. The format of the node is
+     * contained in the <code>DmtData</code> object. For interior nodes, the
+     * format must be <code>FORMAT_NODE</code>, while for leaf nodes this
+     * format must not be used. 
      * <p>
-     * Nodes of <code>null</code> format can be set by using
-     * {@link DmtData#NULL_VALUE} as second argument.
+     * If the specified value is <code>null</code>, the default value is taken. 
+     * In this case, if the node does not have a default value, this method will
+     * throw a <code>DmtException</code> with error code 
+     * <code>METADATA_MISMATCH</code>. Nodes of <code>null</code> format can be 
+     * set by using {@link DmtData#NULL_VALUE} as second argument.
+     * <p>
+     * An Event of type REPLACE is sent out for a leaf node. A replaced interior
+     * node sends out events for each of its children in depth first order
+     * and node names sorted with Arrays.sort(String[]).  When setting a value
+     * on an interior node, the values of the leaf nodes under it can change,
+     * but the structure of the subtree is not modified by the operation. 
      * 
      * @param nodeUri the URI of the node
      * @param data the data to be set, can be <code>null</code>
@@ -1046,13 +1056,16 @@ public interface DmtSession {
      *         associated with a principal and the ACL of the node does not
      *         allow the <code>Replace</code> operation for the associated
      *         principal
-     *         <li><code>COMMAND_NOT_ALLOWED</code> if the specified node is
-     *         not a leaf node, or in non-atomic sessions if the underlying
-     *         plugin is read-only or does not support non-atomic writing
+     *         <li><code>COMMAND_NOT_ALLOWED</code> if the given data has
+     *         <code>FORMAT_NODE</code> format but the node is a leaf node (or
+     *         vice versa), or in non-atomic sessions if the underlying plugin
+     *         is read-only or does not support non-atomic writing 
      *         <li><code>METADATA_MISMATCH</code> if the node is permanent or
      *         cannot be modified according to the meta-data (does not have the
      *         <code>MetaNode.CMD_REPLACE</code> access type), or if the given
      *         value does not conform to the meta-data value constraints
+     *         <li><code>FEATURE_NOT_SUPPORTED</code> if the specified node is
+     *         an interior node and does not support Java object values
      *         <li><code>TRANSACTION_ERROR</code> in an atomic session if the
      *         underlying plugin is read-only or does not support atomic writing
      *         <li><code>DATA_STORE_FAILURE</code> if an error occurred while
@@ -1189,8 +1202,9 @@ public interface DmtSession {
     /**
      * Get the list of children names of a node. The returned array contains the
      * names - not the URIs - of the immediate children nodes of the given node.
-     * The elements are in no particular order. The returned array must not
-     * contain <code>null</code> entries.
+     * The returned child names are mangled ({@link Uri#mangle}). The elements
+     * are in no particular order. The returned array must not contain
+     * <code>null</code> entries.
      * 
      * @param nodeUri the URI of the node
      * @return the list of child node names as a string array or an empty string
@@ -1443,10 +1457,12 @@ public interface DmtSession {
     String getNodeType(String nodeUri) throws DmtException;
 
     /**
-     * Get the data contained in a leaf node.
+     * Get the data contained in a leaf or interior node.  When retrieving the
+     * value associated with an interior node, the caller must have rights to
+     * read all nodes in the subtree under the given node.
      * 
      * @param nodeUri the URI of the node to retrieve
-     * @return the data of the leaf node, can not be <code>null</code>
+     * @return the data of the node, can not be <code>null</code>
      * @throws DmtException with the following possible error codes:
      *         <ul>
      *         <li><code>URI_TOO_LONG</code> if <code>nodeUri</code> or a
@@ -1456,14 +1472,14 @@ public interface DmtSession {
      *         <li><code>NODE_NOT_FOUND</code> if <code>nodeUri</code>
      *         points to a non-existing node
      *         <li><code>PERMISSION_DENIED</code> if the session is
-     *         associated with a principal and the ACL of the node does not
-     *         allow the <code>Get</code> operation for the associated
-     *         principal
-     *         <li><code>COMMAND_NOT_ALLOWED</code> if the specified node is
-     *         not a leaf node
+     *         associated with a principal and the ACL of the node (and the ACLs
+     *         of all its descendants in case of interior nodes) do not allow
+     *         the <code>Get</code> operation for the associated principal
      *         <li><code>METADATA_MISMATCH</code> if the node value cannot be
      *         retrieved according to the meta-data (it does not have
      *         <code>MetaNode.CMD_GET</code> access type)
+     *         <li><code>FEATURE_NOT_SUPPORTED</code> if the specified node is
+     *         an interior node and does not support Java object values
      *         <li><code>DATA_STORE_FAILURE</code> if an error occurred while
      *         accessing the data store
      *         <li><code>COMMAND_FAILED</code> if the URI is not within the
@@ -1475,8 +1491,8 @@ public interface DmtSession {
      * @throws SecurityException if the caller does not have the necessary
      *         permissions to execute the underlying management operation, or,
      *         in case of local sessions, if the caller does not have
-     *         <code>DmtPermission</code> for the node with the Get action
-     *         present
+     *         <code>DmtPermission</code> for the node (and all its descendants
+     *         in case of interior nodes) with the Get action present
      */
     DmtData getNodeValue(String nodeUri) throws DmtException;
 
