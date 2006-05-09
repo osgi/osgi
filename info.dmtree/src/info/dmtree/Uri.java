@@ -18,6 +18,9 @@
 package info.dmtree;
 
 import java.io.UnsupportedEncodingException;
+import java.security.AccessController;
+import java.security.PrivilegedActionException;
+import java.security.PrivilegedExceptionAction;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -53,6 +56,49 @@ public final class Uri {
      * A private constructor to suppress the default public constructor.
      */
     private Uri() {}
+    
+    // the name of the system property containing the digest delegate class name
+    private static final String DIGEST_DELEGATE_PROPERTY = 
+        "org.osgi.impl.service.dmt.DigestDelegate";
+
+    // the name of the system property containing the URI segment length limit 
+    private static final String SEGMENT_LENGTH_LIMIT_PROPERTY = 
+        "org.osgi.impl.service.dmt.uri.limits.segmentlength";
+    
+    // the smallest valid value for the URI segment length limit
+    private static final int MINIMAL_SEGMENT_LENGTH_LIMIT = 32;
+
+    // contains the maximum length of node names
+    private static final int segmentLengthLimit;
+
+    static {
+        String limitString = System.getProperty(SEGMENT_LENGTH_LIMIT_PROPERTY);
+        int limit = MINIMAL_SEGMENT_LENGTH_LIMIT; // min. used as default
+        
+        try {
+            int limitInt = Integer.parseInt(limitString);
+            if(limitInt >= MINIMAL_SEGMENT_LENGTH_LIMIT)
+                limit = limitInt;
+        } catch(NumberFormatException e) {}
+        
+        segmentLengthLimit = limit;
+    }
+    
+    // base64 encoding table, modified for use in node name mangling 
+    private static final char BASE_64_TABLE[] = {
+        'A','B','C','D','E','F','G','H',
+        'I','J','K','L','M','N','O','P',
+        'Q','R','S','T','U','V','W','X',
+        'Y','Z','a','b','c','d','e','f',
+        'g','h','i','j','k','l','m','n',
+        'o','p','q','r','s','t','u','v',
+        'w','x','y','z','0','1','2','3',
+        '4','5','6','7','8','9','+','_', // !!! this differs from base64
+    };
+
+    // the class where message digest requests can be delegated
+    private static DigestDelegate digestDelegate = null;
+
     
     /**
      * Returns a node name that is valid for the tree operation methods, based
@@ -94,7 +140,7 @@ public final class Uri {
      * @throws IllegalArgumentException if <code>nodeName</code> is empty
      */
     public static String mangle(String nodeName) {
-        return nodeName;
+        return mangle(nodeName, getMaxSegmentNameLength());
     }
 
     /**
@@ -192,8 +238,8 @@ public final class Uri {
 
     /**
      * Split the specified URI along the path separator '/' charaters and return
-     * an array of URI segments. The returned array may be empty if the specifed
-     * URI was empty.
+     * an array of URI segments. Special characters in the returned segments are
+     * escaped. The returned array may be empty if the specifed URI was empty.
      * 
      * @param uri the URI to be split, must not be <code>null</code>
      * @return an array of URI segments created by splitting the specified URI
@@ -201,12 +247,12 @@ public final class Uri {
      * @throws IllegalArgumentException if the specified URI is malformed
      */
     public static String[] toPath(String uri) {
-        if( null == uri ) {
+        if (uri == null)
             throw new NullPointerException("'uri' parameter is null.");
-        }
-        if( !isValidUri(uri) ) {
+
+        if (!isValidUri(uri))
             throw new IllegalArgumentException("Malformed URI: " + uri);
-        }
+
         if (uri.length() == 0)
             return new String[] {};
 
@@ -218,6 +264,8 @@ public final class Uri {
             char ch = uri.charAt(i);
 
             if (escape) {
+                if(ch == '/' || ch == '\\')
+                    segment.append('\\');
                 segment.append(ch);
                 escape = false;
             } else if (ch == '/') {
@@ -245,7 +293,7 @@ public final class Uri {
      * @return maximum number of URI segments supported by the implementation
      */
     public static int getMaxUriSegments() {
-        return 16;
+        return Integer.MAX_VALUE;
     }
 
     /**
@@ -259,14 +307,14 @@ public final class Uri {
      * @return maximum URI length supported by the implementation
      */
     public static int getMaxUriLength() {
-        return 256;
+        return Integer.MAX_VALUE;
     }
 
     /**
-     * This method returns the maximum allowed length of a URI segment. The
-     * value is implementation specific. The length of the URI segment is
-     * defined as the number of bytes in the unescaped, UTF-8 encoded
-     * represenation of the segment.
+     * Returns the maximum allowed length of a URI segment. The value is
+     * implementation specific. The length of the URI segment is defined as the
+     * number of bytes in the unescaped, UTF-8 encoded represenation of the
+     * segment.
      * <p>
      * The return value of <code>Integer.MAX_VALUE</code> indicates that there
      * is no upper limit on the length of segment names.
@@ -274,7 +322,7 @@ public final class Uri {
      * @return maximum URI segment length supported by the implementation
      */
     public static int getMaxSegmentNameLength() {
-        return 32;
+        return segmentLengthLimit;
     }
 
     /**
@@ -325,4 +373,95 @@ public final class Uri {
         return true;
     }
 
+    // Non-public fields and methods
+
+    // package private method for testing purposes 
+    static String mangle(String nodeName, int limit) {
+        if(nodeName == null)
+            throw new NullPointerException(
+                    "The 'nodeName' parameter must not be null.");
+            
+        if(nodeName.equals(""))
+            throw new IllegalArgumentException(
+                    "The 'nodeName' parameter must not be empty.");        
+
+        if(nodeName.length() > limit)
+            // create node name hash
+            return getHash(nodeName);
+
+        // escape any '/' and '\' characters in the node name
+        StringBuffer nameBuffer = new StringBuffer(nodeName);
+        for(int i = 0; i < nameBuffer.length(); i++) // 'i' can increase in loop
+            if(nameBuffer.charAt(i) == '\\' || nameBuffer.charAt(i) == '/')
+                nameBuffer.insert(i++, '\\');
+        
+        return nameBuffer.toString();
+    }
+
+    private static String getHash(String from) {
+        byte[] byteStream;
+        try {
+            byteStream = from.getBytes("UTF-8");
+        }
+        catch (UnsupportedEncodingException e) {
+            // There's no way UTF-8 encoding is not implemented...
+            throw new IllegalStateException("there's no UTF-8 encoder here!");
+        }
+        byte[] digest = digestMessage(byteStream);
+        
+        // very dumb base64 encoder code. There is no need for multiple lines
+        // or trailing '='-s....
+        // also, we hardcoded the fact that sha-1 digests are 20 bytes long
+        StringBuffer sb = new StringBuffer(digest.length*2);
+        for(int i=0;i<6;i++) {
+            int d0 = digest[i*3]&0xff;
+            int d1 = digest[i*3+1]&0xff;
+            int d2 = digest[i*3+2]&0xff;
+            sb.append(BASE_64_TABLE[d0>>2]);
+            sb.append(BASE_64_TABLE[(d0<<4|d1>>4)&63]);
+            sb.append(BASE_64_TABLE[(d1<<2|d2>>6)&63]);
+            sb.append(BASE_64_TABLE[d2&63]);
+        }
+        int d0 = digest[18]&0xff;
+        int d1 = digest[19]&0xff;
+        sb.append(BASE_64_TABLE[d0>>2]);
+        sb.append(BASE_64_TABLE[(d0<<4|d1>>4)&63]);
+        sb.append(BASE_64_TABLE[(d1<<2)&63]);
+        
+        return sb.toString();
+    }
+    
+    private static byte[] digestMessage(byte[] byteStream) {
+        if(digestDelegate == null) {
+            // Look up delegate class name from a system property and attempt to
+            // create an instance.
+            try {
+                digestDelegate = (DigestDelegate) AccessController
+                        .doPrivileged(new PrivilegedExceptionAction() {
+                            public Object run() throws Exception {
+                                String className = System
+                                        .getProperty(DIGEST_DELEGATE_PROPERTY);
+                                if(className == null)
+                                    throw new IllegalStateException("Digest " +
+                                            "delegate class property not set.");
+
+                                return Class.forName(className).newInstance();
+                            }
+                        });
+            } catch(PrivilegedActionException e) {
+                throw new IllegalStateException("Unable to create digest " +
+                        "delegate class: " + e.getException());
+            }
+        }
+        
+        return digestDelegate.digestMessage(byteStream);
+    }
+    
+    /**
+     * @skip
+     */
+    public interface DigestDelegate {
+        // Returns the SHA-1 digest of the given bytes.
+        byte[] digestMessage(byte[] byteStream);
+    }
 }
