@@ -80,16 +80,16 @@ public interface MetaNode {
 
     /**
      * Constant for the REPLACE access type. If {@link #can(int)} returns
-     * <code>true</code> for this operation, the value (in case of leaf nodes)
-     * and properties of the node can can potentially be modified.
+     * <code>true</code> for this operation, the value and other properties of
+     * the node can potentially be modified.
      */
     public int CMD_REPLACE = 3;
 
     /**
      * Constant for the GET access type. If {@link #can(int)} returns
-     * <code>true</code> for this operation, the value (in case of leaf
-     * nodes), the list of child nodes (in case of interior nodes) and the
-     * properties of the node can potentially be retrieved.
+     * <code>true</code> for this operation, the value, the list of child nodes
+     * (in case of interior nodes) and the properties of the node can
+     * potentially be retrieved.
      */
     public int CMD_GET = 4;
 
@@ -284,6 +284,24 @@ public interface MetaNode {
      * @return the allowed format(s) of the node
      */
     int getFormat();
+    
+    /**
+     * Get the format names for any raw formats supported by the node.  This
+     * method is only meaningful if the list of supported formats returned by
+     * {@link #getFormat()} contains {@link DmtData#FORMAT_RAW_STRING} or
+     * {@link DmtData#FORMAT_RAW_BINARY}: it specifies precisely which raw
+     * format(s) are actually supported.  If the node cannot contain data in one
+     * of the raw types, this method must return <code>null</code>.
+     * <p>
+     * The format names returned by this method are not checked by DmtAdmin,
+     * they are only for external use, for example in user interfaces. DmtAdmin
+     * only calls {@link #isValidValue} for checking the value, its behaviour
+     * should be consistent with this method.
+     * 
+     * @return the allowed format name(s) of raw data stored by the node, or
+     *         <code>null</code> if raw formats are not supported
+     */
+    String[] getRawFormatNames();
 
     /**
      * Checks whether the given value is valid for this node. This method can be
