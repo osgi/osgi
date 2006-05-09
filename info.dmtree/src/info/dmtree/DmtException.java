@@ -39,9 +39,9 @@ import java.util.Vector;
  * close multiple plugins, and has to report the exceptions of all failures.
  * <p>
  * Each constructor has two variants, one accepts a <code>String</code> node
- * URI, the other accepts a <code>String[]</code> node path.  The former is
+ * URI, the other accepts a <code>String[]</code> node path. The former is
  * used by the DmtAdmin implementation, the latter by the plugins, who receive
- * the node URI as an array of segment names.  The constructors are otherwise
+ * the node URI as an array of segment names. The constructors are otherwise
  * identical.
  * <p>
  * Getter methods are provided to retrieve the values of the additional
@@ -106,6 +106,10 @@ public class DmtException extends Exception {
      * transactions. Similarly, accessing the optional node properties (Title,
      * Timestamp, Version, Size) might not succeed if either the DmtAdmin
      * implementation or the underlying plugin does not support the property.
+     * <p>
+     * When getting or setting values for interior nodes (an optional
+     * optimization feature), a plugin can use this error code to indicate that
+     * the given interior node does not support values.
      * <p>
      * This error code corresponds to the OMA DM response status code 406
      * &quot;Optional feature not supported&quot;.
