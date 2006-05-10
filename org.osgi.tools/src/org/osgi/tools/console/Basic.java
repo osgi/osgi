@@ -254,9 +254,14 @@ public class Basic implements CommandProvider {
 	public Object _inspect(CommandInterpreter intp) throws Exception {
 		StringBuffer sb = new StringBuffer();
 		Bundle b = getBundle(intp);
-		sb.append("Id:          " + b.getBundleId() + "\r\n" + "Location:  "
-				+ b.getLocation() + "\r\n" + "Status:      " + status(b)
-				+ "\r\n");
+		sb.append("Id            : " + b.getBundleId() + "\r\n" 
+				+ "Location:     : " + b.getLocation() + "\r\n" 
+				+ "Status:       : " + status(b) + "\r\n");
+		
+		sb.append("Last Modified : " );
+		sb.append( new Date( b.getLastModified()));		
+		sb.append("\r\n");
+		
 		return sb;
 	}
 
