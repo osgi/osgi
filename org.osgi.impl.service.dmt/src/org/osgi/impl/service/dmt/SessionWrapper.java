@@ -21,10 +21,10 @@ package org.osgi.impl.service.dmt;
 import java.util.Date;
 import java.util.Timer;
 import java.util.TimerTask;
-import org.osgi.service.dmt.Acl;
-import org.osgi.service.dmt.DmtData;
-import org.osgi.service.dmt.DmtException;
-import org.osgi.service.dmt.MetaNode;
+import info.dmtree.Acl;
+import info.dmtree.DmtData;
+import info.dmtree.DmtException;
+import info.dmtree.MetaNode;
 import org.osgi.service.permissionadmin.PermissionInfo;
 
 class SessionWrapper extends DmtSessionImpl {
@@ -32,8 +32,8 @@ class SessionWrapper extends DmtSessionImpl {
     TimerTask invalidateTask;
 
     SessionWrapper(String principal, String subtreeUri, int lockMode,
-            PermissionInfo[] permissions, Context context, 
-            DmtAdminImpl dmtAdmin) throws DmtException {
+            PermissionInfo[] permissions, Context context,
+            DmtAdminCore dmtAdmin) throws DmtException {
         super(principal, subtreeUri, lockMode, permissions, context, dmtAdmin);
         
         timer = new Timer(true);
@@ -556,7 +556,7 @@ class SessionWrapper extends DmtSessionImpl {
         // stops previous timer, if any (there shouldn't be one)
         stopTimer(); 
         invalidateTask = new InvalidateTask();
-        timer.schedule(invalidateTask, DmtAdminImpl.IDLE_TIMEOUT);
+        timer.schedule(invalidateTask, DmtAdminCore.IDLE_TIMEOUT);
     }
     
     private synchronized void removeTimer() {
