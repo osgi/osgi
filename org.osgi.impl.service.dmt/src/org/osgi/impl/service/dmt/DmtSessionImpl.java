@@ -21,9 +21,9 @@ import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Constructor;
 import java.security.*;
 import java.util.*;
-import org.osgi.service.dmt.*;
-import org.osgi.service.dmt.security.*;
-import org.osgi.service.dmt.spi.*;
+import info.dmtree.*;
+import info.dmtree.security.*;
+import info.dmtree.spi.*;
 import org.osgi.service.event.Event;
 import org.osgi.service.event.EventAdmin;
 import org.osgi.service.log.LogService;
@@ -32,6 +32,7 @@ import org.osgi.service.permissionadmin.PermissionInfo;
 // OPTIMIZE node handling (e.g. retrieve plugin from dispatcher only once per API call)
 // OPTIMIZE only retrieve meta-data once per API call
 // OPTIMIZE only call commit/rollback for plugins that were actually modified since the last transaction boundary
+// TODO remove VEG CR comments, and also old code
 public class DmtSessionImpl implements DmtSession {
     
     private static final int SHOULD_NOT_EXIST   = 0;
@@ -53,7 +54,7 @@ public class DmtSessionImpl implements DmtSession {
 	}
 	
     private final AccessControlContext securityContext;
-    private final DmtAdminImpl         dmtAdmin;
+    private final DmtAdminCore         dmtAdmin;
     private final Context              context;
 
     private final String principal;
@@ -61,9 +62,9 @@ public class DmtSessionImpl implements DmtSession {
     private final int    lockMode;
     private final int    sessionId;
     
-    private EventList eventList;
-	private Vector    dataPlugins;
-    private int       state;
+    private EventStore   eventStore;
+	private Vector       dataPlugins;
+    private int          state;
     
     // Session creation is done in two phases: 
     // - DmtAdmin creates a new DmtSessionImpl instance (this should indicate
@@ -72,7 +73,7 @@ public class DmtSessionImpl implements DmtSession {
     //   to actually open the session for external use
 	DmtSessionImpl(String principal, String subtreeUri, int lockMode,
 	               PermissionInfo[] permissions, Context context, 
-                   DmtAdminImpl dmtAdmin) throws DmtException {
+                   DmtAdminCore dmtAdmin) throws DmtException {
         
         Node node = Node.validateAndNormalizeUri(subtreeUri);
         subtreeNode = node.isAbsolute() ? 
@@ -99,11 +100,12 @@ public class DmtSessionImpl implements DmtSession {
         } else
             securityContext = null;
         
-        if(lockMode == LOCK_TYPE_ATOMIC)
-        	eventList = new EventList();
-        
         sessionId = 
             (new Long(System.currentTimeMillis())).hashCode() ^ hashCode();
+        
+        if(lockMode == LOCK_TYPE_ATOMIC)
+            eventStore = new EventStore(context, sessionId);
+
         dataPlugins = new Vector();
         state = STATE_CLOSED;
 	}
@@ -174,10 +176,6 @@ public class DmtSessionImpl implements DmtSession {
     
     public int getLockType() {
         return lockMode;
-    }
-    
-    public String mangle(String nodeName) {
-        return dmtAdmin.mangle(nodeName);
     }
     
     /* These methods are only meaningful in the context of an open session. */
@@ -253,17 +251,12 @@ public class DmtSessionImpl implements DmtSession {
                 // checks transaction support before calling commit on the plugin
                 wrappedPlugin.commit();
             } catch(Exception e) {
-                purgeEvents(wrappedPlugin.getSessionRoot());
+                eventStore.excludeRoot(wrappedPlugin.getSessionRoot());
                 commitExceptions.add(e);
             }
         }
         
-        sendEvent(EventList.ADD);
-        sendEvent(EventList.DELETE);
-        sendEvent(EventList.REPLACE);
-        sendEvent(EventList.RENAME);
-        sendEvent(EventList.COPY);
-        eventList.clear();
+        eventStore.dispatchEvents();
         
         if (commitExceptions.size() != 0)
             throw new DmtException((String) null, 
@@ -291,8 +284,9 @@ public class DmtSessionImpl implements DmtSession {
 		state = STATE_OPEN;
     }
     
+    // precondition: lockMode == LOCK_TYPE_ATOMIC
     private void rollbackPlugins() throws DmtException {
-		eventList.clear();
+		eventStore.clear();
         
         Vector rollbackExceptions = new Vector();
         // this block requires synchronization
@@ -426,7 +420,7 @@ public class DmtSessionImpl implements DmtSession {
 
         getReadableDataSession(node).nodeChanged(node.getPath());
         
-        enqueueEvent(EventList.REPLACE, node);
+        enqueueEventWithCurrentAcl(DmtEvent.REPLACED, node, null);
 	}
 
 	public synchronized MetaNode getMetaNode(String nodeUri)
@@ -449,22 +443,38 @@ public class DmtSessionImpl implements DmtSession {
     // also used by copy() to pass an already validated Node instead of a URI
     private DmtData internalGetNodeValue(Node node) throws DmtException {
         // VEG CR supporting values for interior nodes
-        // checkNode(node, SHOULD_EXIST);
-        checkNode(node, SHOULD_BE_LEAF);
+        checkNode(node, SHOULD_EXIST);
+        //checkNode(node, SHOULD_BE_LEAF);
         
         checkOperation(node, Acl.GET, MetaNode.CMD_GET);
+
+        // VEG CR supporting values for interior nodes
+        if(!isLeafNodeNoCheck(node))
+            checkDescendantGetPermissions(node);
+        
         ReadableDataSession pluginSession = getReadableDataSession(node);
         DmtData data = pluginSession.getNodeValue(node.getPath());
         
         // VEG CR supporting values for interior nodes
-        //boolean isLeafNode = pluginSession.isLeafNode(node.getPath());
-        //boolean isLeafData = data.getFormat() != DmtData.FORMAT_NODE;
-        //if(isLeafNode != isLeafData)
-        //    throw new DmtException(node.getUri(), DmtException.COMMAND_FAILED, 
-        //            "Error retrieving node value, the type of the data " +
-        //            "returned by the plugin does not match the node type.");
+        boolean isLeafNode = pluginSession.isLeafNode(node.getPath());
+        boolean isLeafData = data.getFormat() != DmtData.FORMAT_NODE;
+        if(isLeafNode != isLeafData)
+            throw new DmtException(node.getUri(), DmtException.COMMAND_FAILED, 
+                    "Error retrieving node value, the type of the data " +
+                    "returned by the plugin does not match the node type.");
         
         return data;
+    }
+
+    // VEG CR supporting values for interior nodes
+    private void checkDescendantGetPermissions(Node node) throws DmtException {
+        checkNodePermission(node, Acl.GET);
+        if (!isLeafNodeNoCheck(node)) {
+            String[] children = internalGetChildNodeNames(node);
+            // 'children' is [] if there are no child nodes
+            for (int i = 0; i < children.length; i++)
+                checkDescendantGetPermissions(node.appendSegment(children[i]));
+        }
     }
 
 	public synchronized String[] getChildNodeNames(String nodeUri) 
@@ -570,7 +580,7 @@ public class DmtSessionImpl implements DmtSession {
         
         getReadWriteDataSession(node).setNodeTitle(node.getPath(), title);
         if(sendEvent)
-            enqueueEvent(EventList.REPLACE, node);
+            enqueueEventWithCurrentAcl(DmtEvent.REPLACED, node, null);
     }
 
     public synchronized void setNodeValue(String nodeUri, DmtData data)
@@ -588,11 +598,11 @@ public class DmtSessionImpl implements DmtSession {
         checkWriteSession();
         
         // VEG CR supporting values for interior nodes
-        //int nodeConstraint =
-        //    data == null ? SHOULD_EXIST :
-        //    data.getFormat() == DmtData.FORMAT_NODE ?
-        //        SHOULD_BE_INTERIOR : SHOULD_BE_LEAF;
-        int nodeConstraint = SHOULD_BE_LEAF;
+        int nodeConstraint =
+            data == null ? SHOULD_EXIST :
+            data.getFormat() == DmtData.FORMAT_NODE ?
+                SHOULD_BE_INTERIOR : SHOULD_BE_LEAF;
+        //int nodeConstraint = SHOULD_BE_LEAF;
 
         Node node = makeAbsoluteUriAndCheck(nodeUri, nodeConstraint); 
         checkOperation(node, Acl.REPLACE, MetaNode.CMD_REPLACE);
@@ -600,9 +610,9 @@ public class DmtSessionImpl implements DmtSession {
         // VEG CR supporting values for interior nodes
         // check data against meta-data in case of leaf nodes (meta-data does
         // not contain constraints for interior node values)
-        //if(isLeafNodeNoCheck(node))
-        //    checkValue(node, data);
-        checkValue(node, data);
+        if(isLeafNodeNoCheck(node))
+            checkValue(node, data);
+        //checkValue(node, data);
 
         MetaNode metaNode = getMetaNodeNoCheck(node);
         if (metaNode != null && metaNode.getScope() == MetaNode.PERMANENT)
@@ -612,15 +622,14 @@ public class DmtSessionImpl implements DmtSession {
         getReadWriteDataSession(node).setNodeValue(node.getPath(), data);
 
         // VEG CR supporting values for interior nodes
-        //traverseEvents(EventList.REPLACE, node);
-        enqueueEvent(EventList.REPLACE, node);
+        traverseEvents(DmtEvent.REPLACED, node);
+        //enqueueEvent(DmtEvent.REPLACED, node);
     }
 
     // VEG CR supporting values for interior nodes
-    /*
     private void traverseEvents(int mode, Node node) throws DmtException {
         if(isLeafNodeNoCheck(node))
-            enqueueEvent(mode, node);
+            enqueueEventWithCurrentAcl(mode, node, null);
         else {
             String children[] = internalGetChildNodeNames(node);
             Arrays.sort(children);
@@ -628,7 +637,6 @@ public class DmtSessionImpl implements DmtSession {
                 traverseEvents(mode, node.appendSegment(children[i]));
         }
     }
-    */
     
     // SyncML DMTND 7.5 (p16) Type: only the Get command is applicable!
     public synchronized void setNodeType(String nodeUri, String type)
@@ -650,7 +658,7 @@ public class DmtSessionImpl implements DmtSession {
         // (same in createInteriorNode/2)
 
         getReadWriteDataSession(node).setNodeType(node.getPath(), type);
-        enqueueEvent(EventList.REPLACE, node);
+        enqueueEventWithCurrentAcl(DmtEvent.REPLACED, node, null);
     }
 
 	public synchronized void deleteNode(String nodeUri) throws DmtException {
@@ -691,8 +699,9 @@ public class DmtSessionImpl implements DmtSession {
         }
         
 		getReadWriteDataSession(node).deleteNode(node.getPath());
+        Acl acl = getEffectiveNodeAclNoCheck(node);
 		moveAclEntries(node, null);
-        enqueueEvent(EventList.DELETE, node);
+        enqueueEvent(DmtEvent.DELETED, node, null, acl);
 	}
     
 	public synchronized void createInteriorNode(String nodeUri)
@@ -757,7 +766,7 @@ public class DmtSessionImpl implements DmtSession {
         getReadWriteDataSession(node).createInteriorNode(node.getPath(), type);
         assignNewNodePermissions(node, parent);
         if(sendEvent)
-            enqueueEvent(EventList.ADD, node);
+            enqueueEventWithCurrentAcl(DmtEvent.ADDED, node, null);
     }
 
     public synchronized void createLeafNode(String nodeUri) throws DmtException {
@@ -817,7 +826,7 @@ public class DmtSessionImpl implements DmtSession {
                 mimeType);
         
         if(sendEvent)
-            enqueueEvent(EventList.ADD, node);        
+            enqueueEventWithCurrentAcl(DmtEvent.ADDED, node, null);        
     }
 
 	// Tree may be left in an inconsistent state if there is an error when only
@@ -872,8 +881,11 @@ public class DmtSessionImpl implements DmtSession {
 		}
 		else
 			copyNoCheck(node, newNode, recursive); // does not trigger events  
-
-        enqueueEvent(EventList.COPY, node, newNode);
+  
+        Acl acl = getEffectiveNodeAclNoCheck(node);
+        Acl newAcl = getEffectiveNodeAclNoCheck(newNode);
+        Acl mergedAcl = mergeAcls(acl, newAcl);
+        enqueueEvent(DmtEvent.COPIED, node, newNode, mergedAcl);
 	}
 
 	public synchronized void renameNode(String nodeUri, String newNodeName) 
@@ -936,8 +948,9 @@ public class DmtSessionImpl implements DmtSession {
         // meta-data is the responsibility of the plugin itself
         
 		getReadWriteDataSession(node).renameNode(node.getPath(), newName);
+        Acl acl = getEffectiveNodeAclNoCheck(node);
         moveAclEntries(node, newNode);
-        enqueueEvent(EventList.RENAME, node, newNode);
+        enqueueEvent(DmtEvent.RENAMED, node, newNode, acl);
 	}
 
     /**
@@ -989,53 +1002,29 @@ public class DmtSessionImpl implements DmtSession {
                     "requested write operation.");
     }
     
-    private void purgeEvents(Node root) {
-        eventList.excludeRoot(root);
-    }
-    
-	private void sendEvent(int type) {
-		Node[] nodes    = eventList.getNodes(type);
-        Node[] newNodes = eventList.getNewNodes(type);
-        if(nodes.length != 0)
-            sendEvent(type, nodes, newNodes);
+    private Acl mergeAcls(Acl acl1, Acl acl2) {
+        Acl mergedAcl = acl1;
+
+        String[] principals = acl2.getPrincipals();
+        for (int i = 0; i < principals.length; i++)
+            mergedAcl = mergedAcl.addPermission(principals[i], acl2
+                    .getPermissions(principals[i]));
+        mergedAcl.addPermission("*", acl2.getPermissions("*"));
+
+        return mergedAcl;
     }
 
-    private void enqueueEvent(int type, Node node) {
-        if(lockMode == LOCK_TYPE_ATOMIC)
-            eventList.add(type, node);
-        else
-        	sendEvent(type, new Node[] { node }, null);
+    private void enqueueEventWithCurrentAcl(int type, Node node, Node newNode) {
+        Acl acl = null;
+        if(node != null)
+            acl = getEffectiveNodeAclNoCheck(node);
+        
+        enqueueEvent(type, node, newNode, acl);
     }
     
-    private void enqueueEvent(int type, Node node, Node newNode) {
-        if(lockMode == LOCK_TYPE_ATOMIC)
-            eventList.add(type, node, newNode);
-        else
-            sendEvent(type, new Node[] { node }, new Node[] { newNode });
-    }
-    
-    private void sendEvent(int type, Node[] nodes, Node[] newNodes) {
-        String topic = EventList.getTopic(type);
-        Hashtable properties = new Hashtable();
-        properties.put("session.id", new Integer(sessionId));
-        properties.put("nodes", Node.getUriArray(nodes));
-        if(newNodes != null)
-            properties.put("newnodes", Node.getUriArray(newNodes));
-        final Event event = new Event(topic, properties);
-        
-        // it's an error if Event Admin is missing, but it could also be ignored
-        final EventAdmin eventChannel = 
-            (EventAdmin) context.getTracker(EventAdmin.class).getService();
-        if(eventChannel == null)
-            throw new MissingResourceException("Event Admin not found.",
-                    EventAdmin.class.getName(), null);
-        
-        AccessController.doPrivileged(new PrivilegedAction() {
-            public Object run() {
-                eventChannel.postEvent(event);
-                return null;
-            }
-        });
+    private void enqueueEvent(int type, Node node, Node newNode, Acl acl) {
+        boolean isAtomic = lockMode == LOCK_TYPE_ATOMIC;
+        eventStore.add(type, node, newNode, acl, isAtomic);
     }
     
     private boolean isLeafNodeNoCheck(Node node) throws DmtException {
@@ -1136,7 +1125,7 @@ public class DmtSessionImpl implements DmtSession {
 			throws DmtException {
 		checkNodeOrParentPermission(principal, node, actions, true);
 	}
-
+    
     // Performs the necessary permission checks for a copy operation:
     // - checks that the caller has GET rights (ACL or Java permission) for all 
     //   source nodes
@@ -1638,7 +1627,6 @@ public class DmtSessionImpl implements DmtSession {
                 "Unknown meta-data capability constant " + capability + ".");
     }
     
-	// ENHANCE define constants for the action names in the Acl class
 	private static String writeAclCommands(int actions) {
 		String cmds = null;
 		cmds = writeCommand(cmds, actions, Acl.ADD,     DmtPermission.ADD);
@@ -1691,93 +1679,128 @@ public class DmtSessionImpl implements DmtSession {
     }
 }
 
-// Sets of node URIs for the different types of changes. 
-// Only used in atomic transactions.
-class EventList {
-    // two-parameter event types
-    static final int RENAME  = 0;
-    static final int COPY    = 1;
+// Multi-purpose event store class:
+// - stores sets of node URIs for the different types of changes within an
+//   atomic session
+// - contains a static event queue for the asynchronous local event delivery;
+//   this queue is emptied by DmtAdminFactory, which forwards the events to all
+//   locally registered DmtEventListeners
+class EventStore {
+    private static LinkedList localEventQueue = new LinkedList();
+
+    private static void postLocalEvent(DmtEventCore event) {
+        synchronized (localEventQueue) {
+            localEventQueue.addLast(event);
+            localEventQueue.notifyAll();
+        }
+    }
     
-    // single-parameter event types
-    static final int ADD     = 2;
-    static final int DELETE  = 3;
-    static final int REPLACE = 4;
+    // Retrieve the next event from the queue.  If there are no events, block
+    // until one is added, or until the given timeout time (in milliseconds) has
+    // elapsed.  A timeout of zero blocks indefinitely.  In case of timeout, or
+    // if the wait has been interrupted, the method returns "null".
+    static DmtEventCore getNextLocalEvent(int timeout) {
+        synchronized (localEventQueue) {
+            if(localEventQueue.size() == 0) {
+                try {
+                    localEventQueue.wait(timeout);
+                } catch (InterruptedException e) {
+                    // do nothing
+                }
+                
+                if(localEventQueue.size() == 0)
+                    return null;
+            }
+            
+            return (DmtEventCore) localEventQueue.removeFirst();
+        }
+    }
+
+    private final int sessionId;
+    private final Context context;
     
-    private static final int TWO_PARAM_EVENT_TYPE_NUM = 2;
-    private static final int EVENT_TYPE_NUM = 5;
+    private Hashtable events;
     
-    private List[] nodeLists    = new List[EVENT_TYPE_NUM];
-    private List[] newNodeLists = new List[TWO_PARAM_EVENT_TYPE_NUM];
-    
-    EventList() {
-        for(int i = 0; i < EVENT_TYPE_NUM; i++)
-            nodeLists[i] = new Vector();
-        for(int i = 0; i < TWO_PARAM_EVENT_TYPE_NUM; i++)
-            newNodeLists[i] = new Vector();
+    EventStore(Context context, int sessionId) {
+        this.sessionId = sessionId;
+        this.context = context;
+
+        events = new Hashtable();
     }
     
     synchronized void clear() {
-        for(int i = 0; i < EVENT_TYPE_NUM; i++)
-            nodeLists[i].clear();
-        for(int i = 0; i < TWO_PARAM_EVENT_TYPE_NUM; i++)
-            newNodeLists[i].clear();
-	}
+        events.clear();
+    }
     
     synchronized void excludeRoot(Node root) {
-        int i = 0;
-        for(; i < TWO_PARAM_EVENT_TYPE_NUM; i++)
-            // cannot use iterator here because if there is any match,
-            // items have to be removed from both lists
-            for(int k = 0; k < nodeLists[i].size(); k++)
-                if(root.isAncestorOf((Node)nodeLists[i].get(k)) ||
-                        root.isAncestorOf((Node)newNodeLists[i].get(k))) {
-                    nodeLists[i].remove(k);
-                    newNodeLists[i].remove(k);
-                }
-        
-        for(; i < EVENT_TYPE_NUM; i++) {
-            Iterator iterator = nodeLists[i].iterator();
-            while(iterator.hasNext())
-                if(root.isAncestorOf((Node) iterator.next()))
-                    iterator.remove();
-        }
-    }
-
-	synchronized void add(int type, Node node) {
-        if(type < TWO_PARAM_EVENT_TYPE_NUM)
-            throw new IllegalArgumentException("Missing parameter for event.");
-        
-        nodeLists[type].add(node);
+        Enumeration e = events.elements();
+        while (e.hasMoreElements())
+            ((DmtEventCore) e.nextElement()).excludeRoot(root);
     }
     
-	synchronized void add(int type, Node node, Node newNode) {
-        if(type >= TWO_PARAM_EVENT_TYPE_NUM)
-            throw new IllegalArgumentException("Too many parameters for event.");
-
-        nodeLists[type].add(node);
-        newNodeLists[type].add(newNode);
+    synchronized void add(int type, Node node, Node newNode, Acl acl,
+            boolean isAtomic) {
+        if (isAtomic) { // add event to event store, for delivery at commit
+            Integer typeInteger = new Integer(type);
+            DmtEventCore event = (DmtEventCore) events.get(typeInteger);
+            if(event == null) {
+                event = new DmtEventCore(type, sessionId);
+                events.put(typeInteger, event);
+            }
+            event.addNode(node, newNode, acl);
+        } else // dispatch to local and OSGi event listeners immediately
+            dispatchEvent(new DmtEventCore(type, sessionId, node, newNode, acl));
     }
     
-    synchronized Node[] getNodes(int type) {
-        return (Node[]) nodeLists[type].toArray(new Node[0]);
-    }
-
-    synchronized Node[] getNewNodes(int type) {
-        if(type >= TWO_PARAM_EVENT_TYPE_NUM)
-            return null;
-        
-        return (Node[]) newNodeLists[type].toArray(new Node[0]);
-    }
-
-    static String getTopic(int type) {
-        switch(type) {
-        case ADD:     return "org/osgi/service/dmt/ADDED";
-        case DELETE:  return "org/osgi/service/dmt/DELETED";
-        case REPLACE: return "org/osgi/service/dmt/REPLACED";
-        case RENAME:  return "org/osgi/service/dmt/RENAMED";
-        case COPY:    return "org/osgi/service/dmt/COPIED";
+    synchronized void dispatchEvents() {
+        Enumeration e = events.elements();
+        while (e.hasMoreElements()) {
+            DmtEventCore event = (DmtEventCore) e.nextElement();
+            dispatchEvent(event);
         }
-        throw new IllegalArgumentException("Unknown event type.");
+        clear();
+    }
+    
+    private void dispatchEvent(DmtEventCore dmtEvent) {
+        // send event to listeners directly registered with DmtAdmin
+        postLocalEvent(dmtEvent);
+        
+        // send event to listeners registered through EventAdmin
+        postOSGiEvent(dmtEvent);
+        
+    }
+    
+    private void postOSGiEvent(DmtEventCore dmtEvent) {
+        final EventAdmin eventChannel = 
+            (EventAdmin) context.getTracker(EventAdmin.class).getService();
+        
+        if(eventChannel == null) {// logging a warning if Event Admin is missing
+            context.log(LogService.LOG_WARNING, "Event Admin not found, only " +
+                    "delivering events to listeners directly registered with " +
+                    "DmtAdmin.", null);
+            return;
+        }
+        
+        Hashtable properties = new Hashtable();
+        properties.put("session.id", new Integer(dmtEvent.getSessionId()));
+    
+        List nodes = dmtEvent.getNodes();
+        if(nodes != null)
+            properties.put("nodes", 
+                    Node.getUriArray((Node[]) nodes.toArray(new Node[0])));
+        
+        List newNodes = dmtEvent.getNewNodes();
+        if(newNodes != null)
+            properties.put("newnodes", 
+                    Node.getUriArray((Node[]) newNodes.toArray(new Node[0])));
+    
+        final Event event = new Event(dmtEvent.getTopic(), properties);
+        
+        AccessController.doPrivileged(new PrivilegedAction() {
+            public Object run() {
+                eventChannel.postEvent(event);
+                return null;
+            }
+        });
     }
 }
-
