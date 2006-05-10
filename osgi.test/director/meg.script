@@ -1,5 +1,5 @@
 <script name="meg-compliance" version="4.0">
-	<delay duration="2" type="sec"/>
+	<delay duration="10" type="sec"/>
 	<properties location="test.properties"/>
 	<separate duration="1" type="sec"/>
 	
