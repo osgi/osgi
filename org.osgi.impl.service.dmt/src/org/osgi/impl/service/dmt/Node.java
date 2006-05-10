@@ -20,7 +20,8 @@ package org.osgi.impl.service.dmt;
 
 import java.util.ArrayList;
 import java.util.List;
-import org.osgi.service.dmt.DmtException;
+import info.dmtree.DmtException;
+import info.dmtree.Uri;
 
 // OPTIMIZE implement operations to work on either path or URI, depending on which is available.
 public class Node {
@@ -85,10 +86,10 @@ public class Node {
             throw new DmtException(nodeName, DmtException.INVALID_URI, 
                     "Node name must not be \"..\".");
         
-        if(sb.length() > DmtAdminImpl.segmentLengthLimit)
+        if(sb.length() > Uri.getMaxSegmentNameLength())
             throw new DmtException(nodeName, DmtException.URI_TOO_LONG,
                     "Node name length exceeds maximum segment length limit " +
-                    "of " + DmtAdminImpl.segmentLengthLimit + " characters.");
+                    "of " + Uri.getMaxSegmentNameLength() + " characters.");
         
         return sb.toString();
     }
@@ -108,8 +109,8 @@ public class Node {
      * @param uri the URI string to check and canonicalize
      * @return a node object representing the canonicalized URI
      * @throws DmtException with the code <code>URI_TOO_LONG</code> if any
-     *         any segment of the URI is too long, or <code>INVALID_URI</code> 
-     *         if the URI does not meet one of the other constraints described 
+     *         segment of the URI is too long, or <code>INVALID_URI</code> if 
+     *         the URI does not meet one of the other constraints described
      *         above
      */
     static Node validateAndNormalizeUri(String uri) throws DmtException {
