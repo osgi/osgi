@@ -17,16 +17,21 @@
  */
 package org.osgi.meg.demo.remote;
 
-import java.io.*;
+import info.dmtree.DmtAdmin;
+import info.dmtree.notification.spi.RemoteAlertSender;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.Dictionary;
 import java.util.Hashtable;
-import org.osgi.framework.*;
-import org.osgi.service.cm.Configuration;
-import org.osgi.service.cm.ConfigurationAdmin;
-import org.osgi.service.dmt.DmtAdmin;
-import org.osgi.service.dmt.RemoteAlertSender;
-import org.osgi.service.permissionadmin.PermissionInfo;
-//import org.osgi.service.dmt.DmtSession;
+
+import org.osgi.framework.Bundle;
+import org.osgi.framework.BundleActivator;
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.BundleException;
+import org.osgi.framework.ServiceReference;
+import org.osgi.framework.ServiceRegistration;
 
 public class Activator implements BundleActivator {
 	

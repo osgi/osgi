@@ -17,11 +17,17 @@
  */
 package org.osgi.meg.demo.remote;
 
+import info.dmtree.Acl;
+import info.dmtree.DmtAdmin;
+import info.dmtree.DmtData;
+import info.dmtree.DmtException;
+import info.dmtree.DmtSession;
+import info.dmtree.MetaNode;
+
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.Date;
 import java.util.StringTokenizer;
-import org.osgi.service.dmt.*;
 
 // TODO support non-recursive copy operation if necessary
 public class CommandProcessor {
