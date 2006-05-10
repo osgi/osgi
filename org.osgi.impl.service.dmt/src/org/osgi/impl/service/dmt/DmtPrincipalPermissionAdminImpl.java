@@ -27,7 +27,7 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.MissingResourceException;
 import org.osgi.framework.AdminPermission;
-import org.osgi.impl.service.dmt.api.DmtPrincipalPermissionAdmin;
+import org.osgi.impl.service.dmt.export.DmtPrincipalPermissionAdmin;
 import org.osgi.service.cm.Configuration;
 import org.osgi.service.cm.ConfigurationAdmin;
 import org.osgi.service.cm.ConfigurationException;
