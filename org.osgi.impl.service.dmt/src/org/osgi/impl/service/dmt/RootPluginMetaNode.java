@@ -17,8 +17,8 @@
  */
 package org.osgi.impl.service.dmt;
 
-import org.osgi.service.dmt.DmtData;
-import org.osgi.service.dmt.MetaNode;
+import info.dmtree.DmtData;
+import info.dmtree.MetaNode;
 
 public class RootPluginMetaNode implements MetaNode {
 
@@ -70,6 +70,10 @@ public class RootPluginMetaNode implements MetaNode {
         return DmtData.FORMAT_NODE;
     }
 
+    public String[] getRawFormatNames() {
+        return null;
+    }
+
     public String[] getMimeTypes() {
         return null;
     }
@@ -80,5 +84,15 @@ public class RootPluginMetaNode implements MetaNode {
     
     public boolean isValidValue(DmtData value) {
         return false;
+    }
+
+    public String[] getExtensionPropertyKeys() {
+        // Extension property keys not supported.
+        return null;
+    }
+    
+    public Object getExtensionProperty(String key) {
+        throw new IllegalArgumentException(
+                "Extension property keys not supported.");
     }
 }

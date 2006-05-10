@@ -18,7 +18,7 @@
 
 package org.osgi.impl.service.dmt.plugins;
 
-import org.osgi.service.dmt.DmtException;
+import info.dmtree.DmtException;
 
 /**
  * Thrown by different components of the confiugration plugin implementation,

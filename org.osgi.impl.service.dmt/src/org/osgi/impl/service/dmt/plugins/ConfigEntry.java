@@ -21,8 +21,8 @@ package org.osgi.impl.service.dmt.plugins;
 import java.lang.reflect.Array;
 import java.util.*;
 
-import org.osgi.service.dmt.DmtData;
-import org.osgi.service.dmt.DmtException;
+import info.dmtree.DmtData;
+import info.dmtree.DmtException;
 
 class ConfigEntry {
     private Type type;

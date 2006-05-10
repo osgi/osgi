@@ -21,9 +21,9 @@ package org.osgi.impl.service.dmt.plugins;
 import java.io.IOException;
 import java.util.*;
 import org.osgi.service.cm.Configuration;
-import org.osgi.service.dmt.DmtData;
-import org.osgi.service.dmt.DmtException;
-import org.osgi.service.dmt.spi.TransactionalDataSession;
+import info.dmtree.DmtData;
+import info.dmtree.DmtException;
+import info.dmtree.spi.TransactionalDataSession;
 
 class ConfigReadWriteSession extends ConfigReadOnlySession
         implements TransactionalDataSession {

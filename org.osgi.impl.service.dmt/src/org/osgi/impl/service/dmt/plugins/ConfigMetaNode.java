@@ -18,8 +18,8 @@
 package org.osgi.impl.service.dmt.plugins;
 
 import java.util.Arrays;
-import org.osgi.service.dmt.DmtData;
-import org.osgi.service.dmt.MetaNode;
+import info.dmtree.DmtData;
+import info.dmtree.MetaNode;
 
 class ConfigMetaNode implements MetaNode {
     static final boolean CAN_ADD        = true;
@@ -145,7 +145,11 @@ class ConfigMetaNode implements MetaNode {
 		return formats;
 	}
 
-	public String[] getMimeTypes() {
+	public String[] getRawFormatNames() {
+        return null;
+    }
+
+    public String[] getMimeTypes() {
 		return mimeTypes;
 	}
     
@@ -168,5 +172,15 @@ class ConfigMetaNode implements MetaNode {
         
         return validValues == null ? true : 
             Arrays.asList(validValues).contains(value);
+    }
+
+    public String[] getExtensionPropertyKeys() {
+        // Extension property keys not supported.
+        return null;
+    }
+    
+    public Object getExtensionProperty(String key) {
+        throw new IllegalArgumentException(
+                "Extension property keys not supported.");
     }
 }

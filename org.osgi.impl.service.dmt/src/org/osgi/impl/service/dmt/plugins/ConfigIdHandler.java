@@ -22,19 +22,13 @@ import java.util.*;
 import org.osgi.service.cm.Configuration;
 import org.osgi.service.cm.ConfigurationAdmin;
 import org.osgi.service.cm.ConfigurationException;
-import org.osgi.service.dmt.DmtSession;
+import info.dmtree.Uri;
+
 import org.osgi.service.log.LogService;
 import org.osgi.util.tracker.ServiceTracker;
 
 class ConfigIdHandler {
     private static final String ID_MAP_KEY = "IDmap";
-    
-    private static DmtSession session = null;
-    
-    static void setSession(DmtSession s) {
-        if(session == null)
-            session = s;
-    }
     
     private ServiceTracker configTracker;
     private ServiceTracker logTracker;
@@ -99,7 +93,7 @@ class ConfigIdHandler {
             if(pid.equals(entry.getValue()))
                 return (String) entry.getKey(); 
         }
-        return mangle(pid);
+        return Uri.mangle(pid);
     }
     
     void removeMapping(String nodeName) throws IOException {
@@ -140,14 +134,6 @@ class ConfigIdHandler {
 
     
     static boolean matchingId(String nodeName, String pid) {
-        return mangle(pid).equals(nodeName);
-    }
-    
-    private static String mangle(String nodeName) {
-        if(session == null) // shouldn't happen, session starts before any ops.
-            throw new IllegalStateException("Session object (needed for " +
-                    "mangling) not set yet.");
-        
-        return session.mangle(nodeName);
+        return Uri.mangle(pid).equals(nodeName);
     }
 }

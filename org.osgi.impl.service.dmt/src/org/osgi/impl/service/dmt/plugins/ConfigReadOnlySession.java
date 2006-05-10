@@ -20,10 +20,10 @@ package org.osgi.impl.service.dmt.plugins;
 
 import java.util.*;
 import org.osgi.service.cm.Configuration;
-import org.osgi.service.dmt.DmtData;
-import org.osgi.service.dmt.DmtException;
-import org.osgi.service.dmt.MetaNode;
-import org.osgi.service.dmt.spi.ReadableDataSession;
+import info.dmtree.DmtData;
+import info.dmtree.DmtException;
+import info.dmtree.MetaNode;
+import info.dmtree.spi.ReadableDataSession;
 
 class ConfigReadOnlySession implements ReadableDataSession {
     

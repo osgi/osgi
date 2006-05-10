@@ -28,9 +28,9 @@ import org.osgi.service.cm.Configuration;
 import org.osgi.service.cm.ConfigurationAdmin;
 import org.osgi.service.cm.ConfigurationException;
 import org.osgi.service.cm.ManagedService;
-import org.osgi.service.dmt.DmtException;
-import org.osgi.service.dmt.DmtSession;
-import org.osgi.service.dmt.spi.*;
+import info.dmtree.DmtException;
+import info.dmtree.DmtSession;
+import info.dmtree.spi.*;
 import org.osgi.util.tracker.ServiceTracker;
 
 class ConfigPlugin implements DataPlugin, ManagedService {
@@ -58,19 +58,16 @@ class ConfigPlugin implements DataPlugin, ManagedService {
 
     public ReadableDataSession openReadOnlySession(String[] sessionRoot,
             DmtSession session) throws DmtException {
-        ConfigIdHandler.setSession(session); // only needed for mangling
         return new ConfigReadOnlySession(this);
     }
 
     public ReadWriteDataSession openReadWriteSession(String[] sessionRoot,
             DmtSession session) throws DmtException {
-        ConfigIdHandler.setSession(session); // only needed for mangling
         return null; // non-atomic write sessions not supported
     }
 
     public TransactionalDataSession openAtomicSession(String[] sessionRoot,
             DmtSession session) throws DmtException {
-        ConfigIdHandler.setSession(session); // only needed for mangling
         
         if(sessionRoot.length > 
                 ConfigPluginActivator.PLUGIN_ROOT_PATH.length + 1)
