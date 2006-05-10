@@ -29,10 +29,11 @@ import java.util.Vector;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
-import org.osgi.service.dmt.AlertItem;
-import org.osgi.service.dmt.DmtData;
-import org.osgi.service.dmt.DmtAdmin;
-import org.osgi.service.dmt.DmtException;
+import info.dmtree.DmtData;
+import info.dmtree.DmtException;
+import info.dmtree.notification.AlertItem;
+import info.dmtree.notification.NotificationService;
+
 import org.osgi.service.event.Event;
 import org.osgi.service.event.EventAdmin;
 import org.osgi.service.log.LogService;
@@ -71,13 +72,13 @@ public class MonitorAdminImpl implements MonitorAdmin, MonitorListener {
     private BundleContext bc;
     private ServiceTracker tracker;
     private EventAdmin eventChannel;
-    private DmtAdmin alertSender;
+    private NotificationService alertSender;
     private Vector jobs;
     
     private Set quietVars; // no automatic events for the listed status vars
 
     MonitorAdminImpl(BundleContext bc, ServiceTracker tracker, 
-            EventAdmin eventChannel, DmtAdmin alertSender) {
+            EventAdmin eventChannel, NotificationService alertSender) {
         this.bc = bc;
         this.tracker = tracker;
         this.eventChannel = eventChannel;
@@ -325,7 +326,7 @@ public class MonitorAdminImpl implements MonitorAdmin, MonitorListener {
             itemList.toArray(new AlertItem[itemList.size()]);
 
         try {
-            alertSender.sendAlert(initiator, MONITORING_ALERT_CODE, null, 
+            alertSender.sendNotification(initiator, MONITORING_ALERT_CODE, null, 
                                   items);
         } catch(DmtException e) {
             // expected error codes: ALERT_NOT_ROUTED, REMOTE_ERROR

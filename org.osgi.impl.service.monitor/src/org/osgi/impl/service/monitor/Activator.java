@@ -19,8 +19,8 @@ package org.osgi.impl.service.monitor;
 
 import java.util.Hashtable;
 import org.osgi.framework.*;
-import org.osgi.service.dmt.DmtAdmin;
-import org.osgi.service.dmt.spi.DataPlugin;
+import info.dmtree.notification.NotificationService;
+import info.dmtree.spi.DataPlugin;
 import org.osgi.service.event.EventAdmin;
 import org.osgi.service.monitor.MonitorAdmin;
 import org.osgi.service.monitor.MonitorListener;
@@ -30,9 +30,9 @@ import org.osgi.util.tracker.ServiceTracker;
 /**
  * Activator class for the bundle containing the Monitor Admin and
  * Monitor Plugin.  Retrieves required services (EventAdmin and
- * DmtAlertSender), starts tracking of Monitorable services, and
- * registers provided services (MonitorAdmin, UpdateListener and
- * DmtDataPlugin).
+ * NotificationSender), starts tracking of Monitorable services,
+ * and registers provided services (MonitorAdmin, UpdateListener
+ * and DataPlugin).
  */
 public class Activator implements BundleActivator
 {
@@ -45,7 +45,7 @@ public class Activator implements BundleActivator
     ServiceRegistration monitorAdminReg;
     ServiceRegistration monitorPluginReg;
     ServiceReference eventChannelRef;
-    ServiceReference dmtAdminRef;
+    ServiceReference alertSenderRef;
 
     public void start(BundleContext bc) throws BundleException {
         System.out.println("Monitor Admin and Plugin activation...");
@@ -57,12 +57,13 @@ public class Activator implements BundleActivator
         if(eventChannel == null)
             throw new BundleException("Event Channel service no longer registered.");
 
-        dmtAdminRef = bc.getServiceReference(DmtAdmin.class.getName());
-        if(dmtAdminRef == null)
-            throw new BundleException("Cannot find Dmt Admin service.");
-        DmtAdmin alertSender = (DmtAdmin) bc.getService(dmtAdminRef);
+        alertSenderRef = bc.getServiceReference(NotificationService.class.getName());
+        if(alertSenderRef == null)
+            throw new BundleException("Cannot find Notification Service.");
+        NotificationService alertSender = (NotificationService) 
+                bc.getService(alertSenderRef);
         if(alertSender == null)
-            throw new BundleException("Dmt Admin service no longer registered.");
+            throw new BundleException("Notification Service no longer registered.");
 
         // create a tracker for Monitorable services that notifies the plugin if a monitorable is unregistered
         monitorableTracker = 
@@ -99,7 +100,7 @@ public class Activator implements BundleActivator
         monitorableTracker.close();
         monitorPluginReg.unregister();
         monitorAdminReg.unregister();
-        bc.ungetService(dmtAdminRef);
+        bc.ungetService(alertSenderRef);
         bc.ungetService(eventChannelRef);
     }
 }

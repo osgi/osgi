@@ -18,8 +18,8 @@
 package org.osgi.impl.service.monitor;
 
 import java.util.Arrays;
-import org.osgi.service.dmt.MetaNode;
-import org.osgi.service.dmt.DmtData;
+import info.dmtree.MetaNode;
+import info.dmtree.DmtData;
 
 public class MonitorMetaNodeImpl implements MetaNode
 {
@@ -154,6 +154,10 @@ public class MonitorMetaNodeImpl implements MetaNode
         return format;
     }
 
+    public String[] getRawFormatNames() {
+        return null;
+    }
+
     public String [] getMimeTypes()
     {
         return mimeTypes;
@@ -185,6 +189,16 @@ public class MonitorMetaNodeImpl implements MetaNode
             Arrays.asList(validValues).contains(value);
     }
     
+    public String[] getExtensionPropertyKeys() {
+        // Extension property keys not supported.
+        return null;
+    }
+    
+    public Object getExtensionProperty(String key) {
+        throw new IllegalArgumentException(
+                "Extension property keys not supported.");
+    }
+
     private void setCommon(String description, boolean allowInfinte)
     {
         this.description = description;
