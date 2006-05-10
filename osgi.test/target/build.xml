@@ -34,7 +34,7 @@
 			<jvmarg value="-Dosgi.install.area=&quot;file:&quot;"/>
 			<jvmarg value="-Dosgi.support.signature.verify=true"/>
 			<jvmarg value="-Xverify:none"/>
-			<arg value="-console:2102"/>
+			<arg value="-console:2202"/>
 			<arg value="init"/>
 			<arg value="launch"/>
 			<arg value="install file:../osgi.jar start"/>
