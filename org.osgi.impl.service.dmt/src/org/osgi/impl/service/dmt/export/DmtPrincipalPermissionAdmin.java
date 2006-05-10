@@ -15,7 +15,7 @@
  * The above notice must be included on all copies of this document.
  * ============================================================================
  */
-package org.osgi.impl.service.dmt.api;
+package org.osgi.impl.service.dmt.export;
 
 import java.io.IOException;
 import java.util.Map;
