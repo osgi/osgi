@@ -20,9 +20,9 @@ package org.osgi.impl.service.dmt;
 import java.util.*;
 import org.osgi.framework.Constants;
 import org.osgi.framework.ServiceReference;
-import org.osgi.service.dmt.DmtException;
-import org.osgi.service.dmt.spi.DataPlugin;
-import org.osgi.service.dmt.spi.ExecPlugin;
+import info.dmtree.DmtException;
+import info.dmtree.spi.DataPlugin;
+import info.dmtree.spi.ExecPlugin;
 import org.osgi.service.log.LogService;
 import org.osgi.util.tracker.ServiceTrackerCustomizer;
 

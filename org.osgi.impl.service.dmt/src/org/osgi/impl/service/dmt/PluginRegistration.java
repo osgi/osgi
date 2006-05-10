@@ -21,8 +21,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Vector;
 import org.osgi.framework.ServiceReference;
-import org.osgi.service.dmt.spi.DataPlugin;
-import org.osgi.service.dmt.spi.ExecPlugin;
+import info.dmtree.spi.DataPlugin;
+import info.dmtree.spi.ExecPlugin;
 
 class PluginRegistration {
 	private Object plugin;

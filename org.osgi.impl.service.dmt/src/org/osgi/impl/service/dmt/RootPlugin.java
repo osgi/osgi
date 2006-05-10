@@ -19,11 +19,11 @@ package org.osgi.impl.service.dmt;
 
 import java.util.Date;
 import java.util.Set;
-import org.osgi.service.dmt.DmtData;
-import org.osgi.service.dmt.DmtException;
-import org.osgi.service.dmt.DmtSession;
-import org.osgi.service.dmt.MetaNode;
-import org.osgi.service.dmt.spi.*;
+import info.dmtree.DmtData;
+import info.dmtree.DmtException;
+import info.dmtree.DmtSession;
+import info.dmtree.MetaNode;
+import info.dmtree.spi.*;
 
 public class RootPlugin implements DataPlugin, ReadableDataSession {
     private static final Node osgi =
