@@ -21,7 +21,8 @@ import java.util.Hashtable;
 import org.osgi.framework.*;
 import org.osgi.service.cm.ManagedService;
 import org.osgi.service.cm.ManagedServiceFactory;
-import org.osgi.service.dmt.DmtAdmin;
+import info.dmtree.DmtAdmin;
+
 import org.osgi.service.event.EventConstants;
 import org.osgi.service.event.EventHandler;
 import org.osgi.service.monitor.MonitorListener;
@@ -61,19 +62,13 @@ public class ClientActivator implements BundleActivator
 
             config.put(EventConstants.EVENT_TOPIC, new String[] {
                     "org/osgi/service/monitor/MonitorEvent",
-                    "org/osgi/service/dmt/*"
+                    "info/dmtree/DmtEvent/*"
             });
             
             // ProtectedUri doesn't work with wildcard filters, Comparable IF
             // is not adequate for checking matches 
             //config.put(EventConstants.EVENT_FILTER, "(proba=./guarded*)");
             
-            // TODO try this property instead of topic when event manager works properly
-            /*
-            config.put(EventConstants.EVENT_FILTER, 
-                    "(|(topic=org/osgi/service/monitor/MonitorEvent)" +
-                    "(topic=org/osgi/service/dmt/DmtEvent/*))");
-            */
 
             String[] services = new String[] {
                 ManagedService.class.getName(),
