@@ -20,8 +20,8 @@ package com.nokia.test.plugin;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
-import org.osgi.service.dmt.DmtAdmin;
-//import org.osgi.service.dmt.DmtSession;
+import info.dmtree.DmtAdmin;
+//import info.dmtree.DmtSession;
 //import org.osgi.service.permissionadmin.PermissionAdmin;
 //import org.osgi.service.permissionadmin.PermissionInfo;
 

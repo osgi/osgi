@@ -9,10 +9,10 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import javax.swing.JOptionPane;
-import org.osgi.service.dmt.DmtAdmin;
-import org.osgi.service.dmt.DmtData;
-import org.osgi.service.dmt.DmtException;
-import org.osgi.service.dmt.DmtSession;
+import info.dmtree.DmtAdmin;
+import info.dmtree.DmtData;
+import info.dmtree.DmtException;
+import info.dmtree.DmtSession;
 
 
 public class TestDesktop extends Frame implements ActionListener {
