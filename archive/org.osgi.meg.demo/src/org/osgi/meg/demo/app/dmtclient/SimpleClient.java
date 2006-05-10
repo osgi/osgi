@@ -27,14 +27,20 @@ import org.osgi.service.cm.Configuration;
 import org.osgi.service.cm.ConfigurationAdmin;
 import org.osgi.service.cm.ManagedService;
 import org.osgi.service.cm.ManagedServiceFactory;
-import org.osgi.service.dmt.DmtAdmin;
-import org.osgi.service.dmt.DmtException;
-import org.osgi.service.dmt.DmtSession;
+import info.dmtree.DmtAdmin;
+import info.dmtree.DmtEvent;
+import info.dmtree.DmtEventListener;
+import info.dmtree.DmtException;
+import info.dmtree.DmtSession;
+import info.dmtree.Uri;
+import info.dmtree.notification.NotificationService;
+import info.dmtree.registry.DmtServiceFactory;
+
 import org.osgi.service.event.Event;
 import org.osgi.service.event.EventConstants;
 import org.osgi.service.event.EventHandler;
 import org.osgi.service.monitor.*;
-//import org.osgi.service.dmt.Acl;
+//import info.dmtree.Acl;
 //import java.io.File;
 //import javax.xml.parsers.DocumentBuilder;
 //import javax.xml.parsers.DocumentBuilderFactory;
@@ -86,13 +92,29 @@ public class SimpleClient implements ManagedService, ManagedServiceFactory,
     public void run()
     {
         String pid = ClientActivator.SERVICE_PID;
-
         
         try {
             System.out.println("DMT root: " + 
                     System.getProperty("org.osgi.service.dmt.root"));
             
-            /*
+            System.out.println("mangle: "
+                    + Uri.mangle("almafa,balmafa,hosszufa,megmegyegyfa"));
+            
+            // checking local (non-OSGi) API, i.e. service lookup via DmtServiceFactory
+            DmtAdmin lAdmin = DmtServiceFactory.getDmtAdmin();
+            DmtSession lSession = lAdmin.getSession("./OSGi/Configuration");
+            System.out.println("Configuration trees: " + 
+                    Arrays.asList(lSession.getChildNodeNames("")));
+            lSession.close();
+            
+            SimpleListener simpleListener = new SimpleListener();
+            lAdmin.addEventListener(DmtEvent.ADDED, ".", simpleListener);
+            lAdmin.addEventListener("proba", 0xFFFF, ".", simpleListener);
+            //lAdmin.removeEventListener(simpleListener);
+            
+            NotificationService lNotification = DmtServiceFactory.getNotificationService();
+            //lNotification.sendNotification("proba", 1226, null, null);
+          /*
             ServiceReference refs[] = bc.getServiceReferences( SAXParserFactory.class.getName(), 
                     "(&(parser.namespaceAware=true)(parser.validating=false))" ); 
 
@@ -268,6 +290,9 @@ public class SimpleClient implements ManagedService, ManagedServiceFactory,
                                ", lock type=" + session.getLockType() +
                                ", principal=" + session.getPrincipal() +
                                ", root=" + session.getRootUri());
+
+            //session.getNodeValue("./OSGi/Configuration");
+            
             //printTree();
 
             /*
@@ -745,7 +770,7 @@ public class SimpleClient implements ManagedService, ManagedServiceFactory,
 
         if(topic.equals("org/osgi/service/monitor/MonitorEvent"))
             monitorEvent(event);
-        else if(topic.startsWith("org/osgi/service/dmt/"))
+        else if(topic.startsWith("info/dmtree/DmtEvent/"))
             dmtEvent(event);
         else
             System.out.println("Unexpected event received on topic '" + topic + "'.");
@@ -816,5 +841,11 @@ public class SimpleClient implements ManagedService, ManagedServiceFactory,
         //    System.out.println("Error retrieving value of proba.");
         //else
         //    System.out.println("Value of proba: " + proba);
+    }
+    
+    static class SimpleListener implements DmtEventListener {
+        public void changeOccurred(DmtEvent event) {
+            System.out.println("Received event on DmtEventListener: " + event);
+        }
     }
 }
