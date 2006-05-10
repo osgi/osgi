@@ -30,8 +30,8 @@ package org.osgi.meg.demo.plugin;
 import java.util.*;
 
 import org.osgi.framework.*;
-import org.osgi.service.dmt.*;
-import org.osgi.service.dmt.spi.*;
+import info.dmtree.*;
+import info.dmtree.spi.*;
 
 /**
  * Simple read-only data plugin for trial purposes.

@@ -17,13 +17,14 @@
  */
 package org.osgi.meg.demo.remote;
 
+import info.dmtree.DmtAdmin;
+import info.dmtree.notification.AlertItem;
+import info.dmtree.notification.spi.RemoteAlertSender;
+
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
-import org.osgi.service.dmt.AlertItem;
-import org.osgi.service.dmt.DmtAdmin;
-import org.osgi.service.dmt.RemoteAlertSender;
 
 /* Description of the protocol at the end of this file */
 
