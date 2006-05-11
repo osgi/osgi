@@ -28,7 +28,7 @@ import info.dmtree.security.DmtPermission;
 /*
  * Wrapper class to DmtEventCore that implements the DmtEvent interface and
  * filters the list of nodes returned to the caller based on either the ACLs of
- * of the principal (if given), or the Java permissions of the caller
+ * the principal (if given), or the Java permissions of the caller
  */
 public class DmtEventImpl implements DmtEvent {
     private DmtEventCore coreEvent;
