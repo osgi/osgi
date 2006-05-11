@@ -79,7 +79,8 @@ public class Basic implements CommandProvider {
 
 	public Object _decompile(CommandInterpreter intp)
 			throws InvalidSyntaxException {
-		ServiceReference[] refs = _context.getServiceReferences(null,
+		ServiceReference[] refs = _context.getServiceReferences(
+				null,
 				"(service.id=" + intp.nextArgument() + ")");
 		for (int i = 0; refs != null && i < refs.length; i++) {
 			Object o = _context.getService(refs[i]);
@@ -251,17 +252,76 @@ public class Basic implements CommandProvider {
 		return sb.toString();
 	}
 
+	public Object _loadclass(CommandInterpreter intp)
+			throws ClassNotFoundException {
+		Bundle b = getBundle(intp);
+		String c = intp.nextArgument();
+		Class clazz = b.loadClass(c);
+		PrintWriter pw = new PrintWriter(new OutputStreamWriter(System.out)); 
+		decompile(pw, clazz);
+		return clazz;
+	}
+
+	public Object _getresource(CommandInterpreter intp) throws IOException {
+		boolean view = false;
+		Bundle b = getBundle(intp);
+		String name = intp.nextArgument();
+		while (name.startsWith("-")) {
+			if (name.equals("-view")) {
+				view = true;
+			}
+			name = intp.nextArgument();
+		}
+		URL url = b.getResource(name);
+		return view(url, view);
+	}
+
+	Object view(URL url, boolean view) throws IOException {
+		if (view && url != null) {
+			InputStream in = url.openStream();
+			byte buffer[] = new byte[1024];
+			int size = in.read(buffer);
+			while (size > 0) {
+				System.out.print(buffer);
+				size = in.read(buffer);
+			}
+			in.close();
+		}
+		return url;
+	}
+
+	public Object _getentry(CommandInterpreter intp) throws IOException {
+		boolean view = false;
+		Bundle b = getBundle(intp);
+		String name = intp.nextArgument();
+		while (name.startsWith("-")) {
+			if (name.equals("-view")) {
+				view = true;
+			}
+			name = intp.nextArgument();
+		}
+		URL url = b.getEntry(name);
+		return view(url, view);
+	}
+
+	public Object _getentrypaths(CommandInterpreter intp) throws IOException {
+		boolean view = false;
+		Bundle b = getBundle(intp);
+		String name = intp.nextArgument();
+		return b.getEntryPaths(name);
+	}
+	
 	public Object _inspect(CommandInterpreter intp) throws Exception {
 		StringBuffer sb = new StringBuffer();
 		Bundle b = getBundle(intp);
-		sb.append("Id            : " + b.getBundleId() + "\r\n" 
-				+ "Location:     : " + b.getLocation() + "\r\n" 
+		sb.append("Id            : " + b.getBundleId() + "\r\n"
+				+ "Location:     : " + b.getLocation() + "\r\n"
 				+ "Status:       : " + status(b) + "\r\n");
-		
-		sb.append("Last Modified : " );
-		sb.append( new Date( b.getLastModified()));		
+
+		sb.append("Last Modified : ");
+		sb.append(new Date(b.getLastModified()));
 		sb.append("\r\n");
-		
+
 		return sb;
 	}
 
@@ -308,10 +368,12 @@ public class Basic implements CommandProvider {
 		if (prefix == null)
 			prefix = "";
 		try {
-			Method m = b.getClass().getMethod("getEntryPaths",
+			Method m = b.getClass().getMethod(
+					"getEntryPaths",
 					new Class[] {String.class});
 			Vector v = new Vector();
-			for (Enumeration e = (Enumeration) m.invoke(b,
+			for (Enumeration e = (Enumeration) m.invoke(
+					b,
 					new Object[] {prefix}); e.hasMoreElements();) {
 				String path = (String) e.nextElement();
 				v.add(path);
@@ -330,21 +392,22 @@ public class Basic implements CommandProvider {
 		return null;
 	}
 
-	public Object _logcause( CommandInterpreter intp ) throws Exception {
+	public Object _logcause(CommandInterpreter intp) throws Exception {
 		Collection list = (Collection) _log(intp);
 		List result = new ArrayList();
-		for ( Iterator i= list.iterator(); i.hasNext(); ) {
+		for (Iterator i = list.iterator(); i.hasNext();) {
 			LogEntry entry = (LogEntry) i.next();
 			Throwable throwable = entry.getException();
-			if ( throwable != null ) 
+			if (throwable != null)
 				result.add(throwable);
 		}
 		return result;
 	}
+
 	public Object _log(CommandInterpreter intp) throws Exception {
 		String n = intp.nextArgument();
 		String datePrefix = null;
-		
+
 		int mask = 0;
 		Bundle bundle = null;
 		while (n != null) {
@@ -377,10 +440,10 @@ public class Basic implements CommandProvider {
 		for (Enumeration e = rdr.getLog(); e.hasMoreElements();) {
 			LogEntry entry = (LogEntry) e.nextElement();
 			boolean selected = false;
-			
+
 			if (bundle != null && bundle != entry.getBundle())
 				continue;
-			
+
 			switch (entry.getLevel()) {
 				case LogService.LOG_DEBUG :
 					if ((mask & 1) != 0)
@@ -403,13 +466,13 @@ public class Basic implements CommandProvider {
 					break;
 			}
 			String date = Handler.getDate(entry.getTime());
-			if ( datePrefix != null ) {
-				if ( selected ) {
+			if (datePrefix != null) {
+				if (selected) {
 					selected = date.startsWith(datePrefix);
 				}
 			}
-				
-			if ( selected ) 
+
+			if (selected)
 				result.add(entry);
 		}
 		Collections.reverse(result);
@@ -529,7 +592,8 @@ public class Basic implements CommandProvider {
 		if (name == null)
 			throw new RuntimeException("You must specify a resource");
 		try {
-			Method m = b.getClass().getMethod("getEntry",
+			Method m = b.getClass().getMethod(
+					"getEntry",
 					new Class[] {String.class});
 			URL url = (URL) m.invoke(b, new Object[] {name});
 			if (url == null)
@@ -583,7 +647,8 @@ public class Basic implements CommandProvider {
 	}
 
 	public Object _ss(CommandInterpreter intp) throws Exception {
-		ServiceReference[] refs = _context.getServiceReferences(null,
+		ServiceReference[] refs = _context.getServiceReferences(
+				null,
 				"(service.id=" + intp.nextArgument() + ")");
 		StringBuffer sb = new StringBuffer();
 		for (int i = 0; refs != null && i < refs.length; i++) {
@@ -751,6 +816,7 @@ public class Basic implements CommandProvider {
 			if (b != null)
 				pw.println("loaded from " + Handler.getName(b));
 		}
+		pw.flush();
 	}
 
 	void decompile(PrintWriter pw, Field f) {
@@ -785,7 +851,8 @@ public class Basic implements CommandProvider {
 	}
 
 	public Object _call(CommandInterpreter intp) throws Exception {
-		ServiceReference[] refs = _context.getServiceReferences(null,
+		ServiceReference[] refs = _context.getServiceReferences(
+				null,
 				"(service.id=" + intp.nextArgument() + ")");
 
 		String call = intp.nextArgument();
@@ -994,8 +1061,9 @@ public class Basic implements CommandProvider {
 		return Handler.toString(o);
 	}
 
-	public Object _capture( CommandInterpreter intp ) throws IOException {
-		BufferedReader rdr = new BufferedReader(new InputStreamReader(System.in));
+	public Object _capture(CommandInterpreter intp) throws IOException {
+		BufferedReader rdr = new BufferedReader(
+				new InputStreamReader(System.in));
 		return rdr.readLine();
 	}
 }
