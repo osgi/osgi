@@ -36,13 +36,13 @@
 
 package org.osgi.test.cases.dmt.tc3.tbc.MetaNode.MetaData;
 
+import info.dmtree.spi.DataPlugin;
+
 import java.util.Hashtable;
 
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
-import org.osgi.service.dmt.spi.DataPlugin;
-import org.osgi.service.dmt.spi.ExecPlugin;
 import org.osgi.test.cases.dmt.tc3.tbc.DmtConstants;
 import org.osgi.test.cases.dmt.tc3.tbc.DmtTestControl;
 
@@ -90,8 +90,8 @@ public class TestPluginMetaDataActivator implements BundleActivator {
 		// creating the service
 		testPluginMetaData = new TestPluginMetaData(tbc);
 		Hashtable props = new Hashtable();
-		props.put(DataPlugin.DATA_ROOT_URIS, new String[] { ROOT });
-		props.put(ExecPlugin.EXEC_ROOT_URIS, new String[] { ROOT });
+		props.put("dataRootURIs", new String[] { ROOT });
+		props.put("execRootURIs", new String[] { ROOT });
 		String[] ifs = new String[] { DataPlugin.class.getName() };
 		servReg = bc.registerService(ifs, testPluginMetaData, props);
 		System.out.println("TestPluginMetaData activated.");

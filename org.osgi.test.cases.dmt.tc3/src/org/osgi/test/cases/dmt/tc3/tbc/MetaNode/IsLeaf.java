@@ -39,8 +39,8 @@
 
 package org.osgi.test.cases.dmt.tc3.tbc.MetaNode;
 
-import org.osgi.service.dmt.DmtSession;
-import org.osgi.service.dmt.MetaNode;
+import info.dmtree.DmtSession;
+import info.dmtree.MetaNode;
 import org.osgi.test.cases.dmt.tc3.tbc.DmtTestControl;
 
 /**
@@ -78,8 +78,7 @@ public class IsLeaf {
 		
 		tbc.assertTrue("Asserts isLeaf method", !metanode.isLeaf());
 	} catch (Exception e) {
-		tbc.fail("Unexpected Exception: " + e.getClass().getName()
-				+ " [Message: " + e.getMessage() + "]");
+		tbc.failUnexpectedException(e);
 	} finally {
 		tbc.closeSession(session);
 	}

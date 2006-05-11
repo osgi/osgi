@@ -36,7 +36,7 @@
 
 package org.osgi.test.cases.dmt.tc3.tbc.Others;
 
-import org.osgi.service.dmt.DmtSession;
+import info.dmtree.DmtSession;
 import org.osgi.test.cases.dmt.tc3.tbc.DmtConstants;
 import org.osgi.test.cases.dmt.tc3.tbc.DmtTestControl;
 import org.osgi.test.cases.dmt.tc3.tbc.DataPlugin.TestDataPlugin;
@@ -83,7 +83,7 @@ public class OverlappingPlugins {
 			String nodeTitle = session.getNodeTitle(OverlappingDataPluginActivator.ROOT);
 			tbc.assertEquals("Asserts that a DataPlugin cannot be overlapped by other DataPlugin",TestDataPlugin.GETNODETITLE,nodeTitle);
 		} catch (Exception e) {
-			tbc.fail("Unexpected Exception: " + e.getClass().getName() + " [Message: " + e.getMessage() +"]");
+			tbc.failUnexpectedException(e);
 		} finally {
 			tbc.cleanUp(session,true);
 		}
@@ -104,7 +104,7 @@ public class OverlappingPlugins {
 			tbc.assertEquals("Asserts that a it is not possible for a plugin to control the same, or part of the same, " +
 					"subtree that another plugins controls.",TestDataPlugin.GETNODETITLE,nodeTitle);
 		} catch (Exception e) {
-			tbc.fail("Unexpected Exception: " + e.getClass().getName() + " [Message: " + e.getMessage() +"]");
+			tbc.failUnexpectedException(e);
 		} finally {
 			tbc.cleanUp(session,true);
 
@@ -129,7 +129,7 @@ public class OverlappingPlugins {
 			tbc.assertEquals("Asserts that DmtAdmin allows that an ExecPlugin overlaps a DataPlugin",TestExecPlugin.EXECUTE,DmtConstants.TEMPORARY);
 			
 		} catch (Exception e) {
-			tbc.fail("Unexpected Exception: " + e.getClass().getName() + " [Message: " + e.getMessage() +"]");
+			tbc.failUnexpectedException(e);
 		} finally {
 			tbc.cleanUp(session,true);
 		}
@@ -154,7 +154,7 @@ public class OverlappingPlugins {
 			tbc.assertEquals("Asserts that DmtAdmin does not allow that an ExecPlugin overlaps another ExecPlugin",TestExecPlugin.EXECUTE,DmtConstants.TEMPORARY);
 			
 		} catch (Exception e) {
-			tbc.fail("Unexpected Exception: " + e.getClass().getName() + " [Message: " + e.getMessage() +"]");
+			tbc.failUnexpectedException(e);
 		} finally {
 			tbc.cleanUp(session,true);
 		}

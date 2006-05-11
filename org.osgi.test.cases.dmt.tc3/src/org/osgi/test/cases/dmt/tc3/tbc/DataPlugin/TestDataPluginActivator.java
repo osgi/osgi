@@ -41,7 +41,7 @@ import java.util.Hashtable;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
-import org.osgi.service.dmt.spi.DataPlugin;
+import info.dmtree.spi.DataPlugin;
 import org.osgi.test.cases.dmt.tc3.tbc.DmtTestControl;
 
 /**
@@ -88,7 +88,7 @@ public class TestDataPluginActivator implements BundleActivator {
 		// creating the service
 		testDataPlugin = new TestDataPlugin(tbc);
 		Hashtable props = new Hashtable();
-		props.put(DataPlugin.DATA_ROOT_URIS, new String[] { ROOT, TEST_DATA_PLUGIN_ROOT2 });
+		props.put("dataRootURIs", new String[] { ROOT, TEST_DATA_PLUGIN_ROOT2 });
 		String[] ifs = new String[] { DataPlugin.class.getName() };
 		servReg = bc.registerService(ifs, testDataPlugin, props);
 		System.out.println("TestDataPlugin activated.");

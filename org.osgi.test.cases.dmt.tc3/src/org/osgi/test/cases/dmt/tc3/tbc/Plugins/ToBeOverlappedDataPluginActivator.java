@@ -42,7 +42,7 @@ import java.util.Hashtable;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
-import org.osgi.service.dmt.spi.DataPlugin;
+import info.dmtree.spi.DataPlugin;
 import org.osgi.test.cases.dmt.tc3.tbc.ExecPlugin.TestExecPluginActivator;
 
 /**
@@ -59,7 +59,7 @@ public class ToBeOverlappedDataPluginActivator implements BundleActivator {
 		// creating the service
 		toBeOverlappedDataPlugin = new ToBeOverlappedDataPlugin();
 		Hashtable props = new Hashtable();
-		props.put(DataPlugin.DATA_ROOT_URIS, new String[] { TestExecPluginActivator.ROOT });
+		props.put("dataRootURIs", new String[] { TestExecPluginActivator.ROOT });
 		String[] ifs = new String[] { DataPlugin.class.getName() };
 		servReg = bc.registerService(ifs, toBeOverlappedDataPlugin, props);
 		System.out.println("ToBeOverlappedDataPlugin activated.");

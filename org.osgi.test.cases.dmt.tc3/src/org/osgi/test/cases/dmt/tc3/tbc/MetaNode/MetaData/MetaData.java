@@ -35,10 +35,10 @@
  */
 package org.osgi.test.cases.dmt.tc3.tbc.MetaNode.MetaData;
 
-import org.osgi.service.dmt.DmtData;
-import org.osgi.service.dmt.DmtException;
-import org.osgi.service.dmt.DmtSession;
-import org.osgi.service.dmt.MetaNode;
+import info.dmtree.DmtData;
+import info.dmtree.DmtException;
+import info.dmtree.DmtSession;
+import info.dmtree.MetaNode;
 import org.osgi.test.cases.dmt.tc3.tbc.DmtConstants;
 import org.osgi.test.cases.dmt.tc3.tbc.DmtTestControl;
 import org.osgi.test.cases.dmt.tc3.tbc.MetaNode.TestMetaNodeDataPlugin;
@@ -160,8 +160,7 @@ public class MetaData {
 					"if meta-data defines it as an interior node. ",DmtException.METADATA_MISMATCH,e.getCode());
 			tbc.assertTrue("Asserts that the plugin's method was not called",DmtConstants.TEMPORARY=="");
 		} catch (Exception e) {
-			tbc.fail("Expected " + DmtException.class.getName() + " but was "
-					+ e.getClass().getName());
+			tbc.failExpectedOtherException(DmtException.class, e);
 		} finally {
 			tbc.cleanUp(session,true);
 		}
@@ -195,8 +194,7 @@ public class MetaData {
 					"if meta-data doesn't allow the specified value. ",DmtException.METADATA_MISMATCH,e.getCode());
 			tbc.assertTrue("Asserts that the plugin's method was not called",DmtConstants.TEMPORARY=="");
 		} catch (Exception e) {
-			tbc.fail("Expected " + DmtException.class.getName() + " but was "
-					+ e.getClass().getName());
+			tbc.failExpectedOtherException(DmtException.class, e);
 		} finally {
 			tbc.cleanUp(session,true);
 	
@@ -232,8 +230,7 @@ public class MetaData {
 					"if meta-data doesn't allow the specified node name, ",DmtException.METADATA_MISMATCH,e.getCode());
 			tbc.assertTrue("Asserts that the plugin's method was not called",DmtConstants.TEMPORARY=="");
 		} catch (Exception e) {
-			tbc.fail("Expected " + DmtException.class.getName() + " but was "
-					+ e.getClass().getName());
+			tbc.failExpectedOtherException(DmtException.class, e);
 
 		} finally {
 			tbc.cleanUp(session,true);
@@ -267,8 +264,7 @@ public class MetaData {
 					"if meta-data  defines it as a permanent leaf node. ",DmtException.METADATA_MISMATCH,e.getCode());
 			tbc.assertTrue("Asserts that the plugin's method was not called",DmtConstants.TEMPORARY=="");
 		} catch (Exception e) {
-			tbc.fail("Expected " + DmtException.class.getName() + " but was "
-					+ e.getClass().getName());
+			tbc.failExpectedOtherException(DmtException.class, e);
 
 		} finally {
 			tbc.cleanUp(session,true);
@@ -303,8 +299,7 @@ public class MetaData {
 					"if meta-data doesn't allow the add operation. ",DmtException.METADATA_MISMATCH,e.getCode());
 			tbc.assertTrue("Asserts that the plugin's method was not called",DmtConstants.TEMPORARY=="");
 		} catch (Exception e) {
-			tbc.fail("Expected " + DmtException.class.getName() + " but was "
-					+ e.getClass().getName());
+			tbc.failExpectedOtherException(DmtException.class, e);
 
 		} finally {
 			tbc.cleanUp(session,true);
@@ -338,8 +333,7 @@ public class MetaData {
 					"if meta-data defines it as an interior node. ",DmtException.METADATA_MISMATCH,e.getCode());
 			tbc.assertTrue("Asserts that the plugin's method was not called",DmtConstants.TEMPORARY=="");
 		} catch (Exception e) {
-			tbc.fail("Expected " + DmtException.class.getName() + " but was "
-					+ e.getClass().getName());
+			tbc.failExpectedOtherException(DmtException.class, e);
 		} finally {
 			tbc.cleanUp(session,true);
 			
@@ -376,8 +370,7 @@ public class MetaData {
 					"if meta-data doesn't allow the specified value. ",DmtException.METADATA_MISMATCH,e.getCode());
 			tbc.assertTrue("Asserts that the plugin's method was not called",DmtConstants.TEMPORARY=="");
 		} catch (Exception e) {
-			tbc.fail("Expected " + DmtException.class.getName() + " but was "
-					+ e.getClass().getName());
+			tbc.failExpectedOtherException(DmtException.class, e);
 		} finally {
 			tbc.cleanUp(session,true);
 		}
@@ -411,8 +404,7 @@ public class MetaData {
 					"if meta-data doesn't allow the specified mimeType. ",DmtException.METADATA_MISMATCH,e.getCode());
 			tbc.assertTrue("Asserts that the plugin's method was not called",DmtConstants.TEMPORARY=="");
 		} catch (Exception e) {
-			tbc.fail("Expected " + DmtException.class.getName() + " but was "
-					+ e.getClass().getName());
+			tbc.failExpectedOtherException(DmtException.class, e);
 
 		} finally {
 			tbc.cleanUp(session,true);
@@ -449,8 +441,7 @@ public class MetaData {
 					"if meta-data doesn't allow the specified node name. ",DmtException.METADATA_MISMATCH,e.getCode());
 			tbc.assertTrue("Asserts that the plugin's method was not called",DmtConstants.TEMPORARY=="");
 		} catch (Exception e) {
-			tbc.fail("Expected " + DmtException.class.getName() + " but was "
-					+ e.getClass().getName());
+			tbc.failExpectedOtherException(DmtException.class, e);
 
 		} finally {
 			tbc.cleanUp(session,true);
@@ -483,8 +474,7 @@ public class MetaData {
 					"if meta-data defines it as permanent. ",DmtException.METADATA_MISMATCH,e.getCode());
 			tbc.assertTrue("Asserts that the plugin's method was not called",DmtConstants.TEMPORARY=="");
 		} catch (Exception e) {
-			tbc.fail("Expected " + DmtException.class.getName() + " but was "
-					+ e.getClass().getName());
+			tbc.failExpectedOtherException(DmtException.class, e);
 
 		} finally {
 			tbc.cleanUp(session,true);
@@ -519,8 +509,7 @@ public class MetaData {
 					"if meta-data doesn't allow the add operation. ",DmtException.METADATA_MISMATCH,e.getCode());
 			tbc.assertTrue("Asserts that the plugin's method was not called",DmtConstants.TEMPORARY=="");
 		} catch (Exception e) {
-			tbc.fail("Expected " + DmtException.class.getName() + " but was "
-					+ e.getClass().getName());
+			tbc.failExpectedOtherException(DmtException.class, e);
 
 		} finally {
 			tbc.cleanUp(session,true);
@@ -553,8 +542,7 @@ public class MetaData {
 					"if meta-data doesn't doesn't have a default value. ",DmtException.METADATA_MISMATCH,e.getCode());
 			tbc.assertTrue("Asserts that the plugin's method was not called",DmtConstants.TEMPORARY=="");
 		} catch (Exception e) {
-			tbc.fail("Expected " + DmtException.class.getName() + " but was "
-					+ e.getClass().getName());
+			tbc.failExpectedOtherException(DmtException.class, e);
 
 		} finally {
 			tbc.cleanUp(session,true);
@@ -591,8 +579,7 @@ public class MetaData {
 					"if meta-data doesn't doesn't allow the replace operation. ",DmtException.METADATA_MISMATCH,e.getCode());
 			tbc.assertTrue("Asserts that the plugin's method was not called",DmtConstants.TEMPORARY=="");
 		} catch (Exception e) {
-			tbc.fail("Expected " + DmtException.class.getName() + " but was "
-					+ e.getClass().getName());
+			tbc.failExpectedOtherException(DmtException.class, e);
 
 		} finally {
 			tbc.cleanUp(session,true);
@@ -627,8 +614,7 @@ public class MetaData {
 					"if meta-data doesn't allow the specified value. ",DmtException.METADATA_MISMATCH,e.getCode());
 			tbc.assertTrue("Asserts that the plugin's method was not called",DmtConstants.TEMPORARY=="");
 		} catch (Exception e) {
-			tbc.fail("Expected " + DmtException.class.getName() + " but was "
-					+ e.getClass().getName());
+			tbc.failExpectedOtherException(DmtException.class, e);
 
 		} finally {
 			tbc.cleanUp(session,true);
@@ -667,8 +653,7 @@ public class MetaData {
 					"if meta-data doesn't allow the replace operation. ",DmtException.METADATA_MISMATCH,e.getCode());
 			tbc.assertTrue("Asserts that the plugin's method was not called",DmtConstants.TEMPORARY=="");
 		} catch (Exception e) {
-			tbc.fail("Expected " + DmtException.class.getName() + " but was "
-					+ e.getClass().getName());
+			tbc.failExpectedOtherException(DmtException.class, e);
 
 		} finally {
 			tbc.cleanUp(session,true);
@@ -701,9 +686,7 @@ public class MetaData {
 					"if meta-data doesn't allow the specified node name. ",DmtException.METADATA_MISMATCH,e.getCode());
 			tbc.assertTrue("Asserts that the plugin's method was not called",DmtConstants.TEMPORARY=="");
 		} catch (Exception e) {
-			tbc.fail("Expected " + DmtException.class.getName() + " but was "
-					+ e.getClass().getName());
-
+			tbc.failExpectedOtherException(DmtException.class, e);
 		} finally {
 			tbc.cleanUp(session,true);
 			
@@ -735,8 +718,7 @@ public class MetaData {
 					"if meta-data doesn't allow the specified node name. ",DmtException.METADATA_MISMATCH,e.getCode());
 			tbc.assertTrue("Asserts that the plugin's method was not called",DmtConstants.TEMPORARY=="");
 		} catch (Exception e) {
-			tbc.fail("Expected " + DmtException.class.getName() + " but was "
-					+ e.getClass().getName());
+			tbc.failExpectedOtherException(DmtException.class, e);
 
 		} finally {
 			tbc.cleanUp(session,true);
@@ -769,8 +751,7 @@ public class MetaData {
 					"if meta-data doesn't allow the add operation. ",DmtException.METADATA_MISMATCH,e.getCode());
 			tbc.assertTrue("Asserts that the plugin's method was not called",DmtConstants.TEMPORARY=="");
 		} catch (Exception e) {
-			tbc.fail("Expected " + DmtException.class.getName() + " but was "
-					+ e.getClass().getName());
+			tbc.failExpectedOtherException(DmtException.class, e);
 
 		} finally {
 			tbc.cleanUp(session,true);
@@ -803,8 +784,7 @@ public class MetaData {
 					"if meta-data doesn't allow the add operation. ",DmtException.METADATA_MISMATCH,e.getCode());
 			tbc.assertTrue("Asserts that the plugin's method was not called",DmtConstants.TEMPORARY=="");
 		} catch (Exception e) {
-			tbc.fail("Expected " + DmtException.class.getName() + " but was "
-					+ e.getClass().getName());
+			tbc.failExpectedOtherException(DmtException.class, e);
 
 		} finally {
 			tbc.cleanUp(session,true);
@@ -838,8 +818,7 @@ public class MetaData {
 					"if zero occurrences of the node are not allowed, it must not be the last one.",DmtException.METADATA_MISMATCH,e.getCode());
 			tbc.assertTrue("Asserts that the plugin's method was not called",DmtConstants.TEMPORARY=="");
 		} catch (Exception e) {
-			tbc.fail("Expected " + DmtException.class.getName() + " but was "
-					+ e.getClass().getName());
+			tbc.failExpectedOtherException(DmtException.class, e);
 
 		} finally {
 			tbc.cleanUp(session,true);
@@ -873,8 +852,7 @@ public class MetaData {
 					"if meta-data doesn't allow the delete operation. ",DmtException.METADATA_MISMATCH,e.getCode());
 			tbc.assertTrue("Asserts that the plugin's method was not called",DmtConstants.TEMPORARY=="");
 		} catch (Exception e) {
-			tbc.fail("Expected " + DmtException.class.getName() + " but was "
-					+ e.getClass().getName());
+			tbc.failExpectedOtherException(DmtException.class, e);
 
 		} finally {
 			tbc.cleanUp(session,true);
@@ -907,8 +885,7 @@ public class MetaData {
 					"if meta-data doesn't allow the replace operation for this node. ",DmtException.METADATA_MISMATCH,e.getCode());
 			tbc.assertTrue("Asserts that the plugin's method was not called",DmtConstants.TEMPORARY=="");
 		} catch (Exception e) {
-			tbc.fail("Expected " + DmtException.class.getName() + " but was "
-					+ e.getClass().getName());
+			tbc.failExpectedOtherException(DmtException.class, e);
 
 		} finally {
 			tbc.cleanUp(session,true);
@@ -942,8 +919,7 @@ public class MetaData {
 					"if meta-data doesn't allow the replace operation. ",DmtException.METADATA_MISMATCH,e.getCode());
 			tbc.assertTrue("Asserts that the plugin's method was not called",DmtConstants.TEMPORARY=="");
 		} catch (Exception e) {
-			tbc.fail("Expected " + DmtException.class.getName() + " but was "
-					+ e.getClass().getName());
+			tbc.failExpectedOtherException(DmtException.class, e);
 
 		} finally {
 			tbc.cleanUp(session,true);
@@ -976,8 +952,7 @@ public class MetaData {
 					"if meta-data doesn't allow the replace operation. ",DmtException.METADATA_MISMATCH,e.getCode());
 			tbc.assertTrue("Asserts that the plugin's method was not called",DmtConstants.TEMPORARY=="");
 		} catch (Exception e) {
-			tbc.fail("Expected " + DmtException.class.getName() + " but was "
-					+ e.getClass().getName());
+			tbc.failExpectedOtherException(DmtException.class, e);
 
 		} finally {
 			tbc.cleanUp(session,true);
@@ -1011,8 +986,7 @@ public class MetaData {
 					"if meta-data doesn't allow the get operation. ",DmtException.METADATA_MISMATCH,e.getCode());
 			tbc.assertTrue("Asserts that the plugin's method was not called",DmtConstants.TEMPORARY=="");
 		} catch (Exception e) {
-			tbc.fail("Expected " + DmtException.class.getName() + " but was "
-					+ e.getClass().getName());
+			tbc.failExpectedOtherException(DmtException.class, e);
 
 		} finally {
 			tbc.cleanUp(session,true);
@@ -1046,8 +1020,7 @@ public class MetaData {
 					"if meta-data doesn't allow the get operation. ",DmtException.METADATA_MISMATCH,e.getCode());
 			tbc.assertTrue("Asserts that the plugin's method was not called",DmtConstants.TEMPORARY=="");
 		} catch (Exception e) {
-			tbc.fail("Expected " + DmtException.class.getName() + " but was "
-					+ e.getClass().getName());
+			tbc.failExpectedOtherException(DmtException.class, e);
 
 		} finally {
 			tbc.cleanUp(session,true);
@@ -1080,8 +1053,7 @@ public class MetaData {
 					"if meta-data doesn't allow the get operation. ",DmtException.METADATA_MISMATCH,e.getCode());
 			tbc.assertTrue("Asserts that the plugin's method was not called",DmtConstants.TEMPORARY=="");
 		} catch (Exception e) {
-			tbc.fail("Expected " + DmtException.class.getName() + " but was "
-					+ e.getClass().getName());
+			tbc.failExpectedOtherException(DmtException.class, e);
 
 		} finally {
 			tbc.cleanUp(session,true);
@@ -1114,8 +1086,7 @@ public class MetaData {
 					"if meta-data doesn't allow the get operation. ",DmtException.METADATA_MISMATCH,e.getCode());
 			tbc.assertTrue("Asserts that the plugin's method was not called",DmtConstants.TEMPORARY=="");
 		} catch (Exception e) {
-			tbc.fail("Expected " + DmtException.class.getName() + " but was "
-					+ e.getClass().getName());
+			tbc.failExpectedOtherException(DmtException.class, e);
 
 		} finally {
 			tbc.cleanUp(session,true);
@@ -1148,8 +1119,7 @@ public class MetaData {
 					"if meta-data doesn't allow the get operation. ",DmtException.METADATA_MISMATCH,e.getCode());
 			tbc.assertTrue("Asserts that the plugin's method was not called",DmtConstants.TEMPORARY=="");
 		} catch (Exception e) {
-			tbc.fail("Expected " + DmtException.class.getName() + " but was "
-					+ e.getClass().getName());
+			tbc.failExpectedOtherException(DmtException.class, e);
 
 		} finally {
 			tbc.cleanUp(session,true);
@@ -1182,8 +1152,7 @@ public class MetaData {
 					"if meta-data doesn't allow the get operation. ",DmtException.METADATA_MISMATCH,e.getCode());
 			tbc.assertTrue("Asserts that the plugin's method was not called",DmtConstants.TEMPORARY=="");
 		} catch (Exception e) {
-			tbc.fail("Expected " + DmtException.class.getName() + " but was "
-					+ e.getClass().getName());
+			tbc.failExpectedOtherException(DmtException.class, e);
 
 		} finally {
 			tbc.cleanUp(session,true);
@@ -1216,8 +1185,7 @@ public class MetaData {
 					"if meta-data doesn't allow the get operation. ",DmtException.METADATA_MISMATCH,e.getCode());
 			tbc.assertTrue("Asserts that the plugin's method was not called",DmtConstants.TEMPORARY=="");
 		} catch (Exception e) {
-			tbc.fail("Expected " + DmtException.class.getName() + " but was "
-					+ e.getClass().getName());
+			tbc.failExpectedOtherException(DmtException.class, e);
 
 		} finally {
 			tbc.cleanUp(session,true);
@@ -1250,8 +1218,7 @@ public class MetaData {
 					"if meta-data doesn't allow the get operation. ",DmtException.METADATA_MISMATCH,e.getCode());
 			tbc.assertTrue("Asserts that the plugin's method was not called",DmtConstants.TEMPORARY=="");
 		} catch (Exception e) {
-			tbc.fail("Expected " + DmtException.class.getName() + " but was "
-					+ e.getClass().getName());
+			tbc.failExpectedOtherException(DmtException.class, e);
 
 		} finally {
 			tbc.cleanUp(session,true);
@@ -1284,8 +1251,7 @@ public class MetaData {
 					"if meta-data doesn't allow the get operation. ",DmtException.METADATA_MISMATCH,e.getCode());
 			tbc.assertTrue("Asserts that the plugin's method was not called",DmtConstants.TEMPORARY=="");
 		} catch (Exception e) {
-			tbc.fail("Expected " + DmtException.class.getName() + " but was "
-					+ e.getClass().getName());
+			tbc.failExpectedOtherException(DmtException.class, e);
 
 		} finally {
 			tbc.cleanUp(session,true);
@@ -1318,8 +1284,7 @@ public class MetaData {
 					"if meta-data doesn't allow the get operation. ",DmtException.METADATA_MISMATCH,e.getCode());
 			tbc.assertTrue("Asserts that the plugin's method was not called",DmtConstants.TEMPORARY=="");
 		} catch (Exception e) {
-			tbc.fail("Expected " + DmtException.class.getName() + " but was "
-					+ e.getClass().getName());
+			tbc.failExpectedOtherException(DmtException.class, e);
 
 		} finally {
 			tbc.cleanUp(session,true);
@@ -1353,8 +1318,7 @@ public class MetaData {
 					"if meta-data doesn't allow deleting a permanent node. ",DmtException.METADATA_MISMATCH,e.getCode());
 			tbc.assertTrue("Asserts that the plugin's method was not called",DmtConstants.TEMPORARY=="");
 		} catch (Exception e) {
-			tbc.fail("Expected " + DmtException.class.getName() + " but was "
-					+ e.getClass().getName());
+			tbc.failExpectedOtherException(DmtException.class, e);
 
 		} finally {
 			tbc.cleanUp(session,true);
@@ -1387,8 +1351,7 @@ public class MetaData {
 					"if meta-data doesn't allow creating a permanent node. ",DmtException.METADATA_MISMATCH,e.getCode());
 			tbc.assertTrue("Asserts that the plugin's method was not called",DmtConstants.TEMPORARY=="");
 		} catch (Exception e) {
-			tbc.fail("Expected " + DmtException.class.getName() + " but was "
-					+ e.getClass().getName());
+			tbc.failExpectedOtherException(DmtException.class, e);
 
 		} finally {
 			tbc.cleanUp(session,true);
@@ -1421,8 +1384,7 @@ public class MetaData {
 					"according to the meta-data  (does not have MetaNode.CMD_EXECUTE access type)",DmtException.METADATA_MISMATCH,e.getCode());
 			tbc.assertTrue("Asserts that the plugin's method was not called",DmtConstants.TEMPORARY=="");
 		} catch (Exception e) {
-			tbc.fail("Expected " + DmtException.class.getName() + " but was "
-					+ e.getClass().getName());
+			tbc.failExpectedOtherException(DmtException.class, e);
 
 		} finally {
 			tbc.cleanUp(session,true);
@@ -1455,8 +1417,7 @@ public class MetaData {
 					"according to the meta-data  (does not have MetaNode.CMD_EXECUTE access type)",DmtException.METADATA_MISMATCH,e.getCode());
 			tbc.assertTrue("Asserts that the plugin's method was not called",DmtConstants.TEMPORARY=="");
 		} catch (Exception e) {
-			tbc.fail("Expected " + DmtException.class.getName() + " but was "
-					+ e.getClass().getName());
+			tbc.failExpectedOtherException(DmtException.class, e);
 
 		} finally {
 			tbc.cleanUp(session,true);
@@ -1490,8 +1451,7 @@ public class MetaData {
 					"if meta-data doesn't allow creating a permanent node. ",DmtException.METADATA_MISMATCH,e.getCode());
 			tbc.assertTrue("Asserts that the plugin's method was not called",DmtConstants.TEMPORARY=="");
 		} catch (Exception e) {
-			tbc.fail("Expected " + DmtException.class.getName() + " but was "
-					+ e.getClass().getName());
+			tbc.failExpectedOtherException(DmtException.class, e);
 
 		} finally {
 			tbc.cleanUp(session,true);
@@ -1525,8 +1485,7 @@ public class MetaData {
 					"if the creation of the new node exceeds the maximum occurrence number. ",DmtException.METADATA_MISMATCH,e.getCode());
 			tbc.assertTrue("Asserts that the plugin's method was not called",DmtConstants.TEMPORARY=="");
 		} catch (Exception e) {
-			tbc.fail("Expected " + DmtException.class.getName() + " but was "
-					+ e.getClass().getName());
+			tbc.failExpectedOtherException(DmtException.class, e);
 
 		} finally {
 			tbc.cleanUp(session,true);
@@ -1559,8 +1518,7 @@ public class MetaData {
 					"if the creation of the new node exceeds the maximum occurrence number. ",DmtException.METADATA_MISMATCH,e.getCode());
 			tbc.assertTrue("Asserts that the plugin's method was not called",DmtConstants.TEMPORARY=="");
 		} catch (Exception e) {
-			tbc.fail("Expected " + DmtException.class.getName() + " but was "
-					+ e.getClass().getName());
+			tbc.failExpectedOtherException(DmtException.class, e);
 
 		} finally {
 			tbc.cleanUp(session,true);
@@ -1595,8 +1553,7 @@ public class MetaData {
 					"if the creation of the new node exceeds the maximum occurrence number. ",DmtException.METADATA_MISMATCH,e.getCode());
 			tbc.assertTrue("Asserts that the plugin's method was not called",DmtConstants.TEMPORARY=="");
 		} catch (Exception e) {
-			tbc.fail("Expected " + DmtException.class.getName() + " but was "
-					+ e.getClass().getName());
+			tbc.failExpectedOtherException(DmtException.class, e);
 
 		} finally {
 			tbc.cleanUp(session,true);
@@ -1632,8 +1589,7 @@ public class MetaData {
 					"if the creation of the new node exceeds the maximum occurrence number. ",DmtException.METADATA_MISMATCH,e.getCode());
 			tbc.assertTrue("Asserts that the plugin's method was not called",DmtConstants.TEMPORARY=="");
 		} catch (Exception e) {
-			tbc.fail("Expected " + DmtException.class.getName() + " but was "
-					+ e.getClass().getName());
+			tbc.failExpectedOtherException(DmtException.class, e);
 
 		} finally {
 			tbc.cleanUp(session,true);
@@ -1670,8 +1626,7 @@ public class MetaData {
 					"if the creation of the new node exceeds the maximum occurrence number. ",DmtException.METADATA_MISMATCH,e.getCode());
 			tbc.assertTrue("Asserts that the plugin's method was not called",DmtConstants.TEMPORARY=="");
 		} catch (Exception e) {
-			tbc.fail("Expected " + DmtException.class.getName() + " but was "
-					+ e.getClass().getName());
+			tbc.failExpectedOtherException(DmtException.class, e);
 
 		} finally {
 			tbc.cleanUp(session,true);
@@ -1709,9 +1664,7 @@ public class MetaData {
 					"if meta-data doesn't allow the add operation. ",DmtException.METADATA_MISMATCH,e.getCode());
 			tbc.assertTrue("Asserts that the plugin's method was not called",DmtConstants.TEMPORARY=="");
 		} catch (Exception e) {
-			tbc.fail("Expected " + DmtException.class.getName() + " but was "
-					+ e.getClass().getName());
-
+			tbc.failExpectedOtherException(DmtException.class, e);
 		} finally {
 			tbc.cleanUp(session,true);
 			
@@ -1743,8 +1696,7 @@ public class MetaData {
 					"if meta-data defines it as an interior node.",DmtException.METADATA_MISMATCH,e.getCode());
 			tbc.assertTrue("Asserts that the plugin's method was not called",DmtConstants.TEMPORARY=="");
 		} catch (Exception e) {
-			tbc.fail("Expected " + DmtException.class.getName() + " but was "
-					+ e.getClass().getName());
+			tbc.failExpectedOtherException(DmtException.class, e);
 
 		} finally {
 			tbc.cleanUp(session,true);
@@ -1779,8 +1731,7 @@ public class MetaData {
 					"if meta-data defines it as a permanent leaf node",DmtException.METADATA_MISMATCH,e.getCode());
 			tbc.assertTrue("Asserts that the plugin's method was not called",DmtConstants.TEMPORARY=="");
 		} catch (Exception e) {
-			tbc.fail("Expected " + DmtException.class.getName() + " but was "
-					+ e.getClass().getName());
+			tbc.failExpectedOtherException(DmtException.class, e);
 
 		} finally {
 			tbc.cleanUp(session,true);
@@ -1815,8 +1766,7 @@ public class MetaData {
 					"if meta-data doesn't allow the specified node name ",DmtException.METADATA_MISMATCH,e.getCode());
 			tbc.assertTrue("Asserts that the plugin's method was not called",DmtConstants.TEMPORARY=="");
 		} catch (Exception e) {
-			tbc.fail("Expected " + DmtException.class.getName() + " but was "
-					+ e.getClass().getName());
+			tbc.failExpectedOtherException(DmtException.class, e);
 		} finally {
 			tbc.cleanUp(session,true);
 	
@@ -1847,8 +1797,7 @@ public class MetaData {
 					"if meta-data doesn't allow the specified value. ",DmtException.METADATA_MISMATCH,e.getCode());
 			tbc.assertTrue("Asserts that the plugin's method was not called",DmtConstants.TEMPORARY=="");
 		} catch (Exception e) {
-			tbc.fail("Expected " + DmtException.class.getName() + " but was "
-					+ e.getClass().getName());
+			tbc.failExpectedOtherException(DmtException.class, e);
 		} finally {
 			tbc.cleanUp(session,true);
 		}
@@ -1881,8 +1830,7 @@ public class MetaData {
                     "if meta-data doesn't have the mimeType specified. ",DmtException.METADATA_MISMATCH,e.getCode());
             tbc.assertTrue("Asserts that the plugin's method was not called",DmtConstants.TEMPORARY=="");
         } catch (Exception e) {
-            tbc.fail("Expected " + DmtException.class.getName() + " but was "
-                    + e.getClass().getName());
+        	tbc.failExpectedOtherException(DmtException.class, e);
 
         } finally {
             tbc.cleanUp(session,true);
@@ -1910,8 +1858,7 @@ public class MetaData {
                     "if meta-data of the parent node does not allow the Add operation ",DmtException.METADATA_MISMATCH,e.getCode());
             tbc.assertTrue("Asserts that the plugin's method was not called",DmtConstants.TEMPORARY=="");
         } catch (Exception e) {
-            tbc.fail("Expected " + DmtException.class.getName() + " but was "
-                    + e.getClass().getName());
+        	tbc.failExpectedOtherException(DmtException.class, e);
 
         } finally {
             tbc.cleanUp(session,true);
@@ -1944,8 +1891,7 @@ public class MetaData {
                     "if meta-data doesn't allow the specified node name, ",DmtException.METADATA_MISMATCH,e.getCode());
             tbc.assertTrue("Asserts that the plugin's method was not called",DmtConstants.TEMPORARY=="");
         } catch (Exception e) {
-            tbc.fail("Expected " + DmtException.class.getName() + " but was "
-                    + e.getClass().getName());
+        	tbc.failExpectedOtherException(DmtException.class, e);
 
         } finally {
             tbc.cleanUp(session,true);
@@ -1975,8 +1921,7 @@ public class MetaData {
                     "if meta-data defines the source as a leaf node. ",DmtException.METADATA_MISMATCH,e.getCode());
             tbc.assertTrue("Asserts that the plugin's method was not called",DmtConstants.TEMPORARY=="");
         } catch (Exception e) {
-            tbc.fail("Expected " + DmtException.class.getName() + " but was "
-                    + e.getClass().getName());
+        	tbc.failExpectedOtherException(DmtException.class, e);
 
         } finally {
             tbc.cleanUp(session,true);
@@ -2006,8 +1951,7 @@ public class MetaData {
                     "if meta-data defines the target as leaf node. ",DmtException.METADATA_MISMATCH,e.getCode());
             tbc.assertTrue("Asserts that the plugin's method was not called",DmtConstants.TEMPORARY=="");
         } catch (Exception e) {
-            tbc.fail("Expected " + DmtException.class.getName() + " but was "
-                    + e.getClass().getName());
+        	tbc.failExpectedOtherException(DmtException.class, e);
 
         } finally {
             tbc.cleanUp(session,true);
@@ -2040,8 +1984,7 @@ public class MetaData {
                     "if meta-data does not have a default value. ",DmtException.METADATA_MISMATCH,e.getCode());
             tbc.assertTrue("Asserts that the plugin's method was not called",DmtConstants.TEMPORARY=="");
         } catch (Exception e) {
-            tbc.fail("Expected " + DmtException.class.getName() + " but was "
-                    + e.getClass().getName());
+        	tbc.failExpectedOtherException(DmtException.class, e);
 
         } finally {
             tbc.cleanUp(session,true);
@@ -2075,8 +2018,7 @@ public class MetaData {
                     "if meta-data does not have a default value. ",DmtException.METADATA_MISMATCH,e.getCode());
             tbc.assertTrue("Asserts that the plugin's method was not called",DmtConstants.TEMPORARY=="");
         } catch (Exception e) {
-            tbc.fail("Expected " + DmtException.class.getName() + " but was "
-                    + e.getClass().getName());
+        	tbc.failExpectedOtherException(DmtException.class, e);
 
         } finally {
             tbc.cleanUp(session,true);
@@ -2112,8 +2054,7 @@ public class MetaData {
            
             
         } catch (Exception e) {
-            tbc.fail("Unexpected Exception: " + e.getClass().getName()
-                + " [Message: " + e.getMessage() + "]");
+        	tbc.failUnexpectedException(e);
         } finally {
             tbc.cleanUp(session,true);
         }
@@ -2139,8 +2080,7 @@ public class MetaData {
             session.renameNode(TestMetaNodeDataPluginActivator.INTERIOR_NODE,TestMetaNodeDataPluginActivator.INEXISTENT_NODE_WITHOUT_PERMISSIONS_NAME);
             tbc.pass("renameNode could be called, even if the target does not have any permission");
         } catch (Exception e) {
-            tbc.fail("Unexpected Exception: " + e.getClass().getName()
-                + " [Message: " + e.getMessage() + "]");
+        	tbc.failUnexpectedException(e);
         } finally {
             tbc.cleanUp(session,true);
         }
@@ -2166,8 +2106,7 @@ public class MetaData {
             session.createInteriorNode(TestPluginMetaDataActivator.INEXISTENT_NODE);
             tbc.pass("Asserts that no exception is thrown if the node does not have a metanode and createInteriorNode is called");
         } catch (Exception e) {
-            tbc.fail("Unexpected Exception: " + e.getClass().getName()
-                + " [Message: " + e.getMessage() + "]");
+        	tbc.failUnexpectedException(e);
         } finally {
             tbc.cleanUp(session,true);
         }
@@ -2193,8 +2132,7 @@ public class MetaData {
             session.createInteriorNode(TestPluginMetaDataActivator.INEXISTENT_NODE,null);
             tbc.pass("Asserts that no exception is thrown if the node does not have a metanode and createInteriorNode is called");
         } catch (Exception e) {
-            tbc.fail("Unexpected Exception: " + e.getClass().getName()
-                + " [Message: " + e.getMessage() + "]");
+        	tbc.failUnexpectedException(e);
         } finally {
             tbc.cleanUp(session,true);
         }
@@ -2220,8 +2158,7 @@ public class MetaData {
             session.createLeafNode(TestPluginMetaDataActivator.INEXISTENT_LEAF_NODE);
             tbc.pass("Asserts that no exception is thrown if the node does not have a metanode and createLeafNode is called");
         } catch (Exception e) {
-            tbc.fail("Unexpected Exception: " + e.getClass().getName()
-                + " [Message: " + e.getMessage() + "]");
+        	tbc.failUnexpectedException(e);
         } finally {
             tbc.cleanUp(session,true);
         }
@@ -2247,8 +2184,7 @@ public class MetaData {
             session.createLeafNode(TestPluginMetaDataActivator.INEXISTENT_LEAF_NODE,null);
             tbc.pass("Asserts that no exception is thrown if the node does not have a metanode and createLeafNode is called");
         } catch (Exception e) {
-            tbc.fail("Unexpected Exception: " + e.getClass().getName()
-                + " [Message: " + e.getMessage() + "]");
+        	tbc.failUnexpectedException(e);
         } finally {
             tbc.cleanUp(session,true);
         }
@@ -2273,8 +2209,7 @@ public class MetaData {
             session.createLeafNode(TestPluginMetaDataActivator.INEXISTENT_LEAF_NODE,null,null);
             tbc.pass("Asserts that no exception is thrown if the node does not have a metanode and createLeafNode is called");
         } catch (Exception e) {
-            tbc.fail("Unexpected Exception: " + e.getClass().getName()
-                + " [Message: " + e.getMessage() + "]");
+        	tbc.failUnexpectedException(e);
         } finally {
             tbc.cleanUp(session,true);
         }
@@ -2300,8 +2235,7 @@ public class MetaData {
             session.copy(TestPluginMetaDataActivator.INTERIOR_NODE,TestPluginMetaDataActivator.INEXISTENT_NODE,false);
             tbc.pass("Asserts that no exception is thrown if the node does not have a metanode and copy is called");
         } catch (Exception e) {
-            tbc.fail("Unexpected Exception: " + e.getClass().getName()
-                + " [Message: " + e.getMessage() + "]");
+        	tbc.failUnexpectedException(e);
         } finally {
             tbc.cleanUp(session,true);
         }
@@ -2327,8 +2261,7 @@ public class MetaData {
             session.renameNode(TestPluginMetaDataActivator.INTERIOR_NODE,TestPluginMetaDataActivator.INEXISTENT_NODE_NAME);
             tbc.pass("Asserts that no exception is thrown if the node does not have a metanode and renameNode is called");
         } catch (Exception e) {
-            tbc.fail("Unexpected Exception: " + e.getClass().getName()
-                + " [Message: " + e.getMessage() + "]");
+        	tbc.failUnexpectedException(e);
         } finally {
             tbc.cleanUp(session,true);
         }
@@ -2354,8 +2287,7 @@ public class MetaData {
             session.createLeafNode(TestPluginMetaDataActivator.INEXISTENT_LEAF_NODE,DmtData.NULL_VALUE);
             tbc.pass("Asserts that no exception is thrown if the node does not have a metanode and createLeafNode is called with any value");
         } catch (Exception e) {
-            tbc.fail("Unexpected Exception: " + e.getClass().getName()
-                + " [Message: " + e.getMessage() + "]");
+        	tbc.failUnexpectedException(e);
         } finally {
             tbc.cleanUp(session,true);
         }
@@ -2380,8 +2312,7 @@ public class MetaData {
             session.createLeafNode(TestPluginMetaDataActivator.INEXISTENT_LEAF_NODE,DmtData.NULL_VALUE,"text/xml");
             tbc.pass("Asserts that no exception is thrown if the node does not have a metanode and createLeafNode is called with any value");
         } catch (Exception e) {
-            tbc.fail("Unexpected Exception: " + e.getClass().getName()
-                + " [Message: " + e.getMessage() + "]");
+        	tbc.failUnexpectedException(e);
         } finally {
             tbc.cleanUp(session,true);
         }
@@ -2407,8 +2338,7 @@ public class MetaData {
             session.setNodeValue(TestPluginMetaDataActivator.LEAF_NODE,DmtData.NULL_VALUE);
             tbc.pass("Asserts that no exception is thrown if the node does not have a metanode and setNodeValue is called with any value");
         } catch (Exception e) {
-            tbc.fail("Unexpected Exception: " + e.getClass().getName()
-                + " [Message: " + e.getMessage() + "]");
+        	tbc.failUnexpectedException(e);
         } finally {
             tbc.cleanUp(session,true);
         }
@@ -2434,8 +2364,7 @@ public class MetaData {
             session.deleteNode(TestPluginMetaDataActivator.INTERIOR_NODE);
             tbc.pass("Asserts that no exception is thrown if the node does not have a metanode and deleteNode is called");
         } catch (Exception e) {
-            tbc.fail("Unexpected Exception: " + e.getClass().getName()
-                + " [Message: " + e.getMessage() + "]");
+        	tbc.failUnexpectedException(e);
         } finally {
             tbc.cleanUp(session,true);
         }
@@ -2464,8 +2393,7 @@ public class MetaData {
                     "if meta-data defines the source as permanent ",DmtException.METADATA_MISMATCH,e.getCode());
             tbc.assertTrue("Asserts that the plugin's method was not called",DmtConstants.TEMPORARY=="");
         } catch (Exception e) {
-            tbc.fail("Expected " + DmtException.class.getName() + " but was "
-                    + e.getClass().getName());
+        	tbc.failExpectedOtherException(DmtException.class, e);
 
         } finally {
             tbc.cleanUp(session,true);
@@ -2494,8 +2422,7 @@ public class MetaData {
                     "if meta-data defines the source as permanent ",DmtException.METADATA_MISMATCH,e.getCode());
             tbc.assertTrue("Asserts that the plugin's method was not called",DmtConstants.TEMPORARY=="");
         } catch (Exception e) {
-            tbc.fail("Expected " + DmtException.class.getName() + " but was "
-                    + e.getClass().getName());
+        	tbc.failExpectedOtherException(DmtException.class, e);
 
         } finally {
             tbc.cleanUp(session,true);
@@ -2528,8 +2455,7 @@ public class MetaData {
            
             
         } catch (Exception e) {
-            tbc.fail("Unexpected Exception: " + e.getClass().getName()
-                + " [Message: " + e.getMessage() + "]");
+        	tbc.failUnexpectedException(e);
         } finally {
             tbc.cleanUp(session,true);
         }
@@ -2558,8 +2484,7 @@ public class MetaData {
                     "if meta-data of the copied node does not allow the Get operation, ",DmtException.METADATA_MISMATCH,e.getCode());
             tbc.assertTrue("Asserts that the plugin's method was not called",DmtConstants.TEMPORARY=="");
         } catch (Exception e) {
-            tbc.fail("Expected " + DmtException.class.getName() + " but was "
-                    + e.getClass().getName());
+        	tbc.failExpectedOtherException(DmtException.class, e);
 
         } finally {
             tbc.cleanUp(session,true);

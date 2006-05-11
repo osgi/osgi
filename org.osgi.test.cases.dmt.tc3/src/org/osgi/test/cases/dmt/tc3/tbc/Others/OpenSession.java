@@ -36,7 +36,7 @@
 
 package org.osgi.test.cases.dmt.tc3.tbc.Others;
 
-import org.osgi.service.dmt.DmtSession;
+import info.dmtree.DmtSession;
 import org.osgi.test.cases.dmt.tc3.tbc.DmtTestControl;
 import org.osgi.test.cases.dmt.tc3.tbc.DataPlugin.TestDataPlugin;
 import org.osgi.test.cases.dmt.tc3.tbc.DataPlugin.TestDataPluginActivator;
@@ -80,7 +80,7 @@ public class OpenSession {
                     " a node which is handled by this plugin using the LOCK_TYPE_SHARED",
                     TestDataPlugin.SESSION_OPENED,"openReadOnlySession");
 		} catch (Exception e) {
-			tbc.fail("Unexpected Exception: " + e.getClass().getName() + " [Message: " + e.getMessage() +"]");
+			tbc.failUnexpectedException(e);
 		} finally {
 			tbc.cleanUp(session,true);
             TestDataPlugin.SESSION_OPENED="";
@@ -105,7 +105,7 @@ public class OpenSession {
                     " a node which is handled by this plugin using the LOCK_TYPE_EXCLUSIVE",
                     TestDataPlugin.SESSION_OPENED,"openReadWriteSession");
         } catch (Exception e) {
-            tbc.fail("Unexpected Exception: " + e.getClass().getName() + " [Message: " + e.getMessage() +"]");
+            tbc.failUnexpectedException(e);
         } finally {
             tbc.cleanUp(session,true);
             TestDataPlugin.SESSION_OPENED="";
@@ -129,7 +129,7 @@ public class OpenSession {
                     " a node which is handled by this plugin using the LOCK_TYPE_ATOMIC",
                     TestDataPlugin.SESSION_OPENED,"openAtomicSession");
         } catch (Exception e) {
-            tbc.fail("Unexpected Exception: " + e.getClass().getName() + " [Message: " + e.getMessage() +"]");
+            tbc.failUnexpectedException(e);
         } finally {
             tbc.cleanUp(session,true);
             TestDataPlugin.SESSION_OPENED="";

@@ -42,8 +42,8 @@ import java.util.Hashtable;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
-import org.osgi.service.dmt.spi.DataPlugin;
-import org.osgi.service.dmt.spi.ExecPlugin;
+import info.dmtree.spi.DataPlugin;
+import info.dmtree.spi.ExecPlugin;
 import org.osgi.test.cases.dmt.tc3.tbc.DmtTestControl;
 
 /**
@@ -70,7 +70,7 @@ public class TestExecPluginActivator implements BundleActivator {
 		// creating the service
 		testExecPlugin = new TestExecPlugin(tbc);
 		Hashtable props = new Hashtable();
-		props.put(ExecPlugin.EXEC_ROOT_URIS, new String[] { ROOT });
+		props.put("execRootURIs", new String[] { ROOT });
 		String[] ifs = new String[] { DataPlugin.class.getName(),ExecPlugin.class.getName() };
 		servReg = bc.registerService(ifs, testExecPlugin, props);
 		System.out.println("TestExecPlugin activated.");

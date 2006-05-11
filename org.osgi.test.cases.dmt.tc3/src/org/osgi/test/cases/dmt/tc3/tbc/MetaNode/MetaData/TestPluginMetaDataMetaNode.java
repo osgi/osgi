@@ -35,8 +35,8 @@
  */
 package org.osgi.test.cases.dmt.tc3.tbc.MetaNode.MetaData;
 
-import org.osgi.service.dmt.DmtData;
-import org.osgi.service.dmt.MetaNode;
+import info.dmtree.DmtData;
+import info.dmtree.MetaNode;
 
 public class TestPluginMetaDataMetaNode implements MetaNode {
 
@@ -274,6 +274,21 @@ public class TestPluginMetaDataMetaNode implements MetaNode {
 			}
 		}
 		return false;
+	}
+
+
+	public String[] getExtensionPropertyKeys() {
+		return null;
+	}
+
+
+	public Object getExtensionProperty(String key) {
+		return null;
+	}
+
+
+	public String[] getRawFormatNames() {
+		return null;
 	}
 
 }

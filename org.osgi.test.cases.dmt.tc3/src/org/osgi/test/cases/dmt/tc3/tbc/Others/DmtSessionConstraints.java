@@ -39,8 +39,8 @@
 
 package org.osgi.test.cases.dmt.tc3.tbc.Others;
 
-import org.osgi.service.dmt.DmtException;
-import org.osgi.service.dmt.DmtSession;
+import info.dmtree.DmtException;
+import info.dmtree.DmtSession;
 import org.osgi.test.cases.dmt.tc3.tbc.DmtConstants;
 import org.osgi.test.cases.dmt.tc3.tbc.DmtTestControl;
 import org.osgi.test.cases.dmt.tc3.tbc.DataPlugin.TestDataPluginActivator;
@@ -89,8 +89,7 @@ public class DmtSessionConstraints {
 					DmtSession.LOCK_TYPE_SHARED);
 			tbc.pass("Two concurrent read only sessions were created.");
 		} catch (Exception e) {
-			tbc.fail("Unexpected Exception: " + e.getClass().getName()
-					+ " [Message: " + e.getMessage() + "]");
+			tbc.failUnexpectedException(e);
 		} finally {
 			tbc.closeSession(session1);
 			tbc.closeSession(session2);
@@ -118,8 +117,7 @@ public class DmtSessionConstraints {
 		} catch (DmtException e) {
 			tbc.assertEquals("A read only session blocked the creation of an updating session (with a LOCK_TYPE_EXCLUSIVE)",DmtException.SESSION_CREATION_TIMEOUT,e.getCode());
 		} catch (Exception e) {
-			tbc.fail("Expected " + DmtException.class.getName()
-					+ " but it was " + e.getClass().getName());
+			tbc.failExpectedOtherException(DmtException.class, e);
 		} finally {
 			tbc.closeSession(session1);
 			tbc.closeSession(session2);
@@ -146,8 +144,7 @@ public class DmtSessionConstraints {
 		} catch (DmtException e) {
 			tbc.assertEquals("A read only session blocked the creation of an updating session (with a LOCK_TYPE_ATOMIC)",DmtException.SESSION_CREATION_TIMEOUT,e.getCode());
 		} catch (Exception e) {
-			tbc.fail("Expected " + DmtException.class.getName()
-					+ " but it was " + e.getClass().getName());
+			tbc.failExpectedOtherException(DmtException.class, e);
 		} finally {
 			tbc.closeSession(session1);
 			tbc.closeSession(session2);
@@ -175,8 +172,7 @@ public class DmtSessionConstraints {
 		} catch (DmtException e) {
 			tbc.assertEquals("An EXCLUSIVE session could NOT be shared with an ATOMIC session",DmtException.SESSION_CREATION_TIMEOUT,e.getCode());
 		} catch (Exception e) {
-			tbc.fail("Expected " + DmtException.class.getName()
-					+ " but it was " + e.getClass().getName());
+			tbc.failExpectedOtherException(DmtException.class, e);
 		} finally {
 			tbc.closeSession(session1);
 			tbc.closeSession(session2);
@@ -203,8 +199,7 @@ public class DmtSessionConstraints {
 		} catch (DmtException e) {
 			tbc.assertEquals("An EXCLUSIVE session could NOT be shared with an SHARED session",DmtException.SESSION_CREATION_TIMEOUT,e.getCode());
 		} catch (Exception e) {
-			tbc.fail("Expected " + DmtException.class.getName()
-					+ " but it was " + e.getClass().getName());
+			tbc.failExpectedOtherException(DmtException.class, e);
 		} finally {
 			tbc.closeSession(session1);
 			tbc.closeSession(session2);
@@ -231,8 +226,7 @@ public class DmtSessionConstraints {
 		} catch (DmtException e) {
 			tbc.assertEquals("An EXCLUSIVE session could NOT be shared with an EXCLUSIVE session",DmtException.SESSION_CREATION_TIMEOUT,e.getCode());
 		} catch (Exception e) {
-			tbc.fail("Expected " + DmtException.class.getName()
-					+ " but it was " + e.getClass().getName());
+			tbc.failExpectedOtherException(DmtException.class, e);
 		} finally {
 			tbc.closeSession(session1);
 			tbc.closeSession(session2);
@@ -262,8 +256,7 @@ public class DmtSessionConstraints {
 		} catch (DmtException e) {
 			tbc.assertEquals("An ATOMIC session could NOT be shared with an ATOMIC session",DmtException.SESSION_CREATION_TIMEOUT,e.getCode());
 		} catch (Exception e) {
-			tbc.fail("Expected " + DmtException.class.getName()
-					+ " but it was " + e.getClass().getName());
+			tbc.failExpectedOtherException(DmtException.class, e);
 		} finally {
 			tbc.closeSession(session1);
 			tbc.closeSession(session2);
@@ -293,8 +286,7 @@ public class DmtSessionConstraints {
 		} catch (DmtException e) {
 			tbc.assertEquals("An ATOMIC session could NOT be shared with an EXCLUSIVE session",DmtException.SESSION_CREATION_TIMEOUT,e.getCode());
 		} catch (Exception e) {
-			tbc.fail("Expected " + DmtException.class.getName()
-					+ " but it was " + e.getClass().getName());
+			tbc.failExpectedOtherException(DmtException.class, e);
 		} finally {
 			tbc.closeSession(session1);
 			tbc.closeSession(session2);
@@ -323,8 +315,7 @@ public class DmtSessionConstraints {
 		} catch (DmtException e) {
 			tbc.assertEquals("An ATOMIC session could NOT be shared with a SHARED session",DmtException.SESSION_CREATION_TIMEOUT,e.getCode());
 		} catch (Exception e) {
-			tbc.fail("Expected " + DmtException.class.getName()
-					+ " but it was " + e.getClass().getName());
+			tbc.failExpectedOtherException(DmtException.class, e);
 		} finally {
 			tbc.closeSession(session1);
 			tbc.closeSession(session2);
@@ -351,8 +342,7 @@ public class DmtSessionConstraints {
 					DmtSession.LOCK_TYPE_ATOMIC);
 			tbc.pass("Two sessions could be opened with different plugins.");
 		} catch (Exception e) {
-			tbc.fail("Unexpected Exception: " + e.getClass().getName()
-					+ " [Message: " + e.getMessage() + "]");
+			tbc.failUnexpectedException(e);
 		} finally {
 			tbc.closeSession(session1);
 			tbc.closeSession(session2);
@@ -378,8 +368,7 @@ public class DmtSessionConstraints {
 					DmtSession.LOCK_TYPE_EXCLUSIVE);
 			tbc.pass("Two sessions could be opened with different plugins.");
 		} catch (Exception e) {
-			tbc.fail("Unexpected Exception: " + e.getClass().getName()
-					+ " [Message: " + e.getMessage() + "]");
+			tbc.failUnexpectedException(e);
 		} finally {
 			tbc.closeSession(session1);
 			tbc.closeSession(session2);
@@ -404,8 +393,7 @@ public class DmtSessionConstraints {
 					DmtSession.LOCK_TYPE_EXCLUSIVE);
 			tbc.pass("Two sessions could be opened with different plugins.");
 		} catch (Exception e) {
-			tbc.fail("Unexpected Exception: " + e.getClass().getName()
-					+ " [Message: " + e.getMessage() + "]");
+			tbc.failUnexpectedException(e);
 		} finally {
 			tbc.closeSession(session1);
 			tbc.closeSession(session2);

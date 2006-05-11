@@ -37,7 +37,7 @@
 
 package org.osgi.test.cases.dmt.tc3.tbc;
 
-import org.osgi.service.dmt.DmtData;
+import info.dmtree.DmtData;
 
 public class DmtConstants  {
 

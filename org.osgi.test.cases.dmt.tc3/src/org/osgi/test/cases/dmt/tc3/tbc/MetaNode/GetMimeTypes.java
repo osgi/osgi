@@ -39,8 +39,8 @@
 
 package org.osgi.test.cases.dmt.tc3.tbc.MetaNode;
 
-import org.osgi.service.dmt.DmtSession;
-import org.osgi.service.dmt.MetaNode;
+import info.dmtree.DmtSession;
+import info.dmtree.MetaNode;
 import org.osgi.test.cases.dmt.tc3.tbc.DmtTestControl;
 
 /**
@@ -82,8 +82,7 @@ public class GetMimeTypes {
 			tbc.assertEquals("Asserts getMimeTypes method",
 					TestMetaNode.DEFAULT_MIME_TYPES, metanode.getMimeTypes());
 		} catch (Exception e) {
-			tbc.fail("Unexpected Exception: " + e.getClass().getName()
-					+ " [Message: " + e.getMessage() + "]");
+			tbc.failUnexpectedException(e);
 		} finally {
 			tbc.cleanUp(session, true);
 		}
@@ -107,8 +106,7 @@ public class GetMimeTypes {
             tbc.pass("If DmtSession.getMetaNode returns null for a node, DmtSession.createLeafNode can be called without throwing any exceptions");
 
         } catch (Exception e) {
-            tbc.fail("Unexpected Exception: " + e.getClass().getName()
-                    + " [Message: " + e.getMessage() + "]");
+        	tbc.failUnexpectedException(e);
         } finally {
             tbc.cleanUp(session, true);
         }
@@ -132,8 +130,7 @@ public class GetMimeTypes {
             tbc.pass("If DmtSession.getMetaNode returns null for a node, DmtSession.createLeafNode can be called without throwing any exceptions");
 
         } catch (Exception e) {
-            tbc.fail("Unexpected Exception: " + e.getClass().getName()
-                    + " [Message: " + e.getMessage() + "]");
+        	tbc.failUnexpectedException(e);
         } finally {
         	tbc.cleanUp(session, true);
         }
@@ -157,8 +154,7 @@ public class GetMimeTypes {
             tbc.pass("If DmtSession.getMetaNode returns null for a node, DmtSession.createLeafNode can be called without throwing any exceptions");
 
         } catch (Exception e) {
-            tbc.fail("Unexpected Exception: " + e.getClass().getName()
-                    + " [Message: " + e.getMessage() + "]");
+        	tbc.failUnexpectedException(e);
         } finally {
         	tbc.cleanUp(session, true);
         }
@@ -181,8 +177,7 @@ public class GetMimeTypes {
             tbc.pass("If DmtSession.getMetaNode returns null for a node, DmtSession.createLeafNode can be called without throwing any exceptions");
 
         } catch (Exception e) {
-            tbc.fail("Unexpected Exception: " + e.getClass().getName()
-                    + " [Message: " + e.getMessage() + "]");
+        	tbc.failUnexpectedException(e);
         } finally {
         	tbc.cleanUp(session, true);
         }

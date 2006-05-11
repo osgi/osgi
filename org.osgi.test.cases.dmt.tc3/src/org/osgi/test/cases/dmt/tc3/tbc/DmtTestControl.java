@@ -45,10 +45,11 @@
  */
 
 package org.osgi.test.cases.dmt.tc3.tbc;
-import org.osgi.framework.ServiceReference;
-import org.osgi.service.dmt.DmtAdmin;
-import org.osgi.service.dmt.DmtException;
-import org.osgi.service.dmt.DmtSession;
+import info.dmtree.DmtAdmin;
+import info.dmtree.DmtException;
+import info.dmtree.DmtSession;
+import info.dmtree.Uri;
+
 import org.osgi.test.cases.dmt.tc3.tbc.DataPlugin.TestDataPluginActivator;
 import org.osgi.test.cases.dmt.tc3.tbc.ExecPlugin.TestExecPluginActivator;
 import org.osgi.test.cases.dmt.tc3.tbc.MetaNode.Can;
@@ -109,9 +110,14 @@ public class DmtTestControl extends DefaultTestBundleControl {
 	private TestPluginMetaDataActivator testPluginMetaDataActivator; 
 	
 	public void prepare() {
-		log("#before each run");
-		ServiceReference dmtAdminReference = getContext().getServiceReference(DmtAdmin.class.getName());
-		dmtAdmin = (DmtAdmin) getContext().getService(dmtAdminReference);
+		try {
+			dmtAdmin = (DmtAdmin) getContext().getService(
+					getContext().getServiceReference(DmtAdmin.class.getName()));
+		} catch (NullPointerException e) {
+			log("There is no DmtAdmin service in the service registry, tests will not be executed correctly");
+		}
+
+		
 		registerTestPlugins();
 		
 	}
@@ -165,18 +171,12 @@ public class DmtTestControl extends DefaultTestBundleControl {
 		}
 	}
 	
-	public void setState() {
-		log("#before each method");
-	}
 	
 	//OverlappingPlugins
 	public void testOverlappingPlugins() {
 		new OverlappingPlugins(this).run();
 	}
 	//DataPlugin methods
-	public void testDataPluginConstants() {
-		new org.osgi.test.cases.dmt.tc3.tbc.DataPlugin.TransactionalDataSession.PluginConstants(this).run();
-	}
 	public void testDataPluginClose() {
 		new org.osgi.test.cases.dmt.tc3.tbc.DataPlugin.TransactionalDataSession.Close(this).run();
 	}
@@ -345,6 +345,7 @@ public class DmtTestControl extends DefaultTestBundleControl {
 	}
 	
 	//Use cases test cases
+
 	public void testUseCases() {
 		new UseCases(this).run();
 	}
@@ -359,21 +360,6 @@ public class DmtTestControl extends DefaultTestBundleControl {
     public void testOpenSession() {
         new OpenSession(this).run();
     }       
-	/**
-	 * Clean up after each method. Notice that during debugging many times the
-	 * unsetState is never reached.
-	 */
-	public void unsetState() {
-		log("#after each method");
-	}
-
-	/**
-	 * Clean up after a run. Notice that during debugging many times the
-	 * unprepare is never reached.
-	 */
-	public void unprepare() {
-		log("#after each run");
-	}
 
 	/**
 	 * @return Returns the factory.
@@ -382,7 +368,7 @@ public class DmtTestControl extends DefaultTestBundleControl {
 		if (dmtAdmin != null)
 			return dmtAdmin;
 		else
-			throw new NullPointerException("DmtAdmin factory is null");
+			throw new NullPointerException("DmtAdmin is null");
 	}
 
 	/**
@@ -436,7 +422,7 @@ public class DmtTestControl extends DefaultTestBundleControl {
 		String nodeName="";
 		if (nodeUri.length>0) {
 			for (int i=0;i<nodeUri.length;i++) {
-				nodeNameBuffer = nodeNameBuffer.append(getDmtAdmin().mangle(nodeUri[i]) + "/");
+				nodeNameBuffer = nodeNameBuffer.append(Uri.mangle(nodeUri[i]) + "/");
 			}
 			nodeName = nodeNameBuffer.substring(0,nodeNameBuffer.length()-1);
 		}
@@ -456,6 +442,12 @@ public class DmtTestControl extends DefaultTestBundleControl {
 		}
 		
 	}
+	public void failUnexpectedException(Exception exception) {
+		fail("Unexpected Exception: " + exception.getClass().getName() + " [Message: " + exception.getMessage() +"]");
+	}
 	
+	public void failExpectedOtherException(Class expected,Throwable found) {
+		fail("Expected " + expected.getName()+ " but was " + found.getClass().getName());
+	}
 
 }

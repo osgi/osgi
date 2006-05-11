@@ -41,7 +41,7 @@ import java.util.Hashtable;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
-import org.osgi.service.dmt.spi.DataPlugin;
+import info.dmtree.spi.DataPlugin;
 
 public class OverlappingDataPluginActivator implements BundleActivator {
 
@@ -55,7 +55,7 @@ public class OverlappingDataPluginActivator implements BundleActivator {
 		// creating the service
 		overlappingDataPlugin = new OverlappingDataPlugin();
 		Hashtable props = new Hashtable();
-		props.put(DataPlugin.DATA_ROOT_URIS, new String[] { ROOT });
+		props.put("dataRootURIs", new String[] { ROOT });
 		String[] ifs = new String[] { DataPlugin.class.getName() };
 		servReg = bc.registerService(ifs, overlappingDataPlugin, props);
 		System.out.println("OverlappingPlugin activated.");

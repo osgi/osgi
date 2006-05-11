@@ -35,8 +35,8 @@
  */
 package org.osgi.test.cases.dmt.tc3.tbc.Others;
 
-import org.osgi.service.dmt.DmtException;
-import org.osgi.service.dmt.DmtSession;
+import info.dmtree.DmtException;
+import info.dmtree.DmtSession;
 import org.osgi.test.cases.dmt.tc3.tbc.DmtConstants;
 import org.osgi.test.cases.dmt.tc3.tbc.DmtTestControl;
 import org.osgi.test.cases.dmt.tc3.tbc.DataPlugin.TestDataPluginActivator;
@@ -85,8 +85,7 @@ public class UseCases {
 					FatalExceptionDataPlugin.COMMIT + NewDataPlugin.COMMIT +
 					FatalExceptionDataPlugin.CLOSE + NewDataPlugin.CLOSE,DmtConstants.TEMPORARY);
 		} catch (Exception e) {
-			tbc.fail("Unexpected Exception: " + e.getClass().getName()
-					+ " [Message: " + e.getMessage() + "]");
+			tbc.failUnexpectedException(e);
 		} finally {
 			tbc.cleanUp(session,true);
 		}
@@ -112,8 +111,7 @@ public class UseCases {
 					"of joining the session",
 					FatalExceptionDataPlugin.COMMIT + NewDataPlugin.COMMIT,DmtConstants.TEMPORARY);			
 		} catch (Exception e) {
-			tbc.fail("Unexpected Exception: " + e.getClass().getName()
-					+ " [Message: " + e.getMessage() + "]");
+			tbc.failUnexpectedException(e);
 		} finally {
             tbc.cleanUp(session,true);
 		}
@@ -139,8 +137,7 @@ public class UseCases {
 					"of joining the session",
 					FatalExceptionDataPlugin.ROLLBACK + NewDataPlugin.ROLLBACK,DmtConstants.TEMPORARY);			
 		} catch (Exception e) {
-			tbc.fail("Unexpected Exception: " + e.getClass().getName()
-					+ " [Message: " + e.getMessage() + "]");
+			tbc.failUnexpectedException(e);
 		} finally {
             tbc.cleanUp(session,true);
 		}
@@ -169,8 +166,7 @@ public class UseCases {
 					FatalExceptionDataPlugin.ROLLBACK + NewDataPlugin.ROLLBACK + FatalExceptionDataPlugin.CLOSE + NewDataPlugin.CLOSE,DmtConstants.TEMPORARY);
 			tbc.assertEquals("Asserts that when a fatal exception is thrown, the session becomes STATE_INVALID",DmtSession.STATE_INVALID,session.getState());
 		} catch (Exception e) {
-			tbc.fail("Expected " + DmtException.class.getName() + " but was "
-					+ e.getClass().getName());
+			tbc.failExpectedOtherException(DmtException.class, e);
 		} finally {
             tbc.cleanUp(session,true);
 		}
@@ -197,8 +193,7 @@ public class UseCases {
 					DmtSession.STATE_OPEN,session.getState());		
 			tbc.assertEquals("None fatal errors do not rollback the session.", "", DmtConstants.TEMPORARY);
 		} catch (Exception e) {
-			tbc.fail("Expected " + DmtException.class.getName() + " but was "
-					+ e.getClass().getName());
+			tbc.failExpectedOtherException(DmtException.class, e);
 		} finally {
             tbc.cleanUp(session,true);
 		}
@@ -235,8 +230,7 @@ public class UseCases {
 			tbc.assertEquals("Asserts that when a fatal exception is thrown, the session becomes STATE_INVALID",DmtSession.STATE_INVALID,session.getState());
 				
 		} catch (Exception e) {
-			tbc.fail("Expected " + IllegalStateException.class.getName() + " but was "
-					+ e.getClass().getName());
+			tbc.failExpectedOtherException(IllegalStateException.class, e);
 		} finally {
             tbc.cleanUp(session,true);
 			try {
@@ -266,8 +260,7 @@ public class UseCases {
 			tbc.pass("Asserts that a plugin can be associated with more than one node.");			
 			
 		} catch (Exception e) {
-			tbc.fail("Unexpected Exception: " + e.getClass().getName()
-					+ " [Message: " + e.getMessage() + "]");
+			tbc.failUnexpectedException(e);
 		} finally {
             tbc.cleanUp(session,true);
 		}

@@ -36,9 +36,9 @@
 
 package org.osgi.test.cases.dmt.tc3.tbc.DataPlugin.TransactionalDataSession;
 
-import org.osgi.service.dmt.Acl;
-import org.osgi.service.dmt.DmtException;
-import org.osgi.service.dmt.DmtSession;
+import info.dmtree.Acl;
+import info.dmtree.DmtException;
+import info.dmtree.DmtSession;
 import org.osgi.test.cases.dmt.tc3.tbc.DmtTestControl;
 import org.osgi.test.cases.dmt.tc3.tbc.DataPlugin.TestDataPlugin;
 import org.osgi.test.cases.dmt.tc3.tbc.DataPlugin.TestDataPluginActivator;
@@ -72,8 +72,8 @@ public class NodeChanged {
 		try {
 			tbc.log("#testNodeChanged001");
 			String[] principal = { "www.cesar.org.br" };
-			int[] perm = { org.osgi.service.dmt.Acl.GET
-					| org.osgi.service.dmt.Acl.EXEC };
+			int[] perm = { info.dmtree.Acl.GET
+					| info.dmtree.Acl.EXEC };
 
 			Acl acl = new Acl(principal, perm);
 
@@ -93,8 +93,7 @@ public class NodeChanged {
 					e.getMessage().indexOf(TestDataPlugin.NODECHANGED) > -1);
 
 		} catch (Exception e) {
-			tbc.fail("Expected " + DmtException.class.getName()
-					+ " but was " + e.getClass().getName());
+			tbc.failExpectedOtherException(DmtException.class, e);
 		} finally {
 			tbc.cleanUp(session,true);
 			tbc.cleanAcl(TestDataPluginActivator.INTERIOR_NODE);

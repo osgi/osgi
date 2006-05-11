@@ -36,9 +36,9 @@
 
 package org.osgi.test.cases.dmt.tc3.tbc.TreeStructure;
 
-import org.osgi.service.dmt.DmtData;
-import org.osgi.service.dmt.DmtSession;
-import org.osgi.service.dmt.MetaNode;
+import info.dmtree.DmtData;
+import info.dmtree.DmtSession;
+import info.dmtree.MetaNode;
 import org.osgi.test.cases.dmt.tc3.tbc.DmtConstants;
 import org.osgi.test.cases.dmt.tc3.tbc.DmtTestControl;
 
@@ -93,8 +93,7 @@ public class Log {
 			tbc.assertEquals("Asserts $/Log node format is an interior node", DmtData.FORMAT_NODE,metaNode.getFormat());
 			tbc.assertTrue("Asserts $/Log node cardinality", !metaNode.isZeroOccurrenceAllowed() && metaNode.getMaxOccurrence()==1);
 		} catch (Exception e) {
-			tbc.fail("Unexpected Exception: " + e.getClass().getName()
-					+ " [Message: " + e.getMessage() + "]");
+			tbc.failUnexpectedException(e);
 		} finally {
 			tbc.closeSession(session);		
 		}
@@ -120,8 +119,7 @@ public class Log {
 			tbc.assertEquals("Asserts $/Log/<search_id> node format is an interior node", DmtData.FORMAT_NODE,metaNode.getFormat());
 			tbc.assertTrue("Asserts $/Log/<search_id> node cardinality", metaNode.isZeroOccurrenceAllowed() && metaNode.getMaxOccurrence()==Integer.MAX_VALUE);
 		} catch (Exception e) {
-			tbc.fail("Unexpected Exception: " + e.getClass().getName()
-					+ " [Message: " + e.getMessage() + "]");
+			tbc.failUnexpectedException(e);
 		} finally {
 			tbc.cleanUp(session,new String [] { DmtConstants.LOG_SEARCH });
 		}
@@ -146,8 +144,7 @@ public class Log {
 			tbc.assertEquals("Asserts $/Log/<search_id>/Filter node format is a chr node", DmtData.FORMAT_STRING,metaNode.getFormat());
 			tbc.assertTrue("Asserts $/Log/<search_id>/Filter node cardinality", !metaNode.isZeroOccurrenceAllowed() && metaNode.getMaxOccurrence()==1);
 		} catch (Exception e) {
-			tbc.fail("Unexpected Exception: " + e.getClass().getName()
-					+ " [Message: " + e.getMessage() + "]");
+			tbc.failUnexpectedException(e);
 		} finally {
 			tbc.cleanUp(session,new String [] { DmtConstants.LOG_SEARCH });
 		}
@@ -172,8 +169,7 @@ public class Log {
 			tbc.assertEquals("Asserts $/Log/<search_id>/MaxRecords node format is an integer node", DmtData.FORMAT_INTEGER,metaNode.getFormat());
 			tbc.assertTrue("Asserts $/Log/<search_id>/MaxRecords node cardinality", !metaNode.isZeroOccurrenceAllowed() && metaNode.getMaxOccurrence()==1);
 		} catch (Exception e) {
-			tbc.fail("Unexpected Exception: " + e.getClass().getName()
-					+ " [Message: " + e.getMessage() + "]");
+			tbc.failUnexpectedException(e);
 		} finally {
 			tbc.cleanUp(session,new String [] { DmtConstants.LOG_SEARCH});
 		}
@@ -198,8 +194,7 @@ public class Log {
 			tbc.assertEquals("Asserts $/Log/<search_id>/Exclude node format is a chr node", DmtData.FORMAT_STRING,metaNode.getFormat());
 			tbc.assertTrue("Asserts $/Log/<search_id>/Exclude node cardinality", !metaNode.isZeroOccurrenceAllowed() && metaNode.getMaxOccurrence()==1);
 		} catch (Exception e) {
-			tbc.fail("Unexpected Exception: " + e.getClass().getName()
-					+ " [Message: " + e.getMessage() + "]");
+			tbc.failUnexpectedException(e);
 		} finally {
 			tbc.cleanUp(session,new String [] { DmtConstants.LOG_SEARCH });
 		}
@@ -223,8 +218,7 @@ public class Log {
 			tbc.assertEquals("Asserts $/Log/<search_id>/LogResult node format is an interior node", DmtData.FORMAT_NODE,metaNode.getFormat());
 			tbc.assertTrue("Asserts $/Log/<search_id>/LogResult node cardinality", !metaNode.isZeroOccurrenceAllowed() && metaNode.getMaxOccurrence()==1);
 		} catch (Exception e) {
-			tbc.fail("Unexpected Exception: " + e.getClass().getName()
-					+ " [Message: " + e.getMessage() + "]");
+			tbc.failUnexpectedException(e);
 		} finally {
 			tbc.cleanUp(session,new String [] { DmtConstants.LOG_SEARCH });
 		}
@@ -253,8 +247,7 @@ public class Log {
 			    tbc.fail("There is no child under $/Log/<search_id>/LogResult");
 			}
 		} catch (Exception e) {
-			tbc.fail("Unexpected Exception: " + e.getClass().getName()
-					+ " [Message: " + e.getMessage() + "]");
+			tbc.failUnexpectedException(e);
 		} finally {
 			tbc.cleanUp(session,new String [] { DmtConstants.LOG_SEARCH });
 		}
@@ -283,8 +276,7 @@ public class Log {
 			    tbc.fail("There is no child under $/Log/<search_id>/LogResult");
 			}
 		} catch (Exception e) {
-			tbc.fail("Unexpected Exception: " + e.getClass().getName()
-					+ " [Message: " + e.getMessage() + "]");
+			tbc.failUnexpectedException(e);
 		} finally {
 			tbc.cleanUp(session,new String [] { DmtConstants.LOG_SEARCH });
 		}
@@ -313,8 +305,7 @@ public class Log {
 			    tbc.fail("There is no child under $/Log/<search_id>/LogResult");
 			}
 		} catch (Exception e) {
-			tbc.fail("Unexpected Exception: " + e.getClass().getName()
-					+ " [Message: " + e.getMessage() + "]");
+			tbc.failUnexpectedException(e);
 		} finally {
 			tbc.cleanUp(session,new String [] { DmtConstants.LOG_SEARCH });
 		}
@@ -343,8 +334,7 @@ public class Log {
 			    tbc.fail("There is no child under $/Log/<search_id>/LogResult");
 			}
 		} catch (Exception e) {
-			tbc.fail("Unexpected Exception: " + e.getClass().getName()
-					+ " [Message: " + e.getMessage() + "]");
+			tbc.failUnexpectedException(e);
 		} finally {
 			tbc.cleanUp(session,new String [] { DmtConstants.LOG_SEARCH });
 		}
@@ -372,8 +362,7 @@ public class Log {
 			    tbc.fail("There is no child under $/Log/<search_id>/LogResult");
 			}
 		} catch (Exception e) {
-			tbc.fail("Unexpected Exception: " + e.getClass().getName()
-					+ " [Message: " + e.getMessage() + "]");
+			tbc.failUnexpectedException(e);
 		} finally {
 			tbc.cleanUp(session,new String [] { DmtConstants.LOG_SEARCH });
 		}
@@ -401,8 +390,7 @@ public class Log {
 			    tbc.fail("There is no child under $/Log/<search_id>/LogResult");
 			}
 		} catch (Exception e) {
-			tbc.fail("Unexpected Exception: " + e.getClass().getName()
-					+ " [Message: " + e.getMessage() + "]");
+			tbc.failUnexpectedException(e);
 		} finally {
 			tbc.cleanUp(session,new String [] { DmtConstants.LOG_SEARCH });
 		}
@@ -430,8 +418,7 @@ public class Log {
 			    tbc.fail("There is no child under $/Log/<search_id>/LogResult");
 			}
 		} catch (Exception e) {
-			tbc.fail("Unexpected Exception: " + e.getClass().getName()
-					+ " [Message: " + e.getMessage() + "]");
+			tbc.failUnexpectedException(e);
 		} finally {
 			tbc.cleanUp(session,new String [] { DmtConstants.LOG_SEARCH });
 		}

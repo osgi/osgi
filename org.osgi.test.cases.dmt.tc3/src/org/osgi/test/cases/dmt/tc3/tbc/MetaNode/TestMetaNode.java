@@ -36,8 +36,8 @@
 
 package org.osgi.test.cases.dmt.tc3.tbc.MetaNode;
 
-import org.osgi.service.dmt.DmtData;
-import org.osgi.service.dmt.MetaNode;
+import info.dmtree.DmtData;
+import info.dmtree.MetaNode;
 
 /**
  * @author Andre Assad
@@ -105,6 +105,12 @@ public class TestMetaNode implements MetaNode {
 	public static final String[] DEFAULT_MIME_TYPES = { "text/xml",
 			"audio/mpeg" };
 
+	public static final String[] DEFAULT_EXTENSION_PROPERTY_KEYS = { "a",	"b" };
+	
+	public static final String DEFAULT_EXTENSION_PROPERTY ="Extension Property";
+	
+	public static final String[] DEFAULT_RAW_FORMAT_NAMES  = { "test1",	"test2" };
+	
     private void resetDefaultValues() {
         
         DEFAULT_VALID_VALUES = new DmtData[] { new DmtData(10), new DmtData("standard") };
@@ -228,6 +234,18 @@ public class TestMetaNode implements MetaNode {
             return true;
         }
 		
+	}
+
+	public String[] getExtensionPropertyKeys() {
+		return DEFAULT_EXTENSION_PROPERTY_KEYS;
+	}
+
+	public Object getExtensionProperty(String key) {
+            return DEFAULT_EXTENSION_PROPERTY;
+	}
+
+	public String[] getRawFormatNames() {
+		return DEFAULT_RAW_FORMAT_NAMES;
 	}
 
 }

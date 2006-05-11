@@ -35,8 +35,8 @@
  */
 package org.osgi.test.cases.dmt.tc3.tbc.DataPlugin.TransactionalDataSession;
 
-import org.osgi.service.dmt.DmtException;
-import org.osgi.service.dmt.DmtSession;
+import info.dmtree.DmtException;
+import info.dmtree.DmtSession;
 import org.osgi.test.cases.dmt.tc3.tbc.DmtTestControl;
 import org.osgi.test.cases.dmt.tc3.tbc.DataPlugin.TestDataPlugin;
 import org.osgi.test.cases.dmt.tc3.tbc.DataPlugin.TestDataPluginActivator;
@@ -90,12 +90,10 @@ public class Close {
 								exception.getMessage().indexOf(
 								    TestDataPlugin.CLOSE) > -1);
 			}	else {
-				tbc.fail("Expected " + DmtException.class.getName() + " but was "
-					+ e.getCause().getClass().getName());
+				tbc.failExpectedOtherException(DmtException.class,e.getCause());
 			}		
 		} catch (Exception e) {
-			tbc.fail("Unexpected Exception: " + e.getClass().getName()
-					+ " [Message: " + e.getMessage() + "]");	
+			tbc.failUnexpectedException(e);	
 		} finally {
 		    TestDataPlugin.setCloseThrowsException(false);
 		}
@@ -135,12 +133,10 @@ public class Close {
 								    TestDataPlugin.COMMIT) > -1);
 				
 			} else {
-				tbc.fail("Expected " + DmtException.class.getName() + " but was "
-						+ e.getCause().getClass().getName());
+				tbc.failExpectedOtherException(DmtException.class, e.getCause());
 			}			
 		} catch (Exception e) {
-			tbc.fail("Expected " + DmtException.class.getName() + " but was "
-				+ e.getClass().getName());
+			tbc.failExpectedOtherException(DmtException.class, e);
 		} finally {
 		    TestDataPlugin.setCommitThrowsException(false);
 		}

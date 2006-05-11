@@ -41,8 +41,10 @@ import java.util.Hashtable;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
-import org.osgi.service.dmt.spi.DataPlugin;
-import org.osgi.service.dmt.spi.ExecPlugin;
+import info.dmtree.spi.DataPlugin;
+import info.dmtree.spi.ExecPlugin;
+
+import org.osgi.test.cases.dmt.tc3.tbc.DmtConstants;
 import org.osgi.test.cases.dmt.tc3.tbc.DmtTestControl;
 
 /**
@@ -53,7 +55,7 @@ public class TestMetaNodeDataPluginActivator implements BundleActivator {
 
 	private ServiceRegistration servReg;
 	
-	public static final String ROOT = "./OSGi/meta_node";
+	public static final String ROOT = DmtConstants.OSGi_ROOT + "/meta_node";
     
     public static final String NODE_WITHOUT_METANODE = ROOT +"/node";
     
@@ -102,8 +104,8 @@ public class TestMetaNodeDataPluginActivator implements BundleActivator {
 		// creating the service
 		testMetaNodeDataPlugin = new TestMetaNodeDataPlugin(tbc);
 		Hashtable props = new Hashtable();
-		props.put(DataPlugin.DATA_ROOT_URIS, new String[] { ROOT });
-        props.put(ExecPlugin.EXEC_ROOT_URIS, new String[] { ROOT });
+		props.put("dataRootURIs", new String[] { ROOT });
+        props.put("execRootURIs", new String[] { ROOT });
 		String[] ifs = new String[] { DataPlugin.class.getName(),ExecPlugin.class.getName() };
 		servReg = bc.registerService(ifs, testMetaNodeDataPlugin, props);
 		System.out.println("TestMetaNodeDataPlugin activated.");

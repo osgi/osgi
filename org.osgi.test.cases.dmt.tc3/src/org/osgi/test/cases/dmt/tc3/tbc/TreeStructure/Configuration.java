@@ -35,9 +35,9 @@
  */
 
 package org.osgi.test.cases.dmt.tc3.tbc.TreeStructure;
-import org.osgi.service.dmt.DmtData;
-import org.osgi.service.dmt.DmtSession;
-import org.osgi.service.dmt.MetaNode;
+import info.dmtree.DmtData;
+import info.dmtree.DmtSession;
+import info.dmtree.MetaNode;
 import org.osgi.test.cases.dmt.tc3.tbc.DmtConstants;
 import org.osgi.test.cases.dmt.tc3.tbc.DmtTestControl;
 import org.osgi.test.cases.util.DefaultTestBundleControl;
@@ -115,8 +115,7 @@ public class Configuration extends DefaultTestBundleControl {
 			
 			
 		} catch (Exception e) {
-			tbc.fail("Unexpected Exception: " + e.getClass().getName()
-					+ " [Message: " + e.getMessage() + "]");
+			tbc.failUnexpectedException(e);
 		} finally {
 			tbc.closeSession(session);
 		}
@@ -143,8 +142,7 @@ public class Configuration extends DefaultTestBundleControl {
 			tbc.assertTrue("Asserts $/Configuration/<pid> node cardinality", metaNode.isZeroOccurrenceAllowed() && metaNode.getMaxOccurrence()==Integer.MAX_VALUE);
 
 		} catch (Exception e) {
-			tbc.fail("Unexpected Exception: " + e.getClass().getName()
-					+ " [Message: " + e.getMessage() + "]");
+			tbc.failUnexpectedException(e);
 		} finally {
 			tbc.cleanUp(session,new String[] { CFG_PID });
 		}
@@ -171,8 +169,7 @@ public class Configuration extends DefaultTestBundleControl {
 			tbc.assertTrue("Asserts $/Configuration/<pid>/Location node cardinality", !metaNode.isZeroOccurrenceAllowed() && metaNode.getMaxOccurrence()==1);
 
 		} catch (Exception e) {
-			tbc.fail("Unexpected Exception: " + e.getClass().getName()
-					+ " [Message: " + e.getMessage() + "]");
+			tbc.failUnexpectedException(e);
 		} finally {
 			tbc.cleanUp(session,new String[] { CFG_PID });
 		}
@@ -200,8 +197,7 @@ public class Configuration extends DefaultTestBundleControl {
 			tbc.assertTrue("Asserts $/Configuration/<pid>/Pid node cardinality", !metaNode.isZeroOccurrenceAllowed() && metaNode.getMaxOccurrence()==1);
 
 		} catch (Exception e) {
-			tbc.fail("Unexpected Exception: " + e.getClass().getName()
-					+ " [Message: " + e.getMessage() + "]");
+			tbc.failUnexpectedException(e);
 		} finally {
 		    tbc.cleanUp(session,new String[] { CFG_PID });
 		}
@@ -229,8 +225,7 @@ public class Configuration extends DefaultTestBundleControl {
 			tbc.assertTrue("Asserts $/Configuration/<pid>/FactoryPid node cardinality", metaNode.isZeroOccurrenceAllowed() && metaNode.getMaxOccurrence()==1);
 
 		} catch (Exception e) {
-			tbc.fail("Unexpected Exception: " + e.getClass().getName()
-					+ " [Message: " + e.getMessage() + "]");
+			tbc.failUnexpectedException(e);
 		} finally {
 		    tbc.cleanUp(session,new String[] { CFG_PID });
 		}
@@ -256,8 +251,7 @@ public class Configuration extends DefaultTestBundleControl {
 			tbc.assertTrue("Asserts $/Configuration/<pid>/Keys node cardinality", !metaNode.isZeroOccurrenceAllowed() && metaNode.getMaxOccurrence()==1);
 
 		} catch (Exception e) {
-			tbc.fail("Unexpected Exception: " + e.getClass().getName()
-					+ " [Message: " + e.getMessage() + "]");
+			tbc.failUnexpectedException(e);
 		} finally {
 		    tbc.cleanUp(session,new String[] { CFG_PID });
 		}
@@ -285,8 +279,7 @@ public class Configuration extends DefaultTestBundleControl {
 			tbc.assertTrue("Asserts $/Configuration/<pid>/Keys/<key> node cardinality", metaNode.isZeroOccurrenceAllowed() && metaNode.getMaxOccurrence()==Integer.MAX_VALUE);
 
 		} catch (Exception e) {
-			tbc.fail("Unexpected Exception: " + e.getClass().getName()
-					+ " [Message: " + e.getMessage() + "]");
+			tbc.failUnexpectedException(e);
 		} finally {
 		    tbc.cleanUp(session,new String[] { CFG_PID_KEYS_KEY, CFG_PID });
 		}
@@ -315,8 +308,7 @@ public class Configuration extends DefaultTestBundleControl {
 			tbc.assertTrue("Asserts $/Configuration/<pid>/Keys/<key>/Type node cardinality", !metaNode.isZeroOccurrenceAllowed() && metaNode.getMaxOccurrence()==1);
 
 		} catch (Exception e) {
-			tbc.fail("Unexpected Exception: " + e.getClass().getName()
-					+ " [Message: " + e.getMessage() + "]");
+			tbc.failUnexpectedException(e);
 		} finally {
 		    tbc.cleanUp(session,new String[] { CFG_PID_KEYS_KEY, CFG_PID });
 		}
@@ -345,8 +337,7 @@ public class Configuration extends DefaultTestBundleControl {
 			tbc.assertTrue("Asserts $/Configuration/<pid>/Keys/<key>/Cardinality node cardinality", !metaNode.isZeroOccurrenceAllowed() && metaNode.getMaxOccurrence()==1);
 
 		} catch (Exception e) {
-			tbc.fail("Unexpected Exception: " + e.getClass().getName()
-					+ " [Message: " + e.getMessage() + "]");
+			tbc.failUnexpectedException(e);
 		} finally {
 		    tbc.cleanUp(session,new String[] { CFG_PID_KEYS_KEY, CFG_PID });
 		}
@@ -378,8 +369,7 @@ public class Configuration extends DefaultTestBundleControl {
 			tbc.assertTrue("Asserts $/Configuration/<pid>/Keys/<key>/Value node cardinality", metaNode.isZeroOccurrenceAllowed() && metaNode.getMaxOccurrence()==1);
 
 		} catch (Exception e) {
-			tbc.fail("Unexpected Exception: " + e.getClass().getName()
-					+ " [Message: " + e.getMessage() + "]");
+			tbc.failUnexpectedException(e);
 		} finally {
 		    tbc.cleanUp(session,new String[] { CFG_PID_KEYS_KEY, CFG_PID });
 		}
@@ -409,8 +399,7 @@ public class Configuration extends DefaultTestBundleControl {
 			tbc.assertTrue("Asserts $/Configuration/<pid>/Keys/<key>/Values node cardinality", metaNode.isZeroOccurrenceAllowed() && metaNode.getMaxOccurrence()==1);
 
 		} catch (Exception e) {
-			tbc.fail("Unexpected Exception: " + e.getClass().getName()
-					+ " [Message: " + e.getMessage() + "]");
+			tbc.failUnexpectedException(e);
 		} finally {
 		    tbc.cleanUp(session,new String[] { CFG_PID_KEYS_KEY, CFG_PID });
 		}
@@ -443,8 +432,7 @@ public class Configuration extends DefaultTestBundleControl {
 			tbc.assertTrue("Asserts $/Configuration/<pid>/Keys/<key>/Values/<n> node cardinality", metaNode.isZeroOccurrenceAllowed() && metaNode.getMaxOccurrence()==Integer.MAX_VALUE);
 
 		} catch (Exception e) {
-			tbc.fail("Unexpected Exception: " + e.getClass().getName()
-					+ " [Message: " + e.getMessage() + "]");
+			tbc.failUnexpectedException(e);
 		} finally {
 		    tbc.cleanUp(session,new String[] { CFG_PID_KEYS_KEY, CFG_PID });
 		}
