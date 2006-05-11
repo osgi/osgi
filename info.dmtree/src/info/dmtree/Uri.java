@@ -443,7 +443,11 @@ public final class Uri {
                                         .getProperty(DIGEST_DELEGATE_PROPERTY);
                                 if(className == null)
                                     throw new IllegalStateException("Digest " +
-                                            "delegate class property not set.");
+                                            "delegate class property '" + 
+                                            DIGEST_DELEGATE_PROPERTY +
+                                            "' must be set to an " +
+                                            "implementation of the " +
+                                            "Uri.DigestDelegate interface.");
 
                                 return Class.forName(className).newInstance();
                             }
