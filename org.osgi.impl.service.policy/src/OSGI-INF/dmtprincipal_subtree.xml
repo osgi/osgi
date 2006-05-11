@@ -4,7 +4,7 @@
 	<implementation class="org.osgi.impl.service.policy.dmtprincipal.PluginFactory"/>
 	<property name="dataRootURIs" value="./OSGi/Policy/Java/DmtPrincipalPermission"/>
 	<service>
-		<provide interface="info.dmtree.DataPlugin"/>
+		<provide interface="info.dmtree.spi.DataPlugin"/>
 	</service>
 	<reference name="dmtPrincipalPermissionAdmin"
 		interface="org.osgi.impl.service.dmt.export.DmtPrincipalPermissionAdmin"/>
