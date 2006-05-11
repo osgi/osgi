@@ -19,8 +19,13 @@ package unittests;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.net.MalformedURLException;
+import java.net.URL;
 
 import javax.xml.bind.JAXBContext;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
 import junit.framework.TestCase;
@@ -28,6 +33,9 @@ import junit.framework.TestCase;
 import org.osgi.impl.bundle.autoconf.MetaData;
 import org.osgi.service.metatype.AttributeDefinition;
 import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
+import org.xml.sax.SAXNotRecognizedException;
+import org.xml.sax.SAXNotSupportedException;
 
 import unittests.metadata.AD;
 import unittests.metadata.Designate;
@@ -49,6 +57,9 @@ public class ParserTest extends TestCase {
 	SAXParserFactory spf;
 	AD	ad;
 	MetaData.AD ad0;
+    public static final String JAXP_SCHEMA_LANGUAGE = "http://java.sun.com/xml/jaxp/properties/schemaLanguage";
+    public static final String W3C_XML_SCHEMA = "http://www.w3.org/2001/XMLSchema";
+    public static final String JAXP_SCHEMA_SOURCE = "http://java.sun.com/xml/jaxp/properties/schemaSource";
 
 	public void setUp() throws Exception {
 		of = new ObjectFactory();
@@ -77,7 +88,7 @@ public class ParserTest extends TestCase {
 	
 	public void testParser1() throws Exception {
 		// just a basic test that everything is in place
-		MetaData md = new MetaData(spf.newSAXParser(),getInputSource("testParser1.xml"));
+		MetaData md = new MetaData(getParser(),getInputSource("testParser1.xml"));
 		assertEquals(1,md.designates.length);
 		MetaData.Designate d = md.designates[0];
 		assertEquals("foo",d.pid);
@@ -109,6 +120,14 @@ public class ParserTest extends TestCase {
 		MetaData.Option option = ad.options[0];
 		assertEquals("opt1",option.label);
 		assertEquals("optval1",option.value);
+	}
+
+	private SAXParser getParser() throws ParserConfigurationException, SAXException, SAXNotRecognizedException, SAXNotSupportedException, MalformedURLException {
+		SAXParser sp = spf.newSAXParser();
+		sp.setProperty(JAXP_SCHEMA_LANGUAGE,W3C_XML_SCHEMA);
+		URL autoconfURL = new File(System.getProperty("metatype.schema")).toURL();
+		sp.setProperty(JAXP_SCHEMA_SOURCE,autoconfURL.toExternalForm());
+		return sp;
 	}
 	
 	public void testMinimal() throws Exception {
@@ -211,7 +230,7 @@ public class ParserTest extends TestCase {
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
 		jaxbContext.createMarshaller().marshal(metaData,baos);
 		ByteArrayInputStream bais = new ByteArrayInputStream(baos.toByteArray());
-		resultMetaData = new MetaData(spf.newSAXParser(),new InputSource(bais));
+		resultMetaData = new MetaData(getParser(),new InputSource(bais));
 		if ((resultMetaData!=null)&&(resultMetaData.ocds!=null)&&(resultMetaData.ocds.length>0)&&
 				(resultMetaData.ocds[0]!=null)&&(resultMetaData.ocds[0].ads!=null)
 				&&(resultMetaData.ocds[0].ads.length>0))

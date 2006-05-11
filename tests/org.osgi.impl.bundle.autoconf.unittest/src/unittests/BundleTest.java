@@ -22,6 +22,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.reflect.Method;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -51,6 +52,8 @@ import org.osgi.framework.Version;
 import org.osgi.impl.bundle.autoconf.Autoconf;
 import org.osgi.service.cm.Configuration;
 import org.osgi.service.cm.ConfigurationAdmin;
+import org.osgi.service.component.ComponentContext;
+import org.osgi.service.component.ComponentInstance;
 import org.osgi.service.deploymentadmin.BundleInfo;
 import org.osgi.service.deploymentadmin.DeploymentAdmin;
 import org.osgi.service.deploymentadmin.DeploymentPackage;
@@ -69,15 +72,16 @@ import unittests.metadata.ObjectFactory;
 
 public class BundleTest extends TestCase {
 	public DummyBundleContext bundleContext;
-	public Autoconf activator;
 	public ResourceProcessor resourceProcessor;
 	public DummyConfigurationAdmin configurationAdmin;
 	public DummyMetaTypeService metaTypeService;
 	public DummyDeploymentAdmin deploymentAdmin;
+	private DummyComponentContext componentContext;
 	JAXBContext jaxbContext;
 	ObjectFactory of;
 	
 	public final class DummyBundleContext implements BundleContext {
+		public ArrayList bundles = new ArrayList();
 		public ServiceReference[] getServiceReferences(String clazz, String filter) throws InvalidSyntaxException {
 			return new ServiceReference[] {
 					new DummyServiceReference(clazz)
@@ -114,13 +118,31 @@ public class BundleTest extends TestCase {
 		public ServiceReference getServiceReference(String clazz) {
 			return new DummyServiceReference(clazz);
 		}
-		
+
+		public File getDataFile(String filename) { 
+			assertEquals("storedConfigurations",filename);
+			try {
+				File f = File.createTempFile("OSGi-autoconf-RI-storedConfigurations","dat");
+				f.delete();
+				f.deleteOnExit();
+				return f;
+			} catch (IOException e) {
+				IllegalStateException e2 = new IllegalStateException();
+				e2.initCause(e);
+				throw e2;
+			}
+		}
+
+		public Bundle[] getBundles() {
+			Bundle[] b = new Bundle[bundles.size()];
+			return (Bundle[]) bundles.toArray(b);
+		}
+
 		public String getProperty(String key) {	throw new IllegalStateException(); }
 		public Bundle getBundle() { throw new IllegalStateException(); }
 		public Bundle installBundle(String location) throws BundleException { throw new IllegalStateException(); }
 		public Bundle installBundle(String location, InputStream input) throws BundleException { throw new IllegalStateException(); }
 		public Bundle getBundle(long id) { throw new IllegalStateException();	}
-		public Bundle[] getBundles() { throw new IllegalStateException();	}
 		public void addServiceListener(ServiceListener listener, String filter) throws InvalidSyntaxException { throw new IllegalStateException(); }
 		public void addServiceListener(ServiceListener listener) { throw new IllegalStateException(); }
 		public void removeServiceListener(ServiceListener listener) {throw new IllegalStateException();}
@@ -131,7 +153,6 @@ public class BundleTest extends TestCase {
 		public ServiceRegistration registerService(String[] clazzes, java.lang.Object service, Dictionary properties) { throw new IllegalStateException(); }
 		public ServiceReference[] getAllServiceReferences(String clazz, String filter) throws InvalidSyntaxException { throw new IllegalStateException(); }
 		public boolean ungetService(ServiceReference reference) { throw new IllegalStateException(); }
-		public File getDataFile(String filename) { throw new IllegalStateException();	}
 		public Filter createFilter(String filter) throws InvalidSyntaxException { throw new IllegalStateException(); }
 	};
 
@@ -159,7 +180,10 @@ public class BundleTest extends TestCase {
 			this.properties.putAll((Hashtable)properties);
 		}
 
-		public String getPid() { throw new IllegalStateException(); }
+		public String getPid() {
+			return pid;
+		}
+		
 		public Dictionary getProperties() { throw new IllegalStateException(); }
 		public void delete() throws IOException { throw new IllegalStateException(); }
 		public String getFactoryPid() { throw new IllegalStateException(); }
@@ -180,8 +204,18 @@ public class BundleTest extends TestCase {
 			return conf;
 		}
 
+		public Configuration createFactoryConfiguration(String factoryPid, String location) throws IOException {
+			String pid = "factory+"+factoryPid+location;
+			DummyConfiguration factoryConf = (DummyConfiguration) configurations.get(pid);
+			if (factoryConf==null) {
+				factoryConf = new DummyConfiguration(pid);
+				factoryConf.location = location;
+				configurations.put(pid,factoryConf);
+			}
+			return factoryConf;
+		}
+
 		public Configuration createFactoryConfiguration(String factoryPid) throws IOException { throw new IllegalStateException(); }
-		public Configuration createFactoryConfiguration(String factoryPid, String location) throws IOException { throw new IllegalStateException(); }
 		public Configuration getConfiguration(String pid) throws IOException { throw new IllegalStateException(); }
 		public Configuration[] listConfigurations(String filter) throws IOException, InvalidSyntaxException { throw new IllegalStateException(); }
 	}
@@ -213,8 +247,9 @@ public class BundleTest extends TestCase {
 			return null;
 		}
 		
+		public String getName() { return "dummyDep1"; }
+
 		public long getId() { throw new IllegalStateException(); }
-		public String getName() { throw new IllegalStateException(); }
 		public Version getVersion() { throw new IllegalStateException(); }
 		public void uninstall() { throw new IllegalStateException(); }
 		public boolean isNew(Bundle b) { throw new IllegalStateException(); }
@@ -275,6 +310,26 @@ public class BundleTest extends TestCase {
 		public Enumeration findEntries(String path, String filePattern, boolean recurse){ throw new IllegalStateException(); }  
 	}
 	
+	public final class DummyComponentContext implements ComponentContext {
+		public HashMap services = new HashMap();
+		public BundleContext bundleContext;
+		public java.lang.Object locateService(String name) {
+			return services.get(name);
+		}	
+		public BundleContext getBundleContext() { 
+			return bundleContext;
+		}
+
+		public Dictionary getProperties() { throw new IllegalStateException(); }
+		public java.lang.Object locateService(String name, ServiceReference reference) { throw new IllegalStateException(); }
+		public java.lang.Object[] locateServices(String name) { throw new IllegalStateException(); }
+		public Bundle getUsingBundle() { throw new IllegalStateException(); }
+		public ComponentInstance getComponentInstance() { throw new IllegalStateException(); }
+		public void enableComponent(String name) { throw new IllegalStateException(); }
+		public void disableComponent(String name) { throw new IllegalStateException(); }
+		public ServiceReference getServiceReference() { throw new IllegalStateException(); }
+	}
+
 	public static String location(String symbname,String version) {
 		return "bundle://"+symbname+"-"+version;
 	}
@@ -291,12 +346,21 @@ public class BundleTest extends TestCase {
 		of = new ObjectFactory();
 		jaxbContext = JAXBContext.newInstance("unittests.metadata");
 		resourceProcessor = null;
+		componentContext = new DummyComponentContext();
 		bundleContext = new DummyBundleContext();
+		componentContext.bundleContext = bundleContext;
 		metaTypeService = new DummyMetaTypeService();
+		componentContext.services.put("metaTypeService",metaTypeService);
 		configurationAdmin = new DummyConfigurationAdmin();
+		componentContext.services.put("configurationAdmin",configurationAdmin);
 		SAXParserFactory saxParserFactory = SAXParserFactory.newInstance();
 		saxParserFactory.setNamespaceAware(true);
-		saxParserFactory.setValidating(true);
+		saxParserFactory.setValidating(false);
+		componentContext.services.put("saxParserFactory",saxParserFactory);
+		resourceProcessor = new Autoconf();
+		Method activate = resourceProcessor.getClass().getDeclaredMethod("activate",new Class[] {ComponentContext.class});
+		activate.setAccessible(true);
+		activate.invoke(resourceProcessor,new java.lang.Object[] {componentContext});
 //		resourceProcessor = new Autoconf(bundleContext,configurationAdmin,metaTypeService,saxParserFactory);
 		
 	}
@@ -389,7 +453,9 @@ public class BundleTest extends TestCase {
 	
 	public void testBasic() throws Exception {
 		DummyDeploymentPackage dp = new DummyDeploymentPackage();
-		dp.bundles.add(new DummyBundle("foo","1.1"));
+		DummyBundle dummyBundle = new DummyBundle("foo","1.1");
+		dp.bundles.add(dummyBundle);
+		bundleContext.bundles.add(dummyBundle);
 		DummyDeploymentSession ds = new DummyDeploymentSession();
 		ds.sourceDeploymentPackage = dp;
 		resourceProcessor.begin(ds);
@@ -400,7 +466,7 @@ public class BundleTest extends TestCase {
 		Designate d = of.createDesignate();
 		md.getDesignate().add(d);
 		d.setFactoryPid("factorypid1");
-		d.setBundle("foo-1.1");
+		d.setBundle("bundle://foo-1.1");
 		d.setPid("pid1");
 		Object o = of.createObject();
 		d.setObject(o);
@@ -451,7 +517,7 @@ public class BundleTest extends TestCase {
 
 		resourceProcessor.commit();
 		
-		DummyConfiguration conf = (DummyConfiguration) configurationAdmin.configurations.get("pid1");
+		DummyConfiguration conf = (DummyConfiguration) configurationAdmin.configurations.get("factory+factorypid1bundle://foo-1.1");
 		assertEquals("data",conf.properties.get("ad_string1"));
 		assertEquals(new Integer(2),conf.properties.get("ad_int1"));
 		assertArrayEquals(new int[] { 1,2 }, conf.properties.get("ad_intArray"));
