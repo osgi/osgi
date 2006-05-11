@@ -17,14 +17,22 @@
  */
 package org.osgi.impl.service.deploymentadmin;
 
-import org.osgi.service.dmt.DmtData;
-import org.osgi.service.dmt.MetaNode;
+import info.dmtree.DmtData;
+import info.dmtree.MetaNode;
 
 /**
  * DMT MetaNode implementation
  */
 public class Metanode implements MetaNode {
     
+	/*
+	 * Deployment admin related DM plugins don't support the interior node 
+	 * setNodeValue/getNodeValue operation. getExtensionProperty method uses 
+	 * this to inform DMT Admin about this behaviour.
+	 */
+	private static final String INTERIOR_NODE_VALUE_SUPPORT_PROPERTY = 
+		"org.osgi.impl.service.dmt.interior-node-value-support";
+	
     public static final boolean IS_LEAF = true;
     public static final boolean ZERO_OCC = true;
 
@@ -140,12 +148,27 @@ public class Metanode implements MetaNode {
     }
 
     public boolean isValidValue(DmtData value) {
-    	
         return true;
     }
 
     public boolean isValidName(String name) {
         return true;
     }
+
+	public String[] getRawFormatNames() {
+		return null;
+	}
+
+	public String[] getExtensionPropertyKeys() {
+		return new String[] {INTERIOR_NODE_VALUE_SUPPORT_PROPERTY};
+	}
+
+	public Object getExtensionProperty(String key) {
+		if (key.equals(INTERIOR_NODE_VALUE_SUPPORT_PROPERTY))
+			return new Boolean(false); // :)
+		throw new IllegalArgumentException("Only the '" + 
+				INTERIOR_NODE_VALUE_SUPPORT_PROPERTY + 
+				"' extension property is supported by this plugin");
+	}
 
 }

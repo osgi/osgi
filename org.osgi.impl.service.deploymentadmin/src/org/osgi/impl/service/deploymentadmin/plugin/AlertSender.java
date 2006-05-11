@@ -17,14 +17,15 @@
  */
 package org.osgi.impl.service.deploymentadmin.plugin;
 
+import info.dmtree.DmtData;
+import info.dmtree.notification.AlertItem;
+import info.dmtree.notification.NotificationService;
+
 import java.security.AccessControlException;
 
 import org.osgi.impl.service.deploymentadmin.Logger;
 import org.osgi.impl.service.deploymentadmin.perm.DeploymentAdminPermission;
 import org.osgi.service.deploymentadmin.DeploymentException;
-import org.osgi.service.dmt.DmtAdmin;
-import org.osgi.service.dmt.AlertItem;
-import org.osgi.service.dmt.DmtData;
 
 public class AlertSender {
 	
@@ -35,14 +36,14 @@ public class AlertSender {
 	}
 
     static void sendDeployAlert(boolean bundlesNs, Exception exception, String principal, 
-            String correlator, String nodeUri, String type, DmtAdmin dmtA) 
+            String correlator, String nodeUri, String type, NotificationService nfs) 
     {
         if (null == principal)
             return;
 
         try {
             if (null == exception)
-                dmtA.sendAlert(principal, 1226, correlator, new AlertItem[] {
+                nfs.sendNotification(principal, 1226, correlator, new AlertItem[] {
                       new AlertItem(nodeUri, type,
                       null, new DmtData(bundlesNs ? 
                     		  PluginConstants.RESULT_SUCCESSFUL_BUNDLE_START_WARNING : 
@@ -50,13 +51,13 @@ public class AlertSender {
             else {
                 if (exception instanceof DeploymentException) {
                     DeploymentException de = (DeploymentException) exception;
-                    dmtA.sendAlert(principal, 1226, correlator, new AlertItem[] {
+                    nfs.sendNotification(principal, 1226, correlator, new AlertItem[] {
                         new AlertItem(nodeUri, type,
                         null, new DmtData(de.getCode()))});
                 } else if (exception instanceof AccessControlException) {
                     AccessControlException ae = (AccessControlException) exception;
                     if (ae.getPermission() instanceof DeploymentAdminPermission)
-                        dmtA.sendAlert(principal, 1226, correlator, new AlertItem[] {
+                        nfs.sendNotification(principal, 1226, correlator, new AlertItem[] {
                             new AlertItem(nodeUri, type,
                             null, new DmtData(PluginConstants.RESULT_AUTHORIZATION_FAILURE))});
                 }
@@ -67,26 +68,26 @@ public class AlertSender {
     }
 
     static void sendDeploymentRemoveAlert(Exception exception, String principal, 
-    		String correlator, String nodeUri, DmtAdmin dmtA) 
+    		String correlator, String nodeUri, NotificationService nfs) 
     {
     	if (null == principal)
     		return;
     	
     	try {
     		if (null == exception)
-    			dmtA.sendAlert(principal, 1226, correlator, new AlertItem[] {
+    			nfs.sendNotification(principal, 1226, correlator, new AlertItem[] {
     					new AlertItem(nodeUri, "org.osgi.deployment.deployed.remove",
     							null, new DmtData(PluginConstants.RESULT_SUCCESSFUL))});
     		else {
     			if (exception instanceof DeploymentException) {
     				DeploymentException de = (DeploymentException) exception;
-    				dmtA.sendAlert(principal, 1226, correlator, new AlertItem[] {
+    				nfs.sendNotification(principal, 1226, correlator, new AlertItem[] {
     						new AlertItem(nodeUri, "org.osgi.deployment.deployed.remove",
     								null, new DmtData(de.getCode()))});
     			} else if (exception instanceof AccessControlException) {
     				AccessControlException ae = (AccessControlException) exception;
     				if (ae.getPermission() instanceof DeploymentAdminPermission)
-    					dmtA.sendAlert(principal, 1226, correlator, new AlertItem[] {
+    					nfs.sendNotification(principal, 1226, correlator, new AlertItem[] {
     							new AlertItem(nodeUri, "org.osgi.deployment.deployed.remove",
     									null, new DmtData(PluginConstants.RESULT_AUTHORIZATION_FAILURE))});
     			}
@@ -97,17 +98,17 @@ public class AlertSender {
     }
     
     static void sendDeliveredRemoveAlert(boolean success, String principal, String correlator, String nodeUri, 
-    		DmtAdmin dmtA) {
+    		NotificationService nfs) {
     	if (null == principal)
     		return;
     	
     	try {
     		if (success) {
-				dmtA.sendAlert(principal, 1226, correlator, new AlertItem[] {
+				nfs.sendNotification(principal, 1226, correlator, new AlertItem[] {
 						new AlertItem(nodeUri, "org.osgi.deployment.delivered.remove",
 								null, new DmtData(PluginConstants.RESULT_SUCCESSFUL))});
     		} else {
-    			dmtA.sendAlert(principal, 1226, correlator, new AlertItem[] {
+    			nfs.sendNotification(principal, 1226, correlator, new AlertItem[] {
     					new AlertItem(nodeUri, "org.osgi.deployment.delivered.remove",
     							null, new DmtData(PluginConstants.RESULT_UNDEFINED_ERROR))});
     		}
@@ -117,12 +118,12 @@ public class AlertSender {
     }
 
 	public static void sendDownloadAlert(int status, String principal, String correlator, 
-			String nodeUri, DmtAdmin dmtA) {
+			String nodeUri, NotificationService nfs) {
 		if (null == principal)
 			return;
 		
 		try {
-			dmtA.sendAlert(principal, 1226, correlator, new AlertItem[] {
+			nfs.sendNotification(principal, 1226, correlator, new AlertItem[] {
 					new AlertItem(nodeUri, "org.osgi.deployment.downloadandinstallandactivate",
 							null, new DmtData(status))});
 		} catch (Exception e) {

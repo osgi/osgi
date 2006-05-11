@@ -17,6 +17,16 @@
  */
 package org.osgi.impl.service.deploymentadmin.plugin;
 
+import info.dmtree.DmtData;
+import info.dmtree.DmtException;
+import info.dmtree.DmtSession;
+import info.dmtree.MetaNode;
+import info.dmtree.spi.DataPlugin;
+import info.dmtree.spi.ExecPlugin;
+import info.dmtree.spi.ReadWriteDataSession;
+import info.dmtree.spi.ReadableDataSession;
+import info.dmtree.spi.TransactionalDataSession;
+
 import java.io.IOException;
 import java.io.Serializable;
 import java.security.AccessController;
@@ -35,11 +45,6 @@ import org.osgi.impl.service.deploymentadmin.DeploymentPackageImpl;
 import org.osgi.impl.service.deploymentadmin.Metanode;
 import org.osgi.impl.service.deploymentadmin.PluginCtx;
 import org.osgi.impl.service.dwnl.DownloadAgent;
-import org.osgi.service.dmt.DmtData;
-import org.osgi.service.dmt.DmtException;
-import org.osgi.service.dmt.MetaNode;
-import org.osgi.service.dmt.DmtSession;
-import org.osgi.service.dmt.spi.*;
 import org.xml.sax.helpers.DefaultHandler;
 
 public class PluginDownload extends DefaultHandler implements DataPlugin,
@@ -150,7 +155,7 @@ public class PluginDownload extends DefaultHandler implements DataPlugin,
             if (dwnlThr.getStatus() != DownloadThread.RESULT_OK) {
                 entry.setStatus(STATUS_DOWNLD_FAILED);
                 AlertSender.sendDownloadAlert(dwnlThr.getStatus(), 
-                    principal, correlator, nodeUri, pluginCtx.getDmtAdmin());
+                    principal, correlator, nodeUri, pluginCtx.getNotificationService());
                 return;
             }
 
@@ -175,7 +180,7 @@ public class PluginDownload extends DefaultHandler implements DataPlugin,
                     }
                     AlertSender.sendDeployAlert(pluginCtx.bundlesNotStarted(dp).length != 0, 
                     		exception, principal, correlator, nodeUriRes, 
-                    		DAConstants.ALERT_TYPE_DWNL_INS_ACT, pluginCtx.getDmtAdmin());
+                    		DAConstants.ALERT_TYPE_DWNL_INS_ACT, pluginCtx.getNotificationService());
                 }});
             deplThr.setBundleListener(new DeploymentThread.ListenerBundle() {
                 public void onFinish(Bundle b, Exception exception) {
@@ -195,7 +200,7 @@ public class PluginDownload extends DefaultHandler implements DataPlugin,
                         entry.setStatus(STATUS_DEPLOYMENT_FAILED);
                     }
                     AlertSender.sendDeployAlert(false, exception, principal, correlator, nodeUriRes,
-                            DAConstants.ALERT_TYPE_DWNL_INS_ACT, pluginCtx.getDmtAdmin());
+                            DAConstants.ALERT_TYPE_DWNL_INS_ACT, pluginCtx.getNotificationService());
                 }});
             deplThr.start();
         }

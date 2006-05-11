@@ -145,6 +145,14 @@ public class BundleUtil {
             bundleDataClazz =  bundleData.getClass();
         if (getBaseBundleFile == null || getDataFile == null)
             try {
+            	
+            	/////////////////
+            	Method[] ms = bundleDataClazz.getMethods();
+            	for (int i = 0; i < ms.length; i++) {
+					System.out.println(ms[i]);
+				}
+            	/////////////////
+            	
                 getBaseBundleFile = bundleDataClazz.getMethod("getBaseBundleFile", new Class[0]);
                 getDataFile = bundleDataClazz.getMethod("getDataFile", new Class[] {String.class});
             } catch (Exception e) {

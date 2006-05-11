@@ -26,6 +26,8 @@
  */
 package org.osgi.impl.service.deploymentadmin;
 
+import info.dmtree.notification.NotificationService;
+
 import java.io.IOException;
 import java.security.AccessController;
 import java.security.PrivilegedAction;
@@ -37,7 +39,6 @@ import org.osgi.framework.BundleContext;
 import org.osgi.impl.service.deploymentadmin.plugin.PluginDeployed;
 import org.osgi.impl.service.dwnl.DownloadAgent;
 import org.osgi.service.deploymentadmin.DeploymentAdmin;
-import org.osgi.service.dmt.DmtAdmin;
 
 /**
  * Represents the context of a DMT plugin 
@@ -89,8 +90,8 @@ public class PluginCtx {
         da.save();
     }
 
-    public DmtAdmin getDmtAdmin() {
-        return da.getDmtAdmin();
+    public NotificationService getNotificationService() {
+    	return da.getNotificationService();
     }
 
     public DeploymentAdmin getDeploymentAdmin() {

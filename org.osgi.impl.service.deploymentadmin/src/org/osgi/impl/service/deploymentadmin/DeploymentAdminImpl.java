@@ -17,18 +17,45 @@
  */
 package org.osgi.impl.service.deploymentadmin;
 
-import java.io.*;
-import java.security.*;
-import java.security.cert.Certificate;
-import java.util.*;
+import info.dmtree.notification.NotificationService;
+import info.dmtree.spi.DataPlugin;
+import info.dmtree.spi.ExecPlugin;
 
-import org.osgi.framework.*;
-import org.osgi.impl.service.deploymentadmin.plugin.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.security.AccessController;
+import java.security.KeyStoreException;
+import java.security.PrivilegedAction;
+import java.security.PrivilegedActionException;
+import java.security.PrivilegedExceptionAction;
+import java.security.cert.Certificate;
+import java.util.HashSet;
+import java.util.Hashtable;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Vector;
+
+import org.osgi.framework.Bundle;
+import org.osgi.framework.BundleActivator;
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.ServiceRegistration;
+import org.osgi.framework.Version;
+import org.osgi.impl.service.deploymentadmin.plugin.PluginDelivered;
+import org.osgi.impl.service.deploymentadmin.plugin.PluginDeployed;
+import org.osgi.impl.service.deploymentadmin.plugin.PluginDownload;
 import org.osgi.impl.service.dwnl.DownloadAgent;
-import org.osgi.service.deploymentadmin.*;
-import org.osgi.service.dmt.DmtAdmin;
-import org.osgi.service.dmt.spi.*;
-import org.osgi.service.event.*;
+import org.osgi.service.deploymentadmin.DeploymentAdmin;
+import org.osgi.service.deploymentadmin.DeploymentAdminPermission;
+import org.osgi.service.deploymentadmin.DeploymentException;
+import org.osgi.service.deploymentadmin.DeploymentPackage;
+import org.osgi.service.event.Event;
+import org.osgi.service.event.EventAdmin;
 import org.osgi.util.tracker.ServiceTracker;
 
 /**
@@ -47,8 +74,8 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
     private DeploymentSessionImpl session;
     private DAKeyStore            keystore;
     private TrackerEvent          trackEvent;         // tracks the EventAdmin
-    private TrackerDmt            trackDmt;           // tracks the DmtAdmin
     private TrackerDownloadAgent  trackDownloadAgent; // tracks the DownloadAgent
+    private TrackerNfs            trackNfs;           // tracks the NotificationService
     
     // max wait time before Deployment Admin throws exception with code 
     // DeploymentException.CODE_TIMEOUT
@@ -84,16 +111,6 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
     }
 
     /*
-     * Class to track the Dmt Admin
-     */
-    private class TrackerDmt extends ServiceTracker {
-        public TrackerDmt() {
-            super(DeploymentAdminImpl.this.context, 
-                    DmtAdmin.class.getName(), null);
-        }
-    }
-    
-    /*
      * Class to track the Download Agent
      */
     private class TrackerDownloadAgent extends ServiceTracker {
@@ -101,6 +118,16 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
             super(DeploymentAdminImpl.this.context, 
                     DownloadAgent.class.getName(), null);
         }
+    }
+    
+    /*
+     * Class to track the NotificationService
+     */
+    private class TrackerNfs extends ServiceTracker {
+    	public TrackerNfs() {
+    		super(DeploymentAdminImpl.this.context, 
+    				NotificationService.class.getName(), null);
+    	}
     }
     
     // BundleActivator interface implementation
@@ -142,7 +169,7 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
         unregisterServices();
         logger.stop();
         trackEvent.close();
-        trackDmt.close();
+        trackNfs.close();
         trackDownloadAgent.close();
     }
     
@@ -317,8 +344,8 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
     private void initTrackers() {
         trackEvent = new TrackerEvent();
         trackEvent.open();
-        trackDmt = new TrackerDmt();
-        trackDmt.open();
+        trackNfs = new TrackerNfs();
+        trackNfs.open();
         trackDownloadAgent = new TrackerDownloadAgent();
         trackDownloadAgent.open();
     }
@@ -332,18 +359,18 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
         };  
                 
         props = new Hashtable();
-        props.put(DataPlugin.DATA_ROOT_URIS, "./OSGi/Deployment/Download");
-        props.put(ExecPlugin.EXEC_ROOT_URIS, "./OSGi/Deployment/Download");
+        props.put("dataRootURIs", "./OSGi/Deployment/Download");
+        props.put("execRootURIs", "./OSGi/Deployment/Download");
         registerService(pluginClassNames, pluginDownload, props);
 
         props = new Hashtable();
-        props.put(DataPlugin.DATA_ROOT_URIS, "./OSGi/Deployment/Inventory/Deployed");
-        props.put(ExecPlugin.EXEC_ROOT_URIS, "./OSGi/Deployment/Inventory/Deployed");
+        props.put("dataRootURIs", "./OSGi/Deployment/Inventory/Deployed");
+        props.put("execRootURIs", "./OSGi/Deployment/Inventory/Deployed");
         registerService(pluginClassNames, pluginDeployed, props);
 
         props = new Hashtable();
-        props.put(DataPlugin.DATA_ROOT_URIS, "./OSGi/Deployment/Inventory/Delivered");
-        props.put(ExecPlugin.EXEC_ROOT_URIS, "./OSGi/Deployment/Inventory/Delivered");
+        props.put("dataRootURIs", "./OSGi/Deployment/Inventory/Delivered");
+        props.put("execRootURIs", "./OSGi/Deployment/Inventory/Delivered");
         registerService(pluginClassNames, pluginDelivered, props);
     }
     
@@ -870,10 +897,6 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
         return dps;
     }
     
-    DmtAdmin getDmtAdmin() {
-        return (DmtAdmin) trackDmt.getService();
-    }
-
     DownloadAgent getDownloadAgent() {
         return (DownloadAgent) trackDownloadAgent.getService();
     }
@@ -881,5 +904,9 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
     PluginDeployed getDeployedPlugin() {
         return pluginDeployed;
     }
+
+	public NotificationService getNotificationService() {
+		return (NotificationService) trackNfs.getService();
+	}
 
 }

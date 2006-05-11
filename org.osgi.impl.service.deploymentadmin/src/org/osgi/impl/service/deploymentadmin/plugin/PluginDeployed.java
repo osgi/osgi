@@ -17,6 +17,17 @@
  */
 package org.osgi.impl.service.deploymentadmin.plugin;
 
+import info.dmtree.DmtData;
+import info.dmtree.DmtException;
+import info.dmtree.DmtSession;
+import info.dmtree.MetaNode;
+import info.dmtree.Uri;
+import info.dmtree.spi.DataPlugin;
+import info.dmtree.spi.ExecPlugin;
+import info.dmtree.spi.ReadWriteDataSession;
+import info.dmtree.spi.ReadableDataSession;
+import info.dmtree.spi.TransactionalDataSession;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -41,11 +52,6 @@ import org.osgi.impl.service.deploymentadmin.Metanode;
 import org.osgi.impl.service.deploymentadmin.PluginCtx;
 import org.osgi.impl.service.deploymentadmin.ResourceEntry;
 import org.osgi.service.deploymentadmin.DeploymentPackage;
-import org.osgi.service.dmt.DmtData;
-import org.osgi.service.dmt.DmtException;
-import org.osgi.service.dmt.DmtSession;
-import org.osgi.service.dmt.MetaNode;
-import org.osgi.service.dmt.spi.*;
 
 public class PluginDeployed implements DataPlugin, ReadableDataSession, 
         ExecPlugin, Serializable {
@@ -96,7 +102,7 @@ public class PluginDeployed implements DataPlugin, ReadableDataSession,
         // gathers deployed DPs
         DeploymentPackage[] dps = pluginCtx.getDeploymentAdmin().listDeploymentPackages();
         for (int i = 0; i < dps.length; i++) {
-            String mv = pluginCtx.getDmtAdmin().mangle(dpToNodeId(dps[i].getName()));
+            String mv = Uri.mangle(dpToNodeId(dps[i].getName()));
             set.add(mv);
         }
 
@@ -114,7 +120,7 @@ public class PluginDeployed implements DataPlugin, ReadableDataSession,
         }
         for (Iterator iter = bset.iterator(); iter.hasNext();) {
             Long bid = (Long) iter.next();
-            String mv = pluginCtx.getDmtAdmin().mangle(bundleToNodeId(bid.longValue()));
+            String mv = Uri.mangle(bundleToNodeId(bid.longValue()));
             set.add(mv);
         }
         
@@ -577,7 +583,7 @@ public class PluginDeployed implements DataPlugin, ReadableDataSession,
                 	String nodeUriRes = null;
                     if (null == exception) {
                     	nodeUriRes = DAConstants.DMT_DEPLOYMENT_ROOT + 
-                    		pluginCtx.getDmtAdmin().mangle(dpToNodeId(dp.getName()));
+                    		Uri.mangle(dpToNodeId(dp.getName()));
                         dpIdMappings.remove(dp.getName());
                         try {
                             pluginCtx.save();
@@ -590,7 +596,7 @@ public class PluginDeployed implements DataPlugin, ReadableDataSession,
                         pluginCtx.getLogger().log(exception);
                     }
                     AlertSender.sendDeploymentRemoveAlert(exception, session.getPrincipal(), 
-                    		correlator, nodeUriRes, pluginCtx.getDmtAdmin());
+                    		correlator, nodeUriRes, pluginCtx.getNotificationService());
                 }
             });
             undThread.start();
@@ -609,7 +615,7 @@ public class PluginDeployed implements DataPlugin, ReadableDataSession,
                 	String nodeUriRes = null;
                     if (null == exception) {
                     	nodeUriRes = DAConstants.DMT_DEPLOYMENT_ROOT + 
-                			pluginCtx.getDmtAdmin().mangle(bundleToNodeId(bundle.getBundleId()));
+                			Uri.mangle(bundleToNodeId(bundle.getBundleId()));
                         bundleIdMappings.remove(fromNodeId(nodeUriArr[5]));
                         try {
                             pluginCtx.save();
@@ -622,7 +628,7 @@ public class PluginDeployed implements DataPlugin, ReadableDataSession,
                         pluginCtx.getLogger().log(exception);
                     }
                     AlertSender.sendDeploymentRemoveAlert(exception, session.getPrincipal(), 
-                    		correlator, nodeUriRes, pluginCtx.getDmtAdmin());
+                    		correlator, nodeUriRes, pluginCtx.getNotificationService());
                 }
             });
             undThread.start();
@@ -725,12 +731,12 @@ public class PluginDeployed implements DataPlugin, ReadableDataSession,
 
     public String associateID(DeploymentPackageImpl dp, String dwnlId) {
        dpIdMappings.put(dp.getName(), dwnlId);
-       return pluginCtx.getDmtAdmin().mangle(dpToNodeId(dp.getName()));
+       return Uri.mangle(dpToNodeId(dp.getName()));
     }
     
     public String associateID(Bundle b, String dwnlId) {
        bundleIdMappings.put(new Long(b.getBundleId()), dwnlId);
-       return pluginCtx.getDmtAdmin().mangle(bundleToNodeId(b.getBundleId()));
+       return Uri.mangle(bundleToNodeId(b.getBundleId()));
     }
 
     public void setPluginCtx(PluginCtx pluginCtx) {

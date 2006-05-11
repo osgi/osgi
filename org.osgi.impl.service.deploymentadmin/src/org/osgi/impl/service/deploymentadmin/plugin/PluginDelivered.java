@@ -17,6 +17,17 @@
  */
 package org.osgi.impl.service.deploymentadmin.plugin;
 
+import info.dmtree.DmtData;
+import info.dmtree.DmtException;
+import info.dmtree.DmtSession;
+import info.dmtree.MetaNode;
+import info.dmtree.Uri;
+import info.dmtree.spi.DataPlugin;
+import info.dmtree.spi.ExecPlugin;
+import info.dmtree.spi.ReadWriteDataSession;
+import info.dmtree.spi.ReadableDataSession;
+import info.dmtree.spi.TransactionalDataSession;
+
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -36,12 +47,6 @@ import org.osgi.impl.service.deploymentadmin.DeploymentPackageImpl;
 import org.osgi.impl.service.deploymentadmin.Logger;
 import org.osgi.impl.service.deploymentadmin.Metanode;
 import org.osgi.impl.service.deploymentadmin.PluginCtx;
-import org.osgi.service.dmt.DmtAdmin;
-import org.osgi.service.dmt.DmtData;
-import org.osgi.service.dmt.DmtException;
-import org.osgi.service.dmt.DmtSession;
-import org.osgi.service.dmt.MetaNode;
-import org.osgi.service.dmt.spi.*;
 
 public class PluginDelivered implements DataPlugin, ReadableDataSession, 
         ExecPlugin, Serializable {
@@ -268,7 +273,7 @@ public class PluginDelivered implements DataPlugin, ReadableDataSession,
 	private void remove(String[] nodeUriArr, DmtSession session, String correlator) {
         boolean b = removeNode(new File(store, nodeUriArr[5]));
         AlertSender.sendDeliveredRemoveAlert(b, session.getPrincipal(), correlator, 
-        		PluginCtx.convertUri(nodeUriArr, 2), pluginCtx.getDmtAdmin());
+        		PluginCtx.convertUri(nodeUriArr, 2), pluginCtx.getNotificationService());
     }
 	
     private byte[] extractData(String fileName) throws IOException {
@@ -346,7 +351,7 @@ public class PluginDelivered implements DataPlugin, ReadableDataSession,
 					pluginCtx.getLogger().log(exception);
 				}
 				AlertSender.sendDeployAlert(false, exception, principal, correlator, nodeUriRes, 
-						DAConstants.ALERT_TYPE_INS_ACT, pluginCtx.getDmtAdmin());
+						DAConstants.ALERT_TYPE_INS_ACT, pluginCtx.getNotificationService());
 			}
 		});
 	}
@@ -378,7 +383,7 @@ public class PluginDelivered implements DataPlugin, ReadableDataSession,
 				}
 				AlertSender.sendDeployAlert(pluginCtx.bundlesNotStarted(dp).length != 0,
 						exception, principal, correlator, nodeUriRes, 
-                		DAConstants.ALERT_TYPE_INS_ACT, pluginCtx.getDmtAdmin());
+                		DAConstants.ALERT_TYPE_INS_ACT, pluginCtx.getNotificationService());
 			}
 		});
 	}
@@ -395,10 +400,6 @@ public class PluginDelivered implements DataPlugin, ReadableDataSession,
    }
     
     private File[] getFiles(String[] nodeUriArr) {
-        DmtAdmin dmtA = pluginCtx.getDmtAdmin();
-        if (null == dmtA)
-            throw new RuntimeException("DMT Admin doesn't run");
-        
         File[] files;
         if (null != store) {
             files = (File[]) AccessController.doPrivileged(new PrivilegedAction() {
@@ -413,7 +414,7 @@ public class PluginDelivered implements DataPlugin, ReadableDataSession,
         if (null != files) {
             for (int i = 0; i < files.length; i++) {
                 String a = files[i].getName();
-                String b = dmtA.mangle(files[i].getName());
+                String b = Uri.mangle(files[i].getName());
                 if (a.equals(b) && !files[i].isDirectory())
                     ret.add(files[i]);
             }
