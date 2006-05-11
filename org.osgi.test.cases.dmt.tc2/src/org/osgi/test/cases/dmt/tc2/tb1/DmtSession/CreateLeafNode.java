@@ -41,12 +41,12 @@
  */
 package org.osgi.test.cases.dmt.tc2.tb1.DmtSession;
 
-import org.osgi.service.dmt.Acl;
-import org.osgi.service.dmt.DmtData;
-import org.osgi.service.dmt.DmtException;
-import org.osgi.service.dmt.DmtSession;
-import org.osgi.service.dmt.security.DmtPermission;
-import org.osgi.service.dmt.security.DmtPrincipalPermission;
+import info.dmtree.Acl;
+import info.dmtree.DmtData;
+import info.dmtree.DmtException;
+import info.dmtree.DmtSession;
+import info.dmtree.security.DmtPermission;
+import info.dmtree.security.DmtPrincipalPermission;
 import org.osgi.service.permissionadmin.PermissionInfo;
 import org.osgi.test.cases.dmt.tc2.tbc.DmtConstants;
 import org.osgi.test.cases.dmt.tc2.tbc.DmtTestControl;
@@ -141,8 +141,7 @@ public class CreateLeafNode implements TestInterface {
 					"Asserting that DmtException code is NODE_ALREADY_EXISTS",
 					DmtException.NODE_ALREADY_EXISTS, e.getCode());
 		} catch (Exception e) {
-			tbc.fail("Unexpected Exception: " + e.getClass().getName()
-					+ " [Message: " + e.getMessage() + "]");
+			tbc.failUnexpectedException(e);
 		} finally {
 			tbc.closeSession(session);
 		}
@@ -172,8 +171,7 @@ public class CreateLeafNode implements TestInterface {
 					"Asserting that DmtException code is NODE_ALREADY_EXISTS",
 					DmtException.NODE_ALREADY_EXISTS, e.getCode());
 		} catch (Exception e) {
-			tbc.fail("Unexpected Exception: " + e.getClass().getName()
-					+ " [Message: " + e.getMessage() + "]");
+			tbc.failUnexpectedException(e);
 		} finally {
 			tbc.closeSession(session);
 		}
@@ -201,8 +199,7 @@ public class CreateLeafNode implements TestInterface {
 					"Asserting that DmtException code is NODE_ALREADY_EXISTS",
 					DmtException.NODE_ALREADY_EXISTS, e.getCode());
 		} catch (Exception e) {
-			tbc.fail("Unexpected Exception: " + e.getClass().getName()
-					+ " [Message: " + e.getMessage() + "]");
+			tbc.failUnexpectedException(e);
 		} finally {
 			tbc.closeSession(session);
 		}
@@ -232,8 +229,7 @@ public class CreateLeafNode implements TestInterface {
 			tbc.pass("createLeafNode was successfully executed");
 
 		} catch (Exception e) {
-			tbc.fail("Unexpected Exception: " + e.getClass().getName()
-					+ " [Message: " + e.getMessage() + "]");
+			tbc.failUnexpectedException(e);
 		} finally {
             tbc.setPermissions(new PermissionInfo(DmtPermission.class.getName(), DmtConstants.ALL_NODES,DmtConstants.ALL_ACTIONS));
             tbc.cleanUp(session, null);
@@ -264,8 +260,7 @@ public class CreateLeafNode implements TestInterface {
 			tbc.pass("createLeafNode was successfully executed");
 
 		} catch (Exception e) {
-			tbc.fail("Unexpected Exception: " + e.getClass().getName()
-					+ " [Message: " + e.getMessage() + "]");
+			tbc.failUnexpectedException(e);
 		} finally {
             tbc.setPermissions(new PermissionInfo(DmtPermission.class.getName(), DmtConstants.ALL_NODES,DmtConstants.ALL_ACTIONS));
             tbc.cleanUp(session, null);
@@ -297,8 +292,7 @@ public class CreateLeafNode implements TestInterface {
 			tbc.pass("createLeafNode was successfully executed");
 
 		} catch (Exception e) {
-			tbc.fail("Unexpected Exception: " + e.getClass().getName()
-					+ " [Message: " + e.getMessage() + "]");
+			tbc.failUnexpectedException(e);
 		} finally {
             tbc.setPermissions(new PermissionInfo(DmtPermission.class.getName(), DmtConstants.ALL_NODES,DmtConstants.ALL_ACTIONS));
             tbc.cleanUp(session, null);
@@ -335,8 +329,7 @@ public class CreateLeafNode implements TestInterface {
 			tbc.pass("createLeafNode was successfully executed");
 
 		} catch (Exception e) {
-			tbc.fail("Unexpected Exception: " + e.getClass().getName()
-					+ " [Message: " + e.getMessage() + "]");
+			tbc.failUnexpectedException(e);
 		} finally {
             tbc.setPermissions(new PermissionInfo(DmtPermission.class.getName(), DmtConstants.ALL_NODES,DmtConstants.ALL_ACTIONS));
             tbc.cleanUp(session, TestExecPluginActivator.ROOT);
@@ -374,8 +367,7 @@ public class CreateLeafNode implements TestInterface {
 			tbc.pass("createLeafNode was successfully executed");
 
 		} catch (Exception e) {
-			tbc.fail("Unexpected Exception: " + e.getClass().getName()
-					+ " [Message: " + e.getMessage() + "]");
+			tbc.failUnexpectedException(e);
 		} finally {
             tbc.setPermissions(new PermissionInfo(DmtPermission.class.getName(), DmtConstants.ALL_NODES,DmtConstants.ALL_ACTIONS));
             tbc.cleanUp(session, TestExecPluginActivator.ROOT);
@@ -414,8 +406,7 @@ public class CreateLeafNode implements TestInterface {
 			tbc.pass("createLeafNode was successfully executed");
 
 		} catch (Exception e) {
-			tbc.fail("Unexpected Exception: " + e.getClass().getName()
-					+ " [Message: " + e.getMessage() + "]");
+			tbc.failUnexpectedException(e);
 		} finally {
             tbc.setPermissions(new PermissionInfo(DmtPermission.class.getName(), DmtConstants.ALL_NODES,DmtConstants.ALL_ACTIONS));
             tbc.cleanUp(session, TestExecPluginActivator.ROOT);
@@ -439,8 +430,7 @@ public class CreateLeafNode implements TestInterface {
 
 			tbc.pass("A relative URI can be used with CreateLeafNode.");
 		} catch (Exception e) {
-			tbc.fail("Unexpected Exception: " + e.getClass().getName()
-					+ " [Message: " + e.getMessage() + "]");
+			tbc.failUnexpectedException(e);
 		} finally {
 			tbc.closeSession(session);
 		}
@@ -463,8 +453,7 @@ public class CreateLeafNode implements TestInterface {
 
 			tbc.pass("A relative URI can be used with CreateLeafNode.");
 		} catch (Exception e) {
-			tbc.fail("Unexpected Exception: " + e.getClass().getName()
-					+ " [Message: " + e.getMessage() + "]");
+			tbc.failUnexpectedException(e);
 		} finally {
 			tbc.closeSession(session);
 		}
@@ -487,8 +476,7 @@ public class CreateLeafNode implements TestInterface {
 
 			tbc.pass("A relative URI can be used with CreateLeafNode.");
 		} catch (Exception e) {
-			tbc.fail("Unexpected Exception: " + e.getClass().getName()
-					+ " [Message: " + e.getMessage() + "]");
+			tbc.failUnexpectedException(e);
 		} finally {
 			tbc.closeSession(session);
 		}
@@ -577,8 +565,7 @@ public class CreateLeafNode implements TestInterface {
 					"Asserting that DmtException code is COMMAND_NOT_ALLOWED",
 					DmtException.COMMAND_NOT_ALLOWED, e.getCode());
 		} catch (Exception e) {
-			tbc.fail("Expected " + DmtException.class.getName() + " but was "
-					+ e.getClass().getName());
+			tbc.failExpectedOtherException(DmtException.class, e);
 		} finally {
 			tbc.closeSession(session);
 		}
@@ -602,8 +589,7 @@ public class CreateLeafNode implements TestInterface {
 					"Asserting that DmtException code is COMMAND_NOT_ALLOWED",
 					DmtException.COMMAND_NOT_ALLOWED, e.getCode());
 		} catch (Exception e) {
-			tbc.fail("Expected " + DmtException.class.getName() + " but was "
-					+ e.getClass().getName());
+			tbc.failExpectedOtherException(DmtException.class, e);
 		} finally {
 			tbc.closeSession(session);
 		}
@@ -626,8 +612,7 @@ public class CreateLeafNode implements TestInterface {
 					"Asserting that DmtException code is COMMAND_NOT_ALLOWED",
 					DmtException.COMMAND_NOT_ALLOWED, e.getCode());
 		} catch (Exception e) {
-			tbc.fail("Expected " + DmtException.class.getName() + " but was "
-					+ e.getClass().getName());
+			tbc.failExpectedOtherException(DmtException.class, e);
 		} finally {
 			tbc.closeSession(session);
 		}
@@ -653,8 +638,7 @@ public class CreateLeafNode implements TestInterface {
             tbc.pass("createLeafNode was successfully executed");
 
         } catch (Exception e) {
-            tbc.fail("Unexpected Exception: " + e.getClass().getName()
-                    + " [Message: " + e.getMessage() + "]");
+        	tbc.failUnexpectedException(e);
         } finally {
             tbc.setPermissions(new PermissionInfo(DmtPermission.class.getName(), DmtConstants.ALL_NODES,DmtConstants.ALL_ACTIONS));
             tbc.cleanUp(session, null);
@@ -680,8 +664,7 @@ public class CreateLeafNode implements TestInterface {
             tbc.pass("createLeafNode was successfully executed");
 
         } catch (Exception e) {
-            tbc.fail("Unexpected Exception: " + e.getClass().getName()
-                    + " [Message: " + e.getMessage() + "]");
+        	tbc.failUnexpectedException(e);
         } finally {
             tbc.setPermissions(new PermissionInfo(DmtPermission.class.getName(), DmtConstants.ALL_NODES,DmtConstants.ALL_ACTIONS));
             tbc.cleanUp(session, null);
@@ -707,8 +690,7 @@ public class CreateLeafNode implements TestInterface {
             tbc.pass("createLeafNode was successfully executed");
 
         } catch (Exception e) {
-            tbc.fail("Unexpected Exception: " + e.getClass().getName()
-                    + " [Message: " + e.getMessage() + "]");
+        	tbc.failUnexpectedException(e);
         } finally {
             tbc.setPermissions(new PermissionInfo(DmtPermission.class.getName(), DmtConstants.ALL_NODES,DmtConstants.ALL_ACTIONS));
             tbc.cleanUp(session, null);
@@ -737,8 +719,7 @@ public class CreateLeafNode implements TestInterface {
                     "as if createInteriorNode(String) were called for the parent URI", 
                     TestExecPlugin.getCreateInteriorNodeCount()==2 && TestExecPlugin.getCreateLeafNodeCount()==1);
         } catch (Exception e) {
-            tbc.fail("Unexpected Exception: " + e.getClass().getName()
-                    + " [Message: " + e.getMessage() + "]");
+        	tbc.failUnexpectedException(e);
         } finally {
             tbc.cleanUp(session, null);
             
@@ -766,8 +747,7 @@ public class CreateLeafNode implements TestInterface {
                     "as if createInteriorNode(String) were called for the parent URI", 
                     TestExecPlugin.getCreateInteriorNodeCount()==2 && TestExecPlugin.getCreateLeafNodeCount()==1);
         } catch (Exception e) {
-            tbc.fail("Unexpected Exception: " + e.getClass().getName()
-                    + " [Message: " + e.getMessage() + "]");
+        	tbc.failUnexpectedException(e);
         } finally {
             tbc.cleanUp(session, null);
             
@@ -795,8 +775,7 @@ public class CreateLeafNode implements TestInterface {
                     "as if createInteriorNode(String) were called for the parent URI", 
                     TestExecPlugin.getCreateInteriorNodeCount()==2 && TestExecPlugin.getCreateLeafNodeCount()==1);
         } catch (Exception e) {
-            tbc.fail("Unexpected Exception: " + e.getClass().getName()
-                    + " [Message: " + e.getMessage() + "]");
+        	tbc.failUnexpectedException(e);
         } finally {
             tbc.cleanUp(session, null);
             
@@ -822,8 +801,7 @@ public class CreateLeafNode implements TestInterface {
         } catch (IllegalStateException e) {
             tbc.pass("Asserts that any exceptions encountered while creating the ancestors are propagated to the caller of createLeafNode");
         } catch (Exception e) {
-            tbc.fail("Expected " + IllegalStateException.class.getName() + " but was "
-                + e.getClass().getName());
+        	tbc.failExpectedOtherException(IllegalStateException.class, e);
         } finally {
             tbc.cleanUp(session, null);
             TestExecPlugin.setExceptionAtCreateInteriorNode(false);
@@ -850,8 +828,7 @@ public class CreateLeafNode implements TestInterface {
         } catch (IllegalStateException e) {
             tbc.pass("Asserts that any exceptions encountered while creating the ancestors are propagated to the caller of createLeafNode");
         } catch (Exception e) {
-            tbc.fail("Expected " + IllegalStateException.class.getName() + " but was "
-                + e.getClass().getName());
+        	tbc.failExpectedOtherException(IllegalStateException.class, e);
         } finally {
             tbc.cleanUp(session, null);
             TestExecPlugin.setExceptionAtCreateInteriorNode(false);
@@ -878,8 +855,7 @@ public class CreateLeafNode implements TestInterface {
         } catch (IllegalStateException e) {
             tbc.pass("Asserts that any exceptions encountered while creating the ancestors are propagated to the caller of createLeafNode");
         } catch (Exception e) {
-            tbc.fail("Expected " + IllegalStateException.class.getName() + " but was "
-                + e.getClass().getName());
+        	tbc.failExpectedOtherException(IllegalStateException.class, e);
         } finally {
             tbc.cleanUp(session, null);
             TestExecPlugin.setExceptionAtCreateInteriorNode(false);
@@ -905,8 +881,7 @@ public class CreateLeafNode implements TestInterface {
             tbc.assertEquals("Asserting that DmtException code is TRANSACTION_ERROR",
                     DmtException.TRANSACTION_ERROR, e.getCode());
         } catch (Exception e) {
-            tbc.fail("Expected " + DmtException.class.getName() + " but was "
-                    + e.getClass().getName());
+        	tbc.failExpectedOtherException(DmtException.class, e);
         } finally {
             tbc.closeSession(session);
         }
@@ -930,8 +905,7 @@ public class CreateLeafNode implements TestInterface {
             tbc.assertEquals("Asserting that DmtException code is TRANSACTION_ERROR",
                     DmtException.TRANSACTION_ERROR, e.getCode());
         } catch (Exception e) {
-            tbc.fail("Expected " + DmtException.class.getName() + " but was "
-                    + e.getClass().getName());
+        	tbc.failExpectedOtherException(DmtException.class, e);
         } finally {
             tbc.closeSession(session);
         }
@@ -955,8 +929,7 @@ public class CreateLeafNode implements TestInterface {
             tbc.assertEquals("Asserting that DmtException code is TRANSACTION_ERROR",
                     DmtException.TRANSACTION_ERROR, e.getCode());
         } catch (Exception e) {
-            tbc.fail("Expected " + DmtException.class.getName() + " but was "
-                    + e.getClass().getName());
+        	tbc.failExpectedOtherException(DmtException.class, e);
         } finally {
             tbc.closeSession(session);
         }
@@ -981,8 +954,7 @@ public class CreateLeafNode implements TestInterface {
             tbc.assertEquals("Asserting that DmtException code is TRANSACTION_ERROR",
                     DmtException.TRANSACTION_ERROR, e.getCode());
         } catch (Exception e) {
-            tbc.fail("Expected " + DmtException.class.getName() + " but was "
-                    + e.getClass().getName());
+        	tbc.failExpectedOtherException(DmtException.class, e);
         } finally {
             tbc.closeSession(session);
         }
@@ -1006,8 +978,7 @@ public class CreateLeafNode implements TestInterface {
             tbc.assertEquals("Asserting that DmtException code is TRANSACTION_ERROR",
                     DmtException.TRANSACTION_ERROR, e.getCode());
         } catch (Exception e) {
-            tbc.fail("Expected " + DmtException.class.getName() + " but was "
-                    + e.getClass().getName());
+        	tbc.failExpectedOtherException(DmtException.class, e);
         } finally {
             tbc.closeSession(session);
         }
@@ -1031,8 +1002,7 @@ public class CreateLeafNode implements TestInterface {
             tbc.assertEquals("Asserting that DmtException code is TRANSACTION_ERROR",
                     DmtException.TRANSACTION_ERROR, e.getCode());
         } catch (Exception e) {
-            tbc.fail("Expected " + DmtException.class.getName() + " but was "
-                    + e.getClass().getName());
+        	tbc.failExpectedOtherException(DmtException.class, e);
         } finally {
             tbc.closeSession(session);
         }
@@ -1056,8 +1026,7 @@ public class CreateLeafNode implements TestInterface {
                     "Asserting that DmtException code is COMMAND_NOT_ALLOWED",
                     DmtException.COMMAND_NOT_ALLOWED, e.getCode());
         } catch (Exception e) {
-            tbc.fail("Expected " + DmtException.class.getName() + " but was "
-                    + e.getClass().getName());
+        	tbc.failExpectedOtherException(DmtException.class, e);
         } finally {
             tbc.closeSession(session);
         }
@@ -1080,8 +1049,7 @@ public class CreateLeafNode implements TestInterface {
                     "Asserting that DmtException code is COMMAND_NOT_ALLOWED",
                     DmtException.COMMAND_NOT_ALLOWED, e.getCode());
         } catch (Exception e) {
-            tbc.fail("Expected " + DmtException.class.getName() + " but was "
-                    + e.getClass().getName());
+        	tbc.failExpectedOtherException(DmtException.class, e);
         } finally {
             tbc.closeSession(session);
         }
@@ -1104,8 +1072,7 @@ public class CreateLeafNode implements TestInterface {
                     "Asserting that DmtException code is COMMAND_NOT_ALLOWED",
                     DmtException.COMMAND_NOT_ALLOWED, e.getCode());
         } catch (Exception e) {
-            tbc.fail("Expected " + DmtException.class.getName() + " but was "
-                    + e.getClass().getName());
+        	tbc.failExpectedOtherException(DmtException.class, e);
         } finally {
             tbc.closeSession(session);
         }
@@ -1132,8 +1099,7 @@ public class CreateLeafNode implements TestInterface {
                     "Asserting that DmtException code is COMMAND_NOT_ALLOWED",
                     DmtException.COMMAND_NOT_ALLOWED, e.getCode());
         } catch (Exception e) {
-            tbc.fail("Expected " + DmtException.class.getName() + " but was "
-                    + e.getClass().getName());
+        	tbc.failExpectedOtherException(DmtException.class, e);
         } finally {
             tbc.closeSession(session);
         }
@@ -1157,8 +1123,7 @@ public class CreateLeafNode implements TestInterface {
                     "Asserting that DmtException code is COMMAND_NOT_ALLOWED",
                     DmtException.COMMAND_NOT_ALLOWED, e.getCode());
         } catch (Exception e) {
-            tbc.fail("Expected " + DmtException.class.getName() + " but was "
-                    + e.getClass().getName());
+        	tbc.failExpectedOtherException(DmtException.class, e);
         } finally {
             tbc.closeSession(session);
         }
@@ -1182,8 +1147,7 @@ public class CreateLeafNode implements TestInterface {
                     "Asserting that DmtException code is COMMAND_NOT_ALLOWED",
                     DmtException.COMMAND_NOT_ALLOWED, e.getCode());
         } catch (Exception e) {
-            tbc.fail("Expected " + DmtException.class.getName() + " but was "
-                    + e.getClass().getName());
+        	tbc.failExpectedOtherException(DmtException.class, e);
         } finally {
             tbc.closeSession(session);
         }
@@ -1211,8 +1175,7 @@ public class CreateLeafNode implements TestInterface {
 					"Asserting that DmtException code is NODE_ALREADY_EXISTS",
 					DmtException.NODE_ALREADY_EXISTS, e.getCode());
 		} catch (Exception e) {
-			tbc.fail("Expected " + DmtException.class.getName() + " but was "
-					+ e.getClass().getName());
+			tbc.failExpectedOtherException(DmtException.class, e);
 		} finally {
 			tbc.closeSession(session);
 		}
@@ -1239,8 +1202,7 @@ public class CreateLeafNode implements TestInterface {
 					"Asserting that DmtException code is NODE_ALREADY_EXISTS",
 					DmtException.NODE_ALREADY_EXISTS, e.getCode());
 		} catch (Exception e) {
-			tbc.fail("Expected " + DmtException.class.getName() + " but was "
-					+ e.getClass().getName());
+			tbc.failExpectedOtherException(DmtException.class, e);
 		} finally {
 			tbc.closeSession(session);
 		}
@@ -1267,8 +1229,7 @@ public class CreateLeafNode implements TestInterface {
 					"Asserting that DmtException code is NODE_ALREADY_EXISTS",
 					DmtException.NODE_ALREADY_EXISTS, e.getCode());
 		} catch (Exception e) {
-			tbc.fail("Expected " + DmtException.class.getName() + " but was "
-					+ e.getClass().getName());
+			tbc.failExpectedOtherException(DmtException.class, e);
 		} finally {
 			tbc.closeSession(session);
 		}

@@ -35,10 +35,10 @@
  * ============  ==============================================================
  */
 
-package org.osgi.test.cases.dmt.tc2.tb1.DmtAdmin;
+package org.osgi.test.cases.dmt.tc2.tbc.Uri;
 
-import org.osgi.service.permissionadmin.PermissionInfo;
-import org.osgi.test.cases.dmt.tc2.tbc.DmtConstants;
+import info.dmtree.Uri;
+
 import org.osgi.test.cases.dmt.tc2.tbc.DmtTestControl;
 import org.osgi.test.cases.dmt.tc2.tbc.TestInterface;
 
@@ -57,7 +57,6 @@ public class Mangle implements TestInterface {
 	}
 
 	public void run() {
-        prepare();
 		testMangle001();
 		testMangle002();
 		testMangle003();
@@ -65,11 +64,6 @@ public class Mangle implements TestInterface {
 		testMangle005();
 		testMangle006();
 	}
-    private void prepare() {
-        //This method do not throw SecurityException, so, if it is checking for DmtPermission 
-        //SecurityException is incorrectly thrown.
-        tbc.setPermissions(new PermissionInfo[0]);
-    }
 	/**
 	 * Asserts that IllegalArgumentException is thrown if nodeName is empty
 	 * 
@@ -78,13 +72,12 @@ public class Mangle implements TestInterface {
 	private void testMangle001() {
 		try {
 			tbc.log("#testMangle001");
-			tbc.getDmtAdmin().mangle("");
+			Uri.mangle("");
 			tbc.failException("#", IllegalArgumentException.class);
 		} catch (IllegalArgumentException e) {
 			tbc.pass("IllegalArgumentException is thrown if nodeName is empty");
 		} catch (Exception e) {
-			tbc.fail("Expected " + IllegalArgumentException.class.getName()
-					+ " but was " + e.getClass().getName());
+			tbc.failExpectedOtherException(IllegalArgumentException.class, e);
 		}
 	}
 
@@ -96,13 +89,12 @@ public class Mangle implements TestInterface {
 	private void testMangle002() {
 		try {
 			tbc.log("#testMangle002");
-			tbc.getDmtAdmin().mangle(null);
+			Uri.mangle(null);
 			tbc.failException("#", NullPointerException.class);
 		} catch (NullPointerException e) {
 			tbc.pass("NullPointerException is thrown if nodeName is null");
 		} catch (Exception e) {
-			tbc.fail("Expected " + NullPointerException.class.getName()
-					+ " but was " + e.getClass().getName());
+			tbc.failExpectedOtherException(NullPointerException.class, e);
 		}
 	}
 
@@ -117,17 +109,16 @@ public class Mangle implements TestInterface {
 			tbc.log("#testMangle003");
 			
 			
-			StringBuffer nodeName = new StringBuffer(DmtConstants.MAXIMUM_NODE_LENGTH);
-			for (int i=0;i<DmtConstants.MAXIMUM_NODE_LENGTH;i++) {
+			StringBuffer nodeName = new StringBuffer(Uri.getMaxSegmentNameLength());
+			for (int i=0;i<Uri.getMaxSegmentNameLength();i++) {
 				nodeName.append("a");
 			}
 			String expectedNodeName = nodeName.toString();
 			tbc.assertEquals("Asserts that if the nodeName doesnt exceed the limit defined by implementation and " +
 					"doesnt contain '\' or '/', the returned value remain unchanged", 
-					expectedNodeName,tbc.getDmtAdmin().mangle(expectedNodeName));
+					expectedNodeName,Uri.mangle(expectedNodeName));
 		} catch (Exception e) {
-			tbc.fail("Unexpected Exception: " + e.getClass().getName()
-					+ " [Message: " + e.getMessage() + "]");
+			tbc.failUnexpectedException(e);
 		}
 	}
 
@@ -146,11 +137,10 @@ public class Mangle implements TestInterface {
 			String expectedNodeName = "text\\/html";
 			tbc.assertEquals("Asserts that a slash in the nameNode is escaped using a backslash slash", 
 					expectedNodeName, 
-					tbc.getDmtAdmin().mangle(nodeName));
+					Uri.mangle(nodeName));
 
 		} catch (Exception e) {
-			tbc.fail("Unexpected Exception: " + e.getClass().getName()
-					+ " [Message: " + e.getMessage() + "]");
+			tbc.failUnexpectedException(e);
 		}
 	}
 	/**
@@ -164,11 +154,10 @@ public class Mangle implements TestInterface {
 			String expectedNodeName = "a\\\\b";
 			tbc.assertEquals("Asserts that a backslash in the nameNode is escaped using a backslash slash", 
 					expectedNodeName, 
-					tbc.getDmtAdmin().mangle(nodeName));
+					Uri.mangle(nodeName));
 
 		} catch (Exception e) {
-			tbc.fail("Unexpected Exception: " + e.getClass().getName()
-					+ " [Message: " + e.getMessage() + "]");
+			tbc.failUnexpectedException(e);
 		}
 	}
 	/**
@@ -181,7 +170,7 @@ public class Mangle implements TestInterface {
 	private void testMangle006() {
 		try {
 			tbc.log("#testMangle006");
-			int nodeLength = DmtConstants.MAXIMUM_NODE_LENGTH + 1;
+			int nodeLength = Uri.getMaxSegmentNameLength() + 1;
 			StringBuffer nodeName = new StringBuffer(nodeLength);
 			for (int i=0;i<nodeLength;i++) {
 				nodeName.append("a");
@@ -192,11 +181,10 @@ public class Mangle implements TestInterface {
 			tbc.assertEquals("Asserts that if the length of the name does exceed the limit, " +
 					"the specified mechanism is used to normalize.", 
 					expectedNodeName, 
-					tbc.getDmtAdmin().mangle(nodeName.toString()));
+					Uri.mangle(nodeName.toString()));
 
 		} catch (Exception e) {
-			tbc.fail("Unexpected Exception: " + e.getClass().getName()
-					+ " [Message: " + e.getMessage() + "]");
+			tbc.failUnexpectedException(e);
 		}
 	}
 }

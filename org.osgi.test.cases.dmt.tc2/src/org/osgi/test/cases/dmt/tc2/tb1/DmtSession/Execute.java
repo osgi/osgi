@@ -39,11 +39,11 @@
 
 package org.osgi.test.cases.dmt.tc2.tb1.DmtSession;
 
-import org.osgi.service.dmt.Acl;
-import org.osgi.service.dmt.DmtException;
-import org.osgi.service.dmt.security.DmtPermission;
-import org.osgi.service.dmt.security.DmtPrincipalPermission;
-import org.osgi.service.dmt.DmtSession;
+import info.dmtree.Acl;
+import info.dmtree.DmtException;
+import info.dmtree.security.DmtPermission;
+import info.dmtree.security.DmtPrincipalPermission;
+import info.dmtree.DmtSession;
 import org.osgi.service.permissionadmin.PermissionInfo;
 import org.osgi.test.cases.dmt.tc2.tbc.DmtConstants;
 import org.osgi.test.cases.dmt.tc2.tbc.DmtTestControl;
@@ -111,8 +111,7 @@ public class Execute implements TestInterface {
 					"Asserting that DmtException's code is NODE_NOT_FOUND",
 					DmtException.NODE_NOT_FOUND, e.getCode());
 		} catch (Exception e) {
-			tbc.fail("Expected " + DmtException.class.getName() + " but was "
-					+ e.getClass().getName());
+			tbc.failExpectedOtherException(DmtException.class, e);
 		} finally {
 			tbc.closeSession(session);
 		}
@@ -141,8 +140,7 @@ public class Execute implements TestInterface {
 					"Asserting that DmtException's code is COMMAND_FAILED",
 					DmtException.COMMAND_FAILED, e.getCode());
 		} catch (Exception e) {
-			tbc.fail("Expected " + DmtException.class.getName() + " but was "
-					+ e.getClass().getName());
+			tbc.failExpectedOtherException(DmtException.class, e);
 		} finally {
 			tbc.closeSession(session);
 		}
@@ -167,7 +165,7 @@ public class Execute implements TestInterface {
 			
 			tbc.pass("execute was successfully executed");
 		} catch (Exception e) {
-			tbc.fail("Unexpected Exception: " + e.getClass().getName() + " [Message: " + e.getMessage() +"]");
+			tbc.failUnexpectedException(e);
 		} finally {
             tbc.setPermissions(new PermissionInfo(DmtPermission.class.getName(), DmtConstants.ALL_NODES,DmtConstants.ALL_ACTIONS));
             tbc.cleanUp(session, TestExecPluginActivator.INTERIOR_NODE);
@@ -198,8 +196,7 @@ public class Execute implements TestInterface {
 		} catch (SecurityException e) {
 			tbc.pass("The Exception was SecurityException");
 		} catch (Exception e) {
-			tbc.fail("Expected " + SecurityException.class.getName()
-					+ " but was " + e.getClass().getName());
+			tbc.failExpectedOtherException(SecurityException.class, e);
 		} finally {
             tbc.setPermissions(new PermissionInfo(DmtPermission.class.getName(), DmtConstants.ALL_NODES,DmtConstants.ALL_ACTIONS));
             tbc.cleanUp(session, null);
@@ -226,8 +223,7 @@ public class Execute implements TestInterface {
 
 			tbc.pass("A relative URI can be used with execute.");
 		} catch (Exception e) {
-			tbc.fail("Unexpected Exception: " + e.getClass().getName()
-					+ " [Message: " + e.getMessage() + "]");
+			tbc.failUnexpectedException(e);
 		} finally {
 			tbc.closeSession(session);
 		}
@@ -255,8 +251,7 @@ public class Execute implements TestInterface {
 					"Asserting that DmtException's code is NODE_NOT_FOUND",
 					DmtException.NODE_NOT_FOUND, e.getCode());
 		} catch (Exception e) {
-			tbc.fail("Expected " + DmtException.class.getName() + " but was "
-					+ e.getClass().getName());
+			tbc.failExpectedOtherException(DmtException.class, e);
 		} finally {
 			tbc.closeSession(session);
 		}
@@ -287,8 +282,7 @@ public class Execute implements TestInterface {
 					"Asserting that DmtException's code is COMMAND_FAILED",
 					DmtException.COMMAND_FAILED, e.getCode());
 		} catch (Exception e) {
-			tbc.fail("Expected " + DmtException.class.getName() + " but was "
-					+ e.getClass().getName());
+			tbc.failExpectedOtherException(DmtException.class, e);
 		} finally {
 			tbc.closeSession(session);
 		}
@@ -316,7 +310,7 @@ public class Execute implements TestInterface {
 			
 			tbc.pass("execute was successfully executed");
 		} catch (Exception e) {
-			tbc.fail("Unexpected Exception: " + e.getClass().getName() + " [Message: " + e.getMessage() +"]");
+			tbc.failUnexpectedException(e);
 		} finally {
             tbc.setPermissions(new PermissionInfo(DmtPermission.class.getName(), DmtConstants.ALL_NODES,DmtConstants.ALL_ACTIONS));
             tbc.cleanUp(session,TestExecPluginActivator.INTERIOR_NODE);
@@ -346,8 +340,7 @@ public class Execute implements TestInterface {
 		} catch (SecurityException e) {
 			tbc.pass("The Exception was SecurityException");
 		} catch (Exception e) {
-			tbc.fail("Expected " + SecurityException.class.getName()
-					+ " but was " + e.getClass().getName());
+			tbc.failExpectedOtherException(SecurityException.class, e);
 		} finally {
             tbc.setPermissions(new PermissionInfo(DmtPermission.class.getName(), DmtConstants.ALL_NODES,DmtConstants.ALL_ACTIONS));
             tbc.closeSession(session);
@@ -374,8 +367,7 @@ public class Execute implements TestInterface {
 
 			tbc.pass("A relative URI can be used with execute.");
 		} catch (Exception e) {
-			tbc.fail("Unexpected Exception: " + e.getClass().getName()
-					+ " [Message: " + e.getMessage() + "]");
+			tbc.failUnexpectedException(e);
 		} finally {
 			tbc.closeSession(session);
 		}
@@ -398,8 +390,7 @@ public class Execute implements TestInterface {
 
 			tbc.pass("Null can be passed on data parameter");
 		} catch (Exception e) {
-			tbc.fail("Unexpected Exception: " + e.getClass().getName()
-					+ " [Message: " + e.getMessage() + "]");
+			tbc.failUnexpectedException(e);
 		} finally {
 			tbc.closeSession(session);
 		}
@@ -421,8 +412,7 @@ public class Execute implements TestInterface {
 
 			tbc.pass("Null can be passed on correlator parameter");
 		} catch (Exception e) {
-			tbc.fail("Unexpected Exception: " + e.getClass().getName()
-					+ " [Message: " + e.getMessage() + "]");
+			tbc.failUnexpectedException(e);
 		} finally {
 			tbc.closeSession(session);
 		}
@@ -447,8 +437,7 @@ public class Execute implements TestInterface {
 			tbc.pass("Asserts that an empty string as relative URI means the root " +
 					"URI the session was opened with");
 		} catch (Exception e) {
-			tbc.fail("Unexpected Exception: " + e.getClass().getName()
-					+ " [Message: " + e.getMessage() + "]");
+			tbc.failUnexpectedException(e);
 		} finally {
 			tbc.closeSession(session);
 		}
@@ -473,8 +462,7 @@ public class Execute implements TestInterface {
 			tbc.pass("Asserts that an empty string as relative URI means the root " +
 					"URI the session was opened with");
 		} catch (Exception e) {
-			tbc.fail("Unexpected Exception: " + e.getClass().getName()
-					+ " [Message: " + e.getMessage() + "]");
+			tbc.failUnexpectedException(e);
 		} finally {
 			tbc.closeSession(session);
 		}

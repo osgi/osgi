@@ -48,17 +48,20 @@
  */
 
 package org.osgi.test.cases.dmt.tc2.tbc;
+import info.dmtree.Acl;
+import info.dmtree.DmtAdmin;
+import info.dmtree.DmtException;
+import info.dmtree.DmtSession;
+import info.dmtree.Uri;
+
 import java.security.MessageDigest;
 import java.util.PropertyPermission;
+import java.util.StringTokenizer;
 
 import org.osgi.framework.AdminPermission;
 import org.osgi.framework.PackagePermission;
 import org.osgi.framework.ServicePermission;
 import org.osgi.framework.ServiceReference;
-import org.osgi.service.dmt.Acl;
-import org.osgi.service.dmt.DmtAdmin;
-import org.osgi.service.dmt.DmtException;
-import org.osgi.service.dmt.DmtSession;
 import org.osgi.service.event.TopicPermission;
 import org.osgi.service.permissionadmin.PermissionAdmin;
 import org.osgi.service.permissionadmin.PermissionInfo;
@@ -69,6 +72,11 @@ import org.osgi.test.cases.dmt.tc2.tbc.Plugin.ExecPlugin.TestExecPlugin;
 import org.osgi.test.cases.dmt.tc2.tbc.Plugin.ExecPlugin.TestExecPluginActivator;
 import org.osgi.test.cases.dmt.tc2.tbc.Plugin.NonAtomic.TestNonAtomicPluginActivator;
 import org.osgi.test.cases.dmt.tc2.tbc.Plugin.ReadOnly.TestReadOnlyPluginActivator;
+import org.osgi.test.cases.dmt.tc2.tbc.Uri.IsAbsoluteUri;
+import org.osgi.test.cases.dmt.tc2.tbc.Uri.IsValidUri;
+import org.osgi.test.cases.dmt.tc2.tbc.Uri.Mangle;
+import org.osgi.test.cases.dmt.tc2.tbc.Uri.ToPath;
+import org.osgi.test.cases.dmt.tc2.tbc.Uri.ToUri;
 import org.osgi.test.cases.util.DefaultTestBundleControl;
 
 public class DmtTestControl extends DefaultTestBundleControl {
@@ -100,13 +108,13 @@ public class DmtTestControl extends DefaultTestBundleControl {
 	
     static {
 	    
-	    if (DmtConstants.MAXIMUM_NODE_LENGTH>0) {
-	        if (DmtConstants.MAXIMUM_NODE_SEGMENTS>0) {
+	    if (Uri.getMaxSegmentNameLength()!=Integer.MAX_VALUE) {
+	        if (Uri.getMaxUriSegments()!=Integer.MAX_VALUE) {
 	            URIS_TOO_LONG = new String[] { getSegmentTooLong(TestExecPluginActivator.ROOT),getExcedingSegmentsUri(TestExecPluginActivator.ROOT) };
 	        } else {
 	            URIS_TOO_LONG = new String[] { getSegmentTooLong(TestExecPluginActivator.ROOT) };
 	        }
-	    } else if (DmtConstants.MAXIMUM_NODE_SEGMENTS>0) { 
+	    } else if (Uri.getMaxUriSegments()!=Integer.MAX_VALUE) { 
 	        URIS_TOO_LONG = new String[] { getExcedingSegmentsUri(TestExecPluginActivator.ROOT)};
 	    } else {
 	    	URIS_TOO_LONG = new String[0];
@@ -123,14 +131,31 @@ public class DmtTestControl extends DefaultTestBundleControl {
         TestExecPluginActivator.ROOT + "/./" + TestExecPluginActivator.INTERIOR_NODE_NAME, 
         TestExecPluginActivator.INTERIOR_NODE + "/../" + TestExecPluginActivator.INTERIOR_NODE_NAME};
     
+    public final static String[] EXCEEDING_LIMIT_URIS = new String[] { 
+    	DmtTestControl.getExcedingSegmentsUri("."),
+		DmtTestControl.getSegmentTooLong("."), 
+		DmtTestControl.getUriTooLong(".") };
 
 	public void prepare() {
-		ServiceReference dmtAdminReference = getContext().getServiceReference(DmtAdmin.class.getName());
-		dmtAdmin = (DmtAdmin) getContext().getService(dmtAdminReference);
 
-		permissionAdmin = (PermissionAdmin) getContext().getService(
-				getContext().getServiceReference(
-						PermissionAdmin.class.getName()));	
+		try {
+			dmtAdmin = (DmtAdmin) getContext().getService(
+					getContext().getServiceReference(DmtAdmin.class.getName()));
+		} catch (NullPointerException e) {
+			log("There is no DmtAdmin service in the service registry, tests will not be executed correctly");
+		}
+
+		try {
+			permissionAdmin = (PermissionAdmin) getContext().getService(
+					getContext().getServiceReference(
+							PermissionAdmin.class.getName()));
+		} catch (NullPointerException e) {
+			log("There is no PermissionAdmin service in the service registry, tests will not be executed correctly");
+		}
+		
+
+
+		
 		installBundle();
 		installPlugins();
 		installHandler();
@@ -144,7 +169,7 @@ public class DmtTestControl extends DefaultTestBundleControl {
 			remoteAlertSenderActivator = new RemoteAlertSenderActivator();
 			remoteAlertSenderActivator.start(getContext());
 		} catch (Exception e) {
-			log("#TestControl: Failed starting the remote alert sender");
+			log("TestControl: Failed starting the remote alert sender");
 		}
 	}	
 	
@@ -153,7 +178,7 @@ public class DmtTestControl extends DefaultTestBundleControl {
 		try {
 			installBundle("tb1.jar");
 		} catch (Exception e) {
-			log("#TestControl: Failed installing tb1 bundle");
+			log("TestControl: Failed installing tb1 bundle");
 		}
 		ServiceReference tb1SvrReference = getContext().getServiceReference(TB1Service.class.getName());
 		LOCATION = tb1SvrReference.getBundle().getLocation();		
@@ -201,7 +226,7 @@ public class DmtTestControl extends DefaultTestBundleControl {
             permissionWorker.setPermissions(perm);
             permissionWorker.notifyAll();
             try {
-                permissionWorker.wait(DmtConstants.WAIT_TIME);
+                permissionWorker.wait(DmtConstants.WAITING_TIME);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -226,7 +251,7 @@ public class DmtTestControl extends DefaultTestBundleControl {
             permissionWorker.setPermissions(perm);
             permissionWorker.notifyAll();
             try {
-                permissionWorker.wait(DmtConstants.WAIT_TIME);
+                permissionWorker.wait(DmtConstants.WAITING_TIME);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -255,14 +280,14 @@ public class DmtTestControl extends DefaultTestBundleControl {
 	}
 	
 	public void testEvents() {
-		testClasses[34].run();
+		testClasses[32].run();
 	}
 
 	//DmtSession test cases
 	
 	//Tests common DmtSession exceptions
 	public void testDmtSessionExceptions() {
-		testClasses[32].run();
+		testClasses[31].run();
 	}
 	
 	public void testDmtSessionConstants() {
@@ -378,13 +403,10 @@ public class DmtTestControl extends DefaultTestBundleControl {
 	}
 	
 	public void testDmtSessionSetDefaultNodeValue() {
-		testClasses[30].run();
+		testClasses[29].run();
 	}
 	
-	public void testDmtSessionMangle() {
-		testClasses[33].run();
-	}
-	
+
 	//Acl Constraints test cases 
 	//(it is not at org.osgi.test.cases.dmt.tc1 because it uses the DmtAdmin and there we cannot get any services)
 	
@@ -397,18 +419,32 @@ public class DmtTestControl extends DefaultTestBundleControl {
 		testClasses[20].run();
 	}
 	
-	public void testDmtAdminSendAlert() {
+	public void testDmtAdminDmtAdressingUri() {
+		testClasses[30].run();
+	}
+
+	//NotificationService
+	public void testNotificationServiceSendNotification() {
 		testClasses[28].run();
 	}
-
-	public void testDmtAdminMangle() {
-		testClasses[29].run();
-	}
-
-	public void testDmtAdminDmtAdressingUri() {
-		testClasses[31].run();
+	
+	//Uri
+	public void testUriIsAbsoluteUri() {
+		new IsAbsoluteUri(this).run();
 	}
 	
+	public void testUriIsValidUri() {
+		new IsValidUri(this).run();
+	}
+	public void testUriMangle() {
+		new Mangle(this).run();
+	}
+	public void testUriToUri() {
+		new ToUri(this).run();
+	}
+	public void testUriToPath() {
+		new ToPath(this).run();
+	}
 	
 	public void unprepare() {
 		uninstallHandler();
@@ -486,7 +522,7 @@ public class DmtTestControl extends DefaultTestBundleControl {
 		    StringBuffer nodeNameBuffer= new StringBuffer();
 			if (nodeUri.length>0) {
 				for (int i=0;i<nodeUri.length;i++) {
-					nodeNameBuffer = nodeNameBuffer.append(getDmtAdmin().mangle(nodeUri[i]) + "/");
+					nodeNameBuffer = nodeNameBuffer.append(Uri.mangle(nodeUri[i]) + "/");
 				}
 				nodeName = nodeNameBuffer.substring(0,nodeNameBuffer.length()-1);
 			}
@@ -502,9 +538,9 @@ public class DmtTestControl extends DefaultTestBundleControl {
 	 */
 	public static String getExcedingSegmentsUri(String nodeUri) {
 	    //Gets the number of segments
-		int rootPluginSegments = uriTotalSegments(TestExecPluginActivator.ROOT);
+		int rootPluginSegments = uriTotalSegments(nodeUri);
 		//The segments to be appended are equal to the maximum number of segments plus one.
-		int totalSegments = DmtConstants.MAXIMUM_NODE_SEGMENTS - rootPluginSegments + 1;
+		int totalSegments = Uri.getMaxUriSegments() - rootPluginSegments + 1;
 		//Appends an the specified number of segments
 		return appendSegments(nodeUri,totalSegments);
 	}
@@ -550,7 +586,7 @@ public class DmtTestControl extends DefaultTestBundleControl {
 	 * it returns a segment too long.
 	 */
 	public static String getSegmentTooLong(String nodeUri) {
-		int nodeLength = DmtConstants.MAXIMUM_NODE_LENGTH + 1;
+		int nodeLength = Uri.getMaxSegmentNameLength() + 1;
 		StringBuffer nodeName = new StringBuffer(nodeLength);
 		for (int i=0;i<nodeLength;i++) {
 			nodeName.append("a");
@@ -561,6 +597,38 @@ public class DmtTestControl extends DefaultTestBundleControl {
 		    return nodeName.toString();
 		}
 		    
+	}
+	
+	/**
+	 * Appends a base URI with a segment that exceeds the maximum allowed length of a URI defined by the
+	 * implementation
+	 * @param nodeUri The URI base
+	 * @return If nodeUri is not null it returns the URI base appended with a segment that exceeds the maximum 
+	 * allowed length of a URI else it returns the root node appended with the exceeding segment
+	 */
+	public static String getUriTooLong(String nodeUri) {
+		int uriLength = Uri.getMaxUriLength() + 1;
+		if (nodeUri==null) {
+			nodeUri = ".";
+		}
+		//The segment to be appended must not consider the nodeUri + "/"
+		StringBuffer nodeName = new StringBuffer(uriLength - nodeUri.length() - 1);
+		for (int i=0;i<uriLength;i++) {
+			nodeName.append("a");
+		}
+		return nodeUri + "/" + nodeName.toString(); 
+			    
+	}
+
+	public static String[] toPath(String nodeUri) {
+		StringTokenizer st = new StringTokenizer(nodeUri,"/");
+		String[] uri = new String[st.countTokens()];
+		int i=0;
+		while (st.hasMoreElements()) {
+			uri[i] = st.nextToken();
+			i++;
+		}
+		return uri;
 	}
     
     public void openSessionAndSetNodeAcl(String nodeUri,String principal,int permissions) {
@@ -578,5 +646,14 @@ public class DmtTestControl extends DefaultTestBundleControl {
         }
     
     }
+    
+	public void failUnexpectedException(Exception exception) {
+		fail("Unexpected Exception: " + exception.getClass().getName() + " [Message: " + exception.getMessage() +"]");
+	}
+	
+	public void failExpectedOtherException(Class expected,Throwable found) {
+		fail("Expected " + expected.getName()+ " but was " + found.getClass().getName());
+	}
+
     
 }

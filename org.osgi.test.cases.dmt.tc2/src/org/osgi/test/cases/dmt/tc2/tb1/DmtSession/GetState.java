@@ -36,7 +36,7 @@
 
 package org.osgi.test.cases.dmt.tc2.tb1.DmtSession;
 
-import org.osgi.service.dmt.DmtSession;
+import info.dmtree.DmtSession;
 import org.osgi.service.permissionadmin.PermissionInfo;
 import org.osgi.test.cases.dmt.tc2.tbc.DmtTestControl;
 import org.osgi.test.cases.dmt.tc2.tbc.TestInterface;
@@ -80,8 +80,7 @@ public class GetState implements TestInterface {
 			tbc.assertEquals("Asserting that the session is opened ",
 					DmtSession.STATE_OPEN, session.getState());
 		} catch (Exception e) {
-			tbc.fail("Unexpected Exception: " + e.getClass().getName()
-					+ " [Message: " + e.getMessage() + "]");
+			tbc.failUnexpectedException(e);
 		} finally {
 			tbc.closeSession(session);
 		}
@@ -103,8 +102,7 @@ public class GetState implements TestInterface {
 			tbc.assertEquals("Asserting that the session is closed ",
 					DmtSession.STATE_CLOSED, session.getState());
 		} catch (Exception e) {
-			tbc.fail("Unexpected Exception: " + e.getClass().getName()
-					+ " [Message: " + e.getMessage() + "]");
+			tbc.failUnexpectedException(e);
 		} finally {
 			tbc.closeSession(session);
 		}

@@ -41,8 +41,8 @@
  */
 package org.osgi.test.cases.dmt.tc2.tb1.DmtSession;
 
-import org.osgi.service.dmt.DmtException;
-import org.osgi.service.dmt.DmtSession;
+import info.dmtree.DmtException;
+import info.dmtree.DmtSession;
 import org.osgi.service.permissionadmin.PermissionInfo;
 import org.osgi.test.cases.dmt.tc2.tbc.DmtConstants;
 import org.osgi.test.cases.dmt.tc2.tbc.DmtTestControl;
@@ -85,7 +85,7 @@ public class Close implements TestInterface  {
 			session.close();
 			tbc.assertEquals("Asserting if the state after a close is really STATE_CLOSED.", DmtSession.STATE_CLOSED, session.getState());
 		} catch (Exception e) {
-			tbc.fail("Unexpected Exception: " + e.getClass().getName() + " [Message: " + e.getMessage() +"]");
+			tbc.failUnexpectedException(e);
 		} finally {
 		    tbc.closeSession(session);
         }
@@ -108,8 +108,7 @@ public class Close implements TestInterface  {
         } catch (DmtException e) {
             tbc.assertEquals("Asserts that the session becomes STATE_INVALID if the close operation completed unsuccessfully", DmtSession.STATE_INVALID, session.getState());
         } catch (Exception e) {
-            tbc.fail("Expected " + DmtException.class.getName() + " but was "
-                + e.getClass().getName());
+        	tbc.failExpectedOtherException(DmtException.class, e);
         } finally {
             tbc.closeSession(session);
             TestReadOnlyPlugin.setExceptionAtClose(false);

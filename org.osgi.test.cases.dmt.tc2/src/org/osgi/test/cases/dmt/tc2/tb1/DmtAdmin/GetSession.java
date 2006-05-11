@@ -40,10 +40,10 @@
 
 package org.osgi.test.cases.dmt.tc2.tb1.DmtAdmin;
 
-import org.osgi.service.dmt.DmtException;
-import org.osgi.service.dmt.DmtSession;
-import org.osgi.service.dmt.security.DmtPermission;
-import org.osgi.service.dmt.security.DmtPrincipalPermission;
+import info.dmtree.DmtException;
+import info.dmtree.DmtSession;
+import info.dmtree.security.DmtPermission;
+import info.dmtree.security.DmtPrincipalPermission;
 import org.osgi.service.permissionadmin.PermissionInfo;
 import org.osgi.test.cases.dmt.tc2.tbc.DmtConstants;
 import org.osgi.test.cases.dmt.tc2.tbc.DmtTestControl;
@@ -115,8 +115,7 @@ public class GetSession implements TestInterface {
 					DmtSession.LOCK_TYPE_EXCLUSIVE, session.getLockType());
 			tbc.assertNull("Asserting principal", session.getPrincipal());
 		} catch (Exception e) {
-			tbc.fail("Unexpected Exception: " + e.getClass().getName()
-					+ " [Message: " + e.getMessage() + "]");
+			tbc.failUnexpectedException(e);
 
 		} finally {
 			tbc.closeSession(session);
@@ -141,8 +140,7 @@ public class GetSession implements TestInterface {
                 session.isNodeUri(TestExecPluginActivator.INTERIOR_NODE));
             
 		} catch (Exception e) {
-			tbc.fail("Unexpected Exception: " + e.getClass().getName()
-					+ " [Message: " + e.getMessage() + "]");
+			tbc.failUnexpectedException(e);
 
 		} finally {
 			tbc.closeSession(session);
@@ -166,8 +164,7 @@ public class GetSession implements TestInterface {
             tbc.assertTrue("asserts that null on the parameter subtree gives access to the whole subtree",
                 session.isNodeUri(TestExecPluginActivator.INTERIOR_NODE));
 		} catch (Exception e) {
-			tbc.fail("Unexpected Exception: " + e.getClass().getName()
-					+ " [Message: " + e.getMessage() + "]");
+			tbc.failUnexpectedException(e);
 
 		} finally {
 			tbc.closeSession(session);
@@ -190,8 +187,7 @@ public class GetSession implements TestInterface {
 					"Asserting if the exception's code is NODE_NOT_FOUND.",
 					DmtException.NODE_NOT_FOUND, e.getCode());
 		} catch (Exception e) {
-			tbc.fail("Expected " + DmtException.class.getName() + " but was "
-					+ e.getClass().getName());
+			tbc.failExpectedOtherException(DmtException.class, e);
 
 		} finally {
 			tbc.closeSession(session);
@@ -215,8 +211,7 @@ public class GetSession implements TestInterface {
 					DmtSession.LOCK_TYPE_SHARED, session.getLockType());
 			tbc.assertNull("Asserting principal", session.getPrincipal());
 		} catch (Exception e) {
-			tbc.fail("Unexpected Exception: " + e.getClass().getName()
-					+ " [Message: " + e.getMessage() + "]");
+			tbc.failUnexpectedException(e);
 
 		} finally {
 			tbc.closeSession(session);
@@ -242,8 +237,7 @@ public class GetSession implements TestInterface {
                 session.isNodeUri(TestExecPluginActivator.INTERIOR_NODE));
             
 		} catch (Exception e) {
-			tbc.fail("Unexpected Exception: " + e.getClass().getName()
-					+ " [Message: " + e.getMessage() + "]");
+			tbc.failUnexpectedException(e);
 
 		} finally {
 			tbc.closeSession(session);
@@ -268,8 +262,7 @@ public class GetSession implements TestInterface {
             tbc.assertTrue("asserts that null on the parameter subtree gives access to the whole subtree",
                 session.isNodeUri(TestExecPluginActivator.INTERIOR_NODE));
 		} catch (Exception e) {
-			tbc.fail("Unexpected Exception: " + e.getClass().getName()
-					+ " [Message: " + e.getMessage() + "]");
+			tbc.failUnexpectedException(e);
 
 		} finally {
 			tbc.closeSession(session);
@@ -293,8 +286,7 @@ public class GetSession implements TestInterface {
 					"Asserting if the exception's code is NODE_NOT_FOUND.",
 					DmtException.NODE_NOT_FOUND, e.getCode());
 		} catch (Exception e) {
-			tbc.fail("Expected " + DmtException.class.getName() + " but was "
-					+ e.getClass().getName());
+			tbc.failExpectedOtherException(DmtException.class, e);
 
 		} finally {
 			tbc.closeSession(session);
@@ -320,8 +312,7 @@ public class GetSession implements TestInterface {
 					"Asserting if the exception's code is COMMAND_FAILED.",
 					DmtException.COMMAND_FAILED, e.getCode());
 		} catch (Exception e) {
-			tbc.fail("Expected " + DmtException.class.getName() + " but was "
-					+ e.getClass().getName());
+			tbc.failExpectedOtherException(DmtException.class, e);
 		} finally {
 			tbc.closeSession(session);
 		}
@@ -347,8 +338,7 @@ public class GetSession implements TestInterface {
 			tbc.assertEquals("Asserting principal", DmtConstants.PRINCIPAL,
 					session.getPrincipal());
 		} catch (Exception e) {
-			tbc.fail("Unexpected Exception: " + e.getClass().getName()
-					+ " [Message: " + e.getMessage() + "]");
+			tbc.failUnexpectedException(e);
 
 		} finally {
 			tbc.closeSession(session);
@@ -374,8 +364,7 @@ public class GetSession implements TestInterface {
             tbc.assertTrue("asserts that '.' on the parameter subtree gives access to the whole subtree",
                 session.isNodeUri(TestExecPluginActivator.INTERIOR_NODE));
 		} catch (Exception e) {
-			tbc.fail("Unexpected Exception: " + e.getClass().getName()
-					+ " [Message: " + e.getMessage() + "]");
+			tbc.failUnexpectedException(e);
 		} finally {
 			tbc.closeSession(session);
 		}
@@ -401,8 +390,7 @@ public class GetSession implements TestInterface {
             tbc.assertTrue("asserts that null on the parameter subtree gives access to the whole subtree",
                 session.isNodeUri(TestExecPluginActivator.INTERIOR_NODE));
 		} catch (Exception e) {
-			tbc.fail("Unexpected Exception: " + e.getClass().getName()
-					+ " [Message: " + e.getMessage() + "]");
+			tbc.failUnexpectedException(e);
 		} finally {
 			tbc.closeSession(session);
 		}
@@ -426,8 +414,7 @@ public class GetSession implements TestInterface {
 					"Asserting if the exception's code is NODE_NOT_FOUND.",
 					DmtException.NODE_NOT_FOUND, e.getCode());
 		} catch (Exception e) {
-			tbc.fail("Expected " + DmtException.class.getName() + " but was "
-					+ e.getClass().getName());
+			tbc.failExpectedOtherException(DmtException.class, e);
 		} finally {
 			tbc.closeSession(session);
 			
@@ -454,8 +441,7 @@ public class GetSession implements TestInterface {
 					"Asserting if the exception's code is COMMAND_FAILED.",
 					DmtException.COMMAND_FAILED, e.getCode());
 		} catch (Exception e) {
-			tbc.fail("Expected " + DmtException.class.getName() + " but was "
-					+ e.getClass().getName());
+			tbc.failExpectedOtherException(DmtException.class, e);
 		} finally {
 			tbc.closeSession(session);
 		}
@@ -481,8 +467,7 @@ public class GetSession implements TestInterface {
 		} catch (SecurityException e) {
 			tbc.pass("SecurityException was thrown.");
 		} catch (Exception e) {
-			tbc.fail("Expected " + SecurityException.class.getName()
-					+ " but was " + e.getClass().getName());
+			tbc.failExpectedOtherException(SecurityException.class, e);
 		} finally {
 			tbc.closeSession(session);
             tbc.setPermissions(
@@ -507,8 +492,7 @@ public class GetSession implements TestInterface {
 					TestExecPluginActivator.LEAF_NODE);
 			tbc.pass("A leaf node could be opened as session root.");
 		} catch (Exception e) {
-			tbc.fail("Unexpected Exception: " + e.getClass().getName()
-					+ " [Message: " + e.getMessage() + "]");
+			tbc.failUnexpectedException(e);
 		} finally {
 			tbc.closeSession(session);
 
@@ -530,8 +514,7 @@ public class GetSession implements TestInterface {
 					DmtSession.LOCK_TYPE_ATOMIC);
 			tbc.pass("A leaf node could be opened as session root.");
 		} catch (Exception e) {
-			tbc.fail("Unexpected Exception: " + e.getClass().getName()
-					+ " [Message: " + e.getMessage() + "]");
+			tbc.failUnexpectedException(e);
 		} finally {
 			tbc.closeSession(session);
 
@@ -552,8 +535,7 @@ public class GetSession implements TestInterface {
 					DmtSession.LOCK_TYPE_ATOMIC);
 			tbc.pass("A leaf node could be opened as session root.");
 		} catch (Exception e) {
-			tbc.fail("Unexpected Exception: " + e.getClass().getName()
-					+ " [Message: " + e.getMessage() + "]");
+			tbc.failUnexpectedException(e);
 		} finally {
 			tbc.closeSession(session);
 		}
@@ -570,7 +552,7 @@ public class GetSession implements TestInterface {
 		DmtSession session = null;
 		try {
 			tbc.log("#testGetSession019");
-            //It is from 1 because 0 is 'null' and null is a valid nodeUri for this method
+            //It is from 1 because 0 is 'null' and null is a valid nodeUri in this method
 			for (int i=1;i<DmtTestControl.INVALID_URIS.length;i++) {
 				try {
 				    session = tbc.getDmtAdmin().getSession(DmtTestControl.INVALID_URIS[i].toString());
@@ -581,8 +563,7 @@ public class GetSession implements TestInterface {
 			}
 			
 		} catch (Exception e) {
-			tbc.fail("Unexpected Exception: " + e.getClass().getName()
-				+ " [Message: " + e.getMessage() + "]");
+			tbc.failUnexpectedException(e);
 		} finally {
 			tbc.closeSession(session);
 		}
@@ -598,7 +579,7 @@ public class GetSession implements TestInterface {
 		try {
 			tbc.log("#testGetSession020");
 
-            //It is from 1 because 0 is 'null' and null is a valid nodeUri for this method
+            //It is from 1 because 0 is 'null' and null is a valid nodeUri in this method
             for (int i=1;i<DmtTestControl.INVALID_URIS.length;i++) {
                 try {
                     session = tbc.getDmtAdmin().getSession(DmtTestControl.INVALID_URIS[i].toString(),DmtSession.LOCK_TYPE_ATOMIC);
@@ -610,8 +591,7 @@ public class GetSession implements TestInterface {
 
 			
 		} catch (Exception e) {
-			tbc.fail("Unexpected Exception: " + e.getClass().getName()
-				+ " [Message: " + e.getMessage() + "]");
+			tbc.failUnexpectedException(e);
 		} finally {
 			tbc.closeSession(session);
 		}
@@ -627,7 +607,7 @@ public class GetSession implements TestInterface {
 		try {
 			tbc.log("#testGetSession021");
 
-            //It is from 1 because 0 is 'null' and null is a valid nodeUri for this method
+            //It is from 1 because 0 is 'null' and null is a valid nodeUri in this method
             for (int i=1;i<DmtTestControl.INVALID_URIS.length;i++) {
                 try {
                     session = tbc.getDmtAdmin().getSession(DmtConstants.PRINCIPAL,DmtTestControl.INVALID_URIS[i].toString(),DmtSession.LOCK_TYPE_ATOMIC);
@@ -638,8 +618,7 @@ public class GetSession implements TestInterface {
             }
 			
 		} catch (Exception e) {
-			tbc.fail("Unexpected Exception: " + e.getClass().getName()
-				+ " [Message: " + e.getMessage() + "]");
+			tbc.failUnexpectedException(e);
 		} finally {
 			tbc.closeSession(session);
 		}
@@ -664,8 +643,7 @@ public class GetSession implements TestInterface {
                 }
             }
 		} catch (Exception e) {
-			tbc.fail("Unexpected Exception: " + e.getClass().getName()
-				+ " [Message: " + e.getMessage() + "]");
+			tbc.failUnexpectedException(e);
 		} finally {
 			tbc.closeSession(session);
 		}
@@ -691,8 +669,7 @@ public class GetSession implements TestInterface {
             }
 			
 		} catch (Exception e) {
-			tbc.fail("Unexpected Exception: " + e.getClass().getName()
-				+ " [Message: " + e.getMessage() + "]");
+			tbc.failUnexpectedException(e);
 		} finally {
 			tbc.closeSession(session);
 		}
@@ -718,8 +695,7 @@ public class GetSession implements TestInterface {
             }
 			
 		} catch (Exception e) {
-			tbc.fail("Unexpected Exception: " + e.getClass().getName()
-				+ " [Message: " + e.getMessage() + "]");
+			tbc.failUnexpectedException(e);
 		} finally {
 			tbc.closeSession(session);
 		}

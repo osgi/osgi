@@ -36,14 +36,15 @@
  */
 package org.osgi.test.cases.dmt.tc2.tbc.Activators;
 
-import org.osgi.service.dmt.AlertItem;
+import info.dmtree.notification.AlertItem;
+import info.dmtree.notification.spi.RemoteAlertSender;
 
 
 /**
  *	This class tests the alert sent by the DmtAdmin.
  */
 public class DefaultRemoteAlertSenderImpl implements
-		org.osgi.service.dmt.RemoteAlertSender {
+		RemoteAlertSender {
 	
 	public static int codeException = 99;
 	

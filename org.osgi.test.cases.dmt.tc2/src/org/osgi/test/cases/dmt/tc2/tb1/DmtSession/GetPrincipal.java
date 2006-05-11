@@ -39,8 +39,8 @@
 
 package org.osgi.test.cases.dmt.tc2.tb1.DmtSession;
 
-import org.osgi.service.dmt.security.DmtPrincipalPermission;
-import org.osgi.service.dmt.DmtSession;
+import info.dmtree.security.DmtPrincipalPermission;
+import info.dmtree.DmtSession;
 import org.osgi.service.permissionadmin.PermissionInfo;
 import org.osgi.test.cases.dmt.tc2.tbc.DmtConstants;
 import org.osgi.test.cases.dmt.tc2.tbc.DmtTestControl;
@@ -85,8 +85,7 @@ public class GetPrincipal implements TestInterface {
 			tbc.assertEquals("Asserts that getPrincipal returns the principal passed in the DmtSession's constructor",
 					DmtConstants.PRINCIPAL, session.getPrincipal());
 		} catch (Exception e) {
-			tbc.fail("Unexpected Exception: " + e.getClass().getName()
-					+ " [Message: " + e.getMessage() + "]");
+			tbc.failUnexpectedException(e);
 		} finally {
 			tbc.cleanUp(session, null);
 		}
@@ -106,8 +105,7 @@ public class GetPrincipal implements TestInterface {
 			tbc.assertNull("Asserts that getPrincipal returns null when the session is local", session
 					.getPrincipal());
 		} catch (Exception e) {
-			tbc.fail("Unexpected Exception: " + e.getClass().getName()
-					+ " [Message: " + e.getMessage() + "]");
+			tbc.failUnexpectedException(e);
 		} finally {
 			tbc.closeSession(session);
 		}

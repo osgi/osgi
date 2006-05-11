@@ -39,7 +39,7 @@
 
 package org.osgi.test.cases.dmt.tc2.tb1.DmtSession;
 
-import org.osgi.service.dmt.DmtSession;
+import info.dmtree.DmtSession;
 import org.osgi.service.permissionadmin.PermissionInfo;
 import org.osgi.test.cases.dmt.tc2.tbc.DmtTestControl;
 import org.osgi.test.cases.dmt.tc2.tbc.TestInterface;
@@ -84,8 +84,7 @@ public class GetLockType implements TestInterface {
 	        tbc.assertEquals("Asserting lock type", DmtSession.LOCK_TYPE_ATOMIC,
 	                session.getLockType());
 	    } catch (Exception e) {
-	    	tbc.fail("Unexpected Exception: " + e.getClass().getName()
-					+ " [Message: " + e.getMessage() + "]");
+	    	tbc.failUnexpectedException(e);
 	    }  finally {
 			tbc.closeSession(session);
 		}
@@ -106,8 +105,7 @@ public class GetLockType implements TestInterface {
 	        tbc.assertEquals("Asserting lock type", DmtSession.LOCK_TYPE_EXCLUSIVE,
 	                session.getLockType());
 	    } catch (Exception e) {
-	    	tbc.fail("Unexpected Exception: " + e.getClass().getName()
-					+ " [Message: " + e.getMessage() + "]");
+	    	tbc.failUnexpectedException(e);
 	    } finally {
 			tbc.closeSession(session);
 		}
@@ -130,8 +128,7 @@ public class GetLockType implements TestInterface {
 	        tbc.assertEquals("Asserting lock type", DmtSession.LOCK_TYPE_SHARED,
 	                session.getLockType());
 	    } catch (Exception e) {
-	    	tbc.fail("Unexpected Exception: " + e.getClass().getName()
-					+ " [Message: " + e.getMessage() + "]");
+	    	tbc.failUnexpectedException(e);
 	    } finally {
 			tbc.closeSession(session);
 		}       

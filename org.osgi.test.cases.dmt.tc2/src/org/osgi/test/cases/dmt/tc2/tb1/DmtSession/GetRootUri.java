@@ -42,7 +42,7 @@
 
 package org.osgi.test.cases.dmt.tc2.tb1.DmtSession;
 
-import org.osgi.service.dmt.DmtSession;
+import info.dmtree.DmtSession;
 import org.osgi.service.permissionadmin.PermissionInfo;
 import org.osgi.test.cases.dmt.tc2.tbc.DmtConstants;
 import org.osgi.test.cases.dmt.tc2.tbc.DmtTestControl;
@@ -86,8 +86,7 @@ public class GetRootUri implements TestInterface {
 			tbc.assertEquals("Asserting root uri", DmtConstants.OSGi_ROOT,
 					session.getRootUri());
 		} catch (Exception e) {
-			tbc.fail("Unexpected Exception: " + e.getClass().getName()
-					+ " [Message: " + e.getMessage() + "]");
+			tbc.failUnexpectedException(e);
 		} finally {
 			tbc.closeSession(session);
 		}
@@ -106,8 +105,7 @@ public class GetRootUri implements TestInterface {
 					DmtSession.LOCK_TYPE_ATOMIC);
 			tbc.assertEquals("Asserting root uri", ".", session.getRootUri());
 		} catch (Exception e) {
-			tbc.fail("Unexpected Exception: " + e.getClass().getName()
-					+ " [Message: " + e.getMessage() + "]");
+			tbc.failUnexpectedException(e);
 		} finally {
 			tbc.closeSession(session);
 		}
@@ -126,8 +124,7 @@ public class GetRootUri implements TestInterface {
 					DmtSession.LOCK_TYPE_ATOMIC);
 			tbc.assertEquals("Asserting root uri", TestExecPluginActivator.LEAF_NODE, session.getRootUri());
 		} catch (Exception e) {
-			tbc.fail("Unexpected Exception: " + e.getClass().getName()
-					+ " [Message: " + e.getMessage() + "]");
+			tbc.failUnexpectedException(e);
 		} finally {
 			tbc.closeSession(session);
 		}

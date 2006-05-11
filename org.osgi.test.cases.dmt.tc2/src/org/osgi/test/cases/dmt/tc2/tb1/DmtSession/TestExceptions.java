@@ -43,12 +43,12 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.Vector;
 
-import org.osgi.service.dmt.Acl;
-import org.osgi.service.dmt.DmtData;
-import org.osgi.service.dmt.DmtException;
-import org.osgi.service.dmt.DmtSession;
-import org.osgi.service.dmt.security.DmtPermission;
-import org.osgi.service.dmt.security.DmtPrincipalPermission;
+import info.dmtree.Acl;
+import info.dmtree.DmtData;
+import info.dmtree.DmtException;
+import info.dmtree.DmtSession;
+import info.dmtree.security.DmtPermission;
+import info.dmtree.security.DmtPrincipalPermission;
 import org.osgi.service.permissionadmin.PermissionInfo;
 import org.osgi.test.cases.dmt.tc2.tbc.DmtConstants;
 import org.osgi.test.cases.dmt.tc2.tbc.DmtTestControl;
@@ -276,8 +276,7 @@ public class TestExceptions implements TestInterface {
 				
 			}
 		} catch (Exception e) {
-			tbc.fail("Unexpected Exception: " + e.getClass().getName()
-					+ " [Message: " + e.getMessage() + "]");
+			tbc.failUnexpectedException(e);
 		} finally {
 			tbc.setPermissions(new PermissionInfo(DmtPermission.class.getName(), DmtConstants.ALL_NODES,DmtConstants.ALL_ACTIONS));
 		    tbc.cleanUp(session,TestExecPluginActivator.ROOT);
@@ -346,13 +345,11 @@ public class TestExceptions implements TestInterface {
 			if (exceptionReturned instanceof IllegalStateException) {
 				tbc.pass("IllegalStateException correctly thrown when the session is "+ problemName + " and DmtSession." + methodName +" is called.");
 			} else {
-			    tbc.fail("Expected " + DmtException.class.getName()
-						+ " but was " + exceptionReturned.getClass().getName());
+			    tbc.failExpectedOtherException(DmtException.class, exceptionReturned);
 			}
 				
 		} catch (Exception e) {
-		    tbc.fail("Unexpected Exception: " + e.getClass().getName()
-					+ " [Message: " + e.getMessage() + "]");
+			tbc.failUnexpectedException(e);
 		} finally {
 		    tbc.closeSession(session);
 		}
@@ -397,8 +394,7 @@ public class TestExceptions implements TestInterface {
 				}
 		    }
 		} catch (Exception e) {
-			tbc.fail("Unexpected Exception: " + e.getClass().getName()
-					+ " [Message: " + e.getMessage() + "]");
+			tbc.failUnexpectedException(e);
 		} finally {
 		    tbc.closeSession(session);
 		}
@@ -434,8 +430,7 @@ public class TestExceptions implements TestInterface {
 								if (exceptionReturned instanceof SecurityException) {
 									tbc.pass("SecurityException correctly thrown when the caller does not have DmtPermission for the specified node. Method: DmtSession." + currentMethodName);
 								} else {
-								    tbc.fail("Expected " + DmtException.class.getName()
-											+ " but was " + exceptionReturned.getClass().getName());
+									tbc.failExpectedOtherException(DmtException.class, exceptionReturned);
 								}
 							}
 					}
@@ -443,8 +438,7 @@ public class TestExceptions implements TestInterface {
 				}
 		    }
 		} catch (Exception e) {
-			tbc.fail("Unexpected Exception: " + e.getClass().getName()
-					+ " [Message: " + e.getMessage() + "]");
+			tbc.failUnexpectedException(e);
 		} finally {
 		    tbc.closeSession(session);
 		}
@@ -520,13 +514,11 @@ public class TestExceptions implements TestInterface {
 				    " correctly. Node URI: \"" + parameters[0] + "\"",code,exception.getCode());
 				
 			} else {
-			    tbc.fail("Expected " + DmtException.class.getName()
-						+ " but was " + exceptionReturned.getClass().getName());
+			    tbc.failExpectedOtherException(DmtException.class, exceptionReturned);
 			}
 			
 		} catch (Exception e) {
-		    tbc.fail("Unexpected Exception: " + e.getClass().getName()
-					+ " [Message: " + e.getMessage() + "]");
+			tbc.failUnexpectedException(e);
 		}
 		
 	}	

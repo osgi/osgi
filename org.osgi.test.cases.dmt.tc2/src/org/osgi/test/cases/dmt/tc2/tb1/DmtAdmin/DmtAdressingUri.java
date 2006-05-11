@@ -37,9 +37,9 @@
 
 package org.osgi.test.cases.dmt.tc2.tb1.DmtAdmin;
 
-import org.osgi.service.dmt.DmtException;
-import org.osgi.service.dmt.DmtSession;
-import org.osgi.service.dmt.security.DmtPermission;
+import info.dmtree.DmtException;
+import info.dmtree.DmtSession;
+import info.dmtree.security.DmtPermission;
 import org.osgi.service.permissionadmin.PermissionInfo;
 import org.osgi.test.cases.dmt.tc2.tbc.DmtConstants;
 import org.osgi.test.cases.dmt.tc2.tbc.DmtTestControl;
@@ -89,8 +89,7 @@ public class DmtAdressingUri implements TestInterface {
 			session.createInteriorNode(TestExecPluginActivator.ROOT+ "/" + DmtConstants.INVALID);
 			tbc.pass("It is possible to create a node with full Unicode character set.");
 		} catch (Exception e) {
-			tbc.fail("Unexpected Exception: " + e.getClass().getName()
-					+ " [Message: " + e.getMessage() + "]");
+			tbc.failUnexpectedException(e);
 		} finally {
 			tbc.closeSession(session);
 		}
@@ -109,8 +108,7 @@ public class DmtAdressingUri implements TestInterface {
 			session.createInteriorNode(TestExecPluginActivator.ROOT+ "/" + "test\\/slash");
 			tbc.pass("It is possible to create a node containing a slash if a backslash is inserted before it.");
 		} catch (Exception e) {
-			tbc.fail("Unexpected Exception: " + e.getClass().getName()
-					+ " [Message: " + e.getMessage() + "]");
+			tbc.failUnexpectedException(e);
 		} finally {
 			tbc.closeSession(session);
 		}
@@ -128,8 +126,7 @@ public class DmtAdressingUri implements TestInterface {
 			session.createInteriorNode(TestExecPluginActivator.ROOT+ "/" + "test\\\\slash");
 			tbc.pass("It is possible to create a node containing a backslash if a backslash is inserted before it.");
 		} catch (Exception e) {
-			tbc.fail("Unexpected Exception: " + e.getClass().getName()
-					+ " [Message: " + e.getMessage() + "]");
+			tbc.failUnexpectedException(e);
 		} finally {
 			tbc.closeSession(session);
 		}
@@ -151,8 +148,7 @@ public class DmtAdressingUri implements TestInterface {
 			boolean passed = session.isNodeUri(TestExecPluginActivator.ROOT + "/" + nodeName );
 			tbc.assertTrue("The DmtAdmin ignores a backslash when it is not followed by a slash or backslash.",passed);
 		} catch (Exception e) {
-			tbc.fail("Unexpected Exception: " + e.getClass().getName()
-					+ " [Message: " + e.getMessage() + "]");
+			tbc.failUnexpectedException(e);
 		} finally {
 			tbc.closeSession(session);
 		}
@@ -172,8 +168,7 @@ public class DmtAdressingUri implements TestInterface {
 			tbc.assertEquals("Asserts that a URI must not end with the delimiter slash (’/’)",
 					DmtException.INVALID_URI, e.getCode());			
 		} catch (Exception e) {
-			tbc.fail("Expected " + DmtException.class.getName() + " but was "
-					+ e.getClass().getName());
+			tbc.failExpectedOtherException(DmtException.class, e);
 		} finally {
 			tbc.closeSession(session);
 		}
@@ -194,8 +189,7 @@ public class DmtAdressingUri implements TestInterface {
 			tbc.assertEquals("Asserts that the root node must not be denoted as ./",
 					DmtException.INVALID_URI, e.getCode());			
 		} catch (Exception e) {
-			tbc.fail("Expected " + DmtException.class.getName() + " but was "
-					+ e.getClass().getName());
+			tbc.failExpectedOtherException(DmtException.class, e);
 		} finally {
 			tbc.closeSession(session);
 		}
@@ -217,8 +211,7 @@ public class DmtAdressingUri implements TestInterface {
 			tbc.assertEquals("Asserts that a URI must not be constructed using the character sequence ../ to traverse the tree upwards",
 					DmtException.INVALID_URI, e.getCode());			
 		} catch (Exception e) {
-			tbc.fail("Expected " + DmtException.class.getName() + " but was "
-					+ e.getClass().getName());
+			tbc.failExpectedOtherException(DmtException.class, e);
 		} finally {
 			tbc.closeSession(session);
 		}
@@ -240,8 +233,7 @@ public class DmtAdressingUri implements TestInterface {
 			tbc.assertEquals("Asserts that the character sequence ./ must not be used anywhere else but in the beginning of a URI.",
 					DmtException.INVALID_URI, e.getCode());			
 		} catch (Exception e) {
-			tbc.fail("Expected " + DmtException.class.getName() + " but was "
-					+ e.getClass().getName());
+			tbc.failExpectedOtherException(DmtException.class, e);
 		} finally {
 			tbc.closeSession(session);
 		}
@@ -264,8 +256,7 @@ public class DmtAdressingUri implements TestInterface {
                 !session.isNodeUri(TestExecPluginActivator.ROOT+ "/" + TestExecPluginActivator.INTERIOR_NODE_NAME.toLowerCase()));
 			
 		} catch (Exception e) {
-			tbc.fail("Unexpected Exception: " + e.getClass().getName()
-					+ " [Message: " + e.getMessage() + "]");
+			tbc.failUnexpectedException(e);
 		} finally {
 			tbc.closeSession(session);
 		}
@@ -289,8 +280,7 @@ public class DmtAdressingUri implements TestInterface {
 			tbc.assertEquals("This method asserts that the URI must be given with the root of the management " +
 					"tree as the starting point",DmtException.INVALID_URI, e.getCode());			
 		} catch (Exception e) {
-			tbc.fail("Expected " + DmtException.class.getName() + " but was "
-					+ e.getClass().getName());
+			tbc.failExpectedOtherException(DmtException.class, e);
 
 		} finally {
 			tbc.closeSession(session);
@@ -314,8 +304,7 @@ public class DmtAdressingUri implements TestInterface {
 		} catch (DmtException e) {
 			tbc.assertEquals("This method asserts that the slash and backslash must not be escaped using the % escaping.",DmtException.INVALID_URI, e.getCode());			
 		} catch (Exception e) {
-			tbc.fail("Expected " + DmtException.class.getName() + " but was "
-					+ e.getClass().getName());
+			tbc.failExpectedOtherException(DmtException.class, e);
 
 		} finally {
 			tbc.closeSession(session);

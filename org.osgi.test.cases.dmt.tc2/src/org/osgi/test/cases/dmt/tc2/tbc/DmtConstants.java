@@ -37,7 +37,8 @@
 
 package org.osgi.test.cases.dmt.tc2.tbc;
 
-import org.osgi.service.dmt.security.DmtPermission;
+import info.dmtree.DmtEvent;
+import info.dmtree.security.DmtPermission;
 
 public class DmtConstants {
 
@@ -61,6 +62,8 @@ public class DmtConstants {
 	
 	public static final int INVALID_LOCKMODE = 3;
 	
+	public static final int ALL_DMT_EVENTS = DmtEvent.ADDED | DmtEvent.COPIED | DmtEvent.DELETED | DmtEvent.RENAMED | DmtEvent.REPLACED | DmtEvent.SESSION_CLOSED | DmtEvent.SESSION_OPENED;
+	
 	public static final String ALL_ACTIONS = DmtPermission.ADD + "," + DmtPermission.DELETE + "," +DmtPermission.EXEC + "," + DmtPermission.GET + "," + DmtPermission.REPLACE;
 	 
 	public static final String ALL_NODES = "./*";
@@ -68,15 +71,19 @@ public class DmtConstants {
 	public static final String DDF = "http://www.openmobilealliance.org/tech/DTD/OMA-SyncML-DMDDF-V1_2_0.dtd";
 	
 	//Events constants
-	public static final String ADDED = "org/osgi/service/dmt/ADDED";
+	public static final String ADDED = "info/dmtree/DmtEvent/ADDED";
 
-	public static final String DELETED = "org/osgi/service/dmt/DELETED";
+	public static final String DELETED = "info/dmtree/DmtEvent/DELETED";
 
-	public static final String REPLACED = "org/osgi/service/dmt/REPLACED";
+	public static final String REPLACED = "info/dmtree/DmtEvent/REPLACED";
 
-	public static final String RENAMED = "org/osgi/service/dmt/RENAMED";
+	public static final String RENAMED = "info/dmtree/DmtEvent/RENAMED";
 
-	public static final String COPIED = "org/osgi/service/dmt/COPIED";
+	public static final String COPIED = "info/dmtree/DmtEvent/COPIED";
+
+	public static final String SESSION_OPENED = "info/dmtree/DmtEvent/SESSION_OPENED";
+	
+	public static final String SESSION_CLOSED = "info/dmtree/DmtEvent/SESSION_CLOSED";
 
 	public static final String SESSION_ID = "session.id";
 
@@ -86,17 +93,10 @@ public class DmtConstants {
 
 	public static final String TOPIC = "event.topics";
 	
-	//--
-
-	public static final int WAIT_TIME;
+	public static final int WAITING_TIME;
 
 	public static final int TIMEOUT;
 	
-	//The maximum node length and maximum node segments may not be 0 else the tests of URI_TOO_LONG wont be executed. 
-	public static final int MAXIMUM_NODE_LENGTH;
-	
-	public static final int MAXIMUM_NODE_SEGMENTS;
-
     public static final boolean SUPPORTS_NODE_TITLE;
     
     public static final boolean SUPPORTS_NODE_TIMESTAMP;
@@ -105,17 +105,9 @@ public class DmtConstants {
     
     public static final boolean SUPPORTS_NODE_VERSION;
     
+    public static final boolean SUPPORTS_ASYNCHRONOUS_NOTIFICATION;
+    
     static {
-    	if (System.getProperty("org.osgi.test.cases.dmt.tc2.maximum_node_length")!=null) {
-    		MAXIMUM_NODE_LENGTH = Integer.parseInt(System.getProperty("org.osgi.test.cases.dmt.tc2.maximum_node_length"));
-    	} else {
-    		MAXIMUM_NODE_LENGTH = 32;
-    	}
-    	if (System.getProperty("org.osgi.test.cases.dmt.tc2.maximum_node_segments")!=null) {
-    		MAXIMUM_NODE_SEGMENTS = Integer.parseInt(System.getProperty("org.osgi.test.cases.dmt.tc2.maximum_node_segments"));
-    	} else {
-    		MAXIMUM_NODE_SEGMENTS = 0;
-    	}
     	if (System.getProperty("org.osgi.test.cases.dmt.tc2.supports_node_title")!=null) {
     		SUPPORTS_NODE_TITLE = Boolean.getBoolean("org.osgi.test.cases.dmt.tc2.supports_node_title");
     	} else {
@@ -142,15 +134,19 @@ public class DmtConstants {
     		TIMEOUT = 31000;
     	}
     	if (System.getProperty("org.osgi.test.cases.dmt.tc2.wait_for_event")!=null) {
-    		WAIT_TIME = Integer.parseInt(System.getProperty("org.osgi.test.cases.dmt.tc2.wait_for_event"));
+    		WAITING_TIME = Integer.parseInt(System.getProperty("org.osgi.test.cases.dmt.tc2.wait_for_event"));
     	} else {
-    		WAIT_TIME = 1200;
+    		WAITING_TIME = 1200;
+    	}
+    	
+    	if (System.getProperty("org.osgi.test.cases.dmt.tc2.supports_asynchronous_notifications")!=null) {
+    		SUPPORTS_ASYNCHRONOUS_NOTIFICATION = Boolean.getBoolean("org.osgi.test.cases.dmt.tc2.supports_node_version");
+    	} else {
+    		SUPPORTS_ASYNCHRONOUS_NOTIFICATION = true;
     	}
     	
     }
 	
-    
-    
     /**
      * This method returns the String corresponding to the code of the DmtExceptions's format
      * @param code The DmtException code format
@@ -158,37 +154,37 @@ public class DmtConstants {
      */
     public static String getDmtExceptionCodeText(int code) {
         switch(code) {
-        case org.osgi.service.dmt.DmtException.NODE_NOT_FOUND:           
+        case info.dmtree.DmtException.NODE_NOT_FOUND:           
         	return "NODE_NOT_FOUND";
-        case org.osgi.service.dmt.DmtException.COMMAND_NOT_ALLOWED:      
+        case info.dmtree.DmtException.COMMAND_NOT_ALLOWED:      
         	return "COMMAND_NOT_ALLOWED";
-        case org.osgi.service.dmt.DmtException.FEATURE_NOT_SUPPORTED:    
+        case info.dmtree.DmtException.FEATURE_NOT_SUPPORTED:    
         	return "FEATURE_NOT_SUPPORTED";
-        case org.osgi.service.dmt.DmtException.URI_TOO_LONG:             
+        case info.dmtree.DmtException.URI_TOO_LONG:             
         	return "URI_TOO_LONG";
-        case org.osgi.service.dmt.DmtException.NODE_ALREADY_EXISTS:      
+        case info.dmtree.DmtException.NODE_ALREADY_EXISTS:      
         	return "NODE_ALREADY_EXISTS";
-        case org.osgi.service.dmt.DmtException.PERMISSION_DENIED:        
+        case info.dmtree.DmtException.PERMISSION_DENIED:        
         	return "PERMISSION_DENIED";
-        case org.osgi.service.dmt.DmtException.COMMAND_FAILED:           
+        case info.dmtree.DmtException.COMMAND_FAILED:           
         	return "COMMAND_FAILED";
-        case org.osgi.service.dmt.DmtException.DATA_STORE_FAILURE:       
+        case info.dmtree.DmtException.DATA_STORE_FAILURE:       
         	return "DATA_STORE_FAILURE";
-        case org.osgi.service.dmt.DmtException.ROLLBACK_FAILED:          
+        case info.dmtree.DmtException.ROLLBACK_FAILED:          
         	return "ROLLBACK_FAILED";
-        case org.osgi.service.dmt.DmtException.REMOTE_ERROR:             
+        case info.dmtree.DmtException.REMOTE_ERROR:             
         	return "REMOTE_ERROR";
-        case org.osgi.service.dmt.DmtException.METADATA_MISMATCH:        
+        case info.dmtree.DmtException.METADATA_MISMATCH:        
         	return "METADATA_MISMATCH";
-        case org.osgi.service.dmt.DmtException.INVALID_URI:             
+        case info.dmtree.DmtException.INVALID_URI:             
         	return "INVALID_URI";
-        case org.osgi.service.dmt.DmtException.CONCURRENT_ACCESS:       
+        case info.dmtree.DmtException.CONCURRENT_ACCESS:       
         	return "CONCURRENT_ACCESS";
-        case org.osgi.service.dmt.DmtException.ALERT_NOT_ROUTED:         
+        case info.dmtree.DmtException.ALERT_NOT_ROUTED:         
         	return "ALERT_NOT_ROUTED";
-        case org.osgi.service.dmt.DmtException.TRANSACTION_ERROR:        
+        case info.dmtree.DmtException.TRANSACTION_ERROR:        
         	return "TRANSACTION_ERROR";
-        case org.osgi.service.dmt.DmtException.SESSION_CREATION_TIMEOUT: 
+        case info.dmtree.DmtException.SESSION_CREATION_TIMEOUT: 
         	return "SESSION_CREATION_TIMEOUT";
         }
         return null;

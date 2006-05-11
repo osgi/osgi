@@ -35,9 +35,9 @@
  */
 package org.osgi.test.cases.dmt.tc2.tb1.DmtSession;
 
-import org.osgi.service.dmt.DmtData;
-import org.osgi.service.dmt.DmtSession;
-import org.osgi.service.dmt.security.DmtPermission;
+import info.dmtree.DmtData;
+import info.dmtree.DmtSession;
+import info.dmtree.security.DmtPermission;
 import org.osgi.service.permissionadmin.PermissionInfo;
 import org.osgi.test.cases.dmt.tc2.tbc.DmtConstants;
 import org.osgi.test.cases.dmt.tc2.tbc.DmtTestControl;
@@ -90,7 +90,7 @@ public class Events implements TestInterface  {
 			tbc.assertEquals("Asserts that if the session is atomic, no event is sent before commit.",0,EventHandlerImpl.getEventCount());
 			session.commit();
 			synchronized (tbc) {
-				tbc.wait(DmtConstants.WAIT_TIME);
+				tbc.wait(DmtConstants.WAITING_TIME);
 			}
 			tbc.assertTrue("Asserts if the events have the correct properties.", EventHandlerImpl.isAllProperties());
 			tbc.assertEquals("Asserts that the number of events are correct",5,EventHandlerImpl.getEventCount());
@@ -98,7 +98,7 @@ public class Events implements TestInterface  {
 			tbc.assertTrue("Asserts that the order of the sent events is the expected.",EventHandlerImpl.isOrderedAtomic());
 			tbc.assertTrue("Asserts that the property session.id contains the same value as DmtSession.getSessionId()",EventHandlerImpl.getSessionId() == session.getSessionId());
 		} catch (Exception e) {
-			tbc.fail("Unexpected Exception: " + e.getClass().getName() + " [Message: " + e.getMessage() +"]");
+			tbc.failUnexpectedException(e);
 		} finally {
 			tbc.closeSession(session);
 		}
@@ -125,7 +125,7 @@ public class Events implements TestInterface  {
 			session.deleteNode(TestExecPluginActivator.INTERIOR_NODE);
 
 			synchronized (tbc) {
-				tbc.wait(DmtConstants.WAIT_TIME);
+				tbc.wait(DmtConstants.WAITING_TIME);
 			}
 			tbc.assertTrue("Asserts if the events have the correct properties.", EventHandlerImpl.isAllProperties());
 			tbc.assertEquals("Asserts that the number of events are correct",5,EventHandlerImpl.getEventCount());
@@ -134,7 +134,7 @@ public class Events implements TestInterface  {
                 EventHandlerImpl.isOrderedExclusive());
 			tbc.assertTrue("Asserts that the property session.id contains the same value as DmtSession.getSessionId()",EventHandlerImpl.getSessionId() == session.getSessionId());
 		} catch (Exception e) {
-			tbc.fail("Unexpected Exception: " + e.getClass().getName() + " [Message: " + e.getMessage() +"]");
+			tbc.failUnexpectedException(e);
 		} finally {
 			tbc.closeSession(session);
 		}

@@ -39,8 +39,8 @@
 
 package org.osgi.test.cases.dmt.tc2.tb1.DmtSession;
 
-import org.osgi.service.dmt.security.DmtPermission;
-import org.osgi.service.dmt.DmtSession;
+import info.dmtree.security.DmtPermission;
+import info.dmtree.DmtSession;
 import org.osgi.service.permissionadmin.PermissionInfo;
 import org.osgi.test.cases.dmt.tc2.tbc.DmtConstants;
 import org.osgi.test.cases.dmt.tc2.tbc.DmtTestControl;
@@ -83,8 +83,7 @@ public class IsNodeUri implements TestInterface {
 			tbc.assertTrue("Assert isNodeUri", session
 					.isNodeUri(DmtConstants.OSGi_LOG));
 		} catch (Exception e) {
-			tbc.fail("Unexpected Exception: " + e.getClass().getName()
-					+ " [Message: " + e.getMessage() + "]");
+			tbc.failUnexpectedException(e);
 		} finally {
 			tbc.closeSession(session);
 		}
@@ -105,8 +104,7 @@ public class IsNodeUri implements TestInterface {
 			tbc.assertTrue("Assert isNodeUri", !session
 					.isNodeUri(TestExecPluginActivator.INEXISTENT_NODE));
 		} catch (Exception e) {
-			tbc.fail("Unexpected Exception: " + e.getClass().getName()
-					+ " [Message: " + e.getMessage() + "]");
+			tbc.failUnexpectedException(e);
 		} finally {
 			tbc.closeSession(session);
 		}
@@ -132,8 +130,7 @@ public class IsNodeUri implements TestInterface {
 
 			tbc.pass("A relative URI can be used with isNodeUri.");
 		} catch (Exception e) {
-			tbc.fail("Unexpected Exception: " + e.getClass().getName()
-					+ " [Message: " + e.getMessage() + "]");
+			tbc.failUnexpectedException(e);
 		} finally {
 			tbc.closeSession(session);
 			prepare();
@@ -158,8 +155,7 @@ public class IsNodeUri implements TestInterface {
 					"URI the session was opened with",session.isNodeUri(""));
 			
 		} catch (Exception e) {
-			tbc.fail("Unexpected Exception: " + e.getClass().getName()
-					+ " [Message: " + e.getMessage() + "]");
+			tbc.failUnexpectedException(e);
 		} finally {
 			tbc.closeSession(session);
 		}

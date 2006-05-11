@@ -38,10 +38,10 @@ package org.osgi.test.cases.dmt.tc2.tbc.Constraints;
 
 import java.lang.reflect.Modifier;
 
-import org.osgi.service.dmt.Acl;
-import org.osgi.service.dmt.DmtException;
-import org.osgi.service.dmt.DmtSession;
-import org.osgi.service.dmt.security.DmtPrincipalPermission;
+import info.dmtree.Acl;
+import info.dmtree.DmtException;
+import info.dmtree.DmtSession;
+import info.dmtree.security.DmtPrincipalPermission;
 import org.osgi.service.permissionadmin.PermissionInfo;
 import org.osgi.test.cases.dmt.tc2.tbc.DmtConstants;
 import org.osgi.test.cases.dmt.tc2.tbc.DmtTestControl;
@@ -87,14 +87,13 @@ public class AclConstraints {
 		try {
 			tbc.log("#testAclConstraints001");
 			
-            new org.osgi.service.dmt.Acl("Add=test&Exec=test &Get=*");
+            new info.dmtree.Acl("Add=test&Exec=test &Get=*");
 			
             tbc.failException("",IllegalArgumentException.class);
 		} catch (IllegalArgumentException e) {
 			tbc.pass("White space between tokens of a Acl is not allowed.");			
 		} catch (Exception e) {
-			tbc.fail("Expected " + IllegalArgumentException.class.getName() + " but was "
-					+ e.getClass().getName());
+			tbc.failExpectedOtherException(IllegalArgumentException.class, e);
 		}
 	}
 	
@@ -112,8 +111,7 @@ public class AclConstraints {
 			String rootAcl = session.getNodeAcl(".").toString();
 			tbc.assertEquals("This test asserts that if the root node ACL is not explicitly set, it should be set to Add=*&Get=*&Replace=*.",expectedRootAcl,rootAcl);
 		} catch (Exception e) {
-			tbc.fail("Unexpected Exception: " + e.getClass().getName()
-					+ " [Message: " + e.getMessage() + "]");
+			tbc.failUnexpectedException(e);
 		} finally {
 			tbc.closeSession(session);
 		}
@@ -136,14 +134,12 @@ public class AclConstraints {
 			    DmtException.COMMAND_NOT_ALLOWED,e.getCode());
 			
 		} catch (Exception e) {
-			tbc.fail("Expected " + DmtException.class.getName() + " but was "
-				+ e.getClass().getName());
+			tbc.failExpectedOtherException(DmtException.class, e);
 		} finally {
 			try {
-				session.setNodeAcl(".",new org.osgi.service.dmt.Acl("Add=*&Get=*&Replace=*"));
+				session.setNodeAcl(".",new info.dmtree.Acl("Add=*&Get=*&Replace=*"));
 			} catch (Exception e) {
-				tbc.fail("Unexpected Exception: " + e.getClass().getName()
-						+ " [Message: " + e.getMessage() + "]");
+				tbc.failUnexpectedException(e);
 			} finally {
 				tbc.closeSession(session);
 			}
@@ -161,18 +157,16 @@ public class AclConstraints {
 			tbc.log("#testAclConstraints004");
 			session = tbc.getDmtAdmin().getSession(".",DmtSession.LOCK_TYPE_EXCLUSIVE);
 			String expectedRootAcl = "Add=*&Exec=*&Replace=*";
-			session.setNodeAcl(".",new org.osgi.service.dmt.Acl(expectedRootAcl));
+			session.setNodeAcl(".",new info.dmtree.Acl(expectedRootAcl));
 			String rootAcl = session.getNodeAcl(".").toString();
 			tbc.assertEquals("Asserts that the root's ACL can be changed.",expectedRootAcl,rootAcl);
 		} catch (Exception e) {
-			tbc.fail("Unexpected Exception: " + e.getClass().getName()
-					+ " [Message: " + e.getMessage() + "]");
+			tbc.failUnexpectedException(e);
 		} finally {
 			try {
-				session.setNodeAcl(".",new org.osgi.service.dmt.Acl("Add=*&Get=*&Replace=*"));
+				session.setNodeAcl(".",new info.dmtree.Acl("Add=*&Get=*&Replace=*"));
 			} catch (Exception e) {
-				tbc.fail("Unexpected Exception: " + e.getClass().getName()
-						+ " [Message: " + e.getMessage() + "]");
+				tbc.failUnexpectedException(e);
 			} finally {
 				tbc.closeSession(session);
 			}
@@ -194,7 +188,7 @@ public class AclConstraints {
 					DmtSession.LOCK_TYPE_EXCLUSIVE);
 
 			session.setNodeAcl(TestExecPluginActivator.INTERIOR_NODE,
-					new org.osgi.service.dmt.Acl("Replace=*"));
+					new info.dmtree.Acl("Replace=*"));
 
 			session.deleteNode(TestExecPluginActivator.INTERIOR_NODE);
 
@@ -202,8 +196,7 @@ public class AclConstraints {
 							+ "in the DMT that is made through its service interface",
 							session.getNodeAcl(TestExecPluginActivator.INTERIOR_NODE));
 		} catch (Exception e) {
-			tbc.fail("Unexpected Exception: " + e.getClass().getName()
-					+ " [Message: " + e.getMessage() + "]");
+			tbc.failUnexpectedException(e);
 		} finally {
 			tbc.closeSession(session);
 		}
@@ -224,7 +217,7 @@ public class AclConstraints {
 
 			String expectedRootAcl = "Add=*";
 			session.setNodeAcl(TestExecPluginActivator.INTERIOR_NODE,
-					new org.osgi.service.dmt.Acl(expectedRootAcl));
+					new info.dmtree.Acl(expectedRootAcl));
 
 			session.renameNode(TestExecPluginActivator.INTERIOR_NODE,TestExecPluginActivator.RENAMED_NODE_NAME);
 			TestExecPlugin.setAllUriIsExistent(true);
@@ -234,8 +227,7 @@ public class AclConstraints {
 					expectedRootAcl,session.getNodeAcl(TestExecPluginActivator.RENAMED_NODE).toString());
 			
 		} catch (Exception e) {
-			tbc.fail("Unexpected Exception: " + e.getClass().getName()
-					+ " [Message: " + e.getMessage() + "]");
+			tbc.failUnexpectedException(e);
 		} finally {
 			tbc.cleanUp(session,TestExecPluginActivator.RENAMED_NODE);
 			TestExecPlugin.setAllUriIsExistent(false);
@@ -257,13 +249,12 @@ public class AclConstraints {
             tbc.openSessionAndSetNodeAcl(TestExecPluginActivator.INTERIOR_NODE, DmtConstants.PRINCIPAL, Acl.REPLACE );
 			tbc.setPermissions(new PermissionInfo(DmtPrincipalPermission.class.getName(),DmtConstants.PRINCIPAL,"*"));
 			session = tbc.getDmtAdmin().getSession(DmtConstants.PRINCIPAL,TestExecPluginActivator.ROOT,DmtSession.LOCK_TYPE_EXCLUSIVE);
-			session.setNodeAcl(TestExecPluginActivator.LEAF_NODE,new org.osgi.service.dmt.Acl("Get=*"));
+			session.setNodeAcl(TestExecPluginActivator.LEAF_NODE,new info.dmtree.Acl("Get=*"));
 			
 			tbc.pass("If a principal has Replace access to a node, the principal is permitted to change the ACL of all its child nodes");
 			
 		} catch (Exception e) {
-			tbc.fail("Unexpected Exception: " + e.getClass().getName()
-					+ " [Message: " + e.getMessage() + "]");
+			tbc.failUnexpectedException(e);
 		} finally {
 			tbc.cleanUp(session,TestExecPluginActivator.LEAF_NODE);
 			tbc.cleanAcl(TestExecPluginActivator.INTERIOR_NODE);
@@ -285,15 +276,14 @@ public class AclConstraints {
 
             tbc.setPermissions(new PermissionInfo(DmtPrincipalPermission.class.getName(),DmtConstants.PRINCIPAL,"*"));
             session = tbc.getDmtAdmin().getSession(DmtConstants.PRINCIPAL,TestExecPluginActivator.LEAF_NODE,DmtSession.LOCK_TYPE_EXCLUSIVE);
-            session.setNodeAcl(TestExecPluginActivator.LEAF_NODE,new org.osgi.service.dmt.Acl("Get=*"));
+            session.setNodeAcl(TestExecPluginActivator.LEAF_NODE,new info.dmtree.Acl("Get=*"));
 			tbc.failException("",DmtException.class);
 		} catch (DmtException e) {	
 			tbc.assertEquals("Asserts that Replace access on a leaf node does not allow changing the ACL property itself.",
 			    DmtException.PERMISSION_DENIED,e.getCode());
 			
 		} catch (Exception e) {
-			tbc.fail("Unexpected Exception: " + e.getClass().getName()
-					+ " [Message: " + e.getMessage() + "]");
+			tbc.failUnexpectedException(e);
 		} finally {
 			tbc.cleanUp(session,TestExecPluginActivator.LEAF_NODE);
             tbc.cleanAcl(TestExecPluginActivator.INTERIOR_NODE);
@@ -315,14 +305,13 @@ public class AclConstraints {
                     DmtSession.LOCK_TYPE_EXCLUSIVE);
 
             session.setNodeAcl(TestExecPluginActivator.INTERIOR_NODE,
-                    new org.osgi.service.dmt.Acl("Replace=*"));
+                    new info.dmtree.Acl("Replace=*"));
 
             session.deleteNode(TestExecPluginActivator.INTERIOR_NODE);
 
             tbc.pass("ACLs is only verified by the Dmt Admin service when the session has an associated principal.");
         } catch (Exception e) {
-            tbc.fail("Unexpected Exception: " + e.getClass().getName()
-                    + " [Message: " + e.getMessage() + "]");
+        	tbc.failUnexpectedException(e);
         } finally {
             tbc.closeSession(session);
         }
@@ -357,8 +346,7 @@ public class AclConstraints {
                 aclParent.equals(session.getEffectiveNodeAcl(TestExecPluginActivator.INEXISTENT_NODE)));
             
         } catch (Exception e) {
-            tbc.fail("Unexpected Exception: " + e.getClass().getName()
-                + " [Message: " + e.getMessage() + "]");
+        	tbc.failUnexpectedException(e);
         } finally {
             tbc.cleanUp(session, TestExecPluginActivator.INTERIOR_NODE);
             tbc.cleanAcl(TestExecPluginActivator.ROOT);
@@ -401,8 +389,7 @@ public class AclConstraints {
             		aclExpected.equals(session.getNodeAcl(TestExecPluginActivator.INEXISTENT_NODE)));
             
         } catch (Exception e) {
-            tbc.fail("Unexpected Exception: " + e.getClass().getName()
-                + " [Message: " + e.getMessage() + "]");
+        	tbc.failUnexpectedException(e);
         } finally {
             tbc.cleanUp(session, TestExecPluginActivator.INTERIOR_NODE);
             tbc.cleanAcl(TestExecPluginActivator.ROOT);
@@ -422,8 +409,7 @@ public class AclConstraints {
             tbc.assertTrue("Asserts that Acl is a public final class", aclModifiers == (Modifier.FINAL | Modifier.PUBLIC));
             
         } catch (Exception e) {
-            tbc.fail("Unexpected Exception: " + e.getClass().getName()
-                + " [Message: " + e.getMessage() + "]");
+        	tbc.failUnexpectedException(e);
         }
     }
 }

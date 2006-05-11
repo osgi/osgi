@@ -39,7 +39,7 @@
 
 package org.osgi.test.cases.dmt.tc2.tb1.DmtSession;
 
-import org.osgi.service.dmt.DmtSession;
+import info.dmtree.DmtSession;
 import org.osgi.service.permissionadmin.PermissionInfo;
 import org.osgi.test.cases.dmt.tc2.tbc.DmtTestControl;
 import org.osgi.test.cases.dmt.tc2.tbc.TestInterface;
@@ -84,8 +84,7 @@ public class GetSessionId implements TestInterface {
 					"Asserting that session1 and session2 has differents ids.",
 					(session1.getSessionId() != session2.getSessionId()));
 		} catch (Exception e) {
-			tbc.fail("Unexpected Exception: " + e.getClass().getName()
-					+ " [Message: " + e.getMessage() + "]");
+			tbc.failUnexpectedException(e);
 		} finally {
 			tbc.closeSession(session1);
             tbc.closeSession(session2);

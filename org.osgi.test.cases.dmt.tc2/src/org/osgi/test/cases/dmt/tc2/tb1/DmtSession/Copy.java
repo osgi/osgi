@@ -42,11 +42,13 @@
 
 package org.osgi.test.cases.dmt.tc2.tb1.DmtSession;
 
-import org.osgi.service.dmt.Acl;
-import org.osgi.service.dmt.DmtException;
-import org.osgi.service.dmt.DmtSession;
-import org.osgi.service.dmt.security.DmtPermission;
-import org.osgi.service.dmt.security.DmtPrincipalPermission;
+import info.dmtree.Acl;
+import info.dmtree.DmtException;
+import info.dmtree.DmtSession;
+import info.dmtree.Uri;
+import info.dmtree.security.DmtPermission;
+import info.dmtree.security.DmtPrincipalPermission;
+
 import org.osgi.service.permissionadmin.PermissionInfo;
 import org.osgi.test.cases.dmt.tc2.tbc.DmtConstants;
 import org.osgi.test.cases.dmt.tc2.tbc.DmtTestControl;
@@ -125,8 +127,7 @@ public class Copy implements TestInterface {
 					"Asserting that DmtException code is COMMAND_NOT_ALLOWED",
 					DmtException.COMMAND_NOT_ALLOWED, e.getCode());
 		} catch (Exception e) {
-			tbc.fail("Expected " + DmtException.class.getName() + " but was "
-					+ e.getClass().getName());
+			tbc.failExpectedOtherException(DmtException.class, e);
 		} finally {
 			tbc.closeSession(session);
 		}
@@ -154,8 +155,7 @@ public class Copy implements TestInterface {
 					"Asserting that DmtException code is NODE_NOT_FOUND",
 					DmtException.NODE_NOT_FOUND, e.getCode());
 		} catch (Exception e) {
-			tbc.fail("Expected " + DmtException.class.getName() + " but was "
-					+ e.getClass().getName());
+			tbc.failExpectedOtherException(DmtException.class, e);
 		} finally {
 			tbc.closeSession(session);
 		}
@@ -181,8 +181,7 @@ public class Copy implements TestInterface {
 					"Asserting that DmtException code is NODE_ALREADY_EXISTS",
 					DmtException.NODE_ALREADY_EXISTS, e.getCode());
 		} catch (Exception e) {
-			tbc.fail("Expected " + DmtException.class.getName() + " but was "
-					+ e.getClass().getName());
+			tbc.failExpectedOtherException(DmtException.class, e);
 		} finally {
 			tbc.closeSession(session);
 		}
@@ -211,8 +210,7 @@ public class Copy implements TestInterface {
                 TestExecPluginActivator.INEXISTENT_NODE, false);
             tbc.pass("A node could be copied with the right permission");
         } catch (Exception e) {
-            tbc.fail("Unexpected Exception: " + e.getClass().getName()
-                + " [Message: " + e.getMessage() + "]");
+        	tbc.failUnexpectedException(e);
         } finally {
             tbc.setPermissions(new PermissionInfo(
                 DmtPermission.class.getName(),
@@ -247,8 +245,7 @@ public class Copy implements TestInterface {
 			tbc
 					.pass("This method asserts that the method is called if it has the right Acl");
 		} catch (Exception e) {
-			tbc.fail("Unexpected Exception: " + e.getClass().getName()
-					+ " [Message: " + e.getMessage() + "]");
+			tbc.failUnexpectedException(e);
 		} finally {
             tbc.setPermissions(new PermissionInfo(DmtPermission.class.getName(), DmtConstants.ALL_NODES,DmtConstants.ALL_ACTIONS));
             tbc.cleanUp(session,TestExecPluginActivator.INTERIOR_NODE);
@@ -275,8 +272,7 @@ public class Copy implements TestInterface {
 
 			tbc.pass("A relative URI can be used with Copy.");
 		} catch (Exception e) {
-			tbc.fail("Unexpected Exception: " + e.getClass().getName()
-					+ " [Message: " + e.getMessage() + "]");
+			tbc.failUnexpectedException(e);
 		} finally {
 			tbc.closeSession(session);
 		}
@@ -302,8 +298,7 @@ public class Copy implements TestInterface {
 		} catch (IllegalStateException e) {
 			tbc.pass("IllegalStateException correctly thrown");
 		} catch (Exception e) {
-			tbc.fail("Expected " + IllegalStateException.class.getName() + " but was "
-				+ e.getClass().getName());
+			tbc.failExpectedOtherException(IllegalStateException.class, e);
 		} finally {
 			tbc.closeSession(session);
 		}
@@ -335,8 +330,7 @@ public class Copy implements TestInterface {
 					"Asserting that DmtException code is PERMISSION_DENIED",
 					DmtException.PERMISSION_DENIED, e.getCode());
 		} catch (Exception e) {
-			tbc.fail("Expected " + DmtException.class.getName() + " but was "
-					+ e.getClass().getName());
+			tbc.failExpectedOtherException(DmtException.class, e);
 		} finally {
             tbc.setPermissions(new PermissionInfo(DmtPermission.class.getName(), DmtConstants.ALL_NODES,DmtConstants.ALL_ACTIONS));
 			tbc.cleanUp(session,TestExecPluginActivator.INTERIOR_NODE);
@@ -376,8 +370,7 @@ public class Copy implements TestInterface {
 					"Asserting that DmtException code is PERMISSION_DENIED",
 					DmtException.PERMISSION_DENIED, e.getCode());
 		} catch (Exception e) {
-			tbc.fail("Expected " + DmtException.class.getName() + " but was "
-					+ e.getClass().getName());
+			tbc.failExpectedOtherException(DmtException.class, e);
 		} finally {
             tbc.setPermissions(new PermissionInfo(DmtPermission.class.getName(), DmtConstants.ALL_NODES,DmtConstants.ALL_ACTIONS));
             tbc.cleanUp(session,TestExecPluginActivator.INTERIOR_NODE);
@@ -408,8 +401,7 @@ public class Copy implements TestInterface {
 		} catch (SecurityException e) {
 			tbc.pass("The Exception was SecurityException");
 		} catch (Exception e) {
-			tbc.fail("Expected " + SecurityException.class.getName()
-					+ " but was " + e.getClass().getName());
+			tbc.failExpectedOtherException(SecurityException.class, e);
 		} finally {
             tbc.setPermissions(new PermissionInfo(DmtPermission.class.getName(), DmtConstants.ALL_NODES,DmtConstants.ALL_ACTIONS));
             tbc.cleanUp(session, null);
@@ -439,8 +431,7 @@ public class Copy implements TestInterface {
 		} catch (SecurityException e) {
 			tbc.pass("The Exception was SecurityException");
 		} catch (Exception e) {
-			tbc.fail("Expected " + SecurityException.class.getName()
-					+ " but was " + e.getClass().getName());
+			tbc.failExpectedOtherException(SecurityException.class, e);
 		} finally {
             tbc.setPermissions(new PermissionInfo(DmtPermission.class.getName(), DmtConstants.ALL_NODES,DmtConstants.ALL_ACTIONS));
             tbc.cleanUp(session, null);
@@ -465,8 +456,7 @@ public class Copy implements TestInterface {
 					"Asserting that DmtException code is INVALID_URI",
 					DmtException.INVALID_URI, e.getCode());
 		} catch (Exception e) {
-			tbc.fail("Expected " + DmtException.class.getName() + " but was "
-					+ e.getClass().getName());
+			tbc.failExpectedOtherException(DmtException.class, e);
 		} finally {
 			tbc.closeSession(session);
 		}
@@ -490,8 +480,7 @@ public class Copy implements TestInterface {
 					"Asserting that DmtException code is NODE_ALREADY_EXISTS",
 					DmtException.NODE_ALREADY_EXISTS, e.getCode());
 		} catch (Exception e) {
-			tbc.fail("Expected " + DmtException.class.getName() + " but was "
-					+ e.getClass().getName());
+			tbc.failExpectedOtherException(DmtException.class, e);;
 		} finally {
 			tbc.closeSession(session);
 		}
@@ -516,8 +505,7 @@ public class Copy implements TestInterface {
 					"Asserting that DmtException code is INVALID_URI",
 					DmtException.INVALID_URI, e.getCode());
 		} catch (Exception e) {
-			tbc.fail("Expected " + DmtException.class.getName() + " but was "
-					+ e.getClass().getName());
+			tbc.failExpectedOtherException(DmtException.class, e);
 		} finally {
 			tbc.closeSession(session);
 		}
@@ -541,8 +529,7 @@ public class Copy implements TestInterface {
 					"Asserting that DmtException code is INVALID_URI",
 					DmtException.INVALID_URI, e.getCode());
 		} catch (Exception e) {
-			tbc.fail("Expected " + DmtException.class.getName() + " but was "
-					+ e.getClass().getName());
+			tbc.failExpectedOtherException(DmtException.class, e);
 		} finally {
 			tbc.closeSession(session);
 		}
@@ -567,8 +554,7 @@ public class Copy implements TestInterface {
 					"Asserting that DmtException code is INVALID_URI",
 					DmtException.INVALID_URI, e.getCode());
 		} catch (Exception e) {
-			tbc.fail("Expected " + DmtException.class.getName() + " but was "
-					+ e.getClass().getName());
+			tbc.failExpectedOtherException(DmtException.class, e);
 		} finally {
 			tbc.closeSession(session);
 		}
@@ -593,8 +579,7 @@ public class Copy implements TestInterface {
 					"Asserting that DmtException code is INVALID_URI",
 					DmtException.INVALID_URI, e.getCode());
 		} catch (Exception e) {
-			tbc.fail("Expected " + DmtException.class.getName() + " but was "
-					+ e.getClass().getName());
+			tbc.failExpectedOtherException(DmtException.class, e);
 		} finally {
 			tbc.closeSession(session);
 		}
@@ -611,13 +596,14 @@ public class Copy implements TestInterface {
 			tbc.log("#testCopy018");
 			session = tbc.getDmtAdmin().getSession(DmtConstants.OSGi_ROOT,
 					DmtSession.LOCK_TYPE_EXCLUSIVE);
-			if (DmtConstants.MAXIMUM_NODE_LENGTH>0) {
+			
+			if (Uri.getMaxSegmentNameLength()!=Integer.MAX_VALUE) {
 			    String uriTooLong = DmtTestControl.getSegmentTooLong(TestExecPluginActivator.ROOT);
 			    session.copy(TestExecPluginActivator.INTERIOR_NODE,uriTooLong, true);
 			    tbc.failException("", DmtException.class);
 			} else {
-		        tbc.log("#There is no maximum node length , " +
-        		"DmtException.URI_TOO_LONG in this case will not be tested");
+		        tbc.log("#There is no upper limit on the length of segment names, " +
+        			"DmtException.URI_TOO_LONG will not be tested in this case");
 			}
 			
 		} catch (DmtException e) {
@@ -625,8 +611,7 @@ public class Copy implements TestInterface {
 					"Asserting that DmtException code is URI_TOO_LONG",
 					DmtException.URI_TOO_LONG, e.getCode());
 		} catch (Exception e) {
-			tbc.fail("Expected " + DmtException.class.getName() + " but was "
-					+ e.getClass().getName());
+			tbc.failExpectedOtherException(DmtException.class, e);
 		} finally {
 			tbc.closeSession(session);
 		}
@@ -643,22 +628,21 @@ public class Copy implements TestInterface {
 			tbc.log("#testCopy019");
 			session = tbc.getDmtAdmin().getSession(DmtConstants.OSGi_ROOT,
 					DmtSession.LOCK_TYPE_EXCLUSIVE);
-			if (DmtConstants.MAXIMUM_NODE_SEGMENTS>0) {
+			if (Uri.getMaxUriSegments()!=Integer.MAX_VALUE) {
 			    String uriTooLong = DmtTestControl.getExcedingSegmentsUri(TestExecPluginActivator.ROOT);
 				session.copy(TestExecPluginActivator.INTERIOR_NODE,uriTooLong, true);
 				tbc.failException("", DmtException.class);
 				
 			} else {
-		        tbc.log("#There is no maximum node segments, " +
-        		"DmtException.URI_TOO_LONG in this case will not be tested");
+		        tbc.log("#There is no upper limit on the number of URI segments, " +
+        		"DmtException.URI_TOO_LONG will not be tested in this case");
 			}
 		} catch (DmtException e) {
 			tbc.assertEquals(
 					"Asserting that DmtException code is URI_TOO_LONG",
 					DmtException.URI_TOO_LONG, e.getCode());
 		} catch (Exception e) {
-			tbc.fail("Expected " + DmtException.class.getName() + " but was "
-					+ e.getClass().getName());
+			tbc.failExpectedOtherException(DmtException.class, e);
 		} finally {
 			tbc.closeSession(session);
 		}
@@ -685,8 +669,7 @@ public class Copy implements TestInterface {
 			tbc.assertEquals("Asserting that DmtException code is TRANSACTION_ERROR",
 					DmtException.TRANSACTION_ERROR, e.getCode());
 		} catch (Exception e) {
-			tbc.fail("Expected " + DmtException.class.getName() + " but was "
-					+ e.getClass().getName());
+			tbc.failExpectedOtherException(DmtException.class, e);
 		} finally {
 			tbc.closeSession(session);
 		}
@@ -713,8 +696,7 @@ public class Copy implements TestInterface {
 			tbc.assertEquals("Asserting that DmtException code is TRANSACTION_ERROR",
 					DmtException.TRANSACTION_ERROR, e.getCode());
 		} catch (Exception e) {
-			tbc.fail("Expected " + DmtException.class.getName() + " but was "
-					+ e.getClass().getName());
+			tbc.failExpectedOtherException(DmtException.class, e);
 		} finally {
 			tbc.closeSession(session);
 		}
@@ -749,8 +731,7 @@ public class Copy implements TestInterface {
 			tbc.pass("Copy method could called when the caller has DmtPermission for the " +
 					"target node with the Replace action and the node has a title ");
 		} catch (Exception e) {
-            tbc.fail("Unexpected Exception: " + e.getClass().getName()
-                    + " [Message: " + e.getMessage() + "]");
+			tbc.failUnexpectedException(e);
 
 		} finally {
             tbc.setPermissions(new PermissionInfo(DmtPermission.class.getName(), DmtConstants.ALL_NODES,DmtConstants.ALL_ACTIONS));
@@ -788,8 +769,7 @@ public class Copy implements TestInterface {
 		} catch (SecurityException e) {
 			tbc.pass("The Exception was SecurityException");
 		} catch (Exception e) {
-			tbc.fail("Expected " + SecurityException.class.getName()
-					+ " but was " + e.getClass().getName());
+			tbc.failExpectedOtherException(SecurityException.class, e);
 		} finally {
             tbc.setPermissions(new PermissionInfo(DmtPermission.class.getName(), DmtConstants.ALL_NODES,DmtConstants.ALL_ACTIONS));
             tbc.cleanUp(session, null);
@@ -820,8 +800,7 @@ public class Copy implements TestInterface {
 					"Asserting that DmtException code is COMMAND_NOT_ALLOWED",
 					DmtException.COMMAND_NOT_ALLOWED, e.getCode());
 		} catch (Exception e) {
-			tbc.fail("Expected " + DmtException.class.getName() + " but was "
-					+ e.getClass().getName());
+			tbc.failExpectedOtherException(DmtException.class, e);
 		} finally {
 			tbc.closeSession(session);
 		}
@@ -850,8 +829,7 @@ public class Copy implements TestInterface {
 					"Asserting that DmtException code is COMMAND_NOT_ALLOWED",
 					DmtException.COMMAND_NOT_ALLOWED, e.getCode());
 		} catch (Exception e) {
-			tbc.fail("Expected " + DmtException.class.getName() + " but was "
-					+ e.getClass().getName());
+			tbc.failExpectedOtherException(DmtException.class, e);
 		} finally {
 			tbc.closeSession(session);
 		}
@@ -880,8 +858,7 @@ public class Copy implements TestInterface {
 					"Asserting that DmtException code is COMMAND_NOT_ALLOWED",
 					DmtException.COMMAND_NOT_ALLOWED, e.getCode());
 		} catch (Exception e) {
-			tbc.fail("Expected " + DmtException.class.getName() + " but was "
-					+ e.getClass().getName());
+			tbc.failExpectedOtherException(DmtException.class, e);
 		} finally {
 			tbc.closeSession(session);
 		}
@@ -910,8 +887,7 @@ public class Copy implements TestInterface {
 					"Asserting that DmtException code is COMMAND_NOT_ALLOWED",
 					DmtException.COMMAND_NOT_ALLOWED, e.getCode());
 		} catch (Exception e) {
-			tbc.fail("Expected " + DmtException.class.getName() + " but was "
-					+ e.getClass().getName());
+			tbc.failExpectedOtherException(DmtException.class, e);
 		} finally {
 			tbc.closeSession(session);
 		}
@@ -939,8 +915,7 @@ public class Copy implements TestInterface {
 					"Asserting that DmtException code is COMMAND_FAILED",
 					DmtException.COMMAND_FAILED, e.getCode());
 		} catch (Exception e) {
-			tbc.fail("Expected " + DmtException.class.getName() + " but was "
-					+ e.getClass().getName());
+			tbc.failExpectedOtherException(DmtException.class, e);
 		} finally {
 			tbc.closeSession(session);
 		}

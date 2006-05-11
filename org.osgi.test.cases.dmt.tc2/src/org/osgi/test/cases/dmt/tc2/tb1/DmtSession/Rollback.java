@@ -39,7 +39,7 @@
 
 package org.osgi.test.cases.dmt.tc2.tb1.DmtSession;
 
-import org.osgi.service.dmt.DmtSession;
+import info.dmtree.DmtSession;
 import org.osgi.service.permissionadmin.PermissionInfo;
 import org.osgi.test.cases.dmt.tc2.tbc.DmtTestControl;
 import org.osgi.test.cases.dmt.tc2.tbc.TestInterface;
@@ -84,8 +84,7 @@ public class Rollback implements TestInterface {
 		} catch (IllegalStateException e) {
 			tbc.pass("IllegalStateException correctly thrown");
 		} catch (Exception e) {
-			tbc.fail("Unexpected Exception: " + e.getClass().getName()
-					+ " [Message: " + e.getMessage() + "]");
+			tbc.failUnexpectedException(e);
 		} finally {
 			tbc.closeSession(session);
 		}
@@ -108,8 +107,7 @@ public class Rollback implements TestInterface {
 		} catch (IllegalStateException e) {
 			tbc.pass("IllegalStateException correctly thrown");
 		} catch (Exception e) {
-			tbc.fail("Unexpected Exception: " + e.getClass().getName()
-					+ " [Message: " + e.getMessage() + "]");
+			tbc.failUnexpectedException(e);
 		} finally {
 			tbc.closeSession(session);
 		}
@@ -129,7 +127,7 @@ public class Rollback implements TestInterface {
             session.rollback();
             tbc.assertEquals("Asserting that after a rollback(), the session is not closed.", session.getState(), DmtSession.STATE_OPEN);
         } catch (Exception e) {
-        	tbc.fail("Unexpected Exception: " + e.getClass().getName() + " [Message: " + e.getMessage() +"]");
+        	tbc.failUnexpectedException(e);
         } finally {
             tbc.closeSession(session);
         }

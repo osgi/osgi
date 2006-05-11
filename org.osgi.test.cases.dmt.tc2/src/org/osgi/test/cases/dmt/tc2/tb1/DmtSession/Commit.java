@@ -36,7 +36,8 @@
 
 package org.osgi.test.cases.dmt.tc2.tb1.DmtSession;
 
-import org.osgi.service.dmt.DmtSession;
+import info.dmtree.DmtSession;
+
 import org.osgi.service.permissionadmin.PermissionInfo;
 import org.osgi.test.cases.dmt.tc2.tbc.DmtTestControl;
 import org.osgi.test.cases.dmt.tc2.tbc.TestInterface;
@@ -81,8 +82,7 @@ public class Commit implements TestInterface {
 		} catch (IllegalStateException e) {
 			tbc.pass("IllegalStateException is thrown if the session is tried to commit a non-atomic session");
 		} catch (Exception e) {
-			tbc.fail("Expected " + IllegalStateException.class.getName() + " but was "
-					+ e.getClass().getName());
+			tbc.failExpectedOtherException(IllegalStateException.class, e);
 		} finally {
 			tbc.closeSession(session);
 		}
@@ -104,8 +104,7 @@ public class Commit implements TestInterface {
 		} catch (IllegalStateException e) {
 			tbc.pass("IllegalStateException is thrown if the session is tried to commit a non-atomic session");
 		} catch (Exception e) {
-			tbc.fail("Expected " + IllegalStateException.class.getName() + " but was "
-					+ e.getClass().getName());
+			tbc.failExpectedOtherException(IllegalStateException.class, e);
 		} finally {
 			tbc.closeSession(session);
 		}
@@ -126,8 +125,7 @@ public class Commit implements TestInterface {
             session.close();
             tbc.pass("Asserting that session was committed correctly");
         } catch (Exception e) {
-            tbc.fail("Expected " + IllegalStateException.class.getName()
-                    + " but was " + e.getClass().getName());
+        	tbc.failExpectedOtherException(IllegalStateException.class, e);
         } finally {
             tbc.closeSession(session);
         }
@@ -146,7 +144,7 @@ public class Commit implements TestInterface {
             session.commit();
             tbc.assertEquals("Asserting that after a commit(), the session is not closed.", session.getState(), DmtSession.STATE_OPEN);
         } catch (Exception e) {
-        	tbc.fail("Unexpected Exception: " + e.getClass().getName() + " [Message: " + e.getMessage() +"]");
+        	tbc.failUnexpectedException(e);
         } finally {
             tbc.closeSession(session);
         }

@@ -39,11 +39,11 @@
 
 package org.osgi.test.cases.dmt.tc2.tb1.DmtSession;
 
-import org.osgi.service.dmt.Acl;
-import org.osgi.service.dmt.DmtException;
-import org.osgi.service.dmt.security.DmtPermission;
-import org.osgi.service.dmt.security.DmtPrincipalPermission;
-import org.osgi.service.dmt.DmtSession;
+import info.dmtree.Acl;
+import info.dmtree.DmtException;
+import info.dmtree.security.DmtPermission;
+import info.dmtree.security.DmtPrincipalPermission;
+import info.dmtree.DmtSession;
 import org.osgi.service.permissionadmin.PermissionInfo;
 import org.osgi.test.cases.dmt.tc2.tbc.DmtConstants;
 import org.osgi.test.cases.dmt.tc2.tbc.DmtTestControl;
@@ -103,8 +103,7 @@ public class GetSetNodeAcl implements TestInterface {
 					.getNodeAcl(DmtConstants.OSGi_LOG).toString());
 
 		} catch (Exception e) {
-			tbc.fail("Unexpected Exception: " + e.getClass().getName()
-					+ " [Message: " + e.getMessage() + "]");
+			tbc.failUnexpectedException(e);
 		} finally {
 			tbc.cleanUp(session, DmtConstants.OSGi_LOG);
 		}
@@ -133,8 +132,7 @@ public class GetSetNodeAcl implements TestInterface {
 					"Asserting that DmtException code was NODE_NOT_FOUND.",
 					DmtException.NODE_NOT_FOUND, e.getCode());
 		} catch (Exception e) {
-			tbc.fail("Expected " + IllegalStateException.class.getName()
-					+ " but was " + e.getClass().getName());
+			tbc.failExpectedOtherException(DmtException.class, e);
 		} finally {
 			tbc.cleanUp(session, TestExecPluginActivator.INEXISTENT_NODE);
 		}
@@ -168,7 +166,7 @@ public class GetSetNodeAcl implements TestInterface {
 
 			tbc.assertEquals("Asserts that setNodeAcl really sets the Acl of a node",acl,session.getNodeAcl(DmtConstants.OSGi_LOG));
 		} catch (Exception e) {
-			tbc.fail("Unexpected Exception: " + e.getClass().getName() + " [Message: " + e.getMessage() +"]");
+			tbc.failUnexpectedException(e);
 		} finally {
             tbc.setPermissions(new PermissionInfo(DmtPermission.class.getName(), DmtConstants.ALL_NODES,DmtConstants.ALL_ACTIONS));
             tbc.cleanUp(session,DmtConstants.OSGi_LOG);
@@ -201,7 +199,7 @@ public class GetSetNodeAcl implements TestInterface {
 			
             tbc.assertEquals("Asserts that setNodeAcl really sets the Acl of a node",acl,session.getNodeAcl(DmtConstants.OSGi_LOG));
 		} catch (Exception e) {
-			tbc.fail("Unexpected Exception: " + e.getClass().getName() + " [Message: " + e.getMessage() +"]");
+			tbc.failUnexpectedException(e);
 		} finally {
             tbc.setPermissions(new PermissionInfo(DmtPermission.class.getName(), DmtConstants.ALL_NODES,DmtConstants.ALL_ACTIONS));
             tbc.cleanUp(session, DmtConstants.OSGi_LOG);		
@@ -230,8 +228,7 @@ public class GetSetNodeAcl implements TestInterface {
 					"Asserting that DmtException code was NODE_NOT_FOUND.",
 					DmtException.NODE_NOT_FOUND, e.getCode());
 		} catch (Exception e) {
-			tbc.fail("Expected " + DmtException.class.getName() + " but was "
-					+ e.getClass().getName());
+			tbc.failExpectedOtherException(DmtException.class, e);
 		} finally {
 			tbc.closeSession(session);
 		}
@@ -255,8 +252,7 @@ public class GetSetNodeAcl implements TestInterface {
 					.getNodeAcl(TestExecPluginActivator.INTERIOR_NODE));
 
 		} catch (Exception e) {
-			tbc.fail("Unexpected Exception: " + e.getClass().getName()
-					+ " [Message: " + e.getMessage() + "]");
+			tbc.failUnexpectedException(e);
 		} finally {
 			tbc.closeSession(session);
 		}
@@ -282,7 +278,7 @@ public class GetSetNodeAcl implements TestInterface {
 
 			tbc.pass("getNodeAcl correctly executed");
 		} catch (Exception e) {
-			tbc.fail("Unexpected Exception: " + e.getClass().getName() + " [Message: " + e.getMessage() +"]");
+			tbc.failUnexpectedException(e);
 		} finally {
             tbc.setPermissions(new PermissionInfo(DmtPermission.class.getName(), DmtConstants.ALL_NODES,DmtConstants.ALL_ACTIONS));
             tbc.cleanUp(session,DmtConstants.OSGi_LOG);
@@ -310,7 +306,7 @@ public class GetSetNodeAcl implements TestInterface {
 
 			tbc.pass("getNodeAcl correctly executed");
 		} catch (Exception e) {
-			tbc.fail("Unexpected Exception: " + e.getClass().getName() + " [Message: " + e.getMessage() +"]");
+			tbc.failUnexpectedException(e);
 		} finally {
             tbc.setPermissions(new PermissionInfo(DmtPermission.class.getName(), DmtConstants.ALL_NODES,DmtConstants.ALL_ACTIONS));
             tbc.cleanUp(session, null);
@@ -337,8 +333,7 @@ public class GetSetNodeAcl implements TestInterface {
 
 			tbc.pass("A relative URI can be used with getNodeAcl.");
 		} catch (Exception e) {
-			tbc.fail("Unexpected Exception: " + e.getClass().getName()
-					+ " [Message: " + e.getMessage() + "]");
+			tbc.failUnexpectedException(e);
 		} finally {
 			tbc.closeSession(session);
 		}
@@ -363,8 +358,7 @@ public class GetSetNodeAcl implements TestInterface {
             tbc.assertEquals("A relative URI can be used with setNodeAcl.",acl,session.getNodeAcl(TestExecPluginActivator.LEAF_NODE));
 			
 		} catch (Exception e) {
-			tbc.fail("Unexpected Exception: " + e.getClass().getName()
-					+ " [Message: " + e.getMessage() + "]");
+			tbc.failUnexpectedException(e);
 		} finally {
 			tbc.closeSession(session);
 		}
@@ -388,8 +382,7 @@ public class GetSetNodeAcl implements TestInterface {
 		} catch (IllegalStateException e) {
 			tbc.pass("IllegalStateException correctly thrown");
 		} catch (Exception e) {
-			tbc.fail("Expected " + IllegalStateException.class.getName() + " but was "
-				+ e.getClass().getName());
+			tbc.failExpectedOtherException(IllegalStateException.class, e);
 		} finally {
 			tbc.closeSession(session);
 		}
@@ -417,8 +410,7 @@ public class GetSetNodeAcl implements TestInterface {
 					"Asserting that DmtException code was COMMAND_NOT_ALLOWED.",
 					DmtException.COMMAND_NOT_ALLOWED, e.getCode());
 		} catch (Exception e) {
-			tbc.fail("Expected " + DmtException.class.getName() + " but was "
-					+ e.getClass().getName());
+			tbc.failExpectedOtherException(DmtException.class, e);
 		} finally {
             tbc.setPermissions(new PermissionInfo(DmtPermission.class.getName(), DmtConstants.ALL_NODES,DmtConstants.ALL_ACTIONS));
             tbc.closeSession(session);
@@ -448,8 +440,7 @@ public class GetSetNodeAcl implements TestInterface {
 			tbc.pass("Asserts that an empty string as relative URI means the root " +
 					"URI the session was opened with");
 		} catch (Exception e) {
-			tbc.fail("Unexpected Exception: " + e.getClass().getName()
-					+ " [Message: " + e.getMessage() + "]");
+			tbc.failUnexpectedException(e);
 		} finally {
 			tbc.closeSession(session);
 		}
@@ -476,8 +467,7 @@ public class GetSetNodeAcl implements TestInterface {
 					"URI the session was opened with",acl,session.getNodeAcl(TestExecPluginActivator.LEAF_NODE));
 
 		} catch (Exception e) {
-			tbc.fail("Unexpected Exception: " + e.getClass().getName()
-					+ " [Message: " + e.getMessage() + "]");
+			tbc.failUnexpectedException(e);
 		} finally {
 			tbc.closeSession(session);
 		}

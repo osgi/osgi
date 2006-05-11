@@ -36,18 +36,18 @@
 
 package org.osgi.test.cases.dmt.tc2.tbc.Plugin.ExecPlugin;
 
-import java.util.Date;
-import java.util.Vector;
+import info.dmtree.DmtData;
+import info.dmtree.DmtException;
+import info.dmtree.DmtSession;
+import info.dmtree.MetaNode;
+import info.dmtree.spi.DataPlugin;
+import info.dmtree.spi.ExecPlugin;
+import info.dmtree.spi.ReadWriteDataSession;
+import info.dmtree.spi.ReadableDataSession;
+import info.dmtree.spi.TransactionalDataSession;
 
-import org.osgi.service.dmt.DmtData;
-import org.osgi.service.dmt.DmtException;
-import org.osgi.service.dmt.DmtSession;
-import org.osgi.service.dmt.MetaNode;
-import org.osgi.service.dmt.spi.DataPlugin;
-import org.osgi.service.dmt.spi.ExecPlugin;
-import org.osgi.service.dmt.spi.ReadWriteDataSession;
-import org.osgi.service.dmt.spi.ReadableDataSession;
-import org.osgi.service.dmt.spi.TransactionalDataSession;
+import java.util.Date;
+
 import org.osgi.test.cases.dmt.tc2.tbc.DmtTestControl;
 
 /**
@@ -72,8 +72,6 @@ public class TestExecPlugin implements DataPlugin, ExecPlugin, TransactionalData
 	private static boolean allUriIsExistent = false;
 	
 	private DmtData dataString = new DmtData("");
-	
-	private DmtData dataComplex = new DmtData(new Vector());
 	
 	public static final String[] CHILDREN_NAMES = new String[] { "leaf_b","leaf_a" };
 	
@@ -160,11 +158,10 @@ public class TestExecPlugin implements DataPlugin, ExecPlugin, TransactionalData
 	}
 
 	public DmtData getNodeValue(String[] nodeUri) throws DmtException {
-		if (tbc.mangleUri(nodeUri).equals(TestExecPluginActivator.INTERIOR_NODE)) {
-			return dataComplex;
-		} else {
+		//if (tbc.mangleUri(nodeUri).equals(TestExecPluginActivator.INTERIOR_NODE)) {
+		//	return dataComplex;
+		//} else {
 			return dataString;
-		}
 	}
 
 	public String getNodeTitle(String[] nodeUri) throws DmtException {

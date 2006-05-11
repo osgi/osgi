@@ -40,11 +40,11 @@
 
 package org.osgi.test.cases.dmt.tc2.tb1.DmtSession;
 
-import org.osgi.service.dmt.Acl;
-import org.osgi.service.dmt.DmtException;
-import org.osgi.service.dmt.security.DmtPermission;
-import org.osgi.service.dmt.security.DmtPrincipalPermission;
-import org.osgi.service.dmt.DmtSession;
+import info.dmtree.Acl;
+import info.dmtree.DmtException;
+import info.dmtree.security.DmtPermission;
+import info.dmtree.security.DmtPrincipalPermission;
+import info.dmtree.DmtSession;
 import org.osgi.service.permissionadmin.PermissionInfo;
 import org.osgi.test.cases.dmt.tc2.tbc.DmtConstants;
 import org.osgi.test.cases.dmt.tc2.tbc.DmtTestControl;
@@ -100,8 +100,7 @@ public class GetChildNodeNames implements TestInterface {
 			tbc.assertEquals("Asserts DmtException.getCode",
 					DmtException.NODE_NOT_FOUND, e.getCode());
 		} catch (Exception e) {
-			tbc.fail("Expected " + DmtException.class.getName() + " but was "
-					+ e.getClass().getName());
+			tbc.failExpectedOtherException(DmtException.class, e);
 		} finally {
 			tbc.closeSession(session);
 		}
@@ -125,7 +124,7 @@ public class GetChildNodeNames implements TestInterface {
 			session.getChildNodeNames(TestExecPluginActivator.INTERIOR_NODE);
 			tbc.pass("getChildNodeNames correctly executed");
 		} catch (Exception e) {
-			tbc.fail("Unexpected Exception: " + e.getClass().getName() + " [Message: " + e.getMessage() +"]");
+			tbc.failUnexpectedException(e);
 		} finally {
             tbc.setPermissions(new PermissionInfo(DmtPermission.class.getName(), DmtConstants.ALL_NODES,DmtConstants.ALL_ACTIONS));
             tbc.cleanUp(session,TestExecPluginActivator.INTERIOR_NODE);
@@ -154,7 +153,7 @@ public class GetChildNodeNames implements TestInterface {
 			
 			tbc.pass("getChildNodeNames correctly executed");
 		} catch (Exception e) {
-			tbc.fail("Unexpected Exception: " + e.getClass().getName() + " [Message: " + e.getMessage() +"]");
+			tbc.failUnexpectedException(e);
 			
 		} finally {
             tbc.setPermissions(new PermissionInfo(DmtPermission.class.getName(), DmtConstants.ALL_NODES,DmtConstants.ALL_ACTIONS));
@@ -184,7 +183,7 @@ public class GetChildNodeNames implements TestInterface {
 			tbc.assertTrue("Asserting if an empty array was returned by DmtAdmin.", childs == null ? false : (childs.length == 0)); 
 			
 		} catch (Exception e) {
-			tbc.fail("Unexpected Exception: " + e.getClass().getName() + " [Message: " + e.getMessage() +"]");
+			tbc.failUnexpectedException(e);
 			
 		} finally {
             tbc.setPermissions(new PermissionInfo(DmtPermission.class.getName(), DmtConstants.ALL_NODES,DmtConstants.ALL_ACTIONS));
@@ -226,7 +225,7 @@ public class GetChildNodeNames implements TestInterface {
 			tbc.assertTrue("Asserting if no null entries exists as elements in the returned array.", !hasNull);
 			
 		} catch (Exception e) {
-			tbc.fail("Unexpected Exception: " + e.getClass().getName() + " [Message: " + e.getMessage() +"]");
+			tbc.failUnexpectedException(e);
 			
 		} finally {
             tbc.setPermissions(new PermissionInfo(DmtPermission.class.getName(), DmtConstants.ALL_NODES,DmtConstants.ALL_ACTIONS));
@@ -251,8 +250,7 @@ public class GetChildNodeNames implements TestInterface {
 
 			tbc.pass("A relative URI can be used with getChildNodeNames.");
 		} catch (Exception e) {
-			tbc.fail("Unexpected Exception: " + e.getClass().getName()
-					+ " [Message: " + e.getMessage() + "]");
+			tbc.failUnexpectedException(e);
 		} finally {
 			tbc.closeSession(session);
 		}
@@ -279,8 +277,7 @@ public class GetChildNodeNames implements TestInterface {
 			tbc.assertEquals("Asserts DmtException.getCode",
 					DmtException.COMMAND_NOT_ALLOWED, e.getCode());
 		} catch (Exception e) {
-			tbc.fail("Expected " + DmtException.class.getName() + " but was "
-					+ e.getClass().getName());
+			tbc.failExpectedOtherException(DmtException.class, e);
 		} finally {
 			tbc.closeSession(session);
 		}
@@ -303,8 +300,7 @@ public class GetChildNodeNames implements TestInterface {
 			tbc.pass("Asserts that an empty string as relative URI means the root" +
 					" URI the session was opened with");
 		} catch (Exception e) {
-			tbc.fail("Unexpected Exception: " + e.getClass().getName()
-					+ " [Message: " + e.getMessage() + "]");
+			tbc.failUnexpectedException(e);
 		} finally {
 			tbc.closeSession(session);
 		}

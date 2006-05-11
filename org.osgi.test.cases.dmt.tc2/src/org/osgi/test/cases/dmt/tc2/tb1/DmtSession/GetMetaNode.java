@@ -39,11 +39,11 @@
 
 package org.osgi.test.cases.dmt.tc2.tb1.DmtSession;
 
-import org.osgi.service.dmt.Acl;
-import org.osgi.service.dmt.DmtSession;
-import org.osgi.service.dmt.MetaNode;
-import org.osgi.service.dmt.security.DmtPermission;
-import org.osgi.service.dmt.security.DmtPrincipalPermission;
+import info.dmtree.Acl;
+import info.dmtree.DmtSession;
+import info.dmtree.MetaNode;
+import info.dmtree.security.DmtPermission;
+import info.dmtree.security.DmtPrincipalPermission;
 import org.osgi.service.permissionadmin.PermissionInfo;
 import org.osgi.test.cases.dmt.tc2.tbc.DmtConstants;
 import org.osgi.test.cases.dmt.tc2.tbc.DmtTestControl;
@@ -97,7 +97,7 @@ public class GetMetaNode implements TestInterface {
 					metaNode instanceof TestMetaNode);
 			
 		} catch (Exception e) {
-			tbc.fail("Unexpected Exception: " + e.getClass().getName() + " [Message: " + e.getMessage() +"]");
+			tbc.failUnexpectedException(e);
 		} finally {
 			tbc.closeSession(session);
 		}
@@ -122,7 +122,7 @@ public class GetMetaNode implements TestInterface {
 
 			tbc.pass("getMetaNode was successfully executed");
 		} catch (Exception e) {
-			tbc.fail("Unexpected Exception: " + e.getClass().getName() + " [Message: " + e.getMessage() +"]");
+			tbc.failUnexpectedException(e);
 		} finally {
             tbc.setPermissions(new PermissionInfo(DmtPermission.class.getName(), DmtConstants.ALL_NODES,DmtConstants.ALL_ACTIONS));
             tbc.cleanUp(session,TestExecPluginActivator.INTERIOR_NODE);
@@ -150,7 +150,7 @@ public class GetMetaNode implements TestInterface {
 
 			tbc.pass("getMetaNode was successfully executed");
 		} catch (Exception e) {
-			tbc.fail("Unexpected Exception: " + e.getClass().getName() + " [Message: " + e.getMessage() +"]");
+			tbc.failUnexpectedException(e);
 		} finally {
             tbc.setPermissions(new PermissionInfo(DmtPermission.class.getName(), DmtConstants.ALL_NODES,DmtConstants.ALL_ACTIONS));
             tbc.cleanUp(session, null);
@@ -175,8 +175,7 @@ public class GetMetaNode implements TestInterface {
 
 			tbc.pass("A relative URI can be used with getMetaNode.");
 		} catch (Exception e) {
-			tbc.fail("Unexpected Exception: " + e.getClass().getName()
-					+ " [Message: " + e.getMessage() + "]");
+			tbc.failUnexpectedException(e);
 		} finally {
 			tbc.closeSession(session);
 		}
@@ -198,8 +197,7 @@ public class GetMetaNode implements TestInterface {
                     "available for the given node",session.getMetaNode(TestNonAtomicPluginActivator.INTERIOR_NODE));
             
         } catch (Exception e) {
-            tbc.fail("Unexpected Exception: " + e.getClass().getName()
-                    + " [Message: " + e.getMessage() + "]");
+        	tbc.failUnexpectedException(e);
         } finally {
             tbc.closeSession(session);
         }
@@ -220,8 +218,7 @@ public class GetMetaNode implements TestInterface {
             tbc.assertNotNull("Asserts that a node does not have to exist for having meta-data associated with it",session.getMetaNode(TestExecPluginActivator.INEXISTENT_LEAF_NODE));
             
         } catch (Exception e) {
-            tbc.fail("Unexpected Exception: " + e.getClass().getName()
-                    + " [Message: " + e.getMessage() + "]");
+        	tbc.failUnexpectedException(e);
         } finally {
             tbc.closeSession(session);
         }
@@ -247,8 +244,7 @@ public class GetMetaNode implements TestInterface {
 			tbc.pass("Asserts that an empty string as relative URI means the root " +
 					"URI the session was opened with");
 		} catch (Exception e) {
-			tbc.fail("Unexpected Exception: " + e.getClass().getName()
-					+ " [Message: " + e.getMessage() + "]");
+			tbc.failUnexpectedException(e);
 		} finally {
 			tbc.closeSession(session);
 		}
