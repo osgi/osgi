@@ -105,8 +105,7 @@ public class DmtSessionImpl implements DmtSession {
         sessionId = 
             (new Long(System.currentTimeMillis())).hashCode() ^ hashCode();
         
-        if(lockMode == LOCK_TYPE_ATOMIC)
-            eventStore = new EventStore(context, sessionId);
+        eventStore = new EventStore(context, sessionId);
 
         dataPlugins = new Vector();
         state = STATE_CLOSED;
