@@ -34,6 +34,8 @@ import org.osgi.service.permissionadmin.PermissionInfo;
 // OPTIMIZE only call commit/rollback for plugins that were actually modified since the last transaction boundary
 // TODO remove VEG CR comments, and also old code
 public class DmtSessionImpl implements DmtSession {
+    private static final String INTERIOR_NODE_VALUE_SUPPORT_PROPERTY = 
+        "org.osgi.impl.service.dmt.interior-node-value-support";
     
     private static final int SHOULD_NOT_EXIST   = 0;
 	private static final int SHOULD_EXIST       = 1;
@@ -122,6 +124,7 @@ public class DmtSessionImpl implements DmtSession {
 		// after everything is initialized, check with the plugins whether the
 		// given node really exists
 		checkNode(subtreeNode, SHOULD_EXIST);
+        eventStore.dispatchSessionLifecycleEvent(DmtEvent.SESSION_OPENED);
     }
     
     // called by Dmt Admin when checking session conflicts
@@ -188,6 +191,9 @@ public class DmtSessionImpl implements DmtSession {
         state = STATE_INVALID; 
 
         closeAndRelease(lockMode == LOCK_TYPE_ATOMIC);
+        
+        // TODO also send session closed event whenever session is invalidated?
+        eventStore.dispatchSessionLifecycleEvent(DmtEvent.SESSION_CLOSED);
         
         state = STATE_CLOSED;
 	}
@@ -449,8 +455,10 @@ public class DmtSessionImpl implements DmtSession {
         checkOperation(node, Acl.GET, MetaNode.CMD_GET);
 
         // VEG CR supporting values for interior nodes
-        if(!isLeafNodeNoCheck(node))
+        if(!isLeafNodeNoCheck(node)) {
             checkDescendantGetPermissions(node);
+            checkInteriorNodeValueSupport(node);
+        }
         
         ReadableDataSession pluginSession = getReadableDataSession(node);
         DmtData data = pluginSession.getNodeValue(node.getPath());
@@ -612,6 +620,8 @@ public class DmtSessionImpl implements DmtSession {
         // not contain constraints for interior node values)
         if(isLeafNodeNoCheck(node))
             checkValue(node, data);
+        else
+            checkInteriorNodeValueSupport(node);
         //checkValue(node, data);
 
         MetaNode metaNode = getMetaNodeNoCheck(node);
@@ -1413,6 +1423,28 @@ public class DmtSessionImpl implements DmtSession {
         */
     }
     
+    // precondition: path must be absolute and must specify an interior node
+    private void checkInteriorNodeValueSupport(Node node) throws DmtException {
+        MetaNode metaNode = getMetaNodeNoCheck(node);
+
+        if(metaNode == null)
+            return;
+        
+        boolean interiorNodeValueSupported = true;
+        try {
+             interiorNodeValueSupported = ((Boolean) metaNode
+                    .getExtensionProperty(INTERIOR_NODE_VALUE_SUPPORT_PROPERTY))
+                    .booleanValue();
+        } catch(IllegalArgumentException e) {           
+        } catch(ClassCastException e) {
+        }
+        
+        if(!interiorNodeValueSupported)
+            throw new DmtException(node.getUri(),
+                    DmtException.FEATURE_NOT_SUPPORTED, "The given interior " +
+                            "node does not support complex java values.");
+    }
+    
     private void checkNewNode(Node node) throws DmtException {
         MetaNode metaNode = getMetaNodeNoCheck(node);
 
@@ -1759,6 +1791,14 @@ class EventStore {
             dispatchEvent(event);
         }
         clear();
+    }
+    
+    synchronized void dispatchSessionLifecycleEvent(int type) {
+        if(type != DmtEvent.SESSION_OPENED && type != DmtEvent.SESSION_CLOSED)
+            throw new IllegalArgumentException("Invalid event type, only " +
+                    "session lifecycle events can be dispatched directly.");
+        
+        dispatchEvent(new DmtEventCore(type, sessionId));
     }
     
     private void dispatchEvent(DmtEventCore dmtEvent) {
