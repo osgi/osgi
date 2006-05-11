@@ -18,29 +18,16 @@
 package org.osgi.impl.service.policy.dmtprincipal;
 
 import java.io.IOException;
-import java.security.AccessController;
-import java.security.PrivilegedAction;
-import java.security.PrivilegedActionException;
-import java.security.PrivilegedExceptionAction;
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Set;
-import java.util.TreeSet;
+import java.security.*;
+import java.util.*;
 import java.util.Map.Entry;
 
-import org.osgi.impl.service.dmt.api.DmtPrincipalPermissionAdmin;
-import org.osgi.impl.service.policy.AbstractPolicyPlugin;
-import org.osgi.impl.service.policy.PermissionInfoMetaNode;
-import org.osgi.impl.service.policy.RootMetaNode;
+import org.osgi.impl.service.dmt.export.DmtPrincipalPermissionAdmin;
+import org.osgi.impl.service.policy.*;
 import org.osgi.impl.service.policy.util.PermissionInfoComparator;
 import org.osgi.impl.service.policy.util.Splitter;
 import org.osgi.service.component.ComponentContext;
-import org.osgi.service.dmt.DmtData;
-import org.osgi.service.dmt.DmtException;
-import org.osgi.service.dmt.MetaNode;
+import org.osgi.service.dmt.*;
 import org.osgi.service.permissionadmin.PermissionInfo;
 
 /**
