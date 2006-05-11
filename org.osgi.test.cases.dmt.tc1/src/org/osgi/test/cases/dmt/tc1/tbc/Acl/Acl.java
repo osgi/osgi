@@ -57,7 +57,7 @@ import org.osgi.test.cases.dmt.tc1.tbc.DmtTestControl;
  */
 public class Acl {
 	private DmtTestControl tbc;
-
+	
 	public Acl(DmtTestControl tbc) {
 		this.tbc = tbc;
 	}
@@ -80,7 +80,7 @@ public class Acl {
 		testAcl015();
         testAcl016();
         testAcl017();
-        testAcl018();
+
 	}
 
 	/**
@@ -93,15 +93,15 @@ public class Acl {
 
 		try {
 			tbc.log("#testAcl001");
-			org.osgi.service.dmt.Acl Acl = null;
-			Acl = new org.osgi.service.dmt.Acl("Add="
+			info.dmtree.Acl Acl = null;
+			Acl = new info.dmtree.Acl("Add="
 					+ DmtConstants.PRINCIPAL + "&Delete="
 					+ DmtConstants.PRINCIPAL + "&Get=*");
 			tbc.assertEquals(
 					"Asserting that all of the permissions were found",
-					org.osgi.service.dmt.Acl.ADD
-							| org.osgi.service.dmt.Acl.DELETE
-							| org.osgi.service.dmt.Acl.GET, Acl
+					info.dmtree.Acl.ADD
+							| info.dmtree.Acl.DELETE
+							| info.dmtree.Acl.GET, Acl
 							.getPermissions(DmtConstants.PRINCIPAL));
 
 			boolean found = false;
@@ -112,7 +112,7 @@ public class Acl {
 			}
 			tbc.assertTrue("Asserting that the principal was found", found);
 		} catch (Exception e) {
-			tbc.fail("Unexpected exception: " + e.getClass().getName());
+			tbc.failUnexpectedException(e);
 		}
 	}
 
@@ -128,15 +128,15 @@ public class Acl {
 			String[] principals = { DmtConstants.PRINCIPAL,
 					DmtConstants.PRINCIPAL_2 };
 			int[] perm = {
-					org.osgi.service.dmt.Acl.GET
-							| org.osgi.service.dmt.Acl.EXEC,
-					org.osgi.service.dmt.Acl.ADD
-							| org.osgi.service.dmt.Acl.REPLACE };
-			org.osgi.service.dmt.Acl acl = new org.osgi.service.dmt.Acl(
+					info.dmtree.Acl.GET
+							| info.dmtree.Acl.EXEC,
+					info.dmtree.Acl.ADD
+							| info.dmtree.Acl.REPLACE };
+			info.dmtree.Acl acl = new info.dmtree.Acl(
 					principals, perm);
 			boolean passed = false;
-			if (acl.getPermissions(principals[0]) == (org.osgi.service.dmt.Acl.GET | org.osgi.service.dmt.Acl.EXEC)) {
-				if (acl.getPermissions(principals[1]) == (org.osgi.service.dmt.Acl.ADD | org.osgi.service.dmt.Acl.REPLACE)) {
+			if (acl.getPermissions(principals[0]) == (info.dmtree.Acl.GET | info.dmtree.Acl.EXEC)) {
+				if (acl.getPermissions(principals[1]) == (info.dmtree.Acl.ADD | info.dmtree.Acl.REPLACE)) {
 					passed = true;
 				}
 			}
@@ -156,48 +156,26 @@ public class Acl {
 			tbc.assertEquals("Asserting that all of the principals were found",
 					totalExpected, totalFound);
 		} catch (Exception e) {
-			tbc.fail("Unexpected exception: " + e.getClass().getName());
+			tbc.failUnexpectedException(e);
 		}
 	}
 
-	/**
-	 * This method asserts that an ACL instance that represents an empty list of 
-	 * principals with no permissions is created.
-	 * 
-	 * @spec Acl.Acl()
-	 */
-	private void testAcl003() {
-		try {
-			tbc.log("#testAcl003");
-			org.osgi.service.dmt.Acl Acl = new org.osgi.service.dmt.Acl();
-			String[] principals = Acl.getPrincipals();
-			int permissions = Acl.getPermissions("*");
 
-			tbc.assertNotNull("Principals are not null", principals);
-			tbc.assertTrue("Asserting empty principals",
-					(principals.length == 0));
-			tbc.assertTrue("Asserting that no global permissions were granted",
-					permissions == 0);
-		} catch (Exception e) {
-			tbc.fail("Unexpected exception: " + e.getClass().getName());
-		}
-	}
 
 	/**
 	 * Checks if IllegalArgumentException is thrown if acl is not a valid OMA DM ACL string
 	 * 
 	 * @spec Acl.Acl(String)
 	 */
-	private void testAcl004() {
+	private void testAcl003() {
 		try {
-			tbc.log("#testAcl004");
-			new org.osgi.service.dmt.Acl(DmtConstants.INVALID);
+			tbc.log("#testAcl003");
+			new info.dmtree.Acl(DmtConstants.INVALID);
 			tbc.failException("#", IllegalArgumentException.class);
 		} catch (IllegalArgumentException e) {
 			tbc.pass("Exception correctly thrown");
 		} catch (Exception e) {
-			tbc.fail("Expected " + IllegalArgumentException.class.getName()
-					+ " but was " + e.getClass().getName());
+			tbc.failExpectedOtherException(IllegalArgumentException.class,e);
 		}
 	}
 
@@ -208,10 +186,10 @@ public class Acl {
 	 * @spec Acl.Acl(String)
 	 */
 
-	private void testAcl005() {
+	private void testAcl004() {
 		try {
-			tbc.log("#testAcl005");
-			org.osgi.service.dmt.Acl Acl = new org.osgi.service.dmt.Acl(
+			tbc.log("#testAcl004");
+			info.dmtree.Acl Acl = new info.dmtree.Acl(
 					null);
 			String[] principals = Acl.getPrincipals();
 			int permissions = Acl.getPermissions("*");
@@ -222,7 +200,7 @@ public class Acl {
 			tbc.assertTrue("Asserting that no global permissions were granted",
 					permissions == 0);
 		} catch (Exception e) {
-			tbc.fail("Unexpected exception: " + e.getClass().getName());
+			tbc.failUnexpectedException(e);
 		}
 
 	}
@@ -232,21 +210,21 @@ public class Acl {
 	 * 
 	 * @spec Acl.Acl(String)
 	 */
-	private void testAcl006() {
+	private void testAcl005() {
 		try {
-			tbc.log("#testAcl006");
+			tbc.log("#testAcl005");
 			String[] principal = { DmtConstants.PRINCIPAL,
 					DmtConstants.PRINCIPAL_2 };
-			org.osgi.service.dmt.Acl Acl = null;
-			Acl = new org.osgi.service.dmt.Acl("Add=" + principal[0]
+			info.dmtree.Acl Acl = null;
+			Acl = new info.dmtree.Acl("Add=" + principal[0]
 					+ "&Delete=" + principal[1] + "&Get=*");
 			tbc.assertEquals("Asserting permissions of " + principal[0],
-					org.osgi.service.dmt.Acl.ADD
-							| org.osgi.service.dmt.Acl.GET, Acl
+					info.dmtree.Acl.ADD
+							| info.dmtree.Acl.GET, Acl
 							.getPermissions(principal[0]));
 			tbc.assertEquals("Asserting permissions of " + principal[1],
-					org.osgi.service.dmt.Acl.DELETE
-							| org.osgi.service.dmt.Acl.GET, Acl
+					info.dmtree.Acl.DELETE
+							| info.dmtree.Acl.GET, Acl
 							.getPermissions(principal[1]));
 
 			int found = 0;
@@ -262,7 +240,7 @@ public class Acl {
 			tbc.assertEquals("All principals were found", principal.length,
 					found);
 		} catch (Exception e) {
-			tbc.fail("Unexpected exception: " + e.getClass().getName());
+			tbc.failUnexpectedException(e);
 		}
 	}
 
@@ -272,11 +250,11 @@ public class Acl {
 	 * 
 	 * @spec Acl.Acl(String)
 	 */
-	private void testAcl007() {
+	private void testAcl006() {
 		try {
-			tbc.log("#testAcl007");
+			tbc.log("#testAcl006");
 			
-            new org.osgi.service.dmt.Acl("Invalid="
+            new info.dmtree.Acl("Invalid="
 					+ DmtConstants.PRINCIPAL + "&Install="
 					+ DmtConstants.PRINCIPAL + "&Remove=*");
             
@@ -284,8 +262,7 @@ public class Acl {
 		} catch (IllegalArgumentException e) {
 			tbc.pass("Correctly caught IllegalArgumentException");
 		} catch (Exception e) {
-			tbc.fail("Expected " + IllegalArgumentException.class.getName()
-					+ " but was " + e.getClass().getName());
+			tbc.failExpectedOtherException(IllegalArgumentException.class,e);
 		}
 	}
 
@@ -295,18 +272,17 @@ public class Acl {
 	 * 
 	 * @spec Acl.Acl(String)
 	 */
-	private void testAcl008() {
+	private void testAcl007() {
 		try {
-			tbc.log("#testAcl008");
+			tbc.log("#testAcl007");
             
-			new org.osgi.service.dmt.Acl("Add="+ DmtConstants.INVALID + "&Delete="
+			new info.dmtree.Acl("Add="+ DmtConstants.INVALID + "&Delete="
 					+ DmtConstants.INVALID + "&Get=*");
 			tbc.failException("#", IllegalArgumentException.class);
 		} catch (IllegalArgumentException e) {
 			tbc.pass("Correctly caught IllegalArgumentException");
 		} catch (Exception e) {
-			tbc.fail("Expected " + IllegalArgumentException.class.getName()
-					+ " but was " + e.getClass().getName());
+			tbc.failExpectedOtherException(IllegalArgumentException.class,e);
 		}
 	}
 
@@ -316,24 +292,23 @@ public class Acl {
 	 * 
 	 * @spec Acl.Acl(String[],int[])
 	 */
-	private void testAcl009() {
+	private void testAcl008() {
 		try {
-			tbc.log("#testAcl009");
+			tbc.log("#testAcl008");
 			String[] principal = { DmtConstants.PRINCIPAL,
 					DmtConstants.PRINCIPAL_2 };
-			int[] perm = { org.osgi.service.dmt.Acl.GET
-					| org.osgi.service.dmt.Acl.DELETE
-					| org.osgi.service.dmt.Acl.ADD };
+			int[] perm = { info.dmtree.Acl.GET
+					| info.dmtree.Acl.DELETE
+					| info.dmtree.Acl.ADD };
 
-			new org.osgi.service.dmt.Acl(principal, perm);
+			new info.dmtree.Acl(principal, perm);
             
 			tbc.failException("#", IllegalArgumentException.class);
 
 		} catch (IllegalArgumentException e) {
 			tbc.pass("Correctly caught IllegalArgumentException.");
 		} catch (Exception e) {
-			tbc.fail("Expected " + IllegalArgumentException.class.getName()
-					+ " but was " + e.getClass().getName());
+			tbc.failExpectedOtherException(IllegalArgumentException.class,e);
 		}
 	}
 
@@ -343,21 +318,20 @@ public class Acl {
 	 * 
 	 * @spec Acl.Acl(String[],int[])
 	 */
-	private void testAcl010() {
+	private void testAcl009() {
 		try {
-			tbc.log("#testAcl010");
+			tbc.log("#testAcl009");
 			String[] principal = { DmtConstants.PRINCIPAL,
 					DmtConstants.PRINCIPAL_2 };
-			int[] perm = { org.osgi.service.dmt.Acl.GET | 99 };
+			int[] perm = { info.dmtree.Acl.GET | 99 };
 			
-            new org.osgi.service.dmt.Acl(principal, perm);
+            new info.dmtree.Acl(principal, perm);
 			
             tbc.failException("#", IllegalArgumentException.class);
 		} catch (IllegalArgumentException e) {
 			tbc.pass("Correctly caught IllegalArgumentException.");
 		} catch (Exception e) {
-			tbc.fail("Expected " + IllegalArgumentException.class.getName()
-					+ " but was " + e.getClass().getName());
+			tbc.failExpectedOtherException(IllegalArgumentException.class,e);
 		}
 	}
 
@@ -367,22 +341,21 @@ public class Acl {
 	 * 
 	 * @spec Acl.Acl(String[],int[])
 	 */
-	private void testAcl011() {
+	private void testAcl010() {
 		try {
-			tbc.log("#testAcl011");
+			tbc.log("#testAcl010");
 			String[] principal = { DmtConstants.PRINCIPAL,
 					DmtConstants.INVALID };
-			int[] perm = { org.osgi.service.dmt.Acl.GET,
-					org.osgi.service.dmt.Acl.EXEC };
+			int[] perm = { info.dmtree.Acl.GET,
+					info.dmtree.Acl.EXEC };
 			
-            new org.osgi.service.dmt.Acl(principal, perm);
+            new info.dmtree.Acl(principal, perm);
 			
             tbc.failException("#", IllegalArgumentException.class);
 		} catch (IllegalArgumentException e) {
 			tbc.pass("Correctly caught IllegalArgumentException.");
 		} catch (Exception e) {
-			tbc.fail("Expected " + IllegalArgumentException.class.getName()
-					+ " but was " + e.getClass().getName());
+			tbc.failExpectedOtherException(IllegalArgumentException.class,e);
 		}
 	}
 
@@ -391,22 +364,22 @@ public class Acl {
 	 * 
 	 * @spec Acl.Acl(String[],int[])
 	 */
-	private void testAcl012() {
+	private void testAcl011() {
 		try {
-			tbc.log("#testAcl012");
+			tbc.log("#testAcl011");
 			String[] principal = { DmtConstants.PRINCIPAL,
 					DmtConstants.PRINCIPAL_2, "*" };
-			int[] perm = { org.osgi.service.dmt.Acl.GET,
-					org.osgi.service.dmt.Acl.EXEC,
-					org.osgi.service.dmt.Acl.ADD };
+			int[] perm = { info.dmtree.Acl.GET,
+					info.dmtree.Acl.EXEC,
+					info.dmtree.Acl.ADD };
 
-			org.osgi.service.dmt.Acl Acl = new org.osgi.service.dmt.Acl(
+			info.dmtree.Acl Acl = new info.dmtree.Acl(
 					principal, perm);
 
 			boolean passed = false;
 
-			if (Acl.getPermissions(principal[0]) == (org.osgi.service.dmt.Acl.GET | org.osgi.service.dmt.Acl.ADD)) {
-				if (Acl.getPermissions(principal[1]) == (org.osgi.service.dmt.Acl.EXEC | org.osgi.service.dmt.Acl.ADD)) {
+			if (Acl.getPermissions(principal[0]) == (info.dmtree.Acl.GET | info.dmtree.Acl.ADD)) {
+				if (Acl.getPermissions(principal[1]) == (info.dmtree.Acl.EXEC | info.dmtree.Acl.ADD)) {
 					passed = true;
 				}
 			}
@@ -415,7 +388,7 @@ public class Acl {
 					passed);
 
 		} catch (Exception e) {
-			tbc.fail("Unexpected exception: " + e.getClass().getName());
+			tbc.failUnexpectedException(e);
 		}
 	}
 
@@ -424,19 +397,19 @@ public class Acl {
 	 * 
 	 * @spec Acl.Acl(String[],int[])
 	 */
-	private void testAcl013() {
+	private void testAcl012() {
 		try {
-			tbc.log("#testAcl013");
+			tbc.log("#testAcl012");
 			String[] principal = { DmtConstants.PRINCIPAL, "*" };
-			int[] perm = { org.osgi.service.dmt.Acl.GET,
-					org.osgi.service.dmt.Acl.ADD };
+			int[] perm = { info.dmtree.Acl.GET,
+					info.dmtree.Acl.ADD };
 
-			org.osgi.service.dmt.Acl Acl = new org.osgi.service.dmt.Acl(
+			info.dmtree.Acl Acl = new info.dmtree.Acl(
 					principal, perm);
 
 			boolean passed = false;
-			if (Acl.getPermissions(principal[0]) == (org.osgi.service.dmt.Acl.GET | org.osgi.service.dmt.Acl.ADD)) {
-				if (Acl.getPermissions(DmtConstants.PRINCIPAL_2) == org.osgi.service.dmt.Acl.ADD) {
+			if (Acl.getPermissions(principal[0]) == (info.dmtree.Acl.GET | info.dmtree.Acl.ADD)) {
+				if (Acl.getPermissions(DmtConstants.PRINCIPAL_2) == info.dmtree.Acl.ADD) {
 					passed = true;
 				}
 			}
@@ -446,7 +419,7 @@ public class Acl {
 					passed);
 
 		} catch (Exception e) {
-			tbc.fail("Unexpected exception: " + e.getClass().getName());
+			tbc.failUnexpectedException(e);
 		}
 	}
 
@@ -455,24 +428,23 @@ public class Acl {
 	 * 
 	 * @spec Acl.Acl(String[],int[])
 	 */
-	private void testAcl014() {
+	private void testAcl013() {
 		try {
-			tbc.log("#testAcl014");
+			tbc.log("#testAcl013");
 			String[] principal = { DmtConstants.PRINCIPAL,
 					DmtConstants.PRINCIPAL_2, DmtConstants.PRINCIPAL };
-			int[] perm = { org.osgi.service.dmt.Acl.GET,
-					org.osgi.service.dmt.Acl.EXEC,
-					org.osgi.service.dmt.Acl.ADD };
+			int[] perm = { info.dmtree.Acl.GET,
+					info.dmtree.Acl.EXEC,
+					info.dmtree.Acl.ADD };
 			
-            new org.osgi.service.dmt.Acl(principal, perm);
+            new info.dmtree.Acl(principal, perm);
             
 			tbc.failException("#", IllegalArgumentException.class);
 		} catch (IllegalArgumentException e) {
 			tbc
 					.pass("IllegalArgumentException was thrown when a principal appeared multiple times in the principals array");
 		} catch (Exception e) {
-			tbc.fail("Expected " + IllegalArgumentException.class.getName()
-					+ " but was " + e.getClass().getName());
+			tbc.failExpectedOtherException(IllegalArgumentException.class,e);
 		}
 	}
 
@@ -482,65 +454,43 @@ public class Acl {
 	 * 
 	 * @spec Acl.Acl(String[],int[])
 	 */
-	private void testAcl015() {
+	private void testAcl014() {
 		try {
-			tbc.log("#testAcl015");
+			tbc.log("#testAcl014");
 			String[] principal = { DmtConstants.PRINCIPAL,
 					DmtConstants.PRINCIPAL_2 };
 			int[] perm = {
-					org.osgi.service.dmt.Acl.GET
-							| org.osgi.service.dmt.Acl.EXEC , };
+					info.dmtree.Acl.GET
+							| info.dmtree.Acl.EXEC , };
 			
-			 org.osgi.service.dmt.Acl acl = new org.osgi.service.dmt.Acl(principal, perm);
+			 info.dmtree.Acl acl = new info.dmtree.Acl(principal, perm);
 			 
 			 acl.getPermissions(principal[1]);
 				tbc.failException("#", IllegalArgumentException.class);
 		} catch (IllegalArgumentException e) {
 			tbc.pass("Correctly caught IllegalArgumentException. The constructor is ignoring principals with empty permissions.");
 		} catch (Exception e) {
-			tbc.fail("Expected " + IllegalArgumentException.class.getName()
-				+ " but was " + e.getClass().getName());
+			tbc.failExpectedOtherException(IllegalArgumentException.class,e);
 		}
 	}
     
-    /**
-     * Test if an IllegalArgumentException is thrown when getPermissions is called with an invalid principal
-     * 
-     * @spec Acl.getPermissions(String)
-     */
-    private void testAcl016() {
-        try {
-            tbc.log("#testAcl016");
-            org.osgi.service.dmt.Acl acl = new org.osgi.service.dmt.Acl();
-            
-            acl.getPermissions(DmtConstants.INVALID);
-            
-            tbc.failException("#", IllegalArgumentException.class);
-
-        } catch (IllegalArgumentException e) {
-            tbc.pass("Correctly caught IllegalArgumentException.");
-        } catch (Exception e) {
-            tbc.fail("Expected " + IllegalArgumentException.class.getName()
-                    + " but was " + e.getClass().getName());
-        }
-    }
     
     /**
      * Test if getPermissions '*' gets the permissions that are granted globally, to all principals 
      * 
      * @spec Acl.getPermissions(String)
      */
-    private void testAcl017() {
+    private void testAcl015() {
         try {
-            tbc.log("#testAcl017");
-            org.osgi.service.dmt.Acl acl = new org.osgi.service.dmt.Acl("Add=*&Get=" + DmtConstants.PRINCIPAL +"&Replace="+DmtConstants.PRINCIPAL_2);
+            tbc.log("#testAcl015");
+            info.dmtree.Acl acl = new info.dmtree.Acl("Add=*&Get=" + DmtConstants.PRINCIPAL +"&Replace="+DmtConstants.PRINCIPAL_2);
             
             int perm = acl.getPermissions("*");
             tbc.assertTrue("Asserts that getPermissions '*' gets the permissions that are granted globally, to all principals", 
-                perm==org.osgi.service.dmt.Acl.ADD);
+                perm==info.dmtree.Acl.ADD);
 
         } catch (Exception e) {
-            tbc.fail("Unexpected exception: " + e.getClass().getName());
+        	tbc.failUnexpectedException(e);
         }
     }
     
@@ -551,10 +501,10 @@ public class Acl {
 	 * @spec Acl.Acl(String)
 	 */
 
-	private void testAcl018() {
+	private void testAcl016() {
 		try {
-			tbc.log("#testAcl018");
-			org.osgi.service.dmt.Acl Acl = new org.osgi.service.dmt.Acl("");
+			tbc.log("#testAcl016");
+			info.dmtree.Acl Acl = new info.dmtree.Acl("");
 			String[] principals = Acl.getPrincipals();
 			int permissions = Acl.getPermissions("*");
 
@@ -564,9 +514,35 @@ public class Acl {
 			
 			tbc.assertTrue("Asserting that no global permissions were granted",permissions == 0);
 		} catch (Exception e) {
-			tbc.fail("Unexpected exception: " + e.getClass().getName());
+			tbc.failUnexpectedException(e);
 		}
 
+	}
+	
+	/**
+	 * Checks if IllegalArgumentException is thrown if the remote server id is not a valid OMA DM 
+	 * ACL string (contains '=', '&', '*' or white-space characters). '+' is not in the list because
+	 * it is interpreted as a different principal
+	 * 
+	 * @spec Acl.Acl(String)
+	 */
+	private void testAcl017() {
+		char[] invalidAclChar = new char[] { '=','&','*',' ' };
+		
+		try {
+			tbc.log("#testAcl017");
+			for (int i = 0; i < invalidAclChar.length; i++) {
+				try {
+					new info.dmtree.Acl("Add=prin" + invalidAclChar[i] + "cipal");
+					tbc.failException("", IllegalArgumentException.class);
+				} catch (IllegalArgumentException e) {
+					tbc.pass("IllegalArgumentException correctly thrown when creating an Acl " +
+							"using the invalid character \"" + invalidAclChar[i] + "\" in the remote server id");
+				}
+			}
+		} catch (Exception e) {
+			tbc.failExpectedOtherException(IllegalArgumentException.class,e);
+		}
 	}
 }
 

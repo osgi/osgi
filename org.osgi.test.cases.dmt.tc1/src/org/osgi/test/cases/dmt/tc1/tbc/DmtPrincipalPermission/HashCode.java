@@ -36,7 +36,7 @@
  */
 package org.osgi.test.cases.dmt.tc1.tbc.DmtPrincipalPermission;
 
-import org.osgi.service.dmt.security.DmtPrincipalPermission;
+import info.dmtree.security.DmtPrincipalPermission;
 import org.osgi.test.cases.dmt.tc1.tbc.DmtConstants;
 import org.osgi.test.cases.dmt.tc1.tbc.DmtTestControl;
 
@@ -73,7 +73,7 @@ public class HashCode {
 					d1.hashCode()==d2.hashCode());
 
 		} catch (Exception e) {
-			tbc.fail("Unexpected exception: " + e.getClass().getName());
+			tbc.failUnexpectedException(e);
 		}
 	}
 	
@@ -95,7 +95,7 @@ public class HashCode {
 					d1.hashCode()==d2.hashCode());
 
 		} catch (Exception e) {
-			tbc.fail("Unexpected exception: " + e.getClass().getName());
+			tbc.failUnexpectedException(e);
 		}
 	}
 

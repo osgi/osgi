@@ -35,7 +35,7 @@
 
 package org.osgi.test.cases.dmt.tc1.tbc.AlertItem;
 
-import org.osgi.service.dmt.DmtData;
+import info.dmtree.DmtData;
 import org.osgi.test.cases.dmt.tc1.tbc.DmtConstants;
 import org.osgi.test.cases.dmt.tc1.tbc.DmtTestControl;
 
@@ -78,13 +78,13 @@ public class AlertItem {
 	private void testAlertItem001() {
 		try {		
 			tbc.log("#testAlertItem001");
-			org.osgi.service.dmt.AlertItem alert = new org.osgi.service.dmt.AlertItem(DmtConstants.OSGi_LOG,DmtConstants.MIMETYPE,mark,data);
+			info.dmtree.notification.AlertItem alert = new info.dmtree.notification.AlertItem(DmtConstants.OSGi_LOG,DmtConstants.MIMETYPE,mark,data);
 			tbc.assertEquals("Asserts that the expected data is returned",data,alert.getData());
 			tbc.assertEquals("Asserts that the expected mark is returned",mark,alert.getMark());
 			tbc.assertEquals("Asserts that the expected type is returned",DmtConstants.MIMETYPE,alert.getType());
 			tbc.assertEquals("Asserts that the expected source is returned",DmtConstants.OSGi_LOG,alert.getSource());
 		} catch(Exception e) {
-			tbc.fail("Unexpected Exception: " + e.getClass().getName() + " [Message: " + e.getMessage() +"]");
+			tbc.failUnexpectedException(e);
 		}
 			
 	}
@@ -97,7 +97,7 @@ public class AlertItem {
 	private void testAlertItem002() {
 		try {		
 			tbc.log("#testAlertItem002");
-            org.osgi.service.dmt.AlertItem alert = new org.osgi.service.dmt.AlertItem((String)null,DmtConstants.MIMETYPE,mark,data);
+            info.dmtree.notification.AlertItem alert = new info.dmtree.notification.AlertItem((String)null,DmtConstants.MIMETYPE,mark,data);
             tbc.assertEquals("Asserts that the expected data is returned",data,alert.getData());
             tbc.assertEquals("Asserts that the expected mark is returned",mark,alert.getMark());
             tbc.assertEquals("Asserts that the expected type is returned",DmtConstants.MIMETYPE,alert.getType());
@@ -105,7 +105,7 @@ public class AlertItem {
             
 			
 		} catch(Exception e) {
-			tbc.fail("Unexpected Exception: " + e.getClass().getName() + " [Message: " + e.getMessage() +"]");
+			tbc.failUnexpectedException(e);
 		}
 			
 	}
@@ -118,7 +118,7 @@ public class AlertItem {
     private void testAlertItem003() {
         try {       
             tbc.log("#testAlertItem003");
-            org.osgi.service.dmt.AlertItem alert = new org.osgi.service.dmt.AlertItem(DmtConstants.OSGi_LOG,null,mark,data);
+            info.dmtree.notification.AlertItem alert = new info.dmtree.notification.AlertItem(DmtConstants.OSGi_LOG,null,mark,data);
             tbc.assertEquals("Asserts that the expected data is returned",data,alert.getData());
             tbc.assertEquals("Asserts that the expected mark is returned",mark,alert.getMark());
             tbc.assertNull("Asserts that the expected type is returned",alert.getType());
@@ -126,7 +126,7 @@ public class AlertItem {
             
             
         } catch(Exception e) {
-            tbc.fail("Unexpected Exception: " + e.getClass().getName() + " [Message: " + e.getMessage() +"]");
+        	tbc.failUnexpectedException(e);
         }
             
     }
@@ -139,7 +139,7 @@ public class AlertItem {
     private void testAlertItem004() {
         try {       
             tbc.log("#testAlertItem004");
-            org.osgi.service.dmt.AlertItem alert = new org.osgi.service.dmt.AlertItem(DmtConstants.OSGi_LOG,DmtConstants.MIMETYPE,null,data);
+            info.dmtree.notification.AlertItem alert = new info.dmtree.notification.AlertItem(DmtConstants.OSGi_LOG,DmtConstants.MIMETYPE,null,data);
             tbc.assertEquals("Asserts that the expected data is returned",data,alert.getData());
             tbc.assertNull("Asserts that the expected mark is returned",alert.getMark());
             tbc.assertEquals("Asserts that the expected type is returned",DmtConstants.MIMETYPE,alert.getType());
@@ -147,7 +147,7 @@ public class AlertItem {
             
             
         } catch(Exception e) {
-            tbc.fail("Unexpected Exception: " + e.getClass().getName() + " [Message: " + e.getMessage() +"]");
+        	tbc.failUnexpectedException(e);
         }
             
     }
@@ -160,14 +160,14 @@ public class AlertItem {
     private void testAlertItem005() {
         try {       
             tbc.log("#testAlertItem005");
-            org.osgi.service.dmt.AlertItem alert = new org.osgi.service.dmt.AlertItem(DmtConstants.OSGi_LOG,DmtConstants.MIMETYPE,mark,null);
+            info.dmtree.notification.AlertItem alert = new info.dmtree.notification.AlertItem(DmtConstants.OSGi_LOG,DmtConstants.MIMETYPE,mark,null);
             tbc.assertEquals("Asserts that the expected mark is returned",mark,alert.getMark());
             tbc.assertEquals("Asserts that the expected type is returned",DmtConstants.MIMETYPE,alert.getType());
             tbc.assertEquals("Asserts that the expected source is returned",DmtConstants.OSGi_LOG,alert.getSource());
             tbc.assertNull("Asserts that the expected data is returned",alert.getData());
             
         } catch(Exception e) {
-            tbc.fail("Unexpected Exception: " + e.getClass().getName() + " [Message: " + e.getMessage() +"]");
+        	tbc.failUnexpectedException(e);
         }
             
     }
@@ -180,13 +180,13 @@ public class AlertItem {
 	private void testAlertItem006() {
 		try {		
 			tbc.log("#testAlertItem006");
-			org.osgi.service.dmt.AlertItem alert = new org.osgi.service.dmt.AlertItem(nodeUri,DmtConstants.MIMETYPE,mark,data);
+			info.dmtree.notification.AlertItem alert = new info.dmtree.notification.AlertItem(nodeUri,DmtConstants.MIMETYPE,mark,data);
 			tbc.assertEquals("Asserts that the expected data is returned",data,alert.getData());
 			tbc.assertEquals("Asserts that the expected mark is returned",mark,alert.getMark());
 			tbc.assertEquals("Asserts that the expected type is returned",DmtConstants.MIMETYPE,alert.getType());
 			tbc.assertEquals("Asserts that the expected source is returned",nodeUriMangled,alert.getSource());
 		} catch(Exception e) {
-			tbc.fail("Unexpected Exception: " + e.getClass().getName() + " [Message: " + e.getMessage() +"]");
+			tbc.failUnexpectedException(e);
 		}
 			
 	}
@@ -199,7 +199,7 @@ public class AlertItem {
 	private void testAlertItem007() {
 		try {		
 			tbc.log("#testAlertItem007");
-            org.osgi.service.dmt.AlertItem alert = new org.osgi.service.dmt.AlertItem((String[])null,DmtConstants.MIMETYPE,mark,data);
+            info.dmtree.notification.AlertItem alert = new info.dmtree.notification.AlertItem((String[])null,DmtConstants.MIMETYPE,mark,data);
             tbc.assertEquals("Asserts that the expected data is returned",data,alert.getData());
             tbc.assertEquals("Asserts that the expected mark is returned",mark,alert.getMark());
             tbc.assertEquals("Asserts that the expected type is returned",DmtConstants.MIMETYPE,alert.getType());
@@ -207,7 +207,7 @@ public class AlertItem {
             
 			
 		} catch(Exception e) {
-			tbc.fail("Unexpected Exception: " + e.getClass().getName() + " [Message: " + e.getMessage() +"]");
+			tbc.failUnexpectedException(e);
 		}
 			
 	}
@@ -221,7 +221,7 @@ public class AlertItem {
         try {       
             tbc.log("#testAlertItem008");
 
-            org.osgi.service.dmt.AlertItem alert = new org.osgi.service.dmt.AlertItem(nodeUri,null,mark,data);
+            info.dmtree.notification.AlertItem alert = new info.dmtree.notification.AlertItem(nodeUri,null,mark,data);
             tbc.assertEquals("Asserts that the expected data is returned",data,alert.getData());
             tbc.assertEquals("Asserts that the expected mark is returned",mark,alert.getMark());
             tbc.assertNull("Asserts that the expected type is returned",alert.getType());
@@ -229,7 +229,7 @@ public class AlertItem {
             
             
         } catch(Exception e) {
-            tbc.fail("Unexpected Exception: " + e.getClass().getName() + " [Message: " + e.getMessage() +"]");
+        	tbc.failUnexpectedException(e);
         }
             
     }
@@ -242,7 +242,7 @@ public class AlertItem {
     private void testAlertItem009() {
         try {       
             tbc.log("#testAlertItem009");
-            org.osgi.service.dmt.AlertItem alert = new org.osgi.service.dmt.AlertItem(nodeUri,DmtConstants.MIMETYPE,null,data);
+            info.dmtree.notification.AlertItem alert = new info.dmtree.notification.AlertItem(nodeUri,DmtConstants.MIMETYPE,null,data);
             tbc.assertEquals("Asserts that the expected data is returned",data,alert.getData());
             tbc.assertNull("Asserts that the expected mark is returned",alert.getMark());
             tbc.assertEquals("Asserts that the expected type is returned",DmtConstants.MIMETYPE,alert.getType());
@@ -250,7 +250,7 @@ public class AlertItem {
             
             
         } catch(Exception e) {
-            tbc.fail("Unexpected Exception: " + e.getClass().getName() + " [Message: " + e.getMessage() +"]");
+        	tbc.failUnexpectedException(e);
         }
             
     }
@@ -263,14 +263,14 @@ public class AlertItem {
     private void testAlertItem010() {
         try {       
             tbc.log("#testAlertItem010");
-            org.osgi.service.dmt.AlertItem alert = new org.osgi.service.dmt.AlertItem(nodeUri,DmtConstants.MIMETYPE,mark,null);
+            info.dmtree.notification.AlertItem alert = new info.dmtree.notification.AlertItem(nodeUri,DmtConstants.MIMETYPE,mark,null);
             tbc.assertEquals("Asserts that the expected mark is returned",mark,alert.getMark());
             tbc.assertEquals("Asserts that the expected type is returned",DmtConstants.MIMETYPE,alert.getType());
             tbc.assertEquals("Asserts that the expected source is returned",nodeUriMangled,alert.getSource());
             tbc.assertNull("Asserts that the expected data is returned",alert.getData());
             
         } catch(Exception e) {
-            tbc.fail("Unexpected Exception: " + e.getClass().getName() + " [Message: " + e.getMessage() +"]");
+        	tbc.failUnexpectedException(e);
         }
             
     }

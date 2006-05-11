@@ -70,7 +70,7 @@ public class PrintStackTrace {
 	private void testPrintStackTrace001() {
 		tbc.log("#testPrintStackTrace001");
         try {
-    		org.osgi.service.dmt.DmtException de = new org.osgi.service.dmt.DmtException(
+    		info.dmtree.DmtException de = new info.dmtree.DmtException(
     				(String)null, 0, null, new Exception());
     
     		ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -86,8 +86,7 @@ public class PrintStackTrace {
     		} catch (IOException e) {
     		}
         } catch (Exception e) {
-            tbc.fail("Unexpected Exception: " + e.getClass().getName()
-                    + " [Message: " + e.getMessage() + "]");
+        	tbc.failUnexpectedException(e);
         }
 	}
 	
@@ -104,7 +103,7 @@ public class PrintStackTrace {
     		causes.add(0,new Exception());
     		causes.add(1,new NullPointerException());
     		
-    		org.osgi.service.dmt.DmtException de = new org.osgi.service.dmt.DmtException(
+    		info.dmtree.DmtException de = new info.dmtree.DmtException(
     				(String)null, 0, null,causes,false);
     
     		ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -123,8 +122,7 @@ public class PrintStackTrace {
     		} catch (IOException e) {
     		}
         } catch (Exception e) {
-            tbc.fail("Unexpected Exception: " + e.getClass().getName()
-                    + " [Message: " + e.getMessage() + "]");
+        	tbc.failUnexpectedException(e);
         }
 	}
 

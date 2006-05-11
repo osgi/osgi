@@ -36,7 +36,7 @@
  */
 package org.osgi.test.cases.dmt.tc1.tbc.DmtPrincipalPermission;
 
-import org.osgi.service.dmt.security.DmtPrincipalPermission;
+import info.dmtree.security.DmtPrincipalPermission;
 import org.osgi.test.cases.dmt.tc1.tbc.DmtConstants;
 import org.osgi.test.cases.dmt.tc1.tbc.DmtTestControl;
 
@@ -75,7 +75,7 @@ public class Implies {
 							d1.implies(d2));
 
 		} catch (Exception e) {
-			tbc.fail("Unexpected exception: " + e.getClass().getName());
+			tbc.failUnexpectedException(e);
 		}
 	}
 
@@ -99,7 +99,7 @@ public class Implies {
 							d1.implies(d2));
 
 		} catch (Exception e) {
-			tbc.fail("Unexpected exception: " + e.getClass().getName());
+			tbc.failUnexpectedException(e);
 		}
 	}
 
@@ -122,7 +122,7 @@ public class Implies {
 							!d1.implies(d2));
 
 		} catch (Exception e) {
-			tbc.fail("Unexpected exception: " + e.getClass().getName());
+			tbc.failUnexpectedException(e);
 		}
 	}
 
@@ -146,7 +146,7 @@ public class Implies {
                             d1.implies(d2));
 
         } catch (Exception e) {
-            tbc.fail("Unexpected exception: " + e.getClass().getName());
+            tbc.failUnexpectedException(e);
         }
     }
 }

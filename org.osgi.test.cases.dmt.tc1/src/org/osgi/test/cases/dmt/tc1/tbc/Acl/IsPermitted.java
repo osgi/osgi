@@ -39,7 +39,7 @@
 
 package org.osgi.test.cases.dmt.tc1.tbc.Acl;
 
-import org.osgi.service.dmt.Acl;
+import info.dmtree.Acl;
 import org.osgi.test.cases.dmt.tc1.tbc.DmtConstants;
 import org.osgi.test.cases.dmt.tc1.tbc.DmtTestControl;
 
@@ -79,7 +79,7 @@ public class IsPermitted {
 			tbc.assertTrue("Asserting that isPermitted returns false for permissions not granted", !acl.isPermitted(
 					DmtConstants.PRINCIPAL, Acl.EXEC | Acl.REPLACE));			
 		} catch (Exception e) {
-			tbc.fail("Unexpected exception: " + e.getClass().getName());
+			tbc.failUnexpectedException(e);
 		}
 	}
 
@@ -99,8 +99,7 @@ public class IsPermitted {
 		} catch (IllegalArgumentException e) {
 			tbc.pass("IllegalArgumentException correctly thrown on isPermitted method");
 		} catch (Exception e) {
-			tbc.fail("Expected " + IllegalArgumentException.class.getName()
-					+ " but was " + e.getClass().getName());
+			tbc.failExpectedOtherException(IllegalArgumentException.class,e);
 		}
 
 	}
@@ -121,8 +120,7 @@ public class IsPermitted {
 		} catch (IllegalArgumentException e) {
 			tbc.pass("IllegalArgumentException correctly thrown on isPermitted method");
 		} catch (Exception e) {
-			tbc.fail("Expected " + IllegalStateException.class.getName()
-					+ " but was " + e.getClass().getName());
+			tbc.failExpectedOtherException(IllegalArgumentException.class,e);
 		}
 	}
 
@@ -139,7 +137,7 @@ public class IsPermitted {
 			tbc.assertTrue("Asserting that '*' returns true if the permission is global", acl.isPermitted("*", Acl.GET));
 			tbc.assertTrue("Asserting that '*' returns false if the permission is not global", !acl.isPermitted("*", Acl.ADD | Acl.DELETE | Acl.EXEC | Acl.REPLACE));
 		} catch (Exception e) {
-			tbc.fail("Unexpected exception: " + e.getClass().getName());
+			tbc.failUnexpectedException(e);
 		}
 	}
 }

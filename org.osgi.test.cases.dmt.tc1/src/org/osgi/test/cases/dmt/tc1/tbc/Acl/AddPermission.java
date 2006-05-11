@@ -42,7 +42,7 @@
 
 package org.osgi.test.cases.dmt.tc1.tbc.Acl;
 
-import org.osgi.service.dmt.Acl;
+import info.dmtree.Acl;
 import org.osgi.test.cases.dmt.tc1.tbc.DmtConstants;
 import org.osgi.test.cases.dmt.tc1.tbc.DmtTestControl;
 /**
@@ -90,7 +90,7 @@ public class AddPermission {
 			tbc.assertEquals("Asserting that '*' grants permissions to all principals",
 					Acl.GET, acl.getPermissions(DmtConstants.PRINCIPAL_2));			
 		} catch (Exception e) {
-			tbc.fail("Unexpected exception: " + e.getClass().getName());
+			tbc.failUnexpectedException(e);
 		}
 	}
 
@@ -114,7 +114,7 @@ public class AddPermission {
 					Acl.GET, acl.getPermissions(DmtConstants.PRINCIPAL_2));			
 			
 		} catch (Exception e) {
-			tbc.fail("Unexpected exception: " + e.getClass().getName());
+			tbc.failUnexpectedException(e);
 		}
 	}
 
@@ -133,8 +133,7 @@ public class AddPermission {
 		} catch (IllegalArgumentException e) {
 			tbc.pass("IllegalArgumentException correctly thrown");
 		} catch (Exception e) {
-			tbc.fail("Expected " + IllegalArgumentException.class.getName()
-					+ " but was " + e.getClass().getName());
+			tbc.failExpectedOtherException(IllegalArgumentException.class,e);
 		}		
 	}
 
@@ -153,8 +152,7 @@ public class AddPermission {
 		} catch (IllegalArgumentException e) {
 			tbc.pass("IllegalArgumentException correctly thrown");
 		} catch (Exception e) {
-			tbc.fail("Expected " + IllegalArgumentException.class.getName()
-					+ " but was " + e.getClass().getName());
+			tbc.failExpectedOtherException(IllegalArgumentException.class,e);
 		}
 	}
 	/**
@@ -178,7 +176,7 @@ public class AddPermission {
 					Acl.ALL_PERMISSION, acl.getPermissions(DmtConstants.PRINCIPAL));
 			
 		} catch (Exception e) {
-			tbc.fail("Unexpected exception: " + e.getClass().getName());
+			tbc.failUnexpectedException(e);
 		}
 	}
 	
@@ -205,7 +203,7 @@ public class AddPermission {
 			tbc.assertTrue("Asserts if '*' grants permissions to all principals.",passed);
 			
 		} catch (Exception e) {
-			tbc.fail("Unexpected exception: " + e.getClass().getName());
+			tbc.failUnexpectedException(e);
 		}
 	}	
 

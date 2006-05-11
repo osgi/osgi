@@ -36,7 +36,7 @@
  */
 package org.osgi.test.cases.dmt.tc1.tbc.AlertPermission;
 
-import org.osgi.service.dmt.security.AlertPermission;
+import info.dmtree.security.AlertPermission;
 import org.osgi.test.cases.dmt.tc1.tbc.DmtConstants;
 import org.osgi.test.cases.dmt.tc1.tbc.DmtTestControl;
 
@@ -76,7 +76,7 @@ public class Implies {
 							d1.implies(d2));
 
 		} catch (Exception e) {
-			tbc.fail("Unexpected Exception: " + e.getClass().getName() + " [Message: " + e.getMessage() +"]");
+			tbc.failUnexpectedException(e);
 		}
 	}
 
@@ -100,7 +100,7 @@ public class Implies {
 							d1.implies(d2));
 
 		} catch (Exception e) {
-			tbc.fail("Unexpected Exception: " + e.getClass().getName() + " [Message: " + e.getMessage() +"]");
+			tbc.failUnexpectedException(e);
 		}
 	}
 
@@ -123,7 +123,7 @@ public class Implies {
 							!d1.implies(d2));
 
 		} catch (Exception e) {
-			tbc.fail("Unexpected Exception: " + e.getClass().getName() + " [Message: " + e.getMessage() +"]");
+			tbc.failUnexpectedException(e);
 		}
 	}
     
@@ -146,7 +146,7 @@ public class Implies {
                             d1.implies(d2));
 
         } catch (Exception e) {
-            tbc.fail("Unexpected Exception: " + e.getClass().getName() + " [Message: " + e.getMessage() +"]");
+            tbc.failUnexpectedException(e);
         }
     }
 

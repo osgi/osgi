@@ -36,7 +36,7 @@
 
 package org.osgi.test.cases.dmt.tc1.tbc.Acl;
 
-import org.osgi.service.dmt.Acl;
+import info.dmtree.Acl;
 import org.osgi.test.cases.dmt.tc1.tbc.DmtConstants;
 import org.osgi.test.cases.dmt.tc1.tbc.DmtTestControl;
 /**
@@ -73,7 +73,7 @@ public class Equals {
 
 			tbc.assertTrue("Asserts that two Acl are equal when they have the same set of principals and permissions",Acl.equals(Acl2));
 		} catch (Exception e) {
-			tbc.fail("Unexpected exception: " + e.getClass().getName());
+			tbc.failUnexpectedException(e);
 		}
 	}
 
@@ -92,7 +92,7 @@ public class Equals {
 			Acl Acl2 = new Acl(principals2,permissionsBoth);
 			tbc.assertTrue("Asserts that two Acl are different when they have the same set of permissions but different principals",!Acl.equals(Acl2));
 		} catch (Exception e) {
-			tbc.fail("Unexpected exception: " + e.getClass().getName());
+			tbc.failUnexpectedException(e);
 		}
 	}	
 	/**
@@ -110,7 +110,7 @@ public class Equals {
 			Acl Acl2 = new Acl(principalsBoth,permissions2);
 			tbc.assertTrue("Asserts that two Acl are different when they have the same set of principals but different permissions",!Acl.equals(Acl2));
 		} catch (Exception e) {
-			tbc.fail("Unexpected exception: " + e.getClass().getName());
+			tbc.failUnexpectedException(e);
 		}
 	}
 

@@ -29,47 +29,52 @@
  * Date          Author(s)
  * CR            Headline
  * ============  ==============================================================
- * Jan 31, 2005  Andre Assad
- * 1             Implement MEG TCK
- * ============  ==============================================================
- * Feb 11, 2005  Andre Assad
- * 1             Updates after formal inspection (BTC_MEG_TCK_CODE-INSPR-001)
+ * Apr 17, 2006  Luiz Felipe Guimaraes
+ * 283           [MEGTCK][DMT] DMT API changes
  * ============  ==============================================================
  */
 
-package org.osgi.test.cases.dmt.tc1.tbc.Acl;
+package org.osgi.test.cases.dmt.tc1.tbc.DmtServiceFactory;
 
-import info.dmtree.Acl;
+import info.dmtree.registry.DmtServiceFactory;
+
 import org.osgi.test.cases.dmt.tc1.tbc.DmtTestControl;
 
+
+
 /**
- * @author Andre Assad
- *
- * This test case validates all <code>constants</code> of Acl, according to MEG specification
+ * @author Luiz Felipe Guimaraes
  * 
+ * This Class Validates the implementation of <code>DmtServiceFactory.getNotificationService()<code> method, 
+ * according to MEG specification
  */
-public class AclConstants {
+public class GetNotificationService {
 	private DmtTestControl tbc;
-
-
-	public AclConstants(DmtTestControl tbc) {
+	
+	public GetNotificationService(DmtTestControl tbc) {
 		this.tbc = tbc;
 	}
 
 	public void run() {
-		testConstants001();
+		testGetNotificationService001();
 	}
 
 	/**
-	 * Tests all constants values according to the specified values
+	 * Asserts that DmtServiceFactory.getDmtAdmin() does not return null
+	 * 
+	 * @spec DmtServiceFactory.getDmtAdmin()
 	 */
-	private void testConstants001() {
-		tbc.log("#testConstants001");
-		tbc.assertEquals("Asserting GET value", 1, Acl.GET);
-		tbc.assertEquals("Asserting ADD value", 2, Acl.ADD);
-		tbc.assertEquals("Asserting REPLACE value", 4, Acl.REPLACE);
-		tbc.assertEquals("Asserting DELETE value", 8, Acl.DELETE);
-		tbc.assertEquals("Asserting EXEC value", 16, Acl.EXEC);
-		tbc.assertEquals("Asserting ALL_PERMISSION 	 value", 31, Acl.ALL_PERMISSION);
+	private void testGetNotificationService001() {
+
+		try {
+			tbc.log("#testGetNotificationService001");
+			tbc.assertNotNull("Asserts that DmtServiceFactory.getNotificationService() does not return null", DmtServiceFactory.getNotificationService());
+		} catch (Exception e) {
+			tbc.failUnexpectedException(e);
+		}
+	
 	}
+	
+		
 }
+

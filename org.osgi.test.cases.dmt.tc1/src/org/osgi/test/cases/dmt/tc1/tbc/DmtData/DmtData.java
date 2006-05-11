@@ -37,8 +37,6 @@
 
 package org.osgi.test.cases.dmt.tc1.tbc.DmtData;
 
-import java.util.Vector;
-
 import org.osgi.test.cases.dmt.tc1.tbc.DmtTestControl;
 
 /**
@@ -47,7 +45,6 @@ import org.osgi.test.cases.dmt.tc1.tbc.DmtTestControl;
  */
 public class DmtData {
 	private DmtTestControl tbc;
-
 	public DmtData(DmtTestControl tbc) {
 		this.tbc = tbc;
 
@@ -71,6 +68,7 @@ public class DmtData {
         testDmtData015();
         testDmtData016();
         testDmtData017();
+        testDmtData018();
 
 	}
 
@@ -85,9 +83,9 @@ public class DmtData {
 			tbc.log("#testDmtData001");
 			byte[] value = new byte[] { 1, 10, 127 };
 			String expectedValue= "01 0A 7F";
-			org.osgi.service.dmt.DmtData data  = new org.osgi.service.dmt.DmtData(value,true);
+			info.dmtree.DmtData data  = new info.dmtree.DmtData(value,true);
 			tbc.assertEquals("Asserting DmtData.FORMAT_BASE64",
-					org.osgi.service.dmt.DmtData.FORMAT_BASE64, data.getFormat());
+					info.dmtree.DmtData.FORMAT_BASE64, data.getFormat());
 			
 			tbc.assertEquals("Asserting the value", value, data.getBase64());
 			
@@ -98,8 +96,7 @@ public class DmtData {
 					expectedValue, data.toString());
 			
 		} catch(Exception e) {
-			tbc.fail("Unexpected Exception: " + e.getClass().getName()
-					+ " [Message: " + e.getMessage() + "]");
+			tbc.failUnexpectedException(e);
 
 		}
 	}
@@ -117,9 +114,9 @@ public class DmtData {
 			tbc.log("#testDmtData002");
 			byte[] value = new byte[] { 3, 55, 100 };
 			String expectedValue= "03 37 64";
-			org.osgi.service.dmt.DmtData data  = new org.osgi.service.dmt.DmtData(value);
+			info.dmtree.DmtData data  = new info.dmtree.DmtData(value);
 			tbc.assertEquals("Asserting DmtData.FORMAT_BINARY",
-					org.osgi.service.dmt.DmtData.FORMAT_BINARY, data.getFormat());
+					info.dmtree.DmtData.FORMAT_BINARY, data.getFormat());
 			
 			tbc.assertEquals("Asserting the value", value, data.getBinary());
 			
@@ -130,8 +127,7 @@ public class DmtData {
 					expectedValue, data.toString());
 			
 		} catch(Exception e) {
-			tbc.fail("Unexpected Exception: " + e.getClass().getName()
-					+ " [Message: " + e.getMessage() + "]");
+			tbc.failUnexpectedException(e);
 
 		}
 	}
@@ -148,17 +144,16 @@ public class DmtData {
 		try {		
 			tbc.log("#testDmtData003");
 			boolean value = false;
-			org.osgi.service.dmt.DmtData data  = new org.osgi.service.dmt.DmtData(value);
+			info.dmtree.DmtData data  = new info.dmtree.DmtData(value);
 			tbc.assertEquals("Asserting DmtData.FORMAT_BOOLEAN",
-					org.osgi.service.dmt.DmtData.FORMAT_BOOLEAN, data.getFormat());
+					info.dmtree.DmtData.FORMAT_BOOLEAN, data.getFormat());
 			
 			tbc.assertEquals("Asserting the value", value, data.getBoolean());
 			tbc.assertEquals("Asserting the size", 1, data.getSize());
 			tbc.assertEquals("Asserting the string returned", String.valueOf(value), data.toString());
 			
 		} catch(Exception e) {
-			tbc.fail("Unexpected Exception: " + e.getClass().getName()
-					+ " [Message: " + e.getMessage() + "]");
+			tbc.failUnexpectedException(e);
 
 		}
 	}
@@ -175,9 +170,9 @@ public class DmtData {
 		try {		
 			tbc.log("#testDmtData004");
 			String value = "20051001";
-			org.osgi.service.dmt.DmtData data  = new org.osgi.service.dmt.DmtData(value,org.osgi.service.dmt.DmtData.FORMAT_DATE);
+			info.dmtree.DmtData data  = new info.dmtree.DmtData(value,info.dmtree.DmtData.FORMAT_DATE);
 			tbc.assertEquals("Asserting DmtData.FORMAT_DATE",
-					org.osgi.service.dmt.DmtData.FORMAT_DATE, data.getFormat());
+					info.dmtree.DmtData.FORMAT_DATE, data.getFormat());
 			
 			tbc.assertEquals("Asserting the value", value, data.getDate());
 			
@@ -186,8 +181,7 @@ public class DmtData {
 			tbc.assertEquals("Asserting the size", data.toString().length(), data.getSize());
 			
 		} catch(Exception e) {
-			tbc.fail("Unexpected Exception: " + e.getClass().getName()
-					+ " [Message: " + e.getMessage() + "]");
+			tbc.failUnexpectedException(e);
 
 		}
 	}
@@ -204,9 +198,9 @@ public class DmtData {
 		try {		
 			tbc.log("#testDmtData005");
 			float value = 2.4F;
-			org.osgi.service.dmt.DmtData data  = new org.osgi.service.dmt.DmtData(value);
+			info.dmtree.DmtData data  = new info.dmtree.DmtData(value);
 			tbc.assertEquals("Asserting DmtData.FORMAT_FLOAT",
-					org.osgi.service.dmt.DmtData.FORMAT_FLOAT, data.getFormat());
+					info.dmtree.DmtData.FORMAT_FLOAT, data.getFormat());
 			
 			tbc.assertTrue("Asserting the value", value == data.getFloat());
 			
@@ -214,8 +208,7 @@ public class DmtData {
 			
 			tbc.assertEquals("Asserting the string returned", String.valueOf(value), data.toString());
 		} catch(Exception e) {
-			tbc.fail("Unexpected Exception: " + e.getClass().getName()
-					+ " [Message: " + e.getMessage() + "]");
+			tbc.failUnexpectedException(e);
 
 		}
 	}
@@ -231,9 +224,9 @@ public class DmtData {
 		try {		
 			tbc.log("#testDmtData006");
 			int value = 2;
-			org.osgi.service.dmt.DmtData data  = new org.osgi.service.dmt.DmtData(value);
+			info.dmtree.DmtData data  = new info.dmtree.DmtData(value);
 			tbc.assertEquals("Asserting DmtData.FORMAT_INTEGER",
-					org.osgi.service.dmt.DmtData.FORMAT_INTEGER, data.getFormat());
+					info.dmtree.DmtData.FORMAT_INTEGER, data.getFormat());
 			
 			tbc.assertEquals("Asserting the value", value,data.getInt());
 			
@@ -242,8 +235,7 @@ public class DmtData {
 			tbc.assertEquals("Asserting the string returned", String.valueOf(value), data.toString());
 			
 		} catch(Exception e) {
-			tbc.fail("Unexpected Exception: " + e.getClass().getName()
-					+ " [Message: " + e.getMessage() + "]");
+			tbc.failUnexpectedException(e);
 
 		}
 	}
@@ -257,17 +249,16 @@ public class DmtData {
 	private void testDmtData007() {
 		try {		
 			tbc.log("#testDmtData007");
-			org.osgi.service.dmt.DmtData data  = org.osgi.service.dmt.DmtData.NULL_VALUE;
+			info.dmtree.DmtData data  = info.dmtree.DmtData.NULL_VALUE;
 			tbc.assertEquals("Asserting DmtData.FORMAT_NULL",
-					org.osgi.service.dmt.DmtData.FORMAT_NULL, data.getFormat());
+					info.dmtree.DmtData.FORMAT_NULL, data.getFormat());
 			
 			tbc.assertEquals("Asserting the size", 0, data.getSize());
 			
 			tbc.assertEquals("Asserting the string returned", "null", data.toString());
 			
 		} catch(Exception e) {
-			tbc.fail("Unexpected Exception: " + e.getClass().getName()
-					+ " [Message: " + e.getMessage() + "]");
+			tbc.failUnexpectedException(e);
 
 		}
 	}
@@ -283,9 +274,9 @@ public class DmtData {
 		try {		
 			tbc.log("#testDmtData008");
 			String value = "TestString";
-			org.osgi.service.dmt.DmtData data  = new org.osgi.service.dmt.DmtData(value);
+			info.dmtree.DmtData data  = new info.dmtree.DmtData(value);
 			tbc.assertEquals("Asserting DmtData.FORMAT_STRING",
-					org.osgi.service.dmt.DmtData.FORMAT_STRING, data.getFormat());
+					info.dmtree.DmtData.FORMAT_STRING, data.getFormat());
 			
 			tbc.assertEquals("Asserting the value", value, data.getString());
 			
@@ -294,8 +285,7 @@ public class DmtData {
 			tbc.assertEquals("Asserting the string returned", value, data.toString());
 			
 		} catch(Exception e) {
-			tbc.fail("Unexpected Exception: " + e.getClass().getName()
-					+ " [Message: " + e.getMessage() + "]");
+			tbc.failUnexpectedException(e);
 
 		}
 	}
@@ -311,9 +301,9 @@ public class DmtData {
 		try {		
 			tbc.log("#testDmtData009");
 			String value = "120000";
-			org.osgi.service.dmt.DmtData data  = new org.osgi.service.dmt.DmtData(value,org.osgi.service.dmt.DmtData.FORMAT_TIME);
+			info.dmtree.DmtData data  = new info.dmtree.DmtData(value,info.dmtree.DmtData.FORMAT_TIME);
 			tbc.assertEquals("Asserting DmtData.FORMAT_TIME",
-					org.osgi.service.dmt.DmtData.FORMAT_TIME, data.getFormat());
+					info.dmtree.DmtData.FORMAT_TIME, data.getFormat());
 			
 			tbc.assertEquals("Asserting the value", value, data.getTime());
 			
@@ -322,8 +312,7 @@ public class DmtData {
 			tbc.assertEquals("Asserting the size", data.toString().length(), data.getSize());
 			
 		} catch(Exception e) {
-			tbc.fail("Unexpected Exception: " + e.getClass().getName()
-					+ " [Message: " + e.getMessage() + "]");
+			tbc.failUnexpectedException(e);
 
 		}
 	}
@@ -338,17 +327,16 @@ public class DmtData {
 		try {		
 			tbc.log("#testDmtData010");
 			String value = "120000Z";
-			org.osgi.service.dmt.DmtData data  = new org.osgi.service.dmt.DmtData(value,org.osgi.service.dmt.DmtData.FORMAT_TIME);
+			info.dmtree.DmtData data  = new info.dmtree.DmtData(value,info.dmtree.DmtData.FORMAT_TIME);
 			tbc.assertEquals("Asserting DmtData.FORMAT_TIME",
-					org.osgi.service.dmt.DmtData.FORMAT_TIME, data.getFormat());
+					info.dmtree.DmtData.FORMAT_TIME, data.getFormat());
 			
 			tbc.assertEquals("Asserting the value", value, data.getTime());
 			
 			tbc.assertEquals("Asserting the string returned", value, data.toString());
 			
 		} catch(Exception e) {
-			tbc.fail("Unexpected Exception: " + e.getClass().getName()
-					+ " [Message: " + e.getMessage() + "]");
+			tbc.failUnexpectedException(e);
 
 		}
 	}
@@ -363,9 +351,9 @@ public class DmtData {
 		try {		
 			tbc.log("#testDmtData011");
 			String value = "testXml";
-			org.osgi.service.dmt.DmtData data  = new org.osgi.service.dmt.DmtData(value,org.osgi.service.dmt.DmtData.FORMAT_XML);
+			info.dmtree.DmtData data  = new info.dmtree.DmtData(value,info.dmtree.DmtData.FORMAT_XML);
 			tbc.assertEquals("Asserting DmtData.FORMAT_XML",
-					org.osgi.service.dmt.DmtData.FORMAT_XML, data.getFormat());
+					info.dmtree.DmtData.FORMAT_XML, data.getFormat());
 			
 			tbc.assertEquals("Asserting the value", value, data.getXml());
 			
@@ -375,8 +363,7 @@ public class DmtData {
 			
 			
 		} catch(Exception e) {
-			tbc.fail("Unexpected Exception: " + e.getClass().getName()
-					+ " [Message: " + e.getMessage() + "]");
+			tbc.failUnexpectedException(e);
 
 		}
 	}
@@ -393,9 +380,9 @@ public class DmtData {
 			tbc.log("#testDmtData012");
 			String value = "TestString2";
 			
-			org.osgi.service.dmt.DmtData data  = new org.osgi.service.dmt.DmtData(value,org.osgi.service.dmt.DmtData.FORMAT_STRING);
+			info.dmtree.DmtData data  = new info.dmtree.DmtData(value,info.dmtree.DmtData.FORMAT_STRING);
 			tbc.assertEquals("Asserting DmtData.FORMAT_STRING",
-					org.osgi.service.dmt.DmtData.FORMAT_STRING, data.getFormat());
+					info.dmtree.DmtData.FORMAT_STRING, data.getFormat());
 			
 			tbc.assertEquals("Asserting the value", value, data.getString());
 			
@@ -404,8 +391,7 @@ public class DmtData {
 			tbc.assertEquals("Asserting the string returned", value, data.toString());
 			
 		} catch(Exception e) {
-			tbc.fail("Unexpected Exception: " + e.getClass().getName()
-					+ " [Message: " + e.getMessage() + "]");
+			tbc.failUnexpectedException(e);
 
 		}
 	}
@@ -421,9 +407,9 @@ public class DmtData {
             tbc.log("#testDmtData013");
             byte[] value = new byte[] { 1, 10, 127 };
             String expectedValue= "01 0A 7F";
-            org.osgi.service.dmt.DmtData data  = new org.osgi.service.dmt.DmtData(value,false);
+            info.dmtree.DmtData data  = new info.dmtree.DmtData(value,false);
             tbc.assertEquals("Asserting DmtData.FORMAT_BINARY",
-                    org.osgi.service.dmt.DmtData.FORMAT_BINARY, data.getFormat());
+                    info.dmtree.DmtData.FORMAT_BINARY, data.getFormat());
             
             tbc.assertEquals("Asserting the value", value, data.getBinary());
             
@@ -434,8 +420,7 @@ public class DmtData {
                     expectedValue, data.toString());
             
         } catch(Exception e) {
-            tbc.fail("Unexpected Exception: " + e.getClass().getName()
-                    + " [Message: " + e.getMessage() + "]");
+        	tbc.failUnexpectedException(e);
 
         }
     }
@@ -449,9 +434,9 @@ public class DmtData {
 	private void testDmtData014() {
 		try {		
 			tbc.log("#testDmtData014");
-			org.osgi.service.dmt.DmtData data  = new org.osgi.service.dmt.DmtData((String)null);
+			info.dmtree.DmtData data  = new info.dmtree.DmtData((String)null);
 			tbc.assertEquals("Asserting DmtData.FORMAT_STRING",
-					org.osgi.service.dmt.DmtData.FORMAT_STRING, data.getFormat());
+					info.dmtree.DmtData.FORMAT_STRING, data.getFormat());
 			
 			tbc.assertNull("Asserting the value", data.getString());
 
@@ -460,8 +445,7 @@ public class DmtData {
 			tbc.assertEquals("Asserting the string returned", "",data.toString());
 			
 		} catch(Exception e) {
-			tbc.fail("Unexpected Exception: " + e.getClass().getName()
-					+ " [Message: " + e.getMessage() + "]");
+			tbc.failUnexpectedException(e);
 
 		}
 	}
@@ -475,9 +459,9 @@ public class DmtData {
 	private void testDmtData015() {
 		try {		
 			tbc.log("#testDmtData015");
-			org.osgi.service.dmt.DmtData data  = new org.osgi.service.dmt.DmtData(null,org.osgi.service.dmt.DmtData.FORMAT_STRING);
+			info.dmtree.DmtData data  = new info.dmtree.DmtData(null,info.dmtree.DmtData.FORMAT_STRING);
 			tbc.assertEquals("Asserting DmtData.FORMAT_STRING",
-					org.osgi.service.dmt.DmtData.FORMAT_STRING, data.getFormat());
+					info.dmtree.DmtData.FORMAT_STRING, data.getFormat());
 			
 			tbc.assertNull("Asserting the value", data.getString());
 
@@ -486,8 +470,7 @@ public class DmtData {
 			tbc.assertEquals("Asserting the string returned", "",data.toString());
 			
 		} catch(Exception e) {
-			tbc.fail("Unexpected Exception: " + e.getClass().getName()
-					+ " [Message: " + e.getMessage() + "]");
+			tbc.failUnexpectedException(e);
 
 		}
 	}
@@ -501,9 +484,9 @@ public class DmtData {
 	private void testDmtData016() {
 		try {		
 			tbc.log("#testDmtData016");
-			org.osgi.service.dmt.DmtData data  = new org.osgi.service.dmt.DmtData(null,org.osgi.service.dmt.DmtData.FORMAT_XML);
+			info.dmtree.DmtData data  = new info.dmtree.DmtData(null,info.dmtree.DmtData.FORMAT_XML);
 			tbc.assertEquals("Asserting DmtData.FORMAT_XML",
-					org.osgi.service.dmt.DmtData.FORMAT_XML, data.getFormat());
+					info.dmtree.DmtData.FORMAT_XML, data.getFormat());
 			
 			tbc.assertNull("Asserting the value", data.getXml());
 
@@ -512,34 +495,59 @@ public class DmtData {
 			tbc.assertEquals("Asserting the string returned", "",data.toString());
 			
 		} catch(Exception e) {
-			tbc.fail("Unexpected Exception: " + e.getClass().getName()
-					+ " [Message: " + e.getMessage() + "]");
+			tbc.failUnexpectedException(e);
 
 		}
 	}
 	
 	/**
-	 * This method asserts that when a DmtData(Object) is created the format is
-	 * DmtData.FORMAT_NODE and the value is returned by DmtData.getNode()
+	 * This method asserts that when a DmtData(String,String) is created the format is
+	 * DmtData.FORMAT_RAW_STRING, DmtData.getSize() and DmtData.getRawString() return the expected value
 	 * 
-	 * @spec DmtData.DmtData(Object)
+	 * @spec DmtData.DmtData(String,String)
 	 */
 	private void testDmtData017() {
 		try {		
 			tbc.log("#testDmtData017");
-			Vector value = new Vector();
-			org.osgi.service.dmt.DmtData data  = new org.osgi.service.dmt.DmtData(value);
-			tbc.assertEquals("Asserting DmtData.FORMAT_NODE",
-					org.osgi.service.dmt.DmtData.FORMAT_NODE, data.getFormat());
+			String format = "format";
+			String value = "data";
+			info.dmtree.DmtData data  = new info.dmtree.DmtData(format,value);
+			tbc.assertEquals("Asserting DmtData.FORMAT_RAW_STRING",
+					info.dmtree.DmtData.FORMAT_RAW_STRING, data.getFormat());
 			
-			tbc.assertEquals("Asserting the value", value, data.getNode());
+			tbc.assertEquals("Asserting the value", value, data.getRawString());
+			
+			tbc.assertEquals("Asserting the size", value.length(), data.getSize());
 			
 		} catch(Exception e) {
-			tbc.fail("Unexpected Exception: " + e.getClass().getName()
-					+ " [Message: " + e.getMessage() + "]");
+			tbc.failUnexpectedException(e);
 
 		}
 	}
 	
+	/**
+	 * This method asserts that when a DmtData(String,String) is created the format is
+	 * DmtData.FORMAT_RAW_BINARY, DmtData.getSize() and DmtData.getRawBinary() return the expected value
+	 * 
+	 * @spec DmtData.DmtData(String,byte[])
+	 */
+	private void testDmtData018() {
+		try {		
+			tbc.log("#testDmtData018");
+			String format = "format";
+			byte[] value = new byte[] {1};
+			info.dmtree.DmtData data  = new info.dmtree.DmtData(format,value);
+			tbc.assertEquals("Asserting DmtData.FORMAT_RAW_BINARY",
+					info.dmtree.DmtData.FORMAT_RAW_BINARY, data.getFormat());
+			
+			tbc.assertEquals("Asserting the value", value, data.getRawBinary());
+			
+			tbc.assertEquals("Asserting the size",value.length, data.getSize());
+			
+		} catch(Exception e) {
+			tbc.failUnexpectedException(e);
+
+		}
+	}
 	
 }

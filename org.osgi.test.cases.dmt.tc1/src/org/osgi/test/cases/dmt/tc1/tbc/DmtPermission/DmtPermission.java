@@ -75,7 +75,7 @@ public class DmtPermission {
 		try {
 			tbc.log("#testDmtPermission001");
 			StringTokenizer stringToken = new StringTokenizer(
-					new org.osgi.service.dmt.security.DmtPermission(
+					new info.dmtree.security.DmtPermission(
 							DmtConstants.OSGi_LOG, DmtConstants.ACTIONS)
 							.getActions(), ",");
 
@@ -86,16 +86,16 @@ public class DmtPermission {
 			boolean errorFound = false;
 			while (stringToken.hasMoreTokens()) {
 				String currentToken = stringToken.nextToken().trim();
-				if (currentToken.equals(org.osgi.service.dmt.security.DmtPermission.ADD)) {
+				if (currentToken.equals(info.dmtree.security.DmtPermission.ADD)) {
 					hasADD = true;
 				} else if (currentToken
-						.equals(org.osgi.service.dmt.security.DmtPermission.GET)) {
+						.equals(info.dmtree.security.DmtPermission.GET)) {
 					hasGET = true;
 					if (!hasADD) {
 						ordered = false;
 					}
 				} else if (currentToken
-						.equals(org.osgi.service.dmt.security.DmtPermission.REPLACE)) {
+						.equals(info.dmtree.security.DmtPermission.REPLACE)) {
 					hasREPLACE = true;
 					if (!hasGET) {
 						ordered = false;
@@ -114,7 +114,7 @@ public class DmtPermission {
 					"Asserts that the order returned was the specified.",
 					ordered);
 		} catch (Exception e) {
-			tbc.fail("Unexpected exception: " + e.getClass().getName());
+			tbc.failUnexpectedException(e);
 		}
 	}
 
@@ -129,7 +129,7 @@ public class DmtPermission {
 		try {
 			tbc.log("#testDmtPermission002");
 			StringTokenizer stringToken = new StringTokenizer(
-					new org.osgi.service.dmt.security.DmtPermission(
+					new info.dmtree.security.DmtPermission(
 							DmtConstants.OSGi_LOG, "*").getActions(), ",");
 
 			boolean ordered = true;
@@ -142,30 +142,30 @@ public class DmtPermission {
 
 			while (stringToken.hasMoreTokens()) {
 				String currentToken = stringToken.nextToken().trim();
-				if (currentToken.equals(org.osgi.service.dmt.security.DmtPermission.ADD)) {
+				if (currentToken.equals(info.dmtree.security.DmtPermission.ADD)) {
 					hasADD = true;
 
 				} else if (currentToken
-						.equals(org.osgi.service.dmt.security.DmtPermission.DELETE)) {
+						.equals(info.dmtree.security.DmtPermission.DELETE)) {
 					hasDELETE = true;
 					if (!hasADD) {
 						ordered = false;
 					}
 
 				} else if (currentToken
-						.equals(org.osgi.service.dmt.security.DmtPermission.EXEC)) {
+						.equals(info.dmtree.security.DmtPermission.EXEC)) {
 					hasEXEC = true;
 					if (!hasDELETE) {
 						ordered = false;
 					}
 				} else if (currentToken
-						.equals(org.osgi.service.dmt.security.DmtPermission.GET)) {
+						.equals(info.dmtree.security.DmtPermission.GET)) {
 					hasGET = true;
 					if (!hasEXEC) {
 						ordered = false;
 					}
 				} else if (currentToken
-						.equals(org.osgi.service.dmt.security.DmtPermission.REPLACE)) {
+						.equals(info.dmtree.security.DmtPermission.REPLACE)) {
 					hasREPLACE = true;
 					if (!hasGET) {
 						ordered = false;
@@ -185,7 +185,7 @@ public class DmtPermission {
 					"Asserts that the order returned was the specified.",
 					ordered);
 		} catch (Exception e) {
-			tbc.fail("Unexpected exception: " + e.getClass().getName());
+			tbc.failUnexpectedException(e);
 		}
 	}
 
@@ -197,14 +197,13 @@ public class DmtPermission {
 	private void testDmtPermission003() {
 		tbc.log("#testDmtPermission003");
 		try {
-			new org.osgi.service.dmt.security.DmtPermission(DmtConstants.OSGi_LOG,
+			new info.dmtree.security.DmtPermission(DmtConstants.OSGi_LOG,
 					null);
 			tbc.failException("#", NullPointerException.class);
 		} catch (NullPointerException e) {
 			tbc.pass("NullPointerException correctly thrown");
 		} catch (Exception e) {
-			tbc.fail("Expected " + NullPointerException.class.getName()
-					+ " but was " + e.getClass().getName());
+			tbc.failExpectedOtherException(NullPointerException.class,e);
 		}
 
 	}
@@ -217,13 +216,12 @@ public class DmtPermission {
 	private void testDmtPermission004() {
 		tbc.log("#testDmtPermission004");
 		try {
-			new org.osgi.service.dmt.security.DmtPermission(null, DmtConstants.ACTIONS);
+			new info.dmtree.security.DmtPermission(null, DmtConstants.ACTIONS);
 			tbc.failException("#", NullPointerException.class);
 		} catch (NullPointerException e) {
 			tbc.pass("NullPointerException correctly thrown");
 		} catch (Exception e) {
-			tbc.fail("Expected " + NullPointerException.class.getName()
-					+ " but was " + e.getClass().getName());
+			tbc.failExpectedOtherException(NullPointerException.class,e);
 		}
 
 	}
@@ -236,14 +234,13 @@ public class DmtPermission {
 	private void testDmtPermission005() {
 		tbc.log("#testDmtPermission005");
 		try {
-			new org.osgi.service.dmt.security.DmtPermission(DmtConstants.OSGi_LOG,
+			new info.dmtree.security.DmtPermission(DmtConstants.OSGi_LOG,
 					DmtConstants.TITLE);
 			tbc.failException("#", IllegalArgumentException.class);
 		} catch (IllegalArgumentException e) {
 			tbc.pass("IllegalArgumentException correctly thrown");
 		} catch (Exception e) {
-			tbc.fail("Expected " + IllegalArgumentException.class.getName()
-					+ " but was " + e.getClass().getName());
+			tbc.failExpectedOtherException(IllegalArgumentException.class,e);
 		}
 
 	}
@@ -256,14 +253,13 @@ public class DmtPermission {
 	private void testDmtPermission006() {
 		tbc.log("#testDmtPermission006");
 		try {
-			new org.osgi.service.dmt.security.DmtPermission(DmtConstants.INVALID,
+			new info.dmtree.security.DmtPermission(DmtConstants.INVALID,
 					DmtConstants.ACTIONS);
 			tbc.failException("#", IllegalArgumentException.class);
 		} catch (IllegalArgumentException e) {
 			tbc.pass("IllegalArgumentException correctly thrown");
 		} catch (Exception e) {
-			tbc.fail("Expected " + IllegalArgumentException.class.getName()
-					+ " but was " + e.getClass().getName());
+			tbc.failExpectedOtherException(IllegalArgumentException.class,e);
 		}
 
 	}
@@ -276,14 +272,14 @@ public class DmtPermission {
 	private void testDmtPermission007() {
 		tbc.log("#testDmtPermission007");
 		try {
-			String actions = new org.osgi.service.dmt.security.DmtPermission(
+			String actions = new info.dmtree.security.DmtPermission(
 					DmtConstants.OSGi_ROOT + "/l*",
-					org.osgi.service.dmt.security.DmtPermission.GET).getActions();
+					info.dmtree.security.DmtPermission.GET).getActions();
 
 			tbc.assertEquals("Asserts that a wildcard is permitted on dmtUri",
-					org.osgi.service.dmt.security.DmtPermission.GET, actions.trim());
+					info.dmtree.security.DmtPermission.GET, actions.trim());
 		} catch (Exception e) {
-			tbc.fail("Unexpected exception: " + e.getClass().getName());
+			tbc.failUnexpectedException(e);
 		}
 
 	}
@@ -296,17 +292,17 @@ public class DmtPermission {
 	private void testDmtPermission008() {
 		tbc.log("#testDmtPermission008");
 		try {
-			String actions = new org.osgi.service.dmt.security.DmtPermission(
+			String actions = new info.dmtree.security.DmtPermission(
 					DmtConstants.OSGi_ROOT + "/*",
-					org.osgi.service.dmt.security.DmtPermission.GET).getActions();
+					info.dmtree.security.DmtPermission.GET).getActions();
 
 			tbc
 					.assertEquals(
 							"Asserts that a wildcard is permitted on dmtUri after '/' character",
-							org.osgi.service.dmt.security.DmtPermission.GET, actions
+							info.dmtree.security.DmtPermission.GET, actions
 									.trim());
 		} catch (Exception e) {
-			tbc.fail("Unexpected exception: " + e.getClass().getName());
+			tbc.failUnexpectedException(e);
 		}
 	}
 	
@@ -320,14 +316,14 @@ public class DmtPermission {
 	private void testDmtPermission009() {
 		tbc.log("#testDmtPermission009");
 		try {
-			String expectedActions = org.osgi.service.dmt.security.DmtPermission.ADD + "," + 
-			org.osgi.service.dmt.security.DmtPermission.DELETE + "," +
-			org.osgi.service.dmt.security.DmtPermission.EXEC + "," + 
-			org.osgi.service.dmt.security.DmtPermission.GET + "," + 
-			org.osgi.service.dmt.security.DmtPermission.REPLACE;
+			String expectedActions = info.dmtree.security.DmtPermission.ADD + "," + 
+			info.dmtree.security.DmtPermission.DELETE + "," +
+			info.dmtree.security.DmtPermission.EXEC + "," + 
+			info.dmtree.security.DmtPermission.GET + "," + 
+			info.dmtree.security.DmtPermission.REPLACE;
 			
 			
-			String actions = new org.osgi.service.dmt.security.DmtPermission(
+			String actions = new info.dmtree.security.DmtPermission(
 					DmtConstants.OSGi_ROOT,expectedActions.toUpperCase()).getActions();
 
 			tbc.assertEquals("Asserts that action names are interpreted case-insensitively, " +
@@ -335,7 +331,7 @@ public class DmtPermission {
 					"forms defined by the action constants.",expectedActions,actions);
 
 		} catch (Exception e) {
-			tbc.fail("Unexpected exception: " + e.getClass().getName());
+			tbc.failUnexpectedException(e);
 		}
 	}
 }

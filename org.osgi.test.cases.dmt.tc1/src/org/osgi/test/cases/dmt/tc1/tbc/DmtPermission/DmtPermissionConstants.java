@@ -58,11 +58,11 @@ public class DmtPermissionConstants {
 	 */
 	private void testConstants001() {
 		tbc.log("#testConstants001");
-		tbc.assertEquals("Asserting DmtPermission.ADD","Add",org.osgi.service.dmt.security.DmtPermission.ADD);
-		tbc.assertEquals("Asserting DmtPermission.DELETE","Delete",org.osgi.service.dmt.security.DmtPermission.DELETE);
-		tbc.assertEquals("Asserting DmtPermission.EXEC","Exec",org.osgi.service.dmt.security.DmtPermission.EXEC);
-		tbc.assertEquals("Asserting DmtPermission.GET","Get",org.osgi.service.dmt.security.DmtPermission.GET);
-		tbc.assertEquals("Asserting DmtPermission.REPLACE","Replace",org.osgi.service.dmt.security.DmtPermission.REPLACE);
+		tbc.assertEquals("Asserting DmtPermission.ADD","Add",info.dmtree.security.DmtPermission.ADD);
+		tbc.assertEquals("Asserting DmtPermission.DELETE","Delete",info.dmtree.security.DmtPermission.DELETE);
+		tbc.assertEquals("Asserting DmtPermission.EXEC","Exec",info.dmtree.security.DmtPermission.EXEC);
+		tbc.assertEquals("Asserting DmtPermission.GET","Get",info.dmtree.security.DmtPermission.GET);
+		tbc.assertEquals("Asserting DmtPermission.REPLACE","Replace",info.dmtree.security.DmtPermission.REPLACE);
 	}
 	
 

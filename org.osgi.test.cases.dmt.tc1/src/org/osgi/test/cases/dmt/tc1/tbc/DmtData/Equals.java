@@ -37,7 +37,7 @@
 
 package org.osgi.test.cases.dmt.tc1.tbc.DmtData;
 
-import org.osgi.service.dmt.DmtData;
+import info.dmtree.DmtData;
 import org.osgi.test.cases.dmt.tc1.tbc.DmtConstants;
 import org.osgi.test.cases.dmt.tc1.tbc.DmtTestControl;
 /**
@@ -66,28 +66,29 @@ public class Equals {
 		try {
 			tbc.log("#testEquals001");
 
-			//A DmtData instance can not have FORMAT_NODE, so it is form FORMAT_INTEGER (1) to FORMAT_NULL(512). 
-			for (int i=1;i<=512;i=i<<1){
-				DmtData baseData = DmtConstants.getDmtData(i);
-				String baseName = DmtConstants.getDmtDataCodeText(i);
-				for (int j=1;j<=512;j=j<<1){
-					if (i==j) {
-						tbc.assertEquals("Asserts that two DmtData with the same format ("+ baseName +") and value are equal",baseData,DmtConstants.getDmtData(j));
-						//Obviously format null cannot have a different value 
-						if (i!=org.osgi.service.dmt.DmtData.FORMAT_NULL) {
-						    DmtData variantDataDifferentValue = DmtConstants.getDmtData(j,true);
-							tbc.assertTrue("Asserts that two DmtData with the same format ("+ baseName +") but different values (\""+ baseData.toString() +"\" x \""+ variantDataDifferentValue.toString() +"\") are different",!baseData.equals(variantDataDifferentValue));
+			for (int i=DmtData.FORMAT_INTEGER;i<=DmtData.FORMAT_RAW_BINARY;i=i<<1){
+				//A DmtData instance can not have FORMAT_NODE,
+				if (i!=DmtData.FORMAT_NODE) { 
+					DmtData baseData = DmtConstants.getDmtData(i);
+					String baseName = DmtConstants.getDmtDataCodeText(i);
+					for (int j=DmtData.FORMAT_INTEGER;j<=DmtData.FORMAT_RAW_BINARY;j=j<<1){
+						if (i==j) {
+							tbc.assertEquals("Asserts that two DmtData with the same format ("+ baseName +") and value are equal",baseData,DmtConstants.getDmtData(j));
+							//Obviously format null cannot have a different value 
+							if (i!=info.dmtree.DmtData.FORMAT_NULL) {
+							    DmtData variantDataDifferentValue = DmtConstants.getDmtData(j,true);
+								tbc.assertTrue("Asserts that two DmtData with the same format ("+ baseName +") but different values (\""+ baseData.toString() +"\" x \""+ variantDataDifferentValue.toString() +"\") are different",!baseData.equals(variantDataDifferentValue));
+							}
+						} else {
+							tbc.assertTrue("Asserts that two DmtData with the different formats ("+ baseName +" x "+ DmtConstants.getDmtDataCodeText(j) +") are different",
+							    !baseData.equals(DmtConstants.getDmtData(j)));
 						}
-					} else {
-						tbc.assertTrue("Asserts that two DmtData with the different formats ("+ baseName +" x "+ DmtConstants.getDmtDataCodeText(j) +") are different",
-						    !baseData.equals(DmtConstants.getDmtData(j)));
 					}
 				}
 			}
 			
 		} catch (Exception e) {
-			tbc.fail("Unexpected Exception: " + e.getClass().getName()
-					+ " [Message: " + e.getMessage() + "]");
+			tbc.failUnexpectedException(e);
 		}
 	}
 

@@ -36,7 +36,7 @@
 
 package org.osgi.test.cases.dmt.tc1.tbc.DmtPermission;
 
-import org.osgi.service.dmt.security.DmtPermission;
+import info.dmtree.security.DmtPermission;
 import org.osgi.test.cases.dmt.tc1.tbc.DmtConstants;
 import org.osgi.test.cases.dmt.tc1.tbc.DmtTestControl;
 
@@ -64,17 +64,17 @@ public class HashCode {
 	private void testHashCode001() {
 		try {
 			tbc.log("#testHashCode001");
-			org.osgi.service.dmt.security.DmtPermission permission = new org.osgi.service.dmt.security.DmtPermission(
+			info.dmtree.security.DmtPermission permission = new info.dmtree.security.DmtPermission(
 					DmtConstants.OSGi_LOG, DmtConstants.ACTIONS);
 			tbc
 					.assertEquals(
 							"Asserting that two objects initialized with the same dmtUri and actions have the same hashcode",
-							new org.osgi.service.dmt.security.DmtPermission(
+							new info.dmtree.security.DmtPermission(
 									DmtConstants.OSGi_LOG,
 									DmtConstants.ACTIONS).hashCode(),
 							permission.hashCode());
 		} catch (Exception e) {
-			tbc.fail("Unexpected exception: " + e.getClass().getName());
+			tbc.failUnexpectedException(e);
 		}
 	}
 
@@ -91,17 +91,17 @@ public class HashCode {
 					+ "," + DmtPermission.EXEC;
 			String actionsDifferentOrder = DmtPermission.DELETE + ","
 					+ DmtPermission.EXEC + "," + DmtPermission.ADD;
-			org.osgi.service.dmt.security.DmtPermission permission = new org.osgi.service.dmt.security.DmtPermission(
+			info.dmtree.security.DmtPermission permission = new info.dmtree.security.DmtPermission(
 					DmtConstants.OSGi_LOG, actions);
 			tbc
 					.assertEquals(
 							"Asserting that two objects initialized with the same dmtUri and actions are equal",
 							permission.hashCode(),
-							(new org.osgi.service.dmt.security.DmtPermission(
+							(new info.dmtree.security.DmtPermission(
 									DmtConstants.OSGi_LOG,
 									actionsDifferentOrder)).hashCode());
 		} catch (Exception e) {
-			tbc.fail("Unexpected exception: " + e.getClass().getName());
+			tbc.failUnexpectedException(e);
 		}
 	}
 

@@ -35,7 +35,7 @@
 
 package org.osgi.test.cases.dmt.tc1.tbc.DmtData;
 
-import org.osgi.service.dmt.DmtData;
+import info.dmtree.DmtData;
 import org.osgi.test.cases.util.DefaultTestBundleControl;
 
 /**
@@ -69,5 +69,8 @@ public class DmtDataConstants {
         tbc.assertEquals("Asserting FORMAT_NULL value", 512,DmtData.FORMAT_NULL);
         tbc.assertEquals("Asserting FORMAT_STRING value", 4,DmtData.FORMAT_STRING);
         tbc.assertEquals("Asserting FORMAT_XML value", 256,DmtData.FORMAT_XML);
+        tbc.assertEquals("Asserting FORMAT_RAW_BINARY value", 4096,DmtData.FORMAT_RAW_BINARY);
+        tbc.assertEquals("Asserting FORMAT_RAW_STRING value", 2048,DmtData.FORMAT_RAW_STRING);
+
 	}
 }

@@ -42,7 +42,7 @@
 
 package org.osgi.test.cases.dmt.tc1.tbc.Acl;
 
-import org.osgi.service.dmt.Acl;
+import info.dmtree.Acl;
 import org.osgi.test.cases.dmt.tc1.tbc.DmtConstants;
 import org.osgi.test.cases.dmt.tc1.tbc.DmtTestControl;
 
@@ -90,7 +90,7 @@ public class DeletePermission {
 					| Acl.EXEC | Acl.GET, acl
 					.getPermissions(DmtConstants.PRINCIPAL));
 		} catch (Exception e) {
-			tbc.fail("Unexpected exception: " + e.getClass().getName());
+			tbc.failUnexpectedException(e);
 		}
 	}
 
@@ -111,7 +111,7 @@ public class DeletePermission {
 					| Acl.GET, acl
 					.getPermissions(DmtConstants.PRINCIPAL));
 		} catch (Exception e) {
-			tbc.fail("Unexpected exception: " + e.getClass().getName());
+			tbc.failUnexpectedException(e);
 		}
 	}
 
@@ -130,8 +130,7 @@ public class DeletePermission {
 		} catch (IllegalArgumentException e) {
 			tbc.pass("IllegalArgumentException correctly thrown");
 		} catch (Exception e) {
-			tbc.fail("Expected IllegalArgumentException and "
-					+ e.getClass().getName() + " was thrown");
+			tbc.failExpectedOtherException(IllegalArgumentException.class,e);
 		}
 	}
 
@@ -151,8 +150,7 @@ public class DeletePermission {
 		} catch (IllegalArgumentException e) {
 			tbc.pass("IllegalArgumentException correctly thrown");
 		} catch (Exception e) {
-			tbc.fail("Expected IllegalArgumentException and "
-					+ e.getClass().getName() + " was thrown");
+			tbc.failExpectedOtherException(IllegalArgumentException.class,e);
 		}
 	}
 
@@ -191,7 +189,7 @@ public class DeletePermission {
 					Acl.GET, acl
 							.getPermissions(DmtConstants.PRINCIPAL_2));
 		} catch (Exception e) {
-			tbc.fail("Unexpected exception: " + e.getClass().getName());
+			tbc.failUnexpectedException(e);
 		}
 	}
 
@@ -212,8 +210,7 @@ public class DeletePermission {
 		} catch (IllegalArgumentException e) {
 			tbc.pass("IllegalArgumentException correctly thrown");
 		} catch (Exception e) {
-			tbc.fail("Expected IllegalArgumentException and "
-					+ e.getClass().getName() + " was thrown");
+			tbc.failExpectedOtherException(IllegalArgumentException.class,e);
 		}
 	}
 
@@ -243,7 +240,7 @@ public class DeletePermission {
 					passed);
 
 		} catch (Exception e) {
-			tbc.fail("Unexpected exception: " + e.getClass().getName());
+			tbc.failUnexpectedException(e);
 		}
 	}
 

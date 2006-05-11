@@ -63,22 +63,23 @@ public class DmtExceptionConstants {
 	 */
 	private void testConstants001(){
 		tbc.log("#testConstants001");
-		tbc.assertEquals("Asserts DmtException.ALERT_NOT_ROUTED",5,org.osgi.service.dmt.DmtException.ALERT_NOT_ROUTED);
-		tbc.assertEquals("Asserts DmtException.COMMAND_FAILED",500,org.osgi.service.dmt.DmtException.COMMAND_FAILED);
-		tbc.assertEquals("Asserts DmtException.COMMAND_NOT_ALLOWED",405,org.osgi.service.dmt.DmtException.COMMAND_NOT_ALLOWED);
-		tbc.assertEquals("Asserts DmtException.CONCURRENT_ACCESS",4,org.osgi.service.dmt.DmtException.CONCURRENT_ACCESS);
-		tbc.assertEquals("Asserts DmtException.DATA_STORE_FAILURE",510,org.osgi.service.dmt.DmtException.DATA_STORE_FAILURE);
-		tbc.assertEquals("Asserts DmtException.FEATURE_NOT_SUPPORTED",406,org.osgi.service.dmt.DmtException.FEATURE_NOT_SUPPORTED);
-        tbc.assertEquals("Asserts DmtException.INVALID_URI",3,org.osgi.service.dmt.DmtException.INVALID_URI);
-		tbc.assertEquals("Asserts DmtException.METADATA_MISMATCH",2,org.osgi.service.dmt.DmtException.METADATA_MISMATCH);
-		tbc.assertEquals("Asserts DmtException.NODE_ALREADY_EXISTS",418,org.osgi.service.dmt.DmtException.NODE_ALREADY_EXISTS);
-		tbc.assertEquals("Asserts DmtException.NODE_NOT_FOUND",404,org.osgi.service.dmt.DmtException.NODE_NOT_FOUND);
-		tbc.assertEquals("Asserts DmtException.PERMISSION_DENIED",425,org.osgi.service.dmt.DmtException.PERMISSION_DENIED);
-		tbc.assertEquals("Asserts DmtException.REMOTE_ERROR",1,org.osgi.service.dmt.DmtException.REMOTE_ERROR);
-		tbc.assertEquals("Asserts DmtException.ROLLBACK_FAILED",516,org.osgi.service.dmt.DmtException.ROLLBACK_FAILED);
-		tbc.assertEquals("Asserts DmtException.SESSION_CREATION_TIMEOUT",7,org.osgi.service.dmt.DmtException.SESSION_CREATION_TIMEOUT);
-		tbc.assertEquals("Asserts DmtException.TRANSACTION_ERROR",6,org.osgi.service.dmt.DmtException.TRANSACTION_ERROR);
-		tbc.assertEquals("Asserts DmtException.URI_TOO_LONG",414,org.osgi.service.dmt.DmtException.URI_TOO_LONG);
+		tbc.assertEquals("Asserts DmtException.ALERT_NOT_ROUTED",5,info.dmtree.DmtException.ALERT_NOT_ROUTED);
+		tbc.assertEquals("Asserts DmtException.COMMAND_FAILED",500,info.dmtree.DmtException.COMMAND_FAILED);
+		tbc.assertEquals("Asserts DmtException.COMMAND_NOT_ALLOWED",405,info.dmtree.DmtException.COMMAND_NOT_ALLOWED);
+		tbc.assertEquals("Asserts DmtException.CONCURRENT_ACCESS",4,info.dmtree.DmtException.CONCURRENT_ACCESS);
+		tbc.assertEquals("Asserts DmtException.DATA_STORE_FAILURE",510,info.dmtree.DmtException.DATA_STORE_FAILURE);
+		tbc.assertEquals("Asserts DmtException.FEATURE_NOT_SUPPORTED",406,info.dmtree.DmtException.FEATURE_NOT_SUPPORTED);
+        tbc.assertEquals("Asserts DmtException.INVALID_URI",3,info.dmtree.DmtException.INVALID_URI);
+		tbc.assertEquals("Asserts DmtException.METADATA_MISMATCH",2,info.dmtree.DmtException.METADATA_MISMATCH);
+		tbc.assertEquals("Asserts DmtException.NODE_ALREADY_EXISTS",418,info.dmtree.DmtException.NODE_ALREADY_EXISTS);
+		tbc.assertEquals("Asserts DmtException.NODE_NOT_FOUND",404,info.dmtree.DmtException.NODE_NOT_FOUND);
+		tbc.assertEquals("Asserts DmtException.PERMISSION_DENIED",425,info.dmtree.DmtException.PERMISSION_DENIED);
+		tbc.assertEquals("Asserts DmtException.REMOTE_ERROR",1,info.dmtree.DmtException.REMOTE_ERROR);
+		tbc.assertEquals("Asserts DmtException.ROLLBACK_FAILED",516,info.dmtree.DmtException.ROLLBACK_FAILED);
+		tbc.assertEquals("Asserts DmtException.SESSION_CREATION_TIMEOUT",7,info.dmtree.DmtException.SESSION_CREATION_TIMEOUT);
+		tbc.assertEquals("Asserts DmtException.TRANSACTION_ERROR",6,info.dmtree.DmtException.TRANSACTION_ERROR);
+		tbc.assertEquals("Asserts DmtException.URI_TOO_LONG",414,info.dmtree.DmtException.URI_TOO_LONG);
+		tbc.assertEquals("Asserts DmtException.UNAUTHORIZED",401,info.dmtree.DmtException.UNAUTHORIZED);
 	}
 
 }

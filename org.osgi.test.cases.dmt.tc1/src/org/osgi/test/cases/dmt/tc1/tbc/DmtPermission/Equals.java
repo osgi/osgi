@@ -36,7 +36,7 @@
 
 package org.osgi.test.cases.dmt.tc1.tbc.DmtPermission;
 
-import org.osgi.service.dmt.security.DmtPermission;
+import info.dmtree.security.DmtPermission;
 import org.osgi.test.cases.dmt.tc1.tbc.DmtConstants;
 import org.osgi.test.cases.dmt.tc1.tbc.DmtTestControl;
 
@@ -69,10 +69,10 @@ public class Equals {
 		try {
 			tbc.log("#testEquals001");
 			tbc.assertTrue("Asserting that two objects initialized with the same dmtUri and actions are equal", 
-					new org.osgi.service.dmt.security.DmtPermission(DmtConstants.OSGi_LOG,DmtConstants.ACTIONS)
-					.equals(new org.osgi.service.dmt.security.DmtPermission(DmtConstants.OSGi_LOG,DmtConstants.ACTIONS)));
+					new info.dmtree.security.DmtPermission(DmtConstants.OSGi_LOG,DmtConstants.ACTIONS)
+					.equals(new info.dmtree.security.DmtPermission(DmtConstants.OSGi_LOG,DmtConstants.ACTIONS)));
 		} catch (Exception e) { 
-			tbc.fail("Unexpected exception: " + e.getClass().getName());
+			tbc.failUnexpectedException(e);
 		}
 	}
 	
@@ -85,10 +85,10 @@ public class Equals {
 		try {
 			tbc.log("#testEquals002");
 			tbc.assertTrue("Asserting that two objects initialized with the same dmtUri but different actions are different", 
-					!new org.osgi.service.dmt.security.DmtPermission(DmtConstants.OSGi_LOG,DmtConstants.ACTIONS)
-					.equals(new org.osgi.service.dmt.security.DmtPermission(DmtConstants.OSGi_LOG,DmtConstants.DIFFERENT_ACTIONS)));
+					!new info.dmtree.security.DmtPermission(DmtConstants.OSGi_LOG,DmtConstants.ACTIONS)
+					.equals(new info.dmtree.security.DmtPermission(DmtConstants.OSGi_LOG,DmtConstants.DIFFERENT_ACTIONS)));
 		} catch (Exception e) { 
-			tbc.fail("Unexpected exception: " + e.getClass().getName());
+			tbc.failUnexpectedException(e);
 		}
 	}
 	
@@ -101,10 +101,10 @@ public class Equals {
 		try {
 			tbc.log("#testEquals003");
 			tbc.assertTrue("Asserting that two objects initialized with the same actions but different dmtUri are different", 
-					!new org.osgi.service.dmt.security.DmtPermission(DmtConstants.OSGi_LOG,DmtConstants.ACTIONS)
-					.equals(new org.osgi.service.dmt.security.DmtPermission(DmtConstants.OSGi_CONFIGURATION,DmtConstants.ACTIONS)));
+					!new info.dmtree.security.DmtPermission(DmtConstants.OSGi_LOG,DmtConstants.ACTIONS)
+					.equals(new info.dmtree.security.DmtPermission(DmtConstants.OSGi_CONFIGURATION,DmtConstants.ACTIONS)));
 		} catch (Exception e) { 
-			tbc.fail("Unexpected exception: " + e.getClass().getName());
+			tbc.failUnexpectedException(e);
 		}
 	}
 	/**
@@ -119,10 +119,10 @@ public class Equals {
 			String actions = DmtPermission.ADD + "," + DmtPermission.DELETE + "," +DmtPermission.EXEC;
 			String actionsDifferentOrder = DmtPermission.DELETE + "," +DmtPermission.EXEC+"," +DmtPermission.ADD;
 			tbc.assertTrue("Asserting that two objects initialized with the same dmtUri and actions are equal", 
-					new org.osgi.service.dmt.security.DmtPermission(DmtConstants.OSGi_LOG,actions)
-					.equals(new org.osgi.service.dmt.security.DmtPermission(DmtConstants.OSGi_LOG,actionsDifferentOrder)));
+					new info.dmtree.security.DmtPermission(DmtConstants.OSGi_LOG,actions)
+					.equals(new info.dmtree.security.DmtPermission(DmtConstants.OSGi_LOG,actionsDifferentOrder)));
 		} catch (Exception e) { 
-			tbc.fail("Unexpected exception: " + e.getClass().getName());
+			tbc.failUnexpectedException(e);
 		}
 	}	
 	
@@ -135,10 +135,10 @@ public class Equals {
 		try {
 			tbc.log("#testEquals005");
 			tbc.assertTrue("Asserts that the \"*\" action mask is considered equal to a mask containing all actions.", 
-					new org.osgi.service.dmt.security.DmtPermission(DmtConstants.OSGi_LOG,"*")
-					.equals(new org.osgi.service.dmt.security.DmtPermission(DmtConstants.OSGi_LOG,DmtConstants.ALL_ACTIONS)));
+					new info.dmtree.security.DmtPermission(DmtConstants.OSGi_LOG,"*")
+					.equals(new info.dmtree.security.DmtPermission(DmtConstants.OSGi_LOG,DmtConstants.ALL_ACTIONS)));
 		} catch (Exception e) { 
-			tbc.fail("Unexpected exception: " + e.getClass().getName());
+			tbc.failUnexpectedException(e);
 		}
 	}
 }

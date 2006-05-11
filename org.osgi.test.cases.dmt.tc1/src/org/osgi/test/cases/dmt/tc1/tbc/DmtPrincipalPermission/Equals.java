@@ -36,7 +36,7 @@
  */
 package org.osgi.test.cases.dmt.tc1.tbc.DmtPrincipalPermission;
 
-import org.osgi.service.dmt.security.DmtPrincipalPermission;
+import info.dmtree.security.DmtPrincipalPermission;
 import org.osgi.test.cases.dmt.tc1.tbc.DmtConstants;
 import org.osgi.test.cases.dmt.tc1.tbc.DmtTestControl;
 
@@ -74,7 +74,7 @@ public class Equals {
 			tbc.assertTrue("Assert if two DmtPrincipalPermission instances are equal", d1.equals(d2));
 
 		} catch (Exception e) {
-			tbc.fail("Unexpected exception: " + e.getClass().getName());
+			tbc.failUnexpectedException(e);
 		}
 	}
 	
@@ -94,7 +94,7 @@ public class Equals {
 			tbc.assertTrue("Assert if two DmtPrincipalPermission instances are equal", d1.equals(d2));
 
 		} catch (Exception e) {
-			tbc.fail("Unexpected exception: " + e.getClass().getName());
+			tbc.failUnexpectedException(e);
 		}
 	}
 
@@ -113,7 +113,7 @@ public class Equals {
 			tbc.assertTrue("Assert if two DmtPrincipalPermission instances are not equal", !d1.equals(d2));
 
 		} catch (Exception e) {
-			tbc.fail("Unexpected exception: " + e.getClass().getName());
+			tbc.failUnexpectedException(e);
 		}
 	}
 
@@ -133,7 +133,7 @@ public class Equals {
 			tbc.assertTrue("Assert if two DmtPrincipalPermission instances are not equal", !d1.equals(d2));
 
 		} catch (Exception e) {
-			tbc.fail("Unexpected exception: " + e.getClass().getName());
+			tbc.failUnexpectedException(e);
 		}
 	}
     
@@ -152,7 +152,7 @@ public class Equals {
             tbc.assertTrue("Assert if two DmtPrincipalPermission instances are equal using different constructors", d1.equals(d2));
 
         } catch (Exception e) {
-            tbc.fail("Unexpected exception: " + e.getClass().getName());
+            tbc.failUnexpectedException(e);
         }
     }
 }

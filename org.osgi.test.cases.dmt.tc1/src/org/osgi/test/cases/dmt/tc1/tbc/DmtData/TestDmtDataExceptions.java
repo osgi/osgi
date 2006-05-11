@@ -35,7 +35,7 @@
 
 package org.osgi.test.cases.dmt.tc1.tbc.DmtData;
 
-import org.osgi.service.dmt.DmtData;
+import info.dmtree.DmtData;
 import org.osgi.test.cases.dmt.tc1.tbc.DmtConstants;
 import org.osgi.test.cases.dmt.tc1.tbc.DmtTestControl;
 
@@ -70,6 +70,10 @@ public class TestDmtDataExceptions {
         testDmtDataExceptions008();
         testDmtDataExceptions009();
         testDmtDataExceptions010();
+        testDmtDataExceptions011();
+        testDmtDataExceptions012();
+        testDmtDataExceptions013();
+        testDmtDataExceptions014();
 	}
     /**
      * Asserts that NullPointerException is thrown if a date format is constructed and value is null
@@ -84,8 +88,7 @@ public class TestDmtDataExceptions {
         } catch (NullPointerException e) {
             tbc.pass("Asserts that NullPointerException is thrown if a date is constructed and value is null");
         } catch (Exception e) {
-            tbc.fail("Unexpected Exception: " + e.getClass().getName()
-                    + " [Message: " + e.getMessage() + "]");
+        	tbc.failExpectedOtherException(NullPointerException.class,e);
         }
     }
     
@@ -102,8 +105,7 @@ public class TestDmtDataExceptions {
         } catch (NullPointerException e) {
             tbc.pass("Asserts that NullPointerException is thrown if a date is constructed and value is null");
         } catch (Exception e) {
-            tbc.fail("Unexpected Exception: " + e.getClass().getName()
-                    + " [Message: " + e.getMessage() + "]");
+        	tbc.failExpectedOtherException(NullPointerException.class,e);
         }
     }
     
@@ -120,8 +122,7 @@ public class TestDmtDataExceptions {
         } catch (NullPointerException e) {
             tbc.pass("Asserts that NullPointerException is thrown if a bin format is constructed and bytes parameter is null");
         } catch (Exception e) {
-            tbc.fail("Unexpected Exception: " + e.getClass().getName()
-                    + " [Message: " + e.getMessage() + "]");
+        	tbc.failExpectedOtherException(NullPointerException.class,e);
         }
     }
     
@@ -138,8 +139,78 @@ public class TestDmtDataExceptions {
         } catch (NullPointerException e) {
             tbc.pass("Asserts that NullPointerException is thrown if a base64 format is constructed and bytes parameter is null");
         } catch (Exception e) {
-            tbc.fail("Unexpected Exception: " + e.getClass().getName()
-                    + " [Message: " + e.getMessage() + "]");
+        	tbc.failExpectedOtherException(NullPointerException.class,e);
+        }
+    }
+    
+    
+    /**
+     * Asserts that NullPointerException is thrown if a raw string format is 
+     * constructed and formatName parameter is null
+     * 
+     * @spec DmtData.DmtData(String,String)
+     */
+    private void testDmtDataExceptions005() {
+        try {       
+            tbc.log("#testDmtDataExceptions005");
+            new DmtData(null,"a");
+            tbc.failException("", NullPointerException.class);
+        } catch (NullPointerException e) {
+            tbc.pass("Asserts that NullPointerException is thrown if a raw string format is constructed and formatName parameter is null");
+        } catch (Exception e) {
+        	tbc.failExpectedOtherException(NullPointerException.class,e);
+        }
+    }
+    /**
+     * Asserts that NullPointerException is thrown if a raw string format is 
+     * constructed and data parameter is null
+     * 
+     * @spec DmtData.DmtData(String,String)
+     */
+    private void testDmtDataExceptions006() {
+        try {       
+            tbc.log("#testDmtDataExceptions006");
+            new DmtData("a",(String)null);
+            tbc.failException("", NullPointerException.class);
+        } catch (NullPointerException e) {
+            tbc.pass("Asserts that NullPointerException is thrown if a raw string format is constructed and data parameter is null");
+        } catch (Exception e) {
+        	tbc.failExpectedOtherException(NullPointerException.class,e);
+        }
+    }
+    
+    /**
+     * Asserts that NullPointerException is thrown if a raw string format is 
+     * constructed and formatName parameter is null
+     * 
+     * @spec DmtData.DmtData(String,String)
+     */
+    private void testDmtDataExceptions007() {
+        try {       
+            tbc.log("#testDmtDataExceptions007");
+            new DmtData(null,new byte[0]);
+            tbc.failException("", NullPointerException.class);
+        } catch (NullPointerException e) {
+            tbc.pass("Asserts that NullPointerException is thrown if a raw string format is constructed and formatName parameter is null");
+        } catch (Exception e) {
+        	tbc.failExpectedOtherException(NullPointerException.class,e);
+        }
+    }
+    /**
+     * Asserts that NullPointerException is thrown if a raw binary format is 
+     * constructed and data parameter is null
+     * 
+     * @spec DmtData.DmtData(String,String)
+     */
+    private void testDmtDataExceptions008() {
+        try {       
+            tbc.log("#testDmtDataExceptions008");
+            new DmtData("a",(byte[])null);
+            tbc.failException("", NullPointerException.class);
+        } catch (NullPointerException e) {
+            tbc.pass("Asserts that NullPointerException is thrown if a raw binary format is constructed and data parameter is null");
+        } catch (Exception e) {
+        	tbc.failExpectedOtherException(NullPointerException.class,e);
         }
     }
 	/**
@@ -147,23 +218,30 @@ public class TestDmtDataExceptions {
 	 * 
 	 * @spec 117.12.5 DmtData
 	 */
-	private void testDmtDataExceptions005() {
+	private void testDmtDataExceptions009() {
 		try {		
-			tbc.log("#testDmtDataExceptions005");
-			//A DmtData instance can not have FORMAT_NODE, so it is from FORMAT_INTEGER (1) to FORMAT_NULL(512). 
-			for (int i=1;i<=512;i=i<<1){
-				//FORMAT_NULL doesnt have a get associated, so it is from FORMAT_INTEGER (1) to FORMAT_XML(256).
-				String baseName = DmtConstants.getDmtDataCodeText(i);
-			    for (int j=1;j<=256;j=j<<1){
-					if (i!=j) {
-						tbc.assertTrue("Asserts that IllegalStateException is thrown when "+ DmtConstants.getExpectedDmtDataMethod(j) +" is called in a DmtData."+ baseName +"",
-								invalidGetThrowsException(DmtConstants.getDmtData(i),j));
+			tbc.log("#testDmtDataExceptions009");
+			//It's from FORMAT_INTEGER [1] to FORMAT_RAW_BINARY[4096]   
+			for (int i=DmtData.FORMAT_INTEGER;i<=DmtData.FORMAT_RAW_BINARY;i=i<<1){
+
+				//Exception: FORMAT_NODE because a DmtData instance can not have this value
+				if (i!=DmtData.FORMAT_NODE) {
+					String baseName = DmtConstants.getDmtDataCodeText(i);
+				    for (int j=DmtData.FORMAT_INTEGER;j<=DmtData.FORMAT_RAW_BINARY;j=j<<1){
+				    	
+				    	//Checks only different formats, because equal ones do not throw any exception (it is checked at org.osgi.test.cases.dmt.tc1.tbc.DmtData) 
+				    	//FORMAT_NULL and FORMAT_NODE doesnt have a get associated
+				    	if (i!=j && j!=DmtData.FORMAT_NULL && j!=DmtData.FORMAT_NODE) {
+							tbc.assertTrue("Asserts that IllegalStateException is thrown when "+ 
+									DmtConstants.getExpectedDmtDataMethod(j) +" is called in a DmtData."+ baseName,
+									invalidGetThrowsException(DmtConstants.getDmtData(i),j));
+						}
 					}
 				}
+				
 			}
 		} catch (Exception e) {
-			tbc.fail("Unexpected Exception: " + e.getClass().getName()
-					+ " [Message: " + e.getMessage() + "]");
+			tbc.failUnexpectedException(e);
 		}
 	}
 	
@@ -173,18 +251,20 @@ public class TestDmtDataExceptions {
 	 * 
 	 * @spec DmtData.DmtData(String,int)
 	 */
-	private void testDmtDataExceptions006() {
+	private void testDmtDataExceptions010() {
 		try {		
-			tbc.log("#testDmtDataExceptions006");
+			tbc.log("#testDmtDataExceptions010");
 			
 			int[] invalidStringFormats =  new int[] {
-					org.osgi.service.dmt.DmtData.FORMAT_BASE64,
-					org.osgi.service.dmt.DmtData.FORMAT_BINARY,
-					org.osgi.service.dmt.DmtData.FORMAT_BOOLEAN,
-					org.osgi.service.dmt.DmtData.FORMAT_FLOAT,
-					org.osgi.service.dmt.DmtData.FORMAT_INTEGER,
-					org.osgi.service.dmt.DmtData.FORMAT_NODE,
-					org.osgi.service.dmt.DmtData.FORMAT_NULL,
+					info.dmtree.DmtData.FORMAT_BASE64,
+					info.dmtree.DmtData.FORMAT_BINARY,
+					info.dmtree.DmtData.FORMAT_BOOLEAN,
+					info.dmtree.DmtData.FORMAT_FLOAT,
+					info.dmtree.DmtData.FORMAT_INTEGER,
+					info.dmtree.DmtData.FORMAT_NODE,
+					info.dmtree.DmtData.FORMAT_NULL,
+					info.dmtree.DmtData.FORMAT_RAW_BINARY,
+					info.dmtree.DmtData.FORMAT_RAW_STRING,
 					};
 			
 			for (int i=0; i<invalidStringFormats.length; i++) {
@@ -192,8 +272,7 @@ public class TestDmtDataExceptions {
 						invalidFormatThrowsException(invalidStringFormats[i]));
 			}
 		} catch(Exception e) {
-			tbc.fail("Unexpected Exception: " + e.getClass().getName()
-					+ " [Message: " + e.getMessage() + "]");
+			tbc.failUnexpectedException(e);
 
 		}
 	}
@@ -204,9 +283,9 @@ public class TestDmtDataExceptions {
 	 * 
 	 * @spec DmtData.DmtData(String,int)
 	 */
-	private void testDmtDataExceptions007() {
+	private void testDmtDataExceptions011() {
 		try {		
-			tbc.log("#testDmtDataExceptions007");
+			tbc.log("#testDmtDataExceptions011");
 			
 			String[] invalidTimes =  new String[] {
 			    	"12000", //Less than 6 digits
@@ -222,8 +301,7 @@ public class TestDmtDataExceptions {
 						invalidFormatThrowsException(invalidTimes[i],DmtData.FORMAT_TIME));
 			}
 		} catch(Exception e) {
-			tbc.fail("Unexpected Exception: " + e.getClass().getName()
-					+ " [Message: " + e.getMessage() + "]");
+			tbc.failUnexpectedException(e);
 
 		}
 	}
@@ -234,9 +312,9 @@ public class TestDmtDataExceptions {
 	 * 
 	 * @spec DmtData.DmtData(String,int)
 	 */
-	private void testDmtDataExceptions008() {
+	private void testDmtDataExceptions012() {
 		try {		
-			tbc.log("#testDmtDataExceptions008");
+			tbc.log("#testDmtDataExceptions012");
 			
 			String[] validTimes =  new String[] {
 			    	"000000",
@@ -252,8 +330,7 @@ public class TestDmtDataExceptions {
 						!invalidFormatThrowsException(validTimes[i],DmtData.FORMAT_TIME));
 			}
 		} catch(Exception e) {
-			tbc.fail("Unexpected Exception: " + e.getClass().getName()
-					+ " [Message: " + e.getMessage() + "]");
+			tbc.failUnexpectedException(e);
 
 		}
 	}
@@ -264,9 +341,9 @@ public class TestDmtDataExceptions {
 	 * 
 	 * @spec DmtData.DmtData(String,int)
 	 */
-	private void testDmtDataExceptions009() {
+	private void testDmtDataExceptions013() {
 		try {		
-			tbc.log("#testDmtDataExceptions009");
+			tbc.log("#testDmtDataExceptions013");
 			
 			String[] invalidDates =  new String[] {
 					"2005010", //Less than 8 digits
@@ -286,8 +363,7 @@ public class TestDmtDataExceptions {
 			}
 			
 		} catch(Exception e) {
-			tbc.fail("Unexpected Exception: " + e.getClass().getName()
-					+ " [Message: " + e.getMessage() + "]");
+			tbc.failUnexpectedException(e);
 
 		}
 	}
@@ -297,9 +373,9 @@ public class TestDmtDataExceptions {
 	 * 
 	 * @spec DmtData.DmtData(String,int)
 	 */
-	private void testDmtDataExceptions010() {
+	private void testDmtDataExceptions014() {
 		try {		
-			tbc.log("#testDmtDataExceptions010");
+			tbc.log("#testDmtDataExceptions014");
 			
 			String[] validDates =  new String[] {
 					"20050131", 
@@ -321,8 +397,7 @@ public class TestDmtDataExceptions {
 						!invalidFormatThrowsException(validDates[i],DmtData.FORMAT_DATE));
 			}
 		} catch(Exception e) {
-			tbc.fail("Unexpected Exception: " + e.getClass().getName()
-					+ " [Message: " + e.getMessage() + "]");
+			tbc.failUnexpectedException(e);
 
 		}
 	}
@@ -332,45 +407,50 @@ public class TestDmtDataExceptions {
 	private boolean invalidFormatThrowsException(String value, int format) {
 		boolean threw = false;
 		try {
-			new org.osgi.service.dmt.DmtData(value,format);
+			new info.dmtree.DmtData(value,format);
 		} catch (IllegalArgumentException e) {
 			threw = true;
 		}
 
 		return threw;
 	}
-	private boolean invalidGetThrowsException(org.osgi.service.dmt.DmtData data, int format) {
+	private boolean invalidGetThrowsException(info.dmtree.DmtData data, int format) {
 		boolean threw = false;
 		try {
 			switch (format) {
-			case org.osgi.service.dmt.DmtData.FORMAT_BASE64:
+			case info.dmtree.DmtData.FORMAT_BASE64:
 				data.getBase64();
 				break;
-			case org.osgi.service.dmt.DmtData.FORMAT_BINARY:
+			case info.dmtree.DmtData.FORMAT_BINARY:
 				data.getBinary();
 				break;
-			case org.osgi.service.dmt.DmtData.FORMAT_BOOLEAN:
+			case info.dmtree.DmtData.FORMAT_BOOLEAN:
 				data.getBoolean();
 				break;
-			case org.osgi.service.dmt.DmtData.FORMAT_DATE:
+			case info.dmtree.DmtData.FORMAT_DATE:
 				data.getDate();
 				break;
-			case org.osgi.service.dmt.DmtData.FORMAT_FLOAT:
+			case info.dmtree.DmtData.FORMAT_FLOAT:
 				data.getFloat();
 				break;
-			case org.osgi.service.dmt.DmtData.FORMAT_INTEGER:
+			case info.dmtree.DmtData.FORMAT_INTEGER:
 				data.getInt();
 				break;
-			case org.osgi.service.dmt.DmtData.FORMAT_STRING:
+			case info.dmtree.DmtData.FORMAT_STRING:
 				data.getString();
 				break;
-			case org.osgi.service.dmt.DmtData.FORMAT_TIME:
+			case info.dmtree.DmtData.FORMAT_TIME:
 				data.getTime();
 				break;
-			case org.osgi.service.dmt.DmtData.FORMAT_XML:
+			case info.dmtree.DmtData.FORMAT_XML:
 				data.getXml();
 				break;
-				
+			case info.dmtree.DmtData.FORMAT_RAW_BINARY:
+				data.getRawBinary();
+				break;				
+			case info.dmtree.DmtData.FORMAT_RAW_STRING:
+				data.getRawString();
+				break;								
 			}
 		} catch (IllegalStateException e) {
 			threw = true;

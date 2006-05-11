@@ -37,8 +37,8 @@
 
 package org.osgi.test.cases.dmt.tc1.tbc;
 
-import org.osgi.service.dmt.DmtData;
-import org.osgi.service.dmt.security.DmtPermission;
+import info.dmtree.DmtData;
+import info.dmtree.security.DmtPermission;
 
 public class DmtConstants {
 
@@ -107,6 +107,11 @@ public class DmtConstants {
     	case DmtData.FORMAT_XML:
     		return "getXml()";
     		
+    	case DmtData.FORMAT_RAW_BINARY:
+    		return "getRawBinary()";
+    		
+    	case DmtData.FORMAT_RAW_STRING:
+    		return "getRawString()";    		
     	}
     return null;
     }
@@ -139,6 +144,10 @@ public class DmtConstants {
         	return "FORMAT_TIME";
         case DmtData.FORMAT_XML:           
         	return "FORMAT_XML";
+        case DmtData.FORMAT_RAW_BINARY:           
+        	return "FORMAT_RAW_BINARY";
+        case DmtData.FORMAT_RAW_STRING:           
+        	return "FORMAT_RAW_STRING";
         }
         return null;
     }
@@ -192,7 +201,7 @@ public class DmtConstants {
     			
     		case DmtData.FORMAT_STRING:
     			if (differentValue) {
-    				return new DmtData("TestString ");
+    				return new DmtData("TestString ");//Extra space
     			} 
     			return new DmtData("TestString");
     			
@@ -207,6 +216,17 @@ public class DmtConstants {
     				return new DmtData("TestString ",DmtData.FORMAT_XML);
     			} 
     			return new DmtData("TestString",DmtData.FORMAT_XML);
+    		case DmtData.FORMAT_RAW_BINARY:
+    			if (differentValue) {
+    				return new DmtData("format1",new byte[0]);
+    			} 
+    			return new DmtData("format2",new byte[0]);  
+    			
+    		case DmtData.FORMAT_RAW_STRING:
+    			if (differentValue) {
+    				return new DmtData("format1","data");
+    			} 
+    			return new DmtData("format2","data");    	    			
     	}
     	return null;
     }

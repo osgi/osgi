@@ -81,7 +81,7 @@ public class DmtPrincipalPermission {
 	private void testDmtPrincipalPermission001() {
 		try {
 			tbc.log("#testDmtPrincipalPermission001");
-			org.osgi.service.dmt.security.DmtPrincipalPermission dmtPrincipalPermission = new org.osgi.service.dmt.security.DmtPrincipalPermission(
+			info.dmtree.security.DmtPrincipalPermission dmtPrincipalPermission = new info.dmtree.security.DmtPrincipalPermission(
 					DmtConstants.PRINCIPAL);
 			tbc
 					.assertEquals(
@@ -91,8 +91,7 @@ public class DmtPrincipalPermission {
 			tbc.assertEquals("Asserts that the actions returned is '*'", "*",
 					dmtPrincipalPermission.getActions());
 		} catch (Exception e) {
-			tbc.fail("Unexpected Exception: " + e.getClass().getName()
-					+ " [Message: " + e.getMessage() + "]");
+			tbc.failUnexpectedException(e);
 		}
 	}
 
@@ -104,7 +103,7 @@ public class DmtPrincipalPermission {
 	private void testDmtPrincipalPermission002() {
 		try {
 			tbc.log("#testDmtPrincipalPermission002");
-			org.osgi.service.dmt.security.DmtPrincipalPermission dmtPrincipalPermission = new org.osgi.service.dmt.security.DmtPrincipalPermission(
+			info.dmtree.security.DmtPrincipalPermission dmtPrincipalPermission = new info.dmtree.security.DmtPrincipalPermission(
 					"*");
 			tbc
 					.assertEquals(
@@ -113,8 +112,7 @@ public class DmtPrincipalPermission {
 			tbc.assertEquals("Asserts that the actions returned is '*'.", "*",
 					dmtPrincipalPermission.getActions());
 		} catch (Exception e) {
-			tbc.fail("Unexpected Exception: " + e.getClass().getName()
-					+ " [Message: " + e.getMessage() + "]");
+			tbc.failUnexpectedException(e);
 		}
 	}
 
@@ -127,7 +125,7 @@ public class DmtPrincipalPermission {
 	private void testDmtPrincipalPermission003() {
 		try {
 			tbc.log("#testDmtPrincipalPermission003");
-			org.osgi.service.dmt.security.DmtPrincipalPermission dmtPrincipalPermission = new org.osgi.service.dmt.security.DmtPrincipalPermission(
+			info.dmtree.security.DmtPrincipalPermission dmtPrincipalPermission = new info.dmtree.security.DmtPrincipalPermission(
 					DmtConstants.PRINCIPAL, "*");
 			tbc
 					.assertEquals(
@@ -139,8 +137,7 @@ public class DmtPrincipalPermission {
 							"Asserts that the actions passed as parameter is equal to the returned value",
 							"*", dmtPrincipalPermission.getActions());
 		} catch (Exception e) {
-			tbc.fail("Unexpected Exception: " + e.getClass().getName()
-					+ " [Message: " + e.getMessage() + "]");
+			tbc.failUnexpectedException(e);
 		}
 	}
 
@@ -152,13 +149,12 @@ public class DmtPrincipalPermission {
 	private void testDmtPrincipalPermission004() {
 		try {
 			tbc.log("#testDmtPrincipalPermission004");
-			new org.osgi.service.dmt.security.DmtPrincipalPermission(null);
+			new info.dmtree.security.DmtPrincipalPermission(null);
 			tbc.failException("#", NullPointerException.class);
 		} catch (NullPointerException e) {
 			tbc.pass("NullPointerException correctly thrown");
 		} catch (Exception e) {
-			tbc.fail("Expected " + NullPointerException.class.getName()
-					+ " but was " + e.getClass().getName());
+			tbc.failExpectedOtherException(NullPointerException.class,e);
 		}
 	}
 
@@ -170,13 +166,12 @@ public class DmtPrincipalPermission {
 	private void testDmtPrincipalPermission005() {
 		try {
 			tbc.log("#testDmtPrincipalPermission005");
-			new org.osgi.service.dmt.security.DmtPrincipalPermission("");
+			new info.dmtree.security.DmtPrincipalPermission("");
 			tbc.failException("#", IllegalArgumentException.class);
 		} catch (IllegalArgumentException e) {
 			tbc.pass("IllegalArgumentException correctly thrown");
 		} catch (Exception e) {
-			tbc.fail("Expected " + IllegalArgumentException.class.getName()
-					+ " but was " + e.getClass().getName());
+			tbc.failExpectedOtherException(IllegalArgumentException.class,e);
 		}
 	}
 
@@ -188,13 +183,12 @@ public class DmtPrincipalPermission {
 	private void testDmtPrincipalPermission006() {
 		try {
 			tbc.log("#testDmtPrincipalPermission006");
-			new org.osgi.service.dmt.security.DmtPrincipalPermission(null, "*");
+			new info.dmtree.security.DmtPrincipalPermission(null, "*");
 			tbc.failException("#", NullPointerException.class);
 		} catch (NullPointerException e) {
 			tbc.pass("NullPointerException correctly thrown");
 		} catch (Exception e) {
-			tbc.fail("Expected " + NullPointerException.class.getName()
-					+ " but was " + e.getClass().getName());
+			tbc.failExpectedOtherException(NullPointerException.class,e);
 		}
 	}
 
@@ -206,13 +200,12 @@ public class DmtPrincipalPermission {
 	private void testDmtPrincipalPermission007() {
 		try {
 			tbc.log("#testDmtPrincipalPermission007");
-			new org.osgi.service.dmt.security.DmtPrincipalPermission("", "*");
+			new info.dmtree.security.DmtPrincipalPermission("", "*");
 			tbc.failException("#", IllegalArgumentException.class);
 		} catch (IllegalArgumentException e) {
 			tbc.pass("IllegalArgumentException correctly thrown");
 		} catch (Exception e) {
-			tbc.fail("Expected " + IllegalArgumentException.class.getName()
-					+ " but was " + e.getClass().getName());
+			tbc.failExpectedOtherException(IllegalArgumentException.class,e);
 		}
 	}
 
@@ -224,14 +217,13 @@ public class DmtPrincipalPermission {
 	private void testDmtPrincipalPermission008() {
 		try {
 			tbc.log("#testDmtPrincipalPermission008");
-			new org.osgi.service.dmt.security.DmtPrincipalPermission(
+			new info.dmtree.security.DmtPrincipalPermission(
 					DmtConstants.PRINCIPAL, null);
 			tbc.failException("#", NullPointerException.class);
 		} catch (NullPointerException e) {
 			tbc.pass("NullPointerException correctly thrown");
 		} catch (Exception e) {
-			tbc.fail("Expected " + NullPointerException.class.getName()
-					+ " but was " + e.getClass().getName());
+			tbc.failExpectedOtherException(NullPointerException.class,e);
 		}
 	}
 
@@ -243,14 +235,13 @@ public class DmtPrincipalPermission {
 	private void testDmtPrincipalPermission009() {
 		try {
 			tbc.log("#testDmtPrincipalPermission009");
-			new org.osgi.service.dmt.security.DmtPrincipalPermission(
+			new info.dmtree.security.DmtPrincipalPermission(
 					DmtConstants.PRINCIPAL, "");
 			tbc.failException("#", IllegalArgumentException.class);
 		} catch (IllegalArgumentException e) {
 			tbc.pass("IllegalArgumentException correctly thrown");
 		} catch (Exception e) {
-			tbc.fail("Expected " + IllegalArgumentException.class.getName()
-					+ " but was " + e.getClass().getName());
+			tbc.failExpectedOtherException(IllegalArgumentException.class,e);
 		}
 	}
 
@@ -264,7 +255,7 @@ public class DmtPrincipalPermission {
 		try {
 			tbc.log("#testDmtPrincipalPermission010");
 			String principal = "www.cesar*";
-			org.osgi.service.dmt.security.DmtPrincipalPermission dmtPrincipalPermission = new org.osgi.service.dmt.security.DmtPrincipalPermission(
+			info.dmtree.security.DmtPrincipalPermission dmtPrincipalPermission = new info.dmtree.security.DmtPrincipalPermission(
 					principal);
 			tbc
 					.assertEquals(
@@ -273,8 +264,7 @@ public class DmtPrincipalPermission {
 			tbc.assertEquals("Asserts that the actions returned is '*'", "*",
 					dmtPrincipalPermission.getActions());
 		} catch (Exception e) {
-			tbc.fail("Unexpected Exception: " + e.getClass().getName()
-					+ " [Message: " + e.getMessage() + "]");
+			tbc.failUnexpectedException(e);
 		}
 	}
 
@@ -288,7 +278,7 @@ public class DmtPrincipalPermission {
 		try {
 			tbc.log("#testDmtPrincipalPermission011");
 			String principal = "www.cesar*";
-			org.osgi.service.dmt.security.DmtPrincipalPermission dmtPrincipalPermission = new org.osgi.service.dmt.security.DmtPrincipalPermission(
+			info.dmtree.security.DmtPrincipalPermission dmtPrincipalPermission = new info.dmtree.security.DmtPrincipalPermission(
 					principal, "*");
 			tbc
 					.assertEquals(
@@ -297,8 +287,7 @@ public class DmtPrincipalPermission {
 			tbc.assertEquals("Asserts that the actions returned is '*'", "*",
 					dmtPrincipalPermission.getActions());
 		} catch (Exception e) {
-			tbc.fail("Unexpected Exception: " + e.getClass().getName()
-					+ " [Message: " + e.getMessage() + "]");
+			tbc.failUnexpectedException(e);
 		}
 	}
 }

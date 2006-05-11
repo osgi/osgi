@@ -201,5 +201,12 @@ public class DmtTestControl extends DefaultTestBundleControl {
 		new org.osgi.test.cases.dmt.tc1.tbc.AlertPermission.Implies(this).run();
 	}	
 
+	public void failUnexpectedException(Exception exception) {
+		fail("Unexpected Exception: " + exception.getClass().getName() + " [Message: " + exception.getMessage() +"]");
+	}
+	
+	public void failExpectedOtherException(Class expected,Exception found) {
+		fail("Expected " + expected.getName()+ " but was " + found.getClass().getName());
+	}
 	
 }

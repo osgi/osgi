@@ -35,7 +35,7 @@
 
 package org.osgi.test.cases.dmt.tc1.tbc.AlertItem;
 
-import org.osgi.service.dmt.DmtData;
+import info.dmtree.DmtData;
 import org.osgi.test.cases.dmt.tc1.tbc.DmtConstants;
 import org.osgi.test.cases.dmt.tc1.tbc.DmtTestControl;
 
@@ -66,10 +66,10 @@ public class ToString {
 			tbc.log("#testToString001");
 			String mark = "mark";
 			DmtData data = new DmtData("test");
-			org.osgi.service.dmt.AlertItem alert = new org.osgi.service.dmt.AlertItem(DmtConstants.OSGi_LOG,DmtConstants.MIMETYPE,mark,data);
+			info.dmtree.notification.AlertItem alert = new info.dmtree.notification.AlertItem(DmtConstants.OSGi_LOG,DmtConstants.MIMETYPE,mark,data);
 			tbc.assertEquals("Asserts that the expected string is returned","AlertItem(" + alert.getSource() + ", "+ alert.getType() +", "+ alert.getMark() + ", "+ alert.getData() +")",alert.toString());
 		} catch(Exception e) {
-			tbc.fail("Unexpected Exception: " + e.getClass().getName() + " [Message: " + e.getMessage() +"]");
+			tbc.failUnexpectedException(e);
 		}
 			
 	}
@@ -81,10 +81,10 @@ public class ToString {
 	private void testToString002() {
 		try {		
 			tbc.log("#testToString002");
-			org.osgi.service.dmt.AlertItem alert = new org.osgi.service.dmt.AlertItem((String)null,null,null,null);
+			info.dmtree.notification.AlertItem alert = new info.dmtree.notification.AlertItem((String)null,null,null,null);
 			tbc.assertEquals("Asserts that the expected string is returned","AlertItem(null, null, null, null)",alert.toString());
 		} catch(Exception e) {
-			tbc.fail("Unexpected Exception: " + e.getClass().getName() + " [Message: " + e.getMessage() +"]");
+			tbc.failUnexpectedException(e);
 		}
 			
 	}
