@@ -21,7 +21,6 @@
 	<classpathentry exported="true" kind="src" path="/org.osgi.util.xml"/>
 	<classpathentry exported="true" kind="src" path="/org.osgi.service.startlevel"/>
 	<classpathentry exported="true" kind="src" path="/org.osgi.service.component"/>
-	<classpathentry exported="true" kind="src" path="/org.osgi.service.dmt"/>
 	<classpathentry exported="true" kind="src" path="/org.osgi.service.event"/>
 	<classpathentry exported="true" kind="src" path="/org.osgi.service.condpermadmin"/>
 	<classpathentry exported="true" kind="src" path="/org.osgi.service.application"/>
@@ -29,7 +28,6 @@
 	<classpathentry exported="true" kind="src" path="/org.osgi.util.mobile"/>
 	<classpathentry exported="true" kind="src" path="/org.osgi.service.deploymentadmin"/>
 	<classpathentry exported="true" kind="src" path="/org.osgi.util.gsm"/>
-	<classpathentry kind="src" path="/org.osgi.service.cu"/>
 	<classpathentry kind="src" path="/org.osgi.service.metatype2"/>
 	<classpathentry kind="src" path="/org.osgi.service.power"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/org.osgi.application"/>
