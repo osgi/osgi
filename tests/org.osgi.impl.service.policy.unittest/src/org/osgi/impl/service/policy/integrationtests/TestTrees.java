@@ -96,7 +96,7 @@ public class TestTrees extends IntegratedTest {
 		DmtSession session = dmtAdmin.getSession(dmtPrincipalPlugin_dataRootURI,DmtSession.LOCK_TYPE_ATOMIC);
 		session.createInteriorNode("1");
 		session.setNodeValue("1/Principal",new DmtData(PRINCIPAL1));
-		session.setNodeValue("1/PermissionInfo",new DmtData(DmtPermission.class.getName()+" \""+dmtPrincipalPlugin_dataRootURI+"\" \"Get\")"));
+		session.setNodeValue("1/PermissionInfo",new DmtData("("+DmtPermission.class.getName()+" \""+dmtPrincipalPlugin_dataRootURI+"\" \"Get\")"));
 		session.close();
 
 		//stopFramework();
