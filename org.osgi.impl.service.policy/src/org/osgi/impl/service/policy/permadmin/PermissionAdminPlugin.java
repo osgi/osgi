@@ -17,6 +17,10 @@
  */
 package org.osgi.impl.service.policy.permadmin;
 
+import info.dmtree.DmtData;
+import info.dmtree.DmtException;
+import info.dmtree.MetaNode;
+
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Comparator;
@@ -31,9 +35,6 @@ import org.osgi.impl.service.policy.RootMetaNode;
 import org.osgi.impl.service.policy.util.PermissionInfoComparator;
 import org.osgi.impl.service.policy.util.Splitter;
 import org.osgi.service.component.ComponentContext;
-import org.osgi.service.dmt.DmtData;
-import org.osgi.service.dmt.DmtException;
-import org.osgi.service.dmt.MetaNode;
 import org.osgi.service.permissionadmin.PermissionAdmin;
 import org.osgi.service.permissionadmin.PermissionInfo;
 

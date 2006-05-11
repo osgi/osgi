@@ -23,10 +23,11 @@ import java.security.PrivilegedAction;
 import java.util.Date;
 
 import org.osgi.service.component.ComponentContext;
-import org.osgi.service.dmt.DmtAdmin;
-import org.osgi.service.dmt.DmtData;
-import org.osgi.service.dmt.DmtException;
-import org.osgi.service.dmt.spi.TransactionalDataSession;
+import info.dmtree.DmtAdmin;
+import info.dmtree.DmtData;
+import info.dmtree.DmtException;
+import info.dmtree.Uri;
+import info.dmtree.spi.TransactionalDataSession;
 
 /**
  *
@@ -56,7 +57,7 @@ public abstract class AbstractPolicyPlugin implements TransactionalDataSession {
 	private DmtAdmin dmtAdmin;
 		
 	public final String mangle(String nodename) {
-		return dmtAdmin.mangle(nodename);
+		return Uri.mangle(nodename);
 	}
 	
 	public AbstractPolicyPlugin(final ComponentContext context) {

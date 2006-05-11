@@ -17,18 +17,19 @@
  */
 package org.osgi.impl.service.policy.unittests;
 
+import info.dmtree.DmtData;
+import info.dmtree.DmtException;
+import info.dmtree.DmtSession;
+
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
 import org.osgi.framework.AdminPermission;
 import org.osgi.framework.PackagePermission;
-import org.osgi.impl.service.dmt.api.DmtPrincipalPermissionAdmin;
+import org.osgi.impl.service.dmt.export.DmtPrincipalPermissionAdmin;
 import org.osgi.impl.service.policy.dmtprincipal.PluginFactory;
 import org.osgi.impl.service.policy.unittests.util.DmtPluginTestCase;
-import org.osgi.service.dmt.DmtData;
-import org.osgi.service.dmt.DmtException;
-import org.osgi.service.dmt.DmtSession;
 import org.osgi.service.permissionadmin.PermissionInfo;
 
 /**

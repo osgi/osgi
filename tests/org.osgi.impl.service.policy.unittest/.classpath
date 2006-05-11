@@ -1,64 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry kind="src" path="src">
-		<attributes>
-		</attributes>
-	</classpathentry>
-	<classpathentry kind="lib" path="/licensed/jar/junit.jar">
-		<attributes>
-		</attributes>
-	</classpathentry>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER">
-		<attributes>
-		</attributes>
-	</classpathentry>
-	<classpathentry kind="src" path="/org.osgi.impl.service.policy">
-		<attributes>
-		</attributes>
-	</classpathentry>
-	<classpathentry kind="src" path="/org.osgi.impl.framework.eclipse">
-		<attributes>
-		</attributes>
-	</classpathentry>
-	<classpathentry kind="src" path="/org.osgi.framework">
-		<attributes>
-		</attributes>
-	</classpathentry>
-	<classpathentry kind="src" path="/org.osgi.impl.service.dmt">
-		<attributes>
-		</attributes>
-	</classpathentry>
-	<classpathentry kind="src" path="/org.osgi.service.permissionadmin">
-		<attributes>
-		</attributes>
-	</classpathentry>
-	<classpathentry kind="src" path="/org.osgi.service.condpermadmin">
-		<attributes>
-		</attributes>
-	</classpathentry>
-	<classpathentry kind="src" path="/org.osgi.service.http">
-		<attributes>
-		</attributes>
-	</classpathentry>
-	<classpathentry kind="src" path="/org.osgi.service.cm">
-		<attributes>
-		</attributes>
-	</classpathentry>
-	<classpathentry kind="src" path="/org.osgi.service.event">
-		<attributes>
-		</attributes>
-	</classpathentry>
-	<classpathentry kind="src" path="/org.osgi.util.mobile">
-		<attributes>
-		</attributes>
-	</classpathentry>
-	<classpathentry kind="src" path="/org.osgi.util.gsm">
-		<attributes>
-		</attributes>
-	</classpathentry>
-	<classpathentry combineaccessrules="false" kind="src" path="/org.osgi.service.component">
-		<attributes>
-		</attributes>
-	</classpathentry>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="lib" path="/licensed/jar/junit.jar"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="src" path="/org.osgi.impl.service.policy"/>
+	<classpathentry kind="src" path="/org.osgi.impl.framework.eclipse"/>
+	<classpathentry kind="src" path="/org.osgi.framework"/>
+	<classpathentry kind="src" path="/org.osgi.impl.service.dmt"/>
+	<classpathentry kind="src" path="/org.osgi.service.permissionadmin"/>
+	<classpathentry kind="src" path="/org.osgi.service.condpermadmin"/>
+	<classpathentry kind="src" path="/org.osgi.service.http"/>
+	<classpathentry kind="src" path="/org.osgi.service.cm"/>
+	<classpathentry kind="src" path="/org.osgi.service.event"/>
+	<classpathentry kind="src" path="/org.osgi.util.mobile"/>
+	<classpathentry kind="src" path="/org.osgi.util.gsm"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/org.osgi.service.component"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/info.dmtree"/>
 	<classpathentry kind="output" path="src"/>
 </classpath>

@@ -17,17 +17,22 @@
  */
 package org.osgi.impl.service.policy.dmtprincipal;
 
+import info.dmtree.DmtData;
+import info.dmtree.DmtException;
+import info.dmtree.MetaNode;
+
 import java.io.IOException;
 import java.security.*;
 import java.util.*;
 import java.util.Map.Entry;
 
 import org.osgi.impl.service.dmt.export.DmtPrincipalPermissionAdmin;
-import org.osgi.impl.service.policy.*;
+import org.osgi.impl.service.policy.AbstractPolicyPlugin;
+import org.osgi.impl.service.policy.PermissionInfoMetaNode;
+import org.osgi.impl.service.policy.RootMetaNode;
 import org.osgi.impl.service.policy.util.PermissionInfoComparator;
 import org.osgi.impl.service.policy.util.Splitter;
 import org.osgi.service.component.ComponentContext;
-import org.osgi.service.dmt.*;
 import org.osgi.service.permissionadmin.PermissionInfo;
 
 /**

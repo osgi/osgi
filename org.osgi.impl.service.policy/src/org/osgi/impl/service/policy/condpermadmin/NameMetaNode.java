@@ -17,8 +17,8 @@
  */
 package org.osgi.impl.service.policy.condpermadmin;
 
-import org.osgi.service.dmt.DmtData;
-import org.osgi.service.dmt.MetaNode;
+import info.dmtree.DmtData;
+import info.dmtree.MetaNode;
 
 /**
  *
@@ -47,4 +47,7 @@ public final class NameMetaNode implements MetaNode {
 	public String[] getValidNames() { return NAME_ARRAY; }
 	public boolean isValidValue(DmtData value) { return true; }
 	public boolean isValidName(String name) { return NAME.equals(name); }
+	public String[] getRawFormatNames() { return null; }
+	public String[] getExtensionPropertyKeys() { return null; }
+	public Object getExtensionProperty(String key) { return null; }
 }

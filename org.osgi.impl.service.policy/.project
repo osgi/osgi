@@ -6,7 +6,6 @@
 		<project>cnf</project>
 		<project>org.osgi.impl.service.dmt</project>
 		<project>org.osgi.service.condpermadmin</project>
-		<project>org.osgi.service.dmt</project>
 		<project>org.osgi.service.permissionadmin</project>
 		<project>org.osgi.tools</project>
 	</projects>

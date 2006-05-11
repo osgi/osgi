@@ -17,6 +17,11 @@
  */
 package org.osgi.impl.service.policy.unittests;
 
+import info.dmtree.DmtData;
+import info.dmtree.DmtException;
+import info.dmtree.DmtSession;
+import info.dmtree.MetaNode;
+
 import java.util.Arrays;
 
 import org.osgi.framework.AdminPermission;
@@ -28,10 +33,6 @@ import org.osgi.impl.service.policy.unittests.util.DmtPluginTestCase;
 import org.osgi.service.condpermadmin.BundleLocationCondition;
 import org.osgi.service.condpermadmin.ConditionInfo;
 import org.osgi.service.condpermadmin.ConditionalPermissionInfo;
-import org.osgi.service.dmt.DmtData;
-import org.osgi.service.dmt.DmtException;
-import org.osgi.service.dmt.DmtSession;
-import org.osgi.service.dmt.MetaNode;
 import org.osgi.service.http.HttpService;
 import org.osgi.service.permissionadmin.PermissionInfo;
 import org.osgi.util.gsm.IMEICondition;

@@ -17,6 +17,13 @@
  */
 package org.osgi.impl.service.policy.integrationtests;
 
+import info.dmtree.DmtAdmin;
+import info.dmtree.DmtData;
+import info.dmtree.DmtException;
+import info.dmtree.DmtSession;
+import info.dmtree.security.DmtPermission;
+import info.dmtree.spi.DataPlugin;
+
 import java.lang.reflect.InvocationTargetException;
 import java.security.AccessControlContext;
 import java.security.AccessControlException;
@@ -35,12 +42,6 @@ import org.osgi.impl.service.policy.unittests.DmtPrincipalPluginTest;
 import org.osgi.impl.service.policy.unittests.PermissionAdminPluginTest;
 import org.osgi.service.condpermadmin.BundleSignerCondition;
 import org.osgi.service.condpermadmin.ConditionInfo;
-import org.osgi.service.dmt.DmtAdmin;
-import org.osgi.service.dmt.DmtData;
-import org.osgi.service.dmt.DmtException;
-import org.osgi.service.dmt.DmtSession;
-import org.osgi.service.dmt.security.DmtPermission;
-import org.osgi.service.dmt.spi.DataPlugin;
 import org.osgi.service.permissionadmin.PermissionInfo;
 
 public class TestTrees extends IntegratedTest {
@@ -95,7 +96,7 @@ public class TestTrees extends IntegratedTest {
 		DmtSession session = dmtAdmin.getSession(dmtPrincipalPlugin_dataRootURI,DmtSession.LOCK_TYPE_ATOMIC);
 		session.createInteriorNode("1");
 		session.setNodeValue("1/Principal",new DmtData(PRINCIPAL1));
-		session.setNodeValue("1/PermissionInfo",new DmtData("(org.osgi.service.dmt.security.DmtPermission \""+dmtPrincipalPlugin_dataRootURI+"\" \"Get\")"));
+		session.setNodeValue("1/PermissionInfo",new DmtData(DmtPermission.class.getName()+" \""+dmtPrincipalPlugin_dataRootURI+"\" \"Get\")"));
 		session.close();
 
 		//stopFramework();
