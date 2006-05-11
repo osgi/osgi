@@ -18,8 +18,10 @@
 
 package org.osgi.impl.service.policy.integrationtests;
 
+import java.io.File;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.net.URI;
 import java.net.URL;
 import java.net.URLConnection;
 import java.security.AllPermission;
@@ -30,9 +32,12 @@ import java.security.Policy;
 import java.security.PrivilegedExceptionAction;
 import java.security.Security;
 import junit.framework.TestCase;
+
+import org.eclipse.core.runtime.adaptor.LocationManager;
+import org.eclipse.osgi.baseadaptor.BaseAdaptor;
+import org.eclipse.osgi.framework.adaptor.FrameworkAdaptor;
 import org.eclipse.osgi.framework.internal.core.FrameworkSecurityManager;
 import org.eclipse.osgi.framework.internal.core.OSGi;
-import org.eclipse.osgi.framework.internal.defaultadaptor.DefaultAdaptor;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.PackagePermission;
@@ -59,7 +64,7 @@ public abstract class IntegratedTest extends TestCase {
 	public static final String  CONSOLE_JAR = "file:../../osgi.test/org.osgi.tools.console.jar";
 
 	public FrameworkSecurityManager	secMan;
-	public DefaultAdaptor adaptor;
+	public FrameworkAdaptor adaptor;
 	public BundleContext	systemBundleContext;
 	public Bundle	osgiAPIsBundle;
 	public Bundle	jaxp;
@@ -113,15 +118,23 @@ public abstract class IntegratedTest extends TestCase {
 	 * @throws Exception
 	 */
 	public void startFramework(boolean fresh) throws Exception {
-		cleanAllFactories();
+		System.setSecurityManager(null);
 		Policy.setPolicy(new VeryGenerousPolicy());
+		cleanAllFactories();
 		
 		// replace policy file ${user.home}/.java.policy with our own
 		Security.setProperty("policy.url.2","file:policy");
 		
+		if (fresh) {
+			// we clear out everything
+			URI u = new URI(System.getProperty(LocationManager.PROP_INSTALL_AREA));
+			File f = new File(u);
+			assertTrue(f.exists());
+			delete(new File(f,"configuration"));
+		}
 		secMan = new FrameworkSecurityManager();
 		System.setSecurityManager(secMan);
-		adaptor = new DefaultAdaptor(fresh?new String[] { "reset" }:null);
+		adaptor = new BaseAdaptor(null);
 		framework = new OSGi(adaptor);
 		framework.launch();
 		systemBundleContext = framework.getBundleContext();
@@ -172,6 +185,18 @@ public abstract class IntegratedTest extends TestCase {
 		cl = integrationTestBundle2.loadClass("org.osgi.impl.service.policy.integrationtests.bundle2.Test");
 		bundle2DoAction = cl.getDeclaredMethod("doAction",new Class[]{PrivilegedExceptionAction.class});
 
+	}
+
+	/**
+	 * deletes a dir recursively
+	 * @param f
+	 */
+	private static void delete(File f) {
+		File[] subfiles = f.listFiles();
+		if (subfiles!=null) {
+			for(int i=0;i<subfiles.length;i++) delete(subfiles[i]);
+		}
+		f.delete();
 	}
 
 	public void stopFramework() throws Exception {
