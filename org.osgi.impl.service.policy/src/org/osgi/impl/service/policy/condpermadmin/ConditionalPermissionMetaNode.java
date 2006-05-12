@@ -54,5 +54,5 @@ public final class ConditionalPermissionMetaNode implements MetaNode {
 	public boolean isValidName(String name) { return true; }
 	public String[] getRawFormatNames() { return null; }
 	public String[] getExtensionPropertyKeys() { return null; }
-	public Object getExtensionProperty(String key) { return null; }
+	public Object getExtensionProperty(String key) { throw new IllegalArgumentException("extension property key "+key+" not supported"); }
 }

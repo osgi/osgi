@@ -49,5 +49,5 @@ public final class NameMetaNode implements MetaNode {
 	public boolean isValidName(String name) { return NAME.equals(name); }
 	public String[] getRawFormatNames() { return null; }
 	public String[] getExtensionPropertyKeys() { return null; }
-	public Object getExtensionProperty(String key) { return null; }
+	public Object getExtensionProperty(String key) { throw new IllegalArgumentException("extension property key "+key+" not supported"); }
 }
