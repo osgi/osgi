@@ -34,7 +34,10 @@ class ConfigMetaNode implements MetaNode {
         "org.osgi/1.0/ConfigurationManagementObject";
 
     
-	private boolean		canAdd                  = false;
+    private static final String INTERIOR_NODE_VALUE_SUPPORT_PROPERTY = 
+        "org.osgi.impl.service.dmt.interior-node-value-support";
+
+    private boolean		canAdd                  = false;
 	private boolean		canDelete               = false;
 	private boolean		canGet                  = true;
 	private boolean		canReplace              = true;
@@ -173,14 +176,17 @@ class ConfigMetaNode implements MetaNode {
         return validValues == null ? true : 
             Arrays.asList(validValues).contains(value);
     }
-
-    public String[] getExtensionPropertyKeys() {
-        // Extension property keys not supported.
-        return null;
-    }
     
+    public String[] getExtensionPropertyKeys() {
+        return new String[] { INTERIOR_NODE_VALUE_SUPPORT_PROPERTY };
+    }
+
     public Object getExtensionProperty(String key) {
-        throw new IllegalArgumentException(
-                "Extension property keys not supported.");
+        if(key.equals(INTERIOR_NODE_VALUE_SUPPORT_PROPERTY))
+            return new Boolean(false);
+        
+        throw new IllegalArgumentException("Only the '" + 
+                INTERIOR_NODE_VALUE_SUPPORT_PROPERTY + 
+                "' extension property is supported by this plugin.");
     }
 }

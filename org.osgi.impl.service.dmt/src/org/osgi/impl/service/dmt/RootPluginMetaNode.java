@@ -21,6 +21,8 @@ import info.dmtree.DmtData;
 import info.dmtree.MetaNode;
 
 public class RootPluginMetaNode implements MetaNode {
+    private static final String INTERIOR_NODE_VALUE_SUPPORT_PROPERTY = 
+        "org.osgi.impl.service.dmt.interior-node-value-support";
 
     public boolean can(int operation) {
         return operation == CMD_GET || operation == CMD_REPLACE;
@@ -87,12 +89,15 @@ public class RootPluginMetaNode implements MetaNode {
     }
 
     public String[] getExtensionPropertyKeys() {
-        // Extension property keys not supported.
-        return null;
+        return new String[] { INTERIOR_NODE_VALUE_SUPPORT_PROPERTY };
     }
-    
+
     public Object getExtensionProperty(String key) {
-        throw new IllegalArgumentException(
-                "Extension property keys not supported.");
+        if(key.equals(INTERIOR_NODE_VALUE_SUPPORT_PROPERTY))
+            return new Boolean(false);
+        
+        throw new IllegalArgumentException("Only the '" + 
+                INTERIOR_NODE_VALUE_SUPPORT_PROPERTY + 
+                "' extension property is supported by this plugin");
     }
 }

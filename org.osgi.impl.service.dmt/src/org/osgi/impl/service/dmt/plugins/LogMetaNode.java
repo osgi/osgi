@@ -30,6 +30,9 @@ class LogMetaNode implements MetaNode {
 	static final String  LOG_MO_TYPE = "org.osgi/1.0/LogManagementObject";
     
 	// private fields
+    private static final String INTERIOR_NODE_VALUE_SUPPORT_PROPERTY = 
+        "org.osgi.impl.service.dmt.interior-node-value-support";
+
 	private boolean	  canDelete;
 	private boolean	  canAdd;
 	private boolean	  canGet;
@@ -177,14 +180,17 @@ class LogMetaNode implements MetaNode {
         
         return true;
     }
-
-    public String[] getExtensionPropertyKeys() {
-        // Extension property keys not supported.
-        return null;
-    }
     
+    public String[] getExtensionPropertyKeys() {
+        return new String[] { INTERIOR_NODE_VALUE_SUPPORT_PROPERTY };
+    }
+
     public Object getExtensionProperty(String key) {
-        throw new IllegalArgumentException(
-                "Extension property keys not supported.");
+        if(key.equals(INTERIOR_NODE_VALUE_SUPPORT_PROPERTY))
+            return new Boolean(false);
+        
+        throw new IllegalArgumentException("Only the '" + 
+                INTERIOR_NODE_VALUE_SUPPORT_PROPERTY + 
+                "' extension property is supported by this plugin.");
     }
 }
