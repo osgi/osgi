@@ -125,15 +125,12 @@ public class Node {
         int len = uri.length();
         int start = 0;
         for(int i = 0; i < len; i++) {
-            if(uri.charAt(i) == '/') {
-                if(i == len-1) // last character cannot be a '/'
+            if(uri.charAt(i) == '/' && (i == 0 || uri.charAt(i-1) != '\\')) {
+                if(i == len-1) // last character cannot be an unescaped '/'
                     throw new DmtException(uri, DmtException.INVALID_URI,
                             "The URI string ends with the '/' character.");
-                
-                if(i == 0 || uri.charAt(i-1) != '\\') {
-                    appendName(sb, uri, start, i);
-                    start = i+1;
-                }
+                appendName(sb, uri, start, i);
+                start = i+1;
             }
         }
         
