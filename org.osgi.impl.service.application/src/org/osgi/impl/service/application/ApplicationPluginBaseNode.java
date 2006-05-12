@@ -27,8 +27,7 @@
 
 package org.osgi.impl.service.application;
 
-import org.osgi.service.dmt.*;
-
+import info.dmtree.*;
 import java.util.*;
 
 public class ApplicationPluginBaseNode implements MetaNode {
@@ -47,6 +46,9 @@ public class ApplicationPluginBaseNode implements MetaNode {
 	protected boolean	isLeaf = false;
 	
 	protected Vector  children = new Vector();
+	
+	private static final String INTERIOR_NODE_VALUE_SUPPORT_PROPERTY = 
+		"org.osgi.impl.service.dmt.interior-node-value-support";
 
 	protected ApplicationPluginBaseNode() {
 		canDelete = canAdd = canReplace = canExecute = isLeaf = false;
@@ -303,5 +305,22 @@ public class ApplicationPluginBaseNode implements MetaNode {
 	public String getNamePattern() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	public String[] getRawFormatNames() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public String[] getExtensionPropertyKeys() {
+		return new String[] {INTERIOR_NODE_VALUE_SUPPORT_PROPERTY};
+	}
+
+	public Object getExtensionProperty(String key) {
+		if (key.equals(INTERIOR_NODE_VALUE_SUPPORT_PROPERTY))
+			return new Boolean(false); // :)
+		throw new IllegalArgumentException("Only the '" + 
+				INTERIOR_NODE_VALUE_SUPPORT_PROPERTY + 
+				"' extension property is supported by this plugin");
 	}  
 }

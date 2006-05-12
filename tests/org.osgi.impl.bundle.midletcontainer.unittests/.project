@@ -3,6 +3,7 @@
 	<name>org.osgi.impl.bundle.midletcontainer.unittests</name>
 	<comment></comment>
 	<projects>
+		<project>info.dmtree</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>

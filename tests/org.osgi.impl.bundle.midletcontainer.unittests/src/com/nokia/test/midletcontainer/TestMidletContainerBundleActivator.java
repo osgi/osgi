@@ -9,9 +9,11 @@ import org.osgi.service.application.ApplicationDescriptor;
 import org.osgi.service.application.ApplicationHandle;
 import org.osgi.service.application.ScheduledApplication;
 import org.osgi.impl.bundle.midletcontainer.*;
-import org.osgi.service.dmt.DmtAdmin;
-import org.osgi.service.dmt.DmtData;
-import org.osgi.service.dmt.DmtSession;
+import info.dmtree.DmtAdmin;
+import info.dmtree.DmtData;
+import info.dmtree.DmtSession;
+import info.dmtree.Uri;
+
 import org.osgi.service.event.Event;
 import org.osgi.service.event.EventAdmin;
 import org.osgi.service.event.EventHandler;
@@ -113,7 +115,7 @@ public class TestMidletContainerBundleActivator
   		DmtAdmin dmtAdmin = (DmtAdmin)dmtTracker.getService();
   		if( dmtAdmin == null )
   			throw new RuntimeException("DmtAdmin not running!");
-  		return dmtAdmin.mangle( in );
+  		return Uri.mangle( in );
   	}
 
     String getPID(ApplicationDescriptor appDesc)

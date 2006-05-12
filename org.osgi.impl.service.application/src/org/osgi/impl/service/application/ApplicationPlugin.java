@@ -27,13 +27,37 @@
 
 package org.osgi.impl.service.application;
 
-import java.net.URL;
-import java.util.*;
+import info.dmtree.DmtAdmin;
+import info.dmtree.DmtData;
+import info.dmtree.DmtException;
+import info.dmtree.DmtSession;
+import info.dmtree.MetaNode;
+import info.dmtree.Uri;
+import info.dmtree.spi.DataPlugin;
+import info.dmtree.spi.ExecPlugin;
+import info.dmtree.spi.ReadWriteDataSession;
+import info.dmtree.spi.ReadableDataSession;
+import info.dmtree.spi.TransactionalDataSession;
 
-import org.osgi.framework.*;
-import org.osgi.service.application.*;
-import org.osgi.service.dmt.*;
-import org.osgi.service.dmt.spi.*;
+import java.net.URL;
+import java.util.Date;
+import java.util.Dictionary;
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.Hashtable;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Vector;
+
+import org.osgi.framework.BundleActivator;
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.Constants;
+import org.osgi.framework.InvalidSyntaxException;
+import org.osgi.framework.ServiceReference;
+import org.osgi.framework.ServiceRegistration;
+import org.osgi.service.application.ApplicationDescriptor;
+import org.osgi.service.application.ApplicationHandle;
+import org.osgi.service.application.ScheduledApplication;
 import org.osgi.service.log.LogService;
 import org.osgi.util.tracker.ServiceTracker;
 
@@ -1237,6 +1261,6 @@ public class ApplicationPlugin implements BundleActivator, DataPlugin,
 		DmtAdmin dmtAdmin = (DmtAdmin)dmtTracker.getService();
 		if( dmtAdmin == null )
 			throw new RuntimeException("DmtAdmin not running!");
-		return dmtAdmin.mangle( in );
+		return Uri.mangle( in );
 	}
 }
