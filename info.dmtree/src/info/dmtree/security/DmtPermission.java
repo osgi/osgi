@@ -18,6 +18,7 @@
 package info.dmtree.security;
 
 import info.dmtree.Acl;
+import info.dmtree.Uri;
 
 import java.security.Permission;
 import java.security.PermissionCollection;
@@ -122,24 +123,38 @@ public class DmtPermission extends Permission {
 
     // initializes the member fields from the given URI and actions mask
     private void init(String dmtUri, int mask) {
-        if (dmtUri == null || dmtUri.length() == 0)
-            throw new NullPointerException(
-                    "'dmtUri' parameter cannot be null or empty.");
+        if (dmtUri == null)
+            throw new NullPointerException("'dmtUri' parameter must not be " +
+                    "null.");
+        
+        if(!Uri.isValidUri(dmtUri))
+            throw new IllegalArgumentException("'dmtUri' parameter does not " +
+                    "contain a valid URI.");
 
-        // TODO check all other constraints for URIs
-        // URI must be absolute, i.e. equal to . or beginning with ./
-        if (!dmtUri.startsWith("./") && !dmtUri.equals("."))
-            throw new IllegalArgumentException(
-                    "'dmtUri' parameter is not an absolute URI.");
+        if (!Uri.isAbsoluteUri(dmtUri))
+            throw new IllegalArgumentException("'dmtUri' parameter does not " +
+                    "contain an absolute URI.");
 
+        // canonicalize URI: remove escapes from non-special characters
+        StringBuffer sb = new StringBuffer(dmtUri);
+        int i = 0;
+        while(i < sb.length()) { // length can decrease during the loop!
+            if(sb.charAt(i) == '\\') {
+                // there must be a next character after a '\' in a valid URI
+                char nextCh = sb.charAt(i+1);
+                if(nextCh != '/' && nextCh != '\\')
+                    sb.deleteCharAt(i); // remove the extra '\'
+                else
+                    i++;
+            }
+            i++;
+        }
+        dmtUri = sb.toString();
+        
         if (dmtUri.endsWith("*")) {
             prefixPath = true;
             path = dmtUri.substring(0, dmtUri.length() - 1);
         } else {
-            // Trailing slash ignored
-            if (dmtUri.endsWith("/"))
-                dmtUri = dmtUri.substring(0, dmtUri.length() - 1);
-
             prefixPath = false;
             path = dmtUri;
         }
