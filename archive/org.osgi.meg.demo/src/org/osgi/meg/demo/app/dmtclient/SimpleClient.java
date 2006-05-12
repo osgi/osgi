@@ -777,10 +777,11 @@ public class SimpleClient implements ManagedService, ManagedServiceFactory,
     }
 
 	private void dmtEvent(Event event) {
+	    String[] nodes = (String[])event.getProperty("nodes");
         String[] newNodes = (String[]) event.getProperty("newnodes");
         System.out.println("DMT event for session '" + event.getProperty("session.id") + 
-                "' received on topic '" + event.getProperty(EventConstants.EVENT_TOPIC) +
-                "' for nodes '" + Arrays.asList((String[])event.getProperty("nodes")) + "'" +
+                "' received on topic '" + event.getProperty(EventConstants.EVENT_TOPIC) + "'" +
+                (nodes == null ? "" : " for nodes '" + Arrays.asList(nodes) + "'") +
                 (newNodes == null ? "" : ", new node names are '" + Arrays.asList(newNodes) + "'") + ".");
 	}
 
