@@ -31,6 +31,10 @@
 
 package org.osgi.test.cases.application.tbc;
 
+import info.dmtree.DmtAdmin;
+import info.dmtree.DmtSession;
+import info.dmtree.Uri;
+
 import java.io.FilePermission;
 import java.lang.reflect.ReflectPermission;
 import java.net.SocketPermission;
@@ -47,8 +51,6 @@ import org.osgi.service.application.ApplicationAdminPermission;
 import org.osgi.service.application.ApplicationDescriptor;
 import org.osgi.service.application.ApplicationHandle;
 import org.osgi.service.application.ScheduledApplication;
-import org.osgi.service.dmt.DmtAdmin;
-import org.osgi.service.dmt.DmtSession;
 import org.osgi.service.event.Event;
 import org.osgi.service.event.EventAdmin;
 import org.osgi.service.event.TopicPermission;
@@ -142,7 +144,7 @@ public class ApplicationTestControl extends DefaultTestBundleControl {
 	}
 
 	private void updateConstants() {
-	    ApplicationConstants.OSGI_APPLICATION_APPID = ApplicationConstants.OSGI_APPLICATION + "/" + getDmtAdmin().mangle(ApplicationConstants.TEST_PID);
+	    ApplicationConstants.OSGI_APPLICATION_APPID = ApplicationConstants.OSGI_APPLICATION + "/" + Uri.mangle(ApplicationConstants.TEST_PID);
 	    ApplicationConstants.OSGI_APPLICATION_APPID_NAME = ApplicationConstants.OSGI_APPLICATION_APPID + "/Name";
 	    ApplicationConstants.OSGI_APPLICATION_APPID_VALID = ApplicationConstants.OSGI_APPLICATION_APPID + "/Valid";
 	    ApplicationConstants.OSGI_APPLICATION_APPID_APPLICATION_ID = ApplicationConstants.OSGI_APPLICATION_APPID + "/ApplicationID";
