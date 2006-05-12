@@ -39,6 +39,9 @@
  */
 package org.osgi.test.cases.policy.tb1.TreeStructure;
 
+import info.dmtree.DmtData;
+import info.dmtree.DmtSession;
+
 import java.util.Enumeration;
 
 import org.osgi.framework.AdminPermission;
@@ -47,8 +50,6 @@ import org.osgi.framework.ServicePermission;
 import org.osgi.service.condpermadmin.BundleLocationCondition;
 import org.osgi.service.condpermadmin.ConditionInfo;
 import org.osgi.service.condpermadmin.ConditionalPermissionInfo;
-import org.osgi.service.dmt.DmtData;
-import org.osgi.service.dmt.DmtSession;
 import org.osgi.service.permissionadmin.PermissionInfo;
 import org.osgi.test.cases.policy.tbc.PolicyConstants;
 import org.osgi.test.cases.policy.tbc.PolicyTestControl;

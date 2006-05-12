@@ -38,6 +38,11 @@
  */
 package org.osgi.test.cases.policy.tbc;
 
+import info.dmtree.DmtAdmin;
+import info.dmtree.DmtException;
+import info.dmtree.DmtSession;
+import info.dmtree.security.DmtPermission;
+
 import java.security.AllPermission;
 
 import org.osgi.framework.AdminPermission;
@@ -47,10 +52,6 @@ import org.osgi.framework.PackagePermission;
 import org.osgi.framework.ServicePermission;
 import org.osgi.framework.ServiceReference;
 import org.osgi.service.condpermadmin.ConditionalPermissionAdmin;
-import org.osgi.service.dmt.DmtAdmin;
-import org.osgi.service.dmt.DmtException;
-import org.osgi.service.dmt.DmtSession;
-import org.osgi.service.dmt.security.DmtPermission;
 import org.osgi.service.event.TopicPermission;
 import org.osgi.service.permissionadmin.PermissionAdmin;
 import org.osgi.service.permissionadmin.PermissionInfo;
