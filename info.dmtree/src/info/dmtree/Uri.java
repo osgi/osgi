@@ -205,7 +205,7 @@ public final class Uri {
      */
     private static int getSegmentLength(String segment) {
         if (segment.length() == 0)
-            throw new IllegalArgumentException("URI segmnet is empty.");
+            throw new IllegalArgumentException("URI segment is empty.");
 
         StringBuffer newsegment = new StringBuffer(segment);
         int i = 0;
@@ -358,19 +358,63 @@ public final class Uri {
      * <li>the length of each segment of the URI is less than or equal to
      * {@link #getMaxSegmentNameLength()}.
      * </ul>
+     * The exact definition of the length of a URI and its segments is
+     * given in the descriptions of the <code>getMaxUriLength()</code> and
+     * <code>getMaxSegmentNameLength()</code> methods.  
      * 
      * @param uri the URI to be validated
      * @return whether the specified URI is valid
      */
     public static boolean isValidUri(String uri) {
-        // TODO This implementation is pretty dummy :)
         if (null == uri)
             return false;
-        if( uri.length() == 0 ) 
+        
+        int paramLen = uri.length();
+        if( paramLen == 0 ) 
             return true;
-        if( uri.charAt(0) == '/' ) 
+        if( uri.charAt(0) == '/' || uri.charAt(paramLen-1) == '\\' )
             return false;
-        return true;
+        
+        int processedUriLength = 0;
+        int segmentNumber = 0;
+        
+        // append a '/' to indicate the end of the last segment (the URI in the
+        // parameter must not end with a '/')
+        uri += '/';
+        paramLen++;
+        
+        int start = 0;
+        for(int i = 1; i < paramLen; i++) { // first character is not a '/'
+            if(uri.charAt(i) == '/' && uri.charAt(i-1) != '\\') {
+                segmentNumber++;
+
+                String segment = uri.substring(start, i);
+                if(segmentNumber > 1 && segment.equals("."))
+                    return false; // the URI contains the "." node name at a 
+                                 // position other than the beginning of the URI
+                
+                int segmentLength;
+                try {
+                    // also checks that the segment is valid
+                    segmentLength = getSegmentLength(segment);
+                } catch(IllegalArgumentException e) {
+                    return false;
+                }
+                
+                if(segmentLength > getMaxSegmentNameLength())
+                    return false;
+                
+                // the extra byte is for the separator '/' (will be deducted
+                // again for the last segment of the URI)
+                processedUriLength += segmentLength + 1; 
+                start = i+1;
+            }
+        }
+        
+        processedUriLength--; // remove the '/' added to the end of the URI
+        
+        return segmentNumber <= getMaxUriSegments() &&  
+                processedUriLength <= getMaxUriLength();
     }
 
     // Non-public fields and methods
