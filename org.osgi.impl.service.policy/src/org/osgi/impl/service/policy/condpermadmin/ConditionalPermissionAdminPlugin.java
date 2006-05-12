@@ -216,6 +216,7 @@ public class ConditionalPermissionAdminPlugin extends AbstractPolicyPlugin {
 	}
 
 	public void setNodeValue(String fullPath[], DmtData data) throws DmtException {
+		if (!isLeafNode(fullPath)) throw new DmtException(fullPath,DmtException.FEATURE_NOT_SUPPORTED,"cannot set value for this interior node");
 		String[] path = chopPath(fullPath);
 		switchToWriteMode();
 		ConditionalPermission cp = (ConditionalPermission) conditionalPermissions.get(path[0]);
@@ -288,6 +289,7 @@ public class ConditionalPermissionAdminPlugin extends AbstractPolicyPlugin {
 	}
 
 	public DmtData getNodeValue(String[] path) throws DmtException {
+		if (!isLeafNode(path)) throw new DmtException(path,DmtException.FEATURE_NOT_SUPPORTED,"cannot get value for this interior node");
 		path = chopPath(path);
 		ConditionalPermission cp = (ConditionalPermission) conditionalPermissions.get(path[0]);
 		return cp.getNodeValue(path[1]);

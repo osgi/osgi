@@ -174,6 +174,7 @@ public class DmtPrincipalPlugin extends AbstractPolicyPlugin {
 	}
 
 	public void setNodeValue(String path[], DmtData data) throws DmtException {
+		if (!isLeafNode(path)) throw new DmtException(path,DmtException.FEATURE_NOT_SUPPORTED,"cannot set value for this interior node");
 		path = chopPath(path);
 		switchToWriteMode();
 		if (path.length!=2) throw new IllegalStateException(); // this cannot happen
@@ -244,6 +245,7 @@ public class DmtPrincipalPlugin extends AbstractPolicyPlugin {
 	}
 
 	public DmtData getNodeValue(String path[]) throws DmtException {
+		if (!isLeafNode(path)) throw new DmtException(path,DmtException.FEATURE_NOT_SUPPORTED,"cannot get value for this interior node");
 		path = chopPath(path);
 
 		// isNodeUri and metadata should check all this

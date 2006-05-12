@@ -207,8 +207,9 @@ public class PermissionAdminPlugin extends AbstractPolicyPlugin {
 	}
 
 	public void setNodeValue(String fullPath[], DmtData data) throws DmtException {
-		switchToWriteMode();
+		if (!isLeafNode(fullPath)) throw new DmtException(fullPath,DmtException.FEATURE_NOT_SUPPORTED,"cannot set value for this interior node");
 		String[] path = chopPath(fullPath);
+		switchToWriteMode();
 		if (path.length==1) {
 			// this must be the Default node
 			this.defaultPermissions = stringToPermissionInfos(data.getString());
@@ -317,8 +318,9 @@ public class PermissionAdminPlugin extends AbstractPolicyPlugin {
 	}
 
 	public DmtData getNodeValue(String path[]) throws DmtException {
+		if (!isLeafNode(path)) throw new DmtException(path,DmtException.FEATURE_NOT_SUPPORTED,"cannot get value for this interior node");
 		path = chopPath(path);
-		
+
 		if (path.length==1) {
 			return new DmtData(permissionInfosToString(defaultPermissions));
 		}
