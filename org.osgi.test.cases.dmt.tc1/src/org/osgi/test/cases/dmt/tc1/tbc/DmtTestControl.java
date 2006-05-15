@@ -64,6 +64,8 @@ import org.osgi.test.cases.dmt.tc1.tbc.DmtData.TestDmtDataExceptions;
 import org.osgi.test.cases.dmt.tc1.tbc.DmtException.DmtExceptionConstants;
 import org.osgi.test.cases.dmt.tc1.tbc.DmtException.PrintStackTrace;
 import org.osgi.test.cases.dmt.tc1.tbc.DmtPrincipalPermission.DmtPrincipalPermission;
+import org.osgi.test.cases.dmt.tc1.tbc.DmtServiceFactory.GetDmtAdmin;
+import org.osgi.test.cases.dmt.tc1.tbc.DmtServiceFactory.GetNotificationService;
 import org.osgi.test.cases.util.DefaultTestBundleControl;
 
 public class DmtTestControl extends DefaultTestBundleControl {
@@ -201,6 +203,14 @@ public class DmtTestControl extends DefaultTestBundleControl {
 		new org.osgi.test.cases.dmt.tc1.tbc.AlertPermission.Implies(this).run();
 	}	
 
+	//DmtServiceFactory
+	public void testDmtServiceFactoryGetDmtAdmin() {
+		new GetDmtAdmin(this).run();
+	}
+	
+	public void testDmtServiceFactoryGetNotificationService() {
+		new GetNotificationService(this).run();
+	}
 	public void failUnexpectedException(Exception exception) {
 		fail("Unexpected Exception: " + exception.getClass().getName() + " [Message: " + exception.getMessage() +"]");
 	}
