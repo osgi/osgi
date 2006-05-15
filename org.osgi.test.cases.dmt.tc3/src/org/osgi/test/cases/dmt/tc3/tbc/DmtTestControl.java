@@ -56,11 +56,14 @@ import org.osgi.test.cases.dmt.tc3.tbc.MetaNode.Can;
 import org.osgi.test.cases.dmt.tc3.tbc.MetaNode.DmtMetaNodeConstants;
 import org.osgi.test.cases.dmt.tc3.tbc.MetaNode.GetDefault;
 import org.osgi.test.cases.dmt.tc3.tbc.MetaNode.GetDescription;
+import org.osgi.test.cases.dmt.tc3.tbc.MetaNode.GetExtensionProperty;
+import org.osgi.test.cases.dmt.tc3.tbc.MetaNode.GetExtensionPropertyKeys;
 import org.osgi.test.cases.dmt.tc3.tbc.MetaNode.GetFormat;
 import org.osgi.test.cases.dmt.tc3.tbc.MetaNode.GetMax;
 import org.osgi.test.cases.dmt.tc3.tbc.MetaNode.GetMaxOccurrence;
 import org.osgi.test.cases.dmt.tc3.tbc.MetaNode.GetMimeTypes;
 import org.osgi.test.cases.dmt.tc3.tbc.MetaNode.GetMin;
+import org.osgi.test.cases.dmt.tc3.tbc.MetaNode.GetRawFormatNames;
 import org.osgi.test.cases.dmt.tc3.tbc.MetaNode.GetScope;
 import org.osgi.test.cases.dmt.tc3.tbc.MetaNode.GetValidNames;
 import org.osgi.test.cases.dmt.tc3.tbc.MetaNode.GetValidValues;
@@ -335,6 +338,18 @@ public class DmtTestControl extends DefaultTestBundleControl {
 		new IsZeroOccurrenceAllowed(this).run();
 	}
 	
+	public void testDmtMetaNodeGetExtensionProperty() {
+		new GetExtensionProperty(this).run();
+	}
+
+	public void testDmtMetaNodeGetExtensionPropertyKeys() {
+		new GetExtensionPropertyKeys(this).run();
+	}
+
+	public void testDmtMetaNodeGetRawFormatNames() {
+		new GetRawFormatNames(this).run();
+	}
+	
 	//TreeStructure test cases
 	public void testTreeStructureLog() {
 		new Log(this).run();
@@ -345,7 +360,6 @@ public class DmtTestControl extends DefaultTestBundleControl {
 	}
 	
 	//Use cases test cases
-
 	public void testUseCases() {
 		new UseCases(this).run();
 	}
