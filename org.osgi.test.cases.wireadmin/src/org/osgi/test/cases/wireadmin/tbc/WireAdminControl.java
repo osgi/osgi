@@ -10,6 +10,9 @@ import org.osgi.test.cases.util.DefaultTestBundleControl;
  * Contains the test methods of the wireadmin test case
  * 
  * $Log$
+ * Revision 1.9  2006/05/22 10:17:14  sboshev
+ * Fixed bug - filter test did fail sometimes because the Thread didn't wait for 500ms as requested.
+ *
  * Revision 1.8  2005/11/30 08:44:34  sboshev
  * Fixed a bug which caused sometimes the test case to fail
  *
@@ -1035,7 +1038,7 @@ public class WireAdminControl extends DefaultTestBundleControl {
 		filter = "(" + WireConstants.WIREVALUE_ELAPSED + ">=500)";
 		h.put(WireConstants.WIREADMIN_FILTER, filter);
 		wa.updateWire(localWire, h);
-		Thread.sleep(500); // ensure the time is elapsed
+		Thread.sleep(550); // ensure the time is elapsed
 		log(subtest,
 				"Time elapsed test - notifying producer. Will send integers [0, 2, 4, 6, 8]");
 		log(subtest, "Filter is " + filter);
