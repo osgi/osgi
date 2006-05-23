@@ -150,7 +150,7 @@ public class DmtAdminDelegate implements DmtAdmin {
         try {
             root = Node.validateAndNormalizeUri(rootUri);
         } catch(DmtException e) {
-            // TODO get rid of this somehow...
+            // TODO get rid of exception transformation if/when the addEventListener methods can throw the appropriate DmtExceptions
             throw new IllegalArgumentException("Invalid root URI parameter: " + e);
         }
 
