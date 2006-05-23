@@ -411,7 +411,7 @@ public class DmtException extends Exception {
             boolean fatal) {
         this(uri, code, message, (causes == null) ? new Throwable[0]
                 : (Throwable[]) causes.toArray(new Throwable[causes.size()]),
-                false);
+                fatal);
     }
     
     private DmtException(String uri, int code, String message, 
