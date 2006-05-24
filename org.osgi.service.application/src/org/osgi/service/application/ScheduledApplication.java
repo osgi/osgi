@@ -81,6 +81,12 @@ public interface ScheduledApplication {
     public static final String DAY_OF_MONTH = "day_of_month";
     
     /**
+     * The name of the <i>day of week</i> attribute of a virtual timer event. The value is
+     * defined by {@link java.util.Calendar#DAY_OF_WEEK}.
+     */
+    public static final String DAY_OF_WEEK = "day_of_week";
+    
+    /**
      * The name of the <i>hour of day</i> attribute of a virtual timer event. The value is
      * defined by {@link java.util.Calendar#HOUR_OF_DAY}.
      */
