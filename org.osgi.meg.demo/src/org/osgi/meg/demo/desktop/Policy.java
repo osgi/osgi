@@ -52,6 +52,7 @@ public class Policy {
 		String fn = System.getProperty(POLICY_FILE);
 		if (null == fn) {
 			// throw new IllegalArgumentException(POLICY_FILE + " property not set!");
+			System.out.println(POLICY_FILE + " property is not set!");
 			return;
 		}
 		
