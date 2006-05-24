@@ -101,7 +101,7 @@ public class Test1 extends TestCaseClass {
                 new PermissionInfo(FilePermission.class.getName(), 
                         tRunner.getFile("db_test_01_update_01.dp").getAbsolutePath(), "read"),
                 new PermissionInfo(DeploymentAdminPermission.class.getName(), 
-                        "(name=db_test_01)", "install, uninstall")
+                        "(name=db_test_01)", "install, uninstall, metadata")
             };
     }
 
