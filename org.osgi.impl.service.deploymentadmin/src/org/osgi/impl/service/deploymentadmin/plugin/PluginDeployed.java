@@ -44,7 +44,7 @@ import java.util.Set;
 
 import org.osgi.framework.Bundle;
 import org.osgi.impl.service.deploymentadmin.BundleEntry;
-import org.osgi.impl.service.deploymentadmin.BundleUtil;
+import org.osgi.impl.service.deploymentadmin.BackDoor;
 import org.osgi.impl.service.deploymentadmin.CaseInsensitiveMap;
 import org.osgi.impl.service.deploymentadmin.DAConstants;
 import org.osgi.impl.service.deploymentadmin.DeploymentPackageImpl;
@@ -722,7 +722,7 @@ public class PluginDeployed implements DataPlugin, ReadableDataSession,
     private String[] getStandaloneBundleSigners(String bStr) {
         Bundle b = pluginCtx.getBundleContext().getBundle(
                 Long.parseLong(bStr));
-        BundleUtil bu = new BundleUtil();
+        BackDoor bu = new BackDoor(pluginCtx.getBundleContext());
         String[] ret = bu.getDNChains(b);
         if (null == ret)
         	ret = new String[] {};

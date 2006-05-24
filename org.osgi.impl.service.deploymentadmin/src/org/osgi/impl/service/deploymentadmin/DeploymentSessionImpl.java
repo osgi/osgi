@@ -172,7 +172,7 @@ public class DeploymentSessionImpl implements DeploymentSession, FrameworkListen
     private String getBundleDir(final BundleEntry be) {
         return (String) AccessController.doPrivileged(new PrivilegedAction() {
             public Object run() {
-                BundleUtil bu = new BundleUtil();
+                BackDoor bu = new BackDoor(sessionCtx.getBundleContext());
                 Bundle b = sessionCtx.getBundleContext().getBundle(
                         be.getBundleId());
                 File ret = bu.getDataFile(b);
@@ -733,7 +733,7 @@ public class DeploymentSessionImpl implements DeploymentSession, FrameworkListen
 		try {
             AccessController.doPrivileged(new PrivilegedExceptionAction() {
                 public Object run() throws BundleException, DeploymentException {
-                	BundleUtil bu = new BundleUtil();
+                	BackDoor bu = new BackDoor(sessionCtx.getBundleContext());
 			        InputStream is = bu.getBundleStream(b);
 			        try {
 			            byte[] data = new byte[0x1000];
