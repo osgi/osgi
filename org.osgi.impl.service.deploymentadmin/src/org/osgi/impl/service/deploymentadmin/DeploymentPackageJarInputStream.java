@@ -314,7 +314,7 @@ public class DeploymentPackageJarInputStream {
 
 	private int getFileType(JarEntry je) throws IOException {
 		String name = je.getName().toLowerCase();
-		if ("meta-inf/manifest.mf".equals(name))
+		if (name.startsWith("meta-inf"))
 			return FT_MANIFEST;
 		else if (name.startsWith("meta-inf/") &&
 				(name.endsWith(".sf") || name.endsWith(".dsa") || name.endsWith(".rf")))
