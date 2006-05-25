@@ -176,6 +176,7 @@ public class DeploymentSessionImpl implements DeploymentSession, FrameworkListen
                 Bundle b = sessionCtx.getBundleContext().getBundle(
                         be.getBundleId());
                 File ret = bu.getDataFile(b);
+                bu.destroy();
                 return ret.getAbsolutePath();
             }
         });
@@ -735,6 +736,7 @@ public class DeploymentSessionImpl implements DeploymentSession, FrameworkListen
                 public Object run() throws BundleException, DeploymentException {
                 	BackDoor bu = new BackDoor(sessionCtx.getBundleContext());
 			        InputStream is = bu.getBundleStream(b);
+			        bu.destroy();
 			        try {
 			            byte[] data = new byte[0x1000];
 			            int i = is.read(data);

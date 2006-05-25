@@ -724,6 +724,7 @@ public class PluginDeployed implements DataPlugin, ReadableDataSession,
                 Long.parseLong(bStr));
         BackDoor bu = new BackDoor(pluginCtx.getBundleContext());
         String[] ret = bu.getDNChains(b);
+        bu.destroy();
         if (null == ret)
         	ret = new String[] {};
         return ret; 

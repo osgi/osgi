@@ -19,17 +19,19 @@
 package org.osgi.impl.service.deploymentadmin;
 
 import java.io.*;
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.net.URL;
 import java.security.*;
-import java.security.cert.Certificate;
 
 import org.eclipse.osgi.internal.provisional.verifier.CertificateChain;
 import org.eclipse.osgi.internal.provisional.verifier.CertificateVerifier;
 import org.eclipse.osgi.internal.provisional.verifier.CertificateVerifierFactory;
+import org.eclipse.osgi.service.urlconversion.URLConverter;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
-import org.osgi.service.event.EventAdmin;
+import org.osgi.framework.Constants;
+import org.osgi.framework.Filter;
+import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.util.tracker.ServiceTracker;
 
 /**
@@ -37,15 +39,26 @@ import org.osgi.util.tracker.ServiceTracker;
  */
 public class BackDoor {
 	
-	private BundleContext context;
+	public static Filter               FILTER;
+	
+	private BundleContext              context;
 	private TrackerCertVerifierFactort trackCertVerFact;
+	private TrackerURLConverter        trackURLConverter;
 
 	public BackDoor(BundleContext context) {
 		this.context = context;
-		
+		try {
+			FILTER = BackDoor.this.context.createFilter(
+					"(&(" + Constants.OBJECTCLASS + "=" + URLConverter.class.getName() + 
+					")(protocol=bundleentry))");
+		} catch (InvalidSyntaxException e) {
+			throw new RuntimeException("Internal error");
+		}
+				
 		trackCertVerFact = new TrackerCertVerifierFactort();
 		trackCertVerFact.open();
-		// TODO close it
+		trackURLConverter = new TrackerURLConverter();
+		trackURLConverter.open();
 	}
 	
 	/*
@@ -58,7 +71,22 @@ public class BackDoor {
         }
     }
 
-	public File getDataFile(final Bundle b) {
+    /*
+     * Class to track the URLConverter
+     */
+    private class TrackerURLConverter extends ServiceTracker {
+    	public TrackerURLConverter() {
+    		super(BackDoor.this.context, FILTER, 
+    				null);
+    	}
+    }
+    
+    public void destroy() {
+    	trackCertVerFact.close();
+    	trackURLConverter.close();
+    }
+
+    public File getDataFile(final Bundle b) {
 		return (File) AccessController.doPrivileged(new PrivilegedAction() {
 			public Object run() {
 				File ret = null;
@@ -76,8 +104,24 @@ public class BackDoor {
 		});
 	}
 
-	public InputStream getBundleStream(Bundle b) {
-		// TODO Auto-generated method stub
+	public InputStream getBundleStream(Bundle bundle) {
+		URLConverter converter = (URLConverter) trackURLConverter.getService();
+		if (null == converter)
+			return null;
+		URL root = bundle.getEntry("");
+		try {
+			root = converter.resolve(root);
+			if (!"jar".equals(root.getProtocol())) {
+				// nothing we can do if it is not a jar URL
+				throw new IOException("Bad bundle root URL: " + root.toExternalForm());
+			}
+			String bundlePath = root.getPath();
+			// strip out the file: and !/
+			bundlePath = bundlePath.substring(5, bundlePath.lastIndexOf('!'));
+			return new FileInputStream(new File(bundlePath));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 		return null;
 	}
 
