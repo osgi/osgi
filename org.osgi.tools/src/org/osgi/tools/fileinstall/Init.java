@@ -4,6 +4,8 @@ import java.io.File;
 import java.util.*;
 
 import org.osgi.framework.*;
+import org.osgi.service.packageadmin.PackageAdmin;
+import org.osgi.util.tracker.ServiceTracker;
 
 /**
     This clever little bundle watches a directory and will
@@ -63,7 +65,7 @@ class Track {
                 signature = file.lastModified();
             }
 
-            if ( bundle.getState() != Bundle.ACTIVE ) {
+            if ( bundle.getState() != Bundle.ACTIVE && !isFragment(bundle)) {
                 System.out.println( this + " Starting bundle" );
                 bundle.start();
             }
@@ -76,7 +78,23 @@ class Track {
         }
     }
     
-    /**
+    private boolean isFragment(Bundle bundle) {
+    	PackageAdmin padmin;
+    	if ( Init.padmin == null ) 
+    		return false;
+    	
+		try {
+			padmin = (PackageAdmin) Init.padmin.waitForService(10000);
+	    	if ( padmin != null ) {
+	    		return padmin.getBundleType(bundle) == PackageAdmin.BUNDLE_TYPE_FRAGMENT;
+	    	}
+		}
+		catch (InterruptedException e) {
+		}    	
+		return false;
+	}
+
+	/**
      * When all files are processed in the directory.
      */
     boolean phase2(long pollStart) {
@@ -115,6 +133,8 @@ public class Init
         BundleActivator,
         Runnable
 {
+	static ServiceTracker	padmin;
+	
     BundleContext           context;
     Hashtable               bundles = new Hashtable();
     File                    jardir;
@@ -131,7 +151,8 @@ public class Init
     
     public void start( BundleContext context ) throws Exception {
         this.context = context;
-
+        padmin = new ServiceTracker(context,PackageAdmin.class.getName(),null);
+        padmin.open();
         poll   = getTime( POLL, poll );
         delay  = getTime( DELAY,   delay );
         debug  = getTime( DEBUG,   -1 );
