@@ -40,12 +40,12 @@
 
 package org.osgi.test.cases.deploymentadmin.mo.tbc;
 
+import info.dmtree.security.DmtPermission;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.jar.JarFile;
 import java.util.jar.Manifest;
-
-import org.osgi.service.dmt.security.DmtPermission;
 
 public class DeploymentmoConstants {
     public static String DLOTA_PATH;

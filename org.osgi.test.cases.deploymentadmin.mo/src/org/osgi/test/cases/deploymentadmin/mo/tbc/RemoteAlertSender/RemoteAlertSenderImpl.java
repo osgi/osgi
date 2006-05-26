@@ -39,12 +39,14 @@
  */
 package org.osgi.test.cases.deploymentadmin.mo.tbc.RemoteAlertSender;
 
+import info.dmtree.notification.AlertItem;
+import info.dmtree.notification.spi.RemoteAlertSender;
+
 import java.util.Hashtable;
+
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
-import org.osgi.service.dmt.AlertItem;
-import org.osgi.service.dmt.RemoteAlertSender;
 import org.osgi.test.cases.deploymentadmin.mo.tbc.DeploymentmoConstants;
 import org.osgi.test.cases.deploymentadmin.mo.tbc.DeploymentmoTestControl;
 

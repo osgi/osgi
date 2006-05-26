@@ -36,9 +36,10 @@
  */
 package org.osgi.test.cases.monitor.tbc.TreeStructure;
 
-import org.osgi.service.dmt.DmtData;
-import org.osgi.service.dmt.DmtSession;
-import org.osgi.service.dmt.MetaNode;
+import info.dmtree.DmtData;
+import info.dmtree.DmtSession;
+import info.dmtree.MetaNode;
+
 import org.osgi.test.cases.monitor.tbc.MonitorConstants;
 import org.osgi.test.cases.monitor.tbc.MonitorTestControl;
 import org.osgi.test.cases.monitor.tbc.util.MessagesConstants;

@@ -36,14 +36,16 @@
  */
 package org.osgi.test.cases.monitor.tbc.Activators;
 
-import org.osgi.service.dmt.AlertItem;
+import info.dmtree.notification.AlertItem;
+import info.dmtree.notification.spi.RemoteAlertSender;
+
 import org.osgi.test.cases.monitor.tbc.MonitorTestControl;
 
 /**
  *	This class will test the alert sent by the monitoring job.
  */
 public class RemoteAlertSenderImpl implements
-		org.osgi.service.dmt.RemoteAlertSender {
+		RemoteAlertSender {
 	
 	private MonitorTestControl tbc = null;
 	

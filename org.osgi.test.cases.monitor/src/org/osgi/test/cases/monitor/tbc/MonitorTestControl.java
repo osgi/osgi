@@ -40,6 +40,11 @@
 
 package org.osgi.test.cases.monitor.tbc;
 
+import info.dmtree.DmtAdmin;
+import info.dmtree.DmtException;
+import info.dmtree.DmtSession;
+import info.dmtree.notification.AlertItem;
+
 import java.net.SocketPermission;
 
 import org.osgi.framework.AdminPermission;
@@ -48,10 +53,6 @@ import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.PackagePermission;
 import org.osgi.framework.ServicePermission;
 import org.osgi.framework.ServiceReference;
-import org.osgi.service.dmt.AlertItem;
-import org.osgi.service.dmt.DmtAdmin;
-import org.osgi.service.dmt.DmtException;
-import org.osgi.service.dmt.DmtSession;
 import org.osgi.service.event.TopicPermission;
 import org.osgi.service.monitor.MonitorAdmin;
 import org.osgi.service.monitor.MonitorListener;

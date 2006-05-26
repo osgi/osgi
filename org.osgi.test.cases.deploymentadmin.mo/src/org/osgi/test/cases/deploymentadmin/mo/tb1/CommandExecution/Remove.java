@@ -36,10 +36,11 @@
  */
 package org.osgi.test.cases.deploymentadmin.mo.tb1.CommandExecution;
 
+import info.dmtree.DmtData;
+import info.dmtree.DmtSession;
+
 import java.io.File;
 
-import org.osgi.service.dmt.DmtData;
-import org.osgi.service.dmt.DmtSession;
 import org.osgi.test.cases.deploymentadmin.mo.tbc.DeploymentmoConstants;
 import org.osgi.test.cases.deploymentadmin.mo.tbc.DeploymentmoTestControl;
 import org.osgi.test.cases.deploymentadmin.mo.tbc.TestInterface;

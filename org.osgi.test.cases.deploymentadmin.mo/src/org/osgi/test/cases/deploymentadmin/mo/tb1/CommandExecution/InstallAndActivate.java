@@ -42,6 +42,9 @@
  */
 package org.osgi.test.cases.deploymentadmin.mo.tb1.CommandExecution;
 
+import info.dmtree.DmtData;
+import info.dmtree.DmtSession;
+
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.util.jar.Manifest;
@@ -50,8 +53,6 @@ import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleEvent;
 import org.osgi.service.deploymentadmin.DeploymentPackage;
 import org.osgi.service.deploymentadmin.spi.ResourceProcessor;
-import org.osgi.service.dmt.DmtData;
-import org.osgi.service.dmt.DmtSession;
 import org.osgi.test.cases.deploymentadmin.mo.tbc.DeploymentmoConstants;
 import org.osgi.test.cases.deploymentadmin.mo.tbc.DeploymentmoTestControl;
 import org.osgi.test.cases.deploymentadmin.mo.tbc.SessionWorker;
