@@ -18,6 +18,7 @@
 package org.osgi.impl.service.policy.unittests.util;
 
 import info.dmtree.DmtAdmin;
+import info.dmtree.notification.NotificationService;
 import info.dmtree.notification.spi.RemoteAlertSender;
 import info.dmtree.spi.DataPlugin;
 
@@ -42,6 +43,7 @@ import org.osgi.framework.Filter;
 import org.osgi.framework.FrameworkListener;
 import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceEvent;
+import org.osgi.framework.ServiceFactory;
 import org.osgi.framework.ServiceListener;
 import org.osgi.framework.ServiceReference;
 import org.osgi.framework.ServiceRegistration;
@@ -67,7 +69,8 @@ public abstract class DmtPluginTestCase extends TestCase {
 	public ServiceListener newServiceTracker;
 	public ServiceListener	eventAdminServiceListener;
 	public ServiceListener	configurationAdminServiceListener;
-	public DmtAdmin dmtFactory;
+	public DmtAdmin dmtAdmin;
+	public ServiceFactory dmtAdminFactory;
 	public DmtPrincipalPermissionAdmin dmtPrincipalPermissionAdmin;
 	public DummyConfigurationAdmin	configurationAdmin;
     static final String DMT_PERMISSION_ADMIN_SERVICE_PID = 
@@ -147,7 +150,7 @@ public abstract class DmtPluginTestCase extends TestCase {
 
 		public ServiceRegistration registerService(String clazz, Object service, Dictionary properties) {
 			if (DmtAdmin.class.getName().equals(clazz)) {
-				dmtFactory = (DmtAdmin) service;
+				dmtAdminFactory = (ServiceFactory)service;
 				return null;
 			}
 			if (DmtPrincipalPermissionAdmin.class.getName().equals(clazz)) {
@@ -157,7 +160,10 @@ public abstract class DmtPluginTestCase extends TestCase {
 			if (ManagedService.class.getName().equals(clazz)) {
 				return null;
 			}
-			throw new IllegalStateException();
+			if (NotificationService.class.getName().equals(clazz)) {
+				return null;
+			}
+			throw new IllegalStateException(clazz+" "+service+" "+properties);
 		}
 
 		public ServiceRegistration registerService(String[] clazzes, Object service, Dictionary properties) {
@@ -299,12 +305,13 @@ public abstract class DmtPluginTestCase extends TestCase {
 		configurationAdmin = new DummyConfigurationAdmin();
 		dmtAdminActivator.start(dmtBundleContext);
 		context = new DummyComponentContext();
-		context.services.put("dmtAdmin",dmtFactory);
+		dmtAdmin = (DmtAdmin) dmtAdminFactory.getService(null,null);
 		deferredPluginReferences = new ArrayList();
 	}
 	
 	public void tearDown() throws Exception {
-		dmtFactory = null;
+		dmtAdmin = null;
+		dmtAdminFactory = null;
 		configurationAdmin = null;
 		dmtRemoteAlertSenderServiceListener = null;
 		eventAdminServiceListener = null;

@@ -111,12 +111,12 @@ public class ConditionalPermissionPluginTest extends DmtPluginTestCase {
 	}
 
 	public void newSession() throws DmtException {
-		dmtSession = dmtFactory.getSession(ROOT);
+		dmtSession = dmtAdmin.getSession(ROOT);
 		assertNotNull(dmtSession);
 	}
 
 	public void newAtomicSession() throws DmtException {
-		dmtSession = dmtFactory.getSession(ROOT,DmtSession.LOCK_TYPE_ATOMIC);
+		dmtSession = dmtAdmin.getSession(ROOT,DmtSession.LOCK_TYPE_ATOMIC);
 		assertNotNull(dmtSession);
 	}
 	
