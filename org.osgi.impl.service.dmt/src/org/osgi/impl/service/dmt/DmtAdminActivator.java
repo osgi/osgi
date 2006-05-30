@@ -38,7 +38,7 @@ public class DmtAdminActivator implements BundleActivator {
     // do not change this, it is not handled dynamically in the plugins
     static final String DMT_ROOT = "./OSGi";
     
-    static final String DMT_ROOT_PROPERTY = "org.osgi.service.dmt.root";
+    static final String DMT_ROOT_PROPERTY = "info.dmtree.osgi.root";
     
     static final String DMT_PERMISSION_ADMIN_SERVICE_PID = 
         "org.osgi.impl.service.dmt.perms";

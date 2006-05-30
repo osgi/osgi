@@ -71,7 +71,7 @@ public class DAConstants {
     public static final String DMT_DEPLOYMENT_ROOT;
 
     static {
-    	String prop = "org.osgi.service.dmt.root";
+    	String prop = "info.dmtree.osgi.root";
     	String val = System.getProperty(prop);
     	if (null == val)
     		throw new RuntimeException(prop + " system property is not defined.");
