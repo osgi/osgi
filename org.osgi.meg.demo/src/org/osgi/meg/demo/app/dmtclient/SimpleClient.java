@@ -95,7 +95,7 @@ public class SimpleClient implements ManagedService, ManagedServiceFactory,
         
         try {
             System.out.println("DMT root: " + 
-                    System.getProperty("org.osgi.service.dmt.root"));
+                    System.getProperty("info.dmtree.osgi.root"));
             
             System.out.println("mangle: "
                     + Uri.mangle("almafa,balmafa,hosszufa,megmegyegyfa"));
