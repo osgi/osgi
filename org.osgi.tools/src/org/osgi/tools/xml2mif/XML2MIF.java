@@ -261,7 +261,7 @@ public class XML2MIF extends DefaultHandler {
 			if ( key == null || key.trim().length()==0)
 				key = attributes.getQName(i);
 			String value = attributes.getValue(i);
-			if ( ! value.matches("[0-9]+"))
+			if ( value.indexOf(' ')>=0)
 				value = "`" + value + "'";
 
 			value = value.replaceAll(">","\\\\>");
