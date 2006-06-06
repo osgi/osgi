@@ -154,7 +154,7 @@ public class DeploymentPackageJarInputStream {
     }
     
     // Are used to check right file order
-    private static final int FT_UNKNOWN   = -1; 
+    private static final int FT_INITIAL   = -1; 
     private static final int FT_MANIFEST  =  0; 
 	private static final int FT_SIGNATURE =  1; 
 	private static final int FT_L10N      =  2; 
@@ -162,7 +162,7 @@ public class DeploymentPackageJarInputStream {
 	private static final int FT_RESOURCE  =  4;
 	
 	//Is used to check right file order
-	private int lastFileType = FT_UNKNOWN;
+	private int lastFileType = FT_INITIAL;
 	
     private JarInputStream                  jis;
     private DeploymentPackageResourceBundle dprb = new DeploymentPackageResourceBundle();
@@ -295,30 +295,34 @@ public class DeploymentPackageJarInputStream {
 					"Bad jar file");
 		}
 
-        if (null != actJarEntry) {
-        	int actFileType = getFileType(actJarEntry);
-	        checkFileOrder(lastFileType, actFileType);
-	        lastFileType = actFileType;
+        checkFileOrder();
+
+        while (null != actJarEntry && isUninterested(actJarEntry)) {
+        	actJarEntry = jis.getNextJarEntry();
+        	checkFileOrder();
         }
         
-        while (null != actJarEntry && isUninterested(actJarEntry))
-        	actJarEntry = jis.getNextJarEntry();
-        
-        return actJarEntry; 
+        return actJarEntry;
     }
 
-    private void checkFileOrder(int last, int act) throws DeploymentException {
-		if (act < last)
-			throw new DeploymentException(DeploymentException.CODE_ORDER_ERROR);
+    private void checkFileOrder() throws DeploymentException, IOException {
+    	if (null != actJarEntry) {
+    		if (actJarEntry.isDirectory())
+    			return;
+	    	int actFileType = getFileType(actJarEntry);
+			if (actFileType < lastFileType)
+				throw new DeploymentException(DeploymentException.CODE_ORDER_ERROR);
+			lastFileType = actFileType;
+    	}
 	}
 
 	private int getFileType(JarEntry je) throws IOException {
 		String name = je.getName().toLowerCase();
-		if (name.startsWith("meta-inf"))
-			return FT_MANIFEST;
-		else if (name.startsWith("meta-inf/") &&
-				(name.endsWith(".sf") || name.endsWith(".dsa") || name.endsWith(".rf")))
+		if (name.startsWith("meta-inf/") &&
+				(name.endsWith(".sf") || name.endsWith(".dsa") || name.endsWith(".rsa") || name.endsWith(".rf")))
 			return FT_SIGNATURE;
+		else if (name.startsWith("meta-inf/manifest.mf"))
+			return FT_MANIFEST;
 		else if (name.startsWith(locPath) && name.endsWith(".properties"))
 			return FT_L10N;
 		if (Entry.isBundle(je.getAttributes()))
@@ -363,23 +367,4 @@ public class DeploymentPackageJarInputStream {
         return dprb;
     }
     
-    // for test only
-    public static void main(String[] args) throws IOException, DeploymentException {
-    	FileInputStream fis = new FileInputStream(
-    			"/USERS/eclipse/workspaceMEG/org.osgi.impl.service.deploymentadmin.test/res/" +
-    			"db_test_03_update_01.dp");
-    	DeploymentPackageJarInputStream dpjis = 
-    		new DeploymentPackageJarInputStream(fis);
-    	Entry e = dpjis.nextEntry();
-    	while (null != e) {
-    		System.out.println(e);
-    		if (!e.isMissing()) {
-    			InputStream is = e.getInputStream();
-    			System.out.println(is);
-    		}
-    		dpjis.closeEntry();
-    		e = dpjis.nextEntry();
-    	}
-	}
-
 }
