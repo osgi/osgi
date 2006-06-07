@@ -40,12 +40,6 @@ import info.dmtree.security.DmtPermission;
 
 public class PolicyConstants {
 
-	public static final String IMEI_PHONE_CODE = System
-			.getProperty("org.osgi.util.gsm.imei");
-
-	public static final String IMSI_PHONE_CODE = System
-			.getProperty("org.osgi.util.gsm.imsi");
-
 	public static String LOCATION = "";
 
 	public static final String ALL_ACTIONS = DmtPermission.ADD + ","
@@ -86,7 +80,7 @@ public class PolicyConstants {
 
 	public static final String PRINCIPAL = "www.cesar.org.br";
 
-	public static final String OSGI_ROOT = System.getProperty("org.osgi.service.dmt.root");
+	public static final String OSGI_ROOT = System.getProperty("info.dmtree.osgi.root");
 
 	public static final String TEST_NODE = "test";
 
