@@ -47,7 +47,7 @@ public class DmtConstants  {
 	
 	public static String PARAMETER_3 = "";
 	
-    public static final String OSGi_ROOT = System.getProperty("org.osgi.service.dmt.root");
+    public static final String OSGi_ROOT = System.getProperty("info.dmtree.osgi.root");
 
 	public static final String OSGi_LOG = OSGi_ROOT + "/Log";
 	

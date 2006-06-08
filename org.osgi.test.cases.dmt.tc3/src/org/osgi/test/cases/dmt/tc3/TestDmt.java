@@ -31,7 +31,7 @@ import org.osgi.test.cases.util.DefaultTestCase;
  * This test case validates the implementation of <code>DmtAdmin<code> service, according to 
  * MEG reference specification.
  * @author Andre Assad
- * @testcase org.osgi.service.dmt
+ * @testcase info.dmtree
  */
 public class TestDmt extends DefaultTestCase {
 
