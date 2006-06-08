@@ -5,7 +5,7 @@ Bundle-Activator: $(p).tbc.DmtTestControl
 Bundle-Version: 1.0
 Bundle-Copyright: Copyright (c) OSGi Alliance (2000, 2002). All Rights Reserved.
 CVS-Header: $Header$
-$(IMPORT-PACKAGE)
+$(IMPORT-PACKAGE),info.dmtree.security
 $(EXPORT-PACKAGE)
 $(PRIVATE-PACKAGE)
 

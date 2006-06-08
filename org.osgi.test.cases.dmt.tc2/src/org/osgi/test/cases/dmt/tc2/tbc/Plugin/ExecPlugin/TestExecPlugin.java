@@ -71,6 +71,9 @@ public class TestExecPlugin implements DataPlugin, ExecPlugin, TransactionalData
     
 	private static boolean allUriIsExistent = false;
 	
+	
+	private DmtData dataComplex = new DmtData(new Integer("1"));
+	
 	private DmtData dataString = new DmtData("");
 	
 	public static final String[] CHILDREN_NAMES = new String[] { "leaf_b","leaf_a" };
@@ -158,10 +161,11 @@ public class TestExecPlugin implements DataPlugin, ExecPlugin, TransactionalData
 	}
 
 	public DmtData getNodeValue(String[] nodeUri) throws DmtException {
-		//if (tbc.mangleUri(nodeUri).equals(TestExecPluginActivator.INTERIOR_NODE)) {
-		//	return dataComplex;
-		//} else {
+		if (tbc.mangleUri(nodeUri).equals(TestExecPluginActivator.INTERIOR_NODE)) {
+			return dataComplex;
+		} else {
 			return dataString;
+		}
 	}
 
 	public String getNodeTitle(String[] nodeUri) throws DmtException {

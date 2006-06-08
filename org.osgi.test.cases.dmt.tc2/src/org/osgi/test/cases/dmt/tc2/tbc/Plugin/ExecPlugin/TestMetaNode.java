@@ -133,7 +133,7 @@ public class TestMetaNode implements MetaNode {
 	}
 
 	public Object getExtensionProperty(String key) {
-		return null;
+		return "";
 	}
 
 	public String[] getRawFormatNames() {

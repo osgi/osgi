@@ -57,6 +57,7 @@ import info.dmtree.Uri;
 import java.security.MessageDigest;
 import java.util.PropertyPermission;
 import java.util.StringTokenizer;
+import java.util.Vector;
 
 import org.osgi.framework.AdminPermission;
 import org.osgi.framework.PackagePermission;
@@ -106,20 +107,28 @@ public class DmtTestControl extends DefaultTestBundleControl {
 	//URIs too long, to be used simulating DmtException.URI_TOO_LONG
 	public final static String[] URIS_TOO_LONG;
 	
+    public final static String[] EXCEEDING_LIMIT_URIS;
+    
     static {
-	    
+	    Vector uriTooLong = new Vector();
+	    Vector excedingLimitUri = new Vector();
 	    if (Uri.getMaxSegmentNameLength()!=Integer.MAX_VALUE) {
-	        if (Uri.getMaxUriSegments()!=Integer.MAX_VALUE) {
-	            URIS_TOO_LONG = new String[] { getSegmentTooLong(TestExecPluginActivator.ROOT),getExcedingSegmentsUri(TestExecPluginActivator.ROOT) };
-	        } else {
-	            URIS_TOO_LONG = new String[] { getSegmentTooLong(TestExecPluginActivator.ROOT) };
-	        }
-	    } else if (Uri.getMaxUriSegments()!=Integer.MAX_VALUE) { 
-	        URIS_TOO_LONG = new String[] { getExcedingSegmentsUri(TestExecPluginActivator.ROOT)};
-	    } else {
-	    	URIS_TOO_LONG = new String[0];
+	    	uriTooLong.add(getSegmentTooLong(TestExecPluginActivator.ROOT));
+	    	excedingLimitUri.add(getSegmentTooLong("."));
 	    }
-	    
+        if (Uri.getMaxUriSegments()!=Integer.MAX_VALUE) {
+	        uriTooLong.add(getExcedingSegmentsUri(TestExecPluginActivator.ROOT));
+	        excedingLimitUri.add(getSegmentTooLong("."));
+        }
+        if (Uri.getMaxUriLength()!=Integer.MAX_VALUE) {
+        	uriTooLong.add(getUriTooLong(TestExecPluginActivator.ROOT));
+        	excedingLimitUri.add(getUriTooLong("."));
+        }
+        URIS_TOO_LONG = new String[uriTooLong.size()];
+        EXCEEDING_LIMIT_URIS = new String[excedingLimitUri.size()];
+        uriTooLong.copyInto(URIS_TOO_LONG);
+        excedingLimitUri.copyInto(EXCEEDING_LIMIT_URIS);
+ 
 	            
     };
 	
@@ -131,10 +140,7 @@ public class DmtTestControl extends DefaultTestBundleControl {
         TestExecPluginActivator.ROOT + "/./" + TestExecPluginActivator.INTERIOR_NODE_NAME, 
         TestExecPluginActivator.INTERIOR_NODE + "/../" + TestExecPluginActivator.INTERIOR_NODE_NAME};
     
-    public final static String[] EXCEEDING_LIMIT_URIS = new String[] { 
-    	DmtTestControl.getExcedingSegmentsUri("."),
-		DmtTestControl.getSegmentTooLong("."), 
-		DmtTestControl.getUriTooLong(".") };
+
 
 	public void prepare() {
 
@@ -202,7 +208,7 @@ public class DmtTestControl extends DefaultTestBundleControl {
 	}
 	public void setPermissions(PermissionInfo[] permissions) {
 		PermissionInfo[] defaults = new PermissionInfo[] {
-			new PermissionInfo(TopicPermission.class.getName(), "org/osgi/service/dmt/*", TopicPermission.PUBLISH +","+TopicPermission.SUBSCRIBE),
+			new PermissionInfo(TopicPermission.class.getName(), "info/dmtree/DmtEvent/*", TopicPermission.PUBLISH +","+TopicPermission.SUBSCRIBE),
 			new PermissionInfo(PackagePermission.class.getName(), "*", "EXPORT, IMPORT"),
 			new PermissionInfo(ServicePermission.class.getName(), "*",
 					ServicePermission.GET + ","+ ServicePermission.REGISTER),
@@ -278,7 +284,6 @@ public class DmtTestControl extends DefaultTestBundleControl {
 		}
 		return temp.toString();
 	}
-	
 	public void testEvents() {
 		testClasses[32].run();
 	}
@@ -596,7 +601,6 @@ public class DmtTestControl extends DefaultTestBundleControl {
 		} else {
 		    return nodeName.toString();
 		}
-		    
 	}
 	
 	/**
