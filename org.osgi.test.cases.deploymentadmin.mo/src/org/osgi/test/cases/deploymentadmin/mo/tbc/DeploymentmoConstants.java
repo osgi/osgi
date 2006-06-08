@@ -93,7 +93,7 @@ public class DeploymentmoConstants {
     public static final String ALERT_TYPE_DOWNLOADANDINSTALLANDACTIVATE = "org.osgi.deployment.downloadandinstallandactivate";
     
     //Deployment, Download and Deployed subtrees
-    public static final String OSGI_ROOT = System.getProperty("org.osgi.service.dmt.root");
+    public static final String OSGI_ROOT = System.getProperty("info.dmtree.osgi.root");
     public static final String DEPLOYMENT = OSGI_ROOT + "/Deployment";
     public static final String DEPLOYMENT_DOWNLOAD = DEPLOYMENT + "/Download";
     public static final String DEPLOYMENT_INVENTORY = DEPLOYMENT + "/Inventory";
