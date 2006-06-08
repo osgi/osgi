@@ -56,7 +56,13 @@ public class NotificationServiceImpl implements NotificationService {
         }
         
         try {
-            alertSender.sendAlert(principal, code, correlator, items);
+            // TODO check that this is accepted by 246, update API javadoc!
+            // If all parameters are 0/null, send default alert (1201) for
+            // client-initiated session initialization
+            if(code == 0 && correlator == null && items == null) 
+                alertSender.sendAlert(principal, 1201, null, null);
+            else
+                alertSender.sendAlert(principal, code, correlator, items);
         }
         catch (Exception e) {
             String message = "Error sending remote alert";
