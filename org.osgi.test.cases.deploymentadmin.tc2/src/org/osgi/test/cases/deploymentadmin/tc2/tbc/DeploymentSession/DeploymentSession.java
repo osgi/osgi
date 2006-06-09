@@ -106,7 +106,6 @@ public class DeploymentSession {
 		testDeploymentSession011();
         testDeploymentSession012();
         testDeploymentSession013();
-        testDeploymentSession014();
 	}
 
 		
@@ -543,78 +542,7 @@ public class DeploymentSession {
 		}
 	}
     
-    /**
-     * Asserts that <code>DeploymentAdmin</code> <b>must only process a single
-     * session at a time</b>. When a client requests a new session with an install
-     * or uninstall operation, <b>it must block</b> that call until the earlier session
-     * is completed. This test case installs a deployment package and checks
-     * whether the session was blocked waiting for another installation.
-     * 
-     * @spec 114.12 Threading
-     */
-	
-	 private synchronized void testDeploymentSession012() {
-	        tbc.log("#testDeploymentSession012");
-	        setResourceProcessorPermissions(DeploymentConstants.OSGI_DP_LOCATION
-	            + DeploymentConstants.PID_RESOURCE_PROCESSOR4, "(name=*)");
-	        
-	        TestingBlockingResourceProcessor testBlockRP = null;
-	        SessionWorker workerBlockDP = null,workerSimpleDP = null;
-	        
-	        try {
-            
-	            TestingDeploymentPackage blockDP = tbc.getTestingDeploymentPackage(DeploymentConstants.BLOCK_SESSION_RESOURCE_PROCESSOR);
-	            TestingDeploymentPackage testDP = tbc.getTestingDeploymentPackage(DeploymentConstants.SIMPLE_DP);
-	            
-	            workerBlockDP = new SessionWorker(blockDP);
-	            workerBlockDP.start();
-	            
-	            //It guarantees that this Thread is executed before the second one
-	            //Before workerBlockDP installation is blocked, it registers a resource processor 
-	            while (null==testBlockRP) {
-	            	testBlockRP = (TestingBlockingResourceProcessor) getTestSessionRP(DeploymentConstants.PID_RESOURCE_PROCESSOR4);
-	            }
-	            
-
-	            workerSimpleDP = new SessionWorker(testDP);
-	            workerSimpleDP.start();
-	            //To assure it is blocked on the tests below
-	            while (!workerSimpleDP.isRunning()) {
-
-	            }
-	            
-	            tbc.assertTrue("The installation of Block DP was not completed",!workerBlockDP.isInstalled());
-	            
-	            tbc.assertTrue("Installation of test DP was not completed", !workerSimpleDP.isInstalled());
-	            
-	            // releases blocking resource processor
-	            testBlockRP.setReleased(true);
-	            
-	            long initial = System.currentTimeMillis();
-	            long actual = System.currentTimeMillis();
-	            
-	            while (!workerBlockDP.isInstalled() && (actual - initial < DeploymentConstants.SHORT_TIMEOUT)) {
-		            	actual = System.currentTimeMillis();
-	            }
-	            
-	            //The second deployment package can be installed or not, depending on how long the RI timeout is
-	            //Due to that, we only check if the first DP is installed.
-	            tbc.assertTrue("DeploymentAdmin only processed a single session at a time",workerBlockDP.isInstalled());
-	            
-	        } catch (Exception e) {
-	            tbc.fail(MessagesConstants.getMessage(
-	                MessagesConstants.UNEXPECTED_EXCEPTION, new String[]{e.getClass().getName()}));
-	        } finally {
-	        	if (null!=testBlockRP) 
-	        		testBlockRP.setReleased(true);
-	        	if (null!=workerBlockDP)
-	        		workerBlockDP.uninstallDP();
-	        	if (null!=workerSimpleDP)
-	        		workerSimpleDP.uninstallDP();
-	        }
-	    }
-	 
-
+    	 
     /**
      * Asserts that <code>DeploymentAdmin</code> <b>must only process a single
      * session at a time </b>. When a client requests a new session with an
@@ -625,8 +553,8 @@ public class DeploymentSession {
      * 
      * @spec 114.12 Threading
      */
-	 private synchronized void testDeploymentSession013() {
-	        tbc.log("#testDeploymentSession013");
+	 private synchronized void testDeploymentSession012() {
+	        tbc.log("#testDeploymentSession012");
 	        setResourceProcessorPermissions(DeploymentConstants.OSGI_DP_LOCATION
 	            + DeploymentConstants.PID_RESOURCE_PROCESSOR4, "(name=*)");
 	        SessionWorker workerSimpleDP = null,workerBlockDP = null;
@@ -685,8 +613,8 @@ public class DeploymentSession {
      * @spec 114.12 Threading
      */
 	 
-	 private synchronized void testDeploymentSession014() {
-	        tbc.log("#testDeploymentSession014");
+	 private synchronized void testDeploymentSession013() {
+	        tbc.log("#testDeploymentSession013");
 	        setResourceProcessorPermissions(DeploymentConstants.OSGI_DP_LOCATION
 	            + DeploymentConstants.PID_RESOURCE_PROCESSOR4, "(name=*)");
 	        

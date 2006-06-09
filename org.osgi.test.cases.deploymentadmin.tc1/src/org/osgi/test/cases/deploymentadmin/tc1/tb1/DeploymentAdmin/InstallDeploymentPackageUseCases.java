@@ -412,7 +412,6 @@ public class InstallDeploymentPackageUseCases implements TestInterface {
             dp = tbc.installDeploymentPackage(tbc.getWebServer() + testDP.getFilename());
             tbc.failException("#", DeploymentException.class);
         } catch (DeploymentException e) {
-            //TODO what is the error code for this case?
             tbc.pass("DeploymentException correctly thrown");
         } catch (Exception e) {
             tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }));

@@ -116,7 +116,6 @@ public class DeploymentTestControl extends DefaultTestBundleControl {
 		createTestingDeploymentPackages();
 		installListener();
 		
-		//TODO change after conf file implementation
 		setTransactionalDA(false);
 	}
 	
