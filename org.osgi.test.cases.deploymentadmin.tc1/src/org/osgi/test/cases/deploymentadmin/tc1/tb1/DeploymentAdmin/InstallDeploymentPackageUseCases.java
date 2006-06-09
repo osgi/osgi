@@ -503,8 +503,7 @@ public class InstallDeploymentPackageUseCases implements TestInterface {
         } catch (Exception e) {
             tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }));
         } finally {
-            if (!dp.isStale())
-                tbc.uninstall(dp);
+            tbc.uninstall(dp);
             deploymentEventHandler.reset();
         }
     }
@@ -545,7 +544,6 @@ public class InstallDeploymentPackageUseCases implements TestInterface {
             dp = tbc.installDeploymentPackage(tbc.getWebServer() + testDP.getFilename());
             tbc.failException("#", DeploymentException.class);
         } catch (DeploymentException e) {
-            // TODO what is the error code for this case?
             tbc.pass("DeploymentException correctly thrown");
         } catch (Exception e) {
             tbc.fail(MessagesConstants.getMessage(
@@ -560,15 +558,18 @@ public class InstallDeploymentPackageUseCases implements TestInterface {
      * @return
      */
     private Object findProperty(String prop) {
-        Vector events = deploymentEventHandler.getEvents();
-        Iterator it = events.iterator();
-        while (it.hasNext()) {
-            Event event = (Event)it.next();
-            Object value = event.getProperty(prop);
-            if (value != null) {
-                return value;
-            }
-        }
-        return null;
-    }
+		synchronized (deploymentEventHandler) {
+			Vector events = deploymentEventHandler.getEvents();
+			Iterator it = events.iterator();
+			while (it.hasNext()) {
+				Event event = (Event) it.next();
+				Object value = event.getProperty(prop);
+				if (value != null) {
+					return value;
+				}
+			}
+			return null;
+		}
+
+	}
 }
