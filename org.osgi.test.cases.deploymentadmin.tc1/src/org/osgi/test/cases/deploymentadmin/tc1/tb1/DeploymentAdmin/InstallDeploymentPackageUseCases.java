@@ -558,7 +558,7 @@ public class InstallDeploymentPackageUseCases implements TestInterface {
      * @return
      */
     private Object findProperty(String prop) {
-		synchronized (deploymentEventHandler) {
+		synchronized (deploymentEventHandler.getEvents()) {
 			Vector events = deploymentEventHandler.getEvents();
 			Iterator it = events.iterator();
 			while (it.hasNext()) {
