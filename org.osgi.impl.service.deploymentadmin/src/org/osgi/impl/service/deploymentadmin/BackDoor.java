@@ -39,23 +39,27 @@ import org.osgi.util.tracker.ServiceTracker;
  */
 public class BackDoor {
 	
-	public static Filter               FILTER;
+	public static Filter               FILTER_URL_CONVERTER;
+	public static Filter               FILTER_CERT_VER_FACT;
 	
 	private BundleContext              context;
-	private TrackerCertVerifierFactort trackCertVerFact;
+	private TrackerCertVerifierFactory trackCertVerFact;
 	private TrackerURLConverter        trackURLConverter;
+
 
 	public BackDoor(BundleContext context) {
 		this.context = context;
 		try {
-			FILTER = BackDoor.this.context.createFilter(
+			FILTER_URL_CONVERTER = BackDoor.this.context.createFilter(
 					"(&(" + Constants.OBJECTCLASS + "=" + URLConverter.class.getName() + 
 					")(protocol=bundleentry))");
+			FILTER_CERT_VER_FACT = BackDoor.this.context.createFilter(
+					"(" + Constants.OBJECTCLASS + "=" + CertificateVerifierFactory.class.getName() + ")");
 		} catch (InvalidSyntaxException e) {
 			throw new RuntimeException("Internal error");
 		}
 				
-		trackCertVerFact = new TrackerCertVerifierFactort();
+		trackCertVerFact = new TrackerCertVerifierFactory();
 		trackCertVerFact.open();
 		trackURLConverter = new TrackerURLConverter();
 		trackURLConverter.open();
@@ -64,10 +68,9 @@ public class BackDoor {
 	/*
      * Class to track the CertificateVerifierFactory
      */
-    private class TrackerCertVerifierFactort extends ServiceTracker {
-        public TrackerCertVerifierFactort() {
-            super(BackDoor.this.context, 
-                    CertificateVerifierFactory.class.getName(), null);
+    private class TrackerCertVerifierFactory extends ServiceTracker {
+        public TrackerCertVerifierFactory() {
+            super(BackDoor.this.context, FILTER_CERT_VER_FACT, null);
         }
     }
 
@@ -76,8 +79,7 @@ public class BackDoor {
      */
     private class TrackerURLConverter extends ServiceTracker {
     	public TrackerURLConverter() {
-    		super(BackDoor.this.context, FILTER, 
-    				null);
+    		super(BackDoor.this.context, FILTER_URL_CONVERTER, null);
     	}
     }
     
@@ -126,7 +128,15 @@ public class BackDoor {
 	}
 
 	public String[] getDNChains(Bundle b) {
-		CertificateVerifier cv = (CertificateVerifier) trackCertVerFact.getService();
+		CertificateVerifierFactory cvf = (CertificateVerifierFactory) trackCertVerFact.getService();
+		if (null == cvf)
+			return null;
+		CertificateVerifier cv;
+		try {
+			cv = cvf.getVerifier(b);
+		} catch (IOException e) {
+			return null;
+		}
 		if (null == cv)
 			return null;
 		CertificateChain[] chains = cv.getChains();
