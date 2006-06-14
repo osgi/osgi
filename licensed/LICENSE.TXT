@@ -69,3 +69,8 @@ License					licenses/ASL-2.0.txt (basic ant)
 URL						http://ant.apache.org
 Modifications			NONE, library and scripts used as is
 
+ASM ---------------------------------------------------------------------------------
+Copyright				Copyright (c) ObjectWEB
+License					http://www.opensource.org/licenses/bsd-license.php
+URL						http://asm.objectweb.org/
+Modifications			NONE, library used as is
