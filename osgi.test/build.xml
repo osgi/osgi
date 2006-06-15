@@ -9,5 +9,31 @@
 		<copy file="${workspace}/cnf/certificate/.keystore" tofile="target/keystore" overwrite="true"/>
 	</target>
 
+	<target name="crossref">
+		<java fork="true" classname="org.osgi.tools.cross.Cross" classpath="../org.osgi.tools/src;../licensed/jar/asm-2.2.2.jar;osgi.director.jar">
+		  <arg value="-o"/>
+		  <arg value="osgi.core.html"/>
+		  <arg value="-target"/>
+		  <arg value="osgi.core.jar"/>
+		  <arg value="osgi.core.tests.jar"/>
+		</java>
+		
+		<java fork="true" classname="org.osgi.tools.cross.Cross" classpath="../org.osgi.tools/src;../licensed/jar/asm-2.2.2.jar;osgi.director.jar">
+		  <arg value="-o"/>
+		  <arg value="osgi.cmpn.html"/>
+		  <arg value="-target"/>
+		  <arg value="osgi.compendium.jar"/>
+		  <arg value="osgi.cmpn.tests.jar"/>
+		</java>
+		
+		<java fork="true" classname="org.osgi.tools.cross.Cross" classpath="../org.osgi.tools/src;../licensed/jar/asm-2.2.2.jar;osgi.director.jar">
+		  <arg value="-o"/>
+		  <arg value="osgi.meg.html"/>
+		  <arg value="-target"/>
+		  <arg value="osgi.meg.jar"/>
+		  <arg value="osgi.meg.tests.jar"/>
+		</java>
+	</target>
+
 	<import file="../cnf/build.xml"/>
 </project>
