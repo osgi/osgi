@@ -34,31 +34,43 @@ import org.objectweb.asm.*;
 public class XRef extends DefaultAdapter {
 	String	currentClass;
 	Map		targetAPI;
+	Map		interfacesAPI;
 	Method	currentMethod;
+	String	interfaces[];
 	
-	XRef(Map targetAPI) {
+	XRef(Map targetAPI, Map interfacesAPI) {
 		this.targetAPI = targetAPI;
+		this.interfacesAPI = interfacesAPI;
 	}
 	
 	public void visit(int version, int access, String name, String signature,
 			String superName, String[] interfaces) {
 		currentClass = name.replace('/', '.');
+		this.interfaces = interfaces;
+		for ( int i=0; i<interfaces.length; i++ )
+			interfaces[i] = interfaces[i].replace('/', '.');
 	}
 
 	public MethodVisitor visitMethod(int access, String name, String desc,
 			String signature, String[] exceptions) {
-		currentMethod = new Method(currentClass, name, desc);
+		currentMethod = new Method(currentClass, name, desc, currentJar);
+		for ( int i =0; interfaces!=null && i<interfaces.length; i++ ) {
+			Method callee = new Method(interfaces[i],name,desc, null);
+			Set set = (Set) interfacesAPI.get(callee);
+			if ( set != null )
+				set.add(currentMethod);
+		}
 		return this;
 	}
 	
 	public void visitMethodInsn(int opcode, String owner, String name,
 			String desc) {
-		Method called = new Method(owner.replace('/', '.'), name, desc);
-		System.out.println("xref " + currentMethod + " -> " + called );
+		Method called = new Method(owner.replace('/', '.'), name, desc, currentJar);
 
 		Set set = (Set) targetAPI.get(called);
 		if ( set != null ) {
-			set.add(called);
+			set.add(currentMethod);
 		}
+		
 	}
 }

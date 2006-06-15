@@ -30,7 +30,8 @@ package org.osgi.tools.cross;
 import org.objectweb.asm.*;
 
 public class DefaultAdapter implements ClassVisitor, MethodVisitor {
-
+	String		currentJar;
+	
 	public void visit(int version, int access, String name, String signature, String superName, String[] interfaces) {
 		// TODO Auto-generated method stub
 		

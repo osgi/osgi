@@ -28,28 +28,46 @@
 package org.osgi.tools.cross;
 
 import java.io.*;
+import java.net.URL;
 import java.util.*;
 import java.util.zip.*;
 
+import javax.xml.transform.*;
+import javax.xml.transform.stream.*;
+
 import org.objectweb.asm.*;
+import org.osgi.test.script.Tag;
 
 public class Cross {
-	static Map	interfacesAPI	= new HashMap();
-	static Map	methodsAPI	= new HashMap();
-	static String pattern = "";
+	static Map			interfacesAPI	= new HashMap();
+	static Map			methodsAPI		= new HashMap();
+	static String		pattern			= "";
+	static PrintStream	out				= System.out;
+	static Tag			result			= new Tag("testmatrix");
+	static boolean		xml				= true;
 
-	public static void main(String args[]) throws IOException {
+	public static void main(String args[]) throws IOException, Exception {
 		System.err.println("Cross Reference Test Cases | OSGi v1.0");
 		System.err.flush();
 		for (int i = 0; i < args.length; i++) {
 			if (args[i].startsWith("-")) {
-				if (args[i].equals("-pattern"))
+				if (args[i].equals("-pattern")) {
 					pattern = args[++i];
+					result.addContent(new Tag("pattern", pattern));
+				}
+				else if (args[i].equals("-o")) {
+					out = new PrintStream(new FileOutputStream(args[++i]));
+					if (args[i].endsWith(".html"))
+						xml = false;
+				}
 				else if (args[i].equals("-target")) {
+					result.addContent(new Tag("target", new File(args[i + 1])
+							.getName()));
 					// Is a JAR file that contains the spec.
 					// The API is the set of public and protected
 					// methods. Multiple jars can be specified
-					traverse(args[++i], new API(methodsAPI, interfacesAPI, pattern));
+					traverse(args[++i], new API(methodsAPI, interfacesAPI,
+							pattern));
 				}
 				else {
 					System.err.println("Unknown option " + args[i]);
@@ -57,25 +75,202 @@ public class Cross {
 				}
 			}
 			else {
-				traverse(args[i], new XRef(methodsAPI));
+				result
+						.addContent(new Tag("input", new File(args[i])
+								.getName()));
+				traverse(args[i], new XRef(methodsAPI, interfacesAPI));
 			}
 		}
 
+		String pckge = "";
+		String clazz = "";
+		Tag pckgeTag = null;
+		Tag clazzTag = null;
+
 		for (Iterator it = new TreeSet(methodsAPI.keySet()).iterator(); it
 				.hasNext();) {
-			Method name = (Method) it.next();
-			System.out.print(name);
-			Collection c = (Collection) methodsAPI.get(name);
-			System.out.print("\t");
-			if (c.isEmpty())
-				System.out.print("XXX");
-			else
-				System.out.print(c.size());
-			System.out.println();
+			Method method = (Method) it.next();
+			if (!pckge.equals(method.pckge)) {
+				pckge = method.pckge;
+				pckgeTag = new Tag("package");
+				pckgeTag.addAttribute("name", method.pckge);
+				if (method.jar != null)
+					pckgeTag.addAttribute("jar", method.jar);
+				result.addContent(pckgeTag);
+			}
+			if (!clazz.equals(method.clazz)) {
+				clazz = method.clazz;
+				clazzTag = new Tag("class");
+				clazzTag.addAttribute("name", method.clazz
+						.substring(method.clazz.lastIndexOf('.') + 1));
+				pckgeTag.addContent(clazzTag);
+			}
+
+			Tag methodTag = makeMethodTag(method);
+			clazzTag.addContent(methodTag);
+			setCollectionTag(methodTag, "callers", (Collection) methodsAPI
+					.get(method));
+			setCollectionTag(
+					methodTag,
+					"implementers",
+					(Collection) interfacesAPI.get(method));
+		}
+
+		if (!xml) {
+			ByteArrayOutputStream bout = new ByteArrayOutputStream();
+			PrintWriter pw = new PrintWriter(new OutputStreamWriter(bout));
+			result.print(0, pw);
+			pw.close();
+			// TODO use templates and cache these, this
+			// is horribly inefficient.
+			ByteArrayInputStream bin = new ByteArrayInputStream(bout
+					.toByteArray());
+			Source data = new StreamSource(bin);
+			URL url = Cross.class.getResource("testmatrix.xsl");
+			Source style = new StreamSource(url.openStream());
+			Result output = new StreamResult(out);
+			// create Transformer and perform the tranfomation
+			TransformerFactory fact = /*net.sf.saxon.*/TransformerFactory/*Impl*/.newInstance();
+			fact.setURIResolver(new URIResolver() {
+				public Source resolve(String href, String base)
+						throws TransformerException {
+					// TODO Auto-generated method stub
+					return null;
+				}
+			});
+			Transformer xslt = fact.newTransformer(style);
+			xslt.transform(data, output);
+			out.close();
+		}
+		else {
+			PrintWriter pw = new PrintWriter(new OutputStreamWriter(out));
+			pw.println("<?xml version='1.0'?>");
+			result.print(0, pw);
+			pw.flush();
+			out.close();
 		}
 	}
 
-	static void traverse(String path, ClassVisitor cv)
+	static void setCollectionTag(Tag parent, String name, Collection set) {
+		if (set == null || set.isEmpty())
+			return;
+		Tag holder = new Tag(name);
+		parent.addContent(holder);
+		for (Iterator c = set.iterator(); c.hasNext();) {
+			Method method = (Method) c.next();
+			holder.addContent(makeMethodTag(method));
+		}
+	}
+
+	static Tag makeMethodTag(Method method) {
+		Tag tag = new Tag("method");
+		tag.addAttribute("pckge", method.pckge);
+		tag.addAttribute("class", method.clazz);
+		tag.addAttribute("name", method.name);
+		tag.addAttribute("proto", method.proto);
+		if (method.jar != null)
+			tag.addAttribute("jar", method.jar);
+
+		StringBuffer sb = new StringBuffer();
+		sb.append(doSignature(Type.getReturnType(method.proto).toString()));
+		sb.append(" ");
+		sb.append(method.name);
+		sb.append("(");
+		Type[] types = Type.getArgumentTypes(method.proto);
+		String del = "";
+		for (int i = 0; i < types.length; i++) {
+			sb.append(del);
+			del = ", ";
+			sb.append(doSignature(types[i].toString()));
+
+		}
+		sb.append(")");
+
+		tag.addAttribute("pretty", sb.toString());
+		return tag;
+	}
+
+	static String doSignature(String signature) {
+		StringBuffer sb = new StringBuffer();
+		int dimension = 0;
+
+		while (signature.charAt(dimension) == '[') {
+			dimension++;
+		}
+
+		char c = signature.charAt(dimension);
+		switch (c) {
+			case '[' :
+				dimension++;
+				break;
+
+			case 'L' :
+				int end = signature.indexOf(';', dimension);
+				String type = signature.substring(dimension + 1, end);
+				sb.append(mkShort(type));
+				break;
+
+			case 'B' :
+				sb.append("byte");
+				break;
+
+			case 'C' :
+				sb.append("char");
+				break;
+
+			case 'D' :
+				sb.append("double");
+				break;
+
+			case 'F' :
+				sb.append("float");
+				break;
+
+			case 'I' :
+				sb.append("int");
+				break;
+
+			case 'J' :
+				sb.append("long");
+				break;
+
+			case 'S' :
+				sb.append("short");
+				break;
+
+			case 'V' :
+				sb.append("void");
+				break;
+
+			case 'Z' :
+				sb.append("boolean");
+				break;
+
+			default :
+				throw new IllegalArgumentException("Unknown type: " + c
+						+ " in '" + signature + "' " + "  "
+						+ signature.substring(dimension - 1));
+		}
+		while (dimension-- > 0)
+			sb.append("[]");
+
+		return sb.toString();
+	}
+
+	static String mkShort(String name) {
+		name = name.replace('/', '.');
+		int n = name.lastIndexOf('.');
+		if (name.startsWith("java.lang.")
+				|| name.startsWith("org.osgi.service")
+				|| name.startsWith("org.osgi.framework")
+				|| name.startsWith("info.dmtree")) {
+			return name.substring(n + 1);
+		}
+		else
+			return name;
+	}
+
+	static void traverse(String path, DefaultAdapter cv)
 			throws FileNotFoundException, IOException {
 		File file = new File(path);
 		if (!file.exists()) {
@@ -83,21 +278,22 @@ public class Cross {
 		}
 		else {
 			InputStream fin = new FileInputStream(file);
-			traverse(fin, cv);
+			traverse(file.getName(), fin, cv);
 		}
 	}
 
-	static void traverse(InputStream fin, ClassVisitor cv) throws IOException {
+	static void traverse(String name, InputStream fin, DefaultAdapter cv)
+			throws IOException {
 		ZipInputStream in = new ZipInputStream(fin);
 		ZipEntry entry = in.getNextEntry();
 		while (entry != null) {
 			if (entry.getName().endsWith(".class")) {
 				ClassReader rdr = new ClassReader(in);
+				cv.currentJar = name;
 				rdr.accept(cv, false);
 			}
 			else if (entry.getName().endsWith(".jar")) {
-				System.out.println("JAR: " + entry.getName());
-				traverse(in, cv);
+				traverse(name + " : " + entry.getName(), in, cv);
 			}
 			entry = in.getNextEntry();
 		}

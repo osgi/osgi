@@ -50,8 +50,6 @@ public class API extends DefaultAdapter {
 		currentClass = name.replace('/', '.');
 		ignore = (access & Opcodes.ACC_PUBLIC) == 0 || ! currentClass.startsWith(pattern);
 		intf = (access & Opcodes.ACC_INTERFACE) != 0;
-		if ( intf )
-			interfacesAPI.put(currentClass, new HashSet() );
 	}
 
 	public MethodVisitor visitMethod(int access, String name, String desc,
@@ -60,7 +58,7 @@ public class API extends DefaultAdapter {
 				|| (access & (Opcodes.ACC_PUBLIC + Opcodes.ACC_PROTECTED)) == 0)
 			return null;
 
-		Method method = new Method(currentClass, name, desc);
+		Method method = new Method(currentClass, name, desc, currentJar);
 		if (methodsAPI.containsKey(method))
 			System.err.println("Duh? Double key: " + method);
 		methodsAPI.put(method, new HashSet());

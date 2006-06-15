@@ -31,10 +31,15 @@ public class Method implements Comparable {
 	String	clazz;
 	String	name;
 	String	proto;
-	Method(String clazz, String name, String proto) {
+	String  pckge;
+	String  jar;
+	
+	Method(String clazz, String name, String proto, String jar ) {
 		this.clazz = clazz;
 		this.name = name;
 		this.proto = proto;
+		this.pckge = clazz.substring(0, clazz.lastIndexOf("."));
+		this.jar = jar;
 	}
 
 	public boolean equals(Object o) {
