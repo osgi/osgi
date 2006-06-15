@@ -99,7 +99,7 @@ public interface AttributeDefinition {
 	 * <code>Vector</code> with <code>BigInteger</code> or <code>BigInteger[]</code>
 	 * objects, depending on the <code>getCardinality()</code> value.
 	 * 
-	 * @deprecated Since 1.1
+	 * @deprecated As of 1.1.
 	 */
 	public static final int	BIGINTEGER	= 9;
 	/**
@@ -109,7 +109,7 @@ public interface AttributeDefinition {
 	 * <code>Vector</code> with <code>BigDecimal</code> or <code>BigDecimal[]</code>
 	 * objects depending on <code>getCardinality()</code>.
 	 * 
-	 * @deprecated Since 1.1
+	 * @deprecated As of 1.1.
 	 */
 	public static final int	BIGDECIMAL	= 10;
 	/**

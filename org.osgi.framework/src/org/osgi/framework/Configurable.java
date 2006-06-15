@@ -28,7 +28,7 @@ package org.osgi.framework;
  * <code>instanceof Configurable</code>.
  * 
  * @version $Revision$
- * @deprecated Since 1.2. Please use Configuration Admin service.
+ * @deprecated As of 1.2. Please use Configuration Admin service.
  */
 public interface Configurable {
 	/**
@@ -47,7 +47,7 @@ public interface Configurable {
 	 * @throws java.lang.SecurityException If the caller does not have an
 	 *         appropriate permission and the Java Runtime Environment supports
 	 *         permissions.
-	 * @deprecated Since 1.2. Please use Configuration Admin service.
+	 * @deprecated As of 1.2. Please use Configuration Admin service.
 	 */
 	public Object getConfigurationObject();
 }

@@ -140,7 +140,7 @@ public class FrameworkEvent extends EventObject {
 	 * 
 	 * @param type The event type.
 	 * @param source The event source object. This may not be <code>null</code>.
-	 * @deprecated Since 1.2. This constructor is deprecated in favor of using
+	 * @deprecated As of 1.2. This constructor is deprecated in favor of using
 	 *             the other constructor with the System Bundle as the event
 	 *             source.
 	 */
