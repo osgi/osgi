@@ -113,34 +113,6 @@ public class DeploymentConstants {
     public static final int LOCALIZED_DP = 55;
     public static final int SIGNING_FILE_NOT_NEXT = 56;
     
-	//This array index is very important, and must be the same as the deployment code
-	//Use 31 characters.
-	public static final String[] MAP_CODE_TO_DP = {"simple_dp",
-        "simple_clone_dp", "simple_fix_pack_dp",
-        "missing_resource_fix_pack_dp", "missing_bundle_fix_pack",
-        "simple_resource_processor_dp", "simple_higher_major_version_dp",
-        "simple_higher_minor_version_dp", "simple_higher_micro_version_dp",
-        "bundle_from_other_dp", "bundle_from_other_dp_dif_vers",
-        "symb_name_dif_from_manifest_dp", "bad_header_dp",
-        "resource_from_other_dp", "resource_processor_dp",
-        "add_bundle_fix_pack_dp", "fix_pack_higher_range_dp",
-        "simple_resource_dp", "simple_resource_dp",
-        "simple_unsigned_bundle_dp", "simple_unsigned_dp",
-        "simple_no_bundle_dp", "simple_no_resource_dp",
-        "fix_pack_lower_range_dp", "missing_name_header_dp", "system",
-        "wrong_order", "non_customizer_dp", "untrusted", "wrong_path",
-        "wrong_version", "simple_uninstall_bundle_dp",
-        "simple_uninstall_bundle_dp", "bundle_throws_exception_dp",
-        "bundle_throws_exception_stop_dp", "bundle_doesnt_throw_exception_dp",
-        "block_session", "version_dif_from_manifest_dp",
-        "missing_b_version_header", "missing_bsn_header",
-        "missing_fix_pack_header", "missing_res_name_header",
-        "missing_version_header", "simple_res_proc_uninstall",
-        "simple_resource_uninstall_dp", "wrong_bsn", "wrong_bversion",
-        "wrong_customizer", "wrong_dp_missing", "wrong_fix_pack", "wrong_name",
-        "wrong_rp", "session_test_dp", "resource_processor2_dp",
-        "strange_path", "localized", "signing_file_not_next"};
-	
 	public static final String DEPLOYMENT_PACKAGE_NAME_ALL = "(name=*)";
 	
 	public static final String BUNDLE_NAME_ALL = "(name=*)";

@@ -95,8 +95,6 @@ public class DeploymentTestControl extends DefaultTestBundleControl {
 	private TestInterface[] testClasses;
 	private String bundleLocation;
 	private HashMap packages = new HashMap();
-	private Dictionary managedProps;
-	private Dictionary managedFactoryProps;
     
     private DeploymentEventHandlerImpl deploymentEventHandler;
     private PermissionWorker permWorker;
@@ -183,351 +181,238 @@ public class DeploymentTestControl extends DefaultTestBundleControl {
 	 * Generate Testing Deployment Packages
 	 */
 	private void createTestingDeploymentPackages() {
-		TestingDeploymentPackage dp = null;
-		for (int i = 0; i < DeploymentConstants.MAP_CODE_TO_DP.length; i++) {
-			switch (i) {
-			case DeploymentConstants.SIMPLE_DP: {
-				TestingBundle[] bundles = {new TestingBundle("bundles.tb1", "1.0", "bundle001.jar"), new TestingBundle("bundles.tb2", "1.0", "bundle002.jar")};
-				dp = new TestingDeploymentPackage(DeploymentConstants.getCodeName(DeploymentConstants.SIMPLE_DP), "1.0.0", "simple.dp", bundles);
-				packages.put(""+i, dp);
-				break;
-			}
-			case DeploymentConstants.SIMPLE_DP_CLONE: {
-				dp = new TestingDeploymentPackage(DeploymentConstants.getCodeName(DeploymentConstants.SIMPLE_DP), "1.0.0", "simple_clone.dp", null);
-				packages.put(""+i, dp);
-				break;
-			}
-			case DeploymentConstants.SIMPLE_FIX_PACK_DP: {
-				TestingBundle[] bundles = {new TestingBundle("bundles.tb1", "1.5", "bundle001.jar")};
-				dp = new TestingDeploymentPackage(DeploymentConstants.getCodeName(DeploymentConstants.SIMPLE_DP), "1.1.1", "simple_fix_pack.dp", bundles);
-				packages.put(""+i, dp);
-				break;
-			}
-			case DeploymentConstants.MISSING_RESOURCE_FIX_PACK_DP: {
-				dp = new TestingDeploymentPackage(DeploymentConstants.getCodeName(DeploymentConstants.SIMPLE_RESOURCE_DP), "1.1.1", "missing_resource_fix_pack.dp", null);
-				packages.put(""+i, dp);
-				break;
-			}
-			case DeploymentConstants.MISSING_BUNDLE_FIX_PACK_DP: {
-				TestingResource[] resources = {new TestingResource("simple_resource.xml", DeploymentConstants.PID_RESOURCE_PROCESSOR1)}; 
-				dp = new TestingDeploymentPackage(DeploymentConstants.getCodeName(DeploymentConstants.SIMPLE_DP), "1.1.1", "missing_bundle_fix_pack.dp", null, resources);
-				packages.put(""+i, dp);
-				break;
-			}
-			case DeploymentConstants.SIMPLE_RESOURCE_PROCESSOR_DP: {
-				TestingBundle[] bundles = {new TestingBundle(DeploymentConstants.PID_RESOURCE_PROCESSOR1, "1.0", "rp_bundle.jar")};
-				TestingResource[] resources = {new TestingResource("conf.txt",DeploymentConstants.PID_RESOURCE_PROCESSOR1)};
-				dp = new TestingDeploymentPackage(DeploymentConstants.getCodeName(DeploymentConstants.SIMPLE_RESOURCE_PROCESSOR_DP), "1.0.0", "simple_resource_processor.dp", bundles,resources);
-				packages.put(""+i, dp);
-				break;
-			}
-			case DeploymentConstants.SIMPLE_HIGHER_MAJOR_VERSION_DP: {
-				TestingBundle[] bundles = {new TestingBundle("bundles.tb1", "1.0", "bundle001.jar"), new TestingBundle("bundles.tb2", "1.0", "bundle002.jar")};
-				dp = new TestingDeploymentPackage(DeploymentConstants.getCodeName(DeploymentConstants.SIMPLE_DP), "2.0.0", "simple_higher_major_version.dp", bundles);
-				packages.put(""+i, dp);
-				break;
-			}
-			case DeploymentConstants.SIMPLE_HIGHER_MINOR_VERSION_DP: {
-				TestingBundle[] bundles = {new TestingBundle("bundles.tb1", "1.0", "bundle001.jar"), new TestingBundle("bundles.tb2", "1.0", "bundle002.jar")};
-				dp = new TestingDeploymentPackage(DeploymentConstants.getCodeName(DeploymentConstants.SIMPLE_DP), "1.1.0", "simple_higher_minor_version.dp", bundles);
-				packages.put(""+i, dp);
-				break;
-			}
-			case DeploymentConstants.SIMPLE_HIGHER_MICRO_VERSION_DP: {
-				TestingBundle[] bundles = {new TestingBundle("bundles.tb1", "1.0", "bundle001.jar"), new TestingBundle("bundles.tb2", "1.0", "bundle002.jar")};
-				dp = new TestingDeploymentPackage(DeploymentConstants.getCodeName(DeploymentConstants.SIMPLE_DP), "1.0.1", "simple_higher_micro_version.dp", bundles);
-				packages.put(""+i, dp);
-				break;
-			}
-			case DeploymentConstants.DP_CONTAINING_A_BUNDLE_FROM_OTHER_DP: {
-				TestingBundle[] bundles = {new TestingBundle("bundles.tb1", "1.0", "bundle001.jar"), new TestingBundle("bundles.tb3", "1.0", "bundle003.jar")};
-				dp = new TestingDeploymentPackage(DeploymentConstants.getCodeName(i), "1.0.0", "bundle_from_other.dp", bundles);
-				packages.put(""+i, dp);
-				break;
-			}
-			case DeploymentConstants.DP_CONTAINING_A_BUNDLE_FROM_OTHER_DP_DIF_VERS: {
-				TestingBundle[] bundles = {new TestingBundle("bundles.tb1", "2.0", "bundle001.jar"), new TestingBundle("bundles.tb2", "1.5", "bundle002.jar")};
-				dp = new TestingDeploymentPackage(DeploymentConstants.getCodeName(i), "1.0.0", "bundle_from_other_dp_dif_vers.dp", bundles);
-				packages.put(""+i, dp);
-				break;
-			}
-			case DeploymentConstants.SYMB_NAME_DIFFERENT_FROM_MANIFEST_DP: {
-				TestingBundle[] bundles = {new TestingBundle("bundle_different_name.tb1", "1.0", "bundle001.jar")};
-				dp = new TestingDeploymentPackage(DeploymentConstants.getCodeName(i), "1.0.0", "symb_name_dif_from_manifest.dp", bundles);
-				packages.put(""+i, dp);
-				break;
-			}
-			case DeploymentConstants.BAD_HEADER_DP: {
-				TestingBundle[] bundles = {new TestingBundle("bundles.tb1", "1.0", "bundle001.jar")};
-				dp = new TestingDeploymentPackage(DeploymentConstants.getCodeName(DeploymentConstants.BAD_HEADER_DP), "", "bad_header.dp", bundles);
-				packages.put(""+i, dp);
-				break;
-			}
-			case DeploymentConstants.RESOURCE_PROCESSOR_DP: {
-				TestingBundle[] bundles = {new TestingBundle(DeploymentConstants.PID_RESOURCE_PROCESSOR1, "1.0", "rp_bundle.jar")};
-				dp = new TestingDeploymentPackage(DeploymentConstants.getCodeName(i), "", "resource_processor.dp", bundles);
-				packages.put(""+i, dp);
-				break;
-			}
+			TestingDeploymentPackage dp = null;
+			TestingBundle[] bundles = null;
+			TestingResource[] resources = null;
+		
+			//DeploymentConstants.SIMPLE_DP
+			bundles = new TestingBundle[] {new TestingBundle("bundles.tb1", "1.0", "bundle001.jar"), new TestingBundle("bundles.tb2", "1.0", "bundle002.jar")};
+			dp = new TestingDeploymentPackage(DeploymentConstants.getCodeName(DeploymentConstants.SIMPLE_DP), "1.0.0", "simple.dp", bundles);
+			packages.put(""+DeploymentConstants.SIMPLE_DP, dp);
 
-			case DeploymentConstants.ADD_BUNDLE_FIX_PACK_DP: {
-				TestingBundle[] bundles = {new TestingBundle("bundles.tb1", "1.0", "bundle001.jar"), new TestingBundle("bundles.tb2", "1.0", "bundle002.jar"), new TestingBundle("bundles.tb3", "1.0", "bundle003.jar")};
-				dp = new TestingDeploymentPackage(DeploymentConstants.getCodeName(DeploymentConstants.SIMPLE_DP), "1.1.1", "add_bundle_fix_pack.dp", bundles);
-				packages.put(""+i, dp);
-				break;
-			}
-			case DeploymentConstants.FIX_PACK_HIGHER_RANGE_DP: {
-				TestingBundle[] bundles = {new TestingBundle("bundles.tb1", "1.5", "bundle001_higher_version.jar")};
-				dp = new TestingDeploymentPackage(DeploymentConstants.getCodeName(DeploymentConstants.SIMPLE_DP), "1.0", "fix_pack_higher_range.dp", bundles);
-				packages.put(""+i, dp);
-				break;
-			}
-			case DeploymentConstants.FIX_PACK_LOWER_RANGE_DP: {
-				TestingBundle[] bundles = {new TestingBundle("bundles.tb1", "1.5", "bundle001.jar")};
-				dp = new TestingDeploymentPackage(DeploymentConstants.getCodeName(DeploymentConstants.SIMPLE_DP), "1.0", "fix_pack_higher_range.dp", bundles);
-				packages.put(""+i, dp);
-				break;
-			}
-			case DeploymentConstants.SIMPLE_RESOURCE_DP: {
-				TestingResource[] resources = {new TestingResource("simple_resource.xml",DeploymentConstants.PID_RESOURCE_PROCESSOR1)};
-				dp = new TestingDeploymentPackage(DeploymentConstants.getCodeName(DeploymentConstants.SIMPLE_RESOURCE_DP), "1.0", "simple_resource.dp", null, resources);
-				packages.put(""+i, dp);
-				break;
-			}
-			case DeploymentConstants.ADD_RESOURCE_FIX_PACK: {
-				TestingResource[] resources = {new TestingResource("simple_resource.xml",DeploymentConstants.PID_RESOURCE_PROCESSOR1)};
-				dp = new TestingDeploymentPackage(DeploymentConstants.getCodeName(DeploymentConstants.SIMPLE_DP), "1.1.1", "add_resource_fix_pack.dp", null, resources);
-				packages.put(""+i, dp);
-				break;
-			}
-			case DeploymentConstants.SIMPLE_UNSIGNED_BUNDLE_DP: {
-				TestingBundle[] bundles = {new TestingBundle("bundles.unsigned", "1.0", "unsignedbundle.jar")};
-				dp = new TestingDeploymentPackage(DeploymentConstants.getCodeName(DeploymentConstants.SIMPLE_UNSIGNED_BUNDLE_DP), "1.0", "simple_unsigned_bundle.dp", bundles);
-				packages.put(""+i, dp);
-				break;
-			}
-			case DeploymentConstants.SIMPLE_UNSIGNED_DP: {
-				TestingBundle[] bundles = {new TestingBundle("bundles.tb1", "1.0", "bundle001.jar")};
-				dp = new TestingDeploymentPackage(DeploymentConstants.getCodeName(DeploymentConstants.SIMPLE_UNSIGNED_DP), "1.0", "simple_unsigned.dp", bundles);
-				packages.put(""+i, dp);
-				break;
-			}
-			case DeploymentConstants.SIMPLE_NO_BUNDLE_DP: {
-				TestingResource[] resources = {new TestingResource("simple_resource.xml",DeploymentConstants.PID_RESOURCE_PROCESSOR1)};
-				dp = new TestingDeploymentPackage(DeploymentConstants.getCodeName(DeploymentConstants.SIMPLE_DP), "1.0", "simple_no_bundle.dp", null, resources);
-				packages.put(""+i, dp);
-				break;
-			}
-			case DeploymentConstants.SIMPLE_NO_RESOURCE_DP: {
-				TestingBundle[] bundles = {new TestingBundle("bundles.tb1", "1.0", "bundle001.jar")};
-				dp = new TestingDeploymentPackage(DeploymentConstants.getCodeName(DeploymentConstants.SIMPLE_RESOURCE_DP), "1.0", "simple_no_resource.dp", bundles);
-				packages.put(""+i, dp);
-				break;
-			}
-			case DeploymentConstants.RESOURCE_FROM_OTHER_DP: {
-				dp = new TestingDeploymentPackage(DeploymentConstants.getCodeName(DeploymentConstants.RESOURCE_FROM_OTHER_DP), "1.0", "resource_from_other.dp", null);
-				packages.put(""+i, dp);
-				break;
-			}
-			case DeploymentConstants.MISSING_NAME_HEADER_DP: {
-				TestingBundle[] bundles = {new TestingBundle("bundles.tb1", "1.0", "bundle001.jar")};
-				dp = new TestingDeploymentPackage(DeploymentConstants.getCodeName(DeploymentConstants.MISSING_NAME_HEADER_DP), "1.0", "missing_name_header.dp", bundles);
-				packages.put(""+i, dp);
-				break;
-			}
-			
-			case DeploymentConstants.SYSTEM_DP: {
-				TestingBundle[] bundles = {new TestingBundle("bundles.tb1", "1.0", "bundle001.jar"), new TestingBundle("bundles.tb2", "1.0", "bundle002.jar")};
-				dp = new TestingDeploymentPackage(DeploymentConstants.getCodeName(DeploymentConstants.SYSTEM_DP), "1.0", "system.dp", bundles);
-				packages.put(""+i, dp);
-				break;
-			}
-			case DeploymentConstants.WRONG_ORDER_DP: {
-				TestingBundle[] bundles = {new TestingBundle("bundles.tb1", "1.0", "bundle001.jar")};
-				TestingResource[] resources = {new TestingResource("simple_resource.xml",DeploymentConstants.PID_RESOURCE_PROCESSOR1)};
-				dp = new TestingDeploymentPackage(DeploymentConstants.getCodeName(DeploymentConstants.WRONG_ORDER_DP), "1.0", "wrong_order.dp", bundles, resources);
-				packages.put(""+i, dp);
-				break;
-			}
+			//DeploymentConstants.SIMPLE_DP_CLONE
+			dp = new TestingDeploymentPackage(DeploymentConstants.getCodeName(DeploymentConstants.SIMPLE_DP), "1.0.0", "simple_clone.dp", null);
+			packages.put(""+DeploymentConstants.SIMPLE_DP_CLONE, dp);
 
-			case DeploymentConstants.UNTRUSTED_DP: {
-				TestingBundle[] bundles = {new TestingBundle("bundles.tb1", "1.0", "bundle001.jar"), new TestingBundle("bundles.tb2", "1.0", "bundle002.jar")};
-				dp = new TestingDeploymentPackage(DeploymentConstants.getCodeName(DeploymentConstants.UNTRUSTED_DP), "1.0", "untrusted.dp", bundles);
-				packages.put(""+i, dp);
-				break;
-			}
-			case DeploymentConstants.WRONG_PATH_DP: {
-				TestingBundle[] bundles = {new TestingBundle("bundles.tb1", "1.0", "bundle001.jar")};
-				dp = new TestingDeploymentPackage(DeploymentConstants.getCodeName(DeploymentConstants.WRONG_PATH_DP), "1.0", "wrong_path.dp", bundles);
-				packages.put(""+i, dp);
-				break;
-			}
-			case DeploymentConstants.WRONG_VERSION_DP: {
-				TestingBundle[] bundles = {new TestingBundle("bundles.tb1", "1.0", "bundle001.jar")};
-				dp = new TestingDeploymentPackage(DeploymentConstants.getCodeName(DeploymentConstants.WRONG_VERSION_DP), "1.0", "wrong_version.dp", bundles);
-				packages.put(""+i, dp);
-				break;
-			}
-			case DeploymentConstants.SIMPLE_UNINSTALL_BUNDLE_DP: {
-				dp = new TestingDeploymentPackage(DeploymentConstants.getCodeName(DeploymentConstants.SIMPLE_DP), "1.1.1", "simple_uninstall_bundle.dp", null);
-				packages.put(""+i, dp);
-				break;
-			}
-			case DeploymentConstants.BUNDLE_THROWS_EXCEPTION_DP: {
-				TestingBundle[] bundles = {new TestingBundle("bundles.tb5", "1.0", "bundle005.jar")};
-				dp = new TestingDeploymentPackage(DeploymentConstants.getCodeName(DeploymentConstants.BUNDLE_THROWS_EXCEPTION_DP), "1.0.0", "bundle_throws_exception.dp", bundles);
-				packages.put(""+i, dp);
-				break;
-			}
-			case DeploymentConstants.BUNDLE_THROWS_EXCEPTION_STOP_DP: {
-				TestingBundle[] bundles = {new TestingBundle("bundles.tb6", "1.0", "bundle006.jar")};
-				dp = new TestingDeploymentPackage(DeploymentConstants.getCodeName(DeploymentConstants.BUNDLE_THROWS_EXCEPTION_STOP_DP), "1.0.0", "bundle_throws_exception.dp", bundles);
-				packages.put(""+i, dp);
-				break;
-			}
-			case DeploymentConstants.BUNDLE_DOESNT_THROW_EXCEPTION_DP: {
-				TestingBundle[] bundles = {new TestingBundle("bundles.tb5", "1.0", "bundle005.jar")};
-				dp = new TestingDeploymentPackage(DeploymentConstants.getCodeName(DeploymentConstants.BUNDLE_THROWS_EXCEPTION_DP), "1.0.0", "bundle_doesnt_throw_exception.dp", bundles);
-				packages.put(""+i, dp);
-				break;
-			}
-            case DeploymentConstants.BLOCK_SESSION_RESOURCE_PROCESSOR: {
-                TestingBundle[] bundles = {new TestingBundle(DeploymentConstants.PID_RESOURCE_PROCESSOR3, "1.0", "rp_bundle4.jar")};
-                TestingResource[] resources = {new TestingResource("conf.txt",DeploymentConstants.PID_RESOURCE_PROCESSOR3)};
-                dp = new TestingDeploymentPackage(DeploymentConstants.getCodeName(DeploymentConstants.BLOCK_SESSION_RESOURCE_PROCESSOR), "1.0.0", "block_session.dp", bundles, resources);
-                packages.put(""+i, dp);
-                break;
-            }
-            case DeploymentConstants.VERSION_DIFFERENT_FROM_MANIFEST_DP: {
-                TestingBundle[] bundles = {new TestingBundle("bundles.tb1","1.0", "bundle001.jar")};
-                dp = new TestingDeploymentPackage(DeploymentConstants.getCodeName(DeploymentConstants.VERSION_DIFFERENT_FROM_MANIFEST_DP), "1.0", "version_dif_from_manifest.dp", bundles);
-                packages.put("" + i, dp);
-                break;
-            }
-            case DeploymentConstants.MISSING_B_VERSION_HEADER: {
-                TestingBundle[] bundles = {new TestingBundle("bundles.tb1", "1.0", "bundle001.jar")};
-                dp = new TestingDeploymentPackage(DeploymentConstants.getCodeName(DeploymentConstants.SIMPLE_DP), "1.0", "missing_name_header.dp", bundles);
-                packages.put(""+i, dp);
-                break;
-            }
-            case DeploymentConstants.MISSING_BSN_HEADER: {
-                TestingBundle[] bundles = {new TestingBundle("bundles.tb1", "1.0", "bundle001.jar")};
-                dp = new TestingDeploymentPackage(DeploymentConstants.getCodeName(DeploymentConstants.SIMPLE_DP), "1.0", "missing_name_header.dp", bundles);
-                packages.put(""+i, dp);
-                break;
-            }
-            case DeploymentConstants.MISSING_FIX_PACK_HEADER: {
-                TestingBundle[] bundles = {new TestingBundle("bundles.tb1", "1.0", "bundle001.jar")};
-                dp = new TestingDeploymentPackage(DeploymentConstants.getCodeName(DeploymentConstants.SIMPLE_DP), "1.0", "missing_name_header.dp", bundles);
-                packages.put(""+i, dp);
-                break;
-            }
-            case DeploymentConstants.MISSING_RES_NAME_HEADER: {
-                TestingBundle[] bundles = {new TestingBundle("bundles.tb1", "1.0", "bundle001.jar")};
-                dp = new TestingDeploymentPackage(DeploymentConstants.getCodeName(DeploymentConstants.SIMPLE_DP), "1.0", "missing_name_header.dp", bundles);
-                packages.put(""+i, dp);
-                break;
-            }
-            case DeploymentConstants.MISSING_VERSION_HEADER: {
-                TestingBundle[] bundles = {new TestingBundle("bundles.tb1", "1.0", "bundle001.jar")};
-                dp = new TestingDeploymentPackage(DeploymentConstants.getCodeName(DeploymentConstants.SIMPLE_DP), "1.0", "missing_version_header.dp", bundles);
-                packages.put(""+i, dp);
-                break;
-            }
-            case DeploymentConstants.SIMPLE_RESOURCE_PROCESSOR_UNINSTALL: {
-                TestingBundle[] bundles = {new TestingBundle(DeploymentConstants.PID_RESOURCE_PROCESSOR4, "1.0", "rp_bundle4.jar")};
-                dp = new TestingDeploymentPackage(DeploymentConstants.getCodeName(i), "1.0", "simple_res_proc_uninstall.dp", bundles);
-                packages.put(""+i, dp);
-                break;
-            }           
-            case DeploymentConstants.SIMPLE_RESOURCE_UNINSTALL_DP: {
-                TestingResource[] resources = {new TestingResource("conf.txt",DeploymentConstants.PID_RESOURCE_PROCESSOR4)};
-                dp = new TestingDeploymentPackage(DeploymentConstants.getCodeName(i), "1.0", "simple_resource_uninstall.dp", null, resources);
-                packages.put(""+i, dp);
-                break;
-            }
-            case DeploymentConstants.WRONG_BSN: {
-                TestingBundle[] bundles = {new TestingBundle("bundles.tb1", "1.0", "bundle001.jar")};
-                dp = new TestingDeploymentPackage(DeploymentConstants.getCodeName(DeploymentConstants.WRONG_BSN), "1.0", "wrong_bsn.dp", bundles);
-                packages.put(""+i, dp);
-                break;
-            }
-            case DeploymentConstants.WRONG_BVERSION: {
-                TestingBundle[] bundles = {new TestingBundle("bundles.tb1", "1.0", "bundle001.jar")};
-                dp = new TestingDeploymentPackage(DeploymentConstants.getCodeName(DeploymentConstants.WRONG_BVERSION), "1.0", "wrong_bversion.dp", bundles);
-                packages.put(""+i, dp);
-                break;
-            }
-            case DeploymentConstants.WRONG_CUSTOMIZER: {
-                TestingBundle[] bundles = {new TestingBundle("bundles.tb1", "1.0", "bundle001.jar")};
-                dp = new TestingDeploymentPackage(DeploymentConstants.getCodeName(DeploymentConstants.WRONG_CUSTOMIZER), "1.0", "wrong_customizer.dp", bundles);
-                packages.put(""+i, dp);
-                break;
-            }
-            case DeploymentConstants.WRONG_DP_MISSING: {
-                TestingBundle[] bundles = {new TestingBundle("bundles.tb1", "1.0", "bundle001.jar")};
-                dp = new TestingDeploymentPackage(DeploymentConstants.getCodeName(DeploymentConstants.WRONG_DP_MISSING), "1.0", "wrong_dp_missing.dp", bundles);
-                packages.put(""+i, dp);
-                break;
-            }
-            case DeploymentConstants.WRONG_FIX_PACK: {
-                TestingBundle[] bundles = {new TestingBundle("bundles.tb1", "1.0", "bundle001.jar")};
-                dp = new TestingDeploymentPackage(DeploymentConstants.getCodeName(DeploymentConstants.WRONG_FIX_PACK), "1.0", "wrong_fix_pack.dp", bundles);
-                packages.put(""+i, dp);
-                break;
-            }
-            case DeploymentConstants.WRONG_NAME: {
-                TestingBundle[] bundles = {new TestingBundle("bundles.tb1", "1.0", "bundle001.jar")};
-                dp = new TestingDeploymentPackage(DeploymentConstants.getCodeName(DeploymentConstants.WRONG_NAME), "1.0", "wrong_name.dp", bundles);
-                packages.put(""+i, dp);
-                break;
-            }
-            case DeploymentConstants.WRONG_RP: {
-                TestingBundle[] bundles = {new TestingBundle("bundles.tb1", "1.0", "bundle001.jar")};
-                dp = new TestingDeploymentPackage(DeploymentConstants.getCodeName(DeploymentConstants.WRONG_RP), "1.0", "wrong_rp.dp", bundles);
-                packages.put(""+i, dp);
-                break;
-            }
-            case DeploymentConstants.SESSION_TEST_DP: {
-                TestingBundle[] bundles = {new TestingBundle("org.osgi.test.cases.deployment.bundles.rp1", "1.0", "rp_bundle.jar"), new TestingBundle("org.osgi.test.cases.deployment.bundles.rp2", "1.0", "rp_bundle2.jar")};
-                TestingResource[] resources = {new TestingResource("simple_resource.xml","org.osgi.test.cases.deployment.bundles.rp1"), new TestingResource("conf.txt","org.osgi.test.cases.deployment.bundles.rp2")};
-                dp = new TestingDeploymentPackage(DeploymentConstants.getCodeName(DeploymentConstants.SESSION_TEST_DP), "1.0", "session_test.dp", bundles, resources);
-                packages.put(""+i, dp);
-                break;
-            }
-            case DeploymentConstants.RESOURCE_PROCESSOR_2_DP: {
-                TestingBundle[] bundles = {new TestingBundle(DeploymentConstants.PID_RESOURCE_PROCESSOR2, "1.0", "rp_bundle2.jar")};
-                dp = new TestingDeploymentPackage(DeploymentConstants.getCodeName(DeploymentConstants.RESOURCE_PROCESSOR_2_DP), "1.0.0", "resource_processor2.dp", bundles);
-                packages.put(""+i, dp);
-                break;
-            }
-            case DeploymentConstants.STRANGE_PATH_DP: {
-                TestingBundle[] bundles = {new TestingBundle("bundles.tb1", "1.0", "bundle001.jar")};
-                dp = new TestingDeploymentPackage(DeploymentConstants.getCodeName(DeploymentConstants.STRANGE_PATH_DP), "1.0", "strange_path.dp", bundles);
-                packages.put(""+i, dp);
-                break;
-            }
-            case DeploymentConstants.LOCALIZED_DP: {
-                TestingBundle[] bundles = {new TestingBundle("bundles.tb3", "1.0", "bundle003.jar")};
-                TestingResource[] resources = {new TestingResource("OSGi-INF/I10n/dp.properties",null)};
-                dp = new TestingDeploymentPackage(DeploymentConstants.getCodeName(DeploymentConstants.LOCALIZED_DP), "1.0", "localized.dp", bundles, resources);
-                packages.put(""+i, dp);
-                break;
-            }
-            case DeploymentConstants.SIGNING_FILE_NOT_NEXT: {
-            	TestingBundle[] bundles = {new TestingBundle("bundles.tb1", "1.0", "bundle001.jar"), new TestingBundle("bundles.tb2", "1.0", "bundle002.jar")};
-                dp = new TestingDeploymentPackage(DeploymentConstants.getCodeName(DeploymentConstants.SIGNING_FILE_NOT_NEXT), "1.0", "signing_files_not_next.dp", bundles);
-                packages.put(""+i, dp);
-                break;
-            }            
-            case DeploymentConstants.NON_CUSTOMIZER_DP: {
-                TestingBundle[] bundles = {new TestingBundle(DeploymentConstants.PID_RESOURCE_PROCESSOR1, "1.0", "rp_bundle.jar")};
-                dp = new TestingDeploymentPackage(DeploymentConstants.getCodeName(DeploymentConstants.NON_CUSTOMIZER_DP), "1.0", "non_customizer_rp.dp", bundles);
-                packages.put(""+i, dp);
-                break;
-            }
-			}
-		}
+			//DeploymentConstants.SIMPLE_FIX_PACK_DP
+			bundles = new TestingBundle[] { new TestingBundle("bundles.tb1", "1.5", "bundle001.jar")};
+			dp = new TestingDeploymentPackage(DeploymentConstants.getCodeName(DeploymentConstants.SIMPLE_DP), "1.1.1", "simple_fix_pack.dp", bundles);
+			packages.put(""+DeploymentConstants.SIMPLE_FIX_PACK_DP, dp);
+
+			//DeploymentConstants.MISSING_RESOURCE_FIX_PACK_DP
+			dp = new TestingDeploymentPackage(DeploymentConstants.getCodeName(DeploymentConstants.SIMPLE_RESOURCE_DP), "1.1.1", "missing_resource_fix_pack.dp", null);
+			packages.put(""+DeploymentConstants.MISSING_RESOURCE_FIX_PACK_DP, dp);
+			//DeploymentConstants.MISSING_BUNDLE_FIX_PACK_DP
+			resources = new TestingResource[]  {new TestingResource("simple_resource.xml", DeploymentConstants.PID_RESOURCE_PROCESSOR1)}; 
+			dp = new TestingDeploymentPackage(DeploymentConstants.getCodeName(DeploymentConstants.SIMPLE_DP), "1.1.1", "missing_bundle_fix_pack.dp", null, resources);
+			packages.put(""+DeploymentConstants.MISSING_BUNDLE_FIX_PACK_DP, dp);
+			//DeploymentConstants.SIMPLE_RESOURCE_PROCESSOR_DP
+			bundles = new TestingBundle[] {new TestingBundle(DeploymentConstants.PID_RESOURCE_PROCESSOR1, "1.0", "rp_bundle.jar")};
+			resources = new TestingResource[]  {new TestingResource("conf.txt",DeploymentConstants.PID_RESOURCE_PROCESSOR1)};
+			dp = new TestingDeploymentPackage(DeploymentConstants.getCodeName(DeploymentConstants.SIMPLE_RESOURCE_PROCESSOR_DP), "1.0.0", "simple_resource_processor.dp", bundles,resources);
+			packages.put(""+DeploymentConstants.SIMPLE_RESOURCE_PROCESSOR_DP, dp);
+			//DeploymentConstants.SIMPLE_HIGHER_MAJOR_VERSION_DP
+			bundles = new TestingBundle[] { new TestingBundle("bundles.tb1", "1.0", "bundle001.jar"), new TestingBundle("bundles.tb2", "1.0", "bundle002.jar")};
+			dp = new TestingDeploymentPackage(DeploymentConstants.getCodeName(DeploymentConstants.SIMPLE_DP), "2.0.0", "simple_higher_major_version.dp", bundles);
+			packages.put(""+DeploymentConstants.SIMPLE_HIGHER_MAJOR_VERSION_DP, dp);
+			//DeploymentConstants.SIMPLE_HIGHER_MINOR_VERSION_DP
+			bundles = new TestingBundle[] { new TestingBundle("bundles.tb1", "1.0", "bundle001.jar"), new TestingBundle("bundles.tb2", "1.0", "bundle002.jar")};
+			dp = new TestingDeploymentPackage(DeploymentConstants.getCodeName(DeploymentConstants.SIMPLE_DP), "1.1.0", "simple_higher_minor_version.dp", bundles);
+			packages.put(""+DeploymentConstants.SIMPLE_HIGHER_MINOR_VERSION_DP, dp);
+			//DeploymentConstants.SIMPLE_HIGHER_MICRO_VERSION_DP
+			bundles = new TestingBundle[] { new TestingBundle("bundles.tb1", "1.0", "bundle001.jar"), new TestingBundle("bundles.tb2", "1.0", "bundle002.jar")};
+			dp = new TestingDeploymentPackage(DeploymentConstants.getCodeName(DeploymentConstants.SIMPLE_DP), "1.0.1", "simple_higher_micro_version.dp", bundles);
+			packages.put(""+DeploymentConstants.SIMPLE_HIGHER_MICRO_VERSION_DP, dp);
+			//DeploymentConstants.DP_CONTAINING_A_BUNDLE_FROM_OTHER_DP
+			bundles = new TestingBundle[] { new TestingBundle("bundles.tb1", "1.0", "bundle001.jar"), new TestingBundle("bundles.tb3", "1.0", "bundle003.jar")};
+			dp = new TestingDeploymentPackage(DeploymentConstants.getCodeName(DeploymentConstants.DP_CONTAINING_A_BUNDLE_FROM_OTHER_DP), "1.0.0", "bundle_from_other.dp", bundles);
+			packages.put(""+DeploymentConstants.DP_CONTAINING_A_BUNDLE_FROM_OTHER_DP, dp);
+			//DeploymentConstants.DP_CONTAINING_A_BUNDLE_FROM_OTHER_DP_DIF_VERS
+			bundles = new TestingBundle[] { new TestingBundle("bundles.tb1", "2.0", "bundle001.jar"), new TestingBundle("bundles.tb2", "1.5", "bundle002.jar")};
+			dp = new TestingDeploymentPackage(DeploymentConstants.getCodeName(DeploymentConstants.DP_CONTAINING_A_BUNDLE_FROM_OTHER_DP_DIF_VERS), "1.0.0", "bundle_from_other_dp_dif_vers.dp", bundles);
+			packages.put(""+DeploymentConstants.DP_CONTAINING_A_BUNDLE_FROM_OTHER_DP_DIF_VERS, dp);
+			//DeploymentConstants.SYMB_NAME_DIFFERENT_FROM_MANIFEST_DP
+			bundles = new TestingBundle[] { new TestingBundle("bundle_different_name.tb1", "1.0", "bundle001.jar")};
+			dp = new TestingDeploymentPackage(DeploymentConstants.getCodeName(DeploymentConstants.SYMB_NAME_DIFFERENT_FROM_MANIFEST_DP), "1.0.0", "symb_name_dif_from_manifest.dp", bundles);
+			packages.put(""+DeploymentConstants.SYMB_NAME_DIFFERENT_FROM_MANIFEST_DP, dp);
+			//DeploymentConstants.BAD_HEADER_DP
+			bundles = new TestingBundle[] { new TestingBundle("bundles.tb1", "1.0", "bundle001.jar")};
+			dp = new TestingDeploymentPackage(DeploymentConstants.getCodeName(DeploymentConstants.BAD_HEADER_DP), "", "bad_header.dp", bundles);
+			packages.put(""+DeploymentConstants.BAD_HEADER_DP, dp);
+			//DeploymentConstants.RESOURCE_PROCESSOR_DP
+			bundles = new TestingBundle[] { new TestingBundle(DeploymentConstants.PID_RESOURCE_PROCESSOR1, "1.0", "rp_bundle.jar")};
+			dp = new TestingDeploymentPackage(DeploymentConstants.getCodeName(DeploymentConstants.RESOURCE_PROCESSOR_DP), "", "resource_processor.dp", bundles);
+			packages.put(""+DeploymentConstants.RESOURCE_PROCESSOR_DP, dp);
+			//DeploymentConstants.ADD_BUNDLE_FIX_PACK_DP
+			bundles = new TestingBundle[] { new TestingBundle("bundles.tb1", "1.0", "bundle001.jar"), new TestingBundle("bundles.tb2", "1.0", "bundle002.jar"), new TestingBundle("bundles.tb3", "1.0", "bundle003.jar")};
+			dp = new TestingDeploymentPackage(DeploymentConstants.getCodeName(DeploymentConstants.SIMPLE_DP), "1.1.1", "add_bundle_fix_pack.dp", bundles);
+			packages.put(""+DeploymentConstants.ADD_BUNDLE_FIX_PACK_DP, dp);
+			//DeploymentConstants.FIX_PACK_HIGHER_RANGE_DP
+			bundles = new TestingBundle[] { new TestingBundle("bundles.tb1", "1.5", "bundle001_higher_version.jar")};
+			dp = new TestingDeploymentPackage(DeploymentConstants.getCodeName(DeploymentConstants.SIMPLE_DP), "1.0", "fix_pack_higher_range.dp", bundles);
+			packages.put(""+DeploymentConstants.FIX_PACK_HIGHER_RANGE_DP, dp);
+			//DeploymentConstants.FIX_PACK_LOWER_RANGE_DP
+			bundles = new TestingBundle[] { new TestingBundle("bundles.tb1", "1.5", "bundle001.jar")};
+			dp = new TestingDeploymentPackage(DeploymentConstants.getCodeName(DeploymentConstants.SIMPLE_DP), "1.0", "fix_pack_higher_range.dp", bundles);
+			packages.put(""+DeploymentConstants.FIX_PACK_LOWER_RANGE_DP, dp);
+			//DeploymentConstants.SIMPLE_RESOURCE_DP
+			resources = new TestingResource[]  {new TestingResource("simple_resource.xml",DeploymentConstants.PID_RESOURCE_PROCESSOR1)};
+			dp = new TestingDeploymentPackage(DeploymentConstants.getCodeName(DeploymentConstants.SIMPLE_RESOURCE_DP), "1.0", "simple_resource.dp", null, resources);
+			packages.put(""+DeploymentConstants.SIMPLE_RESOURCE_DP, dp);
+			//DeploymentConstants.ADD_RESOURCE_FIX_PACK
+			resources = new TestingResource[]  {new TestingResource("simple_resource.xml",DeploymentConstants.PID_RESOURCE_PROCESSOR1)};
+			dp = new TestingDeploymentPackage(DeploymentConstants.getCodeName(DeploymentConstants.SIMPLE_DP), "1.1.1", "add_resource_fix_pack.dp", null, resources);
+			packages.put(""+DeploymentConstants.ADD_RESOURCE_FIX_PACK, dp);
+			//DeploymentConstants.SIMPLE_UNSIGNED_BUNDLE_DP
+			bundles = new TestingBundle[] { new TestingBundle("bundles.unsigned", "1.0", "unsignedbundle.jar")};
+			dp = new TestingDeploymentPackage(DeploymentConstants.getCodeName(DeploymentConstants.SIMPLE_UNSIGNED_BUNDLE_DP), "1.0", "simple_unsigned_bundle.dp", bundles);
+			packages.put(""+DeploymentConstants.SIMPLE_UNSIGNED_BUNDLE_DP, dp);
+			//DeploymentConstants.SIMPLE_UNSIGNED_DP
+			bundles = new TestingBundle[] { new TestingBundle("bundles.tb1", "1.0", "bundle001.jar")};
+			dp = new TestingDeploymentPackage(DeploymentConstants.getCodeName(DeploymentConstants.SIMPLE_UNSIGNED_DP), "1.0", "simple_unsigned.dp", bundles);
+			packages.put(""+DeploymentConstants.SIMPLE_UNSIGNED_DP, dp);
+			//DeploymentConstants.SIMPLE_NO_BUNDLE_DP
+			resources = new TestingResource[]  {new TestingResource("simple_resource.xml",DeploymentConstants.PID_RESOURCE_PROCESSOR1)};
+			dp = new TestingDeploymentPackage(DeploymentConstants.getCodeName(DeploymentConstants.SIMPLE_DP), "1.0", "simple_no_bundle.dp", null, resources);
+			packages.put(""+DeploymentConstants.SIMPLE_NO_BUNDLE_DP, dp);
+			//DeploymentConstants.SIMPLE_NO_RESOURCE_DP
+			bundles = new TestingBundle[] { new TestingBundle("bundles.tb1", "1.0", "bundle001.jar")};
+			dp = new TestingDeploymentPackage(DeploymentConstants.getCodeName(DeploymentConstants.SIMPLE_RESOURCE_DP), "1.0", "simple_no_resource.dp", bundles);
+			packages.put(""+DeploymentConstants.SIMPLE_NO_RESOURCE_DP, dp);
+			//DeploymentConstants.RESOURCE_FROM_OTHER_DP
+			dp = new TestingDeploymentPackage(DeploymentConstants.getCodeName(DeploymentConstants.RESOURCE_FROM_OTHER_DP), "1.0", "resource_from_other.dp", null);
+			packages.put(""+DeploymentConstants.RESOURCE_FROM_OTHER_DP, dp);
+			//DeploymentConstants.MISSING_NAME_HEADER_DP
+			bundles = new TestingBundle[] { new TestingBundle("bundles.tb1", "1.0", "bundle001.jar")};
+			dp = new TestingDeploymentPackage(DeploymentConstants.getCodeName(DeploymentConstants.MISSING_NAME_HEADER_DP), "1.0", "missing_name_header.dp", bundles);
+			packages.put(""+DeploymentConstants.MISSING_NAME_HEADER_DP, dp);
+			//DeploymentConstants.SYSTEM_DP
+			bundles = new TestingBundle[] { new TestingBundle("bundles.tb1", "1.0", "bundle001.jar"), new TestingBundle("bundles.tb2", "1.0", "bundle002.jar")};
+			dp = new TestingDeploymentPackage(DeploymentConstants.getCodeName(DeploymentConstants.SYSTEM_DP), "1.0", "system.dp", bundles);
+			packages.put(""+DeploymentConstants.SYSTEM_DP, dp);
+			//DeploymentConstants.WRONG_ORDER_DP
+			bundles = new TestingBundle[] { new TestingBundle("bundles.tb1", "1.0", "bundle001.jar")};
+			resources = new TestingResource[]  {new TestingResource("simple_resource.xml",DeploymentConstants.PID_RESOURCE_PROCESSOR1)};
+			dp = new TestingDeploymentPackage(DeploymentConstants.getCodeName(DeploymentConstants.WRONG_ORDER_DP), "1.0", "wrong_order.dp", bundles, resources);
+			packages.put(""+DeploymentConstants.WRONG_ORDER_DP, dp);
+			//DeploymentConstants.UNTRUSTED_DP
+			bundles = new TestingBundle[] { new TestingBundle("bundles.tb1", "1.0", "bundle001.jar"), new TestingBundle("bundles.tb2", "1.0", "bundle002.jar")};
+			dp = new TestingDeploymentPackage(DeploymentConstants.getCodeName(DeploymentConstants.UNTRUSTED_DP), "1.0", "untrusted.dp", bundles);
+			packages.put(""+DeploymentConstants.UNTRUSTED_DP, dp);
+			//DeploymentConstants.WRONG_PATH_DP
+			bundles = new TestingBundle[] { new TestingBundle("bundles.tb1", "1.0", "bundle001.jar")};
+			dp = new TestingDeploymentPackage(DeploymentConstants.getCodeName(DeploymentConstants.WRONG_PATH_DP), "1.0", "wrong_path.dp", bundles);
+			packages.put(""+DeploymentConstants.WRONG_PATH_DP, dp);
+			//DeploymentConstants.WRONG_VERSION_DP
+			bundles = new TestingBundle[] { new TestingBundle("bundles.tb1", "1.0", "bundle001.jar")};
+			dp = new TestingDeploymentPackage(DeploymentConstants.getCodeName(DeploymentConstants.WRONG_VERSION_DP), "1.0", "wrong_version.dp", bundles);
+			packages.put(""+DeploymentConstants.WRONG_VERSION_DP, dp);
+			//DeploymentConstants.SIMPLE_UNINSTALL_BUNDLE_DP
+			dp = new TestingDeploymentPackage(DeploymentConstants.getCodeName(DeploymentConstants.SIMPLE_DP), "1.1.1", "simple_uninstall_bundle.dp", null);
+			packages.put(""+DeploymentConstants.SIMPLE_UNINSTALL_BUNDLE_DP, dp);
+			//DeploymentConstants.BUNDLE_THROWS_EXCEPTION_DP
+			bundles = new TestingBundle[] { new TestingBundle("bundles.tb5", "1.0", "bundle005.jar")};
+			dp = new TestingDeploymentPackage(DeploymentConstants.getCodeName(DeploymentConstants.BUNDLE_THROWS_EXCEPTION_DP), "1.0.0", "bundle_throws_exception.dp", bundles);
+			packages.put(""+DeploymentConstants.BUNDLE_THROWS_EXCEPTION_DP, dp);
+			//DeploymentConstants.BUNDLE_THROWS_EXCEPTION_STOP_DP
+			bundles = new TestingBundle[] { new TestingBundle("bundles.tb6", "1.0", "bundle006.jar")};
+			dp = new TestingDeploymentPackage(DeploymentConstants.getCodeName(DeploymentConstants.BUNDLE_THROWS_EXCEPTION_STOP_DP), "1.0.0", "bundle_throws_exception.dp", bundles);
+			packages.put(""+DeploymentConstants.BUNDLE_THROWS_EXCEPTION_STOP_DP, dp);
+			//DeploymentConstants.BUNDLE_DOESNT_THROW_EXCEPTION_DP
+			bundles = new TestingBundle[] { new TestingBundle("bundles.tb5", "1.0", "bundle005.jar")};
+			dp = new TestingDeploymentPackage(DeploymentConstants.getCodeName(DeploymentConstants.BUNDLE_THROWS_EXCEPTION_DP), "1.0.0", "bundle_doesnt_throw_exception.dp", bundles);
+			packages.put(""+DeploymentConstants.BUNDLE_DOESNT_THROW_EXCEPTION_DP, dp);
+			//DeploymentConstants.BLOCK_SESSION_RESOURCE_PROCESSOR
+            bundles = new TestingBundle[] { new TestingBundle(DeploymentConstants.PID_RESOURCE_PROCESSOR3, "1.0", "rp_bundle4.jar")};
+            resources = new TestingResource[]  {new TestingResource("conf.txt",DeploymentConstants.PID_RESOURCE_PROCESSOR3)};
+            dp = new TestingDeploymentPackage(DeploymentConstants.getCodeName(DeploymentConstants.BLOCK_SESSION_RESOURCE_PROCESSOR), "1.0.0", "block_session.dp", bundles, resources);
+            packages.put(""+DeploymentConstants.BLOCK_SESSION_RESOURCE_PROCESSOR, dp);
+            //DeploymentConstants.VERSION_DIFFERENT_FROM_MANIFEST_DP
+            bundles = new TestingBundle[] { new TestingBundle("bundles.tb1","1.0", "bundle001.jar")};
+            dp = new TestingDeploymentPackage(DeploymentConstants.getCodeName(DeploymentConstants.VERSION_DIFFERENT_FROM_MANIFEST_DP), "1.0", "version_dif_from_manifest.dp", bundles);
+            packages.put("" + DeploymentConstants.VERSION_DIFFERENT_FROM_MANIFEST_DP, dp);
+            //DeploymentConstants.MISSING_B_VERSION_HEADER
+            bundles = new TestingBundle[] { new TestingBundle("bundles.tb1", "1.0", "bundle001.jar")};
+            dp = new TestingDeploymentPackage(DeploymentConstants.getCodeName(DeploymentConstants.SIMPLE_DP), "1.0", "missing_name_header.dp", bundles);
+            packages.put(""+DeploymentConstants.MISSING_B_VERSION_HEADER, dp);
+            //DeploymentConstants.MISSING_BSN_HEADER
+            bundles = new TestingBundle[] { new TestingBundle("bundles.tb1", "1.0", "bundle001.jar")};
+            dp = new TestingDeploymentPackage(DeploymentConstants.getCodeName(DeploymentConstants.SIMPLE_DP), "1.0", "missing_name_header.dp", bundles);
+            packages.put(""+DeploymentConstants.MISSING_BSN_HEADER, dp);
+           //DeploymentConstants.MISSING_FIX_PACK_HEADER
+            bundles = new TestingBundle[] { new TestingBundle("bundles.tb1", "1.0", "bundle001.jar")};
+            dp = new TestingDeploymentPackage(DeploymentConstants.getCodeName(DeploymentConstants.SIMPLE_DP), "1.0", "missing_name_header.dp", bundles);
+            packages.put(""+DeploymentConstants.MISSING_FIX_PACK_HEADER, dp);
+            //DeploymentConstants.MISSING_RES_NAME_HEADER
+            bundles = new TestingBundle[] { new TestingBundle("bundles.tb1", "1.0", "bundle001.jar")};
+            dp = new TestingDeploymentPackage(DeploymentConstants.getCodeName(DeploymentConstants.SIMPLE_DP), "1.0", "missing_name_header.dp", bundles);
+            packages.put(""+DeploymentConstants.MISSING_RES_NAME_HEADER, dp);
+           //DeploymentConstants.MISSING_VERSION_HEADER
+            bundles = new TestingBundle[] { new TestingBundle("bundles.tb1", "1.0", "bundle001.jar")};
+            dp = new TestingDeploymentPackage(DeploymentConstants.getCodeName(DeploymentConstants.SIMPLE_DP), "1.0", "missing_version_header.dp", bundles);
+            packages.put(""+DeploymentConstants.MISSING_VERSION_HEADER, dp);
+           //DeploymentConstants.SIMPLE_RESOURCE_PROCESSOR_UNINSTALL
+            bundles = new TestingBundle[] { new TestingBundle(DeploymentConstants.PID_RESOURCE_PROCESSOR4, "1.0", "rp_bundle4.jar")};
+            dp = new TestingDeploymentPackage(DeploymentConstants.getCodeName(DeploymentConstants.SIMPLE_RESOURCE_PROCESSOR_UNINSTALL), "1.0", "simple_res_proc_uninstall.dp", bundles);
+            packages.put(""+DeploymentConstants.SIMPLE_RESOURCE_PROCESSOR_UNINSTALL, dp);
+           //DeploymentConstants.SIMPLE_RESOURCE_UNINSTALL_DP
+            resources = new TestingResource[]  {new TestingResource("conf.txt",DeploymentConstants.PID_RESOURCE_PROCESSOR4)};
+            dp = new TestingDeploymentPackage(DeploymentConstants.getCodeName(DeploymentConstants.SIMPLE_RESOURCE_UNINSTALL_DP), "1.0", "simple_resource_uninstall.dp", null, resources);
+            packages.put(""+DeploymentConstants.SIMPLE_RESOURCE_UNINSTALL_DP, dp);
+           //DeploymentConstants.WRONG_BSN
+            bundles = new TestingBundle[] { new TestingBundle("bundles.tb1", "1.0", "bundle001.jar")};
+            dp = new TestingDeploymentPackage(DeploymentConstants.getCodeName(DeploymentConstants.WRONG_BSN), "1.0", "wrong_bsn.dp", bundles);
+            packages.put(""+DeploymentConstants.WRONG_BSN, dp);
+            //DeploymentConstants.WRONG_BVERSION
+            bundles = new TestingBundle[] { new TestingBundle("bundles.tb1", "1.0", "bundle001.jar")};
+            dp = new TestingDeploymentPackage(DeploymentConstants.getCodeName(DeploymentConstants.WRONG_BVERSION), "1.0", "wrong_bversion.dp", bundles);
+            packages.put(""+DeploymentConstants.WRONG_BVERSION, dp);
+            //DeploymentConstants.WRONG_CUSTOMIZER
+            bundles = new TestingBundle[] { new TestingBundle("bundles.tb1", "1.0", "bundle001.jar")};
+            dp = new TestingDeploymentPackage(DeploymentConstants.getCodeName(DeploymentConstants.WRONG_CUSTOMIZER), "1.0", "wrong_customizer.dp", bundles);
+            packages.put(""+DeploymentConstants.WRONG_CUSTOMIZER, dp);
+           //DeploymentConstants.WRONG_DP_MISSING
+            bundles = new TestingBundle[] { new TestingBundle("bundles.tb1", "1.0", "bundle001.jar")};
+            dp = new TestingDeploymentPackage(DeploymentConstants.getCodeName(DeploymentConstants.WRONG_DP_MISSING), "1.0", "wrong_dp_missing.dp", bundles);
+            packages.put(""+DeploymentConstants.WRONG_DP_MISSING, dp);
+           //DeploymentConstants.WRONG_FIX_PACK
+            bundles = new TestingBundle[] { new TestingBundle("bundles.tb1", "1.0", "bundle001.jar")};
+            dp = new TestingDeploymentPackage(DeploymentConstants.getCodeName(DeploymentConstants.WRONG_FIX_PACK), "1.0", "wrong_fix_pack.dp", bundles);
+            packages.put(""+DeploymentConstants.WRONG_FIX_PACK, dp);
+           //DeploymentConstants.WRONG_NAME
+            bundles = new TestingBundle[] { new TestingBundle("bundles.tb1", "1.0", "bundle001.jar")};
+            dp = new TestingDeploymentPackage(DeploymentConstants.getCodeName(DeploymentConstants.WRONG_NAME), "1.0", "wrong_name.dp", bundles);
+            packages.put(""+DeploymentConstants.WRONG_NAME, dp);
+            //DeploymentConstants.WRONG_RP
+            bundles = new TestingBundle[] { new TestingBundle("bundles.tb1", "1.0", "bundle001.jar")};
+            dp = new TestingDeploymentPackage(DeploymentConstants.getCodeName(DeploymentConstants.WRONG_RP), "1.0", "wrong_rp.dp", bundles);
+            packages.put(""+DeploymentConstants.WRONG_RP, dp);
+            //DeploymentConstants.SESSION_TEST_DP
+            bundles = new TestingBundle[] { new TestingBundle("org.osgi.test.cases.deployment.bundles.rp1", "1.0", "rp_bundle.jar"), new TestingBundle("org.osgi.test.cases.deployment.bundles.rp2", "1.0", "rp_bundle2.jar")};
+            resources = new TestingResource[]  {new TestingResource("simple_resource.xml","org.osgi.test.cases.deployment.bundles.rp1"), new TestingResource("conf.txt","org.osgi.test.cases.deployment.bundles.rp2")};
+            dp = new TestingDeploymentPackage(DeploymentConstants.getCodeName(DeploymentConstants.SESSION_TEST_DP), "1.0", "session_test.dp", bundles, resources);
+            packages.put(""+DeploymentConstants.SESSION_TEST_DP, dp);
+            //DeploymentConstants.RESOURCE_PROCESSOR_2_DP
+            bundles = new TestingBundle[] { new TestingBundle(DeploymentConstants.PID_RESOURCE_PROCESSOR2, "1.0", "rp_bundle2.jar")};
+            dp = new TestingDeploymentPackage(DeploymentConstants.getCodeName(DeploymentConstants.RESOURCE_PROCESSOR_2_DP), "1.0.0", "resource_processor2.dp", bundles);
+            packages.put(""+DeploymentConstants.RESOURCE_PROCESSOR_2_DP, dp);
+            //DeploymentConstants.STRANGE_PATH_DP
+            bundles = new TestingBundle[] { new TestingBundle("bundles.tb1", "1.0", "bundle001.jar")};
+            dp = new TestingDeploymentPackage(DeploymentConstants.getCodeName(DeploymentConstants.STRANGE_PATH_DP), "1.0", "strange_path.dp", bundles);
+            packages.put(""+DeploymentConstants.STRANGE_PATH_DP, dp);
+           //DeploymentConstants.LOCALIZED_DP
+            bundles = new TestingBundle[] { new TestingBundle("bundles.tb3", "1.0", "bundle003.jar")};
+            resources = new TestingResource[]  {new TestingResource("OSGi-INF/I10n/dp.properties",null)};
+            dp = new TestingDeploymentPackage(DeploymentConstants.getCodeName(DeploymentConstants.LOCALIZED_DP), "1.0", "localized.dp", bundles, resources);
+            packages.put(""+DeploymentConstants.LOCALIZED_DP, dp);
+           //DeploymentConstants.SIGNING_FILE_NOT_NEXT
+        	bundles = new TestingBundle[] { new TestingBundle("bundles.tb1", "1.0", "bundle001.jar"), new TestingBundle("bundles.tb2", "1.0", "bundle002.jar")};
+            dp = new TestingDeploymentPackage(DeploymentConstants.getCodeName(DeploymentConstants.SIGNING_FILE_NOT_NEXT), "1.0", "signing_files_not_next.dp", bundles);
+            packages.put(""+DeploymentConstants.SIGNING_FILE_NOT_NEXT, dp);
+           //DeploymentConstants.NON_CUSTOMIZER_DP
+            bundles = new TestingBundle[] { new TestingBundle(DeploymentConstants.PID_RESOURCE_PROCESSOR1, "1.0", "rp_bundle.jar")};
+            dp = new TestingDeploymentPackage(DeploymentConstants.getCodeName(DeploymentConstants.NON_CUSTOMIZER_DP), "1.0", "non_customizer_rp.dp", bundles);
+            packages.put(""+DeploymentConstants.NON_CUSTOMIZER_DP, dp);
 	}
 
 	/**
@@ -837,32 +722,6 @@ public class DeploymentTestControl extends DefaultTestBundleControl {
         setAssyncPermission(info);
 	}
     
-   /**
-	 * Give's the Resource Processors the right to access a bundle's private
-	 * area and set the DeploymentAdminPermission for the caller.
-	 */
-	public void setDeploymentAdminAndCustomizerPermission(String dpName, String DAaction, String bundleName, String customizerAction) {
-        PermissionInfo[] info = new PermissionInfo[] {
-            new PermissionInfo(PackagePermission.class.getName(), "*", "EXPORT, IMPORT"),
-            // to find the Deployment Admin
-            new PermissionInfo(ServicePermission.class.getName(), "*", "GET"),
-            // to load files that are passed to the Deployment Admin
-            new PermissionInfo(FilePermission.class.getName(), "<<ALL FILES>>", "READ, WRITE, EXECUTE, DELETE"),
-            // to access deployment admin
-            new PermissionInfo(DeploymentAdminPermission.class.getName(), dpName, DAaction),
-            // to manipulate bundles
-            new PermissionInfo(AdminPermission.class.getName(), "*", "*"),
-            // to connect to director webserver
-            new PermissionInfo(SocketPermission.class.getName(), "*", "accept,connect,listen,resolve"),
-            // to read, write in properties whenever necessary
-            new PermissionInfo(PropertyPermission.class.getName(), "*", "read,write"),
-            // to give Resource Processors the right to access a bundle's private area
-            new PermissionInfo(DeploymentCustomizerPermission.class.getName(), bundleName, customizerAction), 
-            };
-        
-        setAssyncPermission(info);
-    }
-	
 	public void setMininumPermission() {
         PermissionInfo[] info = new PermissionInfo[] {
                 new PermissionInfo(PackagePermission.class.getName(), "*", "EXPORT, IMPORT"),
@@ -919,19 +778,6 @@ public class DeploymentTestControl extends DefaultTestBundleControl {
         return deploymentEventHandler;
     }
 
-	/**
-     * @return Returns the managedFactoryProps.
-     */
-	public Dictionary getManagedFactoryProps() {
-		return managedFactoryProps;
-	}
-	
-	/**
-	 * @return Returns the managedProps.
-	 */
-	public Dictionary getManagedProps() {
-		return managedProps;
-	}
 	/**
 	 * @return Returns the bundleEventHandler.
 	 */
