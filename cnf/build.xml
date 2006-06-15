@@ -177,7 +177,11 @@
 	     ignoreVersions      Do not use version on automatic import/export
 	-->
 	<target name="-btool">
-		<echo>JAR ${item.jarFile}</echo>
+		<echo>JAR ${item.jarFile}</echo>		
+		<antcall target="-interleave">
+		  <param name="target" value="before.${item.jarFile}"/>
+		</antcall>
+		
 		<btool jar="${project}/${item.jarFile}" failok="${btool.failok}" eclipse="${project}" analyse="${btool.analyse}" 
 			showmanifest="${btool.showmanifest}" includeProperty="include.${item.jarFile}" expandProperty="expand.${item.jarFile}" 
 			contentFoldersProperty="source.${item.jarFile}" excludeImportProperty="excludeImport.${item.jarFile}" 
@@ -190,6 +194,16 @@
 		<signjar jar="${item.jarFile}" keystore="${workspace}/cnf/certificate/.keystore" storepass="testtest" keypass="testtest" alias="test" />
 	</target>
 
+	
+	<!--
+	  If you specify before.<jarfile>.jar=target, then we will
+	  call this target before the creation of the jar file.
+	-->
+	<target name="-interleave" if="${target}">
+		<indirect inputName="${target}" outputName="before"/>
+		<antcall target="${before}"/>
+	</target>
+	
 	<!--
 	    RELEASE
 	    Copy the JAR file to the osgi.released directory.
