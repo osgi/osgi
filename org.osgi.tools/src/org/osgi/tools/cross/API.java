@@ -65,7 +65,7 @@ public class API extends DefaultAdapter {
 			System.err.println("Duh? Double key: " + method);
 		methodsAPI.put(method, new HashSet());
 		if ( intf )
-			((Set) interfacesAPI)
+			interfacesAPI.put(method, new HashSet());
 		return null;
 	}
 }
