@@ -971,6 +971,9 @@ public class ServiceTracker implements ServiceTrackerCustomizer {
 					System.out
 							.println("ServiceTracker.Tracked.track[modified]: " + reference); //$NON-NLS-1$
 				}
+				synchronized (this) {
+					modified(); /* increment modification count */
+				}
 				/* Call customizer outside of synchronized region */
 				customizer.modifiedService(reference, object);
 				/*
