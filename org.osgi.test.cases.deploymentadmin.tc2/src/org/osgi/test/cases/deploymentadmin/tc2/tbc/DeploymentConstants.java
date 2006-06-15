@@ -97,30 +97,47 @@ public class DeploymentConstants {
     public static final int RESOURCE_PROCESSOR_CUSTOMIZER = 24;
     public static final int RESOURCE_FROM_OTHER_DP = 25;
 	
-	//This array index is very important, and must be the same as the deployment code
-	//Use 31 characters. 
-	public static final String[] MAP_CODE_TO_DP = {"simple_dp",
-        "rp_resource_dp", "rp_resource_dp", "rp_resource_dp", "auto_config_dp",
-        "session_resource_processor_dp", "session_test_dp",
-        "session_update_test_dp", "transactional_session_dp",
-        "resource_processor2_dp", "block_session", "manifest_not_1st_file",
-        "rp_from_other_dp", "install_fail_dp", "resource_processor_rp3",
-        "bsn_diff_from_manifest", "bversion_diff_from_manifest",
-        "simple_resource_rp3", "simple_bundle_res_dp", "simple_no_bundle",
-        "simple_no_resource", "bundle_fail_res_dp", "bundle_fail_on_stop_dp",
-        "simple_uninstall_bundle",
-        "resource_processor_customizer", "resource_from_other_dp"};
-	
+    public static String getCodeName(int code) {
+        switch (code) {
+            case SIMPLE_DP: return "simple_dp";
+            case RP_RESOURCE_INSTALL_DP: return "rp_resource_dp";
+            case RP_RESOURCE_UPDATE_DP: return "rp_resource_dp";
+            case RP_RESOURCE_UNINSTALL_DP: return "rp_resource_dp";
+            case AUTO_CONFIG_DP: return "auto_config_dp";
+            case SESSION_RESOURCE_PROCESSOR_DP: return "session_resource_processor_dp";
+            case SESSION_TEST_DP: return "session_test_dp";
+            case SESSION_UPDATE_TEST_DP: return "session_update_test_dp";
+            case TRANSACTIONAL_SESSION_DP: return "transactional_session_dp";
+            case RESOURCE_PROCESSOR_2_DP: return "resource_processor2_dp";
+            case BLOCK_SESSION_RESOURCE_PROCESSOR: return "block_session";
+            case MANIFEST_NOT_1ST_FILE: return "manifest_not_1st_file";
+            case RP_FROM_OTHER_DP: return "rp_from_other_dp";
+            case INSTALL_FAIL_DP: return "install_fail_dp";
+            case RESOURCE_PROCESSOR_RP3: return "auto_config_dp";
+            case BSN_DIFF_FROM_MANIFEST: return "bsn_diff_from_manifest";
+            case BVERSION_DIFF_FROM_MANIFEST: return "bversion_diff_from_manifest";
+            case SIMPLE_RESOURCE_RP3: return "resource_processor_rp3";
+            case SIMPLE_BUNDLE_RES_DP: return "simple_bundle_res_dp";
+            case SIMPLE_NO_BUNDLE_DP: return "simple_no_bundle";
+            case SIMPLE_NO_RESOURCE_DP: return "simple_no_resource";
+            case BUNDLE_FAIL_RES_DP: return "bundle_fail_res_dp";
+            case BUNDLE_FAIL_ON_STOP: return "bundle_fail_on_stop_dp";
+            case SIMPLE_UNINSTALL_BUNDLE: return "simple_uninstall_bundle";
+            case RESOURCE_PROCESSOR_CUSTOMIZER: return "resource_processor_customizer";
+            case RESOURCE_FROM_OTHER_DP: return "resource_from_other_dp";
+        }
+        return null;
+    }
 	public static final String DEPLOYMENT_PACKAGE_NAME_ALL = "(&(name=*))";
 	public static final String BUNDLE_NAME_ALL = "(name=*)";
-	public static final String DEPLOYMENT_PACKAGE_NAME0 = "(name="+MAP_CODE_TO_DP[0]+")";
-	public static final String DEPLOYMENT_PACKAGE_NAME1 = "(&(name="+MAP_CODE_TO_DP[1]+")"+"(signer=-;"+SIGNER_FILTER+"))";
+	public static final String DEPLOYMENT_PACKAGE_NAME0 = "(name="+getCodeName(SIMPLE_DP)+")";
+	public static final String DEPLOYMENT_PACKAGE_NAME1 = "(&(name="+getCodeName(RP_RESOURCE_INSTALL_DP)+")"+"(signer=-;"+SIGNER_FILTER+"))";
 	public static final String DEPLOYMENT_PACKAGE_NAME2 = "(&(name=*)(signer="+SIGNER_FILTER_WILDCARD+"))";
     public static final String DEPLOYMENT_PACKAGE_NAME3 = "(&(name=*)"+"(signer="+SIGNER_FILTER+"))";
-    public static final String DEPLOYMENT_PACKAGE_NAME4 = "(&(name="+MAP_CODE_TO_DP[0]+")"+"(signer=-;"+SIGNER_FILTER_INVALID1+"))";
-    public static final String DEPLOYMENT_PACKAGE_NAME5 = "(&(name="+MAP_CODE_TO_DP[0]+")"+"(signer=-;"+SIGNER_FILTER_INVALID2+"))";
+    public static final String DEPLOYMENT_PACKAGE_NAME4 = "(&(name="+getCodeName(SIMPLE_DP)+")"+"(signer=-;"+SIGNER_FILTER_INVALID1+"))";
+    public static final String DEPLOYMENT_PACKAGE_NAME5 = "(&(name="+getCodeName(SIMPLE_DP)+")"+"(signer=-;"+SIGNER_FILTER_INVALID2+"))";
 	
-	public static final String DEPLOYMENT_PACKAGE_DIFFERENT_SIGNATURE = "(&(name="+MAP_CODE_TO_DP[0]+")"+"(signer=-;"+"CN=CESAR.ORG.BR, OU=CIN, O=MOTOROLA, L=RECIFE, ST=PERNAMBUCO, C=BR))";
+	public static final String DEPLOYMENT_PACKAGE_DIFFERENT_SIGNATURE = "(&(name="+getCodeName(SIMPLE_DP)+")"+"(signer=-;"+"CN=CESAR.ORG.BR, OU=CIN, O=MOTOROLA, L=RECIFE, ST=PERNAMBUCO, C=BR))";
 	public static final String INVALID_DEPLOYMENT_PACKAGE_NAME = "name;CESAR signer,CA_CESAR";
 	public static final String RESOURCE_PROCESSOR_PROPERTY_KEY = "property.key";
     
