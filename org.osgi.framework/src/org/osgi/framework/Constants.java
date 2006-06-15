@@ -121,6 +121,8 @@ public interface Constants {
 	 * <p>
 	 * The attribute value may be retrieved from the <code>Dictionary</code>
 	 * object returned by the <code>Bundle.getHeaders</code> method.
+	 * 
+	 * @deprecated As of 1.2.
 	 */
 	public static final String	EXPORT_SERVICE							= "Export-Service";
 
@@ -154,6 +156,8 @@ public interface Constants {
 	 * <p>
 	 * The attribute value may be retrieved from the <code>Dictionary</code>
 	 * object returned by the <code>Bundle.getHeaders</code> method.
+	 *
+	 * @deprecated As of 1.2.
 	 */
 	public static final String	IMPORT_SERVICE							= "Import-Service";
 
@@ -239,7 +243,7 @@ public interface Constants {
 	 *   Import-Package: org.osgi.framework ; specification-version=&quot;1.1&quot;
 	 * </pre>
 	 * 
-	 * @deprecated Since 1.3. This has been replaced by
+	 * @deprecated As of 1.3. This has been replaced by
 	 *             {@link #VERSION_ATTRIBUTE}.
 	 */
 	public static final String	PACKAGE_SPECIFICATION_VERSION			= "specification-version";
