@@ -52,7 +52,6 @@ import java.io.OutputStream;
 import java.net.MalformedURLException;
 import java.net.SocketPermission;
 import java.net.URL;
-import java.util.Dictionary;
 import java.util.HashMap;
 import java.util.PropertyPermission;
 
