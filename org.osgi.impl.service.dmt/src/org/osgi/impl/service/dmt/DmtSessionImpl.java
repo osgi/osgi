@@ -1784,12 +1784,19 @@ class EventStore {
     }
     
     synchronized void dispatchEvents() {
-        Enumeration e = events.elements();
-        while (e.hasMoreElements()) {
-            DmtEventCore event = (DmtEventCore) e.nextElement();
-            dispatchEvent(event);
-        }
+        dispatchEventsByType(DmtEvent.ADDED);
+        dispatchEventsByType(DmtEvent.DELETED);
+        dispatchEventsByType(DmtEvent.REPLACED);
+        dispatchEventsByType(DmtEvent.RENAMED);
+        dispatchEventsByType(DmtEvent.COPIED);
+        
         clear();
+    }
+    
+    synchronized void dispatchEventsByType(int type) {
+        DmtEventCore event = (DmtEventCore) events.get(new Integer(type));
+        if(event != null)
+            dispatchEvent(event);
     }
     
     synchronized void dispatchSessionLifecycleEvent(int type) {
