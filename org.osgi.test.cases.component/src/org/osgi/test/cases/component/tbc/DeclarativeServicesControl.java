@@ -448,8 +448,7 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
       Bundle[] bundles = getContext().getBundles();
       for (int i = 0; i < bundles.length; i++) {
         Bundle current = bundles[i];
-        Dictionary headers = current.getHeaders(null);
-        String name = (String) headers.get(Constants.BUNDLE_NAME);
+        String name = current.getSymbolicName();
         if (bundleName.equals(name)) {
           return current;
         }
@@ -499,7 +498,7 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 					count, refs.length);
 		}
 		else {
-			log("testStartStopSCR test was ignored, please set the property named 'scr.bundle.name'");
+			log("testStartStopSCR test cannot execute: Please set the system property 'scr.bundle.name' to the Bundle-SymbolicName of the SCR implementation bundle being tested.");
 		}
 	}
 
