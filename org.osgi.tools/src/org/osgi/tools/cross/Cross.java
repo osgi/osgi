@@ -130,7 +130,8 @@ public class Cross {
 			Source style = new StreamSource(url.openStream());
 			Result output = new StreamResult(out);
 			// create Transformer and perform the tranfomation
-			TransformerFactory fact = /*net.sf.saxon.*/TransformerFactory/*Impl*/.newInstance();
+			TransformerFactory fact = /* net.sf.saxon. */TransformerFactory
+					/* Impl */.newInstance();
 			fact.setURIResolver(new URIResolver() {
 				public Source resolve(String href, String base)
 						throws TransformerException {
@@ -145,6 +146,10 @@ public class Cross {
 		else {
 			PrintWriter pw = new PrintWriter(new OutputStreamWriter(out));
 			pw.println("<?xml version='1.0'?>");
+			pw
+			.println("<?xml-stylesheet type='text/xsl' title='Matrix' href='http://bundles.osgi.org/xsl/testmatrix.xsl'?>");
+			pw
+			.println("<?xml-stylesheet type='text/xsl' title='Matrix' href='xsl/testmatrix.xsl'?>");
 			result.print(0, pw);
 			pw.flush();
 			out.close();

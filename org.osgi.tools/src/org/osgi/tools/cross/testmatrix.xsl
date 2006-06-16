@@ -2,7 +2,7 @@
 
 <xsl:stylesheet version="2.0"
 	xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
-	<xsl:output method="html"/>
+	<xsl:output method="xml"/>
 	
 	<xsl:template match="/">
 		<html>
@@ -77,6 +77,7 @@
 						</xsl:for-each>
 					</table>
 				</xsl:for-each>
+				<!--
 				<hr/>
 				<xsl:variable name="methods" select="//method/*/method"/>
 				<xsl:variable name="t" select="$methods[ not( @jar=following::method/@jar ) ]/@jar"/>
@@ -120,6 +121,7 @@
 							</xsl:for-each>
 					</table>
 				</xsl:for-each>
+					-->
 				</body>
 		</html>
 	</xsl:template>
