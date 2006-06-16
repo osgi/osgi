@@ -4,3 +4,4 @@ target
 *.zip
 *.html
 configuration
+*.xml
