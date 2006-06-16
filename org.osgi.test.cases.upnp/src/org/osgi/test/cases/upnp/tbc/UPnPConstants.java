@@ -242,27 +242,28 @@ public final class UPnPConstants {
 	public static final String	ACT_MPB				= "MPostBlock";
 	public static final String	ACT_QSV				= "QueryStateVariable";
 	// in\out actions constants
-	public static final String	V_OUT_INT			= "34";
-	public static final String	V_OUT_UI4			= "265";
-	public static final String	V_OUT_NUMBER		= "43.2";
-	public static final String	V_OUT_FLOAT			= "34.5";
-	public static final String	V_OUT_CHAR			= "x";
-	public static final String	V_OUT_STRING		= "bla";
-	public static final String	V_OUT_BOOLEAN		= "true";
-	public static final String	V_OUT_HEX			= "Out bin.hex value";
-	public static final String	V_OUT_OUT_OK		= "OK";
-	public static final String	V_OUT_OUT_FAILED	= "FAILED";
-	public static final String	V_IN_INT			= "21";
-	public static final String	V_IN_UI4			= "423";
-	public static final String	V_IN_NUMBER			= "732.53";
-	public static final String	V_IN_FLOAT			= "123.45";
-	public static final String	V_IN_CHAR			= "v";
-	public static final String	V_IN_STRING			= "pras pras";
-	public static final String	V_IN_BOOLEAN		= "false";
-	public static final String	V_IN_HEX			= "In bin.hex value";
-	public static final String	V_IN_OUT			= "OK?";
-	// in\out vars names
-	public static final String	N_OUT_INT			= "outINT";
+  public static final String V_OUT_INT = "42";
+  public static final String V_OUT_UI4 = "265";
+  public static final String V_OUT_NUMBER = "42.0";
+  public static final String V_OUT_FLOAT = "42.0";
+  public static final String V_OUT_CHAR = "\42";
+  public static final String V_OUT_STRING = "The answer is 42.";
+  public static final String V_OUT_STR = "Whats the question?";
+  public static final String V_OUT_BOOLEAN = "true";
+  public static final String V_OUT_HEX = "Out bin.hex value";
+  public static final String V_OUT_OUT_OK = "OK";
+  public static final String V_OUT_OUT_FAILED = "FAILED";
+  public static final String V_IN_INT = "21";
+  public static final String V_IN_UI4 = "423";
+  public static final String V_IN_NUMBER = "732.53";
+  public static final String V_IN_FLOAT = "123.45";
+  public static final String V_IN_CHAR = "v";
+  public static final String V_IN_STRING = "pras pras";
+  public static final String V_IN_BOOLEAN = "false";
+  public static final String V_IN_HEX = "In bin.hex value";
+  public static final String V_IN_OUT = "OK?";
+  // in\out vars names
+  public static final String	N_OUT_INT			= "outINT";
 	public static final String	N_OUT_UI4			= "outUI4";
 	public static final String	N_OUT_NUMBER		= "outNUMBER";
 	public static final String	N_OUT_FLOAT			= "outFLOAT";
@@ -313,7 +314,6 @@ public final class UPnPConstants {
 	public static final String	V_BOOLEAN			= "true";
 	public static final String	V_HEX				= "Event bin.hex value";
 	public static final String	V_OUT				= "End";
-	public static final String	V_OUT_STR			= "Bla Bla";
 	//description values
 	public static final String	V_UPC				= "9876543210";
 	public static final String	V_FN				= "Test Device";

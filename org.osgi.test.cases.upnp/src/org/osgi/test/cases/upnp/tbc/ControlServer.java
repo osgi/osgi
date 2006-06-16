@@ -101,50 +101,65 @@ public class ControlServer implements Runnable {
 	}
 
 	private boolean controlTest(Dictionary val) {
-		boolean test = true;
-		String str = val.get(UPnPConstants.N_IN_STRING).toString();
-		control.log("Received String value in CP:" + str);
-		if (!str.equals(UPnPConstants.V_OUT_STRING)) {
-			control.log("SERVER: " + UPnPConstants.N_IN_STRING
-					+ " value is not ok: " + str);
-			test = false;
-		}
-		str = val.get(UPnPConstants.N_IN_BOOLEAN).toString();
-		control.log("Received Boolean value in CP:" + str);
-		if (!str.equals(UPnPConstants.V_OUT_BOOLEAN)) {
-			control.log("SERVER: " + UPnPConstants.N_IN_BOOLEAN
-					+ " value is not ok: " + str);
-			test = false;
-		}
-		str = val.get(UPnPConstants.N_IN_NUMBER).toString();
-		control.log("Received Number value in CP:" + str);
-		if (!str.equals(UPnPConstants.V_OUT_NUMBER)) {
-			control.log("SERVER: " + UPnPConstants.N_IN_NUMBER
-					+ " value is not ok: " + str);
-			test = false;
-		}
-		str = val.get(UPnPConstants.N_IN_INT).toString();
-		control.log("Received Int value in CP:" + str);
-		if (!str.equals(UPnPConstants.V_OUT_INT)) {
-			control.log("SERVER: " + UPnPConstants.N_IN_INT
-					+ " value is not ok: " + str);
-			test = false;
-		}
-		str = val.get(UPnPConstants.N_IN_CHAR).toString();
-		control.log("Received Char value in CP:" + str);
-		if (!str.equals(UPnPConstants.V_OUT_CHAR)) {
-			control.log("SERVER: " + UPnPConstants.N_IN_CHAR
-					+ " value is not ok: " + str);
-			test = false;
-		}
-		str = val.get(UPnPConstants.N_IN_FLOAT).toString();
-		control.log("Received Float value in CP:" + str);
-		if (!str.equals(UPnPConstants.V_OUT_FLOAT)) {
-			control.log("SERVER: " + UPnPConstants.N_IN_FLOAT
-					+ " value is not ok: " + str);
-			test = false;
-		}
-		return test;
+    boolean test = true;
+
+    String str = val.get(UPnPConstants.N_OUT_STRING).toString();
+    control.log ("Received String value in CP:" + str);
+    if (!str.equals(UPnPConstants.V_OUT_STRING)) {
+      control.log ("SERVER: " + UPnPConstants.N_OUT_STRING + " value is not ok: " + str);
+      test = false;
+    }
+
+    str = val.get(UPnPConstants.N_OUT_STR).toString();
+    control.log ("Received String value in CP:" + str);
+    if (!str.equals(UPnPConstants.V_OUT_STR)) {
+      control.log ("SERVER: " + UPnPConstants.N_OUT_STRING + " value is not ok: " + str);
+      test = false;
+    }
+
+
+    str = val.get(UPnPConstants.N_OUT_BOOLEAN).toString();
+    control.log ("Received Boolean value in CP:" + str);
+    if (!str.equals(UPnPConstants.V_OUT_BOOLEAN)) {
+      control.log ("SERVER: " + UPnPConstants.N_OUT_BOOLEAN + " value is not ok: " + str);
+      test = false;
+    }
+
+    str = val.get(UPnPConstants.N_OUT_NUMBER).toString();
+    control.log ("Received Number value in CP:" + str);
+    if (!str.equals(UPnPConstants.V_OUT_NUMBER)) {
+      control.log ("SERVER: " + UPnPConstants.N_OUT_NUMBER + " value is not ok: " + str);
+      test = false;
+    }
+
+    str = val.get(UPnPConstants.N_OUT_INT).toString();
+    control.log ("Received Int value in CP:" + str);
+    if (!str.equals(UPnPConstants.V_OUT_INT)) {
+      control.log ("SERVER: " + UPnPConstants.N_OUT_INT + " value is not ok: " + str);
+      test = false;
+    }
+
+    str = val.get(UPnPConstants.N_OUT_CHAR).toString();
+    if (str.equals("&quot;")) {
+      str = "\"";
+    }
+    else {
+      control.log("SERVER: " + UPnPConstants.N_OUT_CHAR + " expected value was \"&quot;\" since in XML \" char have to be encoded as the entity \"&quot;\", but the received value is: " + str);
+    }
+    control.log ("Received Char value in CP:" + str);
+    if (!str.equals(UPnPConstants.V_OUT_CHAR)) {
+      control.log ("SERVER: " + UPnPConstants.N_OUT_CHAR + " value is not ok: " + str);
+      test = false;
+    }
+
+    str = val.get(UPnPConstants.N_OUT_FLOAT).toString();
+    control.log ("Received Float value in CP:" + str);
+    if (!str.equals(UPnPConstants.V_OUT_FLOAT)) {
+      control.log ("SERVER: " + UPnPConstants.N_OUT_FLOAT + " value is not ok: " + str);
+      test = false;
+    }
+
+    return test;
 	}
 
 	public void finish() throws Exception {

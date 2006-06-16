@@ -84,12 +84,13 @@ Properties of the exported device are OK
 Get SCPD xml from discovery message
 Control Server is created and started
 Creating Post message and send it
-Received String value in CP:bla
+Received String value in CP:The answer is 42.
+Received String value in CP:Whats the question?
 Received Boolean value in CP:true
-Received Number value in CP:43.2
-Received Int value in CP:34
-Received Char value in CP:x
-Received Float value in CP:34.5
+Received Number value in CP:42.0
+Received Int value in CP:42
+Received Char value in CP:"
+Received Float value in CP:42.0
 Control test of Export is OK
 #
 # The following test is removed because it was not possible
