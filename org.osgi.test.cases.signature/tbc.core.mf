@@ -1,0 +1,12 @@
+Manifest-Version: 1.0
+Bundle-Name: ${p}.tbc.core
+Bundle-SymbolicName: ${p}.tbc.core
+Bundle-Activator: $(p).tbc.TestControl
+Bundle-Version: 4
+Bundle-Copyright: Copyright (c) OSGi Alliance (2000, 2002). All Rights Reserved.
+CVS-Header: $Header$
+DynamicImport-Package: org.osgi.*
+$(IMPORT-PACKAGE)
+$(EXPORT-PACKAGE)
+$(PRIVATE-PACKAGE)
+
