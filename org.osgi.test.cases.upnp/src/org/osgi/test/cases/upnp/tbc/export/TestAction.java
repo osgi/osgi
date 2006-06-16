@@ -20,15 +20,18 @@ public class TestAction implements UPnPAction {
 	// Contains service state variables.
 	protected Dictionary	argSSV;
 	private TestService		parent;
+  //the response when action is invoked
+  private Dictionary response;
 
-	public TestAction(String name, String raName, String[] iaNames,
-			String[] oaNames, Dictionary argSSV) {
-		this.name = name;
-		this.raName = raName;
-		this.oaNames = oaNames;
-		this.iaNames = iaNames;
-		this.argSSV = argSSV;
-	}
+  public TestAction(String name, String raName, String[] iaNames,
+                    String[] oaNames, Dictionary argSSV, Dictionary response) {
+    this.name = name;
+    this.raName = raName;
+    this.oaNames = oaNames;
+    this.iaNames = iaNames;
+    this.argSSV = argSSV;
+    this.response = response;
+  }
 
 	public String getName() {
 		return name;
@@ -55,12 +58,14 @@ public class TestAction implements UPnPAction {
 	}
 
 	public Dictionary invoke(Dictionary d) throws Exception {
+/*
 		String st = (String) d.get(UPnPConstants.N_IN_STRING);
 		Double dl = (Double) d.get(UPnPConstants.N_IN_NUMBER);
 		Integer inint = (Integer) d.get(UPnPConstants.N_IN_INT);
 		Float fl = (Float) d.get(UPnPConstants.N_IN_FLOAT);
 		Boolean bool = (Boolean) d.get(UPnPConstants.N_IN_BOOLEAN);
 		Character ch = (Character) d.get(UPnPConstants.N_IN_CHAR);
-		return d;
+
+*/		return response;
 	}
 }

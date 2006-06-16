@@ -51,102 +51,127 @@ public class UPnPExportedDevice implements UPnPDevice {
 	}
 
 	public static UPnPExportedDevice newUPnPTestervice() {
-		// init state var Printing
-		TestStateVariable testingSV = new TestStateVariable(TESTING_SV,
-				Boolean.class, UPnPStateVariable.TYPE_BOOLEAN, Boolean.FALSE,
-				null, null, null, null, false);
-		// init state var PrintMessage
-		TestStateVariable testMsg = new TestStateVariable(TESTMSG_SV,
-				String.class, UPnPStateVariable.TYPE_STRING, "", null, null,
-				null, null, false);
-		// var number
-		TestStateVariable outNumber = new TestStateVariable(
-				UPnPConstants.N_OUT_NUMBER, Double.class,
-				UPnPStateVariable.TYPE_NUMBER, null, null, null, null, null,
-				true);
-		// var int
-		TestStateVariable outInt = new TestStateVariable(
-				UPnPConstants.N_OUT_INT, Integer.class,
-				UPnPStateVariable.TYPE_INT, null, null, null, null, null, true);
-		// var char
-		TestStateVariable outChar = new TestStateVariable(
-				UPnPConstants.N_OUT_CHAR, Character.class,
-				UPnPStateVariable.TYPE_CHAR, null, null, null, null, null, true);
-		// var float
-		TestStateVariable outFloat = new TestStateVariable(
-				UPnPConstants.N_OUT_FLOAT, Float.class,
-				UPnPStateVariable.TYPE_FLOAT, null, null, null, null, null,
-				true);
-		// init state var Printing
-		TestStateVariable inBoolean = new TestStateVariable(
-				UPnPConstants.N_IN_BOOLEAN, Boolean.class,
-				UPnPStateVariable.TYPE_BOOLEAN, Boolean.FALSE, null, null,
-				null, null, true);
-		// init state var PrintMessage
-		TestStateVariable inString = new TestStateVariable(
-				UPnPConstants.N_IN_STRING, String.class,
-				UPnPStateVariable.TYPE_STRING, "", null, null, null, null, true);
-		// var number
-		TestStateVariable inNumber = new TestStateVariable(
-				UPnPConstants.N_IN_NUMBER, Double.class,
-				UPnPStateVariable.TYPE_NUMBER, null, null, null, null, null,
-				false);
-		// var int
-		TestStateVariable inInt = new TestStateVariable(UPnPConstants.N_IN_INT,
-				Integer.class, UPnPStateVariable.TYPE_INT, null, null, null,
-				null, null, false);
-		// var char
-		TestStateVariable inChar = new TestStateVariable(
-				UPnPConstants.N_IN_CHAR, Character.class,
-				UPnPStateVariable.TYPE_CHAR, null, null, null, null, null,
-				false);
-		// var float
-		TestStateVariable inFloat = new TestStateVariable(
-				UPnPConstants.N_IN_FLOAT, Float.class,
-				UPnPStateVariable.TYPE_FLOAT, null, null, null, null, null,
-				false);
-		TestStateVariable levski = new TestStateVariable("blabla",
-				String.class, UPnPStateVariable.TYPE_STRING, "", null, null,
-				null, null, false);
-		TestStateVariable[] vars = new TestStateVariable[] {testingSV, testMsg,
-				outNumber, outInt, outChar, outFloat, inBoolean, inString,
-				inNumber, inInt, inChar, inFloat, levski};
-		// init action Print
-		Hashtable nameVar = new Hashtable(6);
-		nameVar.put(testMsg.getName(), testMsg);
-		TestAction msgAct = new TestAction("testMsg", null,
-				new String[] {TESTMSG_SV}, null, nameVar);
-		nameVar.put(testingSV.getName(), testingSV);
-		nameVar.put(levski.getName(), levski);
-		TestAction printAct = new TestAction("testPrint", null,
-				new String[] {TESTMSG_SV}, new String[] {"blabla"}, nameVar);
-		nameVar.put(outNumber.getName(), outNumber);
-		TestAction numAct = new TestAction("testNum", null,
-				new String[] {UPnPConstants.N_OUT_NUMBER}, null, nameVar);
-		nameVar.put(outInt.getName(), outInt);
-		TestAction intAct = new TestAction("testInt", null,
-				new String[] {UPnPConstants.N_OUT_INT}, null, nameVar);
-		nameVar.put(outChar.getName(), outChar);
-		TestAction charAct = new TestAction("testChar", null,
-				new String[] {UPnPConstants.N_OUT_CHAR}, null, nameVar);
-		nameVar.put(outFloat.getName(), outFloat);
-		TestAction floatAct = new TestAction("testFloat", null,
-				new String[] {UPnPConstants.N_OUT_FLOAT}, null, nameVar);
-		nameVar.put(inBoolean.getName(), inBoolean);
-		nameVar.put(inString.getName(), inString);
-		nameVar.put(inNumber.getName(), inNumber);
-		nameVar.put(inInt.getName(), inInt);
-		nameVar.put(inChar.getName(), inChar);
-		nameVar.put(inFloat.getName(), inFloat);
-		TestAction testALL = new TestAction("testALL", null, new String[] {
-				UPnPConstants.N_IN_STRING, UPnPConstants.N_IN_BOOLEAN,
-				UPnPConstants.N_IN_NUMBER, UPnPConstants.N_IN_INT,
-				UPnPConstants.N_IN_CHAR, UPnPConstants.N_IN_FLOAT},
-				new String[] {TESTMSG_SV, TESTING_SV,
-						UPnPConstants.N_OUT_NUMBER, UPnPConstants.N_OUT_INT,
-						UPnPConstants.N_OUT_CHAR, UPnPConstants.N_OUT_FLOAT},
-				nameVar);
-		TestAction[] actions = new TestAction[] {testALL, printAct, msgAct,
+    // init state var Printing
+    TestStateVariable testingSV = new TestStateVariable(TESTING_SV, Boolean.class,
+                                                        UPnPStateVariable.TYPE_BOOLEAN, Boolean.FALSE,
+                                                        null, null, null, null, false);
+    // init state var PrintMessage
+    TestStateVariable testMsg = new TestStateVariable(TESTMSG_SV, String.class,
+                                                        UPnPStateVariable.TYPE_STRING, "",
+                                                        null, null, null, null, false);
+
+
+    TestStateVariable outString = new TestStateVariable(UPnPConstants.N_OUT_STRING, String.class,
+                                                        UPnPStateVariable.TYPE_STRING, "",
+                                                        null, null, null, null, false);
+
+    TestStateVariable outStr = new TestStateVariable(UPnPConstants.N_OUT_STR, String.class,
+                                                        UPnPStateVariable.TYPE_STRING, "",
+                                                        null, null, null, null, false);
+
+    TestStateVariable outBoolean = new TestStateVariable(UPnPConstants.N_OUT_BOOLEAN, Boolean.class,
+                                                        UPnPStateVariable.TYPE_BOOLEAN, null,
+                                                        null, null, null, null, false);
+
+
+    // var number
+    TestStateVariable outNumber = new TestStateVariable(UPnPConstants.N_OUT_NUMBER, Double.class,
+                                                        UPnPStateVariable.TYPE_NUMBER, null,
+                                                        null, null, null, null, true);
+
+    // var int
+    TestStateVariable outInt = new TestStateVariable(UPnPConstants.N_OUT_INT, Integer.class,
+                                                        UPnPStateVariable.TYPE_INT, null,
+                                                        null, null, null, null, true);
+
+    // var char
+    TestStateVariable outChar = new TestStateVariable(UPnPConstants.N_OUT_CHAR, Character.class,
+                                                        UPnPStateVariable.TYPE_CHAR, null,
+                                                        null, null, null, null, true);
+
+    // var float
+    TestStateVariable outFloat = new TestStateVariable(UPnPConstants.N_OUT_FLOAT, Float.class,
+                                                        UPnPStateVariable.TYPE_FLOAT, null,
+                                                        null, null, null, null, true);
+
+    // init state var Printing
+    TestStateVariable inBoolean = new TestStateVariable(UPnPConstants.N_IN_BOOLEAN, Boolean.class,
+                                                        UPnPStateVariable.TYPE_BOOLEAN, Boolean.FALSE,
+                                                        null, null, null, null, true);
+    // init state var PrintMessage
+    TestStateVariable inString = new TestStateVariable(UPnPConstants.N_IN_STRING, String.class,
+                                                      UPnPStateVariable.TYPE_STRING, "",
+                                                      null, null, null, null, true);
+
+    // var number
+    TestStateVariable inNumber = new TestStateVariable(UPnPConstants.N_IN_NUMBER, Double.class,
+                                                        UPnPStateVariable.TYPE_NUMBER, null,
+                                                        null, null, null, null, false);
+
+    // var int
+    TestStateVariable inInt = new TestStateVariable(UPnPConstants.N_IN_INT, Integer.class,
+                                                        UPnPStateVariable.TYPE_INT, null,
+                                                        null, null, null, null, false);
+
+    // var char
+    TestStateVariable inChar = new TestStateVariable(UPnPConstants.N_IN_CHAR, Character.class,
+                                                        UPnPStateVariable.TYPE_CHAR, null,
+                                                        null, null, null, null, false);
+
+    // var float
+    TestStateVariable inFloat = new TestStateVariable(UPnPConstants.N_IN_FLOAT, Float.class,
+                                                        UPnPStateVariable.TYPE_FLOAT, null,
+                                                        null, null, null, null, false);
+
+    TestStateVariable levski = new TestStateVariable("blabla", String.class,
+                                                        UPnPStateVariable.TYPE_STRING, "",
+                                                        null, null, null, null, false);
+
+
+    TestStateVariable[] vars = new TestStateVariable[] {testingSV, testMsg, outStr, outString, outNumber, outInt, outChar, outFloat, outBoolean,
+                                                        inBoolean, inString, inNumber, inInt, inChar, inFloat, levski};
+    // init action Print
+    Hashtable nameVar = new Hashtable(6);
+    nameVar.put(testMsg.getName(), testMsg);
+    TestAction msgAct = new TestAction("testMsg", null, new String[]{TESTMSG_SV}, null, nameVar, null);
+    nameVar.put(testingSV.getName(), testingSV);
+    nameVar.put(levski.getName(), levski);
+    Hashtable resp = new Hashtable();
+    TestAction printAct = new TestAction("testPrint", null, new String[]{TESTMSG_SV}, new String[]{"blabla"}, nameVar, null);
+    nameVar.put(outNumber.getName(), outNumber);
+    TestAction numAct = new TestAction("testNum", null, new String[]{UPnPConstants.N_OUT_NUMBER}, null, nameVar, null);
+    nameVar.put(outInt.getName(), outInt);
+    TestAction intAct = new TestAction("testInt", null, new String[]{UPnPConstants.N_OUT_INT}, null, nameVar, null);
+    nameVar.put(outChar.getName(), outChar);
+    TestAction charAct = new TestAction("testChar", null, new String[]{UPnPConstants.N_OUT_CHAR}, null, nameVar, null);
+    nameVar.put(outFloat.getName(), outFloat);
+    TestAction floatAct = new TestAction("testFloat", null, new String[]{UPnPConstants.N_OUT_FLOAT}, null, nameVar, null);
+
+    nameVar.put(inBoolean.getName(), inBoolean);
+    nameVar.put(inString.getName(), inString);
+    nameVar.put(inNumber.getName(), inNumber);
+    nameVar.put(inInt.getName(), inInt);
+    nameVar.put(inChar.getName(), inChar);
+    nameVar.put(inFloat.getName(), inFloat);
+    nameVar.put(outString.getName(), outString);
+    nameVar.put(outStr.getName(), outStr);
+    nameVar.put(outBoolean.getName(), outBoolean);
+
+    resp = new Hashtable();
+
+    resp.put(UPnPConstants.N_OUT_STRING, UPnPConstants.V_OUT_STRING);
+    resp.put(UPnPConstants.N_OUT_STR, UPnPConstants.V_OUT_STR);
+    resp.put(UPnPConstants.N_OUT_BOOLEAN, Boolean.TRUE);
+    resp.put(UPnPConstants.N_OUT_NUMBER , new Double(42.0d));
+    resp.put(UPnPConstants.N_OUT_INT, new Integer(42));
+    resp.put(UPnPConstants.N_OUT_CHAR, new Character('\42'));
+    resp.put(UPnPConstants.N_OUT_FLOAT, new Float(42.0f));
+
+    TestAction testALL = new TestAction("testALL", null, new String[]{UPnPConstants.N_IN_STRING, UPnPConstants.N_IN_BOOLEAN, UPnPConstants.N_IN_NUMBER, UPnPConstants.N_IN_INT,
+                                                                      UPnPConstants.N_IN_CHAR, UPnPConstants.N_IN_FLOAT}, new String[]{UPnPConstants.N_OUT_STRING,
+                                                                      UPnPConstants.N_OUT_STR, UPnPConstants.N_OUT_BOOLEAN, UPnPConstants.N_OUT_NUMBER, UPnPConstants.N_OUT_INT,UPnPConstants.N_OUT_CHAR,
+                                                                      UPnPConstants.N_OUT_FLOAT}, nameVar, resp);
+    TestAction[] actions = new TestAction[] {testALL, printAct, msgAct,
 				numAct, intAct, charAct, floatAct};
 		// init printer service
 		TestService[] services = new TestService[] {new TestService(actions,
