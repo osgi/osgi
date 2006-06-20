@@ -43,7 +43,7 @@ import java.util.StringTokenizer;
  * commands on the ./OSGi/bundles management object. It is possible to use
  * wildcards in both the target and the actions field. Wildcard in the target
  * field means that the owner of the permission can access children nodes of the
- * target node. Example
+ * target node. Example:
  * 
  * <pre>
  * DmtPermission(&quot;./OSGi/bundles/*&quot;, &quot;Get&quot;);
