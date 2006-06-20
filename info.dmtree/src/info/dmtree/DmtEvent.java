@@ -27,7 +27,8 @@ package info.dmtree;
  * actually performed.
  * <p>
  * An event is generated for each group of nodes added, deleted, replaced,
- * renamed or copied, in this order.
+ * renamed or copied, in this order.  Events are also generated when sessions
+ * are opened and closed.
  * <p>
  * The <code>type</code> of the event describes the change that triggered the
  * event delivery. Each event carries the unique identifier of the session in
@@ -82,7 +83,9 @@ public interface DmtEvent {
     public static final int SESSION_OPENED = 0x20;
 
     /**
-     * Event type indicating that a session was closed.
+     * Event type indicating that a session was closed.  This type of event is
+     * sent when the session is closed by the client or becomes inactive for any
+     * other reason (session timeout, fatal errors in business methods, etc.).
      */
     public static final int SESSION_CLOSED = 0x40;
 
@@ -95,11 +98,11 @@ public interface DmtEvent {
 
     /**
      * This method returns the identifier of the session in which this event
-     * took place. The indetifier of the session is a unique opaque value.
+     * took place. The ID is guaranteed to be unique on a machine.
      * 
      * @return the unique indetifier of the session that triggered the event
      */
-    public String getSessionId();
+    public int getSessionId();
 
     /**
      * This method can be used to query the subject nodes of this event. The
