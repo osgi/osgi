@@ -145,8 +145,8 @@ public final class DmtData {
     /**
      * Constant instance representing a leaf node of <code>null</code> format.
      */
-    public static DmtData NULL_VALUE = new DmtData(); // FORMAT_NAME must be
-        // initialized by the time the constructor is called 
+    public static final DmtData NULL_VALUE = new DmtData();
+        // FORMAT_NAMES must be initialized by the time the constr. is called 
     
     private final String str;
 
