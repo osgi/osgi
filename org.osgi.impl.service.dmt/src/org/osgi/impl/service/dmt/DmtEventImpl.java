@@ -43,9 +43,8 @@ public class DmtEventImpl implements DmtEvent {
         return coreEvent.getType();
     }
     
-    public String getSessionId() {
-        // TODO make the return type uniform with DmtSession.getSessionId()
-        return "" + coreEvent.getSessionId();
+    public int getSessionId() {
+        return coreEvent.getSessionId();
     }
 
     public String[] getNodes() {
