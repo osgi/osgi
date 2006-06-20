@@ -228,7 +228,8 @@ public interface DmtSession {
     void close() throws DmtException;
 
     /**
-     * Executes a node. This corresponds to the EXEC operation in OMA DM.
+     * Executes a node. This corresponds to the EXEC operation in OMA DM.  This
+     * method cannot be called in a read-only session.
      * <p>
      * The semantics of an execute operation and the data parameter it takes
      * depends on the definition of the managed object on which the command is
@@ -260,8 +261,9 @@ public interface DmtSession {
      *         unspecified error is encountered while attempting to complete the
      *         command
      *         </ul>
-     * @throws IllegalStateException if the session is already closed or
-     *         invalidated
+     * @throws IllegalStateException if the session was opened using the
+     *         <code>LOCK_TYPE_SHARED</code> lock type, or if the session is
+     *         already closed or invalidated
      * @throws SecurityException if the caller does not have the necessary
      *         permissions to execute the underlying management operation, or,
      *         in case of local sessions, if the caller does not have
@@ -275,6 +277,7 @@ public interface DmtSession {
     /**
      * Executes a node, also specifying a correlation ID for use in response
      * notifications. This operation corresponds to the EXEC command in OMA DM.
+     * This method cannot be called in a read-only session.
      * <p>
      * The semantics of an execute operation and the data parameter it takes
      * depends on the definition of the managed object on which the command is
@@ -310,8 +313,9 @@ public interface DmtSession {
      *         the node, or if some unspecified error is encountered while
      *         attempting to complete the command
      *         </ul>
-     * @throws IllegalStateException if the session is already closed or
-     *         invalidated
+     * @throws IllegalStateException if the session was opened using the
+     *         <code>LOCK_TYPE_SHARED</code> lock type, or if the session is
+     *         already closed or invalidated
      * @throws SecurityException if the caller does not have the necessary
      *         permissions to execute the underlying management operation, or,
      *         in case of local sessions, if the caller does not have
@@ -409,11 +413,13 @@ public interface DmtSession {
      * <li>if <code>nodeUri</code> specifies an interior node, replace rights
      * on either the node or its parent are sufficient
      * </ul>
+     * If the given <code>acl</code> is <code>null</code> or an empty ACL
+     * (not specifying any permissions for any principals), then the ACL of the 
+     * node is deleted, and the node will inherit the ACL from its parent node.
      * 
      * @param nodeUri the URI of the node
-     * @param acl the Access Control List to be set on the node. It can be
-     *        <code>null</code> meaning that the ACL of the node is deleted,
-     *        in which case the node will inherit the ACL from its parent node.
+     * @param acl the Access Control List to be set on the node, can be
+     *        <code>null</code>
      * @throws DmtException with the following possible error codes:
      *         <ul>
      *         <li><code>URI_TOO_LONG</code> if <code>nodeUri</code> or a
@@ -873,7 +879,8 @@ public interface DmtSession {
 
     /**
      * Delete the given node. Deleting interior nodes is recursive, the whole
-     * subtree under the given node is deleted.
+     * subtree under the given node is deleted.  It is not allowed to delete 
+     * the root node of the session.
      * <p>
      * If meta-data is available for a node, several checks are made before
      * deleting it. The node must be non-permanent, it must have the
@@ -894,7 +901,7 @@ public interface DmtSession {
      *         allow the <code>Delete</code> operation for the associated
      *         principal
      *         <li><code>COMMAND_NOT_ALLOWED</code> if the target node is the
-     *         root of the tree, or in non-atomic sessions if the underlying
+     *         root of the session, or in non-atomic sessions if the underlying
      *         plugin is read-only or does not support non-atomic writing
      *         <li><code>METADATA_MISMATCH</code> if the node could not be
      *         deleted because of meta-data restrictions (see above)
@@ -922,7 +929,7 @@ public interface DmtSession {
      * the timestamp and version properties if they are supported), the value
      * and the other properties are not changed. The new name of the node must
      * be provided, the new URI is constructed from the base of the old URI and
-     * the given name.
+     * the given name. It is not allowed to rename the root node of the session.
      * <p>
      * If available, the meta-data of the original and the new nodes are checked
      * before performing the rename operation. Neither node can be permanent,
@@ -953,7 +960,7 @@ public interface DmtSession {
      *         allow the <code>Replace</code> operation for the associated
      *         principal
      *         <li><code>COMMAND_NOT_ALLOWED</code> if the target node is the
-     *         root of the tree, or in non-atomic sessions if the underlying
+     *         root of the session, or in non-atomic sessions if the underlying
      *         plugin is read-only or does not support non-atomic writing
      *         <li><code>METADATA_MISMATCH</code> if the node could not be
      *         renamed because of meta-data restrictions (see above)
@@ -977,10 +984,10 @@ public interface DmtSession {
     void renameNode(String nodeUri, String newName) throws DmtException;
 
     /**
-     * Set the value of a leaf or interior node to its default.  In case of leaf
-     * nodes the default can be defined by the node's <code>MetaNode</code>. The
-     * method throws a <code>METADATA_MISMATCH</code> exception if the node does
-     * not have a default value.
+     * Set the value of a leaf or interior node to its default.  The default
+     * can be defined by the node's <code>MetaNode</code>. The method throws a 
+     * <code>METADATA_MISMATCH</code> exception if the node does not have a 
+     * default value.
      * 
      * @param nodeUri the URI of the node
      * @throws DmtException with the following possible error codes:
