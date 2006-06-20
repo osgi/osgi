@@ -26,6 +26,7 @@ import java.util.Map;
 import org.osgi.service.log.LogService;
 
 import info.dmtree.DmtAdmin;
+import info.dmtree.DmtEvent;
 import info.dmtree.DmtEventListener;
 import info.dmtree.DmtException;
 import info.dmtree.DmtSession;
@@ -40,6 +41,10 @@ import info.dmtree.security.DmtPrincipalPermission;
  * the registered listeners.
  */
 public class DmtAdminDelegate implements DmtAdmin {
+    
+    private static final int ALL_EVENT_TYPES =
+        DmtEvent.ADDED & DmtEvent.COPIED & DmtEvent.DELETED & DmtEvent.RENAMED &
+        DmtEvent.REPLACED & DmtEvent.SESSION_CLOSED & DmtEvent.SESSION_OPENED;
 
     private DmtAdminCore dmtAdmin;
     private Context context;
@@ -72,16 +77,12 @@ public class DmtAdminDelegate implements DmtAdmin {
         return dmtAdmin.getSession(principal, subtreeUri, lockMode);
     }
 
-    // TODO add DmtException for invalid rootUri, and maybe also instead of null rootUri?
-    // TODO add IllegalArgumentException for invalid bits in the type bitmask
     public void addEventListener(int type, String rootUri, 
             DmtEventListener listener) {
         checkState();
         internalAddEventListener(null, type, rootUri, listener);
     }
 
-    // TODO add DmtException for invalid rootUri, and maybe also instead of null rootUri?
-    // TODO add IllegalArgumentException for invalid bits in the type bitmask
     public void addEventListener(String principal, int type, String rootUri,
             DmtEventListener listener) {
         checkState();
@@ -140,6 +141,10 @@ public class DmtAdminDelegate implements DmtAdmin {
     private void internalAddEventListener(String principal, int type, 
             String rootUri, DmtEventListener listener) {
         
+        if((type & ~ALL_EVENT_TYPES) != 0)
+            throw new IllegalArgumentException("Type parameter contains bits " +
+                    "that do not correspond to any event type.");
+        
         if(rootUri == null)
             throw new NullPointerException("Listener root URI parameter is null.");
         
@@ -150,9 +155,13 @@ public class DmtAdminDelegate implements DmtAdmin {
         try {
             root = Node.validateAndNormalizeUri(rootUri);
         } catch(DmtException e) {
-            // TODO get rid of exception transformation if/when the addEventListener methods can throw the appropriate DmtExceptions
-            throw new IllegalArgumentException("Invalid root URI parameter: " + e);
+            throw new IllegalArgumentException("Invalid root URI parameter: " + 
+                    e.getMessage());
         }
+        
+        if(!root.isAbsolute())
+            throw new IllegalArgumentException("Invalid root URI parameter, " +
+                    "must be an absolute URI.");
 
         SecurityManager sm = System.getSecurityManager();
         if(sm != null) {
