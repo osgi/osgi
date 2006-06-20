@@ -28,11 +28,9 @@ import info.dmtree.DmtSession;
 public interface NotificationService {
 
     /**
-     * Sends a notification to a named principal. If OMA DM is used as a
-     * management protocol the principal name is server ID that corresponds to a
-     * DMT node value in <code>./SyncML/DMAcc/x/ServerId</code>. It is the
-     * responsibility of the <code>NotificationService</code> to route the
-     * notification to the given principal using the registered
+     * Sends a notification to a named principal. It is the responsibility of
+     * the <code>NotificationService</code> to route the notification to the 
+     * given principal using the registered
      * {@link info.dmtree.notification.spi.RemoteAlertSender} services.
      * <p>
      * In remotely initiated sessions the principal name identifies the remote
@@ -64,10 +62,12 @@ public interface NotificationService {
      * <code>null</code> (the principal name is not known), the target of the
      * <code>AlertPermission</code> must be &quot;*&quot;.
      * <p>
-     * When this method is called with <code>null</code> and 0 parameters, it
-     * should send a protocol specific default notification to initiate a
-     * management session. For example, in case of OMA DM this is alert 1201
-     * "Client Initiated Session".
+     * When this method is called with all its parameters <code>null</code> or 0
+     * (except <code>principal</code>), it should send a protocol 
+     * specific default notification to initiate a management session. For 
+     * example, in case of OMA DM this is alert 1201 "Client Initiated Session".
+     * The <code>principal</code> parameter can be used to determine the
+     * recipient of the session initiation request.
      * 
      * @param principal the principal name which is the recepient of this
      *        notification, can be <code>null</code>
