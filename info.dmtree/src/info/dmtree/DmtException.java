@@ -85,7 +85,8 @@ public class DmtException extends Exception {
      * <li>an interior node operation is requested for a leaf node, or vice
      * versa (e.g. trying to retrieve the children of a leaf node)
      * <li>an attempt is made to create a node where the parent is a leaf node
-     * <li>an attempt is made to rename or delete the root node
+     * <li>an attempt is made to rename or delete the root node of the tree
+     * <li>an attempt is made to rename or delete the root node of the session
      * <li>a write operation (other than setting the ACL) is performed in a
      * non-atomic write session on a node provided by a plugin that is read-only
      * or does not support non-atomic writing
