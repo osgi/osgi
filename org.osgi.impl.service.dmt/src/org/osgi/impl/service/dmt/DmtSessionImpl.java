@@ -155,6 +155,8 @@ public class DmtSessionImpl implements DmtSession {
             context.log(LogService.LOG_WARNING, "Error closing plugin while " +
                     "invalidating session.", e);
         }
+        
+        eventStore.dispatchSessionLifecycleEvent(DmtEvent.SESSION_CLOSED);
     }
     
     /* These methods can be called even before the session has been opened, and 
@@ -182,17 +184,18 @@ public class DmtSessionImpl implements DmtSession {
     
     /* These methods are only meaningful in the context of an open session. */
 
-    // no other API methods can be called while this method is executed 
+    // no other API methods can be called while this method is executed
 	public synchronized void close() throws DmtException {
         checkSession();
         
         // changed to CLOSED if this method finishes without error
         state = STATE_INVALID; 
 
-        closeAndRelease(lockMode == LOCK_TYPE_ATOMIC);
-        
-        // TODO also send session closed event whenever session is invalidated?
-        eventStore.dispatchSessionLifecycleEvent(DmtEvent.SESSION_CLOSED);
+        try {
+            closeAndRelease(lockMode == LOCK_TYPE_ATOMIC);
+        } finally {
+            eventStore.dispatchSessionLifecycleEvent(DmtEvent.SESSION_CLOSED);
+        }
         
         state = STATE_CLOSED;
 	}
@@ -324,7 +327,7 @@ public class DmtSessionImpl implements DmtSession {
     // same as execute/3 but can be called internally, because it is not wrapped
     private void internalExecute(String nodeUri, final String correlator,
             final String data) throws DmtException {
-        checkSession();
+        checkWriteSession("execute");
         // not allowing to execute non-existent nodes, all Management Objects
         // defined in the spec have data plugins backing them
 		final Node node = makeAbsoluteUriAndCheck(nodeUri, SHOULD_EXIST);
@@ -615,13 +618,11 @@ public class DmtSessionImpl implements DmtSession {
         checkOperation(node, Acl.REPLACE, MetaNode.CMD_REPLACE);
         
         // VEG CR supporting values for interior nodes
-        // check data against meta-data in case of leaf nodes (meta-data does
-        // not contain constraints for interior node values)
-        if(isLeafNodeNoCheck(node))
-            checkValue(node, data);
-        else
+        if(!isLeafNodeNoCheck(node))
             checkInteriorNodeValueSupport(node);
-        //checkValue(node, data);
+        
+        // check data against meta-data
+        checkValue(node, data);
 
         MetaNode metaNode = getMetaNodeNoCheck(node);
         if (metaNode != null && metaNode.getScope() == MetaNode.PERMANENT)
@@ -674,10 +675,16 @@ public class DmtSessionImpl implements DmtSession {
 		checkWriteSession();
         Node node = makeAbsoluteUriAndCheck(nodeUri, SHOULD_EXIST);
         
+        // sub-case of the next check, but gives a more specific error
         if(node.isRoot())
             throw new DmtException(node.getUri(), 
                     DmtException.COMMAND_NOT_ALLOWED,
                     "Cannot delete root node.");
+        
+        if(node.equals(subtreeNode))
+            throw new DmtException(node.getUri(), 
+                    DmtException.COMMAND_NOT_ALLOWED, 
+                    "Cannot delete root node of the session.");
 
 		checkOperation(node, Acl.DELETE, MetaNode.CMD_DELETE);
 
@@ -904,10 +911,17 @@ public class DmtSessionImpl implements DmtSession {
         checkOperation(node, Acl.REPLACE, MetaNode.CMD_REPLACE);
 
         Node parent = node.getParent();
+
+        // sub-case of the next check, but gives a more specific error
 		if (parent == null)
 			throw new DmtException(node.getUri(), 
                     DmtException.COMMAND_NOT_ALLOWED,
                     "Cannot rename root node.");
+        
+        if(node.equals(subtreeNode))
+            throw new DmtException(node.getUri(), 
+                    DmtException.COMMAND_NOT_ALLOWED, 
+                    "Cannot rename root node of the session.");
         
         String newName = Node.validateAndNormalizeNodeName(newNodeName);
 		Node newNode = parent.appendSegment(newName);
@@ -1004,11 +1018,15 @@ public class DmtSessionImpl implements DmtSession {
     }
     
     private void checkWriteSession() {
+        checkWriteSession("write");
+    }
+    
+    private void checkWriteSession(String op) {
         checkSession();
         if(lockMode == LOCK_TYPE_SHARED)
             throw new IllegalStateException(
                     "Session is not open for writing, cannot perform " +
-                    "requested write operation.");
+                    "requested " + op + " operation.");
     }
     
     private Acl mergeAcls(Acl acl1, Acl acl2) {
