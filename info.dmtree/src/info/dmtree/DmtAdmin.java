@@ -38,6 +38,15 @@ package info.dmtree;
  * escaped (preceded by a '\'). Any string can be converted to a valid URI
  * segment using the {@link Uri#mangle(String)} method.
  * <p>
+ * It is possible to specify a lock mode when opening the session (see lock type
+ * constants in {@link DmtSession}).  This determines whether the session can
+ * run in parallel with other sessions, and the kinds of operations that can be 
+ * performed in the session.  All Management Objects constituting the device 
+ * management tree tree must support read operations on their nodes, while 
+ * support for write operations depends on the Management Object. If write 
+ * access is allowed by a Management Object, it may support either the 
+ * transactional or the non-transactional write mode, or both.
+ * <p>
  * This interface also contains methods for manipulating the set of
  * <code>DmtEventListener</code> objects that are called when the structure or
  * content of the tree is changed. These methods are not needed in an OSGi
@@ -180,6 +189,11 @@ public interface DmtAdmin {
      *         <code>DmtPermission</code> for the given URI
      * @throws NullPointerException if the <code>uri</code> or
      *         <code>listener</code> parameter is <code>null</code>
+     * @throws IllegalArgumentException if the <code>type</code> parameter
+     *         contains invalid bits (not corresponding to any event type
+     *         defined in <code>DmtEvent</code>), or if the <code>uri</code>
+     *         parameter is invalid (is not an absolute URI or is syntactically
+     *         incorrect)
      */
     public void addEventListener(int type, String uri, DmtEventListener listener);
 
@@ -213,6 +227,11 @@ public interface DmtAdmin {
      * @throws NullPointerException if the <code>principal</code>,
      *         <code>uri</code> or <code>listener</code> parameter is 
      *         <code>null</code>
+     * @throws IllegalArgumentException if the <code>type</code> parameter
+     *         contains invalid bits (not corresponding to any event type
+     *         defined in <code>DmtEvent</code>), or if the <code>uri</code>
+     *         parameter is invalid (is not an absolute URI or is syntactically
+     *         incorrect)
      */
     public void addEventListener(String principal, int type, String uri,
             DmtEventListener listener);
