@@ -42,6 +42,11 @@ import org.osgi.service.deploymentadmin.DeploymentAdminPermission;
 public class DeploymentCustomizerPermission extends Permission {
     
     /**
+	 * 
+	 */
+	private static final long	serialVersionUID	= 1L;
+
+	/**
      * Constant String to the "privatearea" action.
      */
     public static final String PRIVATEAREA = "privatearea";

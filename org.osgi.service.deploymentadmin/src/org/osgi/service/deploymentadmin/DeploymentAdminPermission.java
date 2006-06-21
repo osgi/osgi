@@ -121,6 +121,11 @@ import java.security.*;
 public final class DeploymentAdminPermission extends Permission {
     
     /**
+	 * 
+	 */
+	private static final long	serialVersionUID	= 1L;
+
+	/**
      * Constant String to the "install" action.<p>
      * 
      * @see DeploymentAdmin#installDeploymentPackage(InputStream)

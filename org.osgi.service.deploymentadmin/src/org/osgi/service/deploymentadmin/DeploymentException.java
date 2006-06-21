@@ -27,6 +27,11 @@ package org.osgi.service.deploymentadmin;
 public class DeploymentException extends Exception {
 
 	/**
+	 * 
+	 */
+	private static final long	serialVersionUID	= 916011169146851101L;
+
+	/**
 	 * {@link DeploymentAdmin#installDeploymentPackage(InputStream)}, 
 	 * {@link DeploymentPackage#uninstall()} and {@link DeploymentPackage#uninstallForced()} 
 	 * methods can throw {@link DeploymentException} with this error code if the 

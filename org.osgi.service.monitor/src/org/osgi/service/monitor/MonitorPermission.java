@@ -38,9 +38,13 @@ import java.util.StringTokenizer;
  * the permission.
  */
 public class MonitorPermission extends Permission {
-    // TODO add static final serialVersionUID
 
     /**
+	 * 
+	 */
+	private static final long	serialVersionUID	= -9084425194463274314L;
+
+	/**
      * Holders of <code>MonitorPermission</code> with the <code>read</code>
      * action present are allowed to read the value of the
      * <code>StatusVariable</code>s specified in the permission's target field.

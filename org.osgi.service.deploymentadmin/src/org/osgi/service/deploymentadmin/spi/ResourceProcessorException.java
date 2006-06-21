@@ -28,6 +28,11 @@ import org.osgi.service.deploymentadmin.spi.ResourceProcessor;
 public class ResourceProcessorException extends Exception {
 	
 	/**
+	 * 
+	 */
+	private static final long	serialVersionUID	= 9135007015668223386L;
+
+	/**
 	 * Resource Processors are allowed to raise an exception with this error code 
 	 * to indicate that the processor is not able to commit the operations it made 
 	 * since the last call of {@link ResourceProcessor#begin(DeploymentSession)} method.<p>
