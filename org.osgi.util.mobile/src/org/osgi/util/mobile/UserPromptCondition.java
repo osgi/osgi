@@ -74,7 +74,7 @@ public class UserPromptCondition implements Condition {
 	}
 
 	/**
-	 * Creates an UserPrompt object with the given prompt string and permission
+	 * Returns a UserPromptCondition object with the given prompt string and permission
 	 * level. The user should be given choice as to what level of permission is
 	 * given. Thus, the lifetime of the permission is controlled by the user.
 	 *
@@ -99,6 +99,7 @@ public class UserPromptCondition implements Condition {
 	 * 		it starts with a '%' sign, then the message is looked up from the catalog specified previously.
 	 * 		The key is the rest of the string after the '%' sign.</li>
 	 * </ol>
+	 * @return The requested UserPromptCondition.
 	 * @throws IllegalArgumentException if the parameters are malformed.
 	 * @throws NullPointerException if one of the parameters is <code>null</code>.
 	 */
