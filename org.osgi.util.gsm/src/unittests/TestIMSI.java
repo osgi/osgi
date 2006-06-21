@@ -28,7 +28,6 @@ import org.osgi.framework.BundleException;
 import org.osgi.framework.ServiceReference;
 import org.osgi.service.condpermadmin.Condition;
 import org.osgi.service.condpermadmin.ConditionInfo;
-import org.osgi.util.gsm.IMEICondition;
 import org.osgi.util.gsm.IMSICondition;
 import junit.framework.TestCase;
 
