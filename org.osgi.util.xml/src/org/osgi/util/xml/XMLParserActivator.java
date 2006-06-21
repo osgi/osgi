@@ -300,13 +300,12 @@ public class XMLParserActivator implements BundleActivator, ServiceFactory {
 	 * @param properties - the properties object for the service
 	 */
 	public void setSAXProperties(SAXParserFactory factory, Hashtable properties) {
-		SAXParser parser = null;
 		// check if this parser can be configured to validate
 		boolean validating = true;
 		factory.setValidating(true);
 		factory.setNamespaceAware(false);
 		try {
-			parser = factory.newSAXParser();
+			factory.newSAXParser();
 		}
 		catch (Exception pce_val) {
 			validating = false;
@@ -316,7 +315,7 @@ public class XMLParserActivator implements BundleActivator, ServiceFactory {
 		factory.setValidating(false);
 		factory.setNamespaceAware(true);
 		try {
-			parser = factory.newSAXParser();
+			factory.newSAXParser();
 		}
 		catch (Exception pce_nsa) {
 			namespaceaware = false;
@@ -409,13 +408,12 @@ public class XMLParserActivator implements BundleActivator, ServiceFactory {
 	 * @param props - Hashtable of service properties.
 	 */
 	public void setDOMProperties(DocumentBuilderFactory factory, Hashtable props) {
-		DocumentBuilder parser = null;
 		// check if this parser can be configured to validate
 		boolean validating = true;
 		factory.setValidating(true);
 		factory.setNamespaceAware(false);
 		try {
-			parser = factory.newDocumentBuilder();
+			factory.newDocumentBuilder();
 		}
 		catch (Exception pce_val) {
 			validating = false;
@@ -425,7 +423,7 @@ public class XMLParserActivator implements BundleActivator, ServiceFactory {
 		factory.setValidating(false);
 		factory.setNamespaceAware(true);
 		try {
-			parser = factory.newDocumentBuilder();
+			factory.newDocumentBuilder();
 		}
 		catch (Exception pce_nsa) {
 			namespaceaware = false;
