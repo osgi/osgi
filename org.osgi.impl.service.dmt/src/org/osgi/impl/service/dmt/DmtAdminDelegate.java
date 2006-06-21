@@ -43,8 +43,8 @@ import info.dmtree.security.DmtPrincipalPermission;
 public class DmtAdminDelegate implements DmtAdmin {
     
     private static final int ALL_EVENT_TYPES =
-        DmtEvent.ADDED & DmtEvent.COPIED & DmtEvent.DELETED & DmtEvent.RENAMED &
-        DmtEvent.REPLACED & DmtEvent.SESSION_CLOSED & DmtEvent.SESSION_OPENED;
+        DmtEvent.ADDED | DmtEvent.COPIED | DmtEvent.DELETED | DmtEvent.RENAMED |
+        DmtEvent.REPLACED | DmtEvent.SESSION_CLOSED | DmtEvent.SESSION_OPENED;
 
     private DmtAdminCore dmtAdmin;
     private Context context;
