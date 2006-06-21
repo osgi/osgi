@@ -32,7 +32,6 @@ import org.osgi.service.permissionadmin.PermissionInfo;
 // OPTIMIZE node handling (e.g. retrieve plugin from dispatcher only once per API call)
 // OPTIMIZE only retrieve meta-data once per API call
 // OPTIMIZE only call commit/rollback for plugins that were actually modified since the last transaction boundary
-// TODO remove VEG CR comments, and also old code
 public class DmtSessionImpl implements DmtSession {
     private static final String INTERIOR_NODE_VALUE_SUPPORT_PROPERTY = 
         "org.osgi.impl.service.dmt.interior-node-value-support";
@@ -450,13 +449,10 @@ public class DmtSessionImpl implements DmtSession {
     
     // also used by copy() to pass an already validated Node instead of a URI
     private DmtData internalGetNodeValue(Node node) throws DmtException {
-        // VEG CR supporting values for interior nodes
         checkNode(node, SHOULD_EXIST);
-        //checkNode(node, SHOULD_BE_LEAF);
         
         checkOperation(node, Acl.GET, MetaNode.CMD_GET);
 
-        // VEG CR supporting values for interior nodes
         if(!isLeafNodeNoCheck(node)) {
             checkDescendantGetPermissions(node);
             checkInteriorNodeValueSupport(node);
@@ -465,7 +461,6 @@ public class DmtSessionImpl implements DmtSession {
         ReadableDataSession pluginSession = getReadableDataSession(node);
         DmtData data = pluginSession.getNodeValue(node.getPath());
         
-        // VEG CR supporting values for interior nodes
         boolean isLeafNode = pluginSession.isLeafNode(node.getPath());
         boolean isLeafData = data.getFormat() != DmtData.FORMAT_NODE;
         if(isLeafNode != isLeafData)
@@ -476,7 +471,6 @@ public class DmtSessionImpl implements DmtSession {
         return data;
     }
 
-    // VEG CR supporting values for interior nodes
     private void checkDescendantGetPermissions(Node node) throws DmtException {
         checkNodePermission(node, Acl.GET);
         if (!isLeafNodeNoCheck(node)) {
@@ -607,17 +601,14 @@ public class DmtSessionImpl implements DmtSession {
             throws DmtException {
         checkWriteSession();
         
-        // VEG CR supporting values for interior nodes
         int nodeConstraint =
             data == null ? SHOULD_EXIST :
             data.getFormat() == DmtData.FORMAT_NODE ?
                 SHOULD_BE_INTERIOR : SHOULD_BE_LEAF;
-        //int nodeConstraint = SHOULD_BE_LEAF;
 
         Node node = makeAbsoluteUriAndCheck(nodeUri, nodeConstraint); 
         checkOperation(node, Acl.REPLACE, MetaNode.CMD_REPLACE);
         
-        // VEG CR supporting values for interior nodes
         if(!isLeafNodeNoCheck(node))
             checkInteriorNodeValueSupport(node);
         
@@ -631,12 +622,9 @@ public class DmtSessionImpl implements DmtSession {
         
         getReadWriteDataSession(node).setNodeValue(node.getPath(), data);
 
-        // VEG CR supporting values for interior nodes
         traverseEvents(DmtEvent.REPLACED, node);
-        //enqueueEvent(DmtEvent.REPLACED, node);
     }
 
-    // VEG CR supporting values for interior nodes
     private void traverseEvents(int mode, Node node) throws DmtException {
         if(isLeafNodeNoCheck(node))
             enqueueEventWithCurrentAcl(mode, node, null);
