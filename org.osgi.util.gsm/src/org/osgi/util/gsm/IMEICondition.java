@@ -28,14 +28,14 @@ import org.osgi.service.condpermadmin.*;
  */
 public class IMEICondition {
 	private static final String ORG_OSGI_UTIL_GSM_IMEI = "org.osgi.util.gsm.imei";
-	private static String imei ;
+	private static final String imei ;
 		
 	static {
+		imei = (String)
 		AccessController.doPrivileged(
 				new PrivilegedAction() {
 					public Object run() {
-					imei = System.getProperty(ORG_OSGI_UTIL_GSM_IMEI);
-					return null;
+					return System.getProperty(ORG_OSGI_UTIL_GSM_IMEI);
 					}
 				}
 				);

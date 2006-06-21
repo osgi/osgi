@@ -28,14 +28,14 @@ import org.osgi.service.condpermadmin.*;
  */
 public class IMSICondition {
 	private static final String ORG_OSGI_UTIL_GSM_IMSI = "org.osgi.util.gsm.imsi";
-	private static String imsi;
+	private static final String imsi;
 	
 	static {
+		imsi = (String)
 		AccessController.doPrivileged(
 				new PrivilegedAction() {
 					public Object run() {
-					imsi = System.getProperty(ORG_OSGI_UTIL_GSM_IMSI);
-					return null;
+					return System.getProperty(ORG_OSGI_UTIL_GSM_IMSI);
 					}
 				}
 				);
