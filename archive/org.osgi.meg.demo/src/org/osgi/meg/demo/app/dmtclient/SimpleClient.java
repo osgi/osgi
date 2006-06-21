@@ -56,6 +56,10 @@ import org.osgi.service.monitor.*;
 public class SimpleClient implements ManagedService, ManagedServiceFactory,
         Monitorable, EventHandler
 {
+    private static final int ALL_EVENTS = DmtEvent.ADDED | DmtEvent.DELETED |
+        DmtEvent.REPLACED | DmtEvent.RENAMED | DmtEvent.COPIED |
+        DmtEvent.SESSION_OPENED | DmtEvent.SESSION_CLOSED;
+    
     private BundleContext bc;
 
     private DmtAdmin factory;
@@ -109,7 +113,7 @@ public class SimpleClient implements ManagedService, ManagedServiceFactory,
             
             SimpleListener simpleListener = new SimpleListener();
             lAdmin.addEventListener(DmtEvent.ADDED, ".", simpleListener);
-            lAdmin.addEventListener("proba", 0xFFFF, ".", simpleListener);
+            lAdmin.addEventListener("proba", ALL_EVENTS, ".", simpleListener);
             //lAdmin.removeEventListener(simpleListener);
             
             NotificationService lNotification = DmtServiceFactory.getNotificationService();
