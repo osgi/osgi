@@ -58,7 +58,8 @@ public class DmtAdminActivator implements BundleActivator {
 		try {
             System.setProperty(DMT_ROOT_PROPERTY, DMT_ROOT);
             
-            // TODO ensure that DmtAdmin is a singleton (otherwise the context field settings/resettings could get mixed up) 
+            // DmtAdmin service must be a singleton (as mandated by the spec),
+            // otherwise the context field settings/removals could get mixed up 
             factoryContext = DmtServiceFactory.class.getDeclaredField("context");
             factoryContext.setAccessible(true);
             factoryContext.set(null, bc);
