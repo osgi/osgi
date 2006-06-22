@@ -5,7 +5,7 @@ Bundle-Description: Contains the OSGi minimum execution environment stubbed clas
 Bundle-SymbolicName: org.osgi.ee.minimum
 Bundle-Version: 1.1
 Bundle-Vendor: OSGi Alliance
-Bundle-Copyright: Copyrights (c) OSGi Alliance (2001, 2005). All rights reserved.
+Bundle-Copyright: Copyright (c) OSGi Alliance (2001, 2005). All rights reserved.
 Bundle-DocURL: www.osgi.org
 Bundle-Address: speccomments@mail.osgi.org
 Bundle-RequiredExecutionEnvironment: OSGi/Minimum-1.1

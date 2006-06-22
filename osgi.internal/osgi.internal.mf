@@ -1,7 +1,7 @@
 Manifest-Version: 1.0
 Bundle-Name: osgi
-Bundle-Description: OSGi Service Platform Release 3 Interfaces and Classes for use in compiling bundles.
-Bundle-Copyright: Copyright (c) OSGi Alliance (2000, 2002). All Rights Reserved.
+Bundle-Description: OSGi Internal Interfaces and Classes for use in testing.
+Bundle-Copyright: Copyright (c) OSGi Alliance (2000, 2006). All Rights Reserved.
 Bundle-Vendor: OSGi Alliance
 Bundle-Version: 3.0
 Bundle-Category: osgi
