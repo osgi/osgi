@@ -289,6 +289,19 @@ public class SimpleClient implements ManagedService, ManagedServiceFactory,
             cs = ca.listConfigurations("(service.pid=proba123)");
             System.out.println(cs == null ? "nincs meg" : "megvan");
             
+            config = ca.getConfiguration("veryveryveryveryveryveryveryloong");
+            properties = new Hashtable();
+            properties.put("myProperty", new Integer(1));
+            config.update(properties);
+            
+            config = ca.getConfiguration("EvQbuBkml0LWohXyCCnYAwyP93E");
+            properties = new Hashtable();
+            properties.put("myProperty", new Integer(2));
+            config.update(properties);
+
+
+            // SESSION_OPENED event is not delivered to the handler here as 
+            // the bundle is still in STARTING state
             DmtSession session = factory.getSession(".", DmtSession.LOCK_TYPE_ATOMIC);
             System.out.println("Retrieved session, id=" + session.getSessionId() +
                                ", lock type=" + session.getLockType() +
