@@ -124,7 +124,7 @@ public class DmtEvent {
 		tbc.assertEquals("Asserts that DmtEvent.getType() returns the correct event",
 				expectedType,event.getType());
 		tbc.assertTrue("Asserts that DmtEvent.getSessionId() returns the session Id",
-				Integer.parseInt(event.getSessionId()) == session.getSessionId());
+				event.getSessionId() == session.getSessionId());
 		
 		if (null==expectedNodes) {
 			tbc.assertNull("Asserts that DmtEvent.getNodes() returns null",
