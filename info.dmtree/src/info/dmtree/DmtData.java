@@ -20,15 +20,10 @@ package info.dmtree;
 import java.util.Arrays;
 import java.util.Hashtable;
 
-// TODO discuss proposal for refactoring this class:
-// The current DmtData representation (where the format is identified by an int)
-// should be replaced with a more OO approach of having a DmtData base class and
-// different descendent classes for the different data types. This would allow
-// nicer construction (no problem with conflicting signatures).
-
-// TODO add constructors and get/set methods for b64, to access the encoded value
-// TODO add constructors and get/set methods for date/time, for more convenient Java access
-// TODO define proper toString, hashCode, equals and getSize behaviour for date/time/binary/base64 formats
+// Possible enhancements to this class:
+// * new constructors and get/set methods for b64, to access the encoded value
+// * new constructors and get/set methods for date/time, for more convenient 
+//   Java access
 /**
  * An immutable data structure representing the contents of a leaf or interior
  * node. This structure represents only the value and the format property of the
