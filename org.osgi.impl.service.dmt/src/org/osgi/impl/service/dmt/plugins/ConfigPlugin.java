@@ -98,7 +98,7 @@ class ConfigPlugin implements DataPlugin, ManagedService {
                     "Cannot create configuration because Configuration Admin " +
                     "service is not registered.");
         
-        // TODO handle case when mangled PID eclipses the real PID (possibly factory generated)
+        // ENHANCE handle case when mangled PID eclipses the real PID (possibly factory generated)
         Configuration configuration;
         if(factoryPid != null) {
             try {
@@ -198,8 +198,8 @@ class ConfigPlugin implements DataPlugin, ManagedService {
 
     //----- private utility methods -----//
 
-    // TODO handle case when a PID mapping eclipses a real PID
-    // TODO handle case when mangled PID eclipses real PID
+    // ENHANCE handle case when a PID mapping eclipses a real PID
+    // ENHANCE handle case when mangled PID eclipses real PID
     private Configuration findConfiguration(String nodeName,
             boolean removeMapping) throws ConfigPluginException {
         String pid = idHandler.findMappedPidByNodeName(nodeName);
