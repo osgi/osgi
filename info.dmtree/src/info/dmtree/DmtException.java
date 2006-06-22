@@ -121,7 +121,7 @@ public class DmtException extends Exception {
      * The requested command failed because the target URI or one of its
      * segments is too long for what the recipient is able or willing to
      * process, or the target URI contains too many segments. The length and
-     * segment number limits are implementation depenedent, their minimum values
+     * segment number limits are implementation dependent, their minimum values
      * can be found in the Non Functional Requirements section of the OSGi
      * specification.
      * <p>
