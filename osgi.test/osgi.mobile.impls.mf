@@ -1,13 +1,14 @@
 Manifest-Version: 1.0
-Bundle-Name: meg.tests
-Bundle-SymbolicName: meg.tests
+Bundle-Name: mobile.impls
+Bundle-SymbolicName: mobile.impls
 Bundle-Version: 4.0
 Bundle-Activator: org.osgi.tools.group.Group
-Bundle-Description: OSGi Service Platform Release 4, MEG Test Cases loader
+Bundle-Description: OSGi Service Platform Release 4, Mobile Reference Implementations
 Bundle-Copyright: ${copyright}
 CVS-Header: $Header$
 Bundle-Vendor: OSGi Alliance
 Bundle-Category: osgi,test
 Bundle-DocUrl: http://www.osgi.org/
 $(IMPORT-PACKAGE)
-group-load:  ${meg.tests.jars}
+$(EXPORT-PACKAGE)
+group-load:  ${mobile.impls.jars}

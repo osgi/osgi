@@ -3,7 +3,7 @@ Bundle-Name: core.impls
 Bundle-SymbolicName: core.impls
 Bundle-Version: 4.0
 Bundle-Activator: org.osgi.tools.group.Group
-Bundle-Description: OSGi Service Platform Release 4, Core Reference Implementations (empty)
+Bundle-Description: OSGi Service Platform Release 4, Core Reference Implementations
 Bundle-Copyright: ${copyright}
 CVS-Header: $Header$
 Bundle-Vendor: OSGi Alliance

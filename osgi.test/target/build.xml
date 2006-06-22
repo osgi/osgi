@@ -15,9 +15,9 @@
 		</antcall>
 	</target>
 	
-	<target name="run-meg">
+	<target name="run-mobile">
 		<antcall target="-run">
-			  <param name="impls" value="file:../osgi.meg.impls.jar"/>
+			  <param name="impls" value="file:../osgi.mobile.impls.jar"/>
 			  <param name="classpath" value=""/>
 		</antcall>
 	</target>
