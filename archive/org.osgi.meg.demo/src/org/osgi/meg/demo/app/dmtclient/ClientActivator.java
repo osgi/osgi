@@ -22,6 +22,7 @@ import org.osgi.framework.*;
 import org.osgi.service.cm.ManagedService;
 import org.osgi.service.cm.ManagedServiceFactory;
 import info.dmtree.DmtAdmin;
+import info.dmtree.spi.DataPlugin;
 
 import org.osgi.service.event.EventConstants;
 import org.osgi.service.event.EventHandler;
@@ -31,11 +32,16 @@ import org.osgi.service.monitor.Monitorable;
 public class ClientActivator implements BundleActivator 
 {
     static final String SERVICE_PID = "org.osgi.meg.demo.app.dmtclient";
+    
+    static final String PLUGIN_ROOT = 
+        System.getProperty("info.dmtree.osgi.root") + "/" + 
+        ReadWriteDataPlugin.ROOT;
 
     private BundleContext bc;
     private ServiceReference factoryRef;
     private ServiceReference monListenerRef;
     private ServiceRegistration serviceReg;
+    private ServiceRegistration pluginReg;
 
     public void start(BundleContext bc) throws BundleException
     {
@@ -78,6 +84,11 @@ public class ClientActivator implements BundleActivator
             };
 
             serviceReg = bc.registerService(services, client, config);
+            
+            config = new Hashtable();
+            config.put("dataRootURIs",  PLUGIN_ROOT);
+            pluginReg = bc.registerService(DataPlugin.class.getName(), 
+                    new ReadWriteDataPlugin(), config);
 
             client.run();
 
@@ -92,6 +103,7 @@ public class ClientActivator implements BundleActivator
 
     public void stop(BundleContext bc) throws BundleException 
     {
+        pluginReg.unregister();
         serviceReg.unregister();
         bc.ungetService(monListenerRef);
         bc.ungetService(factoryRef);

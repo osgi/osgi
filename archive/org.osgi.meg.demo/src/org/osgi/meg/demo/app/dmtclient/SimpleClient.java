@@ -28,6 +28,7 @@ import org.osgi.service.cm.ConfigurationAdmin;
 import org.osgi.service.cm.ManagedService;
 import org.osgi.service.cm.ManagedServiceFactory;
 import info.dmtree.DmtAdmin;
+import info.dmtree.DmtData;
 import info.dmtree.DmtEvent;
 import info.dmtree.DmtEventListener;
 import info.dmtree.DmtException;
@@ -408,7 +409,25 @@ public class SimpleClient implements ManagedService, ManagedServiceFactory,
             session.close();
             System.out.println("Closed session.");
             */
+            
+            session = factory.getSession(ClientActivator.PLUGIN_ROOT);
+            System.out.println("Retrieved session, id=" + session.getSessionId() +
+                               ", lock type=" + session.getLockType() +
+                               ", principal=" + session.getPrincipal() +
+                               ", root=" + session.getRootUri());
+            
+            DmtData interiorValue = session.getNodeValue("");
+            System.out.println("Interior node value: ");
+            System.out.println("* Format: " + interiorValue.getFormat());
+            System.out.println("* Format name: " + interiorValue.getFormatName());
+            System.out.println("* Content: " + (String) interiorValue.getNode());
 
+            session.setNodeValue("", new DmtData((Object) "Yo to y'all!"));
+            System.out.println("Updated value: " + session.getNodeValue(
+                    ReadWriteDataPlugin.LEAF));
+            
+            session.close();
+            
         } catch(DmtException e) {
             System.out.println("DMT exception caught in client:");
             e.printStackTrace(System.out);
