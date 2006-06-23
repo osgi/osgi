@@ -6,7 +6,7 @@ Bundle-Version: 4
 Bundle-ManifestVersion: 2
 Bundle-Copyright: Copyright (c) OSGi Alliance (2000, 2002). All Rights Reserved.
 CVS-Header: $Header$
-Import-Package: org.osgi.framework, org.osgi.test.cases.util, org.osgi.service.packageadmin, org.osgi.util.tracker
+$(IMPORT-PACKAGE)
 $(EXPORT-PACKAGE)
 $(PRIVATE-PACKAGE)
 
