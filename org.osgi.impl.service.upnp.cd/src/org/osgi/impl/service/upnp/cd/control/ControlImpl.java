@@ -145,6 +145,7 @@ public class ControlImpl {
 				dos.close();
 			}
 			catch (Exception e) {
+				e.printStackTrace();
 				System.out.println(e.getMessage());
 			}
 		}

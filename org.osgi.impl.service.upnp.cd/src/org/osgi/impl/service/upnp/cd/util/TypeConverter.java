@@ -153,9 +153,15 @@ class CharacterConverter extends TypeConverter {
 	}
 
 	public String convertToString(Object value) throws IllegalArgumentException {
-		if (value instanceof Character)
+		if (value instanceof Character) {
+			if (((Character)value).charValue() == '"') {
+				return "&quot;";
+			}
 			return value.toString();
-		throw new IllegalArgumentException();
+		}
+		else {
+			throw new IllegalArgumentException();
+		}
 	}
 }
 

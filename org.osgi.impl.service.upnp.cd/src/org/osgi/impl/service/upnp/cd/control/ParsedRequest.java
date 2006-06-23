@@ -59,7 +59,7 @@ public class ParsedRequest {
 	public Dictionary getParams(UPnPAction upnpaction, Dictionary params)
 			throws Exception {
 		Hashtable stat_dt = new Hashtable();
-		arglist = upnpaction.getInputArgumentNames();
+		arglist = upnpaction.getOutputArgumentNames();
 		for (int j = 0; j < arglist.length; j++) {
 			UPnPStateVariable USV = (UPnPStateVariable) upnpaction
 					.getStateVariable(arglist[j]);
