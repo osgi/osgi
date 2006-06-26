@@ -427,6 +427,14 @@ public class DmtTestControl extends DefaultTestBundleControl {
 	public void testDmtAdminDmtAdressingUri() {
 		testClasses[30].run();
 	}
+	
+	public void testDmtAdminAddEventListener() {
+		testClasses[33].run();
+	}
+	
+	public void testDmtAdminRemoveEventListener() {
+		testClasses[34].run();
+	}
 
 	//NotificationService
 	public void testNotificationServiceSendNotification() {

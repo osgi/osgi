@@ -143,7 +143,7 @@ public class DeleteNode implements TestInterface {
 			tbc.log("#testDeleteNode003");
             tbc.openSessionAndSetNodeAcl(TestExecPluginActivator.INTERIOR_NODE, DmtConstants.PRINCIPAL, Acl.DELETE );
 			tbc.setPermissions(new PermissionInfo(DmtPrincipalPermission.class.getName(),DmtConstants.PRINCIPAL,"*"));
-			session = tbc.getDmtAdmin().getSession(DmtConstants.PRINCIPAL, TestExecPluginActivator.INTERIOR_NODE,
+			session = tbc.getDmtAdmin().getSession(DmtConstants.PRINCIPAL, TestExecPluginActivator.ROOT,
 					DmtSession.LOCK_TYPE_EXCLUSIVE);
 			session.deleteNode(TestExecPluginActivator.INTERIOR_NODE);
 			
@@ -333,29 +333,32 @@ public class DeleteNode implements TestInterface {
 			tbc.closeSession(session);
 		}
 	}
+	
 	/**
-	 * This method asserts that an empty string as relative URI means the root 
-	 * URI the session was opened with
+	 * This method asserts that DmtException.COMMAND_NOT_ALLOWED is thrown
+	 * if the target node is the root of the session
 	 * 
 	 * @spec DmtSession.deleteNode(String)
-	 * 
 	 */
 	private void testDeleteNode011() {
 		DmtSession session = null;
 		try {
 			tbc.log("#testDeleteNode011");
-			session = tbc.getDmtAdmin().getSession(
-					TestExecPluginActivator.INTERIOR_NODE, DmtSession.LOCK_TYPE_ATOMIC);
-
-			session.deleteNode("");
-
-			tbc.pass("Asserts that an empty string as relative URI means the root" +
-					" URI the session was opened with");
+			session = tbc.getDmtAdmin().getSession(TestExecPluginActivator.INTERIOR_NODE,
+					DmtSession.LOCK_TYPE_EXCLUSIVE);
+			session.deleteNode(TestExecPluginActivator.INTERIOR_NODE);
+			
+			tbc.failException("", DmtException.class);
+		} catch (DmtException e) {
+			tbc.assertEquals("Asserting that DmtException code is COMMAND_NOT_ALLOWED",
+					DmtException.COMMAND_NOT_ALLOWED, e.getCode());
 		} catch (Exception e) {
-			tbc.failUnexpectedException(e);
+			tbc.failExpectedOtherException(DmtException.class, e);
 		} finally {
 			tbc.closeSession(session);
+            
 		}
+
 	}
 	
 }

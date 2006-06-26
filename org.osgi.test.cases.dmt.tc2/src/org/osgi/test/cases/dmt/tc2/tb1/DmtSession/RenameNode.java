@@ -122,7 +122,7 @@ public class RenameNode implements TestInterface {
 
             tbc.openSessionAndSetNodeAcl(TestExecPluginActivator.INTERIOR_NODE, DmtConstants.PRINCIPAL, Acl.REPLACE );
 			tbc.setPermissions(new PermissionInfo(DmtPrincipalPermission.class.getName(),DmtConstants.PRINCIPAL,"*"));
-			session = tbc.getDmtAdmin().getSession(DmtConstants.PRINCIPAL,TestExecPluginActivator.INTERIOR_NODE,DmtSession.LOCK_TYPE_ATOMIC);
+			session = tbc.getDmtAdmin().getSession(DmtConstants.PRINCIPAL,TestExecPluginActivator.ROOT,DmtSession.LOCK_TYPE_ATOMIC);
 			session.renameNode(TestExecPluginActivator.INTERIOR_NODE, "newName" );
 			tbc.pass("renameNode correctly executed");
 		} catch (Exception e) {
@@ -477,8 +477,8 @@ public class RenameNode implements TestInterface {
 	}
 	
 	/**
-	 * This method asserts that an empty string as relative URI means the root 
-	 * URI the session was opened with
+	 * This method asserts that DmtException.COMMAND_NOT_ALLOWED is thrown
+	 * if the node is the root of the session
 	 * 
 	 * @spec DmtSession.renameNode(String,String)
 	 */
@@ -486,19 +486,18 @@ public class RenameNode implements TestInterface {
 		DmtSession session = null;
 		try {
 			tbc.log("#testRenameNode017");
-
-			session = tbc.getDmtAdmin().getSession(
-					TestExecPluginActivator.INTERIOR_NODE, DmtSession.LOCK_TYPE_ATOMIC);
-
-			session.renameNode("",
-					TestExecPluginActivator.INEXISTENT_NODE_NAME);
-
-			tbc.pass("Asserts that an empty string as relative URI means the root " +
-				"URI the session was opened with");
+			session = tbc.getDmtAdmin().getSession(TestExecPluginActivator.INTERIOR_NODE,DmtSession.LOCK_TYPE_ATOMIC);
+			session.renameNode(TestExecPluginActivator.INTERIOR_NODE, "newName" );
+			
+			tbc.failException("", DmtException.class);
+		} catch (DmtException e) {
+			tbc.assertEquals("Asserting that DmtException code is COMMAND_NOT_ALLOWED",
+					DmtException.COMMAND_NOT_ALLOWED, e.getCode());
 		} catch (Exception e) {
-			tbc.failUnexpectedException(e);
+			tbc.failExpectedOtherException(DmtException.class, e);
 		} finally {
-			tbc.closeSession(session);
+			tbc.closeSession(session);           
 		}
+
 	}
 }

@@ -84,6 +84,8 @@ public class Execute implements TestInterface {
 		testExecute012();
 		testExecute013();
 		testExecute014();
+		testExecute015();
+		testExecute016();
 		
 	}
     private void prepare() {
@@ -463,6 +465,58 @@ public class Execute implements TestInterface {
 					"URI the session was opened with");
 		} catch (Exception e) {
 			tbc.failUnexpectedException(e);
+		} finally {
+			tbc.closeSession(session);
+		}
+	}
+	
+	/**
+	 * This method asserts that IllegalStateException is thrown
+	 * if the session was opened using the LOCK_TYPE_SHARED lock type
+	 *  
+	 * @spec DmtSession.execute(String,String)
+	 */
+	private void testExecute015() {
+		DmtSession session = null;
+		try {
+			tbc.log("#testExecute015");
+
+			session = tbc.getDmtAdmin().getSession(".",
+					DmtSession.LOCK_TYPE_SHARED);
+
+			session.execute(TestExecPluginActivator.INTERIOR_NODE, DATA);
+
+			tbc.failException("", IllegalStateException.class);
+		} catch (IllegalStateException e) {
+			tbc.pass("IllegalStateException correctly thrown");
+		} catch (Exception e) {
+			tbc.failExpectedOtherException(IllegalStateException.class, e);
+		} finally {
+			tbc.closeSession(session);
+		}
+	}
+	
+	/**
+	 * This method asserts that IllegalStateException is thrown
+	 * if the session was opened using the LOCK_TYPE_SHARED lock type
+	 *  
+	 * @spec DmtSession.execute(String,String,String)
+	 */
+	private void testExecute016() {
+		DmtSession session = null;
+		try {
+			tbc.log("#testExecute016");
+
+			session = tbc.getDmtAdmin().getSession(".",
+					DmtSession.LOCK_TYPE_SHARED);
+
+			session.execute(TestExecPluginActivator.INTERIOR_NODE_NAME,CORRELATOR, DATA);
+
+			tbc.failException("", IllegalStateException.class);
+		} catch (IllegalStateException e) {
+			tbc.pass("IllegalStateException correctly thrown");
+		} catch (Exception e) {
+			tbc.failExpectedOtherException(IllegalStateException.class, e);
 		} finally {
 			tbc.closeSession(session);
 		}

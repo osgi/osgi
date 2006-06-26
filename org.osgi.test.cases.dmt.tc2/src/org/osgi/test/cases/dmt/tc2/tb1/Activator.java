@@ -38,8 +38,10 @@ package org.osgi.test.cases.dmt.tc2.tb1;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
+import org.osgi.test.cases.dmt.tc2.tb1.DmtAdmin.AddEventListener;
 import org.osgi.test.cases.dmt.tc2.tb1.DmtAdmin.DmtAdressingUri;
 import org.osgi.test.cases.dmt.tc2.tb1.DmtAdmin.GetSession;
+import org.osgi.test.cases.dmt.tc2.tb1.DmtAdmin.RemoveEventListener;
 import org.osgi.test.cases.dmt.tc2.tb1.DmtSession.Close;
 import org.osgi.test.cases.dmt.tc2.tb1.DmtSession.Commit;
 import org.osgi.test.cases.dmt.tc2.tb1.DmtSession.Copy;
@@ -120,7 +122,9 @@ public class Activator implements BundleActivator, TB1Service  {
 				 new SetDefaultNodeValue((DmtTestControl)tbc),
 				 new DmtAdressingUri((DmtTestControl)tbc),
 				 new TestExceptions((DmtTestControl)tbc),
-				 new Events((DmtTestControl)tbc)
+				 new Events((DmtTestControl)tbc),
+				 new AddEventListener((DmtTestControl)tbc),
+				 new RemoveEventListener((DmtTestControl)tbc)
 		};
 	}					
 				
