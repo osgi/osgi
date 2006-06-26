@@ -87,7 +87,7 @@ public class TestExecPlugin implements ExecPlugin, DataPlugin, ReadableDataSessi
 				tbc
 						.assertEquals(
 								"Asserts that DmtSession is fowarded to ExecPlugin with the same lock type",
-								DmtSession.LOCK_TYPE_SHARED, session
+								DmtSession.LOCK_TYPE_EXCLUSIVE, session
 										.getLockType());
 				tbc
 						.assertEquals(

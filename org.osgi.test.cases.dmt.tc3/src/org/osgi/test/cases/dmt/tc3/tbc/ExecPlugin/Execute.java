@@ -76,7 +76,7 @@ public class Execute {
 			String data = "data";
 			String correlator = "correlator";
 			session = tbc.getDmtAdmin().getSession(TestExecPluginActivator.ROOT,
-					DmtSession.LOCK_TYPE_SHARED);
+					DmtSession.LOCK_TYPE_EXCLUSIVE);
 			session.execute(TestExecPluginActivator.ROOT, correlator, data);
 			tbc.assertEquals("Asserts that DmtAdmin fowarded "+ TestExecPlugin.EXECUTE+" to the correct plugin",TestExecPlugin.EXECUTE,DmtConstants.TEMPORARY);
 			tbc.assertEquals("Asserts that DmtAdmin the parameter was fowarded to the correct plugin without modification",correlator,DmtConstants.PARAMETER_2);
@@ -98,7 +98,7 @@ public class Execute {
 		try {
 			tbc.log("#testExecute002");
 			session = tbc.getDmtAdmin().getSession(TestExecPluginActivator.ROOT,
-					DmtSession.LOCK_TYPE_SHARED);
+					DmtSession.LOCK_TYPE_EXCLUSIVE);
 			session.execute(TestExecPluginActivator.INTERIOR_NODE_EXCEPTION,"test", "test");
 			
 			tbc.failException("#", DmtException.class);
@@ -129,7 +129,7 @@ public class Execute {
 			String data = "data";
 
 			session = tbc.getDmtAdmin().getSession(TestExecPluginActivator.ROOT,
-					DmtSession.LOCK_TYPE_SHARED);
+					DmtSession.LOCK_TYPE_EXCLUSIVE);
 			session.execute(TestExecPluginActivator.ROOT, data);
 			tbc.assertEquals("Asserts that DmtAdmin fowarded "+ TestExecPlugin.EXECUTE+" to the correct plugin",TestExecPlugin.EXECUTE,DmtConstants.TEMPORARY);
 			tbc.assertEquals("Asserts that DmtAdmin the parameter was fowarded to the correct plugin without modification",data,DmtConstants.PARAMETER_3);
@@ -150,7 +150,7 @@ public class Execute {
 		try {
 			tbc.log("#testExecute004");
 			session = tbc.getDmtAdmin().getSession(TestExecPluginActivator.ROOT,
-					DmtSession.LOCK_TYPE_SHARED);
+					DmtSession.LOCK_TYPE_EXCLUSIVE);
 			session.execute(TestExecPluginActivator.INTERIOR_NODE_EXCEPTION,"test");
 			
 			tbc.failException("#", DmtException.class);

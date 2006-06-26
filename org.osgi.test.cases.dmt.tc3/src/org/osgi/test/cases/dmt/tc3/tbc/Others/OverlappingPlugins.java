@@ -121,7 +121,7 @@ public class OverlappingPlugins {
 			tbc.log("#testOverlappingPlugins003");
 
 			session = tbc.getDmtAdmin().getSession(TestExecPluginActivator.ROOT,
-					DmtSession.LOCK_TYPE_SHARED);
+					DmtSession.LOCK_TYPE_EXCLUSIVE);
 			String nodeTitle = session.getNodeTitle(TestExecPluginActivator.ROOT);
 			tbc.assertEquals("Asserts that DmtAdmin allows that an ExecPlugin overlaps a DataPlugin",ToBeOverlappedDataPlugin.MESSAGE,nodeTitle);
 			
@@ -146,7 +146,7 @@ public class OverlappingPlugins {
 			tbc.log("#testOverlappingPlugins004");
 
 			session = tbc.getDmtAdmin().getSession(OverlappingExecPluginActivator.ROOT,
-					DmtSession.LOCK_TYPE_SHARED);
+					DmtSession.LOCK_TYPE_EXCLUSIVE);
 			String nodeTitle = session.getNodeTitle(OverlappingExecPluginActivator.ROOT);
 			tbc.assertEquals("Asserts that DmtAdmin does not allow that an ExecPlugin overlaps another ExecPlugin",ToBeOverlappedDataPlugin.MESSAGE,nodeTitle);
 			
