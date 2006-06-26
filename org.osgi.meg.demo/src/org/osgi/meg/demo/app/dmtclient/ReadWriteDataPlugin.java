@@ -131,10 +131,16 @@ public class ReadWriteDataPlugin implements ReadWriteDataSession, DataPlugin {
     public void setNodeValue(String[] nodePath, DmtData data)
             throws DmtException {
         String[] path = chopRoot(nodePath);
+        
+        if(data == null)
+            data = getMetaNode(nodePath).getDefault();
         if(path.length == 0)
             value = (String) data.getNode();
         else // path.length == 1
-            value = data.getString();
+            if(data.getFormat() == DmtData.FORMAT_STRING)
+                value = data.getString();
+            else
+                value = data.getRawString();
         
         nodeChanged(nodePath);
     }
