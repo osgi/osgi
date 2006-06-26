@@ -426,6 +426,34 @@ public class SimpleClient implements ManagedService, ManagedServiceFactory,
             System.out.println("Updated value: " + session.getNodeValue(
                     ReadWriteDataPlugin.LEAF));
             
+            session.setNodeValue(ReadWriteDataPlugin.LEAF, 
+                    new DmtData(ReadWriteDataPlugin.RAW_FORMAT_NAME, "I'm plain..."));
+            System.out.println("Updated value: " + session.getNodeValue(
+                    ReadWriteDataPlugin.LEAF));
+
+            session.setNodeValue(ReadWriteDataPlugin.LEAF, 
+                    new DmtData(ReadWriteDataPlugin.RAW_FORMAT_NAME, "I'm RAW!"));
+            System.out.println("Updated value: " + session.getNodeValue(
+                    ReadWriteDataPlugin.LEAF));
+
+            session.setNodeValue("", null);
+            System.out.println("Updated value: " + session.getNodeValue(
+                    ReadWriteDataPlugin.LEAF));
+
+            session.setDefaultNodeValue("");
+            System.out.println("Updated value: " + session.getNodeValue(
+                    ReadWriteDataPlugin.LEAF));
+
+            session.setDefaultNodeValue(ReadWriteDataPlugin.LEAF);
+            System.out.println("Updated value: " + session.getNodeValue(
+                    ReadWriteDataPlugin.LEAF));
+
+            System.out.println("Titles: \"" + session.getNodeTitle("") + "\", " +
+                    "\"" + session.getNodeTitle(ReadWriteDataPlugin.LEAF) + "\"");
+            
+            System.out.println("Version: " + session.getNodeVersion("") +
+                    ", Timestamp: " + session.getNodeTimestamp(""));
+            
             session.close();
             
         } catch(DmtException e) {
