@@ -23,7 +23,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Enumeration;
 import java.util.Iterator;
-import java.util.List;
 
 /**
  * Indicates the callers authority to send alerts to management servers,
@@ -39,10 +38,10 @@ public class AlertPermission extends Permission {
     private static final long serialVersionUID = -3206463101788245739L;
 
     // specifies whether the target string had a wildcard at the end
-    private boolean isPrefix;
+    private final boolean isPrefix;
 
     // the target string without the wildcard (if there was one)
-    private String serverId;
+    private final String serverId;
 
     /**
      * Creates a new <code>AlertPermission</code> object with its name set to
@@ -185,11 +184,9 @@ public class AlertPermission extends Permission {
  * Represents a homogeneous collection of AlertPermission objects.
  */
 final class DmtAlertPermissionCollection extends PermissionCollection {
-    // TODO serialization
-
     private static final long serialVersionUID = 2288462124510043429L;
 
-    private List perms;
+    private ArrayList perms;
 
     /**
      * Create an empty DmtAlertPermissionCollection object.

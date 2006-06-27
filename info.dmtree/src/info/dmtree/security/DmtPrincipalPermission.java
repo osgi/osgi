@@ -24,7 +24,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Enumeration;
 import java.util.Iterator;
-import java.util.List;
 
 /**
  * Indicates the callers authority to create DMT sessions on behalf of a remote
@@ -41,10 +40,10 @@ public class DmtPrincipalPermission extends Permission {
     private static final long serialVersionUID = 6388752177325038332L;
 
     // specifies whether the target string had a wildcard at the end
-    private boolean isPrefix;
+    private final boolean isPrefix;
 
     // the target string without the wildcard (if there was one)
-    private String principal;
+    private final String principal;
 
     /**
      * Creates a new <code>DmtPrincipalPermission</code> object with its name
@@ -187,11 +186,9 @@ public class DmtPrincipalPermission extends Permission {
  * Represents a homogeneous collection of DmtPrincipalPermission objects.
  */
 final class DmtPrincipalPermissionCollection extends PermissionCollection {
-    // TODO serialization
-
     private static final long serialVersionUID = -6692103535775802684L;
 
-    private List perms;
+    private ArrayList perms;
 
     /**
      * Create an empty DmtPrincipalPermissionCollection object.

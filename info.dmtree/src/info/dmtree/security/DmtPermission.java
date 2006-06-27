@@ -26,7 +26,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Enumeration;
 import java.util.Iterator;
-import java.util.List;
 import java.util.StringTokenizer;
 
 /**
@@ -62,7 +61,6 @@ import java.util.StringTokenizer;
  * constants.
  */
 public class DmtPermission extends Permission {
-    // TODO serialization
     private static final long serialVersionUID = -1910969921419407809L;
 
     /**
@@ -110,19 +108,35 @@ public class DmtPermission extends Permission {
     public static final String REPLACE = "Replace";
 
     // does this permission have a wildcard at the end?
-    private boolean prefixPath;
+    private final boolean prefixPath;
 
     // the name without the wildcard on the end
-    private String path;
+    private final String path;
 
     // the actions mask
-    private int mask;
+    private final int mask;
 
     // the canonical action string (redundant)
-    private String actions;
+    private final String actions;
 
-    // initializes the member fields from the given URI and actions mask
-    private void init(String dmtUri, int mask) {
+    /**
+     * Creates a new DmtPermission object for the specified DMT URI with the
+     * specified actions. The given URI must be an absolute URI, possibly ending
+     * with the "*" wildcard. The actions string must either be "*" to allow all
+     * actions, or it must contain a non-empty subset of the valid actions,
+     * defined as constants in this class.
+     * 
+     * @param dmtUri URI of the management object (or subtree)
+     * @param actions OMA DM actions allowed
+     * @throws NullPointerException if any of the parameters are
+     *         <code>null</code>
+     * @throws IllegalArgumentException if any of the parameters are invalid
+     */
+    public DmtPermission(String dmtUri, String actions) {
+        super(dmtUri);
+        mask = getMask(actions);
+        this.actions = canonicalActions(mask);
+
         if (dmtUri == null)
             throw new NullPointerException("'dmtUri' parameter must not be " +
                     "null.");
@@ -130,11 +144,11 @@ public class DmtPermission extends Permission {
         if(!Uri.isValidUri(dmtUri))
             throw new IllegalArgumentException("'dmtUri' parameter does not " +
                     "contain a valid URI.");
-
+        
         if (!Uri.isAbsoluteUri(dmtUri))
             throw new IllegalArgumentException("'dmtUri' parameter does not " +
                     "contain an absolute URI.");
-
+        
         // canonicalize URI: remove escapes from non-special characters
         StringBuffer sb = new StringBuffer(dmtUri);
         int i = 0;
@@ -158,32 +172,6 @@ public class DmtPermission extends Permission {
             prefixPath = false;
             path = dmtUri;
         }
-
-        if (mask == 0)
-            throw new IllegalArgumentException("Action mask cannot be empty.");
-
-        this.mask = mask;
-
-        actions = canonicalActions(mask);
-    }
-
-    /**
-     * Creates a new DmtPermission object for the specified DMT URI with the
-     * specified actions. The given URI must be an absolute URI, possibly ending
-     * with the "*" wildcard. The actions string must either be "*" to allow all
-     * actions, or it must contain a non-empty subset of the valid actions,
-     * defined as constants in this class.
-     * 
-     * @param dmtUri URI of the management object (or subtree)
-     * @param actions OMA DM actions allowed
-     * @throws NullPointerException if any of the parameters are
-     *         <code>null</code>
-     * @throws IllegalArgumentException if any of the parameters are invalid
-     */
-    public DmtPermission(String dmtUri, String actions) {
-        super(dmtUri);
-
-        init(dmtUri, getMask(actions));
     }
 
     /**
@@ -302,6 +290,9 @@ public class DmtPermission extends Permission {
                         + "'");
         }
 
+        if (mask == 0)
+            throw new IllegalArgumentException("Action mask cannot be empty.");
+
         return mask;
     }
 
@@ -348,9 +339,8 @@ final class DmtPermissionCollection extends PermissionCollection {
     private static final long serialVersionUID = -4172481774562012941L;
 
     // OPTIMIZE keep a special flag for permissions of "*" path
-    // TODO serialization
 
-    private List perms;
+    private ArrayList perms;
 
     /**
      * Create an empty DmtPermissionCollection object.
