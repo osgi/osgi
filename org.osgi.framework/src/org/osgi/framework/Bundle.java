@@ -695,6 +695,8 @@ public interface Bundle {
 	 * @since 1.1
 	 * @throws java.lang.IllegalStateException If this bundle has been
 	 *         uninstalled.
+	 * @see #getEntry
+	 * @see #findEntries
 	 */
 	public URL getResource(String name);
 
