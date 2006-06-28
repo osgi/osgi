@@ -124,12 +124,12 @@ public class ToUri {
 	private void testToUri004() {
 		try {
 			tbc.log("#testToUri004");
-			for (int i = 0; i < DmtTestControl.EXCEEDING_LIMIT_URIS.length; i++) {
+			for (int i = 0; i < DmtTestControl.URIS_TOO_LONG.length; i++) {
 				try {
-					Uri.toUri(DmtTestControl.toPath(DmtTestControl.EXCEEDING_LIMIT_URIS[i]));
+					Uri.toUri(DmtTestControl.toPath(DmtTestControl.URIS_TOO_LONG[i]));
 					tbc.failException("", IllegalArgumentException.class);
 				} catch (IllegalArgumentException e) {
-					tbc.pass("IllegalArgumentException correctly thrown when calling Uri.toUri(" + DmtTestControl.EXCEEDING_LIMIT_URIS[i] + ")");
+					tbc.pass("IllegalArgumentException correctly thrown when calling Uri.toUri(" + DmtTestControl.URIS_TOO_LONG[i] + ")");
 				}
 			}
 			

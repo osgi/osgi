@@ -107,27 +107,20 @@ public class DmtTestControl extends DefaultTestBundleControl {
 	//URIs too long, to be used simulating DmtException.URI_TOO_LONG
 	public final static String[] URIS_TOO_LONG;
 	
-    public final static String[] EXCEEDING_LIMIT_URIS;
-    
     static {
 	    Vector uriTooLong = new Vector();
-	    Vector excedingLimitUri = new Vector();
 	    if (Uri.getMaxSegmentNameLength()!=Integer.MAX_VALUE) {
 	    	uriTooLong.add(getSegmentTooLong(TestExecPluginActivator.ROOT));
-	    	excedingLimitUri.add(getSegmentTooLong("."));
 	    }
         if (Uri.getMaxUriSegments()!=Integer.MAX_VALUE) {
 	        uriTooLong.add(getExcedingSegmentsUri(TestExecPluginActivator.ROOT));
-	        excedingLimitUri.add(getSegmentTooLong("."));
         }
         if (Uri.getMaxUriLength()!=Integer.MAX_VALUE) {
         	uriTooLong.add(getUriTooLong(TestExecPluginActivator.ROOT));
-        	excedingLimitUri.add(getUriTooLong("."));
         }
+        
         URIS_TOO_LONG = new String[uriTooLong.size()];
-        EXCEEDING_LIMIT_URIS = new String[excedingLimitUri.size()];
         uriTooLong.copyInto(URIS_TOO_LONG);
-        excedingLimitUri.copyInto(EXCEEDING_LIMIT_URIS);
  
 	            
     };

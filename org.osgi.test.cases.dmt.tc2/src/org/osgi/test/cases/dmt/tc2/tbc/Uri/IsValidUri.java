@@ -115,9 +115,9 @@ public class IsValidUri {
 			//It covers three cases: if the length of the URI is not more than getMaxUriLength(), 
 			//if the URI doesn't contain more than getMaxUriSegments() segments and if the 
 			//length of each segment of the URI is less than or equal to getMaxSegmentNameLength(). 
-			for (int i = 0; i < DmtTestControl.EXCEEDING_LIMIT_URIS.length; i++) {
-				tbc.assertTrue("Asserts that "+ DmtTestControl.EXCEEDING_LIMIT_URIS[i] +" is not a valid URI", 
-						!Uri.isValidUri(DmtTestControl.EXCEEDING_LIMIT_URIS[i]));
+			for (int i = 0; i < DmtTestControl.URIS_TOO_LONG.length; i++) {
+				tbc.assertTrue("Asserts that "+ DmtTestControl.URIS_TOO_LONG[i] +" is not a valid URI", 
+						!Uri.isValidUri(DmtTestControl.URIS_TOO_LONG[i]));
 			}
 		} catch (Exception e) {
 			tbc.failUnexpectedException(e);
