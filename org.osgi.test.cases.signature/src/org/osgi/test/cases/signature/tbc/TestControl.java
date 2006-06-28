@@ -27,15 +27,17 @@
 package org.osgi.test.cases.signature.tbc;
 
 /**
- * Verify the signatures of all methods in the spec. Check that there no more and
- * less fields, methods, end constructors that are visible.
+ * Verify the signatures of all methods in the spec. Check that there no more
+ * and less fields, methods, end constructors that are visible.
  */
 import java.io.*;
 import java.lang.reflect.*;
-import java.util.zip.*;
+import java.net.URL;
+import java.util.*;
 
 import org.objectweb.asm.*;
 import org.objectweb.asm.Type;
+import org.osgi.framework.*;
 import org.osgi.test.cases.util.DefaultTestBundleControl;
 
 /**
@@ -59,26 +61,43 @@ public class TestControl extends DefaultTestBundleControl implements
 	 */
 	public void testSignature() throws IOException {
 		InputStream in = getClass().getResourceAsStream("/ref.jar");
-		traverse(in, this);
+		BundleContext bc = super.getContext();
+		Bundle b = bc.getBundle();
+		String signatures = (String) b.getHeaders().get("Signature-Packages");
+		StringTokenizer st = new StringTokenizer(signatures, " ,");
+		while (st.hasMoreTokens()) {
+			String signature = st.nextToken().replace('.', '/');
+			traverse(b, signature, this);
+		}
 	}
 
 	/**
-	 * Traverse the JAR file. Visit each class and verify against the
+	 * Traverse the paths in out bundle. Visit each class and verify against the
 	 * imported classes.
 	 * 
 	 * @param fin
 	 * @param cv
 	 * @throws IOException
 	 */
-	static void traverse(InputStream fin, TestControl cv) throws IOException {
-		ZipInputStream in = new ZipInputStream(fin);
-		ZipEntry entry = in.getNextEntry();
-		while (entry != null) {
-			if (entry.getName().endsWith(".class")) {
-				ClassReader rdr = new ClassReader(in);
-				rdr.accept(cv, false);
+
+	void traverse(Bundle bundle, String path, TestControl cv)
+			throws IOException {
+		Enumeration e = bundle.findEntries(path, "*.class", true);
+		while (e.hasMoreElements()) {
+			URL url = (URL) e.nextElement();
+			if (url.getPath().indexOf('$') < 0) {
+				try {
+					InputStream in = url.openStream();
+					ClassReader rdr = new ClassReader(in);
+					rdr.accept(cv, false);
+					in.close();
+				}
+				catch (IOException ioe) {
+					fail("Unexpected exception " + ioe);
+				}
 			}
-			entry = in.getNextEntry();
+			else
+				log("Skipping class: " + url.getPath());
 		}
 	}
 
@@ -90,7 +109,7 @@ public class TestControl extends DefaultTestBundleControl implements
 
 		String className = name.replace('/', '.');
 		String superClassName = superName.replace('/', '.');
-		log("Checking class: " + className );
+		log("Checking class: " + className);
 		try {
 
 			clazz = Class.forName(className);
@@ -107,7 +126,8 @@ public class TestControl extends DefaultTestBundleControl implements
 			inner = clazz.getDeclaredClasses();
 		}
 		catch (Exception e) {
-			fail("Class not found in signature check: " + className);
+			e.printStackTrace();
+			fail("Class not found in signature check: " + className + " " + e);
 		}
 	}
 
@@ -141,8 +161,8 @@ public class TestControl extends DefaultTestBundleControl implements
 	}
 
 	/**
-	 * Verify that we have no methods, fields, or constructors that
-	 * are visible left.
+	 * Verify that we have no methods, fields, or constructors that are visible
+	 * left.
 	 * 
 	 * @see org.objectweb.asm.ClassVisitor#visitEnd()
 	 */
@@ -170,8 +190,8 @@ public class TestControl extends DefaultTestBundleControl implements
 			if (constructors[i] != null) {
 				int cMods = constructors[i].getModifiers();
 				if (Modifier.isPublic(cMods) || Modifier.isProtected(cMods))
-					fail("Extra visible constructor " + getClassName(clazz) + "."
-							+ constructors[i]);
+					fail("Extra visible constructor " + getClassName(clazz)
+							+ "." + constructors[i]);
 			}
 		}
 	}
@@ -319,7 +339,7 @@ public class TestControl extends DefaultTestBundleControl implements
 				java.lang.reflect.Modifier.isFinal(cMods) ? 1 : 0);
 
 		assertEquals(
-				"Final must be equal ",
+				"Static must be equal ",
 				(access & Opcodes.ACC_STATIC) != 0 ? 1 : 0,
 				java.lang.reflect.Modifier.isStatic(cMods) ? 1 : 0);
 	}
@@ -329,7 +349,8 @@ public class TestControl extends DefaultTestBundleControl implements
 		outer: for (int i = 0; i < interfaces.length; i++) {
 			String ifname = interfaces[i].replace('/', '.');
 			for (int c = 0; c < implemented.length; c++) {
-				if (implemented[c].getName().equals(ifname)) {
+				if (implemented[c] != null
+						&& implemented[c].getName().equals(ifname)) {
 					implemented[c] = null;
 					continue outer;
 				}
@@ -338,14 +359,13 @@ public class TestControl extends DefaultTestBundleControl implements
 					+ ifname);
 		}
 		for (int i = 0; i < implemented.length; i++)
-			assertNull("Extra interface: " + getClassName(clazz) + " implements "
-					+ implemented[i], implemented[i]);
+			assertNull("Extra interface: " + getClassName(clazz)
+					+ " implements " + implemented[i], implemented[i]);
 	}
 
 	private String getClassName(Class clazz) {
-		if ( clazz.isArray() )
-			return getClassName(clazz.getComponentType())+
-			"[]";
+		if (clazz.isArray())
+			return getClassName(clazz.getComponentType()) + "[]";
 		return clazz.getName();
 	}
 

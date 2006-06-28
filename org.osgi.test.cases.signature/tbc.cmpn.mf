@@ -5,8 +5,7 @@ Bundle-Activator: $(p).tbc.TestControl
 Bundle-Version: 4
 Bundle-Copyright: Copyright (c) OSGi Alliance (2000, 2002). All Rights Reserved.
 CVS-Header: $Header$
-DynamicImport-Package: org.osgi.*
-$(IMPORT-PACKAGE)
-$(EXPORT-PACKAGE)
+Signature-Packages: ${cmpn.specs}
+$(SIGNATURE-PACKAGE)
 $(PRIVATE-PACKAGE)
 
