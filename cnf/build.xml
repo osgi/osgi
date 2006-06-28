@@ -175,6 +175,7 @@
 	     ipaProperty         Property name for ipa parameters. ipa
 	                         is the file used in initial provisioning
 	     ignoreVersions      Do not use version on automatic import/export
+	     compress			true/false
 	-->
 	<target name="-btool">
 		<echo>JAR ${item.jarFile}</echo>		
@@ -187,7 +188,9 @@
 			contentFoldersProperty="source.${item.jarFile}" excludeImportProperty="excludeImport.${item.jarFile}" 
 			includeExportProperty="includeExport.${item.jarFile}" ipaProperty="ipa.${item.jarFile}" verbose="${verbose}" 
 			sources="${btool.sources}" ignoreVersions="${btool.noversion}" manifestVersion="${btool.manifestVersion}" 
-			modified="${base.modified}" extraRoots="root.${item.jarFile}" noExtraHeaders="${btool.noextraheaders}"/>
+			modified="${base.modified}" extraRoots="root.${item.jarFile}" noExtraHeaders="${btool.noextraheaders}"
+			compress="${btool.compressed}"
+		/>
 	</target>
 
 	<target name="-signjar" if="sign.${item.jarFile}">
