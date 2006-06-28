@@ -78,6 +78,11 @@ public class Events implements TestInterface  {
 		DmtSession session = null;
 		try {
 			tbc.log("#testEvents001");
+			// waits events sent by previous test methods before doing this test
+			synchronized (tbc) {
+				tbc.wait(DmtConstants.WAITING_TIME);
+			}
+			
 			//Reset previous events
 			EventHandlerImpl.reset();
 			
