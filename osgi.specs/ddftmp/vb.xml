@@ -1,0 +1,878 @@
+<?xml version='1.0' encoding='iso-8859-1'?>
+<cvs>
+	<record>
+		<h1> $/VehiclePowetrain </h1>
+	</record>
+	<record>
+		<h2> /PowerplantControl </h2>
+	</record>
+	<record>
+		<h3> /Throttle </h3>
+	</record>
+	<record>
+		<h5> ThrottleAngle </h5>
+		<Get> X </Get>
+		<Replace> X </Replace>
+		<Type> Float </Type>
+		<Cardinality> 1 </Cardinality>
+		<Scope> P </Scope>
+		<Description> Gets and/or Sets the throttle angle in degrees </Description>
+	</record>
+	<record>
+		<h5> ThrottleTime </h5>
+		<Get> X </Get>
+		<Replace> X </Replace>
+		<Type> Float </Type>
+		<Cardinality> 1 </Cardinality>
+		<Scope> P </Scope>
+		<Description> Gets and/or Sets the throttle time constant in seconds </Description>
+	</record>
+	<record>
+		<h5> WOT </h5>
+		<Get> X </Get>
+		<Type> Bool </Type>
+		<Cardinality> 1 </Cardinality>
+		<Scope> P </Scope>
+		<Description> Gets the state of the Wide Open Throttle (WOT) switch </Description>
+	</record>
+	<record>
+		<h5> Idle </h5>
+		<Get> X </Get>
+		<Type> Bool </Type>
+		<Cardinality> 1 </Cardinality>
+		<Scope> P </Scope>
+		<Description> Gets the state of the throttle idle position switch </Description>
+	</record>
+	<record>
+		<h3> /MotiveDemand </h3>
+	</record>
+	<record>
+		<h5> MotiveDemandLevel </h5>
+		<Get> X </Get>
+		<Replace> X </Replace>
+		<Type> Float </Type>
+		<Cardinality> 1 </Cardinality>
+		<Scope> P </Scope>
+		<Description> Gets and/or Sets the motive demand from the driver (similar to throttle or accelerator position,
+			but used for other powerplant types) </Description>
+	</record>
+	<record>
+		<Value> 0 </Value>
+		<Description> No power </Description>
+	</record>
+	<record>
+		<h3> /Boost </h3>
+	</record>
+	<record>
+		<h5> BoostState </h5>
+		<Get> X </Get>
+		<Replace> X </Replace>
+		<Type> Bool </Type>
+		<Cardinality> 1 </Cardinality>
+		<Scope> P </Scope>
+		<Description> Gets and/or sets the state of the turbocharger or supercharger clutch </Description>
+	</record>
+	<record>
+		<Value> FALSE </Value>
+		<Description> Dis-engaged </Description>
+	</record>
+	<record>
+		<Value> TRUE </Value>
+		<Description> Eengaged </Description>
+	</record>
+	<record>
+		<h5> BoostLevel </h5>
+		<Get> X </Get>
+		<Replace> X </Replace>
+		<Type> Float </Type>
+		<Description> Gets and/or Sets the boost level (wastegate position) for turbochargers </Description>
+	</record>
+	<record>
+		<h5> NOXVolume </h5>
+		<Get> X </Get>
+		<Replace> X </Replace>
+		<Type> Float </Type>
+		<Description> Gets and/or Sets the nitrous oxide boost level (Manifold side pressure) </Description>
+	</record>
+	<record>
+		<h5> NOXPressure </h5>
+		<Get> X </Get>
+		<Replace> X </Replace>
+		<Type> Float </Type>
+		<Description> Gets the available Nitrous Oxide pressure in Pascals </Description>
+	</record>
+	<record>
+		<h2> /Powerplant </h2>
+		<Type> Node </Type>
+		<Cardinality> 1�* </Cardinality>
+		<Scope> P </Scope>
+		<Description> Interior node that represents the vehicle powerplant information </Description>
+	</record>
+	<record>
+		<h5> PowerPlantType </h5>
+		<Get> X </Get>
+		<Type> Chr </Type>
+		<Cardinality> 1 </Cardinality>
+		<Scope> P </Scope>
+		<Description> Gets the type of powerplant(s). Name must be one of: </Description>
+	</record>
+	<record>
+		<Value> ICR </Value>
+		<Description> Internal Combustion </Description>
+	</record>
+	<record>
+		<Value> EL </Value>
+		<Description> Electric </Description>
+	</record>
+	<record>
+		<Value> TB </Value>
+		<Description> Turbine </Description>
+	</record>
+	<record>
+		<Value> HY </Value>
+		<Description> Hybrid </Description>
+	</record>
+	<record>
+		<Value> GP </Value>
+		<Description> Gophers </Description>
+	</record>
+	<record>
+		<Value> FFF </Value>
+		<Description> Fred Flintstone's Feet </Description>
+	</record>
+	<record>
+		<h5> PowerplantIdentification </h5>
+		<Get> X </Get>
+		<Type> Chr </Type>
+		<Cardinality> 1 </Cardinality>
+		<Scope> P </Scope>
+		<Description> Gets the manufacturer's name for the powerplant </Description>
+	</record>
+	<record>
+		<h5> RatedPower </h5>
+		<Get> X </Get>
+		<Type> Float </Type>
+		<Cardinality> 1 </Cardinality>
+		<Scope> P </Scope>
+		<Description> Gets the rated powerplant power in watts </Description>
+	</record>
+	<record>
+		<h5> RatedTorque </h5>
+		<Get> X </Get>
+		<Type> Float </Type>
+		<Cardinality> 1 </Cardinality>
+		<Scope> P </Scope>
+		<Description> Gets the rated powerplant torque in newton-meters </Description>
+	</record>
+	<record>
+		<h5> MaximumRPM </h5>
+		<Get> X </Get>
+		<Type> Float </Type>
+		<Cardinality> 1 </Cardinality>
+		<Scope> P </Scope>
+		<Description> Gets the manufacturer�s stated maximum powerplant speed in Hz </Description>
+	</record>
+	<record>
+		<h5> MaximumCoolantTemp </h5>
+		<Get> X </Get>
+		<Type> Float </Type>
+		<Cardinality> 1 </Cardinality>
+		<Scope> P </Scope>
+		<Description> Gets the manufacturer�s maximum stated coolant temperature in degrees Kelvin </Description>
+	</record>
+	<record>
+		<h5> MaximumOilTemp </h5>
+		<Get> X </Get>
+		<Type> Float </Type>
+		<Cardinality> 1 </Cardinality>
+		<Scope> P </Scope>
+		<Description> Gets the manufacturer�s maximum stated oil temperature in degrees Kelvin </Description>
+	</record>
+	<record>
+		<h5> MaximumTemp </h5>
+		<Get> X </Get>
+		<Type> Float </Type>
+		<Cardinality> 1 </Cardinality>
+		<Scope> P </Scope>
+		<Description> Gets the manufacturer�s maximum stated operating temperature in degrees Kelvin
+			</Description>
+	</record>
+	<record>
+		<h5> CoolantType </h5>
+		<Get> X </Get>
+		<Type> Chr </Type>
+		<Cardinality> 1 </Cardinality>
+		<Scope> P </Scope>
+		<Description> Gets the manufacturer's recommended coolant type according to the SAE reference spec (?)
+			</Description>
+	</record>
+	<record>
+		<h5> CoolantCapacity </h5>
+		<Get> X </Get>
+		<Type> Float </Type>
+		<Cardinality> 1 </Cardinality>
+		<Scope> P </Scope>
+		<Description> Gets the Engine Coolant capacity in liters </Description>
+	</record>
+	<record>
+		<h5> CoolantLevel </h5>
+		<Get> X </Get>
+		<Type> Float </Type>
+		<Cardinality> 1 </Cardinality>
+		<Scope> P </Scope>
+		<Description> Gets the Engine Coolant capacity in liters </Description>
+	</record>
+	<record>
+		<h5> OilType </h5>
+		<Get> X </Get>
+		<Type> Chr </Type>
+		<Cardinality> 1 </Cardinality>
+		<Scope> P </Scope>
+		<Description> Gets the manufacturers recommended oil type according to the applicable specification for the
+			OBD region </Description>
+	</record>
+	<record>
+		<h5> OilWeight </h5>
+		<Get> X </Get>
+		<Type> Chr </Type>
+		<Cardinality> 1 </Cardinality>
+		<Scope> P </Scope>
+		<Description> Gets the manufacturers recommended engine oil weight according to the applicable specification
+			for the OBD region </Description>
+	</record>
+	<record>
+		<h5> OilCapacity </h5>
+		<Get> X </Get>
+		<Type> Float </Type>
+		<Cardinality> 1 </Cardinality>
+		<Scope> P </Scope>
+		<Description> Gets the Engine Oil capacity in lietrs </Description>
+	</record>
+	<record>
+		<h5> OilLevel </h5>
+		<Get> X </Get>
+		<Type> Float </Type>
+		<Cardinality> 1 </Cardinality>
+		<Scope> P </Scope>
+		<Description> Gets the Engine Oil level in lietrs </Description>
+	</record>
+	<record>
+		<h3>
+			&lt;ICE-instance&gt; </h3>
+		<Type> Node </Type>
+		<Cardinality> 1�* </Cardinality>
+		<Scope> P </Scope>
+		<Description> Interior node representing the ICE powerplant instance </Description>
+	</record>
+	<record>
+		<h5> NumberCombCh </h5>
+		<Get> X </Get>
+		<Type> Int </Type>
+		<Cardinality> 1 </Cardinality>
+		<Scope> P </Scope>
+		<Value> 1,24 </Value>
+		<Description> Gets the number of combustion chambers </Description>
+	</record>
+	<record>
+		<h5> Displacement </h5>
+		<Get> X </Get>
+		<Type> Float </Type>
+		<Cardinality> 1 </Cardinality>
+		<Scope> P </Scope>
+		<Description> Gets the engine displacement in liters </Description>
+	</record>
+	<record>
+		<h4>
+			&lt;ICE-fuel-tank-instance&gt; </h4>
+		<Type> Node </Type>
+		<Cardinality> 1�* </Cardinality>
+		<Scope> P </Scope>
+		<Description> Interior node that represents an instance of the vehicle ICE fuel tanks; The name is one of:
+			</Description>
+	</record>
+	<record>
+		<Value> P1 </Value>
+		<Description> Primary Fuel Tank #1 </Description>
+	</record>
+	<record>
+		<Value> P2 </Value>
+		<Description> Primary Fuel Tank #2 </Description>
+	</record>
+	<record>
+		<h5> FuelVolume </h5>
+		<Get> X </Get>
+		<Type> Float </Type>
+		<Cardinality> 1 </Cardinality>
+		<Scope> P </Scope>
+		<Description> Gets the fuel tank instance capacity in liters </Description>
+	</record>
+	<record>
+		<h5> FuelWeight </h5>
+		<Get> X </Get>
+		<Type> Float </Type>
+		<Cardinality> 1 </Cardinality>
+		<Scope> P </Scope>
+		<Description> Gets the fuel tank instance capacity in kilograms </Description>
+	</record>
+	<record>
+		<h5> FuelLevel </h5>
+		<Get> X </Get>
+		<Type> Int </Type>
+		<Cardinality> 1 </Cardinality>
+		<Scope> P </Scope>
+		<Description> Gets the fuel tank instance level in percent of maximum </Description>
+	</record>
+	<record>
+		<h5> FuelType </h5>
+		<Get> X </Get>
+		<Type> Int </Type>
+		<Cardinality> 1 </Cardinality>
+		<Scope> P </Scope>
+		<Description> Gets the vehicle�s primary externally provided fuel type </Description>
+	</record>
+	<record>
+		<Value> 1 </Value>
+		<Description> Leaded Gasoline </Description>
+	</record>
+	<record>
+		<Value> 2 </Value>
+		<Description> Unleaded Gasoline </Description>
+	</record>
+	<record>
+		<Value> 3 </Value>
+		<Description> Diesel </Description>
+	</record>
+	<record>
+		<Value> 4 </Value>
+		<Description> Ethanol </Description>
+	</record>
+	<record>
+		<Value> 5 </Value>
+		<Description> Hydrogen </Description>
+	</record>
+	<record>
+		<Value> 6 </Value>
+		<Description> Liquid Propane Gas </Description>
+	</record>
+	<record>
+		<Value> 7 </Value>
+		<Description> Alternate </Description>
+	</record>
+	<record>
+		<h5> FuelGrade </h5>
+		<Get> X </Get>
+		<Type> Int </Type>
+		<Cardinality> 1 </Cardinality>
+		<Scope> P </Scope>
+		<Description> Gets the vehicle�s primary externally provided fuel grade in units corresponding to the fuel
+			type. E.g. (R+M)/2 octane for gasoline) </Description>
+	</record>
+	<record>
+		<h3>
+			&lt;Electric-instance&gt; </h3>
+		<Type> Node </Type>
+		<Cardinality> 1�* </Cardinality>
+		<Scope> P </Scope>
+		<Description> Interior node representing the characteristics of the electric motor instance </Description>
+	</record>
+	<record>
+		<h5> MotorIdentification </h5>
+		<Get> X </Get>
+		<Type> Chr </Type>
+		<Cardinality> 1 </Cardinality>
+		<Scope> P </Scope>
+		<Description> Gets the manufacturer's name for the motor. </Description>
+	</record>
+	<record>
+		<h5> MotorType </h5>
+		<Description> Gets the type of electric motor (not sure what this is) </Description>
+	</record>
+	<record>
+		<h5> MaximumCurrent </h5>
+		<Get> X </Get>
+		<Type> Float </Type>
+		<Cardinality> 1 </Cardinality>
+		<Scope> P </Scope>
+		<Description> Gets the maimum current for the motor in amps </Description>
+	</record>
+	<record>
+		<h5> OperatingVoltage </h5>
+		<Get> X </Get>
+		<Type> Float </Type>
+		<Cardinality> 1 </Cardinality>
+		<Scope> P </Scope>
+		<Description> Gets the operating voltage of the motor in volts </Description>
+	</record>
+	<record>
+		<h4>
+			&lt;battery-instance&gt; </h4>
+		<Type> Node </Type>
+		<Cardinality> 1�* </Cardinality>
+		<Scope> P </Scope>
+		<Description> Interior node that represents a specific battery instance. Name must be one of: </Description>
+	</record>
+	<record>
+		<Value> PDB </Value>
+		<Description> Main Electric Drive battery </Description>
+	</record>
+	<record>
+		<Value> SDB </Value>
+		<Description> Secondary Electric Drive battery </Description>
+	</record>
+	<record>
+		<h5> ChargeLevel </h5>
+		<Type> int </Type>
+		<Cardinality> 1 </Cardinality>
+		<Scope> P </Scope>
+		<Value> 0 to 100 </Value>
+		<Description> Gets the Charge level of the battery instance in percent of full capacity </Description>
+	</record>
+	<record>
+		<h5> BattCapacity </h5>
+		<Type> int </Type>
+		<Cardinality> 1 </Cardinality>
+		<Scope> P </Scope>
+		<Value> 0 to 10000 </Value>
+		<Description> Gets the capacity of the battery instance in Ampere-Hours </Description>
+	</record>
+	<record>
+		<h5> BatteryState </h5>
+		<Type> Int </Type>
+		<Cardinality> 1 </Cardinality>
+		<Scope> P </Scope>
+		<Description> Gets the battery state </Description>
+	</record>
+	<record>
+		<Value> 1 </Value>
+		<Description> OK </Description>
+	</record>
+	<record>
+		<Value> 2 </Value>
+		<Description> Low </Description>
+	</record>
+	<record>
+		<Value> 3 </Value>
+		<Description> Fault </Description>
+	</record>
+	<record>
+		<h2> /Transmission </h2>
+		<Type> Node </Type>
+		<Cardinality> 1�* </Cardinality>
+		<Scope> P </Scope>
+		<Description> Interior node representing the characteristics of the transmission </Description>
+	</record>
+	<record>
+		<h5> TransmissionType </h5>
+		<Get> X </Get>
+		<Type> Chr </Type>
+		<Cardinality> 1 </Cardinality>
+		<Scope> P </Scope>
+		<Description> Gets the transmission type in the vehicle </Description>
+	</record>
+	<record>
+		<Value> 1 </Value>
+		<Description> Manual </Description>
+	</record>
+	<record>
+		<Value> 2 </Value>
+		<Description> Automatic </Description>
+	</record>
+	<record>
+		<Value> 3 </Value>
+		<Description> Semiautomatic </Description>
+	</record>
+	<record>
+		<Value> 4 </Value>
+		<Description> Continuously Variable </Description>
+	</record>
+	<record>
+		<h5> TransmissionIdentification </h5>
+		<Get> X </Get>
+		<Type> Chr </Type>
+		<Cardinality> 1 </Cardinality>
+		<Scope> P </Scope>
+		<Description> Gets the manufacturer's designation for the transmission. </Description>
+	</record>
+	<record>
+		<h5> GearNames </h5>
+		<Get> X </Get>
+		<Type> Chr </Type>
+		<Cardinality> 1 </Cardinality>
+		<Scope> P </Scope>
+		<Description> Gets an array containing the gear numbers and their corresponding names (negative gear numbers
+			correspond to reverse gears) </Description>
+	</record>
+	<record>
+		<h5> ModeNames </h5>
+		<Get> X </Get>
+		<Type> Chr </Type>
+		<Cardinality> 1 </Cardinality>
+		<Scope> P </Scope>
+		<Description> Gets an array containing the operating mode numbers and their corresponding names
+			</Description>
+	</record>
+	<record>
+		<h5> Mode </h5>
+		<Get> X </Get>
+		<Replace> X </Replace>
+		<Type> Int </Type>
+		<Cardinality> 1 </Cardinality>
+		<Scope> P </Scope>
+		<Description> Gets and/or Sets the Transmission operating Mode </Description>
+	</record>
+	<record>
+		<h5> Gear </h5>
+		<Get> X </Get>
+		<Replace> X </Replace>
+		<Type> Int </Type>
+		<Cardinality> 1 </Cardinality>
+		<Scope> P </Scope>
+		<Description> Gets and/or Sets the Transmission operating Gear </Description>
+	</record>
+	<record>
+		<h5> GearSelectorPosition </h5>
+		<Get> X </Get>
+		<Type> Int </Type>
+		<Cardinality> 1 </Cardinality>
+		<Scope> P </Scope>
+		<Description> Gets the current positionof the gear selector </Description>
+	</record>
+	<record>
+		<h5> Ratio </h5>
+		<Get> X </Get>
+		<Replace> X </Replace>
+		<Type> Float </Type>
+		<Cardinality> 1 </Cardinality>
+		<Scope> P </Scope>
+		<Description> Gest and/or sets the ratio of a continuously variable transmission </Description>
+	</record>
+	<record>
+		<h5> MaximumTemp </h5>
+		<Get> X </Get>
+		<Type> Int </Type>
+		<Cardinality> 1 </Cardinality>
+		<Scope> P </Scope>
+		<Description> Gets the manufacturer�s maximum recommended operating temperature in degrees Kelvin
+			</Description>
+	</record>
+	<record>
+		<h5> MaximumTorque </h5>
+		<Get> X </Get>
+		<Type> Int </Type>
+		<Cardinality> 1 </Cardinality>
+		<Scope> P </Scope>
+		<Description> Gets the manufacturer�s maximum recommended operating torque in newton-meters
+			</Description>
+	</record>
+	<record>
+		<h5> NumberInputs </h5>
+		<Get> X </Get>
+		<Type> Int </Type>
+		<Cardinality> 1 </Cardinality>
+		<Scope> P </Scope>
+		<Description> Gets the number of input shafts </Description>
+	</record>
+	<record>
+		<h5> NumberOutputs </h5>
+		<Get> X </Get>
+		<Type> Int </Type>
+		<Cardinality> 1 </Cardinality>
+		<Scope> P </Scope>
+		<Description> Gets the number of output shafts </Description>
+	</record>
+	<record>
+		<h5> GearRatios </h5>
+		<Get> X </Get>
+		<Type> Array </Type>
+		<Cardinality> 1 </Cardinality>
+		<Scope> p </Scope>
+		<Description> Gets a 3-dimensional array containing the gear ratios indexed by gear number, input shaft number
+			and output shaft number. Form is: Ratio(Gear,Input,Output) </Description>
+	</record>
+	<record>
+		<h5> TransFluidType </h5>
+		<Get> X </Get>
+		<Type> Chr </Type>
+		<Cardinality> 1 </Cardinality>
+		<Scope> P </Scope>
+		<Description> Gets the manufacturer�s recommended brake fluid type according to the applicable
+			specification for the OBD region </Description>
+	</record>
+	<record>
+		<h5> TransFluidWeight </h5>
+		<Get> X </Get>
+		<Type> Chr </Type>
+		<Cardinality> 1 </Cardinality>
+		<Scope> P </Scope>
+		<Description> Gets the manufacturers recommended transmission oil weight according to the applicable
+			specification for the OBD region </Description>
+	</record>
+	<record>
+		<h5> TransFluidCapacity </h5>
+		<Get> X </Get>
+		<Type> Float </Type>
+		<Cardinality> 1 </Cardinality>
+		<Scope> P </Scope>
+		<Description> Gets the Brake Fluid capacity in liters </Description>
+	</record>
+	<record>
+		<h5> TransFluidLevel </h5>
+		<Get> X </Get>
+		<Type> Int </Type>
+		<Cardinality> 1 </Cardinality>
+		<Scope> P </Scope>
+		<Value> 0-100 </Value>
+		<Description> Getsa the transmission fluid level in percent of maximum </Description>
+	</record>
+	<record>
+		<h2> /TransferCase </h2>
+		<Type> Node </Type>
+		<Cardinality> 1�* </Cardinality>
+		<Scope> P </Scope>
+		<Description> Interior node representing the characteristics of the transfer case </Description>
+	</record>
+	<record>
+		<h5> TransferCaseType </h5>
+		<Get> X </Get>
+		<Type> Int </Type>
+		<Cardinality> 1 </Cardinality>
+		<Scope> P </Scope>
+		<Description> Gets the transfer case type in the vehicle </Description>
+	</record>
+	<record>
+		<Value> 1 </Value>
+		<Description> Manual Shift </Description>
+	</record>
+	<record>
+		<Value> 2 </Value>
+		<Description> Electric Shift </Description>
+	</record>
+	<record>
+		<h5> TransCaseIdentification </h5>
+		<Get> X </Get>
+		<Type> Chr </Type>
+		<Cardinality> 1 </Cardinality>
+		<Scope> P </Scope>
+		<Description> Gets the manufacturer's designation for the transmission. </Description>
+	</record>
+	<record>
+		<h5> GearNames </h5>
+		<Get> X </Get>
+		<Type> Chr </Type>
+		<Cardinality> 1 </Cardinality>
+		<Scope> P </Scope>
+		<Description> Gets an array containing the gear numbers and their corresponding names (negative gear numbers
+			correspond to reverse gears) </Description>
+	</record>
+	<record>
+		<h5> ModeNames </h5>
+		<Get> X </Get>
+		<Type> Chr </Type>
+		<Cardinality> 1 </Cardinality>
+		<Scope> P </Scope>
+		<Description> Gets an array containing the operating mode numbers and their corresponding names
+			</Description>
+	</record>
+	<record>
+		<h5> ModeNames </h5>
+		<Get> X </Get>
+		<Type> Chr </Type>
+		<Cardinality> 1 </Cardinality>
+		<Scope> P </Scope>
+		<Description> Gets the names of the transfer case modes </Description>
+	</record>
+	<record>
+		<h5> MaximumTemp </h5>
+		<Get> X </Get>
+		<Type> Int </Type>
+		<Cardinality> 1 </Cardinality>
+		<Scope> P </Scope>
+		<Description> Gets the manufacturer�s maximum recommended operating temperature in degrees Kelvin
+			</Description>
+	</record>
+	<record>
+		<h5> MaximumTorque </h5>
+		<Get> X </Get>
+		<Type> Float </Type>
+		<Cardinality> 1 </Cardinality>
+		<Scope> P </Scope>
+		<Description> Gets the maximum rated torque for the transfer case in newton-meters </Description>
+	</record>
+	<record>
+		<h5> NumberInputs </h5>
+		<Get> X </Get>
+		<Type> Int </Type>
+		<Cardinality> 1 </Cardinality>
+		<Scope> P </Scope>
+		<Description> Gets the number of input shafts </Description>
+	</record>
+	<record>
+		<h5> NumberOutputs </h5>
+		<Get> X </Get>
+		<Type> Int </Type>
+		<Cardinality> 1 </Cardinality>
+		<Scope> P </Scope>
+		<Description> Gets the number of output shafts </Description>
+	</record>
+	<record>
+		<h5> GearRatios </h5>
+		<Get> X </Get>
+		<Type> Array </Type>
+		<Cardinality> 1 </Cardinality>
+		<Scope> p </Scope>
+		<Description> Gets a 3-dimensional array containing the input to output gear ratios indexed by gear number,
+			input shaft number and output shaft number. Form is: Ratio(Gear,Input,Output) </Description>
+	</record>
+	<record>
+		<h5> Mode </h5>
+		<Get> X </Get>
+		<Replace> X </Replace>
+		<Type> Int </Type>
+		<Cardinality> 1 </Cardinality>
+		<Scope> P </Scope>
+		<Description> Gets and/or Sets the Transfer Case operating Mode </Description>
+	</record>
+	<record>
+		<h5> Gear </h5>
+		<Get> X </Get>
+		<Replace> X </Replace>
+		<Type> Int </Type>
+		<Cardinality> 1 </Cardinality>
+		<Scope> P </Scope>
+		<Description> Gets and/or Sets the Transfer Case operating Gear </Description>
+	</record>
+	<record>
+		<h5> TClFluidType </h5>
+		<Get> X </Get>
+		<Type> Chr </Type>
+		<Cardinality> 1 </Cardinality>
+		<Scope> P </Scope>
+		<Description> Gets the manufacturers recommended transfer case fluid type oil weight according to the
+			applicable specification for the OBD region </Description>
+	</record>
+	<record>
+		<h5> TCFluidWeight </h5>
+		<Get> X </Get>
+		<Type> Chr </Type>
+		<Cardinality> 1 </Cardinality>
+		<Scope> P </Scope>
+		<Description> Gets the manufacturers recommended transfer case fluid weight according to the applicable
+			specification for the OBD region </Description>
+	</record>
+	<record>
+		<h5> TCFluidLevel </h5>
+		<Get> X </Get>
+		<Type> Int </Type>
+		<Cardinality> 1 </Cardinality>
+		<Scope> P </Scope>
+		<Value> 0-100 </Value>
+		<Description> Gets the level of the transfer case fluid in percent of maximum </Description>
+	</record>
+	<record>
+		<h2> /Differential </h2>
+	</record>
+	<record>
+		<h3>
+			&lt;differential-instance&gt; </h3>
+		<Type> Node </Type>
+		<Cardinality> 1�* </Cardinality>
+		<Scope> P </Scope>
+		<Description> Interior node representing the differential instance </Description>
+	</record>
+	<record>
+		<Value> FD </Value>
+		<Description> Front </Description>
+	</record>
+	<record>
+		<Value> RD </Value>
+		<Description> Rear </Description>
+	</record>
+	<record>
+		<h5> DiffType </h5>
+		<Get> X </Get>
+		<Type> Int </Type>
+		<Cardinality> 1 </Cardinality>
+		<Scope> P </Scope>
+		<Description> Gets the type of the differential instance </Description>
+	</record>
+	<record>
+		<Value> 1 </Value>
+		<Description> Open </Description>
+	</record>
+	<record>
+		<Value> 2 </Value>
+		<Description> Limited Slip </Description>
+	</record>
+	<record>
+		<Value> 3 </Value>
+		<Description> Locker </Description>
+	</record>
+	<record>
+		<Value> 4 </Value>
+		<Description> Manual Lock </Description>
+	</record>
+	<record>
+		<Value> 5 </Value>
+		<Description> Fixed </Description>
+	</record>
+	<record>
+		<h5> DiffIdentification </h5>
+		<Get> X </Get>
+		<Type> Chr </Type>
+		<Cardinality> 1 </Cardinality>
+		<Scope> P </Scope>
+		<Description> Gets the manufacturer's designation for the differential instance </Description>
+	</record>
+	<record>
+		<h5> FinalDriveRatio </h5>
+		<Get> X </Get>
+		<Type> Float </Type>
+		<Cardinality> 1 </Cardinality>
+		<Scope> P </Scope>
+		<Description> Gets the final drive output to input ratio of the differential instance </Description>
+	</record>
+	<record>
+		<h5> DifferentialFluidType </h5>
+		<Get> X </Get>
+		<Type> Chr </Type>
+		<Cardinality> 1 </Cardinality>
+		<Scope> P </Scope>
+		<Description> Gets the manufacturers recommended differential or transaxle fluid type oil weight according to
+			the applicable specification for the OBD region </Description>
+	</record>
+	<record>
+		<h5> DifferentialFluidWeight </h5>
+		<Get> X </Get>
+		<Type> Chr </Type>
+		<Cardinality> 1 </Cardinality>
+		<Scope> P </Scope>
+		<Description> Gets the manufacturers recommended differential or transaxle fluid weight according to the
+			applicable specification for the OBD region </Description>
+	</record>
+	<record>
+		<h5> DifferentialFluidLevel </h5>
+		<Get> X </Get>
+		<Type> Int </Type>
+		<Cardinality> 1 </Cardinality>
+		<Scope> P </Scope>
+		<Value> 0-100 </Value>
+		<Description> Gets the level of the differential fluid in percent of maximum </Description>
+	</record>
+	<record>
+		<h5> LockState </h5>
+		<Get> X </Get>
+		<Replace> X </Replace>
+		<Type> Bool </Type>
+		<Cardinality> 1 </Cardinality>
+		<Scope> P </Scope>
+		<Description> Gets and/or Sets the lock state of a manual locking differential </Description>
+	</record>
+	<record>
+		<Value> FALSE </Value>
+		<Description> Unlocked </Description>
+	</record>
+	<record>
+		<Value> TRUE </Value>
+		<Description> Locked </Description>
+	</record>
+</cvs>

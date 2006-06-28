@@ -1,0 +1,1837 @@
+<?xml version="1.0" encoding="utf-8"?>
+<html>
+   <body>
+      <h1 class="Heading1">HVAC Managed Object<a name="HVAC"/>
+         <a index="HVAC"/>
+      </h1>
+      <p/>
+      <table class="Classes">
+         <tr>
+            <th width="3cm">Path</th>
+            <th width="1cm" angle="270">Access</th>
+            <th width="1cm" angle="270">Type</th>
+            <th width="0.7cm" angle="270">Cardin.</th>
+            <th width="0.5cm" angle="270">Scope</th>
+            <th width="6.5cm">Description</th>
+         </tr>
+         <tr>
+            <td>
+               <p class="td">
+                  <a name="$/HVAC/&lt;HVACzone-instance&gt;"/>
+                  <code class="Box">—</code>
+                  <code class="BoxBold">&lt;HVACzone-instance&gt;</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box"/>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">node</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">1</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">P</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">Interior node that represents the HVAC System instances for the vehicle.</p>
+               <h4 class="Heading4">Name<tab/>Description</h4>
+               <p class="property">
+                  <code>FL</code>
+                  <tab/>Front Left</p>
+               <p class="property">
+                  <code>FR</code>
+                  <tab/>Front Right</p>
+               <p class="property">
+                  <code>RL</code>
+                  <tab/>Rear Left</p>
+               <p class="property">
+                  <code>RR</code>
+                  <tab/>Rear Right</p>
+               <p class="property">
+                  <code>R</code>
+                  <tab/>Rear</p>
+               <p class="property">
+                  <code>S</code>
+                  <tab/>Stationary</p>
+            </td>
+         </tr>
+         <tr>
+            <td>
+               <p class="td">
+                  <a name="$/HVAC/&lt;HVACzone-instance&gt;/HVACFanLevel"/>
+                  <code class="Box">——</code>
+                  <code class="BoxBold">HVACFanLevel</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box"/>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">float</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">1..1</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">P</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">Gets and sets the Fan Level for the HVAC zone instance in percent of the maximum
+				level</p>
+               <h4 class="Heading4">Value<tab/>Description</h4>
+               <p class="property">
+                  <code>0</code>
+                  <tab/>Off</p>
+               <p class="property">
+                  <code>100</code>
+                  <tab/>Full On</p>
+            </td>
+         </tr>
+         <tr>
+            <td>
+               <p class="td">
+                  <a name="$/HVAC/&lt;HVACzone-instance&gt;/HVACCtlMode"/>
+                  <code class="Box">——</code>
+                  <code class="BoxBold">HVACCtlMode</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box"/>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">int</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">1..1</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">P</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">Gets and sets the operating mode for the HVAC instance</p>
+               <h4 class="Heading4">Value<tab/>Description</h4>
+               <p class="property">
+                  <code>1</code>
+                  <tab/>Climate</p>
+               <p class="property">
+                  <code>2</code>
+                  <tab/>Manual</p>
+               <p class="property">
+                  <code>3</code>
+                  <tab/>AC</p>
+               <p class="property">
+                  <code>4</code>
+                  <tab/>MaxAC</p>
+               <p class="property">
+                  <code>5</code>
+                  <tab/>MaxDef</p>
+            </td>
+         </tr>
+         <tr>
+            <td>
+               <p class="td">
+                  <a name="$/HVAC/&lt;HVACzone-instance&gt;/IntTemp"/>
+                  <code class="Box">——</code>
+                  <code class="BoxBold">IntTemp</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box"/>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">float</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">1..1</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">P</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">Gets measured temp for the HVAC Zone Instance, in Deg C (###Celsius??)</p>
+            </td>
+         </tr>
+         <tr>
+            <td>
+               <p class="td">
+                  <a name="$/HVAC/&lt;HVACzone-instance&gt;/DesiredIntTemp"/>
+                  <code class="Box">——</code>
+                  <code class="BoxBold">DesiredIntTemp</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box"/>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">float</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">1..1</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">P</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">Sets desired temp for the HVAC zone instance, in degrees C (###Celsius??)</p>
+            </td>
+         </tr>
+         <tr>
+            <td>
+               <p class="td">
+                  <a name="$/HVAC/&lt;HVACzone-instance&gt;/VentTimeOn"/>
+                  <code class="Box">——</code>
+                  <code class="BoxBold">VentTimeOn</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box"/>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">time</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">1..1</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">P</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">Gets and sets the turn on time for the HVAC Stationary vent</p>
+            </td>
+         </tr>
+         <tr>
+            <td>
+               <p class="td">
+                  <a name="$/HVAC/&lt;HVACzone-instance&gt;/VentDuration"/>
+                  <code class="Box">——</code>
+                  <code class="BoxBold">VentDuration</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box"/>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">float</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">1..1</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">P</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">Gets and sets the turn on time for the HVAC Stationary vent, in seconds</p>
+            </td>
+         </tr>
+         <tr>
+            <td>
+               <p class="td">
+                  <a name="$/HVAC/&lt;HVACzone-instance&gt;/VentState"/>
+                  <code class="Box">——</code>
+                  <code class="BoxBold">VentState</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box"/>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">int</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">1..1</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">P</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">Gets and sets the state for the HVAC Stationary vent, in milliseconds(### ms? use
+				s)</p>
+               <h4 class="Heading4">Value<tab/>Description</h4>
+               <p class="property">
+                  <code>1</code>
+                  <tab/>Off</p>
+               <p class="property">
+                  <code>2</code>
+                  <tab/>On</p>
+               <p class="property">
+                  <code>3</code>
+                  <tab/>Set</p>
+            </td>
+         </tr>
+         <tr>
+            <td>
+               <p class="td">
+                  <a name="$/HVAC/&lt;HVACzone-instance&gt;/RearDefState"/>
+                  <code class="Box">——</code>
+                  <code class="BoxBold">RearDefState</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box"/>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">int</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">1..1</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">P</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">Gets and sets the state for the Rear Defroster</p>
+               <h4 class="Heading4">Value<tab/>Description</h4>
+               <p class="property">
+                  <code>1</code>
+                  <tab/>Off</p>
+               <p class="property">
+                  <code>2</code>
+                  <tab/>On</p>
+            </td>
+         </tr>
+         <tr>
+            <td>
+               <p class="td">
+                  <a name="$/HVAC/&lt;HVACzone-instance&gt;/RearDefInterval"/>
+                  <code class="Box">——</code>
+                  <code class="BoxBold">RearDefInterval</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box"/>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">int</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">1..1</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">P</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">Gets and sets the on time interval for the Rear Defroster in seconds</p>
+            </td>
+         </tr>
+         <tr>
+            <td>
+               <p class="td">
+                  <a name="$/HVAC/&lt;HVACzone-instance&gt;/SWHeatState"/>
+                  <code class="Box">——</code>
+                  <code class="BoxBold">SWHeatState</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box"/>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">int</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">1..1</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">P</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">Gets and sets the state for the steering wheel heater</p>
+               <h4 class="Heading4">Value<tab/>Description</h4>
+               <p class="property">
+                  <code>1</code>
+                  <tab/>Off</p>
+               <p class="property">
+                  <code>2</code>
+                  <tab/>On</p>
+               <p class="property">
+                  <code>3</code>
+                  <tab/>Set</p>
+            </td>
+         </tr>
+         <tr>
+            <td>
+               <p class="td">
+                  <a name="$/HVAC/&lt;HVACzone-instance&gt;/SWHeatTimeOn"/>
+                  <code class="Box">——</code>
+                  <code class="BoxBold">SWHeatTimeOn</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box"/>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">time</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">1..1</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">P</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">Gets and sets the turn on time for the steering wheel heater</p>
+            </td>
+         </tr>
+         <tr>
+            <td>
+               <p class="td">
+                  <a name="$/HVAC/&lt;HVACzone-instance&gt;/SWHeatDuration"/>
+                  <code class="Box">——</code>
+                  <code class="BoxBold">SWHeatDuration</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box"/>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">int</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">1..1</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">P</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">Gets and sets the on time interval duration for the steering wheel heater, in
+				seconds</p>
+            </td>
+         </tr>
+         <tr>
+            <td>
+               <p class="td">
+                  <a name="$/HVAC/&lt;flap-instance&gt;"/>
+                  <code class="Box">—</code>
+                  <code class="BoxBold">&lt;flap-instance&gt;</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box"/>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">node</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">1</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">P</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">Interior node that represents the HVAC Air flaps for the HVAC Zone</p>
+               <h4 class="Heading4">Name<tab/>Description</h4>
+               <p class="property">
+                  <code>F</code>
+                  <tab/>Floor</p>
+               <p class="property">
+                  <code>D</code>
+                  <tab/>Defroster</p>
+               <p class="property">
+                  <code>V</code>
+                  <tab/>Vent</p>
+               <p class="property">
+                  <code>R</code>
+                  <tab/>Recirculate/Fresh</p>
+            </td>
+         </tr>
+         <tr>
+            <td>
+               <p class="td">
+                  <a name="$/HVAC/&lt;flap-instance&gt;/HVACAirLevel"/>
+                  <code class="Box">——</code>
+                  <code class="BoxBold">HVACAirLevel</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box"/>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">float</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">1..1</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">P</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">Gets and Sets the HVAC Air Opening Level for the flap instance</p>
+               <h4 class="Heading4">Value<tab/>Description</h4>
+               <p class="property">
+                  <code>0</code>
+                  <tab/>Off</p>
+               <p class="property">
+                  <code>100</code>
+                  <tab/>Full Open</p>
+            </td>
+         </tr>
+         <tr>
+            <td>
+               <p class="td">
+                  <a name="$/HVAC/SteeringColumn"/>
+                  <code class="Box">—</code>
+                  <code class="BoxBold">SteeringColumn</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box"/>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">node</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">1</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">P</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">Interior node that represents the Steering Column</p>
+            </td>
+         </tr>
+         <tr>
+            <td>
+               <p class="td">
+                  <a name="$/HVAC/SteeringColumn/ColumnTilt"/>
+                  <code class="Box">——</code>
+                  <code class="BoxBold">ColumnTilt</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box"/>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">float</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">0..1</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">P</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">Sets or gets the vertical tilt position of the steering column in percent of the maximum tilt
+				range</p>
+               <h4 class="Heading4">Name<tab/>Description</h4>
+               <p class="property">
+                  <code>0, 100</code>
+                  <tab/>Range</p>
+               <p class="property">
+                  <code>0</code>
+                  <tab/>Full Down Tilt</p>
+               <p class="property">
+                  <code>100</code>
+                  <tab/>Full Up Tilt</p>
+            </td>
+         </tr>
+         <tr>
+            <td>
+               <p class="td">
+                  <a name="$/HVAC/SteeringColumn/ColumnTelescope"/>
+                  <code class="Box">——</code>
+                  <code class="BoxBold">ColumnTelescope</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box"/>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">float</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">0..1</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">P</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">Sets or gets the telescoping position of the steering column in percent of the maximum extension
+				range</p>
+               <h4 class="Heading4">Value<tab/>Description</h4>
+               <p class="property">
+                  <code>100, -100</code>
+                  <tab/>Range</p>
+               <p class="property">
+                  <code>0</code>
+                  <tab/>Fully Retracted Position</p>
+               <p class="property">
+                  <code>100</code>
+                  <tab/>Fully Extended position</p>
+            </td>
+         </tr>
+         <tr>
+            <td>
+               <p class="td">
+                  <a name="$/HVAC/SteeringColumn/LockState"/>
+                  <code class="Box">——</code>
+                  <code class="BoxBold">LockState</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box"/>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">bool</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">1..1</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">P</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">Sets or gets the steering column lock state</p>
+               <h4 class="Heading4">Value<tab/>Description</h4>
+               <p class="property">
+                  <code>TRUE</code>
+                  <tab/>Locked</p>
+               <p class="property">
+                  <code>FALSE</code>
+                  <tab/>Unlocked</p>
+            </td>
+         </tr>
+         <tr>
+            <td>
+               <p class="td">
+                  <a name="$/HVAC/Pedals"/>
+                  <code class="Box">—</code>
+                  <code class="BoxBold">Pedals</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box"/>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">node</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">1..1</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">P</code>
+               </p>
+            </td>
+            <td>
+               <p class="td"/>
+            </td>
+         </tr>
+         <tr>
+            <td>
+               <p class="td">
+                  <a name="$/HVAC/Pedals/PedalPosition"/>
+                  <code class="Box">——</code>
+                  <code class="BoxBold">PedalPosition</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box"/>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">float</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">0..1</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">P</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">Sets or gets the Pedal assembly position in percent of the maximum extension
+				range</p>
+            </td>
+         </tr>
+         <tr>
+            <td>
+               <p class="td">
+                  <a name="$/HVAC/Seats"/>
+                  <code class="Box">—</code>
+                  <code class="BoxBold">Seats</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box"/>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">node</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">1..1</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">P</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">Interior node that represents the seats of the vehicle</p>
+            </td>
+         </tr>
+         <tr>
+            <td>
+               <p class="td">
+                  <a name="$/HVAC/Seats/&lt;seat-instance&gt;"/>
+                  <code class="Box">——</code>
+                  <code class="BoxBold">&lt;seat-instance&gt;</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box"/>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">node</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">1</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">P</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">Interior node that represents a specific seat or seating position instance of the
+				vehicle</p>
+               <h4 class="Heading4">Name<tab/>Description</h4>
+               <p class="property">
+                  <code>L1</code>
+                  <tab/>Left Front seat, or left front portion of front bench seat</p>
+               <p class="property">
+                  <code>R1</code>
+                  <tab/>Right Front seat or Right Front portion of front bench seat</p>
+               <p class="property">
+                  <code>M1</code>
+                  <tab/>Middle front seat or middle portion of front bench seat</p>
+               <p class="property">
+                  <code>X1</code>
+                  <tab/>Entire front bench seat unit</p>
+               <p class="property">
+                  <code>L2</code>
+                  <tab/>Left second row seat, or left rear portion of second row bench seat</p>
+               <p class="property">
+                  <code>M2</code>
+                  <tab/>Middle second row seat, or middle rear portion of second row bench seat</p>
+               <p class="property">
+                  <code>R2</code>
+                  <tab/>Right second row seat, or right rear portion of second row bench seat</p>
+               <p class="property">
+                  <code>X2</code>
+                  <tab/>Entire second row bench seat</p>
+               <p class="property">
+                  <code>L3</code>
+                  <tab/>Left third row seat, or left rear portion of third row bench seat</p>
+               <p class="property">
+                  <code>M3</code>
+                  <tab/>Middle third row seat, or middle rear portion of third row bench seat</p>
+               <p class="property">
+                  <code>R3</code>
+                  <tab/>Right third row seat, or right rear portion of third row bench seat</p>
+               <p class="property">
+                  <code>X3</code>
+                  <tab/>Entire third row bench seat</p>
+               <p class="property">
+                  <code>L4</code>
+                  <tab/>Left fourth row seat, or left rear portion of fourth row bench seat</p>
+               <p class="property">
+                  <code>M4</code>
+                  <tab/>Middle fourth row seat, or middle rear portion of fourth row bench seat</p>
+               <p class="property">
+                  <code>R4</code>
+                  <tab/>Right fourth row seat, or right rear portion of fourth row bench seat</p>
+               <p class="property">
+                  <code>X4</code>
+                  <tab/>Entire fourth row bench seat</p>
+               <p class="property">
+                  <code>L5</code>
+                  <tab/>Left fifth row seat, or left rear portion of fifth row bench seat</p>
+               <p class="property">
+                  <code>M5</code>
+                  <tab/>Middle fifth row seat, or middle rear portion of fifth row bench seat</p>
+               <p class="property">
+                  <code>R5</code>
+                  <tab/>Right fifth row seat, or right rear portion of fifth row bench seat</p>
+               <p class="property">
+                  <code>X5</code>
+                  <tab/>Entire fifth row bench seat</p>
+            </td>
+         </tr>
+         <tr>
+            <td>
+               <p class="td">
+                  <a name="$/HVAC/Seats/&lt;seat-instance&gt;/Occupied"/>
+                  <code class="Box">———</code>
+                  <code class="BoxBold">Occupied</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box"/>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">int</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">0..1</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">P</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">Gets the occupancy state of the seat Position</p>
+               <h4 class="Heading4">Value<tab/>Description</h4>
+               <p class="property">
+                  <code>1</code>
+                  <tab/>Un-Occupied</p>
+               <p class="property">
+                  <code>2</code>
+                  <tab/>Occupied</p>
+               <p class="property">
+                  <code>3</code>
+                  <tab/>Child Seat</p>
+            </td>
+         </tr>
+         <tr>
+            <td>
+               <p class="td">
+                  <a name="$/HVAC/Seats/&lt;seat-instance&gt;/Mass"/>
+                  <code class="Box">———</code>
+                  <code class="BoxBold">Mass</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box"/>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">float</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">0..1</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">P</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">Gets the Mass measure for the occupant of the seat Position</p>
+               <h4 class="Heading4">Value<tab/>Description</h4>
+               <p class="property">
+                  <code>0 ..
+									100</code>
+                  <tab/>
+               </p>
+               <p class="property">
+                  <code>0</code>
+                  <tab/>No Measurable mass</p>
+               <p class="property">
+                  <code>100</code>
+                  <tab/>Maximum measurable mass</p>
+            </td>
+         </tr>
+         <tr>
+            <td>
+               <p class="td">
+                  <a name="$/HVAC/Seats/&lt;seat-instance&gt;/SeatBelt"/>
+                  <code class="Box">———</code>
+                  <code class="BoxBold">SeatBelt</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box"/>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">int</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">0..1</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">P</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">Gets the seatbelt state for the seat position</p>
+               <h4 class="Heading4">Value<tab/>Description</h4>
+               <p class="property">
+                  <code>1</code>
+                  <tab/>Un-Buckled</p>
+               <p class="property">
+                  <code>2</code>
+                  <tab/>Buckled</p>
+               <p class="property">
+                  <code>3</code>
+                  <tab/>Tensioner Deployed</p>
+            </td>
+         </tr>
+         <tr>
+            <td>
+               <p class="td">
+                  <a name="$/HVAC/Seats/&lt;seat-instance&gt;/&lt;axis-instance&gt;"/>
+                  <code class="Box">———</code>
+                  <code class="BoxBold">&lt;axis-instance&gt;</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box"/>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">node</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">1</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">P</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">Interior node that represents the control axes of the seats of the vehicle. The node name is one
+					of:</p>
+               <h4 class="Heading4">Name<tab/>Description</h4>
+               <p class="property">
+                  <code>SB</code>
+                  <tab/>Seat Bottom</p>
+               <p class="property">
+                  <code>SBF</code>
+                  <tab/>Seat Bottom Front</p>
+               <p class="property">
+                  <code>SBR</code>
+                  <tab/>Seat Bottom Rear</p>
+               <p class="property">
+                  <code>SBK</code>
+                  <tab/>Seat Back</p>
+               <p class="property">
+                  <code>HR</code>
+                  <tab/>Headrest</p>
+               <p class="property">
+                  <code>SK</code>
+                  <tab/>Knee Support</p>
+               <p class="property">
+                  <code>SBBL</code>
+                  <tab/>Seat Bottom Bolster Left</p>
+               <p class="property">
+                  <code>SBKR</code>
+                  <tab/>Seat Back Bolster Left</p>
+               <p class="property">
+                  <code>SBBR</code>
+                  <tab/>Seat Bottom Bolster Right</p>
+               <p class="property">
+                  <code>SBKR</code>
+                  <tab/>Seat Back Bolster Right</p>
+               <p class="property">
+                  <code>SL</code>
+                  <tab/>Seat Lumbar Support</p>
+            </td>
+         </tr>
+         <tr>
+            <td>
+               <p class="td">
+                  <a name="$/HVAC/Seats/&lt;seat-instance&gt;/&lt;axis-instance&gt;/VerticalPosition"/>
+                  <code class="Box">————</code>
+                  <code class="BoxBold">VerticalPosition</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box"/>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">float</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">0..1</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">P</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">Gets and/or Sets the Seat Axis vertical position in percent of range of
+						motion</p>
+               <h4 class="Heading4">Value<tab/>Description</h4>
+               <p class="property">
+                  <code>0 ..
+									100</code>
+                  <tab/>Range</p>
+               <p class="property">
+                  <code>0</code>
+                  <tab/>Minimum Height</p>
+               <p class="property">
+                  <code>100</code>
+                  <tab/>Maximum height</p>
+            </td>
+         </tr>
+         <tr>
+            <td>
+               <p class="td">
+                  <a name="$/HVAC/Seats/&lt;seat-instance&gt;/&lt;axis-instance&gt;/LongPosition"/>
+                  <code class="Box">————</code>
+                  <code class="BoxBold">LongPosition</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box"/>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">float</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">0..1</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">P</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">Gets and/or Sets the Seat Axis longitudinal position in percent of range of
+						motion</p>
+               <h4 class="Heading4">Value<tab/>Description</h4>
+               <p class="property">
+                  <code>0 ..
+									100</code>
+                  <tab/>Range</p>
+               <p class="property">
+                  <code>0</code>
+                  <tab/>Maximum Rearward</p>
+               <p class="property">
+                  <code>100</code>
+                  <tab/>Maximum Forward</p>
+            </td>
+         </tr>
+         <tr>
+            <td>
+               <p class="td">
+                  <a name="$/HVAC/Seats/&lt;seat-instance&gt;/&lt;axis-instance&gt;/LatPosition"/>
+                  <code class="Box">————</code>
+                  <code class="BoxBold">LatPosition</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box"/>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">float</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">0..1</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">P</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">Gest and/or Sets the Seat Axis lateral position in percent of range of
+						motion</p>
+               <h4 class="Heading4">Value<tab/>Description</h4>
+               <p class="property">
+                  <code>0 ..
+									100</code>
+                  <tab/>Range</p>
+               <p class="property">
+                  <code>-100</code>
+                  <tab/>Maximum Left</p>
+               <p class="property">
+                  <code>100</code>
+                  <tab/>Maximum Right</p>
+            </td>
+         </tr>
+         <tr>
+            <td>
+               <p class="td">
+                  <a name="$/HVAC/Seats/&lt;seat-instance&gt;/&lt;axis-instance&gt;/TiltPosition"/>
+                  <code class="Box">————</code>
+                  <code class="BoxBold">TiltPosition</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box"/>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">float</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">0..1</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">P</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">Gest and/or Sets the Seat Axis tilt position in percent of range of motion</p>
+               <h4 class="Heading4">Value<tab/>Description</h4>
+               <p class="property">
+                  <code>0,100</code>
+                  <tab/>Range</p>
+               <p class="property">
+                  <code>0</code>
+                  <tab/>Maximum Rearward</p>
+               <p class="property">
+                  <code>100</code>
+                  <tab/>Maximum Forward</p>
+            </td>
+         </tr>
+         <tr>
+            <td>
+               <p class="td">
+                  <a name="$/HVAC/Seats/&lt;seat-instance&gt;/&lt;heater-instance&gt;"/>
+                  <code class="Box">———</code>
+                  <code class="BoxBold">&lt;heater-instance&gt;</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box"/>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">node</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">1</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">P</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">Interior node that represents the heaters for the seats of the vehicle. The name must be one
+					of:</p>
+               <h4 class="Heading4">Name<tab/>Description</h4>
+               <p class="property">
+                  <code>HBF</code>
+                  <tab/>Seat Bottom Front</p>
+               <p class="property">
+                  <code>HBR</code>
+                  <tab/>Seat Bottom Rear</p>
+               <p class="property">
+                  <code>HRU</code>
+                  <tab/>Seat Back Upper</p>
+               <p class="property">
+                  <code>HRL</code>
+                  <tab/>Seat Back Lower</p>
+            </td>
+         </tr>
+         <tr>
+            <td>
+               <p class="td">
+                  <a name="$/HVAC/Seats/&lt;seat-instance&gt;/&lt;heater-instance&gt;/HeatState"/>
+                  <code class="Box">————</code>
+                  <code class="BoxBold">HeatState</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box"/>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">int</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">1..1</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">P</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">Sets or gets the state of the seat heater</p>
+               <h4 class="Heading4">Value<tab/>Description</h4>
+               <p class="property">
+                  <code>1</code>
+                  <tab/>On</p>
+               <p class="property">
+                  <code>2</code>
+                  <tab/>Off</p>
+               <p class="property">
+                  <code>3</code>
+                  <tab/>Set</p>
+            </td>
+         </tr>
+         <tr>
+            <td>
+               <p class="td">
+                  <a name="$/HVAC/Seats/&lt;seat-instance&gt;/&lt;heater-instance&gt;/HeatTime"/>
+                  <code class="Box">————</code>
+                  <code class="BoxBold">HeatTime</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box"/>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">time</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">1..1</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">P</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">Sets and Gets the time the Seat Heater is set to turn on</p>
+            </td>
+         </tr>
+         <tr>
+            <td>
+               <p class="td">
+                  <a name="$/HVAC/Seats/&lt;seat-instance&gt;/&lt;heater-instance&gt;/HeatInterval"/>
+                  <code class="Box">————</code>
+                  <code class="BoxBold">HeatInterval</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box"/>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">float</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">1..1</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">P</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">Sets and gest the seat heater On interval duration in seconds</p>
+            </td>
+         </tr>
+         <tr>
+            <td>
+               <p class="td">
+                  <a name="$/HVAC/Seats/&lt;seat-instance&gt;/&lt;cooler-instance&gt;"/>
+                  <code class="Box">———</code>
+                  <code class="BoxBold">&lt;cooler-instance&gt;</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box"/>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">node</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">1</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">P</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">Interior node that represents the coolers for the seats of the vehicle.</p>
+               <h4 class="Heading4">Name<tab/>Description</h4>
+               <p class="property">
+                  <code>CBF</code>
+                  <tab/>Seat Bottom Front</p>
+               <p class="property">
+                  <code>CBR</code>
+                  <tab/>Seat Bottom Rear</p>
+               <p class="property">
+                  <code>CRU</code>
+                  <tab/>Seat Back Upper</p>
+               <p class="property">
+                  <code>CRL</code>
+                  <tab/>Seat Back Lower</p>
+            </td>
+         </tr>
+         <tr>
+            <td>
+               <p class="td">
+                  <a name="$/HVAC/Seats/&lt;seat-instance&gt;/&lt;cooler-instance&gt;/CoolState"/>
+                  <code class="Box">————</code>
+                  <code class="BoxBold">CoolState</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box"/>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">int</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">1..1</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">P</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">Sets or gets the state of the seat cooler</p>
+               <h4 class="Heading4">Value<tab/>Description</h4>
+               <p class="property">
+                  <code>1</code>
+                  <tab/>On</p>
+               <p class="property">
+                  <code>2</code>
+                  <tab/>Off</p>
+               <p class="property">
+                  <code>3</code>
+                  <tab/>Set</p>
+            </td>
+         </tr>
+         <tr>
+            <td>
+               <p class="td">
+                  <a name="$/HVAC/Seats/&lt;seat-instance&gt;/&lt;cooler-instance&gt;/CoolTime"/>
+                  <code class="Box">————</code>
+                  <code class="BoxBold">CoolTime</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box"/>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">time</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">1..1</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">P</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">Sets and Gets the time the Seat cooler is set to turn on</p>
+            </td>
+         </tr>
+         <tr>
+            <td>
+               <p class="td">
+                  <a name="$/HVAC/Seats/&lt;seat-instance&gt;/&lt;cooler-instance&gt;/CoolInterval"/>
+                  <code class="Box">————</code>
+                  <code class="BoxBold">CoolInterval</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box"/>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">float</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">1..1</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">P</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">Sets and gets the seat cooler On interval duration in seconds</p>
+            </td>
+         </tr>
+         <tr>
+            <td>
+               <p class="td">
+                  <a name="$/HVAC/InteriorLights"/>
+                  <code class="Box">—</code>
+                  <code class="BoxBold">InteriorLights</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box"/>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">node</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">1</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">P</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">Interior node that represents the interior lights of the vehicle</p>
+            </td>
+         </tr>
+         <tr>
+            <td>
+               <p class="td">
+                  <a name="$/HVAC/InteriorLights/&lt;interior-light-type&gt;"/>
+                  <code class="Box">——</code>
+                  <code class="BoxBold">&lt;interior-light-type&gt;</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box"/>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">node</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">1</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">P</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">Interior node that represents an instance of the interior lights. The node name is one
+				of:</p>
+               <h4 class="Heading4">Name<tab/>Description</h4>
+               <p class="property">
+                  <code>F</code>
+                  <tab/>Front cabin overhead lamp</p>
+               <p class="property">
+                  <code>R</code>
+                  <tab/>Rear cabin overhead lamp</p>
+               <p class="property">
+                  <code>FL</code>
+                  <tab/>Left front map light</p>
+               <p class="property">
+                  <code>FR</code>
+                  <tab/>Right front map light</p>
+               <p class="property">
+                  <code>RL</code>
+                  <tab/>Left rear passengerï¿½s map light</p>
+               <p class="property">
+                  <code>RR</code>
+                  <tab/>Right rear passengerï¿½s map light</p>
+               <p class="property">
+                  <code>RC</code>
+                  <tab/>Rear Cargo Bay Lamp</p>
+               <p class="property">
+                  <code>LG</code>
+                  <tab/>Liftgate Lamp</p>
+               <p class="property">
+                  <code>FLE</code>
+                  <tab/>Left Front Entry Lamp</p>
+               <p class="property">
+                  <code>RLE</code>
+                  <tab/>Right Front Entry Lamp</p>
+               <p class="property">
+                  <code>FRE</code>
+                  <tab/>Left Rear Entry Lamp</p>
+               <p class="property">
+                  <code>RRE</code>
+                  <tab/>Right Rear Entry Lamp</p>
+               <p class="property">
+                  <code>T</code>
+                  <tab/>Trunk Lamp</p>
+               <p class="property">
+                  <code>G</code>
+                  <tab/>Glove Box Lamp</p>
+            </td>
+         </tr>
+         <tr>
+            <td>
+               <p class="td">
+                  <a name="$/HVAC/InteriorLights/&lt;interior-light-type&gt;/LampLevel"/>
+                  <code class="Box">———</code>
+                  <code class="BoxBold">LampLevel</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box"/>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">float</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">0..1</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">P</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">Gets and/or Sets the Illumination level of the of the interior light instance</p>
+               <h4 class="Heading4">Value<tab/>Description</h4>
+               <p class="property">
+                  <code>0</code>
+                  <tab/>Off</p>
+               <p class="property">
+                  <code>100</code>
+                  <tab/>Fully on</p>
+            </td>
+         </tr>
+         <tr>
+            <td>
+               <p class="td">
+                  <a name="$/HVAC/InteriorLights/&lt;interior-light-type&gt;/Fade"/>
+                  <code class="Box">———</code>
+                  <code class="BoxBold">Fade</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box"/>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">float</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">0..1</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">P</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">Sets or gets the fade time interval in seconds</p>
+               <h4 class="Heading4">Value<tab/>Description</h4>
+               <p class="property">
+                  <code>0</code>
+                  <tab/>No fade (Hard On/Off)</p>
+               <p class="property">
+                  <code>100</code>
+                  <tab/>100% of the maximum fade time</p>
+            </td>
+         </tr>
+         <tr>
+            <td>
+               <p class="td">
+                  <a name="$/HVAC/InteriorLights/&lt;interior-light-type&gt;/Delay"/>
+                  <code class="Box">———</code>
+                  <code class="BoxBold">Delay</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box"/>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">float</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">0..1</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">P</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">Sets and or gets the time interval for the light on/off or off/on delay in
+					seconds</p>
+               <h4 class="Heading4">Value<tab/>Description</h4>
+               <p class="property">
+                  <code>0</code>
+                  <tab/>No delay</p>
+               <p class="property">
+                  <code>100</code>
+                  <tab/>100% of the maximum delay time</p>
+            </td>
+         </tr>
+      </table>
+   </body>
+</html>

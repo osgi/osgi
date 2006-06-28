@@ -1,0 +1,3047 @@
+<?xml version="1.0" encoding="utf-8"?>
+<html>
+   <body>
+      <h1 class="Heading1">VehicleBody Managed Object<a name="VehicleBody"/>
+         <a index="VehicleBody"/>
+      </h1>
+      <p/>
+      <table class="Classes">
+         <tr>
+            <th width="3cm">Path</th>
+            <th width="1cm" angle="270">Access</th>
+            <th width="1cm" angle="270">Type</th>
+            <th width="0.7cm" angle="270">Cardin.</th>
+            <th width="0.5cm" angle="270">Scope</th>
+            <th width="6.5cm">Description</th>
+         </tr>
+         <tr>
+            <td>
+               <p class="td">
+                  <a name="$/VehicleBody/Doors"/>
+                  <code class="Box">—</code>
+                  <code class="BoxBold">Doors</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box"/>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">node</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">1..1</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">P</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">Interior node that represents the vehicle doors</p>
+            </td>
+         </tr>
+         <tr>
+            <td>
+               <p class="td">
+                  <a name="$/VehicleBody/Doors/&lt;door-instance&gt;"/>
+                  <code class="Box">——</code>
+                  <code class="BoxBold">&lt;door-instance&gt;</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box"/>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">node</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">1</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">P</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">Interior node that represents an instance of the vehicle doors. The name is one
+				of:</p>
+               <h4 class="Heading4">Name<tab/>Description</h4>
+               <p class="property">
+                  <code>H</code>
+                  <tab/>Front hood</p>
+               <p class="property">
+                  <code>FL</code>
+                  <tab/>Front Left Side Door</p>
+               <p class="property">
+                  <code>FR</code>
+                  <tab/>Front Right Side Door</p>
+               <p class="property">
+                  <code>RL</code>
+                  <tab/>Rear Left Side Door</p>
+               <p class="property">
+                  <code>RR</code>
+                  <tab/>Rear Right Side Door</p>
+               <p class="property">
+                  <code>RH</code>
+                  <tab/>Hatchback or Rear Lifting Door</p>
+               <p class="property">
+                  <code>LS</code>
+                  <tab/>Left Side Sliding Door</p>
+               <p class="property">
+                  <code>RS</code>
+                  <tab/>Right Side Sliding Door</p>
+               <p class="property">
+                  <code>T</code>
+                  <tab/>Trunk</p>
+               <p class="property">
+                  <code>RSW</code>
+                  <tab/>Rear Swinging Door</p>
+            </td>
+         </tr>
+         <tr>
+            <td>
+               <p class="td">
+                  <a name="$/VehicleBody/Doors/&lt;door-instance&gt;/DoorPosition"/>
+                  <code class="Box">———</code>
+                  <code class="BoxBold">DoorPosition</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box"/>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">float</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">0..1</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">P</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">Gets and/or sets the position of the door instance in percent</p>
+               <h4 class="Heading4">Value<tab/>Description</h4>
+               <p class="property">
+                  <code>0</code>
+                  <tab/>Closed</p>
+               <p class="property">
+                  <code>1 ..
+									5</code>
+                  <tab/>Ajar</p>
+               <p class="property">
+                  <code>6 ..
+									99</code>
+                  <tab/>Intermediate Open Positions</p>
+               <p class="property">
+                  <code>100</code>
+                  <tab/>Fully Open</p>
+            </td>
+         </tr>
+         <tr>
+            <td>
+               <p class="td">
+                  <a name="$/VehicleBody/Doors/&lt;door-instance&gt;/LockState"/>
+                  <code class="Box">———</code>
+                  <code class="BoxBold">LockState</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box"/>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">int</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">0..1</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">P</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">Sets and/or gets state of the door instance lock</p>
+               <h4 class="Heading4">Value<tab/>Description</h4>
+               <p class="property">
+                  <code>1</code>
+                  <tab/>Locked</p>
+               <p class="property">
+                  <code>2</code>
+                  <tab/>Unlocked</p>
+               <p class="property">
+                  <code>3</code>
+                  <tab/>Child Locked</p>
+            </td>
+         </tr>
+         <tr>
+            <td>
+               <p class="td">
+                  <a name="$/VehicleBody/Windows"/>
+                  <code class="Box">—</code>
+                  <code class="BoxBold">Windows</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box"/>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">node</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">1..1</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">P</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">Groups all windows</p>
+            </td>
+         </tr>
+         <tr>
+            <td>
+               <p class="td">
+                  <a name="$/VehicleBody/Windows/&lt;window-instance&gt;"/>
+                  <code class="Box">——</code>
+                  <code class="BoxBold">&lt;window-instance&gt;</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box"/>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">node</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">1</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">P</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">Interior node that represents an instance of the vehicle windows</p>
+               <h4 class="Heading4">Name<tab/>Description</h4>
+               <p class="property">
+                  <code>FW</code>
+                  <tab/>Front Windscreen</p>
+               <p class="property">
+                  <code>FL</code>
+                  <tab/>Front Left Side Window</p>
+               <p class="property">
+                  <code>FR</code>
+                  <tab/>Front Right Side \Window</p>
+               <p class="property">
+                  <code>RL</code>
+                  <tab/>Left Rear Side Window</p>
+               <p class="property">
+                  <code>RR</code>
+                  <tab/>Right Rear Side Window</p>
+               <p class="property">
+                  <code>B</code>
+                  <tab/>Rear Window/Back Glass</p>
+               <p class="property">
+                  <code>FLB</code>
+                  <tab/>Additional Left Side Window</p>
+               <p class="property">
+                  <code>FRB</code>
+                  <tab/>Additional Right Side Window</p>
+               <p class="property">
+                  <code>RLB</code>
+                  <tab/>Additional Left Rear Side Window</p>
+               <p class="property">
+                  <code>RRB</code>
+                  <tab/>Additional Rght Rear Side Window</p>
+               <p class="property">
+                  <code>BB</code>
+                  <tab/>Additional or Separate Right Side Back Glass</p>
+               <p class="property">
+                  <code>BC</code>
+                  <tab/>Additional or Separate Left Side Back Glass</p>
+               <p class="property">
+                  <code>SR</code>
+                  <tab/>Sunroof/Moonroof</p>
+               <p class="property">
+                  <code>TR</code>
+                  <tab/>Tilt Roof (different mode for sun roof treated as a sdifferent window)</p>
+            </td>
+         </tr>
+         <tr>
+            <td>
+               <p class="td">
+                  <a name="$/VehicleBody/Windows/&lt;window-instance&gt;/WindowPosition"/>
+                  <code class="Box">———</code>
+                  <code class="BoxBold">WindowPosition</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box"/>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">float</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">0..1</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">P</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">Gets and/or sets the position of the window instance in percent</p>
+               <h4 class="Heading4">Value<tab/>Description</h4>
+               <p class="property">
+                  <code>0</code>
+                  <tab/>Closed</p>
+               <p class="property">
+                  <code>1 to 99</code>
+                  <tab/>Partly Open</p>
+               <p class="property">
+                  <code>100</code>
+                  <tab/>Fully Open</p>
+            </td>
+         </tr>
+         <tr>
+            <td>
+               <p class="td">
+                  <a name="$/VehicleBody/Windows/&lt;window-instance&gt;/LockState"/>
+                  <code class="Box">———</code>
+                  <code class="BoxBold">LockState</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box"/>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">Bool</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">0..1</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">P</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">Sets and/or gets state of the window lock</p>
+               <h4 class="Heading4">Value<tab/>Description</h4>
+               <p class="property">
+                  <code>TRUE</code>
+                  <tab/>Locked</p>
+               <p class="property">
+                  <code>FALSE</code>
+                  <tab/>Unlocked</p>
+            </td>
+         </tr>
+         <tr>
+            <td>
+               <p class="td">
+                  <a name="$/VehicleBody/Windows/&lt;window-instance&gt;/PinchState"/>
+                  <code class="Box">———</code>
+                  <code class="BoxBold">PinchState</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box"/>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">Bool</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">0..1</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">P</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">Gets state of the window anti Pinch Subsystem</p>
+               <h4 class="Heading4">Value<tab/>Description</h4>
+               <p class="property">
+                  <code>TRUE</code>
+                  <tab/>Nominal</p>
+               <p class="property">
+                  <code>FALSE</code>
+                  <tab/>Triggered</p>
+            </td>
+         </tr>
+         <tr>
+            <td>
+               <p class="td">
+                  <a name="$/VehicleBody/Windows/&lt;window-instance&gt;/ShadePosition"/>
+                  <code class="Box">———</code>
+                  <code class="BoxBold">ShadePosition</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box"/>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">float</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">0..1</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">P</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">Gets and/or Sets position of shade for Awindow Instance</p>
+               <h4 class="Heading4">Value<tab/>Description</h4>
+               <p class="property">
+                  <code>0</code>
+                  <tab/>Open</p>
+               <p class="property">
+                  <code>1 to 99</code>
+                  <tab/>Partly open</p>
+               <p class="property">
+                  <code>100</code>
+                  <tab/>Closed</p>
+            </td>
+         </tr>
+         <tr>
+            <td>
+               <p class="td">
+                  <a name="$/VehicleBody/RunningLamps"/>
+                  <code class="Box">—</code>
+                  <code class="BoxBold">RunningLamps</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box"/>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">node</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">1</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">P</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">Interior node that represents the running lamps of the vehicle</p>
+            </td>
+         </tr>
+         <tr>
+            <td>
+               <p class="td">
+                  <a name="$/VehicleBody/RunningLamps/DrivingLamps"/>
+                  <code class="Box">——</code>
+                  <code class="BoxBold">DrivingLamps</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box"/>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">node</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">1</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">P</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">Interior node that represents the Headlamps of the vehicle</p>
+            </td>
+         </tr>
+         <tr>
+            <td>
+               <p class="td">
+                  <a name="$/VehicleBody/RunningLamps/DrivingLamps/&lt;headlamp-instance&gt;"/>
+                  <code class="Box">———</code>
+                  <code class="BoxBold">&lt;headlamp-instance&gt;</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box"/>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">node</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">1</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">P</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">Interior node that represents a specific Headlamp of the vehicle.</p>
+               <h4 class="Heading4">Name<tab/>Description</h4>
+               <p class="property">
+                  <code>LL</code>
+                  <tab/>Left Low Beam Lamp</p>
+               <p class="property">
+                  <code>LH</code>
+                  <tab/>Left High Beam Lamp</p>
+               <p class="property">
+                  <code>RL</code>
+                  <tab/>Right Low Beam Lamp</p>
+               <p class="property">
+                  <code>RH</code>
+                  <tab/>Right High Beam Lamp</p>
+            </td>
+         </tr>
+         <tr>
+            <td>
+               <p class="td">
+                  <a name="$/VehicleBody/RunningLamps/DrivingLamps/&lt;headlamp-instance&gt;/LampState"/>
+                  <code class="Box">————</code>
+                  <code class="BoxBold">LampState</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box"/>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">int</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">0..1</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">P</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">Gets and sets the state of the headlamp instance</p>
+               <h4 class="Heading4">Value<tab/>Description</h4>
+               <p class="property">
+                  <code>1</code>
+                  <tab/>On</p>
+               <p class="property">
+                  <code>2</code>
+                  <tab/>Off</p>
+               <p class="property">
+                  <code>3</code>
+                  <tab/>Fault (get only)</p>
+            </td>
+         </tr>
+         <tr>
+            <td>
+               <p class="td">
+                  <a name="$/VehicleBody/RunningLamps/DrivingLamps/&lt;headlamp-instance&gt;/LampPosition"/>
+                  <code class="Box">————</code>
+                  <code class="BoxBold">LampPosition</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box"/>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">float</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">1..1</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">P</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">Gets and/or Sets the lateral position of the headamps</p>
+               <h4 class="Heading4">Value<tab/>Description</h4>
+               <p class="property">
+                  <code>100, -100</code>
+                  <tab/>Range</p>
+               <p class="property">
+                  <code>-100</code>
+                  <tab/>Full Left</p>
+               <p class="property">
+                  <code>0</code>
+                  <tab/>Center</p>
+               <p class="property">
+                  <code>100</code>
+                  <tab/>Full Right</p>
+            </td>
+         </tr>
+         <tr>
+            <td>
+               <p class="td">
+                  <a name="$/VehicleBody/RunningLamps/DrivingLamps/&lt;drivinglamp-instance&gt;"/>
+                  <code class="Box">———</code>
+                  <code class="BoxBold">&lt;drivinglamp-instance&gt;</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box"/>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">node</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">1</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">P</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">Interior node that represents a specific Driving Lamp of the vehicle.</p>
+               <h4 class="Heading4">Name<tab/>Description</h4>
+               <p class="property">
+                  <code>FLP</code>
+                  <tab/>Left Front Parking Lamp</p>
+               <p class="property">
+                  <code>FRP</code>
+                  <tab/>Right Front Parking Lamp</p>
+               <p class="property">
+                  <code>FLM</code>
+                  <tab/>Left Front Side Marker Lamp</p>
+               <p class="property">
+                  <code>FRM</code>
+                  <tab/>Right Front Side Marker Lamp</p>
+               <p class="property">
+                  <code>LT</code>
+                  <tab/>Left Rear Tail Lamp</p>
+               <p class="property">
+                  <code>RT</code>
+                  <tab/>Right Rear Tail Lamp</p>
+               <p class="property">
+                  <code>RLM</code>
+                  <tab/>Left Rear Side Marker Lamp</p>
+               <p class="property">
+                  <code>RRM</code>
+                  <tab/>Right Rear Side Marker Lamp</p>
+               <p class="property">
+                  <code>LPR</code>
+                  <tab/>Right License Plate Lamp</p>
+               <p class="property">
+                  <code>LPL</code>
+                  <tab/>Left License Plate Lamp</p>
+               <p class="property">
+                  <code>FLA</code>
+                  <tab/>Front Left Supplemental Lamp A</p>
+               <p class="property">
+                  <code>FLB</code>
+                  <tab/>Front Left Supplemental Lamp B</p>
+               <p class="property">
+                  <code>FRA</code>
+                  <tab/>Front Right Supplemental Lamp A</p>
+               <p class="property">
+                  <code>FRB</code>
+                  <tab/>Front Right Supplemental Lamp B</p>
+               <p class="property">
+                  <code>LA</code>
+                  <tab/>Left Side Supplemental Lamp A</p>
+               <p class="property">
+                  <code>RA</code>
+                  <tab/>Right Side Supplemental Lamp B</p>
+               <p class="property">
+                  <code>RLA</code>
+                  <tab/>Rear Left Supplemental Lamp A</p>
+               <p class="property">
+                  <code>RLB</code>
+                  <tab/>Rear Left Supplemental Lamp B</p>
+               <p class="property">
+                  <code>RRA</code>
+                  <tab/>Rear Right Supplemental Lamp A</p>
+               <p class="property">
+                  <code>RRB</code>
+                  <tab/>Rear Right Supplemental Lamp B</p>
+               <p class="property">
+                  <code>FL</code>
+                  <tab/>Front Left Turn Signal</p>
+               <p class="property">
+                  <code>FR</code>
+                  <tab/>Front Right Turn Signal</p>
+               <p class="property">
+                  <code>SLA</code>
+                  <tab/>Left Side Turn Signal A</p>
+               <p class="property">
+                  <code>SLB</code>
+                  <tab/>Left Side Turn Signal B</p>
+               <p class="property">
+                  <code>SRA</code>
+                  <tab/>Right Side Turn Signal A</p>
+               <p class="property">
+                  <code>SRB</code>
+                  <tab/>Right Side Turn Signal B</p>
+               <p class="property">
+                  <code>RL</code>
+                  <tab/>Rear Left Turn Signal</p>
+               <p class="property">
+                  <code>RR</code>
+                  <tab/>Rear Left Turn Signal</p>
+               <p class="property">
+                  <code>RL</code>
+                  <tab/>Rear Left Brake Lamp</p>
+               <p class="property">
+                  <code>RR</code>
+                  <tab/>Rear Right Brake Lamp</p>
+               <p class="property">
+                  <code>CHMSL</code>
+                  <tab/>Center Brake Lamp</p>
+               <p class="property">
+                  <code>RL</code>
+                  <tab/>Rear Left Backup Lamp</p>
+               <p class="property">
+                  <code>RR</code>
+                  <tab/>Rear Right Backup Lamp</p>
+               <p class="property">
+                  <code>FL</code>
+                  <tab/>Front Left Fog Lamp</p>
+               <p class="property">
+                  <code>FR</code>
+                  <tab/>Front Right Fog Lamp</p>
+               <p class="property">
+                  <code>RL</code>
+                  <tab/>Rear Left Fog Lamp</p>
+               <p class="property">
+                  <code>RR</code>
+                  <tab/>Rear Right Fog Lamp</p>
+            </td>
+         </tr>
+         <tr>
+            <td>
+               <p class="td">
+                  <a name="$/VehicleBody/RunningLamps/DrivingLamps/&lt;drivinglamp-instance&gt;/LampState"/>
+                  <code class="Box">————</code>
+                  <code class="BoxBold">LampState</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box"/>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">int</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">0..1</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">P</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">Gets the state of the Driving Lamp</p>
+               <h4 class="Heading4">Value<tab/>Description</h4>
+               <p class="property">
+                  <code>1</code>
+                  <tab/>On</p>
+               <p class="property">
+                  <code>2</code>
+                  <tab/>Off</p>
+               <p class="property">
+                  <code>3</code>
+                  <tab/>Fault</p>
+            </td>
+         </tr>
+         <tr>
+            <td>
+               <p class="td">
+                  <a name="$/VehicleBody/RunningLamps/DrivingLamps/Flasher"/>
+                  <code class="Box">———</code>
+                  <code class="BoxBold">Flasher</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box"/>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">node</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">1..1</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">P</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">Interior node that represents the signal flasher system</p>
+            </td>
+         </tr>
+         <tr>
+            <td>
+               <p class="td">
+                  <a name="$/VehicleBody/RunningLamps/DrivingLamps/Flasher/FlasherState"/>
+                  <code class="Box">————</code>
+                  <code class="BoxBold">FlasherState</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box"/>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">int</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">1..1</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">P</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">Sets or gets the stste of the flasher system</p>
+               <h4 class="Heading4">Value<tab/>Description</h4>
+               <p class="property">
+                  <code>1</code>
+                  <tab/>Off</p>
+               <p class="property">
+                  <code>2</code>
+                  <tab/>Left</p>
+               <p class="property">
+                  <code>3</code>
+                  <tab/>Right</p>
+               <p class="property">
+                  <code>4</code>
+                  <tab/>Hazard</p>
+            </td>
+         </tr>
+         <tr>
+            <td>
+               <p class="td">
+                  <a name="$/VehicleBody/RunningLamps/DrivingLamps/Flasher/FlasherDuty"/>
+                  <code class="Box">————</code>
+                  <code class="BoxBold">FlasherDuty</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box"/>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">float</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">1..1</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">P</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">Sets or gets the duty cycle of the flasher in percent</p>
+               <h4 class="Heading4">Value<tab/>Description</h4>
+               <p class="property">
+                  <code>0 ..
+									100</code>
+                  <tab/>Range Off to Continuous</p>
+            </td>
+         </tr>
+         <tr>
+            <td>
+               <p class="td">
+                  <a name="$/VehicleBody/RunningLamps/DrivingLamps/Flasher/FlasherPeriod"/>
+                  <code class="Box">————</code>
+                  <code class="BoxBold">FlasherPeriod</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box"/>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">float</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">1..1</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">P</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">Sets or gets the period between on cycles of the flasher</p>
+            </td>
+         </tr>
+         <tr>
+            <td>
+               <p class="td">
+                  <a name="$/VehicleBody/Mirrors"/>
+                  <code class="Box">—</code>
+                  <code class="BoxBold">Mirrors</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box"/>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">node</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">0..1</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">P</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">Interior node that represents the mirrors of the vehicle</p>
+            </td>
+         </tr>
+         <tr>
+            <td>
+               <p class="td">
+                  <a name="$/VehicleBody/Mirrors/&lt;mirror-instance&gt;"/>
+                  <code class="Box">——</code>
+                  <code class="BoxBold">&lt;mirror-instance&gt;</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box"/>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">node</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">1</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">P</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">Interior node that represents a specific mirror of the vehicle.</p>
+               <h4 class="Heading4">Name<tab/>Description</h4>
+               <p class="property">
+                  <code>IRM</code>
+                  <tab/>Inside rearview mirror</p>
+               <p class="property">
+                  <code>LOM</code>
+                  <tab/>Left outside rearview mirror</p>
+               <p class="property">
+                  <code>ROM</code>
+                  <tab/>Right outside rearview mirror</p>
+               <p class="property">
+                  <code>REAR</code>
+                  <tab/>Rear Mirror (to show ground while backing)</p>
+               <p class="property">
+                  <code>FORW</code>
+                  <tab/>Forward Mirror (to see the ground in front of the vehicle)</p>
+            </td>
+         </tr>
+         <tr>
+            <td>
+               <p class="td">
+                  <a name="$/VehicleBody/Mirrors/&lt;mirror-instance&gt;/Tilt"/>
+                  <code class="Box">———</code>
+                  <code class="BoxBold">Tilt</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box"/>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">float</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">0..1</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">P</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">Sets or gets the vertical tilt position of the mirror in percent</p>
+               <h4 class="Heading4">Value<tab/>Description</h4>
+               <p class="property">
+                  <code>-100 ..
+									-100</code>
+                  <tab/>Range full down to full up</p>
+            </td>
+         </tr>
+         <tr>
+            <td>
+               <p class="td">
+                  <a name="$/VehicleBody/Mirrors/&lt;mirror-instance&gt;/Pan"/>
+                  <code class="Box">———</code>
+                  <code class="BoxBold">Pan</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box"/>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">float</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">0..1</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">P</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">Sets or gets the horizontal pan position of the mirror</p>
+               <h4 class="Heading4">Value<tab/>Description</h4>
+               <p class="property">
+                  <code>-100 ..
+									-100</code>
+                  <tab/>Range full left to full right</p>
+            </td>
+         </tr>
+         <tr>
+            <td>
+               <p class="td">
+                  <a name="$/VehicleBody/Mirrors/&lt;mirror-instance&gt;/HeatState"/>
+                  <code class="Box">———</code>
+                  <code class="BoxBold">HeatState</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box"/>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">bool</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">0..1</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">P</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">Sets or gets the state of the mirror heater</p>
+               <h4 class="Heading4">Value<tab/>Description</h4>
+               <p class="property">
+                  <code>TRUE</code>
+                  <tab/>On</p>
+               <p class="property">
+                  <code>FALSE</code>
+                  <tab/>Off</p>
+            </td>
+         </tr>
+         <tr>
+            <td>
+               <p class="td">
+                  <a name="$/VehicleBody/Mirrors/&lt;mirror-instance&gt;/MirrorReflect"/>
+                  <code class="Box">———</code>
+                  <code class="BoxBold">MirrorReflect</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box"/>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">int</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">1..1</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">P</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">Sets or gets the state of the mirror reflective level in percent of the maximum
+					reflectivity</p>
+               <h4 class="Heading4">Value<tab/>Description</h4>
+               <p class="property">
+                  <code>0,100</code>
+                  <tab/>Range</p>
+               <p class="property">
+                  <code>0</code>
+                  <tab/>Minimum reflectivity</p>
+               <p class="property">
+                  <code>100</code>
+                  <tab/>Maximum reflectivity</p>
+            </td>
+         </tr>
+         <tr>
+            <td>
+               <p class="td">
+                  <a name="$/VehicleBody/Airbag"/>
+                  <code class="Box">—</code>
+                  <code class="BoxBold">Airbag</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box"/>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">node</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">1..1</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">P</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">Interior node that represents the supplemental airbag restraints for the
+			vehicle</p>
+            </td>
+         </tr>
+         <tr>
+            <td>
+               <p class="td">
+                  <a name="$/VehicleBody/Airbag/&lt;airbag-instance&gt;"/>
+                  <code class="Box">——</code>
+                  <code class="BoxBold">&lt;airbag-instance&gt;</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box"/>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">node</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">1</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">P</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">Interior node that represents the airbag instances for the vehicle</p>
+               <h4 class="Heading4">Name<tab/>Description</h4>
+               <p class="property">
+                  <code>FL</code>
+                  <tab/>Front Left Airbag</p>
+               <p class="property">
+                  <code>FR</code>
+                  <tab/>Front Right Airbag</p>
+               <p class="property">
+                  <code>FLL</code>
+                  <tab/>Front Left Side Lower Airbag</p>
+               <p class="property">
+                  <code>FRL</code>
+                  <tab/>Front Right Side Lower Airbag</p>
+               <p class="property">
+                  <code>FLU</code>
+                  <tab/>Front Left Side Upper Airbag</p>
+               <p class="property">
+                  <code>FRU</code>
+                  <tab/>Front Right Side Upper Airbag</p>
+               <p class="property">
+                  <code>RLL</code>
+                  <tab/>Rear Left Side Lower Airbag</p>
+               <p class="property">
+                  <code>RLR</code>
+                  <tab/>Rear Right Side Lower Airbag</p>
+               <p class="property">
+                  <code>RLU</code>
+                  <tab/>Rear Left Side Upper Airbag</p>
+               <p class="property">
+                  <code>RRU</code>
+                  <tab/>Rear Right Side Upper Airbag</p>
+            </td>
+         </tr>
+         <tr>
+            <td>
+               <p class="td">
+                  <a name="$/VehicleBody/Airbag/&lt;airbag-instance&gt;/State"/>
+                  <code class="Box">———</code>
+                  <code class="BoxBold">State</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box"/>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">int</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">1..1</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">P</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">Gets the airbag state for the airbag instance</p>
+               <h4 class="Heading4">Value<tab/>Description</h4>
+               <p class="property">
+                  <code>1</code>
+                  <tab/>Armed</p>
+               <p class="property">
+                  <code>2</code>
+                  <tab/>Deployed</p>
+               <p class="property">
+                  <code>3</code>
+                  <tab/>Disabled</p>
+               <p class="property">
+                  <code>4</code>
+                  <tab/>Fault</p>
+            </td>
+         </tr>
+         <tr>
+            <td>
+               <p class="td">
+                  <a name="$/VehicleBody/Airbag/&lt;airbag-instance&gt;/DeploymentTime"/>
+                  <code class="Box">———</code>
+                  <code class="BoxBold">DeploymentTime</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box"/>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">Time</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">1..1</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">P</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">Gets Time at deployment</p>
+            </td>
+         </tr>
+         <tr>
+            <td>
+               <p class="td">
+                  <a name="$/VehicleBody/Rollbar"/>
+                  <code class="Box">—</code>
+                  <code class="BoxBold">Rollbar</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box"/>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">node</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">1..1</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">P</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">Interior node that represents the supplemental deployable rollbars for the
+			vehicle</p>
+            </td>
+         </tr>
+         <tr>
+            <td>
+               <p class="td">
+                  <a name="$/VehicleBody/Rollbar/&lt;rollbar-instance&gt;"/>
+                  <code class="Box">——</code>
+                  <code class="BoxBold">&lt;rollbar-instance&gt;</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box"/>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">node</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">1</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">P</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">Interior node that represents the rollbar instances for the vehicle</p>
+               <h4 class="Heading4">Name<tab/>Description</h4>
+               <p class="property">
+                  <code>FL</code>
+                  <tab/>Front Left Rollbar</p>
+               <p class="property">
+                  <code>FR</code>
+                  <tab/>Front Right Rollbar</p>
+               <p class="property">
+                  <code>RL</code>
+                  <tab/>Rear Left Rollbar</p>
+               <p class="property">
+                  <code>RR</code>
+                  <tab/>Rear Right Rollbar</p>
+               <p class="property">
+                  <code>F</code>
+                  <tab/>Front Rollbar</p>
+               <p class="property">
+                  <code>R</code>
+                  <tab/>Rear Rollbar</p>
+            </td>
+         </tr>
+         <tr>
+            <td>
+               <p class="td">
+                  <a name="$/VehicleBody/Rollbar/&lt;rollbar-instance&gt;/State"/>
+                  <code class="Box">———</code>
+                  <code class="BoxBold">State</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box"/>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">int</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">1..1</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">P</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">Gets the rollbar state for the airbag rollbar</p>
+               <h4 class="Heading4">Value<tab/>Description</h4>
+               <p class="property">
+                  <code>1</code>
+                  <tab/>Armed</p>
+               <p class="property">
+                  <code>2</code>
+                  <tab/>Deployed</p>
+               <p class="property">
+                  <code>3</code>
+                  <tab/>Disabled</p>
+               <p class="property">
+                  <code>4</code>
+                  <tab/>Fault</p>
+            </td>
+         </tr>
+         <tr>
+            <td>
+               <p class="td">
+                  <a name="$/VehicleBody/Rollbar/&lt;rollbar-instance&gt;/DeploymentTime"/>
+                  <code class="Box">———</code>
+                  <code class="BoxBold">DeploymentTime</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box"/>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">Time</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">1..1</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">P</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">Gets Time at deployment</p>
+            </td>
+         </tr>
+         <tr>
+            <td>
+               <p class="td">
+                  <a name="$/VehicleBody/ConvertibleTop"/>
+                  <code class="Box">—</code>
+                  <code class="BoxBold">ConvertibleTop</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box"/>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">node</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">1</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">P</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">Interior node that represents the convertible top</p>
+            </td>
+         </tr>
+         <tr>
+            <td>
+               <p class="td">
+                  <a name="$/VehicleBody/ConvertibleTop/TopState"/>
+                  <code class="Box">——</code>
+                  <code class="BoxBold">TopState</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box"/>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">int</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">1..1</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">P</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">Gets and sets the position state for the convertible top</p>
+               <h4 class="Heading4">Value<tab/>Description</h4>
+               <p class="property">
+                  <code>1</code>
+                  <tab/>Closed</p>
+               <p class="property">
+                  <code>2</code>
+                  <tab/>Open</p>
+               <p class="property">
+                  <code>3</code>
+                  <tab/>Intermediate</p>
+            </td>
+         </tr>
+         <tr>
+            <td>
+               <p class="td">
+                  <a name="$/VehicleBody/EnvironmentalSensors"/>
+                  <code class="Box">—</code>
+                  <code class="BoxBold">EnvironmentalSensors</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box"/>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">node</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">1..1</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">P</code>
+               </p>
+            </td>
+            <td>
+               <p class="td"/>
+            </td>
+         </tr>
+         <tr>
+            <td>
+               <p class="td">
+                  <a name="$/VehicleBody/EnvironmentalSensors/ExtTemp"/>
+                  <code class="Box">——</code>
+                  <code class="BoxBold">ExtTemp</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box"/>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">float</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">1..1</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">P</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">Measured temp for the HVAC Zone Instance in Deg C</p>
+            </td>
+         </tr>
+         <tr>
+            <td>
+               <p class="td">
+                  <a name="$/VehicleBody/EnvironmentalSensors/Sun"/>
+                  <code class="Box">——</code>
+                  <code class="BoxBold">Sun</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box"/>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">int</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">1..1</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">P</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">Gets the measurement of sunlight intensity</p>
+            </td>
+         </tr>
+         <tr>
+            <td>
+               <p class="td">
+                  <a name="$/VehicleBody/EnvironmentalSensors/Rain"/>
+                  <code class="Box">——</code>
+                  <code class="BoxBold">Rain</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box"/>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">int</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">1..1</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">P</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">Gets the state of the rain sensor</p>
+               <h4 class="Heading4">Value<tab/>Description</h4>
+               <p class="property">
+                  <code>1</code>
+                  <tab/>Dry</p>
+               <p class="property">
+                  <code>2</code>
+                  <tab/>Wet</p>
+            </td>
+         </tr>
+         <tr>
+            <td>
+               <p class="td">
+                  <a name="$/VehicleBody/EnvironmentalSensors/RainSens"/>
+                  <code class="Box">——</code>
+                  <code class="BoxBold">RainSens</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box"/>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">int</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">1..1</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">P</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">Gets and Sets the rain sensitivity level</p>
+            </td>
+         </tr>
+         <tr>
+            <td>
+               <p class="td">
+                  <a name="$/VehicleBody/EnvironmentalSensors/Noise"/>
+                  <code class="Box">——</code>
+                  <code class="BoxBold">Noise</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box"/>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">float</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">1..1</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">P</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">Gets the interior noise level in dBa</p>
+            </td>
+         </tr>
+         <tr>
+            <td>
+               <p class="td">
+                  <a name="$/VehicleBody/Wipers"/>
+                  <code class="Box">—</code>
+                  <code class="BoxBold">Wipers</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box"/>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">node</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">1</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">P</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">Interior node that represents the wipers</p>
+            </td>
+         </tr>
+         <tr>
+            <td>
+               <p class="td">
+                  <a name="$/VehicleBody/Wipers/&lt;wiper-instance&gt;"/>
+                  <code class="Box">——</code>
+                  <code class="BoxBold">&lt;wiper-instance&gt;</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box"/>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">node</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">1</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">P</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">Interior node that represents a specific wiper instance. Name must be one of:</p>
+               <h4 class="Heading4">Name<tab/>Description</h4>
+               <p class="property">
+                  <code>F</code>
+                  <tab/>Front</p>
+               <p class="property">
+                  <code>R</code>
+                  <tab/>Rear</p>
+               <p class="property">
+                  <code>H</code>
+                  <tab/>Headlamps</p>
+            </td>
+         </tr>
+         <tr>
+            <td>
+               <p class="td">
+                  <a name="$/VehicleBody/Wipers/&lt;wiper-instance&gt;/WiperState"/>
+                  <code class="Box">———</code>
+                  <code class="BoxBold">WiperState</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box"/>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">int</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">1..1</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">P</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">Gets and sets the state of the wiper Instance</p>
+               <h4 class="Heading4">Value<tab/>Description</h4>
+               <p class="property">
+                  <code>1</code>
+                  <tab/>Off</p>
+               <p class="property">
+                  <code>2</code>
+                  <tab/>Intermittent</p>
+               <p class="property">
+                  <code>3</code>
+                  <tab/>Low</p>
+               <p class="property">
+                  <code>4</code>
+                  <tab/>High</p>
+               <p class="property">
+                  <code>5</code>
+                  <tab/>Automatic</p>
+            </td>
+         </tr>
+         <tr>
+            <td>
+               <p class="td">
+                  <a name="$/VehicleBody/Wipers/&lt;wiper-instance&gt;/WipeInterval"/>
+                  <code class="Box">———</code>
+                  <code class="BoxBold">WipeInterval</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box"/>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">int</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">1..1</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">P</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">Gets and sets the intermittent wipe interval</p>
+               <h4 class="Heading4">Value<tab/>Description</h4>
+               <p class="property">
+                  <code>0, 100</code>
+                  <tab/>
+               </p>
+            </td>
+         </tr>
+         <tr>
+            <td>
+               <p class="td">
+                  <a name="$/VehicleBody/Washers"/>
+                  <code class="Box">—</code>
+                  <code class="BoxBold">Washers</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box"/>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">node</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">1</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">P</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">Interior node that represents the washer fluid tanks</p>
+            </td>
+         </tr>
+         <tr>
+            <td>
+               <p class="td">
+                  <a name="$/VehicleBody/Washers/&lt;washer-instance&gt;"/>
+                  <code class="Box">——</code>
+                  <code class="BoxBold">&lt;washer-instance&gt;</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box"/>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">node</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">1</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">P</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">Interior node that represents a specific washer fluid tank instance.</p>
+               <h4 class="Heading4">Name<tab/>Description</h4>
+               <p class="property">
+                  <code>WW</code>
+                  <tab/>Primary (windshield) washing fluid tank</p>
+               <p class="property">
+                  <code>RW</code>
+                  <tab/>Rear window washing fluid tank</p>
+               <p class="property">
+                  <code>HW</code>
+                  <tab/>Head light washing fluid tank</p>
+               <p class="property">
+                  <code>SW</code>
+                  <tab/>Supplemental washing fluid tank</p>
+            </td>
+         </tr>
+         <tr>
+            <td>
+               <p class="td">
+                  <a name="$/VehicleBody/Washers/&lt;washer-instance&gt;/WasherFluidType"/>
+                  <code class="Box">———</code>
+                  <code class="BoxBold">WasherFluidType</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box"/>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">Chr</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">1..1</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">P</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">Gets the manufacturer?s recommended washer fluid type</p>
+            </td>
+         </tr>
+         <tr>
+            <td>
+               <p class="td">
+                  <a name="$/VehicleBody/Washers/&lt;washer-instance&gt;/WasherTankCapacity"/>
+                  <code class="Box">———</code>
+                  <code class="BoxBold">WasherTankCapacity</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box"/>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">float</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">1..1</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">P</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">Gets the capacity of the tank instance in liters</p>
+            </td>
+         </tr>
+         <tr>
+            <td>
+               <p class="td">
+                  <a name="$/VehicleBody/Washers/&lt;washer-instance&gt;/WasherTankLevel"/>
+                  <code class="Box">———</code>
+                  <code class="BoxBold">WasherTankLevel</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box"/>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">int</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">1..1</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">P</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">Gets the measurement of the tank instance level in percent of total capacity</p>
+            </td>
+         </tr>
+         <tr>
+            <td>
+               <p class="td">
+                  <a name="$/VehicleBody/Washers/&lt;washer-instance&gt;/WasherState"/>
+                  <code class="Box">———</code>
+                  <code class="BoxBold">WasherState</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box"/>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">Bool</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">1..1</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">P</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">Gets and Sets the Washer Pump State</p>
+               <h4 class="Heading4">Value<tab/>Description</h4>
+               <p class="property">
+                  <code>FALSE=Off</code>
+                  <tab/>
+               </p>
+               <p class="property">
+                  <code>TRUE=On</code>
+                  <tab/>
+               </p>
+            </td>
+         </tr>
+         <tr>
+            <td>
+               <p class="td">
+                  <a name="$/VehicleBody/Washers/&lt;washer-instance&gt;/WasherHeatState"/>
+                  <code class="Box">———</code>
+                  <code class="BoxBold">WasherHeatState</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box"/>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">Bool</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">1..1</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">P</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">Gets and Sets the Washer Fluid Heater State</p>
+               <h4 class="Heading4">Value<tab/>Description</h4>
+               <p class="property">
+                  <code>FALSE=Off</code>
+                  <tab/>
+               </p>
+               <p class="property">
+                  <code>TRUE=On</code>
+                  <tab/>
+               </p>
+            </td>
+         </tr>
+         <tr>
+            <td>
+               <p class="td">
+                  <a name="$/VehicleBody/Battery"/>
+                  <code class="Box">—</code>
+                  <code class="BoxBold">Battery</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box"/>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">node</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">1..1</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">P</code>
+               </p>
+            </td>
+            <td>
+               <p class="td"/>
+            </td>
+         </tr>
+         <tr>
+            <td>
+               <p class="td">
+                  <a name="$/VehicleBody/Battery/&lt;battery-instance&gt;"/>
+                  <code class="Box">——</code>
+                  <code class="BoxBold">&lt;battery-instance&gt;</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box"/>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">node</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">1</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">P</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">Interior node that represents a specific battery instance. Name must be one of:</p>
+               <h4 class="Heading4">Name<tab/>Description</h4>
+               <p class="property">
+                  <code>MB</code>
+                  <tab/>Main operating battery</p>
+               <p class="property">
+                  <code>SB</code>
+                  <tab/>Secondary operating battery</p>
+               <p class="property">
+                  <code>ABA</code>
+                  <tab/>Additional battery#1</p>
+               <p class="property">
+                  <code>ABB</code>
+                  <tab/>Additional battery#2</p>
+            </td>
+         </tr>
+         <tr>
+            <td>
+               <p class="td">
+                  <a name="$/VehicleBody/Battery/&lt;battery-instance&gt;/BattCapacity"/>
+                  <code class="Box">———</code>
+                  <code class="BoxBold">BattCapacity</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box"/>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">int</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">1..1</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">P</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">Gets the capacity of the battery instance in Ampere-Hours</p>
+            </td>
+         </tr>
+         <tr>
+            <td>
+               <p class="td">
+                  <a name="$/VehicleBody/Battery/&lt;battery-instance&gt;/ChargeLevel"/>
+                  <code class="Box">———</code>
+                  <code class="BoxBold">ChargeLevel</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box"/>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">int</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">1..1</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">P</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">Gets the Charge level of the battery instance in percent of full capacity</p>
+            </td>
+         </tr>
+         <tr>
+            <td>
+               <p class="td">
+                  <a name="$/VehicleBody/Battery/&lt;battery-instance&gt;/BatteryState"/>
+                  <code class="Box">———</code>
+                  <code class="BoxBold">BatteryState</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box"/>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">int</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">1..1</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">P</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">Gets the battery state</p>
+               <h4 class="Heading4">Value<tab/>Description</h4>
+               <p class="property">
+                  <code>1</code>
+                  <tab/>OK</p>
+               <p class="property">
+                  <code>2</code>
+                  <tab/>Low</p>
+               <p class="property">
+                  <code>3</code>
+                  <tab/>Fault</p>
+            </td>
+         </tr>
+         <tr>
+            <td>
+               <p class="td">
+                  <a name="$/VehicleBody/Horn"/>
+                  <code class="Box">—</code>
+                  <code class="BoxBold">Horn</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box"/>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">node</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">1</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">P</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">Interior node that represents the vehicle horns and sirens</p>
+            </td>
+         </tr>
+         <tr>
+            <td>
+               <p class="td">
+                  <a name="$/VehicleBody/Horn/&lt;horn-instance&gt;"/>
+                  <code class="Box">——</code>
+                  <code class="BoxBold">&lt;horn-instance&gt;</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box"/>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">node</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">1</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">P</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">Interior node that represents a specific Horn instance. Name must be one of:</p>
+               <h4 class="Heading4">Name<tab/>Description</h4>
+               <p class="property">
+                  <code>HornA</code>
+                  <tab/>Conventional car horn A</p>
+               <p class="property">
+                  <code>HornB</code>
+                  <tab/>Conventional car horn B</p>
+               <p class="property">
+                  <code>Beeper</code>
+                  <tab/>low level chime or beeper</p>
+               <p class="property">
+                  <code>Siren</code>
+                  <tab/>Siren</p>
+            </td>
+         </tr>
+         <tr>
+            <td>
+               <p class="td">
+                  <a name="$/VehicleBody/Horn/&lt;horn-instance&gt;/HornState"/>
+                  <code class="Box">———</code>
+                  <code class="BoxBold">HornState</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box"/>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">Bool</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">1..1</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">P</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">Gets and sets the state of the horn instance</p>
+               <h4 class="Heading4">Value<tab/>Description</h4>
+               <p class="property">
+                  <code>TRUE</code>
+                  <tab/>On</p>
+               <p class="property">
+                  <code>FALSE</code>
+                  <tab/>Off</p>
+            </td>
+         </tr>
+         <tr>
+            <td>
+               <p class="td">
+                  <a name="$/VehicleBody/Horn/&lt;horn-instance&gt;/HornAudio"/>
+                  <code class="Box">———</code>
+                  <code class="BoxBold">HornAudio</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box"/>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">float</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">1..1</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">P</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">Audio value output to the Horn</p>
+            </td>
+         </tr>
+         <tr>
+            <td>
+               <p class="td">
+                  <a name="$/VehicleBody/Horn/&lt;horn-instance&gt;/&lt;hornMode-instance&gt;"/>
+                  <code class="Box">———</code>
+                  <code class="BoxBold">&lt;hornMode-instance&gt;</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box"/>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">node</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">1..1</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">P</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">Optional interior mode comprising pre-defined horn sounds. Works with HornState. Name must
+					be one of:</p>
+               <h4 class="Heading4">Name<tab/>Description</h4>
+               <p class="property">
+                  <code>SoundA</code>
+                  <tab/>Manufacturer or aftermarket defined Audio files and/or custom tones</p>
+               <p class="property">
+                  <code>SoundB</code>
+                  <tab/>Manufacturer or aftermarket defined Audio files and/or custom tones</p>
+               <p class="property">
+                  <code>SoundC</code>
+                  <tab/>Manufacturer or aftermarket defined Audio files and/or custom tones</p>
+               <p class="property">
+                  <code>SoundD</code>
+                  <tab/>Manufacturer or aftermarket defined Audio files and/or custom tones</p>
+               <p class="property">
+                  <code>SoundE</code>
+                  <tab/>Manufacturer or aftermarket defined Audio files and/or custom tones</p>
+               <p class="property">
+                  <code>SoundF</code>
+                  <tab/>Manufacturer or aftermarket defined Audio files and/or custom tones</p>
+            </td>
+         </tr>
+         <tr>
+            <td>
+               <p class="td">
+                  <a name="$/VehicleBody/Antenna"/>
+                  <code class="Box">—</code>
+                  <code class="BoxBold">Antenna</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box"/>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">node</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">1</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">P</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">Interior node that represents the vehicle radio antennas</p>
+            </td>
+         </tr>
+         <tr>
+            <td>
+               <p class="td">
+                  <a name="$/VehicleBody/Antenna/&lt;antenna-instance&gt;"/>
+                  <code class="Box">——</code>
+                  <code class="BoxBold">&lt;antenna-instance&gt;</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box"/>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">node</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">1</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">P</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">Interior node that represents a specific vehicle radio antenna instance.</p>
+               <h4 class="Heading4">Name<tab/>Description</h4>
+               <p class="property">
+                  <code>AntA</code>
+                  <tab/>
+               </p>
+               <p class="property">
+                  <code>AntB</code>
+                  <tab/>
+               </p>
+               <p class="property">
+                  <code>AntC</code>
+                  <tab/>
+               </p>
+            </td>
+         </tr>
+         <tr>
+            <td>
+               <p class="td">
+                  <a name="$/VehicleBody/Antenna/&lt;antenna-instance&gt;/AntennaState"/>
+                  <code class="Box">———</code>
+                  <code class="BoxBold">AntennaState</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box"/>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">Bool</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">1..1</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">P</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">Sets and Gets the state of the antenna instance</p>
+               <h4 class="Heading4">Value<tab/>Description</h4>
+               <p class="property">
+                  <code>TRUE</code>
+                  <tab/>Deployed</p>
+               <p class="property">
+                  <code>FALSE</code>
+                  <tab/>Stowed</p>
+            </td>
+         </tr>
+         <tr>
+            <td>
+               <p class="td">
+                  <a name="$/VehicleBody/Ignition"/>
+                  <code class="Box">—</code>
+                  <code class="BoxBold">Ignition</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box"/>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">node</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">1</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">P</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">Interior node that represents the main ignition switch</p>
+            </td>
+         </tr>
+         <tr>
+            <td>
+               <p class="td">
+                  <a name="$/VehicleBody/Ignition/IgnitionState"/>
+                  <code class="Box">——</code>
+                  <code class="BoxBold">IgnitionState</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box"/>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">int</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">1..1</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">P</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">Sets and gets the state of the main ignition switch</p>
+               <h4 class="Heading4">Value<tab/>Description</h4>
+               <p class="property">
+                  <code>1</code>
+                  <tab/>Locked-Key Out</p>
+               <p class="property">
+                  <code>2</code>
+                  <tab/>Locked-Key In</p>
+               <p class="property">
+                  <code>3</code>
+                  <tab/>Accessory</p>
+               <p class="property">
+                  <code>4</code>
+                  <tab/>Run</p>
+               <p class="property">
+                  <code>5</code>
+                  <tab/>Start</p>
+               <p class="property">
+                  <code>6</code>
+                  <tab/>Unlocked-Off</p>
+               <p class="property">
+                  <code>7</code>
+                  <tab/>Accessory B (a secondary Acc state)</p>
+            </td>
+         </tr>
+         <tr>
+            <td>
+               <p class="td">
+                  <a name="$/VehicleBody/Chime"/>
+                  <code class="Box">—</code>
+                  <code class="BoxBold">Chime</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box"/>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">node</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">1</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">P</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">Interior node that represents the vehicle interior chimes</p>
+            </td>
+         </tr>
+         <tr>
+            <td>
+               <p class="td">
+                  <a name="$/VehicleBody/Chime/&lt;chime-instance&gt;"/>
+                  <code class="Box">——</code>
+                  <code class="BoxBold">&lt;chime-instance&gt;</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box"/>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">node</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">1</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">P</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">Interior node that represents a specific chime instance. Name must be one of:</p>
+               <h4 class="Heading4">Value<tab/>Description</h4>
+               <p class="property">
+                  <code>ChimeA</code>
+                  <tab/>
+               </p>
+               <p class="property">
+                  <code>ChimeB</code>
+                  <tab/>
+               </p>
+               <p class="property">
+                  <code>ChimeC</code>
+                  <tab/>
+               </p>
+               <p class="property">
+                  <code>ChimeD</code>
+                  <tab/>
+               </p>
+            </td>
+         </tr>
+         <tr>
+            <td>
+               <p class="td">
+                  <a name="$/VehicleBody/Chime/&lt;chime-instance&gt;/ChimeState"/>
+                  <code class="Box">———</code>
+                  <code class="BoxBold">ChimeState</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box"/>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">Bool</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">1..1</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">P</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">Gets and sets the state of the Chime instance</p>
+               <h4 class="Heading4">Value<tab/>Description</h4>
+               <p class="property">
+                  <code>TRUE</code>
+                  <tab/>On</p>
+               <p class="property">
+                  <code>FALSE</code>
+                  <tab/>Off</p>
+            </td>
+         </tr>
+         <tr>
+            <td>
+               <p class="td">
+                  <a name="$/VehicleBody/Chime/&lt;chime-instance&gt;/ChimeAudio"/>
+                  <code class="Box">———</code>
+                  <code class="BoxBold">ChimeAudio</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box"/>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">int</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">1..1</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">P</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">Gets and/or sets the audio value output to the chime</p>
+            </td>
+         </tr>
+         <tr>
+            <td>
+               <p class="td">
+                  <a name="$/VehicleBody/Chime/&lt;chime-instance&gt;/&lt;chimeMode-instance&gt;"/>
+                  <code class="Box">———</code>
+                  <code class="BoxBold">&lt;chimeMode-instance&gt;</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box"/>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">node</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">1..1</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">
+                  <code class="Box">P</code>
+               </p>
+            </td>
+            <td>
+               <p class="td">Optional interior mode comprising pre-defined chime sounds. Works with
+					ChimeState.</p>
+               <h4 class="Heading4">Name<tab/>Description</h4>
+               <p class="property">
+                  <code>SoundA</code>
+                  <tab/>Manufacturer or aftermarket defined Audio files and/or custom tones</p>
+               <p class="property">
+                  <code>SoundB</code>
+                  <tab/>Manufacturer or aftermarket defined Audio files and/or custom tones</p>
+               <p class="property">
+                  <code>SoundC</code>
+                  <tab/>Manufacturer or aftermarket defined Audio files and/or custom tones</p>
+               <p class="property">
+                  <code>SoundD</code>
+                  <tab/>Manufacturer or aftermarket defined Audio files and/or custom tones</p>
+               <p class="property">
+                  <code>SoundE</code>
+                  <tab/>Manufacturer or aftermarket defined Audio files and/or custom tones</p>
+               <p class="property">
+                  <code>SoundF</code>
+                  <tab/>Manufacturer or aftermarket defined Audio files and/or custom tones</p>
+            </td>
+         </tr>
+      </table>
+   </body>
+</html>

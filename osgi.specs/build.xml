@@ -46,6 +46,15 @@
 		<foreach list="${ddf}" delimiter=" ," target="-ddf2mif" param="item" inheritAll="true" />
 	</target>
 
+	<target name="coverage" depends="init">
+		<echo>Coverage Core</echo>
+		<java classname="com.icl.saxon.StyleSheet" classpath="${workspace}/licensed/jar/saxon.jar" fork="true" output="html.tmp">
+			<arg line="../osgi.test/osgi.core.html xsl/html2mif.xsl" />
+		</java>
+		<java classname="org.osgi.tools.xml2mif.XML2MIF" fork="true" classpath="${project.classpath}" input="html.tmp" output="mif/org.osgi.core.mif">
+		</java>
+	</target>
+
 	<target name="-ddf2mif">
 		<java classname="com.icl.saxon.StyleSheet" classpath="../licensed/jar/saxon.jar" fork="true" 
 			output="ddftmp/${item}.htm">
