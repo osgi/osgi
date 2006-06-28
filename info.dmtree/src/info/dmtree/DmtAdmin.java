@@ -43,9 +43,12 @@ package info.dmtree;
  * run in parallel with other sessions, and the kinds of operations that can be 
  * performed in the session.  All Management Objects constituting the device 
  * management tree tree must support read operations on their nodes, while 
- * support for write operations depends on the Management Object. If write 
- * access is allowed by a Management Object, it may support either the 
- * transactional or the non-transactional write mode, or both.
+ * support for write operations depends on the Management Object. Management 
+ * Objects supporting write access may support transactional write, 
+ * non-transactional write or both. Users of <code>DmtAdmin</code> should 
+ * consult the Management Object specification and implementation for the 
+ * supported update modes. If Management Object definition permits, 
+ * implementations are encouraged to support both update modes. 
  * <p>
  * This interface also contains methods for manipulating the set of
  * <code>DmtEventListener</code> objects that are called when the structure or
