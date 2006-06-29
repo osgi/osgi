@@ -114,8 +114,11 @@ public class DmtAdminDelegate implements DmtAdmin {
             final DmtEventListener listener = (DmtEventListener) entry.getKey();
             final String principal = properties.principal; // can be null
             
-            if((event.getType() & properties.type) != 0 &&
-                    event.containsNodeUnderRoot(properties.root)) {
+            int eventType = event.getType();
+            if ((eventType & properties.type) != 0 && 
+                    (eventType == DmtEvent.SESSION_OPENED 
+                            || eventType == DmtEvent.SESSION_CLOSED
+                            || event.containsNodeUnderRoot(properties.root))) {
                 try {
                     AccessController.doPrivileged(new PrivilegedAction() {
                         public Object run() {
