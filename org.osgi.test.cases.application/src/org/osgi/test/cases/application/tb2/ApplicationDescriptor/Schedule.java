@@ -310,7 +310,7 @@ public class Schedule implements TestInterface {
 	/**
 	 * This method asserts if the topic/eventFilter really works
 	 * as a filter for the events an the application will be started
-	 * only once.
+	 * in the right time.
 	 * 
 	 * @spec ApplicationDescriptor.schedule(String,Map,String,String,boolean)
 	 */	
@@ -331,7 +331,7 @@ public class Schedule implements TestInterface {
 			tbc.assertNotNull("Asserting that a ScheduledApplication was returned according to the used filter.", sa);
 			
 			synchronized (this) {
-				this.wait(ApplicationConstants.SHORT_TIMEOUT*100);
+				this.wait(ApplicationConstants.SHORT_TIMEOUT*120);
 			}
 					
 			tbc.assertEquals("Asserting that a ApplicationHandle was registered.", 1, tbc.getNumberAppHandle());

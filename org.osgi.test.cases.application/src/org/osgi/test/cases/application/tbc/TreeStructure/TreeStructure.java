@@ -929,7 +929,7 @@ public class TreeStructure {
 		ApplicationHandle handle = null;
 		try {
 			session = tbc.getDmtAdmin().getSession(ApplicationConstants.OSGI_APPLICATION,
-					DmtSession.LOCK_TYPE_SHARED);
+					DmtSession.LOCK_TYPE_EXCLUSIVE);
 			tbc.getAppDescriptor().lock();
 			session
 					.execute(
@@ -1580,7 +1580,7 @@ public class TreeStructure {
 		ApplicationHandle handle = null;
 		try {
 			session = tbc.getDmtAdmin().getSession(ApplicationConstants.OSGI_APPLICATION,
-					DmtSession.LOCK_TYPE_SHARED);
+					DmtSession.LOCK_TYPE_EXCLUSIVE);
 
 			handle = tbc.getAppDescriptor().launch(null);
 
