@@ -3,7 +3,7 @@ $(IMPORT-PACKAGE)
 Bundle-Name: test.cases.framework.div.tb1
 Bundle-Description: Contains the manifest checked by the test case.
 Bundle-Vendor: Ericsson Radio Systems AB
-Bundle-Version: 1.0.0
+Bundle-Version: Improper value for bundle manifest version 2
 Bundle-DocURL: http://www.ericsson.com
 Bundle-ContactAddress: info@ericsson.com
 Bundle-Activator: org.osgi.test.cases.framework.div.tb1.CheckManifest

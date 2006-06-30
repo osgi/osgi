@@ -13,7 +13,7 @@ bundle-docurl: http://www.ericsson.com
 bundle-name: test.cases.framework.div.tb1
 bundle-updatelocation: www.ericsson.se
 bundle-vendor: Ericsson Radio Systems AB
-bundle-version: 1.0.0
+bundle-version: Improper value for bundle manifest version 2
 continue: 12                          34
 export-package: org.osgi.dummy1;                         specification-version="0.0", org.osgi.dummy2,org.osgi.dummy3;specification-version="19.67.34"
 export-service: should contain the exported services, not used by framework

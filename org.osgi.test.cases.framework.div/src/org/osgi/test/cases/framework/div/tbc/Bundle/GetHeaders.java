@@ -50,7 +50,7 @@ public class GetHeaders {
 	private String[]		tb1_manifestHeadersValues					= {
 			"test.cases.framework.div.tb1",
 			"Contains the manifest checked by the test case.",
-			"Ericsson Radio Systems AB", "1.0.0", "http://www.ericsson.com",
+			"Ericsson Radio Systems AB", "Improper value for bundle manifest version 2", "http://www.ericsson.com",
 			"info@ericsson.com",
 			"org.osgi.test.cases.framework.div.tb1.CheckManifest",
 			"should contain the bundle category",
