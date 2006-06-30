@@ -64,8 +64,8 @@ public class ApplicationConstants {
     public static final String APP_ICON = "/TestIcon.gif";    
     public static String TEST_PID = "";
     public static final String TEST_PID2 = "MIDlet: TestApplication-2.0.0-Cesar test MIDlet";
-    public static final int TIMEOUT = 60000;
-    public static final int SHORT_TIMEOUT = 600;
+    public static final int TIMEOUT;
+    public static final int SHORT_TIMEOUT;
     public final static String TIMER_EVENT = "org/osgi/application/timer";
     public final static String TOPIC_EVENT = "org/cesar/topic";
     public static final String EVENT_FILTER = "(minute=*)";
@@ -129,4 +129,17 @@ public class ApplicationConstants {
 	public static String APPLICATION_PERMISSION_FILTER_DIFFERENT_SIGNER = "(&(signer="+SIGNER_FILTER2+")"+"(pid="+TEST_PID+"))";
 	public static String APPLICATION_PERMISSION_FILTER_INVALID1 = "(&!!!dfs#"+SIGNER_FILTER_INVALID1+")"+"(pid="+TEST_PID+")]";
 	
+	
+    static {
+    	if (System.getProperty("SHORT_TIMEOUT")!=null) {
+    		SHORT_TIMEOUT = Integer.parseInt(System.getProperty("SHORT_TIMEOUT"));
+    	} else {
+    		SHORT_TIMEOUT = 600;
+    	}
+    	if (System.getProperty("TIMEOUT")!=null) {
+    		TIMEOUT = Integer.parseInt(System.getProperty("TIMEOUT"));
+    	} else {
+    		TIMEOUT = 60000;
+    	}    	    	
+    }	
 }

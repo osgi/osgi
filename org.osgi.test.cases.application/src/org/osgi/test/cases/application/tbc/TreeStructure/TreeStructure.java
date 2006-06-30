@@ -162,7 +162,7 @@ public class TreeStructure {
 	}
 
 	/**
-	 * This method asserts if $/Application/<app_id>is a valid node and asserts
+	 * This method asserts if $/Application/&lt;app_id&gt;is a valid node and asserts
 	 * Type, Cardinality, Get Permission according to Table 3.6
 	 * 
 	 * @spec 3.5.1 Applications Descriptors
@@ -176,23 +176,23 @@ public class TreeStructure {
 
 			tbc
 					.assertTrue(
-							"Asserts if $/Application/<app_id> is a valid node",
+							"Asserts if $/Application/&lt;app_id&gt; is a valid node",
 							session
 									.isNodeUri(ApplicationConstants.OSGI_APPLICATION_APPID));
 
 			MetaNode metaNode = session
 					.getMetaNode(ApplicationConstants.OSGI_APPLICATION_APPID);
 
-			tbc.assertEquals("Asserts $/Application/<app_id> metanode scope",
+			tbc.assertEquals("Asserts $/Application/&lt;app_id&gt; metanode scope",
 					MetaNode.PERMANENT, metaNode.getScope());
-			tbc.assertEquals("Asserts $/Application/<app_id> metanode format",
+			tbc.assertEquals("Asserts $/Application/&lt;app_id&gt; metanode format",
 					DmtData.FORMAT_NODE, metaNode.getFormat());
 			tbc
 					.assertTrue(
-							"Asserts $/Application/<app_id> metanode cardinality",
+							"Asserts $/Application/&lt;app_id&gt; metanode cardinality",
 							metaNode.isZeroOccurrenceAllowed()
 									&& metaNode.getMaxOccurrence() == Integer.MAX_VALUE);
-			tbc.assertTrue("Asserts $/Application/<app_id> metanode GET",
+			tbc.assertTrue("Asserts $/Application/&lt;app_id&gt; metanode GET",
 					metaNode.can(MetaNode.CMD_GET));
 		} catch (Exception e) {
 			tbc.fail(MessagesConstants.getMessage(
@@ -204,7 +204,7 @@ public class TreeStructure {
 	}
 
 	/**
-	 * This method asserts if $/Application/<app_id>/Name is a valid node and
+	 * This method asserts if $/Application/&lt;app_id&gt;/Name is a valid node and
 	 * asserts Type, Cardinality, Get Permission according to Table 3.6 . Then,
 	 * asserts the value of the node.
 	 * 
@@ -219,7 +219,7 @@ public class TreeStructure {
 
 			tbc
 					.assertTrue(
-							"Asserts if $/Application/<app_id>/Name is a valid node",
+							"Asserts if $/Application/&lt;app_id&gt;/Name is a valid node",
 							session
 									.isNodeUri(ApplicationConstants.OSGI_APPLICATION_APPID_NAME));
 
@@ -227,20 +227,20 @@ public class TreeStructure {
 					.getMetaNode(ApplicationConstants.OSGI_APPLICATION_APPID_NAME);
 
 			tbc.assertEquals(
-					"Asserts $/Application/<app_id>/Name metanode scope",
+					"Asserts $/Application/&lt;app_id&gt;/Name metanode scope",
 					MetaNode.PERMANENT, metaNode.getScope());
 			tbc.assertEquals(
-					"Asserts $/Application/<app_id>/Name metanode format",
+					"Asserts $/Application/&lt;app_id&gt;/Name metanode format",
 					DmtData.FORMAT_STRING, metaNode.getFormat());
 			tbc.assertTrue(
-					"Asserts $/Application/<app_id>/Name metanode cardinality",
+					"Asserts $/Application/&lt;app_id&gt;/Name metanode cardinality",
 					!metaNode.isZeroOccurrenceAllowed()
 							&& metaNode.getMaxOccurrence() == 1);
-			tbc.assertTrue("Asserts $/Application/<app_id>/Name metanode GET",
+			tbc.assertTrue("Asserts $/Application/&lt;app_id&gt;/Name metanode GET",
 					metaNode.can(MetaNode.CMD_GET));
 			tbc
 					.assertEquals(
-							"Asserting the value of $/Application/<app_id>/Name",
+							"Asserting the value of $/Application/&lt;app_id&gt;/Name",
 							ApplicationConstants.APPLICATION_NAME,
 							session
 									.getNodeValue(ApplicationConstants.OSGI_APPLICATION_APPID_NAME).getString());
@@ -254,7 +254,7 @@ public class TreeStructure {
 	}
 
 	/**
-	 * This method asserts if $/Application/ <app_id>/IconURI is a valid node
+	 * This method asserts if $/Application/ &lt;app_id&gt;/IconURI is a valid node
 	 * and asserts Type, Cardinality, Get Permission according to Table 3.6 .
 	 * Then, asserts the value of the node.
 	 * 
@@ -269,7 +269,7 @@ public class TreeStructure {
 
 			tbc
 					.assertTrue(
-							"Asserts if $/Application/<app_id>/IconURI is a valid node",
+							"Asserts if $/Application/&lt;app_id&gt;/IconURI is a valid node",
 							session
 									.isNodeUri(ApplicationConstants.OSGI_APPLICATION_APPID_ICONURI));
 
@@ -277,22 +277,22 @@ public class TreeStructure {
 					.getMetaNode(ApplicationConstants.OSGI_APPLICATION_APPID_ICONURI);
 
 			tbc.assertEquals(
-					"Asserts $/Application/<app_id>/IconURI metanode scope",
+					"Asserts $/Application/&lt;app_id&gt;/IconURI metanode scope",
 					MetaNode.PERMANENT, metaNode.getScope());
 			tbc.assertEquals(
-					"Asserts $/Application/<app_id>/IconURI metanode format",
+					"Asserts $/Application/&lt;app_id&gt;/IconURI metanode format",
 					DmtData.FORMAT_STRING, metaNode.getFormat());
 			tbc
 					.assertTrue(
-							"Asserts $/Application/<app_id>/IconURI metanode cardinality",
+							"Asserts $/Application/&lt;app_id&gt;/IconURI metanode cardinality",
 							!metaNode.isZeroOccurrenceAllowed()
 									&& metaNode.getMaxOccurrence() == 1);
 			tbc.assertTrue(
-					"Asserts $/Application/<app_id>/IconURI metanode GET",
+					"Asserts $/Application/&lt;app_id&gt;/IconURI metanode GET",
 					metaNode.can(MetaNode.CMD_GET));
 			tbc
 					.assertEquals(
-							"Asserting the value of $/Application/<app_id>/IconURI",
+							"Asserting the value of $/Application/&lt;app_id&gt;/IconURI",
 							tbc.getServiceProperty(ApplicationDescriptor.class.getName(), "application.icon", ApplicationConstants.TEST_PID).toString(),
 							session
 									.getNodeValue(ApplicationConstants.OSGI_APPLICATION_APPID_ICONURI).getString());
@@ -311,7 +311,7 @@ public class TreeStructure {
 	}
 
 	/**
-	 * This method asserts if $/Application/ <app_id>/Vendor is a valid node and
+	 * This method asserts if $/Application/ &lt;app_id&gt;/Vendor is a valid node and
 	 * asserts Type, Cardinality, Get Permission according to Table 3.6 . Then,
 	 * asserts the value of the node.
 	 * 
@@ -326,7 +326,7 @@ public class TreeStructure {
 
 			tbc
 					.assertTrue(
-							"Asserts if $/Application/<app_id>/Vendor is a valid node",
+							"Asserts if $/Application/&lt;app_id&gt;/Vendor is a valid node",
 							session
 									.isNodeUri(ApplicationConstants.OSGI_APPLICATION_APPID_VENDOR));
 
@@ -334,22 +334,22 @@ public class TreeStructure {
 					.getMetaNode(ApplicationConstants.OSGI_APPLICATION_APPID_VENDOR);
 
 			tbc.assertEquals(
-					"Asserts $/Application/<app_id>/Vendor metanode scope",
+					"Asserts $/Application/&lt;app_id&gt;/Vendor metanode scope",
 					MetaNode.PERMANENT, metaNode.getScope());
 			tbc.assertEquals(
-					"Asserts $/Application/<app_id>/Vendor metanode format",
+					"Asserts $/Application/&lt;app_id&gt;/Vendor metanode format",
 					DmtData.FORMAT_STRING, metaNode.getFormat());
 			tbc
 					.assertTrue(
-							"Asserts $/Application/<app_id>/Vendor metanode cardinality",
+							"Asserts $/Application/&lt;app_id&gt;/Vendor metanode cardinality",
 							metaNode.isZeroOccurrenceAllowed()
 									&& metaNode.getMaxOccurrence() == 1);
 			tbc.assertTrue(
-					"Asserts $/Application/<app_id>/Vendor metanode GET",
+					"Asserts $/Application/&lt;app_id&gt;/Vendor metanode GET",
 					metaNode.can(MetaNode.CMD_GET));
 			tbc
 					.assertEquals(
-							"Asserting the value of $/Application/<app_id>/Vendor",
+							"Asserting the value of $/Application/&lt;app_id&gt;/Vendor",
 							"Cesar",
 							session
 									.getNodeValue(ApplicationConstants.OSGI_APPLICATION_APPID_VENDOR).getString());
@@ -363,7 +363,7 @@ public class TreeStructure {
 	}
 
 	/**
-	 * This method asserts if $/Application/ <app_id>/Version is a valid node
+	 * This method asserts if $/Application/ &lt;app_id&gt;/Version is a valid node
 	 * and asserts Type, Cardinality, Get Permission according to Table 3.6 .
 	 * Then, asserts the value of the node.
 	 * 
@@ -377,28 +377,28 @@ public class TreeStructure {
 					DmtSession.LOCK_TYPE_SHARED);
 			tbc
 					.assertTrue(
-							"Asserts if $/Application/<app_id>/Version is a valid node",
+							"Asserts if $/Application/&lt;app_id&gt;/Version is a valid node",
 							session
 									.isNodeUri(ApplicationConstants.OSGI_APPLICATION_APPID_VERSION));
 			MetaNode metaNode = session
 					.getMetaNode(ApplicationConstants.OSGI_APPLICATION_APPID_VERSION);
 			tbc.assertEquals(
-					"Asserts $/Application/<app_id>/Version metanode scope",
+					"Asserts $/Application/&lt;app_id&gt;/Version metanode scope",
 					MetaNode.PERMANENT, metaNode.getScope());
 			tbc.assertEquals(
-					"Asserts $/Application/<app_id>/Version metanode format",
+					"Asserts $/Application/&lt;app_id&gt;/Version metanode format",
 					DmtData.FORMAT_STRING, metaNode.getFormat());
 			tbc
 					.assertTrue(
-							"Asserts $/Application/<app_id>/Version metanode cardinality",
+							"Asserts $/Application/&lt;app_id&gt;/Version metanode cardinality",
 							metaNode.isZeroOccurrenceAllowed()
 									&& metaNode.getMaxOccurrence() == 1);
 			tbc.assertTrue(
-					"Asserts $/Application/<app_id>/Version metanode GET",
+					"Asserts $/Application/&lt;app_id&gt;/Version metanode GET",
 					metaNode.can(MetaNode.CMD_GET));
 			tbc
 					.assertEquals(
-							"Asserting the value of $/Application/<app_id>/Version",
+							"Asserting the value of $/Application/&lt;app_id&gt;/Version",
 							ApplicationConstants.APP_VERSION,
 							session
 									.getNodeValue(ApplicationConstants.OSGI_APPLICATION_APPID_VERSION).getString());
@@ -412,7 +412,7 @@ public class TreeStructure {
 	}
 
 	/**
-	 * This method asserts if $/Application/<app_id>/Locked is a valid node and
+	 * This method asserts if $/Application/&lt;app_id&gt;/Locked is a valid node and
 	 * asserts Type, Cardinality, Get Permission according to Table 3.6 . Then,
 	 * asserts the value of the node.
 	 * 
@@ -426,27 +426,27 @@ public class TreeStructure {
 					DmtSession.LOCK_TYPE_SHARED);
 			tbc
 					.assertTrue(
-							"Asserts if $/Application/<app_id>/Locked is a valid node",
+							"Asserts if $/Application/&lt;app_id&gt;/Locked is a valid node",
 							session
 									.isNodeUri(ApplicationConstants.OSGI_APPLICATION_APPID_LOCKED));
 			MetaNode metaNode = session
 					.getMetaNode(ApplicationConstants.OSGI_APPLICATION_APPID_LOCKED);
 			tbc.assertEquals(
-					"Asserts $/Application/<app_id>/Locked metanode scope",
+					"Asserts $/Application/&lt;app_id&gt;/Locked metanode scope",
 					MetaNode.PERMANENT, metaNode.getScope());
 			tbc.assertEquals(
-					"Asserts $/Application/<app_id>/Locked metanode format",
+					"Asserts $/Application/&lt;app_id&gt;/Locked metanode format",
 					DmtData.FORMAT_BOOLEAN, metaNode.getFormat());
 			tbc
 					.assertTrue(
-							"Asserts $/Application/<app_id>/Locked metanode cardinality",
+							"Asserts $/Application/&lt;app_id&gt;/Locked metanode cardinality",
 							!metaNode.isZeroOccurrenceAllowed()
 									&& metaNode.getMaxOccurrence() == 1);
 			tbc.assertTrue(
-					"Asserts $/Application/<app_id>/Locked metanode GET",
+					"Asserts $/Application/&lt;app_id&gt;/Locked metanode GET",
 					metaNode.can(MetaNode.CMD_GET));
 			tbc.assertTrue(
-					"Asserting the value of $/Application/<app_id>/Locked",
+					"Asserting the value of $/Application/&lt;app_id&gt;/Locked",
 					!session.getNodeValue(
 							ApplicationConstants.OSGI_APPLICATION_APPID_LOCKED)
 							.getBoolean());
@@ -454,7 +454,7 @@ public class TreeStructure {
 			tbc.getAppDescriptor().lock();
 
 			tbc.assertTrue(
-					"Asserting the value of $/Application/<app_id>/Locked",
+					"Asserting the value of $/Application/&lt;app_id&gt;/Locked",
 					session.getNodeValue(
 							ApplicationConstants.OSGI_APPLICATION_APPID_LOCKED)
 							.getBoolean());
@@ -469,7 +469,7 @@ public class TreeStructure {
 	}
 
 	/**
-	 * This method asserts if $/Application/<app_id>/ContainerID is a valid
+	 * This method asserts if $/Application/&lt;app_id&gt;/ContainerID is a valid
 	 * node and asserts Type, Cardinality, Get Permission according to Table 3.6 .
 	 * Then, asserts the value of the node.
 	 * 
@@ -483,26 +483,26 @@ public class TreeStructure {
 					DmtSession.LOCK_TYPE_SHARED);
 			tbc
 					.assertTrue(
-							"Asserts if $/Application/<app_id>/ContainerID is a valid node",
+							"Asserts if $/Application/&lt;app_id&gt;/ContainerID is a valid node",
 							session
 									.isNodeUri(ApplicationConstants.OSGI_APPLICATION_APPID_CONTAINERID));
 			MetaNode metaNode = session
 					.getMetaNode(ApplicationConstants.OSGI_APPLICATION_APPID_CONTAINERID);
 			tbc
 					.assertEquals(
-							"Asserts $/Application/<app_id>/ContainerID metanode scope",
+							"Asserts $/Application/&lt;app_id&gt;/ContainerID metanode scope",
 							MetaNode.PERMANENT, metaNode.getScope());
 			tbc
 					.assertEquals(
-							"Asserts $/Application/<app_id>/ContainerID metanode format",
+							"Asserts $/Application/&lt;app_id&gt;/ContainerID metanode format",
 							DmtData.FORMAT_STRING, metaNode.getFormat());
 			tbc
 					.assertTrue(
-							"Asserts $/Application/<app_id>/ContainerID metanode cardinality",
+							"Asserts $/Application/&lt;app_id&gt;/ContainerID metanode cardinality",
 							!metaNode.isZeroOccurrenceAllowed()
 									&& metaNode.getMaxOccurrence() == 1);
 			tbc.assertTrue(
-					"Asserts $/Application/<app_id>/ContainerID metanode GET",
+					"Asserts $/Application/&lt;app_id&gt;/ContainerID metanode GET",
 					metaNode.can(MetaNode.CMD_GET));
 
 		} catch (Exception e) {
@@ -617,7 +617,7 @@ public class TreeStructure {
 	}
 	
 	/**
-	 * This method asserts if $/Application/<app_id>/Ext is a valid node and
+	 * This method asserts if $/Application/&lt;app_id&gt;/Ext is a valid node and
 	 * asserts Type, Cardinality, Get Permission according to Table 3.6 .
 	 * 
 	 * @spec 3.5.1 Applications Descriptors
@@ -634,18 +634,18 @@ public class TreeStructure {
 				MetaNode metaNode = session
 						.getMetaNode(ApplicationConstants.OSGI_APPLICATION_APPID_EXT);
 				tbc.assertEquals(
-						"Asserts $/Application/<app_id>/Ext metanode scope",
+						"Asserts $/Application/&lt;app_id&gt;/Ext metanode scope",
 						MetaNode.PERMANENT, metaNode.getScope());
 				tbc.assertEquals(
-						"Asserts $/Application/<app_id>/Ext metanode format",
+						"Asserts $/Application/&lt;app_id&gt;/Ext metanode format",
 						DmtData.FORMAT_NODE, metaNode.getFormat());
 				tbc
 						.assertTrue(
-								"Asserts $/Application/<app_id>/Ext metanode cardinality",
+								"Asserts $/Application/&lt;app_id&gt;/Ext metanode cardinality",
 								metaNode.isZeroOccurrenceAllowed()
 										&& metaNode.getMaxOccurrence() == 1);
 				tbc.assertTrue(
-						"Asserts $/Application/<app_id>/Ext metanode GET",
+						"Asserts $/Application/&lt;app_id&gt;/Ext metanode GET",
 						metaNode.can(MetaNode.CMD_GET));
 			}
 			
@@ -659,7 +659,7 @@ public class TreeStructure {
 	}
 
 	/**
-	 * This method asserts if $/Application/ <app_id>/Instances is a valid node
+	 * This method asserts if $/Application/ &lt;app_id&gt;/Instances is a valid node
 	 * and asserts Type, Cardinality, Get Permission according to Table 3.6 .
 	 * 
 	 * @spec 3.5.1 Applications Descriptors
@@ -672,24 +672,24 @@ public class TreeStructure {
 					DmtSession.LOCK_TYPE_SHARED);
 			tbc
 					.assertTrue(
-							"Asserts if $/Application/<app_id>/Instances is a valid node",
+							"Asserts if $/Application/&lt;app_id&gt;/Instances is a valid node",
 							session
 									.isNodeUri(ApplicationConstants.OSGI_APPLICATION_APPID_INSTANCES));
 			MetaNode metaNode = session
 					.getMetaNode(ApplicationConstants.OSGI_APPLICATION_APPID_INSTANCES);
 			tbc.assertEquals(
-					"Asserts $/Application/<app_id>/Instances metanode scope",
+					"Asserts $/Application/&lt;app_id&gt;/Instances metanode scope",
 					MetaNode.PERMANENT, metaNode.getScope());
 			tbc.assertEquals(
-					"Asserts $/Application/<app_id>/Instances metanode format",
+					"Asserts $/Application/&lt;app_id&gt;/Instances metanode format",
 					DmtData.FORMAT_NODE, metaNode.getFormat());
 			tbc
 					.assertTrue(
-							"Asserts $/Application/<app_id>/Instances metanode cardinality",
+							"Asserts $/Application/&lt;app_id&gt;/Instances metanode cardinality",
 							!metaNode.isZeroOccurrenceAllowed()
 									&& metaNode.getMaxOccurrence() == 1);
 			tbc.assertTrue(
-					"Asserts $/Application/<app_id>/Instances metanode GET",
+					"Asserts $/Application/&lt;app_id&gt;/Instances metanode GET",
 					metaNode.can(MetaNode.CMD_GET));
 		} catch (Exception e) {
 			tbc.fail(MessagesConstants.getMessage(
@@ -701,7 +701,7 @@ public class TreeStructure {
 	}
 
 	/**
-	 * This method asserts if $/Application/ <app_id>/Operations is a valid node
+	 * This method asserts if $/Application/ &lt;app_id&gt;/Operations is a valid node
 	 * and asserts Type, Cardinality, Get Permission according to Table 3.8 .
 	 * 
 	 * @spec 3.5.1 Applications Descriptors
@@ -714,25 +714,25 @@ public class TreeStructure {
 					DmtSession.LOCK_TYPE_SHARED);
 			tbc
 					.assertTrue(
-							"Asserts if $/Application/<app_id>/Operations is a valid node",
+							"Asserts if $/Application/&lt;app_id&gt;/Operations is a valid node",
 							session
 									.isNodeUri(ApplicationConstants.OSGI_APPLICATION_APPID_OPERATIONS));
 			MetaNode metaNode = session
 					.getMetaNode(ApplicationConstants.OSGI_APPLICATION_APPID_OPERATIONS);
 			tbc.assertEquals(
-					"Asserts $/Application/<app_id>/Operations metanode scope",
+					"Asserts $/Application/&lt;app_id&gt;/Operations metanode scope",
 					MetaNode.PERMANENT, metaNode.getScope());
 			tbc
 					.assertEquals(
-							"Asserts $/Application/<app_id>/Operations metanode format",
+							"Asserts $/Application/&lt;app_id&gt;/Operations metanode format",
 							DmtData.FORMAT_NODE, metaNode.getFormat());
 			tbc
 					.assertTrue(
-							"Asserts $/Application/<app_id>/Operations metanode cardinality",
+							"Asserts $/Application/&lt;app_id&gt;/Operations metanode cardinality",
 							!metaNode.isZeroOccurrenceAllowed()
 									&& metaNode.getMaxOccurrence() == 1);
 			tbc.assertTrue(
-					"Asserts $/Application/<app_id>/Operations metanode GET",
+					"Asserts $/Application/&lt;app_id&gt;/Operations metanode GET",
 					metaNode.can(MetaNode.CMD_GET));
 		} catch (Exception e) {
 			tbc.fail(MessagesConstants.getMessage(
@@ -744,7 +744,7 @@ public class TreeStructure {
 	}
 
 	/**
-	 * This method asserts if $/Application/ <app_id>/Schedules is a valid node
+	 * This method asserts if $/Application/ &lt;app_id&gt;/Schedules is a valid node
 	 * and asserts Type, Cardinality, Get Permission according to Table 3.6 .
 	 * 
 	 * @spec 3.5.1 Applications Descriptors
@@ -757,24 +757,24 @@ public class TreeStructure {
 					DmtSession.LOCK_TYPE_SHARED);
 			tbc
 					.assertTrue(
-							"Asserts if $/Application/<app_id>/Schedules is a valid node",
+							"Asserts if $/Application/&lt;app_id&gt;/Schedules is a valid node",
 							session
 									.isNodeUri(ApplicationConstants.OSGI_APPLICATION_APPID_SCHEDULES));
 			MetaNode metaNode = session
 					.getMetaNode(ApplicationConstants.OSGI_APPLICATION_APPID_SCHEDULES);
 			tbc.assertEquals(
-					"Asserts $/Application/<app_id>/Schedules metanode scope",
+					"Asserts $/Application/&lt;app_id&gt;/Schedules metanode scope",
 					MetaNode.PERMANENT, metaNode.getScope());
 			tbc.assertEquals(
-					"Asserts $/Application/<app_id>/Schedules metanode format",
+					"Asserts $/Application/&lt;app_id&gt;/Schedules metanode format",
 					DmtData.FORMAT_NODE, metaNode.getFormat());
 			tbc
 					.assertTrue(
-							"Asserts $/Application/<app_id>/Schedules metanode cardinality",
+							"Asserts $/Application/&lt;app_id&gt;/Schedules metanode cardinality",
 							!metaNode.isZeroOccurrenceAllowed()
 									&& metaNode.getMaxOccurrence() == 1);
 			tbc.assertTrue(
-					"Asserts $/Application/<app_id>/Schedules metanode GET",
+					"Asserts $/Application/&lt;app_id&gt;/Schedules metanode GET",
 					metaNode.can(MetaNode.CMD_GET));
 		} catch (Exception e) {
 			tbc.fail(MessagesConstants.getMessage(
@@ -786,7 +786,7 @@ public class TreeStructure {
 	}
 
 	/**
-	 * This method asserts if $/Application/ <app_id>/Operations/Lock is a valid
+	 * This method asserts if $/Application/ &lt;app_id&gt;/Operations/Lock is a valid
 	 * node and asserts Type, Cardinality, Get Permission, Execute Permission
 	 * according to Table 3.8 .
 	 * 
@@ -800,31 +800,31 @@ public class TreeStructure {
 					DmtSession.LOCK_TYPE_SHARED);
 			tbc
 					.assertTrue(
-							"Asserts if $/Application/<app_id>/Operations/Lock is a valid node",
+							"Asserts if $/Application/&lt;app_id&gt;/Operations/Lock is a valid node",
 							session
 									.isNodeUri(ApplicationConstants.OSGI_APPLICATION_APPID_OPERATIONS_LOCK));
 			MetaNode metaNode = session
 					.getMetaNode(ApplicationConstants.OSGI_APPLICATION_APPID_OPERATIONS_LOCK);
 			tbc
 					.assertEquals(
-							"Asserts $/Application/<app_id>/Operations/Lock metanode scope",
+							"Asserts $/Application/&lt;app_id&gt;/Operations/Lock metanode scope",
 							MetaNode.PERMANENT, metaNode.getScope());
 			tbc
 					.assertEquals(
-							"Asserts $/Application/<app_id>/Operations/Lock metanode format",
+							"Asserts $/Application/&lt;app_id&gt;/Operations/Lock metanode format",
 							DmtData.FORMAT_NULL, metaNode.getFormat());
 			tbc
 					.assertTrue(
-							"Asserts $/Application/<app_id>/Operations/Lock metanode cardinality",
+							"Asserts $/Application/&lt;app_id&gt;/Operations/Lock metanode cardinality",
 							!metaNode.isZeroOccurrenceAllowed()
 									&& metaNode.getMaxOccurrence() == 1);
 			tbc
 					.assertTrue(
-							"Asserts $/Application/<app_id>/Operations/Lock metanode GET",
+							"Asserts $/Application/&lt;app_id&gt;/Operations/Lock metanode GET",
 							metaNode.can(MetaNode.CMD_GET));
 			tbc
 					.assertTrue(
-							"Asserts $/Application/<app_id>/Operations/Lock metanode EXECUTE",
+							"Asserts $/Application/&lt;app_id&gt;/Operations/Lock metanode EXECUTE",
 							metaNode.can(MetaNode.CMD_EXECUTE));
 		} catch (Exception e) {
 			tbc.fail(MessagesConstants.getMessage(
@@ -837,7 +837,7 @@ public class TreeStructure {
 
 	/**
 	 * This method asserts if executing the $/Application/
-	 * <app_id>/Operations/Lock node, it really locks the ApplicationDescriptor.
+	 * &lt;app_id&gt;/Operations/Lock node, it really locks the ApplicationDescriptor.
 	 * 
 	 * @spec 3.5.4 Launching new application instaces
 	 */
@@ -847,8 +847,8 @@ public class TreeStructure {
 		ApplicationHandle handle = null;
 		try {
 			session = tbc.getDmtAdmin().getSession(ApplicationConstants.OSGI_APPLICATION,
-					DmtSession.LOCK_TYPE_SHARED);
-			tbc.getAppDescriptor().unlock();
+					DmtSession.LOCK_TYPE_EXCLUSIVE);
+			tbc.getAppDescriptor().lock();
 			session
 					.execute(
 							ApplicationConstants.OSGI_APPLICATION_APPID_OPERATIONS_LOCK,
@@ -861,13 +861,14 @@ public class TreeStructure {
 					MessagesConstants.EXCEPTION_CORRECTLY_THROWN,
 					new String[] { Exception.class.getName() }));
 		} finally {
+			tbc.getAppDescriptor().unlock();
 			tbc.closeSession(session);
 			tbc.cleanUp(handle);
 		}
 	}
 
 	/**
-	 * This method asserts if $/Application/ <app_id>/Operations/Unlock is a
+	 * This method asserts if $/Application/ &lt;app_id&gt;/Operations/Unlock is a
 	 * valid node and asserts Type, Cardinality, Get Permission and Execute
 	 * Permission according to Table 3.8 .
 	 * 
@@ -881,31 +882,31 @@ public class TreeStructure {
 					DmtSession.LOCK_TYPE_SHARED);
 			tbc
 					.assertTrue(
-							"Asserts if $/Application/<app_id>/Operations/Unlock is a valid node",
+							"Asserts if $/Application/&lt;app_id&gt;/Operations/Unlock is a valid node",
 							session
 									.isNodeUri(ApplicationConstants.OSGI_APPLICATION_APPID_OPERATIONS_UNLOCK));
 			MetaNode metaNode = session
 					.getMetaNode(ApplicationConstants.OSGI_APPLICATION_APPID_OPERATIONS_UNLOCK);
 			tbc
 					.assertEquals(
-							"Asserts $/Application/<app_id>/Operations/Unlock metanode scope",
+							"Asserts $/Application/&lt;app_id&gt;/Operations/Unlock metanode scope",
 							MetaNode.PERMANENT, metaNode.getScope());
 			tbc
 					.assertEquals(
-							"Asserts $/Application/<app_id>/Operations/Unlock metanode format",
+							"Asserts $/Application/&lt;app_id&gt;/Operations/Unlock metanode format",
 							DmtData.FORMAT_NULL, metaNode.getFormat());
 			tbc
 					.assertTrue(
-							"Asserts $/Application/<app_id>/Operations/Unlock metanode cardinality",
+							"Asserts $/Application/&lt;app_id&gt;/Operations/Unlock metanode cardinality",
 							!metaNode.isZeroOccurrenceAllowed()
 									&& metaNode.getMaxOccurrence() == 1);
 			tbc
 					.assertTrue(
-							"Asserts $/Application/<app_id>/Operations/Unlock metanode GET",
+							"Asserts $/Application/&lt;app_id&gt;/Operations/Unlock metanode GET",
 							metaNode.can(MetaNode.CMD_GET));
 			tbc
 					.assertTrue(
-							"Asserts $/Application/<app_id>/Operations/Unlock metanode EXECUTE",
+							"Asserts $/Application/&lt;app_id&gt;/Operations/Unlock metanode EXECUTE",
 							metaNode.can(MetaNode.CMD_EXECUTE));
 		} catch (Exception e) {
 			tbc.fail(MessagesConstants.getMessage(
@@ -918,7 +919,7 @@ public class TreeStructure {
 
 	/**
 	 * This method asserts if executing the $/Application/
-	 * <app_id>/Operations/Unlock node, it really unlocks the
+	 * &lt;app_id&gt;/Operations/Unlock node, it really unlocks the
 	 * ApplicationDescriptor.
 	 * 
 	 * @spec 3.5.4 Launching new application instaces
@@ -951,7 +952,7 @@ public class TreeStructure {
 	}
 
 	/**
-	 * This method asserts if $/Application/ <app_id>/Operations/Launch is a
+	 * This method asserts if $/Application/ &lt;app_id&gt;/Operations/Launch is a
 	 * valid node and asserts Type, Cardinality, Get Permission according to
 	 * Table 3.8 .
 	 * 
@@ -965,27 +966,27 @@ public class TreeStructure {
 					DmtSession.LOCK_TYPE_SHARED);
 			tbc
 					.assertTrue(
-							"Asserts if $/Application/<app_id>/Operations/Launch is a valid node",
+							"Asserts if $/Application/&lt;app_id&gt;/Operations/Launch is a valid node",
 							session
 									.isNodeUri(ApplicationConstants.OSGI_APPLICATION_APPID_OPERATIONS_LAUNCH));
 			MetaNode metaNode = session
 					.getMetaNode(ApplicationConstants.OSGI_APPLICATION_APPID_OPERATIONS_LAUNCH);
 			tbc
 					.assertEquals(
-							"Asserts $/Application/<app_id>/Operations/Launch metanode scope",
+							"Asserts $/Application/&lt;app_id&gt;/Operations/Launch metanode scope",
 							MetaNode.PERMANENT, metaNode.getScope());
 			tbc
 					.assertEquals(
-							"Asserts $/Application/<app_id>/Operations/Launch metanode format",
+							"Asserts $/Application/&lt;app_id&gt;/Operations/Launch metanode format",
 							DmtData.FORMAT_NODE, metaNode.getFormat());
 			tbc
 					.assertTrue(
-							"Asserts $/Application/<app_id>/Operations/Launch metanode cardinality",
+							"Asserts $/Application/&lt;app_id&gt;/Operations/Launch metanode cardinality",
 							!metaNode.isZeroOccurrenceAllowed()
 									&& metaNode.getMaxOccurrence() == 1);
 			tbc
 					.assertTrue(
-							"Asserts $/Application/<app_id>/Operations/Launch metanode GET",
+							"Asserts $/Application/&lt;app_id&gt;/Operations/Launch metanode GET",
 							metaNode.can(MetaNode.CMD_GET));
 
 		} catch (Exception e) {
@@ -998,7 +999,7 @@ public class TreeStructure {
 	}
 
 	/**
-	 * This method asserts if $/Application/<app_id>/Operations/Launch/<launch_id>
+	 * This method asserts if $/Application/&lt;app_id&gt;/Operations/Launch/&lt;launch_id&gt;
 	 * is a valid node and asserts Type, Cardinality, Add Permission, Get
 	 * Permission, Delete Permission and Execute Permission according to Table
 	 * 3.8 .
@@ -1022,32 +1023,32 @@ public class TreeStructure {
 
 			tbc
 					.assertEquals(
-							"Asserts $/Application/<app_id>/Operations/Launch/<launch_id> metanode scope",
+							"Asserts $/Application/&lt;app_id&gt;/Operations/Launch/&lt;launch_id&gt; metanode scope",
 							MetaNode.DYNAMIC, metaNode.getScope());
 			tbc
 					.assertEquals(
-							"Asserts $/Application/<app_id>/Operations/Launch/<launch_id> metanode format",
+							"Asserts $/Application/&lt;app_id&gt;/Operations/Launch/&lt;launch_id&gt; metanode format",
 							DmtData.FORMAT_NODE, metaNode.getFormat());
 			tbc
 					.assertTrue(
-							"Asserts $/Application/<app_id>/Operations/Launch/<launch_id> metanode cardinality",
+							"Asserts $/Application/&lt;app_id&gt;/Operations/Launch/&lt;launch_id&gt; metanode cardinality",
 							metaNode.isZeroOccurrenceAllowed()
 									&& metaNode.getMaxOccurrence() == Integer.MAX_VALUE);
 			tbc
 					.assertTrue(
-							"Asserts $/Application/<app_id>/Operations/Launch/<launch_id> metanode ADD",
+							"Asserts $/Application/&lt;app_id&gt;/Operations/Launch/&lt;launch_id&gt; metanode ADD",
 							metaNode.can(MetaNode.CMD_ADD));
 			tbc
 					.assertTrue(
-							"Asserts $/Application/<app_id>/Operations/Launch/<launch_id> metanode GET",
+							"Asserts $/Application/&lt;app_id&gt;/Operations/Launch/&lt;launch_id&gt; metanode GET",
 							metaNode.can(MetaNode.CMD_GET));
 			tbc
 					.assertTrue(
-							"Asserts $/Application/<app_id>/Operations/Launch/<launch_id> metanode DELETE",
+							"Asserts $/Application/&lt;app_id&gt;/Operations/Launch/&lt;launch_id&gt; metanode DELETE",
 							metaNode.can(MetaNode.CMD_DELETE));
 			tbc
 					.assertTrue(
-							"Asserts $/Application/<app_id>/Operations/Launch/<launch_id> metanode EXECUTE",
+							"Asserts $/Application/&lt;app_id&gt;/Operations/Launch/&lt;launch_id&gt; metanode EXECUTE",
 							metaNode.can(MetaNode.CMD_EXECUTE));
 		} catch (Exception e) {
 			tbc.fail(MessagesConstants.getMessage(
@@ -1062,8 +1063,8 @@ public class TreeStructure {
 	}
 
 	/**
-	 * This method asserts if $/Application/ <app_id>/Operations/Launch/
-	 * <launch_id>/Arguments/<arg_id> is a valid node and asserts Type,
+	 * This method asserts if $/Application/ &lt;app_id&gt;/Operations/Launch/
+	 * &lt;launch_id&gt;/Arguments/&lt;arg_id&gt; is a valid node and asserts Type,
 	 * Cardinality, Add Permission, Get Permission, Delete Permission according
 	 * to Table 3.7 .
 	 * 
@@ -1088,28 +1089,28 @@ public class TreeStructure {
 
 			tbc
 					.assertEquals(
-							"Asserts $/Application/<app_id>/Operations/Launch/<launch_id>/Arguments/<arg_id> metanode scope",
+							"Asserts $/Application/&lt;app_id&gt;/Operations/Launch/&lt;launch_id&gt;/Arguments/&lt;arg_id&gt; metanode scope",
 							MetaNode.DYNAMIC, metaNode.getScope());
 			tbc
 					.assertEquals(
-							"Asserts $/Application/<app_id>/Operations/Launch/<launch_id>/Arguments/<arg_id> metanode format",
+							"Asserts $/Application/&lt;app_id&gt;/Operations/Launch/&lt;launch_id&gt;/Arguments/&lt;arg_id&gt; metanode format",
 							DmtData.FORMAT_NODE, metaNode.getFormat());
 			tbc
 					.assertTrue(
-							"Asserts $/Application/<app_id>/Operations/Launch/<launch_id>/Arguments/<arg_id> metanode cardinality",
+							"Asserts $/Application/&lt;app_id&gt;/Operations/Launch/&lt;launch_id&gt;/Arguments/&lt;arg_id&gt; metanode cardinality",
 							metaNode.isZeroOccurrenceAllowed()
 									&& metaNode.getMaxOccurrence() == Integer.MAX_VALUE);
 			tbc
 					.assertTrue(
-							"Asserts $/Application/<app_id>/Operations/Launch/<launch_id>/Arguments/<arg_id> metanode ADD",
+							"Asserts $/Application/&lt;app_id&gt;/Operations/Launch/&lt;launch_id&gt;/Arguments/&lt;arg_id&gt; metanode ADD",
 							metaNode.can(MetaNode.CMD_ADD));
 			tbc
 					.assertTrue(
-							"Asserts $/Application/<app_id>/Operations/Launch/<launch_id>/Arguments/<arg_id> metanode GET",
+							"Asserts $/Application/&lt;app_id&gt;/Operations/Launch/&lt;launch_id&gt;/Arguments/&lt;arg_id&gt; metanode GET",
 							metaNode.can(MetaNode.CMD_GET));
 			tbc
 					.assertTrue(
-							"Asserts $/Application/<app_id>/Operations/Launch/<launch_id>/Arguments/<arg_id> metanode DELETE",
+							"Asserts $/Application/&lt;app_id&gt;/Operations/Launch/&lt;launch_id&gt;/Arguments/&lt;arg_id&gt; metanode DELETE",
 							metaNode.can(MetaNode.CMD_DELETE));
 
 		} catch (Exception e) {
@@ -1125,8 +1126,8 @@ public class TreeStructure {
 	}
 
 	/**
-	 * This method asserts if $/Application/ <app_id>/Operations/Launch/
-	 * <launch_id>/Arguments/<arg_id>/Name is a valid node and asserts Type,
+	 * This method asserts if $/Application/ &lt;app_id&gt;/Operations/Launch/
+	 * &lt;launch_id&gt;/Arguments/&lt;arg_id&gt;/Name is a valid node and asserts Type,
 	 * Cardinality, Get Permission, Replace Permission according to Table 3.7 .
 	 * 
 	 * @spec 3.5.3 Application Arguments
@@ -1150,24 +1151,24 @@ public class TreeStructure {
 
 			tbc
 					.assertEquals(
-							"Asserts $/Application/<app_id>/Operations/Launch/<launch_id>/Arguments/<arg_id>/Name metanode scope",
+							"Asserts $/Application/&lt;app_id&gt;/Operations/Launch/&lt;launch_id&gt;/Arguments/&lt;arg_id&gt;/Name metanode scope",
 							MetaNode.AUTOMATIC, metaNode.getScope());
 			tbc
 					.assertEquals(
-							"Asserts $/Application/<app_id>/Operations/Launch/<launch_id>/Arguments/<arg_id>/Name metanode format",
+							"Asserts $/Application/&lt;app_id&gt;/Operations/Launch/&lt;launch_id&gt;/Arguments/&lt;arg_id&gt;/Name metanode format",
 							DmtData.FORMAT_STRING, metaNode.getFormat());
 			tbc
 					.assertTrue(
-							"Asserts $/Application/<app_id>/Operations/Launch/<launch_id>/Arguments/<arg_id>/Name metanode cardinality",
+							"Asserts $/Application/&lt;app_id&gt;/Operations/Launch/&lt;launch_id&gt;/Arguments/&lt;arg_id&gt;/Name metanode cardinality",
 							!metaNode.isZeroOccurrenceAllowed()
 									&& metaNode.getMaxOccurrence() == 1);
 			tbc
 					.assertTrue(
-							"Asserts $/Application/<app_id>/Operations/Launch/<launch_id>/Arguments/<arg_id>/Name metanode GET",
+							"Asserts $/Application/&lt;app_id&gt;/Operations/Launch/&lt;launch_id&gt;/Arguments/&lt;arg_id&gt;/Name metanode GET",
 							metaNode.can(MetaNode.CMD_GET));
 			tbc
 					.assertTrue(
-							"Asserts $/Application/<app_id>/Operations/Launch/<launch_id>/Arguments/<arg_id>/Name metanode REPLACE",
+							"Asserts $/Application/&lt;app_id&gt;/Operations/Launch/&lt;launch_id&gt;/Arguments/&lt;arg_id&gt;/Name metanode REPLACE",
 							metaNode.can(MetaNode.CMD_REPLACE));
 
 		} catch (Exception e) {
@@ -1183,8 +1184,8 @@ public class TreeStructure {
 	}
 
 	/**
-	 * This method asserts if $/Application/ <app_id>/Operations/Launch/
-	 * <launch_id>/Arguments/<arg_id>/Value is a valid node and asserts Type,
+	 * This method asserts if $/Application/ &lt;app_id&gt;/Operations/Launch/
+	 * &lt;launch_id&gt;/Arguments/&lt;arg_id&gt;/Value is a valid node and asserts Type,
 	 * Cardinality, Get Permission, Replace Permission according to Table 3.7 .
 	 * 
 	 * @spec 3.5.3 Application Arguments
@@ -1208,11 +1209,11 @@ public class TreeStructure {
 
 			tbc
 					.assertEquals(
-							"Asserts $/Application/<app_id>/Operations/Launch/<launch_id>/Arguments/<arg_id>/Value metanode scope",
+							"Asserts $/Application/&lt;app_id&gt;/Operations/Launch/&lt;launch_id&gt;/Arguments/&lt;arg_id&gt;/Value metanode scope",
 							MetaNode.AUTOMATIC, metaNode.getScope());
 			tbc
 					.assertEquals(
-							"Asserts $/Application/<app_id>/Operations/Launch/<launch_id>/Arguments/<arg_id>/Value metanode format",
+							"Asserts $/Application/&lt;app_id&gt;/Operations/Launch/&lt;launch_id&gt;/Arguments/&lt;arg_id&gt;/Value metanode format",
 							(DmtData.FORMAT_BINARY | DmtData.FORMAT_STRING
 									| DmtData.FORMAT_INTEGER
 									| DmtData.FORMAT_FLOAT
@@ -1220,16 +1221,16 @@ public class TreeStructure {
 							metaNode.getFormat());
 			tbc
 					.assertTrue(
-							"Asserts $/Application/<app_id>/Operations/Launch/<launch_id>/Arguments/<arg_id>/Value metanode cardinality",
+							"Asserts $/Application/&lt;app_id&gt;/Operations/Launch/&lt;launch_id&gt;/Arguments/&lt;arg_id&gt;/Value metanode cardinality",
 							metaNode.isZeroOccurrenceAllowed()
 									&& metaNode.getMaxOccurrence() == 1);
 			tbc
 					.assertTrue(
-							"Asserts $/Application/<app_id>/Operations/Launch/<launch_id>/Arguments/<arg_id>/Value metanode GET",
+							"Asserts $/Application/&lt;app_id&gt;/Operations/Launch/&lt;launch_id&gt;/Arguments/&lt;arg_id&gt;/Value metanode GET",
 							metaNode.can(MetaNode.CMD_GET));
 			tbc
 					.assertTrue(
-							"Asserts $/Application/<app_id>/Operations/Launch/<launch_id>/Arguments/<arg_id>/Value metanode REPLACE",
+							"Asserts $/Application/&lt;app_id&gt;/Operations/Launch/&lt;launch_id&gt;/Arguments/&lt;arg_id&gt;/Value metanode REPLACE",
 							metaNode.can(MetaNode.CMD_REPLACE));
 
 		} catch (Exception e) {
@@ -1245,7 +1246,7 @@ public class TreeStructure {
 	}
 
 	/**
-	 * This method asserts if executing $/Application/<app_id>/Operations/Launch/<launch_id>,
+	 * This method asserts if executing $/Application/&lt;app_id&gt;/Operations/Launch/&lt;launch_id&gt;,
 	 * this method is executed synchronously, and if the Result/InstanceID node
 	 * is updated with the instance identifier of the newly created application
 	 * instance, if the Result/Status node is updated to OK and if the
@@ -1315,8 +1316,8 @@ public class TreeStructure {
 	}
 
 	/**
-	 * This method asserts if $/Application/<app_id>/Operations/Launch/
-	 * <launch_id>/Arguments is a valid node and asserts Type, Cardinality, Get
+	 * This method asserts if $/Application/&lt;app_id&gt;/Operations/Launch/
+	 * &lt;launch_id&gt;/Arguments is a valid node and asserts Type, Cardinality, Get
 	 * Permission according to Table 3.7 .
 	 * 
 	 * @spec 3.5.3 Application Arguments
@@ -1335,7 +1336,7 @@ public class TreeStructure {
 			
 			tbc
 					.assertTrue(
-							"Asserts if $/Application/<app_id>/Operations/Launch/Arguments is a valid node",
+							"Asserts if $/Application/&lt;app_id&gt;/Operations/Launch/Arguments is a valid node",
 							session
 									.isNodeUri(ApplicationConstants.OSGI_APPLICATION_APPID_OPERATIONS_LAUNCH_LAUNCHID_ARGUMENTS));
 
@@ -1344,20 +1345,20 @@ public class TreeStructure {
 
 			tbc
 					.assertEquals(
-							"Asserts $/Application/<app_id>/Operations/Launch/<launch_id>/Arguments metanode scope",
+							"Asserts $/Application/&lt;app_id&gt;/Operations/Launch/&lt;launch_id&gt;/Arguments metanode scope",
 							MetaNode.AUTOMATIC, metaNode.getScope());
 			tbc
 					.assertEquals(
-							"Asserts $/Application/<app_id>/Operations/Launch/<launch_id>/Arguments metanode format",
+							"Asserts $/Application/&lt;app_id&gt;/Operations/Launch/&lt;launch_id&gt;/Arguments metanode format",
 							DmtData.FORMAT_NODE, metaNode.getFormat());
 			tbc
 					.assertTrue(
-							"Asserts $/Application/<app_id>/Operations/Launch/<launch_id>/Arguments metanode cardinality",
+							"Asserts $/Application/&lt;app_id&gt;/Operations/Launch/&lt;launch_id&gt;/Arguments metanode cardinality",
 							!metaNode.isZeroOccurrenceAllowed()
 									&& metaNode.getMaxOccurrence() == 1);
 			tbc
 					.assertTrue(
-							"Asserts $/Application/<app_id>/Operations/Launch/<launch_id>/Arguments metanode GET",
+							"Asserts $/Application/&lt;app_id&gt;/Operations/Launch/&lt;launch_id&gt;/Arguments metanode GET",
 							metaNode.can(MetaNode.CMD_GET));
 
 		} catch (Exception e) {
@@ -1373,7 +1374,7 @@ public class TreeStructure {
 	}
 
 	/**
-	 * This method asserts if $/Application/<app_id>/Instances/<instance_id>/State
+	 * This method asserts if $/Application/&lt;app_id&gt;/Instances/&lt;instance_id&gt;/State
 	 * is a valid node and asserts Type, Cardinality, Get Permission according to
 	 * Table 3.9 .
 	 * 
@@ -1401,7 +1402,7 @@ public class TreeStructure {
 				
 			tbc
 					.assertTrue(
-							"Asserts if $/Application/<app_id>/Instances/<instance_id>/State is a valid node",
+							"Asserts if $/Application/&lt;app_id&gt;/Instances/&lt;instance_id&gt;/State is a valid node",
 							session
 									.isNodeUri(ApplicationConstants.OSGI_APPLICATION_APPID_INSTANCES_ID_STATE));
 
@@ -1409,20 +1410,20 @@ public class TreeStructure {
 					.getMetaNode(ApplicationConstants.OSGI_APPLICATION_APPID_INSTANCES_ID_STATE);
 			tbc
 					.assertEquals(
-							"Asserts $/Application/<app_id>/Instances/<instance_id>/State metanode scope",
+							"Asserts $/Application/&lt;app_id&gt;/Instances/&lt;instance_id&gt;/State metanode scope",
 							MetaNode.PERMANENT, metaNode.getScope());
 			tbc
 					.assertEquals(
-							"Asserts $/Application/<app_id>/Instances/<instance_id>/State metanode format",
+							"Asserts $/Application/&lt;app_id&gt;/Instances/&lt;instance_id&gt;/State metanode format",
 							DmtData.FORMAT_STRING, metaNode.getFormat());
 			tbc
 					.assertTrue(
-							"Asserts $/Application/<app_id>/Instances/<instance_id>/State metanode cardinality",
+							"Asserts $/Application/&lt;app_id&gt;/Instances/&lt;instance_id&gt;/State metanode cardinality",
 							!metaNode.isZeroOccurrenceAllowed()
 									&& metaNode.getMaxOccurrence() == 1);
 			tbc
 					.assertTrue(
-							"Asserts $/Application/<app_id>/Instances/<instance_id>/State metanode GET",
+							"Asserts $/Application/&lt;app_id&gt;/Instances/&lt;instance_id&gt;/State metanode GET",
 							metaNode.can(MetaNode.CMD_GET));
 
 			DmtData value = session.getNodeValue(ApplicationConstants.OSGI_APPLICATION_APPID_INSTANCES_ID_STATE);
@@ -1439,7 +1440,7 @@ public class TreeStructure {
 	}
 
 	/**
-	 * This method asserts if $/Application/<app_id>/Instances/<instance_id>/Operations
+	 * This method asserts if $/Application/&lt;app_id&gt;/Instances/&lt;instance_id&gt;/Operations
 	 * is a valid node and asserts Type, Cardinality, Get Permission according 
 	 * to Table 3.9 .
 	 * 
@@ -1467,7 +1468,7 @@ public class TreeStructure {
 
 			tbc
 					.assertTrue(
-							"Asserts if $/Application/<app_id>/Instances/<instance_id>/Operations is a valid node",
+							"Asserts if $/Application/&lt;app_id&gt;/Instances/&lt;instance_id&gt;/Operations is a valid node",
 							session
 									.isNodeUri(ApplicationConstants.OSGI_APPLICATION_APPID_INSTANCES_ID_OPERATIONS));
 
@@ -1475,20 +1476,20 @@ public class TreeStructure {
 					.getMetaNode(ApplicationConstants.OSGI_APPLICATION_APPID_INSTANCES_ID_OPERATIONS);
 			tbc
 					.assertEquals(
-							"Asserts $/Application/<app_id>/Instances/<instance_id>/Operations metanode scope",
+							"Asserts $/Application/&lt;app_id&gt;/Instances/&lt;instance_id&gt;/Operations metanode scope",
 							MetaNode.PERMANENT, metaNode.getScope());
 			tbc
 					.assertEquals(
-							"Asserts $/Application/<app_id>/Instances/<instance_id>/Operations metanode format",
+							"Asserts $/Application/&lt;app_id&gt;/Instances/&lt;instance_id&gt;/Operations metanode format",
 							DmtData.FORMAT_NODE, metaNode.getFormat());
 			tbc
 					.assertTrue(
-							"Asserts $/Application/<app_id>/Instances/<instance_id>/Operations metanode cardinality",
+							"Asserts $/Application/&lt;app_id&gt;/Instances/&lt;instance_id&gt;/Operations metanode cardinality",
 							!metaNode.isZeroOccurrenceAllowed()
 									&& metaNode.getMaxOccurrence() == 1);
 			tbc
 					.assertTrue(
-							"Asserts $/Application/<app_id>/Instances/<instance_id>/Operations metanode GET",
+							"Asserts $/Application/&lt;app_id&gt;/Instances/&lt;instance_id&gt;/Operations metanode GET",
 							metaNode.can(MetaNode.CMD_GET));
 
 		} catch (Exception e) {
@@ -1502,7 +1503,7 @@ public class TreeStructure {
 	}
 
 	/**
-	 * This method asserts if $/Application/<app_id>/Instances/<instance_id>/Operations/Stop
+	 * This method asserts if $/Application/&lt;app_id&gt;/Instances/&lt;instance_id&gt;/Operations/Stop
 	 * is a valid node and asserts Type, Cardinality, Get Permission and Execute Permission
 	 * according to Table 3.9 .
 	 * 
@@ -1530,7 +1531,7 @@ public class TreeStructure {
 			
 			tbc
 					.assertTrue(
-							"Asserts if $/Application/<app_id>/Instances/<instance_id>/Operations/Stop is a valid node",
+							"Asserts if $/Application/&lt;app_id&gt;/Instances/&lt;instance_id&gt;/Operations/Stop is a valid node",
 							session
 									.isNodeUri(ApplicationConstants.OSGI_APPLICATION_APPID_INSTANCES_ID_OPERATIONS_STOP));
 
@@ -1538,24 +1539,24 @@ public class TreeStructure {
 					.getMetaNode(ApplicationConstants.OSGI_APPLICATION_APPID_INSTANCES_ID_OPERATIONS_STOP);
 			tbc
 					.assertEquals(
-							"Asserts $/Application/<app_id>/Instances/<instance_id>/Operations/Stop metanode scope",
+							"Asserts $/Application/&lt;app_id&gt;/Instances/&lt;instance_id&gt;/Operations/Stop metanode scope",
 							MetaNode.PERMANENT, metaNode.getScope());
 			tbc
 					.assertEquals(
-							"Asserts $/Application/<app_id>/Instances/<instance_id>/Operations/Stop metanode format",
+							"Asserts $/Application/&lt;app_id&gt;/Instances/&lt;instance_id&gt;/Operations/Stop metanode format",
 							DmtData.FORMAT_NULL, metaNode.getFormat());
 			tbc
 					.assertTrue(
-							"Asserts $/Application/<app_id>/Instances/<instance_id>/Operations/Stop metanode cardinality",
+							"Asserts $/Application/&lt;app_id&gt;/Instances/&lt;instance_id&gt;/Operations/Stop metanode cardinality",
 							!metaNode.isZeroOccurrenceAllowed()
 									&& metaNode.getMaxOccurrence() == 1);
 			tbc
 					.assertTrue(
-							"Asserts $/Application/<app_id>/Instances/<instance_id>/Operations/Stop metanode GET",
+							"Asserts $/Application/&lt;app_id&gt;/Instances/&lt;instance_id&gt;/Operations/Stop metanode GET",
 							metaNode.can(MetaNode.CMD_GET));
 			tbc
 					.assertTrue(
-							"Asserts $/Application/<app_id>/Instances/<instance_id>/Operations/Stop metanode EXECUTE",
+							"Asserts $/Application/&lt;app_id&gt;/Instances/&lt;instance_id&gt;/Operations/Stop metanode EXECUTE",
 							metaNode.can(MetaNode.CMD_EXECUTE));
 
 		} catch (Exception e) {
@@ -1569,7 +1570,7 @@ public class TreeStructure {
 	}
 
 	/**
-	 * This method asserts if executing $/Application/<app_id>/Instances/<instance_id>/Operations/Stop ,
+	 * This method asserts if executing $/Application/&lt;app_id&gt;/Instances/&lt;instance_id&gt;/Operations/Stop ,
 	 * it really stops the ApplicationHandle.
 	 * 
 	 * @spec 3.5.6 Application Instances
@@ -1618,7 +1619,7 @@ public class TreeStructure {
 	}
 
 	/**
-	 * This method asserts if $/Application/<app_id>/Instances/<instance_id>/Operations/Ext
+	 * This method asserts if $/Application/&lt;app_id&gt;/Instances/&lt;instance_id&gt;/Operations/Ext
 	 * is a valid node and asserts Type, Cardinality, Get Permission according to Table 3.9 .
 	 * 
 	 * @spec 3.5.6 Application Instances
@@ -1648,7 +1649,7 @@ public class TreeStructure {
 
 				tbc
 						.assertTrue(
-								"Asserts if $/Application/<app_id>/Instances/<instance_id>/Operations/Ext is a valid node",
+								"Asserts if $/Application/&lt;app_id&gt;/Instances/&lt;instance_id&gt;/Operations/Ext is a valid node",
 								session
 										.isNodeUri(ApplicationConstants.OSGI_APPLICATION_APPID_INSTANCES_ID_OPERATIONS_EXT));
 
@@ -1656,20 +1657,20 @@ public class TreeStructure {
 						.getMetaNode(ApplicationConstants.OSGI_APPLICATION_APPID_INSTANCES_ID_OPERATIONS_EXT);
 				tbc
 						.assertEquals(
-								"Asserts $/Application/<app_id>/Instances/<instance_id>/Operations/Ext metanode scope",
+								"Asserts $/Application/&lt;app_id&gt;/Instances/&lt;instance_id&gt;/Operations/Ext metanode scope",
 								MetaNode.PERMANENT, metaNode.getScope());
 				tbc
 						.assertEquals(
-								"Asserts $/Application/<app_id>/Instances/<instance_id>/Operations/Ext metanode format",
+								"Asserts $/Application/&lt;app_id&gt;/Instances/&lt;instance_id&gt;/Operations/Ext metanode format",
 								DmtData.FORMAT_NODE, metaNode.getFormat());
 				tbc
 						.assertTrue(
-								"Asserts $/Application/<app_id>/Instances/<instance_id>/Operations/Ext metanode cardinality",
+								"Asserts $/Application/&lt;app_id&gt;/Instances/&lt;instance_id&gt;/Operations/Ext metanode cardinality",
 								metaNode.isZeroOccurrenceAllowed()
 										&& metaNode.getMaxOccurrence() == 1);
 				tbc
 						.assertTrue(
-								"Asserts $/Application/<app_id>/Instances/<instance_id>/Operations/Ext metanode GET",
+								"Asserts $/Application/&lt;app_id&gt;/Instances/&lt;instance_id&gt;/Operations/Ext metanode GET",
 								metaNode.can(MetaNode.CMD_GET));
 			}
 
@@ -1684,7 +1685,7 @@ public class TreeStructure {
 	}
 
 	/**
-	 * This method asserts if $/Application/<app_id>/Schedule/<schedule_id> is
+	 * This method asserts if $/Application/&lt;app_id&gt;/Schedule/&lt;schedule_id&gt; is
 	 * a valid node and asserts Type, Cardinality, Add Permission, Get
 	 * Permission, Delete Permission according to Table 3.10 .
 	 * 
@@ -1706,28 +1707,28 @@ public class TreeStructure {
 					.getMetaNode(ApplicationConstants.OSGI_APPLICATION_APPID_SCHEDULES_ID);
 			tbc
 					.assertEquals(
-							"Asserts $/Application/<app_id>/Schedule/<schedule_id> metanode scope",
+							"Asserts $/Application/&lt;app_id&gt;/Schedule/&lt;schedule_id&gt; metanode scope",
 							MetaNode.DYNAMIC, metaNode.getScope());
 			tbc
 					.assertEquals(
-							"Asserts $/Application/<app_id>/Schedule/<schedule_id> metanode format",
+							"Asserts $/Application/&lt;app_id&gt;/Schedule/&lt;schedule_id&gt; metanode format",
 							DmtData.FORMAT_NODE, metaNode.getFormat());
 			tbc
 					.assertTrue(
-							"Asserts $/Application/<app_id>/Schedule/<schedule_id> metanode cardinality",
+							"Asserts $/Application/&lt;app_id&gt;/Schedule/&lt;schedule_id&gt; metanode cardinality",
 							metaNode.isZeroOccurrenceAllowed()
 									&& metaNode.getMaxOccurrence() == Integer.MAX_VALUE);
 			tbc
 					.assertTrue(
-							"Asserts $/Application/<app_id>/Schedule/<schedule_id> metanode ADD",
+							"Asserts $/Application/&lt;app_id&gt;/Schedule/&lt;schedule_id&gt; metanode ADD",
 							metaNode.can(MetaNode.CMD_ADD));
 			tbc
 					.assertTrue(
-							"Asserts $/Application/<app_id>/Schedule/<schedule_id> metanode GET",
+							"Asserts $/Application/&lt;app_id&gt;/Schedule/&lt;schedule_id&gt; metanode GET",
 							metaNode.can(MetaNode.CMD_GET));
 			tbc
 					.assertTrue(
-							"Asserts $/Application/<app_id>/Schedule/<schedule_id> metanode DELETE",
+							"Asserts $/Application/&lt;app_id&gt;/Schedule/&lt;schedule_id&gt; metanode DELETE",
 							metaNode.can(MetaNode.CMD_DELETE));
 
 		} catch (Exception e) {
@@ -1743,7 +1744,7 @@ public class TreeStructure {
 	}
 
 	/**
-	 * This method asserts if $/Application/<app_id>/Schedules/<schedule_id>/Arguments
+	 * This method asserts if $/Application/&lt;app_id&gt;/Schedules/&lt;schedule_id&gt;/Arguments
 	 * is a valid node and asserts Type, Cardinality, Get Permission according to
 	 * Table 3.10 .
 	 * 
@@ -1763,7 +1764,7 @@ public class TreeStructure {
 
 			tbc
 					.assertTrue(
-							"Asserts if $/Application/<app_id>/Schedules/<schedule_id>/Arguments is a valid node",
+							"Asserts if $/Application/&lt;app_id&gt;/Schedules/&lt;schedule_id&gt;/Arguments is a valid node",
 							session
 									.isNodeUri(ApplicationConstants.OSGI_APPLICATION_APPID_SCHEDULES_ID_ARGUMENTS));
 
@@ -1771,20 +1772,20 @@ public class TreeStructure {
 					.getMetaNode(ApplicationConstants.OSGI_APPLICATION_APPID_SCHEDULES_ID_ARGUMENTS);
 			tbc
 					.assertEquals(
-							"Asserts $/Application/<app_id>/Schedules/<schedule_id>/Arguments metanode scope",
+							"Asserts $/Application/&lt;app_id&gt;/Schedules/&lt;schedule_id&gt;/Arguments metanode scope",
 							MetaNode.AUTOMATIC, metaNode.getScope());
 			tbc
 					.assertEquals(
-							"Asserts $/Application/<app_id>/Schedules/<schedule_id>/Arguments metanode format",
+							"Asserts $/Application/&lt;app_id&gt;/Schedules/&lt;schedule_id&gt;/Arguments metanode format",
 							DmtData.FORMAT_NODE, metaNode.getFormat());
 			tbc
 					.assertTrue(
-							"Asserts $/Application/<app_id>/Schedules/<schedule_id>/Arguments metanode cardinality",
+							"Asserts $/Application/&lt;app_id&gt;/Schedules/&lt;schedule_id&gt;/Arguments metanode cardinality",
 							!metaNode.isZeroOccurrenceAllowed()
 									&& metaNode.getMaxOccurrence() == 1);
 			tbc
 					.assertTrue(
-							"Asserts $/Application/<app_id>/Schedules/<schedule_id>/Arguments metanode GET",
+							"Asserts $/Application/&lt;app_id&gt;/Schedules/&lt;schedule_id&gt;/Arguments metanode GET",
 							metaNode.can(MetaNode.CMD_GET));
 
 		} catch (Exception e) {
@@ -1800,7 +1801,7 @@ public class TreeStructure {
 	}
 
 	/**
-	 * This method asserts if $/Application/<app_id>/Schedules/<schedule_id>/Enabled
+	 * This method asserts if $/Application/&lt;app_id&gt;/Schedules/&lt;schedule_id&gt;/Enabled
 	 * is a valid node and asserts Type, Cardinality, Get Permission, Replace Permission
 	 * according to Table 3.10 .
 	 * 
@@ -1820,7 +1821,7 @@ public class TreeStructure {
 
 			tbc
 					.assertTrue(
-							"Asserts if $/Application/<app_id>/Schedules/<schedule_id>/Enabled is a valid node",
+							"Asserts if $/Application/&lt;app_id&gt;/Schedules/&lt;schedule_id&gt;/Enabled is a valid node",
 							session
 									.isNodeUri(ApplicationConstants.OSGI_APPLICATION_APPID_SCHEDULES_ID_ENABLED));
 
@@ -1828,24 +1829,24 @@ public class TreeStructure {
 					.getMetaNode(ApplicationConstants.OSGI_APPLICATION_APPID_SCHEDULES_ID_ENABLED);
 			tbc
 					.assertEquals(
-							"Asserts $/Application/<app_id>/Schedules/<schedule_id>/Enabled metanode scope",
+							"Asserts $/Application/&lt;app_id&gt;/Schedules/&lt;schedule_id&gt;/Enabled metanode scope",
 							MetaNode.AUTOMATIC, metaNode.getScope());
 			tbc
 					.assertEquals(
-							"Asserts $/Application/<app_id>/Schedules/<schedule_id>/Enabled metanode format",
+							"Asserts $/Application/&lt;app_id&gt;/Schedules/&lt;schedule_id&gt;/Enabled metanode format",
 							DmtData.FORMAT_BOOLEAN, metaNode.getFormat());
 			tbc
 					.assertTrue(
-							"Asserts $/Application/<app_id>/Schedules/<schedule_id>/Enabled metanode cardinality",
+							"Asserts $/Application/&lt;app_id&gt;/Schedules/&lt;schedule_id&gt;/Enabled metanode cardinality",
 							!metaNode.isZeroOccurrenceAllowed()
 									&& metaNode.getMaxOccurrence() == 1);
 			tbc
 					.assertTrue(
-							"Asserts $/Application/<app_id>/Schedules/<schedule_id>/Enabled metanode GET",
+							"Asserts $/Application/&lt;app_id&gt;/Schedules/&lt;schedule_id&gt;/Enabled metanode GET",
 							metaNode.can(MetaNode.CMD_GET));
 			tbc
 					.assertTrue(
-							"Asserts $/Application/<app_id>/Schedules/<schedule_id>/Enabled metanode REPLACE",
+							"Asserts $/Application/&lt;app_id&gt;/Schedules/&lt;schedule_id&gt;/Enabled metanode REPLACE",
 							metaNode.can(MetaNode.CMD_REPLACE));
 
 			tbc
@@ -1869,7 +1870,7 @@ public class TreeStructure {
 	}
 
 	/**
-	 * This method asserts if $/Application/<app_id>/Schedules/<schedule_id>/TopicFilter
+	 * This method asserts if $/Application/&lt;app_id&gt;/Schedules/&lt;schedule_id&gt;/TopicFilter
 	 * is a valid node and asserts Type, Cardinality, Get Permission, Replace Permission 
 	 * according to Table 3.10 .
 	 * 
@@ -1889,7 +1890,7 @@ public class TreeStructure {
 
 			tbc
 					.assertTrue(
-							"Asserts if $/Application/<app_id>/Schedules/<schedule_id>/TopicFilter is a valid node",
+							"Asserts if $/Application/&lt;app_id&gt;/Schedules/&lt;schedule_id&gt;/TopicFilter is a valid node",
 							session
 									.isNodeUri(ApplicationConstants.OSGI_APPLICATION_APPID_SCHEDULES_ID_TOPICFILTER));
 
@@ -1897,24 +1898,24 @@ public class TreeStructure {
 					.getMetaNode(ApplicationConstants.OSGI_APPLICATION_APPID_SCHEDULES_ID_TOPICFILTER);
 			tbc
 					.assertEquals(
-							"Asserts $/Application/<app_id>/Schedules/<schedule_id>/TopicFilter metanode scope",
+							"Asserts $/Application/&lt;app_id&gt;/Schedules/&lt;schedule_id&gt;/TopicFilter metanode scope",
 							MetaNode.AUTOMATIC, metaNode.getScope());
 			tbc
 					.assertEquals(
-							"Asserts $/Application/<app_id>/Schedules/<schedule_id>/TopicFilter metanode format",
+							"Asserts $/Application/&lt;app_id&gt;/Schedules/&lt;schedule_id&gt;/TopicFilter metanode format",
 							DmtData.FORMAT_STRING, metaNode.getFormat());
 			tbc
 					.assertTrue(
-							"Asserts $/Application/<app_id>/Schedules/<schedule_id>/TopicFilter metanode cardinality",
+							"Asserts $/Application/&lt;app_id&gt;/Schedules/&lt;schedule_id&gt;/TopicFilter metanode cardinality",
 							!metaNode.isZeroOccurrenceAllowed()
 									&& metaNode.getMaxOccurrence() == 1);
 			tbc
 					.assertTrue(
-							"Asserts $/Application/<app_id>/Schedules/<schedule_id>/TopicFilter metanode GET",
+							"Asserts $/Application/&lt;app_id&gt;/Schedules/&lt;schedule_id&gt;/TopicFilter metanode GET",
 							metaNode.can(MetaNode.CMD_GET));
 			tbc
 					.assertTrue(
-							"Asserts $/Application/<app_id>/Schedules/<schedule_id>/TopicFilter metanode REPLACE",
+							"Asserts $/Application/&lt;app_id&gt;/Schedules/&lt;schedule_id&gt;/TopicFilter metanode REPLACE",
 							metaNode.can(MetaNode.CMD_REPLACE));
 
 			tbc
@@ -1938,7 +1939,7 @@ public class TreeStructure {
 	}
 
 	/**
-	 * This method asserts if $/Application/<app_id>/Schedules/<schedule_id>/EventFilter
+	 * This method asserts if $/Application/&lt;app_id&gt;/Schedules/&lt;schedule_id&gt;/EventFilter
 	 * is a valid node and asserts Type, Cardinality, Get Permission, Replace Permission
 	 * according to Table 3.10 .
 	 * 
@@ -1958,7 +1959,7 @@ public class TreeStructure {
 
 			tbc
 					.assertTrue(
-							"Asserts if $/Application/<app_id>/Schedules/<schedule_id>/EventFilter is a valid node",
+							"Asserts if $/Application/&lt;app_id&gt;/Schedules/&lt;schedule_id&gt;/EventFilter is a valid node",
 							session
 									.isNodeUri(ApplicationConstants.OSGI_APPLICATION_APPID_SCHEDULES_ID_EVENTFILTER));
 
@@ -1966,24 +1967,24 @@ public class TreeStructure {
 					.getMetaNode(ApplicationConstants.OSGI_APPLICATION_APPID_SCHEDULES_ID_EVENTFILTER);
 			tbc
 					.assertEquals(
-							"Asserts $/Application/<app_id>/Schedules/<schedule_id>/EventFilter metanode scope",
+							"Asserts $/Application/&lt;app_id&gt;/Schedules/&lt;schedule_id&gt;/EventFilter metanode scope",
 							MetaNode.AUTOMATIC, metaNode.getScope());
 			tbc
 					.assertEquals(
-							"Asserts $/Application/<app_id>/Schedules/<schedule_id>/EventFilter metanode format",
+							"Asserts $/Application/&lt;app_id&gt;/Schedules/&lt;schedule_id&gt;/EventFilter metanode format",
 							DmtData.FORMAT_STRING, metaNode.getFormat());
 			tbc
 					.assertTrue(
-							"Asserts $/Application/<app_id>/Schedules/<schedule_id>/EventFilter metanode cardinality",
+							"Asserts $/Application/&lt;app_id&gt;/Schedules/&lt;schedule_id&gt;/EventFilter metanode cardinality",
 							!metaNode.isZeroOccurrenceAllowed()
 									&& metaNode.getMaxOccurrence() == 1);
 			tbc
 					.assertTrue(
-							"Asserts $/Application/<app_id>/Schedules/<schedule_id>/EventFilter metanode GET",
+							"Asserts $/Application/&lt;app_id&gt;/Schedules/&lt;schedule_id&gt;/EventFilter metanode GET",
 							metaNode.can(MetaNode.CMD_GET));
 			tbc
 					.assertTrue(
-							"Asserts $/Application/<app_id>/Schedules/<schedule_id>/EventFilter metanode REPLACE",
+							"Asserts $/Application/&lt;app_id&gt;/Schedules/&lt;schedule_id&gt;/EventFilter metanode REPLACE",
 							metaNode.can(MetaNode.CMD_REPLACE));
 
 			tbc
@@ -2008,7 +2009,7 @@ public class TreeStructure {
 	}
 
 	/**
-	 * This method asserts if $/Application/<app_id>/Schedules/<schedule_id>/Recurring
+	 * This method asserts if $/Application/&lt;app_id&gt;/Schedules/&lt;schedule_id&gt;/Recurring
 	 * is a valid node and asserts Type, Cardinality, Get Permission, Replace Permission
 	 * according to Table 3.10 .
 	 * 
@@ -2028,7 +2029,7 @@ public class TreeStructure {
 
 			tbc
 					.assertTrue(
-							"Asserts if $/Application/<app_id>/Schedules/<schedule_id>/Recurring is a valid node",
+							"Asserts if $/Application/&lt;app_id&gt;/Schedules/&lt;schedule_id&gt;/Recurring is a valid node",
 							session
 									.isNodeUri(ApplicationConstants.OSGI_APPLICATION_APPID_SCHEDULES_ID_RECURRING));
 
@@ -2036,24 +2037,24 @@ public class TreeStructure {
 					.getMetaNode(ApplicationConstants.OSGI_APPLICATION_APPID_SCHEDULES_ID_RECURRING);
 			tbc
 					.assertEquals(
-							"Asserts $/Application/<app_id>/Schedules/<schedule_id>/Recurring metanode scope",
+							"Asserts $/Application/&lt;app_id&gt;/Schedules/&lt;schedule_id&gt;/Recurring metanode scope",
 							MetaNode.AUTOMATIC, metaNode.getScope());
 			tbc
 					.assertEquals(
-							"Asserts $/Application/<app_id>/Schedules/<schedule_id>/Recurring metanode format",
+							"Asserts $/Application/&lt;app_id&gt;/Schedules/&lt;schedule_id&gt;/Recurring metanode format",
 							DmtData.FORMAT_BOOLEAN, metaNode.getFormat());
 			tbc
 					.assertTrue(
-							"Asserts $/Application/<app_id>/Schedules/<schedule_id>/Recurring metanode cardinality",
+							"Asserts $/Application/&lt;app_id&gt;/Schedules/&lt;schedule_id&gt;/Recurring metanode cardinality",
 							!metaNode.isZeroOccurrenceAllowed()
 									&& metaNode.getMaxOccurrence() == 1);
 			tbc
 					.assertTrue(
-							"Asserts $/Application/<app_id>/Schedules/<schedule_id>/Recurring metanode GET",
+							"Asserts $/Application/&lt;app_id&gt;/Schedules/&lt;schedule_id&gt;/Recurring metanode GET",
 							metaNode.can(MetaNode.CMD_GET));
 			tbc
 					.assertTrue(
-							"Asserts $/Application/<app_id>/Schedules/<schedule_id>/Recurring metanode REPLACE",
+							"Asserts $/Application/&lt;app_id&gt;/Schedules/&lt;schedule_id&gt;/Recurring metanode REPLACE",
 							metaNode.can(MetaNode.CMD_REPLACE));
 
 			tbc
@@ -2077,7 +2078,7 @@ public class TreeStructure {
 	}
 
 	/**
-	 * This method asserts if $/Application/<app_id>/Schedules/<schedule_id>/Arguments/<arg_id>/Name
+	 * This method asserts if $/Application/&lt;app_id&gt;/Schedules/&lt;schedule_id&gt;/Arguments/&lt;arg_id&gt;/Name
 	 * is a valid node and asserts Type, Cardinality, Get Permission, Replace Permission
 	 * according to Table 3.10 .
 	 * 
@@ -2096,7 +2097,7 @@ public class TreeStructure {
 			
 			tbc
 					.assertTrue(
-							"Asserts if $/Application/<app_id>/Schedules/<schedule_id>/Arguments/<arg_id>/Name is a valid node",
+							"Asserts if $/Application/&lt;app_id&gt;/Schedules/&lt;schedule_id&gt;/Arguments/&lt;arg_id&gt;/Name is a valid node",
 							session
 									.isNodeUri(ApplicationConstants.OSGI_APPLICATION_APPID_SCHEDULES_ID_ARGUMENTS_ID_NAME));
 
@@ -2105,24 +2106,24 @@ public class TreeStructure {
 
 			tbc
 					.assertEquals(
-							"Asserts $/Application/<app_id>/Schedules/<schedule_id>/Arguments/<arg_id>/Name metanode scope",
+							"Asserts $/Application/&lt;app_id&gt;/Schedules/&lt;schedule_id&gt;/Arguments/&lt;arg_id&gt;/Name metanode scope",
 							MetaNode.AUTOMATIC, metaNode.getScope());
 			tbc
 					.assertEquals(
-							"Asserts $/Application/<app_id>/Schedules/<schedule_id>/Arguments/<arg_id>/Name metanode format",
+							"Asserts $/Application/&lt;app_id&gt;/Schedules/&lt;schedule_id&gt;/Arguments/&lt;arg_id&gt;/Name metanode format",
 							DmtData.FORMAT_STRING, metaNode.getFormat());
 			tbc
 					.assertTrue(
-							"Asserts $/Application/<app_id>/Schedules/<schedule_id>/Arguments/<arg_id>/Name metanode cardinality",
+							"Asserts $/Application/&lt;app_id&gt;/Schedules/&lt;schedule_id&gt;/Arguments/&lt;arg_id&gt;/Name metanode cardinality",
 							!metaNode.isZeroOccurrenceAllowed()
 									&& metaNode.getMaxOccurrence() == 1);
 			tbc
 					.assertTrue(
-							"Asserts $/Application/<app_id>/Schedules/<schedule_id>/Arguments/<arg_id>/Name metanode GET",
+							"Asserts $/Application/&lt;app_id&gt;/Schedules/&lt;schedule_id&gt;/Arguments/&lt;arg_id&gt;/Name metanode GET",
 							metaNode.can(MetaNode.CMD_GET));
 			tbc
 					.assertTrue(
-							"Asserts $/Application/<app_id>/Schedules/<schedule_id>/Arguments/<arg_id>/Name metanode REPLACE",
+							"Asserts $/Application/&lt;app_id&gt;/Schedules/&lt;schedule_id&gt;/Arguments/&lt;arg_id&gt;/Name metanode REPLACE",
 							metaNode.can(MetaNode.CMD_REPLACE));
 
 		} catch (Exception e) {
@@ -2138,7 +2139,7 @@ public class TreeStructure {
 	}
 
 	/**
-	 * This method asserts if $/Application/<app_id>/Schedules/<schedule_id>/Arguments/<arg_id>/Value
+	 * This method asserts if $/Application/&lt;app_id&gt;/Schedules/&lt;schedule_id&gt;/Arguments/&lt;arg_id&gt;/Value
 	 * is a valid node and asserts Type, Cardinality, Get Permission, Replace Permission
 	 * according to Table 3.10 .
 	 * 
@@ -2158,7 +2159,7 @@ public class TreeStructure {
 
 			tbc
 					.assertTrue(
-							"Asserts if $/Application/<app_id>/Schedules/<schedule_id>/Arguments/<arg_id>/Value is a valid node",
+							"Asserts if $/Application/&lt;app_id&gt;/Schedules/&lt;schedule_id&gt;/Arguments/&lt;arg_id&gt;/Value is a valid node",
 							session
 									.isNodeUri(ApplicationConstants.OSGI_APPLICATION_APPID_SCHEDULES_ID_ARGUMENTS_ID_VALUE));
 
@@ -2167,27 +2168,27 @@ public class TreeStructure {
 
 			tbc
 					.assertEquals(
-							"Asserts $/Application/<app_id>/Schedules/<schedule_id>/Arguments/<arg_id>/Value metanode scope",
+							"Asserts $/Application/&lt;app_id&gt;/Schedules/&lt;schedule_id&gt;/Arguments/&lt;arg_id&gt;/Value metanode scope",
 							MetaNode.AUTOMATIC, metaNode.getScope());
 			tbc
 					.assertEquals(
-							"Asserts $/Application/<app_id>/Schedules/<schedule_id>/Arguments/<arg_id>/Value metanode format",
+							"Asserts $/Application/&lt;app_id&gt;/Schedules/&lt;schedule_id&gt;/Arguments/&lt;arg_id&gt;/Value metanode format",
 							(DmtData.FORMAT_BINARY | DmtData.FORMAT_STRING
 									| DmtData.FORMAT_INTEGER
 									| DmtData.FORMAT_FLOAT
 									| DmtData.FORMAT_BOOLEAN | DmtData.FORMAT_NULL), metaNode.getFormat());
 			tbc
 					.assertTrue(
-							"Asserts $/Application/<app_id>/Schedules/<schedule_id>/Arguments/<arg_id>/Value metanode cardinality",
+							"Asserts $/Application/&lt;app_id&gt;/Schedules/&lt;schedule_id&gt;/Arguments/&lt;arg_id&gt;/Value metanode cardinality",
 							metaNode.isZeroOccurrenceAllowed()
 									&& metaNode.getMaxOccurrence() == 1);
 			tbc
 					.assertTrue(
-							"Asserts $/Application/<app_id>/Schedules/<schedule_id>/Arguments/<arg_id>/Value metanode GET",
+							"Asserts $/Application/&lt;app_id&gt;/Schedules/&lt;schedule_id&gt;/Arguments/&lt;arg_id&gt;/Value metanode GET",
 							metaNode.can(MetaNode.CMD_GET));
 			tbc
 					.assertTrue(
-							"Asserts $/Application/<app_id>/Schedules/<schedule_id>/Arguments/<arg_id>/Value metanode REPLACE",
+							"Asserts $/Application/&lt;app_id&gt;/Schedules/&lt;schedule_id&gt;/Arguments/&lt;arg_id&gt;/Value metanode REPLACE",
 							metaNode.can(MetaNode.CMD_REPLACE));
 
 		} catch (Exception e) {
@@ -2203,7 +2204,7 @@ public class TreeStructure {
 	}
 
 	/**
-	 * This method asserts if $/Application/<app_id>/ApplicationID is a valid
+	 * This method asserts if $/Application/&lt;app_id&gt;/ApplicationID is a valid
 	 * node and asserts Type, Cardinality, Get Permission according to
 	 * Table 3.6
 	 * 
@@ -2218,7 +2219,7 @@ public class TreeStructure {
 
 			tbc
 					.assertTrue(
-							"Asserts if $/Application/<app_id>/ApplicationID is a valid node",
+							"Asserts if $/Application/&lt;app_id&gt;/ApplicationID is a valid node",
 							session
 									.isNodeUri(ApplicationConstants.OSGI_APPLICATION_APPID_APPLICATION_ID));
 
@@ -2227,20 +2228,20 @@ public class TreeStructure {
 
 			tbc
 					.assertEquals(
-							"Asserts $/Application/<app_id>/ApplicationID metanode scope",
+							"Asserts $/Application/&lt;app_id&gt;/ApplicationID metanode scope",
 							MetaNode.PERMANENT, metaNode.getScope());
 			tbc
 					.assertEquals(
-							"Asserts $/Application/<app_id>/ApplicationID metanode format",
+							"Asserts $/Application/&lt;app_id&gt;/ApplicationID metanode format",
 							DmtData.FORMAT_STRING, metaNode.getFormat());
 			tbc
 					.assertTrue(
-							"Asserts $/Application/<app_id>/ApplicationID metanode cardinality",
+							"Asserts $/Application/&lt;app_id&gt;/ApplicationID metanode cardinality",
 							!metaNode.isZeroOccurrenceAllowed()
 									&& metaNode.getMaxOccurrence() == 1);
 			tbc
 					.assertTrue(
-							"Asserts $/Application/<app_id>/ApplicationID metanode GET",
+							"Asserts $/Application/&lt;app_id&gt;/ApplicationID metanode GET",
 							metaNode.can(MetaNode.CMD_GET));
 
 		} catch (Exception e) {
@@ -2256,7 +2257,7 @@ public class TreeStructure {
 	}
 
 	/**
-	 * This method asserts if $/Application/<app_id>/Location is a valid node
+	 * This method asserts if $/Application/&lt;app_id&gt;/Location is a valid node
 	 * and asserts Type, Cardinality, Get Permission according to Table 3.6 .
 	 * 
 	 * @spec 3.5.1 Applications Descriptors
@@ -2270,7 +2271,7 @@ public class TreeStructure {
 
 			tbc
 					.assertTrue(
-							"Asserts if $/Application/<app_id>/Location is a valid node",
+							"Asserts if $/Application/&lt;app_id&gt;/Location is a valid node",
 							session
 									.isNodeUri(ApplicationConstants.OSGI_APPLICATION_APPID_LOCATION));
 
@@ -2278,18 +2279,18 @@ public class TreeStructure {
 					.getMetaNode(ApplicationConstants.OSGI_APPLICATION_APPID_LOCATION);
 
 			tbc.assertEquals(
-					"Asserts $/Application/<app_id>/Location metanode scope",
+					"Asserts $/Application/&lt;app_id&gt;/Location metanode scope",
 					MetaNode.PERMANENT, metaNode.getScope());
 			tbc.assertEquals(
-					"Asserts $/Application/<app_id>/Location metanode format",
+					"Asserts $/Application/&lt;app_id&gt;/Location metanode format",
 					DmtData.FORMAT_STRING, metaNode.getFormat());
 			tbc
 					.assertTrue(
-							"Asserts $/Application/<app_id>/Location metanode cardinality",
+							"Asserts $/Application/&lt;app_id&gt;/Location metanode cardinality",
 							!metaNode.isZeroOccurrenceAllowed()
 									&& metaNode.getMaxOccurrence() == 1);
 			tbc.assertTrue(
-					"Asserts $/Application/<app_id>/Location metanode GET",
+					"Asserts $/Application/&lt;app_id&gt;/Location metanode GET",
 					metaNode.can(MetaNode.CMD_GET));
 
 			tbc
@@ -2318,7 +2319,7 @@ public class TreeStructure {
 	}
 
 	/**
-	 * This method asserts if $/Application/<app_id>/Operations/Launch/<launch_id>/Result
+	 * This method asserts if $/Application/&lt;app_id&gt;/Operations/Launch/&lt;launch_id&gt;/Result
 	 * is a valid node and asserts Type, Cardinality, Get Permission according to Table 3.8 .
 	 * 
 	 * @spec 3.5.4 Launching new application instances
@@ -2337,7 +2338,7 @@ public class TreeStructure {
 
 			tbc
 					.assertTrue(
-							"Asserts if $/Application/<app_id>/Operations/<launch_id>/Result is a valid node",
+							"Asserts if $/Application/&lt;app_id&gt;/Operations/&lt;launch_id&gt;/Result is a valid node",
 							session
 									.isNodeUri(ApplicationConstants.OSGI_APPLICATION_APPID_OPERATIONS_LAUNCH_LAUNCHID_RESULT));
 
@@ -2346,20 +2347,20 @@ public class TreeStructure {
 
 			tbc
 					.assertEquals(
-							"Asserts $/Application/<app_id>/Operations/Launch/<launch_id>/Result metanode scope",
+							"Asserts $/Application/&lt;app_id&gt;/Operations/Launch/&lt;launch_id&gt;/Result metanode scope",
 							MetaNode.AUTOMATIC, metaNode.getScope());
 			tbc
 					.assertEquals(
-							"Asserts $/Application/<app_id>/Operations/Launch/<launch_id>/Result metanode format",
+							"Asserts $/Application/&lt;app_id&gt;/Operations/Launch/&lt;launch_id&gt;/Result metanode format",
 							DmtData.FORMAT_NODE, metaNode.getFormat());
 			tbc
 					.assertTrue(
-							"Asserts $/Application/<app_id>/Operations/Launch/<launch_id>/Result metanode cardinality",
+							"Asserts $/Application/&lt;app_id&gt;/Operations/Launch/&lt;launch_id&gt;/Result metanode cardinality",
 							!metaNode.isZeroOccurrenceAllowed()
 									&& metaNode.getMaxOccurrence() == 1);
 			tbc
 					.assertTrue(
-							"Asserts $/Application/<app_id>/Operations/Launch/<launch_id>/Result metanode GET",
+							"Asserts $/Application/&lt;app_id&gt;/Operations/Launch/&lt;launch_id&gt;/Result metanode GET",
 							metaNode.can(MetaNode.CMD_GET));
 
 		} catch (Exception e) {
@@ -2375,7 +2376,7 @@ public class TreeStructure {
 	}
 
 	/**
-	 * This method asserts if $/Application/<app_id>/Operations/Launch/<launch_id>/Result/InstanceID
+	 * This method asserts if $/Application/&lt;app_id&gt;/Operations/Launch/&lt;launch_id&gt;/Result/InstanceID
 	 * is a valid node and asserts Type, Cardinality, Get Permission according to Table 3.8 .
 	 * 
 	 * @spec 3.5.4 Launching new application instances
@@ -2394,7 +2395,7 @@ public class TreeStructure {
 
 			tbc
 					.assertTrue(
-							"Asserts if $/Application/<app_id>/Operations/Launch/<launch_id>/Result/InstanceID is a valid node",
+							"Asserts if $/Application/&lt;app_id&gt;/Operations/Launch/&lt;launch_id&gt;/Result/InstanceID is a valid node",
 							session
 									.isNodeUri(ApplicationConstants.OSGI_APPLICATION_APPID_OPERATIONS_LAUNCH_LAUNCHID_RESULT_INSTANCEID));
 
@@ -2403,20 +2404,20 @@ public class TreeStructure {
 
 			tbc
 					.assertEquals(
-							"Asserts $/Application/<app_id>/Operations/Launch/<launch_id>/Result/InstanceID metanode scope",
+							"Asserts $/Application/&lt;app_id&gt;/Operations/Launch/&lt;launch_id&gt;/Result/InstanceID metanode scope",
 							MetaNode.AUTOMATIC, metaNode.getScope());
 			tbc
 					.assertEquals(
-							"Asserts $/Application/<app_id>/Operations/Launch/<launch_id>/Result/InstanceID metanode format",
+							"Asserts $/Application/&lt;app_id&gt;/Operations/Launch/&lt;launch_id&gt;/Result/InstanceID metanode format",
 							DmtData.FORMAT_STRING, metaNode.getFormat());
 			tbc
 					.assertTrue(
-							"Asserts $/Application/<app_id>/Operations/Launch/<launch_id>/Result/InstanceID metanode cardinality",
+							"Asserts $/Application/&lt;app_id&gt;/Operations/Launch/&lt;launch_id&gt;/Result/InstanceID metanode cardinality",
 							!metaNode.isZeroOccurrenceAllowed()
 									&& metaNode.getMaxOccurrence() == 1);
 			tbc
 					.assertTrue(
-							"Asserts $/Application/<app_id>/Operations/Launch/<launch_id>/Result/InstanceID metanode GET",
+							"Asserts $/Application/&lt;app_id&gt;/Operations/Launch/&lt;launch_id&gt;/Result/InstanceID metanode GET",
 							metaNode.can(MetaNode.CMD_GET));
 
 		} catch (Exception e) {
@@ -2432,7 +2433,7 @@ public class TreeStructure {
 	}
 
 	/**
-	 * This method asserts if $/Application/<app_id>/Operations/Launch/<launch_id>/Result/Status
+	 * This method asserts if $/Application/&lt;app_id&gt;/Operations/Launch/&lt;launch_id&gt;/Result/Status
 	 * is a valid node and asserts Type, Cardinality, Get Permission according to Table 3.8 .
 	 * 
 	 * @spec 3.5.4 Launching new application instances
@@ -2451,7 +2452,7 @@ public class TreeStructure {
 
 			tbc
 					.assertTrue(
-							"Asserts if $/Application/<app_id>/Operations/Launch/<launch_id>/Result/Status is a valid node",
+							"Asserts if $/Application/&lt;app_id&gt;/Operations/Launch/&lt;launch_id&gt;/Result/Status is a valid node",
 							session
 									.isNodeUri(ApplicationConstants.OSGI_APPLICATION_APPID_OPERATIONS_LAUNCH_LAUNCHID_RESULT_STATUS));
 
@@ -2460,20 +2461,20 @@ public class TreeStructure {
 
 			tbc
 					.assertEquals(
-							"Asserts $/Application/<app_id>/Operations/Launch/<launch_id>/Result/Status metanode scope",
+							"Asserts $/Application/&lt;app_id&gt;/Operations/Launch/&lt;launch_id&gt;/Result/Status metanode scope",
 							MetaNode.AUTOMATIC, metaNode.getScope());
 			tbc
 					.assertEquals(
-							"Asserts $/Application/<app_id>/Operations/Launch/<launch_id>/Result/Status metanode format",
+							"Asserts $/Application/&lt;app_id&gt;/Operations/Launch/&lt;launch_id&gt;/Result/Status metanode format",
 							DmtData.FORMAT_STRING, metaNode.getFormat());
 			tbc
 					.assertTrue(
-							"Asserts $/Application/<app_id>/Operations/Launch/<launch_id>/Result/Status metanode cardinality",
+							"Asserts $/Application/&lt;app_id&gt;/Operations/Launch/&lt;launch_id&gt;/Result/Status metanode cardinality",
 							!metaNode.isZeroOccurrenceAllowed()
 									&& metaNode.getMaxOccurrence() == 1);
 			tbc
 					.assertTrue(
-							"Asserts $/Application/<app_id>/Operations/Launch/<launch_id>/Result/Status metanode GET",
+							"Asserts $/Application/&lt;app_id&gt;/Operations/Launch/&lt;launch_id&gt;/Result/Status metanode GET",
 							metaNode.can(MetaNode.CMD_GET));
 
 		} catch (Exception e) {
@@ -2489,7 +2490,7 @@ public class TreeStructure {
 	}
 
 	/**
-	 * This method asserts if $/Application/<app_id>/Operations/Launch/<launch_id>/Result/Message
+	 * This method asserts if $/Application/&lt;app_id&gt;/Operations/Launch/&lt;launch_id&gt;/Result/Message
 	 * is a valid node and asserts Type, Cardinality, Get Permission according to Table 3.8 .
 	 * 
 	 * @spec 3.5.4 Launching new application instances
@@ -2508,7 +2509,7 @@ public class TreeStructure {
 
 			tbc
 					.assertTrue(
-							"Asserts if $/Application/<app_id>/Operations/Launch/<launch_id>/Result/Message is a valid node",
+							"Asserts if $/Application/&lt;app_id&gt;/Operations/Launch/&lt;launch_id&gt;/Result/Message is a valid node",
 							session
 									.isNodeUri(ApplicationConstants.OSGI_APPLICATION_APPID_OPERATIONS_LAUNCH_LAUNCHID_RESULT_MESSAGE));
 
@@ -2517,20 +2518,20 @@ public class TreeStructure {
 
 			tbc
 					.assertEquals(
-							"Asserts $/Application/<app_id>/Operations/Launch/<launch_id>/Result/Message metanode scope",
+							"Asserts $/Application/&lt;app_id&gt;/Operations/Launch/&lt;launch_id&gt;/Result/Message metanode scope",
 							MetaNode.AUTOMATIC, metaNode.getScope());
 			tbc
 					.assertEquals(
-							"Asserts $/Application/<app_id>/Operations/Launch/<launch_id>/Result/Message metanode format",
+							"Asserts $/Application/&lt;app_id&gt;/Operations/Launch/&lt;launch_id&gt;/Result/Message metanode format",
 							DmtData.FORMAT_STRING, metaNode.getFormat());
 			tbc
 					.assertTrue(
-							"Asserts $/Application/<app_id>/Operations/Launch/<launch_id>/Result/Message metanode cardinality",
+							"Asserts $/Application/&lt;app_id&gt;/Operations/Launch/&lt;launch_id&gt;/Result/Message metanode cardinality",
 							!metaNode.isZeroOccurrenceAllowed()
 									&& metaNode.getMaxOccurrence() == 1);
 			tbc
 					.assertTrue(
-							"Asserts $/Application/<app_id>/Operations/Launch/<launch_id>/Result/Message metanode GET",
+							"Asserts $/Application/&lt;app_id&gt;/Operations/Launch/&lt;launch_id&gt;/Result/Message metanode GET",
 							metaNode.can(MetaNode.CMD_GET));
 
 		} catch (Exception e) {
@@ -2643,7 +2644,7 @@ public class TreeStructure {
 	}
 	
 	/**
-	 * This method asserts if $/Application/<app_id>/Instances/<instance_id>
+	 * This method asserts if $/Application/&lt;app_id&gt;/Instances/&lt;instance_id&gt;
 	 * is a valid node and asserts Type, Cardinality, Get Permission according
 	 * to Table 3.9 .
 	 * 
@@ -2674,23 +2675,23 @@ public class TreeStructure {
         
         tbc
             .assertEquals(
-                "Asserts $/Application/<app_id>/Instances/<instance_id> metanode scope",
+                "Asserts $/Application/&lt;app_id&gt;/Instances/&lt;instance_id&gt; metanode scope",
                 MetaNode.PERMANENT, metaNode.getScope());
         
         tbc
             .assertEquals(
-                "Asserts $/Application/<app_id>/Instances/<instance_id> metanode format",
+                "Asserts $/Application/&lt;app_id&gt;/Instances/&lt;instance_id&gt; metanode format",
                 DmtData.FORMAT_NODE, metaNode.getFormat());
         
         tbc
             .assertTrue(
-                "Asserts $/Application/<app_id>/Instances/<instance_id> metanode cardinality",
+                "Asserts $/Application/&lt;app_id&gt;/Instances/&lt;instance_id&gt; metanode cardinality",
                 metaNode.isZeroOccurrenceAllowed()
                     && metaNode.getMaxOccurrence() == Integer.MAX_VALUE);
                   
         tbc
             .assertTrue(
-                "Asserts $/Application/<app_id>/Instances/<instance_id> metanode GET",
+                "Asserts $/Application/&lt;app_id&gt;/Instances/&lt;instance_id&gt; metanode GET",
                 metaNode.can(MetaNode.CMD_GET));
 		} catch (Exception e) {
 			tbc.fail(MessagesConstants.getMessage(
@@ -2705,7 +2706,7 @@ public class TreeStructure {
 	/**
 	 * This method asserts the values of Result/InstanceID, Result/Status
 	 * and Result/Message after a failed execution of
-	 * $/Application/<app_id>/Operations/Launch/<launch_id>.
+	 * $/Application/&lt;app_id&gt;/Operations/Launch/&lt;launch_id&gt;.
 	 * 
 	 * @spec 3.5.4 Launching new application instaces
 	 */
@@ -2766,7 +2767,7 @@ public class TreeStructure {
 	}
 	
 	/**
-	 * This method asserts if $/Application/<app_id>/Instances/<instance_id>/InstanceID
+	 * This method asserts if $/Application/&lt;app_id&gt;/Instances/&lt;instance_id&gt;/InstanceID
 	 * is a valid node and asserts Type, Cardinality, Get Permission according
 	 * to Table 3.9 .
 	 * 
@@ -2797,23 +2798,23 @@ public class TreeStructure {
         
         tbc
             .assertEquals(
-                "Asserts $/Application/<app_id>/Instances/<instance_id>/InstanceID metanode scope",
+                "Asserts $/Application/&lt;app_id&gt;/Instances/&lt;instance_id&gt;/InstanceID metanode scope",
                 MetaNode.PERMANENT, metaNode.getScope());
         
         tbc
             .assertEquals(
-                "Asserts $/Application/<app_id>/Instances/<instance_id>/InstanceID metanode format",
+                "Asserts $/Application/&lt;app_id&gt;/Instances/&lt;instance_id&gt;/InstanceID metanode format",
                 DmtData.FORMAT_STRING, metaNode.getFormat());
         
         tbc
             .assertTrue(
-                "Asserts $/Application/<app_id>/Instances/<instance_id>/InstanceID metanode cardinality",
+                "Asserts $/Application/&lt;app_id&gt;/Instances/&lt;instance_id&gt;/InstanceID metanode cardinality",
                 !metaNode.isZeroOccurrenceAllowed()
                     && metaNode.getMaxOccurrence() == 1);
                   
         tbc
             .assertTrue(
-                "Asserts $/Application/<app_id>/Instances/<instance_id> metanode GET",
+                "Asserts $/Application/&lt;app_id&gt;/Instances/&lt;instance_id&gt; metanode GET",
                 metaNode.can(MetaNode.CMD_GET));
 		} catch (Exception e) {
 			tbc.fail(MessagesConstants.getMessage(
@@ -2826,7 +2827,7 @@ public class TreeStructure {
 	}	
 	
 	/**
-	 * This method asserts if $/Application/<app_id>/Valid is a valid node and
+	 * This method asserts if $/Application/&lt;app_id&gt;/Valid is a valid node and
 	 * asserts Type, Cardinality, Get Permission according to Table 3.6 . Then,
 	 * asserts the value of the node.
 	 * 
@@ -2841,7 +2842,7 @@ public class TreeStructure {
 
 			tbc
 					.assertTrue(
-							"Asserts if $/Application/<app_id>/Valid is a valid node",
+							"Asserts if $/Application/&lt;app_id&gt;/Valid is a valid node",
 							session
 									.isNodeUri(ApplicationConstants.OSGI_APPLICATION_APPID_VALID));
 
@@ -2849,19 +2850,19 @@ public class TreeStructure {
 					.getMetaNode(ApplicationConstants.OSGI_APPLICATION_APPID_VALID);
 
 			tbc.assertEquals(
-					"Asserts $/Application/<app_id>/Valid metanode scope",
+					"Asserts $/Application/&lt;app_id&gt;/Valid metanode scope",
 					MetaNode.PERMANENT, metaNode.getScope());
 			tbc.assertEquals(
-					"Asserts $/Application/<app_id>/Valid metanode format",
+					"Asserts $/Application/&lt;app_id&gt;/Valid metanode format",
 					DmtData.FORMAT_BOOLEAN, metaNode.getFormat());
 			tbc.assertTrue(
-					"Asserts $/Application/<app_id>/Valid metanode cardinality",
+					"Asserts $/Application/&lt;app_id&gt;/Valid metanode cardinality",
 					!metaNode.isZeroOccurrenceAllowed()
 							&& metaNode.getMaxOccurrence() == 1);
-			tbc.assertTrue("Asserts $/Application/<app_id>/Valid metanode GET",
+			tbc.assertTrue("Asserts $/Application/&lt;app_id&gt;/Valid metanode GET",
 					metaNode.can(MetaNode.CMD_GET));
 			tbc
-					.assertTrue("Asserting the value of $/Application/<app_id>/Valid",							
+					.assertTrue("Asserting the value of $/Application/&lt;app_id&gt;/Valid",							
 							session
 									.getNodeValue(ApplicationConstants.OSGI_APPLICATION_APPID_VALID).getBoolean());
 		} catch (Exception e) {
@@ -2875,7 +2876,7 @@ public class TreeStructure {
 	
 	/**
 	 * This method asserts that when the ApplicationDescriptor is unregistered, the 
-	 * $/Application/<app_id>/Valid is set to false.
+	 * $/Application/&lt;app_id&gt;/Valid is set to false.
 	 * 
 	 * @spec 3.5.1 Applications Descriptors
 	 */
@@ -2889,7 +2890,7 @@ public class TreeStructure {
 
 			tbc
 					.assertTrue(
-							"Asserts if $/Application/<app_id>/Valid is a valid node",
+							"Asserts if $/Application/&lt;app_id&gt;/Valid is a valid node",
 							session
 									.isNodeUri(ApplicationConstants.OSGI_APPLICATION_APPID_VALID));
 
@@ -2898,7 +2899,7 @@ public class TreeStructure {
 			tbc.unregisterDescriptor();
 
 			tbc
-					.assertTrue("Asserting the value of $/Application/<app_id>/Valid",							
+					.assertTrue("Asserting the value of $/Application/&lt;app_id&gt;/Valid",							
 							!session
 									.getNodeValue(ApplicationConstants.OSGI_APPLICATION_APPID_VALID).getBoolean());
 		} catch (Exception e) {
@@ -2914,7 +2915,7 @@ public class TreeStructure {
 	
 	/**
 	 * This method asserts that when the ApplicationDescriptor is unregistered and
-	 * still exist a ScheduledApplication, the node $/Application/<app_id>/Valid is 
+	 * still exist a ScheduledApplication, the node $/Application/&lt;app_id&gt;/Valid is 
 	 * not removed and returns an empty value for every nodes except Valid, 
 	 * ApplicationId and Schedules.
 	 * 
@@ -2930,7 +2931,7 @@ public class TreeStructure {
 
 			tbc
 					.assertTrue(
-							"Asserts if $/Application/<app_id>/Valid is a valid node",
+							"Asserts if $/Application/&lt;app_id&gt;/Valid is a valid node",
 							session
 									.isNodeUri(ApplicationConstants.OSGI_APPLICATION_APPID_VALID));
 
@@ -2939,44 +2940,44 @@ public class TreeStructure {
 			tbc.unregisterDescriptor();
 
 			tbc
-					.assertEquals("Asserting the value of $/Application/<app_id>/Name", "",														
+					.assertEquals("Asserting the value of $/Application/&lt;app_id&gt;/Name", "",														
 							session
 									.getNodeValue(ApplicationConstants.OSGI_APPLICATION_APPID_NAME).getString());
 			
 			tbc
-			.assertTrue("Asserting the value of $/Application/<app_id>/ApplicationID", session
+			.assertTrue("Asserting the value of $/Application/&lt;app_id&gt;/ApplicationID", session
 							.getNodeValue(ApplicationConstants.OSGI_APPLICATION_APPID_NAME).getString().equals(""));
 			
 			tbc
-			.assertEquals("Asserting the value of $/Application/<app_id>/IconURI", "",														
+			.assertEquals("Asserting the value of $/Application/&lt;app_id&gt;/IconURI", "",														
 					session
 							.getNodeValue(ApplicationConstants.OSGI_APPLICATION_APPID_ICONURI).getString());
 			
 			if (session.isNodeUri(ApplicationConstants.OSGI_APPLICATION_APPID_VENDOR)) {
 
-				tbc.assertEquals("Asserting the value of $/Application/<app_id>/Vendor",
+				tbc.assertEquals("Asserting the value of $/Application/&lt;app_id&gt;/Vendor",
 								"", session.getNodeValue(ApplicationConstants.OSGI_APPLICATION_APPID_VENDOR).getString());
 
 			}
 			
 			if (session.isNodeUri(ApplicationConstants.OSGI_APPLICATION_APPID_VERSION)) {
 				tbc
-					.assertEquals("Asserting the value of $/Application/<app_id>/Version", "",														
+					.assertEquals("Asserting the value of $/Application/&lt;app_id&gt;/Version", "",														
 							session
 								.getNodeValue(ApplicationConstants.OSGI_APPLICATION_APPID_VERSION).getString());
 			}
 			
 			tbc
-			.assertTrue("Asserting the value of $/Application/<app_id>/Locked", !session
+			.assertTrue("Asserting the value of $/Application/&lt;app_id&gt;/Locked", !session
 							.getNodeValue(ApplicationConstants.OSGI_APPLICATION_APPID_LOCKED).getBoolean());
 			
 			tbc
-			.assertEquals("Asserting the value of $/Application/<app_id>/ContainerID", "",														
+			.assertEquals("Asserting the value of $/Application/&lt;app_id&gt;/ContainerID", "",														
 					session
 							.getNodeValue(ApplicationConstants.OSGI_APPLICATION_APPID_CONTAINERID).getString());
 			
 			tbc
-			.assertEquals("Asserting the value of $/Application/<app_id>/Location", "",														
+			.assertEquals("Asserting the value of $/Application/&lt;app_id&gt;/Location", "",														
 					session
 							.getNodeValue(ApplicationConstants.OSGI_APPLICATION_APPID_LOCATION).getString());
 			
@@ -2993,7 +2994,7 @@ public class TreeStructure {
 	
 	/**
 	 * This method asserts that after removing the schedules, the 
-	 * $/Application/<app_id> must be removed.
+	 * $/Application/&lt;app_id&gt; must be removed.
 	 * 
 	 * @spec 3.5.1 Applications Descriptors
 	 */
@@ -3007,7 +3008,7 @@ public class TreeStructure {
 
 			tbc
 					.assertTrue(
-							"Asserts if $/Application/<app_id>/Valid is a valid node",
+							"Asserts if $/Application/&lt;app_id&gt;/Valid is a valid node",
 							session
 									.isNodeUri(ApplicationConstants.OSGI_APPLICATION_APPID_VALID));
 
@@ -3023,7 +3024,7 @@ public class TreeStructure {
 
 			tbc
 			.assertTrue(
-					"Asserts if $/Application/<app_id>/Valid is a valid node",
+					"Asserts if $/Application/&lt;app_id&gt;/Valid is a valid node",
 					!session
 							.isNodeUri(ApplicationConstants.OSGI_APPLICATION_APPID_VALID));
 						
@@ -3038,7 +3039,7 @@ public class TreeStructure {
 	}
     
     /**
-     * This method validates $/Application/<app_id>/Schedules/<schedule_id>/EventFilter
+     * This method validates $/Application/&lt;app_id&gt;/Schedules/&lt;schedule_id&gt;/EventFilter
      * according to Table 3.9. If the default value of this node is empty, then
      * an empty string must be converted to a null object in the associated
      * method call.
@@ -3058,7 +3059,7 @@ public class TreeStructure {
             updateScheduleIdConstants("temp");
 
             tbc.assertTrue(
-                            "Asserts if $/Application/<app_id>/Schedules/<schedule_id>/EventFilter is a valid node",
+                            "Asserts if $/Application/&lt;app_id&gt;/Schedules/&lt;schedule_id&gt;/EventFilter is a valid node",
                             session.isNodeUri(ApplicationConstants.OSGI_APPLICATION_APPID_SCHEDULES_ID_EVENTFILTER));
 
             // asserting the default value of this node is empty
