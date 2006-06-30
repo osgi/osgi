@@ -79,7 +79,7 @@ public class TestControl extends DefaultTestBundleControl implements
 	 * @throws IOException
 	 */
 
-	void traverse(Bundle bundle, String path, TestControl cv)
+	void traverse(Bundle bundle, String path, ClassVisitor cv)
 			throws IOException {
 		Enumeration e = bundle.findEntries(path, "*.class", true);
 		while (e.hasMoreElements()) {
