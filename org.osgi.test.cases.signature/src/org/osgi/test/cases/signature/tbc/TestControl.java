@@ -60,7 +60,6 @@ public class TestControl extends DefaultTestBundleControl implements
 	 * @methods <remove>Related method(s)</remove>
 	 */
 	public void testSignature() throws IOException {
-		InputStream in = getClass().getResourceAsStream("/ref.jar");
 		BundleContext bc = super.getContext();
 		Bundle b = bc.getBundle();
 		String signatures = (String) b.getHeaders().get("Signature-Packages");
@@ -97,7 +96,7 @@ public class TestControl extends DefaultTestBundleControl implements
 				}
 			}
 			else
-				log("Skipping class: " + url.getPath());
+				log("#Skipping class: " + url.getPath());
 		}
 	}
 
@@ -109,7 +108,7 @@ public class TestControl extends DefaultTestBundleControl implements
 
 		String className = name.replace('/', '.');
 		String superClassName = superName.replace('/', '.');
-		log("Checking class: " + className);
+		log("#Checking class: " + className);
 		try {
 
 			clazz = Class.forName(className);
@@ -247,7 +246,7 @@ public class TestControl extends DefaultTestBundleControl implements
 		if (clazz == null)
 			return null;
 
-		log("visit " + getClassName(clazz) + "." + name);
+		log("#visit " + getClassName(clazz) + "." + name);
 
 		if (name.equals("<init>"))
 			checkConstructors(access, name, desc, signature, exceptions);
