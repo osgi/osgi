@@ -234,6 +234,8 @@ public class TestControl extends DefaultTestBundleControl implements
 			return;
 
 		// Not sure what to do here?
+		// We currently have no visible classes in our API
+		// so we can skip it for now.
 	}
 
 	public MethodVisitor visitMethod(int access, String name, String desc,
