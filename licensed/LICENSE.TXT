@@ -71,6 +71,6 @@ Modifications			NONE, library and scripts used as is
 
 ASM ---------------------------------------------------------------------------------
 Copyright				Copyright (c) ObjectWEB
-License					http://www.opensource.org/licenses/bsd-license.php
+License					http://asm.objectweb.org/license.html
 URL						http://asm.objectweb.org/
 Modifications			NONE, library used as is
