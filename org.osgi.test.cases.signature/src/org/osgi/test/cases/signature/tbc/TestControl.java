@@ -51,6 +51,9 @@ public class TestControl extends DefaultTestBundleControl implements
 	Constructor	constructors[];
 	Field		fields[];
 	Class		inner[];
+	Set			found;
+	Set			missing;
+	boolean		ignore;
 
 	/**
 	 * @throws IOException
@@ -66,7 +69,7 @@ public class TestControl extends DefaultTestBundleControl implements
 		StringTokenizer st = new StringTokenizer(signatures, " ,");
 		while (st.hasMoreTokens()) {
 			String signature = st.nextToken().replace('.', '/');
-			traverse(b, signature, this);
+			testPackage(b, signature, this);
 		}
 	}
 
@@ -79,8 +82,10 @@ public class TestControl extends DefaultTestBundleControl implements
 	 * @throws IOException
 	 */
 
-	void traverse(Bundle bundle, String path, ClassVisitor cv)
+	void testPackage(Bundle bundle, String path, ClassVisitor cv)
 			throws IOException {
+		found = new HashSet();
+		missing = new HashSet();
 		Enumeration e = bundle.findEntries(path, "*.class", true);
 		while (e.hasMoreElements()) {
 			URL url = (URL) e.nextElement();
@@ -98,35 +103,53 @@ public class TestControl extends DefaultTestBundleControl implements
 			else
 				log("#Skipping class: " + url.getPath());
 		}
+		if ( found.isEmpty() ) {
+			log("#Package is not present: " + path );
+			return;
+		}
+		if (!missing.isEmpty())
+			fail("Missing classes. Found " + found + " but not " + missing);
 	}
 
 	public void visit(int version, int access, String name, String signature,
 			String superName, String[] interfaces) {
 		clazz = null;
-		if (!isVisible(access))
+		if (!isVisible(access)) {
 			return;
-
+		}
+		
 		String className = name.replace('/', '.');
 		String superClassName = superName.replace('/', '.');
 		log("#Checking class: " + className);
 		try {
 
-			clazz = Class.forName(className);
-			checkInterfaces(clazz, interfaces);
+			try {
+				clazz = Class.forName(className);
+				if ( clazz.getClassLoader() == getClass().getClassLoader() ) {
+					// We have gotten our own package
+					missing.add(name);
+					clazz= null;
+					return;
+				}
+				found.add(name);
+				checkInterfaces(clazz, interfaces);
 
-			int cMods = clazz.getModifiers();
-			checkModifiers(access, cMods);
+				int cMods = clazz.getModifiers();
+				checkModifiers(access, cMods);
 
-			checkSuperClass(clazz, superClassName);
+				checkSuperClass(clazz, superClassName);
 
-			methods = clazz.getDeclaredMethods();
-			fields = clazz.getDeclaredFields();
-			constructors = clazz.getDeclaredConstructors();
-			inner = clazz.getDeclaredClasses();
+				methods = clazz.getDeclaredMethods();
+				fields = clazz.getDeclaredFields();
+				constructors = clazz.getDeclaredConstructors();
+				inner = clazz.getDeclaredClasses();
+			}
+			catch (ClassNotFoundException cnfe) {
+				missing.add(name);
+			}
 		}
 		catch (Exception e) {
-			e.printStackTrace();
-			fail("Class not found in signature check: " + className + " " + e);
+			fail("Unexpected exception: " + e );
 		}
 	}
 

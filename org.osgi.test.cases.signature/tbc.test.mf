@@ -1,12 +1,13 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: ${p}.tbc.mobile
-Bundle-SymbolicName: ${p}.tbc.mobile
+Bundle-Name: ${p}.tbc.test
+Bundle-SymbolicName: ${p}.tbc.test
 Bundle-Activator: $(p).tbc.TestControl
 Bundle-Version: 4
+Bundle-ManifestVersion: 2
 Bundle-Copyright: Copyright (c) OSGi Alliance (2000, 2002). All Rights Reserved.
 CVS-Header: $Header$
-Signature-Packages: ${mobile.specs}
+Signature-Packages: org.osgi.service.io, org.osgi.service.cm
 $(SIGNATURE-PACKAGE)
 $(PRIVATE-PACKAGE)
 
