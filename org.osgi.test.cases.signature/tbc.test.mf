@@ -7,7 +7,7 @@ Bundle-Version: 4
 Bundle-ManifestVersion: 2
 Bundle-Copyright: Copyright (c) OSGi Alliance (2000, 2002). All Rights Reserved.
 CVS-Header: $Header$
-Signature-Packages: org.osgi.service.io, org.osgi.service.cm
+Signature-Packages: i.am.absent, org.osgi.framework
 $(SIGNATURE-PACKAGE)
 $(PRIVATE-PACKAGE)
 
