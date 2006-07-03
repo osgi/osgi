@@ -35,8 +35,6 @@ import java.lang.reflect.*;
 import java.net.URL;
 import java.util.*;
 
-import org.objectweb.asm.*;
-import org.objectweb.asm.Type;
 import org.osgi.framework.*;
 import org.osgi.test.cases.util.DefaultTestBundleControl;
 
@@ -45,7 +43,7 @@ import org.osgi.test.cases.util.DefaultTestBundleControl;
  * @version $Revision$
  */
 public class TestControl extends DefaultTestBundleControl implements
-		ClassVisitor {
+		ParserCallback {
 	Class		clazz;
 	Method		methods[];
 	Constructor	constructors[];
@@ -54,6 +52,138 @@ public class TestControl extends DefaultTestBundleControl implements
 	Set			found;
 	Set			missing;
 	boolean		ignore;
+
+	/** Callback
+	 *  For the class parser to do attributes that are unknown.
+	 * @param name
+	 * @param data
+	 * @see org.osgi.test.cases.signature.tbc.ParserCallback#doAttribute(java.lang.String, byte[])
+	 */
+	public Object doAttribute(String name, byte[] data) {
+		return null;
+	}
+
+	/**
+	 * Call back to handle a class file.
+	 * @param access
+	 * @param name
+	 * @param superName
+	 * @param interfaces
+	 * @return
+	 * @see org.osgi.test.cases.signature.tbc.ParserCallback#doClass(int, java.lang.String, java.lang.String, java.lang.String[])
+	 */
+	public boolean doClass(int access, String name, String superName,
+			String[] interfaces) {
+		clazz = null;
+		if (!isVisible(access)) {
+			return false;
+		}
+
+		String className = name.replace('/', '.');
+		String superClassName = superName.replace('/', '.');
+		log("#Checking class: " + className);
+		try {
+
+			try {
+				clazz = Class.forName(className);
+				if (clazz.getClassLoader() == getClass().getClassLoader()) {
+					// We have gotten our own package
+					missing.add(name);
+					clazz = null;
+					return false;
+				}
+				found.add(name);
+				checkInterfaces(clazz, interfaces);
+
+				int cMods = clazz.getModifiers();
+				checkModifiers(access, cMods, ACC_PUBLIC + ACC_FINAL
+						+ ACC_INTERFACE + ACC_ABSTRACT);
+
+				checkSuperClass(clazz, superClassName);
+
+				methods = clazz.getDeclaredMethods();
+				fields = clazz.getDeclaredFields();
+				constructors = clazz.getDeclaredConstructors();
+				inner = clazz.getDeclaredClasses();
+				return true;
+			}
+			catch (ClassNotFoundException cnfe) {
+				missing.add(name);
+			}
+		}
+		catch (Exception e) {
+			fail("Unexpected exception: " + e);
+		}
+		return false;
+	}
+
+	public void doField(int access, String name, String desiredDescriptor,
+			Object constant) {
+		if (!isVisible(access))
+			return;
+
+		for (int i = 0; i < fields.length; i++) {
+			if (fields[i] != null && fields[i].getName().equals(name)) {
+				int cMods = fields[i].getModifiers();
+				checkModifiers(access, cMods, ACC_PUBLIC + ACC_PRIVATE
+						+ ACC_PROTECTED + ACC_STATIC + ACC_FINAL);
+
+				Class type = fields[i].getType();
+				StringBuffer sb = new StringBuffer();
+				createTypeDescriptor(sb, type);
+				assertEquals(
+						"Field " + getClassName(clazz) + "." + name,
+						desiredDescriptor,
+						sb.toString());
+
+				if (constant != null)
+					try {
+						assertEquals("Constant value:", constant, fields[i]
+								.get(null));
+					}
+					// These can probably be ignored
+					catch (IllegalArgumentException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					catch (IllegalAccessException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				fields[i] = null;
+				return;
+			}
+		}
+		// Field not found!
+		fail("Could not find field: " + getClassName(clazz) + "." + name);
+	}
+
+	public void doInnerClass(String name, String outerName, String innerName,
+			int access) {
+		if (!isVisible(access))
+			return;
+
+		if (clazz == null)
+			return;
+
+		// Not sure what to do here?
+		// We currently have no visible classes in our API
+		// so we can skip it for now.
+	}
+
+	public void doMethod(int access, String name, String desc,
+			String[] exceptions) {
+
+		if (!isVisible(access))
+			return;
+
+		log("#visit " + getClassName(clazz) + "." + name + " " + desc );
+
+		if (name.equals("<init>"))
+			checkConstructors(access, name, desc, exceptions);
+		else
+			checkMethods(access, name, desc, exceptions);
+	}
 
 	/**
 	 * @throws IOException
@@ -73,125 +203,7 @@ public class TestControl extends DefaultTestBundleControl implements
 		}
 	}
 
-	/**
-	 * Traverse the paths in out bundle. Visit each class and verify against the
-	 * imported classes.
-	 * 
-	 * @param fin
-	 * @param cv
-	 * @throws IOException
-	 */
-
-	void testPackage(Bundle bundle, String path, ClassVisitor cv)
-			throws IOException {
-		found = new HashSet();
-		missing = new HashSet();
-		Enumeration e = bundle.findEntries(path, "*.class", true);
-		while (e.hasMoreElements()) {
-			URL url = (URL) e.nextElement();
-			if (url.getPath().indexOf('$') < 0) {
-				try {
-					InputStream in = url.openStream();
-					ClassReader rdr = new ClassReader(in);
-					rdr.accept(cv, false);
-					in.close();
-				}
-				catch (IOException ioe) {
-					fail("Unexpected exception " + ioe);
-				}
-			}
-			else
-				log("#Skipping class: " + url.getPath());
-		}
-		if ( found.isEmpty() ) {
-			log("#Package is not present: " + path );
-			return;
-		}
-		if (!missing.isEmpty())
-			fail("Missing classes. Found " + found + " but not " + missing);
-	}
-
-	public void visit(int version, int access, String name, String signature,
-			String superName, String[] interfaces) {
-		clazz = null;
-		if (!isVisible(access)) {
-			return;
-		}
-		
-		String className = name.replace('/', '.');
-		String superClassName = superName.replace('/', '.');
-		log("#Checking class: " + className);
-		try {
-
-			try {
-				clazz = Class.forName(className);
-				if ( clazz.getClassLoader() == getClass().getClassLoader() ) {
-					// We have gotten our own package
-					missing.add(name);
-					clazz= null;
-					return;
-				}
-				found.add(name);
-				checkInterfaces(clazz, interfaces);
-
-				int cMods = clazz.getModifiers();
-				checkModifiers(access, cMods);
-
-				checkSuperClass(clazz, superClassName);
-
-				methods = clazz.getDeclaredMethods();
-				fields = clazz.getDeclaredFields();
-				constructors = clazz.getDeclaredConstructors();
-				inner = clazz.getDeclaredClasses();
-			}
-			catch (ClassNotFoundException cnfe) {
-				missing.add(name);
-			}
-		}
-		catch (Exception e) {
-			fail("Unexpected exception: " + e );
-		}
-	}
-
-	private boolean isVisible(int access) {
-		return (access & (Opcodes.ACC_PUBLIC | Opcodes.ACC_PROTECTED)) != 0;
-	}
-
-	/**
-	 * Annotations are ignored
-	 * 
-	 * @param desc
-	 * @param visible
-	 * @return
-	 * @see org.objectweb.asm.ClassVisitor#visitAnnotation(java.lang.String,
-	 *      boolean)
-	 */
-	public AnnotationVisitor visitAnnotation(String desc, boolean visible) {
-
-		return null;
-	}
-
-	/**
-	 * Attributes are ignored
-	 * 
-	 * @param attr
-	 * @see org.objectweb.asm.ClassVisitor#visitAttribute(org.objectweb.asm.Attribute)
-	 */
-	public void visitAttribute(Attribute attr) {
-		// TODO Auto-generated method stub
-
-	}
-
-	/**
-	 * Verify that we have no methods, fields, or constructors that are visible
-	 * left.
-	 * 
-	 * @see org.objectweb.asm.ClassVisitor#visitEnd()
-	 */
-	public void visitEnd() {
-		if (clazz == null)
-			return;
-
+	public void doEnd() {
 		for (int i = 0; i < methods.length; i++) {
 			if (methods[i] != null) {
 				int cMods = methods[i].getModifiers();
@@ -218,105 +230,61 @@ public class TestControl extends DefaultTestBundleControl implements
 		}
 	}
 
-	public FieldVisitor visitField(int access, String name, String desc,
-			String signature, Object value) {
-		if (!isVisible(access))
-			return null;
+	/**
+	 * Traverse the paths in out bundle. Visit each class and verify against the
+	 * imported classes.
+	 * 
+	 * @param fin
+	 * @param cv
+	 * @throws IOException
+	 */
 
-		if (clazz == null)
-			return null;
-
-		for (int i = 0; i < fields.length; i++) {
-			if (fields[i] != null && fields[i].getName().equals(name)) {
-				int cMods = fields[i].getModifiers();
-				checkModifiers(access, cMods);
-
-				Class type = fields[i].getType();
-				String typeName = Type.getType(desc).getClassName();
-				assertEquals(
-						"Field " + getClassName(clazz) + "." + name,
-						typeName,
-						getClassName(type));
-
-				fields[i] = null;
-				return null;
-			}
-		}
-		// Field not found!
-		fail("Could not find field: " + getClassName(clazz) + "." + name);
-		return null;
-	}
-
-	public void visitInnerClass(String name, String outerName,
-			String innerName, int access) {
-		if (!isVisible(access))
-			return;
-
-		if (clazz == null)
-			return;
-
-		// Not sure what to do here?
-		// We currently have no visible classes in our API
-		// so we can skip it for now.
-	}
-
-	public MethodVisitor visitMethod(int access, String name, String desc,
-			String signature, String[] exceptions) {
-
-		if (!isVisible(access))
-			return null;
-
-		if (clazz == null)
-			return null;
-
-		log("#visit " + getClassName(clazz) + "." + name);
-
-		if (name.equals("<init>"))
-			checkConstructors(access, name, desc, signature, exceptions);
-		else
-			checkMethods(access, name, desc, signature, exceptions);
-
-		return null;
-	}
-
-	public void visitOuterClass(String owner, String name, String desc) {
-		// TODO What is this?
-	}
-
-	public void visitSource(String source, String debug) {
-	}
-
-	private void checkMethods(int access, String name, String desc,
-			String signature, String[] exceptions) {
-		for (int i = 0; i < methods.length; i++) {
-			if (methods[i] != null && methods[i].getName().equals(name)) {
-				String cDesc = Type.getMethodDescriptor(methods[i]);
-				if (cDesc.equals(desc)) {
-					int cMods = methods[i].getModifiers();
-					checkModifiers(access, cMods);
-					methods[i] = null;
-					return;
+	void testPackage(Bundle bundle, String path, ParserCallback cv)
+			throws IOException {
+		found = new HashSet();
+		missing = new HashSet();
+		Enumeration e = bundle.findEntries(path, "*.class", true);
+		while (e.hasMoreElements()) {
+			URL url = (URL) e.nextElement();
+			if (url.getPath().indexOf('$') < 0) {
+				try {
+					InputStream in = url.openStream();
+					ClassParser rdr = new ClassParser(in);
+					rdr.go(this);
+					in.close();
+				}
+				catch (Exception ioe) {
+					ioe.printStackTrace();
+					fail("Unexpected exception " + ioe);
 				}
 			}
+			else
+				log("#Skipping class: " + url.getPath());
 		}
-		// Method not found!
-		fail("Could not find method: " + getClassName(clazz) + "." + name);
+		if (found.isEmpty()) {
+			log("#Package is not present: " + path);
+			return;
+		}
+		if (!missing.isEmpty())
+			fail("Missing classes. Found " + found + " but not " + missing);
 	}
 
-	private void checkConstructors(int access, String name, String desc,
-			String signature, String[] exceptions) {
-		Type[] arguments = Type.getArgumentTypes(desc);
-		next: for (int i = 0; i < constructors.length; i++) {
+	private void checkConstructors(int access, String name,
+			String desiredDescriptor, String[] exceptions) {
+		for (int i = 0; i < constructors.length; i++) {
 			if (constructors[i] != null) {
-				Class[] cArguments = constructors[i].getParameterTypes();
-				if (arguments.length == cArguments.length) {
-					for (int a = 0; a < arguments.length; a++) {
-						String arg = arguments[a].getClassName();
-						String cArg = getClassName(cArguments[a]);
-						if (!arg.equals(cArg)) {
-							continue next;
-						}
-					}
+				StringBuffer sb = new StringBuffer();
+				sb.append("(");
+				getDescriptor(sb, constructors[i].getParameterTypes());
+				sb.append(")V");
+				String actualDescriptor = sb.toString();
+				if (actualDescriptor.equals(desiredDescriptor)) {
+					int cMods = constructors[i].getModifiers();
+					checkModifiers(access, cMods, ACC_PUBLIC + ACC_PRIVATE
+							+ ACC_PROTECTED + ACC_STATIC + ACC_FINAL
+							+ ACC_ABSTRACT);
+					checkExceptions(exceptions, constructors[i]
+							.getExceptionTypes());
 					constructors[i] = null;
 					return;
 				}
@@ -324,48 +292,22 @@ public class TestControl extends DefaultTestBundleControl implements
 		}
 		// Method not found!
 		fail("Could not find constructor: " + getClassName(clazz) + "." + name
-				+ " " + desc);
+				+ " " + desiredDescriptor);
+
 	}
 
-	private void checkSuperClass(Class clazz, String superClassName) {
-		Class superClass = clazz.getSuperclass();
-		if (superClass != null)
-			assertEquals(
-					"Super class does not match ",
-					superClassName,
-					superClass.getName());
-	}
-
-	private void checkModifiers(int access, int cMods) {
-		assertEquals(
-				"Interface must be equal ",
-				(access & Opcodes.ACC_INTERFACE) != 0 ? 1 : 0,
-				java.lang.reflect.Modifier.isInterface(cMods) ? 1 : 0);
-
-		assertEquals(
-				"Abstract must be equal ",
-				(access & Opcodes.ACC_ABSTRACT) != 0 ? 1 : 0,
-				java.lang.reflect.Modifier.isAbstract(cMods) ? 1 : 0);
-
-		assertEquals(
-				"Public must be equal ",
-				(access & Opcodes.ACC_PUBLIC) != 0 ? 1 : 0,
-				java.lang.reflect.Modifier.isPublic(cMods) ? 1 : 0);
-
-		assertEquals(
-				"Protected must be equal ",
-				(access & Opcodes.ACC_PROTECTED) != 0 ? 1 : 0,
-				java.lang.reflect.Modifier.isProtected(cMods) ? 1 : 0);
-
-		assertEquals(
-				"Final must be equal ",
-				(access & Opcodes.ACC_FINAL) != 0 ? 1 : 0,
-				java.lang.reflect.Modifier.isFinal(cMods) ? 1 : 0);
-
-		assertEquals(
-				"Static must be equal ",
-				(access & Opcodes.ACC_STATIC) != 0 ? 1 : 0,
-				java.lang.reflect.Modifier.isStatic(cMods) ? 1 : 0);
+	private void checkExceptions(String[] exceptions, Class[] exceptionTypes) {
+		if ( exceptions == null && (exceptionTypes==null || exceptionTypes.length==0))
+			return;
+		
+		Set set = new TreeSet(Arrays.asList(exceptions));
+		for (int i = 0; exceptionTypes !=null && i < exceptionTypes.length; i++) {
+			String name = exceptionTypes[i].getName().replace('.','/');
+			if (!set.remove(name))
+				fail("Superfluous Exception " + exceptionTypes[i]);
+		}
+		if ( ! set.isEmpty() )
+			fail("Missing declared exceptions: " + set );
 	}
 
 	private void checkInterfaces(Class clazz, String[] interfaces) {
@@ -387,10 +329,100 @@ public class TestControl extends DefaultTestBundleControl implements
 					+ " implements " + implemented[i], implemented[i]);
 	}
 
+	private void checkMethods(int access, String name,
+			String desiredDescriptor, String[] exceptions) {
+		for (int i = 0; i < methods.length; i++) {
+			if (methods[i] != null && methods[i].getName().equals(name)) {
+				String cDesc = getMethodDescriptor(methods[i]);
+				if (cDesc.equals(desiredDescriptor)) {
+					int cMods = methods[i].getModifiers();
+					checkModifiers(access, cMods, ACC_PUBLIC + ACC_PRIVATE
+							+ ACC_PROTECTED + ACC_STATIC + ACC_FINAL
+							+ ACC_ABSTRACT);
+					checkExceptions(exceptions, methods[i].getExceptionTypes());
+					methods[i] = null;
+					return;
+				}
+			}
+		}
+		// Method not found!
+		fail("Could not find method: " + getClassName(clazz) + "." + name);
+	}
+
+	private void checkModifiers(int access, int cMods, int mask) {
+		access &= mask;
+		cMods &= mask;
+		assertEquals("Relevant access modifiers", access, cMods);
+	}
+
+	private void checkSuperClass(Class clazz, String superClassName) {
+		Class superClass = clazz.getSuperclass();
+		if (superClass != null)
+			assertEquals(
+					"Super class does not match ",
+					superClassName,
+					superClass.getName());
+	}
+
+	private void createTypeDescriptor(StringBuffer sb, Class type) {
+		if (type.isArray()) {
+			sb.append("[");
+			createTypeDescriptor(sb, type.getComponentType());
+		}
+		else {
+			if (type.isPrimitive()) {
+				if (type == byte.class)
+					sb.append("B");
+				else if (type == char.class)
+					sb.append("C");
+				else if (type == double.class)
+					sb.append("D");
+				else if (type == float.class)
+					sb.append("F");
+				else if (type == int.class)
+					sb.append("I");
+				else if (type == long.class)
+					sb.append("J");
+				else if (type == short.class)
+					sb.append("S");
+				else if (type == boolean.class)
+					sb.append("Z");
+				else if (type == void.class)
+					sb.append("V");
+				else
+					throw new IllegalArgumentException(
+							"Unknown primitive type " + type);
+			}
+			else {
+				sb.append("L");
+				sb.append(type.getName().replace('.', '/'));
+				sb.append(";");
+			}
+		}
+	}
+
 	private String getClassName(Class clazz) {
 		if (clazz.isArray())
 			return getClassName(clazz.getComponentType()) + "[]";
 		return clazz.getName();
 	}
 
+	private void getDescriptor(StringBuffer sb, Class[] parameters) {
+		for (int i = 0; i < parameters.length; i++) {
+			createTypeDescriptor(sb, parameters[i]);
+		}
+	}
+
+	private String getMethodDescriptor(Method method) {
+		StringBuffer sb = new StringBuffer();
+		sb.append("(");
+		getDescriptor(sb, method.getParameterTypes());
+		sb.append(")");
+		createTypeDescriptor(sb, method.getReturnType());
+		return sb.toString();
+	}
+
+	private boolean isVisible(int access) {
+		return (access & (ACC_PUBLIC | ACC_PROTECTED)) != 0;
+	}
 }

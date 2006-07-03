@@ -3,11 +3,6 @@
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="lib" path="/osgi.released/osgi.jar"/>
 	<classpathentry sourcepath="/org.osgi.test.cases/src" kind="lib" path="/osgi.released/osgi.internal.jar"/>
-	<classpathentry sourcepath="/licensed/src/asmsrc.zip" kind="lib" path="/licensed/jar/asm-2.2.2.jar"/>
-	<classpathentry kind="var" path="JRE_LIB">
-		<attributes>
-			<attribute value="http://java.sun.com/j2se/1.4.2/docs/api" name="javadoc_location"/>
-		</attributes>
-	</classpathentry>
+	<classpathentry sourcepath="/ee.minimum" kind="lib" path="/osgi.released/ee.minimum.jar"/>
 	<classpathentry kind="output" path="src"/>
 </classpath>
