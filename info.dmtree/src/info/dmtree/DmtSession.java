@@ -48,13 +48,13 @@ public interface DmtSession {
      * Sessions created with <code>LOCK_TYPE_SHARED</code> lock allows
      * read-only access to the tree, but can be shared between multiple readers.
      */
-    static final int LOCK_TYPE_SHARED = 0;
+    int LOCK_TYPE_SHARED = 0;
 
     /**
      * <code>LOCK_TYPE_EXCLUSIVE</code> lock guarantees full access to the
      * tree, but can not be shared with any other locks.
      */
-    static final int LOCK_TYPE_EXCLUSIVE = 1;
+    int LOCK_TYPE_EXCLUSIVE = 1;
 
     /**
      * <code>LOCK_TYPE_ATOMIC</code> is an exclusive lock with transactional
@@ -62,18 +62,18 @@ public interface DmtSession {
      * together, if a single command fails then the whole session will be rolled
      * back.
      */
-    static final int LOCK_TYPE_ATOMIC = 2;
+    int LOCK_TYPE_ATOMIC = 2;
 
     /**
      * The session is open, all session operations are available.
      */
-    static final int STATE_OPEN = 0;
+    int STATE_OPEN = 0;
 
     /**
      * The session is closed, DMT manipulation operations are not available,
      * they throw <code>IllegalStateException</code> if tried.
      */
-    static final int STATE_CLOSED = 1;
+    int STATE_CLOSED = 1;
 
     /**
      * The session is invalid because a fatal error happened. Fatal errors
@@ -82,7 +82,7 @@ public interface DmtSession {
      * by the session. DMT manipulation operations are not available, they throw
      * <code>IllegalStateException</code> if tried.
      */
-    static final int STATE_INVALID = 2;
+    int STATE_INVALID = 2;
 
     /**
      * Get the current state of this session.
@@ -151,7 +151,7 @@ public interface DmtSession {
      * <p>
      * In many cases the tree is not the only way to manage a given part of the
      * system. It may happen that while modifying some nodes in an atomic
-     * session, the underlying settings are modified parallelly outside the
+     * session, the underlying settings are modified in parallel outside the
      * scope of the DMT. If this is detected during commit, an exception with
      * the code <code>CONCURRENT_ACCESS</code> is thrown.
      * 
@@ -162,7 +162,7 @@ public interface DmtSession {
      *         <li><code>CONCURRENT_ACCESS</code> if it is detected that some
      *         modification has been made outside the scope of the DMT to the
      *         nodes affected in the session's operations
-     *         <li><code>TRANSACTION_ERROR</code> if an error occured during
+     *         <li><code>TRANSACTION_ERROR</code> if an error occurred during
      *         the commit of any of the underlying plugins
      *         <li><code>DATA_STORE_FAILURE</code> if an error occurred while
      *         accessing the data store
@@ -366,7 +366,7 @@ public interface DmtSession {
 
     /**
      * Gives the Access Control List in effect for a given node. The returned
-     * <code>Acl</code> takes inheritance into accout, that is if there is no
+     * <code>Acl</code> takes inheritance into account, that is if there is no
      * ACL defined for the node, it will be derived from the closest ancestor
      * having an ACL defined.
      * 
@@ -413,6 +413,7 @@ public interface DmtSession {
      * <li>if <code>nodeUri</code> specifies an interior node, replace rights
      * on either the node or its parent are sufficient
      * </ul>
+     * <p>
      * If the given <code>acl</code> is <code>null</code> or an empty ACL
      * (not specifying any permissions for any principals), then the ACL of the 
      * node is deleted, and the node will inherit the ACL from its parent node.
@@ -1250,7 +1251,7 @@ public interface DmtSession {
     String[] getChildNodeNames(String nodeUri) throws DmtException;
 
     /**
-     * Get the meta data which describes a given node. Meta data can be only
+     * Get the meta data which describes a given node. Meta data can only be
      * inspected, it can not be changed.
      * <p>
      * The <code>MetaNode</code> object returned to the client is the

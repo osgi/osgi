@@ -18,9 +18,9 @@
 package info.dmtree;
 
 /**
- * The MetaNode contains meta data standard for OMA DM but extends it (without
- * breaking the compatibility) to provide for better DMT data quality in an
- * environment where many software components manipulate this data.
+ * The MetaNode contains meta data as standardized by OMA DM but extends it 
+ * (without breaking the compatibility) to provide for better DMT data quality 
+ * in an environment where many software components manipulate this data.
  * <p>
  * The interface has several types of functions to describe the nodes in the
  * DMT. Some methods can be used to retrieve standard OMA DM metadata such as
@@ -62,28 +62,28 @@ public interface MetaNode {
      * added to its parent. Nodes with {@link #PERMANENT} or {@link #AUTOMATIC}
      * scope typically do not have this access type.
      */
-    public int CMD_ADD = 0;
+    int CMD_ADD = 0;
 
     /**
      * Constant for the DELETE access type. If {@link #can(int)} returns
      * <code>true</code> for this operation, the node can potentially be
      * deleted.
      */
-    public int CMD_DELETE = 1;
+    int CMD_DELETE = 1;
 
     /**
      * Constant for the EXECUTE access type. If {@link #can(int)} returns
      * <code>true</code> for this operation, the node can potentially be
      * executed.
      */
-    public int CMD_EXECUTE = 2;
+    int CMD_EXECUTE = 2;
 
     /**
      * Constant for the REPLACE access type. If {@link #can(int)} returns
      * <code>true</code> for this operation, the value and other properties of
      * the node can potentially be modified.
      */
-    public int CMD_REPLACE = 3;
+    int CMD_REPLACE = 3;
 
     /**
      * Constant for the GET access type. If {@link #can(int)} returns
@@ -91,7 +91,7 @@ public interface MetaNode {
      * (in case of interior nodes) and the properties of the node can
      * potentially be retrieved.
      */
-    public int CMD_GET = 4;
+    int CMD_GET = 4;
 
     /**
      * Constant for representing a permanent node in the tree. This must be
@@ -99,14 +99,14 @@ public interface MetaNode {
      * modified in any way through tree operations. Permanent nodes cannot have
      * non-permanent nodes as parents.
      */
-    public int PERMANENT = 0;
+    int PERMANENT = 0;
 
     /**
      * Constant for representing a dynamic node in the tree. This must be
      * returned by {@link #getScope} for all nodes that are not permanent and
      * are not created automatically by the management object.
      */
-    public int DYNAMIC = 1;
+    int DYNAMIC = 1;
 
     /**
      * Constant for representing an automatic node in the tree. This must be
@@ -120,7 +120,7 @@ public interface MetaNode {
      * other condition. The exact behaviour must be defined by the Management
      * Object.
      */
-    public int AUTOMATIC = 2;
+    int AUTOMATIC = 2;
 
     /**
      * Check whether the given operation is valid for this node. If no meta-data
@@ -367,7 +367,7 @@ public interface MetaNode {
      * 
      * @return the array of supported extension property keys
      */
-    public String[] getExtensionPropertyKeys();
+    String[] getExtensionPropertyKeys();
 
     /**
      * Returns the value for the specified extension property key. This method
@@ -379,5 +379,5 @@ public interface MetaNode {
      * @throws IllegalArgumentException if the specified key is not supported by
      *         this <code>MetaNode</code>
      */
-    public Object getExtensionProperty(String key);
+    Object getExtensionProperty(String key);
 }
