@@ -23,7 +23,7 @@ package info.dmtree;
  * {@link DmtEventListener EventListeners} about important changes. Events are
  * generated after every successful DMT change, and also when sessions are
  * opened or closed. If a {@link DmtSession} is opened in atomic mode, DMT
- * events are only sent when the session is comitted, when the changes are
+ * events are only sent when the session is committed, when the changes are
  * actually performed.
  * <p>
  * An event is generated for each group of nodes added, deleted, replaced,
@@ -55,46 +55,46 @@ public interface DmtEvent {
     /**
      * Event type indicating nodes that were added.
      */
-    public static final int ADDED = 0x01;
+    int ADDED = 0x01;
 
     /**
      * Event type indicating nodes that were copied.
      */
-    public static final int COPIED = 0x02;
+    int COPIED = 0x02;
 
     /**
      * Event type indicating nodes that were deleted.
      */
-    public static final int DELETED = 0x04;
+    int DELETED = 0x04;
 
     /**
      * Event type indicating nodes that were renamed.
      */
-    public static final int RENAMED = 0x08;
+    int RENAMED = 0x08;
 
     /**
      * Event type indicating nodes that were replaced.
      */
-    public static final int REPLACED = 0x10;
+    int REPLACED = 0x10;
 
     /**
      * Event type indicating that a new session was opened.
      */
-    public static final int SESSION_OPENED = 0x20;
+    int SESSION_OPENED = 0x20;
 
     /**
      * Event type indicating that a session was closed.  This type of event is
      * sent when the session is closed by the client or becomes inactive for any
      * other reason (session timeout, fatal errors in business methods, etc.).
      */
-    public static final int SESSION_CLOSED = 0x40;
+    int SESSION_CLOSED = 0x40;
 
     /**
      * This method returns the type of this event.
      * 
      * @return the type of this event.
      */
-    public int getType();
+    int getType();
 
     /**
      * This method returns the identifier of the session in which this event
@@ -102,7 +102,7 @@ public interface DmtEvent {
      * 
      * @return the unique indetifier of the session that triggered the event
      */
-    public int getSessionId();
+    int getSessionId();
 
     /**
      * This method can be used to query the subject nodes of this event. The
@@ -118,7 +118,7 @@ public interface DmtEvent {
      * @return the array of affected nodes
      * @see #getNewNodes
      */
-    public String[] getNodes();
+    String[] getNodes();
 
     /**
      * This method can be used to query the new nodes, when the type of the
@@ -136,5 +136,5 @@ public interface DmtEvent {
      * 
      * @return the array of newly created nodes
      */
-    public String[] getNewNodes();
+    String[] getNewNodes();
 }

@@ -32,7 +32,7 @@ package info.dmtree;
  * session.createInteriorNode(&quot;./OSGi/Configuration/my.table&quot;);
  * </pre>
  * <p>
- * The methods for opening a session take a node URI (the session root) as
+ * The methods for opening a session take a node URI (the session root) as a
  * parameter. All segments of the given URI must be within the segment length
  * limit of the implementation, and the special characters '/' and '\' must be
  * escaped (preceded by a '\'). Any string can be converted to a valid URI
@@ -42,13 +42,13 @@ package info.dmtree;
  * constants in {@link DmtSession}).  This determines whether the session can
  * run in parallel with other sessions, and the kinds of operations that can be 
  * performed in the session.  All Management Objects constituting the device 
- * management tree tree must support read operations on their nodes, while 
- * support for write operations depends on the Management Object. Management 
- * Objects supporting write access may support transactional write, 
- * non-transactional write or both. Users of <code>DmtAdmin</code> should 
- * consult the Management Object specification and implementation for the 
- * supported update modes. If Management Object definition permits, 
- * implementations are encouraged to support both update modes. 
+ * management tree must support read operations on their nodes, while support 
+ * for write operations depends on the Management Object. Management Objects 
+ * supporting write access may support transactional write, non-transactional 
+ * write or both. Users of <code>DmtAdmin</code> should consult the Management 
+ * Object specification and implementation for the supported update modes. If 
+ * Management Object definition permits, implementations are encouraged to 
+ * support both update modes. 
  * <p>
  * This interface also contains methods for manipulating the set of
  * <code>DmtEventListener</code> objects that are called when the structure or
@@ -88,7 +88,7 @@ public interface DmtAdmin {
 
     /**
      * Opens a <code>DmtSession</code> for local usage on a specific DMT
-     * subtree with a given locking mode. This call is equivalent to the
+     * subtree with a given lock mode. This call is equivalent to the
      * following: <code>getSession(null, subtreeUri, lockMode)</code>
      * <p>
      * If <code>subtreeUri</code> is <code>null</code>, the session is
@@ -97,7 +97,7 @@ public interface DmtAdmin {
      * 
      * @param subtreeUri the subtree on which DMT manipulations can be performed
      *        within the returned session
-     * @param lockMode one of the locking modes specified in
+     * @param lockMode one of the lock modes specified in
      *        <code>DmtSession</code>
      * @return a <code>DmtSession</code> object for the requested subtree
      * @throws DmtException with the following possible error codes:
@@ -122,8 +122,8 @@ public interface DmtAdmin {
 
     /**
      * Opens a <code>DmtSession</code> on a specific DMT subtree using a
-     * specific locking mode on behalf of a remote principal. If local
-     * management applications are using this method then they should provide
+     * specific lock mode on behalf of a remote principal. If local management
+     * applications are using this method then they should provide
      * <code>null</code> as the first parameter. Alternatively they can use
      * other forms of this method without providing a principal string. This
      * method is guarded by <code>DmtPrincipalPermission</code> in case of
@@ -138,7 +138,7 @@ public interface DmtAdmin {
      *        sessions
      * @param subtreeUri the subtree on which DMT manipulations can be performed
      *        within the returned session
-     * @param lockMode one of the locking modes specified in
+     * @param lockMode one of the lock modes specified in
      *        <code>DmtSession</code>
      * @return a <code>DmtSession</code> object for the requested subtree
      * @throws DmtException with the following possible error codes:
@@ -167,7 +167,7 @@ public interface DmtAdmin {
 
     /**
      * Registers an event listener on behalf of a local application. The given
-     * listener will recieve notification on all changes affecting the specified
+     * listener will receive notification on all changes affecting the specified
      * subtree. The subtree is specified by its root node URI. An event is
      * delivered to the registered listener if at least one affected node is
      * within this subtree. The events can also be filtered by specifying a
@@ -198,11 +198,11 @@ public interface DmtAdmin {
      *         parameter is invalid (is not an absolute URI or is syntactically
      *         incorrect)
      */
-    public void addEventListener(int type, String uri, DmtEventListener listener);
+    void addEventListener(int type, String uri, DmtEventListener listener);
 
     /**
      * Registers an event listener on behalf of a remote principal. The given
-     * listener will recieve notification on all changes affecting the specified
+     * listener will receive notification on all changes affecting the specified
      * subtree. The subtree is specified by its root node URI. An event is
      * delivered to the registered listener if at least one affected node is
      * within this subtree. The events can also be filtered by specifying a
@@ -236,7 +236,7 @@ public interface DmtAdmin {
      *         parameter is invalid (is not an absolute URI or is syntactically
      *         incorrect)
      */
-    public void addEventListener(String principal, int type, String uri,
+    void addEventListener(String principal, int type, String uri,
             DmtEventListener listener);
 
     /**
@@ -248,5 +248,5 @@ public interface DmtAdmin {
      * @throws NullPointerException if the <code>listener</code> parameter is
      *         <code>null</code>
      */
-    public void removeEventListener(DmtEventListener listener);
+    void removeEventListener(DmtEventListener listener);
 }

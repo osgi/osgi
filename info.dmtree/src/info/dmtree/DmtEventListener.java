@@ -22,7 +22,7 @@ package info.dmtree;
  * objects about important changes in the tree. Events are generated after every
  * successful DMT change, and also when sessions are opened or closed. If a
  * {@link DmtSession} is opened in atomic mode, DMT events are only sent when
- * the session is comitted, when the changes are actually performed.
+ * the session is committed, when the changes are actually performed.
  */
 public interface DmtEventListener {
 
@@ -33,5 +33,5 @@ public interface DmtEventListener {
      * 
      * @param event the <code>DmtEvent</code> describing the change in detail
      */
-    public void changeOccurred(DmtEvent event);
+    void changeOccurred(DmtEvent event);
 }
