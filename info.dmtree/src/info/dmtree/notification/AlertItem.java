@@ -37,7 +37,7 @@ import info.dmtree.Uri;
  * <P>
  * The syntax used in <code>AlertItem</code> class corresponds to the OMA DM
  * alert format. {@link NotificationService} implementations on other management
- * protocols shold map these constructs to the underlying protocol.
+ * protocols should map these constructs to the underlying protocol.
  */
 public class AlertItem {
 

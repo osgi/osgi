@@ -69,7 +69,7 @@ public interface NotificationService {
      * The <code>principal</code> parameter can be used to determine the
      * recipient of the session initiation request.
      * 
-     * @param principal the principal name which is the recepient of this
+     * @param principal the principal name which is the recipient of this
      *        notification, can be <code>null</code>
      * @param code the alert code, can be 0 if not needed
      * @param correlator optional field that contains the correlation identifier
