@@ -80,7 +80,7 @@ public final class DmtData {
     /**
      * The node holds an OMA DM <code>b64</code> value. Like
      * {@link #FORMAT_BINARY}, this format is also represented by the Java
-     * <code>byte[]</code> type, the difference is only in the correspoding
+     * <code>byte[]</code> type, the difference is only in the corresponding
      * OMA DM format.
      */
     public static final int FORMAT_BASE64 = 0x0080;
@@ -383,7 +383,7 @@ public final class DmtData {
      * Create a <code>DmtData</code> instance in {@link #FORMAT_RAW_STRING}
      * format. The data is provided encoded as a <code>String</code>. The
      * actual data format is specified in <code>formatName</code>. The
-     * encoding used in <code>data</code> must comform to this format.
+     * encoding used in <code>data</code> must conform to this format.
      * 
      * @param formatName the name of the format, must not be <code>null</code>
      * @param data the data encoded according to the specified format, must not
@@ -412,7 +412,7 @@ public final class DmtData {
      * Create a <code>DmtData</code> instance in {@link #FORMAT_RAW_BINARY}
      * format. The data is provided encoded as binary. The actual data format is
      * specified in <code>formatName</code>. The encoding used in
-     * <code>data</code> must comform to this format.
+     * <code>data</code> must conform to this format.
      * 
      * @param formatName the name of the format, must not be <code>null</code>
      * @param data the data encoded according to the specified format, must not

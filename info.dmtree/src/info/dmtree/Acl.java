@@ -158,7 +158,7 @@ public final class Acl {
     }
 
     /**
-     * Creates an instance with specifying the list of principals and the
+     * Creates an instance with a specified list of principals and the
      * permissions they hold. The two arrays run in parallel, that is
      * <code>principals[i]</code> will hold <code>permissions[i]</code> in
      * the ACL.
@@ -354,9 +354,9 @@ public final class Acl {
      * @param principal The entity whose permissions to query, or &quot;*&quot;
      *        to query the permissions that are granted globally, to all
      *        principals
-     * @return The permissions which the given principal has. The returned
-     *         <code>int</code> is the logical <code>or</code> of the
-     *         permission constants defined in this class.
+     * @return The permissions of the given principal. The returned
+     *         <code>int</code> is a bitmask of the permission constants defined
+     *         in this class
      * @throws IllegalArgumentException if <code>principal</code> is not a
      *         valid principal name
      */
@@ -379,7 +379,7 @@ public final class Acl {
      * <code>(Acl.ADD | Acl.DELETE | Acl.GET)</code>.
      * 
      * @param principal The entity to check, or &quot;*&quot; to check whether
-     *        the given permissions are granted globally, to all principals
+     *        the given permissions are granted to all principals globally
      * @param permissions The permissions to check
      * @return <code>true</code> if the principal holds all the given permissions
      * @throws IllegalArgumentException if <code>principal</code> is not a
@@ -395,8 +395,8 @@ public final class Acl {
     }
 
     /**
-     * Create a new <code>Acl</code> instance by setting the list of
-     * permissions a given principal has. All permissions the principal had will
+     * Create a new <code>Acl</code> instance with the list of permissions for
+     * the given principal. All previous permissions of the principal will
      * be overwritten.
      * <p>
      * Note, that when changing the permissions of a specific principal, it is
@@ -404,10 +404,9 @@ public final class Acl {
      * of permissions (that apply to all principals).
      * 
      * @param principal The entity to which permissions should be granted, or
-     *        &quot;*&quot; to grant permissions globally, to all principals.
-     * @param permissions The set of permissions to be given. The parameter can
-     *        be a logical <code>or</code> of the permission constants defined
-     *        in this class.
+     *        &quot;*&quot; to globally grant permissions to all principals.
+     * @param permissions The set of permissions to be given. The parameter is
+     *        a bitmask of the permission constants defined in this class.
      * @return a new <code>Acl</code> instance
      * @throws IllegalArgumentException if <code>principal</code> is not a
      *         valid principal name, if <code>permissions</code> is not a

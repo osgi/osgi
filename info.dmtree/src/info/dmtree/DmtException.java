@@ -34,7 +34,7 @@ import java.util.Vector;
  * <p>
  * The cause of the exception (if specified) can either be a single
  * <code>Throwable</code> instance, or a list of such instances if several
- * problems occured during the execution of a method. An example for the latter
+ * problems occurred during the execution of a method. An example for the latter
  * is the <code>close</code> method of <code>DmtSession</code> that tries to
  * close multiple plugins, and has to report the exceptions of all failures.
  * <p>
@@ -206,7 +206,7 @@ public class DmtException extends Exception {
     public static final int REMOTE_ERROR = 1;
 
     /**
-     * Operation failed bacause of meta data restrictions. This covers any
+     * Operation failed because of meta data restrictions. This covers any
      * attempted deviation from the parameters defined by the
      * <code>MetaNode</code> objects of the affected nodes, for example in the
      * following situations:
@@ -228,7 +228,7 @@ public class DmtException extends Exception {
      * This error code can also be used to indicate any other meta data
      * violation, even if it cannot be described by the <code>MetaNode</code>
      * class. For example, detecting a multi-node constraint violation while
-     * commiting an atomic session should result in this error.
+     * committing an atomic session should result in this error.
      * <p>
      * This error code does not correspond to any OMA DM response status code.
      * It should be translated to the code 405 &quot;Command not allowed&quot;
@@ -312,7 +312,7 @@ public class DmtException extends Exception {
      * <p>
      * This error code does not correspond to any OMA DM response status code.
      * OMA has several status codes related to timeout, but these are meant to
-     * be used when a request times out, not when a session can not be
+     * be used when a request times out, not if a session can not be
      * established. This error code should be translated to the code 500
      * &quot;Command Failed&quot; when transferring over OMA DM.
      */
@@ -530,7 +530,7 @@ public class DmtException extends Exception {
     /**
      * Get the cause of this exception. Returns non-<code>null</code>, if
      * this exception is caused by one or more other exceptions (like a
-     * <code>NullPointerException</code> in a Dmt Plugin). If there are more
+     * <code>NullPointerException</code> in a DmtPlugin). If there are more
      * than one cause exceptions, the first one is returned.
      * 
      * @return the cause of this exception, or <code>null</code> if no cause
