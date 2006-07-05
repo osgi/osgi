@@ -299,9 +299,9 @@ public final class Acl {
     }
 
     /**
-     * Create a new <code>Acl</code> instance by adding a specific permission
-     * to a given principal. The already existing permissions of the principal
-     * are not affected.
+     * Create a new <code>Acl</code> instance from this <code>Acl</code> with 
+     * the given permission added for the given principal. The already existing
+     * permissions of the principal are not affected.
      * 
      * @param principal The entity to which permissions should be granted, or
      *        &quot;*&quot; to grant permissions to all principals.
@@ -322,9 +322,9 @@ public final class Acl {
     }
 
     /**
-     * Create a new <code>Acl</code> instance by revoking a specific
-     * permission from a given principal. Other permissions of the principal are
-     * not affected.
+     * Create a new <code>Acl</code> instance from this <code>Acl</code> with 
+     * the given permission revoked from the given principal. Other permissions 
+     * of the principal are not affected.
      * <p>
      * Note, that it is not valid to revoke a permission from a specific
      * principal if that permission is granted globally to all principals.
@@ -395,9 +395,9 @@ public final class Acl {
     }
 
     /**
-     * Create a new <code>Acl</code> instance with the list of permissions for
-     * the given principal. All previous permissions of the principal will
-     * be overwritten.
+     * Create a new <code>Acl</code> instance from this <code>Acl</code> where 
+     * all permissions for the given principal are overwritten with the given 
+     * permissions.
      * <p>
      * Note, that when changing the permissions of a specific principal, it is
      * not allowed to specify a set of permissions stricter than the global set
