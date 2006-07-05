@@ -126,7 +126,6 @@ public class PoolEntry {
 		check(tag == CONSTANT_Long || tag == CONSTANT_Float
 				|| tag == CONSTANT_Double || tag == CONSTANT_Integer
 				|| tag == CONSTANT_String, "Expected constant");
-		// TODO Auto-generated method stub
 		return o;
 	}
 
@@ -152,7 +151,7 @@ public class PoolEntry {
 		"FIELDREF<9>            ",
 		"METHODREF<10>          ",
 		"INTERFACEMETHODREF<11> ",
-		"NAMEANDTYPE<12>        ",
+		"NAMEANDTYPE<12>        "
 	};
 	public String toString() {
 	
