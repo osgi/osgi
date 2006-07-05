@@ -143,11 +143,9 @@ public class TestControl extends DefaultTestBundleControl implements
 					}
 					// These can probably be ignored
 					catch (IllegalArgumentException e) {
-						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
 					catch (IllegalAccessException e) {
-						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
 				fields[i] = null;
@@ -166,7 +164,7 @@ public class TestControl extends DefaultTestBundleControl implements
 		if (clazz == null)
 			return;
 
-		// Not sure what to do here?
+		// TODO Not sure what to do here?
 		// We currently have no visible classes in our API
 		// so we can skip it for now.
 	}
@@ -199,7 +197,7 @@ public class TestControl extends DefaultTestBundleControl implements
 		StringTokenizer st = new StringTokenizer(signatures, " ,");
 		while (st.hasMoreTokens()) {
 			String signature = st.nextToken().replace('.', '/');
-			testPackage(b, signature, this);
+			doPackage(b, signature, this);
 		}
 	}
 
@@ -239,27 +237,23 @@ public class TestControl extends DefaultTestBundleControl implements
 	 * @throws IOException
 	 */
 
-	void testPackage(Bundle bundle, String path, ParserCallback cv)
+	void doPackage(Bundle bundle, String path, ParserCallback cv)
 			throws IOException {
 		found = new HashSet();
 		missing = new HashSet();
-		Enumeration e = bundle.findEntries(path, "*.class", true);
+		Enumeration e = bundle.findEntries(path, "*.class", false);
 		while (e.hasMoreElements()) {
 			URL url = (URL) e.nextElement();
-			if (url.getPath().indexOf('$') < 0) {
-				try {
-					InputStream in = url.openStream();
-					ClassParser rdr = new ClassParser(in);
-					rdr.go(this);
-					in.close();
-				}
-				catch (Exception ioe) {
-					ioe.printStackTrace();
-					fail("Unexpected exception " + ioe);
-				}
+			try {
+				InputStream in = url.openStream();
+				ClassParser rdr = new ClassParser(in);
+				rdr.go(this);
+				in.close();
 			}
-			else
-				log("#Skipping class: " + url.getPath());
+			catch (Exception ioe) {
+				ioe.printStackTrace();
+				fail("Unexpected exception " + ioe);
+			}
 		}
 		if (found.isEmpty()) {
 			log("#Package is not present: " + path);
@@ -359,7 +353,7 @@ public class TestControl extends DefaultTestBundleControl implements
 		Class superClass = clazz.getSuperclass();
 		if (superClass != null)
 			assertEquals(
-					"Super class does not match ",
+					"Super class",
 					superClassName,
 					superClass.getName());
 	}
