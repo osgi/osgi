@@ -20,6 +20,7 @@
 	<testcase>test.permissionadmin.nosecurity</testcase>
 	<testcase>test.permissionadmin.security</testcase>
 	<testcase>test.permissionadmin.signature</testcase>
+	<testcase>test.signature.core</testcase>
 	<testcase>test.startlevel</testcase>
 	<testcase>test.url</testcase>
 </script>
