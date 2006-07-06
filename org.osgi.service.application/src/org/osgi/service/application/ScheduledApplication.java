@@ -26,11 +26,11 @@ import java.util.Map;
  * specified event is fired a new instance must be launched. Note that launching
  * operation may fail because e.g. the application is locked.
  * <p>
- * Each <code>ScheduledApplication</code> instance has an identified which is
+ * Each <code>ScheduledApplication</code> instance has an identifier which is
  * unique within the scope of the application being scheduled.
  * <p>
  * <code>ScheduledApplication</code> instances are registered as services.
- * the {@link #APPLICATION_PID} service property contains the PID of the
+ * The {@link #APPLICATION_PID} service property contains the PID of the
  * application being scheduled, the {@link #SCHEDULE_ID} service property
  * contains the schedule identifier.
  */
@@ -58,7 +58,7 @@ public interface ScheduledApplication {
     
     /**
      * The topic name for the virtual timer topic. Time based schedules
-     * shold be created using this topic.
+     * should be created using this topic.
      */
     public static final String TIMER_TOPIC = "org/osgi/application/timer";
     

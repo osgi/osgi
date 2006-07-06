@@ -68,7 +68,7 @@ public class ApplicationException extends Exception {
     public static final int APPLICATION_SCHEDULING_FAILED = 0x04;
     
     /**
-     * The application schedule failed because the specified identifier
+     * The application scheduling failed because the specified identifier
      * is already in use.
      */
     public static final int APPLICATION_DUPLICATE_SCHEDULE_ID = 0x05;
