@@ -62,13 +62,13 @@ public class ApplicationException extends Exception {
 	public static final int APPLICATION_INTERNAL_ERROR = 0x03;
     
     /**
-     * The application scheduling could not be created due to some internal error (
-     * e.g. the scheduling information couldn't be saved).
+     * The application schedule could not be created due to some internal error (
+     * e.g. the schedule information couldn't be saved).
      */
     public static final int APPLICATION_SCHEDULING_FAILED = 0x04;
     
     /**
-     * The application scheduling failed because the specified identifier
+     * The application schedule failed because the specified identifier
      * is already in use.
      */
     public static final int APPLICATION_DUPLICATE_SCHEDULE_ID = 0x05;

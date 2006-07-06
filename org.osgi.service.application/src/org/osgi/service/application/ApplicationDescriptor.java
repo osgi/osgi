@@ -377,19 +377,19 @@ public abstract class ApplicationDescriptor {
 	 * should not get lost even if the framework or the device restarts so it
 	 * should be stored in a persistent storage. The method registers a
 	 * {@link ScheduledApplication} service in Service Registry, representing
-	 * the created scheduling.
+	 * the created schedule.
 	 * <p>
 	 * The <code>Map</code> argument of the  method contains startup 
 	 * arguments for the application. The keys used in the Map must be non-null, 
 	 * non-empty <code>String<code> objects.
      * <p>
-     * The created schedulings have a unique identifier withing the scope of this
+     * The created schedules have a unique identifier within the scope of this
      * <code>ApplicationDescriptor</code>. This identifier can be specified
      * in the <code>scheduleId</code> argument. If this argument is <code>null</code>,
      * the identifier is automatically generated.
      * 
 	 * @param scheduleId 
-	 *             the identifier of the created scheduling. It can be <code>null</code>,
+	 *             the identifier of the created schedule. It can be <code>null</code>,
      *             in this case the identifier is automatically generated.
 	 * @param arguments
 	 *            the startup arguments for the scheduled application, may be
@@ -414,7 +414,7 @@ public abstract class ApplicationDescriptor {
 	 * @throws InvalidSyntaxException 
 	 * 			   if the specified <code>eventFilter</code> is not syntactically correct
 	 * @throws ApplicationException
-     *              if the scheduling couldn't be created. The possible error
+     *              if the schedule couldn't be created. The possible error
      *              codes are 
      *              <ul>
      *               <li> {@link ApplicationException#APPLICATION_DUPLICATE_SCHEDULE_ID}

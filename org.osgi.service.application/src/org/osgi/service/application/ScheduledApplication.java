@@ -22,7 +22,7 @@ import java.util.Map;
 
 /**
  * It is allowed to schedule an application based on a specific event.
- * ScheduledApplication service keeps the scheduling information. When the
+ * ScheduledApplication service keeps the schedule information. When the
  * specified event is fired a new instance must be launched. Note that launching
  * operation may fail because e.g. the application is locked.
  * <p>
@@ -32,7 +32,7 @@ import java.util.Map;
  * <code>ScheduledApplication</code> instances are registered as services.
  * the {@link #APPLICATION_PID} service property contains the PID of the
  * application being scheduled, the {@link #SCHEDULE_ID} service property
- * contains the scheduling identifier.
+ * contains the schedule identifier.
  */
 public interface ScheduledApplication {
     
@@ -42,14 +42,14 @@ public interface ScheduledApplication {
     public static final String APPLICATION_PID = ApplicationDescriptor.APPLICATION_PID;
     
     /**
-     * The property key for the scheduling identifier. The identifier is unique
+     * The property key for the schedule identifier. The identifier is unique
      * within the scope of the application being scheduled.
      */
     public static final String SCHEDULE_ID = "schedule.id";
     
     /**
      * The key for the startup argument used to pass the event object that 
-     * triggered the scheduling to the launched application instance.
+     * triggered the schedule to launch the application instance.
      * The event is passed in a {@link java.security.GuardedObject}
      * protected by the corresponding 
      * {@link org.osgi.service.event.TopicPermission}.
@@ -57,7 +57,7 @@ public interface ScheduledApplication {
     public static final String TRIGGERING_EVENT = "org.osgi.triggeringevent";
     
     /**
-     * The topic name for the virtual timer topic. Time based schedulings
+     * The topic name for the virtual timer topic. Time based schedules
      * shold be created using this topic.
      */
     public static final String TIMER_TOPIC = "org/osgi/application/timer";
@@ -100,9 +100,9 @@ public interface ScheduledApplication {
     
     
     /**
-     * Returns the identifier of this scheduling. The identifier is unique within
-     * the scope of the applicale the scheduling is related to. 
-     * @return the identifier of this scheduling
+     * Returns the identifier of this schedule. The identifier is unique within
+     * the scope of the application that the schedule is related to. 
+     * @return the identifier of this schedule
      * 
      */
     public String getScheduleId();
@@ -129,9 +129,9 @@ public interface ScheduledApplication {
 	public String getEventFilter();
 
 	/**
-	 * Queries if the scheduling is recurring.
+	 * Queries if the schedule is recurring.
 	 * 
-	 * @return true if the scheduling is recurring, otherwise returns false
+	 * @return true if the schedule is recurring, otherwise returns false
 	 * 
 	 * @throws IllegalStateException
 	 *             if the scheduled application service is unregistered
