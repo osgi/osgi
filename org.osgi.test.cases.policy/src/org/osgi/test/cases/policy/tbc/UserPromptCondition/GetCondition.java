@@ -99,7 +99,9 @@ public class GetCondition {
 					MessagesConstants.ASSERT_NOT_NULL,
 					new String[] { "Created UserPrompt" }), condition);
 
-			tbc.assertTrue("Asserts that the returned Condition is an instanceof UserPromptCondition.",(condition instanceof UserPromptCondition));
+			// ### The following test is not valid. The condition does not
+			// have to be an instance of the UserPromptCondition
+			//tbc.assertTrue("Asserts that the returned Condition is an instanceof UserPromptCondition.",(condition instanceof UserPromptCondition));
 		} catch (Exception e) {
 			tbc.fail(MessagesConstants.getMessage(
 					MessagesConstants.UNEXPECTED_EXCEPTION, new String[] {
@@ -455,7 +457,10 @@ public class GetCondition {
 					MessagesConstants.ASSERT_NOT_NULL,
 					new String[] { "Created UserPrompt" }), condition);
 
-			tbc.assertTrue("Asserts that the returned Condition is an instanceof UserPromptCondition.",(condition instanceof UserPromptCondition));
+			//### See 9.7.1, a Condition object must implement the
+			// Condition interface, it does not have to be an instance of
+			// the given implementation class.
+			//tbc.assertTrue("Asserts that the returned Condition is an instanceof UserPromptCondition.",(condition instanceof UserPromptCondition));
 		} catch (Exception e) {
 			tbc.fail(MessagesConstants.getMessage(
 					MessagesConstants.UNEXPECTED_EXCEPTION, new String[] {
