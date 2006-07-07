@@ -14,7 +14,7 @@
 	<testcase>test.position</testcase> 				<!-- Tests the Position utility -->
 	<testcase>test.prefs</testcase> 				<!-- Tests the Preferences service -->
 	<testcase>test.provisioning</testcase> 			<!-- Tests Initial Provisioning -->
-	<testcase>test.signature.cmpn</testcase>
+	<testcase>test.signature.cmpn</testcase>		<!-- Tests the API signatures -->
 	<testcase>test.tracker</testcase> 		        <!-- The service tracker test case -->
 	<testcase>test.upnp</testcase> 		       		<!-- The service tracker test case -->
 	<testcase>test.useradmin</testcase> 			<!-- Tests the UserAdmin service -->

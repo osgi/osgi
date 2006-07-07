@@ -19,7 +19,7 @@
 	<testcase>test.monitor</testcase> 			    <!-- Tests the Monitor spec -->
 	<testcase>test.policy</testcase> 				<!-- Tests the Policy (gsm/mobile conditions) -->
 	<testcase>test.prefs</testcase> 				<!-- Tests the Preferences service -->
-	<testcase>test.signature.mobile</testcase>
+	<testcase>test.signature.mobile</testcase>		<!-- Tests the API signatures -->
 	<testcase>test.tracker</testcase> 		        <!-- The service tracker test case -->
 	<testcase>test.xml</testcase> 					<!-- Tests the XML Parser Service -->	
 </script>
