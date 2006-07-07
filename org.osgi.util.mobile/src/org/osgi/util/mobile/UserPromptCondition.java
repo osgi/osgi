@@ -33,6 +33,12 @@ import org.osgi.service.condpermadmin.ConditionInfo;
  */
 public class UserPromptCondition implements Condition {
 	
+	/*
+	 * NOTE: An implementor may also choose to replace this class in
+	 * their distribution with a class that directly interfaces with the
+	 * policy implementation. This replacement class MUST NOT alter the
+	 * public/protected signature of this class.
+	 */
 	// this will need to be set by the implementation class
 	static Method factory = null;
 	Condition realUserPromptCondition;
