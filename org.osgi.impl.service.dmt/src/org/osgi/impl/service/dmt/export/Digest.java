@@ -20,16 +20,18 @@ package org.osgi.impl.service.dmt.export;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
-import info.dmtree.Uri.DigestDelegate;
-
-public class Digest implements DigestDelegate {
-    private MessageDigest md;
-    
-    public Digest() throws NoSuchAlgorithmException {
-        md = MessageDigest.getInstance("SHA");
+public class Digest{
+    private static final MessageDigest md;
+    static {
+    	try {
+    		md = MessageDigest.getInstance("SHA");
+    	}
+    	catch (NoSuchAlgorithmException e) {
+    		throw new RuntimeException(e.getMessage());
+    	}
     }
     
-    public byte[] digestMessage(byte[] byteStream) {
+    public static byte[] digest(byte[] byteStream) {
         return md.digest(byteStream);
     }
 

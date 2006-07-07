@@ -18,9 +18,9 @@
 package info.dmtree;
 
 import java.io.UnsupportedEncodingException;
+import java.lang.reflect.*;
 import java.security.AccessController;
-import java.security.PrivilegedActionException;
-import java.security.PrivilegedExceptionAction;
+import java.security.PrivilegedAction;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -52,14 +52,67 @@ import java.util.List;
  * </ul>
  */
 public final class Uri {
-    /**
-     * A private constructor to suppress the default public constructor.
-     */
-    private Uri() {}
-    
+	/*
+	 * NOTE: An implementor may also choose to replace this class in
+	 * their distribution with a class that directly interfaces with the
+	 * info.dmtree implementation. This replacement class MUST NOT alter the
+	 * public/protected signature of this class.
+	 */
+
+	/*
+	 * This class will load the class named
+	 * by the org.osgi.vendor.dmtree.DigestDelegate property. This class will call
+	 * the public static byte[] digest(byte[]) method on that class.
+	 */
+
     // the name of the system property containing the digest delegate class name
     private static final String DIGEST_DELEGATE_PROPERTY = 
-        "org.osgi.impl.service.dmt.DigestDelegate";
+        "org.osgi.vendor.dmtree.DigestDelegate";
+
+    // the Method where message digest requests can be delegated
+    private static final Method digestMethod;
+    
+    static {
+    	digestMethod = (Method) AccessController
+    	.doPrivileged(new PrivilegedAction() {
+    		public Object run() {
+    			String className = System
+    			.getProperty(DIGEST_DELEGATE_PROPERTY);
+    			if (className == null) {
+    				throw new NoClassDefFoundError("Digest " +
+    						"delegate class property '" + 
+    						DIGEST_DELEGATE_PROPERTY +
+    						"' must be set to a " +
+    						"class which implements a " +
+    				"public static byte[] digest(byte[]) method."); 
+    			}
+
+    			Class delegateClass;
+    			try {
+    				delegateClass = Class.forName(className);
+    			}
+    			catch (ClassNotFoundException e) {
+    				throw new NoClassDefFoundError(e.toString());
+    			}
+
+    			Method result;
+    			try {
+    				result = delegateClass.getMethod("digest",
+    						new Class[] {byte[].class});
+    			}
+    			catch (NoSuchMethodException e) {
+    				throw new NoSuchMethodError(e.toString());
+    			}
+
+    			if (!Modifier.isStatic(result.getModifiers())) {
+    				throw new NoSuchMethodError(
+    				"digest method must be static");
+    			}
+
+    			return result;
+    		}
+    	});
+    }
 
     // the name of the system property containing the URI segment length limit 
     private static final String SEGMENT_LENGTH_LIMIT_PROPERTY = 
@@ -72,16 +125,21 @@ public final class Uri {
     private static final int segmentLengthLimit;
 
     static {
-        String limitString = System.getProperty(SEGMENT_LENGTH_LIMIT_PROPERTY);
-        int limit = MINIMAL_SEGMENT_LENGTH_LIMIT; // min. used as default
-        
-        try {
-            int limitInt = Integer.parseInt(limitString);
-            if(limitInt >= MINIMAL_SEGMENT_LENGTH_LIMIT)
-                limit = limitInt;
-        } catch(NumberFormatException e) {}
-        
-        segmentLengthLimit = limit;
+    	segmentLengthLimit = ((Integer) AccessController
+    	.doPrivileged(new PrivilegedAction() {
+    		public Object run() {
+    			String limitString = System.getProperty(SEGMENT_LENGTH_LIMIT_PROPERTY);
+    			int limit = MINIMAL_SEGMENT_LENGTH_LIMIT; // min. used as default
+    			
+    			try {
+    				int limitInt = Integer.parseInt(limitString);
+    				if(limitInt >= MINIMAL_SEGMENT_LENGTH_LIMIT)
+    					limit = limitInt;
+    			} catch(NumberFormatException e) {}
+    			
+    			return new Integer(limit);
+    		}
+    	})).intValue();
     }
     
     // base64 encoding table, modified for use in node name mangling 
@@ -96,11 +154,13 @@ public final class Uri {
         '4','5','6','7','8','9','+','_', // !!! this differs from base64
     };
 
-    // the class where message digest requests can be delegated
-    private static DigestDelegate digestDelegate = null;
-
     
     /**
+     * A private constructor to suppress the default public constructor.
+     */
+    private Uri() {}
+    
+   /**
      * Returns a node name that is valid for the tree operation methods, based
      * on the given node name. This transformation is not idempotent, so it must
      * not be called with a parameter that is the result of a previous
@@ -476,40 +536,23 @@ public final class Uri {
     }
     
     private static byte[] digestMessage(byte[] byteStream) {
-        if(digestDelegate == null) {
-            // Look up delegate class name from a system property and attempt to
-            // create an instance.
-            try {
-                digestDelegate = (DigestDelegate) AccessController
-                        .doPrivileged(new PrivilegedExceptionAction() {
-                            public Object run() throws Exception {
-                                String className = System
-                                        .getProperty(DIGEST_DELEGATE_PROPERTY);
-                                if(className == null)
-                                    throw new IllegalStateException("Digest " +
-                                            "delegate class property '" + 
-                                            DIGEST_DELEGATE_PROPERTY +
-                                            "' must be set to an " +
-                                            "implementation of the " +
-                                            "Uri.DigestDelegate interface.");
-
-                                return Class.forName(className).newInstance();
-                            }
-                        });
-            } catch(PrivilegedActionException e) {
-                throw new IllegalStateException("Unable to create digest " +
-                        "delegate class: " + e.getException());
-            }
-        }
-        
-        return digestDelegate.digestMessage(byteStream);
-    }
-    
-    /**
-     * @skip
-     */
-    public interface DigestDelegate {
-        // Returns the SHA-1 digest of the given bytes.
-        byte[] digestMessage(byte[] byteStream);
+		try {
+			try {
+				return (byte[]) digestMethod.invoke(null, new Object[] {
+						byteStream});
+			}
+			catch (InvocationTargetException e) {
+				throw e.getTargetException();
+			}
+		}
+		catch (Error e) {
+			throw e;
+		}
+		catch (RuntimeException e) {
+			throw e;
+		}
+		catch (Throwable e) {
+			throw new RuntimeException(e.toString());
+		}
     }
 }
