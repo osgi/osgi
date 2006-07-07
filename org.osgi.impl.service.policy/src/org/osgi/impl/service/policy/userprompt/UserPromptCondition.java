@@ -29,6 +29,8 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.io.StreamCorruptedException;
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Dictionary;
 import java.util.HashMap;
@@ -48,8 +50,7 @@ import org.osgi.service.condpermadmin.Condition;
  * @version $Revision$
  */
 public class UserPromptCondition 
-		extends org.osgi.util.mobile.UserPromptCondition 
-		implements Serializable
+		implements Condition, Serializable
 {
 
 	/**
@@ -70,6 +71,8 @@ public class UserPromptCondition
 	 * The keys are strings as given by generateUniqueID, the values are the conditions themselves.
 	 */
 	static HashMap conditions;
+
+	private static Field unWrapField;
 	
 	final long bundleID;
 	final String catalogName;
@@ -208,8 +211,7 @@ public class UserPromptCondition
 		
 		// first, figure out what to prompt
 		for(int i=0;i<conds.length;i++) {
-			org.osgi.util.mobile.UserPromptCondition ucond = (org.osgi.util.mobile.UserPromptCondition) conds[i];
-			UserPromptCondition cond = (UserPromptCondition) org.osgi.util.mobile.UserPromptCondition.unWrap(ucond);
+			UserPromptCondition cond = unWrap(conds[i]);
 			Boolean prevAns = (Boolean) context.get(cond);
 			if ((prevAns!=null)||!cond.isPostponed()) {
 				if ((prevAns!=null)) {
@@ -274,14 +276,23 @@ public class UserPromptCondition
 		// then evaluate all of them, and return whether all are satisfied
 		boolean all_satisfied = true;
 		for(int i=0;i<conds.length;i++) {
-			org.osgi.util.mobile.UserPromptCondition ucond = (org.osgi.util.mobile.UserPromptCondition) conds[i];
-			UserPromptCondition cond = (UserPromptCondition) org.osgi.util.mobile.UserPromptCondition.unWrap(ucond);
+			UserPromptCondition cond = unWrap(conds[i]);
 			boolean satisfied = cond.setAnswer(answers[i]);
 			context.put(cond,satisfied?Boolean.TRUE:Boolean.FALSE);
 			all_satisfied&=satisfied;
 		}
 		
 		return all_satisfied;
+	}
+
+	private UserPromptCondition unWrap(Condition ucond) {
+		if (ucond instanceof UserPromptCondition) return (UserPromptCondition) ucond;
+		try {
+			return (UserPromptCondition) unWrapField.get(ucond);
+		} catch (IllegalAccessException e) {
+			e.printStackTrace();
+			return null;
+		}
 	}
 
 	static void checkConstructorParams(String levels,String defaultLevel) {
@@ -362,17 +373,15 @@ public class UserPromptCondition
 		}
 	}
 
-	public static class Factory implements org.osgi.util.mobile.UserPromptCondition.UserPromptConditionFactory {
-		public org.osgi.util.mobile.UserPromptCondition getInstance(Bundle bundle, String levels, String defaultLevel, String catalogName, String message) {
-			checkConstructorParams(levels,defaultLevel);
-			String id = generateUniqueID(bundle,catalogName,message);
-			UserPromptCondition condition = (UserPromptCondition) conditions.get(id);
-			if (condition==null) {
-				condition = new UserPromptCondition(bundle,levels,defaultLevel,catalogName,message);
-				conditions.put(id,condition);
-			}
-			return condition;
+	public static Condition getInstance(Bundle bundle, String levels, String defaultLevel, String catalogName, String message) {
+		checkConstructorParams(levels,defaultLevel);
+		String id = generateUniqueID(bundle,catalogName,message);
+		UserPromptCondition condition = (UserPromptCondition) conditions.get(id);
+		if (condition==null) {
+			condition = new UserPromptCondition(bundle,levels,defaultLevel,catalogName,message);
+			conditions.put(id,condition);
 		}
+		return condition;
 	}
 
 	public static void setContext(BundleContext context) {
@@ -401,7 +410,8 @@ public class UserPromptCondition
 	
 	public static void deregisterMySelf() {
 		conditions = null;
-		org.osgi.util.mobile.UserPromptCondition.setFactory(null);
+		setFactory(null);
+		unWrapField = null;
 	}
 
 	public static void registerMySelf() throws StreamCorruptedException, IOException, ClassNotFoundException {
@@ -419,7 +429,33 @@ public class UserPromptCondition
 			if (SESSION_STRING.equals(cond.status)) cond.status = null;
 			if (NOSESSION_STRING.equals(cond.status)) cond.status = null;
 		}
-		org.osgi.util.mobile.UserPromptCondition.setFactory(new Factory());
+		Method factory;
+		try {
+			factory = UserPromptCondition.class.getMethod("getInstance",new Class[]{
+				Bundle.class,String.class,String.class,String.class,String.class});
+			setFactory(factory);
+		} catch (NoSuchMethodException e) {
+			e.printStackTrace();
+		}
+		try {
+			unWrapField = org.osgi.util.mobile.UserPromptCondition.class.getDeclaredField("realUserPromptCondition");
+			unWrapField.setAccessible(true);
+		} catch (NoSuchFieldException e) {
+			e.printStackTrace();
+		}
+	}
+
+	private static void setFactory(Method factory) {
+		Field factoryField;
+		try {
+			factoryField = org.osgi.util.mobile.UserPromptCondition.class.getDeclaredField("factory");
+			factoryField.setAccessible(true);
+			factoryField.set(null,factory);
+		} catch (NoSuchFieldException e) {
+			e.printStackTrace();
+		} catch (IllegalAccessException e) {
+			e.printStackTrace();
+		}
 	}
 
 	public boolean equals(Object var0) {

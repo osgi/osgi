@@ -17,8 +17,10 @@
  */
 package org.osgi.util.mobile;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.Dictionary;
-import org.osgi.framework.AdminPermission;
+
 import org.osgi.framework.Bundle;
 import org.osgi.service.condpermadmin.Condition;
 import org.osgi.service.condpermadmin.ConditionInfo;
@@ -31,48 +33,16 @@ import org.osgi.service.condpermadmin.ConditionInfo;
  */
 public class UserPromptCondition implements Condition {
 	
-	/**
-	 * @skip
-	 */
-	protected static interface UserPromptConditionFactory {
-		/**
-		 * @skip
-		 */
-		public UserPromptCondition getInstance(
-				Bundle bundle,
-				String levels,
-				String defaultLevel, 
-				String catalogName, 
-				String message);
-	}
+	// this will need to be set by the implementation class
+	static Method factory = null;
+	Condition realUserPromptCondition;
 
-	private static UserPromptConditionFactory factory = null;
-	/**
-	 * @skip
-	 */
-	protected static void setFactory(UserPromptConditionFactory factory) {
-		SecurityManager sm = System.getSecurityManager();
-		if (sm!=null) {
-			sm.checkPermission(new AdminPermission("*","*"));
-		}
-		UserPromptCondition.factory = factory;
-	}
-	
 	private final Bundle bundle;
 	private final String levels;
 	private final String defaultLevel;
 	private final String catalogName;
 	private final String message;
-	private UserPromptCondition realUserPromptCondition;
 	
-	/**
-	 * @skip
-	 */
-	protected static UserPromptCondition unWrap(UserPromptCondition c) {
-		if (c.realUserPromptCondition==null) return c;
-		return c.realUserPromptCondition;
-	}
-
 	/**
 	 * Returns a UserPromptCondition object with the given prompt string and permission
 	 * level. The user should be given choice as to what level of permission is
@@ -121,10 +91,19 @@ public class UserPromptCondition implements Condition {
 		if (factory==null) {
 			// the bundle implementing the UserPromptCondition has not started yet.
 			// Do wrapping magick.
-			return new UserPromptCondition(false,bundle,levels,defaultLevel,catalogName,message);
+			return new UserPromptCondition(bundle,levels,defaultLevel,catalogName,message);
 		} else {
 			// there is already a factory, no need to do any wrapping magic
-			return factory.getInstance(bundle,levels,defaultLevel,catalogName,message);
+			try {
+				return (Condition) factory.invoke(null,new Object[]{bundle,levels,defaultLevel,catalogName,message});
+			} catch (IllegalAccessException e) {
+				e.printStackTrace();
+			} catch (InvocationTargetException e) {
+				e.printStackTrace();
+			}
+			// the factory method is not working, fallback behavior:
+			factory = null;
+			return new UserPromptCondition(bundle,levels,defaultLevel,catalogName,message);
 		}
 	}
 
@@ -140,7 +119,7 @@ public class UserPromptCondition implements Condition {
 	 * @param catalogName
 	 * @param message
 	 */
-	private UserPromptCondition(boolean unused,Bundle bundle,String levels,String defaultLevel,String catalogName,String message) {
+	private UserPromptCondition(Bundle bundle,String levels,String defaultLevel,String catalogName,String message) {
 		this.bundle=bundle;
 		this.levels=levels;
 		this.defaultLevel=defaultLevel;
@@ -149,23 +128,20 @@ public class UserPromptCondition implements Condition {
 	}
 	
 	/**
-	 * @skip
-	 */
-
-	protected UserPromptCondition() {
-		bundle=null;
-		levels=null;
-		defaultLevel=null;
-		catalogName=null;
-		message=null;
-	}
-
-	/**
 	 * Check if a factory is registered, and if yes, create userprompt to delegate calls to.
 	 */
 	private void lookForImplementation() {
 		if ((realUserPromptCondition==null)&&(factory!=null)) {
-			realUserPromptCondition = factory.getInstance(bundle,levels,defaultLevel,catalogName,message);
+			try {
+				realUserPromptCondition = (Condition) factory.invoke(null,new Object[]{bundle,levels,defaultLevel,catalogName,message});
+				return;
+			} catch (IllegalAccessException e) {
+				e.printStackTrace();
+			} catch (InvocationTargetException e) {
+				e.printStackTrace();
+			}
+			// only if the factory call fails with some invocation exception
+			factory = null;
 		}
 	}
 	
