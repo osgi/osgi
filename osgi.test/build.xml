@@ -21,6 +21,13 @@
 		  <arg value="osgi.${item.spec}.jar"/>
 		  <arg value="osgi.${item.spec}.tests.jar"/>
 		</java>
+		<java fork="true" classname="org.osgi.tools.cross.Cross" classpath="../org.osgi.tools/src;../licensed/jar/asm-2.2.2.jar;osgi.director.jar">
+		  <arg value="-o"/>
+		  <arg value="doc/osgi.${item.spec}.html"/>
+		  <arg value="-target"/>
+		  <arg value="osgi.${item.spec}.jar"/>
+		  <arg value="osgi.${item.spec}.tests.jar"/>
+		</java>
 	</target>
 
 	<import file="../cnf/build.xml"/>
