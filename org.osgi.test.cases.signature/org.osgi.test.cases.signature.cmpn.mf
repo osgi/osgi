@@ -1,6 +1,6 @@
 Manifest-Version: 1.0
 Bundle-Activator: ${p}.TestCase
-Bundle-Name: test.signatute.cmpn
+Bundle-Name: test.signature.cmpn
 Bundle-SymbolicName: ${p}.cmpn
 Bundle-Version: 4
 Bundle-Copyright: Copyright (c) OSGi Alliance (2006). All Rights Reserved.

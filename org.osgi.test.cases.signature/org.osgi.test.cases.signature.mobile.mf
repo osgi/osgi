@@ -1,6 +1,6 @@
 Manifest-Version: 1.0
 Bundle-Activator: ${p}.TestCase
-Bundle-Name: test.signatute.mobile
+Bundle-Name: test.signature.mobile
 Bundle-SymbolicName: ${p}.mobile
 Bundle-Version: 4
 Bundle-Copyright: Copyright (c) OSGi Alliance (2006). All Rights Reserved.
