@@ -193,8 +193,9 @@ final class ConfigurationPermissionCollection extends PermissionCollection {
 	 */
 
 	public Enumeration elements() {
+		final boolean nonEmpty = hasElement;
 		return new Enumeration() {
-			private boolean	more	= hasElement;
+			private boolean	more = nonEmpty;
 
 			public boolean hasMoreElements() {
 				return more;
