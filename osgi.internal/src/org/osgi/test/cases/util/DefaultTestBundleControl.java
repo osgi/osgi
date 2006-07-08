@@ -101,6 +101,8 @@ public abstract class DefaultTestBundleControl
     private Hashtable               sharedContexts = new Hashtable();
 
     protected Registry              registry;
+    double			progressFactor;
+    double			progressOffset;
 
     public void start(BundleContext context) {
         try {
@@ -257,8 +259,10 @@ public abstract class DefaultTestBundleControl
                     /* Run all the specified tests */
                     String methods[] = getTestMethods();
 
+                	progressFactor = 100.0  / methods.length;
                     for(int i = 0; cont && i < methods.length; i++) {
                         try {
+                        	progressOffset = i * progressFactor;
                             registry = new Registry(context, webserver, this);
                             setState();
                             logMethodBegin(methods[i]);
@@ -271,8 +275,7 @@ public abstract class DefaultTestBundleControl
                             /* Clean up all install bundles, gotten services and
 							registered services during the method call. */
                             registry.cleanAll();
-
-                            link.send("" + 100 * (i + 1) / methods.length);
+                        	progress(100);
                         }
                        catch(InvocationTargetException ite) {
 							Throwable t = ite.getTargetException();
@@ -327,6 +330,12 @@ public abstract class DefaultTestBundleControl
                 log("Already died");
         }
     }
+
+	public void progress(int i) throws IOException {
+		if (i>=100) i = 100;
+		else if (i<0) i = 0;
+		link.send("" + (int)(progressOffset + progressFactor * i / 100.0));
+	}
 
 	/**
 	 * Return a flag to indicate if we should continue after this error
