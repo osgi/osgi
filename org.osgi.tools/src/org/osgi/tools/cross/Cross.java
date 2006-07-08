@@ -148,8 +148,6 @@ public class Cross {
 			pw.println("<?xml version='1.0'?>");
 			pw
 			.println("<?xml-stylesheet type='text/xsl' title='Matrix' href='http://bundles.osgi.org/xsl/testmatrix.xsl'?>");
-			pw
-			.println("<?xml-stylesheet type='text/xsl' title='Matrix' href='xsl/testmatrix.xsl'?>");
 			result.print(0, pw);
 			pw.flush();
 			out.close();
