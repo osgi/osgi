@@ -1,7 +1,7 @@
 Manifest-Version: 1.0
 Bundle-Name: test.cases.startlevel.tbc
 Bundle-Description: Tests the Start Level service control bundle
-Bundle-Version: 3.0
+Bundle-Version: 3.0.1
 Bundle-Activator: $(p).tbc.StartLevelControl
 Bundle-Vendor: OSGi Alliance
 Bundle-DocURL: http://www.osgi.org/

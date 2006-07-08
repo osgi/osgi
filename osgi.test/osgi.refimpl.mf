@@ -1,7 +1,7 @@
 Manifest-Version: 1.0
 Bundle-Name: osgi.refimpl
 Bundle-SymbolicName: osgi.refimpl
-Bundle-Version: 4.0
+Bundle-Version: 4.0.1
 Bundle-Activator: org.osgi.tools.group.Group
 Bundle-Description: OSGi Service Platform Release 4, All Reference Implementations
 Bundle-Copyright: Copyright (c) The OSGi Alliance (2000, 2006). All Rights Reserved.

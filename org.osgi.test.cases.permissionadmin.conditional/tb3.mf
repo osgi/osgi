@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-Name: ${p}.tb3
 Bundle-SymbolicName: ${p}.tb3
 Bundle-ManifestVersion: 2
-Bundle-Version: 1.0.0
+Bundle-Version: 4.0.1
 Bundle-Activator: $(p).tb3.Activator
 $(IMPORT-PACKAGE)
 $(EXPORT-PACKAGE)
