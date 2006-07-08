@@ -195,9 +195,11 @@ public class TestControl extends DefaultTestBundleControl implements
 		Bundle b = bc.getBundle();
 		String signatures = (String) b.getHeaders().get("Signature-Packages");
 		StringTokenizer st = new StringTokenizer(signatures, " ,");
-		while (st.hasMoreTokens()) {
+		int n = st.countTokens();
+		for (int i=0; i<n; i++ ) {
 			String signature = st.nextToken().replace('.', '/');
 			doPackage(b, signature, this);
+			progress(100 * (i+1)/n);
 		}
 	}
 
