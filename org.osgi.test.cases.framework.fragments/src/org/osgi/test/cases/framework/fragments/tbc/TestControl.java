@@ -1037,20 +1037,6 @@ public class TestControl extends DefaultTestBundleControl implements
 	}
 
 	/**
-	 * Auxiliar method to get the root (boot) classloader.
-	 * 
-	 * @return the boot classloader.
-	 */
-	private ClassLoader getBootClassLoader() {
-		ClassLoader boot = ClassLoader.getSystemClassLoader();
-		// traverse the tree down to the root element (boot classloader)
-		while (boot.getParent() != null) {
-			boot = boot.getParent();
-		}
-		return boot;
-	}
-
-	/**
 	 * Tests if a boot classpath extension bundle's classpath is appended to the
 	 * boot classpath. Will only perform this test if
 	 * <code>SUPPORTS_BOOTCLASSPATH_EXTENSION</code> equals <code>true</code>.
@@ -1066,12 +1052,21 @@ public class TestControl extends DefaultTestBundleControl implements
 			try {
 				// install extension bundle
 				tb5 = getContext().installBundle(getWebServer() + "tb5.jar");
+				Bundle systemBundle = getContext().getBundle(0);
 				// check if classloader is boot classloader
-				assertEquals("loaded by the boot classloader", tb5.loadClass(
-						class5).getClassLoader(), getBootClassLoader());
+				try {
+					assertEquals("loaded by the boot classloader", systemBundle.loadClass(
+							class5).getClassLoader(), Class.class.getClassLoader());
+// TODO add back in 4.1
+//					assertTrue("bootclasspath extension bundle is resolved", (tb5.getState() & Bundle.RESOLVED) != 0);
+				} catch (ClassNotFoundException cnfe) {
+					if ((tb5.getState() & Bundle.RESOLVED) != 0)
+						fail("failed loading class from a resolved bootclasspath extension bundle");
+					assertTrue("bootclasspath extension bundle is installed", (tb5.getState() & Bundle.INSTALLED) != 0);
+				}
 			}
 			catch (BundleException be) {
-				fail("installing boot extension bundle");
+				fail("installing bootclasspath extension bundle");
 			}
 			finally {
 				if (tb5 != null) {
@@ -1080,7 +1075,7 @@ public class TestControl extends DefaultTestBundleControl implements
 			}
 		}
 		else {
-			String message = "boot extension bundle instalation not supported";
+			String message = "bootclasspath extension bundle instalation not supported";
 			try {
 				// tries to install extension bundle
 				tb5 = getContext().installBundle(getWebServer() + "tb5.jar");
@@ -1109,7 +1104,6 @@ public class TestControl extends DefaultTestBundleControl implements
 	 */
 	public void testFrameworkExtensionBundle() throws Exception {
 		String class6 = "org.osgi.test.cases.framework.fragments.tb6.FooTB6";
-		getContext();
 		Bundle tb6 = null;
 		if ("true".equals(getContext().getProperty(
 				Constants.SUPPORTS_FRAMEWORK_EXTENSION))) {
@@ -1117,13 +1111,26 @@ public class TestControl extends DefaultTestBundleControl implements
 				// install extension bundle
 				tb6 = getContext().installBundle(getWebServer() + "tb6.jar");
 				// check if classloader is framework classloader
-				assertEquals("loaded by the framework classloader",
-						getContext().getClass().getClassLoader().loadClass(
-								class6).getClassLoader(), getContext()
-								.getClass().getClassLoader());
+				try {
+					assertEquals("loaded by the framework classloader",
+							getContext().getClass().getClassLoader().loadClass(
+									class6).getClassLoader(), getContext()
+									.getClass().getClassLoader());
+// TODO add back in 4.1
+//					assertTrue("framework extension bundle is resolved", (tb6.getState() & Bundle.RESOLVED) != 0);
+				} catch (ClassNotFoundException cnfe) {
+					if ((tb6.getState() & Bundle.RESOLVED) != 0)
+						fail("failed loading class from a resolved framework extension bundle");
+					assertTrue("framework extension bundle is installed", (tb6.getState() & Bundle.INSTALLED) != 0);
+				}
+			}
+			catch (BundleException be) {
+				fail("installing framework extension bundle");
 			}
 			finally {
-				tb6.uninstall();
+				if (tb6 != null) {
+					tb6.uninstall();
+				}
 			}
 
 		}
@@ -1230,18 +1237,31 @@ public class TestControl extends DefaultTestBundleControl implements
 		Bundle tb21 = null;
 		if ("true".equals(getContext().getProperty(
 				Constants.SUPPORTS_FRAMEWORK_EXTENSION))) {
-			tb21 = getContext().installBundle(getWebServer() + "tb21.jar");
 			try {
+				// install extension bundle
+				tb21 = getContext().installBundle(getWebServer() + "tb21.jar");
 				// check if classloader is framework classloader
-				assertEquals("loaded by the framework classloader",
-						getContext().getClass().getClassLoader().loadClass(
-								class21).getClassLoader(), getContext()
-								.getClass().getClassLoader());
+				try {
+					assertEquals("loaded by the framework classloader",
+							getContext().getClass().getClassLoader().loadClass(
+									class21).getClassLoader(), getContext()
+									.getClass().getClassLoader());
+//					 TODO add back in 4.1
+//					assertTrue("framework extension bundle is resolved", (tb21.getState() & Bundle.RESOLVED) != 0);
+				} catch (ClassNotFoundException cnfe) {
+					if ((tb21.getState() & Bundle.RESOLVED) != 0)
+						fail("failed loading class from a resolved framework extension bundle");
+					assertTrue("framework extension bundle is installed", (tb21.getState() & Bundle.INSTALLED) != 0);
+				}
+			}
+			catch (BundleException be) {
+				fail("installing framework extension bundle");
 			}
 			finally {
-				tb21.uninstall();
+				if (tb21 != null) {
+					tb21.uninstall();
+				}
 			}
-
 		}
 		else {
 			trace("framework extension bundles not supported");
