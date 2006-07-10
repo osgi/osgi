@@ -105,6 +105,9 @@ public class UserPromptCondition implements Condition {
 			} catch (IllegalAccessException e) {
 				e.printStackTrace();
 			} catch (InvocationTargetException e) {
+				Throwable original = e.getTargetException();
+				if (original instanceof NullPointerException) throw (NullPointerException) original;
+				if (original instanceof IllegalArgumentException) throw (IllegalArgumentException) original;
 				e.printStackTrace();
 			}
 			// the factory method is not working, fallback behavior:
