@@ -44,6 +44,7 @@ import org.osgi.service.permissionadmin.PermissionInfo;
 import org.osgi.test.cases.dmt.tc2.tbc.DmtConstants;
 import org.osgi.test.cases.dmt.tc2.tbc.DmtTestControl;
 import org.osgi.test.cases.dmt.tc2.tbc.TestInterface;
+import org.osgi.test.cases.dmt.tc2.tbc.Plugin.ExecPlugin.TestExecPlugin;
 import org.osgi.test.cases.dmt.tc2.tbc.Plugin.ExecPlugin.TestExecPluginActivator;
 
 /**
@@ -294,18 +295,17 @@ public class DmtAdressingUri implements TestInterface {
 	 */
 	private void testDmtAdressingUri011() {
 		DmtSession session = null;
+		String lastNodeName = "test%2Fslash%5C";
 		try {
 			tbc.log("#testDmtAdressingUri011");
-			String nodeWithoutRoot = TestExecPluginActivator.ROOT.substring(1,TestExecPluginActivator.ROOT.length());
-			session = tbc.getDmtAdmin().getSession(nodeWithoutRoot,DmtSession.LOCK_TYPE_EXCLUSIVE);
-			session.createInteriorNode(TestExecPluginActivator.ROOT+ "/" + "test%/slash");
-			tbc.failException("",DmtException.class);
-			
-		} catch (DmtException e) {
-			tbc.assertEquals("This method asserts that the slash and backslash must not be escaped using the % escaping.",DmtException.INVALID_URI, e.getCode());			
-		} catch (Exception e) {
-			tbc.failExpectedOtherException(DmtException.class, e);
 
+			session = tbc.getDmtAdmin().getSession(TestExecPluginActivator.ROOT,DmtSession.LOCK_TYPE_EXCLUSIVE);
+			session.createInteriorNode(TestExecPluginActivator.ROOT+ "/" + lastNodeName);
+			String[] newInteriorNodeName = TestExecPlugin.getNewInteriorNodeName();
+			tbc.assertEquals("This method asserts that the slash and backslash must not be escaped using the % escaping.", lastNodeName, newInteriorNodeName[newInteriorNodeName.length-1]);
+			
+		} catch (Exception e) {
+			tbc.failUnexpectedException(e);
 		} finally {
 			tbc.closeSession(session);
 		}

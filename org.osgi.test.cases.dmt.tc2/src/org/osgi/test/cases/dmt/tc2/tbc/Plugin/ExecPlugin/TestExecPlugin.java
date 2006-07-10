@@ -71,10 +71,11 @@ public class TestExecPlugin implements DataPlugin, ExecPlugin, TransactionalData
     
 	private static boolean allUriIsExistent = false;
 	
-	
 	private DmtData dataComplex = new DmtData(new Integer("1"));
 	
 	private DmtData dataString = new DmtData("");
+	
+	private static String[] newInteriorNodeName = null;
 	
 	public static final String[] CHILDREN_NAMES = new String[] { "leaf_b","leaf_a" };
 	
@@ -119,6 +120,7 @@ public class TestExecPlugin implements DataPlugin, ExecPlugin, TransactionalData
 
 	public void createInteriorNode(String[] nodeUri, String type)
 			throws DmtException {
+		newInteriorNodeName = nodeUri;
         createInteriorNodeCount++;
         if (exceptionAtCreateInteriorNode) {
             throw new IllegalStateException();
@@ -263,5 +265,10 @@ public class TestExecPlugin implements DataPlugin, ExecPlugin, TransactionalData
     public static void setDefaultNodeTitle(String nodeUri) {
         nodeTitle = nodeUri;
     }
+
+
+	public static String[] getNewInteriorNodeName() {
+		return newInteriorNodeName;
+	}
     
 }
