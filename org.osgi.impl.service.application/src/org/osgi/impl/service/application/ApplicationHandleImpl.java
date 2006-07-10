@@ -29,12 +29,12 @@ package org.osgi.impl.service.application;
 
 import org.osgi.service.application.*;
 
-public class ApplicationHandleImpl implements ApplicationHandle.Delegate {
+public class ApplicationHandleImpl {
 	ApplicationHandle	handle;
 	ApplicationDescriptorImpl descriptor;
 	
 	public void setApplicationHandle(
-			ApplicationHandle handle, ApplicationDescriptor.Delegate descriptor ) {
+			ApplicationHandle handle, Object descriptor ) {
 		this.handle = handle;
 		this.descriptor = (ApplicationDescriptorImpl) descriptor;
 	}

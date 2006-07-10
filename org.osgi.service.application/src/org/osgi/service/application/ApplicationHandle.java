@@ -18,8 +18,9 @@
 
 package org.osgi.service.application;
 
-import java.security.AccessController;
-import java.security.PrivilegedExceptionAction;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.security.*;
 
 import org.osgi.framework.Constants;
 
@@ -95,12 +96,7 @@ public abstract class ApplicationHandle {
 		this.descriptor = descriptor;
 
 		try {
-		  AccessController.doPrivileged(new PrivilegedExceptionAction() {
-			  public Object run() throws Exception {			
-					delegate = (Delegate) implementation.newInstance();
-				  return null;
-			  }
-		  });
+			delegate = new Delegate();
 			delegate.setApplicationHandle( this, descriptor.delegate );
 		}
 		catch (Exception e) {
@@ -108,7 +104,7 @@ public abstract class ApplicationHandle {
 			e.printStackTrace();
 			System.err
 					.println("No implementation available for ApplicationDescriptor, property is: "
-							+ cName);
+							+ Delegate.cName);
 		}
 	}
 
@@ -194,30 +190,94 @@ public abstract class ApplicationHandle {
 	ApplicationDescriptor		descriptor;
 	Delegate	delegate;
 	
-	static Class				implementation;
-
-	static String				cName;
-	{
-		try {
-		  AccessController.doPrivileged(new PrivilegedExceptionAction() {
-			  public Object run() throws Exception {			
-					cName = System.getProperty("org.osgi.vendor.application.ApplicationHandle");
-			    implementation = Class.forName(cName);
-				  return null;
-			  }
-		  });
-		}
-		catch (Throwable t) {
-			t.printStackTrace();
-		}
-	}
 
 	/**
 	 * @skip
 	 *
 	 */
-	public interface Delegate {
-		void setApplicationHandle(ApplicationHandle d, ApplicationDescriptor.Delegate descriptor );
-		void destroy();
+	static class Delegate {
+		static String cName;
+		static Class implementation;
+		static Method setApplicationHandle;
+		static Method destroy;
+
+		static {
+			AccessController.doPrivileged(new PrivilegedAction() {
+				public Object run(){			
+					cName = System.getProperty("org.osgi.vendor.application.ApplicationHandle");
+					if (cName == null) {
+						throw new NoClassDefFoundError("org.osgi.vendor.application.ApplicationHandle property must be set"); 
+					}
+					
+					try {
+						implementation = Class.forName(cName);
+					}
+					catch (ClassNotFoundException e) {
+						throw new NoClassDefFoundError(e.toString());
+					}
+					
+					try {
+						setApplicationHandle = implementation.getMethod("setApplicationHandle",
+								new Class[] {ApplicationHandle.class, Object.class});
+						destroy = implementation.getMethod("destroy",
+								new Class[] {});
+					}
+					catch (NoSuchMethodException e) {
+						throw new NoSuchMethodError(e.toString());
+					}
+					
+					return null;
+				}
+			});
+		}
+		
+		Object target; 
+		
+		Delegate() throws Exception {
+			target = AccessController.doPrivileged(new PrivilegedExceptionAction() {
+				public Object run() throws Exception {			
+					return implementation.newInstance();
+				}
+			});
+		}
+
+		void setApplicationHandle(ApplicationHandle d, ApplicationDescriptor.Delegate descriptor ) {
+			try {
+				try {
+					setApplicationHandle.invoke(target, new Object[] {d, descriptor.target});
+				}
+				catch (InvocationTargetException e) {
+					throw e.getTargetException();
+				}
+			}
+			catch (Error e) {
+				throw e;
+			}
+			catch (RuntimeException e) {
+				throw e;
+			}
+			catch (Throwable e) {
+				throw new RuntimeException(e.toString());
+			}
+		}
+		void destroy() {
+			try {
+				try {
+					destroy.invoke(target, new Object[] {});
+				}
+				catch (InvocationTargetException e) {
+					throw e.getTargetException();
+				}
+			}
+			catch (Error e) {
+				throw e;
+			}
+			catch (RuntimeException e) {
+				throw e;
+			}
+			catch (Throwable e) {
+				throw new RuntimeException(e.toString());
+			}
+		}
 	}
 }

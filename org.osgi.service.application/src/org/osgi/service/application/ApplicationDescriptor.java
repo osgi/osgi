@@ -18,8 +18,9 @@
 
 package org.osgi.service.application;
 
-import java.security.AccessController;
-import java.security.PrivilegedExceptionAction;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.security.*;
 import java.util.Map;
 
 import org.osgi.framework.Constants;
@@ -122,20 +123,15 @@ public abstract class ApplicationDescriptor {
 		
 		this.pid = applicationId;
 		try {
-		  AccessController.doPrivileged(new PrivilegedExceptionAction() {
-			  public Object run() throws Exception {			
-					delegate = (Delegate) implementation.newInstance();
-				  return null;
-			  }
-		  });
-	    delegate.setApplicationDescriptor( this, applicationId );
+			delegate = new Delegate();
+			delegate.setApplicationDescriptor( this, applicationId );
 		}
 		catch (Exception e) {
 			// Too bad ...
 			e.printStackTrace();
 			System.err
 					.println("No implementation available for ApplicationDescriptor, property is: "
-							+ cName);
+							+ Delegate.cName);
 		}
 	}
 
@@ -508,42 +504,202 @@ public abstract class ApplicationDescriptor {
 	 */
 	protected abstract void unlockSpecific();
 
-		/**
-		 * @skip
-		 */
-	public interface Delegate {
-		void setApplicationDescriptor(ApplicationDescriptor d, String pid );
-
-		boolean isLocked();
-
-		void lock();
-
-		void unlock();
-
-		ScheduledApplication schedule(String scheduleId, Map args, String topic, String filter,
-				boolean recurs) throws InvalidSyntaxException, ApplicationException;
-
-		void launch(Map arguments) throws ApplicationException;
-	}
-
 	Delegate	delegate;
 	String							pid;
 
-	static Class					implementation;
-	static String					cName;
-
-	{
-		try {
-		  AccessController.doPrivileged(new PrivilegedExceptionAction() {
-			  public Object run() throws Exception {			
+		/**
+		 * @skip
+		 */
+	static class Delegate {
+		static String cName;
+		static Class implementation;
+		static Method setApplicationDescriptor;
+		static Method isLocked;
+		static Method lock;
+		static Method unlock;
+		static Method schedule;
+		static Method launch;
+		
+		static {
+			AccessController.doPrivileged(new PrivilegedAction() {
+				public Object run() {			
 					cName = System.getProperty("org.osgi.vendor.application.ApplicationDescriptor");
-    			implementation = Class.forName(cName);
-				  return null;
-			  }
-		  });
+					if (cName == null) {
+						throw new NoClassDefFoundError("org.osgi.vendor.application.ApplicationDescriptor property must be set"); 
+					}
+					
+					try {
+						implementation = Class.forName(cName);
+					}
+					catch (ClassNotFoundException e) {
+						throw new NoClassDefFoundError(e.toString());
+					}
+					
+					try {
+						setApplicationDescriptor = implementation.getMethod("setApplicationDescriptor",
+								new Class[] {ApplicationDescriptor.class, String.class});
+						isLocked = implementation.getMethod("isLocked",
+								new Class[] {});
+						lock = implementation.getMethod("lock",
+								new Class[] {});
+						unlock = implementation.getMethod("unlock",
+								new Class[] {});
+						schedule = implementation.getMethod("schedule",
+								new Class[] {String.class, Map.class, String.class, String.class,
+								boolean.class});
+						launch = implementation.getMethod("launch",
+								new Class[] {Map.class});
+					}
+					catch (NoSuchMethodException e) {
+						throw new NoSuchMethodError(e.toString());
+					}
+					
+					return null;
+				}
+			});
 		}
-		catch (Throwable t) {
-			t.printStackTrace();
+
+		Object target; 
+		
+		Delegate() throws Exception {
+			target = AccessController.doPrivileged(new PrivilegedExceptionAction() {
+				public Object run() throws Exception {			
+					return implementation.newInstance();
+				}
+			});
+		}
+
+		void setApplicationDescriptor(ApplicationDescriptor d, String pid ) {
+			try {
+				try {
+					setApplicationDescriptor.invoke(target, new Object[] {d, pid});
+				}
+				catch (InvocationTargetException e) {
+					throw e.getTargetException();
+				}
+			}
+			catch (Error e) {
+				throw e;
+			}
+			catch (RuntimeException e) {
+				throw e;
+			}
+			catch (Throwable e) {
+				throw new RuntimeException(e.toString());
+			}
+		}
+
+		boolean isLocked() {
+			try {
+				try {
+					return ((Boolean)isLocked.invoke(target, new Object[] {})).booleanValue();
+				}
+				catch (InvocationTargetException e) {
+					throw e.getTargetException();
+				}
+			}
+			catch (Error e) {
+				throw e;
+			}
+			catch (RuntimeException e) {
+				throw e;
+			}
+			catch (Throwable e) {
+				throw new RuntimeException(e.toString());
+			}
+		}
+
+		void lock() {
+			try {
+				try {
+					lock.invoke(target, new Object[] {});
+				}
+				catch (InvocationTargetException e) {
+					throw e.getTargetException();
+				}
+			}
+			catch (Error e) {
+				throw e;
+			}
+			catch (RuntimeException e) {
+				throw e;
+			}
+			catch (Throwable e) {
+				throw new RuntimeException(e.toString());
+			}
+		}
+
+		void unlock() {
+			try {
+				try {
+					unlock.invoke(target, new Object[] {});
+				}
+				catch (InvocationTargetException e) {
+					throw e.getTargetException();
+				}
+			}
+			catch (Error e) {
+				throw e;
+			}
+			catch (RuntimeException e) {
+				throw e;
+			}
+			catch (Throwable e) {
+				throw new RuntimeException(e.toString());
+			}
+		}
+
+		ScheduledApplication schedule(String scheduleId, Map args, String topic, String filter,
+				boolean recurs) throws InvalidSyntaxException, ApplicationException {
+			try {
+				try {
+					return (ScheduledApplication)schedule.invoke(target, new Object[] {scheduleId, args, topic, filter,
+							new Boolean(recurs)});
+				}
+				catch (InvocationTargetException e) {
+					throw e.getTargetException();
+				}
+			}
+			catch (InvalidSyntaxException e) {
+				throw e;
+			}
+			catch (ApplicationException e) {
+				throw e;
+			}
+			catch (Error e) {
+				throw e;
+			}
+			catch (RuntimeException e) {
+				throw e;
+			}
+			catch (Throwable e) {
+				throw new RuntimeException(e.toString());
+			}
+		}
+
+		void launch(Map arguments) throws ApplicationException {
+			try {
+				try {
+					launch.invoke(target, new Object[] {arguments});
+				}
+				catch (InvocationTargetException e) {
+					throw e.getTargetException();
+				}
+			}
+			catch (ApplicationException e) {
+				throw e;
+			}
+			catch (Error e) {
+				throw e;
+			}
+			catch (RuntimeException e) {
+				throw e;
+			}
+			catch (Throwable e) {
+				throw new RuntimeException(e.toString());
+			}
 		}
 	}
+
+
 }

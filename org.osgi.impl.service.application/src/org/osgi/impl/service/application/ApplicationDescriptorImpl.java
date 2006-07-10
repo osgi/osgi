@@ -35,9 +35,8 @@ import java.util.*;
 
 import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.service.application.*;
-import org.osgi.service.application.ApplicationDescriptor.Delegate;
 
-public class ApplicationDescriptorImpl implements Delegate {
+public class ApplicationDescriptorImpl {
 	private ApplicationDescriptor descriptor;
 	private static Properties			locks;
 	private String 								pid;
