@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry path="/org.osgi.service.component" kind="src"/>
-	<classpathentry path="src" kind="output"/>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="src" path="/org.osgi.service.component"/>
+	<classpathentry kind="output" path="src"/>
 </classpath>

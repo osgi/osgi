@@ -1,0 +1,1 @@
+The sources for this project can be found in the Eclipse Equinox repository for the declarative services.
