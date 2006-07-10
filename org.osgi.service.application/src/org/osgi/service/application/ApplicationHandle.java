@@ -31,6 +31,12 @@ import org.osgi.framework.Constants;
  * for the lifecycle states.
  */
 public abstract class ApplicationHandle {
+	/*
+	 * NOTE: An implementor may also choose to replace this class in
+	 * their distribution with a class that directly interfaces with the
+	 * org.osgi.service.application implementation. This replacement class MUST NOT alter the
+	 * public/protected signature of this class.
+	 */
 
 	/**
 	 * The property key for the unique identifier (PID) of the application
@@ -63,6 +69,8 @@ public abstract class ApplicationHandle {
 
 	private final String instanceId;
 	
+	private final ApplicationDescriptor	descriptor;
+
 	/**
 	 * Application instance identifier is specified by the container when the
 	 * instance is created. The instance identifier must remain static for the 
@@ -187,13 +195,13 @@ public abstract class ApplicationHandle {
 	 */
 	protected abstract void destroySpecific();
 	
-	ApplicationDescriptor		descriptor;
 	Delegate	delegate;
 	
 
 	/**
-	 * @skip
-	 *
+	 * This class will load the class named
+	 * by the org.osgi.vendor.application.ApplicationHandle and delegate
+	 * method calls to an instance of the class.
 	 */
 	static class Delegate {
 		static String cName;

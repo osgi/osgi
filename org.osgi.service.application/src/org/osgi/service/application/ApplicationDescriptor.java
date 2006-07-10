@@ -33,6 +33,12 @@ import org.osgi.framework.InvalidSyntaxException;
  */
 
 public abstract class ApplicationDescriptor {
+	/*
+	 * NOTE: An implementor may also choose to replace this class in
+	 * their distribution with a class that directly interfaces with the
+	 * org.osgi.service.application implementation. This replacement class MUST NOT alter the
+	 * public/protected signature of this class.
+	 */
 
 	/**
 	 * The property key for the localized name of the application.
@@ -106,6 +112,9 @@ public abstract class ApplicationDescriptor {
 	public static final String APPLICATION_LOCATION = "application.location";
 
 	
+	private final String	pid;
+
+
 	/**
 	 * Constructs the <code>ApplicationDescriptor</code>.
 	 *
@@ -505,11 +514,11 @@ public abstract class ApplicationDescriptor {
 	protected abstract void unlockSpecific();
 
 	Delegate	delegate;
-	String							pid;
-
-		/**
-		 * @skip
-		 */
+	/**
+	 * This class will load the class named
+	 * by the org.osgi.vendor.application.ApplicationDescriptor and delegate
+	 * method calls to an instance of the class.
+	 */
 	static class Delegate {
 		static String cName;
 		static Class implementation;
