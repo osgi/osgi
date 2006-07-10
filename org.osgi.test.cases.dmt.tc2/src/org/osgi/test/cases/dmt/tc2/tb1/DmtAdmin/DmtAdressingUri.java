@@ -272,13 +272,13 @@ public class DmtAdressingUri implements TestInterface {
 		DmtSession session = null;
 		try {
 			tbc.log("#testDmtAdressingUri010");
-			String nodeWithoutRoot = TestExecPluginActivator.ROOT.substring(1,TestExecPluginActivator.ROOT.length());
+			String nodeWithoutRoot = TestExecPluginActivator.ROOT.substring(2,TestExecPluginActivator.ROOT.length());
 			session = tbc.getDmtAdmin().getSession(nodeWithoutRoot,DmtSession.LOCK_TYPE_EXCLUSIVE);
 			tbc.failException("",DmtException.class);
 			
 		} catch (DmtException e) {
 			tbc.assertEquals("This method asserts that the URI must be given with the root of the management " +
-					"tree as the starting point",DmtException.INVALID_URI, e.getCode());			
+					"tree as the starting point",DmtException.COMMAND_FAILED, e.getCode());			
 		} catch (Exception e) {
 			tbc.failExpectedOtherException(DmtException.class, e);
 

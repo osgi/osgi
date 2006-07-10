@@ -76,10 +76,12 @@ public class DmtSessionImpl implements DmtSession {
 	               PermissionInfo[] permissions, Context context, 
                    DmtAdminCore dmtAdmin) throws DmtException {
         
-        Node node = Node.validateAndNormalizeUri(subtreeUri);
-        subtreeNode = node.isAbsolute() ? 
-                node : Node.ROOT_NODE.appendRelativeNode(node);
-		
+        subtreeNode = Node.validateAndNormalizeUri(subtreeUri);
+
+        if(!subtreeNode.isAbsolute())
+            throw new DmtException(subtreeUri, DmtException.COMMAND_FAILED, 
+                    "Relative subtree root URI passed to getSession().");
+        
         this.principal = principal;
         this.lockMode = lockMode;
         this.dmtAdmin = dmtAdmin;

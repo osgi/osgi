@@ -63,9 +63,10 @@ public interface DmtAdmin {
      * following:
      * <code>getSession(null, subtreeUri, DmtSession.LOCK_TYPE_EXCLUSIVE)</code>
      * <p>
-     * If <code>subtreeUri</code> is <code>null</code>, the session is
-     * opened with the default session root, &quot;.&quot;, that gives access to
-     * the whole tree.
+     * The <code>subtreeUri</code> parameter must contain an absolute URI.  It
+     * can also be <code>null</code>, in this case the session is opened with 
+     * the default session root, &quot;.&quot;, that gives access to the whole 
+     * tree.  
      * 
      * @param subtreeUri the subtree on which DMT manipulations can be performed
      *        within the returned session
@@ -80,7 +81,8 @@ public interface DmtAdmin {
      *         specifies a non-existing node
      *         <li><code>SESSION_CREATION_TIMEOUT</code> if the operation
      *         timed out because of another ongoing session
-     *         <li><code>COMMAND_FAILED</code> for unspecified errors
+     *         <li><code>COMMAND_FAILED</code> if <code>subtreeUri</code>
+     *         specifies a relative URI, or some unspecified error is
      *         encountered while attempting to complete the command
      *         </ul>
      */
@@ -91,9 +93,10 @@ public interface DmtAdmin {
      * subtree with a given lock mode. This call is equivalent to the
      * following: <code>getSession(null, subtreeUri, lockMode)</code>
      * <p>
-     * If <code>subtreeUri</code> is <code>null</code>, the session is
-     * opened with the default session root, &quot;.&quot;, that gives access to
-     * the whole tree.
+     * The <code>subtreeUri</code> parameter must contain an absolute URI.  It
+     * can also be <code>null</code>, in this case the session is opened with 
+     * the default session root, &quot;.&quot;, that gives access to the whole 
+     * tree.  
      * 
      * @param subtreeUri the subtree on which DMT manipulations can be performed
      *        within the returned session
@@ -113,9 +116,10 @@ public interface DmtAdmin {
      *         requests an atomic session
      *         <li><code>SESSION_CREATION_TIMEOUT</code> if the operation 
      *         timed out because of  another ongoing session
-     *         <li><code>COMMAND_FAILED</code> if <code>lockMode</code> is
-     *         unknown, or some unspecified error is encountered while
-     *         attempting to complete the command
+     *         <li><code>COMMAND_FAILED</code> if <code>subtreeUri</code>
+     *         specifies a relative URI, if <code>lockMode</code> is unknown,
+     *         or some unspecified error is encountered while attempting to 
+     *         complete the command
      *         </ul>
      */
     DmtSession getSession(String subtreeUri, int lockMode) throws DmtException;
@@ -129,9 +133,10 @@ public interface DmtAdmin {
      * method is guarded by <code>DmtPrincipalPermission</code> in case of
      * remote sessions.
      * <p>
-     * If <code>subtreeUri</code> is <code>null</code>, the session is
-     * opened with the default session root, &quot;.&quot;, that gives access to
-     * the whole tree.
+     * The <code>subtreeUri</code> parameter must contain an absolute URI.  It
+     * can also be <code>null</code>, in this case the session is opened with 
+     * the default session root, &quot;.&quot;, that gives access to the whole 
+     * tree.  
      * 
      * @param principal the identifier of the remote server on whose behalf the
      *        data manipulation is performed, or <code>null</code> for local
@@ -154,9 +159,10 @@ public interface DmtAdmin {
      *         requests an atomic session
      *         <li><code>SESSION_CREATION_TIMEOUT</code> if the operation
      *         timed out because of  another ongoing session
-     *         <li><code>COMMAND_FAILED</code> if <code>lockMode</code> is
-     *         unknown, or some unspecified error is encountered while
-     *         attempting to complete the command
+     *         <li><code>COMMAND_FAILED</code> if <code>subtreeUri</code>
+     *         specifies a relative URI, if <code>lockMode</code> is unknown,
+     *         or some unspecified error is encountered while attempting to 
+     *         complete the command
      *         </ul>
      * @throws SecurityException if the caller does not have the required
      *         <code>DmtPrincipalPermission</code> with a target matching the
