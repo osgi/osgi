@@ -1,7 +1,7 @@
 Manifest-Version: 1.0
 Bundle-Name: core.impls
 Bundle-SymbolicName: core.impls
-Bundle-Version: 4.0.1
+Bundle-Version: ${core.release.version}
 Bundle-Activator: org.osgi.tools.group.Group
 Bundle-Description: OSGi Service Platform Release 4, Core Reference Implementations
 Bundle-Copyright: ${copyright}

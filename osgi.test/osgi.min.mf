@@ -1,7 +1,7 @@
 Manifest-Version: 1.0
 Bundle-Name: osgi.min
 Bundle-SymbolicName: osgi.min
-Bundle-Version: 4.0.1
+Bundle-Version: ${core.release.version}
 Bundle-Activator: org.osgi.tools.group.Group
 Bundle-Description: OSGi Service Platform Release 4, Minimal Reference Implementations
 Bundle-Copyright: Copyright (c) The OSGi Alliance (2000, 2006). All Rights Reserved.
