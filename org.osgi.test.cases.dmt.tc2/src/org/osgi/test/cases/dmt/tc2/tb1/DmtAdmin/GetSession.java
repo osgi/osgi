@@ -558,7 +558,7 @@ public class GetSession implements TestInterface {
 				    session = tbc.getDmtAdmin().getSession(DmtTestControl.INVALID_URIS[i].toString());
                     tbc.failException("", DmtException.class);
                 } catch (DmtException e) {
-                    tbc.pass("DmtException.INVALID_URI is thrown when nodeUri is syntactically invalid");
+                    tbc.assertEquals("DmtException.INVALID_URI is thrown when nodeUri is syntactically invalid",DmtException.INVALID_URI, e.getCode());
                 }
 			}
 			
@@ -585,7 +585,7 @@ public class GetSession implements TestInterface {
                     session = tbc.getDmtAdmin().getSession(DmtTestControl.INVALID_URIS[i].toString(),DmtSession.LOCK_TYPE_ATOMIC);
                     tbc.failException("", DmtException.class);
                 } catch (DmtException e) {
-                        tbc.pass("DmtException.INVALID_URI is thrown when nodeUri is syntactically invalid");
+                    tbc.assertEquals("DmtException.INVALID_URI is thrown when nodeUri is syntactically invalid",DmtException.INVALID_URI, e.getCode());
                 }
             }
 
@@ -613,7 +613,7 @@ public class GetSession implements TestInterface {
                     session = tbc.getDmtAdmin().getSession(DmtConstants.PRINCIPAL,DmtTestControl.INVALID_URIS[i].toString(),DmtSession.LOCK_TYPE_ATOMIC);
                     tbc.failException("", DmtException.class);
                 } catch (DmtException e) {
-                        tbc.pass("DmtException.INVALID_URI is thrown when nodeUri is syntactically invalid");
+                    tbc.assertEquals("DmtException.INVALID_URI is thrown when nodeUri is syntactically invalid",DmtException.INVALID_URI, e.getCode());
                 }
             }
 			
@@ -639,7 +639,7 @@ public class GetSession implements TestInterface {
                     session = tbc.getDmtAdmin().getSession(DmtTestControl.URIS_TOO_LONG[i].toString());
                     tbc.failException("", DmtException.class);
                 } catch (DmtException e) {
-                        tbc.pass("DmtException.URI_TOO_LONG is thrown when nodeUri is too long");
+                    tbc.assertEquals("DmtException.URI_TOO_LONG is thrown when nodeUri is too long",DmtException.URI_TOO_LONG, e.getCode());
                 }
             }
 		} catch (Exception e) {
@@ -664,7 +664,7 @@ public class GetSession implements TestInterface {
                     session = tbc.getDmtAdmin().getSession(DmtTestControl.URIS_TOO_LONG[i].toString(),DmtSession.LOCK_TYPE_ATOMIC);
                     tbc.failException("", DmtException.class);
                 } catch (DmtException e) {
-                        tbc.pass("DmtException.URI_TOO_LONG is thrown when nodeUri is too long");
+                    tbc.assertEquals("DmtException.URI_TOO_LONG is thrown when nodeUri is too long",DmtException.URI_TOO_LONG, e.getCode());
                 }
             }
 			
@@ -690,7 +690,7 @@ public class GetSession implements TestInterface {
                     session = tbc.getDmtAdmin().getSession(DmtConstants.PRINCIPAL,DmtTestControl.URIS_TOO_LONG[i].toString(),DmtSession.LOCK_TYPE_ATOMIC);
                     tbc.failException("", DmtException.class);
                 } catch (DmtException e) {
-                        tbc.pass("DmtException.URI_TOO_LONG is thrown when nodeUri is too long");
+                    tbc.assertEquals("DmtException.URI_TOO_LONG is thrown when nodeUri is too long",DmtException.URI_TOO_LONG, e.getCode());
                 }
             }
 			

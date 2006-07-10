@@ -69,7 +69,7 @@ public class DmtEventListenerImpl  implements DmtEventListener{
 	} 
 	
 	public boolean isOrdered() {
-		return !ordered & (count==5);
+		return ordered & (count==5);
 	}
 	public int getCount() {
 		return count;

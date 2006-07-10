@@ -434,7 +434,16 @@ public class DmtTestControl extends DefaultTestBundleControl {
 		testClasses[28].run();
 	}
 	
-	//Uri
+    //DmtEvent Test cases
+    public void testDmtEvent() {
+        testClasses[35].run();
+    }
+
+    public void testDmtEventConstants() {
+        testClasses[36].run();
+    }
+
+    //Uri
 	public void testUriIsAbsoluteUri() {
 		new IsAbsoluteUri(this).run();
 	}

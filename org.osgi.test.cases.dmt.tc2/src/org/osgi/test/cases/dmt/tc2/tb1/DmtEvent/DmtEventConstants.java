@@ -39,6 +39,7 @@ package org.osgi.test.cases.dmt.tc2.tb1.DmtEvent;
 import info.dmtree.DmtEvent;
 
 import org.osgi.test.cases.dmt.tc2.tbc.DmtTestControl;
+import org.osgi.test.cases.dmt.tc2.tbc.TestInterface;
 
 
 
@@ -48,7 +49,7 @@ import org.osgi.test.cases.dmt.tc2.tbc.DmtTestControl;
  * This Class Validates the implementation of <code>DmtEvent<code> constants, 
  * according to MEG specification
  */
-public class DmtEventConstants {
+public class DmtEventConstants implements TestInterface {
 	private DmtTestControl tbc;
 	
 	public DmtEventConstants(DmtTestControl tbc) {
@@ -72,9 +73,9 @@ public class DmtEventConstants {
 			tbc.assertEquals("Asserting DmtEvent.COPIED constant value", 2, DmtEvent.COPIED);
 			tbc.assertEquals("Asserting DmtEvent.DELETED constant value", 4, DmtEvent.DELETED);
 			tbc.assertEquals("Asserting DmtEvent.RENAMED constant value", 8, DmtEvent.RENAMED);
-			tbc.assertEquals("Asserting DmtEvent.REPLACED constant value", 15, DmtEvent.REPLACED);
-			tbc.assertEquals("Asserting DmtEvent.SESSION_CLOSED constant value", 32, DmtEvent.SESSION_CLOSED);
-			tbc.assertEquals("Asserting DmtEvent.SESSION_OPENED constant value", 16, DmtEvent.SESSION_OPENED);
+			tbc.assertEquals("Asserting DmtEvent.REPLACED constant value", 16, DmtEvent.REPLACED);
+			tbc.assertEquals("Asserting DmtEvent.SESSION_OPENED constant value", 32, DmtEvent.SESSION_OPENED);
+			tbc.assertEquals("Asserting DmtEvent.SESSION_CLOSED constant value", 64, DmtEvent.SESSION_CLOSED);
 		} catch (Exception e) {
 			tbc.failUnexpectedException(e);
 		}

@@ -86,7 +86,7 @@ public class DmtAdressingUri implements TestInterface {
 		try {
 			tbc.log("#testDmtAdressingUri001");
 			session = tbc.getDmtAdmin().getSession(".",DmtSession.LOCK_TYPE_EXCLUSIVE);
-			session.createInteriorNode(TestExecPluginActivator.ROOT+ "/" + DmtConstants.INVALID);
+			session.createInteriorNode(TestExecPluginActivator.ROOT+ "/" + DmtConstants.UNICODE);
 			tbc.pass("It is possible to create a node with full Unicode character set.");
 		} catch (Exception e) {
 			tbc.failUnexpectedException(e);
@@ -154,7 +154,7 @@ public class DmtAdressingUri implements TestInterface {
 		}
 	}
 	/**
-	 * This test asserts that a URI must not end with the delimiter slash (’/’). 
+	 * This test asserts that a URI must not end with the delimiter slash ("/"). 
 	 * 
 	 * @spec 117.4.1 The DMT Addressing URI
 	 */
@@ -165,7 +165,7 @@ public class DmtAdressingUri implements TestInterface {
 			session = tbc.getDmtAdmin().getSession(TestExecPluginActivator.ROOT + "/",DmtSession.LOCK_TYPE_EXCLUSIVE);
 			tbc.failException("",DmtException.class);
 		} catch (DmtException e) {
-			tbc.assertEquals("Asserts that a URI must not end with the delimiter slash (’/’)",
+			tbc.assertEquals("Asserts that a URI must not end with the delimiter slash (\"/\")",
 					DmtException.INVALID_URI, e.getCode());			
 		} catch (Exception e) {
 			tbc.failExpectedOtherException(DmtException.class, e);

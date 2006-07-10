@@ -44,6 +44,7 @@ import info.dmtree.security.DmtPrincipalPermission;
 import org.osgi.service.permissionadmin.PermissionInfo;
 import org.osgi.test.cases.dmt.tc2.tbc.DmtConstants;
 import org.osgi.test.cases.dmt.tc2.tbc.DmtTestControl;
+import org.osgi.test.cases.dmt.tc2.tbc.TestInterface;
 import org.osgi.test.cases.dmt.tc2.tbc.Plugin.ExecPlugin.TestExecPluginActivator;
 
 
@@ -54,7 +55,7 @@ import org.osgi.test.cases.dmt.tc2.tbc.Plugin.ExecPlugin.TestExecPluginActivator
  * This Class Validates the implementation of <code>DmtEvent<code> constants, 
  * according to MEG specification
  */
-public class DmtEvent {
+public class DmtEvent implements TestInterface {
 	private DmtTestControl tbc;
 	
 	public DmtEvent(DmtTestControl tbc) {
@@ -87,7 +88,11 @@ public class DmtEvent {
 			
 			session = tbc.getDmtAdmin().getSession(".",DmtSession.LOCK_TYPE_ATOMIC);
 			
-			DmtEventListenerImpl event = new DmtEventListenerImpl();
+            synchronized (tbc) {
+                tbc.wait(DmtConstants.WAITING_TIME);
+            }
+
+            DmtEventListenerImpl event = new DmtEventListenerImpl();
 			tbc.getDmtAdmin().addEventListener(DmtConstants.ALL_DMT_EVENTS,
 					TestExecPluginActivator.ROOT,event);
 			
@@ -187,7 +192,7 @@ public class DmtEvent {
 	}
 	
 	/**
-	 * Asserts all the DmtEvent methods when the event is successfully sent before DmtSession.commit()
+	 * Asserts all the DmtEvent methods when the event is successfully sent before DmtSession.close()
 	 * is called (in case of DmtSession.LOCK_TYPE_EXCLUSIVE)
 	 * 
 	 * @spec 117.13.5
@@ -199,7 +204,11 @@ public class DmtEvent {
 			
 			session = tbc.getDmtAdmin().getSession(".",DmtSession.LOCK_TYPE_EXCLUSIVE);
 			
-			DmtEventListenerImpl event = new DmtEventListenerImpl();
+            synchronized (tbc) {
+                tbc.wait(DmtConstants.WAITING_TIME);
+            }
+
+            DmtEventListenerImpl event = new DmtEventListenerImpl();
 			tbc.getDmtAdmin().addEventListener(DmtConstants.ALL_DMT_EVENTS,
 					TestExecPluginActivator.ROOT,event);
 			
@@ -210,7 +219,7 @@ public class DmtEvent {
 				tbc.wait(DmtConstants.WAITING_TIME);
 			}
 			
-			tbc.assertEquals("Asserts that if the session is exclusive, events are sent before commit.",2,event.getCount());
+			tbc.assertEquals("Asserts that if the session is exclusive, events are sent before close.",2,event.getCount());
 
 			info.dmtree.DmtEvent[] dmtEvents = event.getDmtEvents();
 			//The first one must be the DmtEvent.REPLACED and the second one DmtEvent.ADDED 

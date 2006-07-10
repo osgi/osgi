@@ -46,7 +46,7 @@ public class DmtConstants {
 
 	public static final String OSGi_LOG = OSGi_ROOT + "/Log";
 	
-	public static final String INVALID = "%&@#&$#";
+	public static final String UNICODE = "%&@#$©Å?";
 	
 	public static final String ACLSTR = "Add=*&Delete=*&Replace=*&Get=*";
 
