@@ -190,6 +190,7 @@
 			sources="${btool.sources}" ignoreVersions="${btool.noversion}" manifestVersion="${btool.manifestVersion}" 
 			modified="${base.modified}" extraRoots="root.${item.jarFile}" noExtraHeaders="${btool.noextraheaders}"
 			compress="${btool.compressed}"
+			doNotCopy="${doNotCopy}"
 		/>
 	</target>
 
