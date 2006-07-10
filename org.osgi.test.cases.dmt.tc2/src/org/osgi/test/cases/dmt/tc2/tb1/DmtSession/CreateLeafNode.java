@@ -41,16 +41,12 @@
  */
 package org.osgi.test.cases.dmt.tc2.tb1.DmtSession;
 
-import info.dmtree.Acl;
-import info.dmtree.DmtData;
-import info.dmtree.DmtException;
-import info.dmtree.DmtSession;
+import info.dmtree.*;
 import info.dmtree.security.DmtPermission;
 import info.dmtree.security.DmtPrincipalPermission;
+
 import org.osgi.service.permissionadmin.PermissionInfo;
-import org.osgi.test.cases.dmt.tc2.tbc.DmtConstants;
-import org.osgi.test.cases.dmt.tc2.tbc.DmtTestControl;
-import org.osgi.test.cases.dmt.tc2.tbc.TestInterface;
+import org.osgi.test.cases.dmt.tc2.tbc.*;
 import org.osgi.test.cases.dmt.tc2.tbc.Plugin.ExecPlugin.TestExecPlugin;
 import org.osgi.test.cases.dmt.tc2.tbc.Plugin.ExecPlugin.TestExecPluginActivator;
 import org.osgi.test.cases.dmt.tc2.tbc.Plugin.NonAtomic.TestNonAtomicPluginActivator;
@@ -483,7 +479,7 @@ public class CreateLeafNode implements TestInterface {
 	}
 	
 	/**
-	 * This method asserts if IllegalStateException is thrown if this method is called 
+	 * This method asserts if DmtIllegalStateException is thrown if this method is called 
 	 * when the session is LOCK_TYPE_SHARED
 	 * 
 	 * @spec DmtSession.createLeafNode(String)
@@ -494,18 +490,18 @@ public class CreateLeafNode implements TestInterface {
 			tbc.log("#testCreateLeafNode013");
 			session = tbc.getDmtAdmin().getSession(".",DmtSession.LOCK_TYPE_SHARED);
 			session.createLeafNode(TestExecPluginActivator.INEXISTENT_LEAF_NODE);
-			tbc.failException("", IllegalStateException.class);
-		} catch (IllegalStateException e) {
-			tbc.pass("IllegalStateException correctly thrown");
+			tbc.failException("", DmtIllegalStateException.class);
+		} catch (DmtIllegalStateException e) {
+			tbc.pass("DmtIllegalStateException correctly thrown");
 		} catch (Exception e) {
-			tbc.failException("", IllegalStateException.class);
+			tbc.failException("", DmtIllegalStateException.class);
 		} finally {
 			tbc.closeSession(session);
 		}
 	}
 
 	/**
-	 * This method asserts if IllegalStateException is thrown if this method is called 
+	 * This method asserts if DmtIllegalStateException is thrown if this method is called 
 	 * when the session is LOCK_TYPE_SHARED
 	 * 
 	 * @spec DmtSession.createLeafNode(String,DmtData)
@@ -516,17 +512,17 @@ public class CreateLeafNode implements TestInterface {
 			tbc.log("#testCreateLeafNode014");
 			session = tbc.getDmtAdmin().getSession(".",DmtSession.LOCK_TYPE_SHARED);
 			session.createLeafNode(TestExecPluginActivator.INEXISTENT_LEAF_NODE,value);
-			tbc.failException("", IllegalStateException.class);
-		} catch (IllegalStateException e) {
-			tbc.pass("IllegalStateException correctly thrown");
+			tbc.failException("", DmtIllegalStateException.class);
+		} catch (DmtIllegalStateException e) {
+			tbc.pass("DmtIllegalStateException correctly thrown");
 		} catch (Exception e) {
-			tbc.failException("", IllegalStateException.class);
+			tbc.failException("", DmtIllegalStateException.class);
 		} finally {
 			tbc.closeSession(session);
 		}
 	}
 	/**
-	 * This method asserts if IllegalStateException is thrown if this method is called 
+	 * This method asserts if DmtIllegalStateException is thrown if this method is called 
 	 * when the session is LOCK_TYPE_SHARED
 	 * 
 	 * @spec DmtSession.createLeafNode(String,DmtData,String)
@@ -537,11 +533,11 @@ public class CreateLeafNode implements TestInterface {
 			tbc.log("#testCreateLeafNode015");
 			session = tbc.getDmtAdmin().getSession(".",DmtSession.LOCK_TYPE_SHARED);
 			session.createLeafNode(TestExecPluginActivator.INEXISTENT_LEAF_NODE,value,DmtConstants.MIMETYPE);
-			tbc.failException("", IllegalStateException.class);
-		} catch (IllegalStateException e) {
-			tbc.pass("IllegalStateException correctly thrown");
+			tbc.failException("", DmtIllegalStateException.class);
+		} catch (DmtIllegalStateException e) {
+			tbc.pass("DmtIllegalStateException correctly thrown");
 		} catch (Exception e) {
-			tbc.failException("", IllegalStateException.class);
+			tbc.failException("", DmtIllegalStateException.class);
 		} finally {
 			tbc.closeSession(session);
 		}
@@ -797,11 +793,11 @@ public class CreateLeafNode implements TestInterface {
 
             session.createLeafNode(
                     TestExecPluginActivator.INEXISTENT_INTERIOR_AND_LEAF_NODES);
-            tbc.failException("", IllegalStateException.class);
-        } catch (IllegalStateException e) {
+            tbc.failException("", DmtIllegalStateException.class);
+        } catch (DmtIllegalStateException e) {
             tbc.pass("Asserts that any exceptions encountered while creating the ancestors are propagated to the caller of createLeafNode");
         } catch (Exception e) {
-        	tbc.failExpectedOtherException(IllegalStateException.class, e);
+        	tbc.failExpectedOtherException(DmtIllegalStateException.class, e);
         } finally {
             tbc.cleanUp(session, null);
             TestExecPlugin.setExceptionAtCreateInteriorNode(false);
@@ -824,11 +820,11 @@ public class CreateLeafNode implements TestInterface {
 
             session.createLeafNode(
                     TestExecPluginActivator.INEXISTENT_INTERIOR_AND_LEAF_NODES, value);
-            tbc.failException("", IllegalStateException.class);
-        } catch (IllegalStateException e) {
+            tbc.failException("", DmtIllegalStateException.class);
+        } catch (DmtIllegalStateException e) {
             tbc.pass("Asserts that any exceptions encountered while creating the ancestors are propagated to the caller of createLeafNode");
         } catch (Exception e) {
-        	tbc.failExpectedOtherException(IllegalStateException.class, e);
+        	tbc.failExpectedOtherException(DmtIllegalStateException.class, e);
         } finally {
             tbc.cleanUp(session, null);
             TestExecPlugin.setExceptionAtCreateInteriorNode(false);
@@ -851,11 +847,11 @@ public class CreateLeafNode implements TestInterface {
 
             session.createLeafNode(
                     TestExecPluginActivator.INEXISTENT_INTERIOR_AND_LEAF_NODES, value,null);
-            tbc.failException("", IllegalStateException.class);
-        } catch (IllegalStateException e) {
+            tbc.failException("", DmtIllegalStateException.class);
+        } catch (DmtIllegalStateException e) {
             tbc.pass("Asserts that any exceptions encountered while creating the ancestors are propagated to the caller of createLeafNode");
         } catch (Exception e) {
-        	tbc.failExpectedOtherException(IllegalStateException.class, e);
+        	tbc.failExpectedOtherException(DmtIllegalStateException.class, e);
         } finally {
             tbc.cleanUp(session, null);
             TestExecPlugin.setExceptionAtCreateInteriorNode(false);

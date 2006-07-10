@@ -17,21 +17,15 @@
  */
 package org.osgi.impl.service.dmt;
 
-import java.security.AccessController;
-import java.security.PrivilegedAction;
-import java.util.Hashtable;
-import java.util.Iterator;
-import java.util.Map;
-
-import org.osgi.service.log.LogService;
-
-import info.dmtree.DmtAdmin;
-import info.dmtree.DmtEvent;
-import info.dmtree.DmtEventListener;
-import info.dmtree.DmtException;
-import info.dmtree.DmtSession;
+import info.dmtree.*;
 import info.dmtree.security.DmtPermission;
 import info.dmtree.security.DmtPrincipalPermission;
+
+import java.security.AccessController;
+import java.security.PrivilegedAction;
+import java.util.*;
+
+import org.osgi.service.log.LogService;
 
 /*
  * Dmt Admin service provider class. An instance of this is returned by
@@ -187,7 +181,7 @@ public class DmtAdminDelegate implements DmtAdmin {
     
     private void checkState() {
         if(!active)
-            throw new IllegalStateException("The service can no longer be " +
+            throw new DmtIllegalStateException("The service can no longer be " +
                     "used, as it has been released by the caller.");
     }
 

@@ -18,19 +18,14 @@
 
 package org.osgi.impl.service.dmt.plugins;
 
-import java.io.IOException;
-import java.util.Dictionary;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Set;
-import org.osgi.framework.InvalidSyntaxException;
-import org.osgi.service.cm.Configuration;
-import org.osgi.service.cm.ConfigurationAdmin;
-import org.osgi.service.cm.ConfigurationException;
-import org.osgi.service.cm.ManagedService;
-import info.dmtree.DmtException;
-import info.dmtree.DmtSession;
+import info.dmtree.*;
 import info.dmtree.spi.*;
+
+import java.io.IOException;
+import java.util.*;
+
+import org.osgi.framework.InvalidSyntaxException;
+import org.osgi.service.cm.*;
 import org.osgi.util.tracker.ServiceTracker;
 
 class ConfigPlugin implements DataPlugin, ManagedService {
@@ -253,7 +248,7 @@ class ConfigPlugin implements DataPlugin, ManagedService {
                     "Error looking up the configuration with the given PID.");
         } catch (InvalidSyntaxException e) {
             // should not happen, the outside parameter (pid) is escaped
-            throw new IllegalStateException("Syntax error in configuration " +
+            throw new DmtIllegalStateException("Syntax error in configuration " +
                     "lookup: " + e.getMessage());
         }
 

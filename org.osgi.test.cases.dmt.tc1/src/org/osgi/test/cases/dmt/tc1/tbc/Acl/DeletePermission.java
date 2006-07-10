@@ -43,6 +43,8 @@
 package org.osgi.test.cases.dmt.tc1.tbc.Acl;
 
 import info.dmtree.Acl;
+import info.dmtree.DmtIllegalStateException;
+
 import org.osgi.test.cases.dmt.tc1.tbc.DmtConstants;
 import org.osgi.test.cases.dmt.tc1.tbc.DmtTestControl;
 
@@ -126,7 +128,7 @@ public class DeletePermission {
 			tbc.log("#testDeletePermission003");
 			Acl acl = new Acl(ACL_DEFAULT);
 			acl = acl.deletePermission(DmtConstants.PRINCIPAL, 2005);
-			tbc.failException("#", IllegalStateException.class);
+			tbc.failException("#", DmtIllegalStateException.class);
 		} catch (IllegalArgumentException e) {
 			tbc.pass("IllegalArgumentException correctly thrown");
 		} catch (Exception e) {
@@ -146,7 +148,7 @@ public class DeletePermission {
 			Acl acl = new Acl(ACL_DEFAULT);
 			acl = acl.deletePermission(DmtConstants.INVALID,
 					Acl.EXEC);
-			tbc.failException("#", IllegalStateException.class);
+			tbc.failException("#", DmtIllegalStateException.class);
 		} catch (IllegalArgumentException e) {
 			tbc.pass("IllegalArgumentException correctly thrown");
 		} catch (Exception e) {

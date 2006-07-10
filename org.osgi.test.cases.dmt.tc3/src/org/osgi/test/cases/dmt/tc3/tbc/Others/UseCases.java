@@ -35,15 +35,12 @@
  */
 package org.osgi.test.cases.dmt.tc3.tbc.Others;
 
-import info.dmtree.DmtException;
-import info.dmtree.DmtSession;
+import info.dmtree.*;
+
 import org.osgi.test.cases.dmt.tc3.tbc.DmtConstants;
 import org.osgi.test.cases.dmt.tc3.tbc.DmtTestControl;
 import org.osgi.test.cases.dmt.tc3.tbc.DataPlugin.TestDataPluginActivator;
-import org.osgi.test.cases.dmt.tc3.tbc.Plugins.FatalExceptionDataPlugin;
-import org.osgi.test.cases.dmt.tc3.tbc.Plugins.FatalExceptionDataPluginActivator;
-import org.osgi.test.cases.dmt.tc3.tbc.Plugins.NewDataPlugin;
-import org.osgi.test.cases.dmt.tc3.tbc.Plugins.NewDataPluginActivator;
+import org.osgi.test.cases.dmt.tc3.tbc.Plugins.*;
  
 public class UseCases {
 
@@ -219,10 +216,10 @@ public class UseCases {
 			//a plugin is unregistered while in use by a session
 			fatalExceptionActivator.stop(tbc.getContext());
 
-			//an IllegalStateException must thrown
+			//an DmtIllegalStateException must thrown
 			session.getChildNodeNames(FatalExceptionDataPluginActivator.TEST_EXCEPTION_PLUGIN_ROOT);
-			tbc.failException("",IllegalStateException.class);
-		} catch (IllegalStateException e) {
+			tbc.failException("",DmtIllegalStateException.class);
+		} catch (DmtIllegalStateException e) {
 			tbc.assertEquals("Asserts that if a plugin is unregistered, rollback() is called in each plugin " +
 				"that participates of the session (in reverse order)",
 				NewDataPlugin.ROLLBACK + NewDataPlugin.CLOSE,DmtConstants.TEMPORARY);
@@ -230,7 +227,7 @@ public class UseCases {
 			tbc.assertEquals("Asserts that when a fatal exception is thrown, the session becomes STATE_INVALID",DmtSession.STATE_INVALID,session.getState());
 				
 		} catch (Exception e) {
-			tbc.failExpectedOtherException(IllegalStateException.class, e);
+			tbc.failExpectedOtherException(DmtIllegalStateException.class, e);
 		} finally {
             tbc.cleanUp(session,true);
 			try {

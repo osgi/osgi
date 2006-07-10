@@ -39,7 +39,9 @@
 
 package org.osgi.test.cases.dmt.tc2.tb1.DmtSession;
 
+import info.dmtree.DmtIllegalStateException;
 import info.dmtree.DmtSession;
+
 import org.osgi.service.permissionadmin.PermissionInfo;
 import org.osgi.test.cases.dmt.tc2.tbc.DmtTestControl;
 import org.osgi.test.cases.dmt.tc2.tbc.TestInterface;
@@ -68,7 +70,7 @@ public class Rollback implements TestInterface {
         tbc.setPermissions(new PermissionInfo[0]);
     }
 	/**
-	 * This method asserts that IllegalStateException is thrown 
+	 * This method asserts that DmtIllegalStateException is thrown 
 	 * if rollback() is called when the session is opened using 
 	 * the LOCK_TYPE_EXCLUSIVE lock type
 	 * 
@@ -80,9 +82,9 @@ public class Rollback implements TestInterface {
 			tbc.log("#testRollback001");
 			session = tbc.getDmtAdmin().getSession(".", DmtSession.LOCK_TYPE_EXCLUSIVE);
 			session.rollback();
-			tbc.failException("#",IllegalStateException.class);
-		} catch (IllegalStateException e) {
-			tbc.pass("IllegalStateException correctly thrown");
+			tbc.failException("#",DmtIllegalStateException.class);
+		} catch (DmtIllegalStateException e) {
+			tbc.pass("DmtIllegalStateException correctly thrown");
 		} catch (Exception e) {
 			tbc.failUnexpectedException(e);
 		} finally {
@@ -91,7 +93,7 @@ public class Rollback implements TestInterface {
 	}
 	
 	/**
-	 * This method asserts that IllegalStateException is thrown 
+	 * This method asserts that DmtIllegalStateException is thrown 
 	 * if rollback() is called when the session is opened using 
 	 * the LOCK_TYPE_SHARED lock type
 	 * 
@@ -103,9 +105,9 @@ public class Rollback implements TestInterface {
 			tbc.log("#testRollback002");
 			session = tbc.getDmtAdmin().getSession(".", DmtSession.LOCK_TYPE_SHARED);
 			session.rollback();
-			tbc.failException("#",IllegalStateException.class);
-		} catch (IllegalStateException e) {
-			tbc.pass("IllegalStateException correctly thrown");
+			tbc.failException("#",DmtIllegalStateException.class);
+		} catch (DmtIllegalStateException e) {
+			tbc.pass("DmtIllegalStateException correctly thrown");
 		} catch (Exception e) {
 			tbc.failUnexpectedException(e);
 		} finally {

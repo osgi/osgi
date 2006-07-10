@@ -39,7 +39,7 @@ import java.util.Date;
  * method which returns <code>false</code> in case of an invalid URI.
  * <p>
  * Each method of <code>DmtSession</code> that accesses the tree in any way
- * can throw <code>IllegalStateException</code> if the session has been closed
+ * can throw <code>DmtIllegalStateException</code> if the session has been closed
  * or invalidated (due to timeout, fatal exceptions, or unexpectedly
  * unregistered plugins).
  */
@@ -71,7 +71,7 @@ public interface DmtSession {
 
     /**
      * The session is closed, DMT manipulation operations are not available,
-     * they throw <code>IllegalStateException</code> if tried.
+     * they throw <code>DmtIllegalStateException</code> if tried.
      */
     int STATE_CLOSED = 1;
 
@@ -80,7 +80,7 @@ public interface DmtSession {
      * include the timeout of the session, any DmtException with the 'fatal'
      * flag set, or the case when a plugin service is unregistered while in use
      * by the session. DMT manipulation operations are not available, they throw
-     * <code>IllegalStateException</code> if tried.
+     * <code>DmtIllegalStateException</code> if tried.
      */
     int STATE_INVALID = 2;
 
@@ -169,7 +169,7 @@ public interface DmtSession {
      *         <li><code>COMMAND_FAILED</code> if some unspecified error is
      *         encountered while attempting to complete the command
      *         </ul>
-     * @throws IllegalStateException if the session was not opened using the
+     * @throws DmtIllegalStateException if the session was not opened using the
      *         <code>LOCK_TYPE_ATOMIC</code> lock type, or if the session is
      *         already closed or invalidated
      * @throws SecurityException if the caller does not have the necessary
@@ -185,7 +185,7 @@ public interface DmtSession {
      * 
      * @throws DmtException with the error code <code>ROLLBACK_FAILED</code>
      *         in case the rollback did not succeed
-     * @throws IllegalStateException if the session was not opened using the
+     * @throws DmtIllegalStateException if the session was not opened using the
      *         <code>LOCK_TYPE_ATOMIC</code> lock type, or if the session is
      *         already closed or invalidated
      * @throws SecurityException if the caller does not have the necessary
@@ -220,7 +220,7 @@ public interface DmtSession {
      *         to close, or if some unspecified error is encountered while
      *         attempting to complete the command
      *         </ul>
-     * @throws IllegalStateException if the session is already closed or
+     * @throws DmtIllegalStateException if the session is already closed or
      *         invalidated
      * @throws SecurityException if the caller does not have the necessary
      *         permissions to execute the underlying management operation
@@ -261,7 +261,7 @@ public interface DmtSession {
      *         unspecified error is encountered while attempting to complete the
      *         command
      *         </ul>
-     * @throws IllegalStateException if the session was opened using the
+     * @throws DmtIllegalStateException if the session was opened using the
      *         <code>LOCK_TYPE_SHARED</code> lock type, or if the session is
      *         already closed or invalidated
      * @throws SecurityException if the caller does not have the necessary
@@ -313,7 +313,7 @@ public interface DmtSession {
      *         the node, or if some unspecified error is encountered while
      *         attempting to complete the command
      *         </ul>
-     * @throws IllegalStateException if the session was opened using the
+     * @throws DmtIllegalStateException if the session was opened using the
      *         <code>LOCK_TYPE_SHARED</code> lock type, or if the session is
      *         already closed or invalidated
      * @throws SecurityException if the caller does not have the necessary
@@ -355,7 +355,7 @@ public interface DmtSession {
      *         current session's subtree, or if some unspecified error is
      *         encountered while attempting to complete the command
      *         </ul>
-     * @throws IllegalStateException if the session is already closed or
+     * @throws DmtIllegalStateException if the session is already closed or
      *         invalidated
      * @throws SecurityException in case of local sessions, if the caller does
      *         not have <code>DmtPermission</code> for the node with the Get
@@ -393,7 +393,7 @@ public interface DmtSession {
      *         current session's subtree, or if some unspecified error is
      *         encountered while attempting to complete the command
      *         </ul>
-     * @throws IllegalStateException if the session is already closed or
+     * @throws DmtIllegalStateException if the session is already closed or
      *         invalidated
      * @throws SecurityException in case of local sessions, if the caller does
      *         not have <code>DmtPermission</code> for the node with the Get
@@ -442,7 +442,7 @@ public interface DmtSession {
      *         current session's subtree, or if some unspecified error is
      *         encountered while attempting to complete the command
      *         </ul>
-     * @throws IllegalStateException if the session was opened using the
+     * @throws DmtIllegalStateException if the session was opened using the
      *         <code>LOCK_TYPE_SHARED</code> lock type, or if the session is
      *         already closed or invalidated
      * @throws SecurityException in case of local sessions, if the caller does
@@ -512,7 +512,7 @@ public interface DmtSession {
      *         the current session's subtree, or if some unspecified error is
      *         encountered while attempting to complete the command
      *         </ul>
-     * @throws IllegalStateException if the session was opened using the
+     * @throws DmtIllegalStateException if the session was opened using the
      *         <code>LOCK_TYPE_SHARED</code> lock type, or if the session is
      *         already closed or invalidated
      * @throws SecurityException if the caller does not have the necessary
@@ -572,7 +572,7 @@ public interface DmtSession {
      *         current session's subtree, or if some unspecified error is
      *         encountered while attempting to complete the command
      *         </ul>
-     * @throws IllegalStateException if the session was opened using the
+     * @throws DmtIllegalStateException if the session was opened using the
      *         <code>LOCK_TYPE_SHARED</code> lock type, or if the session is
      *         already closed or invalidated
      * @throws SecurityException if the caller does not have the necessary
@@ -641,7 +641,7 @@ public interface DmtSession {
      *         above), or if some unspecified error is encountered while
      *         attempting to complete the command
      *         </ul>
-     * @throws IllegalStateException if the session was opened using the
+     * @throws DmtIllegalStateException if the session was opened using the
      *         <code>LOCK_TYPE_SHARED</code> lock type, or if the session is
      *         already closed or invalidated
      * @throws SecurityException if the caller does not have the necessary
@@ -710,7 +710,7 @@ public interface DmtSession {
      *         current session's subtree, or if some unspecified error is
      *         encountered while attempting to complete the command
      *         </ul>
-     * @throws IllegalStateException if the session was opened using the
+     * @throws DmtIllegalStateException if the session was opened using the
      *         <code>LOCK_TYPE_SHARED</code> lock type, or if the session is
      *         already closed or invalidated
      * @throws SecurityException if the caller does not have the necessary
@@ -783,7 +783,7 @@ public interface DmtSession {
      *         current session's subtree, or if some unspecified error is
      *         encountered while attempting to complete the command
      *         </ul>
-     * @throws IllegalStateException if the session was opened using the
+     * @throws DmtIllegalStateException if the session was opened using the
      *         <code>LOCK_TYPE_SHARED</code> lock type, or if the session is
      *         already closed or invalidated
      * @throws SecurityException if the caller does not have the necessary
@@ -864,7 +864,7 @@ public interface DmtSession {
      *         proper MIME type string (see above), or if some unspecified error
      *         is encountered while attempting to complete the command
      *         </ul>
-     * @throws IllegalStateException if the session was opened using the
+     * @throws DmtIllegalStateException if the session was opened using the
      *         <code>LOCK_TYPE_SHARED</code> lock type, or if the session is
      *         already closed or invalidated
      * @throws SecurityException if the caller does not have the necessary
@@ -914,7 +914,7 @@ public interface DmtSession {
      *         current session's subtree, or if some unspecified error is
      *         encountered while attempting to complete the command
      *         </ul>
-     * @throws IllegalStateException if the session was opened using the
+     * @throws DmtIllegalStateException if the session was opened using the
      *         <code>LOCK_TYPE_SHARED</code> lock type, or if the session is
      *         already closed or invalidated
      * @throws SecurityException if the caller does not have the necessary
@@ -973,7 +973,7 @@ public interface DmtSession {
      *         current session's subtree, or if some unspecified error is
      *         encountered while attempting to complete the command
      *         </ul>
-     * @throws IllegalStateException if the session was opened using the
+     * @throws DmtIllegalStateException if the session was opened using the
      *         <code>LOCK_TYPE_SHARED</code> lock type, or if the session is
      *         already closed or invalidated
      * @throws SecurityException if the caller does not have the necessary
@@ -1020,7 +1020,7 @@ public interface DmtSession {
      *         current session's subtree, or if some unspecified error is
      *         encountered while attempting to complete the command
      *         </ul>
-     * @throws IllegalStateException if the session was opened using the
+     * @throws DmtIllegalStateException if the session was opened using the
      *         <code>LOCK_TYPE_SHARED</code> lock type, or if the session is
      *         already closed or invalidated
      * @throws SecurityException if the caller does not have the necessary
@@ -1082,7 +1082,7 @@ public interface DmtSession {
      *         current session's subtree, or if some unspecified error is
      *         encountered while attempting to complete the command
      *         </ul>
-     * @throws IllegalStateException if the session was opened using the
+     * @throws DmtIllegalStateException if the session was opened using the
      *         <code>LOCK_TYPE_SHARED</code> lock type, or if the session is
      *         already closed or invalidated
      * @throws SecurityException if the caller does not have the necessary
@@ -1129,7 +1129,7 @@ public interface DmtSession {
      *         if some unspecified error is encountered while attempting to
      *         complete the command
      *         </ul>
-     * @throws IllegalStateException if the session was opened using the
+     * @throws DmtIllegalStateException if the session was opened using the
      *         <code>LOCK_TYPE_SHARED</code> lock type, or if the session is
      *         already closed or invalidated
      * @throws SecurityException if the caller does not have the necessary
@@ -1192,7 +1192,7 @@ public interface DmtSession {
      *         above), or if some unspecified error is encountered while
      *         attempting to complete the command
      *         </ul>
-     * @throws IllegalStateException if the session was opened using the
+     * @throws DmtIllegalStateException if the session was opened using the
      *         <code>LOCK_TYPE_SHARED</code> lock type, or if the session is
      *         already closed or invalidated
      * @throws SecurityException if the caller does not have the necessary
@@ -1240,7 +1240,7 @@ public interface DmtSession {
      *         current session's subtree, or if some unspecified error is
      *         encountered while attempting to complete the command
      *         </ul>
-     * @throws IllegalStateException if the session is already closed or
+     * @throws DmtIllegalStateException if the session is already closed or
      *         invalidated
      * @throws SecurityException if the caller does not have the necessary
      *         permissions to execute the underlying management operation, or,
@@ -1291,7 +1291,7 @@ public interface DmtSession {
      *         current session's subtree, or if some unspecified error is
      *         encountered while attempting to complete the command
      *         </ul>
-     * @throws IllegalStateException if the session is already closed or
+     * @throws DmtIllegalStateException if the session is already closed or
      *         invalidated
      * @throws SecurityException if the caller does not have the necessary
      *         permissions to execute the underlying management operation, or,
@@ -1335,7 +1335,7 @@ public interface DmtSession {
      *         current session's subtree, or if some unspecified error is
      *         encountered while attempting to complete the command
      *         </ul>
-     * @throws IllegalStateException if the session is already closed or
+     * @throws DmtIllegalStateException if the session is already closed or
      *         invalidated
      * @throws SecurityException if the caller does not have the necessary
      *         permissions to execute the underlying management operation, or,
@@ -1375,7 +1375,7 @@ public interface DmtSession {
      *         current session's subtree, or if some unspecified error is
      *         encountered while attempting to complete the command
      *         </ul>
-     * @throws IllegalStateException if the session is already closed or
+     * @throws DmtIllegalStateException if the session is already closed or
      *         invalidated
      * @throws SecurityException if the caller does not have the necessary
      *         permissions to execute the underlying management operation, or,
@@ -1415,7 +1415,7 @@ public interface DmtSession {
      *         current session's subtree, or if some unspecified error is
      *         encountered while attempting to complete the command
      *         </ul>
-     * @throws IllegalStateException if the session is already closed or
+     * @throws DmtIllegalStateException if the session is already closed or
      *         invalidated
      * @throws SecurityException if the caller does not have the necessary
      *         permissions to execute the underlying management operation, or,
@@ -1454,7 +1454,7 @@ public interface DmtSession {
      *         current session's subtree, or if some unspecified error is
      *         encountered while attempting to complete the command
      *         </ul>
-     * @throws IllegalStateException if the session is already closed or
+     * @throws DmtIllegalStateException if the session is already closed or
      *         invalidated
      * @throws SecurityException if the caller does not have the necessary
      *         permissions to execute the underlying management operation, or,
@@ -1494,7 +1494,7 @@ public interface DmtSession {
      *         current session's subtree, or if some unspecified error is
      *         encountered while attempting to complete the command
      *         </ul>
-     * @throws IllegalStateException if the session is already closed or
+     * @throws DmtIllegalStateException if the session is already closed or
      *         invalidated
      * @throws SecurityException if the caller does not have the necessary
      *         permissions to execute the underlying management operation, or,
@@ -1536,7 +1536,7 @@ public interface DmtSession {
      *         current session's subtree, or if some unspecified error is
      *         encountered while attempting to complete the command
      *         </ul>
-     * @throws IllegalStateException if the session is already closed or
+     * @throws DmtIllegalStateException if the session is already closed or
      *         invalidated
      * @throws SecurityException if the caller does not have the necessary
      *         permissions to execute the underlying management operation, or,
@@ -1572,7 +1572,7 @@ public interface DmtSession {
      *         current session's subtree, or if some unspecified error is
      *         encountered while attempting to complete the command
      *         </ul>
-     * @throws IllegalStateException if the session is already closed or
+     * @throws DmtIllegalStateException if the session is already closed or
      *         invalidated
      * @throws SecurityException if the caller does not have the necessary
      *         permissions to execute the underlying management operation, or,
@@ -1587,7 +1587,7 @@ public interface DmtSession {
      * 
      * @param nodeUri the URI to check
      * @return true if the given node exists in the DMT
-     * @throws IllegalStateException if the session is already closed or
+     * @throws DmtIllegalStateException if the session is already closed or
      *         invalidated
      * @throws SecurityException if the caller does not have the necessary
      *         permissions to execute the underlying management operation, or,

@@ -38,21 +38,15 @@
 
 package org.osgi.test.cases.dmt.tc2.tb1.DmtSession;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
-import java.util.Vector;
-
-import info.dmtree.Acl;
-import info.dmtree.DmtData;
-import info.dmtree.DmtException;
-import info.dmtree.DmtSession;
+import info.dmtree.*;
 import info.dmtree.security.DmtPermission;
 import info.dmtree.security.DmtPrincipalPermission;
+
+import java.lang.reflect.*;
+import java.util.Vector;
+
 import org.osgi.service.permissionadmin.PermissionInfo;
-import org.osgi.test.cases.dmt.tc2.tbc.DmtConstants;
-import org.osgi.test.cases.dmt.tc2.tbc.DmtTestControl;
-import org.osgi.test.cases.dmt.tc2.tbc.TestInterface;
+import org.osgi.test.cases.dmt.tc2.tbc.*;
 import org.osgi.test.cases.dmt.tc2.tbc.Plugin.ExecPlugin.TestExecPluginActivator;
 
 /**
@@ -60,7 +54,7 @@ import org.osgi.test.cases.dmt.tc2.tbc.Plugin.ExecPlugin.TestExecPluginActivator
  * 
  * This class simulates the following Exceptions that can be thrown in a DmtSession:
  * 1) DmtException (INVALID_URI, URI_TOO_LONG, PERMISSION_DENIED, COMAND_FAILED-when the URI is not within the current session's subtree-).
- * 2) IllegalStateException (in case of timeout or closed session).
+ * 2) DmtIllegalStateException (in case of timeout or closed session).
  * 3) SecurityException (in case of local sessions, if the caller does not have DmtPermission for the node)
  */
 public class TestExceptions implements TestInterface {
@@ -180,7 +174,7 @@ public class TestExceptions implements TestInterface {
 	}
 	
 	/**
-	 * This method simulates IllegalStateException in all methods that throw this Exception
+	 * This method simulates DmtIllegalStateException in all methods that throw this Exception
 	 * (if the session is already closed) 
 	 * 
 	 * @spec 117.12.7 DmtSession
@@ -188,14 +182,14 @@ public class TestExceptions implements TestInterface {
 	private void testExceptions005() {
 		try {
 		    tbc.log("#testExceptions005");
-		    openSessionAndSimulateIllegalStateException(false);
+		    openSessionAndSimulateDmtIllegalStateException(false);
 		} catch (Throwable e) {
 		    tbc.log(e.getMessage());
 		}
 	}
 	
 	/**
-	 * This method simulates IllegalStateException in all methods that throw this Exception
+	 * This method simulates DmtIllegalStateException in all methods that throw this Exception
 	 * (if the session is invalidated because of timeout)  
 	 * 
 	 * @spec 117.12.7 DmtSession
@@ -204,7 +198,7 @@ public class TestExceptions implements TestInterface {
 		try {
 		    tbc.log("#testExceptions006");
 
-		    openSessionAndSimulateIllegalStateException(true);
+		    openSessionAndSimulateDmtIllegalStateException(true);
 		} catch (Throwable e) {
 		    tbc.log(e.getMessage());
 		}
@@ -324,26 +318,26 @@ public class TestExceptions implements TestInterface {
 		}
 	}
 	/**
-	 * Asserts that IllegalStateException is thrown if the session is closed or timed out.
+	 * Asserts that DmtIllegalStateException is thrown if the session is closed or timed out.
 	 * @param session The session (timed out or closed)
  	 * @param method The method's name.
 	 * @param timeOut True if the exception being tested is because of timeout. False if it is because of a closed session.
 	 */
-	private void assertIllegalStateException(DmtSession session,Method method,boolean timeOut) {
+	private void assertDmtIllegalStateException(DmtSession session,Method method,boolean timeOut) {
 	    String methodName = method.getName();
 	    Object[] parameterValues = getDefaultValuesToParameters(method);
 	    String problemName=(timeOut)?"timed out":"closed";
 	    try {
 		    method.invoke(session,parameterValues);
-			tbc.failException("IllegalStateException was not thrown when the session is "+ problemName + " and DmtSession." + 
-			    methodName+ " is called.",IllegalStateException.class);
+			tbc.failException("DmtIllegalStateException was not thrown when the session is "+ problemName + " and DmtSession." + 
+			    methodName+ " is called.",DmtIllegalStateException.class);
 		
 		} catch (InvocationTargetException e) {
 			
 			Throwable exceptionReturned = e.getTargetException();
 			
-			if (exceptionReturned instanceof IllegalStateException) {
-				tbc.pass("IllegalStateException correctly thrown when the session is "+ problemName + " and DmtSession." + methodName +" is called.");
+			if (exceptionReturned instanceof DmtIllegalStateException) {
+				tbc.pass("DmtIllegalStateException correctly thrown when the session is "+ problemName + " and DmtSession." + methodName +" is called.");
 			} else {
 			    tbc.failExpectedOtherException(DmtException.class, exceptionReturned);
 			}
@@ -359,7 +353,7 @@ public class TestExceptions implements TestInterface {
 	 * (if timeout is set to true and there is a timeout period in this implementation)
 	 * @param timeOut True if the exception being tested is because of timeout. False if it is because of a closed session.
 	 */
-	private synchronized void openSessionAndSimulateIllegalStateException(boolean timeOut) {
+	private synchronized void openSessionAndSimulateDmtIllegalStateException(boolean timeOut) {
 	    DmtSession session= null;
 	    boolean timeoutPeriodDefined = true;
 	    try {
@@ -371,7 +365,7 @@ public class TestExceptions implements TestInterface {
 		            tbc.assertEquals("Asserts that DmtSession.getState returns STATE_INVALID in case of timeout",DmtSession.STATE_INVALID,session.getState());
 		            
 		        } else {
-		            tbc.log("#Timeout period was not defined, tests of IllegalStateException in case of timeout will not be tested");
+		            tbc.log("#Timeout period was not defined, tests of DmtIllegalStateException in case of timeout will not be tested");
 		            timeoutPeriodDefined = false;
 		        }
 		    } else {
@@ -385,9 +379,9 @@ public class TestExceptions implements TestInterface {
 					Method currentMethod = methods[i];
 					//Only the public fields must be gotten.
 					if (Modifier.isPublic(currentMethod.getModifiers())) {
-					    //There are some methods that do not throw IllegalStateException
+					    //There are some methods that do not throw DmtIllegalStateException
 					    if (!methodsDontThrowAnyExceptions.contains(currentMethod.getName())) {
-					        assertIllegalStateException(session,currentMethod,timeOut);
+					        assertDmtIllegalStateException(session,currentMethod,timeOut);
 					    }
 					}
 					

@@ -18,10 +18,10 @@
 
 package org.osgi.impl.service.dmt;
 
+import info.dmtree.*;
+
 import java.util.ArrayList;
 import java.util.List;
-import info.dmtree.DmtException;
-import info.dmtree.Uri;
 
 // OPTIMIZE implement operations to work on either path or URI, depending on which is available.
 public class Node {
@@ -277,7 +277,7 @@ public class Node {
     // precondition: parameter node is not absolute
     Node appendRelativeNode(Node relativeNode) {
         if(relativeNode.isAbsolute())
-            throw new IllegalStateException(
+            throw new DmtIllegalStateException(
                     "Cannot append an absolute node to another node.");
 
         if(relativeNode.isEmpty())

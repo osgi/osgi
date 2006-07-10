@@ -42,17 +42,12 @@
 
 package org.osgi.test.cases.dmt.tc2.tb1.DmtSession;
 
-import info.dmtree.Acl;
-import info.dmtree.DmtException;
-import info.dmtree.DmtSession;
-import info.dmtree.Uri;
+import info.dmtree.*;
 import info.dmtree.security.DmtPermission;
 import info.dmtree.security.DmtPrincipalPermission;
 
 import org.osgi.service.permissionadmin.PermissionInfo;
-import org.osgi.test.cases.dmt.tc2.tbc.DmtConstants;
-import org.osgi.test.cases.dmt.tc2.tbc.DmtTestControl;
-import org.osgi.test.cases.dmt.tc2.tbc.TestInterface;
+import org.osgi.test.cases.dmt.tc2.tbc.*;
 import org.osgi.test.cases.dmt.tc2.tbc.Plugin.ExecPlugin.TestExecPlugin;
 import org.osgi.test.cases.dmt.tc2.tbc.Plugin.ExecPlugin.TestExecPluginActivator;
 import org.osgi.test.cases.dmt.tc2.tbc.Plugin.NonAtomic.TestNonAtomicPluginActivator;
@@ -279,7 +274,7 @@ public class Copy implements TestInterface {
 	}
 
 	/**
-	 * This method asserts if IllegalStateException is thrown if this method is called 
+	 * This method asserts if DmtIllegalStateException is thrown if this method is called 
 	 * when the session is LOCK_TYPE_SHARED
 	 * 
 	 * @spec DmtSession.copy(String,String,boolean)
@@ -294,11 +289,11 @@ public class Copy implements TestInterface {
 			session.copy(TestExecPluginActivator.INTERIOR_NODE_NAME,
 				TestExecPluginActivator.INEXISTENT_NODE_NAME, false);
 			
-			tbc.failException("", IllegalStateException.class);
-		} catch (IllegalStateException e) {
-			tbc.pass("IllegalStateException correctly thrown");
+			tbc.failException("", DmtIllegalStateException.class);
+		} catch (DmtIllegalStateException e) {
+			tbc.pass("DmtIllegalStateException correctly thrown");
 		} catch (Exception e) {
-			tbc.failExpectedOtherException(IllegalStateException.class, e);
+			tbc.failExpectedOtherException(DmtIllegalStateException.class, e);
 		} finally {
 			tbc.closeSession(session);
 		}

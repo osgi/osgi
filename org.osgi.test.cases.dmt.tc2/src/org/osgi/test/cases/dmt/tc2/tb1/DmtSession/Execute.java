@@ -39,15 +39,12 @@
 
 package org.osgi.test.cases.dmt.tc2.tb1.DmtSession;
 
-import info.dmtree.Acl;
-import info.dmtree.DmtException;
+import info.dmtree.*;
 import info.dmtree.security.DmtPermission;
 import info.dmtree.security.DmtPrincipalPermission;
-import info.dmtree.DmtSession;
+
 import org.osgi.service.permissionadmin.PermissionInfo;
-import org.osgi.test.cases.dmt.tc2.tbc.DmtConstants;
-import org.osgi.test.cases.dmt.tc2.tbc.DmtTestControl;
-import org.osgi.test.cases.dmt.tc2.tbc.TestInterface;
+import org.osgi.test.cases.dmt.tc2.tbc.*;
 import org.osgi.test.cases.dmt.tc2.tbc.Plugin.ExecPlugin.TestExecPluginActivator;
 import org.osgi.test.cases.dmt.tc2.tbc.Plugin.ReadOnly.TestReadOnlyPluginActivator;
 
@@ -471,7 +468,7 @@ public class Execute implements TestInterface {
 	}
 	
 	/**
-	 * This method asserts that IllegalStateException is thrown
+	 * This method asserts that DmtIllegalStateException is thrown
 	 * if the session was opened using the LOCK_TYPE_SHARED lock type
 	 *  
 	 * @spec DmtSession.execute(String,String)
@@ -486,18 +483,18 @@ public class Execute implements TestInterface {
 
 			session.execute(TestExecPluginActivator.INTERIOR_NODE, DATA);
 
-			tbc.failException("", IllegalStateException.class);
-		} catch (IllegalStateException e) {
-			tbc.pass("IllegalStateException correctly thrown");
+			tbc.failException("", DmtIllegalStateException.class);
+		} catch (DmtIllegalStateException e) {
+			tbc.pass("DmtIllegalStateException correctly thrown");
 		} catch (Exception e) {
-			tbc.failExpectedOtherException(IllegalStateException.class, e);
+			tbc.failExpectedOtherException(DmtIllegalStateException.class, e);
 		} finally {
 			tbc.closeSession(session);
 		}
 	}
 	
 	/**
-	 * This method asserts that IllegalStateException is thrown
+	 * This method asserts that DmtIllegalStateException is thrown
 	 * if the session was opened using the LOCK_TYPE_SHARED lock type
 	 *  
 	 * @spec DmtSession.execute(String,String,String)
@@ -512,11 +509,11 @@ public class Execute implements TestInterface {
 
 			session.execute(TestExecPluginActivator.INTERIOR_NODE_NAME,CORRELATOR, DATA);
 
-			tbc.failException("", IllegalStateException.class);
-		} catch (IllegalStateException e) {
-			tbc.pass("IllegalStateException correctly thrown");
+			tbc.failException("", DmtIllegalStateException.class);
+		} catch (DmtIllegalStateException e) {
+			tbc.pass("DmtIllegalStateException correctly thrown");
 		} catch (Exception e) {
-			tbc.failExpectedOtherException(IllegalStateException.class, e);
+			tbc.failExpectedOtherException(DmtIllegalStateException.class, e);
 		} finally {
 			tbc.closeSession(session);
 		}

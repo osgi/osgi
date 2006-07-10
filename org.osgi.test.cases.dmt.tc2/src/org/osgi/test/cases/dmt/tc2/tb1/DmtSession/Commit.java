@@ -37,6 +37,7 @@
 package org.osgi.test.cases.dmt.tc2.tb1.DmtSession;
 
 import info.dmtree.DmtSession;
+import info.dmtree.DmtIllegalStateException;
 
 import org.osgi.service.permissionadmin.PermissionInfo;
 import org.osgi.test.cases.dmt.tc2.tbc.DmtTestControl;
@@ -78,11 +79,11 @@ public class Commit implements TestInterface {
 			tbc.log("#testCommit001");
 			session = tbc.getDmtAdmin().getSession(".",DmtSession.LOCK_TYPE_EXCLUSIVE);
 			session.commit();
-			tbc.failException("#", IllegalStateException.class);
-		} catch (IllegalStateException e) {
-			tbc.pass("IllegalStateException is thrown if the session is tried to commit a non-atomic session");
+			tbc.failException("#", DmtIllegalStateException.class);
+		} catch (DmtIllegalStateException e) {
+			tbc.pass("DmtIllegalStateException is thrown if the session is tried to commit a non-atomic session");
 		} catch (Exception e) {
-			tbc.failExpectedOtherException(IllegalStateException.class, e);
+			tbc.failExpectedOtherException(DmtIllegalStateException.class, e);
 		} finally {
 			tbc.closeSession(session);
 		}
@@ -100,11 +101,11 @@ public class Commit implements TestInterface {
 			tbc.log("#testCommit002");
 			session = tbc.getDmtAdmin().getSession(".",DmtSession.LOCK_TYPE_SHARED);
 			session.commit();
-			tbc.failException("#", IllegalStateException.class);
-		} catch (IllegalStateException e) {
-			tbc.pass("IllegalStateException is thrown if the session is tried to commit a non-atomic session");
+			tbc.failException("#", DmtIllegalStateException.class);
+		} catch (DmtIllegalStateException e) {
+			tbc.pass("DmtIllegalStateException is thrown if the session is tried to commit a non-atomic session");
 		} catch (Exception e) {
-			tbc.failExpectedOtherException(IllegalStateException.class, e);
+			tbc.failExpectedOtherException(DmtIllegalStateException.class, e);
 		} finally {
 			tbc.closeSession(session);
 		}
@@ -125,7 +126,7 @@ public class Commit implements TestInterface {
             session.close();
             tbc.pass("Asserting that session was committed correctly");
         } catch (Exception e) {
-        	tbc.failExpectedOtherException(IllegalStateException.class, e);
+        	tbc.failExpectedOtherException(DmtIllegalStateException.class, e);
         } finally {
             tbc.closeSession(session);
         }

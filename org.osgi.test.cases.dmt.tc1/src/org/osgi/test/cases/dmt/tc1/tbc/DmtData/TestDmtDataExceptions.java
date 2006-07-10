@@ -36,12 +36,14 @@
 package org.osgi.test.cases.dmt.tc1.tbc.DmtData;
 
 import info.dmtree.DmtData;
+import info.dmtree.DmtIllegalStateException;
+
 import org.osgi.test.cases.dmt.tc1.tbc.DmtConstants;
 import org.osgi.test.cases.dmt.tc1.tbc.DmtTestControl;
 
 /**
  * 
- * This test case asserts that IllegalStateException is thrown if we try to get a different format from the defined.
+ * This test case asserts that DmtIllegalStateException is thrown if we try to get a different format from the defined.
  * e.g: Calling DmtData.getFloat() in a DmtData.FORMAT_STRING
  * 
  * It also asserts that it is not possible to create a DmtData(String value,int format) if the format is not one of the
@@ -214,7 +216,7 @@ public class TestDmtDataExceptions {
         }
     }
 	/**
-	 * Asserts that IllegalStateException is thrown when an incorrect DmtData is gotten (for all cases)
+	 * Asserts that DmtIllegalStateException is thrown when an incorrect DmtData is gotten (for all cases)
 	 * 
 	 * @spec 117.12.5 DmtData
 	 */
@@ -232,7 +234,7 @@ public class TestDmtDataExceptions {
 				    	//Checks only different formats, because equal ones do not throw any exception (it is checked at org.osgi.test.cases.dmt.tc1.tbc.DmtData) 
 				    	//FORMAT_NULL and FORMAT_NODE doesnt have a get associated
 				    	if (i!=j && j!=DmtData.FORMAT_NULL && j!=DmtData.FORMAT_NODE) {
-							tbc.assertTrue("Asserts that IllegalStateException is thrown when "+ 
+							tbc.assertTrue("Asserts that DmtIllegalStateException is thrown when "+ 
 									DmtConstants.getExpectedDmtDataMethod(j) +" is called in a DmtData."+ baseName,
 									invalidGetThrowsException(DmtConstants.getDmtData(i),j));
 						}
@@ -452,7 +454,7 @@ public class TestDmtDataExceptions {
 				data.getRawString();
 				break;								
 			}
-		} catch (IllegalStateException e) {
+		} catch (DmtIllegalStateException e) {
 			threw = true;
 		}
 

@@ -17,13 +17,16 @@
  */
 package org.osgi.impl.service.dmt;
 
+import info.dmtree.*;
+import info.dmtree.security.DmtPermission;
+import info.dmtree.security.DmtPrincipalPermission;
+import info.dmtree.spi.*;
+
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Constructor;
 import java.security.*;
 import java.util.*;
-import info.dmtree.*;
-import info.dmtree.security.*;
-import info.dmtree.spi.*;
+
 import org.osgi.service.event.Event;
 import org.osgi.service.event.EventAdmin;
 import org.osgi.service.log.LogService;
@@ -236,7 +239,7 @@ public class DmtSessionImpl implements DmtSession {
         checkSession();
 
         if (lockMode != LOCK_TYPE_ATOMIC)
-            throw new IllegalStateException("Commit can only be requested " +
+            throw new DmtIllegalStateException("Commit can only be requested " +
                     "for atomic sessions.");
         
         // changed back to OPEN if this method finishes without error
@@ -280,7 +283,7 @@ public class DmtSessionImpl implements DmtSession {
 		checkSession();
 
 		if (lockMode != LOCK_TYPE_ATOMIC)
-			throw new IllegalStateException("Rollback can only be requested " +
+			throw new DmtIllegalStateException("Rollback can only be requested " +
                     "for atomic sessions.");
         
         // changed back to OPEN if this method finishes without error
@@ -1003,7 +1006,7 @@ public class DmtSessionImpl implements DmtSession {
 
     private void checkSession() {
         if(state != STATE_OPEN)
-            throw new IllegalStateException(
+            throw new DmtIllegalStateException(
                     "Session is not open, cannot perform DMT operations.");
     }
     
@@ -1014,7 +1017,7 @@ public class DmtSessionImpl implements DmtSession {
     private void checkWriteSession(String op) {
         checkSession();
         if(lockMode == LOCK_TYPE_SHARED)
-            throw new IllegalStateException(
+            throw new DmtIllegalStateException(
                     "Session is not open for writing, cannot perform " +
                     "requested " + op + " operation.");
     }
@@ -1317,7 +1320,7 @@ public class DmtSessionImpl implements DmtSession {
                 return roots[i].isAncestorOf(subtreeNode) 
                     ? subtreeNode : roots[i];
         
-        throw new IllegalStateException("Internal error, plugin root not " +
+        throw new DmtIllegalStateException("Internal error, plugin root not " +
                 "found for a URI handled by the plugin.");
     }
     

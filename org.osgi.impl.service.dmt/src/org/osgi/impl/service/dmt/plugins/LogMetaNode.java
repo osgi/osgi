@@ -17,9 +17,9 @@
  */
 package org.osgi.impl.service.dmt.plugins;
 
+import info.dmtree.*;
+
 import java.util.List;
-import info.dmtree.DmtData;
-import info.dmtree.MetaNode;
 
 class LogMetaNode implements MetaNode {
     static final boolean MODIFIABLE = true; 
@@ -173,7 +173,7 @@ class LogMetaNode implements MetaNode {
                 for (int i = 0; i < components.length; i++)
                     if(!validComponents.contains(components[i].trim()))
                         return false;
-            } catch(IllegalStateException e) {
+            } catch(DmtIllegalStateException e) {
                 // not checking components if format is not string
             }
         }

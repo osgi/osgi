@@ -441,13 +441,13 @@ public final class DmtData {
      * Gets the value of a node with string (<code>chr</code>) format.
      * 
      * @return the string value
-     * @throws IllegalStateException if the format of the node is not string
+     * @throws DmtIllegalStateException if the format of the node is not string
      */
     public String getString() {
         if (format == FORMAT_STRING)
             return str;
 
-        throw new IllegalStateException("DmtData value is not string.");
+        throw new DmtIllegalStateException("DmtData value is not string.");
     }
 
     /**
@@ -456,13 +456,13 @@ public final class DmtData {
      * complete representation, basic format (pattern <tt>CCYYMMDD</tt>).
      * 
      * @return the date value
-     * @throws IllegalStateException if the format of the node is not date
+     * @throws DmtIllegalStateException if the format of the node is not date
      */
     public String getDate() {
         if (format == FORMAT_DATE)
             return str;
 
-        throw new IllegalStateException("DmtData value is not date.");
+        throw new DmtIllegalStateException("DmtData value is not date.");
     }
 
     /**
@@ -474,74 +474,74 @@ public final class DmtData {
      * <tt>hhmmssZ</tt>).
      * 
      * @return the time value
-     * @throws IllegalStateException if the format of the node is not time
+     * @throws DmtIllegalStateException if the format of the node is not time
      */
     public String getTime() {
         if (format == FORMAT_TIME)
             return str;
 
-        throw new IllegalStateException("DmtData value is not time.");
+        throw new DmtIllegalStateException("DmtData value is not time.");
     }
 
     /**
      * Gets the value of a node with <code>xml</code> format.
      * 
      * @return the XML value
-     * @throws IllegalStateException if the format of the node is not
+     * @throws DmtIllegalStateException if the format of the node is not
      *         <code>xml</code>
      */
     public String getXml() {
         if (format == FORMAT_XML)
             return str;
 
-        throw new IllegalStateException("DmtData value is not XML.");
+        throw new DmtIllegalStateException("DmtData value is not XML.");
     }
 
     /**
      * Gets the value of a node with integer (<code>int</code>) format.
      * 
      * @return the integer value
-     * @throws IllegalStateException if the format of the node is not integer
+     * @throws DmtIllegalStateException if the format of the node is not integer
      */
     public int getInt() {
         if (format == FORMAT_INTEGER)
             return integer;
 
-        throw new IllegalStateException("DmtData value is not integer.");
+        throw new DmtIllegalStateException("DmtData value is not integer.");
     }
 
     /**
      * Gets the value of a node with <code>float</code> format.
      * 
      * @return the float value
-     * @throws IllegalStateException if the format of the node is not
+     * @throws DmtIllegalStateException if the format of the node is not
      *         <code>float</code>
      */
     public float getFloat() {
         if (format == FORMAT_FLOAT)
             return flt;
 
-        throw new IllegalStateException("DmtData value is not float.");
+        throw new DmtIllegalStateException("DmtData value is not float.");
     }
 
     /**
      * Gets the value of a node with boolean (<code>bool</code>) format.
      * 
      * @return the boolean value
-     * @throws IllegalStateException if the format of the node is not boolean
+     * @throws DmtIllegalStateException if the format of the node is not boolean
      */
     public boolean getBoolean() {
         if (format == FORMAT_BOOLEAN)
             return bool;
 
-        throw new IllegalStateException("DmtData value is not boolean.");
+        throw new DmtIllegalStateException("DmtData value is not boolean.");
     }
 
     /**
      * Gets the value of a node with binary (<code>bin</code>) format.
      * 
      * @return the binary value
-     * @throws IllegalStateException if the format of the node is not binary
+     * @throws DmtIllegalStateException if the format of the node is not binary
      */
     public byte[] getBinary() {
         if (format == FORMAT_BINARY) {
@@ -552,7 +552,7 @@ public final class DmtData {
             return bytesCopy;
         }
 
-        throw new IllegalStateException("DmtData value is not a byte array.");
+        throw new DmtIllegalStateException("DmtData value is not a byte array.");
     }
     
     /**
@@ -560,13 +560,13 @@ public final class DmtData {
      * format.
      * 
      * @return the data value in raw binary format
-     * @throws IllegalStateException if the format of the node is not raw binary
+     * @throws DmtIllegalStateException if the format of the node is not raw binary
      */
     public byte[] getRawBinary() {
         if (format == FORMAT_RAW_BINARY)
             return (byte[]) bytes.clone();
         
-        throw new IllegalStateException(
+        throw new DmtIllegalStateException(
                 "DmtData value is not in raw binary format.");
     }
 
@@ -575,14 +575,14 @@ public final class DmtData {
      * ({@link #FORMAT_RAW_STRING}) format.
      * 
      * @return the data value in raw <code>String</code> format
-     * @throws IllegalStateException if the format of the node is not raw
+     * @throws DmtIllegalStateException if the format of the node is not raw
      *     <code>String</code>
     */
     public String getRawString() {
         if (format == FORMAT_RAW_STRING)
             return str;
         
-        throw new IllegalStateException(
+        throw new DmtIllegalStateException(
                 "DmtData value is not in raw string format.");
     }
 
@@ -590,7 +590,7 @@ public final class DmtData {
      * Gets the value of a node with base 64 (<code>b64</code>) format.
      * 
      * @return the binary value
-     * @throws IllegalStateException if the format of the node is not base 64.
+     * @throws DmtIllegalStateException if the format of the node is not base 64.
      */
     public byte[] getBase64() {
         if (format == FORMAT_BASE64) {
@@ -601,7 +601,7 @@ public final class DmtData {
             return bytesCopy;
         }
 
-        throw new IllegalStateException(
+        throw new DmtIllegalStateException(
                 "DmtData value is not in base 64 format.");
     }
 
@@ -614,14 +614,14 @@ public final class DmtData {
      * the subtree.
      * 
      * @return the data object associated with an interior node
-     * @throws IllegalStateException if the format of the data is not 
+     * @throws DmtIllegalStateException if the format of the data is not 
      *         <code>node</code>
      */
     public Object getNode() {
         if(format == FORMAT_NODE)
             return complex;
 
-        throw new IllegalStateException(
+        throw new DmtIllegalStateException(
                 "DmtData does not contain interior node data.");
     }
 

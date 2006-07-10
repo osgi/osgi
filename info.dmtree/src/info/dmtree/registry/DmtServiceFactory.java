@@ -17,11 +17,12 @@
  */
 package info.dmtree.registry;
 
+import info.dmtree.DmtAdmin;
+import info.dmtree.DmtIllegalStateException;
+import info.dmtree.notification.NotificationService;
+
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
-
-import info.dmtree.DmtAdmin;
-import info.dmtree.notification.NotificationService;
 
 
 /**
@@ -50,18 +51,18 @@ public final class DmtServiceFactory {
      */
     public static DmtAdmin getDmtAdmin() {
         if(context == null)
-            throw new IllegalStateException("Cannot retrieve Dmt Admin " +
+            throw new DmtIllegalStateException("Cannot retrieve Dmt Admin " +
                     "service, implementation bundle not started yet.");
         
         ServiceReference dmtAdminRef = 
             context.getServiceReference(DmtAdmin.class.getName());
         if(dmtAdminRef == null)
-            throw new IllegalStateException("Dmt Admin service not found in " +
+            throw new DmtIllegalStateException("Dmt Admin service not found in " +
                     "service registry.");
         
         DmtAdmin dmtAdmin = (DmtAdmin) context.getService(dmtAdminRef);
         if(dmtAdmin == null)
-            throw new IllegalStateException("Dmt Admin service not found in " +
+            throw new DmtIllegalStateException("Dmt Admin service not found in " +
                     "service registry.");
         
         return dmtAdmin;
@@ -76,19 +77,19 @@ public final class DmtServiceFactory {
      */
     public static NotificationService getNotificationService() {
         if(context == null)
-            throw new IllegalStateException("Cannot retrieve Notification " +
+            throw new DmtIllegalStateException("Cannot retrieve Notification " +
                     "service, implementation bundle not started yet.");
         
         ServiceReference notificationServiceRef = 
             context.getServiceReference(NotificationService.class.getName());
         if(notificationServiceRef == null)
-            throw new IllegalStateException("Notification service not found " +
+            throw new DmtIllegalStateException("Notification service not found " +
                     "in service registry.");
         
         NotificationService notificationService = 
             (NotificationService) context.getService(notificationServiceRef);
         if(notificationService == null)
-            throw new IllegalStateException("Notification service not found " +
+            throw new DmtIllegalStateException("Notification service not found " +
                     "in service registry.");
         
         return notificationService;

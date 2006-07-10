@@ -39,6 +39,8 @@
 
 package org.osgi.test.cases.dmt.tc1.tbc.DmtException;
 
+import info.dmtree.DmtIllegalStateException;
+
 import java.util.Vector;
 
 import org.osgi.test.cases.dmt.tc1.tbc.DmtConstants;
@@ -289,7 +291,7 @@ public class DmtException {
 	private void testDmtException009() {
 		tbc.log("#testDmtException009");
 		Vector causes = new Vector();
-		causes.add(0, new IllegalStateException(EXCEPTION_MSG));
+		causes.add(0, new DmtIllegalStateException(EXCEPTION_MSG));
 		causes.add(1, new Exception(EXCEPTION_MSG));
 		causes.add(2, new IllegalArgumentException(EXCEPTION_MSG));
 		info.dmtree.DmtException de = new info.dmtree.DmtException(
@@ -304,7 +306,7 @@ public class DmtException {
 		tbc.assertEquals("Asserts getCode() method",info.dmtree.DmtException.COMMAND_NOT_ALLOWED, de.getCode());
 		
 		tbc.assertException("Asserts that getCause returns the first exception in case of more than one exception", 
-				IllegalStateException.class, de.getCause());
+				DmtIllegalStateException.class, de.getCause());
 		
 		Throwable[] causesReturned = de.getCauses();
 		tbc.assertEquals("Asserts the size of getCauses() method", causes.size(), causesReturned.length);
@@ -313,8 +315,8 @@ public class DmtException {
 		int expected = causes.size();
         for (int i = 0; i < causesReturned.length; i++) {
             Object obj = causesReturned[i];
-            if (obj instanceof IllegalStateException) {
-                if (((IllegalStateException)obj).toString().indexOf(EXCEPTION_MSG)>-1) {
+            if (obj instanceof DmtIllegalStateException) {
+                if (((DmtIllegalStateException)obj).toString().indexOf(EXCEPTION_MSG)>-1) {
                     found++;
                 }
             } else if (obj instanceof Exception) {
@@ -364,7 +366,7 @@ public class DmtException {
 		Vector causes = new Vector();
 		causes.add(0, new IllegalArgumentException(EXCEPTION_MSG));
 		causes.add(1, new Exception(EXCEPTION_MSG));
-		causes.add(2, new IllegalStateException(EXCEPTION_MSG));
+		causes.add(2, new DmtIllegalStateException(EXCEPTION_MSG));
 		info.dmtree.DmtException de = new info.dmtree.DmtException(
 				new String [] {".","g", "h", "i"},
 				info.dmtree.DmtException.FEATURE_NOT_SUPPORTED,
@@ -388,8 +390,8 @@ public class DmtException {
         int expected = causes.size();
         for (int i = 0; i < causesReturned.length; i++) {
             Object obj = causesReturned[i];
-            if (obj instanceof IllegalStateException) {
-                if (((IllegalStateException)obj).toString().indexOf(EXCEPTION_MSG)>-1) {
+            if (obj instanceof DmtIllegalStateException) {
+                if (((DmtIllegalStateException)obj).toString().indexOf(EXCEPTION_MSG)>-1) {
                     found++;
                 }
             } else if (obj instanceof Exception) {

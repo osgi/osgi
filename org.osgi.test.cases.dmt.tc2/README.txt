@@ -38,7 +38,7 @@ subtree. There are some specific cases in  DmtSession.close (tested in
 org.osgi.test.cases.dmt.plugins.tbc.DataPluginFactory.TransactionalDataSession.Close),
 DmtSession.execute (tested in org.osgi.test.cases.dmt.main.tb1.DmtSession.Execute). 
 
-1.5) IllegalStateException in case of timeout or closed session. The DmtAdmin 
+1.5) DmtIllegalStateException in case of timeout or closed session. The DmtAdmin 
 timeout must be defined at org.osgi.test.cases.dmt.main.tbc.DmtConstants). There 
 are some methods that throws this exception if the session was created using 
 LOCK_TYPE_SHARED: commit, rollback, setNodeAcl, copy, createInteriorNode, 

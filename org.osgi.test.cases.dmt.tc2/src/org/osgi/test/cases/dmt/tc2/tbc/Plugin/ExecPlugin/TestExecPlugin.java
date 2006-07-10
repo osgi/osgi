@@ -36,15 +36,8 @@
 
 package org.osgi.test.cases.dmt.tc2.tbc.Plugin.ExecPlugin;
 
-import info.dmtree.DmtData;
-import info.dmtree.DmtException;
-import info.dmtree.DmtSession;
-import info.dmtree.MetaNode;
-import info.dmtree.spi.DataPlugin;
-import info.dmtree.spi.ExecPlugin;
-import info.dmtree.spi.ReadWriteDataSession;
-import info.dmtree.spi.ReadableDataSession;
-import info.dmtree.spi.TransactionalDataSession;
+import info.dmtree.*;
+import info.dmtree.spi.*;
 
 import java.util.Date;
 
@@ -123,7 +116,7 @@ public class TestExecPlugin implements DataPlugin, ExecPlugin, TransactionalData
 		newInteriorNodeName = nodeUri;
         createInteriorNodeCount++;
         if (exceptionAtCreateInteriorNode) {
-            throw new IllegalStateException();
+            throw new DmtIllegalStateException();
         }
 	}
 
