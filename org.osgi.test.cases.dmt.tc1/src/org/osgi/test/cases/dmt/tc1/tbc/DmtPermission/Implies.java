@@ -60,6 +60,7 @@ public class Implies {
 		testImplies005();
         testImplies006();
         testImplies007();
+        testImplies008();
 	}
 
 	/**
@@ -209,4 +210,22 @@ public class Implies {
 			tbc.failUnexpectedException(e);
 		}
 	}
+    
+    /**
+     * Asserts that a permission with "*" uri implies a permission with "." uri
+     * 
+     * @spec DmtPermission.implies(Permission)
+     */
+    private void testImplies008() {
+        try {
+            tbc.log("#testImplies008");
+            DmtPermission permission = new DmtPermission("*",DmtConstants.ALL_ACTIONS);
+            DmtPermission permission2 = new DmtPermission(".", "Get");
+            tbc.assertTrue(
+                        "Asserts that the \"*\" implies \".\"",
+                        permission.implies(permission2));
+        } catch (Exception e) {
+            tbc.failUnexpectedException(e);
+        }
+    }
 }
