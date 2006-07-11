@@ -42,7 +42,7 @@ package org.osgi.service.event;
  * ht.put(EVENT_TOPIC, topics);
  * context.registerService(EventHandler.class.getName(), this, ht);
  * </pre>
- * Event Handler services can also be registered with an @link EventConstants#EVENT_FILTER}
+ * Event Handler services can also be registered with an {@link EventConstants#EVENT_FILTER}
  * service propery to further filter the events. If the syntax of this filter is invalid,
  * then the Event Handler must be ignored by the Event Admin service. The Event Admin
  * service should log a warning.
