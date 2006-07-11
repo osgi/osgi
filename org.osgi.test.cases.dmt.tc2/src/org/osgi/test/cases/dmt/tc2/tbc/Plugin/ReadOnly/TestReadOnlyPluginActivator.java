@@ -54,7 +54,9 @@ public class TestReadOnlyPluginActivator implements BundleActivator {
 	
 	private DmtTestControl tbc;
 
-	public static final String ROOT = "./OSGi/read_only_plugin";
+    public static final String OSGi_ROOT = System.getProperty("info.dmtree.osgi.root");
+
+    public static final String ROOT = OSGi_ROOT + "/read_only_plugin";
 	
 	public static final String INTERIOR_NODE = ROOT + "/interior";
 	
