@@ -86,7 +86,7 @@ public class Rollback implements TestInterface {
 		} catch (DmtIllegalStateException e) {
 			tbc.pass("DmtIllegalStateException correctly thrown");
 		} catch (Exception e) {
-			tbc.failUnexpectedException(e);
+            tbc.failExpectedOtherException(DmtIllegalStateException.class, e);
 		} finally {
 			tbc.closeSession(session);
 		}
@@ -109,7 +109,7 @@ public class Rollback implements TestInterface {
 		} catch (DmtIllegalStateException e) {
 			tbc.pass("DmtIllegalStateException correctly thrown");
 		} catch (Exception e) {
-			tbc.failUnexpectedException(e);
+            tbc.failExpectedOtherException(DmtIllegalStateException.class, e);
 		} finally {
 			tbc.closeSession(session);
 		}

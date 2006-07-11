@@ -126,7 +126,7 @@ public class Commit implements TestInterface {
             session.close();
             tbc.pass("Asserting that session was committed correctly");
         } catch (Exception e) {
-        	tbc.failExpectedOtherException(DmtIllegalStateException.class, e);
+            tbc.failUnexpectedException(e);
         } finally {
             tbc.closeSession(session);
         }
