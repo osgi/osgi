@@ -117,7 +117,11 @@ public class DmtSessionImpl implements DmtSession {
     
     // called directly before returning the session object in getSession()
     // throws NODE_NOT_FOUND if the previously specified root does not exist
+    // throws SecurityException or DmtException.PERMISSION_DENIED if the caller
+    //        doesn't have GET permissions for the session root node
     void open() throws DmtException {
+        checkNodePermission(subtreeNode, Acl.GET);
+        
         if(lockMode == LOCK_TYPE_ATOMIC)
             // shallow copy is enough, Nodes and Acls are immutable 
             savedAcls = (Hashtable) acls.clone();
@@ -1127,7 +1131,7 @@ public class DmtSessionImpl implements DmtSession {
 	}
 
     private void checkOperation(Node node, int actions, int capability)
-        throws DmtException {
+            throws DmtException {
         checkNodePermission(node, actions);
         checkNodeCapability(node, capability);
     }

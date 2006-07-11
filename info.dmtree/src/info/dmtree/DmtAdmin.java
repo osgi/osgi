@@ -66,7 +66,10 @@ public interface DmtAdmin {
      * The <code>subtreeUri</code> parameter must contain an absolute URI.  It
      * can also be <code>null</code>, in this case the session is opened with 
      * the default session root, &quot;.&quot;, that gives access to the whole 
-     * tree.  
+     * tree.
+     * <p>
+     * To perform this operation the caller must have <code>DmtPermission</code>
+     * for the <code>subtreeUri</code> node with the Get action present.
      * 
      * @param subtreeUri the subtree on which DMT manipulations can be performed
      *        within the returned session
@@ -85,6 +88,9 @@ public interface DmtAdmin {
      *         specifies a relative URI, or some unspecified error is
      *         encountered while attempting to complete the command
      *         </ul>
+     * @throws SecurityException if the caller does not have 
+     *         <code>DmtPermission</code> for the given root node with the Get 
+     *         action present 
      */
     DmtSession getSession(String subtreeUri) throws DmtException;
 
@@ -96,7 +102,10 @@ public interface DmtAdmin {
      * The <code>subtreeUri</code> parameter must contain an absolute URI.  It
      * can also be <code>null</code>, in this case the session is opened with 
      * the default session root, &quot;.&quot;, that gives access to the whole 
-     * tree.  
+     * tree.
+     * <p>
+     * To perform this operation the caller must have <code>DmtPermission</code>
+     * for the <code>subtreeUri</code> node with the Get action present.
      * 
      * @param subtreeUri the subtree on which DMT manipulations can be performed
      *        within the returned session
@@ -121,6 +130,9 @@ public interface DmtAdmin {
      *         or some unspecified error is encountered while attempting to 
      *         complete the command
      *         </ul>
+     * @throws SecurityException if the caller does not have 
+     *         <code>DmtPermission</code> for the given root node with the Get 
+     *         action present 
      */
     DmtSession getSession(String subtreeUri, int lockMode) throws DmtException;
 
@@ -129,14 +141,18 @@ public interface DmtAdmin {
      * specific lock mode on behalf of a remote principal. If local management
      * applications are using this method then they should provide
      * <code>null</code> as the first parameter. Alternatively they can use
-     * other forms of this method without providing a principal string. This
-     * method is guarded by <code>DmtPrincipalPermission</code> in case of
-     * remote sessions.
+     * other forms of this method without providing a principal string. 
      * <p>
      * The <code>subtreeUri</code> parameter must contain an absolute URI.  It
      * can also be <code>null</code>, in this case the session is opened with 
      * the default session root, &quot;.&quot;, that gives access to the whole 
      * tree.  
+     * <p>
+     * This method is guarded by <code>DmtPrincipalPermission</code> in case of
+     * remote sessions.  In addition, the caller must have Get access rights 
+     * (ACL in case of remote sessions, <code>DmtPermission</code> in case of
+     * local sessions) on the <code>subtreeUri</code> node to perform this
+     * operation. 
      * 
      * @param principal the identifier of the remote server on whose behalf the
      *        data manipulation is performed, or <code>null</code> for local
@@ -154,6 +170,10 @@ public interface DmtAdmin {
      *         syntactically invalid
      *         <li><code>NODE_NOT_FOUND</code> if <code>subtreeUri</code>
      *         specifies a non-existing node
+     *         <li><code>PERMISSION_DENIED</code> if <code>principal</code> is
+     *         not <code>null</code> and the ACL of the node does not allow the
+     *         <code>Get</code> operation for the principal on the given root 
+     *         node 
      *         <li><code>FEATURE_NOT_SUPPORTED</code> if atomic sessions are
      *         not supported by the implementation and <code>lockMode</code> 
      *         requests an atomic session
@@ -164,9 +184,12 @@ public interface DmtAdmin {
      *         or some unspecified error is encountered while attempting to 
      *         complete the command
      *         </ul>
-     * @throws SecurityException if the caller does not have the required
-     *         <code>DmtPrincipalPermission</code> with a target matching the
-     *         <code>principal</code> parameter
+     * @throws SecurityException in case of remote sessions, if the caller does 
+     *         not have the required <code>DmtPrincipalPermission</code> with a 
+     *         target matching the <code>principal</code> parameter, or in case
+     *         of local sessions, if the caller does not have 
+     *         <code>DmtPermission</code> for the given root node with the Get 
+     *         action present 
      */
     DmtSession getSession(String principal, String subtreeUri, int lockMode)
             throws DmtException;
