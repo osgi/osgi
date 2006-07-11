@@ -509,7 +509,7 @@ public final class Uri {
         }
         catch (UnsupportedEncodingException e) {
             // There's no way UTF-8 encoding is not implemented...
-            throw new DmtIllegalStateException("there's no UTF-8 encoder here!");
+            throw new IllegalStateException("there's no UTF-8 encoder here!");
         }
         byte[] digest = digestMessage(byteStream);
         
