@@ -20,7 +20,7 @@ package org.osgi.service.url;
 
 /**
  * Defines standard names for property keys associated with
- * {@link URLStreamHandlerService}and <code>java.net.ContentHandler</code>
+ * {@link URLStreamHandlerService} and <code>java.net.ContentHandler</code>
  * services.
  * 
  * <p>

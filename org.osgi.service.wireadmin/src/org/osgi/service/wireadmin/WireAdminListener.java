@@ -32,7 +32,7 @@ package org.osgi.service.wireadmin;
  * 
  * <p>
  * <code>WireAdminListener</code> objects must be registered with a service
- * property {@link WireConstants#WIREADMIN_EVENTS}whose value is a bitwise OR
+ * property {@link WireConstants#WIREADMIN_EVENTS} whose value is a bitwise OR
  * of all the event types the listener is interested in receiving.
  * <p>
  * For example:
@@ -66,7 +66,7 @@ public interface WireAdminListener {
 	 * 
 	 * The event object will be of an event type specified in this
 	 * <code>WireAdminListener</code> service's
-	 * {@link WireConstants#WIREADMIN_EVENTS}service property.
+	 * {@link WireConstants#WIREADMIN_EVENTS} service property.
 	 * 
 	 * @param event The <code>WireAdminEvent</code> object.
 	 */

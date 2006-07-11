@@ -27,7 +27,7 @@ import java.net.*;
  * The important differences between this interface and the
  * <code>URLStreamHandler</code> class are that the <code>setURL</code> method is
  * absent and the <code>parseURL</code> method takes a
- * {@link URLStreamHandlerSetter}object as the first argument. Classes
+ * {@link URLStreamHandlerSetter} object as the first argument. Classes
  * implementing this interface must call the <code>setURL</code> method on the
  * <code>URLStreamHandlerSetter</code> object received in the <code>parseURL</code>
  * method instead of <code>URLStreamHandler.setURL</code> to avoid a

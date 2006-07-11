@@ -34,11 +34,11 @@ import org.osgi.framework.*;
  * Every role has a name and a type.
  * 
  * <p>
- * A {@link User}object can be configured with credentials (e.g., a password)
+ * A {@link User} object can be configured with credentials (e.g., a password)
  * and properties (e.g., a street address, phone number, etc.).
  * <p>
- * A {@link Group}object represents an aggregation of {@link User}and
- * {@link Group}objects. In other words, the members of a <code>Group</code>
+ * A {@link Group} object represents an aggregation of {@link User} and
+ * {@link Group} objects. In other words, the members of a <code>Group</code>
  * object are roles themselves.
  * <p>
  * Every User Admin service manages and maintains its own namespace of
@@ -54,12 +54,12 @@ public interface UserAdmin {
 	 * 
 	 * <p>
 	 * If a <code>Role</code> object was created, a <code>UserAdminEvent</code>
-	 * object of type {@link UserAdminEvent#ROLE_CREATED}is broadcast to any
+	 * object of type {@link UserAdminEvent#ROLE_CREATED} is broadcast to any
 	 * <code>UserAdminListener</code> object.
 	 * 
 	 * @param name The <code>name</code> of the <code>Role</code> object to create.
 	 * @param type The type of the <code>Role</code> object to create. Must be
-	 *        either a {@link Role#USER}type or {@link Role#GROUP}type.
+	 *        either a {@link Role#USER} type or {@link Role#GROUP} type.
 	 * 
 	 * @return The newly created <code>Role</code> object, or <code>null</code> if a
 	 *         role with the given name already exists.
@@ -78,7 +78,7 @@ public interface UserAdmin {
 	 * 
 	 * <p>
 	 * If the <code>Role</code> object was removed, a <code>UserAdminEvent</code>
-	 * object of type {@link UserAdminEvent#ROLE_REMOVED}is broadcast to any
+	 * object of type {@link UserAdminEvent#ROLE_REMOVED} is broadcast to any
 	 * <code>UserAdminListener</code> object.
 	 * 
 	 * @param name The name of the <code>Role</code> object to remove.

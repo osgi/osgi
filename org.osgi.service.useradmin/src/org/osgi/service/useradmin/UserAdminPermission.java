@@ -25,13 +25,13 @@ import java.security.BasicPermission;
 import java.security.PermissionCollection;
 
 /**
- * Permission to configure and access the {@link Role}objects managed by a User
+ * Permission to configure and access the {@link Role} objects managed by a User
  * Admin service.
  * 
  * <p>
  * This class represents access to the <code>Role</code> objects managed by a User
  * Admin service and their properties and credentials (in the case of
- * {@link User}objects).
+ * {@link User} objects).
  * <p>
  * The permission name is the name (or name prefix) of a property or credential.
  * The naming convention follows the hierarchical property naming convention.

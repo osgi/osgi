@@ -99,15 +99,15 @@ public interface HttpContext {
 	 * 
 	 * <p>
 	 * If the specified request has been authenticated, this method must set the
-	 * {@link #AUTHENTICATION_TYPE}request attribute to the type of
-	 * authentication used, and the {@link #REMOTE_USER}request attribute to
+	 * {@link #AUTHENTICATION_TYPE} request attribute to the type of
+	 * authentication used, and the {@link #REMOTE_USER} request attribute to
 	 * the remote user (request attributes are set using the
 	 * <code>setAttribute</code> method on the request). If this method does not
 	 * perform any authentication, it must not set these attributes.
 	 * 
 	 * <p>
 	 * If the authenticated user is also authorized to access certain resources,
-	 * this method must set the {@link #AUTHORIZATION}request attribute to the
+	 * this method must set the {@link #AUTHORIZATION} request attribute to the
 	 * <code>Authorization</code> object obtained from the
 	 * <code>org.osgi.service.useradmin.UserAdmin</code> service.
 	 * 

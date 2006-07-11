@@ -32,7 +32,7 @@ package org.osgi.util.measurement;
  * incompatible way. E.g., when a speed (m/s) is added to a distance (m). The
  * measurement class will correctly track changes in unit during multiplication
  * and division, always coercing the result to the most simple form. See
- * {@link Unit}for more information on the supported units.
+ * {@link Unit} for more information on the supported units.
  * 
  * <p>
  * Errors in the measurement class are absolute errors. Measurement errors
@@ -102,7 +102,7 @@ public class Measurement implements Comparable {
 
 	/**
 	 * Create a new <code>Measurement</code> object with an error of 0.0, a unit
-	 * of {@link Unit#unity}and a time of zero.
+	 * of {@link Unit#unity} and a time of zero.
 	 * 
 	 * @param value The value of the <code>Measurement</code>.
 	 */

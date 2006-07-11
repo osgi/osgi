@@ -126,7 +126,7 @@ public interface ManagedServiceFactory {
 	 * <p>
 	 * When the implementation of updated detects any kind of error in the
 	 * configuration properties, it should create a new
-	 * {@link ConfigurationException}which describes the problem.
+	 * {@link ConfigurationException} which describes the problem.
 	 * 
 	 * <p>
 	 * The Configuration Admin service must call this method asynchronously.

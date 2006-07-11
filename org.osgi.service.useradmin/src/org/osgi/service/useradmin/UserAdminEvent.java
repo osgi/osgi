@@ -28,8 +28,8 @@ import org.osgi.framework.ServiceReference;
  * 
  * <p>
  * A type code is used to identify the event. The following event types are
- * defined: {@link #ROLE_CREATED}type, {@link #ROLE_CHANGED}type, and
- * {@link #ROLE_REMOVED}type. Additional event types may be defined in the
+ * defined: {@link #ROLE_CREATED} type, {@link #ROLE_CHANGED} type, and
+ * {@link #ROLE_REMOVED} type. Additional event types may be defined in the
  * future.
  * 
  * @see UserAdmin
@@ -93,8 +93,8 @@ public class UserAdminEvent {
 	 * Returns the type of this event.
 	 * 
 	 * <p>
-	 * The type values are {@link #ROLE_CREATED}type, {@link #ROLE_CHANGED}
-	 * type, and {@link #ROLE_REMOVED}type.
+	 * The type values are {@link #ROLE_CREATED} type, {@link #ROLE_CHANGED}
+	 * type, and {@link #ROLE_REMOVED} type.
 	 * 
 	 * @return The event type.
 	 */

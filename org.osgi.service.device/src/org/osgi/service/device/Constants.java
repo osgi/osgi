@@ -19,7 +19,7 @@ package org.osgi.service.device;
 
 /**
  * This interface defines standard names for property keys associated with
- * {@link Device}and {@link Driver}services.
+ * {@link Device} and {@link Driver} services.
  * 
  * <p>
  * The values associated with these keys are of type <code>java.lang.String</code>,
@@ -41,7 +41,7 @@ public interface Constants {
 	 * 
 	 * <ul>
 	 * <li>It must be independent of the location from where it is obtained.
-	 * <li>It must be independent of the {@link DriverLocator}service that
+	 * <li>It must be independent of the {@link DriverLocator} service that
 	 * downloaded it.
 	 * <li>It must be unique.
 	 * <li>It must be different for different revisions of the same driver.

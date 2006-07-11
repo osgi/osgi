@@ -58,7 +58,7 @@ import org.osgi.framework.InvalidSyntaxException;
  * When the ConfigurationAdmin detects the registration of a Managed Service, it
  * checks its persistent storage for a configuration object whose PID matches
  * the PID registration property (<code>service.pid</code>) of the Managed
- * Service. If found, it calls {@link ManagedService#updated}method with the
+ * Service. If found, it calls {@link ManagedService#updated} method with the
  * new properties. The implementation of a Configuration Admin service must run
  * these call-backs asynchronously to allow proper synchronization.
  * 
@@ -98,7 +98,7 @@ import org.osgi.framework.InvalidSyntaxException;
  * bundle". This is a loose way of referring to the bundle which obtained the
  * Configuration Admin service from the service registry. Implementations of
  * <code>ConfigurationAdmin</code> must use a
- * {@link org.osgi.framework.ServiceFactory}to support this concept.
+ * {@link org.osgi.framework.ServiceFactory} to support this concept.
  * 
  * @version $Revision$
  */
@@ -125,7 +125,7 @@ public interface ConfigurationAdmin {
 	 * 
 	 * The properties of the new <code>Configuration</code> object are
 	 * <code>null</code> until the first time that its
-	 * {@link Configuration#update(Dictionary)}method is called.
+	 * {@link Configuration#update(Dictionary)} method is called.
 	 * 
 	 * <p>
 	 * It is not required that the <code>factoryPid</code> maps to a
@@ -147,7 +147,7 @@ public interface ConfigurationAdmin {
 	 * 
 	 * The properties of the new <code>Configuration</code> object are
 	 * <code>null</code> until the first time that its
-	 * {@link Configuration#update(Dictionary)}method is called.
+	 * {@link Configuration#update(Dictionary)} method is called.
 	 * 
 	 * <p>
 	 * It is not required that the <code>factoryPid</code> maps to a

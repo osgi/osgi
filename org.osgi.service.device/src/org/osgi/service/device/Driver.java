@@ -22,8 +22,8 @@ import org.osgi.framework.ServiceReference;
 /**
  * A <code>Driver</code> service object must be registered by each Driver bundle
  * wishing to attach to Device services provided by other drivers. For each
- * newly discovered {@link Device}object, the device manager enters a bidding
- * phase. The <code>Driver</code> object whose {@link #match}method bids the
+ * newly discovered {@link Device} object, the device manager enters a bidding
+ * phase. The <code>Driver</code> object whose {@link #match} method bids the
  * highest for a particular <code>Device</code> object will be instructed by the
  * device manager to attach to the <code>Device</code> object.
  * 
@@ -37,7 +37,7 @@ public interface Driver {
 	 * 
 	 * The Device service is represented by the given {@link ServiceReference}
 	 * and returns a value indicating how well this driver can support the given
-	 * Device service, or {@link Device#MATCH_NONE}if it cannot support the
+	 * Device service, or {@link Device#MATCH_NONE} if it cannot support the
 	 * given Device service at all.
 	 * 
 	 * <p>

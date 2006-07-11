@@ -132,11 +132,11 @@ public interface HttpService {
 	 * returning.
 	 * <p>
 	 * If the bundle which performed the registration is stopped or otherwise
-	 * "unget"s the Http Service without calling {@link #unregister}then Http
+	 * "unget"s the Http Service without calling {@link #unregister} then Http
 	 * Service must automatically unregister the registration. However, if the
 	 * registration was for a servlet, the <code>destroy</code> method of the
 	 * servlet will not be called in this case since the bundle may be stopped.
-	 * {@link #unregister}must be explicitly called to cause the
+	 * {@link #unregister} must be explicitly called to cause the
 	 * <code>destroy</code> method of the servlet to be called. This can be done
 	 * in the <code>BundleActivator.stop</code> method of the
 	 * bundle registering the servlet.

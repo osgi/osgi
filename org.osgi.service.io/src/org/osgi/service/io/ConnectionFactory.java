@@ -29,7 +29,7 @@ import java.io.*;
  * of the Connector Service will examine the specified name for a scheme. The
  * Connector Service will then look for a Connection Factory service which is
  * registered with the service property <code>IO_SCHEME</code> which matches the
- * scheme. The {@link #createConnection}method of the selected Connection
+ * scheme. The {@link #createConnection} method of the selected Connection
  * Factory will then be called to create the actual <code>Connection</code>
  * object.
  * 
