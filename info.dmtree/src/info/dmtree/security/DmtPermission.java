@@ -121,10 +121,18 @@ public class DmtPermission extends Permission {
 
     /**
      * Creates a new DmtPermission object for the specified DMT URI with the
-     * specified actions. The given URI must be an absolute URI, possibly ending
-     * with the "*" wildcard. The actions string must either be "*" to allow all
-     * actions, or it must contain a non-empty subset of the valid actions,
-     * defined as constants in this class.
+     * specified actions. The given URI can be:
+     * <ul>
+     * <li> <code>"*"</code> which matches all valid (see {@link Uri#isValid})
+     * absolute URIs;
+     * <li> the prefix of an absolute URI followed by the "*" character (for 
+     * example <code>"./OSGi/L*"</code>) which matches all valid absolute URIs 
+     * beginning with the given prefix;
+     * <li> a valid absolute URI which matches itself.
+     * </ul><p>
+     * The actions string must either be "*" to allow all actions, or it must 
+     * contain a non-empty subset of the valid actions, defined as constants in
+     * this class.
      * 
      * @param dmtUri URI of the management object (or subtree)
      * @param actions OMA DM actions allowed
@@ -140,6 +148,12 @@ public class DmtPermission extends Permission {
         if (dmtUri == null)
             throw new NullPointerException("'dmtUri' parameter must not be " +
                     "null.");
+        
+        if(dmtUri.equals("*")) {
+            prefixPath = true;
+            path = "";
+            return;
+        }
         
         if(!Uri.isValidUri(dmtUri))
             throw new IllegalArgumentException("'dmtUri' parameter does not " +
