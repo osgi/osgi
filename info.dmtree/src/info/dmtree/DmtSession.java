@@ -39,8 +39,8 @@ import java.util.Date;
  * method which returns <code>false</code> in case of an invalid URI.
  * <p>
  * Each method of <code>DmtSession</code> that accesses the tree in any way
- * can throw <code>DmtIllegalStateException</code> if the session has been closed
- * or invalidated (due to timeout, fatal exceptions, or unexpectedly
+ * can throw <code>DmtIllegalStateException</code> if the session has been
+ * closed or invalidated (due to timeout, fatal exceptions, or unexpectedly
  * unregistered plugins).
  */
 public interface DmtSession {
