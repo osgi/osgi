@@ -20,7 +20,7 @@ package info.dmtree;
 
 /**
  * Unchecked illegal state exception. This class is used in DMT because 
- * java.lang.IllegalStateException does not exists in CLDC.
+ * java.lang.IllegalStateException does not exist in CLDC.
  * 
  * @version $Revision$
  */
@@ -28,10 +28,16 @@ public class DmtIllegalStateException extends RuntimeException {
 	private static final long	serialVersionUID	= 2015244852018469700L;
 
 	/**
+	 * Nested exception.
+	 */
+	private final Throwable	cause;
+
+	/**
 	 * Create an instance of the exception with no message.
 	 */
 	public DmtIllegalStateException() {
 		super();
+		cause = null;
 	}
 
 	/**
@@ -41,5 +47,35 @@ public class DmtIllegalStateException extends RuntimeException {
 	 */
 	public DmtIllegalStateException(String message) {
 		super(message);
+		cause = null;
+	}
+
+	/**
+	 * Create an instance of the exception with no message.
+	 */
+	public DmtIllegalStateException(Throwable t) {
+		super();
+		cause = t;
+	}
+
+	/**
+	 * Create an instance of the exception with the specific message.
+	 * 
+	 * @param message The reason for the exception.
+	 */
+	public DmtIllegalStateException(String message, Throwable t) {
+		super(message);
+		cause = t;
+	}
+
+	/**
+	 * Returns the cause of this exception or <code>null</code> if no cause
+	 * was specified when this exception was created.
+	 * 
+	 * @return The cause of this exception or <code>null</code> if no cause
+	 *         was specified.
+	 */
+	public Throwable getCause() {
+		return cause;
 	}
 }
