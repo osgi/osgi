@@ -155,7 +155,7 @@ public class Execute implements TestInterface {
 		DmtSession session = null;
 		try {
 			tbc.log("#testExecute003");
-            tbc.openSessionAndSetNodeAcl(TestExecPluginActivator.INTERIOR_NODE, DmtConstants.PRINCIPAL, Acl.EXEC );
+            tbc.openSessionAndSetNodeAcl(TestExecPluginActivator.INTERIOR_NODE, DmtConstants.PRINCIPAL, Acl.EXEC | Acl.GET );
 			tbc.setPermissions(new PermissionInfo(DmtPrincipalPermission.class.getName(),DmtConstants.PRINCIPAL,"*"));
 			session = tbc.getDmtAdmin().getSession(DmtConstants.PRINCIPAL,
 					TestExecPluginActivator.INTERIOR_NODE, DmtSession.LOCK_TYPE_EXCLUSIVE);
@@ -299,7 +299,7 @@ public class Execute implements TestInterface {
 			tbc.log("#testExecute008");
 
 
-            tbc.openSessionAndSetNodeAcl(TestExecPluginActivator.INTERIOR_NODE, DmtConstants.PRINCIPAL, Acl.EXEC );
+            tbc.openSessionAndSetNodeAcl(TestExecPluginActivator.INTERIOR_NODE, DmtConstants.PRINCIPAL, Acl.EXEC | Acl.GET );
 
 			tbc.setPermissions(new PermissionInfo(DmtPrincipalPermission.class.getName(),DmtConstants.PRINCIPAL,"*"));
 			session = tbc.getDmtAdmin().getSession(DmtConstants.PRINCIPAL,

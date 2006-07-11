@@ -189,7 +189,7 @@ public class GetSetNodeType implements TestInterface {
 		try {
 			tbc.log("#testGetSetNodeType005");
 
-            tbc.openSessionAndSetNodeAcl(TestExecPluginActivator.INTERIOR_NODE, DmtConstants.PRINCIPAL, Acl.REPLACE);
+            tbc.openSessionAndSetNodeAcl(TestExecPluginActivator.INTERIOR_NODE, DmtConstants.PRINCIPAL, Acl.REPLACE | Acl.GET );
 			tbc.setPermissions(new PermissionInfo(DmtPrincipalPermission.class.getName(),DmtConstants.PRINCIPAL,"*"));
 			session = tbc.getDmtAdmin().getSession(DmtConstants.PRINCIPAL,TestExecPluginActivator.INTERIOR_NODE,DmtSession.LOCK_TYPE_ATOMIC);
 			
@@ -236,7 +236,9 @@ public class GetSetNodeType implements TestInterface {
 		DmtSession session = null;
 		try {
 			tbc.log("#testGetSetNodeType007");
-			tbc.setPermissions(new PermissionInfo(DmtPermission.class.getName(),DmtConstants.ALL_NODES,DmtPermission.REPLACE));
+            tbc.setPermissions(new PermissionInfo[] {
+                    new PermissionInfo(DmtPermission.class.getName(), DmtConstants.OSGi_ROOT, DmtPermission.GET),
+                    new PermissionInfo(DmtPermission.class.getName(),DmtConstants.ALL_NODES,DmtPermission.REPLACE)});
 			session = tbc.getDmtAdmin().getSession(DmtConstants.OSGi_ROOT,
 					DmtSession.LOCK_TYPE_ATOMIC);
 			session.setNodeType(TestExecPluginActivator.INTERIOR_NODE,"text/xml");

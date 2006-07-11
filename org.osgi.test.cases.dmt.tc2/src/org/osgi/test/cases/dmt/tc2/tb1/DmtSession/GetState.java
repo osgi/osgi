@@ -37,6 +37,8 @@
 package org.osgi.test.cases.dmt.tc2.tb1.DmtSession;
 
 import info.dmtree.DmtSession;
+import info.dmtree.security.DmtPermission;
+
 import org.osgi.service.permissionadmin.PermissionInfo;
 import org.osgi.test.cases.dmt.tc2.tbc.DmtTestControl;
 import org.osgi.test.cases.dmt.tc2.tbc.TestInterface;
@@ -61,9 +63,8 @@ public class GetState implements TestInterface {
 		testGetState002();
 	}
     private void prepare() {
-        //This method do not throw any exceptions, so, if it is checking for DmtPermission an exception is
-        //incorrectly thrown.
-        tbc.setPermissions(new PermissionInfo[0]);
+        tbc.setPermissions(new PermissionInfo[] {
+                new PermissionInfo(DmtPermission.class.getName(), ".", DmtPermission.GET)});
     }
 	/**
 	 * Asserts that getState() returns STATE_OPEN after opening a DmtSession

@@ -401,9 +401,11 @@ public class TestExceptions implements TestInterface {
 	private void openSessionAndSimulateSecurityException() {
 	    DmtSession session= null;
 	    try {
-	        //DmtPermission is not present, so SecurityException must be thrown 
-	        tbc.setPermissions(new PermissionInfo[0]);
+            // DmtPermission.GET is required for session opening
+            tbc.setPermissions(new PermissionInfo(DmtPermission.class.getName(), TestExecPluginActivator.ROOT, DmtPermission.GET));
 	        session = tbc.getDmtAdmin().getSession(TestExecPluginActivator.ROOT,DmtSession.LOCK_TYPE_ATOMIC);
+	        //DmtPermission is not present, so SecurityException must be thrown 
+            tbc.setPermissions(new PermissionInfo[0]);
 			    for (int i=0;i<methods.length;i++) {
 					Method currentMethod = methods[i];
 					

@@ -53,6 +53,7 @@ import info.dmtree.DmtAdmin;
 import info.dmtree.DmtException;
 import info.dmtree.DmtSession;
 import info.dmtree.Uri;
+import info.dmtree.security.DmtPermission;
 
 import java.security.MessageDigest;
 import java.util.PropertyPermission;
@@ -219,19 +220,9 @@ public class DmtTestControl extends DefaultTestBundleControl {
             perm = defaults;
         }
 
-
-        synchronized (permissionWorker) {
-            permissionWorker.setLocation(LOCATION);
-            permissionWorker.setPermissions(perm);
-            permissionWorker.notifyAll();
-            try {
-                permissionWorker.wait(DmtConstants.WAITING_TIME);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
-        
+        permissionWorker.updatePermissions(LOCATION, perm, DmtConstants.WAITING_TIME);
 	}
+    
 	public void setPermissions(PermissionInfo permission) {
         
         PermissionInfo[] perm = new PermissionInfo[] {
@@ -245,18 +236,7 @@ public class DmtTestControl extends DefaultTestBundleControl {
             permission
         };
 
-        synchronized (permissionWorker) {
-            permissionWorker.setLocation(LOCATION);
-            permissionWorker.setPermissions(perm);
-            permissionWorker.notifyAll();
-            try {
-                permissionWorker.wait(DmtConstants.WAITING_TIME);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
-
-
+        permissionWorker.updatePermissions(LOCATION, perm, DmtConstants.WAITING_TIME);
 	}
 	
 	public PermissionAdmin getPermissionAdmin() {
@@ -463,11 +443,7 @@ public class DmtTestControl extends DefaultTestBundleControl {
 	
 	public void unprepare() {
 		uninstallHandler();
-        synchronized (permissionWorker) {
-        	permissionWorker.setRunning(false);
-        	permissionWorker.notifyAll();
-        }
-
+        permissionWorker.shutdown();
 	}
 
 

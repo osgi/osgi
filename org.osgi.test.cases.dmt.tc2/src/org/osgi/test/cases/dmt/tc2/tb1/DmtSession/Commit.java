@@ -38,8 +38,10 @@ package org.osgi.test.cases.dmt.tc2.tb1.DmtSession;
 
 import info.dmtree.DmtSession;
 import info.dmtree.DmtIllegalStateException;
+import info.dmtree.security.DmtPermission;
 
 import org.osgi.service.permissionadmin.PermissionInfo;
+import org.osgi.test.cases.dmt.tc2.tbc.DmtConstants;
 import org.osgi.test.cases.dmt.tc2.tbc.DmtTestControl;
 import org.osgi.test.cases.dmt.tc2.tbc.TestInterface;
 /**
@@ -64,8 +66,9 @@ public class Commit implements TestInterface {
         testCommit004();
 	}
     private void prepare() {
-        //No DmtPermission is needed. 
-        tbc.setPermissions(new PermissionInfo[0]);
+        tbc.setPermissions(new PermissionInfo[] {
+                new PermissionInfo(DmtPermission.class.getName(), ".", DmtPermission.GET)
+        });
     }
 	/**
 	 * This method asserts that whenever a DmtSession with LOCK_TYPE_EXCLUSIVE 

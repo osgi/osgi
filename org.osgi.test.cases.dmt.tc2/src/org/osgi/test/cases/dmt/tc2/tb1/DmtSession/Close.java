@@ -43,6 +43,8 @@ package org.osgi.test.cases.dmt.tc2.tb1.DmtSession;
 
 import info.dmtree.DmtException;
 import info.dmtree.DmtSession;
+import info.dmtree.security.DmtPermission;
+
 import org.osgi.service.permissionadmin.PermissionInfo;
 import org.osgi.test.cases.dmt.tc2.tbc.DmtConstants;
 import org.osgi.test.cases.dmt.tc2.tbc.DmtTestControl;
@@ -70,7 +72,9 @@ public class Close implements TestInterface  {
 	}
     private void prepare() {
         //No DmtPermission is needed. 
-        tbc.setPermissions(new PermissionInfo[0]);
+        tbc.setPermissions(new PermissionInfo[] {
+                new PermissionInfo(DmtPermission.class.getName(), DmtConstants.OSGi_ROOT+"/*", DmtPermission.GET)
+        });
     }
 	/**
 	 * Asserts that after a close, the state is really set to STATE_CLOSED.

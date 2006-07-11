@@ -41,6 +41,7 @@ package org.osgi.test.cases.dmt.tc2.tb1.DmtSession;
 
 import info.dmtree.DmtIllegalStateException;
 import info.dmtree.DmtSession;
+import info.dmtree.security.DmtPermission;
 
 import org.osgi.service.permissionadmin.PermissionInfo;
 import org.osgi.test.cases.dmt.tc2.tbc.DmtTestControl;
@@ -66,8 +67,8 @@ public class Rollback implements TestInterface {
 		testRollback003();
 	}
     private void prepare() {
-        //No DmtPermission is needed. 
-        tbc.setPermissions(new PermissionInfo[0]);
+        tbc.setPermissions(new PermissionInfo[] {
+                new PermissionInfo(DmtPermission.class.getName(), ".", DmtPermission.GET)});
     }
 	/**
 	 * This method asserts that DmtIllegalStateException is thrown 

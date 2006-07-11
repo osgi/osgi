@@ -213,7 +213,7 @@ public class GetSetNodeValue implements TestInterface {
 		try {
 			tbc.log("#testGetSetNodeValue006");
 
-            tbc.openSessionAndSetNodeAcl(TestExecPluginActivator.LEAF_NODE, DmtConstants.PRINCIPAL, Acl.REPLACE );
+            tbc.openSessionAndSetNodeAcl(TestExecPluginActivator.LEAF_NODE, DmtConstants.PRINCIPAL, Acl.REPLACE | Acl.GET );
 			tbc.setPermissions(new PermissionInfo(DmtPrincipalPermission.class.getName(),DmtConstants.PRINCIPAL,"*"));
 			session = tbc.getDmtAdmin().getSession(DmtConstants.PRINCIPAL,TestExecPluginActivator.LEAF_NODE,DmtSession.LOCK_TYPE_ATOMIC);
 			session.setNodeValue(TestExecPluginActivator.LEAF_NODE,dmtData);
@@ -235,7 +235,9 @@ public class GetSetNodeValue implements TestInterface {
 		DmtSession session = null;
 		try {
 			tbc.log("#testGetSetNodeValue007");
-			tbc.setPermissions(new PermissionInfo(DmtPermission.class.getName(),DmtConstants.ALL_NODES,DmtPermission.REPLACE));
+            tbc.setPermissions(new PermissionInfo[] {
+                    new PermissionInfo(DmtPermission.class.getName(), DmtConstants.OSGi_ROOT, DmtPermission.GET),
+                    new PermissionInfo(DmtPermission.class.getName(),DmtConstants.ALL_NODES,DmtPermission.REPLACE)});
 			session = tbc.getDmtAdmin().getSession(DmtConstants.OSGi_ROOT,
 					DmtSession.LOCK_TYPE_ATOMIC);
 			session.setNodeValue(TestExecPluginActivator.LEAF_NODE, dmtData);

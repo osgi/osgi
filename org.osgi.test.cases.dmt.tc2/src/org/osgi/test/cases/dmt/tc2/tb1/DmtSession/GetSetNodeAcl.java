@@ -147,7 +147,7 @@ public class GetSetNodeAcl implements TestInterface {
 		try {
 			tbc.log("#testGetSetNodeAcl003");
 
-            tbc.openSessionAndSetNodeAcl(DmtConstants.OSGi_LOG, DmtConstants.PRINCIPAL, Acl.REPLACE );
+            tbc.openSessionAndSetNodeAcl(DmtConstants.OSGi_LOG, DmtConstants.PRINCIPAL, Acl.REPLACE | Acl.GET );
 			tbc.setPermissions(new PermissionInfo(DmtPrincipalPermission.class.getName(),DmtConstants.PRINCIPAL,"*"));
 			session = tbc.getDmtAdmin().getSession(DmtConstants.PRINCIPAL,
 					DmtConstants.OSGi_LOG, DmtSession.LOCK_TYPE_EXCLUSIVE);

@@ -46,7 +46,7 @@ public class DmtConstants {
 
 	public static final String OSGi_LOG = OSGi_ROOT + "/Log";
 	
-	public static final String UNICODE = "%&@#$©Å?";
+	public static final String UNICODE = "%&@#$Â©Ã…?";
 	
 	public static final String ACLSTR = "Add=*&Delete=*&Replace=*&Get=*";
 
@@ -66,7 +66,7 @@ public class DmtConstants {
 	
 	public static final String ALL_ACTIONS = DmtPermission.ADD + "," + DmtPermission.DELETE + "," +DmtPermission.EXEC + "," + DmtPermission.GET + "," + DmtPermission.REPLACE;
 	 
-	public static final String ALL_NODES = "./*";
+	public static final String ALL_NODES = "*";
     
 	public static final String DDF = "http://www.openmobilealliance.org/tech/DTD/OMA-SyncML-DMDDF-V1_2_0.dtd";
 	

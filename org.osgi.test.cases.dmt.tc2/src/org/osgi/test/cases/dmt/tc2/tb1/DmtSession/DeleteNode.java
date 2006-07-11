@@ -164,7 +164,9 @@ public class DeleteNode implements TestInterface {
 		DmtSession session = null;
 		try {
 			tbc.log("#testDeleteNode004");
-            tbc.setPermissions(new PermissionInfo(DmtPermission.class.getName(), DmtConstants.ALL_NODES,DmtPermission.DELETE));
+            tbc.setPermissions(new PermissionInfo[] {
+                    new PermissionInfo(DmtPermission.class.getName(), TestExecPluginActivator.ROOT, DmtPermission.GET),
+                    new PermissionInfo(DmtPermission.class.getName(), DmtConstants.ALL_NODES,DmtPermission.DELETE)});
 			session = tbc.getDmtAdmin().getSession(TestExecPluginActivator.ROOT,
 					DmtSession.LOCK_TYPE_EXCLUSIVE);
 

@@ -39,6 +39,7 @@
 
 package org.osgi.test.cases.dmt.tc2.tb1.DmtSession;
 
+import info.dmtree.security.DmtPermission;
 import info.dmtree.security.DmtPrincipalPermission;
 import info.dmtree.DmtSession;
 import org.osgi.service.permissionadmin.PermissionInfo;
@@ -65,8 +66,6 @@ public class GetPrincipal implements TestInterface {
 		testGetPrincipal002();
 	}
     private void prepare() {
-        //This method do not throw any exceptions, so, if it is checking for DmtPermission an exception is
-        //incorrectly thrown.
         tbc.setPermissions(new PermissionInfo[0]);
     }
 	/**
@@ -100,6 +99,9 @@ public class GetPrincipal implements TestInterface {
 		DmtSession session = null;
 		try {
 			tbc.log("#testGetPrincipal002");
+            tbc.setPermissions(new PermissionInfo[] {
+                    new PermissionInfo(DmtPermission.class.getName(), ".", DmtPermission.GET)});
+
 			session = tbc.getDmtAdmin().getSession(".",
 					DmtSession.LOCK_TYPE_ATOMIC);
 			tbc.assertNull("Asserts that getPrincipal returns null when the session is local", session

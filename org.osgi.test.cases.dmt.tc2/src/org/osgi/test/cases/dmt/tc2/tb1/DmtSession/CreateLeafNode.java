@@ -310,7 +310,7 @@ public class CreateLeafNode implements TestInterface {
 					DmtSession.LOCK_TYPE_EXCLUSIVE);
 			session.setNodeAcl(TestExecPluginActivator.ROOT, new Acl(
 					new String[] { DmtConstants.PRINCIPAL },
-					new int[] { Acl.ADD }));
+					new int[] { Acl.ADD | Acl.GET }));
 
 			session.close();
 			tbc.setPermissions(new PermissionInfo(DmtPrincipalPermission.class
@@ -348,7 +348,7 @@ public class CreateLeafNode implements TestInterface {
 					DmtSession.LOCK_TYPE_EXCLUSIVE);
 			session.setNodeAcl(TestExecPluginActivator.ROOT, new Acl(
 					new String[] { DmtConstants.PRINCIPAL },
-					new int[] { Acl.ADD }));
+					new int[] { Acl.ADD | Acl.GET }));
 			session.close();
 
 			tbc.setPermissions(new PermissionInfo(DmtPrincipalPermission.class
@@ -386,7 +386,7 @@ public class CreateLeafNode implements TestInterface {
 					DmtSession.LOCK_TYPE_EXCLUSIVE);
 			session.setNodeAcl(TestExecPluginActivator.ROOT, new Acl(
 					new String[] { DmtConstants.PRINCIPAL },
-					new int[] { Acl.ADD }));
+					new int[] { Acl.ADD | Acl.GET }));
 
 			session.close();
 

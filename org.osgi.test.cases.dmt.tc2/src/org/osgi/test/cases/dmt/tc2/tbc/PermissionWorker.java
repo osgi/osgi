@@ -47,10 +47,11 @@ import org.osgi.service.permissionadmin.PermissionInfo;
  */
 public class PermissionWorker extends Thread {
     
-    private DmtTestControl tbc;
+    private final DmtTestControl tbc;
     private PermissionInfo[] permissions;
     private String location;
     private boolean running;
+    
     public PermissionWorker(DmtTestControl tbc) {
         this.tbc = tbc;
     }
@@ -68,32 +69,22 @@ public class PermissionWorker extends Thread {
 
         }
 	}
-    /**
-	 * @return Returns the location.
-	 */
-    public String getLocation() {
-        return location;
-    }
-    /**
-     * @param location The location to set.
-     */
-    public void setLocation(String location) {
+
+    public synchronized void updatePermissions(String location,
+            PermissionInfo[] permissions, long timeout) {
         this.location = location;
-    }
-    /**
-     * @return Returns the permissions.
-     */
-    public PermissionInfo[] getPermissions() {
-        return permissions;
-    }
-    /**
-     * @param permissions The permissions to set.
-     */
-    public void setPermissions(PermissionInfo[] permissions) {
         this.permissions = permissions;
+        notifyAll();
+        try {
+            wait(timeout);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
     }
     
-	public void setRunning(boolean running) {
-		this.running = running;
-	}
+    public synchronized void shutdown() {
+        this.running = false;
+        notifyAll();
+    }
 }

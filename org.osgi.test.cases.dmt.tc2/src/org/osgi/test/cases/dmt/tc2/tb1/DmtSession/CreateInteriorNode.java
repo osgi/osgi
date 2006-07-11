@@ -128,7 +128,7 @@ public class CreateInteriorNode implements TestInterface {
 		try {
 			tbc.log("#testCreateInteriorNode002");
 			
-            tbc.openSessionAndSetNodeAcl(TestExecPluginActivator.ROOT, DmtConstants.PRINCIPAL, Acl.ADD );
+            tbc.openSessionAndSetNodeAcl(TestExecPluginActivator.ROOT, DmtConstants.PRINCIPAL, Acl.ADD | Acl.GET );
 			tbc.setPermissions(new PermissionInfo(DmtPrincipalPermission.class.getName(),DmtConstants.PRINCIPAL,"*"));
 			session = tbc.getDmtAdmin().getSession(DmtConstants.PRINCIPAL, TestExecPluginActivator.ROOT,
 					DmtSession.LOCK_TYPE_ATOMIC);
@@ -153,7 +153,9 @@ public class CreateInteriorNode implements TestInterface {
 		DmtSession session = null;
 		try {
 			tbc.log("#testCreateInteriorNode003");
-			tbc.setPermissions(new PermissionInfo(DmtPermission.class.getName(),DmtConstants.ALL_NODES,DmtPermission.ADD));
+			tbc.setPermissions(new PermissionInfo[] {
+                new PermissionInfo(DmtPermission.class.getName(), ".", DmtPermission.GET),
+                new PermissionInfo(DmtPermission.class.getName(),DmtConstants.ALL_NODES,DmtPermission.ADD)});
 			session = tbc.getDmtAdmin().getSession(".",DmtSession.LOCK_TYPE_EXCLUSIVE);
 			session.createInteriorNode(TestExecPluginActivator.INEXISTENT_NODE);
 			tbc.pass("createInteriorNode was successfully executed");
@@ -172,14 +174,14 @@ public class CreateInteriorNode implements TestInterface {
      * ACL of the new node so that the creating server has Add, Delete and 
      * Replace rights on the new node.
      * 
-     * @spec DmtSession.createInteriorNode(String,String)
+     * @spec DmtSession.createInteriorNode(String)
      */
     private void testCreateInteriorNode004() {
         DmtSession session = null;
         try {
             tbc.log("#testCreateInteriorNode004");
 
-            tbc.openSessionAndSetNodeAcl(TestExecPluginActivator.ROOT, DmtConstants.PRINCIPAL, Acl.ADD );
+            tbc.openSessionAndSetNodeAcl(TestExecPluginActivator.ROOT, DmtConstants.PRINCIPAL, Acl.ADD | Acl.GET );
             tbc.setPermissions(new PermissionInfo(DmtPrincipalPermission.class.getName(),DmtConstants.PRINCIPAL,"*"));
             session = tbc.getDmtAdmin().getSession(DmtConstants.PRINCIPAL, TestExecPluginActivator.ROOT,
                     DmtSession.LOCK_TYPE_ATOMIC);
@@ -242,7 +244,7 @@ public class CreateInteriorNode implements TestInterface {
 		try {
 			tbc.log("#testCreateInteriorNode006");
 
-            tbc.openSessionAndSetNodeAcl(TestExecPluginActivator.ROOT, DmtConstants.PRINCIPAL, Acl.ADD );
+            tbc.openSessionAndSetNodeAcl(TestExecPluginActivator.ROOT, DmtConstants.PRINCIPAL, Acl.ADD | Acl.GET );
 			tbc.setPermissions(new PermissionInfo(DmtPrincipalPermission.class.getName(),DmtConstants.PRINCIPAL,"*"));
 			session = tbc.getDmtAdmin().getSession(DmtConstants.PRINCIPAL, TestExecPluginActivator.ROOT,
 					DmtSession.LOCK_TYPE_EXCLUSIVE);
@@ -269,7 +271,9 @@ public class CreateInteriorNode implements TestInterface {
 		DmtSession session = null;
 		try {
 			tbc.log("#testCreateInteriorNode007");
-			tbc.setPermissions(new PermissionInfo(DmtPermission.class.getName(),DmtConstants.ALL_NODES,DmtPermission.ADD));
+			tbc.setPermissions(new PermissionInfo[] {
+                    new PermissionInfo(DmtPermission.class.getName(), ".", DmtPermission.GET),
+                    new PermissionInfo(DmtPermission.class.getName(),DmtConstants.ALL_NODES,DmtPermission.ADD)});
 			session = tbc.getDmtAdmin().getSession(".",DmtSession.LOCK_TYPE_EXCLUSIVE);
 			session.createInteriorNode(TestExecPluginActivator.INEXISTENT_NODE,
 					DmtConstants.MIMETYPE);
