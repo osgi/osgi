@@ -36,11 +36,11 @@ public class InvalidSyntaxException extends Exception {
 	/**
 	 * The invalid filter string.
 	 */
-	private String		filter;
+	private final String		filter;
 	/**
 	 * Nested exception.
 	 */
-	private Throwable	cause;
+	private final Throwable	cause;
 
 	/**
 	 * Creates an exception of type <code>InvalidSyntaxException</code>.

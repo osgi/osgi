@@ -58,7 +58,7 @@ public class UPnPException extends Exception {
 	 * Key for an error information that is an int type variable and that is
 	 * used to identify occured errors.
 	 */
-	private int				errorCode;
+	private final int				errorCode;
 
 	/**
 	 * This constructor creates a UPnPException on the specified error code and

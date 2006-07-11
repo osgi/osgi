@@ -29,7 +29,7 @@ public class NamespaceException extends Exception {
 	/**
 	 * Nested exception.
 	 */
-	private Throwable	cause;
+	private final Throwable	cause;
 
 	/**
 	 * Construct a <code>NamespaceException</code> object with a detail message.

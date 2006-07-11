@@ -28,7 +28,7 @@ public class ComponentException extends RuntimeException {
 	/**
 	 * Nested exception.
 	 */
-	private Throwable	cause;
+	private final Throwable	cause;
 
 	/**
 	 * Construct a new ComponentException with the specified message and cause.

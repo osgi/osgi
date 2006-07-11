@@ -28,7 +28,7 @@ public class BackingStoreException extends Exception {
 	/**
 	 * Nested exception.
 	 */
-	private Throwable	cause;
+	private final Throwable	cause;
 
 	/**
 	 * Constructs a <code>BackingStoreException</code> with the specified detail
@@ -38,6 +38,7 @@ public class BackingStoreException extends Exception {
 	 */
 	public BackingStoreException(String s) {
 		super(s);
+		this.cause = null;
 	}
 	
 	/**

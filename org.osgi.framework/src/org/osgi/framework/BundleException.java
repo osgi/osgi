@@ -39,7 +39,7 @@ public class BundleException extends Exception {
 	/**
 	 * Nested exception.
 	 */
-	private Throwable	cause;
+	private final Throwable	cause;
 
 	/**
 	 * Creates a <code>BundleException</code> that wraps another exception.

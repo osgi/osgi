@@ -26,13 +26,13 @@ package org.osgi.service.cm;
 public class ConfigurationException extends Exception {
 	static final long	serialVersionUID	= -1690090413441769377L;
 
-	private String		property;
-	private String		reason;
+	private final String		property;
+	private final String		reason;
 
 	/**
 	 * Nested exception.
 	 */
-	private Throwable	cause;
+	private final Throwable	cause;
 
 	/**
 	 * Create a <code>ConfigurationException</code> object.

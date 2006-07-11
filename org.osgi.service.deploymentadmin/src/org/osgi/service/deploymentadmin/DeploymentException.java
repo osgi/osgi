@@ -200,9 +200,9 @@ public class DeploymentException extends Exception {
 	 */
 	public static final int	CODE_TIMEOUT					= 465;
 
-	private int				code;
-	private String			message;
-	private Throwable		cause;
+	private final int				code;
+	private final String			message;
+	private final Throwable		cause;
 
 	/**
 	 * Create an instance of the exception.
