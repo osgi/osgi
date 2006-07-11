@@ -248,7 +248,7 @@ class ConfigPlugin implements DataPlugin, ManagedService {
                     "Error looking up the configuration with the given PID.");
         } catch (InvalidSyntaxException e) {
             // should not happen, the outside parameter (pid) is escaped
-            throw new DmtIllegalStateException("Syntax error in configuration " +
+            throw new IllegalStateException("Syntax error in configuration " +
                     "lookup: " + e.getMessage());
         }
 

@@ -638,7 +638,7 @@ class Value {
         
         // should never happen if Configuration Admin/Plugin works correctly
         if(!Type.getTypeByClass(value.getClass()).equals(this.type))
-            throw new DmtIllegalStateException("Value object created with " +
+            throw new IllegalStateException("Value object created with " +
                     "incompatible type and value parameters.");
         
         if(value instanceof byte[])
@@ -732,7 +732,7 @@ class Value {
      */ 
     Object getObject() {
         if(type == null) // shouldn't happen, type must be set at this point
-            throw new DmtIllegalStateException("The type of the stored value is " +
+            throw new IllegalStateException("The type of the stored value is " +
                     "not known yet.");
         
         return value;

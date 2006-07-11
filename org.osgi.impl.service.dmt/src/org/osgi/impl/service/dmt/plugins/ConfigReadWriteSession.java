@@ -87,7 +87,7 @@ class ConfigReadWriteSession extends ConfigReadOnlySession
                     configuration.update(dict);
                     break;
                 default: // cannot happen
-                    throw new DmtIllegalStateException("Unknown event type: " +
+                    throw new IllegalStateException("Unknown event type: " +
                             event.getType());
                 }
             } catch (ConfigPluginException e) {
@@ -265,7 +265,7 @@ class ConfigReadWriteSession extends ConfigReadOnlySession
                 
                 Type type = Type.getTypeByData(data);
                 if(type == null) // should not happen because of meta-data
-                    throw new DmtIllegalStateException("Invalid data received " +
+                    throw new IllegalStateException("Invalid data received " +
                             "for the type: " + data);
                 
                 try {
@@ -282,7 +282,7 @@ class ConfigReadWriteSession extends ConfigReadOnlySession
             
             Cardinality cardinality = Cardinality.getCardinalityByData(data);
             if(cardinality == null) // should not happen because of meta-data
-                throw new DmtIllegalStateException("Invalid data received for " +
+                throw new IllegalStateException("Invalid data received for " +
                         "the cardinality: " + data);
             
             try {
@@ -821,7 +821,7 @@ class Event {
             throw new IllegalArgumentException("Cannot make 'recreate' events" +
                     "directly, these can only be changed from 'delete' events.");
         default:
-            throw new DmtIllegalStateException("Unknown event type.");
+            throw new IllegalStateException("Unknown event type.");
         }
         
         this.type = type;
@@ -831,7 +831,7 @@ class Event {
     
     void delete() {
         if(type != EVENT_TYPE_UPDATE && type != EVENT_TYPE_RECREATE)
-            throw new DmtIllegalStateException("Only 'update' or 'recreate' " +
+            throw new IllegalStateException("Only 'update' or 'recreate' " +
                     "events can be changed to 'delete'.");
         
         type = EVENT_TYPE_DELETE;
@@ -840,7 +840,7 @@ class Event {
     
     void recreate() {
         if(type != EVENT_TYPE_DELETE)
-            throw new DmtIllegalStateException("Only 'delete' events can be " + 
+            throw new IllegalStateException("Only 'delete' events can be " + 
                     "changed to 'recreate'.");
         
         type = EVENT_TYPE_RECREATE;
@@ -949,7 +949,7 @@ class Conf {
     
     void createPid(String pid) {
         if(this.pid != null)
-            throw new DmtIllegalStateException("PID already set.");
+            throw new IllegalStateException("PID already set.");
         if(pid == null || pid.length() == 0)
             throw new IllegalArgumentException("PID parameter cannot be null " +
                     "or empty.");
@@ -959,7 +959,7 @@ class Conf {
     
     void createFactoryPid(String factoryPid) {
         if(!canCreateFactoryPid)
-            throw new DmtIllegalStateException("Cannot set factory PID, not a " +
+            throw new IllegalStateException("Cannot set factory PID, not a " +
                     "factory configuration or PID already set.");
         if(factoryPid == null || factoryPid.length() == 0)
             throw new IllegalArgumentException("Factory PID parameter cannot " +
@@ -971,7 +971,7 @@ class Conf {
     
     void createLocation(String location) {
         if(!canCreateLocation)
-            throw new DmtIllegalStateException("Location already set.");
+            throw new IllegalStateException("Location already set.");
         if(location != null && location.length() == 0)
             throw new IllegalArgumentException("Location parameter cannot be " +
                     "empty.");
