@@ -123,14 +123,23 @@ public class DmtPermission extends Permission {
      * Creates a new DmtPermission object for the specified DMT URI with the
      * specified actions. The given URI can be:
      * <ul>
-     * <li> <code>"*"</code> which matches all valid (see {@link Uri#isValid})
-     * absolute URIs;
-     * <li> the prefix of an absolute URI followed by the "*" character (for 
-     * example <code>"./OSGi/L*"</code>) which matches all valid absolute URIs 
-     * beginning with the given prefix;
-     * <li> a valid absolute URI which matches itself.
-     * </ul><p>
-     * The actions string must either be "*" to allow all actions, or it must 
+     * <li> <code>"*"</code>, which matches all valid
+     * (see {@link Uri#isValidUri}) absolute URIs;
+     * <li> the prefix of an absolute URI followed by the <code>*</code> 
+     * character (for example <code>"./OSGi/L*"</code>), which matches all valid
+     * absolute URIs beginning with the given prefix;
+     * <li> a valid absolute URI, which matches itself.
+     * </ul>
+     * <p>
+     * Since the <code>*</code> character is itself a valid URI character, it 
+     * can appear as the last character of a valid absolute URI. To distinguish
+     * this case from using <code>*</code> as a wildcard, the <code>*</code> 
+     * character at the end of the URI must be escaped with the <code>\</code> 
+     * charater. For example the URI <code>"./a*"</code> matches 
+     * <code>"./a"</code>, <code>"./aa"</code>, <code>"./a/b"</code> etc while
+     * <code>"./a\*"</code> matches <code>"./a*"</code> only.
+     * <p>
+     * The actions string must either be "*" to allow all actions, or it must
      * contain a non-empty subset of the valid actions, defined as constants in
      * this class.
      * 
@@ -149,17 +158,26 @@ public class DmtPermission extends Permission {
             throw new NullPointerException("'dmtUri' parameter must not be " +
                     "null.");
         
-        if(dmtUri.equals("*")) {
-            prefixPath = true;
-            path = "";
-            return;
+        prefixPath = dmtUri.endsWith("*") && !dmtUri.endsWith("\\*");
+        
+        if(prefixPath) {
+            dmtUri = dmtUri.substring(0, dmtUri.length() - 1);
+
+            // the single "*" as dmtUri is the only valid non-absolute URI param
+            if(dmtUri.length() == 0) {
+                path = "";
+                return;
+            }
+            
+            if(dmtUri.endsWith("/") && !dmtUri.endsWith("\\/"))
+                dmtUri = dmtUri.substring(0, dmtUri.length() - 1);
         }
         
         if(!Uri.isValidUri(dmtUri))
             throw new IllegalArgumentException("'dmtUri' parameter does not " +
                     "contain a valid URI.");
         
-        if (!Uri.isAbsoluteUri(dmtUri))
+        if(!Uri.isAbsoluteUri(dmtUri))
             throw new IllegalArgumentException("'dmtUri' parameter does not " +
                     "contain an absolute URI.");
         
@@ -177,15 +195,7 @@ public class DmtPermission extends Permission {
             }
             i++;
         }
-        dmtUri = sb.toString();
-        
-        if (dmtUri.endsWith("*")) {
-            prefixPath = true;
-            path = dmtUri.substring(0, dmtUri.length() - 1);
-        } else {
-            prefixPath = false;
-            path = dmtUri;
-        }
+        path = sb.toString();
     }
 
     /**
