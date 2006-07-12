@@ -17,9 +17,9 @@
  */
 package org.osgi.service.provisioning;
 
+import java.io.IOException;
 import java.util.Dictionary;
 import java.util.zip.ZipInputStream;
-import java.io.IOException;
 
 /**
  * Service for managing the initial provisioning information.

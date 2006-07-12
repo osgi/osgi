@@ -18,7 +18,6 @@
 package info.dmtree;
 
 import java.io.PrintStream;
-
 import java.util.Vector;
 
 /**

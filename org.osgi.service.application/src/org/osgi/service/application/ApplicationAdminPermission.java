@@ -19,13 +19,9 @@
 package org.osgi.service.application;
 
 import java.security.Permission;
-import java.util.Hashtable;
-import java.util.StringTokenizer;
-import java.util.Vector;
+import java.util.*;
 
-import org.osgi.framework.Filter;
-import org.osgi.framework.FrameworkUtil;
-import org.osgi.framework.InvalidSyntaxException;
+import org.osgi.framework.*;
 
 /**
  * This class implements permissions for manipulating applications and

@@ -17,7 +17,7 @@
  */
 package org.osgi.service.useradmin;
 
-import org.osgi.framework.*;
+import org.osgi.framework.InvalidSyntaxException;
 
 /**
  * This interface is used to manage a database of named <code>Role</code> objects,

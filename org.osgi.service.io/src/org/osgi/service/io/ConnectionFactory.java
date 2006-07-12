@@ -17,8 +17,9 @@
  */
 package org.osgi.service.io;
 
-import javax.microedition.io.*;
-import java.io.*;
+import java.io.IOException;
+
+import javax.microedition.io.Connection;
 
 /**
  * A Connection Factory service is called by the implementation of the Connector

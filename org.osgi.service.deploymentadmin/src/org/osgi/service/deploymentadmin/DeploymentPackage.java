@@ -18,9 +18,7 @@
 
 package org.osgi.service.deploymentadmin;
 
-import org.osgi.framework.Bundle;
-import org.osgi.framework.ServiceReference;
-import org.osgi.framework.Version;
+import org.osgi.framework.*;
 
 /**
   * The <code>DeploymentPackage</code> object represents a deployment package (already installed

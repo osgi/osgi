@@ -18,6 +18,8 @@
 
 package org.osgi.service.deploymentadmin;
 
+import java.io.InputStream;
+
 /**
  * Checked exception received when something fails during any deployment
  * processes. A <code>DeploymentException</code> always contains an error code 

@@ -17,7 +17,8 @@
  */
 package org.osgi.util.position;
 
-import org.osgi.util.measurement.*;
+import org.osgi.util.measurement.Measurement;
+import org.osgi.util.measurement.Unit;
 
 /**
  * Position represents a geographic location, based on the WGS84 System (World

@@ -17,10 +17,12 @@
  */
 package org.osgi.util.gsm;
 
-import java.security.*;
+import java.security.AccessController;
+import java.security.PrivilegedAction;
 
 import org.osgi.framework.Bundle;
-import org.osgi.service.condpermadmin.*;
+import org.osgi.service.condpermadmin.Condition;
+import org.osgi.service.condpermadmin.ConditionInfo;
 
 /**
  * Class representing an IMEI condition. Instances of this class contain a

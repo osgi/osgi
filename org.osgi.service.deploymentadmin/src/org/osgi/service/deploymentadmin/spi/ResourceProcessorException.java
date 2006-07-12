@@ -17,7 +17,7 @@
  */
 package org.osgi.service.deploymentadmin.spi;
 
-import org.osgi.service.deploymentadmin.spi.ResourceProcessor;
+import java.io.InputStream;
 
 /**
  * Checked exception received when something fails during a call to a Resource 

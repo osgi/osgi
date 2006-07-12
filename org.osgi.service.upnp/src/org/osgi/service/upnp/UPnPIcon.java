@@ -17,8 +17,8 @@
  */
 package org.osgi.service.upnp;
 
-import java.io.InputStream;
 import java.io.IOException;
+import java.io.InputStream;
 
 /**
  * A UPnP icon representation.

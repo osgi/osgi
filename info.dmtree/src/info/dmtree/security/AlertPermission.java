@@ -19,10 +19,7 @@ package info.dmtree.security;
 
 import java.security.Permission;
 import java.security.PermissionCollection;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Enumeration;
-import java.util.Iterator;
+import java.util.*;
 
 /**
  * Indicates the callers authority to send alerts to management servers,

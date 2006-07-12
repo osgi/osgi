@@ -18,11 +18,9 @@
 package org.osgi.service.wireadmin;
 
 import java.io.IOException;
-import java.util.Hashtable;
+import java.security.*;
 import java.util.Enumeration;
-import java.security.Permission;
-import java.security.BasicPermission;
-import java.security.PermissionCollection;
+import java.util.Hashtable;
 
 /**
  * Permission for the scope of a <code>Wire</code> object. When a

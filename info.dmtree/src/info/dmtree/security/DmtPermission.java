@@ -22,11 +22,7 @@ import info.dmtree.Uri;
 
 import java.security.Permission;
 import java.security.PermissionCollection;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Enumeration;
-import java.util.Iterator;
-import java.util.StringTokenizer;
+import java.util.*;
 
 /**
  * Controls access to management objects in the Device Management Tree (DMT). It

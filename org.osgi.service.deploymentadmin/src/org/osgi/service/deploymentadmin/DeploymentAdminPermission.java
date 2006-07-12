@@ -18,9 +18,12 @@
 
 package org.osgi.service.deploymentadmin;
 
+import java.io.InputStream;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.security.*;
+
+import org.osgi.framework.Bundle;
 
 /**
  * DeploymentAdminPermission controls access to the Deployment Admin service.<p>

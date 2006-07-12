@@ -17,9 +17,10 @@
  */
 package org.osgi.service.http;
 
+import java.util.Dictionary;
+
 import javax.servlet.Servlet;
 import javax.servlet.ServletException;
-import java.util.Dictionary;
 
 /**
  * The Http Service allows other bundles in the OSGi environment to dynamically

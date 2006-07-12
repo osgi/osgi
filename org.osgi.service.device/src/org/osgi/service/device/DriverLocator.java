@@ -17,9 +17,9 @@
  */
 package org.osgi.service.device;
 
-import java.util.Dictionary;
-import java.io.InputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.util.Dictionary;
 
 /**
  * A Driver Locator service can find and load device driver bundles given a

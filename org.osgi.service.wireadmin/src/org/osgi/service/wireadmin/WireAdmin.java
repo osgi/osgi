@@ -18,6 +18,7 @@
 package org.osgi.service.wireadmin;
 
 import java.util.Dictionary;
+
 import org.osgi.framework.InvalidSyntaxException;
 
 /**

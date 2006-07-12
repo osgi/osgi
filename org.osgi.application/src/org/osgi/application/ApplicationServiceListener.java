@@ -20,9 +20,7 @@ package org.osgi.application;
 
 import java.util.EventListener;
 
-import org.osgi.framework.Bundle;
-import org.osgi.framework.ServicePermission;
-import org.osgi.framework.ServiceReference;
+import org.osgi.framework.*;
 
 /**
  * An <code>ApplicationServiceEvent</code> listener. When a 

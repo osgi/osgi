@@ -18,11 +18,9 @@
 package org.osgi.service.useradmin;
 
 import java.io.IOException;
-import java.util.Hashtable;
+import java.security.*;
 import java.util.Enumeration;
-import java.security.Permission;
-import java.security.BasicPermission;
-import java.security.PermissionCollection;
+import java.util.Hashtable;
 
 /**
  * Permission to configure and access the {@link Role} objects managed by a User

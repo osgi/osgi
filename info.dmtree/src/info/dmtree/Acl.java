@@ -17,11 +17,7 @@
  */
 package info.dmtree;
 
-import java.util.Iterator;
-import java.util.TreeMap;
-import java.util.Vector;
-import java.util.Arrays;
-import java.util.Map;
+import java.util.*;
 
 /**
  * <code>Acl</code> is an immutable class representing structured access to

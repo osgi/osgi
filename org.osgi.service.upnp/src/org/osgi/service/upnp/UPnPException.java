@@ -17,7 +17,6 @@
  */
 package org.osgi.service.upnp;
 
-import java.lang.Exception;
 
 /**
  * There are several defined error situations describing UPnP problems while a

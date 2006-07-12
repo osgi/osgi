@@ -18,7 +18,9 @@
 package org.osgi.service.io;
 
 import java.io.*;
-import javax.microedition.io.*;
+
+import javax.microedition.io.Connection;
+import javax.microedition.io.Connector;
 
 /**
  * The Connector Service should be called to create and open

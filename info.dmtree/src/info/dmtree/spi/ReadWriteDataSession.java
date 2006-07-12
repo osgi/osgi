@@ -17,10 +17,7 @@
  */
 package info.dmtree.spi;
 
-import info.dmtree.DmtData;
-import info.dmtree.DmtException;
-import info.dmtree.DmtSession;
-import info.dmtree.MetaNode;
+import info.dmtree.*;
 
 /**
  * Provides non-atomic read-write access to the part of the tree handled by the
