@@ -174,8 +174,7 @@ public class Event {
 		}
 	}
 
-	private static final String	alphaGrammar	= "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"; //$NON-NLS-1$
-	private static final String	tokenGrammar	= alphaGrammar + "0123456789_"; //$NON-NLS-1$
+	private static final String	tokenAlphabet	= "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789_-"; //$NON-NLS-1$
 
 	/**
 	 * Validate a token.
@@ -184,14 +183,11 @@ public class Event {
 	 */
 	private void validateToken(String token) {
 		int length = token.length();
-		if (length < 1) {
+		if (length < 1) {	// token must contain at least one character
 			throw new IllegalArgumentException("invalid topic"); //$NON-NLS-1$
 		}
-		if (alphaGrammar.indexOf(token.charAt(0)) == -1) { //$NON-NLS-1$
-			throw new IllegalArgumentException("invalid topic"); //$NON-NLS-1$
-		}
-		for (int i = 1; i < length; i++) {
-			if (tokenGrammar.indexOf(token.charAt(i)) == -1) { //$NON-NLS-1$
+		for (int i = 0; i < length; i++) { // each character in the token must be from the token alphabet
+			if (tokenAlphabet.indexOf(token.charAt(i)) == -1) { //$NON-NLS-1$
 				throw new IllegalArgumentException("invalid topic"); //$NON-NLS-1$
 			}
 		}

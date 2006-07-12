@@ -47,7 +47,7 @@ import org.osgi.service.event.*;
 public class EventTestControl extends DefaultTestBundleControl {
 	
 	private ServiceReference eventAdminSR;
-  private EventAdmin eventAdmin;
+  EventAdmin eventAdmin;
   private Bundle tb1;
   private Bundle tb2;
   private static String[] methods = new String[] {"testIstallation", // "TC1"
@@ -251,8 +251,8 @@ public class EventTestControl extends DefaultTestBundleControl {
    * topic := token ( "/" token )*
    */
   public void testEventConstruction() {
-    String[] illegalTopics = new String[] {"", "*", "/error_topic", "//error_topic1", "1/error_topic2", "topic/error_topic3/", "error_topic&"};
-    String[]   legalTopics = new String[] {"ACTION0", "org/osgi/test/cases/event/ACTION1", "org/osgi/test/cases/event/ACTION2"};
+    String[] illegalTopics = new String[] {"", "*", "/error_topic", "//error_topic1", "é/error_topic2", "topic/error_topic3/", "error_topic&", "topic//error-topic4", "topic\\error_topic5"};
+    String[]   legalTopics = new String[] {"ACTION0", "org/osgi/test/cases/event/ACTION1", "org/osgi/test/cases/event/ACTION2", "0", "_/-", "_topic", "-topic", "9topic0/-topic_/_topic-"};
     Hashtable properties = new Hashtable();
     String message = "Exception in event construction with topic:[";
     String topic;
@@ -403,11 +403,11 @@ public class EventTestControl extends DefaultTestBundleControl {
       events[i] = new Event("test/Event" + i, new Hashtable()); 
     }    
     
-    MultyPostSendThread []mpts = new MultyPostSendThread[events.length];
+    MultiPostSendThread []mpts = new MultiPostSendThread[events.length];
     
     Object lock = new Object();
     for (int i = 0; i < events.length; i++) {
-      mpts[i] = new MultyPostSendThread(events[i], lock, "[MultyPostSendThread] - " + i, true);
+      mpts[i] = new MultiPostSendThread(events[i], lock, "[MultiPostSendThread] - " + i, true);
       mpts[i].start();
     }    
     
@@ -431,12 +431,12 @@ public class EventTestControl extends DefaultTestBundleControl {
       Thread.sleep(3000); 
     } catch (InterruptedException e) {
     }     
-    trace("All MultyPostSendThread started, notify all...");
+    trace("All MultiPostSendThread started, notify all...");
     //here notify all threads to start posting events simultaneously
     synchronized (lock) {
       lock.notifyAll();
     }
-    trace("Wait all MultyPostSendThread to post events");
+    trace("Wait all MultiPostSendThread to post events");
     //wait to ensure that events are recieved asynchronous
     try { 
       Thread.sleep(5000); 
@@ -474,12 +474,12 @@ public class EventTestControl extends DefaultTestBundleControl {
   /**
    * This is used to start posting or sending simultaneously.
    */
-  class MultyPostSendThread extends Thread {
+  class MultiPostSendThread extends Thread {
 	  private Event event;
     private Object lock;
     private boolean post;
 
-    MultyPostSendThread(Event event, Object lock, String name, boolean post) {
+    MultiPostSendThread(Event event, Object lock, String name, boolean post) {
 		  super(name);
       this.lock = lock;
 		  this.event = event;
@@ -487,7 +487,7 @@ public class EventTestControl extends DefaultTestBundleControl {
 	  }
 	  
     public void run() {
-      trace("MultyPostSendThread started on event: " + event);
+      trace("MultiPostSendThread started on event: " + event);
       synchronized (lock) {
         try {
           lock.wait();
@@ -499,7 +499,7 @@ public class EventTestControl extends DefaultTestBundleControl {
       } else {
         eventAdmin.sendEvent(event);
       }
-      trace("MultyPostSendThread " + (post?"post":"send") + " event: " + event);
+      trace("MultiPostSendThread " + (post?"post":"send") + " event: " + event);
     }
   }
   
@@ -527,11 +527,11 @@ public class EventTestControl extends DefaultTestBundleControl {
       events[i] = new Event("test/Event" + i, new Hashtable()); 
     }    
     
-    MultyPostSendThread []mpts = new MultyPostSendThread[events.length];
+    MultiPostSendThread []mpts = new MultiPostSendThread[events.length];
     
     Object lock = new Object();
     for (int i = 0; i < events.length; i++) {
-      mpts[i] = new MultyPostSendThread(events[i], lock, "[MultyPostSendThread] - " + i, false);
+      mpts[i] = new MultiPostSendThread(events[i], lock, "[MultiPostSendThread] - " + i, false);
       mpts[i].start();
     }    
     
@@ -555,12 +555,12 @@ public class EventTestControl extends DefaultTestBundleControl {
       Thread.sleep(3000); 
     } catch (InterruptedException e) {
     }     
-    trace("All MultyPostSendThread started, notify all...");
+    trace("All MultiPostSendThread started, notify all...");
     //here notify all threads to start posting events simultaneously
     synchronized (lock) {
       lock.notifyAll();
     }
-    trace("Wait all MultyPostSendThread to send events");
+    trace("Wait all MultiPostSendThread to send events");
     //wait to ensure that events are recieved asynchronous
     try { 
       Thread.sleep(5000); 
