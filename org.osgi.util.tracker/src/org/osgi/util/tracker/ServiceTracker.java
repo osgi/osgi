@@ -47,8 +47,7 @@ public class ServiceTracker implements ServiceTrackerCustomizer {
 	/* set this to true to compile in debug messages */
 	static final boolean				DEBUG			= false;
 	/**
-	 * Bundle context this <code>ServiceTracker</code> object is tracking
-	 * against.
+	 * Bundle context against which this <code>ServiceTracker</code> object is tracking.
 	 */
 	protected final BundleContext		context;
 	/**
