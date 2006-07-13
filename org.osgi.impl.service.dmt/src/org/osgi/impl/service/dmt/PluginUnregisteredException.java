@@ -21,9 +21,9 @@ package org.osgi.impl.service.dmt;
 /**
  * Indicates that a plugin has been unregistered while in use by a session.
  * It is thrown by PluginSessionWrapper and caught by SessionWrapper, which 
- * invalidates the session (rolling back if needed), and throws an
- * DmtIllegalStateException.  The exceptions have to be runtime, becasue isNodeUri
- * cannot throw checked exceptions.
+ * invalidates the session (rolling back if needed), and throws a
+ * DmtIllegalStateException.  The exceptions have to be runtime, becasue
+ * isNodeUri cannot throw checked exceptions.
  */
 public class PluginUnregisteredException extends RuntimeException {
     private String uri;
