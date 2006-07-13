@@ -1,6 +1,6 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: ${p}.tbc.test
+Bundle-Name: ${p}.tbc.dmtree
 Bundle-SymbolicName: ${p}.tbc.test
 Bundle-Activator: $(p).tbc.TestControl
 Bundle-Version: 4
