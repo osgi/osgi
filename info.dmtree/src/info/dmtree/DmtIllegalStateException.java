@@ -23,62 +23,62 @@ package info.dmtree;
  * java.lang.IllegalStateException does not exist in CLDC.
  */
 public class DmtIllegalStateException extends RuntimeException {
-	private static final long	serialVersionUID	= 2015244852018469700L;
+    private static final long serialVersionUID = 2015244852018469700L;
 
-	/**
-	 * Nested exception.
-	 */
-	private final Throwable	cause;
+    /**
+     * Nested exception.
+     */
+    private final Throwable cause;
 
-	/**
-	 * Create an instance of the exception with no message.
-	 */
-	public DmtIllegalStateException() {
-		super();
-		cause = null;
-	}
+    /**
+     * Create an instance of the exception with no message.
+     */
+    public DmtIllegalStateException() {
+        super();
+        cause = null;
+    }
 
-	/**
-	 * Create an instance of the exception with the specified message.
-	 * 
-	 * @param message the reason for the exception
-	 */
-	public DmtIllegalStateException(String message) {
-		super(message);
-		cause = null;
-	}
+    /**
+     * Create an instance of the exception with the specified message.
+     * 
+     * @param message the reason for the exception
+     */
+    public DmtIllegalStateException(String message) {
+        super(message);
+        cause = null;
+    }
 
-	/**
-	 * Create an instance of the exception with the specified cause exception
+    /**
+     * Create an instance of the exception with the specified cause exception
      * and no message.
      * 
      * @param cause the cause of the exception
-	 */
-	public DmtIllegalStateException(Throwable cause) {
-		super();
-		this.cause = cause;
-	}
+     */
+    public DmtIllegalStateException(Throwable cause) {
+        super();
+        this.cause = cause;
+    }
 
-	/**
-	 * Create an instance of the exception with the specified message and cause
+    /**
+     * Create an instance of the exception with the specified message and cause
      * exception.
-	 * 
-	 * @param message the reason for the exception
+     * 
+     * @param message the reason for the exception
      * @param cause the cause of the exception
-	 */
-	public DmtIllegalStateException(String message, Throwable cause) {
-		super(message);
-		this.cause = cause;
-	}
+     */
+    public DmtIllegalStateException(String message, Throwable cause) {
+        super(message);
+        this.cause = cause;
+    }
 
-	/**
-	 * Returns the cause of this exception or <code>null</code> if no cause
-	 * was specified when this exception was created.
-	 * 
-	 * @return the cause of this exception or <code>null</code> if no cause
-	 *         was specified
-	 */
-	public Throwable getCause() {
-		return cause;
-	}
+    /**
+     * Returns the cause of this exception or <code>null</code> if no cause
+     * was specified when this exception was created.
+     * 
+     * @return the cause of this exception or <code>null</code> if no cause
+     *         was specified
+     */
+    public Throwable getCause() {
+        return cause;
+    }
 }
