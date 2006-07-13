@@ -1,18 +1,13 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: ${p}.tbc.dmtree
-Bundle-SymbolicName: ${p}.tbc.dmtree
+Bundle-Name: ${p}.tbc.test
+Bundle-SymbolicName: ${p}.tbc.test
 Bundle-Activator: $(p).tbc.TestControl
 Bundle-Version: 4
 Bundle-ManifestVersion: 2
 Bundle-Copyright: Copyright (c) OSGi Alliance (2000, 2002). All Rights Reserved.
 CVS-Header: $Header$
-Signature-Packages: info.dmtree, 
-  info.dmtree.notification, 
-  info.dmtree.notification.spi,
-  info.dmtree.registry,
-  info.dmtree.security,
-  info.dmtree.spi
+Signature-Packages: i.am.absent, org.osgi.framework
 $(SIGNATURE-PACKAGE)
 $(PRIVATE-PACKAGE)
 
