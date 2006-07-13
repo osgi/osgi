@@ -17,7 +17,6 @@
  */
 package org.osgi.impl.service.dmt;
 
-import info.dmtree.DmtIllegalStateException;
 import info.dmtree.spi.DataPlugin;
 import info.dmtree.spi.ExecPlugin;
 
@@ -56,7 +55,7 @@ class PluginRegistration {
 
     DataPlugin getDataPlugin() {
         if(!(plugin instanceof DataPlugin))
-            throw new DmtIllegalStateException("Plugin object is not a data " +
+            throw new IllegalStateException("Plugin object is not a data " +
                     "plugin.");
         
         return (DataPlugin) plugin;
@@ -64,7 +63,7 @@ class PluginRegistration {
     
 	ExecPlugin getExecPlugin() {
 		if (!(plugin instanceof ExecPlugin))
-			throw new DmtIllegalStateException(
+			throw new IllegalStateException(
 					"Plugin object is not an exec plugin.");
 		return (ExecPlugin) plugin;
 	}

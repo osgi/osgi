@@ -277,7 +277,7 @@ public class Node {
     // precondition: parameter node is not absolute
     Node appendRelativeNode(Node relativeNode) {
         if(relativeNode.isAbsolute())
-            throw new DmtIllegalStateException(
+            throw new IllegalStateException(
                     "Cannot append an absolute node to another node.");
 
         if(relativeNode.isEmpty())

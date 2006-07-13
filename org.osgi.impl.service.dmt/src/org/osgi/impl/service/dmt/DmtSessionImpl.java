@@ -1324,7 +1324,7 @@ public class DmtSessionImpl implements DmtSession {
                 return roots[i].isAncestorOf(subtreeNode) 
                     ? subtreeNode : roots[i];
         
-        throw new DmtIllegalStateException("Internal error, plugin root not " +
+        throw new IllegalStateException("Internal error, plugin root not " +
                 "found for a URI handled by the plugin.");
     }
     
