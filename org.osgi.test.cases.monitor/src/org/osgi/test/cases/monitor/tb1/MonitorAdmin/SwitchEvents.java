@@ -191,7 +191,7 @@ public class SwitchEvents implements TestInterface {
 					tbc.getTb1Location());
 
 			tbc.setLocalPermission(new PermissionInfo(MonitorPermission.class
-					.getName(), MonitorConstants.SVS[0], null));
+					.getName(), MonitorConstants.SVS[0], ""));
 
 			tbc.getMonitorAdmin()
 					.switchEvents(MonitorConstants.SVS[0], false);

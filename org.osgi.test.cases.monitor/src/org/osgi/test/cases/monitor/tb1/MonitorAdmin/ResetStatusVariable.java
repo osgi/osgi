@@ -232,7 +232,7 @@ public class ResetStatusVariable implements TestInterface {
 			infos = tbc.getPermissionAdmin().getPermissions(
 					tbc.getTb1Location());
 
-			tbc.setLocalPermission(new PermissionInfo(MonitorPermission.class.getName(),MonitorConstants.SVS[1], null));
+			tbc.setLocalPermission(new PermissionInfo(MonitorPermission.class.getName(),MonitorConstants.SVS[1], ""));
 
 			tbc.getMonitorAdmin().resetStatusVariable(
 					MonitorConstants.SVS[1]);

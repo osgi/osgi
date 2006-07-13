@@ -215,7 +215,7 @@ public class GetStatusVariableNames implements TestInterface {
 					tbc.getTb1Location());
 
 			tbc.setLocalPermission(new PermissionInfo(MonitorPermission.class
-					.getName(), "*/*", null));
+					.getName(), "*/*", ""));
 
 			String[] sv = tbc.getMonitorAdmin().getStatusVariableNames(
 					MonitorConstants.SV_MONITORABLEID1);

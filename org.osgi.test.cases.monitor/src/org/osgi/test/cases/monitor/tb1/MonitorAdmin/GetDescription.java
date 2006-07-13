@@ -193,7 +193,7 @@ public class GetDescription implements TestInterface {
 			infos = tbc.getPermissionAdmin().getPermissions(
 					tbc.getTb1Location());
 
-			tbc.setLocalPermission(new PermissionInfo(MonitorPermission.class.getName(),MonitorConstants.SVS[0], null));
+			tbc.setLocalPermission(new PermissionInfo(MonitorPermission.class.getName(),MonitorConstants.SVS[0], ""));
 
 			tbc.getMonitorAdmin().getDescription(MonitorConstants.SVS[0]);
 

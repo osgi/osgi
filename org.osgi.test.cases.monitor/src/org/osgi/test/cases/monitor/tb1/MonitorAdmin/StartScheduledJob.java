@@ -333,11 +333,11 @@ public class StartScheduledJob implements TestInterface {
 							new PermissionInfo(
 									org.osgi.service.monitor.MonitorPermission.class
 											.getName(),
-									MonitorConstants.SVS[0], null),
+									MonitorConstants.SVS[0], ""),
 							new PermissionInfo(
 									org.osgi.service.monitor.MonitorPermission.class
 											.getName(),
-									MonitorConstants.SVS[1], null) });
+									MonitorConstants.SVS[1], "") });
 
 			mj = tbc.getMonitorAdmin().startScheduledJob(
 					MonitorConstants.INITIATOR, MonitorConstants.SVS,
