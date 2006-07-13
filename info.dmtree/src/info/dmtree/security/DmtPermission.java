@@ -132,7 +132,7 @@ public class DmtPermission extends Permission {
      * this case from using <code>*</code> as a wildcard, the <code>*</code> 
      * character at the end of the URI must be escaped with the <code>\</code> 
      * charater. For example the URI <code>"./a*"</code> matches 
-     * <code>"./a"</code>, <code>"./aa"</code>, <code>"./a/b"</code> etc while
+     * <code>"./a"</code>, <code>"./aa"</code>, <code>"./a/b"</code> etc. while
      * <code>"./a\*"</code> matches <code>"./a*"</code> only.
      * <p>
      * The actions string must either be "*" to allow all actions, or it must
@@ -164,18 +164,13 @@ public class DmtPermission extends Permission {
                 path = "";
                 return;
             }
-            
-            if(dmtUri.endsWith("/") && !dmtUri.endsWith("\\/"))
-                dmtUri = dmtUri.substring(0, dmtUri.length() - 1);
         }
         
-        if(!Uri.isValidUri(dmtUri))
-            throw new IllegalArgumentException("'dmtUri' parameter does not " +
-                    "contain a valid URI.");
-        
-        if(!Uri.isAbsoluteUri(dmtUri))
-            throw new IllegalArgumentException("'dmtUri' parameter does not " +
-                    "contain an absolute URI.");
+        // if URI ends with "/*", remove it before the validity check
+        if(prefixPath && dmtUri.endsWith("/") && !dmtUri.endsWith("\\/"))
+            checkUri(dmtUri.substring(0, dmtUri.length() - 1));
+        else
+            checkUri(dmtUri);
         
         // canonicalize URI: remove escapes from non-special characters
         StringBuffer sb = new StringBuffer(dmtUri);
@@ -192,6 +187,16 @@ public class DmtPermission extends Permission {
             i++;
         }
         path = sb.toString();
+    }
+    
+    private void checkUri(String dmtUri) throws IllegalArgumentException {
+        if(!Uri.isValidUri(dmtUri))
+            throw new IllegalArgumentException("'dmtUri' parameter does not " +
+                    "contain a valid URI.");
+        
+        if(!Uri.isAbsoluteUri(dmtUri))
+            throw new IllegalArgumentException("'dmtUri' parameter does not " +
+                    "contain an absolute URI.");
     }
 
     /**
