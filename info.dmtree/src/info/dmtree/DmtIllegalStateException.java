@@ -21,8 +21,6 @@ package info.dmtree;
 /**
  * Unchecked illegal state exception. This class is used in DMT because 
  * java.lang.IllegalStateException does not exist in CLDC.
- * 
- * @version $Revision$
  */
 public class DmtIllegalStateException extends RuntimeException {
 	private static final long	serialVersionUID	= 2015244852018469700L;
@@ -41,9 +39,9 @@ public class DmtIllegalStateException extends RuntimeException {
 	}
 
 	/**
-	 * Create an instance of the exception with the specific message.
+	 * Create an instance of the exception with the specified message.
 	 * 
-	 * @param message The reason for the exception.
+	 * @param message the reason for the exception
 	 */
 	public DmtIllegalStateException(String message) {
 		super(message);
@@ -51,29 +49,34 @@ public class DmtIllegalStateException extends RuntimeException {
 	}
 
 	/**
-	 * Create an instance of the exception with no message.
+	 * Create an instance of the exception with the specified cause exception
+     * and no message.
+     * 
+     * @param cause the cause of the exception
 	 */
-	public DmtIllegalStateException(Throwable t) {
+	public DmtIllegalStateException(Throwable cause) {
 		super();
-		cause = t;
+		this.cause = cause;
 	}
 
 	/**
-	 * Create an instance of the exception with the specific message.
+	 * Create an instance of the exception with the specified message and cause
+     * exception.
 	 * 
-	 * @param message The reason for the exception.
+	 * @param message the reason for the exception
+     * @param cause the cause of the exception
 	 */
-	public DmtIllegalStateException(String message, Throwable t) {
+	public DmtIllegalStateException(String message, Throwable cause) {
 		super(message);
-		cause = t;
+		this.cause = cause;
 	}
 
 	/**
 	 * Returns the cause of this exception or <code>null</code> if no cause
 	 * was specified when this exception was created.
 	 * 
-	 * @return The cause of this exception or <code>null</code> if no cause
-	 *         was specified.
+	 * @return the cause of this exception or <code>null</code> if no cause
+	 *         was specified
 	 */
 	public Throwable getCause() {
 		return cause;
