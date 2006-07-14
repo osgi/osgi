@@ -11,7 +11,6 @@ public class XmlDoclet extends Doclet {
 	
 	public static boolean start( RootDoc doc ) {
 		try {
-			System.out.println("Hello world!");
 			XmlDoclet doclet = new XmlDoclet();
 			doclet.startx( doc );
 			return true;
@@ -228,7 +227,7 @@ public class XmlDoclet extends Doclet {
 			String signature = "";
 			if ( tag.referencedMember() instanceof ExecutableMemberDoc ) {
 				ExecutableMemberDoc member = (ExecutableMemberDoc) tag.referencedMember();
-				signature = flatten(member.flatSignature());
+				signature = flatten(member.signature());
 			}
 			ref = tag.referencedMember().containingClass().name() + "." + tag.referencedMember().name() + signature;
 		}
