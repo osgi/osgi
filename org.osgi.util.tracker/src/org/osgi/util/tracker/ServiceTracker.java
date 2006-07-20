@@ -700,15 +700,15 @@ public class ServiceTracker implements ServiceTrackerCustomizer {
 	 * 
 	 * The tracking count is initialized to 0 when this
 	 * <code>ServiceTracker</code> object is opened. Every time a service is
-	 * added or removed from this <code>ServiceTracker</code> object the
+	 * added, modified or removed from this <code>ServiceTracker</code> object the
 	 * tracking count is incremented.
 	 * 
 	 * <p>
 	 * The tracking count can be used to determine if this
-	 * <code>ServiceTracker</code> object has added or removed a service by
+	 * <code>ServiceTracker</code> object has added, modified or removed a service by
 	 * comparing a tracking count value previously collected with the current
 	 * tracking count value. If the value has not changed, then no service has
-	 * been added or removed from this <code>ServiceTracker</code> object
+	 * been added, modified or removed from this <code>ServiceTracker</code> object
 	 * since the previous tracking count was collected.
 	 * 
 	 * @since 1.2
