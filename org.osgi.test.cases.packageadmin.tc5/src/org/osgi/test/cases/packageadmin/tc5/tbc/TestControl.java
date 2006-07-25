@@ -276,24 +276,12 @@ public class TestControl extends DefaultTestBundleControl {
 		tb2 = installBundle("tb2.jar");
 		tb3 = installBundle("tb3.jar");
 		tb4 = installBundle("tb4.jar");
-
-		// Start test bundles
-		tb1.start();
-		tb2.start();
-		tb3.start();
-		tb4.start();
 	}
 
 	/**
 	 * Uninstall all test bundles
 	 */
 	public void uninstallTestBundles() throws Exception {
-		// Stop test bundles
-		tb4.stop();
-		tb3.stop();
-		tb2.stop();
-		tb1.stop();
-
 		// Uninstall test bundles
 		tb5.uninstall();
 		tb4.uninstall();
