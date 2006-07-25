@@ -63,8 +63,11 @@ public class BundleSignerCondition {
 	 * getCondition methods calls to the vendor BundleSignerCondition class.
 	 */
 	private static final String	packageProperty	= "org.osgi.vendor.condpermadmin";
-	private static final Method	getCondition;
-	static {
+	private static Method	getCondition;
+	private static synchronized void init() {
+		if (getCondition != null )
+			return;
+		
 		getCondition = (Method) AccessController
 				.doPrivileged(new PrivilegedAction() {
 					public Object run() {
@@ -128,6 +131,9 @@ public class BundleSignerCondition {
 
 		try {
 			try {
+				if ( getCondition == null )
+					init();
+				
 				return (Condition) getCondition.invoke(null, new Object[] {
 						bundle, info});
 			}
