@@ -45,50 +45,53 @@ public class FrameworkUtil {
 	 * instance of the vendor FrameworkUtil class will be created and this class
 	 * will delegate method calls to the vendor FrameworkUtil instance.
 	 */
-	private static final String	packageProperty	= "org.osgi.vendor.framework";
 
-	/*
-	 * This is the delegate method used by createFilter.
-	 */
-	private final static Method	createFilter;
-
-	static {
-		createFilter = (Method) AccessController
-				.doPrivileged(new PrivilegedAction() {
-					public Object run() {
-						String packageName = System
-								.getProperty(packageProperty);
-						if (packageName == null) {
-							throw new NoClassDefFoundError(packageProperty
-									+ " property not set");
-						}
-
-						Class delegateClass;
-						try {
-							delegateClass = Class.forName(packageName
-									+ ".FrameworkUtil");
-						}
-						catch (ClassNotFoundException e) {
-							throw new NoClassDefFoundError(e.toString());
-						}
-
-						Method result;
-						try {
-							result = delegateClass.getMethod("createFilter",
-									new Class[] {String.class});
-						}
-						catch (NoSuchMethodException e) {
-							throw new NoSuchMethodError(e.toString());
-						}
-
-						if (!Modifier.isStatic(result.getModifiers())) {
-							throw new NoSuchMethodError(
-									"createFilter method must be static");
-						}
-
-						return result;
+	private static class ImplHolder {
+		private static final String	packageProperty	= "org.osgi.vendor.framework";
+		
+		/*
+		 * This is the delegate method used by createFilter.
+		 */
+		static final Method	createFilter;
+		
+		static {
+			createFilter = (Method) AccessController
+			.doPrivileged(new PrivilegedAction() {
+				public Object run() {
+					String packageName = System
+					.getProperty(packageProperty);
+					if (packageName == null) {
+						throw new NoClassDefFoundError(packageProperty
+								+ " property not set");
 					}
-				});
+					
+					Class delegateClass;
+					try {
+						delegateClass = Class.forName(packageName
+								+ ".FrameworkUtil");
+					}
+					catch (ClassNotFoundException e) {
+						throw new NoClassDefFoundError(e.toString());
+					}
+					
+					Method result;
+					try {
+						result = delegateClass.getMethod("createFilter",
+								new Class[] {String.class});
+					}
+					catch (NoSuchMethodException e) {
+						throw new NoSuchMethodError(e.toString());
+					}
+					
+					if (!Modifier.isStatic(result.getModifiers())) {
+						throw new NoSuchMethodError(
+						"createFilter method must be static");
+					}
+					
+					return result;
+				}
+			});
+		}
 	}
 
 	
@@ -118,7 +121,7 @@ public class FrameworkUtil {
 			throws InvalidSyntaxException {
 		try {
 			try {
-				return (Filter) createFilter
+				return (Filter) ImplHolder.createFilter
 						.invoke(null, new Object[] {filter});
 			}
 			catch (InvocationTargetException e) {

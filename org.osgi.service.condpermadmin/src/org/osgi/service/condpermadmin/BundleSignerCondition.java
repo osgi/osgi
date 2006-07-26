@@ -62,51 +62,51 @@ public class BundleSignerCondition {
 	 * by the org.osgi.vendor.condpermadmin package. This class will delegate
 	 * getCondition methods calls to the vendor BundleSignerCondition class.
 	 */
-	private static final String	packageProperty	= "org.osgi.vendor.condpermadmin";
-	private static Method	getCondition;
-	private static synchronized void init() {
-		if (getCondition != null )
-			return;
-		
-		getCondition = (Method) AccessController
-				.doPrivileged(new PrivilegedAction() {
-					public Object run() {
-						String packageName = System
-								.getProperty(packageProperty);
-						if (packageName == null) {
-							throw new NoClassDefFoundError(packageProperty
-									+ " property not set");
-						}
-
-						Class delegateClass;
-						try {
-							delegateClass = Class.forName(packageName
-									+ ".BundleSignerCondition");
-						}
-						catch (ClassNotFoundException e) {
-							throw new NoClassDefFoundError(e.toString());
-						}
-
-						Method result;
-						try {
-							result = delegateClass.getMethod("getCondition",
-									new Class[] {Bundle.class,
-			ConditionInfo.class		});
-						}
-						catch (NoSuchMethodException e) {
-							throw new NoSuchMethodError(e.toString());
-						}
-
-						if (!Modifier.isStatic(result.getModifiers())) {
-							throw new NoSuchMethodError(
-									"getCondition method must be static");
-						}
-
-						return result;
+	
+	private static class ImplHolder {
+		private static final String	packageProperty	= "org.osgi.vendor.condpermadmin";
+		static final Method	getCondition;
+		static {
+			getCondition = (Method) AccessController
+			.doPrivileged(new PrivilegedAction() {
+				public Object run() {
+					String packageName = System
+					.getProperty(packageProperty);
+					if (packageName == null) {
+						throw new NoClassDefFoundError(packageProperty
+								+ " property not set");
 					}
-				});
+					
+					Class delegateClass;
+					try {
+						delegateClass = Class.forName(packageName
+								+ ".BundleSignerCondition");
+					}
+					catch (ClassNotFoundException e) {
+						throw new NoClassDefFoundError(e.toString());
+					}
+					
+					Method result;
+					try {
+						result = delegateClass.getMethod("getCondition",
+								new Class[] {Bundle.class,
+								ConditionInfo.class		});
+					}
+					catch (NoSuchMethodException e) {
+						throw new NoSuchMethodError(e.toString());
+					}
+					
+					if (!Modifier.isStatic(result.getModifiers())) {
+						throw new NoSuchMethodError(
+								"getCondition method must be static");
+					}
+					
+					return result;
+				}
+			});
+		}
 	}
-
+	
 	private static final String	CONDITION_TYPE	= "org.osgi.service.condpermadmin.BundleSignerCondition";
 
 	/**
@@ -120,7 +120,7 @@ public class BundleSignerCondition {
 	 *        Bundle.
 	 * @return A Condition which checks the signers of the specified bundle.        
 	 */
-	static public Condition getCondition(Bundle bundle, ConditionInfo info) {
+	public static Condition getCondition(Bundle bundle, ConditionInfo info) {
 		if (!CONDITION_TYPE.equals(info.getType()))
 			throw new IllegalArgumentException(
 					"ConditionInfo must be of type \"" + CONDITION_TYPE + "\"");
@@ -131,10 +131,7 @@ public class BundleSignerCondition {
 
 		try {
 			try {
-				if ( getCondition == null )
-					init();
-				
-				return (Condition) getCondition.invoke(null, new Object[] {
+				return (Condition) ImplHolder.getCondition.invoke(null, new Object[] {
 						bundle, info});
 			}
 			catch (InvocationTargetException e) {

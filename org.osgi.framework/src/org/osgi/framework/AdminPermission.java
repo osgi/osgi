@@ -135,50 +135,53 @@ public final class AdminPermission extends BasicPermission {
 	 * an instance of the vendor AdminPermission class will be created and this
 	 * class will delegate method calls to the vendor AdminPermission instance.
 	 */
-	private static final String			packageProperty		= "org.osgi.vendor.framework";
-	private static final Constructor	initStringString;
-	private static final Constructor	initBundleString;
-	static {
-		Constructor[] constructors = (Constructor[]) AccessController
-				.doPrivileged(new PrivilegedAction() {
-					public Object run() {
-						String packageName = System
-								.getProperty(packageProperty);
-						if (packageName == null) {
-							throw new NoClassDefFoundError(packageProperty
-									+ " property not set");
-						}
 
-						Class delegateClass;
-						try {
-							delegateClass = Class.forName(packageName
-									+ ".AdminPermission");
-						}
-						catch (ClassNotFoundException e) {
-							throw new NoClassDefFoundError(e.toString());
-						}
-
-						Constructor[] result = new Constructor[2];
-						try {
-							result[0] = delegateClass
-									.getConstructor(new Class[] {String.class,
-			String.class			});
-							result[1] = delegateClass
-									.getConstructor(new Class[] {Bundle.class,
-			String.class			});
-						}
-						catch (NoSuchMethodException e) {
-							throw new NoSuchMethodError(e.toString());
-						}
-
-						return result;
+	private static class ImplHolder {
+		private static final String			packageProperty		= "org.osgi.vendor.framework";
+		static final Constructor	initStringString;
+		static final Constructor	initBundleString;
+		static {
+			Constructor[] constructors = (Constructor[]) AccessController
+			.doPrivileged(new PrivilegedAction() {
+				public Object run() {
+					String packageName = System
+					.getProperty(packageProperty);
+					if (packageName == null) {
+						throw new NoClassDefFoundError(packageProperty
+								+ " property not set");
 					}
-				});
-
-		initStringString = constructors[0];
-		initBundleString = constructors[1];
+					
+					Class delegateClass;
+					try {
+						delegateClass = Class.forName(packageName
+								+ ".AdminPermission");
+					}
+					catch (ClassNotFoundException e) {
+						throw new NoClassDefFoundError(e.toString());
+					}
+					
+					Constructor[] result = new Constructor[2];
+					try {
+						result[0] = delegateClass
+						.getConstructor(new Class[] {String.class,
+								String.class			});
+						result[1] = delegateClass
+						.getConstructor(new Class[] {Bundle.class,
+								String.class			});
+					}
+					catch (NoSuchMethodException e) {
+						throw new NoSuchMethodError(e.toString());
+					}
+					
+					return result;
+				}
+			});
+			
+			initStringString = constructors[0];
+			initBundleString = constructors[1];
+		}
 	}
-
+	
 	/*
 	 * This is the delegate permission created by the constructor.
 	 */
@@ -228,7 +231,7 @@ public final class AdminPermission extends BasicPermission {
 		super(filter == null ? "*" : filter);
 		try {
 			try {
-				delegate = (Permission) initStringString
+				delegate = (Permission) ImplHolder.initStringString
 						.newInstance(new Object[] {filter, actions});
 			}
 			catch (InvocationTargetException e) {
@@ -262,7 +265,7 @@ public final class AdminPermission extends BasicPermission {
 		super(createName(bundle));
 		try {
 			try {
-				delegate = (Permission) initBundleString
+				delegate = (Permission) ImplHolder.initBundleString
 						.newInstance(new Object[] {bundle, actions});
 			}
 			catch (InvocationTargetException e) {

@@ -64,55 +64,58 @@ public final class Uri {
 	 * by the org.osgi.vendor.dmtree.DigestDelegate property. This class will call
 	 * the public static byte[] digest(byte[]) method on that class.
 	 */
+	
+	private static class ImplHolder {
+		// the name of the system property containing the digest delegate class name
+		private static final String DIGEST_DELEGATE_PROPERTY = 
+			"org.osgi.vendor.dmtree.DigestDelegate";
+		
+		// the Method where message digest requests can be delegated
+		static final Method digestMethod;
+		
+		static {
+			digestMethod = (Method) AccessController
+			.doPrivileged(new PrivilegedAction() {
+				public Object run() {
+					String className = System
+					.getProperty(DIGEST_DELEGATE_PROPERTY);
+					if (className == null) {
+						throw new NoClassDefFoundError("Digest " +
+								"delegate class property '" + 
+								DIGEST_DELEGATE_PROPERTY +
+								"' must be set to a " +
+								"class which implements a " +
+						"public static byte[] digest(byte[]) method."); 
+					}
+					
+					Class delegateClass;
+					try {
+						delegateClass = Class.forName(className);
+					}
+					catch (ClassNotFoundException e) {
+						throw new NoClassDefFoundError(e.toString());
+					}
+					
+					Method result;
+					try {
+						result = delegateClass.getMethod("digest",
+								new Class[] {byte[].class});
+					}
+					catch (NoSuchMethodException e) {
+						throw new NoSuchMethodError(e.toString());
+					}
+					
+					if (!Modifier.isStatic(result.getModifiers())) {
+						throw new NoSuchMethodError(
+						"digest method must be static");
+					}
+					
+					return result;
+				}
+			});
+		}
+	}
 
-    // the name of the system property containing the digest delegate class name
-    private static final String DIGEST_DELEGATE_PROPERTY = 
-        "org.osgi.vendor.dmtree.DigestDelegate";
-
-    // the Method where message digest requests can be delegated
-    private static final Method digestMethod;
-    
-    static {
-    	digestMethod = (Method) AccessController
-    	.doPrivileged(new PrivilegedAction() {
-    		public Object run() {
-    			String className = System
-    			.getProperty(DIGEST_DELEGATE_PROPERTY);
-    			if (className == null) {
-    				throw new NoClassDefFoundError("Digest " +
-    						"delegate class property '" + 
-    						DIGEST_DELEGATE_PROPERTY +
-    						"' must be set to a " +
-    						"class which implements a " +
-    				"public static byte[] digest(byte[]) method."); 
-    			}
-
-    			Class delegateClass;
-    			try {
-    				delegateClass = Class.forName(className);
-    			}
-    			catch (ClassNotFoundException e) {
-    				throw new NoClassDefFoundError(e.toString());
-    			}
-
-    			Method result;
-    			try {
-    				result = delegateClass.getMethod("digest",
-    						new Class[] {byte[].class});
-    			}
-    			catch (NoSuchMethodException e) {
-    				throw new NoSuchMethodError(e.toString());
-    			}
-
-    			if (!Modifier.isStatic(result.getModifiers())) {
-    				throw new NoSuchMethodError(
-    				"digest method must be static");
-    			}
-
-    			return result;
-    		}
-    	});
-    }
 
     // the name of the system property containing the URI segment length limit 
     private static final String SEGMENT_LENGTH_LIMIT_PROPERTY = 
@@ -538,7 +541,7 @@ public final class Uri {
     private static byte[] digestMessage(byte[] byteStream) {
 		try {
 			try {
-				return (byte[]) digestMethod.invoke(null, new Object[] {
+				return (byte[]) ImplHolder.digestMethod.invoke(null, new Object[] {
 						byteStream});
 			}
 			catch (InvocationTargetException e) {
