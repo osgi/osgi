@@ -18,22 +18,34 @@
 
 package org.osgi.service.navigation;
 
-public class CircularZone implements Location {
-	Coordinates		coordinate;
-	double			radius;
+/**
+ * A Circular Zone is defined by a center expressed by a WGS84 
+ * coordinate and a radius expressed in meter.
+ *
+ * ### I am not happy with this implementation class because it
+ *     means putting implementation code in the spec, which gives
+ *     all kind of nasty problems. So we need a factory
+ *     and make these interfaces. Another problem is that
+ *     we bind the spec to the types of zones.
+ *     
+ * @version $Revision$
+ */
+public class CircularZone extends RectangularZone {
 	
-	public CircularZone(Coordinates coordinate, double radius ) {
-		this.coordinate  = coordinate;
-		this.radius = radius;
+	public CircularZone(Coordinate coordinate, double radius ) {
+		super(coordinate, radius, radius);
 	}
 	
-	public Coordinates getCoordinate() {
-		return coordinate;
+	public double getRadius() {
+		return getWidth();
+	}
+	
+	public boolean contains(Coordinate coordinate) {
+		return false;
 	}
 
-	public boolean contains(Coordinates coordinate) {
-		double [] distance = coordinate.distance(this.coordinate);
-		return Math.sqrt(distance[0]*distance[0] + distance[1]*distance[2])<= radius;		
+	public boolean contains(Zone coordinate) {
+		// TODO
+		return false;
 	}
-
 }

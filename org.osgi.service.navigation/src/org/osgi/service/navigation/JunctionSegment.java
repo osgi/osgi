@@ -18,36 +18,40 @@
 
 package org.osgi.service.navigation;
 
-import org.osgi.util.measurement.Measurement;
-
 /**
  * A JunctionSegment is a part of the JunctionGeometry.
  */
-public interface JunctionSegment 
-{
-   
-   /**
-    * Returns the angle of this segment with the North in degrees.
-    * @return Measurement
-    */
-   public Measurement getAngle();
-   
-   /**
-    * Returns the coordinate where this segment is attached to the maneuver.
-    * @return org.osgi.nursery.util.geo.Coordinate
-    */
-   public Coordinates getCoordinate();
-   
-   /**
-    * Returns true if this JunctionSegment object is part of the inner segments
-    * otherwise false.
-    * @return boolean
-    */
-   public boolean isInnerSegment();
-   
-   /**
-    * Returns true if this JunctionSegment object is in the itinerary otherwise false.
-    * @return boolean
-    */
-   public boolean isOnRoute();
+public interface JunctionSegment {
+
+	/**
+	 * Returns the angle of this segment with the North in degrees.
+	 * 
+	 * @return Measurement
+	 */
+	 double getAngle();
+
+	/**
+	 * Returns the coordinate where this segment is attached to the maneuver.
+	 * 
+	 * @return org.osgi.nursery.util.geo.Coordinate
+	 */
+	 Coordinate getCoordinate();
+
+	/**
+	 * Returns true if this JunctionSegment object is part of the inner segments
+	 * otherwise false.
+	 * 
+	 * @return boolean
+	 */
+	 boolean isInnerSegment();
+
+	/**
+	 * Returns true if this JunctionSegment object is in the itinerary otherwise
+	 * false.
+	 * 
+	 * @return boolean
+	 */
+	 boolean isOnRoute();
+
+	JunctionSegment[] getJunctionSegments();
 }

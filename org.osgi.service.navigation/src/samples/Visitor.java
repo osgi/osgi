@@ -29,17 +29,14 @@ public class Visitor {
 	
 	List		visits;
 	
-	public void patientVisitor(Patient patients[]){
-		if ( session != null ) 
-			session.destroy();
-		
+	public void patientVisitor(Patient patients[]){		
+		RoutePlan plan = nav.createRoutePlan(nav.getCurrentLocation());
 		Location locations[] = new Location[patients.length];
 		for ( int i=0; i<locations.length; i++ ) {
-			locations[i] = calcAddress(patients[i]);
+			Location via = calcAddress(patients[i]);
+			plan.addRoute(via);
 		}
-		RoutePlan	plan = new RoutePlan(RoutePlan.SHORTEST, patients);
-		session = nav.navigate(plan);
-		session.resume();
+		nav.startGuidance(plan);
 	}
 	
 	
@@ -55,6 +52,6 @@ public class Visitor {
 	
 }
 
-interface Patient extends Location {
+interface Patient {
 	
 }

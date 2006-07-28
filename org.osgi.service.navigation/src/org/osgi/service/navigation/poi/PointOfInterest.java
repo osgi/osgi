@@ -16,9 +16,11 @@
  * limitations under the License.
  */
 
-package org.osgi.service.navigation.orig;
+package org.osgi.service.navigation.poi;
 
-import java.util.Dictionary;
+import java.util.Map;
+
+import org.osgi.service.navigation.Location;
 
 /**
  * A point of interest represents external service provider, like a hospital, 
@@ -32,18 +34,14 @@ import java.util.Dictionary;
  * National (or country specific) POI means of "national" importance such as 
  * international airports, Disney Land, London Tower, etc.
  */
-public interface PointOfInterest 
+public interface PointOfInterest
 {
    /**
     * Returns the POI name.
     * @return The name of the POI
     */
    public String getName();
-   
-   /**
-    * Returns the location of the POI.
-    * @return The location of the POI
-    */
+
    public Location getLocation();
    
    /**
@@ -58,7 +56,7 @@ public interface PointOfInterest
     * @return The list of specific properties of the POI, null if properties are not 
     * provided
     */
-   public Dictionary getProperties();
+   public Map getProperties();
    
    /**
     * Returns the POI Category. The third party provider has to deliver the categories 

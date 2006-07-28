@@ -16,12 +16,13 @@
  * limitations under the License.
  */
 
-package org.osgi.service.navigation.control;
 
-import org.osgi.service.navigation.*;
+package org.osgi.service.navigation;
 
-public interface RoutePlan {
-	Route addRoute(Location location);
-	Route addRoute(Route route);
-	Route [] getRoutes();
+public interface Zone {
+	boolean contains(Coordinate coordinate);
+	boolean contains(Zone zone);
+	Coordinate getCenter();
+	double getWidth();
+	double getHeight();
 }

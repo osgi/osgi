@@ -16,12 +16,8 @@
  * limitations under the License.
  */
 
-package org.osgi.service.navigation.orig;
+package org.osgi.service.navigation.control;
 
-/**
- * Basic interface for any hints along the route. The hints could be maneuvers, scenic
- * advice, alert zones or any additional information that are linked to a Location.
- */
-public interface Hint 
-{
+public interface NavigationListener {
+
 }

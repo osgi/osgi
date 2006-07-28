@@ -15,46 +15,57 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.osgi.service.navigation.orig;
+package org.osgi.service.navigation;
 
 import org.osgi.util.position.Position;
+
+// ### This should be moved to org.osgi.util.position (or coordinate)
 
 /**
  * Defines a WGS84 coordinate with latitude, longitude and altitude.
  */
 public class Coordinate {
-	private double	latitude;
-	private double	longitude;
-	private float	altitude;
+	double	latitude;
+	double	longitude;
+	
+	// ### This was a float but that is silly. In java, you must cast
+	// floats most of the time. You need a very good reason to save
+	// 4 bytes for this misery
+	double	altitude;
 
+	
+
+	// ### The following constructor should only be there if 
+	// we move this class to org.osgi.util.position
 	/**
-	 * Create a new <code>Coordinate</code> object from a <code>Position</code> object.
-	 * @param position
+	 * TODO
 	 */
-	public Coordinate(Position pos) {
-		this.latitude = pos.getLatitude().getValue();
-		this.longitude = pos.getLongitude().getValue();
-		this.altitude = (float) pos.getAltitude().getValue();
+	public Coordinate(Position position) {
+		latitude = position.getLatitude().getValue();
+		longitude = position.getLongitude().getValue();
+		altitude = position.getAltitude().getValue();
 	}
 
-	/**
-	 * Create a new <code>Coordinate</code> object from another 
-	 * <code>Coordinate</code> object. 
-	 * @param coord a <tt>Coordinate</tt> object where values are copied from.
-	 */
-	public Coordinate(Coordinate coord) {
-		this.latitude = coord.latitude;
-		this.longitude = coord.longitude;
-		this.altitude = coord.altitude;
-	}
+	// ### This is a silly constructor, a Coordinate is 
+	// immutable so a copy constructor is unnecessary
 
 	/**
-	 * Create a new <code>Coordinate</code> object. 
+	 * TODO
+	 */
+	public Coordinate(Coordinate coordinate) {
+		latitude = coordinate.getLatitude();
+		longitude = coordinate.getLongitude();
+		altitude = coordinate.getAltitude();
+	}
+	
+	/**
+	 * Create a new <code>Coordinate</code> object.
+	 * 
 	 * @param latitude a double value specifying the latitude in radians
 	 * @param longitude a double value specifying the longitude in radians
 	 * @param altitude a float value specifying the altitude in meters
 	 */
-	public Coordinate(double latitude, double longitude, float altitude) {
+	public Coordinate(double latitude, double longitude, double altitude) {
 		this.latitude = latitude;
 		this.longitude = longitude;
 		this.altitude = altitude;
@@ -62,6 +73,7 @@ public class Coordinate {
 
 	/**
 	 * Returns the latitude of this coordinate in radians.
+	 * 
 	 * @return double
 	 */
 	public double getLatitude() {
@@ -70,6 +82,7 @@ public class Coordinate {
 
 	/**
 	 * Returns the longitude of this coordinate in radians.
+	 * 
 	 * @return double
 	 */
 	public double getLongitude() {
@@ -78,9 +91,12 @@ public class Coordinate {
 
 	/**
 	 * Returns the altitude of this coordinate in meters.
+	 * 
 	 * @return float
 	 */
-	public float getAltitude() {
+	public double getAltitude() {
 		return altitude;
 	}
+
+	// ### Dont we have any calculations on Coordinates??
 }

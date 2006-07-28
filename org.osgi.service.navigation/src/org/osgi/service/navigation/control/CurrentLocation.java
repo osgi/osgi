@@ -16,11 +16,12 @@
  * limitations under the License.
  */
 
-package org.osgi.service.navigation.orig;
+package org.osgi.service.navigation.control;
 
-/**
- *  Basic interface of route boundaries. Can be a single Location or another complete route.
- */
-public interface RouteBoundary 
-{
+import org.osgi.service.navigation.RouteSegment;
+import org.osgi.util.position.Position;
+
+public interface CurrentLocation {
+	Position getPosition();
+	RouteSegment getRouteSegment();
 }

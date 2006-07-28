@@ -32,62 +32,69 @@ public class Address {
 	/**
 	 * Address key referencing the country name.
 	 */
-	public int			COUNTRY				= 1;
+	public int	COUNTRY				= 1;
 
 	/**
 	 * Address key referencing the city name.
 	 */
-	public int			CITY				= 2;
+	public int	CITY				= 2;
 
 	/**
 	 * Address key referencing the street name.
 	 */
-	public int			STREET				= 3;
+	public int	STREET				= 3;
 
 	/**
 	 * Address key referencing the name of an intersecting street.
 	 */
-	public int			INTERSECTING_STREET	= 4;
+	public int	INTERSECTING_STREET	= 4;
 
 	/**
 	 * Address key referencing the house number.
 	 */
-	public int			HOUSE_NUMBER		= 5;
+	public int	HOUSE_NUMBER		= 5;
 
 	/**
 	 * Address key referencing the postal code.
 	 */
-	public int			POSTAL_CODE			= 6;
+	public int	POSTAL_CODE			= 6;
 
 	/**
 	 * Address key referencing the county.
 	 */
-	public int			COUNTY				= 7;
+	public int	COUNTY				= 7;
 
 	/**
 	 * Address key referencing the state.
 	 */
-	public int			STATE				= 8;
+	public int	STATE				= 8;
 
 	/**
 	 * Address key referencing the building name.
 	 */
-	public int			BUILDING_NAME		= 9;
+	public int	BUILDING_NAME		= 9;
 
 	/**
 	 * Address key referencing the building floor.
 	 */
-	public int			BUILDING_FLOOR		= 10;
+	public int	BUILDING_FLOOR		= 10;
 
 	/**
 	 * Address key referencing the building room.
 	 */
-	public int			BUILDING_ROOM		= 11;
+	public int	BUILDING_ROOM		= 11;
 
-	private String[]	places;
+	
+	String[]	places;
 
-	private int[]		keys;
+	int[]		keys;
 
+	/**
+	 * Initialize a new Address object with a set of places.
+	 * 
+	 * @param places Descriptive values of a place.
+	 * @param keys One of the predefined keys.
+	 */
 	public Address(String[] places, int[] keys) {
 		this.places = places;
 		this.keys = keys;
@@ -110,8 +117,8 @@ public class Address {
 	 * @return String
 	 */
 	public String getPlace(int key) {
-		for ( int i=0; i<keys.length; i++ ) {
-			if ( keys[i]==key)
+		for (int i = 0; i < keys.length; i++) {
+			if (keys[i] == key)
 				return places[i];
 		}
 		return null;

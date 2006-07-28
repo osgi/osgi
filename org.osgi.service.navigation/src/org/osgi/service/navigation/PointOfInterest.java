@@ -45,7 +45,7 @@ public interface PointOfInterest extends Location
     * These location can be used to determine a route.
     * @return The list of entry points to the POI
     */
-   public Coordinates[] getEntryPoints();
+   public Coordinate[] getEntryPoints();
    
    /**
     * Returns additional properties of the POI.

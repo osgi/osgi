@@ -16,27 +16,22 @@
  * limitations under the License.
  */
 
-package org.osgi.service.navigation.orig;
+package org.osgi.service.navigation;
 
+import org.osgi.util.measurement.Measurement;
 
-/**
- * Defines a geographical area.
- */
-public interface Zone 
-{
-   
-   /**
-    * Indicates if the coordinate is contained in the this object.
-    * @param coordinate The coordinate that needs to be checked
-    * @return true if the coordinate is inside the object, otherwise false
-    */
-   public boolean contains(Coordinate coordinate);
-   
-   /**
-    * Indicates if the Shape object given as parameter is in this object.
-    * @param shape The Shape
-    * @param zone
-    * @return true if the shape is completely inside the object, otherwise false
-    */
-   public boolean contains(Zone zone);
+public interface RouteSegment {
+	/**
+	 * Returns the heading of the route element expressed in radian.
+	 * 
+	 * @return Measurement
+	 */
+	public Measurement getHeading();
+
+	
+	Location getLocation();
+
+	Measurement getDistance2RouteSegment(RouteSegment segment);
+	
+	Measurement getTime2RouteSegment(RouteSegment segment);
 }

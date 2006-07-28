@@ -16,12 +16,22 @@
  * limitations under the License.
  */
 
-package org.osgi.service.navigation.control;
+package org.osgi.service.navigation.poi;
 
-import org.osgi.service.navigation.*;
+import org.osgi.service.navigation.Zone;
 
-public interface RoutePlan {
-	Route addRoute(Location location);
-	Route addRoute(Route route);
-	Route [] getRoutes();
+public interface PointOfInterestService {
+	String	NAME		= "name";
+	String	DESCRIPTION	= "description";
+	String	PHONENUMBER	= "phonenumber";
+	String	URL			= "url";
+
+	String[] getPropertyKeys(String category, String locale);
+
+	String[] getCategories(String locale);
+
+	PointOfInterest[] getPointOfInterests(String filter, Zone zone,
+			String locale);
+
+	PointOfInterest getPointOfInterest(int index);
 }

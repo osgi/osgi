@@ -22,7 +22,7 @@ package org.osgi.service.navigation;
  * A maneuver is the action that the driver has to perform at a junction.
  * Several advices can be rendered at a maneuver.
  */
-public interface Maneuver extends RouteElement {
+public interface Maneuver extends RouteSegment {
 	/**
 	 * Indicates that there is no junction at the maneuver.
 	 */
@@ -105,6 +105,7 @@ public interface Maneuver extends RouteElement {
 	 * Returns the angle of the turn which is the difference between the angle
 	 * of the from and to segments.
 	 * 
+	 * ### Should this not be in the junction segment?
 	 * @return int The angle made by the from and to segments
 	 */
 	public int getTurnAngle();
@@ -147,30 +148,9 @@ public interface Maneuver extends RouteElement {
 	public boolean isMultipleTurn();
 
 	/**
-	 * Returns the list of segments that are inside the maneuver geometry.
-	 * 
-	 * @return org.osgi.nursery.util.maneuver.JunctionSegment[]
+	 * Get the first Junction Segment for this maneuver, this is the
+	 * from segment. From this segment, you can find the next segments.
 	 */
-	public JunctionSegment[] getInnerSegments();
+	public JunctionSegment getJunctionSegment();
 
-	/**
-	 * Returns the list of segments that are outside the maneuver geometry.
-	 * 
-	 * @return org.osgi.nursery.util.maneuver.JunctionSegment[]
-	 */
-	public JunctionSegment[] getOuterSegments();
-
-	/**
-	 * Returns the segment from where the traveler is entering the maneuver
-	 * 
-	 * @return org.osgi.nursery.util.maneuver.JunctionSegment
-	 */
-	public JunctionSegment getFromSegment();
-
-	/**
-	 * Returns the segment where the traveler is leaving the maneuver.
-	 * 
-	 * @return org.osgi.nursery.util.maneuver.JunctionSegment
-	 */
-	public JunctionSegment getToSegment();
 }

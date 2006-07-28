@@ -22,19 +22,47 @@ package org.osgi.service.navigation;
  * Interface to the route definition. The route has several states:
  */
 public interface Route extends Location {
+	/**
+	 * Indicates that the shortest way must be found.
+	 */
+	public static final int	SHORTEST		= 0;
 
 	/**
-	 * Returns the list of Locations that match to the filter.
-	 * 
-	 * ### properties?? what does the filter do?
-	 * 
-	 * @param filter A LDAP query used to filter route elements
-	 * @return The list of route elements found
+	 * Indicates that the fastest way must be found.
 	 */
-	public Location[] getRouteElements(String filter);
+	public static final int	FASTEST			= 1;
 
-	public Location[] getRouteElements(RectangularZone viewPort);
+	/**
+	 * FeaturePreference object to set AVOID_HIGHWAY preference.
+	 */
+	public static final int	AVOID_HIGHWAY	= 2;
 
-	Location getLocationAt(int n);
-	int size();
+	/**
+	 * FeaturePreference object to set AVOID_TOLLWAY preference.
+	 */
+	public static final int	AVOID_TOLLWAY	= 4;
+
+	/**
+	 * FeaturePreference object to set AVOID_FERRY preference.
+	 */
+	public static final int	AVOID_FERRY		= 8;
+
+	RouteSegment next();
+	RouteSegment [] getSegments(int index, String filter);
+	RouteSegment getSegment(int n);
+	
+	void avoid(Location location);
+	Location[] getAvoids();
+	Location[] getVias();
+	
+	double getRemainingDistance();
+	double getRemainingTravelTime();
+	
+	void plan();
+	
+	void setStrategy(int strategy);
+	void via(Location location);
+	
+	Location getDestination();
+	
 }
