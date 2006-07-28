@@ -1057,8 +1057,7 @@ public class TestControl extends DefaultTestBundleControl implements
 				try {
 					assertEquals("loaded by the boot classloader", systemBundle.loadClass(
 							class5).getClassLoader(), Class.class.getClassLoader());
-// TODO add back in 4.1
-//					assertTrue("bootclasspath extension bundle is resolved", (tb5.getState() & Bundle.RESOLVED) != 0);
+					assertTrue("bootclasspath extension bundle is resolved", (tb5.getState() & Bundle.RESOLVED) != 0);
 				} catch (ClassNotFoundException cnfe) {
 					if ((tb5.getState() & Bundle.RESOLVED) != 0)
 						fail("failed loading class from a resolved bootclasspath extension bundle");
@@ -1116,8 +1115,7 @@ public class TestControl extends DefaultTestBundleControl implements
 							getContext().getClass().getClassLoader().loadClass(
 									class6).getClassLoader(), getContext()
 									.getClass().getClassLoader());
-// TODO add back in 4.1
-//					assertTrue("framework extension bundle is resolved", (tb6.getState() & Bundle.RESOLVED) != 0);
+					assertTrue("framework extension bundle is resolved", (tb6.getState() & Bundle.RESOLVED) != 0);
 				} catch (ClassNotFoundException cnfe) {
 					if ((tb6.getState() & Bundle.RESOLVED) != 0)
 						fail("failed loading class from a resolved framework extension bundle");
@@ -1246,8 +1244,7 @@ public class TestControl extends DefaultTestBundleControl implements
 							getContext().getClass().getClassLoader().loadClass(
 									class21).getClassLoader(), getContext()
 									.getClass().getClassLoader());
-//					 TODO add back in 4.1
-//					assertTrue("framework extension bundle is resolved", (tb21.getState() & Bundle.RESOLVED) != 0);
+					assertTrue("framework extension bundle is resolved", (tb21.getState() & Bundle.RESOLVED) != 0);
 				} catch (ClassNotFoundException cnfe) {
 					if ((tb21.getState() & Bundle.RESOLVED) != 0)
 						fail("failed loading class from a resolved framework extension bundle");
