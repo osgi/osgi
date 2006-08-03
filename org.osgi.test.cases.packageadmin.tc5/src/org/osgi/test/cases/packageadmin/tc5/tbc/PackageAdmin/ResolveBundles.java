@@ -110,8 +110,7 @@ public class ResolveBundles {
 		/*control.assertEquals("Checking the bundle state", Bundle.INSTALLED, tb5
 				.getState());*/
 
-		control.assertTrue("Checking the bundle is sucessfully resolved",
-				packageAdmin.resolveBundles(null));
+		packageAdmin.resolveBundles(null);
 
 		control.assertEquals("Checking the bundle state", Bundle.RESOLVED, tb5
 				.getState());
