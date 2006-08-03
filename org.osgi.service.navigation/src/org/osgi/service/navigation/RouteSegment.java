@@ -21,6 +21,8 @@ package org.osgi.service.navigation;
 import org.osgi.util.measurement.Measurement;
 
 public interface RouteSegment {
+	 // ### dont we need a length for the segment?
+	
 	/**
 	 * Returns the heading of the route element expressed in radian.
 	 * 
@@ -31,7 +33,7 @@ public interface RouteSegment {
 	
 	Location getLocation();
 
-	Measurement getDistance2RouteSegment(RouteSegment segment);
+	double getDistance2RouteSegment(RouteSegment segment);
 	
-	Measurement getTime2RouteSegment(RouteSegment segment);
+	double getTime2RouteSegment(RouteSegment segment);
 }

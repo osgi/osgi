@@ -20,8 +20,6 @@ package org.osgi.service.navigation;
 
 import java.util.Map;
 
-import org.osgi.util.measurement.Measurement;
-
 public interface Location {
 	/**
 	 * Indicates that the road segment is part of a Motorway.
@@ -145,10 +143,17 @@ public interface Location {
 	 */
 	public int getRoadClass();
 
-	Measurement getDistance2Location(Location location);
+	double getDistance2Location(Location location);
 	Address getAddress();
+	
+	//### why is is segment attributes, not just properties?
 	Map getSegmentAttributes();
 	Coordinate getCoordinate();
 	Zone getZone();
+	
+	// ### ??????
 	Object getSource();
+	
+	// ### Could we add a getId() to location which is unique for
+	// each location? I think this is useful with filtering.
 }

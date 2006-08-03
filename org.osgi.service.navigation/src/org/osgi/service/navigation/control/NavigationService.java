@@ -22,7 +22,7 @@ import org.osgi.service.navigation.*;
 
 public interface NavigationService  {
 	// was elaborate
-	Location getLocation(Address address );
+	Location[] getLocation(Address address );
 	// was elaborate
 	Location getLocation(Coordinate coordinate);
 	
@@ -32,5 +32,12 @@ public interface NavigationService  {
 	
 	void startGuidance(RoutePlan routePlan );
 	void stopGuidance();
+	
+	/**
+	 * ### I think we need to be able to get the current route.
+	 * 
+	 * @return
+	 */
+	Route getCurrentRoute();
 }
  

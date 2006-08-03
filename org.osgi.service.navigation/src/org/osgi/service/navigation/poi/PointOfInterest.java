@@ -20,7 +20,7 @@ package org.osgi.service.navigation.poi;
 
 import java.util.Map;
 
-import org.osgi.service.navigation.Location;
+import org.osgi.service.navigation.*;
 
 /**
  * A point of interest represents external service provider, like a hospital, 
@@ -34,29 +34,29 @@ import org.osgi.service.navigation.Location;
  * National (or country specific) POI means of "national" importance such as 
  * international airports, Disney Land, London Tower, etc.
  */
-public interface PointOfInterest
+ interface PointOfInterest
 {
    /**
     * Returns the POI name.
     * @return The name of the POI
     */
-   public String getName();
+    String getName();
 
-   public Location getLocation();
+    Location getLocation();
    
    /**
     * Returns the location (WGS84 coordinates) of possible entries to the POI.
     * These location can be used to determine a route.
     * @return The list of entry points to the POI
     */
-   public Location[] getEntryPoints();
+    Location[] getEntryPoints();
    
    /**
     * Returns additional properties of the POI.
     * @return The list of specific properties of the POI, null if properties are not 
     * provided
     */
-   public Map getProperties();
+    Map getProperties();
    
    /**
     * Returns the POI Category. The third party provider has to deliver the categories 
@@ -64,5 +64,13 @@ public interface PointOfInterest
     * The categroy is expressed by a String. It can contain sub-categories separated by a slash.
     * @return String The POI categories. Each sub category must 
     */
-   public String getCategory();
+    String getCategory();
+   
+    // ### Why do we need those methods? They are obtainable 
+    // through the Location of getLocation and getEntryPoints?
+   Coordinate getCoordinate();
+   Address getAddress();
+   Address[] getEntryAddresses();
+   Coordinate[] getEntryCoordinates();
+   
 }

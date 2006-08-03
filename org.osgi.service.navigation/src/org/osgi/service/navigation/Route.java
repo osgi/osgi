@@ -21,7 +21,7 @@ package org.osgi.service.navigation;
 /**
  * Interface to the route definition. The route has several states:
  */
-public interface Route extends Location {
+public interface Route  {
 	/**
 	 * Indicates that the shortest way must be found.
 	 */
@@ -47,22 +47,79 @@ public interface Route extends Location {
 	 */
 	public static final int	AVOID_FERRY		= 8;
 
-	RouteSegment next();
-	RouteSegment [] getSegments(int index, String filter);
-	RouteSegment getSegment(int n);
+	/**
+	 * ### Should we return the index?
+	 * ### what happens when you have not planned this Route?
+	 * ### will it return at the end?
+	 * ### what happens when the nav system replans because of some
+	 *     reason?
+	 * 
+	 * @return
+	 */
+	RouteSegment nextRouteSegment();
+	/**
+	 * ### What is the syntax of the filter?
+	 * ### what happens when you have not planned this Route?
+	 * ### what happens when you replan?
+	 * 
+	 * @param size maximum number of elements to return
+	 * @param filter an OSGi filter, for properties see ###
+	 * @return
+	 */
+	RouteSegment [] getRouteSegments(int size, String filter);
 	
+	/**
+	 * 
+	 * @param n Index
+	 * @return The n'th Route Segment, or null if no such Route Segment
+	 */
+	RouteSegment getRouteSegment(int n);
+
+	/**
+	 * ### Can you do this after planning?
+	 * ### Is there a circumference around the location to avoid?
+	 * ### Can this fail, if so, when is the exception thrown?
+	 * 
+	 * @param location
+	 */
 	void avoid(Location location);
+
+	/**
+	 * ### Does this imply there is a segment with the given location? Or is
+	 *     this the broad via "Lyon". If so, should this not have a Zone as parm?
+	 * ### If this location is unreachable, when will an exception be thrown?
+	 * 
+	 * @param location
+	 */
+	void via(Location location);
+	
 	Location[] getAvoids();
 	Location[] getVias();
 	
+	/**
+	 * ### remaining distance to where? The routeplan or this route?
+	 * 
+	 * @return
+	 */
 	double getRemainingDistance();
 	double getRemainingTravelTime();
 	
+	/**
+	 * ### what exceptions are thrown?
+	 * ### must the planning actually take place or can it be deferred?
+	 *
+	 */
 	void plan();
 	
 	void setStrategy(int strategy);
-	void via(Location location);
 	
 	Location getDestination();
 	
+	//### Do we need an error state if the planning failed? or do
+	// we throw a planning exception.
+	// Exception getErrorState();
+	
+	// ### do we need a getRouteSegment(Location) method so that
+	// we can easily find a segment on the route that we need to
+	// do something special with?
 }
