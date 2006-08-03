@@ -139,13 +139,12 @@ public class HttpTestBundle1 extends DefaultTestBundleControl implements
 		log("Simple Servlet unregistered");
 		// try to get and use the resoruce /tc2servlet after unregistering
 		log("Check if Simple servlet available after having been unregistered");
-		try {
-			in = new BufferedReader(new InputStreamReader(source.openStream()));
-			// read lines in resource /tc2servlet
-			while ((inputLine = in.readLine()) != null) {
-				log(inputLine);
+		try { 
+			HttpURLConnection conn = (HttpURLConnection) source.openConnection();
+			if (conn.getResponseCode() == HttpURLConnection.HTTP_NOT_FOUND) {
+				throw new IOException("404");
 			}
-			in.close();
+			log("Simple servlet improperly available");
 		}
 		catch (IOException e) {
 			log("Simple servlet not available");
@@ -293,7 +292,6 @@ public class HttpTestBundle1 extends DefaultTestBundleControl implements
 	void check(String urlstr) {
 		URL source = null;
 		String inputLine = new String();
-		StringBuffer resbuf = new StringBuffer();
 		BufferedReader in = null;
 		try {
 			source = new URL(urlstr);
@@ -304,8 +302,12 @@ public class HttpTestBundle1 extends DefaultTestBundleControl implements
 		}
 		try {
 			// get and use resoruce /tc5servlet
-			in = new BufferedReader(new InputStreamReader(source.openStream()));
+			HttpURLConnection conn = (HttpURLConnection) source.openConnection();
+			if (conn.getResponseCode() == HttpURLConnection.HTTP_NOT_FOUND) {
+				throw new IOException("404");
+			}
 			log("--- start file: " + source.getPath());
+			in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
 			// read lines in resource /tc5servlet
 			while ((inputLine = in.readLine()) != null) {
 				log(inputLine);
@@ -809,14 +811,13 @@ public class HttpTestBundle1 extends DefaultTestBundleControl implements
 		}
 		catch (MalformedURLException mue) {
 		}
-		BufferedReader in2 = null;
 		try {
 			// Access without permission
-			in2 = new BufferedReader(new InputStreamReader(source.openStream()));
-			while ((inputLine = in2.readLine()) != null) {
-				resbuf.append(inputLine);
+			HttpURLConnection conn = (HttpURLConnection) source.openConnection();
+			if (conn.getResponseCode() == HttpURLConnection.HTTP_UNAUTHORIZED) {
+				throw new IOException("401");
 			}
-			log(resbuf.toString());
+			log("Access improperly allowed");
 		}
 		catch (IOException fnfe) {
 			log("Access denied");
