@@ -31,11 +31,11 @@
 			<failing>
 				<xsl:for-each select="$set//testcase[@errors]">
 					<testcase errors="{@errors}" name="{@name}"/>
-					<redflag>
+					<redflag/>
 				</xsl:for-each>
 				<xsl:for-each select="$set//testcase[@exception]">
 					<testcase errors="{@errors}" name="{@name} (exception)"/>
-					<redflag>
+					<redflag/>
 				</xsl:for-each>
 			</failing>
 		</report>
