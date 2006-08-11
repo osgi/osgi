@@ -29,7 +29,7 @@
 			</xsl:attribute>
 			
 			<failing>
-				<xsl:for-each select="$set//testcase[@errors]">
+				<xsl:for-each select="$set//testcase[@errors] or $set//testcase[@exception]">
 					<testcase errors="{@errors}" name="{@name}"/>
 				</xsl:for-each>
 			</failing>
