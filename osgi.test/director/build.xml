@@ -11,6 +11,7 @@
 			<arg value="init"/>
 			<arg value="launch"/>
 			<arg value="install file:../osgi.jar start"/>
+			<arg value="install file:../servlet.jar start"/>
 			<arg value="install file:../osgi.min.jar start"/>
 			<arg value="install file:../osgi.director.jar start"/>
 		</java>
@@ -60,6 +61,7 @@
 			<arg value="init"/>
 			<arg value="launch"/>
 			<arg value="install file:../osgi.jar start"/>
+			<arg value="install file:../servlet.jar start"/>
 			<arg value="install file:../osgi.min.jar start"/>
 			<arg value="install file:../osgi.director.jar start"/>
 			<arg value="install ${tests} start"/>

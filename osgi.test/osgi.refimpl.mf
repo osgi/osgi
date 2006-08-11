@@ -11,7 +11,7 @@ Bundle-Category: osgi
 Bundle-DocUrl: http://www.osgi.org/
 $(EXPORT-PACKAGE)
 $(IMPORT-PACKAGE)
-group-load: ${replace:${impls}:$:.jar}, apache/servlet.jar
+group-load: apache/servlet.jar, ${replace:${impls}:$:.jar}
 
 
 
