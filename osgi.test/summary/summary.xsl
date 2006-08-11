@@ -16,10 +16,13 @@
 		<xsl:variable name="set" select="document(concat('../director/run-',@type,'.xml'))"/>
 		<report id="{@type}">
 			<xsl:attribute name="error">
-				<xsl:value-of select="sum($set//@errors)"/>	
+				<xsl:value-of select="sum($set//@errors)+count($set//@exception)"/>	
 			</xsl:attribute>
 			<xsl:attribute name="absent">
 				<xsl:value-of select="count($set//@absent)"/>	
+			</xsl:attribute>
+			<xsl:attribute name="exception">
+				<xsl:value-of select="count($set//@exception)"/>	
 			</xsl:attribute>
 			<xsl:attribute name="title">
 				<xsl:value-of select="@title"/>	
