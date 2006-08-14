@@ -6,7 +6,7 @@
 	The implementation is supplied by Eclipse Equinox.
 	-->
 	<target name="init" depends="master.init">
-		<copy file="${workspace}/licensed/jar/org.eclipse.osgi_3.2.0.jar"
+		<copy file="${workspace}/licensed/jar/org.eclipse.osgi.jar"
 		      tofile="${project}/${project.name}.jar"
 		      verbose="${verbose}"
 		      preservelastmodified="true" />
