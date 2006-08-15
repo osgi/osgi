@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry path="src" kind="src"/>
-	<classpathentry path="org.eclipse.jdt.launching.JRE_CONTAINER" kind="con"/>
-	<classpathentry path="/licensed/jar/org.eclipse.osgi_3.2.0.jar" kind="lib" exported="true"/>
-	<classpathentry path="src" kind="output"/>
+	<classpathentry exported="true" kind="lib" path="/licensed/jar/org.eclipse.osgi.jar"/>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="output" path="src"/>
 </classpath>
