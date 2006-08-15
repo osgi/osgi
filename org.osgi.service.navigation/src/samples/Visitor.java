@@ -25,7 +25,6 @@ import org.osgi.service.navigation.control.*;
 
 public class Visitor {
 	NavigationService nav;
-	NavigationSession session;
 	
 	List		visits;
 	
