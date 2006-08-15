@@ -27,7 +27,10 @@
 
 package org.osgi.test.cases.cu;
 
-import org.osgi.test.cases.util.DefaultTestCase;
+import org.osgi.test.cases.util.director.DefaultTestCase;
+
+
+
 
 /**
  *
