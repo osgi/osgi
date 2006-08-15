@@ -2,9 +2,9 @@
 <classpath>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/org.osgi.service.deploymentadmin"/>
-	<classpathentry sourcepath="/osgi.released/osgi.jar" kind="lib" path="/osgi.released/osgi.jar"/>
-	<classpathentry sourcepath="/osgi.released/ee.foundation.jar" kind="lib" path="/osgi.released/ee.foundation.jar"/>
+	<classpathentry kind="lib" path="/osgi.released/osgi.jar" sourcepath="/osgi.released/osgi.jar"/>
+	<classpathentry kind="lib" path="/osgi.released/ee.foundation.jar" sourcepath="/osgi.released/ee.foundation.jar"/>
 	<classpathentry kind="lib" path="/licensed/jar/saxon.jar"/>
-	<classpathentry kind="lib" path="/licensed/jar/org.eclipse.osgi_3.2.0.jar"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/org.osgi.impl.framework.eclipse"/>
 	<classpathentry kind="output" path="src"/>
 </classpath>
