@@ -27,7 +27,11 @@
  */
 package org.osgi.test.cases.cm;
 
-import org.osgi.test.cases.util.*;
+import org.osgi.test.cases.util.director.DefaultTestCase;
+
+
+
+
 
 /**
  * Configuration Management test case.

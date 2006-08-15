@@ -27,7 +27,11 @@
  */
 package org.osgi.test.cases.xml;
 
-import org.osgi.test.cases.util.DefaultTestCase;
+import org.osgi.test.cases.util.director.DefaultTestCase;
+
+
+
+
 
 /**
  * This is the test-case control bundle for the XML Parser Service test suite

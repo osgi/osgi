@@ -27,7 +27,8 @@
 
 package org.osgi.test.cases.packageadmin.tc5;
 
-import org.osgi.test.cases.util.DefaultTestCase;
+import org.osgi.test.cases.util.director.DefaultTestCase;
+
 
 /**
  *

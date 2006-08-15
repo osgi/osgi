@@ -28,7 +28,8 @@
 
 package org.osgi.test.cases.tracker;
 
-import org.osgi.test.cases.util.*;
+import org.osgi.test.cases.util.director.DefaultTestCase;
+
 /**
  * 
  *

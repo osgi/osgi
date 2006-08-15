@@ -27,7 +27,8 @@
  */
 package org.osgi.test.cases.measurement;
 
-import org.osgi.test.cases.util.*;
+import org.osgi.test.cases.util.director.DefaultTestCase;
+
 
 /**
  * 

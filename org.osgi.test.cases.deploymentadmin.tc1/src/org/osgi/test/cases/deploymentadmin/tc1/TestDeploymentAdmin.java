@@ -35,7 +35,10 @@
  */
 package org.osgi.test.cases.deploymentadmin.tc1;
 
-import org.osgi.test.cases.util.DefaultTestCase;
+import org.osgi.test.cases.util.director.DefaultTestCase;
+
+
+
 
 
 /**

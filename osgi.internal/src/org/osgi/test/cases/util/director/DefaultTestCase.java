@@ -26,7 +26,7 @@
  * property of their respective owners. All rights reserved.
  */
 
-package org.osgi.test.cases.util;
+package org.osgi.test.cases.util.director;
 
 import java.io.*;
 import java.net.*;

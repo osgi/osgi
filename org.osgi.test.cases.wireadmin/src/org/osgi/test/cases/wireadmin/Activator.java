@@ -1,6 +1,7 @@
 package org.osgi.test.cases.wireadmin;
 
-import org.osgi.test.cases.util.DefaultTestCase;
+import org.osgi.test.cases.util.director.DefaultTestCase;
+
 
 /**
  * The activator of the wire admin test case. Uses the default test case

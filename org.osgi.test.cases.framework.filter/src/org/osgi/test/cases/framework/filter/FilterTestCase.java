@@ -27,7 +27,8 @@
  */
 package org.osgi.test.cases.framework.filter;
 
-import org.osgi.test.cases.util.*;
+import org.osgi.test.cases.util.director.DefaultTestCase;
+
 
 /**
  * 

@@ -27,7 +27,8 @@
 
 package org.osgi.test.cases.signature;
 
-import org.osgi.test.cases.util.DefaultTestCase;
+import org.osgi.test.cases.util.director.DefaultTestCase;
+
 
 /**
  * TODO Provide a description of the test case.

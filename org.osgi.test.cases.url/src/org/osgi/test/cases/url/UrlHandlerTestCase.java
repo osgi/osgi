@@ -10,7 +10,8 @@
  */
 package org.osgi.test.cases.url;
 
-import org.osgi.test.cases.util.DefaultTestCase;
+import org.osgi.test.cases.util.director.DefaultTestCase;
+
 
 /**
  * 

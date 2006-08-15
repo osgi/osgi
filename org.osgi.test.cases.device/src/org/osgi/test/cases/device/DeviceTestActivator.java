@@ -1,6 +1,7 @@
 package org.osgi.test.cases.device;
 
-import org.osgi.test.cases.util.*;
+import org.osgi.test.cases.util.director.DefaultTestCase;
+
 
 /**
  * The activator of the device access test case

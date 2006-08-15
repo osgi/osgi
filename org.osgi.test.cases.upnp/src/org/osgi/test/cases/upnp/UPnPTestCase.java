@@ -1,6 +1,7 @@
 package org.osgi.test.cases.upnp;
 
-import org.osgi.test.cases.util.*;
+import org.osgi.test.cases.util.director.DefaultTestCase;
+
 
 /**
  * 

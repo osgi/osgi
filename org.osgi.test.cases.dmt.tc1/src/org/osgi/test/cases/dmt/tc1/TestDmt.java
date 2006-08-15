@@ -25,7 +25,8 @@
 
 package org.osgi.test.cases.dmt.tc1;
 
-import org.osgi.test.cases.util.DefaultTestCase;
+import org.osgi.test.cases.util.director.DefaultTestCase;
+
 
 /**
  * This test case validates the implementation of <code>DmtAdmin<code> service, according to 

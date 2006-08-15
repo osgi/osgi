@@ -6,12 +6,11 @@
  */
 package org.osgi.test.cases.packageadmin.tc1;
 
-import org.osgi.framework.*;
-import org.osgi.test.cases.util.*;
+import org.osgi.test.cases.util.director.DefaultTestCase;
 
 /**
  *  
  *  @testcase org.osgi.service.packageadmin
  */
-public class TC1 extends DefaultTestCase implements BundleActivator {
+public class TC1 extends DefaultTestCase  {
 }

@@ -36,16 +36,21 @@
  */
 package org.osgi.test.cases.application;
 
-import org.osgi.test.cases.util.DefaultTestCase;
+import org.osgi.test.cases.util.director.DefaultTestCase;
+
+
+
+
+
 
 /**
-* This Test Case Validates the implementation of
-* <code>Application<code> service, according to MEG reference
-* documentation.
-* 
-* @author Alexandre Alves
-* @testcase org.osgi.service.monitor
-*/
+ * This Test Case Validates the implementation of
+ * <code>Application<code> service, according to MEG reference
+ * documentation.
+ * 
+ * @author Alexandre Alves
+ * @testcase org.osgi.service.monitor
+ */
 public class TestApplication extends DefaultTestCase {
 
 }

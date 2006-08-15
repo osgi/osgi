@@ -32,7 +32,7 @@ import java.net.URL;
 
 import org.osgi.framework.*;
 import org.osgi.service.http.HttpService;
-import org.osgi.test.cases.util.DefaultTestCase;
+import org.osgi.test.cases.util.director.DefaultTestCase;
 import org.osgi.util.tracker.ServiceTracker;
 
 /**

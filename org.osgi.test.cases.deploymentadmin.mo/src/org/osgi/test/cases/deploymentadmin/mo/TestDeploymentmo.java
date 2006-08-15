@@ -36,7 +36,10 @@
  */
 package org.osgi.test.cases.deploymentadmin.mo;
 
-import org.osgi.test.cases.util.DefaultTestCase;
+import org.osgi.test.cases.util.director.DefaultTestCase;
+
+
+
 
 /**
  * This Test Case Validates the implementation of

@@ -6,7 +6,8 @@
  */
 package org.osgi.test.cases.framework.syncbundlelistener;
 
-import org.osgi.test.cases.util.*;
+import org.osgi.test.cases.util.director.*;
+
 
 /**
  * A TestCase testing diverse issues.

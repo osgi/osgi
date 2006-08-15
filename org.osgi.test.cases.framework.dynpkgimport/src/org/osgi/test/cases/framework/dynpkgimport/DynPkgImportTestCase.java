@@ -25,7 +25,8 @@
  */
 package org.osgi.test.cases.framework.dynpkgimport;
 
-import org.osgi.test.cases.util.*;
+import org.osgi.test.cases.util.director.DefaultTestCase;
+
 
 /**
  * 

@@ -6,7 +6,8 @@
  */
 package org.osgi.test.cases.framework.div;
 
-import org.osgi.test.cases.util.*;
+import org.osgi.test.cases.util.director.DefaultTestCase;
+
 
 /**
  * A TestCase testing diverse issues.

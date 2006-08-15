@@ -27,7 +27,9 @@
  */
 package org.osgi.test.cases.http;
 
-import org.osgi.test.cases.util.*;
+import org.osgi.test.cases.util.director.DefaultTestCase;
+
+
 
 
 /**
