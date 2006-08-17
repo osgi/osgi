@@ -1,4 +1,4 @@
-<?xml version='1.0' encoding='iso-8859-1'?>
+<?xml version='1.0' encoding='UTF-8'?>
 <cvs>
 	<record>
 		<h1> $/VehiclePowetrain </h1>
@@ -104,7 +104,7 @@
 	<record>
 		<h2> /Powerplant </h2>
 		<Type> Node </Type>
-		<Cardinality> 1�* </Cardinality>
+		<Cardinality> 1ï¿½* </Cardinality>
 		<Scope> P </Scope>
 		<Description> Interior node that represents the vehicle powerplant information </Description>
 	</record>
@@ -170,7 +170,7 @@
 		<Type> Float </Type>
 		<Cardinality> 1 </Cardinality>
 		<Scope> P </Scope>
-		<Description> Gets the manufacturer�s stated maximum powerplant speed in Hz </Description>
+		<Description> Gets the manufacturerï¿½s stated maximum powerplant speed in Hz </Description>
 	</record>
 	<record>
 		<h5> MaximumCoolantTemp </h5>
@@ -178,7 +178,7 @@
 		<Type> Float </Type>
 		<Cardinality> 1 </Cardinality>
 		<Scope> P </Scope>
-		<Description> Gets the manufacturer�s maximum stated coolant temperature in degrees Kelvin </Description>
+		<Description> Gets the manufacturerï¿½s maximum stated coolant temperature in degrees Kelvin </Description>
 	</record>
 	<record>
 		<h5> MaximumOilTemp </h5>
@@ -186,7 +186,7 @@
 		<Type> Float </Type>
 		<Cardinality> 1 </Cardinality>
 		<Scope> P </Scope>
-		<Description> Gets the manufacturer�s maximum stated oil temperature in degrees Kelvin </Description>
+		<Description> Gets the manufacturerï¿½s maximum stated oil temperature in degrees Kelvin </Description>
 	</record>
 	<record>
 		<h5> MaximumTemp </h5>
@@ -194,7 +194,7 @@
 		<Type> Float </Type>
 		<Cardinality> 1 </Cardinality>
 		<Scope> P </Scope>
-		<Description> Gets the manufacturer�s maximum stated operating temperature in degrees Kelvin
+		<Description> Gets the manufacturerï¿½s maximum stated operating temperature in degrees Kelvin
 			</Description>
 	</record>
 	<record>
@@ -260,7 +260,7 @@
 		<h3>
 			&lt;ICE-instance&gt; </h3>
 		<Type> Node </Type>
-		<Cardinality> 1�* </Cardinality>
+		<Cardinality> 1ï¿½* </Cardinality>
 		<Scope> P </Scope>
 		<Description> Interior node representing the ICE powerplant instance </Description>
 	</record>
@@ -285,7 +285,7 @@
 		<h4>
 			&lt;ICE-fuel-tank-instance&gt; </h4>
 		<Type> Node </Type>
-		<Cardinality> 1�* </Cardinality>
+		<Cardinality> 1ï¿½* </Cardinality>
 		<Scope> P </Scope>
 		<Description> Interior node that represents an instance of the vehicle ICE fuel tanks; The name is one of:
 			</Description>
@@ -328,7 +328,7 @@
 		<Type> Int </Type>
 		<Cardinality> 1 </Cardinality>
 		<Scope> P </Scope>
-		<Description> Gets the vehicle�s primary externally provided fuel type </Description>
+		<Description> Gets the vehicleï¿½s primary externally provided fuel type </Description>
 	</record>
 	<record>
 		<Value> 1 </Value>
@@ -364,14 +364,14 @@
 		<Type> Int </Type>
 		<Cardinality> 1 </Cardinality>
 		<Scope> P </Scope>
-		<Description> Gets the vehicle�s primary externally provided fuel grade in units corresponding to the fuel
+		<Description> Gets the vehicleï¿½s primary externally provided fuel grade in units corresponding to the fuel
 			type. E.g. (R+M)/2 octane for gasoline) </Description>
 	</record>
 	<record>
 		<h3>
 			&lt;Electric-instance&gt; </h3>
 		<Type> Node </Type>
-		<Cardinality> 1�* </Cardinality>
+		<Cardinality> 1ï¿½* </Cardinality>
 		<Scope> P </Scope>
 		<Description> Interior node representing the characteristics of the electric motor instance </Description>
 	</record>
@@ -407,7 +407,7 @@
 		<h4>
 			&lt;battery-instance&gt; </h4>
 		<Type> Node </Type>
-		<Cardinality> 1�* </Cardinality>
+		<Cardinality> 1ï¿½* </Cardinality>
 		<Scope> P </Scope>
 		<Description> Interior node that represents a specific battery instance. Name must be one of: </Description>
 	</record>
@@ -457,7 +457,7 @@
 	<record>
 		<h2> /Transmission </h2>
 		<Type> Node </Type>
-		<Cardinality> 1�* </Cardinality>
+		<Cardinality> 1ï¿½* </Cardinality>
 		<Scope> P </Scope>
 		<Description> Interior node representing the characteristics of the transmission </Description>
 	</record>
@@ -552,7 +552,7 @@
 		<Type> Int </Type>
 		<Cardinality> 1 </Cardinality>
 		<Scope> P </Scope>
-		<Description> Gets the manufacturer�s maximum recommended operating temperature in degrees Kelvin
+		<Description> Gets the manufacturerï¿½s maximum recommended operating temperature in degrees Kelvin
 			</Description>
 	</record>
 	<record>
@@ -561,7 +561,7 @@
 		<Type> Int </Type>
 		<Cardinality> 1 </Cardinality>
 		<Scope> P </Scope>
-		<Description> Gets the manufacturer�s maximum recommended operating torque in newton-meters
+		<Description> Gets the manufacturerï¿½s maximum recommended operating torque in newton-meters
 			</Description>
 	</record>
 	<record>
@@ -595,7 +595,7 @@
 		<Type> Chr </Type>
 		<Cardinality> 1 </Cardinality>
 		<Scope> P </Scope>
-		<Description> Gets the manufacturer�s recommended brake fluid type according to the applicable
+		<Description> Gets the manufacturerï¿½s recommended brake fluid type according to the applicable
 			specification for the OBD region </Description>
 	</record>
 	<record>
@@ -627,7 +627,7 @@
 	<record>
 		<h2> /TransferCase </h2>
 		<Type> Node </Type>
-		<Cardinality> 1�* </Cardinality>
+		<Cardinality> 1ï¿½* </Cardinality>
 		<Scope> P </Scope>
 		<Description> Interior node representing the characteristics of the transfer case </Description>
 	</record>
@@ -687,7 +687,7 @@
 		<Type> Int </Type>
 		<Cardinality> 1 </Cardinality>
 		<Scope> P </Scope>
-		<Description> Gets the manufacturer�s maximum recommended operating temperature in degrees Kelvin
+		<Description> Gets the manufacturerï¿½s maximum recommended operating temperature in degrees Kelvin
 			</Description>
 	</record>
 	<record>
@@ -775,7 +775,7 @@
 		<h3>
 			&lt;differential-instance&gt; </h3>
 		<Type> Node </Type>
-		<Cardinality> 1�* </Cardinality>
+		<Cardinality> 1ï¿½* </Cardinality>
 		<Scope> P </Scope>
 		<Description> Interior node representing the differential instance </Description>
 	</record>
