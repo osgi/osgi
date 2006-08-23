@@ -330,9 +330,16 @@ public class Schedule implements TestInterface {
 			
 			tbc.assertNotNull("Asserting that a ScheduledApplication was returned according to the used filter.", sa);
 			
-			synchronized (this) {
-				this.wait(ApplicationConstants.SHORT_TIMEOUT*120);
-			}
+      int handles = tbc.getNumberAppHandle();
+      int counter = 0;
+      //cycle until the handle appears or a timeout of 1+ minute passes
+      while (handles < 1 && counter < 62) {
+        synchronized (this) {
+          this.wait(1000);
+        }
+        handles = tbc.getNumberAppHandle();
+        counter++;
+      }
 					
 			tbc.assertEquals("Asserting that a ApplicationHandle was registered.", 1, tbc.getNumberAppHandle());
 						
