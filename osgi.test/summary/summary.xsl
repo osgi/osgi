@@ -15,8 +15,10 @@
 	<xsl:template match="test">
 		<xsl:variable name="set" select="document(concat('../director/run-',@type,'.xml'))"/>
 		<report id="{@type}">
+			<xsl:variable name="notestcases">0<xsl:if test="count($set//testcase)=1">1</xsl:if>
+			</xsl:variable>
 			<xsl:attribute name="error">
-				<xsl:value-of select="sum($set//@errors) + count($set//@exception)"/>	
+				<xsl:value-of select="sum($set//@errors) + count($set//@exception) + $notestcases"/>	
 			</xsl:attribute>
 			<xsl:attribute name="absent">
 				<xsl:value-of select="count($set//@absent)"/>	
@@ -29,6 +31,10 @@
 			</xsl:attribute>
 			
 			<failing>
+				<xsl:if test="$notestcases=1">
+					<testcase errors="1" name="batch"/>
+					<redflag/>
+				</xsl:if>
 				<xsl:for-each select="$set//testcase[@errors]">
 					<testcase errors="{@errors}" name="{@name}"/>
 					<redflag/>
