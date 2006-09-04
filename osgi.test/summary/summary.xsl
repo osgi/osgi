@@ -32,7 +32,7 @@
 			
 			<failing>
 				<xsl:if test="$notestcases=1">
-					<testcase errors="1" name="batch"/>
+					<testcase errors="1" name="no test cases"/>
 					<redflag/>
 				</xsl:if>
 				<xsl:for-each select="$set//testcase[@errors]">
