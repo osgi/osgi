@@ -34,7 +34,7 @@
 					<redflag/>
 				</xsl:for-each>
 				<xsl:for-each select="$set//testcase[@exception]">
-					<testcase errors="{@exception}" name="{@name} {@exception}"/>
+					<testcase errors="{@errors+1}" name="{@name} {@exception}"/>
 					<redflag/>
 				</xsl:for-each>
 			</failing>
