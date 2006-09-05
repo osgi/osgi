@@ -1,7 +1,7 @@
 Manifest-Version: 1.0
 Bundle-Name: osgi.core
 Bundle-SymbolicName: osgi.core
-Bundle-Version: 4.0.1
+Bundle-Version: ${core.release.version}
 Bundle-Description: OSGi Service Platform Release 4 Core Interface and Classes.
 Bundle-Copyright: Copyright (c) OSGi Alliance (2000, 2006). All Rights Reserved.
 Bundle-Vendor: OSGi Alliance

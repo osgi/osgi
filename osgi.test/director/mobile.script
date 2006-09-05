@@ -1,4 +1,4 @@
-<script name="mobile-compliance" version="4.0">
+<script name="mobile-compliance" version="4.1">
 	<delay duration="10" type="sec"/>
 	<properties location="test.properties"/>
 	<separate duration="1" type="sec"/>

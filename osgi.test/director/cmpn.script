@@ -1,9 +1,16 @@
-<script name="cmpn-compliance" version="4.0">
+<script name="cmpn-compliance" version="4.1">
 	<delay duration="10" type="sec"/>
 	<separate duration="1" type="sec"/>
 	
+	<testcase>test.application</testcase> 			<!-- Tests the Application service -->
 	<testcase>test.cm</testcase> 					<!-- Tests the Configuration Management service -->
 	<testcase>test.component</testcase> 			<!-- Tests the Declarative Services -->
+	<testcase>test.deploymentadmin.tc1</testcase> 	<!-- Tests the Deployment Admin --> 
+	<testcase>test.deploymentadmin.tc2</testcase> 	<!-- Tests the Deployment Admin --> 
+	<testcase>test.deploymentadmin.mo</testcase> 	<!-- Tests the Deployment Admin Managed Object --> 
+	<testcase>test.dmt.tc1</testcase> 				<!-- Tests the Dmt Main functionality --> 
+	<testcase>test.dmt.tc2</testcase> 				<!-- Tests the Dmt Plugin functionality --> 
+	<testcase>test.dmt.tc3</testcase> 			`	<!-- Tests the Dmt Other functionality --> 
 	<testcase>test.device</testcase> 				<!-- Tests the Device Access Specification --> 
 	<testcase>test.event</testcase> 				<!-- Tests the Event Admin --> 
 	<testcase>test.http</testcase> 					<!-- Tests the Http Service -->
@@ -11,6 +18,8 @@
 	<testcase>test.log</testcase> 					<!-- Tests the Log Service -->
 	<testcase>test.measurement</testcase> 			<!-- Tests the measurement utility -->
 	<testcase>test.metatype</testcase> 			    <!-- Tests the metatype spec -->
+	<testcase>test.monitor</testcase> 			    <!-- Tests the Monitor spec -->
+	<testcase>test.policy</testcase> 				<!-- Tests the Policy (gsm/mobile conditions) -->
 	<testcase>test.position</testcase> 				<!-- Tests the Position utility -->
 	<testcase>test.prefs</testcase> 				<!-- Tests the Preferences service -->
 	<testcase>test.provisioning</testcase> 			<!-- Tests Initial Provisioning -->

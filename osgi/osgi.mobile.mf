@@ -1,6 +1,6 @@
 Manifest-Version: 1.0
 Bundle-Name: osgi.mobile
-Bundle-Version: 4.0
+Bundle-Version: ${mobile.release.version}
 Bundle-SymbolicName: osgi.mobile
 Bundle-Description: OSGi Service Platform Release 4 Mobile Interfaces and Classes.
 Bundle-Copyright: Copyright (c) OSGi Alliance (2000, 2006). All Rights Reserved.
