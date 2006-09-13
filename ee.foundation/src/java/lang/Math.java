@@ -51,8 +51,8 @@ public final class Math {
 	public static double random() { return 0.0d; }
 	public static double toRadians(double var0) { return 0.0d; }
 	public static double toDegrees(double var0) { return 0.0d; }
-	public final static double E; static { E = 0.0d; }
-	public final static double PI; static { PI = 0.0d; }
+	public final static double E = 2.7182818284590452354d; 
+	public final static double PI = 3.14159265358979323846d;
 	private Math() { } /* generated constructor to prevent compiler adding default public constructor */
 }
 
