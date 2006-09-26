@@ -230,7 +230,7 @@ public interface ConfigurationAdmin {
 	 * <code>ConfigurationPermission[*,CONFIGURE]</code>.
 	 * 
 	 * <p>
-	 * The syntax of the filter string is as defined in the <code>Filter</code>
+	 * The syntax of the filter string is as defined in the {@link org.osgi.framework.Filter}
 	 * class. The filter can test any configuration parameters including the
 	 * following system properties:
 	 * <ul>
@@ -244,10 +244,10 @@ public interface ConfigurationAdmin {
 	 * The filter can also be <code>null</code>, meaning that all
 	 * <code>Configuration</code> objects should be returned.
 	 * 
-	 * @param filter a <code>Filter</code> object, or <code>null</code> to
+	 * @param filter A filter string, or <code>null</code> to
 	 *        retrieve all <code>Configuration</code> objects.
-	 * @return all matching <code>Configuration</code> objects, or
-	 *         <code>null</code> if there aren't any
+	 * @return All matching <code>Configuration</code> objects, or
+	 *         <code>null</code> if there aren't any.
 	 * @throws IOException if access to persistent storage fails
 	 * @throws InvalidSyntaxException if the filter string is invalid
 	 */
