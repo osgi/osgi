@@ -53,6 +53,8 @@ import java.security.*;
  *                       Bundle resource/entry URL creation
  *  startlevel           StartLevel.setStartLevel
  *                       StartLevel.setInitialBundleStartLevel 
+ *  context              Bundle.getBundleContext                     
+ *                       
  * </pre>
  * 
  * <p>
@@ -122,6 +124,12 @@ public final class AdminPermission extends BasicPermission {
 	 */
 	public final static String			STARTLEVEL			= "startlevel";
 
+	/**
+	 * The action string <code>context</code> (Value is "context").
+	 * @since 1.4
+	 */
+	public final static String			CONTEXT				= "context";
+	
 	/*
 	 * NOTE: A framework implementor may also choose to replace this class in
 	 * their distribution with a class that directly interfaces with the
@@ -221,8 +229,8 @@ public final class AdminPermission extends BasicPermission {
 	 * @param actions <code>class</code>, <code>execute</code>,
 	 *        <code>extensionLifecycle</code>, <code>lifecycle</code>,
 	 *        <code>listener</code>, <code>metadata</code>,
-	 *        <code>resolve</code>, <code>resource</code>, or
-	 *        <code>startlevel</code>. A value of "*" or <code>null</code>
+	 *        <code>resolve</code>, <code>resource</code>, 
+	 *        <code>startlevel</code> or <code>context</code>. A value of "*" or <code>null</code>
 	 *        indicates all actions
 	 */
 	public AdminPermission(String filter, String actions) {
@@ -258,7 +266,7 @@ public final class AdminPermission extends BasicPermission {
 	 *        <code>extensionLifecycle</code>, <code>lifecycle</code>,
 	 *        <code>listener</code>, <code>metadata</code>,
 	 *        <code>resolve</code>, <code>resource</code>,
-	 *        <code>startlevel</code>
+	 *        <code>startlevel</code>, <code>context</code>.
 	 * @since 1.3
 	 */
 	public AdminPermission(Bundle bundle, String actions) {
@@ -336,7 +344,7 @@ public final class AdminPermission extends BasicPermission {
 	 * following order: <code>class</code>, <code>execute</code>,
 	 * <code>extensionLifecycle</code>, <code>lifecycle</code>,
 	 * <code>listener</code>, <code>metadata</code>, <code>resolve</code>,
-	 * <code>resource</code>, <code>startlevel</code>.
+	 * <code>resource</code>, <code>startlevel</code>, <code>context</code>.
 	 * 
 	 * @return Canonical string representation of the
 	 *         <code>AdminPermission</code> actions.
