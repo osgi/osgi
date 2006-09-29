@@ -24,6 +24,7 @@ import java.net.URL;
 import java.util.Dictionary;
 import java.util.Enumeration;
 import org.osgi.framework.Bundle;
+import org.osgi.framework.BundleContext;
 import org.osgi.framework.BundleException;
 import org.osgi.framework.ServiceReference;
 import org.osgi.service.condpermadmin.Condition;
@@ -59,6 +60,7 @@ public class TestIMSI extends TestCase {
 		public URL getEntry(String name) { throw new IllegalStateException(); }
 		public long getLastModified() { throw new IllegalStateException(); }
 		public Enumeration findEntries(String path, String filePattern, boolean recurse) { throw new IllegalStateException(); }
+		public BundleContext getBundleContext() { throw new IllegalStateException(); }
 	}
 	
 	public void testBasic() throws Exception {
