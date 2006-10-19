@@ -50,8 +50,9 @@ public class GetHeaders {
 	private String[]		tb1_manifestHeadersValues					= {
 			"test.cases.framework.div.tb1",
 			"Contains the manifest checked by the test case.",
-			"Ericsson Radio Systems AB", "Improper value for bundle manifest version 2", "http://www.ericsson.com",
-			"info@ericsson.com",
+			"Ericsson Radio Systems AB",
+			"Improper value for bundle manifest version 2",
+			"http://www.ericsson.com", "info@ericsson.com",
 			"org.osgi.test.cases.framework.div.tb1.CheckManifest",
 			"should contain the bundle category",
 			"should contain the bundle copyright"						};
@@ -117,49 +118,40 @@ public class GetHeaders {
 			"org.osgi.test.cases.framework.div.tb9.CheckManifestGetHeadersLocale",
 			"bundlecategory", "bundlecopyright"							};
 
+	private String[]		tb9_manifestHeadersKeys						= {
+			"Bundle-Name", "Bundle-Description", "Bundle-Vendor",
+			"Bundle-DocURL", "Bundle-ContactAddress", "Bundle-Category",
+			"Bundle-Copyright",											};
+
 	private String[]		tb14_manifestHeadersKeys					= {
 			"Bundle-Name", "Bundle-Description", "Bundle-Vendor",
 			"Bundle-Version", "Bundle-DocURL", "Bundle-ContactAddress",
-			"Bundle-Category", "Bundle-Copyright"	};
+			"Bundle-Category", "Bundle-Copyright"						};
 
 	private String[]		tb14_manifestHeadersValues_en_US			= {
 			"test.cases.framework.div.tb14",
 			"Contains the manifest headers localized by bundle_en_US.properties test case.",
-			"CESAR.ORG", 
-			"1.0.1", 
-			"http://www.cesar.org.br", 
-			"info@cesar.org.br",
-			"Should contain the bundle category for tb14",
+			"CESAR.ORG", "1.0.1", "http://www.cesar.org.br",
+			"info@cesar.org.br", "Should contain the bundle category for tb14",
 			"Should contain the bundle copyright for tb14"				};
 
 	private String[]		tb14_manifestHeadersValues_pt_BR			= {
 			"test.cases.framework.div.tb14",
 			"Contains the manifest headers localized by bundle_pt_BR.properties test case.",
-			"CESAR.ORG",
-			"1.0.1", 
-			"http://www.cesar.org.br", 
-			"info@cesar.org.br",
-			"Should contain the bundle category for tb14",
+			"CESAR.ORG", "1.0.1", "http://www.cesar.org.br",
+			"info@cesar.org.br", "Should contain the bundle category for tb14",
 			"Should contain the bundle copyright for tb14"				};
 
 	private String[]		tb14_manifestHeadersValues_es_ES			= {
 			"test.cases.framework.div.tb23",
 			"Contains the manifest headers localized by bundle_es_ES.properties test case.",
-			"CESAR.ORG", 
-			"1.0.1", 
-			"http://www.cesar.org.br", "info@cesar.org.br",
-			"Should contain the bundle category for tb23",
+			"CESAR.ORG", "1.0.1", "http://www.cesar.org.br",
+			"info@cesar.org.br", "Should contain the bundle category for tb23",
 			"Should contain the bundle copyright for tb23"				};
 
 	private String[]		tb14_manifestHeadersValues_missingLocale	= {
-			"bundlename", 
-			"bundledescription", 
-			"bundlevendor", 
-			"1.0.1", 
-			"docurl",
-			"contactinfo", 
-			"bundlecategory", 
-			"bundlecopyright"							};
+			"bundlename", "bundledescription", "bundlevendor", "1.0.1",
+			"docurl", "contactinfo", "bundlecategory", "bundlecopyright"};
 
 	/**
 	 * Creates a new GetHeaders
@@ -267,7 +259,7 @@ public class GetHeaders {
 	 * @spec Bundle.getHeaders()
 	 */
 	void testGetHeaders003() throws Exception {
-		//specify default locale
+		// specify default locale
 		Locale.setDefault(new Locale("en", "US"));
 		Bundle tb9 = _context.installBundle(_tcHome + "tb9.jar");
 		tb9.start();
@@ -505,14 +497,19 @@ public class GetHeaders {
 	 * @spec Bundle.getHeaders(String)
 	 */
 	void testGetHeaders010() throws Exception {
+		
 		Locale.setDefault(new Locale("pt", "BR"));
-		//install host bundle
+		// install host bundle
 		Bundle tb9 = _context.installBundle(_tcHome + "tb9.jar");
-		//install fragment bundle
+		// install fragment bundle
 		Bundle tb14 = _context.installBundle(_tcHome + "tb14.jar");
+		
+		// Start the bundles to force them to resolve.
+		tb9.start();
+		tb14.start();
 
-		//When searching for a localization file of a fragment bundle,
-		//it must first look in the fragment’s host bundle (with the lowest
+		// When searching for a localization file of a fragment bundle,
+		// it must first look in the fragment’s host bundle (with the lowest
 		// bundle id) and then look
 		// in the host’s currently attached fragment bundles.
 		Dictionary h = tb14.getHeaders("pt_BR");
@@ -528,16 +525,21 @@ public class GetHeaders {
 		}
 
 		h = tb14.getHeaders("en_US");
-
+		
+		// Bug #385 indicates that this was invalid. The code assume
+		// the tb9 default was returned because the bundles were not started. However,
+		// the framework may resolve fragments at will. If the host/fragment 
+		// were resolved, a fragment must consult its host before looking in itself.
+		
 		// manifest localization before bundle is resolved.
-		for (int i = 0; i < tb14_manifestHeadersValues_pt_BR.length; i++) {
-			if (!h.get(tb14_manifestHeadersKeys[i]).equals(
-					tb14_manifestHeadersValues_pt_BR[i]))
+		for (int i = 0; i < tb9_manifestHeadersValues_en_US.length; i++) {
+			if (!h.get(tb9_manifestHeadersKeys[i]).equals(
+					tb9_manifestHeadersValues_en_US[i]))
 				throw new Exception(
 						"Exception on testGetHeaders010-2. Manifest header localization does not match. Expected "
-								+ tb14_manifestHeadersValues_pt_BR[i]
+								+ tb9_manifestHeadersValues_en_US[i]
 								+ " was "
-								+ h.get(tb14_manifestHeadersKeys[i]));
+								+ h.get(tb9_manifestHeadersKeys[i]));
 		}
 
 		tb14.uninstall();
@@ -583,17 +585,17 @@ public class GetHeaders {
 	void testGetHeaders012() throws Exception {
 
 		Locale.setDefault(new Locale("en", "US"));
-		//install fragment bundle
+		// install fragment bundle
 		Bundle tb14 = _context.installBundle(_tcHome + "tb14.jar");
-		//install host bundle
+		// install host bundle
 		Bundle tb9 = _context.installBundle(_tcHome + "tb9.jar");
 
-		//When searching for a localization file of a fragment bundle,
-		//it must first look in the fragment’s host bundle (with the lowest
+		// When searching for a localization file of a fragment bundle,
+		// it must first look in the fragment’s host bundle (with the lowest
 		// bundle id) and then look
 		// in the host’s currently attached fragment bundles.
 
-		//resolve fragment bundle
+		// resolve fragment bundle
 		tb9.start();
 		// manifest localization after bundle is resolved.
 		Dictionary h = tb14.getHeaders("en_US");
@@ -617,8 +619,8 @@ public class GetHeaders {
 	 * @spec Bundle.getHeaders(String)
 	 */
 	void testGetHeaders013() throws Exception {
-		//default locale should exist in any of the following
-		//bundles locale file
+		// default locale should exist in any of the following
+		// bundles locale file
 		Locale.setDefault(new Locale("fr", "CA"));
 		Bundle tb14 = _context.installBundle(_tcHome + "tb14.jar");
 		Bundle tb23 = _context.installBundle(_tcHome + "tb23.jar");
