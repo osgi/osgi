@@ -6,6 +6,9 @@
 	<target name="javadoc" depends="init">
 		<echo>${javadoc}</echo>
 		<mkdir dir="mif" />
+		<delete>
+			<fileset dir="xml" includes="*.xml"/>
+		</delete>
 		<javadoc doclet="org.osgi.tools.xmldoclet.XmlDoclet" docletpath="${workspace}/org.osgi.tools/src" classpath="${project.classpath}" encoding="utf-8" packagenames="${javadoc}">
 			<sourcepath>
 				<dirset dir="${workspace}">
@@ -18,7 +21,10 @@
 			<arg line="javadoc.xml xsl/javadoc.xsl" />
 		</java>
 
-		<foreach list="${javadoc}" delimiter=" ," target="-html2mif" param="item" inheritAll="true" />
+		<foreach delimiter=" ," target="-html2mif" param="item" inheritAll="true">
+			<fileset dir="xml" includes="*.xml"/>
+		</foreach>
+	
 	</target>
 
 	<target name="ees" depends="init">
@@ -73,13 +79,14 @@
 	</target>
 
 	<target name="-html2mif">
+		<basename property="base" file="${item}" suffix=".xml"/>
 		<java classname="com.icl.saxon.StyleSheet" classpath="${workspace}/licensed/jar/saxon.jar" fork="true">
-			<arg line="-o ${item}.tmp xml/${item}.xml xsl/html2mif.xsl" />
+			<arg line="-o ${base}.tmp xml/${base}.xml xsl/html2mif.xsl" />
 		</java>
 		<java classname="org.osgi.tools.xml2mif.XML2MIF" fork="true" classpath="${project.classpath}">
-			<arg line="-i ${item}.tmp -o mif/${item}.mif" />
+			<arg line="-i ${base}.tmp -o mif/${base}.mif" />
 		</java>
-		<delete file="${item}.tmp" />
+		<delete file="${base}.tmp" />
 	</target>
 
 
