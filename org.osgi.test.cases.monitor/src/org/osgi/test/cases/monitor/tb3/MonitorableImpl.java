@@ -208,7 +208,7 @@ public class MonitorableImpl implements Monitorable, TestingMonitorable {
 	
 	synchronized void log(String s) {
 		if ( tbc != null )
-			log(s);
+			tbc.log(s);
 	}
 
 
