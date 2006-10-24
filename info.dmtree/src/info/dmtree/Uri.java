@@ -65,7 +65,7 @@ public final class Uri {
 	 * the public static byte[] digest(byte[]) method on that class.
 	 */
 	
-	private static class ImplHolder {
+	private static class ImplHolder implements PrivilegedAction {
 		// the name of the system property containing the digest delegate class name
 		private static final String DIGEST_DELEGATE_PROPERTY = 
 			"org.osgi.vendor.dmtree.DigestDelegate";
@@ -74,45 +74,47 @@ public final class Uri {
 		static final Method digestMethod;
 		
 		static {
-			digestMethod = (Method) AccessController
-			.doPrivileged(new PrivilegedAction() {
-				public Object run() {
-					String className = System
-					.getProperty(DIGEST_DELEGATE_PROPERTY);
-					if (className == null) {
-						throw new NoClassDefFoundError("Digest " +
-								"delegate class property '" + 
-								DIGEST_DELEGATE_PROPERTY +
-								"' must be set to a " +
-								"class which implements a " +
-						"public static byte[] digest(byte[]) method."); 
-					}
-					
-					Class delegateClass;
-					try {
-						delegateClass = Class.forName(className);
-					}
-					catch (ClassNotFoundException e) {
-						throw new NoClassDefFoundError(e.toString());
-					}
-					
-					Method result;
-					try {
-						result = delegateClass.getMethod("digest",
-								new Class[] {byte[].class});
-					}
-					catch (NoSuchMethodException e) {
-						throw new NoSuchMethodError(e.toString());
-					}
-					
-					if (!Modifier.isStatic(result.getModifiers())) {
-						throw new NoSuchMethodError(
-						"digest method must be static");
-					}
-					
-					return result;
-				}
-			});
+			digestMethod = (Method) AccessController.doPrivileged(new ImplHolder());
+		}
+		
+		private ImplHolder() {
+		}
+
+		public Object run() {
+			String className = System
+			.getProperty(DIGEST_DELEGATE_PROPERTY);
+			if (className == null) {
+				throw new NoClassDefFoundError("Digest " +
+						"delegate class property '" + 
+						DIGEST_DELEGATE_PROPERTY +
+						"' must be set to a " +
+						"class which implements a " +
+				"public static byte[] digest(byte[]) method."); 
+			}
+			
+			Class delegateClass;
+			try {
+				delegateClass = Class.forName(className);
+			}
+			catch (ClassNotFoundException e) {
+				throw new NoClassDefFoundError(e.toString());
+			}
+			
+			Method result;
+			try {
+				result = delegateClass.getMethod("digest",
+						new Class[] {byte[].class});
+			}
+			catch (NoSuchMethodException e) {
+				throw new NoSuchMethodError(e.toString());
+			}
+			
+			if (!Modifier.isStatic(result.getModifiers())) {
+				throw new NoSuchMethodError(
+				"digest method must be static");
+			}
+			
+			return result;
 		}
 	}
 

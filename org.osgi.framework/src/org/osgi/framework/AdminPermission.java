@@ -144,49 +144,51 @@ public final class AdminPermission extends BasicPermission {
 	 * class will delegate method calls to the vendor AdminPermission instance.
 	 */
 
-	private static class ImplHolder {
+	private static class ImplHolder implements PrivilegedAction {
 		private static final String			packageProperty		= "org.osgi.vendor.framework";
 		static final Constructor	initStringString;
 		static final Constructor	initBundleString;
 		static {
-			Constructor[] constructors = (Constructor[]) AccessController
-			.doPrivileged(new PrivilegedAction() {
-				public Object run() {
-					String packageName = System
-					.getProperty(packageProperty);
-					if (packageName == null) {
-						throw new NoClassDefFoundError(packageProperty
-								+ " property not set");
-					}
-					
-					Class delegateClass;
-					try {
-						delegateClass = Class.forName(packageName
-								+ ".AdminPermission");
-					}
-					catch (ClassNotFoundException e) {
-						throw new NoClassDefFoundError(e.toString());
-					}
-					
-					Constructor[] result = new Constructor[2];
-					try {
-						result[0] = delegateClass
-						.getConstructor(new Class[] {String.class,
-								String.class			});
-						result[1] = delegateClass
-						.getConstructor(new Class[] {Bundle.class,
-								String.class			});
-					}
-					catch (NoSuchMethodException e) {
-						throw new NoSuchMethodError(e.toString());
-					}
-					
-					return result;
-				}
-			});
+			Constructor[] constructors = (Constructor[]) AccessController.doPrivileged(new ImplHolder());
 			
 			initStringString = constructors[0];
 			initBundleString = constructors[1];
+		}
+
+		private ImplHolder() {
+		}
+		
+		public Object run() {
+			String packageName = System
+			.getProperty(packageProperty);
+			if (packageName == null) {
+				throw new NoClassDefFoundError(packageProperty
+						+ " property not set");
+			}
+			
+			Class delegateClass;
+			try {
+				delegateClass = Class.forName(packageName
+						+ ".AdminPermission");
+			}
+			catch (ClassNotFoundException e) {
+				throw new NoClassDefFoundError(e.toString());
+			}
+			
+			Constructor[] result = new Constructor[2];
+			try {
+				result[0] = delegateClass
+				.getConstructor(new Class[] {String.class,
+						String.class			});
+				result[1] = delegateClass
+				.getConstructor(new Class[] {Bundle.class,
+						String.class			});
+			}
+			catch (NoSuchMethodException e) {
+				throw new NoSuchMethodError(e.toString());
+			}
+			
+			return result;
 		}
 	}
 	

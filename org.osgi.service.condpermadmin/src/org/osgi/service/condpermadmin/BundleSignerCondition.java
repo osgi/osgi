@@ -63,47 +63,49 @@ public class BundleSignerCondition {
 	 * getCondition methods calls to the vendor BundleSignerCondition class.
 	 */
 	
-	private static class ImplHolder {
+	private static class ImplHolder implements PrivilegedAction {
 		private static final String	packageProperty	= "org.osgi.vendor.condpermadmin";
 		static final Method	getCondition;
 		static {
-			getCondition = (Method) AccessController
-			.doPrivileged(new PrivilegedAction() {
-				public Object run() {
-					String packageName = System
-					.getProperty(packageProperty);
-					if (packageName == null) {
-						throw new NoClassDefFoundError(packageProperty
-								+ " property not set");
-					}
-					
-					Class delegateClass;
-					try {
-						delegateClass = Class.forName(packageName
-								+ ".BundleSignerCondition");
-					}
-					catch (ClassNotFoundException e) {
-						throw new NoClassDefFoundError(e.toString());
-					}
-					
-					Method result;
-					try {
-						result = delegateClass.getMethod("getCondition",
-								new Class[] {Bundle.class,
-								ConditionInfo.class		});
-					}
-					catch (NoSuchMethodException e) {
-						throw new NoSuchMethodError(e.toString());
-					}
-					
-					if (!Modifier.isStatic(result.getModifiers())) {
-						throw new NoSuchMethodError(
-								"getCondition method must be static");
-					}
-					
-					return result;
-				}
-			});
+			getCondition = (Method) AccessController.doPrivileged(new ImplHolder());
+		}
+
+		private ImplHolder() {
+		}
+
+		public Object run() {
+			String packageName = System
+			.getProperty(packageProperty);
+			if (packageName == null) {
+				throw new NoClassDefFoundError(packageProperty
+						+ " property not set");
+			}
+			
+			Class delegateClass;
+			try {
+				delegateClass = Class.forName(packageName
+						+ ".BundleSignerCondition");
+			}
+			catch (ClassNotFoundException e) {
+				throw new NoClassDefFoundError(e.toString());
+			}
+			
+			Method result;
+			try {
+				result = delegateClass.getMethod("getCondition",
+						new Class[] {Bundle.class,
+						ConditionInfo.class		});
+			}
+			catch (NoSuchMethodException e) {
+				throw new NoSuchMethodError(e.toString());
+			}
+			
+			if (!Modifier.isStatic(result.getModifiers())) {
+				throw new NoSuchMethodError(
+						"getCondition method must be static");
+			}
+			
+			return result;
 		}
 	}
 	

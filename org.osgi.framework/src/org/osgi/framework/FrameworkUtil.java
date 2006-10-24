@@ -46,7 +46,7 @@ public class FrameworkUtil {
 	 * will delegate method calls to the vendor FrameworkUtil instance.
 	 */
 
-	private static class ImplHolder {
+	private static class ImplHolder implements PrivilegedAction {
 		private static final String	packageProperty	= "org.osgi.vendor.framework";
 		
 		/*
@@ -55,42 +55,44 @@ public class FrameworkUtil {
 		static final Method	createFilter;
 		
 		static {
-			createFilter = (Method) AccessController
-			.doPrivileged(new PrivilegedAction() {
-				public Object run() {
-					String packageName = System
-					.getProperty(packageProperty);
-					if (packageName == null) {
-						throw new NoClassDefFoundError(packageProperty
-								+ " property not set");
-					}
-					
-					Class delegateClass;
-					try {
-						delegateClass = Class.forName(packageName
-								+ ".FrameworkUtil");
-					}
-					catch (ClassNotFoundException e) {
-						throw new NoClassDefFoundError(e.toString());
-					}
-					
-					Method result;
-					try {
-						result = delegateClass.getMethod("createFilter",
-								new Class[] {String.class});
-					}
-					catch (NoSuchMethodException e) {
-						throw new NoSuchMethodError(e.toString());
-					}
-					
-					if (!Modifier.isStatic(result.getModifiers())) {
-						throw new NoSuchMethodError(
-						"createFilter method must be static");
-					}
-					
-					return result;
-				}
-			});
+			createFilter = (Method) AccessController.doPrivileged(new ImplHolder());
+		}
+		
+		private ImplHolder() {
+		}
+
+		public Object run() {
+			String packageName = System
+			.getProperty(packageProperty);
+			if (packageName == null) {
+				throw new NoClassDefFoundError(packageProperty
+						+ " property not set");
+			}
+			
+			Class delegateClass;
+			try {
+				delegateClass = Class.forName(packageName
+						+ ".FrameworkUtil");
+			}
+			catch (ClassNotFoundException e) {
+				throw new NoClassDefFoundError(e.toString());
+			}
+			
+			Method result;
+			try {
+				result = delegateClass.getMethod("createFilter",
+						new Class[] {String.class});
+			}
+			catch (NoSuchMethodException e) {
+				throw new NoSuchMethodError(e.toString());
+			}
+			
+			if (!Modifier.isStatic(result.getModifiers())) {
+				throw new NoSuchMethodError(
+				"createFilter method must be static");
+			}
+			
+			return result;
 		}
 	}
 
