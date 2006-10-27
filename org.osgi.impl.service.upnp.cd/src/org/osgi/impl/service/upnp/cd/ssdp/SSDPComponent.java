@@ -91,9 +91,9 @@ public class SSDPComponent implements SSDPConstants {
 	// devices. It calls
 	// sendNotifyBye() method by passing the required details.
 	void readDevicesForNotifyBye() {
-		for (Enumeration enum = allDeviceDetails.elements(); enum
+		for (Enumeration enumeration = allDeviceDetails.elements(); enumeration
 				.hasMoreElements();) {
-			DeviceDetails devDet = (DeviceDetails) enum.nextElement();
+			DeviceDetails devDet = (DeviceDetails) enumeration.nextElement();
 			sendDeviceForNotifyBye(devDet.getUUID());
 		}
 	}

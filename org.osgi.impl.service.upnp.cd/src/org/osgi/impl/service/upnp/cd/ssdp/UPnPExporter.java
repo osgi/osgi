@@ -93,8 +93,8 @@ public class UPnPExporter implements ServiceTrackerCustomizer, HttpContext {
 
 	// This methods removes a event table entry.
 	synchronized void removeEventEntry(String uuid) {
-		for (Enumeration enum = eventTable.keys(); enum.hasMoreElements();) {
-			String key1 = (String) enum.nextElement();
+		for (Enumeration enumeration = eventTable.keys(); enumeration.hasMoreElements();) {
+			String key1 = (String) enumeration.nextElement();
 			if (key1.indexOf(uuid) != -1) {
 				eventTable.remove(key1);
 				ssdpcomp.eventregistry.removeServiceId(key1);
@@ -104,8 +104,8 @@ public class UPnPExporter implements ServiceTrackerCustomizer, HttpContext {
 
 	// This methods removes a control table entry.
 	synchronized void removeControlEntry(String uuid) {
-		for (Enumeration enum = controlTable.keys(); enum.hasMoreElements();) {
-			String key1 = (String) enum.nextElement();
+		for (Enumeration enumeration = controlTable.keys(); enumeration.hasMoreElements();) {
+			String key1 = (String) enumeration.nextElement();
 			if (key1.indexOf(uuid) != -1) {
 				controlTable.remove(key1);
 			}
@@ -121,8 +121,8 @@ public class UPnPExporter implements ServiceTrackerCustomizer, HttpContext {
 
 	// This methods removes a resources table entry.
 	synchronized void removeResource(String uuid) {
-		for (Enumeration enum = resources.keys(); enum.hasMoreElements();) {
-			String key1 = (String) enum.nextElement();
+		for (Enumeration enumeration = resources.keys(); enumeration.hasMoreElements();) {
+			String key1 = (String) enumeration.nextElement();
 			if (key1.indexOf(uuid) != -1) {
 				resources.remove(key1);
 			}
@@ -138,8 +138,8 @@ public class UPnPExporter implements ServiceTrackerCustomizer, HttpContext {
 
 	// This methods removes a icon table entry.
 	synchronized void removeIconEntry(String uuid) {
-		for (Enumeration enum = iconsTable.keys(); enum.hasMoreElements();) {
-			String key1 = (String) enum.nextElement();
+		for (Enumeration enumeration = iconsTable.keys(); enumeration.hasMoreElements();) {
+			String key1 = (String) enumeration.nextElement();
 			if (key1.indexOf(uuid) != -1) {
 				iconsTable.remove(key1);
 			}
@@ -277,8 +277,8 @@ public class UPnPExporter implements ServiceTrackerCustomizer, HttpContext {
 		removeControlEntry(udn);
 		removeResource(udn);
 		removeIconEntry(udn);
-		for (Enumeration enum = createdFiles.keys(); enum.hasMoreElements();) {
-			String key1 = (String) enum.nextElement();
+		for (Enumeration enumeration = createdFiles.keys(); enumeration.hasMoreElements();) {
+			String key1 = (String) enumeration.nextElement();
 			if (key1.indexOf(udn) != -1) {
 				try {
 					File storedFile = (File) createdFiles.get(key1);
@@ -298,8 +298,8 @@ public class UPnPExporter implements ServiceTrackerCustomizer, HttpContext {
 		controlTable = null;
 		iconsTable = null;
 		try {
-			for (Enumeration enum = createdFiles.keys(); enum.hasMoreElements();) {
-				String key1 = (String) enum.nextElement();
+			for (Enumeration enumeration = createdFiles.keys(); enumeration.hasMoreElements();) {
+				String key1 = (String) enumeration.nextElement();
 				try {
 					File storedFile = (File) createdFiles.get(key1);
 					storedFile.delete();

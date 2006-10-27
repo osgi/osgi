@@ -156,9 +156,9 @@ public class DeviceExporter implements Runnable, SSDPConstants {
 
 	// This method reads root device and embedded devices for NOTIFY.
 	void addDeviceForSsdp() {
-		for (Enumeration enum = notifyDevices.elements(); enum
+		for (Enumeration enumeration = notifyDevices.elements(); enumeration
 				.hasMoreElements();) {
-			DeviceDetails devDet = (DeviceDetails) enum.nextElement();
+			DeviceDetails devDet = (DeviceDetails) enumeration.nextElement();
 			sendDeviceForNotify(devDet);
 		}
 		System.out
@@ -381,8 +381,8 @@ public class DeviceExporter implements Runnable, SSDPConstants {
 	// This method makes all state variables descriptions of perticuler service.
 	String makeStatevarDescription(Vector stVars) {
 		String varsDes = "<serviceStateTable>\r\n";
-		for (Enumeration enum = stVars.elements(); enum.hasMoreElements();) {
-			UPnPStateVariable var = (UPnPStateVariable) enum.nextElement();
+		for (Enumeration enumeration = stVars.elements(); enumeration.hasMoreElements();) {
+			UPnPStateVariable var = (UPnPStateVariable) enumeration.nextElement();
 			if (var.sendsEvents()) {
 				varsDes = varsDes + "<stateVariable sendEvents=\"yes\">\r\n";
 			}

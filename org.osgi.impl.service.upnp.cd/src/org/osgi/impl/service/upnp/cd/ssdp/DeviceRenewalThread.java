@@ -21,9 +21,9 @@ public class DeviceRenewalThread extends Thread {
 	public void run() {
 		while (flag) {
 			try {
-				for (Enumeration enum = ssdpcomp.allDeviceDetails.elements(); enum
+				for (Enumeration enumeration = ssdpcomp.allDeviceDetails.elements(); enumeration
 						.hasMoreElements();) {
-					DeviceDetails device = (DeviceDetails) enum.nextElement();
+					DeviceDetails device = (DeviceDetails) enumeration.nextElement();
 					if (device.getTime() <= System.currentTimeMillis()) {
 						System.out.println("send renew notify message");
 						exporter.sendDeviceForNotify(device);

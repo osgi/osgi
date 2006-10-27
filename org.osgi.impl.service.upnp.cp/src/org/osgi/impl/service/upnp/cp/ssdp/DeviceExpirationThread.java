@@ -16,9 +16,9 @@ public class DeviceExpirationThread extends Thread {
 	public void run() {
 		while (flag) {
 			try {
-				Enumeration enum = ssdpcomp.devExpTimes.keys();
-				while (enum.hasMoreElements()) {
-					String uuid = (String) enum.nextElement();
+				Enumeration enumeration = ssdpcomp.devExpTimes.keys();
+				while (enumeration.hasMoreElements()) {
+					String uuid = (String) enumeration.nextElement();
 					Long expTime = (Long) ssdpcomp.devExpTimes.get(uuid);
 					if (expTime.longValue() <= System.currentTimeMillis()) {
 						ssdpcomp.removeDevice(uuid);

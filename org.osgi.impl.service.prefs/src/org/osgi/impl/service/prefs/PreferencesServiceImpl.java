@@ -83,10 +83,10 @@ public class PreferencesServiceImpl implements PreferencesService {
 	}
 	
 	public synchronized String[] getUsers() {
-		Enumeration enum = userPreferencesTable.keys();
+		Enumeration enumeration = userPreferencesTable.keys();
 		String[] result = new String[userPreferencesTable.size()];
-		for (int i = 0; enum.hasMoreElements(); i++) {
-			result[i] = (String) enum.nextElement();
+		for (int i = 0; enumeration.hasMoreElements(); i++) {
+			result[i] = (String) enumeration.nextElement();
 		}
 		return result;
 	}

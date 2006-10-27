@@ -151,9 +151,9 @@ public class EventSender implements Runnable {
 		StringBuffer sb = new StringBuffer();
 		sb.append(UPnPConstants.PROPSET_ST);
 		sb.append(UPnPConstants.CRLF);
-		Enumeration enum = dict.keys();
-		while (enum.hasMoreElements()) {
-			String key = (String) enum.nextElement();
+		Enumeration enumeration = dict.keys();
+		while (enumeration.hasMoreElements()) {
+			String key = (String) enumeration.nextElement();
 			sb.append(UPnPConstants.PROP_ST);
 			sb.append(UPnPConstants.CRLF);
 			sb.append(UPnPConstants.LB);

@@ -50,10 +50,10 @@ class SimplePreferences extends AbstractPreferences {
 	}
 
 	protected String[] keysSpi() {
-		Enumeration enum = prefs.keys();
+		Enumeration enumeration = prefs.keys();
 		String[] result = new String[prefs.size()];
-		for (int i = 0; enum.hasMoreElements(); i++) {
-			result[i] = (String) enum.nextElement();
+		for (int i = 0; enumeration.hasMoreElements(); i++) {
+			result[i] = (String) enumeration.nextElement();
 		}
 		return result;
 		// Java 2 version:
@@ -61,10 +61,10 @@ class SimplePreferences extends AbstractPreferences {
 	}
 
 	public String[] childrenNamesSpi() {
-		Enumeration enum = kids.keys();
+		Enumeration enumeration = kids.keys();
 		String[] result = new String[kids.size()];
-		for (int i = 0; enum.hasMoreElements(); i++) {
-			result[i] = (String) enum.nextElement();
+		for (int i = 0; enumeration.hasMoreElements(); i++) {
+			result[i] = (String) enumeration.nextElement();
 		}
 		return result;
 		// Java 2 version:

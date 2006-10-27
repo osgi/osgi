@@ -51,8 +51,8 @@ public class EventServiceImpl implements EventService {
 		if (subscriptionId == null) {
 			throw new UPnPException("service Id cannot be null");
 		}
-		for (Enumeration enum = subscriberList.keys(); enum.hasMoreElements();) {
-			String val1 = (String) enum.nextElement();
+		for (Enumeration enumeration = subscriberList.keys(); enumeration.hasMoreElements();) {
+			String val1 = (String) enumeration.nextElement();
 		}
 		Subscription sc = (Subscription) subscriberList.get(subscriptionId);
 		if (sc == null) {

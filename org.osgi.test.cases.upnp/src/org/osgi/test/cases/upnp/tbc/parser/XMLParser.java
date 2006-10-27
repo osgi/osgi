@@ -342,9 +342,9 @@ public class XMLParser {
 		result.append(sb + "<" + tag.getName());
 		Dictionary attrlist = tag.getAttributes();
 		if (attrlist != null) {
-			Enumeration enum = attrlist.keys();
-			while (enum.hasMoreElements()) {
-				String next = (String) enum.nextElement();
+			Enumeration enumeration = attrlist.keys();
+			while (enumeration.hasMoreElements()) {
+				String next = (String) enumeration.nextElement();
 				result.append(" " + next + "=\"" + attrlist.get(next) + "\"");
 			}
 		}

@@ -186,9 +186,9 @@ public final class HttpServer extends Thread {
 	void removeBundleRegistrations(Bundle bundle) {
 		AliasRegistration aliasReg;
 		int i = 0;
-		for (Enumeration enum = registrations.elements(); enum
+		for (Enumeration enumeration = registrations.elements(); enumeration
 				.hasMoreElements(); i++) {
-			aliasReg = (AliasRegistration) enum.nextElement();
+			aliasReg = (AliasRegistration) enumeration.nextElement();
 			if (bundle == aliasReg.getBundle()) {
 				removeRegistration(aliasReg);
 			}

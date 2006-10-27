@@ -139,9 +139,9 @@ public class SSDPParser implements SSDPConstants, Runnable {
 	// device ,embedded
 	// device or service information.It is for M-SEARCH request with ssdp:all.
 	void sendReplyForSsdpAll(String maxWait) {
-		for (Enumeration enum = ssdpcomp.allDeviceDetails.elements(); enum
+		for (Enumeration enumeration = ssdpcomp.allDeviceDetails.elements(); enumeration
 				.hasMoreElements();) {
-			DeviceDetails devDet = (DeviceDetails) enum.nextElement();
+			DeviceDetails devDet = (DeviceDetails) enumeration.nextElement();
 			if (devDet.isRoot()) {
 				String[] response = new String[3];
 				ssdpAll(devDet, maxWait, response, null);
@@ -201,9 +201,9 @@ public class SSDPParser implements SSDPConstants, Runnable {
 		Date dt = new Date(System.currentTimeMillis());
 		String usn = null;
 		String[] response = new String[1];
-		for (Enumeration enum = ssdpcomp.allDeviceDetails.elements(); enum
+		for (Enumeration enumeration = ssdpcomp.allDeviceDetails.elements(); enumeration
 				.hasMoreElements();) {
-			DeviceDetails devDet = (DeviceDetails) enum.nextElement();
+			DeviceDetails devDet = (DeviceDetails) enumeration.nextElement();
 			if (devDet.isRoot()) {
 				usn = new String(devDet.getUUID() + "::" + ROOTDEVICE);
 				response[0] = ssdpcomp.makeMsearchResponse(dt.toString(),
@@ -237,9 +237,9 @@ public class SSDPParser implements SSDPConstants, Runnable {
 		Date dt = new Date(System.currentTimeMillis());
 		String usn = null;
 		String[] response = new String[1];
-		for (Enumeration enum = ssdpcomp.allDeviceDetails.elements(); enum
+		for (Enumeration enumeration = ssdpcomp.allDeviceDetails.elements(); enumeration
 				.hasMoreElements();) {
-			DeviceDetails devDet = (DeviceDetails) enum.nextElement();
+			DeviceDetails devDet = (DeviceDetails) enumeration.nextElement();
 			if (devDet.isDevAvailable(st)) {
 				usn = new String(devDet.getUUID() + "::" + st);
 				response[0] = ssdpcomp.makeMsearchResponse(dt.toString(), st,
@@ -261,9 +261,9 @@ public class SSDPParser implements SSDPConstants, Runnable {
 		Date dt = new Date(System.currentTimeMillis());
 		String usn = null;
 		String[] response = new String[1];
-		for (Enumeration enum = ssdpcomp.allDeviceDetails.elements(); enum
+		for (Enumeration enumeration = ssdpcomp.allDeviceDetails.elements(); enumeration
 				.hasMoreElements();) {
-			DeviceDetails devDet = (DeviceDetails) enum.nextElement();
+			DeviceDetails devDet = (DeviceDetails) enumeration.nextElement();
 			if (devDet.isServiceAvailable(st)) {
 				usn = new String(devDet.getUUID() + "::" + st);
 				response[0] = ssdpcomp.makeMsearchResponse(dt.toString(), st,

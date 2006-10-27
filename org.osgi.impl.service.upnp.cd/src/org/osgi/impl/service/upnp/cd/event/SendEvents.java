@@ -122,8 +122,8 @@ class SendEvents extends Thread {
 	// xml format
 	String convertXml(Hashtable stateVariables) {
 		String xml = "<e:propertyset xmlns:e=\"urn:schemas-upnp-org:event-1-0\">\r\n";
-		for (Enumeration enum = stateVariables.keys(); enum.hasMoreElements();) {
-			String key = (String) enum.nextElement();
+		for (Enumeration enumeration = stateVariables.keys(); enumeration.hasMoreElements();) {
+			String key = (String) enumeration.nextElement();
 			Object val = (Object) stateVariables.get(key);
 			xml = xml + "  <e:property>\r\n" + "    <" + key + ">"
 					+ val.toString() + "</" + key + ">\r\n"

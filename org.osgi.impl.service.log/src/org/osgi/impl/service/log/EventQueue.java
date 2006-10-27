@@ -73,9 +73,9 @@ public class EventQueue extends Thread {
 	 */
 	protected synchronized void publishLogEntry(Vector logreaders,
 			LogEntry logentry) {
-		Enumeration enum = logreaders.elements();
-		while (enum.hasMoreElements()) {
-			LogReaderServiceImpl logreader = (LogReaderServiceImpl) enum
+		Enumeration enumeration = logreaders.elements();
+		while (enumeration.hasMoreElements()) {
+			LogReaderServiceImpl logreader = (LogReaderServiceImpl) enumeration
 					.nextElement();
 			Vector listeners = logreader.listeners;
 			if (listeners != null) {
@@ -119,9 +119,9 @@ public class EventQueue extends Thread {
 	 */
 	protected void deliverEvent(LogReaderServiceImpl logreader,
 			Vector listeners, LogEntry logentry) {
-		Enumeration enum = listeners.elements();
-		while (enum.hasMoreElements()) {
-			LogListener listener = (LogListener) enum.nextElement();
+		Enumeration enumeration = listeners.elements();
+		while (enumeration.hasMoreElements()) {
+			LogListener listener = (LogListener) enumeration.nextElement();
 			try {
 				logreader.deliverLogEntry(listener, logentry);
 			}

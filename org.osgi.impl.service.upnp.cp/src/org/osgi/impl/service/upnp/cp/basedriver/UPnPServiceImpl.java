@@ -194,8 +194,8 @@ public class UPnPServiceImpl implements SamsungUPnPService,
 
 	// This method sets all state variable values of service.
 	public void setChangedValue(Dictionary dict) {
-		for (Enumeration enum = dict.keys(); enum.hasMoreElements();) {
-			String variablename = (String) enum.nextElement();
+		for (Enumeration enumeration = dict.keys(); enumeration.hasMoreElements();) {
+			String variablename = (String) enumeration.nextElement();
 			SamsungUPnPStateVariable sst = (SamsungUPnPStateVariable) getStateVariable(variablename);
 			if (sst != null) {
 				sst.setChangedValue((String) dict.get(variablename));

@@ -40,12 +40,12 @@ public class UPnPBaseDriver implements UPnPDeviceListener {
 	// getting notifications.
 	public void stop() {
 		controller.unRegisterDeviceListener(this);
-		for (Enumeration enum = devices.elements(); enum.hasMoreElements();) {
-			UPnPDeviceImpl dev = (UPnPDeviceImpl) enum.nextElement();
+		for (Enumeration enumeration = devices.elements(); enumeration.hasMoreElements();) {
+			UPnPDeviceImpl dev = (UPnPDeviceImpl) enumeration.nextElement();
 			dev.unsubscribe();
 		}
-		for (Enumeration enum = servicerefs.elements(); enum.hasMoreElements();) {
-			ServiceRegistration sreg = (ServiceRegistration) enum.nextElement();
+		for (Enumeration enumeration = servicerefs.elements(); enumeration.hasMoreElements();) {
+			ServiceRegistration sreg = (ServiceRegistration) enumeration.nextElement();
 			if (sreg != null) {
 				try {
 					sreg.unregister();

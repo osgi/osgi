@@ -91,9 +91,9 @@ public class UPnPDeviceImpl implements UPnPDevice {
 
 	// This method invokes the unsubscribe method from all the UPnP services.
 	public void unsubscribe() {
-		for (Enumeration enum = services.elements(); enum.hasMoreElements();) {
+		for (Enumeration enumeration = services.elements(); enumeration.hasMoreElements();) {
 			try {
-				UPnPServiceImpl serv = (UPnPServiceImpl) enum.nextElement();
+				UPnPServiceImpl serv = (UPnPServiceImpl) enumeration.nextElement();
 				serv.unsubscribe();
 				serv.closeTracker();
 			}

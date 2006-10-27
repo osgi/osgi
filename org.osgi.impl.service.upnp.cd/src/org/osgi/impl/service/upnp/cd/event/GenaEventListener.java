@@ -29,9 +29,9 @@ public class GenaEventListener implements UPnPEventListener {
 			String eventsuburl = deviceId + serviceId;
 			String tmpEventUrl = "";
 			eventsuburl = eventsuburl.replace(':', '-');
-			for (Enumeration enum = EventRegistry.getSubscriberIds(); enum
+			for (Enumeration enumeration = EventRegistry.getSubscriberIds(); enumeration
 					.hasMoreElements();) {
-				String element = (String) enum.nextElement();
+				String element = (String) enumeration.nextElement();
 				Subscription subscription = (Subscription) EventRegistry
 						.getSubscriber(element);
 				String eventURL = subscription.getPublisherPath();
@@ -48,8 +48,8 @@ public class GenaEventListener implements UPnPEventListener {
 	Hashtable checkSendEvents(Hashtable statevariables, UPnPService upnpservice) {
 		Hashtable eventedVariables = new Hashtable();
 		UPnPStateVariable[] variables = upnpservice.getStateVariables();
-		for (Enumeration enum = statevariables.keys(); enum.hasMoreElements();) {
-			String variablename = (String) enum.nextElement();
+		for (Enumeration enumeration = statevariables.keys(); enumeration.hasMoreElements();) {
+			String variablename = (String) enumeration.nextElement();
 			for (int i = 0; i < variables.length; i++) {
 				if (variables[i].getName().equals(variablename)) {
 					if (variables[i].sendsEvents()) {

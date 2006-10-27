@@ -74,8 +74,8 @@ public class EventRegistry implements EventAccessForExporter {
 			}
 		}
 		idMapsListener.remove(serviceId);
-		for (Enumeration enum = subscribersList.keys(); enum.hasMoreElements();) {
-			String subscriptionId = (String) enum.nextElement();
+		for (Enumeration enumeration = subscribersList.keys(); enumeration.hasMoreElements();) {
+			String subscriptionId = (String) enumeration.nextElement();
 			Subscription subscription = (Subscription) subscribersList
 					.get(subscriptionId);
 			String serviceIdentifier = subscription.getServiceId();
@@ -104,9 +104,9 @@ public class EventRegistry implements EventAccessForExporter {
 	// keeping of listener with framework.
 	public static void checkForServiceId(String serviceId) {
 		boolean removeListener = true;
-		for (Enumeration enum = subscribersList.elements(); enum
+		for (Enumeration enumeration = subscribersList.elements(); enumeration
 				.hasMoreElements();) {
-			if (((Subscription) enum.nextElement()).getServiceId().equals(
+			if (((Subscription) enumeration.nextElement()).getServiceId().equals(
 					serviceId)) {
 				removeListener = false;
 				break;
@@ -127,8 +127,8 @@ public class EventRegistry implements EventAccessForExporter {
 	}
 
 	public void releaseAllListeners() {
-		for (Enumeration enum = idMapsListener.keys(); enum.hasMoreElements();) {
-			String eventUrl = (String) enum.nextElement();
+		for (Enumeration enumeration = idMapsListener.keys(); enumeration.hasMoreElements();) {
+			String eventUrl = (String) enumeration.nextElement();
 			ServiceRegistration registration = (ServiceRegistration) idMapsListener
 					.get(eventUrl);
 			try {
