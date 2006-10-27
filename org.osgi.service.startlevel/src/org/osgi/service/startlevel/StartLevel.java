@@ -50,13 +50,19 @@ import org.osgi.framework.Bundle;
  * When the Framework is launched, the Framework will enter start level one and
  * all bundles which are assigned to start level one and are persistently marked
  * to be started are started as described in the <code>Bundle.start</code>
- * method. Within a start level, bundles are started in ascending order by
- * <code>Bundle.getBundleId</code>. The Framework will continue to increase
+ * method. The Framework will continue to increase
  * the start level, starting bundles at each start level, until the Framework
  * has reached a beginning start level. At this point the Framework has
  * completed starting bundles and will then fire a Framework event of type
  * <code>FrameworkEvent.STARTED</code> to announce it has completed its
  * launch.
+ * 
+ * <p>
+ * Within a start level, bundles may be started in order defined by
+ * the Framework implementation. This may be something like ascending 
+ * <code>Bundle.getBundleId</code> order or an order based upon dependencies
+ * between bundles. A similar but reversed order may be used when stopping
+ * bundles within a start level.
  * 
  * <p>
  * The StartLevel service can be used by management bundles to alter the active
@@ -95,8 +101,7 @@ public interface StartLevel {
 	 * target start level, the framework must:
 	 * <ol>
 	 * <li>Change the active start level to the intermediate start level value.
-	 * <li>Start bundles at the intermediate start level in ascending order by
-	 * <code>Bundle.getBundleId</code>.
+	 * <li>Start bundles at the intermediate start level.
 	 * </ol>
 	 * When this process completes after the specified start level is reached,
 	 * the Framework will fire a Framework event of type
@@ -114,8 +119,7 @@ public interface StartLevel {
 	 * At each intermediate start level value on the way to and including the
 	 * specified start level, the framework must:
 	 * <ol>
-	 * <li>Stop bundles at the intermediate start level in descending order by
-	 * <code>Bundle.getBundleId</code>.
+	 * <li>Stop bundles at the intermediate start level.
 	 * <li>Change the active start level to the intermediate start level value.
 	 * </ol>
 	 * When this process completes after the specified start level is reached,
