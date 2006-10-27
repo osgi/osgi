@@ -60,7 +60,7 @@ public class BundleEvent extends EventObject {
 	 * <p>
 	 * The value of <code>STARTED</code> is 0x00000002.
 	 * 
-	 * @see Bundle#start
+	 * @see Bundle#start()
 	 */
 	public final static int	STARTED				= 0x00000002;
 
@@ -69,7 +69,7 @@ public class BundleEvent extends EventObject {
 	 * <p>
 	 * The value of <code>STOPPED</code> is 0x00000004.
 	 * 
-	 * @see Bundle#stop
+	 * @see Bundle#stop()
 	 */
 	public final static int	STOPPED				= 0x00000004;
 
