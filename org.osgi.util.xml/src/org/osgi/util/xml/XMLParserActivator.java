@@ -137,7 +137,6 @@ public class XMLParserActivator implements BundleActivator, ServiceFactory {
 	 *         bundle is marked as stopped and the Framework will remove this
 	 *         bundle's listeners, unregister all services registered by this
 	 *         bundle, and release all services used by this bundle.
-	 * @see Bundle#start
 	 */
 	public void start(BundleContext context) throws Exception {
 		this.context = context;
@@ -159,7 +158,6 @@ public class XMLParserActivator implements BundleActivator, ServiceFactory {
 	}
 
 	/**
-	 * <p>
 	 * This method has nothing to do as all active service registrations will
 	 * automatically get unregistered when the bundle stops.
 	 * 
@@ -168,7 +166,6 @@ public class XMLParserActivator implements BundleActivator, ServiceFactory {
 	 *         bundle is still marked as stopped, and the Framework will remove
 	 *         the bundle's listeners, unregister all services registered by the
 	 *         bundle, and release all services used by the bundle.
-	 * @see Bundle#stop
 	 */
 	public void stop(BundleContext context) throws Exception {
 	}
