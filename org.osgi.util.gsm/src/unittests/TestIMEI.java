@@ -61,6 +61,8 @@ public class TestIMEI extends TestCase {
 		public long getLastModified() { throw new IllegalStateException(); }
 		public Enumeration findEntries(String path, String filePattern, boolean recurse) { throw new IllegalStateException(); }
 		public BundleContext getBundleContext() { throw new IllegalStateException(); }
+		public void start(int activation) throws BundleException { throw new IllegalStateException(); }
+		public void stop(int activation) throws BundleException { throw new IllegalStateException(); }
 	}
 	
 	public void testBasic() throws Exception {
