@@ -30,7 +30,7 @@ public class DataInputStream extends java.io.FilterInputStream implements java.i
 	public final void readFully(byte[] var0) throws java.io.IOException { }
 	public final void readFully(byte[] var0, int var1, int var2) throws java.io.IOException { }
 	public final int readInt() throws java.io.IOException { return 0; }
-	public final java.lang.String readLine() throws java.io.IOException { return null; }
+	/** @deprecated */ public final java.lang.String readLine() throws java.io.IOException { return null; }
 	public final long readLong() throws java.io.IOException { return 0l; }
 	public final short readShort() throws java.io.IOException { return 0; }
 	public final int readUnsignedByte() throws java.io.IOException { return 0; }
