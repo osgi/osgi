@@ -18,7 +18,7 @@
  */
 
 package java.security;
-public abstract class Identity implements java.security.Principal, java.io.Serializable {
+/** @deprecated */ public abstract class Identity implements java.security.Principal, java.io.Serializable {
 	protected Identity() { }
 	public Identity(java.lang.String var0) { }
 	public Identity(java.lang.String var0, java.security.IdentityScope var1) throws java.security.KeyManagementException { }

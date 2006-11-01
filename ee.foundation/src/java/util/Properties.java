@@ -27,7 +27,7 @@ public class Properties extends java.util.Hashtable {
 	public void list(java.io.PrintWriter var0) { }
 	public void load(java.io.InputStream var0) throws java.io.IOException { }
 	public java.util.Enumeration propertyNames() { return null; }
-	public void save(java.io.OutputStream var0, java.lang.String var1) { }
+	/** @deprecated */ public void save(java.io.OutputStream var0, java.lang.String var1) { }
 	public java.lang.Object setProperty(java.lang.String var0, java.lang.String var1) { return null; }
 	public void store(java.io.OutputStream var0, java.lang.String var1) throws java.io.IOException { }
 	protected java.util.Properties defaults;

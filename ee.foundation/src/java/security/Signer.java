@@ -18,7 +18,7 @@
  */
 
 package java.security;
-public abstract class Signer extends java.security.Identity {
+/** @deprecated */ public abstract class Signer extends java.security.Identity {
 	protected Signer() { }
 	public Signer(java.lang.String var0) { }
 	public Signer(java.lang.String var0, java.security.IdentityScope var1) throws java.security.KeyManagementException { }
