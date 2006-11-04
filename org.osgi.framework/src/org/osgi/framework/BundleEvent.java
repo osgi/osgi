@@ -58,6 +58,9 @@ public class BundleEvent extends EventObject {
 	/**
 	 * The bundle has been started.
 	 * <p>
+	 * The bundle's {@link BundleActivator#start(BundleContext) BundleActivator start} 
+	 * method has been executed if the bundle has a bundle activator class.
+	 * <p>
 	 * The value of <code>STARTED</code> is 0x00000002.
 	 * 
 	 * @see Bundle#start()
@@ -66,6 +69,9 @@ public class BundleEvent extends EventObject {
 
 	/**
 	 * The bundle has been stopped.
+	 * <p>
+	 * The bundle's {@link BundleActivator#stop(BundleContext) BundleActivator stop} 
+	 * method has been executed if the bundle has a bundle activator class.
 	 * <p>
 	 * The value of <code>STOPPED</code> is 0x00000004.
 	 * 
@@ -112,7 +118,11 @@ public class BundleEvent extends EventObject {
 	public final static int	UNRESOLVED			= 0x00000040;
 
 	/**
-	 * The bundle is about to start.
+	 * The bundle is about to be activated.
+	 * <p>
+	 * The bundle's {@link BundleActivator#start(BundleContext) BundleActivator start} 
+	 * method is about to be called if the bundle has a bundle activator class.
+	 * This event is only delivered to {@link SynchronousBundleListener}'s.
 	 * <p>
 	 * The value of <code>STARTING</code> is 0x00000080.
 	 * 
@@ -122,7 +132,11 @@ public class BundleEvent extends EventObject {
 	public final static int	STARTING			= 0x00000080;
 
 	/**
-	 * The bundle is about to stop.
+	 * The bundle is about to deactivated.
+	 * <p>
+	 * The bundle's {@link BundleActivator#stop(BundleContext) BundleActivator stop} 
+	 * method is about to be called if the bundle has a bundle activator class.
+	 * This event is only delivered to {@link SynchronousBundleListener}'s.
 	 * <p>
 	 * The value of <code>STOPPING</code> is 0x00000100.
 	 * 
@@ -130,6 +144,21 @@ public class BundleEvent extends EventObject {
 	 * @since 1.3
 	 */
 	public final static int	STOPPING			= 0x00000100;
+
+	/**
+	 * The bundle will be lazily activated.
+	 * <p>
+	 * The bundle has a {@link Constants#ACTIVATION_LAZY lazy activation policy} and 
+	 * is waiting to be activated. 
+	 * It is now in the {@link Bundle#STARTING STARTING} state and has a valid 
+	 * <code>BundleContext</code>.
+	 * This event is only delivered to {@link SynchronousBundleListener}'s.
+	 * <p>
+	 * The value of <code>LAZY_ACTIVATION</code> is 0x00000200.
+	 * 
+	 * @since 1.4
+	 */
+	public final static int	LAZY_ACTIVATION			= 0x00000200;
 
 	/**
 	 * Creates a bundle event of the specified type.
@@ -159,6 +188,7 @@ public class BundleEvent extends EventObject {
 	 * <ul>
 	 * <li>{@link #INSTALLED}
 	 * <li>{@link #RESOLVED}
+	 * <li>{@link #LAZY_ACTIVATION}
 	 * <li>{@link #STARTING}
 	 * <li>{@link #STARTED}
 	 * <li>{@link #STOPPING}

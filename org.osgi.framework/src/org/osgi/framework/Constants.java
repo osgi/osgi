@@ -235,14 +235,6 @@ public interface Constants {
 	 * identifying the version of a package specified in the Export-Package or
 	 * Import-Package manifest header.
 	 * 
-	 * <p>
-	 * The attribute value is encoded in the Export-Package or Import-Package
-	 * manifest header like:
-	 * 
-	 * <pre>
-	 *   Import-Package: org.osgi.framework ; specification-version=&quot;1.1&quot;
-	 * </pre>
-	 * 
 	 * @deprecated As of 1.3. This has been replaced by
 	 *             {@link #VERSION_ATTRIBUTE}.
 	 */
@@ -899,16 +891,22 @@ public interface Constants {
 	public final static String	USES_DIRECTIVE							= "uses";
 
 	/**
-	 * Manifest header directive (named &quot;include&quot;) identifying a list
-	 * of classes and/or resources of the specified package which must be
-	 * allowed to be exported in the Export-Package manifest header.
-	 * 
+	 * Manifest header directive (named &quot;include&quot;).
 	 * <p>
-	 * The directive value is encoded in the Export-Package manifest header
-	 * like:
-	 * 
+	 * This directive is used by the Import-Package manifest header to
+	 * identify a list of classes of the specified package which must be 
+	 * allowed to be exported. The directive value is encoded in the 
+	 * Import-Package manifest header like:
 	 * <pre>
-	 *   Export-Package: org.osgi.framework; include:=&quot;MyStuff*&quot;
+	 *   Import-Package: org.osgi.framework; include:=&quot;MyClass*&quot;
+	 * </pre>
+	 * <p>
+	 * This directive is also used by the Bundle-ActivationPolicy manifest 
+	 * header to identify the packages from which class loads will trigger 
+	 * lazy activation. The directive value is encoded in the 
+	 * Bundle-ActivationPolicy manifest header like:
+	 * <pre>
+	 *   Bundle-ActivationPolicy: lazy; include:=&quot;org.osgi.framework&quot;
 	 * </pre>
 	 * 
 	 * @since 1.3
@@ -916,16 +914,22 @@ public interface Constants {
 	public final static String	INCLUDE_DIRECTIVE						= "include";
 
 	/**
-	 * Manifest header directive (named &quot;exclude&quot;) identifying a list
-	 * of classes and/or resources of the specified package which must not be
-	 * allowed to be exported in the Export-Package manifest header.
-	 * 
+	 * Manifest header directive (named &quot;exclude&quot;).
 	 * <p>
-	 * The directive value is encoded in the Export-Package manifest header
-	 * like:
-	 * 
+	 * This directive is used by the Export-Package manifest header to
+	 * identify a list of classes of the specified package which must not be 
+	 * allowed to be exported. The directive value is encoded in the 
+	 * Export-Package manifest header like:
 	 * <pre>
-	 *   Export-Package: org.osgi.framework; exclude:=&quot;MyStuff*&quot;
+	 *   Export-Package: org.osgi.framework; exclude:=&quot;*Impl&quot;
+	 * </pre>
+	 * <p>
+	 * This directive is also used by the Bundle-ActivationPolicy manifest 
+	 * header to identify the packages from which class loads will not trigger 
+	 * lazy activation. The directive value is encoded in the 
+	 * Bundle-ActivationPolicy manifest header like:
+	 * <pre>
+	 *   Bundle-ActivationPolicy: lazy; exclude:=&quot;org.osgi.framework&quot;
 	 * </pre>
 	 * 
 	 * @since 1.3
@@ -1060,5 +1064,42 @@ public interface Constants {
 	 * @since 1.3
 	 */
 	public final static String	EXTENSION_BOOTCLASSPATH			= "bootclasspath";
+	
+	/**
+	 * Manifest header (named &quot;Bundle-ActivationPolicy&quot;) identifying the
+	 * bundle's activation policy.
+	 * <p>
+	 * The attribute value may be retrieved from the <code>Dictionary</code>
+	 * object returned by the <code>Bundle.getHeaders</code> method.
+	 * 
+	 * @since 1.4
+	 * @see Constants#ACTIVATION_LAZY
+	 * @see Constants#INCLUDE_DIRECTIVE
+	 * @see Constants#EXCLUDE_DIRECTIVE
+	 */
+	public final static String	BUNDLE_ACTIVATIONPOLICY			= "Bundle-ActivationPolicy";
 
+	/**
+	 * Bundle activation policy (named &quot;lazy&quot;) declaring the 
+	 * bundle must be activated when the first class load is made from the 
+	 * bundle.
+	 * <p>
+	 * A bundle with the lazy activation policy enters the {@link Bundle#STARTING STARTING}
+	 * state as soon as it is resolved and its start level has been met. The bundle
+	 * will wait in the STARTING state until the first class load from the bundle
+	 * occurs. The bundle will then be activated before the class is returned to the
+	 * requestor.
+	 * <p>
+	 * The activation policy value is specified as in the Bundle-ActivationPolicy
+	 * manifest header like:
+	 * 
+	 * <pre>
+	 *   Bundle-ActivationPolicy: lazy
+	 * </pre>
+	 * 
+	 * @see Constants#BUNDLE_ACTIVATIONPOLICY
+	 * @since 1.4
+	 */
+	public final static String	ACTIVATION_LAZY					= "lazy";
+	
 }

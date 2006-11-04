@@ -216,9 +216,9 @@ public interface Bundle {
 	 * <li>If this bundle's state is <code>UNINSTALLED</code> then an
 	 * <code>IllegalStateException</code> is thrown.
 	 * 
-	 * <li>If this bundle's state is <code>STARTING</code> or
-	 * <code>STOPPING</code> then this method must wait for this bundle to
-	 * change state before continuing. If this does not occur in a reasonable
+	 * <li>If this bundle is in the process of being activated or deactivated 
+	 * then this method must wait for activation or deactivation to 
+	 * complete before continuing. If this does not occur in a reasonable
 	 * time, a <code>BundleException</code> is thrown to indicate this bundle
 	 * was unable to be started.
 	 * 
@@ -242,10 +242,13 @@ public interface Bundle {
 	 * <li>The {@link BundleActivator#start} method of this bundle's
 	 * <code>BundleActivator</code>, if one is specified, is called. If the
 	 * <code>BundleActivator</code> is invalid or throws an exception, this
-	 * bundle's state is set back to <code>RESOLVED</code>.<br>
+	 * bundle's state is set to <code>STOPPING</code>.<br>
+	 * A bundle event of type {@link BundleEvent#STOPPING} is fired. <br>
 	 * Any services registered by the bundle must be unregistered. <br>
 	 * Any services used by the bundle must be released. <br>
 	 * Any listeners registered by the bundle must be removed. <br>
+	 * This bundle's state is set to <code>RESOLVED</code>.<br>
+	 * A bundle event of type {@link BundleEvent#STOPPED} is fired. <br>
 	 * A <code>BundleException</code> is then thrown.
 	 * 
 	 * <li>If this bundle's state is <code>UNINSTALLED</code>, because the
@@ -259,8 +262,10 @@ public interface Bundle {
 	 * 
 	 * <b>Preconditions </b>
 	 * <ul>
-	 * <li><code>getState()</code> in {<code>INSTALLED</code>}, {
-	 * <code>RESOLVED</code>}.
+	 * <li><code>getState()</code> in {<code>INSTALLED</code>,
+	 * <code>RESOLVED</code>} or {<code>INSTALLED</code>,
+	 * <code>RESOLVED</code>, <code>STARTING</code>} if the bundle
+	 * has a lazy activation policy.
 	 * </ul>
 	 * <b>Postconditions, no exceptions thrown </b>
 	 * <ul>
@@ -274,12 +279,13 @@ public interface Bundle {
 	 * <ul>
 	 * <li>Depending on when the exception occurred, bundle persistent state is
 	 * marked as active unless the {@link #START_TRANSIENT} option was set.
-	 * <li><code>getState()</code> not in {<code>STARTING</code>}, {
+	 * <li><code>getState()</code> not in {<code>STARTING</code>,
 	 * <code>ACTIVE</code>}.
 	 * </ul>
 	 * 
 	 * @param options The options for starting this bundle. See
-	 *         {@link #START_TRANSIENT}.
+	 *         {@link #START_TRANSIENT}. The Framework must ignore unrecognized
+	 *         options.
 	 * @throws BundleException If this bundle could not be started. This could
 	 *         be because a code dependency could not be resolved or the
 	 *         specified <code>BundleActivator</code> could not be loaded or
@@ -321,9 +327,9 @@ public interface Bundle {
 	 * <li>If this bundle's state is <code>UNINSTALLED</code> then an
 	 * <code>IllegalStateException</code> is thrown.
 	 * 
-	 * <li>If this bundle's state is <code>STARTING</code> or
-	 * <code>STOPPING</code> then this method must wait for this bundle to
-	 * change state before continuing. If this does not occur in a reasonable
+	 * <li>If this bundle is in the process of being activated or deactivated 
+	 * then this method must wait for activation or deactivation to 
+	 * complete before continuing. If this does not occur in a reasonable
 	 * time, a <code>BundleException</code> is thrown to indicate this bundle
 	 * was unable to be stopped.
 	 * 
@@ -379,7 +385,8 @@ public interface Bundle {
 	 * </ul>
 	 * 
 	 * @param options The options for stoping this bundle. See
-	 *         {@link #STOP_TRANSIENT}.
+	 *         {@link #STOP_TRANSIENT}. The Framework must ignore unrecognized
+	 *         options.
 	 * @throws BundleException If this bundle's <code>BundleActivator</code>
 	 *         threw an exception.
 	 * @throws java.lang.IllegalStateException If this bundle has been
