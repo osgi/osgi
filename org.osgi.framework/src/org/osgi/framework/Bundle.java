@@ -201,21 +201,24 @@ public interface Bundle {
 	 * Starts this bundle.
 	 * 
 	 * <p>
-	 * If the Framework implements the optional Start Level service and the
-	 * current start level is less than this bundle's start level, then the
-	 * Framework must:
-	 * <ol>
-	 * <li>Persistently mark this bundle as started unless the {@link #START_TRANSIENT}
-	 * option is set. 
-	 * <li>Delay the starting of this bundle until the Framework's current start level becomes
-	 * equal or more than the bundle's start level.
-	 * </ol>
-	 * <p>
-	 * Otherwise, the following steps are required to start a bundle:
-	 * <ol>
-	 * <li>If this bundle's state is <code>UNINSTALLED</code> then an
+	 * If this bundle's state is <code>UNINSTALLED</code> then an
 	 * <code>IllegalStateException</code> is thrown.
+	 * <p>
+	 * If the Framework implements the optional Start Level service and the
+	 * current start level is less than this bundle's start level:
+	 * <ul> 
+	 * <li>If the {@link #START_TRANSIENT} option is set,
+	 * then a <code>BundleException</code> is thrown indicating this bundle
+	 * cannot be started due to the Framework's current start level. 
 	 * 
+	 * <li>Otherwise, the Framework must persistently mark this bundle as started.
+	 * When the Framework's current 
+	 * start level becomes equal to or more than this bundle's start level, this 
+	 * bundle will be started. 
+	 * </ul>
+	 * <p>
+	 * Otherwise, the following steps are required to start this bundle:
+	 * <ol>
 	 * <li>If this bundle is in the process of being activated or deactivated 
 	 * then this method must wait for activation or deactivation to 
 	 * complete before continuing. If this does not occur in a reasonable
@@ -236,8 +239,7 @@ public interface Bundle {
 	 * 
 	 * <li>This bundle's state is set to <code>STARTING</code>.
 	 * 
-	 * <li>A bundle event of type {@link BundleEvent#STARTING} is fired. This event is only delivered to
-	 * <code>SynchronousBundleListener</code>s. It is not delivered to <code>BundleListener</code>s.
+	 * <li>A bundle event of type {@link BundleEvent#STARTING} is fired.
 	 * 
 	 * <li>The {@link BundleActivator#start} method of this bundle's
 	 * <code>BundleActivator</code>, if one is specified, is called. If the
@@ -343,8 +345,7 @@ public interface Bundle {
 	 * 
 	 * <li>This bundle's state is set to <code>STOPPING</code>.
 	 * 
-	 * <li>A bundle event of type {@link BundleEvent#STOPPING} is fired. This event is only delivered to
-	 * <code>SynchronousBundleListener</code>s. It is not delivered to <code>BundleListener</code>s.
+	 * <li>A bundle event of type {@link BundleEvent#STOPPING} is fired.
 	 * 
 	 * <li>The {@link BundleActivator#stop} method of this bundle's
 	 * <code>BundleActivator</code>, if one is specified, is called. If that

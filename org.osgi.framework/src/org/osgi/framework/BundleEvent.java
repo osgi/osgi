@@ -122,7 +122,8 @@ public class BundleEvent extends EventObject {
 	 * <p>
 	 * The bundle's {@link BundleActivator#start(BundleContext) BundleActivator start} 
 	 * method is about to be called if the bundle has a bundle activator class.
-	 * This event is only delivered to {@link SynchronousBundleListener}'s.
+	 * This event is only delivered to {@link SynchronousBundleListener}s.
+	 * It is not delivered to <code>BundleListener</code>s.
 	 * <p>
 	 * The value of <code>STARTING</code> is 0x00000080.
 	 * 
@@ -136,7 +137,8 @@ public class BundleEvent extends EventObject {
 	 * <p>
 	 * The bundle's {@link BundleActivator#stop(BundleContext) BundleActivator stop} 
 	 * method is about to be called if the bundle has a bundle activator class.
-	 * This event is only delivered to {@link SynchronousBundleListener}'s.
+	 * This event is only delivered to {@link SynchronousBundleListener}s.
+	 * It is not delivered to <code>BundleListener</code>s.
 	 * <p>
 	 * The value of <code>STOPPING</code> is 0x00000100.
 	 * 
@@ -152,7 +154,8 @@ public class BundleEvent extends EventObject {
 	 * is waiting to be activated. 
 	 * It is now in the {@link Bundle#STARTING STARTING} state and has a valid 
 	 * <code>BundleContext</code>.
-	 * This event is only delivered to {@link SynchronousBundleListener}'s.
+	 * This event is only delivered to {@link SynchronousBundleListener}s.
+	 * It is not delivered to <code>BundleListener</code>s.
 	 * <p>
 	 * The value of <code>LAZY_ACTIVATION</code> is 0x00000200.
 	 * 
