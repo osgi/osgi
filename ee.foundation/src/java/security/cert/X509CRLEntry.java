@@ -20,14 +20,10 @@
 package java.security.cert;
 public abstract class X509CRLEntry implements java.security.cert.X509Extension {
 	public X509CRLEntry() { }
-	public abstract java.util.Set getCriticalExtensionOIDs();
 	public abstract byte[] getEncoded() throws java.security.cert.CRLException;
-	public abstract byte[] getExtensionValue(java.lang.String var0);
-	public abstract java.util.Set getNonCriticalExtensionOIDs();
 	public abstract java.util.Date getRevocationDate();
 	public abstract java.math.BigInteger getSerialNumber();
 	public abstract boolean hasExtensions();
-	public abstract boolean hasUnsupportedCriticalExtension();
 	public abstract java.lang.String toString();
 }
 

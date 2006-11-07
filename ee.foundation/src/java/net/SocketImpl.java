@@ -31,11 +31,9 @@ public abstract class SocketImpl implements java.net.SocketOptions {
 	protected java.net.InetAddress getInetAddress() { return null; }
 	protected abstract java.io.InputStream getInputStream() throws java.io.IOException;
 	protected int getLocalPort() { return 0; }
-	public abstract java.lang.Object getOption(int var0) throws java.net.SocketException;
 	protected abstract java.io.OutputStream getOutputStream() throws java.io.IOException;
 	protected int getPort() { return 0; }
 	protected abstract void listen(int var0) throws java.io.IOException;
-	public abstract void setOption(int var0, java.lang.Object var1) throws java.net.SocketException;
 	protected void shutdownInput() throws java.io.IOException { }
 	protected void shutdownOutput() throws java.io.IOException { }
 	protected java.net.InetAddress address;

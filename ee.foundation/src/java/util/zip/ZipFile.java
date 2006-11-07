@@ -19,7 +19,7 @@
 
 package java.util.zip;
 public class ZipFile implements java.util.zip.ZipConstants {
-	public ZipFile(java.io.File var0) throws java.io.IOException, java.util.zip.ZipException { }
+	public ZipFile(java.io.File var0) throws java.io.IOException { }
 	public ZipFile(java.io.File var0, int var1) throws java.io.IOException { }
 	public ZipFile(java.lang.String var0) throws java.io.IOException { }
 	public void close() throws java.io.IOException { }

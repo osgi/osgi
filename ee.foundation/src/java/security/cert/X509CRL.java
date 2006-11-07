@@ -20,12 +20,9 @@
 package java.security.cert;
 public abstract class X509CRL extends java.security.cert.CRL implements java.security.cert.X509Extension {
 	protected X509CRL() { super((java.lang.String) null); }
-	public abstract java.util.Set getCriticalExtensionOIDs();
 	public abstract byte[] getEncoded() throws java.security.cert.CRLException;
-	public abstract byte[] getExtensionValue(java.lang.String var0);
 	public abstract java.security.Principal getIssuerDN();
 	public abstract java.util.Date getNextUpdate();
-	public abstract java.util.Set getNonCriticalExtensionOIDs();
 	public abstract java.security.cert.X509CRLEntry getRevokedCertificate(java.math.BigInteger var0);
 	public abstract java.util.Set getRevokedCertificates();
 	public abstract java.lang.String getSigAlgName();
@@ -35,7 +32,6 @@ public abstract class X509CRL extends java.security.cert.CRL implements java.sec
 	public abstract byte[] getTBSCertList() throws java.security.cert.CRLException;
 	public abstract java.util.Date getThisUpdate();
 	public abstract int getVersion();
-	public abstract boolean hasUnsupportedCriticalExtension();
 	public abstract void verify(java.security.PublicKey var0) throws java.security.InvalidKeyException, java.security.NoSuchAlgorithmException, java.security.NoSuchProviderException, java.security.SignatureException, java.security.cert.CRLException;
 	public abstract void verify(java.security.PublicKey var0, java.lang.String var1) throws java.security.InvalidKeyException, java.security.NoSuchAlgorithmException, java.security.NoSuchProviderException, java.security.SignatureException, java.security.cert.CRLException;
 }

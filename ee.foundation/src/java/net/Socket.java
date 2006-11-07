@@ -20,7 +20,7 @@
 package java.net;
 public class Socket {
 	protected Socket() { }
-	public Socket(java.lang.String var0, int var1) throws java.io.IOException, java.net.UnknownHostException { }
+	public Socket(java.lang.String var0, int var1) throws java.io.IOException { }
 	public Socket(java.lang.String var0, int var1, java.net.InetAddress var2, int var3) throws java.io.IOException { }
 	public Socket(java.net.InetAddress var0, int var1) throws java.io.IOException { }
 	public Socket(java.net.InetAddress var0, int var1, java.net.InetAddress var2, int var3) throws java.io.IOException { }

@@ -20,8 +20,8 @@
 package java.io;
 public class ObjectInputStream extends java.io.InputStream implements java.io.ObjectInput, java.io.ObjectStreamConstants {
 	protected ObjectInputStream() throws java.io.IOException, java.lang.SecurityException { }
-	public ObjectInputStream(java.io.InputStream var0) throws java.io.IOException, java.io.StreamCorruptedException { }
-	public void defaultReadObject() throws java.io.IOException, java.io.NotActiveException, java.lang.ClassNotFoundException { }
+	public ObjectInputStream(java.io.InputStream var0) throws java.io.IOException { }
+	public void defaultReadObject() throws java.io.IOException, java.lang.ClassNotFoundException { }
 	protected boolean enableResolveObject(boolean var0) throws java.lang.SecurityException { return false; }
 	public int read() throws java.io.IOException { return 0; }
 	public boolean readBoolean() throws java.io.IOException { return false; }
@@ -29,17 +29,17 @@ public class ObjectInputStream extends java.io.InputStream implements java.io.Ob
 	public char readChar() throws java.io.IOException { return 0; }
 	protected java.io.ObjectStreamClass readClassDescriptor() throws java.io.IOException, java.lang.ClassNotFoundException { return null; }
 	public double readDouble() throws java.io.IOException { return 0.0d; }
-	public java.io.ObjectInputStream.GetField readFields() throws java.io.IOException, java.io.NotActiveException, java.lang.ClassNotFoundException { return null; }
+	public java.io.ObjectInputStream.GetField readFields() throws java.io.IOException, java.lang.ClassNotFoundException { return null; }
 	public float readFloat() throws java.io.IOException { return 0.0f; }
 	public void readFully(byte[] var0) throws java.io.IOException { }
 	public void readFully(byte[] var0, int var1, int var2) throws java.io.IOException { }
 	public int readInt() throws java.io.IOException { return 0; }
 	/** @deprecated */ public java.lang.String readLine() throws java.io.IOException { return null; }
 	public long readLong() throws java.io.IOException { return 0l; }
-	public final java.lang.Object readObject() throws java.io.IOException, java.io.OptionalDataException, java.lang.ClassNotFoundException { return null; }
-	protected java.lang.Object readObjectOverride() throws java.io.IOException, java.io.OptionalDataException, java.lang.ClassNotFoundException { return null; }
+	public final java.lang.Object readObject() throws java.io.IOException, java.lang.ClassNotFoundException { return null; }
+	protected java.lang.Object readObjectOverride() throws java.io.IOException, java.lang.ClassNotFoundException { return null; }
 	public short readShort() throws java.io.IOException { return 0; }
-	protected void readStreamHeader() throws java.io.IOException, java.io.StreamCorruptedException { }
+	protected void readStreamHeader() throws java.io.IOException { }
 	public java.lang.String readUTF() throws java.io.IOException { return null; }
 	public int readUnsignedByte() throws java.io.IOException { return 0; }
 	public int readUnsignedShort() throws java.io.IOException { return 0; }

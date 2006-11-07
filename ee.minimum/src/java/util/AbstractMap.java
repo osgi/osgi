@@ -23,7 +23,6 @@ public abstract class AbstractMap implements java.util.Map {
 	public void clear() { }
 	public boolean containsKey(java.lang.Object var0) { return false; }
 	public boolean containsValue(java.lang.Object var0) { return false; }
-	public abstract java.util.Set entrySet();
 	public java.lang.Object get(java.lang.Object var0) { return null; }
 	public boolean isEmpty() { return false; }
 	public java.util.Set keySet() { return null; }
