@@ -2,7 +2,7 @@
  * $Header$
  *
  * (C) Copyright 2001 Sun Microsystems, Inc.
- * Copyright (c) OSGi Alliance (2001, 2005). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2006). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,11 +20,11 @@
 package java.security.spec;
 public class RSAPrivateCrtKeySpec extends java.security.spec.RSAPrivateKeySpec {
 	public RSAPrivateCrtKeySpec(java.math.BigInteger var0, java.math.BigInteger var1, java.math.BigInteger var2, java.math.BigInteger var3, java.math.BigInteger var4, java.math.BigInteger var5, java.math.BigInteger var6, java.math.BigInteger var7) { super((java.math.BigInteger) null, (java.math.BigInteger) null); }
-	public java.math.BigInteger getPublicExponent() { return null; }
 	public java.math.BigInteger getCrtCoefficient() { return null; }
-	public java.math.BigInteger getPrimeP() { return null; }
-	public java.math.BigInteger getPrimeQ() { return null; }
 	public java.math.BigInteger getPrimeExponentP() { return null; }
 	public java.math.BigInteger getPrimeExponentQ() { return null; }
+	public java.math.BigInteger getPrimeP() { return null; }
+	public java.math.BigInteger getPrimeQ() { return null; }
+	public java.math.BigInteger getPublicExponent() { return null; }
 }
 

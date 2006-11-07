@@ -2,7 +2,7 @@
  * $Header$
  *
  * (C) Copyright 2001 Sun Microsystems, Inc.
- * Copyright (c) OSGi Alliance (2001, 2005). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2006). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -32,8 +32,8 @@ public abstract class KeyStoreSpi {
 	public abstract boolean engineIsKeyEntry(java.lang.String var0);
 	public abstract void engineLoad(java.io.InputStream var0, char[] var1) throws java.io.IOException, java.security.NoSuchAlgorithmException, java.security.cert.CertificateException;
 	public abstract void engineSetCertificateEntry(java.lang.String var0, java.security.cert.Certificate var1) throws java.security.KeyStoreException;
-	public abstract void engineSetKeyEntry(java.lang.String var0, byte[] var1, java.security.cert.Certificate[] var2) throws java.security.KeyStoreException;
 	public abstract void engineSetKeyEntry(java.lang.String var0, java.security.Key var1, char[] var2, java.security.cert.Certificate[] var3) throws java.security.KeyStoreException;
+	public abstract void engineSetKeyEntry(java.lang.String var0, byte[] var1, java.security.cert.Certificate[] var2) throws java.security.KeyStoreException;
 	public abstract int engineSize();
 	public abstract void engineStore(java.io.OutputStream var0, char[] var1) throws java.io.IOException, java.security.NoSuchAlgorithmException, java.security.cert.CertificateException;
 }

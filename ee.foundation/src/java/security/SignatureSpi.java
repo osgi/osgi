@@ -2,7 +2,7 @@
  * $Header$
  *
  * (C) Copyright 2001 Sun Microsystems, Inc.
- * Copyright (c) OSGi Alliance (2001, 2005). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2006). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,8 +27,8 @@ public abstract class SignatureSpi {
 	protected void engineSetParameter(java.security.spec.AlgorithmParameterSpec var0) throws java.security.InvalidAlgorithmParameterException { }
 	protected abstract byte[] engineSign() throws java.security.SignatureException;
 	protected int engineSign(byte[] var0, int var1, int var2) throws java.security.SignatureException { return 0; }
-	protected abstract void engineUpdate(byte[] var0, int var1, int var2) throws java.security.SignatureException;
 	protected abstract void engineUpdate(byte var0) throws java.security.SignatureException;
+	protected abstract void engineUpdate(byte[] var0, int var1, int var2) throws java.security.SignatureException;
 	protected abstract boolean engineVerify(byte[] var0) throws java.security.SignatureException;
 	protected java.security.SecureRandom appRandom;
 }

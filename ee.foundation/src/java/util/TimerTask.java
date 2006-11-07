@@ -2,7 +2,7 @@
  * $Header$
  *
  * (C) Copyright 2001 Sun Microsystems, Inc.
- * Copyright (c) OSGi Alliance (2001, 2005). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2006). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,7 +21,7 @@ package java.util;
 public abstract class TimerTask implements java.lang.Runnable {
 	protected TimerTask() { }
 	public boolean cancel() { return false; }
-	public long scheduledExecutionTime() { return 0l; }
 	public abstract void run();
+	public long scheduledExecutionTime() { return 0l; }
 }
 

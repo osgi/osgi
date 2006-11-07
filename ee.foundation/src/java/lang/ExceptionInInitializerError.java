@@ -2,7 +2,7 @@
  * $Header$
  *
  * (C) Copyright 2001 Sun Microsystems, Inc.
- * Copyright (c) OSGi Alliance (2001, 2005). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2006). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,8 +23,5 @@ public class ExceptionInInitializerError extends java.lang.LinkageError {
 	public ExceptionInInitializerError(java.lang.String var0) { }
 	public ExceptionInInitializerError(java.lang.Throwable var0) { }
 	public java.lang.Throwable getException() { return null; }
-	public void printStackTrace() { }
-	public void printStackTrace(java.io.PrintStream var0) { }
-	public void printStackTrace(java.io.PrintWriter var0) { }
 }
 

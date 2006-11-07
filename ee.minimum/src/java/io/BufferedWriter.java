@@ -2,7 +2,7 @@
  * $Header$
  *
  * (C) Copyright 2001 Sun Microsystems, Inc.
- * Copyright (c) OSGi Alliance (2001, 2005). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2006). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,7 +25,5 @@ public class BufferedWriter extends java.io.Writer {
 	public void flush() throws java.io.IOException { }
 	public void newLine() throws java.io.IOException { }
 	public void write(char[] var0, int var1, int var2) throws java.io.IOException { }
-	public void write(int var0) throws java.io.IOException { }
-	public void write(java.lang.String var0, int var1, int var2) throws java.io.IOException { }
 }
 

@@ -2,7 +2,7 @@
  * $Header$
  *
  * (C) Copyright 2001 Sun Microsystems, Inc.
- * Copyright (c) OSGi Alliance (2001, 2005). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2006). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,8 +22,8 @@ public final class FileDescriptor {
 	public FileDescriptor() { }
 	public void sync() throws java.io.SyncFailedException { }
 	public boolean valid() { return false; }
+	public final static java.io.FileDescriptor err; static { err = null; }
 	public final static java.io.FileDescriptor in; static { in = null; }
 	public final static java.io.FileDescriptor out; static { out = null; }
-	public final static java.io.FileDescriptor err; static { err = null; }
 }
 

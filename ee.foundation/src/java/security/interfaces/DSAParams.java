@@ -2,7 +2,7 @@
  * $Header$
  *
  * (C) Copyright 2001 Sun Microsystems, Inc.
- * Copyright (c) OSGi Alliance (2001, 2005). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2006). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,8 +19,8 @@
 
 package java.security.interfaces;
 public abstract interface DSAParams {
+	public abstract java.math.BigInteger getG();
 	public abstract java.math.BigInteger getP();
 	public abstract java.math.BigInteger getQ();
-	public abstract java.math.BigInteger getG();
 }
 

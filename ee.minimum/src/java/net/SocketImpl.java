@@ -2,7 +2,7 @@
  * $Header$
  *
  * (C) Copyright 2001 Sun Microsystems, Inc.
- * Copyright (c) OSGi Alliance (2001, 2005). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2006). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -36,10 +36,9 @@ public abstract class SocketImpl implements java.net.SocketOptions {
 	protected int getPort() { return 0; }
 	protected abstract void listen(int var0) throws java.io.IOException;
 	public abstract void setOption(int var0, java.lang.Object var1) throws java.net.SocketException;
-	public java.lang.String toString() { return null; }
 	protected java.net.InetAddress address;
-	protected int port;
 	protected java.io.FileDescriptor fd;
 	protected int localport;
+	protected int port;
 }
 

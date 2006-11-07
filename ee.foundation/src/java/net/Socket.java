@@ -2,7 +2,7 @@
  * $Header$
  *
  * (C) Copyright 2001 Sun Microsystems, Inc.
- * Copyright (c) OSGi Alliance (2001, 2005). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2006). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,7 +20,7 @@
 package java.net;
 public class Socket {
 	protected Socket() { }
-	public Socket(java.lang.String var0, int var1) throws java.net.UnknownHostException, java.io.IOException { }
+	public Socket(java.lang.String var0, int var1) throws java.io.IOException, java.net.UnknownHostException { }
 	public Socket(java.lang.String var0, int var1, java.net.InetAddress var2, int var3) throws java.io.IOException { }
 	public Socket(java.net.InetAddress var0, int var1) throws java.io.IOException { }
 	public Socket(java.net.InetAddress var0, int var1, java.net.InetAddress var2, int var3) throws java.io.IOException { }
@@ -33,19 +33,18 @@ public class Socket {
 	public int getLocalPort() { return 0; }
 	public java.io.OutputStream getOutputStream() throws java.io.IOException { return null; }
 	public int getPort() { return 0; }
-	public int getSoLinger() throws java.net.SocketException { return 0; }
 	public int getReceiveBufferSize() throws java.net.SocketException { return 0; }
 	public int getSendBufferSize() throws java.net.SocketException { return 0; }
+	public int getSoLinger() throws java.net.SocketException { return 0; }
 	public int getSoTimeout() throws java.net.SocketException { return 0; }
 	public boolean getTcpNoDelay() throws java.net.SocketException { return false; }
 	public void setKeepAlive(boolean var0) throws java.net.SocketException { }
-	public static void setSocketImplFactory(java.net.SocketImplFactory var0) throws java.io.IOException { }
-	public void setSendBufferSize(int var0) throws java.net.SocketException { }
 	public void setReceiveBufferSize(int var0) throws java.net.SocketException { }
+	public void setSendBufferSize(int var0) throws java.net.SocketException { }
 	public void setSoLinger(boolean var0, int var1) throws java.net.SocketException { }
 	public void setSoTimeout(int var0) throws java.net.SocketException { }
+	public static void setSocketImplFactory(java.net.SocketImplFactory var0) throws java.io.IOException { }
 	public void setTcpNoDelay(boolean var0) throws java.net.SocketException { }
-	public java.lang.String toString() { return null; }
 	public void shutdownInput() throws java.io.IOException { }
 	public void shutdownOutput() throws java.io.IOException { }
 }

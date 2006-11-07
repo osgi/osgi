@@ -2,7 +2,7 @@
  * $Header$
  *
  * (C) Copyright 2001 Sun Microsystems, Inc.
- * Copyright (c) OSGi Alliance (2001, 2005). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2006). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,9 +20,9 @@
 package java.security;
 public abstract class Policy {
 	public Policy() { }
-	public static java.security.Policy getPolicy() { return null; }
-	public static void setPolicy(java.security.Policy var0) { }
 	public abstract java.security.PermissionCollection getPermissions(java.security.CodeSource var0);
+	public static java.security.Policy getPolicy() { return null; }
 	public abstract void refresh();
+	public static void setPolicy(java.security.Policy var0) { }
 }
 

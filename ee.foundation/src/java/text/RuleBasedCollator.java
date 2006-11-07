@@ -2,7 +2,7 @@
  * $Header$
  *
  * (C) Copyright 2001 Sun Microsystems, Inc.
- * Copyright (c) OSGi Alliance (2001, 2005). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2006). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,13 +20,11 @@
 package java.text;
 public class RuleBasedCollator extends java.text.Collator {
 	public RuleBasedCollator(java.lang.String var0) throws java.text.ParseException { }
-	public java.lang.String getRules() { return null; }
+	public int compare(java.lang.String var0, java.lang.String var1) { return 0; }
 	public java.text.CollationElementIterator getCollationElementIterator(java.lang.String var0) { return null; }
 	public java.text.CollationElementIterator getCollationElementIterator(java.text.CharacterIterator var0) { return null; }
-	public int compare(java.lang.String var0, java.lang.String var1) { return 0; }
 	public java.text.CollationKey getCollationKey(java.lang.String var0) { return null; }
-	public java.lang.Object clone() { return null; }
-	public boolean equals(java.lang.Object var0) { return false; }
+	public java.lang.String getRules() { return null; }
 	public int hashCode() { return 0; }
 }
 

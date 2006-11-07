@@ -2,7 +2,7 @@
  * $Header$
  *
  * (C) Copyright 2001 Sun Microsystems, Inc.
- * Copyright (c) OSGi Alliance (2001, 2005). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2006). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,8 +24,8 @@ public abstract interface Datagram extends java.io.DataInput, java.io.DataOutput
 	public abstract int getLength();
 	public abstract int getOffset();
 	public abstract void reset();
-	public abstract void setAddress(javax.microedition.io.Datagram var0);
 	public abstract void setAddress(java.lang.String var0) throws java.io.IOException;
+	public abstract void setAddress(javax.microedition.io.Datagram var0);
 	public abstract void setData(byte[] var0, int var1, int var2);
 	public abstract void setLength(int var0);
 }

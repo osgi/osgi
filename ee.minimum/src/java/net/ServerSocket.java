@@ -2,7 +2,7 @@
  * $Header$
  *
  * (C) Copyright 2001 Sun Microsystems, Inc.
- * Copyright (c) OSGi Alliance (2001, 2005). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2006). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,8 +28,7 @@ public class ServerSocket {
 	public int getLocalPort() { return 0; }
 	public int getSoTimeout() throws java.io.IOException { return 0; }
 	protected final void implAccept(java.net.Socket var0) throws java.io.IOException { }
-	public static void setSocketFactory(java.net.SocketImplFactory var0) throws java.io.IOException { }
 	public void setSoTimeout(int var0) throws java.net.SocketException { }
-	public java.lang.String toString() { return null; }
+	public static void setSocketFactory(java.net.SocketImplFactory var0) throws java.io.IOException { }
 }
 

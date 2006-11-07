@@ -2,7 +2,7 @@
  * $Header$
  *
  * (C) Copyright 2001 Sun Microsystems, Inc.
- * Copyright (c) OSGi Alliance (2001, 2005). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2006). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,15 +18,14 @@
  */
 
 package java.security;
-public abstract class Permission implements java.security.Guard, java.io.Serializable {
+public abstract class Permission implements java.io.Serializable, java.security.Guard {
 	public Permission(java.lang.String var0) { }
-	public abstract boolean equals(java.lang.Object var0);
-	public abstract int hashCode();
 	public void checkGuard(java.lang.Object var0) throws java.lang.SecurityException { }
+	public abstract boolean equals(java.lang.Object var0);
 	public abstract java.lang.String getActions();
 	public final java.lang.String getName() { return null; }
+	public abstract int hashCode();
 	public abstract boolean implies(java.security.Permission var0);
 	public java.security.PermissionCollection newPermissionCollection() { return null; }
-	public java.lang.String toString() { return null; }
 }
 

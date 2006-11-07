@@ -2,7 +2,7 @@
  * $Header$
  *
  * (C) Copyright 2001 Sun Microsystems, Inc.
- * Copyright (c) OSGi Alliance (2001, 2005). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2006). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,6 +25,5 @@ public abstract class BasicPermission extends java.security.Permission implement
 	public java.lang.String getActions() { return null; }
 	public int hashCode() { return 0; }
 	public boolean implies(java.security.Permission var0) { return false; }
-	public java.security.PermissionCollection newPermissionCollection() { return null; }
 }
 

@@ -2,7 +2,7 @@
  * $Header$
  *
  * (C) Copyright 2001 Sun Microsystems, Inc.
- * Copyright (c) OSGi Alliance (2001, 2005). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2006). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,11 +19,9 @@
 
 package java.text;
 public final class CollationKey implements java.lang.Comparable {
-	public int compareTo(java.text.CollationKey var0) { return 0; }
 	public int compareTo(java.lang.Object var0) { return 0; }
-	public boolean equals(java.lang.Object var0) { return false; }
+	public int compareTo(java.text.CollationKey var0) { return 0; }
 	public java.lang.String getSourceString() { return null; }
-	public int hashCode() { return 0; }
 	public byte[] toByteArray() { return null; }
 	private CollationKey() { } /* generated constructor to prevent compiler adding default public constructor */
 }

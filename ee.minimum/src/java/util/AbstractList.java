@@ -2,7 +2,7 @@
  * $Header$
  *
  * (C) Copyright 2001 Sun Microsystems, Inc.
- * Copyright (c) OSGi Alliance (2001, 2005). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2006). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,12 +21,8 @@ package java.util;
 public abstract class AbstractList extends java.util.AbstractCollection implements java.util.List {
 	protected AbstractList() { }
 	public void add(int var0, java.lang.Object var1) { }
-	public boolean add(java.lang.Object var0) { return false; }
 	public boolean addAll(int var0, java.util.Collection var1) { return false; }
-	public void clear() { }
-	public boolean equals(java.lang.Object var0) { return false; }
 	public abstract java.lang.Object get(int var0);
-	public int hashCode() { return 0; }
 	public int indexOf(java.lang.Object var0) { return 0; }
 	public java.util.Iterator iterator() { return null; }
 	public int lastIndexOf(java.lang.Object var0) { return 0; }

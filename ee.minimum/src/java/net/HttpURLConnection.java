@@ -2,7 +2,7 @@
  * $Header$
  *
  * (C) Copyright 2001 Sun Microsystems, Inc.
- * Copyright (c) OSGi Alliance (2001, 2005). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2006). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,16 +23,12 @@ public abstract class HttpURLConnection extends java.net.URLConnection {
 	public abstract void disconnect();
 	public java.io.InputStream getErrorStream() { return null; }
 	public static boolean getFollowRedirects() { return false; }
-	public java.security.Permission getPermission() throws java.io.IOException { return null; }
 	public java.lang.String getRequestMethod() { return null; }
 	public int getResponseCode() throws java.io.IOException { return 0; }
 	public java.lang.String getResponseMessage() throws java.io.IOException { return null; }
 	public static void setFollowRedirects(boolean var0) { }
 	public void setRequestMethod(java.lang.String var0) throws java.net.ProtocolException { }
 	public abstract boolean usingProxy();
-	protected java.lang.String method;
-	protected int responseCode;
-	protected java.lang.String responseMessage;
 	public final static int HTTP_ACCEPTED = 202;
 	public final static int HTTP_BAD_GATEWAY = 502;
 	public final static int HTTP_BAD_METHOD = 405;
@@ -49,12 +45,12 @@ public abstract class HttpURLConnection extends java.net.URLConnection {
 	public final static int HTTP_MOVED_PERM = 301;
 	public final static int HTTP_MOVED_TEMP = 302;
 	public final static int HTTP_MULT_CHOICE = 300;
-	public final static int HTTP_NO_CONTENT = 204;
 	public final static int HTTP_NOT_ACCEPTABLE = 406;
 	public final static int HTTP_NOT_AUTHORITATIVE = 203;
 	public final static int HTTP_NOT_FOUND = 404;
 	public final static int HTTP_NOT_IMPLEMENTED = 501;
 	public final static int HTTP_NOT_MODIFIED = 304;
+	public final static int HTTP_NO_CONTENT = 204;
 	public final static int HTTP_OK = 200;
 	public final static int HTTP_PARTIAL = 206;
 	public final static int HTTP_PAYMENT_REQUIRED = 402;
@@ -63,10 +59,13 @@ public abstract class HttpURLConnection extends java.net.URLConnection {
 	public final static int HTTP_REQ_TOO_LONG = 414;
 	public final static int HTTP_RESET = 205;
 	public final static int HTTP_SEE_OTHER = 303;
-	public final static int HTTP_USE_PROXY = 305;
 	public final static int HTTP_UNAUTHORIZED = 401;
-	public final static int HTTP_UNSUPPORTED_TYPE = 415;
 	public final static int HTTP_UNAVAILABLE = 503;
+	public final static int HTTP_UNSUPPORTED_TYPE = 415;
+	public final static int HTTP_USE_PROXY = 305;
 	public final static int HTTP_VERSION = 505;
+	protected java.lang.String method;
+	protected int responseCode;
+	protected java.lang.String responseMessage;
 }
 

@@ -2,7 +2,7 @@
  * $Header$
  *
  * (C) Copyright 2001 Sun Microsystems, Inc.
- * Copyright (c) OSGi Alliance (2001, 2005). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2006). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,11 +19,11 @@
 
 package java.security.interfaces;
 public abstract interface RSAPrivateCrtKey extends java.security.interfaces.RSAPrivateKey {
-	public abstract java.math.BigInteger getPublicExponent();
-	public abstract java.math.BigInteger getPrimeP();
-	public abstract java.math.BigInteger getPrimeQ();
+	public abstract java.math.BigInteger getCrtCoefficient();
 	public abstract java.math.BigInteger getPrimeExponentP();
 	public abstract java.math.BigInteger getPrimeExponentQ();
-	public abstract java.math.BigInteger getCrtCoefficient();
+	public abstract java.math.BigInteger getPrimeP();
+	public abstract java.math.BigInteger getPrimeQ();
+	public abstract java.math.BigInteger getPublicExponent();
 }
 

@@ -2,7 +2,7 @@
  * $Header$
  *
  * (C) Copyright 2001 Sun Microsystems, Inc.
- * Copyright (c) OSGi Alliance (2001, 2005). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2006). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,8 +20,6 @@
 package java.text;
 public abstract class NumberFormat extends java.text.Format {
 	public NumberFormat() { }
-	public java.lang.Object clone() { return null; }
-	public boolean equals(java.lang.Object var0) { return false; }
 	public final java.lang.String format(double var0) { return null; }
 	public abstract java.lang.StringBuffer format(double var0, java.lang.StringBuffer var1, java.text.FieldPosition var2);
 	public final java.lang.String format(long var0) { return null; }
@@ -40,7 +38,6 @@ public abstract class NumberFormat extends java.text.Format {
 	public static java.text.NumberFormat getNumberInstance(java.util.Locale var0) { return null; }
 	public final static java.text.NumberFormat getPercentInstance() { return null; }
 	public static java.text.NumberFormat getPercentInstance(java.util.Locale var0) { return null; }
-	public int hashCode() { return 0; }
 	public boolean isGroupingUsed() { return false; }
 	public boolean isParseIntegerOnly() { return false; }
 	public java.lang.Number parse(java.lang.String var0) throws java.text.ParseException { return null; }
@@ -52,7 +49,7 @@ public abstract class NumberFormat extends java.text.Format {
 	public void setMinimumFractionDigits(int var0) { }
 	public void setMinimumIntegerDigits(int var0) { }
 	public void setParseIntegerOnly(boolean var0) { }
-	public final static int INTEGER_FIELD = 0;
 	public final static int FRACTION_FIELD = 1;
+	public final static int INTEGER_FIELD = 0;
 }
 

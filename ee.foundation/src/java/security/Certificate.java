@@ -2,7 +2,7 @@
  * $Header$
  *
  * (C) Copyright 2001 Sun Microsystems, Inc.
- * Copyright (c) OSGi Alliance (2001, 2005). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2006). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,8 +19,8 @@
 
 package java.security;
 /** @deprecated */ public abstract interface Certificate {
-	public abstract void decode(java.io.InputStream var0) throws java.security.KeyException, java.io.IOException;
-	public abstract void encode(java.io.OutputStream var0) throws java.security.KeyException, java.io.IOException;
+	public abstract void decode(java.io.InputStream var0) throws java.io.IOException, java.security.KeyException;
+	public abstract void encode(java.io.OutputStream var0) throws java.io.IOException, java.security.KeyException;
 	public abstract java.lang.String getFormat();
 	public abstract java.security.Principal getGuarantor();
 	public abstract java.security.Principal getPrincipal();

@@ -2,7 +2,7 @@
  * $Header$
  *
  * (C) Copyright 2001 Sun Microsystems, Inc.
- * Copyright (c) OSGi Alliance (2001, 2005). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2006). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,14 +29,11 @@ public class GregorianCalendar extends java.util.Calendar {
 	public void add(int var0, int var1) { }
 	protected void computeFields() { }
 	protected void computeTime() { }
-	public boolean equals(java.lang.Object var0) { return false; }
 	public final java.util.Date getGregorianChange() { return null; }
-	public int hashCode() { return 0; }
 	public boolean isLeapYear(int var0) { return false; }
-	public void roll(int var0, int var1) { }
 	public void roll(int var0, boolean var1) { }
 	public void setGregorianChange(java.util.Date var0) { }
-	public final static int BC = 0;
 	public final static int AD = 1;
+	public final static int BC = 0;
 }
 

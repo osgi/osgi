@@ -2,7 +2,7 @@
  * $Header$
  *
  * (C) Copyright 2001 Sun Microsystems, Inc.
- * Copyright (c) OSGi Alliance (2001, 2005). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2006). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,15 +21,12 @@ package java.io;
 public class PipedInputStream extends java.io.InputStream {
 	public PipedInputStream() { }
 	public PipedInputStream(java.io.PipedOutputStream var0) throws java.io.IOException { }
-	public int available() throws java.io.IOException { return 0; }
-	public void close() throws java.io.IOException { }
 	public void connect(java.io.PipedOutputStream var0) throws java.io.IOException { }
 	public int read() throws java.io.IOException { return 0; }
-	public int read(byte[] var0, int var1, int var2) throws java.io.IOException { return 0; }
 	protected void receive(int var0) throws java.io.IOException { }
+	protected final static int PIPE_SIZE = 1024;
 	protected byte[] buffer;
 	protected int in;
 	protected int out;
-	protected final static int PIPE_SIZE = 1024;
 }
 

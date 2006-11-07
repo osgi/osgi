@@ -2,7 +2,7 @@
  * $Header$
  *
  * (C) Copyright 2001 Sun Microsystems, Inc.
- * Copyright (c) OSGi Alliance (2001, 2005). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2006). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,9 +30,9 @@ public abstract interface DataInput {
 	public abstract java.lang.String readLine() throws java.io.IOException;
 	public abstract long readLong() throws java.io.IOException;
 	public abstract short readShort() throws java.io.IOException;
+	public abstract java.lang.String readUTF() throws java.io.IOException;
 	public abstract int readUnsignedByte() throws java.io.IOException;
 	public abstract int readUnsignedShort() throws java.io.IOException;
-	public abstract java.lang.String readUTF() throws java.io.IOException;
 	public abstract int skipBytes(int var0) throws java.io.IOException;
 }
 

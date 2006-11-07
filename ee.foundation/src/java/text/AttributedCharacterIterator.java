@@ -2,7 +2,7 @@
  * $Header$
  *
  * (C) Copyright 2001 Sun Microsystems, Inc.
- * Copyright (c) OSGi Alliance (2001, 2005). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2006). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -34,7 +34,6 @@ public abstract interface AttributedCharacterIterator extends java.text.Characte
 		protected java.lang.String getName() { return null; }
 		public final int hashCode() { return 0; }
 		protected java.lang.Object readResolve() throws java.io.InvalidObjectException { return null; }
-		public java.lang.String toString() { return null; }
 		public final static java.text.AttributedCharacterIterator.Attribute INPUT_METHOD_SEGMENT; static { INPUT_METHOD_SEGMENT = null; }
 		public final static java.text.AttributedCharacterIterator.Attribute LANGUAGE; static { LANGUAGE = null; }
 		public final static java.text.AttributedCharacterIterator.Attribute READING; static { READING = null; }

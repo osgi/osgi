@@ -2,7 +2,7 @@
  * $Header$
  *
  * (C) Copyright 2001 Sun Microsystems, Inc.
- * Copyright (c) OSGi Alliance (2001, 2005). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2006). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,14 +21,11 @@ package java.text;
 public class MessageFormat extends java.text.Format {
 	public MessageFormat(java.lang.String var0) { }
 	public void applyPattern(java.lang.String var0) { }
-	public java.lang.Object clone() { return null; }
-	public boolean equals(java.lang.Object var0) { return false; }
-	public final java.lang.StringBuffer format(java.lang.Object[] var0, java.lang.StringBuffer var1, java.text.FieldPosition var2) { return null; }
 	public final java.lang.StringBuffer format(java.lang.Object var0, java.lang.StringBuffer var1, java.text.FieldPosition var2) { return null; }
 	public static java.lang.String format(java.lang.String var0, java.lang.Object[] var1) { return null; }
+	public final java.lang.StringBuffer format(java.lang.Object[] var0, java.lang.StringBuffer var1, java.text.FieldPosition var2) { return null; }
 	public java.text.Format[] getFormats() { return null; }
 	public java.util.Locale getLocale() { return null; }
-	public int hashCode() { return 0; }
 	public java.lang.Object[] parse(java.lang.String var0) throws java.text.ParseException { return null; }
 	public java.lang.Object[] parse(java.lang.String var0, java.text.ParsePosition var1) { return null; }
 	public java.lang.Object parseObject(java.lang.String var0, java.text.ParsePosition var1) { return null; }

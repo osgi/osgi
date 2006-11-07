@@ -2,7 +2,7 @@
  * $Header$
  *
  * (C) Copyright 2001 Sun Microsystems, Inc.
- * Copyright (c) OSGi Alliance (2001, 2005). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2006). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,14 +20,12 @@
 package java.security.cert;
 public abstract class Certificate implements java.io.Serializable {
 	protected Certificate(java.lang.String var0) { }
-	public boolean equals(java.lang.Object var0) { return false; }
 	public abstract byte[] getEncoded() throws java.security.cert.CertificateEncodingException;
 	public abstract java.security.PublicKey getPublicKey();
 	public final java.lang.String getType() { return null; }
-	public int hashCode() { return 0; }
 	public abstract java.lang.String toString();
-	public abstract void verify(java.security.PublicKey var0) throws java.security.cert.CertificateException, java.security.NoSuchAlgorithmException, java.security.InvalidKeyException, java.security.NoSuchProviderException, java.security.SignatureException;
-	public abstract void verify(java.security.PublicKey var0, java.lang.String var1) throws java.security.cert.CertificateException, java.security.NoSuchAlgorithmException, java.security.InvalidKeyException, java.security.NoSuchProviderException, java.security.SignatureException;
+	public abstract void verify(java.security.PublicKey var0) throws java.security.InvalidKeyException, java.security.NoSuchAlgorithmException, java.security.NoSuchProviderException, java.security.SignatureException, java.security.cert.CertificateException;
+	public abstract void verify(java.security.PublicKey var0, java.lang.String var1) throws java.security.InvalidKeyException, java.security.NoSuchAlgorithmException, java.security.NoSuchProviderException, java.security.SignatureException, java.security.cert.CertificateException;
 	protected java.lang.Object writeReplace() throws java.io.ObjectStreamException { return null; }
 	protected static class CertificateRep implements java.io.Serializable {
 		protected CertificateRep(java.lang.String var0, byte[] var1) { }

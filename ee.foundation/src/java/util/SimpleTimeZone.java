@@ -2,7 +2,7 @@
  * $Header$
  *
  * (C) Copyright 2001 Sun Microsystems, Inc.
- * Copyright (c) OSGi Alliance (2001, 2005). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2006). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,13 +22,9 @@ public class SimpleTimeZone extends java.util.TimeZone {
 	public SimpleTimeZone(int var0, java.lang.String var1) { }
 	public SimpleTimeZone(int var0, java.lang.String var1, int var2, int var3, int var4, int var5, int var6, int var7, int var8, int var9) { }
 	public SimpleTimeZone(int var0, java.lang.String var1, int var2, int var3, int var4, int var5, int var6, int var7, int var8, int var9, int var10) { }
-	public java.lang.Object clone() { return null; }
-	public boolean equals(java.lang.Object var0) { return false; }
 	public int getDSTSavings() { return 0; }
 	public int getOffset(int var0, int var1, int var2, int var3, int var4, int var5) { return 0; }
 	public int getRawOffset() { return 0; }
-	public int hashCode() { return 0; }
-	public boolean hasSameRules(java.util.TimeZone var0) { return false; }
 	public boolean inDaylightTime(java.util.Date var0) { return false; }
 	public void setDSTSavings(int var0) { }
 	public void setEndRule(int var0, int var1, int var2) { }
@@ -39,7 +35,6 @@ public class SimpleTimeZone extends java.util.TimeZone {
 	public void setStartRule(int var0, int var1, int var2, int var3) { }
 	public void setStartRule(int var0, int var1, int var2, int var3, boolean var4) { }
 	public void setStartYear(int var0) { }
-	public java.lang.String toString() { return null; }
 	public boolean useDaylightTime() { return false; }
 }
 

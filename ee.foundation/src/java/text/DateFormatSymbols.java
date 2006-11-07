@@ -2,7 +2,7 @@
  * $Header$
  *
  * (C) Copyright 2001 Sun Microsystems, Inc.
- * Copyright (c) OSGi Alliance (2001, 2005). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2006). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,7 +22,6 @@ public class DateFormatSymbols implements java.io.Serializable, java.lang.Clonea
 	public DateFormatSymbols() { }
 	public DateFormatSymbols(java.util.Locale var0) { }
 	public java.lang.Object clone() { return null; }
-	public boolean equals(java.lang.Object var0) { return false; }
 	public java.lang.String[] getAmPmStrings() { return null; }
 	public java.lang.String[] getEras() { return null; }
 	public java.lang.String getLocalPatternChars() { return null; }
@@ -31,7 +30,6 @@ public class DateFormatSymbols implements java.io.Serializable, java.lang.Clonea
 	public java.lang.String[] getShortWeekdays() { return null; }
 	public java.lang.String[] getWeekdays() { return null; }
 	public java.lang.String[][] getZoneStrings() { return null; }
-	public int hashCode() { return 0; }
 	public void setAmPmStrings(java.lang.String[] var0) { }
 	public void setEras(java.lang.String[] var0) { }
 	public void setLocalPatternChars(java.lang.String var0) { }

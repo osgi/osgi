@@ -2,7 +2,7 @@
  * $Header$
  *
  * (C) Copyright 2001 Sun Microsystems, Inc.
- * Copyright (c) OSGi Alliance (2001, 2005). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2006). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,8 +19,7 @@
 
 package java.util.jar;
 public class JarOutputStream extends java.util.zip.ZipOutputStream {
-	public JarOutputStream(java.io.OutputStream var0, java.util.jar.Manifest var1) throws java.io.IOException { super((java.io.OutputStream) null); }
 	public JarOutputStream(java.io.OutputStream var0) throws java.io.IOException { super((java.io.OutputStream) null); }
-	public void putNextEntry(java.util.zip.ZipEntry var0) throws java.io.IOException { }
+	public JarOutputStream(java.io.OutputStream var0, java.util.jar.Manifest var1) throws java.io.IOException { super((java.io.OutputStream) null); }
 }
 

@@ -2,7 +2,7 @@
  * $Header$
  *
  * (C) Copyright 2001 Sun Microsystems, Inc.
- * Copyright (c) OSGi Alliance (2001, 2005). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2006). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,9 +23,12 @@ public abstract class X509Certificate extends java.security.cert.Certificate imp
 	public abstract void checkValidity() throws java.security.cert.CertificateExpiredException, java.security.cert.CertificateNotYetValidException;
 	public abstract void checkValidity(java.util.Date var0) throws java.security.cert.CertificateExpiredException, java.security.cert.CertificateNotYetValidException;
 	public abstract int getBasicConstraints();
+	public abstract java.util.Set getCriticalExtensionOIDs();
+	public abstract byte[] getExtensionValue(java.lang.String var0);
 	public abstract java.security.Principal getIssuerDN();
 	public abstract boolean[] getIssuerUniqueID();
 	public abstract boolean[] getKeyUsage();
+	public abstract java.util.Set getNonCriticalExtensionOIDs();
 	public abstract java.util.Date getNotAfter();
 	public abstract java.util.Date getNotBefore();
 	public abstract java.math.BigInteger getSerialNumber();
@@ -38,8 +41,5 @@ public abstract class X509Certificate extends java.security.cert.Certificate imp
 	public abstract byte[] getTBSCertificate() throws java.security.cert.CertificateEncodingException;
 	public abstract int getVersion();
 	public abstract boolean hasUnsupportedCriticalExtension();
-	public abstract java.util.Set getCriticalExtensionOIDs();
-	public abstract java.util.Set getNonCriticalExtensionOIDs();
-	public abstract byte[] getExtensionValue(java.lang.String var0);
 }
 

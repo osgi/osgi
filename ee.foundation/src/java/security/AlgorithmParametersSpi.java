@@ -2,7 +2,7 @@
  * $Header$
  *
  * (C) Copyright 2001 Sun Microsystems, Inc.
- * Copyright (c) OSGi Alliance (2001, 2005). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2006). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,9 +23,9 @@ public abstract class AlgorithmParametersSpi {
 	protected abstract byte[] engineGetEncoded() throws java.io.IOException;
 	protected abstract byte[] engineGetEncoded(java.lang.String var0) throws java.io.IOException;
 	protected abstract java.security.spec.AlgorithmParameterSpec engineGetParameterSpec(java.lang.Class var0) throws java.security.spec.InvalidParameterSpecException;
+	protected abstract void engineInit(java.security.spec.AlgorithmParameterSpec var0) throws java.security.spec.InvalidParameterSpecException;
 	protected abstract void engineInit(byte[] var0) throws java.io.IOException;
 	protected abstract void engineInit(byte[] var0, java.lang.String var1) throws java.io.IOException;
-	protected abstract void engineInit(java.security.spec.AlgorithmParameterSpec var0) throws java.security.spec.InvalidParameterSpecException;
 	protected abstract java.lang.String engineToString();
 }
 

@@ -2,7 +2,7 @@
  * $Header$
  *
  * (C) Copyright 2001 Sun Microsystems, Inc.
- * Copyright (c) OSGi Alliance (2001, 2005). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2006). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,6 +19,7 @@
 
 package java.lang;
 public final class StrictMath {
+	public static double IEEEremainder(double var0, double var1) { return 0.0d; }
 	public static double abs(double var0) { return 0.0d; }
 	public static float abs(float var0) { return 0.0f; }
 	public static int abs(int var0) { return 0; }
@@ -31,7 +32,6 @@ public final class StrictMath {
 	public static double cos(double var0) { return 0.0d; }
 	public static double exp(double var0) { return 0.0d; }
 	public static double floor(double var0) { return 0.0d; }
-	public static double IEEEremainder(double var0, double var1) { return 0.0d; }
 	public static double log(double var0) { return 0.0d; }
 	public static double max(double var0, double var1) { return 0.0d; }
 	public static float max(float var0, float var1) { return 0.0f; }
@@ -51,7 +51,7 @@ public final class StrictMath {
 	public static double tan(double var0) { return 0.0d; }
 	public static double toDegrees(double var0) { return 0.0d; }
 	public static double toRadians(double var0) { return 0.0d; }
-	public final static double E = 2.7182818284590452354d; 
+	public final static double E = 2.7182818284590452354d;
 	public final static double PI = 3.14159265358979323846d;
 	private StrictMath() { } /* generated constructor to prevent compiler adding default public constructor */
 }

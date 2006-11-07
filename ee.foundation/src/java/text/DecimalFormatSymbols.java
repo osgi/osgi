@@ -2,7 +2,7 @@
  * $Header$
  *
  * (C) Copyright 2001 Sun Microsystems, Inc.
- * Copyright (c) OSGi Alliance (2001, 2005). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2006). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,11 +18,10 @@
  */
 
 package java.text;
-public final class DecimalFormatSymbols implements java.lang.Cloneable, java.io.Serializable {
+public final class DecimalFormatSymbols implements java.io.Serializable, java.lang.Cloneable {
 	public DecimalFormatSymbols() { }
 	public DecimalFormatSymbols(java.util.Locale var0) { }
 	public java.lang.Object clone() { return null; }
-	public boolean equals(java.lang.Object var0) { return false; }
 	public java.lang.String getCurrencySymbol() { return null; }
 	public char getDecimalSeparator() { return 0; }
 	public char getDigit() { return 0; }
@@ -33,10 +32,9 @@ public final class DecimalFormatSymbols implements java.lang.Cloneable, java.io.
 	public char getMonetaryDecimalSeparator() { return 0; }
 	public java.lang.String getNaN() { return null; }
 	public char getPatternSeparator() { return 0; }
-	public char getPercent() { return 0; }
 	public char getPerMill() { return 0; }
+	public char getPercent() { return 0; }
 	public char getZeroDigit() { return 0; }
-	public int hashCode() { return 0; }
 	public void setCurrencySymbol(java.lang.String var0) { }
 	public void setDecimalSeparator(char var0) { }
 	public void setDigit(char var0) { }
@@ -47,8 +45,8 @@ public final class DecimalFormatSymbols implements java.lang.Cloneable, java.io.
 	public void setMonetaryDecimalSeparator(char var0) { }
 	public void setNaN(java.lang.String var0) { }
 	public void setPatternSeparator(char var0) { }
-	public void setPercent(char var0) { }
 	public void setPerMill(char var0) { }
+	public void setPercent(char var0) { }
 	public void setZeroDigit(char var0) { }
 }
 

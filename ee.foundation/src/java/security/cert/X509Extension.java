@@ -2,7 +2,7 @@
  * $Header$
  *
  * (C) Copyright 2001 Sun Microsystems, Inc.
- * Copyright (c) OSGi Alliance (2001, 2005). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2006). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,9 +19,9 @@
 
 package java.security.cert;
 public abstract interface X509Extension {
-	public abstract boolean hasUnsupportedCriticalExtension();
 	public abstract java.util.Set getCriticalExtensionOIDs();
-	public abstract java.util.Set getNonCriticalExtensionOIDs();
 	public abstract byte[] getExtensionValue(java.lang.String var0);
+	public abstract java.util.Set getNonCriticalExtensionOIDs();
+	public abstract boolean hasUnsupportedCriticalExtension();
 }
 

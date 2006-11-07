@@ -2,7 +2,7 @@
  * $Header$
  *
  * (C) Copyright 2001 Sun Microsystems, Inc.
- * Copyright (c) OSGi Alliance (2001, 2005). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2006). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,9 +27,9 @@ public class AlgorithmParameters {
 	public static java.security.AlgorithmParameters getInstance(java.lang.String var0, java.lang.String var1) throws java.security.NoSuchAlgorithmException, java.security.NoSuchProviderException { return null; }
 	public final java.security.spec.AlgorithmParameterSpec getParameterSpec(java.lang.Class var0) throws java.security.spec.InvalidParameterSpecException { return null; }
 	public final java.security.Provider getProvider() { return null; }
+	public final void init(java.security.spec.AlgorithmParameterSpec var0) throws java.security.spec.InvalidParameterSpecException { }
 	public final void init(byte[] var0) throws java.io.IOException { }
 	public final void init(byte[] var0, java.lang.String var1) throws java.io.IOException { }
-	public final void init(java.security.spec.AlgorithmParameterSpec var0) throws java.security.spec.InvalidParameterSpecException { }
 	public final java.lang.String toString() { return null; }
 }
 

@@ -2,7 +2,7 @@
  * $Header$
  *
  * (C) Copyright 2001 Sun Microsystems, Inc.
- * Copyright (c) OSGi Alliance (2001, 2005). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2006). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,7 +19,7 @@
 
 package java.security.interfaces;
 public abstract interface DSAKeyPairGenerator {
-	public abstract void initialize(java.security.interfaces.DSAParams var0, java.security.SecureRandom var1) throws java.security.InvalidParameterException;
 	public abstract void initialize(int var0, boolean var1, java.security.SecureRandom var2) throws java.security.InvalidParameterException;
+	public abstract void initialize(java.security.interfaces.DSAParams var0, java.security.SecureRandom var1) throws java.security.InvalidParameterException;
 }
 

@@ -19,6 +19,7 @@
 
 package java.lang;
 public final class Math {
+	public static double IEEEremainder(double var0, double var1) { return 0.0d; }
 	public static double abs(double var0) { return 0.0d; }
 	public static float abs(float var0) { return 0.0f; }
 	public static int abs(int var0) { return 0; }
@@ -31,7 +32,6 @@ public final class Math {
 	public static double cos(double var0) { return 0.0d; }
 	public static double exp(double var0) { return 0.0d; }
 	public static double floor(double var0) { return 0.0d; }
-	public static double IEEEremainder(double var0, double var1) { return 0.0d; }
 	public static double log(double var0) { return 0.0d; }
 	public static double max(double var0, double var1) { return 0.0d; }
 	public static float max(float var0, float var1) { return 0.0f; }
@@ -42,16 +42,16 @@ public final class Math {
 	public static int min(int var0, int var1) { return 0; }
 	public static long min(long var0, long var1) { return 0l; }
 	public static double pow(double var0, double var1) { return 0.0d; }
+	public static double random() { return 0.0d; }
 	public static double rint(double var0) { return 0.0d; }
 	public static long round(double var0) { return 0l; }
 	public static int round(float var0) { return 0; }
 	public static double sin(double var0) { return 0.0d; }
 	public static double sqrt(double var0) { return 0.0d; }
 	public static double tan(double var0) { return 0.0d; }
-	public static double random() { return 0.0d; }
-	public static double toRadians(double var0) { return 0.0d; }
 	public static double toDegrees(double var0) { return 0.0d; }
-	public final static double E = 2.7182818284590452354d; 
+	public static double toRadians(double var0) { return 0.0d; }
+	public final static double E = 2.7182818284590452354d;
 	public final static double PI = 3.14159265358979323846d;
 	private Math() { } /* generated constructor to prevent compiler adding default public constructor */
 }

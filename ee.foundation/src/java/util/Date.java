@@ -2,7 +2,7 @@
  * $Header$
  *
  * (C) Copyright 2001 Sun Microsystems, Inc.
- * Copyright (c) OSGi Alliance (2001, 2005). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2006). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,10 +26,7 @@ public class Date implements java.io.Serializable, java.lang.Cloneable, java.lan
 	public java.lang.Object clone() { return null; }
 	public int compareTo(java.lang.Object var0) { return 0; }
 	public int compareTo(java.util.Date var0) { return 0; }
-	public boolean equals(java.lang.Object var0) { return false; }
 	public long getTime() { return 0l; }
-	public int hashCode() { return 0; }
 	public void setTime(long var0) { }
-	public java.lang.String toString() { return null; }
 }
 

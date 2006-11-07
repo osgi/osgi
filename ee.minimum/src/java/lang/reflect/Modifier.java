@@ -2,7 +2,7 @@
  * $Header$
  *
  * (C) Copyright 2001 Sun Microsystems, Inc.
- * Copyright (c) OSGi Alliance (2001, 2005). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2006). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -33,17 +33,17 @@ public class Modifier {
 	public static boolean isTransient(int var0) { return false; }
 	public static boolean isVolatile(int var0) { return false; }
 	public static java.lang.String toString(int var0) { return null; }
-	public final static int PUBLIC = 1;
+	public final static int ABSTRACT = 1024;
+	public final static int FINAL = 16;
+	public final static int INTERFACE = 512;
+	public final static int NATIVE = 256;
 	public final static int PRIVATE = 2;
 	public final static int PROTECTED = 4;
+	public final static int PUBLIC = 1;
 	public final static int STATIC = 8;
-	public final static int FINAL = 16;
-	public final static int SYNCHRONIZED = 32;
-	public final static int VOLATILE = 64;
-	public final static int TRANSIENT = 128;
-	public final static int NATIVE = 256;
-	public final static int INTERFACE = 512;
-	public final static int ABSTRACT = 1024;
 	public final static int STRICT = 2048;
+	public final static int SYNCHRONIZED = 32;
+	public final static int TRANSIENT = 128;
+	public final static int VOLATILE = 64;
 }
 

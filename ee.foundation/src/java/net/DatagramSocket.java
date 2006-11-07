@@ -2,7 +2,7 @@
  * $Header$
  *
  * (C) Copyright 2001 Sun Microsystems, Inc.
- * Copyright (c) OSGi Alliance (2001, 2005). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2006). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -34,9 +34,9 @@ public class DatagramSocket {
 	public int getSoTimeout() throws java.net.SocketException { return 0; }
 	public void receive(java.net.DatagramPacket var0) throws java.io.IOException { }
 	public void send(java.net.DatagramPacket var0) throws java.io.IOException { }
-	public void setSendBufferSize(int var0) throws java.net.SocketException { }
-	public void setReceiveBufferSize(int var0) throws java.net.SocketException { }
-	public void setSoTimeout(int var0) throws java.net.SocketException { }
 	public static void setDatagramSocketImplFactory(java.net.DatagramSocketImplFactory var0) throws java.io.IOException { }
+	public void setReceiveBufferSize(int var0) throws java.net.SocketException { }
+	public void setSendBufferSize(int var0) throws java.net.SocketException { }
+	public void setSoTimeout(int var0) throws java.net.SocketException { }
 }
 

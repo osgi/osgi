@@ -2,7 +2,7 @@
  * $Header$
  *
  * (C) Copyright 2001 Sun Microsystems, Inc.
- * Copyright (c) OSGi Alliance (2001, 2005). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2006). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,14 +23,13 @@ package java.security;
 	public IdentityScope(java.lang.String var0) { }
 	public IdentityScope(java.lang.String var0, java.security.IdentityScope var1) throws java.security.KeyManagementException { }
 	public abstract void addIdentity(java.security.Identity var0) throws java.security.KeyManagementException;
-	public abstract void removeIdentity(java.security.Identity var0) throws java.security.KeyManagementException;
-	public abstract java.util.Enumeration identities();
+	public abstract java.security.Identity getIdentity(java.lang.String var0);
 	public java.security.Identity getIdentity(java.security.Principal var0) { return null; }
 	public abstract java.security.Identity getIdentity(java.security.PublicKey var0);
-	public abstract java.security.Identity getIdentity(java.lang.String var0);
+	public static java.security.IdentityScope getSystemScope() { return null; }
+	public abstract java.util.Enumeration identities();
+	public abstract void removeIdentity(java.security.Identity var0) throws java.security.KeyManagementException;
 	protected static void setSystemScope(java.security.IdentityScope var0) { }
 	public abstract int size();
-	public java.lang.String toString() { return null; }
-	public static java.security.IdentityScope getSystemScope() { return null; }
 }
 

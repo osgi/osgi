@@ -2,7 +2,7 @@
  * $Header$
  *
  * (C) Copyright 2001 Sun Microsystems, Inc.
- * Copyright (c) OSGi Alliance (2001, 2005). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2006). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,6 +19,9 @@
 
 package java.util.zip;
 public class Deflater {
+	public Deflater() { }
+	public Deflater(int var0) { }
+	public Deflater(int var0, boolean var1) { }
 	public int deflate(byte[] var0) { return 0; }
 	public int deflate(byte[] var0, int var1, int var2) { return 0; }
 	public void end() { }
@@ -36,9 +39,6 @@ public class Deflater {
 	public void setInput(byte[] var0, int var1, int var2) { }
 	public void setLevel(int var0) { }
 	public void setStrategy(int var0) { }
-	public Deflater() { }
-	public Deflater(int var0, boolean var1) { }
-	public Deflater(int var0) { }
 	public final static int BEST_COMPRESSION = 9;
 	public final static int BEST_SPEED = 1;
 	public final static int DEFAULT_COMPRESSION = -1;

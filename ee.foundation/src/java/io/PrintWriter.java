@@ -2,7 +2,7 @@
  * $Header$
  *
  * (C) Copyright 2001 Sun Microsystems, Inc.
- * Copyright (c) OSGi Alliance (2001, 2005). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2006). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,7 +26,6 @@ public class PrintWriter extends java.io.Writer {
 	public boolean checkError() { return false; }
 	public void close() { }
 	public void flush() { }
-	public void print(char[] var0) { }
 	public void print(char var0) { }
 	public void print(double var0) { }
 	public void print(float var0) { }
@@ -35,8 +34,8 @@ public class PrintWriter extends java.io.Writer {
 	public void print(java.lang.Object var0) { }
 	public void print(java.lang.String var0) { }
 	public void print(boolean var0) { }
+	public void print(char[] var0) { }
 	public void println() { }
-	public void println(char[] var0) { }
 	public void println(char var0) { }
 	public void println(double var0) { }
 	public void println(float var0) { }
@@ -45,12 +44,13 @@ public class PrintWriter extends java.io.Writer {
 	public void println(java.lang.Object var0) { }
 	public void println(java.lang.String var0) { }
 	public void println(boolean var0) { }
+	public void println(char[] var0) { }
 	protected void setError() { }
-	public void write(char[] var0) { }
-	public void write(char[] var0, int var1, int var2) { }
 	public void write(int var0) { }
 	public void write(java.lang.String var0) { }
 	public void write(java.lang.String var0, int var1, int var2) { }
+	public void write(char[] var0) { }
+	public void write(char[] var0, int var1, int var2) { }
 	protected java.io.Writer out;
 }
 

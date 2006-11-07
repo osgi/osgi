@@ -2,7 +2,7 @@
  * $Header$
  *
  * (C) Copyright 2001 Sun Microsystems, Inc.
- * Copyright (c) OSGi Alliance (2001, 2005). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2006). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,8 +21,8 @@ package java.lang;
 public final class Class implements java.io.Serializable {
 	public static java.lang.Class forName(java.lang.String var0) throws java.lang.ClassNotFoundException { return null; }
 	public static java.lang.Class forName(java.lang.String var0, boolean var1, java.lang.ClassLoader var2) throws java.lang.ClassNotFoundException { return null; }
-	public java.lang.Class[] getClasses() { return null; }
 	public java.lang.ClassLoader getClassLoader() { return null; }
+	public java.lang.Class[] getClasses() { return null; }
 	public java.lang.Class getComponentType() { return null; }
 	public java.lang.reflect.Constructor getConstructor(java.lang.Class[] var0) throws java.lang.NoSuchMethodException, java.lang.SecurityException { return null; }
 	public java.lang.reflect.Constructor[] getConstructors() throws java.lang.SecurityException { return null; }
@@ -41,6 +41,7 @@ public final class Class implements java.io.Serializable {
 	public java.lang.reflect.Method[] getMethods() throws java.lang.SecurityException { return null; }
 	public int getModifiers() { return 0; }
 	public java.lang.String getName() { return null; }
+	public java.lang.Package getPackage() { return null; }
 	public java.security.ProtectionDomain getProtectionDomain() { return null; }
 	public java.net.URL getResource(java.lang.String var0) { return null; }
 	public java.io.InputStream getResourceAsStream(java.lang.String var0) { return null; }
@@ -52,8 +53,6 @@ public final class Class implements java.io.Serializable {
 	public boolean isInterface() { return false; }
 	public boolean isPrimitive() { return false; }
 	public java.lang.Object newInstance() throws java.lang.IllegalAccessException, java.lang.InstantiationException { return null; }
-	public java.lang.String toString() { return null; }
-	public java.lang.Package getPackage() { return null; }
 	private Class() { } /* generated constructor to prevent compiler adding default public constructor */
 }
 

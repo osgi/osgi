@@ -2,7 +2,7 @@
  * $Header$
  *
  * (C) Copyright 2001 Sun Microsystems, Inc.
- * Copyright (c) OSGi Alliance (2001, 2005). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2006). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,11 +28,9 @@ public class Package {
 	public java.lang.String getSpecificationTitle() { return null; }
 	public java.lang.String getSpecificationVendor() { return null; }
 	public java.lang.String getSpecificationVersion() { return null; }
-	public int hashCode() { return 0; }
 	public boolean isCompatibleWith(java.lang.String var0) throws java.lang.NumberFormatException { return false; }
 	public boolean isSealed() { return false; }
 	public boolean isSealed(java.net.URL var0) { return false; }
-	public java.lang.String toString() { return null; }
 	private Package() { } /* generated constructor to prevent compiler adding default public constructor */
 }
 

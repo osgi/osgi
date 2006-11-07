@@ -2,7 +2,7 @@
  * $Header$
  *
  * (C) Copyright 2001 Sun Microsystems, Inc.
- * Copyright (c) OSGi Alliance (2001, 2005). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2006). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,6 +27,7 @@ public class KeyStore {
 	public final java.lang.String getCertificateAlias(java.security.cert.Certificate var0) throws java.security.KeyStoreException { return null; }
 	public final java.security.cert.Certificate[] getCertificateChain(java.lang.String var0) throws java.security.KeyStoreException { return null; }
 	public final java.util.Date getCreationDate(java.lang.String var0) throws java.security.KeyStoreException { return null; }
+	public final static java.lang.String getDefaultType() { return null; }
 	public static java.security.KeyStore getInstance(java.lang.String var0) throws java.security.KeyStoreException { return null; }
 	public static java.security.KeyStore getInstance(java.lang.String var0, java.lang.String var1) throws java.security.KeyStoreException, java.security.NoSuchProviderException { return null; }
 	public final java.security.Key getKey(java.lang.String var0, char[] var1) throws java.security.KeyStoreException, java.security.NoSuchAlgorithmException, java.security.UnrecoverableKeyException { return null; }
@@ -36,10 +37,9 @@ public class KeyStore {
 	public final boolean isKeyEntry(java.lang.String var0) throws java.security.KeyStoreException { return false; }
 	public final void load(java.io.InputStream var0, char[] var1) throws java.io.IOException, java.security.NoSuchAlgorithmException, java.security.cert.CertificateException { }
 	public final void setCertificateEntry(java.lang.String var0, java.security.cert.Certificate var1) throws java.security.KeyStoreException { }
-	public final void setKeyEntry(java.lang.String var0, byte[] var1, java.security.cert.Certificate[] var2) throws java.security.KeyStoreException { }
 	public final void setKeyEntry(java.lang.String var0, java.security.Key var1, char[] var2, java.security.cert.Certificate[] var3) throws java.security.KeyStoreException { }
+	public final void setKeyEntry(java.lang.String var0, byte[] var1, java.security.cert.Certificate[] var2) throws java.security.KeyStoreException { }
 	public final int size() throws java.security.KeyStoreException { return 0; }
-	public final void store(java.io.OutputStream var0, char[] var1) throws java.security.KeyStoreException, java.io.IOException, java.security.NoSuchAlgorithmException, java.security.cert.CertificateException { }
-	public final static java.lang.String getDefaultType() { return null; }
+	public final void store(java.io.OutputStream var0, char[] var1) throws java.io.IOException, java.security.KeyStoreException, java.security.NoSuchAlgorithmException, java.security.cert.CertificateException { }
 }
 

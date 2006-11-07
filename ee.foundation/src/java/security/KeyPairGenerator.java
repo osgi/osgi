@@ -2,7 +2,7 @@
  * $Header$
  *
  * (C) Copyright 2001 Sun Microsystems, Inc.
- * Copyright (c) OSGi Alliance (2001, 2005). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2006). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,6 +21,7 @@ package java.security;
 public abstract class KeyPairGenerator extends java.security.KeyPairGeneratorSpi {
 	protected KeyPairGenerator(java.lang.String var0) { }
 	public final java.security.KeyPair genKeyPair() { return null; }
+	public java.security.KeyPair generateKeyPair() { return null; }
 	public java.lang.String getAlgorithm() { return null; }
 	public static java.security.KeyPairGenerator getInstance(java.lang.String var0) throws java.security.NoSuchAlgorithmException { return null; }
 	public static java.security.KeyPairGenerator getInstance(java.lang.String var0, java.lang.String var1) throws java.security.NoSuchAlgorithmException, java.security.NoSuchProviderException { return null; }
@@ -28,7 +29,5 @@ public abstract class KeyPairGenerator extends java.security.KeyPairGeneratorSpi
 	public void initialize(int var0) { }
 	public void initialize(int var0, java.security.SecureRandom var1) { }
 	public void initialize(java.security.spec.AlgorithmParameterSpec var0) throws java.security.InvalidAlgorithmParameterException { }
-	public void initialize(java.security.spec.AlgorithmParameterSpec var0, java.security.SecureRandom var1) throws java.security.InvalidAlgorithmParameterException { }
-	public java.security.KeyPair generateKeyPair() { return null; }
 }
 

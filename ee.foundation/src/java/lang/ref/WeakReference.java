@@ -2,7 +2,7 @@
  * $Header$
  *
  * (C) Copyright 2001 Sun Microsystems, Inc.
- * Copyright (c) OSGi Alliance (2001, 2005). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2006). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,7 +19,7 @@
 
 package java.lang.ref;
 public class WeakReference extends java.lang.ref.Reference {
-	public WeakReference(java.lang.Object var0, java.lang.ref.ReferenceQueue var1) { }
 	public WeakReference(java.lang.Object var0) { }
+	public WeakReference(java.lang.Object var0, java.lang.ref.ReferenceQueue var1) { }
 }
 

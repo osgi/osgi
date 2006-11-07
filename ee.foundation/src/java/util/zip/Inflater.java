@@ -2,7 +2,7 @@
  * $Header$
  *
  * (C) Copyright 2001 Sun Microsystems, Inc.
- * Copyright (c) OSGi Alliance (2001, 2005). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2006). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,6 +19,8 @@
 
 package java.util.zip;
 public class Inflater {
+	public Inflater() { }
+	public Inflater(boolean var0) { }
 	public void end() { }
 	protected void finalize() { }
 	public boolean finished() { return false; }
@@ -28,8 +30,6 @@ public class Inflater {
 	public int getTotalOut() { return 0; }
 	public int inflate(byte[] var0) throws java.util.zip.DataFormatException { return 0; }
 	public int inflate(byte[] var0, int var1, int var2) throws java.util.zip.DataFormatException { return 0; }
-	public Inflater() { }
-	public Inflater(boolean var0) { }
 	public boolean needsDictionary() { return false; }
 	public boolean needsInput() { return false; }
 	public void reset() { }

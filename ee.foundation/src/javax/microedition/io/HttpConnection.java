@@ -2,7 +2,7 @@
  * $Header$
  *
  * (C) Copyright 2001 Sun Microsystems, Inc.
- * Copyright (c) OSGi Alliance (2001, 2005). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2006). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -42,7 +42,6 @@ public abstract interface HttpConnection extends javax.microedition.io.ContentCo
 	public abstract void setRequestProperty(java.lang.String var0, java.lang.String var1) throws java.io.IOException;
 	public final static java.lang.String GET = "GET";
 	public final static java.lang.String HEAD = "HEAD";
-	public final static java.lang.String POST = "POST";
 	public final static int HTTP_ACCEPTED = 202;
 	public final static int HTTP_BAD_GATEWAY = 502;
 	public final static int HTTP_BAD_METHOD = 405;
@@ -60,12 +59,12 @@ public abstract interface HttpConnection extends javax.microedition.io.ContentCo
 	public final static int HTTP_MOVED_PERM = 301;
 	public final static int HTTP_MOVED_TEMP = 302;
 	public final static int HTTP_MULT_CHOICE = 300;
-	public final static int HTTP_NO_CONTENT = 204;
 	public final static int HTTP_NOT_ACCEPTABLE = 406;
 	public final static int HTTP_NOT_AUTHORITATIVE = 203;
 	public final static int HTTP_NOT_FOUND = 404;
 	public final static int HTTP_NOT_IMPLEMENTED = 501;
 	public final static int HTTP_NOT_MODIFIED = 304;
+	public final static int HTTP_NO_CONTENT = 204;
 	public final static int HTTP_OK = 200;
 	public final static int HTTP_PARTIAL = 206;
 	public final static int HTTP_PAYMENT_REQUIRED = 402;
@@ -81,5 +80,6 @@ public abstract interface HttpConnection extends javax.microedition.io.ContentCo
 	public final static int HTTP_UNSUPPORTED_TYPE = 415;
 	public final static int HTTP_USE_PROXY = 305;
 	public final static int HTTP_VERSION = 505;
+	public final static java.lang.String POST = "POST";
 }
 

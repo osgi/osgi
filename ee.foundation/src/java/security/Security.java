@@ -2,7 +2,7 @@
  * $Header$
  *
  * (C) Copyright 2001 Sun Microsystems, Inc.
- * Copyright (c) OSGi Alliance (2001, 2005). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2006). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,15 +19,15 @@
 
 package java.security;
 public final class Security {
-	public static java.lang.String getProperty(java.lang.String var0) { return null; }
-	public static void setProperty(java.lang.String var0, java.lang.String var1) { }
 	public static int addProvider(java.security.Provider var0) { return 0; }
+	public static java.lang.String getProperty(java.lang.String var0) { return null; }
 	public static java.security.Provider getProvider(java.lang.String var0) { return null; }
 	public static java.security.Provider[] getProviders() { return null; }
 	public static java.security.Provider[] getProviders(java.lang.String var0) { return null; }
 	public static java.security.Provider[] getProviders(java.util.Map var0) { return null; }
 	public static int insertProviderAt(java.security.Provider var0, int var1) { return 0; }
 	public static void removeProvider(java.lang.String var0) { }
+	public static void setProperty(java.lang.String var0, java.lang.String var1) { }
 	private Security() { } /* generated constructor to prevent compiler adding default public constructor */
 }
 

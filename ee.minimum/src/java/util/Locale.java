@@ -2,7 +2,7 @@
  * $Header$
  *
  * (C) Copyright 2001 Sun Microsystems, Inc.
- * Copyright (c) OSGi Alliance (2001, 2005). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2006). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,11 +18,10 @@
  */
 
 package java.util;
-public final class Locale implements java.lang.Cloneable, java.io.Serializable {
+public final class Locale implements java.io.Serializable, java.lang.Cloneable {
 	public Locale(java.lang.String var0, java.lang.String var1) { }
 	public Locale(java.lang.String var0, java.lang.String var1, java.lang.String var2) { }
 	public java.lang.Object clone() { return null; }
-	public boolean equals(java.lang.Object var0) { return false; }
 	public static java.util.Locale[] getAvailableLocales() { return null; }
 	public java.lang.String getCountry() { return null; }
 	public static java.util.Locale getDefault() { return null; }
@@ -40,7 +39,6 @@ public final class Locale implements java.lang.Cloneable, java.io.Serializable {
 	public static java.lang.String[] getISOLanguages() { return null; }
 	public java.lang.String getLanguage() { return null; }
 	public java.lang.String getVariant() { return null; }
-	public int hashCode() { return 0; }
 	public static void setDefault(java.util.Locale var0) { }
 	public final java.lang.String toString() { return null; }
 	public final static java.util.Locale CANADA; static { CANADA = null; }

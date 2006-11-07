@@ -2,7 +2,7 @@
  * $Header$
  *
  * (C) Copyright 2001 Sun Microsystems, Inc.
- * Copyright (c) OSGi Alliance (2001, 2005). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2006). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,8 +18,10 @@
  */
 
 package java.util.zip;
-public class ZipEntry implements java.util.zip.ZipConstants, java.lang.Cloneable {
+public class ZipEntry implements java.lang.Cloneable, java.util.zip.ZipConstants {
 	public ZipEntry(java.lang.String var0) { }
+	public ZipEntry(java.util.zip.ZipEntry var0) { }
+	public java.lang.Object clone() { return null; }
 	public java.lang.String getComment() { return null; }
 	public long getCompressedSize() { return 0l; }
 	public long getCrc() { return 0l; }
@@ -36,10 +38,6 @@ public class ZipEntry implements java.util.zip.ZipConstants, java.lang.Cloneable
 	public void setMethod(int var0) { }
 	public void setSize(long var0) { }
 	public void setTime(long var0) { }
-	public java.lang.String toString() { return null; }
-	public ZipEntry(java.util.zip.ZipEntry var0) { }
-	public java.lang.Object clone() { return null; }
-	public int hashCode() { return 0; }
 	public final static int DEFLATED = 8;
 	public final static int STORED = 0;
 }

@@ -2,7 +2,7 @@
  * $Header$
  *
  * (C) Copyright 2001 Sun Microsystems, Inc.
- * Copyright (c) OSGi Alliance (2001, 2005). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2006). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,12 +24,10 @@ public final class StringCharacterIterator implements java.text.CharacterIterato
 	public StringCharacterIterator(java.lang.String var0, int var1, int var2, int var3) { }
 	public java.lang.Object clone() { return null; }
 	public char current() { return 0; }
-	public boolean equals(java.lang.Object var0) { return false; }
 	public char first() { return 0; }
 	public int getBeginIndex() { return 0; }
 	public int getEndIndex() { return 0; }
 	public int getIndex() { return 0; }
-	public int hashCode() { return 0; }
 	public char last() { return 0; }
 	public char next() { return 0; }
 	public char previous() { return 0; }

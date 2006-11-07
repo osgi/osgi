@@ -23,6 +23,5 @@ public class ClassNotFoundException extends java.lang.Exception {
 	public ClassNotFoundException(java.lang.String var0) { }
 	public ClassNotFoundException(java.lang.String var0, java.lang.Throwable var1) { }
 	public java.lang.Throwable getException() { return null; }
-	public void printStackTrace(java.io.PrintStream var0) { }
 }
 

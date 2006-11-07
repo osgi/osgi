@@ -2,7 +2,7 @@
  * $Header$
  *
  * (C) Copyright 2001 Sun Microsystems, Inc.
- * Copyright (c) OSGi Alliance (2001, 2005). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2006). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,7 +21,6 @@ package java.io;
 public class InvalidClassException extends java.io.ObjectStreamException {
 	public InvalidClassException(java.lang.String var0) { }
 	public InvalidClassException(java.lang.String var0, java.lang.String var1) { }
-	public java.lang.String getMessage() { return null; }
 	public java.lang.String classname;
 }
 
