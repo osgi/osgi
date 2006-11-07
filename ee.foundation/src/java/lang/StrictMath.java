@@ -51,8 +51,8 @@ public final class StrictMath {
 	public static double tan(double var0) { return 0.0d; }
 	public static double toDegrees(double var0) { return 0.0d; }
 	public static double toRadians(double var0) { return 0.0d; }
-	public final static double E = 2.7182818284590452354d;
-	public final static double PI = 3.14159265358979323846d;
+	public final static double E = 2.718281828459045d;
+	public final static double PI = 3.141592653589793d;
 	private StrictMath() { } /* generated constructor to prevent compiler adding default public constructor */
 }
 
