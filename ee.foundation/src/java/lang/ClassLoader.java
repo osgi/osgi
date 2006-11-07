@@ -23,7 +23,7 @@ public abstract class ClassLoader {
 	protected ClassLoader(java.lang.ClassLoader var0) { }
 	protected final java.lang.Class defineClass(java.lang.String var0, byte[] var1, int var2, int var3) throws java.lang.ClassFormatError { return null; }
 	protected final java.lang.Class defineClass(java.lang.String var0, byte[] var1, int var2, int var3, java.security.ProtectionDomain var4) throws java.lang.ClassFormatError { return null; }
-	protected java.lang.Package definePackage(java.lang.String var0, java.lang.String var1, java.lang.String var2, java.lang.String var3, java.lang.String var4, java.lang.String var5, java.lang.String var6, java.net.URL var7) throws java.lang.IllegalArgumentException { return null; }
+	protected java.lang.Package definePackage(java.lang.String var0, java.lang.String var1, java.lang.String var2, java.lang.String var3, java.lang.String var4, java.lang.String var5, java.lang.String var6, java.net.URL var7) { return null; }
 	protected java.lang.Class findClass(java.lang.String var0) throws java.lang.ClassNotFoundException { return null; }
 	protected java.lang.String findLibrary(java.lang.String var0) { return null; }
 	protected final java.lang.Class findLoadedClass(java.lang.String var0) { return null; }

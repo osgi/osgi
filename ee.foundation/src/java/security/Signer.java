@@ -23,6 +23,6 @@ package java.security;
 	public Signer(java.lang.String var0) { }
 	public Signer(java.lang.String var0, java.security.IdentityScope var1) throws java.security.KeyManagementException { }
 	public java.security.PrivateKey getPrivateKey() { return null; }
-	public final void setKeyPair(java.security.KeyPair var0) throws java.security.InvalidParameterException, java.security.KeyException { }
+	public final void setKeyPair(java.security.KeyPair var0) throws java.security.KeyException { }
 }
 

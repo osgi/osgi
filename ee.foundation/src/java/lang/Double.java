@@ -20,7 +20,7 @@
 package java.lang;
 public final class Double extends java.lang.Number implements java.lang.Comparable {
 	public Double(double var0) { }
-	public Double(java.lang.String var0) throws java.lang.NumberFormatException { }
+	public Double(java.lang.String var0) { }
 	public int compareTo(java.lang.Double var0) { return 0; }
 	public int compareTo(java.lang.Object var0) { return 0; }
 	public static long doubleToLongBits(double var0) { return 0l; }
@@ -34,9 +34,9 @@ public final class Double extends java.lang.Number implements java.lang.Comparab
 	public static boolean isNaN(double var0) { return false; }
 	public static double longBitsToDouble(long var0) { return 0.0d; }
 	public long longValue() { return 0l; }
-	public static double parseDouble(java.lang.String var0) throws java.lang.NumberFormatException { return 0.0d; }
+	public static double parseDouble(java.lang.String var0) { return 0.0d; }
 	public static java.lang.String toString(double var0) { return null; }
-	public static java.lang.Double valueOf(java.lang.String var0) throws java.lang.NumberFormatException { return null; }
+	public static java.lang.Double valueOf(java.lang.String var0) { return null; }
 	public final static double MAX_VALUE = 1.7976931348623157E308d;
 	public final static double MIN_VALUE; static { MIN_VALUE = 0.0d; }
 	public final static double NEGATIVE_INFINITY = -1.0d / 0.0d;

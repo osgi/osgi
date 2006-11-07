@@ -22,6 +22,6 @@ public class ReferenceQueue {
 	public ReferenceQueue() { }
 	public java.lang.ref.Reference poll() { return null; }
 	public java.lang.ref.Reference remove() throws java.lang.InterruptedException { return null; }
-	public java.lang.ref.Reference remove(long var0) throws java.lang.IllegalArgumentException, java.lang.InterruptedException { return null; }
+	public java.lang.ref.Reference remove(long var0) throws java.lang.InterruptedException { return null; }
 }
 

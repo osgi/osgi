@@ -19,10 +19,10 @@
 
 package java.io;
 public class ObjectInputStream extends java.io.InputStream implements java.io.ObjectInput, java.io.ObjectStreamConstants {
-	protected ObjectInputStream() throws java.io.IOException, java.lang.SecurityException { }
+	protected ObjectInputStream() throws java.io.IOException { }
 	public ObjectInputStream(java.io.InputStream var0) throws java.io.IOException { }
 	public void defaultReadObject() throws java.io.IOException, java.lang.ClassNotFoundException { }
-	protected boolean enableResolveObject(boolean var0) throws java.lang.SecurityException { return false; }
+	protected boolean enableResolveObject(boolean var0) { return false; }
 	public int read() throws java.io.IOException { return 0; }
 	public boolean readBoolean() throws java.io.IOException { return false; }
 	public byte readByte() throws java.io.IOException { return 0; }
@@ -50,16 +50,16 @@ public class ObjectInputStream extends java.io.InputStream implements java.io.Ob
 	public int skipBytes(int var0) throws java.io.IOException { return 0; }
 	public static abstract class GetField {
 		public GetField() { }
-		public abstract boolean defaulted(java.lang.String var0) throws java.io.IOException, java.lang.IllegalArgumentException;
-		public abstract byte get(java.lang.String var0, byte var1) throws java.io.IOException, java.lang.IllegalArgumentException;
-		public abstract char get(java.lang.String var0, char var1) throws java.io.IOException, java.lang.IllegalArgumentException;
-		public abstract double get(java.lang.String var0, double var1) throws java.io.IOException, java.lang.IllegalArgumentException;
-		public abstract float get(java.lang.String var0, float var1) throws java.io.IOException, java.lang.IllegalArgumentException;
-		public abstract int get(java.lang.String var0, int var1) throws java.io.IOException, java.lang.IllegalArgumentException;
-		public abstract long get(java.lang.String var0, long var1) throws java.io.IOException, java.lang.IllegalArgumentException;
-		public abstract java.lang.Object get(java.lang.String var0, java.lang.Object var1) throws java.io.IOException, java.lang.IllegalArgumentException;
-		public abstract short get(java.lang.String var0, short var1) throws java.io.IOException, java.lang.IllegalArgumentException;
-		public abstract boolean get(java.lang.String var0, boolean var1) throws java.io.IOException, java.lang.IllegalArgumentException;
+		public abstract boolean defaulted(java.lang.String var0) throws java.io.IOException;
+		public abstract byte get(java.lang.String var0, byte var1) throws java.io.IOException;
+		public abstract char get(java.lang.String var0, char var1) throws java.io.IOException;
+		public abstract double get(java.lang.String var0, double var1) throws java.io.IOException;
+		public abstract float get(java.lang.String var0, float var1) throws java.io.IOException;
+		public abstract int get(java.lang.String var0, int var1) throws java.io.IOException;
+		public abstract long get(java.lang.String var0, long var1) throws java.io.IOException;
+		public abstract java.lang.Object get(java.lang.String var0, java.lang.Object var1) throws java.io.IOException;
+		public abstract short get(java.lang.String var0, short var1) throws java.io.IOException;
+		public abstract boolean get(java.lang.String var0, boolean var1) throws java.io.IOException;
 		public abstract java.io.ObjectStreamClass getObjectStreamClass();
 	}
 }

@@ -19,6 +19,6 @@
 
 package java.security;
 public abstract interface Guard {
-	public abstract void checkGuard(java.lang.Object var0) throws java.lang.SecurityException;
+	public abstract void checkGuard(java.lang.Object var0);
 }
 

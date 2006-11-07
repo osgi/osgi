@@ -19,28 +19,28 @@
 
 package java.lang.reflect;
 public final class Field extends java.lang.reflect.AccessibleObject implements java.lang.reflect.Member {
-	public java.lang.Object get(java.lang.Object var0) throws java.lang.IllegalAccessException, java.lang.IllegalArgumentException { return null; }
-	public boolean getBoolean(java.lang.Object var0) throws java.lang.IllegalAccessException, java.lang.IllegalArgumentException { return false; }
-	public byte getByte(java.lang.Object var0) throws java.lang.IllegalAccessException, java.lang.IllegalArgumentException { return 0; }
-	public char getChar(java.lang.Object var0) throws java.lang.IllegalAccessException, java.lang.IllegalArgumentException { return 0; }
+	public java.lang.Object get(java.lang.Object var0) throws java.lang.IllegalAccessException { return null; }
+	public boolean getBoolean(java.lang.Object var0) throws java.lang.IllegalAccessException { return false; }
+	public byte getByte(java.lang.Object var0) throws java.lang.IllegalAccessException { return 0; }
+	public char getChar(java.lang.Object var0) throws java.lang.IllegalAccessException { return 0; }
 	public java.lang.Class getDeclaringClass() { return null; }
-	public double getDouble(java.lang.Object var0) throws java.lang.IllegalAccessException, java.lang.IllegalArgumentException { return 0.0d; }
-	public float getFloat(java.lang.Object var0) throws java.lang.IllegalAccessException, java.lang.IllegalArgumentException { return 0.0f; }
-	public int getInt(java.lang.Object var0) throws java.lang.IllegalAccessException, java.lang.IllegalArgumentException { return 0; }
-	public long getLong(java.lang.Object var0) throws java.lang.IllegalAccessException, java.lang.IllegalArgumentException { return 0l; }
+	public double getDouble(java.lang.Object var0) throws java.lang.IllegalAccessException { return 0.0d; }
+	public float getFloat(java.lang.Object var0) throws java.lang.IllegalAccessException { return 0.0f; }
+	public int getInt(java.lang.Object var0) throws java.lang.IllegalAccessException { return 0; }
+	public long getLong(java.lang.Object var0) throws java.lang.IllegalAccessException { return 0l; }
 	public int getModifiers() { return 0; }
 	public java.lang.String getName() { return null; }
-	public short getShort(java.lang.Object var0) throws java.lang.IllegalAccessException, java.lang.IllegalArgumentException { return 0; }
+	public short getShort(java.lang.Object var0) throws java.lang.IllegalAccessException { return 0; }
 	public java.lang.Class getType() { return null; }
-	public void set(java.lang.Object var0, java.lang.Object var1) throws java.lang.IllegalAccessException, java.lang.IllegalArgumentException { }
-	public void setBoolean(java.lang.Object var0, boolean var1) throws java.lang.IllegalAccessException, java.lang.IllegalArgumentException { }
-	public void setByte(java.lang.Object var0, byte var1) throws java.lang.IllegalAccessException, java.lang.IllegalArgumentException { }
-	public void setChar(java.lang.Object var0, char var1) throws java.lang.IllegalAccessException, java.lang.IllegalArgumentException { }
-	public void setDouble(java.lang.Object var0, double var1) throws java.lang.IllegalAccessException, java.lang.IllegalArgumentException { }
-	public void setFloat(java.lang.Object var0, float var1) throws java.lang.IllegalAccessException, java.lang.IllegalArgumentException { }
-	public void setInt(java.lang.Object var0, int var1) throws java.lang.IllegalAccessException, java.lang.IllegalArgumentException { }
-	public void setLong(java.lang.Object var0, long var1) throws java.lang.IllegalAccessException, java.lang.IllegalArgumentException { }
-	public void setShort(java.lang.Object var0, short var1) throws java.lang.IllegalAccessException, java.lang.IllegalArgumentException { }
+	public void set(java.lang.Object var0, java.lang.Object var1) throws java.lang.IllegalAccessException { }
+	public void setBoolean(java.lang.Object var0, boolean var1) throws java.lang.IllegalAccessException { }
+	public void setByte(java.lang.Object var0, byte var1) throws java.lang.IllegalAccessException { }
+	public void setChar(java.lang.Object var0, char var1) throws java.lang.IllegalAccessException { }
+	public void setDouble(java.lang.Object var0, double var1) throws java.lang.IllegalAccessException { }
+	public void setFloat(java.lang.Object var0, float var1) throws java.lang.IllegalAccessException { }
+	public void setInt(java.lang.Object var0, int var1) throws java.lang.IllegalAccessException { }
+	public void setLong(java.lang.Object var0, long var1) throws java.lang.IllegalAccessException { }
+	public void setShort(java.lang.Object var0, short var1) throws java.lang.IllegalAccessException { }
 	private Field() { } /* generated constructor to prevent compiler adding default public constructor */
 }
 

@@ -28,7 +28,7 @@ public class Package {
 	public java.lang.String getSpecificationTitle() { return null; }
 	public java.lang.String getSpecificationVendor() { return null; }
 	public java.lang.String getSpecificationVersion() { return null; }
-	public boolean isCompatibleWith(java.lang.String var0) throws java.lang.NumberFormatException { return false; }
+	public boolean isCompatibleWith(java.lang.String var0) { return false; }
 	public boolean isSealed() { return false; }
 	public boolean isSealed(java.net.URL var0) { return false; }
 	private Package() { } /* generated constructor to prevent compiler adding default public constructor */

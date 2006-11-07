@@ -21,7 +21,7 @@ package java.security;
 public final class AccessControlContext {
 	public AccessControlContext(java.security.AccessControlContext var0, java.security.DomainCombiner var1) { }
 	public AccessControlContext(java.security.ProtectionDomain[] var0) { }
-	public void checkPermission(java.security.Permission var0) throws java.security.AccessControlException { }
+	public void checkPermission(java.security.Permission var0) { }
 	public java.security.DomainCombiner getDomainCombiner() { return null; }
 }
 

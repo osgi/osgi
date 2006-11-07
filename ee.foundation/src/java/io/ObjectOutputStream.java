@@ -19,13 +19,13 @@
 
 package java.io;
 public class ObjectOutputStream extends java.io.OutputStream implements java.io.ObjectOutput, java.io.ObjectStreamConstants {
-	protected ObjectOutputStream() throws java.io.IOException, java.lang.SecurityException { }
+	protected ObjectOutputStream() throws java.io.IOException { }
 	public ObjectOutputStream(java.io.OutputStream var0) throws java.io.IOException { }
 	protected void annotateClass(java.lang.Class var0) throws java.io.IOException { }
 	protected void annotateProxyClass(java.lang.Class var0) throws java.io.IOException { }
 	public void defaultWriteObject() throws java.io.IOException { }
 	protected void drain() throws java.io.IOException { }
-	protected boolean enableReplaceObject(boolean var0) throws java.lang.SecurityException { return false; }
+	protected boolean enableReplaceObject(boolean var0) { return false; }
 	public java.io.ObjectOutputStream.PutField putFields() throws java.io.IOException { return null; }
 	protected java.lang.Object replaceObject(java.lang.Object var0) throws java.io.IOException { return null; }
 	public void reset() throws java.io.IOException { }

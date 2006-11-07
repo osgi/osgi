@@ -19,7 +19,7 @@
 
 package java.lang;
 public final class Short extends java.lang.Number implements java.lang.Comparable {
-	public Short(java.lang.String var0) throws java.lang.NumberFormatException { }
+	public Short(java.lang.String var0) { }
 	public Short(short var0) { }
 	public int compareTo(java.lang.Object var0) { return 0; }
 	public int compareTo(java.lang.Short var0) { return 0; }
@@ -27,9 +27,9 @@ public final class Short extends java.lang.Number implements java.lang.Comparabl
 	public float floatValue() { return 0.0f; }
 	public int intValue() { return 0; }
 	public long longValue() { return 0l; }
-	public static short parseShort(java.lang.String var0) throws java.lang.NumberFormatException { return 0; }
-	public static short parseShort(java.lang.String var0, int var1) throws java.lang.NumberFormatException { return 0; }
-	public static java.lang.Short valueOf(java.lang.String var0, int var1) throws java.lang.NumberFormatException { return null; }
+	public static short parseShort(java.lang.String var0) { return 0; }
+	public static short parseShort(java.lang.String var0, int var1) { return 0; }
+	public static java.lang.Short valueOf(java.lang.String var0, int var1) { return null; }
 	public final static short MAX_VALUE = 32767;
 	public final static short MIN_VALUE = -32768;
 	public final static java.lang.Class TYPE; static { TYPE = null; }

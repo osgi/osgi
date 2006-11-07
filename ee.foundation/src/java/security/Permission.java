@@ -20,7 +20,7 @@
 package java.security;
 public abstract class Permission implements java.io.Serializable, java.security.Guard {
 	public Permission(java.lang.String var0) { }
-	public void checkGuard(java.lang.Object var0) throws java.lang.SecurityException { }
+	public void checkGuard(java.lang.Object var0) { }
 	public abstract boolean equals(java.lang.Object var0);
 	public abstract java.lang.String getActions();
 	public final java.lang.String getName() { return null; }

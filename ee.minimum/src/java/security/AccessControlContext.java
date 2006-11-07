@@ -20,6 +20,6 @@
 package java.security;
 public final class AccessControlContext {
 	public AccessControlContext(java.security.ProtectionDomain[] var0) { }
-	public void checkPermission(java.security.Permission var0) throws java.security.AccessControlException { }
+	public void checkPermission(java.security.Permission var0) { }
 }
 

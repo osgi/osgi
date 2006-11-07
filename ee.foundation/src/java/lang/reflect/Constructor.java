@@ -24,7 +24,7 @@ public final class Constructor extends java.lang.reflect.AccessibleObject implem
 	public int getModifiers() { return 0; }
 	public java.lang.String getName() { return null; }
 	public java.lang.Class[] getParameterTypes() { return null; }
-	public java.lang.Object newInstance(java.lang.Object[] var0) throws java.lang.IllegalAccessException, java.lang.IllegalArgumentException, java.lang.InstantiationException, java.lang.reflect.InvocationTargetException { return null; }
+	public java.lang.Object newInstance(java.lang.Object[] var0) throws java.lang.IllegalAccessException, java.lang.InstantiationException, java.lang.reflect.InvocationTargetException { return null; }
 	private Constructor() { } /* generated constructor to prevent compiler adding default public constructor */
 }
 

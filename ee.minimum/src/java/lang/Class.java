@@ -24,21 +24,21 @@ public final class Class implements java.io.Serializable {
 	public java.lang.ClassLoader getClassLoader() { return null; }
 	public java.lang.Class[] getClasses() { return null; }
 	public java.lang.Class getComponentType() { return null; }
-	public java.lang.reflect.Constructor getConstructor(java.lang.Class[] var0) throws java.lang.NoSuchMethodException, java.lang.SecurityException { return null; }
-	public java.lang.reflect.Constructor[] getConstructors() throws java.lang.SecurityException { return null; }
-	public java.lang.Class[] getDeclaredClasses() throws java.lang.SecurityException { return null; }
-	public java.lang.reflect.Constructor getDeclaredConstructor(java.lang.Class[] var0) throws java.lang.NoSuchMethodException, java.lang.SecurityException { return null; }
-	public java.lang.reflect.Constructor[] getDeclaredConstructors() throws java.lang.SecurityException { return null; }
-	public java.lang.reflect.Field getDeclaredField(java.lang.String var0) throws java.lang.NoSuchFieldException, java.lang.SecurityException { return null; }
-	public java.lang.reflect.Field[] getDeclaredFields() throws java.lang.SecurityException { return null; }
-	public java.lang.reflect.Method getDeclaredMethod(java.lang.String var0, java.lang.Class[] var1) throws java.lang.NoSuchMethodException, java.lang.SecurityException { return null; }
-	public java.lang.reflect.Method[] getDeclaredMethods() throws java.lang.SecurityException { return null; }
+	public java.lang.reflect.Constructor getConstructor(java.lang.Class[] var0) throws java.lang.NoSuchMethodException { return null; }
+	public java.lang.reflect.Constructor[] getConstructors() { return null; }
+	public java.lang.Class[] getDeclaredClasses() { return null; }
+	public java.lang.reflect.Constructor getDeclaredConstructor(java.lang.Class[] var0) throws java.lang.NoSuchMethodException { return null; }
+	public java.lang.reflect.Constructor[] getDeclaredConstructors() { return null; }
+	public java.lang.reflect.Field getDeclaredField(java.lang.String var0) throws java.lang.NoSuchFieldException { return null; }
+	public java.lang.reflect.Field[] getDeclaredFields() { return null; }
+	public java.lang.reflect.Method getDeclaredMethod(java.lang.String var0, java.lang.Class[] var1) throws java.lang.NoSuchMethodException { return null; }
+	public java.lang.reflect.Method[] getDeclaredMethods() { return null; }
 	public java.lang.Class getDeclaringClass() { return null; }
-	public java.lang.reflect.Field getField(java.lang.String var0) throws java.lang.NoSuchFieldException, java.lang.SecurityException { return null; }
-	public java.lang.reflect.Field[] getFields() throws java.lang.SecurityException { return null; }
+	public java.lang.reflect.Field getField(java.lang.String var0) throws java.lang.NoSuchFieldException { return null; }
+	public java.lang.reflect.Field[] getFields() { return null; }
 	public java.lang.Class[] getInterfaces() { return null; }
-	public java.lang.reflect.Method getMethod(java.lang.String var0, java.lang.Class[] var1) throws java.lang.NoSuchMethodException, java.lang.SecurityException { return null; }
-	public java.lang.reflect.Method[] getMethods() throws java.lang.SecurityException { return null; }
+	public java.lang.reflect.Method getMethod(java.lang.String var0, java.lang.Class[] var1) throws java.lang.NoSuchMethodException { return null; }
+	public java.lang.reflect.Method[] getMethods() { return null; }
 	public int getModifiers() { return 0; }
 	public java.lang.String getName() { return null; }
 	public java.security.ProtectionDomain getProtectionDomain() { return null; }

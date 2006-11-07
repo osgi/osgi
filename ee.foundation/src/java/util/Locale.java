@@ -33,8 +33,8 @@ public final class Locale implements java.io.Serializable, java.lang.Cloneable {
 	public java.lang.String getDisplayName(java.util.Locale var0) { return null; }
 	public final java.lang.String getDisplayVariant() { return null; }
 	public java.lang.String getDisplayVariant(java.util.Locale var0) { return null; }
-	public java.lang.String getISO3Country() throws java.util.MissingResourceException { return null; }
-	public java.lang.String getISO3Language() throws java.util.MissingResourceException { return null; }
+	public java.lang.String getISO3Country() { return null; }
+	public java.lang.String getISO3Language() { return null; }
 	public static java.lang.String[] getISOCountries() { return null; }
 	public static java.lang.String[] getISOLanguages() { return null; }
 	public java.lang.String getLanguage() { return null; }

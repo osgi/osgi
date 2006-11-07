@@ -19,7 +19,7 @@
 
 package java.security;
 public final class AccessController {
-	public static void checkPermission(java.security.Permission var0) throws java.security.AccessControlException { }
+	public static void checkPermission(java.security.Permission var0) { }
 	public static java.lang.Object doPrivileged(java.security.PrivilegedAction var0) { return null; }
 	public static java.lang.Object doPrivileged(java.security.PrivilegedAction var0, java.security.AccessControlContext var1) { return null; }
 	public static java.lang.Object doPrivileged(java.security.PrivilegedExceptionAction var0) throws java.security.PrivilegedActionException { return null; }
