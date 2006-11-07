@@ -37,7 +37,7 @@ public final class Double extends java.lang.Number implements java.lang.Comparab
 	public static java.lang.String toString(double var0) { return null; }
 	public static java.lang.Double valueOf(java.lang.String var0) throws java.lang.NumberFormatException { return null; }
 	public final static double MAX_VALUE = 1.7976931348623157E308d;
-	public final static double MIN_VALUE = 4.9E-324d;
+    public final static double MIN_VALUE; static { MIN_VALUE = 0.0d; }
 	public final static double NEGATIVE_INFINITY = -1.0d / 0.0d;
 	public final static double NaN = 0.0d / 0.0d;
 	public final static double POSITIVE_INFINITY = 1.0d / 0.0d;
