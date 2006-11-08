@@ -1,0 +1,543 @@
+#!/usr/bin/perl -w
+###############################################################################
+# japiohtml - Convert japicompat output to pretty html format.
+# Copyright (C) 2000,2002,2003,2004,2005  Stuart Ballard <stuart.a.ballard@gmail.com>
+# 
+# This program is free software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public License
+# as published by the Free Software Foundation; either version 2
+# of the License, or (at your option) any later version.
+# 
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+# 
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+###############################################################################
+
+## GLOBAL VARIABLES ##
+
+# Some global variables used for displaying stuff.
+$japiover = "0.9.2";
+@categories = ();
+@packages = ();
+# Would be nice not to hardcode this - maybe later...
+@things = ("package", "class", "interface", "enum", "annotation", "field", "method", "constructor");
+
+$javatypes = {Z=>'boolean', B=>'byte', C=>'char', D=>'double', F=>'float',
+                  I=>'int', J=>'long', S=>'short', V=>'void'};
+
+# Requirements
+#use IO::Handle;
+sub sig2type($);
+sub readable_member($);
+sub readable_item($);
+sub htmlencode($);
+
+my $verline = <>;
+chomp $verline;
+($filever, $origfile, $newfile) = ($1, $2, $3)
+    if $verline =~ /^%\%japio ([^ ]+) ([^ ]+) ([^ ]+)(?: .*)?$/;
+unless (defined $filever) {
+  print STDERR <<EOF;
+This does not look like a japio file.
+EOF
+  exit 1;
+}
+if ($filever ne $japiover) {
+  print STDERR <<EOF;
+This japio file claims to be version $filever, but this version of japiohtml
+only supports version $japiover.
+EOF
+  exit 1;
+}
+
+($orig,$origdate) = ($1, $2)
+    if $origfile =~ /^([^@]*?)(?:\.japi(?:\.gz)?)?(?:@(.*))?$/;
+($new, $newdate) = ($1, $2)
+    if $newfile =~ /^([^@]*?)(?:\.japi(?:\.gz)?)?(?:@(.*))?$/;
+$origdate =~ s/_/ /g if $origdate;
+$newdate =~ s/_/ /g if $newdate;
+
+my $date = gmtime() . " GMT";
+
+print <<EOF;
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+               "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+  <head>
+    <title>Results of comparison between $orig and $new</title>
+    <link rel="stylesheet" type="text/css" href="japi.css">
+  </head>
+  <body>
+    <h1>Results of comparison between $orig and $new</h1>
+    <p class="datestamp">Comparison run at $date</p>
+EOF
+print <<EOF if $origdate;
+    <p class="datestamp">$orig API scanned at $origdate</p>
+EOF
+print <<EOF if $newdate;
+    <p class="datestamp">$new API scanned at $newdate</p>
+EOF
+print <<EOF;
+    <h2>Summary</h2>
+EOF
+
+my $alt = 1;
+while (<>) {
+  chomp;
+  if (/^notify (.*)$/) {
+    print "<p class='notify'>$1</p>\n";
+  } elsif (/^categories (.*)$/) {
+    print <<EOF;
+    <table class="legend" align="right" border="0" cellspacing="0" cellpadding="3">
+      <tr>
+        <th>Legend:</th>
+        <td>All correct -</td>
+EOF
+for (my $i = 100; $i >= 0; $i -= 10) {
+  print <<EOF;
+        <td class="ok-${i}pct">&nbsp;</td>
+EOF
+}
+print <<EOF;
+        <td class="ok-none">&nbsp;</td>
+        <td>- None correct</td>
+      </tr>
+    </table>
+    <br clear="all">
+    <table class="summary" border="0" cellspacing="0" cellpadding="3">
+      <tr class="colhead">
+        <td>&nbsp;</td>
+EOF
+    my @bits = split / /, $1;
+    foreach my $bit (@bits) {
+      if ($bit =~ /^(=?)(.)(.*)/) {
+        my $cat = "$2$3";
+        my $capegory = uc($2).$3;
+        my $letter = $2;
+        my $ok = $1;
+        $letter = $1 if $cat =~ /_(.)/;
+        $cat =~ s/_//;
+        $letters->{$cat} = $letter;
+        $capegory =~ s/_//;
+        push @categories, $cat;
+        $okcats->{$cat} = 1 if $ok;
+        $cat =~ s/\./-/g;
+        print <<EOF;
+        <th class="$cat">$capegory</th>
+EOF
+      }
+    }
+    print <<EOF;
+      </tr>
+EOF
+  } elsif (/^summary (.*)$/) {
+    die "No categories line found before summary line" unless @categories;
+    my @bits = split / /, $1;
+    my ($extra, $total, $values, $etotal, $oktotal, $nonmoototal) = ({}, 0, {}, 0, 0, 0);
+    my $pkg = shift @bits;
+    foreach my $bit (@bits) {
+      my ($plus, $key, $value, $smootval, $mootval) = ($1, $2, $3, $4, $5)
+        if $bit =~ /^(\+?)([^:+]+):([0-9]+)\^([0-9]+)>([0-9]+)$/;
+      $etotal += $value - $smootval - $mootval;
+      $oktotal += $value - $smootval - $mootval if $okcats->{$key};
+      if ($plus) {
+        $extra->{$key} = $value - $smootval - $mootval;
+      } else {
+        $total += $value - $smootval;
+        $nonmoototal += $value - $smootval - $mootval;
+        $values->{$key} = $value - $smootval - $mootval;
+        $values->{MOOT} += $mootval;
+      }
+    }
+    my $pkgn = $pkg;
+    my $pkga;
+    my $pkgl;
+    if ($pkg eq "#") {
+      print "\n";
+      $pkga = $pkgn = "Total";
+    } elsif ($pkg =~ /^#(.)(.*)$/) {
+      $pkgn = uc($1) . $2;
+      $pkgn .= "e" if $pkgn =~ /[sx]$/;
+      $pkgn .= "s";
+      $pkga = $pkgn;
+    } else {
+      $pkgl = $pkg; $pkgl =~ s/\./_/g;
+      $pkga = $pkgn;
+      $pkga =~ s/\./.<span class="sp"> <\/span>/g;
+      $pkga = "<a href=\"#pkg_$pkgl\">$pkga</a>";
+      push @packages, $pkg;
+    }
+    my $pctclass = "none";
+    if ($etotal) {
+      $pctclass = (int($oktotal * 10 / $etotal) * 10)."pct" if $oktotal;
+    } else {
+      $pctclass = "moot";
+    }
+    print <<EOF;
+      <tr class="alternating-$alt">
+        <th class="ok-$pctclass">$pkga:</th>
+EOF
+    $alt = 3 - $alt;
+    foreach my $key (@categories) {
+      my $val;
+      if ($values->{$key}) {
+        $val = (int($values->{$key} * 10000 / $total)/100) . "%";
+      } elsif ($extra->{$key}) {
+        $val = (int($extra->{$key} * 10000 / $total)/100) . "%";
+      }
+      if ($val) {
+        if ($pkg ne "#" && $key ne "good") {
+          my $errl = $key; $errl =~ s/\./_/g;
+          $val = "<a href=\"#err_${errl}_$pkgl\">$val</a>";
+        }
+      } else {
+        $val = "&nbsp;";
+      }
+      my $class = $key; $class =~ s/\./-/g;
+      print <<EOF;
+        <td class="$class" title="$pkgn $key">$val</td>
+EOF
+    }
+
+    use integer;
+
+    # Now we need to integerize the percentages so we can emit a table whose
+    # width (minus the "extra" bit) adds up to exactly 100 pixels. We also want
+    # to ensure that *anything* nonzero gets at least a pixel. See the file
+    # design/percent-rounding.txt for a justification of this algorithm.
+
+    # Start off assuming nothing's less than 1%, and iterate until we find
+    # that we're right. m is the number of adjustable (<1%) items, and t is
+    # the total of the non-adjustable items. Lastm keeps track of what we
+    # thought m was last time round. We loop until we do an entire pass without
+    # m ending up different from lastm. Lastm starts off as -1 just so that the
+    # m == lastm test fails first time around.
+    my $t = $total;
+    my $m = 0;
+    my $lastm = -1;
+    my $adjustable = {};
+    until ($m == $lastm) {
+      $lastm = $m;
+
+      # Loop over the items that haven't already been marked adjustable. For
+      # each such item, determine whether it needs to be adjustable based on
+      # the current values of m and t. If it does, mark it as adjustable and
+      # update m and t accordingly.
+      foreach my $item (keys %$values) {
+        if ($values->{$item} > 0) {
+          if (!$adjustable->{$item}) {
+            if ($values->{$item} * (100-$m) < $t) {
+              $t -= $values->{$item};
+              $m++;
+              $adjustable->{$item} = 1;
+            }
+          }
+        }
+      }
+    }
+
+    # Having calculated the final values of m and t, and also knowing exactly
+    # which items are adjustable, we can now calculate the adjusted totals.
+    # Non-adjustable items are scaled up by a constant factor; adjustable
+    # items are all set to exactly 1% of the scaled total.
+    my $adjtotal = 100 * $t;
+    my $adjvalue = {};
+    foreach my $item (keys %$values) {
+      if ($values->{$item} > 0) {
+        if ($adjustable->{$item}) {
+          $adjvalue->{$item} = $t;
+        } else {
+          $adjvalue->{$item} = $values->{$item} * (100-$m);
+        }
+      }
+    }
+
+    # Calculate the percentage rounded *down* to the nearest integer, and also
+    # calculate the magnitude of the difference between the integer percentage
+    # and the actual percentage. This is still all done in integer math...
+    # While we're at it, sum the percentages so we can see how close we got,
+    # later.
+    my $totalpct = 0;
+    my $percent = {};
+    my $diff = {};
+    foreach my $item (keys %$values) {
+      if ($values->{$item} > 0) {
+        $percent->{$item} = ($adjvalue->{$item} * 100) / $adjtotal;
+        $diff->{$item} = $adjvalue->{$item} * 100 - $percent->{$item} * $adjtotal;
+        $totalpct += $percent->{$item};
+      } else {
+        $diff->{$item} = 0;
+      }
+    }
+
+    # Find the items with the largest differences, and adjust them upwards,
+    # until 100% is reached. No need to reset the difference since we're looping
+    # through the items and will never repeat: it's easy to show that the upper
+    # bound on the number of upwards adjustments needed is smaller than the
+    # number of items.
+    foreach my $item (sort { $diff->{$b} <=> $diff->{$a} } keys %$values) {
+      if ($values->{$item} > 0) {
+        last if ($totalpct >= 100);
+        $percent->{$item}++;
+        $totalpct++;
+      }
+    }
+
+    foreach my $item (keys %$extra) {
+      if ($extra->{$item} > 0) {
+        $percent->{$item} = ($extra->{$item} * 1000 + 5) / ($total * 10);
+        $percent->{$item} = 1 unless $percent->{$item};
+        $totalpct += $percent->{$item};
+      }
+    }
+
+    print <<EOF;
+        <td>
+          <table width="$totalpct" cellpadding="0" cellspacing="0" class="bar">
+            <tr>
+EOF
+    foreach my $item (@categories) {
+      if (exists $percent->{$item}) {
+        my $pct = $percent->{$item};
+        my $class = $item; $class =~ s/\./-/g;
+        my $altc = uc($letters->{$item});
+        my $alt = $altc x ($percent->{$item} / 5);
+        $alt = $altc unless $alt;
+        print <<EOF if $pct;
+              <td width="$pct" class="$class-bar" title="$pkgn $item">
+                <img src="1x1.gif" width="1" height="12" alt="$alt">
+              </td>
+EOF
+      }
+    }
+    print <<EOF;
+            </tr>
+          </table>
+        </td>
+      </tr>
+EOF
+  } elsif (/^error (.*)$/) {
+    my $line = $1;
+    my ($etype, $isa, $item, $sups, $rest) = split / /, $line, 5;
+    my ($pkg, $cmember) = split /,/, $item;
+    push @{$errors->{"$pkg/$etype"}}, $line;
+    $totals->{"$etype/$isa"}++;
+    $totals->{"$etype/$isa/$pkg"}++;
+  } elsif (/^end japio$/) {
+    last;
+  } else {
+    die "Line not understood in japio file:\n$_";
+  }
+}
+print <<EOF;
+    </table>
+    <h2>Errors</h2>
+    <table class="phead" width="100%">
+      <tr>
+        <td>
+          <h3>Total</h3>
+EOF
+my $ct = 0;
+foreach my $cat (@categories) {
+  next if $cat eq "good";
+  my $cap = uc($1).$2 if $cat =~ /^(.)(.*)$/;
+  my $catn = $cat; $catn =~ s/\./-/g;
+  my $vals = "";
+  foreach my $thing (@things) {
+    my $tot = $totals->{"$cat/$thing"};
+    if ($tot) {
+      my $th = $thing;
+      if ($tot > 1) {
+        $th .= "e" if $th =~ /[sx]$/;
+        $th .= "s";
+      }
+      $vals .= "," if $vals;
+      $vals .= "&nbsp;$tot&nbsp;$th";
+    }
+  }
+  $vals = "&nbsp;None" unless $vals;
+  print <<EOF;
+          <span class="$catn">$cap:$vals.</span>
+EOF
+}
+print <<EOF;
+        </td>
+      </tr>
+    </table>
+    <p>&nbsp;</p>
+EOF
+foreach my $pkg (@packages) {
+  my $pkgl = $pkg; $pkgl =~ s/\./_/g;
+  my $catlinks = "";
+  my $anyerrors = 0;
+  foreach my $cat (@categories) {
+    my $catl = $cat; $catl =~ s/\./_/g;
+    unless ($cat eq "good") {
+      if ($errors->{"$pkg/$cat"}) {
+        $anyerrors = 1;
+      } else {
+        $catlinks .= "<a name=\"err_${catl}_$pkgl\"></a>";
+      }
+    }
+  }
+  if ($anyerrors) {
+    print <<EOF;
+    <table class="phead" width="100%">
+      <tr>
+        <td>
+          <h3><a name="pkg_$pkgl"></a>$catlinks$pkg</h3>
+EOF
+    my $ct = 0;
+    foreach my $cat (@categories) {
+      next if $cat eq "good";
+      my $cap = uc($1).$2 if $cat =~ /^(.)(.*)$/;
+      my $catn = $cat; $catn =~ s/\./-/g;
+      my $catl = $cat; $catl =~ s/\./_/g;
+      my $vals = "";
+      foreach my $thing (@things) {
+        my $tot = $totals->{"$cat/$thing/$pkg"};
+        if ($tot) {
+          my $th = $thing;
+          if ($tot > 1) {
+            $th .= "e" if $th =~ /[sx]$/;
+            $th .= "s";
+          }
+          $vals .= "," if $vals;
+          $vals .= "&nbsp;$tot&nbsp;$th";
+        }
+      }
+      print <<EOF if $vals;
+          <a class="$catn" href="#err_${catl}_$pkgl">$cap:$vals.</a>
+EOF
+    }
+    print <<EOF;
+        </td>
+      </tr>
+    </table>
+EOF
+  } else {
+    print <<EOF;
+    <a name="pkg_$pkgl"></a>$catlinks
+EOF
+  }
+  foreach my $cat (@categories) {
+    if ($errors->{"$pkg/$cat"}) {
+      my $catl = $cat; $catl =~ s/\./_/g;
+      my $catc = $cat; $catc =~ s/\./-/g;
+      my $cap = uc($1).$2 if $cat =~ /^(.)(.*)$/;
+      print <<EOF;
+    <h4 class="ehead"><a name="err_${catl}_$pkgl"></a>$cap</h4>
+    <ul class="$catc">
+EOF
+      foreach my $line (sort @{$errors->{"$pkg/$cat"}}) {
+        my ($etype, $isa, $item, $sups, $rest) = split / /, $line, 5;
+        my ($was, $is) = split /\//, $rest;
+        $was =~ s/~s/\//g; $was =~ s/~t/~/g;
+        $is =~ s/~s/\//g; $is =~ s/~t/~/g;
+        my $msg = $was ? "$was in $orig, but" : "";
+        my $ritem = readable_item($item);
+        my $outline = "<strong>$isa</strong> " . htmlencode("$ritem: $msg $is in $new");
+        print <<EOF;
+        <li>$outline</li>
+EOF
+      }
+      print <<EOF;
+      </ul>
+EOF
+    }
+  }
+}
+print <<EOF;
+  </body>
+</html>
+EOF
+
+sub htmlencode($) {
+  my ($val) = @_;
+  $val =~ s/&/&amp;/g;
+  $val =~ s/</&lt;/g;
+  $val =~ s/>/&gt;/g;
+  return $val;
+}
+
+sub readable_item($) {
+  my ($item) = @_;
+  my ($fqclass, $member) = split /!/, $item, 2;
+  my ($pkg, $class) = split /,/, $fqclass, 2;
+  my $ritem = $pkg;
+  if ($class) {
+    $class =~ s/\$/./g;
+    $ritem .= ".$class";
+  }
+  if ($member) {
+    $ritem .= "." unless $member =~ /^\(/;
+    $ritem .= readable_member($member);
+  }
+  return $ritem;
+}
+
+# Convert all the type signatures in a method name...
+sub readable_member($) {
+  my ($member) = @_;
+  if ($member =~ /^(.*)\((.*)\)$/) {
+    my ($name, $params) = ($1, $2);
+    $params = sig2typelist($params);
+    $member = "$name($params)";
+  } elsif ($member =~ /^#(.*)$/) {
+    $member = $1;
+  }
+  $member;
+}
+
+# Convert a type signature as used in a japi file to a displayable type.
+sub sig2type($) {
+  my ($sig) = @_;
+  return sig2type($1) . '[]' if $sig =~ /^\[(.*)$/;
+  return sig2type($1) . "..." if $sig =~ /^\.(.*)$/;
+  return "? super " . sig2type($1) if $sig =~ /^\}(.*)$/;
+  return "?" if $sig eq "{Ljava/lang/Object;";
+  return "? extends " . sig2type($1) if $sig =~ /^\{(.*)$/;
+  return "T" if $sig eq "\@0";
+  return "T" . ($1 + 1) if $sig =~ /^\@([0-9]+)$/;
+  return $javatypes->{$sig} if $javatypes->{$sig};
+  my $gparams;
+  $sig = $1 if $sig =~ /^L(.*);$/;
+  ($sig, $gparams) = ($1, $2) if $sig =~ /^([^<>]+)<(.*)>$/;
+  $sig =~ s-/-.-g;
+  $sig =~ s/\$/./g;
+  $sig = "$sig<" . sig2typelist($gparams) . ">" if defined($gparams);
+  return $sig;
+}
+sub sig2typelist($) {
+  my ($list) = @_;
+  my @sigs = splitgenstr($list);
+  return join(", ", map {sig2type($_)} @sigs);
+}
+sub countchar($$) {
+  my ($str, $char) = @_;
+  $str =~ s/[^$char]//g;
+  return length $str;
+}
+
+sub splitgenstr($) {
+  my ($str) = @_;
+  my @items = split(/,/, $str);
+  my @result = ();
+
+  my $class = "";
+  foreach my $item (@items) {
+    $class .= "," if $class;
+    $class .= $item;
+    if (countchar($class, "<") == countchar($class, ">")) {
+      push @result, $class;
+      $class = "";
+    }
+  }
+  push @result, $class if $class;
+  return @result;
+}

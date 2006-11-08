@@ -1,0 +1,50 @@
+Take multiple items on the cmdline. Have an LHS, an RHS, and a center.
+
+japicompat -l jdk11 -l jdk12 -l jdk13 -l jdk14 -c classpath -c kaffe -r jdk14
+
+The following tests will be done:
+
+Foreach a < b, test L(a)=>L(b)
+Foreach a, b test L(a)=>C(b) excluding errors from L(a)=>L(*).
+Foreach a, b test C(a)=>R(b)
+
+Plan is to read *all* japi files simultaneously and process in parallel. This'll
+be a good trick since we won't have one file that we can cue from. The plan will
+be something like: Have all of the files aware of what has been read from all
+the others, and have something like a "conditional_read_item" function that
+only reads an item if none of the others are "behind".
+
+Perhaps arrange to do the read in order of "behindness" so that other files that
+are less behind read in sync.
+
+a       a       a             a
+b               b
+c       c              c      c
+d       d              d
+e               e      e      e
+
+Idea is to have, at any time, all the records of the same letter being read,
+but without any knowledge of which, if any, file has "everything".
+
+Perhaps the trick is for each file to readahead one line? Seems probable, else
+how do you deal with #4 over there?
+
+So for each file, readahead one line. Store everything there is to know about
+the item that was read-ahead.
+
+Determine the lowest "next" item, and process it. "Process" means to advance
+each file with that as their "next" item, and do all the comparisons on it
+(missing, bad, etc). While doing so, keep the "lowest next item" counter up to
+date, with the "next-lowest-next-item" taking over after this one is gone.
+
+Data structure to keep track of lowest-ness could be a simple sorted set: pop
+off an item and process it, and insert an item for each "next" record read.
+Since there's no sortedset structure in perl and this isn't performance-critical
+(but is clarity-of-code critical), using $foo->{$x}=1 and sort(keys(%$foo)) is
+probably the easiest way.
+
+When doing processing, likeliest way seems to be to have a way to ask a
+particular file "do you have record x next"? All comparisons can be done on
+this basis.
+
+

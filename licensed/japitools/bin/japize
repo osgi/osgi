@@ -1,0 +1,87 @@
+#!/usr/bin/perl
+###############################################################################
+# japize - Wrapper script to launch japize.
+# Copyright (C) 2000,2002,2003,2004  Stuart Ballard <stuart.a.ballard@gmail.com>
+# 
+# This program is free software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public License
+# as published by the Free Software Foundation; either version 2
+# of the License, or (at your option) any later version.
+# 
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+# 
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+###############################################################################
+
+
+# Wrapper script for Japize. Checks argument syntax to avoid wasting time
+# starting a JVM just to print an error message, then launches the Japize class.
+
+$progname = $1 if $0 =~ /^.*\/([^\/]+)$/;
+my $ct = 0; my $prog = $0;
+$prog = readlink $prog while -l $prog && $ct++ < 5;
+$progdir = $1 if $prog =~ /^(.*)\/[^\/]+$/;
+
+sub printusage() {
+  print STDERR <<EOF;
+Usage: $progname [unzip] [as <name>] [lint <filename>] apis <zipfile>|<dir> ... +|-|=<pkg> ...
+At least one +pkg is required. 'name' will have .japi and/or .gz
+appended if appropriate.
+The word 'apis' can be replaced by 'explicitly', 'byname', 'packages' or
+'classes'. These values indicate whether something of the form a.b.C should
+be treated as a class or a package. Use 'a.b,C' or 'a.b.c,' to be explicit.
+EOF
+  exit(1);
+}
+sub illegalpkgpath() {
+  $errarg =~ s/^[+=-]//;
+  print STDERR <<EOF;
+Specified package path $errarg is not a valid package path.
+Legal paths are of the form 'pkg.sub.Class' or 'pkg.sub', or use the
+explicit forms 'pkg.sub,Class' or 'pkg.sub,'.
+EOF
+  exit(1);
+}
+sub zipfnerror() {
+  print STDERR <<EOF;
+Filename ending in .gz specified with zip output disabled.
+Please either omit 'unzip' or specify a different filename (did you
+mean '$errarg.japi'?)
+EOF
+  exit(1);
+}
+
+my @args = @ARGV;
+my $fn = "";
+my $zip = 1;
+do { shift @args; $zip = 0 } if @args[0] eq 'unzip';
+do { shift @args; $fn = shift @args } if @args[0] eq 'as';
+do { shift @args; shift @args } if @args[0] eq 'lint';
+printusage
+  unless {explicitly=>1,apis=>1,byname=>1,packages=>1,classes=>1}->{@args[0]};
+shift @args;
+my $plusses = 0;
+my $paths = 0;
+foreach my $arg (@args) {
+  if ($arg =~ /^[+=-]/) {
+    $errarg = $arg;
+    illegalpkgpath
+      unless $arg =~ /^[+=-](?:(?:[a-zA-Z0-9_]+\.)*[a-zA-Z0-9_\$]+)?(?:,[a-zA-Z0-9_\$]*)?(?::serial)?$/;
+    $plusses++ unless $arg =~ /^-/;
+  } else {
+    $paths++;
+  }
+}
+printusage unless $plusses && $paths;
+$errarg = $fn;
+zipfnerror if !$zip && $fn =~ /\.gz$/;
+
+$ENV{JAVA} = 'java' unless defined $ENV{JAVA};
+$ENV{CLASSPATH} = "$progdir/../share/java/japitools.jar:$ENV{CLASSPATH}";
+print STDERR "...\n";
+exec($ENV{JAVA}, 'net.wuffies.japi.Japize', @ARGV);

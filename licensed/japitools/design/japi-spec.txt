@@ -1,0 +1,280 @@
+This document specifies the format of a .japi file, version 0.9.6. The actual
+implementations of japize, japifix and japicompat may not honor this spec
+exactly. If they do not, it is generally a bug or missing feature in the tool;
+this spec notes such bugs when they are known.
+
+Types
+-----
+
+Types in a japi file get represented in different ways, depending on where they
+appear. This spec identifies which representation should be used for each
+item. The possible representations are:
+- Java Language representation: Can only be used to represent classes and
+  interfaces. The format is simply the format of a fully-qualified class name
+  in the Java language, eg "java.lang.Exception". This format is used when
+  only classes and interfaces can appear, eg in superclasses or exceptions.
+  Inner classes are represented using the name that the compiler gives them:
+  the name of the outer class followed by a "$" followed by the inner
+  class name, eg "java.util.Map$Entry".
+- Type Signature representation: Can represent any Java type, including
+  primitive types and arrays. This is the format used in type signatures
+  internally within the Java virtual machine. The format looks like this:
+  - Primitive types are represented as single letter codes, specifically:
+    boolean=Z, byte=B, char=C, short=S, int=I, long=J, float=F, double=D, void=V
+  - Classes and interfaces are represented as the letter L, followed by the
+    fully-qualified classname with periods replaced by slashes, followed by a
+    semicolon. The class generally known as java.io.Writer would be represented
+    as "Ljava/io/Writer;". Inner classes are represented by the name the
+    compiler gives them, just as above.
+  - Array types are represented by the character "[" followed by the type
+    of elements in the array. For example, an array of java.util.Dates would
+    be represented as "[Ljava/util/Date;" and a two-dimensional array of
+    ints (an array of arrays of ints) would be "[[I".
+- Japi sortable representation: Designed to make it easy to sort a japi file
+  into a convenient order. The format is:
+  <pkg>,<class>[$<innerclass>].
+  In this format, <pkg> is the package that the class appears in (dot separated,
+  eg "java.util"), <class> is the full name of the outer class (eg "Map") and
+  <innerclass> is the name of the inner class (eg "Entry"), if applicable. The
+  $ is omitted for top-level classes. Note that it is theoretically possible for
+  a class to have a $ in its name without being an inner class: the $ in that
+  case should be \u escaped (see "Escaping", below; note that this is not yet
+  implemented by any of the japitools programs). Multiple levels of inner-
+  classness are represented the obvious way. So the class java.util.Map is
+  represented as "java.util,Map", and its Entry inner class is represented as
+  "java.util,Map$Entry".
+
+
+Escaping
+--------
+Note: Much of this section is not yet implemented by any existing japitools
+program.
+
+The Java language is a fully unicode-enabled language with support for multibyte
+characters at every level of the language. However, the japi file format is
+strictly 7-bit ASCII, for ease of processing in (for example) older versions of
+perl, which are not unicode-capable. To support this, characters outside the
+normal ASCII ranges are escaped. Characters are escaped as follows: The newline
+character is escaped to "\n", the backslash character is escaped to "\\", and
+all other characters are escaped as "\uXXXX", where XXXX is the lowercase
+hexadecimal rendition of the integer value of the "char" type in java.
+
+In class names, all characters should be escaped except for A-Z, a-z, 0-9, _ and
+any metacharacters that have meaning in the particular representation being
+used. In Java Language representation, the metacharacters are ".$"; in Type
+Signature representation, they are "/$;"; and in Japi Sortable representation
+they are ".,$".
+
+In field and method names, all characters should be escaped except for A-Z, a-z,
+0-9 and _.
+
+In constant strings, all characters outside the range from " " to "~" in ASCII
+value should be escaped, along with the backslash ("\") character.
+
+Existing implementations only escape backslash and newline, and only do so in
+constant strings. This covers the vast majority of what will actually arise.
+
+
+Inclusion
+---------
+
+Japi files may be created for any set of classes and interfaces, although
+typically they will be made for particular complete packages that make up a
+public API. However, it is not permitted to create a japi file for only part of
+a class. Only public and protected classes and interfaces can be included in
+a japi file.
+
+For each class and/or interface that is included, all its public and protected
+fields, methods and constructors must be included. This includes fields and
+methods (but not constructors!) inherited from public or protected superclasses.
+
+
+Ordering
+--------
+
+In order to allow efficient comparison of japi files, the items in the file are
+required to be in a strict order. The items are sorted first by package, then
+by class (or interface), then by member.
+
+Packages are sorted alphabetically by name, except that java.lang and all its
+subpackages (eg java.lang.reflect and java.lang.ref) are placed first. Classes
+and interfaces are sorted by name, with inner classes coming after the
+corresponding outer class, except for java.lang.Object which sorts first of
+everything.
+
+Within a class or interface, the class (or interface) itself comes first,
+followed by its fields (in alphabetical order by name), followed by its
+constructors (in alphabetical order by argument types), followed by its methods
+(in alphabetical order by name and argument types). "By argument types" here
+means by the result of concatenating all the types of the arguments, comma
+separated, in type signature format.
+
+If any package, class or member names include any escaped characters, it is the
+escaped string that is compared, rather than the original.
+
+Note: the separating characters in a japi file were chosen so that a straight
+alphabetical sort is sufficient to achieve this ordering.
+
+
+File Format: Compression
+------------------------
+
+Japi files may optionally be compressed by gzip. A compressed japi file should
+be named *.japi.gz; an uncompressed one should be named *.japi. Tools for
+reading japi files may rely on this naming convention; tools for creating japi
+files should enforce it where possible.
+
+
+File Format: First Line
+-----------------------
+
+The first line of a japi file indicates the file format version. This line is
+guaranteed to follow the same format for all future releases. Thus, this section
+(only!) of the spec covers all japi file format versions, past and future. With
+this information you can identify whether a file is a japi file, and which
+version it is. However, this spec does not provide any information about the
+content of the rest of the file for any version other than 0.9.6. Both past and
+future versions can be assumed to be entirely incompatible with this spec from
+the second line onwards.
+
+The first line of any japi file since version 0.8.1 is as follows:
+%%japi <version>[ <info>]
+<version> indicates the version number of the japi file format. While this
+version number vaguely correlates with the version number of japitools releases,
+it is not the same number. Often japitools releases do not require a file format
+change, and sometimes I mess with the file version number for other reasons,
+with mixed results. The contents of <info> may vary from version to version,
+or it and its leading space may be omitted altogether; implementations should
+parse and ignore it (if present) except when the file format version indicates
+they can understand it.
+
+For completeness, I should mention file format versions prior to 0.8.1. Version
+0.7 can be recognized by the following regular expression:
+  /^[^ ]+#[^ ]* (public|protected) (abstract|concrete) (static|instance) (final|nonfinal) /
+Version 0.8 can be recognized by the following regular expression:
+  /^[^ ]+#[^ ]* [Pp][ac][si][fn] /
+These version numbers were invented retroactively, of course :)
+
+
+File Format: File information
+-----------------------------
+
+The <info> field contains a list of space-separated name=value pairs. Unknown
+names should be ignored. Neither the name nor value may include spaces. The
+following names and values are permitted:
+date=yyyy/mm/dd_hh:mm:ss_TZ
+creator=<toolname>
+origver=<original japi file version that this was updated from>
+
+
+File Format: API Items
+----------------------
+
+Every other line in a japi file represents an individual item in the API.
+These lines must appear in a specific order; see "Ordering" above for the
+specific requirements.
+The format of these lines is as follows:
+<plus><class>!<member> <modifiers> <typeinfo>
+
+<plus> is "++" for all members of java.lang.Object, "+" for all members of all
+classes in java.lang and its subpackages, or nothing ("") for all other API
+items. This allows java.lang.Object and java.lang to appear in the right
+places in a purely alphabetical sort.
+
+<class> is the name of the class, in Japi Sortable representation.
+
+<member> is one of the following depending on what type of API item is being
+represented:
+- The empty string, to refer to the class or interface itself.
+- #<fieldname>, to refer to a field.
+- (<argtypes>), to refer to a constructor.
+- <methodname>(<argtypes>), to refer to a method.
+<fieldname> and <methodname> are simply the name of the field or method, eg
+"toString". <argtypes> is a comma-separated list of argument types, with each
+one listed in Type Signature representation, eg "[B,I,I,Ljava/lang/String;".
+
+<modifiers> is a five-character string indicating the modifiers of the item:
+
+- The first character is either "P" for public or "p" for protected.
+  Package-private (default access) and private items do not appear in japi
+  files.
+
+- The second character is either "a" for abstract or "c" for concrete
+  (non-abstract). Interfaces, and methods on interfaces, are always considered
+  abstract regardless of whether they are explicitly set as such.
+
+- The third character is either "s" for static or "i" for instance (non-static).
+  Top-level classes are always considered static.
+
+- The fourth character is either "f" for final or "n" for nonfinal. Methods on
+  final classes are always considered final regardless of whether they are
+  explicitly set as such.
+
+- The fifth character is either "d" for deprecated, "u" for undeprecated, or
+  "?" if the deprecation status is unknown.
+
+<typeinfo> is a catch-all for general information about the item. What exactly
+appears here depends on what type of item this is.
+
+- For classes, the <typeinfo> field consists of the following parts:
+  - The word "class"
+  - If the class is serializable, the character "#" followed by the
+    SerialVersionUID of the class, represented in decimal. If the class is
+    not serializable, this section does not appear.
+  - For each superclass, in order, the character ":" followed by the
+    name of the superclass in Java Language representation. Superclasses that
+    are neither public nor protected are omitted. In the case of
+    java.lang.Object, which has no superclass, this section does not appear.
+  - For each interface implemented by the class, in *any* order, the character
+    "*" followed by the name of the interface in Java Language representation.
+    Interfaces that are neither public nor protected are omitted. Note that
+    interfaces implemented by superclasses, or by other interfaces, must also be
+    included, even if the superclass that implements the interface isn't
+    public or protected.
+  For example, for the class java.util.ArrayList, the typeinfo would be
+  something like:
+  class#99999999999999:java.util.AbstractList:java.lang.AbstractCollection:java.lang.Object*java.io.Serializable*java.lang.Cloneable*java.util.List*java.util.Collection
+
+- For interfaces, the format is the same except that "interface" appears instead
+  of "class", and the SerialVersionUID and superclasses are not applicable.
+
+- For fields, the <typeinfo> field consists of the following parts:
+  - The type of the field, in Type Signature format.
+  - If the field is a constant value other than null, the character ":" followed
+    by the value of the field. In the case of a char value, this is the integer
+    value of the character; in the case of a string, it is the character '"'
+    followed by the escaped string. For all other values it is the result of
+    Java's default conversion of that type to a string. For float and double
+    constants, the stringified value may be followed by "/" and the result of
+    toHexString() called on the result of floatToRawIntBits() or
+    doubleToRawLongBits(), respectively. This is unambigous since there is no
+    way for the stringified value of a float or double to contain "/". This
+    hex string is optional but it is recommended to include it if possible.
+
+- For constructors, the <typeinfo> field consists of the following parts:
+  - The word "constructor".
+  - For every exception type thrown by this constructor, the character "*"
+    followed by the name of the exception type, in Java Language representation.
+    These may appear in any order. Subclasses of java.lang.RuntimeException and
+    java.lang.Error must be omitted, as must any exception that is a subclass of
+    another exception that can be thrown (eg if both java.io.IOException and
+    java.io.FileNotFoundException can be thrown, only java.io.IOException should
+    be listed).
+
+- For methods, the <typeinfo> field consists of the following parts:
+  - The return type of the method, in Type Signature format.
+  - For every exception type thrown by this method, the character "*" followed
+    by the name of the exception type, in Java Language representation. These
+    may appear in any order. Subclasses of java.lang.RuntimeException and
+    java.lang.Error must be omitted, as must any exception that is a subclass of
+    another exception that can be thrown (eg if both java.io.IOException and
+    java.io.FileNotFoundException can be thrown, only java.io.IOException should
+    be listed).
+
+
+Conclusion
+----------
+
+This specification should provide enough information to both read and write
+japi files. Any questions or comments, especially if anything in this spec is
+unclear, should be directed to stuart.a.ballard@gmail.com.

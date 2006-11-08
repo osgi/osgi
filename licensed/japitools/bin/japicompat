@@ -1,0 +1,1160 @@
+#!/usr/bin/perl -w
+###############################################################################
+# japicompat - Test Java APIs for binary backwards compatibility.
+# Copyright (C) 2000,2002,2003,2004,2005  Stuart Ballard <stuart.a.ballard@gmail.com>
+# 
+# This program is free software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public License
+# as published by the Free Software Foundation; either version 2
+# of the License, or (at your option) any later version.
+# 
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+# 
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+###############################################################################
+
+
+## GLOBAL VARIABLES ##
+
+# Some global variables used for displaying stuff.
+$japiver = "0.9.7";
+$buggyver = "0.9.5";
+@static = ('instance', 'static');
+@ofhs = ();
+@summarypkgs = ();
+@allerrors = ();
+$totalerrors = 0;
+$ignorenotes = "";
+
+$javatypes = {Z=>'boolean', B=>'byte', C=>'char', D=>'double', F=>'float',
+                  I=>'int', J=>'long', S=>'short', V=>'void'};
+
+# Requirements
+use IO::Handle;
+use IO::File;
+use IO::Pipe;
+use Getopt::Std;
+
+# Function prototypes
+sub open_japi($);
+sub read_japi_item($$);
+sub close_japi($);
+sub output_error($$$$$$$;$);
+sub compare_japis($$);
+sub compare_japi_item($$$$);
+sub merge_results($);
+sub print_summary();
+sub sig2type($);
+sub sig2typelist($);
+sub getgenparams($);
+sub splitgenstr($);
+sub gentypestr($);
+sub reallychomp($);
+
+
+## MAIN LOOP ##
+
+# Parse cmdline and give a usage message.
+getopts("svqhtjwpo:i:", \%opts);
+my $sun_only = 1 if $opts{"s"};
+my $svuid_errors = 1 if $opts{"v"};
+my $buggywarn = 1 unless $opts{"w"};
+my $skip_missing_pkgs = 1 if $opts{"p"};
+my $dot = $opts{"q"} ? "" : ".";
+my $outprog = $opts{"h"} ? "japiohtml" : $opts{"j"} ? undef : "japiotext";
+my $ignorefile = $opts{"i"};
+my ($origfile, $newfile) = @ARGV;
+if (!defined $newfile) {
+  print STDERR "Usage: japicompat [-svqhtjwp] [-o outfile] [-i ignorefiles,commaseparated] <original api> <api to check>\n";
+  exit 1;
+}
+
+# Read in the old and new APIs.
+$orig = open_japi($origfile);
+$new = open_japi($newfile);
+
+
+# Loop through the two files and compare them.
+my $counts = compare_japis($orig, $new);
+
+# Close out the files now we're done with them.
+close_japi($orig);
+close_japi($new);
+
+# Merge the results into a single stream of errors, and print them to stdout.
+merge_results($counts);
+
+# Print a summary of what was found.
+print_summary();
+
+## SUBROUTINES ##
+
+# Compare two japi entries pseudo-alphabetically.
+sub japicmp($$) {
+  my ($ia, $ib) = @_;
+  return -1 unless defined $ib;
+  $ia->{rawitem} cmp $ib->{rawitem};
+}
+
+sub open_japi($) {
+  my ($filename) = @_;
+  my $japi;
+  $japi->{name} = $filename;
+  my $fh;
+  if ($filename =~ /\.gz$/) {
+    $fh = new IO::Pipe()->reader("gzip", "-dc", $filename);
+    die "Could not pipe from gzip: $!" unless $fh;
+  } else {
+    $fh = new IO::File("<$filename");
+    die "Could not open $filename: $!" unless $fh;
+  }
+  print STDERR "Loading $filename" if $dot;
+  my $japiline = $fh->getline;
+  die <<EOF unless $japiline;
+
+No data found in japi file, are you sure the filename was right?
+EOF
+  reallychomp $japiline;
+  die <<EOF unless $japiline =~ /^%\%japi ([^ ]*)(?: (.*))?$/;
+
+This looks like a very old japi file. I'm surprised it even exists, in fact.
+EOF
+  my ($filever, $info) = ($1, $2);
+  die <<EOF if $filever lt $japiver;
+
+This japi file claims to be version $filever, but this version of japicompat
+only understands version $japiver.
+EOF
+  die <<EOF if $filever gt $japiver;
+
+This japi file claims to be version $filever, but this version of japicompat
+only understands version $japiver. Either the japi file is incorrect or you need
+a new version of japicompat.
+EOF
+  print STDERR ".\n" if $dot;
+  $japi->{fh} = $fh;
+  foreach my $infitem (split / /, $info) {
+    my ($infname, $infvalue) = split /=/, $infitem, 2;
+    $japi->{$infname} = $infvalue;
+  }
+  return $japi;
+}
+
+sub read_japi_item($$) {
+  my ($japi, $is_lhs) = @_;
+  my $fh = $japi->{fh};
+  my $line = $fh->getline;
+
+  # Ignore "-" or "--" annotated methods on the LHS
+  if ($is_lhs) {
+    while ($line && $line =~ /^[^ ]+\)-{1,2}/) {
+      $line = $fh->getline;
+    }
+  }
+  return undef unless $line;
+  reallychomp $line;
+  
+  # Parse and interpret the entry.
+  my ($item, $flags, $type) = split / /, $line, 3;
+
+  # If the item was "--" annotated, store that fact, it affects processing later
+  my $duplicate = 0;
+  $duplicate = 1 if $item =~ /\)--$/;
+  my $bridge = 0;
+  $bridge = 1 if $item =~ /\)-$/ || $duplicate;
+  my $nobridge = 0;
+  $nobridge = 1 if $item =~ /\)\+$/;
+
+  # Strip off the "+" or "-" annotation.
+  $item =~ s/\)[+-]{1,2}$/\)/;
+
+  my $rawitem = $item;
+
+  # Check and trim the leading plusses on java.lang.Object and java.lang.
+  die "\nMissing required leading plusses on $item"
+    if $item =~ /^java\.lang[.,]/ || $item =~ /^\+java\.lang,Object!/;
+  $item =~ s/^\+\+java\.lang,Object!/java.lang,Object!/;
+  $item =~ s/^\+java\.lang([.,])/java.lang$1/;
+  die "\nIncorrect leading plusses on $item" if $item =~ /^\+/;
+
+  my ($fqcn, $member) = split /!/, $item, 2;
+  my ($pkg, $class) = split /,/, $fqcn, 2;
+  my $isa;
+
+  if ($member eq "") {
+    $isa = $type =~ /^class/ ? "class" :
+           $type =~ /^interface/ ? "interface" :
+           $type =~ /^enum/ ? "enum" :
+           $type =~ /^annotation/ ? "annotation" :
+           die "\nUnknown kind of Type: $type";
+  } elsif ($member =~ /^\(.*\)$/) {
+    $isa = "constructor";
+  } elsif ($member =~ /\(.*\)$/) {
+    $isa = "method";
+  } elsif ($member =~ /^#(.*)$/) {
+    $isa = "field";
+    $member = $1;
+  } else {
+    die <<EOF;
+
+Could not interpret item in japi file:
+$line
+Either this japi file is corrupt or you have uncovered a bug in japicompat.
+Please email this error message in full to stuart.a.ballard\@gmail.com.
+EOF
+  }
+
+  # Store information about the entry in $japi->{$pkg}->{$class}->{$member}.
+  my $mitem = {};
+  $mitem->{rawitem} = $rawitem;
+  $mitem->{item} = $item;
+  $mitem->{isa} = $isa;
+  $mitem->{class} = $class;
+  $mitem->{package} = $pkg;
+  $mitem->{gmember} = $member;
+  my ($public, $abstract, $static, $final, $deprecated, $stub) = split //, $flags;
+  $mitem->{public} = ($public eq 'P' || 0);
+  $mitem->{abstract} = ($abstract eq 'a' || 0);
+  $mitem->{static} = ($static eq 's' || 0);
+  $mitem->{final} = ($final eq 'f' || $final eq 'e' || 0);
+  $mitem->{enumfield} = ($final eq 'e' || 0);
+  $mitem->{deprecated} = ($deprecated eq 'd' ? 1 :
+                          $deprecated eq 'u' ? 0 : undef);
+  $mitem->{stub} = ($stub eq 'S' || 0);
+  $mitem->{duplicate} = $duplicate;
+  $mitem->{bridge} = $bridge;
+  $mitem->{nobridge} = $nobridge;
+
+  # Store information about the containing class
+  if ($member ne "") {
+    $mitem->{clitem} = $japi->{clitem};
+  } else {
+    my $cli = $japi->{clitem};
+    while ($cli) {
+      if ($cli->{item} =~ /^\Q$item\E\$/) {
+        $mitem->{clitem} = $cli;
+        last;
+      }
+      $cli = $cli->{clitem};
+    }
+    $japi->{clitem} = $mitem;
+  }
+  
+  # Classes and interfaces have superclasses and implemented interfaces tacked
+  # on to the "type" field. We store this information in the $japi hash also.
+  if ($member eq "") {
+
+    # Get the interfaces data, which is separated by '*'s from the classname.
+    my @ifaces = split(/\*/, $type);
+    $type = shift @ifaces;
+    $mitem->{ifaces} = {};
+    foreach my $iface (@ifaces) {
+      $mitem->{ifaces}->{$iface} = 1;
+      my $rawiface = $iface; $rawiface = $1 if $iface =~ /^([^<>]+)</;
+      $mitem->{rawifaces}->{$rawiface} = 1;
+    }
+
+    # Get the class's superclasses, which are separated by ':'s.
+    my @supers = split(/:/, $type);
+    $type = shift @supers;
+    my $ct = 0;
+    $mitem->{supers} = [];
+    foreach my $super (@supers) {
+      $mitem->{superset}->{$super} = 1;
+      $mitem->{supers}->[$ct++] = $super;
+      my $rawsuper = $super; $rawsuper = $1 if $super =~ /^([^<>]+)</;
+      $mitem->{rawsupers}->{$rawsuper} = 1;
+    }
+
+    my $svuid;
+    ($type, $svuid) = split(/#/, $type, 2);
+    $mitem->{svuid} = $svuid if defined $svuid;
+
+    my $genericparams;
+    ($type, $genericparams) = ($1, $2) if $type =~ /^([^<>]+)<(.+)>$/;
+    if (defined $genericparams) {
+      $mitem->{gparamstr} = $genericparams;
+      $mitem->{genericparams} = [];
+      my $ct = 0;
+      foreach my $gparam (splitgenstr($genericparams)) {
+        $mitem->{genericparams}->[$ct++] = $gparam;
+      }
+    }
+
+  # Methods and constructors have exceptions that can be thrown separated by
+  # '*'s from the typename. Also in the case of annotations the method can
+  # have a default value. These also need to get stored in the hash.
+  } elsif ($member =~ /\(.*\)$/) {
+    my ($val, $bits);
+    ($type, $val) = split(/:/, $type, 2);
+    my @excps = split(/\*/, $type);
+    $type = shift @excps;
+    foreach my $excp (@excps) {
+      $mitem->{excps}->{$excp} = 1;
+    }
+
+    my $genericparams;
+    ($genericparams, $type) = ($1, $2) if $type =~ /<(.*?)>([^>,;].*)?$/;
+    if (defined $genericparams) {
+      $mitem->{gparamstr} = $genericparams;
+      $mitem->{genericparams} = [];
+      my $ct = 0;
+      foreach my $gparam (splitgenstr($genericparams)) {
+        $mitem->{genericparams}->[$ct++] = $gparam;
+      }
+    }
+
+    ($val, $bits) = ($1, $2)
+      if ($type eq 'F'||$type eq 'D') && defined $val && $val =~ /^(.*)\/(.*)$/;
+    $mitem->{defaultbits} = $bits if defined $bits;
+    $mitem->{default} = $val if defined $val;
+
+  # Fields can have their value separated by a : from the typename, if they
+  # are constant.
+  } else {
+    my ($val, $bits);
+    ($type, $val) = split(/:/, $type, 2);
+    ($val, $bits) = ($1, $2)
+      if ($type eq 'F'||$type eq 'D') && defined $val && $val =~ /^(.*)\/(.*)$/;
+    $mitem->{constbits} = $bits if defined $bits;
+    $mitem->{constant} = $val if defined $val;
+
+    # Fields also get the declaring class separated by "=" in cases where it matters.
+    # The rules for when it matters are defined in japi-spec-0.9.7.txt and in
+    # Japize, but basically, it's when the field is nonfinal and either public or
+    # static.
+    my $decl;
+    ($type, $decl) = split(/=/, $type, 2);
+    $mitem->{decl} = $decl if defined $decl;
+  }
+
+  # Store what's left of the type after parsing off all of those parts.
+  $mitem->{type} = $type;
+
+  $mitem->{member} = sanitize_member($mitem, $member);
+
+  # Ensure that this item is correctly ordered.
+  $rawitem =~ s/\Q$mitem->{gmember}\E/$mitem->{member}/ if $mitem->{gmember};
+  $mitem->{rawitem} = $rawitem;
+
+  die "\nIncorrect ordering of $japi->{name}:\n$japi->{last_item} >=\n$item"
+    if defined($japi->{last_item}) &&
+      ($japi->{last_item} gt $rawitem || 
+       ($japi->{last_item} eq $rawitem && !$japi->{last_was_dup}));
+
+  $japi->{last_item} = $rawitem;
+  $japi->{last_was_dup} = $duplicate;
+
+  return $mitem;
+}
+
+sub close_japi($) {
+  my ($japi) = @_;
+  my $fh = $japi->{fh};
+  close $fh;
+}
+
+sub inc($$$$;$) {
+  my ($c, $pkg, $isa, $etype, $count) = (@_, 1);
+  $c->{"$pkg/$etype"} += $count;
+  $c->{"#$isa/$etype"} += $count;
+  $c->{"/$etype"} += $count;
+}
+
+sub mootinc($$$$$;$) {
+  my ($c, $prefix, $pkg, $isa, $etype, $count) = (@_, 1);
+  $c->{"$prefix$pkg/$etype"} += $count;
+  $c->{"$prefix#$isa/$etype"} += $count;
+  $c->{"$prefix/$etype"} += $count;
+}
+
+sub output_error($$$$$$$;$) {
+  my ($oitem, $nitem, $oclitem, $c, $etype, $was, $is, $count) = (@_, 1);
+  my ($supct, $sups);
+  if ($oitem->{isa} eq "package") {
+    $supct = 0;
+    $sups = "";
+  } else {
+    $supct = scalar @{$oclitem->{supers}} + keys %{$oclitem->{ifaces}};
+    $supct++ unless $supct;
+    $sups = join ";", @{$oclitem->{supers}}, keys %{$oclitem->{ifaces}};
+  }
+  unless ($ofhs[$supct]) {
+    $ofhs[$supct] = new_tmpfile IO::File();
+  }
+  $was =~ s/~/~t/g; $was =~ s/\//~s/g;
+  $is =~ s/~/~t/g; $is =~ s/\//~s/g;
+  print {$ofhs[$supct]} "error $count $etype $oitem->{isa} $oitem->{item} $sups $was/$is\n";
+
+  # Note that since svuid checking happens last, svuid error count will only
+  # be inc'd if the item isn't already BAD for some other reason.
+  inc($c, $oitem->{package}, $oitem->{isa}, $etype, $count)
+    unless $errhere;
+  $errhere = 1;
+}
+
+sub pct($$$$) {
+  my ($c, $pkg, $etype, $str) = @_;
+  my $ct = $c->{"$pkg/$etype"};
+  return $str unless $ct;
+  my $tot = $c->{"$pkg/total"};
+  $str .= ", " if $str;
+  return $str . ((int (10000 * $ct / $tot)) / 100) . "% $etype";
+}
+
+sub short_summary($$) {
+  my ($c, $pkg) = @_;
+  my $pkgn = $pkg || "Total";
+  if ($pkg =~ /^#(.)(.*)$/) {
+    $pkgn = uc($1) . $2;
+    $pkgn .= "e" if $pkgn =~ /[sx]$/;
+    $pkgn .= "s";
+  }
+  my $summ = pct($c, $pkg, "good", "");
+  $summ = pct($c, $pkg, "minor", $summ);
+  $summ = pct($c, $pkg, "bad", $summ);
+  $summ = pct($c, $pkg, "missing", $summ);
+  $summ = pct($c, $pkg, "abs.add", $summ);
+  print STDERR "\r$pkgn: $summ\n" if $dot;
+  push @summarypkgs, $pkg;
+}
+
+sub dump_output($) {
+  my ($c) = @_;
+
+  # Open the appropriate thing for output. If we will be piping to japiohtml or
+  # japiotext, we first redirect STDOUT to whatever was given as "-o".
+  if ($outprog) {
+    if ($opts{"o"}) {
+      close STDOUT;
+      open STDOUT, ">$opts{o}";
+    }
+    my $ct = 0; my $prog = $0;
+    $prog = readlink $prog while -l $prog && $ct++ < 5;
+    $progdir = $1 if $prog =~ /^(.*)\/[^\/]+$/;
+    if ($progdir) {
+      $progdir .= "/";
+    } else {
+      $progdir = $1 if $prog =~ /^(.*)\\[^\\]+$/;
+      $progdir .= "\\" if $progdir;
+    }
+    open OUT, "|$^X \"$progdir$outprog\"";
+  } else {
+    if ($opts{"o"}) {
+      open OUT, ">$opts{o}";
+    } else {
+      open OUT, ">-";
+    }
+  }
+
+  my $origname = $origfile;
+  my $newname = $newfile;
+  my $origsname = $origname; $origsname =~ s/\.japi(?:\.gz)?$//;
+  my $newsname = $newname; $newsname =~ s/\.japi(?:\.gz)?$//;
+  $origname .= "\@$orig->{date}" if $orig->{date};
+  $newname .= "\@$new->{date}" if $new->{date};
+
+  print OUT "%\%japio 0.9.2 $origname $newname\n";
+  if ($ignorenotes) {
+    print OUT $ignorenotes;
+    print OUT "notify Since these differences are not counted as good OR bad, they may cause percentages not to add up to 100%.\n";
+  }
+  if ($buggywarn) {
+    if ($orig->{"origver"} && $orig->{"origver"} le $buggyver) {
+      print OUT "notify Warning: $origsname API was read by a version of japitools that contained known bugs that cause inaccuracies in the output.\n";
+    }
+    if ($new->{"origver"} && $new->{"origver"} le $buggyver) {
+      print OUT "notify Warning: $newsname API was read by a version of japitools that contained known bugs that cause inaccuracies in the output.\n";
+    }
+  }
+  if ($orig->{"noserial"}) {
+    my @serialexc = split /;/, $orig->{"noserial"};
+    foreach my $exc (@serialexc) {
+      if ($exc =~ /,$/) {
+        $exc =~ s/,//;
+        print OUT "notify Serialization compatibility of classes in $exc and subpackages, and their subclasses, has not been checked.\n";
+      } else {
+        $exc =~ s/,//;
+        print OUT "notify Serialization compatibility of $exc and its subclasses has not been checked.\n";
+      }
+    }
+    if ($orig->{"serial"}) {
+      my @serialinc = split /;/, $orig->{"serial"};
+      foreach my $inc (@serialinc) {
+        if ($inc =~ /,$/) {
+          $inc =~ s/,//;
+          print OUT "notify Serialization compatibility of classes in $inc and subpackages HAS been checked unless they're subclasses of a class mentioned above.\n";
+        } else {
+          $inc =~ s/,//;
+          print OUT "notify Serialization compatibility of $inc HAS been checked unless it's a subclass of a class mentioned above.\n";
+        }
+      }
+    }
+  }
+  print OUT "categories =good ";
+  print OUT "=mi_nor " if $svuid_errors;
+  print OUT "bad missing";
+  print OUT " abs.add" unless $sun_only;
+  print OUT "\n";
+
+  foreach my $pkg (@summarypkgs) {
+    my $pkgc = $pkg || "#";
+    print OUT "summary $pkgc";
+    foreach my $item ("good", "minor", "bad", "missing", "abs.add") {
+      my $itm = $item;
+      $itm = "+abs.add" if $item eq "abs.add";
+      my $val = $c->{"$pkg/$item"};
+      my $smootval = $c->{"^$pkg/$item"} || 0;
+      my $mootval = $c->{">$pkg/$item"} || 0;
+      print OUT " $itm:$val^$smootval>$mootval" if $val;
+    }
+    print OUT "\n";
+  }
+  foreach my $errline (@allerrors) {
+    print OUT "$errline\n";
+  }
+  print OUT "end japio\n";
+  close OUT;
+}
+
+# Loop through all the packages in the original API and process them.
+sub compare_japis($$) {
+  my ($orig, $new) = @_;
+
+  my $pkg = "";
+  my $class = "";
+  my $c = {}; # counts
+  my $oitem = read_japi_item($orig, 1);
+  my $nitem = read_japi_item($new, 0);
+  my $class_has_ctors = 0;
+  my ($oclitem, $nclitem);
+  print STDERR "Comparing...\n" if $dot;
+  while (defined $oitem) {
+    my $isnewpkg = ($pkg ne $oitem->{package});
+    my $isnewclass = $isnewpkg || ($class ne $oitem->{class});
+    my $cmp;
+    my $first = 1;
+    while (($cmp = japicmp($oitem, $nitem)) > 0) {
+      $errhere = 0;
+
+      # Keep an eye out for members that are abstract that are also not in
+      # the original. This check is not in the JLS, so only do it if sun_only
+      # is false.
+      # OPENQ: Maybe New annotation methods should be legal, esp. if there's a
+      # default value?
+      if (!$sun_only && !$first && $class_has_ctors && $nitem->{abstract} &&
+          $nitem->{package} eq $pkg && $nitem->{class} eq $class) {
+        my $mtype = $nclitem->{isa} eq "interface" ? "interface" : "abstract";
+        output_error($nitem, $nitem, $oclitem, $c, "abs.add",
+                     "", "new $mtype method");
+      }
+      $first = 0;
+      $nitem = read_japi_item($new, 0);
+    }
+    if ($isnewpkg) {
+      short_summary($c, $pkg) if $pkg;
+      print STDERR $oitem->{package} if $dot;
+    }
+    print STDERR $dot if $isnewclass;
+    $pkg = $oitem->{package};
+    $class = $oitem->{class};
+    $oclitem = $oitem if $isnewclass;
+    $class_has_ctors = 0 if $isnewclass;
+    $class_has_ctors = 1 if $oitem->{isa} eq "constructor" ||
+                            $oitem->{isa} eq "interface";
+
+    unless ($skip_missing_pkgs && $isnewpkg &&
+            (!defined($nitem) || $nitem->{package} ne $oitem->{package})) {
+      inc($c, $oitem->{package}, $oitem->{isa}, "total");
+    }
+
+    $errhere = 0;
+    if ($cmp) {
+      my $ecount = 1;
+      my $eitem = {%$oitem};
+      if ($isnewpkg && (!defined($nitem) ||
+                        $nitem->{package} ne $oitem->{package})) {
+        $eitem->{isa} = "package";
+        $eitem->{class} = "";
+        $eitem->{item} = "$pkg,!";
+        while (defined $oitem && $oitem->{package} eq $pkg) {
+          $oitem = read_japi_item($orig, 1);
+          if (!$skip_missing_pkgs && defined $oitem && $oitem->{package} eq $pkg) {
+            inc($c, $pkg, $oitem->{isa}, "total");
+            $ecount++;
+          }
+        }
+      } elsif ($isnewclass) {
+        while (defined $oitem && $oitem->{package} eq $pkg &&
+               $oitem->{class} eq $class) {
+          $oitem = read_japi_item($orig, 1);
+          if (defined $oitem && $oitem->{package} eq $pkg &&
+              $oitem->{class} eq $class) {
+            inc($c, $pkg, $oitem->{isa}, "total");
+            $ecount++;
+          }
+        }
+      } else {
+        $oitem = read_japi_item($orig, 1);
+      }
+      if ($skip_missing_pkgs && $eitem->{isa} eq "package") {
+        $pkg = "";
+      } else {
+        output_error($eitem, undef, $oclitem, $c, "missing",
+                     "", "missing", $ecount);
+      }
+    } else {
+      $nclitem = $nitem if $isnewclass;
+
+      # If the orig item is non-generic (sanitize of the method doesn't have
+      # any effect) and the "new" item is marked as a
+      # duplicate, and the erasure of the return types don't match, we
+      # read on to the next item.
+      while ($nitem->{duplicate} && $oitem->{gmember} eq $oitem->{member} &&
+             sanitize_typesig($nitem->{type}, $nitem) ne sanitize_typesig($oitem->{type}, $oitem)) {
+        $nitem = read_japi_item($new, 0);
+      }
+
+      # Otherwise, we just do a straight one-to-one comparison of the items.
+      inc($c, $pkg, $oitem->{isa}, "good")
+        unless compare_japi_item($oitem, $nitem, $oclitem, $c);
+      $oitem = read_japi_item($orig, 1);
+    }
+  }
+
+  # New abstract members in a class might show up even at the end of the file,
+  # after the last item in orig.
+  my $first = 1;
+  while (!$sun_only && defined $nitem && $class_has_ctors &&
+         $nitem->{package} eq $pkg && $nitem->{class} eq $class) {
+    $errhere = 0;
+
+    # Keep an eye out for members that are abstract that are also not in
+    # the original. This check is not in the JLS, so only do it if sun_only
+    # is false.
+    if (!$first && $nitem->{abstract}) {
+      my $mtype = $nclitem->{isa} eq "interface" ? "interface" : "abstract";
+      output_error($nitem, $nitem, $oclitem, $c, "abs.add",
+                   "", "new $mtype method");
+    }
+    $first = 0;
+    $nitem = read_japi_item($new, 0);
+  }
+  short_summary($c, $pkg) if $pkg;
+  short_summary($c, "");
+  return $c;
+}
+
+sub compare_japi_item($$$$) {
+  my ($oitem, $nitem, $oclitem, $c) = @_;
+
+  my $isa = $oitem->{isa};
+  my $member = $oitem->{member};
+
+  if (!$oitem->{stub} && $nitem->{stub}) {
+    output_error($oitem, $nitem, $oclitem, $c, "missing",
+                 "", "not implemented");
+  }
+
+  # Check that the item hasn't gone from class to interface, annotation to
+  # class etc.
+  if ($oitem->{isa} ne $nitem->{isa}) {
+    if ($oitem->{isa} eq "class" && $nitem->{isa} eq "enum") {
+      # Do nothing, we're treating this as legal.
+    } else {
+      output_error($oitem, $nitem, $oclitem, $c, "bad",
+                   $oitem->{isa}, $nitem->{isa});
+    }
+  }
+
+  # Check that access to the item hasn't been reduced.
+  if ($oitem->{public} && !$nitem->{public}) {
+    output_error($oitem, $nitem, $oclitem, $c, "bad",
+                 "public", "protected");
+  }
+
+  # Check that the item hasn't changed from concrete to abstract.
+  if (!$oitem->{abstract} && $nitem->{abstract}) {
+    output_error($oitem, $nitem, $oclitem, $c, "bad",
+                 "concrete", "abstract");
+  }
+
+  # Check that the staticness of the item hasn't changed
+  if ($oitem->{static} != $nitem->{static}) {
+    output_error($oitem, $nitem, $oclitem, $c, "bad",
+                 $static[$oitem->{static}], $static[$nitem->{static}]);
+  }
+
+  # Check that the item hasn't gone from nonfinal to final, except
+  # for static methods.
+  if (!$oitem->{final} && $nitem->{final} &&
+      ($oitem->{isa} ne "method" || !$oitem->{static})) {
+    output_error($oitem, $nitem, $oclitem, $c, "bad",
+                 "nonfinal", "final");
+  }
+
+  # Check that the item hasn't changed from an enum field to a regular
+  # field.
+  if ($oitem->{enumfield} && !$nitem->{enumfield}) {
+    output_error($oitem, $nitem, $oclitem, $c, "bad",
+                 "enum field", "normal field");
+  }
+
+  # Check that generic type parameters are the same. It's legal to add type
+  # parameters to something that wasn't generic at all before, though.
+  if ($oitem->{gparamstr}) {
+    if (!$nitem->{gparamstr}) {
+      output_error($oitem, $nitem, $oclitem, $c, "bad",
+                   gentypestr($oitem), "not generic");
+    } elsif ($nitem->{gparamstr} ne $oitem->{gparamstr}) {
+      output_error($oitem, $nitem, $oclitem, $c, "bad",
+                   gentypestr($oitem), gentypestr($nitem));
+    }
+  }
+
+  # Check that the item's type has remained the same.
+  if ($oitem->{type} ne $nitem->{type}) {
+
+    # If the original type is entirely non-generic (sanitizing it makes no difference) and
+    # the new type sanitizes to the same thing, that's legal and happens all over the place
+    # when making a non-generic class generic.
+    unless (sanitize_typesig($oitem->{type}, $oitem) eq $oitem->{type} &&
+            sanitize_typesig($nitem->{type}, $nitem) eq $oitem->{type}) {
+      output_error($oitem, $nitem, $oclitem, $c, "bad",
+                   "type @{[sig2type($oitem->{type})]}", "type @{[sig2type($nitem->{type})]}");
+    }
+    # Do I win the award for "most consecutive close brackets"?
+  }
+
+  # Check that the generic parts of method signatures, etc, have remained the
+  # same. If the original wasn't generic at all, though, it's legal for the
+  # new one to become generic.
+  if ($oitem->{gmember} ne $oitem->{member} &&
+      $oitem->{gmember} ne $nitem->{gmember}) {
+    my $oparams = sig2typelist($1) if $oitem->{gmember} =~ /\(([^()]+)\)$/;
+    my $nparams = sig2typelist($1) if $nitem->{gmember} =~ /\(([^()]+)\)$/;
+    die "unexpectedly found gmember unequal to member" unless $oparams && $nparams;
+    output_error($oitem, $nitem, $oclitem, $c, "bad",
+                 "parameters ($oparams)", "parameters ($nparams)");
+  }
+
+  # For classes and interfaces, check that nothing has been removed from
+  # the set of super-interfaces or superclasses.
+  if ($member eq "") {
+    foreach my $iface (keys %{$oitem->{ifaces}}) {
+      my $rawiface = $iface; $rawiface = $1 if $iface =~ /^([^<>]+)</;
+      unless ($nitem->{ifaces}->{$iface} || ($iface eq $rawiface && $nitem->{rawifaces}->{$rawiface})) {
+        if ($nitem->{ifaces}->{$rawiface}) {
+          output_error($oitem, $nitem, $oclitem, $c, "bad",
+                       "implements @{[sig2type($iface)]}", "implements raw $rawiface");
+        } else {
+          output_error($oitem, $nitem, $oclitem, $c, "bad",
+                       "implements @{[sig2type($iface)]}", "doesn't implement @{[sig2type($iface)]}");
+        }
+      }
+    }
+    my $super = $oitem->{supers}->[0];
+    if (defined($super)) {
+      my $rawsuper = $super; $rawsuper = $1 if $super =~ /^([^<>]+)</;
+      unless ($nitem->{superset}->{$super} || ($super eq $rawsuper && $nitem->{rawsupers}->{$rawsuper})) {
+        if ($nitem->{superset}->{$rawsuper}) {
+          output_error($oitem, $nitem, $oclitem, $c, "bad",
+                       "subclass of @{[sig2type($super)]}", "subclass of raw $rawsuper");
+        } else {
+          output_error($oitem, $nitem, $oclitem, $c, "bad",
+                       "subclass of @{[sig2type($super)]}", "not a subclass of @{[sig2type($super)]}");
+        }
+      }
+    }
+
+    # Also check the SerialVersionUID if that is turned on. Do this last, to
+    # ensure that anything "bad" will be flagged before this "minor" error.
+    if ($svuid_errors && defined $oitem->{svuid}) {
+      if (!defined $nitem->{svuid}) {
+        output_error($oitem, $nitem, $oclitem, $c, "minor",
+                     "SerialVersionUID=$oitem->{svuid}", "no SVUID");
+      } elsif ($nitem->{svuid} ne $oitem->{svuid}) {
+        output_error($oitem, $nitem, $oclitem, $c, "minor",
+                     "SerialVersionUID=$oitem->{svuid}", "SerialVersionUID=$nitem->{svuid}");
+      }
+    }
+
+  # For methods and constructors, check that the set of thrown exceptions
+  # is the same. The JLS does not specify this so only do it if not
+  # sun_only.
+  } elsif ($member =~ /\(.*\)/ && !$sun_only) {
+    foreach my $excp (keys %{$oitem->{excps}}) {
+      unless ($nitem->{excps}->{$excp}) {
+        output_error($oitem, $nitem, $oclitem, $c, "bad",
+                     "throws $excp", "doesn't throw $excp");
+      }
+    }
+    foreach my $excp (keys %{$nitem->{excps}}) {
+      unless ($oitem->{excps}->{$excp}) {
+        output_error($oitem, $nitem, $oclitem, $c, "bad",
+                     "doesn't throw $excp", "throws $excp");
+      }
+    }
+
+    # Check that if the original was a "real" method, the new one is at least
+    # a bridge.
+    if ($nitem->{nobridge} && !$oitem->{nobridge}) {
+      output_error($oitem, $nitem, $oclitem, $c, "bad",
+                   "", "no bridge method");
+    }
+
+    # Check the default value if applicable
+    # OPENQ Assuming for now that it's legal to add a default where one wasn't
+    # before. Not sure if this is true...
+    if (defined $oitem->{default}) {
+      my $odefault = $oitem->{default};
+      $odefault .= " (0x$oitem->{defaultbits})" if defined $oitem->{defaultbits};
+      if (!defined $nitem->{default}) {
+        output_error($oitem, $nitem, $oclitem, $c, "bad",
+                     "has default [$odefault]", "has no default");
+      } else {
+        my $ndefault = $nitem->{default};
+        $ndefault .= " (0x$nitem->{defaultbits})" if defined $nitem->{defaultbits};
+        if (defined $nitem->{defaultbits} && defined $oitem->{defaultbits}) {
+          if ($nitem->{defaultbits} ne $oitem->{defaultbits}) {
+            output_error($oitem, $nitem, $oclitem, $c, "bad",
+                         "has default [$odefault]", "has default [$ndefault]");
+          }
+        } elsif ($nitem->{default} ne $oitem->{default}) {
+          output_error($oitem, $nitem, $oclitem, $c, "bad",
+                       "has default [$odefault]", "has default [$ndefault]");
+        }
+      }
+    }
+
+
+  # For fields, check the constant value if there is one.
+  } else {
+    if (defined $oitem->{constant}) {
+      my $oconstant = $oitem->{constant};
+      $oconstant .= " (0x$oitem->{constbits})" if defined $oitem->{constbits};
+      my $ocstr = (defined $oitem->{constbits}) ? "fp constant" : "constant";
+      if (!defined $nitem->{constant}) {
+        output_error($oitem, $nitem, $oclitem, $c, "bad",
+                     "$ocstr [$oconstant]", "not constant");
+      } else {
+        my $nconstant = $nitem->{constant};
+        $nconstant .= " (0x$nitem->{constbits})" if defined $nitem->{constbits};
+        my $ncstr = (defined $nitem->{constbits}) ? "fp constant" : "constant";
+        if (defined $nitem->{constbits} && defined $oitem->{constbits}) {
+          if ($nitem->{constbits} ne $oitem->{constbits}) {
+            output_error($oitem, $nitem, $oclitem, $c, "bad",
+                         "$ocstr [$oconstant]", "$ncstr [$nconstant]");
+          }
+        } elsif ($nitem->{constant} ne $oitem->{constant}) {
+          output_error($oitem, $nitem, $oclitem, $c, "bad",
+                       "$ocstr [$oconstant]", "$ncstr [$nconstant]");
+        }
+      }
+    }
+
+    # When the declaring class is given, check that the fields are declared in the same
+    # class. Note that we're relying on Japize to only tell us the declaring class in
+    # the right situations.
+    my $odecl = $oitem->{decl};
+    my $ndecl = $nitem->{decl};
+    if ($odecl && $ndecl && $odecl ne $ndecl) {
+      output_error($oitem, $nitem, $oclitem, $c, "bad",
+                   "declared in $odecl", "declared in $ndecl");
+    }
+  }
+
+  # Check for deprecation problems - do this last, to ensure that anything "bad"
+  # will be flagged before this "minor" error.
+  if ($svuid_errors && defined $oitem->{deprecated} &&
+      defined $nitem->{deprecated}) {
+    if ($oitem->{deprecated} && !$nitem->{deprecated}) {
+      output_error($oitem, $nitem, $oclitem, $c, "minor",
+                   "deprecated", "not deprecated");
+    }
+  }
+  return $errhere;
+}
+
+sub load_ignore_file($$) {
+  my ($ign, $ignorefiles) = @_;
+  if ($ignorefiles) {
+    foreach my $ignorefile (split /,/, $ignorefiles) {
+      if ($ignorefile =~ /\.japi(?:\.gz)?$/) {
+        my $ct = 0; my $prog = $0;
+        $prog = readlink $prog while -l $prog && $ct++ < 5;
+        $progdir = $1 if $prog =~ /^(.*)\/[^\/]+$/;
+        if ($progdir) {
+          $progdir .= "/";
+        } else {
+          $progdir = $1 if $prog =~ /^(.*)\\[^\\]+$/;
+          $progdir .= "\\" if $progdir;
+        }
+        my $opts = "-j";
+        $opts .= "v" if $svuid_errors;
+        $opts .= "s" if $sun_only;
+        open IGN, "$^X \"${progdir}japicompat\" $opts \"$origfile\" \"$ignorefile\"|";
+      } else {
+        open IGN, "<$ignorefile" or die "Could not open ignore file $ignorefile";
+      }
+      my $japioline = <IGN>;
+      die "Ignore file $ignorefile does not look like a japio file" if $japioline !~ /^\%\%japio /;
+      die "Ignore file $ignorefile is not japio version 0.9.2" if $japioline !~ /^\%\%japio 0.9.2 ([^ \@]+)(?:\@[^ ]+) ([^ \@]+)(?:\@[^ ]+)/;
+      my ($ignore_orig, $ignore_new) = ($1, $2);
+      $ignore_orig =~ s/\.japi(\.gz)?$//;
+      $ignore_new =~ s/\.japi(\.gz)?$//;
+      $ignorenotes .= "notify Differences due to incompatibility between $ignore_orig and $ignore_new have been ignored.\n";
+      my $origsname = $origfile; $origsname =~ s/\.japi(?:\.gz)?$//;
+      $ignorenotes .= "notify Warning: this may not make sense, because normally differences between $origsname and something should be ignored instead.\n" unless $ignore_orig eq $origsname;
+      while (<IGN>) {
+        reallychomp $_;
+        if (/^error /) {
+          my ($error, $etype, $isa, $item, $sups, $rest) = split(/ /, $_, 6);
+          my ($class, $member) = split(/!/, $item, 2);
+          my ($pkg, $cls) = split(/,/, $class, 2);
+          my $dotclass = "$pkg.$cls";
+          $rest = "fp constant [$1]/fp constant [$2]" if $rest =~ /^fp constant \[[^ ]* \((0x[0-9a-z]+)\)\]\/fp constant \[[^ ]* \((0x[0-9a-z]+)\)\]$/;
+          $ign->{"$dotclass\!$member $rest"} = 1;
+        } elsif (/^end japio$/) {
+          last;
+        }
+      }
+      close IGN;
+    }
+  }
+}
+
+sub merge_results($) {
+  my ($c) = @_;
+  my $errs = {};
+  my $ign_errs = {};
+  load_ignore_file($ign_errs, $ignorefile);
+  $sc = {};
+  print STDERR "Merging results / eliminating duplicates...\n" if $dot;
+  foreach my $fh (@ofhs) {
+    if ($fh) {
+      $fh->seek(0, 0);
+      my $lastmember = "";
+      while (<$fh>) {
+        reallychomp $_;
+        my $line = $_;
+        my ($error, $count, $etype, $isa, $item, $sups, $rest) = split(/ /, $_, 7);
+        my ($class, $member) = split(/!/, $item, 2);
+        my ($pkg, $cls) = split(/,/, $class, 2);
+        my $dotclass = "$pkg.$cls";
+        my @sups = split(/;/, $sups);
+        my $insup = 0;
+        my $prest = $rest;
+        $prest = "fp constant [$1]/fp constant [$2]" if $prest =~ /^fp constant \[[^ ]* \((0x[0-9a-z]+)\)\]\/fp constant \[[^ ]* \((0x[0-9a-z]+)\)\]$/;
+        my $inign = ($ign_errs->{"$dotclass\!$member $prest"} ? 1 : 0);
+
+        # Determine whether the same error appears in any superclass, and if so
+        # do not report this error. That doesn't apply, though, to missing
+        # classes, which should be reported regardless of whether their
+        # superclass is missing too. It also doesn't apply to errors in
+        # constructors, since they aren't inherited.
+        unless ((($isa eq 'class' || $isa eq 'interface' || $isa eq 'enum' || $isa eq 'annotation') &&
+                 $etype eq 'missing') ||
+                $isa eq 'constructor') {
+          foreach my $sup (@sups) {
+            $insup = 1 if $errs->{"$sup\!$member $rest"};
+            $inign = 1 if $ign_errs->{"$sup\!$member $rest"};
+          }
+        }
+
+        if ($inign) {
+          mootinc($c, ">", $pkg, $isa, $etype, $count) unless $lastmember eq "$dotclass\!$member";
+        } elsif ($insup) {
+          mootinc($c, "^", $pkg, $isa, $etype, $count) unless $lastmember eq "$dotclass\!$member";
+        } else {
+          $errs->{"$dotclass\!$member $rest"} = 1;
+
+          push @allerrors, "$error $etype $isa $item $sups $rest";
+          $totalerrors++;
+          inc($sc, $pkg, $isa, $etype);
+        }
+        $lastmember = "$dotclass\!$member";
+      }
+      $fh->close();
+      undef $fh;
+    }
+  }
+
+  dump_output($c);
+
+  print STDERR "Done.\n" if $dot;
+}
+
+sub ct($$$$) {
+  my ($c, $pkg, $etype, $str) = @_;
+  my $ct = $c->{"$pkg/$etype"};
+  return $str unless $ct;
+  $str .= ", " if $str;
+  return "$str$ct $etype";
+}
+
+sub count_summary($$) {
+  my ($c, $pkg) = @_;
+  my $pkgn = $pkg || "Total";
+  if ($pkg =~ /^#(.)(.*)$/) {
+    $pkgn = uc($1) . $2;
+    $pkgn .= "e" if $pkgn =~ /[sx]$/;
+    $pkgn .= "s";
+  }
+  my $summ = ct($c, $pkg, "good", "");
+  $summ = ct($c, $pkg, "minor", $summ);
+  $summ = ct($c, $pkg, "bad", $summ);
+  $summ = ct($c, $pkg, "missing", $summ);
+  $summ = ct($c, $pkg, "abs.add", $summ);
+  $summ = "All good" unless $summ;
+  print STDERR "\r$pkgn: $summ \n" if $dot;
+}
+# Print summary information.
+sub print_summary() {
+  print STDERR "\n" if $dot;
+  count_summary($sc, "#package");
+  count_summary($sc, "#class");
+  count_summary($sc, "#interface");
+  count_summary($sc, "#enum");
+  count_summary($sc, "#annotation");
+  count_summary($sc, "#field");
+  count_summary($sc, "#constructor");
+  count_summary($sc, "#method");
+  print STDERR "$totalerrors unique errors found.\n" if $dot;
+}
+
+sub getgenparams($) {
+  my ($item) = @_;
+  my $gps = [];
+  unless ($item->{static}) {
+    push @$gps, @{getgenparams($item->{clitem})} if $item->{clitem};
+  }
+  push @$gps, @{$item->{genericparams}} if $item->{genericparams};
+  return $gps;
+}
+
+sub sanitize_typesig($$) {
+  my ($str, $item) = @_;
+  my $gparams = getgenparams($item);
+  $str =~ s/^\./\[/;
+  my $oldstr = "";
+  while ($oldstr ne $str) {
+    while ($oldstr ne $str) {
+      $oldstr = $str;
+      $str =~ s/<[^<>]*>//g;
+    }
+    $str =~ s/\@([0-9]+)/$gparams->[$1]/g;
+  }
+  $str =~ s/&.*$//;
+  #print "\n${lastsanitized}Sub: $str with gparams=@$gparams\n" if $str =~ /\@[0-9]/;
+  return $str;
+}
+
+sub sanitize_member($) {
+  my ($item) = @_;
+  #$lastsanitized = "Sanitizing $item->{rawitem}\n";
+  if ($item->{gmember} =~ /\(([^\)]+)\)/) {
+    my $params = join(',', map {sanitize_typesig($_, $item)} splitgenstr($1));
+    my $result = $item->{gmember};
+    $result =~ s/\([^\)]+\)/\($params\)/;
+    return $result;
+  } else {
+    return $item->{gmember};
+  }
+}
+
+sub gentypestr($) {
+  my ($item) = @_;
+  my $result = "";
+  my $num = 0;
+  unless ($item->{static}) {
+    my $gps = getgenparams($item->{clitem});
+    $num = scalar(@$gps);
+  }
+  my $count = 0;
+
+  foreach my $param (splitgenstr($item->{gparamstr})) {
+    $result .= ", " if $result;
+
+    my $bounds;
+    if ($param eq "Ljava/lang/Object;") {
+      $bounds = "";
+    } else {
+      $bounds = " extends ";
+
+      foreach my $bound (split /\&/, $param) {
+        $bounds .= " & " unless $bounds eq " extends ";
+        $bounds .= sig2type($bound);
+      }
+    }
+
+    $num++;
+    my $name = "T$num";
+    $name = "T" if $name eq "T1";
+    $result .= "$name$bounds";
+    $count++;
+  }
+  return $count > 1 ? "has generic type parameters <$result>" : "has generic type parameter <$result>";
+}
+
+# Convert a type signature as used in a japi file to a displayable type.
+sub sig2type($) {
+  my ($sig) = @_;
+  return sig2type($1) . '[]' if $sig =~ /^\[(.*)$/;
+  return sig2type($1) . "..." if $sig =~ /^\.(.*)$/;
+  return "? super " . sig2type($1) if $sig =~ /^\}(.*)$/;
+  return "?" if $sig eq "{Ljava/lang/Object;";
+  return "? extends " . sig2type($1) if $sig =~ /^\{(.*)$/;
+  return "T" if $sig eq "\@0";
+  return "T" . ($1 + 1) if $sig =~ /^\@([0-9]+)$/;
+  return $javatypes->{$sig} if $javatypes->{$sig};
+  my $gparams;
+  $sig = $1 if $sig =~ /^L(.*);$/;
+  ($sig, $gparams) = ($1, $2) if $sig =~ /^([^<>]+)<(.*)>$/;
+  $sig =~ s-/-.-g;
+  $sig =~ s/\$/./g;
+  $sig = "$sig<" . sig2typelist($gparams) . ">" if defined($gparams);
+  return $sig;
+}
+sub sig2typelist($) {
+  my ($list) = @_;
+  my @sigs = splitgenstr($list);
+#  print "sig2typelist of $list gives @sigs\n";
+#  print "returning " .join(", ", map {sig2type($_)} @sigs) . "\n";
+  return join(", ", map {sig2type($_)} @sigs);
+}
+sub countchar($$) {
+  my ($str, $char) = @_;
+  $str =~ s/[^$char]//g;
+  return length $str;
+}
+
+sub splitgenstr($) {
+  my ($str) = @_;
+  my @items = split(/,/, $str);
+  my @result = ();
+
+  my $class = "";
+  foreach my $item (@items) {
+    $class .= "," if $class;
+    $class .= $item;
+    if (countchar($class, "<") == countchar($class, ">")) {
+      push @result, $class;
+      $class = "";
+    }
+  }
+  push @result, $class if $class;
+  return @result;
+}
+
+# Be rather excessively forceful about chomping a line, to handle windows systems under
+# Cygwin perl where chomp still doesn't believe \r is a newline character.
+sub reallychomp($) {
+  chomp $_[0]; chomp $_[0];
+  $_[0] = $1 if $_[0] =~ /^(.*)\r$/;
+}

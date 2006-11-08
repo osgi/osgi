@@ -1,0 +1,27 @@
+This is a temporary README file for the sake of getting *something* together
+fast. Full instructions can be found in the web/index.html file, or at
+http://www.kaffe.org/~stuart/japi/
+
+You can unpack the tarball and use the files in the bin/ directory directly or
+via symlinks: they can find the java libraries, when necessary, by relative
+pathnames. The tarball comes with the java code precompiled so you don't need
+to build before use, but if you do any hacking, "make" in the root japi/
+directory will rebuild the java code. There's no "make install" but if you copy
+everything from bin/ to $prefix/bin and everything in share/java to
+$prefix/share/java, everything will continue to work. Sorry, the build system is
+spartan!
+
+As of japitools 0.8.7 there is an alternative build system using ant, kindly
+provided by Brian Jones. Since I (Stuart) know nothing about ant, I'll assume
+that people who do know ant will know exactly what to do with the build.xml file
+he provided :)
+
+Japitools assumes that perl is /usr/bin/perl, "gzip" is in your path, and your
+preferred java runtime is "java" in your path. gzip is not required if you
+work with uncompressed japi files (see the "unzip" option in the japize
+documentation). Japize requires a Java runtime with some JDK1.2 features: mostly
+the Collections classes. Success has been reported with Free runtimes including
+Kaffe and gcj/gij.
+
+Fixes are welcomed, and I'll be improving the docs over time.
+

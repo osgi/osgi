@@ -1,0 +1,32 @@
+Thoughts on doing side-by-side comparisons of different free implementations
+versus different jdk versions.
+
+                           JDK1.1        JDK1.2         JDK1.3
+
+java.lang   Classpath    |=|==| 100%  |===| 90%/10%  |==|=| 80%/20%
+            Kaffe        |=|==| 100%  |===| 90%/10%  |==|=| 80%/20%
+            libgcj       |=|==| 100%  |===| 90%/10%  |==|=| 80%/20%
+j.l.r.proxy Classpath                                |==|=| 80%/20%
+            Kaffe                                    |==|=| 80%/20%
+            libgcj                                   |==|=| 80%/20%
+javax.swing Classpath                 |===| 90%/10%  |==|=| 80%/20%
+            Kaffe                     |===| 90%/10%  |==|=| 80%/20%
+            libgcj                    |===| 90%/10%  |==|=| 80%/20%
+
+Put a 2-3px border around each Cp/k/lgcj cell in the "ok-xxpct" class to pick
+out the problematic items in red etc. Leave a slightly larger gap between
+packages than between implementations of the same package. Left-align the bar
+graphs so they can be compared.
+
+
+                JDK11 JDK12   JDK13    Classpath Kaffe   libgcj
+java.lang.Foo   N/A   N/A     Present  N/A       Missing Missing
+                N/A   N/A     static   instance  N/A     N/A
+javax.swing     N/A   Present Present  N/A       Missing N/A
+javax.swing.Foo N/A   Present Present  Missing   N/A     N/A
+
+Print the N/A in a pale grey so that the stuff that isn't N/A stands out.
+The "was" stuff should be green, the "is" stuff red to indicate a problem.
+Perhaps the background itself should be red etc.
+Would be nice to correlate the colors with the class of error, but that would
+make missing items a boring grey...

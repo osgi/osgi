@@ -1,0 +1,230 @@
+* For 0.8.3:
+  * Verify results of new japicompat against old
+  * Print at least *some* kind of overall summary information at end
+  * Update docs
+* For 0.8.4:
+  * Oops! Fix hang-at-end bug!
+* For 0.8.5:
+  * Better summary information
+  * Update file version format to 0.9
+  * Put the whole of java.lang first along with Object
+  * Make japi2new support new version
+  * Make japize generate the new version
+  * Support "unzip" option in japize and require that either it or zip be
+    specified. This is a precursor to making zipped output the default; in the
+    next release, "zip" will be a no-op. Requiring the option for one release
+    at least makes sure that people are aware that something changed...
+  * Update webpage to describe zip/unzip option and rationale, with note that
+    "zip" is going away.
+  * Make japi2new work something like gzip/gunzip, replacing the original
+    unless otherwise specified. Make it work with gzipped input and produce
+    gzipped output (by default, but turn-offable).
+  * Rename japi2new to japifix.
+  * Make japifix abort with an error on mis-ordered files. Support a -s option
+    to force a sort in such situations.
+  * Test japize at least a little bit!
+  * Figure out why japize is screwing up the ordering and fix it. Perhaps
+    put jdk1.1/classes.zip onto laptop so I can work with it.
+  * Get japize to reliably get constants, by ensuring that nothing will get
+    unloaded until there are no references to the JodeClass. "Anything can be
+    solved by another layer of indirection".
+  * Teach japicompat that constructors don't inherit, so don't filter out
+    problems "inherited" from a superclass constructor.
+  * Test japize on jdk1.1 classes.zip (again) and make sure output is equivalent
+    or better than the best I've gotten so far.
+  * Test japicompat again against japicompat-old for new jdk1.1.japi vs
+    kaffe.japi from Dalibor.
+  * Distribute as a tarball rather than a jarball, so permissions flags on the
+    things in 'bin' are preserved.
+* For 0.8.6:
+  * Make tarball include 'japi' directory rather than just its contents.
+  * Make zipped output the silent default in japize, with "zip" a no-op. "unzip"
+    explicitly will turn off the zipping.
+  * Remove reflection support.
+  * Remove japicompat-old.
+  * Put japitools.jar in japi/share/java, and put jode.jar there too.
+  * Make japize figure out location of *.jar from $0 (../share/java rel path)
+  * Use "!" instead of "%" so that it sorts before "$", making the order
+    correct for inner classes.
+    * Change japize to output "!" and japiver 0.9.1
+    * Change japicompat to recognize "!" and japiver 0.9.1
+    * Change japipkgs to recognize 0.9.1
+    * Change japifix to convert to "!" and 0.9.1
+  * Test japize on jdk1.1
+  * Test japifix on old jdk1.1 japis
+  * Test japifix on old kaffe japis (to ensure that the ordering of inner
+    classes is right)
+  * Test japicompat between jdk1.1 and kaffe, as usual.
+* For 0.8.7:
+  * Bump file format version
+  * Exclude subclasses of RuntimeException and Error, and subclasses of other
+    exceptions thrown by the same method.
+  * Flush stdout at the end of output...
+  * Filter out Throwable subclasses in japifix by the same algorithm as used in
+    japize.
+  * Remove japifix's ability to work on stdin/stdout.
+  * Remove japifix's -s option.
+  * Allow japifix to restart with needtosort set if a file is found to be
+    mis-sorted.
+  * Turn japipkgs into japilist with enhanced capabilities.
+  * Allow japifix to read to the end of a file to find all the Throwables and
+    then restart using that list for exception-filtering.
+  * Allow specifying a file to japifix that won't be converted but will be
+    scanned for exceptions, so that you can include platform libraries when
+    fixing japis that don't include the full platform.
+  * Fix japize bug causing missort when java.lang is not included but
+    java.lang.(something) is.
+  * Include serialize, serialcompat, build.xml and new runner scripts from
+    Brian Jones.
+* For 0.9:
+  * Make japifix prune exceptions correctly for the same-throws-clause case.
+  * Bump file format version to force users to update their japis in case
+    they're wrong.
+  * Make japicompat include the per-package and overall summaries on stdout as
+    well as stderr, so that "-q" and a redirect of stdout only gives decent
+    results.
+  * Incorporate patch from Brian Jones to runner scripts and index.html
+  * Make sure all relevant files carry the GPL, and include COPYING
+  * Prepare a nice-looking announcement
+  * This is intended as a vaguely stable milestone before everything breaks
+    again.
+* For 0.9.1:
+  * Remove "zip" no-op option as useless cruft.
+  * Output in raw mode by default (suggest .japio as file ext). Add a version
+    to japio files similar to that in japi files.
+  * Put all summary information into the japio somehow to allow it to appear in
+    the results files.
+  * japiohtml filter program
+  * japiotext filter program
+  * Include source for jode.bytecode and its dependencies.
+  * Compile jode bits from source and put them in japitools.jar. Remove
+    all references to jode-1.1.1.jar.
+  * Apply theoretical fix to jode breakage with 1.4.
+  * Break down results in japio* by package and etype.
+  * Add links to each package/etype in japiohtml.
+* For 0.9.2:
+  * Bump the file format version again...
+  * Add an optional creation date on the %%japi line.
+  * Include the japi-creation date in the japio.
+  * Include the japi-creation date in the html and text.
+  * Add "++" in front of java.lang.Object and "+" in front of java.lang.*,
+    and make both japifix and japicompat use straight "cmp" for sorting.
+  * Make japifix add the pluses as needed.
+  * Make japicompat ignore the pluses.
+  * Make japilist ignore the pluses.
+  * Fix/workaround the Jode limitation that inner class static/protected
+    modifiers aren't read right.
+  * Make japifix skip files that are already the right version unless a -f flag
+    is specified.
+  * Make japifix preserve the date field if present.
+  * Put a 12 pixel height on the spacer gif to help opera out.
+  * Use ".bad a { color: foo }" etc to support browsers that can't handle
+    "color: inherit".
+  * "-o filename" flag to japicompat which will write straight to a file
+    rather than stdout.
+  * "-h" and "-t" flags to japicompat will pipe to the relevant program
+  * Store the current japi version in a variable in japifix since it's now used
+    in multiple places.
+  * "-q" flag to japifix to supress messages.
+  * Add "legend" to the top of HTML output indicating the colors for "perfect"
+    thru "completely wrong".
+  * Add class-deprecation support to Jode code.
+  * Add summary totals in both japiotext and japiohtml that appear *before* the
+    full listing of errors.
+  * Add per-package summary of errors in japiohtml, again *before* the actual
+    error listing. Minimize the size of it by putting it in spans using &nbsp;
+    instead of space, all on one "line", and letting the browser wrap as
+    appropriate.
+  * Do something like readable_member on item names to make them human-readable.
+  * Remove readable_member and anything else that's now japio*'s responsibility
+    from japicompat.
+  * Order the errors in japiotext in the same way japiohtml does. In fact,
+    redo japiotext entirely as a stripped-down version of japiohtml.
+  * Use "minor" instead of "svuid"
+  * Add deprecation testing (it's an error to *un*deprecate an API)
+    * Bump file version and add info to output in japize
+    * Bump version in japifix and add "?" if not present
+    * Bump version in japilist
+    * Bump version in japicompat and test the new field
+  * Add rawbits support in float and double constants (but don't test it, yet).
+    * Include both the bits and the readable number in japize
+    * Have japicompat ignore the bits completely, for now, and not require
+      them to be present.
+  * Support specifying the letter to alt-ify to (eg mi_nor).
+  * Update spec to cover new changes.
+* For 0.9.3:
+  * Compare rawbits values if both are present, otherwise compare strings as
+    now. Make the output always include both if present.
+  * Fix bug that reports deprecation problems only on classes and interfaces.
+  * Fix erroneous } that slipped into constants
+  * Escape slashes in "was" and "is" to avoid breakage when / appears in, say,
+    a constant string.
+  * Fix problem causing japize to fail on Classpath.
+  * This is a 1.0 "Release candidate"
+* Skipped up to 0.9.5...
+  * Fix bug causing minor not to be recognized as 'ok'. Now a package with only
+    minor bugs will get the 'good-100pct' CSS class.
+  * Update webpage docs to cover the changes in the 0.9.x series.
+  * Bump the file format version.
+  * Ability to filter out differences between, say, jdk11 and jdk14 when comparing
+    jdk11 against $freevm
+- For 0.9.6:
+  - Remove Jode support entirely
+  - Preliminary generics, enum, annotation etc support
+  - Generics, specifically:
+    - Need to be aware of the containing class(es) when doing read_japi_item. How?
+    - By putting stuff in the $japi hash. BUT WHAT?
+    - A single $clitem which is the japi entry of the single containing class. When
+      a class(/interface/etc) is found, replace $clitem with this one.
+    - Also add the $clitem to the item hash. This provides a chain to find the
+      container of an inner class. Make sure to store the previous $clitem for items
+      that represent an inner class of that item, but not for brand new classes.
+    - We can probably stop storing $oclitem and $nclitem in compare_japis
+    - And stop passing it to output_error
+    - $item->{member} should be the sanitized string, for compatibility
+    - $item->{gmember} should be the real, generic-aware string
+    - Sounds like what we really want is:
+      sanitize_typesig(str, item)
+      sanitize_member(item) - works on $item->{gmember}
+      sanitize_member looks for (...), splits it on comma, and calls sanitize_typesig on each part.
+      sanitize_typesig makes the following changes:
+      - Removes anything between <>
+      - Replaces any @n with the nth generic parameter type
+      - Replaces any leading . with a [
+      - 
+
+- For 0.9.7:
+  - Finish generics, enum, annotation etc support
+    - Array and annotation-typed annotation method defaults
+    - Annotations on packages, types and members
+    - Constraints on generic types
+    - Investigate improving representations eg of inner classes of generic types
+    - Try to be less naive about reporting every difference as an error
+- For 1.0: 
+  - Fix any bugs reported in 0.9.7.
+  - Do 1.0.x releases for other (hopefully minor) bugfixes.
+- For 1.1.1:
+  - Add "link to Sun's documentation" capability somehow.
+    - Use environment variables
+    - JAPI_DOC_LINK=http://java.sun.com/j2se/1.4/docs/api
+    - JAPI_DOC_FORMAT=1.1 or 1.0 (1.2 and up format assumed if missing)
+    - How to deal with methods inherited from superclass? In general such
+      methods shouldn't cause problems - except when overridden in the free
+      API but not in the original.
+    - First pass: don't even try to link to the method, just the class or the
+      package summary.
+  - Add capability to specify args to japize in a file (eg .japispec)
+  - Add more filtering options to japilist: -s superclass, -t throwabletype,
+    -f (public|protected|abstract|concrete|static|instance|final|nonfinal|
+        constant|variable|deprecated|undeprecated)
+  - Document japilist (both help messages and webpage documentation).
+  - Document japifix (-? option, webpage documentation).
+  - Convert all non-"a-zA-Z0-9_$" characters in class and method names into
+    "\uXXXX". Do the same with characters in constant strings, only use a wider
+    range (eg everything in the ascii charset from space to the end). Update
+    the spec to document the fact that this is now truly supported, rather
+    than just theoretically specified. 
+  - Find out how to take a \uXXXX escape and turn it into an &#xxxx; HTML one.
+  - This is a 1.2.0 Release Candidate.
+- For 1.2.0:
+  - Any bug fixes reported against 1.1.1.

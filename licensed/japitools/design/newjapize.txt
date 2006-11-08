@@ -1,0 +1,48 @@
+To identify the classes to process, work as follows:
+
+- Allow two forms of packagepath to be specified on the commandline: "a.b,C" and
+  "a.b.c,". The first is a class C in package a.b and the second is a package
+  a.b.c. If the user specifies a.b.c with no disambiguation, both forms will
+  be added, as if the user had specified "+a.b,c +a.b.c,". Note that comma
+  sorts before period, and both sort before any alphanumerics.
+  - I think we can also provide a way for the user to specify what type of roots
+    these are without knowing this obscure syntax. For any ambiguous packagepath
+    (ie one not explicitly identified as either ",X" or "x,"):
+    - "packages" => It's a package.
+    - "classes" => It's a class.
+    - "apis" => Make no guesses, include both possibilities. Guaranteed to get
+      it right but potentially at the cost of performance.
+    - "byname" => If the first letter after the last "." is uppercase, treat it
+      as a class, otherwise as a package. This heuristic will work most of the
+      time but not for, say, +org.omg.CORBA which would require a trailing ",".
+    - "explicitly" => An ambiguous packagepath is an error.
+- Sort all "plus" items - these will be our "roots".
+- Identify whether java.lang.Object falls within the scope of things to process.
+  If it does, process it as a class root and then add "-java.lang,Object" to
+  the list of exclusions.
+- Iteratively process each root in order. After processing each root, skip any
+  following roots that lie between "root" and "root/". Since slash sorts after
+  comma and period but before alphanumerics, this will exclude any subpackages
+  and classes but not anything like a.b.CD.
+
+- "Process" for a class root is defined as follows: Scan all zips and
+  directories for this class, and if it's found, Japize it. Optimization: on
+  the first scan through, compare all classes to all class roots and remove
+  class roots that aren't found. Also set a flag to indicate that this has been
+  done - then you can skip the scan for all subsequent class roots.
+- "Process" for a package root is a recursive function defined as follows:
+  - Scan all zips and directories for (a) classes in this package directly, and
+    (b) immediate subpackages of this package. Store everything that is found.
+  - Sort and then iterate over the items found in (a):
+    - Skip the class if there is an exclusion ("-" form) for this class
+      specified on the commandline.
+    - Otherwise Japize the class.
+  - Sort and then iterate over the items found in (b):
+    - If there is an exclusion for this subpackage found on the commandline,
+      skip it, but also do the following:
+      - Using SortedSet.subSet(), identify if there are any global roots that
+        lie between "excludedpkg" and "excludedpkg/". If there are, process
+        those in order using the appropriate process method for the type.
+    - If the package is not excluded, process it recursively using this
+      process method.
+

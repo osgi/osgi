@@ -1,0 +1,329 @@
+To handle generics we need a more unified/flexible way of dealing with types in general.
+
+Today we have the following situation:
+
+interface ClassWrapper extends Wrapper {
+  ...
+  ClassWrapper getSuperclass();
+  ClassWrapper[] getInterfaces();
+  ...
+}
+interface FieldWrapper extends Wrapper, Comparable {
+  ...
+  String getType();
+  ...
+  ClassWrapper getDeclaringClass();
+}
+interface CallWrapper extends Wrapper, Comparable {
+  String[] getParameterTypes();
+  String[] getExceptionTypes();
+  ...
+  String getReturnType();
+  ClassWrapper getDeclaringClass();
+  ...
+}
+
+And who knows exactly what format the string returns from getType(), getParameterType(), getExceptionTypes() and getReturnType() are
+actually in?
+
+I propose the following:
+
+interface Type {
+  String getTypeSig();
+}
+
+class PrimitiveType implements Type {
+}
+class ArrayType implements Type {
+}
+class TypeParam implements Type {
+}
+interface ClassWrapper implements Type {
+}
+
+There's still an issue as to exactly what the role of ClassWrapper is, though, because it's currently fulfilling two roles.
+ClassWrapper is used for both List and Collection in the context of List<T> implements Collection<T>. There's a key difference
+in what information is needed for the two halves of that statement, as is clear by how they'll show up in the japi file:
+
+interface<Ljava/lang/Object;>*java.util.Collection<@0>
+
+In other words, in the case of List we need to know the type *parameters*, but in the case of Collection we need to know the type *arguments* - the *values* of the parameters *in this particular case*.
+
+The ClassWrapper of List is being used to represent the generic, un-instantiated List type. The ClassWrapper of Collection is being used to represent a particular instantiation of the Collection type. The situations are different and really should be recognized as such, despite the fact that most of the same information is needed.
+
+We do this by having a hierarchy coming down from Type which knows how to represent instantiated types, potentially with arguments. It's possible to get from a ClassType to the associated ClassWrapper but to do the other direction you have to supply the type arguments, or say that there aren't any.
+
+We should change the japi file spec so that it understands the inheritance from containing classes because it makes the japi file clearer and represents fairyland better, which is the whole point really.
+
+
+Interesting issue. This is a setup that could not occur under 1.4.
+
+class Super<T> {
+  String foo(T t);
+}
+class Sub extends Super<T> {
+  Object foo(Object o);
+  String foo(String s);
+}
+
+Sub has these methods:
+String foo(Object=String) inherited (Foo=Bar notation intended to convey that the VM thinks it's object but the compiler knows it's String)
+String foo(Object) BRIDGE (inserted by the compiler, calls foo((String) o))
+String foo(String) (declared)
+Object foo(Object) (declared)
+
+We've established that we want to ignore bridge methods.
+
+That leaves:
+
+p,Sub!foo(Ljava/lang/Object;=Ljava/lang/String;) Pcinu Ljava/lang/String;
+p,Sub!foo(Ljava/lang/Object;) Pcinu Ljava/lang/Object;
+p,Sub!foo(Ljava/lang/String;) Pcinu Ljava/lang/String;
+
+This situation can't happen in 1.4 so it's okay that the first two would be contradictory (since 1.4 ignores the bit after =).
+
+However if we have a class that *doesn't* declare the Object foo(Object) method, the situation is murkier.
+
+p,Sub!foo(Ljava/lang/Object;=Ljava/lang/String;) Pcinu Ljava/lang/String;
+p,Sub!foo(Ljava/lang/String;) Pcinu Ljava/lang/String;
+
+1.5 says these are clearly, trivially, the same method. 1.4 says equally clearly and trivially that they're not.
+
+In other words, if the previous non-generic version had:
+
+p,Sub!foo(Ljava/lang/Object;) Pcinu Ljava/lang/String;
+
+Under 1.4 rules that's totally compatible. Under 1.5 rules it's not. On the other hand, if the non-generic version had:
+
+p,Sub!foo(Ljava/lang/String;) Pcinu Ljava/lang/String;
+
+Under 1.4 rules that's *incompatible* but under 1.5 rules it's compatible.
+
+Seems that the key is to use 1.5 rules when they apply on the "orig" half of the API - that is, the one we're comparing against. If we represent the method as p,Sub!foo(Ljava/lang/Object;=Ljava/lang/String;) and *sort* it as if it were java/lang/String, then we can say that such a method is completely compatible with a method that's p,Sub!foo(Ljava/lang/String;), and not compatible with a method that's Ljava/lang/Object. Do we need to store Object here at all or do we just need to recognize that it's only "conceptually" String and that 1.5 rules need to be applied to it?
+
+Then the trick is to notice when it's appropriate to insert the "=". Previously once we found foo(String) in Sub we would use it unmodified and ignore any identical method on Super. Now we need to notice when we find the identical method on Super that we need to annotate the Sub method as being Object=String instead of just String.
+
+
+Consider the 1.4a, 1.4b and 1.5 versions of Super and Sub. The 1.4a version has:
+p,Sub!foo(Ljava/lang/String;) Pcinu Ljava/lang/String;
+1.4b has:
+p,Sub!foo(Ljava/lang/Object;) Pcinu Ljava/lang/String;
+and 1.5 has:
+p,Sub!foo(Ljava/lang/Object;=Ljava/lang/String;) Pcinu Ljava/lang/String;
+
+japicompat v15.japi.gz v14a.japi.gz should say nothing. That's completely compatible by *1.5* rules, and since the 1.5 line is on the RHS, that's the rules that apply.
+japicompat v15.japi.gz v14b.japi.gz should flag an error, p.Sub.foo(String) missing in v14b.
+japicompat v14a.japi.gz v15.japi.gz should flag an error, p.Sub.foo(String) missing in v15, because that comparison should be done by 1.4 rules, and 1.4 rules say that v15 contains foo(Object).
+japicompat v14b.japi.gz v15.japi.gz should *not* flag an error, because by 1.4 rules foo(Object) is required, and that's what exists.
+
+Solution: 1.5 japi includes the method twice, once sorted each way.
+
+p,Sub!foo(Ljava/lang/Object;}Ljava/lang/String;) Pcinu Ljava/lang/String;
+p,Sub!foo(Ljava/lang/RuntimeException;) (just to show the sorting behavior...)
+p,Sub!foo(Ljava/lang/String;{Ljava/lang/Object;) Pcinu Ljava/lang/String;
+
+The first sorts as object, the second as string.
+
+When japicompat sees the { or } characters in the "orig" part of a comparison it knows that it should use 1.5 rules, so it ignores the } version and treats the { version as if it just said "string". 
+When it's in the "new" part of a comparison and an equivalent method exists in the "orig" part without the "}", it should use that one and treat it as if it were Object.
+
+Alternatively just annotate the method like this:
+
+p,Sub!foo(Ljava/lang/Object;)- Pcinu Ljava/lang/String;
+p,Sub!foo(Ljava/lang/String;)+ Pcinu Ljava/lang/String;
+
+The "-" says "this is a 1.4 representation of a 1.5 method, only consider it when comparing against 1.4-style methods".
+The "+" says "this is a 1.5 representation of a 1.5 method, ignore it when comparing against 1.4-style methods".
+
+It's legal to have this:
+p,Sub!foo(Ljava/lang/Object;)- Pcinu Ljava/lang/String;
+p,Sub!foo(Ljava/lang/Object;) Pcinu V
+p,Sub!foo(Ljava/lang/String;)+ Pcinu Ljava/lang/String;
+
+but these combinations are illegal:
+p,Sub!foo(Ljava/lang/Object;)- Pcinu Ljava/lang/String;
+p,Sub!foo(Ljava/lang/Object;) Pcinu Ljava/lang/String;
+p,Sub!foo(Ljava/lang/String;)+ Pcinu Ljava/lang/String;
+
+p,Sub!foo(Ljava/lang/Object;)- Pcinu Ljava/lang/String;
+p,Sub!foo(Ljava/lang/String;) Pcinu V
+p,Sub!foo(Ljava/lang/String;)+ Pcinu Ljava/lang/String;
+
+That is to say, clashes between a "-"-annotated method and a non-annotated one are legal as long as the return type differs, but clashes between a "+"-annotated method and a non-annotated one are always illegal.
+
+The "-"-annotated method should represent the 1.4 return type and the "+"-annotated method the 1.5 return type. That is:
+
+class Super {
+  Object getFoo();
+}
+class Sub {
+  String getFoo();
+}
+
+gives:
+p,Sub!getFoo()- Pcinu Ljava/lang/Object;
+p,Sub!getFoo()+ Pcinu Ljava/lang/String;
+
+This means that clashes between a "+" and "-" method are also ok as long as the return type is different.
+
+The "+" and "-" entries should appear only if they are "essentially" different.
+
+class Super<T> {
+  T get();
+}
+p,Super! Pcsnu class<Ljava/lang/Object>
+p,Super!getFoo() Pcinu @0
+*not*
+p,Super! Pcsnu class<Ljava/lang/Object>
+p,Super!getFoo()- Pcinu Ljava/lang/Object;
+p,Super!getFoo()+ Pcinu @0
+
+Reason is that simple generic-removal is sufficient to get from one to the other.
+
+However,
+class Sub<T extends String> extends Super<T> {
+}
+
+p,Sub! Pcsnu class<Ljava/lang/String>
+p,Sub!getFoo()- Pcinu Ljava/lang/Object;
+p,Sub!getFoo()+ Pcinu @0
+
+because @0 resolves to String.
+
+
+
+TODO:
+* Fix bugs that show up today in the results:
+  * Eliminate interface methods that are also in Object (GSSCredential!hashCode is the test)
+  * Be more intelligent about the tostring-independent floats and doubles bit when deciding what errors to ignore
+* Generic support:
+  * Bind type parameters correctly in superclasses and superinterfaces
+  * Make Japize, not ClassFile, responsible for recursing up through superclasses and superinterfaces to find methods and fields.
+    * Trick is we need to be able to store the result of binding the parameters etc of the method and type of the field.
+  * Start testing japicompat between these japis
+  * Add a flag to toggle between 1.5-style and 1.4-style comparison because simply looking at the method isn't sufficient - Sub should still be equally compatible even if Super doesn't have a foo method.
+- Update the japi spec to discuss + and - annotated methods and other changes, like the fact that inner classes are considered to automatically inherit the type params of the container
+- Getting japicompat to handle prettifying generic types and handle them in bounds, various problems:
+  - Parsing nested <> is tough, can we actually avoid it?
+  - Basic prettification of either a single gen type or a list of them
+    - Superclasses
+    - Interfaces
+    - Exceptions
+    - Method parameters
+    - Return types and field types
+    - The problem of a list of them is almost idential to the problem of a single one because a single one can have
+      a list of parameter types Ljava/util/Map<Ljava/lang/String;,Ljava/util/List<Ljava/lang/Integer;>;>;
+      s/L([^;]+);/$1/g gives:
+      The L has to be at the beginning or after a , or <.
+      That works if you stick a , at the beginning and remove it afterwards...
+      java/util/Map<Ljava/lang/String ,java/util/List<Ljava/lang/Integer>;>;
+      again gives
+      java/util/Map<java/lang/String,java/util/List<Ljava/lang/Integer>>;
+      java/util/Map<java/lang/String,java/util/ist<Ljava/lang/Integer>> Ooops!
+      Even the trick we're using now doesn't work because we also want to handle lists of the things.
+
+  * Recognizing the end of a <>-contained list that may include such things
+  * De-generifying backrefs
+
+
+- Wildcard types and multiple bounds:
+
+Foo<T extends Serializable & Comparable>
+
+Foo! Pcsnu class<Ljava/io/Serializable;&Ljava/lang/Comparable;>
+
+? extends T becomes {@0
+? super T becomes }@0
+
+? is naturally {Ljava/lang/Object; but of course should be specialcased.
+
+You can't specify both extends and super on the same wildcard so no syntax is needed for that.
+
+In the Signature attribute it's + and - instead of { and }, should we adopt this?
+
+
+Annotationotes:
+
+An annotation is represented as [pkg.Type|name=value|name=value]
+
+In the japi file they appear here:
+
+pkg,Foo!#member Pcsfu[pkg.Type][pkg.Type2|name=value] I
+
+methods of the annotation sort alphabetically
+
+annotation types sort alphabetically by FQCN
+
+
+method parameter annotations go inline with the parameters they refer to:
+
+pkg,Foo!method([pkg.Type]I,[pkg.Type][pkg.Type2]Ljava/lang/Object;)
+
+Value - legal types are:
+primitive
+string
+class
+annotation
+array of legal type
+
+Encoded means s-\-\\-, s-(newline)-\n-, s-[^0-9a-zA-Z]-\u(4-digit-hex-unicode-number)-
+
+We update the encoding spec to say that constant strings must always be encoded this way (and actually implement it, unlike the old encoding spec).
+
+Primitives: lettervalue eg I3, F0.1\u002f34a2321c  (accounts for characters ZCBSIJFD)
+String: svalue eg sHello\u0020World
+Class: Ljava\u002flang\u002fString\u003b
+Annotation: A\u005bpkg.Type\u007c...\u005b
+Array: \u005bsvalue\u007cs\u007csvalue\u007c\u007csvalue\u005d means {"value", "", "value", null, "value"}
+
+
+Then we do:
+primitive, string are represented just like the constant format. Only special character possible is "/" in floats and doubles, plus \.
+class is represented in typesig representation and encoded. Special characters would be /;<>, but since they're encoded they're not.
+Annotation is represented as [pkg.Type|name=value] etc but encoded. Special characters would be []|= but since they're encoded they're not.
+Array is represented as [value|value|value|value] but encoded. Special characters would be []| but since they're encoded they're not.
+Problem with array rep: how to distinguish null from empty string? Maybe say that string, always, is represented as [value]?
+
+[[value]|[value]|[]||[value]] represents {"value", "value", "", null, "value"}
+
+
+
+This means that annotations as a whole can only be [\[\]\|A-Za-z0-9\/\=\.\$], specifically, an annotation is:
+
+/\[([A-Za-z0-9\.\$\\]+)(\|[A-Za-z0-9\\]+=[A-Za-z0-9\/\\]*)*\]/ with $1 as the type and $2 matching repeatedly as the name=value pair.
+
+
+Todo:
+- Go through all the places that say "OPENQ" and figure out what
+  the right thing to do is.
+- Handle multiple "-" annotated methods with different return values
+  (can't happen yet though)
+- -P option which suppresses "missing package" errors and also omits the
+  content of those packages from consideration for percentages etc.
+- Compare error-by-error the cvs output against the "production" output
+  and make sure all differences are for known and expected reasons.
+- Annotation support.
+- Testing system:
+  - test/
+    - orig/
+      - japitest/
+        - TnnnName.java
+        - TnnnName_Helper.java
+    - new/
+      - japitest/
+    - ignore/
+      - japitest/
+    - expected/
+      TnnnName_orig.japi
+      TnnnName_new.japi
+      TnnnName_ignore.japi
+      TnnnName.txt
+    - results/
+  - perl script that scans orig, identifies all the TnnnName strings, and loops over them doing:
+    - cd orig; javac japitest/TnnnName.java japitest/TnnnName_*.java
+    - japize unzip as results/TnnnName_orig classes japitest (classpath) +japitest.TnnnName +japitest.TnnnName_Helper ...
+    - if TnnnName.java exists in new or ignore, do the same thing
+    - if it existed in new, japicompat -tvo results/TnnnName.txt [-i TnnnName_ignore.japi] TnnnName_orig.japi TnnnName_new.japi
+    - for each of TnnnName_orig.japi, TnnnName_new.japi, TnnnName_ignore.japi, TnnnName.txt:
+      - diff expected/$n results/$n
+      - except that the date-dependant bits need to be ignored, figure out a solution to this

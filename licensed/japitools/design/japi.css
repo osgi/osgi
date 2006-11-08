@@ -1,0 +1,45 @@
+/* Percentage goodness colors */
+.ok-100pct { background-color: #00cc00 }
+.ok-90pct { background-color: #99dd00 }
+.ok-80pct { background-color: #dddd00 }
+.ok-70pct { background-color: #ddc100 }
+.ok-60pct { background-color: #ddaa00 }
+.ok-50pct { background-color: #d39900 }
+.ok-40pct { background-color: #cc8800 }
+.ok-30pct { background-color: #cc7700 }
+.ok-20pct { background-color: #cc6600 }
+.ok-10pct { background-color: #cc5500 }
+.ok-0pct { background-color: #cc4400 }
+.ok-none { background-color: #cc0000 }
+.ok-moot { color: #555555 }
+
+/* Error category colors */
+.good, .good a { color: #00cc00 }
+.good-bar { background-color: #00cc00 }
+
+.minor, .minor a { color: #009999 }
+.minor-bar { background-color: #009999 }
+
+.bad, .bad a { color: #0000ff }
+.bad-bar { background-color: #0000ff }
+
+.missing, .missing a { color: #555555 }
+.missing-bar { background-color: #999999 }
+
+.abs-add, .abs-add a { color: #8800aa }
+.abs-add-bar { background-color: #8800aa }
+
+/* Layout properties */
+th { font-size: 12px; text-align: right }
+.colhead th { text-align: center }
+.alternating-1 { background-color: #ddddff }
+.alternating-2 { background-color: #eeeeee }
+.datestamp { text-align: right; color: #bbbbbb; margin-top: 3px; margin-bottom: 3px; font-size: 80%}
+a { color: black; text-decoration: none }
+a:hover { text-decoration: underline }
+.ehead { margin-bottom: 2px; padding-bottom: 2px }
+.phead { background-color: #ddddff }
+.sp { font-size: 0 }
+.notify { color: #440000; margin-top: 5px; margin-bottom: 5px; font-size: 90%}
+.ok-moot a { color: #555555 }
+body, table { font-family: sans-serif }

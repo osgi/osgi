@@ -1,0 +1,108 @@
+For the bar chart in the HTML output, we need to get a the percentages to all be
+integers and yet still all add up to 100% exactly. We also want anything nonzero
+to show up at least one pixel. Note that if there were more than 100 categories
+these constraints could not be met, and that even with less than 100 there's
+potential for distortion of the results. For example, consider the following
+two sets of "real" percentages:
+
+98.1, 1.9, 0, 0
+99.6, 0.2, 0.1, 0.1
+
+The first would, quite reasonably, be represented as 98, 2, 0, 0. But to meet
+all the constraints, the second would have to be represented as 97, 1, 1, 1. So
+although the first value is 1.5% higher in the second set of figures, it renders
+as 1% lower. Although this is annoying, it's considered worth it because the
+other constraints are so useful, and the inaccuracy is bounded by the number of
+values minus 1, so 3% in this example. In reality we're dealing with three
+numbers, so the worst inaccuracy in any figure would be 2%.
+
+Here's an algorithm we can use to get this behavior:
+0) Identify which, if any, nonzero values are less than 1% of the total.
+   Calculate what you would have to increase them (and the total) to to make
+   them at least 1%. Do it. To do this:
+   - Solve the simultaneous equation 100n = mn + t, where m is the (known)
+     number of values to be increased, n is the desired solution, and t is the
+     total of all the other values. The solution goes like (100-m)n = t =>
+     n = t/(100-m). We can get this all in integers by multiplying *all* the
+     values involved by 100-m, and setting the values-to-be-increased to t.
+   - Note that this process may in theory adjust other values to be below 1%
+     that previously weren't. In order to compensate for this, instead of just
+     checking whether this value is less than 1% of the total, keep a running
+     total of t and m and check whether the *adjusted* value is less than 1%,
+     that is, whether value*(100-m) < t. Since m starts off as zero and t starts
+     off as total, this degenerates to the right thing on the first pass. Repeat
+     this pass until m doesn't get any larger over an entire iteration.
+   - 
+     # Start off assuming nothing's less than 1%, and iterate until we find
+     # that we're right. m is the number of adjustable (<1%) items, and t is
+     # the total of the non-adjustable items. Lastm keeps track of what we
+     # thought m was last time round. We loop until we do an entire pass without
+     # m ending up different from lastm. Lastm starts off as -1 just so that the
+     # m == lastm test fails first time around.
+     t = total;
+     m = 0;
+     lastm = -1;
+     until (m == lastm) {
+       lastm = m;
+
+       # Loop over the items that haven't already been marked adjustable. For
+       # each such item, determine whether it needs to be adjustable based on
+       # the current values of m and t. If it does, mark it as adjustable and
+       # update m and t accordingly.
+       foreach item {
+         if (! adjustable(item)) {
+           if (value(item) * (100-m) < t) {
+             t -= value;
+             m++;
+             adjustable(item) = true;
+           }
+         }
+       }
+     }
+
+     # Having calculated the final values of m and t, and also knowing exactly
+     # which items are adjustable, we can now calculate the adjusted totals.
+     # Non-adjustable items are scaled up by a constant factor; adjustable
+     # items are all set to exactly 1% of the scaled total.
+     adjtotal = 100 * t;
+     foreach item {
+       if (adjustable(item)) {
+         adjvalue(item) = t;
+       } else {
+         adjvalue(item) = value(item) * (100-m);
+       }
+     }
+       
+1) Calculate the actual percentages (based on the adjusted numbers from step 0)
+   to the best precision possible.
+2) Round down to integers, but store the difference between the real and rounded
+   value for each item. Assert that no nonzero real value should ever round to
+   zero, because of step 0.
+3) Sum the rounded values to find out how close we are to 100% (we must be <=
+   100% because we rounded everything down).
+   
+   # Calculate the percentage rounded *down* to the nearest integer, and also
+   # calculate the magnitude of the difference between the integer percentage
+   # and the actual percentage. This is still all done in integer math...
+   # While we're at it, sum the percentages so we can see how close we got,
+   # later.
+   totalpct = 0;
+   foreach item {
+     percent(item) = (adjvalue(item) * 100) intdiv adjtotal;
+     diff(item) = adjvalue(item) * 100 - percent(item) * adjtotal;
+     totalpct += percent(item);
+   }
+4) Loop until we reach 100% doing the following:
+     Pick the item with the largest stored difference, add 1 to its rounded
+     figure, and set its difference to zero.
+
+   # Find the items with the largest differences, and adjust them upwards, until
+   # 100% is reached. No need to reset the difference since we're looping
+   # through the items and will never repeat: it's easy to show that the upper
+   # bound on the number of upwards adjustments needed is smaller than the
+   # number of items.
+   foreach (item sorted by diff(item), descending) {
+     if (totalpct == 100) return;
+     percent(item)++;
+     totalpct++;
+   }

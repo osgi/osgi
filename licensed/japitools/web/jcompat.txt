@@ -1,0 +1,63 @@
+Classes:
+- ILLEGAL: more access->less access (eg public->protected)
+- LEGAL: less access->more access (eg protected->public)
+- ILLEGAL: nonabstract->abstract
+- LEGAL: abstract->nonabstract
+- ILLEGAL: nonfinal->final
+- LEGAL: final->nonfinal
+- ILLEGAL: removing a class from the set of superclasses or an interface from the set of superinterfaces
+- LEGAL: Adding interfaces or superclasses; reordering superclasses
+  - BUT: Note that going from A extends B extends C to A extends C extends B
+         breaks binary compatibility for B, even though it doesn't for A.
+
+Fields:
+- ILLEGAL: more access->less access (eg public->protected)
+- LEGAL: less access->more access (eg protected->public)
+- ILLEGAL: deleting public/protected fields
+- LEGAL: Adding fields
+- ILLEGAL: nonfinal->final
+- LEGAL: final->nonfinal
+- ILLEGAL: primitive constant (static/final/compile time constant) -> non-primitive constant or different value.
+- LEGAL: non-primitive constant to primitive constant.
+- ILLEGAL: static->nonstatic
+- ILLEGAL: nonstatic->static
+- LEGAL: transient->nontransient (japitools does not address Serialization compatibility)
+- LEGAL: nontransient->transient (japitools does not address Serialization compatibility)
+
+Methods:
+- ILLEGAL: more access->less access (eg public->protected)
+- LEGAL: less access->more access (eg protected->public)
+- ILLEGAL: deleting public/protected methods
+- LEGAL: Adding methods
+- Changing the types of parameters or the result type is equivalent to deleting one method and adding another.
+- LEGAL: abstract->nonabstract
+- ILLEGAL: nonabstract->abstract
+- ILLEGAL: adding an abstract method (the JLS does NOT specify this, but it's clearly true)
+  - BUT: If the class in question has no public or protected constructors it cannot be inherited from,
+         so it's okay to add to it.
+- ILLEGAL: nonfinal->final
+- LEGAL: final->nonfinal
+- LEGAL: nonfinal->final on a static method
+- ILLEGAL: static->nonstatic
+- ILLEGAL: nonstatic->static
+- ILLEGAL: changing the throws clause (the JLS does NOT specify this; see my rationale on the japitools homepage for why it should)
+- LEGAL: adding new overloads to methods.
+- LEGAL: adding new overrides to methods.
+
+Constructors:
+- ILLEGAL: more access->less access (eg public->protected)
+- LEGAL: less access->more access (eg protected->public)
+- ILLEGAL: deleting public/protected constructors
+- LEGAL: Adding constructors
+- Changing the types of parameters is equivalent to deleting one constructor and adding another.
+- ILLEGAL: Adding constructors such that the default constructor disappears, without replacing it.
+- ILLEGAL: changing the throws clause (the JLS does NOT specify this; see my rationale on the japitools homepage for why it should)
+- LEGAL: adding new overloads to constructors.
+
+Interfaces:
+- ILLEGAL: more access->less access (eg public->protected)
+- LEGAL: less access->more access (eg protected->public)
+- ILLEGAL: removing any interface from being a superinterface of a class or interface.
+- LEGAL: any change to the hierarchy that does not cause the above.
+- LEGAL: adding a field to an interface
+- ILLEGAL: Adding a method to an interface (the JLS does NOT specify this, but it's clearly true)

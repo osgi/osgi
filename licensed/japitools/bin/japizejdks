@@ -1,0 +1,43 @@
+#!/bin/bash
+# This is very obviously tuned to run on my system, but I'm including it in
+# the japitools tarball because it's useful for showing exactly how to generate
+# japi files for each JDK version. Feel free to modify it to take the paths etc
+# as arguments so people other than me can run it directly...
+
+cd /home/sballard/public_html/japi/htmlout
+
+JAPIDIR=/home/sballard/japi
+
+JDK15DIR=/usr/lib/j2sdk1.5-sun
+JDK14DIR=/usr/local/j2sdk1.4.1
+JDK13DIR=/usr/lib/j2se/1.3
+JDK12DIR=/usr/local/jdk1.2.2
+JDK11DIR=/usr/lib/jdk/1.1
+JDK10DIR=/usr/local/jdk1.0
+
+JDK15ARGS="+java +javax +org -java.awt.dnd.peer -java.awt.peer -org.apache -org.w3c.dom.css -org.w3c.dom.events -org.w3c.dom.html -org.w3c.dom.stylesheets -org.w3c.dom.traversal -org.w3c.dom.views -java.text.resources -org.omg.stub.javax -org.omg.dom.ranges"
+JDK14ARGS="+java +javax +org -java.awt.dnd.peer -java.awt.peer -org.apache -org.w3c.dom.css -org.w3c.dom.events -org.w3c.dom.html -org.w3c.dom.stylesheets -org.w3c.dom.traversal -org.w3c.dom.views -java.text.resources"
+JDK13ARGS="$JDK14ARGS"
+JDK12ARGS="$JDK13ARGS"
+JDK11ARGS="+java -java.awt.peer -java.text.resources"
+JDK10ARGS="+java -java.lang,UNIXProcess"
+
+japize=$JAPIDIR/bin/japize
+
+for n in jdk10 jdk11 jdk12 jdk13 jdk14 jdk15; do mv $n.japi.gz $n.bak.japi.gz; done
+
+echo -n "Japizing jdk15"
+$japize as jdk15 packages $JDK15DIR/jre/lib/{rt,jce,jsse}.jar $JDK15ARGS
+echo -n "Japizing jdk14"
+$japize as jdk14 packages $JDK14DIR/jre/lib/{rt,jce,jsse}.jar $JDK14ARGS
+echo -n "Japizing jdk13"
+$japize as jdk13 packages $JDK13DIR/jre/lib/rt.jar $JDK13ARGS
+echo -n "Japizing jdk12"
+$japize as jdk12 packages $JDK12DIR/jre/lib/rt.jar $JDK12ARGS
+echo -n "Japizing jdk11"
+$japize as jdk11 packages $JDK11DIR/lib/classes.zip $JDK11ARGS
+echo -n "Japizing jdk10"
+$japize as jdk10 packages $JDK10DIR/lib/classes.zip $JDK10ARGS
+echo "Finished japizing."
+
+tar cvf ../jdkjapis.tar jdk1?.japi.gz

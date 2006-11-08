@@ -1,0 +1,81 @@
+#!/usr/bin/perl
+###############################################################################
+# japilist - List the contents of japi files.
+# Copyright (C) 2000,2002,2003,2004  Stuart Ballard <stuart.a.ballard@gmail.com>
+# 
+# This program is free software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public License
+# as published by the Free Software Foundation; either version 2
+# of the License, or (at your option) any later version.
+# 
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+# 
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+###############################################################################
+
+
+use Getopt::Std;
+
+getopts("apcmM:n:", \%opts);
+
+$show_pkgs = 1 if $opts{a} || $opts{p};
+$show_classes = 1 if $opts{a} || $opts{c};
+$show_fields = 1 if $opts{a} || $opts{m} || $opts{M} =~ /f/;
+$show_methods = 1 if $opts{a} || $opts{m} || $opts{M} =~ /m/;
+$show_constr = 1 if $opts{a} || $opts{m} || $opts{M} =~ /c/;
+
+$show_pkgs = 1 unless $show_classes||$show_fields||$show_methods||$show_constr;
+
+$filter_name = $opts{n};
+
+foreach (@ARGV) {
+  if (/\.gz$/) {
+    open(IN, "-|") || exec 'gzip', '-dc', $_;
+  } else {
+    open IN, $_;
+  }
+  my $hdr = <IN>;
+  chomp $hdr;
+  my $ver = $1 if $hdr =~ /^\%\%japi ([^ ]*)(?: .*)?$/;
+  $ver = "0.8 or earlier (or\nnot a japi file at all)" unless $ver;
+  if ($ver ne "0.9.7") {
+    print STDERR <<EOF;
+$_ is a japi file of version $ver.
+This version of japilist only knows how to deal with version 0.9.7 japis. Use
+japifix if your japi file is too old, or get a new version of japilist if it
+is too new.
+EOF
+    exit(1);
+  }
+  print "\nIn $_:\n" if $#ARGV;
+  while(<IN>) {
+    if (/^\+{0,2}([^ ]+),([^ ]+)!([^ ]*) /) {
+      my ($pkg, $class, $member) = ($1, $2, $3);
+      if ($filter_name) {
+        next unless $pkg eq $filter_name || "$pkg.$class" eq $filter_name;
+      }
+      if ($show_pkgs && $pkg ne $lastpkg) {
+        $lastpkg = $pkg;
+        print "P $pkg\n";
+      }
+      if ($show_classes && "$pkg.$class" ne $lastclass) {
+        $lastclass = "$pkg.$class";
+        print "C $pkg.$class\n";
+      }
+      if ($show_fields && $member =~ /^#(.*)$/) {
+        print "f $pkg.$class.$1\n";
+      } elsif ($show_constr && $member =~ /^(\(.*\))$/) {
+        print "c $pkg.$class$1\n";
+      } elsif ($show_methods && $member =~ /^([^(]+\(.*\))$/) {
+        print "m $pkg.$class.$1\n";
+      }
+    }
+  }
+  close IN;
+  undef $pkgs;
+}

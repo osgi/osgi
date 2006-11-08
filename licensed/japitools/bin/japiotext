@@ -1,0 +1,260 @@
+#!/usr/bin/perl -w
+###############################################################################
+# japiotext - Convert japicompat output to readable plain text format.
+# Copyright (C) 2000,2002,2003,2004,2005  Stuart Ballard <stuart.a.ballard@gmail.com>
+# 
+# This program is free software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public License
+# as published by the Free Software Foundation; either version 2
+# of the License, or (at your option) any later version.
+# 
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+# 
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+###############################################################################
+
+## GLOBAL VARIABLES ##
+
+# Some global variables used for displaying stuff.
+$japiover = "0.9.2";
+@categories = ();
+@packages = ();
+# Would be nice not to hardcode this - maybe later...
+@things = ("package", "class", "interface", "enum", "annotation", "field", "method", "constructor");
+
+$javatypes = {Z=>'boolean', B=>'byte', C=>'char', D=>'double', F=>'float',
+                  I=>'int', J=>'long', S=>'short', V=>'void'};
+
+sub readable_item($);
+sub sig2type($);
+sub readable_member($);
+
+my $verline = <>;
+chomp $verline;
+($filever, $origfile, $newfile) = ($1, $2, $3)
+    if $verline =~ /^%\%japio ([^ ]+) ([^ ]+) ([^ ]+)(?: .*)?$/;
+unless (defined $filever) {
+  print STDERR <<EOF;
+This does not look like a japio file.
+EOF
+  exit 1;
+}
+if ($filever ne $japiover) {
+  print STDERR <<EOF;
+This japio file claims to be version $filever, but this version of japiotext
+only supports version $japiover.
+EOF
+  exit 1;
+}
+
+($orig,$origdate) = ($1, $2)
+    if $origfile =~ /^([^@]*?)(?:\.japi(?:\.gz)?)?(?:@(.*))?$/;
+($new, $newdate) = ($1, $2)
+    if $newfile =~ /^([^@]*?)(?:\.japi(?:\.gz)?)?(?:@(.*))?$/;
+$origdate =~ s/_/ /g if $origdate;
+$newdate =~ s/_/ /g if $newdate;
+
+my $date = gmtime() . " GMT";
+
+print <<EOF;
+Results of comparison between $orig and $new
+
+Comparison run at $date
+EOF
+print "$orig API scanned at $origdate\n" if $origdate;
+print "$new API scanned at $newdate\n" if $newdate;
+
+my $alt = 1;
+while (<>) {
+  chomp;
+  if (/^notify (.*)$/) {
+    print "\n * $1\n";
+  } elsif (/^categories (.*)$/) {
+    my @bits = split / /, $1;
+    foreach my $bit (@bits) {
+      if ($bit =~ /^=?(.*)$/) {
+        my $cat = $1; $cat =~ s/_//g;
+        push @categories, $cat;
+      }
+    }
+    print "\nPackage Summary:\n";
+  } elsif (/^summary (.*)$/) {
+    die "No categories line found before summary line" unless @categories;
+    my @bits = split / /, $1;
+    my ($extra, $total, $values, $etotal, $nonmoototal) = ({}, 0, {}, 0, 0);
+    my $pkg = shift @bits;
+    foreach my $bit (@bits) {
+      my ($plus, $key, $value, $smootval, $mootval) = ($1, $2, $3, $4, $5)
+        if $bit =~ /^(\+?)([^:+]+):([0-9]+)\^([0-9]+)>([0-9]+)$/;
+      $etotal += $value - $smootval - $mootval;
+      if ($plus) {
+        $extra->{$key} = $value - $smootval - $mootval;
+      } else {
+        $total += $value - $smootval;
+        $nonmoototal += $value - $smootval - $mootval;
+        $values->{$key} = $value - $smootval - $mootval;
+        $values->{MOOT} += $mootval;
+      }
+    }
+    my $pkgn = $pkg;
+    if ($pkg eq "#") {
+      print "\n";
+      $pkgn = "Total";
+    } elsif ($pkg =~ /^#(.)(.*)$/) {
+      $pkgn = uc($1) . $2;
+      $pkgn .= "e" if $pkgn =~ /[sx]$/;
+      $pkgn .= "s";
+    } else {
+      push @packages, $pkg;
+    }
+    print "$pkgn: ";
+    my $summ = "";
+    foreach my $key (@categories) {
+      my $val;
+      if ($values->{$key}) {
+        $val = (int($values->{$key} * 10000 / $total)/100) . "%";
+      } elsif ($extra->{$key}) {
+        $val = (int($extra->{$key} * 10000 / $total)/100) . "%";
+      }
+      if ($val) {
+        $summ .= ", " if $summ;
+        $summ .= "$val $key";
+      }
+    }
+    $summ = "N/A" unless $summ;
+    print "$summ\n";
+
+  } elsif (/^error (.*)$/) {
+    my $line = $1;
+    my ($etype, $isa, $item, $sups, $rest) = split / /, $line, 5;
+    my ($pkg, $cmember) = split /,/, $item;
+    push @{$errors->{"$pkg/$etype"}}, $line;
+    $totals->{"$etype/$isa"}++;
+  } elsif (/^end japio$/) {
+    last;
+  } else {
+    die "Line not understood in japio file:\n$_";
+  }
+}
+
+print "\nError Summary:\n";
+foreach my $thing (@things) {
+  my $th = uc($1).$2 if $thing =~ /^(.)(.*)$/;
+  $th .= "e" if $th =~ /[sx]$/;
+  $th .= "s";
+  my $vals = "";
+  foreach my $cat (@categories) {
+    my $tot = $totals->{"$cat/$thing"};
+    if ($tot) {
+      $vals .= ", " if $vals;
+      $vals .= "$tot $cat";
+    }
+  }
+  print "$th: $vals.\n" if $vals;
+}
+
+print "\nErrors:\n";
+foreach my $pkg (@packages) {
+  my $anyerrors = 0;
+  foreach my $cat (@categories) {
+    $anyerrors = 1 if $errors->{"$pkg/$cat"};
+  }
+  print "\n$pkg:\n" if $anyerrors;
+  foreach my $cat (@categories) {
+    if ($errors->{"$pkg/$cat"}) {
+      my $cap = uc($1).$2 if $cat =~ /^(.)(.*)$/;
+      print "$cap\n";
+      foreach my $line (sort @{$errors->{"$pkg/$cat"}}) {
+        my ($etype, $isa, $item, $sups, $rest) = split / /, $line, 5;
+        my ($was, $is) = split /\//, $rest;
+        $was =~ s/~s/\//g; $was =~ s/~t/~/g;
+        $is =~ s/~s/\//g; $is =~ s/~t/~/g;
+        my $msg = $was ? " $was in $orig, but" : "";
+        my $ritem = readable_item($item);
+        print "$isa $ritem:$msg $is in $new\n";
+      }
+    }
+  }
+}
+
+sub readable_item($) {
+  my ($item) = @_;
+  my ($fqclass, $member) = split /!/, $item, 2;
+  my ($pkg, $class) = split /,/, $fqclass, 2;
+  my $ritem = $pkg;
+  if ($class) {
+    $class =~ s/\$/./g;
+    $ritem .= ".$class";
+  }
+  if ($member) {
+    $ritem .= "." unless $member =~ /^\(/;
+    $ritem .= readable_member($member);
+  }
+  return $ritem;
+}
+
+# Convert all the type signatures in a method name...
+sub readable_member($) {
+  my ($member) = @_;
+  if ($member =~ /^(.*)\((.*)\)$/) {
+    my ($name, $params) = ($1, $2);
+    $params = sig2typelist($params);
+    $member = "$name($params)";
+  } elsif ($member =~ /^#(.*)$/) {
+    $member = $1;
+  }
+  $member;
+}
+
+# Convert a type signature as used in a japi file to a displayable type.
+sub sig2type($) {
+  my ($sig) = @_;
+  return sig2type($1) . '[]' if $sig =~ /^\[(.*)$/;
+  return sig2type($1) . "..." if $sig =~ /^\.(.*)$/;
+  return "? super " . sig2type($1) if $sig =~ /^\}(.*)$/;
+  return "?" if $sig eq "{Ljava/lang/Object;";
+  return "? extends " . sig2type($1) if $sig =~ /^\{(.*)$/;
+  return "T" if $sig eq "\@0";
+  return "T" . ($1 + 1) if $sig =~ /^\@([0-9]+)$/;
+  return $javatypes->{$sig} if $javatypes->{$sig};
+  my $gparams;
+  $sig = $1 if $sig =~ /^L(.*);$/;
+  ($sig, $gparams) = ($1, $2) if $sig =~ /^([^<>]+)<(.*)>$/;
+  $sig =~ s-/-.-g;
+  $sig =~ s/\$/./g;
+  $sig = "$sig<" . sig2typelist($gparams) . ">" if defined($gparams);
+  return $sig;
+}
+sub sig2typelist($) {
+  my ($list) = @_;
+  my @sigs = splitgenstr($list);
+  return join(", ", map {sig2type($_)} @sigs);
+}
+sub countchar($$) {
+  my ($str, $char) = @_;
+  $str =~ s/[^$char]//g;
+  return length $str;
+}
+
+sub splitgenstr($) {
+  my ($str) = @_;
+  my @items = split(/,/, $str);
+  my @result = ();
+
+  my $class = "";
+  foreach my $item (@items) {
+    $class .= "," if $class;
+    $class .= $item;
+    if (countchar($class, "<") == countchar($class, ">")) {
+      push @result, $class;
+      $class = "";
+    }
+  }
+  push @result, $class if $class;
+  return @result;
+}

@@ -1,0 +1,69 @@
+<html>
+  <head>
+    <title>Sample of proposed japiohtml output</title>
+    <link rel="stylesheet" type="text/css" href="japi.css">
+  </head>
+  <body>
+    <h1>Compatibility of FreeImpl with JDK1.x</h1>
+    <h2>Summary</h2>
+    <p>Note that summary information is calculated prior to filtering the
+       results (for duplicates, etc). It is possible to show a non-zero "bad" or
+       "missing" score without any actual errors being listed.</p>
+    <table class="summary" border="0" cellspacing="0" cellpadding="3">
+      <tr class="colhead">
+        <td></td>
+        <th class="good">Good</th>
+        <th class="bad">Bad</th>
+        <th class="missing">Missing</th>
+        <th class="abs-add">Abs.Add</th>
+      </th>
+      <tr class="alternating-0">
+        <th class="good-100pct">java.lang:</th>
+        <td class="good">100%</td>
+        <td class="bad"></td>
+        <td class="missing"></td>
+        <td class="abs-add"></td>
+        <td>
+          <table width="100" cellpadding="0" cellspacing="0" class="bar">
+            <tr>
+              <td width="100" class="good-bar">.</td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+      <tr class="alternating-1">
+        <th class="good-90pct">java.lang.reflect:</th>
+        <td class="good">90%</td>
+        <td class="bad">8%</td>
+        <td class="missing">2%</td>
+        <td class="abs-add"></td>
+        <td>
+          <table width="100" cellpadding="0" cellspacing="0" class="bar">
+            <tr>
+              <td width="90" class="good-bar">.</td>
+              <td width="8" class="bad-bar">.</td>
+              <td width="2" class="missing-bar"></td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+      <tr class="alternating-0">
+        <th class="good-70pct">java.lang.ref:</th>
+        <td class="good">80%</td>
+        <td class="bad">10%</td>
+        <td class="missing">10%</td>
+        <td class="abs-add">7%</td>
+        <td>
+          <table width="107" cellpadding="0" cellspacing="0" class="bar">
+            <tr>
+              <td width="80" class="good-bar">.</td>
+              <td width="10" class="bad-bar">.</td>
+              <td width="10" class="missing-bar">.</td>
+              <td width="7" class="abs-add-bar">.</td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+  </body>
+</html>

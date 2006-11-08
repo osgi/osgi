@@ -1,0 +1,147 @@
+<?xml version="1.0"?>
+<!-- ===================================================================== -->
+<!-- Template build file                                                   -->
+<!-- ===================================================================== -->
+<project name="japi" default="main" basedir=".">
+    <property environment="env"/>
+    <property name="name" value="japitools"/>
+    <property name="version" value="0.9.1"/>
+    <property name="src.dir" value="${basedir}/src"/>
+    <property name="test.dir" value="${basedir}/test"/>
+    <property name="lib.dir" value="${basedir}/share/java"/>
+    <property name="build.dir" value="${basedir}/build"/>
+    <property name="build.bin.dir" value="${build.dir}/bin"/>
+    <property name="build.classes.dir" value="${build.dir}/classes"/>
+    <property name="build.test.classes.dir" value="${build.dir}/tests"/>
+    <property name="build.test.report.dir" value="${build.dir}/testreports"/>
+    <property name="japi.jar" value="${name}.jar"/>
+    <property name="junit.jar" value="/usr/share/java/junit.jar"/>
+
+    <path id="getopt.classpath">
+    </path>
+    <path id="jsx.classpath">
+    </path>
+
+    <!-- ================================================================ -->
+    <!-- Targets below, ant -projecthelp provides list of user callable   -->
+    <!-- ================================================================ -->
+    <target name="init" >
+        <echo message="build.compiler = ${build.compiler}"/>
+        <echo message="user.home = ${user.home}"/>
+        <echo message="java.home = ${java.home}"/>
+        <echo message="ant.home = ${ant.home}"/>
+        <echo message="java.class.path = ${java.class.path}"/>
+        <echo message=""/>
+
+        <path id="base.path">
+            <pathelement location="${build.classes.dir}" />
+        </path>
+    </target>
+
+    <!-- =============================================================== -->
+    <!-- Compiles the source code                                        -->
+    <!-- =============================================================== -->
+    <target name="compile" depends="init" description="Compiles source code">
+        <mkdir dir="${build.classes.dir}"/>
+        <javac destdir="${build.classes.dir}" source="1.4" debug="on" deprecation="off" optimize="off" classpathref="base.path">
+            <classpath>
+                <!-- we need Ant's JAR files on classpath to compile
+                     our own task -->
+                <path path="${java.class.path}"/>
+            </classpath>
+            <src path="${src.dir}"/>
+        </javac>
+    </target>
+	
+    <!-- =============================================================== -->
+    <!-- Creates the jar archives                                        -->
+    <!-- =============================================================== -->
+    <target name="jar" depends="compile" description="Create jar">
+        <mkdir dir="${lib.dir}"/>
+        <jar jarfile="${lib.dir}/${japi.jar}">
+            <fileset dir="${build.classes.dir}" includes="net/wuffies/**"/>
+        </jar>
+    </target>
+	
+    <!-- =============================================================== -->
+    <!-- Creates the client binary                                       -->
+    <!-- =============================================================== -->
+    <target name="create-client" depends="jar">
+        <mkdir dir="${build.bin.dir}"/>
+        <!-- Convert the given paths to Windows -->
+        <pathconvert targetos="windows" property="java.home.on.windows">
+            <path>
+                <pathelement location="${java.home}"/>
+            </path>
+        </pathconvert>
+        <!-- Convert the given paths to Unix -->
+        <pathconvert targetos="unix" property="java.home.on.unix">
+            <path>
+                <pathelement location="${java.home}"/>
+            </path>
+        </pathconvert>
+
+        <echo message="Java Home on Unix: ${java.home.on.unix}"/>
+
+        <filter token="java.home" value="${java.home.on.windows}"/>
+        <copy todir="${build.bin.dir}" filtering="yes">
+            <fileset dir="${src.etc.dir}/bin" includes="run-*client.bat"/>
+        </copy>
+        <copy file="${src.etc.dir}/bin/lcp.bat" todir="${build.bin.dir}"/>
+
+        <filter token="java.home" value="${java.home.on.unix}"/>
+        <copy todir="${build.bin.dir}" filtering="yes">
+            <fileset dir="${src.etc.dir}/bin" includes="run-*client.sh"/>
+        </copy>
+    </target>
+
+    <!-- =================================================================== -->
+    <!-- Build everything                                                    -->
+    <!-- =================================================================== -->
+    <target name="main" depends="jar"/>
+
+    <!-- =================================================================== -->
+    <!-- Cleans up the current build                                         -->
+    <!-- =================================================================== -->
+    <target name="clean" depends="init" description="Clean build directory">
+        <delete dir="${build.dir}"/>
+        <delete file="${lib.dir}/${japi.jar}"/>
+    </target>
+
+    <!-- =============================================================== -->
+    <!-- Compiles the tests                                              -->
+    <!-- =============================================================== -->
+    <target name="test-compile" depends="jar" description="Compiles source code">
+        <mkdir dir="${build.test.classes.dir}"/>
+        <javac destdir="${build.test.classes.dir}" source="1.4" debug="on" deprecation="off" optimize="off" classpathref="base.path">
+            <src path="${test.dir}"/>
+            <classpath>
+                <!-- we need Ant's JAR files on classpath to compile
+                     our own task -->
+                <path path="${java.class.path}"/>
+                <path location="${junit.jar}"/>
+                <path location="${lib.dir}/${japi.jar}"/>
+            </classpath>
+        </javac>
+    </target>
+    <!-- =============================================================== -->
+    <!-- Run the tests                                                   -->
+    <!-- =============================================================== -->
+    <target name="test" depends="test-compile" description="Compiles source code">
+        <junit showoutput="true" haltonfailure="yes">
+          <classpath>
+                <path path="${java.class.path}"/>
+                <path location="${build.test.classes.dir}"/>
+                <path location="${junit.jar}"/>
+                <path location="${lib.dir}/${japi.jar}"/>
+          </classpath>
+
+          <formatter type="brief" usefile="false"/>
+          <batchtest fork="yes" >
+            <fileset dir="${test.dir}">
+              <include name="**/*Test*.java"/>
+            </fileset>
+          </batchtest>
+        </junit>
+    </target>
+</project>

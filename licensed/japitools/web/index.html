@@ -1,0 +1,631 @@
+<html><head><title>japitools: Java API compatibility testing</title></head>
+<body bgcolor="#ffffff" text="#000000" link="#0000ff" vlink="#8800ff">
+<h1>japitools: Java API compatibility testing tools</h1>
+<p>japitools consists of two simple tools designed to test for compatibility
+between Java APIs. They were originally designed for testing free
+implementations of Java itself for compatibility with Sun's JDK, but they can
+also be used for testing backward compatibility between versions of any API.</p>
+<p>The tools are <a href="#japize">japize</a>
+and <a href="#japicompat">japicompat</a>. Japize is a Java program which
+emits a listing of an API in a machine-readable
+format. Japicompat then takes two such listings and compares them for binary
+compatibility, as defined by Sun in the
+<a href="http://java.sun.com/docs/books/jls/html/13.doc.html">Java Language Specification</a>
+(and as amended
+<a href="http://java.sun.com/docs/books/jls/clarify.html">here</a>).</p>
+<h3>Authors</h3>
+<p>japitools was written primarily by
+<a href="http://sab39.dev.netreach.com/">Stuart Ballard (sab39)</a>.
+Contributions have been made by various people including Brian Jones,
+Tom Tromey, Michael Koch and Jeroen Frijters. It incorporates part of Jode by
+Jochen Hoenicke. If I forgot anyone,
+<a href="mailto:stuart.a.ballard@gmail.com">let me know</a>.</p>
+<h3>Results</h3>
+<p>(in alphabetical order to avoid arguments... ;) )</p>
+<ul>
+<li>
+<a href="http://www.classpath.org/">GNU Classpath</a>:
+      <a href="htmlout/h-jdk10-classpath.html">vs JDK1.0</a>,
+      <a href="htmlout/h-jdk11-classpath.html">vs JDK1.1</a>,
+      <a href="htmlout/h-jdk12-classpath.html">vs JDK1.2</a>,
+      <a href="htmlout/h-jdk13-classpath.html">vs JDK1.3</a>,
+      <a href="htmlout/h-jdk14-classpath.html">vs JDK1.4</a>,
+      <a href="htmlout/h-jdk15-classpath.html">vs JDK1.5</a>,
+      <a href="htmlout/h-classpath-jdk15.html">JDK1.5 vs it</a>
+      (updated nightly).
+</li>
+<li>
+<a href="http://www.classpath.org/">GNU Classpath</a> generics branch:
+      <a href="htmlout/h-jdk10-classpath-generics.html">vs JDK1.0</a>,
+      <a href="htmlout/h-jdk11-classpath-generics.html">vs JDK1.1</a>,
+      <a href="htmlout/h-jdk12-classpath-generics.html">vs JDK1.2</a>,
+      <a href="htmlout/h-jdk13-classpath-generics.html">vs JDK1.3</a>,
+      <a href="htmlout/h-jdk14-classpath-generics.html">vs JDK1.4</a>,
+      <a href="htmlout/h-jdk15-classpath-generics.html">vs JDK1.5</a>,
+      <a href="htmlout/h-classpath-generics-jdk15.html">JDK1.5 vs it</a>
+      (updated nightly).
+</li>
+<li>
+<a href="http://gcc.gnu.org/java/">GNU libgcj</a>:
+      <a href="htmlout/h-jdk10-libgcj.html">vs JDK1.0</a>,
+      <a href="htmlout/h-jdk11-libgcj.html">vs JDK1.1</a>,
+      <a href="htmlout/h-jdk12-libgcj.html">vs JDK1.2</a>,
+      <a href="htmlout/h-jdk13-libgcj.html">vs JDK1.3</a>,
+      <a href="htmlout/h-jdk14-libgcj.html">vs JDK1.4</a>,
+      <a href="htmlout/h-jdk15-libgcj.html">vs JDK1.5</a>,
+      <a href="htmlout/h-libgcj-jdk15.html">JDK1.5 vs it</a>
+      (updated nightly).
+</li>
+<li>
+Apache Harmony:
+      <a href="htmlout/h-jdk10-harmony.html">vs JDK1.0</a>,
+      <a href="htmlout/h-jdk11-harmony.html">vs JDK1.1</a>,
+      <a href="htmlout/h-jdk12-harmony.html">vs JDK1.2</a>,
+      <a href="htmlout/h-jdk13-harmony.html">vs JDK1.3</a>,
+      <a href="htmlout/h-jdk14-harmony.html">vs JDK1.4</a>,
+      <a href="htmlout/h-jdk15-harmony.html">vs JDK1.5</a>,
+      <a href="htmlout/h-harmony-jdk15.html">JDK1.5 vs it</a>
+      (updated nightly).
+</li>
+<li>
+<a href="http://jnode.sourceforge.net/portal/">JNode</a>:
+      <a href="htmlout/h-jdk10-jnode.html">vs JDK1.0</a>,
+      <a href="htmlout/h-jdk11-jnode.html">vs JDK1.1</a>,
+      <a href="htmlout/h-jdk12-jnode.html">vs JDK1.2</a>,
+      <a href="htmlout/h-jdk13-jnode.html">vs JDK1.3</a>,
+      <a href="htmlout/h-jdk14-jnode.html">vs JDK1.4</a>,
+      <a href="htmlout/h-jdk15-jnode.html">vs JDK1.5</a>,
+      <a href="htmlout/h-jnode-jdk15.html">JDK1.5 vs it</a>
+      (updated nightly).
+</li>
+<li>
+<a href="http://www.kaffe.org/">Kaffe</a>:
+      <a href="htmlout/h-jdk10-kaffe.html">vs JDK1.0</a>,
+      <a href="htmlout/h-jdk11-kaffe.html">vs JDK1.1</a>,
+      <a href="htmlout/h-jdk12-kaffe.html">vs JDK1.2</a>,
+      <a href="htmlout/h-jdk13-kaffe.html">vs JDK1.3</a>,
+      <a href="htmlout/h-jdk14-kaffe.html">vs JDK1.4</a>,
+      <a href="htmlout/h-jdk15-kaffe.html">vs JDK1.5</a>,
+      <a href="htmlout/h-kaffe-jdk15.html">JDK1.5 vs it</a>
+      (updated manually).
+</li>
+</ul>
+<p>The JDK 1.5 results include comparisons of most of the aspects of the API
+that use language features, but not quite all: Japitools still does not yet
+understand annotations applied to classes and members.</p>
+<p>A tarball of the JDK japi files used to generate this output can be
+downloaded from <a href="jdkjapis.tar">here</a>. These japi files were
+created by running japize over the rt.jar (or equivalent) files from each
+JDK release.</p>
+<h3>News</h3>
+<ul>
+  <li>11 November 2004: Released japitools-0.9.5. This release has several
+      significant changes and fixes:
+      <ul>
+        <li>A much-requested feature: the ability to ignore differences when
+            reporting compatibility with an early API release, if those
+            differences are required for compatibility with a later release. See
+            the description of the -i flag below for more information. This new
+            code has been running nightly for a while producing the results
+            linked above, without any known problems. It reveals that the free
+            implementations are much closer to full coverage of 1.0 and 1.1 than
+            was previously apparent - in fact already perfect for 1.0 and in
+            Classpath's case only one method away from 1.1.<br>
+            Thanks to Michael Koch for the key insight that enabled this feature
+            to finally be written, four years after I first said it was needed.
+        </li>
+        <li>A new bytecode reading implementation from Jeroen Frijters to
+            replace Jode. This vastly reduces the amount of code because it
+            only reads and understands the bits of metadata we actually need,
+            where Jode was part of a larger system that needed more information.
+            This code also fixes a "Miranda Methods" bug in the Jode
+            implementation.</li>
+        <li>Also from Jeroen: methods in final classes are now treated as
+            final even if they weren't explicitly marked as such.</li>
+        <li>Correct access modifiers on inner classes. Jeroen caught this one
+            and the fix was a joint effort.</li>
+        <li>japicompat will warn if using a japi file from an older release that
+            contains known bugs. That covers all versions except for this one,
+            in fact. Use the -w flag to disable this warning</li>
+        <li>Better support for launching japiotext and japiohtml on Windows
+            systems (some issues may remain, however).</li>
+        <li>The serialize and serialcompat tools have been removed (they are
+            now a module in the
+            <a href="http://sources.redhat.com/mauve/">Mauve</a> project).</li>
+      </ul>
+  </li>
+  <li>30 September 2004: Released japitools-0.9.4. This is a bugfix release
+      that addresses two issues:
+      <ul>
+        <li>Constant field values were frequently missed.</li>
+        <li>Exceptions were sometimes misreported (found and fixed by Tom
+            Tromey).</li>
+      </ul>
+      Needless to say, the world has changed a bit since I suggested that
+      0.9.3 was a release candidate for 1.0. Now that Java 5 has been released,
+      it would be unacceptable to make a 1.0 release without support for
+      generics and the other new language features. Still, 0.9.4 is definitely
+      more stable than any previous "stable" release - this is the version
+      you should be using.
+  </li>
+  <li>19 February 2003: Released japitools-0.9.3. This is a 'release candidate'
+      for 1.0. There are a few minor fixes over 0.9.2 including:
+      <ul>
+        <li>Workaround a bug that caused Japize to abort when run against
+            Classpath.</li>
+        <li>Implement toString-independent comparisons of floats and doubles,
+            as described below.</li>
+        <li>Fix a problem that caused deprecation errors to be reported only on
+            classes and interfaces, not members.</li>
+        <li>Fix an erroneous '}' that appeared in comparisons of constant
+            fields. Also fix some other potential problems if particular
+            characters appeared in constant fields.</li>
+      </ul></li>
+  <li>4 December 2002: Released an EXPERIMENTAL, BETA QUALITY japitools-0.9.2.
+      This release is more complete than 0.9.1 and includes some fixes over
+      version 0.9 that make it worth using even if you're not interested in
+      the flashy output. On the other hand, it's still less tested than 0.9
+      was, so be warned. Improvements over 0.9.1 include:
+      <ul>
+        <li>Fix for a problem that caused inner classes to be incorrectly
+            treated as non-static.</li>
+        <li>Deprecation support (<em>un</em>deprecating an API is flagged as a
+            (minor) error).</li>
+        <li>Preparation for toString-independent comparisons of floats and
+            doubles. Since toString on these types seems to be all but
+            impossible to code to the spec (even Sun don't achieve it), this
+            allows japi files to be somewhat independent of the VM producing
+            them. Note that this is not yet implemented in japicompat, but
+            the necessary information is in the japi file so the nightly results
+            will be able to take advantage immediately.</li>
+        <li>The date of japi file creation is now included in the japi file and
+            presented in the output</li>
+        <li>Numerous fixes to the HTML output including better organization of
+            errors, browser compatibility fixes, and a color-legend.</li>
+        <li>Parallel enhancements to the text output.</li>
+        <li>Use -h to get HTML output, no more piping to japiohtml manually.
+            You can still get raw output by specifying -j. Use -o to specify
+            an output filename if you don't want to use shell redirection.</li>
+        <li>Other miscellaneous fixes.</li>
+      </ul></li>
+  <li>21 November 2002: Released an EXPERIMENTAL, ALPHA QUALITY japitools-0.9.1.
+      Japitools-0.9 is still the recommended version if you plan to do anything
+      important with the results. This release includes some nice new features
+      but also has some significant issues:
+      <ul>
+        <li>The documentation below has not been updated to cover this release.
+            Since 0.9 is still the stable version, I need to split out the
+            webpage with separate docs for each version. I haven't done that
+            yet. The only information about the differences in usage is this
+            list.</li>
+        <li>japicompat no longer gives you anything terribly comprehensible if
+            you save its stdout directly. Instead, you must pipe the output to
+            one of the new tools japiotext or japiohtml. In a future version
+            this will be made optional, with a pipe through japiotext as the
+            default, but currently it's compulsory. You can save the results
+            as a ".japio" file if you want to run both japiotext and japiohtml
+            over the same output.</li>
+        <li>Speaking of which, the japiohtml tool gives nice HTML output. This
+            is what's been generating the nightly classpath comparisons. The
+            output will be further cleaned up in future versions.</li>
+        <li>Using japiotext to get text output still doesn't provide everything
+            the old text output did. Neither does the HTML output.</li>
+        <li>The bits of Jode source code that I'm using are included directly
+            and get compiled into japitools.jar, so jode-1.1.1.jar is no longer
+            bundled. I stripped out some of the "magic" of the Jode build system
+            to use just .java files instead of .java.in. I also applied a
+            theoretical fix to Jode's problem with JDK1.4, but this is entirely
+            untested. If you test it, and produce a jdk14.japi.gz, please
+            send it to me.</li>
+      </ul></li>
+  <li>13 November 2002: Started a nightly script comparing classpath to various
+      JDK versions using new experimental (and unreleased because it's still
+      very crufty) HTML output. The results can be seen here:
+      <a href="htmlout/h-jdk11-classpath.html">vs JDK1.1</a>,
+      <a href="htmlout/h-jdk12-classpath.html">vs JDK1.2</a>, and
+      <a href="htmlout/h-jdk13-classpath.html">vs JDK1.3</a>.</li>
+  <li>5 November 2002: Released japitools-0.9, and dared to announce it on a few
+      mailing lists that I thought might be interested. This release only has
+      minor changes and cleanups over 0.8.7:
+      <ul>
+        <li>Japifix was missing a case in the exception-pruning algorithm
+            (thanks to Brian Jones for catching this).</li>
+        <li>Fixes to serialize from Brian Jones, including addition of the
+            line that actually runs it, which I somehow missed last time.</li>
+        <li>Print a warning from japize about the importance of using the right
+            filename, if "as" isn't used (thanks to Dalibor Topic for pointing
+            out that this isn't obvious). Updated the docs, too.</li>
+        <li>Cleaner separation of japicompat output between stdout and stderr,
+            to make it easier to redirect what you actually want. Recommended
+            usage is now to redirect stdout only, and use the "-q" option if
+            running non-interactively.</li>
+      </ul>
+      This release is currently considered stable and suitable for widespread
+      use. Barring the discovery of major problems, the next few releases will
+      be potentially unstable new-feature releases leading up to an eventual
+      1.0.</li>
+  <li>24 September 2002: Released japitools-0.8.7, which is a "release
+      candidate" for a hopefully stable and widely-announced 0.9. Quite a bit
+      new in this release:
+      <ul>
+        <li>Japize (and japifix) will now ignore any subclasses of Error and
+            RuntimeException thrown, because they're redundant. Exceptions will
+            also be skipped if they are subclasses of another exception thrown
+            by the same method, eg FileNotFoundException won't be included if
+            the method also throws IOException.</li>
+        <li>Added Ant build system (optional) provided by Brian Jones.</li>
+        <li>Added new tools serialize and serialcompat for testing serialization
+            compatibility, again thanks to Brian Jones.</li>
+        <li>japipkgs has evolved into japilist, which can list classes and
+            members, and filter results by package and class, as well as just
+            listing packages. Thanks again to Brian for the "japiclasses" script
+            that inspired this tool.</li>
+        <li>japifix can now detect mis-sorted files without the explicit -s
+            flag, by re-starting as soon as a mis-sort is detected. To make this
+            possible, the ability to operate on stdin has been dropped.</li>
+        <li>Fixed a corner-case mis-sorting bug in japize that appeared if
+            java.lang.something was included but java.lang itself was not.</li>
+        <li>japicompat flushes stdout when it's done, making the output appear
+            in a nice order if stdout and stderr are redirected to the same
+            place.</li>
+        <li>Added windows batch file for running japize on windows systems,
+            thanks (yet again :) ) to Brian Jones.</li>
+        <li>Added the <a href="japi-spec.txt">japi file format specification</a>
+            for the benefit of anyone writing code to interoperate with
+            japitools.</li>
+      </ul></li>
+  <li>18 September 2002: Released japitools-0.8.6, fixing an ordering problem
+      related to inner classes (serve me right for having a machine that can
+      only handle japizing JDK1.1, which has no inner classes). This release
+      also includes some cruft-removal, including the unreliable "reflect"
+      option and japicompat-old, and makes zipped output the default. I added
+      Jode to the tarball itself and restructured a bit so that japize can find
+      its own libraries, so you no longer need to set CLASSPATH (or download
+      Jode separately).</li>
+  <li>10 September 2002: Released japitools-0.8.5. This fixes numerous problems
+      in the files produced by japize, bringing it finally back to parity with
+      release 0.8 or so. Japicompat will now abort on mis-ordered files, so that
+      errors like this will be caught quicker next time. Japi2new got a facelift
+      and is now called japifix. Much more testing, leading me to conclude that
+      japicompat is now <em>more</em> trustworthy than japicompat-old.</li>
+  <li>31 July 2002: Released a brown-paper-bag japitools-0.8.4 with a fix for
+      a hang-at-end-of-file bug that showed up whenever the 'orig' file contains
+      packages or classes at the end of the file that aren't in the 'new' file.
+      Oooops!</li>
+  <li>31 July 2002: Released japitools-0.8.3 with a rewritten japicompat that
+      uses a much faster and more scalable algorithm. Of course, being a total
+      rewrite, there's a risk of regressions, so the old japicompat is still
+      available as japicompat-old (and, in fact, includes a fix or two over the
+      0.8.2 version). The other casualty of the rewrite is that although some
+      summary information is better, some is also worse. I hope to resurrect the
+      bits of what was lost that make sense. Also updated the docs below so that
+      they match the state of reality since 0.8.1.</li>
+  <li>9 July 2002: Released japitools-0.8.2 with a fix for a NullPointer.
+      There's more work in progress on my laptop that isn't included in this
+      release because it's not ready yet, but hopefully soon there'll be a first
+      pass at the optimized algorithm for japicompat.</li>
+  <li>28 June 2002: Released japitools-0.8.1. Noted that this obsoletes some
+      of the documentation on the website. Removed a bunch of old results
+      files that aren't correct any more. The docs will have to be updated
+      later - no time now.</li>
+  <li>19 March 2002: Updated the website so that the documentation matches the
+      actual current code. Since it's been almost 2 years since I wrote this,
+      I can't be 100% sure that this documentation is all correct, but it's
+      certainly better than it was before!</li>
+  <li>28 June 2000: Finally bundled japitools up into a jarball which I'm
+      calling version 0.8 (which is a good indicator of how close to "complete"
+      I feel it is). It now requires the jode.bytecode package if you want to
+      get good results, although you can still use the old buggy reflection
+      version. See below for details.</li>
+  <li>18 June 2000: At the suggestion of Edouard G. Parmelan, added support
+      for checking SerialVersionUIDs. Since this will generally produce lots
+      of errors and make it harder to identify more important API compatibility
+      errors, it needs to be explicitly turned on in japicompat by passing the
+      -v flag.</li>
+  <li>16 June 2000: Godmar fixed the remaining Kaffe bug, so I've removed the
+      hackaround. I still need to leave part of it in due to a subtlety in the
+      way superinterfaces are defined by the JLS. japicompat now removes
+      duplicates, cutting the number of Kaffe errors to 142, and checks
+      everything in the JLS plus my four additions. Reflection is incapable of
+      telling me if a field is a primitive constant, buggrit, so I have to
+      move to using something like gnu.bytecode.</li>
+  <li>15 June 2000: Japize is now, finally, well commented. Godmar Back kindly
+      fixed one of the Kaffe bugs which will mean that some hackarounds can be
+      removed Real Soon (once another related bug gets fixed). I've been hacking
+      japicompat to allow duplicates to be removed; you can find the code
+      <a href="japicompat2.pl">here</a> [long-dead link]. It doesn't actually <b>do</b> the
+      removal yet, but the architecture is in. This will replace japicompat once
+      I'm convinced it's as robust; early signs look good. It's also commented!
+      Certify me on <a href="http://www.advogato.org/person/sab39">Advogato</a>
+      - or don't, but it really is me! I need to figure how I'm going to version
+      japitools - right now, all the links here are to my working copies...</li>
+</ul>
+
+<h3>Installation</h3>
+<p>You can download <a href="japitools-0.9.5.tar.gz">japitools-0.9.5.tar.gz</a>
+here. This tarball contains a bin/ directory containing all the japi tools, a
+share/ directory containing the java runtime libraries, and a src/ directory
+containing all the sources in case you want to do development. It should be
+unnecessary to set your CLASSPATH, since japitools can figure out the path to
+its runtime libraries by relative directory structures.</p>
+<p>The tarball contains code extracted from
+<a href="http://jode.sourceforge.net/">Jode</a>
+(a jarball of which is mirrored <a href="jode-1.1.1.jar">here</a>).
+japitools is completely self-sufficient (except for perl, Java, and optionally
+gzip). The tools in the bin directory assume that perl is /usr/bin/perl and that
+your prefered Java runtime is "java" in your PATH. If you're working with
+zipped japi files, you must also have "gzip" in your path.</p>
+
+<h3>Usage</h3>
+<p>Using japitools is a two-step process:</p>
+<ul><li>Use japize to generate a .japi file for each of the versions you want
+to compare.</li>
+<li>Use japicompat to compare one for backwards compatibility with the
+other</li></ul>
+<h4><a name="japize">japize</a></h4>
+<p>The general usage of japize is as follows:</p>
+<pre>$ japize [unzip] [as &lt;name&gt;] apis &lt;zipfile&gt; | &lt;dir&gt; ... +|-&lt;pkgpath&gt; ...</pre>
+<p>At least one +&lt;pkgpath&gt; is required. &lt;name&gt; will have
+".japi" and/or ".gz" appended as appropriate.</p>
+<p>The word "apis" can be replaced by "explicitly", "byname", "packages" or
+"classes". These options indicate whether something of the form "a.b.C" should
+be treated as a class or a package. You may specify this unambiguously by using
+one of the forms "a.b.cpackage," or "a.b,CClass".</p>
+<p>That's the one-paragraph overview, pretty much equivalent to what you get if
+you type "japize" with no arguments. In detail, the options available are as
+follows:</p>
+<h4>[unzip]</h4>
+<p>Specifying the "unzip" option indicates that japize should not gzip its
+output. Zipping the output is highly
+recommended since it saves huge amounts of space (japi files are
+large but extremely compressable because they contain large numbers of duplicate
+strings. Factor-of-ten compression seems to be typical). The only situations
+where you might not want to use gzip compression are when memory and CPU usage
+are extremely tight (zipping and unzipping both require more memory the larger
+the file gets, and require more CPU usage - on todays computers this is rarely
+an issue, though) or if your JVM does not implement GZIPOutputStream correctly
+(in which case you might still want to gzip the resulting file manually).</p>
+<h4>as &lt;name&gt;</h4>
+<p>Specifying this option tells japize to write its output to a file with the
+specified name. When writing to a file with the "as" option, japize insists on
+writing to a file name ending in .japi.gz for compressed files, or .japi for
+uncompressed files. If the filename you specify doesn't have the right
+extension, japize will add parts to it to ensure that it does.</p>
+<p>If the "as" option is omitted, japize will write to standard output. In this
+case japize has no control over the filename you use, but it is strongly
+recommended to use a filename with the correct extension (".japi.gz" unless the
+"unzip" option was specified). If you use any other extension, japicompat and
+other tools may be unable to recognize the format.</p>
+<h4>apis | explicitly | byname | packages | classes</h4>
+<p>This option has a dual role: it indicates the boundary between japize options
+(unzip, as) and other arguments (files and packages), but also tells
+japize how to deal with ambiguously specified arguments. See
+"+|-&lt;pkgpath&gt;" below for details on the behavior of each option. If you
+are unsure which to specify, "apis" is a safe choice.</p>
+<h4>&lt;zipfile&gt; | &lt;dir&gt;</h4>
+<p>Any arguments after "apis" that do not start with "+" or "-" are taken to be
+zipfiles or directories. These should be specified exactly as you would put
+them in your CLASSPATH (except separated by spaces rather than colons). Anything
+that's a file will be assumed to be a zip (or jar) file, so you can't specify
+a .class file directly - if you need to do that you should specify the folder
+containing it and then name the class for processing.</p>
+<h4>+|-&lt;pkgpath&gt;</h4>
+<p>To specify which classes are included, use +pkgpath to add pkgpaths to be
+scanned and -pkgpath to exclude sub-pkgpaths of these. You MUST specify at least
+one +pkgpath option to specify which pkgpath to include, otherwise Japize could
+happily scan through all the zipfiles and directories but not actually process
+any of the classes. Since that would be a useless thing to do, japize gives an
+error instead.</p>
+<p>A "pkgpath" refers to either a package (which includes, by implication, all
+sub-packages of it) or a single class. A pkgpath for a package looks like
+"com.foo.pkg.sub," and a pkgpath for a class looks like "com.foo.pkg,Cls". The
+existence and placement of the comma indicates unambiguously which type of path
+is intended.</p>
+<p>Most of the time, though, it's a pain to have to put in commas in names that
+are familiar with dots instead, and get the comma placement exactly right. For
+this reason, japize accepts pkgpaths containing only dots, and lets you tell it
+what to make of those names. The interpretation of "a.b.c" as a pkgpath depends
+on whether you specified apis, explicitly, byname, packages, or classes.</p>
+<dl>
+  <dt>apis</dt>
+  <dd>a.b.c is tried both as a package <i>and</i> a class. This will always do
+      what you want (which is why apis is described as the safe default) but at
+      the expense of possibly doing extra unnecessary processing trying to find
+      the wrong thing.</dd>
+  <dt>explicitly</dt>
+  <dd>pkgpaths of the form a.b.c are illegal - you must use the explicit
+      form.</dd>
+  <dt>byname</dt>
+  <dd>a.b.c will be processed as a package if "c" starts with a lowercase
+      letter, or as a class if it starts with an uppercase one. This usually
+      does what you want but fails on things like org.omg.CORBA.
+  <dt>packages</dt>
+  <dd>a.b.c will be processed as a package. If processing for a class is needed,
+      it must be specified explicitly.</dd>
+  <dt>classes</dt>
+  <dd>a.b.c will be processed as a class. If processing for a package is needed,
+      it must be specified explicitly.</dd>
+</dl>
+<h4>Example</h4>
+<p>As an example, Sun's
+JDK 1.1 includes classes in java.awt.peer and in java.text.resources that are
+not part of the public API, even though they are public classes; however, every
+other class in the java.* package hierarchy is part of the public API. The
+syntax to construct a useful jdk11.japi.gz would therefore be:</p>
+<pre>$ japize as jdk11 apis classes.zip +java -java.awt.peer -java.text.resources</pre>
+<p>Note that since all pkgpath arguments here are packages, you could save a
+small amount of processing by doing this instead:</p>
+<pre>$ japize as jdk11 packages classes.zip +java -java.awt.peer -java.text.resources</pre>
+<p>or even this:</p>
+<pre>$ japize as jdk11 explicitly classes.zip +java, -java.awt.peer, -java.text.resources,</pre>
+<p>Another example, this time doing the same thing for kaffe:</p>
+<pre>$ japize as kaffe packages $KAFFEHOME/share/kaffe/Klasses.jar $KAFFEHOME/share/kaffe/rmi.jar +java -java.awt.peer -java.text.resources</pre>
+<h4><a name="japicompat">japicompat</a></h4>
+<p>Next, you can perform the test for compatibility between these two files:</p>
+<pre>
+$ japicompat jdk11.japi.gz kaffe.japi.gz
+</pre>
+<p>The full list of flags supported by japicompat is as follows:</p>
+<pre>japicompat [-svqhtjw] [-o &lt;outfile&gt;] [-i &lt;ignorefile&gt;] &lt;original api&gt; &lt;api to check&gt;</pre>
+<p>The meanings of these options are as follows:</p>
+<h4>-s</h4>
+<p>By default, japicompat tests for binary compatibility as defined by the JLS,
+plus a couple of additions (see below for details). You can turn off these
+additions by passing the -s flag to japicompat, for example:</p>
+<pre>
+$ japicompat -s jdk11.japi.gz kaffe.japi.gz
+</pre>
+<p>The s stands for "sun", "standard", "specification", or if you like more
+colorful language, "single-buttocked" (one buttock=half an...). See "What exactly
+does japicompat test?" below for exactly what tests get turned off by this
+flag.</p>
+
+<h4>-v</h4>
+<p>By default, japicompat only checks for errors that break binary compatibility.
+However, japicompat can also check for some "minor" compatibility problems. To
+activate these additional checks, use the "-v" flag. The v stands for "verbose".</p>
+<pre>
+$ japicompat -v jdk11.japi.gz kaffe.japi.gz
+</pre>
+<p>Specifically, the -v flag enables the following additional checks:</p>
+<ul>
+  <li>SerialVersionUID checking: japicompat reports a minor error if a Serializable
+      class has a different SerialVersionUID between the two releases.</li>
+  <li>Deprecation checking: japicompat reports a minor error if a class or member
+      was deprecated in the original API but is not deprecated in the API being
+      checked.</li>
+</ul>
+
+<h4>-q</h4>
+<p>By default, japicompat provides progress reports as it runs. In unix
+terminology, these are sent to stderr (the actual results are sent to
+stdout unless the -o flag is used). The -q flag turns off these
+progress reports - only real errors will be sent to stderr.</p>
+
+<h4>-h</h4>
+<p>Generate output in HTML format. The HTML files produced depend on the
+japi.css file in the design directory to get attractive presentation.</h>
+
+<h4>-t</h4>
+<p>Generate output in text format. This is the default.</p>
+
+<h4>-j</h4>
+<p>Generate output in raw machine readable form. The format produced is called
+"japio" format, and by convention should be saved with a ".japio" file extension.
+The standalone japiotext and japiohtml utilities can be used to convert this
+format into html or text (actually, japicompat calls japiotext or japiohtml
+internally if the -h or -t flags are used). Japio files can also be used with
+the -i flag to support ignoring errors caused by incompatibilities between
+JDK versions.</p>
+
+<h4>-w</h4>
+<p>By default japicompat will produce warnings if run against japi files
+originally generated by older versions of japitools that had known bugs that
+japifix cannot eliminate. Use the -w flag to turn off these warnings, or better
+yet, generate your japi files with the latest version ;)</p>
+
+<h4>-o &lt;outfile&gt;</h4>
+<p>Send the output to &lt;outfile&gt; instead of stdout. The format of this file
+depends on the -h, -t and -j flags.</p>
+
+<h4>-i &lt;ignorefile&gt;</h4>
+<p>Suppose you are attempting to implement the Java API. You have (pretty much)
+completed coverage of the early JDK versions (1.0 and 1.1) but still have some distance
+to achieve full coverage of 1.4 (this is an accurate description of all Free
+Software Java implementations at the time of writing). Using japicompat to compare
+your implementation with JDK 1.4 gives accurate results, but you might also want to
+show your coverage of the earlier versions.</p>
+<p>Unfortunately Sun has not followed their own binary compatibility rules between
+JDK releases, let alone the expanded rules that japicompat tests for. So when you
+run a comparison between JDK 1.1 and your implementation, you will get spurious
+error reports when you're compatible with 1.4 but not 1.1.</p>
+<p>Obviously what you really want is to ignore errors like this, and japicompat
+provides a way to do so. First, run a comparison between 1.1 and 1.4 using the
+-j switch. Then run the comparison between 1.1 and your implementation, passing
+the "-i" option with the output of the previous run. For example:</p>
+<pre>
+$ japicompat -jvo ignore-11-14.japio jdk11.japi.gz jdk14.japi.gz
+$ japicompat -hvo jdk11-myimpl.html -i ignore-11-14.japio jdk11.japi.gz myimpl.japi.gz
+</pre>
+<p>(In this example I also passed the -v flag but didn't pass -s. You should use
+the same combination of these two flags for both runs of japicompat to avoid getting
+bad results)</p>
+<p>You can also get the same effect by running:</p>
+<pre>
+$ japicompat -hvo jdk11-myimpl.html -i jdk14.japi.gz jdk11.japi.gz myimpl.japi.gz
+</pre>
+<p>This is obviously simpler and quicker to type, but requires the comparison
+between jdk11 and jdk14 to be run every single time. Making the japio file
+manually allows for it to be saved and used again the next time, which lets
+japicompat run about twice as fast.</p>
+<h4>&lt;original api&gt; &lt;api to check&gt;</h4>
+<p>The japi files corresponding to the APIs to be compared.</p>
+<p>japicompat specifically tests that the second argument is
+backwardly-compatible with the first. Therefore, a perfect implementation of
+JDK 1.1 would produce no errors regardless of the order of the arguments, but a
+perfect implementation of JDK1.1 plus <em>parts</em> of JDK1.2 should be tested as
+follows:</p>
+<pre>$ japicompat jdk11.japi.gz myimpl.japi.gz
+$ japicompat myimpl.japi.gz jdk12.japi.gz</pre>
+<p>It is probably impossible to make an implementation that passes both these
+tests, since Sun's own JDK1.2 produces numerous errors when tested against
+JDK1.1. See the discussion of the -i option above for a way to cope with this
+situation.</p>
+<p>Either compressed (.japi.gz) or uncompressed (.japi) files can be passed to
+japicompat: The file extension is used to determine whether or not to pipe input
+through gzip or not.</p>
+
+<h3>What exactly does japicompat test?</h3>
+<p>As mentioned above, japicompat tests for binary compatibility as defined
+by Sun in the JLS. A full summary of what does and does not break binary
+compatibility according to Sun is <a href="jcompat.txt">here</a>.</p>
+<p>However, japicompat also performs some checks that are not specified by the
+JLS, for the simple reason that I believe the JLS is wrong to omit them. You can
+omit these four extra checks by passing the "-s" flag to japicompat, although
+I'm not sure why you would want to...</p>
+<p>The specific checks that I believe the JLS should include are:</p>
+<ul>
+<li><i>Adding an exception to the throws clause of a method or constructor
+    violates binary compatibility</i>, because a class calling that method may
+    not catch or specify the newly thrown exception. The JLS claims that the
+    VM does not perform any checks on thrown exceptions; I hope this has
+    changed because it makes it trivially easy to write a method that throws
+    any exception you like without specifying it.</li>
+<li><i>Removing an exception from the throws clause of a method or constructor
+    violates binary compatibility</i>, because a subclass may be overriding
+    the method and throwing the exception. This only applies to non-final
+    methods, but it is worth enforcing this rule for all methods and
+    constructors because otherwise it is possible to break source code
+    compatibility by rendering code in a catch block unreachable.</li>
+<li><i>Adding a method to an interface violates binary compatibility</i>,
+    because a class that implemented the original version of the interface
+    may not implement the newly added method.</li>
+<li><i>Adding an abstract method to an abstract class violates binary
+    compatibility</i>, because a concrete class derived from the original
+    version may not provide a concrete implementation of the new method.
+</ul>
+
+
+<h3>File format</h3>
+<p>The file format of .japi files is described in full in
+<a href="japi-spec.txt">the japi file format specification</a>. This document
+should provide enough information to write a japi file fully compatible with
+those produced by japize. This spec can also be found in the tarball as
+design/japi-spec.txt.</p>
+
+<h3>License</h3>
+<p>These programs are made available under the
+<a href="http://www.gnu.org/copyleft/gpl.html"</a>GNU General Public License</a>,
+version 2 or later.</p>
+
+<h3>To do</h3>
+<p>Here is an incomplete list of what still needs to be done:</p>
+<ul>
+<li>Handle the new constructs in JDK 1.5 (or 5.0 or whatever it's called),
+    particularly generics.</li>
+<li>Fix any bugs that anyone finds...</li>
+<li>Handle APIs containing international characters in class/member names, and
+    also international characters in final constant Strings.</li>
+<li>Make a "1.0" release.</li>
+</ul>
+</body></html>

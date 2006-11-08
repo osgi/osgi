@@ -1,0 +1,53 @@
+JAPITOOLS 0.9 RELEASED                                                2002/11/05
+----------------------
+
+I'm proud to announce the first japitools release intended for wide public
+consumption. japitools is a set of tools for testing compatibility between
+different versions of a Java API. It can be used both for verifying whether an
+independent implementation of an API is correct and complete, and for ensuring
+that binary compatibility is maintained between successive versions of the
+same API. In particular, japitools can be used to test the conformance of
+independent implementations of the Java platform itself.
+
+Features of this release:
+
+* japize tool reads Java class files and dumps a machine-readable representation
+  of the API to a "japi" file.
+
+* japicompat tool compares two japi files for binary backwards compatibility.
+
+* japilist tool provides human-readable summaries of the contents of a japi
+  file.
+
+* serialize and serialcompat tools test serialization compatibility.
+
+* japifix tool updates japi files made by previous releases, and in some cases
+  can correct malformed files.
+
+* Comparisions cover every requirement for binary compatibility as defined in
+  the JLS, and more, but exclude many differences that are known to be
+  insignificant, to keep the signal-to-noise ratio high.
+
+* All algorithms are tuned for memory usage and performance, to allow running
+  on machines with limited resources or as unsupervised (eg nightly) jobs.
+
+* japi file format is fully specified, allowing interoperable tools to be
+  created.
+
+For more information on japitools, including a change history, visit the project
+website at http://rainbow.netreach.net/~sballard/japi . japitools 0.9 can be
+downloaded from http://rainbow.netreach.net/~sballard/japi/japitools-0.9.tar.gz
+. Any questions or comments should be directed to sballard@netreach.net.
+
+Particular thanks for their help in making this release as good as it can be
+go to Brian Jones for providing the ant build system, the serialize and
+serialcompat tools, and lots of wrapper scripts, along with some invaluable
+testing and setting up nightly japicompat tests for GNU Classpath CVS; and to
+Dalibor Topic for working towards a similar arrangement for Kaffe, and being
+a patient and committed tester despite several brown-paper-bag development
+releases. Thanks also to everyone else who's provided feedback.
+
+Major features planned for the near future include HTML and possibly XML output,
+and more advanced filtering of errors to allow, for example, ignoring errors
+against an early JDK version if the same problem appears in (more recent
+versions of) the JDK itself.

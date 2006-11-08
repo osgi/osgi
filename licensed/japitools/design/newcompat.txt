@@ -1,0 +1,61 @@
+Here's the plan:
+- Generate .japi files in alphabetical order by membername. This makes it
+  possible to merge in O(1) space and O(N) time. Specialcase j.l.Object to go
+  first, because that can save a pass later.
+
+  Allow japi2new to sort japis as well as messing with the formatting.
+
+- japicompat will generate a .jace file. This will consist of all errors, in
+  the order they were found in the japi. jace = Java API Compatibility Errors.
+  The format will look something like this:
+    a.b.C:a.b.CSuper:java.lang.Object
+    # extends_#!_in_#O_but_not_in_#N a.b.AnotherCSuper
+    #foo() method_present_in_#O_but_not_in_#N
+    a.b.CSuper:java.lang.Object
+    ...
+  Classes will only appear if there are errors in them; each error will appear
+  on a # line by itself. 
+  #! indicates a positional parameter.
+  #O and #N indicate the original and new japi filenames.
+  Parameters will be encoded similarly to the way prim consts are in the japi.
+
+- japifilter will make several passes through the two jaces. Each pass will
+  operate on a particular subset of classes and interfaces. Specifically:
+  - Pass 1 will start with j.l.Object (hence its positioning first in the file),
+    then it will move on to interfaces that have no superinterfaces. In the
+    process it will also do all "missing package" and "missing class" checks,
+    and figure out how many subsequent passes of each type are needed.
+  - Pass 2 will operate on interfaces with exactly 1 superinterface; pass 3 on
+    interfaces with 2 superinterfaces, etc, until all interfaces have been
+    processed (it might be possible to skip some numbers if pass 1 determined
+    that there were no interfaces with that number of superinterfaces). Say
+    that this process continues up to pass N-1.
+  - Pass N will operate on classes with exactly one superclass (j.l.Object).
+    Pass N+1 will operate on classes with 2 superclasses, etc (as with
+    interfaces, it might be possible to skip some numbers). When all classes
+    have been processed at pass M, we're done.
+  
+  In determining which classes to process in which pass, only the "new" japi
+  is considered. Hence a class with 2 superclasses in the original and 3
+  superclasses in the new would be processed as having 3 superclasses.
+
+  So that gives an order to process in, but doesn't define what "process"
+  means. It means the following:
+  - Determine any errors on that class or interface.
+  - In memory, construct a tree of class -> superclass -> ... j.l.Object.
+  - Check for the same errors on all superclasses. If present, don't add the
+    error to the tree. Don't even add the class to the tree!
+  - If not present already on a superclass, add the class and the error to
+    the tree, and write it to the output file.
+
+- japifilter can also provide some other options too:
+  - Take multiple jace files and combine them.
+  - Write output as either a fresh jace file or as human-readable output.
+  - Include/exclude serialversion errors, abstract method additions and/or
+    single-buttocked selections. This can be implemented easily as a generic
+    filter on the error strings, with particular filters tied to cmdline flags.
+  - Take one or more jace files and *exclude* all errors that occur in said
+    jace files. The exclusion file(s) will be processed first and added to the
+    tree *without* writing them to output. This must be done on a per-pass
+    basis: do pass 1 on the exclude files, then on the include files, then pass
+    2 on the exclude, etc.
