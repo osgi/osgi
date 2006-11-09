@@ -17,7 +17,7 @@
  */
 package org.osgi.service.webapplication;
 
-import java.util.Dictionary;
+import java.util.Map;
 
 /**
  * DefaultWebApplication provides a basic, default service component which
@@ -57,7 +57,7 @@ public class DefaultWebApplication implements WebApplication {
 	 * @return <code>null</code>
 	 * @see org.osgi.service.webapplication.WebApplication#getServletContextAttributes()
 	 */
-	public Dictionary getServletContextAttributes() {
+	public Map getServletContextAttributes() {
 		return null;
 	}
 

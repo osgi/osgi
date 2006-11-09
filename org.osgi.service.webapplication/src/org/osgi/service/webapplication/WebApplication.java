@@ -17,7 +17,7 @@
  */
 package org.osgi.service.webapplication;
 
-import java.util.Dictionary;
+import java.util.Map;
 
 /**
  * A WebApplication service is registered by a Web Application Bundle to
@@ -74,23 +74,23 @@ public interface WebApplication {
 	public static final String	WEBAPP_API_VERSION		= "webapp.api.version";									//$NON-NLS-1$
 
 	/**
-	 * Returns a <code>Dictionary</code> of attributes that will be available
+	 * Returns a <code>Map</code> of attributes that will be available
 	 * to the Web Application Bundle's servlets as ServletContext attributes.
 	 * These attributes may be accessed by a servlet in the Web Application
 	 * Bundle using the following call:
 	 * <p>
 	 * getServletContext().getAttribute(key);
 	 * <p>
-	 * Where <code>key</code> is a key in the Dictionary.
+	 * Where <code>key</code> is a key in the Map.
 	 * 
-	 * @return A Dictionary of attributes that is used to initialize the
+	 * @return A Map of attributes that is used to initialize the
 	 *         attributes of the Web Application Bundle's ServletContext, null
-	 *         may be returned if no attributes exist. The Dictionary returned
+	 *         may be returned if no attributes exist. The Map returned
 	 *         is used by the Web Container once during the deployment of the
 	 *         Web Application to get a list of attributes to set in the Web
 	 *         Application's ServletContext.
 	 */
-	public Dictionary getServletContextAttributes();
+	public Map getServletContextAttributes();
 
 	/**
 	 * This method must be called by the Web Container to report any exception
