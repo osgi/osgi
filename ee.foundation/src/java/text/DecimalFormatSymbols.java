@@ -22,6 +22,7 @@ public final class DecimalFormatSymbols implements java.io.Serializable, java.la
 	public DecimalFormatSymbols() { }
 	public DecimalFormatSymbols(java.util.Locale var0) { }
 	public java.lang.Object clone() { return null; }
+	public java.util.Currency getCurrency() { return null; }
 	public java.lang.String getCurrencySymbol() { return null; }
 	public char getDecimalSeparator() { return 0; }
 	public char getDigit() { return 0; }
@@ -35,6 +36,7 @@ public final class DecimalFormatSymbols implements java.io.Serializable, java.la
 	public char getPerMill() { return 0; }
 	public char getPercent() { return 0; }
 	public char getZeroDigit() { return 0; }
+	public void setCurrency(java.util.Currency var0) { }
 	public void setCurrencySymbol(java.lang.String var0) { }
 	public void setDecimalSeparator(char var0) { }
 	public void setDigit(char var0) { }

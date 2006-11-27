@@ -22,6 +22,7 @@ public class File implements java.io.Serializable, java.lang.Comparable {
 	public File(java.io.File var0, java.lang.String var1) { }
 	public File(java.lang.String var0) { }
 	public File(java.lang.String var0, java.lang.String var1) { }
+	public File(java.net.URI var0) { }
 	public boolean canRead() { return false; }
 	public boolean canWrite() { return false; }
 	public int compareTo(java.io.File var0) { return 0; }
@@ -57,6 +58,7 @@ public class File implements java.io.Serializable, java.lang.Comparable {
 	public boolean renameTo(java.io.File var0) { return false; }
 	public boolean setLastModified(long var0) { return false; }
 	public boolean setReadOnly() { return false; }
+	public java.net.URI toURI() { return null; }
 	public java.net.URL toURL() throws java.net.MalformedURLException { return null; }
 	public final static java.lang.String pathSeparator; static { pathSeparator = null; }
 	public final static char pathSeparatorChar; static { pathSeparatorChar = 0; }

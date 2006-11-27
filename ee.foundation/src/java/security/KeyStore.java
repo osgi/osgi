@@ -30,6 +30,7 @@ public class KeyStore {
 	public final static java.lang.String getDefaultType() { return null; }
 	public static java.security.KeyStore getInstance(java.lang.String var0) throws java.security.KeyStoreException { return null; }
 	public static java.security.KeyStore getInstance(java.lang.String var0, java.lang.String var1) throws java.security.KeyStoreException, java.security.NoSuchProviderException { return null; }
+	public static java.security.KeyStore getInstance(java.lang.String var0, java.security.Provider var1) throws java.security.KeyStoreException { return null; }
 	public final java.security.Key getKey(java.lang.String var0, char[] var1) throws java.security.KeyStoreException, java.security.NoSuchAlgorithmException, java.security.UnrecoverableKeyException { return null; }
 	public final java.security.Provider getProvider() { return null; }
 	public final java.lang.String getType() { return null; }

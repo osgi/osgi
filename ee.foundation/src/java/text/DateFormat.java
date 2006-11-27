@@ -70,5 +70,28 @@ public abstract class DateFormat extends java.text.Format {
 	public final static int YEAR_FIELD = 1;
 	protected java.util.Calendar calendar;
 	protected java.text.NumberFormat numberFormat;
+	public static class Field extends java.text.Format.Field {
+		protected Field(java.lang.String var0, int var1) { super((java.lang.String) null); }
+		public int getCalendarField() { return 0; }
+		public static java.text.DateFormat.Field ofCalendarField(int var0) { return null; }
+		public final static java.text.DateFormat.Field AM_PM; static { AM_PM = null; }
+		public final static java.text.DateFormat.Field DAY_OF_MONTH; static { DAY_OF_MONTH = null; }
+		public final static java.text.DateFormat.Field DAY_OF_WEEK; static { DAY_OF_WEEK = null; }
+		public final static java.text.DateFormat.Field DAY_OF_WEEK_IN_MONTH; static { DAY_OF_WEEK_IN_MONTH = null; }
+		public final static java.text.DateFormat.Field DAY_OF_YEAR; static { DAY_OF_YEAR = null; }
+		public final static java.text.DateFormat.Field ERA; static { ERA = null; }
+		public final static java.text.DateFormat.Field HOUR0; static { HOUR0 = null; }
+		public final static java.text.DateFormat.Field HOUR1; static { HOUR1 = null; }
+		public final static java.text.DateFormat.Field HOUR_OF_DAY0; static { HOUR_OF_DAY0 = null; }
+		public final static java.text.DateFormat.Field HOUR_OF_DAY1; static { HOUR_OF_DAY1 = null; }
+		public final static java.text.DateFormat.Field MILLISECOND; static { MILLISECOND = null; }
+		public final static java.text.DateFormat.Field MINUTE; static { MINUTE = null; }
+		public final static java.text.DateFormat.Field MONTH; static { MONTH = null; }
+		public final static java.text.DateFormat.Field SECOND; static { SECOND = null; }
+		public final static java.text.DateFormat.Field TIME_ZONE; static { TIME_ZONE = null; }
+		public final static java.text.DateFormat.Field WEEK_OF_MONTH; static { WEEK_OF_MONTH = null; }
+		public final static java.text.DateFormat.Field WEEK_OF_YEAR; static { WEEK_OF_YEAR = null; }
+		public final static java.text.DateFormat.Field YEAR; static { YEAR = null; }
+	}
 }
 

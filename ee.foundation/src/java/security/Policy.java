@@ -21,7 +21,9 @@ package java.security;
 public abstract class Policy {
 	public Policy() { }
 	public abstract java.security.PermissionCollection getPermissions(java.security.CodeSource var0);
+	public java.security.PermissionCollection getPermissions(java.security.ProtectionDomain var0) { return null; }
 	public static java.security.Policy getPolicy() { return null; }
+	public boolean implies(java.security.ProtectionDomain var0, java.security.Permission var1) { return false; }
 	public abstract void refresh();
 	public static void setPolicy(java.security.Policy var0) { }
 }

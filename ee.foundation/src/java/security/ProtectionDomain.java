@@ -20,8 +20,11 @@
 package java.security;
 public class ProtectionDomain {
 	public ProtectionDomain(java.security.CodeSource var0, java.security.PermissionCollection var1) { }
+	public ProtectionDomain(java.security.CodeSource var0, java.security.PermissionCollection var1, java.lang.ClassLoader var2, java.security.Principal[] var3) { }
+	public final java.lang.ClassLoader getClassLoader() { return null; }
 	public final java.security.CodeSource getCodeSource() { return null; }
 	public final java.security.PermissionCollection getPermissions() { return null; }
+	public final java.security.Principal[] getPrincipals() { return null; }
 	public boolean implies(java.security.Permission var0) { return false; }
 }
 

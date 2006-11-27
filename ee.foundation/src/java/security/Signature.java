@@ -23,6 +23,8 @@ public abstract class Signature extends java.security.SignatureSpi {
 	public final java.lang.String getAlgorithm() { return null; }
 	public static java.security.Signature getInstance(java.lang.String var0) throws java.security.NoSuchAlgorithmException { return null; }
 	public static java.security.Signature getInstance(java.lang.String var0, java.lang.String var1) throws java.security.NoSuchAlgorithmException, java.security.NoSuchProviderException { return null; }
+	public static java.security.Signature getInstance(java.lang.String var0, java.security.Provider var1) throws java.security.NoSuchAlgorithmException { return null; }
+	public final java.security.AlgorithmParameters getParameters() { return null; }
 	public final java.security.Provider getProvider() { return null; }
 	public final void initSign(java.security.PrivateKey var0) throws java.security.InvalidKeyException { }
 	public final void initSign(java.security.PrivateKey var0, java.security.SecureRandom var1) throws java.security.InvalidKeyException { }
@@ -35,6 +37,7 @@ public abstract class Signature extends java.security.SignatureSpi {
 	public final void update(byte[] var0) throws java.security.SignatureException { }
 	public final void update(byte[] var0, int var1, int var2) throws java.security.SignatureException { }
 	public final boolean verify(byte[] var0) throws java.security.SignatureException { return false; }
+	public final boolean verify(byte[] var0, int var1, int var2) throws java.security.SignatureException { return false; }
 	protected final static int SIGN = 2;
 	protected final static int UNINITIALIZED = 0;
 	protected final static int VERIFY = 3;

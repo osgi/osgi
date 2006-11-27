@@ -22,7 +22,11 @@ public abstract class CertificateFactorySpi {
 	public CertificateFactorySpi() { }
 	public abstract java.security.cert.CRL engineGenerateCRL(java.io.InputStream var0) throws java.security.cert.CRLException;
 	public abstract java.util.Collection engineGenerateCRLs(java.io.InputStream var0) throws java.security.cert.CRLException;
+	public java.security.cert.CertPath engineGenerateCertPath(java.io.InputStream var0) throws java.security.cert.CertificateException { return null; }
+	public java.security.cert.CertPath engineGenerateCertPath(java.io.InputStream var0, java.lang.String var1) throws java.security.cert.CertificateException { return null; }
+	public java.security.cert.CertPath engineGenerateCertPath(java.util.List var0) throws java.security.cert.CertificateException { return null; }
 	public abstract java.security.cert.Certificate engineGenerateCertificate(java.io.InputStream var0) throws java.security.cert.CertificateException;
 	public abstract java.util.Collection engineGenerateCertificates(java.io.InputStream var0) throws java.security.cert.CertificateException;
+	public java.util.Iterator engineGetCertPathEncodings() { return null; }
 }
 

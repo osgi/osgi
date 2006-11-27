@@ -22,6 +22,7 @@ public abstract class X509CRL extends java.security.cert.CRL implements java.sec
 	protected X509CRL() { super((java.lang.String) null); }
 	public abstract byte[] getEncoded() throws java.security.cert.CRLException;
 	public abstract java.security.Principal getIssuerDN();
+	public javax.security.auth.x500.X500Principal getIssuerX500Principal() { return null; }
 	public abstract java.util.Date getNextUpdate();
 	public abstract java.security.cert.X509CRLEntry getRevokedCertificate(java.math.BigInteger var0);
 	public abstract java.util.Set getRevokedCertificates();

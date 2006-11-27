@@ -30,7 +30,7 @@ public abstract class Calendar implements java.io.Serializable, java.lang.Clonea
 	protected void complete() { }
 	protected abstract void computeFields();
 	protected abstract void computeTime();
-	public final int get(int var0) { return 0; }
+	public int get(int var0) { return 0; }
 	public int getActualMaximum(int var0) { return 0; }
 	public int getActualMinimum(int var0) { return 0; }
 	public static java.util.Locale[] getAvailableLocales() { return null; }
@@ -45,14 +45,14 @@ public abstract class Calendar implements java.io.Serializable, java.lang.Clonea
 	public int getMinimalDaysInFirstWeek() { return 0; }
 	public abstract int getMinimum(int var0);
 	public final java.util.Date getTime() { return null; }
-	protected long getTimeInMillis() { return 0l; }
+	public long getTimeInMillis() { return 0l; }
 	public java.util.TimeZone getTimeZone() { return null; }
 	protected final int internalGet(int var0) { return 0; }
 	public boolean isLenient() { return false; }
 	public final boolean isSet(int var0) { return false; }
 	public void roll(int var0, int var1) { }
 	public abstract void roll(int var0, boolean var1);
-	public final void set(int var0, int var1) { }
+	public void set(int var0, int var1) { }
 	public final void set(int var0, int var1, int var2) { }
 	public final void set(int var0, int var1, int var2, int var3, int var4) { }
 	public final void set(int var0, int var1, int var2, int var3, int var4, int var5) { }
@@ -60,7 +60,7 @@ public abstract class Calendar implements java.io.Serializable, java.lang.Clonea
 	public void setLenient(boolean var0) { }
 	public void setMinimalDaysInFirstWeek(int var0) { }
 	public final void setTime(java.util.Date var0) { }
-	protected void setTimeInMillis(long var0) { }
+	public void setTimeInMillis(long var0) { }
 	public void setTimeZone(java.util.TimeZone var0) { }
 	public final static int AM = 0;
 	public final static int AM_PM = 9;

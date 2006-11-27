@@ -21,5 +21,7 @@ package java.lang;
 public class Error extends java.lang.Throwable {
 	public Error() { }
 	public Error(java.lang.String var0) { }
+	public Error(java.lang.String var0, java.lang.Throwable var1) { }
+	public Error(java.lang.Throwable var0) { }
 }
 

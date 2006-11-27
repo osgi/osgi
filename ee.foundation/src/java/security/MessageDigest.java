@@ -27,6 +27,7 @@ public abstract class MessageDigest extends java.security.MessageDigestSpi {
 	public final int getDigestLength() { return 0; }
 	public static java.security.MessageDigest getInstance(java.lang.String var0) throws java.security.NoSuchAlgorithmException { return null; }
 	public static java.security.MessageDigest getInstance(java.lang.String var0, java.lang.String var1) throws java.security.NoSuchAlgorithmException, java.security.NoSuchProviderException { return null; }
+	public static java.security.MessageDigest getInstance(java.lang.String var0, java.security.Provider var1) throws java.security.NoSuchAlgorithmException { return null; }
 	public final java.security.Provider getProvider() { return null; }
 	public static boolean isEqual(byte[] var0, byte[] var1) { return false; }
 	public void reset() { }

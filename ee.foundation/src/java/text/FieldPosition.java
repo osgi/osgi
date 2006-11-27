@@ -20,9 +20,12 @@
 package java.text;
 public class FieldPosition {
 	public FieldPosition(int var0) { }
+	public FieldPosition(java.text.Format.Field var0) { }
+	public FieldPosition(java.text.Format.Field var0, int var1) { }
 	public int getBeginIndex() { return 0; }
 	public int getEndIndex() { return 0; }
 	public int getField() { return 0; }
+	public java.text.Format.Field getFieldAttribute() { return null; }
 	public void setBeginIndex(int var0) { }
 	public void setEndIndex(int var0) { }
 }

@@ -21,5 +21,7 @@ package java.lang;
 public class RuntimeException extends java.lang.Exception {
 	public RuntimeException() { }
 	public RuntimeException(java.lang.String var0) { }
+	public RuntimeException(java.lang.String var0, java.lang.Throwable var1) { }
+	public RuntimeException(java.lang.Throwable var0) { }
 }
 

@@ -21,11 +21,17 @@ package java.lang;
 public class Throwable implements java.io.Serializable {
 	public Throwable() { }
 	public Throwable(java.lang.String var0) { }
+	public Throwable(java.lang.String var0, java.lang.Throwable var1) { }
+	public Throwable(java.lang.Throwable var0) { }
 	public java.lang.Throwable fillInStackTrace() { return null; }
+	public java.lang.Throwable getCause() { return null; }
 	public java.lang.String getLocalizedMessage() { return null; }
 	public java.lang.String getMessage() { return null; }
+	public java.lang.StackTraceElement[] getStackTrace() { return null; }
+	public java.lang.Throwable initCause(java.lang.Throwable var0) { return null; }
 	public void printStackTrace() { }
 	public void printStackTrace(java.io.PrintStream var0) { }
 	public void printStackTrace(java.io.PrintWriter var0) { }
+	public void setStackTrace(java.lang.StackTraceElement[] var0) { }
 }
 

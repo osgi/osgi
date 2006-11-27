@@ -25,6 +25,7 @@ public final class Character implements java.io.Serializable, java.lang.Comparab
 	public int compareTo(java.lang.Object var0) { return 0; }
 	public static int digit(char var0, int var1) { return 0; }
 	public static char forDigit(int var0, int var1) { return 0; }
+	public static byte getDirectionality(char var0) { return 0; }
 	public static int getNumericValue(char var0) { return 0; }
 	public static int getType(char var0) { return 0; }
 	public static boolean isDefined(char var0) { return false; }
@@ -36,6 +37,7 @@ public final class Character implements java.io.Serializable, java.lang.Comparab
 	public static boolean isLetter(char var0) { return false; }
 	public static boolean isLetterOrDigit(char var0) { return false; }
 	public static boolean isLowerCase(char var0) { return false; }
+	public static boolean isMirrored(char var0) { return false; }
 	public static boolean isSpaceChar(char var0) { return false; }
 	public static boolean isTitleCase(char var0) { return false; }
 	public static boolean isUnicodeIdentifierPart(char var0) { return false; }
@@ -43,6 +45,7 @@ public final class Character implements java.io.Serializable, java.lang.Comparab
 	public static boolean isUpperCase(char var0) { return false; }
 	public static boolean isWhitespace(char var0) { return false; }
 	public static char toLowerCase(char var0) { return 0; }
+	public static java.lang.String toString(char var0) { return null; }
 	public static char toTitleCase(char var0) { return 0; }
 	public static char toUpperCase(char var0) { return 0; }
 	public final static byte COMBINING_SPACING_MARK = 8;
@@ -51,9 +54,31 @@ public final class Character implements java.io.Serializable, java.lang.Comparab
 	public final static byte CURRENCY_SYMBOL = 26;
 	public final static byte DASH_PUNCTUATION = 20;
 	public final static byte DECIMAL_DIGIT_NUMBER = 9;
+	public final static byte DIRECTIONALITY_ARABIC_NUMBER = 6;
+	public final static byte DIRECTIONALITY_BOUNDARY_NEUTRAL = 9;
+	public final static byte DIRECTIONALITY_COMMON_NUMBER_SEPARATOR = 7;
+	public final static byte DIRECTIONALITY_EUROPEAN_NUMBER = 3;
+	public final static byte DIRECTIONALITY_EUROPEAN_NUMBER_SEPARATOR = 4;
+	public final static byte DIRECTIONALITY_EUROPEAN_NUMBER_TERMINATOR = 5;
+	public final static byte DIRECTIONALITY_LEFT_TO_RIGHT = 0;
+	public final static byte DIRECTIONALITY_LEFT_TO_RIGHT_EMBEDDING = 14;
+	public final static byte DIRECTIONALITY_LEFT_TO_RIGHT_OVERRIDE = 15;
+	public final static byte DIRECTIONALITY_NONSPACING_MARK = 8;
+	public final static byte DIRECTIONALITY_OTHER_NEUTRALS = 13;
+	public final static byte DIRECTIONALITY_PARAGRAPH_SEPARATOR = 10;
+	public final static byte DIRECTIONALITY_POP_DIRECTIONAL_FORMAT = 18;
+	public final static byte DIRECTIONALITY_RIGHT_TO_LEFT = 1;
+	public final static byte DIRECTIONALITY_RIGHT_TO_LEFT_ARABIC = 2;
+	public final static byte DIRECTIONALITY_RIGHT_TO_LEFT_EMBEDDING = 16;
+	public final static byte DIRECTIONALITY_RIGHT_TO_LEFT_OVERRIDE = 17;
+	public final static byte DIRECTIONALITY_SEGMENT_SEPARATOR = 11;
+	public final static byte DIRECTIONALITY_UNDEFINED = -1;
+	public final static byte DIRECTIONALITY_WHITESPACE = 12;
 	public final static byte ENCLOSING_MARK = 7;
 	public final static byte END_PUNCTUATION = 22;
+	public final static byte FINAL_QUOTE_PUNCTUATION = 30;
 	public final static byte FORMAT = 16;
+	public final static byte INITIAL_QUOTE_PUNCTUATION = 29;
 	public final static byte LETTER_NUMBER = 10;
 	public final static byte LINE_SEPARATOR = 13;
 	public final static byte LOWERCASE_LETTER = 2;
@@ -96,12 +121,17 @@ public final class Character implements java.io.Serializable, java.lang.Comparab
 		public final static java.lang.Character.UnicodeBlock BENGALI; static { BENGALI = null; }
 		public final static java.lang.Character.UnicodeBlock BLOCK_ELEMENTS; static { BLOCK_ELEMENTS = null; }
 		public final static java.lang.Character.UnicodeBlock BOPOMOFO; static { BOPOMOFO = null; }
+		public final static java.lang.Character.UnicodeBlock BOPOMOFO_EXTENDED; static { BOPOMOFO_EXTENDED = null; }
 		public final static java.lang.Character.UnicodeBlock BOX_DRAWING; static { BOX_DRAWING = null; }
+		public final static java.lang.Character.UnicodeBlock BRAILLE_PATTERNS; static { BRAILLE_PATTERNS = null; }
+		public final static java.lang.Character.UnicodeBlock CHEROKEE; static { CHEROKEE = null; }
 		public final static java.lang.Character.UnicodeBlock CJK_COMPATIBILITY; static { CJK_COMPATIBILITY = null; }
 		public final static java.lang.Character.UnicodeBlock CJK_COMPATIBILITY_FORMS; static { CJK_COMPATIBILITY_FORMS = null; }
 		public final static java.lang.Character.UnicodeBlock CJK_COMPATIBILITY_IDEOGRAPHS; static { CJK_COMPATIBILITY_IDEOGRAPHS = null; }
+		public final static java.lang.Character.UnicodeBlock CJK_RADICALS_SUPPLEMENT; static { CJK_RADICALS_SUPPLEMENT = null; }
 		public final static java.lang.Character.UnicodeBlock CJK_SYMBOLS_AND_PUNCTUATION; static { CJK_SYMBOLS_AND_PUNCTUATION = null; }
 		public final static java.lang.Character.UnicodeBlock CJK_UNIFIED_IDEOGRAPHS; static { CJK_UNIFIED_IDEOGRAPHS = null; }
+		public final static java.lang.Character.UnicodeBlock CJK_UNIFIED_IDEOGRAPHS_EXTENSION_A; static { CJK_UNIFIED_IDEOGRAPHS_EXTENSION_A = null; }
 		public final static java.lang.Character.UnicodeBlock COMBINING_DIACRITICAL_MARKS; static { COMBINING_DIACRITICAL_MARKS = null; }
 		public final static java.lang.Character.UnicodeBlock COMBINING_HALF_MARKS; static { COMBINING_HALF_MARKS = null; }
 		public final static java.lang.Character.UnicodeBlock COMBINING_MARKS_FOR_SYMBOLS; static { COMBINING_MARKS_FOR_SYMBOLS = null; }
@@ -112,6 +142,7 @@ public final class Character implements java.io.Serializable, java.lang.Comparab
 		public final static java.lang.Character.UnicodeBlock DINGBATS; static { DINGBATS = null; }
 		public final static java.lang.Character.UnicodeBlock ENCLOSED_ALPHANUMERICS; static { ENCLOSED_ALPHANUMERICS = null; }
 		public final static java.lang.Character.UnicodeBlock ENCLOSED_CJK_LETTERS_AND_MONTHS; static { ENCLOSED_CJK_LETTERS_AND_MONTHS = null; }
+		public final static java.lang.Character.UnicodeBlock ETHIOPIC; static { ETHIOPIC = null; }
 		public final static java.lang.Character.UnicodeBlock GENERAL_PUNCTUATION; static { GENERAL_PUNCTUATION = null; }
 		public final static java.lang.Character.UnicodeBlock GEOMETRIC_SHAPES; static { GEOMETRIC_SHAPES = null; }
 		public final static java.lang.Character.UnicodeBlock GEORGIAN; static { GEORGIAN = null; }
@@ -125,10 +156,13 @@ public final class Character implements java.io.Serializable, java.lang.Comparab
 		public final static java.lang.Character.UnicodeBlock HANGUL_SYLLABLES; static { HANGUL_SYLLABLES = null; }
 		public final static java.lang.Character.UnicodeBlock HEBREW; static { HEBREW = null; }
 		public final static java.lang.Character.UnicodeBlock HIRAGANA; static { HIRAGANA = null; }
+		public final static java.lang.Character.UnicodeBlock IDEOGRAPHIC_DESCRIPTION_CHARACTERS; static { IDEOGRAPHIC_DESCRIPTION_CHARACTERS = null; }
 		public final static java.lang.Character.UnicodeBlock IPA_EXTENSIONS; static { IPA_EXTENSIONS = null; }
 		public final static java.lang.Character.UnicodeBlock KANBUN; static { KANBUN = null; }
+		public final static java.lang.Character.UnicodeBlock KANGXI_RADICALS; static { KANGXI_RADICALS = null; }
 		public final static java.lang.Character.UnicodeBlock KANNADA; static { KANNADA = null; }
 		public final static java.lang.Character.UnicodeBlock KATAKANA; static { KATAKANA = null; }
+		public final static java.lang.Character.UnicodeBlock KHMER; static { KHMER = null; }
 		public final static java.lang.Character.UnicodeBlock LAO; static { LAO = null; }
 		public final static java.lang.Character.UnicodeBlock LATIN_1_SUPPLEMENT; static { LATIN_1_SUPPLEMENT = null; }
 		public final static java.lang.Character.UnicodeBlock LATIN_EXTENDED_A; static { LATIN_EXTENDED_A = null; }
@@ -139,19 +173,29 @@ public final class Character implements java.io.Serializable, java.lang.Comparab
 		public final static java.lang.Character.UnicodeBlock MATHEMATICAL_OPERATORS; static { MATHEMATICAL_OPERATORS = null; }
 		public final static java.lang.Character.UnicodeBlock MISCELLANEOUS_SYMBOLS; static { MISCELLANEOUS_SYMBOLS = null; }
 		public final static java.lang.Character.UnicodeBlock MISCELLANEOUS_TECHNICAL; static { MISCELLANEOUS_TECHNICAL = null; }
+		public final static java.lang.Character.UnicodeBlock MONGOLIAN; static { MONGOLIAN = null; }
+		public final static java.lang.Character.UnicodeBlock MYANMAR; static { MYANMAR = null; }
 		public final static java.lang.Character.UnicodeBlock NUMBER_FORMS; static { NUMBER_FORMS = null; }
+		public final static java.lang.Character.UnicodeBlock OGHAM; static { OGHAM = null; }
 		public final static java.lang.Character.UnicodeBlock OPTICAL_CHARACTER_RECOGNITION; static { OPTICAL_CHARACTER_RECOGNITION = null; }
 		public final static java.lang.Character.UnicodeBlock ORIYA; static { ORIYA = null; }
 		public final static java.lang.Character.UnicodeBlock PRIVATE_USE_AREA; static { PRIVATE_USE_AREA = null; }
+		public final static java.lang.Character.UnicodeBlock RUNIC; static { RUNIC = null; }
+		public final static java.lang.Character.UnicodeBlock SINHALA; static { SINHALA = null; }
 		public final static java.lang.Character.UnicodeBlock SMALL_FORM_VARIANTS; static { SMALL_FORM_VARIANTS = null; }
 		public final static java.lang.Character.UnicodeBlock SPACING_MODIFIER_LETTERS; static { SPACING_MODIFIER_LETTERS = null; }
 		public final static java.lang.Character.UnicodeBlock SPECIALS; static { SPECIALS = null; }
 		public final static java.lang.Character.UnicodeBlock SUPERSCRIPTS_AND_SUBSCRIPTS; static { SUPERSCRIPTS_AND_SUBSCRIPTS = null; }
 		public final static java.lang.Character.UnicodeBlock SURROGATES_AREA; static { SURROGATES_AREA = null; }
+		public final static java.lang.Character.UnicodeBlock SYRIAC; static { SYRIAC = null; }
 		public final static java.lang.Character.UnicodeBlock TAMIL; static { TAMIL = null; }
 		public final static java.lang.Character.UnicodeBlock TELUGU; static { TELUGU = null; }
+		public final static java.lang.Character.UnicodeBlock THAANA; static { THAANA = null; }
 		public final static java.lang.Character.UnicodeBlock THAI; static { THAI = null; }
 		public final static java.lang.Character.UnicodeBlock TIBETAN; static { TIBETAN = null; }
+		public final static java.lang.Character.UnicodeBlock UNIFIED_CANADIAN_ABORIGINAL_SYLLABICS; static { UNIFIED_CANADIAN_ABORIGINAL_SYLLABICS = null; }
+		public final static java.lang.Character.UnicodeBlock YI_RADICALS; static { YI_RADICALS = null; }
+		public final static java.lang.Character.UnicodeBlock YI_SYLLABLES; static { YI_SYLLABLES = null; }
 		private UnicodeBlock() { super((java.lang.String) null); } /* generated constructor to prevent compiler adding default public constructor */
 	}
 }

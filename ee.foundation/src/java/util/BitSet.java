@@ -23,12 +23,25 @@ public class BitSet implements java.io.Serializable, java.lang.Cloneable {
 	public BitSet(int var0) { }
 	public void and(java.util.BitSet var0) { }
 	public void andNot(java.util.BitSet var0) { }
+	public int cardinality() { return 0; }
+	public void clear() { }
 	public void clear(int var0) { }
+	public void clear(int var0, int var1) { }
 	public java.lang.Object clone() { return null; }
+	public void flip(int var0) { }
+	public void flip(int var0, int var1) { }
 	public boolean get(int var0) { return false; }
+	public java.util.BitSet get(int var0, int var1) { return null; }
+	public boolean intersects(java.util.BitSet var0) { return false; }
+	public boolean isEmpty() { return false; }
 	public int length() { return 0; }
+	public int nextClearBit(int var0) { return 0; }
+	public int nextSetBit(int var0) { return 0; }
 	public void or(java.util.BitSet var0) { }
 	public void set(int var0) { }
+	public void set(int var0, int var1) { }
+	public void set(int var0, int var1, boolean var2) { }
+	public void set(int var0, boolean var1) { }
 	public int size() { return 0; }
 	public void xor(java.util.BitSet var0) { }
 }

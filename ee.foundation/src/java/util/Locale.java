@@ -19,6 +19,7 @@
 
 package java.util;
 public final class Locale implements java.io.Serializable, java.lang.Cloneable {
+	public Locale(java.lang.String var0) { }
 	public Locale(java.lang.String var0, java.lang.String var1) { }
 	public Locale(java.lang.String var0, java.lang.String var1, java.lang.String var2) { }
 	public java.lang.Object clone() { return null; }

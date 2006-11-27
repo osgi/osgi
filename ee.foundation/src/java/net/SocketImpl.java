@@ -26,6 +26,7 @@ public abstract class SocketImpl implements java.net.SocketOptions {
 	protected abstract void close() throws java.io.IOException;
 	protected abstract void connect(java.lang.String var0, int var1) throws java.io.IOException;
 	protected abstract void connect(java.net.InetAddress var0, int var1) throws java.io.IOException;
+	protected abstract void connect(java.net.SocketAddress var0, int var1) throws java.io.IOException;
 	protected abstract void create(boolean var0) throws java.io.IOException;
 	protected java.io.FileDescriptor getFileDescriptor() { return null; }
 	protected java.net.InetAddress getInetAddress() { return null; }
@@ -34,8 +35,10 @@ public abstract class SocketImpl implements java.net.SocketOptions {
 	protected abstract java.io.OutputStream getOutputStream() throws java.io.IOException;
 	protected int getPort() { return 0; }
 	protected abstract void listen(int var0) throws java.io.IOException;
+	protected abstract void sendUrgentData(int var0) throws java.io.IOException;
 	protected void shutdownInput() throws java.io.IOException { }
 	protected void shutdownOutput() throws java.io.IOException { }
+	protected boolean supportsUrgentData() { return false; }
 	protected java.net.InetAddress address;
 	protected java.io.FileDescriptor fd;
 	protected int localport;

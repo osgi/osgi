@@ -18,7 +18,7 @@
  */
 
 package java.util;
-public class ArrayList extends java.util.AbstractList implements java.io.Serializable, java.lang.Cloneable, java.util.List {
+public class ArrayList extends java.util.AbstractList implements java.io.Serializable, java.lang.Cloneable, java.util.List, java.util.RandomAccess {
 	public ArrayList() { }
 	public ArrayList(int var0) { }
 	public ArrayList(java.util.Collection var0) { }

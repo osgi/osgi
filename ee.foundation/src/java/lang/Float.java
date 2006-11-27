@@ -22,6 +22,7 @@ public final class Float extends java.lang.Number implements java.lang.Comparabl
 	public Float(double var0) { }
 	public Float(float var0) { }
 	public Float(java.lang.String var0) { }
+	public static int compare(float var0, float var1) { return 0; }
 	public int compareTo(java.lang.Float var0) { return 0; }
 	public int compareTo(java.lang.Object var0) { return 0; }
 	public double doubleValue() { return 0.0d; }

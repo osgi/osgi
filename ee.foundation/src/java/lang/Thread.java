@@ -25,6 +25,7 @@ public class Thread implements java.lang.Runnable {
 	public Thread(java.lang.String var0) { }
 	public Thread(java.lang.ThreadGroup var0, java.lang.Runnable var1) { }
 	public Thread(java.lang.ThreadGroup var0, java.lang.Runnable var1, java.lang.String var2) { }
+	public Thread(java.lang.ThreadGroup var0, java.lang.Runnable var1, java.lang.String var2, long var3) { }
 	public Thread(java.lang.ThreadGroup var0, java.lang.String var1) { }
 	public static int activeCount() { return 0; }
 	public final void checkAccess() { }
@@ -36,6 +37,7 @@ public class Thread implements java.lang.Runnable {
 	public final java.lang.String getName() { return null; }
 	public final int getPriority() { return 0; }
 	public final java.lang.ThreadGroup getThreadGroup() { return null; }
+	public static boolean holdsLock(java.lang.Object var0) { return false; }
 	public void interrupt() { }
 	public static boolean interrupted() { return false; }
 	public final boolean isAlive() { return false; }

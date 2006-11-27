@@ -18,7 +18,7 @@
  */
 
 package java.lang;
-public final class String implements java.io.Serializable, java.lang.Comparable {
+public final class String implements java.io.Serializable, java.lang.CharSequence, java.lang.Comparable {
 	public String() { }
 	public String(java.lang.String var0) { }
 	public String(java.lang.StringBuffer var0) { }
@@ -33,6 +33,7 @@ public final class String implements java.io.Serializable, java.lang.Comparable 
 	public int compareTo(java.lang.String var0) { return 0; }
 	public int compareToIgnoreCase(java.lang.String var0) { return 0; }
 	public java.lang.String concat(java.lang.String var0) { return null; }
+	public boolean contentEquals(java.lang.StringBuffer var0) { return false; }
 	public static java.lang.String copyValueOf(char[] var0) { return null; }
 	public static java.lang.String copyValueOf(char[] var0, int var1, int var2) { return null; }
 	public boolean endsWith(java.lang.String var0) { return false; }
@@ -55,6 +56,7 @@ public final class String implements java.io.Serializable, java.lang.Comparable 
 	public java.lang.String replace(char var0, char var1) { return null; }
 	public boolean startsWith(java.lang.String var0) { return false; }
 	public boolean startsWith(java.lang.String var0, int var1) { return false; }
+	public java.lang.CharSequence subSequence(int var0, int var1) { return null; }
 	public java.lang.String substring(int var0) { return null; }
 	public java.lang.String substring(int var0, int var1) { return null; }
 	public char[] toCharArray() { return null; }

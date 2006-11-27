@@ -26,10 +26,13 @@ public abstract class NumberFormat extends java.text.Format {
 	public abstract java.lang.StringBuffer format(long var0, java.lang.StringBuffer var1, java.text.FieldPosition var2);
 	public final java.lang.StringBuffer format(java.lang.Object var0, java.lang.StringBuffer var1, java.text.FieldPosition var2) { return null; }
 	public static java.util.Locale[] getAvailableLocales() { return null; }
+	public java.util.Currency getCurrency() { return null; }
 	public final static java.text.NumberFormat getCurrencyInstance() { return null; }
 	public static java.text.NumberFormat getCurrencyInstance(java.util.Locale var0) { return null; }
 	public final static java.text.NumberFormat getInstance() { return null; }
 	public static java.text.NumberFormat getInstance(java.util.Locale var0) { return null; }
+	public final static java.text.NumberFormat getIntegerInstance() { return null; }
+	public static java.text.NumberFormat getIntegerInstance(java.util.Locale var0) { return null; }
 	public int getMaximumFractionDigits() { return 0; }
 	public int getMaximumIntegerDigits() { return 0; }
 	public int getMinimumFractionDigits() { return 0; }
@@ -43,6 +46,7 @@ public abstract class NumberFormat extends java.text.Format {
 	public java.lang.Number parse(java.lang.String var0) throws java.text.ParseException { return null; }
 	public abstract java.lang.Number parse(java.lang.String var0, java.text.ParsePosition var1);
 	public final java.lang.Object parseObject(java.lang.String var0, java.text.ParsePosition var1) { return null; }
+	public void setCurrency(java.util.Currency var0) { }
 	public void setGroupingUsed(boolean var0) { }
 	public void setMaximumFractionDigits(int var0) { }
 	public void setMaximumIntegerDigits(int var0) { }
@@ -51,5 +55,19 @@ public abstract class NumberFormat extends java.text.Format {
 	public void setParseIntegerOnly(boolean var0) { }
 	public final static int FRACTION_FIELD = 1;
 	public final static int INTEGER_FIELD = 0;
+	public static class Field extends java.text.Format.Field {
+		protected Field(java.lang.String var0) { super((java.lang.String) null); }
+		public final static java.text.NumberFormat.Field CURRENCY; static { CURRENCY = null; }
+		public final static java.text.NumberFormat.Field DECIMAL_SEPARATOR; static { DECIMAL_SEPARATOR = null; }
+		public final static java.text.NumberFormat.Field EXPONENT; static { EXPONENT = null; }
+		public final static java.text.NumberFormat.Field EXPONENT_SIGN; static { EXPONENT_SIGN = null; }
+		public final static java.text.NumberFormat.Field EXPONENT_SYMBOL; static { EXPONENT_SYMBOL = null; }
+		public final static java.text.NumberFormat.Field FRACTION; static { FRACTION = null; }
+		public final static java.text.NumberFormat.Field GROUPING_SEPARATOR; static { GROUPING_SEPARATOR = null; }
+		public final static java.text.NumberFormat.Field INTEGER; static { INTEGER = null; }
+		public final static java.text.NumberFormat.Field PERCENT; static { PERCENT = null; }
+		public final static java.text.NumberFormat.Field PERMILLE; static { PERMILLE = null; }
+		public final static java.text.NumberFormat.Field SIGN; static { SIGN = null; }
+	}
 }
 

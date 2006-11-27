@@ -21,6 +21,7 @@ package java.io;
 public class PrintStream extends java.io.FilterOutputStream {
 	public PrintStream(java.io.OutputStream var0) { super((java.io.OutputStream) null); }
 	public PrintStream(java.io.OutputStream var0, boolean var1) { super((java.io.OutputStream) null); }
+	public PrintStream(java.io.OutputStream var0, boolean var1, java.lang.String var2) throws java.io.UnsupportedEncodingException { super((java.io.OutputStream) null); }
 	public boolean checkError() { return false; }
 	public void close() { }
 	public void flush() { }

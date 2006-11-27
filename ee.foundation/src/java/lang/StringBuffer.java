@@ -18,7 +18,7 @@
  */
 
 package java.lang;
-public final class StringBuffer implements java.io.Serializable {
+public final class StringBuffer implements java.io.Serializable, java.lang.CharSequence {
 	public StringBuffer() { }
 	public StringBuffer(int var0) { }
 	public StringBuffer(java.lang.String var0) { }
@@ -29,6 +29,7 @@ public final class StringBuffer implements java.io.Serializable {
 	public java.lang.StringBuffer append(long var0) { return null; }
 	public java.lang.StringBuffer append(java.lang.Object var0) { return null; }
 	public java.lang.StringBuffer append(java.lang.String var0) { return null; }
+	public java.lang.StringBuffer append(java.lang.StringBuffer var0) { return null; }
 	public java.lang.StringBuffer append(boolean var0) { return null; }
 	public java.lang.StringBuffer append(char[] var0) { return null; }
 	public java.lang.StringBuffer append(char[] var0, int var1, int var2) { return null; }
@@ -38,6 +39,8 @@ public final class StringBuffer implements java.io.Serializable {
 	public java.lang.StringBuffer deleteCharAt(int var0) { return null; }
 	public void ensureCapacity(int var0) { }
 	public void getChars(int var0, int var1, char[] var2, int var3) { }
+	public int indexOf(java.lang.String var0) { return 0; }
+	public int indexOf(java.lang.String var0, int var1) { return 0; }
 	public java.lang.StringBuffer insert(int var0, char var1) { return null; }
 	public java.lang.StringBuffer insert(int var0, double var1) { return null; }
 	public java.lang.StringBuffer insert(int var0, float var1) { return null; }
@@ -48,11 +51,14 @@ public final class StringBuffer implements java.io.Serializable {
 	public java.lang.StringBuffer insert(int var0, boolean var1) { return null; }
 	public java.lang.StringBuffer insert(int var0, char[] var1) { return null; }
 	public java.lang.StringBuffer insert(int var0, char[] var1, int var2, int var3) { return null; }
+	public int lastIndexOf(java.lang.String var0) { return 0; }
+	public int lastIndexOf(java.lang.String var0, int var1) { return 0; }
 	public int length() { return 0; }
 	public java.lang.StringBuffer replace(int var0, int var1, java.lang.String var2) { return null; }
 	public java.lang.StringBuffer reverse() { return null; }
 	public void setCharAt(int var0, char var1) { }
 	public void setLength(int var0) { }
+	public java.lang.CharSequence subSequence(int var0, int var1) { return null; }
 	public java.lang.String substring(int var0) { return null; }
 	public java.lang.String substring(int var0, int var1) { return null; }
 }

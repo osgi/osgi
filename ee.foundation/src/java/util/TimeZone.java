@@ -23,6 +23,7 @@ public abstract class TimeZone implements java.io.Serializable, java.lang.Clonea
 	public java.lang.Object clone() { return null; }
 	public static java.lang.String[] getAvailableIDs() { return null; }
 	public static java.lang.String[] getAvailableIDs(int var0) { return null; }
+	public int getDSTSavings() { return 0; }
 	public static java.util.TimeZone getDefault() { return null; }
 	public final java.lang.String getDisplayName() { return null; }
 	public final java.lang.String getDisplayName(java.util.Locale var0) { return null; }
@@ -30,6 +31,7 @@ public abstract class TimeZone implements java.io.Serializable, java.lang.Clonea
 	public java.lang.String getDisplayName(boolean var0, int var1, java.util.Locale var2) { return null; }
 	public java.lang.String getID() { return null; }
 	public abstract int getOffset(int var0, int var1, int var2, int var3, int var4, int var5);
+	public int getOffset(long var0) { return 0; }
 	public abstract int getRawOffset();
 	public static java.util.TimeZone getTimeZone(java.lang.String var0) { return null; }
 	public boolean hasSameRules(java.util.TimeZone var0) { return false; }

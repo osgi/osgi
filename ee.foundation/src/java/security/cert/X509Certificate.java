@@ -23,8 +23,11 @@ public abstract class X509Certificate extends java.security.cert.Certificate imp
 	public abstract void checkValidity() throws java.security.cert.CertificateExpiredException, java.security.cert.CertificateNotYetValidException;
 	public abstract void checkValidity(java.util.Date var0) throws java.security.cert.CertificateExpiredException, java.security.cert.CertificateNotYetValidException;
 	public abstract int getBasicConstraints();
+	public java.util.List getExtendedKeyUsage() throws java.security.cert.CertificateParsingException { return null; }
+	public java.util.Collection getIssuerAlternativeNames() throws java.security.cert.CertificateParsingException { return null; }
 	public abstract java.security.Principal getIssuerDN();
 	public abstract boolean[] getIssuerUniqueID();
+	public javax.security.auth.x500.X500Principal getIssuerX500Principal() { return null; }
 	public abstract boolean[] getKeyUsage();
 	public abstract java.util.Date getNotAfter();
 	public abstract java.util.Date getNotBefore();
@@ -33,8 +36,10 @@ public abstract class X509Certificate extends java.security.cert.Certificate imp
 	public abstract java.lang.String getSigAlgOID();
 	public abstract byte[] getSigAlgParams();
 	public abstract byte[] getSignature();
+	public java.util.Collection getSubjectAlternativeNames() throws java.security.cert.CertificateParsingException { return null; }
 	public abstract java.security.Principal getSubjectDN();
 	public abstract boolean[] getSubjectUniqueID();
+	public javax.security.auth.x500.X500Principal getSubjectX500Principal() { return null; }
 	public abstract byte[] getTBSCertificate() throws java.security.cert.CertificateEncodingException;
 	public abstract int getVersion();
 }

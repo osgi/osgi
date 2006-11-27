@@ -20,6 +20,7 @@
 package java.net;
 public abstract class URLConnection {
 	protected URLConnection(java.net.URL var0) { }
+	public void addRequestProperty(java.lang.String var0, java.lang.String var1) { }
 	public abstract void connect() throws java.io.IOException;
 	public boolean getAllowUserInteraction() { return false; }
 	public java.lang.Object getContent() throws java.io.IOException { return null; }
@@ -39,15 +40,17 @@ public abstract class URLConnection {
 	public long getHeaderFieldDate(java.lang.String var0, long var1) { return 0l; }
 	public int getHeaderFieldInt(java.lang.String var0, int var1) { return 0; }
 	public java.lang.String getHeaderFieldKey(int var0) { return null; }
+	public java.util.Map getHeaderFields() { return null; }
 	public long getIfModifiedSince() { return 0l; }
 	public java.io.InputStream getInputStream() throws java.io.IOException { return null; }
 	public long getLastModified() { return 0l; }
 	public java.io.OutputStream getOutputStream() throws java.io.IOException { return null; }
 	public java.security.Permission getPermission() throws java.io.IOException { return null; }
+	public java.util.Map getRequestProperties() { return null; }
 	public java.lang.String getRequestProperty(java.lang.String var0) { return null; }
 	public java.net.URL getURL() { return null; }
 	public boolean getUseCaches() { return false; }
-	protected static java.lang.String guessContentTypeFromName(java.lang.String var0) { return null; }
+	public static java.lang.String guessContentTypeFromName(java.lang.String var0) { return null; }
 	public static java.lang.String guessContentTypeFromStream(java.io.InputStream var0) throws java.io.IOException { return null; }
 	public void setAllowUserInteraction(boolean var0) { }
 	public static void setContentHandlerFactory(java.net.ContentHandlerFactory var0) { }

@@ -21,6 +21,7 @@ package java.security;
 public abstract class SignatureSpi {
 	public SignatureSpi() { }
 	public java.lang.Object clone() throws java.lang.CloneNotSupportedException { return null; }
+	protected java.security.AlgorithmParameters engineGetParameters() { return null; }
 	protected abstract void engineInitSign(java.security.PrivateKey var0) throws java.security.InvalidKeyException;
 	protected void engineInitSign(java.security.PrivateKey var0, java.security.SecureRandom var1) throws java.security.InvalidKeyException { }
 	protected abstract void engineInitVerify(java.security.PublicKey var0) throws java.security.InvalidKeyException;
@@ -30,6 +31,7 @@ public abstract class SignatureSpi {
 	protected abstract void engineUpdate(byte var0) throws java.security.SignatureException;
 	protected abstract void engineUpdate(byte[] var0, int var1, int var2) throws java.security.SignatureException;
 	protected abstract boolean engineVerify(byte[] var0) throws java.security.SignatureException;
+	protected boolean engineVerify(byte[] var0, int var1, int var2) throws java.security.SignatureException { return false; }
 	protected java.security.SecureRandom appRandom;
 }
 
