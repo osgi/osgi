@@ -7,4 +7,5 @@
 <stringAttribute key="org.eclipse.jdt.launching.VM_ARGUMENTS" value="-Dorg.osgi.util.gsm.imei=322956009459287 -Dorg.osgi.util.gsm.imsi=724935267491023"/>
 <stringAttribute key="org.eclipse.jdt.junit.CONTAINER" value="=org.osgi.util.gsm/src&lt;unittests"/>
 <booleanAttribute key="org.eclipse.debug.core.appendEnvironmentVariables" value="true"/>
+<stringAttribute key="org.eclipse.jdt.junit.TEST_KIND" value="org.eclipse.jdt.junit.loader.junit3"/>
 </launchConfiguration>
