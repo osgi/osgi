@@ -21,23 +21,13 @@ package org.osgi.service.navigation.control;
 import org.osgi.service.navigation.*;
 
 public interface NavigationService  {
-	// was elaborate
 	Location[] getLocation(Address address );
-	// was elaborate
-	Location getLocation(Coordinate coordinate);
-	
-	RoutePlan createRoutePlan(Location to);
-	
+	Location getLocation(Coordinate coordinate);	
+	Route createRoute(Location from, Location to);
 	Location getCurrentLocation();
-	
-	void startGuidance(RoutePlan routePlan );
+	Path startGuidance(Route route );
 	void stopGuidance();
-	
-	/**
-	 * ### I think we need to be able to get the current route.
-	 * 
-	 * @return
-	 */
 	Route getCurrentRoute();
+	Path getCurrentPath();
 }
  

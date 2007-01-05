@@ -22,7 +22,7 @@ package org.osgi.service.navigation;
  * A maneuver is the action that the driver has to perform at a junction.
  * Several advices can be rendered at a maneuver.
  */
-public interface Maneuver extends RouteSegment {
+public interface Maneuver extends RoadSegment {
 	/**
 	 * Indicates that there is no junction at the maneuver.
 	 */

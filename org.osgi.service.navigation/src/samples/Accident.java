@@ -47,7 +47,7 @@ public class Accident {
 		// like to use filtering, but I guess that is hard to
 		// make it work because we have no id on the location.
 		
-		RouteSegment rss[] = route.getRouteSegments(-1, "(location.id="+/*loc.getId()+*/")");
+		RoadSegment rss[] = route.getRouteSegments(-1, "(location.id="+/*loc.getId()+*/")");
 		for ( int i=0; i<rss.length; i++ ) {
 			// route.exclude(rss[i]);
 		}
@@ -56,7 +56,7 @@ public class Accident {
 		// ### maybe the nextRoutSegment should return an int?
 		int n =0;
 		while(true) {
-			RouteSegment rs = route.getRouteSegment(n++);
+			RoadSegment rs = route.getRouteSegment(n++);
 			if ( rs == null) 
 				continue;
 			

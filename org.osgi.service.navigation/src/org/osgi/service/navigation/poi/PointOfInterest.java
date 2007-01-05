@@ -49,14 +49,14 @@ import org.osgi.service.navigation.*;
     * These location can be used to determine a route.
     * @return The list of entry points to the POI
     */
-    Location[] getEntryPoints();
+    Location[] getEntryLocations();
    
    /**
     * Returns additional properties of the POI.
     * @return The list of specific properties of the POI, null if properties are not 
     * provided
     */
-    Map getProperties();
+    Map getAttributes();
    
    /**
     * Returns the POI Category. The third party provider has to deliver the categories 
@@ -65,12 +65,5 @@ import org.osgi.service.navigation.*;
     * @return String The POI categories. Each sub category must 
     */
     String getCategory();
-   
-    // ### Why do we need those methods? They are obtainable 
-    // through the Location of getLocation and getEntryPoints?
-   Coordinate getCoordinate();
-   Address getAddress();
-   Address[] getEntryAddresses();
-   Coordinate[] getEntryCoordinates();
    
 }

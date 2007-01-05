@@ -26,11 +26,12 @@ public interface PointOfInterestService {
 	String	PHONENUMBER	= "phonenumber";
 	String	URL			= "url";
 
-	String[] getPropertyKeys(String category, String locale);
+	String[] getAttributeKeys(String category, String locale);
 
 	String[] getCategories(String locale);
 
-	PointOfInterest[] getPointOfInterests(String filter, Zone zone,
+	PointOfInterest[] getPointOfInterests(String filter, Location zone,
+			double radius,
 			String locale);
 
 	PointOfInterest getPointOfInterest(int index);

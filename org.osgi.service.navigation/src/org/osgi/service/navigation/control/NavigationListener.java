@@ -20,4 +20,5 @@ package org.osgi.service.navigation.control;
 
 public interface NavigationListener {
 
+	void navigationEvent(NavigationEvent event);
 }

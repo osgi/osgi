@@ -47,33 +47,15 @@ public interface Route  {
 	 */
 	public static final int	AVOID_FERRY		= 8;
 
-	/**
-	 * ### Should we return the index?
-	 * ### what happens when you have not planned this Route?
-	 * ### will it return at the end?
-	 * ### what happens when the nav system replans because of some
-	 *     reason?
-	 * 
-	 * @return
-	 */
-	RouteSegment nextRouteSegment();
-	/**
-	 * ### What is the syntax of the filter?
-	 * ### what happens when you have not planned this Route?
-	 * ### what happens when you replan?
-	 * 
-	 * @param size maximum number of elements to return
-	 * @param filter an OSGi filter, for properties see ###
-	 * @return
-	 */
-	RouteSegment [] getRouteSegments(int size, String filter);
 	
 	/**
-	 * 
-	 * @param n Index
-	 * @return The n'th Route Segment, or null if no such Route Segment
+	 * Calculate alternatives
 	 */
-	RouteSegment getRouteSegment(int n);
+	public static final int CALCULATE_ALTERNATIVES = 10;
+	
+	
+	
+	
 
 	/**
 	 * ### Can you do this after planning?
@@ -82,7 +64,8 @@ public interface Route  {
 	 * 
 	 * @param location
 	 */
-	void avoid(Location location);
+	void addAvoid(Location location);
+	void removeAvoid(Location location);
 
 	/**
 	 * ### Does this imply there is a segment with the given location? Or is
@@ -91,29 +74,16 @@ public interface Route  {
 	 * 
 	 * @param location
 	 */
-	void via(Location location);
+	void addVia(Location location);
+	void removeVia(Location location);
 	
 	Location[] getAvoids();
 	Location[] getVias();
-	
-	/**
-	 * ### remaining distance to where? The routeplan or this route?
-	 * 
-	 * @return
-	 */
-	double getRemainingDistance();
-	double getRemainingTravelTime();
-	
-	/**
-	 * ### what exceptions are thrown?
-	 * ### must the planning actually take place or can it be deferred?
-	 *
-	 */
-	void plan();
-	
+		
 	void setStrategy(int strategy);
 	
 	Location getDestination();
+	Location getOrigin();
 	
 	//### Do we need an error state if the planning failed? or do
 	// we throw a planning exception.
@@ -122,4 +92,9 @@ public interface Route  {
 	// ### do we need a getRouteSegment(Location) method so that
 	// we can easily find a segment on the route that we need to
 	// do something special with?
+	
+	
+	Path[] getPaths();
+	Path getPreferredPath();
+	void setPreferredPath(Path path);
 }
