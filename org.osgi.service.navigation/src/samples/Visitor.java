@@ -28,15 +28,15 @@ public class Visitor {
 	
 	List		visits;
 	
-	public void patientVisitor(Patient patients[]){		
-		RoutePlan plan = nav.createRoutePlan(nav.getCurrentLocation());
-		Location locations[] = new Location[patients.length];
-		for ( int i=0; i<locations.length; i++ ) {
-			Location via = calcAddress(patients[i]);
-			plan.addRoute(via);
-		}
-		nav.startGuidance(plan);
-	}
+//	public void patientVisitor(Patient patients[]){		
+//		RoutePlan plan = nav.createRoutePlan(nav.getCurrentLocation());
+//		Location locations[] = new Location[patients.length];
+//		for ( int i=0; i<locations.length; i++ ) {
+//			Location via = calcAddress(patients[i]);
+//			plan.addRoute(via);
+//		}
+//		nav.startGuidance(plan);
+//	}
 	
 	
 	private Location calcAddress(Patient patient) {

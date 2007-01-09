@@ -18,6 +18,8 @@
 
 package org.osgi.service.navigation;
 
+import java.util.Map;
+
 import org.osgi.util.measurement.Measurement;
 
 public interface RoadSegment {

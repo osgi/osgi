@@ -1,5 +1,9 @@
 package org.osgi.service.navigation;
 
+import java.util.List;
+
+import org.osgi.util.measurement.Measurement;
+
 public interface Path extends List {
 
 	/**

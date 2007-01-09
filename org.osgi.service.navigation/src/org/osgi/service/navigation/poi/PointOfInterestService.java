@@ -18,7 +18,7 @@
 
 package org.osgi.service.navigation.poi;
 
-import org.osgi.service.navigation.Zone;
+import org.osgi.service.navigation.Location;
 
 public interface PointOfInterestService {
 	String	NAME		= "name";

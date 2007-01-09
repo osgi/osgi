@@ -47,23 +47,23 @@ public class Accident {
 		// like to use filtering, but I guess that is hard to
 		// make it work because we have no id on the location.
 		
-		RoadSegment rss[] = route.getRouteSegments(-1, "(location.id="+/*loc.getId()+*/")");
-		for ( int i=0; i<rss.length; i++ ) {
-			// route.exclude(rss[i]);
-		}
-		
-		// ### Iterating over the segments stinks! We need a count or iterator. 
-		// ### maybe the nextRoutSegment should return an int?
-		int n =0;
-		while(true) {
-			RoadSegment rs = route.getRouteSegment(n++);
-			if ( rs == null) 
-				continue;
-			
-			if ( rs.getLocation().equals(loc) ) {
-				// route.exclude(rs);
-			}
-		}
+//		RoadSegment rss[] = route.getRouteSegments(-1, "(location.id="+/*loc.getId()+*/")");
+//		for ( int i=0; i<rss.length; i++ ) {
+//			// route.exclude(rss[i]);
+//		}
+//		
+//		// ### Iterating over the segments stinks! We need a count or iterator. 
+//		// ### maybe the nextRoutSegment should return an int?
+//		int n =0;
+//		while(true) {
+//			RoadSegment rs = route.getRouteSegment(n++);
+//			if ( rs == null) 
+//				continue;
+//			
+//			if ( rs.getLocation().equals(loc) ) {
+//				// route.exclude(rs);
+//			}
+//		}
 	}
 	
 }

@@ -1,5 +1,7 @@
 package org.osgi.service.navigation.control;
 
+import org.osgi.service.navigation.Path;
+
 public class NavigationEvent {
 	final static int GUIDANCE_STARTED = 1;
 	final static int GUIDANCE_STOPPED = 2;

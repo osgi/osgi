@@ -20,6 +20,8 @@ package org.osgi.service.navigation;
 
 import java.util.Map;
 
+import org.osgi.util.measurement.Measurement;
+
 public interface Location {
 	final static int FEATURE_ROAD_OR_FERRY = 41;
 	final static int ADMINISTRATIVE_BOUNDARY = 11;
@@ -30,7 +32,6 @@ public interface Location {
 	Object getSource();
 	Address getAddress();	
 	Map getAttributes();
-	Object getSource();
 	
 	int getFeature();
 }
