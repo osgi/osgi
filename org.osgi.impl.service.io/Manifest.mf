@@ -7,7 +7,8 @@ Bundle-Copyright: ${copyright}
 Bundle-Vendor: OSGi Alliance
 Bundle-Version: 1.0
 Bundle-Category: osgi
-Export-Package: org.osgi.service.io; specification-version="1.0"
-Import-Package: org.osgi.framework; specification-version=1.1, org.osgi.util.tracker; specification-version=1.1,javax.microedition.io
+$(IMPORT-PACKAGE)
+$(EXPORT-PACKAGE)
+$(PRIVATE-PACKAGE)
 
 
