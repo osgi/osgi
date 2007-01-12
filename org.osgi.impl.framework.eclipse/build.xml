@@ -10,11 +10,5 @@
 		      tofile="${project}/${project.name}.jar"
 		      verbose="${verbose}"
 		      preservelastmodified="true" />
-		<!-- Set the main class. -->
-		<jar destfile="${project}/${project.name}.jar" update="true">
-			<manifest>
-				<attribute name="Main-Class" value="org.eclipse.osgi.framework.launcher.Launcher" />
-			</manifest>
-		</jar>
 	</target>
 </project>
