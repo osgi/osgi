@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="project" default="run-core">
 	
+	<target name="clean">
+		<delete dir="configuration"/> <!-- delete bundles dir to clear permdata -->
+		<delete dir="cdresources"/> <!-- delete upnp cd resources -->
+	</target>	
+
 	<target name="run-core">
 		<antcall target="-run">
 		  <param name="impls" value="file:../osgi.core.impls.jar"/>
@@ -22,10 +27,8 @@
 		</antcall>
 	</target>
 	
-	<target name="-run">
+	<target name="-run" depends="clean">
 		<echo>Testing ${impls}</echo>
-		<delete dir="configuration"/> <!-- delete bundles dir to clear permdata -->
-		<delete dir="cdresources"/> <!-- delete upnp cd resources -->
 		<java fork="true" classname="org.eclipse.osgi.framework.launcher.Launcher">	
 			<classpath path="../org.osgi.impl.framework.eclipse.jar"/>
 			<classpath path="${classpath}"/>
