@@ -2,11 +2,11 @@
 <project name="project" default="publish"> 
 
 	<target name="init" depends="master.init">
-		<copy todir="target/delivered" overwrite="true" verbose="${verbose}" preservelastmodified="true">
+		<copy todir="target/delivered" verbose="${verbose}" preservelastmodified="true">
 			<fileset dir="${workspace}/org.osgi.test.cases.deploymentadmin.mo/delivered" />
 		</copy>
-		<copy file="${workspace}/cnf/certificate/.keystore" tofile="target/keystore" overwrite="true" verbose="${verbose}" preservelastmodified="true"/>
-		<copy file="${workspace}/licensed/jar/servlet.jar" tofile="servlet.jar" overwrite="true" verbose="${verbose}" preservelastmodified="true"/>
+		<copy file="${workspace}/cnf/certificate/.keystore" tofile="target/keystore" verbose="${verbose}" preservelastmodified="true"/>
+		<copy file="${workspace}/licensed/jar/servlet.jar" tofile="servlet.jar" verbose="${verbose}" preservelastmodified="true"/>
 	</target>
 
 	<target name="crossref">
