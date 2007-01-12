@@ -5,15 +5,15 @@
 <listEntry value="org.eclipse.debug.ui.launchGroup.debug"/>
 </listAttribute>
 <stringAttribute key="org.eclipse.jdt.launching.MAIN_TYPE" value="org.eclipse.osgi.framework.launcher.Launcher"/>
-<stringAttribute key="org.eclipse.debug.ui.ATTR_CONSOLE_ENCODING" value="UTF-8"/>
 <stringAttribute key="org.eclipse.jdt.launching.WORKING_DIRECTORY" value="${workspace_loc:osgi.test}/target"/>
+<stringAttribute key="org.eclipse.debug.ui.ATTR_CONSOLE_ENCODING" value="UTF-8"/>
 <stringAttribute key="org.eclipse.jdt.launching.PROJECT_ATTR" value="osgi.test"/>
 <booleanAttribute key="org.eclipse.jdt.launching.DEFAULT_CLASSPATH" value="false"/>
 <listAttribute key="org.eclipse.jdt.launching.CLASSPATH">
 <listEntry value="&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;&#13;&#10;&lt;runtimeClasspathEntry internalArchive=&quot;/osgi.test/org.osgi.impl.framework.eclipse.jar&quot; path=&quot;3&quot; type=&quot;2&quot;/&gt;&#13;&#10;"/>
 <listEntry value="&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;&#13;&#10;&lt;runtimeClasspathEntry internalArchive=&quot;/osgi.test/testcond.jar&quot; path=&quot;3&quot; type=&quot;2&quot;/&gt;&#13;&#10;"/>
 </listAttribute>
-<stringAttribute key="org.eclipse.jdt.launching.PROGRAM_ARGUMENTS" value="-console&#13;&#10;init&#13;&#10;launch&#13;&#10;&quot;install file:../osgi.jar start&quot;&#13;&#10;&quot;install file:../org.osgi.tools.console.jar start&quot;&#13;&#10;&quot;install file:../osgi.target.jar start&quot;&#13;&#10;&quot;install file:../osgi.refimpl.jar start&quot;"/>
+<stringAttribute key="org.eclipse.jdt.launching.PROGRAM_ARGUMENTS" value="-console:2202&#13;&#10;init&#13;&#10;launch&#13;&#10;&quot;install file:../osgi.jar start&quot;&#13;&#10;&quot;install file:../osgi.target.jar start&quot;&#13;&#10;&quot;install file:../osgi.refimpl.jar start&quot;"/>
 <stringAttribute key="org.eclipse.jdt.launching.VM_ARGUMENTS" value="-Djava.security.manager=org.eclipse.osgi.framework.internal.core.FrameworkSecurityManager &#13;&#10;-Djava.security.policy=policy&#13;&#10;-Dorg.osgi.test.testcase.timeout=120000&#13;&#10;-Dosgi.install.area=file:&#13;&#10;-Dosgi.support.signature.verify=true"/>
 <listAttribute key="org.eclipse.debug.core.MAPPED_RESOURCE_TYPES">
 <listEntry value="4"/>
