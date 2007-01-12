@@ -2,7 +2,8 @@
 <classpath>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="lib" path="/osgi.released/ee.minimum.jar" sourcepath="/ee.minimum"/>
-	<classpathentry kind="lib" path="/osgi.released/osgi.jar"/>
-	<classpathentry kind="lib" path="/osgi.released/osgi.core.jar"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/org.osgi.framework"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/org.osgi.util.measurement"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/org.osgi.util.position"/>
 	<classpathentry kind="output" path="src"/>
 </classpath>
