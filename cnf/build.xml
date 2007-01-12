@@ -266,6 +266,6 @@
 		Check out the projects that are part of the build.
 	-->
 	<target name="co" depends="init">
-		<cvs cvsRoot=":pserver:membercvs.osgi.org:/cvshome/build" dest="${workspace}" package="${specs},${impls},${tests}" />
+		<cvs cvsRoot=":pserver:www2.osgi.org:/cvshome/build" dest="${workspace}" package="${specs},${impls},${tests}" />
 	</target>
 </project>
