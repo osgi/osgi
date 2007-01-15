@@ -152,9 +152,9 @@ public class Handler implements BundleListener {
 				PrintWriter pw = new PrintWriter(new FileWriter(file));
 				pw.println("<?xml version='1.0' encoding='ISO-8859-1'?>");
 				pw
-						.println("<?xml-stylesheet type='text/xsl' title='Compact' href='http://membercvs.osgi.org/xsl/testresult-compact-1.xsl'?>");
+						.println("<?xml-stylesheet type='text/xsl' title='Compact' href='http://www2.osgi.org/xsl/testresult-compact-1.xsl'?>");
 				pw
-						.println("<?xml-stylesheet type='text/xsl' title='Full' href='http://membercvs.osgi.org/xsl/testresult-full-1.xsl'?>");
+						.println("<?xml-stylesheet type='text/xsl' title='Full' href='http://www2.osgi.org/xsl/testresult-full-1.xsl'?>");
 				run.history.print(0, pw);
 				pw.close();
 			}
