@@ -4,7 +4,7 @@ Bundle-SymbolicName: ${p}.tb7a
 Bundle-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Activator: $(p).tb7a.Activator
-Import-Package: org.osgi.framework,org.osgi.test.cases.framework.fragments.tb7c;version="1.0"
+Import-Package: org.osgi.framework,org.osgi.test.cases.framework.fragments.tb7c;version="[1.0,2.0)"
 $(PRIVATE-PACKAGE)
 $(EXPORT-PACKAGE)
 
