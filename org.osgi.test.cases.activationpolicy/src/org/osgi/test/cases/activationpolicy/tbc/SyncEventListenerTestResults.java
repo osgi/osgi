@@ -26,12 +26,32 @@
  */
 package org.osgi.test.cases.activationpolicy.tbc;
 
-import org.osgi.framework.SynchronousBundleListener;
+import java.util.ArrayList;
+
+import org.osgi.framework.*;
 
 public class SyncEventListenerTestResults extends EventListenerTestResults implements SynchronousBundleListener{
+	private boolean getBundleContext = false;
+	private ArrayList contexts = new ArrayList();
+
 	public SyncEventListenerTestResults(int mask) {
-		// TODO Auto-generated constructor stub
 		super(mask);
-		
+	}
+
+	public SyncEventListenerTestResults(int mask, boolean getBundleContext) {
+		this(mask);
+		this.getBundleContext = getBundleContext;
+	}
+
+	public synchronized void bundleChanged(BundleEvent event) {
+		if (getBundleContext && event.getType() == BundleEvent.LAZY_ACTIVATION)
+			contexts.add(event.getBundle().getBundleContext());
+		super.bundleChanged(event);
+	}
+
+	public synchronized BundleContext[] getContexts() {
+		BundleContext[] results = (BundleContext[]) contexts.toArray(new BundleContext[contexts.size()]);
+		contexts.clear();
+		return results;
 	}
 }

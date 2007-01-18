@@ -72,7 +72,9 @@ public class TestControl extends DefaultTestBundleControl {
 		Bundle tblazy3 = getContext().installBundle(getWebServer() + "tblazy3.jar");
 		Bundle tblazy4 = getContext().installBundle(getWebServer() + "tblazy4.jar");
 
-		EventListenerTestResults resultsListener = new SyncEventListenerTestResults(BundleEvent.STARTED | BundleEvent.STOPPED);
+		// listen for STARTED, STOPPED and LAZY_ACTIVATION evnets
+		// we should not get LAZY_ACTIVATION events because this is not a synchronous listener.
+		EventListenerTestResults resultsListener = new EventListenerTestResults(BundleEvent.STARTED | BundleEvent.STOPPED | BundleEvent.LAZY_ACTIVATION);
 		getContext().addBundleListener(resultsListener);
 		try {
 			tblazy1.loadClass("org.osgi.test.cases.activationpolicy.tblazy1.LazySimple").newInstance();
@@ -100,7 +102,9 @@ public class TestControl extends DefaultTestBundleControl {
 		Bundle tblazy3 = getContext().installBundle(getWebServer() + "tblazy3.jar");
 		Bundle tblazy4 = getContext().installBundle(getWebServer() + "tblazy4.jar");
 
-		EventListenerTestResults resultsListener = new SyncEventListenerTestResults(BundleEvent.STARTED | BundleEvent.STOPPED);
+		// listen for STARTED, STOPPED and LAZY_ACTIVATION evnets
+		// we should not get LAZY_ACTIVATION events because this is not a synchronous listener.
+		EventListenerTestResults resultsListener = new EventListenerTestResults(BundleEvent.STARTED | BundleEvent.STOPPED | BundleEvent.LAZY_ACTIVATION);
 		getContext().addBundleListener(resultsListener);
 		try {
 			// First load a class that depends on a class included in an excludes package
@@ -134,7 +138,9 @@ public class TestControl extends DefaultTestBundleControl {
 		Bundle tblazy3 = getContext().installBundle(getWebServer() + "tblazy3.jar");
 		Bundle tblazy4 = getContext().installBundle(getWebServer() + "tblazy4.jar");
 
-		EventListenerTestResults resultsListener = new SyncEventListenerTestResults(BundleEvent.STARTED | BundleEvent.STOPPED);
+		// listen for STARTED, STOPPED and LAZY_ACTIVATION evnets
+		// we should not get LAZY_ACTIVATION events because this is not a synchronous listener.
+		EventListenerTestResults resultsListener = new EventListenerTestResults(BundleEvent.STARTED | BundleEvent.STOPPED | BundleEvent.LAZY_ACTIVATION);
 		getContext().addBundleListener(resultsListener);
 		try {
 			// first load a class that depends on a class that was not included in an includes package
@@ -172,6 +178,8 @@ public class TestControl extends DefaultTestBundleControl {
 		Bundle tblazy2 = getContext().installBundle(getWebServer() + "tblazy2.jar");
 		if (pa != null)
 			pa.resolveBundles(new Bundle[] {tblazy2});
+		// listen for STARTING, STARTED, STOPPING, STOPPED and LAZY_ACTIVATION events
+		// we *should* get LAZY_ACTIVATION events because this *is* a synchronous listener.
 		EventListenerTestResults resultsListener = new SyncEventListenerTestResults(BundleEvent.STARTED | BundleEvent.LAZY_ACTIVATION | BundleEvent.STARTING | BundleEvent.STOPPING | BundleEvent.STOPPED);
 		getContext().addBundleListener(resultsListener);
 		EventListenerTestResults startlevelListener = new EventListenerTestResults(FrameworkEvent.STARTLEVEL_CHANGED);
@@ -267,7 +275,7 @@ public class TestControl extends DefaultTestBundleControl {
 	/*
 	 * Tests Bundle.start(START_TRANSIENT) in relation to the start-level service
 	 */
-	public void testActivationPolicy05() throws Exception {
+	public void testStartTransient01() throws Exception {
 		PackageAdmin pa = (PackageAdmin) getService(PackageAdmin.class);
 		StartLevel startLevel = (StartLevel) getService(StartLevel.class);
 		int initialSL = startLevel.getStartLevel();
@@ -276,6 +284,8 @@ public class TestControl extends DefaultTestBundleControl {
 		Bundle tblazy2 = getContext().installBundle(getWebServer() + "tblazy2.jar");
 		if (pa != null)
 			pa.resolveBundles(new Bundle[] {tblazy2});
+		// listen for STARTING, STARTED, STOPPING, STOPPED and LAZY_ACTIVATION events
+		// we *should* get LAZY_ACTIVATION events because this *is* a synchronous listener.
 		EventListenerTestResults resultsListener = new SyncEventListenerTestResults(BundleEvent.STARTED | BundleEvent.LAZY_ACTIVATION | BundleEvent.STARTING | BundleEvent.STOPPING | BundleEvent.STOPPED);
 		getContext().addBundleListener(resultsListener);
 		EventListenerTestResults startlevelListener = new EventListenerTestResults(FrameworkEvent.STARTLEVEL_CHANGED);
@@ -305,7 +315,7 @@ public class TestControl extends DefaultTestBundleControl {
 			// now call start(START_TRANSIENT) before the start-level is met.  This should result in no STARTED event
 			try {
 				tblazy2.start(Bundle.START_TRANSIENT);
-				assertTrue("Bundle is started!!", tblazy2.getState() != Bundle.ACTIVE);
+				fail("expected a BundleException because start level is not met.");
 			} catch (BundleException e) {
 				// expected
 			}
@@ -376,7 +386,7 @@ public class TestControl extends DefaultTestBundleControl {
 	/*
 	 * Tests Bundle.stop(STOP_TRANSIENT) in relation to the start-level service
 	 */
-	public void testActivationPolicy06() throws Exception {
+	public void testStopTransient01() throws Exception {
 		StartLevel startLevel = (StartLevel) getService(StartLevel.class);
 		int initialSL = startLevel.getStartLevel();
 		int initialBSL = startLevel.getInitialBundleStartLevel();
@@ -385,6 +395,8 @@ public class TestControl extends DefaultTestBundleControl {
 		PackageAdmin pa = (PackageAdmin) getService(PackageAdmin.class);
 		if (pa != null)
 			pa.resolveBundles(new Bundle[] {tblazy2});
+		// listen for STARTING, STARTED, STOPPING, STOPPED and LAZY_ACTIVATION events
+		// we *should* get LAZY_ACTIVATION events because this *is* a synchronous listener.
 		EventListenerTestResults resultsListener = new SyncEventListenerTestResults(BundleEvent.STARTED | BundleEvent.LAZY_ACTIVATION | BundleEvent.STARTING | BundleEvent.STOPPING | BundleEvent.STOPPED);
 		getContext().addBundleListener(resultsListener);
 		EventListenerTestResults startlevelListener = new EventListenerTestResults(FrameworkEvent.STARTLEVEL_CHANGED);
@@ -502,7 +514,6 @@ public class TestControl extends DefaultTestBundleControl {
 			expectedEvents[1] = new BundleEvent(BundleEvent.STARTED, tbchain2);
 			expectedEvents[2] = new BundleEvent(BundleEvent.STARTED, tbchain1);
 			Object[] actualEvents = resultsListener.getResults(3);
-			assertEquals("number of results", expectedEvents.length, actualEvents.length);
 			compareEvents(expectedEvents, actualEvents);
 		} finally {
 			getContext().removeBundleListener(resultsListener);
@@ -537,7 +548,6 @@ public class TestControl extends DefaultTestBundleControl {
 			expectedEvents[3] = new BundleEvent(BundleEvent.STARTED, tbchain2);
 			expectedEvents[4] = new BundleEvent(BundleEvent.STARTED, tbchain1);
 			Object[] actualEvents = resultsListener.getResults(5);
-			assertEquals("number of results", expectedEvents.length, actualEvents.length);
 			compareEvents(expectedEvents, actualEvents);
 		} finally {
 			getContext().removeBundleListener(resultsListener);
@@ -574,6 +584,34 @@ public class TestControl extends DefaultTestBundleControl {
 			getContext().removeBundleListener(resultsListener);
 			uninstallBundle(tblazy5);
 			uninstallBundle(tblazy6);
+		}
+	}
+
+	/*
+	 * Tests that getBundleContext works as when LAZY_ACTIVATION event is fired.
+	 */
+	public void testGetBundleContext() throws Exception {
+		Bundle tblazy2 = getContext().installBundle(getWebServer() + "tblazy2.jar");
+
+		// listen for STARTED, STOPPED and LAZY_ACTIVATION evnets
+		// we *should* get LAZY_ACTIVATION events because this *is* a synchronous listener.
+		SyncEventListenerTestResults resultsListener = new SyncEventListenerTestResults(BundleEvent.STARTED | BundleEvent.STOPPED | BundleEvent.LAZY_ACTIVATION, true);
+		getContext().addBundleListener(resultsListener);
+		try {
+			tblazy2.loadClass("org.osgi.test.cases.activationpolicy.tblazy2.ATest");
+	
+			// The bundle must have been activated now
+			Object[] expectedEvents = new Object[2];
+			expectedEvents[0] = new BundleEvent(BundleEvent.LAZY_ACTIVATION, tblazy2);
+			expectedEvents[1] = new BundleEvent(BundleEvent.STARTED, tblazy2);
+			Object[] actualEvents = resultsListener.getResults(2);
+			compareEvents(expectedEvents, actualEvents);
+			BundleContext[] contexts = resultsListener.getContexts();
+			assertEquals("number of contexts", 1, contexts.length);
+			assertEquals("bundle context", tblazy2, contexts[0].getBundle());
+		} finally {
+			getContext().removeBundleListener(resultsListener);
+			uninstallBundle(tblazy2);
 		}
 	}
 }
