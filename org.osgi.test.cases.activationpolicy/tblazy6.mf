@@ -1,0 +1,14 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: ${p}.tblazy6
+Bundle-SymbolicName: ${p}.tblazy6
+Bundle-Activator: $(p).tblazy6.Activator
+Bundle-Version: 4.1
+Bundle-ActivationPolicy: lazy
+CVS-Header: $Header$
+$(IMPORT-PACKAGE)
+$(EXPORT-PACKAGE)
+$(PRIVATE-PACKAGE)
+
+
+

@@ -1,0 +1,13 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: ${p}.tblazy4
+Bundle-SymbolicName: ${p}.tblazy4
+Bundle-Version: 4.1
+Bundle-ActivationPolicy: lazy; include:="${p}.tblazy4"
+CVS-Header: $Header$
+$(IMPORT-PACKAGE)
+$(EXPORT-PACKAGE)
+$(PRIVATE-PACKAGE)
+
+
+

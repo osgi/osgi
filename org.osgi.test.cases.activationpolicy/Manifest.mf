@@ -1,0 +1,16 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Activator: ${p}.TestCase
+Bundle-Name: test.activationpolicy
+Bundle-SymbolicName: ${p}
+Bundle-Version: 4.1
+Bundle-Copyright: ${copyright}
+Bundle-Description: A test case for activation policy.
+Bundle-Vendor: OSGi Alliance
+Bundle-DocUrl: http://www.osgi.org/testcases/4/test.cases.template
+Bundle-Category: osgi,test
+CVS-Header: $Header$
+$(IMPORT-PACKAGE)
+$(PRIVATE-PACKAGE)
+
+
