@@ -147,7 +147,7 @@ public class Cross {
 			PrintWriter pw = new PrintWriter(new OutputStreamWriter(out));
 			pw.println("<?xml version='1.0'?>");
 			pw
-			.println("<?xml-stylesheet type='text/xsl' title='Matrix' href='http://bundles.osgi.org/xsl/testmatrix.xsl'?>");
+			.println("<?xml-stylesheet type='text/xsl' title='Matrix' href='http://www2.osgi.org/www/testmatrix.xsl'?>");
 			result.print(0, pw);
 			pw.flush();
 			out.close();

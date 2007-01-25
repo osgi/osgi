@@ -576,7 +576,7 @@ public class Activator extends Thread implements FrameworkListener,
 		String proc = _context.getProperty("org.osgi.framework.processor");
 		log("Current os + processor", "osname=" + os + " processor=" + proc);
 		log(
-				"See for allowed constants: http://membercvs.osgi.org/docs/reference.html",
+				"See for allowed constants: http://www2.osgi.org/Specifications/Reference",
 				null);
 	}
 
