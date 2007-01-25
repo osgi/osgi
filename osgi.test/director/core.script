@@ -2,6 +2,7 @@
 	<delay duration="10" type="sec"/>
 	<separate duration="1" type="sec"/>
 	
+	<testcase>test.activationpolicy</testcase>
 	<testcase>test.framework.classloading</testcase>
 	<testcase>test.framework.classpath</testcase>
 	<testcase>test.framework.div</testcase>
