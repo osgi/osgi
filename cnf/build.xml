@@ -3,7 +3,7 @@
 	The is main OSGi build file. It is included from projects
 	as is.
 	
-	It is described in http://membercvs.osgi.org/docs/build.html 
+	It is described in http://www2.osgi.org/members/Build/HomePage 
 -->
 <project name="master" default="none">
 

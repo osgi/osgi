@@ -14,7 +14,7 @@
 				<title>Test Matrix
 					<xsl:value-of select="//target"/></title>
 				<LINK REL="stylesheet"
-					HREF="http://bundles.osgi.org/www/osgi.css"
+					HREF="http://www2.osgi.org/www/osgi.css"
 					TYPE="text/css"/>
 				
 			</head>
