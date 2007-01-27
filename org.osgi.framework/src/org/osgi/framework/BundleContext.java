@@ -150,7 +150,8 @@ public interface BundleContext {
 	 * 
 	 * <li>If the bundle has declared an Bundle-RequiredExecutionEnvironment
 	 * header, then the listed execution environments must be verified against
-	 * the installed execution environments. If they are not all present, a
+	 * the installed execution environments. If none of the listed execution 
+	 * environments match an installed execution environment, a
 	 * <code>BundleException</code> must be thrown.
 	 * 
 	 * <li>The bundle's state is set to <code>INSTALLED</code>.
