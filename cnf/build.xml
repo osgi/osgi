@@ -98,7 +98,11 @@
 				Default properties
 		-->
 
-
+		<!-- Create version qualifier to use in bundle versions.
+		     This must be before the include of global.properties.
+		-->
+		<tstamp prefix="tstamp"/>
+		<property name="project.build" value="build-${tstamp.DSTAMP}${tstamp.TSTAMP}"/>
 
 		<expand propertyFile="${workspace}/cnf/global.properties" />
 		<expand propertyFile="${project}/build.properties" />
@@ -112,7 +116,7 @@
 		<property name="project.bootclasspath" value="" />
 		<property name="p" value="${project.name}" />
 		<property name="bin.includes" value="${project.name}.jar" />
-
+		
 		<!-- mark init has been run -->
 		<property name="initialized" value="set" />
 		<echo>Enter project ${project.name}</echo>
