@@ -3,7 +3,7 @@ Bundle-Name: osgi
 Bundle-SymbolicName: osgi
 Bundle-Version: ${osgi.release.version}
 Bundle-Description: OSGi Service Platform Release 4 Interfaces and Classes for use in compiling bundles.
-Bundle-Copyright: Copyright (c) OSGi Alliance (2000, 2006). All Rights Reserved.
+Bundle-Copyright: ${copyright}
 Bundle-Vendor: OSGi Alliance
 Bundle-Category: osgi
 Bundle-DocUrl: http://www.osgi.org/
