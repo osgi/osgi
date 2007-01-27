@@ -85,7 +85,7 @@ public interface Bundle {
 	 * 
 	 * <p>
 	 * A bundle is in the <code>INSTALLED</code> state when it has been
-	 * installed in the Framework but cannot run.
+	 * installed in the Framework but is not or cannot be resolved.
 	 * <p>
 	 * This state is visible if the bundle's code dependencies are not resolved.
 	 * The Framework may attempt to resolve an <code>INSTALLED</code> bundle's
@@ -101,7 +101,7 @@ public interface Bundle {
 	 * 
 	 * <p>
 	 * A bundle is in the <code>RESOLVED</code> state when the Framework has
-	 * successfully resolved the bundle's dependencies. These dependencies
+	 * successfully resolved the bundle's code dependencies. These dependencies
 	 * include:
 	 * <ul>
 	 * <li>The bundle's class path from its {@link Constants#BUNDLE_CLASSPATH}
@@ -127,11 +127,16 @@ public interface Bundle {
 	 * This bundle is in the process of starting.
 	 * 
 	 * <p>
-	 * A bundle is in the <code>STARTING</code> state when the <code>start</code>
+	 * A bundle is in the <code>STARTING</code> state when its {@link #start(int) start}
 	 * method is active. A bundle must be in this state when the bundle's
-	 * {@link BundleActivator#start} is called. If this method completes without
+	 * {@link BundleActivator#start} is called. 
+	 * If the <code>BundleActivator.start</code> method completes without
 	 * exception, then the bundle has successfully started and must move to the
 	 * <code>ACTIVE</code> state.
+	 * <p>
+	 * If this bundle has a {@link Constants#ACTIVATION_LAZY lazy activation policy},
+	 * then the bundle may remain in this state for some time until the 
+	 * activation is triggered.
 	 * <p>
 	 * The value of <code>STARTING</code> is 0x00000008.
 	 */
@@ -141,9 +146,10 @@ public interface Bundle {
 	 * This bundle is in the process of stopping.
 	 * 
 	 * <p>
-	 * A bundle is in the <code>STOPPING</code> state when the <code>stop</code>
+	 * A bundle is in the <code>STOPPING</code> state when its {@link #stop(int) stop}
 	 * method is active. A bundle must be in this state when the bundle's
-	 * {@link BundleActivator#stop} method is called. When this method completes
+	 * {@link BundleActivator#stop} method is called. 
+	 * When the <code>BundleActivator.stop</code> method completes
 	 * the bundle is stopped and must move to the <code>RESOLVED</code> state.
 	 * <p>
 	 * The value of <code>STOPPING</code> is 0x00000010.
@@ -155,14 +161,14 @@ public interface Bundle {
 	 * 
 	 * <p>
 	 * A bundle is in the <code>ACTIVE</code> state when it has been
-	 * successfully started.
+	 * successfully started and activated.
 	 * <p>
 	 * The value of <code>ACTIVE</code> is 0x00000020.
 	 */
 	public static final int	ACTIVE		= 0x00000020;
 	
 	/**
-	 * The bundle start is transient and is not persistently marked.
+	 * The bundle start operation is transient and is not persistently marked.
 	 * 
 	 * <p> This bit may be set when calling {@link #start(int)}
 	 * to notify the framework that the starting of the bundle is not to 
