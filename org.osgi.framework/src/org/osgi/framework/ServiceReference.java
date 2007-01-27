@@ -48,7 +48,7 @@ package org.osgi.framework;
  * @see BundleContext#getService
  */
 
-public interface ServiceReference {
+public interface ServiceReference extends Comparable {
 	/**
 	 * Returns the property value to which the specified property key is mapped
 	 * in the properties <code>Dictionary</code> object of the service
@@ -84,8 +84,8 @@ public interface ServiceReference {
 	 * This method is <i>case-preserving </i>; this means that every key in the
 	 * returned array must have the same case as the corresponding key in the
 	 * properties <code>Dictionary</code> that was passed to the
-	 * {@link BundleContext#registerService(String[],Object,java.util.Dictionary)} or
-	 * {@link ServiceRegistration#setProperties} methods.
+	 * {@link BundleContext#registerService(String[],Object,java.util.Dictionary)}
+	 * or {@link ServiceRegistration#setProperties} methods.
 	 * 
 	 * @return An array of property keys.
 	 */
@@ -150,4 +150,30 @@ public interface ServiceReference {
 	 */
 	public boolean isAssignableTo(Bundle bundle, String className);
 
+	/**
+	 * Compares this <code>ServiceReference</code> with the specified
+	 * <code>ServiceReference</code> for order.
+	 * 
+	 * <p>
+	 * If this <code>ServiceReference</code> and the specified
+	 * <code>ServiceReference</code> have the same
+	 * {@link Constants#SERVICE_ID service id} they are equal. This
+	 * <code>ServiceReference</code> is less than the specified
+	 * <code>ServiceReference</code> if it has a lower
+	 * {@link Constants#SERVICE_RANKING service ranking} and greater if it has a
+	 * higher service ranking. Otherwise, if this <code>ServiceReference</code>
+	 * and the specified <code>ServiceReference</code> have the same
+	 * {@link Constants#SERVICE_RANKING service ranking}, this
+	 * <code>ServiceReference</code> is less than the specified
+	 * <code>ServiceReference</code> if it has a higher
+	 * {@link Constants#SERVICE_ID service id} and greater if it has a lower
+	 * service id.
+	 * 
+	 * @param reference The <code>ServiceReference</code> to be compared.
+	 * @return Returns a negative integer, zero, or a positive integer is this
+	 *         <code>ServiceReference</code> is less than, equal to, or
+	 *         greater than the specified <code>ServiceReference</code>.
+	 * @since 1.4
+	 */
+	public int compareTo(Object reference);
 }
