@@ -273,8 +273,8 @@ public interface Bundle {
 	 * is made to resolve this bundle's package dependencies. If the Framework
 	 * cannot resolve this bundle, a <code>BundleException</code> is thrown.
 	 * 
-	 * <li>If the {@link #START_ACTIVATION_POLICY} is set and the bundle's activation
-	 * policy is {@link Constants#ACTIVATION_LAZY} set then do the following:
+	 * <li>If the {@link #START_ACTIVATION_POLICY} option is set and the bundle's activation
+	 * policy is {@link Constants#ACTIVATION_LAZY} then do the following:
 	 * <ul>
 	 *   <li>If the bundle's state is <code>STARTING</code> this method returns
 	 *         immediately. 
