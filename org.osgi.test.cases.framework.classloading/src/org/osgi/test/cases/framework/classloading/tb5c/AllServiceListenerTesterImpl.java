@@ -61,7 +61,9 @@ public class AllServiceListenerTesterImpl implements AllServiceListenerTester {
 	 * @return the service event delivered by the framework
 	 */
 	public ServiceEvent getServiceEventDelivered() {
-		return event;
+		ServiceEvent result = event;
+		event = null;
+		return result;
 	}
 
 	
