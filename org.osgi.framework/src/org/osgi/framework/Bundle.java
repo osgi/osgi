@@ -168,16 +168,32 @@ public interface Bundle {
 	public static final int	ACTIVE		= 0x00000020;
 	
 	/**
-	 * The bundle start operation is transient and is not persistently marked.
+	 * The bundle start operation is transient and the persistent state of
+	 * the bundle is not modified.
 	 * 
 	 * <p> This bit may be set when calling {@link #start(int)}
-	 * to notify the framework that the starting of the bundle is not to 
-	 * be persistently marked. If this bit is not set, then the starting 
-	 * of the bundle is persistently marked.
+	 * to notify the framework that the persistent state of the 
+	 * bundle must not be marked. If this bit is not set, then the
+	 * persistent state of the bundle is marked.
 	 * 
 	 * @since 1.4
+	 * @see #start(int)
 	 */
 	public static final int START_TRANSIENT = 0x00000001;
+
+	/**
+	 * The bundle start operation must activate the bundle 
+	 * according to the bundle's specified activation policy.
+	 * 
+	 * <p> This bit may be set when calling {@link #start(int)}
+	 * to notify the framework that the bundle must be activated 
+	 * using the bundle's specified activation policy.
+	 * 
+	 * @since 1.4
+	 * @see Constants#BUNDLE_ACTIVATIONPOLICY
+	 * @see #start(int)
+	 */
+	public static final int START_ACTIVATION_POLICY = 0x00000002;
 
 	/**
 	 * The bundle stop is transient and is not persistently marked.
@@ -188,6 +204,7 @@ public interface Bundle {
 	 * of the bundle is persistently marked.
 	 * 
 	 * @since 1.4
+	 * @see #stop(int)
 	 */
 	public static final int STOP_TRANSIENT = 0x00000001;
 
@@ -217,10 +234,15 @@ public interface Bundle {
 	 * then a <code>BundleException</code> is thrown indicating this bundle
 	 * cannot be started due to the Framework's current start level. 
 	 * 
-	 * <li>Otherwise, the Framework must persistently mark this bundle as started.
-	 * When the Framework's current 
-	 * start level becomes equal to or more than this bundle's start level, this 
-	 * bundle will be started. 
+	 * <li>Otherwise, the Framework must persistently mark this bundle's started
+	 * state as ture.  If the {@link #START_ACTIVATION_POLICY} option is set then
+	 * the Framework must persistently mark the bundle's policy activated state to 
+	 * true; otherwise persistently mark the bundle's policy activated state to false.
+	 * 
+	 * <li>When the Framework's current start level becomes equal to or more than 
+	 * this bundle's start level, this bundle will be started.  If the bundle's persistent
+	 * policy activated state is true then the bundle will be started according to the
+	 * bundle's activation policy.
 	 * </ul>
 	 * <p>
 	 * Otherwise, the following steps are required to start this bundle:
@@ -234,14 +256,32 @@ public interface Bundle {
 	 * <li>If this bundle's state is <code>ACTIVE</code> then this method
 	 * returns immediately.
 	 * 
-	 * <li>Persistently record that this bundle has been started unless the 
-	 * {@link #START_TRANSIENT} option is set. When the
-	 * Framework is restarted and the bundle is persistently marked started,
-	 * this bundle must be automatically started.
+	 * <li>If the {@link #START_TRANSIENT} option is not set then do the following:
+	 * <ul>
+	 *   <li>Persistently mark the bundle's started state to true 
+	 *   <li>If the {@link #START_ACTIVATION_POLICY} option is set then 
+	 *         persistently mark the bundle's policy activated state to true;
+	 *         otherwise persistently mark the bundle's policy activated state
+	 *         to false.
+	 *   <li>When the Framework is restarted and the bundle is persistently marked started,
+	 *         this bundle must be automatically started.  If the bundle's persistent policy activated 
+	 *         state is true then the bundle will be activated according to the bundle's activation policy.
+	 * </ul>
+	 * </li>
 	 * 
 	 * <li>If this bundle's state is not <code>RESOLVED</code>, an attempt
 	 * is made to resolve this bundle's package dependencies. If the Framework
 	 * cannot resolve this bundle, a <code>BundleException</code> is thrown.
+	 * 
+	 * <li>If the {@link #START_ACTIVATION_POLICY} is set and the bundle's activation
+	 * policy is {@link Constants#ACTIVATION_LAZY} set then do the following:
+	 * <ul>
+	 *   <li>If the bundle's state is <code>STARTING</code> this method returns
+	 *         immediately. 
+	 *   <li>This bundle's state is set to <code>STARTING</code>.
+	 *   <li>A bundle event of type {@link BundleEvent#LAZY_ACTIVATION} is fired and
+	 *         this method returns immediately.
+	 * </ul>
 	 * 
 	 * <li>This bundle's state is set to <code>STARTING</code>.
 	 * 
@@ -292,8 +332,8 @@ public interface Bundle {
 	 * </ul>
 	 * 
 	 * @param options The options for starting this bundle. See
-	 *         {@link #START_TRANSIENT}. The Framework must ignore unrecognized
-	 *         options.
+	 *         {@link #START_TRANSIENT} and {@link #START_ACTIVATION_POLICY}. 
+	 *         The Framework must ignore unrecognized options.
 	 * @throws BundleException If this bundle could not be started. This could
 	 *         be because a code dependency could not be resolved or the
 	 *         specified <code>BundleActivator</code> could not be loaded or
@@ -340,12 +380,14 @@ public interface Bundle {
 	 * complete before continuing. If this does not occur in a reasonable
 	 * time, a <code>BundleException</code> is thrown to indicate this bundle
 	 * was unable to be stopped.
-	 * 
-	 * <li>Persistently record that this bundle has been stopped unless the 
-	 * {@link #STOP_TRANSIENT} option is set. When the
-	 * Framework is restarted and the bundle is persistently marked stopped,
+	 * <li>If the {@link #STOP_TRANSIENT} option is not set then do the following:
+	 * <ul>
+	 *   <li>Persistently mark the bundle's started state to false 
+	 *   <li>Persistently mark the bundle's policy activated state to false
+	 * </ul>
+	 * When the Framework is restarted and the bundle is persistently marked stopped,
 	 * this bundle must not be automatically started.
-	 * 
+	 * </li>
 	 * <li>If this bundle's state is not <code>ACTIVE</code> then this method
 	 * returns immediately.
 	 * 

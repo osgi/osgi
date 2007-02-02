@@ -94,8 +94,11 @@ public interface StartLevel {
 	 * If the specified start level is higher than the active start level, the
 	 * Framework will continue to increase the start level until the Framework
 	 * has reached the specified start level, starting bundles at each start
-	 * level which are persistently marked to be started as described in the
-	 * <code>Bundle.start</code> method.
+	 * level which are persistently marked to be started as described in the 
+	 * {@link Bundle#start(int)} method using the 
+	 * {@link Bundle#START_TRANSIENT} option.  The 
+	 * {@link Bundle#START_ACTIVATION_POLICY} option must also be used 
+	 * if {@link #isBundleActivationPolicyUsed(Bundle)} returns true for the bundle.
 	 * 
 	 * At each intermediate start level value on the way to and including the
 	 * target start level, the framework must:
@@ -112,9 +115,8 @@ public interface StartLevel {
 	 * If the specified start level is lower than the active start level, the
 	 * Framework will continue to decrease the start level until the Framework
 	 * has reached the specified start level stopping bundles at each start
-	 * level as described in the <code>Bundle.stop</code> method except that
-	 * their persistently recorded state indicates that they must be restarted
-	 * in the future.
+	 * level as described in the {@link Bundle#stop(int)} method
+	 * using the {@link Bundle#STOP_TRANSIENT} option.
 	 * 
 	 * At each intermediate start level value on the way to and including the
 	 * specified start level, the framework must:
@@ -163,16 +165,17 @@ public interface StartLevel {
 	 * 
 	 * If the new start level for the bundle is lower than or equal to the
 	 * active start level of the Framework, the Framework will start the
-	 * specified bundle as described in the <code>Bundle.start</code> method
-	 * if the bundle is persistently marked to be started. The actual starting
-	 * of this bundle must occur asynchronously.
+	 * specified bundle as described in the {@link Bundle#start(int)} method
+	 * using the {@link Bundle#START_TRANSIENT} option.  The 
+	 * {@link Bundle#START_ACTIVATION_POLICY} option must also be used 
+	 * if {@link #isBundleActivationPolicyUsed(Bundle)} returns true for the bundle.
+	 * The actual starting of this bundle must occur asynchronously.
 	 * 
 	 * If the new start level for the bundle is higher than the active start
 	 * level of the Framework, the Framework will stop the specified bundle as
-	 * described in the <code>Bundle.stop</code> method except that the
-	 * persistently recorded state for the bundle indicates that the bundle must
-	 * be restarted in the future. The actual stopping of this bundle must occur
-	 * asynchronously.
+	 * described in the {@link Bundle#stop(int)} method using the 
+	 * {@link Bundle#STOP_TRANSIENT} option.  The actual stopping of this 
+	 * bundle must occur asynchronously.
 	 * 
 	 * @param bundle The target bundle.
 	 * @param startlevel The new start level for the specified Bundle.
@@ -224,14 +227,12 @@ public interface StartLevel {
 	public void setInitialBundleStartLevel(int startlevel);
 
 	/**
-	 * Return the persistent state of the specified bundle.
-	 * 
+	 * Returns true if the bundle is marked as persistently started.
 	 * <p>
-	 * This method returns the persistent state of a bundle. The persistent
-	 * state of a bundle indicates whether a bundle is persistently marked to be
-	 * started when it's start level is reached.
+	 * The persistent started state of a bundle indicates whether a bundle is 
+	 * persistently marked to be started when it's start level is reached.
 	 * 
-	 * @param bundle The bundle for which to return the persistently started state.
+	 * @param bundle The bundle for which to return the persistent started state.
 	 * @return <code>true</code> if the bundle is persistently marked to be
 	 *         started, <code>false</code> if the bundle is not persistently
 	 *         marked to be started.
@@ -239,4 +240,21 @@ public interface StartLevel {
 	 *         been uninstalled.
 	 */
 	public boolean isBundlePersistentlyStarted(Bundle bundle);
+
+	/**
+	 * Returns true if the bundle is marked as persistently using the bundle's activation policy.
+	 * <p>
+	 * The persistent policy activated state indicates whether a bundle is persistently marked
+	 * to be activated according to its defined activation policy.
+	 * @param bundle The bundle for which to return the persistent policy activated 
+	 *         state.
+	 * @return <code>true</code> if the bundle is persistently marked to be
+	 *         activated according to its activation policy, <code>false</code> if the bundle is 
+	 *         not persistently marked to be activated according to its activation policy.
+	 * @throws java.lang.IllegalArgumentException If the specified bundle has
+	 *         been uninstalled.
+	 * @since 1.4
+	 * @see Bundle#START_ACTIVATION_POLICY
+	 */
+	public boolean isBundleActivationPolicyUsed(Bundle bundle);
 }

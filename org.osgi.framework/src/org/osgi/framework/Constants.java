@@ -1085,7 +1085,8 @@ public interface Constants {
 	 * bundle.
 	 * <p>
 	 * A bundle with the lazy activation policy enters the {@link Bundle#STARTING STARTING}
-	 * state as soon as it is resolved and its start level has been met. The bundle
+	 * state as soon as it is resolved, its start level has been met, its persistent started
+	 * state is true and its persistent policy activated state is true. The bundle
 	 * will wait in the STARTING state until the first class load from the bundle
 	 * occurs. The bundle will then be activated before the class is returned to the
 	 * requestor.
@@ -1098,6 +1099,8 @@ public interface Constants {
 	 * </pre>
 	 * 
 	 * @see Constants#BUNDLE_ACTIVATIONPOLICY
+	 * @see Bundle#start(int)
+	 * @see Bundle#START_ACTIVATION_POLICY
 	 * @since 1.4
 	 */
 	public final static String	ACTIVATION_LAZY					= "lazy";
