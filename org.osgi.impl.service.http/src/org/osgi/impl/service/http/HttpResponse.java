@@ -93,17 +93,11 @@ public final class HttpResponse implements HttpServletResponse {
 	 */
 	void createResponse() throws IOException {
 		String requestURI = request.getRequestURI();
-		// Redirect if to default page "/index.html" if the request
-		// is for "/" and "/index.html" is registered.
-		// Otherwise redirect to the HTTP server's own page
-		if (requestURI.equals("/")) {
-			if (httpServer.getRegistration("/index.html") != null) {
-				request.requestURI = requestURI = "/index.html";
-			}
-			else {
+		// Redirect to HTTP server's default page if
+		// request is "/" and the is no registration for "/".
+		if (requestURI.equals("/") && (httpServer.getRegistration("/") == null)) {
 				sendRedirect(httpServer.baseURL + "/osgiref/http/index.html");
 				return;
-			}
 		}
 		aliasMatch = httpServer.findMatchingRegistration(requestURI);
 		if (aliasMatch == null) {
