@@ -4,7 +4,7 @@ Bundle-Name: test.io
 Bundle-Copyright: ${copyright}
 Bundle-Description: Tests the IO Service
 Bundle-Vendor: OSGi Alliance
-Bundle-Version: 3.0
+Bundle-Version: 3.0.0.${project.build}
 Bundle-DocUrl: http://membercvs.osgi.org/test/3
 Bundle-ContactAddress: speccomments@mail.osgi.org
 Bundle-Category: osgi,test

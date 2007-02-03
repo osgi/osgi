@@ -1,7 +1,7 @@
 Manifest-Version: 1.0
 Bundle-SymbolicName: ${p}
 Bundle-Name: impl.service.provisioning
-Bundle-Version: 1.0.1
+Bundle-Version: 1.0.1.${project.build}
 Bundle-Activator: org.osgi.impl.service.provisioning.Provisioning
 Bundle-Category: osgi
 Bundle-Copyright: ${copyright}

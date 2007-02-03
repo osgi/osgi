@@ -3,7 +3,7 @@ Bundle-SymbolicName: ${p}
 Bundle-Name: impl.service.power
 Bundle-Vendor: Siemens AG
 Bundle-Copyright: All Rights Reserved, (c) OSGi Alliance, 2000-2005
-Bundle-Version: 0.0.0.0
+Bundle-Version: 1.0.0.${project.build}
 Bundle-Activator: ${p}.Activator
 Export-Service: org.osgi.service.power.PowerManager
 Import-Service: org.osgi.service.power.DevicePower,

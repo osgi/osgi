@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-Activator: ${p}.TestCase
 Bundle-Name: test.packageadmin.tc5
 Bundle-SymbolicName: ${p}
-Bundle-Version: 4.0.1
+Bundle-Version: 4.0.1.${project.build}
 Bundle-Copyright: ${copyright}
 Bundle-Description: This is a template description. It should contain 
   general information about the test case. The test tool allows this text to be

@@ -5,7 +5,7 @@ Bundle-Name: impl.bundle.rsh
 Bundle-Description: OSGi rsh URL handler reference implementation by IBM Corporation.
 Bundle-Copyright: ${copyright}
 Bundle-Vendor: OSGi Alliance
-Bundle-Version: 1.0.1
+Bundle-Version: 1.0.1.${project.build}
 Bundle-Category: osgi
 ${IMPORT-PACKAGE}
 ${EXPORT-PACKAGE}

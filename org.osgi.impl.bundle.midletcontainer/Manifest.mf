@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-Name: MIDletContainer
 Bundle-SymbolicName: ${p}
 Bundle-Vendor: Nokia
-Bundle-Version: 1.0
+Bundle-Version: 1.0.0.${project.build}
 Bundle-ClassPath: .
 Bundle-Activator: $(p).Activator
 $(EXPORT-PACKAGE)

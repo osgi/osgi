@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-Name: impl.service.monitor
 Bundle-SymbolicName: ${p}
 Bundle-Vendor: Nokia
-Bundle-Version: 1.0
+Bundle-Version: 1.0.0.${project.build}
 Bundle-Activator: $(p).Activator
 Bundle-Copyright: ${copyright}
 Export-Service: org.osgi.service.monitorable.MonitorAdmin, 

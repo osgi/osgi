@@ -3,7 +3,7 @@ Bundle-ManifestVersion: 2
 Bundle-Activator: ${p}.TestCase
 Bundle-Name: test.activationpolicy
 Bundle-SymbolicName: ${p}
-Bundle-Version: 4.1
+Bundle-Version: 4.1.0.${project.build}
 Bundle-Copyright: ${copyright}
 Bundle-Description: A test case for activation policy.
 Bundle-Vendor: OSGi Alliance

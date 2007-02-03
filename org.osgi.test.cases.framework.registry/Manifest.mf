@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-SymbolicName: ${p}
 Bundle-Name: test.framework.registry
 Bundle-Description: Tests the Service Registry
-Bundle-Version: 3.0.1
+Bundle-Version: 3.0.1.${project.build}
 Bundle-Activator: $(p).RegistryTestCase
 Bundle-Vendor: OSGi Alliance
 Bundle-DocURL: http://www.osgi.org/

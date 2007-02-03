@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-SymbolicName: ${p}
 Bundle-Name: test.tracker
 Bundle-Description: Tests the Service Tracker
-Bundle-Version: 3.0
+Bundle-Version: 3.0.0.${project.build}
 Bundle-Activator: $(p).ServiceTrackerTestCase
 Bundle-Vendor: OSGi Alliance
 Bundle-DocURL: http://www.osgi.org/

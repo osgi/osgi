@@ -26,7 +26,7 @@ Bundle-Description: Diverse tests for the OSGi Framework. The
 Bundle-Vendor: OSGi Alliance
 Bundle-Copyright: ${copyright}
 Bundle-Activator: org.osgi.test.cases.framework.div.DivTestCase
-Bundle-Version: 3.0.1
+Bundle-Version: 3.0.1.${project.build}
 Bundle-Category: osgi,test
 Bundle-DocUrl: http://membercvs.osgi.org/test/3
 Bundle-ContactAddress: speccomments@mail.osgi.org

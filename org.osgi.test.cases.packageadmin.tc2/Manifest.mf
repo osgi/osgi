@@ -6,7 +6,7 @@ Bundle-Description: Tests exporting packages, updating. <BR>
  Tests what happens when a bundle is updated and exports another package.<BR>
  Tests Bundle.getResource().<BR>
 Bundle-Vendor: OSGi Alliance
-Bundle-Version: 3.0
+Bundle-Version: 3.0.0.${project.build}
 Bundle-Activator: $(p).TC2
 CVS-Header: $Header$
 $(IMPORT-PACKAGE)

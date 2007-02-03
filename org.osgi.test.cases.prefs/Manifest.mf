@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-SymbolicName: ${p}
 Bundle-Name: test.prefs
 Bundle-Description: Tests the Preferences service
-Bundle-Version: 3.0
+Bundle-Version: 3.0.0.${project.build}
 Bundle-Activator: $(p).PrefsTestCase
 Bundle-Vendor: OSGi Alliance
 Bundle-DocURL: http://www.osgi.org/

@@ -18,7 +18,7 @@ Bundle-Description: Tests lifecycle operations: <br><br>
   tests that securityExceptions are thrown in BundleContext methods<br>
  </pre><br>
 Bundle-Vendor: OSGi Alliance
-Bundle-Version: 3.0.1
+Bundle-Version: 3.0.1.${project.build}
 Bundle-DocUrl: http://membercvs.osgi.org/test/3
 Bundle-ContactAddress: speccomments@mail.osgi.org
 Bundle-Category: osgi,test

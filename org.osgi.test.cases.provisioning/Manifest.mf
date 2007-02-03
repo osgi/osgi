@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-SymbolicName: ${p}
 Bundle-Name: test.provisioning
 Bundle-Description: Tests the Initial Provisioning
-Bundle-Version: 3.0
+Bundle-Version: 3.0.0.${project.build}
 Bundle-Activator: $(p).ProvisioningTestCase
 Bundle-Vendor: OSGi Alliance
 Bundle-DocURL: http://www.osgi.org/

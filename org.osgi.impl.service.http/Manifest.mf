@@ -4,7 +4,7 @@ Bundle-Copyright: ${copyright}
 Bundle-Name: impl.service.http
 Bundle-Description: The OSGi HTTP service Reference Implementation by Gatespace AB.
 Bundle-Vendor: OSGi Alliance
-Bundle-Version: 1.1.1
+Bundle-Version: 1.1.2.${project.build}
 Bundle-DocURL: http://www.gatespace.com
 Bundle-ContactAddress: info@gatespace.com
 Bundle-Activator: org.osgi.impl.service.http.HttpServiceController

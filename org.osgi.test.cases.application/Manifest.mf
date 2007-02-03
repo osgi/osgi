@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-Activator: ${p}.TestApplication
 Bundle-Name: test.application
 Bundle-SymbolicName: ${p}
-Bundle-Version: 1.0
+Bundle-Version: 4.0.0.${project.build}
 Bundle-Copyright: Copyright (c) OSGi Alliance (2000-2005). All Rights Reserved.
 Bundle-Description: Application Test Case.
 Bundle-Vendor: OSGi Alliance

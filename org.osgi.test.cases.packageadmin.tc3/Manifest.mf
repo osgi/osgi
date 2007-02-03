@@ -5,7 +5,7 @@ Bundle-Copyright: ${copyright}
 Bundle-Description: Tests new bundle exporting same package. <BR>
  Tests two bundles exporting the same package.<BR>
 Bundle-Vendor: OSGi Alliance
-Bundle-Version: 3.0
+Bundle-Version: 3.0.0.${project.build}
 Bundle-Activator: $(p).TC3
 CVS-Header: $Header$
 $(IMPORT-PACKAGE)

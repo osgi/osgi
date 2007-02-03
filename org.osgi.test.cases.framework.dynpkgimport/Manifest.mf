@@ -5,7 +5,7 @@ Bundle-Description: Tests dynamic package import
 Bundle-Vendor: OSGi Alliance
 Bundle-Copyright: ${copyright}
 Bundle-Activator: org.osgi.test.cases.framework.dynpkgimport.DynPkgImportTestCase
-Bundle-Version: 3.0
+Bundle-Version: 3.0.0.${project.build}
 Bundle-Category: osgi,test
 Bundle-DocUrl: http://membercvs.osgi.org/test/3
 Bundle-ContactAddress: speccomments@mail.osgi.org

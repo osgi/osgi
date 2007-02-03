@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-Activator: ${p}.EventTestCase
 Bundle-Name: test.event
 Bundle-SymbolicName: ${p}
-Bundle-Version: 4.0.1
+Bundle-Version: 4.0.1.${project.build}
 Bundle-Copyright: ${copyright}
 Bundle-Description: A test case for the event generic mechanism implementation.
 Bundle-Vendor: OSGi Alliance

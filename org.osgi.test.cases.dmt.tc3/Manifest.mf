@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-Activator: ${p}.TestDmt
 Bundle-Name: test.dmt.tc3
 Bundle-SymbolicName: ${p}
-Bundle-Version: 1.0
+Bundle-Version: 4.0.0.${project.build}
 Bundle-Copyright: ${copyright}
 Bundle-Description: Dmt Test Case 003.
 Bundle-Vendor: OSGi Alliance

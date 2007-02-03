@@ -7,7 +7,7 @@ Bundle-Description: Tests exporting packages and re-exporting packages. <BR>
  Tests that PackageAdmin is exported by the System Bundle.<BR>
  Tests what happens when an exported package is being removed.<BR>
 Bundle-Vendor: OSGi Alliance
-Bundle-Version: 3.0
+Bundle-Version: 3.0.0.${project.build}
 Bundle-Activator: $(p).TC1
 CVS-Header: $Header$
 $(IMPORT-PACKAGE)

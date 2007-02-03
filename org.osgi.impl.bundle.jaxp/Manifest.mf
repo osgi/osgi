@@ -5,7 +5,7 @@ Bundle-Name: impl.bundle.jaxp
 Bundle-Description: OSGi XML JAXP Implementation. Registers an 
 Bundle-Copyright: ${copyright}
 Bundle-Vendor: OSGi Alliance
-Bundle-Version: 1.0.1
+Bundle-Version: 1.0.1.${project.build}
 Bundle-Category: osgi,xml
 $(EXPORT-PACKAGE)
 $(IMPORT-PACKAGE)

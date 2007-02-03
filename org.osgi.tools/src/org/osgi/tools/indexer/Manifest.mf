@@ -8,7 +8,7 @@ Bundle-Description: A utility to index JAR files for the web. It must be called
   containing a structure with all the information to the console.
 Bundle-Copyright: ERICSSON Radio AB (c) 2000, All rights reserved, $(DATE)
 Bundle-Vendor: OSGi
-Bundle-Version: 4.0
+Bundle-Version: 4.0.0.${project.build}
 
 
 

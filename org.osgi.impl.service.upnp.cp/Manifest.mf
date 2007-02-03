@@ -1,6 +1,6 @@
 Manifest-Version: 1.0
 Bundle-Vendor: SamSung
-Bundle-Version: 0.1
+Bundle-Version: 0.1.0.${project.build}
 Bundle-Activator: org.osgi.impl.service.upnp.cp.UPnPBundleActivator
 Bundle-DocURL: http://samsung.com/osgi/upnp.html
 Bundle-Name: impl.service.upnp.cp

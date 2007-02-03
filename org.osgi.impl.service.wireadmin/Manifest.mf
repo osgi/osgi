@@ -5,7 +5,7 @@ Bundle-SymbolicName: ${p}
 Bundle-Description: OSGi WireAdmin Service Reference Implementation by ACUNIA nv.
 Bundle-Copyright: ${copyright}
 Bundle-Vendor: OSGi Alliance
-Bundle-Version: 1.0.1
+Bundle-Version: 1.0.1.${project.build}
 Bundle-Category: osgi
 Export-Package: org.osgi.service.wireadmin; specification-version=1.0
 ${IMPORT-PACKAGE}

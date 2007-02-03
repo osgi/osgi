@@ -8,7 +8,7 @@ Bundle-Copyright: Copyright (c) 2000-2002 Sun Microsystems, Inc. All Rights Rese
   This source code is licensed to OSGi as MEMBER LICENSED MATERIALS
   under the terms of Section 3.2 of the OSGi MEMBER AGREEMENT.
 Bundle-Vendor: Sun Microsystems, Inc.
-Bundle-Version: 1.1
+Bundle-Version: 1.1.0.${project.build}
 Bundle-Category: osgi
 $(EXPORT-PACKAGE)
 Import-Package: org.osgi.framework; specification-version=1.0

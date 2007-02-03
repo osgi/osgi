@@ -5,7 +5,7 @@ Bundle-Name: impl.service.io
 Bundle-Description: OSGi ConnectionService 1.0 Reference Implementation by ProSyst AG.
 Bundle-Copyright: ${copyright}
 Bundle-Vendor: OSGi Alliance
-Bundle-Version: 1.0
+Bundle-Version: 1.0.0.${project.build}
 Bundle-Category: osgi
 $(IMPORT-PACKAGE)
 $(EXPORT-PACKAGE)

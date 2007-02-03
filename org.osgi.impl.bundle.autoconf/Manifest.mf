@@ -3,7 +3,7 @@ Bundle-SymbolicName: ${p}
 Bundle-Name: impl.bundle.autoconf
 Bundle-Vendor: Nokia
 Bundle-Copyright: ${copyright}
-Bundle-Version: 1.0
+Bundle-Version: 1.0.0.${project.build}
 Service-Component: OSGI-INF/services.xml
 $(IMPORT-PACKAGE)
 $(EXPORT-PACKAGE)

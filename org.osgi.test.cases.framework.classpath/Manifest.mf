@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-Name: test.framework.classpath
 Bundle-SymbolicName: ${p}
 Bundle-Description: Tests class path functions.
-Bundle-Version: 4.0
+Bundle-Version: 4.0.0.${project.build}
 Bundle-Activator: org.osgi.test.cases.framework.classpath.ClassPathTestCase
 Bundle-Vendor: OSGi Alliance
 Bundle-DocURL: http://www.osgi.org/

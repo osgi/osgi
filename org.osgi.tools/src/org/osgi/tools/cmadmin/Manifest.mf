@@ -1,6 +1,6 @@
 Manifest-Version: 1.0
 Bundle-Name: $(name)
-Bundle-Version: 4.0
+Bundle-Version: 4.0.0.${project.build}
 Bundle-Activator: $(activator)
 Bundle-Description: Provides commands to the console to adminstrate
   the Configuration Admin service.

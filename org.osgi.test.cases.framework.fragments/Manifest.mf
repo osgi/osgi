@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-Activator: ${p}.TestCase
 Bundle-SymbolicName: ${p}
 Bundle-Name: test.framework.fragments
-Bundle-Version: 4.0.1
+Bundle-Version: 4.0.1.${project.build}
 Bundle-Copyright: ${copyright}
 Bundle-Description: Tests fragment bundles and extension bundles
 Bundle-Vendor: OSGi Alliance

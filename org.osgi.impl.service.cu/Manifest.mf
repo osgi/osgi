@@ -4,7 +4,7 @@ Bundle-Name: impl.service.cu
 Bundle-Description: OSGi Control Unit Admin Reference Implementation by ProSyst GmbH.
 Bundle-Vendor: OSGi Aliance
 Bundle-Copyright: All Rights Reserved, (c) OSGi Alliance, 2000-2005
-Bundle-Version: 1.0.0
+Bundle-Version: 1.0.0.${project.build}
 Bundle-Activator: ${p}.admin.Activator
 $(IMPORT-PACKAGE)
 $(EXPORT-PACKAGE)

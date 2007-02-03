@@ -14,7 +14,7 @@ Bundle-Description: The following tests are executed<br>
   </pre>
 Bundle-Vendor: OSGi Alliance
 Bundle-Activator: $(p).SyncListenerTest
-Bundle-Version: 3.0
+Bundle-Version: 3.0.0.${project.build}
 Bundle-Category: osgi,test
 Bundle-DocUrl: http://membercvs.osgi.org/test/3
 Bundle-ContactAddress: speccomments@mail.osgi.org
