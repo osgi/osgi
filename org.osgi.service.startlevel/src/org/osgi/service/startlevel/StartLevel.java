@@ -162,15 +162,16 @@ public interface StartLevel {
 	 * The specified bundle will be assigned the specified start level. The
 	 * start level value assigned to the bundle will be persistently recorded by
 	 * the Framework.
-	 * 
+	 * <p>
 	 * If the new start level for the bundle is lower than or equal to the
-	 * active start level of the Framework, the Framework will start the
-	 * specified bundle as described in the {@link Bundle#start(int)} method
-	 * using the {@link Bundle#START_TRANSIENT} option.  The 
+	 * active start level of the Framework and the bundle is persistently marked 
+     * to be started, the Framework will start the specified bundle as described
+     * in the {@link Bundle#start(int)} method using the 
+     * {@link Bundle#START_TRANSIENT} option.  The 
 	 * {@link Bundle#START_ACTIVATION_POLICY} option must also be used 
 	 * if {@link #isBundleActivationPolicyUsed(Bundle)} returns true for the bundle.
 	 * The actual starting of this bundle must occur asynchronously.
-	 * 
+	 * <p>
 	 * If the new start level for the bundle is higher than the active start
 	 * level of the Framework, the Framework will stop the specified bundle as
 	 * described in the {@link Bundle#stop(int)} method using the 
