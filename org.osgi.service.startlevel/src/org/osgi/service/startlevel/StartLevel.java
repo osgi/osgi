@@ -50,16 +50,15 @@ import org.osgi.framework.Bundle;
  * When the Framework is launched, the Framework will enter start level one and
  * all bundles which are assigned to start level one and are persistently marked
  * to be started are started as described in the <code>Bundle.start</code>
- * method. The Framework will continue to increase
- * the start level, starting bundles at each start level, until the Framework
- * has reached a beginning start level. At this point the Framework has
- * completed starting bundles and will then fire a Framework event of type
- * <code>FrameworkEvent.STARTED</code> to announce it has completed its
- * launch.
+ * method. The Framework will continue to increase the start level, starting
+ * bundles at each start level, until the Framework has reached a beginning
+ * start level. At this point the Framework has completed starting bundles and
+ * will then fire a Framework event of type <code>FrameworkEvent.STARTED</code>
+ * to announce it has completed its launch.
  * 
  * <p>
- * Within a start level, bundles may be started in order defined by
- * the Framework implementation. This may be something like ascending 
+ * Within a start level, bundles may be started in an order defined by the
+ * Framework implementation. This may be something like ascending
  * <code>Bundle.getBundleId</code> order or an order based upon dependencies
  * between bundles. A similar but reversed order may be used when stopping
  * bundles within a start level.
@@ -94,11 +93,11 @@ public interface StartLevel {
 	 * If the specified start level is higher than the active start level, the
 	 * Framework will continue to increase the start level until the Framework
 	 * has reached the specified start level, starting bundles at each start
-	 * level which are persistently marked to be started as described in the 
-	 * {@link Bundle#start(int)} method using the 
-	 * {@link Bundle#START_TRANSIENT} option.  The 
-	 * {@link Bundle#START_ACTIVATION_POLICY} option must also be used 
-	 * if {@link #isBundleActivationPolicyUsed(Bundle)} returns true for the bundle.
+	 * level which are persistently marked to be started as described in the
+	 * {@link Bundle#start(int)} method using the {@link Bundle#START_TRANSIENT}
+	 * option. The {@link Bundle#START_ACTIVATION_POLICY} option must also be
+	 * used if {@link #isBundleActivationPolicyUsed(Bundle)} returns
+	 * <code>true</code> for the bundle.
 	 * 
 	 * At each intermediate start level value on the way to and including the
 	 * target start level, the framework must:
@@ -115,8 +114,8 @@ public interface StartLevel {
 	 * If the specified start level is lower than the active start level, the
 	 * Framework will continue to decrease the start level until the Framework
 	 * has reached the specified start level stopping bundles at each start
-	 * level as described in the {@link Bundle#stop(int)} method
-	 * using the {@link Bundle#STOP_TRANSIENT} option.
+	 * level as described in the {@link Bundle#stop(int)} method using the
+	 * {@link Bundle#STOP_TRANSIENT} option.
 	 * 
 	 * At each intermediate start level value on the way to and including the
 	 * specified start level, the framework must:
@@ -140,8 +139,8 @@ public interface StartLevel {
 	 * @throws IllegalArgumentException If the specified start level is less
 	 *         than or equal to zero.
 	 * @throws SecurityException If the caller does not have
-	 *         <code>AdminPermission[System Bundle,STARTLEVEL]</code> and the Java runtime
-	 *         environment supports permissions.
+	 *         <code>AdminPermission[System Bundle,STARTLEVEL]</code> and the
+	 *         Java runtime environment supports permissions.
 	 */
 	public void setStartLevel(int startlevel);
 
@@ -164,28 +163,29 @@ public interface StartLevel {
 	 * the Framework.
 	 * <p>
 	 * If the new start level for the bundle is lower than or equal to the
-	 * active start level of the Framework and the bundle is persistently marked 
-     * to be started, the Framework will start the specified bundle as described
-     * in the {@link Bundle#start(int)} method using the 
-     * {@link Bundle#START_TRANSIENT} option.  The 
-	 * {@link Bundle#START_ACTIVATION_POLICY} option must also be used 
-	 * if {@link #isBundleActivationPolicyUsed(Bundle)} returns true for the bundle.
-	 * The actual starting of this bundle must occur asynchronously.
+	 * active start level of the Framework and the bundle is persistently marked
+	 * to be started, the Framework will start the specified bundle as described
+	 * in the {@link Bundle#start(int)} method using the
+	 * {@link Bundle#START_TRANSIENT} option. The
+	 * {@link Bundle#START_ACTIVATION_POLICY} option must also be used if
+	 * {@link #isBundleActivationPolicyUsed(Bundle)} returns <code>true</code>
+	 * for the bundle. The actual starting of this bundle must occur
+	 * asynchronously.
 	 * <p>
 	 * If the new start level for the bundle is higher than the active start
 	 * level of the Framework, the Framework will stop the specified bundle as
-	 * described in the {@link Bundle#stop(int)} method using the 
-	 * {@link Bundle#STOP_TRANSIENT} option.  The actual stopping of this 
-	 * bundle must occur asynchronously.
+	 * described in the {@link Bundle#stop(int)} method using the
+	 * {@link Bundle#STOP_TRANSIENT} option. The actual stopping of this bundle
+	 * must occur asynchronously.
 	 * 
 	 * @param bundle The target bundle.
 	 * @param startlevel The new start level for the specified Bundle.
 	 * @throws IllegalArgumentException If the specified bundle has been
 	 *         uninstalled or if the specified start level is less than or equal
 	 *         to zero, or the specified bundle is the system bundle.
-	 * @throws SecurityException If the caller does not have 
-	 *         <code>AdminPermission[bundle,EXECUTE]</code> and the Java runtime
-	 *         environment supports permissions.
+	 * @throws SecurityException If the caller does not have
+	 *         <code>AdminPermission[bundle,EXECUTE]</code> and the Java
+	 *         runtime environment supports permissions.
 	 */
 	public void setBundleStartLevel(Bundle bundle, int startlevel);
 
@@ -222,39 +222,44 @@ public interface StartLevel {
 	 * @throws IllegalArgumentException If the specified start level is less
 	 *         than or equal to zero.
 	 * @throws SecurityException If the caller does not have
-	 *         <code>AdminPermission[System Bundle,STARTLEVEL]</code> and the Java runtime
-	 *         environment supports permissions.
+	 *         <code>AdminPermission[System Bundle,STARTLEVEL]</code> and the
+	 *         Java runtime environment supports permissions.
 	 */
 	public void setInitialBundleStartLevel(int startlevel);
 
 	/**
-	 * Returns true if the bundle is marked as persistently started.
+	 * Returns the persistent started state of the specified bundle.
 	 * <p>
-	 * The persistent started state of a bundle indicates whether a bundle is 
-	 * persistently marked to be started when it's start level is reached.
+	 * The persistent started state of a bundle indicates whether the bundle is
+	 * persistently marked to be started when its start level is reached.
 	 * 
-	 * @param bundle The bundle for which to return the persistent started state.
+	 * @param bundle The bundle for which to return the persistent started
+	 *        state.
 	 * @return <code>true</code> if the bundle is persistently marked to be
 	 *         started, <code>false</code> if the bundle is not persistently
 	 *         marked to be started.
 	 * @throws java.lang.IllegalArgumentException If the specified bundle has
 	 *         been uninstalled.
+	 * @see Bundle#START_TRANSIENT
 	 */
 	public boolean isBundlePersistentlyStarted(Bundle bundle);
 
 	/**
-	 * Returns true if the bundle is marked as persistently using the bundle's activation policy.
+	 * Returns the persistent activation policy state of the specified bundle.
 	 * <p>
-	 * The persistent policy activated state indicates whether a bundle is persistently marked
-	 * to be activated according to its defined activation policy.
-	 * @param bundle The bundle for which to return the persistent policy activated 
-	 *         state.
+	 * The persistent activation policy state of a bundle indicates whether the
+	 * bundle is persistently marked to be activated according to its declared
+	 * activation policy.
+	 * 
+	 * @param bundle The bundle for which to return the persistent activation
+	 *        policy state.
 	 * @return <code>true</code> if the bundle is persistently marked to be
-	 *         activated according to its activation policy, <code>false</code> if the bundle is 
-	 *         not persistently marked to be activated according to its activation policy.
+	 *         activated according to its declared activation policy,
+	 *         <code>false</code> if the bundle is not persistently marked to
+	 *         be activated according to its declared activation policy.
 	 * @throws java.lang.IllegalArgumentException If the specified bundle has
 	 *         been uninstalled.
-	 * @since 1.4
+	 * @since 1.1
 	 * @see Bundle#START_ACTIVATION_POLICY
 	 */
 	public boolean isBundleActivationPolicyUsed(Bundle bundle);

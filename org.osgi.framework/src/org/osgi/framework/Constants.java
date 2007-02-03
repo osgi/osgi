@@ -156,7 +156,7 @@ public interface Constants {
 	 * <p>
 	 * The attribute value may be retrieved from the <code>Dictionary</code>
 	 * object returned by the <code>Bundle.getHeaders</code> method.
-	 *
+	 * 
 	 * @deprecated As of 1.2.
 	 */
 	public static final String	IMPORT_SERVICE							= "Import-Service";
@@ -250,7 +250,7 @@ public interface Constants {
 	 * like:
 	 * 
 	 * <pre>
-	 *   Bundle-NativeCode: http.so ; processor=x86 ...
+	 *     Bundle-NativeCode: http.so ; processor=x86 ...
 	 * </pre>
 	 */
 	public static final String	BUNDLE_NATIVECODE_PROCESSOR				= "processor";
@@ -264,7 +264,7 @@ public interface Constants {
 	 * like:
 	 * 
 	 * <pre>
-	 *   Bundle-NativeCode: http.so ; osname=Linux ...
+	 *     Bundle-NativeCode: http.so ; osname=Linux ...
 	 * </pre>
 	 */
 	public static final String	BUNDLE_NATIVECODE_OSNAME				= "osname";
@@ -278,7 +278,7 @@ public interface Constants {
 	 * like:
 	 * 
 	 * <pre>
-	 *   Bundle-NativeCode: http.so ; osversion=&quot;2.34&quot; ...
+	 *     Bundle-NativeCode: http.so ; osversion=&quot;2.34&quot; ...
 	 * </pre>
 	 */
 	public static final String	BUNDLE_NATIVECODE_OSVERSION				= "osversion";
@@ -292,7 +292,7 @@ public interface Constants {
 	 * like:
 	 * 
 	 * <pre>
-	 *   Bundle-NativeCode: http.so ; language=nl_be ...
+	 *     Bundle-NativeCode: http.so ; language=nl_be ...
 	 * </pre>
 	 */
 	public static final String	BUNDLE_NATIVECODE_LANGUAGE				= "language";
@@ -591,7 +591,7 @@ public interface Constants {
 	 * like:
 	 * 
 	 * <pre>
-	 *   Bundle-SymbolicName: com.acme.module.test; singleton:=true
+	 *     Bundle-SymbolicName: com.acme.module.test; singleton:=true
 	 * </pre>
 	 * 
 	 * @since 1.3
@@ -608,7 +608,7 @@ public interface Constants {
 	 * like:
 	 * 
 	 * <pre>
-	 *   Bundle-SymbolicName: com.acme.module.test; fragment-attachment:=&quot;never&quot;
+	 *     Bundle-SymbolicName: com.acme.module.test; fragment-attachment:=&quot;never&quot;
 	 * </pre>
 	 * 
 	 * @see Constants#FRAGMENT_ATTACHMENT_ALWAYS
@@ -630,7 +630,7 @@ public interface Constants {
 	 * like:
 	 * 
 	 * <pre>
-	 *   Bundle-SymbolicName: com.acme.module.test; fragment-attachment:=&quot;always&quot;
+	 *     Bundle-SymbolicName: com.acme.module.test; fragment-attachment:=&quot;always&quot;
 	 * </pre>
 	 * 
 	 * @see Constants#FRAGMENT_ATTACHMENT_DIRECTIVE
@@ -650,7 +650,7 @@ public interface Constants {
 	 * like:
 	 * 
 	 * <pre>
-	 *   Bundle-SymbolicName: com.acme.module.test; fragment-attachment:=&quot;resolve-time&quot;
+	 *     Bundle-SymbolicName: com.acme.module.test; fragment-attachment:=&quot;resolve-time&quot;
 	 * </pre>
 	 * 
 	 * @see Constants#FRAGMENT_ATTACHMENT_DIRECTIVE
@@ -669,7 +669,7 @@ public interface Constants {
 	 * like:
 	 * 
 	 * <pre>
-	 *   Bundle-SymbolicName: com.acme.module.test; fragment-attachment:=&quot;never&quot;
+	 *     Bundle-SymbolicName: com.acme.module.test; fragment-attachment:=&quot;never&quot;
 	 * </pre>
 	 * 
 	 * @see Constants#FRAGMENT_ATTACHMENT_DIRECTIVE
@@ -719,8 +719,8 @@ public interface Constants {
 	 * like:
 	 * 
 	 * <pre>
-	 *   Require-Bundle: com.acme.module.test; bundle-version=&quot;1.1&quot;
-	 *   Require-Bundle: com.acme.module.test; bundle-version=&quot;[1.0,2.0)&quot;
+	 *     Require-Bundle: com.acme.module.test; bundle-version=&quot;1.1&quot;
+	 *     Require-Bundle: com.acme.module.test; bundle-version=&quot;[1.0,2.0)&quot;
 	 * </pre>
 	 * 
 	 * <p>
@@ -753,7 +753,7 @@ public interface Constants {
 	 * The attribute value is encoded in manifest headers like:
 	 * 
 	 * <pre>
-	 *   Bundle-NativeCode: libgtk.so; selection-filter=&quot;(ws=gtk)&quot;; ...
+	 *     Bundle-NativeCode: libgtk.so; selection-filter=&quot;(ws=gtk)&quot;; ...
 	 * </pre>
 	 * 
 	 * @since 1.3
@@ -788,7 +788,7 @@ public interface Constants {
 	 * manifest header like:
 	 * 
 	 * <pre>
-	 *   Import-Package: org.osgi.framework; version=&quot;1.1&quot;
+	 *     Import-Package: org.osgi.framework; version=&quot;1.1&quot;
 	 * </pre>
 	 * 
 	 * @since 1.3
@@ -805,7 +805,7 @@ public interface Constants {
 	 * like:
 	 * 
 	 * <pre>
-	 *   Import-Package: org.osgi.framework; bundle-symbolic-name=&quot;com.acme.module.test&quot;
+	 *     Import-Package: org.osgi.framework; bundle-symbolic-name=&quot;com.acme.module.test&quot;
 	 * </pre>
 	 * 
 	 * @since 1.3
@@ -821,8 +821,8 @@ public interface Constants {
 	 * manifest header like:
 	 * 
 	 * <pre>
-	 *   Import-Package: org.osgi.framework; resolution:=&quot;optional&quot;
-	 *   Require-Bundle: com.acme.module.test; resolution:=&quot;optional&quot;
+	 *     Import-Package: org.osgi.framework; resolution:=&quot;optional&quot;
+	 *     Require-Bundle: com.acme.module.test; resolution:=&quot;optional&quot;
 	 * </pre>
 	 * 
 	 * @see Constants#RESOLUTION_MANDATORY
@@ -843,8 +843,8 @@ public interface Constants {
 	 * manifest header like:
 	 * 
 	 * <pre>
-	 *   Import-Package: org.osgi.framework; resolution:=&quot;manditory&quot;
-	 *   Require-Bundle: com.acme.module.test; resolution:=&quot;manditory&quot;
+	 *     Import-Package: org.osgi.framework; resolution:=&quot;manditory&quot;
+	 *     Require-Bundle: com.acme.module.test; resolution:=&quot;manditory&quot;
 	 * </pre>
 	 * 
 	 * @see Constants#RESOLUTION_DIRECTIVE
@@ -865,8 +865,8 @@ public interface Constants {
 	 * manifest header like:
 	 * 
 	 * <pre>
-	 *   Import-Package: org.osgi.framework; resolution:=&quot;optional&quot;
-	 *   Require-Bundle: com.acme.module.test; resolution:=&quot;optional&quot;
+	 *     Import-Package: org.osgi.framework; resolution:=&quot;optional&quot;
+	 *     Require-Bundle: com.acme.module.test; resolution:=&quot;optional&quot;
 	 * </pre>
 	 * 
 	 * @see Constants#RESOLUTION_DIRECTIVE
@@ -883,7 +883,7 @@ public interface Constants {
 	 * like:
 	 * 
 	 * <pre>
-	 *   Export-Package: org.osgi.util.tracker; uses:=&quot;org.osgi.framework&quot;
+	 *     Export-Package: org.osgi.util.tracker; uses:=&quot;org.osgi.framework&quot;
 	 * </pre>
 	 * 
 	 * @since 1.3
@@ -893,20 +893,23 @@ public interface Constants {
 	/**
 	 * Manifest header directive (named &quot;include&quot;).
 	 * <p>
-	 * This directive is used by the Import-Package manifest header to
-	 * identify a list of classes of the specified package which must be 
-	 * allowed to be exported. The directive value is encoded in the 
-	 * Import-Package manifest header like:
+	 * This directive is used by the Import-Package manifest header to identify
+	 * a list of classes of the specified package which must be allowed to be
+	 * exported. The directive value is encoded in the Import-Package manifest
+	 * header like:
+	 * 
 	 * <pre>
-	 *   Import-Package: org.osgi.framework; include:=&quot;MyClass*&quot;
+	 *     Import-Package: org.osgi.framework; include:=&quot;MyClass*&quot;
 	 * </pre>
+	 * 
 	 * <p>
-	 * This directive is also used by the Bundle-ActivationPolicy manifest 
-	 * header to identify the packages from which class loads will trigger 
-	 * lazy activation. The directive value is encoded in the 
-	 * Bundle-ActivationPolicy manifest header like:
+	 * This directive is also used by the Bundle-ActivationPolicy manifest
+	 * header to identify the packages from which class loads will trigger lazy
+	 * activation. The directive value is encoded in the Bundle-ActivationPolicy
+	 * manifest header like:
+	 * 
 	 * <pre>
-	 *   Bundle-ActivationPolicy: lazy; include:=&quot;org.osgi.framework&quot;
+	 *     Bundle-ActivationPolicy: lazy; include:=&quot;org.osgi.framework&quot;
 	 * </pre>
 	 * 
 	 * @since 1.3
@@ -916,20 +919,23 @@ public interface Constants {
 	/**
 	 * Manifest header directive (named &quot;exclude&quot;).
 	 * <p>
-	 * This directive is used by the Export-Package manifest header to
-	 * identify a list of classes of the specified package which must not be 
-	 * allowed to be exported. The directive value is encoded in the 
-	 * Export-Package manifest header like:
+	 * This directive is used by the Export-Package manifest header to identify
+	 * a list of classes of the specified package which must not be allowed to
+	 * be exported. The directive value is encoded in the Export-Package
+	 * manifest header like:
+	 * 
 	 * <pre>
-	 *   Export-Package: org.osgi.framework; exclude:=&quot;*Impl&quot;
+	 *     Export-Package: org.osgi.framework; exclude:=&quot;*Impl&quot;
 	 * </pre>
+	 * 
 	 * <p>
-	 * This directive is also used by the Bundle-ActivationPolicy manifest 
-	 * header to identify the packages from which class loads will not trigger 
-	 * lazy activation. The directive value is encoded in the 
+	 * This directive is also used by the Bundle-ActivationPolicy manifest
+	 * header to identify the packages from which class loads will not trigger
+	 * lazy activation. The directive value is encoded in the
 	 * Bundle-ActivationPolicy manifest header like:
+	 * 
 	 * <pre>
-	 *   Bundle-ActivationPolicy: lazy; exclude:=&quot;org.osgi.framework&quot;
+	 *     Bundle-ActivationPolicy: lazy; exclude:=&quot;org.osgi.framework&quot;
 	 * </pre>
 	 * 
 	 * @since 1.3
@@ -946,7 +952,7 @@ public interface Constants {
 	 * like:
 	 * 
 	 * <pre>
-	 *   Export-Package: org.osgi.framework; mandatory:=&quot;bundle-symbolic-name&quot;
+	 *     Export-Package: org.osgi.framework; mandatory:=&quot;bundle-symbolic-name&quot;
 	 * </pre>
 	 * 
 	 * @since 1.3
@@ -962,7 +968,7 @@ public interface Constants {
 	 * like:
 	 * 
 	 * <pre>
-	 *   Require-Bundle: com.acme.module.test; visibility:=&quot;reexport&quot;
+	 *     Require-Bundle: com.acme.module.test; visibility:=&quot;reexport&quot;
 	 * </pre>
 	 * 
 	 * @see Constants#VISIBILITY_PRIVATE
@@ -982,7 +988,7 @@ public interface Constants {
 	 * like:
 	 * 
 	 * <pre>
-	 *   Require-Bundle: com.acme.module.test; visibility:=&quot;private&quot;
+	 *     Require-Bundle: com.acme.module.test; visibility:=&quot;private&quot;
 	 * </pre>
 	 * 
 	 * @see Constants#VISIBILITY_DIRECTIVE
@@ -1002,7 +1008,7 @@ public interface Constants {
 	 * like:
 	 * 
 	 * <pre>
-	 *   Require-Bundle: com.acme.module.test; visibility:=&quot;reexport&quot;
+	 *     Require-Bundle: com.acme.module.test; visibility:=&quot;reexport&quot;
 	 * </pre>
 	 * 
 	 * @see Constants#VISIBILITY_DIRECTIVE
@@ -1010,64 +1016,61 @@ public interface Constants {
 	 */
 	public final static String	VISIBILITY_REEXPORT						= "reexport";
 	/**
-	 * Manifest header directive (named &quot;extension&quot;)
-	 * identifying the type of the extension fragment.
+	 * Manifest header directive (named &quot;extension&quot;) identifying the
+	 * type of the extension fragment.
 	 * 
 	 * <p>
-	 * The directive value is encoded in the Fragment-Host manifest header
-	 * like:
+	 * The directive value is encoded in the Fragment-Host manifest header like:
 	 * 
 	 * <pre>
-	 *   Fragment-Host: system.bundle; extension:=&quot;framework&quot;
+	 *     Fragment-Host: system.bundle; extension:=&quot;framework&quot;
 	 * </pre>
 	 * 
 	 * @see Constants#EXTENSION_FRAMEWORK
 	 * @see Constants#EXTENSION_BOOTCLASSPATH
 	 * @since 1.3
 	 */
-	public final static String	EXTENSION_DIRECTIVE			= "extension";
+	public final static String	EXTENSION_DIRECTIVE						= "extension";
 
 	/**
-	 * Manifest header directive value (named &quot;framework&quot;) identifying 
+	 * Manifest header directive value (named &quot;framework&quot;) identifying
 	 * the type of extension fragment. An extension fragment type of framework
-	 * indicates that the extension fragment is to be loaded by
-	 * the framework's class loader.
+	 * indicates that the extension fragment is to be loaded by the framework's
+	 * class loader.
 	 * 
 	 * <p>
-	 * The directive value is encoded in the Fragment-Host manifest header
-	 * like:
+	 * The directive value is encoded in the Fragment-Host manifest header like:
 	 * 
 	 * <pre>
-	 *   Fragment-Host: system.bundle; extension:=&quot;framework&quot;
+	 *     Fragment-Host: system.bundle; extension:=&quot;framework&quot;
 	 * </pre>
 	 * 
 	 * @see Constants#EXTENSION_DIRECTIVE
 	 * @since 1.3
 	 */
-	public final static String	EXTENSION_FRAMEWORK				= "framework";
+	public final static String	EXTENSION_FRAMEWORK						= "framework";
 
 	/**
-	 * Manifest header directive value (named &quot;bootclasspath&quot;) identifying 
-	 * the type of extension fragment. An extension fragment type of bootclasspath
-	 * indicates that the extension fragment is to be loaded by
+	 * Manifest header directive value (named &quot;bootclasspath&quot;)
+	 * identifying the type of extension fragment. An extension fragment type of
+	 * bootclasspath indicates that the extension fragment is to be loaded by
 	 * the boot class loader.
 	 * 
 	 * <p>
-	 * The directive value is encoded in the Fragment-Host manifest header
-	 * like:
+	 * The directive value is encoded in the Fragment-Host manifest header like:
 	 * 
 	 * <pre>
-	 *   Fragment-Host: system.bundle; extension:=&quot;bootclasspath&quot;
+	 *     Fragment-Host: system.bundle; extension:=&quot;bootclasspath&quot;
 	 * </pre>
 	 * 
 	 * @see Constants#EXTENSION_DIRECTIVE
 	 * @since 1.3
 	 */
-	public final static String	EXTENSION_BOOTCLASSPATH			= "bootclasspath";
-	
+	public final static String	EXTENSION_BOOTCLASSPATH					= "bootclasspath";
+
 	/**
-	 * Manifest header (named &quot;Bundle-ActivationPolicy&quot;) identifying the
-	 * bundle's activation policy.
+	 * Manifest header (named &quot;Bundle-ActivationPolicy&quot;) identifying
+	 * the bundle's activation policy.
 	 * <p>
 	 * The attribute value may be retrieved from the <code>Dictionary</code>
 	 * object returned by the <code>Bundle.getHeaders</code> method.
@@ -1077,25 +1080,25 @@ public interface Constants {
 	 * @see Constants#INCLUDE_DIRECTIVE
 	 * @see Constants#EXCLUDE_DIRECTIVE
 	 */
-	public final static String	BUNDLE_ACTIVATIONPOLICY			= "Bundle-ActivationPolicy";
+	public final static String	BUNDLE_ACTIVATIONPOLICY					= "Bundle-ActivationPolicy";
 
 	/**
-	 * Bundle activation policy (named &quot;lazy&quot;) declaring the 
-	 * bundle must be activated when the first class load is made from the 
-	 * bundle.
+	 * Bundle activation policy (named &quot;lazy&quot;) declaring the bundle
+	 * must be activated when the first class load is made from the bundle.
 	 * <p>
-	 * A bundle with the lazy activation policy enters the {@link Bundle#STARTING STARTING}
-	 * state as soon as it is resolved, its start level has been met, its persistent started
-	 * state is true and its persistent policy activated state is true. The bundle
-	 * will wait in the STARTING state until the first class load from the bundle
-	 * occurs. The bundle will then be activated before the class is returned to the
-	 * requestor.
+	 * A bundle with the lazy activation policy enters the
+	 * {@link Bundle#STARTING STARTING} state as soon as it is resolved, its
+	 * start level has been met, its persistent started state is
+	 * <code>true</code> and its persistent activation policy state is
+	 * <code>true</code>. The bundle will wait in the <code>STARTING</code>
+	 * state until the first class load from the bundle occurs. The bundle will
+	 * then be activated before the class is returned to the requestor.
 	 * <p>
-	 * The activation policy value is specified as in the Bundle-ActivationPolicy
-	 * manifest header like:
+	 * The activation policy value is specified as in the
+	 * Bundle-ActivationPolicy manifest header like:
 	 * 
 	 * <pre>
-	 *   Bundle-ActivationPolicy: lazy
+	 *     Bundle-ActivationPolicy: lazy
 	 * </pre>
 	 * 
 	 * @see Constants#BUNDLE_ACTIVATIONPOLICY
@@ -1103,6 +1106,6 @@ public interface Constants {
 	 * @see Bundle#START_ACTIVATION_POLICY
 	 * @since 1.4
 	 */
-	public final static String	ACTIVATION_LAZY					= "lazy";
-	
+	public final static String	ACTIVATION_LAZY							= "lazy";
+
 }
