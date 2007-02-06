@@ -344,7 +344,7 @@ public interface Bundle {
 	 * @throws BundleException If this bundle could not be started. This could
 	 *         be because a code dependency could not be resolved or the
 	 *         specified <code>BundleActivator</code> could not be loaded or
-	 *         threw an exception.
+	 *         threw an exception or this bundle is a fragment.
 	 * @throws java.lang.IllegalStateException If this bundle has been
 	 *         uninstalled or this bundle tries to change its own state.
 	 * @throws java.lang.SecurityException If the caller does not have the
@@ -363,7 +363,7 @@ public interface Bundle {
 	 * @throws BundleException If this bundle could not be started. This could
 	 *         be because a code dependency could not be resolved or the
 	 *         specified <code>BundleActivator</code> could not be loaded or
-	 *         threw an exception.
+	 *         threw an exception or this bundle is a fragment.
 	 * @throws java.lang.IllegalStateException If this bundle has been
 	 *         uninstalled or this bundle tries to change its own state.
 	 * @throws java.lang.SecurityException If the caller does not have the
@@ -445,7 +445,7 @@ public interface Bundle {
 	 *        {@link #STOP_TRANSIENT}. The Framework must ignore unrecognized
 	 *        options.
 	 * @throws BundleException If this bundle's <code>BundleActivator</code>
-	 *         threw an exception.
+	 *         threw an exception or this bundle is a fragment.
 	 * @throws java.lang.IllegalStateException If this bundle has been
 	 *         uninstalled or this bundle tries to change its own state.
 	 * @throws java.lang.SecurityException If the caller does not have the
@@ -462,7 +462,7 @@ public interface Bundle {
 	 * This method calls <code>stop(0)</code>.
 	 * 
 	 * @throws BundleException If this bundle's <code>BundleActivator</code>
-	 *         threw an exception.
+	 *         threw an exception or this bundle is a fragment.
 	 * @throws java.lang.IllegalStateException If this bundle has been
 	 *         uninstalled or this bundle tries to change its own state.
 	 * @throws java.lang.SecurityException If the caller does not have the
