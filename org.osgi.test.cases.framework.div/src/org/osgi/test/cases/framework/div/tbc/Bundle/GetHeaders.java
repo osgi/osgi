@@ -506,7 +506,7 @@ public class GetHeaders {
 		
 		// Start the bundles to force them to resolve.
 		tb9.start();
-		tb14.start();
+		//tb14.start();
 
 		// When searching for a localization file of a fragment bundle,
 		// it must first look in the fragment’s host bundle (with the lowest
@@ -532,14 +532,14 @@ public class GetHeaders {
 		// were resolved, a fragment must consult its host before looking in itself.
 		
 		// manifest localization before bundle is resolved.
-		for (int i = 0; i < tb9_manifestHeadersValues_en_US.length; i++) {
-			if (!h.get(tb9_manifestHeadersKeys[i]).equals(
-					tb9_manifestHeadersValues_en_US[i]))
+		for (int i = 0; i < tb14_manifestHeadersValues_en_US.length; i++) {
+			if (!h.get(tb14_manifestHeadersKeys[i]).equals(
+					tb14_manifestHeadersValues_en_US[i]))
 				throw new Exception(
 						"Exception on testGetHeaders010-2. Manifest header localization does not match. Expected "
-								+ tb9_manifestHeadersValues_en_US[i]
+								+ tb14_manifestHeadersValues_en_US[i]
 								+ " was "
-								+ h.get(tb9_manifestHeadersKeys[i]));
+								+ h.get(tb14_manifestHeadersKeys[i]));
 		}
 
 		tb14.uninstall();
