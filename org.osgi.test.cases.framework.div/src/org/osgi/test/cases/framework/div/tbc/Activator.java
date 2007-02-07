@@ -30,6 +30,7 @@ import org.osgi.framework.FrameworkEvent;
 import org.osgi.framework.FrameworkListener;
 import org.osgi.framework.ServiceReference;
 import org.osgi.test.cases.framework.div.tb6.BundleClass;
+import org.osgi.test.cases.framework.div.tbc.Bundle.GetBundleContext;
 import org.osgi.test.cases.framework.div.tbc.Bundle.GetEntry;
 import org.osgi.test.cases.framework.div.tbc.Bundle.GetEntryPaths;
 import org.osgi.test.cases.framework.div.tbc.Bundle.GetHeaders;
@@ -75,6 +76,7 @@ public class Activator extends Thread implements FrameworkListener,
 			"testBundleEventConstants", "testBundleGetEntryPath",
 			"testBundleGetEntryPaths", "testBundleGetResources",
 			"testBundleGetResource", "testBundleGetSymbolicName",
+			"testBundleGetBundleContext",
 			"testBundleHashCode", "testBundleLoadClass",
 			"testBundleExceptionGetCause", "testBundleExceptionInitCause",
 			"testFrameworkEventConstants",
@@ -898,6 +900,16 @@ public class Activator extends Thread implements FrameworkListener,
 		}
 	}
 
+	void testBundleGetBundleContext() {
+		try {
+			new GetBundleContext(_context, _link, _tcHome).run();
+		}
+		catch (Exception ex) {
+			ex.printStackTrace();
+			log(ex.getMessage(), "Fail");
+		}
+	}
+	
 	void testBundleHashCode() {
 		try {
 			new HashCode(_context, _link, _tcHome).run();
