@@ -222,7 +222,6 @@ public class DeploymentmoTestControl extends DefaultTestBundleControl {
     */
    private void addBundleListener() {
        listener = new BundleListenerImpl(this);
-       getContext().addBundleListener(listener);
    }
 
     /**

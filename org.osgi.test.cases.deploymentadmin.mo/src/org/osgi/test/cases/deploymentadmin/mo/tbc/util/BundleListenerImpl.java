@@ -70,6 +70,15 @@ public class BundleListenerImpl implements BundleListener {
 			tbc.notifyAll();
 		}
 	}
+  
+  public void begin() {
+    reset();
+    tbc.getContext().addBundleListener(this);
+  }
+  
+  public void end() {
+    tbc.getContext().removeBundleListener(this);
+  }
 	
 	public void reset() {
 		currentType = 0;
