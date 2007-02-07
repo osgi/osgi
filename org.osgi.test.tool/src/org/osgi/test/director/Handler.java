@@ -149,8 +149,8 @@ public class Handler implements BundleListener {
 						"MMddHHmmss");
 				lastRun = sf.format(new Date()) + ".xml";
 				File file = new File(directory, lastRun);
-				PrintWriter pw = new PrintWriter(new FileWriter(file));
-				pw.println("<?xml version='1.0' encoding='ISO-8859-1'?>");
+				PrintWriter pw = new PrintWriter(new OutputStreamWriter(new FileOutputStream(file),"UTF-8"));
+				pw.println("<?xml version='1.0' encoding='UTF-8'?>");
 				pw
 						.println("<?xml-stylesheet type='text/xsl' title='Compact' href='http://www2.osgi.org/www/testresult-compact-1.xsl'?>");
 				pw
