@@ -35,7 +35,7 @@ import org.osgi.test.cases.util.Logger;
 import org.osgi.test.service.TestCaseLink;
 
 /**
- * Test the method org.osgi.framework.Bundle.getSymbolicName().
+ * Test the method org.osgi.framework.Bundle.getBundleContext().
  * 
  * @version $Revision$
  */
@@ -46,7 +46,7 @@ public class GetBundleContext extends Logger {
 	private String			tcHome;
 
 	/**
-	 * Creates a new GetSymbolicName
+	 * Creates a new GetBundleContext
 	 * 
 	 * @param _context the bundle context
 	 * @param _link the link with test director
@@ -135,6 +135,7 @@ public class GetBundleContext extends Logger {
 			host.start(); 	// resolve the bundles
 			assertNotNull("BundleContext for host bundle must not be null", host.getBundleContext());
 			assertNull("BundleContext for fragment bundle must be null", fragment.getBundleContext());
+			
 			host.stop();
 			assertNull("BundleContext for stopped host bundle must not be null", host.getBundleContext());
 			assertNull("BundleContext for fragment bundle must be null", fragment.getBundleContext());
