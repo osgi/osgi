@@ -664,12 +664,12 @@ public interface Bundle {
 	 * they are present in the Manifest file:
 	 * 
 	 * <pre>
-	 * Bundle-Name
-	 * Bundle-Vendor
-	 * Bundle-Version
-	 * Bundle-Description
-	 * Bundle-DocURL
-	 * Bundle-ContactAddress
+	 *  Bundle-Name
+	 *  Bundle-Vendor
+	 *  Bundle-Version
+	 *  Bundle-Description
+	 *  Bundle-DocURL
+	 *  Bundle-ContactAddress
 	 * </pre>
 	 * 
 	 * <p>
@@ -863,7 +863,7 @@ public interface Bundle {
      *   bn + "_" + Ld + "_" + Cd + "_" + Vd
      *   bn + "_" + Ld + "_" + Cd
      *   bn + "_" + Ld
-	 * bn
+	 *  bn
 	 * </pre>
 	 * 
 	 * Where <code>bn</code> is the bundle localization basename,
@@ -1106,9 +1106,10 @@ public interface Bundle {
 	 * 
 	 * <p>
 	 * If this bundle is not in the {@link #STARTING}, {@link #ACTIVE}, or
-	 * {@link #STOPPING} states, then this bundle has no valid
-	 * <code>BundleContext</code>. This method will return <code>null</code>
-	 * if this bundle has no valid <code>BundleContext</code>.
+	 * {@link #STOPPING} states or this bundle is a fragment bundle, then this
+	 * bundle has no valid <code>BundleContext</code>. This method will
+	 * return <code>null</code> if this bundle has no valid
+	 * <code>BundleContext</code>.
 	 * 
 	 * @return A <code>BundleContext</code> for this bundle or
 	 *         <code>null</code> if this bundle has no valid
