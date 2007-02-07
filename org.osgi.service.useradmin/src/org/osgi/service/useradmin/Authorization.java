@@ -92,10 +92,10 @@ public interface Authorization {
 	public boolean hasRole(String name);
 
 	/**
-	 * Gets the names of all roles encapsulated by this <code>Authorization</code>
+	 * Gets the names of all roles implied by this <code>Authorization</code>
 	 * context.
 	 * 
-	 * @return The names of all roles encapsulated by this
+	 * @return The names of all roles implied by this
 	 *         <code>Authorization</code> context, or <code>null</code> if no roles
 	 *         are in the context. The predefined role <code>user.anyone</code>
 	 *         will not be included in this list.
