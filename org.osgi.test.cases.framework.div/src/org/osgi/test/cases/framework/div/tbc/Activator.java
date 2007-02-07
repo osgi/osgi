@@ -40,7 +40,6 @@ import org.osgi.test.cases.framework.div.tbc.Bundle.LoadClass;
 import org.osgi.test.cases.framework.div.tbc.BundleContext.RegisterService;
 import org.osgi.test.cases.framework.div.tbc.BundleException.GetCause;
 import org.osgi.test.cases.framework.div.tbc.BundleException.InitCause;
-import org.osgi.test.cases.framework.div.tbc.Constants.ConstantsValues;
 import org.osgi.test.cases.framework.div.tbc.Version.CompareTo;
 import org.osgi.test.cases.framework.div.tbc.Version.Equals;
 import org.osgi.test.cases.framework.div.tbc.Version.GetMajor;
@@ -78,7 +77,7 @@ public class Activator extends Thread implements FrameworkListener,
 			"testBundleGetResource", "testBundleGetSymbolicName",
 			"testBundleHashCode", "testBundleLoadClass",
 			"testBundleExceptionGetCause", "testBundleExceptionInitCause",
-			"testConstantsValues", "testFrameworkEventConstants",
+			"testFrameworkEventConstants",
 			"testVersionConstructors", "testVersionEquals",
 			"testVersionGetMajor", "testVersionGetMinor",
 			"testVersionGetMicro", "testVersionCompareTo",
@@ -943,16 +942,6 @@ public class Activator extends Thread implements FrameworkListener,
 	void testBundleExceptionInitCause() {
 		try {
 			new InitCause(_context, _link, _tcHome).run();
-		}
-		catch (Exception ex) {
-			ex.printStackTrace();
-			log(ex.getMessage(), "Fail");
-		}
-	}
-
-	void testConstantsValues() {
-		try {
-			new ConstantsValues(_context, _link, _tcHome).run();
 		}
 		catch (Exception ex) {
 			ex.printStackTrace();
