@@ -281,6 +281,7 @@ public class InstallAndActivate implements TestInterface {
 			tbc.assertTrue("Asserting that there is only one bundle node in DMT",children.length==1);
 
 		} catch (Exception e) {
+      e.printStackTrace();
 			tbc.fail("Unexpected exception: " + e.getClass().getName());
 		} finally {
         	if (!nodeId.equals("")) {
@@ -626,6 +627,7 @@ public class InstallAndActivate implements TestInterface {
             
             assertResultCode(session, DeploymentmoConstants.SIMPLE_DP, 465);
         } catch (Exception e) {
+          e.printStackTrace();
             tbc.fail(MessagesConstants.getMessage(
                 MessagesConstants.UNEXPECTED_EXCEPTION, new String[]{e.getClass().getName()}));
         } finally {
@@ -667,6 +669,7 @@ public class InstallAndActivate implements TestInterface {
             assertSimpleDpSubtree(session, nodeId);
             
 			} catch (Exception e) {
+          e.printStackTrace();
 			tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }));
 		} finally {
 			tbc.uninstall(dp);
