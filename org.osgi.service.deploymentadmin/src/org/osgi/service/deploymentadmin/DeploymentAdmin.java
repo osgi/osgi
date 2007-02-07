@@ -78,9 +78,8 @@ public interface DeploymentAdmin {
       * replaces the target.
       * 
       * @return the array of <code>DeploymentPackage</code> objects representing all the 
-      *         installed Deployment Packages (including the "system" Deployment Package). 
-      *         The return value cannot be <code>null</code>. In case of missing permissions it may 
-      *         give back an empty array.
+      *         installed Deployment Packages. The return value cannot be <code>null</code>. 
+      *         In case of missing permissions it may give back an empty array.
       * @see DeploymentPackage
       * @see DeploymentAdminPermission
       */
