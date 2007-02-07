@@ -49,6 +49,7 @@ import info.dmtree.DmtSession;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
+import java.util.jar.JarFile;
 import java.util.jar.Manifest;
 
 import org.osgi.framework.Bundle;
@@ -155,6 +156,7 @@ public class DownloadAndInstallAndActivate implements TestInterface {
             }
             
         } catch (Exception e) {
+          e.printStackTrace();
             tbc.fail(MessagesConstants.getMessage(
                 MessagesConstants.UNEXPECTED_EXCEPTION, new String[]{e.getClass().getName()}));
         } finally {
@@ -203,6 +205,7 @@ public class DownloadAndInstallAndActivate implements TestInterface {
                 tbc.log("Precondition for testDownloadAndInstallAndActivate002 not satisfied");
             }
         } catch (Exception e) {
+          e.printStackTrace();
             tbc.fail(MessagesConstants.getMessage(
                 MessagesConstants.UNEXPECTED_EXCEPTION, new String[]{e.getClass().getName()}));
         } finally {
@@ -266,6 +269,7 @@ public class DownloadAndInstallAndActivate implements TestInterface {
 	                tbc.log("Precondition for testDownloadAndInstallAndActivate003 not satisfied");
 	            }
 	        } catch (Exception e) {
+          e.printStackTrace();
 	            tbc.fail(MessagesConstants.getMessage(
 	                MessagesConstants.UNEXPECTED_EXCEPTION, new String[]{e.getClass().getName()}));
 	        } finally {
@@ -336,6 +340,7 @@ public class DownloadAndInstallAndActivate implements TestInterface {
 	                tbc.log("Precondition for testDownloadAndInstallAndActivate004 not satisfied");
 	            }
 	        } catch (Exception e) {
+          e.printStackTrace();
 	            tbc.fail(MessagesConstants.getMessage(
 	                MessagesConstants.UNEXPECTED_EXCEPTION, new String[]{e.getClass().getName()}));
 	        } finally {
@@ -385,6 +390,7 @@ public class DownloadAndInstallAndActivate implements TestInterface {
                 tbc.log("Precondition for testDownloadAndInstallAndActivate005 not satisfied");
             }
         } catch (Exception e) {
+          e.printStackTrace();
             tbc.fail(MessagesConstants.getMessage(
                 MessagesConstants.UNEXPECTED_EXCEPTION, new String[]{e.getClass().getName()}));
         } finally {
@@ -431,6 +437,7 @@ public class DownloadAndInstallAndActivate implements TestInterface {
                 tbc.log("Precondition for testDownloadAndInstallAndActivate006 not satisfied");
             }
         } catch (Exception e) {
+          e.printStackTrace();
             tbc.fail(MessagesConstants.getMessage(
                 MessagesConstants.UNEXPECTED_EXCEPTION, new String[]{e.getClass().getName()}));
         } finally {
@@ -503,6 +510,7 @@ public class DownloadAndInstallAndActivate implements TestInterface {
             		DeploymentmoConstants.DEPLOYMENT_DOWNLOAD_TEST, new DmtData(408));
                 
         } catch (Exception e) {
+          e.printStackTrace();
             tbc.fail(MessagesConstants.getMessage(
                 MessagesConstants.UNEXPECTED_EXCEPTION, new String[]{e.getClass().getName()}));
         } finally {
@@ -627,6 +635,7 @@ public class DownloadAndInstallAndActivate implements TestInterface {
                 tbc.log("Precondition for testDownloadAndInstallAndActivate009 not satisfied");
             }
         } catch (Exception e) {
+          e.printStackTrace();
             tbc.fail(MessagesConstants.getMessage(
                 MessagesConstants.UNEXPECTED_EXCEPTION, new String[]{e.getClass().getName()}));
         } finally {
@@ -725,7 +734,7 @@ public class DownloadAndInstallAndActivate implements TestInterface {
 				
 				bais = new ByteArrayInputStream(session.getNodeValue(DeploymentmoConstants.getDeployedExtBundlesManifest(nodeId, bundleId)).toString().getBytes());
     			manifest = new Manifest(bais);
-
+          
     			tbc.assertTrue("Asserting that the manifest of the first bundle is the same as the specified",
     					manifest.getMainAttributes().equals(DeploymentmoConstants.SIMPLE_FIX_PACK_BUNDLE1_MANIFEST.getMainAttributes()));
     			
@@ -857,6 +866,7 @@ public class DownloadAndInstallAndActivate implements TestInterface {
             tbc.assertAlertValues(DeploymentmoConstants.ALERT_TYPE_DOWNLOADANDINSTALLANDACTIVATE,DeploymentmoConstants.DEPLOYMENT_DOWNLOAD_TEST,new DmtData(410));
             
         } catch (Exception e) {
+          e.printStackTrace();
             tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[]{ e.getClass().getName()}));
         } finally {
             cleanUp(session, null);
@@ -915,7 +925,7 @@ public class DownloadAndInstallAndActivate implements TestInterface {
      * @spec 3.6.5.3 DownloadAndInstallAndActivate Command
      */
     private void testDownloadAndInstallAndActivate019() {
-    	tbc.log("#testDownloadAndInstallAndActivate019");
+      tbc.log("#testDownloadAndInstallAndActivate019");
         DmtSession session = openDefaultSession();
         try {
         	assertResultCode(session,DeploymentmoConstants.RESOURCE_PROCESSOR_DP,DeploymentmoConstants.SIMPLE_NO_BUNDLE_DP, DeploymentmoConstants.MISSING_BUNDLE_FIX_PACK, 454);
@@ -1065,7 +1075,9 @@ public class DownloadAndInstallAndActivate implements TestInterface {
         SessionWorker worker1 = null;
         DmtSession session = openDefaultSession();
         
+        BundleListenerImpl listener = tbc.getListener();
         try {
+          listener.begin();
             TestingArtifact artifact = tbc.getArtifact(DeploymentmoConstants.BLOCK_SESSION_RESOURCE_PROCESSOR);
             TestingDeploymentPackage testDP = artifact.getDeploymentPackage();
             
@@ -1073,7 +1085,6 @@ public class DownloadAndInstallAndActivate implements TestInterface {
             worker1.start();
             
             int count = 0;
-            BundleListenerImpl listener = tbc.getListener();
             while ((count < DeploymentmoConstants.TIMEOUT) &&
                 !((listener.getCurrentType() == BundleEvent.STARTED) && 
                 (listener.getCurrentBundle().getSymbolicName().indexOf(DeploymentmoConstants.PID_RESOURCE_PROCESSOR3) != -1))) {
@@ -1088,9 +1099,11 @@ public class DownloadAndInstallAndActivate implements TestInterface {
             assertResultCode(session, DeploymentmoConstants.SIMPLE_DP, 465);
             
         } catch (Exception e) {
+          e.printStackTrace();
             tbc.fail(MessagesConstants.getMessage(
                 MessagesConstants.UNEXPECTED_EXCEPTION, new String[]{e.getClass().getName()}));
         } finally {
+          listener.end();
             if (testBlockRP != null) {
                 testBlockRP.setReleased(true);
                 try {
@@ -1111,6 +1124,7 @@ public class DownloadAndInstallAndActivate implements TestInterface {
      */
     private void testDownloadAndInstallAndActivate029() {
         tbc.log("#testDownloadAndInstallAndActivate029");
+        JarFile jar = null;
         TestingDlota dlota = null;
     	DmtSession session = openDefaultSession();
         String nodeId = "";
@@ -1154,9 +1168,10 @@ public class DownloadAndInstallAndActivate implements TestInterface {
     			
     			ByteArrayInputStream bais = new ByteArrayInputStream(session.getNodeValue(DeploymentmoConstants.getDeployedExtBundlesManifest(nodeId, bundleId)).toString().getBytes());
     			Manifest manifest = new Manifest(bais);
-
+          
+          jar = DeploymentmoConstants.getJarFile(DeploymentmoConstants.SIMPLE_BUNDLE);
     			tbc.assertTrue("Asserting that the manifest of the bundle is the same as the specified",
-    					manifest.getMainAttributes().equals(DeploymentmoConstants.getJarFile(DeploymentmoConstants.SIMPLE_BUNDLE).getManifest().getMainAttributes()));
+    					manifest.getMainAttributes().equals(jar.getManifest().getMainAttributes()));
 
     			//It is not installed by the DeploymentAdmin, so the location does not change to osgi-dp: bsn 
     			String bundleLocation = session.getNodeValue(DeploymentmoConstants.getDeployedExtBundlesLocation(nodeId, bundleId)).toString();
@@ -1173,9 +1188,15 @@ public class DownloadAndInstallAndActivate implements TestInterface {
                 tbc.log("Precondition for testDownloadAndInstallAndActivate029 not satisfied");
             }
         } catch (Exception e) {
+          e.printStackTrace();
             tbc.fail(MessagesConstants.getMessage(
                 MessagesConstants.UNEXPECTED_EXCEPTION, new String[]{e.getClass().getName()}));
         } finally {
+          if (jar != null) {
+            try {
+              jar.close();
+            } catch (Throwable t) {};
+          }
         	if (!nodeId.equals("")) {
         		tbc.executeRemoveNode(session,DeploymentmoConstants.getDeployedOperationsRemove(nodeId));
         	}
@@ -1193,6 +1214,7 @@ public class DownloadAndInstallAndActivate implements TestInterface {
      */
     private void testDownloadAndInstallAndActivate030() {
         tbc.log("#testDownloadAndInstallAndActivate030");
+        JarFile jar = null;
         TestingDlota dlota = null;
     	DmtSession session = openDefaultSession();
         String nodeId = executeNodeAndGetNewNodeName(session,DeploymentmoConstants.SIMPLE_BUNDLE);
@@ -1242,8 +1264,9 @@ public class DownloadAndInstallAndActivate implements TestInterface {
     			ByteArrayInputStream bais = new ByteArrayInputStream(session.getNodeValue(DeploymentmoConstants.getDeployedExtBundlesManifest(nodeId, bundleId)).toString().getBytes());
     			
     			Manifest manifest = new Manifest(bais);
+          jar = DeploymentmoConstants.getJarFile(DeploymentmoConstants.SIMPLE_BUNDLE);
     			tbc.assertTrue("Asserting that the manifest of the bundle is the same as the specified",
-    					manifest.getMainAttributes().equals(DeploymentmoConstants.getJarFile(DeploymentmoConstants.SIMPLE_BUNDLE).getManifest().getMainAttributes()));
+    					manifest.getMainAttributes().equals(jar.getManifest().getMainAttributes()));
     			
     			//It is not installed by the DeploymentAdmin, so the location does not change to osgi-dp: bsn 
     			String bundleLocation = session.getNodeValue(DeploymentmoConstants.getDeployedExtBundlesLocation(nodeId, bundleId)).toString();
@@ -1261,9 +1284,15 @@ public class DownloadAndInstallAndActivate implements TestInterface {
                 tbc.log("Precondition for testDownloadAndInstallAndActivate030 not satisfied");
             }
         } catch (Exception e) {
+          e.printStackTrace();
             tbc.fail(MessagesConstants.getMessage(
                 MessagesConstants.UNEXPECTED_EXCEPTION, new String[]{e.getClass().getName()}));
         } finally {
+          if (jar != null) {
+            try {
+              jar.close();
+            } catch (Throwable t) {};
+          }
         	if (!nodeId.equals("")) {
         		tbc.executeRemoveNode(session,DeploymentmoConstants.getDeployedOperationsRemove(nodeId));
         	}
@@ -1320,6 +1349,7 @@ public class DownloadAndInstallAndActivate implements TestInterface {
                 tbc.log("Precondition for this method was not satisfied");
             }
         } catch (Exception e) {
+          e.printStackTrace();
             tbc.fail(MessagesConstants.getMessage(
                 MessagesConstants.UNEXPECTED_EXCEPTION, new String[]{e.getClass().getName()}));
         } finally {
@@ -1377,6 +1407,7 @@ public class DownloadAndInstallAndActivate implements TestInterface {
             }
             
         } catch (Exception e) {
+          e.printStackTrace();
             tbc.fail(MessagesConstants.getMessage(
                 MessagesConstants.UNEXPECTED_EXCEPTION, new String[]{e.getClass().getName()}));
         } finally {
@@ -1403,6 +1434,7 @@ public class DownloadAndInstallAndActivate implements TestInterface {
         	//The second DP should install successfully, so it is removed in the final of the method below
     		assertResultCode(session, secondDpCode, thirdDpCode, alertCode);
         } catch (Exception e) {
+          e.printStackTrace();
             tbc.fail(MessagesConstants.getMessage(
                 MessagesConstants.UNEXPECTED_EXCEPTION, new String[]{e.getClass().getName()}));
     	} finally {
@@ -1416,7 +1448,11 @@ public class DownloadAndInstallAndActivate implements TestInterface {
     private String executeNodeAndGetNewNodeName(DmtSession session,int dpCode) {
         TestingDlota dlota = null;
         String nodeId = "";
+        BundleListenerImpl listener = tbc.getListener();
+        
         try {
+          listener.begin();
+          
             TestingArtifact artifact = tbc.getArtifact(dpCode);
 
             String fileName = (artifact.isBundle())?artifact.getBundle().getFilename():artifact.getDeploymentPackage().getFilename();
@@ -1425,9 +1461,12 @@ public class DownloadAndInstallAndActivate implements TestInterface {
             tbc.generateDLOTA(dlota,artifact.isBundle());
             if (preCondition(session, fileName, dlota.getFilename())) {
             	String[] initialChildren= session.getChildNodeNames(DeploymentmoConstants.DEPLOYMENT_INVENTORY_DEPLOYED);
+              int count = 0;
                 synchronized (tbc) {
                 	session.execute(DeploymentmoConstants.DEPLOYMENT_DOWNLOAD_TEST_DOWN_INST_ACTIV, null);
                     tbc.wait(DeploymentmoConstants.TIMEOUT);
+                    listener.end();
+                    Thread.sleep(1000);
                 }
                 String[] finalChildren= session.getChildNodeNames(DeploymentmoConstants.DEPLOYMENT_INVENTORY_DEPLOYED);
                 tbc.assertTrue("Asserts that the node was created",initialChildren.length+1==finalChildren.length);
@@ -1438,8 +1477,11 @@ public class DownloadAndInstallAndActivate implements TestInterface {
             }
             
         } catch (Exception e) {
+          e.printStackTrace();
             tbc.fail(MessagesConstants.getMessage(
                 MessagesConstants.UNEXPECTED_EXCEPTION, new String[]{e.getClass().getName()}));
+        } finally {
+          listener.end();
         }
         return nodeId;
     }
