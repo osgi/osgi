@@ -170,7 +170,7 @@ public interface ServiceReference extends Comparable {
 	 * service id.
 	 * 
 	 * @param reference The <code>ServiceReference</code> to be compared.
-	 * @return Returns a negative integer, zero, or a positive integer is this
+	 * @return Returns a negative integer, zero, or a positive integer if this
 	 *         <code>ServiceReference</code> is less than, equal to, or
 	 *         greater than the specified <code>ServiceReference</code>.
 	 * @since 1.4
