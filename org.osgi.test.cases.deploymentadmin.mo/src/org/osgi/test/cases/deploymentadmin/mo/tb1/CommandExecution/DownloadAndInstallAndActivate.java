@@ -188,9 +188,9 @@ public class DownloadAndInstallAndActivate implements TestInterface {
             if (preCondition(session, dp.getFilename(), artifact.getDlota().getFilename())) {
                 String[] initialChildren= session.getChildNodeNames(DeploymentmoConstants.DEPLOYMENT_INVENTORY_DEPLOYED);
 
-                session.execute(DeploymentmoConstants.DEPLOYMENT_DOWNLOAD_TEST_DOWN_INST_ACTIV, null);
                 
                 synchronized (tbc) {
+                    session.execute(DeploymentmoConstants.DEPLOYMENT_DOWNLOAD_TEST_DOWN_INST_ACTIV, null);
                     tbc.wait(DeploymentmoConstants.TIMEOUT);
                 }
                 
