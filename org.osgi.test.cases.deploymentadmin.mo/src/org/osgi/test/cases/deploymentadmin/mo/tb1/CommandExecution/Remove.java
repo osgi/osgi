@@ -108,7 +108,9 @@ public class Remove implements TestInterface {
              
  			  synchronized (tbc) {
  	   			 session.execute(DeploymentmoConstants.getDeployedOperationsRemove(nodeId), null);
-                  tbc.wait(DeploymentmoConstants.TIMEOUT);
+ 	   			        if (session.isNodeUri(nodeId)) {
+ 	   			          tbc.wait(DeploymentmoConstants.TIMEOUT);
+                  }
               }
 
               finalChildren= session.getChildNodeNames(DeploymentmoConstants.DEPLOYMENT_INVENTORY_DEPLOYED);
@@ -210,10 +212,12 @@ public class Remove implements TestInterface {
              //Uninstalls a bundle
              initialChildren = finalChildren;
              tbc.resetCommandValues();
- 			  synchronized (tbc) {
- 	   			 session.execute(DeploymentmoConstants.getDeployedOperationsRemove(nodeId), null);
-                  tbc.wait(DeploymentmoConstants.TIMEOUT);
-              }
+            synchronized (tbc) {
+            	 session.execute(DeploymentmoConstants.getDeployedOperationsRemove(nodeId), null);
+                  if (session.isNodeUri(nodeId)) {
+                      tbc.wait(DeploymentmoConstants.TIMEOUT);
+                  }
+            }
 
               finalChildren= session.getChildNodeNames(DeploymentmoConstants.DEPLOYMENT_INVENTORY_DEPLOYED);
               tbc.assertTrue("Asserts that the Deployed subtree was removed ",initialChildren.length-1==finalChildren.length);
