@@ -605,21 +605,22 @@ public class InstallAndActivate implements TestInterface {
         TestingBlockingResourceProcessor testBlockRP = null;
         DmtSession session = openDefaultSession();
         SessionWorker worker1 = null;
+        BundleListenerImpl listener = tbc.getListener();
         try {
+            listener.begin();
             TestingArtifact artifact = tbc.getArtifact(DeploymentmoConstants.BLOCK_SESSION_RESOURCE_PROCESSOR);
             TestingDeploymentPackage testDP = artifact.getDeploymentPackage();
             
             worker1 = new SessionWorker(tbc,testDP);
             worker1.start();
-            
             int count = 0;
-            BundleListenerImpl listener = tbc.getListener();
             while ((count < DeploymentmoConstants.TIMEOUT) &&
                 !((listener.getCurrentType() == BundleEvent.STARTED) && 
                 (listener.getCurrentBundle().getSymbolicName().indexOf(DeploymentmoConstants.PID_RESOURCE_PROCESSOR3) != -1))) {
-                count++;
-                wait(1);
+                count+=100;
+                wait(100);
             }
+            listener.end();
             
             testBlockRP = (TestingBlockingResourceProcessor) tbc.getService(
                 ResourceProcessor.class, "(service.pid=" + DeploymentmoConstants.PID_RESOURCE_PROCESSOR3 + ")");
@@ -631,13 +632,16 @@ public class InstallAndActivate implements TestInterface {
             tbc.fail(MessagesConstants.getMessage(
                 MessagesConstants.UNEXPECTED_EXCEPTION, new String[]{e.getClass().getName()}));
         } finally {
+            if (listener != null) {
+              listener.end();
+            }
             if (testBlockRP != null) {
-                testBlockRP.setReleased(true);
-                try {
-					worker1.join();
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
+              testBlockRP.setReleased(true);
+              try {
+      					worker1.join();
+      				} catch (InterruptedException e) {
+      					e.printStackTrace();
+      				}
             }
             tbc.closeSession(session);
         }

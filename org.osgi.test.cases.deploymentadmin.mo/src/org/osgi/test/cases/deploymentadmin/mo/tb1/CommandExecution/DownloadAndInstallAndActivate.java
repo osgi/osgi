@@ -1088,9 +1088,10 @@ public class DownloadAndInstallAndActivate implements TestInterface {
             while ((count < DeploymentmoConstants.TIMEOUT) &&
                 !((listener.getCurrentType() == BundleEvent.STARTED) && 
                 (listener.getCurrentBundle().getSymbolicName().indexOf(DeploymentmoConstants.PID_RESOURCE_PROCESSOR3) != -1))) {
-                count++;
-                wait(1);
+                count+=100;
+                wait(100);
             }
+            listener.end();
             
             testBlockRP = (TestingBlockingResourceProcessor) tbc.getService(
                 ResourceProcessor.class, "(service.pid=" + DeploymentmoConstants.PID_RESOURCE_PROCESSOR3 + ")");
@@ -1448,11 +1449,7 @@ public class DownloadAndInstallAndActivate implements TestInterface {
     private String executeNodeAndGetNewNodeName(DmtSession session,int dpCode) {
         TestingDlota dlota = null;
         String nodeId = "";
-        BundleListenerImpl listener = tbc.getListener();
-        
         try {
-          listener.begin();
-          
             TestingArtifact artifact = tbc.getArtifact(dpCode);
 
             String fileName = (artifact.isBundle())?artifact.getBundle().getFilename():artifact.getDeploymentPackage().getFilename();
@@ -1461,12 +1458,9 @@ public class DownloadAndInstallAndActivate implements TestInterface {
             tbc.generateDLOTA(dlota,artifact.isBundle());
             if (preCondition(session, fileName, dlota.getFilename())) {
             	String[] initialChildren= session.getChildNodeNames(DeploymentmoConstants.DEPLOYMENT_INVENTORY_DEPLOYED);
-              int count = 0;
                 synchronized (tbc) {
                 	session.execute(DeploymentmoConstants.DEPLOYMENT_DOWNLOAD_TEST_DOWN_INST_ACTIV, null);
                     tbc.wait(DeploymentmoConstants.TIMEOUT);
-                    listener.end();
-                    Thread.sleep(1000);
                 }
                 String[] finalChildren= session.getChildNodeNames(DeploymentmoConstants.DEPLOYMENT_INVENTORY_DEPLOYED);
                 tbc.assertTrue("Asserts that the node was created",initialChildren.length+1==finalChildren.length);
@@ -1481,7 +1475,6 @@ public class DownloadAndInstallAndActivate implements TestInterface {
             tbc.fail(MessagesConstants.getMessage(
                 MessagesConstants.UNEXPECTED_EXCEPTION, new String[]{e.getClass().getName()}));
         } finally {
-          listener.end();
         }
         return nodeId;
     }
