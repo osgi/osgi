@@ -35,7 +35,6 @@
 package org.osgi.test.cases.deploymentadmin.mo.tbc.Areas;
 
 import info.dmtree.DmtData;
-import info.dmtree.DmtException;
 import info.dmtree.DmtSession;
 import info.dmtree.MetaNode;
 
@@ -101,7 +100,9 @@ public class DeployedSubtree {
                 
                 synchronized (tbc) {
                     session.execute(DeploymentmoConstants.getDeployedOperationsRemove(nodeId), null);
-                    tbc.wait(DeploymentmoConstants.TIMEOUT);
+                    if (session.isNodeUri(nodeId)) {
+                      tbc.wait(DeploymentmoConstants.TIMEOUT);
+                    }
                 }
 
                 String[] finalChildren= session.getChildNodeNames(DeploymentmoConstants.DEPLOYMENT_INVENTORY_DEPLOYED);
@@ -110,6 +111,7 @@ public class DeployedSubtree {
                 }
             }
         } catch (Exception e) {
+            e.printStackTrace();
 	        tbc.fail(e.getMessage());
         } finally {
             tbc.closeSession(session);
@@ -156,6 +158,7 @@ public class DeployedSubtree {
 			    bundleId = children[0];
 			}
         } catch (Exception e) {
+          e.printStackTrace();
             tbc.fail(MessagesConstants.getMessage(
                 MessagesConstants.UNEXPECTED_EXCEPTION, new String[]{e.getClass().getName()}));
         } finally {
@@ -201,6 +204,7 @@ public class DeployedSubtree {
 					metaNode.can(MetaNode.CMD_GET));
 
 		} catch (Exception e) {
+          e.printStackTrace();
             tbc.fail(MessagesConstants.getMessage(
                     MessagesConstants.UNEXPECTED_EXCEPTION, new String[]{e.getClass().getName()}));
 		} finally {
@@ -242,6 +246,7 @@ public class DeployedSubtree {
 					metaNode.can(MetaNode.CMD_GET));
 
 		} catch (Exception e) {
+          e.printStackTrace();
             tbc.fail(MessagesConstants.getMessage(
                     MessagesConstants.UNEXPECTED_EXCEPTION, new String[]{e.getClass().getName()}));
 		} finally {
@@ -281,6 +286,7 @@ public class DeployedSubtree {
 					"Asserts if $/Deployment/Inventory/Deployed/[node_id]/EnvType metanode has Get Permission",
 					metaNode.can(MetaNode.CMD_GET));
 		} catch (Exception e) {
+          e.printStackTrace();
             tbc.fail(MessagesConstants.getMessage(
                     MessagesConstants.UNEXPECTED_EXCEPTION, new String[]{e.getClass().getName()}));
 		} finally {
@@ -321,6 +327,7 @@ public class DeployedSubtree {
 					metaNode.can(MetaNode.CMD_GET));
 
 		} catch (Exception e) {
+          e.printStackTrace();
             tbc.fail(MessagesConstants.getMessage(
                     MessagesConstants.UNEXPECTED_EXCEPTION, new String[]{e.getClass().getName()}));
 		} finally {
@@ -367,6 +374,7 @@ public class DeployedSubtree {
 					"Asserts if $/Deployment/Inventory/Deployed/[node_id]/Operations/Remove metanode has Execute Permission",
 					metaNode.can(MetaNode.CMD_EXECUTE));
 		} catch (Exception e) {
+          e.printStackTrace();
             tbc.fail(MessagesConstants.getMessage(
                     MessagesConstants.UNEXPECTED_EXCEPTION, new String[]{e.getClass().getName()}));
 		} finally {
@@ -409,6 +417,7 @@ public class DeployedSubtree {
 				    tbc.log("# " + nodeUri + " node does not exist. Metanode will not be tested.");
 				}
 		} catch (Exception e) {
+          e.printStackTrace();
             tbc.fail(MessagesConstants.getMessage(
                     MessagesConstants.UNEXPECTED_EXCEPTION, new String[]{e.getClass().getName()}));
 		} finally {
@@ -449,6 +458,7 @@ public class DeployedSubtree {
 					metaNode.can(MetaNode.CMD_GET));
 
 		} catch (Exception e) {
+          e.printStackTrace();
             tbc.fail(MessagesConstants.getMessage(
                     MessagesConstants.UNEXPECTED_EXCEPTION, new String[]{e.getClass().getName()}));
 		} finally {
@@ -488,6 +498,7 @@ public class DeployedSubtree {
 					metaNode.can(MetaNode.CMD_GET));
 
 		} catch (Exception e) {
+          e.printStackTrace();
             tbc.fail(MessagesConstants.getMessage(
                     MessagesConstants.UNEXPECTED_EXCEPTION, new String[]{e.getClass().getName()}));
 		} finally {
@@ -528,6 +539,7 @@ public class DeployedSubtree {
 					metaNode.can(MetaNode.CMD_GET));
 
 		} catch (Exception e) {
+          e.printStackTrace();
             tbc.fail(MessagesConstants.getMessage(
                     MessagesConstants.UNEXPECTED_EXCEPTION, new String[]{e.getClass().getName()}));
 		} finally {
@@ -578,6 +590,7 @@ public class DeployedSubtree {
 					metaNode.can(MetaNode.CMD_GET));
 
 		} catch (Exception e) {
+          e.printStackTrace();
             tbc.fail(MessagesConstants.getMessage(
                     MessagesConstants.UNEXPECTED_EXCEPTION, new String[]{e.getClass().getName()}));
 		} finally {
@@ -620,6 +633,7 @@ public class DeployedSubtree {
 					metaNode.can(MetaNode.CMD_GET));
 
 		} catch (Exception e) {
+          e.printStackTrace();
             tbc.fail(MessagesConstants.getMessage(
                     MessagesConstants.UNEXPECTED_EXCEPTION, new String[]{e.getClass().getName()}));
 		} finally {
@@ -663,6 +677,7 @@ public class DeployedSubtree {
 					metaNode.can(MetaNode.CMD_GET));
 
 		} catch (Exception e) {
+          e.printStackTrace();
             tbc.fail(MessagesConstants.getMessage(
                     MessagesConstants.UNEXPECTED_EXCEPTION, new String[]{e.getClass().getName()}));
 		} finally {
@@ -707,6 +722,7 @@ public class DeployedSubtree {
 					metaNode.can(MetaNode.CMD_GET));
 
 		} catch (Exception e) {
+          e.printStackTrace();
             tbc.fail(MessagesConstants.getMessage(
                     MessagesConstants.UNEXPECTED_EXCEPTION, new String[]{e.getClass().getName()}));
 		} finally {
@@ -749,6 +765,7 @@ public class DeployedSubtree {
 					metaNode.can(MetaNode.CMD_GET));
 
 		} catch (Exception e) {
+          e.printStackTrace();
             tbc.fail(MessagesConstants.getMessage(
                     MessagesConstants.UNEXPECTED_EXCEPTION, new String[]{e.getClass().getName()}));
 		} finally {
@@ -792,6 +809,7 @@ public class DeployedSubtree {
 					metaNode.can(MetaNode.CMD_GET));
 			
 		} catch (Exception e) {
+          e.printStackTrace();
             tbc.fail(MessagesConstants.getMessage(
                     MessagesConstants.UNEXPECTED_EXCEPTION, new String[]{e.getClass().getName()}));
 		} finally {
@@ -834,6 +852,7 @@ public class DeployedSubtree {
 					metaNode.can(MetaNode.CMD_GET));
 
 		} catch (Exception e) {
+          e.printStackTrace();
             tbc.fail(MessagesConstants.getMessage(
                     MessagesConstants.UNEXPECTED_EXCEPTION, new String[]{e.getClass().getName()}));
 		} finally {
@@ -877,6 +896,7 @@ public class DeployedSubtree {
 					metaNode.can(MetaNode.CMD_GET));
 
 		} catch (Exception e) {
+          e.printStackTrace();
             tbc.fail(MessagesConstants.getMessage(
                     MessagesConstants.UNEXPECTED_EXCEPTION, new String[]{e.getClass().getName()}));
 		} finally {
@@ -927,6 +947,7 @@ public class DeployedSubtree {
 			
 			
 		} catch (Exception e) {
+          e.printStackTrace();
             tbc.fail(MessagesConstants.getMessage(
                     MessagesConstants.UNEXPECTED_EXCEPTION, new String[]{e.getClass().getName()}));
 		} finally {
