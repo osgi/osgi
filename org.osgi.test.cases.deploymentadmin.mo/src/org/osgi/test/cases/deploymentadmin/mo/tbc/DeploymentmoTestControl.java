@@ -875,7 +875,9 @@ public class DeploymentmoTestControl extends DefaultTestBundleControl {
                 
                 synchronized (this) {
                     session.execute(removeNode,null);
-                    this.wait(DeploymentmoConstants.TIMEOUT);
+                    if (session.isNodeUri(removeNode)) {
+                      this.wait(DeploymentmoConstants.TIMEOUT);
+                    }
                 }
                 
                 String[] finalChildren = session.getChildNodeNames(DeploymentmoConstants.DEPLOYMENT_INVENTORY_DEPLOYED);
