@@ -40,14 +40,14 @@ import java.util.Vector;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleEvent;
-import org.osgi.framework.BundleListener;
+import org.osgi.framework.SynchronousBundleListener;
 import org.osgi.test.cases.deploymentadmin.mo.tbc.DeploymentmoTestControl;
 
 /**
  * @author Andre Assad
  * 
  */
-public class BundleListenerImpl implements BundleListener {
+public class BundleListenerImpl implements SynchronousBundleListener {
 	
 	private DeploymentmoTestControl tbc;
 	private Vector events;
