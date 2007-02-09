@@ -25,6 +25,7 @@
 		<exec executable="perl" failifexecutionfails="false">
 			<arg value="${workspace}/licensed/japitools/bin/japicompat" />
 			<arg value="-h" />
+			<arg value="-v" />
 			<arg value="-o" />
 			<arg value="osgi-japicompat.html" />
 			<arg value="osgi-published.japi" />
