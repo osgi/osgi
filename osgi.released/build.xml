@@ -65,6 +65,14 @@
 			<arg value="ee.foundation-published.japi" />
 			<arg value="ee.foundation-latest.japi" />
 		</exec>
+		<exec executable="perl" failifexecutionfails="false">
+			<arg value="${workspace}/licensed/japitools/bin/japicompat" />
+			<arg value="-h" />
+			<arg value="-o" />
+			<arg value="ee.minimum2foundation-japicompat.html" />
+			<arg value="ee.minimum-latest.japi" />
+			<arg value="ee.foundation-latest.japi" />
+		</exec>
 	</target>
 
 	<import file="../cnf/build.xml" />
