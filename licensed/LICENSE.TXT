@@ -79,4 +79,4 @@ JAPITOOLS ----------------------------------------------------------------------
 Copyright				Copyright (C) 2000,2002,2003,2004,2005,2006  Stuart Ballard <stuart.a.ballard@gmail.com>
 License					licenses/GPL-2.0.txt (GPL 2)
 URL						http://sab39.netreach.com/japi/
-Modifications			NONE, library used as is
+Modifications			Modified japiohtml to ref /www/japi.css for website use
