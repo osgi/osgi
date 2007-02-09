@@ -1,4 +1,36 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="project" default="publish">
+	<target name="release" depends="master.release,japitools,japicompat">
+	</target>
+	
+	<available file="osgi-published.japi" property="osgi-published.japi.present"/>
+	
+	<target name="japitools" depends="init">
+		<java classname="net.wuffies.japi.Japize">
+			<classpath path="${workspace}/licensed/japitools/share/java/japitools.jar" />
+			<arg value="unzip" />
+			<arg value="as" />
+			<arg value="osgi-latest.japi" />
+			<arg value="apis" />
+			<arg value="ee.foundation.jar" />
+			<arg value="osgi.jar" />
+			<arg value="${workspace}/licensed/jar/servlet.jar" />
+			<arg value="${workspace}/licensed/jar/saxon.jar" />
+			<arg value="+org.osgi," />
+			<arg value="+info.dmtree," />
+		</java>
+	</target>
+	
+	<target name="japicompat" depends="init" if="osgi-published.japi.present">
+		<exec executable="perl" failifexecutionfails="false">
+			<arg value="${workspace}/licensed/japitools/bin/japicompat" />
+			<arg value="-h" />
+			<arg value="-o" />
+			<arg value="osgi-japicompat.html" />
+			<arg value="osgi-published.japi" />
+			<arg value="osgi-latest.japi" />
+		</exec>
+	</target>
+
 	<import file="../cnf/build.xml" />
 </project>

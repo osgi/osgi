@@ -1,2 +1,4 @@
 fwdir
 *.jar
+osgi-latest.japi
+osgi-japicompat.html
