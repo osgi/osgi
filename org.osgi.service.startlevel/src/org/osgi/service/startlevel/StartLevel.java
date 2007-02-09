@@ -48,13 +48,14 @@ import org.osgi.framework.Bundle;
  * before it is launched.
  * 
  * When the Framework is launched, the Framework will enter start level one and
- * all bundles which are assigned to start level one and are persistently marked
- * to be started are started as described in the <code>Bundle.start</code>
- * method. The Framework will continue to increase the start level, starting
- * bundles at each start level, until the Framework has reached a beginning
- * start level. At this point the Framework has completed starting bundles and
- * will then fire a Framework event of type <code>FrameworkEvent.STARTED</code>
- * to announce it has completed its launch.
+ * all bundles which are assigned to start level one and whose autostart setting
+ * indicates the bundle should be started are started as described in the
+ * <code>Bundle.start</code> method. The Framework will continue to increase
+ * the start level, starting bundles at each start level, until the Framework
+ * has reached a beginning start level. At this point the Framework has
+ * completed starting bundles and will then fire a Framework event of type
+ * <code>FrameworkEvent.STARTED</code> to announce it has completed its
+ * launch.
  * 
  * <p>
  * Within a start level, bundles may be started in an order defined by the
@@ -92,18 +93,19 @@ public interface StartLevel {
 	 * <p>
 	 * If the specified start level is higher than the active start level, the
 	 * Framework will continue to increase the start level until the Framework
-	 * has reached the specified start level, starting bundles at each start
-	 * level which are persistently marked to be started as described in the
-	 * {@link Bundle#start(int)} method using the {@link Bundle#START_TRANSIENT}
-	 * option. The {@link Bundle#START_ACTIVATION_POLICY} option must also be
-	 * used if {@link #isBundleActivationPolicyUsed(Bundle)} returns
-	 * <code>true</code> for the bundle.
+	 * has reached the specified start level.
 	 * 
 	 * At each intermediate start level value on the way to and including the
-	 * target start level, the framework must:
+	 * target start level, the Framework must:
 	 * <ol>
 	 * <li>Change the active start level to the intermediate start level value.
-	 * <li>Start bundles at the intermediate start level.
+	 * <li>Start bundles at the intermediate start level whose autostart
+	 * setting indicate they must be started. They are started as described in
+	 * the {@link Bundle#start(int)} method using the
+	 * {@link Bundle#START_TRANSIENT} option. The
+	 * {@link Bundle#START_ACTIVATION_POLICY} option must also be used if
+	 * {@link #isBundleActivationPolicyUsed(Bundle)} returns <code>true</code>
+	 * for the bundle.
 	 * </ol>
 	 * When this process completes after the specified start level is reached,
 	 * the Framework will fire a Framework event of type
@@ -113,14 +115,14 @@ public interface StartLevel {
 	 * <p>
 	 * If the specified start level is lower than the active start level, the
 	 * Framework will continue to decrease the start level until the Framework
-	 * has reached the specified start level stopping bundles at each start
-	 * level as described in the {@link Bundle#stop(int)} method using the
-	 * {@link Bundle#STOP_TRANSIENT} option.
+	 * has reached the specified start level.
 	 * 
 	 * At each intermediate start level value on the way to and including the
 	 * specified start level, the framework must:
 	 * <ol>
-	 * <li>Stop bundles at the intermediate start level.
+	 * <li>Stop bundles at the intermediate start level as described in the
+	 * {@link Bundle#stop(int)} method using the {@link Bundle#STOP_TRANSIENT}
+	 * option.
 	 * <li>Change the active start level to the intermediate start level value.
 	 * </ol>
 	 * When this process completes after the specified start level is reached,
@@ -133,7 +135,7 @@ public interface StartLevel {
 	 * bundles are started or stopped, however, the Framework must fire a
 	 * Framework event of type <code>FrameworkEvent.STARTLEVEL_CHANGED</code>
 	 * to announce it has finished moving to the specified start level. This
-	 * event may arrive before the this method return.
+	 * event may arrive before this method return.
 	 * 
 	 * @param startlevel The requested start level for the Framework.
 	 * @throws IllegalArgumentException If the specified start level is less
@@ -163,10 +165,10 @@ public interface StartLevel {
 	 * the Framework.
 	 * <p>
 	 * If the new start level for the bundle is lower than or equal to the
-	 * active start level of the Framework and the bundle is persistently marked
-	 * to be started, the Framework will start the specified bundle as described
-	 * in the {@link Bundle#start(int)} method using the
-	 * {@link Bundle#START_TRANSIENT} option. The
+	 * active start level of the Framework and the bundle's autostart setting
+	 * indicates the bundle must be started, the Framework will start the
+	 * specified bundle as described in the {@link Bundle#start(int)} method
+	 * using the {@link Bundle#START_TRANSIENT} option. The
 	 * {@link Bundle#START_ACTIVATION_POLICY} option must also be used if
 	 * {@link #isBundleActivationPolicyUsed(Bundle)} returns <code>true</code>
 	 * for the bundle. The actual starting of this bundle must occur
@@ -228,16 +230,16 @@ public interface StartLevel {
 	public void setInitialBundleStartLevel(int startlevel);
 
 	/**
-	 * Returns the persistent started state of the specified bundle.
+	 * Returns whether the specified bundle's autostart setting indicates the
+	 * bundle must be started.
 	 * <p>
-	 * The persistent started state of a bundle indicates whether the bundle is
-	 * persistently marked to be started when its start level is reached.
+	 * The autostart setting of a bundle indicates whether the bundle is to be
+	 * started when its start level is reached.
 	 * 
-	 * @param bundle The bundle for which to return the persistent started
-	 *        state.
-	 * @return <code>true</code> if the bundle is persistently marked to be
-	 *         started, <code>false</code> if the bundle is not persistently
-	 *         marked to be started.
+	 * @param bundle The bundle whose autostart setting is to be examined.
+	 * @return <code>true</code> if the autostart setting of the bundle
+	 *         indicates the bundle is to be started. <code>false</code>
+	 *         otherwise.
 	 * @throws java.lang.IllegalArgumentException If the specified bundle has
 	 *         been uninstalled.
 	 * @see Bundle#START_TRANSIENT
@@ -245,18 +247,16 @@ public interface StartLevel {
 	public boolean isBundlePersistentlyStarted(Bundle bundle);
 
 	/**
-	 * Returns the persistent activation policy state of the specified bundle.
+	 * Returns whether the specified bundle's autostart setting indicates that
+	 * the activation policy declared in the bundle's manifest must be used.
 	 * <p>
-	 * The persistent activation policy state of a bundle indicates whether the
-	 * bundle is persistently marked to be activated according to its declared
-	 * activation policy.
+	 * The autostart setting of a bundle indicates whether the bundle's declared
+	 * activation policy is to be used when the bundle is started.
 	 * 
-	 * @param bundle The bundle for which to return the persistent activation
-	 *        policy state.
-	 * @return <code>true</code> if the bundle is persistently marked to be
-	 *         activated according to its declared activation policy,
-	 *         <code>false</code> if the bundle is not persistently marked to
-	 *         be activated according to its declared activation policy.
+	 * @param bundle The bundle whose autostart setting is to be examined.
+	 * @return <code>true</code> if the bundle’s autostart setting indicates
+	 *         the activation policy declared in the manifest must be used.
+	 *         <code>false</code> if the bundle must be eagerly activated.
 	 * @throws java.lang.IllegalArgumentException If the specified bundle has
 	 *         been uninstalled.
 	 * @since 1.1

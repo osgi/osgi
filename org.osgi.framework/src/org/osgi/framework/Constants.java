@@ -1086,19 +1086,17 @@ public interface Constants {
 	 * Bundle activation policy (named &quot;lazy&quot;) declaring the bundle
 	 * must be activated when the first class load is made from the bundle.
 	 * <p>
-	 * A bundle with the lazy activation policy enters the
-	 * {@link Bundle#STARTING STARTING} state as soon as it is resolved, its
-	 * start level has been met, its persistent started state is
-	 * <code>true</code> and its persistent activation policy state is
-	 * <code>true</code>. The bundle will wait in the <code>STARTING</code>
-	 * state until the first class load from the bundle occurs. The bundle will
-	 * then be activated before the class is returned to the requestor.
+	 * A bundle with the lazy activation policy that is started with the
+	 * {@link Bundle#START_ACTIVATION_POLICY START_ACTIVATION_POLICY} option
+	 * will wait in the {@link Bundle#STARTING STARTING} state until the first
+	 * class load from the bundle occurs. The bundle will then be activated
+	 * before the class is returned to the requestor.
 	 * <p>
 	 * The activation policy value is specified as in the
 	 * Bundle-ActivationPolicy manifest header like:
 	 * 
 	 * <pre>
-	 *     Bundle-ActivationPolicy: lazy
+	 *       Bundle-ActivationPolicy: lazy
 	 * </pre>
 	 * 
 	 * @see Constants#BUNDLE_ACTIVATIONPOLICY

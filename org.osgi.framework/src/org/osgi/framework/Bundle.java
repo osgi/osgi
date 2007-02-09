@@ -1,5 +1,4 @@
 /*
- * $Header$
  * 
  * Copyright (c) OSGi Alliance (2000, 2007). All Rights Reserved.
  * 
@@ -169,13 +168,13 @@ public interface Bundle {
 	public static final int	ACTIVE					= 0x00000020;
 
 	/**
-	 * The bundle start operation is transient and the persistent state of the
-	 * bundle is not modified.
+	 * The bundle start operation is transient and the persistent autostart
+	 * setting of the bundle is not modified.
 	 * 
 	 * <p>
 	 * This bit may be set when calling {@link #start(int)} to notify the
-	 * framework that the persistent state of the bundle must not be modified.
-	 * If this bit is not set, then the persistent state of the bundle is
+	 * framework that the autostart setting of the bundle must not be modified.
+	 * If this bit is not set, then the autostart setting of the bundle is
 	 * modified.
 	 * 
 	 * @since 1.4
@@ -200,13 +199,13 @@ public interface Bundle {
 	public static final int	START_ACTIVATION_POLICY	= 0x00000002;
 
 	/**
-	 * The bundle stop is transient and the persistent state of the bundle is
-	 * not modified.
+	 * The bundle stop is transient and the persistent autostart setting of the
+	 * bundle is not modified.
 	 * 
 	 * <p>
 	 * This bit may be set when calling {@link #stop(int)} to notify the
-	 * framework that the persistent state of the bundle must not be modified.
-	 * If this bit is not set, then the persistent state of the bundle is
+	 * framework that the autostart setting of the bundle must not be modified.
+	 * If this bit is not set, then the autostart setting of the bundle is
 	 * modified.
 	 * 
 	 * @since 1.4
@@ -240,11 +239,10 @@ public interface Bundle {
 	 * <code>BundleException</code> is thrown indicating this bundle cannot be
 	 * started due to the Framework's current start level.
 	 * 
-	 * <li>Otherwise, the Framework must set this bundle's persistent started
-	 * state to <code>true</code> and set this bundle's persistent activation
-	 * policy state to <code>true</code> if the
-	 * {@link #START_ACTIVATION_POLICY} option is set or <code>false</code> if
-	 * not set.
+	 * <li>Otherwise, the Framework must set this bundle's persistent autostart
+	 * setting to <em>Started with declared activation</em> if the
+	 * {@link #START_ACTIVATION_POLICY} option is set or
+	 * <em>Started with eager activation</em> if not set.
 	 * <p>
 	 * When the Framework's current start level becomes equal to or more than
 	 * this bundle's start level, this bundle will be started.
@@ -261,16 +259,12 @@ public interface Bundle {
 	 * <li>If this bundle's state is <code>ACTIVE</code> then this method
 	 * returns immediately.
 	 * 
-	 * <li>If the {@link #START_TRANSIENT} option is not set then:
-	 * <ul>
-	 * <li>Set this bundle's persistent started state to <code>true</code>.
-	 * When the Framework is restarted and the bundle's persistent started state
-	 * is <code>true</code>, this bundle must be automatically started.
-	 * <li>Set this bundle's persistent activation policy state to
-	 * <code>true</code> if the {@link #START_ACTIVATION_POLICY} option is set
-	 * or <code>false</code> if not set.
-	 * </ul>
-	 * </li>
+	 * <li>If the {@link #START_TRANSIENT} option is not set then set this
+	 * bundle's autostart setting to <em>Started with declared activation</em>
+	 * if the {@link #START_ACTIVATION_POLICY} option is set or
+	 * <em>Started with eager activation</em> if not set. When the Framework
+	 * is restarted and the bundle's autostart setting is not <em>Stopped</em>,
+	 * this bundle must be automatically started.
 	 * 
 	 * <li>If this bundle's state is not <code>RESOLVED</code>, an attempt
 	 * is made to resolve this bundle. If the Framework cannot resolve this
@@ -323,7 +317,7 @@ public interface Bundle {
 	 * </ul>
 	 * <b>Postconditions, no exceptions thrown </b>
 	 * <ul>
-	 * <li>Bundle persistent state is modified unless the
+	 * <li>Bundle autostart setting is modified unless the
 	 * {@link #START_TRANSIENT} option was set.
 	 * <li><code>getState()</code> in {<code>ACTIVE</code>} unless the
 	 * lazy activation policy was used.
@@ -332,8 +326,8 @@ public interface Bundle {
 	 * </ul>
 	 * <b>Postconditions, when an exception is thrown </b>
 	 * <ul>
-	 * <li>Depending on when the exception occurred, bundle persistent state is
-	 * modified unless the {@link #START_TRANSIENT} option was set.
+	 * <li>Depending on when the exception occurred, bundle autostart setting
+	 * is modified unless the {@link #START_TRANSIENT} option was set.
 	 * <li><code>getState()</code> not in {<code>STARTING</code>,
 	 * <code>ACTIVE</code>}.
 	 * </ul>
@@ -387,14 +381,10 @@ public interface Bundle {
 	 * before continuing. If this does not occur in a reasonable time, a
 	 * <code>BundleException</code> is thrown to indicate this bundle was
 	 * unable to be stopped.
-	 * <li>If the {@link #STOP_TRANSIENT} option is not set then:
-	 * <ul>
-	 * <li>Set this bundle's persistent started state to <code>false</code>.
-	 * When the Framework is restarted and the bundle's persistent started state
-	 * is <code>false</code>, this bundle must not be automatically started.
-	 * <li>Set this bundle's persistent activation policy state to
-	 * <code>false</code>.
-	 * </ul>
+	 * <li>If the {@link #STOP_TRANSIENT} option is not set then then set this
+	 * bundle's persistent autostart setting to to <em>Stopped</em>. When the
+	 * Framework is restarted and the bundle's autostart setting is
+	 * <em>Stopped</em>, this bundle must not be automatically started.
 	 * 
 	 * <li>If this bundle's state is not <code>ACTIVE</code> then this method
 	 * returns immediately.
@@ -428,7 +418,7 @@ public interface Bundle {
 	 * </ul>
 	 * <b>Postconditions, no exceptions thrown </b>
 	 * <ul>
-	 * <li>Bundle persistent state is modified unless the
+	 * <li>Bundle autostart setting is modified unless the
 	 * {@link #STOP_TRANSIENT} option was set.
 	 * <li><code>getState()</code> not in {<code>ACTIVE</code>,
 	 * <code>STOPPING</code>}.
@@ -437,7 +427,7 @@ public interface Bundle {
 	 * </ul>
 	 * <b>Postconditions, when an exception is thrown </b>
 	 * <ul>
-	 * <li>Bundle persistent state is marked as stopped unless the
+	 * <li>Bundle autostart setting is modified unless the
 	 * {@link #STOP_TRANSIENT} option was set.
 	 * </ul>
 	 * 
