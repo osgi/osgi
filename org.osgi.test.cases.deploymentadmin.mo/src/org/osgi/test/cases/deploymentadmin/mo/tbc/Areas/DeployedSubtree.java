@@ -100,9 +100,7 @@ public class DeployedSubtree {
                 
                 synchronized (tbc) {
                     session.execute(DeploymentmoConstants.getDeployedOperationsRemove(nodeId), null);
-                    if (session.isNodeUri(nodeId)) {
-                      tbc.wait(DeploymentmoConstants.TIMEOUT);
-                    }
+                    tbc.wait(DeploymentmoConstants.TIMEOUT);
                 }
 
                 String[] finalChildren= session.getChildNodeNames(DeploymentmoConstants.DEPLOYMENT_INVENTORY_DEPLOYED);
