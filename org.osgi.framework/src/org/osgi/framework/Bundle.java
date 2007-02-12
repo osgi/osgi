@@ -243,10 +243,10 @@ public interface Bundle {
 	 * setting to <em>Started with declared activation</em> if the
 	 * {@link #START_ACTIVATION_POLICY} option is set or
 	 * <em>Started with eager activation</em> if not set.
+	 * </ul>
 	 * <p>
 	 * When the Framework's current start level becomes equal to or more than
 	 * this bundle's start level, this bundle will be started.
-	 * </ul>
 	 * <p>
 	 * Otherwise, the following steps are required to start this bundle:
 	 * <ol>
@@ -274,14 +274,14 @@ public interface Bundle {
 	 * bundle's declared activation policy is
 	 * {@link Constants#ACTIVATION_LAZY lazy} then:
 	 * <ul>
-	 * <li>If this bundle's state is <code>STARTING</code> then this method
-	 * returns immediately.
-	 * <li>This bundle's state is set to <code>STARTING</code>.
-	 * <li>A bundle event of type {@link BundleEvent#LAZY_ACTIVATION} is fired.
-	 * <li>This method returns immediately and the remaining steps will be
-	 * followed when this bundle's activation is later triggered.
+		 * <li>If this bundle's state is <code>STARTING</code> then this method
+		 * returns immediately.
+		 * <li>This bundle's state is set to <code>STARTING</code>.
+		 * <li>A bundle event of type {@link BundleEvent#LAZY_ACTIVATION} is fired.
+		 * <li>This method returns immediately and the remaining steps will be
+		 * followed when this bundle's activation is later triggered.
 	 * </ul>
-	 * 
+	 * <i></i>
 	 * <li>This bundle's state is set to <code>STARTING</code>.
 	 * 
 	 * <li>A bundle event of type {@link BundleEvent#STARTING} is fired.
@@ -290,15 +290,16 @@ public interface Bundle {
 	 * <code>BundleActivator</code>, if one is specified, is called. If the
 	 * <code>BundleActivator</code> is invalid or throws an exception then:
 	 * <ul>
-	 * <li>This bundle's state is set to <code>STOPPING</code>.
-	 * <li>A bundle event of type {@link BundleEvent#STOPPING} is fired.
-	 * <li>Any services registered by this bundle must be unregistered.
-	 * <li>Any services used by this bundle must be released.
-	 * <li>Any listeners registered by this bundle must be removed.
-	 * <li>This bundle's state is set to <code>RESOLVED</code>.
-	 * <li>A bundle event of type {@link BundleEvent#STOPPED} is fired.
-	 * <li>A <code>BundleException</code> is then thrown.
+		 * <li>This bundle's state is set to <code>STOPPING</code>.
+		 * <li>A bundle event of type {@link BundleEvent#STOPPING} is fired.
+		 * <li>Any services registered by this bundle must be unregistered.
+		 * <li>Any services used by this bundle must be released.
+		 * <li>Any listeners registered by this bundle must be removed.
+		 * <li>This bundle's state is set to <code>RESOLVED</code>.
+		 * <li>A bundle event of type {@link BundleEvent#STOPPED} is fired.
+		 * <li>A <code>BundleException</code> is then thrown.
 	 * </ul>
+	 * <i></i>
 	 * <li>If this bundle's state is <code>UNINSTALLED</code>, because this
 	 * bundle was uninstalled while the <code>BundleActivator.start</code>
 	 * method was running, a <code>BundleException</code> is thrown.
