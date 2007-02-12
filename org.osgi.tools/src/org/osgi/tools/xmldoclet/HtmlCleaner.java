@@ -70,7 +70,7 @@ public class HtmlCleaner {
 	
 	StringBuffer result = new StringBuffer();
 	
-	HtmlCleaner( String s  ) {
+	public HtmlCleaner( String s  ) {
 		source = s;
 		in = new StringTokenizer(s, "<>", true );
 	}
@@ -169,7 +169,7 @@ public class HtmlCleaner {
 				break;
 				
 			case ITEM:
-				element( token, CHAR + TEXT + SINGLE );
+				element( token, CHAR + TEXT + SINGLE + LIST );
 				break;
 				
 			default:
