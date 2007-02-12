@@ -28,6 +28,8 @@
 	</target>
 
 	<target name="ees" depends="init">
+		<subant target="publish" inheritAll="false" buildpath="../ee.minimum" />
+		<subant target="publish" inheritAll="false" buildpath="../ee.foundation" />
 		<java classname="org.osgi.tools.jar2xml.JAR2XML" classpath="../org.osgi.tools/osgi.tools.jar" fork="true" output="ee.xml">
 			<arg line="-tagged minimum ${workspace}/ee.minimum/ee.minimum.jar" />
 			<arg line="-tagged foundation ${workspace}/ee.foundation/ee.foundation.jar" />
@@ -44,6 +46,18 @@
 		</java>
 	</target>
 
+	<target name="eediff" depends="init">
+		<java classname="com.icl.saxon.StyleSheet" classpath="../licensed/jar/saxon.jar" fork="true" output="eediff.html">
+			<arg line="eediffs/FP1.0-FP1.1.xml xsl/eediff.xsl" />
+		</java>
+		<echo>Generated HTML file</echo>
+		<java classname="com.icl.saxon.StyleSheet" classpath="${workspace}/licensed/jar/saxon.jar" fork="true" output="eediff.tmp">
+			<arg line="eediff.html xsl/html2mif.xsl" />
+		</java>
+		<java classname="org.osgi.tools.xml2mif.XML2MIF" fork="true" classpath="${project.classpath}" input="eediff.tmp" output="mif/eediff.mif">
+		</java>		
+	</target>
+	
 	<target name="ddf" depends="init">
 		<deltree dir="ddftmp"/>
 		<copy flatten="true" todir="ddftmp" failonerror="true" verbose="true">

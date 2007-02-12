@@ -1,0 +1,444 @@
+<?xml version="1.0" encoding="utf-8"?>
+<html>
+   <head>
+      <title>Changes from ee.foundation-1.0 to ee.foundation-1.1</title>
+   </head>
+   <body>
+      <h1 class="Heading2">Changes from ee.foundation-1.0 to ee.foundation-1.1</h1>
+      <h2 class="Heading3">New Packages</h2>
+      <p class="ee">javax.microedition.pki</p>
+      <p class="ee">javax.security.auth.x500</p>
+      <h2 class="Heading3">New Classes and Interfaces</h2>
+      <p class="ee">java.lang.AssertionError</p>
+      <p class="ee">java.lang.CharSequence</p>
+      <p class="ee">java.lang.StackTraceElement</p>
+      <p class="ee">java.math.BigDecimal</p>
+      <p class="ee">java.net.Inet4Address</p>
+      <p class="ee">java.net.Inet6Address</p>
+      <p class="ee">java.net.InetSocketAddress</p>
+      <p class="ee">java.net.NetworkInterface</p>
+      <p class="ee">java.net.PortUnreachableException</p>
+      <p class="ee">java.net.SocketAddress</p>
+      <p class="ee">java.net.SocketTimeoutException</p>
+      <p class="ee">java.net.URI</p>
+      <p class="ee">java.net.URISyntaxException</p>
+      <p class="ee">java.security.cert.CertPath</p>
+      <p class="ee">java.security.cert.CertPath$CertPathRep</p>
+      <p class="ee">java.security.spec.PSSParameterSpec</p>
+      <p class="ee">java.text.DateFormat$Field</p>
+      <p class="ee">java.text.Format$Field</p>
+      <p class="ee">java.text.MessageFormat$Field</p>
+      <p class="ee">java.text.NumberFormat$Field</p>
+      <p class="ee">java.util.Currency</p>
+      <p class="ee">java.util.EventListenerProxy</p>
+      <p class="ee">java.util.IdentityHashMap</p>
+      <p class="ee">java.util.LinkedHashMap</p>
+      <p class="ee">java.util.LinkedHashSet</p>
+      <p class="ee">java.util.RandomAccess</p>
+      <p class="ee">javax.microedition.io.CommConnection</p>
+      <p class="ee">javax.microedition.io.HttpsConnection</p>
+      <p class="ee">javax.microedition.io.SecureConnection</p>
+      <p class="ee">javax.microedition.io.SecurityInfo</p>
+      <p class="ee">javax.microedition.io.ServerSocketConnection</p>
+      <p class="ee">javax.microedition.io.SocketConnection</p>
+      <p class="ee">javax.microedition.io.UDPDatagramConnection</p>
+      <h2 class="Heading3">Modified Classes and Interfaces</h2>
+      <h2 class="ee-class">java.io.File</h2>
+      <p class="ee">+ File(java.net.URI)</p>
+      <p class="ee">+ java.net.URI toURI() </p>
+      <h2 class="ee-class">java.io.FileOutputStream</h2>
+      <p class="ee">+ FileOutputStream(java.io.File, boolean)java.io.FileNotFoundException</p>
+      <h2 class="ee-class">java.io.FileWriter</h2>
+      <p class="ee">+ FileWriter(java.io.File, boolean)java.io.IOException</p>
+      <h2 class="ee-class">java.io.ObjectInputStream</h2>
+      <p class="ee">+ java.lang.Object readUnshared() 
+						throws java.io.IOException, java.lang.ClassNotFoundException</p>
+      <h2 class="ee-class">java.io.ObjectOutputStream</h2>
+      <p class="ee">+ void writeUnshared(java.lang.Object) 
+						throws java.io.IOException</p>
+      <h2 class="ee-class">java.io.ObjectOutputStream$PutField</h2>
+      <p class="ee">- void write(java.io.ObjectOutput) 
+						throws java.io.IOException</p>
+      <h2 class="ee-class">java.io.ObjectStreamField</h2>
+      <p class="ee">+ ObjectStreamField(java.lang.String, java.lang.Class, boolean)</p>
+      <h2 class="ee-class">java.io.PrintStream</h2>
+      <p class="ee">+ PrintStream(java.io.OutputStream, boolean, java.lang.String)java.io.UnsupportedEncodingException</p>
+      <h2 class="ee-class">java.lang.Boolean</h2>
+      <p class="ee">+ static java.lang.String toString(boolean) </p>
+      <p class="ee">+ static java.lang.Boolean valueOf(boolean) </p>
+      <h2 class="ee-class">java.lang.Character</h2>
+      <p class="ee">+ static byte DIRECTIONALITY_ARABIC_NUMBER</p>
+      <p class="ee">+ static byte DIRECTIONALITY_BOUNDARY_NEUTRAL</p>
+      <p class="ee">+ static byte DIRECTIONALITY_COMMON_NUMBER_SEPARATOR</p>
+      <p class="ee">+ static byte DIRECTIONALITY_EUROPEAN_NUMBER</p>
+      <p class="ee">+ static byte DIRECTIONALITY_EUROPEAN_NUMBER_SEPARATOR</p>
+      <p class="ee">+ static byte DIRECTIONALITY_EUROPEAN_NUMBER_TERMINATOR</p>
+      <p class="ee">+ static byte DIRECTIONALITY_LEFT_TO_RIGHT</p>
+      <p class="ee">+ static byte DIRECTIONALITY_LEFT_TO_RIGHT_EMBEDDING</p>
+      <p class="ee">+ static byte DIRECTIONALITY_LEFT_TO_RIGHT_OVERRIDE</p>
+      <p class="ee">+ static byte DIRECTIONALITY_NONSPACING_MARK</p>
+      <p class="ee">+ static byte DIRECTIONALITY_OTHER_NEUTRALS</p>
+      <p class="ee">+ static byte DIRECTIONALITY_PARAGRAPH_SEPARATOR</p>
+      <p class="ee">+ static byte DIRECTIONALITY_POP_DIRECTIONAL_FORMAT</p>
+      <p class="ee">+ static byte DIRECTIONALITY_RIGHT_TO_LEFT</p>
+      <p class="ee">+ static byte DIRECTIONALITY_RIGHT_TO_LEFT_ARABIC</p>
+      <p class="ee">+ static byte DIRECTIONALITY_RIGHT_TO_LEFT_EMBEDDING</p>
+      <p class="ee">+ static byte DIRECTIONALITY_RIGHT_TO_LEFT_OVERRIDE</p>
+      <p class="ee">+ static byte DIRECTIONALITY_SEGMENT_SEPARATOR</p>
+      <p class="ee">+ static byte DIRECTIONALITY_UNDEFINED</p>
+      <p class="ee">+ static byte DIRECTIONALITY_WHITESPACE</p>
+      <p class="ee">+ static byte FINAL_QUOTE_PUNCTUATION</p>
+      <p class="ee">+ static byte INITIAL_QUOTE_PUNCTUATION</p>
+      <p class="ee">+ static byte getDirectionality(char) </p>
+      <p class="ee">+ static boolean isMirrored(char) </p>
+      <p class="ee">+ static java.lang.String toString(char) </p>
+      <h2 class="ee-class">java.lang.Character$UnicodeBlock</h2>
+      <p class="ee">+ static java.lang.Character$UnicodeBlock BOPOMOFO_EXTENDED</p>
+      <p class="ee">+ static java.lang.Character$UnicodeBlock BRAILLE_PATTERNS</p>
+      <p class="ee">+ static java.lang.Character$UnicodeBlock CHEROKEE</p>
+      <p class="ee">+ static java.lang.Character$UnicodeBlock CJK_RADICALS_SUPPLEMENT</p>
+      <p class="ee">+ static java.lang.Character$UnicodeBlock CJK_UNIFIED_IDEOGRAPHS_EXTENSION_A</p>
+      <p class="ee">+ static java.lang.Character$UnicodeBlock ETHIOPIC</p>
+      <p class="ee">+ static java.lang.Character$UnicodeBlock IDEOGRAPHIC_DESCRIPTION_CHARACTERS</p>
+      <p class="ee">+ static java.lang.Character$UnicodeBlock KANGXI_RADICALS</p>
+      <p class="ee">+ static java.lang.Character$UnicodeBlock KHMER</p>
+      <p class="ee">+ static java.lang.Character$UnicodeBlock MONGOLIAN</p>
+      <p class="ee">+ static java.lang.Character$UnicodeBlock MYANMAR</p>
+      <p class="ee">+ static java.lang.Character$UnicodeBlock OGHAM</p>
+      <p class="ee">+ static java.lang.Character$UnicodeBlock RUNIC</p>
+      <p class="ee">+ static java.lang.Character$UnicodeBlock SINHALA</p>
+      <p class="ee">+ static java.lang.Character$UnicodeBlock SYRIAC</p>
+      <p class="ee">+ static java.lang.Character$UnicodeBlock THAANA</p>
+      <p class="ee">+ static java.lang.Character$UnicodeBlock UNIFIED_CANADIAN_ABORIGINAL_SYLLABICS</p>
+      <p class="ee">+ static java.lang.Character$UnicodeBlock YI_RADICALS</p>
+      <p class="ee">+ static java.lang.Character$UnicodeBlock YI_SYLLABLES</p>
+      <h2 class="ee-class">java.lang.Class</h2>
+      <p class="ee">+ boolean desiredAssertionStatus() </p>
+      <h2 class="ee-class">java.lang.ClassLoader</h2>
+      <p class="ee">+ void clearAssertionStatus() </p>
+      <p class="ee">+ void setClassAssertionStatus(java.lang.String, boolean) </p>
+      <p class="ee">+ void setDefaultAssertionStatus(boolean) </p>
+      <p class="ee">+ void setPackageAssertionStatus(java.lang.String, boolean) </p>
+      <h2 class="ee-class">java.lang.Double</h2>
+      <p class="ee">+ static int compare(double, double) </p>
+      <h2 class="ee-class">java.lang.Error</h2>
+      <p class="ee">+ Error(java.lang.String, java.lang.Throwable)</p>
+      <p class="ee">+ Error(java.lang.Throwable)</p>
+      <h2 class="ee-class">java.lang.Exception</h2>
+      <p class="ee">+ Exception(java.lang.String, java.lang.Throwable)</p>
+      <p class="ee">+ Exception(java.lang.Throwable)</p>
+      <h2 class="ee-class">java.lang.Float</h2>
+      <p class="ee">+ static int compare(float, float) </p>
+      <h2 class="ee-class">java.lang.Runtime</h2>
+      <p class="ee">+ int availableProcessors() </p>
+      <p class="ee">+ long maxMemory() </p>
+      <h2 class="ee-class">java.lang.RuntimeException</h2>
+      <p class="ee">+ RuntimeException(java.lang.String, java.lang.Throwable)</p>
+      <p class="ee">+ RuntimeException(java.lang.Throwable)</p>
+      <h2 class="ee-class">java.lang.SecurityManager</h2>
+      <p class="ee">- void checkMulticast(java.net.InetAddress, byte) </p>
+      <h2 class="ee-class">java.lang.String
+							(~)
+						</h2>
+      <p class="ee">+ boolean contentEquals(java.lang.StringBuffer) </p>
+      <p class="ee">+ java.lang.CharSequence subSequence(int, int) </p>
+      <h2 class="ee-class">java.lang.StringBuffer
+							(~)
+						</h2>
+      <p class="ee">+ java.lang.StringBuffer append(java.lang.StringBuffer) </p>
+      <p class="ee">+ int indexOf(java.lang.String) </p>
+      <p class="ee">+ int indexOf(java.lang.String, int) </p>
+      <p class="ee">+ int lastIndexOf(java.lang.String) </p>
+      <p class="ee">+ int lastIndexOf(java.lang.String, int) </p>
+      <p class="ee">+ java.lang.CharSequence subSequence(int, int) </p>
+      <h2 class="ee-class">java.lang.Thread</h2>
+      <p class="ee">+ Thread(java.lang.ThreadGroup, java.lang.Runnable, java.lang.String, long)</p>
+      <p class="ee">+ static boolean holdsLock(java.lang.Object) </p>
+      <h2 class="ee-class">java.lang.Throwable</h2>
+      <p class="ee">+ Throwable(java.lang.String, java.lang.Throwable)</p>
+      <p class="ee">+ Throwable(java.lang.Throwable)</p>
+      <p class="ee">+ java.lang.Throwable getCause() </p>
+      <p class="ee">+ java.lang.StackTraceElement[] getStackTrace() </p>
+      <p class="ee">+ java.lang.Throwable initCause(java.lang.Throwable) </p>
+      <p class="ee">+ void setStackTrace(java.lang.StackTraceElement[]) </p>
+      <h2 class="ee-class">java.net.Authenticator</h2>
+      <p class="ee">+ java.lang.String getRequestingHost() </p>
+      <p class="ee">+ static java.net.PasswordAuthentication requestPasswordAuthentication(java.lang.String, java.net.InetAddress, int, java.lang.String, java.lang.String, java.lang.String) </p>
+      <h2 class="ee-class">java.net.DatagramPacket</h2>
+      <p class="ee">+ DatagramPacket(byte[], int, int, java.net.SocketAddress)java.net.SocketException</p>
+      <p class="ee">+ DatagramPacket(byte[], int, java.net.SocketAddress)java.net.SocketException</p>
+      <p class="ee">+ java.net.SocketAddress getSocketAddress() </p>
+      <p class="ee">+ void setSocketAddress(java.net.SocketAddress) </p>
+      <h2 class="ee-class">java.net.DatagramSocket</h2>
+      <p class="ee">+ DatagramSocket(java.net.DatagramSocketImpl)</p>
+      <p class="ee">+ DatagramSocket(java.net.SocketAddress)java.net.SocketException</p>
+      <p class="ee">+ void bind(java.net.SocketAddress) 
+						throws java.net.SocketException</p>
+      <p class="ee">+ void connect(java.net.SocketAddress) 
+						throws java.net.SocketException</p>
+      <p class="ee">+ boolean getBroadcast() 
+						throws java.net.SocketException</p>
+      <p class="ee">+ java.net.SocketAddress getLocalSocketAddress() </p>
+      <p class="ee">+ java.net.SocketAddress getRemoteSocketAddress() </p>
+      <p class="ee">+ boolean getReuseAddress() 
+						throws java.net.SocketException</p>
+      <p class="ee">+ int getTrafficClass() 
+						throws java.net.SocketException</p>
+      <p class="ee">+ boolean isBound() </p>
+      <p class="ee">+ boolean isClosed() </p>
+      <p class="ee">+ boolean isConnected() </p>
+      <p class="ee">+ void setBroadcast(boolean) 
+						throws java.net.SocketException</p>
+      <p class="ee">+ void setReuseAddress(boolean) 
+						throws java.net.SocketException</p>
+      <p class="ee">+ void setTrafficClass(int) 
+						throws java.net.SocketException</p>
+      <h2 class="ee-class">java.net.DatagramSocketImpl</h2>
+      <p class="ee">+ void connect(java.net.InetAddress, int) 
+						throws java.net.SocketException</p>
+      <p class="ee">+ void disconnect() </p>
+      <p class="ee">+ void joinGroup(java.net.SocketAddress, java.net.NetworkInterface) 
+						throws java.io.IOException</p>
+      <p class="ee">+ void leaveGroup(java.net.SocketAddress, java.net.NetworkInterface) 
+						throws java.io.IOException</p>
+      <p class="ee">+ int peekData(java.net.DatagramPacket) 
+						throws java.io.IOException</p>
+      <h2 class="ee-class">java.net.InetAddress
+							(~)
+						</h2>
+      <p class="ee">+ static java.net.InetAddress getByAddress(byte[]) 
+						throws java.net.UnknownHostException</p>
+      <p class="ee">+ static java.net.InetAddress getByAddress(java.lang.String, byte[]) 
+						throws java.net.UnknownHostException</p>
+      <p class="ee">+ java.lang.String getCanonicalHostName() </p>
+      <p class="ee">+ boolean isAnyLocalAddress() </p>
+      <p class="ee">+ boolean isLinkLocalAddress() </p>
+      <p class="ee">+ boolean isLoopbackAddress() </p>
+      <p class="ee">+ boolean isMCGlobal() </p>
+      <p class="ee">+ boolean isMCLinkLocal() </p>
+      <p class="ee">+ boolean isMCNodeLocal() </p>
+      <p class="ee">+ boolean isMCOrgLocal() </p>
+      <p class="ee">+ boolean isMCSiteLocal() </p>
+      <p class="ee">+ boolean isSiteLocalAddress() </p>
+      <p class="ee">~ InetAddress()</p>
+      <h2 class="ee-class">java.net.MulticastSocket</h2>
+      <p class="ee">+ MulticastSocket(java.net.SocketAddress)java.io.IOException</p>
+      <p class="ee">+ boolean getLoopbackMode() 
+						throws java.net.SocketException</p>
+      <p class="ee">+ java.net.NetworkInterface getNetworkInterface() 
+						throws java.net.SocketException</p>
+      <p class="ee">+ void joinGroup(java.net.SocketAddress, java.net.NetworkInterface) 
+						throws java.io.IOException</p>
+      <p class="ee">+ void leaveGroup(java.net.SocketAddress, java.net.NetworkInterface) 
+						throws java.io.IOException</p>
+      <p class="ee">+ void setLoopbackMode(boolean) 
+						throws java.net.SocketException</p>
+      <p class="ee">+ void setNetworkInterface(java.net.NetworkInterface) 
+						throws java.net.SocketException</p>
+      <p class="ee">- void send(java.net.DatagramPacket, byte) 
+						throws java.io.IOException</p>
+      <h2 class="ee-class">java.net.ServerSocket</h2>
+      <p class="ee">+ ServerSocket()java.io.IOException</p>
+      <p class="ee">+ void bind(java.net.SocketAddress) 
+						throws java.io.IOException</p>
+      <p class="ee">+ void bind(java.net.SocketAddress, int) 
+						throws java.io.IOException</p>
+      <p class="ee">+ java.net.SocketAddress getLocalSocketAddress() </p>
+      <p class="ee">+ int getReceiveBufferSize() 
+						throws java.net.SocketException</p>
+      <p class="ee">+ boolean getReuseAddress() 
+						throws java.net.SocketException</p>
+      <p class="ee">+ boolean isBound() </p>
+      <p class="ee">+ boolean isClosed() </p>
+      <p class="ee">+ void setReceiveBufferSize(int) 
+						throws java.net.SocketException</p>
+      <p class="ee">+ void setReuseAddress(boolean) 
+						throws java.net.SocketException</p>
+      <h2 class="ee-class">java.net.Socket</h2>
+      <p class="ee">+ void bind(java.net.SocketAddress) 
+						throws java.io.IOException</p>
+      <p class="ee">+ void connect(java.net.SocketAddress) 
+						throws java.io.IOException</p>
+      <p class="ee">+ void connect(java.net.SocketAddress, int) 
+						throws java.io.IOException</p>
+      <p class="ee">+ java.net.SocketAddress getLocalSocketAddress() </p>
+      <p class="ee">+ boolean getOOBInline() 
+						throws java.net.SocketException</p>
+      <p class="ee">+ java.net.SocketAddress getRemoteSocketAddress() </p>
+      <p class="ee">+ boolean getReuseAddress() 
+						throws java.net.SocketException</p>
+      <p class="ee">+ int getTrafficClass() 
+						throws java.net.SocketException</p>
+      <p class="ee">+ boolean isBound() </p>
+      <p class="ee">+ boolean isClosed() </p>
+      <p class="ee">+ boolean isConnected() </p>
+      <p class="ee">+ boolean isInputShutdown() </p>
+      <p class="ee">+ boolean isOutputShutdown() </p>
+      <p class="ee">+ void sendUrgentData(int) 
+						throws java.io.IOException</p>
+      <p class="ee">+ void setOOBInline(boolean) 
+						throws java.net.SocketException</p>
+      <p class="ee">+ void setReuseAddress(boolean) 
+						throws java.net.SocketException</p>
+      <p class="ee">+ void setTrafficClass(int) 
+						throws java.net.SocketException</p>
+      <p class="ee">~ Socket()</p>
+      <h2 class="ee-class">java.net.SocketImpl</h2>
+      <p class="ee">+ void connect(java.net.SocketAddress, int) 
+						throws java.io.IOException</p>
+      <p class="ee">+ void sendUrgentData(int) 
+						throws java.io.IOException</p>
+      <p class="ee">+ boolean supportsUrgentData() </p>
+      <h2 class="ee-class">java.net.SocketOptions</h2>
+      <p class="ee">+ static int IP_MULTICAST_IF2</p>
+      <p class="ee">+ static int IP_MULTICAST_LOOP</p>
+      <p class="ee">+ static int IP_TOS</p>
+      <p class="ee">+ static int SO_BROADCAST</p>
+      <p class="ee">+ static int SO_OOBINLINE</p>
+      <h2 class="ee-class">java.net.URL</h2>
+      <p class="ee">+ int getDefaultPort() </p>
+      <h2 class="ee-class">java.net.URLConnection</h2>
+      <p class="ee">+ void addRequestProperty(java.lang.String, java.lang.String) </p>
+      <p class="ee">+ java.util.Map getHeaderFields() </p>
+      <p class="ee">+ java.util.Map getRequestProperties() </p>
+      <p class="ee">~ static java.lang.String guessContentTypeFromName(java.lang.String) </p>
+      <h2 class="ee-class">java.net.URLDecoder</h2>
+      <p class="ee">+ static java.lang.String decode(java.lang.String, java.lang.String) 
+						throws java.io.UnsupportedEncodingException</p>
+      <p class="ee">- static java.lang.String decode(java.lang.String) </p>
+      <h2 class="ee-class">java.net.URLEncoder</h2>
+      <p class="ee">+ static java.lang.String encode(java.lang.String, java.lang.String) 
+						throws java.io.UnsupportedEncodingException</p>
+      <p class="ee">- static java.lang.String encode(java.lang.String) </p>
+      <h2 class="ee-class">java.security.AlgorithmParameterGenerator</h2>
+      <p class="ee">+ static java.security.AlgorithmParameterGenerator getInstance(java.lang.String, java.security.Provider) 
+						throws java.security.NoSuchAlgorithmException</p>
+      <h2 class="ee-class">java.security.AlgorithmParameters</h2>
+      <p class="ee">+ static java.security.AlgorithmParameters getInstance(java.lang.String, java.security.Provider) 
+						throws java.security.NoSuchAlgorithmException</p>
+      <h2 class="ee-class">java.security.cert.CertificateFactory</h2>
+      <p class="ee">+ java.security.cert.CertPath generateCertPath(java.io.InputStream) 
+						throws java.security.cert.CertificateException</p>
+      <p class="ee">+ java.security.cert.CertPath generateCertPath(java.io.InputStream, java.lang.String) 
+						throws java.security.cert.CertificateException</p>
+      <p class="ee">+ java.security.cert.CertPath generateCertPath(java.util.List) 
+						throws java.security.cert.CertificateException</p>
+      <p class="ee">+ java.util.Iterator getCertPathEncodings() </p>
+      <p class="ee">+ static java.security.cert.CertificateFactory getInstance(java.lang.String, java.security.Provider) 
+						throws java.security.cert.CertificateException</p>
+      <h2 class="ee-class">java.security.cert.CertificateFactorySpi</h2>
+      <p class="ee">+ java.security.cert.CertPath engineGenerateCertPath(java.io.InputStream) 
+						throws java.security.cert.CertificateException</p>
+      <p class="ee">+ java.security.cert.CertPath engineGenerateCertPath(java.io.InputStream, java.lang.String) 
+						throws java.security.cert.CertificateException</p>
+      <p class="ee">+ java.security.cert.CertPath engineGenerateCertPath(java.util.List) 
+						throws java.security.cert.CertificateException</p>
+      <p class="ee">+ java.util.Iterator engineGetCertPathEncodings() </p>
+      <h2 class="ee-class">java.security.cert.X509Certificate</h2>
+      <p class="ee">+ java.util.List getExtendedKeyUsage() 
+						throws java.security.cert.CertificateParsingException</p>
+      <p class="ee">+ java.util.Collection getIssuerAlternativeNames() 
+						throws java.security.cert.CertificateParsingException</p>
+      <p class="ee">+ javax.security.auth.x500.X500Principal getIssuerX500Principal() </p>
+      <p class="ee">+ java.util.Collection getSubjectAlternativeNames() 
+						throws java.security.cert.CertificateParsingException</p>
+      <p class="ee">+ javax.security.auth.x500.X500Principal getSubjectX500Principal() </p>
+      <h2 class="ee-class">java.security.cert.X509CRL</h2>
+      <p class="ee">+ javax.security.auth.x500.X500Principal getIssuerX500Principal() </p>
+      <h2 class="ee-class">java.security.KeyFactory</h2>
+      <p class="ee">+ static java.security.KeyFactory getInstance(java.lang.String, java.security.Provider) 
+						throws java.security.NoSuchAlgorithmException</p>
+      <h2 class="ee-class">java.security.KeyPairGenerator</h2>
+      <p class="ee">+ static java.security.KeyPairGenerator getInstance(java.lang.String, java.security.Provider) 
+						throws java.security.NoSuchAlgorithmException</p>
+      <h2 class="ee-class">java.security.KeyStore</h2>
+      <p class="ee">+ static java.security.KeyStore getInstance(java.lang.String, java.security.Provider) 
+						throws java.security.KeyStoreException</p>
+      <h2 class="ee-class">java.security.MessageDigest</h2>
+      <p class="ee">+ static java.security.MessageDigest getInstance(java.lang.String, java.security.Provider) 
+						throws java.security.NoSuchAlgorithmException</p>
+      <h2 class="ee-class">java.security.Policy</h2>
+      <p class="ee">+ java.security.PermissionCollection getPermissions(java.security.ProtectionDomain) </p>
+      <p class="ee">+ boolean implies(java.security.ProtectionDomain, java.security.Permission) </p>
+      <h2 class="ee-class">java.security.ProtectionDomain</h2>
+      <p class="ee">+ ProtectionDomain(java.security.CodeSource, java.security.PermissionCollection, java.lang.ClassLoader, java.security.Principal[])</p>
+      <p class="ee">+ java.lang.ClassLoader getClassLoader() </p>
+      <p class="ee">+ java.security.Principal[] getPrincipals() </p>
+      <h2 class="ee-class">java.security.SecureRandom</h2>
+      <p class="ee">+ static java.security.SecureRandom getInstance(java.lang.String, java.security.Provider) 
+						throws java.security.NoSuchAlgorithmException</p>
+      <h2 class="ee-class">java.security.Security</h2>
+      <p class="ee">+ static java.util.Set getAlgorithms(java.lang.String) </p>
+      <h2 class="ee-class">java.security.Signature</h2>
+      <p class="ee">+ static java.security.Signature getInstance(java.lang.String, java.security.Provider) 
+						throws java.security.NoSuchAlgorithmException</p>
+      <p class="ee">+ java.security.AlgorithmParameters getParameters() </p>
+      <p class="ee">+ boolean verify(byte[], int, int) 
+						throws java.security.SignatureException</p>
+      <h2 class="ee-class">java.security.SignatureSpi</h2>
+      <p class="ee">+ java.security.AlgorithmParameters engineGetParameters() </p>
+      <p class="ee">+ boolean engineVerify(byte[], int, int) 
+						throws java.security.SignatureException</p>
+      <h2 class="ee-class">java.text.DecimalFormatSymbols</h2>
+      <p class="ee">+ java.util.Currency getCurrency() </p>
+      <p class="ee">+ void setCurrency(java.util.Currency) </p>
+      <h2 class="ee-class">java.text.FieldPosition</h2>
+      <p class="ee">+ FieldPosition(java.text.Format$Field)</p>
+      <p class="ee">+ FieldPosition(java.text.Format$Field, int)</p>
+      <p class="ee">+ java.text.Format$Field getFieldAttribute() </p>
+      <h2 class="ee-class">java.text.Format</h2>
+      <p class="ee">+ java.text.AttributedCharacterIterator formatToCharacterIterator(java.lang.Object) </p>
+      <h2 class="ee-class">java.text.MessageFormat</h2>
+      <p class="ee">+ MessageFormat(java.lang.String, java.util.Locale)</p>
+      <p class="ee">+ java.text.Format[] getFormatsByArgumentIndex() </p>
+      <p class="ee">+ void setFormatByArgumentIndex(int, java.text.Format) </p>
+      <p class="ee">+ void setFormatsByArgumentIndex(java.text.Format[]) </p>
+      <h2 class="ee-class">java.text.NumberFormat</h2>
+      <p class="ee">+ java.util.Currency getCurrency() </p>
+      <p class="ee">+ static java.text.NumberFormat getIntegerInstance() </p>
+      <p class="ee">+ static java.text.NumberFormat getIntegerInstance(java.util.Locale) </p>
+      <p class="ee">+ void setCurrency(java.util.Currency) </p>
+      <h2 class="ee-class">java.util.ArrayList
+							(~)
+						</h2>
+      <h2 class="ee-class">java.util.BitSet</h2>
+      <p class="ee">+ int cardinality() </p>
+      <p class="ee">+ void clear() </p>
+      <p class="ee">+ void clear(int, int) </p>
+      <p class="ee">+ void flip(int) </p>
+      <p class="ee">+ void flip(int, int) </p>
+      <p class="ee">+ java.util.BitSet get(int, int) </p>
+      <p class="ee">+ boolean intersects(java.util.BitSet) </p>
+      <p class="ee">+ boolean isEmpty() </p>
+      <p class="ee">+ int nextClearBit(int) </p>
+      <p class="ee">+ int nextSetBit(int) </p>
+      <p class="ee">+ void set(int, boolean) </p>
+      <p class="ee">+ void set(int, int) </p>
+      <p class="ee">+ void set(int, int, boolean) </p>
+      <h2 class="ee-class">java.util.Calendar</h2>
+      <p class="ee">~ int get(int) </p>
+      <p class="ee">~ long getTimeInMillis() </p>
+      <p class="ee">~ void set(int, int) </p>
+      <p class="ee">~ void setTimeInMillis(long) </p>
+      <h2 class="ee-class">java.util.Collections</h2>
+      <p class="ee">+ static int indexOfSubList(java.util.List, java.util.List) </p>
+      <p class="ee">+ static int lastIndexOfSubList(java.util.List, java.util.List) </p>
+      <p class="ee">+ static java.util.ArrayList list(java.util.Enumeration) </p>
+      <p class="ee">+ static boolean replaceAll(java.util.List, java.lang.Object, java.lang.Object) </p>
+      <p class="ee">+ static void rotate(java.util.List, int) </p>
+      <p class="ee">+ static void swap(java.util.List, int, int) </p>
+      <h2 class="ee-class">java.util.Locale</h2>
+      <p class="ee">+ Locale(java.lang.String)</p>
+      <h2 class="ee-class">java.util.SimpleTimeZone</h2>
+      <p class="ee">+ static int STANDARD_TIME</p>
+      <p class="ee">+ static int UTC_TIME</p>
+      <p class="ee">+ static int WALL_TIME</p>
+      <p class="ee">+ SimpleTimeZone(int, java.lang.String, int, int, int, int, int, int, int, int, int, int, int)</p>
+      <h2 class="ee-class">java.util.TimeZone</h2>
+      <p class="ee">+ int getDSTSavings() </p>
+      <p class="ee">+ int getOffset(long) </p>
+      <h2 class="ee-class">java.util.Vector
+							(~)
+						</h2>
+   </body>
+</html>
