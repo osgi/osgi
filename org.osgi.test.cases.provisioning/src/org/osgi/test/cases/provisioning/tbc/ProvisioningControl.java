@@ -51,12 +51,30 @@ public class ProvisioningControl extends DefaultTestBundleControl {
 	ServiceTracker					bundles;		// Tracks started Ip bundles
 	ServiceRegistration				registration;	// director: spid-test: stream handler
 	String							query; 			// Query part from spid-test: url
-	
+
+	long TIMEOUT1 = 60000;
+	long TIMEOUT2 = 10000;
+	long TIMEOUT4 = 100;
+	long TIMEOUT5 = 50;
+
 	/**
 	 * Check the availability of the provisioning service.
 	 */	
 	public boolean checkPrerequisites() {
 		try {
+			String scalingStr = System.getProperty("org.osgi.test.testcase.scaling");
+			if (scalingStr != null) {
+				try {
+					long scale = Long.parseLong(scalingStr);
+					if (scale > 0) {
+						TIMEOUT1 *= scale;
+						TIMEOUT2 *= scale;
+						TIMEOUT4 *= scale;
+						TIMEOUT5 *= scale;
+					}
+				} catch (Exception e) {}
+			}
+
 			context = getContext();
 			provisioning = new ServiceTracker(context, ProvisioningService.class.getName(),null);
 			provisioning.open();
@@ -122,7 +140,7 @@ public class ProvisioningControl extends DefaultTestBundleControl {
 					//
 					int n = 30;
 					while ( bundle.getState() == Bundle.STARTING && n-->0)
-						Thread.sleep(100);
+						Thread.sleep(TIMEOUT4);
 					
 					//
 					// But now we kill it !
@@ -464,7 +482,7 @@ public class ProvisioningControl extends DefaultTestBundleControl {
 			if ( deadline <= System.currentTimeMillis() )
 				assertEquals(string, bundle.getState(), active );
 			else {
-				Thread.sleep(50);
+				Thread.sleep(TIMEOUT5);
 			}
 		} catch( InterruptedException ie ) {
 			// who cares
@@ -665,7 +683,7 @@ public class ProvisioningControl extends DefaultTestBundleControl {
 	 */
 	Bundle waitForBundle() {
 		try {
-			Bundle bundle = (Bundle) bundles.waitForService(60000);
+			Bundle bundle = (Bundle) bundles.waitForService(TIMEOUT1);
 			return bundle;
 		} catch( InterruptedException e ) {}
 		
@@ -695,7 +713,7 @@ public class ProvisioningControl extends DefaultTestBundleControl {
 	 */	
 	ProvisioningService getProvisioningService() {
 		Object service = null;
-		try { service = provisioning.waitForService(10000); } catch( InterruptedException e) {}
+		try { service = provisioning.waitForService(TIMEOUT2); } catch( InterruptedException e) {}
 		if ( service == null )
 			throw new IllegalStateException( "No Provisioning Service" );
 		
@@ -778,7 +796,7 @@ public class ProvisioningControl extends DefaultTestBundleControl {
 		try {
 			while ( n-- > 0 
 				&& get( ipaFile ) == null )
-				Thread.sleep(100);
+				Thread.sleep(TIMEOUT4);
 		} catch( InterruptedException e ) {}
 		if ( n < 0 )
 			fail("File did not appear in time " + ipaFile );

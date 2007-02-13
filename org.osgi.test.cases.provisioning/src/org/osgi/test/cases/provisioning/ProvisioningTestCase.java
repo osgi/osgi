@@ -47,6 +47,20 @@ public class ProvisioningTestCase extends DefaultTestCase {
 	HttpService		http;
 	ServiceTracker	tracker;
 
+	static long TIMEOUT2 = 10000;
+
+	static {
+		String scalingStr = System.getProperty("org.osgi.test.testcase.scaling");	  
+		if (scalingStr != null) {
+			try {
+				long scale = Long.parseLong(scalingStr);
+				if (scale > 0) {
+					TIMEOUT2 *= scale;
+				}
+			} catch (Exception e) {}
+		}
+	}
+
 	public String getMimeType(String name) {
 		if (name.endsWith(".ipa") || name.endsWith(".jar")
 				|| name.endsWith(".zip"))
@@ -56,11 +70,10 @@ public class ProvisioningTestCase extends DefaultTestCase {
 
 	public URL getResource(String name) {
 		if (name.endsWith("delay.jar"))
-			try {
-				Thread.sleep(10000);
+			try {		
+				Thread.sleep(TIMEOUT2);
 			}
-			catch (InterruptedException e) {
-			}
+			catch (InterruptedException e) {}
 		return super.getResource(name);
 	}
 
