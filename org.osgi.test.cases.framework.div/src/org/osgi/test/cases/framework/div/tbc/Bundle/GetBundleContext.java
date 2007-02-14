@@ -137,7 +137,7 @@ public class GetBundleContext extends Logger {
 			assertNull("BundleContext for fragment bundle must be null", fragment.getBundleContext());
 			
 			host.stop();
-			assertNull("BundleContext for stopped host bundle must not be null", host.getBundleContext());
+			assertNull("BundleContext for stopped host bundle must be null", host.getBundleContext());
 			assertNull("BundleContext for fragment bundle must be null", fragment.getBundleContext());
 		}
 		finally {
