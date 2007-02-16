@@ -65,6 +65,9 @@ public class XRef extends DefaultAdapter {
 	
 	public void visitMethodInsn(int opcode, String owner, String name,
 			String desc) {
+		if ( owner.indexOf("/")<0)
+			return;
+		
 		Method called = new Method(owner.replace('/', '.'), name, desc, currentJar);
 
 		Set set = (Set) targetAPI.get(called);
