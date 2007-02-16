@@ -22,7 +22,7 @@ import java.util.EventListener;
 
 /**
  * A <code>ServiceEvent</code> listener. When a <code>ServiceEvent</code> is
- * fired, it is synchronously delivered to a <code>BundleListener</code>.
+ * fired, it is synchronously delivered to a <code>ServiceListener</code>.
  * 
  * <p>
  * <code>ServiceListener</code> is a listener interface that may be
