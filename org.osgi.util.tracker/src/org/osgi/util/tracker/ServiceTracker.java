@@ -40,14 +40,20 @@ import org.osgi.framework.*;
  * references to the services being tracked. The <code>getService</code> and
  * <code>getServices</code> methods can be called to get the service objects
  * for the tracked service.
+ * <p>
+ * The <code>ServiceTracker</code> class is thread-safe. It does not call a
+ * <code>ServiceTrackerCustomizer</code> object while holding any locks, so
+ * <code>ServiceTrackerCustomizer</code> implementations must be thread-safe.
  * 
  * @version $Revision$
  */
+/* @ThreadSafe */
 public class ServiceTracker implements ServiceTrackerCustomizer {
 	/* set this to true to compile in debug messages */
 	static final boolean				DEBUG			= false;
 	/**
-	 * Bundle context against which this <code>ServiceTracker</code> object is tracking.
+	 * Bundle context against which this <code>ServiceTracker</code> object is
+	 * tracking.
 	 */
 	protected final BundleContext		context;
 	/**
@@ -80,7 +86,7 @@ public class ServiceTracker implements ServiceTrackerCustomizer {
 	 * Tracked services: <code>ServiceReference</code> object -> customized
 	 * Object and <code>ServiceListener</code> object
 	 */
-	private Tracked						tracked;
+	private volatile Tracked			tracked;
 	/**
 	 * Modification count. This field is initialized to zero by open, set to -1
 	 * by close and incremented by modified.
@@ -700,16 +706,17 @@ public class ServiceTracker implements ServiceTrackerCustomizer {
 	 * 
 	 * The tracking count is initialized to 0 when this
 	 * <code>ServiceTracker</code> object is opened. Every time a service is
-	 * added, modified or removed from this <code>ServiceTracker</code> object the
-	 * tracking count is incremented.
+	 * added, modified or removed from this <code>ServiceTracker</code> object
+	 * the tracking count is incremented.
 	 * 
 	 * <p>
 	 * The tracking count can be used to determine if this
-	 * <code>ServiceTracker</code> object has added, modified or removed a service by
-	 * comparing a tracking count value previously collected with the current
-	 * tracking count value. If the value has not changed, then no service has
-	 * been added, modified or removed from this <code>ServiceTracker</code> object
-	 * since the previous tracking count was collected.
+	 * <code>ServiceTracker</code> object has added, modified or removed a
+	 * service by comparing a tracking count value previously collected with the
+	 * current tracking count value. If the value has not changed, then no
+	 * service has been added, modified or removed from this
+	 * <code>ServiceTracker</code> object since the previous tracking count
+	 * was collected.
 	 * 
 	 * @since 1.2
 	 * @return The tracking count for this <code>ServiceTracker</code> object
@@ -754,6 +761,7 @@ public class ServiceTracker implements ServiceTrackerCustomizer {
 	 * implementation of the <code>ServiceTracker</code> class.
 	 * 
 	 */
+	/* @ThreadSafe */
 	class Tracked extends Hashtable implements ServiceListener {
 		static final long			serialVersionUID	= -7420065199791006079L;
 		/**
@@ -767,9 +775,10 @@ public class ServiceTracker implements ServiceTrackerCustomizer {
 		 * 
 		 * Since the ArrayList implementation is not synchronized, all access to
 		 * this list must be protected by the same synchronized object for
-		 * thread safety.
+		 * thread-safety.
 		 */
-		private ArrayList			adding;
+		/* @GuardedBy("this") */
+		private final ArrayList		adding;
 
 		/**
 		 * true if the tracked object is closed.
@@ -793,9 +802,10 @@ public class ServiceTracker implements ServiceTrackerCustomizer {
 		 * 
 		 * Since the LinkedList implementation is not synchronized, all access
 		 * to this list must be protected by the same synchronized object for
-		 * thread safety.
+		 * thread-safety.
 		 */
-		private LinkedList			initial;
+		/* @GuardedBy("this") */
+		private final LinkedList	initial;
 
 		/**
 		 * Tracked constructor.
@@ -817,6 +827,7 @@ public class ServiceTracker implements ServiceTrackerCustomizer {
 		 * 
 		 * @param references The initial list of services to be tracked.
 		 */
+		/* @GuardedBy("this") */
 		protected void setInitialServices(ServiceReference[] references) {
 			if (references == null) {
 				return;
@@ -920,7 +931,7 @@ public class ServiceTracker implements ServiceTrackerCustomizer {
 				case ServiceEvent.REGISTERED :
 				case ServiceEvent.MODIFIED :
 					if (listenerFilter != null) { // constructor supplied
-													// filter
+						// filter
 						track(reference);
 						/*
 						 * If the customizer throws an unchecked exception, it
@@ -959,7 +970,7 @@ public class ServiceTracker implements ServiceTrackerCustomizer {
 		 * 
 		 * @param reference Reference to a service to be tracked.
 		 */
-		protected void track(ServiceReference reference) {
+		private void track(ServiceReference reference) {
 			Object object;
 			synchronized (this) {
 				object = this.get(reference);
@@ -1128,6 +1139,7 @@ public class ServiceTracker implements ServiceTrackerCustomizer {
 	 * 
 	 * @since 1.3
 	 */
+	/* @ThreadSafe */
 	class AllTracked extends Tracked implements AllServiceListener {
 		static final long	serialVersionUID	= 4050764875305137716L;
 
