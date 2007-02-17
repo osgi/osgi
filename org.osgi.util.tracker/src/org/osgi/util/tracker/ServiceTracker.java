@@ -746,6 +746,13 @@ public class ServiceTracker implements ServiceTrackerCustomizer {
 	}
 
 	/**
+	 * Finalize. This method no longer performs any function but it kept to
+	 * maintain binary compatibility with prior versions of this class.
+	 */
+	protected void finalize() throws Throwable {
+	}
+
+	/**
 	 * Inner class to track services. If a <code>ServiceTracker</code> object
 	 * is reused (closed then reopened), then a new Tracked object is used. This
 	 * class is a hashtable mapping <code>ServiceReference</code> object ->
