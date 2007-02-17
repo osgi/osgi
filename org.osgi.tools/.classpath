@@ -11,7 +11,6 @@
 	<classpathentry sourcepath="/osgi.released/osgi.jar" kind="lib" path="/osgi.released/osgi.jar"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/org.osgi.test.tool"/>
 	<classpathentry kind="lib" path="/licensed/jar/bcel.jar"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/org.osgi.tools.btool"/>
 	<classpathentry sourcepath="/licensed/src/asmsrc.zip" kind="lib" path="/licensed/jar/asm-2.2.2.jar"/>
 	<classpathentry kind="output" path="src"/>
 </classpath>
