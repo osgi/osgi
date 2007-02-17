@@ -735,6 +735,7 @@ public class ServiceTracker implements ServiceTrackerCustomizer {
 	 * Tracked is synchronized. We don't want synchronization interactions
 	 * between the ServiceListener thread and the user thread.
 	 */
+	/* @GuardedBy("tracked") */
 	void modified() {
 		trackingCount++; /* increment modification count */
 		cachedReference = null; /* clear cached value */
