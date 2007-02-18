@@ -976,12 +976,15 @@ public interface Bundle {
 	 * Returns an Enumeration of all the paths (<code>String</code> objects)
 	 * to entries within the bundle whose longest sub-path matches the supplied
 	 * path argument. The bundle's classloader is not used to search for
-	 * entries. Only the contents of the bundle is searched. A specified path of
+	 * entries. Only the contents of the bundle is searched. 
+	 * <p>
+	 * The supplied path argument is always relative to the root of the bundle 
+	 * and may begin with a &quot;/&quot;.  A supplied path argument of 
 	 * &quot;/&quot; indicates the root of the bundle.
-	 * 
 	 * <p>
 	 * Returned paths indicating subdirectory paths end with a &quot;/&quot;.
-	 * The returned paths are all relative to the root of the bundle.
+	 * The returned paths are all relative to the root of the bundle and must
+	 * not begin with a &quot;/&quot;.
 	 * 
 	 * @param path The path name for which to return entry paths.
 	 * @return An Enumeration of the entry paths (<code>String</code>
@@ -998,12 +1001,13 @@ public interface Bundle {
 	/**
 	 * Returns a URL to the specified entry in this bundle. The bundle's
 	 * classloader is not used to search for the specified entry. Only the
-	 * contents of the bundle is searched for the specified entry. A specified
-	 * path of &quot;/&quot; indicates the root of the bundle.
+	 * contents of the bundle is searched for the specified entry. 
+	 * <p>
+	 * The supplied path argument is always relative to the root of the bundle 
+	 * and may begin with a &quot;/&quot;.  A supplied path argument of 
+	 * &quot;/&quot; indicates the root of the bundle.
 	 * 
-	 * @param name The name of the entry. See
-	 *        <code>java.lang.ClassLoader.getResource</code> for a description
-	 *        of the format of a resource name.
+	 * @param path The path name of the entry.
 	 * @return A URL to the specified entry, or <code>null</code> if no entry
 	 *         could be found or if the caller does not have the appropriate
 	 *         <code>AdminPermission[this,RESOURCE]</code> and the Java
@@ -1013,7 +1017,7 @@ public interface Bundle {
 	 *         uninstalled.
 	 * @since 1.3
 	 */
-	public URL getEntry(String name);
+	public URL getEntry(String path);
 
 	/**
 	 * Returns the time when this bundle was last modified. A bundle is
@@ -1065,9 +1069,10 @@ public interface Bundle {
 	 * 	return (URL) e.nextElement();
 	 * </pre>
 	 * 
-	 * @param path The path name in which to look. A specified path of
-	 *        &quot;/&quot; indicates the root of the bundle. Path is relative
-	 *        to the root of the bundle and must not be null.
+	 * @param path The path name in which to look.  The path is always 
+	 *       relative to the root of the bundle and may begin with a &quot;/&quot;.  
+	 *       A supplied path argument of &quot;/&quot; indicates the root of 
+	 *       the bundle.
 	 * @param filePattern The file name pattern for selecting entries in the
 	 *        specified path. The pattern is only matched against the last
 	 *        element of the entry path and it supports substring matching, as
