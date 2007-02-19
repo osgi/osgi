@@ -28,8 +28,10 @@
 	</target>
 
 	<target name="ees" depends="init">
-		<subant target="publish" inheritAll="false" buildpath="../ee.minimum" />
-		<subant target="publish" inheritAll="false" buildpath="../ee.foundation" />
+		<subant target="publish" inheritAll="false">
+			<dirset dir=".." includes="${ees}"/>
+		</subant>
+
 		<java classname="org.osgi.tools.jar2xml.JAR2XML" classpath="../org.osgi.tools/osgi.tools.jar" fork="true" output="ee.xml">
 			<arg line="-tagged minimum ${workspace}/ee.minimum/ee.minimum.jar" />
 			<arg line="-tagged foundation ${workspace}/ee.foundation/ee.foundation.jar" />
