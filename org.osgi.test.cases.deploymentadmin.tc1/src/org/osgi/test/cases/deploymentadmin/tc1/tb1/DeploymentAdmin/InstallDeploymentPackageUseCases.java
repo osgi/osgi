@@ -96,6 +96,7 @@ public class InstallDeploymentPackageUseCases implements TestInterface {
             tbc.setDeploymentAdminPermission(DeploymentConstants.DEPLOYMENT_PACKAGE_NAME_ALL, DeploymentConstants.ALL_PERMISSION);
             deploymentEventHandler = tbc.getDeploymentEventHandler();
         } catch (Exception e) {
+            e.printStackTrace();
             tbc.fail("Failed to set Permission necessary for testing installDeploymentPackage");
         }
     }
@@ -113,14 +114,17 @@ public class InstallDeploymentPackageUseCases implements TestInterface {
 			
             deploymentEventHandler.reset();
             deploymentEventHandler.setVerifying(true);
+			dp = tbc.installDeploymentPackage(tbc.getWebServer() + testDP.getFilename());
 			synchronized (tbc) {
-				dp = tbc.installDeploymentPackage(tbc.getWebServer() + testDP.getFilename());
-				tbc.wait(DeploymentConstants.TIMEOUT);
+        if(!deploymentEventHandler.isInstall()){
+				  tbc.wait(DeploymentConstants.TIMEOUT);
+        }
 			}
             String prop = (String)findProperty("deploymentpackage.name");
 			tbc.assertTrue("An install event occured", deploymentEventHandler.isInstall());
 			tbc.assertEquals("The installed deployment package is " + testDP.getName(), testDP.getName(), prop);
 		} catch (Exception e) {
+      e.printStackTrace();
 			tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }));
 		} finally {
 			tbc.uninstall(dp);
@@ -144,10 +148,12 @@ public class InstallDeploymentPackageUseCases implements TestInterface {
             deploymentEventHandler.reset();
             deploymentEventHandler.setHandlingUninstall(true);
             deploymentEventHandler.setVerifying(true);
+      tbc.uninstall(dp);
 			synchronized (tbc) {
-				tbc.uninstall(dp);
 				// waiting for uninstall event
-				tbc.wait(DeploymentConstants.TIMEOUT);
+        if(!deploymentEventHandler.isUninstall()){
+				  tbc.wait(DeploymentConstants.TIMEOUT);
+        }
 			}
 
 			String prop = (String)findProperty("deploymentpackage.name");
@@ -155,6 +161,7 @@ public class InstallDeploymentPackageUseCases implements TestInterface {
 			tbc.assertEquals("The installed deployment package is " + testDP.getName(), testDP.getName(), prop);
 			
 		} catch (Exception e) {
+      e.printStackTrace();
 			tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }));
 		} finally {
 			deploymentEventHandler.reset();
@@ -176,9 +183,11 @@ public class InstallDeploymentPackageUseCases implements TestInterface {
             deploymentEventHandler.reset();
             deploymentEventHandler.setHandlingComplete(true);
             deploymentEventHandler.setVerifying(true);
+      dp = tbc.installDeploymentPackage(tbc.getWebServer() + testDP.getFilename());
 			synchronized (tbc) {
-				dp = tbc.installDeploymentPackage(tbc.getWebServer() + testDP.getFilename());
-				tbc.wait(DeploymentConstants.TIMEOUT);
+        if(!deploymentEventHandler.isComplete()){
+				  tbc.wait(DeploymentConstants.TIMEOUT);
+        }
 			}
 			
 			String dpNameProp = (String)findProperty("deploymentpackage.name");
@@ -188,6 +197,7 @@ public class InstallDeploymentPackageUseCases implements TestInterface {
 			tbc.assertTrue("The installation of deployment package was successfull ", successProp.booleanValue());
 			
 		} catch (Exception e) {
+      e.printStackTrace();
 			tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }));
 		} finally {
 			tbc.uninstall(dp);
@@ -212,9 +222,11 @@ public class InstallDeploymentPackageUseCases implements TestInterface {
             deploymentEventHandler.setHandlingComplete(true);
             deploymentEventHandler.setHandlingUninstall(true);
             deploymentEventHandler.setVerifying(true);
+			tbc.uninstall(dp);
 			synchronized (tbc) {
-				tbc.uninstall(dp);
-				tbc.wait(DeploymentConstants.TIMEOUT);
+        if(!deploymentEventHandler.isComplete()){
+  				tbc.wait(DeploymentConstants.TIMEOUT);
+        }
 			}
 			
 			String dpNameProp = (String) findProperty("deploymentpackage.name");
@@ -224,6 +236,7 @@ public class InstallDeploymentPackageUseCases implements TestInterface {
 			tbc.assertTrue("The installation of deployment package was successfull ", successProp.booleanValue());
 
 		} catch (Exception e) {
+      e.printStackTrace();
 			tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }));
 		} finally {
 			deploymentEventHandler.reset();
@@ -250,6 +263,7 @@ public class InstallDeploymentPackageUseCases implements TestInterface {
 			tbc.assertTrue("Deployment Admin correctly set osgi-dp in location:", location.startsWith(DeploymentConstants.OSGI_DP_LOCATION));
 			tbc.assertEquals("Deployment Admin correctly set bundle symbolic name in location:", bsn, location.substring(location.indexOf(':')+1));
 		} catch (Exception e) {
+      e.printStackTrace();
 			tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }));
 		} finally {
 			tbc.uninstall(dp);
@@ -272,6 +286,7 @@ public class InstallDeploymentPackageUseCases implements TestInterface {
 		} catch (DeploymentException e) {
 			tbc.pass("Correctly failed to install a deployment package with wrong extension");
 		} catch (Exception e) {
+      e.printStackTrace();
 			tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }));
 		} finally {
 			tbc.uninstall(dp);
@@ -294,6 +309,7 @@ public class InstallDeploymentPackageUseCases implements TestInterface {
 		} catch (DeploymentException e) {
 			tbc.assertEquals("Correctly failed to install untrusted deployment package", DeploymentException.CODE_SIGNING_ERROR, e.getCode());
 		} catch (Exception e) {
+      e.printStackTrace();
 			tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }));
 		} finally {
 			tbc.uninstall(dp);
@@ -316,6 +332,7 @@ public class InstallDeploymentPackageUseCases implements TestInterface {
 		} catch (DeploymentException e) {
 			tbc.pass("Correctly failed to install a deployment package with a wrong path name to a bundle in the jar file.");
 		} catch (Exception e) {
+      e.printStackTrace();
 			tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }));
 		} finally {
 			tbc.uninstall(dp);
@@ -373,6 +390,7 @@ public class InstallDeploymentPackageUseCases implements TestInterface {
             }
 			tbc.assertTrue("The two testing bundles in the deployment package were stopped", (count==-1));
 		} catch (Exception e) {
+      e.printStackTrace();
 			tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }));
 		} finally {
             listener.reset();
@@ -394,6 +412,7 @@ public class InstallDeploymentPackageUseCases implements TestInterface {
 			dp.uninstall();
 			tbc.pass("Exception thrown during stopping of a bundle was correctly ignored");
 		} catch (Exception e) {
+      e.printStackTrace();
 			tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }));
 		}
 	}
@@ -414,6 +433,7 @@ public class InstallDeploymentPackageUseCases implements TestInterface {
         } catch (DeploymentException e) {
             tbc.pass("DeploymentException correctly thrown");
         } catch (Exception e) {
+            e.printStackTrace();
             tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }));
         } finally {
             tbc.uninstall(dp);
@@ -449,9 +469,11 @@ public class InstallDeploymentPackageUseCases implements TestInterface {
                 tbc.assertEquals("The installed deployment package is " + testDP.getName(), testDP.getName(), dpNameProp);
                 tbc.assertTrue("The installation of deployment package was NOT successfull ", !successProp.booleanValue());
             } catch (Exception ex) {
+                e.printStackTrace();
                 tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[]{ex.getClass().getName()}));
             }
         } catch (Exception e) {
+            e.printStackTrace();
             tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }));
         } finally {
             tbc.uninstall(dp);
@@ -496,11 +518,13 @@ public class InstallDeploymentPackageUseCases implements TestInterface {
 				tbc.assertTrue("The uninstallation of deployment package was NOT successfull ",
 								!successProp.booleanValue());
 			} catch (Exception ex) {
+        e.printStackTrace();
 				tbc.fail(MessagesConstants.getMessage(
 						MessagesConstants.UNEXPECTED_EXCEPTION,
 						new String[] { ex.getClass().getName() }));
 			}
         } catch (Exception e) {
+            e.printStackTrace();
             tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }));
         } finally {
             tbc.uninstall(dp);
@@ -524,6 +548,7 @@ public class InstallDeploymentPackageUseCases implements TestInterface {
             dp = tbc.installDeploymentPackage(tbc.getWebServer() + testDP.getFilename());
             tbc.pass("No exception is thrown during the installation of a DP with strange path to bundles");
         } catch (Exception e) {
+            e.printStackTrace();
             tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }));
         } finally {
             tbc.uninstall(dp);
@@ -546,6 +571,7 @@ public class InstallDeploymentPackageUseCases implements TestInterface {
         } catch (DeploymentException e) {
             tbc.pass("DeploymentException correctly thrown");
         } catch (Exception e) {
+            e.printStackTrace();
             tbc.fail(MessagesConstants.getMessage(
                 MessagesConstants.UNEXPECTED_EXCEPTION, new String[]{e.getClass().getName()}));
         } finally {
