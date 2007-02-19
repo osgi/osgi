@@ -76,7 +76,7 @@ public class IMEICondition {
 			if (c<'0'||c>'9') throw new IllegalArgumentException("not a valid imei: "+imei);
 		}
 		if (IMEICondition.imei==null) {
-			System.err.println("The OSGI Reference Implementation of org.osgi.util.gsm.IMEICondition ");
+			System.err.println("The OSGi Reference Implementation of org.osgi.util.gsm.IMEICondition ");
 			System.err.println("needs the system property "+ORG_OSGI_UTIL_GSM_IMEI+" set.");
 			return Condition.FALSE;
 		}
