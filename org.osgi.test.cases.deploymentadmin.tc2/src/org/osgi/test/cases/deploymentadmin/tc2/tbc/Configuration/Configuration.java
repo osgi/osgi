@@ -89,6 +89,17 @@ public class Configuration {
 					new String[] { "Deployment Package" }), dp);
 			return dp;
 		} catch (Exception e) {
+      
+      e.printStackTrace();
+      if (e instanceof DeploymentException) {
+        if (((DeploymentException)e).getCause() != null) {
+          System.out.println("The casue is: ");
+          ((DeploymentException)e).getCause().printStackTrace();
+        } else {
+          System.out.println("The cause is null");
+        }
+      }
+      
 			tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { 
 					e.getClass().getName() }));
 		} finally {
@@ -109,9 +120,16 @@ public class Configuration {
 	private void testConfiguration001() {
 		tbc.log("#testConfiguration001");
 		DeploymentPackage dp = null;
+    Dictionary properties = null;
 		try {
 			dp = installAutoConfigDP();
-			Dictionary properties = tbc.getManagedService().getProperties();
+      TestingManagedService msf = tbc.getManagedService();
+      if(!msf.isUpdated()){
+        for(int i=0;i<50&!msf.isUpdated();i++){
+          Thread.sleep(100);
+        }
+      }
+			properties = msf.getProperties();
 			tbc.assertTrue("The Resource Processor updated the same Dictionary properties as received by the ManagedService",
 					properties.get(TestingManagedService.ATTRIBUTE_A).equals(TestingManagedService.ATTRIBUTE_A_VALUE) &&
 					properties.get(TestingManagedService.ATTRIBUTE_B).equals(TestingManagedService.ATTRIBUTE_B_VALUE) &&
@@ -120,6 +138,7 @@ public class Configuration {
 		} catch (InvalidSyntaxException e) {
 			tbc.fail("InvalidSyntaxException: Failed to get service");
 		} catch (Exception e) {
+      e.printStackTrace();
 			tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { 
 					e.getClass().getName() }));
 		} finally {
@@ -138,8 +157,15 @@ public class Configuration {
 		tbc.log("#testConfiguration002");
 		DeploymentPackage dp = null;
 		try {
-			dp = installAutoConfigDP();
-			Dictionary properties = tbc.getManagedServiceFactory().getProperties();
+			Dictionary properties=null;
+      dp = installAutoConfigDP();
+      TestingManagedServiceFactory msf = tbc.getManagedServiceFactory();
+      if(!msf.isUpdated()){
+        for(int i=0;i<50&!msf.isUpdated();i++){
+          Thread.sleep(100);
+        }
+      }
+			properties = msf.getProperties();
 			//We check only our properties because there are some automatic properties added by the Configuration Admin
 			tbc.assertTrue("The Resource Processor updated the same Dictionary properties as received by the ManagedServiceFactory",
 					properties.get(TestingManagedServiceFactory.ATTRIBUTE_A).equals(TestingManagedServiceFactory.ATTRIBUTE_A_VALUE) &&
@@ -150,6 +176,7 @@ public class Configuration {
 		} catch (InvalidSyntaxException e) {
 			tbc.fail("InvalidSyntaxException: Failed to get service");
 		} catch (Exception e) {
+      e.printStackTrace();
 			tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { 
 					e.getClass().getName() }));
 		} finally {
@@ -174,6 +201,7 @@ public class Configuration {
 		} catch (DeploymentException e) {
 			tbc.pass("A DeploymentException was correctly thrown if the Autoconf Resource processor does not have ConfigurationPermission[*,CONFIGURE]. Message: " + e.getMessage());
 		} catch (Exception e) {
+      e.printStackTrace();
 			tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { 
 					e.getClass().getName() }));
 		} finally {
@@ -197,6 +225,7 @@ public class Configuration {
 			dp = tbc.installDeploymentPackage(tbc.getWebServer() + testDP.getFilename());
 			tbc.pass("A Deployment Package was installed using only ConfigurationPermission[*,CONFIGURE].");
 		} catch (Exception e) {
+      e.printStackTrace();
 			tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { 
 					e.getClass().getName() }));
 		} finally {
