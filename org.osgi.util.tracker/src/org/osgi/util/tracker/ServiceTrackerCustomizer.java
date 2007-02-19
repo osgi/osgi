@@ -42,12 +42,13 @@ import org.osgi.framework.ServiceReference;
  * 
  * <p>
  * The <code>ServiceTracker</code> class is thread-safe. It does not call a
- * <code>ServiceTrackerCustomizer</code> object while holding any locks, so
- * <code>ServiceTrackerCustomizer</code> implementations must be thread-safe.
+ * <code>ServiceTrackerCustomizer</code> object while holding any locks.
+ * <code>ServiceTrackerCustomizer</code> implementations must also be
+ * thread-safe.
  * 
+ * @ThreadSafe
  * @version $Revision$
  */
-/* @ThreadSafe */
 public interface ServiceTrackerCustomizer {
 	/**
 	 * A service is being added to the <code>ServiceTracker</code> object.

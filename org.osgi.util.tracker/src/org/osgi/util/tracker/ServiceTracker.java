@@ -42,12 +42,13 @@ import org.osgi.framework.*;
  * for the tracked service.
  * <p>
  * The <code>ServiceTracker</code> class is thread-safe. It does not call a
- * <code>ServiceTrackerCustomizer</code> object while holding any locks, so
- * <code>ServiceTrackerCustomizer</code> implementations must be thread-safe.
+ * <code>ServiceTrackerCustomizer</code> object while holding any locks.
+ * <code>ServiceTrackerCustomizer</code> implementations must also be
+ * thread-safe.
  * 
+ * @ThreadSafe
  * @version $Revision$
  */
-/* @ThreadSafe */
 public class ServiceTracker implements ServiceTrackerCustomizer {
 	/* set this to true to compile in debug messages */
 	static final boolean				DEBUG			= false;
@@ -729,13 +730,14 @@ public class ServiceTracker implements ServiceTrackerCustomizer {
 	/**
 	 * Called by the Tracked object whenever the set of tracked services is
 	 * modified. Increments the tracking count and clears the cache.
+	 * 
+	 * @GuardedBy tracked
 	 */
 	/*
 	 * This method must not be synchronized since it is called by Tracked while
 	 * Tracked is synchronized. We don't want synchronization interactions
 	 * between the ServiceListener thread and the user thread.
 	 */
-	/* @GuardedBy("tracked") */
 	void modified() {
 		trackingCount++; /* increment modification count */
 		cachedReference = null; /* clear cached value */
@@ -754,8 +756,8 @@ public class ServiceTracker implements ServiceTrackerCustomizer {
 	 * tracked services. This is not a public class. It is only for use by the
 	 * implementation of the <code>ServiceTracker</code> class.
 	 * 
+	 * @ThreadSafe
 	 */
-	/* @ThreadSafe */
 	class Tracked extends Hashtable implements ServiceListener {
 		static final long			serialVersionUID	= -7420065199791006079L;
 		/**
@@ -770,8 +772,9 @@ public class ServiceTracker implements ServiceTrackerCustomizer {
 		 * Since the ArrayList implementation is not synchronized, all access to
 		 * this list must be protected by the same synchronized object for
 		 * thread-safety.
+		 * 
+		 * @GuardedBy this
 		 */
-		/* @GuardedBy("this") */
 		private final ArrayList		adding;
 
 		/**
@@ -797,8 +800,9 @@ public class ServiceTracker implements ServiceTrackerCustomizer {
 		 * Since the LinkedList implementation is not synchronized, all access
 		 * to this list must be protected by the same synchronized object for
 		 * thread-safety.
+		 * 
+		 * @GuardedBy this
 		 */
-		/* @GuardedBy("this") */
 		private final LinkedList	initial;
 
 		/**
@@ -820,8 +824,8 @@ public class ServiceTracker implements ServiceTrackerCustomizer {
 		 * addServiceListener call.
 		 * 
 		 * @param references The initial list of services to be tracked.
+		 * @GuardedBy this
 		 */
-		/* @GuardedBy("this") */
 		protected void setInitialServices(ServiceReference[] references) {
 			if (references == null) {
 				return;
@@ -1132,8 +1136,8 @@ public class ServiceTracker implements ServiceTrackerCustomizer {
 	 * This class is used by the ServiceTracker if open is called with true.
 	 * 
 	 * @since 1.3
+	 * @ThreadSafe
 	 */
-	/* @ThreadSafe */
 	class AllTracked extends Tracked implements AllServiceListener {
 		static final long	serialVersionUID	= 4050764875305137716L;
 
