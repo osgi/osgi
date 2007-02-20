@@ -9,7 +9,7 @@ import java.util.*;
  * framework.
  */
 
-public abstract class Assert {
+public class Assert {
 
     /**
 	 * Passes a test. Default implementation does nothing at all,
@@ -102,10 +102,35 @@ public abstract class Assert {
     }
 
     /**
+     * Asserts that two objects are equal. If they are not
+     * an AssertionFailedError is thrown.
+     */
+    public void assertEquals(String message, Comparator comparator, Object expected, Object actual)
+    {
+    	if (objectEquals(comparator, expected, actual))
+    	{
+    		passNotEquals(message, expected, actual);
+    	}
+    	else
+    	{
+    		failNotEquals(message, expected, actual);
+    	}
+    }
+    
+    /**
+     * Compare two objects for equality. This method calls Arrays.equals if the object types are arrays.
+     *
+     */
+    public boolean objectEquals(Object expected, Object actual)
+    {
+    	return objectEquals(null, expected, actual);
+    }
+    
+    /**
 	 * Compare two objects for equality. This method calls Arrays.equals if the object types are arrays.
 	 *
 	 */
-    public boolean objectEquals(Object expected, Object actual)
+    public boolean objectEquals(Comparator comparator, Object expected, Object actual)
     {
         if (expected == actual)
         {
@@ -119,75 +144,82 @@ public abstract class Assert {
 
         if (expected.equals(actual))
         {
-            return true;
+        	return true;
         }
 
-		if ( expected instanceof Vector && actual instanceof Vector )
-			return objectEquals((Vector)expected, (Vector)actual );
+		if ( expected instanceof List && actual instanceof List )
+			return objectEquals( comparator, (List)expected, (List)actual );
 		
 		if ( expected instanceof Dictionary && actual instanceof Dictionary )
-			return objectEquals((Dictionary)expected, (Dictionary)actual );
+			return objectEquals( comparator, (Dictionary)expected, (Dictionary)actual );
 		
-		Class clazz = expected.getClass();
-
-        if (clazz.isArray())
-        {
-            Class type = clazz.getComponentType();
-
-            try
-            {
-                if (type.isPrimitive())
-                {
-                    if (type.equals(Integer.TYPE))
-                    {
-                        return Arrays.equals((int[])expected, (int[])actual);
-                    }
-                    else
-                    if (type.equals(Long.TYPE))
-                    {
-                        return Arrays.equals((long[])expected, (long[])actual);
-                    }
-                    else
-                    if (type.equals(Byte.TYPE))
-                    {
-                        return Arrays.equals((byte[])expected, (byte[])actual);
-                    }
-                    else
-                    if (type.equals(Short.TYPE))
-                    {
-                        return Arrays.equals((short[])expected, (short[])actual);
-                    }
-                    else
-                    if (type.equals(Character.TYPE))
-                    {
-                        return Arrays.equals((char[])expected, (char[])actual);
-                    }
-                    else
-                    if (type.equals(Float.TYPE))
-                    {
-                        return Arrays.equals((float[])expected, (float[])actual);
-                    }
-                    else
-                    if (type.equals(Double.TYPE))
-                    {
-                        return Arrays.equals((double[])expected, (double[])actual);
-                    }
-                    else
-                    if (type.equals(Boolean.TYPE))
-                    {
-                        return Arrays.equals((boolean[])expected, (boolean[])actual);
-                    }
-                }
-                else    /* non-primitive array object */
-                {
-                    return Arrays.equals((Object[])expected, (Object[])actual);
-                }
-            }
-            catch (ClassCastException e)
-            {
-                return false;
-            }
-        }
+		try
+		{
+			Class clazz = expected.getClass();
+			if (clazz.isArray())
+			{
+				Class type = clazz.getComponentType();
+				
+				if (type.isPrimitive())
+				{
+					if (type.equals(Integer.TYPE))
+					{
+						return Arrays.equals((int[])expected, (int[])actual);
+					}
+					else
+						if (type.equals(Long.TYPE))
+						{
+							return Arrays.equals((long[])expected, (long[])actual);
+						}
+						else
+							if (type.equals(Byte.TYPE))
+							{
+								return Arrays.equals((byte[])expected, (byte[])actual);
+							}
+							else
+								if (type.equals(Short.TYPE))
+								{
+									return Arrays.equals((short[])expected, (short[])actual);
+								}
+								else
+									if (type.equals(Character.TYPE))
+									{
+										return Arrays.equals((char[])expected, (char[])actual);
+									}
+									else
+										if (type.equals(Float.TYPE))
+										{
+											return Arrays.equals((float[])expected, (float[])actual);
+										}
+										else
+											if (type.equals(Double.TYPE))
+											{
+												return Arrays.equals((double[])expected, (double[])actual);
+											}
+											else
+												if (type.equals(Boolean.TYPE))
+												{
+													return Arrays.equals((boolean[])expected, (boolean[])actual);
+												}
+				}
+				else    /* non-primitive array object */
+				{
+					return Arrays.equals((Object[])expected, (Object[])actual);
+				}
+			}
+			
+			/* well it did not match any of the above types
+			 * do we have a comparator to compare them?
+			 */
+			if (comparator != null) {
+				if (comparator.compare(expected, actual) == 0) {
+					return true;
+				}
+			}
+		}
+		catch (ClassCastException e)
+		{
+		}
 
         return false;
     }
@@ -397,19 +429,19 @@ public abstract class Assert {
 	
 	
 	
-	boolean objectEquals( Vector expected, Vector actual ) {
+	boolean objectEquals(Comparator comparator, List expected, List actual ) {
 		if ( expected.size() != actual.size() )
 			return false;
 		
 		boolean result = true;
 		
 		for ( int i=0; result && i<expected.size(); i++ )
-			result = objectEquals( expected.elementAt(i), actual.elementAt(i) );
+			result = objectEquals( comparator,  expected.get(i), actual.get(i) );
 			
 		return result;
 	}
 		
-	boolean objectEquals( Dictionary expected, Dictionary actual ) {
+	boolean objectEquals(Comparator comparator, Dictionary expected, Dictionary actual ) {
 		if ( expected.size() != actual.size() )
 			return false;
 		
@@ -419,7 +451,7 @@ public abstract class Assert {
 			Object key = e.nextElement();
 			Object expectedValue = expected.get(key);
 			Object actualValue = actual.get(key);
-			result = objectEquals( expectedValue, actualValue );
+			result = objectEquals( comparator, expectedValue, actualValue );
 		}
 		return result;
 	}
