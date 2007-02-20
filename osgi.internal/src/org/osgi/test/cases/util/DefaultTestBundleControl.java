@@ -269,29 +269,31 @@ public abstract class DefaultTestBundleControl
                             Method     m = getClass().getDeclaredMethod(methods[i], new Class[0]);
 
                             m.invoke(this, new Object[0]);
-                            logMethodEnd(methods[i]);
-                            clearState();
-
-                            /* Clean up all install bundles, gotten services and
-							registered services during the method call. */
-                            registry.cleanAll();
-                        	progress(100);
-                        }
+                       }
                        catch(InvocationTargetException ite) {
 							Throwable t = ite.getTargetException();
 							if ( t instanceof AssertionFailedError ) {
 								AssertionFailedError assertion = (AssertionFailedError) t;
 								log( methods[i], assertion.getMessage() );
 							} else {
-	                            log("During execution of " + methods[i], ite.getTargetException());
-	                            ite.getTargetException().printStackTrace();
-	                            cont = getContinuationAfterError(ite.getTargetException());
+	                            log("During execution of " + methods[i], t);
+	                            t.printStackTrace();
+	                            cont = getContinuationAfterError(t);
 							}
                         }
                         catch(Throwable e) {
                             log("During execution of " + methods[i], e);
                             e.printStackTrace();
                             cont = getContinuationAfterError(e);
+                        }
+                        finally {
+                        	logMethodEnd(methods[i]);
+                        	clearState();
+                        	
+                        	/* Clean up all install bundles, gotten services and
+							registered services during the method call. */
+                        	registry.cleanAll();
+                        	progress(100);
                         }
                     }
 
