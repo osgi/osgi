@@ -110,25 +110,22 @@ public class StartLevelControl extends DefaultTestBundleControl {
     sl_10 = min + 10;
     sl_15 = min + 15;
     sl_20 = min + 20;
-
-    fec = new FrameworkEventCollector(FrameworkEvent.STARTLEVEL_CHANGED);
-    getContext().addFrameworkListener(fec);
-    bec = new BundleEventCollector(BundleEvent.STARTED | BundleEvent.STOPPED);
-    getContext().addBundleListener(bec);
   }
 
   public void unprepare() throws Exception {
-	  getContext().removeFrameworkListener(fec);
-	  getContext().removeBundleListener(bec);
-
 	  sl.setInitialBundleStartLevel(ibsl);
 	  sl.setStartLevel(origSl);
   }
   public void setState() throws Exception {
-	  fec.clear();
-	  bec.clear();
+	  fec = new FrameworkEventCollector(FrameworkEvent.STARTLEVEL_CHANGED);
+	  getContext().addFrameworkListener(fec);
+	  bec = new BundleEventCollector(BundleEvent.STARTED | BundleEvent.STOPPED);
+	  getContext().addBundleListener(bec);
   }
-  public void clearState() throws Exception {}
+  public void clearState() throws Exception {
+	  getContext().removeFrameworkListener(fec);
+	  getContext().removeBundleListener(bec);
+  }
 
   public void testInitialBundleStartLevel() throws Exception
   {
