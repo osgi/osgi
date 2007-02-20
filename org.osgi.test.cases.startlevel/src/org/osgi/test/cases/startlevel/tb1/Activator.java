@@ -26,32 +26,16 @@
 
 package org.osgi.test.cases.startlevel.tb1;
 
-import org.osgi.framework.*;
-import org.osgi.test.service.*;
+import org.osgi.framework.BundleActivator;
+import org.osgi.framework.BundleContext;
 
 public class Activator implements BundleActivator
 {
-
-  ServiceReference loggerR;
-  TestLogger logger;
-
   public void start(BundleContext bc) 
   {
-    loggerR = bc.getServiceReference(TestLogger.class.getName());
-    if (loggerR == null) {
-      System.out.println("tb1: failed to get TestLogger service reference");
-      return;
-    }
-    logger = (TestLogger)bc.getService(loggerR);
-    if (logger == null) {
-      System.out.println("tb1: failed to get TestLogger service");
-      return;
-    }
-    logger.log("tb1: started");
   }
 
   public void stop(BundleContext bc)
   {
-    logger.log("tb1: stopped");
   }
 }

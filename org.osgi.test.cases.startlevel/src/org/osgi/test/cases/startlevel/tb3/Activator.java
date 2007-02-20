@@ -53,25 +53,22 @@ public class Activator implements BundleActivator
 
     slR = bc.getServiceReference(StartLevel.class.getName());
     if (slR == null) {
-      System.out.println("tb3: failed to get StartLevel servce reference");
+      logger.log("tb3: failed to get StartLevel servce reference");
       return;
     }
 
     sl = (StartLevel)bc.getService(slR);
     if (sl == null) {
-      System.out.println("tb3: failed to get StartLevel servce reference");
+    	logger.log("tb3: failed to get StartLevel servce reference");
       return;
     }
 
     Bundle b = bc.getBundle();
     int bundleStartLevel = sl.getBundleStartLevel(b);
     sl.setBundleStartLevel(b, bundleStartLevel + 10);
-
-    logger.log("tb3: started");
   }
 
   public void stop(BundleContext bc)
   {
-    logger.log("tb3: stopped");
   }
 }
