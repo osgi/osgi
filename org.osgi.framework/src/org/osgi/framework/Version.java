@@ -1,7 +1,7 @@
 /*
  * $Header$
  * 
- * Copyright (c) OSGi Alliance (2004, 2006). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2004, 2007). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -37,8 +37,9 @@ import java.util.StringTokenizer;
  * <p>
  * <code>Version</code> objects are immutable.
  * 
- * @version $Revision$
  * @since 1.3
+ * @Immutable
+ * @version $Revision$
  */
 
 public class Version implements Comparable {

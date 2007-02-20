@@ -19,15 +19,15 @@
 package org.osgi.framework;
 
 /**
- * Defines standard names for the OSGi environment property, service property,
- * and Manifest header attribute keys.
+ * Defines standard names for the OSGi environment system properties, service
+ * properties, and Manifest header attribute keys.
  * 
  * <p>
  * The values associated with these keys are of type
  * <code>java.lang.String</code>, unless otherwise indicated.
  * 
- * @version $Revision$
  * @since 1.1
+ * @version $Revision$
  */
 
 public interface Constants {

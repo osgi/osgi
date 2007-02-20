@@ -1,7 +1,7 @@
 /*
  * $Header$
  *
- * Copyright (c) OSGi Alliance (2004, 2006). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2004, 2007). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -44,6 +44,7 @@ import java.util.Hashtable;
  * The <code>PROVIDE</code> action implies the <code>REQUIRE</code> action.
  * 
  * @since 1.3
+ * @version $Revision$
  */
 
 public final class BundlePermission extends BasicPermission {

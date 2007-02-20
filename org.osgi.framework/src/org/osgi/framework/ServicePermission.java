@@ -1,7 +1,7 @@
 /*
  * $Header$
  * 
- * Copyright (c) OSGi Alliance (2000, 2006). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2000, 2007). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,7 +24,7 @@ import java.util.Enumeration;
 import java.util.Hashtable;
 
 /**
- * Indicates a bundle's authority to register or get a service.
+ * A bundle's authority to register or get a service.
  * <ul>
  * <li>The <code>ServicePermission.REGISTER</code> action allows a bundle to
  * register a service on the specified names.

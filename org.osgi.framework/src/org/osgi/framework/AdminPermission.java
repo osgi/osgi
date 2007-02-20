@@ -1,7 +1,7 @@
 /*
  * $Header$
  * 
- * Copyright (c) OSGi Alliance (2000, 2006). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2000, 2007). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,42 +23,42 @@ import java.lang.reflect.InvocationTargetException;
 import java.security.*;
 
 /**
- * Indicates the caller's authority to perform specific privileged
- * administrative operations on or to get sensitive information about a bundle.
- * The actions for this permission are:
+ * A bundle's authority to perform specific privileged administrative operations
+ * on or to get sensitive information about a bundle. The actions for this
+ * permission are:
  * 
  * <pre>
- *  Action               Methods
- *  class                Bundle.loadClass
- *  execute              Bundle.start
- *                       Bundle.stop
- *                       StartLevel.setBundleStartLevel
- *  extensionLifecycle   BundleContext.installBundle for extension bundles
- *                       Bundle.update for extension bundles
- *                       Bundle.uninstall for extension bundles
- *  lifecycle            BundleContext.installBundle
- *                       Bundle.update
- *                       Bundle.uninstall
- *  listener             BundleContext.addBundleListener for SynchronousBundleListener
- *                       BundleContext.removeBundleListener for SynchronousBundleListener
- *  metadata             Bundle.getHeaders
- *                       Bundle.getLocation
- *  resolve              PackageAdmin.refreshPackages
- *                       PackageAdmin.resolveBundles
- *  resource             Bundle.getResource
- *                       Bundle.getResources
- *                       Bundle.getEntry
- *                       Bundle.getEntryPaths
- *                       Bundle.findEntries
- *                       Bundle resource/entry URL creation
- *  startlevel           StartLevel.setStartLevel
- *                       StartLevel.setInitialBundleStartLevel 
- *  context              Bundle.getBundleContext                     
- *                       
+ *   Action               Methods
+ *   class                Bundle.loadClass
+ *   execute              Bundle.start
+ *                        Bundle.stop
+ *                        StartLevel.setBundleStartLevel
+ *   extensionLifecycle   BundleContext.installBundle for extension bundles
+ *                        Bundle.update for extension bundles
+ *                        Bundle.uninstall for extension bundles
+ *   lifecycle            BundleContext.installBundle
+ *                        Bundle.update
+ *                        Bundle.uninstall
+ *   listener             BundleContext.addBundleListener for SynchronousBundleListener
+ *                        BundleContext.removeBundleListener for SynchronousBundleListener
+ *   metadata             Bundle.getHeaders
+ *                        Bundle.getLocation
+ *   resolve              PackageAdmin.refreshPackages
+ *                        PackageAdmin.resolveBundles
+ *   resource             Bundle.getResource
+ *                        Bundle.getResources
+ *                        Bundle.getEntry
+ *                        Bundle.getEntryPaths
+ *                        Bundle.findEntries
+ *                        Bundle resource/entry URL creation
+ *   startlevel           StartLevel.setStartLevel
+ *                        StartLevel.setInitialBundleStartLevel 
+ *   context              Bundle.getBundleContext                     
+ *                        
  * </pre>
  * 
  * <p>
- * The special action "*" will represent all actions.
+ * The special action &quot;*&quot; will represent all actions.
  * <p>
  * The name of this permission is a filter expression. The filter gives access
  * to the following parameters:

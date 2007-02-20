@@ -42,10 +42,10 @@ package org.osgi.framework;
  * <code>ServiceReference</code> objects associated with different
  * <code>ServiceRegistration</code> objects are not equal.
  * 
- * @version $Revision$
  * @see BundleContext#getServiceReference
  * @see BundleContext#getServiceReferences
  * @see BundleContext#getService
+ * @version $Revision$
  */
 
 public interface ServiceReference extends Comparable {

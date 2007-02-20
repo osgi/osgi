@@ -1,7 +1,7 @@
 /*
  * $Header$
  * 
- * Copyright (c) OSGi Alliance (2000, 2006). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2000, 2007). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -32,15 +32,16 @@ import java.util.Dictionary;
  * Some examples of LDAP filters are:
  * 
  * <pre>
- *      &quot;(cn=Babs Jensen)&quot;
- *      &quot;(!(cn=Tim Howes))&quot;
- *      &quot;(&amp;(&quot; + Constants.OBJECTCLASS + &quot;=Person)(|(sn=Jensen)(cn=Babs J*)))&quot;
- *      &quot;(o=univ*of*mich*)&quot;
+ *  &quot;(cn=Babs Jensen)&quot;
+ *  &quot;(!(cn=Tim Howes))&quot;
+ *  &quot;(&amp;(&quot; + Constants.OBJECTCLASS + &quot;=Person)(|(sn=Jensen)(cn=Babs J*)))&quot;
+ *  &quot;(o=univ*of*mich*)&quot;
  * </pre>
  * 
- * @version $Revision$
  * @since 1.1
- * @see "Framework specification for a description of the filter string syntax."
+ * @see "Core Specification, section 5.5, for a description of the filter string
+ *      syntax."
+ * @version $Revision$
  */
 public interface Filter {
 	/**

@@ -1,7 +1,7 @@
 /*
  * $Header$
  * 
- * Copyright (c) OSGi Alliance (2000, 2006). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2000, 2007). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,8 +27,8 @@ package org.osgi.framework;
  * configure a service may test to determine if the service object is an
  * <code>instanceof Configurable</code>.
  * 
- * @version $Revision$
  * @deprecated As of 1.2. Please use Configuration Admin service.
+ * @version $Revision$
  */
 public interface Configurable {
 	/**
