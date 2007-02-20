@@ -21,12 +21,14 @@ package org.osgi.framework;
 import java.util.EventListener;
 
 /**
- * A <code>ServiceEvent</code> listener. When a <code>ServiceEvent</code> is
- * fired, it is synchronously delivered to a <code>ServiceListener</code>.
+ * A <code>ServiceEvent</code> listener. <code>ServiceListener</code> is a
+ * listener interface that may be implemented by a bundle developer. When a
+ * <code>ServiceEvent</code> is fired, it is synchronously delivered to a
+ * <code>ServiceListener</code>. The Framework may deliver
+ * <code>ServiceEvent</code> objects to a <code>ServiceListener</code> out
+ * of order and may concurrently call and/or reenter a
+ * <code>ServiceListener</code>.
  * 
- * <p>
- * <code>ServiceListener</code> is a listener interface that may be
- * implemented by a bundle developer.
  * <p>
  * A <code>ServiceListener</code> object is registered with the Framework
  * using the <code>BundleContext.addServiceListener</code> method.
@@ -41,16 +43,17 @@ import java.util.EventListener;
  * filtering is done. <code>ServiceEvent</code> objects are only delivered to
  * the listener if the bundle which defines the listener object's class has the
  * appropriate <code>ServicePermission</code> to get the service using at
- * least one of the named classes the service was registered under.
+ * least one of the named classes under which the service was registered.
  * 
  * <p>
  * <code>ServiceEvent</code> object delivery to <code>ServiceListener</code>
  * objects is further filtered according to package sources as defined in
  * {@link ServiceReference#isAssignableTo(Bundle, String)}.
  * 
- * @version $Revision$
  * @see ServiceEvent
  * @see ServicePermission
+ * @ThreadSafe
+ * @version $Revision$
  */
 
 public interface ServiceListener extends EventListener {

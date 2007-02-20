@@ -1,7 +1,7 @@
 /*
  * $Header$
  * 
- * Copyright (c) OSGi Alliance (2000, 2006). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2000, 2007). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,12 +21,12 @@ package org.osgi.framework;
 import java.util.EventListener;
 
 /**
- * A <code>BundleEvent</code> listener. When a <code>BundleEvent</code> is
- * fired, it is asynchronously delivered to a <code>BundleListener</code>.
- * 
- * <p>
- * <code>BundleListener</code> is a listener interface that may be implemented
- * by a bundle developer.
+ * A <code>BundleEvent</code> listener. <code>BundleListener</code> is a
+ * listener interface that may be implemented by a bundle developer. When a
+ * <code>BundleEvent</code> is fired, it is asynchronously delivered to a
+ * <code>BundleListener</code>. The Framework delivers
+ * <code>BundleEvent</code> objects to a <code>BundleListener</code> in
+ * order and must not concurrently call a <code>BundleListener</code>.
  * <p>
  * A <code>BundleListener</code> object is registered with the Framework using
  * the {@link BundleContext#addBundleListener} method.
@@ -34,8 +34,8 @@ import java.util.EventListener;
  * object when a bundle has been installed, resolved, started, stopped, updated,
  * unresolved, or uninstalled.
  * 
- * @version $Revision$
  * @see BundleEvent
+ * @version $Revision$
  */
 
 public interface BundleListener extends EventListener {
