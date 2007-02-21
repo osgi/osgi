@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:saxon="http://icl.com/saxon" extension-element-prefixes="saxon" version="1.1">
 	<xsl:strip-space elements="*"/>
+	<xsl:output method="xml" indent="yes" encoding="UTF-8"/>
 	
 	<xsl:template match="package">
-		<xsl:document href="xml/{@name}.xml" method="xml" indent="yes" encoding="ISO-8859-1">
+		<xsl:document href="xml/{@name}.xml" method="xml" indent="yes" encoding="UTF-8">
 			<html>
 				<head>
 					<title><xsl:value-of select="@name"/></title>
@@ -198,6 +199,26 @@
 					<xsl:apply-templates select="." mode="html"/>
 				</p>
 			</xsl:for-each>
+		</xsl:if>
+		<xsl:if test="ThreadSafe|GuardedBy|Immutable|NotThreadSafe">
+			<p class="parameter">
+				<tab/>
+				<em class="key">Concurrency</em>
+				<tab/>
+				<xsl:if test="ThreadSafe">
+					Thread-safe<xsl:text> </xsl:text>
+				</xsl:if>
+				<xsl:if test="GuardedBy">
+					Guarded by: <xsl:value-of select="GuardedBy"/>
+					<xsl:text> </xsl:text>
+				</xsl:if>
+				<xsl:if test="Immutable">
+					Immutable<xsl:text> </xsl:text>
+				</xsl:if>
+				<xsl:if test="NotThreadSafe">
+					Not Thread-safe<xsl:text> </xsl:text>
+				</xsl:if>
+			</p>
 		</xsl:if>
 	</xsl:template>
 	
