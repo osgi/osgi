@@ -499,6 +499,7 @@ public abstract class DefaultTestBundleControl
 	}
 
     /* Proxy methods to the Registry class */
+    public Bundle installBundle(String bundleName, boolean start) throws Exception { return mainRegistry.installBundle(bundleName, start); }
     public Bundle installBundle(String bundleName) throws Exception { return mainRegistry.installBundle(bundleName); }
     public boolean isBundleInstalled(String bundleName) { return mainRegistry.isBundleInstalled(bundleName); }
     public void uninstallBundle(Bundle bundleName) throws Exception { mainRegistry.uninstallBundle(bundleName); }

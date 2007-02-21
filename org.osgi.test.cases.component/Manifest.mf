@@ -4,7 +4,7 @@ Bundle-Name: test.component
 Bundle-SymbolicName: ${p}
 Bundle-Version: 4.0.1.${project.build}
 Bundle-Copyright: ${copyright}
-Bundle-Description: RFC 80 Declarative Services Test Case
+Bundle-Description: Declarative Services Test Case
 Bundle-Vendor: OSGi Alliance
 Bundle-DocUrl: http://www.osgi.org/testcases/4/test.cases.template
 Bundle-ContactAddress: speccomments@mail.osgi.org

@@ -36,6 +36,10 @@ public class Registry {
     /*** Bundle methods ***/
 
     public Bundle installBundle(String bundleName) throws Exception {
+    	return installBundle(bundleName, true);
+    }
+    
+    public Bundle installBundle(String bundleName, boolean start) throws Exception {
         try {
             URL    url = new URL(webserver + bundleName);
             InputStream in = url.openStream();
@@ -43,7 +47,9 @@ public class Registry {
             Bundle        b = context.installBundle(webserver + bundleName, in);
 
             bundles.addElement(b);
-            b.start();
+            if (start) {
+            	b.start();
+            }
             return b;
         }
         catch(BundleException e) {

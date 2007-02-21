@@ -116,9 +116,9 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
     }
     
 		// install test cases
-		tb1 = installBundle("tb1.jar");
-		tb2 = installBundle("tb2.jar");
-		tb3 = installBundle("tb3.jar");
+		tb1 = installBundle("tb1.jar", false);
+		tb2 = installBundle("tb2.jar", false);
+		tb3 = installBundle("tb3.jar", false);
 
 		// start them
 		tb1.start();
@@ -181,16 +181,16 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 		trackerConsumerEvent.close();
 		trackerNamedService.close();
 		trackerNamedServiceFactory.close();
+		trackerCM.close();
 	}
 
-  /**
-   * Clean up after each method. Notice that during debugging many times the
-   * unsetState is never reached.
-   */
-  public void unsetState() {
-  }
+	protected void setState() throws Exception {
+	}
+	protected void clearState() throws Exception {
+	}
+	
 
-	/**
+/**
 	 * Tests registering / unregistering of the component bundles and their
 	 * provided services.
 	 * 
@@ -223,12 +223,11 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 		assertNull("ServiceProvider service should not be registered",
 				serviceProvider);
 
-		tb1 = installBundle("tb1.jar");
-		tb1.stop();
+		tb1 = installBundle("tb1.jar", false);
 		Thread.sleep(SLEEP);
 		serviceProvider = (TBCService) trackerProvider.getService();
-		assertEquals("ServiceProvider bundle should be in resolved state",
-				Bundle.RESOLVED, tb1.getState());
+		assertTrue("ServiceProvider bundle should be in resolved state",
+				(tb1.getState()&(Bundle.RESOLVED|Bundle.INSTALLED))!=0);
 		assertNull("ServiceProvider service should not be registered",
 				serviceProvider);
 
@@ -292,11 +291,51 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 		String[] array = (String[]) properties.get("test.property.string");
 		assertEquals("The size of test.property.string array should be 3", 3,
 				array.length);
-		for (int i = 0; i < 3; i++) {
-			assertEquals("Element [" + i
-					+ "] of test.property.string array should be 'Value "
-					+ (i + 1) + "'", array[i], "Value " + (i + 1));
+		assertEquals("test.property.string array should be", new String[] {"Value 1", "Value 2", "Value 3"}, array );
+	}
+
+	/**
+	 * This test check if the SCR will unregister all components when it is
+	 * stopped!
+	 * 
+	 * @throws Exception
+	 */
+	public void testStartStopSCR() throws Exception {
+		Bundle scr = getSCRBundle();
+		if (scr == null) {
+			fail("testStartStopSCR test cannot execute: Please set the system property 'scr.bundle.name' to the Bundle-SymbolicName of the SCR implementation bundle being tested.");
 		}
+		
+		ServiceReference refs[];
+		BundleContext bc = getContext();
+		String filter = "(" + ComponentConstants.COMPONENT_NAME + "=*)";
+		
+		// preserve the count of the registered components
+		// after SRC is started again, the same number of components
+		// must be registered
+		refs = bc.getServiceReferences(null, filter);
+		int count = (refs==null)?0:refs.length;
+		
+		scr.stop();
+		Thread.sleep(SLEEP*2);
+		
+		try {
+			refs = bc.getServiceReferences(null, filter);
+			assertNull(
+					"The Service Component Runtime must stop all services if SCR is stopped",
+					refs);
+		}
+		finally {
+			// make sure that after SCR is being started it will activate
+			// the components which bundles are active
+			scr.start();
+			Thread.sleep(SLEEP*2);
+		}
+		
+		refs = bc.getServiceReferences(null, filter);
+		assertEquals(
+				"The Service Component Runtime must start all components that are installed prior it",
+				count, (refs==null)?0:refs.length);
 	}
 
 	/**
@@ -318,7 +357,7 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 	 * @throws Exception
 	 */
 	public void testComponentFactory() throws Exception {
-		Bundle bundle = installBundle("tb4.jar");
+		Bundle bundle = installBundle("tb4.jar", false);
 		bundle.start();
 		Thread.sleep(SLEEP);
 
@@ -416,7 +455,7 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
     logService.addLogListener(this);
 
 		// the bundle contains some illegal definitions
-		tb1 = installBundle("tb1.jar");
+		tb1 = installBundle("tb1.jar", false);
 		tb1.start();
 		Thread.sleep(SLEEP*2); // log and scr have asynchronous processing 
 
@@ -457,51 +496,6 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
     return null;
   }
 
-	/**
-	 * This test check if the SCR will unregister all components when it is
-	 * stopped!
-	 * 
-	 * @throws Exception
-	 */
-	public void testStartStopSCR() throws Exception {
-		Bundle scr = getSCRBundle();
-		if (scr != null) {
-			ServiceReference refs[];
-			BundleContext bc = getContext();
-			String filter = "(" + ComponentConstants.COMPONENT_NAME + "=*)";
-
-			// preserve the count of the registered components
-			// after SRC is started again, the same number of components
-			// must be registered
-			refs = bc.getServiceReferences(null, filter);
-			int count = refs.length;
-
-			scr.stop();
-			Thread.sleep(SLEEP*2);
-
-			try {
-				refs = bc.getServiceReferences(null, filter);
-				assertNull(
-						"The Service Component Runtime must stop all services if SCR is stopped",
-						refs);
-			}
-			finally {
-				// make sure that after SCR is being started it will activate
-				// the components which bundles are active
-				scr.start();
-				Thread.sleep(SLEEP*2);
-			}
-
-			refs = bc.getServiceReferences(null, filter);
-			assertEquals(
-					"The Service Component Runtime must start all components that are installed prior it",
-					count, refs.length);
-		}
-		else {
-			log("testStartStopSCR test cannot execute: Please set the system property 'scr.bundle.name' to the Bundle-SymbolicName of the SCR implementation bundle being tested.");
-		}
-	}
-
 	// helper for testDynamicBind
 	private int getCount() {
 		TBCService serviceConsumerEvent = (TBCService) trackerConsumerEvent
@@ -516,7 +510,7 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 		assertEquals("The number of dynamically bound service should be zero",
 				0, getCount());
 
-		Bundle bundle = installBundle("tb4.jar");
+		Bundle bundle = installBundle("tb4.jar",false);
 		bundle.start();
 		Thread.sleep(SLEEP);
 
