@@ -46,12 +46,17 @@ import org.osgi.util.tracker.ServiceTracker;
  * @version $Revision$
  */
 public class TestControl extends DefaultTestBundleControl {
-
-	/**
-	 * Creates a new instance of TestControl
-	 */
-	public TestControl() {
-
+	PackageAdmin padmin;
+	
+	public void clearState() {
+		if ( padmin == null ) {
+			ServiceReference ref = getContext().getServiceReference( PackageAdmin.class.getName());
+			if ( ref == null )
+				return;
+			
+			padmin = (PackageAdmin) getContext().getService(ref);
+		}
+		padmin.refreshPackages(null);
 	}
 
 	// Service Registry --------------------------
