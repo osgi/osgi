@@ -46,6 +46,7 @@ package org.osgi.framework;
  * constructor that takes no parameters so that a <code>BundleActivator</code>
  * object can be created by <code>Class.newInstance()</code>.
  * 
+ * @NotThreadSafe
  * @version $Revision$
  */
 

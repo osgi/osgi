@@ -69,6 +69,7 @@ import java.util.Dictionary;
  * The Framework is the only entity that can create <code>BundleContext</code>
  * objects and they are only valid within the Framework that created them.
  * 
+ * @ThreadSafe
  * @version $Revision$
  */
 

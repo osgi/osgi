@@ -71,6 +71,7 @@ import java.security.*;
  * <li>name - The symbolic name of a bundle.</li>
  * </ul>
  * 
+ * @ThreadSafe
  * @version $Revision$
  */
 

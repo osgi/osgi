@@ -45,6 +45,7 @@ package org.osgi.framework;
  * @see BundleContext#getServiceReference
  * @see BundleContext#getServiceReferences
  * @see BundleContext#getService
+ * @ThreadSafe
  * @version $Revision$
  */
 

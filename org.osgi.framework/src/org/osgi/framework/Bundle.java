@@ -64,6 +64,7 @@ import java.util.Enumeration;
  * <code>Bundle</code> objects, and these objects are only valid within the
  * Framework that created them.
  * 
+ * @ThreadSafe
  * @version $Revision$
  */
 public interface Bundle {

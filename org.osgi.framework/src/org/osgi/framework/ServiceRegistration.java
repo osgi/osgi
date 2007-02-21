@@ -33,6 +33,7 @@ import java.util.Dictionary;
  * properties of the service or to unregister the service.
  * 
  * @see BundleContext#registerService(String[],Object,Dictionary)
+ * @ThreadSafe
  * @version $Revision$
  */
 

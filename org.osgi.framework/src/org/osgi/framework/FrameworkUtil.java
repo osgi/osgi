@@ -30,6 +30,7 @@ import java.security.PrivilegedAction;
  * be useful to bundles.
  * 
  * @since 1.3
+ * @ThreadSafe
  * @version $Revision$
  */
 public class FrameworkUtil {
