@@ -7,7 +7,7 @@
 		<delete dir="${project.bindir}/javadoc"/>
         <javadoc 
 			access="protected" 
-			windowtitle="OSGi Service Platform Release 4 Version 4.1"
+			windowtitle="OSGi Service Platform Release ${osgi.release} Version ${osgi.version}"
 			author="false" 
 			classpath="${project.classpath}"
 			destdir="${project.bindir}/javadoc" 
@@ -33,9 +33,9 @@
 			<tag name="ThreadSafe" scope="types" description="ThreadSafe"/>
 			<tag name="NotThreadSafe" scope="types" description="NotThreadSafe"/>
 			<tag name="GuardedBy" scope="methods,fields" description="Guarded By:"/>
-			<header><![CDATA[<b>OSGi&trade; Service Platform</b><br/><font  size=-1>Release 4 Version 4.1</font>]]></header>
-			<bottom><![CDATA[<font size=-1>Copyright &copy; OSGi Alliance (2000, 2007). All Rights Reserved. Licensed under the <a href="{@docRoot}/LICENSE.html">OSGi Specification License, Version 1.0</a></font>]]></bottom>
-			<doctitle><![CDATA[OSGi&trade; Service Platform Release 4 Version 4.1]]></doctitle>
+			<header><![CDATA[<b>OSGi&trade; Service Platform</b><br/><font  size=-1>Release ${osgi.release} Version ${osgi.version}</font>]]></header>
+			<bottom><![CDATA[<font size=-1>${copyright.html} Licensed under the <a href="{@docRoot}/LICENSE.html">OSGi Specification License, Version 1.0</a></font>]]></bottom>
+			<doctitle><![CDATA[OSGi&trade; Service Platform Release ${osgi.release} Version ${osgi.version}]]></doctitle>
 		</javadoc>
 		<copy file="${project}/OSGiSpecificationLicense-v10.html"
 		    tofile="${project.bindir}/javadoc/LICENSE.html"
