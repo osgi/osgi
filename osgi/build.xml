@@ -3,7 +3,7 @@
 	<target name="release" depends="master.release,javadoc">
 	</target>
 
-	<target name="javadoc">
+	<target name="javadoc" depends="init">
 		<delete dir="${project.bindir}/javadoc"/>
         <javadoc 
 			access="protected" 
