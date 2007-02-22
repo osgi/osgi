@@ -1,6 +1,7 @@
 package org.osgi.test.cases.upnp.tbc.device.discovery;
 
 import java.net.*;
+
 import org.osgi.test.cases.upnp.tbc.*;
 
 /**
@@ -8,6 +9,12 @@ import org.osgi.test.cases.upnp.tbc.*;
  * 
  */
 public class DiscoveryMsgCreator {
+	private InetAddress	address;
+	
+	public DiscoveryMsgCreator() throws UnknownHostException {
+		address = InetAddress.getByName(UPnPConstants.UPnPMCAddress);
+	}
+
 	public DatagramPacket createAlive(String nt, String usn, String location) {
 		return createAlive(nt, usn, location, UPnPConstants.V_CC);
 	}
@@ -72,7 +79,7 @@ public class DiscoveryMsgCreator {
 		buf.append(UPnPConstants.CRLF); // emptry line at the end of the
 										// discovery
 		byte[] bytes = buf.toString().getBytes();
-		DatagramPacket pack = new DatagramPacket(bytes, bytes.length);
+		DatagramPacket pack = createDatagramPacket(bytes, bytes.length);
 		return pack;
 	}
 
@@ -102,7 +109,11 @@ public class DiscoveryMsgCreator {
 		buf.append(UPnPConstants.CRLF);
 		buf.append(UPnPConstants.CRLF); // empty line after last header
 		byte[] bytes = buf.toString().getBytes();
-		DatagramPacket pack = new DatagramPacket(bytes, bytes.length);
+		DatagramPacket pack = createDatagramPacket(bytes, bytes.length);
 		return pack;
+	}
+	
+	private DatagramPacket createDatagramPacket(byte[] bytes, int length) {
+		return new DatagramPacket(bytes, length, address, UPnPConstants.UPnPMCPort);
 	}
 }

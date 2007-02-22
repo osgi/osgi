@@ -22,9 +22,9 @@ public class DiscoveryServer extends Thread {
 	public DiscoveryServer(DefaultTestBundleControl logger) throws Exception {
 		super("DiscoveryServer");
 		this.logger = logger;
-		msocket = new MulticastSocket();
+		msocket = new MulticastSocket(UPnPConstants.UPnPMCPort);
 		address = InetAddress.getByName(UPnPConstants.UPnPMCAddress);
-		msocket.connect(address, UPnPConstants.UPnPMCPort);
+		msocket.joinGroup(address);
 		senders = new Vector();
 	}
 
@@ -75,7 +75,7 @@ public class DiscoveryServer extends Thread {
 
 	public void finish() {
 		try {
-			msocket.disconnect();
+			msocket.leaveGroup(address);
 			msocket.close();
 		}
 		catch (Exception er) {
