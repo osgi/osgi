@@ -254,7 +254,7 @@ public interface StartLevel {
 	 * activation policy is to be used when the bundle is started.
 	 * 
 	 * @param bundle The bundle whose autostart setting is to be examined.
-	 * @return <code>true</code> if the bundle’s autostart setting indicates
+	 * @return <code>true</code> if the bundle's autostart setting indicates
 	 *         the activation policy declared in the manifest must be used.
 	 *         <code>false</code> if the bundle must be eagerly activated.
 	 * @throws java.lang.IllegalArgumentException If the specified bundle has
