@@ -389,18 +389,19 @@ public interface Bundle {
 	 * Framework is restarted and this bundle's autostart setting is
 	 * <em>Stopped</em>, this bundle must not be automatically started.
 	 * 
-	 * <li>If this bundle's state is not <code>ACTIVE</code> then this method
-	 * returns immediately.
+	 * <li>If this bundle's state is not <code>STARTING</code> or
+	 * <code>ACTIVE</code> then this method returns immediately.
 	 * 
 	 * <li>This bundle's state is set to <code>STOPPING</code>.
 	 * 
 	 * <li>A bundle event of type {@link BundleEvent#STOPPING} is fired.
 	 * 
-	 * <li>The {@link BundleActivator#stop} method of this bundle's
-	 * <code>BundleActivator</code>, if one is specified, is called. If that
-	 * method throws an exception, this method must continue to stop this
-	 * bundle. A <code>BundleException</code> must be thrown after completion
-	 * of the remaining steps.
+	 * <li>If this bundle's state was <code>ACTIVE</code> prior to setting
+	 * the state to <code>STOPPING</code>, the {@link BundleActivator#stop}
+	 * method of this bundle's <code>BundleActivator</code>, if one is
+	 * specified, is called. If that method throws an exception, this method
+	 * must continue to stop this bundle and a <code>BundleException</code>
+	 * must be thrown after completion of the remaining steps.
 	 * 
 	 * <li>Any services registered by this bundle must be unregistered.
 	 * <li>Any services used by this bundle must be released.
