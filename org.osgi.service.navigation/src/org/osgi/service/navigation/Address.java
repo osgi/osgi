@@ -83,6 +83,11 @@ public class Address {
 	 * Address key referencing the building room.
 	 */
 	public int	BUILDING_ROOM		= 11;
+	/**
+	 * Address key referencing a non-administrative area. (e.g. "Foret de
+	 * Fontainebleau")
+	 */
+	public static int AREANAME = 12;
 
 	
 	String[]	places;

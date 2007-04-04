@@ -31,6 +31,7 @@ public class Coordinate {
 	// ### This was a float but that is silly. In java, you must cast
 	// floats most of the time. You need a very good reason to save
 	// 4 bytes for this misery
+	// TODO: if we have to create many of these it will become interesting, chack if double is OK (RvdB)
 	double	altitude;
 
 	
@@ -38,7 +39,7 @@ public class Coordinate {
 	// ### The following constructor should only be there if 
 	// we move this class to org.osgi.util.position
 	/**
-	 * TODO
+	 * TODO: Is there a need to do this?
 	 */
 	public Coordinate(Position position) {
 		latitude = position.getLatitude().getValue();
@@ -46,18 +47,6 @@ public class Coordinate {
 		altitude = position.getAltitude().getValue();
 	}
 
-	// ### This is a silly constructor, a Coordinate is 
-	// immutable so a copy constructor is unnecessary
-
-	/**
-	 * TODO
-	 */
-	public Coordinate(Coordinate coordinate) {
-		latitude = coordinate.getLatitude();
-		longitude = coordinate.getLongitude();
-		altitude = coordinate.getAltitude();
-	}
-	
 	/**
 	 * Create a new <code>Coordinate</code> object.
 	 * 
