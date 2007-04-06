@@ -13,7 +13,7 @@ Import-Service: org.osgi.service.log.LogService
 $(IMPORT-PACKAGE)
 $(EXPORT-PACKAGE)
 $(PRIVATE-PACKAGE)
-CVS-Header: $Header$
+CVS-Header: $Id$
 Bundle-RequiredExecutionEnvironment: J2SE-1.4
 
 
