@@ -8,5 +8,5 @@ Bundle-Vendor: OSGi Alliance
 Bundle-Category: osgi
 Bundle-DocUrl: http://www.osgi.org/
 $(EXPORT-PACKAGE)
-CVS-Header: $Header$
+CVS-Header: $Id$
 DynamicImport-Package: *
