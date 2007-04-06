@@ -12,7 +12,7 @@ Bundle-Description: Looks at a directory and installs bundles from this folder.
 Bundle-Vendor: OSGi
 Bundle-Activator: ${p}.fileinstall.Init
 Bundle-Copyright: Copyright (c) The OSGi Alliance (2000-2005). All Rights Reserved.
-CVS-Header: $Header$
+CVS-Header: $Id$
 $(IMPORT-PACKAGE)
 $(EXPORT-PACKAGE)
 $(PRIVATE-PACKAGE)
