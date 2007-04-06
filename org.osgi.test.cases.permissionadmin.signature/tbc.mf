@@ -4,7 +4,7 @@ Bundle-SymbolicName: ${p}.tbc
 Bundle-Activator: $(p).tbc.PermissionSignatureTestControl
 Bundle-Version: 4.0.1
 Bundle-Copyright: Copyright (c) OSGi Alliance (2000, 2002). All Rights Reserved.
-CVS-Header: $Header$
+CVS-Header: $Id$
 $(IMPORT-PACKAGE), org.osgi.service.cm
 $(EXPORT-PACKAGE)
 $(PRIVATE-PACKAGE)
