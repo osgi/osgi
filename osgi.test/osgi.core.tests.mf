@@ -5,7 +5,7 @@ Bundle-Version: ${core.release.version}
 Bundle-Activator: org.osgi.tools.group.Group
 Bundle-Description: OSGi Service Platform Release 4, Core Test Cases
 Bundle-Copyright: ${copyright}
-CVS-Header: $Header$
+CVS-Header: $Id$
 Bundle-Vendor: OSGi Alliance
 Bundle-Category: osgi,test
 Bundle-DocUrl: http://www.osgi.org/
