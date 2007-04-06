@@ -7,5 +7,5 @@ Bundle-Version: 3.0
 Bundle-Category: osgi
 Bundle-DocUrl: http://www.osgi.org/
 $(EXPORT-PACKAGE)
-CVS-Header: $Header$
+CVS-Header: $Id$
 $(PRIVATE-PACKAGE)
