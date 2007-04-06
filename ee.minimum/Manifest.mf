@@ -9,4 +9,4 @@ Bundle-Copyright: ${copyright}
 Bundle-DocURL: www.osgi.org
 Bundle-Address: speccomments@mail.osgi.org
 Bundle-RequiredExecutionEnvironment: OSGi/Minimum-1.1
-CVS-Header: $Header$
+CVS-Header: $Id$
