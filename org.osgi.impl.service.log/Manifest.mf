@@ -13,5 +13,5 @@ Export-Service: org.osgi.service.log.LogService
 $(EXPORT-PACKAGE)
 $(IMPORT-PACKAGE)
 $(PRIVATE-PACKAGE)
-CVS-Header: $Header$
+CVS-Header: $Id$
 

@@ -1,5 +1,5 @@
 /*
- * $Header$
+ * $Id$
  *
  * OSGi Log Service Reference Implementation.
  *
