@@ -12,5 +12,5 @@ Bundle-Copyright: ${copyright}
 Comment: Created by $(DELIVER) at $(DATE)
 $(IMPORT-PACKAGE)
 $(EXPORT-PACKAGE)
-CVS-Header: $Header$
+CVS-Header: $Id$
 
