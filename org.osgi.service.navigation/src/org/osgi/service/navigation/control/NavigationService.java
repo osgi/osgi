@@ -32,7 +32,7 @@ public interface NavigationService  {
      * e.g. coordinate of the middle of a crossing could lead to 4 corners matching.
      * The implementer of this service will decide then what the best match is
      */
-	Location getLocation(Coordinate coordinate);
+	Location[] getLocation(Coordinate coordinate);
 	
 	/**
 	 * Based on a opolygin will return a Location 
@@ -57,7 +57,6 @@ public interface NavigationService  {
 	* get the current Location of the vehicle
 	* TODO should return CurrentLocation. 
 	*/
-	Location getLocation(Coordinate coordinate);	
 	Route createRoute(Location from, Location to);
 	Location getCurrentLocation();
 	

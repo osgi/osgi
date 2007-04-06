@@ -30,7 +30,7 @@ public class Accident {
 	 * @param where
 	 */
 	void accident(Coordinate where) {
-		Location loc = nav.getLocation(where);
+		Location loc[] = nav.getLocation(where);
 		Route route = nav.getCurrentRoute();
 		if ( route == null )
 			return;

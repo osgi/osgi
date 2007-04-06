@@ -8,7 +8,7 @@ package org.osgi.service.navigation;
  */
 public class PolygonArea {
 
-	private  Location[] points;
+	private  PointLocation[] points;
 
 	public PolygonArea(){
 		points = null;
