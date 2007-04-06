@@ -5,6 +5,6 @@ Bundle-Description: Installs and runs the other test bundles
 Bundle-Vendor: OSGi Alliance
 Bundle-Version: 3.0
 Bundle-Activator: $(p).tbc.BundleActivatorI
-CVS-Header: $Header$
+CVS-Header: $Id$
 $(IMPORT-PACKAGE)
 $(EXPORT-PACKAGE)
