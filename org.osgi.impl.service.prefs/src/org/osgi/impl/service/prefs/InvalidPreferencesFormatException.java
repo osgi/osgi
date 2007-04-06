@@ -1,6 +1,6 @@
 /*
  * @(#)InvalidPreferencesFormatException.java	1.3 01/07/18
- * $Header$
+ * $Id$
  *
  
  * 

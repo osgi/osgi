@@ -1,6 +1,6 @@
 /*
  * @(#)TextFileSupport.java	1.4 01/07/18
- * $Header$
+ * $Id$
  *
  
  * 

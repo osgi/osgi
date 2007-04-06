@@ -1,6 +1,6 @@
 /*
  * @(#)Activator.java	1.5 01/07/18
- * $Header$
+ * $Id$
  *
  
  * 

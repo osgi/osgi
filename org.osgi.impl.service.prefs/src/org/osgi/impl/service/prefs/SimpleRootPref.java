@@ -1,6 +1,6 @@
 /*
  * @(#)SimpleRootPref.java	1.6 01/07/18
- * $Header$
+ * $Id$
  *
  
  * 
