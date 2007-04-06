@@ -1,7 +1,5 @@
 /*
- * $Header:
- * /cvshome/repository/org/osgi/test/cases/framework/classpath/tbc/ClassPathControl.java,v
- * 1.1 2002/01/09 15:15:19 nnilsson Exp $
+ * $Id$
  * 
  * Copyright (c) OSGi Alliance (2000-2001). All Rights
  * Reserved.
