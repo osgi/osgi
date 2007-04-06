@@ -1,5 +1,5 @@
 /*
- * $Header$
+ * $Id$
  *
  * Copyright (c) OSGi Alliance (2001, 2006). All Rights Reserved.
  *
