@@ -6,7 +6,7 @@ Bundle-Activator: $(p).tbc.TestControl
 Bundle-Version: 4
 Bundle-ManifestVersion: 2
 Bundle-Copyright: Copyright (c) OSGi Alliance (2000, 2002). All Rights Reserved.
-CVS-Header: $Header$
+CVS-Header: $Id$
 Signature-Packages: info.dmtree, 
   info.dmtree.notification, 
   info.dmtree.notification.spi,
