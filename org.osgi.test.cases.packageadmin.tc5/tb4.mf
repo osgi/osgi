@@ -5,7 +5,7 @@ Bundle-SymbolicName: ${p}.tb4
 Bundle-Activator: $(p).tb4.Activator
 Bundle-Version: 1.0
 Bundle-Copyright: Copyright (c) OSGi Alliance (2000, 2002). All Rights Reserved.
-CVS-Header: $Header$
+CVS-Header: $Id$
 Require-Bundle: ${p}.tb1, ${p}.tb3
 $(EXPORT-PACKAGE)
 $(IMPORT-PACKAGE)
