@@ -1,7 +1,7 @@
 package org.osgi.impl.service.useradmin;
 
 /*
- * $Header$
+ * $Id$
  *
  * OSGi UserAdmin Reference Implementation.
  *

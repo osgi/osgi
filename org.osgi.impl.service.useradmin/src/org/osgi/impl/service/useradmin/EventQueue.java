@@ -1,5 +1,5 @@
 /*
- * $Header$
+ * $Id$
  *
  * OSGi EventQueue for UserAdmin adapted from LogService.
  *
