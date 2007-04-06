@@ -5,7 +5,7 @@ Bundle-SymbolicName: ${p}.testcond
 Bundle-Version: 4.0.1
 Bundle-Copyright: Copyright (c) OSGi Alliance (2000, 2002). All Rights Reserved.
 Fragment-Host: system.bundle; extension:=framework
-CVS-Header: $Header$
+CVS-Header: $Id$
 $(EXPORT-PACKAGE)
 $(PRIVATE-PACKAGE)
 
