@@ -4,7 +4,7 @@ Bundle-Name: ${p}.tblazy3
 Bundle-SymbolicName: ${p}.tblazy3
 Bundle-Version: 4.1
 Bundle-ActivationPolicy: lazy; exclude:="${p}.tblazy3.excluded.a, ${p}.tblazy3.excluded.b"
-CVS-Header: $Header$
+CVS-Header: $Id$
 $(IMPORT-PACKAGE)
 $(EXPORT-PACKAGE)
 $(PRIVATE-PACKAGE)
