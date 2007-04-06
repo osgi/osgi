@@ -22,7 +22,7 @@
  * ${tags}
  * ${see_to_target}
  */</template><template autoinsert="false" context="newtype_context" deleted="false" description="Newly created files" enabled="true" id="org.eclipse.jdt.ui.text.codetemplates.newtype" name="newtype">/*
- * $$Header$$
+ * $$Id$$
  * 
  * Copyright (c) OSGi Alliance (${year}). All Rights Reserved.
  * 
