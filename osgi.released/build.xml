@@ -8,14 +8,36 @@
 			<classpath path="${workspace}/licensed/japitools/share/java/japitools.jar" />
 			<arg value="unzip" />
 			<arg value="as" />
-			<arg value="osgi-latest.japi" />
+			<arg value="osgi.core-latest.japi" />
+			<arg value="packages" />
+			<arg value="ee.minimum.jar" />
+			<arg value="osgi.core.jar" />
+			<arg line="${japi.osgi.core}" />
+		</java>
+		<java classname="net.wuffies.japi.Japize">
+			<classpath path="${workspace}/licensed/japitools/share/java/japitools.jar" />
+			<arg value="unzip" />
+			<arg value="as" />
+			<arg value="osgi.cmpn-latest.japi" />
 			<arg value="packages" />
 			<arg value="ee.foundation.jar" />
-			<arg value="osgi.jar" />
+			<arg value="osgi.core.jar" />
+			<arg value="osgi.cmpn.jar" />
 			<arg value="${workspace}/licensed/jar/servlet.jar" />
 			<arg value="${workspace}/licensed/jar/saxon.jar" />
-			<arg value="+org.osgi" />
-			<arg value="+info.dmtree" />
+			<arg line="${japi.osgi.cmpn}" />
+		</java>
+		<java classname="net.wuffies.japi.Japize">
+			<classpath path="${workspace}/licensed/japitools/share/java/japitools.jar" />
+			<arg value="unzip" />
+			<arg value="as" />
+			<arg value="osgi.mobile-latest.japi" />
+			<arg value="packages" />
+			<arg value="ee.foundation.jar" />
+			<arg value="osgi.core.jar" />
+			<arg value="osgi.mobile.jar" />
+			<arg value="${workspace}/licensed/jar/saxon.jar" />
+			<arg line="${japi.osgi.mobile}" />
 		</java>
 		<java classname="net.wuffies.japi.Japize">
 			<classpath path="${workspace}/licensed/japitools/share/java/japitools.jar" />
@@ -45,9 +67,27 @@
 			<arg value="-h" />
 			<arg value="-v" />
 			<arg value="-o" />
-			<arg value="osgi-japicompat.html" />
-			<arg value="osgi-published.japi" />
-			<arg value="osgi-latest.japi" />
+			<arg value="osgi.core-japicompat.html" />
+			<arg value="osgi.core-published.japi" />
+			<arg value="osgi.core-latest.japi" />
+		</exec>
+		<exec executable="perl" failifexecutionfails="false">
+			<arg value="${workspace}/licensed/japitools/bin/japicompat" />
+			<arg value="-h" />
+			<arg value="-v" />
+			<arg value="-o" />
+			<arg value="osgi.cmpn-japicompat.html" />
+			<arg value="osgi.cmpn-published.japi" />
+			<arg value="osgi.cmpn-latest.japi" />
+		</exec>
+		<exec executable="perl" failifexecutionfails="false">
+			<arg value="${workspace}/licensed/japitools/bin/japicompat" />
+			<arg value="-h" />
+			<arg value="-v" />
+			<arg value="-o" />
+			<arg value="osgi.mobile-japicompat.html" />
+			<arg value="osgi.mobile-published.japi" />
+			<arg value="osgi.mobile-latest.japi" />
 		</exec>
 		<exec executable="perl" failifexecutionfails="false">
 			<arg value="${workspace}/licensed/japitools/bin/japicompat" />
