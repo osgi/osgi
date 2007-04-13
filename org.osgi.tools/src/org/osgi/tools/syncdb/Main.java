@@ -45,6 +45,19 @@ public class Main {
 							}
 						}
 						else
+							if (args[i].equals("-merge")) {
+								File f = new File(args[++i]);
+								if ( f.exists() ) 
+									syncDb.setMerge(f.getAbsolutePath());
+								else {
+									System.err.println("No such file for merge: " + f );
+								}
+							}
+							else
+								if (args[i].equals("-base")) {
+									syncDb.setBase(args[++i]);
+								}
+						else
 							throw new RuntimeException("Invalid option "
 									+ args[i]);
 		}
