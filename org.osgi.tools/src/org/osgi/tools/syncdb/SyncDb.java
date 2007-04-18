@@ -121,6 +121,7 @@ public class SyncDb implements Runnable {
 	Map getIncomingUsers(String fileName, Map existing ) throws Exception {
 		File f = new File(fileName);
 		Map result = new HashMap();
+		result.putAll(existing);
 
 		FileReader fr = new FileReader(f);
 		BufferedReader rdr = new BufferedReader(fr);
@@ -145,9 +146,9 @@ public class SyncDb implements Runnable {
 				Set isMemberOf = (Set) record.get("isMemberOf");
 				if ( isMemberOf == null )
 					isMemberOf = new HashSet();
+				record.put("isMemberOf", isMemberOf);
 				
 				isMemberOf.add("member");
-				record.put("isMemberOf", isMemberOf);
 
 				if (parts.length > 2) {
 					for (int i = 2; i < parts.length; i++) {
@@ -196,8 +197,10 @@ public class SyncDb implements Runnable {
 		try {
 			init();
 			Map incomingRecords = getIncomingUsers(file, new HashMap());
+			report.println( incomingRecords.keySet());
 			if ( merge != null )
 				incomingRecords = getIncomingUsers(merge, incomingRecords);
+			report.println( incomingRecords.keySet());
 			List currentRecords = getLdapUsers();
 			Map currentRecordsByCn = new HashMap();
 
@@ -246,8 +249,10 @@ public class SyncDb implements Runnable {
 							break;
 						}
 					}
-					if (!processed)
+					if (!processed) {
 						untouched.add(cn);
+						report.println("Untouched: "+ incomingRecord + " -> " + currentRecord );
+					}
 					// We remove it so that the end only the
 					// to be deleted records remain
 					currentRecordsByCn.remove(cn);
