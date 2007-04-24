@@ -25,7 +25,7 @@ s.boshev@prosyst.com x committer
 khackbarth x committer
 sschwarze x committer
 kvelikova x committer
-heavy@ungoverned.org  x committer   
+heavy@ungoverned.org  x committer tester
 hgyook x committer
 jaeleee@samsung.com x committer
 tim.diekmann@siemens.com x committer

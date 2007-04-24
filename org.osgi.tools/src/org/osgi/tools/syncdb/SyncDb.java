@@ -197,10 +197,8 @@ public class SyncDb implements Runnable {
 		try {
 			init();
 			Map incomingRecords = getIncomingUsers(file, new HashMap());
-			report.println( incomingRecords.keySet());
 			if ( merge != null )
 				incomingRecords = getIncomingUsers(merge, incomingRecords);
-			report.println( incomingRecords.keySet());
 			List currentRecords = getLdapUsers();
 			Map currentRecordsByCn = new HashMap();
 
@@ -237,7 +235,7 @@ public class SyncDb implements Runnable {
 						Object incomingKey = incomingAttribute.getKey();
 						Object currentValue = currentRecord.get(incomingKey);
 						if (!equals(incomingValue, currentValue)) {
-							report.print("Due to: " + incomingKey + " " + incomingValue + " != " + currentValue );
+							report.print("Merge due to  : " + incomingKey + " " + incomingValue + " != " + currentValue );
 							// Mismatch, so we must update the
 							// database with the updated record because
 							// we seem to have different info now.
