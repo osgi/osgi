@@ -90,7 +90,7 @@ public class SyncDb implements Runnable {
 			List l = Collections.list(attr.getAll());
 			if (attr.getID().equalsIgnoreCase("isMemberOf")) {
 				if (l.contains("admin") || l.contains("test")) {
-					System.out.println("Skipping admins: " + l);
+					report.println("Skipping admins: " + l);
 					continue;
 				}
 				map.put("isMemberOf", l);
@@ -193,7 +193,7 @@ public class SyncDb implements Runnable {
 		sync(created, updated, untouched, deleted);
 	}
 
-	public void sync(List created, List updated, List untouched, List deleted) {
+	public Map sync(List created, List updated, List untouched, List deleted) {
 		try {
 			init();
 			Map incomingRecords = getIncomingUsers(file, new HashMap());
@@ -251,7 +251,7 @@ public class SyncDb implements Runnable {
 					}
 					if (!processed) {
 						untouched.add(cn);
-						report.println("Untouched: "+ incomingRecord + " -> " + currentRecord );
+						report.println("Untouched    : "+ cn );
 					}
 					// We remove it so that the end only the
 					// to be deleted records remain
@@ -271,6 +271,7 @@ public class SyncDb implements Runnable {
 				deleted.add(currentRecord.get("cn"));
 			}
 			ctx.close();
+			return incomingRecords;
 		}
 		catch (Exception e) {
 			e.printStackTrace();
@@ -280,20 +281,20 @@ public class SyncDb implements Runnable {
 
 	void create(Map map) throws Exception {
 		String dn = getDn(map);
-		System.out.println("Create " + dn);
+		report.println("Create       : " + dn);
 		ctx.bind(getDn(map), null, getAttributes(map));
 	}
 
 	void update(Map map) throws Exception {
 		String dn = getDn(map);
-		System.out.println("Update " + dn);
+		report.println("Update       : " + dn);
 		map.remove("objectClass");
 		ctx.rebind(dn, null, getAttributes(map));
 	}
 
 	void remove(Map map) throws Exception {
 		String dn = getDn(map);
-		System.out.println("Delete " + dn);
+		report.println("Delete       : " + dn);
 		ctx.unbind(getDn(map));
 	}
 
