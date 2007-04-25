@@ -136,6 +136,7 @@ public class SyncDb implements Runnable {
 					record = new HashMap();
 					record.put("mail", cn);
 					record.put("cn", cn);
+					record.put("displayName", cn); // need to put person's name here
 					if ( !"x".equals(password))
 						record.put("userPassword", "{SHA}" + sha(password));
 					String o = organization(cn);
@@ -147,8 +148,6 @@ public class SyncDb implements Runnable {
 				if ( isMemberOf == null )
 					isMemberOf = new HashSet();
 				record.put("isMemberOf", isMemberOf);
-				
-				isMemberOf.add("member");
 
 				if (parts.length > 2) {
 					for (int i = 2; i < parts.length; i++) {
@@ -164,6 +163,10 @@ public class SyncDb implements Runnable {
 								isMemberOf.add(parts[i]);
 						}
 					}
+				}
+
+				if (!isMemberOf.contains("adopter")) { // only add member if the user is not an adopter
+					isMemberOf.add("member");
 				}
 				result.put(cn,record);
 			}
