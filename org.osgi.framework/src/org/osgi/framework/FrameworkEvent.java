@@ -61,6 +61,7 @@ public class FrameworkEvent extends EventObject {
 	 * This event is fired when the Framework has started after all installed
 	 * bundles that are marked to be started have been started and the Framework
 	 * has reached the intitial start level.
+	 * The source of this event is the System Bundle.
 	 * 
 	 * <p>
 	 * The value of <code>STARTED</code> is 0x00000001.
@@ -86,6 +87,7 @@ public class FrameworkEvent extends EventObject {
 	 * <p>
 	 * This event is fired when the Framework has completed the refresh packages
 	 * operation initiated by a call to the PackageAdmin.refreshPackages method.
+	 * The source of this event is the System Bundle.
 	 * 
 	 * <p>
 	 * The value of <code>PACKAGES_REFRESHED</code> is 0x00000004.
@@ -101,6 +103,7 @@ public class FrameworkEvent extends EventObject {
 	 * <p>
 	 * This event is fired when the Framework has completed changing the active
 	 * start level initiated by a call to the StartLevel.setStartLevel method.
+	 * The source of this event is the System Bundle.
 	 * 
 	 * <p>
 	 * The value of <code>STARTLEVEL_CHANGED</code> is 0x00000008.
