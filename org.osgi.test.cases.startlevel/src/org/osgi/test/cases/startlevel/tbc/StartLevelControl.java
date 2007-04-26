@@ -137,7 +137,7 @@ public class StartLevelControl extends DefaultTestBundleControl {
     assertEquals("getInitialBundleStartLevel", sl_20,  sl.getInitialBundleStartLevel());
     
     sl.setStartLevel(sl_10);
-    expectedFrameworkEvents.add(new FrameworkEvent(FrameworkEvent.STARTLEVEL_CHANGED, getContext().getBundle(),null));
+    expectedFrameworkEvents.add(new FrameworkEvent(FrameworkEvent.STARTLEVEL_CHANGED, getContext().getBundle(0),null));
     assertEquals("Received start level changed event", fec.getComparator(), expectedFrameworkEvents, fec.getList(1, TIMEOUT));
     
     Bundle tb1 = getContext().installBundle(getWebServer() + "tb1.jar");
@@ -167,7 +167,7 @@ public class StartLevelControl extends DefaultTestBundleControl {
 
     sl.setInitialBundleStartLevel(sl_20);
     sl.setStartLevel(sl_10);
-    expectedFrameworkEvents.add(new FrameworkEvent(FrameworkEvent.STARTLEVEL_CHANGED, getContext().getBundle(),null));
+    expectedFrameworkEvents.add(new FrameworkEvent(FrameworkEvent.STARTLEVEL_CHANGED, getContext().getBundle(0),null));
     assertEquals("Received start level changed event", fec.getComparator(), expectedFrameworkEvents, fec.getList(1, TIMEOUT));
     
     Bundle tb1 = getContext().installBundle(getWebServer() + "tb1.jar");
@@ -220,7 +220,7 @@ public class StartLevelControl extends DefaultTestBundleControl {
     ArrayList expectedBundleStartEvents = new ArrayList();
     ArrayList expectedBundleStopEvents = new ArrayList();
 
-    expectedFrameworkEvents.add(new FrameworkEvent(FrameworkEvent.STARTLEVEL_CHANGED, getContext().getBundle(),null));
+    expectedFrameworkEvents.add(new FrameworkEvent(FrameworkEvent.STARTLEVEL_CHANGED, getContext().getBundle(0),null));
 
     sl.setInitialBundleStartLevel(sl_15);
     sl.setStartLevel(sl_10);
@@ -267,7 +267,7 @@ public class StartLevelControl extends DefaultTestBundleControl {
 	    ArrayList expectedBundleStartEvents = new ArrayList();
 	    ArrayList expectedBundleStopEvents = new ArrayList();
 
-	    expectedFrameworkEvents.add(new FrameworkEvent(FrameworkEvent.STARTLEVEL_CHANGED, getContext().getBundle(),null));
+	    expectedFrameworkEvents.add(new FrameworkEvent(FrameworkEvent.STARTLEVEL_CHANGED, getContext().getBundle(0),null));
 
     sl.setInitialBundleStartLevel(sl_15);
     sl.setStartLevel(sl_10);
@@ -315,7 +315,7 @@ public class StartLevelControl extends DefaultTestBundleControl {
 	    ArrayList expectedBundleStartEvents = new ArrayList();
 	    ArrayList expectedBundleStopEvents = new ArrayList();
 
-	    expectedFrameworkEvents.add(new FrameworkEvent(FrameworkEvent.STARTLEVEL_CHANGED, getContext().getBundle(),null));
+	    expectedFrameworkEvents.add(new FrameworkEvent(FrameworkEvent.STARTLEVEL_CHANGED, getContext().getBundle(0),null));
 
 	    sl.setInitialBundleStartLevel(sl_15);
     assertEquals("setInitialBundleStartLevel", sl_15,  sl.getInitialBundleStartLevel());
@@ -376,7 +376,7 @@ public class StartLevelControl extends DefaultTestBundleControl {
 	    FrameworkEventCollector fec2 = new FrameworkEventCollector(FrameworkEvent.STARTLEVEL_CHANGED|FrameworkEvent.ERROR);
 	    getContext().addFrameworkListener(fec2);
 
-	    expectedFrameworkEvents.add(new FrameworkEvent(FrameworkEvent.STARTLEVEL_CHANGED, getContext().getBundle(),null));
+	    expectedFrameworkEvents.add(new FrameworkEvent(FrameworkEvent.STARTLEVEL_CHANGED, getContext().getBundle(0),null));
 
 	    sl.setInitialBundleStartLevel(sl_5);
     sl.setStartLevel(sl_10);
@@ -385,7 +385,7 @@ public class StartLevelControl extends DefaultTestBundleControl {
     Bundle tb5 = getContext().installBundle(getWebServer() + "tb5.jar");
     expectedFrameworkError1.add(new FrameworkEvent(FrameworkEvent.ERROR, tb5, new BundleException("")));
     expectedFrameworkError2.add(new FrameworkEvent(FrameworkEvent.ERROR, tb5, new BundleException("")));
-    expectedFrameworkError2.add(new FrameworkEvent(FrameworkEvent.STARTLEVEL_CHANGED, getContext().getBundle(),null));
+    expectedFrameworkError2.add(new FrameworkEvent(FrameworkEvent.STARTLEVEL_CHANGED, getContext().getBundle(0),null));
 
 
     try {
@@ -424,7 +424,7 @@ public class StartLevelControl extends DefaultTestBundleControl {
 	    ArrayList expectedTB3Events = new ArrayList();
 	    ArrayList expectedTB4Events = new ArrayList();
 
-	    expectedFrameworkEvents.add(new FrameworkEvent(FrameworkEvent.STARTLEVEL_CHANGED, getContext().getBundle(),null));
+	    expectedFrameworkEvents.add(new FrameworkEvent(FrameworkEvent.STARTLEVEL_CHANGED, getContext().getBundle(0),null));
 
 	    sl.setInitialBundleStartLevel(sl_5);
     sl.setStartLevel(sl_10);
@@ -444,7 +444,7 @@ public class StartLevelControl extends DefaultTestBundleControl {
     expectedTB4Events.add(new BundleEvent(BundleEvent.STARTED, tb4));
     expectedTB4Events.add(new BundleEvent(BundleEvent.STOPPED, tb4));
     expectedFrameworkEvents.clear();
-    expectedFrameworkEvents.add(new FrameworkEvent(FrameworkEvent.STARTLEVEL_CHANGED, tb4,null));
+    expectedFrameworkEvents.add(new FrameworkEvent(FrameworkEvent.STARTLEVEL_CHANGED, getContext().getBundle(0),null));
     try {
       tb4.start();
       assertEquals("Received start level changed event", fec.getComparator(), expectedFrameworkEvents, fec.getList(1, TIMEOUT));
