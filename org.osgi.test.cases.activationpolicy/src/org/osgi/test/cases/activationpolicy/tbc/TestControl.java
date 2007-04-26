@@ -55,7 +55,7 @@ public class TestControl extends DefaultTestBundleControl {
 				assertEquals("Event Type", expected.getType(), actual.getType());
 			} else if (expectedEvents[i] instanceof FrameworkEvent) {
 				FrameworkEvent expected = (FrameworkEvent) expectedEvents[i];
-				FrameworkEvent actual = (FrameworkEvent) expectedEvents[i];
+				FrameworkEvent actual = (FrameworkEvent) actualEvents[i];
 				assertEquals("Event Bundles", expected.getSource(), actual.getSource());
 				assertEquals("Event Type", expected.getType(), actual.getType());
 			}
@@ -198,13 +198,13 @@ public class TestControl extends DefaultTestBundleControl {
 			// crank up the framework start-level.  This should result in no STARTED event
 			startLevel.setStartLevel(startLevel.getStartLevel() + 15);
 			Object[] expectedFrameworkEvents = new Object[1];
-			expectedFrameworkEvents[0] = new FrameworkEvent(FrameworkEvent.STARTLEVEL_CHANGED, getContext().getBundle(), null);
+			expectedFrameworkEvents[0] = new FrameworkEvent(FrameworkEvent.STARTLEVEL_CHANGED, getContext().getBundle(0), null);
 			Object[] actualFrameworkEvents = startlevelListener.getResults(1);
 			compareEvents(expectedFrameworkEvents, actualFrameworkEvents);
 		
 			startLevel.setStartLevel(startLevel.getStartLevel() - 15);
 			expectedFrameworkEvents = new Object[1];
-			expectedFrameworkEvents[0] = new FrameworkEvent(FrameworkEvent.STARTLEVEL_CHANGED, getContext().getBundle(), null);
+			expectedFrameworkEvents[0] = new FrameworkEvent(FrameworkEvent.STARTLEVEL_CHANGED, getContext().getBundle(0), null);
 			actualFrameworkEvents = startlevelListener.getResults(1);
 			compareEvents(expectedFrameworkEvents, actualFrameworkEvents);
 
@@ -225,13 +225,13 @@ public class TestControl extends DefaultTestBundleControl {
 
 			startLevel.setStartLevel(startLevel.getStartLevel() + 15);
 			expectedFrameworkEvents = new Object[1];
-			expectedFrameworkEvents[0] = new FrameworkEvent(FrameworkEvent.STARTLEVEL_CHANGED, getContext().getBundle(), null);
+			expectedFrameworkEvents[0] = new FrameworkEvent(FrameworkEvent.STARTLEVEL_CHANGED, getContext().getBundle(0), null);
 			actualFrameworkEvents = startlevelListener.getResults(1);
 			compareEvents(expectedFrameworkEvents, actualFrameworkEvents);
 
 			startLevel.setStartLevel(startLevel.getStartLevel() - 15);
 			expectedFrameworkEvents = new Object[1];
-			expectedFrameworkEvents[0] = new FrameworkEvent(FrameworkEvent.STARTLEVEL_CHANGED, getContext().getBundle(), null);
+			expectedFrameworkEvents[0] = new FrameworkEvent(FrameworkEvent.STARTLEVEL_CHANGED, getContext().getBundle(0), null);
 			actualFrameworkEvents = startlevelListener.getResults(1);
 			compareEvents(expectedFrameworkEvents, actualFrameworkEvents);
 
@@ -247,7 +247,7 @@ public class TestControl extends DefaultTestBundleControl {
 			// now load a class while start-level is met.
 			startLevel.setStartLevel(startLevel.getStartLevel() + 15);
 			expectedFrameworkEvents = new Object[1];
-			expectedFrameworkEvents[0] = new FrameworkEvent(FrameworkEvent.STARTLEVEL_CHANGED, getContext().getBundle(), null);
+			expectedFrameworkEvents[0] = new FrameworkEvent(FrameworkEvent.STARTLEVEL_CHANGED, getContext().getBundle(0), null);
 			actualFrameworkEvents = startlevelListener.getResults(1);
 			compareEvents(expectedFrameworkEvents, actualFrameworkEvents);
 
@@ -262,7 +262,7 @@ public class TestControl extends DefaultTestBundleControl {
 
 			startLevel.setStartLevel(startLevel.getStartLevel() - 15);
 			expectedFrameworkEvents = new Object[1];
-			expectedFrameworkEvents[0] = new FrameworkEvent(FrameworkEvent.STARTLEVEL_CHANGED, getContext().getBundle(), null);
+			expectedFrameworkEvents[0] = new FrameworkEvent(FrameworkEvent.STARTLEVEL_CHANGED, getContext().getBundle(0), null);
 			actualFrameworkEvents = startlevelListener.getResults(1);
 			compareEvents(expectedFrameworkEvents, actualFrameworkEvents);
 
@@ -304,13 +304,13 @@ public class TestControl extends DefaultTestBundleControl {
 			// crank up the framework start-level.  This should result in a STARTED event because we are ingoring the activation policy
 			startLevel.setStartLevel(startLevel.getStartLevel() + 15);
 			Object[] expectedFrameworkEvents = new Object[1];
-			expectedFrameworkEvents[0] = new FrameworkEvent(FrameworkEvent.STARTLEVEL_CHANGED, getContext().getBundle(), null);
+			expectedFrameworkEvents[0] = new FrameworkEvent(FrameworkEvent.STARTLEVEL_CHANGED, getContext().getBundle(0), null);
 			Object[] actualFrameworkEvents = startlevelListener.getResults(1);
 			compareEvents(expectedFrameworkEvents, actualFrameworkEvents);
 		
 			startLevel.setStartLevel(startLevel.getStartLevel() - 15);
 			expectedFrameworkEvents = new Object[1];
-			expectedFrameworkEvents[0] = new FrameworkEvent(FrameworkEvent.STARTLEVEL_CHANGED, getContext().getBundle(), null);
+			expectedFrameworkEvents[0] = new FrameworkEvent(FrameworkEvent.STARTLEVEL_CHANGED, getContext().getBundle(0), null);
 			actualFrameworkEvents = startlevelListener.getResults(1);
 			compareEvents(expectedFrameworkEvents, actualFrameworkEvents);
 
@@ -330,13 +330,13 @@ public class TestControl extends DefaultTestBundleControl {
 
 			startLevel.setStartLevel(startLevel.getStartLevel() + 15);
 			expectedFrameworkEvents = new Object[1];
-			expectedFrameworkEvents[0] = new FrameworkEvent(FrameworkEvent.STARTLEVEL_CHANGED, getContext().getBundle(), null);
+			expectedFrameworkEvents[0] = new FrameworkEvent(FrameworkEvent.STARTLEVEL_CHANGED, getContext().getBundle(0), null);
 			actualFrameworkEvents = startlevelListener.getResults(1);
 			compareEvents(expectedFrameworkEvents, actualFrameworkEvents);
 
 			startLevel.setStartLevel(startLevel.getStartLevel() - 15);
 			expectedFrameworkEvents = new Object[1];
-			expectedFrameworkEvents[0] = new FrameworkEvent(FrameworkEvent.STARTLEVEL_CHANGED, getContext().getBundle(), null);
+			expectedFrameworkEvents[0] = new FrameworkEvent(FrameworkEvent.STARTLEVEL_CHANGED, getContext().getBundle(0), null);
 			actualFrameworkEvents = startlevelListener.getResults(1);
 			compareEvents(expectedFrameworkEvents, actualFrameworkEvents);
 
@@ -359,7 +359,7 @@ public class TestControl extends DefaultTestBundleControl {
 			// now call start(START_TRANSIENT | START_ACTIVATION_POLICY) while start-level is met.
 			startLevel.setStartLevel(startLevel.getStartLevel() + 15);
 			expectedFrameworkEvents = new Object[1];
-			expectedFrameworkEvents[0] = new FrameworkEvent(FrameworkEvent.STARTLEVEL_CHANGED, getContext().getBundle(), null);
+			expectedFrameworkEvents[0] = new FrameworkEvent(FrameworkEvent.STARTLEVEL_CHANGED, getContext().getBundle(0), null);
 			actualFrameworkEvents = startlevelListener.getResults(1);
 			compareEvents(expectedFrameworkEvents, actualFrameworkEvents);
 
@@ -373,7 +373,7 @@ public class TestControl extends DefaultTestBundleControl {
 
 			startLevel.setStartLevel(startLevel.getStartLevel() - 15);
 			expectedFrameworkEvents = new Object[1];
-			expectedFrameworkEvents[0] = new FrameworkEvent(FrameworkEvent.STARTLEVEL_CHANGED, getContext().getBundle(), null);
+			expectedFrameworkEvents[0] = new FrameworkEvent(FrameworkEvent.STARTLEVEL_CHANGED, getContext().getBundle(0), null);
 			actualFrameworkEvents = startlevelListener.getResults(1);
 			compareEvents(expectedFrameworkEvents, actualFrameworkEvents);
 
@@ -414,13 +414,13 @@ public class TestControl extends DefaultTestBundleControl {
 			// crank up the framework start-level.  This should result in no STARTED event
 			startLevel.setStartLevel(startLevel.getStartLevel() + 15);
 			Object[] expectedFrameworkEvents = new Object[1];
-			expectedFrameworkEvents[0] = new FrameworkEvent(FrameworkEvent.STARTLEVEL_CHANGED, getContext().getBundle(), null);
+			expectedFrameworkEvents[0] = new FrameworkEvent(FrameworkEvent.STARTLEVEL_CHANGED, getContext().getBundle(0), null);
 			Object[] actualFrameworkEvents = startlevelListener.getResults(1);
 			compareEvents(expectedFrameworkEvents, actualFrameworkEvents);
 		
 			startLevel.setStartLevel(startLevel.getStartLevel() - 15);
 			expectedFrameworkEvents = new Object[1];
-			expectedFrameworkEvents[0] = new FrameworkEvent(FrameworkEvent.STARTLEVEL_CHANGED, getContext().getBundle(), null);
+			expectedFrameworkEvents[0] = new FrameworkEvent(FrameworkEvent.STARTLEVEL_CHANGED, getContext().getBundle(0), null);
 			actualFrameworkEvents = startlevelListener.getResults(1);
 			compareEvents(expectedFrameworkEvents, actualFrameworkEvents);
 
@@ -446,13 +446,13 @@ public class TestControl extends DefaultTestBundleControl {
 
 			startLevel.setStartLevel(startLevel.getStartLevel() + 15);
 			expectedFrameworkEvents = new Object[1];
-			expectedFrameworkEvents[0] = new FrameworkEvent(FrameworkEvent.STARTLEVEL_CHANGED, getContext().getBundle(), null);
+			expectedFrameworkEvents[0] = new FrameworkEvent(FrameworkEvent.STARTLEVEL_CHANGED, getContext().getBundle(0), null);
 			actualFrameworkEvents = startlevelListener.getResults(1);
 			compareEvents(expectedFrameworkEvents, actualFrameworkEvents);
 
 			startLevel.setStartLevel(startLevel.getStartLevel() - 15);
 			expectedFrameworkEvents = new Object[1];
-			expectedFrameworkEvents[0] = new FrameworkEvent(FrameworkEvent.STARTLEVEL_CHANGED, getContext().getBundle(), null);
+			expectedFrameworkEvents[0] = new FrameworkEvent(FrameworkEvent.STARTLEVEL_CHANGED, getContext().getBundle(0), null);
 			actualFrameworkEvents = startlevelListener.getResults(1);
 			compareEvents(expectedFrameworkEvents, actualFrameworkEvents);
 
@@ -468,7 +468,7 @@ public class TestControl extends DefaultTestBundleControl {
 			// now call start(START_TRANSIENT) while start-level is met.
 			startLevel.setStartLevel(startLevel.getStartLevel() + 15);
 			expectedFrameworkEvents = new Object[1];
-			expectedFrameworkEvents[0] = new FrameworkEvent(FrameworkEvent.STARTLEVEL_CHANGED, getContext().getBundle(), null);
+			expectedFrameworkEvents[0] = new FrameworkEvent(FrameworkEvent.STARTLEVEL_CHANGED, getContext().getBundle(0), null);
 			actualFrameworkEvents = startlevelListener.getResults(1);
 			compareEvents(expectedFrameworkEvents, actualFrameworkEvents);
 
@@ -484,7 +484,7 @@ public class TestControl extends DefaultTestBundleControl {
 
 			startLevel.setStartLevel(startLevel.getStartLevel() - 15);
 			expectedFrameworkEvents = new Object[1];
-			expectedFrameworkEvents[0] = new FrameworkEvent(FrameworkEvent.STARTLEVEL_CHANGED, getContext().getBundle(), null);
+			expectedFrameworkEvents[0] = new FrameworkEvent(FrameworkEvent.STARTLEVEL_CHANGED, getContext().getBundle(0), null);
 			actualFrameworkEvents = startlevelListener.getResults(1);
 			compareEvents(expectedFrameworkEvents, actualFrameworkEvents);
 
@@ -524,13 +524,13 @@ public class TestControl extends DefaultTestBundleControl {
 			// test transient start Bundle.stop(START_TRANSIENT)
 			startLevel.setStartLevel(startLevel.getStartLevel() + 15);
 			Object[] expectedFrameworkEvents = new Object[1];
-			expectedFrameworkEvents[0] = new FrameworkEvent(FrameworkEvent.STARTLEVEL_CHANGED, getContext().getBundle(), null);
+			expectedFrameworkEvents[0] = new FrameworkEvent(FrameworkEvent.STARTLEVEL_CHANGED, getContext().getBundle(0), null);
 			Object[] actualFrameworkEvents = startlevelListener.getResults(1);
 			compareEvents(expectedFrameworkEvents, actualFrameworkEvents);
 		
 			startLevel.setStartLevel(startLevel.getStartLevel() - 15);
 			expectedFrameworkEvents = new Object[1];
-			expectedFrameworkEvents[0] = new FrameworkEvent(FrameworkEvent.STARTLEVEL_CHANGED, getContext().getBundle(), null);
+			expectedFrameworkEvents[0] = new FrameworkEvent(FrameworkEvent.STARTLEVEL_CHANGED, getContext().getBundle(0), null);
 			actualFrameworkEvents = startlevelListener.getResults(1);
 			compareEvents(expectedFrameworkEvents, actualFrameworkEvents);
 
@@ -547,7 +547,7 @@ public class TestControl extends DefaultTestBundleControl {
 			// now call stop(STOP_TRANSIENT) while the start-level is met.
 			startLevel.setStartLevel(startLevel.getStartLevel() + 15);
 			expectedFrameworkEvents = new Object[1];
-			expectedFrameworkEvents[0] = new FrameworkEvent(FrameworkEvent.STARTLEVEL_CHANGED, getContext().getBundle(), null);
+			expectedFrameworkEvents[0] = new FrameworkEvent(FrameworkEvent.STARTLEVEL_CHANGED, getContext().getBundle(0), null);
 			actualFrameworkEvents = startlevelListener.getResults(1);
 			compareEvents(expectedFrameworkEvents, actualFrameworkEvents);
 
@@ -571,7 +571,7 @@ public class TestControl extends DefaultTestBundleControl {
 
 			startLevel.setStartLevel(startLevel.getStartLevel() - 15);
 			expectedFrameworkEvents = new Object[1];
-			expectedFrameworkEvents[0] = new FrameworkEvent(FrameworkEvent.STARTLEVEL_CHANGED, getContext().getBundle(), null);
+			expectedFrameworkEvents[0] = new FrameworkEvent(FrameworkEvent.STARTLEVEL_CHANGED, getContext().getBundle(0), null);
 			actualFrameworkEvents = startlevelListener.getResults(1);
 			compareEvents(expectedFrameworkEvents, actualFrameworkEvents);
 
@@ -579,7 +579,7 @@ public class TestControl extends DefaultTestBundleControl {
 			// now set the start-level back up and check that the bundle is started again because it is persistently started.
 			startLevel.setStartLevel(startLevel.getStartLevel() + 15);
 			expectedFrameworkEvents = new Object[1];
-			expectedFrameworkEvents[0] = new FrameworkEvent(FrameworkEvent.STARTLEVEL_CHANGED, getContext().getBundle(), null);
+			expectedFrameworkEvents[0] = new FrameworkEvent(FrameworkEvent.STARTLEVEL_CHANGED, getContext().getBundle(0), null);
 			actualFrameworkEvents = startlevelListener.getResults(1);
 			compareEvents(expectedFrameworkEvents, actualFrameworkEvents);
 
@@ -591,7 +591,7 @@ public class TestControl extends DefaultTestBundleControl {
 
 			startLevel.setStartLevel(startLevel.getStartLevel() - 15);
 			expectedFrameworkEvents = new Object[1];
-			expectedFrameworkEvents[0] = new FrameworkEvent(FrameworkEvent.STARTLEVEL_CHANGED, getContext().getBundle(), null);
+			expectedFrameworkEvents[0] = new FrameworkEvent(FrameworkEvent.STARTLEVEL_CHANGED, getContext().getBundle(0), null);
 			actualFrameworkEvents = startlevelListener.getResults(1);
 			compareEvents(expectedFrameworkEvents, actualFrameworkEvents);
 
