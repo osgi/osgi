@@ -74,7 +74,7 @@ public interface UserAdmin {
 
 	/**
 	 * Removes the <code>Role</code> object with the given name from this User
-	 * Admin service.
+	 * Admin service and all groups it is a member of.
 	 * 
 	 * <p>
 	 * If the <code>Role</code> object was removed, a <code>UserAdminEvent</code>
