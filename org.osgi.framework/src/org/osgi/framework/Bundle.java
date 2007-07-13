@@ -818,6 +818,10 @@ public interface Bundle {
 	 * bundle must be searched for the specified resource. Imported packages
 	 * cannot be searched when this bundle has not been resolved. If this bundle
 	 * is a fragment bundle then <code>null</code> is returned.
+	 * <p>
+	 * Note: Jar and zip files are not required to include directory entries.
+	 * URLs to directory entries will not be returned if the bundle contents
+	 * do not contain directory entries.
 	 * 
 	 * @param name The name of the resource. See
 	 *        <code>java.lang.ClassLoader.getResource</code> for a description
@@ -958,6 +962,10 @@ public interface Bundle {
 	 * bundle must be searched for the specified resources. Imported packages
 	 * cannot be searched when a bundle has not been resolved. If this bundle is
 	 * a fragment bundle then <code>null</code> is returned.
+	 * <p>
+	 * Note: Jar and zip files are not required to include directory entries.
+	 * URLs to directory entries will not be returned if the bundle contents
+	 * do not contain directory entries.
 	 * 
 	 * @param name The name of the resource. See
 	 *        <code>java.lang.ClassLoader.getResources</code> for a
@@ -988,6 +996,10 @@ public interface Bundle {
 	 * Returned paths indicating subdirectory paths end with a &quot;/&quot;.
 	 * The returned paths are all relative to the root of this bundle and must
 	 * not begin with &quot;/&quot;.
+	 * <p>
+	 * Note: Jar and zip files are not required to include directory entries.
+	 * Paths to directory entries will not be returned if the bundle contents
+	 * do not contain directory entries.
 	 * 
 	 * @param path The path name for which to return entry paths.
 	 * @return An Enumeration of the entry paths (<code>String</code>
@@ -1009,6 +1021,10 @@ public interface Bundle {
 	 * The specified path is always relative to the root of this bundle and may
 	 * begin with &quot;/&quot;. A path value of &quot;/&quot; indicates the
 	 * root of this bundle.
+	 * <p>
+	 * Note: Jar and zip files are not required to include directory entries.
+	 * URLs to directory entries will not be returned if the bundle contents
+	 * do not contain directory entries.
 	 * 
 	 * @param path The path name of the entry.
 	 * @return A URL to the entry, or <code>null</code> if no entry could be
@@ -1071,16 +1087,22 @@ public interface Bundle {
 	 * if (e.hasMoreElements())
 	 * 	return (URL) e.nextElement();
 	 * </pre>
+	 * <p>
+	 * Note: Jar and zip files are not required to include directory entries.
+	 * URLs to directory entries will not be returned if the bundle contents
+	 * do not contain directory entries.
 	 * 
 	 * @param path The path name in which to look. The path is always relative
 	 *        to the root of this bundle and may begin with &quot;/&quot;. A
 	 *        path value of &quot;/&quot; indicates the root of this bundle.
 	 * @param filePattern The file name pattern for selecting entries in the
 	 *        specified path. The pattern is only matched against the last
-	 *        element of the entry path and it supports substring matching, as
-	 *        specified in the Filter specification, using the wildcard
-	 *        character (&quot;*&quot;). If null is specified, this is
-	 *        equivalent to &quot;*&quot; and matches all files.
+	 *        element of the entry path.  If the entry is a directory then
+	 *        the trailing &quot;/&quot; is not used for pattern matching.
+	 *        Substring matching is supported, as specified in the Filter
+	 *        specification, using the wildcard character (&quot;*&quot;).
+	 *        If null is specified, this is equivalent to &quot;*&quot;
+	 *        and matches all files.
 	 * @param recurse If <code>true</code>, recurse into subdirectories.
 	 *        Otherwise only return entries from the specified path.
 	 * @return An enumeration of URL objects for each matching entry, or
