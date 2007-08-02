@@ -37,9 +37,9 @@ package org.osgi.service.event;
  * For example:
  * 
  * <pre>
- * String[] topics = new String[] {EventConstants.EVENT_TOPIC, &quot;com/isv/*&quot;};
+ * String[] topics = new String[] {&quot;com/isv/*&quot;};
  * Hashtable ht = new Hashtable();
- * ht.put(EVENT_TOPIC, topics);
+ * ht.put(EventConstants.EVENT_TOPIC, topics);
  * context.registerService(EventHandler.class.getName(), this, ht);
  * </pre>
  * Event Handler services can also be registered with an {@link EventConstants#EVENT_FILTER}
