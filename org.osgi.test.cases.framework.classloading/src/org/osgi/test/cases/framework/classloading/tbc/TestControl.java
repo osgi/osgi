@@ -31,9 +31,11 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.lang.reflect.Method;
 import java.net.URL;
+import java.util.StringTokenizer;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleException;
+import org.osgi.framework.Constants;
 import org.osgi.framework.ServiceReference;
 import org.osgi.service.packageadmin.PackageAdmin;
 import org.osgi.test.cases.util.DefaultTestBundleControl;
@@ -726,10 +728,9 @@ public class TestControl extends DefaultTestBundleControl {
 	 */
 	public void testHiddenPackages001() throws Exception {
 		Bundle tb7c;
-		String systemPackages;
+		String bootPackages;
 
 		tb7c = getContext().installBundle(getWebServer() + "tb7c.jar");
-
 		try {
 			try {
 				ClassLoader.getSystemClassLoader().loadClass(
@@ -739,19 +740,26 @@ public class TestControl extends DefaultTestBundleControl {
 				fail("A class required by this test cannot be loaded");
 			}
 
-			systemPackages = System.getProperty(
-					"org.osgi.framework.systemPackages", "");
-			if (systemPackages.indexOf("org.omg.CORBA") != -1) {
-				fail("This test does not run with some packages exported using the property 'org.osgi.framework.systemPackages'");
+			bootPackages = System.getProperty(
+					Constants.FRAMEWORK_BOOTDELEGATION, "");
+			if (bootPackages != null) {
+				StringTokenizer packages = new StringTokenizer(bootPackages, ",");
+				while(packages.hasMoreTokens()) {
+					String pkg = packages.nextToken().trim();
+					if (pkg.equals("*") || pkg.indexOf("org.*") != -1 || pkg.indexOf("org.omg.*") != -1 || pkg.indexOf("org.omg.CORBA") != -1) {
+						fail("This test does not run with the org.omg.CORBA package available in '" + Constants.FRAMEWORK_BOOTDELEGATION + "'");
+					}
+				}
 			}
 
-			trace("Installing a bundle which imports a package accessible using the system class loader");
-			tb7c.start();
-			tb7c.stop();
-			fail("All packages (except java.*) loaded by system class loader must be hidden from executing bundles");
-		}
-		catch (BundleException ex) {
-			// Ignore this exception
+			trace("Installing a bundle which uses a package accessible using the system class loader");
+			try {
+				tb7c.start();
+				tb7c.stop();
+				fail("All packages (except java.*) loaded by system class loader must be hidden from executing bundles");
+			} catch (BundleException be) {
+				// expected
+			}
 		}
 		finally {
 			tb7c.uninstall();

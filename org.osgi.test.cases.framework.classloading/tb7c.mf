@@ -3,7 +3,8 @@ Bundle-Name: ${p}.tb7c
 Bundle-SymbolicName: ${p}.tb7c
 Bundle-Version: 4
 Bundle-ManifestVersion: 2
-Import-Package: org.osgi.framework, org.omg.CORBA
+Bundle-Activator: org.osgi.test.cases.framework.classloading.tb7c.Activator
+Import-Package: org.osgi.framework
 $(EXPORT-PACKAGE)
 $(PRIVATE-PACKAGE)
 
