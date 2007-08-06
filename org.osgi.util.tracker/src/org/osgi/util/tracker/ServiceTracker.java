@@ -248,7 +248,7 @@ public class ServiceTracker implements ServiceTrackerCustomizer {
 	 *        <code>ServiceTracker</code> will track all matching services
 	 *        regardless of class loader accessibility. If <code>false</code>,
 	 *        then this <code>ServiceTracker</code> will only track matching
-	 *        services which are class loader accessibile to the bundle whose
+	 *        services which are class loader accessible to the bundle whose
 	 *        <code>BundleContext</code> is used by this
 	 *        <code>ServiceTracker</code>.
 	 * @throws java.lang.IllegalStateException if the <code>BundleContext</code>
@@ -439,7 +439,7 @@ public class ServiceTracker implements ServiceTrackerCustomizer {
 	 * short period of time.
 	 * 
 	 * @param timeout time interval in milliseconds to wait. If zero, the method
-	 *        will wait indefinately.
+	 *        will wait indefinitely.
 	 * @return Returns the result of <code>getService()</code>.
 	 * @throws InterruptedException If another thread has interrupted the
 	 *         current thread.
