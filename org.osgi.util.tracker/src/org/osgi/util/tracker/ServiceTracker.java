@@ -18,12 +18,6 @@
 
 package org.osgi.util.tracker;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.Map;
-
 import org.osgi.framework.AllServiceListener;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.Constants;
@@ -294,7 +288,7 @@ public class ServiceTracker implements ServiceTrackerCustomizer {
 					}
 				}
 
-				tracked.setInitialServices(references); // set tracked with
+				tracked.setInitial(references); // set tracked with
 				// the initial
 				// references
 			}
@@ -304,7 +298,7 @@ public class ServiceTracker implements ServiceTrackerCustomizer {
 			}
 		}
 		/* Call tracked outside of synchronized region */
-		tracked.trackInitialServices(); // process the initial references
+		tracked.trackInitial(); // process the initial references
 	}
 
 	/**
@@ -498,7 +492,14 @@ public class ServiceTracker implements ServiceTrackerCustomizer {
 			return null;
 		}
 		synchronized (tracked) {
-			return tracked.getTrackedReferences();
+			int length = tracked.size();
+			if (length == 0) {
+				return null;
+			}
+
+			ServiceReference[] references = new ServiceReference[length];
+			tracked.getTracked(references);
+			return references;
 		}
 	}
 
@@ -603,7 +604,7 @@ public class ServiceTracker implements ServiceTrackerCustomizer {
 			return null;
 		}
 		synchronized (tracked) {
-			return tracked.getTracked(reference);
+			return tracked.getCustomizedObject(reference);
 		}
 	}
 
@@ -752,166 +753,17 @@ public class ServiceTracker implements ServiceTrackerCustomizer {
 	}
 
 	/**
-	 * Inner class to track services. If a <code>ServiceTracker</code> object
-	 * is reused (closed then reopened), then a new Tracked object is used. This
-	 * class acts a map of <code>ServiceReference</code> object -> tracked
-	 * Object. This class is the <code>ServiceListener</code> object for the
-	 * tracker. This class is used to synchronize access to the tracked
-	 * services. This is not a public class. It is only for use by the
-	 * implementation of the <code>ServiceTracker</code> class.
+	 * Inner class which subclasses AbstractTracked. This class is the
+	 * <code>ServiceListener</code> object for the tracker.
 	 * 
 	 * @ThreadSafe
 	 */
-	class Tracked implements ServiceListener {
-		/**
-		 * Map of ServiceReferences to tracked service objects.
-		 * 
-		 * @GuardedBy this
-		 */
-		private final Map			tracked;
-
-		/**
-		 * List of ServiceReferences in the process of being added. This is used
-		 * to deal with nesting of ServiceEvents. Since ServiceEvents are
-		 * synchronously delivered, ServiceEvents can be nested. For example,
-		 * when processing the adding of a service and the customizer causes the
-		 * service to be unregistered, notification to the nested call to
-		 * untrack that the service was unregistered can be made to the track
-		 * method.
-		 * 
-		 * Since the ArrayList implementation is not synchronized, all access to
-		 * this list must be protected by the same synchronized object for
-		 * thread-safety.
-		 * 
-		 * @GuardedBy this
-		 */
-		private final ArrayList		adding;
-
-		/**
-		 * true if the tracked object is closed.
-		 * 
-		 * This field is volatile because it is set by one thread and read by
-		 * another.
-		 */
-		private volatile boolean	closed;
-
-		/**
-		 * Initial list of ServiceReferences for the tracker. This is used to
-		 * correctly process the initial services which could become
-		 * unregistered before they are tracked. This is necessary since the
-		 * initial set of tracked services are not "announced" by ServiceEvents
-		 * and therefore the ServiceEvent for unregistration could be delivered
-		 * before we track the service.
-		 * 
-		 * A service must not be in both the initial and adding lists at the
-		 * same time. A service must be moved from the initial list to the
-		 * adding list "atomically" before we begin tracking it.
-		 * 
-		 * Since the LinkedList implementation is not synchronized, all access
-		 * to this list must be protected by the same synchronized object for
-		 * thread-safety.
-		 * 
-		 * @GuardedBy this
-		 */
-		private final LinkedList	initial;
-
+	class Tracked extends AbstractTracked implements ServiceListener {
 		/**
 		 * Tracked constructor.
 		 */
 		protected Tracked() {
-			closed = false;
-			tracked = new HashMap();
-			adding = new ArrayList(6);
-			initial = new LinkedList();
-		}
-
-		/**
-		 * Set initial list of services into tracker before ServiceEvents begin
-		 * to be received.
-		 * 
-		 * This method must be called from ServiceTracker.open while
-		 * synchronized on this object in the same synchronized block as the
-		 * addServiceListener call.
-		 * 
-		 * @param references The initial list of services to be tracked.
-		 * @GuardedBy this
-		 */
-		protected void setInitialServices(ServiceReference[] references) {
-			if (references == null) {
-				return;
-			}
-			int size = references.length;
-			for (int i = 0; i < size; i++) {
-				if (DEBUG) {
-					System.out
-							.println("ServiceTracker.Tracked.setInitialServices: " + references[i]); //$NON-NLS-1$
-				}
-				initial.add(references[i]);
-			}
-		}
-
-		/**
-		 * Track the initial list of services. This is called after
-		 * ServiceEvents can begin to be received.
-		 * 
-		 * This method must be called from ServiceTracker.open while not
-		 * synchronized on this object after the addServiceListener call.
-		 * 
-		 */
-		protected void trackInitialServices() {
-			while (true) {
-				ServiceReference reference;
-				synchronized (this) {
-					if (initial.size() == 0) {
-						/*
-						 * if there are no more inital services
-						 */
-						return; /* we are done */
-					}
-					/*
-					 * move the first service from the initial list to the
-					 * adding list within this synchronized block.
-					 */
-					reference = (ServiceReference) initial.removeFirst();
-					if (tracked.get(reference) != null) {
-						/* if we are already tracking this service */
-						if (DEBUG) {
-							System.out
-									.println("ServiceTracker.Tracked.trackInitialServices[already tracked]: " + reference); //$NON-NLS-1$
-						}
-						continue; /* skip this service */
-					}
-					if (adding.contains(reference)) {
-						/*
-						 * if this service is already in the process of being
-						 * added.
-						 */
-						if (DEBUG) {
-							System.out
-									.println("ServiceTracker.Tracked.trackInitialServices[already adding]: " + reference); //$NON-NLS-1$
-						}
-						continue; /* skip this service */
-					}
-					adding.add(reference);
-				}
-				if (DEBUG) {
-					System.out
-							.println("ServiceTracker.Tracked.trackInitialServices: " + reference); //$NON-NLS-1$
-				}
-				trackAdding(reference); /*
-										 * Begin tracking it. We call
-										 * trackAdding since we have already put
-										 * the reference in the adding list.
-										 */
-			}
-		}
-
-		/**
-		 * Called by the owning <code>ServiceTracker</code> object when it is
-		 * closed.
-		 */
-		protected void close() {
-			closed = true;
+			super();
 		}
 
 		/**
@@ -974,215 +826,46 @@ public class ServiceTracker implements ServiceTrackerCustomizer {
 		}
 
 		/**
-		 * Begin to track the referenced service.
-		 * 
-		 * @param reference Reference to a service to be tracked.
-		 */
-		private void track(ServiceReference reference) {
-			Object object;
-			synchronized (this) {
-				object = tracked.get(reference);
-			}
-			if (object != null) /* we are already tracking the service */
-			{
-				if (DEBUG) {
-					System.out
-							.println("ServiceTracker.Tracked.track[modified]: " + reference); //$NON-NLS-1$
-				}
-				synchronized (this) {
-					modified(); /* increment modification count */
-				}
-				/* Call customizer outside of synchronized region */
-				customizer.modifiedService(reference, object);
-				/*
-				 * If the customizer throws an unchecked exception, it is safe
-				 * to let it propagate
-				 */
-				return;
-			}
-			synchronized (this) {
-				if (adding.contains(reference)) { /*
-													 * if this service is
-													 * already in the process of
-													 * being added.
-													 */
-					if (DEBUG) {
-						System.out
-								.println("ServiceTracker.Tracked.track[already adding]: " + reference); //$NON-NLS-1$
-					}
-					return;
-				}
-				adding.add(reference); /* mark this service is being added */
-			}
-
-			trackAdding(reference); /*
-									 * call trackAdding now that we have put the
-									 * reference in the adding list
-									 */
-		}
-
-		/**
-		 * Common logic to add a service to the tracker used by track and
-		 * trackInitialServices. The specified reference must have been placed
-		 * in the adding list before calling this method.
-		 * 
-		 * @param reference Reference to a service to be tracked.
-		 */
-		private void trackAdding(ServiceReference reference) {
-			if (DEBUG) {
-				System.out
-						.println("ServiceTracker.Tracked.trackAdding: " + reference); //$NON-NLS-1$
-			}
-			Object object = null;
-			boolean becameUntracked = false;
-			/* Call customizer outside of synchronized region */
-			try {
-				object = customizer.addingService(reference);
-				/*
-				 * If the customizer throws an unchecked exception, it will
-				 * propagate after the finally
-				 */
-			}
-			finally {
-				synchronized (this) {
-					if (adding.remove(reference)) { /*
-													 * if the service was not
-													 * untracked during the
-													 * customizer callback
-													 */
-						if (object != null) {
-							tracked.put(reference, object);
-							modified(); /* increment modification count */
-							notifyAll(); /*
-											 * notify any waiters in
-											 * waitForService
-											 */
-						}
-					}
-					else {
-						becameUntracked = true;
-					}
-				}
-			}
-			/*
-			 * The service became untracked during the customizer callback.
-			 */
-			if (becameUntracked) {
-				if (DEBUG) {
-					System.out
-							.println("ServiceTracker.Tracked.trackAdding[removed]: " + reference); //$NON-NLS-1$
-				}
-				/* Call customizer outside of synchronized region */
-				customizer.removedService(reference, object);
-				/*
-				 * If the customizer throws an unchecked exception, it is safe
-				 * to let it propagate
-				 */
-			}
-		}
-
-		/**
-		 * Discontinue tracking the referenced service.
-		 * 
-		 * @param reference Reference to the tracked service.
-		 */
-		protected void untrack(ServiceReference reference) {
-			Object object;
-			synchronized (this) {
-				if (initial.remove(reference)) { /*
-													 * if this service is
-													 * already in the list of
-													 * initial references to
-													 * process
-													 */
-					if (DEBUG) {
-						System.out
-								.println("ServiceTracker.Tracked.untrack[removed from initial]: " + reference); //$NON-NLS-1$
-					}
-					return; /*
-							 * we have removed it from the list and it will not
-							 * be processed
-							 */
-				}
-
-				if (adding.remove(reference)) { /*
-												 * if the service is in the
-												 * process of being added
-												 */
-					if (DEBUG) {
-						System.out
-								.println("ServiceTracker.Tracked.untrack[being added]: " + reference); //$NON-NLS-1$
-					}
-					return; /*
-							 * in case the service is untracked while in the
-							 * process of adding
-							 */
-				}
-				object = tracked.remove(reference); /*
-													 * must remove from tracker
-													 * before calling customizer
-													 * callback
-													 */
-				if (object == null) { /* are we actually tracking the service */
-					return;
-				}
-				modified(); /* increment modification count */
-			}
-			if (DEBUG) {
-				System.out
-						.println("ServiceTracker.Tracked.untrack[removed]: " + reference); //$NON-NLS-1$
-			}
-			/* Call customizer outside of synchronized region */
-			customizer.removedService(reference, object);
-			/*
-			 * If the customizer throws an unchecked exception, it is safe to
-			 * let it propagate
-			 */
-		}
-
-		/**
-		 * Returns the number of tracked services.
-		 * 
-		 * @return The number of tracked services.
+		 * Call the Tracker modified method.
 		 * 
 		 * @GuardedBy this
 		 */
-		protected int size() {
-			return tracked.size();
+		protected void modified() {
+			ServiceTracker.this.modified();
 		}
 
 		/**
-		 * Return the tracked object for the specified service reference
+		 * Call the specific customizer adding method. This method must not be
+		 * called while synchronized on this object.
 		 * 
-		 * @param reference The service reference to lookup in the map
-		 * @return The tracked object for the specified service reference.
-		 * 
-		 * @GuardedBy this
+		 * @param item Item to be tracked.
+		 * @return Customized object for the tracked item or <code>null</code>
+		 *         if the item is not to be tracked.
 		 */
-		protected Object getTracked(ServiceReference reference) {
-			return tracked.get(reference);
+		protected Object customizerAdding(Object item) {
+			return customizer.addingService((ServiceReference) item);
 		}
 
 		/**
-		 * Return the list of references for the tracked services.
+		 * Call the specific customizer modified method. This method must not be
+		 * called while synchronized on this object.
 		 * 
-		 * @return An array of service references or <code>null</code> if no
-		 *         services are being tracked .
-		 * 
-		 * @GuardedBy this
+		 * @param item Tracked item.
+		 * @param object Customized object for the tracked item.
 		 */
-		protected ServiceReference[] getTrackedReferences() {
-			int length = tracked.size();
-			if (length == 0) {
-				return null;
-			}
+		protected void customizerModified(Object item, Object object) {
+			customizer.modifiedService((ServiceReference) item, object);
+		}
 
-			ServiceReference[] references = new ServiceReference[length];
-			Iterator iter = tracked.keySet().iterator();
-			for (int i = 0; i < length; i++) {
-				references[i] = (ServiceReference) iter.next();
-			}
-			return references;
+		/**
+		 * Call the specific customizer removed method. This method must not be
+		 * called while synchronized on this object.
+		 * 
+		 * @param item Tracked item.
+		 * @param object Customized object for the tracked item.
+		 */
+		protected void customizerRemoved(Object item, Object object) {
+			customizer.removedService((ServiceReference) item, object);
 		}
 	}
 

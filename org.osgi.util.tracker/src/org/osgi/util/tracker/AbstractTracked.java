@@ -1,0 +1,419 @@
+/*
+ * $Id$
+ * 
+ * Copyright (c) OSGi Alliance (2007). All Rights Reserved.
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package org.osgi.util.tracker;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.Map;
+
+/**
+ * Abstract class to track items. If a Tracker is reused (closed then reopened),
+ * then a new AbstractTracked object is used. This class acts a map of tracked
+ * item -> customized object. Subclasses of this class will act as the listener
+ * object for the tracker. This class is used to synchronize access to the
+ * tracked items. This is not a public class. It is only for use by the
+ * implementation of the Tracker class.
+ * 
+ * @ThreadSafe
+ * @since 1.4
+ */
+abstract class AbstractTracked {
+	/* set this to true to compile in debug messages */
+	static final boolean		DEBUG	= false;
+
+	/**
+	 * Map of tracked items to customized objects.
+	 * 
+	 * @GuardedBy this
+	 */
+	private final Map			tracked;
+
+	/**
+	 * List of items in the process of being added. This is used to deal with
+	 * nesting of events. Since events may be synchronously delivered, events
+	 * can be nested. For example, when processing the adding of a service and
+	 * the customizer causes the service to be unregistered, notification to the
+	 * nested call to untrack that the service was unregistered can be made to
+	 * the track method.
+	 * 
+	 * Since the ArrayList implementation is not synchronized, all access to
+	 * this list must be protected by the same synchronized object for
+	 * thread-safety.
+	 * 
+	 * @GuardedBy this
+	 */
+	private final ArrayList		adding;
+
+	/**
+	 * true if the tracked object is closed.
+	 * 
+	 * This field is volatile because it is set by one thread and read by
+	 * another.
+	 */
+	protected volatile boolean	closed;
+
+	/**
+	 * Initial list of items for the tracker. This is used to correctly process
+	 * the initial items which could be modified before they are tracked. This
+	 * is necessary since the initial set of tracked items are not "announced"
+	 * by events and therefore the event which makes the item untracked could be
+	 * delivered before we track the item.
+	 * 
+	 * An item must not be in both the initial and adding lists at the same
+	 * time. An item must be moved from the initial list to the adding list
+	 * "atomically" before we begin tracking it.
+	 * 
+	 * Since the LinkedList implementation is not synchronized, all access to
+	 * this list must be protected by the same synchronized object for
+	 * thread-safety.
+	 * 
+	 * @GuardedBy this
+	 */
+	private final LinkedList	initial;
+
+	/**
+	 * AbstractTracked constructor.
+	 */
+	protected AbstractTracked() {
+		closed = false;
+		tracked = new HashMap();
+		adding = new ArrayList(6);
+		initial = new LinkedList();
+	}
+
+	/**
+	 * Set initial list of items into tracker before events begin to be
+	 * received.
+	 * 
+	 * This method must be called from Tracker's open method while synchronized
+	 * on this object in the same synchronized block as the add listener call.
+	 * 
+	 * @param list The initial list of items to be tracked. <code>null</code>
+	 *        entries in the list are ignored.
+	 * @GuardedBy this
+	 */
+	protected void setInitial(Object[] list) {
+		if (list == null) {
+			return;
+		}
+		int size = list.length;
+		for (int i = 0; i < size; i++) {
+			Object item = list[i];
+			if (item != null) {
+				if (DEBUG) {
+					System.out
+							.println("AbstractTracked.setInitial: " + item); //$NON-NLS-1$
+				}
+				initial.add(item);
+			}
+		}
+	}
+
+	/**
+	 * Track the initial list of items. This is called after events can begin to
+	 * be received.
+	 * 
+	 * This method must be called from Tracker's open method while not
+	 * synchronized on this object after the add listener call.
+	 * 
+	 */
+	protected void trackInitial() {
+		while (true) {
+			Object item;
+			synchronized (this) {
+				if (initial.size() == 0) {
+					/*
+					 * if there are no more initial items
+					 */
+					return; /* we are done */
+				}
+				/*
+				 * move the first item from the initial list to the adding list
+				 * within this synchronized block.
+				 */
+				item = initial.removeFirst();
+				if (tracked.get(item) != null) {
+					/* if we are already tracking this item */
+					if (DEBUG) {
+						System.out
+								.println("AbstractTracked.trackInitial[already tracked]: " + item); //$NON-NLS-1$
+					}
+					continue; /* skip this item */
+				}
+				if (adding.contains(item)) {
+					/*
+					 * if this item is already in the process of being added.
+					 */
+					if (DEBUG) {
+						System.out
+								.println("AbstractTracked.trackInitial[already adding]: " + item); //$NON-NLS-1$
+					}
+					continue; /* skip this item */
+				}
+				adding.add(item);
+			}
+			if (DEBUG) {
+				System.out.println("AbstractTracked.trackInitial: " + item); //$NON-NLS-1$
+			}
+			trackAdding(item); /*
+								 * Begin tracking it. We call trackAdding since
+								 * we have already put the item in the adding
+								 * list.
+								 */
+		}
+	}
+
+	/**
+	 * Called by the owning Tracker object when it is closed.
+	 */
+	protected void close() {
+		closed = true;
+	}
+
+	/**
+	 * Begin to track an item.
+	 * 
+	 * @param item Item to be tracked.
+	 */
+	protected void track(Object item) {
+		Object object;
+		synchronized (this) {
+			object = tracked.get(item);
+		}
+		if (object != null) /* we are already tracking the item */
+		{
+			if (DEBUG) {
+				System.out.println("AbstractTracked.track[modified]: " + item); //$NON-NLS-1$
+			}
+			synchronized (this) {
+				modified(); /* increment modification count */
+			}
+			/* Call customizer outside of synchronized region */
+			customizerModified(item, object);
+			/*
+			 * If the customizer throws an unchecked exception, it is safe to
+			 * let it propagate
+			 */
+			return;
+		}
+		synchronized (this) {
+			if (adding.contains(item)) { /*
+											 * if this item is already in the
+											 * process of being added.
+											 */
+				if (DEBUG) {
+					System.out
+							.println("AbstractTracked.track[already adding]: " + item); //$NON-NLS-1$
+				}
+				return;
+			}
+			adding.add(item); /* mark this item is being added */
+		}
+
+		trackAdding(item); /*
+							 * call trackAdding now that we have put the item in
+							 * the adding list
+							 */
+	}
+
+	/**
+	 * Common logic to add an item to the tracker used by track and
+	 * trackInitial. The specified item must have been placed in the adding list
+	 * before calling this method.
+	 * 
+	 * @param item Item to be tracked.
+	 */
+	private void trackAdding(Object item) {
+		if (DEBUG) {
+			System.out.println("AbstractTracked.trackAdding: " + item); //$NON-NLS-1$
+		}
+		Object object = null;
+		boolean becameUntracked = false;
+		/* Call customizer outside of synchronized region */
+		try {
+			object = customizerAdding(item);
+			/*
+			 * If the customizer throws an unchecked exception, it will
+			 * propagate after the finally
+			 */
+		}
+		finally {
+			synchronized (this) {
+				if (adding.remove(item)) { /*
+											 * if the item was not untracked
+											 * during the customizer callback
+											 */
+					if (object != null) {
+						tracked.put(item, object);
+						modified(); /* increment modification count */
+						notifyAll(); /* notify any waiters */
+					}
+				}
+				else {
+					becameUntracked = true;
+				}
+			}
+		}
+		/*
+		 * The item became untracked during the customizer callback.
+		 */
+		if (becameUntracked) {
+			if (DEBUG) {
+				System.out
+						.println("AbstractTracked.trackAdding[removed]: " + item); //$NON-NLS-1$
+			}
+			/* Call customizer outside of synchronized region */
+			customizerRemoved(item, object);
+			/*
+			 * If the customizer throws an unchecked exception, it is safe to
+			 * let it propagate
+			 */
+		}
+	}
+
+	/**
+	 * Discontinue tracking the item.
+	 * 
+	 * @param item Item to be untracked.
+	 */
+	protected void untrack(Object item) {
+		Object object;
+		synchronized (this) {
+			if (initial.remove(item)) { /*
+										 * if this item is already in the list
+										 * of initial references to process
+										 */
+				if (DEBUG) {
+					System.out
+							.println("AbstractTracked.untrack[removed from initial]: " + item); //$NON-NLS-1$
+				}
+				return; /*
+						 * we have removed it from the list and it will not be
+						 * processed
+						 */
+			}
+
+			if (adding.remove(item)) { /*
+										 * if the item is in the process of
+										 * being added
+										 */
+				if (DEBUG) {
+					System.out
+							.println("AbstractTracked.untrack[being added]: " + item); //$NON-NLS-1$
+				}
+				return; /*
+						 * in case the item is untracked while in the process of
+						 * adding
+						 */
+			}
+			object = tracked.remove(item); /*
+											 * must remove from tracker before
+											 * calling customizer callback
+											 */
+			if (object == null) { /* are we actually tracking the item */
+				return;
+			}
+			modified(); /* increment modification count */
+		}
+		if (DEBUG) {
+			System.out.println("AbstractTracked.untrack[removed]: " + item); //$NON-NLS-1$
+		}
+		/* Call customizer outside of synchronized region */
+		customizerRemoved(item, object);
+		/*
+		 * If the customizer throws an unchecked exception, it is safe to let it
+		 * propagate
+		 */
+	}
+
+	/**
+	 * Returns the number of tracked items.
+	 * 
+	 * @return The number of tracked items.
+	 * 
+	 * @GuardedBy this
+	 */
+	protected int size() {
+		return tracked.size();
+	}
+
+	/**
+	 * Return the customized object for the specified item
+	 * 
+	 * @param item The item to lookup in the map
+	 * @return The customized object for the specified item.
+	 * 
+	 * @GuardedBy this
+	 */
+	protected Object getCustomizedObject(Object item) {
+		return tracked.get(item);
+	}
+
+	/**
+	 * Return the list of tracked items.
+	 * 
+	 * @param list An array to contain the tracked items.
+	 * @GuardedBy this
+	 */
+	protected void getTracked(Object[] list) {
+		Iterator iter = tracked.keySet().iterator();
+		int i = 0;
+		while ((i < list.length) && iter.hasNext()) {
+			list[i] = iter.next();
+			i++;
+		}
+	}
+
+	/**
+	 * Call the Tracker modified method.
+	 * 
+	 * @GuardedBy this
+	 */
+	protected abstract void modified();
+
+	/**
+	 * Call the specific customizer adding method. This method must not be
+	 * called while synchronized on this object.
+	 * 
+	 * @param item Item to be tracked.
+	 * @return Customized object for the tracked item or <code>null</code> if
+	 *         the item is not to be tracked.
+	 */
+	protected abstract Object customizerAdding(Object item);
+
+	/**
+	 * Call the specific customizer modified method. This method must not be
+	 * called while synchronized on this object.
+	 * 
+	 * @param item Tracked item.
+	 * @param object Customized object for the tracked item.
+	 */
+	protected abstract void customizerModified(Object item, Object object);
+
+	/**
+	 * Call the specific customizer removed method. This method must not be
+	 * called while synchronized on this object.
+	 * 
+	 * @param item Tracked item.
+	 * @param object Customized object for the tracked item.
+	 */
+	protected abstract void customizerRemoved(Object item, Object object);
+}
