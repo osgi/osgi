@@ -33,7 +33,7 @@ import org.osgi.framework.ServiceReference;
  * <p>
  * The methods in this interface may be called as the result of a
  * <code>ServiceEvent</code> being received by a <code>ServiceTracker</code>
- * object. Since <code>ServiceEvent</code> s are synchronously delivered by
+ * object. Since <code>ServiceEvent</code>s are synchronously delivered by
  * the Framework, it is highly recommended that implementations of these methods
  * do not register (<code>BundleContext.registerService</code>), modify (
  * <code>ServiceRegistration.setProperties</code>) or unregister (

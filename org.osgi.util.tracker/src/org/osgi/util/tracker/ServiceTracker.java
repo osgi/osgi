@@ -18,9 +18,20 @@
 
 package org.osgi.util.tracker;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.Map;
 
-import org.osgi.framework.*;
+import org.osgi.framework.AllServiceListener;
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.Constants;
+import org.osgi.framework.Filter;
+import org.osgi.framework.InvalidSyntaxException;
+import org.osgi.framework.ServiceEvent;
+import org.osgi.framework.ServiceListener;
+import org.osgi.framework.ServiceReference;
 
 /**
  * The <code>ServiceTracker</code> class simplifies using services from the
@@ -487,16 +498,7 @@ public class ServiceTracker implements ServiceTrackerCustomizer {
 			return null;
 		}
 		synchronized (tracked) {
-			int length = tracked.size();
-			if (length == 0) {
-				return null;
-			}
-			ServiceReference[] references = new ServiceReference[length];
-			Enumeration keys = tracked.keys();
-			for (int i = 0; i < length; i++) {
-				references[i] = (ServiceReference) keys.nextElement();
-			}
-			return references;
+			return tracked.getTrackedReferences();
 		}
 	}
 
@@ -601,7 +603,7 @@ public class ServiceTracker implements ServiceTrackerCustomizer {
 			return null;
 		}
 		synchronized (tracked) {
-			return tracked.get(reference);
+			return tracked.getTracked(reference);
 		}
 	}
 
@@ -609,8 +611,8 @@ public class ServiceTracker implements ServiceTrackerCustomizer {
 	 * Return an array of service objects for all services being tracked by this
 	 * <code>ServiceTracker</code> object.
 	 * 
-	 * @return Array of service objects or <code>null</code> if no service are
-	 *         being tracked.
+	 * @return Array of service objects or <code>null</code> if no services
+	 *         are being tracked.
 	 */
 	public Object[] getServices() {
 		Tracked tracked = this.tracked; /*
@@ -699,7 +701,9 @@ public class ServiceTracker implements ServiceTrackerCustomizer {
 		if (tracked == null) { /* if ServiceTracker is not open */
 			return 0;
 		}
-		return tracked.size();
+		synchronized (tracked) {
+			return tracked.size();
+		}
 	}
 
 	/**
@@ -750,16 +754,22 @@ public class ServiceTracker implements ServiceTrackerCustomizer {
 	/**
 	 * Inner class to track services. If a <code>ServiceTracker</code> object
 	 * is reused (closed then reopened), then a new Tracked object is used. This
-	 * class is a hashtable mapping <code>ServiceReference</code> object ->
-	 * customized Object. This class is the <code>ServiceListener</code>
-	 * object for the tracker. This class is used to synchronize access to the
-	 * tracked services. This is not a public class. It is only for use by the
+	 * class acts a map of <code>ServiceReference</code> object -> tracked
+	 * Object. This class is the <code>ServiceListener</code> object for the
+	 * tracker. This class is used to synchronize access to the tracked
+	 * services. This is not a public class. It is only for use by the
 	 * implementation of the <code>ServiceTracker</code> class.
 	 * 
 	 * @ThreadSafe
 	 */
-	class Tracked extends Hashtable implements ServiceListener {
-		static final long			serialVersionUID	= -7420065199791006079L;
+	class Tracked implements ServiceListener {
+		/**
+		 * Map of ServiceReferences to tracked service objects.
+		 * 
+		 * @GuardedBy this
+		 */
+		private final Map			tracked;
+
 		/**
 		 * List of ServiceReferences in the process of being added. This is used
 		 * to deal with nesting of ServiceEvents. Since ServiceEvents are
@@ -809,8 +819,8 @@ public class ServiceTracker implements ServiceTrackerCustomizer {
 		 * Tracked constructor.
 		 */
 		protected Tracked() {
-			super();
 			closed = false;
+			tracked = new HashMap();
 			adding = new ArrayList(6);
 			initial = new LinkedList();
 		}
@@ -863,7 +873,7 @@ public class ServiceTracker implements ServiceTrackerCustomizer {
 					 * adding list within this synchronized block.
 					 */
 					reference = (ServiceReference) initial.removeFirst();
-					if (this.get(reference) != null) {
+					if (tracked.get(reference) != null) {
 						/* if we are already tracking this service */
 						if (DEBUG) {
 							System.out
@@ -971,7 +981,7 @@ public class ServiceTracker implements ServiceTrackerCustomizer {
 		private void track(ServiceReference reference) {
 			Object object;
 			synchronized (this) {
-				object = this.get(reference);
+				object = tracked.get(reference);
 			}
 			if (object != null) /* we are already tracking the service */
 			{
@@ -1041,7 +1051,7 @@ public class ServiceTracker implements ServiceTrackerCustomizer {
 													 * customizer callback
 													 */
 						if (object != null) {
-							this.put(reference, object);
+							tracked.put(reference, object);
 							modified(); /* increment modification count */
 							notifyAll(); /*
 											 * notify any waiters in
@@ -1108,7 +1118,7 @@ public class ServiceTracker implements ServiceTrackerCustomizer {
 							 * process of adding
 							 */
 				}
-				object = this.remove(reference); /*
+				object = tracked.remove(reference); /*
 													 * must remove from tracker
 													 * before calling customizer
 													 * callback
@@ -1129,6 +1139,51 @@ public class ServiceTracker implements ServiceTrackerCustomizer {
 			 * let it propagate
 			 */
 		}
+
+		/**
+		 * Returns the number of tracked services.
+		 * 
+		 * @return The number of tracked services.
+		 * 
+		 * @GuardedBy this
+		 */
+		protected int size() {
+			return tracked.size();
+		}
+
+		/**
+		 * Return the tracked object for the specified service reference
+		 * 
+		 * @param reference The service reference to lookup in the map
+		 * @return The tracked object for the specified service reference.
+		 * 
+		 * @GuardedBy this
+		 */
+		protected Object getTracked(ServiceReference reference) {
+			return tracked.get(reference);
+		}
+
+		/**
+		 * Return the list of references for the tracked services.
+		 * 
+		 * @return An array of service references or <code>null</code> if no
+		 *         services are being tracked .
+		 * 
+		 * @GuardedBy this
+		 */
+		protected ServiceReference[] getTrackedReferences() {
+			int length = tracked.size();
+			if (length == 0) {
+				return null;
+			}
+
+			ServiceReference[] references = new ServiceReference[length];
+			Iterator iter = tracked.keySet().iterator();
+			for (int i = 0; i < length; i++) {
+				references[i] = (ServiceReference) iter.next();
+			}
+			return references;
+		}
 	}
 
 	/**
@@ -1139,8 +1194,6 @@ public class ServiceTracker implements ServiceTrackerCustomizer {
 	 * @ThreadSafe
 	 */
 	class AllTracked extends Tracked implements AllServiceListener {
-		static final long	serialVersionUID	= 4050764875305137716L;
-
 		/**
 		 * AllTracked constructor.
 		 */
