@@ -78,14 +78,19 @@ public class Activator implements BundleActivator, TBCService, EventHandler {
    * @see org.osgi.test.cases.event.tbc.TBCService#setTopics(java.lang.String[])
    */
   public void setTopics(String[] topics) {
-    this.topics = topics;
-    Hashtable ht = new Hashtable();
-    ht.put(EventConstants.EVENT_TOPIC, topics);
-    if (serviceReg == null) {
-      serviceReg = context.registerService(EventHandler.class.getName(), this, ht);
-    } else {
-      serviceReg.setProperties(ht);
-    }
+	  this.topics = topics;
+	  Hashtable ht = new Hashtable();
+	  if (topics.length == 1) {
+		  ht.put(EventConstants.EVENT_TOPIC, topics[0]);
+	  }
+	  else {
+		  ht.put(EventConstants.EVENT_TOPIC, topics);
+	  }
+	  if (serviceReg == null) {
+		  serviceReg = context.registerService(EventHandler.class.getName(), this, ht);
+	  } else {
+		  serviceReg.setProperties(ht);
+	  }
   }
   
   /**

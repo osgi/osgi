@@ -79,7 +79,12 @@ public class Activator implements BundleActivator, TBCService, EventHandler {
   public void setTopics(String[] topics) {
     this.topics = topics;
     Hashtable ht = new Hashtable();
-    ht.put(EventConstants.EVENT_TOPIC, topics);
+	  if (topics.length == 1) {
+		  ht.put(EventConstants.EVENT_TOPIC, topics[0]);
+	  }
+	  else {
+		  ht.put(EventConstants.EVENT_TOPIC, topics);
+	  }
     if (serviceReg == null) {
       serviceReg = context.registerService(EventHandler.class.getName(), this, ht);
     } else {

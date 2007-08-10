@@ -69,7 +69,7 @@ public class IOControl extends DefaultTestBundleControl {
 	public void testOpen() throws Exception {
 		bc = getContext();
 		Hashtable props = new Hashtable();
-		props.put(ConnectionFactory.IO_SCHEME, new String[] {"test"});
+		props.put(ConnectionFactory.IO_SCHEME, "test");
 		TestConnectionFactory cf = new TestConnectionFactory();
 		ServiceRegistration reg = bc.registerService(ConnectionFactory.class
 				.getName(), cf, props);
