@@ -1,5 +1,5 @@
 /*
- * $Id$
+ * $Date$
  *
  * Copyright (c) OSGi Alliance (2000, 2006). All Rights Reserved.
  *

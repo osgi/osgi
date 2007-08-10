@@ -1,5 +1,5 @@
 /*
- * $Id$
+ * $Date$
  * 
  * Copyright (c) OSGi Alliance (2004, 2006). All Rights Reserved.
  * 
@@ -303,6 +303,9 @@ public class ApplicationAdminPermission extends Permission {
   	private String pattern;
   	private ApplicationDescriptor appDesc;
   	
+  	/**
+  	 * @param pattern
+  	 */
   	public SignerWrapper(String pattern) {
   		this.pattern = pattern;    			
   	}

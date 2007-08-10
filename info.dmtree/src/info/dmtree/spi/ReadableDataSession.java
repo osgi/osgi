@@ -1,5 +1,5 @@
 /*
- * $Id$
+ * $Date$
  *
  * Copyright (c) OSGi Alliance (2004, 2006). All Rights Reserved.
  * 
@@ -118,7 +118,7 @@ public interface ReadableDataSession {
     /**
      * Get the list of children names of a node. The returned array contains the
      * names - not the URIs - of the immediate children nodes of the given node.
-     * The returned child names must be mangled ({@link info.dmtree.Uri#mangle}).
+     * The returned child names must be mangled ({@link info.dmtree.Uri#mangle(String)}).
      * The returned array may contain <code>null</code> entries, but these are
      * removed by the DmtAdmin before returning it to the client.
      * 

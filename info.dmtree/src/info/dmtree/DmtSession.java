@@ -1,5 +1,5 @@
 /*
- * $Id$
+ * $Date$
  *
  * Copyright (c) OSGi Alliance (2004, 2006). All Rights Reserved.
  * 
@@ -1210,7 +1210,7 @@ public interface DmtSession {
     /**
      * Get the list of children names of a node. The returned array contains the
      * names - not the URIs - of the immediate children nodes of the given node.
-     * The returned child names are mangled ({@link Uri#mangle}). The elements
+     * The returned child names are mangled ({@link Uri#mangle(String)}). The elements
      * are in no particular order. The returned array must not contain
      * <code>null</code> entries.
      * 
