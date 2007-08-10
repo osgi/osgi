@@ -1,7 +1,7 @@
 /*
- * $Id$
+ * $Date$
  * 
- * Copyright (c) OSGi Alliance (2005, 2006). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2005, 2007). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -34,15 +34,15 @@ public interface EventConstants {
 	 * service.
 	 * <p>
 	 * Event handlers SHOULD be registered with this property. The value of the
-	 * property is an array of strings that describe the topics in which the
-	 * handler is interested. An asterisk ('*') may be used as a trailing
-	 * wildcard. Event Handlers which do not have a value for this property must
-	 * not receive events. More precisely, the value of each entry in the array
-	 * must conform to the following grammar:
+	 * property is a string or an array of strings that describe the topics in
+	 * which the handler is interested. An asterisk ('*') may be used as a
+	 * trailing wildcard. Event Handlers which do not have a value for this
+	 * property must not receive events. More precisely, the value of each
+	 * string must conform to the following grammar:
 	 * 
 	 * <pre>
-	 *            topic-description := '*' | topic ( '/*' )?
-	 *            topic := token ( '/' token )*
+	 *  topic-description := '*' | topic ( '/*' )?
+	 *  topic := token ( '/' token )*
 	 * </pre>
 	 * 
 	 * @see Event
@@ -154,7 +154,7 @@ public interface EventConstants {
 	public static final String	TIMESTAMP			= "timestamp";
 
 	/**
-	 * This constant was released with an incorrect spelling. It has been
+	 * This constant was released with an incorrectly spelled name. It has been
 	 * replaced by {@link #EXCEPTION_CLASS}
 	 * 
 	 * @deprecated As of 1.1, replaced by EXCEPTION_CLASS

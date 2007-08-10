@@ -1,5 +1,5 @@
 /*
- * $Id$
+ * $Date$
  *
  * Copyright (c) OSGi Alliance (2002, 2006). All Rights Reserved.
  * 
@@ -40,7 +40,7 @@ public interface ConnectionFactory {
 	/**
 	 * Service property containing the scheme(s) for which this Connection
 	 * Factory can create <code>Connection</code> objects. This property is of
-	 * type <code>String[]</code>.
+	 * type <code>String</code> or <code>String[]</code>.
 	 */
 	public static final String	IO_SCHEME	= "io.scheme";
 
