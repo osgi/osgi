@@ -149,8 +149,15 @@ class ConnectorServiceImpl implements ConnectorService {
 		ServiceReference prospective = null;
 		int pRanking = 0;
 		for (int i = 0; i < cfRefs.length; i++) {
-			String[] s = (String[]) cfRefs[i]
-					.getProperty(ConnectionFactory.IO_SCHEME);
+			String[] s = null;
+			Object o = cfRefs[i].getProperty(ConnectionFactory.IO_SCHEME);
+			if (o instanceof String) {
+				s = new String[] {(String)o};
+			}
+			else if (o instanceof String[]) {
+				s = (String[]) o;
+			}
+
 			if ((s != null) && contains(s, scheme)) {
 				// found a ConnectionFactory object for the given scheme
 				if (prospective == null) {
