@@ -91,8 +91,8 @@ public interface BundleContext {
 	 * ISO 639 for possible values.</li>
 	 * <li>{@link Constants#FRAMEWORK_OS_NAME} - The host computer operating
 	 * system.</li>
-	 * <li>{@link Constants#FRAMEWORK_OS_VERSION} - The host computer
-	 * operating system version number.</li>
+	 * <li>{@link Constants#FRAMEWORK_OS_VERSION} - The host computer operating
+	 * system version number.</li>
 	 * <li>{@link Constants#FRAMEWORK_PROCESSOR} - The host computer processor
 	 * name.</li>
 	 * </ul>
@@ -151,7 +151,7 @@ public interface BundleContext {
 	 * 
 	 * <li>If the bundle has declared an Bundle-RequiredExecutionEnvironment
 	 * header, then the listed execution environments must be verified against
-	 * the installed execution environments. If none of the listed execution 
+	 * the installed execution environments. If none of the listed execution
 	 * environments match an installed execution environment, a
 	 * <code>BundleException</code> must be thrown.
 	 * 
@@ -177,13 +177,13 @@ public interface BundleContext {
 	 * @return The <code>Bundle</code> object of the installed bundle.
 	 * @throws BundleException If the installation failed.
 	 * @throws java.lang.SecurityException If the caller does not have the
-	 *         appropriate <code>AdminPermission[installed bundle,LIFECYCLE]</code>, and the
-	 *         Java Runtime Environment supports permissions.
+	 *         appropriate
+	 *         <code>AdminPermission[installed bundle,LIFECYCLE]</code>, and
+	 *         the Java Runtime Environment supports permissions.
 	 * @throws java.lang.IllegalStateException If this BundleContext is no
 	 *         longer valid.
 	 */
-	public Bundle installBundle(String location)
-			throws BundleException;
+	public Bundle installBundle(String location) throws BundleException;
 
 	/**
 	 * Installs a bundle from the specified <code>InputStream</code> object.
@@ -206,8 +206,9 @@ public interface BundleContext {
 	 * @throws BundleException If the provided stream cannot be read or the
 	 *         installation failed.
 	 * @throws java.lang.SecurityException If the caller does not have the
-	 *         appropriate <code>AdminPermission[installed bundle,LIFECYCLE]</code>, and the
-	 *         Java Runtime Environment supports permissions.
+	 *         appropriate
+	 *         <code>AdminPermission[installed bundle,LIFECYCLE]</code>, and
+	 *         the Java Runtime Environment supports permissions.
 	 * @throws java.lang.IllegalStateException If this BundleContext is no
 	 *         longer valid.
 	 * @see #installBundle(java.lang.String)
@@ -289,8 +290,8 @@ public interface BundleContext {
 	 * @see ServiceListener
 	 * @see ServicePermission
 	 */
-	public void addServiceListener(ServiceListener listener,
-			String filter) throws InvalidSyntaxException;
+	public void addServiceListener(ServiceListener listener, String filter)
+			throws InvalidSyntaxException;
 
 	/**
 	 * Adds the specified <code>ServiceListener</code> object to the context
@@ -339,8 +340,9 @@ public interface BundleContext {
 	 *         longer valid.
 	 * @throws java.lang.SecurityException If listener is a
 	 *         <code>SynchronousBundleListener</code> and the caller does not
-	 *         have the appropriate <code>AdminPermission[context bundle,LISTENER]</code>,
-	 *         and the Java Runtime Environment supports permissions.
+	 *         have the appropriate
+	 *         <code>AdminPermission[context bundle,LISTENER]</code>, and the
+	 *         Java Runtime Environment supports permissions.
 	 * 
 	 * @see BundleEvent
 	 * @see BundleListener
@@ -360,8 +362,9 @@ public interface BundleContext {
 	 *         longer valid.
 	 * @throws java.lang.SecurityException If listener is a
 	 *         <code>SynchronousBundleListener</code> and the caller does not
-	 *         have the appropriate <code>AdminPermission[context bundle,LISTENER]</code>,
-	 *         and the Java Runtime Environment supports permissions.
+	 *         have the appropriate
+	 *         <code>AdminPermission[context bundle,LISTENER]</code>, and the
+	 *         Java Runtime Environment supports permissions.
 	 */
 	public void removeBundleListener(BundleListener listener);
 
@@ -430,8 +433,7 @@ public interface BundleContext {
 	 * the Framework.
 	 * <li>The service is added to the Framework service registry and may now
 	 * be used by other bundles.
-	 * <li>A service event of type {@link ServiceEvent#REGISTERED} is
-	 * fired.
+	 * <li>A service event of type {@link ServiceEvent#REGISTERED} is fired.
 	 * <li>A <code>ServiceRegistration</code> object for this registration is
 	 * returned.
 	 * </ol>
@@ -495,19 +497,19 @@ public interface BundleContext {
 	 * @param clazz The class name under which the service can be located.
 	 * @param service The service object or a <code>ServiceFactory</code>
 	 *        object.
-	 * @param properties The properties for this service. 
+	 * @param properties The properties for this service.
 	 * 
 	 * @return A <code>ServiceRegistration</code> object for use by the bundle
 	 *         registering the service to update the service's properties or to
 	 *         unregister the service.
-	 *         
+	 * 
 	 * @throws java.lang.IllegalStateException If this BundleContext is no
 	 *         longer valid.
 	 * @see #registerService(java.lang.String[], java.lang.Object,
 	 *      java.util.Dictionary)
 	 */
-	public ServiceRegistration registerService(String clazz,
-			Object service, Dictionary properties);
+	public ServiceRegistration registerService(String clazz, Object service,
+			Dictionary properties);
 
 	/**
 	 * Returns an array of <code>ServiceReference</code> objects. The returned
@@ -579,8 +581,8 @@ public interface BundleContext {
 	 * @throws java.lang.IllegalStateException If this BundleContext is no
 	 *         longer valid.
 	 */
-	public ServiceReference[] getServiceReferences(String clazz,
-			String filter) throws InvalidSyntaxException;
+	public ServiceReference[] getServiceReferences(String clazz, String filter)
+			throws InvalidSyntaxException;
 
 	/**
 	 * Returns an array of <code>ServiceReference</code> objects. The returned
@@ -713,7 +715,8 @@ public interface BundleContext {
 	 * If the service object returned by the <code>ServiceFactory</code>
 	 * object is not an <code>instanceof</code> all the classes named when the
 	 * service was registered or the <code>ServiceFactory</code> object throws
-	 * an exception, <code>null</code> is returned and a Framework event of
+	 * an exception, a {@link ServiceException} of type
+	 * {@link ServiceException#FACTORY_ERROR} is thrown and a Framework event of
 	 * type {@link FrameworkEvent#ERROR} is fired.
 	 * <li>The service object for the service is returned.
 	 * </ol>
@@ -721,8 +724,10 @@ public interface BundleContext {
 	 * @param reference A reference to the service.
 	 * @return A service object for the service associated with
 	 *         <code>reference</code> or <code>null</code> if the service is
-	 *         not registered or does not implement the classes under which it
-	 *         was registered in the case of a <code>ServiceFactory</code>.
+	 *         not registered.
+	 * @throws ServiceException In the case of a <code>ServiceFactory</code>
+	 *         if the service object does not implement the classes under which
+	 *         it was registered or the service factory threw an exception.
 	 * @throws java.lang.SecurityException If the caller does not have the
 	 *         <code>ServicePermission</code> to get the service using at
 	 *         least one of the named classes the service was registered under
@@ -817,9 +822,9 @@ public interface BundleContext {
 	 *         longer valid.
 	 * 
 	 * @since 1.1
-	 * @see "Framework specification for a description of the filter string syntax."
+	 * @see "Framework specification for a description of the filter string
+	 *      syntax."
 	 * @see FrameworkUtil#createFilter(String)
 	 */
-	public Filter createFilter(String filter)
-			throws InvalidSyntaxException;
+	public Filter createFilter(String filter) throws InvalidSyntaxException;
 }
