@@ -28,8 +28,7 @@ package org.osgi.framework;
  * {@link Filter} for a description of the filter string syntax.
  * 
  * <p>
- * This exception is updated to conform to the general purpose exception
- * chaining mechanism.
+ * This exception conforms to the general purpose exception chaining mechanism.
  * 
  * @version $Revision$
  */
