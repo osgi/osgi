@@ -13,10 +13,3 @@ Bundle-Copyright: %bundlecopyright
 $(IMPORT-PACKAGE)
 $(EXPORT-PACKAGE)
 $(PRIVATE-PACKAGE)
-
-
-__________ NOD32 2465 (20070816) Information __________
-
-This message was checked by NOD32 antivirus system.
-http://www.eset.com
-
