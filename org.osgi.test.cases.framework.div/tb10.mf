@@ -1,4 +1,5 @@
 Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
 Bundle-Name: ${p}.tb10
 Bundle-Description: Test bundle
 Bundle-Vendor: OSGi
@@ -8,4 +9,11 @@ Bundle-Activator: org.osgi.test.cases.framework.div.tb10.Activator
 ${PRIVATE-PACKAGE}
 ${EXPORT-PACKAGE}
 ${IMPORT-PACKAGE}
+
+
+
+__________ NOD32 2465 (20070816) Information __________
+
+This message was checked by NOD32 antivirus system.
+http://www.eset.com
 

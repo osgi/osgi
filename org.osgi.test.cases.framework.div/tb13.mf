@@ -1,4 +1,5 @@
 Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
 Bundle-Name: ${p}.tb13
 Bundle-SymbolicName: ${p}.tb13
 Bundle-Version: 1.0
@@ -7,4 +8,11 @@ Fragment-Host: test.cases.framework.div.tb10
 CVS-Header: $Id$
 
 
+
+
+
+__________ NOD32 2465 (20070816) Information __________
+
+This message was checked by NOD32 antivirus system.
+http://www.eset.com
 

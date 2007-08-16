@@ -1,4 +1,5 @@
 Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
 Bundle-Name: %bundlename
 Bundle-SymbolicName: ${p}.tb8; fragment-attachment="always"
 Bundle-Description: %bundledescription
@@ -12,3 +13,10 @@ Bundle-Copyright: %bundlecopyright
 $(IMPORT-PACKAGE)
 $(EXPORT-PACKAGE)
 $(PRIVATE-PACKAGE)
+
+
+__________ NOD32 2465 (20070816) Information __________
+
+This message was checked by NOD32 antivirus system.
+http://www.eset.com
+
