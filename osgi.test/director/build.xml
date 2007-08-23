@@ -2,26 +2,23 @@
 <project name="project" default="director">
 	
 	<target name="clean">
-		<delete dir="configuration"/> <!-- delete bundles dir to clear permdata -->
+		<delete> <!-- delete bundles dir to clear permdata -->
+			<fileset dir="configuration">
+				<exclude name="config.ini"/>
+			</fileset>
+		</delete>
 	</target>	
 	
 	<target name="director" depends="clean">
-		<java fork="true" classname="org.eclipse.osgi.framework.launcher.Launcher">	
-			<classpath path="../org.osgi.impl.framework.eclipse.jar"/>
+		<java fork="true" jar="../org.osgi.impl.framework.eclipse.jar">	
 			<jvmarg value="-Dosgi.install.area=file:"/>
-			<arg value="-console:2201"/>
-			<arg value="init"/>
-			<arg value="launch"/>
-			<arg value="install file:../osgi.jar start"/>
-			<arg value="install file:../servlet.jar start"/>
-			<arg value="install file:../osgi.min.jar start"/>
-			<arg value="install file:../osgi.director.jar start"/>
+			<jvmarg value="-Dosgi.bundles=osgi.jar@start,servlet.jar@start,osgi.min.jar@start,osgi.director.jar@start"/>
 		</java>
 	</target>
 		
 	<target name="run-cmpn">
 		<ant target="-run">
-			<property name="tests" value="file:../osgi.cmpn.tests.jar"/>
+			<property name="tests" value="osgi.cmpn.tests.jar@start"/>
 			<property name="script" value="file:cmpn.script"/>
 			<property name="out" value="run-cmpn.xml"/>
 		</ant>
@@ -29,7 +26,7 @@
 	
 	<target name="run-core">
 		<antcall target="-run">
-			<param name="tests" value="file:../osgi.core.tests.jar"/>
+			<param name="tests" value="osgi.core.tests.jar@start"/>
 			<param name="script" value="file:core.script"/>
 			<param name="out" value="run-core.xml"/>
 		</antcall>
@@ -37,7 +34,7 @@
 	
 	<target name="run-mobile">
 		<ant target="-run">
-			<property name="tests" value="file:../osgi.mobile.tests.jar"/>
+			<property name="tests" value="osgi.mobile.tests.jar@start"/>
 			<property name="script" value="file:mobile.script"/>
 			<property name="out" value="run-mobile.xml"/>
 		</ant>
@@ -45,26 +42,18 @@
 	
 	<target name="run-link">
 		<antcall target="-run">
-			<param name="tests" value="file:../org.osgi.test.cases.testtool.jar"/>
+			<param name="tests" value="org.osgi.test.cases.testtool.jar@start"/>
 			<param name="script" value="file:link.script"/>
 			<param name="out" value="run-link.xml"/>
 		</antcall>
 	</target>
 	
 	<target name="-run" depends="clean">		
-		<java fork="true" classname="org.eclipse.osgi.framework.launcher.Launcher">	
-			<classpath path="../org.osgi.impl.framework.eclipse.jar"/>
+		<java fork="true" jar="../org.osgi.impl.framework.eclipse.jar">	
 			<jvmarg value="-Dorg.osgi.test.batch.script=${script}"/>
 			<jvmarg value="-Dorg.osgi.test.batch.out=${out}"/>
 			<jvmarg value="-Dosgi.install.area=file:"/>
-			<arg value="-console:2201"/>
-			<arg value="init"/>
-			<arg value="launch"/>
-			<arg value="install file:../osgi.jar start"/>
-			<arg value="install file:../servlet.jar start"/>
-			<arg value="install file:../osgi.min.jar start"/>
-			<arg value="install file:../osgi.director.jar start"/>
-			<arg value="install ${tests} start"/>
+			<jvmarg value="-Dosgi.bundles=osgi.jar@start,servlet.jar@start,osgi.min.jar@start,osgi.director.jar@start,${tests}"/>
 		</java>
 	</target>
 </project>

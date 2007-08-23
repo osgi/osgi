@@ -2,47 +2,37 @@
 <project name="project" default="run-core">
 	
 	<target name="clean">
-		<delete dir="configuration"/> <!-- delete bundles dir to clear permdata -->
+		<delete> <!-- delete bundles dir to clear permdata -->
+			<fileset dir="configuration">
+				<exclude name="config.ini"/>
+			</fileset>
+		</delete>
 		<delete dir="cdresources"/> <!-- delete upnp cd resources -->
 	</target>	
 
 	<target name="run-core">
 		<antcall target="-run">
-		  <param name="impls" value="file:../osgi.core.impls.jar"/>
-		  <param name="classpath" value=" ../testcond.jar"/>
+			<param name="impls" value="osgi.core.impls.jar@start"/>
 		</antcall>
 	</target>
 	
 	<target name="run-cmpn">
 		<antcall target="-run">
-			  <param name="impls" value="file:../osgi.cmpn.impls.jar"/>
-			  <param name="classpath" value=""/>
+			<param name="impls" value="osgi.cmpn.impls.jar@start"/>
 		</antcall>
 	</target>
 	
 	<target name="run-mobile">
 		<antcall target="-run">
-			  <param name="impls" value="file:../osgi.mobile.impls.jar"/>
-			  <param name="classpath" value=""/>
+			<param name="impls" value="osgi.mobile.impls.jar@start"/>
 		</antcall>
 	</target>
 	
 	<target name="-run" depends="clean">
 		<echo>Testing ${impls}</echo>
-		<java fork="true" classname="org.eclipse.osgi.framework.launcher.Launcher">	
-			<classpath path="../org.osgi.impl.framework.eclipse.jar"/>
-			<classpath path="${classpath}"/>
-			<jvmarg value="-Djava.security.manager=org.eclipse.osgi.framework.internal.core.FrameworkSecurityManager"/>
-			<jvmarg value="-Djava.security.policy=policy"/>
+		<java fork="true" jar="../org.osgi.impl.framework.eclipse.jar">	
 			<jvmarg value="-Dosgi.install.area=file:"/>
-			<jvmarg value="-Dosgi.support.signature.verify=true"/>
-			<jvmarg value="-Dosgi.compatibility.eagerStart.LazyActivation=false"/>
-			<arg value="-console:2202"/>
-			<arg value="init"/>
-			<arg value="launch"/>
-			<arg value="install file:../osgi.jar start"/>
-			<arg value="install file:../osgi.target.jar start"/>
-			<arg value="install ${impls} start"/>
+			<jvmarg value="-Dosgi.bundles=testcond.jar,osgi.jar@start,osgi.target.jar@start,${impls}"/>
 		</java>
 	</target>
 </project>
