@@ -26,7 +26,7 @@ import java.util.Dictionary;
  * <p>
  * A Managed Service is a service that needs configuration data. Such an object
  * should be registered with the Framework registry with the
- * <code>service.pid</code> property set to some unique identitifier called a
+ * <code>service.pid</code> property set to some unique identifier called a
  * PID.
  * 
  * <p>

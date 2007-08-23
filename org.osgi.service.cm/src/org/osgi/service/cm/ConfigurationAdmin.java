@@ -88,7 +88,7 @@ import org.osgi.framework.InvalidSyntaxException;
  * service will bind it to the location of the bundle that registers the first
  * Managed Service or Managed Service Factory that has a corresponding PID
  * property. When a <code>Configuration</code> object is bound to a bundle
- * location in this manner, the Confguration Admin service must detect if the
+ * location in this manner, the Configuration Admin service must detect if the
  * bundle corresponding to the location is uninstalled. If this occurs, the
  * <code>Configuration</code> object is unbound, that is its location field is
  * set back to <code>null</code>.

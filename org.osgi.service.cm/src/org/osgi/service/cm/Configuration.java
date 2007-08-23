@@ -109,7 +109,7 @@ public interface Configuration {
 	 * callback is delayed until aforementioned registration occurs.
 	 * 
 	 * <p>
-	 * Also intiates an asynchronous call to all
+	 * Also initiates an asynchronous call to all
 	 * <code>ConfigurationListener</code>s with a
 	 * <code>ConfigurationEvent.CM_UPDATED</code> event.
 	 * 
@@ -133,7 +133,7 @@ public interface Configuration {
 	 * call to its <code>deleted</code> method.
 	 * 
 	 * <p>
-	 * Also intiates an asynchronous call to all
+	 * Also initiates an asynchronous call to all
 	 * <code>ConfigurationListener</code>s with a
 	 * <code>ConfigurationEvent.CM_DELETED</code> event.
 	 * 
@@ -160,7 +160,7 @@ public interface Configuration {
 	 * 
 	 * <p>
 	 * This is the only way for a bundle that uses a Configuration Plugin
-	 * service to initate a callback. For example, when that bundle detects a
+	 * service to initiate a callback. For example, when that bundle detects a
 	 * change that requires an update of the Managed Service or Managed Service
 	 * Factory via its <code>ConfigurationPlugin</code> object.
 	 * 

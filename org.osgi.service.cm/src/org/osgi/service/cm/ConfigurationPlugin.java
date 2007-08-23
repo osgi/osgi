@@ -34,7 +34,7 @@ import org.osgi.framework.ServiceReference;
  * <code>ManagedServiceFactory</code>
  * <code>updated</code> method. The
  * Configuration Plugin service thus has the opportunity to view and modify the
- * properties before they are passed to the ManagedS ervice or Managed Service
+ * properties before they are passed to the Managed Service or Managed Service
  * Factory.
  * 
  * <p>
@@ -71,7 +71,7 @@ import org.osgi.framework.ServiceReference;
  * A plugin may optionally specify a <code>cm.target</code> registration
  * property whose value is the PID of the Managed Service or Managed Service
  * Factory whose configuration updates the plugin is intended to intercept. The
- * plugin will then only be called with configuration updates that are targetted
+ * plugin will then only be called with configuration updates that are targeted
  * at the Managed Service or Managed Service Factory with the specified PID.
  * Omitting the <code>cm.target</code> registration property means that the
  * plugin is called for all configuration updates.
