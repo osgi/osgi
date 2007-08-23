@@ -17,6 +17,7 @@
  */
 package org.osgi.service.cm;
 
+import java.util.Dictionary;
 import org.osgi.framework.ServiceReference;
 
 /**
@@ -57,7 +58,7 @@ public class ConfigurationEvent {
 	 * This <code>ConfigurationEvent</code> type that indicates that a
 	 * <code>Configuration</code> object has been updated with new properties.
 	 * 
-	 * An event is fired when a call to <code>Configuration.update</code>
+	 * An event is fired when a call to {@link Configuration#update(Dictionary)}
 	 * successfully changes a configuration.
 	 * 
 	 * <p>
@@ -71,7 +72,7 @@ public class ConfigurationEvent {
 	 * This <code>ConfigurationEvent</code> type that indicates that a
 	 * <code>Configuration</code> object has been deleted.
 	 * 
-	 * An event is fired when a call to <code>Configuration.delete</code>
+	 * An event is fired when a call to {@link Configuration#delete()}
 	 * successfully deletes a configuration.
 	 * 
 	 * <p>
