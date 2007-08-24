@@ -28,9 +28,9 @@
 package org.osgi.test.cases.framework.div.tbc.Bundle;
 
 import java.util.Enumeration;
+
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
-import org.osgi.test.service.TestCaseLink;
 
 /**
  * 
@@ -43,7 +43,6 @@ public class GetEntryPaths {
 
 	private BundleContext	context;
 	private String			tcHome;
-	private TestCaseLink	link;
 
 	/**
 	 * Creates a new GetEntryPaths
@@ -52,10 +51,8 @@ public class GetEntryPaths {
 	 * @param _link the link with test director
 	 * @param _tcHome the test case home
 	 */
-	public GetEntryPaths(BundleContext _context, TestCaseLink _link,
-			String _tcHome) {
+	public GetEntryPaths(BundleContext _context,	String _tcHome) {
 		context = _context;
-		link = _link;
 		tcHome = _tcHome;
 	}
 

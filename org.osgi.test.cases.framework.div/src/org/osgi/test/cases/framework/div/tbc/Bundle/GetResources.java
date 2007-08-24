@@ -31,7 +31,6 @@ import java.util.Enumeration;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
-import org.osgi.test.service.TestCaseLink;
 
 /**
  * This class tests the method org.osgi.framework.Bundle.getResources().
@@ -43,7 +42,6 @@ public class GetResources {
 
 	private BundleContext	context;
 	private String			tcHome;
-	private TestCaseLink	link;
 
 	/**
 	 * Creates a new GetResources
@@ -52,10 +50,8 @@ public class GetResources {
 	 * @param _link the link with test director
 	 * @param _tcHome the test case home path
 	 */
-	public GetResources(BundleContext _context, TestCaseLink _link,
-			String _tcHome) {
+	public GetResources(BundleContext _context, String _tcHome) {
 		context = _context;
-		link = _link;
 		tcHome = _tcHome;
 	}
 

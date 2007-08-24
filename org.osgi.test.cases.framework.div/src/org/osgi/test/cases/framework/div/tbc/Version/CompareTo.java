@@ -29,7 +29,6 @@ package org.osgi.test.cases.framework.div.tbc.Version;
 
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.Version;
-import org.osgi.test.service.TestCaseLink;
 
 /**
  * Test the method org.osgi.framework.Version.compareTo().
@@ -39,7 +38,6 @@ import org.osgi.test.service.TestCaseLink;
 public class CompareTo {
 
 	private BundleContext	context;
-	private TestCaseLink	link;
 	private String			tcHome;
 
 	/**
@@ -49,9 +47,8 @@ public class CompareTo {
 	 * @param _link the link with test director
 	 * @param _tcHome the test case home path
 	 */
-	public CompareTo(BundleContext _context, TestCaseLink _link, String _tcHome) {
+	public CompareTo(BundleContext _context, String _tcHome) {
 		context = _context;
-		link = _link;
 		tcHome = _tcHome;
 	}
 

@@ -13,7 +13,6 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.lang.reflect.Method;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Dictionary;
@@ -22,13 +21,10 @@ import java.util.Properties;
 import java.util.Vector;
 
 import org.osgi.framework.Bundle;
-import org.osgi.framework.BundleActivator;
-import org.osgi.framework.BundleContext;
 import org.osgi.framework.BundleException;
 import org.osgi.framework.Constants;
 import org.osgi.framework.FrameworkEvent;
 import org.osgi.framework.FrameworkListener;
-import org.osgi.framework.ServiceReference;
 import org.osgi.test.cases.framework.div.tb6.BundleClass;
 import org.osgi.test.cases.framework.div.tbc.Bundle.GetBundleContext;
 import org.osgi.test.cases.framework.div.tbc.Bundle.GetEntry;
@@ -48,7 +44,7 @@ import org.osgi.test.cases.framework.div.tbc.Version.GetMicro;
 import org.osgi.test.cases.framework.div.tbc.Version.GetMinor;
 import org.osgi.test.cases.framework.div.tbc.Version.HashCode;
 import org.osgi.test.cases.framework.div.tbc.Version.InstanceOf;
-import org.osgi.test.service.TestCaseLink;
+import org.osgi.test.cases.util.DefaultTestBundleControl;
 
 /**
  * This is the bundle initially installed and started by the TestCase when
@@ -56,16 +52,9 @@ import org.osgi.test.service.TestCaseLink;
  * 
  * @author Ericsson Radio Systems AB
  */
-public class Activator extends Thread implements FrameworkListener,
-		BundleActivator {
-	private ServiceReference	serviceRef;
-	BundleContext				_context;
-	ServiceReference			_linkRef;
-	TestCaseLink				_link;
-	String						_tcHome;
-	boolean						_continue	= true;
+public class Activator extends DefaultTestBundleControl implements FrameworkListener {
 	static final int			TESTS		= 5;
-	static String[]				methods		= new String[] {
+	String[] methods		= new String[] {
 			"testManifestHeaders", "testMissingManifestHeaders",
 			"testBundleClassPath", "testNativeCode", "testFrameworkListener",
 			"testFileAccess", "testBundleZero", "testEERequirement",
@@ -86,77 +75,34 @@ public class Activator extends Thread implements FrameworkListener,
 			"testVersionInstanceOf", "testBundleGetHeaders",
 			"testBundleContextRegisterService"};
 
-	/**
-	 * start. Gets a reference to the TestCaseLink to communicate with the
-	 * TestCase.
-	 */
-	public void start(BundleContext context) {
-		_context = context;
-		_linkRef = _context.getServiceReference(TestCaseLink.class.getName());
-		_link = (TestCaseLink) _context.getService(_linkRef);
-		start();
+	protected void prepare() throws Exception {
+		log("Test bundle control started Ok.");
 	}
 
-	public void stop(BundleContext context) {
-		quit();
+
+	public void log(String test, String result) {
+		if (result == null)
+			result = "";
+		log(test + " " + result);
 	}
 
-	/**
-	 * This function performs the tests.
-	 */
-	public void run() {
-		try {
-			_link.log("Test bundle control started Ok.");
-			_tcHome = (String) _link.receive(10000);
-			for (int i = 0; _continue && i < methods.length; i++) {
-				Method method = getClass().getDeclaredMethod(methods[i],
-						new Class[0]);
-				method.invoke(this, new Object[0]);
-				_link.send("" + 100 * (i + 1) / methods.length);
-			}
-			_link.send("ready");
-		}
-		catch (Exception e) {
-			e.printStackTrace();
-		}
-		System.out.println("done");
-	}
 
-	/**
-	 * Releases the reference to the TestCaseLink.
-	 */
-	void quit() {
-		if (_continue) {
-			_context.ungetService(_linkRef);
-			_linkRef = null;
-			_continue = false;
-		}
-	}
+	public String [] getMethods() { return methods; }
 
-	void log(String test, String result) {
-		try {
-			if (result == null)
-				result = "";
-			_link.log(test + " " + result);
-		}
-		catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
 
 	/**
 	 * Logs the manifest headers.
 	 */
-	void testManifestHeaders() throws Exception {
+	public void testManifestHeaders() throws Exception {
 		Bundle tb;
 		Dictionary h;
 		log(".", "");
-		_link.log("Testing Manifest header syntax.");
+		log("Testing Manifest header syntax.");
 		try {
-			tb = _context.installBundle(_tcHome + "tb1.jar");
+			tb = getContext().installBundle(getWebServer() + "tb1.jar");
 			tb.start();
 			h = tb.getHeaders();
-			_link.log(h.size() + " headers.");
+			log(h.size() + " headers.");
 			// The order of the headers isn't specified, so we'd better sort
 			// them.
 			for (Enumeration e = sort(h.keys()); e.hasMoreElements();) {
@@ -174,7 +120,7 @@ public class Activator extends Thread implements FrameworkListener,
 									"0000".substring(hex.length())).append(hex);
 						}
 					}
-					_link.log(key.toLowerCase() + ": " + result);
+					log(key.toLowerCase() + ": " + result);
 				}
 			}
 			tb.stop();
@@ -189,21 +135,21 @@ public class Activator extends Thread implements FrameworkListener,
 	/**
 	 * Tests empty manifest headers.
 	 */
-	void testMissingManifestHeaders() throws Exception {
+	public void testMissingManifestHeaders() throws Exception {
 		Bundle tb;
 		Dictionary h;
 		log(".", "");
-		_link.log("Testing missing manifest headers.");
+		log("Testing missing manifest headers.");
 		try {
-			tb = _context.installBundle(_tcHome + "tb5.jar");
+			tb = getContext().installBundle(getWebServer() + "tb5.jar");
 			tb.start();
 			h = tb.getHeaders();
-			_link.log(h.size() + " headers.");
+			log(h.size() + " headers.");
 			// The order of the headers isn't specified, so we'd better sort
 			// them.
 			for (Enumeration e = sort(h.keys()); e.hasMoreElements();) {
 				String key = (String) e.nextElement();
-				_link.log(key.toLowerCase() + ": " + h.get(key));
+				log(key.toLowerCase() + ": " + h.get(key));
 			}
 			tb.stop();
 			tb.uninstall();
@@ -217,7 +163,7 @@ public class Activator extends Thread implements FrameworkListener,
 	/**
 	 * Tests extended classpath
 	 */
-	void testBundleClassPath() {
+	public void testBundleClassPath() {
 		//instaniate an object from tbcinner.jar
 		log(".", "");
 		log(
@@ -241,14 +187,14 @@ public class Activator extends Thread implements FrameworkListener,
 	/**
 	 * Tests that location remains the same after an update
 	 */
-	void testBundleLocation() {
+	public void testBundleLocation() {
 		Bundle tb;
 		try {
 			log(".", "");
 			log(
 					"Tests if bundle location remains unchanged after an bundle update.",
 					"");
-			tb = _context.installBundle(_tcHome + "tb1.jar");
+			tb = getContext().installBundle(getWebServer() + "tb1.jar");
 			String originalLocation = tb.getLocation();
 			tb.update();
 			if ((tb.getLocation()).equals(originalLocation))
@@ -269,11 +215,11 @@ public class Activator extends Thread implements FrameworkListener,
 	 * @spec Bundle.start()
 	 * @spec Bundle.uninstall()
 	 */
-	void testNativeCode() throws Exception {
+	public void testNativeCode() throws Exception {
 		Bundle tb;
 		String res;
 		try {
-			tb = _context.installBundle(_tcHome + "tb2.jar");
+			tb = getContext().installBundle(getWebServer() + "tb2.jar");
 			try {
 				tb.start();
 				log(".", "");
@@ -304,11 +250,11 @@ public class Activator extends Thread implements FrameworkListener,
 	 * @spec Bundle.start()
 	 * @spec Bundle.uninstall()
 	 */
-	void testNativeCodeFilterOptional() throws Exception {
+	public void testNativeCodeFilterOptional() throws Exception {
 		Bundle tb;
 		String res;
 		try {
-			tb = _context.installBundle(_tcHome + "tb12.jar");
+			tb = getContext().installBundle(getWebServer() + "tb12.jar");
 			try {
 				tb.start();
 				log(".", "");
@@ -339,11 +285,11 @@ public class Activator extends Thread implements FrameworkListener,
 	 * @spec Bundle.start()
 	 * @spec Bundle.uninstall()
 	 */
-	void testNativeCodeFilterNoOptional() throws Exception {
+	public void testNativeCodeFilterNoOptional() throws Exception {
 		Bundle tb;
 		String res;
 		try {
-			tb = _context.installBundle(_tcHome + "tb15.jar");
+			tb = getContext().installBundle(getWebServer() + "tb15.jar");
 			log("Error: Bundle should NOT be loaded", "");
 			try {
 				tb.start();
@@ -373,14 +319,14 @@ public class Activator extends Thread implements FrameworkListener,
 	 * @spec Bundle.start()
 	 * @spec Bundle.uninstall()
 	 */
-	void testNativeCodeFilterAlias() throws Exception {
+	public void testNativeCodeFilterAlias() throws Exception {
 		Bundle tb;
 		String res;
 		try {
 			Properties props = System.getProperties();
 			props.put("org.osgi.framework.windowing.system", "xyz");
 			System.setProperties(props);
-			tb = _context.installBundle(_tcHome + "tb16.jar");
+			tb = getContext().installBundle(getWebServer() + "tb16.jar");
 			try {
 				tb.start();
 				log(".", "");
@@ -409,13 +355,13 @@ public class Activator extends Thread implements FrameworkListener,
 	 * @spec Bundle.start()
 	 * @spec Bundle.uninstall()
 	 */
-	void testNativeCodeFragment() throws Exception {
+	public void testNativeCodeFragment() throws Exception {
 		Bundle tb;
 		Bundle tbFragment;
 		String res;
 		try {
-			tbFragment = _context.installBundle(_tcHome + "tb18.jar");
-			tb = _context.installBundle(_tcHome + "tb17.jar");
+			tbFragment = getContext().installBundle(getWebServer() + "tb18.jar");
+			tb = getContext().installBundle(getWebServer() + "tb17.jar");
 			try {
 				tb.start();
 				log(".", "");
@@ -448,11 +394,11 @@ public class Activator extends Thread implements FrameworkListener,
 	 * @spec Bundle.start()
 	 * @spec Bundle.uninstall()
 	 */
-	void testNativeCodeLanguage() throws Exception {
+	public void testNativeCodeLanguage() throws Exception {
 		Bundle tb;
 		String res;
 		try {
-			tb = _context.installBundle(_tcHome + "tb19.jar");
+			tb = getContext().installBundle(getWebServer() + "tb19.jar");
 			log("Error: Bundle should NOT be loaded:",
 					"language should not match");
 			try {
@@ -483,11 +429,11 @@ public class Activator extends Thread implements FrameworkListener,
 	 * @spec Bundle.start()
 	 * @spec Bundle.uninstall()
 	 */
-	void testNativeCodeLanguageSuccess() throws Exception {
+	public void testNativeCodeLanguageSuccess() throws Exception {
 		Bundle tb;
 		String res;
 		try {
-			tb = _context.installBundle(_tcHome + "tb20.jar");
+			tb = getContext().installBundle(getWebServer() + "tb20.jar");
 			try {
 				tb.start();
 				log(".", "");
@@ -517,11 +463,11 @@ public class Activator extends Thread implements FrameworkListener,
 	 * @spec Bundle.start()
 	 * @spec Bundle.uninstall()
 	 */
-	void testNativeCodeVersion() throws Exception {
+	public void testNativeCodeVersion() throws Exception {
 		Bundle tb;
 		String res;
 		try {
-			tb = _context.installBundle(_tcHome + "tb21.jar");
+			tb = getContext().installBundle(getWebServer() + "tb21.jar");
 			log("Error: Bundle should NOT be loaded", "os version out of range");
 			try {
 				tb.start();
@@ -548,11 +494,11 @@ public class Activator extends Thread implements FrameworkListener,
 	 * @spec Bundle.start()
 	 * @spec Bundle.uninstall()
 	 */
-	void testNativeCodeVersionSuccess() throws Exception {
+	public void testNativeCodeVersionSuccess() throws Exception {
 		Bundle tb;
 		String res;
 		try {
-			tb = _context.installBundle(_tcHome + "tb22.jar");
+			tb = getContext().installBundle(getWebServer() + "tb22.jar");
 			try {
 				tb.start();
 				log(".", "");
@@ -573,8 +519,8 @@ public class Activator extends Thread implements FrameworkListener,
 	}
 
 	void reportProcessorOS() throws IOException {
-		String os = _context.getProperty("org.osgi.framework.os.name");
-		String proc = _context.getProperty("org.osgi.framework.processor");
+		String os = getContext().getProperty("org.osgi.framework.os.name");
+		String proc = getContext().getProperty("org.osgi.framework.processor");
 		log("Current os + processor", "osname=" + os + " processor=" + proc);
 		log(
 				"See for allowed constants: http://www2.osgi.org/Specifications/Reference",
@@ -607,16 +553,16 @@ public class Activator extends Thread implements FrameworkListener,
 	/**
 	 * Tests to add a FrameworkListener.
 	 */
-	synchronized void testFrameworkListener() throws Exception {
+	synchronized public void testFrameworkListener() throws Exception {
 		Bundle tb;
 		synced = false;
-		_context.addFrameworkListener(this);
+		getContext().addFrameworkListener(this);
 		log(".", "");
 		log("Testing framework event.", "Expecting BundleException");
-		tb = _context.installBundle(_tcHome + "tb3.jar");
+		tb = getContext().installBundle(getWebServer() + "tb3.jar");
 		tb.start();
 		tb.uninstall();
-		_context.removeFrameworkListener(this);
+		getContext().removeFrameworkListener(this);
 		if (!synced)
 			wait(10000);
 		if (!synced)
@@ -626,13 +572,13 @@ public class Activator extends Thread implements FrameworkListener,
 	/**
 	 * Tests the file system.
 	 */
-	void testFileAccess() throws Exception {
+	public void testFileAccess() throws Exception {
 		File file;
 		PrintWriter out;
 		BufferedReader in;
 		boolean ok = true;
 		String res;
-		file = _context.getDataFile("testfile");
+		file = getContext().getDataFile("testfile");
 		log(".", "");
 		if (file != null) {
 			out = new PrintWriter(new FileWriter(file));
@@ -665,20 +611,18 @@ public class Activator extends Thread implements FrameworkListener,
 			log("Testing file deletion:", res);
 		}
 		else
-			_link.log("Framework lacks filesystem support, no error.");
+			log("Framework lacks filesystem support, no error.");
 	}
 
 	/**
 	 * Tests double manifest tags.
 	 */
-	void testDoubleManifestTags() throws Exception {
+	public void testDoubleManifestTags() throws Exception {
 		Bundle tb = null;
 		Dictionary h;
-		Enumeration e;
-		Object key;
 		log(".", "");
 		log("Testing double Manifest tags.", "");
-		tb = _context.installBundle(_tcHome + "tb4.jar");
+		tb = getContext().installBundle(getWebServer() + "tb4.jar");
 		try {
 			h = tb.getHeaders();
 			log("", "The Import-Package header was " + h.get("Import-Package"));
@@ -712,10 +656,10 @@ public class Activator extends Thread implements FrameworkListener,
 		return result.elements();
 	}
 
-	void testBundleZero() {
+	public void testBundleZero() {
 		//Bundle(0).update is tested in permission/tc5
 		try {
-			(_context.getBundle(0)).start();
+			(getContext().getBundle(0)).start();
 			log("bundle(0).start returned without Exception", "OK");
 		}
 		catch (Exception e) {
@@ -723,7 +667,7 @@ public class Activator extends Thread implements FrameworkListener,
 			e.printStackTrace();
 		}
 		try {
-			(_context.getBundle(0)).uninstall();
+			(getContext().getBundle(0)).uninstall();
 		}
 		catch (BundleException e) {
 			log("BundleException thrown when excecuting bundle(0).uninstall",
@@ -752,7 +696,7 @@ public class Activator extends Thread implements FrameworkListener,
 		return message;
 	}
 
-	void testEERequirement() {
+	public void testEERequirement() {
 		String oneAvailableEEOneMatch = "AA/BB";
 		String twoAvailableEEsOneMatch = "XX/YY,CC/DD";
 		String oneAvailableEENoMatch = "XX/YY";
@@ -761,7 +705,7 @@ public class Activator extends Thread implements FrameworkListener,
 		Bundle tb = null;
 		try {
 			// Install w/o available EE, should fail
-			tb = _context.installBundle(_tcHome + "tb7.jar");
+			tb = getContext().installBundle(getWebServer() + "tb7.jar");
 			log(
 					"Install: No BundleException thrown when EE requirements not fulfilled",
 					"Fail");
@@ -777,7 +721,7 @@ public class Activator extends Thread implements FrameworkListener,
 			System.getProperties().put(
 					Constants.FRAMEWORK_EXECUTIONENVIRONMENT,
 					oneAvailableEENoMatch);
-			tb = _context.installBundle(_tcHome + "tb7.jar");
+			tb = getContext().installBundle(getWebServer() + "tb7.jar");
 			log(
 					"Install: No BundleException thrown when EE requirements not fulfilled",
 					"Fail");
@@ -793,7 +737,7 @@ public class Activator extends Thread implements FrameworkListener,
 			System.getProperties().put(
 					Constants.FRAMEWORK_EXECUTIONENVIRONMENT,
 					oneAvailableEEOneMatch);
-			tb = _context.installBundle(_tcHome + "tb7.jar");
+			tb = getContext().installBundle(getWebServer() + "tb7.jar");
 			log(
 					"Install: No BundleException thrown when EE requirements fulfilled.",
 					"OK");
@@ -850,9 +794,9 @@ public class Activator extends Thread implements FrameworkListener,
 		}
 	}
 
-	void testBundleGetEntryPath() {
+	public void testBundleGetEntryPath() {
 		try {
-			new GetEntry(_context, _link, _tcHome).run();
+			new GetEntry(getContext(), getWebServer()).run();
 		}
 		catch (Exception ex) {
 			ex.printStackTrace();
@@ -860,9 +804,9 @@ public class Activator extends Thread implements FrameworkListener,
 		}
 	}
 
-	void testBundleGetEntryPaths() {
+	public void testBundleGetEntryPaths() {
 		try {
-			new GetEntryPaths(_context, _link, _tcHome).run();
+			new GetEntryPaths(getContext(), getWebServer()).run();
 		}
 		catch (Exception ex) {
 			ex.printStackTrace();
@@ -870,9 +814,9 @@ public class Activator extends Thread implements FrameworkListener,
 		}
 	}
 
-	void testBundleGetResource() {
+	public void testBundleGetResource() {
 		try {
-			new GetResource(_context, _link, _tcHome).run();
+			new GetResource(getContext(), getWebServer()).run();
 		}
 		catch (Exception ex) {
 			ex.printStackTrace();
@@ -880,9 +824,9 @@ public class Activator extends Thread implements FrameworkListener,
 		}
 	}
 
-	void testBundleGetResources() {
+	public void testBundleGetResources() {
 		try {
-			new GetResources(_context, _link, _tcHome).run();
+			new GetResources(getContext(), getWebServer()).run();
 		}
 		catch (Exception ex) {
 			ex.printStackTrace();
@@ -890,9 +834,9 @@ public class Activator extends Thread implements FrameworkListener,
 		}
 	}
 
-	void testBundleGetSymbolicName() {
+	public void testBundleGetSymbolicName() {
 		try {
-			new GetSymbolicName(_context, _link, _tcHome).run();
+			new GetSymbolicName(getContext(), getWebServer()).run();
 		}
 		catch (Exception ex) {
 			ex.printStackTrace();
@@ -900,9 +844,9 @@ public class Activator extends Thread implements FrameworkListener,
 		}
 	}
 
-	void testBundleGetBundleContext() {
+	public void testBundleGetBundleContext() {
 		try {
-			new GetBundleContext(_context, _link, _tcHome).run();
+			new GetBundleContext(getContext(), this, getWebServer()).run();
 		}
 		catch (Exception ex) {
 			ex.printStackTrace();
@@ -910,9 +854,9 @@ public class Activator extends Thread implements FrameworkListener,
 		}
 	}
 	
-	void testBundleHashCode() {
+	public void testBundleHashCode() {
 		try {
-			new HashCode(_context, _link, _tcHome).run();
+			new HashCode(getContext(), getWebServer()).run();
 		}
 		catch (Exception ex) {
 			ex.printStackTrace();
@@ -920,9 +864,9 @@ public class Activator extends Thread implements FrameworkListener,
 		}
 	}
 
-	void testBundleLoadClass() {
+	public void testBundleLoadClass() {
 		try {
-			new LoadClass(_context, _link, _tcHome).run();
+			new LoadClass(getContext(), getWebServer()).run();
 		}
 		catch (Exception ex) {
 			ex.printStackTrace();
@@ -930,10 +874,10 @@ public class Activator extends Thread implements FrameworkListener,
 		}
 	}
 
-	void testBundleEventConstants() {
+	public void testBundleEventConstants() {
 		try {
 			new org.osgi.test.cases.framework.div.tbc.BundleEvent.Constants(
-					_context, _link, _tcHome).run();
+					getContext(), getWebServer()).run();
 		}
 		catch (Exception ex) {
 			ex.printStackTrace();
@@ -941,9 +885,9 @@ public class Activator extends Thread implements FrameworkListener,
 		}
 	}
 
-	void testBundleExceptionGetCause() {
+	public void testBundleExceptionGetCause() {
 		try {
-			new GetCause(_context, _link, _tcHome).run();
+			new GetCause(getContext(), getWebServer()).run();
 		}
 		catch (Exception ex) {
 			ex.printStackTrace();
@@ -951,9 +895,9 @@ public class Activator extends Thread implements FrameworkListener,
 		}
 	}
 
-	void testBundleExceptionInitCause() {
+	public void testBundleExceptionInitCause() {
 		try {
-			new InitCause(_context, _link, _tcHome).run();
+			new InitCause(getContext(), getWebServer()).run();
 		}
 		catch (Exception ex) {
 			ex.printStackTrace();
@@ -961,10 +905,10 @@ public class Activator extends Thread implements FrameworkListener,
 		}
 	}
 
-	void testFrameworkEventConstants() {
+	public void testFrameworkEventConstants() {
 		try {
 			new org.osgi.test.cases.framework.div.tbc.FrameworkEvent.Constants(
-					_context, _link, _tcHome).run();
+					getContext(), getWebServer()).run();
 		}
 		catch (Exception ex) {
 			ex.printStackTrace();
@@ -972,10 +916,10 @@ public class Activator extends Thread implements FrameworkListener,
 		}
 	}
 
-	void testVersionConstructors() {
+	public void testVersionConstructors() {
 		try {
 			new org.osgi.test.cases.framework.div.tbc.Version.Constructors(
-					_context, _link, _tcHome).run();
+					getContext(), getWebServer()).run();
 		}
 		catch (Exception ex) {
 			ex.printStackTrace();
@@ -983,9 +927,9 @@ public class Activator extends Thread implements FrameworkListener,
 		}
 	}
 
-	void testVersionEquals() {
+	public void testVersionEquals() {
 		try {
-			new Equals(_context, _link, _tcHome).run();
+			new Equals(getContext(), getWebServer()).run();
 		}
 		catch (Exception ex) {
 			ex.printStackTrace();
@@ -993,9 +937,9 @@ public class Activator extends Thread implements FrameworkListener,
 		}
 	}
 
-	void testVersionGetMajor() {
+	public void testVersionGetMajor() {
 		try {
-			new GetMajor(_context, _link, _tcHome).run();
+			new GetMajor(getContext(), getWebServer()).run();
 		}
 		catch (Exception ex) {
 			ex.printStackTrace();
@@ -1003,9 +947,9 @@ public class Activator extends Thread implements FrameworkListener,
 		}
 	}
 
-	void testVersionGetMinor() {
+	public void testVersionGetMinor() {
 		try {
-			new GetMinor(_context, _link, _tcHome).run();
+			new GetMinor(getContext(), getWebServer()).run();
 		}
 		catch (Exception ex) {
 			ex.printStackTrace();
@@ -1013,9 +957,9 @@ public class Activator extends Thread implements FrameworkListener,
 		}
 	}
 
-	void testVersionGetMicro() {
+	public void testVersionGetMicro() {
 		try {
-			new GetMicro(_context, _link, _tcHome).run();
+			new GetMicro(getContext(), getWebServer()).run();
 		}
 		catch (Exception ex) {
 			ex.printStackTrace();
@@ -1023,9 +967,9 @@ public class Activator extends Thread implements FrameworkListener,
 		}
 	}
 
-	void testVersionCompareTo() {
+	public void testVersionCompareTo() {
 		try {
-			new CompareTo(_context, _link, _tcHome).run();
+			new CompareTo(getContext(), getWebServer()).run();
 		}
 		catch (Exception ex) {
 			ex.printStackTrace();
@@ -1033,9 +977,9 @@ public class Activator extends Thread implements FrameworkListener,
 		}
 	}
 
-	void testVersionInstanceOf() {
+	public void testVersionInstanceOf() {
 		try {
-			new InstanceOf(_context, _link, _tcHome).run();
+			new InstanceOf(getContext(), getWebServer()).run();
 		}
 		catch (Exception ex) {
 			ex.printStackTrace();
@@ -1043,10 +987,10 @@ public class Activator extends Thread implements FrameworkListener,
 		}
 	}
 
-	void testVersionConstantsValues() {
+	public void testVersionConstantsValues() {
 		try {
 			new org.osgi.test.cases.framework.div.tbc.Version.Constants(
-					_context, _link, _tcHome).run();
+					getContext(), getWebServer()).run();
 		}
 		catch (Exception ex) {
 			ex.printStackTrace();
@@ -1057,11 +1001,12 @@ public class Activator extends Thread implements FrameworkListener,
 	/**
 	 * Tests localization of manifest headers.
 	 */
-	void testBundleGetHeaders() {
+	public void testBundleGetHeaders() {
 		try {
-			(new GetHeaders(_context, _tcHome)).run();
+			(new GetHeaders(getContext(), getWebServer())).run();
 		}
 		catch (Exception e) {
+			e.printStackTrace();
 			log("Error.", e.getMessage());
 
 		}
@@ -1070,11 +1015,12 @@ public class Activator extends Thread implements FrameworkListener,
 	/**
 	 * Tests service registration.
 	 */
-	void testBundleContextRegisterService() {
+	public void testBundleContextRegisterService() {
 		try {
-			(new RegisterService(_context, _link, _tcHome)).run();
+			(new RegisterService(getContext(), getWebServer())).run();
 		}
 		catch (Exception e) {
+			e.printStackTrace();
 			log("Error.", e.getMessage());
 
 		}

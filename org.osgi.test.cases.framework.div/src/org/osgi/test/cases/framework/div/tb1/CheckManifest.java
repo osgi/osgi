@@ -25,6 +25,6 @@ public class CheckManifest implements BundleActivator {
 	 * Stops the bundle.
 	 */
 	public void stop(BundleContext bc) {
-		System.out.println("TB1 start");
+		System.out.println("TB1 stop");
 	}
 }

@@ -29,7 +29,6 @@ package org.osgi.test.cases.framework.div.tbc.Bundle;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
-import org.osgi.test.service.TestCaseLink;
 
 /**
  * Test the method org.osgi.framework.Bundle.getSymbolicName().
@@ -39,7 +38,6 @@ import org.osgi.test.service.TestCaseLink;
 public class GetSymbolicName {
 
 	private BundleContext	context;
-	private TestCaseLink	link;
 	private String			tcHome;
 
 	/**
@@ -49,10 +47,8 @@ public class GetSymbolicName {
 	 * @param _link the link with test director
 	 * @param _tcHome the test case home path
 	 */
-	public GetSymbolicName(BundleContext _context, TestCaseLink _link,
-			String _tcHome) {
+	public GetSymbolicName(BundleContext _context, String _tcHome) {
 		context = _context;
-		link = _link;
 		tcHome = _tcHome;
 	}
 

@@ -29,7 +29,6 @@ package org.osgi.test.cases.framework.div.tbc.BundleException;
 
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.BundleException;
-import org.osgi.test.service.TestCaseLink;
 
 /**
  * 
@@ -41,7 +40,6 @@ public class GetCause {
 
 	private BundleContext	context;
 	private String			tcHome;
-	private TestCaseLink	link;
 
 	/**
 	 * Creates a new GetCause
@@ -50,9 +48,8 @@ public class GetCause {
 	 * @param _link the link with test director
 	 * @param _tcHome the test case home
 	 */
-	public GetCause(BundleContext _context, TestCaseLink _link, String _tcHome) {
+	public GetCause(BundleContext _context, String _tcHome) {
 		context = _context;
-		link = _link;
 		tcHome = _tcHome;
 	}
 

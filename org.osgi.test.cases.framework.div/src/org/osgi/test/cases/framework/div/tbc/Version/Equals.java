@@ -30,7 +30,6 @@ package org.osgi.test.cases.framework.div.tbc.Version;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.Version;
 import org.osgi.test.cases.framework.div.tbc.Bundle.BundleTestException;
-import org.osgi.test.service.TestCaseLink;
 
 /**
  * Test the method org.osgi.framework.Version.equals().
@@ -40,7 +39,6 @@ import org.osgi.test.service.TestCaseLink;
 public class Equals {
 
 	private BundleContext	context;
-	private TestCaseLink	link;
 	private String			tcHome;
 
 	/**
@@ -50,9 +48,8 @@ public class Equals {
 	 * @param _link the link with test director
 	 * @param _tcHome the test case home path
 	 */
-	public Equals(BundleContext _context, TestCaseLink _link, String _tcHome) {
+	public Equals(BundleContext _context, String _tcHome) {
 		context = _context;
-		link = _link;
 		tcHome = _tcHome;
 	}
 

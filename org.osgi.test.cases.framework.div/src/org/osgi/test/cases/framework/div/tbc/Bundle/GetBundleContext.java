@@ -27,23 +27,20 @@
 
 package org.osgi.test.cases.framework.div.tbc.Bundle;
 
-import java.io.IOException;
-
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.test.cases.util.Logger;
-import org.osgi.test.service.TestCaseLink;
 
 /**
  * Test the method org.osgi.framework.Bundle.getBundleContext().
  * 
  * @version $Revision$
  */
-public class GetBundleContext extends Logger {
+public class GetBundleContext {
 
 	private BundleContext	context;
-	private TestCaseLink	link;
 	private String			tcHome;
+	private Logger			logger;
 
 	/**
 	 * Creates a new GetBundleContext
@@ -52,10 +49,10 @@ public class GetBundleContext extends Logger {
 	 * @param _link the link with test director
 	 * @param _tcHome the test case home path
 	 */
-	public GetBundleContext(BundleContext _context, TestCaseLink _link,
+	public GetBundleContext(BundleContext _context, Logger _logger,
 			String _tcHome) {
 		context = _context;
-		link = _link;
+		logger = _logger;
 		tcHome = _tcHome;
 	}
 
@@ -79,19 +76,19 @@ public class GetBundleContext extends Logger {
 
 		bundle = context.installBundle(tcHome + "tb10.jar");
 		try {
-			assertNull("BundleContext for installed bundle must be null", bundle.getBundleContext());
+			logger.assertNull("BundleContext for installed bundle must be null", bundle.getBundleContext());
 			
 			bundle.start();
-			assertNotNull("BundleContext for started bundle must not be null", bundle.getBundleContext());
+			logger.assertNotNull("BundleContext for started bundle must not be null", bundle.getBundleContext());
 			
-			assertEquals("Bundle id via BundleContext must equal original id", bundle.getBundleId(), bundle.getBundleContext().getBundle().getBundleId());
+			logger.assertEquals("Bundle id via BundleContext must equal original id", bundle.getBundleId(), bundle.getBundleContext().getBundle().getBundleId());
 			
 			bundle.stop();
-			assertNull("BundleContext for stopped bundle must be null", bundle.getBundleContext());
+			logger.assertNull("BundleContext for stopped bundle must be null", bundle.getBundleContext());
 		}
 		finally {
 			bundle.uninstall();
-			assertNull("BundleContext for uninstalled bundle must be null", bundle.getBundleContext());
+			logger.assertNull("BundleContext for uninstalled bundle must be null", bundle.getBundleContext());
 		}
 		
 	}
@@ -102,7 +99,7 @@ public class GetBundleContext extends Logger {
 	 * @spec Bundle.getBundleContext()
 	 */
 	public void testGetBundleContext0002() throws Exception {
-		assertEquals("BundleContext for test case should match context passed to activator", context, context.getBundle().getBundleContext());
+		logger.assertEquals("BundleContext for test case should match context passed to activator", context, context.getBundle().getBundleContext());
 	}
 
 	/**
@@ -115,9 +112,9 @@ public class GetBundleContext extends Logger {
 		
 		bundle = context.getBundle(0);
 		
-		assertNotNull("BundleContext for system bundle must not be null", bundle.getBundleContext());
+		logger.assertNotNull("BundleContext for system bundle must not be null", bundle.getBundleContext());
 
-		assertEquals("Bundle id via BundleContext must equal zero", 0L, bundle.getBundleContext().getBundle().getBundleId());
+		logger.assertEquals("Bundle id via BundleContext must equal zero", 0L, bundle.getBundleContext().getBundle().getBundleId());
 	}
 
 	/**
@@ -133,29 +130,16 @@ public class GetBundleContext extends Logger {
 
 		try {
 			host.start(); 	// resolve the bundles
-			assertNotNull("BundleContext for host bundle must not be null", host.getBundleContext());
-			assertNull("BundleContext for fragment bundle must be null", fragment.getBundleContext());
+			logger.assertNotNull("BundleContext for host bundle must not be null", host.getBundleContext());
+			logger.assertNull("BundleContext for fragment bundle must be null", fragment.getBundleContext());
 			
 			host.stop();
-			assertNull("BundleContext for stopped host bundle must be null", host.getBundleContext());
-			assertNull("BundleContext for fragment bundle must be null", fragment.getBundleContext());
+			logger.assertNull("BundleContext for stopped host bundle must be null", host.getBundleContext());
+			logger.assertNull("BundleContext for fragment bundle must be null", fragment.getBundleContext());
 		}
 		finally {
 			fragment.uninstall();
 			host.uninstall();
 		}
-	}
-
-	public void log(String message) {
-        if (link != null) {
-        	try {
-        		//System.out.println("log: " + test );
-        		link.log(message);
-        		return;
-        	}
-        	catch(IOException e) {
-        	}
-        }
-        System.out.println("No Log: " + message);
 	}
 }

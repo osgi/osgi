@@ -31,7 +31,6 @@ import java.net.URL;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
-import org.osgi.test.service.TestCaseLink;
 
 /**
  * 
@@ -44,7 +43,6 @@ public class GetResource {
 
 	private BundleContext	context;
 	private String			tcHome;
-	private TestCaseLink	link;
 
 	/**
 	 * Creates a new GetResource
@@ -53,10 +51,8 @@ public class GetResource {
 	 * @param _link the link with test director
 	 * @param _tcHome the test case home path
 	 */
-	public GetResource(BundleContext _context, TestCaseLink _link,
-			String _tcHome) {
+	public GetResource(BundleContext _context, String _tcHome) {
 		context = _context;
-		link = _link;
 		tcHome = _tcHome;
 	}
 
