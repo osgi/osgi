@@ -28,6 +28,7 @@ package org.osgi.test.cases.permissionadmin.signature.tbc;
 
 import org.osgi.framework.*;
 
+import org.osgi.service.condpermadmin.ConditionalPermissionAdmin;
 import org.osgi.service.permissionadmin.PermissionAdmin;
 import org.osgi.service.permissionadmin.PermissionInfo;
 import org.osgi.service.startlevel.StartLevel;
@@ -102,6 +103,12 @@ public class PermissionSignatureTestControl extends DefaultTestBundleControl {
   } 
   
   
+  public boolean checkPrerequisites() {
+	    return securityNeeded(true) &&
+		 serviceAvailable(PermissionAdmin.class); 
+  }
+
+
   public void prepare() throws Exception {
     testBundle = installBundle("tb1.jar");
     testBundleLocation = testBundle.getLocation();

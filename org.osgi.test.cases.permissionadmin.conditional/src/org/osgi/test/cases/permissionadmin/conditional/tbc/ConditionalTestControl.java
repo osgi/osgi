@@ -85,6 +85,12 @@ public class ConditionalTestControl extends DefaultTestBundleControl {
                                                   "testMutable2Immutable", //"T12"
                                                   };
 
+  public boolean checkPrerequisites() {
+	    return securityNeeded(true) &&
+		 serviceAvailable(PermissionAdmin.class) && 
+		 serviceAvailable(ConditionalPermissionAdmin.class); 
+  }
+
   /**
    * <remove>Prepare for each run. It is important that a test run is properly
    * initialized and that each case can run standalone. To save a lot

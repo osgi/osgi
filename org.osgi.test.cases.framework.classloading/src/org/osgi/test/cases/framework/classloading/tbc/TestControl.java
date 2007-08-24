@@ -2541,6 +2541,9 @@ public class TestControl extends DefaultTestBundleControl {
 	 * @throws Exception if any failure occurs or any assert fails
 	 */
 	public void testRequiredBundle003() throws Exception {
+		if (System.getSecurityManager() == null) {
+			return;
+		}
 		Bundle tb16b = getContext().installBundle(getWebServer() + "tb16b.jar");
 		Bundle tb16d = getContext().installBundle(getWebServer() + "tb16d.jar");
 		try {
