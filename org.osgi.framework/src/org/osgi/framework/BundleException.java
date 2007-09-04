@@ -101,6 +101,14 @@ public class BundleException extends Exception {
 	public static final int	STATECHANGE_ERROR		= 7;
 
 	/**
+	 * The bundle could not be resolved due to an error with the
+	 * Bundle-NativeCode header.
+	 * 
+	 * @since 1.5
+	 */
+	public static final int	NATIVECODE_ERROR		= 8;
+
+	/**
 	 * Creates a <code>BundleException</code> with the specified message and
 	 * exception cause.
 	 * 
