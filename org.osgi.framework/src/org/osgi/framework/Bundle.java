@@ -505,13 +505,6 @@ public interface Bundle {
 	 * this bundle must be restored and a <code>BundleException</code> must be
 	 * thrown after completion of the remaining steps.
 	 * 
-	 * <li>If this bundle has declared an Bundle-RequiredExecutionEnvironment
-	 * header, then the listed execution environments must be verified against
-	 * the installed execution environments. If they do not all match, the
-	 * original version of this bundle must be restored and a
-	 * <code>BundleException</code> must be thrown after completion of the
-	 * remaining steps.
-	 * 
 	 * <li>This bundle's state is set to <code>INSTALLED</code>.
 	 * 
 	 * <li>If the new version of this bundle was successfully installed, a
