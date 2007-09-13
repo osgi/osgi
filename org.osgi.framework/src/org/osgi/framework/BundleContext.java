@@ -141,19 +141,10 @@ public interface BundleContext {
 	 * <li>The bundle's content is read from the location string. If this
 	 * fails, a {@link BundleException} is thrown.
 	 * 
-	 * <li>The bundle's <code>Bundle-NativeCode</code> dependencies are
-	 * resolved. If this fails, a <code>BundleException</code> is thrown.
-	 * 
 	 * <li>The bundle's associated resources are allocated. The associated
 	 * resources minimally consist of a unique identifier and a persistent
 	 * storage area if the platform has file system support. If this step fails,
 	 * a <code>BundleException</code> is thrown.
-	 * 
-	 * <li>If the bundle has declared an Bundle-RequiredExecutionEnvironment
-	 * header, then the listed execution environments must be verified against
-	 * the installed execution environments. If none of the listed execution
-	 * environments match an installed execution environment, a
-	 * <code>BundleException</code> must be thrown.
 	 * 
 	 * <li>The bundle's state is set to <code>INSTALLED</code>.
 	 * 
