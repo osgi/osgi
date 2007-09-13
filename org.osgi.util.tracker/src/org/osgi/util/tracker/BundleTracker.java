@@ -21,7 +21,6 @@ package org.osgi.util.tracker;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.BundleEvent;
-import org.osgi.framework.BundleListener;
 import org.osgi.framework.SynchronousBundleListener;
 
 /**
@@ -55,18 +54,19 @@ public class BundleTracker implements BundleTrackerCustomizer {
 	static final boolean			DEBUG			= false;
 
 	/**
-	 * Bundle context this <tt>BundleTracker</tt> object is tracking against.
+	 * Bundle context this <code>BundleTracker</code> object is tracking
+	 * against.
 	 */
 	protected final BundleContext	context;
 
 	/**
-	 * <tt>BundleTrackerCustomizer</tt> object for this tracker.
+	 * <code>BundleTrackerCustomizer</code> object for this tracker.
 	 */
 	final BundleTrackerCustomizer	customizer;
 
 	/**
-	 * Tracked bundles: <tt>Bundle</tt> object -> customized Object and
-	 * <tt>BundleListener</tt> object
+	 * Tracked bundles: <code>Bundle</code> object -> customized Object and
+	 * <code>BundleListener</code> object
 	 */
 	private volatile Tracked		tracked;
 
@@ -119,27 +119,22 @@ public class BundleTracker implements BundleTrackerCustomizer {
 	 * <code>BundleTracker</code> object was created are now tracked by this
 	 * <code>BundleTracker</code> object.
 	 * 
-	 * @param synchronizedListener If <code>true</code>, then this
-	 *        <code>BundleTracker</code> will use a
-	 *        <code>SynchronizedBundleListener</code> when tracking bundles.If
-	 *        <code>false</code>, then this <code>BundleTracker</code> will
-	 *        track bundles asynchronously using a <code>BundleListener</code>.
 	 * @throws java.lang.IllegalStateException if the <code>BundleContext</code>
 	 *         object with which this <code>BundleTracker</code> object was
 	 *         created is no longer valid.
-	 * @throws java.lang.SecurityException If synchronizedListener is
-	 *         <code>true</code> and the caller and this class do not have the
-	 *         appropriate <code>AdminPermission[context bundle,LISTENER]</code>,
-	 *         and the Java Runtime Environment supports permissions.
+	 * @throws java.lang.SecurityException If the caller and this class do not
+	 *         have the appropriate
+	 *         <code>AdminPermission[context bundle,LISTENER]</code>, and the
+	 *         Java Runtime Environment supports permissions.
 	 */
-	public synchronized void open(boolean synchronizedListener) {
+	public synchronized void open() {
 		if (tracked != null) {
 			return;
 		}
 		if (DEBUG) {
 			System.out.println("BundleTracker.open"); //$NON-NLS-1$
 		}
-		tracked = synchronizedListener ? new SyncTracked() : new Tracked();
+		tracked = new Tracked();
 		trackingCount = 0;
 
 		synchronized (tracked) {
@@ -151,7 +146,7 @@ public class BundleTracker implements BundleTrackerCustomizer {
 					int state = bundles[i].getState();
 					if ((state & mask) == 0) {
 						bundles[i] = null; // null out bundles whose states are
-											// not interesting
+						// not interesting
 					}
 				}
 				tracked.setInitial(bundles); // set tracked with the initial
@@ -257,11 +252,11 @@ public class BundleTracker implements BundleTrackerCustomizer {
 	}
 
 	/**
-	 * Return an array of <tt>Bundle</tt> objects for all bundles being
-	 * tracked by this <tt>BundleTracker</tt> object.
+	 * Return an array of <code>Bundle</code> objects for all bundles being
+	 * tracked by this <code>BundleTracker</code> object.
 	 * 
-	 * @return Array of <tt>Bundle</tt> objects or <tt>null</tt> if no
-	 *         bundles are being tracked.
+	 * @return Array of <code>Bundle</code> objects or <code>null</code> if
+	 *         no bundles are being tracked.
 	 */
 	public Bundle[] getBundles() {
 		Tracked tracked = this.tracked; /*
@@ -382,12 +377,12 @@ public class BundleTracker implements BundleTrackerCustomizer {
 
 	/**
 	 * Inner class which subclasses AbstractTracked. This class is the
-	 * <code>BundleListener</code> object for the tracker.
+	 * <code>SynchronousBundleListener</code> object for the tracker.
 	 * 
 	 * @ThreadSafe
 	 * @since 1.4
 	 */
-	class Tracked extends AbstractTracked implements BundleListener {
+	class Tracked extends AbstractTracked implements SynchronousBundleListener {
 		/**
 		 * Tracked constructor.
 		 */
@@ -396,11 +391,11 @@ public class BundleTracker implements BundleTrackerCustomizer {
 		}
 
 		/**
-		 * <tt>BundleListener</tt> method for the <tt>BundleTracker</tt>
-		 * class. This method must NOT be synchronized to avoid deadlock
-		 * potential.
+		 * <code>BundleListener</code> method for the
+		 * <code>BundleTracker</code> class. This method must NOT be
+		 * synchronized to avoid deadlock potential.
 		 * 
-		 * @param event <tt>BundleEvent</tt> object from the framework.
+		 * @param event <code>BundleEvent</code> object from the framework.
 		 */
 		public void bundleChanged(BundleEvent event) {
 			/*
@@ -474,23 +469,6 @@ public class BundleTracker implements BundleTrackerCustomizer {
 		 */
 		protected void customizerRemoved(Object item, Object object) {
 			customizer.removedBundle((Bundle) item, object);
-		}
-	}
-
-	/**
-	 * Subclass of Tracked which implements the SynchronousBundleListener
-	 * interface. This class is used by the BundleTracker if open is called with
-	 * true.
-	 * 
-	 * @since 1.4
-	 * @ThreadSafe
-	 */
-	class SyncTracked extends Tracked implements SynchronousBundleListener {
-		/**
-		 * SyncTracked constructor.
-		 */
-		protected SyncTracked() {
-			super();
 		}
 	}
 }
