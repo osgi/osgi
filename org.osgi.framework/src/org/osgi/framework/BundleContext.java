@@ -706,19 +706,19 @@ public interface BundleContext {
 	 * If the service object returned by the <code>ServiceFactory</code>
 	 * object is not an <code>instanceof</code> all the classes named when the
 	 * service was registered or the <code>ServiceFactory</code> object throws
-	 * an exception, a {@link ServiceException} of type
-	 * {@link ServiceException#FACTORY_ERROR} is thrown and a Framework event of
-	 * type {@link FrameworkEvent#ERROR} is fired.
+	 * an exception, <code>null</code> is returned and a Framework event of
+	 * type {@link FrameworkEvent#ERROR} containing a {@link ServiceException}
+	 * describing the error is fired.
 	 * <li>The service object for the service is returned.
 	 * </ol>
 	 * 
 	 * @param reference A reference to the service.
 	 * @return A service object for the service associated with
 	 *         <code>reference</code> or <code>null</code> if the service is
-	 *         not registered.
-	 * @throws ServiceException In the case of a <code>ServiceFactory</code>
-	 *         if the service object does not implement the classes under which
-	 *         it was registered or the service factory threw an exception.
+	 *         not registered, the service object returned by a
+	 *         <code>ServiceFactory</code> does not implement the classes
+	 *         under which it was registered or the <code>ServiceFactory</code>
+	 *         threw an exception.
 	 * @throws java.lang.SecurityException If the caller does not have the
 	 *         <code>ServicePermission</code> to get the service using at
 	 *         least one of the named classes the service was registered under

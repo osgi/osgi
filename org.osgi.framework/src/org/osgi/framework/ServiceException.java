@@ -27,7 +27,10 @@ package org.osgi.framework;
  * type code is used to identify the exception type for future extendability.
  * 
  * <p>
- * OSGi Alliance reserves the right to extend the set of types.
+ * OSGi Alliance reserves the right to extend the set of types. The type values
+ * 0x0000 through 0x7FFF are reserved for use by the OSGi Alliance. Service
+ * implementations wishing to define custom service exception types must not use
+ * values in this reserved range.
  * 
  * <p>
  * This exception conforms to the general purpose exception chaining mechanism.
@@ -44,7 +47,7 @@ public class ServiceException extends RuntimeException {
 	private final Throwable	cause;
 
 	/**
-	 * Type of bundle exception.
+	 * Type of service exception.
 	 */
 	private final int		type;
 
@@ -57,10 +60,14 @@ public class ServiceException extends RuntimeException {
 	 */
 	public static final int	UNREGISTERED		= 1;
 	/**
-	 * The service factory did not produce a valid service object.
+	 * The service factory produced an invalid service object.
 	 */
 	public static final int	FACTORY_ERROR		= 2;
-	
+	/**
+	 * The service factory threw an exception.
+	 */
+	public static final int	FACTORY_EXCEPTION	= 3;
+
 	/**
 	 * Creates a <code>ServiceException</code> with the specified message and
 	 * exception cause.
