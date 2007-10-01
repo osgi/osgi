@@ -80,3 +80,9 @@ Copyright				Copyright (C) 2000,2002,2003,2004,2005,2006  Stuart Ballard <stuart
 License					licenses/GPL-2.0.txt (GPL 2)
 URL						http://sab39.netreach.com/japi/
 Modifications			Modified japiohtml to ref /www/japi.css for website use
+
+DERBY--------------------------------------------------------------------------------------
+Copyright               Copyright (c) 2004 Apache Software Foundation, All Rights Reserved
+Used                    Bundles framework
+URL                     
+Modifications           none
