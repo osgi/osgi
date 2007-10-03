@@ -19,6 +19,7 @@
 package org.osgi.util.tracker;
 
 import org.osgi.framework.Bundle;
+import org.osgi.framework.BundleEvent;
 
 /**
  * The <code>BundleTrackerCustomizer</code> interface allows a
@@ -62,11 +63,14 @@ public interface BundleTrackerCustomizer {
 	 * 
 	 * @param bundle Bundle being added to the <code>BundleTracker</code>
 	 *        object.
+	 * @param event The bundle event which caused this customizer method to be
+	 *        called or <code>null</code> if there is no bundle event
+	 *        associated with the call to this method.
 	 * @return The object to be tracked for the <code>Bundle</code> object or
 	 *         <code>null</code> if the <code>Bundle</code> object should
 	 *         not be tracked.
 	 */
-	public abstract Object addingBundle(Bundle bundle);
+	public abstract Object addingBundle(Bundle bundle, BundleEvent event);
 
 	/**
 	 * A bundle tracked by the <code>BundleTracker</code> object has been
@@ -77,9 +81,13 @@ public interface BundleTrackerCustomizer {
 	 * <code>BundleTracker</code> object has had its state modified.
 	 * 
 	 * @param bundle Bundle whose state has been modified.
+	 * @param event The bundle event which caused this customizer method to be
+	 *        called or <code>null</code> if there is no bundle event
+	 *        associated with the call to this method.
 	 * @param object The tracked object for the modified bundle.
 	 */
-	public abstract void modifiedBundle(Bundle bundle, Object object);
+	public abstract void modifiedBundle(Bundle bundle, BundleEvent event,
+			Object object);
 
 	/**
 	 * A bundle tracked by the <code>BundleTracker</code> object has been
@@ -90,7 +98,11 @@ public interface BundleTrackerCustomizer {
 	 * <code>BundleTracker</code> object.
 	 * 
 	 * @param bundle Bundle that has been removed.
+	 * @param event The bundle event which caused this customizer method to be
+	 *        called or <code>null</code> if there is no bundle event
+	 *        associated with the call to this method.
 	 * @param object The tracked object for the removed bundle.
 	 */
-	public abstract void removedBundle(Bundle bundle, Object object);
+	public abstract void removedBundle(Bundle bundle, BundleEvent event,
+			Object object);
 }

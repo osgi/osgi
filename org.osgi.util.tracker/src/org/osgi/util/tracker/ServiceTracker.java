@@ -349,7 +349,7 @@ public class ServiceTracker implements ServiceTrackerCustomizer {
 		}
 		if (references != null) {
 			for (int i = 0; i < references.length; i++) {
-				outgoing.untrack(references[i]);
+				outgoing.untrack(references[i], null);
 			}
 		}
 		trackingCount = -1;
@@ -685,7 +685,7 @@ public class ServiceTracker implements ServiceTrackerCustomizer {
 		if (tracked == null) { /* if ServiceTracker is not open */
 			return;
 		}
-		tracked.untrack(reference);
+		tracked.untrack(reference, null);
 	}
 
 	/**
@@ -773,7 +773,7 @@ public class ServiceTracker implements ServiceTrackerCustomizer {
 		 * 
 		 * @param event <code>ServiceEvent</code> object from the framework.
 		 */
-		public void serviceChanged(ServiceEvent event) {
+		public void serviceChanged(final ServiceEvent event) {
 			/*
 			 * Check if we had a delayed call (which could happen when we
 			 * close).
@@ -792,7 +792,7 @@ public class ServiceTracker implements ServiceTrackerCustomizer {
 				case ServiceEvent.MODIFIED :
 					if (listenerFilter != null) { // constructor supplied
 						// filter
-						track(reference);
+						track(reference, event);
 						/*
 						 * If the customizer throws an unchecked exception, it
 						 * is safe to let it propagate
@@ -800,14 +800,14 @@ public class ServiceTracker implements ServiceTrackerCustomizer {
 					}
 					else { // user supplied filter
 						if (filter.match(reference)) {
-							track(reference);
+							track(reference, event);
 							/*
 							 * If the customizer throws an unchecked exception,
 							 * it is safe to let it propagate
 							 */
 						}
 						else {
-							untrack(reference);
+							untrack(reference, event);
 							/*
 							 * If the customizer throws an unchecked exception,
 							 * it is safe to let it propagate
@@ -816,7 +816,7 @@ public class ServiceTracker implements ServiceTrackerCustomizer {
 					}
 					break;
 				case ServiceEvent.UNREGISTERING :
-					untrack(reference);
+					untrack(reference, event);
 					/*
 					 * If the customizer throws an unchecked exception, it is
 					 * safe to let it propagate
@@ -839,10 +839,11 @@ public class ServiceTracker implements ServiceTrackerCustomizer {
 		 * called while synchronized on this object.
 		 * 
 		 * @param item Item to be tracked.
+		 * @param related Action related object.
 		 * @return Customized object for the tracked item or <code>null</code>
 		 *         if the item is not to be tracked.
 		 */
-		protected Object customizerAdding(Object item) {
+		protected Object customizerAdding(final Object item, final Object related) {
 			return customizer.addingService((ServiceReference) item);
 		}
 
@@ -851,9 +852,10 @@ public class ServiceTracker implements ServiceTrackerCustomizer {
 		 * called while synchronized on this object.
 		 * 
 		 * @param item Tracked item.
+		 * @param related Action related object.
 		 * @param object Customized object for the tracked item.
 		 */
-		protected void customizerModified(Object item, Object object) {
+		protected void customizerModified(final Object item, final Object related, final Object object) {
 			customizer.modifiedService((ServiceReference) item, object);
 		}
 
@@ -862,9 +864,10 @@ public class ServiceTracker implements ServiceTrackerCustomizer {
 		 * called while synchronized on this object.
 		 * 
 		 * @param item Tracked item.
+		 * @param related Action related object.
 		 * @param object Customized object for the tracked item.
 		 */
-		protected void customizerRemoved(Object item, Object object) {
+		protected void customizerRemoved(final Object item, final Object related, final Object object) {
 			customizer.removedService((ServiceReference) item, object);
 		}
 	}

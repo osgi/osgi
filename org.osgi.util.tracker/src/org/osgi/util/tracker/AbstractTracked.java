@@ -174,7 +174,7 @@ abstract class AbstractTracked {
 			if (DEBUG) {
 				System.out.println("AbstractTracked.trackInitial: " + item); //$NON-NLS-1$
 			}
-			trackAdding(item); /*
+			trackAdding(item, null); /*
 								 * Begin tracking it. We call trackAdding since
 								 * we have already put the item in the adding
 								 * list.
@@ -193,8 +193,9 @@ abstract class AbstractTracked {
 	 * Begin to track an item.
 	 * 
 	 * @param item Item to be tracked.
+	 * @param related Action related object.
 	 */
-	protected void track(Object item) {
+	protected void track(final Object item, final Object related) {
 		Object object;
 		synchronized (this) {
 			object = tracked.get(item);
@@ -208,7 +209,7 @@ abstract class AbstractTracked {
 				modified(); /* increment modification count */
 			}
 			/* Call customizer outside of synchronized region */
-			customizerModified(item, object);
+			customizerModified(item, related, object);
 			/*
 			 * If the customizer throws an unchecked exception, it is safe to
 			 * let it propagate
@@ -229,7 +230,7 @@ abstract class AbstractTracked {
 			adding.add(item); /* mark this item is being added */
 		}
 
-		trackAdding(item); /*
+		trackAdding(item, related); /*
 							 * call trackAdding now that we have put the item in
 							 * the adding list
 							 */
@@ -241,8 +242,9 @@ abstract class AbstractTracked {
 	 * before calling this method.
 	 * 
 	 * @param item Item to be tracked.
+	 * @param related Action related object.
 	 */
-	private void trackAdding(Object item) {
+	private void trackAdding(final Object item, final Object related) {
 		if (DEBUG) {
 			System.out.println("AbstractTracked.trackAdding: " + item); //$NON-NLS-1$
 		}
@@ -250,7 +252,7 @@ abstract class AbstractTracked {
 		boolean becameUntracked = false;
 		/* Call customizer outside of synchronized region */
 		try {
-			object = customizerAdding(item);
+			object = customizerAdding(item, related);
 			/*
 			 * If the customizer throws an unchecked exception, it will
 			 * propagate after the finally
@@ -282,7 +284,7 @@ abstract class AbstractTracked {
 						.println("AbstractTracked.trackAdding[removed]: " + item); //$NON-NLS-1$
 			}
 			/* Call customizer outside of synchronized region */
-			customizerRemoved(item, object);
+			customizerRemoved(item, related, object);
 			/*
 			 * If the customizer throws an unchecked exception, it is safe to
 			 * let it propagate
@@ -294,8 +296,9 @@ abstract class AbstractTracked {
 	 * Discontinue tracking the item.
 	 * 
 	 * @param item Item to be untracked.
+	 * @param related Action related object.
 	 */
-	protected void untrack(Object item) {
+	protected void untrack(final Object item, final Object related) {
 		Object object;
 		synchronized (this) {
 			if (initial.remove(item)) { /*
@@ -338,7 +341,7 @@ abstract class AbstractTracked {
 			System.out.println("AbstractTracked.untrack[removed]: " + item); //$NON-NLS-1$
 		}
 		/* Call customizer outside of synchronized region */
-		customizerRemoved(item, object);
+		customizerRemoved(item, related, object);
 		/*
 		 * If the customizer throws an unchecked exception, it is safe to let it
 		 * propagate
@@ -364,7 +367,7 @@ abstract class AbstractTracked {
 	 * 
 	 * @GuardedBy this
 	 */
-	protected Object getCustomizedObject(Object item) {
+	protected Object getCustomizedObject(final Object item) {
 		return tracked.get(item);
 	}
 
@@ -395,26 +398,29 @@ abstract class AbstractTracked {
 	 * called while synchronized on this object.
 	 * 
 	 * @param item Item to be tracked.
+	 * @param related Action related object.
 	 * @return Customized object for the tracked item or <code>null</code> if
 	 *         the item is not to be tracked.
 	 */
-	protected abstract Object customizerAdding(Object item);
+	protected abstract Object customizerAdding(final Object item, final Object related);
 
 	/**
 	 * Call the specific customizer modified method. This method must not be
 	 * called while synchronized on this object.
 	 * 
 	 * @param item Tracked item.
+	 * @param related Action related object.
 	 * @param object Customized object for the tracked item.
 	 */
-	protected abstract void customizerModified(Object item, Object object);
+	protected abstract void customizerModified(final Object item, final Object related, final Object object);
 
 	/**
 	 * Call the specific customizer removed method. This method must not be
 	 * called while synchronized on this object.
 	 * 
 	 * @param item Tracked item.
+	 * @param related Action related object.
 	 * @param object Customized object for the tracked item.
 	 */
-	protected abstract void customizerRemoved(Object item, Object object);
+	protected abstract void customizerRemoved(final Object item, final Object related, final Object object);
 }
