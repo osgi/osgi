@@ -156,18 +156,18 @@ public class BundleException extends Exception {
 	}
 
 	/**
-	 * Returns any nested exceptions included in this exception.
+	 * Returns the cause of this exception or <code>null</code> if no cause
+	 * was specified when this exception was created.
 	 * 
 	 * <p>
 	 * This method predates the general purpose exception chaining mechanism.
 	 * The {@link #getCause()} method is now the preferred means of obtaining
 	 * this information.
 	 * 
-	 * @return The nested exception; <code>null</code> if there is no nested
-	 *         exception.
+	 * @return The result of calling {@link #getCause()}.
 	 */
 	public Throwable getNestedException() {
-		return cause;
+		return getCause();
 	}
 
 	/**
