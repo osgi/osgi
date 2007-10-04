@@ -257,7 +257,9 @@ public class SwitchEvents implements TestInterface {
 						MonitorConstants.SV_MONITORABLEID1,
 						new StatusVariable(MonitorConstants.SV_NAME1,
 								StatusVariable.CM_CC, "test1"));				
-				tbc.wait(MonitorConstants.SHORT_TIMEOUT);
+        if (tbc.getStatusVariableName() == null) {
+          tbc.wait(MonitorConstants.SHORT_TIMEOUT);
+        }
 			}
 
 			tbc.assertEquals(MessagesConstants.getMessage(
@@ -374,19 +376,27 @@ public class SwitchEvents implements TestInterface {
 					new StatusVariable(MonitorConstants.SV_NAME1,
 							StatusVariable.CM_CC, "test1"));
 
-			wait(MonitorConstants.SHORT_TIMEOUT);
+      synchronized (tbc) {
+        if (tbc.getStatusVariableName() == null) {
+          tbc.wait(MonitorConstants.SHORT_TIMEOUT);
+        }
+      }
 
 			tbc.assertEquals(MessagesConstants.getMessage(
 					MessagesConstants.ASSERT_EQUALS, new String[] {
 							"variable of event modification", 0 + "" }), 0,
 					MonitorConstants.SWITCH_EVENTS_COUNT);
 
+			tbc.resetEvent();
+			
 			synchronized (tbc) {
 				tbc.getMonitorListener().updated(
 						MonitorConstants.SV_MONITORABLEID2,
 						new StatusVariable(MonitorConstants.SV_NAME1,
-								StatusVariable.CM_CC, "test1"));			
-				tbc.wait(MonitorConstants.TIMEOUT);
+								StatusVariable.CM_CC, "test1"));
+				if (tbc.getStatusVariableName() == null) {
+				  tbc.wait(MonitorConstants.SHORT_TIMEOUT);
+				}
 			}
 
 			tbc.assertEquals(MessagesConstants.getMessage(
@@ -395,13 +405,15 @@ public class SwitchEvents implements TestInterface {
 					MonitorConstants.SWITCH_EVENTS_COUNT);
 
 			tbc.getMonitorAdmin().switchEvents("cesa*/test*", true);
-
+			tbc.resetEvent();
 			synchronized (tbc) {
 				tbc.getMonitorListener().updated(
 						MonitorConstants.SV_MONITORABLEID1,
 						new StatusVariable(MonitorConstants.SV_NAME1,
 								StatusVariable.CM_DER, "test1"));				
-				tbc.wait(MonitorConstants.TIMEOUT);
+        if (tbc.getStatusVariableName() == null) {
+          tbc.wait(MonitorConstants.SHORT_TIMEOUT);
+        }
 			}
 
 			tbc.assertEquals(MessagesConstants.getMessage(
@@ -448,8 +460,12 @@ public class SwitchEvents implements TestInterface {
 			tbc.getMonitorListener().updated(
 						MonitorConstants.SV_MONITORABLEID1,
 						new StatusVariable(MonitorConstants.SV_NAME1,
-								StatusVariable.CM_CC, "test1"));			
-			wait(MonitorConstants.SHORT_TIMEOUT);
+								StatusVariable.CM_CC, "test1"));
+			synchronized (tbc) {
+	      if (tbc.getStatusVariableName() == null) {
+	        tbc.wait(MonitorConstants.SHORT_TIMEOUT);
+	      }
+      }
 
 			tbc.assertEquals(MessagesConstants.getMessage(
 					MessagesConstants.ASSERT_EQUALS, new String[] {
@@ -461,7 +477,11 @@ public class SwitchEvents implements TestInterface {
 					new StatusVariable(MonitorConstants.SV_NAME1,
 							StatusVariable.CM_CC, "test1"));
 			
-			wait(MonitorConstants.SHORT_TIMEOUT);
+      synchronized (tbc) {
+        if (tbc.getStatusVariableName() == null) {
+          tbc.wait(MonitorConstants.SHORT_TIMEOUT);
+        }
+      }
 
 			tbc.assertEquals(MessagesConstants.getMessage(
 					MessagesConstants.ASSERT_EQUALS, new String[] {
@@ -535,7 +555,9 @@ public class SwitchEvents implements TestInterface {
 						MonitorConstants.SV_MONITORABLEID3,
 						new StatusVariable(MonitorConstants.SV_NAME1,
 								StatusVariable.CM_CC, "test1"));				
-				tbc.wait(MonitorConstants.TIMEOUT);				
+        if (tbc.getStatusVariableName() == null) {
+          tbc.wait(MonitorConstants.SHORT_TIMEOUT);
+        }
 			}
 
 			tbc.assertEquals("Asserting that when a statusvariable is registered(published), its event sending state is ON by default", 1,
@@ -578,6 +600,7 @@ public class SwitchEvents implements TestInterface {
 
 			MonitorConstants.SWITCH_EVENTS_COUNT = 0;
 			
+			tbc.resetEvent();
 			tbc.setBroadcast(true); // listen only for broadcast events
 
 			tbc.getMonitorListener().updated(
@@ -585,7 +608,11 @@ public class SwitchEvents implements TestInterface {
 					new StatusVariable(MonitorConstants.SV_NAME1,
 							StatusVariable.CM_CC, "test1"));
 
-			wait(MonitorConstants.SHORT_TIMEOUT);
+      synchronized (tbc) {
+        if (tbc.getStatusVariableName() == null) {
+          tbc.wait(MonitorConstants.SHORT_TIMEOUT);
+        }
+      }
 
 			tbc.assertEquals(MessagesConstants.getMessage(
 					MessagesConstants.ASSERT_EQUALS, new String[] {
