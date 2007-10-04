@@ -100,16 +100,14 @@ public class Schedule implements TestInterface {
 				new PermissionInfo(ApplicationAdminPermission.class.getName(), ApplicationConstants.APPLICATION_PERMISSION_FILTER1, ApplicationAdminPermission.SCHEDULE_ACTION)
 			);
 
-			HashMap map = new HashMap();
+      HashMap map = new HashMap();
 			sa = tbc.getAppDescriptor().schedule(null, map, "*", null, false);
 			
 			tbc.installTestBundle();
 			
 			tbc.assertNotNull("Asserting that a ScheduledApplication was returned when we pass null as eventFilter parameter.", sa);
 			
-			synchronized (tbc) {
-				tbc.wait(ApplicationConstants.SHORT_TIMEOUT);
-			}
+		  Thread.sleep(ApplicationConstants.SHORT_TIMEOUT);
 			
 			tbc.assertEquals("Asserting that a ApplicationHandle was registered.", 1, tbc.getNumberAppHandle());
 			
@@ -145,9 +143,7 @@ public class Schedule implements TestInterface {
 			
 			tbc.assertNotNull("Asserting that a ScheduledApplication was returned when we pass null as arguments parameter.", sa);
 			
-			synchronized (tbc) {
-				tbc.wait(ApplicationConstants.SHORT_TIMEOUT);
-			}
+      Thread.sleep(ApplicationConstants.SHORT_TIMEOUT);
 			
 			tbc.assertEquals("Asserting that a ApplicationHandle was registered.", 1, tbc.getNumberAppHandle());
 								
@@ -292,9 +288,7 @@ public class Schedule implements TestInterface {
 			
 			tbc.assertNotNull("Asserting that an empty string works as a wildcard(*) in topic parameter.", sa);
 			
-			synchronized (tbc) {
-				tbc.wait(ApplicationConstants.SHORT_TIMEOUT);
-			}
+      Thread.sleep(ApplicationConstants.SHORT_TIMEOUT);
 			
 			tbc.assertEquals("Asserting that a ApplicationHandle was registered.", 1, tbc.getNumberAppHandle());
 								
