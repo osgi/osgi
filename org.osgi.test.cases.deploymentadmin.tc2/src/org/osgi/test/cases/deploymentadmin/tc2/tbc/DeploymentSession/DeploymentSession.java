@@ -569,7 +569,7 @@ public class DeploymentSession {
 	            
 	            //Installs the simple.dp
 	            while (!workerSimpleDP.isInstalled()) {
-
+	              Thread.sleep(100);
 	            }
 	            
 	            workerBlockDP = new SessionWorker(blockDP);
