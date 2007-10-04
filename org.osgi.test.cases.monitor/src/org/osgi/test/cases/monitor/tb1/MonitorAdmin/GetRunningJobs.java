@@ -156,15 +156,17 @@ public class GetRunningJobs implements TestInterface {
 					new PermissionInfo(org.osgi.service.monitor.MonitorPermission.class.getName(), MonitorConstants.SVS[1], org.osgi.service.monitor.MonitorPermission.STARTJOB)
 			});
 			
-			
 			mj = tbc.getMonitorAdmin().startScheduledJob(
 					MonitorConstants.INITIATOR, MonitorConstants.SVS,
 					MonitorConstants.SCHEDULE, MonitorConstants.COUNT);
-
+			
 
 			mjs = tbc.getMonitorAdmin().getRunningJobs();
 		
 			tbc.assertNotNull("Asserting if a non-null value is returned by getRunningJobs().", mjs);
+			
+      tbc.assertEquals(MessagesConstants.getMessage(MessagesConstants.ASSERT_EQUALS, new String[] { "count", MonitorConstants.COUNT+"" }),
+          MonitorConstants.COUNT, mjs[0].getReportCount());
 			
 			tbc.assertEquals(MessagesConstants.getMessage(MessagesConstants.ASSERT_EQUALS, new String[] { "number of running jobs", 1+""}),
 					1, mjs.length);
@@ -184,9 +186,6 @@ public class GetRunningJobs implements TestInterface {
 					MonitorConstants.SVS[1], mjs[0].getStatusVariableNames()[1]);
 
 			tbc.assertEquals(MessagesConstants.getMessage(MessagesConstants.ASSERT_EQUALS, new String[] { "schedule", MonitorConstants.SCHEDULE+"" }), MonitorConstants.SCHEDULE, mjs[0].getSchedule());
-			
-			tbc.assertEquals(MessagesConstants.getMessage(MessagesConstants.ASSERT_EQUALS, new String[] { "count", MonitorConstants.COUNT+"" }),
-					MonitorConstants.COUNT, mjs[0].getReportCount());
 
 		} catch (Exception e) {
 			tbc.fail(MessagesConstants.UNEXPECTED_EXCEPTION + ": " + e.getClass().getName());
