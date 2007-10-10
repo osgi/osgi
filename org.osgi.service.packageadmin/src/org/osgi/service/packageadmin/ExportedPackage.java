@@ -74,7 +74,7 @@ public interface ExportedPackage {
 	 * @return The array of resolved bundles currently wired to this exported
 	 *         package, or <code>null</code> if this
 	 *         <code>ExportedPackage</code> object has become stale. The array
-	 *         may be empty if no bundles are wired to this exported package.
+	 *         will be empty if no bundles are wired to this exported package.
 	 */
 	public Bundle[] getImportingBundles();
 

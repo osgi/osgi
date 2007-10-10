@@ -72,7 +72,7 @@ public interface RequiredBundle {
 	 * 
 	 * @return An array of bundles currently requiring this required bundle, or
 	 *         <code>null</code> if this <code>RequiredBundle</code> object
-	 *         has become stale. The array may be empty if no bundles require
+	 *         has become stale. The array will be empty if no bundles require
 	 *         this required package.
 	 */
 	public Bundle[] getRequiringBundles();
