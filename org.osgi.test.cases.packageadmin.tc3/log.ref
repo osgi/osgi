@@ -6,7 +6,7 @@ Testbundle 1 exports only TestPackage 1: true : 'true'
 Testbundle 1 exports: org.osgi.test.cases.packageadmin.tc3.tb1 : 'org.osgi.test.cases.packageadmin.tc3.tb1'
 What bundle is exporting TestPackage 1. Is it Testbundle 1: true : 'true'
 What bundle is exporting TestPackage 1. Is it Testbundle 3: false : 'false'
-What bundles is importing TestPackage 1. Is it Testbundle 1: true : 'true'
+What bundles is importing TestPackage 1. Is it Testbundle 1: false : 'false'
 What bundles is importing TestPackage 1. Is it Testbundle 2: true : 'true'
 What bundles is importing TestPackage 1. Is it Testbundle 3: true : 'true'
 Uninstall Testbundle 1.

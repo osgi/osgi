@@ -87,12 +87,10 @@ public class GetImportingBundles {
 		bundles = exportedPackage.getImportingBundles();
 		control.assertNotNull("Checking the returned importing bundles",
 				bundles);
-		control.assertEquals("Checking the number of importing bundles", 2,
+		control.assertEquals("Checking the number of importing bundles", 1,
 				bundles.length);
-		control.assertEquals("Checking the first importing bundle", control
-				.getTestBundle2(), bundles[0]);
-		control.assertEquals("Checking the second importing bundle", control
-				.getTestBundle4(), bundles[1]);
+		control.assertEquals("Checking the importing bundle", control
+				.getTestBundle4(), bundles[0]);
 
 		control.uninstallTestBundles();
 

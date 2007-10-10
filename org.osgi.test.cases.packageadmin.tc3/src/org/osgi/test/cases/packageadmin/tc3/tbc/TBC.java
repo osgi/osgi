@@ -154,7 +154,7 @@ public class TBC extends Thread {
 						if (ib[i].equals(tb1))
 							i1 = true;
 			}
-			log("What bundles is importing TestPackage 1. Is it Testbundle 1: true : '"
+			log("What bundles is importing TestPackage 1. Is it Testbundle 1: false : '"
 					+ i1 + "'");
 			log("What bundles is importing TestPackage 1. Is it Testbundle 2: true : '"
 					+ i2 + "'");
