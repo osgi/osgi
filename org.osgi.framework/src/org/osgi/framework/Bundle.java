@@ -802,7 +802,7 @@ public interface Bundle {
 	public boolean hasPermission(Object permission);
 
 	/**
-	 * Find the specified resource from this bundle.
+	 * Find the specified resource from this bundle's class loader.
 	 * 
 	 * This bundle's class loader is called to search for the specified
 	 * resource. If this bundle's state is <code>INSTALLED</code>, this
@@ -912,7 +912,7 @@ public interface Bundle {
 	public String getSymbolicName();
 
 	/**
-	 * Loads the specified class using this bundle's classloader.
+	 * Loads the specified class using this bundle's class loader.
 	 * 
 	 * <p>
 	 * If this bundle is a fragment bundle then this method must throw a
@@ -946,7 +946,7 @@ public interface Bundle {
 	public Class loadClass(String name) throws ClassNotFoundException;
 
 	/**
-	 * Find the specified resources from this bundle.
+	 * Find the specified resources from this bundle's class loader.
 	 * 
 	 * This bundle's class loader is called to search for the specified
 	 * resources. If this bundle's state is <code>INSTALLED</code>, this
@@ -979,7 +979,7 @@ public interface Bundle {
 	/**
 	 * Returns an Enumeration of all the paths (<code>String</code> objects)
 	 * to entries within this bundle whose longest sub-path matches the
-	 * specified path. This bundle's classloader is not used to search for
+	 * specified path. This bundle's class loader is not used to search for
 	 * entries. Only the contents of this bundle are searched.
 	 * <p>
 	 * The specified path is always relative to the root of this bundle and may
@@ -1008,7 +1008,7 @@ public interface Bundle {
 
 	/**
 	 * Returns a URL to the entry at the specified path in this bundle. This
-	 * bundle's classloader is not used to search for the entry. Only the
+	 * bundle's class loader is not used to search for the entry. Only the
 	 * contents of this bundle are searched for the entry.
 	 * <p>
 	 * The specified path is always relative to the root of this bundle and may
@@ -1046,7 +1046,7 @@ public interface Bundle {
 
 	/**
 	 * Returns entries in this bundle and its attached fragments. This bundle's
-	 * classloader is not used to search for entries. Only the contents of this
+	 * class loader is not used to search for entries. Only the contents of this
 	 * bundle and its attached fragments are searched for the specified entries.
 	 * 
 	 * If this bundle's state is <code>INSTALLED</code>, this method must
