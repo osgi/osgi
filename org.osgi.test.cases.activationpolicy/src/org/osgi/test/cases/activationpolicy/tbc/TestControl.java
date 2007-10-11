@@ -275,8 +275,12 @@ public class TestControl extends DefaultTestBundleControl {
 		} finally {
 			getContext().removeBundleListener(resultsListener);
 			uninstallBundle(tblazy2);
+			startlevelListener = new EventListenerTestResults(FrameworkEvent.STARTLEVEL_CHANGED);
+			getContext().addFrameworkListener(startlevelListener);
 			startLevel.setStartLevel(initialSL);
+			startlevelListener.getResults(1);
 			startLevel.setInitialBundleStartLevel(initialBSL);
+			getContext().removeFrameworkListener(startlevelListener);
 		}
 	}
 
@@ -389,8 +393,12 @@ public class TestControl extends DefaultTestBundleControl {
 		} finally {
 			getContext().removeBundleListener(resultsListener);
 			uninstallBundle(tblazy2);
+			startlevelListener = new EventListenerTestResults(FrameworkEvent.STARTLEVEL_CHANGED);
+			getContext().addFrameworkListener(startlevelListener);
 			startLevel.setStartLevel(initialSL);
+			startlevelListener.getResults(1);
 			startLevel.setInitialBundleStartLevel(initialBSL);
+			getContext().removeFrameworkListener(startlevelListener);
 		}
 	}
 	
@@ -496,8 +504,12 @@ public class TestControl extends DefaultTestBundleControl {
 		} finally {
 			getContext().removeBundleListener(resultsListener);
 			uninstallBundle(tblazy2);
+			startlevelListener = new EventListenerTestResults(FrameworkEvent.STARTLEVEL_CHANGED);
+			getContext().addFrameworkListener(startlevelListener);
 			startLevel.setStartLevel(initialSL);
+			startlevelListener.getResults(1);
 			startLevel.setInitialBundleStartLevel(initialBSL);
+			getContext().removeFrameworkListener(startlevelListener);
 		}
 	}
 
@@ -603,8 +615,12 @@ public class TestControl extends DefaultTestBundleControl {
 		} finally {
 			getContext().removeBundleListener(resultsListener);
 			uninstallBundle(tblazy2);
+			startlevelListener = new EventListenerTestResults(FrameworkEvent.STARTLEVEL_CHANGED);
+			getContext().addFrameworkListener(startlevelListener);
 			startLevel.setStartLevel(initialSL);
+			startlevelListener.getResults(1);
 			startLevel.setInitialBundleStartLevel(initialBSL);
+			getContext().removeFrameworkListener(startlevelListener);
 		}
 	}
 	
