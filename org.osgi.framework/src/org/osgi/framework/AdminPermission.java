@@ -76,66 +76,76 @@ import java.security.*;
  */
 
 public final class AdminPermission extends BasicPermission {
-	static final long					serialVersionUID	= 307051004521261705L;
+	static final long			serialVersionUID	= 307051004521261705L;
 
 	/**
 	 * The action string <code>class</code> (Value is "class").
+	 * 
 	 * @since 1.3
 	 */
-	public final static String			CLASS				= "class";
+	public final static String	CLASS				= "class";
 	/**
 	 * The action string <code>execute</code> (Value is "execute").
+	 * 
 	 * @since 1.3
 	 */
-	public final static String			EXECUTE				= "execute";
+	public final static String	EXECUTE				= "execute";
 	/**
 	 * The action string <code>extensionLifecycle</code> (Value is
 	 * "extensionLifecycle").
+	 * 
 	 * @since 1.3
 	 */
-	public final static String			EXTENSIONLIFECYCLE	= "extensionLifecycle";
+	public final static String	EXTENSIONLIFECYCLE	= "extensionLifecycle";
 	/**
 	 * The action string <code>lifecycle</code> (Value is "lifecycle").
+	 * 
 	 * @since 1.3
 	 */
-	public final static String			LIFECYCLE			= "lifecycle";
+	public final static String	LIFECYCLE			= "lifecycle";
 	/**
 	 * The action string <code>listener</code> (Value is "listener").
+	 * 
 	 * @since 1.3
 	 */
-	public final static String			LISTENER			= "listener";
+	public final static String	LISTENER			= "listener";
 	/**
 	 * The action string <code>metadata</code> (Value is "metadata").
+	 * 
 	 * @since 1.3
 	 */
-	public final static String			METADATA			= "metadata";
+	public final static String	METADATA			= "metadata";
 	/**
 	 * The action string <code>resolve</code> (Value is "resolve").
+	 * 
 	 * @since 1.3
 	 */
-	public final static String			RESOLVE				= "resolve";
+	public final static String	RESOLVE				= "resolve";
 	/**
 	 * The action string <code>resource</code> (Value is "resource").
+	 * 
 	 * @since 1.3
 	 */
-	public final static String			RESOURCE			= "resource";
+	public final static String	RESOURCE			= "resource";
 	/**
 	 * The action string <code>startlevel</code> (Value is "startlevel").
+	 * 
 	 * @since 1.3
 	 */
-	public final static String			STARTLEVEL			= "startlevel";
+	public final static String	STARTLEVEL			= "startlevel";
 
 	/**
 	 * The action string <code>context</code> (Value is "context").
+	 * 
 	 * @since 1.4
 	 */
-	public final static String			CONTEXT				= "context";
-	
+	public final static String	CONTEXT				= "context";
+
 	/*
 	 * NOTE: A framework implementor may also choose to replace this class in
 	 * their distribution with a class that directly interfaces with the
-	 * framework implementation. This replacement class MUST NOT
-	 * alter the public/protected signature of this class.
+	 * framework implementation. This replacement class MUST NOT alter the
+	 * public/protected signature of this class.
 	 */
 
 	/*
@@ -146,57 +156,54 @@ public final class AdminPermission extends BasicPermission {
 	 */
 
 	private static class ImplHolder implements PrivilegedAction {
-		private static final String			packageProperty		= "org.osgi.vendor.framework";
+		private static final String	packageProperty	= "org.osgi.vendor.framework";
 		static final Constructor	initStringString;
 		static final Constructor	initBundleString;
 		static {
-			Constructor[] constructors = (Constructor[]) AccessController.doPrivileged(new ImplHolder());
-			
+			Constructor[] constructors = (Constructor[]) AccessController
+					.doPrivileged(new ImplHolder());
+
 			initStringString = constructors[0];
 			initBundleString = constructors[1];
 		}
 
 		private ImplHolder() {
 		}
-		
+
 		public Object run() {
-			String packageName = System
-			.getProperty(packageProperty);
+			String packageName = System.getProperty(packageProperty);
 			if (packageName == null) {
 				throw new NoClassDefFoundError(packageProperty
 						+ " property not set");
 			}
-			
+
 			Class delegateClass;
 			try {
-				delegateClass = Class.forName(packageName
-						+ ".AdminPermission");
+				delegateClass = Class.forName(packageName + ".AdminPermission");
 			}
 			catch (ClassNotFoundException e) {
 				throw new NoClassDefFoundError(e.toString());
 			}
-			
+
 			Constructor[] result = new Constructor[2];
 			try {
-				result[0] = delegateClass
-				.getConstructor(new Class[] {String.class,
-						String.class			});
-				result[1] = delegateClass
-				.getConstructor(new Class[] {Bundle.class,
-						String.class			});
+				result[0] = delegateClass.getConstructor(new Class[] {
+						String.class, String.class});
+				result[1] = delegateClass.getConstructor(new Class[] {
+						Bundle.class, String.class});
 			}
 			catch (NoSuchMethodException e) {
 				throw new NoSuchMethodError(e.toString());
 			}
-			
+
 			return result;
 		}
 	}
-	
+
 	/*
 	 * This is the delegate permission created by the constructor.
 	 */
-	private final Permission			delegate;
+	private final Permission	delegate;
 
 	/**
 	 * Creates a new <code>AdminPermission</code> object that matches all
@@ -232,9 +239,9 @@ public final class AdminPermission extends BasicPermission {
 	 * @param actions <code>class</code>, <code>execute</code>,
 	 *        <code>extensionLifecycle</code>, <code>lifecycle</code>,
 	 *        <code>listener</code>, <code>metadata</code>,
-	 *        <code>resolve</code>, <code>resource</code>, 
-	 *        <code>startlevel</code> or <code>context</code>. A value of "*" or <code>null</code>
-	 *        indicates all actions
+	 *        <code>resolve</code>, <code>resource</code>,
+	 *        <code>startlevel</code> or <code>context</code>. A value of
+	 *        "*" or <code>null</code> indicates all actions
 	 */
 	public AdminPermission(String filter, String actions) {
 		// arguments will be null if called from a PermissionInfo defined with
@@ -347,7 +354,8 @@ public final class AdminPermission extends BasicPermission {
 	 * following order: <code>class</code>, <code>execute</code>,
 	 * <code>extensionLifecycle</code>, <code>lifecycle</code>,
 	 * <code>listener</code>, <code>metadata</code>, <code>resolve</code>,
-	 * <code>resource</code>, <code>startlevel</code>, <code>context</code>.
+	 * <code>resource</code>, <code>startlevel</code>,
+	 * <code>context</code>.
 	 * 
 	 * @return Canonical string representation of the
 	 *         <code>AdminPermission</code> actions.

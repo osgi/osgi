@@ -19,8 +19,12 @@
 package org.osgi.framework;
 
 import java.io.IOException;
-import java.security.*;
+import java.security.BasicPermission;
+import java.security.Permission;
+import java.security.PermissionCollection;
+import java.util.Collections;
 import java.util.Enumeration;
+import java.util.HashMap;
 import java.util.Hashtable;
 
 /**
@@ -36,6 +40,7 @@ import java.util.Hashtable;
  * certain services unless they have the appropriate
  * <code>ServicePermission</code> to get the specific service.
  * 
+ * @ThreadSafe
  * @version $Revision$
  */
 
@@ -230,11 +235,11 @@ final public class ServicePermission extends BasicPermission {
 		if (p instanceof ServicePermission) {
 			ServicePermission target = (ServicePermission) p;
 
-			return (((action_mask & target.action_mask) == target.action_mask) && super
-					.implies(p));
+			return ((action_mask & target.action_mask) == target.action_mask) && super
+					.implies(p);
 		}
 
-		return (false);
+		return false;
 	}
 
 	/**
@@ -244,7 +249,7 @@ final public class ServicePermission extends BasicPermission {
 	 * 
 	 * @return The canonical string representation of the actions.
 	 */
-	public String getActions() {
+	public synchronized String getActions() {
 		if (actions == null) {
 			StringBuffer sb = new StringBuffer();
 			boolean comma = false;
@@ -263,7 +268,7 @@ final public class ServicePermission extends BasicPermission {
 			actions = sb.toString();
 		}
 
-		return (actions);
+		return actions;
 	}
 
 	/**
@@ -274,7 +279,7 @@ final public class ServicePermission extends BasicPermission {
 	 * <code>ServicePermission</code> objects.
 	 */
 	public PermissionCollection newPermissionCollection() {
-		return (new ServicePermissionCollection());
+		return new ServicePermissionCollection();
 	}
 
 	/**
@@ -291,16 +296,16 @@ final public class ServicePermission extends BasicPermission {
 	 */
 	public boolean equals(Object obj) {
 		if (obj == this) {
-			return (true);
+			return true;
 		}
 
 		if (!(obj instanceof ServicePermission)) {
-			return (false);
+			return false;
 		}
 
 		ServicePermission p = (ServicePermission) obj;
 
-		return ((action_mask == p.action_mask) && getName().equals(p.getName()));
+		return (action_mask == p.action_mask) && getName().equals(p.getName());
 	}
 
 	/**
@@ -310,7 +315,7 @@ final public class ServicePermission extends BasicPermission {
 	 */
 
 	public int hashCode() {
-		return (getName().hashCode() ^ getActions().hashCode());
+		return getName().hashCode() ^ getActions().hashCode();
 	}
 
 	/**
@@ -320,7 +325,7 @@ final public class ServicePermission extends BasicPermission {
 	 * @return The actions mask.
 	 */
 	int getMask() {
-		return (action_mask);
+		return action_mask;
 	}
 
 	/**
@@ -363,13 +368,15 @@ final class ServicePermissionCollection extends PermissionCollection {
 	 * Table of permissions.
 	 * 
 	 * @serial
+	 * @GuardedBy this
 	 */
-	private Hashtable	permissions;
+	private final HashMap	permissions;
 
 	/**
 	 * Boolean saying if "*" is in the collection.
 	 * 
 	 * @serial
+	 * @GuardedBy this
 	 */
 	private boolean		all_allowed;
 
@@ -378,7 +385,7 @@ final class ServicePermissionCollection extends PermissionCollection {
 	 */
 
 	public ServicePermissionCollection() {
-		permissions = new Hashtable();
+		permissions = new HashMap();
 		all_allowed = false;
 	}
 
@@ -395,7 +402,7 @@ final class ServicePermissionCollection extends PermissionCollection {
 	 *         read-only.
 	 */
 
-	public void add(Permission permission) {
+	public void add(final Permission permission) {
 		if (!(permission instanceof ServicePermission))
 			throw new IllegalArgumentException("invalid permission: "
 					+ permission);
@@ -403,26 +410,28 @@ final class ServicePermissionCollection extends PermissionCollection {
 			throw new SecurityException("attempt to add a Permission to a "
 					+ "readonly PermissionCollection");
 
-		ServicePermission sp = (ServicePermission) permission;
-		String name = sp.getName();
+		final ServicePermission sp = (ServicePermission) permission;
+		final String name = sp.getName();
+		final int newMask = sp.getMask();
 
-		ServicePermission existing = (ServicePermission) permissions.get(name);
-
-		if (existing != null) {
-			int oldMask = existing.getMask();
-			int newMask = sp.getMask();
-			if (oldMask != newMask) {
-				permissions.put(name, new ServicePermission(name, oldMask
-						| newMask));
+		synchronized (this) {
+			final ServicePermission existing = (ServicePermission) permissions.get(name);
+			
+			if (existing != null) {
+				final int oldMask = existing.getMask();
+				if (oldMask != newMask) {
+					permissions.put(name, new ServicePermission(name, oldMask
+							| newMask));
+				}
 			}
-		}
-		else {
-			permissions.put(name, permission);
-		}
-
-		if (!all_allowed) {
-			if (name.equals("*"))
-				all_allowed = true;
+			else {
+				permissions.put(name, permission);
+			}
+			
+			if (!all_allowed) {
+				if (name.equals("*"))
+					all_allowed = true;
+			}
 		}
 	}
 
@@ -437,62 +446,54 @@ final class ServicePermissionCollection extends PermissionCollection {
 	 *         otherwise.
 	 */
 
-	public boolean implies(Permission permission) {
+	public boolean implies(final Permission permission) {
 		if (!(permission instanceof ServicePermission))
-			return (false);
-
-		ServicePermission sp = (ServicePermission) permission;
+			return false;
+		final ServicePermission sp = (ServicePermission) permission;
+		String name = sp.getName();
+		final int desired = sp.getMask();
 		ServicePermission x;
-
-		int desired = sp.getMask();
 		int effective = 0;
 
-		// short circuit if the "*" Permission was added
-		if (all_allowed) {
-			x = (ServicePermission) permissions.get("*");
-			if (x != null) {
-				effective |= x.getMask();
-				if ((effective & desired) == desired)
-					return (true);
+		synchronized (this) {
+			// short circuit if the "*" Permission was added
+			if (all_allowed) {
+				x = (ServicePermission) permissions.get("*");
+				if (x != null) {
+					effective |= x.getMask();
+					if ((effective & desired) == desired)
+						return true;
+				}
 			}
+			x = (ServicePermission) permissions.get(name);
 		}
-
 		// strategy:
 		// Check for full match first. Then work our way up the
 		// name looking for matches on a.b.*
-
-		String name = sp.getName();
-
-		x = (ServicePermission) permissions.get(name);
-
 		if (x != null) {
 			// we have a direct hit!
 			effective |= x.getMask();
 			if ((effective & desired) == desired)
-				return (true);
+				return true;
 		}
-
 		// work our way up the tree...
 		int last, offset;
-
 		offset = name.length() - 1;
-
 		while ((last = name.lastIndexOf(".", offset)) != -1) {
-
 			name = name.substring(0, last + 1) + "*";
-			x = (ServicePermission) permissions.get(name);
-
+			synchronized (this) {
+				x = (ServicePermission) permissions.get(name);
+			}
 			if (x != null) {
 				effective |= x.getMask();
 				if ((effective & desired) == desired)
-					return (true);
+					return true;
 			}
 			offset = last - 1;
 		}
-
 		// we don't have to check for "*" as it was already checked
 		// at the top (all_allowed), so we just return false
-		return (false);
+		return false;
 	}
 
 	/**
@@ -502,7 +503,7 @@ final class ServicePermissionCollection extends PermissionCollection {
 	 * @return Enumeration of all the ServicePermission objects.
 	 */
 
-	public Enumeration elements() {
-		return (permissions.elements());
+	public synchronized Enumeration elements() {
+		return Collections.enumeration(permissions.values());
 	}
 }

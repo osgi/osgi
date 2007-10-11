@@ -19,9 +19,12 @@
 package org.osgi.framework;
 
 import java.io.IOException;
-import java.security.*;
+import java.security.BasicPermission;
+import java.security.Permission;
+import java.security.PermissionCollection;
+import java.util.Collections;
 import java.util.Enumeration;
-import java.util.Hashtable;
+import java.util.HashMap;
 
 /**
  * A bundle's authority to import or export a package.
@@ -43,6 +46,7 @@ import java.util.Hashtable;
  * <code>IMPORT</code>. The <code>EXPORT</code> action implies the
  * <code>IMPORT</code> action.
  * 
+ * @ThreadSafe
  * @version $Revision$
  */
 
@@ -143,14 +147,14 @@ public final class PackagePermission extends BasicPermission {
 		int mask = ACTION_NONE;
 
 		if (actions == null) {
-			return (mask);
+			return mask;
 		}
 
 		char[] a = actions.toCharArray();
 
 		int i = a.length - 1;
 		if (i < 0)
-			return (mask);
+			return mask;
 
 		while (i != -1) {
 			char c;
@@ -198,7 +202,7 @@ public final class PackagePermission extends BasicPermission {
 				switch (a[i - matchlen]) {
 					case ',' :
 						seencomma = true;
-					/* FALLTHROUGH */
+						/* FALLTHROUGH */
 					case ' ' :
 					case '\r' :
 					case '\n' :
@@ -220,7 +224,7 @@ public final class PackagePermission extends BasicPermission {
 			throw new IllegalArgumentException("invalid permission: " + actions);
 		}
 
-		return (mask);
+		return mask;
 	}
 
 	/**
@@ -250,13 +254,13 @@ public final class PackagePermission extends BasicPermission {
 
 	public boolean implies(Permission p) {
 		if (p instanceof PackagePermission) {
-			PackagePermission target = (PackagePermission) p;
+			PackagePermission pp = (PackagePermission) p;
 
-			return (((action_mask & target.action_mask) == target.action_mask) && super
-					.implies(p));
+			return ((action_mask & pp.action_mask) == pp.action_mask)
+					&& super.implies(p);
 		}
 
-		return (false);
+		return false;
 	}
 
 	/**
@@ -271,7 +275,7 @@ public final class PackagePermission extends BasicPermission {
 	 *         <code>PackagePermission</code> actions.
 	 */
 
-	public String getActions() {
+	public synchronized String getActions() {
 		if (actions == null) {
 			StringBuffer sb = new StringBuffer();
 			boolean comma = false;
@@ -290,7 +294,7 @@ public final class PackagePermission extends BasicPermission {
 			actions = sb.toString();
 		}
 
-		return (actions);
+		return actions;
 	}
 
 	/**
@@ -300,7 +304,7 @@ public final class PackagePermission extends BasicPermission {
 	 * @return A new <code>PermissionCollection</code> object.
 	 */
 	public PermissionCollection newPermissionCollection() {
-		return (new PackagePermissionCollection());
+		return new PackagePermissionCollection();
 	}
 
 	/**
@@ -319,16 +323,17 @@ public final class PackagePermission extends BasicPermission {
 	 */
 	public boolean equals(Object obj) {
 		if (obj == this) {
-			return (true);
+			return true;
 		}
 
 		if (!(obj instanceof PackagePermission)) {
-			return (false);
+			return false;
 		}
 
-		PackagePermission p = (PackagePermission) obj;
+		PackagePermission pp = (PackagePermission) obj;
 
-		return ((action_mask == p.action_mask) && getName().equals(p.getName()));
+		return (action_mask == pp.action_mask)
+				&& getName().equals(pp.getName());
 	}
 
 	/**
@@ -338,7 +343,7 @@ public final class PackagePermission extends BasicPermission {
 	 */
 
 	public int hashCode() {
-		return (getName().hashCode() ^ getActions().hashCode());
+		return getName().hashCode() ^ getActions().hashCode();
 	}
 
 	/**
@@ -349,7 +354,7 @@ public final class PackagePermission extends BasicPermission {
 	 * @return Current action mask.
 	 */
 	int getMask() {
-		return (action_mask);
+		return action_mask;
 	}
 
 	/**
@@ -388,27 +393,29 @@ public final class PackagePermission extends BasicPermission {
  */
 
 final class PackagePermissionCollection extends PermissionCollection {
-	static final long	serialVersionUID	= -3350758995234427603L;
+	static final long		serialVersionUID	= -3350758995234427603L;
 	/**
 	 * Table of permissions.
 	 * 
 	 * @serial
+	 * @GuardedBy this
 	 */
-	private Hashtable	permissions;
+	private final HashMap	permissions;
 
 	/**
 	 * Boolean saying if "*" is in the collection.
 	 * 
 	 * @serial
+	 * @GuardedBy this
 	 */
-	private boolean		all_allowed;
+	private boolean			all_allowed;
 
 	/**
 	 * Create an empty PackagePermissions object.
 	 */
 
 	public PackagePermissionCollection() {
-		permissions = new Hashtable();
+		permissions = new HashMap();
 		all_allowed = false;
 	}
 
@@ -426,7 +433,7 @@ final class PackagePermissionCollection extends PermissionCollection {
 	 *         read-only.
 	 */
 
-	public void add(Permission permission) {
+	public void add(final Permission permission) {
 		if (!(permission instanceof PackagePermission))
 			throw new IllegalArgumentException("invalid permission: "
 					+ permission);
@@ -434,27 +441,30 @@ final class PackagePermissionCollection extends PermissionCollection {
 			throw new SecurityException("attempt to add a Permission to a "
 					+ "readonly PermissionCollection");
 
-		PackagePermission pp = (PackagePermission) permission;
-		String name = pp.getName();
+		final PackagePermission pp = (PackagePermission) permission;
+		final String name = pp.getName();
+		final int newMask = pp.getMask();
 
-		PackagePermission existing = (PackagePermission) permissions.get(name);
+		synchronized (this) {
+			final PackagePermission existing = (PackagePermission) permissions
+					.get(name);
 
-		if (existing != null) {
-			int oldMask = existing.getMask();
-			int newMask = pp.getMask();
-			if (oldMask != newMask) {
-				permissions.put(name, new PackagePermission(name, oldMask
-						| newMask));
+			if (existing != null) {
+				final int oldMask = existing.getMask();
+				if (oldMask != newMask) {
+					permissions.put(name, new PackagePermission(name, oldMask
+							| newMask));
 
+				}
 			}
-		}
-		else {
-			permissions.put(name, permission);
-		}
+			else {
+				permissions.put(name, permission);
+			}
 
-		if (!all_allowed) {
-			if (name.equals("*"))
-				all_allowed = true;
+			if (!all_allowed) {
+				if (name.equals("*"))
+					all_allowed = true;
+			}
 		}
 	}
 
@@ -470,62 +480,54 @@ final class PackagePermissionCollection extends PermissionCollection {
 	 *         otherwise.
 	 */
 
-	public boolean implies(Permission permission) {
+	public boolean implies(final Permission permission) {
 		if (!(permission instanceof PackagePermission))
-			return (false);
-
-		PackagePermission pp = (PackagePermission) permission;
+			return false;
+		final PackagePermission pp = (PackagePermission) permission;
+		String name = pp.getName();
+		final int desired = pp.getMask();
 		PackagePermission x;
-
-		int desired = pp.getMask();
 		int effective = 0;
 
-		// short circuit if the "*" Permission was added
-		if (all_allowed) {
-			x = (PackagePermission) permissions.get("*");
-			if (x != null) {
-				effective |= x.getMask();
-				if ((effective & desired) == desired)
-					return (true);
+		synchronized (this) {
+			// short circuit if the "*" Permission was added
+			if (all_allowed) {
+				x = (PackagePermission) permissions.get("*");
+				if (x != null) {
+					effective |= x.getMask();
+					if ((effective & desired) == desired)
+						return true;
+				}
 			}
+			x = (PackagePermission) permissions.get(name);
 		}
-
 		// strategy:
 		// Check for full match first. Then work our way up the
 		// name looking for matches on a.b.*
-
-		String name = pp.getName();
-
-		x = (PackagePermission) permissions.get(name);
-
 		if (x != null) {
 			// we have a direct hit!
 			effective |= x.getMask();
 			if ((effective & desired) == desired)
-				return (true);
+				return true;
 		}
-
 		// work our way up the tree...
 		int last, offset;
-
 		offset = name.length() - 1;
-
 		while ((last = name.lastIndexOf(".", offset)) != -1) {
-
 			name = name.substring(0, last + 1) + "*";
-			x = (PackagePermission) permissions.get(name);
-
+			synchronized (this) {
+				x = (PackagePermission) permissions.get(name);
+			}
 			if (x != null) {
 				effective |= x.getMask();
 				if ((effective & desired) == desired)
-					return (true);
+					return true;
 			}
 			offset = last - 1;
 		}
-
 		// we don't have to check for "*" as it was already checked
 		// at the top (all_allowed), so we just return false
-		return (false);
+		return false;
 	}
 
 	/**
@@ -535,7 +537,7 @@ final class PackagePermissionCollection extends PermissionCollection {
 	 * @return Enumeration of all <code>PackagePermission</code> objects.
 	 */
 
-	public Enumeration elements() {
-		return (permissions.elements());
+	public synchronized Enumeration elements() {
+		return Collections.enumeration(permissions.values());
 	}
 }

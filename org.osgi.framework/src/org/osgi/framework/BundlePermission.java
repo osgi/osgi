@@ -19,9 +19,12 @@
 package org.osgi.framework;
 
 import java.io.IOException;
-import java.security.*;
+import java.security.BasicPermission;
+import java.security.Permission;
+import java.security.PermissionCollection;
+import java.util.Collections;
 import java.util.Enumeration;
-import java.util.Hashtable;
+import java.util.HashMap;
 
 /**
  * A bundle's authority to require or provide a bundle or to receive or attach
@@ -44,6 +47,7 @@ import java.util.Hashtable;
  * The <code>PROVIDE</code> action implies the <code>REQUIRE</code> action.
  * 
  * @since 1.3
+ * @ThreadSafe
  * @version $Revision$
  */
 
@@ -149,14 +153,14 @@ public final class BundlePermission extends BasicPermission {
 		int mask = ACTION_NONE;
 
 		if (actions == null) {
-			return (mask);
+			return mask;
 		}
 
 		char[] a = actions.toCharArray();
 
 		int i = a.length - 1;
 		if (i < 0)
-			return (mask);
+			return mask;
 
 		while (i != -1) {
 			char c;
@@ -224,7 +228,7 @@ public final class BundlePermission extends BasicPermission {
 				switch (a[i - matchlen]) {
 					case ',' :
 						seencomma = true;
-					/* FALLTHROUGH */
+						/* FALLTHROUGH */
 					case ' ' :
 					case '\r' :
 					case '\n' :
@@ -246,7 +250,7 @@ public final class BundlePermission extends BasicPermission {
 			throw new IllegalArgumentException("invalid permission: " + actions);
 		}
 
-		return (mask);
+		return mask;
 	}
 
 	/**
@@ -276,13 +280,13 @@ public final class BundlePermission extends BasicPermission {
 
 	public boolean implies(Permission p) {
 		if (p instanceof BundlePermission) {
-			BundlePermission target = (BundlePermission) p;
+			BundlePermission bp = (BundlePermission) p;
 
-			return (((action_mask & target.action_mask) == target.action_mask) && super
-					.implies(p));
+			return ((action_mask & bp.action_mask) == bp.action_mask)
+					&& super.implies(p);
 		}
 
-		return (false);
+		return false;
 	}
 
 	/**
@@ -296,7 +300,7 @@ public final class BundlePermission extends BasicPermission {
 	 * @return Canonical string representation of the <code>BundlePermission</code> actions.
 	 */
 
-	public String getActions() {
+	public synchronized String getActions() {
 		if (actions == null) {
 			StringBuffer sb = new StringBuffer();
 			boolean comma = false;
@@ -329,7 +333,7 @@ public final class BundlePermission extends BasicPermission {
 			actions = sb.toString();
 		}
 
-		return (actions);
+		return actions;
 	}
 
 	/**
@@ -339,7 +343,7 @@ public final class BundlePermission extends BasicPermission {
 	 * @return A new <code>PermissionCollection</code> object.
 	 */
 	public PermissionCollection newPermissionCollection() {
-		return (new BundlePermissionCollection());
+		return new BundlePermissionCollection();
 	}
 
 	/**
@@ -358,16 +362,17 @@ public final class BundlePermission extends BasicPermission {
 	 */
 	public boolean equals(Object obj) {
 		if (obj == this) {
-			return (true);
+			return true;
 		}
 
 		if (!(obj instanceof BundlePermission)) {
-			return (false);
+			return false;
 		}
 
-		BundlePermission p = (BundlePermission) obj;
+		BundlePermission bp = (BundlePermission) obj;
 
-		return ((action_mask == p.action_mask) && getName().equals(p.getName()));
+		return (action_mask == bp.action_mask)
+				&& getName().equals(bp.getName());
 	}
 
 	/**
@@ -377,7 +382,7 @@ public final class BundlePermission extends BasicPermission {
 	 */
 
 	public int hashCode() {
-		return (getName().hashCode() ^ getActions().hashCode());
+		return getName().hashCode() ^ getActions().hashCode();
 	}
 
 	/**
@@ -388,7 +393,7 @@ public final class BundlePermission extends BasicPermission {
 	 * @return Current action mask.
 	 */
 	int getMask() {
-		return (action_mask);
+		return action_mask;
 	}
 
 	/**
@@ -437,13 +442,15 @@ final class BundlePermissionCollection extends PermissionCollection {
 	 * Table of permissions.
 	 * 
 	 * @serial
+	 * @GuardedBy this
 	 */
-	private Hashtable			permissions;
+	private final HashMap		permissions;
 
 	/**
 	 * Boolean saying if "*" is in the collection.
 	 * 
 	 * @serial
+	 * @GuardedBy this
 	 */
 	private boolean				all_allowed;
 
@@ -453,7 +460,7 @@ final class BundlePermissionCollection extends PermissionCollection {
 	 */
 
 	public BundlePermissionCollection() {
-		permissions = new Hashtable();
+		permissions = new HashMap();
 		all_allowed = false;
 	}
 
@@ -469,7 +476,7 @@ final class BundlePermissionCollection extends PermissionCollection {
 	 *         object has been marked read-only.
 	 */
 
-	public void add(Permission permission) {
+	public void add(final Permission permission) {
 		if (!(permission instanceof BundlePermission))
 			throw new IllegalArgumentException("invalid permission: "
 					+ permission);
@@ -477,27 +484,30 @@ final class BundlePermissionCollection extends PermissionCollection {
 			throw new SecurityException("attempt to add a Permission to a "
 					+ "readonly PermissionCollection");
 
-		BundlePermission bp = (BundlePermission) permission;
-		String name = bp.getName();
+		final BundlePermission bp = (BundlePermission) permission;
+		final String name = bp.getName();
+		final int newMask = bp.getMask();
 
-		BundlePermission existing = (BundlePermission) permissions.get(name);
+		synchronized (this) {
+			final BundlePermission existing = (BundlePermission) permissions
+					.get(name);
 
-		if (existing != null) {
-			int oldMask = existing.getMask();
-			int newMask = bp.getMask();
-			if (oldMask != newMask) {
-				permissions.put(name, new BundlePermission(name, oldMask
-						| newMask));
+			if (existing != null) {
+				final int oldMask = existing.getMask();
+				if (oldMask != newMask) {
+					permissions.put(name, new BundlePermission(name, oldMask
+							| newMask));
 
+				}
 			}
-		}
-		else {
-			permissions.put(name, permission);
-		}
+			else {
+				permissions.put(name, permission);
+			}
 
-		if (!all_allowed) {
-			if (name.equals("*"))
-				all_allowed = true;
+			if (!all_allowed) {
+				if (name.equals("*"))
+					all_allowed = true;
+			}
 		}
 	}
 
@@ -513,62 +523,54 @@ final class BundlePermissionCollection extends PermissionCollection {
 	 *         otherwise.
 	 */
 
-	public boolean implies(Permission permission) {
+	public boolean implies(final Permission permission) {
 		if (!(permission instanceof BundlePermission))
-			return (false);
-
-		BundlePermission bp = (BundlePermission) permission;
+			return false;
+		final BundlePermission bp = (BundlePermission) permission;
+		String name = bp.getName();
+		final int desired = bp.getMask();
 		BundlePermission x;
-
-		int desired = bp.getMask();
 		int effective = 0;
 
 		// short circuit if the "*" Permission was added
-		if (all_allowed) {
-			x = (BundlePermission) permissions.get("*");
-			if (x != null) {
-				effective |= x.getMask();
-				if ((effective & desired) == desired)
-					return (true);
+		synchronized (this) {
+			if (all_allowed) {
+				x = (BundlePermission) permissions.get("*");
+				if (x != null) {
+					effective |= x.getMask();
+					if ((effective & desired) == desired)
+						return true;
+				}
 			}
+			x = (BundlePermission) permissions.get(name);
 		}
-
 		// strategy:
 		// Check for full match first. Then work our way up the
 		// name looking for matches on a.b.*
-
-		String name = bp.getName();
-
-		x = (BundlePermission) permissions.get(name);
-
 		if (x != null) {
 			// we have a direct hit!
 			effective |= x.getMask();
 			if ((effective & desired) == desired)
-				return (true);
+				return true;
 		}
-
 		// work our way up the tree...
 		int last, offset;
-
 		offset = name.length() - 1;
-
 		while ((last = name.lastIndexOf(".", offset)) != -1) {
-
 			name = name.substring(0, last + 1) + "*";
-			x = (BundlePermission) permissions.get(name);
-
+			synchronized (this) {
+				x = (BundlePermission) permissions.get(name);
+			}
 			if (x != null) {
 				effective |= x.getMask();
 				if ((effective & desired) == desired)
-					return (true);
+					return true;
 			}
 			offset = last - 1;
 		}
-
 		// we don't have to check for "*" as it was already checked
 		// at the top (all_allowed), so we just return false
-		return (false);
+		return false;
 	}
 
 	/**
@@ -578,7 +580,7 @@ final class BundlePermissionCollection extends PermissionCollection {
 	 * @return Enumeration of all <code>BundlePermission</code> objects.
 	 */
 
-	public Enumeration elements() {
-		return (permissions.elements());
+	public synchronized Enumeration elements() {
+		return Collections.enumeration(permissions.values());
 	}
 }
