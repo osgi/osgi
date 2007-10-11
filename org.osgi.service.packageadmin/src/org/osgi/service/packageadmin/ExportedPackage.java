@@ -43,6 +43,7 @@ import org.osgi.framework.Version;
  * <code>getExportingBundle()</code> and <code>getImportingBundles()</code>
  * return <code>null</code>.
  * 
+ * @ThreadSafe
  * @version $Revision$
  */
 public interface ExportedPackage {

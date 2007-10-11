@@ -44,6 +44,7 @@ import org.osgi.framework.Version;
  * and <code>getRequiringBundles()</code> return <code>null</code>.
  * 
  * @since 1.2
+ * @ThreadSafe
  * @version $Revision$
  */
 public interface RequiredBundle {
@@ -90,7 +91,7 @@ public interface RequiredBundle {
 	 * Returns <code>true</code> if the bundle associated with this
 	 * <code>RequiredBundle</code> object has been updated or uninstalled.
 	 * 
-	 * @return <code>true</code> if the reqiured bundle has been updated or
+	 * @return <code>true</code> if the required bundle has been updated or
 	 *         uninstalled, or if the <code>RequiredBundle</code> object has
 	 *         become stale; <code>false</code> otherwise.
 	 */

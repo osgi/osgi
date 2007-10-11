@@ -45,11 +45,12 @@ import java.util.ArrayList;
  * <code>ConditionInfo</code> object as arguments.
  * </ul>
  * 
+ * @Immutable
  * @version $Revision$
  */
 public class ConditionInfo {
-	private String		type;
-	private String[]	args;
+	private final String	type;
+	private final String[]	args;
 
 	/**
 	 * Constructs a <code>ConditionInfo</code> from the specified type and
@@ -177,7 +178,7 @@ public class ConditionInfo {
 	 * 
 	 * where <i>argN</i> are strings that are encoded for proper parsing.
 	 * Specifically, the <code>"</code>, <code>\</code>, carriage return,
-	 * and linefeed characters are escaped using <code>\"</code>,
+	 * and line feed characters are escaped using <code>\"</code>,
 	 * <code>\\</code>, <code>\r</code>, and <code>\n</code>,
 	 * respectively.
 	 * 

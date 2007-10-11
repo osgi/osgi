@@ -27,6 +27,7 @@ import org.osgi.service.permissionadmin.PermissionInfo;
  * Framework service to administer Conditional Permissions. Conditional
  * Permissions can be added to, retrieved from, and removed from the framework.
  * 
+ * @ThreadSafe
  * @version $Revision$
  */
 public interface ConditionalPermissionAdmin {

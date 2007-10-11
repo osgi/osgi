@@ -25,6 +25,7 @@ import java.util.Dictionary;
  * using Conditional Permission Info. The Permissions of a ConditionalPermission
  * Info can only be used if the associated Conditions are satisfied.
  * 
+ * @ThreadSafe
  * @version $Revision$
  */
 public interface Condition {
@@ -58,8 +59,9 @@ public interface Condition {
 	/**
 	 * Returns whether the Condition is satisfied.
 	 * 
-	 * @return <code>true</code> to indicate the Conditions is satisfied. 
-	 *         Otherwise, <code>false</code> if the Condition is not satisfied.
+	 * @return <code>true</code> to indicate the Conditions is satisfied.
+	 *         Otherwise, <code>false</code> if the Condition is not
+	 *         satisfied.
 	 */
 	boolean isSatisfied();
 
@@ -84,7 +86,7 @@ public interface Condition {
 	 *        permission evaluation, the same Dictionary will be passed multiple
 	 *        times. The SecurityManager treats this Dictionary as an opaque
 	 *        object and simply creates an empty dictionary and passes it to
-	 *        subsequent invocations if multiple invocatios are needed.
+	 *        subsequent invocations if multiple invocations are needed.
 	 * @return <code>true</code> if all the Conditions are satisfied.
 	 *         Otherwise, <code>false</code> if one of the Conditions is not
 	 *         satisfied.
@@ -94,7 +96,7 @@ public interface Condition {
 }
 
 /**
- * Package internal class used to define the {@link Condition#FALSE} and
+ * Package private class used to define the {@link Condition#FALSE} and
  * {@link Condition#TRUE} constants.
  */
 final class BooleanCondition implements Condition {

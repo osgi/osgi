@@ -68,6 +68,7 @@ import org.osgi.framework.Bundle;
  * The StartLevel service can be used by management bundles to alter the active
  * start level of the framework.
  * 
+ * @ThreadSafe
  * @version $Revision$
  */
 public interface StartLevel {
@@ -218,7 +219,7 @@ public interface StartLevel {
 	 * been called to assign a different initial bundle start level value.
 	 * 
 	 * <p>
-	 * Thie method does not change the start level values of installed bundles.
+	 * This method does not change the start level values of installed bundles.
 	 * 
 	 * @param startlevel The initial start level for newly installed bundles.
 	 * @throws IllegalArgumentException If the specified start level is less

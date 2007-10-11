@@ -24,6 +24,7 @@ import org.osgi.service.permissionadmin.PermissionInfo;
  * A binding of a set of Conditions to a set of Permissions. Instances of this
  * interface are obtained from the Conditional Permission Admin service.
  * 
+ * @ThreadSafe
  * @version $Revision$
  */
 public interface ConditionalPermissionInfo {

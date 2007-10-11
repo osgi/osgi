@@ -25,16 +25,18 @@ import java.net.*;
  * <code>java.net.URLStreamHandler</code> methods.
  * <p>
  * The important differences between this interface and the
- * <code>URLStreamHandler</code> class are that the <code>setURL</code> method is
- * absent and the <code>parseURL</code> method takes a
+ * <code>URLStreamHandler</code> class are that the <code>setURL</code>
+ * method is absent and the <code>parseURL</code> method takes a
  * {@link URLStreamHandlerSetter} object as the first argument. Classes
  * implementing this interface must call the <code>setURL</code> method on the
- * <code>URLStreamHandlerSetter</code> object received in the <code>parseURL</code>
- * method instead of <code>URLStreamHandler.setURL</code> to avoid a
+ * <code>URLStreamHandlerSetter</code> object received in the
+ * <code>parseURL</code> method instead of
+ * <code>URLStreamHandler.setURL</code> to avoid a
  * <code>SecurityException</code>.
  * 
  * @see AbstractURLStreamHandlerService
  * 
+ * @ThreadSafe
  * @version $Revision$
  */
 public interface URLStreamHandlerService {
@@ -45,11 +47,11 @@ public interface URLStreamHandlerService {
 
 	/**
 	 * Parse a URL. This method is called by the <code>URLStreamHandler</code>
-	 * proxy, instead of <code>java.net.URLStreamHandler.parseURL</code>, passing
-	 * a <code>URLStreamHandlerSetter</code> object.
+	 * proxy, instead of <code>java.net.URLStreamHandler.parseURL</code>,
+	 * passing a <code>URLStreamHandlerSetter</code> object.
 	 * 
-	 * @param realHandler The object on which <code>setURL</code> must be invoked
-	 *        for this URL.
+	 * @param realHandler The object on which <code>setURL</code> must be
+	 *        invoked for this URL.
 	 * @see "java.net.URLStreamHandler.parseURL"
 	 */
 	public void parseURL(URLStreamHandlerSetter realHandler, URL u,

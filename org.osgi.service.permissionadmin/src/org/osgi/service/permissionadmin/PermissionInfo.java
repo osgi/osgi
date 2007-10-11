@@ -28,42 +28,44 @@ package org.osgi.service.permissionadmin;
  * </i> arguments passed to its constructor.
  * 
  * <p>
- * In order for a permission represented by a <code>PermissionInfo</code> to be
- * instantiated and considered during a permission check, its Permission class
- * must be available from the system classpath or an exported package. This
- * means that the instantiation of a permission represented by a
+ * In order for a permission represented by a <code>PermissionInfo</code> to
+ * be instantiated and considered during a permission check, its Permission
+ * class must be available from the system classpath or an exported package.
+ * This means that the instantiation of a permission represented by a
  * <code>PermissionInfo</code> may be delayed until the package containing its
  * Permission class has been exported by a bundle.
  * 
+ * @Immutable
  * @version $Revision$
  */
 public class PermissionInfo {
-	private String	type;
-	private String	name;
-	private String	actions;
+	private final String	type;
+	private final String	name;
+	private final String	actions;
 
 	/**
-	 * Constructs a <code>PermissionInfo</code> from the specified type, name, and
-	 * actions.
+	 * Constructs a <code>PermissionInfo</code> from the specified type, name,
+	 * and actions.
 	 * 
 	 * @param type The fully qualified class name of the permission represented
-	 *        by this <code>PermissionInfo</code>. The class must be a subclass
-	 *        of <code>java.security.Permission</code> and must define a
-	 *        2-argument constructor that takes a <i>name </i> string and an
-	 *        <i>actions </i> string.
+	 *        by this <code>PermissionInfo</code>. The class must be a
+	 *        subclass of <code>java.security.Permission</code> and must
+	 *        define a 2-argument constructor that takes a <i>name </i> string
+	 *        and an <i>actions </i> string.
 	 * 
 	 * @param name The permission name that will be passed as the first argument
-	 *        to the constructor of the <code>Permission</code> class identified
-	 *        by <code>type</code>.
+	 *        to the constructor of the <code>Permission</code> class
+	 *        identified by <code>type</code>.
 	 * 
 	 * @param actions The permission actions that will be passed as the second
 	 *        argument to the constructor of the <code>Permission</code> class
 	 *        identified by <code>type</code>.
 	 * 
 	 * @throws java.lang.NullPointerException if <code>type</code> is
-	 *            <code>null</code>.
-	 * @throws java.lang.IllegalArgumentException if <code>action</code> is not
-	 *            <code>null</code> and <code>name</code> is <code>null</code>.
+	 *         <code>null</code>.
+	 * @throws java.lang.IllegalArgumentException if <code>action</code> is
+	 *         not <code>null</code> and <code>name</code> is
+	 *         <code>null</code>.
 	 */
 	public PermissionInfo(String type, String name, String actions) {
 		this.type = type;
@@ -78,15 +80,15 @@ public class PermissionInfo {
 	}
 
 	/**
-	 * Constructs a <code>PermissionInfo</code> object from the specified encoded
-	 * <code>PermissionInfo</code> string. White space in the encoded
+	 * Constructs a <code>PermissionInfo</code> object from the specified
+	 * encoded <code>PermissionInfo</code> string. White space in the encoded
 	 * <code>PermissionInfo</code> string is ignored.
 	 * 
 	 * 
 	 * @param encodedPermission The encoded <code>PermissionInfo</code>.
 	 * @see #getEncoded
-	 * @throws java.lang.IllegalArgumentException If the 
-	 *            <code>encodedPermission</code> is not properly formatted.
+	 * @throws java.lang.IllegalArgumentException If the
+	 *         <code>encodedPermission</code> is not properly formatted.
 	 */
 	public PermissionInfo(String encodedPermission) {
 		if (encodedPermission == null) {
@@ -95,20 +97,22 @@ public class PermissionInfo {
 		if (encodedPermission.length() == 0) {
 			throw new IllegalArgumentException("empty encoded permission");
 		}
+		String type = null;
+		String name = null;
+		String actions = null;
 		try {
 			char[] encoded = encodedPermission.toCharArray();
 			int length = encoded.length;
 			int pos = 0;
-			
+
 			/* skip whitespace */
 			while (Character.isWhitespace(encoded[pos])) {
 				pos++;
 			}
-			
+
 			/* the first character must be '(' */
 			if (encoded[pos] != '(') {
-				throw new IllegalArgumentException(
-						"expecting open parenthesis");
+				throw new IllegalArgumentException("expecting open parenthesis");
 			}
 			pos++;
 
@@ -116,22 +120,23 @@ public class PermissionInfo {
 			while (Character.isWhitespace(encoded[pos])) {
 				pos++;
 			}
-			
+
 			/* type is not quoted or encoded */
 			int begin = pos;
-			while (!Character.isWhitespace(encoded[pos]) && (encoded[pos] != ')')) {
+			while (!Character.isWhitespace(encoded[pos])
+					&& (encoded[pos] != ')')) {
 				pos++;
 			}
 			if (pos == begin || encoded[begin] == '"') {
 				throw new IllegalArgumentException("expecting type");
 			}
-			this.type = new String(encoded, begin, pos - begin);
-			
+			type = new String(encoded, begin, pos - begin);
+
 			/* skip whitespace */
 			while (Character.isWhitespace(encoded[pos])) {
 				pos++;
 			}
-			
+
 			/* type may be followed by name which is quoted and encoded */
 			if (encoded[pos] == '"') {
 				pos++;
@@ -142,7 +147,7 @@ public class PermissionInfo {
 					}
 					pos++;
 				}
-				this.name = unescapeString(encoded, begin, pos);
+				name = unescapeString(encoded, begin, pos);
 				pos++;
 
 				if (Character.isWhitespace(encoded[pos])) {
@@ -150,8 +155,11 @@ public class PermissionInfo {
 					while (Character.isWhitespace(encoded[pos])) {
 						pos++;
 					}
-					
-					/* name may be followed by actions which is quoted and encoded */
+
+					/*
+					 * name may be followed by actions which is quoted and
+					 * encoded
+					 */
 					if (encoded[pos] == '"') {
 						pos++;
 						begin = pos;
@@ -161,7 +169,7 @@ public class PermissionInfo {
 							}
 							pos++;
 						}
-						this.actions = unescapeString(encoded, begin, pos);
+						actions = unescapeString(encoded, begin, pos);
 						pos++;
 
 						/* skip whitespace */
@@ -171,7 +179,7 @@ public class PermissionInfo {
 					}
 				}
 			}
-			
+
 			/* the final character must be ')' */
 			char c = encoded[pos];
 			pos++;
@@ -179,17 +187,22 @@ public class PermissionInfo {
 				pos++;
 			}
 			if ((c != ')') || (pos != length)) {
-				throw new IllegalArgumentException("expecting close parenthesis");
+				throw new IllegalArgumentException(
+						"expecting close parenthesis");
 			}
 		}
 		catch (ArrayIndexOutOfBoundsException e) {
 			throw new IllegalArgumentException("parsing terminated abruptly");
 		}
+
+		this.type = type;
+		this.name = name;
+		this.actions = actions;
 	}
 
 	/**
-	 * Returns the string encoding of this <code>PermissionInfo</code> in a form
-	 * suitable for restoring this <code>PermissionInfo</code>.
+	 * Returns the string encoding of this <code>PermissionInfo</code> in a
+	 * form suitable for restoring this <code>PermissionInfo</code>.
 	 * 
 	 * <p>
 	 * The encoded format is:
@@ -211,14 +224,15 @@ public class PermissionInfo {
 	 * </pre>
 	 * 
 	 * where <i>name</i> and <i>actions</i> are strings that are encoded for
-	 * proper parsing. Specifically, the <code>"</code>,<code>\</code>, carriage
-	 * return, and linefeed characters are escaped using <code>\"</code>,
-	 * <code>\\</code>,<code>\r</code>, and <code>\n</code>, respectively.
+	 * proper parsing. Specifically, the <code>"</code>,<code>\</code>,
+	 * carriage return, and line feed characters are escaped using
+	 * <code>\"</code>, <code>\\</code>,<code>\r</code>, and
+	 * <code>\n</code>, respectively.
 	 * 
 	 * <p>
-	 * The encoded string contains no leading or trailing whitespace
-	 * characters. A single space character is used between <i>type</i> and 
-	 * &quot;<i>name</i>&quot; and between &quot;<i>name</i>&quot; and &quot;<i>actions</i>&quot;.
+	 * The encoded string contains no leading or trailing whitespace characters.
+	 * A single space character is used between <i>type</i> and &quot;<i>name</i>&quot;
+	 * and between &quot;<i>name</i>&quot; and &quot;<i>actions</i>&quot;.
 	 * 
 	 * @return The string encoding of this <code>PermissionInfo</code>.
 	 */
@@ -244,9 +258,9 @@ public class PermissionInfo {
 	}
 
 	/**
-	 * Returns the string representation of this <code>PermissionInfo</code>. The
-	 * string is created by calling the <code>getEncoded</code> method on this
-	 * <code>PermissionInfo</code>.
+	 * Returns the string representation of this <code>PermissionInfo</code>.
+	 * The string is created by calling the <code>getEncoded</code> method on
+	 * this <code>PermissionInfo</code>.
 	 * 
 	 * @return The string representation of this <code>PermissionInfo</code>.
 	 */
@@ -270,8 +284,8 @@ public class PermissionInfo {
 	 * <code>PermissionInfo</code>.
 	 * 
 	 * @return The name of the permission represented by this
-	 *         <code>PermissionInfo</code>, or <code>null</code> if the permission
-	 *         does not have a name.
+	 *         <code>PermissionInfo</code>, or <code>null</code> if the
+	 *         permission does not have a name.
 	 */
 	public final String getName() {
 		return name;
@@ -282,8 +296,8 @@ public class PermissionInfo {
 	 * <code>PermissionInfo</code>.
 	 * 
 	 * @return The actions of the permission represented by this
-	 *         <code>PermissionInfo</code>, or <code>null</code> if the permission
-	 *         does not have any actions associated with it.
+	 *         <code>PermissionInfo</code>, or <code>null</code> if the
+	 *         permission does not have any actions associated with it.
 	 */
 	public final String getActions() {
 		return actions;
@@ -297,9 +311,10 @@ public class PermissionInfo {
 	 * 
 	 * @param obj The object to test for equality with this
 	 *        <code>PermissionInfo</code> object.
-	 * @return <code>true</code> if <code>obj</code> is a <code>PermissionInfo</code>,
-	 *         and has the same type, name and actions as this
-	 *         <code>PermissionInfo</code> object; <code>false</code> otherwise.
+	 * @return <code>true</code> if <code>obj</code> is a
+	 *         <code>PermissionInfo</code>, and has the same type, name and
+	 *         actions as this <code>PermissionInfo</code> object;
+	 *         <code>false</code> otherwise.
 	 */
 	public boolean equals(Object obj) {
 		if (obj == this) {
@@ -315,8 +330,7 @@ public class PermissionInfo {
 		}
 		if (name != null) {
 			if (actions != null) {
-				return name.equals(other.name) && actions
-						.equals(other.actions);
+				return name.equals(other.name) && actions.equals(other.actions);
 			}
 			else {
 				return name.equals(other.name);
@@ -400,7 +414,7 @@ public class PermissionInfo {
 			}
 			output.append(c);
 		}
-		
+
 		return output.toString();
 	}
 }

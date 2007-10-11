@@ -29,6 +29,7 @@ import org.osgi.framework.Bundle;
  * If present, there will only be a single instance of this service registered
  * with the Framework.
  * 
+ * @ThreadSafe
  * @version $Revision$
  * @see org.osgi.service.packageadmin.ExportedPackage
  * @see org.osgi.service.packageadmin.RequiredBundle

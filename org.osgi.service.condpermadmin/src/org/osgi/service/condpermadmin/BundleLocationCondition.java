@@ -28,6 +28,7 @@ import org.osgi.framework.*;
  * Condition to test if the location of a bundle matches a pattern. Pattern
  * matching is done according to the filter string matching rules.
  * 
+ * @ThreadSafe
  * @version $Revision$
  */
 public class BundleLocationCondition {
@@ -47,7 +48,8 @@ public class BundleLocationCondition {
 	 *        character.
 	 * @return Condition object for the requested condition.
 	 */
-	static public Condition getCondition(final Bundle bundle, ConditionInfo info) {
+	static public Condition getCondition(final Bundle bundle,
+			final ConditionInfo info) {
 		if (!CONDITION_TYPE.equals(info.getType()))
 			throw new IllegalArgumentException(
 					"ConditionInfo must be of type \"" + CONDITION_TYPE + "\"");
@@ -67,7 +69,7 @@ public class BundleLocationCondition {
 					+ escapeLocation(args[0]) + ")");
 		}
 		catch (InvalidSyntaxException e) {
-			// this should never happen, but just incase
+			// this should never happen, but just in case
 			throw new RuntimeException("Invalid filter: " + e.getFilter());
 		}
 		Hashtable matchProps = new Hashtable(2);

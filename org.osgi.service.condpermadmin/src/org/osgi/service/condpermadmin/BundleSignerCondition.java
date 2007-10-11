@@ -47,6 +47,7 @@ import org.osgi.framework.Bundle;
  * must be the first RDN and will match any number of RDNs (including zero
  * RDNs).
  * 
+ * @ThreadSafe
  * @version $Revision$
  */
 public class BundleSignerCondition {

@@ -22,15 +22,18 @@ import java.net.URL;
 
 /**
  * Interface used by <code>URLStreamHandlerService</code> objects to call the
- * <code>setURL</code> method on the proxy <code>URLStreamHandler</code> object.
+ * <code>setURL</code> method on the proxy <code>URLStreamHandler</code>
+ * object.
  * 
  * <p>
  * Objects of this type are passed to the
- * {@link URLStreamHandlerService#parseURL} method. Invoking the <code>setURL</code>
- * method on the <code>URLStreamHandlerSetter</code> object will invoke the
- * <code>setURL</code> method on the proxy <code>URLStreamHandler</code> object that
- * is actually registered with <code>java.net.URL</code> for the protocol.
+ * {@link URLStreamHandlerService#parseURL} method. Invoking the
+ * <code>setURL</code> method on the <code>URLStreamHandlerSetter</code>
+ * object will invoke the <code>setURL</code> method on the proxy
+ * <code>URLStreamHandler</code> object that is actually registered with
+ * <code>java.net.URL</code> for the protocol.
  * 
+ * @ThreadSafe
  * @version $Revision$
  */
 public interface URLStreamHandlerSetter {
