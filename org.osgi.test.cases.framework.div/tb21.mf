@@ -18,6 +18,7 @@ Bundle-NativeCode: org/osgi/test/cases/div/tb2/linux_x86/libNative.so; osname=Li
  org/osgi/test/cases/div/tb2/windows_x86/Native.dll; osname=Win32; processor=x86;  osversion=10000,
  org/osgi/test/cases/div/tb2/windows_x86/Native.dll; osname=Win32; processor=x86;  osversion="[1000.1.3.10-b_c,10000]",
  org/osgi/test/cases/div/tb2/solaris_sparc/libNative.so; osname=Solaris; processor=sparc;  osversion="[10000,10000]",
- org/osgi/test/cases/div/tb2/solaris_sparc/libNative.so; osname=SunOS; processor=sparc;  osversion="[10000.1.3.10-b_c,10000.1.3.10-b_c]"
+ org/osgi/test/cases/div/tb2/solaris_sparc/libNative.so; osname=SunOS; processor=sparc;  osversion="[10000.1.3.10-b_c,10000.1.3.10-b_c]", 
+ org/osgi/test/cases/div/tb2/windows_arm/Native.dll; osname="windows ce"; processor=arm;  osversion="[10000.1.3.10-b_c,10000.1.3.10-b_c]"
 $(IMPORT-PACKAGE)
 $(EXPORT-PACKAGE)
