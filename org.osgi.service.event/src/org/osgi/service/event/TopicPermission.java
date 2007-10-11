@@ -426,7 +426,7 @@ final class TopicPermissionCollection extends PermissionCollection {
 		final int newMask = tp.getMask();
 
 		synchronized (this) {
-			TopicPermission existing = (TopicPermission) permissions.get(name);
+			final TopicPermission existing = (TopicPermission) permissions.get(name);
 			if (existing != null) {
 				final int oldMask = existing.getMask();
 				if (oldMask != newMask) {
@@ -459,8 +459,8 @@ final class TopicPermissionCollection extends PermissionCollection {
 		if (!(permission instanceof TopicPermission))
 			return false;
 		final TopicPermission tp = (TopicPermission) permission;
-		final int desired = tp.getMask();
 		String name = tp.getName();
+		final int desired = tp.getMask();
 		int effective = 0;
 
 		TopicPermission x;
@@ -474,13 +474,11 @@ final class TopicPermissionCollection extends PermissionCollection {
 						return true;
 				}
 			}
+			x = (TopicPermission) permissions.get(name);
 		}
 		// strategy:
 		// Check for full match first. Then work our way up the
 		// name looking for matches on a/b/*
-		synchronized (this) {
-			x = (TopicPermission) permissions.get(name);
-		}
 		if (x != null) {
 			// we have a direct hit!
 			effective |= x.getMask();
