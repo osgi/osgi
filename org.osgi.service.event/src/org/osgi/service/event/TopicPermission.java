@@ -201,7 +201,7 @@ public final class TopicPermission extends Permission {
 				switch (a[i - matchlen]) {
 					case ',' :
 						seencomma = true;
-					/* FALLTHROUGH */
+						/* FALLTHROUGH */
 					case ' ' :
 					case '\r' :
 					case '\n' :
@@ -299,9 +299,9 @@ public final class TopicPermission extends Permission {
 	/**
 	 * Determines the equality of two <code>TopicPermission</code> objects.
 	 * 
-	 * This method checks that specified <code>TopicPermission</code> has the same topic name and
-	 * actions as this
-	 * <code>TopicPermission</code> object.
+	 * This method checks that specified <code>TopicPermission</code> has the
+	 * same topic name and actions as this <code>TopicPermission</code>
+	 * object.
 	 * 
 	 * @param obj The object to test for equality with this
 	 *        <code>TopicPermission</code> object.
@@ -405,11 +405,10 @@ final class TopicPermissionCollection extends PermissionCollection {
 	 * @param permission The <code>TopicPermission</code> object to add.
 	 * 
 	 * @throws IllegalArgumentException If the permission is not a
-	 *            <code>TopicPermission</code> instance.
+	 *         <code>TopicPermission</code> instance.
 	 * 
-	 * @throws SecurityException If this
-	 *            <code>TopicPermissionCollection</code> object has been
-	 *            marked read-only.
+	 * @throws SecurityException If this <code>TopicPermissionCollection</code>
+	 *         object has been marked read-only.
 	 */
 	public void add(Permission permission) {
 		if (!(permission instanceof TopicPermission))

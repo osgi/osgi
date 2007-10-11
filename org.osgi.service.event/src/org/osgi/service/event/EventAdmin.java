@@ -22,32 +22,33 @@ package org.osgi.service.event;
  * The Event Admin service. Bundles wishing to publish events must obtain the
  * Event Admin service and call one of the event delivery methods.
  * 
+ * @ThreadSafe
  * @version $Revision$
  */
 public interface EventAdmin {
 	/**
-	 * Initiate asynchronous delivery of an event. This method returns to
-	 * the caller before delivery of the event is completed.
+	 * Initiate asynchronous delivery of an event. This method returns to the
+	 * caller before delivery of the event is completed.
 	 * 
-	 * @param event The event to send to all listeners which subscribe
-	 *        to the topic of the event.
+	 * @param event The event to send to all listeners which subscribe to the
+	 *        topic of the event.
 	 * 
 	 * @throws SecurityException If the caller does not have
-	 *            <code>TopicPermission[topic,PUBLISH]</code> for the topic
-	 *            specified in the event.
+	 *         <code>TopicPermission[topic,PUBLISH]</code> for the topic
+	 *         specified in the event.
 	 */
 	void postEvent(Event event);
 
 	/**
-	 * Initiate synchronous delivery of an event. This method does not
-	 * return to the caller until delivery of the event is completed.
+	 * Initiate synchronous delivery of an event. This method does not return to
+	 * the caller until delivery of the event is completed.
 	 * 
-	 * @param event The event to send to all listeners which subscribe
-	 *        to the topic of the event.
+	 * @param event The event to send to all listeners which subscribe to the
+	 *        topic of the event.
 	 * 
 	 * @throws SecurityException If the caller does not have
-	 *            <code>TopicPermission[topic,PUBLISH]</code> for the topic
-	 *            specified in the event.
+	 *         <code>TopicPermission[topic,PUBLISH]</code> for the topic
+	 *         specified in the event.
 	 */
 	void sendEvent(Event event);
 }

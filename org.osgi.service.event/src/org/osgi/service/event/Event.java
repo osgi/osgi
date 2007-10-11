@@ -18,7 +18,11 @@
 
 package org.osgi.service.event;
 
-import java.util.*;
+import java.util.Dictionary;
+import java.util.Enumeration;
+import java.util.Hashtable;
+import java.util.NoSuchElementException;
+import java.util.StringTokenizer;
 
 import org.osgi.framework.Filter;
 
@@ -26,20 +30,21 @@ import org.osgi.framework.Filter;
  * An event.
  * 
  * <code>Event</code> objects are delivered to <code>EventHandler</code>
- * services which subsrcibe to the topic of the event.
+ * services which subscribe to the topic of the event.
  * 
+ * @ThreadSafe
  * @version $Revision$
  */
 public class Event {
 	/**
 	 * The topic of this event.
 	 */
-	String	topic;
+	private final String	topic;
 	/**
 	 * The properties carried by this event. Keys are strings and values are
 	 * objects
 	 */
-	Hashtable	properties;
+	private final Hashtable	properties;
 
 	/**
 	 * Constructs an event.
@@ -50,8 +55,8 @@ public class Event {
 	 * @throws IllegalArgumentException If topic is not a valid topic name.
 	 */
 	public Event(String topic, Dictionary properties) {
+		validateTopicName(topic);
 		this.topic = topic;
-		validateTopicName();
 		this.properties = new Hashtable();
 		if (properties != null) {
 			for (Enumeration e = properties.keys(); e.hasMoreElements();) {
@@ -157,9 +162,10 @@ public class Event {
 	/**
 	 * Called by the constructor to validate the topic name.
 	 * 
+	 * @param topic The topic name to validate.
 	 * @throws IllegalArgumentException If the topic name is invalid.
 	 */
-	private void validateTopicName() {
+	private static void validateTopicName(String topic) {
 		try {
 			StringTokenizer st = new StringTokenizer(topic, SEPARATOR, true);
 			validateToken(st.nextToken());
@@ -179,9 +185,10 @@ public class Event {
 	/**
 	 * Validate a token.
 	 * 
+	 * @param token The token value to validate.
 	 * @throws IllegalArgumentException If the token is invalid.
 	 */
-	private void validateToken(String token) {
+	private static void validateToken(String token) {
 		int length = token.length();
 		if (length < 1) {	// token must contain at least one character
 			throw new IllegalArgumentException("invalid topic"); //$NON-NLS-1$
