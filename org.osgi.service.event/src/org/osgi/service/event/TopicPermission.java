@@ -21,8 +21,9 @@ package org.osgi.service.event;
 import java.io.IOException;
 import java.security.Permission;
 import java.security.PermissionCollection;
+import java.util.Collections;
 import java.util.Enumeration;
-import java.util.Hashtable;
+import java.util.HashMap;
 
 /**
  * A bundle's authority to publish or subscribe to event on a topic.
@@ -40,6 +41,7 @@ import java.util.Hashtable;
  * <code>TopicPermission</code> has two actions: <code>publish</code> and
  * <code>subscribe</code>.
  * 
+ * @ThreadSafe
  * @version $Revision$
  */
 public final class TopicPermission extends Permission {
@@ -119,7 +121,7 @@ public final class TopicPermission extends Permission {
 	 * @param name topic name
 	 * @param mask action mask
 	 */
-	private void init(String name, int mask) {
+	private void init(final String name, final int mask) {
 		if ((name == null) || name.length() == 0) {
 			throw new IllegalArgumentException("invalid name"); //$NON-NLS-1$
 		}
@@ -147,7 +149,7 @@ public final class TopicPermission extends Permission {
 	 * @param actions Action string.
 	 * @return action mask.
 	 */
-	private static int getMask(String actions) {
+	private static int getMask(final String actions) {
 		boolean seencomma = false;
 		int mask = ACTION_NONE;
 		if (actions == null) {
@@ -243,15 +245,15 @@ public final class TopicPermission extends Permission {
 	 * @return <code>true</code> if the specified <code>TopicPermission</code>
 	 *         action is implied by this object; <code>false</code> otherwise.
 	 */
-	public boolean implies(Permission p) {
+	public boolean implies(final Permission p) {
 		if (p instanceof TopicPermission) {
-			TopicPermission target = (TopicPermission) p;
-			if ((action_mask & target.action_mask) == target.action_mask) {
+			final TopicPermission tp = (TopicPermission) p;
+			if ((action_mask & tp.action_mask) == tp.action_mask) {
 				if (prefix != null) {
-					return target.getName().startsWith(prefix);
+					return tp.getName().startsWith(prefix);
 				}
 
-				return target.getName().equals(getName());
+				return tp.getName().equals(getName());
 			}
 		}
 		return false;
@@ -268,7 +270,7 @@ public final class TopicPermission extends Permission {
 	 * @return Canonical string representation of the
 	 *         <code>TopicPermission</code> actions.
 	 */
-	public String getActions() {
+	public synchronized String getActions() {
 		if (actions == null) {
 			StringBuffer sb = new StringBuffer();
 			boolean comma = false;
@@ -310,14 +312,14 @@ public final class TopicPermission extends Permission {
 	 *         actions as this <code>TopicPermission</code> object;
 	 *         <code>false</code> otherwise.
 	 */
-	public boolean equals(Object obj) {
+	public boolean equals(final Object obj) {
 		if (obj == this) {
 			return true;
 		}
 		if (!(obj instanceof TopicPermission)) {
 			return false;
 		}
-		TopicPermission p = (TopicPermission) obj;
+		final TopicPermission p = (TopicPermission) obj;
 		return (action_mask == p.action_mask) && getName().equals(p.getName());
 	}
 
@@ -375,26 +377,28 @@ public final class TopicPermission extends Permission {
  * @see java.security.PermissionCollection
  */
 final class TopicPermissionCollection extends PermissionCollection {
-	static final long	serialVersionUID	= -614647783533924048L;
+	static final long		serialVersionUID	= -614647783533924048L;
 	/**
 	 * Table of permissions.
 	 * 
 	 * @serial
+	 * @GuardedBy this
 	 */
-	private Hashtable	permissions;
+	private final HashMap	permissions;
 	/**
 	 * Boolean saying if "*" is in the collection.
 	 * 
 	 * @serial
+	 * @GuardedBy this
 	 */
-	private boolean		all_allowed;
+	private boolean			all_allowed;
 
 	/**
 	 * Create an empty TopicPermissions object.
 	 * 
 	 */
 	public TopicPermissionCollection() {
-		permissions = new Hashtable();
+		permissions = new HashMap();
 		all_allowed = false;
 	}
 
@@ -410,30 +414,33 @@ final class TopicPermissionCollection extends PermissionCollection {
 	 * @throws SecurityException If this <code>TopicPermissionCollection</code>
 	 *         object has been marked read-only.
 	 */
-	public void add(Permission permission) {
+	public void add(final Permission permission) {
 		if (!(permission instanceof TopicPermission))
 			throw new IllegalArgumentException("invalid permission: " //$NON-NLS-1$
 					+ permission);
 		if (isReadOnly())
 			throw new SecurityException("attempt to add a Permission to a " //$NON-NLS-1$
 					+ "readonly PermissionCollection"); //$NON-NLS-1$
-		TopicPermission pp = (TopicPermission) permission;
-		String name = pp.getName();
-		TopicPermission existing = (TopicPermission) permissions.get(name);
-		if (existing != null) {
-			int oldMask = existing.getMask();
-			int newMask = pp.getMask();
-			if (oldMask != newMask) {
-				permissions.put(name, new TopicPermission(name, oldMask
-						| newMask));
+		final TopicPermission tp = (TopicPermission) permission;
+		final String name = tp.getName();
+		final int newMask = tp.getMask();
+
+		synchronized (this) {
+			TopicPermission existing = (TopicPermission) permissions.get(name);
+			if (existing != null) {
+				final int oldMask = existing.getMask();
+				if (oldMask != newMask) {
+					permissions.put(name, new TopicPermission(name, oldMask
+							| newMask));
+				}
 			}
-		}
-		else {
-			permissions.put(name, permission);
-		}
-		if (!all_allowed) {
-			if (name.equals("*")) //$NON-NLS-1$
-				all_allowed = true;
+			else {
+				permissions.put(name, permission);
+			}
+			if (!all_allowed) {
+				if (name.equals("*")) //$NON-NLS-1$
+					all_allowed = true;
+			}
 		}
 	}
 
@@ -448,27 +455,32 @@ final class TopicPermissionCollection extends PermissionCollection {
 	 *         subset of a permission in the set; <code>false</code>
 	 *         otherwise.
 	 */
-	public boolean implies(Permission permission) {
+	public boolean implies(final Permission permission) {
 		if (!(permission instanceof TopicPermission))
 			return false;
-		TopicPermission pp = (TopicPermission) permission;
-		TopicPermission x;
-		int desired = pp.getMask();
+		final TopicPermission tp = (TopicPermission) permission;
+		final int desired = tp.getMask();
+		String name = tp.getName();
 		int effective = 0;
+
+		TopicPermission x;
 		// short circuit if the "*" Permission was added
-		if (all_allowed) {
-			x = (TopicPermission) permissions.get("*"); //$NON-NLS-1$
-			if (x != null) {
-				effective |= x.getMask();
-				if ((effective & desired) == desired)
-					return true;
+		synchronized (this) {
+			if (all_allowed) {
+				x = (TopicPermission) permissions.get("*"); //$NON-NLS-1$
+				if (x != null) {
+					effective |= x.getMask();
+					if ((effective & desired) == desired)
+						return true;
+				}
 			}
 		}
 		// strategy:
 		// Check for full match first. Then work our way up the
 		// name looking for matches on a/b/*
-		String name = pp.getName();
-		x = (TopicPermission) permissions.get(name);
+		synchronized (this) {
+			x = (TopicPermission) permissions.get(name);
+		}
 		if (x != null) {
 			// we have a direct hit!
 			effective |= x.getMask();
@@ -480,7 +492,9 @@ final class TopicPermissionCollection extends PermissionCollection {
 		offset = name.length() - 1;
 		while ((last = name.lastIndexOf("/", offset)) != -1) { //$NON-NLS-1$
 			name = name.substring(0, last + 1) + "*"; //$NON-NLS-1$
-			x = (TopicPermission) permissions.get(name);
+			synchronized (this) {
+				x = (TopicPermission) permissions.get(name);
+			}
 			if (x != null) {
 				effective |= x.getMask();
 				if ((effective & desired) == desired)
@@ -499,7 +513,7 @@ final class TopicPermissionCollection extends PermissionCollection {
 	 * 
 	 * @return Enumeration of all <code>TopicPermission</code> objects.
 	 */
-	public Enumeration elements() {
-		return permissions.elements();
+	public synchronized Enumeration elements() {
+		return Collections.enumeration(permissions.values());
 	}
 }
