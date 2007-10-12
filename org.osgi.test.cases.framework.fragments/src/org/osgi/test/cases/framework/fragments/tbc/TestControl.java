@@ -700,10 +700,10 @@ public class TestControl extends DefaultTestBundleControl implements
 	}
 
 	/**
-	 * Tests that a fragment Export-Package entry conflicts with a host
-	 * Export-Package entry only if it has the same package name. If a conflict
-	 * is found, test that it attaches normally and the export from the fragment
-	 * is ignored.
+	 * Tests a fragment Export-Package entry with a different version than a host
+	 * Export-Package entry with the same package name. Test that it attaches normally
+	 * and the export with a different version from the fragment
+	 * is available for import.
 	 * 
 	 * @throws Exception if an error occurs or an assertion fails in the test.
 	 * @spec Bundle.installBundle(String)
@@ -730,10 +730,9 @@ public class TestControl extends DefaultTestBundleControl implements
 			// fragment
 			try {
 				tb7h.start();
-				fail("Expecting the bundle start to fail because it imports an unknown package.");
 			}
 			catch (BundleException e) {
-
+				fail("Expecting the bundle to start.  The imported package from the fragment should resolve.");
 			}
 		}
 		finally {
