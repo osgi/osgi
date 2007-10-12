@@ -223,7 +223,7 @@ public class DeploymentPackageJarInputStream {
     }
 	
     /**
-	 * Gives back the next Entry in the dployment package.
+	 * Gives back the next Entry in the deployment package.
 	 * @return The next Entry or <code>null</code> if there is no 
 	 * more entries.
 	 * @throws IOException
