@@ -109,6 +109,13 @@ public class BundleException extends Exception {
 	public static final int	NATIVECODE_ERROR		= 8;
 
 	/**
+	 * The install or update operation failed because another 
+	 * already installed bundle has the same symbolic name and version.
+	 * @since 1.5
+	 */
+	public static final int	DUPLICATE_BUNDLE_ERROR	= 9;
+
+	/**
 	 * Creates a <code>BundleException</code> with the specified message and
 	 * exception cause.
 	 * 
