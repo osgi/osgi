@@ -76,48 +76,51 @@ import org.osgi.framework.*;
  * or attributes which could be used to select a parser with a filter. These can
  * be added by extending this class and overriding the
  * <code>setSAXProperties</code> and <code>setDOMProperties</code> methods.
+ * 
+ * @ThreadSafe
+ * @Version $Revision$
  */
 public class XMLParserActivator implements BundleActivator, ServiceFactory {
 	/** Context of this bundle */
-	private BundleContext		context;
+	private volatile BundleContext	context;
 	/**
 	 * Filename containing the SAX Parser Factory Class name. Also used as the
 	 * basis for the <code>SERVICE_PID<code> registration property.
 	 */
-	public static final String	SAXFACTORYNAME			= "javax.xml.parsers.SAXParserFactory";
+	public static final String		SAXFACTORYNAME			= "javax.xml.parsers.SAXParserFactory";
 	/**
 	 * Filename containing the DOM Parser Factory Class name. Also used as the
 	 * basis for the <code>SERVICE_PID</code> registration property.
 	 */
-	public static final String	DOMFACTORYNAME			= "javax.xml.parsers.DocumentBuilderFactory";
+	public static final String		DOMFACTORYNAME			= "javax.xml.parsers.DocumentBuilderFactory";
 	/** Path to the factory class name files */
-	private static final String	PARSERCLASSFILEPATH		= "/META-INF/services/";
+	private static final String		PARSERCLASSFILEPATH		= "/META-INF/services/";
 	/** Fully qualified path name of SAX Parser Factory Class Name file */
-	public static final String	SAXCLASSFILE			= PARSERCLASSFILEPATH
-																+ SAXFACTORYNAME;
+	public static final String		SAXCLASSFILE			= PARSERCLASSFILEPATH
+																	+ SAXFACTORYNAME;
 	/** Fully qualified path name of DOM Parser Factory Class Name file */
-	public static final String	DOMCLASSFILE			= PARSERCLASSFILEPATH
-																+ DOMFACTORYNAME;
+	public static final String		DOMCLASSFILE			= PARSERCLASSFILEPATH
+																	+ DOMFACTORYNAME;
 	/** SAX Factory Service Description */
-	private static final String	SAXFACTORYDESCRIPTION	= "A JAXP Compliant SAX Parser";
+	private static final String		SAXFACTORYDESCRIPTION	= "A JAXP Compliant SAX Parser";
 	/** DOM Factory Service Description */
-	private static final String	DOMFACTORYDESCRIPTION	= "A JAXP Compliant DOM Parser";
+	private static final String		DOMFACTORYDESCRIPTION	= "A JAXP Compliant DOM Parser";
 	/**
 	 * Service property specifying if factory is configured to support
 	 * validating parsers. The value is of type <code>Boolean</code>.
 	 */
-	public static final String	PARSER_VALIDATING		= "parser.validating";
+	public static final String		PARSER_VALIDATING		= "parser.validating";
 	/**
 	 * Service property specifying if factory is configured to support namespace
 	 * aware parsers. The value is of type <code>Boolean</code>.
 	 */
-	public static final String	PARSER_NAMESPACEAWARE	= "parser.namespaceAware";
+	public static final String		PARSER_NAMESPACEAWARE	= "parser.namespaceAware";
 	/**
 	 * Key for parser factory name property - this must be saved in the parsers
 	 * properties hashtable so that the parser factory can be instantiated from
 	 * a ServiceReference
 	 */
-	private static final String	FACTORYNAMEKEY			= "parser.factoryname";
+	private static final String		FACTORYNAMEKEY			= "parser.factoryname";
 
 	/**
 	 * Called when this bundle is started so the Framework can perform the
@@ -168,6 +171,7 @@ public class XMLParserActivator implements BundleActivator, ServiceFactory {
 	 *         bundle, and release all services used by the bundle.
 	 */
 	public void stop(BundleContext context) throws Exception {
+		// framework will automatically unregister the parser services
 	}
 
 	/**
@@ -281,7 +285,7 @@ public class XMLParserActivator implements BundleActivator, ServiceFactory {
 	 * 
 	 * <p>
 	 * This method attempts to instantiate a validating parser and a
-	 * namespaceaware parser to determine if the parser can support those
+	 * namespace aware parser to determine if the parser can support those
 	 * features. The appropriate properties are then set in the specified
 	 * properties object.
 	 * 
@@ -389,7 +393,7 @@ public class XMLParserActivator implements BundleActivator, ServiceFactory {
 	 * 
 	 * <p>
 	 * This method attempts to instantiate a validating parser and a
-	 * namespaceaware parser to determine if the parser can support those
+	 * namespace aware parser to determine if the parser can support those
 	 * features. The appropriate properties are then set in the specified props
 	 * object.
 	 * 
