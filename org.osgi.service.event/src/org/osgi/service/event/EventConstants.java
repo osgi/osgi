@@ -29,7 +29,7 @@ import org.osgi.framework.Constants;
 public interface EventConstants {
 
 	/**
-	 * Service registration property (named <code>event.topic</code>)
+	 * Service registration property (named <code>event.topics</code>)
 	 * specifying the <code>Event</code> topics of interest to a Event Handler
 	 * service.
 	 * <p>
