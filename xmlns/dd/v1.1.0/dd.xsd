@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+	/*
+	* $Date$
+	* 
+	* Copyright (c) OSGi Alliance (2006, 2007). All Rights Reserved.
+	* 
+	* Licensed under the Apache License, Version 2.0 (the "License");
+	* you may not use this file except in compliance with the License.
+	* You may obtain a copy of the License at
+	*
+	*      http://www.apache.org/licenses/LICENSE-2.0
+	*
+	* Unless required by applicable law or agreed to in writing, software
+	* distributed under the License is distributed on an "AS IS" BASIS,
+	* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+	* See the License for the specific language governing permissions and
+	* limitations under the License.
+	*/
+-->
+<schema xmlns="http://www.w3.org/2001/XMLSchema"
+	xmlns:dd="http://www.osgi.org/xmlns/dd/v1.1.0"
+	targetNamespace="http://www.osgi.org/xmlns/dd/v1.1.0"
+	version="1.1.0">
+
+	<element name="environment" type="dd:Tenvironment" />
+
+	<complexType name="Tenvironment">
+		<sequence>
+			<any namespace="##any" processContents="lax" minOccurs="0"
+				maxOccurs="unbounded" />
+		</sequence>
+
+		<attribute name="required-storage" type="int" use="optional" />
+		<attribute name="envtype" type="anyURI" use="required" />
+		<anyAttribute />
+	</complexType>
+</schema>
