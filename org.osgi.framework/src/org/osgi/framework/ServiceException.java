@@ -67,7 +67,7 @@ public class ServiceException extends RuntimeException {
 	public static final int	FACTORY_EXCEPTION	= 3;
 	/**
 	 * The exception is a subclass of ServiceException. The subclass should be
-	 * examined for the cause of the exception.
+	 * examined for the type of the exception.
 	 */
 	public static final int	SUBCLASSED			= 4;
 
