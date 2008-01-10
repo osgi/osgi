@@ -25,12 +25,10 @@ package org.osgi.framework;
  * A <code>ServiceException</code> object is created by the Framework or
  * service implementation to denote an exception condition in the service. A
  * type code is used to identify the exception type for future extendability.
- * 
- * <p>
- * OSGi Alliance reserves the right to extend the set of types. The type values
- * 0x0000 through 0x7FFF are reserved for use by the OSGi Alliance. Service
- * implementations wishing to define custom service exception types must not use
- * values in this reserved range.
+ * Service implementations may also create subclasses of
+ * <code>ServiceException</code>. When subclassing, the subclass should set
+ * the type to {@link #SUBCLASSED} to indicate that
+ * <code>ServiceException</code> has been subclassed.
  * 
  * <p>
  * This exception conforms to the general purpose exception chaining mechanism.
@@ -67,6 +65,11 @@ public class ServiceException extends RuntimeException {
 	 * The service factory threw an exception.
 	 */
 	public static final int	FACTORY_EXCEPTION	= 3;
+	/**
+	 * The exception is a subclass of ServiceException. The subclass should be
+	 * examined for the cause of the exception.
+	 */
+	public static final int	SUBCLASSED			= 4;
 
 	/**
 	 * Creates a <code>ServiceException</code> with the specified message and
