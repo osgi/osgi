@@ -294,6 +294,7 @@ public class DeploymentTestControl extends DefaultTestBundleControl {
 	 */
 	public void unprepare() {
 		log("#after each run");
+		getContext().removeBundleListener(bundleListener);
 	}
 
 	/**
