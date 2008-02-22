@@ -471,10 +471,11 @@ public class DeploymentTestControl extends DefaultTestBundleControl {
 	 */
 	public void unprepare() {
 		log("#after each run");
-        synchronized (permWorker) {
-			permWorker.setRunning(false);
-			permWorker.notifyAll();
-        }
+		getContext().removeBundleListener(bundleListener);
+    synchronized (permWorker) {
+    	permWorker.setRunning(false);
+    	permWorker.notifyAll();
+    }
 	}
 
 	/**
