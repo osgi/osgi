@@ -568,8 +568,12 @@ public class DeploymentSession {
 	            workerSimpleDP.start();
 	            
 	            //Installs the simple.dp
-	            while (!workerSimpleDP.isInstalled()) {
+	            while (!workerSimpleDP.isInstalled() && !workerSimpleDP.installFailed) {
 	              Thread.sleep(100);
+	            }
+	            
+	            if (workerSimpleDP.installFailed) {
+	              tbc.fail("The installation of a simple DP failed!");
 	            }
 	            
 	            workerBlockDP = new SessionWorker(blockDP);
@@ -577,6 +581,9 @@ public class DeploymentSession {
 	            
 	            //Before the workerBlockDP installation is blocked, it registers a resource processor 
 	            while (null==testBlockRP) {
+	              try {
+	                Thread.sleep(100);
+	              } catch (InterruptedException ie) {}
 	            	testBlockRP = (TestingBlockingResourceProcessor) getTestSessionRP(DeploymentConstants.PID_RESOURCE_PROCESSOR4);
 	            }
 	            
@@ -589,7 +596,6 @@ public class DeploymentSession {
 	            
 	            // releases blocking resource processor
 	            testBlockRP.setReleased(true);
-	            
 	            
 	        } catch (Exception e) {
 	            tbc.fail(MessagesConstants.getMessage(
@@ -630,11 +636,16 @@ public class DeploymentSession {
 	            
 	            //Just to guarantee that this Thread is executed before the second one
 	            while (!worker1.isRunning()) {
-
+                try {
+                  Thread.sleep(100);
+                } catch (InterruptedException ie) {}
 	            }
 	          //Before the workerBlockDP installation is blocked, it registers a resource processor 
 	            while (null==testBlockRP) {
 	            	testBlockRP = (TestingBlockingResourceProcessor) getTestSessionRP(DeploymentConstants.PID_RESOURCE_PROCESSOR4);
+                try {
+                  Thread.sleep(100);
+                } catch (InterruptedException ie) {}
 	            }
 
 	            
@@ -701,6 +712,7 @@ public class DeploymentSession {
 		
 		private boolean uninstall=false;
 		private boolean running=false;
+    boolean installFailed=false;
 		
 		
 		
@@ -737,7 +749,9 @@ public class DeploymentSession {
 					running=true;
 					dp = tbc.installDeploymentPackage(tbc.getWebServer() + testDP.getFilename());
 					installed=(dp==null?false:true);
-				} catch (Exception e) {
+				} catch (Throwable t) {
+				  t.printStackTrace();
+          installFailed = true;
 				}
 			} finally {
 				while (!uninstall) {
@@ -751,6 +765,7 @@ public class DeploymentSession {
 						dp.uninstall();
 						uninstalled=true;
 					} catch (Exception e) {
+					  
 					}
 				}
 			}
