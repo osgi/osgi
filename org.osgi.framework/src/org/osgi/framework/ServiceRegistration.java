@@ -64,8 +64,7 @@ public interface ServiceRegistration {
 	 * The following steps are required to modify service properties:
 	 * <ol>
 	 * <li>The service's properties are replaced with the provided properties.
-	 * <li>A service event of type {@link ServiceEvent#MODIFIED} is
-	 * fired.
+	 * <li>A service event of type {@link ServiceEvent#MODIFIED} is fired.
 	 * </ol>
 	 * 
 	 * @param properties The properties for this service. See {@link Constants}
@@ -84,17 +83,19 @@ public interface ServiceRegistration {
 	 * Unregisters a service. Remove a <code>ServiceRegistration</code> object
 	 * from the Framework service registry. All <code>ServiceReference</code>
 	 * objects associated with this <code>ServiceRegistration</code> object
-	 * can no longer be used to interact with the service.
+	 * can no longer be used to interact with the service once unregistration is
+	 * complete.
 	 * 
 	 * <p>
 	 * The following steps are required to unregister a service:
 	 * <ol>
 	 * <li>The service is removed from the Framework service registry so that
-	 * it can no longer be used. <code>ServiceReference</code> objects for the
-	 * service may no longer be used to get a service object for the service.
-	 * <li>A service event of type {@link ServiceEvent#UNREGISTERING} is
-	 * fired so that bundles using this service can release their
-	 * use of it.
+	 * it can no longer be obtained.
+	 * <li>A service event of type {@link ServiceEvent#UNREGISTERING} is fired
+	 * so that bundles using this service can release their use of the service.
+	 * Once delivery of the service event is complete, the
+	 * <code>ServiceReference</code> objects for the service may no longer be
+	 * used to get a service object for the service.
 	 * <li>For each bundle whose use count for this service is greater than
 	 * zero: <br>
 	 * The bundle's use count for this service is set to zero. <br>
