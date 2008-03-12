@@ -72,6 +72,12 @@
 		<attribute name="name" type="token" use="required" />
 		<attribute name="factory" type="string" use="optional" />
 		<attribute name="immediate" type="boolean" use="optional" />
+		<attribute name="requireConfiguration" type="boolean"
+			use="optional" default="false" />
+		<attribute name="activate" type="token" use="optional"
+			default="activate" />
+		<attribute name="deactivate" type="token" use="optional"
+			default="deactivate" />
 		<anyAttribute />
 	</complexType>
 
