@@ -66,7 +66,7 @@ case, the scr namespace is assumed. Otherwise the namespace must be used.
 			<extension base="string">
 				<attribute name="name" type="string" use="required"/>
 				<attribute name="value" type="string" use="optional"/>
-				<attribute name="type" type="scr:TjavaTypes" default="String" use="optional"/>
+				<attribute name="type" type="scr:Tjava-types" default="String" use="optional"/>
 			</extension>
 		</simpleContent>
 	</complexType>
@@ -96,7 +96,7 @@ case, the scr namespace is assumed. Otherwise the namespace must be used.
 		<attribute name="unbind" type="token" use="optional"/>
 	</complexType>
 
-	<simpleType name="TjavaTypes">
+	<simpleType name="Tjava-types">
 		<restriction base="string">
 			<enumeration value="String"/>
 			<enumeration value="Long"/>
@@ -104,7 +104,7 @@ case, the scr namespace is assumed. Otherwise the namespace must be used.
 			<enumeration value="Float"/>
 			<enumeration value="Integer"/>
 			<enumeration value="Byte"/>
-			<enumeration value="Char"/>
+			<enumeration value="Character"/>
 			<enumeration value="Boolean"/>
 			<enumeration value="Short"/>
 		</restriction>
