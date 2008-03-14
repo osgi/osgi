@@ -284,10 +284,9 @@ public class XMLParserActivator implements BundleActivator, ServiceFactory {
 	 * Set the customizable SAX Parser Service Properties.
 	 * 
 	 * <p>
-	 * This method attempts to instantiate a validating parser and a
-	 * namespace aware parser to determine if the parser can support those
-	 * features. The appropriate properties are then set in the specified
-	 * properties object.
+	 * This method attempts to instantiate a validating parser and a namespace
+	 * aware parser to determine if the parser can support those features. The
+	 * appropriate properties are then set in the specified properties object.
 	 * 
 	 * <p>
 	 * This method can be overridden to add additional SAX2 features and
@@ -392,10 +391,9 @@ public class XMLParserActivator implements BundleActivator, ServiceFactory {
 	 * Set the customizable DOM Parser Service Properties.
 	 * 
 	 * <p>
-	 * This method attempts to instantiate a validating parser and a
-	 * namespace aware parser to determine if the parser can support those
-	 * features. The appropriate properties are then set in the specified props
-	 * object.
+	 * This method attempts to instantiate a validating parser and a namespace
+	 * aware parser to determine if the parser can support those features. The
+	 * appropriate properties are then set in the specified props object.
 	 * 
 	 * <p>
 	 * This method can be overridden to add additional DOM2 features and
@@ -449,7 +447,8 @@ public class XMLParserActivator implements BundleActivator, ServiceFactory {
 			throws FactoryConfigurationError {
 		Exception e = null;
 		try {
-			return Class.forName(parserFactoryClassName).newInstance();
+			return context.getBundle().loadClass(parserFactoryClassName)
+					.newInstance();
 		}
 		catch (ClassNotFoundException cnfe) {
 			e = cnfe;
