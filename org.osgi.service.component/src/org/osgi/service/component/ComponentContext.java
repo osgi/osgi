@@ -60,6 +60,7 @@ import org.osgi.framework.*;
  * the method will be called. Otherwise, the method will not be called.
  * 
  * @version $Revision$
+ * @ThreadSafe
  */
 public interface ComponentContext {
 	/**

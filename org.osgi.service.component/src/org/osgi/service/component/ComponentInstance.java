@@ -28,6 +28,7 @@ package org.osgi.service.component;
  * created when the component configuration is activated again.
  * 
  * @version $Revision$
+ * @ThreadSafe
  */
 public interface ComponentInstance {
 	/**
