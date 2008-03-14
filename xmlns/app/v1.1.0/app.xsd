@@ -93,7 +93,7 @@
 		</restriction>
 	</simpleType>
 	
-	<attribute name="mustUnderstand" type="boolean">
+	<attribute name="must-understand" type="boolean">
 		<annotation>
 			<documentation xml:lang="en">
 				This attribute should be used by extensions to documents
