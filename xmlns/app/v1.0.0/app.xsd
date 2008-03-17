@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- 
 /*
- * $Date:2007-11-05 11:39:47 -0500 (Mon, 05 Nov 2007) $
+ * $Date$
  * 
  * Copyright (c) OSGi Alliance (2005, 2007). All Rights Reserved.
  * 
@@ -29,7 +29,7 @@
     
 	<xs:element name="descriptor" type="app:descriptorType">
 		<xs:annotation>
-			<xs:documentation>descriptor element encloses the applicaiton descriptors provided in a document</xs:documentation>
+			<xs:documentation>descriptor element encloses the application descriptors provided in a document</xs:documentation>
 		</xs:annotation>
 	</xs:element>
 
@@ -41,7 +41,7 @@
 
 	<xs:complexType name="applicationType">
 		<xs:annotation>
-			<xs:documentation>describes the service dependecies of an application</xs:documentation>
+			<xs:documentation>describes the service dependencies of an application</xs:documentation>
 		</xs:annotation>
 		<xs:sequence>
 			<xs:element name="reference" minOccurs="0" maxOccurs="unbounded" type="referenceType"/>
