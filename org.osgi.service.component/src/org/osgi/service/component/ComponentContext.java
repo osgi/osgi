@@ -1,7 +1,7 @@
 /*
  * $Date$
  *
- * Copyright (c) OSGi Alliance (2004, 2007). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2004, 2008). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,27 +28,24 @@ import org.osgi.framework.*;
  * component instance has a unique Component Context.
  * 
  * <p>
- * A component's implementation class may optionaly implement an activate
- * method:
- * 
- * <pre>
- * protected void activate(ComponentContext context);
- * </pre>
- * 
- * If a component implements this method, this method will be called when a
- * component configuration is activated to provide the component instance's
- * Component Context object.
+ * A component's implementation class may optionally implement an activate
+ * method. If a component implements this method, this method will be called
+ * when a component configuration is activated. If the activate method takes a
+ * <code>ComponentContext</code> argument, it will be passed the component
+ * instance's Component Context object. If the activate method takes a
+ * <code>BundleContext</code> argument, it will be passed the component
+ * instance's Bundle Context object.
  * 
  * <p>
- * A component's implementation class may optionaly implement a deactivate
- * method:
- * 
- * <pre>
- * protected void deactivate(ComponentContext context);
- * </pre>
- * 
- * If a component implements this method, this method will be called when the
- * component configuration is deactivated.
+ * A component's implementation class may optionally implement a deactivate
+ * method. If a component implements this method, this method will be called
+ * when the component configuration is deactivated. If the deactivate method
+ * takes a <code>ComponentContext</code> argument, it will be passed the
+ * component instance's Component Context object. If the deactivate method takes
+ * a <code>BundleContext</code> argument, it will be passed the component
+ * instance's Bundle Context object. If the deactivate method takes an
+ * <code>int</code> or <code>Integer</code> argument, it will be passed the
+ * reason code for the component instance's deactivation.
  * 
  * <p>
  * The activate and deactivate methods will be called using reflection and must
@@ -59,8 +56,8 @@ import org.osgi.framework.*;
  * the method. If the method is found, if it is declared protected or public,
  * the method will be called. Otherwise, the method will not be called.
  * 
- * @version $Revision$
  * @ThreadSafe
+ * @version $Revision$
  */
 public interface ComponentContext {
 	/**

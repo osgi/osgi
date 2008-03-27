@@ -1,7 +1,7 @@
 /*
  * $Date$
  *
- * Copyright (c) OSGi Alliance (2004, 2007). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2004, 2008). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,8 +27,8 @@ package org.osgi.service.component;
  * ComponentInstances are never reused. A new ComponentInstance object will be
  * created when the component configuration is activated again.
  * 
- * @version $Revision$
  * @ThreadSafe
+ * @version $Revision$
  */
 public interface ComponentInstance {
 	/**

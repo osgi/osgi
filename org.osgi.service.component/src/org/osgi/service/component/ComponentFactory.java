@@ -1,7 +1,7 @@
 /*
  * $Date$
  *
- * Copyright (c) OSGi Alliance (2004, 2007). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2004, 2008). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,8 +27,8 @@ import java.util.Dictionary;
  * created and activated rather than automatically creating and activating
  * component configuration as necessary.
  * 
- * @version $Revision$
  * @ThreadSafe
+ * @version $Revision$
  */
 public interface ComponentFactory {
 	/**
