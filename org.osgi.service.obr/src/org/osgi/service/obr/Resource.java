@@ -22,10 +22,8 @@
 
 package org.osgi.service.obr;
 
-import java.net.URL;
-import java.util.Map;
-
-import org.osgi.framework.Version;
+import java.net.*;
+import java.util.*;
 
 /**
  * A resource is an abstraction of a downloadable thing, like a bundle.
@@ -55,7 +53,7 @@ public interface Resource {
 	Map getProperties();
 	String getSymbolicName();
 	String getPresentationName();
-	Version getVersion();
+	String getVersion();
 	String getId();
 	URL getURL();
 	Requirement [] getRequirements();
