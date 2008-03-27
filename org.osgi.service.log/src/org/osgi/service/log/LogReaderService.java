@@ -1,7 +1,7 @@
 /*
  * $Date$
  *
- * Copyright (c) OSGi Alliance (2000, 2007). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2000, 2008). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -31,6 +31,7 @@ import java.util.Enumeration;
  * method can be called which will return an <code>Enumeration</code> of all
  * <code>LogEntry</code> objects in the log.
  * 
+ * @ThreadSafe
  * @version $Revision$
  * @see LogEntry
  * @see LogListener

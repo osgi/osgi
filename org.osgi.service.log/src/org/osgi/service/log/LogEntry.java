@@ -1,7 +1,7 @@
 /*
  * $Date$
  *
- * Copyright (c) OSGi Alliance (2000, 2007). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2000, 2008). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,6 +29,7 @@ import org.osgi.framework.ServiceReference;
  * <code>LogReaderService.getLog</code> method or by registering a
  * <code>LogListener</code> object.
  * 
+ * @ThreadSafe
  * @version $Revision$
  * @see LogReaderService#getLog
  * @see LogListener
