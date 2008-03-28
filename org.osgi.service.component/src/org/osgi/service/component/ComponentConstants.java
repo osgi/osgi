@@ -110,4 +110,11 @@ public interface ComponentConstants {
 	 * @since 1.1
 	 */
 	public static final int DEACTIVATION_REASON_DISPOSED = 5;
+
+	/**
+	 * The component instance was deactivated because the bundle was stopped.
+	 *  
+	 * @since 1.1
+	 */
+	public static final int DEACTIVATION_REASON_BUNDLE_STOPPED = 6;
 }
