@@ -72,6 +72,7 @@ public interface RepositoryAdmin {
 	 * 
 	 * @param filterExpr A standard OSGi filter
 	 * @return List of resources matching the filters.
+	 * @throws IllegalArgumentException If the filter expression is invalid.
 	 */
 	Resource[] discoverResources(String filterExpr);
 
