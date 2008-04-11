@@ -116,7 +116,9 @@ public interface ComponentContext {
 	 * @return An array of service objects for the referenced service or
 	 *         <code>null</code> if the reference cardinality is
 	 *         <code>0..1</code> or <code>0..n</code> and no bound service
-	 *         is available.
+	 *         is available. If the reference cardinality is <code>0..1</code>
+	 *         or <code>1..1</code> and a bound service is available, the
+	 *         array will have exactly one element.
 	 * @throws ComponentException If the Service Component Runtime catches an
 	 *         exception while activating a bound service.
 	 */
