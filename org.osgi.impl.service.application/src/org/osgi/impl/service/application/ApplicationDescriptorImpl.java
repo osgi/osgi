@@ -68,7 +68,7 @@ public class ApplicationDescriptorImpl {
 					locks.remove( pid );
 				else
 					locks.put( pid, "locked");
-				locks.save(new FileOutputStream(f), "Saved " + new Date());
+				locks.store(new FileOutputStream(f), "Saved " + new Date());
 				return new Boolean( newState );
 			  }
 		  })).booleanValue();
