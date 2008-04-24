@@ -69,7 +69,15 @@
 		</sequence>
 		<attribute name="enabled" type="boolean" default="true"
 			use="optional" />
-		<attribute name="name" type="token" use="required" />
+		<attribute name="name" type="token" use="optional">
+			<annotation>
+				<documentation xml:lang="en">
+					The default value of this attribute is the value of
+					the class attribute of the nested implementation
+					element.
+				</documentation>
+			</annotation>
+		</attribute>
 		<attribute name="factory" type="string" use="optional" />
 		<attribute name="immediate" type="boolean" use="optional" />
 		<attribute name="configuration-policy"
@@ -139,7 +147,14 @@
 			<any namespace="##any" processContents="lax" minOccurs="0"
 				maxOccurs="unbounded" />
 		</sequence>
-		<attribute name="name" type="NMTOKEN" use="required" />
+		<attribute name="name" type="token" use="optional">
+			<annotation>
+				<documentation xml:lang="en">
+					The default value of this attribute is the value of
+					the interface attribute of this element.
+				</documentation>
+			</annotation>
+		</attribute>
 		<attribute name="interface" type="token" use="required" />
 		<attribute name="cardinality" type="scr:Tcardinality"
 			default="1..1" use="optional" />
