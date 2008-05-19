@@ -18,30 +18,36 @@
 
 package org.osgi.framework.hooks.service;
 
-import org.osgi.framework.Bundle;
+import java.util.Set;
+
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceEvent;
 
 /**
  * Next hook in the OSGi Framework Service Event Hook chain.
  * 
+ * <p>
  * This interface is implemented by the OSGi Framework and passed to each hook
  * when called so that the hook implementation can call the next hook in the
  * chain to complete the operation.
  * 
- * @ThreadSafe
+ * @NotThreadSafe
  * @version $Revision$
  */
+
 public interface EventHookChain {
 	/**
 	 * Call the next hook in the chain.
 	 * 
-	 * Implementations of
-	 * {@link EventHook#event(EventHookChain, BundleContext, ServiceEvent, Bundle[])}
-	 * MUST call this method to continue processing of the event delivery.
+	 * <p>
+	 * Implementations of {@link EventHook#event(EventHookChain, BundleContext,
+	 * ServiceEvent, Set)} MUST call this method to continue processing of the
+	 * event delivery.
 	 * 
 	 * @param event The Service Event to be delivered.
-	 * @param bundles The bundles to which the event will be delivered.
+	 * @param bundles The <code>Set</code> of Bundles which have listeners to
+	 * 	which the event will be delivered. Bundles can only be removed from the
+	 * 	set. They cannot be added.
 	 */
-	void event(ServiceEvent event, Bundle[] bundles);
+	void event(ServiceEvent event, Set bundles);
 }

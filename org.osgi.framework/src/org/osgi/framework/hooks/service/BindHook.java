@@ -24,6 +24,7 @@ import org.osgi.framework.ServiceReference;
 /**
  * OSGi Framework Service Bind Hook Service.
  * 
+ * <p>
  * Bundles registering this service will be called during framework service bind
  * (get service object) operations. Service hooks are not called for service
  * operations on other service hooks.
@@ -31,32 +32,43 @@ import org.osgi.framework.ServiceReference;
  * @ThreadSafe
  * @version $Revision$
  */
+
 public interface BindHook {
 	/**
-	 * Bind hook method. This method is called during the service bind ({@link BundleContext#getService(ServiceReference)})
-	 * operation by the binding bundle.
+	 * Bind hook method. This method is called during the service bind ({@link
+	 * BundleContext#getService(ServiceReference)}) operation by the binding
+	 * bundle.
 	 * 
+	 * <p>
 	 * The implementation of this method may perform any pre operation actions
 	 * such as modifying the operation parameters before calling the next hook
-	 * in the chain. The implementation of this method can also perform any post
-	 * operation actions such as modifying the operation result before
-	 * returning.
+	 * in the chain. The implementation of this method may also perform any post
+	 * operation actions such as modifying the operation result before returning
+	 * to its caller.
 	 * 
+	 * <p>
 	 * The values supplied to the next hook in the chain and the values returned
 	 * by this method must pass all the tests required of parameters supplied to
-	 * and values returned by the ({@link BundleContext#getService(ServiceReference)})
-	 * method. If the values are invalid or this method throws an exception,
-	 * then the service bind operation will fail and this hook will be not be
-	 * called for future service bind operations.
+	 * and values returned by the ({@link
+	 * BundleContext#getService(ServiceReference)}) method. If the values are
+	 * invalid or this method throws an exception, then the service bind
+	 * operation will fail and this hook will be not be called for future
+	 * service bind operations.
+	 * 
+	 * <p>
+	 * This hook will not be called for a given service bind operation if the
+	 * bundle registering this hook does not have
+	 * <code>AdminPermission[binding bundle,SERVICE_HOOK]</code>, and the Java
+	 * Runtime Environment supports permissions.
 	 * 
 	 * @param next The next bind hook in the chain. The implementation of this
-	 *        method MUST call {@link BindHookChain#bind(ServiceReference)} to
-	 *        complete the bind operation.
+	 * 	method MUST call {@link BindHookChain#bind(ServiceReference)} to
+	 * 	complete the bind operation.
 	 * @param context The bundle context of the binding bundle.
 	 * @param reference A reference to the service to which to bind.
 	 * @return The service object to return to the binding bundle. The
-	 *         implementor can return the service value returned by the next
-	 *         hook in the chain or supply an alternative service object.
+	 * 	implementor can return the service value returned by the next hook in
+	 * 	the chain or supply an alternative service object.
 	 */
 	Object bind(BindHookChain next, BundleContext context,
 			ServiceReference reference);

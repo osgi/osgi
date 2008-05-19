@@ -18,35 +18,38 @@
 
 package org.osgi.framework.hooks.service;
 
-import java.util.Dictionary;
+import java.util.Map;
 
+import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
 
 /**
  * Next hook in the OSGi Framework Service Publish Hook chain.
  * 
+ * <p>
  * This interface is implemented by the OSGi Framework and passed to each hook
  * when called so that the hook implementation can call the next hook in the
  * chain to complete the operation.
  * 
- * @ThreadSafe
+ * @NotThreadSafe
  * @version $Revision$
  */
+
 public interface PublishHookChain {
 	/**
 	 * Call the next hook in the chain.
 	 * 
-	 * Implementations of
-	 * {@link PublishHook#publish(PublishHookChain, org.osgi.framework.BundleContext, String[], Object, Dictionary)}
-	 * MUST call this method to continue processing of the publish operation.
+	 * <p>
+	 * Implementations of {@link PublishHook#publish(PublishHookChain,
+	 * BundleContext, String[], Object, Map)} MUST call this method to continue
+	 * processing of the publish operation.
 	 * 
 	 * @param names The class names under which the service is to be published.
-	 * @param service The service object or a <code>ServiceFactory</code>
-	 *        object to be published.
+	 * @param service The service object or a <code>ServiceFactory</code> object
+	 * 	to be published.
 	 * @param properties The properties of the service to be published or
-	 *        <code>null</code> if the service has no properties.
+	 * 	<code>null</code> if the service has no properties.
 	 * @return The ServiceRegistration to be returned to the publishing bundle.
 	 */
-	ServiceRegistration publish(String[] names, Object service,
-			Dictionary properties);
+	ServiceRegistration publish(String[] names, Object service, Map properties);
 }

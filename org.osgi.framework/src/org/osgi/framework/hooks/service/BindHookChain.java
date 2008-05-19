@@ -23,20 +23,23 @@ import org.osgi.framework.ServiceReference;
 /**
  * Next hook in the OSGi Framework Service Bind Hook chain.
  * 
+ * <p>
  * This interface is implemented by the OSGi Framework and passed to each hook
  * when called so that the hook implementation can call the next hook in the
  * chain to complete the operation.
  * 
- * @ThreadSafe
+ * @NotThreadSafe
  * @version $Revision$
  */
+
 public interface BindHookChain {
 	/**
 	 * Call the next hook in the chain.
 	 * 
-	 * Implementations of
-	 * {@link BindHook#bind(BindHookChain, org.osgi.framework.BundleContext, ServiceReference)}
-	 * MUST call this method to continue processing of the bind operation.
+	 * <p>
+	 * Implementations of {@link BindHook#bind(BindHookChain,
+	 * org.osgi.framework.BundleContext, ServiceReference)} MUST call this
+	 * method to continue processing of the bind operation.
 	 * 
 	 * @param reference A reference to the service to which to bind.
 	 * @return The service object to return to the binding bundle.

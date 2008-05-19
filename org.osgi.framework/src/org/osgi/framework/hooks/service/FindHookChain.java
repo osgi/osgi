@@ -18,35 +18,40 @@
 
 package org.osgi.framework.hooks.service;
 
+import java.util.Set;
+
 import org.osgi.framework.BundleContext;
-import org.osgi.framework.ServiceReference;
 
 /**
  * Next hook in the OSGi Framework Service Find Hook chain.
  * 
+ * <p>
  * This interface is implemented by the OSGi Framework and passed to each hook
  * when called so that the hook implementation can call the next hook in the
  * chain to complete the operation.
  * 
- * @ThreadSafe
+ * @NotThreadSafe
  * @version $Revision$
  */
+
 public interface FindHookChain {
 	/**
 	 * Call the next hook in the chain.
 	 * 
-	 * Implementations of
-	 * {@link FindHook#find(FindHookChain, BundleContext, String, String, boolean)}
-	 * MUST call this method to continue processing of the find operation.
+	 * <p>
+	 * Implementations of {@link FindHook#find(FindHookChain, BundleContext,
+	 * String, String, boolean)} MUST call this method to continue processing of
+	 * the find operation.
 	 * 
 	 * @param name The class name of the services to find or <code>null</code>
-	 *        to find all services.
+	 * 	to find all services.
 	 * @param filter The filter criteria of the services to find or
-	 *        <code>null</code> for no filter criteria.
-	 * @param allServices <code>true</code> if the find operation is the
-	 *        result of a call to
-	 *        {@link BundleContext#getAllServiceReferences(String, String)}
-	 * @return The ServiceReferences to be returned to the finding bundle.
+	 * 	<code>null</code> for no filter criteria.
+	 * @param allServices <code>true</code> if the find operation is the result
+	 * 	of a call to {@link BundleContext#getAllServiceReferences(String,
+	 * 	String)}
+	 * @return A <code>Set</code> of Service References to be returned to the
+	 * 	finding bundle.
 	 */
-	ServiceReference[] find(String name, String filter, boolean allServices);
+	Set find(String name, String filter, boolean allServices);
 }

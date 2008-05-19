@@ -18,51 +18,69 @@
 
 package org.osgi.framework.hooks.service;
 
-import java.util.Arrays;
-import java.util.ListResourceBundle;
-
-import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
-import org.osgi.framework.ServiceEvent;
 import org.osgi.framework.ServiceListener;
 
 /**
  * OSGi Framework Service Listener Hook Service.
  * 
+ * <p>
  * Bundles registering this service will be called during service listener
  * addition and removal. Service hooks are not called for service operations on
  * other service hooks.
  * 
+ * <p>
  * This hook cannot modify the service listener addition and removal operations.
  * It just receives notifications about service listener addition and removal
  * operations.
  * 
+ * <p>
+ * If the Java Runtime Environment supports permissions, the service listeners
+ * provided to this hook will be filtered. This hook will only be presented with
+ * service listeners added by bundles for which the bundle registering this hook
+ * has <code>AdminPermission[listening bundle,SERVICE_HOOK]</code>.
+ * 
  * @ThreadSafe
  * @version $Revision$
  */
+
 public interface ListenerHook {
 	/**
-	 * Add listener hook method. This method is called during service listener
-	 * addition. It is also called once after this listener hook service has
-	 * been registered to provide the current list of ServiceListeners.
+	 * Initial listeners hook method. This method is called when the hook is
+	 * first registered to provide the hook with the set of service listeners
+	 * which were had been added prior to the hook being registered. This method
+	 * is only called once. However, due to the timing of other bundles adding
+	 * or removing service listeners, this method may be not be called prior to
+	 * <code>add</code> or <code>remove</code>.
 	 * 
-	 * @param listeners A list of listeners which are listening to service
-	 *        events.
+	 * @param listeners An array of listeners which are listening to service
+	 * 	events.
 	 */
-	void add(Listener[] listeners);
+
+	void initial(Listener[] listeners);
+
+	/**
+	 * Add listener hook method. This method is called during service listener
+	 * addition. This method will be called once for each service listener added
+	 * after this hook had been registered.
+	 * 
+	 * @param listener A listener which is now listening to service events.
+	 */
+	void added(Listener listener);
 
 	/**
 	 * Remove listener hook method. This method is called during service
-	 * listener removal.
+	 * listener removal. This method will be called once for each service
+	 * listener removed after this hook had been registered.
 	 * 
-	 * @param listeners A list of listeners which are no longer listening to
-	 *        service events.
+	 * @param listener A listeners which is no longer listening to service
+	 * 	events.
 	 */
-	void remove(Listener[] listeners);
+	void removed(Listener listener);
 
 	/**
 	 * A Service Listener. This immutable class encapsulates a ServiceListener
-	 * and the bundle which registered it. 
+	 * and the bundle which registered it.
 	 * 
 	 * @Immutable
 	 */
@@ -71,7 +89,8 @@ public interface ListenerHook {
 		private final ServiceListener	listener;
 
 		/**
-		 * Create a Listener. 
+		 * Create a Listener.
+		 * 
 		 * @param context The context of the bundle which added the listener.
 		 * @param listener The ServiceListener object.
 		 */
@@ -82,6 +101,7 @@ public interface ListenerHook {
 
 		/**
 		 * Return the context of the bundle which added the listener.
+		 * 
 		 * @return The context of the bundle which added the listener.
 		 */
 		public BundleContext getContext() {
@@ -90,6 +110,7 @@ public interface ListenerHook {
 
 		/**
 		 * Return the service listener.
+		 * 
 		 * @return The service listener.
 		 */
 		public ServiceListener getServiceListener() {
@@ -98,8 +119,9 @@ public interface ListenerHook {
 	}
 
 	/**
-	 * A Service Listener with a filter. This immutable class encapsulates a ServiceListener,
-	 * the bundle which registered it and the filter with which it was registered. 
+	 * A Service Listener with a filter. This immutable class encapsulates a
+	 * ServiceListener, the bundle which registered it and the filter with which
+	 * it was registered.
 	 * 
 	 * @Immutable
 	 */
@@ -107,7 +129,8 @@ public interface ListenerHook {
 		private final String	filter;
 
 		/**
-		 * Create a FilteredListener. 
+		 * Create a FilteredListener.
+		 * 
 		 * @param context The context of the bundle which added the listener.
 		 * @param listener The ServiceListener object.
 		 * @param filter The filter with which the listener was added.
@@ -120,6 +143,7 @@ public interface ListenerHook {
 
 		/**
 		 * Return the filter with which the listener was added.
+		 * 
 		 * @return The filter with which the listener was added.
 		 */
 		public String getFilter() {
@@ -128,8 +152,9 @@ public interface ListenerHook {
 	}
 
 	/**
-	 * A Service Listener for names services. This immutable class encapsulates a ServiceListener,
-	 * the bundle which registered it and the names of the services upon which it listens. 
+	 * A Service Listener for names services. This immutable class encapsulates
+	 * a ServiceListener, the bundle which registered it and the names of the
+	 * services upon which it listens.
 	 * 
 	 * @Immutable
 	 */
@@ -137,7 +162,8 @@ public interface ListenerHook {
 		private final String[]	names;
 
 		/**
-		 * Create a NamedListener. 
+		 * Create a NamedListener.
+		 * 
 		 * @param context The context of the bundle which added the listener.
 		 * @param listener The ServiceListener object.
 		 * @param names The names of the services upon which listener listens.
@@ -150,6 +176,7 @@ public interface ListenerHook {
 
 		/**
 		 * Return the names of the services upon which listener listens.
+		 * 
 		 * @return The names of the services upon which listener listens.
 		 */
 		public String[] getNames() {
