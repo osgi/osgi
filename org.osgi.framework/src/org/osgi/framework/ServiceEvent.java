@@ -1,7 +1,7 @@
 /*
  * $Date$
  * 
- * Copyright (c) OSGi Alliance (2000, 2007). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2000, 2008). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -144,6 +144,7 @@ public class ServiceEvent extends EventObject {
 	 * <ul>
 	 * <li>{@link #REGISTERED} </li> 
 	 * <li>{@link #MODIFIED} </li> 
+	 * <li>{@link #MODIFIED_ENDMATCH} </li> 
 	 * <li>{@link #UNREGISTERING} </li>
 	 * </ul>
 	 * 
