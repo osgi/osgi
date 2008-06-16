@@ -50,8 +50,8 @@ public interface ListenerHook {
 	 * first registered to provide the hook with the set of service listeners
 	 * which were had been added prior to the hook being registered. This method
 	 * is only called once. However, due to the timing of other bundles adding
-	 * or removing service listeners, this method may be not be called prior to
-	 * <code>add</code> or <code>remove</code>.
+	 * or removing service listeners, calls to {@link #added} or {@link #removed
+	 * } may occur before the call to this method.
 	 * 
 	 * @param listeners An array of listeners which are listening to service
 	 * 	events.
@@ -73,30 +73,36 @@ public interface ListenerHook {
 	 * listener removal. This method will be called once for each service
 	 * listener removed after this hook had been registered.
 	 * 
-	 * @param listener A listeners which is no longer listening to service
+	 * @param listener A listener which is no longer listening to service
 	 * 	events.
 	 */
 	void removed(Listener listener);
 
 	/**
-	 * A Service Listener. This immutable class encapsulates a ServiceListener
-	 * and the bundle which registered it.
+	 * A Service Listener wrapper. This immutable class encapsulates a {@link
+	 * ServiceListener} and the bundle which added it and the filter with which
+	 * it was added. Objects of this type are created by the framework and
+	 * passed to the {@link ListenerHook}.
 	 * 
 	 * @Immutable
 	 */
 	public static class Listener {
 		private final BundleContext		context;
 		private final ServiceListener	listener;
+		private final String			filter;
 
 		/**
-		 * Create a Listener.
+		 * Create a Service Listener wrapper.
 		 * 
 		 * @param context The context of the bundle which added the listener.
 		 * @param listener The ServiceListener object.
+		 * @param filter The filter with which the listener was added.
 		 */
-		public Listener(BundleContext context, ServiceListener listener) {
+		public Listener(BundleContext context, ServiceListener listener,
+				String filter) {
 			this.context = context;
 			this.listener = listener;
+			this.filter = filter;
 		}
 
 		/**
@@ -104,7 +110,7 @@ public interface ListenerHook {
 		 * 
 		 * @return The context of the bundle which added the listener.
 		 */
-		public BundleContext getContext() {
+		public BundleContext getBundleContext() {
 			return context;
 		}
 
@@ -116,71 +122,15 @@ public interface ListenerHook {
 		public ServiceListener getServiceListener() {
 			return listener;
 		}
-	}
-
-	/**
-	 * A Service Listener with a filter. This immutable class encapsulates a
-	 * ServiceListener, the bundle which registered it and the filter with which
-	 * it was registered.
-	 * 
-	 * @Immutable
-	 */
-	public static class FilteredListener extends Listener {
-		private final String	filter;
-
-		/**
-		 * Create a FilteredListener.
-		 * 
-		 * @param context The context of the bundle which added the listener.
-		 * @param listener The ServiceListener object.
-		 * @param filter The filter with which the listener was added.
-		 */
-		public FilteredListener(BundleContext context,
-				ServiceListener listener, String filter) {
-			super(context, listener);
-			this.filter = filter;
-		}
 
 		/**
 		 * Return the filter with which the listener was added.
 		 * 
-		 * @return The filter with which the listener was added.
+		 * @return The filter with which the listener was added. This may be
+		 * 	<code>null</code> if the listener was added without a filter.
 		 */
 		public String getFilter() {
 			return filter;
-		}
-	}
-
-	/**
-	 * A Service Listener for names services. This immutable class encapsulates
-	 * a ServiceListener, the bundle which registered it and the names of the
-	 * services upon which it listens.
-	 * 
-	 * @Immutable
-	 */
-	public static class NamedListener extends Listener {
-		private final String[]	names;
-
-		/**
-		 * Create a NamedListener.
-		 * 
-		 * @param context The context of the bundle which added the listener.
-		 * @param listener The ServiceListener object.
-		 * @param names The names of the services upon which listener listens.
-		 */
-		public NamedListener(BundleContext context, ServiceListener listener,
-				String[] names) {
-			super(context, listener);
-			this.names = (String[]) names.clone();
-		}
-
-		/**
-		 * Return the names of the services upon which listener listens.
-		 * 
-		 * @return The names of the services upon which listener listens.
-		 */
-		public String[] getNames() {
-			return (String[]) names.clone();
 		}
 	}
 }

@@ -24,8 +24,8 @@ import java.util.EventObject;
  * An event from the Framework describing a service lifecycle change.
  * <p>
  * <code>ServiceEvent</code> objects are delivered to
- * <code>ServiceListener</code>s and <code>AllServiceListener</code>s when
- * a change occurs in this service's lifecycle. A type code is used to identify
+ * <code>ServiceListener</code>s and <code>AllServiceListener</code>s when a
+ * change occurs in this service's lifecycle. A type code is used to identify
  * the event type for future extendability.
  * 
  * <p>
@@ -78,8 +78,8 @@ public class ServiceEvent extends EventObject {
 	/**
 	 * This service is in the process of being unregistered.
 	 * <p>
-	 * This event is synchronously delivered <strong>before</strong> the
-	 * service has completed unregistering.
+	 * This event is synchronously delivered <strong>before</strong> the service
+	 * has completed unregistering.
 	 * 
 	 * <p>
 	 * If a bundle is using a service that is <code>UNREGISTERING</code>, the
@@ -97,11 +97,29 @@ public class ServiceEvent extends EventObject {
 	public final static int			UNREGISTERING		= 0x00000004;
 
 	/**
+	 * The properties of a registered service have been modified and the new
+	 * properties no longer match the listener's filter.
+	 * <p>
+	 * This event is synchronously delivered <strong>after</strong> the service
+	 * properties have been modified. This event is only delivered to listeners
+	 * which were added with a non-<code>null</code> filter where the filter
+	 * matched the service properties prior to the modification but the filter
+	 * does not match the modified service properties.
+	 * 
+	 * <p>
+	 * The value of <code>MODIFIED_ENDMATCH</code> is 0x00000008.
+	 * 
+	 * @see ServiceRegistration#setProperties
+	 * @since 1.5
+	 */
+	public final static int			MODIFIED_ENDMATCH	= 0x00000008;
+
+	/**
 	 * Creates a new service event object.
 	 * 
 	 * @param type The event type.
 	 * @param reference A <code>ServiceReference</code> object to the service
-	 *        that had a lifecycle change.
+	 * 	that had a lifecycle change.
 	 */
 	public ServiceEvent(int type, ServiceReference reference) {
 		super(reference);
@@ -124,9 +142,9 @@ public class ServiceEvent extends EventObject {
 	/**
 	 * Returns the type of event. The event type values are:
 	 * <ul>
-	 * <li>{@link #REGISTERED}
-	 * <li>{@link #MODIFIED}
-	 * <li>{@link #UNREGISTERING}
+	 * <li>{@link #REGISTERED} </li> 
+	 * <li>{@link #MODIFIED} </li> 
+	 * <li>{@link #UNREGISTERING} </li>
 	 * </ul>
 	 * 
 	 * @return Type of service lifecycle change.
