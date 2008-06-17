@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="src" path="/org.osgi.framework"/>
+	<classpathentry kind="con" path="org.eclipse.pde.core.requiredPlugins"/>
+	<classpathentry kind="lib" path="/osgi.released/ee.minimum.jar" sourcepath="/ee.minimum"/>
+	<classpathentry kind="output" path="src"/>
+</classpath>
