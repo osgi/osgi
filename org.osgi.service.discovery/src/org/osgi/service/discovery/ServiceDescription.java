@@ -18,31 +18,71 @@
 
 package org.osgi.service.discovery;
 
+import java.net.URL;
 import java.util.Collection;
-import java.util.Comparator;
 import java.util.Map;
 
 /**
  * The ServiceDescription interface defines the service and its properties. The main information necessary is the
  * name of the provided interface.<p/>
  * 
- * Implementations need to also implement the Comparator interface to determine whether two given
- * service descriptions are equal or close enough to say they match.<p/>
+ * It's strongly recommended to override <code>Object.equals<code> method to implement an appropriate equivalence 
+ * comparison for ServiceDescription objects. 
  * 
- * Semantically, <code>A.compare(B)</code> only applies if A and B are equal, meaning
- * <code>A.equals(B) == true</code>. In most case <code>A.compare(B) != B.compare(A)</code>. A could
- * be a subset of B and still be considered a match.<br/>
- * 
- * Implementations of the Comparator interface are encouraged to include additional information into
- * the determination process whether A and B are equal or compatible, e.g. cost, throughput, QoS.<p/>
- * 
- * Implementations of this interface are usually provided by the Distribution software.
+ * @version $Revision: 4930 $
  */
-public interface ServiceDescription extends Comparator {
-	/**
-	 * @return The service interface name
+public interface ServiceDescription {
+        
+    /**
+     * If value of <code>getInterfaceName</code> needs to be described as a key-value pair e.g. by the discovery 
+     * protocol, filter for discovery etc. and there is no other key standardized for that purpose yet, then this is the 
+     * recommended property key to use. 
+     */    
+    public final String PROP_KEY_INTERFACE_NAME = "interface-name";
+    
+    /**
+     * If value of <code>getProtocolSpecificInterfaceName</code> needs to be described as a key-value pair e.g. by the discovery 
+     * protocol, filter for discovery etc. and there is no other key standardized for that purpose yet, then this is the 
+     * recommended property key to use. 
+     */    
+    public final String PROP_KEY_PROTOCOL_SPECIFIC_INTERFACE_NAME = "protocol-interface-name";
+    
+    /**
+     * If value of <code>getVersion</code> needs to be described as a key-value pair e.g. by the discovery 
+     * protocol, filter for discovery etc. and there is no other key standardized for that purpose yet, then this is the 
+     * recommended property key to use. 
+     */    
+    public final String PROP_KEY_VERSION = "version";
+    
+    /**
+     * If value of <code>getServiceLocation</code> needs to be described as a key-value pair e.g. by the discovery 
+     * protocol, filter for discovery etc. and there is no other key standardized for that purpose yet, then this is the 
+     * recommended property key to use. 
+     */    
+    public final String PROP_KEY_SERVICE_LOCATION = "location";
+    
+    /**
+	 * @return The full qualified service interface name
 	 */
 	String getInterfaceName();
+	
+	/**
+     * @return The protocol specific service interface name.   It might be for instance a web service interface name. 
+     * Though this information is usually contained in according interface descriptions, e.g. a wsdl file, 
+     * it might be provided here as well since discovery usually doesn't read and interprets such accompanying 
+     * descriptions. 
+     */
+    String getProtocolSpecificInterfaceName();
+    
+    /**
+     * @return The service interface/implementation version.
+     */
+    String getVersion();
+    
+    /**
+     * @return The URL of the service location.
+     */
+    URL getLocation();	
 	
 	/**
 	 * Getter method for the property value of a given key.
@@ -55,10 +95,10 @@ public interface ServiceDescription extends Comparator {
 	/**
 	 * @return <code>java.util.Collection</code> of the property names available in the ServiceDescription
 	 */
-	Collection keys();
+	Collection getPropertyKeys();
 	
 	/**
-	 * @return Returns all properties of the interface as a <code>java.util.Map</code>.
+	 * @return Returns all properties of the service as a <code>java.util.Map</code>.
 	 */
 	Map getProperties();
 }

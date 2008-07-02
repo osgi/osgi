@@ -20,6 +20,9 @@ package org.osgi.service.discovery;
 
 /**
  *
+ * TODO: consider whether methods should also contain a source object (the particular discovery service which does the notification)
+ * 
+ * @version $Revision: 4930 $
  */
 public interface ServiceListener {
 	/**
