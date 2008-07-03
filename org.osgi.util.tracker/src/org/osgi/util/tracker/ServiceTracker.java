@@ -1,7 +1,7 @@
 /*
  * $Date$
  * 
- * Copyright (c) OSGi Alliance (2000, 2007). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2000, 2008). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -97,13 +97,6 @@ public class ServiceTracker implements ServiceTrackerCustomizer {
 	 * Object and <code>ServiceListener</code> object
 	 */
 	private volatile Tracked			tracked;
-	/**
-	 * Modification count. This field is initialized to zero by open, set to -1
-	 * by close and incremented by modified.
-	 * 
-	 * This field is volatile since it is accessed by multiple threads.
-	 */
-	private volatile int				trackingCount	= -1;
 	/**
 	 * Cached ServiceReference for getServiceReference.
 	 * 
@@ -282,7 +275,6 @@ public class ServiceTracker implements ServiceTrackerCustomizer {
 			System.out.println("ServiceTracker.open: " + filter); //$NON-NLS-1$
 		}
 		tracked = trackAllServices ? new AllTracked() : new Tracked();
-		trackingCount = 0;
 		synchronized (tracked) {
 			try {
 				context.addServiceListener(tracked, listenerFilter);
@@ -365,7 +357,6 @@ public class ServiceTracker implements ServiceTrackerCustomizer {
 				outgoing.untrack(references[i], null);
 			}
 		}
-		trackingCount = -1;
 		if (DEBUG) {
 			if ((cachedReference == null) && (cachedService == null)) {
 				System.out
@@ -735,22 +726,28 @@ public class ServiceTracker implements ServiceTrackerCustomizer {
 	 * 	-1 if this <code>ServiceTracker</code> object is not open.
 	 */
 	public int getTrackingCount() {
-		return trackingCount;
+		Tracked tracked = this.tracked; /*
+		 * use local var since we are not
+		 * synchronized
+		 */
+		if (tracked == null) { /* if ServiceTracker is not open */
+			return -1;
+		}
+		synchronized (tracked) {
+			return tracked.getTrackingCount();
+		}
 	}
 
 	/**
 	 * Called by the Tracked object whenever the set of tracked services is
-	 * modified. Increments the tracking count and clears the cache.
-	 * 
-	 * @GuardedBy tracked
+	 * modified. Clears the cache.
 	 */
 	/*
 	 * This method must not be synchronized since it is called by Tracked while
 	 * Tracked is synchronized. We don't want synchronization interactions
-	 * between the ServiceListener thread and the user thread.
+	 * between the listener thread and the user thread.
 	 */
 	void modified() {
-		trackingCount++; /* increment modification count */
 		cachedReference = null; /* clear cached value */
 		cachedService = null; /* clear cached value */
 		if (DEBUG) {
@@ -833,11 +830,12 @@ public class ServiceTracker implements ServiceTrackerCustomizer {
 		}
 
 		/**
-		 * Call the Tracker modified method.
+		 * Increment the tracking count and tell the tracker there was a modification.
 		 * 
 		 * @GuardedBy this
 		 */
 		protected void modified() {
+			super.modified();	/* increment the modification count */
 			ServiceTracker.this.modified();
 		}
 

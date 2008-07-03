@@ -1,7 +1,7 @@
 /*
  * $Date$
  * 
- * Copyright (c) OSGi Alliance (2007). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2007, 2008). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -46,6 +46,14 @@ abstract class AbstractTracked {
 	 * @GuardedBy this
 	 */
 	private final Map			tracked;
+
+	/**
+	 * Modification count. This field is initialized to zero and incremented by
+	 * modified.
+	 * 
+	 * @GuardedBy this
+	 */
+	private int					trackingCount;
 
 	/**
 	 * List of items in the process of being added. This is used to deal with
@@ -96,6 +104,7 @@ abstract class AbstractTracked {
 	protected AbstractTracked() {
 		closed = false;
 		tracked = new HashMap();
+		trackingCount = 0;
 		adding = new ArrayList(6);
 		initial = new LinkedList();
 	}
@@ -120,8 +129,7 @@ abstract class AbstractTracked {
 			Object item = list[i];
 			if (item != null) {
 				if (DEBUG) {
-					System.out
-							.println("AbstractTracked.setInitial: " + item); //$NON-NLS-1$
+					System.out.println("AbstractTracked.setInitial: " + item); //$NON-NLS-1$
 				}
 				initial.add(item);
 			}
@@ -175,10 +183,10 @@ abstract class AbstractTracked {
 				System.out.println("AbstractTracked.trackInitial: " + item); //$NON-NLS-1$
 			}
 			trackAdding(item, null); /*
-								 * Begin tracking it. We call trackAdding since
-								 * we have already put the item in the adding
-								 * list.
-								 */
+									 * Begin tracking it. We call trackAdding
+									 * since we have already put the item in the
+									 * adding list.
+									 */
 		}
 	}
 
@@ -218,9 +226,9 @@ abstract class AbstractTracked {
 		}
 		synchronized (this) {
 			if (adding.contains(item)) { /*
-											 * if this item is already in the
-											 * process of being added.
-											 */
+										 * if this item is already in the
+										 * process of being added.
+										 */
 				if (DEBUG) {
 					System.out
 							.println("AbstractTracked.track[already adding]: " + item); //$NON-NLS-1$
@@ -231,9 +239,9 @@ abstract class AbstractTracked {
 		}
 
 		trackAdding(item, related); /*
-							 * call trackAdding now that we have put the item in
-							 * the adding list
-							 */
+									 * call trackAdding now that we have put the
+									 * item in the adding list
+									 */
 	}
 
 	/**
@@ -387,11 +395,28 @@ abstract class AbstractTracked {
 	}
 
 	/**
-	 * Call the Tracker modified method.
+	 * Call the Tracker modified method. If this method is overridden, the
+	 * overridding method MUST call this method to increment the tracking count.
 	 * 
 	 * @GuardedBy this
 	 */
-	protected abstract void modified();
+	protected void modified() {
+		trackingCount++;
+	}
+
+	/**
+	 * Returns the tracking count for this <code>ServiceTracker</code> object.
+	 * 
+	 * The tracking count is initialized to 0 when this object is opened. Every
+	 * time an item is added, modified or removed from this object the tracking
+	 * count is incremented.
+	 * 
+	 * @GuardedBy this
+	 * @return The tracking count for this object.
+	 */
+	protected int getTrackingCount() {
+		return trackingCount;
+	}
 
 	/**
 	 * Call the specific customizer adding method. This method must not be
@@ -402,7 +427,8 @@ abstract class AbstractTracked {
 	 * @return Customized object for the tracked item or <code>null</code> if
 	 *         the item is not to be tracked.
 	 */
-	protected abstract Object customizerAdding(final Object item, final Object related);
+	protected abstract Object customizerAdding(final Object item,
+			final Object related);
 
 	/**
 	 * Call the specific customizer modified method. This method must not be
@@ -412,7 +438,8 @@ abstract class AbstractTracked {
 	 * @param related Action related object.
 	 * @param object Customized object for the tracked item.
 	 */
-	protected abstract void customizerModified(final Object item, final Object related, final Object object);
+	protected abstract void customizerModified(final Object item,
+			final Object related, final Object object);
 
 	/**
 	 * Call the specific customizer removed method. This method must not be
@@ -422,5 +449,6 @@ abstract class AbstractTracked {
 	 * @param related Action related object.
 	 * @param object Customized object for the tracked item.
 	 */
-	protected abstract void customizerRemoved(final Object item, final Object related, final Object object);
+	protected abstract void customizerRemoved(final Object item,
+			final Object related, final Object object);
 }
