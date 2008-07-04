@@ -1,7 +1,7 @@
 /*
- * $Date: 2008-04-02 12:42:59 -0800 $
+ * $Date$
  *
- * Copyright (c) OSGi Alliance (2004, 2007). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2008). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,13 +20,12 @@ package org.osgi.service.discovery;
 
 import java.util.Collection;
 
-
 /**
  * 
  * TODO: How to update published ServiceDescriptions? How to identify ServiceDescriptions of the same service instance?
  * TODO: how about to rename auto-publish to push/pull?
  * 
- * @version $Revision: 4930 $
+ * @version $Revision$
  */
 public interface Discovery {
 	final String ORG_OSGI_DISCOVERY = "org.osgi.discovery";
