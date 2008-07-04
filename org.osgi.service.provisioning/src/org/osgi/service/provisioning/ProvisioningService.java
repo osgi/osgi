@@ -1,7 +1,7 @@
 /*
  * $Date$
  *
- * Copyright (c) OSGi Alliance (2002, 2007). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2002, 2008). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -67,17 +67,20 @@ public interface ProvisioningService {
 	 * Service Platform. The value must be of type <code>String</code>.
 	 */
 	public final static String	PROVISIONING_SPID			= "provisioning.spid";
+
 	/**
 	 * The key to the provisioning information that contains the location of the
 	 * provision data provider. The value must be of type <code>String</code>.
 	 */
 	public final static String	PROVISIONING_REFERENCE		= "provisioning.reference";
+	
 	/**
 	 * The key to the provisioning information that contains the initial
 	 * configuration information of the initial Management Agent. The value will
 	 * be of type <code>byte[]</code>.
 	 */
 	public final static String	PROVISIONING_AGENT_CONFIG	= "provisioning.agent.config";
+	
 	/**
 	 * The key to the provisioning information that contains the update count of
 	 * the info data. Each set of changes to the provisioning information must
@@ -86,33 +89,39 @@ public interface ProvisioningService {
 	 * properties of the ProvisioningService in the service registry.
 	 */
 	public final static String	PROVISIONING_UPDATE_COUNT	= "provisioning.update.count";
+	
 	/**
 	 * The key to the provisioning information that contains the location of the
 	 * bundle to start with <code>AllPermission</code>. The bundle must have
 	 * be previously installed for this entry to have any effect.
 	 */
 	public final static String	PROVISIONING_START_BUNDLE	= "provisioning.start.bundle";
+	
 	/**
 	 * The key to the provisioning information that contains the root X509
 	 * certificate used to establish trust with operator when using HTTPS.
 	 */
 	public final static String	PROVISIONING_ROOTX509		= "provisioning.rootx509";
+	
 	/**
 	 * The key to the provisioning information that contains the shared secret
 	 * used in conjunction with the RSH protocol.
 	 */
 	public final static String	PROVISIONING_RSH_SECRET		= "provisioning.rsh.secret";
+	
 	/**
 	 * MIME type to be used in the InitialProvisioning-Entries header or stored
 	 * in the extra field of a <code>ZipEntry</code> object for String data.
 	 */
 	public final static String	MIME_STRING					= "text/plain;charset=utf-8";
+	
 	/**
 	 * MIME type to be used in the InitialProvisioning-Entries header or stored
 	 * stored in the extra field of a <code>ZipEntry</code> object for
 	 * <code>byte[]</code> data.
 	 */
 	public final static String	MIME_BYTE_ARRAY				= "application/octet-stream";
+	
 	/**
 	 * MIME type to be used in the InitialProvisioning-Entries header or stored
 	 * stored in the extra field of a <code>ZipEntry</code> object for an
