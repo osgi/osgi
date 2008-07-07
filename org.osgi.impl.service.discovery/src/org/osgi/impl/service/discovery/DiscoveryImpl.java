@@ -19,55 +19,74 @@
 package org.osgi.impl.service.discovery;
 
 import java.util.Collection;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.eclipse.osgi.framework.internal.core.FilterImpl;
 import org.osgi.framework.BundleContext;
-import org.osgi.impl.service.discovery.slp.SLPHandlerImpl;
-import org.osgi.impl.service.discovery.slp.SLPServiceDescriptionAdapter;
+import org.osgi.framework.Filter;
+import org.osgi.framework.InvalidSyntaxException;
+import org.osgi.framework.ServiceReference;
 import org.osgi.service.discovery.Discovery;
+import org.osgi.service.discovery.FindServiceCallback;
 import org.osgi.service.discovery.ServiceDescription;
 import org.osgi.service.discovery.ServiceListener;
 import org.osgi.service.log.LogService;
-
-import ch.ethz.iks.slp.ServiceLocationException;
+import org.osgi.util.tracker.ServiceTracker;
+import org.osgi.util.tracker.ServiceTrackerCustomizer;
 
 /**
- * Discovery implementation. This implementation supports the SLP protocol implementation.
+ * Discovery implementation. This implementation supports the SLP protocol
+ * implementation.
  * 
  * TODO: add support for second protocol, e.g. JGroups
  * 
  * @author Tim Diekmann
+ * @author Thomas Kiesslich
  */
 public class DiscoveryImpl implements Discovery {
 	private static final boolean DEFAULT_AUTOPUBLISH = true;
-	
+
 	private List listeners;
-	private SLPHandlerImpl slpHandler;
+	private List protocolHandlers;
 	private LogService logService;
 	private boolean autoPublish = DEFAULT_AUTOPUBLISH;
 
-	DiscoveryImpl(BundleContext context, LogService logService) {
+	private ServiceTracker protocolHandlerTracker;
+
+	public DiscoveryImpl(final BundleContext context,
+			final LogService logService) {
 		this.logService = logService;
-		
+
 		// TODO read this from config rather than system property
 		autoPublish = System.getProperty(Discovery.ORG_OSGI_DISCOVERY,
-				Discovery.ORG_OSGI_DISCOVERY_AUTO_PUBLISH).equalsIgnoreCase(Discovery.ORG_OSGI_DISCOVERY_AUTO_PUBLISH);
-		
+				Discovery.ORG_OSGI_DISCOVERY_AUTO_PUBLISH).equalsIgnoreCase(
+				Discovery.ORG_OSGI_DISCOVERY_AUTO_PUBLISH);
+
 		listeners = new LinkedList();
-		slpHandler = new SLPHandlerImpl(context, logService);
+		protocolHandlers = new LinkedList();
+		protocolHandlerTracker = new ServiceTracker(context,
+				ProtocolHandler.class.getName(), new ProtocolHandlerServiceTracker(context));
+		protocolHandlerTracker.open();
+
 	}
-	
+
 	/**
 	 * @see org.osgi.service.discovery.Discovery#addServiceListener(org.osgi.service.discovery.ServiceListener)
 	 */
-	public void addServiceListener(ServiceListener listener) {
-		logService.log(LogService.LOG_DEBUG, "listener added, " + listener);
-		
+	public void addServiceListener(final ServiceListener listener) {
+		// TODO throw IllegalArgumentException if listener == null??
+		if (listener == null) {
+			return;
+		}
 		synchronized (listeners) {
+			boolean done = false;
 			if (!listeners.contains(listener)) {
-				listeners.add(listener);
+				done = listeners.add(listener);
+			}
+			if (logService != null) {
+				logService.log(LogService.LOG_DEBUG, "listener " + listener
+						+ " add successfull ? " + done);
 			}
 		}
 	}
@@ -75,54 +94,67 @@ public class DiscoveryImpl implements Discovery {
 	/**
 	 * @see org.osgi.service.discovery.Discovery#removeServiceListener(org.osgi.service.discovery.ServiceListener)
 	 */
-	public void removeServiceListener(ServiceListener listener) {
-		logService.log(LogService.LOG_DEBUG, "listener removed, " + listener);
-		
+	public void removeServiceListener(final ServiceListener listener) {
+		// TODO throw IllegalArgumentException if listener == null??
+		if (listener == null) {
+			return;
+		}
 		synchronized (listeners) {
-			listeners.remove(listener);
+			boolean done = false;
+			done = listeners.remove(listener);
+			if (logService != null) {
+				logService.log(LogService.LOG_DEBUG, "listener removed, "
+						+ listener + " successfull? " + done);
+			}
 		}
 	}
 
 	/**
-	 * @see org.osgi.service.discovery.Discovery#findService(org.osgi.service.discovery.ServiceDescription, org.osgi.service.discovery.ServiceListener)
+	 * @see org.osgi.service.discovery.Discovery#findService(org.osgi.service.discovery.ServiceDescription,
+	 *      org.osgi.service.discovery.ServiceListener)
 	 */
-	public void findService(final ServiceDescription serviceDescription, final ServiceListener callback) {
-		if (serviceDescription == null) {
-			throw new IllegalArgumentException("serviceDescription must not be null");
+	public void findService(final ServiceDescription serviceDescription,
+			final FindServiceCallback callback) {
+		if (serviceDescription == null
+				|| serviceDescription.getInterfaceName() == null
+				|| serviceDescription.getInterfaceName().equals("")) {
+			throw new IllegalArgumentException(
+					"serviceDescription must not be null or incomplete");
 		}
-		
+		if (callback == null) {
+			throw new IllegalArgumentException("callback must not be null");
+		}
+
 		Thread executor = new Thread(new Runnable() {
 
 			public void run() {
 				try {
 					// TODO first look at cache
 
-					// if miss, do lookup with SLPHandler
+					// if miss, do lookup with ProtocolHandler
 					Collection services = findService(serviceDescription);
 
 					// call callback listener
 					// call callback with unavailable if none found
-					if (services.isEmpty()) {
-						logService.log(LogService.LOG_DEBUG, "no services found for " + serviceDescription);
-						
-						try {
-							callback.serviceUnavailable(serviceDescription);
-						} catch (Exception e) {
-							logService.log(LogService.LOG_ERROR, "callback serviceUnavailable failed", e);
-						}
-						
-						return; // leave this thread
+					if (logService != null) {
+						logService.log(LogService.LOG_DEBUG,
+								"no services found for " + serviceDescription);
 					}
-					
-					for (Iterator i = services.iterator(); i.hasNext();) {
-						try {
-							callback.serviceAvailable((ServiceDescription)i.next());
-						} catch (Exception e) {
-							logService.log(LogService.LOG_ERROR, "callback serviceAvailable failed", e);
+					try {
+						callback.servicesFound(services);
+					} catch (Exception e) {
+						if (logService != null) {
+							logService.log(LogService.LOG_ERROR,
+									"callback serviceUnavailable failed", e);
 						}
 					}
+
+					return; // leave this thread
 				} catch (Exception e) {
-					logService.log(LogService.LOG_ERROR, "Failed to execute async findService", e);
+					if (logService != null) {
+						logService.log(LogService.LOG_ERROR,
+								"Failed to execute async findService", e);
+					}
 				}
 			}
 		});
@@ -132,36 +164,43 @@ public class DiscoveryImpl implements Discovery {
 	/**
 	 * @see org.osgi.service.discovery.Discovery#findService(org.osgi.service.discovery.ServiceDescription)
 	 */
-	public Collection findService(ServiceDescription serviceDescription) {
-		logService.log(LogService.LOG_DEBUG, "find services for " + serviceDescription.getInterfaceName());
+	public Collection findService(final ServiceDescription serviceDescription) {
+		if (logService != null) {
+			logService.log(LogService.LOG_DEBUG, "find services for "
+					+ serviceDescription.getInterfaceName());
+		}
 
-		Collection services;
-		try {
-			services = slpHandler.findService(new SLPServiceDescriptionAdapter(serviceDescription));
+		if (serviceDescription == null) {
+			throw new IllegalArgumentException(
+					"serviceDescription must not be null or incomplete");
 		}
-		catch (ServiceLocationException e) {
-			services = new LinkedList();
-			e.printStackTrace();
-			logService.log(LogService.LOG_ERROR, e.getMessage(), e);
+
+		Collection services = new LinkedList();
+		for (int i = 0; (protocolHandlers != null)
+				&& (i < protocolHandlers.size()); i++) {
+			Collection returnedServices = ((ProtocolHandler) protocolHandlers
+					.get(i)).findService(serviceDescription);
+			if (returnedServices != null) {
+				services.addAll(returnedServices);
+			}
 		}
-		
 		// TODO add to cache
-		
+
 		return services;
 	}
 
 	/**
 	 * @see org.osgi.service.discovery.Discovery#getCachedServiceDescriptions()
 	 */
-	public ServiceDescription[] getCachedServiceDescriptions() {
+	public Collection getCachedServiceDescriptions() {
 		// TODO return cached instances
-		return new ServiceDescription[]{};
+		return new LinkedList();
 	}
 
 	/**
 	 * @see org.osgi.service.discovery.Discovery#isCached(org.osgi.service.discovery.ServiceDescription)
 	 */
-	public boolean isCached(ServiceDescription serviceDescription) {
+	public boolean isCached(final ServiceDescription serviceDescription) {
 		// TODO delegate to cache
 		return false;
 	}
@@ -169,63 +208,261 @@ public class DiscoveryImpl implements Discovery {
 	/**
 	 * @see org.osgi.service.discovery.Discovery#publish(org.osgi.service.discovery.ServiceDescription)
 	 */
-	public boolean publish(ServiceDescription serviceDescription) {
-		return publish(serviceDescription, autoPublish);
+	public boolean publishService(final ServiceDescription serviceDescription) {
+		return publishService(serviceDescription, autoPublish);
 	}
 
 	/**
-	 * @see org.osgi.service.discovery.Discovery#publish(org.osgi.service.discovery.ServiceDescription, boolean)
+	 * @see org.osgi.service.discovery.Discovery#publish(org.osgi.service.discovery.ServiceDescription,
+	 *      boolean)
 	 */
-	public boolean publish(ServiceDescription serviceDescription,
+	public boolean publishService(final ServiceDescription serviceDescription,
 			boolean autopublish) {
-		logService.log(LogService.LOG_DEBUG, "publish service " + serviceDescription.getInterfaceName());
+		if (serviceDescription == null
+				|| serviceDescription.getInterfaceName() == null
+				|| serviceDescription.getInterfaceName().equals("")) {
+			throw new IllegalArgumentException(
+					"serviceDescription must not be null or incomplete");
+		}
 
+		if (logService != null) {
+			logService.log(LogService.LOG_DEBUG, "publish service "
+					+ serviceDescription.getInterfaceName());
+		}
+		boolean done = false;
 		// delegate to protocol implementation
-		try {
-			slpHandler.publishService(new SLPServiceDescriptionAdapter(serviceDescription));
+		for (int i = 0; (protocolHandlers != null)
+				&& (i < protocolHandlers.size()); i++) {
+			try {
+				done = ((ProtocolHandler) protocolHandlers.get(i))
+						.publishService(serviceDescription);
+			} catch (Exception e) {
+				e.printStackTrace();
+				logService.log(LogService.LOG_ERROR,
+						"Failed to publish service", e);
+			}
 		}
-		catch (Exception e) {
-			e.printStackTrace();
-			logService.log(LogService.LOG_ERROR, "Failed to publish service", e);
-			return false;
-		}
-		
-		return true;
+
+		return done;
 	}
 
 	/**
 	 * @see org.osgi.service.discovery.Discovery#unpublish(org.osgi.service.discovery.ServiceDescription)
 	 */
-	public void unpublish(ServiceDescription serviceDescription) {
-		logService.log(LogService.LOG_DEBUG, "unpublish service " + serviceDescription);
-
-		// delegate to protocol implementation
-		try {
-			slpHandler.unpublishService(new SLPServiceDescriptionAdapter(serviceDescription));
+	public void unpublishService(final ServiceDescription serviceDescription) {
+		if (serviceDescription == null
+				|| serviceDescription.getInterfaceName() == null
+				|| serviceDescription.getInterfaceName().equals("")) {
+			throw new IllegalArgumentException(
+					"serviceDescription must not be null or incomplete");
 		}
-		catch (Exception e) {
-			e.printStackTrace();
-			logService.log(LogService.LOG_ERROR, "Failed to unpublish service", e);
+
+		if (logService != null) {
+			logService.log(LogService.LOG_DEBUG, "unpublish service "
+					+ serviceDescription.toString());
+		}
+
+		for (int i = 0; (protocolHandlers != null)
+				&& (i < protocolHandlers.size()); i++) {
+			try {
+				((ProtocolHandler) protocolHandlers.get(i))
+						.unpublishService(serviceDescription);
+			} catch (Exception e) {
+				e.printStackTrace();
+				if (logService != null) {
+					logService.log(LogService.LOG_ERROR,
+							"Failed to unpublish service", e);
+				}
+			}
 		}
 	}
 
 	void destroy() {
-		logService.log(LogService.LOG_DEBUG, "destroy");
-
-		listeners.clear();
-		listeners = null;
-		
-		slpHandler.destroy();
+		if (logService != null) {
+			logService.log(LogService.LOG_DEBUG, "destroy");
+		}
+		if (listeners != null) {
+			listeners.clear();
+			listeners = null;
+		}
 	}
 
 	public void init() {
-		logService.log(LogService.LOG_DEBUG, "init");
-
-		slpHandler.init();
+		if (logService != null) {
+			logService.log(LogService.LOG_DEBUG, "init");
+		}
 	}
 
-	public void setLogService(LogService logService) {
+	public void setLogService(final LogService logService) {
 		this.logService = logService;
-		slpHandler.setLogService(logService);
 	}
+
+	/**
+	 * For test purposes only
+	 * 
+	 * @return the list of listeners
+	 */
+	final List getListeners() {
+		return listeners;
+	}
+
+	/**
+	 * For test purposes only.
+	 * 
+	 * @param pHandler
+	 */
+	final void addProtocolHandler(ProtocolHandler pHandler) {
+		protocolHandlers.add(pHandler);
+	}
+
+	/**
+	 * For test purposes only.
+	 * 
+	 * @param pHandler
+	 */
+	final void removeProtocolHandler(ProtocolHandler pHandler) {
+		protocolHandlers.remove(pHandler);
+	}
+
+	/**
+	 * 
+	 * @see org.osgi.service.discovery.Discovery#addServiceListener(org.osgi.service.discovery.ServiceListener,
+	 *      org.osgi.service.discovery.ServiceDescription)
+	 */
+	public void addServiceListener(ServiceListener listener,
+			ServiceDescription serviceDescription) {
+		// TODO Auto-generated method stub
+
+	}
+
+	/**
+	 * 
+	 * @see org.osgi.service.discovery.Discovery#addServiceListener(org.osgi.service.discovery.ServiceListener,
+	 *      java.lang.String)
+	 */
+	public void addServiceListener(ServiceListener listener, String filter) {
+		// TODO Auto-generated method stub
+
+	}
+
+	/**
+	 * 
+	 * @see org.osgi.service.discovery.Discovery#findService(java.lang.String)
+	 */
+	public Collection findService(String filter) {
+		if (filter == null) {
+			throw new IllegalArgumentException(
+					"filter must not be null or incomplete");
+		}
+		Filter f = null;
+		try {
+			f = new FilterImpl(filter);
+		} catch (InvalidSyntaxException e) {
+			throw new IllegalArgumentException("filter is not an LDAP filter");
+		}
+		Collection services = new LinkedList();
+		for (int i = 0; (protocolHandlers != null)
+				&& (i < protocolHandlers.size()); i++) {
+			Collection returnedServices = ((ProtocolHandler) protocolHandlers
+					.get(i)).findService(f);
+			if (returnedServices != null) {
+				services.addAll(returnedServices);
+			}
+		}
+		// TODO add to cache
+
+		return services;
+	}
+
+	/**
+	 * @see org.osgi.service.discovery.Discovery#findService(String,
+	 *      FindServiceCallback)
+	 */
+	public void findService(final String filter,
+			final FindServiceCallback callback) {
+		if (callback == null) {
+			throw new IllegalArgumentException("callback must not be null");
+		}
+
+		if (filter == null) {
+			throw new IllegalArgumentException(
+					"filter must not be null or incomplete");
+		}
+
+		try {
+			new FilterImpl(filter);
+		} catch (InvalidSyntaxException e) {
+			throw new IllegalArgumentException("filter is not an LDAP filter");
+		}
+
+		Thread executor = new Thread(new Runnable() {
+
+			public void run() {
+				try {
+					// TODO first look at cache
+
+					// if miss, do lookup with ProtocolHandler
+					Collection services = findService(filter);
+
+					// call callback listener
+					// call callback with unavailable if none found
+					if (logService != null) {
+						logService.log(LogService.LOG_DEBUG,
+								"no services found for " + filter);
+					}
+					try {
+						callback.servicesFound(services);
+					} catch (Exception e) {
+						if (logService != null) {
+							logService.log(LogService.LOG_ERROR,
+									"callback serviceUnavailable failed", e);
+						}
+					}
+
+					return; // leave this thread
+				} catch (Exception e) {
+					if (logService != null) {
+						logService.log(LogService.LOG_ERROR,
+								"Failed to execute async findService", e);
+					}
+				}
+			}
+		});
+		executor.start();
+	}
+
+	/**
+	 * Private tracker class.
+	 * 
+	 * @author kt32483
+	 *
+	 */
+	private class ProtocolHandlerServiceTracker implements
+			ServiceTrackerCustomizer {
+		BundleContext context = null;
+
+		public ProtocolHandlerServiceTracker(BundleContext bc) {
+			context = bc;
+		}
+
+		public Object addingService(ServiceReference reference) {
+			ProtocolHandler protocolHandler = (ProtocolHandler) context
+					.getService(reference);
+			protocolHandlers.add(protocolHandler);
+			protocolHandler.init();
+			return protocolHandler;
+		}
+
+		public void modifiedService(ServiceReference reference, Object service) {
+			// ignore
+		}
+
+		public void removedService(ServiceReference reference, Object service) {
+			ProtocolHandler protocolHandler = (ProtocolHandler) context
+					.getService(reference);
+			protocolHandlers.remove(protocolHandler);
+		}
+
+	}
+
 }
