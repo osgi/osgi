@@ -70,49 +70,49 @@ public interface ComponentConstants {
 	public final static String	REFERENCE_TARGET_SUFFIX	= ".target";
 	
 	/**
-	 * The reason the component instance was deactivated is unspecified.
+	 * The reason the component configuration was deactivated is unspecified.
 	 *  
 	 * @since 1.1
 	 */
 	public static final int DEACTIVATION_REASON_UNSPECIFIED = 0;
 	
 	/**
-	 * The component instance was deactivated because the component was disabled.
+	 * The component configuration was deactivated because the component was disabled.
 	 *  
 	 * @since 1.1
 	 */
 	public static final int DEACTIVATION_REASON_DISABLED = 1;
 	
 	/**
-	 * The component instance was deactivated because a reference became unsatisfied.
+	 * The component configuration was deactivated because a reference became unsatisfied.
 	 *  
 	 * @since 1.1
 	 */
 	public static final int DEACTIVATION_REASON_REFERENCE = 2;
 	
 	/**
-	 * The component instance was deactivated because its configuration was changed.
+	 * The component configuration was deactivated because its configuration was changed.
 	 *  
 	 * @since 1.1
 	 */
 	public static final int DEACTIVATION_REASON_CONFIGURATION_MODIFIED = 3;
 	
 	/**
-	 * The component instance was deactivated because its configuration was deleted.
+	 * The component configuration was deactivated because its configuration was deleted.
 	 *  
 	 * @since 1.1
 	 */
 	public static final int DEACTIVATION_REASON_CONFIGURATION_DELETED = 4;
 	
 	/**
-	 * The component instance was deactivated because the component was disposed.
+	 * The component configuration was deactivated because the component was disposed.
 	 *  
 	 * @since 1.1
 	 */
 	public static final int DEACTIVATION_REASON_DISPOSED = 5;
 
 	/**
-	 * The component instance was deactivated because the bundle was stopped.
+	 * The component configuration was deactivated because the bundle was stopped.
 	 *  
 	 * @since 1.1
 	 */
