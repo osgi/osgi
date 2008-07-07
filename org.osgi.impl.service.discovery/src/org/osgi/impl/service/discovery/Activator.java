@@ -19,8 +19,12 @@
 package org.osgi.impl.service.discovery;
 
 import org.eclipse.osgi.framework.console.CommandProvider;
-import org.osgi.framework.*;
+import org.osgi.framework.BundleActivator;
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.ServiceReference;
+import org.osgi.framework.ServiceRegistration;
 import org.osgi.impl.service.discovery.equinox.DiscoveryCommandProvider;
+import org.osgi.impl.service.discovery.slp.SLPHandlerImpl;
 import org.osgi.service.discovery.Discovery;
 import org.osgi.service.log.LogService;
 import org.osgi.util.tracker.ServiceTracker;
@@ -33,9 +37,12 @@ import org.osgi.util.tracker.ServiceTrackerCustomizer;
  */
 public class Activator implements BundleActivator {
 	private DiscoveryImpl discoveryImpl;
-	private ServiceRegistration registration;
+	private ServiceRegistration discoveryRegistration;
+	private ServiceRegistration slpHandlerRegistration;
 	private LogService logService = DEFAULT_LogService;
 	private ServiceTracker logServiceTracker;
+	
+	private SLPHandlerImpl slpHandler;
 	
 	private ServiceRegistration commandProvider;
 	
@@ -51,7 +58,8 @@ public class Activator implements BundleActivator {
 		commandProvider = context.registerService(CommandProvider.class.getName(), new DiscoveryCommandProvider(context), null);
 		
 		discoveryImpl = new DiscoveryImpl(context, logService);
-
+		slpHandler = new SLPHandlerImpl(context, logService);
+		
 		logServiceTracker = new ServiceTracker(context, LogService.class.getName(), new ServiceTrackerCustomizer() {
 
 			public Object addingService(ServiceReference reference) {
@@ -79,9 +87,11 @@ public class Activator implements BundleActivator {
 		logServiceTracker.open();
 		
 		// TODO: make the instance configurable, e.g. via CAS or DS
-		registration = context.registerService(Discovery.class.getName(), discoveryImpl, null);
+		discoveryRegistration = context.registerService(Discovery.class.getName(), discoveryImpl, null);
 		
 		discoveryImpl.init();
+		
+		slpHandlerRegistration = context.registerService(ProtocolHandler.class.getName(), slpHandler, null);
 		
 		logService.log(LogService.LOG_INFO, "discovery service started");
 	}
@@ -102,9 +112,14 @@ public class Activator implements BundleActivator {
 			commandProvider = null;
 		}
 		
-		if (registration != null) {
-			registration.unregister();
-			registration = null;
+		if (discoveryRegistration != null) {
+			discoveryRegistration.unregister();
+			discoveryRegistration = null;
+		}
+		
+		if (slpHandlerRegistration != null) {
+			slpHandlerRegistration.unregister();
+			slpHandlerRegistration = null;
 		}
 		
 		if (logServiceTracker != null) {
@@ -115,6 +130,11 @@ public class Activator implements BundleActivator {
 		if (discoveryImpl != null) {
 			discoveryImpl.destroy();
 			discoveryImpl = null;
+		}
+		
+		if (slpHandler != null) {
+			slpHandler.destroy();
+			slpHandler = null;
 		}
 	}
 	
