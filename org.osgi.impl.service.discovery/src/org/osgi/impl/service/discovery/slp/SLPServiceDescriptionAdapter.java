@@ -1,5 +1,8 @@
 package org.osgi.impl.service.discovery.slp;
 
+import java.net.InetAddress;
+import java.net.URL;
+import java.net.UnknownHostException;
 import java.util.Collection;
 import java.util.Dictionary;
 import java.util.HashMap;
@@ -14,7 +17,7 @@ import ch.ethz.iks.slp.ServiceLocationException;
 import ch.ethz.iks.slp.ServiceURL;
 
 /**
- *
+ * 
  * SLP encoding:
  * 
  * <code>service:osgi:/my/company/MyService://<protocol://><host><:port><?path></code>
@@ -29,33 +32,48 @@ public class SLPServiceDescriptionAdapter implements ServiceDescription {
 	private ServiceURL serviceURL;
 	private Dictionary attributes;
 
-	public SLPServiceDescriptionAdapter(ServiceDescription serviceDescription) throws ServiceLocationException {
+	public SLPServiceDescriptionAdapter(final ServiceDescription serviceDescription)
+			throws ServiceLocationException {
 		this.interfaceName = serviceDescription.getInterfaceName();
 		this.properties = serviceDescription.getProperties();
-		
+
 		String interf = convertInterfaceName(interfaceName);
 		String protocol = (String) serviceDescription.getProperty("protocol");
 		String host = (String) serviceDescription.getProperty("host");
 		String port = (String) serviceDescription.getProperty("port");
 
 		Integer lifeTime = (Integer) serviceDescription.getProperty("lifetime");
-		int lifetime = lifeTime != null ? lifeTime.intValue() : ServiceURL.LIFETIME_DEFAULT; 
+		int lifetime = lifeTime != null ? lifeTime.intValue()
+				: ServiceURL.LIFETIME_DEFAULT;
 
 		String path = getPathFromProperties(properties);
-
+		String hostname = null;
+		try {
+			InetAddress addr = InetAddress.getLocalHost();
+			// Get hostname
+			hostname = addr.getHostName();
+			if (hostname == null || hostname.equals("")) {
+				// if hostname is NULL or empty string
+				// set hostname to ip address
+				hostname = addr.getHostAddress();
+			}
+		} catch (UnknownHostException e) {
+			e.printStackTrace();
+		}
 		this.serviceURL = new ServiceURL("service:osgi" + interf
 				+ (protocol != null ? protocol + "://" : "://")
-				+ (host != null ? host : "localhost")
-				+ (port != null ? ":" + port : "") + "/"
-				+ path, lifetime);
+				+ (host != null ? host : hostname)
+				+ (port != null ? ":" + port : "") + "/" + path, lifetime);
 	}
-	
-	public SLPServiceDescriptionAdapter(ServiceURL serviceURL) {
-		this.interfaceName = convertInterfaceFromURL(serviceURL.getServiceType().getConcreteTypeName());
+
+	public SLPServiceDescriptionAdapter(final ServiceURL serviceURL) {
+		this.interfaceName = convertInterfaceFromURL(serviceURL
+				.getServiceType().getConcreteTypeName());
 		if (this.interfaceName == null) {
-			throw new IllegalArgumentException("Interface information is missing!");
+			throw new IllegalArgumentException(
+					"Interface information is missing!");
 		}
-		
+
 		this.properties = new HashMap();
 		this.serviceURL = serviceURL;
 
@@ -82,7 +100,7 @@ public class SLPServiceDescriptionAdapter implements ServiceDescription {
 		return properties;
 	}
 
-	public Object getProperty(String key) {
+	public Object getProperty(final String key) {
 		return properties.get(key);
 	}
 
@@ -93,13 +111,14 @@ public class SLPServiceDescriptionAdapter implements ServiceDescription {
 	public int compare(Object var0, Object var1) {
 		return 0;
 	}
-	
+
 	public ServiceURL getServiceURL() {
 		return serviceURL;
 	}
 
 	public String getServiceType() {
-		return serviceURL != null ? serviceURL.getServiceType().toString() : null;
+		return serviceURL != null ? serviceURL.getServiceType().toString()
+				: null;
 	}
 
 	public List getScopes() {
@@ -107,7 +126,8 @@ public class SLPServiceDescriptionAdapter implements ServiceDescription {
 	}
 
 	public String getNamingAuthority() {
-		return serviceURL != null ? serviceURL.getServiceType().getNamingAuthority() : null;
+		return serviceURL != null ? serviceURL.getServiceType()
+				.getNamingAuthority() : null;
 	}
 
 	public String getFilter() {
@@ -117,69 +137,72 @@ public class SLPServiceDescriptionAdapter implements ServiceDescription {
 	public Dictionary getAttributes() {
 		return attributes;
 	}
-	
+
 	public String toString() {
 		StringBuffer sb = new StringBuffer("Service:\n");
 		sb.append("interface=").append(getInterfaceName()).append("\n");
-		sb.append("serviceURL=").append(serviceURL != null? serviceURL.toString():"").append("\n");
+		sb.append("serviceURL=").append(
+				serviceURL != null ? serviceURL.toString() : "").append("\n");
 		sb.append("properties=\n");
-		
+
 		String key;
 		Object value;
-		
+
 		for (Iterator i = properties.keySet().iterator(); i.hasNext();) {
 			key = (String) i.next();
 			value = properties.get(key);
 			if (value == null) {
 				value = "<null>";
 			}
-			
+
 			sb.append(key).append("=").append(value.toString()).append("\n");
 		}
 
 		return sb.toString();
 	}
-	
-	private String convertInterfaceName(String interfaceName2) {
-		return interfaceName2 != null ? ":" + interfaceName2.replace('.', '/') : "";
+
+	private String convertInterfaceName(final String interfaceName2) {
+		return interfaceName2 != null ? ":" + interfaceName2.replace('.', '/')
+				: "";
 	}
 
-	private String convertInterfaceFromURL(String interfaceName2) {
+	private String convertInterfaceFromURL(final String interfaceName2) {
 		return interfaceName2 != null ? interfaceName2.replace('/', '.') : null;
 	}
 
-	private String getPathFromProperties(Map properties2) {
+	private String getPathFromProperties(final Map properties2) {
 		StringBuffer sb = new StringBuffer();
-		
+
 		String key;
 		Object value;
-		
+
 		if (properties2 != null && !properties2.isEmpty()) {
 			sb.append("?");
-			
+
 			for (Iterator i = properties2.keySet().iterator(); i.hasNext();) {
 				key = (String) i.next();
 				value = properties2.get(key);
 				if (value == null) {
 					value = "<null>";
 				}
-				
+
 				sb.append(key).append("=").append(value.toString()).append(",");
 			}
 		}
-		
+
 		return sb.toString();
 	}
 
 	private void addPropertiesFromPath(String path) {
 		if (path != null && path.trim() != "") {
-			path = path.substring(2); // strip off the "/?" in front of the path
-			
+			path = path.substring(2); // strip off the "/?" in front of the
+			// path
+
 			StringTokenizer st = new StringTokenizer(path, "=,");
-			
+
 			String key;
 			String value;
-			
+
 			try {
 				while (st.hasMoreTokens()) {
 					key = st.nextToken();
@@ -191,5 +214,25 @@ public class SLPServiceDescriptionAdapter implements ServiceDescription {
 				e.printStackTrace();
 			}
 		}
+	}
+
+	public URL getLocation() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public Collection getPropertyKeys() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public String getProtocolSpecificInterfaceName() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public String getVersion() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }
