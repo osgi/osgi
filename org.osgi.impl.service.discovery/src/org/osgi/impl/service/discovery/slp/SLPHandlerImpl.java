@@ -23,7 +23,10 @@ import java.util.LinkedList;
 import java.util.List;
 
 import org.osgi.framework.BundleContext;
+import org.osgi.framework.Filter;
 import org.osgi.framework.ServiceReference;
+import org.osgi.impl.service.discovery.ProtocolHandler;
+import org.osgi.service.discovery.ServiceDescription;
 import org.osgi.service.log.LogService;
 import org.osgi.util.tracker.ServiceTracker;
 import org.osgi.util.tracker.ServiceTrackerCustomizer;
@@ -35,133 +38,98 @@ import ch.ethz.iks.slp.ServiceLocationException;
 import ch.ethz.iks.slp.ServiceType;
 import ch.ethz.iks.slp.ServiceURL;
 
-
 /**
  * @author Tim Diekmann
- *
+ * @author Thomas Kiesslich
+ * 
  */
-public class SLPHandlerImpl {
-	private LogService logService;
-	private ServiceTracker locatorTracker;
-	private ServiceTracker advertiserTracker;
-	
-	private Locator locator;
-	private Advertiser advertiser;
-	
-	public SLPHandlerImpl(final BundleContext context, LogService logService) {
+public class SLPHandlerImpl implements ProtocolHandler {
+	private LogService logService = null;
+	private ServiceTracker locatorTracker = null;
+	private ServiceTracker advertiserTracker = null;
+
+	private Locator locator = null;
+	private Advertiser advertiser = null;
+
+	/**
+	 * 
+	 * @param context
+	 * @param logService
+	 */
+	public SLPHandlerImpl(final BundleContext context,
+			final LogService logService) {
 		this.logService = logService;
-		
-		locatorTracker = new ServiceTracker(context, Locator.class.getName(), new ServiceTrackerCustomizer(){
 
-			public Object addingService(ServiceReference reference) {
-				Locator loc = (Locator) context.getService(reference);
-				setLocator(loc);
-				
-				SLPHandlerImpl.this.logService.log(LogService.LOG_INFO, "bound Locator");
-				
-				return loc;
-			}
+		locatorTracker = new ServiceTracker(context, Locator.class.getName(),
+				new LocatorServiceTracker(context));
 
-			public void modifiedService(ServiceReference reference,
-					Object service) {
-				Locator loc = (Locator) context.getService(reference);
-				setLocator(loc);
-				
-				SLPHandlerImpl.this.logService.log(LogService.LOG_INFO, "rebound Locator");
-			}
-
-			public void removedService(ServiceReference reference,
-					Object service) {
-				context.ungetService(reference);
-				setLocator(null);
-				
-				SLPHandlerImpl.this.logService.log(LogService.LOG_INFO, "unbound Locator");
-			}
-			
-		});
-		advertiserTracker = new ServiceTracker(context, Advertiser.class.getName(), new ServiceTrackerCustomizer() {
-
-			public Object addingService(ServiceReference reference) {
-				Advertiser adv = (Advertiser) context.getService(reference);
-				setAdvertiser(adv);
-				
-				SLPHandlerImpl.this.logService.log(LogService.LOG_INFO, "bound Advertiser");
-
-				return adv;
-			}
-
-			public void modifiedService(ServiceReference reference,
-					Object service) {
-				Advertiser adv = (Advertiser) context.getService(reference);
-				setAdvertiser(adv);
-				
-				SLPHandlerImpl.this.logService.log(LogService.LOG_INFO, "rebound Advertiser");
-			}
-
-			public void removedService(ServiceReference reference,
-					Object service) {
-				context.ungetService(reference);
-				setAdvertiser(null);
-				
-				SLPHandlerImpl.this.logService.log(LogService.LOG_INFO, "unbound Advertiser");
-			}
-			
-		});
+		advertiserTracker = new ServiceTracker(context, Advertiser.class
+				.getName(), new AdvertiserServiceTracker(context));
 	}
 
 	public void init() {
-		// TODO track slp.Locator and slp.Advertiser
 		locatorTracker.open();
 		advertiserTracker.open();
 	}
-	
+
 	public void destroy() {
 		locatorTracker.close();
 		advertiserTracker.close();
 	}
-	
-	public Collection findService(SLPServiceDescriptionAdapter serviceDescriptionAdapter) {
+
+	/**
+	 * 
+	 * @see org.osgi.impl.service.discovery.ProtocolHandler#findService(org.osgi.service.discovery.ServiceDescription)
+	 */
+	public Collection findService(final ServiceDescription serviceDescription) {
 		List result = new LinkedList();
-		
+		SLPServiceDescriptionAdapter serviceDescriptionAdapter;
+		try {
+			serviceDescriptionAdapter = new SLPServiceDescriptionAdapter(
+					serviceDescription);
+		} catch (ServiceLocationException e1) {
+			e1.printStackTrace();
+			return result;
+		}
 		Locator locator = getLocator();
 		if (locator != null) {
 			try {
-//				ServiceLocationEnumeration sle = locator.findServiceTypes(serviceDescriptionAdapter.getNamingAuthority(),
-//						serviceDescriptionAdapter.getScopes());
-//				
-//				while (sle.hasMoreElements()) {
 				String serviceType = serviceDescriptionAdapter.getServiceType();
 
-				logService.log(LogService.LOG_DEBUG, "serviceType=" + serviceType);
+				logService.log(LogService.LOG_DEBUG, "serviceType="
+						+ serviceType);
 
-				ServiceLocationEnumeration se = locator.findServices(new ServiceType(serviceType),
-						serviceDescriptionAdapter.getScopes(),
-						serviceDescriptionAdapter.getFilter());
+				ServiceLocationEnumeration se = locator.findServices(
+						new ServiceType(serviceType), serviceDescriptionAdapter
+								.getScopes(), serviceDescriptionAdapter
+								.getFilter());
 
 				while (se.hasMoreElements()) {
 					ServiceURL url = (ServiceURL) se.next();
 					logService.log(LogService.LOG_DEBUG, "serviceURL=" + url);
 
-					SLPServiceDescriptionAdapter descriptionAdapter = new SLPServiceDescriptionAdapter(url);
+					SLPServiceDescriptionAdapter descriptionAdapter = new SLPServiceDescriptionAdapter(
+							url);
 
 					result.add(descriptionAdapter); // add to the result list
 				}
-//				}
 			} catch (Exception e) {
 				e.printStackTrace();
-				logService.log(LogService.LOG_WARNING, "Failed to find service", e);
+				logService.log(LogService.LOG_WARNING,
+						"Failed to find service", e);
 			}
-			
+
 		} else {
 			logService.log(LogService.LOG_DEBUG, "no Locator");
 		}
-		
-		logService.log(LogService.LOG_DEBUG, "number of services found " + result.size());
+
+		logService.log(LogService.LOG_DEBUG, "number of services found "
+				+ result.size());
 
 		return result;
 	}
 
-	public void setLogService(LogService logService) {
+	public void setLogService(final LogService logService) {
 		this.logService = logService;
 	}
 
@@ -169,7 +137,7 @@ public class SLPHandlerImpl {
 		return locator;
 	}
 
-	synchronized void setLocator(Locator locator) {
+	synchronized void setLocator(final Locator locator) {
 		this.locator = locator;
 	}
 
@@ -177,30 +145,160 @@ public class SLPHandlerImpl {
 		return advertiser;
 	}
 
-	synchronized void setAdvertiser(Advertiser advertiser) {
+	synchronized void setAdvertiser(final Advertiser advertiser) {
 		this.advertiser = advertiser;
 	}
 
-	public void publishService(SLPServiceDescriptionAdapter serviceDescriptionAdapter) throws ServiceLocationException {
+	/**
+	 * 
+	 * @see org.osgi.impl.service.discovery.ProtocolHandler#publishService(org.osgi.service.discovery.ServiceDescription)
+	 */
+	public boolean publishService(final ServiceDescription serviceDescription) {
+		boolean published = false;
+		SLPServiceDescriptionAdapter serviceDescriptionAdapter;
+		try {
+			serviceDescriptionAdapter = new SLPServiceDescriptionAdapter(
+					serviceDescription);
+		} catch (ServiceLocationException e1) {
+			e1.printStackTrace();
+			return published;
+		}
 		Advertiser advertiser = getAdvertiser();
 		if (advertiser != null) {
-			logService.log(LogService.LOG_DEBUG, "publish service " + serviceDescriptionAdapter);
-			
-			advertiser.register(serviceDescriptionAdapter.getServiceURL(), serviceDescriptionAdapter.getAttributes());
+			logService.log(LogService.LOG_DEBUG, "publish service "
+					+ serviceDescriptionAdapter);
+
+			try {
+				advertiser.register(serviceDescriptionAdapter.getServiceURL(),
+						serviceDescriptionAdapter.getAttributes());
+				published = true;
+			} catch (ServiceLocationException e) {
+				e.printStackTrace();
+			}
+		} else {
+			logService.log(LogService.LOG_DEBUG, "no Advertiser");
+		}
+		return published;
+	}
+
+	/**
+	 * 
+	 * @see org.osgi.impl.service.discovery.ProtocolHandler#unpublishService(org.osgi.service.discovery.ServiceDescription)
+	 */
+	public void unpublishService(final ServiceDescription serviceDescription) {
+		SLPServiceDescriptionAdapter serviceDescriptionAdapter;
+		try {
+			serviceDescriptionAdapter = new SLPServiceDescriptionAdapter(
+					serviceDescription);
+		} catch (ServiceLocationException e1) {
+			e1.printStackTrace();
+			return;
+		}
+		Advertiser advertiser = getAdvertiser();
+		if (advertiser != null) {
+			logService.log(LogService.LOG_DEBUG, "unpublish service "
+					+ serviceDescriptionAdapter);
+
+			try {
+				advertiser
+						.deregister(serviceDescriptionAdapter.getServiceURL());
+			} catch (ServiceLocationException e) {
+				e.printStackTrace();
+			}
 		} else {
 			logService.log(LogService.LOG_DEBUG, "no Advertiser");
 		}
 	}
 
-	public void unpublishService(SLPServiceDescriptionAdapter serviceDescriptionAdapter) throws ServiceLocationException {
-		Advertiser advertiser = getAdvertiser();
-		if (advertiser != null) {
-			logService.log(LogService.LOG_DEBUG, "unpublish service " + serviceDescriptionAdapter);
-			
-			advertiser.deregister(serviceDescriptionAdapter.getServiceURL());
-		} else {
-			logService.log(LogService.LOG_DEBUG, "no Advertiser");
+	/**
+	 * 
+	 * @see org.osgi.impl.service.discovery.ProtocolHandler#publishService(org.osgi.service.discovery.ServiceDescription,
+	 *      boolean)
+	 */
+	public boolean publishService(final ServiceDescription serviceDescription,
+			boolean autopublish) {
+		return publishService(serviceDescription);
+	}
+
+	/**
+	 * 
+	 * @see org.osgi.impl.service.discovery.ProtocolHandler#findService(org.osgi.framework.Filter)
+	 */
+	public Collection findService(Filter filter) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	/**
+	 * Private tracker class to track the locator services.
+	 * 
+	 * @author kt32483
+	 * 
+	 */
+	private class LocatorServiceTracker implements ServiceTrackerCustomizer {
+		BundleContext context = null;
+
+		public LocatorServiceTracker(BundleContext bc) {
+			context = bc;
+		}
+
+		public Object addingService(ServiceReference reference) {
+			Locator loc = (Locator) context.getService(reference);
+			setLocator(loc);
+
+			logService.log(LogService.LOG_INFO, "bound Locator");
+
+			return loc;
+		}
+
+		public void modifiedService(ServiceReference reference, Object service) {
+			Locator loc = (Locator) context.getService(reference);
+			setLocator(loc);
+
+			logService.log(LogService.LOG_INFO, "rebound Locator");
+		}
+
+		public void removedService(ServiceReference reference, Object service) {
+			context.ungetService(reference);
+			setLocator(null);
+
+			logService.log(LogService.LOG_INFO, "unbound Locator");
 		}
 	}
 
+	/**
+	 * 
+	 */
+	private class AdvertiserServiceTracker implements ServiceTrackerCustomizer {
+		BundleContext context = null;
+
+		public AdvertiserServiceTracker(BundleContext bc) {
+			context = bc;
+		}
+
+		public Object addingService(final ServiceReference reference) {
+			Advertiser adv = (Advertiser) context.getService(reference);
+			setAdvertiser(adv);
+
+			logService.log(LogService.LOG_INFO, "bound Advertiser");
+
+			return adv;
+		}
+
+		public void modifiedService(final ServiceReference reference,
+				Object service) {
+			Advertiser adv = (Advertiser) context.getService(reference);
+			setAdvertiser(adv);
+
+			logService.log(LogService.LOG_INFO, "rebound Advertiser");
+		}
+
+		public void removedService(final ServiceReference reference,
+				Object service) {
+			context.ungetService(reference);
+			setAdvertiser(null);
+
+			logService.log(LogService.LOG_INFO, "unbound Advertiser");
+		}
+	}
 }
