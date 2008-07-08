@@ -361,7 +361,10 @@ public class TestExceptions implements TestInterface {
 		        if (DmtConstants.TIMEOUT>0) {
 		            session = tbc.getDmtAdmin().getSession(TestExecPluginActivator.ROOT,DmtSession.LOCK_TYPE_ATOMIC);
 		            //Session should be invalidated after this period.
-		            wait(DmtConstants.TIMEOUT);
+		            long start = System.currentTimeMillis();
+		            do {
+	                wait(100);
+		            } while (System.currentTimeMillis() - start < DmtConstants.TIMEOUT);
 		            tbc.assertEquals("Asserts that DmtSession.getState returns STATE_INVALID in case of timeout",DmtSession.STATE_INVALID,session.getState());
 		            
 		        } else {
