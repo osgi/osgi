@@ -1,0 +1,3 @@
+javadoc= org.osgi.framework.*,org.osgi.service.*,org.osgi.util.*,info.dmtree.*
+
+

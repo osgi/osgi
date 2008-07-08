@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="project" default="javadoc">
-	<import file="../cnf/build.xml" />
+	<import file="../build/build.xml" />
 	
 
 	<target name="javadoc" depends="init">
@@ -9,7 +9,8 @@
 		<delete>
 			<fileset dir="xml" includes="*.xml"/>
 		</delete>
-		<javadoc doclet="org.osgi.tools.xmldoclet.XmlDoclet" docletpath="${workspace}/org.osgi.tools/src" classpath="${project.classpath}" encoding="utf-8" packagenames="${javadoc}">
+		<echo>${javadoc}</echo>
+		<javadoc doclet="org.osgi.tools.xmldoclet.XmlDoclet" docletpath="${repo}/osgi.tools/osgi.tools-1.1.0.jar" classpath="${project.classpath}" encoding="utf-8" packagenames="${javadoc}">
 			<sourcepath>
 				<dirset dir="${workspace}">
 					<include name="*/src" />
@@ -28,13 +29,10 @@
 	</target>
 
 	<target name="ees" depends="init">
-		<subant target="publish" inheritAll="false">
-			<dirset dir=".." includes="${ees}"/>
-		</subant>
 
-		<java classname="org.osgi.tools.jar2xml.JAR2XML" classpath="../org.osgi.tools/osgi.tools.jar" fork="true" output="ee.xml">
-			<arg line="-tagged minimum ${workspace}/ee.minimum/ee.minimum.jar" />
-			<arg line="-tagged foundation ${workspace}/ee.foundation/ee.foundation.jar" />
+		<java classname="org.osgi.tools.jar2xml.JAR2XML" classpath="${repo}/osgi.tools/osgi.tools-1.1.0.jar" fork="true" output="ee.xml">
+			<arg line="-tagged minimum ${repo}/ee.minimum/ee.minimum-1.1.3.jar" />
+			<arg line="-tagged foundation ${repo}/ee.foundation/ee.foundation-1.1.0.jar" />
 		</java>
 		<echo>Converted JARs to XML</echo>
 		<java classname="com.icl.saxon.StyleSheet" classpath="../licensed/jar/saxon.jar" fork="true" output="ee.html">
