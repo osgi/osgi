@@ -25,7 +25,6 @@ import java.security.PermissionCollection;
 import java.util.Collections;
 import java.util.Enumeration;
 import java.util.HashMap;
-import java.util.Hashtable;
 
 /**
  * A bundle's authority to register or get a service.
