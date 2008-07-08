@@ -5,6 +5,7 @@ import java.net.URL;
 import java.net.UnknownHostException;
 import java.util.Collection;
 import java.util.Dictionary;
+import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Iterator;
@@ -157,6 +158,18 @@ public class SLPServiceDescriptionAdapter implements ServiceDescription {
 				value = "<null>";
 			}
 
+			sb.append(key).append("=").append(value.toString()).append("\n");
+		}
+		
+		sb.append("attributes=\n");
+
+		Enumeration e = attributes.keys();
+		while(e.hasMoreElements()) {
+			key = (String) e.nextElement();
+			value = attributes.get(key);
+			if (value == null) {
+				value = "<null>";
+			}
 			sb.append(key).append("=").append(value.toString()).append("\n");
 		}
 

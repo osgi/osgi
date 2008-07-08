@@ -118,9 +118,9 @@ public class SLPHandlerImpl implements ProtocolHandler {
 						String attributes = (String) a.next();
 						String key = null;
 						String value = null;
-						attributes.substring(1);
+						attributes = attributes.substring(1, attributes.length()-1);
 						key = attributes.substring(0,attributes.indexOf("="));
-						value = attributes.substring(1);
+						value = attributes.substring(attributes.indexOf("=") + 1);
 						attrs.put(key, value);
 					}
 					descriptionAdapter.setAtttributes(attrs);
