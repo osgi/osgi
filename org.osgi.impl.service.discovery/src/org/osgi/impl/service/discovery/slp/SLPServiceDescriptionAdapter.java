@@ -6,6 +6,7 @@ import java.net.UnknownHostException;
 import java.util.Collection;
 import java.util.Dictionary;
 import java.util.HashMap;
+import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -28,14 +29,15 @@ import ch.ethz.iks.slp.ServiceURL;
  */
 public class SLPServiceDescriptionAdapter implements ServiceDescription {
 	private String interfaceName;
-	private Map properties;
+	private Map properties = new HashMap();
 	private ServiceURL serviceURL;
 	private Dictionary attributes;
 
-	public SLPServiceDescriptionAdapter(final ServiceDescription serviceDescription)
+	public SLPServiceDescriptionAdapter(
+			final ServiceDescription serviceDescription)
 			throws ServiceLocationException {
 		this.interfaceName = serviceDescription.getInterfaceName();
-		this.properties = serviceDescription.getProperties();
+		this.attributes = (Hashtable) serviceDescription.getProperties();
 
 		String interf = convertInterfaceName(interfaceName);
 		String protocol = (String) serviceDescription.getProperty("protocol");
@@ -89,7 +91,7 @@ public class SLPServiceDescriptionAdapter implements ServiceDescription {
 			properties.put("protocol", serviceURL.getProtocol());
 		}
 		properties.put("lifetime", new Integer(serviceURL.getLifetime()));
-		addPropertiesFromPath(serviceURL.getURLPath());
+		 addPropertiesFromPath(serviceURL.getURLPath());
 	}
 
 	public String getInterfaceName() {
@@ -194,25 +196,30 @@ public class SLPServiceDescriptionAdapter implements ServiceDescription {
 	}
 
 	private void addPropertiesFromPath(String path) {
-		if (path != null && path.trim() != "") {
-			path = path.substring(2); // strip off the "/?" in front of the
-			// path
+		try {
+			if (path != null && path.trim() != "") {
+				path = path.substring(2); // strip off the "/?" in front of
+											// the
+				// path
 
-			StringTokenizer st = new StringTokenizer(path, "=,");
+				StringTokenizer st = new StringTokenizer(path, "=,");
 
-			String key;
-			String value;
+				String key;
+				String value;
 
-			try {
-				while (st.hasMoreTokens()) {
-					key = st.nextToken();
-					value = st.nextToken();
+				try {
+					while (st.hasMoreTokens()) {
+						key = st.nextToken();
+						value = st.nextToken();
 
-					properties.put(key, value);
+						properties.put(key, value);
+					}
+				} catch (Exception e) {
+					e.printStackTrace();
 				}
-			} catch (Exception e) {
-				e.printStackTrace();
 			}
+		} catch (Exception e) {
+			return;
 		}
 	}
 
@@ -234,5 +241,9 @@ public class SLPServiceDescriptionAdapter implements ServiceDescription {
 	public String getVersion() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	public void setAtttributes(Dictionary attrs) {
+		attributes = attrs;
 	}
 }

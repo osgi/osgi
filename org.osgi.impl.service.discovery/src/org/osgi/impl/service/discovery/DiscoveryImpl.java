@@ -54,6 +54,7 @@ public class DiscoveryImpl implements Discovery {
 
 	private ServiceTracker protocolHandlerTracker;
 
+	//TODO do we need a logService as parameter??
 	public DiscoveryImpl(final BundleContext context,
 			final LogService logService) {
 		this.logService = logService;

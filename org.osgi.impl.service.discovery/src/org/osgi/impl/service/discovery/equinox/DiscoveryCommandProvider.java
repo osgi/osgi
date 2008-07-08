@@ -4,6 +4,7 @@ import java.net.URL;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Properties;
@@ -20,8 +21,10 @@ import org.osgi.util.tracker.ServiceTrackerCustomizer;
 
 public class DiscoveryCommandProvider implements
 		org.eclipse.osgi.framework.console.CommandProvider {
-	Discovery discovery;
+	private Discovery discovery;
 	private BundleContext context;
+
+	private HashMap publishedServices = new HashMap();
 
 	public DiscoveryCommandProvider(final BundleContext context) {
 		this.context = context;
@@ -87,6 +90,7 @@ public class DiscoveryCommandProvider implements
 						serviceDescription.setProperty("myKey", "myValue");
 						result = discovery.publishService(serviceDescription);
 						if (result) {
+							publishedServices.put(refs[i], serviceDescription);
 							ci.println("Successfully published "
 									+ serviceDescription.getInterfaceName());
 						} else {
@@ -117,9 +121,8 @@ public class DiscoveryCommandProvider implements
 								+ " has not registered any service");
 					}
 					for (int i = 0; (refs != null) && (i < refs.length); i++) {
-						discovery
-								.unpublishService(new ServiceDescriptionAdapter(
-										refs[i]));
+						ServiceDescriptionAdapter serviceDescription = new ServiceDescriptionAdapter(refs[i]);
+						discovery.unpublishService(serviceDescription);
 					}
 				} catch (Exception ex) {
 					ci.printStackTrace(ex);
@@ -158,7 +161,7 @@ public class DiscoveryCommandProvider implements
 		}
 
 		public Map getProperties() {
-			HashMap map = new HashMap();
+			Hashtable map = new Hashtable();
 			if (serviceReference != null) {
 				String[] keys = serviceReference.getPropertyKeys();
 				for (int i = 0; i < keys.length; i++) {

@@ -19,6 +19,8 @@
 package org.osgi.impl.service.discovery.slp;
 
 import java.util.Collection;
+import java.util.Dictionary;
+import java.util.Hashtable;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -107,11 +109,23 @@ public class SLPHandlerImpl implements ProtocolHandler {
 				while (se.hasMoreElements()) {
 					ServiceURL url = (ServiceURL) se.next();
 					logService.log(LogService.LOG_DEBUG, "serviceURL=" + url);
-
+					ServiceLocationEnumeration a = locator.findAttributes(url,
+							null, null);
 					SLPServiceDescriptionAdapter descriptionAdapter = new SLPServiceDescriptionAdapter(
 							url);
-
-					result.add(descriptionAdapter); // add to the result list
+					Dictionary attrs = new Hashtable();
+					while (a.hasMoreElements()) {
+						String attributes = (String) a.next();
+						String key = null;
+						String value = null;
+						attributes.substring(1);
+						key = attributes.substring(0,attributes.indexOf("="));
+						value = attributes.substring(1);
+						attrs.put(key, value);
+					}
+					descriptionAdapter.setAtttributes(attrs);
+					result.add(descriptionAdapter); // add to the result
+					// list
 				}
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -197,7 +211,7 @@ public class SLPHandlerImpl implements ProtocolHandler {
 		Advertiser advertiser = getAdvertiser();
 		if (advertiser != null) {
 			logService.log(LogService.LOG_DEBUG, "unpublish service "
-					+ serviceDescriptionAdapter);
+					+ serviceDescriptionAdapter.getServiceURL());
 
 			try {
 				advertiser
