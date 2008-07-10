@@ -90,9 +90,10 @@ public interface HttpService {
 	 * the registration will be mapped. An alias must begin with slash ('/') and
 	 * must not end with slash ('/'), with the exception that an alias of the
 	 * form &quot;/&quot; is used to denote the root alias. The name parameter
-	 * must also not end with slash ('/'). See the specification text for
-	 * details on how HTTP requests are mapped to servlet and resource
-	 * registrations.
+	 * must also not end with slash ('/') with the exception that a name of the
+	 * form &quot;/&quot; is used to denote the root of the bundle. See the
+	 * specification text for details on how HTTP requests are mapped to servlet
+	 * and resource registrations.
 	 * <p>
 	 * For example, suppose the resource name /tmp is registered to the alias
 	 * /files. A request for /files/foo.txt will map to the resource name
@@ -104,20 +105,20 @@ public interface HttpService {
 	 * 
 	 * The Http Service will call the <code>HttpContext</code> argument to map
 	 * resource names to URLs and MIME types and to handle security for
-	 * requests. If the <code>HttpContext</code> argument is <code>null</code>, a
-	 * default <code>HttpContext</code> is used (see
+	 * requests. If the <code>HttpContext</code> argument is <code>null</code>,
+	 * a default <code>HttpContext</code> is used (see
 	 * {@link #createDefaultHttpContext}).
 	 * 
 	 * @param alias name in the URI namespace at which the resources are
 	 *        registered
 	 * @param name the base name of the resources that will be registered
 	 * @param context the <code>HttpContext</code> object for the registered
-	 *        resources, or <code>null</code> if a default <code>HttpContext</code>
-	 *        is to be created and used.
-	 * @throws NamespaceException if the registration fails because the alias
-	 *            is already in use.
-	 * @throws java.lang.IllegalArgumentException if any of the parameters
-	 *            are invalid
+	 *        resources, or <code>null</code> if a default
+	 *        <code>HttpContext</code> is to be created and used.
+	 * @throws NamespaceException if the registration fails because the alias is
+	 *         already in use.
+	 * @throws java.lang.IllegalArgumentException if any of the parameters are
+	 *         invalid
 	 */
 	public void registerResources(String alias, String name,
 			HttpContext context) throws NamespaceException;
