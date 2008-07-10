@@ -18,19 +18,17 @@
 
 package org.osgi.framework.hooks.service;
 
-import java.util.Dictionary;
-import java.util.Map;
+import java.util.Collection;
 
-import org.osgi.framework.BundleContext;
-import org.osgi.framework.ServiceRegistration;
+import org.osgi.framework.ServiceEvent;
 
 /**
  * OSGi Framework Service Publish Hook Service.
  * 
  * <p>
  * Bundles registering this service will be called during framework service
- * publish (register service) operations. Service hooks are not called for
- * service operations on other service hooks.
+ * publish (register, modify, and unregister service) operations. Service hooks
+ * are not called for service operations on other service hooks.
  * 
  * @ThreadSafe
  * @version $Revision$
@@ -38,47 +36,16 @@ import org.osgi.framework.ServiceRegistration;
 
 public interface PublishHook {
 	/**
-	 * Publish hook method. This method is called during the service publish (
-	 * {@link BundleContext#registerService(String[], Object, Dictionary)})
-	 * operation by the publishing bundle.
+	 * Event hook method. This method is called prior to service event delivery
+	 * when a publishing bundle registers, modifies or unregisters a service and
+	 * can filter the bundles which receive the event.
 	 * 
-	 * <p>
-	 * The implementation of this method may perform any pre operation actions
-	 * such as modifying the operation parameters before calling the next hook
-	 * in the chain. The implementation of this method may also perform any post
-	 * operation actions such as modifying the operation result before returning
-	 * to its caller.
-	 * 
-	 * <p>
-	 * The values supplied to the next hook in the chain and the values returned
-	 * by this method must pass all the tests required of parameters supplied to
-	 * and values returned by the {@link BundleContext#registerService(String[],
-	 * Object, Dictionary)} method. If the values are invalid or this method
-	 * throws an exception, then the service publish operation will fail and
-	 * this hook will be not be called for future service publish operations.
-	 * 
-	 * <p>
-	 * This hook will not be called for a given service publish operation if the
-	 * bundle registering this hook does not have
-	 * <code>AdminPermission[publishing bundle,SERVICE_HOOK]</code>, and the
-	 * Java Runtime Environment supports permissions.
-	 * 
-	 * @param next The next publish hook in the chain. The implementation of
-	 * 	this method MUST call {@link PublishHookChain#publish(String[], Object,
-	 * 	Map)} to complete the publish operation.
-	 * @param context The bundle context of the publishing bundle.
-	 * @param names The class names under which the service is to be published.
-	 * @param service The service object or a <code>ServiceFactory</code> object
-	 * 	to be published.
-	 * @param properties The properties of the service to be published or
-	 * 	<code>null</code> if the service has no properties.
-	 * @return The ServiceRegistration to be returned to the publishing bundle.
-	 * 	The implementor can return the registration value returned by the next
-	 * 	hook in the chain or supply an alternative registration object. An
-	 * 	alternative registration object must wrap the registration value
-	 * 	returned by the next hook in the chain to support modify and
-	 * 	unregistration operations on the service registration.
+	 * @param event The service event to be delivered.
+	 * @param bundles A <code>Collection</code> of Bundles which have listeners
+	 *        to which the event may be delivered. The method implementation can
+	 *        remove bundles from the collection to prevent the event from being
+	 *        delivered to those bundles. Attempting to add to the collection
+	 *        will result in an <code>UnsupportedOperationException</code>.
 	 */
-	ServiceRegistration publish(PublishHookChain next, BundleContext context,
-			String[] names, Object service, Map properties);
+	void event(ServiceEvent event, Collection bundles);
 }

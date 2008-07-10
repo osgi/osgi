@@ -29,17 +29,6 @@ import org.osgi.framework.ServiceListener;
  * addition and removal. Service hooks are not called for service operations on
  * other service hooks.
  * 
- * <p>
- * This hook cannot modify the service listener addition and removal operations.
- * It just receives notifications about service listener addition and removal
- * operations.
- * 
- * <p>
- * If the Java Runtime Environment supports permissions, the service listeners
- * provided to this hook will be filtered. This hook will only be presented with
- * service listeners added by bundles for which the bundle registering this hook
- * has <code>AdminPermission[listening bundle,SERVICE_HOOK]</code>.
- * 
  * @ThreadSafe
  * @version $Revision$
  */
