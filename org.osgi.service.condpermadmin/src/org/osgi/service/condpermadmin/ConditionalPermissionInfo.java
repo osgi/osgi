@@ -18,8 +18,6 @@
 
 package org.osgi.service.condpermadmin;
 
-import org.osgi.service.permissionadmin.PermissionInfo;
-
 /**
  * A binding of a set of Conditions to a set of Permissions. Instances of this
  * interface are obtained from the Conditional Permission Admin service.
@@ -27,38 +25,17 @@ import org.osgi.service.permissionadmin.PermissionInfo;
  * @ThreadSafe
  * @version $Revision$
  */
-public interface ConditionalPermissionInfo {
-	/**
-	 * Returns the Condition Infos for the Conditions that must be satisfied to
-	 * enable the Permissions.
-	 * 
-	 * @return The Condition Infos for the Conditions in this Conditional
-	 *         Permission Info.
-	 */
-	public ConditionInfo[] getConditionInfos();
-
-	/**
-	 * Returns the Permission Infos for the Permission in this Conditional
-	 * Permission Info.
-	 * 
-	 * @return The Permission Infos for the Permission in this Conditional
-	 *         Permission Info.
-	 */
-	public PermissionInfo[] getPermissionInfos();
-
+public interface ConditionalPermissionInfo extends ConditionalPermissionInfoBase {
 	/**
 	 * Removes this Conditional Permission Info from the Conditional Permission
 	 * Admin.
+	 * <p>
+	 * Since this method changes the underlying permission table any Updates
+	 * that were created prior to calling this method can no longer
+	 * commit.
 	 * 
 	 * @throws SecurityException If the caller does not have
 	 *         <code>AllPermission</code>.
 	 */
 	public void delete();
-
-	/**
-	 * Returns the name of this Conditional Permission Info.
-	 * 
-	 * @return The name of this Conditional Permission Info.
-	 */
-	public String getName();
 }

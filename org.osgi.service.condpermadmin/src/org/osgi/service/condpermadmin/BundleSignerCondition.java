@@ -46,6 +46,16 @@ import org.osgi.framework.Bundle;
  * for the corresponding type in that RDN. If a wildcard is used for a RDN, it
  * must be the first RDN and will match any number of RDNs (including zero
  * RDNs).
+ * <p>
+ * A second String argument is optional and if present and equal to "!" it
+ * indicates that the Condition must return the logical NOT of the
+ * DN chain result.  So for example if the DN string indicates it should match
+ * bundles signed by Acme Corporation and the optional second string argument
+ * of "!" is present then all bundles NOT signed by Acme Corporation would
+ * match the condition, while a bundle signed by the Acme Corporation would
+ * not match the condition.  Note that if the second argument does not start
+ * with the "!" character then the argument should be ignored and should not
+ * affect the processing of the condition.
  * 
  * @ThreadSafe
  * @version $Revision$
@@ -117,10 +127,16 @@ public class BundleSignerCondition {
 	 * to the location pattern.
 	 * 
 	 * @param bundle The Bundle being evaluated.
-	 * @param info The ConditionInfo to construct the condition for. The args of
-	 *        the ConditionInfo specify a single String specifying the chain of
-	 *        distinguished names pattern to match against the signer of the
-	 *        Bundle.
+	 * @param info The ConditionInfo to construct the condition for. The first
+	 *        argument of the ConditionInfo specify a String specifying the
+	 *        chain of distinguished names pattern to match against the signer
+	 *        of the Bundle.  The second argument of the ConditionInfo is an
+	 *        optional String.  If that second argument String is present and
+	 *        is equal to "!" then the condition should return
+	 *        the logical NOT of the DN string match represented in the first
+	 *        argument.  If that second argument String is present but is not
+	 *        equal to "!" then the second argument String should be
+	 *        ignored.
 	 * @return A Condition which checks the signers of the specified bundle.        
 	 */
 	public static Condition getCondition(Bundle bundle, ConditionInfo info) {
@@ -128,7 +144,7 @@ public class BundleSignerCondition {
 			throw new IllegalArgumentException(
 					"ConditionInfo must be of type \"" + CONDITION_TYPE + "\"");
 		String[] args = info.getArgs();
-		if (args.length != 1)
+		if (args.length != 1 && args.length != 2)
 			throw new IllegalArgumentException("Illegal number of args: "
 					+ args.length);
 

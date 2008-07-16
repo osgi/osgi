@@ -27,6 +27,15 @@ import org.osgi.framework.*;
 /**
  * Condition to test if the location of a bundle matches a pattern. Pattern
  * matching is done according to the filter string matching rules.
+ * <p>
+ * A second String argument is optional
+ * and if present and equal to "!" indicates that the Condition must
+ * return the logical NOT of the bundle location result.  So for example if
+ * the location string matches "bundles/1" then all bundles with a location
+ * that is NOT "bundles/1" would match the condition, while a bundle with
+ * location "bundles/1" would not match the condition.  Note that if the
+ * second argument is not equal to "!" then the argument should be ignored
+ * and should not affect the processing of the condition.
  * 
  * @ThreadSafe
  * @version $Revision$
@@ -39,13 +48,18 @@ public class BundleLocationCondition {
 	 * to the location pattern.
 	 * 
 	 * @param bundle The Bundle being evaluated.
-	 * @param info The ConditionInfo to construct the condition for. The args of
-	 *        the ConditionInfo must be a single String which specifies the
+	 * @param info The ConditionInfo to construct the condition for. The first
+	 *        args of the ConditionInfo must be a String which specifies the
 	 *        location pattern to match against the Bundle location. Matching is
 	 *        done according to the filter string matching rules. Any '*'
 	 *        characters in the location argument are used as wildcards when
 	 *        matching bundle locations unless they are escaped with a '\'
-	 *        character.
+	 *        character.  The optional second args of the ConditionInfo must
+	 *        be a String.  If this second argument is equal to "!"
+	 *        then the Condition shall return the logical NOT
+	 *        of the match of the first argument.  If the second argument
+	 *        String is present but does not equal "!" then the second
+	 *        argument String should be ignored.
 	 * @return Condition object for the requested condition.
 	 */
 	static public Condition getCondition(final Bundle bundle,
@@ -54,11 +68,9 @@ public class BundleLocationCondition {
 			throw new IllegalArgumentException(
 					"ConditionInfo must be of type \"" + CONDITION_TYPE + "\"");
 		String[] args = info.getArgs();
-		if (args.length != 1)
-			throw new IllegalArgumentException("Illegal number of args: "
-					+ args.length);
-		String bundleLocation = (String) AccessController
-				.doPrivileged(new PrivilegedAction() {
+		if (args.length != 1 && args.length != 2)
+			throw new IllegalArgumentException("Illegal number of args: " + args.length);
+		String bundleLocation = (String) AccessController.doPrivileged(new PrivilegedAction() {
 					public Object run() {
 						return bundle.getLocation();
 					}
@@ -74,7 +86,8 @@ public class BundleLocationCondition {
 		}
 		Hashtable matchProps = new Hashtable(2);
 		matchProps.put("location", bundleLocation);
-		return filter.match(matchProps) ? Condition.TRUE : Condition.FALSE;
+		boolean negative = args.length == 2 && args[1].length() > 0 ? args[1].charAt(0) == '!' : false;
+		return negative ^ filter.match(matchProps) ? Condition.TRUE : Condition.FALSE;
 	}
 
 	private BundleLocationCondition() {
