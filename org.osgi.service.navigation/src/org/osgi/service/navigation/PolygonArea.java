@@ -1,5 +1,5 @@
 /*******************************************************************************
- * /*
+ *  *
  *  * $Date$
  *  * 
  *  * Copyright (c) OSGi Alliance (2007). All Rights Reserved.
@@ -15,42 +15,41 @@
  *  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  *  * See the License for the specific language governing permissions and
  *  * limitations under the License.
- *  */
- *******************************************************************************/
+ **/
 package org.osgi.service.navigation;
 
 /**
  * @created 23-nov-2006 15:20:17
  * @author rob van den berg
- * @version 1.0
- * TODO: Add method implementation
+ * @version 1.0 TODO: Add method implementation
  */
 public class PolygonArea {
 
-	private  PointLocation[] points;
+	private PointLocation[] points;
 
-	public PolygonArea(){
+	public PolygonArea() {
 		points = null;
 	}
 
 	/**
 	 * 
-	 * @param points    points
+	 * @param points
+	 *            points
 	 */
-	public PolygonArea(PointLocation[] points){
-		
+	public PolygonArea(PointLocation[] points) {
+
 	}
 
 	/**
 	 * 
-	 * @param point    point
+	 * @param point
+	 *            point
 	 */
-	public void addpoint(Coordinate point){
-		
+	public void addpoint(Coordinate point) {
 
 	}
 
-	public PointLocation[] getPoints(){
+	public PointLocation[] getPoints() {
 		return points;
 	}
 
