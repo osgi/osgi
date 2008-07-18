@@ -43,7 +43,7 @@ public interface ConditionalPermissionAdmin {
 	 * {@link ConditionalPermissionInfoBase#ALLOW ALLOW}.
 	 * <p>
 	 * Since this method changes the Conditional Permission Table any
-	 * {@link ConditionalPermissionAdminUpdate}s that were created prior to
+	 * {@link ConditionalPermissionsUpdate}s that were created prior to
 	 * calling this method can no longer be committed.
 	 * 
 	 * @param conds The Conditions that need to be satisfied to enable the
@@ -54,7 +54,7 @@ public interface ConditionalPermissionAdmin {
 	 *         Permissions.
 	 * @throws SecurityException If the caller does not have
 	 *         <code>AllPermission</code>.
-	 * @deprecated Since 1.1. Use {@link ConditionalPermissionAdminUpdate}
+	 * @deprecated Since 1.1. Use {@link ConditionalPermissionsUpdate}
 	 *             instead.
 	 */
 	public ConditionalPermissionInfo addConditionalPermissionInfo(
@@ -75,7 +75,7 @@ public interface ConditionalPermissionAdmin {
 	 * decision of {@link ConditionalPermissionInfoBase#ALLOW ALLOW}.
 	 * <p>
 	 * Since this method changes the underlying permission table any
-	 * {@link ConditionalPermissionAdminUpdate}s that were created prior to
+	 * {@link ConditionalPermissionsUpdate}s that were created prior to
 	 * calling this method can no longer be committed.
 	 * 
 	 * @param name The name of the Conditional Permission Info, or
@@ -88,7 +88,7 @@ public interface ConditionalPermissionAdmin {
 	 *         Conditions and Permissions.
 	 * @throws SecurityException If the caller does not have
 	 *         <code>AllPermission</code>.
-	 * @deprecated Since 1.1. Use {@link ConditionalPermissionAdminUpdate}
+	 * @deprecated Since 1.1. Use {@link ConditionalPermissionsUpdate}
 	 *             instead.
 	 */
 	public ConditionalPermissionInfo setConditionalPermissionInfo(String name,
@@ -137,10 +137,10 @@ public interface ConditionalPermissionAdmin {
 	 * Conditional Permission Table. There is no requirement that commit is
 	 * eventually called on the returned update.
 	 * 
-	 * @return An update for the Conditional Permission Table
+	 * @return An update for the Conditional Permission Table.
 	 * @since 1.1
 	 */
-	public ConditionalPermissionAdminUpdate createConditionalPermissionAdminUpdate();
+	public ConditionalPermissionsUpdate createConditionalPermissionsUpdate();
 
 	/**
 	 * Creates a ConditionalPermissionInfoBase with the specified fields.
@@ -160,7 +160,7 @@ public interface ConditionalPermissionAdmin {
 	 *        <li>{@link ConditionalPermissionInfoBase#DENY deny}</li>
 	 *        </ul>
 	 * @return A ConditionalPermissionInfoBase object suitable for insertion in
-	 *         a {@link ConditionalPermissionAdminUpdate}.
+	 *         a {@link ConditionalPermissionsUpdate}.
 	 * @throws IllegalArgumentException If the decision string is invalid.
 	 * @since 1.1
 	 */

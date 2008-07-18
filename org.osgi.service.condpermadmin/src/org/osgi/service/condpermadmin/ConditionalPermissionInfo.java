@@ -28,11 +28,11 @@ package org.osgi.service.condpermadmin;
 public interface ConditionalPermissionInfo extends ConditionalPermissionInfoBase {
 	/**
 	 * Removes this Conditional Permission Info from the Conditional Permission
-	 * Admin.
+	 * Table.
 	 * <p>
 	 * Since this method changes the underlying permission table any
-	 * {@link ConditionalPermissionAdminUpdate}s that were created prior to
-	 * calling this method can no longer be committed.
+	 * {@link ConditionalPermissionsUpdate}s that were created prior to calling
+	 * this method can no longer be committed.
 	 * 
 	 * @throws SecurityException If the caller does not have
 	 *         <code>AllPermission</code>.

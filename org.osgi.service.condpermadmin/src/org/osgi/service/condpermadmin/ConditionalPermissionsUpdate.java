@@ -29,7 +29,7 @@ import java.util.List;
  * @version $Revision$
  * @since 1.1
  */
-public interface ConditionalPermissionAdminUpdate {
+public interface ConditionalPermissionsUpdate {
 	/**
 	 * This method returns the list of {@link ConditionalPermissionInfoBase}s
 	 * for this update. This list is originally based on the Conditional
