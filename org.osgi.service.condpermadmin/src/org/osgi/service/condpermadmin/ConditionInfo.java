@@ -1,7 +1,7 @@
 /*
  * $Date$
  *
- * Copyright (c) OSGi Alliance (2004, 2007). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2004, 2008). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -66,7 +66,7 @@ public class ConditionInfo {
 	 */
 	public ConditionInfo(String type, String[] args) {
 		this.type = type;
-		this.args = args != null ? args : new String[0];
+		this.args = (args != null) ? (String[]) args.clone() : new String[0];
 		if (type == null) {
 			throw new NullPointerException("type is null");
 		}
@@ -235,7 +235,7 @@ public class ConditionInfo {
 	 *         arguments.
 	 */
 	public final String[] getArgs() {
-		return args;
+		return (String[]) args.clone();
 	}
 
 	/**
