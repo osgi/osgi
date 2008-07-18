@@ -1,7 +1,7 @@
 /*
  * $Date$
  *
- * Copyright (c) OSGi Alliance (2004, 2007). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2004, 2008). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -43,12 +43,12 @@ public interface Condition {
 
 	/**
 	 * Returns whether the evaluation must be postponed until the end of the
-	 * permission check. This method returns <code>true</code> if the
-	 * evaluation of the Condition must be postponed until the end of the
-	 * permission check. If this method returns <code>false</code>, this
-	 * Condition must be able to directly answer the {@link #isSatisfied()}
-	 * method. In other words, isSatisfied() will return very quickly since no
-	 * external sources, such as for example users, need to be consulted.
+	 * permission check. This method returns <code>true</code> if the evaluation
+	 * of the Condition must be postponed until the end of the permission check.
+	 * If this method returns <code>false</code>, this Condition must be able to
+	 * directly answer the {@link #isSatisfied()} method. In other words,
+	 * isSatisfied() will return very quickly since no external sources, such as
+	 * for example users, need to be consulted.
 	 * 
 	 * @return <code>true</code> to indicate the evaluation must be postponed.
 	 *         Otherwise, <code>false</code> if the evaluation can be
@@ -60,8 +60,7 @@ public interface Condition {
 	 * Returns whether the Condition is satisfied.
 	 * 
 	 * @return <code>true</code> to indicate the Conditions is satisfied.
-	 *         Otherwise, <code>false</code> if the Condition is not
-	 *         satisfied.
+	 *         Otherwise, <code>false</code> if the Condition is not satisfied.
 	 */
 	boolean isSatisfied();
 
@@ -87,9 +86,8 @@ public interface Condition {
 	 *        times. The SecurityManager treats this Dictionary as an opaque
 	 *        object and simply creates an empty dictionary and passes it to
 	 *        subsequent invocations if multiple invocations are needed.
-	 * @return <code>true</code> if all the Conditions are satisfied.
-	 *         Otherwise, <code>false</code> if one of the Conditions is not
-	 *         satisfied.
+	 * @return <code>true</code> if all the Conditions are satisfied. Otherwise,
+	 *         <code>false</code> if one of the Conditions is not satisfied.
 	 */
 	boolean isSatisfied(Condition conditions[], Dictionary context);
 
@@ -100,7 +98,7 @@ public interface Condition {
  * {@link Condition#TRUE} constants.
  */
 final class BooleanCondition implements Condition {
-	final boolean	satisfied;
+	private final boolean	satisfied;
 
 	BooleanCondition(boolean satisfied) {
 		this.satisfied = satisfied;
