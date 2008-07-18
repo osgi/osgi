@@ -1,7 +1,7 @@
 /*
  * $Date$
  * 
- * Copyright (c) OSGi Alliance (2005, 2007). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2005, 2008). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,15 +18,18 @@
 
 package org.osgi.service.condpermadmin;
 
-import java.lang.reflect.*;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.security.AccessController;
 import java.security.PrivilegedAction;
 
 import org.osgi.framework.Bundle;
 
 /**
- * Condition to test if the signer of a bundle matches a pattern. Since the bundle's signer can
- * only change when the bundle is updated, this condition is immutable.
+ * Condition to test if the signer of a bundle matches or does not match a
+ * pattern. Since the bundle's signer can only change when the bundle is
+ * updated, this condition is immutable.
  * <p>
  * The condition expressed using a single String that specifies a Distinguished
  * Name (DN) chain to match bundle signers against. DN's are encoded using IETF
@@ -46,16 +49,6 @@ import org.osgi.framework.Bundle;
  * for the corresponding type in that RDN. If a wildcard is used for a RDN, it
  * must be the first RDN and will match any number of RDNs (including zero
  * RDNs).
- * <p>
- * A second String argument is optional and if present and equal to "!" it
- * indicates that the Condition must return the logical NOT of the
- * DN chain result.  So for example if the DN string indicates it should match
- * bundles signed by Acme Corporation and the optional second string argument
- * of "!" is present then all bundles NOT signed by Acme Corporation would
- * match the condition, while a bundle signed by the Acme Corporation would
- * not match the condition.  Note that if the second argument does not start
- * with the "!" character then the argument should be ignored and should not
- * affect the processing of the condition.
  * 
  * @ThreadSafe
  * @version $Revision$
@@ -127,17 +120,18 @@ public class BundleSignerCondition {
 	 * to the location pattern.
 	 * 
 	 * @param bundle The Bundle being evaluated.
-	 * @param info The ConditionInfo to construct the condition for. The first
-	 *        argument of the ConditionInfo specify a String specifying the
-	 *        chain of distinguished names pattern to match against the signer
-	 *        of the Bundle.  The second argument of the ConditionInfo is an
-	 *        optional String.  If that second argument String is present and
-	 *        is equal to "!" then the condition should return
-	 *        the logical NOT of the DN string match represented in the first
-	 *        argument.  If that second argument String is present but is not
-	 *        equal to "!" then the second argument String should be
-	 *        ignored.
-	 * @return A Condition which checks the signers of the specified bundle.        
+	 * @param info The ConditionInfo from which to construct the condition. The
+	 *        ConditionInfo must specify one or two arguments. The first
+	 *        argument of the ConditionInfo specifies the chain of distinguished
+	 *        names pattern to match against the signer of the bundle. The
+	 *        Condition is satisfied if the signer of the bundle matches the
+	 *        pattern. The second argument of the ConditionInfo is optional. If
+	 *        a second argument is present and equal to "!", then the
+	 *        satisfaction of the Condition is negated. That is, the Condition
+	 *        is satisfied if the signer of the bundle does NOT match the
+	 *        pattern. If the second argument is present but does not equal "!",
+	 *        then the second argument is ignored.
+	 * @return A Condition which checks the signers of the specified bundle.
 	 */
 	public static Condition getCondition(Bundle bundle, ConditionInfo info) {
 		if (!CONDITION_TYPE.equals(info.getType()))

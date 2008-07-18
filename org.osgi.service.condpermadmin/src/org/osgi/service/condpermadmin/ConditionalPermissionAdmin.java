@@ -1,7 +1,7 @@
 /*
  * $Date$
  * 
- * Copyright (c) OSGi Alliance (2005, 2007). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2005, 2008). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,97 +26,85 @@ import org.osgi.service.permissionadmin.PermissionInfo;
 /**
  * Framework service to administer Conditional Permissions. Conditional
  * Permissions can be added to, retrieved from, and removed from the framework.
+ * Conditional Permissions are conceptually managed in an ordered table called
+ * the Conditional Permission Table.
  * 
  * @ThreadSafe
  * @version $Revision$
  */
 public interface ConditionalPermissionAdmin {
 	/**
-	 * Creates an  update.  The update is a working
-	 * copy of the current Conditional Permission Table.  If the running
-	 * Conditional Permission Table is modified before commit is called
-	 * on this Update then the call to commit will fail (i.e., the
-	 * commit method will return false and no change will be made
-	 * to the running Conditional Permission Table).  There is no
-	 * requirement that commit is eventually called on an Update.
-	 *   
-	 * @return A working copy Update based on the current Conditional
-	 * Permission table
-	 */
-	public ConditionalPermissionAdminUpdate createUpdate();
-
-	/**
-	 * Create a new Conditional Permission Info.
+	 * Create a new Conditional Permission Info in the Conditional Permission
+	 * Table.
 	 * <p>
 	 * The Conditional Permission Info will be given a unique, never reused
-	 * name.  This entry will be added at the beginning of the table with a
-	 * decision string of "ConditionalPermissionInfoBase.ALLOW".
+	 * name. This entry will be added at the beginning of the Conditional
+	 * Permission Table with a grant decision of
+	 * {@link ConditionalPermissionInfoBase#ALLOW ALLOW}.
 	 * <p>
-	* Since this method changes the underlying permission table any Updates
-	* that were created prior to calling this method can no longer
-	* commit.
+	 * Since this method changes the Conditional Permission Table any
+	 * {@link ConditionalPermissionAdminUpdate}s that were created prior to
+	 * calling this method can no longer be committed.
 	 * 
 	 * @param conds The Conditions that need to be satisfied to enable the
 	 *        corresponding Permissions.
-	 * @param perms The Permissions that are enable when the corresponding
+	 * @param perms The Permissions that are enabled when the corresponding
 	 *        Conditions are satisfied.
 	 * @return The ConditionalPermissionInfo for the specified Conditions and
 	 *         Permissions.
 	 * @throws SecurityException If the caller does not have
 	 *         <code>AllPermission</code>.
+	 * @deprecated Use {@link ConditionalPermissionAdminUpdate} instead.
 	 */
 	public ConditionalPermissionInfo addConditionalPermissionInfo(
 			ConditionInfo conds[], PermissionInfo perms[]);
 
 	/**
-	 * Set or create a Conditional Permission Info with a specified name.
+	 * Set or create a Conditional Permission Info with a specified name in the
+	 * Conditional Permission Table.
 	 * <p>
-	 * If the specified name is <code>null</code>, a new Conditional
-	 * Permission Info must be created and will be given a unique, never reused
-	 * name. If there is currently no Conditional Permission Info with the
-	 * specified name, a new Conditional Permission Info must be created with
-	 * the specified name. Otherwise, the Conditional Permission Info with the
+	 * If the specified name is <code>null</code>, a new Conditional Permission
+	 * Info must be created and will be given a unique, never reused name. If
+	 * there is currently no Conditional Permission Info with the specified
+	 * name, a new Conditional Permission Info must be created with the
+	 * specified name. Otherwise, the Conditional Permission Info with the
 	 * specified name must be updated with the specified Conditions and
-	 * Permissions.  If a new entry was created in the table it will be added
-	* at the beginning of the table with a decision
-	* of "ConditionalPermissionInfoBase.ALLOW".
-	* <p>
-	* Since this method changes the underlying permission table any Updates
-	* that were created prior to calling this method can no longer
-	* commit.
+	 * Permissions. If a new entry was created in the Conditional Permission
+	 * Table it will be added at the beginning of the table with a grant
+	 * decision of {@link ConditionalPermissionInfoBase#ALLOW ALLOW}.
+	 * <p>
+	 * Since this method changes the underlying permission table any
+	 * {@link ConditionalPermissionAdminUpdate}s that were created prior to
+	 * calling this method can no longer be committed.
 	 * 
 	 * @param name The name of the Conditional Permission Info, or
 	 *        <code>null</code>.
 	 * @param conds The Conditions that need to be satisfied to enable the
 	 *        corresponding Permissions.
-	 * @param perms The Permissions that are enable when the corresponding
+	 * @param perms The Permissions that are enabled when the corresponding
 	 *        Conditions are satisfied.
 	 * @return The ConditionalPermissionInfo that for the specified name,
 	 *         Conditions and Permissions.
 	 * @throws SecurityException If the caller does not have
 	 *         <code>AllPermission</code>.
+	 * @deprecated Use {@link ConditionalPermissionAdminUpdate} instead.
 	 */
 	public ConditionalPermissionInfo setConditionalPermissionInfo(String name,
 			ConditionInfo conds[], PermissionInfo perms[]);
 
 	/**
-	 * Returns the Conditional Permission Infos that are currently managed by
-	 * Conditional Permission Admin. Calling
-	 * {@link ConditionalPermissionInfo#delete()} will remove the Conditional
-	 * Permission Info from Conditional Permission Admin.
+	 * Returns the Conditional Permission Infos from the Conditional Permission
 	 * <p>
-	 * The Enumeration returned will return elements in the order of the
-	 * most significant Conditional Permission Info (i.e. those with
-	 * the least index) to the least significant (i.e. those with the
-	 * greatest index).
+	 * The returned Enumeration will return elements in the order they are kept
+	 * in the Conditional Permission Table.
 	 * <p>
-	 * The Enumeration returned is based on a copy of the Conditional
-	 * Permission table, and therefore will not throw exceptions if
-	 * the underlying Conditional Permission table is changed during the
-	 * course of reading elements from the Enumeration
+	 * The Enumeration returned is based on a copy of the Conditional Permission
+	 * Table and therefore will not throw exceptions if the Conditional
+	 * Permission Table is changed during the course of reading elements from
+	 * the Enumeration.
 	 * 
 	 * @return An enumeration of the Conditional Permission Infos that are
-	 *         currently managed by Conditional Permission Admin.
+	 *         currently in the Conditional Permission Table.
 	 */
 	public Enumeration getConditionalPermissionInfos();
 
@@ -129,28 +117,6 @@ public interface ConditionalPermissionAdmin {
 	public ConditionalPermissionInfo getConditionalPermissionInfo(String name);
 
 	/**
-	* This creates a ConditionalPermissionInfoBase
-	* with the given fields.
-	* @param name The name of this object.  Null implies that this
-	*        object will be replaced during a commit operation
-	*        with another ConditionalPermissionInfoBase with all of
-	*        the same fields but with a name that is unique and
-	*        which has never been used.
-	* @param conditions The Conditions that need to be satisfied to enable the
-	*        corresponding Permissions.
-	* @param permissions The Permissions that are enable when the corresponding
-	*        Conditions are satisfied.
-	* @param decision One of the following values:<UL>
-	* <LI>ConditionalPermissionInfoBase.ALLOW - The right should be granted</LI>
-	* <LI>ConditionalPermissionInfoBase.DENY - The right should NOT be granted</LI>
-	* </UL>
-	* @return A ConditionalPermissionInfoBase object.
-	* @throws IllegalArgumentException if name is null or
-	* the decision string is invalid
-	*/
-	public ConditionalPermissionInfoBase createInfoBase(String name, ConditionInfo conditions[], PermissionInfo permissions[], String decision);
-
-	/**
 	 * Returns the Access Control Context that corresponds to the specified
 	 * signers.
 	 * 
@@ -159,4 +125,45 @@ public interface ConditionalPermissionAdmin {
 	 *         associated with the signer.
 	 */
 	public AccessControlContext getAccessControlContext(String[] signers);
+
+	/**
+	 * Creates an update for the Conditional Permission Table. The update is a
+	 * working copy of the current Conditional Permission Table. If the running
+	 * Conditional Permission Table is modified before commit is called on the
+	 * returned update, then the call to commit will fail. That is, the commit
+	 * method will return false and no change will be made to the running
+	 * Conditional Permission Table. There is no requirement that commit is
+	 * eventually called on the returned update.
+	 * 
+	 * @return An update for the Conditional Permission Table
+	 * @since 1.1
+	 */
+	public ConditionalPermissionAdminUpdate createConditionalPermissionAdminUpdate();
+
+	/**
+	 * Creates a ConditionalPermissionInfoBase with the specified fields.
+	 * 
+	 * @param name The name of the created ConditionalPermissionInfoBase or
+	 *        <code>null</code> to have a unique name generated when the created
+	 *        ConditionalPermissionInfoBase is committed in an update to the
+	 *        Conditional Permission Table.
+	 * @param conditions The Conditions that need to be satisfied to enable the
+	 *        corresponding Permissions.
+	 * @param permissions The Permissions that are enabled when the
+	 *        corresponding Conditions are satisfied.
+	 * @param decision One of the following values:
+	 *        <ul>
+	 *        <li>{@link ConditionalPermissionInfoBase#ALLOW allow}</li>
+	 * 
+	 *        <li>{@link ConditionalPermissionInfoBase#DENY deny}</li>
+	 *        </ul>
+	 * @return A ConditionalPermissionInfoBase object suitable for insertion in
+	 *         a {@link ConditionalPermissionAdminUpdate}.
+	 * @throws IllegalArgumentException If the decision string is invalid.
+	 * @since 1.1
+	 */
+	public ConditionalPermissionInfoBase createConditionalPermissionInfoBase(
+			String name,
+			ConditionInfo conditions[], PermissionInfo permissions[],
+			String decision);
 }

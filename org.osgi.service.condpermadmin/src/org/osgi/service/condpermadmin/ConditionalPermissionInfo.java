@@ -1,7 +1,7 @@
 /*
  * $Date$
  *
- * Copyright (c) OSGi Alliance (2004, 2007). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2004, 2008). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,9 +30,9 @@ public interface ConditionalPermissionInfo extends ConditionalPermissionInfoBase
 	 * Removes this Conditional Permission Info from the Conditional Permission
 	 * Admin.
 	 * <p>
-	 * Since this method changes the underlying permission table any Updates
-	 * that were created prior to calling this method can no longer
-	 * commit.
+	 * Since this method changes the underlying permission table any
+	 * {@link ConditionalPermissionAdminUpdate}s that were created prior to
+	 * calling this method can no longer be committed.
 	 * 
 	 * @throws SecurityException If the caller does not have
 	 *         <code>AllPermission</code>.

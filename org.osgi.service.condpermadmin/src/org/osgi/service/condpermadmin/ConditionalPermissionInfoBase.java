@@ -1,7 +1,7 @@
 /*
- * $Date: 2007-12-19 14:42:59 -0600 (Wed, 19 Dec 2007) $
+ * $Date$
  * 
- * Copyright (c) OSGi Alliance (2005, 2007). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2008). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,57 +25,58 @@ import org.osgi.service.permissionadmin.PermissionInfo;
  * interface are obtained from the Conditional Permission Admin service.
  * 
  * @Immutable
- * @version $Revision: 1.11 $
+ * @since 1.1
+ * @version $Revision$
  */
 public interface ConditionalPermissionInfoBase {
-  /**
-   * This string is used to indicate that a row in the conditional
-   * permission admin table should return a decision of ALLOWs if
-   * the conditions all match and at least one of the permissions
-   * indicate the requested right.
-   */
-  public final static String ALLOW = "allow";
-  
-  /**
-   * This string is used to indicate that a row in the conditional
-   * permission admin table should return a decision of DENY if
-   * the conditions all match and at least one of the permissions
-   * indicate the requested right.
-   */
-  public final static String DENY = "deny";
-  
-  /**
-   * Returns the Condition Infos for the Conditions that must be satisfied to
-   * enable the Permissions.
-   * 
-   * @return The Condition Infos for the Conditions in this Conditional
-   *         Permission Info.
-   */
-  public ConditionInfo[] getConditionInfos();
+	/**
+	 * This string is used to indicate that a row in the conditional permission
+	 * admin table should return a grant decision of ALLOW if the conditions are
+	 * all satisfied and at least one of the permissions is implied.
+	 */
+	public final static String	ALLOW	= "allow";
 
-  /**
-   * Returns the Permission Infos for the Permission in this Conditional
-   * Permission Info.
-   * 
-   * @return The Permission Infos for the Permission in this Conditional
-   *         Permission Info.
-   */
-  public PermissionInfo[] getPermissionInfos();
-  
-  /**
-   * Returns the Decision for this Conditional Permission Info.
-   * 
-   * @return One of the following values:<UL>
-   * <LI>ALLOW - The right should be granted</LI>
-   * <LI>DENY - The right should NOT be granted</LI>
-   * </UL>
-   */
-  public String getDecision();
+	/**
+	 * This string is used to indicate that a row in the conditional permission
+	 * admin table should return a grant decision of DENY if the conditions are
+	 * all satisfied and at least one of the permissions is implied.
+	 */
+	public final static String	DENY	= "deny";
 
-  /**
-   * Returns the name of this Conditional Permission Info.
-   * 
-   * @return The name of this Conditional Permission Info.
-   */
-  public String getName();
+	/**
+	 * Returns the Condition Infos for the Conditions that must be satisfied to
+	 * enable the Permissions.
+	 * 
+	 * @return The Condition Infos for the Conditions in this Conditional
+	 *         Permission Info.
+	 */
+	public ConditionInfo[] getConditionInfos();
+
+	/**
+	 * Returns the Permission Infos for the Permission in this Conditional
+	 * Permission Info.
+	 * 
+	 * @return The Permission Infos for the Permission in this Conditional
+	 *         Permission Info.
+	 */
+	public PermissionInfo[] getPermissionInfos();
+
+	/**
+	 * Returns the grant decision for this Conditional Permission Info.
+	 * 
+	 * @return One of the following values:
+	 *         <ul>
+	 *         <li>{@link #ALLOW allow} - The grant decision is allow.</li>
+	 * 
+	 *         <li>{@link #DENY deny} - The grant decision is DENY.</li>
+	 *         </ul>
+	 */
+	public String getGrantDecision();
+
+	/**
+	 * Returns the name of this Conditional Permission Info.
+	 * 
+	 * @return The name of this Conditional Permission Info.
+	 */
+	public String getName();
 }
