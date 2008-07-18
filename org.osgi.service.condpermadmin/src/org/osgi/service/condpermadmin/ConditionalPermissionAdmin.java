@@ -54,7 +54,8 @@ public interface ConditionalPermissionAdmin {
 	 *         Permissions.
 	 * @throws SecurityException If the caller does not have
 	 *         <code>AllPermission</code>.
-	 * @deprecated Use {@link ConditionalPermissionAdminUpdate} instead.
+	 * @deprecated Since 1.1. Use {@link ConditionalPermissionAdminUpdate}
+	 *             instead.
 	 */
 	public ConditionalPermissionInfo addConditionalPermissionInfo(
 			ConditionInfo conds[], PermissionInfo perms[]);
@@ -87,7 +88,8 @@ public interface ConditionalPermissionAdmin {
 	 *         Conditions and Permissions.
 	 * @throws SecurityException If the caller does not have
 	 *         <code>AllPermission</code>.
-	 * @deprecated Use {@link ConditionalPermissionAdminUpdate} instead.
+	 * @deprecated Since 1.1. Use {@link ConditionalPermissionAdminUpdate}
+	 *             instead.
 	 */
 	public ConditionalPermissionInfo setConditionalPermissionInfo(String name,
 			ConditionInfo conds[], PermissionInfo perms[]);
