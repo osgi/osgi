@@ -19,7 +19,6 @@
 package org.osgi.impl.service.discovery.slp;
 
 import java.util.Collection;
-import java.util.Dictionary;
 import java.util.Hashtable;
 import java.util.LinkedList;
 import java.util.List;
@@ -113,17 +112,15 @@ public class SLPHandlerImpl implements ProtocolHandler {
 							null, null);
 					SLPServiceDescriptionAdapter descriptionAdapter = new SLPServiceDescriptionAdapter(
 							url);
-					Dictionary attrs = new Hashtable();
 					while (a.hasMoreElements()) {
 						String attributes = (String) a.next();
 						String key = null;
-						String value = null;
+						Object value = null;
 						attributes = attributes.substring(1, attributes.length()-1);
 						key = attributes.substring(0,attributes.indexOf("="));
 						value = attributes.substring(attributes.indexOf("=") + 1);
-						attrs.put(key, value);
+						descriptionAdapter.addProperty(key, value);
 					}
-					descriptionAdapter.setAtttributes(attrs);
 					result.add(descriptionAdapter); // add to the result
 					// list
 				}
@@ -184,7 +181,7 @@ public class SLPHandlerImpl implements ProtocolHandler {
 
 			try {
 				advertiser.register(serviceDescriptionAdapter.getServiceURL(),
-						serviceDescriptionAdapter.getAttributes());
+						new Hashtable(serviceDescriptionAdapter.getProperties()));
 				published = true;
 			} catch (ServiceLocationException e) {
 				e.printStackTrace();
