@@ -4,8 +4,6 @@ import java.net.InetAddress;
 import java.net.URL;
 import java.net.UnknownHostException;
 import java.util.Collection;
-import java.util.Dictionary;
-import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Iterator;
@@ -32,13 +30,12 @@ public class SLPServiceDescriptionAdapter implements ServiceDescription {
 	private String interfaceName;
 	private Map properties = new HashMap();
 	private ServiceURL serviceURL;
-	private Dictionary attributes;
 
 	public SLPServiceDescriptionAdapter(
 			final ServiceDescription serviceDescription)
 			throws ServiceLocationException {
 		this.interfaceName = serviceDescription.getInterfaceName();
-		this.attributes = (Hashtable) serviceDescription.getProperties();
+		this.properties = (Hashtable) serviceDescription.getProperties();
 
 		String interf = convertInterfaceName(interfaceName);
 		String protocol = (String) serviceDescription.getProperty("protocol");
@@ -137,10 +134,6 @@ public class SLPServiceDescriptionAdapter implements ServiceDescription {
 		return null;
 	}
 
-	public Dictionary getAttributes() {
-		return attributes;
-	}
-
 	public String toString() {
 		StringBuffer sb = new StringBuffer("Service:\n");
 		sb.append("interface=").append(getInterfaceName()).append("\n");
@@ -161,18 +154,6 @@ public class SLPServiceDescriptionAdapter implements ServiceDescription {
 			sb.append(key).append("=").append(value.toString()).append("\n");
 		}
 		
-		sb.append("attributes=\n");
-
-		Enumeration e = attributes.keys();
-		while(e.hasMoreElements()) {
-			key = (String) e.nextElement();
-			value = attributes.get(key);
-			if (value == null) {
-				value = "<null>";
-			}
-			sb.append(key).append("=").append(value.toString()).append("\n");
-		}
-
 		return sb.toString();
 	}
 
@@ -255,8 +236,13 @@ public class SLPServiceDescriptionAdapter implements ServiceDescription {
 		// TODO Auto-generated method stub
 		return null;
 	}
-
-	public void setAtttributes(Dictionary attrs) {
-		attributes = attrs;
+	
+	/**
+	 * 
+	 * @param key
+	 * @param value
+	 */
+	public void addProperty(String key, Object value) {
+		properties.put(key, value);
 	}
 }
