@@ -72,14 +72,14 @@ public class Version implements Comparable {
 	}
 
 	/**
-	 * Creates a version identifier from the specifed components.
+	 * Creates a version identifier from the specified components.
 	 * 
 	 * @param major Major component of the version identifier.
 	 * @param minor Minor component of the version identifier.
 	 * @param micro Micro component of the version identifier.
 	 * @param qualifier Qualifier component of the version identifier. If
-	 *        <code>null</code> is specified, then the qualifier will be set
-	 *        to the empty string.
+	 *        <code>null</code> is specified, then the qualifier will be set to
+	 *        the empty string.
 	 * @throws IllegalArgumentException If the numerical components are negative
 	 *         or the qualifier string is invalid.
 	 */
