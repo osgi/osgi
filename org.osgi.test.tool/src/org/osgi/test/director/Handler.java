@@ -6,13 +6,30 @@
  */
 package org.osgi.test.director;
 
-import java.io.*;
-import java.net.*;
-import java.util.*;
-import org.osgi.framework.*;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
+import java.net.URL;
+import java.net.URLConnection;
+import java.net.UnknownServiceException;
+import java.util.Date;
+import java.util.Hashtable;
+import java.util.StringTokenizer;
+import java.util.Vector;
+
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.BundleEvent;
+import org.osgi.framework.BundleListener;
+import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.test.script.Tag;
-import org.osgi.test.service.*;
-import org.osgi.test.shared.*;
+import org.osgi.test.service.RemoteService;
+import org.osgi.test.service.TestCase;
+import org.osgi.test.shared.IApplet;
+import org.osgi.test.shared.IRun;
 
 /**
  * Control the tests. Originally, the director had an applet and this class was
@@ -152,9 +169,9 @@ public class Handler implements BundleListener {
 				PrintWriter pw = new PrintWriter(new OutputStreamWriter(new FileOutputStream(file),"UTF-8"));
 				pw.println("<?xml version='1.0' encoding='UTF-8'?>");
 				pw
-						.println("<?xml-stylesheet type='text/xsl' title='Compact' href='https://www2.osgi.org/www/testresult-compact-1.xsl'?>");
+						.println("<?xml-stylesheet type='text/xsl' title='Compact' href='https://www.osgi.org/www/testresult-compact-1.xsl'?>");
 				pw
-						.println("<?xml-stylesheet type='text/xsl' title='Full' href='https://www2.osgi.org/www/testresult-full-1.xsl'?>");
+						.println("<?xml-stylesheet type='text/xsl' title='Full' href='https://www.osgi.org/www/testresult-full-1.xsl'?>");
 				run.history.print(0, pw);
 				pw.close();
 			}

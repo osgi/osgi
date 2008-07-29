@@ -523,7 +523,7 @@ public class Activator extends DefaultTestBundleControl implements FrameworkList
 		String proc = getContext().getProperty("org.osgi.framework.processor");
 		log("Current os + processor", "osname=" + os + " processor=" + proc);
 		log(
-				"See for allowed constants: http://www2.osgi.org/Specifications/Reference",
+				"See for allowed constants: http://www.osgi.org/Specifications/Reference",
 				null);
 	}
 

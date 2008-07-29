@@ -27,15 +27,37 @@
 
 package org.osgi.tools.cross;
 
-import java.io.*;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStreamWriter;
+import java.io.PrintStream;
+import java.io.PrintWriter;
 import java.net.URL;
-import java.util.*;
-import java.util.zip.*;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.TreeSet;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
 
-import javax.xml.transform.*;
-import javax.xml.transform.stream.*;
+import javax.xml.transform.Result;
+import javax.xml.transform.Source;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.URIResolver;
+import javax.xml.transform.stream.StreamResult;
+import javax.xml.transform.stream.StreamSource;
 
-import org.objectweb.asm.*;
+import org.objectweb.asm.ClassReader;
+import org.objectweb.asm.Type;
 import org.osgi.test.script.Tag;
 
 public class Cross {
@@ -147,7 +169,7 @@ public class Cross {
 			PrintWriter pw = new PrintWriter(new OutputStreamWriter(out));
 			pw.println("<?xml version='1.0'?>");
 			pw
-			.println("<?xml-stylesheet type='text/xsl' title='Matrix' href='https://www2.osgi.org/www/testmatrix.xsl'?>");
+			.println("<?xml-stylesheet type='text/xsl' title='Matrix' href='https://www.osgi.org/www/testmatrix.xsl'?>");
 			result.print(0, pw);
 			pw.flush();
 			out.close();
