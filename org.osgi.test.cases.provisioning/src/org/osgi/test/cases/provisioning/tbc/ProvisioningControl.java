@@ -28,16 +28,31 @@
 
 package org.osgi.test.cases.provisioning.tbc;
 
-import java.io.*;
-import java.net.*;
-import java.util.*;
-import java.util.zip.*;
+import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.URL;
+import java.net.URLConnection;
+import java.util.Dictionary;
+import java.util.Hashtable;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
 
-import org.osgi.framework.*;
-import org.osgi.service.provisioning.*;
-import org.osgi.service.url.*;
-import org.osgi.test.cases.util.*;
-import org.osgi.util.tracker.*;
+import org.osgi.framework.Bundle;
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.Constants;
+import org.osgi.framework.InvalidSyntaxException;
+import org.osgi.framework.ServiceReference;
+import org.osgi.framework.ServiceRegistration;
+import org.osgi.service.provisioning.ProvisioningService;
+import org.osgi.service.url.AbstractURLStreamHandlerService;
+import org.osgi.service.url.URLConstants;
+import org.osgi.service.url.URLStreamHandlerService;
+import org.osgi.test.cases.util.DefaultTestBundleControl;
+import org.osgi.util.tracker.ServiceTracker;
 
 /**
  * A test case for the R3 Initial Provisioning service, with
@@ -292,7 +307,10 @@ public class ProvisioningControl extends DefaultTestBundleControl {
 	 * @spec ProvisioningService.PROVISIONING_UPDATE_COUNT
 	 */
 	public void testConstants() {
-		assertEquals( "MIME_BUNDLE", 				"application/x-osgi-bundle", 	ProvisioningService.MIME_BUNDLE );
+		assertEquals("MIME_BUNDLE", "application/vnd.osgi.bundle",
+				ProvisioningService.MIME_BUNDLE);
+		assertEquals("MIME_BUNDLE_ALT", "application/x-osgi-bundle",
+				ProvisioningService.MIME_BUNDLE_ALT);
 		assertEquals( "MIME_BUNDLE_URL", 			"text/x-osgi-bundle-url", 		ProvisioningService.MIME_BUNDLE_URL );
 		assertEquals( "MIME_BYTE_ARRAY", 			"application/octet-stream", 	ProvisioningService.MIME_BYTE_ARRAY );
 		assertEquals( "MIME_STRING", 				"text/plain;charset=utf-8", 	ProvisioningService.MIME_STRING );
