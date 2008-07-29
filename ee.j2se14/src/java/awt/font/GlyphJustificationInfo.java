@@ -23,14 +23,14 @@ public final class GlyphJustificationInfo {
 	public final static int PRIORITY_KASHIDA = 0;
 	public final static int PRIORITY_NONE = 3;
 	public final static int PRIORITY_WHITESPACE = 1;
-	public final boolean growAbsorb = false;
-	public final float growLeftLimit = 0.0f;
-	public final int growPriority = 0;
-	public final float growRightLimit = 0.0f;
-	public final boolean shrinkAbsorb = false;
-	public final float shrinkLeftLimit = 0.0f;
-	public final int shrinkPriority = 0;
-	public final float shrinkRightLimit = 0.0f;
-	public final float weight = 0.0f;
+	public final boolean growAbsorb; { growAbsorb = false; }
+	public final float growLeftLimit; { growLeftLimit = 0.0f; }
+	public final int growPriority; { growPriority = 0; }
+	public final float growRightLimit; { growRightLimit = 0.0f; }
+	public final boolean shrinkAbsorb; { shrinkAbsorb = false; }
+	public final float shrinkLeftLimit; { shrinkLeftLimit = 0.0f; }
+	public final int shrinkPriority; { shrinkPriority = 0; }
+	public final float shrinkRightLimit; { shrinkRightLimit = 0.0f; }
+	public final float weight; { weight = 0.0f; }
 }
 

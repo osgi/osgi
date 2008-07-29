@@ -244,6 +244,7 @@ public class JTree extends javax.swing.JComponent implements javax.accessibility
 			public void setLocation(java.awt.Point var0) { }
 			public void setSize(java.awt.Dimension var0) { }
 			public void setVisible(boolean var0) { }
+			private javax.accessibility.Accessible accessibleParent;
 		}
 	}
 	public static class DynamicUtilTreeNode extends javax.swing.tree.DefaultMutableTreeNode {

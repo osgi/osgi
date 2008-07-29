@@ -97,7 +97,7 @@ public class AWTEventMulticaster implements java.awt.event.ActionListener, java.
 	public void windowLostFocus(java.awt.event.WindowEvent var0) { }
 	public void windowOpened(java.awt.event.WindowEvent var0) { }
 	public void windowStateChanged(java.awt.event.WindowEvent var0) { }
-	protected final java.util.EventListener a = null;
-	protected final java.util.EventListener b = null;
+	protected final java.util.EventListener a; { a = null; }
+	protected final java.util.EventListener b; { b = null; }
 }
 

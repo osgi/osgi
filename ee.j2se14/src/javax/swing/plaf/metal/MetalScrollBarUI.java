@@ -26,5 +26,7 @@ public class MetalScrollBarUI extends javax.swing.plaf.basic.BasicScrollBarUI {
 	protected javax.swing.plaf.metal.MetalScrollButton increaseButton;
 	protected boolean isFreeStanding;
 	protected int scrollBarWidth;
+	private static java.awt.Color thumbColor;
+	private static java.awt.Color thumbHighlightColor;
 }
 

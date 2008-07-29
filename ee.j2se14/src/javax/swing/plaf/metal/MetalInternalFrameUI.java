@@ -22,5 +22,6 @@ public class MetalInternalFrameUI extends javax.swing.plaf.basic.BasicInternalFr
 	public static javax.swing.plaf.ComponentUI createUI(javax.swing.JComponent var0) { return null; }
 	public void setPalette(boolean var0) { }
 	protected static java.lang.String IS_PALETTE;
+	private javax.swing.plaf.metal.MetalInternalFrameTitlePane titlePane;
 }
 

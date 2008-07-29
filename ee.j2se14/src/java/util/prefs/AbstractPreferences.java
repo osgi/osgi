@@ -65,7 +65,7 @@ public abstract class AbstractPreferences extends java.util.prefs.Preferences {
 	public void sync() throws java.util.prefs.BackingStoreException { }
 	protected abstract void syncSpi() throws java.util.prefs.BackingStoreException;
 	public java.lang.String toString() { return null; }
-	protected final java.lang.Object lock = null;
+	protected final java.lang.Object lock; { lock = null; }
 	protected boolean newNode;
 }
 

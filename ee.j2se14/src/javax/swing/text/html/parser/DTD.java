@@ -36,20 +36,20 @@ public class DTD implements javax.swing.text.html.parser.DTDConstants {
 	public static void putDTDHash(java.lang.String var0, javax.swing.text.html.parser.DTD var1) { }
 	public void read(java.io.DataInputStream var0) throws java.io.IOException { }
 	public static int FILE_VERSION;
-	public final javax.swing.text.html.parser.Element applet = null;
-	public final javax.swing.text.html.parser.Element base = null;
-	public final javax.swing.text.html.parser.Element body = null;
+	public final javax.swing.text.html.parser.Element applet; { applet = null; }
+	public final javax.swing.text.html.parser.Element base; { base = null; }
+	public final javax.swing.text.html.parser.Element body; { body = null; }
 	public java.util.Hashtable elementHash;
 	public java.util.Vector elements;
 	public java.util.Hashtable entityHash;
-	public final javax.swing.text.html.parser.Element head = null;
-	public final javax.swing.text.html.parser.Element html = null;
-	public final javax.swing.text.html.parser.Element isindex = null;
-	public final javax.swing.text.html.parser.Element meta = null;
+	public final javax.swing.text.html.parser.Element head; { head = null; }
+	public final javax.swing.text.html.parser.Element html; { html = null; }
+	public final javax.swing.text.html.parser.Element isindex; { isindex = null; }
+	public final javax.swing.text.html.parser.Element meta; { meta = null; }
 	public java.lang.String name;
-	public final javax.swing.text.html.parser.Element p = null;
-	public final javax.swing.text.html.parser.Element param = null;
-	public final javax.swing.text.html.parser.Element pcdata = null;
-	public final javax.swing.text.html.parser.Element title = null;
+	public final javax.swing.text.html.parser.Element p; { p = null; }
+	public final javax.swing.text.html.parser.Element param; { param = null; }
+	public final javax.swing.text.html.parser.Element pcdata; { pcdata = null; }
+	public final javax.swing.text.html.parser.Element title; { title = null; }
 }
 

@@ -41,6 +41,7 @@ public class BasicAttribute implements javax.naming.directory.Attribute {
 	public int size() { return 0; }
 	protected java.lang.String attrID;
 	protected boolean ordered;
+	private final static long serialVersionUID = 6743528196119291326l;
 	protected java.util.Vector values;
 }
 
