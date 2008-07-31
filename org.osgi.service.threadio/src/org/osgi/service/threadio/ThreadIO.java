@@ -1,7 +1,7 @@
 /*
- * $Date: 2007-10-11 17:26:56 +0200 (Thu, 11 Oct 2007) $
+ * $Date$
  * 
- * Copyright (c) OSGi Alliance (2002, 2007). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2008). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,7 +17,9 @@
  */
 package org.osgi.service.threadio;
 
-import java.io.*;
+import java.io.InputStream;
+import java.io.PrintStream;
+
 
 /**
  * Enable multiplexing of the standard IO streams for input, output, and error.
@@ -28,7 +30,7 @@ import java.io.*;
  * thread, it will use the standard input/output that was originally set.
  * 
  * @ThreadSafe
- * @version $Revision: 5021 $
+ * @version $Revision$
  */
 public interface ThreadIO {
 	/**
