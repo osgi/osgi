@@ -1,0 +1,55 @@
+/*
+ * $Date: 2007-10-11 17:26:56 +0200 (Thu, 11 Oct 2007) $
+ * 
+ * Copyright (c) OSGi Alliance (2002, 2007). All Rights Reserved.
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package org.osgi.service.threadio;
+
+import java.io.*;
+
+/**
+ * Enable multiplexing of the standard IO streams for input, output, and error.
+ * 
+ * This service guards the central resource of IO streams. The standard streams
+ * are singletons. This service replaces the singletons with special versions that
+ * can find a unique stream for each thread. If no stream is associated with a
+ * thread, it will use the standard input/output that was originally set.
+ * 
+ * @ThreadSafe
+ * @version $Revision: 5021 $
+ */
+public interface ThreadIO {
+	/**
+	 * Associate this streams with the current thread.
+	 * 
+	 * Ensure that when output is performed on System.in, System.out, System.err it
+	 * will happen on the given streams. 
+	 * 
+	 * The streams will automatically be canceled when the bundle that has gotten
+	 * this service is stopped or returns this service.
+	 * 
+	 * @param in InputStream to use for the current thread when System.in is used
+	 * @param out PrintStream to use for the current thread when System.out is used
+	 * @param err PrintStream to use for the current thread when System.err is used
+	 */
+	void setStreams(InputStream in, PrintStream out, PrintStream err);
+
+	/**
+	 * Cancel the streams associated with the current thread.
+	 * 
+	 * This method will not do anything when no streams are associated.
+	 */
+	void close();
+}
