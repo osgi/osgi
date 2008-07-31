@@ -396,7 +396,7 @@ abstract class AbstractTracked {
 
 	/**
 	 * Call the Tracker modified method. If this method is overridden, the
-	 * overridding method MUST call this method to increment the tracking count.
+	 * overriding method MUST call this method to increment the tracking count.
 	 * 
 	 * @GuardedBy this
 	 */
