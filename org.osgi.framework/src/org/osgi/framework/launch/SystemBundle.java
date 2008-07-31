@@ -26,6 +26,8 @@ import org.osgi.framework.Bundle;
  * main object is created. It allows a configurator to set the properties and
  * launch the framework.
  * 
+ * TODO The javadoc in this class need a good scrub before release.
+ * 
  * @ThreadSafe
  * @version $Revision$
  */

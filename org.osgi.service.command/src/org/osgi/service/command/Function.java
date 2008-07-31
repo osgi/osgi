@@ -23,8 +23,10 @@ import java.util.List;
  * A Function is a a block of code that can be executed with a set of arguments,
  * it returns the result object of executing the script.
  * 
- * @version $Revision$
+ * TODO The javadoc in this class need a good scrub before release.
+ * 
  * @ThreadSafe
+ * @version $Revision$
  */
 public interface Function {
 	/**

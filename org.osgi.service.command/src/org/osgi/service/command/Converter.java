@@ -28,6 +28,8 @@ package org.osgi.service.command;
  * The command shell will rank these services in order of service.ranking and
  * will then call them until one of the converters succeeds.
  * 
+ * TODO The javadoc in this class need a good scrub before release.
+ * 
  * @ThreadSafe
  * @version $Revision$
  */

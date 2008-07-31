@@ -20,14 +20,15 @@ package org.osgi.service.threadio;
 import java.io.InputStream;
 import java.io.PrintStream;
 
-
 /**
  * Enable multiplexing of the standard IO streams for input, output, and error.
  * 
  * This service guards the central resource of IO streams. The standard streams
- * are singletons. This service replaces the singletons with special versions that
- * can find a unique stream for each thread. If no stream is associated with a
- * thread, it will use the standard input/output that was originally set.
+ * are singletons. This service replaces the singletons with special versions
+ * that can find a unique stream for each thread. If no stream is associated
+ * with a thread, it will use the standard input/output that was originally set.
+ * 
+ * TODO The javadoc in this class need a good scrub before release.
  * 
  * @ThreadSafe
  * @version $Revision$

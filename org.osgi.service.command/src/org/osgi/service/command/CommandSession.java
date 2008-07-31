@@ -21,13 +21,17 @@ import java.io.InputStream;
 import java.io.PrintStream;
 
 /**
- * A Command Session holds the executable state of a script engine as well as 
+ * A Command Session holds the executable state of a script engine as well as
  * the keyboard and console streams.
  * 
- * A Command Session is not thread safe and should not be used from different threads 
- * at the same time.
-  * @version $Revision$
-*/
+ * A Command Session is not thread safe and should not be used from different
+ * threads at the same time.
+ * 
+ * TODO The javadoc in this class need a good scrub before release.
+ * 
+ * @NotThreadSafe
+ * @version $Revision$
+ */
 public interface CommandSession {
 	/**
 	 * Execute a program in this session.

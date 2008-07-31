@@ -22,13 +22,16 @@ import java.io.PrintStream;
 
 /**
  * A Command Processor is a service that is registered by a script engine that
- * can execute commands. 
+ * can execute commands.
  * 
- * A Command Processor is a factory for Command Session objects. The Command Session
- * maintains execution state and holds the console and keyboard streams. A Command
- * Processor must track any services that are registered with the COMMAND_SCOPE and
- * COMMAND_FUNCTION properties. The functions listed in the COMMAND_FUNCTION property
- * must be made available as functions in the script language.
+ * A Command Processor is a factory for Command Session objects. The Command
+ * Session maintains execution state and holds the console and keyboard streams.
+ * A Command Processor must track any services that are registered with the
+ * COMMAND_SCOPE and COMMAND_FUNCTION properties. The functions listed in the
+ * COMMAND_FUNCTION property must be made available as functions in the script
+ * language.
+ * 
+ * TODO The javadoc in this class need a good scrub before release.
  * 
  * @ThreadSafe
  * @version $Revision$
