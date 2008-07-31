@@ -17,7 +17,9 @@
  */
 package org.osgi.framework.boot;
 
-import java.util.*;
+import java.util.Properties;
+
+import org.osgi.framework.Bundle;
 
 /**
  * This interface should be implemented by framework implementations when their
@@ -26,7 +28,7 @@ import java.util.*;
  * 
  * @version $Revision: 5020 $
  */
-public interface SystemBundle {
+public interface SystemBundle extends Bundle {
 	/**
 	 * The name of a Security Manager class with public empty constructor. A
 	 * valid value is also true, this means that the framework should
