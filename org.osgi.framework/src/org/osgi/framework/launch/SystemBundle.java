@@ -15,7 +15,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.osgi.framework.boot;
+package org.osgi.framework.launch;
 
 import java.util.Properties;
 
@@ -26,6 +26,7 @@ import org.osgi.framework.Bundle;
  * main object is created. It allows a configurator to set the properties and
  * launch the framework.
  * 
+ * @ThreadSafe
  * @version $Revision$
  */
 public interface SystemBundle extends Bundle {
@@ -95,7 +96,6 @@ public interface SystemBundle extends Bundle {
 	 *            finished. Specifying a zero will wait indefinitely.
 	 * @throws InterruptedException When the wait was interrupted
 	 * 
-	 * @ThreadSafe
 	 */
 
 	void waitForStop(long timeout) throws InterruptedException;
