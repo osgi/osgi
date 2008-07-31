@@ -42,10 +42,13 @@ public interface PublishHook {
 	 * 
 	 * @param event The service event to be delivered.
 	 * @param bundles A <code>Collection</code> of Bundles which have listeners
-	 *        to which the event may be delivered. The method implementation can
+	 *        to which the event may be delivered. The method implementation may
 	 *        remove bundles from the collection to prevent the event from being
-	 *        delivered to those bundles. Attempting to add to the collection
-	 *        will result in an <code>UnsupportedOperationException</code>.
+	 *        delivered to those bundles. The collection supports all the
+	 *        optional <code>Collection</code> operations except
+	 *        <code>add</code> and <code>addAll</code>. Attempting to add to the
+	 *        collection will result in an
+	 *        <code>UnsupportedOperationException</code>.
 	 */
 	void event(ServiceEvent event, Collection bundles);
 }

@@ -50,10 +50,12 @@ public interface FindHook {
 	 *        of a call to
 	 *        {@link BundleContext#getAllServiceReferences(String, String)}
 	 * @param references A <code>Collection</code> of Service References to be
-	 *        returned to the finding bundle. The method implementation can
+	 *        returned to the finding bundle. The method implementation may
 	 *        remove references from the collection to prevent the references
-	 *        from being returned to the finding bundle. Attempting to add to
-	 *        the collection will result in an
+	 *        from being returned to the finding bundle. The collection supports
+	 *        all the optional <code>Collection</code> operations except
+	 *        <code>add</code> and <code>addAll</code>. Attempting to add to the
+	 *        collection will result in an
 	 *        <code>UnsupportedOperationException</code>.
 	 */
 	void find(BundleContext context, String name, String filter,
