@@ -18,13 +18,26 @@
 
 package org.osgi.util.xml;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.net.URL;
-import java.util.*;
+import java.util.Enumeration;
+import java.util.Hashtable;
+import java.util.Vector;
 
-import javax.xml.parsers.*;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.FactoryConfigurationError;
+import javax.xml.parsers.SAXParserFactory;
 
-import org.osgi.framework.*;
+import org.osgi.framework.Bundle;
+import org.osgi.framework.BundleActivator;
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.Constants;
+import org.osgi.framework.ServiceFactory;
+import org.osgi.framework.ServiceReference;
+import org.osgi.framework.ServiceRegistration;
 
 /**
  * A BundleActivator class that allows any JAXP compliant XML Parser to register
@@ -50,8 +63,8 @@ import org.osgi.framework.*;
  * An XMLParserActivator assumes that it can find the class file names of the
  * factory classes in the following files:
  * <ul>
- * <li><code>/META-INF/services/javax.xml.parsers.SAXParserFactory</code> is
- * a file contained in a jar available to the runtime which contains the
+ * <li><code>/META-INF/services/javax.xml.parsers.SAXParserFactory</code> is a
+ * file contained in a jar available to the runtime which contains the
  * implementation class name(s) of the SAXParserFactory.
  * <li><code>/META-INF/services/javax.xml.parsers.DocumentBuilderFactory</code>
  * is a file contained in a jar available to the runtime which contains the
@@ -63,11 +76,11 @@ import org.osgi.framework.*;
  * 
  * <p>
  * <code>XMLParserActivator</code> attempts to instantiate both the
- * <code>SAXParserFactory</code> and the <code>DocumentBuilderFactory</code>.
- * It registers each factory with the framework along with service properties:
+ * <code>SAXParserFactory</code> and the <code>DocumentBuilderFactory</code>. It
+ * registers each factory with the framework along with service properties:
  * <ul>
- * <li>{@link #PARSER_VALIDATING}- indicates if this factory supports
- * validating parsers. It's value is a <code>Boolean</code>.
+ * <li>{@link #PARSER_VALIDATING}- indicates if this factory supports validating
+ * parsers. It's value is a <code>Boolean</code>.
  * <li>{@link #PARSER_NAMESPACEAWARE}- indicates if this factory supports
  * namespace aware parsers It's value is a <code>Boolean</code>.
  * </ul>
@@ -78,7 +91,7 @@ import org.osgi.framework.*;
  * <code>setSAXProperties</code> and <code>setDOMProperties</code> methods.
  * 
  * @ThreadSafe
- * @Version $Revision$
+ * @version $Revision$
  */
 public class XMLParserActivator implements BundleActivator, ServiceFactory {
 	/** Context of this bundle */
