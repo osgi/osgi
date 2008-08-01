@@ -552,6 +552,22 @@ public interface Constants {
 	public static final String	SERVICE_RANKING							= "service.ranking";
 
 	/**
+	 * Service property (named &quot;service.type&quot;) to provide type related information
+	 * about the service, for example, if this service is proxied the property can contain
+	 * a string &quot;proxy&quot; <i>(example only)</i>. The property can hold multiple values, the intention for this
+	 * property is to be included in a filter string. For example, to exclude remoted services, 
+	 * a filter can be constructed that looks like: <code>(&(objectclass=...)(!(service.type=remoted)))</code>. 
+	 * 
+	 * <p>
+	 * The OSGi Alliance reserves all value names that start with &quot;osgi&quot;.
+	 * 
+	 * <p>
+	 * This property may be supplied in the properties <code>Dictionary</code>
+	 * object passed to the <code>BundleContext.registerService</code> method. This property
+	 * may have a type of <code>String</code>, <code>List&lt;String&gt;></code>, or <code>String[]</code>.
+	 */
+	public static final String	SERVICE_TYPE							= "service.type";
+	/**
 	 * Service property (named &quot;service.vendor&quot;) identifying a
 	 * service's vendor.
 	 * 
