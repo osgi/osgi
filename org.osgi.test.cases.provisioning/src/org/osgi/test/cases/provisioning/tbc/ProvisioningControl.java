@@ -786,7 +786,7 @@ public class ProvisioningControl extends DefaultTestBundleControl {
 	 * Load a file from the resources in the ip dictionary.
 	 */
 	void loadFromResource( String ipaFile ) throws IOException {
-		assertNull("The ipa file should have been loaded here", get(ipaFile) );
+		assertNull("The ipa file should not have been loaded here", get(ipaFile) );
 		File		jar = new File(dir,ipaFile);
 		copyAndClose( getClass().getResourceAsStream(ipaFile), 
 			new FileOutputStream( jar )  );
