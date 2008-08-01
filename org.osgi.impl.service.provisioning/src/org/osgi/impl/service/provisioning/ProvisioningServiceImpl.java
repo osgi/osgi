@@ -16,20 +16,22 @@ import org.osgi.util.tracker.ServiceTracker;
  * @author breed
  */
 public class ProvisioningServiceImpl implements ProvisioningService {
-	ProvisioningDictionary	info;
-	ServiceRegistration		reg;
-	ProvisioningLog			log;
-	PermissionAdmin			permadm;
-	ServiceTracker			tracker;
-	BundleContext			bc;
-	Dictionary				regDict;
+	ProvisioningDictionary info;
+	ServiceRegistration reg;
+	ProvisioningLog log;
+	PermissionAdmin permadm;
+	ServiceTracker tracker;
+	BundleContext bc;
+	Dictionary regDict;
 
 	/**
 	 * Constructs a ProvisioningService to be registered in the service
 	 * registry.
 	 * 
-	 * @param bc - The BundleContext from the Provisioning activator.
-	 * @param log - The event logger.
+	 * @param bc -
+	 *            The BundleContext from the Provisioning activator.
+	 * @param log -
+	 *            The event logger.
 	 */
 	public ProvisioningServiceImpl(BundleContext bc, ProvisioningLog log,
 			Dictionary regDict) {
@@ -97,11 +99,13 @@ public class ProvisioningServiceImpl implements ProvisioningService {
 	 * The maximum number of provisioning iterations before stopping. This is
 	 * needed to avoid infinite provisioning loops.
 	 */
-	final private int	MAX_ITERATION	= 6;
+	final private int MAX_ITERATION = 6;
 
 	/**
-	 * @param iteration how many times this has been called using the nextref
-	 *        mechanism. If it hits MAX_ITERATIONS, the nextref will be ignored.
+	 * @param iteration
+	 *            how many times this has been called using the nextref
+	 *            mechanism. If it hits MAX_ITERATIONS, the nextref will be
+	 *            ignored.
 	 * 
 	 * @see org.osgi.service.provisioning.ProvisioningService#addInformation()
 	 */
@@ -143,15 +147,13 @@ public class ProvisioningServiceImpl implements ProvisioningService {
 			if (bundle == null) {
 				log.log("Tried to start " + location
 						+ " before it was installed.");
-			}
-			else {
+			} else {
 				if (permadm != null)
 					permadm.setPermissions(location, AllPermissionInfo);
 				try {
 					bundle.start();
 					log.log(location + " started");
-				}
-				catch (BundleException e) {
+				} catch (BundleException e) {
 					log.log(location + " couldn't be started");
 				}
 			}
@@ -175,16 +177,19 @@ public class ProvisioningServiceImpl implements ProvisioningService {
 	}
 
 	/**
-	 * @param iteration how many times this has been called using the nextref
-	 *        mechanism. If it hits MAX_ITERATIONS, the nextref will be ignored.
+	 * @param iteration
+	 *            how many times this has been called using the nextref
+	 *            mechanism. If it hits MAX_ITERATIONS, the nextref will be
+	 *            ignored.
 	 * @see org.osgi.service.provisioning.ProvisioningService#addInformation()
 	 */
 	public void addInformation(ZipInputStream zis, int iteration)
 			throws IOException {
 		class BundleToInstall {
-			String					name;
-			ByteArrayOutputStream	bundle	= null;
-		};
+			String name;
+			ByteArrayOutputStream bundle = null;
+		}
+		;
 		Vector bundlesToInstall = new Vector();
 		int count;
 		Hashtable newinfo = new Hashtable();
@@ -201,35 +206,28 @@ public class ProvisioningServiceImpl implements ProvisioningService {
 			count = readData(zis, os);
 			if (mime.equalsIgnoreCase(ProvisioningService.MIME_STRING)) {
 				newinfo.put(key, new String(os.toByteArray(), "UTF-8"));
+			} else if (mime
+					.equalsIgnoreCase(ProvisioningService.MIME_BYTE_ARRAY)) {
+				newinfo.put(key, os.toByteArray());
+			} else if (mime.equalsIgnoreCase(ProvisioningService.MIME_BUNDLE)
+					|| mime
+							.equalsIgnoreCase(ProvisioningService.MIME_BUNDLE_ALT)) {
+				BundleToInstall b = new BundleToInstall();
+				b.name = key;
+				b.bundle = os;
+				bundlesToInstall.add(b);
+			} else if (mime
+					.equalsIgnoreCase(ProvisioningService.MIME_BUNDLE_URL)) {
+				BundleToInstall b = new BundleToInstall();
+				b.name = key;
+				String url = new String(os.toByteArray());
+				InputStream is = (InputStream) new URL(url).getContent();
+				b.bundle = new ByteArrayOutputStream();
+				readData(is, b.bundle);
+				bundlesToInstall.add(b);
+			} else {
+				log.log("Invalid MIME type " + mime + " for " + key);
 			}
-			else
-				if (mime.equalsIgnoreCase(ProvisioningService.MIME_BYTE_ARRAY)) {
-					newinfo.put(key, os.toByteArray());
-				}
-				else
-					if (mime.equalsIgnoreCase(ProvisioningService.MIME_BUNDLE)) {
-						BundleToInstall b = new BundleToInstall();
-						b.name = key;
-						b.bundle = os;
-						bundlesToInstall.add(b);
-					}
-					else
-						if (mime
-								.equalsIgnoreCase(ProvisioningService.MIME_BUNDLE_URL)) {
-							BundleToInstall b = new BundleToInstall();
-							b.name = key;
-							String url = new String(os.toByteArray());
-							InputStream is = (InputStream) new URL(url)
-									.getContent();
-							b.bundle = new ByteArrayOutputStream();
-							readData(is, b.bundle);
-							bundlesToInstall.add(b);
-						}
-						else {
-							log
-									.log("Invalid MIME type " + mime + " for "
-											+ key);
-						}
 		}
 		Enumeration en = bundlesToInstall.elements();
 		while (en.hasMoreElements()) {
@@ -239,33 +237,30 @@ public class ProvisioningServiceImpl implements ProvisioningService {
 				if (b == null) {
 					bc.installBundle(bti.name, new ByteArrayInputStream(
 							bti.bundle.toByteArray()));
-				}
-				else {
+				} else {
 					b
 							.update(new ByteArrayInputStream(bti.bundle
 									.toByteArray()));
 				}
-			}
-			catch (Exception e) {
+			} catch (Exception e) {
 				log.log(e.toString() + ": when installing " + bti.name);
 			}
 		}
 		addInformation(newinfo, iteration);
 	}
 
-	PermissionInfo	AllPermissionInfo[]	= {new PermissionInfo(
-												"java.security.AllPermission",
-												null, null)};
+	PermissionInfo AllPermissionInfo[] = { new PermissionInfo(
+			"java.security.AllPermission", null, null) };
 
 	/**
 	 * This inner class is used to request a zip file containing provisioning
 	 * information from a URL and add it to the dictionary.
 	 */
 	class RequestorThread extends Thread {
-		String			url;
-		ProvisioningLog	log;
+		String url;
+		ProvisioningLog log;
 		/* Iteration is used to prevent an infinite loop. */
-		int				iteration;
+		int iteration;
 
 		RequestorThread(String url, String spid, ProvisioningLog log,
 				int iteration) {
@@ -276,22 +271,19 @@ public class ProvisioningServiceImpl implements ProvisioningService {
 				int q = url.lastIndexOf('?');
 				if (q == -1) {
 					sb.append('?');
-				}
-				else {
+				} else {
 					sb.append('&');
 				}
 				sb.append("service_platform_id=");
 				try {
 					sb.append(encode(spid));
-					//sb.append(URLEncoder.encode(spid, ));
-				}
-				catch (UnsupportedEncodingException e) {
+					// sb.append(URLEncoder.encode(spid, ));
+				} catch (UnsupportedEncodingException e) {
 					/* This really can't happen since Java requires UTF-8! */
 					throw new RuntimeException("UTF-8 encoding not present");
 				}
 				this.url = sb.toString();
-			}
-			else {
+			} else {
 				this.url = url;
 			}
 			this.log = log;
@@ -311,13 +303,11 @@ public class ProvisioningServiceImpl implements ProvisioningService {
 				if (is instanceof ZipInputStream) {
 					// Hey, we might get lucky...
 					zis = (ZipInputStream) is;
-				}
-				else {
+				} else {
 					zis = new ZipInputStream(is);
 				}
 				addInformation(zis, iteration);
-			}
-			catch (IOException e) {
+			} catch (IOException e) {
 				e.printStackTrace();
 				log.log("Error retrieving information from " + url + ": " + e);
 			}
@@ -334,16 +324,15 @@ public class ProvisioningServiceImpl implements ProvisioningService {
 					|| (c >= '0' && c <= '9') || c == '.' || c == '-'
 					|| c == '*' || c == '_')
 				sb.append((char) c);
-			else
-				if (c == ' ')
-					sb.append('+');
-				else {
-					sb.append('%');
-					int l = (0xF0 & c) / 16;
-					sb.append((char) (l >= 10 ? 'A' + (l - 10) : '0' + l));
-					l = c & 0xF;
-					sb.append((char) (l >= 10 ? 'A' + (l - 10) : '0' + l));
-				}
+			else if (c == ' ')
+				sb.append('+');
+			else {
+				sb.append('%');
+				int l = (0xF0 & c) / 16;
+				sb.append((char) (l >= 10 ? 'A' + (l - 10) : '0' + l));
+				l = c & 0xF;
+				sb.append((char) (l >= 10 ? 'A' + (l - 10) : '0' + l));
+			}
 		}
 		return sb.toString();
 	}
