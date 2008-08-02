@@ -214,12 +214,15 @@ public class ServiceTracker implements ServiceTrackerCustomizer {
 		this.context = context;
 		this.trackReference = null;
 		this.trackClass = null;
-		final Version frameworkVersion = new Version((String) AccessController
+		final Version frameworkVersion = (Version) AccessController
 				.doPrivileged(new PrivilegedAction() {
 					public Object run() {
-						return context.getProperty(Constants.FRAMEWORK_VERSION);
+						String version = context
+								.getProperty(Constants.FRAMEWORK_VERSION);
+						return (version == null) ? Version.emptyVersion
+								: new Version(version);
 					}
-				}));
+				});
 		final boolean endMatchSupported = (frameworkVersion
 				.compareTo(endMatchVersion) >= 0);
 		this.listenerFilter = endMatchSupported ? filter.toString() : null;
