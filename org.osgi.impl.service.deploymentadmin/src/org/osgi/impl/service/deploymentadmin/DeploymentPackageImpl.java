@@ -18,6 +18,7 @@
 package org.osgi.impl.service.deploymentadmin;
 
 import java.io.Serializable;
+import java.net.URL;
 import java.security.*;
 import java.util.*;
 import java.util.jar.*;
@@ -436,5 +437,15 @@ public class DeploymentPackageImpl implements DeploymentPackage, Serializable {
     DeploymentPackageCtx getDpCtx() {
     	return dpCtx;
     }
+
+	public String getDisplayName(String locale) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public URL getIcon(String locale) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
 }
