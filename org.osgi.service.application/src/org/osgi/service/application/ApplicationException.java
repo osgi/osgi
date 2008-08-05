@@ -1,7 +1,7 @@
 /*
  * $Date$
  * 
- * Copyright (c) OSGi Alliance (2005, 2007). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2005, 2008). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -77,19 +77,20 @@ public class ApplicationException extends Exception {
      */
     public static final int APPLICATION_DUPLICATE_SCHEDULE_ID = 0x05;
 
-    /**
-     * The exit value is not available for an application instance because the 
-     * instance has not terminated.
-     */
+	/**
+	 * The exit value is not available for an application instance because the
+	 * instance has not terminated.
+	 * 
+	 * @since 1.1
+	 */
     public static final int APPLICATION_EXITVALUE_NOT_AVAILABLE = 0x06;
-
 
 	/**
 	 * Creates an <code>ApplicationException</code> with the specified error code.
 	 * @param errorCode The code of the error 
 	 */
 	public ApplicationException(int errorCode) {
-		this(errorCode,(Throwable) null);
+		this(errorCode, (Throwable) null);
 	}
 	
 	/**
@@ -110,7 +111,7 @@ public class ApplicationException extends Exception {
 	 * @param message The associated message
 	 */
 	public ApplicationException(int errorCode, String message) {
-		this(errorCode, message,null);
+		this(errorCode, message, null);
 	}
 
 	/**
