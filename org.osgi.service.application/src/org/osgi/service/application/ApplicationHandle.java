@@ -50,9 +50,14 @@ public abstract class ApplicationHandle {
 	public final static String APPLICATION_DESCRIPTOR	= "application.descriptor";
 	
 	/**
-	 * The property key for the state of this appliction instance.
+	 * The property key for the state of this application instance.
 	 */
 	public final static String APPLICATION_STATE		= "application.state";
+
+	/**
+	 * The property key for the supports exit value property of this application instance.
+	 */
+	public final static String APPLICATION_SUPPORTS_EXITVALUE = "application.supports.exitvalue";
 
 	/**
 	 * The application instance is running. This is the initial state of a newly
@@ -135,6 +140,43 @@ public abstract class ApplicationHandle {
 	 *             if the application handle is unregistered
 	 */
 	public abstract String getState();
+
+	/**
+	 * Returns the exit value for the application instance.  The 
+	 * timeout specifies how the method behaves when 
+	 * the application has not terminated.  A negative, zero or 
+	 * positive value may be used.
+     * <ul>
+     *   <li> negative - The method does not wait for termination.
+     *          If the application has not terminated then an
+     *          <code>ApplicationException</code> is thrown
+     *   <li> zero - The method waits until the application has terminated 
+     *   <li> positive - The method waits until the application has terminated
+     *          or the timeout has expired.  If the timeout has expired and the 
+     *          application has not terminated then an
+     *          <code>ApplicationException</code> is thrown.
+     * </ul>
+	 * <p>  
+	 * The default implementation throws an 
+	 * <code>UnsupportedOperationException</code>.
+	 * The application model should override this method if exit values
+	 * are supported.
+	 * </p>
+	 * @param timeout The maximum time in milliseconds to wait for the 
+	 *             application to timeout. 
+	 * @return the exit value for the application instance.  The value
+	 *             is application specific.
+	 * @throws UnsupportedOperationException
+	 *             if the application model does not support exit values.
+	 * @throws InterruptedException 
+	 *             if the wait has been interrupted.
+	 * @throws ApplicationException
+	 *             if the application has not terminated.  The error
+	 *             code will be {@link ApplicationException#APPLICATION_EXITVALUE_NOT_AVAILABLE}.
+	 */
+	public Object getExitValue(long timeout) throws ApplicationException, InterruptedException{
+		throw new UnsupportedOperationException();
+	}
 
 	/**
 	 * Returns the unique identifier of this instance. This value is also

@@ -35,6 +35,10 @@ package org.osgi.service.application;
  *       container during launch.</li>
  * <li> {@link #APPLICATION_SCHEDULING_FAILED} - The scheduling of an application
  *       failed.
+ * <li> {@link #APPLICATION_DUPLICATE_SCHEDULE_ID} -  The application scheduling failed 
+ *       because the specified identifier is already in use.
+ * <li> {@link #APPLICATION_EXITVALUE_NOT_AVAILABLE} - The exit value is not available 
+ *       for an application instance because the instance has not terminated.
  * </ul>
  * 
  */
@@ -72,6 +76,13 @@ public class ApplicationException extends Exception {
      * is already in use.
      */
     public static final int APPLICATION_DUPLICATE_SCHEDULE_ID = 0x05;
+
+    /**
+     * The exit value is not available for an application instance because the 
+     * instance has not terminated.
+     */
+    public static final int APPLICATION_EXITVALUE_NOT_AVAILABLE = 0x06;
+
 
 	/**
 	 * Creates an <code>ApplicationException</code> with the specified error code.
@@ -127,7 +138,7 @@ public class ApplicationException extends Exception {
 	}
 
 	/**
-	 * Returns the error code associcated with this exception.
+	 * Returns the error code associated with this exception.
 	 * @return The error code of this exception.
 	 */
 	public int getErrorCode() {
