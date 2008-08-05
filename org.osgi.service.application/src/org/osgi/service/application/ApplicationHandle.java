@@ -148,7 +148,7 @@ public abstract class ApplicationHandle {
 
 	/**
 	 * Returns the exit value for the application instance. The timeout
-	 * specifies how the method behaves when the application has yet not
+	 * specifies how the method behaves when the application has not yet
 	 * terminated. A negative, zero or positive value may be used.
 	 * <ul>
 	 * <li> negative - The method does not wait for termination. If the
