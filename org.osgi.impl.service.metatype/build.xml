@@ -1,11 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="project" default="publish"> 
 	<import file="../cnf/build.xml"/>
-	
-	<!-- 
-	The implementation is supplied by Eclipse Equinox.
-	-->
-	<target name="init" depends="master.init">
-		<copy file="${workspace}/licensed/jar/org.eclipse.equinox.metatype.jar" tofile="${project}/${project.name}.jar" verbose="${verbose}" preservelastmodified="true"/>
-	</target>
 </project>
