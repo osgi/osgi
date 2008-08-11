@@ -2,9 +2,9 @@
 <classpath>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry exported="true" kind="src" path="/org.osgi.service.upnp"/>
-	<classpathentry sourcepath="/osgi.released/ee.minimum.jar" kind="lib" path="/osgi.released/ee.minimum.jar"/>
-	<classpathentry sourcepath="/osgi.released/osgi.jar" kind="lib" path="/osgi.released/osgi.jar"/>
-	<classpathentry sourcepath="/org.osgi.impl.bundle.servlet/src" kind="lib" path="/licensed/jar/servlet.jar"/>
+	<classpathentry sourcepath="/cnf/repo/ee.minimum/ee.minimum-1.0.0.jar" kind="lib" path="/cnf/repo/ee.minimum/ee.minimum-1.0.0.jar"/>
+	<classpathentry sourcepath="/cnf/repo/osgi/osgi-4.0.0.jar" kind="lib" path="/cnf/repo/osgi/osgi-4.0.0.jar"/>
+	<classpathentry sourcepath="/org.osgi.impl.bundle.servlet/src" kind="lib" path="/licensed/repo/org.osgi.impl.bundle.servlet/org.osgi.impl.bundle.servlet-2.1.0.jar"/>
 	<classpathentry sourcepath="/osgi.released/osgi.internal.jar" kind="lib" path="/osgi.released/osgi.internal.jar"/>
 	<classpathentry kind="output" path="src"/>
 </classpath>

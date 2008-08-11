@@ -3,9 +3,8 @@
 	<classpathentry kind="src" path="src"/>
 	<classpathentry exported="true" kind="src" path="/org.osgi.service.provisioning"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="lib" path="/licensed/jar/servlet.jar" sourcepath="/org.osgi.impl.bundle.servlet/src"/>
+	<classpathentry kind="lib" path="/licensed/repo/org.osgi.impl.bundle.servlet/org.osgi.impl.bundle.servlet-2.1.0.jar" sourcepath="/org.osgi.impl.bundle.servlet/src"/>
 	<classpathentry kind="lib" path="/osgi.released/osgi.internal.jar" sourcepath="/osgi.released/osgi.internal.jar"/>
-	<classpathentry kind="lib" path="/cnf/jar/osgi.core-4.0.jar"/>
-	<classpathentry kind="lib" path="/cnf/jar/osgi.cmpn-4.0.jar"/>
+	<classpathentry kind="lib" path="/cnf/repo/osgi/osgi-4.1.0.jar"/>
 	<classpathentry kind="output" path="src"/>
 </classpath>
