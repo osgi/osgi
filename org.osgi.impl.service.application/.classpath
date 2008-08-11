@@ -2,10 +2,9 @@
 <classpath>
 	<classpathentry exported="true" kind="src" path="/org.osgi.service.application"/>
 	<classpathentry kind="src" path="src"/>
-	<classpathentry sourcepath="/osgi.released/osgi.jar" kind="lib" path="/osgi.released/osgi.jar"/>
 	<classpathentry kind="src" path="/org.osgi.application"/>
-	<classpathentry kind="lib" path="/licensed/jar/saxon.jar"/>
-	<classpathentry sourcepath="/home/ckarai/dfs" kind="lib" path="/licensed/ant/lib/xercesImpl.jar"/>
-	<classpathentry sourcepath="/osgi.released/ee.foundation.jar" kind="lib" path="/osgi.released/ee.foundation.jar"/>
+	<classpathentry kind="lib" path="/licensed/repo/com.icl.saxon/com.icl.saxon-6.5.1.jar"/>
+	<classpathentry kind="lib" path="/cnf/repo/ee.foundation/ee.foundation-1.1.0.jar" sourcepath="/cnf/repo/ee.foundation/ee.foundation-1.1.0.jar"/>
+	<classpathentry kind="lib" path="/cnf/repo/osgi/osgi-4.1.0.jar" sourcepath="/cnf/repo/osgi/osgi-4.0.0.jar"/>
 	<classpathentry kind="output" path="src"/>
 </classpath>
