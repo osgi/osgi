@@ -104,5 +104,5 @@ public interface RepositoryAdmin {
 	 */
 	Repository[] listRepositories();
 	
-	Resource getResource(String respositoryId);
+	Resource getResource(String resourceId);
 }

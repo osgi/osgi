@@ -39,5 +39,10 @@ public interface Resolver {
 
 	boolean resolve();
 
+	/**
+	 * Needs more description ... Should return some state so you can see what went wrong
+	 * 
+	 * @param start
+	 */
 	void deploy(boolean start);
 }
