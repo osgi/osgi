@@ -88,9 +88,17 @@
 		<basename property="project.name" file="${project}" />
 		<property name="p" value="${project.name}" />
 		<property environment="env" />
+		<property name="target-dir" value="generated" />
+		<property name="target" value="${project}/${target-dir}" />
+		<property name="build" value="${workspace}/cnf" />
+		<property name="licensed" value="${workspace}/licensed" />
+		<property name="licensed-repo" value="${licensed}/repo" />
+		<property name="repo" value="${build}/repo" />
+
 
 		<taskdef resource="org/osgi/tools/build/ant/taskdef.properties" classpath="${workspace}/cnf/jar/btool.jar" />
 		<taskdef resource="net/sf/antcontrib/antcontrib.properties" classpath="${workspace}/licensed/ant-contrib/ant-contrib-0.6.jar" />
+		<taskdef resource="aQute/bnd/ant/taskdef.properties" classpath="${licensed}/repo/biz.aQute.bnd/biz.aQute.bnd-latest.jar" />
 
 		<!-- Include properies files in the following order:
 				Project properties
@@ -120,6 +128,9 @@
 		<property name="project.bootclasspath" value="" />
 		<property name="p" value="${project.name}" />
 		<property name="bin.includes" value="${project.name}.jar" />
+
+		
+		<mkdir dir="${target}"/>
 		
 		<!-- mark init has been run -->
 		<property name="initialized" value="set" />
@@ -132,7 +143,7 @@
 	-->
 	<target name="dependencies" depends="init" if="project.buildpath">
 		<subant target="publish" inheritAll="false" buildpath="${project.buildpath}">
-			<property name="release.dir" value="${project}" />
+			<property name="release.dir" value="${target}" />
 		</subant>
 	</target>
 
@@ -149,13 +160,25 @@
 		JARS
 		Iterate of the jars to build.
 	-->
-	<target name="jars" depends="init" if="jars.compile.order">
+	<target name="jars" depends="jars-btool,jars-bnd,copy-from">
+	</target>
+	
+	<target name="copy-from" if="copy.from">
+		<copy overwrite="true" file="${copy.from}" tofile="${target}/${p}.jar" preservelastmodified="true"/>
+	</target>
+	
+	<!-- Use the older btool tool -->
+	<target name="jars-btool" depends="init" if="jars.compile.order">
 		<echo>JARs ${jars.compile.order}</echo>
-
 		<!-- For each jar file, build it -->
 		<foreach list="${jars.compile.order}" delimiter=" ," target="-jar" param="item.jarFile" inheritAll="true" />
 	</target>
 
+	<target name="jars-bnd" depends="init" if="use.bnd">
+		<echo>JARs ${use.bnd}</echo>
+		<bnd eclipse="true" failok="false" exceptions="true" files="bnd.bnd" output="${target}"/>
+	</target>
+	
 	<target name="-jar" depends="-btool,-signjar" />
 
 	<!--
@@ -187,7 +210,7 @@
 		  <param name="target" value="before.${item.jarFile}"/>
 		</antcall>
 		
-		<btool jar="${project}/${item.jarFile}" failok="${btool.failok}" eclipse="${project}" analyse="${btool.analyse}" 
+		<btool jar="${target}/${item.jarFile}" failok="${btool.failok}" eclipse="${project}" analyse="${btool.analyse}" 
 			showmanifest="${btool.showmanifest}" includeProperty="include.${item.jarFile}" expandProperty="expand.${item.jarFile}" 
 			contentFoldersProperty="source.${item.jarFile}" excludeImportProperty="excludeImport.${item.jarFile}" 
 			includeExportProperty="includeExport.${item.jarFile}" ipaProperty="ipa.${item.jarFile}" verbose="${verbose}" 
@@ -218,7 +241,7 @@
 	-->
 	<target name="release" depends="init" if="release.dir">
 		<copy todir="${release.dir}" verbose="${verbose}" preservelastmodified="true">
-			<fileset dir="${project}" includes="${bin.includes}" />
+			<fileset dir="${target}" includes="${bin.includes}" />
 		</copy>
 	</target>
 
@@ -233,6 +256,7 @@
 		<delete quiet="true" includeEmptyDirs="true" verbose="${verbose}">
 			<fileset dir="${project.bindir}" includes="**/*.bak **/*.class" />
 			<fileset dir="${project}" includes="**/*.bak **/~* *.jar" />
+			<fileset dir="${target}" />
 		</delete>
 	</target>
 
@@ -260,7 +284,9 @@
 		<echo>bin.includes:           ${bin.includes}</echo>
 		<echo>prebuild:               ${prebuild}</echo>
 		<echo>base.modfied:           ${base.modified} (${base.modified.readable})</echo>
-
+		<echo>target:                 ${target}</echo>
+		<echo>licensed repo:          ${licensed-repo}</echo>
+	
 	</target>
 
 	<!--

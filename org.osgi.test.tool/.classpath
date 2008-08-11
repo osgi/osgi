@@ -2,9 +2,9 @@
 <classpath>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry sourcepath="/osgi.released/osgi.jar" kind="lib" path="/osgi.released/osgi.jar"/>
-	<classpathentry sourcepath="/aQute.constructor/IFC11SRC.ZIP" kind="lib" path="/licensed/jar/ifc11.jar"/>
-	<classpathentry kind="lib" path="/licensed/jar/servlet.jar"/>
+	<classpathentry sourcepath="/cnf/repo/osgi/osgi-4.0.0.jar" kind="lib" path="/cnf/repo/osgi/osgi-4.0.0.jar"/>
+	<classpathentry sourcepath="/aQute.constructor/IFC11SRC.ZIP" kind="lib" path="/licensed/repo/netscape.ifc/netscape.ifc-1.1.0.jar"/>
+	<classpathentry kind="lib" path="/licensed/repo/org.osgi.impl.bundle.servlet/org.osgi.impl.bundle.servlet-2.1.0.jar"/>
 	<classpathentry sourcepath="/org.osgi.test.cases/src" kind="lib" path="/osgi.released/osgi.internal.jar"/>
 	<classpathentry kind="output" path="src"/>
 </classpath>

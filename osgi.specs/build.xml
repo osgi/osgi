@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="project" default="javadoc">
-	<import file="../build/build.xml" />
+	<import file="../cnf/build.xml" />
 	
 
 	<target name="javadoc" depends="init">
@@ -10,7 +10,7 @@
 			<fileset dir="xml" includes="*.xml"/>
 		</delete>
 		<echo>${javadoc}</echo>
-		<javadoc doclet="org.osgi.tools.xmldoclet.XmlDoclet" docletpath="${repo}/osgi.tools/osgi.tools-1.1.0.jar" classpath="${project.classpath}" encoding="utf-8" packagenames="${javadoc}">
+		<javadoc doclet="org.osgi.tools.xmldoclet.XmlDoclet" docletpath="../org.osgi.tools/src" classpath="${project.classpath}" encoding="utf-8" packagenames="${javadoc}">
 			<sourcepath>
 				<dirset dir="${workspace}">
 					<include name="*/src" />

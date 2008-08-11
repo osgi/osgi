@@ -2,15 +2,15 @@
 <classpath>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="lib" path="/licensed/ant/lib/ant.jar"/>
-	<classpathentry kind="lib" path="/licensed/jar/junit.jar"/>
-	<classpathentry sourcepath="/osgi.released/osgi.internal.jar" kind="lib" path="/osgi.released/osgi.internal.jar"/>
-	<classpathentry kind="lib" path="/licensed/jar/saxon.jar"/>
-	<classpathentry kind="lib" path="/licensed/jar/nanoxml.jar"/>
+	<classpathentry kind="lib" path="/licensed/repo/org.apache.tools.ant/org.apache.tools.ant-1.6.5.jar"/>
+	<classpathentry kind="lib" path="/osgi.released/osgi.internal.jar" sourcepath="/osgi.released/osgi.internal.jar"/>
+	<classpathentry kind="lib" path="/licensed/repo/com.icl.saxon/com.icl.saxon-6.5.1.jar"/>
 	<classpathentry kind="lib" path="jar/tools.jar"/>
-	<classpathentry sourcepath="/osgi.released/osgi.jar" kind="lib" path="/osgi.released/osgi.jar"/>
+	<classpathentry kind="lib" path="/cnf/repo/osgi/osgi-4.0.0.jar" sourcepath="/cnf/repo/osgi/osgi-4.0.0.jar"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/org.osgi.test.tool"/>
-	<classpathentry kind="lib" path="/licensed/jar/bcel.jar"/>
-	<classpathentry sourcepath="/licensed/src/asmsrc.zip" kind="lib" path="/licensed/jar/asm-2.2.2.jar"/>
+	<classpathentry kind="lib" path="/licensed/repo/org.apache.bcel/org.apache.bcel-1.0.0.jar"/>
+	<classpathentry kind="lib" path="/licensed/repo/com.springsource.junit/com.springsource.junit-3.8.2.jar"/>
+	<classpathentry kind="lib" path="/licensed/repo/nanoxml/nanoxml-1.0.0.jar"/>
+	<classpathentry kind="lib" path="/licensed/repo/org.objectweb.asm/org.objectweb.asm-2.2.2.jar"/>
 	<classpathentry kind="output" path="src"/>
 </classpath>

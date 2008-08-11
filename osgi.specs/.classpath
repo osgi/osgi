@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry kind="src" path="src"/>
-	<classpathentry kind="lib" path="/licensed/jar/servlet.jar" sourcepath="/org.osgi.impl.bundle.servlet/src"/>
-	<classpathentry kind="lib" path="/licensed/jar/saxon.jar"/>
+	<classpathentry kind="lib" path="/licensed/repo/org.osgi.impl.bundle.servlet/org.osgi.impl.bundle.servlet-2.1.0.jar" sourcepath="/org.osgi.impl.bundle.servlet/src"/>
+	<classpathentry kind="lib" path="/licensed/repo/com.icl.saxon/com.icl.saxon-6.5.1.jar"/>
 	<classpathentry kind="src" path="/org.osgi.tools"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/ee.foundation"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/ee.minimum"/>

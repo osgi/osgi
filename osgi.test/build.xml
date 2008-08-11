@@ -9,17 +9,17 @@
 		<copy file="${workspace}/licensed/jar/servlet.jar" tofile="servlet.jar" verbose="${verbose}" preservelastmodified="true"/>
 	</target>
 
-	<target name="crossref">
+	<target name="crossref" depends="init">
 		<foreach list="${crossref}" delimiter=" ," target="-cross" param="item.spec" inheritAll="true" />
 	</target>
 	
 	<target name="-cross">
-		<java fork="true" classname="org.osgi.tools.cross.Cross" classpath="../org.osgi.tools/src;../licensed/jar/asm-2.2.2.jar;osgi.director.jar">
+		<java fork="true" classname="org.osgi.tools.cross.Cross" classpath="${repo}/org.osgi.tools.cross/org.osgi.tools.cross-latest.jar">
 		  <arg value="-o"/>
 		  <arg value="doc/osgi.${item.spec}.html"/>
 		  <arg value="-target"/>
-		  <arg value="osgi.${item.spec}.jar"/>
-		  <arg value="osgi.${item.spec}.tests.jar"/>
+		  <arg value="${target-dir}/osgi.${item.spec}.jar"/>
+		  <arg value="${target-dir}/osgi.${item.spec}.tests.jar"/>
 		</java>
 	</target>
 
