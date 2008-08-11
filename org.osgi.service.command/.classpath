@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry kind="src" path="src"/>
-	<classpathentry kind="lib" path="/osgi.released/ee.foundation.jar" sourcepath="/osgi.released/ee.foundation.jar"/>
+	<classpathentry kind="lib" path="/cnf/repo/ee.foundation/ee.foundation-1.1.0.jar" sourcepath="/cnf/repo/ee.foundation/ee.foundation-1.1.0.jar"/>
 	<classpathentry kind="output" path="src"/>
 </classpath>
