@@ -6,7 +6,7 @@
 	<classpathentry kind="src" path="/org.osgi.service.cm"/>
 	<classpathentry kind="src" path="/org.osgi.service.metatype"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/org.osgi.service.component"/>
-	<classpathentry sourcepath="/osgi.released/ee.minimum.jar" kind="lib" path="/osgi.released/ee.minimum.jar"/>
-	<classpathentry kind="lib" path="/licensed/jar/saxon.jar"/>
+	<classpathentry sourcepath="/cnf/repo/ee.minimum/ee.minimum-1.1.3.jar" kind="lib" path="/cnf/repo/ee.minimum/ee.minimum-1.1.3.jar"/>
+	<classpathentry kind="lib" path="/licensed/repo/com.icl.saxon/com.icl.saxon-6.5.1.jar"/>
 	<classpathentry kind="output" path="src"/>
 </classpath>
