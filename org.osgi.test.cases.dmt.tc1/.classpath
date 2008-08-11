@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry kind="src" path="src"/>
-	<classpathentry sourcepath="/osgi.released/ee.minimum.jar" kind="lib" path="/osgi.released/ee.minimum.jar"/>
-	<classpathentry sourcepath="/osgi.released/osgi.jar" kind="lib" path="/osgi.released/osgi.jar"/>
-	<classpathentry sourcepath="/org.osgi.test.cases/src" kind="lib" path="/osgi.released/osgi.internal.jar"/>
+	<classpathentry kind="lib" path="/cnf/repo/ee.minimum/ee.minimum-1.0.0.jar" sourcepath="/cnf/repo/ee.minimum/ee.minimum-1.0.0.jar"/>
+	<classpathentry kind="lib" path="/cnf/repo/osgi/osgi-4.1.0.jar" sourcepath="/cnf/repo/osgi/osgi-4.0.0.jar"/>
+	<classpathentry kind="lib" path="/osgi.released/osgi.internal.jar" sourcepath="/org.osgi.test.cases/src"/>
 	<classpathentry kind="output" path="src"/>
 </classpath>

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry path="/osgi.released/ee.foundation.jar" kind="lib" sourcepath="/osgi.released/ee.foundation.jar"/>
+	<classpathentry path="/cnf/repo/ee.foundation/ee.foundation-1.1.0.jar" kind="lib" sourcepath="/cnf/repo/ee.foundation/ee.foundation-1.1.0.jar"/>
 	<classpathentry kind="src" path="src"/>
-	<classpathentry kind="lib" path="/osgi.released/osgi.jar"/>
+	<classpathentry kind="lib" path="/cnf/repo/osgi/osgi-4.0.0.jar"/>
 	<classpathentry sourcepath="org.osgi.test.cases/src" kind="lib" path="/osgi.released/osgi.internal.jar"/>
 	<classpathentry kind="output" path="src"/>
 </classpath>
