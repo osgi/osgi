@@ -26,8 +26,8 @@
 			docencoding="UTF-8"
 			charset="UTF-8">
 		    <classpath>
-      			<pathelement location="${workspace}/licensed/jar/servlet.jar"/>
-      			<pathelement location="${workspace}/osgi.released/ee.foundation.jar"/>
+      			<pathelement location="${licensed-repo}/org.osgi.impl.bundle.servlet/org.osgi.impl.bundle.servlet-2.1.0.jar"/>
+      			<pathelement location="${repo}/ee.foundation/ee.foundation-1.1.0.jar"/>
     		</classpath>
 			<tag name="Immutable" scope="types" description="Immutable"/>
 			<tag name="ThreadSafe" scope="types" description="ThreadSafe"/>
