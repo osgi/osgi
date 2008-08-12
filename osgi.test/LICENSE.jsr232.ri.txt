@@ -1,0 +1,215 @@
+JSR 232 Binary RI License from the OSGi Alliance
+LIMITED LICENSE AGREEMENT
+
+OSGi Alliance ("OSGi") IS WILLING TO LICENSE THE LICENSED TECHNOLOGY (AS 
+DEFINED BELOW) TO YOU ONLY UPON THE CONDITION THAT YOU ACCEPT ALL OF THE 
+TERMS CONTAINED IN THIS LIMITED LICENSE AGREEMENT ("AGREEMENT").  PLEASE 
+READ THE TERMS AND CONDITIONS OF THIS LICENSE CAREFULLY.  BY SELECTING 
+"ACCEPT" AND/OR DOWNLOADING OR USING THE LICENSED TECHNOLOGY, YOU ACCEPT 
+THE TERMS AND CONDITIONS OF THIS AGREEMENT.  IF YOU ARE NOT WILLING TO 
+BE BOUND BY ITS TERMS, YOU SHALL NOT DOWNLOAD (IN WHICH CASE SELECT THE 
+"DECLINE" BUTTON) NOR USE THE LICENSED TECHNOLOGY.  
+
+In this Agreement, "You" shall mean the individual accepting this 
+Agreement and receiving the Licensed Technology and where such 
+individual is receiving Licensed Technology for other than private use, 
+the legal entity represented by such individual.  
+
+In this Agreement, "Licensed Technology" shall mean Reference 
+Implementation of the Java Specification Request (JSR) 232 for J2ME in 
+binary code form.  
+
+(c) Copyright 2000-2006 OSGi Alliance
+All rights reserved.
+
+1. NOTICE: LIMITED LICENSE GRANTS
+
+1.1 The Licensed Technology and all intellectual property rights 
+relating thereto are owned solely by OSGi and/or its Members or 
+licensors and the Licensed Technology is protected by copyright and may 
+be protected by one or more U.S.  patents, foreign patents, or pending 
+applications.  Except as provided under the following license, no part 
+of the Licensed Technology may be transferred, distributed or given to 
+any third party, reproduced, copied, exported, sublicensed, rented, 
+leased, amended, modified, reverse engineered, disassembled or used in 
+any form by any means without the prior written authorization of OSGi.  
+Any use of the Licensed Technology and the information described therein 
+will be governed by the terms and conditions of this Agreement.  
+
+1.2 Subject to the terms and conditions of this Agreement, OSGi hereby 
+grants you a fully-paid, non-exclusive, non-transferable, worldwide, 
+limited license (without the right to sublicense) under the intellectual 
+property rights licensable by OSGi to use the Licensed Technology 
+internally only for the purposes of evaluation, testing the Licensed 
+Technology and developing Your proprietary applications and/or software 
+products.  
+
+1.3 Except as expressly set forth in this license, You acquire no right, 
+title or interest in or to the Licensed Technology or any other 
+intellectual property licensable by OSGi or its Members and no other 
+rights are granted by implication, estoppel or otherwise.  
+
+1.4 This Agreement is effective from the date of your acceptance of 
+these terms in accordance with the instructions provided above 
+("Effective Date") and the term of this Agreement is a period of four 
+(4) months from the said Effective Date.  You may terminate this 
+Agreement at any time by permanently deleting, destroying, at Your own 
+costs, the Licensed Technology all backup copies, and all related 
+materials provided by OSGi (if any).  Your rights automatically and 
+immediately terminate without notice from OSGi if You fail to comply 
+with any provision of this Agreement.  Upon termination, You must 
+destroy the Licensed Technology.  Sections 2, 3, 4, 7, and 11 shall 
+survive the termination of this Agreement.  
+
+2. TRADEMARKS
+
+2.1 OSGi is a registered trademark of OSGi Alliance.  OSGi Alliance 
+product names are either trademarks or registered trademarks of the OSGi 
+Alliance.  Your access to this License Technology shall not be construed 
+as granting, by implication, estoppel or otherwise, any license or right 
+to use any marks appearing in the Licensed Technology without the prior 
+written consent of OSGi or if such mark is owned by an OSGi Member or 
+licensor, such OSGi Member or licensor.  No right, title, or interest in 
+or to any trademarks, service marks, or trade names of any third 
+parties, is granted hereunder.  
+
+2.2 You shall not be allowed to remove any of the copyright statements 
+or disclaimers or other proprietary notices contained in the Licensed 
+Technology and You are obliged to include the copyright statement and 
+the disclaimers, if any, in any copies of the Licensed Technology You 
+make.  
+
+2.3 For clarity, no right, title, or interest in or to any trademarks, 
+service marks, or trade names of Sun or Sun's licensors, is granted 
+hereunder.  Sun, Sun Microsystems, the Sun logo, Java, J2ME, the Java 
+Coffee Cup logo, and all Java-based marks are trademarks of Sun 
+Microsystems, Inc.  in the U.S.  and other countries.  
+
+3. DISCLAIMER OF WARRANTIES
+
+3.1 THE LICENSED TECHNOLOGY IS PROVIDED "AS IS" AND IS EXPERIMENTAL AND 
+MAY CONTAIN DEFECTS OR DEFICIENCIES WHICH CANNOT OR WILL NOT BE 
+CORRECTED BY OSGI.  OSGI MAKES NO REPRESENTATIONS OR WARRANTIES, EITHER 
+EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO, WARRANTIES OF 
+MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, OR NON-INFRINGEMENT 
+THAT THE CONTENTS OF THE LICENSED TECHNOLOGY ARE SUITABLE FOR ANY 
+PURPOSE OR THAT ANY EVALUATION, PRACTICE OR IMPLEMENTATION OF SUCH 
+CONTENTS WILL NOT INFRINGE ANY THIRD PARTY PATENTS, COPYRIGHTS, TRADE 
+SECRETS OR OTHER RIGHTS.  THERE IS NO WARRANTY BY OSGI OR BY ANY OTHER 
+PARTY THAT THE FUNCTIONS CONTAINED IN THE LICENSED TECHNOLOGY WILL MEET 
+YOUR REQUIREMENTS OR THAT THE OPERATION OF THE LICENSED TECHNOLOGY WILL 
+BE UNINTERRUPTED OR ERROR-FREE.  YOU ASSUME ALL RESPONSIBILITY AND RISK 
+FOR THE SELECTION OF THE LICENSED TECHNOLOGY TO ACHIEVE YOUR INTENDED 
+RESULTS AND FOR THE INSTALLATION, USE OF THE LICENSED TECHNOLOGY AND 
+RESULTS OBTAINED THEREFROM.  
+
+4. LIMITATION OF LIABILITY
+
+4.1 TO THE EXTENT NOT PROHIBITED BY LAW, IN NO EVENT WILL OSGI OR ITS 
+MEMBERS or LICENSORS BE LIABLE FOR ANY DAMAGES, INCLUDING WITHOUT 
+LIMITATION, LOST REVENUE, PROFITS OR DATA, OR FOR SPECIAL, INDIRECT, 
+CONSEQUENTIAL, INCIDENTAL OR PUNITIVE DAMAGES, HOWEVER CAUSED AND 
+REGARDLESS OF THE THEORY OF LIABILITY, ARISING OUT OF THE USE OF OR 
+INABILITY TO USE THE LICENSED TECHNOLOGY, EVEN IF OSGI AND/OR ITS 
+MEMBERS AND/OR ITS LICENSORS HAVE BEEN ADVISED OF THE POSSIBILITY OF 
+SUCH DAMAGES.  
+
+4.2 Some jurisdictions do not allow the exclusion of implied warranties, 
+or the limitation for consequential damages, so Section 4.1 may not 
+apply to You in whole, but in such case Section 4.1 will apply to You to 
+the maximum extent permitted by applicable law.  
+
+4.3 You will indemnify, hold harmless, and defend OSGi and its Members 
+and licensors from any claims based on your use of the Licensed 
+Technology for any purposes other than those of internal evaluation, and 
+from any claims that later versions or releases of any Licensed 
+Technology furnished to you are incompatible with the Licensed 
+Technology provided to you under this license.  
+
+5. RESTRICTED RIGHTS LEGEND
+
+5.1 Note to U.S.  Government Users.  The Licensed Technology is a 
+"Commercial Items", as that term is defined at 48 C.F.R.  2.  101, 
+consisting of "Commercial Computer Software" and "Commercial Computer 
+Software Documentation", as such terms are used in 48 C.F.R.  12.212 or 
+48 C.F.R.  227.7202, as applicable.  Consistent with 48 C.F.R.  12.212 
+or 48 C.F.R.  227.7202-1 through 227.7202-4, as applicable, the 
+Commercial Computer Software Documentation are being licensed to U.S.  
+Government end users a) only as Commercial Items and b) with only those 
+rights as are granted to all other end users pursuant to the terms and 
+conditions herein.  Unpublished-rights reserved under the copyright laws 
+of the United States.  
+
+6. REPORT
+
+6.1 You may wish to report any ambiguities, inconsistencies or 
+inaccuracies you may find in connection with your evaluation of the 
+Licensed Technology ("Feedback").  To the extent that you provide OSGi 
+with any Feedback, you hereby: (i) agree that such Feedback is provided 
+on a non-proprietary and non-confidential basis, and (ii) grant OSGi and 
+its Members a perpetual, non-exclusive, worldwide, fully paid-up, 
+irrevocable license, with the right to sublicense through multiple 
+levels of sublicensees, to incorporate, disclose, and use without 
+limitation the Feedback for any purpose related to the Licensed 
+Technology and future versions, implementations, and test suites 
+thereof.  
+
+7. CONFIDENTIALITY 
+
+7.1 The Licensed Technology is OSGi's confidential information and You 
+shall be obliged to keep the Licensed Technology as strictly 
+confidential and not to disclose it to third parties without prior 
+written approval by OSGi.  You agree to protect the Licensed Technology 
+with the same degree of care that You use to secure and protect Your own 
+confidential and proprietary information.  
+
+8. EXPORT CONTROL
+
+8.1 You shall follow all export control laws and regulations relating to 
+the Licensed Technology.  
+
+9. TECHNICAL SUPPORT
+
+9.1 OSGi has no obligation to furnish You with technical support unless 
+separately agreed in writing between You and OSGi.  
+
+10. NOTICES
+
+10.1 All notices shall be delivered to:
+
+JSR 232 RI Support
+OSGi Alliance 
+Bishop Ranch 6 
+2400 Camino Ramon, Suite 375 
+San Ramon, CA 94583 USA
+E-mail Subject: JSR 232 Support
+E-mail: help@osgi.org
+ 
+11. APPLICABLE LAW AND DISPUTE RESOLUTION.
+You agree to comply with applicable export laws and regulations.
+
+No other rights or licenses are granted by implication, estoppel or otherwise. 
+
+If any provision of this Agreement is invalid or unenforceable under 
+applicable law, it shall not affect the validity or enforceability of 
+the remainder of the terms of this Agreement, and without further action 
+by the parties hereto, such provision shall be reformed to the minimum 
+extent necessary to make such provision valid and enforceable.  
+
+Your rights under this Agreement shall terminate if you fail to comply 
+with any of the material terms or conditions of this Agreement and do 
+not cure such failure in a reasonable period of time after becoming 
+aware of such noncompliance.  If all your rights under this Agreement 
+terminate, you agree to cease use of the Software immediately.  
+
+This Agreement is governed by the laws of the State of California and 
+the intellectual property laws of the United States of America.  No 
+party to this Agreement will bring a legal action under this Agreement 
+more than one year after the cause of action arose.  Each party waives 
+its rights to a jury trial in any resulting litigation.  
+
+This Agreement is the only understanding and agreement we have with 
+respect to the Software.  It supersedes all other communications, 
+understandings or agreements (oral or written) that we may have had with 
+respect to the Software prior to this Agreement.  Only a written 
+agreement signed by both of us can modify this Agreement.  
