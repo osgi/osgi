@@ -3,7 +3,7 @@
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="lib" path="/licensed/repo/org.apache.tools.ant/org.apache.tools.ant-1.6.5.jar"/>
-	<classpathentry kind="lib" path="/osgi.released/osgi.internal.jar" sourcepath="/osgi.released/osgi.internal.jar"/>
+	<classpathentry kind="lib" path="/cnf/repo/org.osgi.internal/org.osgi.internal-4.1.0.jar" sourcepath="/cnf/repo/org.osgi.internal/org.osgi.internal-4.1.0.jar"/>
 	<classpathentry kind="lib" path="/licensed/repo/com.icl.saxon/com.icl.saxon-6.5.1.jar"/>
 	<classpathentry kind="lib" path="jar/tools.jar"/>
 	<classpathentry kind="lib" path="/cnf/repo/osgi/osgi-4.0.0.jar" sourcepath="/cnf/repo/osgi/osgi-4.0.0.jar"/>
