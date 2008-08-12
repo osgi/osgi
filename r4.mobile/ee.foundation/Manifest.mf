@@ -1,0 +1,12 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Foundation-EE
+Bundle-Description: Contains the OSGi foundation execution environment stubbed classes and sources
+Bundle-SymbolicName: org.osgi.ee.foundation
+Bundle-Version: 1.0.1
+Bundle-Vendor: OSGi Alliance
+Bundle-Copyright: Copyright (c) OSGi Alliance (2001, 2006). All rights reserved.
+Bundle-DocURL: www.osgi.org
+Bundle-Address: speccomments@mail.osgi.org
+Bundle-RequiredExecutionEnvironment: CDC-1.0/Foundation-1.0
+CVS-Header: $Header$

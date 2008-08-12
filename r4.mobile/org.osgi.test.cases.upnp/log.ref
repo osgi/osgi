@@ -1,0 +1,107 @@
+Prepare for UPnP Test Case
+Register Service Listener to listen for service changes
+Start the UPnP Test Starter
+Register Http Servlet
+Start Discovery Live and Bye messages creator
+Starting Discovery messages sender
+UPnPDevice UPC: 9876543210
+UPnPDevice FRIENDLY_NAME: Test Device
+UPnPDevice MANUFACTURER: ProSyst
+UPnPDevice MANUFACTURER_URL: http://www.prosyst.com
+UPnPDevice MODEL_DESCRIPTION: UPnP Test Device For OSGI
+UPnPDevice MODEL_NAME: Test
+UPnPDevice MODEL_NUMBER: 123rty
+UPnPDevice MODEL_URL: http://www.prosyst.com
+UPnPDevice SERIAL_NUMBER: qwe456
+Compared icons are the same.Icon test is OK
+Compared icons are the same.Icon test is OK
+Invoking an action Post Fail
+{DeviceServlet} - Incoming POST request
+Incoming invoke request for Action: PostFail
+Exception is thrown OK
+Invoking an action MPost Fail
+{DeviceServlet} - Incoming POST request
+Incoming invoke request for Action: MPostFail
+{DeviceServlet} - Incoming M-POST request
+Incoming invoke request for Action: MPostFail
+Exception is thrown OK
+Invoking an action Post Block.Please wait
+{DeviceServlet} - Incoming POST request
+Incoming invoke request for Action: PostBlock
+Exception is thrown OK
+Invoking an action MPost Block.Please wait
+{DeviceServlet} - Incoming POST request
+Incoming invoke request for Action: MPostBlock
+{DeviceServlet} - Incoming M-POST request
+Incoming invoke request for Action: MPostBlock
+Exception is thrown OK
+Invoking an action Post Out Success
+{DeviceServlet} - Incoming POST request
+Incoming invoke request for Action: PostOutSucc
+Invoking an action MPost Out Success
+{DeviceServlet} - Incoming POST request
+Incoming invoke request for Action: MPostOutSucc
+{DeviceServlet} - Incoming M-POST request
+Incoming invoke request for Action: MPostOutSucc
+Invoking an action Post In Success with invalid arguments
+Exception is thrown OK
+Invoking an action Post In Success
+{DeviceServlet} - Incoming POST request
+Incoming invoke request for Action: PostInSucc
+Invoking an action MPost In Success
+{DeviceServlet} - Incoming POST request
+Incoming invoke request for Action: MPostInSucc
+{DeviceServlet} - Incoming M-POST request
+Incoming invoke request for Action: MPostInSucc
+Device gets service urn:prosyst-com:serviceId:EventService
+Register UPnPEventListener to listen for events
+{DeviceServlet} - Incoming SUBSCRIBE request
+Sending the initial event
+Sending an event with name CHAR and value a
+Sending an event with name INT and value 99
+Sending an event with name UI4 and value 444
+Sending an event with name NUMBER and value 333.33
+Sending an event with name FLOAT and value 77.72
+Sending an event with name CHAR and value a
+Sending an event with name STRING and value Wowin
+Sending an event with name BOOLEAN and value true
+Sending an event with name BIN_HEX and value Event bin.hex value
+Main events are OK
+Creating new device and making it UPnP device
+Start export test
+Prepare to start my Control Point
+Create MSearch package and send it
+Parsing received Discovery Response xml
+Exported device FRIENDLY_NAME: UPnP Tester
+Exported device MANUFACTURER: ProSyst Software AG
+Exported device MANUFACTURER_URL: http://www.prosyst.com
+Exported device MODEL_NAME: upnptester
+Exported device MODEL_NUMBER: 1
+Exported device MODEL_URL: http://www.upnptest.com/test.html
+Exported device SERIAL_NUMBER: 1230456
+Exported device UPC: 123456789
+Properties of the exported device are OK
+Get SCPD xml from discovery message
+Control Server is created and started
+Creating Post message and send it
+Received String value in CP:The answer is 42.
+Received String value in CP:Whats the question?
+Received Boolean value in CP:true
+Received Number value in CP:42.0
+Received Int value in CP:42
+Received Char value in CP:"
+Received Float value in CP:42.0
+Control test of Export is OK
+#
+# The following test is removed because it was not possible
+# to make it work
+#
+#Starting event test of Export
+#Create and start Eventing Server
+#Create subscribe message and send it
+#Create table with events
+#HTTP/1.1 200 OK msg as reply to subsribe msg is received
+#Starting ServerSocket to listen for Notify msg
+#Notify UPnPEventListener service
+#Waiting for events
+#All values of event are OK.Event Test is OK

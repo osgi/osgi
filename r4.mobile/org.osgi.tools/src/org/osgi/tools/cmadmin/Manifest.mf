@@ -1,0 +1,8 @@
+Manifest-Version: 1.0
+Bundle-Name: $(name)
+Bundle-Version: 4.0
+Bundle-Activator: $(activator)
+Bundle-Description: Provides commands to the console to adminstrate
+  the Configuration Admin service.
+$(IMPORT-PACKAGE)
+$(EXPORT-PACKAGE)

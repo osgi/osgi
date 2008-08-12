@@ -1,0 +1,17 @@
+Manifest-Version: 1.0
+Bundle-Name: OSGi-Eclipse
+Bundle-SymbolicName: osgi.eclipse; singleton=true
+Bundle-Version: 1.0.3
+Bundle-Activator: org.osgi.test.eclipse.Activator
+Bundle-Vendor: OSGi
+Bundle-Localization: plugin
+Require-Bundle: org.eclipse.ui,
+ org.eclipse.core.runtime,
+ org.eclipse.core.resources
+Eclipse-AutoStart: true
+Export-Package: javax.servlet,
+    javax.servlet.http,
+    org.osgi.service.http;specification-version=1.1.0,
+    org.osgi.test.service;specification-version=1.1.0,
+    org.osgi.test.cases.util;specification-version=1.1.0
+Bundle-Classpath: .,osgi.eclipse.jar

@@ -1,0 +1,19 @@
+Manifest-Version: 1.0
+DeploymentPackage-SymbolicName: simple_dp
+DeploymentPackage-Version: 1.1.1
+
+Name: bundle001.jar
+Bundle-SymbolicName: bundles.tb1
+Bundle-Version: 1.5
+
+Name: bundle002.jar
+Bundle-SymbolicName: bundles.tb2
+Bundle-Version: 0.5
+
+Name: rp_bundle3.jar
+Bundle-SymbolicName: org.osgi.test.cases.deployment.bundles.rp3
+Bundle-Version: 1.0
+DeploymentPackage-Customizer: true
+
+Name: simple_resource.xml
+Resource-Processor: org.osgi.test.cases.deployment.bundles.rp3

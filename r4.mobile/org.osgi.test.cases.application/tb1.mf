@@ -1,0 +1,13 @@
+Manifest-Version: 1.0
+Bundle-Name: Midlet
+Bundle-Vendor: Cesar
+Bundle-Version: 1.0
+Bundle-ClassPath: .
+MIDlet-Name: Cesar test MIDlet
+MIDlet-Version: 1.0.0
+MIDlet-Vendor: Cesar
+MIDlet-1: TestApplication,/TestIcon.gif,org.osgi.test.cases.application.tb1.TestApplication
+MicroEdition-Profile: MIDP-2.0
+MicroEdition-Configuration: CLDC-1.1
+$(IMPORT-PACKAGE)
+$(PRIVATE-PACKAGE)

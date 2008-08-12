@@ -1,0 +1,17 @@
+Manifest-Version: 1.0
+Bundle-SymbolicName: ${p}
+Bundle-Name: test.http
+Bundle-Copyright: ${copyright}
+Bundle-Description: Tests the Http Service
+Bundle-Vendor: OSGi Alliance
+Bundle-TestReference: org.osgi.framework.Filter;specification-version=1.1
+Bundle-Version: 3.0.1
+Bundle-DocUrl: http://membercvs.osgi.org/test/3
+Bundle-ContactAddress: speccomments@mail.osgi.org
+Bundle-Category: osgi,test
+Bundle-Activator: $(p).HttpTestCase
+CVS-Header: $Header$
+$(IMPORT-PACKAGE)
+$(EXPORT-PACKAGE)
+
+

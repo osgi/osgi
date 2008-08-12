@@ -1,0 +1,1056 @@
+<html>
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   
+      <link rel="stylesheet" href="osgi.css" type="text/css">
+      <title>Test Matrix for org.osgi.service.cm</title>
+   </head>
+   <body>
+      <div width="700px">
+         <h1>Test Matrix for org.osgi.service.cm</h1>
+         <p>
+            <description>
+               
+               <p>The OSGi Configuration Admin service Package. Specification Version 1.2
+                  
+               </p>
+               <p>Bundles wishing to use this package must list the package
+                  in the Import-Package header of the bundle's manifest.
+                  For example:
+                  
+               </p><pre>Import-Package:&nbsp;org.osgi.service.cm;&nbsp;version=1.2</pre>
+                  </description><br></p>
+         <table>
+            <tr>
+               <th colspan="2">Tested by:</th>
+            </tr>
+            <tr>
+               <td><a href="org.osgi.test.cases.cm.html">org.osgi.test.cases.cm</a></td>
+            </tr>
+         </table><br><br><table width="300">
+            <tr>
+               <th></th>
+               <th>Class</th>
+               <th>Methods</th>
+               <th>Tests</th>
+               <th>Ratio</th>
+            </tr>
+            <tr>
+               <td></td>
+               <td><a href="#org.osgi.service.cm.Configuration">Configuration</a></td>
+               <td>10</td>
+               <td>1</td>
+               <td class="passed">0.09</td>
+            </tr>
+            <tr>
+               <td></td>
+               <td><a href="#org.osgi.service.cm.ConfigurationAdmin">ConfigurationAdmin</a></td>
+               <td>5</td>
+               <td>18</td>
+               <td class="early">3.00</td>
+            </tr>
+            <tr>
+               <td></td>
+               <td><a href="#org.osgi.service.cm.ConfigurationEvent">ConfigurationEvent</a></td>
+               <td>5</td>
+               <td>0</td>
+               <td class="passed">0.00</td>
+            </tr>
+            <tr>
+               <td></td>
+               <td><a href="#org.osgi.service.cm.ConfigurationException">ConfigurationException</a></td>
+               <td>6</td>
+               <td>0</td>
+               <td class="passed">0.00</td>
+            </tr>
+            <tr>
+               <td></td>
+               <td><a href="#org.osgi.service.cm.ConfigurationListener">ConfigurationListener</a></td>
+               <td>1</td>
+               <td>0</td>
+               <td class="passed">0.00</td>
+            </tr>
+            <tr>
+               <td></td>
+               <td><a href="#org.osgi.service.cm.ConfigurationPermission">ConfigurationPermission</a></td>
+               <td>6</td>
+               <td>0</td>
+               <td class="passed">0.00</td>
+            </tr>
+            <tr>
+               <td></td>
+               <td><a href="#org.osgi.service.cm.ConfigurationPlugin">ConfigurationPlugin</a></td>
+               <td>1</td>
+               <td>0</td>
+               <td class="passed">0.00</td>
+            </tr>
+            <tr>
+               <td></td>
+               <td><a href="#org.osgi.service.cm.ManagedService">ManagedService</a></td>
+               <td>1</td>
+               <td>0</td>
+               <td class="passed">0.00</td>
+            </tr>
+            <tr>
+               <td></td>
+               <td><a href="#org.osgi.service.cm.ManagedServiceFactory">ManagedServiceFactory</a></td>
+               <td>3</td>
+               <td>0</td>
+               <td class="passed">0.00</td>
+            </tr>
+         </table><br><table width="700">
+            <tr>
+               <th class="pointer" colspan="2"><a name="org.osgi.service.cm.Configuration"></a>Class org.osgi.service.cm.Configuration
+               </th>
+            </tr>
+            <tr>
+               <td colspan="2">
+                  The configuration information for a ManagedService or
+                   ManagedServiceFactory object.
+                     
+               </td>
+            </tr>
+            <tr>
+               <th width="350"><a name="Configuration.delete()"></a>delete()
+               </th>
+               <th width="350">Tests:</th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Delete this Configuration object.
+                     
+               </td>
+               <td width="350"><b>testDeletedConfiguration</b>
+                  Test that the methods throws IllegalStateException when operating on a
+                   deleted Configuration
+                     <br><b>testGetConfigurationWithLocation</b>
+                  TODO comments
+                     <br><b>testListConfigurations</b>
+                  Tests listing of configurations.
+                     <br><b>testDeleteConfigEvent</b>
+                  Tests a configuration listener delete event notification from a
+                   configuration service. The deleted Configuration should be
+                   empty (ConfigurationAdmin.listConfigurations(null) must
+                   not contain the deleted Configuration).
+                     <br><b>testDeleteConfigFactoryEvent</b>
+                  Tests a configuration listener delete event notification from a
+                   configuration service factory. The deleted Configuration
+                   should be empty (
+                   ConfigurationAdmin.listConfigurations(null) must not
+                   contain the deleted Configuration).
+                     <br><b>testConfigEventFromDifferentBundle</b>
+                  Tests an event from a different bundle. The
+                   ConfigurationListener should get the event even if it was
+                   generated from a different bundle.
+                     <br></td>
+            </tr>
+            <tr>
+               <th width="350"><a name="Configuration.equals(Object)"></a>equals(Object)
+               </th>
+               <th width="350"><b class="passed"> NO TEST FOUND </b></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Equality is defined to have equal PIDs
+                   
+                   Two Configuration objects are equal when their PIDs are equal.
+                     
+               </td>
+               <td width="350"></td>
+            </tr>
+            <tr>
+               <th width="350"><a name="Configuration.getBundleLocation()"></a>getBundleLocation()
+               </th>
+               <th width="350">Tests:</th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Get the bundle location.
+                     
+               </td>
+               <td width="350"><b>testDeletedConfiguration</b>
+                  Test that the methods throws IllegalStateException when operating on a
+                   deleted Configuration
+                     <br><b>testGetConfiguration</b>
+                  TODO comments
+                     <br><b>testGetConfigurationWithLocation</b>
+                  TODO comments
+                     <br><b>testManagedServiceRegistration</b>
+                  Tests to register a ManagedService when a configuration is existing for
+                   it.
+                     <br><b>testCreateFactoryConfiguration</b>
+                  Test created Factory configuration without location.
+                     <br><b>testCreateFactoryConfigurationWithLocation</b>
+                  Test created Factory configuration with location.
+                     <br><b>testCreateFactoryConfigurationWithNullLocation</b>
+                  Test created Factory configuration with null location.
+                     <br></td>
+            </tr>
+            <tr>
+               <th width="350"><a name="Configuration.getFactoryPid()"></a>getFactoryPid()
+               </th>
+               <th width="350">Tests:</th>
+            </tr>
+            <tr>
+               <td width="350">
+                  For a factory configuration return the PID of the corresponding Managed
+                   Service Factory, else return null.
+                     
+               </td>
+               <td width="350"><b>testDeletedConfiguration</b>
+                  Test that the methods throws IllegalStateException when operating on a
+                   deleted Configuration
+                     <br><b>testGetConfiguration</b>
+                  TODO comments
+                     <br><b>testGetConfigurationWithLocation</b>
+                  TODO comments
+                     <br><b>testCreateFactoryConfiguration</b>
+                  Test created Factory configuration without location.
+                     <br><b>testCreateFactoryConfigurationWithLocation</b>
+                  Test created Factory configuration with location.
+                     <br><b>testCreateFactoryConfigurationWithNullLocation</b>
+                  Test created Factory configuration with null location.
+                     <br><b>testManagedServiceFactory</b>
+                  Test Managed Service Factory.
+                     <br></td>
+            </tr>
+            <tr>
+               <th width="350"><a name="Configuration.getPid()"></a>getPid()
+               </th>
+               <th width="350">Tests:</th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Get the PID for this Configuration object.
+                     
+               </td>
+               <td width="350"><b>testDeletedConfiguration</b>
+                  Test that the methods throws IllegalStateException when operating on a
+                   deleted Configuration
+                     <br><b>testGetConfiguration</b>
+                  TODO comments
+                     <br><b>testGetConfigurationWithLocation</b>
+                  TODO comments
+                     <br><b>_testEquals</b>
+                  Tests if we really get the same configuration.
+                     <br><b>testListConfigurations</b>
+                  Tests listing of configurations.
+                     <br><b>testManagedServiceRegistration</b>
+                  Tests to register a ManagedService when a configuration is existing for
+                   it.
+                     <br><b>testCreateFactoryConfiguration</b>
+                  Test created Factory configuration without location.
+                     <br><b>testCreateFactoryConfigurationWithLocation</b>
+                  Test created Factory configuration with location.
+                     <br><b>testCreateFactoryConfigurationWithNullLocation</b>
+                  Test created Factory configuration with null location.
+                     <br><b>testManagedServiceFactory</b>
+                  Test Managed Service Factory.
+                     <br><b>testUpdateConfigFactoryEvent</b>
+                  Tests a configuration listener update event notification from a
+                   configuration service factory. The event data should match the data that
+                   originated the event (pid, factorypid...).
+                     <br><b>testDeleteConfigEvent</b>
+                  Tests a configuration listener delete event notification from a
+                   configuration service. The deleted Configuration should be
+                   empty (ConfigurationAdmin.listConfigurations(null) must
+                   not contain the deleted Configuration).
+                     <br><b>testDeleteConfigFactoryEvent</b>
+                  Tests a configuration listener delete event notification from a
+                   configuration service factory. The deleted Configuration
+                   should be empty (
+                   ConfigurationAdmin.listConfigurations(null) must not
+                   contain the deleted Configuration).
+                     <br><b>testConfigEventFromDifferentBundle</b>
+                  Tests an event from a different bundle. The
+                   ConfigurationListener should get the event even if it was
+                   generated from a different bundle.
+                     <br></td>
+            </tr>
+            <tr>
+               <th width="350"><a name="Configuration.getProperties()"></a>getProperties()
+               </th>
+               <th width="350">Tests:</th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Return the properties of this Configuration object.
+                     
+               </td>
+               <td width="350"><b>testDeletedConfiguration</b>
+                  Test that the methods throws IllegalStateException when operating on a
+                   deleted Configuration
+                     <br><b>testGetConfiguration</b>
+                  TODO comments
+                     <br><b>testGetConfigurationWithLocation</b>
+                  TODO comments
+                     <br><b>testUpdate</b>
+                  TODO comments
+                     <br><b>testManagedServiceRegistration</b>
+                  Tests to register a ManagedService when a configuration is existing for
+                   it.
+                     <br><b>testManagedProperties</b>
+                  
+                     <br><b>testCreateFactoryConfiguration</b>
+                  Test created Factory configuration without location.
+                     <br><b>testCreateFactoryConfigurationWithLocation</b>
+                  Test created Factory configuration with location.
+                     <br><b>testCreateFactoryConfigurationWithNullLocation</b>
+                  Test created Factory configuration with null location.
+                     <br><b>testManagedServiceFactory</b>
+                  Test Managed Service Factory.
+                     <br></td>
+            </tr>
+            <tr>
+               <th width="350"><a name="Configuration.hashCode()"></a>hashCode()
+               </th>
+               <th width="350"><b class="passed"> NO TEST FOUND </b></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Hash code is based on PID.
+                     
+               </td>
+               <td width="350"></td>
+            </tr>
+            <tr>
+               <th width="350"><a name="Configuration.setBundleLocation(String)"></a>setBundleLocation(String)
+               </th>
+               <th width="350">Tests:</th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Bind this Configuration object to the specified bundle
+                   location.
+                     
+               </td>
+               <td width="350"><b>testDeletedConfiguration</b>
+                  Test that the methods throws IllegalStateException when operating on a
+                   deleted Configuration
+                     <br><b>testGetConfiguration</b>
+                  TODO comments
+                     <br></td>
+            </tr>
+            <tr>
+               <th width="350"><a name="Configuration.update(Dictionary)"></a>update(Dictionary)
+               </th>
+               <th width="350">Tests:</th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Update the properties of this Configuration object.
+                     
+               </td>
+               <td width="350"><b>testManagedServiceRegistration</b>
+                  Tests to register a ManagedService when a configuration is existing for
+                   it.
+                     <br><b>testManagedProperties</b>
+                  
+                     <br><b>testCreateFactoryConfiguration</b>
+                  Test created Factory configuration without location.
+                     <br><b>testCreateFactoryConfigurationWithLocation</b>
+                  Test created Factory configuration with location.
+                     <br><b>testCreateFactoryConfigurationWithNullLocation</b>
+                  Test created Factory configuration with null location.
+                     <br><b>testManagedServiceFactory</b>
+                  Test Managed Service Factory.
+                     <br><b>testUpdateConfigEvent</b>
+                  Tests a configuration listener update event notification from a
+                   configuration service. The event data should match the data that
+                   originated the event (pid, factorypid...).
+                     <br><b>testUpdateConfigFactoryEvent</b>
+                  Tests a configuration listener update event notification from a
+                   configuration service factory. The event data should match the data that
+                   originated the event (pid, factorypid...).
+                     <br><b>testDeleteConfigEvent</b>
+                  Tests a configuration listener delete event notification from a
+                   configuration service. The deleted Configuration should be
+                   empty (ConfigurationAdmin.listConfigurations(null) must
+                   not contain the deleted Configuration).
+                     <br><b>testDeleteConfigFactoryEvent</b>
+                  Tests a configuration listener delete event notification from a
+                   configuration service factory. The deleted Configuration
+                   should be empty (
+                   ConfigurationAdmin.listConfigurations(null) must not
+                   contain the deleted Configuration).
+                     <br><b>testConfigEventFromDifferentBundle</b>
+                  Tests an event from a different bundle. The
+                   ConfigurationListener should get the event even if it was
+                   generated from a different bundle.
+                     <br><b>testConfigurationPluginService</b>
+                  Tests if a configuration plugin is invoked when only a configuration
+                   listener is registered (no managed service). It should not be invoked.
+                     <br><b>testConfigurationPluginServiceFactory</b>
+                  Tests if a configuration plugin is invoked when only a configuration
+                   listener is registered (managed service factory). It should not be
+                   invoked.
+                     <br></td>
+            </tr>
+            <tr>
+               <th width="350"><a name="Configuration.update()"></a>update()
+               </th>
+               <th width="350">Tests:</th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Update the Configuration object with the current
+                   properties.
+                     
+               </td>
+               <td width="350"><b>testUpdate</b>
+                  TODO comments
+                     <br><b>_testEquals</b>
+                  Tests if we really get the same configuration.
+                     <br></td>
+            </tr>
+         </table><br><table width="700">
+            <tr>
+               <th class="pointer" colspan="2"><a name="org.osgi.service.cm.ConfigurationAdmin"></a>Class org.osgi.service.cm.ConfigurationAdmin
+               </th>
+            </tr>
+            <tr>
+               <td colspan="2">
+                  Service for administering configuration data.
+                     
+               </td>
+            </tr>
+            <tr>
+               <th width="350"><a name="ConfigurationAdmin.createFactoryConfiguration(String)"></a>createFactoryConfiguration(String)
+               </th>
+               <th width="350">Tests:</th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Create a new factory Configuration object with a new PID.
+                     
+               </td>
+               <td width="350"><b>testCreateFactoryConfiguration</b>
+                  Test created Factory configuration without location.
+                     <br><b>testManagedServiceFactory</b>
+                  Test Managed Service Factory.
+                     <br><b>testUpdateConfigFactoryEvent</b>
+                  Tests a configuration listener update event notification from a
+                   configuration service factory. The event data should match the data that
+                   originated the event (pid, factorypid...).
+                     <br><b>testDeleteConfigFactoryEvent</b>
+                  Tests a configuration listener delete event notification from a
+                   configuration service factory. The deleted Configuration
+                   should be empty (
+                   ConfigurationAdmin.listConfigurations(null) must not
+                   contain the deleted Configuration).
+                     <br><b>testConfigurationPluginServiceFactory</b>
+                  Tests if a configuration plugin is invoked when only a configuration
+                   listener is registered (managed service factory). It should not be
+                   invoked.
+                     <br></td>
+            </tr>
+            <tr>
+               <th width="350"><a name="ConfigurationAdmin.createFactoryConfiguration(String,String)"></a>createFactoryConfiguration(String,String)
+               </th>
+               <th width="350">Tests:</th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Create a new factory Configuration object with a new PID.
+                     
+               </td>
+               <td width="350"><b>testCreateFactoryConfigurationWithLocation</b>
+                  Test created Factory configuration with location.
+                     <br><b>testCreateFactoryConfigurationWithNullLocation</b>
+                  Test created Factory configuration with null location.
+                     <br></td>
+            </tr>
+            <tr>
+               <th width="350"><a name="ConfigurationAdmin.getConfiguration(String,String)"></a>getConfiguration(String,String)
+               </th>
+               <th width="350">Tests:</th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Get an existing Configuration object from the persistent
+                   store, or create a new Configuration object.
+                     
+               </td>
+               <td width="350"><b>testGetConfiguration</b>
+                  TODO comments
+                     <br><b>testGetConfigurationWithLocation</b>
+                  TODO comments
+                     <br></td>
+            </tr>
+            <tr>
+               <th width="350"><a name="ConfigurationAdmin.getConfiguration(String)"></a>getConfiguration(String)
+               </th>
+               <th width="350">Tests:</th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Get an existing or new Configuration object from the
+                   persistent store.
+                     
+               </td>
+               <td width="350"><b>testGetConfiguration</b>
+                  TODO comments
+                     <br><b>testUpdate</b>
+                  TODO comments
+                     <br><b>_testEquals</b>
+                  Tests if we really get the same configuration.
+                     <br><b>testListConfigurations</b>
+                  Tests listing of configurations.
+                     <br><b>testManagedServiceRegistration</b>
+                  Tests to register a ManagedService when a configuration is existing for
+                   it.
+                     <br><b>testManagedProperties</b>
+                  
+                     <br><b>testUpdateConfigEvent</b>
+                  Tests a configuration listener update event notification from a
+                   configuration service. The event data should match the data that
+                   originated the event (pid, factorypid...).
+                     <br><b>testDeleteConfigEvent</b>
+                  Tests a configuration listener delete event notification from a
+                   configuration service. The deleted Configuration should be
+                   empty (ConfigurationAdmin.listConfigurations(null) must
+                   not contain the deleted Configuration).
+                     <br><b>testConfigEventFromDifferentBundle</b>
+                  Tests an event from a different bundle. The
+                   ConfigurationListener should get the event even if it was
+                   generated from a different bundle.
+                     <br><b>testConfigurationPluginService</b>
+                  Tests if a configuration plugin is invoked when only a configuration
+                   listener is registered (no managed service). It should not be invoked.
+                     <br></td>
+            </tr>
+            <tr>
+               <th width="350"><a name="ConfigurationAdmin.listConfigurations(String)"></a>listConfigurations(String)
+               </th>
+               <th width="350">Tests:</th>
+            </tr>
+            <tr>
+               <td width="350">
+                  List the current Configuration objects which match the filter.
+                     
+               </td>
+               <td width="350"><b>testListConfigurations</b>
+                  Tests listing of configurations.
+                     <br><b>testDeleteConfigEvent</b>
+                  Tests a configuration listener delete event notification from a
+                   configuration service. The deleted Configuration should be
+                   empty (ConfigurationAdmin.listConfigurations(null) must
+                   not contain the deleted Configuration).
+                     <br><b>testDeleteConfigFactoryEvent</b>
+                  Tests a configuration listener delete event notification from a
+                   configuration service factory. The deleted Configuration
+                   should be empty (
+                   ConfigurationAdmin.listConfigurations(null) must not
+                   contain the deleted Configuration).
+                     <br></td>
+            </tr>
+         </table><br><table width="700">
+            <tr>
+               <th class="pointer" colspan="2"><a name="org.osgi.service.cm.ConfigurationEvent"></a>Class org.osgi.service.cm.ConfigurationEvent
+               </th>
+            </tr>
+            <tr>
+               <td colspan="2">
+                  A Configuration Event.
+                     
+               </td>
+            </tr>
+            <tr>
+               <th width="350"><a name="ConfigurationEvent.ConfigurationEvent(ServiceReference,int,String,String)"></a>ConfigurationEvent(ServiceReference,int,String,String)
+               </th>
+               <th width="350"><b class="passed"> NO TEST FOUND </b></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Constructs a ConfigurationEvent object from the given
+                   ServiceReference object, event type, and pids.
+                     
+               </td>
+               <td width="350"></td>
+            </tr>
+            <tr>
+               <th width="350"><a name="ConfigurationEvent.getFactoryPid()"></a>getFactoryPid()
+               </th>
+               <th width="350">Tests:</th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Returns the factory pid of the associated configuration.
+                     
+               </td>
+               <td width="350"><b>testUpdateConfigEvent</b>
+                  Tests a configuration listener update event notification from a
+                   configuration service. The event data should match the data that
+                   originated the event (pid, factorypid...).
+                     <br><b>testUpdateConfigFactoryEvent</b>
+                  Tests a configuration listener update event notification from a
+                   configuration service factory. The event data should match the data that
+                   originated the event (pid, factorypid...).
+                     <br><b>testDeleteConfigEvent</b>
+                  Tests a configuration listener delete event notification from a
+                   configuration service. The deleted Configuration should be
+                   empty (ConfigurationAdmin.listConfigurations(null) must
+                   not contain the deleted Configuration).
+                     <br><b>testDeleteConfigFactoryEvent</b>
+                  Tests a configuration listener delete event notification from a
+                   configuration service factory. The deleted Configuration
+                   should be empty (
+                   ConfigurationAdmin.listConfigurations(null) must not
+                   contain the deleted Configuration).
+                     <br><b>testConfigEventFromDifferentBundle</b>
+                  Tests an event from a different bundle. The
+                   ConfigurationListener should get the event even if it was
+                   generated from a different bundle.
+                     <br></td>
+            </tr>
+            <tr>
+               <th width="350"><a name="ConfigurationEvent.getPid()"></a>getPid()
+               </th>
+               <th width="350">Tests:</th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Returns the pid of the associated configuration.
+                     
+               </td>
+               <td width="350"><b>testUpdateConfigEvent</b>
+                  Tests a configuration listener update event notification from a
+                   configuration service. The event data should match the data that
+                   originated the event (pid, factorypid...).
+                     <br><b>testUpdateConfigFactoryEvent</b>
+                  Tests a configuration listener update event notification from a
+                   configuration service factory. The event data should match the data that
+                   originated the event (pid, factorypid...).
+                     <br><b>testDeleteConfigEvent</b>
+                  Tests a configuration listener delete event notification from a
+                   configuration service. The deleted Configuration should be
+                   empty (ConfigurationAdmin.listConfigurations(null) must
+                   not contain the deleted Configuration).
+                     <br><b>testDeleteConfigFactoryEvent</b>
+                  Tests a configuration listener delete event notification from a
+                   configuration service factory. The deleted Configuration
+                   should be empty (
+                   ConfigurationAdmin.listConfigurations(null) must not
+                   contain the deleted Configuration).
+                     <br><b>testConfigEventFromDifferentBundle</b>
+                  Tests an event from a different bundle. The
+                   ConfigurationListener should get the event even if it was
+                   generated from a different bundle.
+                     <br></td>
+            </tr>
+            <tr>
+               <th width="350"><a name="ConfigurationEvent.getReference()"></a>getReference()
+               </th>
+               <th width="350">Tests:</th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Return the ServiceReference object of the Configuration Admin
+                   service that created this event.
+                     
+               </td>
+               <td width="350"><b>testUpdateConfigEvent</b>
+                  Tests a configuration listener update event notification from a
+                   configuration service. The event data should match the data that
+                   originated the event (pid, factorypid...).
+                     <br><b>testUpdateConfigFactoryEvent</b>
+                  Tests a configuration listener update event notification from a
+                   configuration service factory. The event data should match the data that
+                   originated the event (pid, factorypid...).
+                     <br><b>testDeleteConfigEvent</b>
+                  Tests a configuration listener delete event notification from a
+                   configuration service. The deleted Configuration should be
+                   empty (ConfigurationAdmin.listConfigurations(null) must
+                   not contain the deleted Configuration).
+                     <br><b>testDeleteConfigFactoryEvent</b>
+                  Tests a configuration listener delete event notification from a
+                   configuration service factory. The deleted Configuration
+                   should be empty (
+                   ConfigurationAdmin.listConfigurations(null) must not
+                   contain the deleted Configuration).
+                     <br><b>testConfigEventFromDifferentBundle</b>
+                  Tests an event from a different bundle. The
+                   ConfigurationListener should get the event even if it was
+                   generated from a different bundle.
+                     <br></td>
+            </tr>
+            <tr>
+               <th width="350"><a name="ConfigurationEvent.getType()"></a>getType()
+               </th>
+               <th width="350">Tests:</th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Return the type of this event.
+                     
+               </td>
+               <td width="350"><b>testUpdateConfigEvent</b>
+                  Tests a configuration listener update event notification from a
+                   configuration service. The event data should match the data that
+                   originated the event (pid, factorypid...).
+                     <br><b>testUpdateConfigFactoryEvent</b>
+                  Tests a configuration listener update event notification from a
+                   configuration service factory. The event data should match the data that
+                   originated the event (pid, factorypid...).
+                     <br><b>testDeleteConfigEvent</b>
+                  Tests a configuration listener delete event notification from a
+                   configuration service. The deleted Configuration should be
+                   empty (ConfigurationAdmin.listConfigurations(null) must
+                   not contain the deleted Configuration).
+                     <br><b>testDeleteConfigFactoryEvent</b>
+                  Tests a configuration listener delete event notification from a
+                   configuration service factory. The deleted Configuration
+                   should be empty (
+                   ConfigurationAdmin.listConfigurations(null) must not
+                   contain the deleted Configuration).
+                     <br><b>testConfigEventFromDifferentBundle</b>
+                  Tests an event from a different bundle. The
+                   ConfigurationListener should get the event even if it was
+                   generated from a different bundle.
+                     <br></td>
+            </tr>
+         </table><br><table width="700">
+            <tr>
+               <th class="pointer" colspan="2"><a name="org.osgi.service.cm.ConfigurationException"></a>Class org.osgi.service.cm.ConfigurationException
+               </th>
+            </tr>
+            <tr>
+               <td colspan="2">
+                  An Exception class to inform the Configuration Admin service of
+                   problems with configuration data.
+                     
+               </td>
+            </tr>
+            <tr>
+               <th width="350"><a name="ConfigurationException.ConfigurationException(String,String)"></a>ConfigurationException(String,String)
+               </th>
+               <th width="350"><b class="passed"> NO TEST FOUND </b></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Create a ConfigurationException object.
+                     
+               </td>
+               <td width="350"></td>
+            </tr>
+            <tr>
+               <th width="350"><a name="ConfigurationException.ConfigurationException(String,String,Throwable)"></a>ConfigurationException(String,String,Throwable)
+               </th>
+               <th width="350"><b class="passed"> NO TEST FOUND </b></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Create a ConfigurationException object.
+                     
+               </td>
+               <td width="350"></td>
+            </tr>
+            <tr>
+               <th width="350"><a name="ConfigurationException.getCause()"></a>getCause()
+               </th>
+               <th width="350"><b class="passed"> NO TEST FOUND </b></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Returns the cause of this exception or null if no
+                   cause was specified when this exception was created.
+                     
+               </td>
+               <td width="350"></td>
+            </tr>
+            <tr>
+               <th width="350"><a name="ConfigurationException.getProperty()"></a>getProperty()
+               </th>
+               <th width="350"><b class="passed"> NO TEST FOUND </b></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Return the property name that caused the failure or null.
+                     
+               </td>
+               <td width="350"></td>
+            </tr>
+            <tr>
+               <th width="350"><a name="ConfigurationException.getReason()"></a>getReason()
+               </th>
+               <th width="350"><b class="passed"> NO TEST FOUND </b></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Return the reason for this exception.
+                     
+               </td>
+               <td width="350"></td>
+            </tr>
+            <tr>
+               <th width="350"><a name="ConfigurationException.initCause(Throwable)"></a>initCause(Throwable)
+               </th>
+               <th width="350"><b class="passed"> NO TEST FOUND </b></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  The cause of this exception can only be set when constructed.
+                     
+               </td>
+               <td width="350"></td>
+            </tr>
+         </table><br><table width="700">
+            <tr>
+               <th class="pointer" colspan="2"><a name="org.osgi.service.cm.ConfigurationListener"></a>Class org.osgi.service.cm.ConfigurationListener
+               </th>
+            </tr>
+            <tr>
+               <td colspan="2">
+                  Listener for Configuration Events.
+                     
+               </td>
+            </tr>
+            <tr>
+               <th width="350"><a name="ConfigurationListener.configurationEvent(ConfigurationEvent)"></a>configurationEvent(ConfigurationEvent)
+               </th>
+               <th width="350">Tests:</th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Receives notification of a broadcast ConfigurationEvent
+                   object.
+                     
+               </td>
+               <td width="350"><b>testUpdateConfigEvent</b>
+                  Tests a configuration listener update event notification from a
+                   configuration service. The event data should match the data that
+                   originated the event (pid, factorypid...).
+                     <br><b>testUpdateConfigFactoryEvent</b>
+                  Tests a configuration listener update event notification from a
+                   configuration service factory. The event data should match the data that
+                   originated the event (pid, factorypid...).
+                     <br><b>testDeleteConfigEvent</b>
+                  Tests a configuration listener delete event notification from a
+                   configuration service. The deleted Configuration should be
+                   empty (ConfigurationAdmin.listConfigurations(null) must
+                   not contain the deleted Configuration).
+                     <br><b>testDeleteConfigFactoryEvent</b>
+                  Tests a configuration listener delete event notification from a
+                   configuration service factory. The deleted Configuration
+                   should be empty (
+                   ConfigurationAdmin.listConfigurations(null) must not
+                   contain the deleted Configuration).
+                     <br><b>testConfigEventFromDifferentBundle</b>
+                  Tests an event from a different bundle. The
+                   ConfigurationListener should get the event even if it was
+                   generated from a different bundle.
+                     <br><b>testConfigurationPluginService</b>
+                  Tests if a configuration plugin is invoked when only a configuration
+                   listener is registered (no managed service). It should not be invoked.
+                     <br><b>testConfigurationPluginServiceFactory</b>
+                  Tests if a configuration plugin is invoked when only a configuration
+                   listener is registered (managed service factory). It should not be
+                   invoked.
+                     <br></td>
+            </tr>
+         </table><br><table width="700">
+            <tr>
+               <th class="pointer" colspan="2"><a name="org.osgi.service.cm.ConfigurationPermission"></a>Class org.osgi.service.cm.ConfigurationPermission
+               </th>
+            </tr>
+            <tr>
+               <td colspan="2">
+                  Indicates a bundle's authority to set or get a Configuration.
+                     
+               </td>
+            </tr>
+            <tr>
+               <th width="350"><a name="ConfigurationPermission.ConfigurationPermission(String,String)"></a>ConfigurationPermission(String,String)
+               </th>
+               <th width="350"><b class="passed"> NO TEST FOUND </b></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Create a new ConfigurationPermission.
+                     
+               </td>
+               <td width="350"></td>
+            </tr>
+            <tr>
+               <th width="350"><a name="ConfigurationPermission.ConfigurationPermission(Bundle,String,String,int)"></a>ConfigurationPermission(Bundle,String,String,int)
+               </th>
+               <th width="350"><b class="passed"> NO TEST FOUND </b></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Create a new Configuration Permission.
+                     
+               </td>
+               <td width="350"></td>
+            </tr>
+            <tr>
+               <th width="350"><a name="ConfigurationPermission.equals(Object)"></a>equals(Object)
+               </th>
+               <th width="350"><b class="passed"> NO TEST FOUND </b></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  
+                     
+               </td>
+               <td width="350"></td>
+            </tr>
+            <tr>
+               <th width="350"><a name="ConfigurationPermission.getActions()"></a>getActions()
+               </th>
+               <th width="350"><b class="passed"> NO TEST FOUND </b></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  
+                     
+               </td>
+               <td width="350"></td>
+            </tr>
+            <tr>
+               <th width="350"><a name="ConfigurationPermission.hashCode()"></a>hashCode()
+               </th>
+               <th width="350"><b class="passed"> NO TEST FOUND </b></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Returns the hash code value for this object.
+                     
+               </td>
+               <td width="350"></td>
+            </tr>
+            <tr>
+               <th width="350"><a name="ConfigurationPermission.implies(Permission)"></a>implies(Permission)
+               </th>
+               <th width="350"><b class="passed"> NO TEST FOUND </b></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Determines if a ConfigurationPermission object "implies"
+                   the specified permission.
+                     
+               </td>
+               <td width="350"></td>
+            </tr>
+            <tr>
+               <th width="350"><a name="ConfigurationPermission.newPermissionCollection()"></a>newPermissionCollection()
+               </th>
+               <th width="350"><b class="passed"> NO TEST FOUND </b></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  
+                     
+               </td>
+               <td width="350"></td>
+            </tr>
+         </table><br><table width="700">
+            <tr>
+               <th class="pointer" colspan="2"><a name="org.osgi.service.cm.ConfigurationPlugin"></a>Class org.osgi.service.cm.ConfigurationPlugin
+               </th>
+            </tr>
+            <tr>
+               <td colspan="2">
+                  A service interface for processing configuration dictionary before the
+                   update.
+                     
+               </td>
+            </tr>
+            <tr>
+               <th width="350"><a name="ConfigurationPlugin.modifyConfiguration(ServiceReference,Dictionary)"></a>modifyConfiguration(ServiceReference,Dictionary)
+               </th>
+               <th width="350">Tests:</th>
+            </tr>
+            <tr>
+               <td width="350">
+                  View and possibly modify the a set of configuration properties before
+                   they are sent to the Managed Service or the Managed Service Factory.
+                     
+               </td>
+               <td width="350"><b>testConfigurationPluginService</b>
+                  Tests if a configuration plugin is invoked when only a configuration
+                   listener is registered (no managed service). It should not be invoked.
+                     <br><b>testConfigurationPluginServiceFactory</b>
+                  Tests if a configuration plugin is invoked when only a configuration
+                   listener is registered (managed service factory). It should not be
+                   invoked.
+                     <br></td>
+            </tr>
+         </table><br><table width="700">
+            <tr>
+               <th class="pointer" colspan="2"><a name="org.osgi.service.cm.ManagedService"></a>Class org.osgi.service.cm.ManagedService
+               </th>
+            </tr>
+            <tr>
+               <td colspan="2">
+                  A service that can receive configuration data from a Configuration Admin
+                   service.
+                     
+               </td>
+            </tr>
+            <tr>
+               <th width="350"><a name="ManagedService.updated(Dictionary)"></a>updated(Dictionary)
+               </th>
+               <th width="350"><b class="passed"> NO TEST FOUND </b></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Update the configuration for a Managed Service.
+                     
+               </td>
+               <td width="350"></td>
+            </tr>
+         </table><br><table width="700">
+            <tr>
+               <th class="pointer" colspan="2"><a name="org.osgi.service.cm.ManagedServiceFactory"></a>Class org.osgi.service.cm.ManagedServiceFactory
+               </th>
+            </tr>
+            <tr>
+               <td colspan="2">
+                  Manage multiple service instances.
+                     
+               </td>
+            </tr>
+            <tr>
+               <th width="350"><a name="ManagedServiceFactory.deleted(String)"></a>deleted(String)
+               </th>
+               <th width="350"><b class="passed"> NO TEST FOUND </b></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Remove a factory instance.
+                     
+               </td>
+               <td width="350"></td>
+            </tr>
+            <tr>
+               <th width="350"><a name="ManagedServiceFactory.getName()"></a>getName()
+               </th>
+               <th width="350"><b class="passed"> NO TEST FOUND </b></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Return a descriptive name of this factory.
+                     
+               </td>
+               <td width="350"></td>
+            </tr>
+            <tr>
+               <th width="350"><a name="ManagedServiceFactory.updated(String,Dictionary)"></a>updated(String,Dictionary)
+               </th>
+               <th width="350">Tests:</th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Create a new instance, or update the configuration of an existing
+                   instance.
+                     
+               </td>
+               <td width="350"><b>testManagedServiceFactory</b>
+                  Test Managed Service Factory.
+                     <br></td>
+            </tr>
+         </table>
+      </div>
+   </body>
+</html>

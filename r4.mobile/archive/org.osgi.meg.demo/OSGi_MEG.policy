@@ -1,0 +1,191 @@
+CPI cpi_Deployment_Admin {
+	CONDITION org.osgi.service.condpermadmin.BundleLocationCondition {
+		"file:/${org.osgi.meg.demo.workdirabsolute}$/osgi.test/target/bundles/74/data/org.osgi.impl.service.deploymentadmin.jar"
+	}
+	PERMISSION java.security.AllPermission {
+		"*" 
+		"*" 
+	}
+}
+
+CPI cpi_DoIt {
+	CONDITION org.osgi.service.condpermadmin.BundleLocationCondition {
+		"${org.osgi.meg.demo.workdirabsolute}$/org.osgi.impl.service.deploymentadmin.test/doit.jar~keep~"
+	}
+	PERMISSION java.security.AllPermission {
+		"*" 
+		"*" 
+	}
+}
+
+CPI cpi_Database {
+	CONDITION org.osgi.service.condpermadmin.BundleLocationCondition {
+		"file:../../org.osgi.impl.service.deploymentadmin.test/db.jar"
+	}
+	PERMISSION org.osgi.framework.PackagePermission {
+		"com.nokia.test.db" 
+		"export" 
+	}
+	PERMISSION org.osgi.framework.PackagePermission {
+		"org.osgi.framework" 
+		"import" 
+	}
+	PERMISSION org.osgi.framework.ServicePermission {
+		"com.nokia.test.db.Db" 
+		"register" 
+	}
+}
+
+CPI cpi_Database_RP_Default {
+	CONDITION org.osgi.service.condpermadmin.BundleLocationCondition {
+		"file:../../org.osgi.impl.service.deploymentadmin.test/dbrp.jar"
+	}
+	PERMISSION org.osgi.framework.PackagePermission {
+		"com.nokia.test.db" 
+		"import" 
+	}
+	PERMISSION org.osgi.framework.PackagePermission {
+		"org.osgi.framework" 
+		"import" 
+	}
+	PERMISSION org.osgi.framework.PackagePermission {
+		"org.osgi.service.deploymentadmin" 
+		"import" 
+	}
+	PERMISSION org.osgi.framework.PackagePermission {
+		"org.osgi.service.deploymentadmin.spi" 
+		"import" 
+	}
+	PERMISSION org.osgi.framework.PackagePermission {
+		"com.nokia.test.exampleresourceprocessor.db.api" 
+		"export" 
+	}
+	PERMISSION org.osgi.framework.AdminPermission {
+		"*" 
+		"metadata" 
+	}
+	PERMISSION org.osgi.framework.ServicePermission {
+		"*" 
+		"get, register" 
+	}
+}
+
+CPI cpi_Database_RP_03 {
+	CONDITION org.osgi.service.condpermadmin.BundleLocationCondition {
+		"osgi-dp:com.nokia.test.exampleresourceprocessor.db.DbResourceProcessor_db_test_03"
+	}
+	PERMISSION org.osgi.framework.PackagePermission {
+		"com.nokia.test.db" 
+		"import" 
+	}
+	PERMISSION org.osgi.framework.PackagePermission {
+		"org.osgi.framework" 
+		"import" 
+	}
+	PERMISSION org.osgi.framework.PackagePermission {
+		"org.osgi.service.deploymentadmin" 
+		"import" 
+	}
+	PERMISSION org.osgi.framework.PackagePermission {
+		"org.osgi.service.deploymentadmin.spi" 
+		"import" 
+	}
+	PERMISSION org.osgi.framework.PackagePermission {
+		"com.nokia.test.exampleresourceprocessor.db.api" 
+		"export" 
+	}
+	PERMISSION org.osgi.framework.AdminPermission {
+		"*" 
+		"metadata" 
+	}
+	PERMISSION org.osgi.framework.ServicePermission {
+		"*" 
+		"get, register" 
+	}
+}
+
+CPI cpi_Database_RP_05 {
+	CONDITION org.osgi.service.condpermadmin.BundleLocationCondition {
+		"osgi-dp:com.nokia.test.exampleresourceprocessor.db.DbResourceProcessor_db_test_05"
+	}
+	PERMISSION org.osgi.framework.PackagePermission {
+		"com.nokia.test.db" 
+		"import" 
+	}
+	PERMISSION org.osgi.framework.PackagePermission {
+		"org.osgi.framework" 
+		"import" 
+	}
+	PERMISSION org.osgi.framework.PackagePermission {
+		"org.osgi.service.deploymentadmin" 
+		"import" 
+	}
+	PERMISSION org.osgi.framework.PackagePermission {
+		"org.osgi.service.deploymentadmin.spi" 
+		"import" 
+	}
+	PERMISSION org.osgi.framework.PackagePermission {
+		"com.nokia.test.exampleresourceprocessor.db.api" 
+		"export" 
+	}
+	PERMISSION org.osgi.framework.AdminPermission {
+		"*" 
+		"metadata" 
+	}
+	PERMISSION org.osgi.framework.ServicePermission {
+		"*" 
+		"get, register" 
+	}
+}
+
+CPI cpi_Database_RP_06 {
+	CONDITION org.osgi.service.condpermadmin.BundleLocationCondition {
+		"osgi-dp:com.nokia.test.exampleresourceprocessor.db.DbResourceProcessor_db_test_06"
+	}
+	PERMISSION org.osgi.framework.PackagePermission {
+		"com.nokia.test.db" 
+		"import" 
+	}
+	PERMISSION org.osgi.framework.PackagePermission {
+		"org.osgi.framework" 
+		"import" 
+	}
+	PERMISSION org.osgi.framework.PackagePermission {
+		"org.osgi.service.deploymentadmin" 
+		"import" 
+	}
+	PERMISSION org.osgi.framework.PackagePermission {
+		"org.osgi.service.deploymentadmin.spi" 
+		"import" 
+	}
+	PERMISSION org.osgi.framework.PackagePermission {
+		"com.nokia.test.exampleresourceprocessor.db.api" 
+		"export" 
+	}
+	PERMISSION org.osgi.framework.AdminPermission {
+		"*" 
+		"metadata" 
+	}
+	PERMISSION org.osgi.framework.ServicePermission {
+		"*" 
+		"get, register" 
+	}
+	PERMISSION org.osgi.service.deploymentadmin.DeploymentAdminPermission {
+		"(&(name=db_test_06)(signer=CN=Sarah Bar, OU=Informatical Infrastructure Management, O=ConstructionOy, C=HU;CN=People, OU=Informatical Infrastructure Maintenance, O=ConstructionOy, L=Budapest, C=HU;CN=Root1, OU=FAKEDONTUSE, O=CASoft, L=Budapest, C=HU))" 
+		"metadata" 
+	}
+	PERMISSION org.osgi.service.deploymentadmin.spi.DeploymentCustomizerPermission {
+		"(name=easygame)" 
+		"privatearea" 
+	}
+}
+
+CPI cpi_Root_1 {
+	CONDITION org.osgi.service.condpermadmin.BundleSignerCondition {
+		"*;CN=Root1, OU=FAKEDONTUSE, O=CASoft, L=Budapest, C=HU"
+	}
+	PERMISSION java.security.AllPermission {
+		"*" 
+		"*" 
+	}
+}

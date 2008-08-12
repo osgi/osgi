@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<projectDescription>
+	<name>osgifw</name>
+	<comment>This project builds a jar for use at runtime by frameworks. 
+	This jar is provided to Eclipse.</comment>
+	<projects>
+		<project>org.osgi.framework</project>
+		<project>org.osgi.service.packageadmin</project>
+		<project>org.osgi.service.permissionadmin</project>
+		<project>org.osgi.service.startlevel</project>
+		<project>org.osgi.service.url</project>
+		<project>org.osgi.util.xml</project>
+	</projects>
+	<buildSpec>
+		<buildCommand>
+			<name>org.eclipse.jdt.core.javabuilder</name>
+			<arguments>
+			</arguments>
+		</buildCommand>
+	</buildSpec>
+	<natures>
+		<nature>org.eclipse.jdt.core.javanature</nature>
+	</natures>
+</projectDescription>

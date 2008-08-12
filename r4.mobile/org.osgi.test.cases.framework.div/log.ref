@@ -1,0 +1,64 @@
+Test bundle control started Ok.
+.
+Testing Manifest header syntax.
+21 headers.
+5-: numeric first char
+bundle-activator: org.osgi.test.cases.framework.div.tb1.CheckManifest
+bundle-category: should contain the bundle category
+bundle-classpath: ., foo/bar/dummy.jar
+bundle-contactaddress: info@ericsson.com
+bundle-copyright: should contain the bundle copyright
+bundle-description: Contains the manifest checked by the test case.
+bundle-docurl: http://www.ericsson.com
+bundle-name: test.cases.framework.div.tb1
+bundle-updatelocation: www.ericsson.se
+bundle-vendor: Ericsson Radio Systems AB
+bundle-version: Improper value for bundle manifest version 2
+continue: 12                          34
+export-package: org.osgi.dummy1;                         specification-version="0.0", org.osgi.dummy2,org.osgi.dummy3;specification-version="19.67.34"
+export-service: should contain the exported services, not used by framework
+fakeheader: This bundle is defined by developper and should be ignored by framework
+import-service: should contain the imported services, not used by framework
+manifest-version: 1.0
+max-length: xxxxxxxxx xxxxxxxxx xxxxxxxxx xxxxxxxxx xxxxxxxxx xxxxxxEND
+unicode-test: \u00d0\u00de
+.
+Testing missing manifest headers.
+1 headers.
+manifest-version: 1.0
+.
+Trying to instansiate a class from a bundle class path declared in the manifest file
+We managed to instansiate a a class from the extended bundleclass path OK
+.
+Testing Native code: Started Ok.
+.
+Testing framework event. Expecting BundleException
+Testing FrameworkEvent: class org.osgi.framework.BundleException.
+.
+Testing file access: Wrote 3 lines Ok.
+Testing file access: Read 3 lines Ok.
+Deleting file: File deleted ok.
+Testing file deletion: File was gone, Ok.
+bundle(0).start returned without Exception OK
+BundleException thrown when excecuting bundle(0).uninstall OK
+Install: BundleException thrown when EE requirements not fulfilled. OK
+Install: BundleException thrown when EE requirements not fulfilled. OK
+Install: No BundleException thrown when EE requirements fulfilled. OK
+Update: BundleException thrown when EE requirements not fulfilled. OK
+Update: No BundleException thrown when EE requirements fulfilled. OK
+.
+Testing Native code selection filter optional: Started Ok.
+.
+Testing Native code selection filter no optional: Not loaded Ok.
+.
+Testing Native code selection filter with new osname alias: Started Ok.
+.
+Testing Native code from a fragment bundle: Started Ok.
+.
+Testing Native code os language: Not loaded Ok.
+.
+Testing Native code successful os language: Started Ok.
+.
+Testing Native code osversion: Not loaded Ok.
+.
+Testing Native code successful osversion: Started Ok.

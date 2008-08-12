@@ -1,0 +1,13 @@
+Manifest-Version: 1.0
+Bundle-Name: ${p}.tb7c
+Bundle-SymbolicName: ${p}.tb7c
+Bundle-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Activator: $(p).tb7c.Activator
+Export-Package: org.osgi.test.cases.framework.fragments.tb7c;version="1.0",testresources;version="1.0"
+$(IMPORT-PACKAGE)
+$(PRIVATE-PACKAGE)
+
+
+
+

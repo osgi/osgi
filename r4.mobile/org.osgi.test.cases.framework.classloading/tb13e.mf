@@ -1,0 +1,9 @@
+Manifest-Version: 1.0
+Bundle-Name: ${p}.tb13e
+Bundle-SymbolicName: ${p}.tb13e
+Bundle-ManifestVersion: 2
+Bundle-Version: 1
+Export-Package: ${p}.exports.service;uses:="resources",${p}.exports.listener;uses:="${p}.exports.service",${p}.exports.security;uses:="${p}.exports.listener"
+Import-Package: resources;bundle-symbolic-name="${p}.tb8b"
+$(PRIVATE-PACKAGE)
+

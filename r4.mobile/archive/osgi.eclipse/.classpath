@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="con" path="org.eclipse.pde.core.requiredPlugins"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="src" path="/org.osgi.test.tool"/>
+	<classpathentry sourcepath="/osgi.released/osgi.jar" kind="lib" path="/osgi.released/osgi.jar"/>
+	<classpathentry kind="src" path="/org.osgi.impl.service.http"/>
+	<classpathentry kind="src" path="/org.osgi.service.http"/>
+	<classpathentry kind="lib" path="/licensed/jar/servlet.jar"/>
+	<classpathentry kind="lib" path="/osgi.test/osgi.director.jar"/>
+	<classpathentry sourcepath="/org.osgi.test.cases/src" kind="lib" path="/osgi.released/osgi.internal.jar"/>
+	<classpathentry kind="output" path="src"/>
+</classpath>

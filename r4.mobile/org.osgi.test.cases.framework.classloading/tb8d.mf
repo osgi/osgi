@@ -1,0 +1,11 @@
+Manifest-Version: 1.0
+Bundle-Name: ${p}.tb8d
+Bundle-SymbolicName: ${p}.tb8d
+Bundle-Version: 4
+Bundle-ClassPath: .
+Bundle-ManifestVersion: 2
+Import-Package: resources;bundle-symbolic-name=${p}.tb8a
+Require-Bundle: ${p}.tb8b
+DynamicImport-Package: resources;bundle-symbolic-name=${p}.tb8c
+$(EXPORT-PACKAGE)
+$(PRIVATE-PACKAGE)

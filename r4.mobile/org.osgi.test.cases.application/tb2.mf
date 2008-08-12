@@ -1,0 +1,8 @@
+Manifest-Version: 1.0
+Bundle-Name: ${p}.tb2
+Bundle-SymbolicName: ${p}.tb2
+Bundle-Version: 1.0
+Bundle-Activator: org.osgi.test.cases.application.tb2.Activator
+$(EXPORT-PACKAGE)
+$(IMPORT-PACKAGE)
+$(PRIVATE-PACKAGE)

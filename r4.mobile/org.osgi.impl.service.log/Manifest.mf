@@ -1,0 +1,17 @@
+Manifest-Version: 1.0
+Bundle-Activator: org.osgi.impl.service.log.Log
+Bundle-SymbolicName: ${p}
+Bundle-Name: impl.service.log
+Bundle-Description: OSGi Log Service Reference Implementation by IBM Corporation.
+Bundle-Copyright: (C) Copyright IBM Corporation 2000-2005.
+ This source code is licensed to OSGi as MEMBER LICENSED MATERIALS
+ under the terms of Section 3.2 of the OSGi MEMBER AGREEMENT.
+Bundle-Vendor: OSGi Alliance
+Bundle-Version: 1.3.1
+Bundle-Category: osgi
+Export-Service: org.osgi.service.log.LogService
+$(EXPORT-PACKAGE)
+$(IMPORT-PACKAGE)
+$(PRIVATE-PACKAGE)
+CVS-Header: $Header$
+

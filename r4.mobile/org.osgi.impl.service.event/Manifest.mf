@@ -1,0 +1,13 @@
+Manifest-Version: 1.0
+Bundle-SymbolicName: ${p}
+Bundle-Name: impl.service.event
+Bundle-Vendor: OSGi Aliance
+Bundle-Copyright: (C) Copyright IBM Corporation 2005. (C) Copyright Nokia 2004.
+ This source code is licensed to OSGi as MEMBER LICENSED MATERIALS
+ under the terms of Section 3.2 of the OSGi MEMBER AGREEMENT.
+Bundle-Version: 1.1
+Bundle-Activator: ${p}.Activator
+$(IMPORT-PACKAGE)
+$(EXPORT-PACKAGE)
+$(PRIVATE-PACKAGE)
+Import-Service: org.osgi.service.log.LogService, org.osgi.service.log.LogReaderService

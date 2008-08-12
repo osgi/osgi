@@ -1,0 +1,1553 @@
+<html>
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   
+      <link rel="stylesheet" href="osgi.css" type="text/css">
+      <title>Overview Test Case org.osgi.test.cases.dmt</title>
+   </head>
+   <body>
+      <div width="700px">
+         <h1>Overview Test Case org.osgi.test.cases.dmt</h1>
+         <p>
+            						This Testcase tests the OSGi specification: <a href="org.osgi.service.dmt.html">org.osgi.service.dmt</a>.
+            					
+         </p>
+         <p>
+            <description>
+               
+                  
+            </description>
+            <description>
+               This Test Case Validates the implementation of
+                <code>Dmt</code><code> class, according to MEG reference
+                   documentation.</code>
+                  
+            </description>
+         </p>
+         <table>
+            <tr>
+               <th>Class</th>
+               <th>Tests</th>
+            </tr>
+            <tr>
+               <td><a href="#ToString">ToString</a></td>
+               <td>1</td>
+            </tr>
+            <tr>
+               <td><a href="#SetPermission">SetPermission</a></td>
+               <td>1</td>
+            </tr>
+            <tr>
+               <td><a href="#IsPermitted">IsPermitted</a></td>
+               <td>1</td>
+            </tr>
+            <tr>
+               <td><a href="#DmtAclConstants">DmtAclConstants</a></td>
+               <td>5</td>
+            </tr>
+            <tr>
+               <td><a href="#DmtAcl">DmtAcl</a></td>
+               <td>5</td>
+            </tr>
+            <tr>
+               <td><a href="#DeletePermission">DeletePermission</a></td>
+               <td>1</td>
+            </tr>
+            <tr>
+               <td><a href="#AddPermission">AddPermission</a></td>
+               <td>1</td>
+            </tr>
+            <tr>
+               <td><a href="#GetSession">GetSession</a></td>
+               <td>5</td>
+            </tr>
+            <tr>
+               <td><a href="#DmtData">DmtData</a></td>
+               <td>7</td>
+            </tr>
+            <tr>
+               <td><a href="#DmtDataTypeConstants">DmtDataTypeConstants</a></td>
+               <td>7</td>
+            </tr>
+            <tr>
+               <td><a href="#PrintStackTrace">PrintStackTrace</a></td>
+               <td>4</td>
+            </tr>
+            <tr>
+               <td><a href="#GetURI">GetURI</a></td>
+               <td>2</td>
+            </tr>
+            <tr>
+               <td><a href="#GetMessage">GetMessage</a></td>
+               <td>2</td>
+            </tr>
+            <tr>
+               <td><a href="#GetCode">GetCode</a></td>
+               <td>2</td>
+            </tr>
+            <tr>
+               <td><a href="#GetCauses">GetCauses</a></td>
+               <td>2</td>
+            </tr>
+            <tr>
+               <td><a href="#GetCause">GetCause</a></td>
+               <td>1</td>
+            </tr>
+            <tr>
+               <td><a href="#DmtExceptionConstants">DmtExceptionConstants</a></td>
+               <td>16</td>
+            </tr>
+            <tr>
+               <td><a href="#DmtException">DmtException</a></td>
+               <td>3</td>
+            </tr>
+            <tr>
+               <td><a href="#DmtPrincipalPermission">DmtPrincipalPermission</a></td>
+               <td>4</td>
+            </tr>
+         </table>
+         <h2><a name="AddPermission"></a>org.osgi.test.cases.dmt.tbc.DmtAcl.AddPermission
+         </h2>
+         <table width="700px">
+            <tr>
+               <th colspan="2">References</th>
+            </tr>
+            <tr>
+               <td><a href="org.osgi.service.dmt.html#DmtAcl.addPermission(String,int)">DmtAcl.addPermission(String,int)</a></td>
+            </tr>
+            <tr>
+               <th width="350">testAddPermission001</th>
+               <th width="350"></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  This method creates a new Acl and asserts that a new permission is
+                   correctly added to the Acl principal.
+                     
+               </td>
+               <td width="350"><a href="org.osgi.service.dmt.html#DmtAcl.addPermission(String,int)">DmtAcl.addPermission(String,int)</a><br></td>
+            </tr>
+            <tr>
+               <th width="350">testAddPermission002</th>
+               <th width="350"></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Test that more than one permission is added in the same time to a
+                   principal.
+                     
+               </td>
+               <td width="350"><a href="org.osgi.service.dmt.html#DmtAcl.addPermission(String,int)">DmtAcl.addPermission(String,int)</a><br></td>
+            </tr>
+            <tr>
+               <th width="350">testAddPermission003</th>
+               <th width="350"></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Asserts that an IllegalArgumentException is thrown whenever an invalid
+                   permission is added to a principal.
+                     
+               </td>
+               <td width="350"><a href="org.osgi.service.dmt.html#DmtAcl.addPermission(String,int)">DmtAcl.addPermission(String,int)</a><br></td>
+            </tr>
+            <tr>
+               <th width="350">testAddPermission004</th>
+               <th width="350"></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Asserts that an IllegalArgumentException is
+                           thrown whenever a valid permission is added to an invalid
+                           principal.
+                     
+               </td>
+               <td width="350"><a href="org.osgi.service.dmt.html#DmtAcl.addPermission(String,int)">DmtAcl.addPermission(String,int)</a><br></td>
+            </tr>
+            <tr>
+               <th width="350">testAddPermission005</th>
+               <th width="350"></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Asserts that an IllegalArgumentException is
+                           thrown whenever a valid permission is added to a principal which
+                           was not created on the constructor.
+                     
+               </td>
+               <td width="350"><a href="org.osgi.service.dmt.html#DmtAcl.addPermission(String,int)">DmtAcl.addPermission(String,int)</a><br></td>
+            </tr>
+         </table>
+         <h2><a name="DeletePermission"></a>org.osgi.test.cases.dmt.tbc.DmtAcl.DeletePermission
+         </h2>
+         <table width="700px">
+            <tr>
+               <th colspan="2">References</th>
+            </tr>
+            <tr>
+               <td><a href="org.osgi.service.dmt.html#DmtAcl.deletePermission(String,int)">DmtAcl.deletePermission(String,int)</a></td>
+            </tr>
+            <tr>
+               <th width="350">testDeletePermission001</th>
+               <th width="350"></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  This method asserts that a principal permission is
+                                    correctly deleted from its Acl.
+                     
+               </td>
+               <td width="350"><a href="org.osgi.service.dmt.html#DmtAcl.deletePermission(String,int)">DmtAcl.deletePermission(String,int)</a><br></td>
+            </tr>
+            <tr>
+               <th width="350">testDeletePermission002</th>
+               <th width="350"></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Test that more than one permission can be deleted in the
+                                    same time from a principal.
+                     
+               </td>
+               <td width="350"><a href="org.osgi.service.dmt.html#DmtAcl.deletePermission(String,int)">DmtAcl.deletePermission(String,int)</a><br></td>
+            </tr>
+            <tr>
+               <th width="350">testDeletePermission003</th>
+               <th width="350"></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Asserts that an IllegalArgumentException is thrown
+                                    whenever an invalid permission is deleted from a
+                                    principal.
+                     
+               </td>
+               <td width="350"><a href="org.osgi.service.dmt.html#DmtAcl.deletePermission(String,int)">DmtAcl.deletePermission(String,int)</a><br></td>
+            </tr>
+            <tr>
+               <th width="350">testDeletePermission004</th>
+               <th width="350"></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Asserts that an IllegalArgumentException is thrown
+                                    whenever a permission which does not belong to a
+                                    principal is deleted.
+                     
+               </td>
+               <td width="350"><a href="org.osgi.service.dmt.html#DmtAcl.deletePermission(String,int)">DmtAcl.deletePermission(String,int)</a><br></td>
+            </tr>
+            <tr>
+               <th width="350">testDeletePermission005</th>
+               <th width="350"></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Asserts that an IllegalArgumentException is thrown
+                                    whenever a valid permission is deleted from an invalid
+                                    principal.
+                     
+               </td>
+               <td width="350"><a href="org.osgi.service.dmt.html#DmtAcl.deletePermission(String,int)">DmtAcl.deletePermission(String,int)</a><br></td>
+            </tr>
+            <tr>
+               <th width="350">testDeletePermission006</th>
+               <th width="350"></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Asserts that an IllegalArgumentException is thrown
+                                    whenever a valid permission is deleted from a principal
+                                    which was not created on the constructor.
+                     
+               </td>
+               <td width="350"><a href="org.osgi.service.dmt.html#DmtAcl.deletePermission(String,int)">DmtAcl.deletePermission(String,int)</a><br></td>
+            </tr>
+         </table>
+         <h2><a name="DmtAcl"></a>org.osgi.test.cases.dmt.tbc.DmtAcl.DmtAcl
+         </h2>
+         <table width="700px">
+            <tr>
+               <th colspan="2">References</th>
+            </tr>
+            <tr>
+               <td><a href="org.osgi.service.dmt.html#DmtAcl.DmtAcl(String)">DmtAcl.DmtAcl(String)</a></td>
+            </tr>
+            <tr>
+               <td><a href="org.osgi.service.dmt.html#DmtAcl.DmtAcl(String,int)">DmtAcl.DmtAcl(String,int)</a></td>
+            </tr>
+            <tr>
+               <td><a href="org.osgi.service.dmt.html#DmtAcl.getPrincipals()">DmtAcl.getPrincipals()</a></td>
+            </tr>
+            <tr>
+               <td><a href="org.osgi.service.dmt.html#DmtAcl.getPermissions(String)">DmtAcl.getPermissions(String)</a></td>
+            </tr>
+            <tr>
+               <td><a href="org.osgi.service.dmt.html#DmtAcl.DmtAcl(String[],int)">DmtAcl.DmtAcl(String[],int)</a></td>
+            </tr>
+            <tr>
+               <th width="350">testDmtAcl001</th>
+               <th width="350"></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  This method asserts that an instance of the ACL is
+                                    created from its canonic string representation. It also
+                                    tests getPermissions, and getPrincipals.
+                     
+               </td>
+               <td width="350"><a href="org.osgi.service.dmt.html#DmtAcl.DmtAcl(String)">DmtAcl.DmtAcl(String)</a><br></td>
+            </tr>
+            <tr>
+               <th width="350">testDmtAcl002</th>
+               <th width="350"></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  This method creates a new ACL from another predefined
+                                    ACL, and asserts that it have got all the later ACL
+                                    properties.
+                     
+               </td>
+               <td width="350"><a href="org.osgi.service.dmt.html#DmtAcl.DmtAcl(String,int)">DmtAcl.DmtAcl(String,int)</a><b class="passed"> X </b><br></td>
+            </tr>
+            <tr>
+               <th width="350">testDmtAcl003</th>
+               <th width="350"></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  This method asserts that an ACL instance that represents
+                                    an empty list of principals with no permissions is
+                                    created.
+                     
+               </td>
+               <td width="350"><a href="org.osgi.service.dmt.html#DmtAcl.getPrincipals()">DmtAcl.getPrincipals()</a><br></td>
+            </tr>
+            <tr>
+               <th width="350">testDmtAcl004</th>
+               <th width="350"></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Checks if IllegalArgumentException is thrown on
+                                    DmtAcl(java.lang.String acl) constructors.
+                     
+               </td>
+               <td width="350"><a href="org.osgi.service.dmt.html#DmtAcl.DmtAcl(String)">DmtAcl.DmtAcl(String)</a><br></td>
+            </tr>
+            <tr>
+               <th width="350">testDmtAcl005</th>
+               <th width="350"></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Passes NULL as argument in the constructor and asserts
+                                    that an empty list of principals with no permissions is
+                                    created.
+                     
+               </td>
+               <td width="350"><a href="org.osgi.service.dmt.html#DmtAcl.getPrincipals()">DmtAcl.getPrincipals()</a><br></td>
+            </tr>
+            <tr>
+               <th width="350">testDmtAcl006</th>
+               <th width="350"></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Validates a constructor of an DmtAcl object with more
+                                    than one principal.
+                     
+               </td>
+               <td width="350"><a href="org.osgi.service.dmt.html#DmtAcl.DmtAcl(String)">DmtAcl.DmtAcl(String)</a><br></td>
+            </tr>
+            <tr>
+               <th width="350">testDmtAcl007</th>
+               <th width="350"></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Asserts that an IllegalArgumentException is thrown
+                                    whenever an ACL is created from an acl String with an
+                                    invalid permission code.
+                                    
+                   ### Why does the constructor not throw an exception?
+                     
+               </td>
+               <td width="350"><a href="org.osgi.service.dmt.html#DmtAcl.getPermissions(String)">DmtAcl.getPermissions(String)</a><br></td>
+            </tr>
+            <tr>
+               <th width="350">testDmtAcl008</th>
+               <th width="350"></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Asserts that an IllegalArgumentException is thrown
+                                    whenever an ACL is created from an acl String with a
+                                    null principal.
+                     
+               </td>
+               <td width="350"><a href="org.osgi.service.dmt.html#DmtAcl.DmtAcl(String)">DmtAcl.DmtAcl(String)</a><br></td>
+            </tr>
+            <tr>
+               <th width="350">testDmtAcl009</th>
+               <th width="350"></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Asserts that an IllegalArgumentException is thrown
+                                    whenever an ACL is created from an acl String with an
+                                    invalid principal.
+                     
+               </td>
+               <td width="350"><a href="org.osgi.service.dmt.html#DmtAcl.DmtAcl(String)">DmtAcl.DmtAcl(String)</a><br></td>
+            </tr>
+            <tr>
+               <th width="350">testDmtAcl010</th>
+               <th width="350"></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Test if an IllegalArgumentException is thrown when the
+                                    DmtAcl constructors receives two arrays with different
+                                    lenghts.
+                     
+               </td>
+               <td width="350"><a href="org.osgi.service.dmt.html#DmtAcl.DmtAcl(String[],int)">DmtAcl.DmtAcl(String[],int)</a><b class="passed"> X </b><br></td>
+            </tr>
+            <tr>
+               <th width="350">testDmtAcl011</th>
+               <th width="350"></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Test if an IllegalArgumentException is thrown when the
+                                    DmtAcl constructors receives an invalid permission array
+                                    element.
+                     
+               </td>
+               <td width="350"><a href="org.osgi.service.dmt.html#DmtAcl.DmtAcl(String[],int)">DmtAcl.DmtAcl(String[],int)</a><b class="passed"> X </b><br></td>
+            </tr>
+            <tr>
+               <th width="350">testDmtAcl012</th>
+               <th width="350"></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Test if an IllegalArgumentException is thrown when the
+                                    DmtAcl constructors receives an invalid principal array
+                                    element.
+                     
+               </td>
+               <td width="350"><a href="org.osgi.service.dmt.html#DmtAcl.DmtAcl(String[],int)">DmtAcl.DmtAcl(String[],int)</a><b class="passed"> X </b><br></td>
+            </tr>
+         </table>
+         <h2><a name="DmtAclConstants"></a>org.osgi.test.cases.dmt.tbc.DmtAcl.DmtAclConstants
+         </h2>
+         <table width="700px">
+            <tr>
+               <th colspan="2">References</th>
+            </tr>
+            <tr>
+               <td><a href="org.osgi.service.dmt.html#DmtAcl.GET">DmtAcl.GET</a></td>
+            </tr>
+            <tr>
+               <td><a href="org.osgi.service.dmt.html#DmtAcl.ADD">DmtAcl.ADD</a></td>
+            </tr>
+            <tr>
+               <td><a href="org.osgi.service.dmt.html#DmtAcl.REPLACE">DmtAcl.REPLACE</a></td>
+            </tr>
+            <tr>
+               <td><a href="org.osgi.service.dmt.html#DmtAcl.DELETE">DmtAcl.DELETE</a></td>
+            </tr>
+            <tr>
+               <td><a href="org.osgi.service.dmt.html#DmtAcl.EXEC%0A %0A ### btw, this tests the compiler, not the system under test because the%0A constants are final so they are compiled inline ... You need to use%0A reflection.">DmtAcl.EXEC
+                      
+                      ### btw, this tests the compiler, not the system under test because the
+                      constants are final so they are compiled inline ... You need to use
+                      reflection.</a></td>
+            </tr>
+            <tr>
+               <th width="350">testDmtAclConstants001</th>
+               <th width="350"></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Tests all constants values according to Constants fields values JavaDoc.
+                     
+               </td>
+               <td width="350"><a href="org.osgi.service.dmt.html#DmtAcl.GET">DmtAcl.GET</a><b class="passed"> X </b><br><a href="org.osgi.service.dmt.html#DmtAcl.ADD">DmtAcl.ADD</a><b class="passed"> X </b><br><a href="org.osgi.service.dmt.html#DmtAcl.REPLACE">DmtAcl.REPLACE</a><b class="passed"> X </b><br><a href="org.osgi.service.dmt.html#DmtAcl.DELETE">DmtAcl.DELETE</a><b class="passed"> X </b><br><a href="org.osgi.service.dmt.html#DmtAcl.EXEC%0A %0A ### btw, this tests the compiler, not the system under test because the%0A constants are final so they are compiled inline ... You need to use%0A reflection.">DmtAcl.EXEC
+                      
+                      ### btw, this tests the compiler, not the system under test because the
+                      constants are final so they are compiled inline ... You need to use
+                      reflection.</a><b class="passed"> X </b><br></td>
+            </tr>
+         </table>
+         <h2><a name="IsPermitted"></a>org.osgi.test.cases.dmt.tbc.DmtAcl.IsPermitted
+         </h2>
+         <table width="700px">
+            <tr>
+               <th colspan="2">References</th>
+            </tr>
+            <tr>
+               <td><a href="org.osgi.service.dmt.html#DmtAcl.isPermitted(String,int)">DmtAcl.isPermitted(String,int)</a></td>
+            </tr>
+            <tr>
+               <th width="350">testIsPermitted001</th>
+               <th width="350"></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  This method tests if a given permission is granted to a
+                                    principal.
+                     
+               </td>
+               <td width="350"><a href="org.osgi.service.dmt.html#DmtAcl.isPermitted(String,int)">DmtAcl.isPermitted(String,int)</a><br></td>
+            </tr>
+            <tr>
+               <th width="350">testIsPermitted002</th>
+               <th width="350"></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  This method asserts that a given permission is not
+                                    granted to a principal.
+                     
+               </td>
+               <td width="350"><a href="org.osgi.service.dmt.html#DmtAcl.isPermitted(String,int)">DmtAcl.isPermitted(String,int)</a><br></td>
+            </tr>
+            <tr>
+               <th width="350">testIsPermitted003</th>
+               <th width="350"></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Asserts that an IllegalArgumentException is thrown
+                                    whenever an invalid permission code is passed to
+                                    isPermitted(java.lang.String principal, int
+                                    permissions).
+                     
+               </td>
+               <td width="350"><a href="org.osgi.service.dmt.html#DmtAcl.isPermitted(String,int)">DmtAcl.isPermitted(String,int)</a><br></td>
+            </tr>
+            <tr>
+               <th width="350">testIsPermitted004</th>
+               <th width="350"></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Asserts that an IllegalArgumentException is thrown
+                                    whenever a valid permission code and an invalid
+                                    principal is passed isPermitted(java.lang.String
+                                    principal, int permissions).
+                     
+               </td>
+               <td width="350"><a href="org.osgi.service.dmt.html#DmtAcl.isPermitted(String,int)">DmtAcl.isPermitted(String,int)</a><br></td>
+            </tr>
+            <tr>
+               <th width="350">testIsPermitted006</th>
+               <th width="350"></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Asserts that an IllegalArgumentException is thrown
+                                    whenever a valid permission is deleted from a principal
+                                    which was not created on the constructor.
+                     
+               </td>
+               <td width="350"><a href="org.osgi.service.dmt.html#DmtAcl.isPermitted(String,int)">DmtAcl.isPermitted(String,int)</a><br></td>
+            </tr>
+         </table>
+         <h2><a name="SetPermission"></a>org.osgi.test.cases.dmt.tbc.DmtAcl.SetPermission
+         </h2>
+         <table width="700px">
+            <tr>
+               <th colspan="2">References</th>
+            </tr>
+            <tr>
+               <td><a href="org.osgi.service.dmt.html#DmtAcl.setPermission(String,int)">DmtAcl.setPermission(String,int)</a></td>
+            </tr>
+            <tr>
+               <th width="350">testSetPermission001</th>
+               <th width="350"></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  This method asserts that a principal gets all the permissions previously
+                   set.
+                     
+               </td>
+               <td width="350"><a href="org.osgi.service.dmt.html#DmtAcl.setPermission(String,int)">DmtAcl.setPermission(String,int)</a><br></td>
+            </tr>
+            <tr>
+               <th width="350">testSetPermission002</th>
+               <th width="350"></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  This method asserts that a set of permissions the principal had is
+                   overriden by new ones.
+                     
+               </td>
+               <td width="350"><a href="org.osgi.service.dmt.html#DmtAcl.setPermission(String,int)">DmtAcl.setPermission(String,int)</a><br></td>
+            </tr>
+            <tr>
+               <th width="350">testSetPermission003</th>
+               <th width="350"></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Asserts that an IllegalArgumentException is thrown whenever an invalid
+                   permission is set to a principal.
+                     
+               </td>
+               <td width="350"><a href="org.osgi.service.dmt.html#DmtAcl.setPermission(String,int)">DmtAcl.setPermission(String,int)</a><br></td>
+            </tr>
+            <tr>
+               <th width="350">testSetPermission004</th>
+               <th width="350"></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Asserts that an IllegalArgumentException is thrown whenever a valid
+                   permission is set to an invalid principal.
+                     
+               </td>
+               <td width="350"><a href="org.osgi.service.dmt.html#DmtAcl.setPermission(String,int)">DmtAcl.setPermission(String,int)</a><br></td>
+            </tr>
+            <tr>
+               <th width="350">testSetPermission005</th>
+               <th width="350"></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Asserts that an IllegalArgumentException is thrown whenever a valid
+                   permission is set to a principal which was not created on the
+                   constructor.
+                     
+               </td>
+               <td width="350"><a href="org.osgi.service.dmt.html#DmtAcl.setPermission(String,int)">DmtAcl.setPermission(String,int)</a><br></td>
+            </tr>
+            <tr>
+               <th width="350">testSetPermission006</th>
+               <th width="350"></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Passes all permission and check if the permission set is the same as
+                   ALL_PERMISSION.
+                     
+               </td>
+               <td width="350"><a href="org.osgi.service.dmt.html#DmtAcl.setPermission(String,int)">DmtAcl.setPermission(String,int)</a><br></td>
+            </tr>
+         </table>
+         <h2><a name="ToString"></a>org.osgi.test.cases.dmt.tbc.DmtAcl.ToString
+         </h2>
+         <table width="700px">
+            <tr>
+               <th colspan="2">References</th>
+            </tr>
+            <tr>
+               <td><a href="org.osgi.service.dmt.html#DmtAcl.toString()">DmtAcl.toString()</a></td>
+            </tr>
+            <tr>
+               <th width="350">testToString001</th>
+               <th width="350"></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  This method asserts that the string representing this ACL is the same as
+                   the canonic string as specified in OMA DM.
+                     
+               </td>
+               <td width="350"><a href="org.osgi.service.dmt.html#DmtAcl.toString()">DmtAcl.toString()</a><br></td>
+            </tr>
+         </table>
+         <h2><a name="GetSession"></a>org.osgi.test.cases.dmt.tbc.DmtAdmin.GetSession
+         </h2>
+         <table width="700px">
+            <tr>
+               <th colspan="2">References</th>
+            </tr>
+            <tr>
+               <td><a href="org.osgi.service.dmt.html#DmtAdmin.getSession(String)">DmtAdmin.getSession(String)</a></td>
+            </tr>
+            <tr>
+               <td><a href="org.osgi.service.dmt.html#DmtAdmin.getSession(String,int)">DmtAdmin.getSession(String,int)</a></td>
+            </tr>
+            <tr>
+               <td><a href="org.osgi.service.dmt.html#DmtSession.LOCK_TYPE_SHARED">DmtSession.LOCK_TYPE_SHARED</a></td>
+            </tr>
+            <tr>
+               <td><a href="org.osgi.service.dmt.html#DmtAdmin.getSession(String,String,int)">DmtAdmin.getSession(String,String,int)</a></td>
+            </tr>
+            <tr>
+               <td><a href="org.osgi.service.dmt.html#DmtSession.LOCK_TYPE_ATOMIC">DmtSession.LOCK_TYPE_ATOMIC</a></td>
+            </tr>
+            <tr>
+               <th width="350">testGetSession001</th>
+               <th width="350"></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  This method asserts that a session is opened with the
+                                    specified subtree, lock type and principal. This constructor use by default LOCK_TYPE_EXCLUSIVE
+                     
+               </td>
+               <td width="350"><a href="org.osgi.service.dmt.html#DmtAdmin.getSession(String)">DmtAdmin.getSession(String)</a><br></td>
+            </tr>
+            <tr>
+               <th width="350">testGetSession002</th>
+               <th width="350"></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  This method asserts if an invalid node causes 
+                                    an exception with NODE_NOT_FOUND code
+                     
+               </td>
+               <td width="350"><a href="org.osgi.service.dmt.html#DmtAdmin.getSession(String)">DmtAdmin.getSession(String)</a><br></td>
+            </tr>
+            <tr>
+               <th width="350">testGetSession003</th>
+               <th width="350"></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  This method asserts if a too long uri causes 
+                                    an exception with URI_TOO_LONG code
+                     
+               </td>
+               <td width="350"><a href="org.osgi.service.dmt.html#DmtAdmin.getSession(String)">DmtAdmin.getSession(String)</a><br></td>
+            </tr>
+            <tr>
+               <th width="350">testGetSession004</th>
+               <th width="350"></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  This method asserts if a node using invalid characters causes 
+                                    an exception with INVALID_URI code
+                     
+               </td>
+               <td width="350"><a href="org.osgi.service.dmt.html#DmtAdmin.getSession(String)">DmtAdmin.getSession(String)</a><br></td>
+            </tr>
+            <tr>
+               <th width="350">testGetSession005</th>
+               <th width="350"></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  This method asserts that a session is opened with the
+                                    specified subtree, lock type and principal. This constructor use by default LOCK_TYPE_SHARED
+                     
+               </td>
+               <td width="350"><a href="org.osgi.service.dmt.html#DmtAdmin.getSession(String)">DmtAdmin.getSession(String)</a><br></td>
+            </tr>
+            <tr>
+               <th width="350">testGetSession006</th>
+               <th width="350"></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  This method asserts if an invalid node causes 
+                                    an exception with NODE_NOT_FOUND code
+                     
+               </td>
+               <td width="350"><a href="org.osgi.service.dmt.html#DmtAdmin.getSession(String,int)">DmtAdmin.getSession(String,int)</a><br><a href="org.osgi.service.dmt.html#DmtSession.LOCK_TYPE_SHARED">DmtSession.LOCK_TYPE_SHARED</a><b class="passed"> X </b><br></td>
+            </tr>
+            <tr>
+               <th width="350">testGetSession007</th>
+               <th width="350"></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  This method asserts if a too long uri causes 
+                                    an exception with URI_TOO_LONG code
+                     
+               </td>
+               <td width="350"><a href="org.osgi.service.dmt.html#DmtAdmin.getSession(String,int)">DmtAdmin.getSession(String,int)</a><br><a href="org.osgi.service.dmt.html#DmtSession.LOCK_TYPE_SHARED">DmtSession.LOCK_TYPE_SHARED</a><b class="passed"> X </b><br></td>
+            </tr>
+            <tr>
+               <th width="350">testGetSession008</th>
+               <th width="350"></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  This method asserts if a invalid lock mode causes 
+                                    an exception with OTHER_ERROR code
+                     
+               </td>
+               <td width="350"><a href="org.osgi.service.dmt.html#DmtAdmin.getSession(String,int)">DmtAdmin.getSession(String,int)</a><br></td>
+            </tr>
+            <tr>
+               <th width="350">testGetSession009</th>
+               <th width="350"></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  This method asserts if a node using invalid characters causes 
+                                    an exception with INVALID_URI code
+                     
+               </td>
+               <td width="350"><a href="org.osgi.service.dmt.html#DmtAdmin.getSession(String,int)">DmtAdmin.getSession(String,int)</a><br><a href="org.osgi.service.dmt.html#DmtSession.LOCK_TYPE_SHARED">DmtSession.LOCK_TYPE_SHARED</a><b class="passed"> X </b><br></td>
+            </tr>
+            <tr>
+               <th width="350">testGetSession010</th>
+               <th width="350"></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  This method asserts that a session is opened with the
+                                    specified subtree, lock type and principal. This constructor use by default LOCK_TYPE_ATOMIC
+                                    
+                   TODO TCs for java.lang.SecurityException using this getSessions
+                   TODO remove String principal ?!?! (String principal) but I need it to test the getSession with 3 arguments.
+                     
+               </td>
+               <td width="350"><a href="org.osgi.service.dmt.html#DmtAdmin.getSession(String,String,int)">DmtAdmin.getSession(String,String,int)</a><br><a href="org.osgi.service.dmt.html#DmtSession.LOCK_TYPE_ATOMIC">DmtSession.LOCK_TYPE_ATOMIC</a><b class="passed"> X </b><br></td>
+            </tr>
+            <tr>
+               <th width="350">testGetSession011</th>
+               <th width="350"></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  This method asserts if an invalid node causes 
+                                    an exception with NODE_NOT_FOUND code
+                     
+               </td>
+               <td width="350"><a href="org.osgi.service.dmt.html#DmtAdmin.getSession(String,String,int)">DmtAdmin.getSession(String,String,int)</a><br><a href="org.osgi.service.dmt.html#DmtSession.LOCK_TYPE_SHARED">DmtSession.LOCK_TYPE_SHARED</a><b class="passed"> X </b><br></td>
+            </tr>
+            <tr>
+               <th width="350">testGetSession012</th>
+               <th width="350"></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  This method asserts if a too long uri causes 
+                                    an exception with URI_TOO_LONG code
+                     
+               </td>
+               <td width="350"><a href="org.osgi.service.dmt.html#DmtAdmin.getSession(String,String,int)">DmtAdmin.getSession(String,String,int)</a><br><a href="org.osgi.service.dmt.html#DmtSession.LOCK_TYPE_SHARED">DmtSession.LOCK_TYPE_SHARED</a><b class="passed"> X </b><br></td>
+            </tr>
+            <tr>
+               <th width="350">testGetSession013</th>
+               <th width="350"></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  This method asserts if a invalid lock mode causes 
+                                    an exception with OTHER_ERROR code
+                     
+               </td>
+               <td width="350"><a href="org.osgi.service.dmt.html#DmtAdmin.getSession(String,String,int)">DmtAdmin.getSession(String,String,int)</a><br></td>
+            </tr>
+            <tr>
+               <th width="350">testGetSession014</th>
+               <th width="350"></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  This method asserts if a node using invalid characters causes 
+                                    an exception with INVALID_URI code
+                     
+               </td>
+               <td width="350"><a href="org.osgi.service.dmt.html#DmtAdmin.getSession(String,String,int)">DmtAdmin.getSession(String,String,int)</a><br><a href="org.osgi.service.dmt.html#DmtSession.LOCK_TYPE_SHARED">DmtSession.LOCK_TYPE_SHARED</a><b class="passed"> X </b><br></td>
+            </tr>
+         </table>
+         <h2><a name="DmtData"></a>org.osgi.test.cases.dmt.tbc.DmtData.DmtData
+         </h2>
+         <table width="700px">
+            <tr>
+               <th colspan="2">References</th>
+            </tr>
+            <tr>
+               <td><a href="org.osgi.service.dmt.html#DmtData.DmtData(String)">DmtData.DmtData(String)</a></td>
+            </tr>
+            <tr>
+               <td><a href="org.osgi.service.dmt.html#DmtData.DmtData(int)">DmtData.DmtData(int)</a></td>
+            </tr>
+            <tr>
+               <td><a href="org.osgi.service.dmt.html#DmtData.DmtData(String,boolean)">DmtData.DmtData(String,boolean)</a></td>
+            </tr>
+            <tr>
+               <td><a href="org.osgi.service.dmt.html#DmtData.DmtData(boolean)">DmtData.DmtData(boolean)</a></td>
+            </tr>
+            <tr>
+               <td><a href="org.osgi.service.dmt.html#DmtData.DmtData(byte[])">DmtData.DmtData(byte[])</a></td>
+            </tr>
+            <tr>
+               <td><a href="org.osgi.service.dmt.html#DmtData.getInt()">DmtData.getInt()</a></td>
+            </tr>
+            <tr>
+               <td><a href="org.osgi.service.dmt.html#DmtData.getBoolean()">DmtData.getBoolean()</a></td>
+            </tr>
+            <tr>
+               <th width="350">testDmtData001</th>
+               <th width="350"></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  This method asserts that the Data format of String
+                                    DmtData Constructor is equal to DmtDataType.STRING and
+                                    that the string value passed is the same as
+                                    DmtData.getString()
+                     
+               </td>
+               <td width="350"><a href="org.osgi.service.dmt.html#DmtData.DmtData(String)">DmtData.DmtData(String)</a><br></td>
+            </tr>
+            <tr>
+               <th width="350">testDmtData002</th>
+               <th width="350"></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  This method passes a String equals to
+                                    DmtData.FORMAT_NULL in order to assert that a node with
+                                    null format is created.
+                    ### Huh?? This creates an INT DmtData???
+                     
+               </td>
+               <td width="350"><a href="org.osgi.service.dmt.html#DmtData.DmtData(int)">DmtData.DmtData(int)</a><br></td>
+            </tr>
+            <tr>
+               <th width="350">testDmtData003</th>
+               <th width="350"></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  This method asserts that a null String parameter can
+                                    create a new DmtData.
+                     
+               </td>
+               <td width="350"><a href="org.osgi.service.dmt.html#DmtData.DmtData(String)">DmtData.DmtData(String)</a><br></td>
+            </tr>
+            <tr>
+               <th width="350">testDmtData004</th>
+               <th width="350"></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  This method asserts that the Data format of DmtData is
+                                    equal to DmtDataType.XML and that the string value
+                                    passed is the same as DmtData.getString()
+                     
+               </td>
+               <td width="350"><a href="org.osgi.service.dmt.html#DmtData.DmtData(String,boolean)">DmtData.DmtData(String,boolean)</a><br></td>
+            </tr>
+            <tr>
+               <th width="350">testDmtData005</th>
+               <th width="350"></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  This method asserts that if a false parameter is passed
+                                    on the constructor, it behaves the same as DmtData(str)
+                     
+               </td>
+               <td width="350"><a href="org.osgi.service.dmt.html#DmtData.DmtData(String,boolean)">DmtData.DmtData(String,boolean)</a><br></td>
+            </tr>
+            <tr>
+               <th width="350">testDmtData006</th>
+               <th width="350"></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  
+                     
+               </td>
+               <td width="350"><a href="org.osgi.service.dmt.html#DmtData.DmtData(int)">DmtData.DmtData(int)</a><br></td>
+            </tr>
+            <tr>
+               <th width="350">testDmtData007</th>
+               <th width="350"></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  
+                     
+               </td>
+               <td width="350"><a href="org.osgi.service.dmt.html#DmtData.DmtData(boolean)">DmtData.DmtData(boolean)</a><br></td>
+            </tr>
+            <tr>
+               <th width="350">testDmtData008</th>
+               <th width="350"></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  This method asserts that the Data format of DmtData is
+                                    equal to DmtDataType.BINARY and that the string value
+                                    passed is the same as dd.getString()
+                     
+               </td>
+               <td width="350"><a href="org.osgi.service.dmt.html#DmtData.DmtData(byte[])">DmtData.DmtData(byte[])</a><br></td>
+            </tr>
+            <tr>
+               <th width="350">testDmtData009</th>
+               <th width="350"></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  This method asserts if getInt method throws a
+                                    DmtException when the DmtData is not created with an
+                                    integer
+                     
+               </td>
+               <td width="350"><a href="org.osgi.service.dmt.html#DmtData.getInt()">DmtData.getInt()</a><br><a href="org.osgi.service.dmt.html#DmtData.DmtData(boolean)">DmtData.DmtData(boolean)</a><br></td>
+            </tr>
+            <tr>
+               <th width="350">testDmtData010</th>
+               <th width="350"></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  This method asserts if getBoolean method throws a
+                                    DmtException when the DmtData is not created with an
+                                    boolean
+                     
+               </td>
+               <td width="350"><a href="org.osgi.service.dmt.html#DmtData.getBoolean()">DmtData.getBoolean()</a><br><a href="org.osgi.service.dmt.html#DmtData.DmtData(int)">DmtData.DmtData(int)</a><br></td>
+            </tr>
+         </table>
+         <h2><a name="DmtDataTypeConstants"></a>org.osgi.test.cases.dmt.tbc.DmtDataType.DmtDataTypeConstants
+         </h2>
+         <table width="700px">
+            <tr>
+               <th colspan="2">References</th>
+            </tr>
+            <tr>
+               <td><a href="org.osgi.service.dmt.html#DmtData.FORMAT_INTEGER">DmtData.FORMAT_INTEGER</a></td>
+            </tr>
+            <tr>
+               <td><a href="org.osgi.service.dmt.html#DmtData.FORMAT_STRING">DmtData.FORMAT_STRING</a></td>
+            </tr>
+            <tr>
+               <td><a href="org.osgi.service.dmt.html#DmtData.FORMAT_BOOLEAN">DmtData.FORMAT_BOOLEAN</a></td>
+            </tr>
+            <tr>
+               <td><a href="org.osgi.service.dmt.html#DmtData.FORMAT_BINARY">DmtData.FORMAT_BINARY</a></td>
+            </tr>
+            <tr>
+               <td><a href="org.osgi.service.dmt.html#DmtData.FORMAT_XML">DmtData.FORMAT_XML</a></td>
+            </tr>
+            <tr>
+               <td><a href="org.osgi.service.dmt.html#DmtData.FORMAT_NULL">DmtData.FORMAT_NULL</a></td>
+            </tr>
+            <tr>
+               <td><a href="org.osgi.service.dmt.html#DmtData.FORMAT_NODE">DmtData.FORMAT_NODE</a></td>
+            </tr>
+            <tr>
+               <th width="350">testDmtDataTypeConstants001</th>
+               <th width="350"></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  This method asserts the value of the constants
+                   ### This test does not work because it tests against the compiled constants, 
+                   it is needed to use reflection to do this ok.
+                     
+               </td>
+               <td width="350"><a href="org.osgi.service.dmt.html#DmtData.FORMAT_INTEGER">DmtData.FORMAT_INTEGER</a><b class="passed"> X </b><br><a href="org.osgi.service.dmt.html#DmtData.FORMAT_STRING">DmtData.FORMAT_STRING</a><b class="passed"> X </b><br><a href="org.osgi.service.dmt.html#DmtData.FORMAT_BOOLEAN">DmtData.FORMAT_BOOLEAN</a><b class="passed"> X </b><br><a href="org.osgi.service.dmt.html#DmtData.FORMAT_BINARY">DmtData.FORMAT_BINARY</a><b class="passed"> X </b><br><a href="org.osgi.service.dmt.html#DmtData.FORMAT_XML">DmtData.FORMAT_XML</a><b class="passed"> X </b><br><a href="org.osgi.service.dmt.html#DmtData.FORMAT_NULL">DmtData.FORMAT_NULL</a><b class="passed"> X </b><br><a href="org.osgi.service.dmt.html#DmtData.FORMAT_NODE">DmtData.FORMAT_NODE</a><b class="passed"> X </b><br></td>
+            </tr>
+         </table>
+         <h2><a name="DmtException"></a>org.osgi.test.cases.dmt.tbc.DmtException.DmtException
+         </h2>
+         <table width="700px">
+            <tr>
+               <th colspan="2">References</th>
+            </tr>
+            <tr>
+               <td><a href="org.osgi.service.dmt.html#DmtException.DmtException(String,int,String)">DmtException.DmtException(String,int,String)</a></td>
+            </tr>
+            <tr>
+               <td><a href="org.osgi.service.dmt.html#DmtException.DmtException(String,int,String,Throwable)">DmtException.DmtException(String,int,String,Throwable)</a></td>
+            </tr>
+            <tr>
+               <td><a href="org.osgi.service.dmt.html#DmtException.DmtException(String,int,String,throwable)">DmtException.DmtException(String,int,String,throwable)</a></td>
+            </tr>
+            <tr>
+               <th width="350">testDmtException001</th>
+               <th width="350"></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Tests if the values that are passed as parameters for
+                                    the constructor are equal to the values returned through
+                                    its corresponding get methods
+                     
+               </td>
+               <td width="350"><a href="org.osgi.service.dmt.html#DmtException.DmtException(String,int,String)">DmtException.DmtException(String,int,String)</a><br></td>
+            </tr>
+            <tr>
+               <th width="350">testDmtException002</th>
+               <th width="350"></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Tests if the values that are passed as parameters for
+                                    the constructor are equal to the values returned through
+                                    its corresponding get methods
+                     
+               </td>
+               <td width="350"><a href="org.osgi.service.dmt.html#DmtException.DmtException(String,int,String,Throwable)">DmtException.DmtException(String,int,String,Throwable)</a><br></td>
+            </tr>
+            <tr>
+               <th width="350">testDmtException003</th>
+               <th width="350"></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Tests if the values that are passed as parameters for
+                                    the constructor are equal to the values returned through
+                                    its corresponding get methods
+                     
+               </td>
+               <td width="350"><a href="org.osgi.service.dmt.html#DmtException.DmtException(String,int,String,throwable)">DmtException.DmtException(String,int,String,throwable)</a><b class="passed"> X </b><br></td>
+            </tr>
+         </table>
+         <h2><a name="DmtExceptionConstants"></a>org.osgi.test.cases.dmt.tbc.DmtException.DmtExceptionConstants
+         </h2>
+         <table width="700px">
+            <tr>
+               <th colspan="2">References</th>
+            </tr>
+            <tr>
+               <td><a href="org.osgi.service.dmt.html#DmtException.ALERT_NOT_ROUTED">DmtException.ALERT_NOT_ROUTED</a></td>
+            </tr>
+            <tr>
+               <td><a href="org.osgi.service.dmt.html#DmtException.COMMAND_FAILED">DmtException.COMMAND_FAILED</a></td>
+            </tr>
+            <tr>
+               <td><a href="org.osgi.service.dmt.html#DmtException.COMMAND_NOT_ALLOWED">DmtException.COMMAND_NOT_ALLOWED</a></td>
+            </tr>
+            <tr>
+               <td><a href="org.osgi.service.dmt.html#DmtException.CONCURRENT_ACCESS">DmtException.CONCURRENT_ACCESS</a></td>
+            </tr>
+            <tr>
+               <td><a href="org.osgi.service.dmt.html#DmtException.DATA_STORE_FAILURE">DmtException.DATA_STORE_FAILURE</a></td>
+            </tr>
+            <tr>
+               <td><a href="org.osgi.service.dmt.html#DmtException.FEATURE_NOT_SUPPORTED">DmtException.FEATURE_NOT_SUPPORTED</a></td>
+            </tr>
+            <tr>
+               <td><a href="org.osgi.service.dmt.html#DmtException.FORMAT_NOT_SUPPORTED">DmtException.FORMAT_NOT_SUPPORTED</a></td>
+            </tr>
+            <tr>
+               <td><a href="org.osgi.service.dmt.html#DmtException.INVALID_URI">DmtException.INVALID_URI</a></td>
+            </tr>
+            <tr>
+               <td><a href="org.osgi.service.dmt.html#DmtException.METADATA_MISMATCH">DmtException.METADATA_MISMATCH</a></td>
+            </tr>
+            <tr>
+               <td><a href="org.osgi.service.dmt.html#DmtException.NODE_ALREADY_EXISTS">DmtException.NODE_ALREADY_EXISTS</a></td>
+            </tr>
+            <tr>
+               <td><a href="org.osgi.service.dmt.html#DmtException.NODE_NOT_FOUND">DmtException.NODE_NOT_FOUND</a></td>
+            </tr>
+            <tr>
+               <td><a href="org.osgi.service.dmt.html#DmtException.OTHER_ERROR">DmtException.OTHER_ERROR</a></td>
+            </tr>
+            <tr>
+               <td><a href="org.osgi.service.dmt.html#DmtException.PERMISSION_DENIED">DmtException.PERMISSION_DENIED</a></td>
+            </tr>
+            <tr>
+               <td><a href="org.osgi.service.dmt.html#DmtException.REMOTE_ERROR">DmtException.REMOTE_ERROR</a></td>
+            </tr>
+            <tr>
+               <td><a href="org.osgi.service.dmt.html#DmtException.ROLLBACK_FAILED">DmtException.ROLLBACK_FAILED</a></td>
+            </tr>
+            <tr>
+               <td><a href="org.osgi.service.dmt.html#DmtException.URI_TOO_LONG">DmtException.URI_TOO_LONG</a></td>
+            </tr>
+            <tr>
+               <th width="350">testDmtExceptionConstants001</th>
+               <th width="350"></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Tests if constants have a correct value
+                     
+               </td>
+               <td width="350"><a href="org.osgi.service.dmt.html#DmtException.ALERT_NOT_ROUTED">DmtException.ALERT_NOT_ROUTED</a><b class="passed"> X </b><br><a href="org.osgi.service.dmt.html#DmtException.COMMAND_FAILED">DmtException.COMMAND_FAILED</a><b class="passed"> X </b><br><a href="org.osgi.service.dmt.html#DmtException.COMMAND_NOT_ALLOWED">DmtException.COMMAND_NOT_ALLOWED</a><b class="passed"> X </b><br><a href="org.osgi.service.dmt.html#DmtException.CONCURRENT_ACCESS">DmtException.CONCURRENT_ACCESS</a><b class="passed"> X </b><br><a href="org.osgi.service.dmt.html#DmtException.DATA_STORE_FAILURE">DmtException.DATA_STORE_FAILURE</a><b class="passed"> X </b><br><a href="org.osgi.service.dmt.html#DmtException.FEATURE_NOT_SUPPORTED">DmtException.FEATURE_NOT_SUPPORTED</a><b class="passed"> X </b><br><a href="org.osgi.service.dmt.html#DmtException.FORMAT_NOT_SUPPORTED">DmtException.FORMAT_NOT_SUPPORTED</a><b class="passed"> X </b><br><a href="org.osgi.service.dmt.html#DmtException.INVALID_URI">DmtException.INVALID_URI</a><b class="passed"> X </b><br><a href="org.osgi.service.dmt.html#DmtException.METADATA_MISMATCH">DmtException.METADATA_MISMATCH</a><b class="passed"> X </b><br><a href="org.osgi.service.dmt.html#DmtException.NODE_ALREADY_EXISTS">DmtException.NODE_ALREADY_EXISTS</a><b class="passed"> X </b><br><a href="org.osgi.service.dmt.html#DmtException.NODE_NOT_FOUND">DmtException.NODE_NOT_FOUND</a><b class="passed"> X </b><br><a href="org.osgi.service.dmt.html#DmtException.OTHER_ERROR">DmtException.OTHER_ERROR</a><b class="passed"> X </b><br><a href="org.osgi.service.dmt.html#DmtException.PERMISSION_DENIED">DmtException.PERMISSION_DENIED</a><b class="passed"> X </b><br><a href="org.osgi.service.dmt.html#DmtException.REMOTE_ERROR">DmtException.REMOTE_ERROR</a><b class="passed"> X </b><br><a href="org.osgi.service.dmt.html#DmtException.ROLLBACK_FAILED">DmtException.ROLLBACK_FAILED</a><b class="passed"> X </b><br><a href="org.osgi.service.dmt.html#DmtException.URI_TOO_LONG">DmtException.URI_TOO_LONG</a><b class="passed"> X </b><br></td>
+            </tr>
+         </table>
+         <h2><a name="GetCause"></a>org.osgi.test.cases.dmt.tbc.DmtException.GetCause
+         </h2>
+         <table width="700px">
+            <tr>
+               <th colspan="2">References</th>
+            </tr>
+            <tr>
+               <td><a href="org.osgi.service.dmt.html#DmtException.DmtException(String,int,String,Throwable)">DmtException.DmtException(String,int,String,Throwable)</a></td>
+            </tr>
+            <tr>
+               <th width="350">testGetCause001</th>
+               <th width="350"></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Tests if the value that is passed as parameter for
+                                    the constructor is equals to the value returned through
+                                    getCause method
+                     
+               </td>
+               <td width="350"><a href="org.osgi.service.dmt.html#DmtException.DmtException(String,int,String,Throwable)">DmtException.DmtException(String,int,String,Throwable)</a><br></td>
+            </tr>
+            <tr>
+               <th width="350">testGetCause002</th>
+               <th width="350"></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Tests if the value that is passed as parameter for
+                                    the constructor is equals to the value returned through
+                                    getCause method
+                     
+               </td>
+               <td width="350"><a href="org.osgi.service.dmt.html#DmtException.DmtException(String,int,String,Throwable)">DmtException.DmtException(String,int,String,Throwable)</a><br></td>
+            </tr>
+         </table>
+         <h2><a name="GetCauses"></a>org.osgi.test.cases.dmt.tbc.DmtException.GetCauses
+         </h2>
+         <table width="700px">
+            <tr>
+               <th colspan="2">References</th>
+            </tr>
+            <tr>
+               <td><a href="org.osgi.service.dmt.html#DmtException.getCauses()">DmtException.getCauses()</a></td>
+            </tr>
+            <tr>
+               <td><a href="org.osgi.service.dmt.html#DmtException.DmtException(String,int,String,Vector)">DmtException.DmtException(String,int,String,Vector)</a></td>
+            </tr>
+            <tr>
+               <th width="350">testGetCauses001</th>
+               <th width="350"></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Tests if the exception returned in the getCauses method
+                                    is from the same type of the exception passed as a
+                                    parameter for the constructor
+                     
+               </td>
+               <td width="350"><a href="org.osgi.service.dmt.html#DmtException.getCauses()">DmtException.getCauses()</a><br><a href="org.osgi.service.dmt.html#DmtException.DmtException(String,int,String,Vector)">DmtException.DmtException(String,int,String,Vector)</a><br></td>
+            </tr>
+            <tr>
+               <th width="350">testGetCauses002</th>
+               <th width="350"></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Tests If an empty vector is returned no cause was
+                                    specified in the constructor
+                     
+               </td>
+               <td width="350"><a href="org.osgi.service.dmt.html#DmtException.getCauses()">DmtException.getCauses()</a><br><a href="org.osgi.service.dmt.html#DmtException.DmtException(String,int,String,Vector)">DmtException.DmtException(String,int,String,Vector)</a><br></td>
+            </tr>
+            <tr>
+               <th width="350">testGetCauses003</th>
+               <th width="350"></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Tests if an empty vector is returned if no cause is
+                                    specified in the constructor
+                     
+               </td>
+               <td width="350"><a href="org.osgi.service.dmt.html#DmtException.getCauses()">DmtException.getCauses()</a><br><a href="org.osgi.service.dmt.html#DmtException.DmtException(String,int,String,Vector)">DmtException.DmtException(String,int,String,Vector)</a><br></td>
+            </tr>
+         </table>
+         <h2><a name="GetCode"></a>org.osgi.test.cases.dmt.tbc.DmtException.GetCode
+         </h2>
+         <table width="700px">
+            <tr>
+               <th colspan="2">References</th>
+            </tr>
+            <tr>
+               <td><a href="org.osgi.service.dmt.html#DmtException.getCode()">DmtException.getCode()</a></td>
+            </tr>
+            <tr>
+               <td><a href="org.osgi.service.dmt.html#DmtException.DmtException(String,int,String)">DmtException.DmtException(String,int,String)</a></td>
+            </tr>
+            <tr>
+               <th width="350">testGetCode001</th>
+               <th width="350"></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Tests if getCode returns a value that is equals to the
+                                    value passed as a parameter for the constructor
+                     
+               </td>
+               <td width="350"><a href="org.osgi.service.dmt.html#DmtException.getCode()">DmtException.getCode()</a><br><a href="org.osgi.service.dmt.html#DmtException.DmtException(String,int,String)">DmtException.DmtException(String,int,String)</a><br></td>
+            </tr>
+         </table>
+         <h2><a name="GetMessage"></a>org.osgi.test.cases.dmt.tbc.DmtException.GetMessage
+         </h2>
+         <table width="700px">
+            <tr>
+               <th colspan="2">References</th>
+            </tr>
+            <tr>
+               <td><a href="org.osgi.service.dmt.html#DmtException.getMessage()">DmtException.getMessage()</a></td>
+            </tr>
+            <tr>
+               <td><a href="org.osgi.service.dmt.html#DmtException.DmtException(String,int,String)">DmtException.DmtException(String,int,String)</a></td>
+            </tr>
+            <tr>
+               <th width="350">testGetMessage001</th>
+               <th width="350"></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Tests if getMessage returns a value that is equals to
+                                    the value passed as a parameter for the constructor
+                     
+               </td>
+               <td width="350"><a href="org.osgi.service.dmt.html#DmtException.getMessage()">DmtException.getMessage()</a><br><a href="org.osgi.service.dmt.html#DmtException.DmtException(String,int,String)">DmtException.DmtException(String,int,String)</a><br></td>
+            </tr>
+            <tr>
+               <th width="350">testGetMessage002</th>
+               <th width="350"></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Tests if getMessage returns a string that contains the
+                                    message and code values passed as parameters for the
+                                    constructor
+                     
+               </td>
+               <td width="350"><a href="org.osgi.service.dmt.html#DmtException.getMessage()">DmtException.getMessage()</a><br><a href="org.osgi.service.dmt.html#DmtException.DmtException(String,int,String)">DmtException.DmtException(String,int,String)</a><br></td>
+            </tr>
+            <tr>
+               <th width="350">testGetMessage003</th>
+               <th width="350"></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Tests if getMessage returns a string that contains the
+                                    message and URI values passed as parameters for the
+                                    constructor
+                     
+               </td>
+               <td width="350"><a href="org.osgi.service.dmt.html#DmtException.getMessage()">DmtException.getMessage()</a><br><a href="org.osgi.service.dmt.html#DmtException.DmtException(String,int,String)">DmtException.DmtException(String,int,String)</a><br></td>
+            </tr>
+            <tr>
+               <th width="350">testGetMessage004</th>
+               <th width="350"></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Tests if getMessage returns a string that contains the
+                                    message, code and URI values passed as parameters for
+                                    the constructor
+                     
+               </td>
+               <td width="350"><a href="org.osgi.service.dmt.html#DmtException.getMessage()">DmtException.getMessage()</a><br><a href="org.osgi.service.dmt.html#DmtException.DmtException(String,int,String)">DmtException.DmtException(String,int,String)</a><br></td>
+            </tr>
+         </table>
+         <h2><a name="GetURI"></a>org.osgi.test.cases.dmt.tbc.DmtException.GetURI
+         </h2>
+         <table width="700px">
+            <tr>
+               <th colspan="2">References</th>
+            </tr>
+            <tr>
+               <td><a href="org.osgi.service.dmt.html#DmtException.getURI()">DmtException.getURI()</a></td>
+            </tr>
+            <tr>
+               <td><a href="org.osgi.service.dmt.html#DmtException.DmtException(String,int,String)">DmtException.DmtException(String,int,String)</a></td>
+            </tr>
+            <tr>
+               <th width="350">testGetURI001</th>
+               <th width="350"></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Tests if getURI returns a value that is equals to the
+                                    value passed as a parameter for the constructor
+                     
+               </td>
+               <td width="350"><a href="org.osgi.service.dmt.html#DmtException.getURI()">DmtException.getURI()</a><br><a href="org.osgi.service.dmt.html#DmtException.DmtException(String,int,String)">DmtException.DmtException(String,int,String)</a><br></td>
+            </tr>
+         </table>
+         <h2><a name="PrintStackTrace"></a>org.osgi.test.cases.dmt.tbc.DmtException.PrintStackTrace
+         </h2>
+         <table width="700px">
+            <tr>
+               <th colspan="2">References</th>
+            </tr>
+            <tr>
+               <td><a href="org.osgi.service.dmt.html#DmtException.printStackTrace()">DmtException.printStackTrace()</a></td>
+            </tr>
+            <tr>
+               <td><a href="org.osgi.service.dmt.html#DmtException.DmtException(String,int,String)">DmtException.DmtException(String,int,String)</a></td>
+            </tr>
+            <tr>
+               <td><a href="org.osgi.service.dmt.html#DmtException.DmtException(String,int,String,Vector)">DmtException.DmtException(String,int,String,Vector)</a></td>
+            </tr>
+            <tr>
+               <td><a href="org.osgi.service.dmt.html#DmtException.DmtException(String,int,String,Throwable)">DmtException.DmtException(String,int,String,Throwable)</a></td>
+            </tr>
+            <tr>
+               <th width="350">testPrintStackTrace001</th>
+               <th width="350"></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Tests if the string printed contains causes passed as parameters for the
+                   constructor
+                   
+                   ### How useful is this test??
+                     
+               </td>
+               <td width="350"><a href="org.osgi.service.dmt.html#DmtException.printStackTrace()">DmtException.printStackTrace()</a><b class="passed"> X </b><br><a href="org.osgi.service.dmt.html#DmtException.DmtException(String,int,String)">DmtException.DmtException(String,int,String)</a><br></td>
+            </tr>
+            <tr>
+               <th width="350">testPrintStackTrace002</th>
+               <th width="350"></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Tests if the string printed contains causes passed as parameters for the
+                   constructor
+                     
+               </td>
+               <td width="350"><a href="org.osgi.service.dmt.html#DmtException.printStackTrace()">DmtException.printStackTrace()</a><b class="passed"> X </b><br><a href="org.osgi.service.dmt.html#DmtException.DmtException(String,int,String,Vector)">DmtException.DmtException(String,int,String,Vector)</a><br></td>
+            </tr>
+            <tr>
+               <th width="350">testPrintStackTrace003</th>
+               <th width="350"></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Tests if the string printed contains causes passed as parameters for the
+                   constructor
+                     
+               </td>
+               <td width="350"><a href="org.osgi.service.dmt.html#DmtException.printStackTrace()">DmtException.printStackTrace()</a><b class="passed"> X </b><br><a href="org.osgi.service.dmt.html#DmtException.DmtException(String,int,String,Throwable)">DmtException.DmtException(String,int,String,Throwable)</a><br></td>
+            </tr>
+            <tr>
+               <th width="350">testPrintStackTrace004</th>
+               <th width="350"></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Tests if the string printed contains causes passed as parameters for the
+                   constructor
+                     
+               </td>
+               <td width="350"><a href="org.osgi.service.dmt.html#DmtException.printStackTrace()">DmtException.printStackTrace()</a><b class="passed"> X </b><br><a href="org.osgi.service.dmt.html#DmtException.DmtException(String,int,String,Vector)">DmtException.DmtException(String,int,String,Vector)</a><br></td>
+            </tr>
+         </table>
+         <h2><a name="DmtPrincipalPermission"></a>org.osgi.test.cases.dmt.tbc.DmtPrincipalPermission.DmtPrincipalPermission
+         </h2>
+         <table width="700px">
+            <tr>
+               <th colspan="2">References</th>
+            </tr>
+            <tr>
+               <td><a href="org.osgi.service.dmt.html#DmtPrincipalPermission.DmtPrincipalPermission(String)">DmtPrincipalPermission.DmtPrincipalPermission(String)</a></td>
+            </tr>
+            <tr>
+               <td><a href="org.osgi.service.dmt.html#DmtPrincipalPermission.getName()">DmtPrincipalPermission.getName()</a></td>
+            </tr>
+            <tr>
+               <td><a href="org.osgi.service.dmt.html#DmtPrincipalPermission.DmtPrincipalPermission(String,String)">DmtPrincipalPermission.DmtPrincipalPermission(String,String)</a></td>
+            </tr>
+            <tr>
+               <td><a href="org.osgi.service.dmt.html#DmtPrincipalPermission.getActions()">DmtPrincipalPermission.getActions()</a></td>
+            </tr>
+            <tr>
+               <th width="350">testDmtPrincipalPermission001</th>
+               <th width="350"></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  It asserts if the principal passed in the constructor is equals to
+                   					DmtPrincipalPermission.getName() method.
+                     
+               </td>
+               <td width="350"><a href="org.osgi.service.dmt.html#DmtPrincipalPermission.DmtPrincipalPermission(String)">DmtPrincipalPermission.DmtPrincipalPermission(String)</a><br><a href="org.osgi.service.dmt.html#DmtPrincipalPermission.getName()">DmtPrincipalPermission.getName()</a><b class="passed"> X </b><br></td>
+            </tr>
+            <tr>
+               <th width="350">testDmtPrincipalPermission002</th>
+               <th width="350"></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  It asserts if a null value passed in the constructor as principal
+                   					throws an NullPointerException
+                     
+               </td>
+               <td width="350"><a href="org.osgi.service.dmt.html#DmtPrincipalPermission.DmtPrincipalPermission(String)">DmtPrincipalPermission.DmtPrincipalPermission(String)</a><br></td>
+            </tr>
+            <tr>
+               <th width="350">testDmtPrincipalPermission003</th>
+               <th width="350"></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Tests the constructor which has two string parameters.
+                                    The second parameter is ignored and the first one
+                                    sets the principal
+                     
+               </td>
+               <td width="350"><a href="org.osgi.service.dmt.html#DmtPrincipalPermission.DmtPrincipalPermission(String,String)">DmtPrincipalPermission.DmtPrincipalPermission(String,String)</a><br><a href="org.osgi.service.dmt.html#DmtPrincipalPermission.getName()">DmtPrincipalPermission.getName()</a><b class="passed"> X </b><br></td>
+            </tr>
+            <tr>
+               <th width="350">testDmtPrincipalPermission004</th>
+               <th width="350"></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Tests the constructor which has two string parameters.
+                                    The second parameter is ignored so this method asserts if
+                                    DmtPrincipalPermission actions is empty
+                     
+               </td>
+               <td width="350"><a href="org.osgi.service.dmt.html#DmtPrincipalPermission.DmtPrincipalPermission(String,String)">DmtPrincipalPermission.DmtPrincipalPermission(String,String)</a><br><a href="org.osgi.service.dmt.html#DmtPrincipalPermission.getActions()">DmtPrincipalPermission.getActions()</a><br></td>
+            </tr>
+            <tr>
+               <th width="350">testDmtPrincipalPermission005</th>
+               <th width="350"></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Tests the constructor which has two string parameters.
+                                    The second parameter is ignored so this method asserts if
+                                    DmtPrincipalPermission actions is empty
+                     
+               </td>
+               <td width="350"><a href="org.osgi.service.dmt.html#DmtPrincipalPermission.DmtPrincipalPermission(String,String)">DmtPrincipalPermission.DmtPrincipalPermission(String,String)</a><br><a href="org.osgi.service.dmt.html#DmtPrincipalPermission.getActions()">DmtPrincipalPermission.getActions()</a><br></td>
+            </tr>
+            <tr>
+               <th width="350">testDmtPrincipalPermission006</th>
+               <th width="350"></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Tests the constructor which has two string parameters.
+                                    To the second method is passed null, so this method asserts if
+                                    the principal passed is correctly returned
+                     
+               </td>
+               <td width="350"><a href="org.osgi.service.dmt.html#DmtPrincipalPermission.DmtPrincipalPermission(String,String)">DmtPrincipalPermission.DmtPrincipalPermission(String,String)</a><br><a href="org.osgi.service.dmt.html#DmtPrincipalPermission.getName()">DmtPrincipalPermission.getName()</a><b class="passed"> X </b><br></td>
+            </tr>
+            <tr>
+               <th width="350">testDmtPrincipalPermission007</th>
+               <th width="350"></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  It asserts if a null value passed in the constructor as
+                                    principal throws an NullPointerException
+                     
+               </td>
+               <td width="350"><a href="org.osgi.service.dmt.html#DmtPrincipalPermission.DmtPrincipalPermission(String,String)">DmtPrincipalPermission.DmtPrincipalPermission(String,String)</a><br><a href="org.osgi.service.dmt.html#DmtPrincipalPermission.getActions()">DmtPrincipalPermission.getActions()</a><br></td>
+            </tr>
+         </table>
+      </div>
+   </body>
+</html>

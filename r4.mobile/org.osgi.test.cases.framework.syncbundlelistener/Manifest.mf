@@ -1,0 +1,27 @@
+Manifest-Version: 1.0
+Bundle-SymbolicName: ${p}
+Bundle-Name: test.framework.syncbundlelistener
+Bundle-Copyright: ${copyright}
+Bundle-Description: The following tests are executed<br>
+  <pre>
+   Tests the synchronous bundle listener<br>
+   Tests that synchrounousBundleListener can't be added without<br>
+   admin permision<br>
+   Tests that listeners can be registered multiple times<br>
+   Tests if a listener can catch events from it's own bundle<br>
+   Tests if SynchronousBundleListener is synchronous<br>
+   Tests if SynchronousBundleListeners are called prior to BundleListeners<br>	
+  </pre>
+Bundle-Vendor: OSGi Alliance
+Bundle-Activator: $(p).SyncListenerTest
+Bundle-Version: 3.0
+Bundle-Category: osgi,test
+Bundle-DocUrl: http://membercvs.osgi.org/test/3
+Bundle-ContactAddress: speccomments@mail.osgi.org
+CVS-Header: $Header$
+$(IMPORT-PACKAGE)
+$(EXPORT-PACKAGE)
+
+
+
+

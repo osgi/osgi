@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema
+    xmlns="http://www.osgi.org/xmlns/app/v1.0.0"
+    xmlns:app="http://www.osgi.org/xmlns/app/v1.0.0" 
+    xmlns:xs="http://www.w3.org/2001/XMLSchema"  
+    targetNamespace="http://www.osgi.org/xmlns/app/v1.0.0"
+    elementFormDefault="qualified" 
+    attributeFormDefault="unqualified" 
+    version="1.0.0">
+    
+	<xs:element name="descriptor" type="app:descriptorType">
+		<xs:annotation>
+			<xs:documentation>descriptor element encloses the applicaiton descriptors provided in a document</xs:documentation>
+		</xs:annotation>
+	</xs:element>
+
+	<xs:complexType name="descriptorType">
+		<xs:sequence>
+			<xs:element name="application" type="app:applicationType" minOccurs="1" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:complexType name="applicationType">
+		<xs:annotation>
+			<xs:documentation>describes the service dependecies of an application</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="reference" minOccurs="0" maxOccurs="unbounded" type="referenceType"/>
+		</xs:sequence>
+		<xs:attribute name="class" type="xs:string"/>
+	</xs:complexType>
+
+	<xs:complexType name="referenceType">
+		<xs:attribute name="name" type="xs:NMTOKEN" use="required"/>
+		<xs:attribute name="interface" type="xs:string" use="required"/>
+		<xs:attribute name="cardinality" default="1..1" use="optional" type="cardinalityType"/>
+		<xs:attribute name="policy" use="optional" default="static" type="policyType"/>
+		<xs:attribute name="target" type="xs:string" use="optional"/>
+	</xs:complexType>
+
+        <xs:simpleType name="cardinalityType">
+               <xs:restriction base="xs:string">
+                       <xs:enumeration value="0..1"/>
+                       <xs:enumeration value="0..n"/>
+                       <xs:enumeration value="1..1"/>
+                       <xs:enumeration value="1..n"/>
+               </xs:restriction>
+	</xs:simpleType>
+
+	<xs:simpleType name="policyType">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="static"/>
+			<xs:enumeration value="dynamic"/>
+		</xs:restriction>
+	</xs:simpleType>
+
+
+</xs:schema>

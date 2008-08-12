@@ -1,0 +1,338 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type='text/xsl' title='Compact' href='http://membercvs.osgi.org/ddf/xml/ddf2html.xsl'?>
+<?xml-stylesheet type="text/css" href="http://bundles.osgi.org/www/osgi.css"?>
+
+
+<!-- 
+/*
+ * $Header$
+ * 
+ * Copyright (c) OSGi Alliance (2006). All Rights Reserved.
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+-->		
+<Node name="HVAC" type="node" min="1" max="1" scope="P">
+	<Description/>
+	<Node name="&lt;HVACzone-instance&gt;" type="node" min="1" scope="P">
+		<Description>Interior node that represents the HVAC System instances for the vehicle.</Description>
+		<Name pattern="FL">Front Left</Name>
+		<Name pattern="FR">Front Right</Name>
+		<Name pattern="RL">Rear Left</Name>
+		<Name pattern="RR">Rear Right</Name>
+		<Name pattern="R">Rear</Name>
+		<Name pattern="S">Stationary</Name>
+		
+		<Node name="HVACFanLevel" type="float" min="1" max="1" scope="P" unit="%">
+			<Description>Gets and sets the Fan Level for the HVAC zone instance in percent of the maximum
+				level</Description>
+			<Value value="0">Off</Value>
+			<Value value="100">Full On</Value>
+		</Node>
+		
+		<Node name="HVACCtlMode" type="int" min="1" max="1" scope="P">
+			<Description>Gets and sets the operating mode for the HVAC instance</Description>
+			<Value value="1">Climate</Value>
+			<Value value="2">Manual</Value>
+			<Value value="3">AC</Value>
+			<Value value="4">MaxAC</Value>
+			<Value value="5">MaxDef</Value>
+		</Node>
+		
+		<Node name="IntTemp" type="float" min="1" max="1" scope="P" unit="K">
+			<Description>Gets measured temp for the HVAC Zone Instance, in Deg C (###Celsius??)</Description>
+		</Node>
+		
+		<Node name="DesiredIntTemp" type="float" min="1" max="1" scope="P" unit="K">
+			<Description>Sets desired temp for the HVAC zone instance, in degrees C (###Celsius??)</Description>
+		</Node>
+		
+		<Node name="VentTimeOn" type="time" min="1" max="1" scope="P">
+			<Description>Gets and sets the turn on time for the HVAC Stationary vent</Description>
+		</Node>
+		
+		<Node name="VentDuration" type="float" min="1" max="1" scope="P" unit="s">
+			<Description>Gets and sets the turn on time for the HVAC Stationary vent, in seconds</Description>
+		</Node>
+		
+		<Node name="VentState" type="int" min="1" max="1" scope="P" unit="s">
+			<Description>Gets and sets the state for the HVAC Stationary vent, in milliseconds(### ms? use
+				s)</Description>
+			<Value value="1">Off</Value>
+			<Value value="2">On</Value>
+			<Value value="3">Set</Value>
+		</Node>
+		
+		<Node name="RearDefState" type="int" min="1" max="1" scope="P">
+			<Description>Gets and sets the state for the Rear Defroster</Description>
+			<Value value="1">Off</Value>
+			<Value value="2">On</Value>
+		</Node>
+		
+		<Node name="RearDefInterval" type="int" min="1" max="1" scope="P" unit="s">
+			<Description>Gets and sets the on time interval for the Rear Defroster in seconds</Description>
+		</Node>
+		
+		<Node name="SWHeatState" type="int" min="1" max="1" scope="P">
+			<Description>Gets and sets the state for the steering wheel heater</Description>
+			<Value value="1">Off</Value>
+			<Value value="2">On</Value>
+			<Value value="3">Set</Value>
+		</Node>
+		
+		<Node name="SWHeatTimeOn" type="time" min="1" max="1" scope="P">
+			<Description>Gets and sets the turn on time for the steering wheel heater</Description>
+		</Node>
+		
+		<Node name="SWHeatDuration" type="int" min="1" max="1" scope="P" unit="s">
+			<Description>Gets and sets the on time interval duration for the steering wheel heater, in
+				seconds</Description>
+		</Node>
+	</Node>
+	
+	<Node name="&lt;flap-instance&gt;" type="node" min="1" scope="P">
+		<Description>Interior node that represents the HVAC Air flaps for the HVAC Zone</Description>
+		<Name pattern="F">Floor</Name>
+		<Name pattern="D">Defroster</Name>
+		<Name pattern="V">Vent</Name>
+		<Name pattern="R">Recirculate/Fresh</Name>
+		
+		<Node name="HVACAirLevel" type="float" min="1" max="1" scope="P">
+			<Description>Gets and Sets the HVAC Air Opening Level for the flap instance</Description>
+			<Value value="0">Off</Value>
+			<Value value="100">Full Open</Value>
+		</Node>
+	</Node>
+	
+	<Node name="SteeringColumn" type="node" min="1" scope="P">
+		<Description>Interior node that represents the Steering Column</Description>
+		
+		<Node name="ColumnTilt" type="float" min="0" max="1" scope="P" unit="%">
+			<Description>Sets or gets the vertical tilt position of the steering column in percent of the maximum tilt
+				range</Description>
+			<Name pattern="0, 100">Range</Name>
+			<Name pattern="0">Full Down Tilt</Name>
+			<Name pattern="100">Full Up Tilt</Name>
+		</Node>
+		
+		<Node name="ColumnTelescope" type="float" min="0" max="1" scope="P" unit="%">
+			<Description>Sets or gets the telescoping position of the steering column in percent of the maximum extension
+				range</Description>
+			<Value value="100, -100">Range</Value>
+			<Value value="0">Fully Retracted Position</Value>
+			<Value value="100">Fully Extended position</Value>
+		</Node>
+		
+		<Node name="LockState" type="bool" min="1" max="1" scope="P">
+			<Description>Sets or gets the steering column lock state</Description>
+			<Value value="TRUE">Locked</Value>
+			<Value value="FALSE">Unlocked</Value>
+		</Node>
+		
+	</Node>
+	
+	<Node name="Pedals" type="node" min="1" max="1" scope="P">
+		<Description/>
+		<Node name="PedalPosition" type="float" min="0" max="1" scope="P">
+			<Description>Sets or gets the Pedal assembly position in percent of the maximum extension
+				range</Description>
+		</Node>
+	</Node>
+	
+	<Node name="Seats" type="node" min="1" max="1" scope="P">
+		<Description>Interior node that represents the seats of the vehicle</Description>
+		
+		<Node name="&lt;seat-instance&gt;" type="node" min="1" scope="P">
+			<Description>Interior node that represents a specific seat or seating position instance of the
+				vehicle</Description>
+			<Name pattern="L1">Left Front seat, or left front portion of front bench seat</Name>
+			<Name pattern="R1">Right Front seat or Right Front portion of front bench seat</Name>
+			<Name pattern="M1">Middle front seat or middle portion of front bench seat</Name>
+			<Name pattern="X1">Entire front bench seat unit</Name>
+			<Name pattern="L2">Left second row seat, or left rear portion of second row bench seat</Name>
+			<Name pattern="M2">Middle second row seat, or middle rear portion of second row bench seat</Name>
+			<Name pattern="R2">Right second row seat, or right rear portion of second row bench seat</Name>
+			<Name pattern="X2">Entire second row bench seat</Name>
+			<Name pattern="L3">Left third row seat, or left rear portion of third row bench seat</Name>
+			<Name pattern="M3">Middle third row seat, or middle rear portion of third row bench seat</Name>
+			<Name pattern="R3">Right third row seat, or right rear portion of third row bench seat</Name>
+			<Name pattern="X3">Entire third row bench seat</Name>
+			<Name pattern="L4">Left fourth row seat, or left rear portion of fourth row bench seat</Name>
+			<Name pattern="M4">Middle fourth row seat, or middle rear portion of fourth row bench seat</Name>
+			<Name pattern="R4">Right fourth row seat, or right rear portion of fourth row bench seat</Name>
+			<Name pattern="X4">Entire fourth row bench seat</Name>
+			<Name pattern="L5">Left fifth row seat, or left rear portion of fifth row bench seat</Name>
+			<Name pattern="M5">Middle fifth row seat, or middle rear portion of fifth row bench seat</Name>
+			<Name pattern="R5">Right fifth row seat, or right rear portion of fifth row bench seat</Name>
+			<Name pattern="X5">Entire fifth row bench seat</Name>
+			
+			<Node name="Occupied" type="int" min="0" max="1" scope="P">
+				<Description>Gets the occupancy state of the seat Position</Description>
+				<Value value="1">Un-Occupied</Value>
+				<Value value="2">Occupied</Value>
+				<Value value="3">Child Seat</Value>
+			</Node>
+			
+			<Node name="Mass" type="float" min="0" max="1" scope="P" unit="###">
+				<Description>Gets the Mass measure for the occupant of the seat Position</Description>
+				<Value min="0" max="100"/>
+				<Value value="0">No Measurable mass</Value>
+				<Value value="100">Maximum measurable mass</Value>
+			</Node>
+			
+			<Node name="SeatBelt" type="int" min="0" max="1" scope="P">
+				<Description>Gets the seatbelt state for the seat position</Description>
+				<Value value="1">Un-Buckled</Value>
+				<Value value="2">Buckled</Value>
+				<Value value="3">Tensioner Deployed</Value>
+			</Node>
+			
+			<Node name="&lt;axis-instance&gt;" type="node" min="1" scope="P">
+				<Description>Interior node that represents the control axes of the seats of the vehicle. The node name is one
+					of:</Description>
+				<Name pattern="SB">Seat Bottom</Name>
+				<Name pattern="SBF">Seat Bottom Front</Name>
+				<Name pattern="SBR">Seat Bottom Rear</Name>
+				<Name pattern="SBK">Seat Back</Name>
+				<Name pattern="HR">Headrest</Name>
+				<Name pattern="SK">Knee Support</Name>
+				<Name pattern="SBBL">Seat Bottom Bolster Left</Name>
+				<Name pattern="SBKR">Seat Back Bolster Left</Name>
+				<Name pattern="SBBR">Seat Bottom Bolster Right</Name>
+				<Name pattern="SBKR">Seat Back Bolster Right</Name>
+				<Name pattern="SL">Seat Lumbar Support</Name>
+				
+				<Node name="VerticalPosition" type="float" min="0" max="1" scope="P" unit="%">
+					<Description>Gets and/or Sets the Seat Axis vertical position in percent of range of
+						motion</Description>
+					<Value min="0" max="100">Range</Value>
+					<Value value="0">Minimum Height</Value>
+					<Value value="100">Maximum height</Value>
+				</Node>
+				
+				<Node name="LongPosition" type="float" min="0" max="1" scope="P" unit="%">
+					<Description>Gets and/or Sets the Seat Axis longitudinal position in percent of range of
+						motion</Description>
+					<Value min="0" max="100">Range</Value>
+					<Value value="0">Maximum Rearward</Value>
+					<Value value="100">Maximum Forward</Value>
+				</Node>
+				
+				<Node name="LatPosition" type="float" min="0" max="1" scope="P" unit="%">
+					<Description>Gest and/or Sets the Seat Axis lateral position in percent of range of
+						motion</Description>
+					<Value min="0" max="100">Range</Value>
+					<Value value="-100">Maximum Left</Value>
+					<Value value="100">Maximum Right</Value>
+				</Node>
+				
+				<Node name="TiltPosition" type="float" min="0" max="1" scope="P" unit="%">
+					<Description>Gest and/or Sets the Seat Axis tilt position in percent of range of motion</Description>
+					<Value value="0,100">Range</Value>
+					<Value value="0">Maximum Rearward</Value>
+					<Value value="100">Maximum Forward</Value>
+				</Node>
+				
+			</Node>
+			<Node name="&lt;heater-instance&gt;" type="node" min="1" scope="P" unit="%">
+				<Description>Interior node that represents the heaters for the seats of the vehicle. The name must be one
+					of:</Description>
+				<Name pattern="HBF">Seat Bottom Front</Name>
+				<Name pattern="HBR">Seat Bottom Rear</Name>
+				<Name pattern="HRU">Seat Back Upper</Name>
+				<Name pattern="HRL">Seat Back Lower</Name>
+			
+				<Node name="HeatState" type="int" min="1" max="1" scope="P">
+					<Description>Sets or gets the state of the seat heater</Description>
+					<Value value="1">On</Value>
+					<Value value="2">Off</Value>
+					<Value value="3">Set</Value>
+				</Node>
+				
+				<Node name="HeatTime" type="time" min="1" max="1" scope="P">
+					<Description>Sets and Gets the time the Seat Heater is set to turn on</Description>
+				</Node>
+				
+				<Node name="HeatInterval" type="float" min="1" max="1" scope="P" unit="s">
+					<Description>Sets and gest the seat heater On interval duration in seconds</Description>
+				</Node>
+			</Node>
+			
+			<Node name="&lt;cooler-instance&gt;" type="node" min="1" scope="P">
+				<Description>Interior node that represents the coolers for the seats of the vehicle.</Description>
+				<Name pattern="CBF">Seat Bottom Front</Name>
+				<Name pattern="CBR">Seat Bottom Rear</Name>
+				<Name pattern="CRU">Seat Back Upper</Name>
+				<Name pattern="CRL">Seat Back Lower</Name>
+				
+				<Node name="CoolState" type="int" min="1" max="1" scope="P">
+					<Description>Sets or gets the state of the seat cooler</Description>
+					<Value value="1">On</Value>
+					<Value value="2">Off</Value>
+					<Value value="3">Set</Value>
+				</Node>
+				
+				<Node name="CoolTime" type="time" min="1" max="1" scope="P">
+					<Description>Sets and Gets the time the Seat cooler is set to turn on</Description>
+				</Node>
+				
+				<Node name="CoolInterval" type="float" min="1" max="1" scope="P" unit="s">
+					<Description>Sets and gets the seat cooler On interval duration in seconds</Description>
+				</Node>
+			</Node>
+		</Node>
+	</Node>
+	
+	<Node name="InteriorLights" type="node" min="1" scope="P">
+		<Description>Interior node that represents the interior lights of the vehicle</Description>
+		
+		<Node name="&lt;interior-light-type&gt;" type="node" min="1" scope="P">
+			<Description>Interior node that represents an instance of the interior lights. The node name is one
+				of:</Description>
+			<Name pattern="F">Front cabin overhead lamp</Name>
+			<Name pattern="R">Rear cabin overhead lamp</Name>
+			<Name pattern="FL">Left front map light</Name>
+			<Name pattern="FR">Right front map light</Name>
+			<Name pattern="RL">Left rear passengerï¿½s map light</Name>
+			<Name pattern="RR">Right rear passengerï¿½s map light</Name>
+			<Name pattern="RC">Rear Cargo Bay Lamp</Name>
+			<Name pattern="LG">Liftgate Lamp</Name>
+			<Name pattern="FLE">Left Front Entry Lamp</Name>
+			<Name pattern="RLE">Right Front Entry Lamp</Name>
+			<Name pattern="FRE">Left Rear Entry Lamp</Name>
+			<Name pattern="RRE">Right Rear Entry Lamp</Name>
+			<Name pattern="T">Trunk Lamp</Name>
+			<Name pattern="G">Glove Box Lamp</Name>
+			
+			<Node name="LampLevel" type="float" min="0" max="1" scope="P" unit="###">
+				<Description>Gets and/or Sets the Illumination level of the of the interior light instance</Description>
+				<Value value="0">Off</Value>
+				<Value value="100">Fully on</Value>
+			</Node>
+			
+			<Node name="Fade" type="float" min="0" max="1" scope="P" unit="s">
+				<Description>Sets or gets the fade time interval in seconds</Description>
+				<Value value="0">No fade (Hard On/Off)</Value>
+				<Value value="100">100% of the maximum fade time</Value>
+			</Node>
+			
+			<Node name="Delay" type="float" min="0" max="1" scope="P" unit="s">
+				<Description>Sets and or gets the time interval for the light on/off or off/on delay in
+					seconds</Description>
+				<Value value="0">No delay</Value>
+				<Value value="100">100% of the maximum delay time</Value>
+			</Node>
+			
+		</Node>
+	</Node>
+</Node>

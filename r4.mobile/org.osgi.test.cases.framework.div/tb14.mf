@@ -1,0 +1,14 @@
+Manifest-Version: 1.0
+Bundle-Name: %bundlename
+Bundle-Description: %bundledescription
+Bundle-Vendor: %bundlevendor
+Bundle-Version: 1.0.1
+Bundle-DocURL: %docurl
+Bundle-ContactAddress: %contactinfo
+Bundle-Category: %bundlecategory
+Bundle-Copyright: %bundlecopyright
+Bundle-Localization: localization/bundlemanifest
+Fragment-Host: ${p}.tb9
+Bundle-ManifestVersion: 2
+Bundle-SymbolicName: asdasd
+

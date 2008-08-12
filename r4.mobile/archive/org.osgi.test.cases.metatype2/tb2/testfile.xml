@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ExtendedMetaData xmlns="http://www.osgi.org/xmlns/exmetatype/v1.0.0" xmlns:mi="http://www.osgi.org/xmlns/metatype/v1.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.osgi.org/xmlns/exmetatype/v1.0.0 metadata.xsd http://www.osgi.org/xmlns/metatype/v1.0.0 metatype.xsd">
+	
+	<!-- BEGIN STATE VAR & PARAM DEFS -->
+	<Attribute id="Att1Def" type="String"/>
+	<Attribute id="Att2Def" type="Long"/>
+	<Attribute id="Att3Def" type="Integer"/>
+	<Attribute id="Att4Def" type="Short"/>
+	<Attribute id="Att5Def" type="Char"/>
+	<Attribute id="Att6Def" type="Byte"/>
+	<Attribute id="Att7Def" type="Double"/>
+	<Attribute id="Att8Def" type="Float"/>
+	<Attribute id="Att9Def" type="Boolean"/>
+	<Attribute id="Att10Def1" type="Short"/>
+	<Attribute id="Att10Def2" type="Long"/>
+	<Attribute id="Att10Def" type="ObjectClass">
+		<Property key="readOnly" value="true"/>
+		<Property key="hidden" value="true"/>
+		<Property key="minValue" value="1"/>
+		<Property key="maxValue" value="100"/>
+		<Property key="stepValue" value="10"/>
+		<Property key="newKey" value="valueNewKey"/>
+		<Attribute id="att10part1" refid="Att10Def1" name="%att10name1" description="%att10Descr1"/>
+		<Attribute id="att10part2" refid="Att10Def2" name="%att10name2" description="%att10Descr2"/>
+	</Attribute>
+	<Attribute id="msgDigestProviderIDDef" type="String">
+		<Property key="readOnly" value="true"/>
+	</Attribute>
+	<Attribute id="timeDef" type="Long"/>
+	<Attribute id="instanceIDArgDef" type="String"/>
+	<Attribute id="byteArrayDef" type="Byte" cardinality="2147483647"/>
+	<Attribute id="algorithmDef" type="String"/>
+	<!-- END STATE VAR & PARAM DEFS -->
+	
+	<!-- BEGIN ACTION DEF -->
+	<Action id="getExpireTimeDef" type="Long"/>
+	<Action id="setExpireTimeDef" type="Void">
+		<Argument id="expireTime" refid="timeDef"/>
+	</Action>
+	<Action id="createInstanceDef" type="String">
+		<Argument id="algorithm" refid="algorithmDef" name="%algorithmName" description="%algorithmDescription"/>
+	</Action>
+	<Action id="releaseInstanceDef" type="Void">
+		<Argument id="instanceIDArg" refid="instanceIDArgDef"/>
+	</Action>
+	<Action id="resetInstanceDef" type="Void">
+		<Argument id="instanceIDArg" refid="instanceIDArgDef"/>
+	</Action>
+	<Action id="checkDigestEqualityDef" type="Boolean">
+		<Argument id="bytesArg1" refid="byteArrayDef" name="%bytesArgName1" description="%bytesArgDescr1"/>
+		<Argument id="bytesArg2" refid="byteArrayDef" name="%bytesArgName2" description="%bytesArgDescr2"/>
+	</Action>
+	<Action id="updateInstanceDef" type="Void">
+		<Argument id="instanceIDArg" refid="instanceIDArgDef"/>
+		<Argument id="bytesArg" refid="byteArrayDef" name="%bytesArgName3" description="%bytesArgDescr3"/>
+	</Action>
+	<Action id="callDigestOnInstanceDef" type="Byte" cardinality="2147483647">
+		<Argument id="generatedMessageDigest" refid="byteArrayDef" name="%genDigestName" description="%genDigestDescr"/>
+	</Action>
+	<!-- END ACTION DEF -->
+	
+	<!-- BEGIN CU CLASS DEF -->
+	<ObjectClassDefinition id="messageDigestService" name="%serviceName" description="%serviceDescription">
+		<!-- State Var Declaration -->
+		<AttributeRef id="Att1" refid="Att1Def" name="%att1" description="%Att1Descr"/>
+		<AttributeRef id="Att2" refid="Att2Def" name="%att2" description="%Att2Descr"/>
+		<AttributeRef id="Att3" refid="Att3Def" name="%att3" description="%Att3Descr"/>
+		<AttributeRef id="Att4" refid="Att4Def" name="%att4" description="%Att4Descr"/>
+		<AttributeRef id="Att5" refid="Att5Def" name="%att5" description="%Att5Descr"/>
+		<AttributeRef id="Att6" refid="Att6Def" name="%att6" description="%Att6Descr"/>
+		<AttributeRef id="Att7" refid="Att7Def" name="%att7" description="%Att7Descr"/>
+		<AttributeRef id="Att8" refid="Att8Def" name="%att8" description="%Att8Descr"/>
+		<AttributeRef id="Att9" refid="Att9Def" name="%att9" description="%Att9Descr"/>
+		<AttributeRef id="Att10" refid="Att10Def" name="%att10" description="%Att10Descr"/>
+		<AttributeRef id="Provider" refid="msgDigestProviderIDDef" name="%provider" description="%prvDescription"/>
+		<AttributeRef id="expireTime" refid="timeDef" name="%timeName" description="%timeDescription"/>
+		<!-- Action Declaration -->
+		<ActionRef id="setExpireTime" refid="setExpireTimeDef" name="%setExpireTimeName" description="%setExpireTimeDescr"/>
+		<ActionRef id="getExpireTime" refid="getExpireTimeDef" name="%detExpireTimeName" description="%getExpireTimeDescr"/>
+		<ActionRef id="createInstance" refid="createInstanceDef" name="%createInstance" description="%createInstanceDescr"/>
+		<ActionRef id="releaseInstance" refid="releaseInstanceDef" name="%releaseInstance" description="%releaseInstanceDescr"/>
+		<ActionRef id="resetInstance" refid="resetInstanceDef" name="%resetInstanceName" description="%resetInstanceDescr"/>
+		<ActionRef id="checkDigestEquality" refid="checkDigestEqualityDef" name="%checkDigestEqName" description="%checkDigestEqDescr"/>
+		<ActionRef id="updateInstance" refid="updateInstanceDef" name="%updateInstanceName" description="%updateInstanceDescr"/>
+		<ActionRef id="callDigestOnInstance" refid="callDigestOnInstanceDef" name="%callDigestOnInstanceName" description="%callDigestOnInstanceDescr"/>
+		<mi:Icon resource="%mdicon16" size="16"/>
+	</ObjectClassDefinition>
+	<!-- END CU CLASS DEF -->
+	
+</ExtendedMetaData>

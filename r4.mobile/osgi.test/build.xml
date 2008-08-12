@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="project" default="publish"> 
+
+	<property name="extra"  value="yes"/>
+	<target name="extra">
+		<copy todir="target/delivered" overwrite="true">
+			<fileset dir="${workspace}/org.osgi.test.cases.deploymentadmin.mo/delivered" />
+		</copy>
+		<copy file="${workspace}/cnf/certificate/.keystore" tofile="target/keystore" overwrite="true"/>
+	</target>
+
+	<target name="crossref">
+		<foreach list="${crossref}" delimiter=" ," target="-cross" param="item.spec" inheritAll="true" />
+	</target>
+	
+	<target name="-cross">
+		<java fork="true" classname="org.osgi.tools.cross.Cross" classpath="../org.osgi.tools/src;../licensed/jar/asm-2.2.2.jar;osgi.director.jar">
+		  <arg value="-o"/>
+		  <arg value="osgi.${item.spec}.xml"/>
+		  <arg value="-target"/>
+		  <arg value="osgi.${item.spec}.jar"/>
+		  <arg value="osgi.${item.spec}.tests.jar"/>
+		</java>
+		<java fork="true" classname="org.osgi.tools.cross.Cross" classpath="../org.osgi.tools/src;../licensed/jar/asm-2.2.2.jar;osgi.director.jar">
+		  <arg value="-o"/>
+		  <arg value="doc/osgi.${item.spec}.html"/>
+		  <arg value="-target"/>
+		  <arg value="osgi.${item.spec}.jar"/>
+		  <arg value="osgi.${item.spec}.tests.jar"/>
+		</java>
+	</target>
+
+	<import file="../cnf/build.xml"/>
+</project>

@@ -1,0 +1,514 @@
+<html>
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   
+      <link rel="stylesheet" href="osgi.css" type="text/css">
+      <title>Test Matrix for org.osgi.service.prefs</title>
+   </head>
+   <body>
+      <div width="700px">
+         <h1>Test Matrix for org.osgi.service.prefs</h1>
+         <p>
+            <description>
+               
+               <p>The OSGi Preferences Service Package. Specification Version 1.1.
+                  
+               </p>
+               <p>Bundles wishing to use this package must list the package
+                  in the Import-Package header of the bundle's manifest.
+                  For example:
+                  
+               </p><pre>Import-Package:&nbsp;org.osgi.service.prefs;&nbsp;version=1.1</pre>
+                  </description><br></p>
+         <table>
+            <tr>
+               <th colspan="2">Tested by:</th>
+            </tr>
+            <tr>
+               <td><a href="org.osgi.test.cases.prefs.html">org.osgi.test.cases.prefs</a></td>
+            </tr>
+         </table><br><br><table width="300">
+            <tr>
+               <th></th>
+               <th>Class</th>
+               <th>Methods</th>
+               <th>Tests</th>
+               <th>Ratio</th>
+            </tr>
+            <tr>
+               <td></td>
+               <td><a href="#org.osgi.service.prefs.BackingStoreException">BackingStoreException</a></td>
+               <td>4</td>
+               <td>0</td>
+               <td class="passed">0.00</td>
+            </tr>
+            <tr>
+               <td></td>
+               <td><a href="#org.osgi.service.prefs.Preferences">Preferences</a></td>
+               <td>26</td>
+               <td>0</td>
+               <td class="passed">0.00</td>
+            </tr>
+            <tr>
+               <td></td>
+               <td><a href="#org.osgi.service.prefs.PreferencesService">PreferencesService</a></td>
+               <td>3</td>
+               <td>0</td>
+               <td class="passed">0.00</td>
+            </tr>
+         </table><br><table width="700">
+            <tr>
+               <th class="pointer" colspan="2"><a name="org.osgi.service.prefs.BackingStoreException"></a>Class org.osgi.service.prefs.BackingStoreException
+               </th>
+            </tr>
+            <tr>
+               <td colspan="2">
+                  Thrown to indicate that a preferences operation could not complete because of
+                   a failure in the backing store, or a failure to contact the backing store.
+                     
+               </td>
+            </tr>
+            <tr>
+               <th width="350"><a name="BackingStoreException.BackingStoreException(String)"></a>BackingStoreException(String)
+               </th>
+               <th width="350"><b class="passed"> NO TEST FOUND </b></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Constructs a BackingStoreException with the specified detail
+                   message.
+                     
+               </td>
+               <td width="350"></td>
+            </tr>
+            <tr>
+               <th width="350"><a name="BackingStoreException.BackingStoreException(String,Throwable)"></a>BackingStoreException(String,Throwable)
+               </th>
+               <th width="350"><b class="passed"> NO TEST FOUND </b></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Constructs a BackingStoreException with the specified detail
+                   message.
+                     
+               </td>
+               <td width="350"></td>
+            </tr>
+            <tr>
+               <th width="350"><a name="BackingStoreException.getCause()"></a>getCause()
+               </th>
+               <th width="350"><b class="passed"> NO TEST FOUND </b></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Returns the cause of this exception or null if no cause was
+                   specified when this exception was created.
+                     
+               </td>
+               <td width="350"></td>
+            </tr>
+            <tr>
+               <th width="350"><a name="BackingStoreException.initCause(Throwable)"></a>initCause(Throwable)
+               </th>
+               <th width="350"><b class="passed"> NO TEST FOUND </b></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  The cause of this exception can only be set when constructed.
+                     
+               </td>
+               <td width="350"></td>
+            </tr>
+         </table><br><table width="700">
+            <tr>
+               <th class="pointer" colspan="2"><a name="org.osgi.service.prefs.Preferences"></a>Class org.osgi.service.prefs.Preferences
+               </th>
+            </tr>
+            <tr>
+               <td colspan="2">
+                  A node in a hierarchical collection of preference data.
+                     
+               </td>
+            </tr>
+            <tr>
+               <th width="350"><a name="Preferences.absolutePath()"></a>absolutePath()
+               </th>
+               <th width="350"><b class="passed"> NO TEST FOUND </b></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Returns this node's absolute path name.
+                     
+               </td>
+               <td width="350"></td>
+            </tr>
+            <tr>
+               <th width="350"><a name="Preferences.childrenNames()"></a>childrenNames()
+               </th>
+               <th width="350"><b class="passed"> NO TEST FOUND </b></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Returns the names of the children of this node.
+                     
+               </td>
+               <td width="350"></td>
+            </tr>
+            <tr>
+               <th width="350"><a name="Preferences.clear()"></a>clear()
+               </th>
+               <th width="350"><b class="passed"> NO TEST FOUND </b></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Removes all of the properties (key-value associations) in this node.
+                     
+               </td>
+               <td width="350"></td>
+            </tr>
+            <tr>
+               <th width="350"><a name="Preferences.flush()"></a>flush()
+               </th>
+               <th width="350"><b class="passed"> NO TEST FOUND </b></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Forces any changes in the contents of this node and its descendants to
+                   the persistent store.
+                     
+               </td>
+               <td width="350"></td>
+            </tr>
+            <tr>
+               <th width="350"><a name="Preferences.get(String,String)"></a>get(String,String)
+               </th>
+               <th width="350"><b class="passed"> NO TEST FOUND </b></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Returns the value associated with the specified key in this
+                   node.
+                     
+               </td>
+               <td width="350"></td>
+            </tr>
+            <tr>
+               <th width="350"><a name="Preferences.getBoolean(String,boolean)"></a>getBoolean(String,boolean)
+               </th>
+               <th width="350"><b class="passed"> NO TEST FOUND </b></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Returns the boolean value represented by the String
+                   object associated with the specified key in this node.
+                     
+               </td>
+               <td width="350"></td>
+            </tr>
+            <tr>
+               <th width="350"><a name="Preferences.getByteArray(String,byte[])"></a>getByteArray(String,byte[])
+               </th>
+               <th width="350"><b class="passed"> NO TEST FOUND </b></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Returns the byte[] value represented by the String
+                   object associated with the specified key in this node.
+                     
+               </td>
+               <td width="350"></td>
+            </tr>
+            <tr>
+               <th width="350"><a name="Preferences.getDouble(String,double)"></a>getDouble(String,double)
+               </th>
+               <th width="350"><b class="passed"> NO TEST FOUND </b></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Returns the double value represented by the String
+                   object associated with the specified key in this node.
+                     
+               </td>
+               <td width="350"></td>
+            </tr>
+            <tr>
+               <th width="350"><a name="Preferences.getFloat(String,float)"></a>getFloat(String,float)
+               </th>
+               <th width="350"><b class="passed"> NO TEST FOUND </b></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Returns the float value represented by the String
+                   object associated with the specified key in this node.
+                     
+               </td>
+               <td width="350"></td>
+            </tr>
+            <tr>
+               <th width="350"><a name="Preferences.getInt(String,int)"></a>getInt(String,int)
+               </th>
+               <th width="350"><b class="passed"> NO TEST FOUND </b></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Returns the int value represented by the String
+                   object associated with the specified key in this node.
+                     
+               </td>
+               <td width="350"></td>
+            </tr>
+            <tr>
+               <th width="350"><a name="Preferences.getLong(String,long)"></a>getLong(String,long)
+               </th>
+               <th width="350"><b class="passed"> NO TEST FOUND </b></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Returns the long value represented by the String
+                   object associated with the specified key in this node.
+                     
+               </td>
+               <td width="350"></td>
+            </tr>
+            <tr>
+               <th width="350"><a name="Preferences.keys()"></a>keys()
+               </th>
+               <th width="350"><b class="passed"> NO TEST FOUND </b></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Returns all of the keys that have an associated value in this node.
+                     
+               </td>
+               <td width="350"></td>
+            </tr>
+            <tr>
+               <th width="350"><a name="Preferences.name()"></a>name()
+               </th>
+               <th width="350"><b class="passed"> NO TEST FOUND </b></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Returns this node's name, relative to its parent.
+                     
+               </td>
+               <td width="350"></td>
+            </tr>
+            <tr>
+               <th width="350"><a name="Preferences.node(String)"></a>node(String)
+               </th>
+               <th width="350"><b class="passed"> NO TEST FOUND </b></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Returns a named Preferences object (node), creating it and any
+                   of its ancestors if they do not already exist.
+                     
+               </td>
+               <td width="350"></td>
+            </tr>
+            <tr>
+               <th width="350"><a name="Preferences.nodeExists(String)"></a>nodeExists(String)
+               </th>
+               <th width="350"><b class="passed"> NO TEST FOUND </b></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Returns true if the named node exists.
+                     
+               </td>
+               <td width="350"></td>
+            </tr>
+            <tr>
+               <th width="350"><a name="Preferences.parent()"></a>parent()
+               </th>
+               <th width="350"><b class="passed"> NO TEST FOUND </b></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Returns the parent of this node, or null if this is the root.
+                     
+               </td>
+               <td width="350"></td>
+            </tr>
+            <tr>
+               <th width="350"><a name="Preferences.put(String,String)"></a>put(String,String)
+               </th>
+               <th width="350"><b class="passed"> NO TEST FOUND </b></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Associates the specified value with the specified key in this node.
+                     
+               </td>
+               <td width="350"></td>
+            </tr>
+            <tr>
+               <th width="350"><a name="Preferences.putBoolean(String,boolean)"></a>putBoolean(String,boolean)
+               </th>
+               <th width="350"><b class="passed"> NO TEST FOUND </b></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Associates a String object representing the specified
+                   boolean value with the specified key in this node.
+                     
+               </td>
+               <td width="350"></td>
+            </tr>
+            <tr>
+               <th width="350"><a name="Preferences.putByteArray(String,byte[])"></a>putByteArray(String,byte[])
+               </th>
+               <th width="350"><b class="passed"> NO TEST FOUND </b></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Associates a String object representing the specified
+                   byte[] with the specified key in this node.
+                     
+               </td>
+               <td width="350"></td>
+            </tr>
+            <tr>
+               <th width="350"><a name="Preferences.putDouble(String,double)"></a>putDouble(String,double)
+               </th>
+               <th width="350"><b class="passed"> NO TEST FOUND </b></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Associates a String object representing the specified
+                   double value with the specified key in this node.
+                     
+               </td>
+               <td width="350"></td>
+            </tr>
+            <tr>
+               <th width="350"><a name="Preferences.putFloat(String,float)"></a>putFloat(String,float)
+               </th>
+               <th width="350"><b class="passed"> NO TEST FOUND </b></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Associates a String object representing the specified
+                   float value with the specified key in this node.
+                     
+               </td>
+               <td width="350"></td>
+            </tr>
+            <tr>
+               <th width="350"><a name="Preferences.putInt(String,int)"></a>putInt(String,int)
+               </th>
+               <th width="350"><b class="passed"> NO TEST FOUND </b></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Associates a String object representing the specified
+                   int value with the specified key in this node.
+                     
+               </td>
+               <td width="350"></td>
+            </tr>
+            <tr>
+               <th width="350"><a name="Preferences.putLong(String,long)"></a>putLong(String,long)
+               </th>
+               <th width="350"><b class="passed"> NO TEST FOUND </b></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Associates a String object representing the specified
+                   long value with the specified key in this node.
+                     
+               </td>
+               <td width="350"></td>
+            </tr>
+            <tr>
+               <th width="350"><a name="Preferences.remove(String)"></a>remove(String)
+               </th>
+               <th width="350"><b class="passed"> NO TEST FOUND </b></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Removes the value associated with the specified key in this
+                   node, if any.
+                     
+               </td>
+               <td width="350"></td>
+            </tr>
+            <tr>
+               <th width="350"><a name="Preferences.removeNode()"></a>removeNode()
+               </th>
+               <th width="350"><b class="passed"> NO TEST FOUND </b></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Removes this node and all of its descendants, invalidating any properties
+                   contained in the removed nodes.
+                     
+               </td>
+               <td width="350"></td>
+            </tr>
+            <tr>
+               <th width="350"><a name="Preferences.sync()"></a>sync()
+               </th>
+               <th width="350"><b class="passed"> NO TEST FOUND </b></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Ensures that future reads from this node and its descendants reflect any
+                   changes that were committed to the persistent store (from any VM) prior
+                   to the sync invocation.
+                     
+               </td>
+               <td width="350"></td>
+            </tr>
+         </table><br><table width="700">
+            <tr>
+               <th class="pointer" colspan="2"><a name="org.osgi.service.prefs.PreferencesService"></a>Class org.osgi.service.prefs.PreferencesService
+               </th>
+            </tr>
+            <tr>
+               <td colspan="2">
+                  The Preferences Service.
+                     
+               </td>
+            </tr>
+            <tr>
+               <th width="350"><a name="PreferencesService.getSystemPreferences()"></a>getSystemPreferences()
+               </th>
+               <th width="350"><b class="passed"> NO TEST FOUND </b></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Returns the root system node for the calling bundle.
+                     
+               </td>
+               <td width="350"></td>
+            </tr>
+            <tr>
+               <th width="350"><a name="PreferencesService.getUserPreferences(String)"></a>getUserPreferences(String)
+               </th>
+               <th width="350"><b class="passed"> NO TEST FOUND </b></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Returns the root node for the specified user and the calling bundle.
+                     
+               </td>
+               <td width="350"></td>
+            </tr>
+            <tr>
+               <th width="350"><a name="PreferencesService.getUsers()"></a>getUsers()
+               </th>
+               <th width="350"><b class="passed"> NO TEST FOUND </b></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Returns the names of users for which node trees exist.
+                     
+               </td>
+               <td width="350"></td>
+            </tr>
+         </table>
+      </div>
+   </body>
+</html>

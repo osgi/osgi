@@ -1,0 +1,16 @@
+Manifest-Version: 1.0
+Bundle-SymbolicName: ${p}.tb1
+Bundle-Name: test.cases.cm.tb1
+Bundle-Description: Configuration Management Test R4 - configuration listener registration permission test
+Bundle-Version: 1.0
+Bundle-Activator: org.osgi.test.cases.cm.tb1.Activator
+Bundle-Vendor: IBM
+Bundle-DocURL: http://www.osgi.org/
+Bundle-ContactAddress: info@mail.osgi.org
+Bundle-Category: osgi,test
+Bundle-Copyright: ${copyright}
+Comment: Created by $(DELIVER) at $(DATE)
+$(IMPORT-PACKAGE)
+$(EXPORT-PACKAGE)
+CVS-Header: $Header$
+

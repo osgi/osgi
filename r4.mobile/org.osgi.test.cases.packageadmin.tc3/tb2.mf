@@ -1,0 +1,8 @@
+Manifest-Version: 1.0
+Bundle-Name: test.cases.packagedamin.tc3.tb2
+Bundle-Description: New bundle exporting same package
+Bundle-Vendor: Ericsson
+Bundle-Version: 1.3
+Bundle-Activator: $(p).tb2.TB2Activator
+$(IMPORT-PACKAGE)
+$(EXPORT-PACKAGE)

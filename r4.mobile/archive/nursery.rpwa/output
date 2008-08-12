@@ -1,0 +1,92 @@
+Initial, we set 2 entries(2 entries )
+T1: Normal install of T1.r1 (3 entries)
+Properties {com.bunny.poi=com.acme.gps.garmin , com.bunny.navigation=com.acme.gps.garmin = , com.acme.debugger=com.acme.gps.garmin }
+Creating {wireadmin.consumer.pid=com.acme.gps.garmin , resource.id=r1, wireadmin.producer.pid=com.bunny.poi, deployment.package=T1, wireadmin.pid=CM_GENERATED_PID_51}
+Creating {wireadmin.consumer.pid=com.acme.gps.garmin = , resource.id=r1, wireadmin.producer.pid=com.bunny.navigation, deployment.package=T1, wireadmin.pid=CM_GENERATED_PID_52}
+Creating {wireadmin.consumer.pid=com.acme.gps.garmin , resource.id=r1, wireadmin.producer.pid=com.acme.debugger, deployment.package=T1, wireadmin.pid=CM_GENERATED_PID_53}
+
+T1: Before we commit the three new entries from r1 (should see new entries=5)(5 entries )
+
+T1: After commit we committed the entries of r1 (should be 5)(5 entries )
+
+
+T1: Drop r1, i.e. remove 3 entries. Normal commit
+
+T1 Before dropping we should have 5 entries(5 entries )
+
+T1 After dropping, it should still be 5(5 entries )
+Deleting a Wire  from com.acme.debugger to com.acme.gps.garmin  scope null
+Deleting a Wire  from com.bunny.navigation to com.acme.gps.garmin =  scope null
+Deleting a Wire  from com.bunny.poi to com.acme.gps.garmin  scope null
+
+T1 After dropping commit, we should have 2 entries again(2 entries )
+
+
+T2: Install r1, but rollback
+Properties {com.bunny.poi=com.acme.gps.garmin , com.bunny.navigation=com.acme.gps.garmin = , com.acme.debugger=com.acme.gps.garmin }
+Creating {wireadmin.consumer.pid=com.acme.gps.garmin , resource.id=r1, wireadmin.producer.pid=com.bunny.poi, deployment.package=T2, wireadmin.pid=CM_GENERATED_PID_54}
+Creating {wireadmin.consumer.pid=com.acme.gps.garmin = , resource.id=r1, wireadmin.producer.pid=com.bunny.navigation, deployment.package=T2, wireadmin.pid=CM_GENERATED_PID_55}
+Creating {wireadmin.consumer.pid=com.acme.gps.garmin , resource.id=r1, wireadmin.producer.pid=com.acme.debugger, deployment.package=T2, wireadmin.pid=CM_GENERATED_PID_56}
+
+T2: Before we committ the install (should be 3 new entries, =5)(5 entries )
+Deleting a Wire  from com.bunny.poi to com.acme.gps.garmin  scope null
+Deleting a Wire  from com.bunny.navigation to com.acme.gps.garmin =  scope null
+Deleting a Wire  from com.acme.debugger to com.acme.gps.garmin  scope null
+
+T2: After we have rolled back the install, we should see 2 entries again(2 entries )
+
+
+T2: Drop r1 with rollback (first installs r1 because it should not have been installed, r2 is also 3 entries)
+Properties {com.bunny.poi=com.acme.gps.garmin , com.bunny.navigation=com.acme.gps.garmin = , com.acme.debugger=com.acme.gps.garmin }
+Creating {wireadmin.consumer.pid=com.acme.gps.garmin , resource.id=r1, wireadmin.producer.pid=com.bunny.poi, deployment.package=T2, wireadmin.pid=CM_GENERATED_PID_57}
+Creating {wireadmin.consumer.pid=com.acme.gps.garmin = , resource.id=r1, wireadmin.producer.pid=com.bunny.navigation, deployment.package=T2, wireadmin.pid=CM_GENERATED_PID_58}
+Creating {wireadmin.consumer.pid=com.acme.gps.garmin , resource.id=r1, wireadmin.producer.pid=com.acme.debugger, deployment.package=T2, wireadmin.pid=CM_GENERATED_PID_59}
+
+T2: Before we drop r1 we should have 5 entries(5 entries )
+
+T2: After dropping, we still have 5 entries(5 entries )
+
+T2: After dropping r1 but rolling back, we should still have 5 entries(5 entries )
+
+
+T3: Install r2 and drop r1 then commit
+Properties {com.bunny.poi=com.acme.gps.garmin , com.bunny.navigation=com.acme.gps.garmin = , com.acme.debugger=com.acme.gps.garmin }
+Creating {wireadmin.consumer.pid=com.acme.gps.garmin , resource.id=r1, wireadmin.producer.pid=com.bunny.poi, deployment.package=T2, wireadmin.pid=CM_GENERATED_PID_60}
+Creating {wireadmin.consumer.pid=com.acme.gps.garmin = , resource.id=r1, wireadmin.producer.pid=com.bunny.navigation, deployment.package=T2, wireadmin.pid=CM_GENERATED_PID_61}
+Creating {wireadmin.consumer.pid=com.acme.gps.garmin , resource.id=r1, wireadmin.producer.pid=com.acme.debugger, deployment.package=T2, wireadmin.pid=CM_GENERATED_PID_62}
+
+T3: Before install r2, we now have 5 entries (base+r1)(8 entries )
+Properties {A=B, C=D }
+Creating {wireadmin.consumer.pid=B, resource.id=r2, wireadmin.producer.pid=A, deployment.package=T2, wireadmin.pid=CM_GENERATED_PID_63}
+Creating {wireadmin.consumer.pid=D , resource.id=r2, wireadmin.producer.pid=C, deployment.package=T2, wireadmin.pid=CM_GENERATED_PID_64}
+
+T3: Now installed r2, we now have 7 entries (base+r2+r1)(10 entries )
+
+T3: After dropping r1, we still have 7 entries (base+r2+r1)(10 entries )
+Deleting a Wire  from com.acme.debugger to com.acme.gps.garmin  scope null
+Deleting a Wire  from com.acme.debugger to com.acme.gps.garmin  scope null
+Deleting a Wire  from com.bunny.navigation to com.acme.gps.garmin =  scope null
+Deleting a Wire  from com.bunny.navigation to com.acme.gps.garmin =  scope null
+Deleting a Wire  from com.bunny.poi to com.acme.gps.garmin  scope null
+Deleting a Wire  from com.bunny.poi to com.acme.gps.garmin  scope null
+
+T3: After installing r2 and dropping r1, commiting we should have 4 entries (base+r2)(4 entries )
+
+
+T4: Install r1 and drop r2 then rollback
+
+T4: Before install r1, we now have 4 entries (base+r2)(4 entries )
+Properties {com.bunny.poi=com.acme.gps.garmin , com.bunny.navigation=com.acme.gps.garmin = , com.acme.debugger=com.acme.gps.garmin }
+Creating {wireadmin.consumer.pid=com.acme.gps.garmin , resource.id=r1, wireadmin.producer.pid=com.bunny.poi, deployment.package=T2, wireadmin.pid=CM_GENERATED_PID_65}
+Creating {wireadmin.consumer.pid=com.acme.gps.garmin = , resource.id=r1, wireadmin.producer.pid=com.bunny.navigation, deployment.package=T2, wireadmin.pid=CM_GENERATED_PID_66}
+Creating {wireadmin.consumer.pid=com.acme.gps.garmin , resource.id=r1, wireadmin.producer.pid=com.acme.debugger, deployment.package=T2, wireadmin.pid=CM_GENERATED_PID_67}
+
+T3: Installed r1, we now have 7 entries (base+r2+r2)(7 entries )
+
+T3: After dropping r2, we still have 7 entries (base+r2+r1)(7 entries )
+Deleting a Wire  from com.bunny.poi to com.acme.gps.garmin  scope null
+Deleting a Wire  from com.bunny.navigation to com.acme.gps.garmin =  scope null
+Deleting a Wire  from com.acme.debugger to com.acme.gps.garmin  scope null
+
+T3: After rollback, we should have 4 entries again (base+r2)(4 entries )
+Target: Link closed true

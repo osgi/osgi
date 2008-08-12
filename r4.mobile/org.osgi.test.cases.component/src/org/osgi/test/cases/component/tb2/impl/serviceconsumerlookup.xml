@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root>
+<scr:component name="org.osgi.test.cases.component.tb2.ServiceConsumerLookup"
+			xmlns:scr="http://www.osgi.org/xmlns/scr/v1.0.0">
+	<implementation class="org.osgi.test.cases.component.tb2.impl.ServiceConsumerLookupImpl"/>
+	<property name="test.property.string" type="String">
+		Value 1
+		Value 2
+		Value 3
+	</property>
+	<property name="cmprop" type="String" value="setFromXML" />
+	<properties entry="org/osgi/test/cases/component/tb2/impl/serviceconsumerlookup.properties"/>
+
+	<!-- by default servicefactory is false -->
+	<service>
+		<provide interface="org.osgi.test.cases.component.tb2.ServiceConsumerLookup"/>
+	</service>
+
+	<!-- cardinality="1..1"; policy="static" - these are defaults -->
+	<reference name="serviceProvider"
+		interface="org.osgi.test.cases.component.tbc.ServiceProvider"
+		target="(component.name=org.osgi.test.cases.component.tbc.ServiceProvider)"
+	/>
+</scr:component>
+
+<!-- 
+this component is registerd with its class name instead of
+using an interface. In addition it is disable on startup 
+-->
+<scr:component enabled="false"
+		name="org.osgi.test.cases.component.tb2.DynService"
+		xmlns:scr="http://www.osgi.org/xmlns/scr/v1.0.0">
+	<implementation class="org.osgi.test.cases.component.tb2.DynService"/>
+	<service>
+		<provide interface="org.osgi.test.cases.component.tb2.DynService"/>
+	</service>
+</scr:component>
+
+</root>

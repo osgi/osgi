@@ -1,0 +1,16 @@
+Manifest-Version: 1.0
+Bundle-Activator: ${p}.TestMonitor
+Bundle-Name: test.monitor
+Bundle-SymbolicName: ${p}
+Bundle-Version: 1.0
+Bundle-Copyright: Copyright (c) OSGi Alliance (2000-2005). All Rights Reserved.
+Bundle-Description: Monitor Test Case.
+Bundle-Vendor: OSGi Alliance
+Bundle-DocUrl: http://www.osgi.org/testcases/4/test.cases.template
+Bundle-ContactAddress: speccomments@mail.osgi.org
+Bundle-Category: osgi,test
+CVS-Header: $Header$
+$(IMPORT-PACKAGE)
+$(EXPORT-PACKAGE)
+$(PRIVATE-PACKAGE)
+

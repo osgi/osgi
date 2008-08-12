@@ -1,0 +1,12 @@
+Manifest-Version: 1.0
+Bundle-Name: ${p}.tb4g
+Bundle-SymbolicName: ${p}.tb4g
+Bundle-Version: 4
+Bundle-ManifestVersion: 2
+Bundle-Activator: $(p).tb4g.Activator
+Import-Package: org.osgi.framework, org.osgi.test.cases.framework.classloading.exports.service;version="2.0.0"
+$(EXPORT-PACKAGE)
+$(PRIVATE-PACKAGE)
+
+
+

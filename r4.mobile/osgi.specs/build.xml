@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="project" default="javadoc">
+	<import file="../cnf/build.xml" />
+	
+
+	<target name="javadoc" depends="init">
+		<echo>${javadoc}</echo>
+		<mkdir dir="mif" />
+		<javadoc doclet="org.osgi.tools.xmldoclet.XmlDoclet" docletpath="${workspace}/org.osgi.tools/src" classpath="${project.classpath}" encoding="utf-8" packagenames="${javadoc}">
+			<sourcepath>
+				<dirset dir="${workspace}">
+					<include name="*/src" />
+				</dirset>
+			</sourcepath>
+		</javadoc>
+
+		<java classname="com.icl.saxon.StyleSheet" classpath="../licensed/jar/saxon.jar" fork="true">
+			<arg line="javadoc.xml xsl/javadoc.xsl" />
+		</java>
+
+		<foreach list="${javadoc}" delimiter=" ," target="-html2mif" param="item" inheritAll="true" />
+	</target>
+
+	<target name="ees" depends="init">
+		<java classname="org.osgi.tools.jar2xml.JAR2XML" classpath="../org.osgi.tools/osgi.tools.jar" fork="true" output="ee.xml">
+			<arg line="-tagged minimum ${workspace}/ee.minimum/ee.minimum.jar" />
+			<arg line="-tagged foundation ${workspace}/ee.foundation/ee.foundation.jar" />
+		</java>
+		<echo>Converted JARs to XML</echo>
+		<java classname="com.icl.saxon.StyleSheet" classpath="../licensed/jar/saxon.jar" fork="true" output="ee.html">
+			<arg line="ee.xml xsl/ee.xsl" />
+		</java>
+		<echo>Generated HTML file</echo>
+		<java classname="com.icl.saxon.StyleSheet" classpath="${workspace}/licensed/jar/saxon.jar" fork="true" output="ee.tmp">
+			<arg line="ee.html xsl/html2mif.xsl" />
+		</java>
+		<java classname="org.osgi.tools.xml2mif.XML2MIF" fork="true" classpath="${project.classpath}" input="ee.tmp" output="mif/ee.mif">
+		</java>
+	</target>
+
+	<target name="ddf" depends="init">
+		<deltree dir="ddftmp"/>
+		<copy flatten="true" todir="ddftmp" failonerror="true" verbose="true">
+			<fileset dir="../ddf" includes="**/*.xml"/>
+		</copy>
+		<foreach list="${ddf}" delimiter=" ," target="-ddf2mif" param="item" inheritAll="true" />
+	</target>
+
+	<target name="coverage" depends="init">
+		<echo>Coverage Core</echo>
+		<java classname="com.icl.saxon.StyleSheet" classpath="${workspace}/licensed/jar/saxon.jar" fork="true" output="html.tmp">
+			<arg line="../osgi.test/osgi.core.html xsl/html2mif.xsl" />
+		</java>
+		<java classname="org.osgi.tools.xml2mif.XML2MIF" fork="true" classpath="${project.classpath}" input="html.tmp" output="mif/org.osgi.core.mif">
+		</java>
+	</target>
+
+	<target name="-ddf2mif">
+		<java classname="com.icl.saxon.StyleSheet" classpath="../licensed/jar/saxon.jar" fork="true" 
+			output="ddftmp/${item}.htm">
+			<arg line="ddftmp/${item}.xml xsl/ddf2mif.xsl" />
+		</java>
+		<echo>Generated HTML file</echo>
+		<java classname="com.icl.saxon.StyleSheet" classpath="${workspace}/licensed/jar/saxon.jar" 
+			fork="true" output="ddftmp/${item}.tmp">
+			<arg line="ddftmp/${item}.htm xsl/html2mif.xsl" />
+		</java>
+		<echo>Generated XML MIF file</echo>
+		<java classname="org.osgi.tools.xml2mif.XML2MIF" fork="true" classpath="${project.classpath}" 
+		input="ddftmp/${item}.tmp" output="mif/${item}.mif">
+		</java>
+		<echo>Generated MIF file</echo>
+	</target>
+
+	<target name="-html2mif">
+		<java classname="com.icl.saxon.StyleSheet" classpath="${workspace}/licensed/jar/saxon.jar" fork="true">
+			<arg line="-o ${item}.tmp xml/${item}.xml xsl/html2mif.xsl" />
+		</java>
+		<java classname="org.osgi.tools.xml2mif.XML2MIF" fork="true" classpath="${project.classpath}">
+			<arg line="-i ${item}.tmp -o mif/${item}.mif" />
+		</java>
+		<delete file="${item}.tmp" />
+	</target>
+
+
+
+</project>

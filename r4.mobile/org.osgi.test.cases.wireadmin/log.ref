@@ -1,0 +1,305 @@
+[begin=test_wireadmin_CreateWire]
+Must Call producersConnected(..) for consumer.ConsumerImplA
+{consumer.ConsumerImplA} Invokes producersConnected(..) : "CORRECT"
+Must Call consumersConnected(..) for producer.ProducerImplA
+{producer.ProducerImplA} Invokes consumersConnected(..) : "CORRECT"
+Must call both consumersConnected(..) for producer.ProducerImplA and producersConnected(..) for consumer.ConsumerImplA
+{producer.ProducerImplA} Invokes consumersConnected(..) : "CORRECT"
+{consumer.ConsumerImplA} Invokes producersConnected(..) : "CORRECT"
+Test wire.isValid after createWire : "Operation passed: OK."
+Test wire.isConnected after createWire : "Operation passed: OK."
+Test wire flavors after createWire: "Operation passed: OK."
+Test update wire : "Operation passed: OK."
+Must call both consumersConnected(..) for producer.ProducerImplA and producersConnected(..) for consumer.ConsumerImplA
+{producer.ProducerImplA} Invokes consumersConnected(..) : "CORRECT"
+{consumer.ConsumerImplA} Invokes producersConnected(..) : "CORRECT"
+Test wire properties after updateWire : "Operation passes: OK."
+[end=test_wireadmin_CreateWire]
+
+[begin=test_wireadmin_DeleteWire]
+test delete wire: "createing two wires"
+test delete wire: "registering consumer and producer so the wires are connected when we delete one of them later"
+test delete wire: "Deleting wire. Must call consumersConnected and producersConnected"
+test delete wire: "{deletedWireProducer} Invokes consumersConnected(..) CORRECT"
+test delete wire: "{deletedWireConsumer} Invokes producersConnected(..) CORRECT"
+test delete wire: "Deleting the second wire."
+{deletedWireProducer} Invokes consumersConnected(..) : "CORRECT"
+{deletedWireConsumer} Invokes producersConnected(..) : "CORRECT"
+test delete wire: "Test Wire.isValid after deleteWire OK."
+test delete wire: "Test wire.isConnected after deleteWire OK."
+test delete wire: "Test wire flavors after deleteWire OK."
+test delete wire: "Test getWires after deleteWire OK."
+[end=test_wireadmin_DeleteWire]
+
+[begin=test_wireadmin_IncorrectCreateWire]
+Test createWire with non-existing PIDs : "Operation passed: OK."
+Test createWire with null PIDs: "Operation passed: OK.Exception thrown."
+Test createWire with incorrect properties' key: "Operation passed: OK.Exception thrown."
+Test createWire with case insensensitive keys: "Operation passed: OK.Exception thrown."
+Must call producersConnected(..) for consumer.ConsumerImplB
+{consumer.ConsumerImplB} Invokes producersConnected(..) : "CORRECT"
+Must call both consumersConnected(..) for producer.ProducerImplA and producersConected(..) for consumer.ConsumerImplB
+{producer.ProducerImplA} Invokes consumersConnected(..) : "CORRECT"
+{consumer.ConsumerImplB} Invokes producersConnected(..) : "CORRECT"
+Test createWire with incompatible flavors: "Operation passed: OK."
+Must call both consumersConnected(..) for producer.ProducerImplA and producersConected(..) for consumer.ConsumerImplB
+{producer.ProducerImplA} Invokes consumersConnected(..) : "CORRECT"
+{consumer.ConsumerImplB} Invokes producersConnected(..) : "CORRECT"
+[end=test_wireadmin_IncorrectCreateWire]
+
+[begin=test_wireadmin_IncorrectUpdateWire]
+Must call both consumersConnected(..) for producer.ProducerImplA and producersConected(..) for consumer.ConsumerImplA
+{producer.ProducerImplA} Invokes consumersConnected(..) : "CORRECT"
+{consumer.ConsumerImplA} Invokes producersConnected(..) : "CORRECT"
+Test updateWire with incorrect properties' keys: "Operation passed: OK.Exception thrown."
+Test updateWire with case insensitive properties' keys: "Operation passed: OK.Exception thrown."
+Must call both consumersConnected(..) for producer.ProducerImplA and producersConected(..) for consumer.ConsumerImplA
+{producer.ProducerImplA} Invokes consumersConnected(..) : "CORRECT"
+{consumer.ConsumerImplA} Invokes producersConnected(..) : "CORRECT"
+Test updateWire with non- existing wire: "Operation passed: OK."
+[end=test_wireadmin_IncorrectUpdateWire]
+
+[begin=test_wireadmin_IncorrectGetWires]
+Test getWires with invalid filter: "Operation passed: OK.Exception thrown."
+[end=test_wireadmin_IncorrectGetWires]
+
+[begin=test_wireadmin_RegisterUnregisterConsumerProducer]
+Must call producersConnected(..) for consumer.ConsumerImplC
+{consumer.ConsumerImplC} Invokes producersConnected(..) : "CORRECT"
+Must call consumersConnected(..) for producer.ProducerImplC
+{producer.ProducerImplC} Invokes consumersConnected(..) : "CORRECT"
+Must call both consumersConnected(..) for producer.ProducerImplC and producersConnected(..) for consumer.ConsumerImplC
+{producer.ProducerImplC} Invokes consumersConnected(..) : "CORRECT"
+{consumer.ConsumerImplC} Invokes producersConnected(..) : "CORRECT"
+Must call producersConnected(..) for producer.ProducerImplC
+{consumer.ConsumerImplC} Invokes producersConnected(..) : "CORRECT"
+Must call both consumersConnected(..) for producer.ProducerImplC and producersConnected(..) for consumer.ConsumerImplC
+{producer.ProducerImplC} Invokes consumersConnected(..) : "CORRECT"
+{consumer.ConsumerImplC} Invokes producersConnected(..) : "CORRECT"
+Test wire properties after Producer's re- registration: "Operation passed: OK."
+Must call consumersConnected(..) for producer.ProducerImplC
+{producer.ProducerImplC} Invokes consumersConnected(..) : "CORRECT"
+Must call both consumersConnected(..) for producer.ProducerImplC and producersConnected(..) for consumer.ConsumerImplC
+{producer.ProducerImplC} Invokes consumersConnected(..) : "CORRECT"
+{consumer.ConsumerImplC} Invokes producersConnected(..) : "CORRECT"
+Test wire properties after Consumer's re- registration: "Operation passed: OK."
+Must call producersConnected(..) for consumer.ConsumerImplC
+{consumer.ConsumerImplC} Invokes producersConnected(..) : "CORRECT"
+Must call both consumersConnected(..) for producer.ProducerImplC and producersConnected(..) for consumer.ConsumerImplC
+{producer.ProducerImplC} Invokes consumersConnected(..) : "CORRECT"
+{consumer.ConsumerImplC} Invokes producersConnected(..) : "CORRECT"
+[end=test_wireadmin_RegisterUnregisterConsumerProducer]
+
+[begin=test_wireadmin_UpdateAfterUnregister]
+Test updateWire with unregistered Producer: "Operation passed: OK."
+Must call consumersConnected(..) for producer.ProducerImplC
+{producer.ProducerImplC} Invokes consumersConnected(..) : "CORRECT"
+Must call both consumersConnected(..) for producer.ProducerImplC and producersConnected(..) for consumer.ConsumerImplC
+{producer.ProducerImplC} Invokes consumersConnected(..) : "CORRECT"
+{consumer.ConsumerImplC} Invokes producersConnected(..) : "CORRECT"
+Test updateWire with unregistered Consumer: "Operation passed: OK."
+[end=test_wireadmin_UpdateAfterUnregister]
+
+[begin=test_wireadmin_RestartWireadmin]
+test stop wireadmin: "createing first wire"
+test stop wireadmin: "createing second wire"
+test stop wireadmin: "registering producer and consumer for first wire"
+test stop wireadmin: "stopping wire admin bundle"
+test stop wireadmin: "registering producer and consumer for the second wire"
+test stop wireadmin: "starting wire admin bundle again"
+test stop wireadmin: "Must call consumersConnected(..) for: producer1, producer2"
+test stop wireadmin: "and producersConnected(..) for: consumer1, consumer2"
+{producer1} Invokes consumersConnected(..) : "CORRECT"
+{consumer1} Invokes producersConnected(..) : "CORRECT"
+{producer2} Invokes consumersConnected(..) : "CORRECT"
+{consumer2} Invokes producersConnected(..) : "CORRECT"
+test stop wireadmin: "Test wire state after WireAdmin restart: first wire is valid and connected OK."
+test stop wireadmin: "Test wire state after WireAdmin restart: second wire is valid and connected OK."
+[end=test_wireadmin_RestartWireadmin]
+
+[begin=test_wireadmin_multipleRegistration]
+Must call both consumersConnected(..) for producer.ProducerImplA and producersConnected(..) for consumer.ConsumerImplC
+{producer.ProducerImplA} Invokes consumersConnected(..) : "CORRECT"
+{consumer.ConsumerImplC} Invokes producersConnected(..) : "CORRECT"
+Must call both consumersConnected(..) for producer.ProducerImplC and producersConnected(..) for consumer.ConsumerImplA
+{producer.ProducerImplC} Invokes consumersConnected(..) : "CORRECT"
+{consumer.ConsumerImplA} Invokes producersConnected(..) : "CORRECT"
+Must call producersConnected(..) for: consumer.ConsumerImplA and consumer.ConsumerImplC
+{consumer.ConsumerImplA} Invokes producersConnected(..) : "CORRECT"
+{consumer.ConsumerImplC} Invokes producersConnected(..) : "CORRECT"
+Test Wireadmin Wires after Producer's unregistration: "Operation passed: OK."
+Must call consumersConnected(..) for: producer.ProducerImplA
+and producersConnected(..) for: consumer.ConsumerImplA and consumer.ConsumerImplC
+{producer.ProducerImplA} Invokes consumersConnected(..) : "CORRECT"
+{consumer.ConsumerImplA} Invokes producersConnected(..) : "CORRECT"
+{consumer.ConsumerImplC} Invokes producersConnected(..) : "CORRECT"
+Test Wireadmin Wires after Producer's registration: "Operation passed: OK."
+Must call consumersConnected(..) for: producer.ProducerImplA and producer.ProducerImplC
+{producer.ProducerImplA} Invokes consumersConnected(..) : "CORRECT"
+{producer.ProducerImplC} Invokes consumersConnected(..) : "CORRECT"
+Test Wireadmin Wires after Consumer's unregistration: "Operation passed: OK."
+Must call consumersConnected(..) for: producer.ProducerImplA and producer.ProducerImplC
+and producersConnected(..) for: consumer.ConsumerImplC
+{producer.ProducerImplA} Invokes consumersConnected(..) : "CORRECT"
+{producer.ProducerImplC} Invokes consumersConnected(..) : "CORRECT"
+{consumer.ConsumerImplC} Invokes producersConnected(..) : "CORRECT"
+Test Wireadmin Wires after Consumer's registration: "Operation passed: OK."
+[end=test_wireadmin_multipleRegistration]
+
+[begin=test_wireadmin_GetFlavors]
+Test wire getFlavors with incorrect consumer's flavors: "Operation passed: OK."
+[end=test_wireadmin_GetFlavors]
+
+[begin=testPollUpdate]
+wire api test: "create wire for the test"
+wire api test: "wire is NOT connected"
+wire api test: "polling unconnected wire"
+wire api test: "received value (null) null"
+wire api test: "updateing unconnected wire"
+wire api test: "register test producer"
+wire api test: "register test consumer"
+wire api test: "wire is connected"
+wire api test: "polling connected wire"
+wire api test: "Producer.polled called for correct wire. Returning '42'"
+wire api test: "received value (42) 42"
+wire api test: "updateing connected wire"
+wire api test: "Consumer.updated received value 4242 from correct wire"
+wire api test: "polling connected wire with producer throwing exception"
+wire api test: "Producer.polled called for correct wire. Throwing exception ..."
+wire api test: "received value (null) null"
+[end=testPollUpdate]
+
+[begin=testValueFiltering]
+value filtering test: "create wire for the test"
+value filtering test: "register test producer"
+value filtering test: "register test consumer"
+value filtering test: "Current value test - notifying producer. Will send integers [0..9]"
+value filtering test: "Filter is (wirevalue.current=5)"
+value filtering test: "Consumer should receive values [5]"
+value filtering test: "consumer received value 5"
+value filtering test: "------------------------------------------------------------"
+value filtering test: "Previous value test - notifying producer. Will send integers [0..9]"
+value filtering test: "Filter is (wirevalue.previous=5)"
+value filtering test: "Consumer should receive values [0]"
+value filtering test: "consumer received value 0"
+value filtering test: "------------------------------------------------------------"
+value filtering test: "Value delta absolute test - notifying producer. Will send integers [0, 2, 4, 6, 8]"
+value filtering test: "Filter is (wirevalue.delta.absolute>=3)"
+value filtering test: "Consumer should receive values [4, 8]"
+value filtering test: "consumer received value 4"
+value filtering test: "consumer received value 8"
+value filtering test: "------------------------------------------------------------"
+value filtering test: "Value delta relative test - notifying producer. Will send integers [0, 2, 4, 6, 8]"
+value filtering test: "Filter is (wirevalue.delta.relative>=0.4)"
+value filtering test: "Consumer should receive values [0, 2, 4, 8]"
+value filtering test: "consumer received value 0"
+value filtering test: "consumer received value 2"
+value filtering test: "consumer received value 4"
+value filtering test: "consumer received value 8"
+value filtering test: "------------------------------------------------------------"
+value filtering test: "Time elapsed test - notifying producer. Will send integers [0, 2, 4, 6, 8]"
+value filtering test: "Filter is (wirevalue.elapsed>=500)"
+value filtering test: "Consumer should receive values [0, 4, 6, 8]"
+value filtering test: "consumer received value 0"
+value filtering test: "consumer received value 4"
+value filtering test: "consumer received value 6"
+value filtering test: "consumer received value 8"
+value filtering test: "------------------------------------------------------------"
+value filtering test: "update the producer properties - add WIREADMIN_PRODUCER_FILTERS property"
+value filtering test: "Filtering disabled test - notifying producer. Will send integers [0, 3, 6, 9]"
+value filtering test: "Filter is (wirevalue.current>=5)"
+value filtering test: "Consumer should receive values [0, 3, 6, 9]"
+value filtering test: "consumer received value 0"
+value filtering test: "consumer received value 3"
+value filtering test: "consumer received value 6"
+value filtering test: "consumer received value 9"
+value filtering test: "------------------------------------------------------------"
+value filtering test: "Finished"
+[end=testValueFiltering]
+
+[begin=testEvents]
+event test: "Create a wire: WIRE_CREATED event is expected"
+wire listener: "received event WIRE_CREATED"
+wire listener: "wire is OK"
+event test: "update a wire: WIRE_UPDATED event is expected"
+wire listener: "received event WIRE_UPDATED"
+wire listener: "wire is OK"
+event test: "connect a wire: WIRE_CONNECTED event is expected"
+wire listener: "received event WIRE_CONNECTED"
+wire listener: "wire is OK"
+event test: "poll the wire: WIRE_TRACE event is expected"
+wire listener: "received event WIRE_TRACE"
+wire listener: "wire is OK"
+event test: "disconnect wire: WIRE_DISCONNECTED event is expected"
+wire listener: "received event WIRE_DISCONNECTED"
+wire listener: "wire is OK"
+event test: "cause exception from producersConnected: CONSUMER_EXCEPTION is expected"
+wire listener: "received event CONSUMER_EXCEPTION"
+wire listener: "wire is OK"
+wire listener: "correct Throwable passed! OK"
+event test: "cause exception from updated: CONSUMER_EXCEPTION is expected"
+wire listener: "received event CONSUMER_EXCEPTION"
+wire listener: "wire is OK"
+wire listener: "correct Throwable passed! OK"
+event test: "cause exception from consumersConnected: PRODUCER_EXCEPTION is expected"
+wire listener: "received event PRODUCER_EXCEPTION"
+wire listener: "wire is OK"
+wire listener: "correct Throwable passed! OK"
+event test: "cause exception from polled: PRODUCER_EXCEPTION is expected"
+wire listener: "received event PRODUCER_EXCEPTION"
+wire listener: "wire is OK"
+wire listener: "correct Throwable passed! OK"
+event test: "delete wire: WIRE_DELETED event is expected"
+wire listener: "received event WIRE_DELETED"
+wire listener: "wire is OK"
+event test: "cause exception form producersConnected of a 'free' Consumer. CONSUMER_EXCEPTION is expected"
+wire listener: "received event CONSUMER_EXCEPTION"
+wire listener: "event.getWire() returned null. No specific wire was responsible for the event"
+wire listener: "correct Throwable passed! OK"
+event test: "cause exception form consumersConnected of a 'free' Producer. PRODUCER_EXCEPTION is expected"
+wire listener: "received event PRODUCER_EXCEPTION"
+wire listener: "event.getWire() returned null. No specific wire was responsible for the event"
+wire listener: "correct Throwable passed! OK"
+[end=testEvents]
+
+[begin=test_statemanagement_null_scopes]
+Test Wire Scope with null scope and without WirePermission: "Operation passed: OK."
+Test Wire Scope with null scope, after setting WirePermissions: "Operation passed: OK."
+Test Wire update with null scope: "Operation passed: OK."
+[end=test_statemanagement_null_scopes]
+
+[begin=test_statemanagement_consumer_scope]
+Test Wire Scope with null producer scope without WirePermission: "Operation passed: OK."
+Test Wire Scope with null producer scope, after setting WirePermission: "Operation passed: OK."
+Test Wire update with null scope: "Operation passed: OK."
+[end=test_statemanagement_consumer_scope]
+
+[begin=test_statemanagement_all_scope]
+Test Wire Scope without WirePermission: "Operation passed: OK."
+Test Wire update without permission: "Operation passed: OK."
+Test Wire Scope, after setting WirePermission: "Operation passed: OK."
+Test Wire update with envelope object: "Operation passed: OK."
+[end=test_statemanagement_all_scope]
+
+[begin=test_statemanagement_asterisk_consumer]
+Test Wire Scope without WirePermission: "Operation passed: OK."
+Test Wire update without permission: "Operation passed: OK."
+Test Wire Scope, after setting WirePermission: "Operation passed: OK."
+Test Wire update with envelope object: "Operation passed: OK."
+[end=test_statemanagement_asterisk_consumer]
+
+[begin=test_statemanagement_all_asterisk]
+Test Wire Scope with *(scope) and *(WirePermission): "Operation passed: OK."
+Test Wire update with envelope object: "Operation passed: OK."
+[end=test_statemanagement_all_asterisk]
+
+[begin=test_statemanagement_missing_scope_permissions]
+Test Wire Scope: "Operation passed: OK."
+Test Wire update with incompatible wire scope: "Operation passed: OK."
+[end=test_statemanagement_missing_scope_permissions]
+
+[begin=test_statemanagement_scope_intersection]
+Test Wire Scope: "Operation passed: OK."
+Test Wire update with incompatible wire scope: "Operation passed: OK."
+Test Wire update with correct envelope object: "Operation passed: OK."
+[end=test_statemanagement_scope_intersection]

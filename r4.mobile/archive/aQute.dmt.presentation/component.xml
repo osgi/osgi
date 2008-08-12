@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scr:component name="${p}" 
+	xmlns:scr="http://www.osgi.org/xmlns/scr/v1.0.0">
+	<implementation class="${p}.DmtServlet"/>
+	<property name="service.pid" value="${p}"/>
+	<reference name="HTTP"
+		interface="org.osgi.service.http.HttpService"/>
+	<reference name="DMT"
+		interface="org.osgi.service.dmt.DmtAdmin"/>
+</scr:component>

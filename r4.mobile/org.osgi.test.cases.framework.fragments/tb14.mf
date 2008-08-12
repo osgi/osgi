@@ -1,0 +1,12 @@
+Manifest-Version: 1.0
+Bundle-Name: ${p}.tb14
+Bundle-SymbolicName: ${p}.tb14
+Bundle-Description: This is a framework extension bundle used
+ in the test that checks if a boot classpath extension bundle
+ has to have permission to be installed.
+Bundle-ManifestVersion: 2
+Bundle-Version: 1.0
+Bundle-Classpath: .
+Fragment-Host: system.bundle; extension:=bootclasspath
+Export-Package: q, p
+$(PRIVATE-PACKAGE)

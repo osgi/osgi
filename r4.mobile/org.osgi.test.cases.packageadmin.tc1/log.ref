@@ -1,0 +1,17 @@
+Test bundle control started Ok.
+The PackageAdmin is in the System Bundle, Bundle with id 0: 0 : '0'
+Install Testbundle 1, 2 and 3.
+Test Bundle 1 does only export TestPackage1: true : 'true'
+Uninstall Testbundle 1.
+When testbundle 1 was uninstalled the package should still be exported: org.osgi.test.cases.packageadmin.tc1.tb1 : 'org.osgi.test.cases.packageadmin.tc1.tb1'
+Is testbundle 2 still active: true: 'true'
+Is testpackage 2 still exported: true : 'true'
+Is testbundle 3 still active: true: 'true'
+Is TestPackage 1 scheduled for removal: true : 'true'
+The Framework is being refreshed.
+After refresh. Is Testpackage 1 exported: false : 'false'
+Is testbundle 2 still active: false: 'false'
+Is TestPackage 2 still exported: false : 'false'
+Is testbundle 3 still active: false : 'false'
+Refresh all packages.
+PackageAdmin TestCase 1 is completed.

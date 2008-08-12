@@ -1,0 +1,11 @@
+director
+osgi.develop
+src
+target
+org.osgi.impl.framework.eclipse.jar
+org.osgi.tools.console.jar
+osgi.director.jar
+osgi.jar
+osgi.min.jar
+osgi.refimpl.jar
+osgi.target.jar

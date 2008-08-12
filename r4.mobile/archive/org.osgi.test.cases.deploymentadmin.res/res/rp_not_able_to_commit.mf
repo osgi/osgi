@@ -1,0 +1,11 @@
+Manifest-Version: 1.0
+DeploymentPackage-SymbolicName: rp_not_able_to_commit
+DeploymentPackage-Version: 1.0.0
+
+Name: rp_bundle2.jar
+Bundle-SymbolicName: org.osgi.test.cases.deployment.bundles.rp2
+Bundle-Version: 1.0
+DeploymentPackage-Customizer: true
+
+Name: simple_resource.xml
+Resource-Processor: org.osgi.test.cases.deployment.bundles.rp2

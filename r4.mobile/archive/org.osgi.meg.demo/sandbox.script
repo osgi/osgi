@@ -1,0 +1,5 @@
+cl ./OSGi/Configuration/meg.test.monitorable/Keys/my.int.array/values/3 chr:12
+
+close
+
+open . admin

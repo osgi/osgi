@@ -1,0 +1,7 @@
+<?xml version="1.0" ?> 
+<descriptor xmlns="http://www.osgi.org/xmlns/app/v1.0.0">
+  <application class="com.nokia.test.midletsample.TestMidlet">
+    <reference name="log" interface="org.osgi.service.log.LogService" /> 
+    <reference name="foo" interface="com.acme.service.FooService" policy="dynamic" cardinality="0..n" /> 
+  </application>
+</descriptor>

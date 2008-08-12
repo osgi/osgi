@@ -1,0 +1,16 @@
+Manifest-Version: 1.0
+Bundle-Activator: ${p}.PermissionSignatureTestCase
+Bundle-Name: test.permissionadmin.signature
+Bundle-SymbolicName: ${p}
+Bundle-Version: 4.0.1
+Bundle-Copyright: ${copyright}
+Bundle-Description: permission signature test case
+Bundle-DocUrl: http://www.osgi.org/testcases/4/test.cases.template
+Bundle-ContactAddress: speccomments@mail.osgi.org
+Bundle-Category: osgi,test
+CVS-Header: $Header$
+$(IMPORT-PACKAGE)
+$(EXPORT-PACKAGE)
+$(PRIVATE-PACKAGE)
+
+

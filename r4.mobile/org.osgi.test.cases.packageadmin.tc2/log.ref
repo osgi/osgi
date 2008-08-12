@@ -1,0 +1,24 @@
+Test bundle control started Ok.
+Install Testbundle 1 and 2.
+Is Testpackage 1 exported: true : 'true'
+What is TestBundle 1 exporting. : org.osgi.test.cases.packageadmin.tc2.tb1 : 'org.osgi.test.cases.packageadmin.tc2.tb1'
+Does TestBundle 1 contain Testpackage 1 before update: true : 'true'
+Does TestBundle 1 contain Testpackage 3 before update: false : 'false'
+Update TestBundle 1. Now TestBundle 1 contains TestPackage 3 instead of TestPackage 1.
+Because of lazy update, now TestBundle 1 should contain TestPackage 1 and TestPackage 3.
+Does TestBundle 1 contain Testpackage 1 after update: true : 'true'
+Does TestBundle 1 contain Testpackage 3 after update: true : 'true'
+Is TestPackage 1 exported: true : 'true'
+Is TestPackage 3 exported: true : 'true'
+Is testbundle 2 still active: true: 'true'
+Is testbundle 4 still active: true: 'true'
+Refresh all packages.
+Does TestBundle 1 contain Testpackage 1 after refresh: false : 'false'
+Does TestBundle 1 contain Testpackage 3 after refresh: true : 'true'
+Is TestPackage 1 exported after refresh: false : 'false'
+Is TestPackage 3 exported after refresh: true : 'true'
+Is testbundle 2 still active: false: 'false'
+Is testbundle 4 still active: true: 'true'
+Refresh all packages.
+PackageAdmin TestCase 2 is completed.
+

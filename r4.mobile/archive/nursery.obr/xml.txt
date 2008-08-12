@@ -1,0 +1,126 @@
+Structure:
+
+
+	repository	= ( referral | resource ) *
+	resource	= description copyright category* capability* require* extend*
+	capability	= p*
+	
+REPOSITORY
+	time				Date().toString
+	
+The repository is the outer tag that holds the information about the
+resources.
+
+
+RESOURCE
+	name				Bundle Symbolic Name
+	version				Version
+	documentation		URI
+	url					relative URL
+	size				Length in bytes
+	license				license URI
+	
+A resource contains information about a deployable resource. Basically
+a bundle.
+
+DESCRIPTION, COPYRIGHT
+A description/copyright of the resource.
+
+CATEGORY
+	id					category names
+
+Provides categorization of bundles.
+### Must establish a preferred list.
+
+CAPABILITY
+A named set of properties
+
+P
+	n					property name
+	v					property value
+	t					property 
+
+Attribute names have been kept short for readability. The type is not general
+java, but is limited to three basic types: version, string, nummeric. We only really need 
+this to handle comparison. Making it Java classses is easily making it non-portable, and 
+harder to implement in other languages.
+
+REQUIRE, EXTEND
+	filter
+	cardinality			OPTIONAL, UNARY, MULTIPLE
+	comment
+
+A named filter that must be matched with one or more capabilities of
+the same name. require elements are putting a requirement on the world. The
+extend are requiring a host bundle. If a host bundle is selected to be installed,
+then a matching extend indicates an extension. I.e. if bundle A is installed,
+and bundle B has an extend(A), then B is an optional bundle for A.
+
+REFERRAL
+	url
+	
+Refers to another repository file that must be included.		
+
+Example
+
+
+ <resource version='3.0.0' documentation='http://www.osgi.org/' name='core.tests' url='core.tests-3.0.0.jar' size='1990923'>
+    <description>
+      OSGi Service Platform Release 3, Core Test Cases loader
+    </description>
+    <copyright>
+      Copyright (c) OSGi Alliance (2000, 2005). All Rights Reserved.
+    </copyright>
+    <category id='osgi'/>
+    <category id='test'/>
+    <capability name='bundle'>
+      <p v='1' n='bundle-manifestversion'/>
+      <p v='core.tests' n='bundle-symbolicname'/>
+      <p v='3.0.0' t='version' n='bundle-version'/>
+    </capability>
+  </resource>
+  
+  
+Bundle Mappings
+
+'bundle'
+	symbolicname			string
+	version					version
+	manifestversion			version
+	
+'fragment'
+	host
+	version
+	
+'ee'
+	ee						string (Execution Env.)
+	
+'package'
+	package					string
+	version					version
+	
+
+----------------------
+Import/Export Package
+
+Exporter:	Capability		'package' package=org.osgi.service.xyz, version=1.2.0
+Importer:	Requirement		'package' (&(package=org.osgi.service.xyz)(version=1.2))
+	
+----------------------
+Require-Bundle
+Provider	Capability		'bundle'  symbolicname=com.provider, version=1.2
+Requirer	Requirement		'bundle'  (&(symbolicname=com.provider)(version>1.2))
+			or Request
+			
+Requirement or Request depends on resolution flag of Require-Bundle
+
+----------------------
+Fragment
+Host		Capability		'bundle' symbolicname=com.provider, version=1.2
+			Request			'fragment' (&(host=com.provider))
+Fragment	Requirement		'bundle'  (&(symbolicname=com.provider)(version>1.2))
+			Capability		'fragment' host=com.provider, version=1.2
+	
+All bundles put out a fragment request so the user can optionally select
+related fragments.
+

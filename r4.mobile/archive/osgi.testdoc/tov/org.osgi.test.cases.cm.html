@@ -1,0 +1,348 @@
+<html>
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   
+      <link rel="stylesheet" href="osgi.css" type="text/css">
+      <title>Overview Test Case org.osgi.test.cases.cm</title>
+   </head>
+   <body>
+      <div width="700px">
+         <h1>Overview Test Case org.osgi.test.cases.cm</h1>
+         <p>
+            						This Testcase tests the OSGi specification: <a href="org.osgi.service.cm.html">org.osgi.service.cm</a>.
+            					
+         </p>
+         <p>
+            <description>
+               
+                  
+            </description>
+            <description>
+               TODO Add Javadoc comment for this type.
+                  
+            </description>
+         </p>
+         <table>
+            <tr>
+               <th>Class</th>
+               <th>Tests</th>
+            </tr>
+            <tr>
+               <td><a href="#CMControl">CMControl</a></td>
+               <td>21</td>
+            </tr>
+         </table>
+         <h2><a name="CMControl"></a>org.osgi.test.cases.cm.tbc.CMControl
+         </h2>
+         <table width="700px">
+            <tr>
+               <th colspan="2">References</th>
+            </tr>
+            <tr>
+               <td><a href="org.osgi.service.cm.html#Configuration.delete()">Configuration.delete()</a></td>
+            </tr>
+            <tr>
+               <td><a href="org.osgi.service.cm.html#Configuration.getBundleLocation()">Configuration.getBundleLocation()</a></td>
+            </tr>
+            <tr>
+               <td><a href="org.osgi.service.cm.html#Configuration.getFactoryPid()">Configuration.getFactoryPid()</a></td>
+            </tr>
+            <tr>
+               <td><a href="org.osgi.service.cm.html#Configuration.getPid()">Configuration.getPid()</a></td>
+            </tr>
+            <tr>
+               <td><a href="org.osgi.service.cm.html#Configuration.getProperties()">Configuration.getProperties()</a></td>
+            </tr>
+            <tr>
+               <td><a href="org.osgi.service.cm.html#Configuration.setBundleLocation(String)">Configuration.setBundleLocation(String)</a></td>
+            </tr>
+            <tr>
+               <td><a href="org.osgi.service.cm.html#ConfigurationAdmin.getConfiguration(String)">ConfigurationAdmin.getConfiguration(String)</a></td>
+            </tr>
+            <tr>
+               <td><a href="org.osgi.service.cm.html#ConfigurationAdmin.getConfiguration(String,String)">ConfigurationAdmin.getConfiguration(String,String)</a></td>
+            </tr>
+            <tr>
+               <td><a href="org.osgi.service.cm.html#Configuration.update()">Configuration.update()</a></td>
+            </tr>
+            <tr>
+               <td><a href="org.osgi.service.cm.html#ConfigurationAdmin.listConfigurations(String)">ConfigurationAdmin.listConfigurations(String)</a></td>
+            </tr>
+            <tr>
+               <td><a href="org.osgi.service.cm.html#Configuration.update(Dictionary)">Configuration.update(Dictionary)</a></td>
+            </tr>
+            <tr>
+               <td><a href="org.osgi.service.cm.html#ConfigurationAdmin.createFactoryConfiguration(String)">ConfigurationAdmin.createFactoryConfiguration(String)</a></td>
+            </tr>
+            <tr>
+               <td><a href="org.osgi.service.cm.html#ConfigurationAdmin.createFactoryConfiguration(String,String)">ConfigurationAdmin.createFactoryConfiguration(String,String)</a></td>
+            </tr>
+            <tr>
+               <td><a href="org.osgi.service.cm.html#ManagedServiceFactory.updated(String,Dictionary)">ManagedServiceFactory.updated(String,Dictionary)</a></td>
+            </tr>
+            <tr>
+               <td><a href="org.osgi.service.cm.html#ConfigurationListener.configurationEvent(ConfigurationEvent)">ConfigurationListener.configurationEvent(ConfigurationEvent)</a></td>
+            </tr>
+            <tr>
+               <td><a href="org.osgi.service.cm.html#ConfigurationEvent.getPid()">ConfigurationEvent.getPid()</a></td>
+            </tr>
+            <tr>
+               <td><a href="org.osgi.service.cm.html#ConfigurationEvent.getFactoryPid()">ConfigurationEvent.getFactoryPid()</a></td>
+            </tr>
+            <tr>
+               <td><a href="org.osgi.service.cm.html#ConfigurationEvent.getReference()">ConfigurationEvent.getReference()</a></td>
+            </tr>
+            <tr>
+               <td><a href="org.osgi.service.cm.html#ConfigurationEvent.getType()">ConfigurationEvent.getType()</a></td>
+            </tr>
+            <tr>
+               <td><a href="org.osgi.service.cm.html#permissions">permissions</a></td>
+            </tr>
+            <tr>
+               <td><a href="org.osgi.service.cm.html#ConfigurationPlugin.modifyConfiguration(ServiceReference,Dictionary)">ConfigurationPlugin.modifyConfiguration(ServiceReference,Dictionary)</a></td>
+            </tr>
+            <tr>
+               <th width="350">_testEquals</th>
+               <th width="350"></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Tests if we really get the same configuration.
+                     
+               </td>
+               <td width="350"><a href="org.osgi.service.cm.html#ConfigurationAdmin.getConfiguration(String)">ConfigurationAdmin.getConfiguration(String)</a><br><a href="org.osgi.service.cm.html#Configuration.update()">Configuration.update()</a><br><a href="org.osgi.service.cm.html#Configuration.getPid()">Configuration.getPid()</a><br></td>
+            </tr>
+            <tr>
+               <th width="350">testConfigEventFromDifferentBundle</th>
+               <th width="350"></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Tests an event from a different bundle. The
+                   ConfigurationListener should get the event even if it was
+                   generated from a different bundle.
+                     
+               </td>
+               <td width="350"><a href="org.osgi.service.cm.html#ConfigurationAdmin.getConfiguration(String)">ConfigurationAdmin.getConfiguration(String)</a><br><a href="org.osgi.service.cm.html#Configuration.getPid()">Configuration.getPid()</a><br><a href="org.osgi.service.cm.html#Configuration.delete()">Configuration.delete()</a><br><a href="org.osgi.service.cm.html#Configuration.update(Dictionary)">Configuration.update(Dictionary)</a><br><a href="org.osgi.service.cm.html#ConfigurationListener.configurationEvent(ConfigurationEvent)">ConfigurationListener.configurationEvent(ConfigurationEvent)</a><br><a href="org.osgi.service.cm.html#ConfigurationEvent.getPid()">ConfigurationEvent.getPid()</a><br><a href="org.osgi.service.cm.html#ConfigurationEvent.getFactoryPid()">ConfigurationEvent.getFactoryPid()</a><br><a href="org.osgi.service.cm.html#ConfigurationEvent.getReference()">ConfigurationEvent.getReference()</a><br><a href="org.osgi.service.cm.html#ConfigurationEvent.getType()">ConfigurationEvent.getType()</a><br></td>
+            </tr>
+            <tr>
+               <th width="350">testConfigListenerPermission</th>
+               <th width="350"></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Tests a configuration listener permission. The bundle does not have
+                   ServicePermission[ConfigurationListener,REGISTER] and will
+                   try to register a ConfigurationListener. An exception
+                   must be thrown.
+                     
+               </td>
+               <td width="350"><a href="org.osgi.service.cm.html#permissions">permissions</a><b class="passed"> X </b><br></td>
+            </tr>
+            <tr>
+               <th width="350">testConfigurationPluginService</th>
+               <th width="350"></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Tests if a configuration plugin is invoked when only a configuration
+                   listener is registered (no managed service). It should not be invoked.
+                     
+               </td>
+               <td width="350"><a href="org.osgi.service.cm.html#ConfigurationAdmin.getConfiguration(String)">ConfigurationAdmin.getConfiguration(String)</a><br><a href="org.osgi.service.cm.html#Configuration.update(Dictionary)">Configuration.update(Dictionary)</a><br><a href="org.osgi.service.cm.html#ConfigurationListener.configurationEvent(ConfigurationEvent)">ConfigurationListener.configurationEvent(ConfigurationEvent)</a><br><a href="org.osgi.service.cm.html#ConfigurationPlugin.modifyConfiguration(ServiceReference,Dictionary)">ConfigurationPlugin.modifyConfiguration(ServiceReference,Dictionary)</a><br></td>
+            </tr>
+            <tr>
+               <th width="350">testConfigurationPluginServiceFactory</th>
+               <th width="350"></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Tests if a configuration plugin is invoked when only a configuration
+                   listener is registered (managed service factory). It should not be
+                   invoked.
+                     
+               </td>
+               <td width="350"><a href="org.osgi.service.cm.html#ConfigurationAdmin.createFactoryConfiguration(String)">ConfigurationAdmin.createFactoryConfiguration(String)</a><br><a href="org.osgi.service.cm.html#Configuration.update(Dictionary)">Configuration.update(Dictionary)</a><br><a href="org.osgi.service.cm.html#ConfigurationListener.configurationEvent(ConfigurationEvent)">ConfigurationListener.configurationEvent(ConfigurationEvent)</a><br><a href="org.osgi.service.cm.html#ConfigurationPlugin.modifyConfiguration(ServiceReference,Dictionary)">ConfigurationPlugin.modifyConfiguration(ServiceReference,Dictionary)</a><br></td>
+            </tr>
+            <tr>
+               <th width="350">testCreateFactoryConfiguration</th>
+               <th width="350"></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Test created Factory configuration without location.
+                     
+               </td>
+               <td width="350"><a href="org.osgi.service.cm.html#ConfigurationAdmin.createFactoryConfiguration(String)">ConfigurationAdmin.createFactoryConfiguration(String)</a><br><a href="org.osgi.service.cm.html#Configuration.update(Dictionary)">Configuration.update(Dictionary)</a><br><a href="org.osgi.service.cm.html#Configuration.getPid()">Configuration.getPid()</a><br><a href="org.osgi.service.cm.html#Configuration.getFactoryPid()">Configuration.getFactoryPid()</a><br><a href="org.osgi.service.cm.html#Configuration.getProperties()">Configuration.getProperties()</a><br><a href="org.osgi.service.cm.html#Configuration.getBundleLocation()">Configuration.getBundleLocation()</a><br></td>
+            </tr>
+            <tr>
+               <th width="350">testCreateFactoryConfigurationWithLocation</th>
+               <th width="350"></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Test created Factory configuration with location.
+                     
+               </td>
+               <td width="350"><a href="org.osgi.service.cm.html#ConfigurationAdmin.createFactoryConfiguration(String,String)">ConfigurationAdmin.createFactoryConfiguration(String,String)</a><br><a href="org.osgi.service.cm.html#Configuration.update(Dictionary)">Configuration.update(Dictionary)</a><br><a href="org.osgi.service.cm.html#Configuration.getPid()">Configuration.getPid()</a><br><a href="org.osgi.service.cm.html#Configuration.getFactoryPid()">Configuration.getFactoryPid()</a><br><a href="org.osgi.service.cm.html#Configuration.getProperties()">Configuration.getProperties()</a><br><a href="org.osgi.service.cm.html#Configuration.getBundleLocation()">Configuration.getBundleLocation()</a><br></td>
+            </tr>
+            <tr>
+               <th width="350">testCreateFactoryConfigurationWithNullLocation</th>
+               <th width="350"></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Test created Factory configuration with null location.
+                     
+               </td>
+               <td width="350"><a href="org.osgi.service.cm.html#ConfigurationAdmin.createFactoryConfiguration(String,String)">ConfigurationAdmin.createFactoryConfiguration(String,String)</a><br><a href="org.osgi.service.cm.html#Configuration.update(Dictionary)">Configuration.update(Dictionary)</a><br><a href="org.osgi.service.cm.html#Configuration.getPid()">Configuration.getPid()</a><br><a href="org.osgi.service.cm.html#Configuration.getFactoryPid()">Configuration.getFactoryPid()</a><br><a href="org.osgi.service.cm.html#Configuration.getProperties()">Configuration.getProperties()</a><br><a href="org.osgi.service.cm.html#Configuration.getBundleLocation()">Configuration.getBundleLocation()</a><br></td>
+            </tr>
+            <tr>
+               <th width="350">testDeleteConfigEvent</th>
+               <th width="350"></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Tests a configuration listener delete event notification from a
+                   configuration service. The deleted Configuration should be
+                   empty (ConfigurationAdmin.listConfigurations(null) must
+                   not contain the deleted Configuration).
+                     
+               </td>
+               <td width="350"><a href="org.osgi.service.cm.html#ConfigurationAdmin.getConfiguration(String)">ConfigurationAdmin.getConfiguration(String)</a><br><a href="org.osgi.service.cm.html#Configuration.getPid()">Configuration.getPid()</a><br><a href="org.osgi.service.cm.html#Configuration.delete()">Configuration.delete()</a><br><a href="org.osgi.service.cm.html#Configuration.update(Dictionary)">Configuration.update(Dictionary)</a><br><a href="org.osgi.service.cm.html#ConfigurationListener.configurationEvent(ConfigurationEvent)">ConfigurationListener.configurationEvent(ConfigurationEvent)</a><br><a href="org.osgi.service.cm.html#ConfigurationEvent.getPid()">ConfigurationEvent.getPid()</a><br><a href="org.osgi.service.cm.html#ConfigurationEvent.getFactoryPid()">ConfigurationEvent.getFactoryPid()</a><br><a href="org.osgi.service.cm.html#ConfigurationEvent.getReference()">ConfigurationEvent.getReference()</a><br><a href="org.osgi.service.cm.html#ConfigurationEvent.getType()">ConfigurationEvent.getType()</a><br><a href="org.osgi.service.cm.html#ConfigurationAdmin.listConfigurations(String)">ConfigurationAdmin.listConfigurations(String)</a><br></td>
+            </tr>
+            <tr>
+               <th width="350">testDeleteConfigFactoryEvent</th>
+               <th width="350"></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Tests a configuration listener delete event notification from a
+                   configuration service factory. The deleted Configuration
+                   should be empty (
+                   ConfigurationAdmin.listConfigurations(null) must not
+                   contain the deleted Configuration).
+                     
+               </td>
+               <td width="350"><a href="org.osgi.service.cm.html#ConfigurationAdmin.createFactoryConfiguration(String)">ConfigurationAdmin.createFactoryConfiguration(String)</a><br><a href="org.osgi.service.cm.html#Configuration.getPid()">Configuration.getPid()</a><br><a href="org.osgi.service.cm.html#Configuration.delete()">Configuration.delete()</a><br><a href="org.osgi.service.cm.html#Configuration.update(Dictionary)">Configuration.update(Dictionary)</a><br><a href="org.osgi.service.cm.html#ConfigurationListener.configurationEvent(ConfigurationEvent)">ConfigurationListener.configurationEvent(ConfigurationEvent)</a><br><a href="org.osgi.service.cm.html#ConfigurationEvent.getPid()">ConfigurationEvent.getPid()</a><br><a href="org.osgi.service.cm.html#ConfigurationEvent.getFactoryPid()">ConfigurationEvent.getFactoryPid()</a><br><a href="org.osgi.service.cm.html#ConfigurationEvent.getReference()">ConfigurationEvent.getReference()</a><br><a href="org.osgi.service.cm.html#ConfigurationEvent.getType()">ConfigurationEvent.getType()</a><br><a href="org.osgi.service.cm.html#ConfigurationAdmin.listConfigurations(String)">ConfigurationAdmin.listConfigurations(String)</a><br></td>
+            </tr>
+            <tr>
+               <th width="350">testDeletedConfiguration</th>
+               <th width="350"></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Test that the methods throws IllegalStateException when operating on a
+                   deleted Configuration
+                     
+               </td>
+               <td width="350"><a href="org.osgi.service.cm.html#Configuration.delete()">Configuration.delete()</a><br><a href="org.osgi.service.cm.html#Configuration.getBundleLocation()">Configuration.getBundleLocation()</a><br><a href="org.osgi.service.cm.html#Configuration.getFactoryPid()">Configuration.getFactoryPid()</a><br><a href="org.osgi.service.cm.html#Configuration.getPid()">Configuration.getPid()</a><br><a href="org.osgi.service.cm.html#Configuration.getProperties()">Configuration.getProperties()</a><br><a href="org.osgi.service.cm.html#Configuration.setBundleLocation(String)">Configuration.setBundleLocation(String)</a><br></td>
+            </tr>
+            <tr>
+               <th width="350">testGetConfiguration</th>
+               <th width="350"></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  TODO comments
+                     
+               </td>
+               <td width="350"><a href="org.osgi.service.cm.html#ConfigurationAdmin.getConfiguration(String)">ConfigurationAdmin.getConfiguration(String)</a><br><a href="org.osgi.service.cm.html#ConfigurationAdmin.getConfiguration(String,String)">ConfigurationAdmin.getConfiguration(String,String)</a><br><a href="org.osgi.service.cm.html#Configuration.getBundleLocation()">Configuration.getBundleLocation()</a><br><a href="org.osgi.service.cm.html#Configuration.getFactoryPid()">Configuration.getFactoryPid()</a><br><a href="org.osgi.service.cm.html#Configuration.getPid()">Configuration.getPid()</a><br><a href="org.osgi.service.cm.html#Configuration.getProperties()">Configuration.getProperties()</a><br><a href="org.osgi.service.cm.html#Configuration.setBundleLocation(String)">Configuration.setBundleLocation(String)</a><br></td>
+            </tr>
+            <tr>
+               <th width="350">testGetConfigurationWithLocation</th>
+               <th width="350"></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  TODO comments
+                     
+               </td>
+               <td width="350"><a href="org.osgi.service.cm.html#ConfigurationAdmin.getConfiguration(String,String)">ConfigurationAdmin.getConfiguration(String,String)</a><br><a href="org.osgi.service.cm.html#Configuration.getBundleLocation()">Configuration.getBundleLocation()</a><br><a href="org.osgi.service.cm.html#Configuration.getFactoryPid()">Configuration.getFactoryPid()</a><br><a href="org.osgi.service.cm.html#Configuration.getPid()">Configuration.getPid()</a><br><a href="org.osgi.service.cm.html#Configuration.delete()">Configuration.delete()</a><br><a href="org.osgi.service.cm.html#Configuration.getProperties()">Configuration.getProperties()</a><br></td>
+            </tr>
+            <tr>
+               <th width="350">testListConfigurations</th>
+               <th width="350"></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Tests listing of configurations.
+                     
+               </td>
+               <td width="350"><a href="org.osgi.service.cm.html#ConfigurationAdmin.getConfiguration(String)">ConfigurationAdmin.getConfiguration(String)</a><br><a href="org.osgi.service.cm.html#ConfigurationAdmin.listConfigurations(String)">ConfigurationAdmin.listConfigurations(String)</a><br><a href="org.osgi.service.cm.html#Configuration.getPid()">Configuration.getPid()</a><br><a href="org.osgi.service.cm.html#Configuration.delete()">Configuration.delete()</a><br></td>
+            </tr>
+            <tr>
+               <th width="350">testManagedProperties</th>
+               <th width="350"></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  
+                     
+               </td>
+               <td width="350"><a href="org.osgi.service.cm.html#ConfigurationAdmin.getConfiguration(String)">ConfigurationAdmin.getConfiguration(String)</a><br><a href="org.osgi.service.cm.html#Configuration.update(Dictionary)">Configuration.update(Dictionary)</a><br><a href="org.osgi.service.cm.html#Configuration.getProperties()">Configuration.getProperties()</a><br></td>
+            </tr>
+            <tr>
+               <th width="350">testManagedServiceFactory</th>
+               <th width="350"></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Test Managed Service Factory.
+                     
+               </td>
+               <td width="350"><a href="org.osgi.service.cm.html#ConfigurationAdmin.createFactoryConfiguration(String)">ConfigurationAdmin.createFactoryConfiguration(String)</a><br><a href="org.osgi.service.cm.html#Configuration.update(Dictionary)">Configuration.update(Dictionary)</a><br><a href="org.osgi.service.cm.html#Configuration.getPid()">Configuration.getPid()</a><br><a href="org.osgi.service.cm.html#Configuration.getFactoryPid()">Configuration.getFactoryPid()</a><br><a href="org.osgi.service.cm.html#Configuration.getProperties()">Configuration.getProperties()</a><br><a href="org.osgi.service.cm.html#ManagedServiceFactory.updated(String,Dictionary)">ManagedServiceFactory.updated(String,Dictionary)</a><br></td>
+            </tr>
+            <tr>
+               <th width="350">testManagedServiceRegistration</th>
+               <th width="350"></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Tests to register a ManagedService when a configuration is existing for
+                   it.
+                     
+               </td>
+               <td width="350"><a href="org.osgi.service.cm.html#ConfigurationAdmin.getConfiguration(String)">ConfigurationAdmin.getConfiguration(String)</a><br><a href="org.osgi.service.cm.html#Configuration.update(Dictionary)">Configuration.update(Dictionary)</a><br><a href="org.osgi.service.cm.html#Configuration.getPid()">Configuration.getPid()</a><br><a href="org.osgi.service.cm.html#Configuration.getProperties()">Configuration.getProperties()</a><br><a href="org.osgi.service.cm.html#Configuration.getBundleLocation()">Configuration.getBundleLocation()</a><br></td>
+            </tr>
+            <tr>
+               <th width="350">testUpdate</th>
+               <th width="350"></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  TODO comments
+                     
+               </td>
+               <td width="350"><a href="org.osgi.service.cm.html#ConfigurationAdmin.getConfiguration(String)">ConfigurationAdmin.getConfiguration(String)</a><br><a href="org.osgi.service.cm.html#Configuration.update()">Configuration.update()</a><br><a href="org.osgi.service.cm.html#Configuration.getProperties()">Configuration.getProperties()</a><br></td>
+            </tr>
+            <tr>
+               <th width="350">testUpdateConfigEvent</th>
+               <th width="350"></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Tests a configuration listener update event notification from a
+                   configuration service. The event data should match the data that
+                   originated the event (pid, factorypid...).
+                     
+               </td>
+               <td width="350"><a href="org.osgi.service.cm.html#ConfigurationAdmin.getConfiguration(String)">ConfigurationAdmin.getConfiguration(String)</a><br><a href="org.osgi.service.cm.html#Configuration.update(Dictionary)">Configuration.update(Dictionary)</a><br><a href="org.osgi.service.cm.html#ConfigurationListener.configurationEvent(ConfigurationEvent)">ConfigurationListener.configurationEvent(ConfigurationEvent)</a><br><a href="org.osgi.service.cm.html#ConfigurationEvent.getPid()">ConfigurationEvent.getPid()</a><br><a href="org.osgi.service.cm.html#ConfigurationEvent.getFactoryPid()">ConfigurationEvent.getFactoryPid()</a><br><a href="org.osgi.service.cm.html#ConfigurationEvent.getReference()">ConfigurationEvent.getReference()</a><br><a href="org.osgi.service.cm.html#ConfigurationEvent.getType()">ConfigurationEvent.getType()</a><br><a href="org.osgi.service.cm.html#Configuration.update(Dictionary)">Configuration.update(Dictionary)</a><br></td>
+            </tr>
+            <tr>
+               <th width="350">testUpdateConfigFactoryEvent</th>
+               <th width="350"></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Tests a configuration listener update event notification from a
+                   configuration service factory. The event data should match the data that
+                   originated the event (pid, factorypid...).
+                     
+               </td>
+               <td width="350"><a href="org.osgi.service.cm.html#ConfigurationAdmin.createFactoryConfiguration(String)">ConfigurationAdmin.createFactoryConfiguration(String)</a><br><a href="org.osgi.service.cm.html#Configuration.getPid()">Configuration.getPid()</a><br><a href="org.osgi.service.cm.html#Configuration.update(Dictionary)">Configuration.update(Dictionary)</a><br><a href="org.osgi.service.cm.html#ConfigurationListener.configurationEvent(ConfigurationEvent)">ConfigurationListener.configurationEvent(ConfigurationEvent)</a><br><a href="org.osgi.service.cm.html#ConfigurationEvent.getPid()">ConfigurationEvent.getPid()</a><br><a href="org.osgi.service.cm.html#ConfigurationEvent.getFactoryPid()">ConfigurationEvent.getFactoryPid()</a><br><a href="org.osgi.service.cm.html#ConfigurationEvent.getReference()">ConfigurationEvent.getReference()</a><br><a href="org.osgi.service.cm.html#ConfigurationEvent.getType()">ConfigurationEvent.getType()</a><br></td>
+            </tr>
+         </table>
+      </div>
+   </body>
+</html>

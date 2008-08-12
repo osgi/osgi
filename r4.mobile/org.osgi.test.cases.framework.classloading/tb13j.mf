@@ -1,0 +1,9 @@
+Manifest-Version: 1.0
+Bundle-Name: ${p}.tb13j
+Bundle-SymbolicName: ${p}.tb13j
+Bundle-ManifestVersion: 2
+Bundle-Version: 1
+Export-Package: ${p}.exports.listener;include:="ServiceListener*";exclude:="All*"
+$(IMPORT-PACKAGE)
+$(PRIVATE-PACKAGE)
+

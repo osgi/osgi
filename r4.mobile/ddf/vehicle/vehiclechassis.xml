@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type='text/xsl' title='Compact' href='http://membercvs.osgi.org/ddf/xml/ddf2html.xsl'?>
+<?xml-stylesheet type="text/css" href="http://bundles.osgi.org/www/osgi.css"?>
+
+<!-- 
+/*
+ * $Header$
+ * 
+ * Copyright (c) OSGi Alliance (2006). All Rights Reserved.
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+-->		
+<Node name="VehicleChassis" type="node" min="1" max="1" scope="P">
+	<Description/>
+	<Node name="Steering" type="node" min="1" max="1" scope="P">
+		<Description/>
+		<Node name="SteeringColumnTorque" type="float" min="1" max="1" scope="P" unit="N/m">
+			<Description>Gets the steering wheel input torque in Newton-Meters</Description>
+		</Node>
+		<Node name="SteeringColumnAngle" type="float" min="1" max="1" scope="P" unit="deg">
+			<Description>Gets the steering wheel rotational angle in degrees</Description>
+		</Node>
+		<Node name="SteeringBoost" type="float" min="1" max="1" scope="P" unit="N/m">
+			<Description>Gets and/or sets the torque boost applied to the steering column</Description>
+		</Node>
+	</Node>
+	<Node name="WheelHubs" type="node" min="1" max="1" scope="P">
+		<Description/>
+		<Node name="&lt;hub-instance&gt;" type="node" min="1" scope="P">
+			<Description>Interior node that represents a specific wheel hub instance; Name is one of:</Description>
+			<Name pattern="FL">Front Left Hub</Name>
+			<Name pattern="FR">Front Right Hub</Name>
+			<Name pattern="RL1">Rear Left Hub First Axle</Name>
+			<Name pattern="RR1">Rear Right Hub First Axle</Name>
+			<Name pattern="RL2">Rear Left Hub Second Axle</Name>
+			<Name pattern="RR2">Rear Right Hub Second Axle</Name>
+			<Name pattern="TR1">Trailer Right Hub First Axle</Name>
+			<Name pattern="TL1">Trailer Left Hub First Axle</Name>
+			<Name pattern="TR2">Trailer Right Hub Second Axle</Name>
+			<Name pattern="TL2">Trailer Left Hub Second Axle</Name>
+			
+			<Node name="HubLockState" type="bool" min="1" max="1" scope="P">
+				<Description>Gets and/or Sets the state of the hub lock</Description>
+				<Value value="FALSE">Unlocked</Value>
+				<Value value="TRUE">Locked</Value>
+			</Node>
+			
+			<Node name="HubSpeed" type="float" min="1" max="1" scope="P" unit="1/s">
+				<Description>Gets the hub rotational speed in Hertz</Description>
+			</Node>
+			
+			<Node name="VerticalAcceleration" type="float" min="1" max="1" scope="P" unit="m/s2">
+				<Description>Gets the hub vertical acceleration in m/sec-squared</Description>
+			</Node>
+			
+			<Node name="VariableDamperLevel" type="int" min="1" max="1" scope="P" unit="%">
+				<Description>Gets and/or Sets the damping level in percent of maximum</Description>
+			</Node>
+			
+			<Node name="SteeringAngle" type="float" min="1" max="1" scope="P" unit="deg"> 
+				<Description>Gets and/or Sets the steering angle of the hub instance in degrees</Description>
+			</Node>
+			
+			<Node name="&lt;brake-instance&gt;" type="node" min="1" scope="P">
+				<Description>Interior node that represents a specific brake instance; Name is one of:</Description>
+				<Name pattern="M">Main driving brakes</Name>
+				<Name pattern="P">Parking Brake</Name>
+				<Name pattern="S">Supplementary Brakes</Name>
+				
+				<Node name="BrakeType" type="int" min="1" max="1" scope="P">
+					<Description>Gets the type of the brake instance</Description>
+					<Value value="1">Hydraulic Disk</Value>
+					<Value value="2">Hydraulic Drum</Value>
+					<Value value="3">Pneumatic Disk</Value>
+					<Value value="4">Pneumatic Drum</Value>
+					<Value value="5">Mechanical Disk</Value>
+					<Value value="6">Mechanical Drum</Value>
+					<Value value="7">Electric</Value>
+				</Node>
+				
+				<Node name="BrakeState" type="bool" min="1" max="1" scope="P">
+					<Description>Gets and/or sets the brake status</Description>
+					<Value value="FALSE=Off"/>
+					<Value value="TRUE=Applied"/>
+				</Node>
+				
+				<Node name="BrakePressureLevel" type="float" min="1" max="1" scope="P" unit="Pa">
+					<Description>Gets and/or sets the brake pressure in Pascals</Description>
+				</Node>
+				
+				<Node name="ABSState" type="bool" min="1" max="1" scope="P">
+					<Description>Gets the ABS status</Description>
+					<Value value="FALSE">Active</Value>
+					<Value value="TRUE">Fault</Value>
+				</Node>
+				
+				<Node name="BrakeLiningState" type="int" min="1" max="1" scope="P" unit="%">
+					<Description>Gets the brake lining thickness in percent of maximum</Description>
+				</Node>
+				
+				<Node name="BrakeTemperature" type="int" min="1" max="1" scope="P" unit="K">
+					<Description>Gets the brake temperature in degrees Kelvin</Description>
+				</Node>
+			</Node>
+			
+			<Node name="&lt;tire-instance&gt;" type="node" min="1" max="1" scope="P">
+				<Description/>
+				
+				<Node name="TirePressure" type="float" min="1" max="1" scope="P">
+					<Description>Gets and/or Sets the inflation pressure of the tire instance in Pascals</Description>
+				</Node>
+				
+				<Node name="TireState" type="bool" min="1" max="1" scope="P">
+					<Description>Gets the inflation state of the tire instance</Description>
+					<Value value="TRUE">Normal</Value>
+					<Value value="FALSE">Flat</Value>
+				</Node>
+			</Node>
+		</Node>
+		<Node name="Steering" type="node" min="1" max="1" scope="P">
+			<Description/>
+			<Node name="SteeringType" type="int" min="1" max="1" scope="P">
+				<Description>Gets the Steering Type</Description>
+				<Value value="1">Manual</Value>
+				<Value value="2">Power Assisted</Value>
+			</Node>
+			
+			<Node name="PowerAssistType" type="int" min="1" max="1" scope="P">
+				<Description>Gets the power assist type</Description>
+				<Value value="1">Hydraulic</Value>
+				<Value value="2">Electric</Value>
+				<Value value="3">Hydro-Electric</Value>
+				<Value value="4">Other</Value>
+			</Node>
+			
+			<Node name="SteeringFluidType" type="chr" min="1" max="1" scope="P">
+				<Description>Gets the manufacturers recommended power steering fluid type</Description>
+			</Node>
+			
+			<Node name="SteeringFluidCapacity" type="float" min="1" max="1" scope="P" unit="l">
+				<Description>Gets the capacity of thepower steering resrvoir in Liters</Description>
+			</Node>
+			
+			<Node name="SteeringFluidLevel" type="int" min="1" max="1" scope="P" unit="l">
+				<Description>Gets the level of the power steering fluid in percent of maximum</Description>
+			</Node>
+			
+			<Node name="SteeringTurns" type="float" min="1" max="1" scope="P">
+				<Description>Gets the number of turns lock-to-lock for the steering</Description>
+				<comment> My not properly address rear wheel and multi wheel steering systems </comment>
+			</Node>
+			
+			<Node name="SteeringRatio" type="float" min="1" max="1" scope="P" unit="deg">
+				<Description>Gets the steering rate in steering wheel degrees per hub degree</Description>
+				<comment> My not properly address rear wheel and multi wheel steering systems </comment>
+			</Node>
+		</Node>
+	</Node>
+</Node>

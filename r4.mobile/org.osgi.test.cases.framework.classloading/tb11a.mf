@@ -1,0 +1,8 @@
+Manifest-Version: 1.0
+Bundle-Name: ${p}.tb11a
+Bundle-Version: 4
+Bundle-ManifestVersion: 2
+$(EXPORT-PACKAGE)
+$(IMPORT-PACKAGE)
+$(PRIVATE-PACKAGE)
+

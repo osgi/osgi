@@ -1,0 +1,8 @@
+Manifest-Version: 1.0
+Bundle-Name: ${p}.tb1
+Bundle-SymbolicName: ${p}.tb1
+Bundle-Activator: $(p).tb1.Activator
+Bundle-Version: 1.0
+$(IMPORT-PACKAGE)
+Export-Package: org.osgi.test.cases.packageadmin.tc5.tb1;specification-version=1.0
+$(PRIVATE-PACKAGE)

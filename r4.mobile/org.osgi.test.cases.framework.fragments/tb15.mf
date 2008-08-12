@@ -1,0 +1,13 @@
+Manifest-Version: 1.0
+Bundle-Name: ${p}.tb15
+Bundle-SymbolicName: ${p}.tb15
+Bundle-Description: This is a framework extension bundle used
+ in the test that checks if an extension bundle that contains
+ a require bundle header is not installed.
+Bundle-ManifestVersion: 2
+Bundle-Version: 1.0
+Bundle-Classpath: .
+Fragment-Host: system.bundle; extension:=bootclasspath
+Require-Bundle: ${p}.tb6
+Export-Package: q, p
+$(PRIVATE-PACKAGE)

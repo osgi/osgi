@@ -1,0 +1,9 @@
+Manifest-Version: 1.0
+Bundle-Name: ${p}.tb9b
+Bundle-SymbolicName: ${p}.tb9b
+Bundle-Version: 4
+Import-Package: resources
+Bundle-ClassPath: .
+$(EXPORT-PACKAGE)
+$(PRIVATE-PACKAGE)
+

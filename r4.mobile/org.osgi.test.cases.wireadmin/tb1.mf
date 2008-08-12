@@ -1,0 +1,9 @@
+Manifest-Version: 1.0
+Bundle-Name: test.cases.wireadmin.tbc
+Bundle-Description: Wire Admin test controller
+Bundle-Activator: org.osgi.test.cases.wireadmin.tb1.ConsumerImpl
+$(IMPORT-PACKAGE)
+$(EXPORT-PACKAGE)
+$(PRIVATE-PACKAGE)
+
+

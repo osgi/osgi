@@ -1,0 +1,533 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE MgmtTree SYSTEM "OMA-DM-DDF-V1_2.dtd">
+<!-- 
+/*
+ * $Header$
+ * 
+ * Copyright (c) OSGi Alliance (2006). All Rights Reserved.
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+-->		
+<MgmtTree>
+    <VerDTD>1.2</VerDTD>
+    <Man>OSGi Alliance</Man>
+    <!-- Policy Management Object -->
+    <Node>
+        <NodeName>Policy</NodeName>
+        <DFProperties>
+            <AccessType>
+                <Get></Get>
+            </AccessType>
+            <Description>Policy subtree</Description>
+            <DFFormat>
+                <node/>
+            </DFFormat>
+            <Occurrence>
+                <One/>
+            </Occurrence>
+            <Scope>
+                <Permanent/>
+            </Scope>
+            <DFTitle>Policy subtree</DFTitle>
+            <DFType>
+                <DDFName></DDFName>
+            </DFType>
+            <CaseSense>
+                <CS></CS>
+            </CaseSense>
+        </DFProperties>
+        <!-- Java -->
+        <Node>
+            <NodeName>Java</NodeName>
+            <DFProperties>
+                <AccessType>
+                    <Get></Get>
+                </AccessType>
+                <Description>Subtree for java permissions</Description>
+                <DFFormat>
+                    <node/>
+                </DFFormat>
+                <Occurrence>
+                    <One/>
+                </Occurrence>
+                <Scope>
+                    <Permanent/>
+                </Scope>
+                <DFTitle>Subtree for java permissions</DFTitle>
+                <DFType>
+                    <DDFName></DDFName>
+                </DFType>
+                <CaseSense>
+                    <CS></CS>
+                </CaseSense>
+            </DFProperties>
+            <!-- LocationPermission -->
+            <Node>
+                <NodeName>LocationPermission</NodeName>
+                <DFProperties>
+                    <AccessType>
+                        <Get></Get>
+                    </AccessType>
+                    <Description>Subtree for permissions maintained by 
+                        PermissionAdmin</Description>
+                    <DFFormat>
+                        <node/>
+                    </DFFormat>
+                    <Occurrence>
+                        <One/>
+                    </Occurrence>
+                    <Scope>
+                        <Permanent/>
+                    </Scope>
+                    <DFTitle>Subtree for permissions maintained by 
+                        PermissionAdmin</DFTitle>
+                    <DFType>
+                        <DDFName></DDFName>
+                    </DFType>
+                    <CaseSense>
+                        <CS></CS>
+                    </CaseSense>
+                </DFProperties>
+                <!-- Default -->
+                <Node>
+                    <NodeName>Default</NodeName>
+                    <DFProperties>
+                        <AccessType>
+                            <Add></Add>
+                            <Delete></Delete>
+                            <Get></Get>
+                            <Replace></Replace>
+                        </AccessType>
+                        <Description>Default when there is no Conditional 
+                            PermissionAdmin</Description>
+                        <DFFormat>
+                            <chr/>
+                        </DFFormat>
+                        <Occurrence>
+                            <ZeroOrOne/>
+                        </Occurrence>
+                        <Scope>
+                            <Dynamic/>
+                        </Scope>
+                        <DFTitle>Default when there is no Conditional 
+                            PermissionAdmin</DFTitle>
+                        <DFType>
+                            <MIME>text/plain</MIME>
+                        </DFType>
+                        <CaseSense>
+                            <CS></CS>
+                        </CaseSense>
+                    </DFProperties>
+                </Node>
+                <!-- end of Default -->
+                <!-- Locations -->
+                <Node>
+                    <NodeName>Locations</NodeName>
+                    <DFProperties>
+                        <AccessType>
+                            <Get></Get>
+                        </AccessType>
+                        <Description>Subtree for locations</Description>
+                        <DFFormat>
+                            <node/>
+                        </DFFormat>
+                        <Occurrence>
+                            <One/>
+                        </Occurrence>
+                        <Scope>
+                            <Permanent/>
+                        </Scope>
+                        <DFTitle>Subtree for locations</DFTitle>
+                        <DFType>
+                            <DDFName></DDFName>
+                        </DFType>
+                        <CaseSense>
+                            <CS></CS>
+                        </CaseSense>
+                    </DFProperties>
+                    <!-- location -->
+                    <Node>
+                        <!--dynamic name-->
+                        <NodeName></NodeName>
+                        <DFProperties>
+                            <AccessType>
+                                <Add></Add>
+                                <Delete></Delete>
+                                <Get></Get>
+                            </AccessType>
+                            <Description>Bundle location, 
+                                mangled</Description>
+                            <DFFormat>
+                                <node/>
+                            </DFFormat>
+                            <Occurrence>
+                                <ZeroOrMore/>
+                            </Occurrence>
+                            <!--automatic-->
+                            <Scope>
+                                <Dynamic/>
+                            </Scope>
+                            <DFTitle>Bundle location, mangled</DFTitle>
+                            <DFType>
+                                <DDFName></DDFName>
+                            </DFType>
+                            <CaseSense>
+                                <CS></CS>
+                            </CaseSense>
+                        </DFProperties>
+                        <!-- Location -->
+                        <Node>
+                            <NodeName>Location</NodeName>
+                            <DFProperties>
+                                <AccessType>
+                                    <Get></Get>
+                                    <Replace></Replace>
+                                </AccessType>
+                                <Description>Bundle location, 
+                                    unmangled</Description>
+                                <DFFormat>
+                                    <chr/>
+                                </DFFormat>
+                                <Occurrence>
+                                    <One/>
+                                </Occurrence>
+                                <!--automatic-->
+                                <Scope>
+                                    <Dynamic/>
+                                </Scope>
+                                <DFTitle>Bundle location, 
+                                    unmangled</DFTitle>
+                                <DFType>
+                                    <MIME>text/plain</MIME>
+                                </DFType>
+                                <CaseSense>
+                                    <CS></CS>
+                                </CaseSense>
+                            </DFProperties>
+                        </Node>
+                        <!-- end of Location -->
+                        <!-- PermissionInfo -->
+                        <Node>
+                            <NodeName>PermissionInfo</NodeName>
+                            <DFProperties>
+                                <AccessType>
+                                    <Get></Get>
+                                    <Replace></Replace>
+                                </AccessType>
+                                <Description>Permission info objects, 
+                                    encoded</Description>
+                                <DFFormat>
+                                    <chr/>
+                                </DFFormat>
+                                <Occurrence>
+                                    <One/>
+                                </Occurrence>
+                                <!--automatic-->
+                                <Scope>
+                                    <Dynamic/>
+                                </Scope>
+                                <DFTitle>Permission info objects, 
+                                    encoded</DFTitle>
+                                <DFType>
+                                    <MIME>text/plain</MIME>
+                                </DFType>
+                                <CaseSense>
+                                    <CS></CS>
+                                </CaseSense>
+                            </DFProperties>
+                        </Node>
+                        <!-- end of PermissionInfo -->
+                    </Node>
+                    <!-- end of location -->
+                </Node>
+                <!-- end of Locations -->
+            </Node>
+            <!-- end of LocationPermission -->
+            <!-- DmtPrincipalPermission -->
+            <Node>
+                <NodeName>DmtPrincipalPermission</NodeName>
+                <DFProperties>
+                    <AccessType>
+                        <Get></Get>
+                    </AccessType>
+                    <Description>Subtree for DMT permissions</Description>
+                    <DFFormat>
+                        <node/>
+                    </DFFormat>
+                    <Occurrence>
+                        <One/>
+                    </Occurrence>
+                    <Scope>
+                        <Permanent/>
+                    </Scope>
+                    <DFTitle>Subtree for DMT permissions</DFTitle>
+                    <DFType>
+                        <DDFName></DDFName>
+                    </DFType>
+                    <CaseSense>
+                        <CS></CS>
+                    </CaseSense>
+                </DFProperties>
+                <!-- principal -->
+                <Node>
+                    <!--dynamic name-->
+                    <NodeName></NodeName>
+                    <DFProperties>
+                        <AccessType>
+                            <Add></Add>
+                            <Delete></Delete>
+                            <Get></Get>
+                        </AccessType>
+                        <Description>Principal name, mangled</Description>
+                        <DFFormat>
+                            <node/>
+                        </DFFormat>
+                        <Occurrence>
+                            <ZeroOrMore/>
+                        </Occurrence>
+                        <Scope>
+                            <Dynamic/>
+                        </Scope>
+                        <DFTitle>Principal name, mangled</DFTitle>
+                        <DFType>
+                            <DDFName></DDFName>
+                        </DFType>
+                        <CaseSense>
+                            <CS></CS>
+                        </CaseSense>
+                    </DFProperties>
+                    <!-- Principal -->
+                    <Node>
+                        <NodeName>Principal</NodeName>
+                        <DFProperties>
+                            <AccessType>
+                                <Get></Get>
+                                <Replace></Replace>
+                            </AccessType>
+                            <Description>Principal name, 
+                                unmangled</Description>
+                            <DFFormat>
+                                <chr/>
+                            </DFFormat>
+                            <Occurrence>
+                                <One/>
+                            </Occurrence>
+                            <!--automatic-->
+                            <Scope>
+                                <Dynamic/>
+                            </Scope>
+                            <DFTitle>Principal name, unmangled</DFTitle>
+                            <DFType>
+                                <MIME>text/plain</MIME>
+                            </DFType>
+                            <CaseSense>
+                                <CS></CS>
+                            </CaseSense>
+                        </DFProperties>
+                    </Node>
+                    <!-- end of Principal -->
+                    <!-- PermissionInfo -->
+                    <Node>
+                        <NodeName>PermissionInfo</NodeName>
+                        <DFProperties>
+                            <AccessType>
+                                <Get></Get>
+                                <Replace></Replace>
+                            </AccessType>
+                            <Description>Permission info objects, 
+                                encoded</Description>
+                            <DFFormat>
+                                <chr/>
+                            </DFFormat>
+                            <Occurrence>
+                                <One/>
+                            </Occurrence>
+                            <!--automatic-->
+                            <Scope>
+                                <Dynamic/>
+                            </Scope>
+                            <DFTitle>Permission info objects, 
+                                encoded</DFTitle>
+                            <DFType>
+                                <MIME>text/plain</MIME>
+                            </DFType>
+                            <CaseSense>
+                                <CS></CS>
+                            </CaseSense>
+                        </DFProperties>
+                    </Node>
+                    <!-- end of PermissionInfo -->
+                </Node>
+                <!-- end of principal -->
+            </Node>
+            <!-- end of DmtPrincipalPermission -->
+            <!-- ConditionalPermission -->
+            <Node>
+                <NodeName>ConditionalPermission</NodeName>
+                <DFProperties>
+                    <AccessType>
+                        <Get></Get>
+                    </AccessType>
+                    <Description>Subtree for condtitional permissions, 
+                        optional</Description>
+                    <DFFormat>
+                        <node/>
+                    </DFFormat>
+                    <Occurrence>
+                        <ZeroOrOne/>
+                    </Occurrence>
+                    <Scope>
+                        <Permanent/>
+                    </Scope>
+                    <DFTitle>Subtree for condtitional permissions, 
+                        optional</DFTitle>
+                    <DFType>
+                        <DDFName></DDFName>
+                    </DFType>
+                    <CaseSense>
+                        <CS></CS>
+                    </CaseSense>
+                </DFProperties>
+                <!-- name -->
+                <Node>
+                    <!--dynamic name-->
+                    <NodeName></NodeName>
+                    <DFProperties>
+                        <AccessType>
+                            <Add></Add>
+                            <Delete></Delete>
+                            <Get></Get>
+                        </AccessType>
+                        <Description>Name of the Conditional Info entry, 
+                            mangled</Description>
+                        <DFFormat>
+                            <node/>
+                        </DFFormat>
+                        <Occurrence>
+                            <ZeroOrMore/>
+                        </Occurrence>
+                        <Scope>
+                            <Dynamic/>
+                        </Scope>
+                        <DFTitle>Name of the Conditional Info entry, 
+                            mangled</DFTitle>
+                        <DFType>
+                            <DDFName></DDFName>
+                        </DFType>
+                        <CaseSense>
+                            <CS></CS>
+                        </CaseSense>
+                    </DFProperties>
+                    <!-- Name -->
+                    <Node>
+                        <NodeName>Name</NodeName>
+                        <DFProperties>
+                            <AccessType>
+                                <Get></Get>
+                                <Replace></Replace>
+                            </AccessType>
+                            <Description>Conditional Permission Info name, 
+                                unmangled</Description>
+                            <DFFormat>
+                                <chr/>
+                            </DFFormat>
+                            <Occurrence>
+                                <One/>
+                            </Occurrence>
+                            <!--automatic-->
+                            <Scope>
+                                <Dynamic/>
+                            </Scope>
+                            <DFTitle>Conditional Permission Info name, 
+                                unmangled</DFTitle>
+                            <DFType>
+                                <MIME>text/plain</MIME>
+                            </DFType>
+                            <CaseSense>
+                                <CS></CS>
+                            </CaseSense>
+                        </DFProperties>
+                    </Node>
+                    <!-- end of Name -->
+                    <!-- ConditionInfo -->
+                    <Node>
+                        <NodeName>ConditionInfo</NodeName>
+                        <DFProperties>
+                            <AccessType>
+                                <Get></Get>
+                                <Replace></Replace>
+                            </AccessType>
+                            <Description>Condtions of this Permission info 
+                                object, encoded</Description>
+                            <DFFormat>
+                                <chr/>
+                            </DFFormat>
+                            <Occurrence>
+                                <One/>
+                            </Occurrence>
+                            <!--automatic-->
+                            <Scope>
+                                <Dynamic/>
+                            </Scope>
+                            <DFTitle>Condtions of this Permission info 
+                                object, encoded</DFTitle>
+                            <DFType>
+                                <MIME>text/plain</MIME>
+                            </DFType>
+                            <CaseSense>
+                                <CS></CS>
+                            </CaseSense>
+                        </DFProperties>
+                    </Node>
+                    <!-- end of ConditionInfo -->
+                    <!-- PermissionInfo -->
+                    <Node>
+                        <NodeName>PermissionInfo</NodeName>
+                        <DFProperties>
+                            <AccessType>
+                                <Get></Get>
+                                <Replace></Replace>
+                            </AccessType>
+                            <Description>Permissions of this Permission 
+                                info object, encoded</Description>
+                            <DFFormat>
+                                <chr/>
+                            </DFFormat>
+                            <Occurrence>
+                                <One/>
+                            </Occurrence>
+                            <!--automatic-->
+                            <Scope>
+                                <Dynamic/>
+                            </Scope>
+                            <DFTitle>Permissions of this Permission info 
+                                object, encoded</DFTitle>
+                            <DFType>
+                                <MIME>text/plain</MIME>
+                            </DFType>
+                            <CaseSense>
+                                <CS></CS>
+                            </CaseSense>
+                        </DFProperties>
+                    </Node>
+                    <!-- end of PermissionInfo -->
+                </Node>
+                <!-- end of name -->
+            </Node>
+            <!-- end of ConditionalPermission -->
+        </Node>
+        <!-- end of Java -->
+    </Node>
+    <!-- end of Policy -->
+</MgmtTree>

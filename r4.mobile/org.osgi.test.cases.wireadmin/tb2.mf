@@ -1,0 +1,12 @@
+Manifest-Version: 1.0
+Bundle-Name: State Management Consumer
+Bundle-Description: Installs WireAdmin Consumer
+Bundle-Vendor: ProSyst
+Bundle-Version: 1.0
+Bundle-DocURL: http://www.prosyst.com
+Bundle-Activator: org.osgi.test.cases.wireadmin.tb2.ConsumerImpl
+$(IMPORT-PACKAGE)
+$(EXPORT-PACKAGE)
+$(PRIVATE-PACKAGE)
+
+

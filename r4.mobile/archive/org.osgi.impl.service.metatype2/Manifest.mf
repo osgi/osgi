@@ -1,0 +1,11 @@
+Manifest-Version: 1.0
+Bundle-SymbolicName: ${p}
+Bundle-Name: impl.service.metatype2
+Bundle-Description: OSGi Metatype 2 Service Reference Implementation by ProSyst GmbH.
+Bundle-Vendor: OSGi Aliance
+Bundle-Copyright: ${copyright}
+Bundle-Version: 1.0.0
+Bundle-Activator: ${p}.Activator
+$(IMPORT-PACKAGE)
+$(EXPORT-PACKAGE)
+$(PRIVATE-PACKAGE)

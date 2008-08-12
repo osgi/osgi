@@ -1,0 +1,688 @@
+<html>
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   
+      <link rel="stylesheet" href="osgi.css" type="text/css">
+      <title>Test Matrix for org.osgi.service.monitor</title>
+   </head>
+   <body>
+      <div width="700px">
+         <h1>Test Matrix for org.osgi.service.monitor</h1>
+         <p>
+            <description>
+               
+               <p>The OSGi Monitor Specification Version 1.0.
+                  
+               </p>
+               <p>Bundles wishing to use this package must list the package
+                  in the <tt>Import-Package</tt> header of the bundle's manifest.
+                  For example:
+                  
+               </p><pre>Import-Package:&nbsp;org.osgi.service.montitor;&nbsp;version=1.0</pre>
+                  </description><br></p>
+         <table>
+            <tr>
+               <th colspan="2">Tested by:</th>
+            </tr>
+            <tr>
+               <td><a href="org.osgi.test.cases.monitor.html">org.osgi.test.cases.monitor</a></td>
+            </tr>
+         </table><br><br><table width="300">
+            <tr>
+               <th></th>
+               <th>Class</th>
+               <th>Methods</th>
+               <th>Tests</th>
+               <th>Ratio</th>
+            </tr>
+            <tr>
+               <td></td>
+               <td><a href="#org.osgi.service.monitor.Monitorable">Monitorable</a></td>
+               <td>5</td>
+               <td>0</td>
+               <td class="passed">0.00</td>
+            </tr>
+            <tr>
+               <td></td>
+               <td><a href="#org.osgi.service.monitor.MonitorAdmin">MonitorAdmin</a></td>
+               <td>10</td>
+               <td>0</td>
+               <td class="passed">0.00</td>
+            </tr>
+            <tr>
+               <td></td>
+               <td><a href="#org.osgi.service.monitor.MonitoringJob">MonitoringJob</a></td>
+               <td>6</td>
+               <td>0</td>
+               <td class="passed">0.00</td>
+            </tr>
+            <tr>
+               <td></td>
+               <td><a href="#org.osgi.service.monitor.MonitorListener">MonitorListener</a></td>
+               <td>1</td>
+               <td>0</td>
+               <td class="passed">0.00</td>
+            </tr>
+            <tr>
+               <td></td>
+               <td><a href="#org.osgi.service.monitor.MonitorPermission">MonitorPermission</a></td>
+               <td>5</td>
+               <td>0</td>
+               <td class="passed">0.00</td>
+            </tr>
+            <tr>
+               <td></td>
+               <td><a href="#org.osgi.service.monitor.StatusVariable">StatusVariable</a></td>
+               <td>15</td>
+               <td>0</td>
+               <td class="passed">0.00</td>
+            </tr>
+         </table><br><table width="700">
+            <tr>
+               <th class="pointer" colspan="2"><a name="org.osgi.service.monitor.Monitorable"></a>Class org.osgi.service.monitor.Monitorable
+               </th>
+            </tr>
+            <tr>
+               <td colspan="2">
+                  A Monitorable can provide information about itself in the form
+                   of StatusVariables.
+                     
+               </td>
+            </tr>
+            <tr>
+               <th width="350"><a name="Monitorable.getDescription(String)"></a>getDescription(String)
+               </th>
+               <th width="350"><b class="passed"> NO TEST FOUND </b></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Returns a human readable description of a StatusVariable.
+                     
+               </td>
+               <td width="350"></td>
+            </tr>
+            <tr>
+               <th width="350"><a name="Monitorable.getStatusVariable(String)"></a>getStatusVariable(String)
+               </th>
+               <th width="350"><b class="passed"> NO TEST FOUND </b></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Returns the StatusVariable object addressed by its
+                   identifier.
+                     
+               </td>
+               <td width="350"></td>
+            </tr>
+            <tr>
+               <th width="350"><a name="Monitorable.getStatusVariableNames()"></a>getStatusVariableNames()
+               </th>
+               <th width="350"><b class="passed"> NO TEST FOUND </b></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Returns the list of StatusVariable identifiers published
+                   by this Monitorable.
+                     
+               </td>
+               <td width="350"></td>
+            </tr>
+            <tr>
+               <th width="350"><a name="Monitorable.notifiesOnChange(String)"></a>notifiesOnChange(String)
+               </th>
+               <th width="350"><b class="passed"> NO TEST FOUND </b></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Tells whether the StatusVariable provider is able to send
+                   instant notifications when the given StatusVariable
+                   changes.
+                     
+               </td>
+               <td width="350"></td>
+            </tr>
+            <tr>
+               <th width="350"><a name="Monitorable.resetStatusVariable(String)"></a>resetStatusVariable(String)
+               </th>
+               <th width="350"><b class="passed"> NO TEST FOUND </b></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Issues a request to reset a given StatusVariable.
+                     
+               </td>
+               <td width="350"></td>
+            </tr>
+         </table><br><table width="700">
+            <tr>
+               <th class="pointer" colspan="2"><a name="org.osgi.service.monitor.MonitorAdmin"></a>Class org.osgi.service.monitor.MonitorAdmin
+               </th>
+            </tr>
+            <tr>
+               <td colspan="2">
+                  A MonitorAdmin implementation handles
+                   StatusVariable query requests and measurement job control
+                   requests.
+                     
+               </td>
+            </tr>
+            <tr>
+               <th width="350"><a name="MonitorAdmin.getDescription(String)"></a>getDescription(String)
+               </th>
+               <th width="350"><b class="passed"> NO TEST FOUND </b></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Returns a human readable description of the given 
+                   StatusVariable.
+                     
+               </td>
+               <td width="350"></td>
+            </tr>
+            <tr>
+               <th width="350"><a name="MonitorAdmin.getMonitorableNames()"></a>getMonitorableNames()
+               </th>
+               <th width="350"><b class="passed"> NO TEST FOUND </b></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Returns the names of the Monitorable services that are
+                   currently registered.
+                     
+               </td>
+               <td width="350"></td>
+            </tr>
+            <tr>
+               <th width="350"><a name="MonitorAdmin.getRunningJobs()"></a>getRunningJobs()
+               </th>
+               <th width="350"><b class="passed"> NO TEST FOUND </b></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Returns the list of currently running MonitoringJobs.
+                     
+               </td>
+               <td width="350"></td>
+            </tr>
+            <tr>
+               <th width="350"><a name="MonitorAdmin.getStatusVariable(String)"></a>getStatusVariable(String)
+               </th>
+               <th width="350"><b class="passed"> NO TEST FOUND </b></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Returns a StatusVariable addressed by its full path.
+                     
+               </td>
+               <td width="350"></td>
+            </tr>
+            <tr>
+               <th width="350"><a name="MonitorAdmin.getStatusVariableNames(String)"></a>getStatusVariableNames(String)
+               </th>
+               <th width="350"><b class="passed"> NO TEST FOUND </b></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Returns the list of StatusVariable names published by a
+                   Monitorable instance.
+                     
+               </td>
+               <td width="350"></td>
+            </tr>
+            <tr>
+               <th width="350"><a name="MonitorAdmin.getStatusVariables(String)"></a>getStatusVariables(String)
+               </th>
+               <th width="350"><b class="passed"> NO TEST FOUND </b></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Returns the StatusVariable objects published by a
+                   Monitorable instance.
+                     
+               </td>
+               <td width="350"></td>
+            </tr>
+            <tr>
+               <th width="350"><a name="MonitorAdmin.resetStatusVariable(String)"></a>resetStatusVariable(String)
+               </th>
+               <th width="350"><b class="passed"> NO TEST FOUND </b></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Issues a request to reset a given StatusVariable.
+                     
+               </td>
+               <td width="350"></td>
+            </tr>
+            <tr>
+               <th width="350"><a name="MonitorAdmin.startJob(String,String[],int)"></a>startJob(String,String[],int)
+               </th>
+               <th width="350"><b class="passed"> NO TEST FOUND </b></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Starts a change based MonitoringJob with the parameters
+                   provided.
+                     
+               </td>
+               <td width="350"></td>
+            </tr>
+            <tr>
+               <th width="350"><a name="MonitorAdmin.startScheduledJob(String,String[],int,int)"></a>startScheduledJob(String,String[],int,int)
+               </th>
+               <th width="350"><b class="passed"> NO TEST FOUND </b></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Starts a time based MonitoringJob with the parameters
+                   provided.
+                     
+               </td>
+               <td width="350"></td>
+            </tr>
+            <tr>
+               <th width="350"><a name="MonitorAdmin.switchEvents(String,boolean)"></a>switchEvents(String,boolean)
+               </th>
+               <th width="350"><b class="passed"> NO TEST FOUND </b></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Switches event sending on or off for the specified 
+                   StatusVariables.
+                     
+               </td>
+               <td width="350"></td>
+            </tr>
+         </table><br><table width="700">
+            <tr>
+               <th class="pointer" colspan="2"><a name="org.osgi.service.monitor.MonitoringJob"></a>Class org.osgi.service.monitor.MonitoringJob
+               </th>
+            </tr>
+            <tr>
+               <td colspan="2">
+                  A Monitoring Job is a request for scheduled or event based notifications on
+                   update of a set of StatusVariables.
+                     
+               </td>
+            </tr>
+            <tr>
+               <th width="350"><a name="MonitoringJob.getInitiator()"></a>getInitiator()
+               </th>
+               <th width="350"><b class="passed"> NO TEST FOUND </b></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Returns the identitifier of the principal who initiated the job.
+                     
+               </td>
+               <td width="350"></td>
+            </tr>
+            <tr>
+               <th width="350"><a name="MonitoringJob.getReportCount()"></a>getReportCount()
+               </th>
+               <th width="350"><b class="passed"> NO TEST FOUND </b></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Returns the number of times MonitorAdmin will query the
+                   StatusVariables (for time based jobs), or the number of
+                   changes of a StatusVariable between notifications (for
+                   change based jobs).
+                     
+               </td>
+               <td width="350"></td>
+            </tr>
+            <tr>
+               <th width="350"><a name="MonitoringJob.getSchedule()"></a>getSchedule()
+               </th>
+               <th width="350"><b class="passed"> NO TEST FOUND </b></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Returns the delay (in seconds) between two samples.
+                     
+               </td>
+               <td width="350"></td>
+            </tr>
+            <tr>
+               <th width="350"><a name="MonitoringJob.getStatusVariableNames()"></a>getStatusVariableNames()
+               </th>
+               <th width="350"><b class="passed"> NO TEST FOUND </b></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Returns the list of StatusVariable names that are the
+                   targets of this measurement job.
+                     
+               </td>
+               <td width="350"></td>
+            </tr>
+            <tr>
+               <th width="350"><a name="MonitoringJob.isLocal()"></a>isLocal()
+               </th>
+               <th width="350"><b class="passed"> NO TEST FOUND </b></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Returns whether the job was started locally or remotely.
+                     
+               </td>
+               <td width="350"></td>
+            </tr>
+            <tr>
+               <th width="350"><a name="MonitoringJob.stop()"></a>stop()
+               </th>
+               <th width="350"><b class="passed"> NO TEST FOUND </b></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Stops a Monitoring Job.
+                     
+               </td>
+               <td width="350"></td>
+            </tr>
+         </table><br><table width="700">
+            <tr>
+               <th class="pointer" colspan="2"><a name="org.osgi.service.monitor.MonitorListener"></a>Class org.osgi.service.monitor.MonitorListener
+               </th>
+            </tr>
+            <tr>
+               <td colspan="2">
+                  The MonitorListener is used by Monitorable
+                   services to send notifications when a StatusVariable value is
+                   changed.
+                     
+               </td>
+            </tr>
+            <tr>
+               <th width="350"><a name="MonitorListener.updated(String,StatusVariable)"></a>updated(String,StatusVariable)
+               </th>
+               <th width="350"><b class="passed"> NO TEST FOUND </b></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Callback for notification of a StatusVariable change.
+                     
+               </td>
+               <td width="350"></td>
+            </tr>
+         </table><br><table width="700">
+            <tr>
+               <th class="pointer" colspan="2"><a name="org.osgi.service.monitor.MonitorPermission"></a>Class org.osgi.service.monitor.MonitorPermission
+               </th>
+            </tr>
+            <tr>
+               <td colspan="2">
+                  Indicates the callers authority to publish, read or reset
+                   StatusVariables, to switch event sending on or off or to
+                   start monitoring jobs.
+                     
+               </td>
+            </tr>
+            <tr>
+               <th width="350"><a name="MonitorPermission.equals(Object)"></a>equals(Object)
+               </th>
+               <th width="350"><b class="passed"> NO TEST FOUND </b></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Determines the equality of two MonitorPermission objects.
+                     
+               </td>
+               <td width="350"></td>
+            </tr>
+            <tr>
+               <th width="350"><a name="MonitorPermission.getActions()"></a>getActions()
+               </th>
+               <th width="350"><b class="passed"> NO TEST FOUND </b></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Get the action string associated with this permission.
+                     
+               </td>
+               <td width="350"></td>
+            </tr>
+            <tr>
+               <th width="350"><a name="MonitorPermission.hashCode()"></a>hashCode()
+               </th>
+               <th width="350"><b class="passed"> NO TEST FOUND </b></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Create an integer hash of the object.
+                     
+               </td>
+               <td width="350"></td>
+            </tr>
+            <tr>
+               <th width="350"><a name="MonitorPermission.implies(Permission)"></a>implies(Permission)
+               </th>
+               <th width="350"><b class="passed"> NO TEST FOUND </b></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Determines if the specified permission is implied by this permission.
+                     
+               </td>
+               <td width="350"></td>
+            </tr>
+            <tr>
+               <th width="350"><a name="MonitorPermission.MonitorPermission(String,String)"></a>MonitorPermission(String,String)
+               </th>
+               <th width="350"><b class="passed"> NO TEST FOUND </b></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Create a MonitorPermission object, specifying the target
+                   and actions.
+                     
+               </td>
+               <td width="350"></td>
+            </tr>
+         </table><br><table width="700">
+            <tr>
+               <th class="pointer" colspan="2"><a name="org.osgi.service.monitor.StatusVariable"></a>Class org.osgi.service.monitor.StatusVariable
+               </th>
+            </tr>
+            <tr>
+               <td colspan="2">
+                  A StatusVariable object represents the value of a status
+                   variable taken with a certain collection method at a certain point of time.
+                     
+               </td>
+            </tr>
+            <tr>
+               <th width="350"><a name="StatusVariable.equals(Object)"></a>equals(Object)
+               </th>
+               <th width="350"><b class="passed"> NO TEST FOUND </b></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Compares the specified object with this StatusVariable.
+                     
+               </td>
+               <td width="350"></td>
+            </tr>
+            <tr>
+               <th width="350"><a name="StatusVariable.getBoolean()"></a>getBoolean()
+               </th>
+               <th width="350"><b class="passed"> NO TEST FOUND </b></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Returns the StatusVariable value if its type is
+                   boolean.
+                     
+               </td>
+               <td width="350"></td>
+            </tr>
+            <tr>
+               <th width="350"><a name="StatusVariable.getCollectionMethod()"></a>getCollectionMethod()
+               </th>
+               <th width="350"><b class="passed"> NO TEST FOUND </b></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Returns the collection method of this StatusVariable.
+                     
+               </td>
+               <td width="350"></td>
+            </tr>
+            <tr>
+               <th width="350"><a name="StatusVariable.getFloat()"></a>getFloat()
+               </th>
+               <th width="350"><b class="passed"> NO TEST FOUND </b></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Returns the StatusVariable value if its type is
+                   float.
+                     
+               </td>
+               <td width="350"></td>
+            </tr>
+            <tr>
+               <th width="350"><a name="StatusVariable.getID()"></a>getID()
+               </th>
+               <th width="350"><b class="passed"> NO TEST FOUND </b></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Returns the ID of this StatusVariable.
+                     
+               </td>
+               <td width="350"></td>
+            </tr>
+            <tr>
+               <th width="350"><a name="StatusVariable.getInteger()"></a>getInteger()
+               </th>
+               <th width="350"><b class="passed"> NO TEST FOUND </b></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Returns the StatusVariable value if its type is
+                   int.
+                     
+               </td>
+               <td width="350"></td>
+            </tr>
+            <tr>
+               <th width="350"><a name="StatusVariable.getString()"></a>getString()
+               </th>
+               <th width="350"><b class="passed"> NO TEST FOUND </b></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Returns the StatusVariable value if its type is
+                   String.
+                     
+               </td>
+               <td width="350"></td>
+            </tr>
+            <tr>
+               <th width="350"><a name="StatusVariable.getTimeStamp()"></a>getTimeStamp()
+               </th>
+               <th width="350"><b class="passed"> NO TEST FOUND </b></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Returns the time when the StatusVariable value was
+                   queried.
+                     
+               </td>
+               <td width="350"></td>
+            </tr>
+            <tr>
+               <th width="350"><a name="StatusVariable.getType()"></a>getType()
+               </th>
+               <th width="350"><b class="passed"> NO TEST FOUND </b></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Returns information on the data type of this StatusVariable.
+                     
+               </td>
+               <td width="350"></td>
+            </tr>
+            <tr>
+               <th width="350"><a name="StatusVariable.hashCode()"></a>hashCode()
+               </th>
+               <th width="350"><b class="passed"> NO TEST FOUND </b></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Returns the hash code value for this StatusVariable.
+                     
+               </td>
+               <td width="350"></td>
+            </tr>
+            <tr>
+               <th width="350"><a name="StatusVariable.StatusVariable(String,int,int)"></a>StatusVariable(String,int,int)
+               </th>
+               <th width="350"><b class="passed"> NO TEST FOUND </b></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Constructor for a StatusVariable of int
+                   type.
+                     
+               </td>
+               <td width="350"></td>
+            </tr>
+            <tr>
+               <th width="350"><a name="StatusVariable.StatusVariable(String,int,float)"></a>StatusVariable(String,int,float)
+               </th>
+               <th width="350"><b class="passed"> NO TEST FOUND </b></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Constructor for a StatusVariable of float
+                   type.
+                     
+               </td>
+               <td width="350"></td>
+            </tr>
+            <tr>
+               <th width="350"><a name="StatusVariable.StatusVariable(String,int,boolean)"></a>StatusVariable(String,int,boolean)
+               </th>
+               <th width="350"><b class="passed"> NO TEST FOUND </b></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Constructor for a StatusVariable of boolean
+                   type.
+                     
+               </td>
+               <td width="350"></td>
+            </tr>
+            <tr>
+               <th width="350"><a name="StatusVariable.StatusVariable(String,int,String)"></a>StatusVariable(String,int,String)
+               </th>
+               <th width="350"><b class="passed"> NO TEST FOUND </b></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Constructor for a StatusVariable of String
+                   type.
+                     
+               </td>
+               <td width="350"></td>
+            </tr>
+            <tr>
+               <th width="350"><a name="StatusVariable.toString()"></a>toString()
+               </th>
+               <th width="350"><b class="passed"> NO TEST FOUND </b></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Returns a String representation of this
+                   StatusVariable.
+                     
+               </td>
+               <td width="350"></td>
+            </tr>
+         </table>
+      </div>
+   </body>
+</html>

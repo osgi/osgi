@@ -1,0 +1,3 @@
+bundle
+file:../../org.osgi.meg.demo/app.events.jar
+location=org.osgi.meg.app.events

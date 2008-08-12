@@ -1,0 +1,10 @@
+Manifest-Version: 1.0
+DeploymentPackage-SymbolicName: wrong_order
+DeploymentPackage-Version: 1.0.0
+
+Name: simple_resource.xml
+Resource-Processor: org.osgi.test.cases.deployment.bundles.rp1
+
+Name: bundle001.jar
+Bundle-SymbolicName: bundle.tb1
+Bundle-Version: 1.0

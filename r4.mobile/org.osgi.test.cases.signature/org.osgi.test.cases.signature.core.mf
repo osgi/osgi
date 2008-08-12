@@ -1,0 +1,17 @@
+Manifest-Version: 1.0
+Bundle-Activator: ${p}.TestCase
+Bundle-Name: test.signature.core
+Bundle-SymbolicName: ${p}.core
+Bundle-Version: 4
+Bundle-Copyright: Copyright (c) OSGi Alliance (2006). All Rights Reserved.
+Bundle-Description: This tests the signatures of the core specification.
+Bundle-Vendor: OSGi Alliance
+Bundle-DocUrl: http://www.osgi.org/
+Bundle-ContactAddress: info@mail.osgi.org
+Bundle-Category: osgi,test
+CVS-Header: $Header$
+$(IMPORT-PACKAGE)
+$(EXPORT-PACKAGE)
+$(PRIVATE-PACKAGE)
+
+

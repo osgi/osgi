@@ -1,0 +1,10 @@
+Manifest-Version: 1.0
+Bundle-SymbolicName: ${p}
+Bundle-Name: impl.bundle.ifc
+Bundle-Description: Netscape IFC 1.1 Implementation.
+Bundle-Version: 1.1
+Bundle-Category: ifc
+Bundle-Classpath: netscape/ifc11.jar
+Export-Package: netscape.application, netscape.util
+CVS-Header: $Header$
+Bundle-RequiredExecutionEnvironment: J2SE-1.4

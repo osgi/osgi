@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scr:component name="component.${p}.admin" 
+	xmlns:scr="http://www.osgi.org/xmlns/scr/v1.0.0">
+	<implementation class="${p}.admin.RepositoryAdminImpl"/>
+	<property name="service.pid" value="${p}.admin"/>
+	<service>
+		<provide interface="org.osgi.service.obr.RepositoryAdmin"/>
+	</service>
+	<reference name="LOG"
+		interface="org.osgi.service.log.LogService"/>
+</scr:component>

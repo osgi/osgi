@@ -1,0 +1,16 @@
+<descriptor>
+  <application>
+    <class value = "${p}.app.events.TestApplication"/>
+    <locale name = "en">
+      <name value = "app.events" />
+      <icon value = "TestIcon.gif" />
+    </locale>
+    <locale name = "hu">
+      <name value = "MEG Teszt progi" />
+      <icon value = "TestIcon.gif" />
+    </locale>
+    <version value = "0.1" />
+    <category value = "test" />
+    <singleton value = "true" />
+  </application>
+</descriptor>

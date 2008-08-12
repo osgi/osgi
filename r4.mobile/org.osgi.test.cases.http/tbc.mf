@@ -1,0 +1,8 @@
+Manifest-Version: 1.0
+Bundle-Name: test.cases.http.tbc
+Bundle-Description: Test Bundle for Http Service tests
+Bundle-Vendor: OSGi Alliance
+Bundle-Version: 3.0
+Bundle-Activator: $(p).tbc.HttpTestBundle1
+$(IMPORT-PACKAGE)
+$(EXPORT-PACKAGE)

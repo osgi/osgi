@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<metatype:MetaData xmlns:metatype= "http://www.osgi.org/xmlns/metatype/v1.0.0">
+
+  <OCD id="ocd1" name="Testing Managed Service">
+    <AD id="ATTRIBUTE_A" name="%ATTRIBUTE_A" type="Integer" cardinality="-3" />
+    <AD id="ATTRIBUTE_B" name="%ATTRIBUTE_B" type="Float" cardinality="0" />
+    <AD id="ATTRIBUTE_C" name="%ATTRIBUTE_C" type="String" cardinality="-2" />
+  </OCD>
+  
+  <OCD id="ocd2" name="Managed Service B">
+    <AD id="ATTRIBUTE_A" name="%ATTRIBUTE_A" type="Integer" cardinality="0" />
+    <AD id="ATTRIBUTE_B" name="%ATTRIBUTE_B" type="Float" cardinality="0" />
+    <AD id="ATTRIBUTE_C" name="%ATTRIBUTE_C" type="String" cardinality="-2" />
+  </OCD>
+  
+  <Designate pid="br.org.cesar.bundles.tb4" factory="false"
+  				bundle="osgi-dp:bundle004.jar">
+  	<Object ocdref="ocd1">
+  		<Attribute adref="ATTRIBUTE_A">
+  			<Value>1</Value>
+  			<Value>2</Value>
+  			<Value>3</Value>
+  		</Attribute>
+  		<Attribute adref="ATTRIBUTE_B" content="3.1415" />
+  		<Attribute adref="ATTRIBUTE_C">
+  			<Value>"String_1"</Value>
+  			<Value>"String_2"</Value>
+  			<Value>"String_3"</Value>
+  		</Attribute>
+  	</Object>
+  </Designate>
+  
+  <Designate pid="org.osgi.test.cases.deployment.tb2" factory="true"
+  				bundle="http://localhost/deployment/tb2.jar">
+  	<Object ocdref="ocd2">
+  		<Attribute adref="ATTRIBUTE_A" content="1" />
+  		<Attribute adref="ATTRIBUTE_B" content="9.98" />
+  		<Attribute adref="ATTRIBUTE_C">
+  			<Value>"No one Land"</Value>
+  			<Value>"Back to the Future"</Value>
+  		</Attribute>
+  	</Object>
+  </Designate>
+
+</metatype:MetaData>

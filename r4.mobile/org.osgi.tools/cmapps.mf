@@ -1,0 +1,12 @@
+Manifest-Version: 1.0
+Bundle-Name: tools.cmapps
+Bundle-Description: Provides a number of commands to the console to 
+  manipulate the ApplicationDescriptor and ApplicationHandle services.
+Bundle-Vendor: OSGi
+Bundle-Activator: ${p}.apps.ApplicationCommands
+Bundle-Copyright: Copyright (c) The OSGi Alliance (2000-2005). All Rights Reserved.
+CVS-Header: $Header$
+$(IMPORT-PACKAGE)
+$(EXPORT-PACKAGE)
+$(PRIVATE-PACKAGE)
+

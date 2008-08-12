@@ -1,0 +1,10 @@
+# initial steps
+#################################
+
+setNodeAcl . Add=*&Exec=*&Get=*&Delete=*&Replace=*
+
+# suspend an application
+#################################
+gc ./OSGi/application_instances
+<$toArray$> / instances
+x ./OSGi/application_instances/<$instances[0]$> SUSPEND

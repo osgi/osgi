@@ -1,0 +1,16 @@
+Manifest-Version: 1.0
+Bundle-SymbolicName: cmpn.impls
+Bundle-Version: ${cmpn.release.version}
+Bundle-Name: cmpn.impls
+Bundle-Activator: org.osgi.tools.group.Group
+Bundle-Description: OSGi Service Platform Release 4, Compendium Reference Implementations
+Bundle-Copyright: ${copyright}
+CVS-Header: $Header$
+Bundle-Vendor: OSGi Alliance
+Bundle-Category: osgi,test
+Bundle-DocUrl: http://www.osgi.org/
+$(EXPORT-PACKAGE)
+$(IMPORT-PACKAGE)
+group-load:  ${cmpn.impls.jars}, apache/servlet.jar
+
+

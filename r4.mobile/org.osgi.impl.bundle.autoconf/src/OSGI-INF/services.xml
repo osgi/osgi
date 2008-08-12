@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scr:component name="org.osgi.impl.bundle.autoconf" 
+	xmlns:scr="http://www.osgi.org/xmlns/scr/v1.0.0">
+	<implementation class="org.osgi.impl.bundle.autoconf.Autoconf"/>
+	<property name="service.pid" value="org.osgi.deployment.rp.autoconf"/>
+	<service>
+		<provide interface="org.osgi.service.deploymentadmin.spi.ResourceProcessor"/>
+	</service>
+	<reference name="saxParserFactory"
+		interface="javax.xml.parsers.SAXParserFactory"
+		target="(&amp;(parser.namespaceAware=true)(parser.validating=true))"/>
+	<reference name="configurationAdmin"
+		interface="org.osgi.service.cm.ConfigurationAdmin"/>
+	<reference name="metaTypeService"
+		interface="org.osgi.service.metatype.MetaTypeService"/>
+</scr:component>

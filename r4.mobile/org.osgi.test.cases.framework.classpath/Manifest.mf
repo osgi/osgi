@@ -1,0 +1,15 @@
+Manifest-Version: 1.0
+Bundle-Name: test.framework.classpath
+Bundle-SymbolicName: ${p}
+Bundle-Description: Tests class path functions.
+Bundle-Version: 4.0
+Bundle-Activator: org.osgi.test.cases.framework.classpath.ClassPathTestCase
+Bundle-Vendor: OSGi Alliance
+Bundle-DocURL: http://www.osgi.org/
+Bundle-ContactAddress: info@mail.osgi.org
+Bundle-Category: osgi,test
+Bundle-Copyright: $(copyright)
+CVS-Header: $Header$
+$(IMPORT-PACKAGE)
+$(EXPORT-PACKAGE)
+

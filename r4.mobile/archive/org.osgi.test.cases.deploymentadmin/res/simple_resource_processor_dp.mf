@@ -1,0 +1,11 @@
+Manifest-Version: 1.0
+DeploymentPackage-Name: simple_resource_processor_dp
+DeploymentPackage-Version: 1.0.0
+
+Name: rp_bundle.jar
+Bundle-SymbolicName: org.osgi.test.cases.deployment.bundles.rp1
+Bundle-Version: 1.0
+DeploymentPackage-Customizer: false
+
+Name: conf.txt
+Resource-Processor: org.osgi.test.cases.deployment.bundles.rp1

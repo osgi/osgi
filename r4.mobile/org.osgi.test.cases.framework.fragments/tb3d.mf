@@ -1,0 +1,11 @@
+Manifest-Version: 1.0
+Bundle-Name: ${p}.tb3d
+Bundle-SymbolicName: ${p}.tb3d
+Bundle-Version: 1.0
+Bundle-ManifestVersion: 2
+Fragment-Host: ${p}.tb3a
+$(IMPORT-PACKAGE)
+$(EXPORT-PACKAGE)
+$(PRIVATE-PACKAGE)
+
+

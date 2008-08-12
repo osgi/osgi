@@ -1,0 +1,14 @@
+Manifest-Version: 1.0
+Bundle-Name: ${p}.tb16j
+Bundle-SymbolicName: ${p}.tb16a
+Bundle-Version: 1
+Bundle-ManifestVersion: 2
+Bundle-Activator: $(p).tb16a.Activator
+Require-Bundle: ${p}.tb16c;visibility:="reexport", ${p}.tb16b;visibility:="reexport"
+Reexport-Package: test.package.resources
+$(IMPORT-PACKAGE)
+$(EXPORT-PACKAGE)
+$(PRIVATE-PACKAGE)
+
+
+

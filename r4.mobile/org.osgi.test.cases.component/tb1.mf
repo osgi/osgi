@@ -1,0 +1,11 @@
+Manifest-Version: 1.0
+Bundle-Name: ${p}.tb1
+Bundle-SymbolicName: ${p}.tb1
+Bundle-Version: 4
+$(IMPORT-PACKAGE)
+$(PRIVATE-PACKAGE)
+Export-Package: org.osgi.test.cases.component.tb1;specification-version="1.0"
+Service-Component: org/osgi/test/cases/component/tb1/impl/serviceprovider.xml
+
+
+

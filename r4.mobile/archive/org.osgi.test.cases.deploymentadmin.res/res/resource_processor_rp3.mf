@@ -1,0 +1,8 @@
+Manifest-Version: 1.0
+DeploymentPackage-SymbolicName: resource_processor_dp
+DeploymentPackage-Version: 1.0.0
+
+Name: rp_bundle3.jar
+Bundle-SymbolicName: org.osgi.test.cases.deployment.bundles.rp3
+Bundle-Version: 1.0
+DeploymentPackage-Customizer: false

@@ -1,0 +1,11 @@
+Manifest-Version: 1.0
+DeploymentPackage-SymbolicName: resource_processor_customizer
+DeploymentPackage-Version: 1.0.0
+
+Name: rp_bundle.jar
+Bundle-SymbolicName: org.osgi.test.cases.deployment.bundles.rp1
+Bundle-Version: 1.0
+DeploymentPackage-Customizer: true
+
+Name: simple_resource.xml
+Resource-Processor: org.osgi.test.cases.deployment.bundles.rp1

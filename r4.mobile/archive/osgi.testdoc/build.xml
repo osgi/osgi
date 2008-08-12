@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="released" default="javadoc">
+	<import file="../cnf/build.xml" />
+
+
+
+	<target name="javadoc" depends="init">
+		<echo>${javadoc}</echo>
+		<echo>"${workspace}/org.osgi.tools/src"</echo>
+		<javadoc doclet="org.osgi.tools.xmldoclet.XmlDocletx" 
+			docletpath="${workspace}/org.osgi.tools/src" 
+			encoding="utf-8"
+			packagenames="${javadoc}">
+			<sourcepath>
+				<dirset dir="${workspace}">
+					<include name="*/src" />
+				</dirset>
+			</sourcepath>
+		</javadoc>
+	</target>
+		
+	<target name="print" depends="init">
+		<java classname="com.icl.saxon.StyleSheet" 
+			classpath="../licensed/jar/saxon.jar" 
+			 fork="true">
+			<arg line="javadoc.xml xsl/javadoc.xsl tests='${tests}' specs='${specs}'"/>
+		</java>
+		
+	</target>
+	
+	<target name="-html2mif">
+		<java classname="com.icl.saxon.StyleSheet" 
+			classpath="${workspace}/licensed/jar/saxon.jar" fork="true">
+			<arg line="-o ${item}.tmp xml/${item}.xml xsl/html2mif.xsl"/>
+		</java>
+		<java classname="org.osgi.tools.xml2mif.XML2MIF" 
+			fork="true"
+			classpath="${project.classpath}">
+			<arg line="-i ${item}.tmp -o mif/${item}.mif"/>
+		</java>
+		<delete file="${item}.tmp"/>
+	</target>
+		
+	
+
+</project>

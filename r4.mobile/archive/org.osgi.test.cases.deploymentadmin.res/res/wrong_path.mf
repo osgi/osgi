@@ -1,0 +1,12 @@
+Manifest-Version: 1.0
+DeploymentPackage-SymbolicName: wrong_path
+DeploymentPackage-Version: 1.0.0
+DeploymentPackage-Copyright: Motorola (c).
+DeploymentPackage-ContactAddress: Rua Bione, 220, Cais do Apolo - Bairro do Recife, Recife - PE, CEP: 50.030-390.
+DeploymentPackage-Description: A testing deployment package.
+DeploymentPackage-DocURL: www.cesar.org.br.
+DeploymentPackage-Vendor: CESAR.
+
+Name: wrong(path)/bundle001.jar
+Bundle-SymbolicName: bundles.tb1
+Bundle-Version: 1.0

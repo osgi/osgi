@@ -1,0 +1,13 @@
+Manifest-Version: 1.0
+Bundle-Name: test.cases.framework.syncbundlelistener.tb2
+Bundle-Description: Causes bundle events 
+Bundle-Vendor: Ericsson Telecom AB
+Bundle-Version: 1.3
+Bundle-DocURL: http://www.ericsson.com
+Bundle-ContactAddress: info@ericsson.com
+Bundle-Activator: $(p).tb2.AsyncListener
+$(IMPORT-PACKAGE)
+$(EXPORT-PACKAGE)
+
+
+

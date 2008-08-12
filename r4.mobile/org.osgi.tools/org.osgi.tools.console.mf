@@ -1,0 +1,40 @@
+Manifest-Version: 1.0
+Bundle-Name: OSGi Console
+Bundle-SymbolicName: org.osgi.tools.console
+Comment: Created by $(DELIVER) on $(DATE)
+Bundle-Description: Implements a console listening on port 2011. 
+ Once this bundle is started, you can telnet into this console 
+ with "telnet host 2011". Type help to see a list 
+ of all the commands. The port can be changed by setting the 
+ property: "org.osgi.nursery.console.port".<p>
+ The purpose of this bundle is to standardize the interface 
+ to command line interpreters that we probably all already have 
+ written. This implementation does not targets to replace these 
+ command line interpreters, it only likes to standardize the 
+ way those interpreters are extended. This bundle uses org.osgi. 
+ nursery.command.CommandProvider/CommandInterpreter. Registering 
+ a CommandProvider in the registry, will make this available to 
+ the console. There are only 2 methods to implement, a getHelp() 
+ showing the help text and toString(Object) to translate objects  
+ to strings. Commands are implemented by writing a public method 
+ that starts with an '_' and takes a CommandInterpreter as parameter. 
+ The Basic class shows a number of basic commands and handles 
+ shell variables. This specific interpreter (which is not proposed 
+ for standardization) has the (for some nasty) habit of concatenating 
+ a number of words. I.e. 'list tasks' is trying to execute _listtasks. This is 
+ true for 'list', 'delete', 'create', 'open', 'show'.<p> 
+ Note that command returns Object instead of String. It is always 
+ possible to return normal objects. Vector, arrays etc. are handled 
+ as expected and expanded. The toString() method in the CommandProvider 
+ can be used to extend these translations. (This is not implemented yet).<br>
+ Changes<br>
+ Returned empty string as last parameter when line ended with one or 
+ more spaces.
+Bundle-Copyright: ERICSSON RADIO SYSTEMS AB (c) 2000 All Rights Reserved 
+Bundle-Vendor: ERICSSON RADIO SYSTEMS AB
+Bundle-Category: nursery,utility,development
+Bundle-Version: 1.0.3
+Bundle-Activator: org.osgi.tools.console.Console
+$(EXPORT-PACKAGE)
+$(IMPORT-PACKAGE)
+$(PRIVATE-PACKAGE)

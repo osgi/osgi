@@ -1,0 +1,13 @@
+Manifest-Version: 1.0
+Bundle-Name: test.cases.packageadmin.tc1.tb3 
+Bundle-Copyright: Copyright (c) OSGi Alliance (2000, 2002). All Rights Reserved.
+Bundle-Description: Exporting packages an re-exporting packages
+Bundle-Vendor: OSGi Alliance
+Bundle-Version: 3.0
+Bundle-Activator: $(p).tb3.TB3Activator
+CVS-Header: $Header$
+$(IMPORT-PACKAGE)
+$(EXPORT-PACKAGE)
+
+
+

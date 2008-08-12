@@ -1,0 +1,12 @@
+Manifest-Version: 1.0
+Bundle-Name: ${p}.tb1b
+Bundle-SymbolicName: ${p}.tb1b
+Bundle-ClassPath: .,dummyentry.jar,tb1c.jar
+Bundle-Version: 1.0
+Bundle-ManifestVersion: 2
+Fragment-Host: ${p}.tb1a
+$(IMPORT-PACKAGE)
+$(EXPORT-PACKAGE)
+$(PRIVATE-PACKAGE)
+
+

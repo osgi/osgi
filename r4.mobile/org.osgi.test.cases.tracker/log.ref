@@ -1,0 +1,95 @@
+[begin=testTc1]
+Now a bundle that contains TestService1 is started.
+The number of Services being tracked by ServiceTracker is: 1 : '1'
+ServiceReference for the tracked service can be reached at this time: true : 'true'
+Tracked services can be reached at this time and are equal in the different methods: true : 'true'
+Now the ServiceTracker is closed.
+No ServiceReferences for tracked services can be reached at this time: true : 'true'
+No Services for tracked services can be reached at this time: true : 'true'
+The number of Services being tracked by ServiceTracker is: 0 : '0'
+Now the ServiceTracker is opened.
+The number of Services being tracked by ServiceTracker is: 1 : '1'
+Now the Testbundle is uninstalled.
+No ServiceReferences for tracked services can be reached at this time: true : 'true'
+No Services for tracked services can be reached at this time: true : 'true'
+The number of Services being tracked by ServiceTracker is: 0 : '0'
+ServiceTracker TestCase 1 is completed.
+[end=testTc1]
+
+[begin=testTc2]
+ServiceTracker is created for Testbundle 1, Testbundle 2 and Testbundle 3
+The number of Services being tracked by ServiceTracker 1 is: 0 : '0'
+The number of Services being tracked by ServiceTracker 2 is: 0 : '0'
+The number of Services being tracked by ServiceTracker 3 is: 0 : '0'
+ServiceTracker 1 uses waitForService(0).
+Returned an object in ServiceTracker 1?:  true  : 'true'
+ServiceTracker 2 uses waitForService(500).
+Returned an object in ServiceTracker 2?: false  : 'false'
+ServiceTracker 3 doesn't use waitForService().
+The number of Services being tracked by ServiceTracker 1 is: 1 : '1'
+The number of Services being tracked by ServiceTracker 2 is: 1 : '1'
+The number of Services being tracked by ServiceTracker 3 is: 1 : '1'
+ServiceTracker TestCase 2 is completed.
+[end=testTc2]
+
+[begin=testTc3]
+Install a ServiceTracker.
+The number of Services being tracked by ServiceTracker 1 is: 0 : '0'
+Install Testbundle 1.
+Now addingService in ServiceTrackerCustomizer should send a message.
+Now addingService is activated.
+The number of Services being tracked by ServiceTracker 1 is: 1 : '1'
+Uninstall Testbundle 1.
+Now removedService in ServiceTrackerCustomizer should send a message.
+Now removedService is activated.
+ServiceTracker TestCase 3 is completed.
+[end=testTc3]
+
+
+[begin=testTc4]
+#A ServiceTracker for TestService1 is created.
+#Testbundles 1, 2, 3 and 4 is started.
+#The bundles that has TestService1: 'ServiceTracker TestCase4 testbundle1'
+#The bundles that has TestService1: 'ServiceTracker TestCase4 testbundle2'
+#The bundles that has TestService1: 'ServiceTracker TestCase4 testbundle3'
+#TestService1 is a part of the Services being tracked by this ServiceTracker: true : 'true'
+#The number of Services being tracked by ServiceTracker 1 is: 3 : '3'
+#A service in use by Testbundle 4 is TestService2: true : 'true'
+#Is Testbundle 1 using TestService2: false : 'false'
+#Is Testbundle 2 using TestService2: false : 'false'
+#Is Testbundle 3 using TestService2: false : 'false'
+#Is Testbundle 4 using TestService2: true : 'true'
+#Testbundle 1 has TestService1 as registered Service:  true : 'true'
+#Testbundle 1 has TestService2 as registered Service:  true : 'true'
+#Testbundle 1 has TestService3 as registered Service:  true : 'true'
+#TestService1 in Testbundle 2 is removed
+#The description of the Services that has TestService1: TestService1 in bundle tb1 : 'TestService 1 in bundle tb1.'
+#The description of the Services that has TestService1: TestService1 in bundle tb3 : 'TestService 1 in bundle tb3.'
+#TestService1 is a part of the Services being tracked by this ServiceTracker: true : 'true'
+#The number of Services being tracked by ServiceTracker 1 is: 2 : '2'
+#ServiceTracker TestCase 4 is completed.
+[begin=testTc4]
+
+
+[begin=testTc5]
+A ServiceTracker for TestService1 is created.
+A ServiceTracker containing a Filter that finds TestService1 is created.
+The number of Services being tracked by ServiceTracker 1 is: 0 : '0'
+Install Testbundle 1.
+The number of Services being tracked by ServiceTracker 1 is: 1 : '1'
+The ServiceReferences contains: TestService1 : 'TestService1'
+Register a new TestService1.
+The number of Services being tracked by ServiceTracker 1 is: 2 : '2'
+Now the properties for one of the TestService1's is changed to not match the filter for which this ServiceTracker.
+The number of Services being tracked by ServiceTracker 1 is: 1 : '1'
+Now the property is changed back again.
+The number of Services being tracked by ServiceTracker 1 is: 2 : '2'
+ServiceTracker TestCase 5 is completed.
+[begin=testTc5]
+
+[begin=testTc6]
+ServiceTracker.getTrackingCount() == 0
+ServiceTracker.getTrackingCount() == 1
+ServiceTracker.getTrackingCount() == 2
+ServiceTracker TestCase 6 is completed.
+[begin=testTc6]

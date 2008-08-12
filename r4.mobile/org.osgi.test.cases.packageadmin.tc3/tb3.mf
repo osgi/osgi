@@ -1,0 +1,9 @@
+Manifest-Version: 1.0
+Bundle-Name: test.cases.pckageadmin.tc3.tb3
+Bundle-Description: New bundle exporting same package
+Bundle-Vendor: Ericsson
+Bundle-Version: 1.3
+Bundle-Activator: $(p).tb3.TB3Activator
+Import-Package: org.osgi.framework, org.osgi.test.cases.packageadmin.tc3.tb1
+Export-Package: org.osgi.test.cases.packageadmin.tc3.tb3, 
+  org.osgi.test.cases.packageadmin.tc3.tb1 ; specification-version=1.0.2

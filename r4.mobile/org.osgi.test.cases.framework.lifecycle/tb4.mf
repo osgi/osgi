@@ -1,0 +1,10 @@
+Manifest-Version: 1.0
+Bundle-Name: test.case.lifecycle.tb4  
+Bundle-Description: Tests halfway broken inputstream during install.
+Bundle-Vendor: Ericsson Radio Systems AB
+Bundle-Version: 1.0
+Bundle-DocURL: http://www.ericsson.com
+Bundle-ContactAddress: info@ericsson.com
+Bundle-Activator: org.osgi.test.cases.framework.lifecycle.tb4.BrokenStream
+$(IMPORT-PACKAGE)
+

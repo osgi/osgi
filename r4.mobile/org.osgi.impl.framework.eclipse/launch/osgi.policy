@@ -1,0 +1,5 @@
+// Grant Framework AllPermission.
+
+grant {
+        permission java.security.AllPermission;
+};

@@ -1,0 +1,16 @@
+Manifest-Version: 1.0
+Bundle-SymbolicName: ${p}
+Bundle-Name: test.io
+Bundle-Copyright: ${copyright}
+Bundle-Description: Tests the IO Service
+Bundle-Vendor: OSGi Alliance
+Bundle-Version: 3.0
+Bundle-DocUrl: http://membercvs.osgi.org/test/3
+Bundle-ContactAddress: speccomments@mail.osgi.org
+Bundle-Category: osgi,test
+Bundle-Activator: org.osgi.test.cases.io.IOTestCase
+CVS-Header: $Header$
+$(IMPORT-PACKAGE)
+$(EXPORT-PACKAGE)
+
+

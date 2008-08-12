@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry sourcepath="/aQute.constructor/IFC11SRC.ZIP" kind="lib" path="/licensed/jar/ifc11.jar"/>
+	<classpathentry kind="output" path="src"/>
+</classpath>

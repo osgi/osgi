@@ -1,0 +1,11 @@
+Manifest-Version: 1.0
+DeploymentPackage-Name: simple_dp
+DeploymentPackage-Version: 1.0.0
+
+Name: rp_bundle4.jar
+Bundle-SymbolicName: org.osgi.test.cases.deployment.bundles.rp4
+Bundle-Version: 1.0
+DeploymentPackage-Customizer: true
+
+Name: simple_resource.xml
+Resource-Processor: org.osgi.test.cases.deployment.bundles.rp4

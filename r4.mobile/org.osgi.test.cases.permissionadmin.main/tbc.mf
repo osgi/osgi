@@ -1,0 +1,14 @@
+Manifest-Version: 1.0
+Bundle-Name: test.cases.permissionadmin.main.tbc
+Bundle-Description: Permission Admin Test R3
+Bundle-Version: 3.0.1
+Bundle-Activator: org.osgi.test.cases.permissionadmin.main.tbc.PermissionControl
+Bundle-Vendor: OSGi Alliance
+Bundle-DocURL: http://www.osgi.org/
+Bundle-ContactAddress: info@mail.osgi.org
+Bundle-Category: osgi,test
+Comment: Created by $(DELIVER) at $(DATE)
+$(IMPORT-PACKAGE)
+$(EXPORT-PACKAGE)
+CVS-Header: $Header$
+

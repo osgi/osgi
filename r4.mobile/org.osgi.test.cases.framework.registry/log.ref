@@ -1,0 +1,91 @@
+[begin=testBasicRegistration]
+REGISTERED      org.osgi.test.cases.framework.registry.tbc.Marker1, org.osgi.test.cases.framework.registry.tbc.Marker2  OWNER
+MODIFIED        org.osgi.test.cases.framework.registry.tbc.Marker1, org.osgi.test.cases.framework.registry.tbc.Marker2  OWNER
+UNREGISTERING   org.osgi.test.cases.framework.registry.tbc.Marker1, org.osgi.test.cases.framework.registry.tbc.Marker2  OWNER
+[end=testBasicRegistration]
+
+[begin=testBasicFactory]
+REGISTERED      org.osgi.test.cases.framework.registry.tbc.Marker1, org.osgi.test.cases.framework.registry.tbc.Marker2  OWNER
+Getting reference via Marker1
+Getting service Marker1
+Getting service from factory 2
+Checking factory result :  org.osgi.test.cases.framework.registry.tbc.Marker1, org.osgi.test.cases.framework.registry.tbc.Marker2  OWNER Service=MARKER 2
+Ungetting service Marker1
+Ungetting correct object = MARKER 2
+Getting reference via Marker2
+Getting service Marker2
+Getting service from factory 3
+Checking factory result with Marker2 :  org.osgi.test.cases.framework.registry.tbc.Marker1, org.osgi.test.cases.framework.registry.tbc.Marker2  OWNER Service=MARKER 3
+Ungetting service Marker2
+Ungetting correct object = MARKER 3
+Getting reference via Marker2 via other bundle
+Getting service Marker2 via other bundle
+Getting service from factory 4
+Check for get via other bundle's context MARKER 4
+Ungetting service Marker2 of other bundle
+Ungetting correct object = MARKER 4
+Multiple gets
+Getting service from factory 5
+Checking factory service, getting it once MARKER 5
+Checking factory service, getting it twice MARKER 5
+Checking factory service, getting it thrice MARKER 5
+Ungetting it once too often
+Ungetting correct object = MARKER 5
+Check for unget via other bundle's context 
+Unregistering
+UNREGISTERING   org.osgi.test.cases.framework.registry.tbc.Marker1, org.osgi.test.cases.framework.registry.tbc.Marker2  OWNER
+Unregister once more (invalid)
+OK Correctly thrown IllegalStateException
+[end=testBasicFactory]
+
+[begin=testFactoryException]
+Factory exception
+REGISTERED      org.osgi.test.cases.framework.registry.tbc.Marker1, org.osgi.test.cases.framework.registry.tbc.Marker2  OWNER
+Checking factory result with Marker1 :  org.osgi.test.cases.framework.registry.tbc.Marker1, org.osgi.test.cases.framework.registry.tbc.Marker2  OWNER
+UNREGISTERING   org.osgi.test.cases.framework.registry.tbc.Marker1, org.osgi.test.cases.framework.registry.tbc.Marker2  OWNER
+[end=testFactoryException]
+
+[begin=testWrongClass]
+Wrong class registration
+OK thrown IllegalArgumentException
+[end=testWrongClass]
+
+[begin=testManyRegistrations]
+Registering 1000 services
+Should have 1000 references : 1000
+Should have 500 references (via filter): 500
+Should have 500 references (via class): 500
+Should have 0 references (=null) : null
+[end=testManyRegistrations]
+
+[begin=testNullService]
+Null service registration
+OK thrown IllegalArgumentException due to null service
+[end=testNullService]
+
+[begin=testEventSpan]
+Check for synchronous service events
+REGISTERED      org.osgi.test.cases.framework.registry.tbc.Marker1, org.osgi.test.cases.framework.registry.tbc.Marker2  OWNER
+Visited should now be true after registration true
+MODIFIED        org.osgi.test.cases.framework.registry.tbc.Marker1, org.osgi.test.cases.framework.registry.tbc.Marker2  OWNER
+Visited should now be true after setProperties true
+UNREGISTERING   org.osgi.test.cases.framework.registry.tbc.Marker1, org.osgi.test.cases.framework.registry.tbc.Marker2  OWNER
+Visited should now be true after unregistration true
+[end=testEventSpan]
+
+#This is from unprepare method. Should be silent.
+Cleaning up after bundle dies
+Should have no registrations registered (null) null
+REGISTERED      java.lang.String 
+Getting service from factory 60
+Getting service from factory 61
+Stopping dummy bundle, should unget 1 service, and unregister 1
+UNREGISTERING   java.lang.String 
+Ungetting object
+Ungetting object
+Trying to get a service again, first via our BundleContext
+Should get null service : null
+Trying to get a service again, now via other BundleContext
+OK Correct illegal state exception because bundlecontext is invalid
+Should have no registrations left (null) null
+

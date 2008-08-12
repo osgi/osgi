@@ -1,0 +1,8 @@
+Manifest-Version: 1.0
+Bundle-Name: test.cases.packageadmin.tc2.tbc
+Bundle-Description: Installs and runs the other test bundles 
+Bundle-Vendor: Ericsson
+Bundle-Version: 1.3
+Bundle-Activator: $(p).tbc.BundleActivatorI
+$(IMPORT-PACKAGE)
+$(EXPORT-PACKAGE)

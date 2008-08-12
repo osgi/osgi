@@ -1,0 +1,41 @@
+CPI cpi_Simple_Client {
+	CONDITION org.osgi.service.condpermadmin.BundleLocationCondition {
+		"${eclipse.root}$/org.osgi.meg.demo/app.dmtclient.jar~keep~"
+	}
+	PERMISSION org.osgi.framework.PackagePermission {
+		"*" 
+		"export, import" 
+	}
+	PERMISSION org.osgi.framework.ServicePermission {
+		"*" 
+		"get, register" 
+	}
+	PERMISSION java.util.PropertyPermission {
+		"org.osgi.service.dmt.root"
+		"read"
+	}
+	PERMISSION org.osgi.service.monitor.MonitorPermission {
+		"meg.test.monitorable/NumOfChanges"
+		"startjob,publish,read"
+	}
+	PERMISSION org.osgi.service.monitor.MonitorPermission {
+		"meg.test.monitorable/Dummy"
+		"startjob:3,publish,read"
+	}
+	PERMISSION org.osgi.service.monitor.MonitorPermission {
+		"m*/Num*"
+		"switchevents"
+	}
+	PERMISSION org.osgi.service.dmt.security.DmtPermission {
+		"./OSGi/*"
+		"*"
+	} 
+	PERMISSION org.osgi.service.cm.ConfigurationPermission {
+		"*"
+		"configure"
+	}
+	PERMISSION org.osgi.service.event.TopicPermission {
+		"org/osgi/service/monitor/MonitorEvent"
+		"subscribe"
+	}
+}

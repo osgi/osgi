@@ -1,0 +1,16 @@
+Manifest-Version: 1.0
+Bundle-Activator: ${p}.TestDeploymentAdmin
+Bundle-Name: test.deploymentadmin.tc2
+Bundle-SymbolicName: ${p}
+Bundle-Version: 1.0
+Bundle-Copyright: ${copyright}
+Bundle-Description: Deployment Test Case.
+Bundle-Vendor: OSGi Alliance
+Bundle-DocUrl: http://www.osgi.org/testcases/4/test.cases.template
+Bundle-ContactAddress: speccomments@mail.osgi.org
+Bundle-Category: osgi,test
+CVS-Header: $Header$
+$(IMPORT-PACKAGE)
+$(EXPORT-PACKAGE)
+$(PRIVATE-PACKAGE)
+

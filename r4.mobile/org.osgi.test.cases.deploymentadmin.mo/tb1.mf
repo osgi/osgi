@@ -1,0 +1,8 @@
+Manifest-Version: 1.0
+Bundle-Name: ${p}.tb1
+Bundle-SymbolicName: ${p}.tb1
+Bundle-Version: 1
+Bundle-Activator: $(p).tb1.Activator
+$(IMPORT-PACKAGE),org.osgi.service.deploymentadmin.spi
+$(EXPORT-PACKAGE)
+$(PRIVATE-PACKAGE)

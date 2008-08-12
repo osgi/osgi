@@ -1,0 +1,15 @@
+Manifest-Version: 1.0
+Bundle-SymbolicName: ${p}
+Bundle-Name: test.provisioning
+Bundle-Description: Tests the Initial Provisioning
+Bundle-Version: 3.0
+Bundle-Activator: $(p).ProvisioningTestCase
+Bundle-Vendor: OSGi Alliance
+Bundle-DocURL: http://www.osgi.org/
+Bundle-ContactAddress: info@mail.osgi.org
+Bundle-Category: osgi,test
+Bundle-Copyright: $(copyright)
+Comment: Created by $(DELIVER) at $(DATE)
+CVS-Header: $Header$
+$(IMPORT-PACKAGE)
+$(EXPORT-PACKAGE)

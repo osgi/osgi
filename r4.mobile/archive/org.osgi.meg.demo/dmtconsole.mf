@@ -1,0 +1,10 @@
+Manifest-Version: 1.0
+Bundle-Name: DmtConsole
+Bundle-SymbolicName: ${p}
+Bundle-Vendor: Nokia
+Bundle-Version: 1.0
+Bundle-Activator: ${p}.console.DmtConsole
+${IMPORT-PACKAGE}
+${EXPORT-PACKAGE}
+${PRIVATE-PACKAGE}
+

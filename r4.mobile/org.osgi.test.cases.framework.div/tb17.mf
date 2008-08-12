@@ -1,0 +1,16 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: test.cases.div.tb17
+Bundle-SymbolicName: test.cases.div.tb17; fragment-attachment:=always
+Bundle-Description: TB17 is part of the DIV test case. This bundle contains
+ a fragment bundle that contains a native code library. The bundle should be
+ able to load the native library.
+Bundle-Vendor: IBM
+Bundle-Version: 1.0
+Bundle-Activator: org.osgi.test.cases.div.tb17.NativeCode
+Comment: The host bundle doesn't contain the native library directly, but its fragment bundle (tb18) does.
+$(IMPORT-PACKAGE)
+$(EXPORT-PACKAGE)
+
+
+

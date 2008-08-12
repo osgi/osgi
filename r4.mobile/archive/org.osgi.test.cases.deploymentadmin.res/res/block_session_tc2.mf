@@ -1,0 +1,11 @@
+Manifest-Version: 1.0
+DeploymentPackage-SymbolicName: block_session
+DeploymentPackage-Version: 1.0
+
+Name: rp_bundle4.jar
+Bundle-SymbolicName: org.osgi.test.cases.deployment.bundles.rp4
+Bundle-Version: 1.0
+DeploymentPackage-Customizer: true
+
+Name: conf.txt
+Resource-Processor: org.osgi.test.cases.deployment.bundles.rp4

@@ -1,0 +1,13 @@
+Manifest-Version: 1.0
+Bundle-Vendor: Samsung
+Bundle-Version: 0.1
+Bundle-Activator: org.osgi.impl.service.upnp.cd.UPnPController
+Bundle-DocURL: http://samsung.com
+Bundle-Name: UPnP CD
+Bundle-Description: Samsung UPnP CD stack
+Import-Package: org.osgi.framework; specification-version=1.1, 
+  org.osgi.service.upnp;specification-version=1.0, 
+  org.osgi.service.http;specification-version=1.1, 
+  org.osgi.util.tracker;specification-version=1.1, 
+  org.osgi.impl.service.upnp.cp.util;specification-version=1.0
+

@@ -1,0 +1,13 @@
+Manifest-Version: 1.0
+Bundle-Name: ${p}.tb12
+Bundle-SymbolicName: ${p}.tb12
+Bundle-Description: This is a boot classpath extension bundle used
+ in the test that checks if a boot extension bundle that contains a
+ import package header is not installed.
+Bundle-ManifestVersion: 2
+Bundle-Version: 1.0
+Bundle-Classpath: .
+Fragment-Host: system.bundle; extension:=bootclasspath
+Import-Package: q, p
+Export-Package: q, p
+$(PRIVATE-PACKAGE)

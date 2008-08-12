@@ -1,0 +1,51 @@
+HTTP TEST SUITE RELEASE NOTES R2
+
+Changes
+
+In the second release of the http test suite the following testcases have been changed:
+
+  Odd registration name (R1 TC7) removed
+  Security (TC51)	         updated
+  Exceptions (TC52)              updated
+  Large URL (TC56)               updated
+  Odd URL (TC57)                 updated
+  Multiple names in URL (TC58)   updated
+ 
+Structure of thes suite has also been reworked to contain fewer files.
+
+
+Running the testsuite
+
+To run the testsuite use the IBM log service and the beta-2 versions of Gatespace framework and http. On NT4 this would look someting like:
+
+java -Dorg.osgi.service.http.port=8080 -jar %PUBLIC%\framework.jar  -init -install file:%PUBLIC%\org.osgi.test.director.jar -install file:%PUBLIC%\log.jar -install file:%PUBLIC%\servlet_.jar -install file:%PUBLIC%\http.jar -launch -start 1 -start 2 -start 3 -start 4
+
+to start the test harness and
+
+java -Dorg.osgi.service.http.port=80  -jar %PUBLIC%\framework.jar -init -install http://localhost:8080/osgi/test/org.osgi.test.target.jar -install file:%PUBLIC%\log.jar -install file:%PUBLIC%\servlet_.jar -install file:%PUBLIC%\http.jar -launch -start 1 -start 2 -start 3 -start 4
+
+to start the framework under test. Then start the applet that comes together with the Ericsson test tools (org.osgi.test.director.jar, org.osgi.test.target.jar and the NetscapeApplet) and install org.osgi.test.cases.http.jar.
+
+
+Remarks
+
+To work around problems with POST to HTTP service reference implementation the POST request is setup in the following manner:
+
+	URL u = new URL("http://thehost:80/httptest/servlet3?p1=0&p2=1");	HttpURLConnection conn = (HttpURLConnection u.openConnection();
+	conn.setRequestMethod("POST");
+ 	conn.setDoOutput(true);
+ 	conn.setRequestProperty("Content-Type", "text/plain");
+	PrintWriter pw = new PrintWriter(conn.getOutputStream());
+ 	pw.flush();
+	conn.connect();
+ 	InputStream is = conn.getInputStream();
+	...
+	
+in stead of
+
+	URL u = new URL("http://thehost:80/httptest/servlet3?p1=0&p2=1");	HttpURLConnection c = (HttpURLConnection)u.openConnection();
+	c.setRequestMethod("POST");
+	InputStream in = c.getInputStream();
+	...
+
+Both ways work with the sun jswdk webserver, only the first with Gatespaces.

@@ -1,0 +1,1223 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE MgmtTree SYSTEM "OMA-DM-DDF-V1_2.dtd">
+<!-- 
+/*
+ * $Header$
+ * 
+ * Copyright (c) OSGi Alliance (2006). All Rights Reserved.
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+-->		
+<MgmtTree>
+    <VerDTD>1.2</VerDTD>
+    <Man>OSGi Alliance</Man>
+    <!-- Application Management Object -->
+    <Node>
+        <NodeName>Application</NodeName>
+        <DFProperties>
+            <AccessType>
+                <Get></Get>
+            </AccessType>
+            <Description>Applications subtree</Description>
+            <DFFormat>
+                <node/>
+            </DFFormat>
+            <Occurrence>
+                <One/>
+            </Occurrence>
+            <Scope>
+                <Permanent/>
+            </Scope>
+            <DFTitle>Applications subtree</DFTitle>
+            <DFType>
+                <DDFName></DDFName>
+            </DFType>
+            <CaseSense>
+                <CS></CS>
+            </CaseSense>
+        </DFProperties>
+        <!-- app_id -->
+        <Node>
+            <!--dynamic name-->
+            <NodeName></NodeName>
+            <DFProperties>
+                <AccessType>
+                    <Get></Get>
+                </AccessType>
+                <Description>ID of the application (mangled)</Description>
+                <DFFormat>
+                    <node/>
+                </DFFormat>
+                <Occurrence>
+                    <ZeroOrMore/>
+                </Occurrence>
+                <Scope>
+                    <Permanent/>
+                </Scope>
+                <DFTitle>ID of the application (mangled)</DFTitle>
+                <DFType>
+                    <DDFName></DDFName>
+                </DFType>
+                <CaseSense>
+                    <CS></CS>
+                </CaseSense>
+            </DFProperties>
+            <!-- Name -->
+            <Node>
+                <NodeName>Name</NodeName>
+                <DFProperties>
+                    <AccessType>
+                        <Get></Get>
+                    </AccessType>
+                    <Description>Name property</Description>
+                    <DFFormat>
+                        <chr/>
+                    </DFFormat>
+                    <Occurrence>
+                        <One/>
+                    </Occurrence>
+                    <Scope>
+                        <Permanent/>
+                    </Scope>
+                    <DFTitle>Name property</DFTitle>
+                    <DFType>
+                        <MIME>text/plain</MIME>
+                    </DFType>
+                    <CaseSense>
+                        <CS></CS>
+                    </CaseSense>
+                </DFProperties>
+            </Node>
+            <!-- end of Name -->
+            <!-- ApplicationID -->
+            <Node>
+                <NodeName>ApplicationID</NodeName>
+                <DFProperties>
+                    <AccessType>
+                        <Get></Get>
+                    </AccessType>
+                    <Description>service.pid property 
+                        (unmangled)</Description>
+                    <DFFormat>
+                        <chr/>
+                    </DFFormat>
+                    <Occurrence>
+                        <One/>
+                    </Occurrence>
+                    <Scope>
+                        <Permanent/>
+                    </Scope>
+                    <DFTitle>service.pid property (unmangled)</DFTitle>
+                    <DFType>
+                        <MIME>text/plain</MIME>
+                    </DFType>
+                    <CaseSense>
+                        <CS></CS>
+                    </CaseSense>
+                </DFProperties>
+            </Node>
+            <!-- end of ApplicationID -->
+            <!-- IconURI -->
+            <Node>
+                <NodeName>IconURI</NodeName>
+                <DFProperties>
+                    <AccessType>
+                        <Get></Get>
+                    </AccessType>
+                    <Description>URI of the application's icon</Description>
+                    <DFFormat>
+                        <chr/>
+                    </DFFormat>
+                    <Occurrence>
+                        <One/>
+                    </Occurrence>
+                    <Scope>
+                        <Permanent/>
+                    </Scope>
+                    <DFTitle>URI of the application's icon</DFTitle>
+                    <DFType>
+                        <MIME>text/plain</MIME>
+                    </DFType>
+                    <CaseSense>
+                        <CS></CS>
+                    </CaseSense>
+                </DFProperties>
+            </Node>
+            <!-- end of IconURI -->
+            <!-- Vendor -->
+            <Node>
+                <NodeName>Vendor</NodeName>
+                <DFProperties>
+                    <AccessType>
+                        <Get></Get>
+                    </AccessType>
+                    <Description>Vendor of the app</Description>
+                    <DFFormat>
+                        <chr/>
+                    </DFFormat>
+                    <Occurrence>
+                        <ZeroOrOne/>
+                    </Occurrence>
+                    <Scope>
+                        <Permanent/>
+                    </Scope>
+                    <DFTitle>Vendor of the app</DFTitle>
+                    <DFType>
+                        <MIME>text/plain</MIME>
+                    </DFType>
+                    <CaseSense>
+                        <CS></CS>
+                    </CaseSense>
+                </DFProperties>
+            </Node>
+            <!-- end of Vendor -->
+            <!-- Version -->
+            <Node>
+                <NodeName>Version</NodeName>
+                <DFProperties>
+                    <AccessType>
+                        <Get></Get>
+                    </AccessType>
+                    <Description>Version of the app</Description>
+                    <DFFormat>
+                        <chr/>
+                    </DFFormat>
+                    <Occurrence>
+                        <ZeroOrOne/>
+                    </Occurrence>
+                    <Scope>
+                        <Permanent/>
+                    </Scope>
+                    <DFTitle>Version of the app</DFTitle>
+                    <DFType>
+                        <MIME>text/plain</MIME>
+                    </DFType>
+                    <CaseSense>
+                        <CS></CS>
+                    </CaseSense>
+                </DFProperties>
+            </Node>
+            <!-- end of Version -->
+            <!-- Locked -->
+            <Node>
+                <NodeName>Locked</NodeName>
+                <DFProperties>
+                    <AccessType>
+                        <Get></Get>
+                    </AccessType>
+                    <Description>Is the app locked?</Description>
+                    <DFFormat>
+                        <bool/>
+                    </DFFormat>
+                    <Occurrence>
+                        <One/>
+                    </Occurrence>
+                    <Scope>
+                        <Permanent/>
+                    </Scope>
+                    <DFTitle>Is the app locked?</DFTitle>
+                    <DFType>
+                        <MIME>text/plain</MIME>
+                    </DFType>
+                    <CaseSense>
+                        <CS></CS>
+                    </CaseSense>
+                </DFProperties>
+            </Node>
+            <!-- end of Locked -->
+            <!-- ContainerID -->
+            <Node>
+                <NodeName>ContainerID</NodeName>
+                <DFProperties>
+                    <AccessType>
+                        <Get></Get>
+                    </AccessType>
+                    <Description>The container that registered this 
+                        app</Description>
+                    <DFFormat>
+                        <chr/>
+                    </DFFormat>
+                    <Occurrence>
+                        <One/>
+                    </Occurrence>
+                    <Scope>
+                        <Permanent/>
+                    </Scope>
+                    <DFTitle>The container that registered this 
+                        app</DFTitle>
+                    <DFType>
+                        <MIME>text/plain</MIME>
+                    </DFType>
+                    <CaseSense>
+                        <CS></CS>
+                    </CaseSense>
+                </DFProperties>
+            </Node>
+            <!-- end of ContainerID -->
+            <!-- Location -->
+            <Node>
+                <NodeName>Location</NodeName>
+                <DFProperties>
+                    <AccessType>
+                        <Get></Get>
+                    </AccessType>
+                    <Description>The application.location 
+                        property</Description>
+                    <DFFormat>
+                        <chr/>
+                    </DFFormat>
+                    <Occurrence>
+                        <One/>
+                    </Occurrence>
+                    <Scope>
+                        <Permanent/>
+                    </Scope>
+                    <DFTitle>The application.location property</DFTitle>
+                    <DFType>
+                        <MIME>text/plain</MIME>
+                    </DFType>
+                    <CaseSense>
+                        <CS></CS>
+                    </CaseSense>
+                </DFProperties>
+            </Node>
+            <!-- end of Location -->
+            <!-- Ext -->
+            <Node>
+                <NodeName>Ext</NodeName>
+                <DFProperties>
+                    <AccessType>
+                        <Get></Get>
+                    </AccessType>
+                    <Description>Application model and container specific 
+                        extensions</Description>
+                    <DFFormat>
+                        <node/>
+                    </DFFormat>
+                    <Occurrence>
+                        <One/>
+                    </Occurrence>
+                    <Scope>
+                        <Permanent/>
+                    </Scope>
+                    <DFTitle>Application model and container specific 
+                        extensions</DFTitle>
+                    <DFType>
+                        <DDFName></DDFName>
+                    </DFType>
+                    <CaseSense>
+                        <CS></CS>
+                    </CaseSense>
+                </DFProperties>
+            </Node>
+            <!-- end of Ext -->
+            <!-- Instances -->
+            <Node>
+                <NodeName>Instances</NodeName>
+                <DFProperties>
+                    <AccessType>
+                        <Get></Get>
+                    </AccessType>
+                    <Description>Currently existing app 
+                        instances</Description>
+                    <DFFormat>
+                        <node/>
+                    </DFFormat>
+                    <Occurrence>
+                        <One/>
+                    </Occurrence>
+                    <Scope>
+                        <Permanent/>
+                    </Scope>
+                    <DFTitle>Currently existing app instances</DFTitle>
+                    <DFType>
+                        <DDFName></DDFName>
+                    </DFType>
+                    <CaseSense>
+                        <CS></CS>
+                    </CaseSense>
+                </DFProperties>
+                <!-- instance_id -->
+                <Node>
+                    <!--dynamic name-->
+                    <NodeName></NodeName>
+                    <DFProperties>
+                        <AccessType>
+                            <Get></Get>
+                        </AccessType>
+                        <Description>service.pid of the instance, 
+                            mangled</Description>
+                        <DFFormat>
+                            <node/>
+                        </DFFormat>
+                        <Occurrence>
+                            <ZeroOrMore/>
+                        </Occurrence>
+                        <Scope>
+                            <Permanent/>
+                        </Scope>
+                        <DFTitle>service.pid of the instance, 
+                            mangled</DFTitle>
+                        <DFType>
+                            <DDFName></DDFName>
+                        </DFType>
+                        <CaseSense>
+                            <CS></CS>
+                        </CaseSense>
+                    </DFProperties>
+                    <!-- State -->
+                    <Node>
+                        <NodeName>State</NodeName>
+                        <DFProperties>
+                            <AccessType>
+                                <Get></Get>
+                            </AccessType>
+                            <Description>State of the instance</Description>
+                            <DFFormat>
+                                <chr/>
+                            </DFFormat>
+                            <Occurrence>
+                                <One/>
+                            </Occurrence>
+                            <Scope>
+                                <Permanent/>
+                            </Scope>
+                            <DFTitle>State of the instance</DFTitle>
+                            <DFType>
+                                <MIME>text/plain</MIME>
+                            </DFType>
+                            <CaseSense>
+                                <CS></CS>
+                            </CaseSense>
+                        </DFProperties>
+                    </Node>
+                    <!-- end of State -->
+                    <!-- InstanceID -->
+                    <Node>
+                        <NodeName>InstanceID</NodeName>
+                        <DFProperties>
+                            <AccessType>
+                                <Get></Get>
+                            </AccessType>
+                            <Description>service.pid, 
+                                unmangled</Description>
+                            <DFFormat>
+                                <chr/>
+                            </DFFormat>
+                            <Occurrence>
+                                <One/>
+                            </Occurrence>
+                            <Scope>
+                                <Permanent/>
+                            </Scope>
+                            <DFTitle>service.pid, unmangled</DFTitle>
+                            <DFType>
+                                <MIME>text/plain</MIME>
+                            </DFType>
+                            <CaseSense>
+                                <CS></CS>
+                            </CaseSense>
+                        </DFProperties>
+                    </Node>
+                    <!-- end of InstanceID -->
+                    <!-- Operations -->
+                    <Node>
+                        <NodeName>Operations</NodeName>
+                        <DFProperties>
+                            <AccessType>
+                                <Get></Get>
+                            </AccessType>
+                            <Description>Subtree for lifecycle operations 
+                                for this instance</Description>
+                            <DFFormat>
+                                <node/>
+                            </DFFormat>
+                            <Occurrence>
+                                <One/>
+                            </Occurrence>
+                            <Scope>
+                                <Permanent/>
+                            </Scope>
+                            <DFTitle>Subtree for lifecycle operations for 
+                                this instance</DFTitle>
+                            <DFType>
+                                <DDFName></DDFName>
+                            </DFType>
+                            <CaseSense>
+                                <CS></CS>
+                            </CaseSense>
+                        </DFProperties>
+                        <!-- Stop -->
+                        <Node>
+                            <NodeName>Stop</NodeName>
+                            <DFProperties>
+                                <AccessType>
+                                    <Exec></Exec>
+                                    <Get></Get>
+                                </AccessType>
+                                <Description>Stops the instance when 
+                                    executed</Description>
+                                <DFFormat>
+                                    <null/>
+                                </DFFormat>
+                                <Occurrence>
+                                    <One/>
+                                </Occurrence>
+                                <Scope>
+                                    <Permanent/>
+                                </Scope>
+                                <DFTitle>Stops the instance when 
+                                    executed</DFTitle>
+                                <DFType>
+                                    <MIME>text/plain</MIME>
+                                </DFType>
+                                <CaseSense>
+                                    <CS></CS>
+                                </CaseSense>
+                            </DFProperties>
+                        </Node>
+                        <!-- end of Stop -->
+                        <!-- Ext -->
+                        <Node>
+                            <NodeName>Ext</NodeName>
+                            <DFProperties>
+                                <AccessType>
+                                    <Get></Get>
+                                </AccessType>
+                                <Description>Application model specific 
+                                    extensions</Description>
+                                <DFFormat>
+                                    <node/>
+                                </DFFormat>
+                                <Occurrence>
+                                    <One/>
+                                </Occurrence>
+                                <Scope>
+                                    <Permanent/>
+                                </Scope>
+                                <DFTitle>Application model specific 
+                                    extensions</DFTitle>
+                                <DFType>
+                                    <DDFName></DDFName>
+                                </DFType>
+                                <CaseSense>
+                                    <CS></CS>
+                                </CaseSense>
+                            </DFProperties>
+                        </Node>
+                        <!-- end of Ext -->
+                    </Node>
+                    <!-- end of Operations -->
+                </Node>
+                <!-- end of instance_id -->
+            </Node>
+            <!-- end of Instances -->
+            <!-- Operations -->
+            <Node>
+                <NodeName>Operations</NodeName>
+                <DFProperties>
+                    <AccessType>
+                        <Get></Get>
+                    </AccessType>
+                    <Description>Subtree for parameters of lifecycle 
+                        operations</Description>
+                    <DFFormat>
+                        <node/>
+                    </DFFormat>
+                    <Occurrence>
+                        <One/>
+                    </Occurrence>
+                    <Scope>
+                        <Permanent/>
+                    </Scope>
+                    <DFTitle>Subtree for parameters of lifecycle 
+                        operations</DFTitle>
+                    <DFType>
+                        <DDFName></DDFName>
+                    </DFType>
+                    <CaseSense>
+                        <CS></CS>
+                    </CaseSense>
+                </DFProperties>
+                <!-- Lock -->
+                <Node>
+                    <NodeName>Lock</NodeName>
+                    <DFProperties>
+                        <AccessType>
+                            <Exec></Exec>
+                            <Get></Get>
+                        </AccessType>
+                        <Description>Locks the app when 
+                            executed</Description>
+                        <DFFormat>
+                            <null/>
+                        </DFFormat>
+                        <Occurrence>
+                            <One/>
+                        </Occurrence>
+                        <Scope>
+                            <Permanent/>
+                        </Scope>
+                        <DFTitle>Locks the app when executed</DFTitle>
+                        <DFType>
+                            <MIME>text/plain</MIME>
+                        </DFType>
+                        <CaseSense>
+                            <CS></CS>
+                        </CaseSense>
+                    </DFProperties>
+                </Node>
+                <!-- end of Lock -->
+                <!-- Unlock -->
+                <Node>
+                    <NodeName>Unlock</NodeName>
+                    <DFProperties>
+                        <AccessType>
+                            <Exec></Exec>
+                            <Get></Get>
+                        </AccessType>
+                        <Description>Unlocks the app when 
+                            executed</Description>
+                        <DFFormat>
+                            <null/>
+                        </DFFormat>
+                        <Occurrence>
+                            <One/>
+                        </Occurrence>
+                        <Scope>
+                            <Permanent/>
+                        </Scope>
+                        <DFTitle>Unlocks the app when executed</DFTitle>
+                        <DFType>
+                            <MIME>text/plain</MIME>
+                        </DFType>
+                        <CaseSense>
+                            <CS></CS>
+                        </CaseSense>
+                    </DFProperties>
+                </Node>
+                <!-- end of Unlock -->
+                <!-- Launch -->
+                <Node>
+                    <NodeName>Launch</NodeName>
+                    <DFProperties>
+                        <AccessType>
+                            <Get></Get>
+                        </AccessType>
+                        <Description>Subtree for launching</Description>
+                        <DFFormat>
+                            <node/>
+                        </DFFormat>
+                        <Occurrence>
+                            <One/>
+                        </Occurrence>
+                        <Scope>
+                            <Permanent/>
+                        </Scope>
+                        <DFTitle>Subtree for launching</DFTitle>
+                        <DFType>
+                            <DDFName></DDFName>
+                        </DFType>
+                        <CaseSense>
+                            <CS></CS>
+                        </CaseSense>
+                    </DFProperties>
+                    <!-- Launch_ID -->
+                    <Node>
+                        <!--dynamic name-->
+                        <NodeName></NodeName>
+                        <DFProperties>
+                            <AccessType>
+                                <Add></Add>
+                                <Delete></Delete>
+                                <Exec></Exec>
+                                <Get></Get>
+                            </AccessType>
+                            <Description>A set of launching 
+                                parameters</Description>
+                            <DFFormat>
+                                <node/>
+                            </DFFormat>
+                            <Occurrence>
+                                <ZeroOrMore/>
+                            </Occurrence>
+                            <Scope>
+                                <Dynamic/>
+                            </Scope>
+                            <DFTitle>A set of launching parameters</DFTitle>
+                            <DFType>
+                                <DDFName></DDFName>
+                            </DFType>
+                            <CaseSense>
+                                <CS></CS>
+                            </CaseSense>
+                        </DFProperties>
+                        <!-- Arguments -->
+                        <Node>
+                            <NodeName>Arguments</NodeName>
+                            <DFProperties>
+                                <AccessType>
+                                    <Get></Get>
+                                </AccessType>
+                                <Description>Argument subtree</Description>
+                                <DFFormat>
+                                    <node/>
+                                </DFFormat>
+                                <Occurrence>
+                                    <One/>
+                                </Occurrence>
+                                <!--automatic-->
+                                <Scope>
+                                    <Dynamic></Dynamic>
+                                </Scope>
+                                <DFTitle>Argument subtree</DFTitle>
+                                <DFType>
+                                    <DDFName></DDFName>
+                                </DFType>
+                                <CaseSense>
+                                    <CS></CS>
+                                </CaseSense>
+                            </DFProperties>
+                            <!-- arg_id -->
+                            <Node>
+                                <!--dynamic name-->
+                                <NodeName></NodeName>
+                                <DFProperties>
+                                    <AccessType>
+                                        <Add></Add>
+                                        <Delete></Delete>
+                                        <Get></Get>
+                                    </AccessType>
+                                    <Description>A startup 
+                                        argument</Description>
+                                    <DFFormat>
+                                        <node/>
+                                    </DFFormat>
+                                    <Occurrence>
+                                        <ZeroOrMore/>
+                                    </Occurrence>
+                                    <Scope>
+                                        <Dynamic/>
+                                    </Scope>
+                                    <DFTitle>A startup argument</DFTitle>
+                                    <DFType>
+                                        <DDFName></DDFName>
+                                    </DFType>
+                                    <CaseSense>
+                                        <CS></CS>
+                                    </CaseSense>
+                                </DFProperties>
+                                <!-- Name -->
+                                <Node>
+                                    <NodeName>Name</NodeName>
+                                    <DFProperties>
+                                        <AccessType>
+                                            <Get></Get>
+                                            <Replace></Replace>
+                                        </AccessType>
+                                        <Description>Name of the 
+                                            argument</Description>
+                                        <DFFormat>
+                                            <chr/>
+                                        </DFFormat>
+                                        <Occurrence>
+                                            <One/>
+                                        </Occurrence>
+                                        <!--automatic-->
+                                        <Scope>
+                                            <Dynamic/>
+                                        </Scope>
+                                        <DFTitle>Name of the 
+                                            argument</DFTitle>
+                                        <DFType>
+                                            <MIME>text/plain</MIME>
+                                        </DFType>
+                                        <CaseSense>
+                                            <CS></CS>
+                                        </CaseSense>
+                                    </DFProperties>
+                                </Node>
+                                <!-- end of Name -->
+                                <!-- Value -->
+                                <Node>
+                                    <NodeName>Value</NodeName>
+                                    <DFProperties>
+                                        <AccessType>
+                                            <Get></Get>
+                                            <Replace></Replace>
+                                        </AccessType>
+                                        <Description>Value of the 
+                                            argument</Description>
+                                        <!--format can be bin, chr, int, float, bool, null-->
+                                        <DFFormat>
+                                            <chr/>
+                                        </DFFormat>
+                                        <Occurrence>
+                                            <ZeroOrOne/>
+                                        </Occurrence>
+                                        <!--automatic-->
+                                        <Scope>
+                                            <Dynamic/>
+                                        </Scope>
+                                        <DFTitle>Value of the 
+                                            argument</DFTitle>
+                                        <DFType>
+                                            <MIME>text/plain</MIME>
+                                        </DFType>
+                                        <CaseSense>
+                                            <CS></CS>
+                                        </CaseSense>
+                                    </DFProperties>
+                                </Node>
+                                <!-- end of Value -->
+                            </Node>
+                            <!-- end of arg_id -->
+                        </Node>
+                        <!-- end of Arguments -->
+                        <!-- Result -->
+                        <Node>
+                            <NodeName>Result</NodeName>
+                            <DFProperties>
+                                <AccessType>
+                                    <Get></Get>
+                                </AccessType>
+                                <Description>Result of the latest launch 
+                                    operation</Description>
+                                <DFFormat>
+                                    <node/>
+                                </DFFormat>
+                                <Occurrence>
+                                    <One/>
+                                </Occurrence>
+                                <!--automatic-->
+                                <Scope>
+                                    <Dynamic></Dynamic>
+                                </Scope>
+                                <DFTitle>Result of the latest launch 
+                                    operation</DFTitle>
+                                <DFType>
+                                    <DDFName></DDFName>
+                                </DFType>
+                                <CaseSense>
+                                    <CS></CS>
+                                </CaseSense>
+                            </DFProperties>
+                            <!-- InstanceID -->
+                            <Node>
+                                <NodeName>InstanceID</NodeName>
+                                <DFProperties>
+                                    <AccessType>
+                                        <Get></Get>
+                                    </AccessType>
+                                    <Description>ID of the created 
+                                        instance</Description>
+                                    <DFFormat>
+                                        <chr/>
+                                    </DFFormat>
+                                    <Occurrence>
+                                        <One/>
+                                    </Occurrence>
+                                    <!--automatic-->
+                                    <Scope>
+                                        <Dynamic/>
+                                    </Scope>
+                                    <DFTitle>ID of the created 
+                                        instance</DFTitle>
+                                    <DFType>
+                                        <MIME>text/plain</MIME>
+                                    </DFType>
+                                    <CaseSense>
+                                        <CS></CS>
+                                    </CaseSense>
+                                </DFProperties>
+                            </Node>
+                            <!-- end of InstanceID -->
+                            <!-- Status -->
+                            <Node>
+                                <NodeName>Status</NodeName>
+                                <DFProperties>
+                                    <AccessType>
+                                        <Get></Get>
+                                    </AccessType>
+                                    <Description>OK or Exception 
+                                        class</Description>
+                                    <DFFormat>
+                                        <chr/>
+                                    </DFFormat>
+                                    <Occurrence>
+                                        <One/>
+                                    </Occurrence>
+                                    <!--automatic-->
+                                    <Scope>
+                                        <Dynamic/>
+                                    </Scope>
+                                    <DFTitle>OK or Exception class</DFTitle>
+                                    <DFType>
+                                        <MIME>text/plain</MIME>
+                                    </DFType>
+                                    <CaseSense>
+                                        <CS></CS>
+                                    </CaseSense>
+                                </DFProperties>
+                            </Node>
+                            <!-- end of Status -->
+                            <!-- Message -->
+                            <Node>
+                                <NodeName>Message</NodeName>
+                                <DFProperties>
+                                    <AccessType>
+                                        <Get></Get>
+                                    </AccessType>
+                                    <Description>Empty or Exception 
+                                        message</Description>
+                                    <DFFormat>
+                                        <chr/>
+                                    </DFFormat>
+                                    <Occurrence>
+                                        <One/>
+                                    </Occurrence>
+                                    <!--automatic-->
+                                    <Scope>
+                                        <Dynamic/>
+                                    </Scope>
+                                    <DFTitle>Empty or Exception 
+                                        message</DFTitle>
+                                    <DFType>
+                                        <MIME>text/plain</MIME>
+                                    </DFType>
+                                    <CaseSense>
+                                        <CS></CS>
+                                    </CaseSense>
+                                </DFProperties>
+                            </Node>
+                            <!-- end of Message -->
+                        </Node>
+                        <!-- end of Result -->
+                    </Node>
+                    <!-- end of Launch_ID -->
+                </Node>
+                <!-- end of Launch -->
+            </Node>
+            <!-- end of Operations -->
+            <!-- Schedules -->
+            <Node>
+                <NodeName>Schedules</NodeName>
+                <DFProperties>
+                    <AccessType>
+                        <Get></Get>
+                    </AccessType>
+                    <Description>Subtree of the existing 
+                        schedules</Description>
+                    <DFFormat>
+                        <node/>
+                    </DFFormat>
+                    <Occurrence>
+                        <One/>
+                    </Occurrence>
+                    <Scope>
+                        <Permanent/>
+                    </Scope>
+                    <DFTitle>Subtree of the existing schedules</DFTitle>
+                    <DFType>
+                        <DDFName></DDFName>
+                    </DFType>
+                    <CaseSense>
+                        <CS></CS>
+                    </CaseSense>
+                </DFProperties>
+                <!-- schedule_id -->
+                <Node>
+                    <!--dynamic name-->
+                    <NodeName></NodeName>
+                    <DFProperties>
+                        <AccessType>
+                            <Add></Add>
+                            <Delete></Delete>
+                            <Get></Get>
+                        </AccessType>
+                        <Description>A schedule for this app</Description>
+                        <DFFormat>
+                            <node/>
+                        </DFFormat>
+                        <Occurrence>
+                            <ZeroOrMore/>
+                        </Occurrence>
+                        <Scope>
+                            <Dynamic/>
+                        </Scope>
+                        <DFTitle>A schedule for this app</DFTitle>
+                        <DFType>
+                            <DDFName></DDFName>
+                        </DFType>
+                        <CaseSense>
+                            <CS></CS>
+                        </CaseSense>
+                    </DFProperties>
+                    <!-- Arguments -->
+                    <Node>
+                        <NodeName>Arguments</NodeName>
+                        <DFProperties>
+                            <AccessType>
+                                <Get></Get>
+                            </AccessType>
+                            <Description>Argument subtree</Description>
+                            <DFFormat>
+                                <node/>
+                            </DFFormat>
+                            <Occurrence>
+                                <One/>
+                            </Occurrence>
+                            <!--automatic-->
+                            <Scope>
+                                <Dynamic></Dynamic>
+                            </Scope>
+                            <DFTitle>Argument subtree</DFTitle>
+                            <DFType>
+                                <DDFName></DDFName>
+                            </DFType>
+                            <CaseSense>
+                                <CS></CS>
+                            </CaseSense>
+                        </DFProperties>
+                        <!-- arg_id -->
+                        <Node>
+                            <!--dynamic name-->
+                            <NodeName></NodeName>
+                            <DFProperties>
+                                <AccessType>
+                                    <Add></Add>
+                                    <Delete></Delete>
+                                    <Get></Get>
+                                </AccessType>
+                                <Description>A startup 
+                                    argument</Description>
+                                <DFFormat>
+                                    <node/>
+                                </DFFormat>
+                                <Occurrence>
+                                    <ZeroOrMore/>
+                                </Occurrence>
+                                <Scope>
+                                    <Dynamic/>
+                                </Scope>
+                                <DFTitle>A startup argument</DFTitle>
+                                <DFType>
+                                    <DDFName></DDFName>
+                                </DFType>
+                                <CaseSense>
+                                    <CS></CS>
+                                </CaseSense>
+                            </DFProperties>
+                            <!-- Name -->
+                            <Node>
+                                <NodeName>Name</NodeName>
+                                <DFProperties>
+                                    <AccessType>
+                                        <Get></Get>
+                                        <Replace></Replace>
+                                    </AccessType>
+                                    <Description>Name of the 
+                                        argument</Description>
+                                    <DFFormat>
+                                        <chr/>
+                                    </DFFormat>
+                                    <Occurrence>
+                                        <One/>
+                                    </Occurrence>
+                                    <!--automatic-->
+                                    <Scope>
+                                        <Dynamic/>
+                                    </Scope>
+                                    <DFTitle>Name of the argument</DFTitle>
+                                    <DFType>
+                                        <MIME>text/plain</MIME>
+                                    </DFType>
+                                    <CaseSense>
+                                        <CS></CS>
+                                    </CaseSense>
+                                </DFProperties>
+                            </Node>
+                            <!-- end of Name -->
+                            <!-- Value -->
+                            <Node>
+                                <NodeName>Value</NodeName>
+                                <DFProperties>
+                                    <AccessType>
+                                        <Get></Get>
+                                        <Replace></Replace>
+                                    </AccessType>
+                                    <Description>Value of the 
+                                        argument</Description>
+                                    <!--format can be bin, chr, int, float, bool, null-->
+                                    <DFFormat>
+                                        <chr/>
+                                    </DFFormat>
+                                    <Occurrence>
+                                        <ZeroOrOne/>
+                                    </Occurrence>
+                                    <!--automatic-->
+                                    <Scope>
+                                        <Dynamic/>
+                                    </Scope>
+                                    <DFTitle>Value of the argument</DFTitle>
+                                    <DFType>
+                                        <MIME>text/plain</MIME>
+                                    </DFType>
+                                    <CaseSense>
+                                        <CS></CS>
+                                    </CaseSense>
+                                </DFProperties>
+                            </Node>
+                            <!-- end of Value -->
+                        </Node>
+                        <!-- end of arg_id -->
+                    </Node>
+                    <!-- end of Arguments -->
+                    <!-- Enabled -->
+                    <Node>
+                        <NodeName>Enabled</NodeName>
+                        <DFProperties>
+                            <AccessType>
+                                <Get></Get>
+                                <Replace></Replace>
+                            </AccessType>
+                            <DefaultValue>false</DefaultValue>
+                            <Description>Is the schedule 
+                                enabled</Description>
+                            <DFFormat>
+                                <bool/>
+                            </DFFormat>
+                            <Occurrence>
+                                <One/>
+                            </Occurrence>
+                            <!--automatic-->
+                            <Scope>
+                                <Dynamic/>
+                            </Scope>
+                            <DFTitle>Is the schedule enabled. Default is 
+                                false</DFTitle>
+                            <DFType>
+                                <MIME>text/plain</MIME>
+                            </DFType>
+                            <CaseSense>
+                                <CS></CS>
+                            </CaseSense>
+                        </DFProperties>
+                    </Node>
+                    <!-- end of Enabled -->
+                    <!-- TopicFilter -->
+                    <Node>
+                        <NodeName>TopicFilter</NodeName>
+                        <DFProperties>
+                            <AccessType>
+                                <Get></Get>
+                                <Replace></Replace>
+                            </AccessType>
+                            <DefaultValue></DefaultValue>
+                            <Description>Topic to listen to in the 
+                                schedule. Default is empty</Description>
+                            <DFFormat>
+                                <chr/>
+                            </DFFormat>
+                            <Occurrence>
+                                <One/>
+                            </Occurrence>
+                            <!--automatic-->
+                            <Scope>
+                                <Dynamic/>
+                            </Scope>
+                            <DFTitle>Topic to listen to in the schedule. 
+                                Default is empty</DFTitle>
+                            <DFType>
+                                <MIME>text/plain</MIME>
+                            </DFType>
+                            <CaseSense>
+                                <CS></CS>
+                            </CaseSense>
+                        </DFProperties>
+                    </Node>
+                    <!-- end of TopicFilter -->
+                    <!-- EventFilter -->
+                    <Node>
+                        <NodeName>EventFilter</NodeName>
+                        <DFProperties>
+                            <AccessType>
+                                <Get></Get>
+                                <Replace></Replace>
+                            </AccessType>
+                            <DefaultValue></DefaultValue>
+                            <Description>Filter of events to listen to. 
+                                Default is empty</Description>
+                            <DFFormat>
+                                <chr/>
+                            </DFFormat>
+                            <Occurrence>
+                                <One/>
+                            </Occurrence>
+                            <!--automatic-->
+                            <Scope>
+                                <Dynamic/>
+                            </Scope>
+                            <DFTitle>Filter of events to listen to. Default 
+                                is empty</DFTitle>
+                            <DFType>
+                                <MIME>text/plain</MIME>
+                            </DFType>
+                            <CaseSense>
+                                <CS></CS>
+                            </CaseSense>
+                        </DFProperties>
+                    </Node>
+                    <!-- end of EventFilter -->
+                    <!-- Recurring -->
+                    <Node>
+                        <NodeName>Recurring</NodeName>
+                        <DFProperties>
+                            <AccessType>
+                                <Get></Get>
+                                <Replace></Replace>
+                            </AccessType>
+                            <DefaultValue>false</DefaultValue>
+                            <Description>Is the schedule recurring. Default 
+                                is false</Description>
+                            <DFFormat>
+                                <bool/>
+                            </DFFormat>
+                            <Occurrence>
+                                <One/>
+                            </Occurrence>
+                            <!--automatic-->
+                            <Scope>
+                                <Dynamic/>
+                            </Scope>
+                            <DFTitle>Is the schedule recurring. Default is 
+                                false</DFTitle>
+                            <DFType>
+                                <MIME>text/plain</MIME>
+                            </DFType>
+                            <CaseSense>
+                                <CS></CS>
+                            </CaseSense>
+                        </DFProperties>
+                    </Node>
+                    <!-- end of Recurring -->
+                </Node>
+                <!-- end of schedule_id -->
+            </Node>
+            <!-- end of Schedules -->
+        </Node>
+        <!-- end of app_id -->
+    </Node>
+    <!-- end of Application -->
+</MgmtTree>

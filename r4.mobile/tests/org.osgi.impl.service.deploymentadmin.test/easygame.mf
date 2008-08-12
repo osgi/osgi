@@ -1,0 +1,7 @@
+Manifest-Version: 1.0
+Bundle-Activator: com.nokia.test.easygame.EasyGame
+Bundle-SymbolicName: easygame
+Bundle-Version: 1.0
+$(EXPORT-PACKAGE)
+$(IMPORT-PACKAGE)
+$(PRIVATE-PACKAGE)

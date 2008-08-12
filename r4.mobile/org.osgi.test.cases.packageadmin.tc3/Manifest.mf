@@ -1,0 +1,15 @@
+Manifest-Version: 1.0
+Bundle-SymbolicName: ${p}
+Bundle-Name: test.packageadmin.tc3
+Bundle-Copyright: ${copyright}
+Bundle-Description: Tests new bundle exporting same package. <BR>
+ Tests two bundles exporting the same package.<BR>
+Bundle-Vendor: OSGi Alliance
+Bundle-Version: 3.0
+Bundle-Activator: $(p).TC3
+CVS-Header: $Header$
+$(IMPORT-PACKAGE)
+$(EXPORT-PACKAGE)
+
+
+

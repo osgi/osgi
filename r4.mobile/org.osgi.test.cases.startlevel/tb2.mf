@@ -1,0 +1,12 @@
+Manifest-Version: 1.0
+Bundle-Name: test.cases.startlevel.tb2
+Bundle-Description: TB2 for startlevel test case
+Bundle-Vendor: Ericsson Radio Systems AB
+Bundle-Version: 1.3
+Bundle-DocURL: http://www.ericsson.com
+Bundle-ContactAddress: info@ericsson.com
+Bundle-Activator: $(p).tb2.Activator
+$(IMPORT-PACKAGE)
+$(EXPORT-PACKAGE)
+
+

@@ -1,0 +1,15 @@
+Manifest-Version: 1.0
+Bundle-Name: %bundlename
+Bundle-SymbolicName: ${p}.tb9; fragment-attachment="always"
+Bundle-Description: %bundledescription
+Bundle-Vendor: %bundlevendor
+Bundle-Version: 0.2
+Bundle-DocURL: %docurl
+Bundle-ContactAddress: %contactinfo
+Bundle-Activator: org.osgi.test.cases.framework.div.tb9a.Activator
+Bundle-Category: %bundlecategory
+Bundle-Copyright: %bundlecopyright
+Bundle-ManifestVersion: 2
+$(IMPORT-PACKAGE)
+$(EXPORT-PACKAGE)
+$(PRIVATE-PACKAGE)

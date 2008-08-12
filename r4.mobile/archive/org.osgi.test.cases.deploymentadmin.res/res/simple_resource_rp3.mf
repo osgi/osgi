@@ -1,0 +1,6 @@
+Manifest-Version: 1.0
+DeploymentPackage-SymbolicName: simple_dp
+DeploymentPackage-Version: 1.0.0
+
+Name: simple_resource.xml
+Resource-Processor: org.osgi.test.cases.deployment.bundles.rp3

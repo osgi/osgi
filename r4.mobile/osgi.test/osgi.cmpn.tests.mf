@@ -1,0 +1,15 @@
+Manifest-Version: 1.0
+Bundle-Name: cmpn.tests
+Bundle-SymbolicName: cmpn.tests
+Bundle-Version: ${cmpn.release.version}
+Bundle-Activator: org.osgi.tools.group.Group
+Bundle-Description: OSGi Service Platform Release 4, Compendium Test Cases
+Bundle-Copyright: ${copyright}
+CVS-Header: $Header$
+Bundle-Vendor: OSGi Alliance
+Bundle-Category: osgi,test
+Bundle-DocUrl: http://www.osgi.org/
+$(IMPORT-PACKAGE)
+group-load:  ${cmpn.tests.jars}
+
+

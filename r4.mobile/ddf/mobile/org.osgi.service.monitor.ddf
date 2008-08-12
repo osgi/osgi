@@ -1,0 +1,501 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE MgmtTree SYSTEM "OMA-DM-DDF-V1_2.dtd">
+<!-- 
+/*
+ * $Header$
+ * 
+ * Copyright (c) OSGi Alliance (2006). All Rights Reserved.
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+-->		
+<MgmtTree>
+    <VerDTD>1.2</VerDTD>
+    <Man>OSGi Alliance</Man>
+    <!-- Monitor Management Object -->
+    <Node>
+        <NodeName>Monitor</NodeName>
+        <DFProperties>
+            <AccessType>
+                <Get></Get>
+            </AccessType>
+            <Description>Monitoring subtree.</Description>
+            <DFFormat>
+                <node/>
+            </DFFormat>
+            <Occurrence>
+                <One/>
+            </Occurrence>
+            <Scope>
+                <Permanent/>
+            </Scope>
+            <DFTitle>Monitoring subtree</DFTitle>
+            <DFType>
+                <DDFName></DDFName>
+            </DFType>
+            <CaseSense>
+                <CS></CS>
+            </CaseSense>
+        </DFProperties>
+        <!-- pid -->
+        <Node>
+            <!-- Name is not given here, it is dynamic -->
+            <NodeName></NodeName>
+            <DFProperties>
+                <AccessType>
+                    <Get></Get>
+                </AccessType>
+                <Description>Identifier of the Monitorable
+                    service.</Description>
+                <DFFormat>
+                    <node/>
+                </DFFormat>
+                <Occurrence>
+                    <ZeroOrMore/>
+                </Occurrence>
+                <Scope>
+                    <Permanent/>
+                </Scope>
+                <DFTitle>Monitorable service subtree</DFTitle>
+                <DFType>
+                    <DDFName></DDFName>
+                </DFType>
+                <CaseSense>
+                    <CS></CS>
+                </CaseSense>
+            </DFProperties>
+            <!-- statusvariable -->
+            <Node>
+                <!-- Name is not given here, it is dynamic -->
+                <NodeName></NodeName>
+                <DFProperties>
+                    <AccessType>
+                        <Get></Get>
+                    </AccessType>
+                    <Description>Name of the status variable.</Description>
+                    <DFFormat>
+                        <node/>
+                    </DFFormat>
+                    <Occurrence>
+                        <ZeroOrMore/>
+                    </Occurrence>
+                    <Scope>
+                        <Permanent/>
+                    </Scope>
+                    <DFTitle>Status variable subtree</DFTitle>
+                    <DFType>
+                        <DDFName></DDFName>
+                    </DFType>
+                    <CaseSense>
+                        <CS></CS>
+                    </CaseSense>
+                </DFProperties>
+                <!-- TrapID -->
+                <Node>
+                    <NodeName>TrapID</NodeName>
+                    <DFProperties>
+                        <AccessType>
+                            <Get></Get>
+                        </AccessType>
+                        <Description>Full name of status 
+                            variable.</Description>
+                        <DFFormat>
+                            <chr/>
+                        </DFFormat>
+                        <Occurrence>
+                            <One/>
+                        </Occurrence>
+                        <Scope>
+                            <Permanent/>
+                        </Scope>
+                        <DFTitle>Status variable name</DFTitle>
+                        <DFType>
+                            <MIME>text/plain</MIME>
+                        </DFType>
+                        <CaseSense>
+                            <CS></CS>
+                        </CaseSense>
+                    </DFProperties>
+                </Node>
+                <!-- end of TrapID -->
+                <!-- CM -->
+                <Node>
+                    <NodeName>CM</NodeName>
+                    <DFProperties>
+                        <AccessType>
+                            <Get></Get>
+                        </AccessType>
+                        <Description>Collection method of the
+                            status variable.</Description>
+                        <DFFormat>
+                            <chr/>
+                        </DFFormat>
+                        <Occurrence>
+                            <One/>
+                        </Occurrence>
+                        <Scope>
+                            <Permanent/>
+                        </Scope>
+                        <DFTitle>Status variable collection method</DFTitle>
+                        <DFType>
+                            <MIME>text/plain</MIME>
+                        </DFType>
+                        <CaseSense>
+                            <CS></CS>
+                        </CaseSense>
+                    </DFProperties>
+                </Node>
+                <!-- end of CM -->
+                <!-- Results -->
+                <Node>
+                    <NodeName>Results</NodeName>
+                    <DFProperties>
+                        <AccessType>
+                            <Get></Get>
+                        </AccessType>
+                        <Description>Result of the last measurement.</Description>
+                        <!-- The format can be chr, int, float or bool but this
+                             can not be expressed in DDF -->
+                        <DFFormat>
+                            <chr/>
+                        </DFFormat>
+                        <Occurrence>
+                            <One/>
+                        </Occurrence>
+                        <Scope>
+                            <Permanent/>
+                        </Scope>
+                        <DFTitle>Value</DFTitle>
+                        <!-- Other types are possible based on the format -->
+                        <DFType>
+                            <MIME>text/plain</MIME>
+                        </DFType>
+                        <CaseSense>
+                            <CS></CS>
+                        </CaseSense>
+                    </DFProperties>
+                </Node>
+                <!-- end of Results -->
+                <!-- Server -->
+                <Node>
+                    <NodeName>Server</NodeName>
+                    <DFProperties>
+                        <AccessType>
+                            <Get></Get>
+                        </AccessType>
+                        <Description>Placeholder for monitoring 
+                            jobs.</Description>
+                        <DFFormat>
+                            <node/>
+                        </DFFormat>
+                        <Occurrence>
+                            <One/>
+                        </Occurrence>
+                        <Scope>
+                            <Permanent/>
+                        </Scope>
+                        <DFTitle>Monitoring job subtrees</DFTitle>
+                        <DFType>
+                            <DDFName></DDFName>
+                        </DFType>
+                        <CaseSense>
+                            <CS></CS>
+                        </CaseSense>
+                    </DFProperties>
+                    <!-- job_id -->
+                    <Node>
+                        <!-- Name is not given here, it is dynamic -->
+                        <NodeName></NodeName>
+                        <DFProperties>
+                            <AccessType>
+                                <Add></Add>
+                                <Delete></Delete>
+                                <Get></Get>
+                            </AccessType>
+                            <Description>Contains the properties
+                                of a monitoring job.</Description>
+                            <DFFormat>
+                                <node/>
+                            </DFFormat>
+                            <Occurrence>
+                                <ZeroOrMore/>
+                            </Occurrence>
+                            <Scope>
+                                <Dynamic/>
+                            </Scope>
+                            <DFTitle>Monitoring job subtree</DFTitle>
+                            <DFType>
+                                <DDFName></DDFName>
+                            </DFType>
+                            <CaseSense>
+                                <CS></CS>
+                            </CaseSense>
+                        </DFProperties>
+                        <!-- ServerId -->
+                        <Node>
+                            <NodeName>ServerId</NodeName>
+                            <DFProperties>
+                                <AccessType>
+                                    <Get></Get>
+                                    <Replace></Replace>
+                                </AccessType>
+                                <Description>Contains the name of the
+                                    management server requesting the job,
+                                    the default value is the name of the 
+                                    parent node.</Description>
+                                <DFFormat>
+                                    <chr/>
+                                </DFFormat>
+                                <Occurrence>
+                                    <One/>
+                                </Occurrence>
+                                <!--automatic-->
+                                <Scope>
+                                    <Dynamic/>
+                                </Scope>
+                                <DFTitle>The name of the management server</DFTitle>
+                                <DFType>
+                                    <MIME>text/plain</MIME>
+                                </DFType>
+                                <CaseSense>
+                                    <CS></CS>
+                                </CaseSense>
+                            </DFProperties>
+                        </Node>
+                        <!-- end of ServerId -->
+                        <!-- Enabled -->
+                        <Node>
+                            <NodeName>Enabled</NodeName>
+                            <DFProperties>
+                                <AccessType>
+                                    <Get></Get>
+                                    <Replace></Replace>
+                                </AccessType>
+                                <DefaultValue>false</DefaultValue>
+                                <Description>Enables/disables the
+                                monitoring job.</Description>
+                                <DFFormat>
+                                    <bool/>
+                                </DFFormat>
+                                <Occurrence>
+                                    <One/>
+                                </Occurrence>
+                                <!--automatic-->
+                                <Scope>
+                                    <Dynamic/>
+                                </Scope>
+                                <DFTitle>Job enabled state</DFTitle>
+                                <DFType>
+                                    <MIME>text/plain</MIME>
+                                </DFType>
+                                <CaseSense>
+                                    <CS></CS>
+                                </CaseSense>
+                            </DFProperties>
+                        </Node>
+                        <!-- end of Enabled -->
+                        <!-- TrapRef -->
+                        <Node>
+                            <NodeName>TrapRef</NodeName>
+                            <DFProperties>
+                                <AccessType>
+                                    <Get></Get>
+                                </AccessType>
+                                <Description>Placeholder for referenced 
+                                    Status Variables</Description>
+                                <DFFormat>
+                                    <node/>
+                                </DFFormat>
+                                <Occurrence>
+                                    <One/>
+                                </Occurrence>
+                                <!-- automatic -->
+                                <Scope>
+                                    <Dynamic/>
+                                </Scope>
+                                <DFTitle>Status Variable reference
+                                    subtree.</DFTitle>
+                                <DFType>
+                                    <DDFName></DDFName>
+                                </DFType>
+                                <CaseSense>
+                                    <CS></CS>
+                                </CaseSense>
+                            </DFProperties>
+                            <!-- TrapRefIdNode -->
+                            <Node>
+                                <!-- dynamic name -->
+                                <NodeName></NodeName>
+                                <DFProperties>
+                                    <AccessType>
+                                        <Add></Add>
+                                        <Delete></Delete>
+                                        <Get></Get>
+                                    </AccessType>
+                                    <Description>Placeholder for a referenced 
+                                        Status Variable</Description>
+                                    <DFFormat>
+                                        <node/>
+                                    </DFFormat>
+                                    <Occurrence>
+                                        <ZeroOrMore/>
+                                    </Occurrence>
+                                    <Scope>
+                                        <Dynamic/>
+                                    </Scope>
+                                    <DFTitle>Status Variable
+                                        reference node</DFTitle>
+                                    <DFType>
+                                        <DDFName></DDFName>
+                                    </DFType>
+                                    <CaseSense>
+                                        <CS></CS>
+                                    </CaseSense>
+                                </DFProperties>
+                                <!-- TrapRefId -->
+                                <Node>
+                                    <NodeName>TrapRefId</NodeName>
+                                    <DFProperties>
+                                        <AccessType>
+                                            <Get></Get>
+                                            <Replace></Replace>
+                                        </AccessType>
+                                        <Description>The identifier
+                                            of the referenced Status 
+                                            Variable.</Description>
+                                        <DFFormat>
+                                            <chr/>
+                                        </DFFormat>
+                                        <Occurrence>
+                                            <One/>
+                                        </Occurrence>
+                                        <Scope>
+                                            <Dynamic/>
+                                        </Scope>
+                                        <DFTitle>Status Variable reference
+                                            identifier</DFTitle>
+                                        <DFType>
+                                            <MIME>text/plain</MIME>
+                                        </DFType>
+                                        <CaseSense>
+                                            <CS></CS>
+                                        </CaseSense>
+                                    </DFProperties>
+                                </Node>
+                                <!-- end of TrapRefId -->
+                            </Node>
+                            <!-- end of TrapRefIdNode -->
+                        </Node>
+                        <!-- end of TrapRef -->
+                        <!-- Reporting -->
+                        <Node>
+                            <NodeName>Reporting</NodeName>
+                            <DFProperties>
+                                <AccessType>
+                                    <Get></Get>
+                                </AccessType>
+                                <Description>Contains reporting
+                                    parameters of the monitoring
+                                    job.</Description>
+                                <DFFormat>
+                                    <node/>
+                                </DFFormat>
+                                <Occurrence>
+                                    <One/>
+                                </Occurrence>
+                                <!-- automatic -->
+                                <Scope>
+                                    <Dynamic/>
+                                </Scope>
+                                <DFTitle>Reporting parameter
+                                    subtree</DFTitle>
+                                <DFType>
+                                    <DDFName></DDFName>
+                                </DFType>
+                                <CaseSense>
+                                    <CS></CS>
+                                </CaseSense>
+                            </DFProperties>
+                            <!-- Type -->
+                            <Node>
+                                <NodeName>Type</NodeName>
+                                <DFProperties>
+                                    <AccessType>
+                                        <Get></Get>
+                                        <Replace></Replace>
+                                    </AccessType>
+                                    <Description>Selects time (TM) or Event 
+                                        (EV) based reporting.</Description>
+                                    <DFFormat>
+                                        <chr/>
+                                    </DFFormat>
+                                    <Occurrence>
+                                        <One/>
+                                    </Occurrence>
+                                    <!--automatic-->
+                                    <Scope>
+                                        <Dynamic/>
+                                    </Scope>
+                                    <DFTitle>Reporting type</DFTitle>
+                                    <DFType>
+                                        <MIME>text/plain</MIME>
+                                    </DFType>
+                                    <CaseSense>
+                                        <CS></CS>
+                                    </CaseSense>
+                                </DFProperties>
+                            </Node>
+                            <!-- end of Type -->
+                            <!-- Value -->
+                            <Node>
+                                <NodeName>Value</NodeName>
+                                <DFProperties>
+                                    <AccessType>
+                                        <Get></Get>
+                                        <Replace></Replace>
+                                    </AccessType>
+                                    <Description>Defines the
+                                        frequency or number of
+                                        reports.</Description>
+                                    <DFFormat>
+                                        <int/>
+                                    </DFFormat>
+                                    <Occurrence>
+                                        <One/>
+                                    </Occurrence>
+                                    <Scope>
+                                        <Dynamic/>
+                                    </Scope>
+                                    <DFTitle>Reporting frequency</DFTitle>
+                                    <DFType>
+                                        <MIME>text/plain</MIME>
+                                    </DFType>
+                                    <CaseSense>
+                                        <CS></CS>
+                                    </CaseSense>
+                                </DFProperties>
+                            </Node>
+                            <!-- end of Value -->
+                        </Node>
+                        <!-- end of Reporting -->
+                    </Node>
+                    <!-- end of job_id -->
+                </Node>
+                <!-- end of Server -->
+            </Node>
+            <!-- end of Monitor/pid/statusvariable -->
+        </Node>
+        <!-- end of Monitor/pid -->
+    </Node>
+    <!-- end of Monitor -->
+</MgmtTree>

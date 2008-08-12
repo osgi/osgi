@@ -1,0 +1,7 @@
+Manifest-Version: 1.0
+DeploymentPackage-SymbolicName: bundle_throws_exception_dp
+DeploymentPackage-Version: 2.0.0
+
+Name: bundle005.jar
+Bundle-SymbolicName: bundles.tb5
+Bundle-Version: 1.0

@@ -1,0 +1,9 @@
+Manifest-Version: 1.0
+Bundle-Name: ${p}
+Bundle-SymbolicName: ${p}
+Bundle-Activator: ${p}.Activator
+$(IMPORT-PACKAGE)
+$(EXPORT-PACKAGE)
+${PRIVATE-PACKAGE}
+
+

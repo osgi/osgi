@@ -1,0 +1,9 @@
+Manifest-Version: 1.0
+Bundle-Name: org.osgi.test.cases.framework.dynpkgimport.tb0
+Bundle-Description: Dynamic package import test bundle 0
+Bundle-Vendor: OSGi Alliance
+Bundle-Version: 1.0.0
+Bundle-Activator: org.osgi.test.cases.framework.dynpkgimport.tb0.Activator
+$(EXPORT-PACKAGE)
+$(IMPORT-PACKAGE)
+

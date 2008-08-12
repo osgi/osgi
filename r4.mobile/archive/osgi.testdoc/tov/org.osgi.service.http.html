@@ -1,0 +1,248 @@
+<html>
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   
+      <link rel="stylesheet" href="osgi.css" type="text/css">
+      <title>Test Matrix for org.osgi.service.http</title>
+   </head>
+   <body>
+      <div width="700px">
+         <h1>Test Matrix for org.osgi.service.http</h1>
+         <p>
+            <description>
+               
+               <p>The OSGi Http Service Package. Specification Version 1.2.
+                  
+               </p>
+               <p>Bundles wishing to use this package must list the package
+                  in the <tt>Import-Package</tt> header of the bundle's manifest.
+                  For example:
+                  
+               </p><pre>Import-Package:&nbsp;org.osgi.service.http;&nbsp;version=1.2</pre>
+                  </description><br></p>
+         <table>
+            <tr>
+               <th colspan="2">Tested by:</th>
+            </tr>
+            <tr>
+               <td><a href="org.osgi.test.cases.http.html">org.osgi.test.cases.http</a></td>
+            </tr>
+         </table><br><br><table width="300">
+            <tr>
+               <th></th>
+               <th>Class</th>
+               <th>Methods</th>
+               <th>Tests</th>
+               <th>Ratio</th>
+            </tr>
+            <tr>
+               <td></td>
+               <td><a href="#org.osgi.service.http.HttpContext">HttpContext</a></td>
+               <td>3</td>
+               <td>0</td>
+               <td class="passed">0.00</td>
+            </tr>
+            <tr>
+               <td></td>
+               <td><a href="#org.osgi.service.http.HttpService">HttpService</a></td>
+               <td>4</td>
+               <td>0</td>
+               <td class="passed">0.00</td>
+            </tr>
+            <tr>
+               <td></td>
+               <td><a href="#org.osgi.service.http.NamespaceException">NamespaceException</a></td>
+               <td>5</td>
+               <td>0</td>
+               <td class="passed">0.00</td>
+            </tr>
+         </table><br><table width="700">
+            <tr>
+               <th class="pointer" colspan="2"><a name="org.osgi.service.http.HttpContext"></a>Class org.osgi.service.http.HttpContext
+               </th>
+            </tr>
+            <tr>
+               <td colspan="2">
+                  This interface defines methods that the Http Service may call to get
+                   information about a registration.
+                     
+               </td>
+            </tr>
+            <tr>
+               <th width="350"><a name="HttpContext.getMimeType(String)"></a>getMimeType(String)
+               </th>
+               <th width="350"><b class="passed"> NO TEST FOUND </b></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Maps a name to a MIME type.
+                     
+               </td>
+               <td width="350"></td>
+            </tr>
+            <tr>
+               <th width="350"><a name="HttpContext.getResource(String)"></a>getResource(String)
+               </th>
+               <th width="350"><b class="passed"> NO TEST FOUND </b></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Maps a resource name to a URL.
+                     
+               </td>
+               <td width="350"></td>
+            </tr>
+            <tr>
+               <th width="350"><a name="HttpContext.handleSecurity(HttpServletRequest,HttpServletResponse)"></a>handleSecurity(HttpServletRequest,HttpServletResponse)
+               </th>
+               <th width="350"><b class="passed"> NO TEST FOUND </b></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Handles security for the specified request.
+                     
+               </td>
+               <td width="350"></td>
+            </tr>
+         </table><br><table width="700">
+            <tr>
+               <th class="pointer" colspan="2"><a name="org.osgi.service.http.HttpService"></a>Class org.osgi.service.http.HttpService
+               </th>
+            </tr>
+            <tr>
+               <td colspan="2">
+                  The Http Service allows other bundles in the OSGi environment to dynamically
+                   register resources and servlets into the URI namespace of Http Service.
+                     
+               </td>
+            </tr>
+            <tr>
+               <th width="350"><a name="HttpService.createDefaultHttpContext()"></a>createDefaultHttpContext()
+               </th>
+               <th width="350"><b class="passed"> NO TEST FOUND </b></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Creates a default HttpContext for registering servlets or
+                   resources with the HttpService, a new HttpContext object is
+                   created each time this method is called.
+                     
+               </td>
+               <td width="350"></td>
+            </tr>
+            <tr>
+               <th width="350"><a name="HttpService.registerResources(String,String,HttpContext)"></a>registerResources(String,String,HttpContext)
+               </th>
+               <th width="350"><b class="passed"> NO TEST FOUND </b></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Registers resources into the URI namespace.
+                     
+               </td>
+               <td width="350"></td>
+            </tr>
+            <tr>
+               <th width="350"><a name="HttpService.registerServlet(String,Servlet,Dictionary,HttpContext)"></a>registerServlet(String,Servlet,Dictionary,HttpContext)
+               </th>
+               <th width="350"><b class="passed"> NO TEST FOUND </b></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Registers a servlet into the URI namespace.
+                     
+               </td>
+               <td width="350"></td>
+            </tr>
+            <tr>
+               <th width="350"><a name="HttpService.unregister(String)"></a>unregister(String)
+               </th>
+               <th width="350"><b class="passed"> NO TEST FOUND </b></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Unregisters a previous registration done by registerServlet or
+                   registerResources methods.
+                     
+               </td>
+               <td width="350"></td>
+            </tr>
+         </table><br><table width="700">
+            <tr>
+               <th class="pointer" colspan="2"><a name="org.osgi.service.http.NamespaceException"></a>Class org.osgi.service.http.NamespaceException
+               </th>
+            </tr>
+            <tr>
+               <td colspan="2">
+                  A NamespaceException is thrown to indicate an error with the caller's request
+                   to register a servlet or resources into the URI namespace of the Http
+                   Service.
+                     
+               </td>
+            </tr>
+            <tr>
+               <th width="350"><a name="NamespaceException.getCause()"></a>getCause()
+               </th>
+               <th width="350"><b class="passed"> NO TEST FOUND </b></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Returns the cause of this exception or null if no
+                   cause was specified when this exception was created.
+                     
+               </td>
+               <td width="350"></td>
+            </tr>
+            <tr>
+               <th width="350"><a name="NamespaceException.getException()"></a>getException()
+               </th>
+               <th width="350"><b class="passed"> NO TEST FOUND </b></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Returns the nested exception.
+                     
+               </td>
+               <td width="350"></td>
+            </tr>
+            <tr>
+               <th width="350"><a name="NamespaceException.initCause(Throwable)"></a>initCause(Throwable)
+               </th>
+               <th width="350"><b class="passed"> NO TEST FOUND </b></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  The cause of this exception can only be set when constructed.
+                     
+               </td>
+               <td width="350"></td>
+            </tr>
+            <tr>
+               <th width="350"><a name="NamespaceException.NamespaceException(String)"></a>NamespaceException(String)
+               </th>
+               <th width="350"><b class="passed"> NO TEST FOUND </b></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Construct a NamespaceException object with a detail message.
+                     
+               </td>
+               <td width="350"></td>
+            </tr>
+            <tr>
+               <th width="350"><a name="NamespaceException.NamespaceException(String,Throwable)"></a>NamespaceException(String,Throwable)
+               </th>
+               <th width="350"><b class="passed"> NO TEST FOUND </b></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Construct a NamespaceException object with a detail message
+                   and a nested exception.
+                     
+               </td>
+               <td width="350"></td>
+            </tr>
+         </table>
+      </div>
+   </body>
+</html>

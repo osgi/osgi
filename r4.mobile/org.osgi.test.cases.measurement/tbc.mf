@@ -1,0 +1,15 @@
+Manifest-Version: 1.0
+Bundle-Name: test.cases.log.tbc
+Bundle-Copyright: Copyright (c) OSGi Alliance (2000, 2002). All Rights Reserved.
+Bundle-Description: Tests the OSGi Log Service
+Bundle-Vendor: OSGi Alliance
+Bundle-Version: 3.0
+Bundle-DocUrl: http://membercvs.osgi.org/test/3
+Bundle-ContactAddress: speccomments@mail.osgi.org
+Bundle-Category: osgi,test
+Bundle-Activator: $(p).tbc.MeasurementControl
+CVS-Header: $Header$
+$(IMPORT-PACKAGE)
+$(EXPORT-PACKAGE)
+
+

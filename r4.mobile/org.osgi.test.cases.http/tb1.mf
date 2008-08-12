@@ -1,0 +1,12 @@
+Manifest-Version: 1.0
+Bundle-Name: test.cases.http.tbc.tb1
+Bundle-Vendor: OSGi Alliance
+Bundle-Version: 3.0
+Bundle-Activator: $(p).tbc.tb1.HttpTestBundle2
+Import-Service: org.osgi.service.http.HttpService
+Bundle-Description: Test Bundle for Http Service tests
+Import-Package: javax.servlet,
+ javax.servlet.http,
+ org.osgi.service.http;specification-version=1.1,
+ org.osgi.framework; specification-version=1.2
+

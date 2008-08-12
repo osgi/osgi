@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE MgmtTree SYSTEM "OMA-DM-DDF-V1_2.dtd">
+<!-- 
+/*
+ * $Header$
+ * 
+ * Copyright (c) OSGi Alliance (2006). All Rights Reserved.
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+-->		
+<MgmtTree>
+    <VerDTD>1.2</VerDTD>
+    <Man>OSGi Alliance</Man>
+    <!-- OSGi Root node -->
+    <Node>
+        <!-- The name and location of the OSGi root is not defined -->
+        <NodeName></NodeName>
+        <DFProperties>
+            <AccessType>
+                <Get/>
+            </AccessType>
+            <Description>Provides a root for all OSGi defined nodes. The 
+                location of the OSGi subtree in the DMT is not defined by the 
+                specification.</Description>
+            <DFFormat>
+                <node/>
+            </DFFormat>
+            <Occurrence>
+                <One/>
+            </Occurrence>
+            <Scope>
+                <Permanent/>
+            </Scope>
+            <DFTitle>OSGi Root Node</DFTitle>
+            <DFType>
+                <DDFName/>
+            </DFType>
+            <CaseSense>
+                <CS></CS>
+            </CaseSense>
+        </DFProperties>
+        <!-- Configuration Management Object reference -->
+        <Node>
+            <NodeName>Configuration</NodeName>
+            <DFProperties>
+                <AccessType>
+                    <Get></Get>
+                </AccessType>
+                <Description>Access to Configuration objects from Configuration 
+                    Admin.</Description>
+                <DFFormat>
+                    <node/>
+                </DFFormat>
+                <Occurrence>
+                    <One/>
+                </Occurrence>
+                <Scope>
+                    <Permanent/>
+                </Scope>
+                <DFTitle>Configuration subtree</DFTitle>
+                <DFType>
+                    <DDFName>org.osgi/1.0/ConfigurationManagementObject</DDFName>
+                </DFType>
+                <CaseSense>
+                    <CS></CS>
+                </CaseSense>
+            </DFProperties>
+        </Node>
+        <!-- Log Management Object reference -->
+        <Node>
+            <NodeName>Log</NodeName>
+            <DFProperties>
+                <AccessType>
+                    <Get></Get>
+                </AccessType>
+                <Description>Access to log records.</Description>
+                <DFFormat>
+                    <node/>
+                </DFFormat>
+                <Occurrence>
+                    <One/>
+                </Occurrence>
+                <Scope>
+                    <Permanent/>
+                </Scope>
+                <DFTitle>Log subtree</DFTitle>
+                <DFType>
+                    <DDFName>org.osgi/1.0/LogManagementObject</DDFName>
+                </DFType>
+                <CaseSense>
+                    <CS></CS>
+                </CaseSense>
+            </DFProperties>
+        </Node>
+        <!-- Monitor Management Object reference -->
+        <Node>
+            <NodeName>Monitor</NodeName>
+            <DFProperties>
+                <AccessType>
+                    <Get></Get>
+                </AccessType>
+                <Description>Monitoring subtree, optional.</Description>
+                <DFFormat>
+                    <node/>
+                </DFFormat>
+                <Occurrence>
+                    <ZeroOrOne/>
+                </Occurrence>
+                <Scope>
+                    <Permanent/>
+                </Scope>
+                <DFTitle>Monitoring subtree</DFTitle>
+                <DFType>
+                    <DDFName>org.osgi/1.0/MonitorManagementObject</DDFName>
+                </DFType>
+                <CaseSense>
+                    <CS></CS>
+                </CaseSense>
+            </DFProperties>
+        </Node>
+        <!-- Application Management Object reference -->
+        <Node>
+            <NodeName>Application</NodeName>
+            <DFProperties>
+                <AccessType>
+                    <Get></Get>
+                </AccessType>
+                <Description>Applications subtree.</Description>
+                <DFFormat>
+                    <node/>
+                </DFFormat>
+                <Occurrence>
+                    <One/>
+                </Occurrence>
+                <Scope>
+                    <Permanent/>
+                </Scope>
+                <DFTitle>Applications subtree</DFTitle>
+                <DFType>
+                    <DDFName>org.osgi/1.0/ApplicationManagementObject</DDFName>
+                </DFType>
+                <CaseSense>
+                    <CS></CS>
+                </CaseSense>
+            </DFProperties>
+        </Node>
+        <!-- Deployment Management Object reference -->
+        <Node>
+            <NodeName>Deployment</NodeName>
+            <DFProperties>
+                <AccessType>
+                    <Get></Get>
+                </AccessType>
+                <Description>Deployment subtree.</Description>
+                <DFFormat>
+                    <node/>
+                </DFFormat>
+                <Occurrence>
+                    <One/>
+                </Occurrence>
+                <Scope>
+                    <Permanent/>
+                </Scope>
+                <DFTitle>Deployment subtree</DFTitle>
+                <DFType>
+                    <DDFName>org.osgi/1.0/DeploymentManagementObject</DDFName>
+                </DFType>
+                <CaseSense>
+                    <CS></CS>
+                </CaseSense>
+            </DFProperties>
+        </Node>
+        <!-- Policy Management Object reference -->
+        <Node>
+            <NodeName>Policy</NodeName>
+            <DFProperties>
+                <AccessType>
+                    <Get></Get>
+                </AccessType>
+                <Description>Policy subtree.</Description>
+                <DFFormat>
+                    <node/>
+                </DFFormat>
+                <Occurrence>
+                    <One/>
+                </Occurrence>
+                <Scope>
+                    <Permanent/>
+                </Scope>
+                <DFTitle>Policy subtree</DFTitle>
+                <DFType>
+                    <DDFName>org.osgi/1.0/PolicyManagementObject</DDFName>
+                </DFType>
+                <CaseSense>
+                    <CS></CS>
+                </CaseSense>
+            </DFProperties>
+        </Node>
+    </Node>
+</MgmtTree>

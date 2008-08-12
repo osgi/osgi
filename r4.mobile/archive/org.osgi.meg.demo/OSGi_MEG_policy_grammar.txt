@@ -1,0 +1,86 @@
+//   GRAMMAR
+//////////////////////////////////////////////////////////
+
+<CPIS>       = <CPI> 
+               <CPI_CONT>
+
+<CPI_CONT>   = <END_OF_FILE> | <CPIS>
+
+<CPI>        = CPI cpi_id { 
+                   <CONDS> 
+                   <PERMS> 
+               }
+
+<CONDS>      = <COND>
+               <COND_CONT>
+
+<COND_CONT>  = | <CONDS>
+
+<COND>       = CONDITION cond_name { 
+                   <PARAMS> 
+               }
+
+<PARAMS>     = "param_str" 
+               <PARAM_CONT>
+
+<PARAM_CONT> = | <PARAMS>
+
+<PERMS>      = <PERM>
+               <PERM_CONT>
+
+<PERM_CONT>  = | <PERMS>
+
+<PERM>       = PERMISSION perm_name { 
+                   "target" 
+                   "actionlist" 
+               }
+
+	       
+//   SYSTEM PROPERTY REFERENCES 
+//////////////////////////////////////////////////////////
+	    
+Quoted strings are allowed to contain system property references. The syntax of such references is:
+${<poperty name>}$
+E.g.:
+"file:/${org.osgi.meg.demo.workdirabsolute}$/osgi.test/target/bundles/74/data/org.osgi.impl.service.deploymentadmin.jar"
+
+//   COMMENTS
+//////////////////////////////////////////////////////////
+
+You are allowed to use C++ style comments.
+
+// example comment
+
+/*
+example comment
+*/
+
+
+//   EXAMPLE POLICY FILE
+//////////////////////////////////////////////////////////
+
+CPI cpi_Deployment_Admin {
+	CONDITION org.osgi.service.condpermadmin.BundleLocationCondition {
+		"file:/${org.osgi.meg.demo.workdirabsolute}$/osgi.test/target/bundles/74/data/org.osgi.impl.service.deploymentadmin.jar"
+	}
+	PERMISSION java.security.AllPermission {
+		"*" 
+		"*" 
+	}
+}
+
+/*-------------------------------------------------------------------------------*/
+
+CPI cpi_Root_1 {
+	CONDITION org.osgi.service.condpermadmin.BundleSignerCondition {
+		"- ; CN=Root1, OU=FAKEDONTUSE, O=CASoft, L=Budapest, C=HU"
+	}
+	PERMISSION org.osgi.framework.PackagePermission {
+		"*" 
+		"export, import" 
+	}
+	PERMISSION org.osgi.framework.ServicePermission {
+		"*" 
+		"register" 
+	}
+}

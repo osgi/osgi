@@ -1,0 +1,10 @@
+Manifest-Version: 1.0
+Bundle-SymbolicName: ${p}
+Bundle-Name: impl.service.application
+Bundle-Vendor: OSGi Alliance
+Bundle-Copyright: ${copyright}
+Bundle-Version: 1.0
+Bundle-Activator: ${p}.Activator
+$(IMPORT-PACKAGE)
+$(EXPORT-PACKAGE)
+$(PRIVATE-PACKAGE)

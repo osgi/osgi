@@ -1,0 +1,11 @@
+Manifest-Version: 1.0
+Bundle-Name: ${p}.tbc
+Bundle-SymbolicName: ${p}.tbc
+Bundle-Activator: $(p).tbc.DeploymentmoTestControl
+Bundle-Version: 1.0
+Bundle-Copyright: Copyright (c) OSGi Alliance (2000, 2002). All Rights Reserved.
+CVS-Header: $Header$
+$(IMPORT-PACKAGE),org.osgi.service.event,info.dmtree.security
+$(EXPORT-PACKAGE)
+$(PRIVATE-PACKAGE)
+

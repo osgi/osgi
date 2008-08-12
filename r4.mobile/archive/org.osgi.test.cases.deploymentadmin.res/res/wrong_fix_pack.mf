@@ -1,0 +1,8 @@
+Manifest-Version: 1.0
+DeploymentPackage-SymbolicName: simple_dp
+DeploymentPackage-Version: 1.2.3.build200501041230
+DeploymentPackage-FixPack: [1.2.3, *.4.5.6!
+
+Name: bundle001.jar
+Bundle-SymbolicName: bundles.tb1
+Bundle-Version: 1.0

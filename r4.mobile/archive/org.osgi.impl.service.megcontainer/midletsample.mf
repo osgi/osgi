@@ -1,0 +1,14 @@
+Manifest-Version: 1.0
+Bundle-Name: Midlet
+Bundle-Vendor: Nokia
+Bundle-Version: 1.0
+Bundle-ClassPath: .
+MIDlet-Name: NOKIA test MIDlet suite
+MIDlet-Version: 1.0.0
+MIDlet-Vendor: Nokia
+MIDlet-1: TestMidlet,/TestIcon.gif,com.nokia.test.midletsample.TestMidlet
+MicroEdition-Profile: MIDP-2.0
+MicroEdition-Configuration: CLDC-1.1
+Import-Package: javax.microedition.midlet, org.osgi.service.log, org.osgi.ser
+ vice.application, org.osgi.service.event, org.osgi.application, org.osgi.framework
+Export-Package: com.nokia.test.midletsample.export

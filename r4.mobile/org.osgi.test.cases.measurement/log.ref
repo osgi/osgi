@@ -1,0 +1,549 @@
+[begin=testUnitConstants]
+Unit.A: A
+Unit.C: C
+Unit.cd: cd
+Unit.F: F
+Unit.Gy: Gy
+Unit.Hz: Hz
+Unit.J: J
+Unit.K: K
+Unit.kat: kat
+Unit.kg: kg
+Unit.lx: lx
+Unit.m: m
+Unit.m2: m2
+Unit.m3: m3
+Unit.m_s: m/s
+Unit.m_s2: m/s2
+Unit.mol: mol
+Unit.N: N
+Unit.Ohm: Ohm
+Unit.Pa: Pa
+Unit.rad: rad
+Unit.S: S
+Unit.s: s
+Unit.T: T
+Unit.unity:
+Unit.V: V
+Unit.W: W
+Unit.Wb: Wb
+[end=testUnitConstants]
+
+[begin=testUnitComparison]
+[end=testUnitComparison]
+
+[begin=testStateConstructor]
+Value of state 0
+value: 1
+name: null
+time: 0
+Value of state 1
+value: 2
+name: firstState
+time: 0
+Value of state 2
+value: 3
+name: null
+time: 1000
+Value of state 3
+value: 4
+name: secondState
+time: 1001
+firstState.toString: 2 "firstState"
+secondState.toString: 4 "secondState"
+[end=testStateConstructor]
+
+[begin=testStateComparison]
+[end=testStateComparison]
+
+[begin=testMeasurementConstructor]
+Value of mesure 0
+value: 100.0
+error: 0.0
+unit:
+time: 0
+Value of mesure 1
+value: 101.0
+error: 0.0
+unit: m
+time: 0
+Value of mesure 2
+value: 102.0
+error: 0.0
+unit:
+time: 0
+Value of mesure 3
+value: 103.0
+error: 1.2
+unit: lx
+time: 0
+Value of mesure 4
+value: 104.0
+error: 1.3
+unit:
+time: 0
+Value of mesure 5
+value: 105.0
+error: 1.4
+unit: kg
+time: 1000
+Value of mesure 6
+value: 106.0
+error: 1.5
+unit:
+time: 1001
+[begin=testMeasurementConstructor]
+
+[begin=testMeasurementComparison]
+[end=testMeasurementComparison]
+
+[begin=testMeasurementAddition]
+mesure content after add
+value: 200.0
+error: 1.0
+unit: kg
+time: 1002
+mesure content after add
+value: 200.0
+error: 1.0
+unit: kg
+time: 1002
+mesure content after add
+value: 200.0
+error: 2.0
+unit: kg
+time: 1002
+mesure content after add
+value: 100.0
+error: 2.0
+unit: kg
+time: 1002
+add m to [m] can be done
+add m to [s,kg,K,A,mol,cd,rad,m/s,m/s2,m2,m3,Hz,N,Pa,J,W,C,V,F,Ohm,S,Wb,T,lx,Gy,kat,] cannot be done
+add s to [s] can be done
+add s to [m,kg,K,A,mol,cd,rad,m/s,m/s2,m2,m3,Hz,N,Pa,J,W,C,V,F,Ohm,S,Wb,T,lx,Gy,kat,] cannot be done
+add kg to [kg] can be done
+add kg to [m,s,K,A,mol,cd,rad,m/s,m/s2,m2,m3,Hz,N,Pa,J,W,C,V,F,Ohm,S,Wb,T,lx,Gy,kat,] cannot be done
+add K to [K] can be done
+add K to [m,s,kg,A,mol,cd,rad,m/s,m/s2,m2,m3,Hz,N,Pa,J,W,C,V,F,Ohm,S,Wb,T,lx,Gy,kat,] cannot be done
+add A to [A] can be done
+add A to [m,s,kg,K,mol,cd,rad,m/s,m/s2,m2,m3,Hz,N,Pa,J,W,C,V,F,Ohm,S,Wb,T,lx,Gy,kat,] cannot be done
+add mol to [mol] can be done
+add mol to [m,s,kg,K,A,cd,rad,m/s,m/s2,m2,m3,Hz,N,Pa,J,W,C,V,F,Ohm,S,Wb,T,lx,Gy,kat,] cannot be done
+add cd to [cd] can be done
+add cd to [m,s,kg,K,A,mol,rad,m/s,m/s2,m2,m3,Hz,N,Pa,J,W,C,V,F,Ohm,S,Wb,T,lx,Gy,kat,] cannot be done
+add rad to [rad] can be done
+add rad to [m,s,kg,K,A,mol,cd,m/s,m/s2,m2,m3,Hz,N,Pa,J,W,C,V,F,Ohm,S,Wb,T,lx,Gy,kat,] cannot be done
+add m/s to [m/s] can be done
+add m/s to [m,s,kg,K,A,mol,cd,rad,m/s2,m2,m3,Hz,N,Pa,J,W,C,V,F,Ohm,S,Wb,T,lx,Gy,kat,] cannot be done
+add m/s2 to [m/s2] can be done
+add m/s2 to [m,s,kg,K,A,mol,cd,rad,m/s,m2,m3,Hz,N,Pa,J,W,C,V,F,Ohm,S,Wb,T,lx,Gy,kat,] cannot be done
+add m2 to [m2] can be done
+add m2 to [m,s,kg,K,A,mol,cd,rad,m/s,m/s2,m3,Hz,N,Pa,J,W,C,V,F,Ohm,S,Wb,T,lx,Gy,kat,] cannot be done
+add m3 to [m3] can be done
+add m3 to [m,s,kg,K,A,mol,cd,rad,m/s,m/s2,m2,Hz,N,Pa,J,W,C,V,F,Ohm,S,Wb,T,lx,Gy,kat,] cannot be done
+add Hz to [Hz] can be done
+add Hz to [m,s,kg,K,A,mol,cd,rad,m/s,m/s2,m2,m3,N,Pa,J,W,C,V,F,Ohm,S,Wb,T,lx,Gy,kat,] cannot be done
+add N to [N] can be done
+add N to [m,s,kg,K,A,mol,cd,rad,m/s,m/s2,m2,m3,Hz,Pa,J,W,C,V,F,Ohm,S,Wb,T,lx,Gy,kat,] cannot be done
+add Pa to [Pa] can be done
+add Pa to [m,s,kg,K,A,mol,cd,rad,m/s,m/s2,m2,m3,Hz,N,J,W,C,V,F,Ohm,S,Wb,T,lx,Gy,kat,] cannot be done
+add J to [J] can be done
+add J to [m,s,kg,K,A,mol,cd,rad,m/s,m/s2,m2,m3,Hz,N,Pa,W,C,V,F,Ohm,S,Wb,T,lx,Gy,kat,] cannot be done
+add W to [W] can be done
+add W to [m,s,kg,K,A,mol,cd,rad,m/s,m/s2,m2,m3,Hz,N,Pa,J,C,V,F,Ohm,S,Wb,T,lx,Gy,kat,] cannot be done
+add C to [C] can be done
+add C to [m,s,kg,K,A,mol,cd,rad,m/s,m/s2,m2,m3,Hz,N,Pa,J,W,V,F,Ohm,S,Wb,T,lx,Gy,kat,] cannot be done
+add V to [V] can be done
+add V to [m,s,kg,K,A,mol,cd,rad,m/s,m/s2,m2,m3,Hz,N,Pa,J,W,C,F,Ohm,S,Wb,T,lx,Gy,kat,] cannot be done
+add F to [F] can be done
+add F to [m,s,kg,K,A,mol,cd,rad,m/s,m/s2,m2,m3,Hz,N,Pa,J,W,C,V,Ohm,S,Wb,T,lx,Gy,kat,] cannot be done
+add Ohm to [Ohm] can be done
+add Ohm to [m,s,kg,K,A,mol,cd,rad,m/s,m/s2,m2,m3,Hz,N,Pa,J,W,C,V,F,S,Wb,T,lx,Gy,kat,] cannot be done
+add S to [S] can be done
+add S to [m,s,kg,K,A,mol,cd,rad,m/s,m/s2,m2,m3,Hz,N,Pa,J,W,C,V,F,Ohm,Wb,T,lx,Gy,kat,] cannot be done
+add Wb to [Wb] can be done
+add Wb to [m,s,kg,K,A,mol,cd,rad,m/s,m/s2,m2,m3,Hz,N,Pa,J,W,C,V,F,Ohm,S,T,lx,Gy,kat,] cannot be done
+add T to [T] can be done
+add T to [m,s,kg,K,A,mol,cd,rad,m/s,m/s2,m2,m3,Hz,N,Pa,J,W,C,V,F,Ohm,S,Wb,lx,Gy,kat,] cannot be done
+add lx to [lx] can be done
+add lx to [m,s,kg,K,A,mol,cd,rad,m/s,m/s2,m2,m3,Hz,N,Pa,J,W,C,V,F,Ohm,S,Wb,T,Gy,kat,] cannot be done
+add Gy to [Gy] can be done
+add Gy to [m,s,kg,K,A,mol,cd,rad,m/s,m/s2,m2,m3,Hz,N,Pa,J,W,C,V,F,Ohm,S,Wb,T,lx,kat,] cannot be done
+add kat to [kat] can be done
+add kat to [m,s,kg,K,A,mol,cd,rad,m/s,m/s2,m2,m3,Hz,N,Pa,J,W,C,V,F,Ohm,S,Wb,T,lx,Gy,] cannot be done
+add  to [] can be done
+add  to [m,s,kg,K,A,mol,cd,rad,m/s,m/s2,m2,m3,Hz,N,Pa,J,W,C,V,F,Ohm,S,Wb,T,lx,Gy,kat] cannot be done
+Error computed by add = 1.2
+Error computed by add = 2.3
+[begin=testMeasurementAddition]
+
+[begin=testMeasurementSubstraction]
+mesure content after sub
+value: 0.0
+error: 1.0
+unit: kg
+time: 1002
+mesure content after sub
+value: 0.0
+error: 1.0
+unit: kg
+time: 1002
+mesure content after sub
+value: 0.0
+error: 2.0
+unit: kg
+time: 1002
+mesure content after sub
+value: 100.0
+error: 2.0
+unit: kg
+time: 1002
+sub m to [m] can be done
+sub m to [s,kg,K,A,mol,cd,rad,m/s,m/s2,m2,m3,Hz,N,Pa,J,W,C,V,F,Ohm,S,Wb,T,lx,Gy,kat,] cannot be done
+sub s to [s] can be done
+sub s to [m,kg,K,A,mol,cd,rad,m/s,m/s2,m2,m3,Hz,N,Pa,J,W,C,V,F,Ohm,S,Wb,T,lx,Gy,kat,] cannot be done
+sub kg to [kg] can be done
+sub kg to [m,s,K,A,mol,cd,rad,m/s,m/s2,m2,m3,Hz,N,Pa,J,W,C,V,F,Ohm,S,Wb,T,lx,Gy,kat,] cannot be done
+sub K to [K] can be done
+sub K to [m,s,kg,A,mol,cd,rad,m/s,m/s2,m2,m3,Hz,N,Pa,J,W,C,V,F,Ohm,S,Wb,T,lx,Gy,kat,] cannot be done
+sub A to [A] can be done
+sub A to [m,s,kg,K,mol,cd,rad,m/s,m/s2,m2,m3,Hz,N,Pa,J,W,C,V,F,Ohm,S,Wb,T,lx,Gy,kat,] cannot be done
+sub mol to [mol] can be done
+sub mol to [m,s,kg,K,A,cd,rad,m/s,m/s2,m2,m3,Hz,N,Pa,J,W,C,V,F,Ohm,S,Wb,T,lx,Gy,kat,] cannot be done
+sub cd to [cd] can be done
+sub cd to [m,s,kg,K,A,mol,rad,m/s,m/s2,m2,m3,Hz,N,Pa,J,W,C,V,F,Ohm,S,Wb,T,lx,Gy,kat,] cannot be done
+sub rad to [rad] can be done
+sub rad to [m,s,kg,K,A,mol,cd,m/s,m/s2,m2,m3,Hz,N,Pa,J,W,C,V,F,Ohm,S,Wb,T,lx,Gy,kat,] cannot be done
+sub m/s to [m/s] can be done
+sub m/s to [m,s,kg,K,A,mol,cd,rad,m/s2,m2,m3,Hz,N,Pa,J,W,C,V,F,Ohm,S,Wb,T,lx,Gy,kat,] cannot be done
+sub m/s2 to [m/s2] can be done
+sub m/s2 to [m,s,kg,K,A,mol,cd,rad,m/s,m2,m3,Hz,N,Pa,J,W,C,V,F,Ohm,S,Wb,T,lx,Gy,kat,] cannot be done
+sub m2 to [m2] can be done
+sub m2 to [m,s,kg,K,A,mol,cd,rad,m/s,m/s2,m3,Hz,N,Pa,J,W,C,V,F,Ohm,S,Wb,T,lx,Gy,kat,] cannot be done
+sub m3 to [m3] can be done
+sub m3 to [m,s,kg,K,A,mol,cd,rad,m/s,m/s2,m2,Hz,N,Pa,J,W,C,V,F,Ohm,S,Wb,T,lx,Gy,kat,] cannot be done
+sub Hz to [Hz] can be done
+sub Hz to [m,s,kg,K,A,mol,cd,rad,m/s,m/s2,m2,m3,N,Pa,J,W,C,V,F,Ohm,S,Wb,T,lx,Gy,kat,] cannot be done
+sub N to [N] can be done
+sub N to [m,s,kg,K,A,mol,cd,rad,m/s,m/s2,m2,m3,Hz,Pa,J,W,C,V,F,Ohm,S,Wb,T,lx,Gy,kat,] cannot be done
+sub Pa to [Pa] can be done
+sub Pa to [m,s,kg,K,A,mol,cd,rad,m/s,m/s2,m2,m3,Hz,N,J,W,C,V,F,Ohm,S,Wb,T,lx,Gy,kat,] cannot be done
+sub J to [J] can be done
+sub J to [m,s,kg,K,A,mol,cd,rad,m/s,m/s2,m2,m3,Hz,N,Pa,W,C,V,F,Ohm,S,Wb,T,lx,Gy,kat,] cannot be done
+sub W to [W] can be done
+sub W to [m,s,kg,K,A,mol,cd,rad,m/s,m/s2,m2,m3,Hz,N,Pa,J,C,V,F,Ohm,S,Wb,T,lx,Gy,kat,] cannot be done
+sub C to [C] can be done
+sub C to [m,s,kg,K,A,mol,cd,rad,m/s,m/s2,m2,m3,Hz,N,Pa,J,W,V,F,Ohm,S,Wb,T,lx,Gy,kat,] cannot be done
+sub V to [V] can be done
+sub V to [m,s,kg,K,A,mol,cd,rad,m/s,m/s2,m2,m3,Hz,N,Pa,J,W,C,F,Ohm,S,Wb,T,lx,Gy,kat,] cannot be done
+sub F to [F] can be done
+sub F to [m,s,kg,K,A,mol,cd,rad,m/s,m/s2,m2,m3,Hz,N,Pa,J,W,C,V,Ohm,S,Wb,T,lx,Gy,kat,] cannot be done
+sub Ohm to [Ohm] can be done
+sub Ohm to [m,s,kg,K,A,mol,cd,rad,m/s,m/s2,m2,m3,Hz,N,Pa,J,W,C,V,F,S,Wb,T,lx,Gy,kat,] cannot be done
+sub S to [S] can be done
+sub S to [m,s,kg,K,A,mol,cd,rad,m/s,m/s2,m2,m3,Hz,N,Pa,J,W,C,V,F,Ohm,Wb,T,lx,Gy,kat,] cannot be done
+sub Wb to [Wb] can be done
+sub Wb to [m,s,kg,K,A,mol,cd,rad,m/s,m/s2,m2,m3,Hz,N,Pa,J,W,C,V,F,Ohm,S,T,lx,Gy,kat,] cannot be done
+sub T to [T] can be done
+sub T to [m,s,kg,K,A,mol,cd,rad,m/s,m/s2,m2,m3,Hz,N,Pa,J,W,C,V,F,Ohm,S,Wb,lx,Gy,kat,] cannot be done
+sub lx to [lx] can be done
+sub lx to [m,s,kg,K,A,mol,cd,rad,m/s,m/s2,m2,m3,Hz,N,Pa,J,W,C,V,F,Ohm,S,Wb,T,Gy,kat,] cannot be done
+sub Gy to [Gy] can be done
+sub Gy to [m,s,kg,K,A,mol,cd,rad,m/s,m/s2,m2,m3,Hz,N,Pa,J,W,C,V,F,Ohm,S,Wb,T,lx,kat,] cannot be done
+sub kat to [kat] can be done
+sub kat to [m,s,kg,K,A,mol,cd,rad,m/s,m/s2,m2,m3,Hz,N,Pa,J,W,C,V,F,Ohm,S,Wb,T,lx,Gy,] cannot be done
+sub  to [] can be done
+sub  to [m,s,kg,K,A,mol,cd,rad,m/s,m/s2,m2,m3,Hz,N,Pa,J,W,C,V,F,Ohm,S,Wb,T,lx,Gy,kat] cannot be done
+Error computed by sub = 1.2
+Error computed by sub = 2.3
+[begin=testMeasurementSubstraction]
+
+[begin=testMeasurementMultiplication]
+mesure content after mul
+value: 10000.0
+error: 100.0
+unit: kg
+time: 1002
+mesure content after mul
+value: 10000.0
+error: 100.0
+unit: kg^2
+time: 1002
+mesure content after mul
+value: 10000.0
+error: 200.0
+unit: kg^2
+time: 1002
+mesure content after mul
+value: 0.0
+error: 100.0
+unit: kg^2
+time: 1002
+mul m to [m,s,kg,K,A,mol,cd,rad,m/s,m/s2,m2,m3,Hz,N,Pa,J,W,C,V,F,Ohm,S,Wb,T,lx,Gy,kat,] can be done
+mul s to [m,s,kg,K,A,mol,cd,rad,m/s,m/s2,m2,m3,Hz,N,Pa,J,W,C,V,F,Ohm,S,Wb,T,lx,Gy,kat,] can be done
+mul kg to [m,s,kg,K,A,mol,cd,rad,m/s,m/s2,m2,m3,Hz,N,Pa,J,W,C,V,F,Ohm,S,Wb,T,lx,Gy,kat,] can be done
+mul K to [m,s,kg,K,A,mol,cd,rad,m/s,m/s2,m2,m3,Hz,N,Pa,J,W,C,V,F,Ohm,S,Wb,T,lx,Gy,kat,] can be done
+mul A to [m,s,kg,K,A,mol,cd,rad,m/s,m/s2,m2,m3,Hz,N,Pa,J,W,C,V,F,Ohm,S,Wb,T,lx,Gy,kat,] can be done
+mul mol to [m,s,kg,K,A,mol,cd,rad,m/s,m/s2,m2,m3,Hz,N,Pa,J,W,C,V,F,Ohm,S,Wb,T,lx,Gy,kat,] can be done
+mul cd to [m,s,kg,K,A,mol,cd,rad,m/s,m/s2,m2,m3,Hz,N,Pa,J,W,C,V,F,Ohm,S,Wb,T,lx,Gy,kat,] can be done
+mul rad to [m,s,kg,K,A,mol,cd,rad,m/s,m/s2,m2,m3,Hz,N,Pa,J,W,C,V,F,Ohm,S,Wb,T,lx,Gy,kat,] can be done
+mul m/s to [m,s,kg,K,A,mol,cd,rad,m/s,m/s2,m2,m3,Hz,N,Pa,J,W,C,V,F,Ohm,S,Wb,T,lx,Gy,kat,] can be done
+mul m/s2 to [m,s,kg,K,A,mol,cd,rad,m/s,m/s2,m2,m3,Hz,N,Pa,J,W,C,V,F,Ohm,S,Wb,T,lx,Gy,kat,] can be done
+mul m2 to [m,s,kg,K,A,mol,cd,rad,m/s,m/s2,m2,m3,Hz,N,Pa,J,W,C,V,F,Ohm,S,Wb,T,lx,Gy,kat,] can be done
+mul m3 to [m,s,kg,K,A,mol,cd,rad,m/s,m/s2,m2,m3,Hz,N,Pa,J,W,C,V,F,Ohm,S,Wb,T,lx,Gy,kat,] can be done
+mul Hz to [m,s,kg,K,A,mol,cd,rad,m/s,m/s2,m2,m3,Hz,N,Pa,J,W,C,V,F,Ohm,S,Wb,T,lx,Gy,kat,] can be done
+mul N to [m,s,kg,K,A,mol,cd,rad,m/s,m/s2,m2,m3,Hz,N,Pa,J,W,C,V,F,Ohm,S,Wb,T,lx,Gy,kat,] can be done
+mul Pa to [m,s,kg,K,A,mol,cd,rad,m/s,m/s2,m2,m3,Hz,N,Pa,J,W,C,V,F,Ohm,S,Wb,T,lx,Gy,kat,] can be done
+mul J to [m,s,kg,K,A,mol,cd,rad,m/s,m/s2,m2,m3,Hz,N,Pa,J,W,C,V,F,Ohm,S,Wb,T,lx,Gy,kat,] can be done
+mul W to [m,s,kg,K,A,mol,cd,rad,m/s,m/s2,m2,m3,Hz,N,Pa,J,W,C,V,F,Ohm,S,Wb,T,lx,Gy,kat,] can be done
+mul C to [m,s,kg,K,A,mol,cd,rad,m/s,m/s2,m2,m3,Hz,N,Pa,J,W,C,V,F,Ohm,S,Wb,T,lx,Gy,kat,] can be done
+mul V to [m,s,kg,K,A,mol,cd,rad,m/s,m/s2,m2,m3,Hz,N,Pa,J,W,C,V,F,Ohm,S,Wb,T,lx,Gy,kat,] can be done
+mul F to [m,s,kg,K,A,mol,cd,rad,m/s,m/s2,m2,m3,Hz,N,Pa,J,W,C,V,F,Ohm,S,Wb,T,lx,Gy,kat,] can be done
+mul Ohm to [m,s,kg,K,A,mol,cd,rad,m/s,m/s2,m2,m3,Hz,N,Pa,J,W,C,V,F,Ohm,S,Wb,T,lx,Gy,kat,] can be done
+mul S to [m,s,kg,K,A,mol,cd,rad,m/s,m/s2,m2,m3,Hz,N,Pa,J,W,C,V,F,Ohm,S,Wb,T,lx,Gy,kat,] can be done
+mul Wb to [m,s,kg,K,A,mol,cd,rad,m/s,m/s2,m2,m3,Hz,N,Pa,J,W,C,V,F,Ohm,S,Wb,T,lx,Gy,kat,] can be done
+mul T to [m,s,kg,K,A,mol,cd,rad,m/s,m/s2,m2,m3,Hz,N,Pa,J,W,C,V,F,Ohm,S,Wb,T,lx,Gy,kat,] can be done
+mul lx to [m,s,kg,K,A,mol,cd,rad,m/s,m/s2,m2,m3,Hz,N,Pa,J,W,C,V,F,Ohm,S,Wb,T,lx,Gy,kat,] can be done
+mul Gy to [m,s,kg,K,A,mol,cd,rad,m/s,m/s2,m2,m3,Hz,N,Pa,J,W,C,V,F,Ohm,S,Wb,T,lx,Gy,kat,] can be done
+mul kat to [m,s,kg,K,A,mol,cd,rad,m/s,m/s2,m2,m3,Hz,N,Pa,J,W,C,V,F,Ohm,S,Wb,T,lx,Gy,kat,] can be done
+mul  to [m,s,kg,K,A,mol,cd,rad,m/s,m/s2,m2,m3,Hz,N,Pa,J,W,C,V,F,Ohm,S,Wb,T,lx,Gy,kat,] can be done
+mul kg to  = kg
+mul kg to kg = kg^2
+mul kg to kg^2 = kg^3
+mul kg to kg^3 = kg^4
+mul kg to kg^4 = kg^5
+mul kg to kg^5 = kg^6
+mul kg to kg^6 = kg^7
+mul kg to kg^7 = kg^8
+mul kg to kg^8 = kg^9
+mul kg to kg^9 = kg^10
+mul kg to kg^10 = kg^11
+mul kg to kg^11 = kg^12
+mul kg to kg^12 = kg^13
+mul kg to kg^13 = kg^14
+mul kg to kg^14 = kg^15
+mul kg to kg^15 = kg^16
+mul kg to kg^16 = kg^17
+mul kg to kg^17 = kg^18
+mul kg to kg^18 = kg^19
+mul kg to kg^19 = kg^20
+mul kg to kg^20 = kg^21
+mul kg to kg^21 = kg^22
+mul kg to kg^22 = kg^23
+mul kg to kg^23 = kg^24
+mul kg to kg^24 = kg^25
+mul kg to kg^25 = kg^26
+mul kg to kg^26 = kg^27
+mul kg to kg^27 = kg^28
+mul kg to kg^28 = kg^29
+mul kg to kg^29 = kg^30
+mul kg to kg^30 = kg^31
+mul kg to kg^31 = kg^32
+mul kg to kg^32 = kg^33
+mul kg to kg^33 = kg^34
+mul kg to kg^34 = kg^35
+mul kg to kg^35 = kg^36
+mul kg to kg^36 = kg^37
+mul kg to kg^37 = kg^38
+mul kg to kg^38 = kg^39
+mul kg to kg^39 = kg^40
+mul kg to kg^40 = kg^41
+mul kg to kg^41 = kg^42
+mul kg to kg^42 = kg^43
+mul kg to kg^43 = kg^44
+mul kg to kg^44 = kg^45
+mul kg to kg^45 = kg^46
+mul kg to kg^46 = kg^47
+mul kg to kg^47 = kg^48
+mul kg to kg^48 = kg^49
+mul kg to kg^49 = kg^50
+mul kg to kg^50 = kg^51
+mul kg to kg^51 = kg^52
+mul kg to kg^52 = kg^53
+mul kg to kg^53 = kg^54
+mul kg to kg^54 = kg^55
+mul kg to kg^55 = kg^56
+mul kg to kg^56 = kg^57
+mul kg to kg^57 = kg^58
+mul kg to kg^58 = kg^59
+mul kg to kg^59 = kg^60
+mul kg to kg^60 = kg^61
+mul kg to kg^61 = kg^62
+mul kg to kg^62 = kg^63
+mul m to  = m
+mul s to m = m*s
+mul kg to m*s = m*s*kg
+mul K to m*s*kg = m*s*kg*K
+mul A to m*s*kg*K = m*s*kg*K*A
+mul mol to m*s*kg*K*A = m*s*kg*K*A*mol
+mul cd to m*s*kg*K*A*mol = m*s*kg*K*A*mol*cd
+mul rad to m*s*kg*K*A*mol*cd = m*s*kg*K*A*mol*cd*rad
+mul m/s to m*s*kg*K*A*mol*cd*rad = m^2*kg*K*A*mol*cd*rad
+mul m/s2 to m^2*kg*K*A*mol*cd*rad = m^3*kg*K*A*mol*cd*rad/s^2
+mul m2 to m^3*kg*K*A*mol*cd*rad/s^2 = m^5*kg*K*A*mol*cd*rad/s^2
+mul m3 to m^5*kg*K*A*mol*cd*rad/s^2 = m^8*kg*K*A*mol*cd*rad/s^2
+mul Hz to m^8*kg*K*A*mol*cd*rad/s^2 = m^8*kg*K*A*mol*cd*rad/s^3
+mul N to m^8*kg*K*A*mol*cd*rad/s^3 = m^9*kg^2*K*A*mol*cd*rad/s^5
+mul Pa to m^9*kg^2*K*A*mol*cd*rad/s^5 = m^8*kg^3*K*A*mol*cd*rad/s^7
+mul J to m^8*kg^3*K*A*mol*cd*rad/s^7 = m^10*kg^4*K*A*mol*cd*rad/s^9
+mul W to m^10*kg^4*K*A*mol*cd*rad/s^9 = m^12*kg^5*K*A*mol*cd*rad/s^12
+mul C to m^12*kg^5*K*A*mol*cd*rad/s^12 = m^12*kg^5*K*A^2*mol*cd*rad/s^11
+mul V to m^12*kg^5*K*A^2*mol*cd*rad/s^11 = m^14*kg^6*K*A*mol*cd*rad/s^14
+mul F to m^14*kg^6*K*A*mol*cd*rad/s^14 = m^12*kg^5*K*A^3*mol*cd*rad/s^10
+mul Ohm to m^12*kg^5*K*A^3*mol*cd*rad/s^10 = m^14*kg^6*K*A*mol*cd*rad/s^13
+mul S to m^14*kg^6*K*A*mol*cd*rad/s^13 = m^12*kg^5*K*A^3*mol*cd*rad/s^10
+mul Wb to m^12*kg^5*K*A^3*mol*cd*rad/s^10 = m^14*kg^6*K*A^2*mol*cd*rad/s^12
+mul T to m^14*kg^6*K*A^2*mol*cd*rad/s^12 = m^14*kg^7*K*A*mol*cd*rad/s^14
+mul lx to m^14*kg^7*K*A*mol*cd*rad/s^14 = m^12*kg^7*K*A*mol*cd^2*rad/s^14
+mul Gy to m^12*kg^7*K*A*mol*cd^2*rad/s^14 = m^14*kg^7*K*A*mol*cd^2*rad/s^16
+mul kat to m^14*kg^7*K*A*mol*cd^2*rad/s^16 = m^14*kg^7*K*A*mol^2*cd^2*rad/s^17
+mul  to m^14*kg^7*K*A*mol^2*cd^2*rad/s^17 = m^14*kg^7*K*A*mol^2*cd^2*rad/s^17
+Error computed by mul = 120.0
+Error computed by mul = 570.0
+[begin=testMeasurementMultiplication]
+
+[begin=testMeasurementDivision]
+mesure content after div
+value: 1.0
+error: 0.01
+unit: kg
+time: 1002
+mesure content after div
+value: 1.0
+error: 0.01
+unit:
+time: 1002
+mesure content after div
+value: 1.0
+error: 0.02
+unit:
+time: 1002
+mesure content after div
+value: Infinity
+error: Infinity
+unit:
+time: 1002
+div m to [m,s,kg,K,A,mol,cd,rad,m/s,m/s2,m2,m3,Hz,N,Pa,J,W,C,V,F,Ohm,S,Wb,T,lx,Gy,kat,] can be done
+div s to [m,s,kg,K,A,mol,cd,rad,m/s,m/s2,m2,m3,Hz,N,Pa,J,W,C,V,F,Ohm,S,Wb,T,lx,Gy,kat,] can be done
+div kg to [m,s,kg,K,A,mol,cd,rad,m/s,m/s2,m2,m3,Hz,N,Pa,J,W,C,V,F,Ohm,S,Wb,T,lx,Gy,kat,] can be done
+div K to [m,s,kg,K,A,mol,cd,rad,m/s,m/s2,m2,m3,Hz,N,Pa,J,W,C,V,F,Ohm,S,Wb,T,lx,Gy,kat,] can be done
+div A to [m,s,kg,K,A,mol,cd,rad,m/s,m/s2,m2,m3,Hz,N,Pa,J,W,C,V,F,Ohm,S,Wb,T,lx,Gy,kat,] can be done
+div mol to [m,s,kg,K,A,mol,cd,rad,m/s,m/s2,m2,m3,Hz,N,Pa,J,W,C,V,F,Ohm,S,Wb,T,lx,Gy,kat,] can be done
+div cd to [m,s,kg,K,A,mol,cd,rad,m/s,m/s2,m2,m3,Hz,N,Pa,J,W,C,V,F,Ohm,S,Wb,T,lx,Gy,kat,] can be done
+div rad to [m,s,kg,K,A,mol,cd,rad,m/s,m/s2,m2,m3,Hz,N,Pa,J,W,C,V,F,Ohm,S,Wb,T,lx,Gy,kat,] can be done
+div m/s to [m,s,kg,K,A,mol,cd,rad,m/s,m/s2,m2,m3,Hz,N,Pa,J,W,C,V,F,Ohm,S,Wb,T,lx,Gy,kat,] can be done
+div m/s2 to [m,s,kg,K,A,mol,cd,rad,m/s,m/s2,m2,m3,Hz,N,Pa,J,W,C,V,F,Ohm,S,Wb,T,lx,Gy,kat,] can be done
+div m2 to [m,s,kg,K,A,mol,cd,rad,m/s,m/s2,m2,m3,Hz,N,Pa,J,W,C,V,F,Ohm,S,Wb,T,lx,Gy,kat,] can be done
+div m3 to [m,s,kg,K,A,mol,cd,rad,m/s,m/s2,m2,m3,Hz,N,Pa,J,W,C,V,F,Ohm,S,Wb,T,lx,Gy,kat,] can be done
+div Hz to [m,s,kg,K,A,mol,cd,rad,m/s,m/s2,m2,m3,Hz,N,Pa,J,W,C,V,F,Ohm,S,Wb,T,lx,Gy,kat,] can be done
+div N to [m,s,kg,K,A,mol,cd,rad,m/s,m/s2,m2,m3,Hz,N,Pa,J,W,C,V,F,Ohm,S,Wb,T,lx,Gy,kat,] can be done
+div Pa to [m,s,kg,K,A,mol,cd,rad,m/s,m/s2,m2,m3,Hz,N,Pa,J,W,C,V,F,Ohm,S,Wb,T,lx,Gy,kat,] can be done
+div J to [m,s,kg,K,A,mol,cd,rad,m/s,m/s2,m2,m3,Hz,N,Pa,J,W,C,V,F,Ohm,S,Wb,T,lx,Gy,kat,] can be done
+div W to [m,s,kg,K,A,mol,cd,rad,m/s,m/s2,m2,m3,Hz,N,Pa,J,W,C,V,F,Ohm,S,Wb,T,lx,Gy,kat,] can be done
+div C to [m,s,kg,K,A,mol,cd,rad,m/s,m/s2,m2,m3,Hz,N,Pa,J,W,C,V,F,Ohm,S,Wb,T,lx,Gy,kat,] can be done
+div V to [m,s,kg,K,A,mol,cd,rad,m/s,m/s2,m2,m3,Hz,N,Pa,J,W,C,V,F,Ohm,S,Wb,T,lx,Gy,kat,] can be done
+div F to [m,s,kg,K,A,mol,cd,rad,m/s,m/s2,m2,m3,Hz,N,Pa,J,W,C,V,F,Ohm,S,Wb,T,lx,Gy,kat,] can be done
+div Ohm to [m,s,kg,K,A,mol,cd,rad,m/s,m/s2,m2,m3,Hz,N,Pa,J,W,C,V,F,Ohm,S,Wb,T,lx,Gy,kat,] can be done
+div S to [m,s,kg,K,A,mol,cd,rad,m/s,m/s2,m2,m3,Hz,N,Pa,J,W,C,V,F,Ohm,S,Wb,T,lx,Gy,kat,] can be done
+div Wb to [m,s,kg,K,A,mol,cd,rad,m/s,m/s2,m2,m3,Hz,N,Pa,J,W,C,V,F,Ohm,S,Wb,T,lx,Gy,kat,] can be done
+div T to [m,s,kg,K,A,mol,cd,rad,m/s,m/s2,m2,m3,Hz,N,Pa,J,W,C,V,F,Ohm,S,Wb,T,lx,Gy,kat,] can be done
+div lx to [m,s,kg,K,A,mol,cd,rad,m/s,m/s2,m2,m3,Hz,N,Pa,J,W,C,V,F,Ohm,S,Wb,T,lx,Gy,kat,] can be done
+div Gy to [m,s,kg,K,A,mol,cd,rad,m/s,m/s2,m2,m3,Hz,N,Pa,J,W,C,V,F,Ohm,S,Wb,T,lx,Gy,kat,] can be done
+div kat to [m,s,kg,K,A,mol,cd,rad,m/s,m/s2,m2,m3,Hz,N,Pa,J,W,C,V,F,Ohm,S,Wb,T,lx,Gy,kat,] can be done
+div  to [m,s,kg,K,A,mol,cd,rad,m/s,m/s2,m2,m3,Hz,N,Pa,J,W,C,V,F,Ohm,S,Wb,T,lx,Gy,kat,] can be done
+div kg to  = 1/kg
+div kg to 1/kg = 1/kg^2
+div kg to 1/kg^2 = 1/kg^3
+div kg to 1/kg^3 = 1/kg^4
+div kg to 1/kg^4 = 1/kg^5
+div kg to 1/kg^5 = 1/kg^6
+div kg to 1/kg^6 = 1/kg^7
+div kg to 1/kg^7 = 1/kg^8
+div kg to 1/kg^8 = 1/kg^9
+div kg to 1/kg^9 = 1/kg^10
+div kg to 1/kg^10 = 1/kg^11
+div kg to 1/kg^11 = 1/kg^12
+div kg to 1/kg^12 = 1/kg^13
+div kg to 1/kg^13 = 1/kg^14
+div kg to 1/kg^14 = 1/kg^15
+div kg to 1/kg^15 = 1/kg^16
+div kg to 1/kg^16 = 1/kg^17
+div kg to 1/kg^17 = 1/kg^18
+div kg to 1/kg^18 = 1/kg^19
+div kg to 1/kg^19 = 1/kg^20
+div kg to 1/kg^20 = 1/kg^21
+div kg to 1/kg^21 = 1/kg^22
+div kg to 1/kg^22 = 1/kg^23
+div kg to 1/kg^23 = 1/kg^24
+div kg to 1/kg^24 = 1/kg^25
+div kg to 1/kg^25 = 1/kg^26
+div kg to 1/kg^26 = 1/kg^27
+div kg to 1/kg^27 = 1/kg^28
+div kg to 1/kg^28 = 1/kg^29
+div kg to 1/kg^29 = 1/kg^30
+div kg to 1/kg^30 = 1/kg^31
+div kg to 1/kg^31 = 1/kg^32
+div kg to 1/kg^32 = 1/kg^33
+div kg to 1/kg^33 = 1/kg^34
+div kg to 1/kg^34 = 1/kg^35
+div kg to 1/kg^35 = 1/kg^36
+div kg to 1/kg^36 = 1/kg^37
+div kg to 1/kg^37 = 1/kg^38
+div kg to 1/kg^38 = 1/kg^39
+div kg to 1/kg^39 = 1/kg^40
+div kg to 1/kg^40 = 1/kg^41
+div kg to 1/kg^41 = 1/kg^42
+div kg to 1/kg^42 = 1/kg^43
+div kg to 1/kg^43 = 1/kg^44
+div kg to 1/kg^44 = 1/kg^45
+div kg to 1/kg^45 = 1/kg^46
+div kg to 1/kg^46 = 1/kg^47
+div kg to 1/kg^47 = 1/kg^48
+div kg to 1/kg^48 = 1/kg^49
+div kg to 1/kg^49 = 1/kg^50
+div kg to 1/kg^50 = 1/kg^51
+div kg to 1/kg^51 = 1/kg^52
+div kg to 1/kg^52 = 1/kg^53
+div kg to 1/kg^53 = 1/kg^54
+div kg to 1/kg^54 = 1/kg^55
+div kg to 1/kg^55 = 1/kg^56
+div kg to 1/kg^56 = 1/kg^57
+div kg to 1/kg^57 = 1/kg^58
+div kg to 1/kg^58 = 1/kg^59
+div kg to 1/kg^59 = 1/kg^60
+div kg to 1/kg^60 = 1/kg^61
+div kg to 1/kg^61 = 1/kg^62
+div kg to 1/kg^62 = 1/kg^63
+div kg to 1/kg^63 = 1/kg^64
+div m to  = 1/m
+div s to 1/m = 1/m*s
+div kg to 1/m*s = 1/m*s*kg
+div K to 1/m*s*kg = 1/m*s*kg*K
+div A to 1/m*s*kg*K = 1/m*s*kg*K*A
+div mol to 1/m*s*kg*K*A = 1/m*s*kg*K*A*mol
+div cd to 1/m*s*kg*K*A*mol = 1/m*s*kg*K*A*mol*cd
+div rad to 1/m*s*kg*K*A*mol*cd = 1/m*s*kg*K*A*mol*cd*rad
+div m/s to 1/m*s*kg*K*A*mol*cd*rad = 1/m^2*kg*K*A*mol*cd*rad
+div m/s2 to 1/m^2*kg*K*A*mol*cd*rad = s^2/m^3*kg*K*A*mol*cd*rad
+div m2 to s^2/m^3*kg*K*A*mol*cd*rad = s^2/m^5*kg*K*A*mol*cd*rad
+div m3 to s^2/m^5*kg*K*A*mol*cd*rad = s^2/m^8*kg*K*A*mol*cd*rad
+div Hz to s^2/m^8*kg*K*A*mol*cd*rad = s^3/m^8*kg*K*A*mol*cd*rad
+div N to s^3/m^8*kg*K*A*mol*cd*rad = s^5/m^9*kg^2*K*A*mol*cd*rad
+div Pa to s^5/m^9*kg^2*K*A*mol*cd*rad = s^7/m^8*kg^3*K*A*mol*cd*rad
+div J to s^7/m^8*kg^3*K*A*mol*cd*rad = s^9/m^10*kg^4*K*A*mol*cd*rad
+div W to s^9/m^10*kg^4*K*A*mol*cd*rad = s^12/m^12*kg^5*K*A*mol*cd*rad
+div C to s^12/m^12*kg^5*K*A*mol*cd*rad = s^11/m^12*kg^5*K*A^2*mol*cd*rad
+div V to s^11/m^12*kg^5*K*A^2*mol*cd*rad = s^14/m^14*kg^6*K*A*mol*cd*rad
+div F to s^14/m^14*kg^6*K*A*mol*cd*rad = s^10/m^12*kg^5*K*A^3*mol*cd*rad
+div Ohm to s^10/m^12*kg^5*K*A^3*mol*cd*rad = s^13/m^14*kg^6*K*A*mol*cd*rad
+div S to s^13/m^14*kg^6*K*A*mol*cd*rad = s^10/m^12*kg^5*K*A^3*mol*cd*rad
+div Wb to s^10/m^12*kg^5*K*A^3*mol*cd*rad = s^12/m^14*kg^6*K*A^2*mol*cd*rad
+div T to s^12/m^14*kg^6*K*A^2*mol*cd*rad = s^14/m^14*kg^7*K*A*mol*cd*rad
+div lx to s^14/m^14*kg^7*K*A*mol*cd*rad = s^14/m^12*kg^7*K*A*mol*cd^2*rad
+div Gy to s^14/m^12*kg^7*K*A*mol*cd^2*rad = s^16/m^14*kg^7*K*A*mol*cd^2*rad
+div kat to s^16/m^14*kg^7*K*A*mol*cd^2*rad = s^17/m^14*kg^7*K*A*mol^2*cd^2*rad
+div  to s^17/m^14*kg^7*K*A*mol^2*cd^2*rad = s^17/m^14*kg^7*K*A*mol^2*cd^2*rad
+Error computed by div = 0.012
+Error computed by div = 0.01425
+[begin=testMeasurementDivision]

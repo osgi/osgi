@@ -1,0 +1,12 @@
+Manifest-Version: 1.0
+Bundle-Name: test.cases.tracker.tb4
+Bundle-Description: TB4 for service tracker test case
+Bundle-Vendor: Ericsson Radio Systems AB
+Bundle-Version: 1.3
+Bundle-DocURL: http://www.ericsson.com
+Bundle-ContactAddress: info@ericsson.com
+Bundle-Activator: $(p).tb4.TB4Activator
+$(IMPORT-PACKAGE)
+$(EXPORT-PACKAGE)
+
+

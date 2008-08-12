@@ -1,0 +1,7 @@
+Manifest-Version: 1.0
+Bundle-SymbolicName: bundles.unsigned
+Bundle-Version: 1.0
+Bundle-Activator: br.org.cesar.bundles.unsigned.Activator
+$(EXPORT-PACKAGE)
+$(IMPORT-PACKAGE)
+$(PRIVATE-PACKAGE)

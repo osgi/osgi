@@ -1,0 +1,6 @@
+Manifest-Version: 1.0
+DeploymentPackage-SymbolicName: rp_from_other_dp
+DeploymentPackage-Version: 1.0.0
+
+Name: conf.txt
+Resource-Processor: org.osgi.test.cases.deployment.bundles.rp1

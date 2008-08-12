@@ -1,0 +1,11 @@
+Manifest-Version: 1.0
+Bundle-Name: ${p}.tb6
+Bundle-SymbolicName: ${p}.tb6
+Bundle-Description: This is a framework extension bundle used in the
+ framework classpath append test.
+Bundle-ManifestVersion: 2
+Bundle-Version: 1.0
+Bundle-Classpath: .
+Fragment-Host: system.bundle; extension:=framework
+Export-Package: q, p
+$(PRIVATE-PACKAGE)

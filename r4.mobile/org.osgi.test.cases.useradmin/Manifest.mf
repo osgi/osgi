@@ -1,0 +1,10 @@
+Manifest-Version: 1.0
+Bundle-SymbolicName: ${p}
+Bundle-Name: test.useradmin
+Bundle-Copyright: ${copyright}
+Bundle-Description: Tests User Admin service
+Bundle-Category: osgi,test
+Bundle-Activator: org.osgi.test.cases.useradmin.UserAdminTestCase
+$(IMPORT-PACKAGE)
+$(EXPORT-PACKAGE)
+

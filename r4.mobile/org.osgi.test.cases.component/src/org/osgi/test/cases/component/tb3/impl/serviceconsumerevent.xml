@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scr:component name="org.osgi.test.cases.component.tb3.ServiceConsumerEvent"
+	    xmlns:scr="http://www.osgi.org/xmlns/scr/v1.0.0">
+    <implementation class="org.osgi.test.cases.component.tb3.impl.ServiceConsumerEventImpl"/>
+	<service>
+		<provide interface="org.osgi.test.cases.component.tb3.ServiceConsumerEvent"/>
+	</service>
+
+	<!-- cardinality by default should be 1..1 and policy - static -->
+  <reference name="serviceProvider"
+		interface="org.osgi.test.cases.component.tbc.ServiceProvider"
+		target="(component.name=org.osgi.test.cases.component.tbc.ServiceProvider)"
+		bind="bindServiceProvider"
+		unbind="unbindServiceProvider"
+	/>
+
+  <reference name="namedService"
+		interface="org.osgi.test.cases.component.tb4.NamedService"
+		cardinality="0..n"
+		policy="dynamic"
+		bind="bindObject"
+		unbind="unbindObject"
+	/>
+</scr:component>
+
+
+

@@ -1,0 +1,41 @@
+#----- framework.filter.m1
+Testing null filter: "7 services: { ServiceA 1.0, ServiceB 1.0, ServiceB 2.0, ServiceC 1.0, ServiceC 2.0, ServiceC 2.5, ServiceD 2.5 }"
+#----- framework.filter.m2
+Testing invalid syntax: "Exception thrown, Ok."
+#----- framework.filter.m3
+Testing case insensitive: "1 services: { ServiceA 1.0 }"
+#----- framework.filter.m4
+Testing spaces in filter operation: "3 services: { ServiceA 1.0, ServiceB 1.0, ServiceB 2.0 }"
+#----- framework.filter.m5
+Testing type String: "1 services: { ServiceA 1.0 }"
+#----- framework.filter.m6
+Testing type Integer: "1 services: { ServiceC 2.5 }"
+Testing type Long: "1 services: { ServiceC 2.5 }"
+Testing type Byte: "1 services: { ServiceC 2.5 }"
+Testing type Short: "1 services: { ServiceC 2.5 }"
+#----- framework.filter.m9
+Testing array filter: "1 services: { ServiceC 2.0 }"
+#----- framework.filter.m10
+Testing Vector filter: "1 services: { ServiceC 2.5 }"
+#----- framework.filter.s1
+Testing approximate equality (case): "1 services: { ServiceA 1.0 }"
+Testing approximate equality (white space): "1 services: { ServiceA 1.0 }"
+#----- framework.filter.s2
+Testing object that implements java.lang.Comparable: "1 services: { ServiceD 2.5 }"
+#----- framework.filter.s3
+Testing = operator with object that does not implement java.lang.Comparable: "1 services: { ServiceD 2.5 }"
+#----- framework.filter.s4
+Testing <= operator with object that does not implement java.lang.Comparable: "1 services: { ServiceD 2.5 }"
+#----- framework.filter.s5
+Testing >= operator with object that does not implement java.lang.Comparable: "1 services: { ServiceD 2.5 }"
+#----- framework.filter.s6
+Testing ~= operator with object that does not implement java.lang.Comparable: "1 services: { ServiceD 2.5 }"
+#----- framework.filter.s7
+Testing < operator with object that does not implement java.lang.Comparable: Exception thrown, Ok.
+#----- framework.filter.s8
+Testing > operator with object that does not implement java.lang.Comparable: Exception thrown, Ok.
+#----- framework.filter.s9
+Testing object that does not have a public constructor with a single java.lang.String argument: "No services."
+
+
+

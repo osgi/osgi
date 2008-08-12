@@ -1,0 +1,7 @@
+Manifest-Version: 1.0
+Bundle-SymbolicName: org.osgi.test.cases.deployment.bundles.rp2
+Bundle-Version: 1.0
+Bundle-Activator: org.osgi.test.cases.deployment.bundles.rp2.ResourceProcessorImpl
+$(EXPORT-PACKAGE)
+$(IMPORT-PACKAGE)
+$(PRIVATE-PACKAGE)

@@ -1,0 +1,12 @@
+Manifest-Version: 1.0
+Bundle-Name: test.cases.startlevel.tb5
+Bundle-Description: TB5 for startlevel test case
+Bundle-Vendor: Ericsson Radio Systems AB
+Bundle-Version: 1.3
+Bundle-DocURL: http://www.ericsson.com
+Bundle-ContactAddress: info@ericsson.com
+Bundle-Activator: $(p).tb5.Activator
+$(IMPORT-PACKAGE)
+$(EXPORT-PACKAGE)
+
+

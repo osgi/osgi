@@ -1,0 +1,11 @@
+Manifest-Version: 1.0
+Bundle-Name: ${p}.tb7e
+Bundle-SymbolicName: ${p}.tb7e
+Bundle-Version: 1.0
+Bundle-ManifestVersion: 2
+Fragment-Host: ${p}.tb7c
+Export-Package: testresources;version="2.0"
+$(IMPORT-PACKAGE)
+$(PRIVATE-PACKAGE)
+
+

@@ -1,0 +1,2250 @@
+<html>
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   
+      <link rel="stylesheet" href="osgi.css" type="text/css">
+      <title>Test Matrix for org.osgi.service.dmt</title>
+   </head>
+   <body>
+      <div width="700px">
+         <h1>Test Matrix for org.osgi.service.dmt</h1>
+         <p>
+            <description>
+               
+               <p>The OSGi DMT Specification Version 1.0.
+                  
+               </p>
+               <p>Bundles wishing to use this package must list the package
+                  in the <tt>Import-Package</tt> header of the bundle's manifest.
+                  For example:
+                  
+               </p><pre>Import-Package:&nbsp;org.osgi.service.dmt;&nbsp;version=1.0</pre>
+                  </description><br></p>
+         <table>
+            <tr>
+               <th colspan="2">Tested by:</th>
+            </tr>
+            <tr>
+               <td><a href="org.osgi.test.cases.dmt.html">org.osgi.test.cases.dmt</a></td>
+            </tr>
+         </table><br><br><table width="300">
+            <tr>
+               <th></th>
+               <th>Class</th>
+               <th>Methods</th>
+               <th>Tests</th>
+               <th>Ratio</th>
+            </tr>
+            <tr>
+               <td></td>
+               <td><a href="#org.osgi.service.dmt.Dmt">Dmt</a></td>
+               <td>14</td>
+               <td>0</td>
+               <td class="passed">0.00</td>
+            </tr>
+            <tr>
+               <td></td>
+               <td><a href="#org.osgi.service.dmt.DmtAcl">DmtAcl</a></td>
+               <td>13</td>
+               <td>36</td>
+               <td class="early">2.57</td>
+            </tr>
+            <tr>
+               <td></td>
+               <td><a href="#org.osgi.service.dmt.DmtAdmin">DmtAdmin</a></td>
+               <td>5</td>
+               <td>14</td>
+               <td class="early">2.33</td>
+            </tr>
+            <tr>
+               <td></td>
+               <td><a href="#org.osgi.service.dmt.DmtAlertItem">DmtAlertItem</a></td>
+               <td>6</td>
+               <td>0</td>
+               <td class="passed">0.00</td>
+            </tr>
+            <tr>
+               <td></td>
+               <td><a href="#org.osgi.service.dmt.DmtAlertPermission">DmtAlertPermission</a></td>
+               <td>7</td>
+               <td>0</td>
+               <td class="passed">0.00</td>
+            </tr>
+            <tr>
+               <td></td>
+               <td><a href="#org.osgi.service.dmt.DmtData">DmtData</a></td>
+               <td>17</td>
+               <td>11</td>
+               <td class="passed">0.61</td>
+            </tr>
+            <tr>
+               <td></td>
+               <td><a href="#org.osgi.service.dmt.DmtDataPlugin">DmtDataPlugin</a></td>
+               <td>2</td>
+               <td>0</td>
+               <td class="passed">0.00</td>
+            </tr>
+            <tr>
+               <td></td>
+               <td><a href="#org.osgi.service.dmt.DmtException">DmtException</a></td>
+               <td>12</td>
+               <td>17</td>
+               <td class="early">1.31</td>
+            </tr>
+            <tr>
+               <td></td>
+               <td><a href="#org.osgi.service.dmt.DmtExecPlugin">DmtExecPlugin</a></td>
+               <td>1</td>
+               <td>0</td>
+               <td class="passed">0.00</td>
+            </tr>
+            <tr>
+               <td></td>
+               <td><a href="#org.osgi.service.dmt.DmtMetaNode">DmtMetaNode</a></td>
+               <td>15</td>
+               <td>0</td>
+               <td class="passed">0.00</td>
+            </tr>
+            <tr>
+               <td></td>
+               <td><a href="#org.osgi.service.dmt.DmtPermission">DmtPermission</a></td>
+               <td>6</td>
+               <td>0</td>
+               <td class="passed">0.00</td>
+            </tr>
+            <tr>
+               <td></td>
+               <td><a href="#org.osgi.service.dmt.DmtPrincipalPermission">DmtPrincipalPermission</a></td>
+               <td>7</td>
+               <td>6</td>
+               <td class="passed">0.75</td>
+            </tr>
+            <tr>
+               <td></td>
+               <td><a href="#org.osgi.service.dmt.DmtReadOnly">DmtReadOnly</a></td>
+               <td>11</td>
+               <td>0</td>
+               <td class="passed">0.00</td>
+            </tr>
+            <tr>
+               <td></td>
+               <td><a href="#org.osgi.service.dmt.DmtReadOnlyDataPlugin">DmtReadOnlyDataPlugin</a></td>
+               <td>1</td>
+               <td>0</td>
+               <td class="passed">0.00</td>
+            </tr>
+            <tr>
+               <td></td>
+               <td><a href="#org.osgi.service.dmt.DmtSession">DmtSession</a></td>
+               <td>10</td>
+               <td>0</td>
+               <td class="passed">0.00</td>
+            </tr>
+            <tr>
+               <td></td>
+               <td><a href="#org.osgi.service.dmt.RemoteAlertSender">RemoteAlertSender</a></td>
+               <td>1</td>
+               <td>0</td>
+               <td class="passed">0.00</td>
+            </tr>
+         </table><br><table width="700">
+            <tr>
+               <th class="pointer" colspan="2"><a name="org.osgi.service.dmt.Dmt"></a>Class org.osgi.service.dmt.Dmt
+               </th>
+            </tr>
+            <tr>
+               <td colspan="2">
+                  A collection of DMT manipulation methods.
+                     
+               </td>
+            </tr>
+            <tr>
+               <th width="350"><a name="Dmt.commit()"></a>commit()
+               </th>
+               <th width="350"><b class="passed"> NO TEST FOUND </b></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Commits a series of DMT operations issued in the current atomic session
+                   since the last transaction boundary.
+                     
+               </td>
+               <td width="350"></td>
+            </tr>
+            <tr>
+               <th width="350"><a name="Dmt.copy(String,String,boolean)"></a>copy(String,String,boolean)
+               </th>
+               <th width="350"><b class="passed"> NO TEST FOUND </b></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Create a deep copy of a node.
+                     
+               </td>
+               <td width="350"></td>
+            </tr>
+            <tr>
+               <th width="350"><a name="Dmt.createInteriorNode(String)"></a>createInteriorNode(String)
+               </th>
+               <th width="350"><b class="passed"> NO TEST FOUND </b></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Create an interior node.
+                     
+               </td>
+               <td width="350"></td>
+            </tr>
+            <tr>
+               <th width="350"><a name="Dmt.createInteriorNode(String,String)"></a>createInteriorNode(String,String)
+               </th>
+               <th width="350"><b class="passed"> NO TEST FOUND </b></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Create an interior node with a given type.
+                     
+               </td>
+               <td width="350"></td>
+            </tr>
+            <tr>
+               <th width="350"><a name="Dmt.createLeafNode(String)"></a>createLeafNode(String)
+               </th>
+               <th width="350"><b class="passed"> NO TEST FOUND </b></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Create a leaf node with default value.
+                     
+               </td>
+               <td width="350"></td>
+            </tr>
+            <tr>
+               <th width="350"><a name="Dmt.createLeafNode(String,DmtData)"></a>createLeafNode(String,DmtData)
+               </th>
+               <th width="350"><b class="passed"> NO TEST FOUND </b></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Create a leaf node with a given value.
+                     
+               </td>
+               <td width="350"></td>
+            </tr>
+            <tr>
+               <th width="350"><a name="Dmt.createLeafNode(String,DmtData,String)"></a>createLeafNode(String,DmtData,String)
+               </th>
+               <th width="350"><b class="passed"> NO TEST FOUND </b></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Create a leaf node with a given value and MIME type.
+                     
+               </td>
+               <td width="350"></td>
+            </tr>
+            <tr>
+               <th width="350"><a name="Dmt.deleteNode(String)"></a>deleteNode(String)
+               </th>
+               <th width="350"><b class="passed"> NO TEST FOUND </b></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Delete the given node.
+                     
+               </td>
+               <td width="350"></td>
+            </tr>
+            <tr>
+               <th width="350"><a name="Dmt.renameNode(String,String)"></a>renameNode(String,String)
+               </th>
+               <th width="350"><b class="passed"> NO TEST FOUND </b></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Rename a node.
+                     
+               </td>
+               <td width="350"></td>
+            </tr>
+            <tr>
+               <th width="350"><a name="Dmt.rollback()"></a>rollback()
+               </th>
+               <th width="350"><b class="passed"> NO TEST FOUND </b></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Rolls back a series of DMT operations issued in the current atomic
+                   session since the last transaction boundary.
+                     
+               </td>
+               <td width="350"></td>
+            </tr>
+            <tr>
+               <th width="350"><a name="Dmt.setDefaultNodeValue(String)"></a>setDefaultNodeValue(String)
+               </th>
+               <th width="350"><b class="passed"> NO TEST FOUND </b></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Set the value of a leaf node to its default as defined by the node's meta
+                   data.
+                     
+               </td>
+               <td width="350"></td>
+            </tr>
+            <tr>
+               <th width="350"><a name="Dmt.setNodeTitle(String,String)"></a>setNodeTitle(String,String)
+               </th>
+               <th width="350"><b class="passed"> NO TEST FOUND </b></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Set the title property of a node.
+                     
+               </td>
+               <td width="350"></td>
+            </tr>
+            <tr>
+               <th width="350"><a name="Dmt.setNodeType(String,String)"></a>setNodeType(String,String)
+               </th>
+               <th width="350"><b class="passed"> NO TEST FOUND </b></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Set the type of a node.
+                     
+               </td>
+               <td width="350"></td>
+            </tr>
+            <tr>
+               <th width="350"><a name="Dmt.setNodeValue(String,DmtData)"></a>setNodeValue(String,DmtData)
+               </th>
+               <th width="350"><b class="passed"> NO TEST FOUND </b></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Set the value of a leaf node.
+                     
+               </td>
+               <td width="350"></td>
+            </tr>
+         </table><br><table width="700">
+            <tr>
+               <th class="pointer" colspan="2"><a name="org.osgi.service.dmt.DmtAcl"></a>Class org.osgi.service.dmt.DmtAcl
+               </th>
+            </tr>
+            <tr>
+               <td colspan="2">
+                  DmtAcl is an immutable class representing structured access to
+                   DMT ACLs.
+                     
+               </td>
+            </tr>
+            <tr>
+               <th width="350"><a name="DmtAcl.addPermission(String,int)"></a>addPermission(String,int)
+               </th>
+               <th width="350">Tests:</th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Create a new DmtAcl instance by adding a specific
+                   permission to a given principal.
+                     
+               </td>
+               <td width="350"><b>testAddPermission001</b>
+                  This method creates a new Acl and asserts that a new permission is
+                   correctly added to the Acl principal.
+                     <br><b>testAddPermission002</b>
+                  Test that more than one permission is added in the same time to a
+                   principal.
+                     <br><b>testAddPermission003</b>
+                  Asserts that an IllegalArgumentException is thrown whenever an invalid
+                   permission is added to a principal.
+                     <br><b>testAddPermission004</b>
+                  Asserts that an IllegalArgumentException is
+                           thrown whenever a valid permission is added to an invalid
+                           principal.
+                     <br><b>testAddPermission005</b>
+                  Asserts that an IllegalArgumentException is
+                           thrown whenever a valid permission is added to a principal which
+                           was not created on the constructor.
+                     <br></td>
+            </tr>
+            <tr>
+               <th width="350"><a name="DmtAcl.clone()"></a>clone()
+               </th>
+               <th width="350"><b class="passed"> NO TEST FOUND </b></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Creates a copy of this ACL object.
+                     
+               </td>
+               <td width="350"></td>
+            </tr>
+            <tr>
+               <th width="350"><a name="DmtAcl.deletePermission(String,int)"></a>deletePermission(String,int)
+               </th>
+               <th width="350">Tests:</th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Create a new DmtAcl instance by revoking a specific
+                   permission from a given principal.
+                     
+               </td>
+               <td width="350"><b>testDeletePermission001</b>
+                  This method asserts that a principal permission is
+                                    correctly deleted from its Acl.
+                     <br><b>testDeletePermission002</b>
+                  Test that more than one permission can be deleted in the
+                                    same time from a principal.
+                     <br><b>testDeletePermission003</b>
+                  Asserts that an IllegalArgumentException is thrown
+                                    whenever an invalid permission is deleted from a
+                                    principal.
+                     <br><b>testDeletePermission004</b>
+                  Asserts that an IllegalArgumentException is thrown
+                                    whenever a permission which does not belong to a
+                                    principal is deleted.
+                     <br><b>testDeletePermission005</b>
+                  Asserts that an IllegalArgumentException is thrown
+                                    whenever a valid permission is deleted from an invalid
+                                    principal.
+                     <br><b>testDeletePermission006</b>
+                  Asserts that an IllegalArgumentException is thrown
+                                    whenever a valid permission is deleted from a principal
+                                    which was not created on the constructor.
+                     <br></td>
+            </tr>
+            <tr>
+               <th width="350"><a name="DmtAcl.DmtAcl()"></a>DmtAcl()
+               </th>
+               <th width="350"><b class="passed"> NO TEST FOUND </b></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Create an instance of the ACL that represents an empty list of principals
+                   with no permissions.
+                     
+               </td>
+               <td width="350"></td>
+            </tr>
+            <tr>
+               <th width="350"><a name="DmtAcl.DmtAcl(String)"></a>DmtAcl(String)
+               </th>
+               <th width="350">Tests:</th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Create an instance of the ACL from its canonic string representation.
+                     
+               </td>
+               <td width="350"><b>testDmtAcl001</b>
+                  This method asserts that an instance of the ACL is
+                                    created from its canonic string representation. It also
+                                    tests getPermissions, and getPrincipals.
+                     <br><b>testDmtAcl004</b>
+                  Checks if IllegalArgumentException is thrown on
+                                    DmtAcl(java.lang.String acl) constructors.
+                     <br><b>testDmtAcl006</b>
+                  Validates a constructor of an DmtAcl object with more
+                                    than one principal.
+                     <br><b>testDmtAcl008</b>
+                  Asserts that an IllegalArgumentException is thrown
+                                    whenever an ACL is created from an acl String with a
+                                    null principal.
+                     <br><b>testDmtAcl009</b>
+                  Asserts that an IllegalArgumentException is thrown
+                                    whenever an ACL is created from an acl String with an
+                                    invalid principal.
+                     <br></td>
+            </tr>
+            <tr>
+               <th width="350"><a name="DmtAcl.DmtAcl(String[],int[])"></a>DmtAcl(String[],int[])
+               </th>
+               <th width="350"><b class="passed"> NO TEST FOUND </b></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Creates an instance with specifying the list of principals and the
+                   permissions they hold.
+                     
+               </td>
+               <td width="350"></td>
+            </tr>
+            <tr>
+               <th width="350"><a name="DmtAcl.equals(Object)"></a>equals(Object)
+               </th>
+               <th width="350"><b class="passed"> NO TEST FOUND </b></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Checks whether the given object is equal to this DmtAcl
+                   instance.
+                     
+               </td>
+               <td width="350"></td>
+            </tr>
+            <tr>
+               <th width="350"><a name="DmtAcl.getPermissions(String)"></a>getPermissions(String)
+               </th>
+               <th width="350">Tests:</th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Get the permissions associated to a given principal.
+                     
+               </td>
+               <td width="350"><b>testDmtAcl007</b>
+                  Asserts that an IllegalArgumentException is thrown
+                                    whenever an ACL is created from an acl String with an
+                                    invalid permission code.
+                                    
+                   ### Why does the constructor not throw an exception?
+                     <br></td>
+            </tr>
+            <tr>
+               <th width="350"><a name="DmtAcl.getPrincipals()"></a>getPrincipals()
+               </th>
+               <th width="350">Tests:</th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Get the list of principals who have any kind of permissions on this node.
+                     
+               </td>
+               <td width="350"><b>testDmtAcl003</b>
+                  This method asserts that an ACL instance that represents
+                                    an empty list of principals with no permissions is
+                                    created.
+                     <br><b>testDmtAcl005</b>
+                  Passes NULL as argument in the constructor and asserts
+                                    that an empty list of principals with no permissions is
+                                    created.
+                     <br></td>
+            </tr>
+            <tr>
+               <th width="350"><a name="DmtAcl.hashcode()"></a>hashcode()
+               </th>
+               <th width="350"><b class="passed"> NO TEST FOUND </b></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Returns the hash code for this ACL instance.
+                     
+               </td>
+               <td width="350"></td>
+            </tr>
+            <tr>
+               <th width="350"><a name="DmtAcl.isPermitted(String,int)"></a>isPermitted(String,int)
+               </th>
+               <th width="350">Tests:</th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Check whether the given permissions are granted to a certain principal.
+                     
+               </td>
+               <td width="350"><b>testIsPermitted001</b>
+                  This method tests if a given permission is granted to a
+                                    principal.
+                     <br><b>testIsPermitted002</b>
+                  This method asserts that a given permission is not
+                                    granted to a principal.
+                     <br><b>testIsPermitted003</b>
+                  Asserts that an IllegalArgumentException is thrown
+                                    whenever an invalid permission code is passed to
+                                    isPermitted(java.lang.String principal, int
+                                    permissions).
+                     <br><b>testIsPermitted004</b>
+                  Asserts that an IllegalArgumentException is thrown
+                                    whenever a valid permission code and an invalid
+                                    principal is passed isPermitted(java.lang.String
+                                    principal, int permissions).
+                     <br><b>testIsPermitted006</b>
+                  Asserts that an IllegalArgumentException is thrown
+                                    whenever a valid permission is deleted from a principal
+                                    which was not created on the constructor.
+                     <br></td>
+            </tr>
+            <tr>
+               <th width="350"><a name="DmtAcl.setPermission(String,int)"></a>setPermission(String,int)
+               </th>
+               <th width="350">Tests:</th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Create a new DmtAcl instance by setting the list of
+                   permissions a given principal has.
+                     
+               </td>
+               <td width="350"><b>testSetPermission001</b>
+                  This method asserts that a principal gets all the permissions previously
+                   set.
+                     <br><b>testSetPermission002</b>
+                  This method asserts that a set of permissions the principal had is
+                   overriden by new ones.
+                     <br><b>testSetPermission003</b>
+                  Asserts that an IllegalArgumentException is thrown whenever an invalid
+                   permission is set to a principal.
+                     <br><b>testSetPermission004</b>
+                  Asserts that an IllegalArgumentException is thrown whenever a valid
+                   permission is set to an invalid principal.
+                     <br><b>testSetPermission005</b>
+                  Asserts that an IllegalArgumentException is thrown whenever a valid
+                   permission is set to a principal which was not created on the
+                   constructor.
+                     <br><b>testSetPermission006</b>
+                  Passes all permission and check if the permission set is the same as
+                   ALL_PERMISSION.
+                     <br></td>
+            </tr>
+            <tr>
+               <th width="350"><a name="DmtAcl.toString()"></a>toString()
+               </th>
+               <th width="350">Tests:</th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Give the canonic string representation of this ACL.
+                     
+               </td>
+               <td width="350"><b>testToString001</b>
+                  This method asserts that the string representing this ACL is the same as
+                   the canonic string as specified in OMA DM.
+                     <br></td>
+            </tr>
+         </table><br><table width="700">
+            <tr>
+               <th class="pointer" colspan="2"><a name="org.osgi.service.dmt.DmtAdmin"></a>Class org.osgi.service.dmt.DmtAdmin
+               </th>
+            </tr>
+            <tr>
+               <td colspan="2">
+                  An interface providing methods to open sessions and send alerts.
+                     
+               </td>
+            </tr>
+            <tr>
+               <th width="350"><a name="DmtAdmin.getSession(String)"></a>getSession(String)
+               </th>
+               <th width="350">Tests:</th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Opens a DmtSession for local usage on a given subtree of
+                   the DMT with non transactional write lock.
+                     
+               </td>
+               <td width="350"><b>testGetSession001</b>
+                  This method asserts that a session is opened with the
+                                    specified subtree, lock type and principal. This constructor use by default LOCK_TYPE_EXCLUSIVE
+                     <br><b>testGetSession002</b>
+                  This method asserts if an invalid node causes 
+                                    an exception with NODE_NOT_FOUND code
+                     <br><b>testGetSession003</b>
+                  This method asserts if a too long uri causes 
+                                    an exception with URI_TOO_LONG code
+                     <br><b>testGetSession004</b>
+                  This method asserts if a node using invalid characters causes 
+                                    an exception with INVALID_URI code
+                     <br><b>testGetSession005</b>
+                  This method asserts that a session is opened with the
+                                    specified subtree, lock type and principal. This constructor use by default LOCK_TYPE_SHARED
+                     <br></td>
+            </tr>
+            <tr>
+               <th width="350"><a name="DmtAdmin.getSession(String,int)"></a>getSession(String,int)
+               </th>
+               <th width="350">Tests:</th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Opens a DmtSession for local usage on a specific DMT
+                   subtree with a given locking mode.
+                     
+               </td>
+               <td width="350"><b>testGetSession006</b>
+                  This method asserts if an invalid node causes 
+                                    an exception with NODE_NOT_FOUND code
+                     <br><b>testGetSession007</b>
+                  This method asserts if a too long uri causes 
+                                    an exception with URI_TOO_LONG code
+                     <br><b>testGetSession008</b>
+                  This method asserts if a invalid lock mode causes 
+                                    an exception with OTHER_ERROR code
+                     <br><b>testGetSession009</b>
+                  This method asserts if a node using invalid characters causes 
+                                    an exception with INVALID_URI code
+                     <br></td>
+            </tr>
+            <tr>
+               <th width="350"><a name="DmtAdmin.getSession(String,String,int)"></a>getSession(String,String,int)
+               </th>
+               <th width="350">Tests:</th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Opens a DmtSession on a specific DMT subtree using a
+                   specific locking mode on behalf of a remote principal.
+                     
+               </td>
+               <td width="350"><b>testGetSession010</b>
+                  This method asserts that a session is opened with the
+                                    specified subtree, lock type and principal. This constructor use by default LOCK_TYPE_ATOMIC
+                                    
+                   TODO TCs for java.lang.SecurityException using this getSessions
+                   TODO remove String principal ?!?! (String principal) but I need it to test the getSession with 3 arguments.
+                     <br><b>testGetSession011</b>
+                  This method asserts if an invalid node causes 
+                                    an exception with NODE_NOT_FOUND code
+                     <br><b>testGetSession012</b>
+                  This method asserts if a too long uri causes 
+                                    an exception with URI_TOO_LONG code
+                     <br><b>testGetSession013</b>
+                  This method asserts if a invalid lock mode causes 
+                                    an exception with OTHER_ERROR code
+                     <br><b>testGetSession014</b>
+                  This method asserts if a node using invalid characters causes 
+                                    an exception with INVALID_URI code
+                     <br></td>
+            </tr>
+            <tr>
+               <th width="350"><a name="DmtAdmin.mangle(String,String)"></a>mangle(String,String)
+               </th>
+               <th width="350"><b class="passed"> NO TEST FOUND </b></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Creates a valid URI string from the given base URI and node name.
+                     
+               </td>
+               <td width="350"></td>
+            </tr>
+            <tr>
+               <th width="350"><a name="DmtAdmin.sendAlert(String,int,String,DmtAlertItem[])"></a>sendAlert(String,int,String,DmtAlertItem[])
+               </th>
+               <th width="350"><b class="passed"> NO TEST FOUND </b></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Sends an alert to a named principal.
+                     
+               </td>
+               <td width="350"></td>
+            </tr>
+         </table><br><table width="700">
+            <tr>
+               <th class="pointer" colspan="2"><a name="org.osgi.service.dmt.DmtAlertItem"></a>Class org.osgi.service.dmt.DmtAlertItem
+               </th>
+            </tr>
+            <tr>
+               <td colspan="2">
+                  Data structure carried in an alert (client initiated notification).
+                     
+               </td>
+            </tr>
+            <tr>
+               <th width="350"><a name="DmtAlertItem.DmtAlertItem(String,String,String,DmtData)"></a>DmtAlertItem(String,String,String,DmtData)
+               </th>
+               <th width="350"><b class="passed"> NO TEST FOUND </b></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Create an instance of the alert item.
+                     
+               </td>
+               <td width="350"></td>
+            </tr>
+            <tr>
+               <th width="350"><a name="DmtAlertItem.getData()"></a>getData()
+               </th>
+               <th width="350"><b class="passed"> NO TEST FOUND </b></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Get the data associated with the alert item.
+                     
+               </td>
+               <td width="350"></td>
+            </tr>
+            <tr>
+               <th width="350"><a name="DmtAlertItem.getMark()"></a>getMark()
+               </th>
+               <th width="350"><b class="passed"> NO TEST FOUND </b></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Get the mark parameter associated with the alert item.
+                     
+               </td>
+               <td width="350"></td>
+            </tr>
+            <tr>
+               <th width="350"><a name="DmtAlertItem.getSource()"></a>getSource()
+               </th>
+               <th width="350"><b class="passed"> NO TEST FOUND </b></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Get the node which is the source of the alert.
+                     
+               </td>
+               <td width="350"></td>
+            </tr>
+            <tr>
+               <th width="350"><a name="DmtAlertItem.getType()"></a>getType()
+               </th>
+               <th width="350"><b class="passed"> NO TEST FOUND </b></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Get the type associated with the alert item.
+                     
+               </td>
+               <td width="350"></td>
+            </tr>
+            <tr>
+               <th width="350"><a name="DmtAlertItem.toString()"></a>toString()
+               </th>
+               <th width="350"><b class="passed"> NO TEST FOUND </b></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Returns the string representation of this alert item.
+                     
+               </td>
+               <td width="350"></td>
+            </tr>
+         </table><br><table width="700">
+            <tr>
+               <th class="pointer" colspan="2"><a name="org.osgi.service.dmt.DmtAlertPermission"></a>Class org.osgi.service.dmt.DmtAlertPermission
+               </th>
+            </tr>
+            <tr>
+               <td colspan="2">
+                  Indicates the callers authority to send alerts to management servers.
+                     
+               </td>
+            </tr>
+            <tr>
+               <th width="350"><a name="DmtAlertPermission.DmtAlertPermission(String)"></a>DmtAlertPermission(String)
+               </th>
+               <th width="350"><b class="passed"> NO TEST FOUND </b></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Creates a new DmtAlertPermission object with its name
+                   set to the target string.
+                     
+               </td>
+               <td width="350"></td>
+            </tr>
+            <tr>
+               <th width="350"><a name="DmtAlertPermission.DmtAlertPermission(String,String)"></a>DmtAlertPermission(String,String)
+               </th>
+               <th width="350"><b class="passed"> NO TEST FOUND </b></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Creates a new DmtAlertPermission object using the
+                   'canonical' two argument constructor.
+                     
+               </td>
+               <td width="350"></td>
+            </tr>
+            <tr>
+               <th width="350"><a name="DmtAlertPermission.equals(Object)"></a>equals(Object)
+               </th>
+               <th width="350"><b class="passed"> NO TEST FOUND </b></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Checks whether the given object is equal to this DmtAlertPermission
+                   instance.
+                     
+               </td>
+               <td width="350"></td>
+            </tr>
+            <tr>
+               <th width="350"><a name="DmtAlertPermission.getActions()"></a>getActions()
+               </th>
+               <th width="350"><b class="passed"> NO TEST FOUND </b></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Returns the action list (always * in the current version).
+                     
+               </td>
+               <td width="350"></td>
+            </tr>
+            <tr>
+               <th width="350"><a name="DmtAlertPermission.hashCode()"></a>hashCode()
+               </th>
+               <th width="350"><b class="passed"> NO TEST FOUND </b></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Returns the hash code for this permission object.
+                     
+               </td>
+               <td width="350"></td>
+            </tr>
+            <tr>
+               <th width="350"><a name="DmtAlertPermission.implies(Permission)"></a>implies(Permission)
+               </th>
+               <th width="350"><b class="passed"> NO TEST FOUND </b></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Checks if this DmtAlertPermission object implies the specified
+                   permission.
+                     
+               </td>
+               <td width="350"></td>
+            </tr>
+            <tr>
+               <th width="350"><a name="DmtAlertPermission.newPermissionCollection()"></a>newPermissionCollection()
+               </th>
+               <th width="350"><b class="passed"> NO TEST FOUND </b></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Returns a new PermissionCollection object for storing
+                   DmtAlertPermission objects.
+                     
+               </td>
+               <td width="350"></td>
+            </tr>
+         </table><br><table width="700">
+            <tr>
+               <th class="pointer" colspan="2"><a name="org.osgi.service.dmt.DmtData"></a>Class org.osgi.service.dmt.DmtData
+               </th>
+            </tr>
+            <tr>
+               <td colspan="2">
+                  A data structure representing a leaf node.
+                     
+               </td>
+            </tr>
+            <tr>
+               <th width="350"><a name="DmtData.DmtData(String)"></a>DmtData(String)
+               </th>
+               <th width="350">Tests:</th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Create a DmtData instance of chr format
+                   with the given string value.
+                     
+               </td>
+               <td width="350"><b>testDmtData001</b>
+                  This method asserts that the Data format of String
+                                    DmtData Constructor is equal to DmtDataType.STRING and
+                                    that the string value passed is the same as
+                                    DmtData.getString()
+                     <br><b>testDmtData003</b>
+                  This method asserts that a null String parameter can
+                                    create a new DmtData.
+                     <br></td>
+            </tr>
+            <tr>
+               <th width="350"><a name="DmtData.DmtData(String,boolean)"></a>DmtData(String,boolean)
+               </th>
+               <th width="350">Tests:</th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Create a DmtData instance of xml format and
+                   set its value.
+                     
+               </td>
+               <td width="350"><b>testDmtData004</b>
+                  This method asserts that the Data format of DmtData is
+                                    equal to DmtDataType.XML and that the string value
+                                    passed is the same as DmtData.getString()
+                     <br><b>testDmtData005</b>
+                  This method asserts that if a false parameter is passed
+                                    on the constructor, it behaves the same as DmtData(str)
+                     <br></td>
+            </tr>
+            <tr>
+               <th width="350"><a name="DmtData.DmtData(int)"></a>DmtData(int)
+               </th>
+               <th width="350">Tests:</th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Create a DmtData instance of int format and
+                   set its value.
+                     
+               </td>
+               <td width="350"><b>testDmtData002</b>
+                  This method passes a String equals to
+                                    DmtData.FORMAT_NULL in order to assert that a node with
+                                    null format is created.
+                    ### Huh?? This creates an INT DmtData???
+                     <br><b>testDmtData006</b>
+                  
+                     <br><b>testDmtData010</b>
+                  This method asserts if getBoolean method throws a
+                                    DmtException when the DmtData is not created with an
+                                    boolean
+                     <br></td>
+            </tr>
+            <tr>
+               <th width="350"><a name="DmtData.DmtData(float)"></a>DmtData(float)
+               </th>
+               <th width="350"><b class="passed"> NO TEST FOUND </b></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Create a DmtData instance of float format and
+                   set its value.
+                     
+               </td>
+               <td width="350"></td>
+            </tr>
+            <tr>
+               <th width="350"><a name="DmtData.DmtData(boolean)"></a>DmtData(boolean)
+               </th>
+               <th width="350">Tests:</th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Create a DmtData instance of bool format
+                   and set its value.
+                     
+               </td>
+               <td width="350"><b>testDmtData007</b>
+                  
+                     <br><b>testDmtData009</b>
+                  This method asserts if getInt method throws a
+                                    DmtException when the DmtData is not created with an
+                                    integer
+                     <br></td>
+            </tr>
+            <tr>
+               <th width="350"><a name="DmtData.DmtData(byte[])"></a>DmtData(byte[])
+               </th>
+               <th width="350">Tests:</th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Create a DmtData instance of bin format and
+                   set its value.
+                     
+               </td>
+               <td width="350"><b>testDmtData008</b>
+                  This method asserts that the Data format of DmtData is
+                                    equal to DmtDataType.BINARY and that the string value
+                                    passed is the same as dd.getString()
+                     <br></td>
+            </tr>
+            <tr>
+               <th width="350"><a name="DmtData.equals(Object)"></a>equals(Object)
+               </th>
+               <th width="350"><b class="passed"> NO TEST FOUND </b></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Compares the specified object with this DmtData instance.
+                     
+               </td>
+               <td width="350"></td>
+            </tr>
+            <tr>
+               <th width="350"><a name="DmtData.getBinary()"></a>getBinary()
+               </th>
+               <th width="350"><b class="passed"> NO TEST FOUND </b></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Gets the value of a node with binary (bin) format.
+                     
+               </td>
+               <td width="350"></td>
+            </tr>
+            <tr>
+               <th width="350"><a name="DmtData.getBoolean()"></a>getBoolean()
+               </th>
+               <th width="350">Tests:</th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Gets the value of a node with boolean (bool) format.
+                     
+               </td>
+               <td width="350"><b>testDmtData010</b>
+                  This method asserts if getBoolean method throws a
+                                    DmtException when the DmtData is not created with an
+                                    boolean
+                     <br></td>
+            </tr>
+            <tr>
+               <th width="350"><a name="DmtData.getFloat()"></a>getFloat()
+               </th>
+               <th width="350"><b class="passed"> NO TEST FOUND </b></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Gets the value of a node with float format.
+                     
+               </td>
+               <td width="350"></td>
+            </tr>
+            <tr>
+               <th width="350"><a name="DmtData.getFormat()"></a>getFormat()
+               </th>
+               <th width="350"><b class="passed"> NO TEST FOUND </b></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Get the node's format, expressed in terms of type constants defined in
+                   this class.
+                     
+               </td>
+               <td width="350"></td>
+            </tr>
+            <tr>
+               <th width="350"><a name="DmtData.getInt()"></a>getInt()
+               </th>
+               <th width="350">Tests:</th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Gets the value of a node with integer (int) format.
+                     
+               </td>
+               <td width="350"><b>testDmtData009</b>
+                  This method asserts if getInt method throws a
+                                    DmtException when the DmtData is not created with an
+                                    integer
+                     <br></td>
+            </tr>
+            <tr>
+               <th width="350"><a name="DmtData.getSize()"></a>getSize()
+               </th>
+               <th width="350"><b class="passed"> NO TEST FOUND </b></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Get the size of the data.
+                     
+               </td>
+               <td width="350"></td>
+            </tr>
+            <tr>
+               <th width="350"><a name="DmtData.getString()"></a>getString()
+               </th>
+               <th width="350"><b class="passed"> NO TEST FOUND </b></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Gets the value of a node with string (chr) format.
+                     
+               </td>
+               <td width="350"></td>
+            </tr>
+            <tr>
+               <th width="350"><a name="DmtData.getXml()"></a>getXml()
+               </th>
+               <th width="350"><b class="passed"> NO TEST FOUND </b></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Gets the value of a node with xml format.
+                     
+               </td>
+               <td width="350"></td>
+            </tr>
+            <tr>
+               <th width="350"><a name="DmtData.hashCode()"></a>hashCode()
+               </th>
+               <th width="350"><b class="passed"> NO TEST FOUND </b></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Returns the hash code value for this DmtData instance.
+                     
+               </td>
+               <td width="350"></td>
+            </tr>
+            <tr>
+               <th width="350"><a name="DmtData.toString()"></a>toString()
+               </th>
+               <th width="350"><b class="passed"> NO TEST FOUND </b></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Gets the string representation of the DmtData.
+                     
+               </td>
+               <td width="350"></td>
+            </tr>
+         </table><br><table width="700">
+            <tr>
+               <th class="pointer" colspan="2"><a name="org.osgi.service.dmt.DmtDataPlugin"></a>Class org.osgi.service.dmt.DmtDataPlugin
+               </th>
+            </tr>
+            <tr>
+               <td colspan="2">
+                  An implementation of this interface takes the responsibility over a
+                   modifiable subtree of the DMT.
+                     
+               </td>
+            </tr>
+            <tr>
+               <th width="350"><a name="DmtDataPlugin.open(String,int,DmtSession)"></a>open(String,int,DmtSession)
+               </th>
+               <th width="350"><b class="passed"> NO TEST FOUND </b></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  This method is called to signal the start of a transaction when the first
+                   reference is made within a DmtSession to a node which is
+                   handled by this plugin.
+                     
+               </td>
+               <td width="350"></td>
+            </tr>
+            <tr>
+               <th width="350"><a name="DmtDataPlugin.supportsAtomic()"></a>supportsAtomic()
+               </th>
+               <th width="350"><b class="passed"> NO TEST FOUND </b></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Tells whether the plugin can handle atomic transactions.
+                     
+               </td>
+               <td width="350"></td>
+            </tr>
+         </table><br><table width="700">
+            <tr>
+               <th class="pointer" colspan="2"><a name="org.osgi.service.dmt.DmtException"></a>Class org.osgi.service.dmt.DmtException
+               </th>
+            </tr>
+            <tr>
+               <td colspan="2">
+                  Checked exception received when a DMT operation fails.
+                     
+               </td>
+            </tr>
+            <tr>
+               <th width="350"><a name="DmtException.DmtException(String,int,String)"></a>DmtException(String,int,String)
+               </th>
+               <th width="350">Tests:</th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Create an instance of the exception.
+                     
+               </td>
+               <td width="350"><b>testPrintStackTrace001</b>
+                  Tests if the string printed contains causes passed as parameters for the
+                   constructor
+                   
+                   ### How useful is this test??
+                     <br><b>testGetURI001</b>
+                  Tests if getURI returns a value that is equals to the
+                                    value passed as a parameter for the constructor
+                     <br><b>testGetMessage001</b>
+                  Tests if getMessage returns a value that is equals to
+                                    the value passed as a parameter for the constructor
+                     <br><b>testGetMessage002</b>
+                  Tests if getMessage returns a string that contains the
+                                    message and code values passed as parameters for the
+                                    constructor
+                     <br><b>testGetMessage003</b>
+                  Tests if getMessage returns a string that contains the
+                                    message and URI values passed as parameters for the
+                                    constructor
+                     <br><b>testGetMessage004</b>
+                  Tests if getMessage returns a string that contains the
+                                    message, code and URI values passed as parameters for
+                                    the constructor
+                     <br><b>testGetCode001</b>
+                  Tests if getCode returns a value that is equals to the
+                                    value passed as a parameter for the constructor
+                     <br><b>testDmtException001</b>
+                  Tests if the values that are passed as parameters for
+                                    the constructor are equal to the values returned through
+                                    its corresponding get methods
+                     <br></td>
+            </tr>
+            <tr>
+               <th width="350"><a name="DmtException.DmtException(String,int,String,Throwable)"></a>DmtException(String,int,String,Throwable)
+               </th>
+               <th width="350">Tests:</th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Create an instance of the exception, specifying the cause exception.
+                     
+               </td>
+               <td width="350"><b>testPrintStackTrace003</b>
+                  Tests if the string printed contains causes passed as parameters for the
+                   constructor
+                     <br><b>testGetCause001</b>
+                  Tests if the value that is passed as parameter for
+                                    the constructor is equals to the value returned through
+                                    getCause method
+                     <br><b>testGetCause002</b>
+                  Tests if the value that is passed as parameter for
+                                    the constructor is equals to the value returned through
+                                    getCause method
+                     <br><b>testDmtException002</b>
+                  Tests if the values that are passed as parameters for
+                                    the constructor are equal to the values returned through
+                                    its corresponding get methods
+                     <br></td>
+            </tr>
+            <tr>
+               <th width="350"><a name="DmtException.DmtException(String,int,String,Vector)"></a>DmtException(String,int,String,Vector)
+               </th>
+               <th width="350">Tests:</th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Create an instance of the exception, specifying the list of cause
+                   exceptions.
+                     
+               </td>
+               <td width="350"><b>testPrintStackTrace002</b>
+                  Tests if the string printed contains causes passed as parameters for the
+                   constructor
+                     <br><b>testPrintStackTrace004</b>
+                  Tests if the string printed contains causes passed as parameters for the
+                   constructor
+                     <br><b>testGetCauses001</b>
+                  Tests if the exception returned in the getCauses method
+                                    is from the same type of the exception passed as a
+                                    parameter for the constructor
+                     <br><b>testGetCauses002</b>
+                  Tests If an empty vector is returned no cause was
+                                    specified in the constructor
+                     <br><b>testGetCauses003</b>
+                  Tests if an empty vector is returned if no cause is
+                                    specified in the constructor
+                     <br></td>
+            </tr>
+            <tr>
+               <th width="350"><a name="DmtException.DmtException(String,int,String,Vector,boolean)"></a>DmtException(String,int,String,Vector,boolean)
+               </th>
+               <th width="350"><b class="passed"> NO TEST FOUND </b></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Create an instance of the exception, specifying the list of cause
+                   exceptions and whether the exception is a fatal one.
+                     
+               </td>
+               <td width="350"></td>
+            </tr>
+            <tr>
+               <th width="350"><a name="DmtException.getCause()"></a>getCause()
+               </th>
+               <th width="350"><b class="passed"> NO TEST FOUND </b></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Get the cause of this exception.
+                     
+               </td>
+               <td width="350"></td>
+            </tr>
+            <tr>
+               <th width="350"><a name="DmtException.getCauses()"></a>getCauses()
+               </th>
+               <th width="350">Tests:</th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Get all causes of this exception.
+                     
+               </td>
+               <td width="350"><b>testGetCauses001</b>
+                  Tests if the exception returned in the getCauses method
+                                    is from the same type of the exception passed as a
+                                    parameter for the constructor
+                     <br><b>testGetCauses002</b>
+                  Tests If an empty vector is returned no cause was
+                                    specified in the constructor
+                     <br><b>testGetCauses003</b>
+                  Tests if an empty vector is returned if no cause is
+                                    specified in the constructor
+                     <br></td>
+            </tr>
+            <tr>
+               <th width="350"><a name="DmtException.getCode()"></a>getCode()
+               </th>
+               <th width="350">Tests:</th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Get the error code associated with this exception.
+                     
+               </td>
+               <td width="350"><b>testGetCode001</b>
+                  Tests if getCode returns a value that is equals to the
+                                    value passed as a parameter for the constructor
+                     <br></td>
+            </tr>
+            <tr>
+               <th width="350"><a name="DmtException.getMessage()"></a>getMessage()
+               </th>
+               <th width="350">Tests:</th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Get the message associated with this exception.
+                     
+               </td>
+               <td width="350"><b>testGetMessage001</b>
+                  Tests if getMessage returns a value that is equals to
+                                    the value passed as a parameter for the constructor
+                     <br><b>testGetMessage002</b>
+                  Tests if getMessage returns a string that contains the
+                                    message and code values passed as parameters for the
+                                    constructor
+                     <br><b>testGetMessage003</b>
+                  Tests if getMessage returns a string that contains the
+                                    message and URI values passed as parameters for the
+                                    constructor
+                     <br><b>testGetMessage004</b>
+                  Tests if getMessage returns a string that contains the
+                                    message, code and URI values passed as parameters for
+                                    the constructor
+                     <br></td>
+            </tr>
+            <tr>
+               <th width="350"><a name="DmtException.getURI()"></a>getURI()
+               </th>
+               <th width="350">Tests:</th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Get the node on which the failed DMT operation was issued.
+                     
+               </td>
+               <td width="350"><b>testGetURI001</b>
+                  Tests if getURI returns a value that is equals to the
+                                    value passed as a parameter for the constructor
+                     <br></td>
+            </tr>
+            <tr>
+               <th width="350"><a name="DmtException.isFatal()"></a>isFatal()
+               </th>
+               <th width="350"><b class="passed"> NO TEST FOUND </b></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Check whether this exception is marked as fatal in the session.
+                     
+               </td>
+               <td width="350"></td>
+            </tr>
+            <tr>
+               <th width="350"><a name="DmtException.printStackTrace(PrintStream)"></a>printStackTrace(PrintStream)
+               </th>
+               <th width="350"><b class="passed"> NO TEST FOUND </b></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Prints the exception and its backtrace to the specified print stream.
+                     
+               </td>
+               <td width="350"></td>
+            </tr>
+            <tr>
+               <th width="350"><a name="DmtException.printStackTrace(PrintWriter)"></a>printStackTrace(PrintWriter)
+               </th>
+               <th width="350"><b class="passed"> NO TEST FOUND </b></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Prints the exception and its backtrace to the specified print writer.
+                     
+               </td>
+               <td width="350"></td>
+            </tr>
+         </table><br><table width="700">
+            <tr>
+               <th class="pointer" colspan="2"><a name="org.osgi.service.dmt.DmtExecPlugin"></a>Class org.osgi.service.dmt.DmtExecPlugin
+               </th>
+            </tr>
+            <tr>
+               <td colspan="2">
+                  An implementation of this interface takes the responsibility of handling EXEC
+                   requests in a subtree of the DMT.
+                     
+               </td>
+            </tr>
+            <tr>
+               <th width="350"><a name="DmtExecPlugin.execute(DmtSession,String,String,String)"></a>execute(DmtSession,String,String,String)
+               </th>
+               <th width="350"><b class="passed"> NO TEST FOUND </b></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Execute the given node with the given data.
+                     
+               </td>
+               <td width="350"></td>
+            </tr>
+         </table><br><table width="700">
+            <tr>
+               <th class="pointer" colspan="2"><a name="org.osgi.service.dmt.DmtMetaNode"></a>Class org.osgi.service.dmt.DmtMetaNode
+               </th>
+            </tr>
+            <tr>
+               <td colspan="2">
+                  The DmtMetaNode contains meta data both standard for SyncML DM and defined by
+                   OSGi MEG (without breaking the compatibility) to provide for better DMT data
+                   quality in an environment where many software components manipulate this
+                   data.
+                     
+               </td>
+            </tr>
+            <tr>
+               <th width="350"><a name="DmtMetaNode.can(int)"></a>can(int)
+               </th>
+               <th width="350"><b class="passed"> NO TEST FOUND </b></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Check whether the given operation is valid for this node.
+                     
+               </td>
+               <td width="350"></td>
+            </tr>
+            <tr>
+               <th width="350"><a name="DmtMetaNode.getDefault()"></a>getDefault()
+               </th>
+               <th width="350"><b class="passed"> NO TEST FOUND </b></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Get the default value of this node if any.
+                     
+               </td>
+               <td width="350"></td>
+            </tr>
+            <tr>
+               <th width="350"><a name="DmtMetaNode.getDescription()"></a>getDescription()
+               </th>
+               <th width="350"><b class="passed"> NO TEST FOUND </b></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Get the explanation string associated with this node.
+                     
+               </td>
+               <td width="350"></td>
+            </tr>
+            <tr>
+               <th width="350"><a name="DmtMetaNode.getFormat()"></a>getFormat()
+               </th>
+               <th width="350"><b class="passed"> NO TEST FOUND </b></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Get the node's format, expressed in terms of type constants defined in
+                      DmtData.
+                     
+               </td>
+               <td width="350"></td>
+            </tr>
+            <tr>
+               <th width="350"><a name="DmtMetaNode.getMax()"></a>getMax()
+               </th>
+               <th width="350"><b class="passed"> NO TEST FOUND </b></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Get the maximum allowed value associated with an integer node.
+                     
+               </td>
+               <td width="350"></td>
+            </tr>
+            <tr>
+               <th width="350"><a name="DmtMetaNode.getMaxOccurrence()"></a>getMaxOccurrence()
+               </th>
+               <th width="350"><b class="passed"> NO TEST FOUND </b></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Get the number of maximum occurrences of this type of nodes on the same
+                   level in the DMT.
+                     
+               </td>
+               <td width="350"></td>
+            </tr>
+            <tr>
+               <th width="350"><a name="DmtMetaNode.getMimeTypes()"></a>getMimeTypes()
+               </th>
+               <th width="350"><b class="passed"> NO TEST FOUND </b></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Get the list of MIME types this node can hold.
+                     
+               </td>
+               <td width="350"></td>
+            </tr>
+            <tr>
+               <th width="350"><a name="DmtMetaNode.getMin()"></a>getMin()
+               </th>
+               <th width="350"><b class="passed"> NO TEST FOUND </b></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Get the minimum allowed value associated with an integer node.
+                     
+               </td>
+               <td width="350"></td>
+            </tr>
+            <tr>
+               <th width="350"><a name="DmtMetaNode.getNamePattern()"></a>getNamePattern()
+               </th>
+               <th width="350"><b class="passed"> NO TEST FOUND </b></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Get the regular expression associated with the name of this node, if any.
+                     
+               </td>
+               <td width="350"></td>
+            </tr>
+            <tr>
+               <th width="350"><a name="DmtMetaNode.getPattern()"></a>getPattern()
+               </th>
+               <th width="350"><b class="passed"> NO TEST FOUND </b></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Get the regular expression associated with the value of this node, if
+                   any.
+                     
+               </td>
+               <td width="350"></td>
+            </tr>
+            <tr>
+               <th width="350"><a name="DmtMetaNode.getScope()"></a>getScope()
+               </th>
+               <th width="350"><b class="passed"> NO TEST FOUND </b></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Return the scope of the node.
+                     
+               </td>
+               <td width="350"></td>
+            </tr>
+            <tr>
+               <th width="350"><a name="DmtMetaNode.getValidNames()"></a>getValidNames()
+               </th>
+               <th width="350"><b class="passed"> NO TEST FOUND </b></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Return an array of Strings if valid names are defined for the node, or
+                   null if no valid name list is defined or if this piece of
+                   meta info is not supported.
+                     
+               </td>
+               <td width="350"></td>
+            </tr>
+            <tr>
+               <th width="350"><a name="DmtMetaNode.getValidValues()"></a>getValidValues()
+               </th>
+               <th width="350"><b class="passed"> NO TEST FOUND </b></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Return an array of DmtData objects if valid values are defined for the
+                   node, or null otherwise.
+                     
+               </td>
+               <td width="350"></td>
+            </tr>
+            <tr>
+               <th width="350"><a name="DmtMetaNode.isLeaf()"></a>isLeaf()
+               </th>
+               <th width="350"><b class="passed"> NO TEST FOUND </b></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Check whether the node is a leaf node or an internal one.
+                     
+               </td>
+               <td width="350"></td>
+            </tr>
+            <tr>
+               <th width="350"><a name="DmtMetaNode.isZeroOccurrenceAllowed()"></a>isZeroOccurrenceAllowed()
+               </th>
+               <th width="350"><b class="passed"> NO TEST FOUND </b></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Check whether zero occurrence of this node is valid.
+                     
+               </td>
+               <td width="350"></td>
+            </tr>
+         </table><br><table width="700">
+            <tr>
+               <th class="pointer" colspan="2"><a name="org.osgi.service.dmt.DmtPermission"></a>Class org.osgi.service.dmt.DmtPermission
+               </th>
+            </tr>
+            <tr>
+               <td colspan="2">
+                  DmtPermission controls access to management objects in the Device
+                   Management Tree (DMT).
+                     
+               </td>
+            </tr>
+            <tr>
+               <th width="350"><a name="DmtPermission.DmtPermission(String,String)"></a>DmtPermission(String,String)
+               </th>
+               <th width="350"><b class="passed"> NO TEST FOUND </b></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Creates a new DmtPermission object for the specified DMT URI with the
+                   specified actions.
+                     
+               </td>
+               <td width="350"></td>
+            </tr>
+            <tr>
+               <th width="350"><a name="DmtPermission.equals(Object)"></a>equals(Object)
+               </th>
+               <th width="350"><b class="passed"> NO TEST FOUND </b></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Checks whether the given object is equal to this DmtPermission instance.
+                     
+               </td>
+               <td width="350"></td>
+            </tr>
+            <tr>
+               <th width="350"><a name="DmtPermission.getActions()"></a>getActions()
+               </th>
+               <th width="350"><b class="passed"> NO TEST FOUND </b></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Returns the String representation of the action list.
+                     
+               </td>
+               <td width="350"></td>
+            </tr>
+            <tr>
+               <th width="350"><a name="DmtPermission.hashCode()"></a>hashCode()
+               </th>
+               <th width="350"><b class="passed"> NO TEST FOUND </b></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Returns the hash code for this permission object.
+                     
+               </td>
+               <td width="350"></td>
+            </tr>
+            <tr>
+               <th width="350"><a name="DmtPermission.implies(Permission)"></a>implies(Permission)
+               </th>
+               <th width="350"><b class="passed"> NO TEST FOUND </b></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Checks if this DmtPermission object "implies" the
+                   specified permission.
+                     
+               </td>
+               <td width="350"></td>
+            </tr>
+            <tr>
+               <th width="350"><a name="DmtPermission.newPermissionCollection()"></a>newPermissionCollection()
+               </th>
+               <th width="350"><b class="passed"> NO TEST FOUND </b></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Returns a new PermissionCollection object for storing
+                   DmtPermission objects.
+                     
+               </td>
+               <td width="350"></td>
+            </tr>
+         </table><br><table width="700">
+            <tr>
+               <th class="pointer" colspan="2"><a name="org.osgi.service.dmt.DmtPrincipalPermission"></a>Class org.osgi.service.dmt.DmtPrincipalPermission
+               </th>
+            </tr>
+            <tr>
+               <td colspan="2">
+                  Indicates the callers authority to create DMT sessions on behalf of a remote
+                   management server.
+                     
+               </td>
+            </tr>
+            <tr>
+               <th width="350"><a name="DmtPrincipalPermission.DmtPrincipalPermission(String)"></a>DmtPrincipalPermission(String)
+               </th>
+               <th width="350">Tests:</th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Creates a new DmtPrincipalPermission object with its name
+                   set to the target string.
+                     
+               </td>
+               <td width="350"><b>testDmtPrincipalPermission001</b>
+                  It asserts if the principal passed in the constructor is equals to
+                   					DmtPrincipalPermission.getName() method.
+                     <br><b>testDmtPrincipalPermission002</b>
+                  It asserts if a null value passed in the constructor as principal
+                   					throws an NullPointerException
+                     <br></td>
+            </tr>
+            <tr>
+               <th width="350"><a name="DmtPrincipalPermission.DmtPrincipalPermission(String,String)"></a>DmtPrincipalPermission(String,String)
+               </th>
+               <th width="350">Tests:</th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Creates a new DmtPrincipalPermission object using the
+                   'canonical' two argument constructor.
+                     
+               </td>
+               <td width="350"><b>testDmtPrincipalPermission003</b>
+                  Tests the constructor which has two string parameters.
+                                    The second parameter is ignored and the first one
+                                    sets the principal
+                     <br><b>testDmtPrincipalPermission004</b>
+                  Tests the constructor which has two string parameters.
+                                    The second parameter is ignored so this method asserts if
+                                    DmtPrincipalPermission actions is empty
+                     <br><b>testDmtPrincipalPermission005</b>
+                  Tests the constructor which has two string parameters.
+                                    The second parameter is ignored so this method asserts if
+                                    DmtPrincipalPermission actions is empty
+                     <br><b>testDmtPrincipalPermission006</b>
+                  Tests the constructor which has two string parameters.
+                                    To the second method is passed null, so this method asserts if
+                                    the principal passed is correctly returned
+                     <br><b>testDmtPrincipalPermission007</b>
+                  It asserts if a null value passed in the constructor as
+                                    principal throws an NullPointerException
+                     <br></td>
+            </tr>
+            <tr>
+               <th width="350"><a name="DmtPrincipalPermission.equals(Object)"></a>equals(Object)
+               </th>
+               <th width="350"><b class="passed"> NO TEST FOUND </b></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Checks whether the given object is equal to this DmtPrincipalPermission
+                   instance.
+                     
+               </td>
+               <td width="350"></td>
+            </tr>
+            <tr>
+               <th width="350"><a name="DmtPrincipalPermission.getActions()"></a>getActions()
+               </th>
+               <th width="350">Tests:</th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Returns the action list (always * in the current version).
+                     
+               </td>
+               <td width="350"><b>testDmtPrincipalPermission004</b>
+                  Tests the constructor which has two string parameters.
+                                    The second parameter is ignored so this method asserts if
+                                    DmtPrincipalPermission actions is empty
+                     <br><b>testDmtPrincipalPermission005</b>
+                  Tests the constructor which has two string parameters.
+                                    The second parameter is ignored so this method asserts if
+                                    DmtPrincipalPermission actions is empty
+                     <br><b>testDmtPrincipalPermission007</b>
+                  It asserts if a null value passed in the constructor as
+                                    principal throws an NullPointerException
+                     <br></td>
+            </tr>
+            <tr>
+               <th width="350"><a name="DmtPrincipalPermission.hashCode()"></a>hashCode()
+               </th>
+               <th width="350"><b class="passed"> NO TEST FOUND </b></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Returns the hash code for this permission object.
+                     
+               </td>
+               <td width="350"></td>
+            </tr>
+            <tr>
+               <th width="350"><a name="DmtPrincipalPermission.implies(Permission)"></a>implies(Permission)
+               </th>
+               <th width="350"><b class="passed"> NO TEST FOUND </b></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Checks if this DmtPrincipalPermission object implies the specified
+                   permission.
+                     
+               </td>
+               <td width="350"></td>
+            </tr>
+            <tr>
+               <th width="350"><a name="DmtPrincipalPermission.newPermissionCollection()"></a>newPermissionCollection()
+               </th>
+               <th width="350"><b class="passed"> NO TEST FOUND </b></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Returns a new PermissionCollection object for storing
+                   DmtPrincipalPermission objects.
+                     
+               </td>
+               <td width="350"></td>
+            </tr>
+         </table><br><table width="700">
+            <tr>
+               <th class="pointer" colspan="2"><a name="org.osgi.service.dmt.DmtReadOnly"></a>Class org.osgi.service.dmt.DmtReadOnly
+               </th>
+            </tr>
+            <tr>
+               <td colspan="2">
+                  This interface collects basic DMT operations.
+                     
+               </td>
+            </tr>
+            <tr>
+               <th width="350"><a name="DmtReadOnly.close()"></a>close()
+               </th>
+               <th width="350"><b class="passed"> NO TEST FOUND </b></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Closes a session.
+                     
+               </td>
+               <td width="350"></td>
+            </tr>
+            <tr>
+               <th width="350"><a name="DmtReadOnly.getChildNodeNames(String)"></a>getChildNodeNames(String)
+               </th>
+               <th width="350"><b class="passed"> NO TEST FOUND </b></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Get the list of children names of a node.
+                     
+               </td>
+               <td width="350"></td>
+            </tr>
+            <tr>
+               <th width="350"><a name="DmtReadOnly.getMetaNode(String)"></a>getMetaNode(String)
+               </th>
+               <th width="350"><b class="passed"> NO TEST FOUND </b></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Get the meta data which describes a given node.
+                     
+               </td>
+               <td width="350"></td>
+            </tr>
+            <tr>
+               <th width="350"><a name="DmtReadOnly.getNodeSize(String)"></a>getNodeSize(String)
+               </th>
+               <th width="350"><b class="passed"> NO TEST FOUND </b></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Get the size of the data in the node.
+                     
+               </td>
+               <td width="350"></td>
+            </tr>
+            <tr>
+               <th width="350"><a name="DmtReadOnly.getNodeTimestamp(String)"></a>getNodeTimestamp(String)
+               </th>
+               <th width="350"><b class="passed"> NO TEST FOUND </b></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Get the timestamp when the node was last modified.
+                     
+               </td>
+               <td width="350"></td>
+            </tr>
+            <tr>
+               <th width="350"><a name="DmtReadOnly.getNodeTitle(String)"></a>getNodeTitle(String)
+               </th>
+               <th width="350"><b class="passed"> NO TEST FOUND </b></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Get the title of a node.
+                     
+               </td>
+               <td width="350"></td>
+            </tr>
+            <tr>
+               <th width="350"><a name="DmtReadOnly.getNodeType(String)"></a>getNodeType(String)
+               </th>
+               <th width="350"><b class="passed"> NO TEST FOUND </b></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Get the type of a node.
+                     
+               </td>
+               <td width="350"></td>
+            </tr>
+            <tr>
+               <th width="350"><a name="DmtReadOnly.getNodeValue(String)"></a>getNodeValue(String)
+               </th>
+               <th width="350"><b class="passed"> NO TEST FOUND </b></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Get the data contained in a leaf node.
+                     
+               </td>
+               <td width="350"></td>
+            </tr>
+            <tr>
+               <th width="350"><a name="DmtReadOnly.getNodeVersion(String)"></a>getNodeVersion(String)
+               </th>
+               <th width="350"><b class="passed"> NO TEST FOUND </b></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Get the version of a node.
+                     
+               </td>
+               <td width="350"></td>
+            </tr>
+            <tr>
+               <th width="350"><a name="DmtReadOnly.isLeafNode(String)"></a>isLeafNode(String)
+               </th>
+               <th width="350"><b class="passed"> NO TEST FOUND </b></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Tells whether a node is a leaf or an interior node of the DMT.
+                     
+               </td>
+               <td width="350"></td>
+            </tr>
+            <tr>
+               <th width="350"><a name="DmtReadOnly.isNodeUri(String)"></a>isNodeUri(String)
+               </th>
+               <th width="350"><b class="passed"> NO TEST FOUND </b></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Check whether the specified URI corresponds to a valid node in the DMT.
+                     
+               </td>
+               <td width="350"></td>
+            </tr>
+         </table><br><table width="700">
+            <tr>
+               <th class="pointer" colspan="2"><a name="org.osgi.service.dmt.DmtReadOnlyDataPlugin"></a>Class org.osgi.service.dmt.DmtReadOnlyDataPlugin
+               </th>
+            </tr>
+            <tr>
+               <td colspan="2">
+                  An implementation of this interface takes the responsibility over a
+                   non-modifiable subtree of the DMT.
+                     
+               </td>
+            </tr>
+            <tr>
+               <th width="350"><a name="DmtReadOnlyDataPlugin.open(String,DmtSession)"></a>open(String,DmtSession)
+               </th>
+               <th width="350"><b class="passed"> NO TEST FOUND </b></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  This method is called to signal the start of a transaction when the first
+                   reference is made within a DmtSession to a node which is
+                   handled by this plugin.
+                     
+               </td>
+               <td width="350"></td>
+            </tr>
+         </table><br><table width="700">
+            <tr>
+               <th class="pointer" colspan="2"><a name="org.osgi.service.dmt.DmtSession"></a>Class org.osgi.service.dmt.DmtSession
+               </th>
+            </tr>
+            <tr>
+               <td colspan="2">
+                  DmtSession provides concurrent access to the DMT.
+                     
+               </td>
+            </tr>
+            <tr>
+               <th width="350"><a name="DmtSession.execute(String,String)"></a>execute(String,String)
+               </th>
+               <th width="350"><b class="passed"> NO TEST FOUND </b></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Executes a node.
+                     
+               </td>
+               <td width="350"></td>
+            </tr>
+            <tr>
+               <th width="350"><a name="DmtSession.execute(String,String,String)"></a>execute(String,String,String)
+               </th>
+               <th width="350"><b class="passed"> NO TEST FOUND </b></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Executes a node, also specifying a correlation ID for use in response
+                   alerts.
+                     
+               </td>
+               <td width="350"></td>
+            </tr>
+            <tr>
+               <th width="350"><a name="DmtSession.getEffectiveNodeAcl(String)"></a>getEffectiveNodeAcl(String)
+               </th>
+               <th width="350"><b class="passed"> NO TEST FOUND </b></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Gives the Access Control List in effect for a given node.
+                     
+               </td>
+               <td width="350"></td>
+            </tr>
+            <tr>
+               <th width="350"><a name="DmtSession.getLockType()"></a>getLockType()
+               </th>
+               <th width="350"><b class="passed"> NO TEST FOUND </b></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Gives the type of lock the session currently has.
+                     
+               </td>
+               <td width="350"></td>
+            </tr>
+            <tr>
+               <th width="350"><a name="DmtSession.getNodeAcl(String)"></a>getNodeAcl(String)
+               </th>
+               <th width="350"><b class="passed"> NO TEST FOUND </b></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Gives the Access Control List associated with a given node.
+                     
+               </td>
+               <td width="350"></td>
+            </tr>
+            <tr>
+               <th width="350"><a name="DmtSession.getPrincipal()"></a>getPrincipal()
+               </th>
+               <th width="350"><b class="passed"> NO TEST FOUND </b></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Gives the name of the principal on whose behalf the session was created.
+                     
+               </td>
+               <td width="350"></td>
+            </tr>
+            <tr>
+               <th width="350"><a name="DmtSession.getRootUri()"></a>getRootUri()
+               </th>
+               <th width="350"><b class="passed"> NO TEST FOUND </b></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Get the root URI associated with this session.
+                     
+               </td>
+               <td width="350"></td>
+            </tr>
+            <tr>
+               <th width="350"><a name="DmtSession.getSessionId()"></a>getSessionId()
+               </th>
+               <th width="350"><b class="passed"> NO TEST FOUND </b></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  The unique identifier of the session.
+                     
+               </td>
+               <td width="350"></td>
+            </tr>
+            <tr>
+               <th width="350"><a name="DmtSession.getState()"></a>getState()
+               </th>
+               <th width="350"><b class="passed"> NO TEST FOUND </b></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Get the current state of this session.
+                     
+               </td>
+               <td width="350"></td>
+            </tr>
+            <tr>
+               <th width="350"><a name="DmtSession.setNodeAcl(String,DmtAcl)"></a>setNodeAcl(String,DmtAcl)
+               </th>
+               <th width="350"><b class="passed"> NO TEST FOUND </b></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Set the Access Control List associated with a given node.
+                     
+               </td>
+               <td width="350"></td>
+            </tr>
+         </table><br><table width="700">
+            <tr>
+               <th class="pointer" colspan="2"><a name="org.osgi.service.dmt.RemoteAlertSender"></a>Class org.osgi.service.dmt.RemoteAlertSender
+               </th>
+            </tr>
+            <tr>
+               <td colspan="2">
+                  The RemoteAlertSender service is provided by Protocol Adapters, and can be
+                   used by the Dmt Admin to send notifications to remote servers.
+                     
+               </td>
+            </tr>
+            <tr>
+               <th width="350"><a name="RemoteAlertSender.sendAlert(String,int,String,DmtAlertItem[])"></a>sendAlert(String,int,String,DmtAlertItem[])
+               </th>
+               <th width="350"><b class="passed"> NO TEST FOUND </b></th>
+            </tr>
+            <tr>
+               <td width="350">
+                  Sends an alert to a given server.
+                     
+               </td>
+               <td width="350"></td>
+            </tr>
+         </table>
+      </div>
+   </body>
+</html>
