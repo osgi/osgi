@@ -308,7 +308,7 @@ public class DeploymentmoTestControl extends DefaultTestBundleControl {
                 packages.put(""+i, dp);
                 //
                 artifact = new TestingArtifact(new TestingDlota("download_failed.xml",
-                        "http://neverfound.com/artifact.dp", 4768, DeploymentmoConstants.ENVIRONMENT_DP), dp);
+                        "neverfound.com/artifact.dp", 4768, DeploymentmoConstants.ENVIRONMENT_DP), dp);
                 artifacts.put(""+i, artifact);
                 break;
             }
