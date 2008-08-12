@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry kind="src" path="src"/>
-	<classpathentry kind="lib" path="/licensed/repo/org.osgi.impl.bundle.servlet/org.osgi.impl.bundle.servlet-2.1.0.jar" sourcepath="/org.osgi.impl.bundle.servlet/src"/>
-	<classpathentry kind="lib" path="/licensed/repo/com.icl.saxon/com.icl.saxon-6.5.1.jar"/>
-	<classpathentry kind="lib" path="/osgi.released/osgi.internal.jar" sourcepath="/org.osgi.test.cases/src"/>
-	<classpathentry kind="lib" path="/cnf/repo/ee.foundation/ee.foundation-1.1.0.jar" sourcepath="/cnf/repo/ee.foundation/ee.foundation-1.1.0.jar"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/osgi.internal"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/ee.foundation"/>
 	<classpathentry kind="output" path="src"/>
 </classpath>
