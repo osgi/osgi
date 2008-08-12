@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <projectDescription>
-	<name>org.osgi.test.cases.servicetracker</name>
+	<name>org.osgi.test.cases.tracker</name>
 	<comment></comment>
 	<projects>
 	</projects>
