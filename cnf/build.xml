@@ -222,7 +222,7 @@
 	</target>
 
 	<target name="-signjar" if="sign.${item.jarFile}">
-		<signjar jar="${item.jarFile}" keystore="${workspace}/cnf/certificate/.keystore" storepass="testtest" keypass="testtest" alias="test" />
+		<signjar jar="${target}/${item.jarFile}" keystore="${workspace}/cnf/certificate/.keystore" storepass="testtest" keypass="testtest" alias="test" />
 	</target>
 
 	
