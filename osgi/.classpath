@@ -34,5 +34,6 @@
 	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/info.dmtree"/>
 	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/org.osgi.service.command"/>
 	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/org.osgi.service.threadio"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/org.osgi.util.cdma"/>
 	<classpathentry kind="output" path=""/>
 </classpath>
