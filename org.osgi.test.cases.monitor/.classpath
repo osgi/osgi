@@ -3,6 +3,6 @@
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="lib" path="/cnf/repo/osgi/osgi-4.1.0.jar"/>
 	<classpathentry kind="lib" path="/cnf/repo/ee.foundation/ee.foundation-1.1.0.jar" sourcepath="/ee.foundation"/>
-	<classpathentry kind="lib" path="/osgi.released/osgi.internal.jar" sourcepath="/org.osgi.test.cases/src"/>
+	<classpathentry kind="lib" path="/cnf/repo/org.osgi.internal/org.osgi.internal-4.1.0.jar" sourcepath="/org.osgi.test.cases/src"/>
 	<classpathentry kind="output" path="src"/>
 </classpath>

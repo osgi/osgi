@@ -4,6 +4,6 @@
 	<classpathentry exported="true" kind="src" path="/org.osgi.service.packageadmin"/>
 	<classpathentry sourcepath="/cnf/repo/ee.minimum/ee.minimum-1.0.0.jar" kind="lib" path="/cnf/repo/ee.minimum/ee.minimum-1.0.0.jar"/>
 	<classpathentry sourcepath="/cnf/repo/osgi/osgi-4.0.0.jar" kind="lib" path="/cnf/repo/osgi/osgi-4.0.0.jar"/>
-	<classpathentry sourcepath="/osgi.released/osgi.internal.jar" kind="lib" path="/osgi.released/osgi.internal.jar"/>
+	<classpathentry sourcepath="/cnf/repo/org.osgi.internal/org.osgi.internal-4.1.0.jar" kind="lib" path="/cnf/repo/org.osgi.internal/org.osgi.internal-4.1.0.jar"/>
 	<classpathentry kind="output" path="src"/>
 </classpath>

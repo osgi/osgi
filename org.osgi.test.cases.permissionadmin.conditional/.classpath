@@ -2,7 +2,7 @@
 <classpath>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry sourcepath="/ee.minimum" kind="lib" path="/cnf/repo/ee.minimum/ee.minimum-1.0.0.jar"/>
-	<classpathentry sourcepath="/org.osgi.test.cases/src" kind="lib" path="/osgi.released/osgi.internal.jar"/>
+	<classpathentry sourcepath="/org.osgi.test.cases/src" kind="lib" path="/cnf/repo/org.osgi.internal/org.osgi.internal-4.1.0.jar"/>
 	<classpathentry kind="src" path="/org.osgi.framework"/>
 	<classpathentry kind="src" path="/org.osgi.service.condpermadmin"/>
 	<classpathentry sourcepath="/cnf/repo/osgi/osgi-4.0.0.jar" kind="lib" path="/cnf/repo/osgi/osgi-4.0.0.jar"/>
