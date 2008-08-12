@@ -185,8 +185,12 @@ public class DownloadAndInstallAndActivate implements TestInterface {
             
             if (preCondition(session, dp.getFilename(), artifact.getDlota().getFilename())) {
                 String[] initialChildren= session.getChildNodeNames(DeploymentmoConstants.DEPLOYMENT_INVENTORY_DEPLOYED);
-                session.execute(
-                        DeploymentmoConstants.DEPLOYMENT_DOWNLOAD_TEST_DOWN_INST_ACTIV, null);
+                
+                session.execute(DeploymentmoConstants.DEPLOYMENT_DOWNLOAD_TEST_DOWN_INST_ACTIV, null);
+                
+                synchronized (tbc) {
+                    tbc.wait(DeploymentmoConstants.TIMEOUT);
+                }
                 
                 tbc.assertEquals("Asserts if the download failed",
                         DeploymentmoConstants.CODE_DOWNLOAD_FAILED,session.getNodeValue(DeploymentmoConstants.DEPLOYMENT_DOWNLOAD_TEST_STATUS).getInt());
