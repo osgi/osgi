@@ -28,7 +28,6 @@
 	<classpathentry exported="true" kind="src" path="/org.osgi.util.mobile"/>
 	<classpathentry exported="true" kind="src" path="/org.osgi.service.deploymentadmin"/>
 	<classpathentry exported="true" kind="src" path="/org.osgi.util.gsm"/>
-	<classpathentry exported="true" kind="src" path="/org.osgi.service.power"/>
 	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/org.osgi.application"/>
 	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/org.osgi.service.obr"/>
 	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/info.dmtree"/>
