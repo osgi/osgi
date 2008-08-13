@@ -176,6 +176,9 @@
 
 	<target name="jars-bnd" depends="init" if="use.bnd">
 		<echo>JARs ${use.bnd}</echo>
+		<antcall target="-interleave">
+		  <param name="x" value="before.${item.jarFile}"/>
+		</antcall>
 		<bnd eclipse="true" failok="false" exceptions="true" files="bnd.bnd" output="${target}"/>
 	</target>
 	
@@ -207,7 +210,7 @@
 	<target name="-btool">
 		<echo>JAR ${item.jarFile}</echo>		
 		<antcall target="-interleave">
-		  <param name="target" value="before.${item.jarFile}"/>
+		  <param name="x" value="before.${item.jarFile}"/>
 		</antcall>
 		
 		<btool jar="${target}/${item.jarFile}" failok="${btool.failok}" eclipse="${project}" analyse="${btool.analyse}" 
@@ -230,8 +233,8 @@
 	  If you specify before.<jarfile>.jar=target, then we will
 	  call this target before the creation of the jar file.
 	-->
-	<target name="-interleave" if="${target}">
-		<indirect inputName="${target}" outputName="before"/>
+	<target name="-interleave" if="${x}">
+		<indirect inputName="${x}" outputName="before"/>
 		<antcall target="${before}"/>
 	</target>
 	
