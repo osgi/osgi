@@ -96,7 +96,7 @@
 		<property name="repo" value="${build}/repo" />
 
 
-		<taskdef resource="org/osgi/tools/build/ant/taskdef.properties" classpath="${workspace}/cnf/jar/btool.jar" />
+		<taskdef resource="org/osgi/tools/build/ant/taskdef.properties" classpath="${repo}/org.osgi.tools.btool/org.osgi.tools.btool-latest.jar" />
 		<taskdef resource="net/sf/antcontrib/antcontrib.properties" classpath="${workspace}/licensed/ant-contrib/ant-contrib-0.6.jar" />
 		<taskdef resource="aQute/bnd/ant/taskdef.properties" classpath="${licensed}/repo/biz.aQute.bnd/biz.aQute.bnd-latest.jar" />
 
