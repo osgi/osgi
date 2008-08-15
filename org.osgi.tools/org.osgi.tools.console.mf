@@ -34,7 +34,6 @@ Bundle-Copyright: ERICSSON RADIO SYSTEMS AB (c) 2000 All Rights Reserved
 Bundle-Vendor: ERICSSON RADIO SYSTEMS AB
 Bundle-Category: nursery,utility,development
 Bundle-Version: 1.0.3
-Bundle-SymbolicName: org.osgi.tools.console
 Bundle-Activator: org.osgi.tools.console.Console
 $(EXPORT-PACKAGE)
 $(IMPORT-PACKAGE)
