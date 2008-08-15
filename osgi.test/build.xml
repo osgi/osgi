@@ -6,7 +6,7 @@
 			<fileset dir="${workspace}/org.osgi.test.cases.deploymentadmin.mo/delivered" />
 		</copy>
 		<copy file="${workspace}/cnf/certificate/.keystore" tofile="target/keystore" verbose="${verbose}" preservelastmodified="true"/>
-		<copy file="${workspace}/licensed/jar/servlet.jar" tofile="servlet.jar" verbose="${verbose}" preservelastmodified="true"/>
+		<copy file="${licensed-repo}/org.osgi.impl.bundle.servlet/org.osgi.impl.bundle.servlet-2.1.0.jar" tofile="${target}/servlet.jar" verbose="${verbose}" preservelastmodified="true"/>
 	</target>
 
 	<target name="crossref" depends="init">
