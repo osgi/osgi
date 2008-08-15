@@ -71,10 +71,16 @@
 	<target name="all" depends="publish">
 		<!-- all target is a synonym for publish target -->
 	</target>
-	<target name="publish" depends="init,dependencies,compile,jars,release">
+	<target name="publish" depends="init,dependencies,compile,jars,release,deploy">
 		<echo>Exit project ${project.name}</echo>
 	</target>
 
+	<target name="deploy" depends="init,dependencies,compile,jars,release" unless="nodeploy">
+		<bnddeploy>
+			<fileset dir="${target}" includes="${bin.includes}" />
+		</bnddeploy>
+	</target>
+		
 	<!-- 
 	     INIT
 	     The target is a dependent of all other targets.
@@ -94,7 +100,7 @@
 		<property name="licensed" value="${workspace}/licensed" />
 		<property name="licensed-repo" value="${licensed}/repo" />
 		<property name="repo" value="${build}/repo" />
-
+		<available file="${project}/bnd.bnd" property="use.bnd"/>
 
 		<taskdef resource="org/osgi/tools/build/ant/taskdef.properties" classpath="${repo}/org.osgi.tools.btool/org.osgi.tools.btool-latest.jar" />
 		<taskdef resource="net/sf/antcontrib/antcontrib.properties" classpath="${workspace}/licensed/ant-contrib/ant-contrib-0.6.jar" />
@@ -111,14 +117,15 @@
 			 properties.
 		-->
 		<tstamp prefix="tstamp">
-			<format property="YEAR" pattern="yyyy"/>
+			<format property="YEAR" pattern="yyyy" />
 		</tstamp>
-		<property name="project.build" value="build-${tstamp.DSTAMP}${tstamp.TSTAMP}"/>
+		<property name="project.build" value="build-${tstamp.DSTAMP}${tstamp.TSTAMP}" />
 
 		<expand propertyFile="${workspace}/cnf/version.properties" />
 		<expand propertyFile="${workspace}/cnf/global.properties" />
 		<expand propertyFile="${project}/build.properties" />
 		<property file="${env.HOME}/osgi.properties" />
+		<bndexpand propertyFile="${workspace}/cnf/build.bld" />
 		<expand propertyFile="${workspace}/cnf/build.properties" />
 
 		<property name="prebuild" value="" />
@@ -129,9 +136,9 @@
 		<property name="p" value="${project.name}" />
 		<property name="bin.includes" value="${project.name}.jar" />
 
-		
-		<mkdir dir="${target}"/>
-		
+
+		<mkdir dir="${target}" />
+
 		<!-- mark init has been run -->
 		<property name="initialized" value="set" />
 		<echo>Enter project ${project.name}</echo>
@@ -162,11 +169,11 @@
 	-->
 	<target name="jars" depends="jars-btool,jars-bnd,copy-from">
 	</target>
-	
+
 	<target name="copy-from" if="copy.from">
-		<copy overwrite="true" file="${copy.from}" tofile="${target}/${p}.jar" preservelastmodified="true"/>
+		<copy overwrite="true" file="${copy.from}" tofile="${target}/${p}.jar" preservelastmodified="true" />
 	</target>
-	
+
 	<!-- Use the older btool tool -->
 	<target name="jars-btool" depends="init" if="jars.compile.order">
 		<echo>JARs ${jars.compile.order}</echo>
@@ -177,11 +184,11 @@
 	<target name="jars-bnd" depends="init" if="use.bnd">
 		<echo>JARs ${use.bnd}</echo>
 		<antcall target="-interleave">
-		  <param name="x" value="before.${item.jarFile}"/>
+			<param name="x" value="before.${item.jarFile}" />
 		</antcall>
-		<bnd eclipse="true" failok="false" exceptions="true" files="bnd.bnd" output="${target}"/>
+		<bnd eclipse="true" failok="false" exceptions="true" files="bnd.bnd" output="${target}" />
 	</target>
-	
+
 	<target name="-jar" depends="-btool,-signjar" />
 
 	<!--
@@ -208,36 +215,28 @@
 	     compress			true/false
 	-->
 	<target name="-btool">
-		<echo>JAR ${item.jarFile}</echo>		
+		<echo>JAR ${item.jarFile}</echo>
 		<antcall target="-interleave">
-		  <param name="x" value="before.${item.jarFile}"/>
+			<param name="x" value="before.${item.jarFile}" />
 		</antcall>
-		
-		<btool jar="${target}/${item.jarFile}" failok="${btool.failok}" eclipse="${project}" analyse="${btool.analyse}" 
-			showmanifest="${btool.showmanifest}" includeProperty="include.${item.jarFile}" expandProperty="expand.${item.jarFile}" 
-			contentFoldersProperty="source.${item.jarFile}" excludeImportProperty="excludeImport.${item.jarFile}" 
-			includeExportProperty="includeExport.${item.jarFile}" ipaProperty="ipa.${item.jarFile}" verbose="${verbose}" 
-			sources="${btool.sources}" ignoreVersions="${btool.noversion}" manifestVersion="${btool.manifestVersion}" 
-			modified="${base.modified}" extraRoots="root.${item.jarFile}" noExtraHeaders="${btool.noextraheaders}"
-			compress="${btool.compressed}"
-			doNotCopy="${doNotCopy}"
-		/>
+
+		<btool jar="${target}/${item.jarFile}" failok="${btool.failok}" eclipse="${project}" analyse="${btool.analyse}" showmanifest="${btool.showmanifest}" includeProperty="include.${item.jarFile}" expandProperty="expand.${item.jarFile}" contentFoldersProperty="source.${item.jarFile}" excludeImportProperty="excludeImport.${item.jarFile}" includeExportProperty="includeExport.${item.jarFile}" ipaProperty="ipa.${item.jarFile}" verbose="${verbose}" sources="${btool.sources}" ignoreVersions="${btool.noversion}" manifestVersion="${btool.manifestVersion}" modified="${base.modified}" extraRoots="root.${item.jarFile}" noExtraHeaders="${btool.noextraheaders}" compress="${btool.compressed}" doNotCopy="${doNotCopy}" />
 	</target>
 
 	<target name="-signjar" if="sign.${item.jarFile}">
 		<signjar jar="${target}/${item.jarFile}" keystore="${workspace}/cnf/certificate/.keystore" storepass="testtest" keypass="testtest" alias="test" />
 	</target>
 
-	
+
 	<!--
 	  If you specify before.<jarfile>.jar=target, then we will
 	  call this target before the creation of the jar file.
 	-->
 	<target name="-interleave" if="${x}">
-		<indirect inputName="${x}" outputName="before"/>
-		<antcall target="${before}"/>
+		<indirect inputName="${x}" outputName="before" />
+		<antcall target="${before}" />
 	</target>
-	
+
 	<!--
 	    RELEASE
 	    Copy the JAR file to the osgi.released directory.
@@ -289,7 +288,10 @@
 		<echo>base.modfied:           ${base.modified} (${base.modified.readable})</echo>
 		<echo>target:                 ${target}</echo>
 		<echo>licensed repo:          ${licensed-repo}</echo>
-	
+		<echo>repo:                   ${repo}</echo>
+		<echo>use.bnd:                ${use.bnd}</echo>
+		<echo>nodeploy:               ${nodeploy}</echo>
+
 	</target>
 
 	<!--
