@@ -1,4 +1,6 @@
 Manifest-Version: 1.0
+Bundle-SymbolicName: org.osgi.tools.cmcmd
+Bundle-Version: 1.0.0
 Bundle-Name: CM-Command
 Bundle-Activator: org.osgi.tools.cmadmin.CMCmd
 Bundle-Description: Provides commands to the console to adminstrate

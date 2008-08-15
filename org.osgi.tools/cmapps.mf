@@ -1,4 +1,6 @@
 Manifest-Version: 1.0
+Bundle-SymbolicName: org.osgi.tools.cmapps
+Bundle-Version: 1.0.0
 Bundle-Name: tools.cmapps
 Bundle-Description: Provides a number of commands to the console to 
   manipulate the ApplicationDescriptor and ApplicationHandle services.

@@ -1,2 +1,4 @@
 Manifest-Version: 1.0
+Bundle-SymbolicName: ${p}.xml2mif
+Bundle-Version: 1.0.0
 Main-Class: ${p}.xml2mif.XML2MIF
