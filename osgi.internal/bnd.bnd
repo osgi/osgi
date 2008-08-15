@@ -1,0 +1,11 @@
+Bundle-Name: osgi.internal
+Bundle-SymbolicName: org.osgi.internal
+Bundle-Description: OSGi Internal Interfaces and Classes for use in testing.
+Bundle-Version: 4.1
+Bundle-Category: osgi
+Export-Package:  org.osgi.tools.command, org.osgi.test.service, \
+ org.osgi.test.cases.util, \
+ org.osgi.test.cases.util.director,\
+ org.osgi.test.cases.logproxy,\
+ org.osgi.tools.group, \
+ org.osgi.test.shared
