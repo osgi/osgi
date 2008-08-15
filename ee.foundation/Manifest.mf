@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Foundation-EE
 Bundle-Description: Contains the OSGi foundation execution environment stubbed classes and sources
-Bundle-SymbolicName: org.osgi.ee.foundation
+Bundle-SymbolicName: ee.foundation
 Bundle-Version: 1.1.0.$(project.build)
 Bundle-Vendor: OSGi Alliance
 Bundle-Copyright: ${copyright}
