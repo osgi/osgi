@@ -7,67 +7,6 @@
 -->
 <project name="master" default="none">
 
-	<!-- 
-		PUBLISH
-		
-		The main target. It will build the jar file(s) and publish them.
-		
-	   	Set the build properties. These are derived from
-	   	the project, the user directory and the workspace directory
-	   	the earlies wins, so the project has the highest priority). 
-	   	Properties may extend on the next line if they end with a '\'
-	   
-	    bin.includes        jars/files copied to ${released.dir} if set
-	    					Example:
-	    						bin.includes = myjar.jar
-	    						
-	    jars.compile.order  list of comma separated JAR files. As the name
-	                        implies, ant will build the jars in that order
-	                        Example:
-	                        	jar.compile.order= embedded.jar, myjar.jar
-	    
-	    for each mentioned jar file in the jars.compile.order
-	    property, the following option may be used in the
-	    form <option>.<jarfile>
-	    
-	    expand.<jarfile>    List of comma separated package names,
-	                        like org.osgi.service.example, javax.microedition, ...
-	                        The package name maybe placed between square
-	                        brackets, this means that the package is
-	                        placed in the export list of the bundle which 
-	                        is placed in the manifest if $(EXPORT-PACKAGE) 
-	                        is present. E.g. [org.osgi.example] will be
-	                        in the export list, otherwise it is assumed to be
-	                        private. Pakage name that end in a .* will be
-	                        recursively expanded. The packages are coming
-	                        from the project classpath as specified in
-	                        the Eclipse .classpath file.
-	                        
-	                        Example:
-	                          expand.myjar.jar = [org.osgi.service.cm], com.foo.*
-	                        
-	    include.<jarfile>   A comma separated list of file names that must be
-	                        be included in the jar. The default name of the file
-	                        in the jar will be the file name without the directory
-	                        name. This can be overridden by using a = sign in the
-	                        name. I.e. tbc.jar=tc1/tbc/org.osgi.tc1.jar
-	                        Example:
-	                        	include.myjar.jar=embedded.jar,  \
-	                        	  ifc.jar=../licensed/jar/ifc11.jar               
-	                        	  
-	  Miscellaneous properties that can be overridden are:
-	  
-		verbose				Printout lots of info of the build
-	  	javac				The Java compiler path
-		javac.debug 		Debug files
-		javac.source		source compatibility
-		javac.target		Target class file compatibility
-		btool.analyse       Analyse the manifest values
-		btool.showmanifest 	Display the manifest during the build
-		btool.noversion    	Ignore versions of import/export
-		btool.manifestVersion
-		
-	-->
 	<target name="all" depends="publish">
 		<!-- all target is a synonym for publish target -->
 	</target>
@@ -93,8 +32,8 @@
 		<dirname property="workspacedir" file="${projectdir}" />
 		<taskdef resource="aQute/bnd/ant/taskdef.properties" classpath="${workspacedir}/licensed/repo/biz.aQute.bnd/biz.aQute.bnd-latest.jar" />
 
-		<available file="bnd.bnd" property="use.bnd"/>
-		
+		<available file="bnd.bnd" property="use.bnd" />
+
 		<bndproperties basedir="${projectdir}" print="${print}" />
 
 		<!-- Now we have the same properties set as bnd 
@@ -102,7 +41,7 @@
 
 		<taskdef resource="org/osgi/tools/build/ant/taskdef.properties" classpath="${repo}/org.osgi.tools.btool/org.osgi.tools.btool-latest.jar" />
 		<taskdef resource="net/sf/antcontrib/antcontrib.properties" classpath="${workspace}/licensed/ant-contrib/ant-contrib-0.6.jar" />
-		
+
 		<btool eclipse="${project}" prebuild="${prebuild}" />
 
 		<!-- mark init has been run -->
@@ -121,6 +60,32 @@
 	</target>
 
 	<!--
+	     Test
+	-->
+	<target name="test" depends="jars">
+		<!-- add the test env (junit, osgi tester) -->
+		<echo>${project.classpath}</echo>
+		<junit printsummary="yes" haltonfailure="yes">
+			<classpath>
+				<pathelement path="${project.classpath}" />
+				<pathelement location="${licensed-repo}/com.springsource.junit/com.springsource.junit-3.8.2.jar" />
+				<pathelement location="${licensed-repo}/biz.aQute.bnd/biz.aQute.bnd-latest.jar" />
+			</classpath>
+
+			<formatter type="plain" />
+
+			<batchtest fork="yes" todir="${target}">
+				<fileset dir="${src}">
+					<include name="**/*Test*.java" />
+					<exclude name="**/AllTests.java" />
+					<exclude name="**/*TestCase*.java" />
+				</fileset>
+			</batchtest>
+		</junit>
+
+	</target>
+
+	<!--
 	     COMPILE
 	     Compile the sources. 
 	-->
@@ -135,7 +100,7 @@
 	-->
 	<target name="jars" depends="-mktarget,jars-btool,jars-bnd,copy-from">
 	</target>
-	
+
 	<target name="-mktarget">
 		<mkdir dir="${target}" />
 	</target>
