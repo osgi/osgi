@@ -80,7 +80,7 @@
 			<fileset dir="${target}" includes="${bin.includes}" />
 		</bnddeploy>
 	</target>
-		
+
 	<!-- 
 	     INIT
 	     The target is a dependent of all other targets.
@@ -89,55 +89,21 @@
 	-->
 
 	<target name="init" unless="initialized">
-		<dirname property="project" file="${ant.file}" />
-		<dirname property="workspace" file="${project}" />
-		<basename property="project.name" file="${project}" />
-		<property name="p" value="${project.name}" />
-		<property environment="env" />
-		<property name="target-dir" value="generated" />
-		<property name="target" value="${project}/${target-dir}" />
-		<property name="build" value="${workspace}/cnf" />
-		<property name="licensed" value="${workspace}/licensed" />
-		<property name="licensed-repo" value="${licensed}/repo" />
-		<property name="repo" value="${build}/repo" />
-		<available file="${project}/bnd.bnd" property="use.bnd"/>
+		<dirname property="projectdir" file="${ant.file}" />
+		<dirname property="workspacedir" file="${projectdir}" />
+		<taskdef resource="aQute/bnd/ant/taskdef.properties" classpath="${workspacedir}/licensed/repo/biz.aQute.bnd/biz.aQute.bnd-latest.jar" />
+
+		<available file="bnd.bnd" property="use.bnd"/>
+		
+		<bndproperties basedir="${projectdir}" print="${print}" />
+
+		<!-- Now we have the same properties set as bnd 
+		-->
 
 		<taskdef resource="org/osgi/tools/build/ant/taskdef.properties" classpath="${repo}/org.osgi.tools.btool/org.osgi.tools.btool-latest.jar" />
 		<taskdef resource="net/sf/antcontrib/antcontrib.properties" classpath="${workspace}/licensed/ant-contrib/ant-contrib-0.6.jar" />
-		<taskdef resource="aQute/bnd/ant/taskdef.properties" classpath="${licensed}/repo/biz.aQute.bnd/biz.aQute.bnd-latest.jar" />
-
-		<!-- Include properies files in the following order:
-				Project properties
-				User properties
-				Default properties
-		-->
-
-		<!-- Create version qualifier to use in bundle versions.
-		     This must be before the include of version and global
-			 properties.
-		-->
-		<tstamp prefix="tstamp">
-			<format property="YEAR" pattern="yyyy" />
-		</tstamp>
-		<property name="project.build" value="build-${tstamp.DSTAMP}${tstamp.TSTAMP}" />
-
-		<expand propertyFile="${workspace}/cnf/version.properties" />
-		<expand propertyFile="${workspace}/cnf/global.properties" />
-		<expand propertyFile="${project}/build.properties" />
-		<property file="${env.HOME}/osgi.properties" />
-		<bndexpand propertyFile="${workspace}/cnf/build.bld" />
-		<expand propertyFile="${workspace}/cnf/build.properties" />
-
-		<property name="prebuild" value="" />
-		<!-- get the classpath and build info from eclipse -->
+		
 		<btool eclipse="${project}" prebuild="${prebuild}" />
-
-		<property name="project.bootclasspath" value="" />
-		<property name="p" value="${project.name}" />
-		<property name="bin.includes" value="${project.name}.jar" />
-
-
-		<mkdir dir="${target}" />
 
 		<!-- mark init has been run -->
 		<property name="initialized" value="set" />
@@ -167,7 +133,11 @@
 		JARS
 		Iterate of the jars to build.
 	-->
-	<target name="jars" depends="jars-btool,jars-bnd,copy-from">
+	<target name="jars" depends="-mktarget,jars-btool,jars-bnd,copy-from">
+	</target>
+	
+	<target name="-mktarget">
+		<mkdir dir="${target}" />
 	</target>
 
 	<target name="copy-from" if="copy.from">
@@ -181,6 +151,7 @@
 		<foreach list="${jars.compile.order}" delimiter=" ," target="-jar" param="item.jarFile" inheritAll="true" />
 	</target>
 
+	<!-- Use the next generation bnd tool -->
 	<target name="jars-bnd" depends="init" if="use.bnd">
 		<echo>JARs ${use.bnd}</echo>
 		<antcall target="-interleave">
@@ -224,7 +195,7 @@
 	</target>
 
 	<target name="-signjar" if="sign.${item.jarFile}">
-		<signjar jar="${target}/${item.jarFile}" keystore="${workspace}/cnf/certificate/.keystore" storepass="testtest" keypass="testtest" alias="test" />
+		<signjar jar="${target}/${item.jarFile}" signedjar="${target}/${item.jarFile}.signed" keystore="${workspace}/cnf/certificate/.keystore" storepass="testtest" keypass="testtest" alias="test" />
 	</target>
 
 
