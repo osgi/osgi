@@ -2,23 +2,17 @@
 verbose					= false
 project                 = ${basedir}
 target					= ${project}/${target-dir}
-
 workspace				= ${dir;${project}}
-
 build					= ${workspace}/cnf
 repo					= ${build}/repo
-
 licensed				= ${workspace}/licensed
 licensed-repo			= ${licensed}/repo
-
 target-dir				= generated
 p                       = ${basename;${project}}
 project.name            = ${p}
-
 bin.includes			= ${project.name}.jar
 project.bootclasspath	= 
 prebuild				= 
-
 
 # Java compiler options
 java 					= java
@@ -45,16 +39,18 @@ btool.compress			= true
   (*).(jar|ipa);                             type=bnd;  recipe="bnd/$1.bnd"
 
 
-# Descriptive information
-copyright              = Copyright (c) OSGi Alliance (2000, 2008). All Rights Reserved.
-copyright.html         = Copyright &copy; OSGi Alliance (2000, 2008). All Rights Reserved.
-Bundle-Copyright       = ${copyright}
 
 # Time options
-base.modified			= ${fmodified;${build}/build.properties,${build}/build.xml,${project}/build.properties,${project}/bnd.bnd}
+# base.modified is used by bnd to not make when files are not changed
+base.modified			= ${fmodified;${build}/build.xml,${project}/build.properties,${project}/bnd.bnd;${build}/build.bld}
 base.modified.readable	= ${long2date;${base.modified}}
 project.build			= ${tstamp;yyyyMMddhhmm}
 
 -include: 	${.}/version.properties, \
 			${.}/global.properties, \
 			-${project.dir}/build.properties
+
+# Documentation
+Bundle-Copyright       	= ${copyright}
+Bundle-Vendor			= OSGi Alliance
+Bundle-License			= ...
