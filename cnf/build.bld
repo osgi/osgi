@@ -42,7 +42,7 @@ btool.compress			= true
 
 # Time options
 # base.modified is used by bnd to not make when files are not changed
-base.modified			= ${fmodified;${build}/build.xml,${project}/build.properties,${project}/bnd.bnd;${build}/build.bld}
+base.modified			= ${fmodified;${build}/build.xml,${project}/build.properties,${project}/bnd.bnd,${build}/build.bld}
 base.modified.readable	= ${long2date;${base.modified}}
 project.build			= ${tstamp;yyyyMMddhhmm}
 
