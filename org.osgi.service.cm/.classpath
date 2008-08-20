@@ -4,5 +4,5 @@
 	<classpathentry sourcepath="/cnf/repo/ee.minimum/ee.minimum-1.0.0.jar" kind="lib" path="/cnf/repo/ee.minimum/ee.minimum-1.0.0.jar"/>
 	<classpathentry kind="src" path="/org.osgi.framework"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/org.osgi.service.condpermadmin"/>
-	<classpathentry kind="output" path="src"/>
+	<classpathentry kind="output" path="bin"/>
 </classpath>

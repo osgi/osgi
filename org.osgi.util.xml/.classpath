@@ -4,5 +4,5 @@
 	<classpathentry kind="src" path="/org.osgi.framework"/>
 	<classpathentry kind="lib" path="/licensed/repo/com.icl.saxon/com.icl.saxon-6.5.1.jar"/>
 	<classpathentry sourcepath="/cnf/repo/ee.minimum/ee.minimum-1.0.0.jar" kind="lib" path="/cnf/repo/ee.minimum/ee.minimum-1.0.0.jar"/>
-	<classpathentry kind="output" path="src"/>
+	<classpathentry kind="output" path="bin"/>
 </classpath>

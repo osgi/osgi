@@ -3,5 +3,5 @@
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="lib" path="/cnf/repo/ee.minimum/ee.minimum-1.1.3.jar" sourcepath="/cnf/repo/ee.minimum/ee.minimum-1.1.3.jar"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/org.osgi.framework"/>
-	<classpathentry kind="output" path="src"/>
+	<classpathentry kind="output" path="bin"/>
 </classpath>

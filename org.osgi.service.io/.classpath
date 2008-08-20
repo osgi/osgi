@@ -2,5 +2,5 @@
 <classpath>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry sourcepath="/cnf/repo/ee.foundation/ee.foundation-1.1.0.jar" kind="lib" path="/cnf/repo/ee.foundation/ee.foundation-1.1.0.jar"/>
-	<classpathentry kind="output" path="src"/>
+	<classpathentry kind="output" path="bin"/>
 </classpath>
