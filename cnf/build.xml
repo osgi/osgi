@@ -34,7 +34,7 @@
 
 		<available file="bnd.bnd" property="use.bnd" />
 
-		<bndproperties basedir="${projectdir}" print="${print}" />
+		<bndprepare basedir="${projectdir}" print="${print}" />
 
 		<!-- Now we have the same properties set as bnd 
 		-->
@@ -42,8 +42,7 @@
 		<taskdef resource="org/osgi/tools/build/ant/taskdef.properties" classpath="${repo}/org.osgi.tools.btool/org.osgi.tools.btool-latest.jar" />
 		<taskdef resource="net/sf/antcontrib/antcontrib.properties" classpath="${workspace}/licensed/ant-contrib/ant-contrib-0.6.jar" />
 
-		<btool eclipse="${project}" prebuild="${prebuild}" />
-
+		
 		<!-- mark init has been run -->
 		<property name="initialized" value="set" />
 		<echo>Enter project ${project.name}</echo>
@@ -53,8 +52,8 @@
 		DEPENDENCIES
 		Build project dependencies.
 	-->
-	<target name="dependencies" depends="init" if="project.buildpath">
-		<subant target="publish" inheritAll="false" buildpath="${project.buildpath}">
+	<target name="dependencies" depends="init" if="project.dependson">
+		<subant target="publish" inheritAll="false" buildpath="${project.dependson}">
 			<property name="release.dir" value="${target}" />
 		</subant>
 	</target>
@@ -64,12 +63,9 @@
 	-->
 	<target name="test" depends="jars">
 		<!-- add the test env (junit, osgi tester) -->
-		<echo>${project.classpath}</echo>
 		<junit printsummary="yes" haltonfailure="yes">
 			<classpath>
-				<pathelement path="${project.classpath}" />
-				<pathelement location="${licensed-repo}/com.springsource.junit/com.springsource.junit-3.8.2.jar" />
-				<pathelement location="${licensed-repo}/biz.aQute.bnd/biz.aQute.bnd-latest.jar" />
+				<pathelement path="${project.testpath}"  />
 			</classpath>
 
 			<formatter type="plain" />
@@ -79,6 +75,7 @@
 					<include name="**/*Test*.java" />
 					<exclude name="**/AllTests.java" />
 					<exclude name="**/*TestCase*.java" />
+					<exclude name="**/*TestBundle*.java" />
 				</fileset>
 			</batchtest>
 		</junit>
@@ -91,7 +88,19 @@
 	-->
 	<target name="compile" depends="init" if="project.sourcepath">
 		<echo>"${project.sourcepath}"</echo>
-		<javac fork="yes" executable="${javac}" srcdir="${project.sourcepath}" destdir="${project.bindir}" classpath="${project.classpath}" bootclasspath="${project.bootclasspath}" deprecation="true" listfiles="true" target="${javac.target}" source="${javac.source}" debug="${javac.debug}" includeAntRuntime="no" verbose="${verbose}" />
+		<javac fork="yes" 
+			executable="${javac}" 
+			srcdir="${project.sourcepath}" 
+			destdir="${project.output}" 
+			classpath="${project.buildpath}" 
+			bootclasspath="${project.bootclasspath}" 
+			deprecation="true" 
+			listfiles="true" 
+			target="${javac.target}" 
+			source="${javac.source}" 
+			debug="${javac.debug}" 
+			includeAntRuntime="no" 
+			verbose="${verbose}" />
 	</target>
 
 	<!-- 
@@ -122,7 +131,13 @@
 		<antcall target="-interleave">
 			<param name="x" value="before.${item.jarFile}" />
 		</antcall>
-		<bnd eclipse="true" failok="false" exceptions="true" files="bnd.bnd" output="${target}" />
+		<bnd 
+			eclipse="false" 
+			failok="false" 
+			exceptions="true" 
+			files="bnd.bnd" 
+			output="${target}" 
+			classpath="${project.buildpath}"/>
 	</target>
 
 	<target name="-jar" depends="-btool,-signjar" />
@@ -156,7 +171,25 @@
 			<param name="x" value="before.${item.jarFile}" />
 		</antcall>
 
-		<btool jar="${target}/${item.jarFile}" failok="${btool.failok}" eclipse="${project}" analyse="${btool.analyse}" showmanifest="${btool.showmanifest}" includeProperty="include.${item.jarFile}" expandProperty="expand.${item.jarFile}" contentFoldersProperty="source.${item.jarFile}" excludeImportProperty="excludeImport.${item.jarFile}" includeExportProperty="includeExport.${item.jarFile}" ipaProperty="ipa.${item.jarFile}" verbose="${verbose}" sources="${btool.sources}" ignoreVersions="${btool.noversion}" manifestVersion="${btool.manifestVersion}" modified="${base.modified}" extraRoots="root.${item.jarFile}" noExtraHeaders="${btool.noextraheaders}" compress="${btool.compressed}" doNotCopy="${doNotCopy}" />
+		<btool jar="${target}/${item.jarFile}" 
+			failok="${btool.failok}" 
+			eclipse="${project}" 
+			analyse="${btool.analyse}" 
+			showmanifest="${btool.showmanifest}" 
+			includeProperty="include.${item.jarFile}" 
+			expandProperty="expand.${item.jarFile}" 
+			contentFoldersProperty="source.${item.jarFile}" 
+			excludeImportProperty="excludeImport.${item.jarFile}" 
+			includeExportProperty="includeExport.${item.jarFile}" 
+			ipaProperty="ipa.${item.jarFile}" 
+			verbose="${verbose}" sources="${btool.sources}" 
+			ignoreVersions="${btool.noversion}" 
+			manifestVersion="${btool.manifestVersion}" 
+			modified="${base.modified}" 
+			extraRoots="root.${item.jarFile}" 
+			noExtraHeaders="${btool.noextraheaders}" 
+			compress="${btool.compressed}" 
+			doNotCopy="${doNotCopy}" />
 	</target>
 
 	<target name="-signjar" if="sign.${item.jarFile}">
@@ -186,13 +219,13 @@
 	<!--
 	     CLEAN
 	-->
-	<target name="deepclean" depends="init,clean" if="project.buildpath">
-		<subant target="deepclean" inheritAll="false" buildpath="${project.buildpath}" />
+	<target name="deepclean" depends="init,clean" if="project.dependson">
+		<subant target="deepclean" inheritAll="false" buildpath="${project.dependson}" />
 	</target>
 
 	<target name="clean" depends="init">
 		<delete quiet="true" includeEmptyDirs="true" verbose="${verbose}">
-			<fileset dir="${project.bindir}" includes="**/*.bak **/*.class" />
+			<fileset dir="${project.output}" includes="**/*.bak **/*.class" />
 			<fileset dir="${project}" includes="**/*.bak **/~* *.jar" />
 			<fileset dir="${target}" />
 		</delete>
@@ -203,13 +236,14 @@
 	-->
 	<target name="echo" depends="init">
 		<echo>verbose:                ${verbose}</echo>
-		<echo>project.bindir:         ${project.bindir}</echo>
-		<echo>project.sourcepath:     ${project.sourcepath}</echo>
-		<echo>project.bootclasspath:  ${project.bootclasspath}</echo>
-		<echo>project.classpath:      ${project.classpath}</echo>
 		<echo>project.name:           ${project.name}</echo>
-		<echo>project.version:        ${project.version}</echo>
+		<echo>project.output:         ${project.output}</echo>
+		<echo>project.sourcepath:     ${project.sourcepath}</echo>
+		<echo>project.allsourcepath:  ${project.allsourcepath}</echo>
 		<echo>project.buildpath:      ${project.buildpath}</echo>
+		<echo>project.testpath:       ${project.testpath}</echo>
+		<echo>project.dependson:      ${project.dependson}</echo>
+		<echo>project.bootclasspath:  ${project.bootclasspath}</echo>
 		<echo>javac:                  ${javac}</echo>
 		<echo>p:                      ${p}</echo>
 		<echo>btool.manifestVersion:  ${btool.manifestVersion}</echo>
@@ -220,7 +254,6 @@
 		<echo>btool.noextraheaders:   ${btool.noextraheaders}</echo>
 		<echo>jars.compile.order:     ${jars.compile.order}</echo>
 		<echo>bin.includes:           ${bin.includes}</echo>
-		<echo>prebuild:               ${prebuild}</echo>
 		<echo>base.modfied:           ${base.modified} (${base.modified.readable})</echo>
 		<echo>target:                 ${target}</echo>
 		<echo>licensed repo:          ${licensed-repo}</echo>

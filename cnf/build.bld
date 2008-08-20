@@ -49,7 +49,7 @@ project.build			= ${tstamp;yyyyMMddhhmm}
 
 -include: 	${.}/version.properties, \
 			${.}/global.properties, \
-			-${project.dir}/build.properties
+			-${basedir}/build.properties
 
 # Documentation
 Bundle-Copyright       	= ${copyright}
