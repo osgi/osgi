@@ -4,13 +4,14 @@
 	</target>
 
 	<target name="javadoc" depends="init">
-		<delete dir="${project.bindir}/javadoc"/>
+		<delete dir="${target}/javadoc"/>
         <javadoc 
 			access="protected" 
 			windowtitle="OSGi Service Platform Release ${osgi.release} Version ${osgi.version}"
 			author="false" 
-			classpath="${project.classpath}"
-			destdir="${project.bindir}/javadoc" 
+			classpath="${project.buildpath}"
+			sourcepath="${project.allsourcepath}"
+			destdir="${project.output}/javadoc" 
 			nodeprecated="false" 
 			nodeprecatedlist="false" 
 			noindex="false" 
@@ -18,7 +19,6 @@
 			notree="false" 
 			packagenames="${javadoc.core.packagenames},${javadoc.cmpn.packagenames},${javadoc.mobile.packagenames}" 
 			source="1.3" 
-			sourcepath="${project.classpath}"
 			splitindex="true" 
 			use="false" 
 			version="false"
@@ -38,13 +38,13 @@
 			<doctitle><![CDATA[OSGi&trade; Service Platform Release ${osgi.release} Version ${osgi.version}]]></doctitle>
 		</javadoc>
 		<copy file="${project}/OSGiSpecificationLicense-v10.html"
-		    tofile="${project.bindir}/javadoc/LICENSE.html"
+		    tofile="${project.output}/javadoc/LICENSE.html"
 	    	verbose="${verbose}"
 	      	preservelastmodified="true" />
     </target>
 
 	<target name="clean" depends="master.clean">
-		<delete dir="${project.bindir}/javadoc"/>
+		<delete dir="${target}/javadoc"/>
 	</target>
 
 	<import file="../cnf/build.xml"/>

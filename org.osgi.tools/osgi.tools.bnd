@@ -1,0 +1,13 @@
+Bundle-SymbolicName: org.osgi.tools.cross
+Bundle-Name: Cross Reference Tool
+Main-Class: org.osgi.tools.cross.Cross
+Bundle-Version: 1.0
+
+Private-Package = ${p}.csv2xml, ${p}.jc, ${p}.xmldoclet, ${p}.jar2xml, \
+  org.apache.bcel, \
+  org.apache.bcel.classfile, \
+  org.apache.bcel.generic, \
+  org.apache.bcel.util, \
+  org.apache.bcel.verifier, \
+  org.osgi.test.script, \
+  org.osgi.tools.cross

@@ -1,0 +1,6 @@
+Export-Package: org.osgi.tools.cross
+Conditional-Package: org.osgi.*, org.objectweb.*
+Bundle-SymbolicName: org.osgi.tools.cross
+Bundle-Name: Cross Reference Tool
+Main-Class: org.osgi.tools.cross.Cross
+Bundle-Version: 1.0

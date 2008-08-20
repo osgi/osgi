@@ -1,6 +1,24 @@
-Export-Package: org.osgi.tools.cross
-Conditional-Package: org.osgi.*, org.objectweb.*
-Bundle-SymbolicName: org.osgi.tools.cross
-Bundle-Name: Cross Reference Tool
-Main-Class: org.osgi.tools.cross.Cross
-Bundle-Version: 1.0
+-sub org.osgi.tools.*.bnd
+
+-buildpath: \
+    org.osgi.test.tool;					version=project;		output=src,	\
+	org.apache.tools.ant, 									\
+	org.osgi.internal, 										\
+	com.icl.saxon, 											\
+	osgi;								version=4.0.0, 		\
+	org.apache.bcel,										\
+	com.springsource.junit;				version="[3.8,4)", 	\
+	nanoxml,												\
+	org.objectweb.asm;					version="[2.2.2,3)",\
+	ee.j2se; 							version=1.4,		\
+	com.sun.tools
+
+bin.includes = \
+	org.osgi.tools.cmapps.jar, \
+	org.osgi.tools.cmcmd.jar, \
+	org.osgi.tools.console.jar, \
+	org.osgi.tools.cross.jar, \
+	org.osgi.tools.properties.jar, \
+	org.osgi.tools.xml2mif.jar, \
+	org.osgi.tools.csv2xml.jar, \
+	osgi.tools.jar

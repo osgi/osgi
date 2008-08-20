@@ -1,0 +1,8 @@
+Bundle-Name: OSGi System Properties
+Bundle-Version: 1.2
+Bundle-Category: utility
+Bundle-Description: Lists Java System and OSGi system properties to be used\
+ in the OS constants.
+Bundle-Activator: ${p}.properties.Properties
+
+Private-Package: ${p}.properties

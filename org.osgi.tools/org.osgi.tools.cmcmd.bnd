@@ -1,9 +1,7 @@
-Manifest-Version: 1.0
-Bundle-SymbolicName: org.osgi.tools.cmcmd
 Bundle-Version: 1.0.0
 Bundle-Name: CM-Command
 Bundle-Activator: org.osgi.tools.cmadmin.CMCmd
 Bundle-Description: Provides commands to the console to adminstrate
   the Configuration Admin service.
-$(IMPORT-PACKAGE)
-$(EXPORT-PACKAGE)
+
+Private-Package: org.osgi.tools.cmadmin

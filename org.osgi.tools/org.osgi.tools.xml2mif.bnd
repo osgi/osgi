@@ -1,0 +1,4 @@
+Bundle-Version: 1.0.0
+Main-Class: ${p}.xml2mif.XML2MIF
+
+Private-Package: ${p}.xml2mif

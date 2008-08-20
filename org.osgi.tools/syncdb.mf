@@ -1,8 +1,0 @@
-Manifest-Version: 1.0
-Bundle-Name: SyncDb
-Bundle-SymbolicName: org.osgi.tools.syncdb
-Bundle-Version: 1.0.0
-Bundle-Description: Syncs a text file with an LDAP database. It accepts
- the following options: -principal cn=me -password secret -providerUrl 
- ldap://www2.osgi.org/dc=osgi,dc=org -file members.txt
-Main-Class: org.osgi.tools.syncdb.Main
