@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: J2SE1.4-EE
 Bundle-Description: Contains the Java 2 SE 1.4 execution environment stubbed classes and sources
-Bundle-SymbolicName: org.osgi.ee.j2se14
+Bundle-SymbolicName: ee.j2se
 Bundle-Version: 1.4.0.$(project.build)
 Bundle-Vendor: OSGi Alliance
 Bundle-Copyright: ${copyright}
