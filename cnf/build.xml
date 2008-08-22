@@ -87,7 +87,8 @@
 	     Compile the sources. 
 	-->
 	<target name="compile" depends="init" if="project.sourcepath">
-		<echo>"${project.sourcepath}"</echo>
+		<echo>${project.sourcepath} ${project.output}</echo>
+		<mkdir dir="${project.output}"/>
 		<javac fork="yes" 
 			executable="${javac}" 
 			srcdir="${project.sourcepath}" 
