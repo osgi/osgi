@@ -5,7 +5,6 @@ Bundle-SymbolicName: ${p}.tbc.mobile
 Bundle-Activator: $(p).tbc.TestControl
 Bundle-Version: 4
 Bundle-Copyright: Copyright (c) OSGi Alliance (2000, 2002). All Rights Reserved.
-CVS-Header: $Id$
 Signature-Packages: ${mobile.specs}
 $(SIGNATURE-PACKAGE)
 $(PRIVATE-PACKAGE)
