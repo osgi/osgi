@@ -111,7 +111,7 @@
 	<target name="jars" depends="-mktarget,jars-btool,jars-bnd,copy-from">
 	</target>
 
-	<target name="-mktarget">
+	<target name="-mktarget" if="target">
 		<mkdir dir="${target}" />
 	</target>
 

@@ -47,9 +47,7 @@ base.modified			= ${fmodified;${build}/build.xml,${project}/build.properties,${p
 base.modified.readable	= ${long2date;${base.modified}}
 project.build			= ${tstamp;yyyyMMddhhmm}
 
--include: 	${.}/version.properties, \
-			${.}/global.properties, \
-			-${basedir}/build.properties
+-include				= 	-${basedir}/build.properties
 
 # Documentation
 Bundle-Copyright       	= ${copyright}
