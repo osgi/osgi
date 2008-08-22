@@ -47,6 +47,9 @@ base.modified			= ${fmodified;${build}/build.xml,${project}/build.properties,${p
 base.modified.readable	= ${long2date;${base.modified}}
 project.build			= ${tstamp;yyyyMMddhhmm}
 
+copyright = Copyright (c) OSGi Alliance (2000, ${tstamp;yyyy}). All Rights Reserved.
+copyright.html = Copyright &copy; OSGi Alliance (2000, ${tstamp;yyyy}). All Rights Reserved.
+
 -include				= 	-${basedir}/build.properties
 
 # Documentation
