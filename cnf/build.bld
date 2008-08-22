@@ -52,4 +52,5 @@ project.build			= ${tstamp;yyyyMMddhhmm}
 # Documentation
 Bundle-Copyright       	= ${copyright}
 Bundle-Vendor			= OSGi Alliance
-Bundle-License			= ...
+Bundle-License			= ... TODO
+-removeheader			= Include-Resource
