@@ -23,7 +23,7 @@ osgi.version.long			= 4.2.0
 
 osgi.release.version		= ${osgi.version.long}.${project.build}
 core.release.version		= ${osgi.version.long}.${project.build}
-cmpn.release.version		= ${osgi.version.long}.${project.build}
+compendium.release.version	= ${osgi.version.long}.${project.build}
 mobile.release.version		= ${osgi.version.long}.${project.build}
 
 # The following line builds all these files and publishes them to 

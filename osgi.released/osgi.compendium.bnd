@@ -1,4 +1,4 @@
-Bundle-Version					: ${cmpn.release.version}
+Bundle-Version					: ${compendium.release.version}
 Bundle-Description				: OSGi Service Platform Release 4 Compendium Interfaces and Classes.
 DynamicImport-Package			: *
 

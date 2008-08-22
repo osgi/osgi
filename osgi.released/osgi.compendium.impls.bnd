@@ -1,4 +1,4 @@
-Bundle-Version					: ${cmpn.release.version}
+Bundle-Version					: ${compendium.release.version}
 Bundle-Activator				: org.osgi.tools.group.Group
 Bundle-Description				: OSGi Service Platform Release 4, Compendium Reference Implementations
 Group-load						: \
