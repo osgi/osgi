@@ -10,7 +10,6 @@ Bundle-DocUrl: http://membercvs.osgi.org/test/3
 Bundle-ContactAddress: speccomments@mail.osgi.org
 Bundle-Category: osgi,test
 Bundle-Activator: $(p).HttpTestCase
-CVS-Header: $Id$
 $(IMPORT-PACKAGE)
 $(EXPORT-PACKAGE)
 

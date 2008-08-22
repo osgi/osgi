@@ -12,5 +12,4 @@ ${IMPORT-PACKAGE}
 ${EXPORT-PACKAGE}
 ${PRIVATE-PACKAGE}
 Export-Service: org.osgi.service.wireadmin.WireAdmin
-CVS-Header: $Id$
 

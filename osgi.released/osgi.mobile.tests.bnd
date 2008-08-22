@@ -9,5 +9,3 @@ Include-Resource				: \
 
 Private-Package					: \
 	org.osgi.tools.group
-
-CVS-Header: $Id: osgi.mobile.tests.mf 4772 2007-04-06 02:45:55Z bjhargrave $

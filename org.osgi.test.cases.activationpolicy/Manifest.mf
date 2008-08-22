@@ -9,7 +9,6 @@ Bundle-Description: A test case for activation policy.
 Bundle-Vendor: OSGi Alliance
 Bundle-DocUrl: http://www.osgi.org/testcases/4/test.cases.template
 Bundle-Category: osgi,test
-CVS-Header: $Id$
 $(IMPORT-PACKAGE)
 $(PRIVATE-PACKAGE)
 

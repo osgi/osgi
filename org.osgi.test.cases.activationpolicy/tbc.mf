@@ -4,7 +4,6 @@ Bundle-SymbolicName: ${p}.tbc
 Bundle-Activator: $(p).tbc.TestControl
 Bundle-Version: 4.1
 Bundle-Copyright: ${copyright}
-CVS-Header: $Id$
 $(IMPORT-PACKAGE)
 $(EXPORT-PACKAGE)
 $(PRIVATE-PACKAGE)

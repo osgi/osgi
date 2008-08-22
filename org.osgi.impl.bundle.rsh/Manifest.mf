@@ -10,7 +10,6 @@ Bundle-Category: osgi
 ${IMPORT-PACKAGE}
 ${EXPORT-PACKAGE}
 ${PRIVATE-PACKAGE}
-CVS-Header: $Id$
 $(PRIVATE-PACKAGE)
 Import-Service: org.osgi.service.provisioning.ProvisioningService
 Export-Service: org.osgi.service.url.URLStreamHandlerService

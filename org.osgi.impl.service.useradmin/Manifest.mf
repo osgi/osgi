@@ -10,5 +10,4 @@ Bundle-Category: osgi
 Export-Package: org.osgi.service.useradmin; specification-version=1.0
 Import-Package: org.osgi.framework; specification-version=1.1, org.osgi.util.tracker; specification-version=1.1, org.osgi.service.log; specification-version=1.0
 Export-Service: org.osgi.service.useradmin.UserAdmin
-CVS-Header: $Id$
 

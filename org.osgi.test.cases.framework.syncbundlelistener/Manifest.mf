@@ -18,7 +18,6 @@ Bundle-Version: 3.0.0.${project.build}
 Bundle-Category: osgi,test
 Bundle-DocUrl: http://membercvs.osgi.org/test/3
 Bundle-ContactAddress: speccomments@mail.osgi.org
-CVS-Header: $Id$
 $(IMPORT-PACKAGE)
 $(EXPORT-PACKAGE)
 

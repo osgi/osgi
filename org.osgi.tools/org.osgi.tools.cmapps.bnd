@@ -3,5 +3,4 @@ Bundle-Name: tools.cmapps
 Bundle-Description: Provides a number of commands to the console to \
   manipulate the ApplicationDescriptor and ApplicationHandle services.
 Bundle-Activator: ${p}.apps.ApplicationCommands
-CVS-Header: $Id$
 Private-Package: org.osgi.tools.apps

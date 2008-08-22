@@ -7,7 +7,6 @@ Bundle-Version: 3.0
 Bundle-Activator: org.osgi.test.target.Target
 Bundle-Category: osgi,test
 Bundle-Copyright: ${copyright}
-CVS-Header: $Id$
 $(EXPORT-PACKAGE)
 Comment: We hard code the import because
  there is a reference to http from the DefaultTestCase. The

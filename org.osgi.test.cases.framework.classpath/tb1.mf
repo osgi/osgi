@@ -8,6 +8,5 @@ Bundle-ContactAddress: info@ericsson.com
 Bundle-Activator: org.osgi.test.cases.framework.classpath.tb1.ImportUninstalled
 Bundle-Copyright: Copyright (c) 2002 OSGi Alliance, All Rights Reserved.
 Import-Package:   org.osgi.test.cases.framework.classpath.notinstalled, org.osgi.framework
-CVS-Header: $Id$
 
 

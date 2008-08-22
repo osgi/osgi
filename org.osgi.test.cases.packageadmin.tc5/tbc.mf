@@ -4,7 +4,6 @@ Bundle-SymbolicName: ${p}.tbc
 Bundle-Activator: $(p).tbc.TestControl
 Bundle-Version: 1.0
 Bundle-Copyright: Copyright (c) OSGi Alliance (2000, 2002). All Rights Reserved.
-CVS-Header: $Id$
 $(IMPORT-PACKAGE)
 $(EXPORT-PACKAGE)
 $(PRIVATE-PACKAGE)

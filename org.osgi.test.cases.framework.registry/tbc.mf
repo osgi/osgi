@@ -9,7 +9,6 @@ Bundle-ContactAddress: info@mail.osgi.org
 Bundle-Category: osgi,test
 Bundle-Copyright: $(copyright)
 Comment: Created by $(DELIVER) at $(DATE)
-CVS-Header: $Id$
 $(IMPORT-PACKAGE)
 $(EXPORT-PACKAGE)
 

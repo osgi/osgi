@@ -8,7 +8,6 @@ Bundle-Description: Tests exporting packages, updating. <BR>
 Bundle-Vendor: OSGi Alliance
 Bundle-Version: 3.0.0.${project.build}
 Bundle-Activator: $(p).TC2
-CVS-Header: $Id$
 $(IMPORT-PACKAGE)
 $(EXPORT-PACKAGE)
 

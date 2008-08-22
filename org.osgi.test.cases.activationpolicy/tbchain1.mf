@@ -4,7 +4,6 @@ Bundle-Name: ${p}.tbchain1
 Bundle-SymbolicName: ${p}.tbchain1
 Bundle-Version: 4.1
 Bundle-ActivationPolicy: lazy
-CVS-Header: $Id$
 $(IMPORT-PACKAGE)
 $(EXPORT-PACKAGE)
 $(PRIVATE-PACKAGE)

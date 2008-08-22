@@ -9,5 +9,4 @@ Bundle-Address: membercvs.osgi.org
 Bundle-Activator: org.osgi.test.cases.device.DeviceTestActivator
 Bundle-Copyright: ${copyright}
 Bundle-Category: osgi,test
-CVS-Header: $Id$
 $(IMPORT-PACKAGE)

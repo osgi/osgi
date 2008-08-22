@@ -9,7 +9,6 @@ Bundle-Vendor: OSGi Alliance
 Bundle-DocUrl: http://www.osgi.org/testcases/4/test.cases.template
 Bundle-ContactAddress: speccomments@mail.osgi.org
 Bundle-Category: osgi,test
-CVS-Header: $Id$
 $(IMPORT-PACKAGE)
 $(EXPORT-PACKAGE)
 $(PRIVATE-PACKAGE)

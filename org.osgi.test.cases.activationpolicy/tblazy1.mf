@@ -3,7 +3,6 @@ Bundle-ManifestVersion: 2
 Bundle-Name: ${p}.tblazy1
 Bundle-SymbolicName: ${p}.tblazy1
 Bundle-Version: 4.1
-CVS-Header: $Id$
 $(IMPORT-PACKAGE)
 $(EXPORT-PACKAGE)
 $(PRIVATE-PACKAGE)

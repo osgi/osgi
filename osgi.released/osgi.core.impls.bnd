@@ -11,5 +11,3 @@ Bundle-Description				: OSGi Service Platform Release 4, Core Reference Implemen
 Include-Resource				: \
  	NOTICE=legal/NOTICE.txt, \
  	about.html=legal/about-ri.html, \
- 
-CVS-Header: $Id: osgi.core.impls.mf 4772 2007-04-06 02:45:55Z bjhargrave $

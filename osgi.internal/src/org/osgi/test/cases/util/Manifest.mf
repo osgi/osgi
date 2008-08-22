@@ -4,7 +4,6 @@ Bundle-Copyright: Copyright (c) OSGi Alliance (2000, 2002). All Rights Reserved.
 Bundle-Description: Utility classes for test cases 
 Bundle-Vendor: OSGi Alliance
 Bundle-Category: osgi,test
-CVS-Header: $Id$
 $(EXPORT-PACKAGE)
 $(IMPORT-PACKAGE)
 

@@ -10,5 +10,4 @@ Bundle-Category: osgi,test
 Comment: Created by $(DELIVER) at $(DATE)
 $(IMPORT-PACKAGE)
 $(EXPORT-PACKAGE)
-CVS-Header: $Id$
 

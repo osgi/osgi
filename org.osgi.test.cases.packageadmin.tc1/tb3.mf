@@ -5,7 +5,6 @@ Bundle-Description: Exporting packages an re-exporting packages
 Bundle-Vendor: OSGi Alliance
 Bundle-Version: 3.0
 Bundle-Activator: $(p).tb3.TB3Activator
-CVS-Header: $Id$
 $(IMPORT-PACKAGE)
 $(EXPORT-PACKAGE)
 

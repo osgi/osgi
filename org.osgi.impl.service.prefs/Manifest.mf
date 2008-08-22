@@ -13,5 +13,4 @@ Bundle-Category: osgi
 $(EXPORT-PACKAGE)
 Import-Package: org.osgi.framework; specification-version=1.0
 Export-Service: org.osgi.service.prefs.PreferencesService
-CVS-Header: $Id$
 
