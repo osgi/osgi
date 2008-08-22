@@ -27,20 +27,20 @@ package org.osgi.service.discovery;
 public interface ServiceListener {
 	/**
 	 * Callback indicating that the specified service was discovered and is known to the calling Discovery implementation.
-	 * @param serviceDescription
+	 * @param serviceEndpointDescription
 	 */
-	void serviceAvailable(ServiceDescription serviceDescription);
+	void serviceAvailable(ServiceEndpointDescription serviceEndpointDescription);
 	
 	/**
-	 * Callback indicating a change in the service description of a previously discovered service.
-	 * @param oldDescription previous service description
-	 * @param newDescription new service description
+	 * Callback indicating a change in the service endpoint description of a previously discovered service.
+	 * @param oldDescription previous service endpoint description
+	 * @param newDescription new service endpoint description
 	 */
-	void serviceModified(ServiceDescription oldDescription, ServiceDescription newDescription);
+	void serviceModified(ServiceEndpointDescription oldDescription, ServiceEndpointDescription newDescription);
 	
 	/**
-	 * Callback indicating that the specified service is no longer available/
-	 * @param serviceDescription ServiceDescription of the service that is no longer available
+	 * Callback indicating that the specified service endpoint is no longer available.
+	 * @param serviceEndpointDescription ServiceEndpointDescription of the service that is no longer available
 	 */
-	void serviceUnavailable(ServiceDescription serviceDescription);
+	void serviceUnavailable(ServiceEndpointDescription serviceEndpointDescription);
 }

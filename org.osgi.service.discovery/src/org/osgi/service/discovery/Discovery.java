@@ -18,7 +18,6 @@
 
 package org.osgi.service.discovery;
 
-import java.util.Collection;
 
 /**
  * 
@@ -36,12 +35,12 @@ public interface Discovery {
 	/**
      * Add a ServiceListener for a particular service description. 
      * 
-     * @param serviceDescription describes the service(s) to listen for. If serviceDescription is <code>null</code> 
+     * @param serviceEndpointDescription describes the service(s) to listen for. If serviceEndpointDescription is <code>null</code> 
      * then all services are considered.
      * @param listener which is to call when discovery detects changes in availability or description of a service. 
-     * The same listener object may also be used to listen on multiple serviceDescription objects.
+     * The same listener object may also be used to listen on multiple serviceEndpointDescription objects.
      */
-    void addServiceListener(ServiceListener listener, ServiceDescription serviceDescription);
+    void addServiceListener(ServiceListener listener, ServiceEndpointDescription serviceEndpointDescription);
     
         
     /**
@@ -49,19 +48,19 @@ public interface Discovery {
      * 
      * @param filter an LDAP filter which the service has to satisfy.
      * @param listener which is to call when discovery detects changes in a service's availability or description. 
-     * The same listener object might also be used for multiple serviceDescription objects.
+     * The same listener object might also be used for multiple serviceEndpointDescription objects.
      */
     void addServiceListener(ServiceListener listener, String filter);
 
     
 	/**
      * This method is the same as calling
-     * <code>Discovery.addServiceListener(ServiceListener listener, ServiceDescription serviceDescription)</code>
-     * with <code>serviceDescription</code> set to <code>null</code>.
+     * <code>Discovery.addServiceListener(ServiceListener listener, ServiceEndpointDescription serviceEndpointDescription)</code>
+     * with <code>serviceEndpointDescription</code> set to <code>null</code>.
      * 
      * @param listener which is to call when discovery detects changes in availability or description of a service. 
-     * The same listener object may also be used to listen on multiple serviceDescription objects.
-     * @see #addServiceListener(ServiceListener, ServiceDescription) 
+     * The same listener object may also be used to listen on multiple serviceEndpointDescription objects.
+     * @see #addServiceListener(ServiceListener, ServiceEndpointDescription) 
 	 */
 	void addServiceListener(ServiceListener listener);
 	
@@ -75,23 +74,23 @@ public interface Discovery {
 	
 	
 	/**
-     * Looks for the given ServiceDescription in the cache. Cache might be local or global depending on the
+     * Looks for the given ServiceEndpointDescription in the cache. Cache might be local or global depending on the
      * cache strategy of the Discovery.<b>
      *      
-     * @param serviceDescription to check for its existence in cache
-     * @return true if a service matching the given serviceDescription is found in the local cache
-     * @throws IllegalArgumentException if serviceDescription is null or incomplete
+     * @param serviceEndpointDescription to check for its existence in cache
+     * @return true if a service matching the given serviceEndpointDescription is found in the local cache
+     * @throws IllegalArgumentException if serviceEndpointDescription is null or incomplete
      */
-    boolean isCached(ServiceDescription serviceDescription);
+    boolean isCached(ServiceEndpointDescription serviceEndpointDescription);
     
     
     /**
-     * Returns an array of all ServiceDescription objects currently known to the Discovery implementation.
+     * Returns an array of all ServiceEndpointDescription objects currently known to the Discovery implementation.
      * 
-     * @return A collection of ServiceDescription objects. An empty collection is returned if no service descriptions
+     * @return Array of ServiceEndpointDescription objects. An empty collection is returned if no service descriptions
      * were found.
      */
-    Collection getCachedServiceDescriptions();
+    ServiceEndpointDescription[] getCachedServiceEndpointDescriptions();
     
 	    	
 	/**
@@ -101,45 +100,43 @@ public interface Discovery {
 	 * For this reason its recommended to provide only simple properties with the service description object. 
 	 * Any other, more complex matching operations could be done in the next step and are caller's responsibility.
 	 *  
-	 * @param serviceDescription ServiceDescription of the service to locate
-	 * @return Collection of ServiceDescription objects satisfying the find criteria.
+	 * @param serviceEndpointDescription ServiceEndpointDescription of the service to locate
+	 * @return Array of ServiceEndpointDescription objects satisfying the find criteria.
 	 *         The Collection may be empty if none was found
-	 * @throws IllegalArgumentException if serviceDescription is null.
+	 * @throws IllegalArgumentException if serviceEndpointDescription is null.
 	 */
-	Collection findService(ServiceDescription serviceDescription);
+    ServiceEndpointDescription[] findService(ServiceEndpointDescription serviceEndpointDescription);
 	
     
     /**
      * Find a service based on the provided LDAP filter. 
      * 
      * @param filter an LDAP filter which the service has to satisfy.
-     * @return Collection of ServiceDescription objects matching the service that was found to satisfy the find criteria.
+     * @return Array of ServiceEndpointDescription objects matching the service that was found to satisfy the find criteria.
      *         The Collection may be empty if none was found.
-     * @throws IllegalArgumentException if serviceDescription is null or incomplete
+     * @throws IllegalArgumentException if serviceEndpointDescription is null or incomplete
      * @throws UnsupportedOperationException if method is not supported by the implementation
      */
-    Collection findService(String filter);
+	ServiceEndpointDescription[] findService(String filter);
 	
     
     /**
-     * Asynchronous version of <code>Discovery.findService(ServiceDescription serviceDescription)</code> method.
+     * Asynchronous version of <code>Discovery.findService(ServiceEndpointDescription serviceEndpointDescription)</code> method.
      * 
-     * @param serviceDescription ServiceDescription of the service to locate
+     * @param serviceEndpointDescription ServiceEndpointDescription of the service to locate
      * @param callback to notify about the asynchronous response of the find operation
-     * @throws IllegalArgumentException if the serviceDescription or callback is null
-     * @see #findService(ServiceDescription) 
+     * @throws IllegalArgumentException if the serviceEndpointDescription or callback is null
+     * @see #findService(ServiceEndpointDescription) 
      */
-    void findService(ServiceDescription serviceDescription, FindServiceCallback callback);
+    void findService(ServiceEndpointDescription serviceEndpointDescription, FindServiceCallback callback);
   
     
     /**
-     * Asynchronous interface to initiate the search for an suitable service based on the provided ServiceDescription and filter.
-     * Discovery implementations might choose to not support this method if the discovery protocol doesn't support filtering.
-     * The ServiceDescription is matched using the Comparable interface.
-     * 
+    * Asynchronous version of <code>Discovery.findService(String filter)</code> method.
+       * 
      * @param filter an LDAP filter which the service has to satisfy.
-     * @param callback Listener object to notify about the asynchronous response of the find operation
-     * @throws IllegalArgumentException if the serviceDescription is null or incomplete
+     * @param callback to notify about the asynchronous response of the find operation
+     * @throws IllegalArgumentException if the serviceEndpointDescription is null or incomplete
      * @throws UnsupportedOperationException if method is not supported by the implementation
      */
     void findService(String filter, FindServiceCallback callback);
@@ -151,12 +148,12 @@ public interface Discovery {
 	 * information about the service to the network. Otherwise, it is just available upon request from other
 	 * Discovery implementations.
 	 * 
-	 * @param serviceDescription ServiceDescription of the service to publish
+	 * @param serviceEndpointDescription ServiceEndpointDescription of the service to publish
 	 * @return true if the service was successfully published.
-	 * @throws IllegalArgumentException if serviceDescription is null, incomplete or invalid (e.g. contains 
+	 * @throws IllegalArgumentException if serviceEndpointDescription is null, incomplete or invalid (e.g. contains 
 	 * unknown property types)
 	 */
-	boolean publishService(ServiceDescription serviceDescription);
+	boolean publishService(ServiceEndpointDescription serviceEndpointDescription);
 
 	
 	/**
@@ -164,23 +161,23 @@ public interface Discovery {
 	 * If the parameter autopublish=true, the Discovery implementation actively pushes the
 	 * information about the service to the network. Otherwise, it is just available upon request from other
 	 * Discovery implementations.
-	 * The ServiceDescription is matched using the Comparable interface.
-	 * @param serviceDescription ServiceDescription of the service to publish
+	 * The ServiceEndpointDescription is matched using the Comparable interface.
+	 * @param serviceEndpointDescription ServiceEndpointDescription of the service to publish
 	 * @param autopublish if true, service information is actively pushed to the network for discovery
 	 * @return true if the service was successfully published.
-	 * @throws IllegalArgumentException if serviceDescription is null, incomplete or invalid (e.g. contains 
+	 * @throws IllegalArgumentException if serviceEndpointDescription is null, incomplete or invalid (e.g. contains 
      * unknown property types)
      */
-	boolean publishService(ServiceDescription serviceDescription, boolean autopublish);
+	boolean publishService(ServiceEndpointDescription serviceEndpointDescription, boolean autopublish);
 	
 	
 	/**
 	 * Make the given service un-discoverable. The previous publish request for a service is undone. The service
 	 * information is also removed from the local or global cache if cached before.
 	 * 
-	 * @param serviceDescription ServiceDescription of the service to unpublish. If this ServiceDescription 
+	 * @param serviceEndpointDescription ServiceEndpointDescription of the service to unpublish. If this ServiceEndpointDescription 
 	 * haven't been published before, then the method returns without throwing exceptions.
-	 * @throws IllegalArgumentException if serviceDescription is null or incomplete
+	 * @throws IllegalArgumentException if serviceEndpointDescription is null or incomplete
 	 */
-	void unpublishService(ServiceDescription serviceDescription);
+	void unpublishService(ServiceEndpointDescription serviceEndpointDescription);
 }

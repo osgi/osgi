@@ -18,7 +18,6 @@
 
 package org.osgi.service.discovery;
 
-import java.util.Collection;
 
  /** 
  * 
@@ -27,8 +26,8 @@ import java.util.Collection;
  */
 public interface FindServiceCallback {
     /**
-     * @param serviceDescriptions Collection of ServiceDescription objects satisfying the find criteria.
-     * The Collection may be empty if none was found.
+     * @param serviceEndpointDescriptions Array of ServiceDescription objects satisfying the find criteria.
+     * The returned array is never null but may be empty if none was found.
      */
-    void servicesFound(Collection serviceDescriptions);
+    void servicesFound(ServiceEndpointDescription[] serviceEndpointDescriptions);
 }
