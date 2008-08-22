@@ -1,0 +1,13 @@
+Bundle-Version					: ${mobile.release.version}
+Bundle-Activator				: org.osgi.tools.group.Group
+Bundle-Description				: OSGi Service Platform Release 4, Mobile Test Cases
+Group-load  					: \
+	${replace;${mobile.tests};(.+);$1.jar}
+
+Include-Resource				: \
+	${replace;${mobile.tests};(.+);${target}/$1.jar}
+
+Private-Package					: \
+	org.osgi.tools.group
+
+CVS-Header: $Id: osgi.mobile.tests.mf 4772 2007-04-06 02:45:55Z bjhargrave $

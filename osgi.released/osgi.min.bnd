@@ -1,0 +1,24 @@
+Bundle-SymbolicName				: osgi.min
+Bundle-Version					: ${osgi.release.version}
+DynamicImport-Package			: *
+Bundle-Activator				: org.osgi.tools.group.Group
+Bundle-Description				: OSGi Service Platform Release 4, Minimal Reference Implementations
+group-load						:   org.osgi.impl.service.log.jar,  org.osgi.impl.service.http.jar
+
+# Contains all specs and their subpackages
+Export-Package					: \
+	org.osgi.test.shared, \
+ 	org.osgi.test.service, \
+	org.osgi.test.cases.util, \
+	org.osgi.test.cases.util.director, \
+	org.osgi.tools.command, \
+	org.osgi.tools.group
+
+Include-Resource				: \
+	${target-dir}/org.osgi.impl.service.http.jar, \
+	${target-dir}/org.osgi.impl.service.log.jar, \
+	NOTICE=legal/NOTICE.txt, \
+ 	legal/about-ri.html
+  
+Id: $Revision: 4930 $ $Date: 2007-08-10 03:17:58 +0200 (Fri, 10 Aug 2007) $
+  

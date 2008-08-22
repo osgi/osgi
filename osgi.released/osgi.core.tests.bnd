@@ -1,0 +1,16 @@
+Bundle-Version				: ${core.release.version}
+Bundle-Activator			: org.osgi.tools.group.Group
+Bundle-Description			: OSGi Service Platform Release 4, Core Test Cases
+Group-load 					: \
+	${replace;${core.tests};(.+);$1.jar}
+
+Include-Resource				: \
+	${replace;${core.tests};(.+);${target}/$1.jar}, \
+ 	NOTICE=legal/NOTICE.txt, \
+ 	about.html=legal/about-ri.html
+
+Private-Package				: \
+	org.osgi.tools.group
+
+
+CVS-Header					: $Id: osgi.core.tests.mf 4772 2007-04-06 02:45:55Z bjhargrave $

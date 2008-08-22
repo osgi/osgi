@@ -1,6 +1,19 @@
 # Build the deliverables that are published in the repository
 # for use in all projects.
 
+bin.includes				= \
+	osgi.jar, \
+	osgi.core.jar, \
+	osgi.core.tests.jar, \
+	osgi.core.impls.jar, \
+	osgi.compendium.jar, \
+	osgi.compendium.impls.jar, \
+	osgi.compendium.tests.jar, \
+	osgi.mobile.jar, \
+	osgi.mobile.impls.jar, \
+	osgi.mobile.tests.jar, \
+	osgi.min.jar
+
 copyright 					= Copyright (c) OSGi Alliance (2000, ${tstamp;yyyy}). All Rights Reserved.
 copyright.html 				= Copyright &copy; OSGi Alliance (2000, ${tstamp;yyyy}). All Rights Reserved.
 
@@ -8,29 +21,39 @@ osgi.release				= 4
 osgi.version				= 4.2
 osgi.version.long			= 4.2.0
 
-osgi.release.version		=	${osgi.version.long}.${project.build}
-core.release.version		=	${osgi.version.long}.${project.build}
-cmpn.release.version		=	${osgi.version.long}.${project.build}
-mobile.release.version		=	${osgi.version.long}.${project.build}
+osgi.release.version		= ${osgi.version.long}.${project.build}
+core.release.version		= ${osgi.version.long}.${project.build}
+cmpn.release.version		= ${osgi.version.long}.${project.build}
+mobile.release.version		= ${osgi.version.long}.${project.build}
 
 # The following line builds all these files and publishes them to 
-# the reposiory (if they are deployable)
--dependson = ${ees}, ee.j2se, ${specs}, osgi.internal
--buildpath = ${replace;${specs};.+;$0\\;version=project}
+# the repository (if they are deployable)
+-dependson 					= \
+	${ees}, \
+	ee.j2se, \
+	${specs}, \
+	osgi.internal, \
+	${impls}, \
+	${tests}
+
+-buildpath 					= \
+	${replace;${specs};.+;$0\\;version=project}, \
+	ee.foundation;version=1.1.3, \
+	org.osgi.internal
 
 # Build the osgi spec files
 -sub       = osgi*.bnd
 
 
-japi.osgi.core = ${replace;$(core.specs);.+;+$0}
-japi.osgi.compendium = ${replace;$(compendium.specs);.+;+$0}
-japi.osgi.mobile = ${replace;$(mobile.specs);.+;+$0}
+japi.osgi.core 				= ${replace;$(core.specs);.+;+$0}
+japi.osgi.compendium 		= ${replace;$(compendium.specs);.+;+$0}
+japi.osgi.mobile 			= ${replace;$(mobile.specs);.+;+$0}
 
-specs = ${uniq; ${core.specs}, ${compendium.specs}, ${mobile.specs}}
-tests = ${uniq; ${core.tests}, ${compendium.tests}, ${mobile.tests}}
-impls = ${uniq;                ${compendium.impls}, ${mobile.impls}}
+specs 						= ${uniq; ${core.specs}, ${compendium.specs}, ${mobile.specs}}
+tests 						= ${uniq; ${core.tests}, ${compendium.tests}, ${mobile.tests}}
+impls 						= ${uniq;                ${compendium.impls}, ${mobile.impls}}
 
-ees = \
+ees 						= \
  ee.minimum, \
  ee.foundation
  
@@ -63,9 +86,10 @@ core.tests = \
   org.osgi.test.cases.permissionadmin.nosecurity, \
   org.osgi.test.cases.permissionadmin.security, \
   org.osgi.test.cases.permissionadmin.signature, \
-  org.osgi.test.cases.signature.core, \
   org.osgi.test.cases.startlevel, \
   org.osgi.test.cases.url
+
+#   org.osgi.test.cases.signature.core, \
 
 compendium.specs = \
  org.osgi.application, \
@@ -143,12 +167,14 @@ compendium.impls = \
   org.osgi.test.cases.position, \
   org.osgi.test.cases.prefs, \
   org.osgi.test.cases.provisioning, \
-  org.osgi.test.cases.signature.cmpn, \
   org.osgi.test.cases.tracker, \
   org.osgi.test.cases.upnp, \
   org.osgi.test.cases.useradmin, \
   org.osgi.test.cases.wireadmin, \
   org.osgi.test.cases.xml
+
+#   org.osgi.test.cases.signature.cmpn, \
+
 
 mobile.specs = \
  info.dmtree, \
@@ -203,6 +229,7 @@ mobile.impls = \
   org.osgi.test.cases.monitor, \
   org.osgi.test.cases.policy, \
   org.osgi.test.cases.prefs, \
-  org.osgi.test.cases.signature.mobile, \
   org.osgi.test.cases.tracker, \
   org.osgi.test.cases.xml
+
+#   org.osgi.test.cases.signature.mobile, \

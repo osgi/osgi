@@ -1,0 +1,18 @@
+Bundle-Version					: ${mobile.release.version}
+Bundle-Activator				: org.osgi.tools.group.Group
+Bundle-Description				: OSGi Service Platform Release 4, Mobile Reference Implementations
+Group-load						: ${replace;${mobile.impls};(.+);$1.jar}
+
+Include-Resource				: \
+	${replace;${mobile.impls};(.+);${target}/$1.jar}
+ 
+Private-Package					: \
+	org.osgi.tools.group
+
+
+Export-Package					: \
+	javax.microedition.io, \
+	javax.microedition.pki
+
+
+CVS-Header: $Id: osgi.mobile.impls.mf 4772 2007-04-06 02:45:55Z bjhargrave $
