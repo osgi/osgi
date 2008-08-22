@@ -1,0 +1,17 @@
+Bundle-Version					: ${mobile.release.version}
+Bundle-SymbolicName				: osgi.mobile
+Bundle-Description				: OSGi Service Platform Release 4 Mobile Interfaces and Classes.
+
+DynamicImport-Package: *
+
+Export-Package					: ${replace;${mobile.specs};.+;$0.*}
+Include-Resource 				: legal/about.html, \
+  								  legal/LICENSE, \
+  								  xmlns/metatype=../xmlns/metatype, \
+  								  xmlns/scr=../xmlns/scr, \
+  								  xmlns/app=../xmlns/app, \
+  								  xmlns/dd=../xmlns/dd, \
+  								  ddf=../ddf/mobile
+
+  								  
+Id								: $Revision: 4930 $ $Date: 2007-08-10 03:17:58 +0200 (Fri, 10 Aug 2007) $

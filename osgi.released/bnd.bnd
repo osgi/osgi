@@ -1,0 +1,17 @@
+# Build the deliverables that are published in the repository
+# for use in all projects.
+
+
+# The following line builds all these files and publishes them to 
+# the reposiory (if they are deployable)
+-dependson = ${ees}, ee.j2se, ${specs}, osgi.internal
+-buildpath = ${replace;${specs};.+;$0\\;version=project}
+
+# Build the osgi spec files
+-sub       = osgi*.bnd
+
+
+japi.osgi.core = ${replace;$(core.specs);.+;+$0}
+japi.osgi.compendium = ${replace;$(cmpn.specs);.+;+$0}
+japi.osgi.mobile = ${replace;$(mobile.specs);.+;+$0}
+
