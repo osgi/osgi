@@ -1,6 +1,17 @@
 # Build the deliverables that are published in the repository
 # for use in all projects.
 
+copyright 					= Copyright (c) OSGi Alliance (2000, ${tstamp;yyyy}). All Rights Reserved.
+copyright.html 				= Copyright &copy; OSGi Alliance (2000, ${tstamp;yyyy}). All Rights Reserved.
+
+osgi.release				= 4
+osgi.version				= 4.2
+osgi.version.long			= 4.2.0
+
+osgi.release.version		=	${osgi.version.long}.${project.build}
+core.release.version		=	${osgi.version.long}.${project.build}
+cmpn.release.version		=	${osgi.version.long}.${project.build}
+mobile.release.version		=	${osgi.version.long}.${project.build}
 
 # The following line builds all these files and publishes them to 
 # the reposiory (if they are deployable)
@@ -12,6 +23,186 @@
 
 
 japi.osgi.core = ${replace;$(core.specs);.+;+$0}
-japi.osgi.compendium = ${replace;$(cmpn.specs);.+;+$0}
+japi.osgi.compendium = ${replace;$(compendium.specs);.+;+$0}
 japi.osgi.mobile = ${replace;$(mobile.specs);.+;+$0}
 
+specs = ${uniq; ${core.specs}, ${compendium.specs}, ${mobile.specs}}
+tests = ${uniq; ${core.tests}, ${compendium.tests}, ${mobile.tests}}
+impls = ${uniq;                ${compendium.impls}, ${mobile.impls}}
+
+ees = \
+ ee.minimum, \
+ ee.foundation
+ 
+core.specs = org.osgi.framework, \
+ org.osgi.service.condpermadmin, \
+ org.osgi.service.packageadmin, \
+ org.osgi.service.permissionadmin, \
+ org.osgi.service.startlevel, \
+ org.osgi.service.url
+
+core.impls =
+
+core.tests = \
+  org.osgi.test.cases.activationpolicy, \
+  org.osgi.test.cases.framework.classloading, \
+  org.osgi.test.cases.framework.classpath, \
+  org.osgi.test.cases.framework.div, \
+  org.osgi.test.cases.framework.dynpkgimport, \
+  org.osgi.test.cases.framework.filter, \
+  org.osgi.test.cases.framework.fragments, \
+  org.osgi.test.cases.framework.lifecycle, \
+  org.osgi.test.cases.framework.registry, \
+  org.osgi.test.cases.framework.syncbundlelistener, \
+  org.osgi.test.cases.packageadmin.tc1, \
+  org.osgi.test.cases.packageadmin.tc2, \
+  org.osgi.test.cases.packageadmin.tc3, \
+  org.osgi.test.cases.packageadmin.tc5, \
+  org.osgi.test.cases.permissionadmin.conditional, \
+  org.osgi.test.cases.permissionadmin.main, \
+  org.osgi.test.cases.permissionadmin.nosecurity, \
+  org.osgi.test.cases.permissionadmin.security, \
+  org.osgi.test.cases.permissionadmin.signature, \
+  org.osgi.test.cases.signature.core, \
+  org.osgi.test.cases.startlevel, \
+  org.osgi.test.cases.url
+
+compendium.specs = \
+ org.osgi.application, \
+ org.osgi.service.application, \
+ org.osgi.service.cm, \
+ org.osgi.service.component, \
+ org.osgi.service.command, \
+ org.osgi.service.deploymentadmin, \
+ org.osgi.service.device, \
+ org.osgi.service.event, \
+ org.osgi.service.http, \
+ org.osgi.service.io, \
+ org.osgi.service.log, \
+ org.osgi.service.metatype, \
+ org.osgi.service.monitor, \
+ org.osgi.service.prefs, \
+ org.osgi.service.provisioning, \
+ org.osgi.service.threadio, \
+ org.osgi.service.upnp, \
+ org.osgi.service.useradmin, \
+ org.osgi.service.wireadmin, \
+ org.osgi.util.measurement, \
+ org.osgi.util.position, \
+ org.osgi.util.gsm, \
+ org.osgi.util.mobile, \
+ org.osgi.util.tracker, \
+ org.osgi.util.xml, \
+ info.dmtree
+ 
+compendium.impls = \
+  org.osgi.impl.service.log, \
+  org.osgi.impl.bundle.rsh, \
+  org.osgi.impl.bundle.jaxp, \
+  org.osgi.impl.bundle.autoconf, \
+  org.osgi.impl.service.application, \
+  org.osgi.impl.service.cm, \
+  org.osgi.impl.service.component, \
+  org.osgi.impl.service.device.basicdriverlocator, \
+  org.osgi.impl.service.device.manager, \
+  org.osgi.impl.service.event, \
+  org.osgi.impl.service.http, \
+  org.osgi.impl.service.deploymentadmin, \
+  org.osgi.impl.service.dmt, \
+  org.osgi.impl.service.io, \
+  org.osgi.impl.service.metatype, \
+  org.osgi.impl.service.monitor, \
+  org.osgi.impl.service.policy, \
+  org.osgi.impl.service.prefs, \
+  org.osgi.impl.service.provisioning, \
+  org.osgi.impl.service.upnp.cp, \
+  org.osgi.impl.service.upnp.cd, \
+  org.osgi.impl.service.useradmin, \
+  org.osgi.impl.service.wireadmin, \
+  org.osgi.impl.bundle.midletcontainer
+  
+ compendium.tests = \
+  org.osgi.test.cases.application, \
+  org.osgi.test.cases.cm, \
+  org.osgi.test.cases.component, \
+  org.osgi.test.cases.device, \
+  org.osgi.test.cases.deploymentadmin.mo, \
+  org.osgi.test.cases.deploymentadmin.tc1, \
+  org.osgi.test.cases.deploymentadmin.tc2, \
+  org.osgi.test.cases.dmt.tc1, \
+  org.osgi.test.cases.dmt.tc2, \
+  org.osgi.test.cases.dmt.tc3, \
+  org.osgi.test.cases.event, \
+  org.osgi.test.cases.http, \
+  org.osgi.test.cases.io, \
+  org.osgi.test.cases.log, \
+  org.osgi.test.cases.measurement, \
+  org.osgi.test.cases.metatype, \
+  org.osgi.test.cases.monitor, \
+  org.osgi.test.cases.policy, \
+  org.osgi.test.cases.position, \
+  org.osgi.test.cases.prefs, \
+  org.osgi.test.cases.provisioning, \
+  org.osgi.test.cases.signature.cmpn, \
+  org.osgi.test.cases.tracker, \
+  org.osgi.test.cases.upnp, \
+  org.osgi.test.cases.useradmin, \
+  org.osgi.test.cases.wireadmin, \
+  org.osgi.test.cases.xml
+
+mobile.specs = \
+ info.dmtree, \
+ org.osgi.application, \
+ org.osgi.service.application, \
+ org.osgi.service.cm, \
+ org.osgi.service.component, \
+ org.osgi.service.deploymentadmin, \
+ org.osgi.service.event, \
+ org.osgi.service.io, \
+ org.osgi.service.log, \
+ org.osgi.service.metatype, \
+ org.osgi.service.monitor, \
+ org.osgi.service.prefs, \
+ org.osgi.util.gsm, \
+ org.osgi.util.mobile, \
+ org.osgi.util.tracker, \
+ org.osgi.util.xml
+
+mobile.impls = \
+  org.osgi.impl.service.log, \
+  org.osgi.impl.bundle.jaxp, \
+  org.osgi.impl.bundle.autoconf, \
+  org.osgi.impl.service.application, \
+  org.osgi.impl.service.cm, \
+  org.osgi.impl.service.component, \
+  org.osgi.impl.service.event, \
+  org.osgi.impl.service.deploymentadmin, \
+  org.osgi.impl.service.dmt, \
+  org.osgi.impl.service.io, \
+  org.osgi.impl.service.metatype, \
+  org.osgi.impl.service.monitor, \
+  org.osgi.impl.service.prefs, \
+  org.osgi.impl.service.policy, \
+  org.osgi.impl.bundle.midletcontainer
+  
+
+ mobile.tests = \
+  org.osgi.test.cases.application, \
+  org.osgi.test.cases.cm, \
+  org.osgi.test.cases.component, \
+  org.osgi.test.cases.deploymentadmin.mo, \
+  org.osgi.test.cases.deploymentadmin.tc1, \
+  org.osgi.test.cases.deploymentadmin.tc2, \
+  org.osgi.test.cases.dmt.tc1, \
+  org.osgi.test.cases.dmt.tc2, \
+  org.osgi.test.cases.dmt.tc3, \
+  org.osgi.test.cases.event, \
+  org.osgi.test.cases.io, \
+  org.osgi.test.cases.log, \
+  org.osgi.test.cases.metatype, \
+  org.osgi.test.cases.monitor, \
+  org.osgi.test.cases.policy, \
+  org.osgi.test.cases.prefs, \
+  org.osgi.test.cases.signature.mobile, \
+  org.osgi.test.cases.tracker, \
+  org.osgi.test.cases.xml
