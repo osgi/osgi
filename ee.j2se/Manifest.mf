@@ -9,4 +9,3 @@ Bundle-Copyright: ${copyright}
 Bundle-DocURL: www.osgi.org
 Bundle-Address: speccomments@mail.osgi.org
 Bundle-RequiredExecutionEnvironment: J2SE-1.4
-Id: $Revision$

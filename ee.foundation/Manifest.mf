@@ -9,4 +9,3 @@ Bundle-Copyright: ${copyright}
 Bundle-DocURL: www.osgi.org
 Bundle-Address: speccomments@mail.osgi.org
 Bundle-RequiredExecutionEnvironment: CDC-1.1/Foundation-1.1
-Id: $Revision$ $Date$

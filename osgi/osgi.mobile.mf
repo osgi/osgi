@@ -8,5 +8,4 @@ Bundle-Vendor: OSGi Alliance
 Bundle-Category: osgi
 Bundle-DocUrl: http://www.osgi.org/
 $(EXPORT-PACKAGE)
-Id: $Revision$ $Date$
 DynamicImport-Package: *

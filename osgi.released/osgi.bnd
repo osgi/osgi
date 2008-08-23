@@ -11,8 +11,4 @@ Include-Resource 				: legal/about.html, \
   								  xmlns/metatype=../xmlns/metatype, \
   								  xmlns/scr=../xmlns/scr, \
   								  xmlns/app=../xmlns/app
-
-  
-  
-Id: $Revision: 4930 $ $Date: 2007-08-10 03:17:58 +0200 (Fri, 10 Aug 2007) $
   
