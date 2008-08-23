@@ -102,11 +102,11 @@ abstract class AbstractTracked {
 	 * AbstractTracked constructor.
 	 */
 	protected AbstractTracked() {
-		closed = false;
 		tracked = new HashMap();
 		trackingCount = 0;
 		adding = new ArrayList(6);
 		initial = new LinkedList();
+		closed = false;
 	}
 
 	/**
