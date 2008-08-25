@@ -44,7 +44,6 @@ mobile.release.version		= ${osgi.version.long}.${project.build}
 # Build the osgi spec files
 -sub       = osgi*.bnd
 
-
 japi.osgi.core 				= ${replace;$(core.specs);.+;+$0}
 japi.osgi.cmpn 				= ${replace;$(cmpn.specs);.+;+$0}
 japi.osgi.mobile 			= ${replace;$(mobile.specs);.+;+$0}
@@ -52,6 +51,8 @@ japi.osgi.mobile 			= ${replace;$(mobile.specs);.+;+$0}
 specs 						= ${uniq; ${core.specs}, ${cmpn.specs}, ${mobile.specs}}
 tests 						= ${uniq; ${core.tests}, ${cmpn.tests}, ${mobile.tests}}
 impls 						= ${uniq;                ${cmpn.impls}, ${mobile.impls}}
+
+javadoc.packagenames 		= ${replace;$(specs);^.*$;$0.*}
 
 ees 						= \
  ee.minimum, \

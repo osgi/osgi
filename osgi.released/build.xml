@@ -1,8 +1,50 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="project" default="publish">
-	<target name="release" depends="master.release,japitools,japicompat">
+	<target name="release" depends="master.release,javadoc,japitools,japicompat">
 	</target>
 
+	<target name="javadoc" depends="init">
+		<delete dir="${target}/javadoc"/>
+        <javadoc 
+			access="protected" 
+			windowtitle="OSGi Service Platform Release ${osgi.release} Version ${osgi.version}"
+			author="false" 
+			classpath="${project.buildpath}"
+			sourcepath="${project.allsourcepath}"
+			destdir="${target}/javadoc" 
+			nodeprecated="false" 
+			nodeprecatedlist="false" 
+			noindex="false" 
+			nonavbar="false" 
+			notree="false" 
+			packagenames="${javadoc.packagenames}" 
+			source="1.3" 
+			splitindex="true" 
+			use="false" 
+			version="false"
+			encoding="UTF-8"
+			docencoding="UTF-8"
+			charset="UTF-8">
+		    <bootclasspath>
+      			<pathelement location="${repo}/ee.foundation/ee.foundation-1.1.0.jar"/>
+    		</bootclasspath>
+		    <classpath>
+      			<pathelement location="${licensed-repo}/org.osgi.impl.bundle.servlet/org.osgi.impl.bundle.servlet-2.1.0.jar"/>
+    		</classpath>
+			<tag name="Immutable" scope="types" description="Immutable"/>
+			<tag name="ThreadSafe" scope="types" description="ThreadSafe"/>
+			<tag name="NotThreadSafe" scope="types" description="NotThreadSafe"/>
+			<tag name="GuardedBy" scope="methods,fields" description="Guarded By:"/>
+			<header><![CDATA[<b>OSGi&trade; Service Platform</b><br/><font  size=-1>Release ${osgi.release} Version ${osgi.version}</font>]]></header>
+			<bottom><![CDATA[<font size=-1>${copyright.html} Licensed under the <a href="{@docRoot}/LICENSE.html">OSGi Specification License, Version 1.0</a></font>]]></bottom>
+			<doctitle><![CDATA[OSGi&trade; Service Platform Release ${osgi.release} Version ${osgi.version}]]></doctitle>
+		</javadoc>
+		<copy file="${project}/legal/OSGiSpecificationLicense-v10.html"
+		    tofile="${target}/javadoc/LICENSE.html"
+	    	verbose="${verbose}"
+	      	preservelastmodified="true" />
+    </target>
+	
 	<target name="japitools" depends="init">
 		<echo>osgi.core</echo>
 		<java classname="net.wuffies.japi.Japize">
