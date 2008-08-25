@@ -138,7 +138,7 @@
 			exceptions="true" 
 			files="bnd.bnd" 
 			output="${target}" 
-			classpath="${project.buildpath}"/>
+			classpath="${project.buildpath}:${project.bootclasspath}"/>
 	</target>
 
 	<target name="-jar" depends="-btool,-signjar" />
@@ -261,6 +261,7 @@
 		<echo>repo:                   ${repo}</echo>
 		<echo>use.bnd:                ${use.bnd}</echo>
 		<echo>nodeploy:               ${nodeploy}</echo>
+		<echo>-sourcepath             ${-sourcepath}</echo>
 
 	</target>
 
