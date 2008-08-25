@@ -16,6 +16,7 @@ bin.includes			= ${project.name}.jar
 project.bootclasspath	= 
 prebuild				= 
 
+
 # Java compiler options
 java 					= java
 javac 					= javac
@@ -35,6 +36,7 @@ btool.compress			= true
 
 #Bnd options
 -sources               	= true
+-sourcepath             = ${project.allsourcepath}
 -plugin	            	= aQute.lib.deployer.FileRepo;location=${repo}, \
   						  aQute.lib.deployer.FileRepo;location=${licensed-repo};readonly=true
 -make                   =  \
