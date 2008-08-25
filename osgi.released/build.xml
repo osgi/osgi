@@ -120,6 +120,15 @@
 			<arg value="${project}/japi-published/osgi.core-published.japi" />
 			<arg value="${target}/japi/osgi.core-latest.japi" />
 		</exec>
+		<exec executable="perl" failifexecutionfails="false">
+			<arg value="${workspace}/licensed/japitools/bin/japicompat" />
+			<arg value="-h" />
+			<arg value="-v" />
+			<arg value="-o" />
+			<arg value="${target}/japi/osgi.core-changed-japicompat.html" />
+			<arg value="${target}/japi/osgi.core-latest.japi" />
+			<arg value="${project}/japi-published/osgi.core-published.japi" />
+		</exec>
 		<echo>osgi.cmpn</echo>
 		<exec executable="perl" failifexecutionfails="false">
 			<arg value="${workspace}/licensed/japitools/bin/japicompat" />
@@ -129,6 +138,15 @@
 			<arg value="${target}/japi/osgi.cmpn-japicompat.html" />
 			<arg value="${project}/japi-published/osgi.cmpn-published.japi" />
 			<arg value="${target}/japi/osgi.cmpn-latest.japi" />
+		</exec>
+		<exec executable="perl" failifexecutionfails="false">
+			<arg value="${workspace}/licensed/japitools/bin/japicompat" />
+			<arg value="-h" />
+			<arg value="-v" />
+			<arg value="-o" />
+			<arg value="${target}/japi/osgi.cmpn-changed-japicompat.html" />
+			<arg value="${target}/japi/osgi.cmpn-latest.japi" />
+			<arg value="${project}/japi-published/osgi.cmpn-published.japi" />
 		</exec>
 		<echo>osgi.mobile</echo>
 		<exec executable="perl" failifexecutionfails="false">
@@ -140,6 +158,15 @@
 			<arg value="${project}/japi-published/osgi.mobile-published.japi" />
 			<arg value="${target}/japi/osgi.mobile-latest.japi" />
 		</exec>
+		<exec executable="perl" failifexecutionfails="false">
+			<arg value="${workspace}/licensed/japitools/bin/japicompat" />
+			<arg value="-h" />
+			<arg value="-v" />
+			<arg value="-o" />
+			<arg value="${target}/japi/osgi.mobile-changed-japicompat.html" />
+			<arg value="${target}/japi/osgi.mobile-latest.japi" />
+			<arg value="${project}/japi-published/osgi.mobile-published.japi" />
+		</exec>
 		<echo>ee.minimum</echo>
 		<exec executable="perl" failifexecutionfails="false">
 			<arg value="${workspace}/licensed/japitools/bin/japicompat" />
@@ -148,6 +175,14 @@
 			<arg value="${target}/japi/ee.minimum-japicompat.html" />
 			<arg value="${project}/japi-published/ee.minimum-published.japi" />
 			<arg value="${target}/japi/ee.minimum-latest.japi" />
+		</exec>
+		<exec executable="perl" failifexecutionfails="false">
+			<arg value="${workspace}/licensed/japitools/bin/japicompat" />
+			<arg value="-h" />
+			<arg value="-o" />
+			<arg value="${target}/japi/ee.minimum-changed-japicompat.html" />
+			<arg value="${target}/japi/ee.minimum-latest.japi" />
+			<arg value="${project}/japi-published/ee.minimum-published.japi" />
 		</exec>
 		<echo>ee.foundation</echo>
 		<exec executable="perl" failifexecutionfails="false">
@@ -158,7 +193,15 @@
 			<arg value="${project}/japi-published/ee.foundation-published.japi" />
 			<arg value="${target}/japi/ee.foundation-latest.japi" />
 		</exec>
-		<echo>ees</echo>
+		<exec executable="perl" failifexecutionfails="false">
+			<arg value="${workspace}/licensed/japitools/bin/japicompat" />
+			<arg value="-h" />
+			<arg value="-o" />
+			<arg value="${target}/japi/ee.foundation-changed-japicompat.html" />
+			<arg value="${target}/japi/ee.foundation-latest.japi" />
+			<arg value="${project}/japi-published/ee.foundation-published.japi" />
+		</exec>
+		<echo>ee compare</echo>
 		<exec executable="perl" failifexecutionfails="false">
 			<arg value="${workspace}/licensed/japitools/bin/japicompat" />
 			<arg value="-h" />
