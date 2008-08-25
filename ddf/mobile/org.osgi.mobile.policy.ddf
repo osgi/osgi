@@ -4,7 +4,7 @@
 /*
  * $Date$
  * 
- * Copyright (c) OSGi Alliance (2006, 2007). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2006, 2008). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -379,7 +379,7 @@
                     <AccessType>
                         <Get></Get>
                     </AccessType>
-                    <Description>Subtree for condtitional permissions, 
+                    <Description>Subtree for conditional permissions, 
                         optional</Description>
                     <DFFormat>
                         <node/>
@@ -390,7 +390,7 @@
                     <Scope>
                         <Permanent/>
                     </Scope>
-                    <DFTitle>Subtree for condtitional permissions, 
+                    <DFTitle>Subtree for conditional permissions, 
                         optional</DFTitle>
                     <DFType>
                         <DDFName></DDFName>
@@ -468,7 +468,7 @@
                                 <Get></Get>
                                 <Replace></Replace>
                             </AccessType>
-                            <Description>Condtions of this Permission info 
+                            <Description>Conditions of this Permission info 
                                 object, encoded</Description>
                             <DFFormat>
                                 <chr/>
@@ -480,7 +480,7 @@
                             <Scope>
                                 <Dynamic/>
                             </Scope>
-                            <DFTitle>Condtions of this Permission info 
+                            <DFTitle>Conditions of this Permission info 
                                 object, encoded</DFTitle>
                             <DFType>
                                 <MIME>text/plain</MIME>
