@@ -1,6 +1,5 @@
 Bundle-Version				: ${core.release.version}
 Bundle-Description			: OSGi Service Platform Release 4 Core Interface and Classes.
-Id							: $Revision: 4930 $ $Date: 2007-08-10 03:17:58 +0200 (Fri, 10 Aug 2007) $
 DynamicImport-Package		: *
 
 Export-Package 				: ${replace;$(core.specs);.+;$0.*}

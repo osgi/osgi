@@ -19,5 +19,3 @@ Export-Package					: \
 	javax.microedition.io, \
 	javax.microedition.pki
 
-CVS-Header						: $Id: osgi.cmpn.impls.mf 4772 2007-04-06 02:45:55Z bjhargrave $
-
