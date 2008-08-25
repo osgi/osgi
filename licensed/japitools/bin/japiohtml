@@ -71,7 +71,7 @@ print <<EOF;
   <head>
     <title>Results of comparison between $orig and $new</title>
     <link rel="stylesheet" type="text/css" href="japi.css">
-    <link rel="stylesheet" type="text/css" href="/www/japi.css">
+    <link rel="stylesheet" type="text/css" href="http://www.osgi.org/www/japi.css">
   </head>
   <body>
     <h1>Results of comparison between $orig and $new</h1>
