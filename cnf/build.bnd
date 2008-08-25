@@ -36,7 +36,7 @@ btool.compress			= true
 
 #Bnd options
 -sources               	= true
--sourcepath             = ${project.allsourcepath}
+-sourcepath             = ${replace;${project.allsourcepath};:;,}
 -plugin	            	= aQute.lib.deployer.FileRepo;location=${repo}, \
   						  aQute.lib.deployer.FileRepo;location=${licensed-repo};readonly=true
 -make                   =  \
@@ -50,8 +50,8 @@ base.modified			= ${fmodified;${build}/build.xml,${build}/build.bnd,${project}/b
 base.modified.readable	= ${long2date;${base.modified}}
 project.build			= ${tstamp;yyyyMMddhhmm}
 
-copyright 				= Copyright (c) OSGi Alliance (2000, ${tstamp;yyyy}). All Rights Reserved.
-copyright.html 			= Copyright &copy; OSGi Alliance (2000, ${tstamp;yyyy}). All Rights Reserved.
+copyright = Copyright (c) OSGi Alliance (2000, ${tstamp;yyyy}). All Rights Reserved.
+copyright.html = Copyright &copy; OSGi Alliance (2000, ${tstamp;yyyy}). All Rights Reserved.
 
 -include				= 	-${basedir}/build.properties
 
