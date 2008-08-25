@@ -1,1 +1,59 @@
--include				= 	-${dir;${basedir}}/cnf/build.bnd
+# Very general
+verbose					= false
+project                 = ${basedir}
+src                     = ${project}/src
+target					= ${project}/${target-dir}
+workspace				= ${dir;${project}}
+build					= ${workspace}/cnf
+repo					= ${build}/repo
+licensed				= ${workspace}/licensed
+licensed-repo			= ${licensed}/repo
+target-dir				= generated
+p                       = ${basename;${project}}
+project.name            = ${p}
+bin.includes			= ${project.name}.jar
+project.bootclasspath	= 
+prebuild				= 
+
+# Java compiler options
+java 					= java
+javac 					= javac
+javac.debug				= on
+javac.source 			= 1.3
+javac.target 			= 1.2
+
+#BTool options
+btool.analyse 			= true
+btool.showmanifest 		= false
+btool.noversion 		= false
+btool.sources			= false
+btool.failok			= false
+btool.manifestVersion	= 1
+btool.noextraheaders	= false
+btool.compress			= true
+
+#Bnd options
+-sources               	= true
+-plugin	            	= aQute.lib.deployer.FileRepo;location=${repo}, \
+  						  aQute.lib.deployer.FileRepo;location=${licensed-repo};readonly=true
+-make                   =  \
+  (*).(jar|ipa);                             type=bnd;  recipe="bnd/$1.bnd"
+
+
+
+# Time options
+# base.modified is used by bnd to not make when files are not changed
+base.modified			= ${fmodified;${build}/build.xml,${build}/build.bnd,${project}/build.properties,${project}/bnd.bnd,${project}/build.xml}
+base.modified.readable	= ${long2date;${base.modified}}
+project.build			= ${tstamp;yyyyMMddhhmm}
+
+copyright = Copyright (c) OSGi Alliance (2000, ${tstamp;yyyy}). All Rights Reserved.
+copyright.html = Copyright &copy; OSGi Alliance (2000, ${tstamp;yyyy}). All Rights Reserved.
+
+-include				= 	-${basedir}/build.properties
+
+# Documentation
+Bundle-Copyright       	= ${copyright}
+Bundle-Vendor			= OSGi Alliance
+Bundle-License			= ... TODO
+-removeheader			= Include-Resource
