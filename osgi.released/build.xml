@@ -2,7 +2,7 @@
 <project name="project" default="publish">
 	<target name="release" depends="master.release,japitools,japicompat">
 	</target>
-	
+
 	<target name="japitools" depends="init">
 		<echo>osgi.core</echo>
 		<java classname="net.wuffies.japi.Japize">
@@ -20,14 +20,14 @@
 			<classpath path="${workspace}/licensed/japitools/share/java/japitools.jar" />
 			<arg value="unzip" />
 			<arg value="as" />
-			<arg value="${target}/osgi.compendium-latest.japi" />
+			<arg value="${target}/osgi.cpmn-latest.japi" />
 			<arg value="packages" />
 			<arg value="${target}/ee.foundation.jar" />
 			<arg value="${target}/osgi.core.jar" />
-			<arg value="${target}/osgi.compendium.jar" />
+			<arg value="${target}/osgi.cpmn.jar" />
 			<arg value="${licensed-repo}/org.osgi.impl.bundle.servlet/org.osgi.impl.bundle.servlet-2.1.0.jar" />
 			<arg value="${licensed-repo}/com.icl.saxon/com.icl.saxon-6.5.1.jar" />
-			<arg line="${japi.osgi.compendium}" />
+			<arg line="${japi.osgi.cpmn}" />
 		</java>
 		<echo>osgi.mobile</echo>
 		<java classname="net.wuffies.japi.Japize">
@@ -65,7 +65,7 @@
 			<arg value="+javax" />
 		</java>
 	</target>
-	
+
 	<target name="japicompat" depends="init">
 		<echo>osgi.core</echo>
 		<exec executable="perl" failifexecutionfails="false">

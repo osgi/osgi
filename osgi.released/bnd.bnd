@@ -46,7 +46,7 @@ mobile.release.version		= ${osgi.version.long}.${project.build}
 
 
 japi.osgi.core 				= ${replace;$(core.specs);.+;+$0}
-japi.osgi.cmpn 		= ${replace;$(cmpn.specs);.+;+$0}
+japi.osgi.cmpn 				= ${replace;$(cmpn.specs);.+;+$0}
 japi.osgi.mobile 			= ${replace;$(mobile.specs);.+;+$0}
 
 specs 						= ${uniq; ${core.specs}, ${cmpn.specs}, ${mobile.specs}}
