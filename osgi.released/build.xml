@@ -20,7 +20,7 @@
 			<classpath path="${workspace}/licensed/japitools/share/java/japitools.jar" />
 			<arg value="unzip" />
 			<arg value="as" />
-			<arg value="${target}/osgi.core-latest.japi" />
+			<arg value="${target}/osgi.cmpn-latest.japi" />
 			<arg value="packages" />
 			<arg value="${target}/ee.foundation.jar" />
 			<arg value="${target}/osgi.core.jar" />
