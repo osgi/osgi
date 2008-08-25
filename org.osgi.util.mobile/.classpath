@@ -5,5 +5,5 @@
 	<classpathentry kind="src" path="/org.osgi.service.condpermadmin"/>
 	<classpathentry kind="src" path="/org.osgi.framework"/>
 	<classpathentry kind="lib" path="/licensed/repo/com.springsource.junit/com.springsource.junit-3.8.2.jar"/>
-	<classpathentry kind="output" path="bin"/>
+	<classpathentry kind="output" path="src"/>
 </classpath>

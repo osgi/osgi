@@ -2,5 +2,5 @@
 <classpath>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="lib" path="/cnf/repo/ee.minimum/ee.minimum-1.0.0.jar" sourcepath="/ee.minimum"/>
-	<classpathentry kind="output" path="bin"/>
+	<classpathentry kind="output" path="src"/>
 </classpath>

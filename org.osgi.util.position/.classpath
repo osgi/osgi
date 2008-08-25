@@ -3,5 +3,5 @@
 	<classpathentry kind="src" path="src"/>
 	<classpathentry sourcepath="/cnf/repo/ee.minimum/ee.minimum-1.0.0.jar" kind="lib" path="/cnf/repo/ee.minimum/ee.minimum-1.0.0.jar"/>
 	<classpathentry kind="src" path="/org.osgi.util.measurement"/>
-	<classpathentry kind="output" path="bin"/>
+	<classpathentry kind="output" path="src"/>
 </classpath>
