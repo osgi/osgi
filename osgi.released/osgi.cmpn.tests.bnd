@@ -2,10 +2,13 @@ Bundle-Version					: ${cmpn.release.version}
 Bundle-Activator				: org.osgi.tools.group.Group
 Bundle-Description				: OSGi Service Platform Release 4, Compendium Test Cases
 Group-load  					: \
-	${replace;${compendium.tests};(.+);$1.jar}
+	${replace;${cmpn.tests};(.+);$1.jar}
 
 Include-Resource				: \
-	${replace;${compendium.tests};(.+);${target}/$1.jar}
+	${replace;${cmpn.tests};(.+);${target}/$1.jar}
 
 Private-Package					: \
 	org.osgi.tools.group
+
+
+CVS-Header: $Id: osgi.cmpn.tests.mf 4772 2007-04-06 02:45:55Z bjhargrave $

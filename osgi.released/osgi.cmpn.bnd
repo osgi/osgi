@@ -1,8 +1,8 @@
-Bundle-Version					: ${compendium.release.version}
+Bundle-Version					: ${cmpn.release.version}
 Bundle-Description				: OSGi Service Platform Release 4 Compendium Interfaces and Classes.
 DynamicImport-Package			: *
 
-Export-Package 					: ${replace;${compendium.specs};.+;$0.*}
+Export-Package 					: ${replace;${cmpn.specs};.+;$0.*}
 Include-Resource 				: legal/about.html, \
   								  legal/LICENSE, \
   								  xmlns/metatype=../xmlns/metatype, \

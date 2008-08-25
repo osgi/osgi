@@ -6,9 +6,9 @@ bin.includes				= \
 	osgi.core.jar, \
 	osgi.core.tests.jar, \
 	osgi.core.impls.jar, \
-	osgi.compendium.jar, \
-	osgi.compendium.impls.jar, \
-	osgi.compendium.tests.jar, \
+	osgi.cmpn.jar, \
+	osgi.cmpn.impls.jar, \
+	osgi.cmpn.tests.jar, \
 	osgi.mobile.jar, \
 	osgi.mobile.impls.jar, \
 	osgi.mobile.tests.jar, \
@@ -23,7 +23,7 @@ osgi.version.long			= 4.2.0
 
 osgi.release.version		= ${osgi.version.long}.${project.build}
 core.release.version		= ${osgi.version.long}.${project.build}
-compendium.release.version	= ${osgi.version.long}.${project.build}
+cmpn.release.version		= ${osgi.version.long}.${project.build}
 mobile.release.version		= ${osgi.version.long}.${project.build}
 
 # The following line builds all these files and publishes them to 
@@ -46,12 +46,12 @@ mobile.release.version		= ${osgi.version.long}.${project.build}
 
 
 japi.osgi.core 				= ${replace;$(core.specs);.+;+$0}
-japi.osgi.compendium 		= ${replace;$(compendium.specs);.+;+$0}
+japi.osgi.cmpn 		= ${replace;$(cmpn.specs);.+;+$0}
 japi.osgi.mobile 			= ${replace;$(mobile.specs);.+;+$0}
 
-specs 						= ${uniq; ${core.specs}, ${compendium.specs}, ${mobile.specs}}
-tests 						= ${uniq; ${core.tests}, ${compendium.tests}, ${mobile.tests}}
-impls 						= ${uniq;                ${compendium.impls}, ${mobile.impls}}
+specs 						= ${uniq; ${core.specs}, ${cmpn.specs}, ${mobile.specs}}
+tests 						= ${uniq; ${core.tests}, ${cmpn.tests}, ${mobile.tests}}
+impls 						= ${uniq;                ${cmpn.impls}, ${mobile.impls}}
 
 ees 						= \
  ee.minimum, \
@@ -91,7 +91,7 @@ core.tests = \
 
 #   org.osgi.test.cases.signature.core, \
 
-compendium.specs = \
+cmpn.specs = \
  org.osgi.application, \
  org.osgi.service.application, \
  org.osgi.service.cm, \
@@ -119,7 +119,7 @@ compendium.specs = \
  org.osgi.util.xml, \
  info.dmtree
  
-compendium.impls = \
+cmpn.impls = \
   org.osgi.impl.service.log, \
   org.osgi.impl.bundle.rsh, \
   org.osgi.impl.bundle.jaxp, \
@@ -145,7 +145,7 @@ compendium.impls = \
   org.osgi.impl.service.wireadmin, \
   org.osgi.impl.bundle.midletcontainer
   
- compendium.tests = \
+ cmpn.tests = \
   org.osgi.test.cases.application, \
   org.osgi.test.cases.cm, \
   org.osgi.test.cases.component, \

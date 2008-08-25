@@ -1,12 +1,12 @@
-Bundle-Version					: ${compendium.release.version}
+Bundle-Version					: ${cmpn.release.version}
 Bundle-Activator				: org.osgi.tools.group.Group
 Bundle-Description				: OSGi Service Platform Release 4, Compendium Reference Implementations
 Group-load						: \
-	${replace;${compendium.impls};(.+);$1.jar}, \
+	${replace;${cmpn.impls};(.+);$1.jar}, \
 	apache/servlet.jar
 
 Include-Resource				: \
-	${replace;${compendium.impls};(.+);${target}/$1.jar}, \
+	${replace;${cmpn.impls};(.+);${target}/$1.jar}, \
 	apache/servlet.jar=${repo;org.osgi.impl.bundle.servlet;2.1}, \
 	apache/LICENSE=../licensed/licenses/ASL-2.0.txt, \
  	NOTICE=legal/NOTICE.txt, \
@@ -18,4 +18,6 @@ Private-Package					: \
 Export-Package					: \
 	javax.microedition.io, \
 	javax.microedition.pki
+
+CVS-Header						: $Id: osgi.cmpn.impls.mf 4772 2007-04-06 02:45:55Z bjhargrave $
 
