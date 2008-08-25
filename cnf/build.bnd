@@ -1,7 +1,8 @@
 # Very general
 verbose					= false
 project                 = ${basedir}
-src                     = ${project}/src
+src                     = src
+bin                     = src
 target					= ${project}/${target-dir}
 workspace				= ${dir;${project}}
 build					= ${workspace}/cnf
