@@ -32,7 +32,7 @@ mobile.release.version		= ${osgi.version.long}.${project.build}
 	${ees}, \
 	ee.j2se, \
 	${specs}, \
-	osgi.internal, \
+	org.osgi.internal, \
 	${impls}, \
 	${tests}
 

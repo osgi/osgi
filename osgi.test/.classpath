@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry kind="src" path="src"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/osgi.internal"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/org.osgi.internal"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/ee.foundation"/>
 	<classpathentry kind="output" path="src"/>
 </classpath>
