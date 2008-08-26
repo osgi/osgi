@@ -1,0 +1,13 @@
+Bundle-Activator				= org.osgi.impl.bundle.jaxp.JaxpActivator
+Bundle-Description				=  OSGi XML JAXP Implementation. Registers an 
+Bundle-Version					= 1.0.1.${project.build}
+Bundle-Category					= osgi,xml
+Bundle-RequiredExecutionEnvironment= J2SE-1.4
+Export-Service	 				= \
+	javax.xml.parsers.SAXParserFactory, \
+	javax.xml.parsers.DocumentBuilderFactory
+Export-Package 					= ${p}
+
+-buildpath						= \
+	ee.j2se;					version=1.4, \
+	osgi;						version=4.0.1

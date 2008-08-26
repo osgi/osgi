@@ -1,0 +1,13 @@
+Bundle-Version					= 1.0.0.${project.build}
+Bundle-Activator				= $(p).Activator
+Bundle-Description				= An OSGi Midlet Container
+Bundle-Vendor					= Nokia
+Bundle-RequiredExecutionEnvironment= J2SE-1.4
+
+Export-Package 					= javax.microedition.midlet
+Private-Package					= ${p}
+Include-Resource				= TestIcon.gif
+
+-buildpath						= \
+	ee.j2se;					version=1.4, \
+	osgi;						version=4.0.1

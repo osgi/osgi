@@ -1,0 +1,14 @@
+Bundle-Activator				= ${p}.RshHandler
+Bundle-Description				= OSGi rsh URL handler reference implementation by IBM Corporation.
+Bundle-Version					= 1.0.1.${project.build}
+Import-Service					= org.osgi.service.provisioning.ProvisioningService
+Export-Service					= org.osgi.service.url.URLStreamHandlerService
+
+Bundle-RequiredExecutionEnvironment= J2SE-1.4
+
+Export-Package 					= org.osgi.util.xml
+Private-Package					= ${p}.*
+
+-buildpath						= \
+	ee.j2se;					version=1.4, \
+	osgi;						version=4.0.1

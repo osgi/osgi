@@ -1,0 +1,1 @@
+-conduit					= ${repo;org.eclipse.equinox.ds;1.0.0;HIGHEST};name=${p}
