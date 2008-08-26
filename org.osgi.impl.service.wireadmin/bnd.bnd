@@ -11,4 +11,4 @@ Private-Package					= ${p}.*
 	org.osgi.service.wireadmin; 	version=project, \
 	osgi;							version=3.0, \
 	ee.minimum;						version=1.0, \
-	osgi.min;						version=4.2
+	org.osgi.internal;				version=4.1
