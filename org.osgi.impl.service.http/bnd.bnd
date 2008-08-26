@@ -1,0 +1,15 @@
+Bundle-Description				= The OSGi HTTP service Reference Implementation by Gatespace AB.
+Bundle-Version					= 1.1.2.${project.build}
+Bundle-Activator				= ${p}.HttpServiceController
+Export-Service					= org.osgi.service.http.HttpService
+Import-Service					= org.osgi.service.log.LogService
+Bundle-RequiredExecutionEnvironment = J2SE-1.4
+
+Private-Package 				= ${p}.*
+Export-Package					= org.osgi.service.http
+
+-buildpath						= \
+    org.osgi.service.http;				version=project, \
+	ee.j2se;							version=1.4, \
+	osgi;								version=3.0, \
+	org.osgi.impl.bundle.servlet;		version=2.1

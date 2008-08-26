@@ -1,0 +1,21 @@
+Bundle-Vendor					= Nokia
+Bundle-Version					= 1.0.0.${project.build}
+Bundle-Activator				= $(p).Activator
+Export-Service					= \
+	org.osgi.service.monitor.MonitorAdmin, \
+  	org.osgi.service.dmt.spi.DataPlugin
+  	
+Import-Service					= \
+	org.osgi.service.monitor.Monitorable, \
+	org.osgi.service.event.EventAdmin, \
+	org.osgi.service.dmt.DmtAdmin
+
+Bundle-RequiredExecutionEnvironment = J2SE-1.4
+
+Private-Package 				= ${p}.*
+Export-Package					= org.osgi.service.monitor;-split-package:=first
+
+-buildpath						= \
+    org.osgi.service.monitor;			version=project, \
+	ee.foundation;						version=1.1, \
+	osgi;								version=4.0.1

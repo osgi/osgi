@@ -1,0 +1,17 @@
+Bundle-Vendor				= Samsung
+Bundle-Version				= 0.2.0.${project.build}
+Bundle-Activator			= ${p}.UPnPController
+Bundle-Description			= Samsung UPnP CD stack
+Bundle-RequiredExecutionEnvironment= J2SE-1.4
+
+Import-Service				= org.osgi.service.upnp.UPnPDevice
+Export-Service				= org.osgi.service.upnp.UPnPListener
+
+Private-Package 			= ${p}.*
+Export-Package				= org.osgi.service.upnp;-split-package:=first
+
+-buildpath = \
+	org.osgi.service.upnp; 			version=project, \
+	osgi;							version=3.0, \
+	ee.j2se;						version=1.4, \
+	org.osgi.impl.bundle.servlet; 	version=2.1

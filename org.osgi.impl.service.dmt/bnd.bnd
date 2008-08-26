@@ -1,0 +1,19 @@
+Bundle-Vendor					= Nokia
+Bundle-Version					= 1.0.0.${project.build}
+Bundle-Activator				= $(p).Activator
+Export-Service					= \
+	info.dmtree.DmtAdmin, \
+	info.dmtree.notification.NotificationService
+Import-Service					= \
+	org.osgi.service.log.LogService, \
+	org.osgi.service.cm.ConfigurationAdmin
+
+Bundle-RequiredExecutionEnvironment= J2SE-1.4
+
+Export-Package 					= ${p}.export
+Private-Package					= ${p}, ${p}.plugins
+
+-buildpath						= \
+    info.dmtree;				version=project, \
+	ee.j2se;					version=1.4, \
+	osgi;						version=4.0.1

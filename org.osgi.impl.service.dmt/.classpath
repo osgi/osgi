@@ -1,9 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry path="src" kind="src"/>
-	<classpathentry path="/info.dmtree" combineaccessrules="false" kind="src"/>
-	<classpathentry path="/cnf/repo/osgi/osgi-4.0.0.jar" kind="lib" sourcepath="/cnf/repo/osgi/osgi-4.0.0.jar"/>
-	<classpathentry path="/cnf/repo/ee.foundation/ee.foundation-1.1.0.jar" kind="lib" sourcepath="/cnf/repo/ee.foundation/ee.foundation-1.1.0.jar"/>
-	<classpathentry path="/licensed/repo/com.icl.saxon/com.icl.saxon-6.5.1.jar" kind="lib"/>
-	<classpathentry path="src" kind="output"/>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="con" path="aQute.bnd.classpath.container"/>
+	<classpathentry kind="output" path="src"/>
 </classpath>

@@ -1,0 +1,12 @@
+Bundle-Activator				= ${p}.Activator
+Bundle-Description				= OSGi ConnectionService 1.0 Reference Implementation by ProSyst AG.
+Bundle-Version					= 1.0.0.${project.build}
+Bundle-RequiredExecutionEnvironment = J2SE-1.4
+
+Private-Package 				= ${p}.*
+Export-Package					= org.osgi.service.io;-split-package:=first
+
+-buildpath						= \
+    org.osgi.service.io;				version=project, \
+	ee.foundation;						version=1.4, \
+	osgi;								version=3.0

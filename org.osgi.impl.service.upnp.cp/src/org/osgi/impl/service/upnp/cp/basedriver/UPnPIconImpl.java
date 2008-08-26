@@ -6,7 +6,6 @@ import java.io.IOException;
 import org.osgi.service.upnp.*;
 import org.osgi.impl.service.upnp.cp.description.*;
 
-import sun.awt.image.URLImageSource;
 
 public class UPnPIconImpl implements UPnPIcon {
 	private Icon		icon;

@@ -1,0 +1,14 @@
+Bundle-Activator				= ${p}.WireAdminImpl
+Bundle-Description				= OSGi WireAdmin Service Reference Implementation by ACUNIA nv.
+Bundle-Version					= 1.0.1.${project.build}
+
+Export-Service					= org.osgi.service.wireadmin.WireAdmin
+
+Export-Package					= org.osgi.service.wireadmin; -split-package:=first
+Private-Package					= ${p}.*
+
+-buildpath = \
+	org.osgi.service.wireadmin; 	version=project, \
+	osgi;							version=3.0, \
+	ee.minimum;						version=1.0, \
+	osgi.min;						version=4.2

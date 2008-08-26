@@ -1,0 +1,27 @@
+Bundle-Vendor					= Nokia
+Bundle-Version					= 1.0.0.${project.build}
+Bundle-Activator				= ${p}.userprompt.UserPromptActivator
+Service-Component				= \
+	OSGI-INF/permadmin_subtree.xml, \
+	OSGI-INF/dmtprincipal_subtree.xml, \
+	OSGI-INF/condpermadmin_subtree.xml
+
+DynamicImport-Package: *
+
+Bundle-RequiredExecutionEnvironment = J2SE-1.4
+
+Private-Package 				= \
+	${p}, \
+	${p}.permadmin, \
+	${p}.util, \
+	${p}.dmtprincipal, \
+	${p}.condpermadmin, \
+	${p}.userprompt
+	
+Include-Resource				= OSGI-INF=src/OSGI-INF
+
+-buildpath						= \
+    org.osgi.impl.service.dmt;			version=project, \
+    org.osgi.service.monitor;			version=project, \
+	ee.foundation;						version=1.1, \
+	osgi;								version=4.0.1
