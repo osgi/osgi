@@ -1,0 +1,8 @@
+-nope							= true
+nodeploy						= true
+
+-buildpath = \
+	org.osgi.framework;				version=project, \
+	org.osgi.service.condpermadmin;	version=project, \
+	ee.minimum;						version=1.0, \
+	${junit}
