@@ -5,6 +5,7 @@ bin.includes				= \
 	osgi.jar, \
 	osgi.core.jar, \
 	osgi.core.tests.jar, \
+	osgi.core.impls.jar, \
 	osgi.cmpn.jar, \
 	osgi.cmpn.impls.jar, \
 	osgi.cmpn.tests.jar, \
@@ -12,6 +13,7 @@ bin.includes				= \
 	osgi.mobile.impls.jar, \
 	osgi.mobile.tests.jar, \
 	osgi.min.jar
+
 
 copyright 					= Copyright (c) OSGi Alliance (2000, ${tstamp;yyyy}). All Rights Reserved.
 copyright.html 				= Copyright &copy; OSGi Alliance (2000, ${tstamp;yyyy}). All Rights Reserved.
