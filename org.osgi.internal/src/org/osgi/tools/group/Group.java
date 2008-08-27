@@ -20,8 +20,18 @@ public class Group
 	public void start( final BundleContext context ) throws Exception {
 		String		list = (String) context.getBundle().getHeaders().get( "Group-Load" );
 		try {
-			if ( list == null )
-				throw new IOException( "No Manifest header: Group-Load " + context.getBundle().getHeaders() );		
+			StringBuffer sb = new StringBuffer();
+			String del="";
+			if ( list == null ) {
+				Bundle bundle = context.getBundle();
+				for ( Enumeration e = bundle.findEntries("/", "*.jar", false); e.hasMoreElements(); ) {
+					URL url = (URL) e.nextElement();
+					sb.append(del);
+					sb.append(url.getFile());
+					del = ",";
+				}
+				list = sb.toString();
+			}
 				
 			StringTokenizer st = new StringTokenizer( list, ", " );
 			if ( ! st.hasMoreTokens() )
