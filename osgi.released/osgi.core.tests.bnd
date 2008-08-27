@@ -1,5 +1,5 @@
 Bundle-Description			: \
-	OSGi Service Platform Release ${osgi.release} version ${core.release.version}, \
+	OSGi Service Platform Release 4 version ${core.release.version}, \
 	Core Test Case Bundles.
 
 Bundle-Version				: ${core.release.version}

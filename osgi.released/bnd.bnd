@@ -27,15 +27,16 @@ mobile.release.version		= ${osgi.version.long}.${project.build}
 
 # The following line builds all these files and publishes them to 
 # the repository (if they are deployable)
--dependson 					= \
-	!org.osgi.impl.service.discovery, \
-	!org.osgi.test.cases.signature, \
-	ee.*, \
-	org.osgi.service.*, \
-	org.osgi.util.*, \
-	org.osgi.internal, \
-	org.osgi.impl.*, \
-	org.osgi.test.cases.*
+-dependson 					= ${wc;${workspace};\
+		!org.osgi.impl.service.discovery, \
+		!org.osgi.test.cases.signature, \
+		ee.*, \
+		org.osgi.service.*, \
+		org.osgi.util.*, \
+		org.osgi.internal, \
+		org.osgi.impl.*, \
+		org.osgi.test.cases.* \
+	}
 
 -buildpath 					= \
 	${replace;${specs};.+;$0\\;version=project}, \

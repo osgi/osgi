@@ -1,6 +1,6 @@
 Bundle-Description				: \
 	OSGi Service Platform Release ${osgi.release} version ${cmpn.release.version}, \
-	Compendium Reference Implementation Bundles.
+	Compendium Reference Implementations.
 
 Bundle-Version					: ${cmpn.release.version}
 Bundle-Activator				: org.osgi.tools.group.Group

@@ -1,6 +1,6 @@
 Bundle-Description				: \
 	OSGi Service Platform Release ${osgi.release} version ${mobile.release.version}, \
-	Mobile Reference Implementation Bundles.
+	Mobile Reference Implementations.
 
 Bundle-Version					: ${mobile.release.version}
 Bundle-Activator				: org.osgi.tools.group.Group

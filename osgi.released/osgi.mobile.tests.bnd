@@ -28,6 +28,6 @@ Include-Resource				: \
 	 	NOTICE=legal/NOTICE.txt, \
 	 	about.html=legal/about-ri.html
   	
-# 		${target}/org.osgi.test.cases.signature.mobile.jar, \
+#		${target}/org.osgi.test.cases.signature.mobile.jar, \
 
 Private-Package					: org.osgi.tools.group
