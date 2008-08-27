@@ -18,16 +18,16 @@
 
 package org.osgi.service.discovery;
 
-
- /** 
+/**
  * 
  * 
  * @version $Revision$
  */
 public interface FindServiceCallback {
     /**
-     * @param serviceEndpointDescriptions Array of ServiceDescription objects satisfying the find criteria.
-     * The returned array is never null but may be empty if none was found.
+     * @param serviceEndpointDescriptions
+     *            Array of ServiceDescription objects satisfying the find criteria. The returned array is never null but
+     *            may be empty if none was found.
      */
     void servicesFound(ServiceEndpointDescription[] serviceEndpointDescriptions);
 }
