@@ -80,7 +80,7 @@ public interface SystemBundle extends Bundle {
 	 * System.mapLibraryName(String) will only return names with the .a
 	 * extension.
 	 */
-	String LIBRARIES = "org.osgi.framework.library.extensions";
+	String LIBRARY_EXTENSIONS = "org.osgi.framework.library.extensions";
 
 	/**
 	 * Specifies an optional OS specific command to set file permissions on
