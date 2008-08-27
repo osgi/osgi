@@ -1,13 +1,38 @@
+Bundle-Description			: \
+	OSGi Service Platform Release ${osgi.release} version ${core.release.version}, \
+	Core Test Case Bundles.
+
 Bundle-Version				: ${core.release.version}
 Bundle-Activator			: org.osgi.tools.group.Group
-Bundle-Description			: OSGi Service Platform Release 4, Core Test Cases
-Group-load 					: \
-	${replace;${core.tests};(.+);$1.jar}
 
 Include-Resource				: \
-	${replace;${core.tests};(.+);${target}/$1.jar}, \
+    ${target}/org.osgi.test.cases.activationpolicy.jar, \
+    ${target}/org.osgi.test.cases.framework.classloading.jar, \
+    ${target}/org.osgi.test.cases.framework.classpath.jar, \
+    ${target}/org.osgi.test.cases.framework.div.jar, \
+    ${target}/org.osgi.test.cases.framework.dynpkgimport.jar, \
+    ${target}/org.osgi.test.cases.framework.filter.jar, \
+    ${target}/org.osgi.test.cases.framework.fragments.jar, \
+    ${target}/org.osgi.test.cases.framework.lifecycle.jar, \
+    ${target}/org.osgi.test.cases.framework.registry.jar, \
+    ${target}/org.osgi.test.cases.framework.syncbundlelistener.jar, \
+    ${target}/org.osgi.test.cases.packageadmin.tc1.jar, \
+    ${target}/org.osgi.test.cases.packageadmin.tc2.jar, \
+    ${target}/org.osgi.test.cases.packageadmin.tc3.jar, \
+    ${target}/org.osgi.test.cases.packageadmin.tc5.jar, \
+    ${target}/org.osgi.test.cases.permissionadmin.conditional.jar, \
+    ${target}/org.osgi.test.cases.permissionadmin.main.jar, \
+    ${target}/org.osgi.test.cases.permissionadmin.nosecurity.jar, \
+    ${target}/org.osgi.test.cases.permissionadmin.security.jar, \
+    ${target}/org.osgi.test.cases.permissionadmin.signature.jar, \
+    ${target}/org.osgi.test.cases.startlevel.jar, \
+    ${target}/org.osgi.test.cases.url.jar, \
+    \
  	NOTICE=legal/NOTICE.txt, \
  	about.html=legal/about-ri.html
+
+
+#   org.osgi.test.cases.signature.core, \
 
 Private-Package				: \
 	org.osgi.tools.group

@@ -1,15 +1,16 @@
-Bundle-SymbolicName				: osgi
+Bundle-Description				: \
+	OSGi Service Platform Release ${osgi.release} version ${osgi.release.version}, \
+	Interfaces and Classes for use in compiling bundles.
+
 Bundle-Version					: ${osgi.release.version}
-Bundle-Description				: OSGi Service Platform Release 4 Interfaces and Classes for use in compiling bundles.
 DynamicImport-Package			: *
 
-# Contains all specs and their subpackages
-Export-Package					: ${replace;${specs};^.*$;$0.*}
+Export-Package					: ${replace;${specs};(.+);$1.*}
 
 Include-Resource 				: legal/about.html, \
   								  legal/LICENSE, \
+  								  \
   								  xmlns/metatype=../xmlns/metatype, \
   								  xmlns/scr=../xmlns/scr, \
   								  xmlns/app=../xmlns/app, \
   								  xmlns/dd=../xmlns/dd
-  

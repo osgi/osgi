@@ -1,14 +1,36 @@
+Bundle-Description				: \
+	OSGi Service Platform Release ${osgi.release} version ${mobile.release.version}, \
+	Mobile Reference Implementation Bundles.
+
 Bundle-Version					: ${mobile.release.version}
 Bundle-Activator				: org.osgi.tools.group.Group
-Bundle-Description				: OSGi Service Platform Release 4, Mobile Reference Implementations
-Group-load						: ${replace;${mobile.impls};(.+);$1.jar}
 
 Include-Resource				: \
-	${replace;${mobile.impls};(.+);${target}/$1.jar}
+  	${target}/org.osgi.impl.service.log.jar , \
+  	${target}/org.osgi.impl.bundle.jaxp.jar , \
+  	${target}/org.osgi.impl.bundle.autoconf.jar , \
+  	${target}/org.osgi.impl.service.application.jar , \
+  	${target}/org.osgi.impl.service.cm.jar , \
+  	${target}/org.osgi.impl.service.deploymentadmin.jar , \
+  	${target}/org.osgi.impl.service.dmt.jar , \
+  	${target}/org.osgi.impl.service.io.jar , \
+  	${target}/org.osgi.impl.service.monitor.jar , \
+  	${target}/org.osgi.impl.service.prefs.jar , \
+  	${target}/org.osgi.impl.service.policy.jar , \
+  	${target}/org.osgi.impl.bundle.midletcontainer.jar , \
+  	\
+	${repo;org.osgi.impl.bundle.servlet;2.1}, \
+  	${repo;org.eclipse.equinox.ds}, \
+  	${repo;org.eclipse.equinox.event}, \
+ 	${repo;org.eclipse.equinox.metatype}, \
+ 	\
+	apache/LICENSE=../licensed/licenses/ASL-2.0.txt, \
+ 	NOTICE=legal/NOTICE.txt, \
+ 	about.html=legal/about-ri.html
+ 	
  
 Private-Package					: \
 	org.osgi.tools.group
-
 
 Export-Package					: \
 	javax.microedition.io, \

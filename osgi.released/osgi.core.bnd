@@ -1,5 +1,8 @@
+Bundle-Description			: \
+	OSGi Service Platform Release ${osgi.release} version ${core.release.version}, \
+	Core Interfaces and Classes for use in compiling bundles.
+
 Bundle-Version				: ${core.release.version}
-Bundle-Description			: OSGi Service Platform Release 4 Core Interface and Classes.
 DynamicImport-Package		: *
 
 Export-Package 				: ${replace;$(core.specs);.+;$0.*}

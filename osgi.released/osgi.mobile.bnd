@@ -1,6 +1,9 @@
+Bundle-Description				: \
+	OSGi Service Platform Release ${osgi.release} version ${mobile.release.version}, \
+	Mobile Interfaces and Classes for use in compiling bundles.
+
 Bundle-Version					: ${mobile.release.version}
 Bundle-SymbolicName				: osgi.mobile
-Bundle-Description				: OSGi Service Platform Release 4 Mobile Interfaces and Classes.
 
 DynamicImport-Package: *
 

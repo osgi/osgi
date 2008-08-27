@@ -1,11 +1,42 @@
+Bundle-Description				: \
+	OSGi Service Platform Release ${osgi.release} version ${cmpn.release.version}, \
+	Compendium Test Case Bundles.
+
 Bundle-Version					: ${cmpn.release.version}
 Bundle-Activator				: org.osgi.tools.group.Group
-Bundle-Description				: OSGi Service Platform Release 4, Compendium Test Cases
-Group-load  					: \
-	${replace;${cmpn.tests};(.+);$1.jar}
 
 Include-Resource				: \
-	${replace;${cmpn.tests};(.+);${target}/$1.jar}
+    ${target}/org.osgi.test.cases.application.jar, \
+    ${target}/org.osgi.test.cases.cm.jar, \
+    ${target}/org.osgi.test.cases.component.jar, \
+    ${target}/org.osgi.test.cases.device.jar, \
+    ${target}/org.osgi.test.cases.deploymentadmin.mo.jar, \
+    ${target}/org.osgi.test.cases.deploymentadmin.tc1.jar, \
+    ${target}/org.osgi.test.cases.deploymentadmin.tc2.jar, \
+    ${target}/org.osgi.test.cases.dmt.tc1.jar, \
+    ${target}/org.osgi.test.cases.dmt.tc2.jar, \
+    ${target}/org.osgi.test.cases.dmt.tc3.jar, \
+    ${target}/org.osgi.test.cases.event.jar, \
+    ${target}/org.osgi.test.cases.http.jar, \
+    ${target}/org.osgi.test.cases.io.jar, \
+    ${target}/org.osgi.test.cases.log.jar, \
+    ${target}/org.osgi.test.cases.measurement.jar, \
+    ${target}/org.osgi.test.cases.metatype.jar, \
+    ${target}/org.osgi.test.cases.monitor.jar, \
+    ${target}/org.osgi.test.cases.policy.jar, \
+    ${target}/org.osgi.test.cases.position.jar, \
+    ${target}/org.osgi.test.cases.prefs.jar, \
+    ${target}/org.osgi.test.cases.provisioning.jar, \
+    ${target}/org.osgi.test.cases.tracker.jar, \
+    ${target}/org.osgi.test.cases.upnp.jar, \
+    ${target}/org.osgi.test.cases.useradmin.jar, \
+    ${target}/org.osgi.test.cases.wireadmin.jar, \
+    ${target}/org.osgi.test.cases.xml.jar, \
+    \
+    NOTICE=legal/NOTICE.txt, \
+ 	about.html=legal/about-ri.html
+
+#   org.osgi.test.cases.signature.cmpn, \
 
 Private-Package					: \
 	org.osgi.tools.group
