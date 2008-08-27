@@ -26,6 +26,23 @@ import org.osgi.framework.Bundle;
  * main object is created. It allows a configurator to set the properties and
  * launch the framework.
  * 
+ * <p>
+ * Implementations must provide a public constructor that takes a single
+ * configuration {@link Properties} object argument. The configuration
+ * Properties object provides the framework with configuration settings and must
+ * be used for the framework properties. The configuration properties can
+ * optionally be backed by other Properties such as the System properties The
+ * framework must use this properties as the only source by using getProperty
+ * (not get) so that the configurator can use the Properties linked behavior. If
+ * the properties object is null, useful defaults should be used to make the
+ * framework run appropriately in the current VM. I.e. the system packages for
+ * the current execution environment should be properly exported. Any persistent
+ * area should be defined in the current directory with a framework
+ * implementation specific name.
+ * 
+ * 
+ * </p>
+ * 
  * TODO The javadoc in this class need a good scrub before release.
  * 
  * @ThreadSafe
@@ -33,11 +50,14 @@ import org.osgi.framework.Bundle;
  */
 public interface SystemBundle extends Bundle {
 	/**
-	 * The name of a Security Manager class with public empty constructor. A
-	 * valid value is also true, this means that the framework should
-	 * instantiate its own security manager. If not set, security could be
-	 * defined by a parent framework or there is no security. This can be
-	 * detected by looking if there is a security manager set
+	 * Specifies the the type of security manager the framework must use. If not
+	 * specified then the framework will not set the VM security manager. The
+	 * following types are defined:
+	 * <ul>
+	 * <li>
+	 * osgi - Enables a security manager that supports all security aspects of
+	 * the OSGi R4.0 specification (including postponed conditions).</li>
+	 * </ul>
 	 */
 	String SECURITY = "org.osgi.framework.security";
 
@@ -51,13 +71,30 @@ public interface SystemBundle extends Bundle {
 	String STORAGE = "org.osgi.framework.storage";
 
 	/**
-	 * A list of paths (separated by path separator) that point to additional
-	 * directories to search for platform specific libraries
+	 * A comma separated list of additional library file extensions that must be
+	 * searched for when a bundle's {@link ClassLoader#findLibrary(String)}. If
+	 * not set then only the library name returned by
+	 * System.mapLibraryName(String) will be used to search. This is needed for
+	 * certain operating systems which allow more than one extension for a
+	 * library. For example AIX allows library extensions of .a and .so, but
+	 * System.mapLibraryName(String) will only return names with the .a
+	 * extension.
 	 */
-	String LIBRARIES = "org.osgi.framework.libraries";
+	String LIBRARIES = "org.osgi.framework.library.extensions";
+
 	/**
-	 * The command to give a file executable permission. This is necessary in
-	 * some environments for running shared libraries.
+	 * Specifies an optional OS specific command to set file permissions on
+	 * extracted native code. On some operating systems it is required that
+	 * native libraries be set to executable. This optional property allows you
+	 * to specify the command. For example, on a UNIX style OS you could have
+	 * the following value:
+	 * 
+	 * <pre>
+	 * org.osgi.framework.command.execpermission = &quot;chmod +rx [fullpath]&quot;
+	 * </pre>
+	 * 
+	 * The [fullpath] is used to substitute the actual file path by the
+	 * framework.
 	 */
 	String EXECPERMISSION = "org.osgi.framework.command.execpermission";
 
@@ -74,18 +111,19 @@ public interface SystemBundle extends Bundle {
 	String WINDOWSYSTEM = "org.osgi.framework.windowsystem";
 
 	/**
+	 * Specifies the beginning start level of the framework (See StartLevel
+	 * service specification for more information).
+	 */
+	String STARTLEVEL = "org.osgi.framework.startlevel";
+
+	/**
 	 * Configure this framework with the given properties. These properties can
 	 * contain framework specific properties or of the general kind defined in
 	 * the specification or in this interface.
 	 * 
-	 * @param configuration
-	 *            The properties. This properties can be backed by another
-	 *            properties, it can there not be assumed that it contains all
-	 *            keys. Use it only through the getProperty methods. This
-	 *            parameter may be null.
 	 * 
 	 */
-	void init(Properties configuration);
+	void init();
 
 	/**
 	 * Wait until the framework is completely finished.
@@ -96,7 +134,8 @@ public interface SystemBundle extends Bundle {
 	 * @param timeout
 	 *            Maximum number of milliseconds to wait until the framework is
 	 *            finished. Specifying a zero will wait indefinitely.
-	 * @throws InterruptedException When the wait was interrupted
+	 * @throws InterruptedException
+	 *             When the wait was interrupted
 	 * 
 	 */
 
