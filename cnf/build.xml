@@ -34,7 +34,7 @@
 
 		<available file="bnd.bnd" property="use.bnd" />
 
-		<bndprepare basedir="${projectdir}" print="${print}" />
+		<bndprepare basedir="${projectdir}" print="false" />
 
 		<!-- Now we have the same properties set as bnd 
 		-->
@@ -261,7 +261,6 @@
 		<echo>repo:                   ${repo}</echo>
 		<echo>use.bnd:                ${use.bnd}</echo>
 		<echo>nodeploy:               ${nodeploy}</echo>
-		<echo>-sourcepath             ${-sourcepath}</echo>
 
 	</target>
 

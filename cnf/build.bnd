@@ -1,4 +1,12 @@
 # Very general
+project.dependson       = ${p-dependson;:}
+project.bootclasspath   = ${p-bootclasspath;:}
+project.buildpath       = ${p-buildpath;:}
+project.sourcepath      = ${p-sourcepath;:}
+project.allsourcepath   = ${p-allsourcepath;:}
+project.output          = ${p-output}
+project.testpath        = ${p-testpath;:}
+
 verbose					= false
 project                 = ${basedir}
 src                     = src
@@ -13,9 +21,7 @@ target-dir				= generated
 p                       = ${basename;${project}}
 project.name            = ${p}
 bin.includes			= ${project.name}.jar
-project.bootclasspath	= 
 prebuild				= 
-
 
 # Java compiler options
 java 					= java
@@ -36,7 +42,8 @@ btool.compress			= true
 
 #Bnd options
 -sources               	= true
--sourcepath             = ${replace;${project.allsourcepath};:;,}
+-sourcepath             = ${project}/src 
+#${replace;${project.allsourcepath};:;,}
 -plugin	            	= aQute.lib.deployer.FileRepo;location=${repo}, \
   						  aQute.lib.deployer.FileRepo;location=${licensed-repo};readonly=true
 -make                   =  \
@@ -61,3 +68,4 @@ Bundle-Copyright       	= ${copyright}
 Bundle-Vendor			= OSGi Alliance
 Bundle-License			= ... TODO
 -removeheader			= Include-Resource
+
