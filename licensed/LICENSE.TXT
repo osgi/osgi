@@ -43,13 +43,12 @@ URL						http://jakarta.apache.org/bcel/
 Modifications			NONE, library used as is
 
 JUNIT-------------------------------------------------------------------
-Copyright				Part of Eclipse
+Copyright				Packaged by SpringSource, adds no copyright, or
 Used					Diverse JUNIT tests, the JUNIT perspective seems
                         to calculate a variable that is not portable between
                         environments.
-File					junit.jar
-License					licenses/EPL-1.0.html
-URL						http://www.eclipse.org
+License					Common Public License - v 1.0
+URL						http://www.junit.org
 Modifications			NONE, library uses as is
 
 NANOXML-----------------------------------------------------------------
@@ -86,3 +85,21 @@ Copyright               Copyright (c) 2004 Apache Software Foundation, All Right
 Used                    Bundles framework
 URL                     
 Modifications           none
+
+BND --------------------------------------------------------------------------------------
+Copyright               Copyright (c) 2006-2008 aQute SARL
+Used                    In build
+URL                     http://www.aQute.biz/Code/Bnd
+License					licenses/ASL-2.0.txt
+Modifications           none
+
+EQUINOX et al ----------------------------------------------------------------------------
+Contains				org.eclipse.osgi, org.eclipse.equinox.ds, org.eclipse.equinox.event,
+                        org.eclipse.equinox.metatype
+Copyright               Copyright (c) 2003, 2004 IBM Corporation and others. All rights reserved.
+Used                    As RI
+URL                     Prepared and submitted by IBM
+License					licenses/ASL-2.0.txt
+Modifications           none
+
+
