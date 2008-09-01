@@ -30,6 +30,7 @@ mobile.release.version		= ${osgi.version.long}.${project.build}
 # The following line builds all these files and publishes them to 
 # the repository (if they are deployable)
 -dependson 					= ${lsr;${workspace};\
+		!org.osgi.test.cases.log, \
 		!org.osgi.impl.bundle.bindex, \
 		!org.osgi.impl.service.discovery, \
 		!org.osgi.test.cases.signature, \
