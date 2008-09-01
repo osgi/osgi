@@ -132,13 +132,7 @@
 		<antcall target="-interleave">
 			<param name="x" value="before.${item.jarFile}" />
 		</antcall>
-		<bnd 
-			eclipse="false" 
-			failok="false" 
-			exceptions="true" 
-			files="bnd.bnd" 
-			output="${target}" 
-			classpath="${project.buildpath}:${project.bootclasspath}"/>
+		<bndproject basedir="${project}"/>
 	</target>
 
 	<target name="-jar" depends="-btool,-signjar" />
@@ -261,6 +255,7 @@
 		<echo>repo:                   ${repo}</echo>
 		<echo>use.bnd:                ${use.bnd}</echo>
 		<echo>nodeploy:               ${nodeploy}</echo>
+		<echo>-dependson:             ${-dependson}</echo>
 
 	</target>
 
