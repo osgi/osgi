@@ -1,1 +1,0 @@
--conduit 				= ${repo;org.eclipse.equinox.event;1.0.100;HIGHEST};name=${p}
