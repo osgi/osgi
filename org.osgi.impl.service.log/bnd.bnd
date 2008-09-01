@@ -8,8 +8,6 @@ Bundle-Version: 		1.3.2.${project.build}
 Bundle-Category: 		osgi
 Export-Service: 		org.osgi.service.log.LogService
 
-nodeploy=true
-
 -buildpath = \
 	org.osgi.service.log; 	version=project, \
 	osgi;					version=4.0, \
