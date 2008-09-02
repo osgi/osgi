@@ -99,7 +99,7 @@ Contains				org.eclipse.osgi, org.eclipse.equinox.ds, org.eclipse.equinox.event,
 Copyright               Copyright (c) 2003, 2004 IBM Corporation and others. All rights reserved.
 Used                    As RI
 URL                     Prepared and submitted by IBM
-License					licenses/ASL-2.0.txt
+License					licenses/EPL-1.0.txt
 Modifications           none
 
 
