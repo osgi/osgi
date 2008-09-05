@@ -1,0 +1,27 @@
+Bundle-Version: 3.0.0.${project.build}
+
+Private-Package						= ${p}.tbc, \
+	org.osgi.test.support.*
+
+Include-Resource					= \
+	www/tbchain1.jar=tbchain1.jar, \
+	www/tbchain2.jar=tbchain2.jar, \
+	www/tbchain3.jar=tbchain3.jar, \
+	www/tbchain4.jar=tbchain4.jar, \
+	www/tbchain5.jar=tbchain5.jar, \
+	www/tblazy1.jar=tblazy1.jar, \
+	www/tblazy2.jar=tblazy2.jar, \
+	www/tblazy3.jar=tblazy3.jar, \
+	www/tblazy4.jar=tblazy4.jar, \
+	www/tblazy5.jar=tblazy5.jar, \
+	www/tblazy6.jar=tblazy6.jar
+
+-buildpath							= \
+    org.osgi.test.support;                  version=project , \
+	osgi;									version=4.1		, \
+	ee.minimum												, \
+	${junit}
+
+-testpath							= \
+	org.eclipse.osgi;		version=3.5; 	framework=org.eclipse.osgi.launch.Equinox, \
+	com.springsource.junit; version=3.8;    export="junit.framework;version=3.8"

@@ -33,12 +33,15 @@ public class Activator implements BundleActivator {
 
 	public void start(BundleContext context) throws Exception {
 		Bundle[] bundles = context.getBundles();
+		
 		Bundle tblazy5 = null;
-		for (int i = bundles.length - 1; i >= 0; i--)
-			if ("org.osgi.test.cases.activationpolicy.tblazy5".equals(bundles[i].getSymbolicName())) {
+		for (int i = bundles.length - 1; i >= 0; i--) {
+			String bsn = bundles[i].getSymbolicName();
+			if (bsn != null && bsn.endsWith("tblazy5")) {
 				tblazy5 = bundles[i];
 				break;
 			}
+		}
 		tblazy5.loadClass("org.osgi.test.cases.activationpolicy.tblazy5.CircularityErrorTest");
 	}
 

@@ -26,9 +26,13 @@
  */
 package org.osgi.test.cases.activationpolicy.tbc;
 
-import org.osgi.framework.*;
+import org.osgi.framework.Bundle;
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.BundleEvent;
+import org.osgi.framework.BundleException;
+import org.osgi.framework.FrameworkEvent;
 import org.osgi.service.startlevel.StartLevel;
-import org.osgi.test.cases.util.DefaultTestBundleControl;
+import org.osgi.test.support.compatibility.DefaultTestBundleControl;
 
 /**
  * This class contains tests related with the framework class loading policies.
@@ -37,13 +41,6 @@ import org.osgi.test.cases.util.DefaultTestBundleControl;
  * @version $Revision$
  */
 public class TestControl extends DefaultTestBundleControl {
-
-	/**
-	 * Creates a new instance of TestControl
-	 */
-	public TestControl() {
-
-	}
 
 	public void compareEvents(Object[] expectedEvents, Object[] actualEvents) {
 		assertEquals("number of results", expectedEvents.length, actualEvents.length);
@@ -66,16 +63,16 @@ public class TestControl extends DefaultTestBundleControl {
 	 * Tests a simple lazy policy with no includes or excludes directives
 	 */
 	public void testActivationPolicy01() throws Exception {
-		Bundle tblazy1 = getContext().installBundle(getWebServer() + "tblazy1.jar");
-		Bundle tblazy2 = getContext().installBundle(getWebServer() + "tblazy2.jar");
-		Bundle tblazy3 = getContext().installBundle(getWebServer() + "tblazy3.jar");
-		Bundle tblazy4 = getContext().installBundle(getWebServer() + "tblazy4.jar");
+		Bundle tblazy1 = installBundle( getWebServer()+"tblazy1.jar");
+		Bundle tblazy2 = installBundle( getWebServer()+"tblazy2.jar");
+		Bundle tblazy3 = installBundle( getWebServer()+"tblazy3.jar");
+		Bundle tblazy4 = installBundle( getWebServer()+"tblazy4.jar");
 
 		tblazy1.start(Bundle.START_ACTIVATION_POLICY);
 		tblazy2.start(Bundle.START_ACTIVATION_POLICY);
 		tblazy3.start(Bundle.START_ACTIVATION_POLICY);
 		tblazy4.start(Bundle.START_ACTIVATION_POLICY);
-		// listen for STARTED, STOPPED and LAZY_ACTIVATION evnets
+		// listen for STARTED, STOPPED and LAZY_ACTIVATION events
 		// we should not get LAZY_ACTIVATION events because this is not a synchronous listener.
 		EventListenerTestResults resultsListener = new EventListenerTestResults(BundleEvent.STARTED | BundleEvent.STOPPED | BundleEvent.LAZY_ACTIVATION);
 		getContext().addBundleListener(resultsListener);
@@ -100,10 +97,10 @@ public class TestControl extends DefaultTestBundleControl {
 	 * Tests a bundle with the lazy activation policy and an excludes directive
 	 */
 	public void testActivationPolicy02() throws Exception {
-		Bundle tblazy1 = getContext().installBundle(getWebServer() + "tblazy1.jar");
-		Bundle tblazy2 = getContext().installBundle(getWebServer() + "tblazy2.jar");
-		Bundle tblazy3 = getContext().installBundle(getWebServer() + "tblazy3.jar");
-		Bundle tblazy4 = getContext().installBundle(getWebServer() + "tblazy4.jar");
+		Bundle tblazy1 = installBundle(getWebServer() + "tblazy1.jar");
+		Bundle tblazy2 = installBundle(getWebServer() + "tblazy2.jar");
+		Bundle tblazy3 = installBundle(getWebServer() + "tblazy3.jar");
+		Bundle tblazy4 = installBundle(getWebServer() + "tblazy4.jar");
 		
 		tblazy1.start(Bundle.START_ACTIVATION_POLICY);
 		tblazy2.start(Bundle.START_ACTIVATION_POLICY);
@@ -141,10 +138,10 @@ public class TestControl extends DefaultTestBundleControl {
 	 * Tests a bundle with the lazy activation policy and an includes directive
 	 */
 	public void testActivationPolicy03() throws Exception {
-		Bundle tblazy1 = getContext().installBundle(getWebServer() + "tblazy1.jar");
-		Bundle tblazy2 = getContext().installBundle(getWebServer() + "tblazy2.jar");
-		Bundle tblazy3 = getContext().installBundle(getWebServer() + "tblazy3.jar");
-		Bundle tblazy4 = getContext().installBundle(getWebServer() + "tblazy4.jar");
+		Bundle tblazy1 = installBundle(getWebServer() + "tblazy1.jar");
+		Bundle tblazy2 = installBundle(getWebServer() + "tblazy2.jar");
+		Bundle tblazy3 = installBundle(getWebServer() + "tblazy3.jar");
+		Bundle tblazy4 = installBundle(getWebServer() + "tblazy4.jar");
 
 		tblazy1.start(Bundle.START_ACTIVATION_POLICY);
 		tblazy2.start(Bundle.START_ACTIVATION_POLICY);
@@ -186,7 +183,7 @@ public class TestControl extends DefaultTestBundleControl {
 		int initialSL = startLevel.getStartLevel();
 		int initialBSL = startLevel.getInitialBundleStartLevel();
 		startLevel.setInitialBundleStartLevel(initialSL + 10);
-		Bundle tblazy2 = getContext().installBundle(getWebServer() + "tblazy2.jar");
+		Bundle tblazy2 = installBundle(getWebServer() + "tblazy2.jar");
 		tblazy2.start(Bundle.START_ACTIVATION_POLICY);
 		// listen for STARTING, STARTED, STOPPING, STOPPED and LAZY_ACTIVATION events
 		// we *should* get LAZY_ACTIVATION events because this *is* a synchronous listener.
@@ -292,7 +289,7 @@ public class TestControl extends DefaultTestBundleControl {
 		int initialSL = startLevel.getStartLevel();
 		int initialBSL = startLevel.getInitialBundleStartLevel();
 		startLevel.setInitialBundleStartLevel(initialSL + 10);
-		Bundle tblazy2 = getContext().installBundle(getWebServer() + "tblazy2.jar");
+		Bundle tblazy2 = installBundle(getWebServer() + "tblazy2.jar");
 		// make this a persistent start and ignore the activation policy;
 		// this should not activate the bundle because the start-level is not met.
 		tblazy2.start(0);
@@ -410,7 +407,7 @@ public class TestControl extends DefaultTestBundleControl {
 		int initialSL = startLevel.getStartLevel();
 		int initialBSL = startLevel.getInitialBundleStartLevel();
 		startLevel.setInitialBundleStartLevel(initialSL + 10);
-		Bundle tblazy2 = getContext().installBundle(getWebServer() + "tblazy2.jar");
+		Bundle tblazy2 = installBundle(getWebServer() + "tblazy2.jar");
 		tblazy2.start(Bundle.START_ACTIVATION_POLICY);
 		// listen for STARTING, STARTED, STOPPING, STOPPED and LAZY_ACTIVATION events
 		// we *should* get LAZY_ACTIVATION events because this *is* a synchronous listener.
@@ -521,7 +518,7 @@ public class TestControl extends DefaultTestBundleControl {
 		int initialSL = startLevel.getStartLevel();
 		int initialBSL = startLevel.getInitialBundleStartLevel();
 		startLevel.setInitialBundleStartLevel(initialSL + 10);
-		Bundle tblazy2 = getContext().installBundle(getWebServer() + "tblazy2.jar");
+		Bundle tblazy2 = installBundle(getWebServer() + "tblazy2.jar");
 		// listen for STARTING, STARTED, STOPPING, STOPPED and LAZY_ACTIVATION events
 		// we *should* get LAZY_ACTIVATION events because this *is* a synchronous listener.
 		EventListenerTestResults resultsListener = new SyncEventListenerTestResults(BundleEvent.STARTED | BundleEvent.LAZY_ACTIVATION | BundleEvent.STARTING | BundleEvent.STOPPING | BundleEvent.STOPPED);
@@ -629,11 +626,11 @@ public class TestControl extends DefaultTestBundleControl {
 	 * started in the correct order.
 	 */
 	public void testActivationPolicyChain01() throws Exception {
-		Bundle tbchain1 = getContext().installBundle(getWebServer() + "tbchain1.jar");
-		Bundle tbchain2 = getContext().installBundle(getWebServer() + "tbchain2.jar");
-		Bundle tbchain3 = getContext().installBundle(getWebServer() + "tbchain3.jar");
-		Bundle tbchain4 = getContext().installBundle(getWebServer() + "tbchain4.jar");
-		Bundle tbchain5 = getContext().installBundle(getWebServer() + "tbchain5.jar");
+		Bundle tbchain1 = installBundle(getWebServer() + "tbchain1.jar");
+		Bundle tbchain2 = installBundle(getWebServer() + "tbchain2.jar");
+		Bundle tbchain3 = installBundle(getWebServer() + "tbchain3.jar");
+		Bundle tbchain4 = installBundle(getWebServer() + "tbchain4.jar");
+		Bundle tbchain5 = installBundle(getWebServer() + "tbchain5.jar");
 
 		tbchain1.start(Bundle.START_ACTIVATION_POLICY);
 		tbchain2.start(Bundle.START_ACTIVATION_POLICY);
@@ -667,11 +664,11 @@ public class TestControl extends DefaultTestBundleControl {
 	 * NOTE there may be too much assumption on the order the VM verifier loads interface classes when more than one is implemented.
 	 */
 	public void testActivationPolicyChain02() throws Exception {
-		Bundle tbchain1 = getContext().installBundle(getWebServer() + "tbchain1.jar");
-		Bundle tbchain2 = getContext().installBundle(getWebServer() + "tbchain2.jar");
-		Bundle tbchain3 = getContext().installBundle(getWebServer() + "tbchain3.jar");
-		Bundle tbchain4 = getContext().installBundle(getWebServer() + "tbchain4.jar");
-		Bundle tbchain5 = getContext().installBundle(getWebServer() + "tbchain5.jar");
+		Bundle tbchain1 = installBundle(getWebServer() + "tbchain1.jar");
+		Bundle tbchain2 = installBundle(getWebServer() + "tbchain2.jar");
+		Bundle tbchain3 = installBundle(getWebServer() + "tbchain3.jar");
+		Bundle tbchain4 = installBundle(getWebServer() + "tbchain4.jar");
+		Bundle tbchain5 = installBundle(getWebServer() + "tbchain5.jar");
 
 		tbchain1.start(Bundle.START_ACTIVATION_POLICY);
 		tbchain2.start(Bundle.START_ACTIVATION_POLICY);
@@ -707,8 +704,8 @@ public class TestControl extends DefaultTestBundleControl {
 	 * is being activated as a result of a lazy activation policy
 	 */
 	public void testClassCircularity() throws Exception {
-		Bundle tblazy5 = getContext().installBundle(getWebServer() + "tblazy5.jar");
-		Bundle tblazy6 = getContext().installBundle(getWebServer() + "tblazy6.jar");
+		Bundle tblazy5 = installBundle(getWebServer() + "tblazy5.jar");
+		Bundle tblazy6 = installBundle(getWebServer() + "tblazy6.jar");
 
 		tblazy5.start(Bundle.START_ACTIVATION_POLICY);
 		tblazy6.start(Bundle.START_ACTIVATION_POLICY);
@@ -737,7 +734,7 @@ public class TestControl extends DefaultTestBundleControl {
 	 * Tests that getBundleContext works as when LAZY_ACTIVATION event is fired.
 	 */
 	public void testGetBundleContext() throws Exception {
-		Bundle tblazy2 = getContext().installBundle(getWebServer() + "tblazy2.jar");
+		Bundle tblazy2 = installBundle(getWebServer() + "tblazy2.jar");
 
 		// listen for STARTED, STOPPED and LAZY_ACTIVATION evnets
 		// we *should* get LAZY_ACTIVATION events because this *is* a synchronous listener.
