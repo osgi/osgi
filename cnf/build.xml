@@ -52,9 +52,10 @@
 		DEPENDENCIES
 		Build project dependencies.
 	-->
-	<target name="dependencies" depends="init" if="project.dependson">
+	<target name="dependencies" depends="init" if="project.dependson" unless="donotrecurse">
 		<subant target="publish" inheritAll="false" buildpath="${project.dependson}">
 			<property name="release.dir" value="${target}" />
+			<property name="donotrecurse" value="true" />
 		</subant>
 	</target>
 
@@ -215,13 +216,12 @@
 	     CLEAN
 	-->
 	<target name="deepclean" depends="init,clean" if="project.dependson">
-		<subant target="deepclean" inheritAll="false" buildpath="${project.dependson}" />
+		<subant target="clean" inheritAll="false" buildpath="${project.dependson}"/>
 	</target>
 
 	<target name="clean" depends="init">
 		<delete quiet="true" includeEmptyDirs="true" verbose="${verbose}">
-			<fileset dir="${project.output}" includes="**/*.bak **/*.class" />
-			<fileset dir="${project}" includes="**/*.bak **/~* *.jar" />
+			<fileset dir="${project.output}" includes="**/*.class" />
 			<fileset dir="${target}" />
 		</delete>
 	</target>

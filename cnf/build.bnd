@@ -1,3 +1,4 @@
+-reportnewer			= true
 # Very general
 project.dependson       = ${p-dependson;:}
 project.bootclasspath   = ${p-bootclasspath;:}
