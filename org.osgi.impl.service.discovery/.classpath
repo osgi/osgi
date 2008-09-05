@@ -2,9 +2,9 @@
 <classpath>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry exported="true" kind="src" path="/org.osgi.service.discovery"/>
-	<classpathentry kind="lib" path="/osgi.released/osgi.jar" sourcepath="/osgi.released/osgi.jar"/>
-	<classpathentry kind="lib" path="/org.osgi.impl.framework.eclipse/org.osgi.impl.framework.eclipse.jar"/>
-	<classpathentry kind="lib" path="/osgi.released/ee.minimum.jar" sourcepath="/ee.minimum"/>
 	<classpathentry kind="lib" path="/licensed/repo/jslp/jslp-osgi-1.0.0.RC3.jar"/>
+	<classpathentry kind="lib" path="/cnf/repo/ee.foundation/ee.foundation-1.0.0.jar"/>
+	<classpathentry kind="lib" path="/cnf/repo/osgi/osgi-4.1.0.jar"/>
+	<classpathentry kind="lib" path="/licensed/repo/org.eclipse.osgi/org.eclipse.osgi-3.5.0.jar"/>
 	<classpathentry kind="output" path="src"/>
 </classpath>
