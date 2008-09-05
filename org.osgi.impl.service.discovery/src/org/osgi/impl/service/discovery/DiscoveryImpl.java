@@ -29,7 +29,7 @@ import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
 import org.osgi.service.discovery.Discovery;
 import org.osgi.service.discovery.FindServiceCallback;
-import org.osgi.service.discovery.ServiceDescription;
+import org.osgi.service.discovery.ServiceEndpointDescription;
 import org.osgi.service.discovery.ServiceListener;
 import org.osgi.service.log.LogService;
 import org.osgi.util.tracker.ServiceTracker;
@@ -54,7 +54,7 @@ public class DiscoveryImpl implements Discovery {
 
 	private ServiceTracker protocolHandlerTracker;
 
-	//TODO do we need a logService as parameter??
+	// TODO do we need a logService as parameter??
 	public DiscoveryImpl(final BundleContext context,
 			final LogService logService) {
 		this.logService = logService;
@@ -67,13 +67,14 @@ public class DiscoveryImpl implements Discovery {
 		listeners = new LinkedList();
 		protocolHandlers = new LinkedList();
 		protocolHandlerTracker = new ServiceTracker(context,
-				ProtocolHandler.class.getName(), new ProtocolHandlerServiceTracker(context));
+				ProtocolHandler.class.getName(),
+				new ProtocolHandlerServiceTracker(context));
 		protocolHandlerTracker.open();
 
 	}
 
 	/**
-	 * @see org.osgi.service.discovery.Discovery#addServiceListener(org.osgi.service.discovery.ServiceListener)
+	 * @see org.osgi.service.discovery.Discovery#addServiceListener(org.osgi.service.discovery.RemoteServiceListener)
 	 */
 	public void addServiceListener(final ServiceListener listener) {
 		// TODO throw IllegalArgumentException if listener == null??
@@ -93,7 +94,7 @@ public class DiscoveryImpl implements Discovery {
 	}
 
 	/**
-	 * @see org.osgi.service.discovery.Discovery#removeServiceListener(org.osgi.service.discovery.ServiceListener)
+	 * @see org.osgi.service.discovery.Discovery#removeServiceListener(org.osgi.service.discovery.RemoteServiceListener)
 	 */
 	public void removeServiceListener(final ServiceListener listener) {
 		// TODO throw IllegalArgumentException if listener == null??
@@ -112,16 +113,14 @@ public class DiscoveryImpl implements Discovery {
 
 	/**
 	 * @see org.osgi.service.discovery.Discovery#findService(org.osgi.service.discovery.ServiceDescription,
-	 *      org.osgi.service.discovery.ServiceListener)
+	 *      org.osgi.service.discovery.RemoteServiceListener)
 	 */
-	public void findService(final ServiceDescription serviceDescription,
+	public void findService(
+			final ServiceEndpointDescription serviceDescription,
 			final FindServiceCallback callback) {
-		if (serviceDescription == null
-				|| serviceDescription.getInterfaceName() == null
-				|| serviceDescription.getInterfaceName().equals("")) {
-			throw new IllegalArgumentException(
-					"serviceDescription must not be null or incomplete");
-		}
+
+		validateServiceDescription(serviceDescription);
+
 		if (callback == null) {
 			throw new IllegalArgumentException("callback must not be null");
 		}
@@ -133,7 +132,7 @@ public class DiscoveryImpl implements Discovery {
 					// TODO first look at cache
 
 					// if miss, do lookup with ProtocolHandler
-					Collection services = findService(serviceDescription);
+					ServiceEndpointDescription[] services = findService(serviceDescription);
 
 					// call callback listener
 					// call callback with unavailable if none found
@@ -163,17 +162,15 @@ public class DiscoveryImpl implements Discovery {
 	}
 
 	/**
-	 * @see org.osgi.service.discovery.Discovery#findService(org.osgi.service.discovery.ServiceDescription)
+	 * @see org.osgi.service.discovery.Discovery#findService(org.osgi.service.discovery.ServiceEndpointDescription)
 	 */
-	public Collection findService(final ServiceDescription serviceDescription) {
+	public ServiceEndpointDescription[] findService(
+			final ServiceEndpointDescription serviceDescription) {
+		validateServiceDescription(serviceDescription);
+
 		if (logService != null) {
 			logService.log(LogService.LOG_DEBUG, "find services for "
-					+ serviceDescription.getInterfaceName());
-		}
-
-		if (serviceDescription == null) {
-			throw new IllegalArgumentException(
-					"serviceDescription must not be null or incomplete");
+					+ serviceDescription.getInterfaceNames()[0]);
 		}
 
 		Collection services = new LinkedList();
@@ -187,49 +184,51 @@ public class DiscoveryImpl implements Discovery {
 		}
 		// TODO add to cache
 
-		return services;
+		return (ServiceEndpointDescription[]) services
+				.toArray(new ServiceEndpointDescription[] {});
 	}
 
 	/**
-	 * @see org.osgi.service.discovery.Discovery#getCachedServiceDescriptions()
+	 * @see org.osgi.service.discovery.Discovery#getCachedServiceEndpointDescriptions()
 	 */
-	public Collection getCachedServiceDescriptions() {
+	public ServiceEndpointDescription[] getCachedServiceEndpointDescriptions() {
 		// TODO return cached instances
-		return new LinkedList();
+		return new ServiceEndpointDescription[] {};
 	}
 
 	/**
-	 * @see org.osgi.service.discovery.Discovery#isCached(org.osgi.service.discovery.ServiceDescription)
+	 * @see org.osgi.service.discovery.Discovery#isCached(org.osgi.service.discovery.ServiceEndpointDescription)
 	 */
-	public boolean isCached(final ServiceDescription serviceDescription) {
+	public boolean isCached(final ServiceEndpointDescription serviceDescription) {
 		// TODO delegate to cache
 		return false;
 	}
 
 	/**
-	 * @see org.osgi.service.discovery.Discovery#publish(org.osgi.service.discovery.ServiceDescription)
+	 * @see org.osgi.service.discovery.Discovery#publish(org.osgi.service.discovery.ServiceEndpointDescription)
 	 */
-	public boolean publishService(final ServiceDescription serviceDescription) {
+	public boolean publishService(
+			final ServiceEndpointDescription serviceDescription) {
 		return publishService(serviceDescription, autoPublish);
 	}
 
 	/**
-	 * @see org.osgi.service.discovery.Discovery#publish(org.osgi.service.discovery.ServiceDescription,
+	 * @see org.osgi.service.discovery.Discovery#publish(org.osgi.service.discovery.ServiceEndpointDescription,
 	 *      boolean)
 	 */
-	public boolean publishService(final ServiceDescription serviceDescription,
+	public boolean publishService(
+			final ServiceEndpointDescription serviceDescription,
 			boolean autopublish) {
-		if (serviceDescription == null
-				|| serviceDescription.getInterfaceName() == null
-				|| serviceDescription.getInterfaceName().equals("")) {
-			throw new IllegalArgumentException(
-					"serviceDescription must not be null or incomplete");
-		}
+		validateServiceDescription(serviceDescription);
 
 		if (logService != null) {
-			logService.log(LogService.LOG_DEBUG, "publish service "
-					+ serviceDescription.getInterfaceName());
+			String logMessage = "publish service having following interfaces: ";
+			for (String interfaceName : serviceDescription.getInterfaceNames()) {
+				logMessage += interfaceName + ";";
+			}
+			logService.log(LogService.LOG_DEBUG, logMessage);
 		}
+
 		boolean done = false;
 		// delegate to protocol implementation
 		for (int i = 0; (protocolHandlers != null)
@@ -248,15 +247,11 @@ public class DiscoveryImpl implements Discovery {
 	}
 
 	/**
-	 * @see org.osgi.service.discovery.Discovery#unpublish(org.osgi.service.discovery.ServiceDescription)
+	 * @see org.osgi.service.discovery.Discovery#unpublish(org.osgi.service.discovery.ServiceEndpointDescription)
 	 */
-	public void unpublishService(final ServiceDescription serviceDescription) {
-		if (serviceDescription == null
-				|| serviceDescription.getInterfaceName() == null
-				|| serviceDescription.getInterfaceName().equals("")) {
-			throw new IllegalArgumentException(
-					"serviceDescription must not be null or incomplete");
-		}
+	public void unpublishService(
+			final ServiceEndpointDescription serviceDescription) {
+		validateServiceDescription(serviceDescription);
 
 		if (logService != null) {
 			logService.log(LogService.LOG_DEBUG, "unpublish service "
@@ -327,18 +322,18 @@ public class DiscoveryImpl implements Discovery {
 
 	/**
 	 * 
-	 * @see org.osgi.service.discovery.Discovery#addServiceListener(org.osgi.service.discovery.ServiceListener,
-	 *      org.osgi.service.discovery.ServiceDescription)
+	 * @see org.osgi.service.discovery.Discovery#addServiceListener(org.osgi.service.discovery.RemoteServiceListener,
+	 *      org.osgi.service.discovery.ServiceEndpointDescription)
 	 */
 	public void addServiceListener(ServiceListener listener,
-			ServiceDescription serviceDescription) {
+			ServiceEndpointDescription serviceDescription) {
 		// TODO Auto-generated method stub
 
 	}
 
 	/**
 	 * 
-	 * @see org.osgi.service.discovery.Discovery#addServiceListener(org.osgi.service.discovery.ServiceListener,
+	 * @see org.osgi.service.discovery.Discovery#addServiceListener(org.osgi.service.discovery.RemoteServiceListener,
 	 *      java.lang.String)
 	 */
 	public void addServiceListener(ServiceListener listener, String filter) {
@@ -350,7 +345,7 @@ public class DiscoveryImpl implements Discovery {
 	 * 
 	 * @see org.osgi.service.discovery.Discovery#findService(java.lang.String)
 	 */
-	public Collection findService(String filter) {
+	public ServiceEndpointDescription[] findService(String filter) {
 		if (filter == null) {
 			throw new IllegalArgumentException(
 					"filter must not be null or incomplete");
@@ -372,7 +367,8 @@ public class DiscoveryImpl implements Discovery {
 		}
 		// TODO add to cache
 
-		return services;
+		return (ServiceEndpointDescription[]) services
+				.toArray(new ServiceEndpointDescription[] {});
 	}
 
 	/**
@@ -403,7 +399,7 @@ public class DiscoveryImpl implements Discovery {
 					// TODO first look at cache
 
 					// if miss, do lookup with ProtocolHandler
-					Collection services = findService(filter);
+					ServiceEndpointDescription[] services = findService(filter);
 
 					// call callback listener
 					// call callback with unavailable if none found
@@ -433,10 +429,28 @@ public class DiscoveryImpl implements Discovery {
 	}
 
 	/**
+	 * @param serviceDescription
+	 */
+	private void validateServiceDescription(
+			ServiceEndpointDescription serviceDescription) {
+		if (serviceDescription == null)
+			throw new IllegalArgumentException(
+					"serviceDescription must not be null.");
+
+		if (serviceDescription.getInterfaceNames() == null
+				|| serviceDescription.getInterfaceNames().length <= 0
+				|| serviceDescription.getInterfaceNames()[0] == null
+				|| serviceDescription.getInterfaceNames()[0].length() <= 0) {
+			throw new IllegalArgumentException(
+					"serviceDescription must contain at least one service interface name.");
+		}
+	}
+
+	/**
 	 * Private tracker class.
 	 * 
 	 * @author kt32483
-	 *
+	 * 
 	 */
 	private class ProtocolHandlerServiceTracker implements
 			ServiceTrackerCustomizer {
@@ -465,5 +479,4 @@ public class DiscoveryImpl implements Discovery {
 		}
 
 	}
-
 }

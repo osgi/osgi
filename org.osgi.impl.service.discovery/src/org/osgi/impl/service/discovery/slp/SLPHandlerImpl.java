@@ -27,7 +27,7 @@ import org.osgi.framework.BundleContext;
 import org.osgi.framework.Filter;
 import org.osgi.framework.ServiceReference;
 import org.osgi.impl.service.discovery.ProtocolHandler;
-import org.osgi.service.discovery.ServiceDescription;
+import org.osgi.service.discovery.ServiceEndpointDescription;
 import org.osgi.service.log.LogService;
 import org.osgi.util.tracker.ServiceTracker;
 import org.osgi.util.tracker.ServiceTrackerCustomizer;
@@ -82,8 +82,10 @@ public class SLPHandlerImpl implements ProtocolHandler {
 	 * 
 	 * @see org.osgi.impl.service.discovery.ProtocolHandler#findService(org.osgi.service.discovery.ServiceDescription)
 	 */
-	public Collection findService(final ServiceDescription serviceDescription) {
+	public Collection findService(final ServiceEndpointDescription serviceDescription) {
 		List result = new LinkedList();
+		
+		// create SLP service description
 		SLPServiceDescriptionAdapter serviceDescriptionAdapter;
 		try {
 			serviceDescriptionAdapter = new SLPServiceDescriptionAdapter(
@@ -92,48 +94,50 @@ public class SLPHandlerImpl implements ProtocolHandler {
 			e1.printStackTrace();
 			return result;
 		}
+		
+		// check whether SLP-Locator service exists
 		Locator locator = getLocator();
-		if (locator != null) {
-			try {
-				String serviceType = serviceDescriptionAdapter.getServiceType();
-
-				logService.log(LogService.LOG_DEBUG, "serviceType="
-						+ serviceType);
-
-				ServiceLocationEnumeration se = locator.findServices(
-						new ServiceType(serviceType), serviceDescriptionAdapter
-								.getScopes(), serviceDescriptionAdapter
-								.getFilter());
-
-				while (se.hasMoreElements()) {
-					ServiceURL url = (ServiceURL) se.next();
-					logService.log(LogService.LOG_DEBUG, "serviceURL=" + url);
-					ServiceLocationEnumeration a = locator.findAttributes(url,
-							null, null);
-					SLPServiceDescriptionAdapter descriptionAdapter = new SLPServiceDescriptionAdapter(
-							url);
-					while (a.hasMoreElements()) {
-						String attributes = (String) a.next();
-						String key = null;
-						Object value = null;
-						attributes = attributes.substring(1, attributes.length()-1);
-						key = attributes.substring(0,attributes.indexOf("="));
-						value = attributes.substring(attributes.indexOf("=") + 1);
-						descriptionAdapter.addProperty(key, value);
-					}
-					result.add(descriptionAdapter); // add to the result
-					// list
-				}
-			} catch (Exception e) {
-				e.printStackTrace();
-				logService.log(LogService.LOG_WARNING,
-						"Failed to find service", e);
-			}
-
-		} else {
-			logService.log(LogService.LOG_DEBUG, "no Locator");
+		if (locator == null) {
+			logService.log(LogService.LOG_WARNING, "no SLP-Locator");
+			return result;
 		}
+		
+		try {			
+			String serviceType = serviceDescriptionAdapter.getServiceType();
+			logService.log(LogService.LOG_DEBUG, "serviceType="
+					+ serviceType);
 
+			ServiceLocationEnumeration se = locator.findServices(
+					new ServiceType(serviceType), serviceDescriptionAdapter
+							.getScopes(), serviceDescriptionAdapter
+							.getFilter());
+
+			// iterate through found services and retrieve their attributes
+			while (se.hasMoreElements()) {
+				ServiceURL url = (ServiceURL) se.next();
+				logService.log(LogService.LOG_DEBUG, "serviceURL=" + url);
+				ServiceLocationEnumeration a = locator.findAttributes(url,
+						null, null);
+				SLPServiceDescriptionAdapter descriptionAdapter = new SLPServiceDescriptionAdapter(
+						url);
+				
+				while (a.hasMoreElements()) {
+					String attributes = (String) a.next();
+					String key = null;
+					Object value = null;
+					attributes = attributes.substring(1, attributes.length()-1);
+					key = attributes.substring(0,attributes.indexOf("="));
+					value = attributes.substring(attributes.indexOf("=") + 1);
+					descriptionAdapter.addProperty(key, value);
+				}
+				result.add(descriptionAdapter); // add to the result list
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			logService.log(LogService.LOG_WARNING,
+					"Failed to find service", e);
+		}
+		
 		logService.log(LogService.LOG_DEBUG, "number of services found "
 				+ result.size());
 
@@ -164,7 +168,7 @@ public class SLPHandlerImpl implements ProtocolHandler {
 	 * 
 	 * @see org.osgi.impl.service.discovery.ProtocolHandler#publishService(org.osgi.service.discovery.ServiceDescription)
 	 */
-	public boolean publishService(final ServiceDescription serviceDescription) {
+	public boolean publishService(final ServiceEndpointDescription serviceDescription) {
 		boolean published = false;
 		SLPServiceDescriptionAdapter serviceDescriptionAdapter;
 		try {
@@ -196,7 +200,7 @@ public class SLPHandlerImpl implements ProtocolHandler {
 	 * 
 	 * @see org.osgi.impl.service.discovery.ProtocolHandler#unpublishService(org.osgi.service.discovery.ServiceDescription)
 	 */
-	public void unpublishService(final ServiceDescription serviceDescription) {
+	public void unpublishService(final ServiceEndpointDescription serviceDescription) {
 		SLPServiceDescriptionAdapter serviceDescriptionAdapter;
 		try {
 			serviceDescriptionAdapter = new SLPServiceDescriptionAdapter(
@@ -226,7 +230,7 @@ public class SLPHandlerImpl implements ProtocolHandler {
 	 * @see org.osgi.impl.service.discovery.ProtocolHandler#publishService(org.osgi.service.discovery.ServiceDescription,
 	 *      boolean)
 	 */
-	public boolean publishService(final ServiceDescription serviceDescription,
+	public boolean publishService(final ServiceEndpointDescription serviceDescription,
 			boolean autopublish) {
 		return publishService(serviceDescription);
 	}

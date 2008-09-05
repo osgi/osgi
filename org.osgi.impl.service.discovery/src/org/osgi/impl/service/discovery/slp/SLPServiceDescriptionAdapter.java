@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.StringTokenizer;
 
-import org.osgi.service.discovery.ServiceDescription;
+import org.osgi.service.discovery.ServiceEndpointDescription;
 
 import ch.ethz.iks.slp.ServiceLocationException;
 import ch.ethz.iks.slp.ServiceURL;
@@ -26,15 +26,15 @@ import ch.ethz.iks.slp.ServiceURL;
  * 
  * @version $Revision$
  */
-public class SLPServiceDescriptionAdapter implements ServiceDescription {
+public class SLPServiceDescriptionAdapter implements ServiceEndpointDescription {
 	private String interfaceName;
 	private Map properties = new HashMap();
 	private ServiceURL serviceURL;
 
 	public SLPServiceDescriptionAdapter(
-			final ServiceDescription serviceDescription)
+			final ServiceEndpointDescription serviceDescription)
 			throws ServiceLocationException {
-		this.interfaceName = serviceDescription.getInterfaceName();
+		this.interfaceName = serviceDescription.getInterfaceNames()[0];
 		this.properties = (Hashtable) serviceDescription.getProperties();
 
 		String interf = convertInterfaceName(interfaceName);
@@ -92,8 +92,8 @@ public class SLPServiceDescriptionAdapter implements ServiceDescription {
 		 addPropertiesFromPath(serviceURL.getURLPath());
 	}
 
-	public String getInterfaceName() {
-		return interfaceName;
+	public String[] getInterfaceNames() {
+		return new String[]{interfaceName};
 	}
 
 	public Map getProperties() {
@@ -136,7 +136,7 @@ public class SLPServiceDescriptionAdapter implements ServiceDescription {
 
 	public String toString() {
 		StringBuffer sb = new StringBuffer("Service:\n");
-		sb.append("interface=").append(getInterfaceName()).append("\n");
+		sb.append("interface=").append(getInterfaceNames()[0]).append("\n");
 		sb.append("serviceURL=").append(
 				serviceURL != null ? serviceURL.toString() : "").append("\n");
 		sb.append("properties=\n");
@@ -226,16 +226,6 @@ public class SLPServiceDescriptionAdapter implements ServiceDescription {
 		// TODO Auto-generated method stub
 		return null;
 	}
-
-	public String getProtocolSpecificInterfaceName() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public String getVersion() {
-		// TODO Auto-generated method stub
-		return null;
-	}
 	
 	/**
 	 * 
@@ -244,5 +234,15 @@ public class SLPServiceDescriptionAdapter implements ServiceDescription {
 	 */
 	public void addProperty(String key, Object value) {
 		properties.put(key, value);
+	}
+
+	public String getProtocolSpecificInterfaceName(String interfaceName) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public String getVersion(String interfaceName) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

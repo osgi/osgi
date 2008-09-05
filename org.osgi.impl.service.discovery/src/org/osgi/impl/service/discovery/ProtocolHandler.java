@@ -21,7 +21,7 @@ package org.osgi.impl.service.discovery;
 import java.util.Collection;
 
 import org.osgi.framework.Filter;
-import org.osgi.service.discovery.ServiceDescription;
+import org.osgi.service.discovery.ServiceEndpointDescription;
 
 /**
  * 
@@ -33,10 +33,12 @@ import org.osgi.service.discovery.ServiceDescription;
  */
 public interface ProtocolHandler {
 
+	//void registerServiceListenerMap();
+	
 	/**
-	 * {@link org.osgi.service.discovery.Discovery#findService(ServiceDescription)}
+	 * {@link org.osgi.service.discovery.Discovery#findService(ServiceEndpointDescription)}
 	 */
-	Collection findService(ServiceDescription serviceDescription);
+	Collection findService(ServiceEndpointDescription serviceDescription);
 
 	/**
 	 * {@link org.osgi.service.discovery.Discovery#findService(String)}
@@ -44,20 +46,20 @@ public interface ProtocolHandler {
 	Collection findService(Filter filter);
 
 	/**
-	 * {@link org.osgi.service.discovery.Discovery#publishService(ServiceDescription, boolean)}
+	 * {@link org.osgi.service.discovery.Discovery#publishService(ServiceEndpointDescription, boolean)}
 	 */
-	boolean publishService(ServiceDescription serviceDescription,
+	boolean publishService(ServiceEndpointDescription serviceDescription,
 			boolean autopublish);
 
 	/**
-	 * {@link org.osgi.service.discovery.Discovery#publishService(ServiceDescription)}
+	 * {@link org.osgi.service.discovery.Discovery#publishService(ServiceEndpointDescription)}
 	 */
-	boolean publishService(ServiceDescription serviceDescription);
+	boolean publishService(ServiceEndpointDescription serviceDescription);
 
 	/**
-	 * {@link org.osgi.service.discovery.Discovery#unpublishService(ServiceDescription)}
+	 * {@link org.osgi.service.discovery.Discovery#unpublishService(ServiceEndpointDescription)}
 	 */
-	void unpublishService(ServiceDescription serviceDescription);
+	void unpublishService(ServiceEndpointDescription serviceDescription);
 
 	/**
 	 * Called before shutdown of the ProtocolHandler to give it a chance to

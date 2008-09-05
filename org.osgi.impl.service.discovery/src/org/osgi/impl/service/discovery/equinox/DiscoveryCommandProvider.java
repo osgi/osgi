@@ -5,7 +5,6 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Hashtable;
-import java.util.Iterator;
 import java.util.Map;
 import java.util.Properties;
 
@@ -15,7 +14,7 @@ import org.osgi.framework.BundleContext;
 import org.osgi.framework.Constants;
 import org.osgi.framework.ServiceReference;
 import org.osgi.service.discovery.Discovery;
-import org.osgi.service.discovery.ServiceDescription;
+import org.osgi.service.discovery.ServiceEndpointDescription;
 import org.osgi.util.tracker.ServiceTracker;
 import org.osgi.util.tracker.ServiceTrackerCustomizer;
 
@@ -57,14 +56,14 @@ public class DiscoveryCommandProvider implements
 
 	public void _lookup(CommandInterpreter ci) {
 		if (discovery != null) {
-			ServiceDescription serviceDescription = new ServiceDescriptionAdapter(
+			ServiceEndpointDescription serviceDescription = new ServiceDescriptionAdapter(
 					ci.nextArgument());
 
-			Collection services = discovery.findService(serviceDescription);
+			ServiceEndpointDescription[] services = discovery.findService(serviceDescription);
 
 			ci.println("services found:");
-			for (Iterator i = services.iterator(); i.hasNext();) {
-				ci.println((ServiceDescription) i.next());
+			for (ServiceEndpointDescription svcDescr : services) {
+				ci.println(svcDescr);
 			}
 		} else {
 			ci.println("Discovery service not set");
@@ -91,11 +90,9 @@ public class DiscoveryCommandProvider implements
 						result = discovery.publishService(serviceDescription);
 						if (result) {
 							publishedServices.put(refs[i], serviceDescription);
-							ci.println("Successfully published "
-									+ serviceDescription.getInterfaceName());
+							ci.println("Successfully published");
 						} else {
-							ci.println("Failed to publish "
-									+ serviceDescription.getInterfaceName());
+							ci.println("Failed to publish");
 						}
 					}
 				} catch (Exception ex) {
@@ -121,7 +118,8 @@ public class DiscoveryCommandProvider implements
 								+ " has not registered any service");
 					}
 					for (int i = 0; (refs != null) && (i < refs.length); i++) {
-						ServiceDescriptionAdapter serviceDescription = new ServiceDescriptionAdapter(refs[i]);
+						ServiceDescriptionAdapter serviceDescription = new ServiceDescriptionAdapter(
+								refs[i]);
 						discovery.unpublishService(serviceDescription);
 					}
 				} catch (Exception ex) {
@@ -135,27 +133,31 @@ public class DiscoveryCommandProvider implements
 		}
 	}
 
-	private class ServiceDescriptionAdapter implements ServiceDescription {
-		private String intf = null;
+	private class ServiceDescriptionAdapter implements
+			ServiceEndpointDescription {
+		private String[] interfaces = new String[] {};
 		private ServiceReference serviceReference = null;
-
 		private Properties props = new Properties();
 
 		public ServiceDescriptionAdapter(ServiceReference sr) {
 			serviceReference = sr;
 		}
 
-		public ServiceDescriptionAdapter(String interf) {
-			intf = interf;
+		public ServiceDescriptionAdapter(String[] interfaces) {
+			this.interfaces = interfaces;
+		}
+		
+		public ServiceDescriptionAdapter(String interfaceName) {
+			this(new String[]{interfaceName});
 		}
 
-		public String getInterfaceName() {
-			if (intf != null) {
-				return intf;
+		public String[] getInterfaceNames() {
+			if (interfaces != null) {
+				return interfaces;
 			}
 			if (serviceReference != null) {
 				return ((String[]) serviceReference
-						.getProperty(Constants.OBJECTCLASS))[0];
+						.getProperty(Constants.OBJECTCLASS));
 			}
 			return null;
 		}
@@ -194,7 +196,11 @@ public class DiscoveryCommandProvider implements
 		}
 
 		public String toString() {
-			return "ServiceDescription: interface=" + intf;
+			String result = "ServiceEndpointDescription: interface=";
+			for (String interfaceName : interfaces) {
+				result += interfaceName + ";";
+			}
+			return  result;
 		}
 
 		public URL getLocation() {
@@ -210,18 +216,18 @@ public class DiscoveryCommandProvider implements
 			}
 		}
 
-		public String getProtocolSpecificInterfaceName() {
-			// TODO Auto-generated method stub
-			return null;
-		}
-
-		public String getVersion() {
-			// TODO Auto-generated method stub
-			return null;
-		}
-
 		public void setProperty(String key, String value) {
 			props.setProperty(key, value);
+		}
+
+		public String getProtocolSpecificInterfaceName(String interfaceName) {
+			// TODO Auto-generated method stub
+			return null;
+		}
+
+		public String getVersion(String interfaceName) {
+			// TODO Auto-generated method stub
+			return null;
 		}
 	}
 }
