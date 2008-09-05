@@ -1,0 +1,8 @@
+Bundle-Description: 			General Support for OSGi JUnit based testing
+Bundle-Version: 				1.0.0
+Export-Package:  				org.osgi.test.*
+
+-buildpath:   \
+ 	osgi;							version=4.0, \
+ 	ee.minimum;						version=1.1.3, \
+ 	${junit}
