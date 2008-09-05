@@ -12,9 +12,6 @@ import org.osgi.service.log.LogEntry;
 import org.osgi.service.log.LogReaderService;
 import org.osgi.service.log.LogService;
 
-import aQute.bnd.build.Framework;
-import aQute.bnd.build.Project;
-
 public class LogTestCase extends TestCase {
 
 	ServiceReference logServiceReference;
@@ -22,15 +19,12 @@ public class LogTestCase extends TestCase {
 	LogReaderService logReaderService;
 	BundleContext context;
 
-	Project		project;
-	Framework	framework;
+	public void setBundleContext(BundleContext context) {
+		this.context = context;
+	}
+	
 	
 	public void setUp() throws Exception {
-		framework = Framework.getInstance();	
-		framework.activate();
-		context = framework.getBundleContext();
-		
-		
 		logServiceReference = context.getServiceReference(LogService.class
 				.getName());
 		logService = (LogService) context.getService(logServiceReference);
@@ -41,7 +35,6 @@ public class LogTestCase extends TestCase {
 	}
 	
 	public void tearDown() throws Exception {
-		framework.deactivate();
 	}
 
 	public void testLog() {
@@ -52,6 +45,8 @@ public class LogTestCase extends TestCase {
 		String message = "'The message <4711>'";
 		ServiceReference sr = logServiceReference;
 		Bundle b = context.getBundle();
+		
+		
 		assertLog(readers, b, null, LogService.LOG_ERROR, message, null);
 		assertLog(readers, b, null, LogService.LOG_WARNING, message, null);
 		assertLog(readers, b, null, LogService.LOG_INFO, message, null);
@@ -164,5 +159,4 @@ public class LogTestCase extends TestCase {
 			assertTrue(entry.getTime() <= System.currentTimeMillis());
 		}
 	}
-
 }

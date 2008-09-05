@@ -1,22 +1,17 @@
 Bundle-Version: 3.0.0.${project.build}
-Bundle-Activator: $(p).LogTest
 
 Private-Package						= org.osgi.test.cases.log
 
 -buildpath							= \
 	org.osgi.service.log;					version=project	, \
 	osgi;									version=4.1		, \
-	biz.aQute.bnd											, \
 	ee.minimum												, \
 	${junit}
 
 -testpath							= \
-	org.eclipse.osgi;		version=3.5; 	framework=org.eclipse.osgi.launch.Equinox
-	
--testexports						= \
-	org.osgi.service.log;version=1.3
+	org.eclipse.osgi;		version=3.5; 	framework=org.eclipse.osgi.launch.Equinox, \
+	com.springsource.junit; version=3.8;    export="junit.framework;version=3.8"
 
--testbundles					 	= \
-	${repo;org.osgi.impl.service.log;latest}
-
-	
+-testbundles						= \
+	org.osgi.impl.service.log; version=latest, \
+	org.osgi.impl.service.cm;  version=latest
