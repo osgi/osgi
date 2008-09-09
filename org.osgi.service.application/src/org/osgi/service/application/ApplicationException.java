@@ -139,7 +139,22 @@ public class ApplicationException extends Exception {
 	}
 
 	/**
+	 * The cause of this exception can only be set when constructed.
+	 * 
+	 * @param cause Cause of the exception.
+	 * @return This object.
+	 * @throws java.lang.IllegalStateException This method will always throw an
+	 *         <code>IllegalStateException</code> since the cause of this
+	 *         exception can only be set when constructed.
+	 * @since 1.1
+	 */
+	public Throwable initCause(Throwable cause) {
+		throw new IllegalStateException();
+	}
+
+	/**
 	 * Returns the error code associated with this exception.
+	 * 
 	 * @return The error code of this exception.
 	 */
 	public int getErrorCode() {
