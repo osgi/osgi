@@ -245,10 +245,8 @@ public class InstallAndActivate implements TestInterface {
 			}
 			String signer = signerChildren[0];
 			
-			tbc.assertEquals("Asserting the signer of the deployment package",
-					DeploymentmoConstants.SIMPLE_DP_SIGNER,
-					session.getNodeValue(DeploymentmoConstants.getDeployedExtSignersSignerId(nodeId, signer)).toString());
-
+			tbc.assertTrue("Asserting the signer of the deployment package", DNChainMatching.match(DeploymentmoConstants.SIMPLE_DP_SIGNER, 
+			    session.getNodeValue(DeploymentmoConstants.getDeployedExtSignersSignerId(nodeId, signer)).toString()));
 			
 			//Bundle "bundles.tb1"
 			Bundle bundle1 = tbc.getBundle(DeploymentmoConstants.SIMPLE_FIX_PACK_BUNDLE1_SYMBNAME);
@@ -326,6 +324,7 @@ public class InstallAndActivate implements TestInterface {
 			
 
 		} catch (Exception e) {
+		  e.printStackTrace();
 			tbc.fail("Unexpected exception: " + e.getClass().getName());
 		} finally {
         	if (!nodeId.equals("")) {
@@ -806,10 +805,8 @@ public class InstallAndActivate implements TestInterface {
 			}
 			String signer = signerChildren[0];
 			
-			tbc.assertEquals("Asserting the signer of the deployment package",
-					DeploymentmoConstants.SIMPLE_DP_SIGNER,
-					session.getNodeValue(DeploymentmoConstants.getDeployedExtSignersSignerId(nodeId, signer)).toString());
-	
+      tbc.assertTrue("Asserting the signer of the deployment package", DNChainMatching.match(DeploymentmoConstants.SIMPLE_DP_SIGNER, 
+          session.getNodeValue(DeploymentmoConstants.getDeployedExtSignersSignerId(nodeId, signer)).toString()));
 			
 			//Bundle "bundles.tb1"
 			Bundle bundle1 = tbc.getBundle(DeploymentmoConstants.SIMPLE_DP_BUNDLE1_SYMBNAME);
