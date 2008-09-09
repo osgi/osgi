@@ -288,19 +288,19 @@ public class DeploymentPackageJarInputStream {
      * Skips uninterested JarEntries (directories, .sf files, etc.)
      */
     private JarEntry getNextJarEntry() throws IOException, DeploymentException {
-    	try {
-    		actJarEntry = jis.getNextJarEntry();
-    	} catch (ZipException ze) {
-			throw new DeploymentException(DeploymentException.CODE_NOT_A_JAR, 
-					"Bad jar file");
-		}
-
-        checkFileOrder();
-
-        while (null != actJarEntry && isUninterested(actJarEntry)) {
-        	actJarEntry = jis.getNextJarEntry();
-        	checkFileOrder();
-        }
+        do {
+          try {
+            actJarEntry = jis.getNextJarEntry();
+          } catch (ZipException ze) {
+            throw new DeploymentException(DeploymentException.CODE_NOT_A_JAR, 
+              "Bad jar file");
+          } catch (SecurityException se) {
+            //This could happen when a signed jar has been modified
+            throw new DeploymentException(DeploymentException.CODE_SIGNING_ERROR, 
+                "Probably the DP is modified after signing! The error message is: "+se.getMessage(), se);
+          }
+          checkFileOrder();
+        } while (null != actJarEntry && isUninterested(actJarEntry));
         
         return actJarEntry;
     }
