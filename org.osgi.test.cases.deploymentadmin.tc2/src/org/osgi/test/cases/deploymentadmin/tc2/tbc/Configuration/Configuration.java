@@ -38,9 +38,12 @@
 package org.osgi.test.cases.deploymentadmin.tc2.tbc.Configuration;
 
 import java.util.Dictionary;
+import java.util.Enumeration;
+import java.util.Vector;
 
 import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.service.cm.ConfigurationPermission;
+import org.osgi.service.condpermadmin.ConditionInfo;
 import org.osgi.service.condpermadmin.ConditionalPermissionInfo;
 import org.osgi.service.deploymentadmin.DeploymentException;
 import org.osgi.service.deploymentadmin.DeploymentPackage;
@@ -191,23 +194,47 @@ public class Configuration {
 	 * @spec 115.4.2 Autoconf Resource Permissions
 	 */
 	private void testConfiguration003() {
-		tbc.log("#testConfiguration003");
-		TestingDeploymentPackage testDP = tbc.getTestingDeploymentPackage(DeploymentConstants.AUTO_CONFIG_DP);
-		try {
-			dp = tbc.installDeploymentPackage(tbc.getWebServer() + testDP.getFilename());
-			tbc.assertNotNull(MessagesConstants.getMessage(MessagesConstants.ASSERT_NOT_NULL,
-					new String[] { "Deployment Package" }), dp);
-			tbc.failException("", DeploymentException.class);
-		} catch (DeploymentException e) {
-			tbc.pass("A DeploymentException was correctly thrown if the Autoconf Resource processor does not have ConfigurationPermission[*,CONFIGURE]. Message: " + e.getMessage());
-		} catch (Exception e) {
+	  tbc.log("#testConfiguration003");
+    TestingDeploymentPackage testDP = tbc
+        .getTestingDeploymentPackage(DeploymentConstants.AUTO_CONFIG_DP);
+    Vector cpis = new Vector();
+    ConditionalPermissionInfo cpi = null;
+    try {
+      Enumeration infos = tbc.getCondPermAdmin().getConditionalPermissionInfos();
+      if (infos != null)
+        while (infos.hasMoreElements()) {
+          ConditionalPermissionInfo info = (ConditionalPermissionInfo) infos.nextElement();
+          ConditionInfo[] conditions = info.getConditionInfos();
+          if (conditions.length == 0) {
+            info.delete();
+            cpis.addElement(info);
+          }
+        }
+      cpi = tbc.getCondPermAdmin().addConditionalPermissionInfo(
+          DeploymentConstants.CONDITION_SIGNER, new PermissionInfo[0]);
+      dp = tbc.installDeploymentPackage(tbc.getWebServer() + testDP.getFilename());
+      tbc.assertNotNull(MessagesConstants.getMessage(MessagesConstants.ASSERT_NOT_NULL,
+          new String[] { "Deployment Package" }), dp);
+      tbc.failException("", DeploymentException.class);
+    } catch (DeploymentException e) {
+      tbc
+          .pass("A DeploymentException was correctly thrown if the Autoconf Resource processor does not have ConfigurationPermission[*,CONFIGURE]. Message: "
+              + e.getMessage());
+    } catch (Exception e) {
       e.printStackTrace();
-			tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { 
-					e.getClass().getName() }));
-		} finally {
-			tbc.uninstall(dp);
-		}
-
+      tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION,
+          new String[] { e.getClass().getName() }));
+    } finally {
+      if (cpi != null) {
+        cpi.delete();
+      }
+      for (int i = 0; i < cpis.size(); i++) {
+        ConditionalPermissionInfo info = (ConditionalPermissionInfo) cpis.elementAt(i);
+        tbc.getCondPermAdmin().setConditionalPermissionInfo(info.getName(),
+            info.getConditionInfos(), info.getPermissionInfos());
+      }
+      tbc.uninstall(dp);
+    }
 	}
 	
 	/**
