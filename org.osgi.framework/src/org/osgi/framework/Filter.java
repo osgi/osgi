@@ -39,8 +39,7 @@ import java.util.Dictionary;
  * </pre>
  * 
  * @since 1.1
- * @see "Core Specification, section 5.5, for a description of the filter string
- *      syntax."
+ * @see "Core Specification, section 5.5, for a description of the filter string syntax."
  * @ThreadSafe
  * @version $Revision$
  */
