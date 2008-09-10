@@ -1,11 +1,11 @@
 Bundle-Version					= 1.0.0.${project.build}
 Bundle-Activator				= ${p}.Activator
-Import-Service					= org.osgi.service.log.LogService
 
 Private-Package					= ${p}.*
 Export-Package					= org.osgi.service.discovery
 
 -buildpath						= \
     org.osgi.service.discovery;	version=project, \
-	ee.foundation;					version=1.0, \
+    ch.ethz.iks.slp; 			version=1.0, \
+	ee.foundation;				version=1.0, \
 	osgi;						version=4.1

@@ -102,4 +102,9 @@ URL                     Prepared and submitted by IBM
 License					licenses/EPL-1.0.txt
 Modifications           none
 
-
+JSLP (ch.ethz.iks.slp) --------------------------------------
+Copyright               Copyright (c) 2005-2007, Jan S. Rellermeyer
+Used                    In RI
+URL                     http://jslp.sourceforge.net/
+License					licenses/EPL-1.0.txt
+Modifications           none
