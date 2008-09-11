@@ -19,15 +19,15 @@
 package org.osgi.service.concurrent;
 
 /**
- * An Executor which executes tasks asynchronously. The Async Executor service
- * is used by the framework instance to execute short duration tasks
- * asynchronously and is also registered as a service for all bundles to use.
+ * An Executor service which executes tasks asynchronously. The Async Executor
+ * service must be used by the framework instance to execute short duration
+ * tasks asynchronously and must also registered as a service for all bundles to
+ * use.
  * 
  * <p>
  * The Async Executor implementation can be passed to the framework instance
  * when it is created. If none is provided, then the framework instance must
- * create a default Async Executor which will be used by the framework instance
- * and will also be registered as a service for all bundles to use.
+ * create a default Async Executor.
  * 
  * @version $Revision$
  * @TheadSafe
