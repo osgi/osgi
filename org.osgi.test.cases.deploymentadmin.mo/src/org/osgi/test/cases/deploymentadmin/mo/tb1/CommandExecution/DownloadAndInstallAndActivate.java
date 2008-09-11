@@ -52,6 +52,7 @@ import java.io.File;
 import java.util.jar.JarFile;
 import java.util.jar.Manifest;
 
+import org.eclipse.osgi.internal.signedcontent.DNChainMatching;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleEvent;
 import org.osgi.service.deploymentadmin.spi.ResourceProcessor;
@@ -579,10 +580,8 @@ public class DownloadAndInstallAndActivate implements TestInterface {
     			}
     			String signer = signerChildren[0];
     			
-    			tbc.assertEquals("Asserting the signer of the deployment package",
-    					DeploymentmoConstants.SIMPLE_DP_SIGNER,
-    					session.getNodeValue(DeploymentmoConstants.getDeployedExtSignersSignerId(nodeId, signer)).toString());
-
+          tbc.assertTrue("Asserting the signer of the deployment package", DNChainMatching.match(DeploymentmoConstants.SIMPLE_DP_SIGNER, 
+              session.getNodeValue(DeploymentmoConstants.getDeployedExtSignersSignerId(nodeId, signer)).toString()));
     			
     			//Bundle "bundles.tb1"
     			Bundle bundle1 = tbc.getBundle(DeploymentmoConstants.SIMPLE_DP_BUNDLE1_SYMBNAME);
@@ -715,10 +714,8 @@ public class DownloadAndInstallAndActivate implements TestInterface {
 				}
 				String signer = signerChildren[0];
 				
-				tbc.assertEquals("Asserting the signer of the deployment package",
-						DeploymentmoConstants.SIMPLE_DP_SIGNER,
-						session.getNodeValue(DeploymentmoConstants.getDeployedExtSignersSignerId(nodeId, signer)).toString());
-	
+	      tbc.assertTrue("Asserting the signer of the deployment package", DNChainMatching.match(DeploymentmoConstants.SIMPLE_DP_SIGNER, 
+	          session.getNodeValue(DeploymentmoConstants.getDeployedExtSignersSignerId(nodeId, signer)).toString()));
 				
 				//Bundle "bundles.tb1"
 				Bundle bundle1 = tbc.getBundle(DeploymentmoConstants.SIMPLE_FIX_PACK_BUNDLE1_SYMBNAME);

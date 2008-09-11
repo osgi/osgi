@@ -4,5 +4,6 @@
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="lib" path="/cnf/repo/osgi/osgi-4.1.0.jar"/>
 	<classpathentry kind="lib" path="/cnf/repo/org.osgi.internal/org.osgi.internal-4.1.0.jar" sourcepath="/org.osgi.test.cases/src"/>
+	<classpathentry kind="lib" path="ext/DNChainMatching.jar"/>
 	<classpathentry kind="output" path="src"/>
 </classpath>
