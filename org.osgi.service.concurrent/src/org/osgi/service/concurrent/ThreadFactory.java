@@ -19,15 +19,14 @@
 package org.osgi.service.concurrent;
 
 /**
- * A Thread Factory service which creates new threads on demand. The Thread
- * Factory service must be used by the framework instance to create new threads
- * and must also registered as a service for bundles to use to create new
- * threads.
+ * A Thread Factory service which creates new threads on demand.
  * 
  * <p>
- * The Thread Factory implementation can be passed to the framework instance
- * when it is created. If none is provided, then the framework instance must
- * create a default Thread Factory.
+ * A Thread Factory implementation can be passed to the framework instance when
+ * it is created. If none is provided, then the framework instance must create a
+ * default Thread Factory. This Thread Factory service must be used by the
+ * framework instance to create new threads and must also registered as a
+ * service for bundles to use to create new threads.
  * 
  * <p>
  * It is recommended that all bundles use this service to create new threads
