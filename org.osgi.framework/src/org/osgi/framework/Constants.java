@@ -1,7 +1,7 @@
 /*
  * $Date$
  *
- * Copyright (c) OSGi Alliance (2000, 2007). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2000, 2008). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -1125,4 +1125,85 @@ public interface Constants {
 	 */
 	public final static String	ACTIVATION_LAZY							= "lazy";
 
+	/**
+	 * Specifies the the type of security manager the framework must use. If not
+	 * specified then the framework will not set the VM security manager. The
+	 * following types are defined:
+	 * <ul>
+	 * <li> osgi - Enables a security manager that supports all security aspects
+	 * of the OSGi R4 specification (including postponed conditions).</li>
+	 * </ul>
+	 * 
+	 * @since 1.5
+	 */
+	public final static String	FRAMEWORK_SECURITY						= "org.osgi.framework.security";
+
+	/**
+	 * A valid file path in the file system to a directory that exists. The
+	 * framework is free to use this directory as it sees fit. This area can not
+	 * be shared with anything else. If this property is not set, the framework
+	 * should use a persistent storage area in the current directory with a
+	 * framework implementation specific name.
+	 * 
+	 * @since 1.5
+	 */
+	public final static String	FRAMEWORK_STORAGE						= "org.osgi.framework.storage";
+
+	/**
+	 * A comma separated list of additional library file extensions that must be
+	 * searched for when a bundle's class loader is searching for native
+	 * libraries. If not set then only the library name returned by
+	 * <code>System.mapLibraryName(String)</code> will be used to search. This
+	 * is needed for certain operating systems which allow more than one
+	 * extension for a library. For example AIX allows library extensions of
+	 * <code>.a</code> and <code>.so</code>, but System.mapLibraryName(String)
+	 * will only return names with the <code>.a</code> extension.
+	 * 
+	 * @since 1.5
+	 */
+	public final static String	FRAMEWORK_LIBRARY_EXTENSIONS			= "org.osgi.framework.library.extensions";
+
+	/**
+	 * Specifies an optional OS specific command to set file permissions on
+	 * extracted native code. On some operating systems it is required that
+	 * native libraries be set to executable. This optional property allows you
+	 * to specify the command. For example, on a UNIX style OS you could have
+	 * the following value:
+	 * 
+	 * <pre>
+	 * org.osgi.framework.command.execpermission = &quot;chmod +rx [fullpath]&quot;
+	 * </pre>
+	 * 
+	 * The [fullpath] is used to substitute the actual file path by the
+	 * framework.
+	 * 
+	 * @since 1.5
+	 */
+	public final static String	FRAMEWORK_EXECPERMISSION				= "org.osgi.framework.command.execpermission";
+
+	/**
+	 * Points to a directory with certificates. ###??? Keystore? Certificate
+	 * format?
+	 * 
+	 * TODO Need to complete this description
+	 * 
+	 * @since 1.5
+	 */
+	public final static String	FRAMEWORK_ROOT_CERTIFICATES				= "org.osgi.framework.root.certificates";
+
+	/**
+	 * Specifies the current windowing system. The framework should provide a
+	 * reasonable default if this is not set.
+	 * 
+	 * @since 1.5
+	 */
+	public final static String	FRAMEWORK_WINDOWSYSTEM					= "org.osgi.framework.windowsystem";
+
+	/**
+	 * Specifies the beginning start level of the framework.
+	 * 
+	 * @see "Core Specification, section 8.2.3."
+	 * @since 1.5
+	 */
+	public final static String	FRAMEWORK_BEGINNING_STARTLEVEL			= "org.osgi.framework.startlevel";
 }

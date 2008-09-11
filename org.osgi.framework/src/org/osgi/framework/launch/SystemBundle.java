@@ -17,34 +17,31 @@
  */
 package org.osgi.framework.launch;
 
-import java.util.Properties;
-
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleException;
 
 /**
- * The System Bundle of a Framework instance.
+ * The System Bundle for a Framework instance.
  * 
  * The <i>main</i> class of a framework implementation must implement this
  * interface. The instantiator of the framework implementation class then has a
- * system bundle object and can then use the methods of this interface to manage
+ * System Bundle object and can then use the methods of this interface to manage
  * and control the created framework instance.
  * 
  * <p>
  * The <i>main</i> class of a framework implementation must provide a public
- * constructor that takes a single {@link Properties} argument. The argument
- * provides this system bundle with configuration settings and must be used to
- * set the framework properties. The configuration properties can optionally be
- * backed by other Properties such as the System Properties The framework
- * instance must use these properties as the only source by using
- * {@link Properties#getProperty getProperty}, rather than <code>get</code>, so
- * that the Properties linked behavior is used. If the configuration argument is
- * null, this system bundle must use some useful default configuration
- * appropriate for the current VM. For example, the system packages for the
- * current execution environment should be properly exported.
+ * constructor that takes a single argument of type <code>Map</code>. This
+ * configuration argument provides this System Bundle with framework properties
+ * to configure the framework instance. The framework instance must also examine
+ * the system properties for framework properties which are not set in the
+ * configuration argument. If framework properties are not provided by the
+ * configuration argument or the system properties, this System Bundle must use
+ * some reasonable default configuration appropriate for the current VM. For
+ * example, the system packages for the current execution environment should be
+ * properly exported. The configuration argument may be <code>null</code>.
  * 
  * <p>
- * A newly constructed system bundle must be in the {@link Bundle#INSTALLED
+ * A newly constructed System Bundle must be in the {@link Bundle#INSTALLED
  * INSTALLED} state.
  * 
  * @ThreadSafe
@@ -52,105 +49,52 @@ import org.osgi.framework.BundleException;
  */
 public interface SystemBundle extends Bundle {
 	/**
-	 * Specifies the the type of security manager the system bundle must use. If
-	 * not specified then the system bundle will not set the VM security
-	 * manager. The following types are defined:
-	 * <ul>
-	 * <li> osgi - Enables a security manager that supports all security aspects
-	 * of the OSGi R4 specification (including postponed conditions).</li>
-	 * </ul>
-	 */
-	String	SECURITY			= "org.osgi.framework.security";
-
-	/**
-	 * A valid file path in the file system to a directory that exists. The
-	 * system bundle is free to use this directory as it sees fit. This area can
-	 * not be shared with anything else. If this property is not set, the system
-	 * bundle should use a persistent storage area in the current directory with
-	 * a framework implementation specific name.
-	 */
-	String	STORAGE				= "org.osgi.framework.storage";
-
-	/**
-	 * A comma separated list of additional library file extensions that must be
-	 * searched for when a bundle's class loader is searching for native
-	 * libraries. If not set then only the library name returned by
-	 * <code>System.mapLibraryName(String)</code> will be used to search. This
-	 * is needed for certain operating systems which allow more than one
-	 * extension for a library. For example AIX allows library extensions of
-	 * <code>.a</code> and <code>.so</code>, but System.mapLibraryName(String)
-	 * will only return names with the <code>.a</code> extension.
-	 */
-	String	LIBRARY_EXTENSIONS	= "org.osgi.framework.library.extensions";
-
-	/**
-	 * Specifies an optional OS specific command to set file permissions on
-	 * extracted native code. On some operating systems it is required that
-	 * native libraries be set to executable. This optional property allows you
-	 * to specify the command. For example, on a UNIX style OS you could have
-	 * the following value:
+	 * Initialize this System Bundle. After calling this method, this System
+	 * Bundle must be in the {@link Bundle#STARTING STARTING} state and must
+	 * have a valid Bundle Context.
 	 * 
-	 * <pre>
-	 * org.osgi.framework.command.execpermission = &quot;chmod +rx [fullpath]&quot;
-	 * </pre>
+	 * <p>
+	 * During intialization, this System Bundle must also register
+	 * {@link org.osgi.service.concurrent.ThreadFactory ThreadFactory} and
+	 * {@link org.osgi.service.concurrent.AsyncExecutor AsyncExecutor} services.
+	 * Implementations of these services may be passed to this System Bundle in
+	 * the configuration argument using the service names as keys. If
+	 * implementations of these services are not passed in the configuration
+	 * argument, then this System Bundle must create and use a default
+	 * implementation of each service.
 	 * 
-	 * The [fullpath] is used to substitute the actual file path by the
-	 * framework.
-	 */
-	String	EXECPERMISSION		= "org.osgi.framework.command.execpermission";
-
-	/**
-	 * Points to a directory with certificates. ###??? Keystore? Certificate
-	 * format?
+	 * <p>
+	 * This System Bundle will not actually be started until <code>start</code>
+	 * is called. If this System Bundle is not initialized called prior to
+	 * calling <code>start</code>, then the <code>start</code> method must
+	 * initialize this System Bundle prior to starting.
 	 * 
-	 * TODO Need to complete this description
-	 */
-	String	ROOT_CERTIFICATES	= "org.osgi.framework.root.certificates";
-
-	/**
-	 * Specifies the current windowing system. The system bundle should provide
-	 * a reasonable default if this is not set.
-	 */
-	String	WINDOWSYSTEM		= "org.osgi.framework.windowsystem";
-
-	/**
-	 * Specifies the beginning start level of the system bundle (See StartLevel
-	 * service specification for more information).
-	 */
-	String	STARTLEVEL			= "org.osgi.framework.startlevel";
-
-	/**
-	 * Initialize this system bundle. After calling this method, this system
-	 * bundle must be in the {@link Bundle#STARTING STARTING} state and must
-	 * have a valid bundle context. This system bundle will not actually be
-	 * started until <code>start</code> is called.
+	 * <p>
+	 * This method does nothing if called when this System Bundle is in the
+	 * {@link Bundle#STARTING STARTING}, {@link Bundle#ACTIVE ACTIVE} or
+	 * {@link Bundle#STOPPING STOPPING} states.
 	 * 
-	 * @throws BundleException If this system bundle could not be initialized.
+	 * @throws BundleException If this System Bundle could not be initialized.
 	 */
 	void init() throws BundleException;
 
 	/**
-	 * Wait until this system bundle is completely finished stopping. The
-	 * <code>stop</code> method on a system bundle performs an asynchronous stop
-	 * of the system bundle. This method can be used to wait until the
-	 * asynchronous stop of this system bundle has completed. This method will
-	 * only wait if called when this system bundle is in the
-	 * {@link Bundle#STOPPING STOPPING} state.
+	 * Wait until this System Bundle has completely stopped. The
+	 * <code>stop</code> and <code>update</code> methods on a System Bundle
+	 * performs an asynchronous stop of the System Bundle. This method can be
+	 * used to wait until the asynchronous stop of this System Bundle has
+	 * completed. This method will only wait if called when this System Bundle
+	 * is in the {@link Bundle#STARTING STARTING}, {@link Bundle#ACTIVE ACTIVE},
+	 * or {@link Bundle#STOPPING STOPPING} states. Otherwise it will return
+	 * immediately.
 	 * 
-	 * This method must only be called after calling <code>stop</code> and will
-	 * return when this system bundle is fully stopped and has cleaned up all
-	 * its resources.
-	 * 
-	 * @param timeout Maximum number of milliseconds to wait until this system
-	 *        bundle has finished stopping. A value of zero will wait
+	 * @param timeout Maximum number of milliseconds to wait until this System
+	 *        Bundle has completely stopped. A value of zero will wait
 	 *        indefinitely.
 	 * @throws InterruptedException If another thread interrupted the current
 	 *         thread before or while the current thread was waiting for this
-	 *         system bundle to finish stopping. The <i>interrupted status</i>
+	 *         System Bundle to completely stop. The <i>interrupted status</i>
 	 *         of the current thread is cleared when this exception is thrown.
-	 * @throws IllegalStateException If this method is called when this system
-	 *         bundle is in the {@link Bundle#STARTING STARTING} or
-	 *         {@link Bundle#ACTIVE ACTIVE} states.
 	 * @throws IllegalArgumentException If the value of timeout is negative.
 	 */
 	void waitForStop(long timeout) throws InterruptedException;
