@@ -24,9 +24,13 @@ package org.osgi.service.concurrent;
  * <p>
  * An Async Executor implementation can be passed to the framework instance when
  * it is created. If none is provided, then the framework instance must create a
- * default Async Executor. This Async Executor service must be used by the
- * framework instance to execute short duration tasks asynchronously and must
- * also registered as a service for all bundles to use.
+ * default Async Executor. The default Async Executor must use a thread, or
+ * threads, created by the {@link ThreadFactory}.
+ * 
+ * <p>
+ * The framework instance must use the provided Async Executor, or the default
+ * Async Executor if none is provided, to execute short duration tasks
+ * asynchronously and must also register it as a service for all bundles to use.
  * 
  * @version $Revision$
  * @TheadSafe

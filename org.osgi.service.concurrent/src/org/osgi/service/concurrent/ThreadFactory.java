@@ -24,9 +24,13 @@ package org.osgi.service.concurrent;
  * <p>
  * A Thread Factory implementation can be passed to the framework instance when
  * it is created. If none is provided, then the framework instance must create a
- * default Thread Factory. This Thread Factory service must be used by the
- * framework instance to create new threads and must also registered as a
- * service for bundles to use to create new threads.
+ * default Thread Factory. The default Thread Factory must create all threads in
+ * the same <code>ThreadGroup</code>.
+ * 
+ * <p>
+ * The framework instance must use the provided Thread Factory, or the default
+ * Thread Factory if none is provided, to create new threads and must also
+ * register it as a service for bundles to use to create new threads.
  * 
  * <p>
  * It is recommended that all bundles use this service to create new threads
@@ -37,9 +41,9 @@ package org.osgi.service.concurrent;
  */
 public interface ThreadFactory {
 	/**
-	 * Creates a new Thread with the specified Runnable. Care should be taken to
-	 * properly set the Thread properties, such as daemon status, name and
-	 * priority, before starting the newly created thread.
+	 * Creates a new Thread with the specified Runnable. Thread properties, such
+	 * as daemon status, name and priority, must be set, if desired, before
+	 * starting the newly created thread.
 	 * 
 	 * @param runnable A Runnable to be executed by the new thread.
 	 * @return The newly created thread.
