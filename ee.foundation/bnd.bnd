@@ -3,4 +3,4 @@ Bundle-Version						: 1.1.0.$(project.build)
 Bundle-RequiredExecutionEnvironment	: CDC-1.1/Foundation-1.1
 
 Export-Package						: java.*, javax.*
-Include-Resource 					: about.html, LICENSE
+Include-Resource 					: legal/about.html, legal/LICENSE
