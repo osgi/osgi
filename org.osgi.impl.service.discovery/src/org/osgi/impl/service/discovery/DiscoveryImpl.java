@@ -53,11 +53,13 @@ public class DiscoveryImpl implements Discovery {
 	private boolean autoPublish = DEFAULT_AUTOPUBLISH;
 
 	private ServiceTracker protocolHandlerTracker;
+	private final BundleContext		context;
 
 	// TODO do we need a logService as parameter??
 	public DiscoveryImpl(final BundleContext context,
 			final LogService logService) {
 		this.logService = logService;
+		this.context = context;
 
 		// TODO read this from config rather than system property
 		autoPublish = System.getProperty(Discovery.ORG_OSGI_DISCOVERY,
@@ -274,6 +276,7 @@ public class DiscoveryImpl implements Discovery {
 	}
 
 	void destroy() {
+		protocolHandlerTracker.close();
 		if (logService != null) {
 			logService.log(LogService.LOG_DEBUG, "destroy");
 		}
@@ -352,7 +355,7 @@ public class DiscoveryImpl implements Discovery {
 		}
 		Filter f = null;
 		try {
-			f = new FilterImpl(filter);
+			f = context.createFilter(filter);
 		} catch (InvalidSyntaxException e) {
 			throw new IllegalArgumentException("filter is not an LDAP filter");
 		}
@@ -387,7 +390,7 @@ public class DiscoveryImpl implements Discovery {
 		}
 
 		try {
-			new FilterImpl(filter);
+			context.createFilter(filter);
 		} catch (InvalidSyntaxException e) {
 			throw new IllegalArgumentException("filter is not an LDAP filter");
 		}
