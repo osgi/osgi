@@ -54,8 +54,11 @@ public interface Filter {
 	 * @param reference The reference to the service whose properties are used
 	 *        in the match.
 	 * 
-	 * @return <code>true</code> if the service's properties match this
-	 *         filter; <code>false</code> otherwise.
+	 * @return <code>true</code> if the service's properties match this filter;
+	 *         <code>false</code> otherwise.
+	 * @throws IllegalArgumentException If the specified
+	 *         <code>ServiceReference</code> was not created by the same
+	 *         framework instance as this <code>Filter</code>.
 	 */
 	public boolean match(ServiceReference reference);
 
