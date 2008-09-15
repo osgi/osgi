@@ -114,6 +114,14 @@ public class BundleException extends Exception {
 	 * @since 1.5
 	 */
 	public static final int	DUPLICATE_BUNDLE_ERROR	= 9;
+	
+    /**
+	 * The start transient operation failed because the start level of the
+	 * bundle is greater than the current framework start level
+	 * 
+	 * @since 1.5
+	 */
+	public static final int	START_TRANSIENT_ERROR	= 10;
 
 	/**
 	 * Creates a <code>BundleException</code> with the specified message and
