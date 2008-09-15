@@ -17,7 +17,6 @@
  */
 package org.osgi.util.measurement;
 
-
 /**
  * Represents a value with an error, a unit and a time-stamp.
  * 
@@ -46,14 +45,15 @@ package org.osgi.util.measurement;
  * Note: This class has a natural ordering that is inconsistent with equals. See
  * {@link #compareTo}.
  * 
+ * @ThreadSafe
  * @version $Revision$
  */
 public class Measurement implements Comparable {
-	/* package private so it can be accessed by Unit */
-	final double	value;
-	final double	error;
-	final long		time;
-	final Unit		unit;
+	private final double		value;
+	private final double		error;
+	private final long			time;
+	private final Unit			unit;
+	/* GuardedBy("this") */
 	private transient String	name;
 
 	/**
@@ -369,7 +369,7 @@ public class Measurement implements Comparable {
 	 * @return a <code>String</code> object representing this <code>Measurement</code>
 	 *         object.
 	 */
-	public String toString() {
+	public synchronized String toString() {
 		if (name == null) {
 			StringBuffer sb = new StringBuffer();
 			sb.append(value);

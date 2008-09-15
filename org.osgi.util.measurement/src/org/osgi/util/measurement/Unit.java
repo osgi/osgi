@@ -30,6 +30,7 @@ import java.util.Hashtable;
  * +63. Any operation which produces an exponent outside of this range will
  * result in a <code>Unit</code> object with undefined exponents.
  * 
+ * @ThreadSafe
  * @version $Revision$
  */
 /*
@@ -279,9 +280,12 @@ public class Unit {
 	private final static Unit[]	allUnits	= new Unit[] {m, s, kg, K, A, mol,
 			cd, rad, m_s, m_s2, m2, m3, Hz, N, Pa, J, W, C, V, F, Ohm, S, Wb,
 			T, lx, Gy, kat, unity			};
+	
+	/* @GuardedBy("this") */
 	private static Hashtable	base;
+	/* @GuardedBy("this") */
 	private String				name;
-	private long				type;
+	private final long			type;
 
 	/**
 	 * Creates a new <code>Unit</code> instance.
@@ -435,16 +439,12 @@ public class Unit {
 	 * 
 	 * @return the <code>Unit</code>
 	 */
-	static Unit find(long type) {
+	static synchronized Unit find(long type) {
 		if (base == null) {
-			synchronized (Unit.class) {
-				if (base == null) {
-					int size = allUnits.length;
-					base = new Hashtable(size << 1);
-					for (int i = 0; i < size; i++) {
-						base.put(allUnits[i], allUnits[i]);
-					}
-				}
+			int size = allUnits.length;
+			base = new Hashtable(size << 1);
+			for (int i = 0; i < size; i++) {
+				base.put(allUnits[i], allUnits[i]);
 			}
 		}
 		Unit unit = new Unit(null, type);
@@ -461,7 +461,7 @@ public class Unit {
 	 * 
 	 * @return A <code>String</code> object representing the <code>Unit</code>
 	 */
-	public String toString() {
+	public synchronized String toString() {
 		if (name == null) {
 			int m = (int) (((type >> m_SHIFT) & MASK) - ZERO);
 			int s = (int) (((type >> s_SHIFT) & MASK) - ZERO);

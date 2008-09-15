@@ -27,12 +27,13 @@ package org.osgi.util.measurement;
  * <p>
  * A <code>State</code> object is immutable so that it may be easily shared.
  * 
+ * @ThreadSafe
  * @version $Revision$
  */
 public class State {
-	final int		value;
-	final long		time;
-	final String	name;
+	private final int		value;
+	private final long		time;
+	private final String	name;
 
 	/**
 	 * Create a new <code>State</code> object.
