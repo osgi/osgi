@@ -27,7 +27,7 @@ package org.osgi.util.measurement;
  * <p>
  * A <code>State</code> object is immutable so that it may be easily shared.
  * 
- * @ThreadSafe
+ * @Immutable
  * @version $Revision$
  */
 public class State {

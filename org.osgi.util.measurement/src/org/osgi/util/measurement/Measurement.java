@@ -45,7 +45,7 @@ package org.osgi.util.measurement;
  * Note: This class has a natural ordering that is inconsistent with equals. See
  * {@link #compareTo}.
  * 
- * @ThreadSafe
+ * @Immutable
  * @version $Revision$
  */
 public class Measurement implements Comparable {
