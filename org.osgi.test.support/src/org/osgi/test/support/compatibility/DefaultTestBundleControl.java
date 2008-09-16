@@ -9,14 +9,16 @@ import org.osgi.framework.BundleContext;
 import org.osgi.framework.BundleException;
 import org.osgi.framework.ServiceReference;
 
-public class DefaultTestBundleControl extends TestCase {
-	BundleContext context;
+public abstract class DefaultTestBundleControl extends TestCase {
+	
+	/* @GuardedBy("this") */
+	private BundleContext	context;
 
 	/**
 	 * THis method is called by the JUnit runner for OSGi, and gives us a Bundle
 	 * Context.
 	 */
-	public void setBundleContext(BundleContext context) {
+	public synchronized void setBundleContext(BundleContext context) {
 		this.context = context;
 	}
 
@@ -24,7 +26,7 @@ public class DefaultTestBundleControl extends TestCase {
 	 * Returns the current Bundle Context
 	 */
 
-	public BundleContext getContext() {
+	public synchronized BundleContext getContext() {
 		if (context == null)
 			fail("No valid Bundle context said, are you running in OSGi Test mode?");
 
@@ -35,7 +37,6 @@ public class DefaultTestBundleControl extends TestCase {
 	 * This returned a web server but we will just now, it is mostly used in
 	 * installBundle and there we get the bundle from our resources.
 	 */
-
 	public String getWebServer() {
 		return "/www/";
 	}
@@ -51,7 +52,7 @@ public class DefaultTestBundleControl extends TestCase {
 	}
 
 	/**
-	 * Uninstall a bundle.
+	 * Install a bundle.
 	 * 
 	 * @param bundle
 	 * @throws BundleException
@@ -67,11 +68,11 @@ public class DefaultTestBundleControl extends TestCase {
 	 * Convenience getService method
 	 */	
 	public Object getService(Class clazz ) {
-		ServiceReference ref = context.getServiceReference(clazz.getName());
+		BundleContext c = getContext();
+		ServiceReference ref = c.getServiceReference(clazz.getName());
 		if ( ref == null )
 			return null;
 		
-		return context.getService(ref);
+		return c.getService(ref);
 	}
-
 }
