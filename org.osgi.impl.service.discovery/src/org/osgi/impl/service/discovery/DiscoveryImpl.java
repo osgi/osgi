@@ -22,7 +22,6 @@ import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.eclipse.osgi.framework.internal.core.FilterImpl;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.Filter;
 import org.osgi.framework.InvalidSyntaxException;
@@ -225,8 +224,9 @@ public class DiscoveryImpl implements Discovery {
 
 		if (logService != null) {
 			String logMessage = "publish service having following interfaces: ";
-			for (String interfaceName : serviceDescription.getInterfaceNames()) {
-				logMessage += interfaceName + ";";
+			String[] interfaceNames = serviceDescription.getInterfaceNames();
+			for (int i = 0; i< interfaceNames.length; i++ ) {
+				logMessage += interfaceNames[i] + ";";
 			}
 			logService.log(LogService.LOG_DEBUG, logMessage);
 		}

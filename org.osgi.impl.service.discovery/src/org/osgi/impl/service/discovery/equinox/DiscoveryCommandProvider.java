@@ -59,11 +59,12 @@ public class DiscoveryCommandProvider implements
 			ServiceEndpointDescription serviceDescription = new ServiceDescriptionAdapter(
 					ci.nextArgument());
 
-			ServiceEndpointDescription[] services = discovery.findService(serviceDescription);
+			ServiceEndpointDescription[] services = discovery
+					.findService(serviceDescription);
 
 			ci.println("services found:");
-			for (ServiceEndpointDescription svcDescr : services) {
-				ci.println(svcDescr);
+			for (int i = 0; i < services.length; i++) {
+				ci.println(services[i]);
 			}
 		} else {
 			ci.println("Discovery service not set");
@@ -146,9 +147,9 @@ public class DiscoveryCommandProvider implements
 		public ServiceDescriptionAdapter(String[] interfaces) {
 			this.interfaces = interfaces;
 		}
-		
+
 		public ServiceDescriptionAdapter(String interfaceName) {
-			this(new String[]{interfaceName});
+			this(new String[] { interfaceName });
 		}
 
 		public String[] getInterfaceNames() {
@@ -197,10 +198,11 @@ public class DiscoveryCommandProvider implements
 
 		public String toString() {
 			String result = "ServiceEndpointDescription: interface=";
-			for (String interfaceName : interfaces) {
-				result += interfaceName + ";";
+
+			for (int i = 0; i < interfaces.length; i++) {
+				result += interfaces[i] + ";";
 			}
-			return  result;
+			return result;
 		}
 
 		public URL getLocation() {
