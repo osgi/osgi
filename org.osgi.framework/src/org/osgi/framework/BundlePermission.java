@@ -1,7 +1,7 @@
 /*
  * $Date$
  *
- * Copyright (c) OSGi Alliance (2004, 2007). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2004, 2008). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -36,15 +36,13 @@ import java.util.HashMap;
  * For example:
  * 
  * <pre>
- * <code>
  * org.osgi.example.bundle
- * </code>
  * </pre>
  * 
  * <p>
- * <code>BundlePermission</code> has four actions: <code>PROVIDE</code>,
- * <code>REQUIRE</code>,<code>HOST</code>, and <code>FRAGMENT</code>.
- * The <code>PROVIDE</code> action implies the <code>REQUIRE</code> action.
+ * <code>BundlePermission</code> has four actions: <code>provide</code>,
+ * <code>require</code>,<code>host</code>, and <code>fragment</code>. The
+ * <code>provide</code> action implies the <code>require</code> action.
  * 
  * @since 1.3
  * @ThreadSafe
@@ -56,12 +54,14 @@ public final class BundlePermission extends BasicPermission {
 	private static final long	serialVersionUID	= 3257846601685873716L;
 
 	/**
-	 * The action string <code>provide</code>.
+	 * The action string <code>provide</code>. The <code>provide</code> action
+	 * implies the <code>require</code> action.
 	 */
 	public final static String	PROVIDE				= "provide";
 
 	/**
-	 * The action string <code>require</code>.
+	 * The action string <code>require</code>. The <code>require</code> action
+	 * is implied by the <code>provide</code> action.
 	 */
 	public final static String	REQUIRE				= "require";
 
@@ -118,7 +118,7 @@ public final class BundlePermission extends BasicPermission {
 	}
 
 	/**
-	 * Bundle private constructor used by BundlePermissionCollection.
+	 * Package private constructor used by BundlePermissionCollection.
 	 * 
 	 * @param symbolicName the bundle symbolic name
 	 * @param mask the action mask

@@ -29,10 +29,10 @@ import java.util.HashMap;
 /**
  * A bundle's authority to register or get a service.
  * <ul>
- * <li>The <code>ServicePermission.REGISTER</code> action allows a bundle to
- * register a service on the specified names.
- * <li>The <code>ServicePermission.GET</code> action allows a bundle to
- * detect a service and get it.
+ * <li>The <code>register</code> action allows a bundle to register a service on
+ * the specified names.
+ * <li>The <code>get</code> action allows a bundle to detect a service and get
+ * it.
  * </ul>
  * Permission to get a service is required in order to detect events regarding
  * the service. Untrusted bundles should not be able to detect the presence of
