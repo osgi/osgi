@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry path="src" kind="src"/>
-	<classpathentry path="/osgi.released/osgi.jar" kind="lib" sourcepath="/osgi.released/osgi.jar"/>
-	<classpathentry path="/osgi.released/ee.minimum.jar" kind="lib" sourcepath="/osgi.released/ee.minimum.jar"/>
-	<classpathentry path="/osgi.released/osgi.internal.jar" kind="lib" sourcepath="/osgi.released/osgi.internal.jar"/>
-	<classpathentry path="src" kind="output"/>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="con" path="aQute.bnd.classpath.container"/>
+	<classpathentry kind="output" path="src"/>
 </classpath>

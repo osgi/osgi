@@ -1,0 +1,13 @@
+Bundle-Version				= 1.0.0.${project.build}
+Bundle-Activator			= org.osgi.impl.service.template.Activator
+Bundle-Description			= Template for a Reference Implementation.
+
+Export-Service				= org.osgi.service.template.ProvisioningService
+
+Private-Package 			= ${p}.*
+Export-Package				= org.osgi.service.template;-split-package:=first
+
+-buildpath 					= \
+	org.osgi.service.template; 	version=project, \
+	osgi;							version=4.0, \
+	ee.minimum;						version=1.0
