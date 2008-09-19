@@ -1,4 +1,3 @@
--reportnewer			= true
 # Very general
 project.dependson       = ${p-dependson;:}
 project.bootclasspath   = ${p-bootclasspath;:}
@@ -51,7 +50,7 @@ btool.compress			= true
   (*).(jar|ipa);                             type=bnd;  recipe="bnd/$1.bnd"
 
 
-junit					= com.springsource.junit;version=3.8
+junit					= com.springsource.junit;version=3.8;export="junit.framework;version=3.8,junit.extensions;version=3.8"
 
 # Time options
 # base.modified is used by bnd to not make when files are not changed
@@ -62,11 +61,13 @@ project.build			= ${tstamp;yyyyMMddhhmm}
 copyright = Copyright (c) OSGi Alliance (2000, ${tstamp;yyyy}). All Rights Reserved.
 copyright.html = Copyright &copy; OSGi Alliance (2000, ${tstamp;yyyy}). All Rights Reserved.
 
--include				= 	-${basedir}/build.properties
-
 # Documentation
 Bundle-Copyright       	= ${copyright}
 Bundle-Vendor			= OSGi Alliance
 Bundle-License			= ... TODO
 -removeheader			= Include-Resource
+
+-testpath							= \
+	org.eclipse.osgi;		version=3.5; 	framework=org.eclipse.osgi.launch.Equinox, \
+	com.springsource.junit; version=3.8;    export="junit.framework;version=3.8"
 
