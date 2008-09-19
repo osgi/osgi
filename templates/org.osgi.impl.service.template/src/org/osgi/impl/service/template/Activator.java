@@ -36,6 +36,7 @@ public class Activator implements BundleActivator, TemplateService {
 	 */
 	public void start(BundleContext context) throws Exception {
 		System.out.println("Hello World");
+		context.registerService(TemplateService.class.getName(), this, null);
 	}
 
 	/**
