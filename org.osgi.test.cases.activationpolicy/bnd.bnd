@@ -22,6 +22,10 @@ Include-Resource					= \
 	ee.minimum												, \
 	${junit}
 
--testpath							= \
-	org.eclipse.osgi;		version=3.5; 	framework=org.eclipse.osgi.launch.Equinox, \
-	com.springsource.junit; version=3.8;    export="junit.framework;version=3.8"
+-runbundles						= \
+	org.osgi.impl.service.log; version=latest, \
+	org.osgi.impl.service.cm;  version=latest, \
+	org.osgi.impl.service.http; version=latest, \
+	org.osgi.impl.bundle.servlet
+
+-include : version.properties
