@@ -27,5 +27,3 @@ Include-Resource					= \
 	org.osgi.impl.service.cm;  version=latest, \
 	org.osgi.impl.service.http; version=latest, \
 	org.osgi.impl.bundle.servlet
-
--include : version.properties
