@@ -56,11 +56,8 @@ public class DiscoveryCommandProvider implements
 
 	public void _lookup(CommandInterpreter ci) {
 		if (discovery != null) {
-			ServiceEndpointDescription serviceDescription = new ServiceDescriptionAdapter(
-					ci.nextArgument());
-
 			ServiceEndpointDescription[] services = discovery
-					.findService(serviceDescription);
+					.findService(ci.nextArgument(), null);
 
 			ci.println("services found:");
 			for (int i = 0; i < services.length; i++) {

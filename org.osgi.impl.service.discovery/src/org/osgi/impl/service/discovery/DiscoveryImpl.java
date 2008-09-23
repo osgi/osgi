@@ -75,6 +75,15 @@ public class DiscoveryImpl implements Discovery {
 	}
 
 	/**
+	 * 
+	 * @see org.osgi.service.discovery.Discovery#addServiceListener(org.osgi.service.discovery.RemoteServiceListener,
+	 *      java.lang.String)
+	 */
+	public void addServiceListener(ServiceListener listener, String filter) {
+		// TODO Auto-generated method stub
+	}
+
+	/**
 	 * @see org.osgi.service.discovery.Discovery#addServiceListener(org.osgi.service.discovery.RemoteServiceListener)
 	 */
 	public void addServiceListener(final ServiceListener listener) {
@@ -325,30 +334,9 @@ public class DiscoveryImpl implements Discovery {
 
 	/**
 	 * 
-	 * @see org.osgi.service.discovery.Discovery#addServiceListener(org.osgi.service.discovery.RemoteServiceListener,
-	 *      org.osgi.service.discovery.ServiceEndpointDescription)
-	 */
-	public void addServiceListener(ServiceListener listener,
-			ServiceEndpointDescription serviceDescription) {
-		// TODO Auto-generated method stub
-
-	}
-
-	/**
-	 * 
-	 * @see org.osgi.service.discovery.Discovery#addServiceListener(org.osgi.service.discovery.RemoteServiceListener,
-	 *      java.lang.String)
-	 */
-	public void addServiceListener(ServiceListener listener, String filter) {
-		// TODO Auto-generated method stub
-
-	}
-
-	/**
-	 * 
 	 * @see org.osgi.service.discovery.Discovery#findService(java.lang.String)
 	 */
-	public ServiceEndpointDescription[] findService(String filter) {
+	public ServiceEndpointDescription[] findService(final String interfaceName, final String filter) {
 		if (filter == null) {
 			throw new IllegalArgumentException(
 					"filter must not be null or incomplete");
@@ -378,7 +366,7 @@ public class DiscoveryImpl implements Discovery {
 	 * @see org.osgi.service.discovery.Discovery#findService(String,
 	 *      FindServiceCallback)
 	 */
-	public void findService(final String filter,
+	public void findService(final String interfaceName, final String filter,
 			final FindServiceCallback callback) {
 		if (callback == null) {
 			throw new IllegalArgumentException("callback must not be null");
@@ -402,7 +390,7 @@ public class DiscoveryImpl implements Discovery {
 					// TODO first look at cache
 
 					// if miss, do lookup with ProtocolHandler
-					ServiceEndpointDescription[] services = findService(filter);
+					ServiceEndpointDescription[] services = findService(interfaceName, filter);
 
 					// call callback listener
 					// call callback with unavailable if none found
