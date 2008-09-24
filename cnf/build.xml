@@ -62,25 +62,8 @@
 	<!--
 	     Test
 	-->
-	<target name="test" depends="jars">
-		<!-- add the test env (junit, osgi tester) -->
-		<junit printsummary="yes" haltonfailure="yes">
-			<classpath>
-				<pathelement path="${project.testpath}"  />
-			</classpath>
-
-			<formatter type="plain" />
-
-			<batchtest fork="yes" todir="${target}">
-				<fileset dir="${src}">
-					<include name="**/*Test*.java" />
-					<exclude name="**/AllTests.java" />
-					<exclude name="**/*TestCase*.java" />
-					<exclude name="**/*TestBundle*.java" />
-				</fileset>
-			</batchtest>
-		</junit>
-
+	<target name="test" depends="compile">
+		<bnd command="test" exceptions="true" basedir="${project}"/>
 	</target>
 
 	<!--

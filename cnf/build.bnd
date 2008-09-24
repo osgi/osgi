@@ -7,7 +7,7 @@ project.allsourcepath   = ${p-allsourcepath;:}
 project.output          = ${p-output}
 project.testpath        = ${p-testpath;:}
 
-verbose					= false
+-verbose				= true
 project                 = ${basedir}
 src                     = src
 bin                     = src
@@ -67,7 +67,7 @@ Bundle-Vendor			= OSGi Alliance
 Bundle-License			= ... TODO
 -removeheader			= Include-Resource
 
--testpath							= \
+-runpath							= \
 	org.eclipse.osgi;		version=3.5; 	framework=org.eclipse.osgi.launch.Equinox, \
 	com.springsource.junit; version=3.8;    export="junit.framework;version=3.8"
 
