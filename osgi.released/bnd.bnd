@@ -45,7 +45,7 @@ mobile.release.version		= ${osgi.version.long}.${project.build}
 
 -buildpath 					= \
 	${replace;${specs};.+;$0\\;version=project}, \
-	ee.foundation;version=1.1.3, \
+	ee.foundation;version=1.1, \
 	org.osgi.internal
 
 # Build the osgi spec files
