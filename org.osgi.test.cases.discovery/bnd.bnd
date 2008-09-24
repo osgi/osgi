@@ -1,0 +1,14 @@
+Bundle-Version: 1.0.0.${project.build}
+
+Private-Package						= org.osgi.test.cases.discovery
+
+-buildpath							= \
+	org.osgi.service.discovery;		version=project	, \
+	osgi;							version=4.1		, \
+	ee.minimum												, \
+	${junit}
+
+-runbundles						= \
+	org.osgi.impl.service.discovery; version=project, \
+    org.osgi.service.discovery;      version=project
+	
