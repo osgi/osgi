@@ -8,5 +8,5 @@ Export-Package					= org.osgi.service.io;-split-package:=first
 
 -buildpath						= \
     org.osgi.service.io;				version=project, \
-	ee.foundation;						version=1.4, \
+	ee.foundation;						version=1.0, \
 	osgi;								version=3.0
