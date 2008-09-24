@@ -15,6 +15,8 @@ Include-Resource					= \
 	www/tblazy4.jar=tblazy4.jar, \
 	www/tblazy5.jar=tblazy5.jar, \
 	www/tblazy6.jar=tblazy6.jar
+	
+Test-Cases							= ${classes;extending;org.junit.framework.TestCase|*DefaultTestBundleControl}
 
 -buildpath							= \
     org.osgi.test.support;                  version=project , \
@@ -22,7 +24,7 @@ Include-Resource					= \
 	ee.minimum												, \
 	${junit}
 
--runbundles						= \
+-runbundles							= \
 	org.osgi.impl.service.log; version=latest, \
 	org.osgi.impl.service.cm;  version=latest, \
 	org.osgi.impl.service.http; version=latest, \

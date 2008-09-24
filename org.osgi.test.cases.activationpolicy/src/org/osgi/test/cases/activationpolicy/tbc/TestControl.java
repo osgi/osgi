@@ -34,6 +34,7 @@ import org.osgi.framework.FrameworkEvent;
 import org.osgi.service.startlevel.StartLevel;
 import org.osgi.test.support.compatibility.DefaultTestBundleControl;
 
+
 /**
  * This class contains tests related with the framework class loading policies.
  * 
