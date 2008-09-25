@@ -1,6 +1,4 @@
 /*
- * $Date$
- *
  * Copyright (c) OSGi Alliance (2002, 2007). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -24,6 +22,8 @@ import java.io.InputStream;
  * A UPnP icon representation.
  * 
  * Each UPnP device can contain zero or more icons.
+ * 
+ * @version $Revision$
  */
 public interface UPnPIcon {
 	/**

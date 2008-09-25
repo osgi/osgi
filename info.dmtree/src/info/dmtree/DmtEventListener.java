@@ -1,6 +1,4 @@
 /*
- * $Date$
- *
  * Copyright (c) OSGi Alliance (2004, 2007). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -23,6 +21,8 @@ package info.dmtree;
  * successful DMT change, and also when sessions are opened or closed. If a
  * {@link DmtSession} is opened in atomic mode, DMT events are only sent when
  * the session is committed, when the changes are actually performed.
+ * 
+ * @version $Revision$
  */
 public interface DmtEventListener {
 

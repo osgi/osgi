@@ -1,6 +1,4 @@
 /*
- * $Date$
- *
  * Copyright (c) OSGi Alliance (2004, 2007). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -23,7 +21,6 @@ import info.dmtree.notification.NotificationService;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
 
-
 /**
  * This class is the central access point for Device Management services.
  * Applications can use the static factory methods provided in this class to
@@ -32,7 +29,9 @@ import org.osgi.framework.ServiceReference;
  * sending notifications to management servers.
  * <p>
  * These methods are not needed in an OSGi environment, clients should retrieve
- * the required service objects from the OSGi Service Registry. 
+ * the required service objects from the OSGi Service Registry.
+ * 
+ * @version $Revision$
  */
 public final class DmtServiceFactory {
     private static BundleContext context = null;

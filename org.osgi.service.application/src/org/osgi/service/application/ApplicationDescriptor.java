@@ -1,6 +1,4 @@
 /*
- * $Date$
- * 
  * Copyright (c) OSGi Alliance (2004, 2006). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -20,7 +18,9 @@ package org.osgi.service.application;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.security.*;
+import java.security.AccessController;
+import java.security.PrivilegedAction;
+import java.security.PrivilegedExceptionAction;
 import java.util.Map;
 
 import org.osgi.framework.Constants;
@@ -30,6 +30,8 @@ import org.osgi.framework.InvalidSyntaxException;
  * An OSGi service that represents an installed application and stores
  * information about it. The application descriptor can be used for instance
  * creation.
+ * 
+ * @version $Revision$
  */
 
 public abstract class ApplicationDescriptor {

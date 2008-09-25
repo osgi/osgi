@@ -1,6 +1,4 @@
 /*
- * $Date$
- *
  * Copyright (c) OSGi Alliance (2004, 2007). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -38,14 +36,16 @@ import java.util.Vector;
  * close multiple plugins, and has to report the exceptions of all failures.
  * <p>
  * Each constructor has two variants, one accepts a <code>String</code> node
- * URI, the other accepts a <code>String[]</code> node path. The former is
- * used by the DmtAdmin implementation, the latter by the plugins, who receive
- * the node URI as an array of segment names. The constructors are otherwise
+ * URI, the other accepts a <code>String[]</code> node path. The former is used
+ * by the DmtAdmin implementation, the latter by the plugins, who receive the
+ * node URI as an array of segment names. The constructors are otherwise
  * identical.
  * <p>
  * Getter methods are provided to retrieve the values of the additional
  * parameters, and the <code>printStackTrace(PrintWriter)</code> method is
  * extended to print the stack trace of all causing throwables as well.
+ * 
+ * @version $Revision$
  */
 public class DmtException extends Exception {
     private static final long serialVersionUID = -63006267148118655L;

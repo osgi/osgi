@@ -1,6 +1,4 @@
 /*
- * $Date$
- *
  * Copyright (c) OSGi Alliance (2004, 2007). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -23,6 +21,8 @@ import info.dmtree.DmtException;
 /**
  * Provides atomic read-write access to the part of the tree handled by the
  * plugin that created this session.
+ * 
+ * @version $Revision$
  */
 public interface TransactionalDataSession extends ReadWriteDataSession {
 

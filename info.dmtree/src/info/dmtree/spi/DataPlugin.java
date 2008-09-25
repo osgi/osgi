@@ -1,6 +1,4 @@
 /*
- * $Date$
- *
  * Copyright (c) OSGi Alliance (2004, 2007). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -36,8 +34,8 @@ import info.dmtree.DmtSession;
  * method depends on the lock type of the current session. In case of
  * {@link #openReadWriteSession(String[], DmtSession)} and
  * {@link #openAtomicSession(String[], DmtSession)}, the plugin may return
- * <code>null</code> to indicate that the specified lock type is not
- * supported. In this case the DmtAdmin may call
+ * <code>null</code> to indicate that the specified lock type is not supported.
+ * In this case the DmtAdmin may call
  * {@link #openReadOnlySession(String[], DmtSession)} to start a read-only
  * plugin session, which can be used as long as there are no write operations on
  * the nodes handled by this plugin.
@@ -47,6 +45,8 @@ import info.dmtree.DmtSession;
  * is an absolute path, so the first segment is always &quot;.&quot;. Special
  * characters appear escaped in the segments.
  * <p>
+ * 
+ * @version $Revision$
  */
 public interface DataPlugin {
 

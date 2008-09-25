@@ -1,6 +1,4 @@
 /*
- * $Date$
- *
  * Copyright (c) OSGi Alliance (2002, 2007). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -22,6 +20,8 @@ package org.osgi.service.upnp;
  * 
  * Each UPnP device contains zero or more services. The UPnP description for a
  * service defines actions, their arguments, and event characteristics.
+ * 
+ * @version $Revision$
  */
 public interface UPnPService {
 	/**

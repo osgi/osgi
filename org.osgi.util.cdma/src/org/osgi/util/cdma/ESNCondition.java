@@ -23,8 +23,10 @@ import org.osgi.service.condpermadmin.Condition;
 import org.osgi.service.condpermadmin.ConditionInfo;
 
 /**
- * Class representing an ESN condition. Instances of this class contain a
- * string value that is matched against the ESN of the device.
+ * Class representing an ESN condition. Instances of this class contain a string
+ * value that is matched against the ESN of the device.
+ * 
+ * @version $Revision$
  */
 public class ESNCondition {
 	private static final String ORG_OSGI_UTIL_CDMA_ESN = "org.osgi.util.cdma.esn";

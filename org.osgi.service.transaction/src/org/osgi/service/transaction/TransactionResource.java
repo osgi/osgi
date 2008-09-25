@@ -1,6 +1,4 @@
 /*
- * $Date: 2007-08-10 04:17:58 +0300 $
- *
  * Copyright (c) OSGi Alliance (2000, 2007). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");

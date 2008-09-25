@@ -1,6 +1,4 @@
 /*
- * $Date$
- *
  * Copyright (c) OSGi Alliance (2004, 2007). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -38,6 +36,8 @@ import java.util.Hashtable;
  * of future data formats. When using these formats, the actual format name is
  * specified as a <code>String</code>. The application is responsible for the
  * proper encoding of the data according to the specified format.
+ * 
+ * @version $Revision$
  */
 public final class DmtData {
 

@@ -1,6 +1,4 @@
 /*
- * $Date$
- * 
  * Copyright (c) OSGi Alliance (2005, 2007). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -21,8 +19,10 @@ package org.osgi.application;
 import java.util.Hashtable;
 
 /**
- * Using this class, OSGi-aware applications can obtain their {@link ApplicationContext}. 
- *
+ * Using this class, OSGi-aware applications can obtain their
+ * {@link ApplicationContext}.
+ * 
+ * @version $Revision$
  */
 public final class Framework {
 

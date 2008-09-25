@@ -1,6 +1,4 @@
 /*
- * $Date$
- *
  * Copyright (c) OSGi Alliance (2004, 2007). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -24,6 +22,8 @@ import info.dmtree.DmtSession;
  * NotificationService enables sending aynchronous notifications to a management
  * server. The implementation of <code>NotificationService</code> should
  * register itself in the OSGi service registry as a service.
+ * 
+ * @version $Revision$
  */
 public interface NotificationService {
 

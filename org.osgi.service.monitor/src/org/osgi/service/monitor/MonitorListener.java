@@ -1,6 +1,4 @@
 /*
- * $Date$
- *
  * Copyright (c) OSGi Alliance (2004, 2007). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -19,11 +17,13 @@
 package org.osgi.service.monitor;
 
 /**
- * The <code>MonitorListener</code> is used by <code>Monitorable</code>
- * services to send notifications when a <code>StatusVariable</code> value is
- * changed. The <code>MonitorListener</code> should register itself as a
- * service at the OSGi Service Registry. This interface must (only) be 
- * implemented by the Monitor Admin component.
+ * The <code>MonitorListener</code> is used by <code>Monitorable</code> services
+ * to send notifications when a <code>StatusVariable</code> value is changed.
+ * The <code>MonitorListener</code> should register itself as a service at the
+ * OSGi Service Registry. This interface must (only) be implemented by the
+ * Monitor Admin component.
+ * 
+ * @version $Revision$
  */
 public interface MonitorListener {
     /**

@@ -1,6 +1,4 @@
 /*
- * $Date$
- *
  * Copyright (c) OSGi Alliance (2002, 2007). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -24,7 +22,8 @@ import java.util.Dictionary;
  * 
  * Each UPnP service contains zero or more actions. Each action may have zero or
  * more UPnP state variables as arguments.
- *  
+ * 
+ * @version $Revision$
  */
 public interface UPnPAction {
 	/**

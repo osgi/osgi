@@ -1,6 +1,4 @@
 /*
- * $Date$
- *
  * Copyright (c) OSGi Alliance (2004, 2007). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -29,14 +27,14 @@ package org.osgi.service.monitor;
  * <code>Monitorable</code> services from the service registry and then query
  * the list of <code>StatusVariable</code> names from the
  * <code>Monitorable</code> services. This way all services which publish
- * <code>StatusVariable</code>s will be returned regardless of whether they
- * do or do not hold the necessary <code>MonitorPermission</code> for
- * publishing <code>StatusVariable</code>s. By using the
- * <code>MonitorAdmin</code> to obtain the <code>StatusVariable</code>s it
- * is guaranteed that only those <code>Monitorable</code> services will be
- * accessed who are authorized to publish <code>StatusVariable</code>s. It is
- * the responsibility of the <code>MonitorAdmin</code> implementation to check
- * the required permissions and show only those variables which pass this check.
+ * <code>StatusVariable</code>s will be returned regardless of whether they do
+ * or do not hold the necessary <code>MonitorPermission</code> for publishing
+ * <code>StatusVariable</code>s. By using the <code>MonitorAdmin</code> to
+ * obtain the <code>StatusVariable</code>s it is guaranteed that only those
+ * <code>Monitorable</code> services will be accessed who are authorized to
+ * publish <code>StatusVariable</code>s. It is the responsibility of the
+ * <code>MonitorAdmin</code> implementation to check the required permissions
+ * and show only those variables which pass this check.
  * <p>
  * The events posted by <code>MonitorAdmin</code> contain the following
  * properties:
@@ -53,11 +51,13 @@ package org.osgi.service.monitor;
  * </ul>
  * <p>
  * Most of the methods require either a Monitorable ID or a Status Variable path
- * parameter, the latter in [Monitorable_ID]/[StatusVariable_ID] format.  These
+ * parameter, the latter in [Monitorable_ID]/[StatusVariable_ID] format. These
  * parameters must not be <code>null</code>, and the IDs they contain must
  * conform to their respective definitions in {@link Monitorable} and
- * {@link StatusVariable}.  If any of the restrictions are violated, the method
+ * {@link StatusVariable}. If any of the restrictions are violated, the method
  * must throw an <code>IllegalArgumentException</code>.
+ * 
+ * @version $Revision$
  */
 public interface MonitorAdmin {
 

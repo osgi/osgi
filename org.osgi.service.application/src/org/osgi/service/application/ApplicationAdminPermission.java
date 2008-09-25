@@ -1,6 +1,4 @@
 /*
- * $Date$
- * 
  * Copyright (c) OSGi Alliance (2004, 2007). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -19,21 +17,27 @@
 package org.osgi.service.application;
 
 import java.security.Permission;
-import java.util.*;
+import java.util.Hashtable;
+import java.util.StringTokenizer;
+import java.util.Vector;
 
-import org.osgi.framework.*;
+import org.osgi.framework.Filter;
+import org.osgi.framework.FrameworkUtil;
+import org.osgi.framework.InvalidSyntaxException;
 
 /**
- * This class implements permissions for manipulating applications and
- * their instances.
+ * This class implements permissions for manipulating applications and their
+ * instances.
  * <P>
  * ApplicationAdminPermission can be targeted to applications that matches the
  * specified filter.
  * <P>
  * ApplicationAdminPermission may be granted for different actions:
- * <code>lifecycle</code>, <code>schedule</code> and <code>lock</code>.
- * The permission <code>schedule</code> implies the permission
+ * <code>lifecycle</code>, <code>schedule</code> and <code>lock</code>. The
+ * permission <code>schedule</code> implies the permission
  * <code>lifecycle</code>.
+ * 
+ * @version $Revision$
  */
 public class ApplicationAdminPermission extends Permission {
 	private static final long serialVersionUID = 1L;

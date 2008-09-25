@@ -25,6 +25,8 @@ import org.osgi.service.condpermadmin.ConditionInfo;
 /**
  * Class representing an MEID condition. Instances of this class contain a
  * string value that is matched against the MEID of the device.
+ * 
+ * @version $Revision$
  */
 public class MEIDCondition {
 	private static final String ORG_OSGI_UTIL_CDMA_MEID = "org.osgi.util.cdma.meid";

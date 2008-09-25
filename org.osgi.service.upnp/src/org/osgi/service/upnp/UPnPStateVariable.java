@@ -1,6 +1,4 @@
 /*
- * $Date$
- *
  * Copyright (c) OSGi Alliance (2002, 2007). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -21,13 +19,15 @@ package org.osgi.service.upnp;
  * The meta-information of a UPnP state variable as declared in the device's
  * service state table (SST).
  * <p>
- * Method calls to interact with a device (e.g. <code>UPnPAction.invoke(...);</code>)
- * use this class to encapsulate meta information about the input and output
- * arguments.
+ * Method calls to interact with a device (e.g.
+ * <code>UPnPAction.invoke(...);</code>) use this class to encapsulate meta
+ * information about the input and output arguments.
  * <p>
  * The actual values of the arguments are passed as Java objects. The mapping of
  * types from UPnP data types to Java data types is described with the field
  * definitions.
+ * 
+ * @version $Revision$
  */
 public interface UPnPStateVariable {
 	/**

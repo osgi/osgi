@@ -1,6 +1,4 @@
 /*
- * $Date$
- *
  * Copyright (c) OSGi Alliance (2005, 2007). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -29,6 +27,8 @@ package org.osgi.service.upnp;
  * be queried.
  * 
  * @since 1.1
+ * 
+ * @version $Revision$
  */
 public interface UPnPLocalStateVariable extends UPnPStateVariable {
 	/**

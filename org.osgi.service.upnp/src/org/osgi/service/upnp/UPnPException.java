@@ -1,6 +1,4 @@
 /*
- * $Date$
- *
  * Copyright (c) OSGi Alliance (2005, 2007). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,12 +15,12 @@
  */
 package org.osgi.service.upnp;
 
-
 /**
  * There are several defined error situations describing UPnP problems while a
  * control point invokes actions to UPnPDevices.
  * 
  * @since 1.1
+ * @version $Revision$
  */
 public class UPnPException extends Exception {
 	static final long		serialVersionUID		= -262013318122195146L;

@@ -1,6 +1,4 @@
 /*
- * $Date$
- *
  * Copyright (c) OSGi Alliance (2006, 2007). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -19,8 +17,10 @@
 package info.dmtree;
 
 /**
- * Unchecked illegal state exception. This class is used in DMT because 
+ * Unchecked illegal state exception. This class is used in DMT because
  * java.lang.IllegalStateException does not exist in CLDC.
+ * 
+ * @version $Revision$
  */
 public class DmtIllegalStateException extends RuntimeException {
     private static final long serialVersionUID = 2015244852018469700L;

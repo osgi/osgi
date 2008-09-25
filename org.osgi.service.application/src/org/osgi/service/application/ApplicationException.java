@@ -1,6 +1,4 @@
 /*
- * $Date$
- * 
  * Copyright (c) OSGi Alliance (2005, 2008). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -19,28 +17,32 @@
 package org.osgi.service.application;
 
 /**
- * This exception is used to indicate problems related to application 
- * lifecycle management.
+ * This exception is used to indicate problems related to application lifecycle
+ * management.
  * 
- * <code>ApplicationException</code> object is created by the Application Admin to denote
- * an exception condition in the lifecycle of an application.
- * <code>ApplicationException</code>s should not be created by developers.
- * <br/>
- * <code>ApplicationException</code>s are associated with an error code. This code
- * describes the type of problem reported in this exception. The possible codes are:
+ * <code>ApplicationException</code> object is created by the Application Admin
+ * to denote an exception condition in the lifecycle of an application.
+ * <code>ApplicationException</code>s should not be created by developers. <br/>
+ * <code>ApplicationException</code>s are associated with an error code. This
+ * code describes the type of problem reported in this exception. The possible
+ * codes are:
  * <ul>
- * <li> {@link #APPLICATION_LOCKED} - The application couldn't be launched because it is locked.</li>
- * <li> {@link #APPLICATION_NOT_LAUNCHABLE} - The application is not in launchable state.</li>
- * <li> {@link #APPLICATION_INTERNAL_ERROR} - An exception was thrown by the application or its
- *       container during launch.</li>
+ * <li> {@link #APPLICATION_LOCKED} - The application couldn't be launched
+ * because it is locked.</li>
+ * <li> {@link #APPLICATION_NOT_LAUNCHABLE} - The application is not in
+ * launchable state.</li>
+ * <li> {@link #APPLICATION_INTERNAL_ERROR} - An exception was thrown by the
+ * application or its container during launch.</li>
  * <li> {@link #APPLICATION_SCHEDULING_FAILED} - The scheduling of an application
- *       failed.
- * <li> {@link #APPLICATION_DUPLICATE_SCHEDULE_ID} -  The application scheduling failed 
- *       because the specified identifier is already in use.
- * <li> {@link #APPLICATION_EXITVALUE_NOT_AVAILABLE} - The exit value is not available 
- *       for an application instance because the instance has not terminated.
+ * failed.
+ * <li> {@link #APPLICATION_DUPLICATE_SCHEDULE_ID} - The application scheduling
+ * failed because the specified identifier is already in use.
+ * <li> {@link #APPLICATION_EXITVALUE_NOT_AVAILABLE} - The exit value is not
+ * available for an application instance because the instance has not
+ * terminated.
  * </ul>
  * 
+ * @version $Revision$
  */
 public class ApplicationException extends Exception {
 	private static final long serialVersionUID = -7173190453622508207L;

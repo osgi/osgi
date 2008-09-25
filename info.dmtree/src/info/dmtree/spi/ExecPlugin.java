@@ -1,6 +1,4 @@
 /*
- * $Date$
- *
  * Copyright (c) OSGi Alliance (2004, 2007). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -28,6 +26,8 @@ import info.dmtree.DmtSession;
  * service registry specifying the list of root node URIs in a
  * <code>String</code> array in the <code>execRootURIs</code> registration
  * parameter.
+ * 
+ * @version $Revision$
  */
 public interface ExecPlugin {
 

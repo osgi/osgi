@@ -1,6 +1,4 @@
 /*
- * $Date$
- * 
  * Copyright (c) OSGi Alliance (2004, 2007). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -29,10 +27,12 @@ import java.util.Map;
  * Each <code>ScheduledApplication</code> instance has an identifier which is
  * unique within the scope of the application being scheduled.
  * <p>
- * <code>ScheduledApplication</code> instances are registered as services.
- * The {@link #APPLICATION_PID} service property contains the PID of the
- * application being scheduled, the {@link #SCHEDULE_ID} service property
- * contains the schedule identifier.
+ * <code>ScheduledApplication</code> instances are registered as services. The
+ * {@link #APPLICATION_PID} service property contains the PID of the application
+ * being scheduled, the {@link #SCHEDULE_ID} service property contains the
+ * schedule identifier.
+ * 
+ * @version $Revision$
  */
 public interface ScheduledApplication {
     

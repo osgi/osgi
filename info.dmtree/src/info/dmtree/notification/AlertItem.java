@@ -1,6 +1,4 @@
 /*
- * $Date$
- *
  * Copyright (c) OSGi Alliance (2004, 2007). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -32,12 +30,14 @@ import info.dmtree.Uri;
  * The data syntax and semantics varies widely between various alerts, so does
  * the optionality of particular parameters of an alert item. If an item, such
  * as source or type, is not defined, the corresponding getter method returns
- * <code>null</code>. For example, for alert 1201 (client-initiated session)
- * all elements will be <code>null</code>.
+ * <code>null</code>. For example, for alert 1201 (client-initiated session) all
+ * elements will be <code>null</code>.
  * <P>
  * The syntax used in <code>AlertItem</code> class corresponds to the OMA DM
  * alert format. {@link NotificationService} implementations on other management
  * protocols should map these constructs to the underlying protocol.
+ * 
+ * @version $Revision$
  */
 public class AlertItem {
 

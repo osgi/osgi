@@ -1,6 +1,4 @@
 /*
- * $Date$
- *
  * Copyright (c) OSGi Alliance (2004, 2007). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -23,8 +21,9 @@ package info.dmtree;
  * service registry as a service. <code>DmtAdmin</code> is the entry point for
  * applications to use the DMT API.
  * <p>
- * The <code>getSession</code> methods are used to open a session on a
- * specified subtree of the DMT. A typical way of usage:
+ * The <code>getSession</code> methods are used to open a session on a specified
+ * subtree of the DMT. A typical way of usage:
+ * 
  * <pre>
  * serviceRef = context.getServiceReference(DmtAdmin.class.getName());
  * DmtAdmin admin = (DmtAdmin) context.getService(serviceRef);
@@ -39,22 +38,24 @@ package info.dmtree;
  * segment using the {@link Uri#mangle(String)} method.
  * <p>
  * It is possible to specify a lock mode when opening the session (see lock type
- * constants in {@link DmtSession}).  This determines whether the session can
- * run in parallel with other sessions, and the kinds of operations that can be 
- * performed in the session.  All Management Objects constituting the device 
- * management tree must support read operations on their nodes, while support 
- * for write operations depends on the Management Object. Management Objects 
- * supporting write access may support transactional write, non-transactional 
- * write or both. Users of <code>DmtAdmin</code> should consult the Management 
- * Object specification and implementation for the supported update modes. If 
- * Management Object definition permits, implementations are encouraged to 
- * support both update modes. 
+ * constants in {@link DmtSession}). This determines whether the session can run
+ * in parallel with other sessions, and the kinds of operations that can be
+ * performed in the session. All Management Objects constituting the device
+ * management tree must support read operations on their nodes, while support
+ * for write operations depends on the Management Object. Management Objects
+ * supporting write access may support transactional write, non-transactional
+ * write or both. Users of <code>DmtAdmin</code> should consult the Management
+ * Object specification and implementation for the supported update modes. If
+ * Management Object definition permits, implementations are encouraged to
+ * support both update modes.
  * <p>
  * This interface also contains methods for manipulating the set of
  * <code>DmtEventListener</code> objects that are called when the structure or
  * content of the tree is changed. These methods are not needed in an OSGi
- * environment, clients should register listeners through the Event Admin 
+ * environment, clients should register listeners through the Event Admin
  * service.
+ * 
+ * @version $Revision$
  */
 public interface DmtAdmin {
     /**

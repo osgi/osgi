@@ -1,6 +1,4 @@
 /*
- * $Date$
- *
  * Copyright (c) OSGi Alliance (2004, 2007). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,7 +15,10 @@
  */
 package info.dmtree.spi;
 
-import info.dmtree.*;
+import info.dmtree.DmtData;
+import info.dmtree.DmtException;
+import info.dmtree.DmtSession;
+import info.dmtree.MetaNode;
 
 /**
  * Provides non-atomic read-write access to the part of the tree handled by the
@@ -36,8 +37,7 @@ import info.dmtree.*;
  * certain circumstances for granted: that the path is valid and is within the
  * subtree of the plugin and the session, the command can be applied to the
  * given node (e.g. the target of <code>setNodeValue</code> is a leaf node),
- * etc. All errors described by the error codes {@link DmtException#INVALID_URI},
- * {@link DmtException#URI_TOO_LONG}, {@link DmtException#PERMISSION_DENIED},
+ * etc. All errors described by the error codes {@link DmtException#INVALID_URI}, {@link DmtException#URI_TOO_LONG}, {@link DmtException#PERMISSION_DENIED},
  * {@link DmtException#COMMAND_NOT_ALLOWED} and
  * {@link DmtException#TRANSACTION_ERROR} are fully filtered out before control
  * reaches the plugin.
@@ -63,6 +63,8 @@ import info.dmtree.*;
  * The plugin can use the remaining error codes as needed. If an error does not
  * fit into any other category, the {@link DmtException#COMMAND_FAILED} code
  * should be used.
+ * 
+ * @version $Revision$
  */
 public interface ReadWriteDataSession extends ReadableDataSession {
 

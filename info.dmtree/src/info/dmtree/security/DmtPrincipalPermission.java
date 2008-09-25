@@ -1,6 +1,4 @@
 /*
- * $Date$
- *
  * Copyright (c) OSGi Alliance (2004, 2007). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -20,7 +18,10 @@ package info.dmtree.security;
 
 import java.security.Permission;
 import java.security.PermissionCollection;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Enumeration;
+import java.util.Iterator;
 
 /**
  * Indicates the callers authority to create DMT sessions on behalf of a remote
@@ -32,6 +33,8 @@ import java.util.*;
  * wildcard is allowed at the end of the target string, to allow using any
  * principal name with the given prefix. The &quot;*&quot; target means the
  * adapter can create a session in the name of any principal.
+ * 
+ * @version $Revision$
  */
 public class DmtPrincipalPermission extends Permission {
     private static final long serialVersionUID = 6388752177325038332L;
