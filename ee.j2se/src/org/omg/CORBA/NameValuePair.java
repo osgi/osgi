@@ -1,5 +1,5 @@
 /*
- * $Date$
+ * $Revision$
  *
  * Copyright (c) OSGi Alliance (2001, 2008). All Rights Reserved.
  *
