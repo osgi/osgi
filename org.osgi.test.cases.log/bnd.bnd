@@ -11,3 +11,5 @@ Private-Package						= org.osgi.test.cases.log
 -runbundles						= \
 	org.osgi.impl.service.log; version=project, \
 	org.osgi.impl.service.cm;  version=project
+
+Test-Cases: ${classes;extending;*TestCase}
