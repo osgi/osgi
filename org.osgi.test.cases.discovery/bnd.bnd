@@ -10,4 +10,7 @@ Private-Package						= org.osgi.test.cases.discovery
 	${junit}
 
 -runbundles							= \
-	org.osgi.impl.service.discovery; 		version=project
+	org.osgi.impl.service.discovery; 		version=project, \
+	ch.ethz.iks.slp, \
+	org.osgi.impl.service.log
+
