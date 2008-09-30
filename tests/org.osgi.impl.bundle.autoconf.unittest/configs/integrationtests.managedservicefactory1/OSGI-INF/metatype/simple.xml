@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<metadata:MetaData xmlns:metadata="http://www.osgi.org/xmlns/metatype/v1.0.0">
+	<OCD id="ocd1" name="ocd1name">
+		<AD id="ad1" type="String" default="value1"/>
+		<AD id="increment" type="Integer" default="1"/>
+	</OCD>
+	<Designate pid="integrationtests.managedservicefactory1.pid">
+		<Object ocdref="ocd1"/>
+	</Designate>
+</metadata:MetaData>

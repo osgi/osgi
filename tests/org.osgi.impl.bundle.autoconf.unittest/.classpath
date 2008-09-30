@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="src" path="/org.osgi.impl.framework.eclipse"/>
+	<classpathentry kind="src" path="/org.osgi.framework"/>
+	<classpathentry kind="src" path="/org.osgi.service.condpermadmin"/>
+	<classpathentry kind="src" path="/org.osgi.service.http"/>
+	<classpathentry kind="src" path="/org.osgi.service.cm"/>
+	<classpathentry kind="src" path="/org.osgi.service.event"/>
+	<classpathentry kind="lib" path="jaxme/jaxme2.jar"/>
+	<classpathentry kind="lib" path="jaxme/jaxme2-rt.jar"/>
+	<classpathentry kind="lib" path="jaxme/jaxmeapi.jar"/>
+	<classpathentry kind="lib" path="jaxme/jaxmejs.jar"/>
+	<classpathentry kind="lib" path="jaxme/jaxmepm.jar"/>
+	<classpathentry kind="lib" path="jaxme/jaxmexs.jar"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/org.osgi.impl.bundle.autoconf"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/org.osgi.service.deploymentadmin"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/org.osgi.service.metatype"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/org.osgi.impl.bundle.jaxp"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/org.osgi.service.permissionadmin"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/org.osgi.impl.service.metatype"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/org.osgi.impl.service.component"/>
+	<classpathentry exported="true" kind="lib" path="/org.osgi.impl.service.policy.unittest/src"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/org.osgi.service.component"/>
+	<classpathentry kind="lib" path="/licensed/jar/junit.jar"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/info.dmtree"/>
+	<classpathentry kind="output" path="src"/>
+</classpath>

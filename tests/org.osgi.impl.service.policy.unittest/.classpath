@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="lib" path="/licensed/jar/junit.jar"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="src" path="/org.osgi.impl.service.policy"/>
+	<classpathentry kind="src" path="/org.osgi.impl.framework.eclipse"/>
+	<classpathentry kind="src" path="/org.osgi.framework"/>
+	<classpathentry kind="src" path="/org.osgi.impl.service.dmt"/>
+	<classpathentry kind="src" path="/org.osgi.service.permissionadmin"/>
+	<classpathentry kind="src" path="/org.osgi.service.condpermadmin"/>
+	<classpathentry kind="src" path="/org.osgi.service.http"/>
+	<classpathentry kind="src" path="/org.osgi.service.cm"/>
+	<classpathentry kind="src" path="/org.osgi.service.event"/>
+	<classpathentry kind="src" path="/org.osgi.util.mobile"/>
+	<classpathentry kind="src" path="/org.osgi.util.gsm"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/org.osgi.service.component"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/info.dmtree"/>
+	<classpathentry kind="output" path="src"/>
+</classpath>

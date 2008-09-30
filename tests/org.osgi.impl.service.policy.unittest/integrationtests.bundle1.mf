@@ -1,0 +1,8 @@
+Manifest-Version: 1.0
+Bundle-Name: IntegrationTestBundle1
+Bundle-SymbolicName: TestBundle1
+Bundle-Vendor: Nokia
+Bundle-Version: 1.0
+$(EXPORT-PACKAGE)
+$(IMPORT-PACKAGE)
+$(PRIVATE-PACKAGE)
