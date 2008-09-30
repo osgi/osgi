@@ -1,0 +1,5 @@
+<tests>
+	<test type="core" title="Core Specifications"/>
+	<test type="cmpn" title="Compendium Specifications"/>
+	<test type="mobile"  title="Mobile Specifications"/>
+</tests>

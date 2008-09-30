@@ -1,0 +1,143 @@
+OSGi Compliance Tests License, V 1.0 released as the TCK for JSR 232 
+
+This Compliance Tests License Agreement ("Agreement") is entered into on 
+the Effective Date by and between 
+
+_____________________________________________________ (insert licensee 
+details) ("Licensee"), and 
+
+The OSGi Alliance, Inc., Bishop Ranch 6, 2400 Camino Ramon, Suite 375, San 
+Ramon, CA 94583, USA, ("OSGi").  
+
+Licensee and OSGi shall be referred to herein as Party or Parties.  
+
+"Specification" shall be those portions of the OSGi adopted specifications 
+or standards which are referenced by the relevant Java Specification 
+Request ("JSR") final output as being required for compliance with such 
+JSR, as such may be updated from time to time by the JSR Specification 
+Lead.  
+
+"Compliance Tests" shall be those OSGi Compliance Tests (including 
+software and documentation) that test compliance with the Specification as 
+identified by the final output of the relevant JSR, as such may be updated 
+from time to time by the JSR Specification Lead.  
+
+License Grant  
+
+You are hereby granted a non-transferable and non-sublicenseable, 
+nonexclusive, world-wide license to use the Compliance Tests solely for 
+the purpose of testing compliance of any software with the Specification.  
+You may not modify or create derivative works of any of the Compliance 
+Tests except as is necessary to fulfill the purpose described above.  You 
+may not distribute copies of the Compliance Tests to other parties for any 
+purpose, including for the purpose of allowing such other party to use the 
+Compliance Tests, provided however that any license granted hereunder 
+shall cover your subcontractors when performing work for you.  You shall 
+be fully responsible and liable for your subcontractors' compliance with 
+the terms and conditions of this Agreement.  You may not modify or 
+incorporate the Compliance Tests into any other software.  
+
+Charges and Term
+ 
+The cost for this license is $50,000 USD for a term of 3 years from the 
+receipt of payment, payable against an invoice to be issued by OSGi.  
+
+Testing on behalf of Third Parties
+ 
+During the license term the licensee may use the Compliance Tests to 
+certify compatibility of Third Party implementations of the specification.  
+For each Third Party the licensee tests on behalf of, an additional 
+$50,000 USD payment must be made to the OSGi as described in the terms 
+above.  The Licensee assumes responsibility to ensure that the Third Party 
+implementation meets the compatibility requirements.  
+
+No Warranties
+
+The Compliance Tests contained herein is provided on an "AS IS" basis and 
+to the maximum extent permitted by applicable law, this material is 
+provided AS IS AND WITH ALL FAULTS, and the developers of this material 
+hereby disclaim all other warranties and conditions, either express, 
+implied or statutory, including, but not limited to, any (if any) implied 
+warranties, duties or conditions of merchantability, of fitness for a 
+particular purpose, of accuracy or completeness of responses, of results, 
+of workmanlike effort, of lack of viruses, and of lack of negligence.  
+ALSO, THERE IS NO WARRANTY OR CONDITION OF TITLE, QUIET ENJOYMENT, QUIET 
+POSSESSION, CORRESPONDENCE TO DESCRIPTION OR NON-INFRINGEMENT WITH REGARD 
+TO THIS MATERIAL.  
+
+Limitation of Liability
+
+IN NO EVENT WILL THE OSGi ALLIANCE, ITS MEMBERS, ANY AUTHOR, DEVELOPER, 
+LICENSOR, OR DISTRIBUTOR OF THIS MATERIAL BE LIABLE TO ANY OTHER PARTY FOR 
+THE COST OF PROCURING SUBSTITUTE GOODS OR SERVICES, LOST PROFITS, LOSS OF 
+USE, LOSS OF DATA, OR ANY INCIDENTAL, CONSEQUENTIAL, DIRECT, INDIRECT, 
+PUNITIVE, OR SPECIAL DAMAGES WHETHER UNDER CONTRACT, TORT, WARRANTY, OR 
+OTHERWISE, ARISING IN ANY WAY OUT OF THIS OR ANY OTHER AGREEMENT RELATING 
+TO THIS MATERIAL, WHETHER OR NOT SUCH PARTY HAD ADVANCE NOTICE OF THE 
+POSSIBILITY OF SUCH DAMAGES.  
+
+Covenant Not to Assert
+
+As a material condition to this license you hereby agree, to the extent 
+that you have any patents which cover the use of the Compliance Tests in 
+any manner permitted under this License, not to assert, for the licensed 
+use of the Compliance Tests, any such patents against the developers or 
+distributors of the Compliance Tests, or the OSGi Alliance, its members, 
+or any other parties who have entered into a license substantially similar 
+to this Agreement.  
+
+
+Compatibility Claims
+
+You may not claim that any version or release of software passes the 
+Compliance Tests, and therefore is compatible with the Specification, 
+unless it is capable of passing the most current version of the Compliance 
+Tests available 1 year prior to the date of the first shipment of the 
+software to customers.  In addition, you may not claim that any version or 
+release of software is compatible with any specific OSGi Specification 
+unless such Software or derivative works is capable of passing the OSGi's 
+Specification compatibility testing requirements, as defined by the OSGi 
+Alliance.  You agree to make information available regarding the version 
+of the Compliance Tests passed, upon request.  You agree that any claims 
+regarding compliance with the Specification will be factually accurate and 
+will not be misleading.  
+
+General
+
+No other rights are granted by implication, estoppel or otherwise.
+
+If any provision of this Agreement is invalid or unenforceable under 
+applicable law, it shall not affect the validity or enforceability of the 
+remainder of the terms of this Agreement, and without further action by 
+the parties hereto, such provision shall be reformed to the minimum extent 
+necessary to make such provision valid and enforceable.  
+
+Your rights under this Agreement shall terminate if you fail to comply 
+with any of the material terms or conditions of this Agreement and do not 
+cure such failure in a reasonable period of time after becoming aware of 
+such noncompliance.  If your rights under this Agreement terminate, you 
+agree to cease use of the Compliance Tests immediately and cease making 
+any claims of compatibility regarding the Specification based on the use 
+of the Compliance Tests.  
+
+This Agreement is governed by the laws of the State of California and the 
+intellectual property laws of the United States of America.  No party to 
+this Agreement will bring a legal action under this Agreement more than 
+one year after the cause of action arose.  Each party waives its rights to 
+a jury trial in any resulting litigation.  
+
+(INSERT LICENSEE)				The OSGi ALLIANCE
+						 
+
+By:  ____________________			By:   ___________________
+
+Name:__________________				Name:  _________________
+
+Title: ___________________ 			Title:  __________________
+
+Effective Date: ___________________				
+
+
+EXHIBIT A
+
+The "SOFTWARE" to which this license applies is the Compliance Tests.  
