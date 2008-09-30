@@ -150,7 +150,7 @@ public class DiscoveryCommandProvider implements
 		}
 
 		public String[] getInterfaceNames() {
-			if (interfaces != null) {
+			if (interfaces != null && interfaces.length > 0) {
 				return interfaces;
 			}
 			if (serviceReference != null) {
