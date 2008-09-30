@@ -6,18 +6,7 @@ Bundle-Version					: ${mobile.release.version}
 Bundle-Activator				: org.osgi.tools.group.Group
 
 Include-Resource				: \
-  	${target}/org.osgi.impl.service.log.jar , \
-  	${target}/org.osgi.impl.bundle.jaxp.jar , \
-  	${target}/org.osgi.impl.bundle.autoconf.jar , \
-  	${target}/org.osgi.impl.service.application.jar , \
-  	${target}/org.osgi.impl.service.cm.jar , \
-  	${target}/org.osgi.impl.service.deploymentadmin.jar , \
-  	${target}/org.osgi.impl.service.dmt.jar , \
-  	${target}/org.osgi.impl.service.io.jar , \
-  	${target}/org.osgi.impl.service.monitor.jar , \
-  	${target}/org.osgi.impl.service.prefs.jar , \
-  	${target}/org.osgi.impl.service.policy.jar , \
-  	${target}/org.osgi.impl.bundle.midletcontainer.jar , \
+	${replace;${build.mobile.impls};(.+);${target}/$1.jar}, \
   	\
 	${repo;org.osgi.impl.bundle.servlet;2.1}, \
   	${repo;org.eclipse.equinox.ds}, \

@@ -6,27 +6,7 @@ Bundle-Version				: ${core.release.version}
 Bundle-Activator			: org.osgi.tools.group.Group
 
 Include-Resource				: \
-    ${target}/org.osgi.test.cases.activationpolicy.jar, \
-    ${target}/org.osgi.test.cases.framework.classloading.jar, \
-    ${target}/org.osgi.test.cases.framework.classpath.jar, \
-    ${target}/org.osgi.test.cases.framework.div.jar, \
-    ${target}/org.osgi.test.cases.framework.dynpkgimport.jar, \
-    ${target}/org.osgi.test.cases.framework.filter.jar, \
-    ${target}/org.osgi.test.cases.framework.fragments.jar, \
-    ${target}/org.osgi.test.cases.framework.lifecycle.jar, \
-    ${target}/org.osgi.test.cases.framework.registry.jar, \
-    ${target}/org.osgi.test.cases.framework.syncbundlelistener.jar, \
-    ${target}/org.osgi.test.cases.packageadmin.tc1.jar, \
-    ${target}/org.osgi.test.cases.packageadmin.tc2.jar, \
-    ${target}/org.osgi.test.cases.packageadmin.tc3.jar, \
-    ${target}/org.osgi.test.cases.packageadmin.tc5.jar, \
-    ${target}/org.osgi.test.cases.permissionadmin.conditional.jar, \
-    ${target}/org.osgi.test.cases.permissionadmin.main.jar, \
-    ${target}/org.osgi.test.cases.permissionadmin.nosecurity.jar, \
-    ${target}/org.osgi.test.cases.permissionadmin.security.jar, \
-    ${target}/org.osgi.test.cases.permissionadmin.signature.jar, \
-    ${target}/org.osgi.test.cases.startlevel.jar, \
-    ${target}/org.osgi.test.cases.url.jar, \
+	${replace;${build.core.tests};(.+);${target}/$1.jar}, \
     \
  	NOTICE=legal/NOTICE.txt, \
  	about.html=legal/about-ri.html

@@ -31,17 +31,17 @@ mobile.release.version		= ${osgi.version.long}.${project.build}
 
 # The following line builds all these files and publishes them to 
 # the repository (if they are deployable)
--dependson 					= ${lsr;${workspace};\
-		!org.osgi.impl.bundle.bindex, \
-		!org.osgi.impl.service.discovery, \
-		!org.osgi.test.cases.signature, \
-		ee.*, \
-		org.osgi.service.*, \
-		org.osgi.util.*, \
-		org.osgi.internal, \
-		org.osgi.impl.*, \
-		org.osgi.test.cases.* \
-	}
+
+-dependson 					= ${uniq; \
+	${specs}, \
+	${ees}, \
+    org.osgi.internal, \
+	${build.cmpn.impls}, \
+	${build.mobile.impls}, \
+	${build.core.tests}, \
+	${build.cmpn.tests}, \
+	${build.mobile.tests} \
+ }
 
 -buildpath 					= \
 	${replace;${specs};.+;$0\\;version=project}, \
@@ -55,8 +55,9 @@ japi.osgi.core 				= ${replace;$(core.specs);.+;+$0}
 japi.osgi.cmpn 				= ${replace;$(cmpn.specs);.+;+$0}
 japi.osgi.mobile 			= ${replace;$(mobile.specs);.+;+$0}
 
-specs 						= ${uniq; ${core.specs}, ${cmpn.specs}, ${mobile.specs}}
-
+specs 						= ${uniq; ${core.specs},       ${cmpn.specs},       ${mobile.specs}}
+build.tests                 = ${uniq; ${build.core.tests}, ${build.cmpn.tests}, ${build.mobile.tests}}
+build.impls                 = ${uniq;                      ${build.cmpn.impls}, ${build.mobile.impls}}
 javadoc.packagenames 		= ${replace;$(specs);^.*$;$0.*}
 
 ees 						= \
@@ -70,48 +71,156 @@ core.specs = org.osgi.framework, \
  org.osgi.service.startlevel, \
  org.osgi.service.url
 
+build.core.tests = \
+    org.osgi.test.cases.activationpolicy, \
+    org.osgi.test.cases.framework.classloading, \
+    org.osgi.test.cases.framework.classpath, \
+    org.osgi.test.cases.framework.div, \
+    org.osgi.test.cases.framework.dynpkgimport, \
+    org.osgi.test.cases.framework.filter, \
+    org.osgi.test.cases.framework.fragments, \
+    org.osgi.test.cases.framework.lifecycle, \
+    org.osgi.test.cases.framework.registry, \
+    org.osgi.test.cases.framework.syncbundlelistener, \
+    org.osgi.test.cases.packageadmin.tc1, \
+    org.osgi.test.cases.packageadmin.tc2, \
+    org.osgi.test.cases.packageadmin.tc3, \
+    org.osgi.test.cases.packageadmin.tc5, \
+    org.osgi.test.cases.permissionadmin.conditional, \
+    org.osgi.test.cases.permissionadmin.main, \
+    org.osgi.test.cases.permissionadmin.nosecurity, \
+    org.osgi.test.cases.permissionadmin.security, \
+    org.osgi.test.cases.permissionadmin.signature, \
+    org.osgi.test.cases.startlevel, \
+    org.osgi.test.cases.url, \
+
 cmpn.specs = \
- org.osgi.application, \
- org.osgi.service.application, \
- org.osgi.service.cm, \
- org.osgi.service.component, \
- org.osgi.service.command, \
- org.osgi.service.deploymentadmin, \
- org.osgi.service.device, \
- org.osgi.service.event, \
- org.osgi.service.http, \
- org.osgi.service.io, \
- org.osgi.service.log, \
- org.osgi.service.metatype, \
- org.osgi.service.monitor, \
- org.osgi.service.prefs, \
- org.osgi.service.provisioning, \
- org.osgi.service.threadio, \
- org.osgi.service.upnp, \
- org.osgi.service.useradmin, \
- org.osgi.service.wireadmin, \
- org.osgi.util.measurement, \
- org.osgi.util.position, \
- org.osgi.util.gsm, \
- org.osgi.util.mobile, \
- org.osgi.util.tracker, \
- org.osgi.util.xml, \
- info.dmtree
+	 org.osgi.application, \
+	 org.osgi.service.application, \
+	 org.osgi.service.cm, \
+	 org.osgi.service.component, \
+	 org.osgi.service.command, \
+	 org.osgi.service.deploymentadmin, \
+	 org.osgi.service.device, \
+	 org.osgi.service.event, \
+	 org.osgi.service.http, \
+	 org.osgi.service.io, \
+	 org.osgi.service.log, \
+	 org.osgi.service.metatype, \
+	 org.osgi.service.monitor, \
+	 org.osgi.service.prefs, \
+	 org.osgi.service.provisioning, \
+	 org.osgi.service.threadio, \
+	 org.osgi.service.upnp, \
+	 org.osgi.service.useradmin, \
+	 org.osgi.service.wireadmin, \
+	 org.osgi.util.measurement, \
+	 org.osgi.util.position, \
+	 org.osgi.util.gsm, \
+	 org.osgi.util.mobile, \
+	 org.osgi.util.tracker, \
+	 org.osgi.util.xml, \
+	 info.dmtree
+
+build.cmpn.impls = \
+	org.osgi.impl.service.log, \
+	org.osgi.impl.bundle.rsh, \
+	org.osgi.impl.bundle.jaxp, \
+	org.osgi.impl.bundle.autoconf, \
+	org.osgi.impl.service.application, \
+	org.osgi.impl.service.cm, \
+	org.osgi.impl.service.device.basicdriverlocator, \
+	org.osgi.impl.service.device.manager , \
+	org.osgi.impl.service.http , \
+	org.osgi.impl.service.deploymentadmin , \
+	org.osgi.impl.service.dmt , \
+	org.osgi.impl.service.io , \
+	org.osgi.impl.service.monitor , \
+	org.osgi.impl.service.policy , \
+	org.osgi.impl.service.prefs , \
+	org.osgi.impl.service.provisioning , \
+	org.osgi.impl.service.upnp.cp , \
+	org.osgi.impl.service.upnp.cd , \
+	org.osgi.impl.service.useradmin , \
+	org.osgi.impl.service.wireadmin 
+
+build.cmpn.tests = \
+    org.osgi.test.cases.application, \
+    org.osgi.test.cases.cm, \
+    org.osgi.test.cases.component, \
+    org.osgi.test.cases.device, \
+    org.osgi.test.cases.deploymentadmin.mo, \
+    org.osgi.test.cases.deploymentadmin.tc1, \
+    org.osgi.test.cases.deploymentadmin.tc2, \
+    org.osgi.test.cases.dmt.tc1, \
+    org.osgi.test.cases.dmt.tc2, \
+    org.osgi.test.cases.dmt.tc3, \
+    org.osgi.test.cases.event, \
+    org.osgi.test.cases.http, \
+    org.osgi.test.cases.io, \
+    org.osgi.test.cases.log, \
+    org.osgi.test.cases.measurement, \
+    org.osgi.test.cases.metatype, \
+    org.osgi.test.cases.monitor, \
+    org.osgi.test.cases.policy, \
+    org.osgi.test.cases.position, \
+    org.osgi.test.cases.prefs, \
+    org.osgi.test.cases.provisioning, \
+    org.osgi.test.cases.tracker, \
+    org.osgi.test.cases.upnp, \
+    org.osgi.test.cases.useradmin, \
+    org.osgi.test.cases.wireadmin, \
+    org.osgi.test.cases.xml
 
 mobile.specs = \
- info.dmtree, \
- org.osgi.application, \
- org.osgi.service.application, \
- org.osgi.service.cm, \
- org.osgi.service.component, \
- org.osgi.service.deploymentadmin, \
- org.osgi.service.event, \
- org.osgi.service.io, \
- org.osgi.service.log, \
- org.osgi.service.metatype, \
- org.osgi.service.monitor, \
- org.osgi.service.prefs, \
- org.osgi.util.gsm, \
- org.osgi.util.mobile, \
- org.osgi.util.tracker, \
- org.osgi.util.xml
+	 info.dmtree, \
+	 org.osgi.application, \
+	 org.osgi.service.application, \
+	 org.osgi.service.cm, \
+	 org.osgi.service.component, \
+	 org.osgi.service.deploymentadmin, \
+	 org.osgi.service.event, \
+	 org.osgi.service.io, \
+	 org.osgi.service.log, \
+	 org.osgi.service.metatype, \
+	 org.osgi.service.monitor, \
+	 org.osgi.service.prefs, \
+	 org.osgi.util.gsm, \
+	 org.osgi.util.mobile, \
+	 org.osgi.util.tracker, \
+	 org.osgi.util.xml
+
+build.mobile.impls = \
+   	org.osgi.impl.service.log , \
+  	org.osgi.impl.bundle.jaxp , \
+  	org.osgi.impl.bundle.autoconf , \
+  	org.osgi.impl.service.application , \
+  	org.osgi.impl.service.cm , \
+  	org.osgi.impl.service.deploymentadmin , \
+  	org.osgi.impl.service.dmt , \
+  	org.osgi.impl.service.io , \
+  	org.osgi.impl.service.monitor , \
+  	org.osgi.impl.service.prefs , \
+  	org.osgi.impl.service.policy , \
+  	org.osgi.impl.bundle.midletcontainer
+
+build.mobile.tests = \
+	org.osgi.test.cases.application, \
+	org.osgi.test.cases.cm, \
+	org.osgi.test.cases.component, \
+	org.osgi.test.cases.deploymentadmin.mo, \
+	org.osgi.test.cases.deploymentadmin.tc1, \
+	org.osgi.test.cases.deploymentadmin.tc2, \
+	org.osgi.test.cases.dmt.tc1, \
+	org.osgi.test.cases.dmt.tc2, \
+	org.osgi.test.cases.dmt.tc3, \
+	org.osgi.test.cases.event, \
+	org.osgi.test.cases.io, \
+	org.osgi.test.cases.log, \
+	org.osgi.test.cases.metatype, \
+	org.osgi.test.cases.monitor, \
+	org.osgi.test.cases.policy, \
+	org.osgi.test.cases.prefs, \
+	org.osgi.test.cases.tracker, \
+	org.osgi.test.cases.xml
+	 

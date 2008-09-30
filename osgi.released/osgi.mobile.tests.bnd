@@ -6,24 +6,7 @@ Bundle-Version					: ${mobile.release.version}
 Bundle-Activator				: org.osgi.tools.group.Group
 
 Include-Resource				: \
-	  	${target}/org.osgi.test.cases.application.jar, \
-		${target}/org.osgi.test.cases.cm.jar, \
-		${target}/org.osgi.test.cases.component.jar, \
-		${target}/org.osgi.test.cases.deploymentadmin.mo.jar, \
-		${target}/org.osgi.test.cases.deploymentadmin.tc1.jar, \
-		${target}/org.osgi.test.cases.deploymentadmin.tc2.jar, \
-		${target}/org.osgi.test.cases.dmt.tc1.jar, \
-		${target}/org.osgi.test.cases.dmt.tc2.jar, \
-		${target}/org.osgi.test.cases.dmt.tc3.jar, \
-		${target}/org.osgi.test.cases.event.jar, \
-		${target}/org.osgi.test.cases.io.jar, \
-		${target}/org.osgi.test.cases.log.jar, \
-		${target}/org.osgi.test.cases.metatype.jar, \
-		${target}/org.osgi.test.cases.monitor.jar, \
-		${target}/org.osgi.test.cases.policy.jar, \
-		${target}/org.osgi.test.cases.prefs.jar, \
-		${target}/org.osgi.test.cases.tracker.jar, \
-	  	${target}/org.osgi.test.cases.xml.jar, \
+	${replace;${build.mobile.tests};(.+);${target}/$1.jar}, \
 	  	\
 	 	NOTICE=legal/NOTICE.txt, \
 	 	about.html=legal/about-ri.html
