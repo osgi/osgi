@@ -1,6 +1,7 @@
 package org.osgi.impl.service.discovery.slp;
 
 import java.net.InetAddress;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.UnknownHostException;
 import java.util.Collection;
@@ -11,6 +12,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.StringTokenizer;
 
+import org.osgi.framework.Filter;
+import org.osgi.impl.service.discovery.ProtocolSpecificServiceDescription;
 import org.osgi.service.discovery.ServiceEndpointDescription;
 
 import ch.ethz.iks.slp.ServiceLocationException;
@@ -26,23 +29,40 @@ import ch.ethz.iks.slp.ServiceURL;
  * 
  * @version $Revision$
  */
-public class SLPServiceDescriptionAdapter implements ServiceEndpointDescription {
+public class SLPServiceDescriptionAdapter implements
+		ProtocolSpecificServiceDescription, ServiceEndpointDescription {
 	private String interfaceName;
 	private Map properties = new HashMap();
 	private ServiceURL serviceURL;
+	private Filter filter = null;
+
+	public SLPServiceDescriptionAdapter(String interfaceName, Map properties,
+			Filter fi) throws ServiceLocationException {
+		this.filter = fi;
+		if (properties != null) {
+			this.properties = properties;
+		}
+		this.interfaceName = interfaceName;
+		createServiceURL();
+	}
 
 	public SLPServiceDescriptionAdapter(
-			final ServiceEndpointDescription serviceDescription)
+			final ProtocolSpecificServiceDescription serviceDescription)
 			throws ServiceLocationException {
-		this.interfaceName = serviceDescription.getInterfaceNames()[0];
-		this.properties = (Hashtable) serviceDescription.getProperties();
+		this.interfaceName = serviceDescription.getInterfaceName();
+		if (serviceDescription.getProperties() != null) {
+			this.properties = (Hashtable) serviceDescription.getProperties();
+		}
+		createServiceURL();
+	}
 
+	private void createServiceURL() throws ServiceLocationException {
 		String interf = convertInterfaceName(interfaceName);
-		String protocol = (String) serviceDescription.getProperty("protocol");
-		String host = (String) serviceDescription.getProperty("host");
-		String port = (String) serviceDescription.getProperty("port");
+		String protocol = (String) properties.get("protocol");
+		String host = (String) properties.get("host");
+		String port = (String) properties.get("port");
 
-		Integer lifeTime = (Integer) serviceDescription.getProperty("lifetime");
+		Integer lifeTime = (Integer) properties.get("lifetime");
 		int lifetime = lifeTime != null ? lifeTime.intValue()
 				: ServiceURL.LIFETIME_DEFAULT;
 
@@ -60,10 +80,15 @@ public class SLPServiceDescriptionAdapter implements ServiceEndpointDescription 
 		} catch (UnknownHostException e) {
 			e.printStackTrace();
 		}
-		this.serviceURL = new ServiceURL("service:osgi" + interf
-				+ (protocol != null ? protocol + "://" : "://")
-				+ (host != null ? host : hostname)
-				+ (port != null ? ":" + port : "") + "/" + path, lifetime);
+		StringBuffer buff = new StringBuffer();
+		buff.append("service:osgi");
+		buff.append(interf);
+		buff.append((protocol != null ? protocol + "://" : "://"));
+		buff.append((host != null ? host : hostname));
+		buff.append((port != null ? ":" + port : ""));
+		buff.append("/");
+		buff.append(path);
+		this.serviceURL = new ServiceURL(buff.toString(), lifetime);
 	}
 
 	public SLPServiceDescriptionAdapter(final ServiceURL serviceURL) {
@@ -89,11 +114,11 @@ public class SLPServiceDescriptionAdapter implements ServiceEndpointDescription 
 			properties.put("protocol", serviceURL.getProtocol());
 		}
 		properties.put("lifetime", new Integer(serviceURL.getLifetime()));
-		 addPropertiesFromPath(serviceURL.getURLPath());
+		addPropertiesFromPath(serviceURL.getURLPath());
 	}
 
-	public String[] getInterfaceNames() {
-		return new String[]{interfaceName};
+	public String getInterfaceName() {
+		return interfaceName;
 	}
 
 	public Map getProperties() {
@@ -130,13 +155,20 @@ public class SLPServiceDescriptionAdapter implements ServiceEndpointDescription 
 				.getNamingAuthority() : null;
 	}
 
+	/**
+	 * 
+	 * @return the filter as String representation
+	 */
 	public String getFilter() {
-		return null;
+		if (filter == null) {
+			return null;
+		}
+		return filter.toString();
 	}
 
 	public String toString() {
 		StringBuffer sb = new StringBuffer("Service:\n");
-		sb.append("interface=").append(getInterfaceNames()[0]).append("\n");
+		sb.append("interface=").append(getInterfaceName()).append("\n");
 		sb.append("serviceURL=").append(
 				serviceURL != null ? serviceURL.toString() : "").append("\n");
 		sb.append("properties=\n");
@@ -153,7 +185,7 @@ public class SLPServiceDescriptionAdapter implements ServiceEndpointDescription 
 
 			sb.append(key).append("=").append(value.toString()).append("\n");
 		}
-		
+
 		return sb.toString();
 	}
 
@@ -193,7 +225,7 @@ public class SLPServiceDescriptionAdapter implements ServiceEndpointDescription 
 		try {
 			if (path != null && path.trim() != "") {
 				path = path.substring(2); // strip off the "/?" in front of
-											// the
+				// the
 				// path
 
 				StringTokenizer st = new StringTokenizer(path, "=,");
@@ -217,16 +249,28 @@ public class SLPServiceDescriptionAdapter implements ServiceEndpointDescription 
 		}
 	}
 
+	/**
+	 * 
+	 * @see org.osgi.impl.service.discovery.ProtocolSpecificServiceDescription#getLocation()
+	 */
 	public URL getLocation() {
-		// TODO Auto-generated method stub
+		try {
+			return new URL((String) properties
+					.get(ServiceEndpointDescription.PROP_KEY_SERVICE_LOCATION));
+		} catch (MalformedURLException e) {
+			e.printStackTrace();
+		}
 		return null;
 	}
 
+	/**
+	 * 
+	 * @see org.osgi.impl.service.discovery.ProtocolSpecificServiceDescription#getPropertyKeys()
+	 */
 	public Collection getPropertyKeys() {
-		// TODO Auto-generated method stub
-		return null;
+		return properties.keySet();
 	}
-	
+
 	/**
 	 * 
 	 * @param key
@@ -236,13 +280,51 @@ public class SLPServiceDescriptionAdapter implements ServiceEndpointDescription 
 		properties.put(key, value);
 	}
 
-	public String getProtocolSpecificInterfaceName(String interfaceName) {
+	public void setProperties(Map props) {
+		properties = props;
+	}
+
+	/**
+	 * 
+	 * @see org.osgi.impl.service.discovery.ProtocolSpecificServiceDescription#getProtocolSpecificInterfaceName()
+	 */
+	public String getProtocolSpecificInterfaceName() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	public String getVersion(String interfaceName) {
+	/**
+	 * 
+	 * @see org.osgi.impl.service.discovery.ProtocolSpecificServiceDescription#getVersion()
+	 */
+	public String getVersion() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	/**
+	 * 
+	 * @see org.osgi.service.discovery.ServiceEndpointDescription#getInterfaceNames()
+	 */
+	public String[] getInterfaceNames() {
+		return new String[] { interfaceName };
+	}
+
+	/**
+	 * 
+	 * @see org.osgi.service.discovery.ServiceEndpointDescription#getProtocolSpecificInterfaceName(java.lang.String)
+	 */
+	public String getProtocolSpecificInterfaceName(String arg0) {
+		return (String) properties
+				.get(ServiceEndpointDescription.PROP_KEY_PROTOCOL_SPECIFIC_INTERFACE_NAME);
+	}
+
+	/**
+	 * 
+	 * @see org.osgi.service.discovery.ServiceEndpointDescription#getVersion(java.lang.String)
+	 */
+	public String getVersion(String arg0) {
+		return (String) properties
+				.get(ServiceEndpointDescription.PROP_KEY_VERSION);
 	}
 }

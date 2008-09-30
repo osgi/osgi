@@ -18,9 +18,8 @@
  */
 package org.osgi.impl.service.discovery.slp;
 
-import java.util.Collection;
+import java.util.ArrayList;
 import java.util.Hashtable;
-import java.util.LinkedList;
 import java.util.List;
 
 import org.osgi.framework.BundleContext;
@@ -82,51 +81,52 @@ public class SLPHandlerImpl implements ProtocolHandler {
 	 * 
 	 * @see org.osgi.impl.service.discovery.ProtocolHandler#findService(org.osgi.service.discovery.ServiceDescription)
 	 */
-	public Collection findService(final ServiceEndpointDescription serviceDescription) {
-		List result = new LinkedList();
-		
+	public ServiceEndpointDescription[] findService(final String interfaceName,
+			final Filter filter) {
+		List result = new ArrayList();
 		// create SLP service description
 		SLPServiceDescriptionAdapter serviceDescriptionAdapter;
 		try {
 			serviceDescriptionAdapter = new SLPServiceDescriptionAdapter(
-					serviceDescription);
+					interfaceName, null, filter);
 		} catch (ServiceLocationException e1) {
 			e1.printStackTrace();
-			return result;
+			return (ServiceEndpointDescription[]) result.toArray();
 		}
-		
 		// check whether SLP-Locator service exists
 		Locator locator = getLocator();
 		if (locator == null) {
 			logService.log(LogService.LOG_WARNING, "no SLP-Locator");
-			return result;
+			return (ServiceEndpointDescription[]) result.toArray();
 		}
-		
-		try {			
+		try {
 			String serviceType = serviceDescriptionAdapter.getServiceType();
-			logService.log(LogService.LOG_DEBUG, "serviceType="
-					+ serviceType);
-
-			ServiceLocationEnumeration se = locator.findServices(
-					new ServiceType(serviceType), serviceDescriptionAdapter
-							.getScopes(), serviceDescriptionAdapter
-							.getFilter());
-
+			logService.log(LogService.LOG_DEBUG,"serviceType to find = " + serviceType);
+			logService.log(LogService.LOG_DEBUG, "try to find services with URL="
+					+ serviceDescriptionAdapter.getServiceURL().toString());
+			ServiceLocationEnumeration se = locator
+					.findServices(new ServiceType(serviceType),
+							serviceDescriptionAdapter.getScopes(),
+							serviceDescriptionAdapter.getFilter());
 			// iterate through found services and retrieve their attributes
 			while (se.hasMoreElements()) {
 				ServiceURL url = (ServiceURL) se.next();
-				logService.log(LogService.LOG_DEBUG, "serviceURL=" + url);
+				logService
+						.log(LogService.LOG_DEBUG, "adding serviceURL=" + url);
+				logService.log(LogService.LOG_DEBUG,
+						"try to find attributes for " + url);
 				ServiceLocationEnumeration a = locator.findAttributes(url,
-						null, null);
+						null, null); // takes some time :-(
 				SLPServiceDescriptionAdapter descriptionAdapter = new SLPServiceDescriptionAdapter(
 						url);
-				
 				while (a.hasMoreElements()) {
 					String attributes = (String) a.next();
 					String key = null;
 					Object value = null;
-					attributes = attributes.substring(1, attributes.length()-1);
-					key = attributes.substring(0,attributes.indexOf("="));
+					attributes = attributes.substring(1,
+							attributes.length() - 1);
+					key = attributes.substring(0, attributes.indexOf("="));
+					// if the value is not a String we cannot handle that value! This is a limitation of the API.
 					value = attributes.substring(attributes.indexOf("=") + 1);
 					descriptionAdapter.addProperty(key, value);
 				}
@@ -134,14 +134,34 @@ public class SLPHandlerImpl implements ProtocolHandler {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-			logService.log(LogService.LOG_WARNING,
-					"Failed to find service", e);
+			logService.log(LogService.LOG_WARNING, "Failed to find service", e);
 		}
-		
-		logService.log(LogService.LOG_DEBUG, "number of services found "
-				+ result.size());
-
-		return result;
+		ServiceEndpointDescription[] results = (ServiceEndpointDescription[]) result
+				.toArray(new ServiceEndpointDescription[0]);
+		if (results.length > 0) {
+			StringBuffer buff = new StringBuffer();
+			buff.append("number of services = ");
+			buff.append(results.length);
+			buff.append("; services = ");
+			for (int i = 0; i < results.length; i++) {
+				buff.append("(");
+				String[] ifNames= results[i].getInterfaceNames();
+				for (int k=0; k< ifNames.length; k++) {
+					buff.append(ifNames[k]);
+					if(k != ifNames.length-1) {
+						buff.append(",");
+					}
+				}
+				buff.append(")");
+				if (i != results.length - 1) {
+					buff.append(",(");
+				}
+			}
+			logService.log(LogService.LOG_DEBUG, buff.toString());
+		} else {
+			logService.log(LogService.LOG_DEBUG, "0 services found");
+		}
+		return results;
 	}
 
 	public void setLogService(final LogService logService) {
@@ -168,27 +188,36 @@ public class SLPHandlerImpl implements ProtocolHandler {
 	 * 
 	 * @see org.osgi.impl.service.discovery.ProtocolHandler#publishService(org.osgi.service.discovery.ServiceDescription)
 	 */
-	public boolean publishService(final ServiceEndpointDescription serviceDescription) {
+	public boolean publishService(
+			final ServiceEndpointDescription serviceDescription) {
 		boolean published = false;
-		SLPServiceDescriptionAdapter serviceDescriptionAdapter;
-		try {
-			serviceDescriptionAdapter = new SLPServiceDescriptionAdapter(
-					serviceDescription);
-		} catch (ServiceLocationException e1) {
-			e1.printStackTrace();
-			return published;
+		List serviceDescriptionAdapter = new ArrayList();
+		for (int i = 0; i < serviceDescription.getInterfaceNames().length; i++) {
+			try {
+				SLPServiceDescriptionAdapter sd = new SLPServiceDescriptionAdapter(
+						serviceDescription.getInterfaceNames()[i],
+						serviceDescription.getProperties(), null);
+				serviceDescriptionAdapter.add(sd);
+			} catch (ServiceLocationException e1) {
+				e1.printStackTrace();
+				return published;
+			}
 		}
+
 		Advertiser advertiser = getAdvertiser();
 		if (advertiser != null) {
 			logService.log(LogService.LOG_DEBUG, "publish service "
 					+ serviceDescriptionAdapter);
-
-			try {
-				advertiser.register(serviceDescriptionAdapter.getServiceURL(),
-						new Hashtable(serviceDescriptionAdapter.getProperties()));
-				published = true;
-			} catch (ServiceLocationException e) {
-				e.printStackTrace();
+			for (int k = 0; k < serviceDescriptionAdapter.size(); k++) {
+				try {
+					SLPServiceDescriptionAdapter sd = (SLPServiceDescriptionAdapter) serviceDescriptionAdapter
+							.get(k);
+					advertiser.register(sd.getServiceURL(), new Hashtable(sd
+							.getProperties()));
+					published = true;
+				} catch (ServiceLocationException e) {
+					e.printStackTrace();
+				}
 			}
 		} else {
 			logService.log(LogService.LOG_DEBUG, "no Advertiser");
@@ -200,25 +229,33 @@ public class SLPHandlerImpl implements ProtocolHandler {
 	 * 
 	 * @see org.osgi.impl.service.discovery.ProtocolHandler#unpublishService(org.osgi.service.discovery.ServiceDescription)
 	 */
-	public void unpublishService(final ServiceEndpointDescription serviceDescription) {
-		SLPServiceDescriptionAdapter serviceDescriptionAdapter;
-		try {
-			serviceDescriptionAdapter = new SLPServiceDescriptionAdapter(
-					serviceDescription);
-		} catch (ServiceLocationException e1) {
-			e1.printStackTrace();
-			return;
+	public void unpublishService(
+			final ServiceEndpointDescription serviceDescription) {
+		List serviceDescriptionAdapter = new ArrayList();
+		for (int i = 0; i < serviceDescription.getInterfaceNames().length; i++) {
+			try {
+				SLPServiceDescriptionAdapter sd = new SLPServiceDescriptionAdapter(
+						serviceDescription.getInterfaceNames()[i],
+						serviceDescription.getProperties(), null);
+				serviceDescriptionAdapter.add(sd);
+			} catch (ServiceLocationException e1) {
+				e1.printStackTrace();
+				return;
+			}
 		}
+
 		Advertiser advertiser = getAdvertiser();
 		if (advertiser != null) {
-			logService.log(LogService.LOG_DEBUG, "unpublish service "
-					+ serviceDescriptionAdapter.getServiceURL());
-
-			try {
-				advertiser
-						.deregister(serviceDescriptionAdapter.getServiceURL());
-			} catch (ServiceLocationException e) {
-				e.printStackTrace();
+			for (int k = 0; k < serviceDescriptionAdapter.size(); k++) {
+				try {
+					SLPServiceDescriptionAdapter sd = (SLPServiceDescriptionAdapter) serviceDescriptionAdapter
+							.get(k);
+					logService.log(LogService.LOG_DEBUG, "unpublish service "
+							+ sd.getServiceURL());
+					advertiser.deregister(sd.getServiceURL());
+				} catch (ServiceLocationException e) {
+					e.printStackTrace();
+				}
 			}
 		} else {
 			logService.log(LogService.LOG_DEBUG, "no Advertiser");
@@ -230,18 +267,10 @@ public class SLPHandlerImpl implements ProtocolHandler {
 	 * @see org.osgi.impl.service.discovery.ProtocolHandler#publishService(org.osgi.service.discovery.ServiceDescription,
 	 *      boolean)
 	 */
-	public boolean publishService(final ServiceEndpointDescription serviceDescription,
+	public boolean publishService(
+			final ServiceEndpointDescription serviceDescription,
 			boolean autopublish) {
 		return publishService(serviceDescription);
-	}
-
-	/**
-	 * 
-	 * @see org.osgi.impl.service.discovery.ProtocolHandler#findService(org.osgi.framework.Filter)
-	 */
-	public Collection findService(Filter filter) {
-		// TODO Auto-generated method stub
-		return null;
 	}
 
 	/**

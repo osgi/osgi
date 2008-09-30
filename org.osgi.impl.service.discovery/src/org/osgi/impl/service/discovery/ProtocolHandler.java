@@ -18,8 +18,6 @@
 
 package org.osgi.impl.service.discovery;
 
-import java.util.Collection;
-
 import org.osgi.framework.Filter;
 import org.osgi.service.discovery.ServiceEndpointDescription;
 
@@ -36,14 +34,9 @@ public interface ProtocolHandler {
 	//void registerServiceListenerMap();
 	
 	/**
-	 * {@link org.osgi.service.discovery.Discovery#findService(ServiceEndpointDescription)}
+	 * {@link org.osgi.service.discovery.Discovery#findService(String, String)}
 	 */
-	Collection findService(ServiceEndpointDescription serviceDescription);
-
-	/**
-	 * {@link org.osgi.service.discovery.Discovery#findService(String)}
-	 */
-	Collection findService(Filter filter);
+	ServiceEndpointDescription[] findService(String interfaceName, Filter filter);
 
 	/**
 	 * {@link org.osgi.service.discovery.Discovery#publishService(ServiceEndpointDescription, boolean)}
