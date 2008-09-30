@@ -1,8 +1,0 @@
-Manifest-Version: 1.0
-Bundle-SymbolicName: bundles.tb5
-Bundle-Version: 1.0
-Bundle-Activator: br.org.cesar.bundles.tb5.TB5ExceptionActivator
-$(EXPORT-PACKAGE)
-$(IMPORT-PACKAGE)
-$(PRIVATE-PACKAGE)
-

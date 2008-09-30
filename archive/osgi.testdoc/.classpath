@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<classpath>
-	<classpathentry kind="lib" path="/licensed/jar/servlet.jar"/>
-	<classpathentry kind="lib" path="/licensed/jar/saxon.jar"/>
-	<classpathentry kind="src" path="/org.osgi.tools"/>
-	<classpathentry kind="output" path="src"/>
-</classpath>

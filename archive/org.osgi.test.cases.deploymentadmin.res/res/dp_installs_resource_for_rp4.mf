@@ -1,6 +1,0 @@
-Manifest-Version: 1.0
-DeploymentPackage-SymbolicName: dp_installs_resource_for_rp4
-DeploymentPackage-Version: 1.0
-
-Name: simple_resource.xml
-Resource-Processor: org.osgi.test.cases.deployment.bundles.rp4

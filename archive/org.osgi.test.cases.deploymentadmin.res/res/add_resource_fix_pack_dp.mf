@@ -1,8 +1,0 @@
-Manifest-Version: 1.0
-DeploymentPackage-SymbolicName: simple_dp
-DeploymentPackage-Version: 1.1.1
-DeploymentPackage-FixPack: [1.0,2.0]
-
-Name: simple_resource.xml
-Resource-Processor: org.osgi.test.cases.deployment.bundles.rp1
-DeploymentPackage-Missing: false

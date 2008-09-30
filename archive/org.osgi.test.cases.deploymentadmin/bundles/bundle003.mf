@@ -1,8 +1,0 @@
-Manifest-Version: 1.0
-Bundle-SymbolicName: bundles.tb3
-Bundle-Version: 1.0
-Bundle-Activator: br.org.cesar.bundles.tb3.TB3Activator
-$(EXPORT-PACKAGE)
-$(IMPORT-PACKAGE)
-$(PRIVATE-PACKAGE)
-

@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<classpath>
-	<classpathentry kind="src" path="src"/>
-	<classpathentry exported="true" kind="src" path="/org.osgi.service.power"/>
-	<classpathentry sourcepath="/cnf/repo/osgi/osgi-4.0.0.jar" kind="lib" path="/cnf/repo/osgi/osgi-4.0.0.jar"/>
-	<classpathentry sourcepath="/cnf/repo/ee.foundation/ee.foundation-1.1.0.jar" kind="lib" path="/cnf/repo/ee.foundation/ee.foundation-1.1.0.jar"/>
-	<classpathentry kind="src" path="/org.osgi.service.event"/>
-	<classpathentry kind="output" path="src"/>
-</classpath>

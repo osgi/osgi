@@ -1,7 +1,0 @@
-Manifest-Version: 1.0
-DeploymentPackage-SymbolicName: bundle_throws_exception_stop_dp
-DeploymentPackage-Version: 1.0.0
-
-Name: bundle006.jar
-Bundle-SymbolicName: bundles.tb6
-Bundle-Version: 1.0

@@ -1,8 +1,0 @@
-Manifest-Version: 1.0
-DeploymentPackage-SymbolicName: simple_resource_processor_uninstall
-DeploymentPackage-Version: 1.0.0
-
-Name: rp_bundle4.jar
-Bundle-SymbolicName: org.osgi.test.cases.deployment.bundles.rp4
-Bundle-Version: 1.0
-DeploymentPackage-Customizer: false

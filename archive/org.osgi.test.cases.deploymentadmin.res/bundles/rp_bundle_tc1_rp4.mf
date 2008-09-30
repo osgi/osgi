@@ -1,7 +1,0 @@
-Manifest-Version: 1.0
-Bundle-SymbolicName: org.osgi.test.cases.deployment.bundles.rp4
-Bundle-Version: 1.0
-Bundle-Activator: br.org.cesar.bundles.tc1.rp4.ResourceProcessorImpl
-$(EXPORT-PACKAGE)
-$(IMPORT-PACKAGE)
-$(PRIVATE-PACKAGE)

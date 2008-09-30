@@ -1,8 +1,0 @@
-Manifest-Version: 1.0
-DeploymentPackage-SymbolicName: resource_processor2
-DeploymentPackage-Version: 1.0.0
-
-Name: rp_bundle2.jar
-Bundle-SymbolicName: org.osgi.test.cases.deployment.bundles.rp2
-Bundle-Version: 1.0
-DeploymentPackage-Customizer: false

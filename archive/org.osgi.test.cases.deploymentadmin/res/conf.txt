@@ -1,3 +1,0 @@
-name: configuration file
-purpose: test resource processor
-vendor: MOTOROLA

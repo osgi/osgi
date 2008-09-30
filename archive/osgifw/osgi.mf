@@ -1,9 +1,0 @@
-Manifest-Version: 1.0
-Bundle-Name: osgifw
-Bundle-Description: OSGi Service Platform Release 4 Interfaces and Classes for use in framework implementations
-Bundle-Copyright: Copyright (c) OSGi Alliance (2000, 2004). All Rights Reserved.
-Bundle-Vendor: OSGi Alliance
-Bundle-Version: 4.0
-Bundle-Category: osgi
-Bundle-DocUrl: http://www.osgi.org/
-CVS-Header: $Header$

@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<classpath>
-	<classpathentry kind="src" path="src"/>
-	<classpathentry exported="true" kind="src" path="/org.osgi.service.upnp"/>
-	<classpathentry kind="var" path="JRE_LIB"/>
-	<classpathentry sourcepath="/osgi.released/osgi.jar" kind="lib" path="/osgi.released/osgi.jar"/>
-	<classpathentry kind="lib" path="/cnf/jar/servlet.jar"/>
-	<classpathentry kind="output" path="src"/>
-</classpath>

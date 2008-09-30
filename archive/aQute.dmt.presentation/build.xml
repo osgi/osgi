@@ -1,3 +1,0 @@
-<project name="project" default="publish">
-	<import file="../cnf/build.xml"/>
-</project>
