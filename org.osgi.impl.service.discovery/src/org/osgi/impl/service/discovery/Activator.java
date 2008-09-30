@@ -60,6 +60,8 @@ public class Activator implements BundleActivator {
 		discoveryImpl = new DiscoveryImpl(context, logService);
 		slpHandler = new SLPHandlerImpl(context, logService);
 		
+		setLogService(null);
+		
 		logServiceTracker = new ServiceTracker(context, LogService.class.getName(), new ServiceTrackerCustomizer() {
 
 			public Object addingService(ServiceReference reference) {
@@ -86,10 +88,10 @@ public class Activator implements BundleActivator {
 		});
 		logServiceTracker.open();
 		
+		discoveryImpl.init();
+		
 		// TODO: make the instance configurable, e.g. via CAS or DS
 		discoveryRegistration = context.registerService(Discovery.class.getName(), discoveryImpl, null);
-		
-		discoveryImpl.init();
 		
 		slpHandlerRegistration = context.registerService(ProtocolHandler.class.getName(), slpHandler, null);
 		
