@@ -25,8 +25,7 @@ import org.osgi.framework.ServiceEvent;
  * 
  * <p>
  * Bundles registering this service will be called during framework service
- * publish (register, modify, and unregister service) operations. Service hooks
- * are not called for service operations on other service hooks.
+ * publish (register, modify, and unregister service) operations.
  * 
  * @ThreadSafe
  * @version $Revision$

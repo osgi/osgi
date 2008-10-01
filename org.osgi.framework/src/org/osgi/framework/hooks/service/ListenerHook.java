@@ -24,8 +24,7 @@ import org.osgi.framework.ServiceListener;
  * 
  * <p>
  * Bundles registering this service will be called during service listener
- * addition and removal. Service hooks are not called for service operations on
- * other service hooks.
+ * addition and removal.
  * 
  * @ThreadSafe
  * @version $Revision$

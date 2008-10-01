@@ -25,8 +25,7 @@ import org.osgi.framework.BundleContext;
  * 
  * <p>
  * Bundles registering this service will be called during framework service find
- * (get service references) operations. Service hooks are not called for service
- * operations on other service hooks.
+ * (get service references) operations.
  * 
  * @ThreadSafe
  * @version $Revision$
