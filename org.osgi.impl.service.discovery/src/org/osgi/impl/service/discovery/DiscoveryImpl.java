@@ -18,8 +18,13 @@
  */
 package org.osgi.impl.service.discovery;
 
+import java.util.Dictionary;
+import java.util.HashMap;
+import java.util.Hashtable;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Vector;
 
 import org.osgi.framework.BundleContext;
@@ -54,6 +59,8 @@ public class DiscoveryImpl implements Discovery {
 	private ServiceTracker protocolHandlerTracker;
 	private final BundleContext context;
 
+	private Map listenerAndFilter = null;
+
 	// TODO do we need a logService as parameter??
 	public DiscoveryImpl(final BundleContext context,
 			final LogService logService) {
@@ -66,6 +73,7 @@ public class DiscoveryImpl implements Discovery {
 				Discovery.ORG_OSGI_DISCOVERY_AUTO_PUBLISH);
 
 		listeners = new LinkedList();
+		listenerAndFilter = new HashMap();
 		protocolHandlers = new LinkedList();
 		protocolHandlerTracker = new ServiceTracker(context,
 				ProtocolHandler.class.getName(),
@@ -80,7 +88,27 @@ public class DiscoveryImpl implements Discovery {
 	 *      java.lang.String)
 	 */
 	public void addServiceListener(ServiceListener listener, String filter) {
-		// TODO implement this
+		if (listener == null) {
+			throw new IllegalArgumentException("listener cannot be null");
+		}
+		Filter f = getFilterFromString(filter);
+		synchronized (listeners) {
+			boolean done = false;
+			if (!listeners.contains(listener)) {
+				done = listeners.add(listener);
+				synchronized (listenerAndFilter) {
+					listenerAndFilter.put(listener, f);
+					if (logService != null) {
+						logService.log(LogService.LOG_DEBUG,
+								"filter associated with listener");
+					}
+				}
+			}
+			if (logService != null) {
+				logService.log(LogService.LOG_DEBUG, "listener " + listener
+						+ " add successfull ? " + done);
+			}
+		}
 	}
 
 	/**
@@ -107,7 +135,7 @@ public class DiscoveryImpl implements Discovery {
 	 */
 	public void removeServiceListener(final ServiceListener listener) {
 		if (listener == null) {
-			throw new IllegalArgumentException("listener cannot be null");
+			return;
 		}
 		synchronized (listeners) {
 			boolean done = false;
@@ -151,6 +179,34 @@ public class DiscoveryImpl implements Discovery {
 				try {
 					done = ((ProtocolHandler) protocolHandlers.get(i))
 							.publishService(serviceDescription);
+					if (done) {
+						// inform the listener about the new available service
+						synchronized (listeners) {
+							Iterator it = listeners.iterator();
+							while (it.hasNext()) {
+								ServiceListener sl = (ServiceListener) it
+										.next();
+								Filter f = (Filter) listenerAndFilter.get(sl);
+								// inform it if the listener has no Filter set
+								// or the filter matches the criteria
+								// TODO check whether the matching operation is
+								// a specficication or implementation problem.
+								// We currently use the Filter class of the
+								// Equinox. It is not possible to define an
+								// array (interface names) as a String
+								// representation (parameter of
+								// addServiceListener()). So we cannot match for
+								// interfaces. So we have to write our own match
+								// method. Is that intendend?
+
+								if (f == null
+										|| (f != null && match(f,
+												serviceDescription))) {
+									sl.serviceAvailable(serviceDescription);
+								}
+							}
+						}
+					}
 				} catch (Exception e) {
 					e.printStackTrace();
 					logService.log(LogService.LOG_ERROR,
@@ -159,6 +215,58 @@ public class DiscoveryImpl implements Discovery {
 			}
 		}
 		return done;
+	}
+
+	/**
+	 * Checks whether a ServiceEndpointDescription matches a given Filter.
+	 * 
+	 * TODO check whether this is appropriate!!
+	 * 
+	 * @param f
+	 *            the given Filter
+	 * @param sd
+	 *            the ServiceEndpointDescription to check
+	 * @return true if the ServiceEndpointDescriptioin matches the Filter, else
+	 *         false.
+	 */
+	private boolean match(Filter f, ServiceEndpointDescription sd) {
+		boolean isMatching = false;
+		Dictionary dict = new Hashtable();
+		String[] interfaceNames = sd.getInterfaceNames();
+		int i = 0;
+		for (i = 0; i < interfaceNames.length; i++) {
+			dict.put(ServiceEndpointDescription.PROP_KEY_INTERFACE_NAME,
+					interfaceNames[i]);
+			if (f.matchCase(dict)) {
+				isMatching = true;
+			}
+		}
+		// TODO fowolling code makes not sense if we have a complex filter, e.g.
+		// (interfaceName=234) & (protocol-specific-interface-name=frgfrg) &
+		// (version=3.4.3)
+		for (i = 0; i < interfaceNames.length; i++) {
+			String protocolSpecificIfName = sd
+					.getProtocolSpecificInterfaceName(interfaceNames[i]);
+			if (protocolSpecificIfName != null) {
+				dict
+						.put(
+								ServiceEndpointDescription.PROP_KEY_PROTOCOL_SPECIFIC_INTERFACE_NAME,
+								protocolSpecificIfName);
+			}
+			String version = sd.getVersion(interfaceNames[i]);
+			if (version != null) {
+				dict.put(ServiceEndpointDescription.PROP_KEY_VERSION, version);
+			}
+			if (f.matchCase(dict)) {
+				isMatching = true;
+			}
+		}
+		dict = new Hashtable(sd.getProperties());
+		if (f.matchCase(dict)) {
+			isMatching = true;
+		}
+
+		return isMatching;
 	}
 
 	/**
@@ -271,7 +379,8 @@ public class DiscoveryImpl implements Discovery {
 			}
 		}
 		// TODO add to cache
-		return (ServiceEndpointDescription[]) services.toArray(new ServiceEndpointDescription[]{});
+		return (ServiceEndpointDescription[]) services
+				.toArray(new ServiceEndpointDescription[] {});
 	}
 
 	/**
