@@ -36,7 +36,10 @@ import org.osgi.framework.BundleException;
  * configuration argument or the system properties, this System Bundle must use
  * some reasonable default configuration appropriate for the current VM. For
  * example, the system packages for the current execution environment should be
- * properly exported. The configuration argument may be <code>null</code>.
+ * properly exported. The configuration argument may be <code>null</code>. The
+ * framework instance must copy any information needed from the configuration
+ * argument since the configuration argument can be changed after the framework
+ * instance has been created.
  * 
  * <p>
  * A newly constructed System Bundle must be in the {@link Bundle#INSTALLED
@@ -52,20 +55,15 @@ public interface SystemBundle extends Bundle {
 	 * have a valid Bundle Context.
 	 * 
 	 * <p>
-	 * During intialization, this System Bundle must also register
-	 * {@link org.osgi.service.concurrent.ThreadFactory ThreadFactory} and
-	 * {@link org.osgi.service.concurrent.AsyncExecutor AsyncExecutor} services.
-	 * Implementations of these services may be passed to this System Bundle in
-	 * the configuration argument using the service names as keys. If
-	 * implementations of these services are not passed in the configuration
-	 * argument, then this System Bundle must create and use a default
-	 * implementation of each service.
+	 * During initialization, this System Bundle must also register any
+	 * framework provided services such as <code>PackageAdmin</code>,
+	 * <code>ConditionalPermissionAdmin</code>, <code>StartLevel</code>, etc.
 	 * 
 	 * <p>
 	 * This System Bundle will not actually be started until <code>start</code>
-	 * is called. If this System Bundle is not initialized called prior to
-	 * calling <code>start</code>, then the <code>start</code> method must
-	 * initialize this System Bundle prior to starting.
+	 * is called. If this System Bundle is not initialized prior to calling
+	 * <code>start</code>, then the <code>start</code> method must initialize
+	 * this System Bundle prior to starting.
 	 * 
 	 * <p>
 	 * This method does nothing if called when this System Bundle is in the
