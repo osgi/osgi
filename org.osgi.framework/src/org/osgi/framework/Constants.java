@@ -405,8 +405,11 @@ public interface Constants {
 
 	/**
 	 * Framework environment property (named
-	 * &quot;org.osgi.framework.system.packages&quot;) identifying package which
+	 * &quot;org.osgi.framework.system.packages&quot;) identifying packages which
 	 * the system bundle must export.
+	 * <p>
+	 * If this property is not specified then the framework must calculate a 
+	 * reasonable default value for the current execution environment. 
 	 * <p>
 	 * The value of this property may be retrieved by calling the
 	 * <code>BundleContext.getProperty</code> method.
@@ -415,6 +418,21 @@ public interface Constants {
 	 */
 	public static final String	FRAMEWORK_SYSTEMPACKAGES				= "org.osgi.framework.system.packages";
 
+	/**
+	 * Framework environment property (named
+	 * &quot;org.osgi.framework.system.packages.extra&quot;) identifying extra 
+	 * packages which the system bundle must export from the current 
+	 * execution environment.
+	 * <p>
+	 * This property is useful for configuring extra system packages in 
+	 * addition to the system packages calculated by the framework.
+	 * <p>
+	 * The value of this property may be retrieved by calling the
+	 * <code>BundleContext.getProperty</code> method.
+	 * @see #FRAMEWORK_SYSTEMPACKAGES org.osgi.framework.system.packages
+	 * @since 1.5
+	 */
+	public static final String	FRAMEWORK_SYSTEMPACKAGES_EXTRA			= "org.osgi.framework.system.packages.extra";
 	/**
 	 * Framework environment property (named
 	 * &quot;org.osgi.supports.framework.extension&quot;) identifying whether
@@ -978,7 +996,7 @@ public interface Constants {
 
 	/**
 	 * Manifest header directive (named &quot;visibility&quot;) identifying the
-	 * visibility of a reqiured bundle in the Require-Bundle manifest header.
+	 * visibility of a required bundle in the Require-Bundle manifest header.
 	 * 
 	 * <p>
 	 * The directive value is encoded in the Require-Bundle manifest header
@@ -1124,7 +1142,7 @@ public interface Constants {
 	public final static String	ACTIVATION_LAZY							= "lazy";
 
 	/**
-	 * Specifies the the type of security manager the framework must use. If not
+	 * Specifies the type of security manager the framework must use. If not
 	 * specified then the framework will not set the VM security manager. The
 	 * following types are defined:
 	 * <ul>
@@ -1139,13 +1157,56 @@ public interface Constants {
 	/**
 	 * A valid file path in the file system to a directory that exists. The
 	 * framework is free to use this directory as it sees fit. This area can not
-	 * be shared with anything else. If this property is not set, the framework
+	 * be shared with anything else.
+	 * <p> 
+	 * If this property is not set, the framework
 	 * should use a persistent storage area in the current directory with a
-	 * framework implementation specific name.
+	 * framework implementation specific name and a value of
+	 * {@link #FRAMEWORK_STORAGE_CLEAN_ONSTOP onStop} for {@link #FRAMEWORK_STORAGE_CLEAN 
+	 * org.osgi.framework.storage.clean} framework property must be used.
 	 * 
 	 * @since 1.5
 	 */
 	public final static String	FRAMEWORK_STORAGE						= "org.osgi.framework.storage";
+	
+	/**
+	 * Specifies if and when the storage area for the framework should be
+	 * cleaned.  Default value is {@link #FRAMEWORK_STORAGE_CLEAN_NONE none}
+	 * @see #FRAMEWORK_STORAGE_CLEAN_NONE 
+	 * @see #FRAMEWORK_STORAGE_CLEAN_ONSTOP
+	 * @see #FRAMEWORK_STORAGE_CLEAN_ONSTART
+	 * @since 1.5
+	 */
+	public final static String	FRAMEWORK_STORAGE_CLEAN					= "org.osgi.framework.storage.clean";
+
+	/**
+	 * A framework configuration property value for 
+	 * {@link #FRAMEWORK_STORAGE_CLEAN} (named &quot;onStop&quot;) identifying 
+	 * that the framework storage area should be cleaned when the system bundle
+	 * is stopped.
+	 * 
+	 * @since 1.5
+	 */
+	public final static String  FRAMEWORK_STORAGE_CLEAN_ONSTOP			= "onStop";
+
+	/**
+	 * A framework configuration property value for 
+	 * {@link #FRAMEWORK_STORAGE_CLEAN} (named &quot;onStart&quot;) identifying 
+	 * that the framework storage area should be cleaned when the system bundle
+	 * is started.
+	 * 
+	 * @since 1.5
+	 */
+	public final static String  FRAMEWORK_STORAGE_CLEAN_ONSTART			= "onStart";
+
+	/**
+	 * A framework configuration property value for 
+	 * {@link #FRAMEWORK_STORAGE_CLEAN} (named &quot;onStart&quot;) identifying 
+	 * that the framework storage area should not be cleaned.
+	 * 
+	 * @since 1.5
+	 */
+	public final static String  FRAMEWORK_STORAGE_CLEAN_NONE			= "none";
 
 	/**
 	 * A comma separated list of additional library file extensions that must be
@@ -1169,10 +1230,10 @@ public interface Constants {
 	 * the following value:
 	 * 
 	 * <pre>
-	 * org.osgi.framework.command.execpermission = &quot;chmod +rx [fullpath]&quot;
+	 * org.osgi.framework.command.execpermission = &quot;chmod +rx ${abspath}&quot;
 	 * </pre>
 	 * 
-	 * The [fullpath] is used to substitute the actual file path by the
+	 * The ${abspath} is used to substitute the actual file path by the
 	 * framework.
 	 * 
 	 * @since 1.5

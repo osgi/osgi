@@ -138,6 +138,41 @@ public class FrameworkEvent extends EventObject {
 	public final static int	INFO				= 0x00000020;
 
 	/**
+	 * The Framework has stopped.
+	 * 
+	 * <p>
+	 * This event is fired when the Framework has been stopped.
+	 * 
+	 * <p>
+	 * The value of <code>STOPPED</code> is 0x00000100.
+	 */
+	public final static int STOPPED = 0x00000100;
+
+	/**
+	 * The Framework has updated.
+	 * 
+	 * <p>
+	 * This event is fired when the Framework has been stopped because of an 
+	 * update operation.
+	 * 
+	 * <p>
+	 * The value of <code>UPDATED</code> is 0x00000100.
+	 */
+	public final static int UPDATED = 0x00000200;
+
+	/**
+	 * The Framework has updated to boot class path.
+	 * 
+	 * <p>
+	 * This event is fired when the Framework has been stopped because of a 
+	 * change to the boot class path.
+	 * 
+	 * <p>
+	 * The value of <code>BOOT_CLASSPATH_MODIFIED</code> is 0x00000100.
+	 */
+	public final static int BOOT_CLASSPATH_MODIFIED = 0x00000400;
+
+	/**
 	 * Creates a Framework event.
 	 * 
 	 * @param type The event type.

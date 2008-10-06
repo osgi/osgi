@@ -17,6 +17,7 @@ package org.osgi.framework.launch;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleException;
+import org.osgi.framework.FrameworkEvent;
 
 /**
  * The System Bundle for a Framework instance.
@@ -32,7 +33,10 @@ import org.osgi.framework.BundleException;
  * configuration argument provides this System Bundle with framework properties
  * to configure the framework instance. The framework instance must also examine
  * the system properties for framework properties which are not set in the
- * configuration argument. If framework properties are not provided by the
+ * configuration argument.  Keys contained in the configuration argument with a  
+ * <code>null</code> value must not be used to examine the system properties. 
+ * <p> 
+ * If framework properties are not provided by the
  * configuration argument or the system properties, this System Bundle must use
  * some reasonable default configuration appropriate for the current VM. For
  * example, the system packages for the current execution environment should be
@@ -49,6 +53,7 @@ import org.osgi.framework.BundleException;
  * @version $Revision$
  */
 public interface SystemBundle extends Bundle {
+
 	/**
 	 * Initialize this System Bundle. After calling this method, this System
 	 * Bundle must be in the {@link Bundle#STARTING STARTING} state and must
@@ -83,15 +88,34 @@ public interface SystemBundle extends Bundle {
 	 * is in the {@link Bundle#STARTING STARTING}, {@link Bundle#ACTIVE ACTIVE},
 	 * or {@link Bundle#STOPPING STOPPING} states. Otherwise it will return
 	 * immediately.
-	 * 
+	 * <p>
+	 * A {@link FrameworkEvent} is returned to indicate why the framework has
+	 * stopped.  The following <code>FrameworkEvent</code> types may be returned
+	 * by this method.
+	 * <ul>
+	 *   <li>{@link FrameworkEvent#STOPPED STOPPED} - The system bundle (bundle with 
+	 *   id 0) has been stopped which shutdown the Framework.</li>
+	 *   <li>{@link FrameworkEvent#UPDATED UPDATED} - The system bundle (bundle with 
+	 *   id 0) has been updated which shutdown and restart the Framework.</li>
+	 *   <li>{@link FrameworkEvent#BOOT_CLASSPATH_MODIFIED BOOT_CLASSPATH_MODIFIED} - The Framework
+	 *   has modified the boot class path and has shutdown.  The Execution 
+	 *   Environment must be restarted in order for the new boot class path
+	 *   to take affect.</li>
+	 *   <li>{@link FrameworkEvent#ERROR ERROR} - The Framework encountered an error
+	 *   while shutting down or an error has occurred which forced the 
+	 *   framework to shutdown.</li>
+	 *   <li>{@link FrameworkEvent#INFO INFO} - The wait for stop call has timed out
+	 *   and the framework has not stopped.</li>
+	 * </ul>
 	 * @param timeout Maximum number of milliseconds to wait until this System
 	 *        Bundle has completely stopped. A value of zero will wait
 	 *        indefinitely.
+	 * @return A framework event indicating the reason the framework has stopped.
 	 * @throws InterruptedException If another thread interrupted the current
 	 *         thread before or while the current thread was waiting for this
 	 *         System Bundle to completely stop. The <i>interrupted status</i>
 	 *         of the current thread is cleared when this exception is thrown.
 	 * @throws IllegalArgumentException If the value of timeout is negative.
 	 */
-	void waitForStop(long timeout) throws InterruptedException;
+	FrameworkEvent waitForStop(long timeout) throws InterruptedException;
 }
