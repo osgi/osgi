@@ -16,6 +16,8 @@
 
 package org.osgi.framework;
 
+import java.io.File;
+
 /**
  * Defines standard names for the OSGi environment system properties, service
  * properties, and Manifest header attribute keys.
@@ -1168,7 +1170,7 @@ public interface Constants {
 	 * @since 1.5
 	 */
 	public final static String	FRAMEWORK_STORAGE						= "org.osgi.framework.storage";
-	
+
 	/**
 	 * Specifies if and when the storage area for the framework should be
 	 * cleaned.  Default value is {@link #FRAMEWORK_STORAGE_CLEAN_NONE none}
@@ -1241,14 +1243,22 @@ public interface Constants {
 	public final static String	FRAMEWORK_EXECPERMISSION				= "org.osgi.framework.command.execpermission";
 
 	/**
-	 * Points to a directory with certificates. ###??? Keystore? Certificate
-	 * format?
-	 * 
-	 * TODO Need to complete this description
+	 * This property is used to configure trust repositories for the
+	 * framework. The value is a {@link File#pathSeparator} separated list of
+	 * valid file paths in the file system to files that contain key stores of
+	 * type JKS. The framework will use the key stores as trust repositories to
+	 * authenticate certificates of trusted signers. The key stores are only used
+	 * as a read-only trust repositories to access public keys. No passwords are
+	 * required to access the key stores' public keys.
+	 * <p>
+	 * Note that framework implementations are allowed to use other trust
+	 * repositories in addition to the trust repositories specified by this 
+	 * property. How these other trust repositories are configured and populated 
+	 * is implementation specific.
 	 * 
 	 * @since 1.5
 	 */
-	public final static String	FRAMEWORK_ROOT_CERTIFICATES				= "org.osgi.framework.root.certificates";
+	public final static String	FRAMEWORK_TRUST_REPOSITORIES			= "org.osgi.framework.trust.repositories";
 
 	/**
 	 * Specifies the current windowing system. The framework should provide a
