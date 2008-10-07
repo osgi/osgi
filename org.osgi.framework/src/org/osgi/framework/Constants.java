@@ -1160,10 +1160,10 @@ public interface Constants {
 	 * be shared with anything else.
 	 * <p> 
 	 * If this property is not set, the framework
-	 * should use a persistent storage area in the current directory with a
-	 * framework implementation specific name and a value of
-	 * {@link #FRAMEWORK_STORAGE_CLEAN_ONSTOP onStop} for {@link #FRAMEWORK_STORAGE_CLEAN 
-	 * org.osgi.framework.storage.clean} framework property must be used.
+	 * should use a reasonable platform default for the persistent storage area 
+	 * and if the {@link #FRAMEWORK_STORAGE_CLEAN 
+	 * org.osgi.framework.storage.clean} perperty is not set then a value of
+	 * {@link #FRAMEWORK_STORAGE_CLEAN_ONSTOP onStop} must be used.
 	 * 
 	 * @since 1.5
 	 */
