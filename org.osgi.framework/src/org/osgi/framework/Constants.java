@@ -16,8 +16,6 @@
 
 package org.osgi.framework;
 
-import java.io.File;
-
 /**
  * Defines standard names for the OSGi environment system properties, service
  * properties, and Manifest header attribute keys.
@@ -1244,11 +1242,11 @@ public interface Constants {
 
 	/**
 	 * This property is used to configure trust repositories for the
-	 * framework. The value is a {@link File#pathSeparator} separated list of
+	 * framework. The value is a <code>java.io.File#pathSeparator</code> separated list of
 	 * valid file paths in the file system to files that contain key stores of
 	 * type JKS. The framework will use the key stores as trust repositories to
 	 * authenticate certificates of trusted signers. The key stores are only used
-	 * as a read-only trust repositories to access public keys. No passwords are
+	 * as read-only trust repositories to access public keys. No passwords are
 	 * required to access the key stores' public keys.
 	 * <p>
 	 * Note that framework implementations are allowed to use other trust
