@@ -25,7 +25,7 @@ import org.osgi.framework.launch.SystemBundle;
 // TODO javadoc needs much work!!
 public interface FrameworkFactory {
 	/**
-	 * Creates a new SystemBundle that is a child of framework which registered this
+	 * Creates a new SystemBundle that is a child of the SystemBundle which owns this
 	 * framework factory.
 	 * @param configuration the framework configuration
 	 * @return an unintialized SystemBundle
@@ -34,7 +34,7 @@ public interface FrameworkFactory {
 	SystemBundle createChildBundle(Map configuration);
 
 	/**
-	 * Creates a link between two rframeworks.
+	 * Creates a link between two frameworks.
 	 * @param source the source framework
 	 * @param target the target framework
 	 * @param description
