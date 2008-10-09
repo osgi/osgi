@@ -1160,10 +1160,7 @@ public interface Constants {
 	 * be shared with anything else.
 	 * <p> 
 	 * If this property is not set, the framework
-	 * should use a reasonable platform default for the persistent storage area 
-	 * and if the {@link #FRAMEWORK_STORAGE_CLEAN 
-	 * org.osgi.framework.storage.clean} perperty is not set then a value of
-	 * {@link #FRAMEWORK_STORAGE_CLEAN_ONSTOP onStop} must be used.
+	 * should use a reasonable platform default for the persistent storage area.
 	 * 
 	 * @since 1.5
 	 */
@@ -1172,36 +1169,26 @@ public interface Constants {
 	/**
 	 * Specifies if and when the storage area for the framework should be
 	 * cleaned.  Default value is {@link #FRAMEWORK_STORAGE_CLEAN_NONE none}
-	 * @see #FRAMEWORK_STORAGE_CLEAN_NONE 
-	 * @see #FRAMEWORK_STORAGE_CLEAN_ONSTOP
-	 * @see #FRAMEWORK_STORAGE_CLEAN_ONSTART
+	 * @see #FRAMEWORK_STORAGE_CLEAN_NONE none
+	 * @see #FRAMEWORK_STORAGE_CLEAN_ONFIRSTSTART onFirstStart
 	 * @since 1.5
 	 */
 	public final static String	FRAMEWORK_STORAGE_CLEAN					= "org.osgi.framework.storage.clean";
 
 	/**
 	 * A framework configuration property value for 
-	 * {@link #FRAMEWORK_STORAGE_CLEAN} (named &quot;onStop&quot;) identifying 
-	 * that the framework storage area should be cleaned when the system bundle
-	 * is stopped.
+	 * {@link #FRAMEWORK_STORAGE_CLEAN org.osgi.framework.storage.clean} (named &quot;onFirstStart&quot;) identifying 
+	 * that the framework storage area will be cleaned before the system bundle
+	 * is started for the first time.  Subsequent starts or updates of the 
+	 * system bundle will not result in cleaning the framework storage area.
 	 * 
 	 * @since 1.5
 	 */
-	public final static String  FRAMEWORK_STORAGE_CLEAN_ONSTOP			= "onStop";
+	public final static String  FRAMEWORK_STORAGE_CLEAN_ONFIRSTSTART			= "onFirstStart";
 
 	/**
 	 * A framework configuration property value for 
-	 * {@link #FRAMEWORK_STORAGE_CLEAN} (named &quot;onStart&quot;) identifying 
-	 * that the framework storage area should be cleaned when the system bundle
-	 * is started.
-	 * 
-	 * @since 1.5
-	 */
-	public final static String  FRAMEWORK_STORAGE_CLEAN_ONSTART			= "onStart";
-
-	/**
-	 * A framework configuration property value for 
-	 * {@link #FRAMEWORK_STORAGE_CLEAN} (named &quot;onStart&quot;) identifying 
+	 * {@link #FRAMEWORK_STORAGE_CLEAN org.osgi.framework.storage.clean} (named &quot;none&quot;) identifying 
 	 * that the framework storage area should not be cleaned.
 	 * 
 	 * @since 1.5
