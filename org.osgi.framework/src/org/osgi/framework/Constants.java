@@ -1155,12 +1155,16 @@ public interface Constants {
 	public final static String	FRAMEWORK_SECURITY						= "org.osgi.framework.security";
 
 	/**
-	 * A valid file path in the file system to a directory that exists. The
-	 * framework is free to use this directory as it sees fit. This area can not
+	 * A valid file path in the file system to a directory. If the specified
+	 * directory does not exist then the framework will create the directory.
+	 * If the specified path exists but is not a directory or if the 
+	 * framework fails to create the storage directory then framework
+	 * initialization must fail.
+	 * The framework is free to use this directory as it sees fit. This area can not
 	 * be shared with anything else.
-	 * <p> 
-	 * If this property is not set, the framework
-	 * should use a reasonable platform default for the persistent storage area.
+	 * <p>
+	 * If this property is not set, the framework should use a reasonable
+	 * platform default for the persistent storage area.
 	 * 
 	 * @since 1.5
 	 */
@@ -1170,21 +1174,21 @@ public interface Constants {
 	 * Specifies if and when the storage area for the framework should be
 	 * cleaned.  Default value is {@link #FRAMEWORK_STORAGE_CLEAN_NONE none}
 	 * @see #FRAMEWORK_STORAGE_CLEAN_NONE none
-	 * @see #FRAMEWORK_STORAGE_CLEAN_ONFIRSTSTART onFirstStart
+	 * @see #FRAMEWORK_STORAGE_CLEAN_ONFIRSTINIT onFirstInit
 	 * @since 1.5
 	 */
 	public final static String	FRAMEWORK_STORAGE_CLEAN					= "org.osgi.framework.storage.clean";
 
 	/**
 	 * A framework configuration property value for 
-	 * {@link #FRAMEWORK_STORAGE_CLEAN org.osgi.framework.storage.clean} (named &quot;onFirstStart&quot;) identifying 
+	 * {@link #FRAMEWORK_STORAGE_CLEAN org.osgi.framework.storage.clean} (named &quot;onFirstInit&quot;) identifying 
 	 * that the framework storage area will be cleaned before the system bundle
-	 * is started for the first time.  Subsequent starts or updates of the 
+	 * is initialized for the first time.  Subsequent inits, starts or updates of the 
 	 * system bundle will not result in cleaning the framework storage area.
 	 * 
 	 * @since 1.5
 	 */
-	public final static String  FRAMEWORK_STORAGE_CLEAN_ONFIRSTSTART			= "onFirstStart";
+	public final static String  FRAMEWORK_STORAGE_CLEAN_ONFIRSTINIT			= "onFirstInit";
 
 	/**
 	 * A framework configuration property value for 
