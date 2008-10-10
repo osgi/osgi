@@ -800,8 +800,8 @@ public interface BundleContext {
 	public File getDataFile(String filename);
 
 	/**
-	 * Creates a <code>Filter</code> object. This <code>Filter</code> object
-	 * may be used to match a <code>ServiceReference</code> object or a
+	 * Creates a <code>Filter</code> object. This <code>Filter</code> object may
+	 * be used to match a <code>ServiceReference</code> object or a
 	 * <code>Dictionary</code> object.
 	 * 
 	 * <p>
@@ -810,15 +810,14 @@ public interface BundleContext {
 	 * 
 	 * @param filter The filter string.
 	 * @return A <code>Filter</code> object encapsulating the filter string.
-	 * @throws InvalidSyntaxException If <code>filter</code> contains an
-	 *         invalid filter string that cannot be parsed.
+	 * @throws InvalidSyntaxException If <code>filter</code> contains an invalid
+	 *         filter string that cannot be parsed.
 	 * @throws NullPointerException If <code>filter</code> is null.
 	 * @throws java.lang.IllegalStateException If this BundleContext is no
 	 *         longer valid.
 	 * 
 	 * @since 1.1
-	 * @see "Framework specification for a description of the filter string
-	 *      syntax."
+	 * @see "Framework specification for a description of the filter string syntax."
 	 * @see FrameworkUtil#createFilter(String)
 	 */
 	public Filter createFilter(String filter) throws InvalidSyntaxException;
