@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<launchConfiguration type="aQute.bnd.junit.launchconfig">
+<booleanAttribute key="aQute.bmaker.CLEARCACHE" value="false"/>
+<booleanAttribute key="aQute.bmaker.REPORT" value="false"/>
+<listAttribute key="org.eclipse.debug.core.MAPPED_RESOURCE_PATHS">
+<listEntry value="/org.osgi.test.cases.discovery/src/org/osgi/test/cases/discovery/DiscoveryTestCase.java"/>
+</listAttribute>
+<listAttribute key="org.eclipse.debug.core.MAPPED_RESOURCE_TYPES">
+<listEntry value="1"/>
+</listAttribute>
+<stringAttribute key="org.eclipse.jdt.junit.CONTAINER" value=""/>
+<booleanAttribute key="org.eclipse.jdt.junit.KEEPRUNNING_ATTR" value="false"/>
+<stringAttribute key="org.eclipse.jdt.junit.TESTNAME" value=""/>
+<stringAttribute key="org.eclipse.jdt.junit.TEST_KIND" value="org.eclipse.jdt.junit.loader.junit3"/>
+<stringAttribute key="org.eclipse.jdt.launching.MAIN_TYPE" value="org.osgi.test.cases.discovery.DiscoveryTestCase"/>
+<stringAttribute key="org.eclipse.jdt.launching.PROJECT_ATTR" value="org.osgi.test.cases.discovery"/>
+<stringAttribute key="org.eclipse.jdt.launching.VM_ARGUMENTS" value="-Dnet.slp.traceDATraffic=true -Dch.ethz.iks.slp.debug=true -Dnet.slp.traceDrop=true -Dnet.slp.traceMsg=true -Dnet.slp.traceReg=true -Dnet.slp.interfaces=192.168.2.14 -Dnet.slp.port=47427"/>
+</launchConfiguration>

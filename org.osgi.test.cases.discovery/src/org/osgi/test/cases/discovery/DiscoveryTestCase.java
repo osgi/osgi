@@ -88,6 +88,8 @@ public class DiscoveryTestCase extends TestCase {
 		assertEquals(service.getInterfaceNames()[0], descs[0].getInterfaceNames()[0]);
 		
 		discovery.unpublishService(service);
-		assertNull(discovery.findService(DiscoveryTestServiceInterface.class.getName(), "(mytestkey=mytestvalue)"));
+		descs = discovery.findService(DiscoveryTestServiceInterface.class.getName(), "(mytestkey=mytestvalue)");
+		assertNotNull(descs);
+		assertTrue(descs.length == 0);
 	}
 }
