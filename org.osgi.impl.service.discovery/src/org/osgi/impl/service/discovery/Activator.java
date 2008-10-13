@@ -65,6 +65,7 @@ public class Activator implements BundleActivator {
 		logServiceTracker = new ServiceTracker(context, LogService.class.getName(), new ServiceTrackerCustomizer() {
 
 			public Object addingService(ServiceReference reference) {
+				//TODO: does it mean that we change our logService each time a new one comes?
 				LogService logger = (LogService) context.getService(reference);
 				
 				setLogService(logger);

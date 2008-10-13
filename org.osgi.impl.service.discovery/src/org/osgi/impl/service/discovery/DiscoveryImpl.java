@@ -44,6 +44,7 @@ import org.osgi.util.tracker.ServiceTrackerCustomizer;
  * implementation that implements the {@link ProtocolHandler} interface.
  * 
  * TODO: add support for second protocol, e.g. JGroups, JCS
+ * TODO: think whether the concept with Protocolhandlers was realy a good idea.
  * 
  * @author Tim Diekmann
  * @author Thomas Kiesslich
@@ -92,10 +93,12 @@ public class DiscoveryImpl implements Discovery {
 			throw new IllegalArgumentException("listener cannot be null");
 		}
 		Filter f = getFilterFromString(filter);
+		//TODO: Why do we have listeners and listeners&filters? One is enough, right?
 		synchronized (listeners) {
 			boolean done = false;
 			if (!listeners.contains(listener)) {
 				done = listeners.add(listener);
+				//TODO: the same listener object might be registered with several filters. Our Map is not capable of multiple keys. Discuss whether it's the required behaviour.
 				synchronized (listenerAndFilter) {
 					listenerAndFilter.put(listener, f);
 					if (logService != null) {
@@ -109,6 +112,7 @@ public class DiscoveryImpl implements Discovery {
 						+ " add successfull ? " + done);
 			}
 		}
+		//TODO: Why there are no actions taken after adding a listener?
 	}
 
 	/**
@@ -137,6 +141,7 @@ public class DiscoveryImpl implements Discovery {
 		if (listener == null) {
 			return;
 		}
+		//TODO: this listener might have had filters as well?
 		synchronized (listeners) {
 			boolean done = false;
 			done = listeners.remove(listener);
@@ -155,6 +160,7 @@ public class DiscoveryImpl implements Discovery {
 		return publishService(serviceDescription, autoPublish);
 	}
 
+	//TODO: think whether we need a version with autopublish parameter
 	/**
 	 * @see org.osgi.service.discovery.Discovery#publish(org.osgi.service.discovery.ServiceEndpointDescription,
 	 *      boolean)
@@ -231,6 +237,7 @@ public class DiscoveryImpl implements Discovery {
 	 */
 	private boolean match(Filter f, ServiceEndpointDescription sd) {
 		boolean isMatching = false;
+		//TODO: all properties are already in the property map. Describe it explicitely in JavaDoc.
 		Dictionary dict = new Hashtable();
 		String[] interfaceNames = sd.getInterfaceNames();
 		int i = 0;
@@ -257,6 +264,7 @@ public class DiscoveryImpl implements Discovery {
 			if (version != null) {
 				dict.put(ServiceEndpointDescription.PROP_KEY_VERSION, version);
 			}
+			//TODO: matching is tried without adding other properties?
 			if (f.matchCase(dict)) {
 				isMatching = true;
 			}
@@ -347,6 +355,7 @@ public class DiscoveryImpl implements Discovery {
 	 * @param pHandler
 	 */
 	final void addProtocolHandler(ProtocolHandler pHandler) {
+		//Shouldn't registered listeners tried out with new pHandler?
 		synchronized (protocolHandlers) {
 			protocolHandlers.add(pHandler);
 		}
@@ -367,6 +376,8 @@ public class DiscoveryImpl implements Discovery {
 			Filter filter) {
 		Vector services = new Vector();
 		synchronized (protocolHandlers) {
+			// TODO first look at cache
+			//TODO: think whether in order to decrease response time we should parallize lookup process or use async invocation
 			for (int i = 0; (protocolHandlers != null)
 					&& (i < protocolHandlers.size()); i++) {
 				ServiceEndpointDescription[] returnedServices = ((ProtocolHandler) protocolHandlers
@@ -403,9 +414,11 @@ public class DiscoveryImpl implements Discovery {
 		try {
 			f = context.createFilter(filter);
 		} catch (InvalidSyntaxException e) {
+			//TODO: add filter
 			throw new IllegalArgumentException("filter is not an LDAP filter");
 		}
 		if (f == null) {
+			//TODO: add filter
 			throw new IllegalArgumentException(
 					"cannot create an LDAP filter with given filter parameter");
 		}
@@ -432,6 +445,7 @@ public class DiscoveryImpl implements Discovery {
 			throw new IllegalArgumentException("callback must not be null");
 		}
 		final Filter f = getFilterFromString(filter);
+		//TODO: think whether it would be not more efficient to make async to the base impl
 		// create a new thread to find the services
 		Thread executor = new Thread(new Runnable() {
 			public void run() {
