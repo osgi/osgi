@@ -1,0 +1,10 @@
+Bundle-Version: 1.0.0.${project.build}
+
+Private-Package						= ${p}.*
+
+-buildpath							= \
+	osgi;									version=4.2		, \
+	ee.foundation											, \
+	${junit}
+
+Test-Cases: ${classes;extending;*TestCase}
