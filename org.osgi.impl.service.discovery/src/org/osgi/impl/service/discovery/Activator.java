@@ -36,13 +36,12 @@ import org.osgi.util.tracker.ServiceTrackerCustomizer;
  * 
  */
 public class Activator implements BundleActivator {
-	private DiscoveryImpl discoveryImpl;
 	private ServiceRegistration discoveryRegistration;
 	private ServiceRegistration slpHandlerRegistration;
 	private LogService logService = DEFAULT_LogService;
 	private ServiceTracker logServiceTracker;
 	
-	private SLPHandlerImpl slpHandler;
+	private SLPHandlerImpl slpDiscovery;
 	
 	private ServiceRegistration commandProvider;
 	
@@ -56,11 +55,6 @@ public class Activator implements BundleActivator {
 	 */
 	public void start(final BundleContext context) throws Exception {
 		commandProvider = context.registerService(CommandProvider.class.getName(), new DiscoveryCommandProvider(context), null);
-		
-		discoveryImpl = new DiscoveryImpl(context, logService);
-		slpHandler = new SLPHandlerImpl(context, logService);
-		
-		setLogService(null);
 		
 		logServiceTracker = new ServiceTracker(context, LogService.class.getName(), new ServiceTrackerCustomizer() {
 
@@ -89,12 +83,11 @@ public class Activator implements BundleActivator {
 		});
 		logServiceTracker.open();
 		
-		discoveryImpl.init();
+		slpDiscovery = new SLPHandlerImpl(context, logService);
+		slpDiscovery.init();
 		
 		// TODO: make the instance configurable, e.g. via CAS or DS
-		discoveryRegistration = context.registerService(Discovery.class.getName(), discoveryImpl, null);
-		
-		slpHandlerRegistration = context.registerService(ProtocolHandler.class.getName(), slpHandler, null);
+		slpHandlerRegistration = context.registerService(Discovery.class.getName(), slpDiscovery, null);
 		
 		logService.log(LogService.LOG_INFO, "discovery service started");
 	}
@@ -130,14 +123,9 @@ public class Activator implements BundleActivator {
 			logServiceTracker = null;
 		}
 		
-		if (discoveryImpl != null) {
-			discoveryImpl.destroy();
-			discoveryImpl = null;
-		}
-		
-		if (slpHandler != null) {
-			slpHandler.destroy();
-			slpHandler = null;
+		if (slpDiscovery != null) {
+			slpDiscovery.destroy();
+			slpDiscovery = null;
 		}
 	}
 	
@@ -148,7 +136,7 @@ public class Activator implements BundleActivator {
 			logService = DEFAULT_LogService;
 		}
 		
-		discoveryImpl.setLogService(logService);
+		slpDiscovery.setLogService(logService);
 	}
 	
 	private static LogService DEFAULT_LogService = new LogService() {

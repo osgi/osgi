@@ -6,14 +6,11 @@ import java.net.URL;
 import java.net.UnknownHostException;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.StringTokenizer;
 
-import org.osgi.framework.Filter;
-import org.osgi.impl.service.discovery.ProtocolSpecificServiceDescription;
 import org.osgi.service.discovery.ServiceEndpointDescription;
 
 import ch.ethz.iks.slp.ServiceLocationException;
@@ -29,79 +26,44 @@ import ch.ethz.iks.slp.ServiceURL;
  * 
  * @version $Revision$
  */
-public class SLPServiceDescriptionAdapter implements
-		ProtocolSpecificServiceDescription, ServiceEndpointDescription {
-	private String interfaceName;
-	private Map properties = new HashMap();
-	private ServiceURL serviceURL;
-	private Filter filter = null;
+public class SLPServiceDescriptionAdapter implements ServiceEndpointDescription {
+	private Map/* <String, String> */javaInterfaceAndFilters;
+	private Map/* <String, String> */javaAndEndpointInterfaces;
+	private Map/* <String, Object> */properties;
+	private Map/* <String, ServiceURL> */serviceURLs;
 
-	public SLPServiceDescriptionAdapter(String interfaceName, Map properties,
-			Filter fi) throws ServiceLocationException {
-		this.filter = fi;
-		if (properties != null) {
-			this.properties = properties;
-		}
-		this.interfaceName = interfaceName;
-		createServiceURL();
-	}
-
-	public SLPServiceDescriptionAdapter(
-			final ProtocolSpecificServiceDescription serviceDescription)
+	public SLPServiceDescriptionAdapter(String javaInterface, String version,
+			String endpointInterface, Map properties)
 			throws ServiceLocationException {
-		this.interfaceName = serviceDescription.getInterfaceName();
-		if (serviceDescription.getProperties() != null) {
-			this.properties = (Hashtable) serviceDescription.getProperties();
-		}
-		createServiceURL();
+		Map javaInterfaceAndFilters = new HashMap();
+		javaInterfaceAndFilters.put(javaInterface, version);
+
+		Map javaAndEndpointInterfaces = new HashMap();
+		javaAndEndpointInterfaces.put(javaInterface, endpointInterface);
+
+		init(javaInterfaceAndFilters, javaAndEndpointInterfaces, properties);
 	}
 
-	private void createServiceURL() throws ServiceLocationException {
-		String interf = convertInterfaceName(interfaceName);
-		String protocol = (String) properties.get("protocol");
-		String host = (String) properties.get("host");
-		String port = (String) properties.get("port");
-
-		Integer lifeTime = (Integer) properties.get("lifetime");
-		int lifetime = lifeTime != null ? lifeTime.intValue()
-				: ServiceURL.LIFETIME_DEFAULT;
-
-		String path = getPathFromProperties(properties);
-		String hostname = null;
-		try {
-			InetAddress addr = InetAddress.getLocalHost();
-			// Get hostname
-			hostname = addr.getHostName();
-			if (hostname == null || hostname.equals("")) {
-				// if hostname is NULL or empty string
-				// set hostname to ip address
-				hostname = addr.getHostAddress();
-			}
-		} catch (UnknownHostException e) {
-			e.printStackTrace();
-		}
-		StringBuffer buff = new StringBuffer();
-		buff.append("service:osgi");
-		buff.append(interf);
-		buff.append((protocol != null ? protocol + "://" : "://"));
-		buff.append((host != null ? host : hostname));
-		buff.append((port != null ? ":" + port : ""));
-		buff.append("/");
-		buff.append(path);
-		this.serviceURL = new ServiceURL(buff.toString(), lifetime);
+	public SLPServiceDescriptionAdapter(Map javaInterfaceAndFilters,
+			Map javaAndEndpointInterfaces, Map properties)
+			throws ServiceLocationException {
+		init(javaInterfaceAndFilters, javaAndEndpointInterfaces, properties);
 	}
 
 	public SLPServiceDescriptionAdapter(final ServiceURL serviceURL) {
-		this.interfaceName = convertInterfaceFromURL(serviceURL
+		String interfaceName = convertPath2JavaInterface(serviceURL
 				.getServiceType().getConcreteTypeName());
-		if (this.interfaceName == null) {
+		if (interfaceName == null) {
 			throw new IllegalArgumentException(
 					"Interface information is missing!");
 		}
 
+		this.javaInterfaceAndFilters = new HashMap();
+		this.javaAndEndpointInterfaces = new HashMap();
 		this.properties = new HashMap();
-		this.serviceURL = serviceURL;
+		this.serviceURLs = new HashMap();
 
+		// Retrieve properties
 		properties.put("slp.serviceURL", serviceURL);
 		properties.put("type", serviceURL.getServiceType().toString());
 		if (serviceURL.getHost() != null) {
@@ -115,10 +77,55 @@ public class SLPServiceDescriptionAdapter implements
 		}
 		properties.put("lifetime", new Integer(serviceURL.getLifetime()));
 		addPropertiesFromPath(serviceURL.getURLPath());
+
+		// Try to get version
+		String version;
+		try {
+			version = (String) properties
+					.get(ServiceEndpointDescription.PROP_KEY_VERSION);
+		} catch (Exception e) {
+			// TODO log
+			version = "*";
+		}
+
+		// Add interface
+		this.javaInterfaceAndFilters.put(interfaceName, version);
+
+		// Store service URL
+		this.serviceURLs.put(interfaceName, serviceURL);
 	}
 
-	public String getInterfaceName() {
-		return interfaceName;
+	private void init(Map javaInterfaceAndFilters,
+			Map javaAndEndpointInterfaces, Map properties)
+			throws ServiceLocationException {
+		if (javaInterfaceAndFilters == null) {
+			throw new IllegalArgumentException(
+					"Given set of Java interfaces must not be null.");
+		}
+		if (javaInterfaceAndFilters.size() <= 0) {
+			throw new IllegalArgumentException(
+					"Given set of Java interfaces must contain at least one service interface name.");
+		}
+
+		this.javaInterfaceAndFilters = javaInterfaceAndFilters;
+		this.javaAndEndpointInterfaces = javaAndEndpointInterfaces != null ? javaAndEndpointInterfaces
+				: new HashMap();
+		this.properties = properties != null ? properties : new HashMap();
+
+		// Create a service url for each interface
+		this.serviceURLs = new HashMap();
+		Iterator intfIterator = this.javaInterfaceAndFilters.keySet()
+				.iterator();
+		for (int i = 0; intfIterator.hasNext(); i++) {
+			Object currentInterface = intfIterator.next();
+			if (currentInterface instanceof String) {
+				String javaInterface = (String) currentInterface;
+				this.serviceURLs.put(javaInterface, createServiceURL(
+						javaInterface, this.properties));
+			} else {
+				// TODO: throw exception
+			}
+		}
 	}
 
 	public Map getProperties() {
@@ -137,45 +144,29 @@ public class SLPServiceDescriptionAdapter implements
 		return 0;
 	}
 
-	public ServiceURL getServiceURL() {
-		return serviceURL;
-	}
-
-	public String getServiceType() {
-		return serviceURL != null ? serviceURL.getServiceType().toString()
-				: null;
-	}
-
-	public List getScopes() {
-		return null;
-	}
-
-	public String getNamingAuthority() {
-		return serviceURL != null ? serviceURL.getServiceType()
-				.getNamingAuthority() : null;
-	}
-
-	/**
-	 * 
-	 * @return the filter as String representation
-	 */
-	public String getFilter() {
-		if (filter == null) {
-			return null;
-		}
-		return filter.toString();
+	public ServiceURL getServiceURL(String interfaceName) {
+		return (ServiceURL) serviceURLs.get(interfaceName);
 	}
 
 	public String toString() {
 		StringBuffer sb = new StringBuffer("Service:\n");
-		sb.append("interface=").append(getInterfaceName()).append("\n");
-		sb.append("serviceURL=").append(
-				serviceURL != null ? serviceURL.toString() : "").append("\n");
-		sb.append("properties=\n");
 
+		Iterator intfIterator = this.javaInterfaceAndFilters.keySet()
+				.iterator();
+		while (intfIterator.hasNext()) {
+			String interfaceName = (String) intfIterator.next();
+			sb.append("interface=").append(interfaceName).append("\n");
+			sb.append("version=").append(
+					this.javaInterfaceAndFilters.get(interfaceName)).append(
+					"\n");
+			ServiceURL svcURL = getServiceURL(interfaceName);
+			sb.append("serviceURL=").append(
+					svcURL != null ? svcURL.toString() : "").append("\n");
+		}
+
+		sb.append("properties=\n");
 		String key;
 		Object value;
-
 		for (Iterator i = properties.keySet().iterator(); i.hasNext();) {
 			key = (String) i.next();
 			value = properties.get(key);
@@ -184,38 +175,6 @@ public class SLPServiceDescriptionAdapter implements
 			}
 
 			sb.append(key).append("=").append(value.toString()).append("\n");
-		}
-
-		return sb.toString();
-	}
-
-	private String convertInterfaceName(final String interfaceName2) {
-		return interfaceName2 != null ? ":" + interfaceName2.replace('.', '/')
-				: "";
-	}
-
-	private String convertInterfaceFromURL(final String interfaceName2) {
-		return interfaceName2 != null ? interfaceName2.replace('/', '.') : null;
-	}
-
-	private String getPathFromProperties(final Map properties2) {
-		StringBuffer sb = new StringBuffer();
-
-		String key;
-		Object value;
-
-		if (properties2 != null && !properties2.isEmpty()) {
-			sb.append("?");
-
-			for (Iterator i = properties2.keySet().iterator(); i.hasNext();) {
-				key = (String) i.next();
-				value = properties2.get(key);
-				if (value == null) {
-					value = "<null>";
-				}
-
-				sb.append(key).append("=").append(value.toString()).append(",");
-			}
 		}
 
 		return sb.toString();
@@ -236,8 +195,11 @@ public class SLPServiceDescriptionAdapter implements
 				try {
 					while (st.hasMoreTokens()) {
 						key = st.nextToken();
-						value = st.nextToken();
-
+						if(st.hasMoreTokens())
+							value = st.nextToken();
+						else 
+							value = "";
+						
 						properties.put(key, value);
 					}
 				} catch (Exception e) {
@@ -247,6 +209,31 @@ public class SLPServiceDescriptionAdapter implements
 		} catch (Exception e) {
 			return;
 		}
+	}
+
+	/**
+	 * 
+	 * @see org.osgi.service.discovery.ServiceEndpointDescription#getInterfaceNames()
+	 */
+	public String[] getInterfaceNames() {
+		return (String[]) this.javaInterfaceAndFilters.keySet().toArray(
+				new String[1]);
+	}
+
+	/**
+	 * 
+	 * @see org.osgi.service.discovery.ServiceEndpointDescription#getProtocolSpecificInterfaceName(java.lang.String)
+	 */
+	public String getProtocolSpecificInterfaceName(String interfaceName) {
+		return (String) this.javaAndEndpointInterfaces.get(interfaceName);
+	}
+
+	/**
+	 * 
+	 * @see org.osgi.service.discovery.ServiceEndpointDescription#getVersion(java.lang.String)
+	 */
+	public String getVersion(String interfaceName) {
+		return (String) this.javaInterfaceAndFilters.get(interfaceName);
 	}
 
 	/**
@@ -284,47 +271,106 @@ public class SLPServiceDescriptionAdapter implements
 		properties = props;
 	}
 
-	/**
-	 * 
-	 * @see org.osgi.impl.service.discovery.ProtocolSpecificServiceDescription#getProtocolSpecificInterfaceName()
-	 */
-	public String getProtocolSpecificInterfaceName() {
-		// TODO Auto-generated method stub
-		return null;
+	public static SLPServiceDescriptionAdapter[] getSLPServiceDescriptions(
+			final ServiceEndpointDescription serviceDescription)
+			throws ServiceLocationException {
+		// TODO validate ServiceEndpointDescription
+
+		// create for each interface an own SLPServiceDescription
+		String[] javaInterfaces = serviceDescription.getInterfaceNames();
+		SLPServiceDescriptionAdapter[] slpSvcDescriptions = new SLPServiceDescriptionAdapter[javaInterfaces.length];
+		for (int i = 0; i < javaInterfaces.length; i++) {
+			slpSvcDescriptions[i] = new SLPServiceDescriptionAdapter(
+					javaInterfaces[i],
+					serviceDescription.getVersion(javaInterfaces[i]),
+					serviceDescription
+							.getProtocolSpecificInterfaceName(javaInterfaces[i]),
+					serviceDescription.getProperties());
+		}
+
+		return slpSvcDescriptions;
 	}
 
-	/**
-	 * 
-	 * @see org.osgi.impl.service.discovery.ProtocolSpecificServiceDescription#getVersion()
-	 */
-	public String getVersion() {
-		// TODO Auto-generated method stub
-		return null;
+	public static ServiceURL createServiceURL(String interfaceName,
+			Map properties) throws ServiceLocationException {
+		String interf = convertJavaInterface2Path(interfaceName);
+		String path = getPathFromProperties(properties);
+
+		String protocol = null;
+		String host = null;
+		String port = null;
+		Integer lifeTime = null;
+		
+		// init from properties if given 
+		if (properties != null) {
+			protocol = (String) properties.get("protocol");
+			host = (String) properties.get("host");
+			port = (String) properties.get("port");
+			lifeTime = (Integer) properties.get("lifetime");
+		}
+		if (host == null) {
+			String hostname = null;
+			try {
+				InetAddress addr = InetAddress.getLocalHost();
+				// Get hostname
+				hostname = addr.getHostName();
+				if (hostname == null || hostname.equals("")) {
+					// if hostname is NULL or empty string
+					// set hostname to ip address
+					hostname = addr.getHostAddress();
+				}
+				host = hostname;
+			} catch (UnknownHostException e) {
+				e.printStackTrace();
+				//TODO log and rethrow
+			}
+		}
+		int lifetime = lifeTime != null ? lifeTime.intValue()
+				: ServiceURL.LIFETIME_DEFAULT;
+
+		StringBuffer buff = new StringBuffer();
+		buff.append("service:osgi");
+		buff.append(interf);
+		buff.append((protocol != null ? protocol + "://" : "://"));
+		buff.append(host);
+		buff.append((port != null ? ":" + port : ""));
+		buff.append("/");
+		buff.append(path);
+		return new ServiceURL(buff.toString(), lifetime);
 	}
 
-	/**
-	 * 
-	 * @see org.osgi.service.discovery.ServiceEndpointDescription#getInterfaceNames()
-	 */
-	public String[] getInterfaceNames() {
-		return new String[] { interfaceName };
+	public static String convertJavaInterface2Path(
+			final String javaInterfaceName) {
+		return javaInterfaceName != null ? ":"
+				+ javaInterfaceName.replace('.', '/') : "";
 	}
 
-	/**
-	 * 
-	 * @see org.osgi.service.discovery.ServiceEndpointDescription#getProtocolSpecificInterfaceName(java.lang.String)
-	 */
-	public String getProtocolSpecificInterfaceName(String arg0) {
-		return (String) properties
-				.get(ServiceEndpointDescription.PROP_KEY_PROTOCOL_SPECIFIC_INTERFACE_NAME);
+	public static String convertPath2JavaInterface(
+			final String interfaceNameEncodedAsPath) {
+		return interfaceNameEncodedAsPath != null ? interfaceNameEncodedAsPath
+				.replace('/', '.') : null;
 	}
 
-	/**
-	 * 
-	 * @see org.osgi.service.discovery.ServiceEndpointDescription#getVersion(java.lang.String)
-	 */
-	public String getVersion(String arg0) {
-		return (String) properties
-				.get(ServiceEndpointDescription.PROP_KEY_VERSION);
+	public static String getPathFromProperties(final Map properties2) {
+		StringBuffer sb = new StringBuffer();
+
+		String key;
+		Object value;
+
+		if (properties2 != null && !properties2.isEmpty()) {
+			sb.append("?");
+
+			for (Iterator i = properties2.keySet().iterator(); i.hasNext();) {
+				key = (String) i.next();
+				value = properties2.get(key);
+				if (value == null) {
+					value = "<null>";
+				}
+
+				sb.append(key).append("=").append(value.toString()).append(",");
+			}
+		}
+
+		return sb.toString();
 	}
 }

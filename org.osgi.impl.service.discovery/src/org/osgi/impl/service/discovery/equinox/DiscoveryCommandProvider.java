@@ -68,41 +68,43 @@ public class DiscoveryCommandProvider implements
 		}
 	}
 
-	public void _publish(CommandInterpreter ci) {
-		if (discovery != null) {
-			String idstr = ci.nextArgument();
-			if (idstr != null) {
-				try {
-					Bundle bundle = context.getBundle(Long.parseLong(idstr));
-					ServiceReference[] refs = bundle.getRegisteredServices();
-					if (refs == null) {
-						ci.println("the bundle " + bundle.getSymbolicName()
-								+ " has not registered any service");
-					}
-					boolean result = false;
-					ServiceDescriptionAdapter serviceDescription;
-					for (int i = 0; (refs != null) && (i < refs.length); i++) {
-						serviceDescription = new ServiceDescriptionAdapter(
-								refs[i]);
-						serviceDescription.setProperty("myKey", "myValue");
-						result = discovery.publishService(serviceDescription);
-						if (result) {
-							publishedServices.put(refs[i], serviceDescription);
-							ci.println("Successfully published");
-						} else {
-							ci.println("Failed to publish");
-						}
-					}
-				} catch (Exception ex) {
-					ci.printStackTrace(ex);
-				}
-			} else {
-				ci.println("Must specify valid bundle id!");
-			}
-		} else {
-			ci.println("Discovery service not set");
-		}
-	}
+//	public void _publish(CommandInterpreter ci) {
+//		if (discovery != null) {
+//			String idstr = ci.nextArgument();
+//			if (idstr != null) {
+//				try {
+//					Bundle bundle = context.getBundle(Long.parseLong(idstr));
+//					ServiceReference[] refs = bundle.getRegisteredServices();
+//					if (refs == null) {
+//						ci.println("the bundle " + bundle.getSymbolicName()
+//								+ " has not registered any service");
+//					}
+//					boolean result = false;
+//					ServiceDescriptionAdapter serviceDescription;
+//					for (int i = 0; (refs != null) && (i < refs.length); i++) {
+//						Map interfaceAndFilter = new HashMap();
+//						Map 
+//						serviceDescription = new ServiceDescriptionAdapter(
+//								refs[i]);
+//						serviceDescription.setProperty("myKey", "myValue");
+//						result = discovery.publishService(serviceDescription);
+//						if (result) {
+//							publishedServices.put(refs[i], serviceDescription);
+//							ci.println("Successfully published");
+//						} else {
+//							ci.println("Failed to publish");
+//						}
+//					}
+//				} catch (Exception ex) {
+//					ci.printStackTrace(ex);
+//				}
+//			} else {
+//				ci.println("Must specify valid bundle id!");
+//			}
+//		} else {
+//			ci.println("Discovery service not set");
+//		}
+//	}
 
 	public void _unpublish(CommandInterpreter ci) {
 		if (discovery != null) {

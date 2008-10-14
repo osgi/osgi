@@ -19,14 +19,20 @@
 package org.osgi.impl.service.discovery.slp;
 
 import java.util.ArrayList;
+import java.util.Dictionary;
 import java.util.Hashtable;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.Filter;
+import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
-import org.osgi.impl.service.discovery.ProtocolHandler;
+import org.osgi.impl.service.discovery.AbstractDiscovery;
+import org.osgi.service.discovery.FindServiceCallback;
 import org.osgi.service.discovery.ServiceEndpointDescription;
+import org.osgi.service.discovery.ServiceListener;
 import org.osgi.service.log.LogService;
 import org.osgi.util.tracker.ServiceTracker;
 import org.osgi.util.tracker.ServiceTrackerCustomizer;
@@ -43,8 +49,9 @@ import ch.ethz.iks.slp.ServiceURL;
  * @author Thomas Kiesslich
  * 
  */
-public class SLPHandlerImpl implements ProtocolHandler {
+public class SLPHandlerImpl extends AbstractDiscovery {
 	private LogService logService = null;
+
 	private ServiceTracker locatorTracker = null;
 	private ServiceTracker advertiserTracker = null;
 
@@ -58,7 +65,7 @@ public class SLPHandlerImpl implements ProtocolHandler {
 	 */
 	public SLPHandlerImpl(final BundleContext context,
 			final LogService logService) {
-		this.logService = logService;
+		super(context, logService);
 
 		locatorTracker = new ServiceTracker(context, Locator.class.getName(),
 				new LocatorServiceTracker(context));
@@ -75,93 +82,6 @@ public class SLPHandlerImpl implements ProtocolHandler {
 	public void destroy() {
 		locatorTracker.close();
 		advertiserTracker.close();
-	}
-
-	/**
-	 * 
-	 * @see org.osgi.impl.service.discovery.ProtocolHandler#findService(org.osgi.service.discovery.ServiceDescription)
-	 */
-	public ServiceEndpointDescription[] findService(final String interfaceName,
-			final Filter filter) {
-		List result = new ArrayList();
-		// create SLP service description
-		SLPServiceDescriptionAdapter serviceDescriptionAdapter;
-		try {
-			serviceDescriptionAdapter = new SLPServiceDescriptionAdapter(
-					interfaceName, null, filter);
-		} catch (ServiceLocationException e1) {
-			e1.printStackTrace();
-			return (ServiceEndpointDescription[]) result.toArray();
-		}
-		// check whether SLP-Locator service exists
-		Locator locator = getLocator();
-		if (locator == null) {
-			logService.log(LogService.LOG_WARNING, "no SLP-Locator");
-			return (ServiceEndpointDescription[]) result.toArray();
-		}
-		try {
-			String serviceType = serviceDescriptionAdapter.getServiceType();
-			logService.log(LogService.LOG_DEBUG,"serviceType to find = " + serviceType);
-			logService.log(LogService.LOG_DEBUG, "try to find services with URL="
-					+ serviceDescriptionAdapter.getServiceURL().toString());
-			ServiceLocationEnumeration se = locator
-					.findServices(new ServiceType(serviceType),
-							serviceDescriptionAdapter.getScopes(),
-							serviceDescriptionAdapter.getFilter());
-			// iterate through found services and retrieve their attributes
-			while (se.hasMoreElements()) {
-				ServiceURL url = (ServiceURL) se.next();
-				logService
-						.log(LogService.LOG_DEBUG, "adding serviceURL=" + url);
-				logService.log(LogService.LOG_DEBUG,
-						"try to find attributes for " + url);
-				ServiceLocationEnumeration a = locator.findAttributes(url,
-						null, null); // takes some time :-(
-				SLPServiceDescriptionAdapter descriptionAdapter = new SLPServiceDescriptionAdapter(
-						url);
-				while (a.hasMoreElements()) {
-					String attributes = (String) a.next();
-					String key = null;
-					Object value = null;
-					attributes = attributes.substring(1,
-							attributes.length() - 1);
-					key = attributes.substring(0, attributes.indexOf("="));
-					// if the value is not a String we cannot handle that value! This is a limitation of the API.
-					value = attributes.substring(attributes.indexOf("=") + 1);
-					descriptionAdapter.addProperty(key, value);
-				}
-				result.add(descriptionAdapter); // add to the result list
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-			logService.log(LogService.LOG_WARNING, "Failed to find service", e);
-		}
-		ServiceEndpointDescription[] results = (ServiceEndpointDescription[]) result
-				.toArray(new ServiceEndpointDescription[0]);
-		if (results.length > 0) {
-			StringBuffer buff = new StringBuffer();
-			buff.append("number of services = ");
-			buff.append(results.length);
-			buff.append("; services = ");
-			for (int i = 0; i < results.length; i++) {
-				buff.append("(");
-				String[] ifNames= results[i].getInterfaceNames();
-				for (int k=0; k< ifNames.length; k++) {
-					buff.append(ifNames[k]);
-					if(k != ifNames.length-1) {
-						buff.append(",");
-					}
-				}
-				buff.append(")");
-				if (i != results.length - 1) {
-					buff.append(",(");
-				}
-			}
-			logService.log(LogService.LOG_DEBUG, buff.toString());
-		} else {
-			logService.log(LogService.LOG_DEBUG, "0 services found");
-		}
-		return results;
 	}
 
 	public void setLogService(final LogService logService) {
@@ -186,91 +106,261 @@ public class SLPHandlerImpl implements ProtocolHandler {
 
 	/**
 	 * 
-	 * @see org.osgi.impl.service.discovery.ProtocolHandler#publishService(org.osgi.service.discovery.ServiceDescription)
+	 * @see org.osgi.impl.service.discovery.ProtocolHandler#findService(org.osgi.service.discovery.ServiceDescription)
 	 */
-	public boolean publishService(
-			final ServiceEndpointDescription serviceDescription) {
-		boolean published = false;
-		List serviceDescriptionAdapter = new ArrayList();
-		for (int i = 0; i < serviceDescription.getInterfaceNames().length; i++) {
+	public ServiceEndpointDescription[] findService(final String interfaceName,
+			final String filter) {
+		List result = new ArrayList();
+		
+		//check validity of the given filter
+		try {
+			Filter f = getContext().createFilter(filter);
+		} catch (InvalidSyntaxException e1) {
+			e1.printStackTrace();
+			//TODO log
+			throw new IllegalArgumentException("filter is not an LDAP filter");
+		}
+
+		// check whether SLP-Locator service exists
+		Locator locator = getLocator();
+		if (locator == null) {
+			logService.log(LogService.LOG_WARNING,
+					"No SLP-Locator. Find operation is not executed.");
+			return (ServiceEndpointDescription[]) result.toArray();
+		}
+
+		// TODO first look at cache
+
+		// find appropriate services
+		ServiceLocationEnumeration se;
+		try {
+			ServiceURL svcURL = SLPServiceDescriptionAdapter.createServiceURL(
+					interfaceName, null);
+			logService.log(LogService.LOG_DEBUG,
+					"try to find services with URL=" + svcURL.toString());
+			se = locator.findServices(svcURL.getServiceType(), null, filter);
+
+			// TODO: in case result is empty do a search impying that service
+			// interface is not java???
+		} catch (Exception e) {
+			e.printStackTrace();
+			logService.log(LogService.LOG_WARNING, "Failed to find service", e);
+			return (ServiceEndpointDescription[]) result.toArray();
+		}
+
+		// iterate through found services and retrieve their attributes
+		while (se.hasMoreElements()) {
 			try {
-				SLPServiceDescriptionAdapter sd = new SLPServiceDescriptionAdapter(
-						serviceDescription.getInterfaceNames()[i],
-						serviceDescription.getProperties(), null);
-				serviceDescriptionAdapter.add(sd);
-			} catch (ServiceLocationException e1) {
-				e1.printStackTrace();
-				return published;
+				ServiceURL url = (ServiceURL) se.next();
+				logService
+						.log(LogService.LOG_DEBUG, "adding serviceURL=" + url);
+				logService.log(LogService.LOG_DEBUG,
+						"try to find attributes for " + url);
+				ServiceLocationEnumeration a = locator.findAttributes(url,
+						null, null); // takes some time :-(
+				SLPServiceDescriptionAdapter descriptionAdapter = new SLPServiceDescriptionAdapter(
+						url);
+				while (a.hasMoreElements()) {
+					String attributes = (String) a.next();
+					String key = null;
+					Object value = null;
+					attributes = attributes.substring(1,
+							attributes.length() - 1);
+					key = attributes.substring(0, attributes.indexOf("="));
+					// if the value is not a String we cannot handle that value!
+					// This is a limitation of the API.
+					value = attributes.substring(attributes.indexOf("=") + 1);
+					descriptionAdapter.addProperty(key, value);
+				}
+				result.add(descriptionAdapter); // add to the result list
+			} catch (Exception e) {
+				e.printStackTrace();
+				logService.log(LogService.LOG_WARNING,
+						"Failed to find service", e);
 			}
 		}
 
+		ServiceEndpointDescription[] results = (ServiceEndpointDescription[]) result
+				.toArray(new ServiceEndpointDescription[0]);
+		if (results.length > 0) {
+			StringBuffer buff = new StringBuffer();
+			buff.append("number of services = ");
+			buff.append(results.length);
+			buff.append("; services = ");
+			for (int i = 0; i < results.length; i++) {
+				buff.append("(");
+				String[] ifNames = results[i].getInterfaceNames();
+				for (int k = 0; k < ifNames.length; k++) {
+					buff.append(ifNames[k]);
+					if (k != ifNames.length - 1) {
+						buff.append(",");
+					}
+				}
+				buff.append(")");
+				if (i != results.length - 1) {
+					buff.append(",(");
+				}
+			}
+			logService.log(LogService.LOG_DEBUG, buff.toString());
+		} else {
+			logService.log(LogService.LOG_DEBUG, "0 services found");
+		}
+
+		// TODO add to cache
+
+		return results;
+	}
+
+	/**
+	 * @see org.osgi.service.discovery.Discovery#findService(String,
+	 *      FindServiceCallback)
+	 */
+	public void findService(final String interfaceName, final String filter,
+			final FindServiceCallback callback) {
+		if (callback == null) {
+			throw new IllegalArgumentException("callback must not be null");
+		}
+
+		Thread executor = new Thread(new Runnable() {
+			public void run() {
+				try {
+					// do lookup
+					ServiceEndpointDescription[] services = findService(
+							interfaceName, filter);
+					// return result via callback
+					try {
+						callback.servicesFound(services);
+					} catch (Exception e) {
+						if (logService != null) {
+							logService
+									.log(
+											LogService.LOG_ERROR,
+											"Exceptions where thrown in the callback of findService operation.",
+											e);
+						}
+					}
+				} catch (Exception e) {
+					if (logService != null) {
+						logService.log(LogService.LOG_ERROR,
+								"Failed to execute async findService", e);
+					}
+				}
+			}
+		});
+		executor.start();
+	}
+
+	// TODO: think whether we need a version with autopublish parameter
+	/*
+	 * @see org.osgi.service.discovery.Discovery#publishService(java.util.Map,
+	 * java.util.Map, java.util.Map, boolean)
+	 */
+	public ServiceEndpointDescription publishService(
+			Map/* <String, String> */javaInterfacesAndVersions,
+			Map/* <String, String> */javaInterfacesAndEndpointInterfaces,
+			Map/* <String, Object> */properties, boolean autopublish) {
+		boolean published = false;
+
+		SLPServiceDescriptionAdapter svcDescr;
+		try {
+			svcDescr = new SLPServiceDescriptionAdapter(
+					javaInterfacesAndVersions,
+					javaInterfacesAndEndpointInterfaces, properties);
+		} catch (ServiceLocationException e1) {
+			e1.printStackTrace();
+			// TODO log
+			return null;
+		}
+
+		// TODO: act according autopublish parameter
+		// publish service via SLP
 		Advertiser advertiser = getAdvertiser();
 		if (advertiser != null) {
-			logService.log(LogService.LOG_DEBUG, "publish service "
-					+ serviceDescriptionAdapter);
-			for (int k = 0; k < serviceDescriptionAdapter.size(); k++) {
+			logService.log(LogService.LOG_DEBUG,
+					"Following service is published: " + svcDescr);
+
+			String[] interfaces = svcDescr.getInterfaceNames();
+			for (int k = 0; k < interfaces.length; k++) {
 				try {
-					SLPServiceDescriptionAdapter sd = (SLPServiceDescriptionAdapter) serviceDescriptionAdapter
-							.get(k);
-					advertiser.register(sd.getServiceURL(), new Hashtable(sd
-							.getProperties()));
+					advertiser.register(svcDescr.getServiceURL(interfaces[k]),
+							new Hashtable(svcDescr.getProperties()));
 					published = true;
 				} catch (ServiceLocationException e) {
 					e.printStackTrace();
+					// TODO log
 				}
 			}
 		} else {
-			logService.log(LogService.LOG_DEBUG, "no Advertiser");
+			logService.log(LogService.LOG_WARNING, "no Advertiser");
 		}
-		return published;
+
+		// inform the listener about the new available service
+		Map listeners = getListeners();
+
+		synchronized (listeners) {
+			Iterator it = listeners.keySet().iterator();
+			while (it.hasNext()) {
+				ServiceListener sl = (ServiceListener) it.next();
+				Filter filter = (Filter) listeners.get(sl);
+				// inform it if the listener has no Filter set
+				// or the filter matches the criteria
+				// TODO check whether the matching operation is
+				// a specficication or implementation problem.
+				// We currently use the Filter class of the
+				// Equinox. It is not possible to define an
+				// array (interface names) as a String
+				// representation (parameter of
+				// addServiceListener()). So we cannot match for
+				// interfaces. So we have to write our own match
+				// method. Is that intendend?
+
+				if (filter == null
+						|| (filter != null && filter.match(new Hashtable(
+								svcDescr.getProperties())))) {
+					sl.serviceAvailable(svcDescr);
+				}
+			}
+		}
+		return svcDescr;
 	}
 
 	/**
-	 * 
-	 * @see org.osgi.impl.service.discovery.ProtocolHandler#unpublishService(org.osgi.service.discovery.ServiceDescription)
+	 * @see org.osgi.service.discovery.Discovery#unpublish(org.osgi.service.discovery.ServiceEndpointDescription)
 	 */
 	public void unpublishService(
 			final ServiceEndpointDescription serviceDescription) {
-		List serviceDescriptionAdapter = new ArrayList();
-		for (int i = 0; i < serviceDescription.getInterfaceNames().length; i++) {
-			try {
-				SLPServiceDescriptionAdapter sd = new SLPServiceDescriptionAdapter(
-						serviceDescription.getInterfaceNames()[i],
-						serviceDescription.getProperties(), null);
-				serviceDescriptionAdapter.add(sd);
-			} catch (ServiceLocationException e1) {
-				e1.printStackTrace();
-				return;
-			}
+		validateServiceDescription(serviceDescription);
+
+		if (logService != null) {
+			logService.log(LogService.LOG_DEBUG, "unpublish service "
+					+ serviceDescription.toString());
 		}
 
-		Advertiser advertiser = getAdvertiser();
-		if (advertiser != null) {
-			for (int k = 0; k < serviceDescriptionAdapter.size(); k++) {
-				try {
-					SLPServiceDescriptionAdapter sd = (SLPServiceDescriptionAdapter) serviceDescriptionAdapter
-							.get(k);
-					logService.log(LogService.LOG_DEBUG, "unpublish service "
-							+ sd.getServiceURL());
-					advertiser.deregister(sd.getServiceURL());
-				} catch (ServiceLocationException e) {
-					e.printStackTrace();
+		if (serviceDescription instanceof SLPServiceDescriptionAdapter) {
+			SLPServiceDescriptionAdapter slpSvcDescr = (SLPServiceDescriptionAdapter) serviceDescription;
+
+			Advertiser advertiser = getAdvertiser();
+			if (advertiser != null) {
+				String[] interfaceNames = slpSvcDescr.getInterfaceNames();
+				for (int k = 0; k < interfaceNames.length; k++) {
+					try {
+						logService
+								.log(
+										LogService.LOG_DEBUG,
+										"unpublish service "
+												+ slpSvcDescr
+														.getServiceURL(interfaceNames[k]));
+						advertiser.deregister(slpSvcDescr
+								.getServiceURL(interfaceNames[k]));
+					} catch (ServiceLocationException e) {
+						e.printStackTrace();
+						// TODO: log
+					}
 				}
+			} else {
+				logService.log(LogService.LOG_WARNING, "no Advertiser");
 			}
-		} else {
-			logService.log(LogService.LOG_DEBUG, "no Advertiser");
 		}
-	}
-
-	/**
-	 * 
-	 * @see org.osgi.impl.service.discovery.ProtocolHandler#publishService(org.osgi.service.discovery.ServiceDescription,
-	 *      boolean)
-	 */
-	public boolean publishService(
-			final ServiceEndpointDescription serviceDescription,
-			boolean autopublish) {
-		return publishService(serviceDescription);
 	}
 
 	/**
