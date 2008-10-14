@@ -16,6 +16,8 @@
 
 package org.osgi.service.discovery;
 
+import java.util.Map;
+
 /**
  * 
  * TODO: How to update published ServiceDescriptions? How to identify
@@ -26,11 +28,20 @@ package org.osgi.service.discovery;
  * @version $Revision$
  */
 public interface Discovery {
-	final String ORG_OSGI_DISCOVERY = "org.osgi.discovery";
+	/**
+	 * 
+	 */
+	final String OSGI_DISCOVERY = "osgi.discovery";
 
-	final String ORG_OSGI_DISCOVERY_NONE = "none";
+	/**
+	 * 
+	 */
+	final String OSGI_DISCOVERY_NONE = "none";
 
-	final String ORG_OSGI_DISCOVERY_AUTO_PUBLISH = "auto-publish";
+	/**
+	 * 
+	 */
+	final String OSGI_DISCOVERY_AUTO_PUBLISH = "auto-publish";
 
 	/**
 	 * Add a ServiceListener for a particular service description.
@@ -85,8 +96,8 @@ public interface Discovery {
 	 *            properties for service url, interface version etc.. If filter
 	 *            is null all services are considered to match.
 	 * @return Array of ServiceEndpointDescription objects matching the service
-	 *         that was found to satisfy the find criteria. The Collection may
-	 *         be empty if none was found.
+	 *         that was found to satisfy the find criteria. The array is empty
+	 *         if none was found.
 	 */
 	ServiceEndpointDescription[] findService(String interfaceName, String filter);
 
@@ -114,19 +125,28 @@ public interface Discovery {
 			FindServiceCallback callback);
 
 	/**
-	 * Publish the provided service description. If the property
-	 * org.osgi.discovery = auto-publish, the Discovery implementation actively
-	 * pushes the information about the service to the network. Otherwise, it is
-	 * just available upon request from other Discovery implementations.
+	 * Publish the provided service description.
 	 * 
-	 * @param serviceEndpointDescription
-	 *            ServiceEndpointDescription of the service to publish
-	 * @return true if the service was successfully published.
+	 * @param javaInterfacesAndVersions
+	 *            its an association between interfaces and versions. For every
+	 *            interface to publish you have to define its version.
+	 * @param javaInterfacesAndEndpointInterfaces
+	 *            associates java interfaces to general end point interface
+	 *            names. It is not needed to to have and end point interface for
+	 *            a java interface. The map can be null.
+	 * @param properties
+	 *            a bag of properties to be published; can be null
+	 * 
+	 * @return an instance of {@link ServiceEndpointDescription} or null if the
+	 *         publishing failed
+	 * 
 	 * @throws IllegalArgumentException
-	 *             if serviceEndpointDescription is null, incomplete or invalid
-	 *             (e.g. contains unknown property types)
+	 *             if javaInterfacesAndVersions is null or empty
 	 */
-	boolean publishService(ServiceEndpointDescription serviceEndpointDescription);
+	ServiceEndpointDescription publishService(
+			Map/* <String, String> */javaInterfacesAndVersions,
+			Map/* <String, String> */javaInterfacesAndEndpointInterfaces,
+			Map/* <String, Object> */properties);
 
 	/**
 	 * Publish the provided service. The information is published by the
@@ -136,19 +156,29 @@ public interface Discovery {
 	 * other Discovery implementations. The ServiceEndpointDescription is
 	 * matched using the Comparable interface.
 	 * 
-	 * @param serviceEndpointDescription
-	 *            ServiceEndpointDescription of the service to publish
+	 * @param javaInterfacesAndVersions
+	 *            its an association between interfaces and versions. For every
+	 *            interface to publish you have to define its version.
+	 * @param javaInterfacesAndEndpointInterfaces
+	 *            associates java interfaces to general end point interface
+	 *            names. It is not needed to to have and end point interface for
+	 *            a java interface. The map can be null.
+	 * @param properties
+	 *            a bag of properties to be published; can be null
 	 * @param autopublish
 	 *            if true, service information is actively pushed to the network
 	 *            for discovery
-	 * @return true if the service was successfully published.
+	 * 
+	 * @return an instance of {@link ServiceEndpointDescription} or null if the
+	 *         publishing failed
+	 * 
 	 * @throws IllegalArgumentException
-	 *             if serviceEndpointDescription is null, incomplete or invalid
-	 *             (e.g. contains unknown property types)
+	 *             if javaInterfacesAndVersions is null or empty
 	 */
-	boolean publishService(
-			ServiceEndpointDescription serviceEndpointDescription,
-			boolean autopublish);
+	ServiceEndpointDescription publishService(
+			Map/* <String, String> */javaInterfacesAndVersions,
+			Map/* <String, String> */javaInterfacesAndEndpointInterfaces,
+			Map/* <String, Object> */properties, boolean autopublish);
 
 	/**
 	 * Make the given service un-discoverable. The previous publish request for
