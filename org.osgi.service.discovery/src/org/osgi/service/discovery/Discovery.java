@@ -129,7 +129,8 @@ public interface Discovery {
 	 * 
 	 * @param javaInterfacesAndVersions
 	 *            its an association between interfaces and versions. For every
-	 *            interface to publish you have to define its version.
+	 *            interface to publish you have to define its version.If you
+	 *            don't have a version, put "0.0.0" in it.
 	 * @param javaInterfacesAndEndpointInterfaces
 	 *            associates java interfaces to general end point interface
 	 *            names. It is not needed to to have and end point interface for
@@ -158,7 +159,8 @@ public interface Discovery {
 	 * 
 	 * @param javaInterfacesAndVersions
 	 *            its an association between interfaces and versions. For every
-	 *            interface to publish you have to define its version.
+	 *            interface to publish you have to define its version. If you
+	 *            don't have a version, put "0.0.0" in it.
 	 * @param javaInterfacesAndEndpointInterfaces
 	 *            associates java interfaces to general end point interface
 	 *            names. It is not needed to to have and end point interface for
