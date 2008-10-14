@@ -1,6 +1,14 @@
 package org.osgi.test.support.compatibility;
 
 import java.net.URL;
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.Dictionary;
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 
 import junit.framework.TestCase;
 
@@ -8,11 +16,18 @@ import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.BundleException;
 import org.osgi.framework.ServiceReference;
+import org.osgi.framework.ServiceRegistration;
 
+/**
+ * @author <a href="mailto:tdiekman@tibco.com">Tim Diekmann</a>
+ *
+ */
 public abstract class DefaultTestBundleControl extends TestCase {
 	
 	/* @GuardedBy("this") */
 	private BundleContext	context;
+	
+	private Map serviceRegistry = new HashMap();
 
 	/**
 	 * THis method is called by the JUnit runner for OSGi, and gives us a Bundle
@@ -81,11 +96,226 @@ public abstract class DefaultTestBundleControl extends TestCase {
 	}
 	
 	public void pass(String passMessage) {
-		//nothing to do here
+		System.out.println(passMessage);
 	}
 	
 	public void log(String logMessage) {
-		//log messages are currently skipped
+		System.out.println(logMessage);
 	}
 	
+	public void trace(String logMessage) {
+		System.out.println(logMessage);
+	}
+	
+    /**
+	 * Method for logging exceptions. The tested code may throw an
+	 * exception that is a subclass of the specified, so the parameter
+	 * <code>want</code> specifies the expected class. If the parameter
+	 * <code>got</code> is of the wanted type (or a subtype of the
+	 * wanted type), the classname of <code>want</code> is logged. If
+	 * <code>got</code> is of an unexpected type, the classname of
+	 * <code>got</code> is logged.
+	 *
+	 * @param message the log description
+	 * @param want the exception that is specified to be thrown
+	 * @param got the exception that was thrown
+	 */
+    public void assertException(String message, Class want, Throwable got) {
+        String formatted = "";
+
+        if(message != null) {
+            formatted = message + " ";
+        }
+
+        if(want.isInstance(got)) {
+            pass(formatted + want.getName());
+        }
+        else {
+        	got.printStackTrace();
+            fail(formatted + "expected:[" + want.getName()
+                 + "] but was:[" + got.getClass().getName() + "]");
+        }
+    }
+    
+    /**
+	 * Asserts that two Dictionaries of properties are equal. If they are not
+	 * an AssertionFailedError is thrown.
+	 */
+    public void assertEqualProperties(String message, Dictionary expected, Dictionary actual)
+    {
+        if (expected == actual)
+        {
+            passNotEquals(message, expected, actual);
+            return;
+        }
+
+        if ((expected == null) || (actual == null))
+        {
+            failNotEquals(message, expected, actual);
+            return;
+        }
+
+        if (expected.size() != actual.size())
+        {
+            failNotEquals(message, expected, actual);
+            return;
+        }
+
+        Enumeration e = expected.keys();
+        while (e.hasMoreElements())
+        {
+            Object key = e.nextElement();
+            Object expectedValue = expected.get(key);
+            Object actualValue = actual.get(key);
+
+            if (!objectEquals(expectedValue, actualValue))
+            {
+                failNotEquals(message, expected, actual);
+                return;
+            }
+        }
+
+        passNotEquals(message, expected, actual);
+    }
+    
+    /**
+     * Compare two objects for equality. This method calls Arrays.equals if the object types are arrays.
+     *
+     */
+    public boolean objectEquals(Object expected, Object actual)
+    {
+    	return objectEquals(null, expected, actual);
+    }
+    
+    /**
+	 * Compare two objects for equality. This method calls Arrays.equals if the object types are arrays.
+	 *
+	 */
+    public boolean objectEquals(Comparator comparator, Object expected, Object actual)
+    {
+        if (expected == actual)
+        {
+            return true;
+        }
+
+        if ((expected == null) || (actual == null))
+        {
+            return false;
+        }
+
+        if (expected.equals(actual))
+        {
+        	return true;
+        }
+
+		if ( expected instanceof List && actual instanceof List )
+			return objectEquals( comparator, (List)expected, (List)actual );
+		
+		if ( expected instanceof Dictionary && actual instanceof Dictionary )
+			return objectEquals( comparator, (Dictionary)expected, (Dictionary)actual );
+		
+		try
+		{
+			Class clazz = expected.getClass();
+			if (clazz.isArray())
+			{
+				Class type = clazz.getComponentType();
+				
+				if (type.isPrimitive())
+				{
+					if (type.equals(Integer.TYPE))
+					{
+						return Arrays.equals((int[])expected, (int[])actual);
+					}
+					else
+						if (type.equals(Long.TYPE))
+						{
+							return Arrays.equals((long[])expected, (long[])actual);
+						}
+						else
+							if (type.equals(Byte.TYPE))
+							{
+								return Arrays.equals((byte[])expected, (byte[])actual);
+							}
+							else
+								if (type.equals(Short.TYPE))
+								{
+									return Arrays.equals((short[])expected, (short[])actual);
+								}
+								else
+									if (type.equals(Character.TYPE))
+									{
+										return Arrays.equals((char[])expected, (char[])actual);
+									}
+									else
+										if (type.equals(Float.TYPE))
+										{
+											return Arrays.equals((float[])expected, (float[])actual);
+										}
+										else
+											if (type.equals(Double.TYPE))
+											{
+												return Arrays.equals((double[])expected, (double[])actual);
+											}
+											else
+												if (type.equals(Boolean.TYPE))
+												{
+													return Arrays.equals((boolean[])expected, (boolean[])actual);
+												}
+				}
+				else    /* non-primitive array object */
+				{
+					return Arrays.equals((Object[])expected, (Object[])actual);
+				}
+			}
+			
+			/* well it did not match any of the above types
+			 * do we have a comparator to compare them?
+			 */
+			if (comparator != null) {
+				if (comparator.compare(expected, actual) == 0) {
+					return true;
+				}
+			}
+		}
+		catch (ClassCastException e)
+		{
+		}
+
+        return false;
+    }
+    
+    public boolean serviceAvailable(Class clazz) {
+    	return context.getServiceReference(clazz.getName()) != null;
+    }
+
+    public void registerService(String clazz, Object service, Dictionary properties) throws Exception {
+    	ServiceRegistration sr = context.registerService(clazz, service, properties);
+    	serviceRegistry.put(service, sr);
+    }
+
+    public void unregisterService(Object service) {
+    	ServiceRegistration sr = (ServiceRegistration) serviceRegistry.remove(service);
+    	if (sr != null) {
+    		sr.unregister();
+    	}
+    }
+    
+    public void unregisterAllServices() {
+    	for (Iterator i = serviceRegistry.values().iterator(); i.hasNext(); ) {
+    		ServiceRegistration sr = (ServiceRegistration) i.next();
+    		sr.unregister();
+    	}
+    }
+    
+    private void passNotEquals(String message, Object expected, Object actual) {
+        String formatted = "";
+
+        if(message != null) {
+            formatted = message + " ";
+        }
+
+        pass(formatted + "expected:[" + expected + "] and correctly got:[" + actual + "]");
+    }
+
 }
