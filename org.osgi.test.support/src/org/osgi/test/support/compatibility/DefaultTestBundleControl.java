@@ -71,19 +71,6 @@ public abstract class DefaultTestBundleControl extends TestCase {
 		bundle.uninstall();
 	}
 
-	/**
-	 * Install a bundle.
-	 * 
-	 * @param bundle
-	 * @throws BundleException
-	 */
-	public Bundle installBundle(String url) throws BundleException {
-		URL resource = getClass().getResource(url);
-		if ( resource == null )
-			fail("Can not load bundle " + url);
-		return getContext().installBundle(resource.toString());
-	}
-
 	public void failException(String message, Class expectedExceptionClass) {
         fail(message + " expected:[" + expectedExceptionClass.getName() + "] and got nothing");
 	}
@@ -420,13 +407,25 @@ public abstract class DefaultTestBundleControl extends TestCase {
 	    return sid.longValue();
     }
     
+	/**
+	 * Install a bundle.
+	 * 
+	 * @param bundle
+	 * @throws BundleException
+	 */
+	public Bundle installBundle(String url) throws Exception {
+		return installBundle(url, true);
+	}
     
     public Bundle installBundle(String bundleName, boolean start) throws Exception {
         try {
-            URL    url = new URL(getWebServer() + bundleName);
+        	if (!bundleName.startsWith(getWebServer())) {
+        		bundleName = getWebServer() + bundleName;
+        	}
+            URL    url = getClass().getResource(bundleName);
             InputStream in = url.openStream();
  
-            Bundle        b = context.installBundle(getWebServer() + bundleName, in);
+            Bundle        b = context.installBundle(bundleName, in);
             if (start) {
             	b.start();
             }
