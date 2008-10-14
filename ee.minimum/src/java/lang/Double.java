@@ -21,6 +21,7 @@ package java.lang;
 public final class Double extends java.lang.Number implements java.lang.Comparable {
 	public Double(double var0) { }
 	public Double(java.lang.String var0) { }
+	public static int compare(double var0, double var1) { return 0; }
 	public int compareTo(java.lang.Double var0) { return 0; }
 	public int compareTo(java.lang.Object var0) { return 0; }
 	public static long doubleToLongBits(double var0) { return 0l; }
