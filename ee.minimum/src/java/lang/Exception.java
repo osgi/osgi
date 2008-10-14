@@ -21,5 +21,7 @@ package java.lang;
 public class Exception extends java.lang.Throwable {
 	public Exception() { }
 	public Exception(java.lang.String var0) { }
+	public Exception(java.lang.String var0, java.lang.Throwable var1) { }
+	public Exception(java.lang.Throwable var0) { }
 }
 
