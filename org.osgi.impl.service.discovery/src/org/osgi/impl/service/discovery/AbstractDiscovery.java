@@ -161,8 +161,20 @@ public abstract class AbstractDiscovery implements Discovery {
 	 *            the reference to the LogService which get called for logging
 	 * 
 	 */
-	public void setLogService(final LogService logService) {
+	protected void setLogService(final LogService logService) {
 		this.logService = logService;
+	}
+	
+	protected LogService getLogService() {
+		return logService;
+	}
+	
+	protected boolean isAutoPublish() {
+		return autoPublish;
+	}
+
+	protected void setAutoPublish(boolean autoPublish) {
+		this.autoPublish = autoPublish;
 	}
 
 	/**

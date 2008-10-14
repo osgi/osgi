@@ -7,7 +7,6 @@ import java.net.UnknownHostException;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 import java.util.StringTokenizer;
 
@@ -112,19 +111,46 @@ public class SLPServiceDescriptionAdapter implements ServiceEndpointDescription 
 				: new HashMap();
 		this.properties = properties != null ? properties : new HashMap();
 
-		// Create a service url for each interface
+		// create arrays for java-interface, version and endpoint-interface
+		// info. Array indexes correlate.
+		int interfaceNmb = this.javaInterfaceAndFilters.size();
+		String[] javaInterfaces = new String[interfaceNmb];
+		String[] versions = new String[interfaceNmb];
+		String[] endpointInterfaces = this.javaAndEndpointInterfaces.size() > 0 ? new String[interfaceNmb]
+				: null;
+
+		// Create a service url for each interface and gather also version and
+		// endpoint-interface information.
 		this.serviceURLs = new HashMap();
 		Iterator intfIterator = this.javaInterfaceAndFilters.keySet()
 				.iterator();
 		for (int i = 0; intfIterator.hasNext(); i++) {
 			Object currentInterface = intfIterator.next();
 			if (currentInterface instanceof String) {
-				String javaInterface = (String) currentInterface;
-				this.serviceURLs.put(javaInterface, createServiceURL(
-						javaInterface, this.properties));
+				javaInterfaces[i] = (String) currentInterface;
+				versions[i] = (String) this.javaInterfaceAndFilters
+						.get(javaInterfaces[i]);
+				if (this.javaAndEndpointInterfaces.size() > 0) {
+					endpointInterfaces[i] = (String) this.javaAndEndpointInterfaces
+							.get(javaInterfaces[i]);
+				}
+				this.serviceURLs.put(javaInterfaces[i], createServiceURL(
+						javaInterfaces[i], this.properties));
 			} else {
 				// TODO: throw exception
 			}
+		}
+
+		// added version and endpoint-interface information to the properties
+		this.properties.put(ServiceEndpointDescription.PROP_KEY_INTERFACE_NAME,
+				javaInterfaces);
+		this.properties.put(ServiceEndpointDescription.PROP_KEY_VERSION,
+				versions);
+		if (this.javaAndEndpointInterfaces.size() > 0) {
+			this.properties
+					.put(
+							ServiceEndpointDescription.PROP_KEY_PROTOCOL_SPECIFIC_INTERFACE_NAME,
+							endpointInterfaces);
 		}
 	}
 
@@ -195,11 +221,11 @@ public class SLPServiceDescriptionAdapter implements ServiceEndpointDescription 
 				try {
 					while (st.hasMoreTokens()) {
 						key = st.nextToken();
-						if(st.hasMoreTokens())
+						if (st.hasMoreTokens())
 							value = st.nextToken();
-						else 
+						else
 							value = "";
-						
+
 						properties.put(key, value);
 					}
 				} catch (Exception e) {
@@ -300,8 +326,8 @@ public class SLPServiceDescriptionAdapter implements ServiceEndpointDescription 
 		String host = null;
 		String port = null;
 		Integer lifeTime = null;
-		
-		// init from properties if given 
+
+		// init from properties if given
 		if (properties != null) {
 			protocol = (String) properties.get("protocol");
 			host = (String) properties.get("host");
@@ -322,7 +348,7 @@ public class SLPServiceDescriptionAdapter implements ServiceEndpointDescription 
 				host = hostname;
 			} catch (UnknownHostException e) {
 				e.printStackTrace();
-				//TODO log and rethrow
+				// TODO log and rethrow
 			}
 		}
 		int lifetime = lifeTime != null ? lifeTime.intValue()
