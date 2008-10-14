@@ -15,6 +15,8 @@ import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
 import org.osgi.service.discovery.Discovery;
 import org.osgi.service.discovery.ServiceEndpointDescription;
+import org.osgi.service.discovery.ServiceListener;
+import org.osgi.test.cases.discovery.internal.DiscoveryServiceListener;
 import org.osgi.test.cases.discovery.internal.DiscoveryTestServiceInterface;
 
 public class DiscoveryTestCase extends TestCase {
@@ -39,57 +41,129 @@ public class DiscoveryTestCase extends TestCase {
 		
 	}
 	
-	public void testPublishFind() {
-		ServiceEndpointDescription service = new ServiceEndpointDescription() {
-
-			public String[] getInterfaceNames() {
-				return new String[]{DiscoveryTestServiceInterface.class.getName()};
-			}
-
-			public URL getLocation() {
-				// TODO Auto-generated method stub
-				return null;
-			}
-
-			public Map getProperties() {
-				HashMap props = new HashMap();
-				props.put("mytestkey", "mytestvalue");
-				return props;
-			}
-
-			public Object getProperty(String arg0) {
-				return arg0 == "mytestkey" ? "mytestvalue" : null;
-			}
-
-			public Collection getPropertyKeys() {
-				ArrayList keys = new ArrayList();
-				keys.add("mytestkey");
-				return keys;
-			}
-
-			public String getProtocolSpecificInterfaceName(String arg0) {
-				// TODO Auto-generated method stub
-				return null;
-			}
-
-			public String getVersion(String arg0) {
-				return "1.2.3";
-			}
-			
-		};
+	public void testPublish() {
+		Map jInterfaces = new HashMap();
+		Map epInterfaces = new HashMap();
+		Map properties = new HashMap();
 		
-		boolean b = discovery.publishService(service);
-		assertTrue(b);
+		jInterfaces.put(DiscoveryTestServiceInterface.class.getName(), "1.0.0");
+		epInterfaces.put(DiscoveryTestServiceInterface.class.getName(), "{www.tibco.com/rfc119/tck}DiscoveryTestServiceInterface");
+		properties.put("mytestkey", "mytestvalue");
+		
+		ServiceEndpointDescription sed = discovery.publishService(jInterfaces, epInterfaces, properties);
+		assertNotNull(sed);
+		assertNotNull(sed.getInterfaceNames());
+		assertTrue(sed.getInterfaceNames().length == 1);
+		assertEquals(DiscoveryTestServiceInterface.class.getName(), sed.getInterfaceNames()[0]);
+		assertEquals("1.0.0", sed.getVersion(DiscoveryTestServiceInterface.class.getName()));
+		assertEquals("mytestvalue", sed.getProperty("mytestkey"));
+		
+		discovery.unpublishService(sed);
+	}
+	
+	public void testAutoPublish() {
+		Map jInterfaces = new HashMap();
+		Map epInterfaces = new HashMap();
+		Map properties = new HashMap();
+		
+		jInterfaces.put(DiscoveryTestServiceInterface.class.getName(), "1.0.0");
+		epInterfaces.put(DiscoveryTestServiceInterface.class.getName(), "{www.tibco.com/rfc119/tck}DiscoveryTestServiceInterface");
+		properties.put("mytestkey", "mytestvalue");
+		
+		ServiceEndpointDescription sed = discovery.publishService(jInterfaces, epInterfaces, properties, true);
+		assertNotNull(sed);
+		assertNotNull(sed.getInterfaceNames());
+		assertTrue(sed.getInterfaceNames().length == 1);
+		assertEquals(DiscoveryTestServiceInterface.class.getName(), sed.getInterfaceNames()[0]);
+		assertEquals("1.0.0", sed.getVersion(DiscoveryTestServiceInterface.class.getName()));
+		assertEquals("mytestvalue", sed.getProperty("mytestkey"));
+		
+		discovery.unpublishService(sed);
+	}
+	
+	public void testPublishFindListener() {
+		Map jInterfaces = new HashMap();
+		Map epInterfaces = new HashMap();
+		Map properties = new HashMap();
+		
+		jInterfaces.put(DiscoveryTestServiceInterface.class.getName(), "1.0.0");
+		epInterfaces.put(DiscoveryTestServiceInterface.class.getName(), "{www.tibco.com/rfc119/tck}DiscoveryTestServiceInterface");
+		properties.put("mytestkey", "mytestvalue");
+		
+		DiscoveryServiceListener listener = new DiscoveryServiceListener();
+		discovery.addServiceListener(listener);
+		
+		ServiceEndpointDescription sed = discovery.publishService(jInterfaces, epInterfaces, properties, true);
+		assertNotNull(sed);
+		assertNotNull(sed.getInterfaceNames());
+		assertTrue(sed.getInterfaceNames().length == 1);
+		assertEquals(DiscoveryTestServiceInterface.class.getName(), sed.getInterfaceNames()[0]);
+		assertEquals("1.0.0", sed.getVersion(DiscoveryTestServiceInterface.class.getName()));
+		assertEquals("mytestvalue", sed.getProperty("mytestkey"));
+		
+		assertEquals(sed, listener.getAvailableCalled());
+		
+		ServiceEndpointDescription[] descs = discovery.findService(DiscoveryTestServiceInterface.class.getName(), null);
+		assertNotNull(descs);
+		assertTrue(descs.length == 1);
+		assertEquals(sed.getProperty("mytestkey"), descs[0].getProperty("mytestkey"));
+		assertEquals(sed.getInterfaceNames()[0], descs[0].getInterfaceNames()[0]);
+		assertEquals(sed.getVersion(DiscoveryTestServiceInterface.class.getName()), descs[0].getVersion(DiscoveryTestServiceInterface.class.getName()));
+		
+		discovery.unpublishService(sed);
+		descs = discovery.findService(DiscoveryTestServiceInterface.class.getName(), "(mytestkey=mytestvalue)");
+		assertNotNull(descs);
+		assertTrue(descs.length == 0);
+		
+		assertEquals(sed, listener.getUnavailableCalled());
+
+		// make sure the listener is removed again
+		discovery.removeServiceListener(listener);
+		listener.setAvailableCalled(null);
+		sed = discovery.publishService(jInterfaces, epInterfaces, properties);
+		assertNull(listener.getAvailableCalled());
+		discovery.unpublishService(sed);
+	}
+	
+	public void testPublishFindListenerFilter() {
+		DiscoveryServiceListener listener = new DiscoveryServiceListener();
+		discovery.addServiceListener(listener, "(mytestkey=mytestvalue)");
+		
+		Map jInterfaces = new HashMap();
+		Map epInterfaces = new HashMap();
+		Map properties = new HashMap();
+		
+		jInterfaces.put(DiscoveryTestServiceInterface.class.getName(), "1.0.0");
+		epInterfaces.put(DiscoveryTestServiceInterface.class.getName(), "{www.tibco.com/rfc119/tck}DiscoveryTestServiceInterface");
+		properties.put("mytestkey", "mytestvalue");
+		
+		ServiceEndpointDescription sed = discovery.publishService(jInterfaces, epInterfaces, properties, true);
+		
+		properties.put("mytestkey", "myothertestvalue");
+		jInterfaces.put(DiscoveryTestServiceInterface.class.getName(), "1.2.3");
+		ServiceEndpointDescription sed1 = discovery.publishService(jInterfaces, epInterfaces, properties, true);
+		
+		assertEquals(sed1, listener.getAvailableCalled());
 		
 		ServiceEndpointDescription[] descs = discovery.findService(DiscoveryTestServiceInterface.class.getName(), "(mytestkey=mytestvalue)");
 		assertNotNull(descs);
 		assertTrue(descs.length == 1);
-		assertEquals(service.getProperty("mytestkey"), descs[0].getProperty("mytestkey"));
-		assertEquals(service.getInterfaceNames()[0], descs[0].getInterfaceNames()[0]);
+		assertEquals(sed1.getProperty("mytestkey"), descs[0].getProperty("mytestkey"));
+		assertEquals(sed1.getInterfaceNames()[0], descs[0].getInterfaceNames()[0]);
+		assertEquals(sed1.getVersion(DiscoveryTestServiceInterface.class.getName()), descs[0].getVersion(DiscoveryTestServiceInterface.class.getName()));
 		
-		discovery.unpublishService(service);
+		discovery.unpublishService(sed);
 		descs = discovery.findService(DiscoveryTestServiceInterface.class.getName(), "(mytestkey=mytestvalue)");
 		assertNotNull(descs);
-		assertTrue(descs.length == 0);
+		assertTrue(descs.length == 1);
+		assertEquals(sed1.getProperty("mytestkey"), descs[0].getProperty("mytestkey"));
+		assertEquals(sed1.getInterfaceNames()[0], descs[0].getInterfaceNames()[0]);
+		assertEquals(sed1.getVersion(DiscoveryTestServiceInterface.class.getName()), descs[0].getVersion(DiscoveryTestServiceInterface.class.getName()));
+		
+		discovery.unpublishService(sed1);
+		assertEquals(sed1, listener.getUnavailableCalled());
+
+		// make sure the listener is removed again
+		discovery.removeServiceListener(listener);
 	}
 }

@@ -14,5 +14,5 @@
 <stringAttribute key="org.eclipse.jdt.junit.TEST_KIND" value="org.eclipse.jdt.junit.loader.junit3"/>
 <stringAttribute key="org.eclipse.jdt.launching.MAIN_TYPE" value="org.osgi.test.cases.discovery.DiscoveryTestCase"/>
 <stringAttribute key="org.eclipse.jdt.launching.PROJECT_ATTR" value="org.osgi.test.cases.discovery"/>
-<stringAttribute key="org.eclipse.jdt.launching.VM_ARGUMENTS" value="-Dnet.slp.traceDATraffic=true -Dch.ethz.iks.slp.debug=true -Dnet.slp.traceDrop=true -Dnet.slp.traceMsg=true -Dnet.slp.traceReg=true -Dnet.slp.interfaces=192.168.2.14 -Dnet.slp.port=47427"/>
+<stringAttribute key="org.eclipse.jdt.launching.VM_ARGUMENTS" value="-Dnet.slp.traceDATraffic=true -Dch.ethz.iks.slp.debug=true -Dnet.slp.traceDrop=true -Dnet.slp.traceMsg=true -Dnet.slp.traceReg=true -Dnet.slp.port=47427"/>
 </launchConfiguration>
