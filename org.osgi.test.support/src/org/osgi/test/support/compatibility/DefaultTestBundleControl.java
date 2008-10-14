@@ -1,5 +1,6 @@
 package org.osgi.test.support.compatibility;
 
+import java.io.InputStream;
 import java.net.URL;
 import java.util.Arrays;
 import java.util.Comparator;
@@ -417,6 +418,31 @@ public abstract class DefaultTestBundleControl extends TestCase {
 	    Long sid = (Long) s.getProperty(Constants.SERVICE_RANKING);
 
 	    return sid.longValue();
+    }
+    
+    
+    public Bundle installBundle(String bundleName, boolean start) throws Exception {
+        try {
+            URL    url = new URL(getWebServer() + bundleName);
+            InputStream in = url.openStream();
+ 
+            Bundle        b = context.installBundle(getWebServer() + bundleName, in);
+            if (start) {
+            	b.start();
+            }
+            return b;
+        }
+        catch(BundleException e) {
+            System.out.println("Not able to install testbundle " + bundleName);
+            System.out.println("Nested " + e.getNestedException());
+            e.printStackTrace();
+            throw e;
+        }
+        catch(Exception e) {
+            System.out.println("Not able to install testbundle " + bundleName);
+            e.printStackTrace();
+            throw e;
+        }
     }
 
 }
