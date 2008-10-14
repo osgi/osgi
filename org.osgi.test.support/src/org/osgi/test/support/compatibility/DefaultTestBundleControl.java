@@ -75,4 +75,17 @@ public abstract class DefaultTestBundleControl extends TestCase {
 		
 		return c.getService(ref);
 	}
+	
+	public void failException(String message, Class expectedExceptionClass) {
+        fail(message + " expected:[" + expectedExceptionClass.getName() + "] and got nothing");
+	}
+	
+	public void pass(String passMessage) {
+		//nothing to do here
+	}
+	
+	public void log(String logMessage) {
+		//log messages are currently skipped
+	}
+	
 }
