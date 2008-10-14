@@ -6,6 +6,7 @@ import java.util.Comparator;
 import java.util.Dictionary;
 import java.util.Enumeration;
 import java.util.HashMap;
+import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -15,6 +16,8 @@ import junit.framework.TestCase;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.BundleException;
+import org.osgi.framework.Constants;
+import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
 import org.osgi.framework.ServiceRegistration;
 
@@ -28,6 +31,7 @@ public abstract class DefaultTestBundleControl extends TestCase {
 	private BundleContext	context;
 	
 	private Map serviceRegistry = new HashMap();
+    Hashtable       fetchedServices = new Hashtable();
 
 	/**
 	 * THis method is called by the JUnit runner for OSGi, and gives us a Bundle
@@ -79,18 +83,6 @@ public abstract class DefaultTestBundleControl extends TestCase {
 		return getContext().installBundle(resource.toString());
 	}
 
-	/**
-	 * Convenience getService method
-	 */	
-	public Object getService(Class clazz ) {
-		BundleContext c = getContext();
-		ServiceReference ref = c.getServiceReference(clazz.getName());
-		if ( ref == null )
-			return null;
-		
-		return c.getService(ref);
-	}
-	
 	public void failException(String message, Class expectedExceptionClass) {
         fail(message + " expected:[" + expectedExceptionClass.getName() + "] and got nothing");
 	}
@@ -316,6 +308,115 @@ public abstract class DefaultTestBundleControl extends TestCase {
         }
 
         pass(formatted + "expected:[" + expected + "] and correctly got:[" + actual + "]");
+    }
+    
+    /**
+     * Convenience method for getting services from the framework in cases
+     * when you don't want to keep track of the ServiceReference.
+     * <p> 
+     * To unregister the service, use the ungetService(Object service) method.
+     *
+     * @param clazz the Class object of the service you with to retrieve
+     * @return a service object
+     * @throws NullPointerException if the service couldn't be retrieved
+     *         from the framework.
+     */
+    public Object getService(Class clazz)  {
+        Object service = null;
+        try {
+            service = getService(clazz, null);
+        } catch(InvalidSyntaxException e) {
+            /* null can not give an exception of this type */
+        }
+        return service;
+    }
+
+    /**
+     */
+    public Object getService(Class clazz, String filter) throws InvalidSyntaxException {
+        ServiceReference[] refs = getContext().getServiceReferences(clazz.getName(), filter);
+
+        if(refs == null) {
+            throw new NullPointerException(
+                    "Can't get service reference for " + clazz.getName());
+        }
+
+        ServiceReference chosenRef = pickServiceReference(refs);
+
+        Object service = getContext().getService(chosenRef);
+
+        if(service == null) {
+            throw new NullPointerException(
+                    "Can't get service for " + clazz.getName());
+        }
+
+        /* Save the service and its reference */
+        fetchedServices.put(service, chosenRef);
+
+        return service;
+    }
+
+    public void ungetService(Object service) {
+        ServiceReference ref = (ServiceReference) fetchedServices.get(service);
+
+        getContext().ungetService(ref);
+        fetchedServices.remove(service);
+    }
+    
+    public void ungetAllServices() {
+        Enumeration e = fetchedServices.keys();
+
+        while(e.hasMoreElements()) {
+            Object service = e.nextElement();
+            ungetService(service);
+        }
+    }
+    
+    /**
+     * Picks a service from the given array of references. The rules
+     * the service is picked by are the same as the rules defined in
+     * BundleContext.getServiceReference() (highest ranking, lowest
+     * service ID if the ranking is a tie)
+     */
+    private ServiceReference pickServiceReference(ServiceReference[] refs) {
+        ServiceReference highest = refs[0];
+        
+        for(int i = 1; i < refs.length; i++) {
+            ServiceReference challenger = refs[i];
+            
+            if(ranking(highest) < ranking(challenger)) {
+                highest = challenger;
+            }
+            else if(ranking(highest) == ranking(challenger)) {
+                if(serviceid(highest) > serviceid(challenger)) {
+                    highest = challenger;
+                }
+            }
+        }
+        
+        return highest;
+    }
+    
+    /**
+     * Get service ranking from a service reference.
+     *
+     * @param s The service reference
+     * @return Ranking value of service, default value is zero
+     */
+    private int ranking(ServiceReference s) {
+	    Object v = s.getProperty(Constants.SERVICE_RANKING);
+	    
+	    if (v != null && v instanceof Integer) {
+	        return ((Integer)v).intValue();
+	    } else {
+	        return 0;
+	    }
+    }
+
+    private long serviceid(ServiceReference s) {
+	    Long sid = (Long) s.getProperty(Constants.SERVICE_RANKING);
+
+	    return sid.longValue();
     }
 
 }
