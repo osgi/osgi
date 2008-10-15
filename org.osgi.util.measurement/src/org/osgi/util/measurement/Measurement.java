@@ -47,12 +47,12 @@ package org.osgi.util.measurement;
  * @version $Revision$
  */
 public class Measurement implements Comparable {
-	private final double		value;
-	private final double		error;
-	private final long			time;
-	private final Unit			unit;
-	/* GuardedBy("this") */
-	private transient String	name;
+	private final double				value;
+	private final double				error;
+	private final long					time;
+	private final Unit					unit;
+	private transient volatile String	name;
+	private transient volatile int		hashCode;
 
 	/**
 	 * Create a new <code>Measurement</code> object.
@@ -367,8 +367,9 @@ public class Measurement implements Comparable {
 	 * @return a <code>String</code> object representing this <code>Measurement</code>
 	 *         object.
 	 */
-	public synchronized String toString() {
-		if (name == null) {
+	public String toString() {
+		String result = name;
+		if (result == null) {
 			StringBuffer sb = new StringBuffer();
 			sb.append(value);
 			if (error != 0.0d) {
@@ -380,9 +381,10 @@ public class Measurement implements Comparable {
 				sb.append(" ");
 				sb.append(u);
 			}
-			name = sb.toString();
+			result = sb.toString();
+			name = result;
 		}
-		return name;
+		return result;
 	}
 
 	/**
@@ -420,25 +422,20 @@ public class Measurement implements Comparable {
 			throw new ArithmeticException("Cannot compare " + this + " and "
 					+ that);
 		}
-		if (value == that.value) {
+		int result = Double.compare(value, that.value);
+		if (result == 0) {
 			return 0;
 		}
-		if (value < that.value) {
-			if ((value + error) >= (that.value - that.error)) {
+		if (result < 0) {
+			if (Double.compare(value + error, that.value - that.error) >= 0) {
 				return 0;
 			}
-			else {
-				return -1;
-			}
+			return -1;
 		}
-		else {
-			if ((value - error) <= (that.value + that.error)) {
-				return 0;
-			}
-			else {
-				return 1;
-			}
+		if (Double.compare(value - error, that.value + that.error) <= 0) {
+			return 0;
 		}
+		return 1;
 	}
 
 	/**
@@ -447,8 +444,16 @@ public class Measurement implements Comparable {
 	 * @return A hash code value for this object.
 	 */
 	public int hashCode() {
-		long bits = Double.doubleToLongBits(value + error);
-		return ((int) (bits ^ (bits >>> 32))) ^ unit.hashCode();
+		int h = hashCode;
+		if (h == 0) {
+			long bits = Double.doubleToLongBits(value);
+			h = 31 * 17 + ((int) (bits ^ (bits >>> 32)));
+			bits = Double.doubleToLongBits(error);
+			h = 31 * h + ((int) (bits ^ (bits >>> 32)));
+			h = 31 * h + unit.hashCode();
+			hashCode = h;
+		}
+		return h;
 	}
 
 	/**
@@ -472,7 +477,8 @@ public class Measurement implements Comparable {
 			return false;
 		}
 		Measurement that = (Measurement) obj;
-		return (value == that.value) && (error == that.error)
+		return (Double.compare(value, that.value) == 0)
+				&& (Double.compare(error, that.error) == 0)
 				&& unit.equals(that.unit);
 	}
 }

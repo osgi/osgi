@@ -342,7 +342,7 @@ public class Unit {
 	 * @return This object's hash code.
 	 */
 	public int hashCode() {
-		return (int) ((type >>> 32) ^ type);
+		return 31 * 17 + (int) (type ^ (type >>> 32));
 	}
 
 	/**

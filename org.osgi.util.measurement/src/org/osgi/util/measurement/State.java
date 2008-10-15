@@ -107,9 +107,9 @@ public class State {
 	 * @return A hash code value for this object.
 	 */
 	public int hashCode() {
-		int hash = value;
+		int hash = 31 * 17 + value;
 		if (name != null) {
-			hash ^= name.hashCode();
+			hash = 31 * hash + name.hashCode();
 		}
 		return hash;
 	}
