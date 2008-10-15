@@ -132,7 +132,7 @@ public class SLPHandlerImpl extends AbstractDiscovery {
 		ServiceLocationEnumeration se;
 		try {
 			ServiceURL svcURL = SLPServiceDescriptionAdapter.createServiceURL(
-					interfaceName, null);
+					interfaceName, null, null, null);
 			getLogService().log(LogService.LOG_DEBUG,
 					"try to find services with URL=" + svcURL.toString());
 			se = locator.findServices(svcURL.getServiceType(), null, filter);
@@ -292,32 +292,8 @@ public class SLPHandlerImpl extends AbstractDiscovery {
 		}
 
 		// inform the listener about the new available service
-		Map listeners = getListeners();
-
-		synchronized (listeners) {
-			Iterator it = listeners.keySet().iterator();
-			while (it.hasNext()) {
-				ServiceListener sl = (ServiceListener) it.next();
-				Filter filter = (Filter) listeners.get(sl);
-				// inform it if the listener has no Filter set
-				// or the filter matches the criteria
-				// TODO check whether the matching operation is
-				// a specficication or implementation problem.
-				// We currently use the Filter class of the
-				// Equinox. It is not possible to define an
-				// array (interface names) as a String
-				// representation (parameter of
-				// addServiceListener()). So we cannot match for
-				// interfaces. So we have to write our own match
-				// method. Is that intendend?
-
-				if (filter == null
-						|| (filter != null && filter.match(new Hashtable(
-								svcDescr.getProperties())))) {
-					sl.serviceAvailable(svcDescr);
-				}
-			}
-		}
+		notifyListenersOnNewServiceDescription(svcDescr);
+		
 		return svcDescr;
 	}
 
@@ -349,6 +325,9 @@ public class SLPHandlerImpl extends AbstractDiscovery {
 														.getServiceURL(interfaceNames[k]));
 						advertiser.deregister(slpSvcDescr
 								.getServiceURL(interfaceNames[k]));
+						
+						//inform listeners about removal
+						notifyListenersOnRemovedServiceDescription(serviceDescription);
 					} catch (ServiceLocationException e) {
 						e.printStackTrace();
 						// TODO: log

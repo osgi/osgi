@@ -21,6 +21,7 @@ package org.osgi.impl.service.discovery;
 import java.util.Dictionary;
 import java.util.HashMap;
 import java.util.Hashtable;
+import java.util.Iterator;
 import java.util.Map;
 
 import org.osgi.framework.BundleContext;
@@ -62,7 +63,7 @@ public abstract class AbstractDiscovery implements Discovery {
 
 		listenerAndFilter = new HashMap();
 	}
-	
+
 	/**
 	 * Initialize this object.
 	 */
@@ -96,14 +97,17 @@ public abstract class AbstractDiscovery implements Discovery {
 		}
 		Filter f = getFilterFromString(filter);
 		synchronized (listenerAndFilter) {
-			//TODO: the same listener object might be registered with several filters. Our Map is not capable of multiple keys. Discuss whether it's the required behaviour.
+			// TODO: the same listener object might be registered with several
+			// filters. Our Map is not capable of multiple keys. Discuss whether
+			// it's the required behaviour.
 			listenerAndFilter.put(listener, f);
 			if (logService != null) {
-				logService.log(LogService.LOG_DEBUG, "listener added successfully. Listener: " + listener
-						+ "; filter: " + filter);
+				logService.log(LogService.LOG_DEBUG,
+						"listener added successfully. Listener: " + listener
+								+ "; filter: " + filter);
 			}
 		}
-		//TODO: Why there are no actions taken after adding a listener?
+		// TODO: Why there are no actions taken after adding a listener?
 	}
 
 	/**
@@ -120,22 +124,30 @@ public abstract class AbstractDiscovery implements Discovery {
 		if (listener == null) {
 			return;
 		}
-		//TODO: this listener might have had filters as well?
+		// TODO: this listener might have had filters as well?
 		synchronized (listenerAndFilter) {
 			boolean removed = (null == listenerAndFilter.remove(listener));
 			if (logService != null) {
-				logService.log(LogService.LOG_DEBUG, removed == true ? "listener removed successfull" : "listener which had to be removed wasn't registered.");
+				logService
+						.log(
+								LogService.LOG_DEBUG,
+								removed == true ? "listener removed successfull"
+										: "listener which had to be removed wasn't registered.");
 			}
 		}
 	}
-	
-	/* 
-	 * @see org.osgi.service.discovery.Discovery#publishService(java.util.Map, java.util.Map, java.util.Map)
+
+	/*
+	 * @see org.osgi.service.discovery.Discovery#publishService(java.util.Map,
+	 * java.util.Map, java.util.Map)
 	 */
-	public ServiceEndpointDescription publishService(Map/* <String, String> */javaInterfacesAndVersions,
+	public ServiceEndpointDescription publishService(
+			Map/* <String, String> */javaInterfacesAndVersions,
 			Map/* <String, String> */javaInterfacesAndEndpointInterfaces,
-			Map/* <String, Object> */properties){
-		return publishService(javaInterfacesAndVersions, javaInterfacesAndEndpointInterfaces, properties, this.autoPublish);
+			Map/* <String, Object> */properties) {
+		return publishService(javaInterfacesAndVersions,
+				javaInterfacesAndEndpointInterfaces, properties,
+				this.autoPublish);
 	}
 
 	/**
@@ -151,7 +163,8 @@ public abstract class AbstractDiscovery implements Discovery {
 	 *         false.
 	 */
 	private boolean match(Filter f, ServiceEndpointDescription sd) {
-		//TODO: all properties are already in the property map. Describe it explicitely in JavaDoc.
+		// TODO: all properties are already in the property map. Describe it
+		// explicitely in JavaDoc.
 		Dictionary dict = new Hashtable(sd.getProperties());
 		return f.matchCase(dict);
 	}
@@ -164,11 +177,11 @@ public abstract class AbstractDiscovery implements Discovery {
 	protected void setLogService(final LogService logService) {
 		this.logService = logService;
 	}
-	
+
 	protected LogService getLogService() {
 		return logService;
 	}
-	
+
 	protected boolean isAutoPublish() {
 		return autoPublish;
 	}
@@ -184,7 +197,7 @@ public abstract class AbstractDiscovery implements Discovery {
 	protected final Map getListeners() {
 		return listenerAndFilter;
 	}
-	
+
 	protected BundleContext getContext() {
 		return context;
 	}
@@ -209,11 +222,11 @@ public abstract class AbstractDiscovery implements Discovery {
 		try {
 			f = context.createFilter(filter);
 		} catch (InvalidSyntaxException e) {
-			//TODO: add filter
+			// TODO: add filter
 			throw new IllegalArgumentException("filter is not an LDAP filter");
 		}
 		if (f == null) {
-			//TODO: add filter
+			// TODO: add filter
 			throw new IllegalArgumentException(
 					"cannot create an LDAP filter with given filter parameter");
 		}
@@ -235,6 +248,91 @@ public abstract class AbstractDiscovery implements Discovery {
 				|| serviceDescription.getInterfaceNames()[0].length() <= 0) {
 			throw new IllegalArgumentException(
 					"serviceDescription must contain at least one service interface name.");
+		}
+	}
+
+	protected void notifyListenersOnNewServiceDescription(
+			ServiceEndpointDescription svcDescr) {
+		synchronized (listenerAndFilter) {
+			Iterator it = listenerAndFilter.keySet().iterator();
+			while (it.hasNext()) {
+				ServiceListener sl = (ServiceListener) it.next();
+				Filter filter = (Filter) listenerAndFilter.get(sl);
+				// inform it if the listener has no Filter set
+				// or the filter matches the criteria
+				if (filter == null
+						|| (filter != null && filter.match(new Hashtable(
+								svcDescr.getProperties())))) {
+					try {
+						sl.serviceAvailable(svcDescr);
+					} catch (Exception e) {
+						if (getLogService() != null) {
+							getLogService()
+									.log(
+											LogService.LOG_ERROR,
+											"Exceptions where thrown while notifying about a new remote service.",
+											e);
+						}
+					}
+				}
+			}
+		}
+	}
+
+	protected void notifyListenersOnRemovedServiceDescription(
+			ServiceEndpointDescription svcDescr) {
+		synchronized (listenerAndFilter) {
+			Iterator it = listenerAndFilter.keySet().iterator();
+			while (it.hasNext()) {
+				ServiceListener sl = (ServiceListener) it.next();
+				Filter filter = (Filter) listenerAndFilter.get(sl);
+				// inform it if the listener has no Filter set
+				// or the filter matches the criteria
+				if (filter == null
+						|| (filter != null && filter.match(new Hashtable(
+								svcDescr.getProperties())))) {
+					try {
+						sl.serviceUnavailable(svcDescr);
+					} catch (Exception e) {
+						if (getLogService() != null) {
+							getLogService()
+									.log(
+											LogService.LOG_ERROR,
+											"Exceptions where thrown while notifying about removal of a remote service.",
+											e);
+						}
+					}
+				}
+			}
+		}
+	}
+
+	protected void notifyListenersOnModifiedServiceDescription(
+			ServiceEndpointDescription oldSvcDescr,
+			ServiceEndpointDescription newSvcDescr) {
+		synchronized (listenerAndFilter) {
+			Iterator it = listenerAndFilter.keySet().iterator();
+			while (it.hasNext()) {
+				ServiceListener sl = (ServiceListener) it.next();
+				Filter filter = (Filter) listenerAndFilter.get(sl);
+				// inform it if the listener has no Filter set
+				// or the filter matches the criteria
+				if (filter == null
+						|| (filter != null && filter.match(new Hashtable(
+								oldSvcDescr.getProperties())))) {
+					try {
+						sl.serviceModified(oldSvcDescr, newSvcDescr);
+					} catch (Exception e) {
+						if (getLogService() != null) {
+							getLogService()
+									.log(
+											LogService.LOG_ERROR,
+											"Exceptions where thrown while notifying about modification of a remote service.",
+											e);
+						}
+					}
+				}
+			}
 		}
 	}
 }
