@@ -248,7 +248,6 @@ public class SLPHandlerImpl extends AbstractDiscovery {
 			Map/* <String, String> */javaInterfacesAndVersions,
 			Map/* <String, String> */javaInterfacesAndEndpointInterfaces,
 			Map/* <String, Object> */properties, boolean autopublish) {
-		boolean published = false;
 
 		SLPServiceDescriptionAdapter svcDescr;
 		try {
@@ -273,7 +272,6 @@ public class SLPHandlerImpl extends AbstractDiscovery {
 				try {
 					advertiser.register(svcDescr.getServiceURL(interfaces[k]),
 							new Hashtable(svcDescr.getProperties()));
-					published = true;
 				} catch (ServiceLocationException e) {
 					e.printStackTrace();
 					// TODO log
