@@ -18,7 +18,6 @@
  */
 package org.osgi.impl.service.discovery;
 
-import java.util.Dictionary;
 import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Iterator;
@@ -139,7 +138,7 @@ public abstract class AbstractDiscovery implements Discovery {
 
 	/*
 	 * @see org.osgi.service.discovery.Discovery#publishService(java.util.Map,
-	 * java.util.Map, java.util.Map)
+	 *      java.util.Map, java.util.Map)
 	 */
 	public ServiceEndpointDescription publishService(
 			Map/* <String, String> */javaInterfacesAndVersions,
@@ -148,25 +147,6 @@ public abstract class AbstractDiscovery implements Discovery {
 		return publishService(javaInterfacesAndVersions,
 				javaInterfacesAndEndpointInterfaces, properties,
 				this.autoPublish);
-	}
-
-	/**
-	 * Checks whether a ServiceEndpointDescription matches a given Filter.
-	 * 
-	 * TODO check whether this is appropriate!!
-	 * 
-	 * @param f
-	 *            the given Filter
-	 * @param sd
-	 *            the ServiceEndpointDescription to check
-	 * @return true if the ServiceEndpointDescriptioin matches the Filter, else
-	 *         false.
-	 */
-	private boolean match(Filter f, ServiceEndpointDescription sd) {
-		// TODO: all properties are already in the property map. Describe it
-		// explicitely in JavaDoc.
-		Dictionary dict = new Hashtable(sd.getProperties());
-		return f.matchCase(dict);
 	}
 
 	/**
@@ -340,7 +320,7 @@ public abstract class AbstractDiscovery implements Discovery {
 		// check validity of the given filter
 		if (filter != null) {
 			try {
-				Filter f = getContext().createFilter(filter);
+				getContext().createFilter(filter);
 			} catch (InvalidSyntaxException e1) {
 				// TODO log
 				throw new IllegalArgumentException(
