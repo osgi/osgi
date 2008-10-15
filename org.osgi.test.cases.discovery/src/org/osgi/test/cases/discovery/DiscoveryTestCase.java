@@ -127,7 +127,7 @@ public class DiscoveryTestCase extends TestCase {
 	
 	public void testPublishFindListenerFilter() {
 		DiscoveryServiceListener listener = new DiscoveryServiceListener();
-		discovery.addServiceListener(listener, "(mytestkey=mytestvalue)");
+		discovery.addServiceListener(listener, "(mytestkey=myothertestvalue)");
 		
 		Map jInterfaces = new HashMap();
 		Map epInterfaces = new HashMap();
@@ -143,22 +143,20 @@ public class DiscoveryTestCase extends TestCase {
 		jInterfaces.put(DiscoveryTestServiceInterface.class.getName(), "1.2.3");
 		ServiceEndpointDescription sed1 = discovery.publishService(jInterfaces, epInterfaces, properties, true);
 		
-		assertEquals(sed, listener.getAvailableCalled());
+		assertEquals(sed1, listener.getAvailableCalled());
 		
 		ServiceEndpointDescription[] descs = discovery.findService(DiscoveryTestServiceInterface.class.getName(), "(mytestkey=mytestvalue)");
 		assertNotNull(descs);
 		assertTrue(descs.length == 1);
-		assertEquals(sed1.getProperty("mytestkey"), descs[0].getProperty("mytestkey"));
-		assertEquals(sed1.getInterfaceNames()[0], descs[0].getInterfaceNames()[0]);
-		assertEquals(sed1.getVersion(DiscoveryTestServiceInterface.class.getName()), descs[0].getVersion(DiscoveryTestServiceInterface.class.getName()));
+		assertEquals(sed.getProperty("mytestkey"), descs[0].getProperty("mytestkey"));
+		assertEquals(sed.getInterfaceNames()[0], descs[0].getInterfaceNames()[0]);
+		assertEquals(sed.getVersion(DiscoveryTestServiceInterface.class.getName()), descs[0].getVersion(DiscoveryTestServiceInterface.class.getName()));
 		
 		discovery.unpublishService(sed);
+		
 		descs = discovery.findService(DiscoveryTestServiceInterface.class.getName(), "(mytestkey=mytestvalue)");
 		assertNotNull(descs);
-		assertTrue(descs.length == 1);
-		assertEquals(sed1.getProperty("mytestkey"), descs[0].getProperty("mytestkey"));
-		assertEquals(sed1.getInterfaceNames()[0], descs[0].getInterfaceNames()[0]);
-		assertEquals(sed1.getVersion(DiscoveryTestServiceInterface.class.getName()), descs[0].getVersion(DiscoveryTestServiceInterface.class.getName()));
+		assertTrue(descs.length == 0);
 		
 		discovery.unpublishService(sed1);
 		assertEquals(sed1, listener.getUnavailableCalled());
