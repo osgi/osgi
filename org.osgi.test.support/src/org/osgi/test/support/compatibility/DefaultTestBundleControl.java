@@ -33,6 +33,7 @@ public abstract class DefaultTestBundleControl extends TestCase {
 	
 	private Map serviceRegistry = new HashMap();
     Hashtable       fetchedServices = new Hashtable();
+    String webServer = "/";
 
 	/**
 	 * THis method is called by the JUnit runner for OSGi, and gives us a Bundle
@@ -40,6 +41,10 @@ public abstract class DefaultTestBundleControl extends TestCase {
 	 */
 	public synchronized void setBundleContext(BundleContext context) {
 		this.context = context;
+		URL base = context.getBundle().getEntry("/");
+		if (base != null) {
+			webServer = base.toString();
+		}
 	}
 
 	/**
@@ -58,7 +63,7 @@ public abstract class DefaultTestBundleControl extends TestCase {
 	 * installBundle and there we get the bundle from our resources.
 	 */
 	public String getWebServer() {
-		return "/www/";
+		return webServer;
 	}
 	
 	/**
@@ -422,7 +427,7 @@ public abstract class DefaultTestBundleControl extends TestCase {
         	if (!bundleName.startsWith(getWebServer())) {
         		bundleName = getWebServer() + bundleName;
         	}
-            URL    url = getClass().getResource(bundleName);
+            URL    url = new URL(bundleName);
             InputStream in = url.openStream();
  
             Bundle        b = context.installBundle(bundleName, in);
