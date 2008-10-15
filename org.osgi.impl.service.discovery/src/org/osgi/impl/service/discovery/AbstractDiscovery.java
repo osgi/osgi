@@ -55,6 +55,15 @@ public abstract class AbstractDiscovery implements Discovery {
 			final LogService logService) {
 		this.logService = logService;
 		this.context = context;
+	}
+
+	/**
+	 * Initialize this object.
+	 */
+	protected void init() {
+		if (logService != null) {
+			logService.log(LogService.LOG_DEBUG, "init");
+		}
 
 		// TODO read this from config rather than system property
 		autoPublish = System.getProperty(Discovery.OSGI_DISCOVERY,
@@ -65,18 +74,9 @@ public abstract class AbstractDiscovery implements Discovery {
 	}
 
 	/**
-	 * Initialize this object.
-	 */
-	public void init() {
-		if (logService != null) {
-			logService.log(LogService.LOG_DEBUG, "init");
-		}
-	}
-
-	/**
 	 * Cleanup.
 	 */
-	void destroy() {
+	protected void destroy() {
 		if (logService != null) {
 			logService.log(LogService.LOG_DEBUG, "destroy");
 		}
@@ -332,6 +332,19 @@ public abstract class AbstractDiscovery implements Discovery {
 						}
 					}
 				}
+			}
+		}
+	}
+
+	protected void validateFilter(final String filter) {
+		// check validity of the given filter
+		if (filter != null) {
+			try {
+				Filter f = getContext().createFilter(filter);
+			} catch (InvalidSyntaxException e1) {
+				// TODO log
+				throw new IllegalArgumentException(
+						"filter is not an LDAP filter");
 			}
 		}
 	}

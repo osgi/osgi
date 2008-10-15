@@ -35,7 +35,6 @@ import org.osgi.util.tracker.ServiceTrackerCustomizer;
  * 
  */
 public class Activator implements BundleActivator {
-	private ServiceRegistration discoveryRegistration;
 	private ServiceRegistration slpHandlerRegistration;
 	private LogService logService = DEFAULT_LogService;
 	private ServiceTracker logServiceTracker;
@@ -113,11 +112,6 @@ public class Activator implements BundleActivator {
 		if (commandProvider != null) {
 			commandProvider.unregister();
 			commandProvider = null;
-		}
-
-		if (discoveryRegistration != null) {
-			discoveryRegistration.unregister();
-			discoveryRegistration = null;
 		}
 
 		if (slpHandlerRegistration != null) {

@@ -20,18 +20,14 @@ package org.osgi.impl.service.discovery.slp;
 
 import java.util.ArrayList;
 import java.util.Hashtable;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
 import org.osgi.framework.BundleContext;
-import org.osgi.framework.Filter;
-import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
 import org.osgi.impl.service.discovery.AbstractDiscovery;
 import org.osgi.service.discovery.FindServiceCallback;
 import org.osgi.service.discovery.ServiceEndpointDescription;
-import org.osgi.service.discovery.ServiceListener;
 import org.osgi.service.log.LogService;
 import org.osgi.util.tracker.ServiceTracker;
 import org.osgi.util.tracker.ServiceTrackerCustomizer;
@@ -43,8 +39,8 @@ import ch.ethz.iks.slp.ServiceLocationException;
 import ch.ethz.iks.slp.ServiceURL;
 
 /**
- * TODO: check for null before calling logger or put it in an extra method
- * TODO: remove printStackTrace and do logging instead
+ * TODO: check for null before calling logger or put it in an extra method TODO:
+ * remove printStackTrace and do logging instead
  * 
  * @author Tim Diekmann
  * @author Thomas Kiesslich
@@ -74,6 +70,7 @@ public class SLPHandlerImpl extends AbstractDiscovery {
 	}
 
 	public void init() {
+		super.init();
 		locatorTracker.open();
 		advertiserTracker.open();
 	}
@@ -81,6 +78,7 @@ public class SLPHandlerImpl extends AbstractDiscovery {
 	public void destroy() {
 		locatorTracker.close();
 		advertiserTracker.close();
+		super.destroy();
 	}
 
 	synchronized Locator getLocator() {
@@ -105,18 +103,9 @@ public class SLPHandlerImpl extends AbstractDiscovery {
 	 */
 	public ServiceEndpointDescription[] findService(final String interfaceName,
 			final String filter) {
-		List result = new ArrayList();
+		validateFilter(filter);
 
-		// check validity of the given filter
-		if (filter != null) {
-			try {
-				Filter f = getContext().createFilter(filter);
-			} catch (InvalidSyntaxException e1) {
-				// TODO log
-				throw new IllegalArgumentException(
-						"filter is not an LDAP filter");
-			}
-		}
+		List result = new ArrayList();
 
 		// check whether SLP-Locator service exists
 		Locator locator = getLocator();
@@ -141,7 +130,8 @@ public class SLPHandlerImpl extends AbstractDiscovery {
 			// interface is not java???
 		} catch (Exception e) {
 			e.printStackTrace();
-			getLogService().log(LogService.LOG_WARNING, "Failed to find service", e);
+			getLogService().log(LogService.LOG_WARNING,
+					"Failed to find service", e);
 			return (ServiceEndpointDescription[]) result.toArray();
 		}
 
@@ -149,8 +139,8 @@ public class SLPHandlerImpl extends AbstractDiscovery {
 		while (se.hasMoreElements()) {
 			try {
 				ServiceURL url = (ServiceURL) se.next();
-				getLogService()
-						.log(LogService.LOG_DEBUG, "adding serviceURL=" + url);
+				getLogService().log(LogService.LOG_DEBUG,
+						"adding serviceURL=" + url);
 				getLogService().log(LogService.LOG_DEBUG,
 						"try to find attributes for " + url);
 				ServiceLocationEnumeration a = locator.findAttributes(url,
@@ -217,6 +207,8 @@ public class SLPHandlerImpl extends AbstractDiscovery {
 		if (callback == null) {
 			throw new IllegalArgumentException("callback must not be null");
 		}
+
+		validateFilter(filter);
 
 		Thread executor = new Thread(new Runnable() {
 			public void run() {
@@ -293,7 +285,7 @@ public class SLPHandlerImpl extends AbstractDiscovery {
 
 		// inform the listener about the new available service
 		notifyListenersOnNewServiceDescription(svcDescr);
-		
+
 		return svcDescr;
 	}
 
@@ -305,8 +297,8 @@ public class SLPHandlerImpl extends AbstractDiscovery {
 		validateServiceDescription(serviceDescription);
 
 		if (getLogService() != null) {
-			getLogService().log(LogService.LOG_DEBUG, "unpublish service "
-					+ serviceDescription.toString());
+			getLogService().log(LogService.LOG_DEBUG,
+					"unpublish service " + serviceDescription.toString());
 		}
 
 		if (serviceDescription instanceof SLPServiceDescriptionAdapter) {
@@ -325,8 +317,8 @@ public class SLPHandlerImpl extends AbstractDiscovery {
 														.getServiceURL(interfaceNames[k]));
 						advertiser.deregister(slpSvcDescr
 								.getServiceURL(interfaceNames[k]));
-						
-						//inform listeners about removal
+
+						// inform listeners about removal
 						notifyListenersOnRemovedServiceDescription(serviceDescription);
 					} catch (ServiceLocationException e) {
 						e.printStackTrace();
