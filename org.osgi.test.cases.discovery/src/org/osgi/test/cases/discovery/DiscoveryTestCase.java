@@ -143,7 +143,7 @@ public class DiscoveryTestCase extends TestCase {
 		jInterfaces.put(DiscoveryTestServiceInterface.class.getName(), "1.2.3");
 		ServiceEndpointDescription sed1 = discovery.publishService(jInterfaces, epInterfaces, properties, true);
 		
-		assertEquals(sed1, listener.getAvailableCalled());
+		assertEquals(sed, listener.getAvailableCalled());
 		
 		ServiceEndpointDescription[] descs = discovery.findService(DiscoveryTestServiceInterface.class.getName(), "(mytestkey=mytestvalue)");
 		assertNotNull(descs);
