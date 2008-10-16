@@ -90,6 +90,7 @@ public class SLPHandlerImpl extends AbstractDiscovery {
 		locatorTracker.close();
 		advertiserTracker.close();
 		t.cancel();
+		t = null;
 		super.destroy();
 	}
 
