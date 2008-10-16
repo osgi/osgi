@@ -223,15 +223,28 @@ public class SLPServiceDescriptionAdapter implements ServiceEndpointDescription 
 		properties.put(key, value);
 	}
 
+	/**
+	 * 
+	 * @param props
+	 */
 	public void setProperties(Map props) {
 		properties = props;
 	}
 
+	/**
+	 * 
+	 * @param interfaceName
+	 * @param version
+	 * @param endpointInterface
+	 * @param properties
+	 * @return
+	 * @throws ServiceLocationException
+	 */
 	public static ServiceURL createServiceURL(String interfaceName,
 			String version, String endpointInterface, Map properties)
 			throws ServiceLocationException {
 		String interf = convertJavaInterface2Path(interfaceName);
-		String path = createPathFromProperties(properties);
+		String path = createStringFromProperties(properties);
 		if (version != null)
 			path = appendPropertyToURLPath(path,
 					ServiceEndpointDescription.PROP_KEY_VERSION, version);
@@ -284,6 +297,14 @@ public class SLPServiceDescriptionAdapter implements ServiceEndpointDescription 
 		return new ServiceURL(buff.toString(), lifetime);
 	}
 
+	/**
+	 * 
+	 * @param serviceURL
+	 * @param javaInterfaceAndFilters
+	 * @param javaAndEndpointInterfaces
+	 * @param properties
+	 * @return
+	 */
 	public static String retrieveDataFromServiceURL(
 			final ServiceURL serviceURL,
 			final Map/* <String, String> */javaInterfaceAndFilters,
@@ -338,6 +359,11 @@ public class SLPServiceDescriptionAdapter implements ServiceEndpointDescription 
 		return interfaceName;
 	}
 
+	/**
+	 * 
+	 * @param path
+	 * @param properties
+	 */
 	public static void retrievePropertiesFromPath(String path,
 			final Map properties) {
 		try {
@@ -370,37 +396,54 @@ public class SLPServiceDescriptionAdapter implements ServiceEndpointDescription 
 		}
 	}
 
+	/**
+	 * 
+	 * @param javaInterfaceName
+	 * @return
+	 */
 	public static String convertJavaInterface2Path(
 			final String javaInterfaceName) {
 		return javaInterfaceName != null ? ":"
 				+ javaInterfaceName.replace('.', '/') : "";
 	}
 
+	/**
+	 * 
+	 * @param interfaceNameEncodedAsPath
+	 * @return
+	 */
 	public static String convertPath2JavaInterface(
 			final String interfaceNameEncodedAsPath) {
 		return interfaceNameEncodedAsPath != null ? interfaceNameEncodedAsPath
 				.replace('/', '.') : null;
 	}
 
-	public static String createPathFromProperties(final Map properties) {
+	/**
+	 * 
+	 * @param properties
+	 * @return
+	 */
+	private static String createStringFromProperties(final Map properties) {
 		StringBuffer sb = new StringBuffer();
-
-		String key;
-		Object value;
-
-		if (properties != null && !properties.isEmpty()) {
+		String key = null;
+		Object value = null;
+		if ((properties != null) && !properties.isEmpty()) {
 			for (Iterator i = properties.keySet().iterator(); i.hasNext();) {
 				key = (String) i.next();
 				value = properties.get(key);
-
 				appendPropertyToURLPath(sb, key, value);
 			}
 		}
-
 		return sb.toString();
 	}
 
-	public static void appendPropertyToURLPath(StringBuffer path, String key,
+	/**
+	 * 
+	 * @param path
+	 * @param key
+	 * @param value
+	 */
+	private static void appendPropertyToURLPath(StringBuffer path, String key,
 			Object value) {
 		if (path == null)
 			throw new IllegalArgumentException("Given StringBuffer is null.");
@@ -421,10 +464,68 @@ public class SLPServiceDescriptionAdapter implements ServiceEndpointDescription 
 		path.append(key).append("=").append(value.toString());
 	}
 
+	/**
+	 * 
+	 * @param path
+	 * @param key
+	 * @param value
+	 * @return
+	 */
 	public static String appendPropertyToURLPath(String path, String key,
 			Object value) {
 		StringBuffer buffer = new StringBuffer(path);
 		appendPropertyToURLPath(buffer, key, value);
 		return buffer.toString();
+	}
+
+	/**
+	 * 
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
+	public boolean equals(final Object serviceDescription) {
+		if (!(serviceDescription instanceof ServiceEndpointDescription)) {
+			return false;
+		}
+		ServiceEndpointDescription descr = (ServiceEndpointDescription) serviceDescription;
+		if (properties != null && descr.getProperties() == null) {
+			return false;
+		}
+		if (properties == null && descr.getProperties() != null) {
+			return false;
+		}
+		if (properties == null && descr.getProperties() == null) {
+			return true;
+		}
+		// if (properties.size() != descr.getProperties().size()) {
+		// return false;
+		// }
+		Iterator it = properties.keySet().iterator();
+		while (it.hasNext()) {
+			String key = (String) it.next();
+			if (descr.getProperties().containsKey(key)) {
+				if (descr.getProperty(key) instanceof String
+						&& (properties.get(key) instanceof String[])) {
+					if (!properties.get(key).toString().equals(
+							(descr.getProperty(key)))) {
+						return false;
+					}
+				} else {
+					if (!properties.get(key).equals(descr.getProperty(key))) {
+						return false;
+					}
+				}
+			} else {
+				return false;
+			}
+		}
+		return true;
+	}
+
+	/**
+	 * 
+	 * @see java.lang.Object#hashCode()
+	 */
+	public int hashCode() {
+		return super.hashCode();
 	}
 }
