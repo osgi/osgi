@@ -130,6 +130,11 @@ public class Activator implements BundleActivator {
 		}
 	}
 
+	/**
+	 * 
+	 * @param loggerLogService
+	 *            instance to set
+	 */
 	void setLogService(LogService logger) {
 		if (logger != null) {
 			logService = logger;
@@ -141,6 +146,9 @@ public class Activator implements BundleActivator {
 			slpDiscovery.setLogService(logService);
 	}
 
+	/**
+	 * 
+	 */
 	private static LogService DEFAULT_LogService = new LogService() {
 		private final String[] LEVELS = new String[] { "[FATAL] ", "[ERROR] ",
 				"[WARNING] ", "[INFO] ", "[DEBUG] " };
