@@ -55,20 +55,21 @@ public class InformListenerTask extends TimerTask {
 	 * @see java.lang.Runnable#run()
 	 */
 	public void run() {
-		ServiceEndpointDescription[] descriptions = discovery.findService(null,
-				null);
-		for (int i = 0; i < descriptions.length; i++) {
-			ServiceEndpointDescription descr = descriptions[i];
-			Hashtable props = new Hashtable(descr.getProperties());
-			Iterator it = listener.keySet().iterator();
-			while (it.hasNext()) {
-				ServiceListener l = (ServiceListener) it.next();
-				Filter f = (Filter) listener.get(l);
-				if (f.match(props)) {
-					l.serviceAvailable(descr);
+		if (listener.size() != 0) {
+			ServiceEndpointDescription[] descriptions = discovery.findService(
+					null, null);
+			for (int i = 0; i < descriptions.length; i++) {
+				ServiceEndpointDescription descr = descriptions[i];
+				Hashtable props = new Hashtable(descr.getProperties());
+				Iterator it = listener.keySet().iterator();
+				while (it.hasNext()) {
+					ServiceListener l = (ServiceListener) it.next();
+					Filter f = (Filter) listener.get(l);
+					if (f.match(props)) {
+						l.serviceAvailable(descr);
+					}
 				}
 			}
 		}
-
 	}
 }
