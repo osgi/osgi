@@ -5,7 +5,7 @@ Bundle-Description				: \
 Bundle-Version					: ${osgi.release.version}
 DynamicImport-Package			: *
 
-Export-Package					: ${replace;${specs};(.+);$1.*}
+Export-Package					: ${spec.packages}
 
 Include-Resource 				: legal/about.html, \
   								  legal/LICENSE, \

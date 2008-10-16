@@ -5,7 +5,7 @@ Bundle-Description				: \
 Bundle-Version					: ${cmpn.release.version}
 DynamicImport-Package			: *
 
-Export-Package 					: ${replace;${cmpn.specs};.+;$0.*}
+Export-Package 					: ${cmpn.packages}
 
 Include-Resource 				: legal/about.html, \
   								  legal/LICENSE, \

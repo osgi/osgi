@@ -7,7 +7,7 @@ Bundle-SymbolicName				: osgi.mobile
 
 DynamicImport-Package: *
 
-Export-Package					: ${replace;${mobile.specs};.+;$0.*}
+Export-Package					: ${mobile.packages}
 Include-Resource 				: legal/about.html, \
   								  legal/LICENSE, \
   								  xmlns/metatype=../xmlns/metatype, \
