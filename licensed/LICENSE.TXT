@@ -115,3 +115,32 @@ Used                    In RI
 URL                     http://jslp.sourceforge.net/
 License					licenses/EPL-1.0.txt
 Modifications           none
+
+Commons Logging --------------------------------------------------------------------------
+Copyright               Copyright (c) 2004 Apache Software Foundation, All Rights Reserved
+Used                    transaction, distributed
+URL                     http://commons.apache.org/logging/
+Modifications           none
+
+org.apache.cxf.dosgi.singlebundle -------------------------------------------------------
+Copyright               Copyright (c) 2004 Apache Software Foundation, All Rights Reserved
+Used                    distributed
+URL                     http://cxf.apache.org/
+Modifications           none (this was made specially for us, but is in the general apache build)
+
+org.apache.felix.main  -------------------------------------------------------
+Copyright               Copyright (c) 2004 Apache Software Foundation, All Rights Reserved
+Used                    general testing
+URL                     http://felix.apache.org/
+Modifications           none
+
+org.apache.felix.scr  -------------------------------------------------------
+Copyright               Copyright (c) 2004 Apache Software Foundation, All Rights Reserved
+Used                    general testing
+URL                     http://felix.apache.org/
+Modifications           none
+
+
+
+
+
