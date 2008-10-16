@@ -124,7 +124,7 @@ public class SLPHandlerImpl extends AbstractDiscovery {
 		if (locator == null) {
 			getLogService().log(LogService.LOG_WARNING,
 					"No SLP-Locator. Find operation is not executed.");
-			return (ServiceEndpointDescription[]) result.toArray();
+			return (ServiceEndpointDescription[]) result.toArray(new ServiceEndpointDescription[0]);
 		}
 
 		// TODO first look at cache
@@ -144,7 +144,7 @@ public class SLPHandlerImpl extends AbstractDiscovery {
 			e.printStackTrace();
 			getLogService().log(LogService.LOG_WARNING,
 					"Failed to find service", e);
-			return (ServiceEndpointDescription[]) result.toArray();
+			return (ServiceEndpointDescription[]) result.toArray(new ServiceEndpointDescription[0]);
 		}
 
 		// iterate through found services and retrieve their attributes
