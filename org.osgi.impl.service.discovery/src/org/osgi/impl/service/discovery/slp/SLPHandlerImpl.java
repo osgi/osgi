@@ -22,10 +22,12 @@ import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
+import java.util.Timer;
 
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
 import org.osgi.impl.service.discovery.AbstractDiscovery;
+import org.osgi.impl.service.discovery.InformListenerTask;
 import org.osgi.service.discovery.FindServiceCallback;
 import org.osgi.service.discovery.ServiceEndpointDescription;
 import org.osgi.service.log.LogService;
@@ -52,6 +54,10 @@ public class SLPHandlerImpl extends AbstractDiscovery {
 
 	private Locator locator = null;
 	private Advertiser advertiser = null;
+	
+	private final int POLLDELAY = 30000;
+	
+	private Timer t = null;
 
 	/**
 	 * 
@@ -67,17 +73,23 @@ public class SLPHandlerImpl extends AbstractDiscovery {
 
 		advertiserTracker = new ServiceTracker(context, Advertiser.class
 				.getName(), new AdvertiserServiceTracker(context));
+
+		
+
 	}
 
 	public void init() {
 		super.init();
 		locatorTracker.open();
 		advertiserTracker.open();
+		t = new Timer(false);
+		t.scheduleAtFixedRate(new InformListenerTask(getListenerAndFilter(), this), POLLDELAY, POLLDELAY);
 	}
 
 	public void destroy() {
 		locatorTracker.close();
 		advertiserTracker.close();
+		t.cancel();
 		super.destroy();
 	}
 

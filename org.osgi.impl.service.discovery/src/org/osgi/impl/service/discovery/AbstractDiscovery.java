@@ -123,7 +123,6 @@ public abstract class AbstractDiscovery implements Discovery {
 		if (listener == null) {
 			return;
 		}
-		// TODO: this listener might have had filters as well?
 		synchronized (listenerAndFilter) {
 			boolean removed = (null == listenerAndFilter.remove(listener));
 			if (logService != null) {
@@ -327,5 +326,12 @@ public abstract class AbstractDiscovery implements Discovery {
 						"filter is not an LDAP filter");
 			}
 		}
+	}
+
+	/**
+	 * @return the listenerAndFilter
+	 */
+	protected Map getListenerAndFilter() {
+		return listenerAndFilter;
 	}
 }
