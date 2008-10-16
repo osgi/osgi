@@ -38,14 +38,17 @@ public interface PublishHook {
 	 * can filter the bundles which receive the event.
 	 * 
 	 * @param event The service event to be delivered.
-	 * @param bundles A <code>Collection</code> of Bundles which have listeners
-	 *        to which the event may be delivered. The method implementation may
-	 *        remove bundles from the collection to prevent the event from being
-	 *        delivered to those bundles. The collection supports all the
+	 * @param contexts A <code>Collection</code> of Bundle Contexts for bundles
+	 *        which have listeners to which the specified event will be
+	 *        delivered. The method implementation may remove a context from the
+	 *        collection to prevent the event from being delivered to the bundle
+	 *        associated with the context. The collection supports all the
 	 *        optional <code>Collection</code> operations except
 	 *        <code>add</code> and <code>addAll</code>. Attempting to add to the
 	 *        collection will result in an
-	 *        <code>UnsupportedOperationException</code>.
+	 *        <code>UnsupportedOperationException</code>. This argument is not
+	 *        synchronized.
 	 */
-	void event(ServiceEvent event, Collection bundles);
+	void event(ServiceEvent event,
+			Collection/* <? extends BundleContext> */contexts);
 }
