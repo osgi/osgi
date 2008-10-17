@@ -11,6 +11,7 @@ Private-Package				= \
  	org.osgi.impl.service.dwnlimpl
 
 Export-Package 					= ${p}.perm
+Import-Package					= info.dmtree; resolution:=optional, *
 
 -buildpath						= \
     org.osgi.service.deploymentadmin;				version= project, \
