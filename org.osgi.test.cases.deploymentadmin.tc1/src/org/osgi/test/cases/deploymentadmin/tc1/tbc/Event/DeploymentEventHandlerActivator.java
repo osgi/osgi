@@ -65,12 +65,9 @@ public class DeploymentEventHandlerActivator implements BundleActivator {
 		props.put(org.osgi.service.event.EventConstants.EVENT_TOPIC, topics);
 		
 		servReg = bc.registerService(EventHandler.class.getName(), deh, props);
-		System.out.println("Deployment Event Handler started...");
-
 	}
 
 	public void stop(BundleContext arg0) throws Exception {
 		servReg.unregister();
-
 	}
 }

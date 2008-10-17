@@ -112,6 +112,8 @@ public class DeploymentConstants {
     public static final int STRANGE_PATH_DP = 54;
     public static final int LOCALIZED_DP = 55;
     public static final int SIGNING_FILE_NOT_NEXT = 56;
+	public static final int SIMPLE_DP2 = 57;
+
     
 	public static final String DEPLOYMENT_PACKAGE_NAME_ALL = "(name=*)";
 	
@@ -233,6 +235,7 @@ public class DeploymentConstants {
             case STRANGE_PATH_DP: return "strange_path";
             case LOCALIZED_DP: return "localized";
             case SIGNING_FILE_NOT_NEXT: return "signed_file_not_next";
+            case SIMPLE_DP2: return "simple_dp2";
             case NON_CUSTOMIZER_DP: return "non_customizer_rp";
             default: return null;
         }

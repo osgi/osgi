@@ -53,7 +53,9 @@ import org.osgi.test.cases.deploymentadmin.tc1.tb1.DeploymentAdmin.UninstallDepl
 import org.osgi.test.cases.deploymentadmin.tc1.tb1.DeploymentPackage.Equals;
 import org.osgi.test.cases.deploymentadmin.tc1.tb1.DeploymentPackage.GetBundle;
 import org.osgi.test.cases.deploymentadmin.tc1.tb1.DeploymentPackage.GetBundleInfos;
+import org.osgi.test.cases.deploymentadmin.tc1.tb1.DeploymentPackage.GetDisplayName;
 import org.osgi.test.cases.deploymentadmin.tc1.tb1.DeploymentPackage.GetHeader;
+import org.osgi.test.cases.deploymentadmin.tc1.tb1.DeploymentPackage.GetIcon;
 import org.osgi.test.cases.deploymentadmin.tc1.tb1.DeploymentPackage.GetName;
 import org.osgi.test.cases.deploymentadmin.tc1.tb1.DeploymentPackage.GetResourceHeader;
 import org.osgi.test.cases.deploymentadmin.tc1.tb1.DeploymentPackage.GetResourceProcessor;
@@ -64,7 +66,6 @@ import org.osgi.test.cases.deploymentadmin.tc1.tb1.DeploymentPackage.ManifestFor
 import org.osgi.test.cases.deploymentadmin.tc1.tbc.DeploymentTestControl;
 import org.osgi.test.cases.deploymentadmin.tc1.tbc.TB1Service;
 import org.osgi.test.cases.deploymentadmin.tc1.tbc.TestInterface;
-import org.osgi.test.cases.util.DefaultTestBundleControl;
 
 /**
  * @author Andre Assad
@@ -87,7 +88,7 @@ public class Activator implements BundleActivator, TB1Service {
 
 	}
 	
-	public TestInterface[] getTestClasses(DefaultTestBundleControl tbc) {
+	public TestInterface[] getTestClasses(DeploymentTestControl tbc) {
 		return new TestInterface[] {
 				new InstallDeploymentPackageAPI((DeploymentTestControl) tbc),
 				new InstallDeploymentPackageUseCases((DeploymentTestControl) tbc),
@@ -107,7 +108,9 @@ public class Activator implements BundleActivator, TB1Service {
                 new GetResources((DeploymentTestControl) tbc),
                 new GetVersion((DeploymentTestControl) tbc),
                 new IsStale((DeploymentTestControl) tbc),
-                new ManifestFormat((DeploymentTestControl) tbc)
+                new GetDisplayName(tbc),
+                new GetIcon(tbc),
+                new ManifestFormat(tbc)
 				};
 	}
 }
