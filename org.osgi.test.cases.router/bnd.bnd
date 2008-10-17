@@ -8,6 +8,6 @@ Private-Package: ${p}
 	com.springsource.junit
 	
 
-Test-Case = ${classes;extending;*TestCase}
+Test-Cases = ${classes;extending;*TestCase}
 
 -runbundles = org.osgi.impl.service.router; version=project
