@@ -90,17 +90,13 @@ public interface DeploymentPackage {
 	 * Returns the Deployment Package human readable name.
 	 * 
 	 * This method returns the localized human readable name as set with the
-	 * <code>DeploymentPackage-Name</code> manifest header. If the local is
-	 * null, the dfault locale is returned if the header is set. If no header is
+	 * <code>DeploymentPackage-Name</code> manifest header using the default locale. If no header is
 	 * set, this method will return <code>null</code>.
 	 * 
-	 * @param locale
-	 *            The name of the requested locale or null for the default
-	 *            locale.
 	 * @return The human readable name of the deployment package or
 	 *         <code>null</code> if header is not set.
 	 */
-	String getDisplayName(String locale);
+	String getDisplayName();
 
 	/**
 	 * Returns the version of the deployment package.
@@ -129,15 +125,12 @@ public interface DeploymentPackage {
 	 * the deployment package. This method returns an absolute URL that is
 	 * defined by this header. The Deployment Admin service must provide this
 	 * icon as a local resource. That is, the Deployment Admin must make a local
-	 * copy of the default locale and should make a copy of the localized versions.
+	 * copy of the default locale.
 	 * The returned <code>URL</code>'s must point to a local resource.
 	 * 
-	 * @param locale
-	 *            The icon for the requested locale. If <code>null</code>,
-	 *            the default local is returned.
 	 * @return An absolute URL to a local (device resident) image resource or <code>null</code> if not found
 	 */
-	URL getIcon(String locale);
+	URL getIcon();
 
 	/**
 	 * Returns the bundle instance, which is part of this deployment package,
