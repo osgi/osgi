@@ -1,0 +1,72 @@
+Bundle-Version: 4.1.0.${project.build}
+
+Private-Package						= ${p}.tbc.*;-split-package:=merge-first, \
+	org.osgi.test.support.*;-split-package:=merge-first
+
+Export-Package						= ${p}.tbc;-split-package:=merge-first, \
+	${p}.tbc.util;-split-package:=merge-first
+
+Bundle-Category: osgi,test
+
+Include-Resource					= \
+	www/tb1.jar=tb1.jar, \
+www/simple.dp=delivered/simple.dp,\
+www/bundle_from_other.dp=delivered/bundle_from_other.dp,\
+www/bundle_throws_exception.dp=delivered/bundle_throws_exception.dp,\
+www/fix_pack_lower_range.dp=delivered/fix_pack_lower_range.dp,\
+www/java.gif=delivered/java.gif,\
+www/manifest_not_1st_file.dp=delivered/manifest_not_1st_file.dp,\
+www/missing_name_header.dp=delivered/missing_name_header.dp,\
+www/missing_resource_fix_pack.dp=delivered/missing_resource_fix_pack.dp,\
+www/rp_not_able_to_commit.dp=delivered/rp_not_able_to_commit.dp,\
+www/simple_no_bundle.dp=delivered/simple_no_bundle.dp,\
+www/simple_no_resource.dp=delivered/simple_no_resource.dp,\
+www/untrusted.dp=delivered/untrusted.dp,\
+www/symb_name_dif_from_manifest.dp=delivered/symb_name_dif_from_manifest.dp,\
+www/rp_from_other_dp.dp=delivered/rp_from_other_dp.dp,\
+www/simple_resource.dp=delivered/simple_resource.dp,\
+www/bundle001.jar=delivered/bundle001.jar,\
+www/missing_bundle_fix_pack.dp=delivered/missing_bundle_fix_pack.dp,\
+www/resource_processor.dp=delivered/resource_processor.dp,\
+www/non_customizer_rp.dp=delivered/non_customizer_rp.dp,\
+www/resource_processor_customizer.dp=delivered/resource_processor_customizer.dp,\
+www/dp_throws_resource_violation.dp=delivered/dp_throws_resource_violation.dp,\
+www/simple_fix_pack.dp=delivered/simple_fix_pack.dp,\
+www/block_session.dp=delivered/block_session.dp,\
+www/update/simple.dp=res/simple.dp,\
+www/rp_throws_no_such_resource.dp=delivered/rp_throws_no_such_resource.dp,\
+www/dp_installs_resource_for_rp4.dp=delivered/dp_installs_resource_for_rp4.dp,\
+www/dp_removes_resource_for_rp4.dp=delivered/dp_removes_resource_for_rp4.dp,\
+www/invalid_dlota.xml=res/invalid_dlota.xml,\
+www/update/bundle001.jar=res/bundle001.jar,\
+www/DNChainMatching.jar=${repo;DNChainMatching;1.0.0}
+		
+Test-Cases							= ${classes;extending;org.junit.framework.TestCase|*DefaultTestBundleControl}
+
+-runbundles							= \
+	org.osgi.impl.service.log; version=latest, \
+	org.osgi.impl.service.cm;  version=latest, \
+	org.eclipse.equinox.event;  version=latest, \
+	org.osgi.impl.bundle.jaxp;  version=project, \
+	org.osgi.impl.service.deploymentadmin; version=latest, \
+	org.osgi.impl.service.dmt; version=project, \
+	osgi; version="[4.1,4.1]"
+
+-buildpath=\
+    org.osgi.test.support; version=project , \
+		osgi;	version=4.1, \
+		ee.foundation, \
+		DNChainMatching, \
+		${junit}
+		
+-runproperties= \
+	report=true, \
+	org.osgi.test.cases.deploymentadmin.mo.timeout=7000, \
+	org.osgi.test.cases.deploymentadmin.mo.usercancel=false, \
+	org.osgi.test.cases.deploymentadmin.mo.status_node_progress=true, \
+	org.osgi.test.cases.deploymentadmin.mo.streaming=true, \
+	org.osgi.vendor.deploymentadmin=org.osgi.impl.service.deploymentadmin.perm, \
+	org.osgi.impl.service.deploymentadmin.deliveredarea=delivered
+	
+	
+-runsystempackages=javax.xml.parsers, org.xml.sax, org.xml.sax.helpers, javax.security.auth.x500		

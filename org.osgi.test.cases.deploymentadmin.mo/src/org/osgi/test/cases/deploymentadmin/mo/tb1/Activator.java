@@ -46,7 +46,6 @@ import org.osgi.test.cases.deploymentadmin.mo.tb1.CommandExecution.Remove;
 import org.osgi.test.cases.deploymentadmin.mo.tbc.DeploymentmoTestControl;
 import org.osgi.test.cases.deploymentadmin.mo.tbc.TB1Service;
 import org.osgi.test.cases.deploymentadmin.mo.tbc.TestInterface;
-import org.osgi.test.cases.util.DefaultTestBundleControl;
 
 
 public class Activator implements BundleActivator, TB1Service {
@@ -64,7 +63,7 @@ public class Activator implements BundleActivator, TB1Service {
 
 	}
 	
-	public TestInterface[] getTestClasses(DefaultTestBundleControl tbc) {
+	public TestInterface[] getTestClasses(DeploymentmoTestControl tbc) {
 		return new TestInterface[] {
 				new InstallAndActivate((DeploymentmoTestControl) tbc),
 				new DownloadAndInstallAndActivate((DeploymentmoTestControl) tbc),

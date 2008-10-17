@@ -86,7 +86,7 @@ import org.osgi.test.cases.deploymentadmin.mo.tbc.util.TestingBundle;
 import org.osgi.test.cases.deploymentadmin.mo.tbc.util.TestingDeploymentPackage;
 import org.osgi.test.cases.deploymentadmin.mo.tbc.util.TestingDlota;
 import org.osgi.test.cases.deploymentadmin.mo.tbc.util.TestingResource;
-import org.osgi.test.cases.util.DefaultTestBundleControl;
+import org.osgi.test.support.compatibility.DefaultTestBundleControl;
 
 public class DeploymentmoTestControl extends DefaultTestBundleControl {
 
@@ -110,7 +110,11 @@ public class DeploymentmoTestControl extends DefaultTestBundleControl {
     private HashMap bundles = new HashMap();
 
     private BundleListenerImpl listener;
-
+    RemoteAlertSenderImpl remoteAlertSender;
+    
+    public DeploymentmoTestControl() {
+    }
+    
     public boolean receivedAlert() {
         return receivedAlert;
     }
@@ -119,7 +123,7 @@ public class DeploymentmoTestControl extends DefaultTestBundleControl {
         this.receivedAlert = receivedAlert;
     }
     
-	public void prepare() throws Exception {
+	public void setUp() throws Exception {
 		BundleContext bc = getContext();
 
         installRemoteAlertSender();
@@ -129,15 +133,15 @@ public class DeploymentmoTestControl extends DefaultTestBundleControl {
 		
 		deploymentAdmin = (DeploymentAdmin) bc.getService(bc.getServiceReference(DeploymentAdmin.class.getName()));
 
-    try {
-      //install the helper bundle
-      installBundle("DNChainMatching.jar");
-    } catch (Exception e) {
-      e.printStackTrace();
-      log("# Failed to install bundle DNChainMatching.jar");
-    }
+	    try {
+	      //install the helper bundle
+	      installBundle("/www/DNChainMatching.jar");
+	    } catch (Exception e) {
+	      e.printStackTrace();
+	      log("# Failed to install bundle DNChainMatching.jar");
+	    }
 		try {
-			installBundle("tb1.jar");
+			installBundle("/www/tb1.jar");
 		} catch (Exception e) {
 			log("# Failed to install bundle tb1");
 		}
@@ -190,7 +194,6 @@ public class DeploymentmoTestControl extends DefaultTestBundleControl {
             }
           }
         DeploymentmoConstants.init();
-
 	}
     
     /**
@@ -545,14 +548,23 @@ public class DeploymentmoTestControl extends DefaultTestBundleControl {
     }
 	private void installRemoteAlertSender() {
 		try {
-            RemoteAlertSenderImpl remoteAlertSenderActivator = new RemoteAlertSenderImpl(this);
-			remoteAlertSenderActivator.start(getContext());
+			remoteAlertSender = new RemoteAlertSenderImpl(this);
+			remoteAlertSender.start(getContext());
 		}
 		catch (Exception e) {
 			this.fail("Unexpected exception at prepare(installRemoteAlertSender). "
 					+ e.getClass());			
 		}				
 	}
+	
+	private void uninstallRemoteAlertSender() {
+		try {
+			remoteAlertSender.stop(getContext());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
 	public DmtAdmin getDmtAdmin() {
 		return da;
 	}
@@ -904,12 +916,14 @@ public class DeploymentmoTestControl extends DefaultTestBundleControl {
         return listener;
     }
     
-    public void unprepare() {
+    public void tearDown() {
+    	uninstallRemoteAlertSender();
     	File[] files = DeploymentmoConstants.TEMP_DIR.listFiles();
     	for (int i=0;i<files.length;i++) {
     		files[i].delete();
     	}
     }
+    
     //Some DP names can be longer than the DmtAdmin limit
 	public void mangleDPNames() {
 		for (int i=0;i<DeploymentmoConstants.MAP_CODE_TO_ARTIFACT_MANGLED.length;i++) {

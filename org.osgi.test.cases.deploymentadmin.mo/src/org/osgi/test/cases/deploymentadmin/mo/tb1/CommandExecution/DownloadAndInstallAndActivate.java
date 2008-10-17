@@ -475,12 +475,11 @@ public class DownloadAndInstallAndActivate implements TestInterface {
 
             tbc.failException("",DmtException.class);
         } catch (DmtException e) {
-            tbc.pass("DmtException was thrown when $/Deployment/Download/[node_id]/EnvType was not \"OSGi.R4\"");
+//            tbc.pass("DmtException was thrown when $/Deployment/Download/[node_id]/EnvType was not \"OSGi.R4\"");
         } catch (Exception e) {
             tbc.fail(MessagesConstants.getMessage(MessagesConstants.EXCEPTION_THROWN, new String[]{ DmtException.class.getName(),e.getClass().getName()}));
         } finally {
             cleanUp(session,null);
-            
         }
     }
     

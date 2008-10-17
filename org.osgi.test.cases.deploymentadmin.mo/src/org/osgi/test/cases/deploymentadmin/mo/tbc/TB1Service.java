@@ -37,10 +37,10 @@
 
 package org.osgi.test.cases.deploymentadmin.mo.tbc;
 
-import org.osgi.test.cases.util.DefaultTestBundleControl;
+import org.osgi.test.cases.deploymentadmin.mo.tbc.DeploymentmoTestControl;
 
 public interface TB1Service {
 	
-	public TestInterface[] getTestClasses(DefaultTestBundleControl tbc);
+	public TestInterface[] getTestClasses(DeploymentmoTestControl tbc);
 
 }
