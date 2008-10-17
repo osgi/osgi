@@ -16,25 +16,27 @@
 package org.osgi.service.framework;
 
 /**
- * Describes the content which is shared over a framework link.
+ * Describes the packages and services which is shared from a 
+ * source framework to a target framework through a 
+ * <code>FrameworkLink</code>.
+ * @see FrameworkLink
  */
-//TODO javadoc needs much work!!
+//TODO javadoc needs review
 public class LinkDescription {
 	private final String[] imports;
 	private final String[] serviceFilters;
 
 	/**
-	 * Create a link description which imports the specified content
-	 * from the a source framework and exports the content to a target
-	 * framework 
-	 * @param imports a list of import package specifications for
-	 *        a list of packages to import from a source framework
+	 * Creates a link description specifies the packages and
+	 * services to share from a source framework to a target framework 
+	 * @param imports a list of import package specifications that 
+	 *        specify the packages to import from a source framework.
 	 * @param serviceFilters a list of service filters specifications
-	 *        for a list of services to import from a source framework
+	 *        that specify the services to import from a source framework.
 	 */
 	public LinkDescription(String[] imports, String[] serviceFilters) {
-		this.imports = imports;
-		this.serviceFilters = serviceFilters;
+		this.imports = imports == null ? new String[0] : imports;
+		this.serviceFilters = serviceFilters == null ? new String[0] : serviceFilters;
 	}
 
 	/**
