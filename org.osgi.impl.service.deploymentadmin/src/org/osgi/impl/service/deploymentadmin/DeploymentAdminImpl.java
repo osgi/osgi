@@ -205,7 +205,7 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
 
             // does the caller have the install permission?
             checkPermission(srcDp, DeploymentAdminPermission.INSTALL);
-            startEvent = sendInstallEvent(srcDp.getName());
+            startEvent = sendInstallEvent(srcDp);
         
             // checks the session
             if (equalSymbNameAndVersion())
@@ -233,7 +233,7 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
             throw new DeploymentException(DeploymentException.CODE_OTHER_ERROR,
                 e.getMessage(), e);
         } finally {
-            sendCompleteEvent(startEvent, result);
+            sendCompleteEvent(srcDp, startEvent, result);
             clearSession();
         }
         return srcDp;
@@ -446,6 +446,7 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
 
     private void removeDp(DeploymentPackageImpl dp) {
     	dps.remove(dp);
+    	dp.clearCache(dp);
     	updateRpDpMapping(dp);
     }
 
@@ -568,9 +569,16 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
     /*
      * Convenience method to send events
      */
-    private Event sendInstallEvent(String dpName) {
+    private Event sendInstallEvent(DeploymentPackageImpl dp) {
     	final Hashtable ht = new Hashtable();
-    	ht.put(DAConstants.EVENTPROP_DPNAME, dpName);
+    	ht.put(DAConstants.EVENTPROP_DPNAME, dp.getName());
+    	String displayName = dp.getDisplayName();
+    	if (displayName != null) {
+    		ht.put(DAConstants.EVENTPROP_DP_READABLE_NAME, displayName);
+    	}
+    	if (session.getDeploymentAction() == DeploymentSessionImpl.UPDATE) {
+    		ht.put(DAConstants.EVENTPROP_DP_CURRENT_VERSION, session.getTargetDeploymentPackage().getVersion());
+    	}
     	final EventAdmin ea = (EventAdmin) trackEvent.getService();
         if (null == ea)
             return null;
@@ -586,9 +594,15 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
     /*
      * Convenience method to send events
      */
-    private Event sendUninstallEvent(String dpName) {
+    private Event sendUninstallEvent(DeploymentPackageImpl dp) {
     	final Hashtable ht = new Hashtable();
-    	ht.put(DAConstants.EVENTPROP_DPNAME, dpName);
+    	ht.put(DAConstants.EVENTPROP_DPNAME, dp.getName());
+    	String displayName = dp.getDisplayName();
+    	if (displayName != null) {
+    		ht.put(DAConstants.EVENTPROP_DP_READABLE_NAME, displayName);
+    	}
+		ht.put(DAConstants.EVENTPROP_DP_CURRENT_VERSION, dp.getVersion());
+
         final EventAdmin ea = (EventAdmin) trackEvent.getService();
         if (null == ea)
             return null;
@@ -603,12 +617,19 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
     /*
      * Convenience method to send events
      */
-    private void sendCompleteEvent(Event startEvent, boolean succ) {
+    private void sendCompleteEvent(DeploymentPackageImpl dp, Event startEvent, boolean succ) {
     	if (null == startEvent)
     		return;
-    	
         final Hashtable ht = new Hashtable();
         ht.put(DAConstants.EVENTPROP_DPNAME, startEvent.getProperty(DAConstants.EVENTPROP_DPNAME));
+        if (startEvent.getProperty(DAConstants.EVENTPROP_DP_READABLE_NAME) != null) {
+        	ht.put(DAConstants.EVENTPROP_DP_READABLE_NAME, startEvent.getProperty(DAConstants.EVENTPROP_DP_READABLE_NAME));
+        }
+        if (startEvent.getTopic().equals(DAConstants.TOPIC_INSTALL)) {
+        	if (startEvent.getProperty(DAConstants.EVENTPROP_DP_CURRENT_VERSION) != null)
+        	ht.put(DAConstants.EVENTPROP_DP_CURRENT_VERSION, startEvent.getProperty(DAConstants.EVENTPROP_DP_CURRENT_VERSION));
+        	ht.put(DAConstants.EVENTPROP_DP_NEXT_VERSION, session.getSourceDeploymentPackage().getVersion());
+        }
         ht.put(DAConstants.EVENTPROP_SUCCESSFUL, new Boolean(succ));
         
         final EventAdmin ea = (EventAdmin) trackEvent.getService();
@@ -834,7 +855,7 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
         boolean result = false;
         Event startEvent = null;
         try {
-        	startEvent = sendUninstallEvent(dp.getName());
+        	startEvent = sendUninstallEvent(dp);
             session = createUninstallSession(dp);
             session.uninstall(false);
             if (!session.isCancelled()) {
@@ -849,7 +870,7 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
             throw new DeploymentException(DeploymentException.CODE_OTHER_ERROR,
                 e.getMessage(), e);
         } finally {
-            sendCompleteEvent(startEvent, result);
+            sendCompleteEvent(dp, startEvent, result);
             clearSession();
         }
     }
@@ -862,7 +883,7 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
     boolean uninstallForced(DeploymentPackageImpl dp) throws DeploymentException {
         waitIfBusy();
         checkPermission(dp, DeploymentAdminPermission.UNINSTALL_FORCED);
-        Event startEvent = sendUninstallEvent(dp.getName());
+        Event startEvent = sendUninstallEvent(dp);
         boolean result = false;
         try {
             session = createUninstallSession(dp);
@@ -879,7 +900,7 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
         } catch (Exception e) {
             logger.log(e);
         } finally {
-            sendCompleteEvent(startEvent, result);
+            sendCompleteEvent(dp, startEvent, result);
             clearSession();
         }
         return result;
