@@ -1,0 +1,93 @@
+Bundle-Version: 4.1.0.${project.build}
+
+Private-Package						= ${p}.tbc.*;-split-package:=merge-first, \
+	org.osgi.test.support.*;-split-package:=merge-first
+	
+Export-Package						= ${p}.tbc;-split-package:=merge-first, \
+	${p}.tbc.util;-split-package:=merge-first, \
+	${p}.tbc.BundleInfo;-split-package:=merge-first, \
+	${p}.tbc.Event;-split-package:=merge-first
+	
+Bundle-Category: osgi,test
+
+Include-Resource					= \
+	www/tb1.jar=tb1.jar, \
+	www/simple.dp=res/simple.dp,\
+	www/simple2.dp=res/simple2.dp,\
+	www/simple_resource.dp=res/simple_resource.dp,\
+	www/simple_clone.dp=res/simple_clone.dp,\
+	www/simple_resource_processor.dp=res/simple_resource_processor.dp,\
+	www/simple_higher_major_version.dp=res/simple_higher_major_version.dp,\
+	www/simple_higher_minor_version.dp=res/simple_higher_minor_version.dp,\
+	www/simple_higher_micro_version.dp=res/simple_higher_micro_version.dp,\
+	www/bundle_from_other.dp=res/bundle_from_other.dp,\
+	www/bundle_from_other_dp_dif_vers.dp=res/bundle_from_other_dp_dif_vers.dp,\
+	www/missing_name_header.dp=res/missing_name_header.dp,\
+	www/missing_version_header.dp=res/missing_version_header.dp,\
+	www/symb_name_dif_from_manifest.dp=res/symb_name_dif_from_manifest.dp,\
+	www/resource_processor.dp=res/resource_processor.dp,\
+	www/simple_fix_pack.dp=res/simple_fix_pack.dp,\
+	www/missing_resource_fix_pack.dp=res/missing_resource_fix_pack.dp,\
+	www/missing_bundle_fix_pack.dp=res/missing_bundle_fix_pack.dp,\
+	www/simple_unsigned_bundle.dp=res/simple_unsigned_bundle.dp,\
+	www/simple_unsigned.dp=res/simple_unsigned.dp,\
+	www/simple_no_resource.dp=res/simple_no_resource.dp,\
+	www/simple_no_bundle.dp=res/simple_no_bundle.dp,\
+	www/resource_from_other.dp=res/resource_from_other.dp,\
+	www/add_bundle_fix_pack.dp=res/add_bundle_fix_pack.dp,\
+	www/add_resource_fix_pack.dp=res/add_resource_fix_pack.dp,\
+	www/fix_pack_higher_range.dp=res/fix_pack_higher_range.dp,\
+	www/fix_pack_lower_range.dp=res/fix_pack_lower_range.dp,\
+	www/wrong_order.dp=res/wrong_order.dp,\
+	www/untrusted.dp=res/untrusted.dp,\
+	www/wrong_path.dp=res/wrong_path.dp,\
+	www/wrong_version.dp=res/wrong_version.dp,\
+	www/simple_uninstall_bundle.dp=res/simple_uninstall_bundle.dp,\
+	www/system.dp=res/system.dp,\
+	www/bundle_throws_exception.dp=res/bundle_throws_exception.dp,\
+	www/bundle_doesnt_throw_exception.dp=res/bundle_doesnt_throw_exception.dp,\
+	www/block_session.dp=res/block_session.dp, \
+	www/simple_res_proc_uninstall.dp=res/simple_res_proc_uninstall.dp, \
+	www/simple_resource_uninstall.dp=res/simple_resource_uninstall.dp,\
+	www/wrong_bsn.dp=res/wrong_bsn.dp,\
+	www/wrong_bversion.dp=res/wrong_bversion.dp,\
+	www/wrong_customizer.dp=res/wrong_customizer.dp,\
+	www/wrong_dp_missing.dp=res/wrong_dp_missing.dp,\
+	www/wrong_fix_pack.dp=res/wrong_fix_pack.dp,\
+	www/wrong_name.dp=res/wrong_name.dp,\
+	www/wrong_rp.dp=res/wrong_rp.dp,\
+	www/session_test.dp=res/session_test.dp,\
+	www/resource_processor2.dp=res/resource_processor2.dp,\
+	www/localized.dp=res/localized.dp,\
+	www/version_dif_from_manifest.dp=res/version_dif_from_manifest.dp,\
+	www/strange_path.dp=res/strange_path.dp,\
+	www/signing_files_not_next.dp=res/signing_files_not_next.dp,\
+	www/non_customizer_rp.dp=res/non_customizer_rp.dp
+		
+Test-Cases							= ${classes;extending;org.junit.framework.TestCase|*DefaultTestBundleControl}
+
+-runbundles							= \
+	org.osgi.impl.service.log; version=latest,\
+	org.eclipse.equinox.event;  version=latest, \
+	org.osgi.impl.service.deploymentadmin; version=latest, \
+	org.osgi.impl.service.cm;  version=latest, \
+	osgi; version=4.2
+
+-buildpath=\
+    org.osgi.test.support; version=project , \
+		osgi;	version=4.2, \
+		ee.foundation, \
+		${junit}
+		
+-runproperties= \
+	report=true, \
+	org.osgi.test.cases.deploymentadmin.timeout=10000, \
+	org.osgi.test.cases.deploymentadmin.short_timeout=2000, \
+	org.osgi.vendor.deploymentadmin=org.osgi.impl.service.deploymentadmin.perm, \
+	info.dmtree.osgi.root=./OSGi/, \
+	org.osgi.impl.service.deploymentadmin.iconcachearea=iconcache, \
+	org.osgi.impl.service.deploymentadmin.deliveredarea=delivered
+	
+	
+-runsystempackages=javax.xml.parsers, org.xml.sax, org.xml.sax.helpers, javax.security.auth.x500		
+		
