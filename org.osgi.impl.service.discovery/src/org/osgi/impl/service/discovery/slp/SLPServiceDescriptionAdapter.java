@@ -23,10 +23,22 @@ import ch.ethz.iks.slp.ServiceURL;
  * 
  * In the <code>path</code> part service properties are listed.
  * 
+ * SLP Spec: http://www.ietf.org/rfc/rfc2608.txt
+ * 
  * @version $Revision$
  */
 public class SLPServiceDescriptionAdapter implements ServiceEndpointDescription {
 	public static final String UnknownVersion = "*";
+
+	// reserved are: `(' / `)' / `,' / `\' / `!' / `<' / `=' / `>' / `~' / CTL
+	// TODO: handle CTL
+	public static final String RESERVED_CHARS_IN_ATTR_VALUES = "(),\\!<>=~";
+
+	// RFC2608: Any character except reserved, * / CR / LF / HTAB / `_'.
+	public static final String RESERVED_CHARS_IN_ATTR_KEYS = RESERVED_CHARS_IN_ATTR_VALUES
+			+ '*' + 0x0D + 0x0A + 0x09 + '_';
+
+	public static final String ESCAPING_CHARACTER = "\\";
 
 	private Map/* <String, String> */javaInterfaceAndFilters;
 	private Map/* <String, String> */javaAndEndpointInterfaces;
@@ -377,6 +389,7 @@ public class SLPServiceDescriptionAdapter implements ServiceEndpointDescription 
 				String key;
 				String value;
 
+				// TODO de-escape escaped chars
 				try {
 					while (st.hasMoreTokens()) {
 						key = st.nextToken();
@@ -458,10 +471,25 @@ public class SLPServiceDescriptionAdapter implements ServiceEndpointDescription 
 			value = "<null>";
 		}
 
-		// TODO handle Array
-		// TODO escape reserved chars
+		path.append(escapeReservedChars(key,
+				SLPServiceDescriptionAdapter.RESERVED_CHARS_IN_ATTR_KEYS));
+		path.append("=");
 
-		path.append(key).append("=").append(value.toString());
+		if (value instanceof Object[]) {
+			Object[] arrayValue = (Object[]) value;
+			for (int i = 0; i < arrayValue.length;) {
+				path
+						.append(escapeReservedChars(
+								arrayValue[i].toString(),
+								SLPServiceDescriptionAdapter.RESERVED_CHARS_IN_ATTR_VALUES));
+				if (++i != arrayValue.length)
+					path.append(",");
+			}
+		} else
+			path
+					.append(escapeReservedChars(
+							value.toString(),
+							SLPServiceDescriptionAdapter.RESERVED_CHARS_IN_ATTR_VALUES));
 	}
 
 	/**
@@ -475,6 +503,69 @@ public class SLPServiceDescriptionAdapter implements ServiceEndpointDescription 
 			Object value) {
 		StringBuffer buffer = new StringBuffer(path);
 		appendPropertyToURLPath(buffer, key, value);
+		return buffer.toString();
+	}
+
+	/**
+	 * TODO: create test case using reserved chars
+	 * 
+	 * @param value
+	 * @param reservedChars
+	 * @return
+	 */
+	public static String deescapeReservedChars(String value) {
+		// tokenize escapedchars as extra chars
+		StringTokenizer tokenizer = new StringTokenizer(value, SLPServiceDescriptionAdapter.ESCAPING_CHARACTER);
+		//TODO finish
+		return null;
+	}
+
+	/**
+	 * TODO: create test case using reserved chars
+	 * 
+	 * @param value
+	 * @param reservedChars
+	 * @return
+	 */
+	public static String escapeReservedChars(String value, String reservedChars) {
+		// tokenize reserved chars as extra chars
+		StringTokenizer tokenizer = new StringTokenizer(value, reservedChars,
+				true);
+
+		boolean isReservedChar = false;
+		// if there is only one token
+		if (tokenizer.countTokens() == 1) {
+			String token = tokenizer.nextToken();
+			// then it might be a reserved char
+			if (token.length() == 1) {
+				// if it's a reserved char
+				if (reservedChars.indexOf(token.charAt(0)) == -1)
+					isReservedChar = true;
+				else
+					return value;
+			}
+			// apparently there are no reserved chars
+			else
+				return value;
+		}
+		StringBuffer buffer = new StringBuffer();
+		while (tokenizer.hasMoreTokens()) {
+			if (isReservedChar) {
+				String token = tokenizer.nextToken();
+				if (token.length() != 1) {
+					// TODO log
+					throw new RuntimeException(
+							"Error while escaping reserved characters.");
+				}
+				buffer.append(ESCAPING_CHARACTER + Integer.toHexString(token.charAt(0)));
+				isReservedChar = false;
+			} else {
+				buffer.append(tokenizer.nextToken());
+				// next token will be reserved char
+				isReservedChar = true;
+			}
+		}
+
 		return buffer.toString();
 	}
 

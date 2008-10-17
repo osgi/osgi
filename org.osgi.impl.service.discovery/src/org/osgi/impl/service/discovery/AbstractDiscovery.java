@@ -108,7 +108,6 @@ public abstract class AbstractDiscovery implements Discovery {
 								+ "; filter: " + filter);
 			}
 		}
-		// TODO: Why there are no actions taken after adding a listener?
 	}
 
 	/**
