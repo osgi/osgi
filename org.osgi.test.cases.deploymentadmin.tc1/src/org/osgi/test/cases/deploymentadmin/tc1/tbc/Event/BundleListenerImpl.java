@@ -56,7 +56,7 @@ public class BundleListenerImpl implements SynchronousBundleListener  {
 	private Vector events = new Vector();
 	private int currentType;
 	private Bundle currentBundle;
-  private boolean verifying;
+	private boolean verifying;
 
 	/**
 	 * @param control
@@ -70,19 +70,20 @@ public class BundleListenerImpl implements SynchronousBundleListener  {
 		currentBundle = event.getBundle();
 		events.add(event);
         
-    if (verifying) {
-        synchronized (tbc) {
-            tbc.notifyAll();
-        }
-    }
+	    if (verifying) {
+	        synchronized (tbc) {
+	            tbc.notifyAll();
+	        }
+	    }
 	}
 	
 	public void reset() {
 		currentType = 0;
 		currentBundle = null;
 		events = new Vector();
-    verifying = false;
+		verifying = false;
 	}
+	
 	/**
 	 * @return Returns the events.
 	 */

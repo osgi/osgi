@@ -37,7 +37,6 @@
 
 package org.osgi.test.cases.deploymentadmin.tc1.tbc;
 
-import org.osgi.test.cases.util.DefaultTestBundleControl;
 
 /**
  * @author Andre Assad
@@ -45,6 +44,6 @@ import org.osgi.test.cases.util.DefaultTestBundleControl;
 
 public interface TB1Service {
 	
-	public TestInterface[] getTestClasses(DefaultTestBundleControl tbc);
+	public TestInterface[] getTestClasses(DeploymentTestControl tbc);
 
 }
