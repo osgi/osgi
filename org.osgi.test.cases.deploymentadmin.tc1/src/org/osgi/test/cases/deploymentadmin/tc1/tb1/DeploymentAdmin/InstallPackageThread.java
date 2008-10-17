@@ -117,6 +117,8 @@ public class InstallPackageThread extends Thread {
 			} catch (Exception e) {
 				if (e instanceof DeploymentException) {
 					exceptionCodeInstall = ((DeploymentException)e).getCode();
+				} else {
+					e.printStackTrace();
 				}
 			}
 		} finally {
@@ -133,6 +135,8 @@ public class InstallPackageThread extends Thread {
 				} catch (Exception e) {
 					if (e instanceof DeploymentException) {
 						exceptionCodeUninstall = ((DeploymentException)e).getCode();
+					} else {
+						e.printStackTrace();
 					}
 				}
 			}

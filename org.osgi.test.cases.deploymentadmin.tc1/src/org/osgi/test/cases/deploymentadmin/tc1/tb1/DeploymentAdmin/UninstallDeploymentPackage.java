@@ -91,6 +91,7 @@ public class UninstallDeploymentPackage implements TestInterface {
         try {
             tbc.setDeploymentAdminPermission(DeploymentConstants.DEPLOYMENT_PACKAGE_NAME_ALL, DeploymentConstants.ALL_PERMISSION);
         } catch (Exception e) {
+        	e.printStackTrace();
             tbc.fail("Failed to set Permission necessary for testing uninstall Deployment Packages methods");
         }
     }
@@ -114,8 +115,9 @@ public class UninstallDeploymentPackage implements TestInterface {
             tbc.assertNull("Asserting that bundle001.jar was uninstalled.", tbc.getBundle("bundle001.jar"));
             tbc.assertNull("Asserting that bundle002.jar was uninstalled.", tbc.getBundle("bundle002.jar"));           
             
-			tbc.pass("A DeploymentPackage could be uninstalled using only \"uninstall\" permission");            
+//			tbc.pass("A DeploymentPackage could be uninstalled using only \"uninstall\" permission");            
 		} catch (Exception e) {
+        	e.printStackTrace();
 			tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }));
 		} finally {
             // reset permissions
@@ -143,6 +145,7 @@ public class UninstallDeploymentPackage implements TestInterface {
             tbc.assertNull("Asserting that bundle001.jar was uninstalled.", tbc.getBundle("bundle001.jar"));
             tbc.assertNull("Asserting that bundle002.jar was uninstalled.", tbc.getBundle("bundle002.jar"));
 		} catch (Exception e) {
+        	e.printStackTrace();
 			tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }));
 		} finally {
             tbc.setDeploymentAdminPermission(DeploymentConstants.DEPLOYMENT_PACKAGE_NAME_ALL, DeploymentConstants.ALL_PERMISSION);
@@ -166,6 +169,7 @@ public class UninstallDeploymentPackage implements TestInterface {
             dp.uninstall();
             tbc.assertEquals("Asserting that dropAllResources() was called two times (once per resource processor).", 2, DeploymentConstants.DROPALLRESOURCES_COUNT);
         } catch (Exception e) {
+        	e.printStackTrace();
             tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }));
         } finally {
             DeploymentConstants.DROPALLRESOURCES_COUNT = 0;
@@ -197,6 +201,7 @@ public class UninstallDeploymentPackage implements TestInterface {
             dp3.uninstall();
             tbc.assertEquals("Asserting that dropAllResources() was called only one time.", 1, DeploymentConstants.DROPALLRESOURCES_COUNT);
         } catch (Exception e) {
+        	e.printStackTrace();
             tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }));
         } finally {
             DeploymentConstants.DROPALLRESOURCES_COUNT = 0;
@@ -225,6 +230,7 @@ public class UninstallDeploymentPackage implements TestInterface {
         } catch (DeploymentException e) {
             tbc.assertTrue("Asserting that rollback was called.", ROLL_BACK_CALLED);
         } catch (Exception e) {
+        	e.printStackTrace();
             tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }));
         } finally {
             ROLL_BACK_CALLED = false;
@@ -255,6 +261,7 @@ public class UninstallDeploymentPackage implements TestInterface {
         } catch (DeploymentException e) {
             tbc.assertTrue("Asserting that rollback was called.", ROLL_BACK_CALLED);
         } catch (Exception e) {
+        	e.printStackTrace();
             tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }));
         } finally {
             if (trbc != null)
@@ -283,8 +290,9 @@ public class UninstallDeploymentPackage implements TestInterface {
             trbc = (TestingRollbackCall)tbc.getServiceInstance(DeploymentConstants.PID_RESOURCE_PROCESSOR4);
             trbc.setPrepareException(true);
             dpError.uninstallForced();
-            tbc.pass("Asserts that any errors when calling uninstallForced are ignored, they must not cause a roll back.");
+//            tbc.pass("Asserts that any errors when calling uninstallForced are ignored, they must not cause a roll back.");
         } catch (Exception e) {
+        	e.printStackTrace();
             tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }));
         } finally {
             if (trbc != null)
@@ -319,6 +327,7 @@ public class UninstallDeploymentPackage implements TestInterface {
             dp.uninstall();
             tbc.assertEquals("Asserting that Commit() was called only once.", 1, DeploymentConstants.COMMIT_COUNT);
         } catch (Exception e) {
+        	e.printStackTrace();
             tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[]{e.getClass().getName()}));
         } finally {
             DeploymentConstants.COMMIT_COUNT = 0;
@@ -351,6 +360,7 @@ public class UninstallDeploymentPackage implements TestInterface {
             dp.uninstallForced();
             tbc.assertEquals("Asserting that Commit() was called only once.", 1, DeploymentConstants.COMMIT_COUNT);
         } catch (Exception e) {
+        	e.printStackTrace();
             tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }));
         } finally {
             DeploymentConstants.COMMIT_COUNT = 0;
@@ -376,6 +386,7 @@ public class UninstallDeploymentPackage implements TestInterface {
             dp.uninstall();
             tbc.assertEquals("Asserting that Commit() was called four times.", 4, DeploymentConstants.COMMIT_COUNT);
         } catch (Exception e) {
+        	e.printStackTrace();
             tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }));
         } finally {
             DeploymentConstants.COMMIT_COUNT = 0;
@@ -400,6 +411,7 @@ public class UninstallDeploymentPackage implements TestInterface {
             dp.uninstallForced();
             tbc.assertEquals("Asserting that Commit() was called twice", 2, DeploymentConstants.COMMIT_COUNT);
         } catch (Exception e) {
+        	e.printStackTrace();
             tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }));
         } finally {
             DeploymentConstants.COMMIT_COUNT = 0;
@@ -433,8 +445,9 @@ public class UninstallDeploymentPackage implements TestInterface {
             b2 = tbc.getBundle(bundles[1].getName());
             tbc.assertNull("Testing bundles 2 was UNINSTALLED", b2);
         } catch (SecurityException e) {
-            tbc.pass(MessagesConstants.getMessage(MessagesConstants.EXCEPTION_CORRECTLY_THROWN, new String[] { "SecurityException" }));
+//            tbc.pass(MessagesConstants.getMessage(MessagesConstants.EXCEPTION_CORRECTLY_THROWN, new String[] { "SecurityException" }));
         } catch (Exception e) {
+        	e.printStackTrace();
             tbc.fail(MessagesConstants.getMessage(MessagesConstants.EXCEPTION_THROWN, new String[] {"SecurityException", e.getClass().getName() }));
         } finally {
             tbc.cleanUp(dp);
@@ -467,8 +480,9 @@ public class UninstallDeploymentPackage implements TestInterface {
             b2 = tbc.getBundle(bundles[1].getName());
             tbc.assertNull("Testing bundles 2 was UNINSTALLED", b2);
         } catch (SecurityException e) {
-            tbc.pass(MessagesConstants.getMessage(MessagesConstants.EXCEPTION_CORRECTLY_THROWN, new String[] { "SecurityException" }));
+//            tbc.pass(MessagesConstants.getMessage(MessagesConstants.EXCEPTION_CORRECTLY_THROWN, new String[] { "SecurityException" }));
         } catch (Exception e) {
+        	e.printStackTrace();
             tbc.fail(MessagesConstants.getMessage(MessagesConstants.EXCEPTION_THROWN, new String[] {"SecurityException", e.getClass().getName() }));
         } finally {
             tbc.cleanUp(dp);
@@ -492,8 +506,9 @@ public class UninstallDeploymentPackage implements TestInterface {
             dp.uninstall();
             tbc.failException("#", SecurityException.class);
         } catch (SecurityException e) {
-            tbc.pass(MessagesConstants.getMessage(MessagesConstants.EXCEPTION_CORRECTLY_THROWN, new String[] { "SecurityException" }));
+//            tbc.pass(MessagesConstants.getMessage(MessagesConstants.EXCEPTION_CORRECTLY_THROWN, new String[] { "SecurityException" }));
         } catch (Exception e) {
+        	e.printStackTrace();
             tbc.fail(MessagesConstants.getMessage(MessagesConstants.EXCEPTION_THROWN, new String[] {"SecurityException", e.getClass().getName() }));
         } finally {
             tbc.cleanUp(dp);
@@ -517,8 +532,9 @@ public class UninstallDeploymentPackage implements TestInterface {
             dp.uninstallForced();
             tbc.failException("#", SecurityException.class);
         } catch (SecurityException e) {
-            tbc.pass(MessagesConstants.getMessage(MessagesConstants.EXCEPTION_CORRECTLY_THROWN, new String[] { "SecurityException" }));
+//            tbc.pass(MessagesConstants.getMessage(MessagesConstants.EXCEPTION_CORRECTLY_THROWN, new String[] { "SecurityException" }));
         } catch (Exception e) {
+        	e.printStackTrace();
             tbc.fail(MessagesConstants.getMessage(MessagesConstants.EXCEPTION_THROWN, new String[] {"SecurityException", e.getClass().getName() }));
         } finally {
             tbc.cleanUp(dp);

@@ -83,6 +83,7 @@ public class GetSymbolicName {
             tbc.assertEquals("Asserts that getDeploymentPackage returns the correct bundle symbolic name", tBundle[0].getName(), bInfo[0].getSymbolicName());
             tbc.assertEquals("Asserts that getDeploymentPackage returns the correct bundle symbolic name", tBundle[1].getName(), bInfo[1].getSymbolicName());
         } catch (Exception e) {
+        	e.printStackTrace();
             tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }));
         } finally {
             tbc.uninstall(dp);

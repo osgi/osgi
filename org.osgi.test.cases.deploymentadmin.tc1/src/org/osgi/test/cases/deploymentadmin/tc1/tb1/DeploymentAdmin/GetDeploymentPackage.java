@@ -88,6 +88,7 @@ public class GetDeploymentPackage implements TestInterface {
         try {
             tbc.setDeploymentAdminPermission(DeploymentConstants.DEPLOYMENT_PACKAGE_NAME_ALL, DeploymentConstants.ALL_PERMISSION);
         } catch (Exception e) {
+        	e.printStackTrace();
             tbc.fail("Failed to set Permission necessary for testing #getDeploymentPackage");
         }
     }
@@ -108,6 +109,7 @@ public class GetDeploymentPackage implements TestInterface {
 			dpGet = tbc.getDeploymentAdmin().getDeploymentPackage(dpInstall.getName());
 			tbc.assertEquals("Asserts that getDeploymentPackage returns the correct instance of a deployment package",dpInstall, dpGet);
 		} catch (Exception e) {
+        	e.printStackTrace();
 			tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }));
 		} finally {
 			tbc.cleanUp(dpInstall);
@@ -127,6 +129,7 @@ public class GetDeploymentPackage implements TestInterface {
 			dp = tbc.getDeploymentAdmin().getDeploymentPackage(DeploymentConstants.INVALID_NAME);
 			tbc.assertNull("Asserts that if there is no deployment package with the passwd symbolic name, null is returned from getDeploymentPackage", dp);
 		} catch (Exception e) {
+        	e.printStackTrace();
 			tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }));
 		}
 	}	
@@ -143,8 +146,9 @@ public class GetDeploymentPackage implements TestInterface {
 			tbc.getDeploymentAdmin().getDeploymentPackage((String)null);
 			tbc.failException("#", IllegalArgumentException.class);
 		} catch (IllegalArgumentException e) {
-			tbc.pass(MessagesConstants.getMessage(MessagesConstants.EXCEPTION_CORRECTLY_THROWN, new String[] { "IllegalArgumentException" }));			
+//			tbc.pass(MessagesConstants.getMessage(MessagesConstants.EXCEPTION_CORRECTLY_THROWN, new String[] { "IllegalArgumentException" }));
 		} catch (Exception e) {
+        	e.printStackTrace();
 			tbc.fail(MessagesConstants.getMessage(MessagesConstants.EXCEPTION_THROWN, new String[] {"IllegalArgumentException", e.getClass().getName() }));
 		}
 	}
@@ -167,6 +171,7 @@ public class GetDeploymentPackage implements TestInterface {
             tbc.assertNull("No deployment package is retrieved after uninstallation", uninstalledtDP);
             
         } catch (Exception e) {
+        	e.printStackTrace();
             tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }));
         } finally {
             tbc.uninstall(dp);
@@ -236,6 +241,7 @@ public class GetDeploymentPackage implements TestInterface {
    					finalDP.getVersion().equals(testFixDP.getVersion()));
 
         } catch (Exception e) {
+        	e.printStackTrace();
             tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }));
         } finally {
        	 installThread.uninstallDP(false);
@@ -267,6 +273,7 @@ public class GetDeploymentPackage implements TestInterface {
                     got.getName().trim() + "_" + got.getVersion().toString().trim());
             
         } catch (Exception e) {
+        	e.printStackTrace();
             tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }));
         } finally {
             tbc.uninstall(new DeploymentPackage[]{dp1, dp2});
@@ -290,6 +297,7 @@ public class GetDeploymentPackage implements TestInterface {
             invisibleDP = tbc.getDeploymentAdmin().getDeploymentPackage(testDP.getName());
             tbc.assertNull("Deployment Package is not visible", invisibleDP);
         } catch (Exception e) {
+        	e.printStackTrace();
             tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }));
         } finally {
             tbc.uninstall(dp);
@@ -313,8 +321,9 @@ public class GetDeploymentPackage implements TestInterface {
             tbc.getDeploymentAdmin().getDeploymentPackage(dp.getName());
             tbc.failException("#", SecurityException.class);
         } catch (SecurityException e) {
-            tbc.pass(MessagesConstants.getMessage(MessagesConstants.EXCEPTION_CORRECTLY_THROWN, new String[] { "SecurityException" }));
+//            tbc.pass(MessagesConstants.getMessage(MessagesConstants.EXCEPTION_CORRECTLY_THROWN, new String[] { "SecurityException" }));
         } catch (Exception e) {
+        	e.printStackTrace();
             tbc.fail(MessagesConstants.getMessage(MessagesConstants.EXCEPTION_THROWN, new String[] {"SecurityException", e.getClass().getName() }));
         } finally {
             tbc.cleanUp(dp);

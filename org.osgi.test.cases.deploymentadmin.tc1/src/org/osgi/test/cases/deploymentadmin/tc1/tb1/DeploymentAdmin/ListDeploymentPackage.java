@@ -84,6 +84,7 @@ public class ListDeploymentPackage implements TestInterface {
         try {
             tbc.setDeploymentAdminPermission(DeploymentConstants.DEPLOYMENT_PACKAGE_NAME_ALL, DeploymentConstants.ALL_PERMISSION);
         } catch (Exception e) {
+        	e.printStackTrace();
             tbc.fail("Failed to set Permission necessary for testing listDeploymentPackage");
         }
     }
@@ -135,6 +136,7 @@ public class ListDeploymentPackage implements TestInterface {
 			}
 			tbc.assertTrue("Asserts that a deployment package uninstalled is not returned by the listDeploymentPackages",!found);
 		} catch (Exception e) {
+        	e.printStackTrace();
 			tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }));
 		} finally {
 			tbc.uninstall(dp);
@@ -184,9 +186,8 @@ public class ListDeploymentPackage implements TestInterface {
                 "During an update, the target deployment package remained the same",
                 updateDP.getName().trim() + "_" + updateDP.getVersion().toString().trim(),
                 found.getName().trim() + "_" + found.getVersion().toString().trim());
-            
-            
         } catch (Exception e) {
+        	e.printStackTrace();
             tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }));
         } finally {
             tbc.uninstall(new DeploymentPackage[]{dp, updateDP});
@@ -218,6 +219,7 @@ public class ListDeploymentPackage implements TestInterface {
                    found.getName().trim() + "_" + found.getVersion().toString().trim());
            
        } catch (Exception e) {
+    	   e.printStackTrace();
            tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }));
        } finally {
            tbc.uninstall(dp);
@@ -235,11 +237,12 @@ public class ListDeploymentPackage implements TestInterface {
        try {
            DeploymentPackage[] dp = tbc.getDeploymentAdmin().listDeploymentPackages();
            if (dp.length==0) {
-               tbc.pass("The returned array is empty");
+//               tbc.pass("The returned array is empty");
            } else {
                tbc.log("The returned array is NOT empty");
            }
        } catch (Exception e) {
+    	   e.printStackTrace();
            tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }));
        }
    }
@@ -307,7 +310,8 @@ public class ListDeploymentPackage implements TestInterface {
 					finalDP.getVersion().equals(testFixDP.getVersion()));
 
      } catch (Exception e) {
-         tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }));
+		e.printStackTrace();
+        tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }));
      } finally {
     	 installThread.uninstallDP(false);
          tbc.uninstall(new DeploymentPackage[] { rp, initialDP, fixDP });

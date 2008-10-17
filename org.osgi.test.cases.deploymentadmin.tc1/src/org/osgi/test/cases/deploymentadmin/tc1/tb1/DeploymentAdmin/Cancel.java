@@ -73,6 +73,7 @@ public class Cancel implements TestInterface {
         try {
             tbc.setDeploymentAdminPermission(DeploymentConstants.DEPLOYMENT_PACKAGE_NAME_ALL, DeploymentConstants.ALL_PERMISSION);
         } catch (Exception e) {
+        	e.printStackTrace();
             tbc.fail("Failed to set Permission necessary for testing #getDeploymentPackage");
         }
     }
@@ -134,6 +135,7 @@ public class Cancel implements TestInterface {
    			
             
         } catch (Exception e) {
+        	e.printStackTrace();
             tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }));
         } finally {
         	test.setRelease(true);
@@ -201,6 +203,7 @@ public class Cancel implements TestInterface {
             		installThread.getDepExceptionCodeUninstall() == DeploymentException.CODE_CANCELLED);
             
         } catch (Exception e) {
+        	e.printStackTrace();
             tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }));
         } finally {
         	test.setRelease(true);
@@ -263,8 +266,9 @@ public class Cancel implements TestInterface {
             
    			tbc.failException("", SecurityException.class);
         } catch (SecurityException e) {
-        	tbc.pass("SecurityException correctly thrown");  
+//        	tbc.pass("SecurityException correctly thrown");  
         } catch (Exception e) {
+        	e.printStackTrace();
             tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }));
         } finally {
         	test.setRelease(true);
@@ -285,8 +289,8 @@ public class Cancel implements TestInterface {
 	    	 boolean canceled = tbc.getDeploymentAdmin().cancel();
 	         tbc.assertTrue("canceled is false when there is no active session", !canceled);
 	     } catch (Exception e) {
-	         tbc.fail(MessagesConstants.getMessage(
-	             MessagesConstants.UNEXPECTED_EXCEPTION, new String[]{e.getClass().getName()}));
+        	e.printStackTrace();
+        	tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[]{e.getClass().getName()}));
 	     }
 	 }
 }
