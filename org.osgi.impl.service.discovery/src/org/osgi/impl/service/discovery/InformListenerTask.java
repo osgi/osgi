@@ -65,7 +65,6 @@ public class InformListenerTask extends TimerTask {
 				Vector availableServices = new Vector();
 				for (int i = 0; i < descriptions.length; i++) {
 					ServiceEndpointDescription descr = descriptions[i];
-					Hashtable props = new Hashtable(descr.getProperties());
 					// walk over the registered listeners
 					Iterator it = listener.keySet().iterator();
 					while (it.hasNext()) {
@@ -73,7 +72,7 @@ public class InformListenerTask extends TimerTask {
 						Filter f = (Filter) listener.get(l);
 						// check if the listeners filter matches the given
 						// description properties
-						if (f.match(props)) {
+						if (f.match(new Hashtable(descr.getProperties()))) {
 							ServiceEndpointDescription existingDescr = null;
 							boolean exists = false;
 							// check if this a new service description or not
