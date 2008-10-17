@@ -17,7 +17,12 @@
  */
 package org.osgi.impl.service.deploymentadmin;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.io.Serializable;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.security.*;
 import java.util.*;
@@ -40,6 +45,7 @@ public class DeploymentPackageImpl implements DeploymentPackage, Serializable {
     private List certChains = new Vector();
     
     private Boolean stale = Boolean.FALSE;
+    private String icon;
     
     private DeploymentPackageImpl() {
     }
@@ -185,6 +191,13 @@ public class DeploymentPackageImpl implements DeploymentPackage, Serializable {
         return null;
     }
     
+    void setBundleEntryPossition(BundleEntry be, int pos) {
+    	boolean res = bundleEntries.remove(be);
+    	if (res) {
+    		bundleEntries.insertElementAt(be, pos);
+    	}
+    }
+    
     BundleEntry getBundleEntry(String symbName, Version version) throws DeploymentException {
         for (Iterator iter = bundleEntries.iterator(); iter.hasNext();) {
             BundleEntry be = (BundleEntry) iter.next();
@@ -320,7 +333,7 @@ public class DeploymentPackageImpl implements DeploymentPackage, Serializable {
     public synchronized Version getVersion() {
         String s = (String) mainSection.get(DAConstants.DP_VERSION);
         if (null == s)
-            return null;
+            return new Version("0.0.0");
         return new Version(s); 
     }
 
@@ -437,15 +450,94 @@ public class DeploymentPackageImpl implements DeploymentPackage, Serializable {
     DeploymentPackageCtx getDpCtx() {
     	return dpCtx;
     }
+    
 
-	public String getDisplayName(String locale) {
-		// TODO Auto-generated method stub
+	public String getDisplayName() {
+        return (String) mainSection.get(DAConstants.DP_DISPLAY_NAME);
+	}
+
+	public URL getIcon() {
+		if (icon != null) {
+			try {
+				return new URL("file:///"+new File(icon).getAbsolutePath());
+			} catch (MalformedURLException e) {
+				//TODO log error?
+			}
+		}
+		String iconHeader = (String) mainSection.get(DAConstants.DP_ICON);
+		if (iconHeader != null) {
+			try {
+				URL url = new URL(iconHeader);
+				InputStream is = url.openStream();
+				String urlString = url.toString(); 
+				int ind = urlString.lastIndexOf('/');
+				String fileName = "icon.gif";
+				if (ind > 0) {
+					fileName = urlString.substring(ind+1);
+				} 
+				String iconLocation = storeIcon(fileName, this, is);
+				if (iconLocation != null) {
+					icon = iconLocation;
+					return getIcon();
+				}
+			} catch (Exception e) {
+			}
+		}
 		return null;
 	}
 
-	public URL getIcon(String locale) {
-		// TODO Auto-generated method stub
-		return null;
+	public void setIcon(String icon) {
+		this.icon = icon;
+	}
+	
+	public static String storeIcon(String iconFileName, DeploymentPackageImpl dp, InputStream is) {
+    	String iconCacheStore = DAConstants.ICON_STORAGE_ROOT;
+    	String iconFile = iconCacheStore + '/' + dp.getName() + '/' + iconFileName;
+    	new File(iconFile).getParentFile().mkdirs();
+    	byte[] buff = new byte[2048];
+		try {
+	    	OutputStream out = new FileOutputStream(iconFile);
+	    	int read = is.read(buff);
+	    	while (read >= 0) {
+				out.write(buff, 0, read);
+				read = is.read(buff);
+			}
+	    	out.close();
+	    	is.close();
+		} catch (Exception e) {
+			// TODO log error
+			return null;
+		}
+		return iconFile;
+	}
+	
+	public static void clearCache(DeploymentPackageImpl dp) {
+		String iconCacheStore = DAConstants.ICON_STORAGE_ROOT;
+		String iconsDir = iconCacheStore + '/' + dp.getName();
+		File iconsDirFile = new File(iconsDir);
+		if (iconsDirFile.exists()) {
+			deleteDir(iconsDirFile);
+		}
+	}
+
+	public static boolean deleteDir(File dir) {
+		if (dir.exists()) {
+			if (dir.isFile())
+				return dir.delete();
+			else {
+				String[] list = dir.list();
+				if (list != null) {
+					int len = list.length;
+					for (int i = 0; i < len; i++)
+						deleteDir(new File(dir.getAbsolutePath()
+								+ File.separator + list[i]));
+				}
+				return dir.delete();
+			}
+		}
+		else {
+			return false;
+		}
 	}
 
 }

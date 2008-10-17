@@ -625,9 +625,14 @@ public class DeploymentSessionImpl implements DeploymentSession, FrameworkListen
 	            ResourceEntry re = (ResourceEntry) iter.next();
 	            String pid = re.getValue(DAConstants.RP_PID);
 	            
-	            if (null == WrappedResourceProcessor.findProcessorSilent(pid))
+	            if (null == WrappedResourceProcessor.findProcessorSilent(pid)) {
+	            	if (isIconResource(targetDp, re.getResName())) {
+	            		//if the resource is the icon we should skip its processing
+	            		continue;
+	            	}
 	            	throw new DeploymentException(DeploymentException.CODE_PROCESSOR_NOT_FOUND, 
 		                "Resource processor for pid " + pid + " is not found");
+	            }
 	            
 	            // each processor is called only once
 	            if (!pids.contains(pid)) {
@@ -809,15 +814,30 @@ public class DeploymentSessionImpl implements DeploymentSession, FrameworkListen
                     "PID '" + pid + "' belongs to another DP (" + dp + ")");
             
         ResourceProcessor proc = WrappedResourceProcessor.findProcessorSilent(pid);
-        if (null == proc)
+        boolean isIcon = isIconResource(srcDp, entry.getName());
+        if (null == proc && !isIcon)
             throw new DeploymentException(DeploymentException.CODE_PROCESSOR_NOT_FOUND, 
                     "Resource processor (PID=" + pid + ") for '" + entry.getName() +
                     "' is not found.");
+        
+        byte[] cachedResourceData = null;
+        if (isIcon) {
+        	ByteArrayOutputStream bos = readIntoBuffer(entry.getInputStream());
+        	//we should cache the icon resource data because it might be processed lated if there is a resource processor for the icon resource
+        	cachedResourceData = bos.toByteArray();
+        	// store the icon in a local storage
+        	String iconFile = DeploymentPackageImpl.storeIcon(entry.getName(), srcDp, new ByteArrayInputStream(cachedResourceData));
+        	srcDp.setIcon(iconFile);
+        	if (proc == null) {
+        		//there is no resource processor - returning
+        		return null; 
+        	}
+        }
         actWrProc = new WrappedResourceProcessor(pid, 
                 fetchAccessControlContext(entry.getCertificateChainStringArrays()), trackRp);
         transaction.addRecord(new TransactionRecord(Transaction.PROCESSOR, actWrProc));
         try {
-			actWrProc.process(entry.getName(), entry.getInputStream());
+			actWrProc.process(entry.getName(), cachedResourceData != null? new ByteArrayInputStream(cachedResourceData) : entry.getInputStream());
         } catch (ResourceProcessorException e) {
 			if (e.getCode() == ResourceProcessorException.CODE_RESOURCE_SHARING_VIOLATION)
 				throw new DeploymentException(
@@ -829,10 +849,27 @@ public class DeploymentSessionImpl implements DeploymentSession, FrameworkListen
         return actWrProc;
     }
     
+    private ByteArrayOutputStream readIntoBuffer(InputStream is) throws IOException {
+        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+        try {
+            byte[] data = new byte[0x1000];
+            int i = is.read(data);
+            while (-1 != i) {
+                bos.write(data, 0, i);
+                i = is.read(data);
+            }
+        } finally {
+            if (null != bos)
+                bos.close();
+        }
+        return bos;
+    }
+
     private void processBundles(DeploymentPackageJarInputStream wjis) 
     		throws BundleException, IOException, DeploymentException 
     {
     	actEntry = wjis.nextEntry();
+    	int counter = 0;
         while (null != actEntry && actEntry.isBundle()) 
         {
         	if (isCancelled())
@@ -844,6 +881,7 @@ public class DeploymentSessionImpl implements DeploymentSession, FrameworkListen
                 final Bundle b = processBundle(actEntry);
                 if (null != b) {
 	                BundleEntry be = srcDp.getBundleEntryByName(actEntry.getName());
+	                srcDp.setBundleEntryPossition(be, counter++);
 	                be.setBundleId(b.getBundleId());
 	                String location = (String) AccessController.doPrivileged(new PrivilegedAction() {
 						public Object run() {
@@ -860,6 +898,19 @@ public class DeploymentSessionImpl implements DeploymentSession, FrameworkListen
             wjis.closeEntry();
             actEntry = wjis.nextEntry();
         }
+    }
+    
+    /**
+     * Checks whether the specified resource entry is an icon as specified by the manifest icon header
+     * */
+    private boolean isIconResource(DeploymentPackageImpl dp, String entryName) {
+    	String iconHeader = dp.getHeader(DAConstants.DP_ICON);
+    	if (iconHeader != null) {
+    		if (iconHeader.equals(entryName) || iconHeader.equals("/"+entryName)) {
+    			return true;
+    		}
+    	}
+    	return false;
     }
     
     private void checkManifestEntryPresence(Entry entry) throws DeploymentException {

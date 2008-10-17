@@ -28,6 +28,8 @@ public class DAConstants {
     public static final String DP_NAME              = "DeploymentPackage-SymbolicName";
     public static final String DP_VERSION           = "DeploymentPackage-Version";
     public static final String DP_FIXPACK           = "DeploymentPackage-FixPack";
+    public static final String DP_DISPLAY_NAME      = "DeploymentPackage-Name";
+    public static final String DP_ICON           	= "DeploymentPackage-Icon";
     public static final String LOC_PATH             = Constants.BUNDLE_LOCALIZATION;
     public static final String BUNDLE_LOCALIZATION  = Constants.BUNDLE_LOCALIZATION;
     
@@ -59,6 +61,16 @@ public class DAConstants {
     public static final String TOPIC_UNINSTALL		= "org/osgi/service/deployment/UNINSTALL";
     public static final String TOPIC_COMPLETE		= "org/osgi/service/deployment/COMPLETE";
     public static final String EVENTPROP_DPNAME		= "deploymentpackage.name";
+    /** The human readable name of the DP localized to the default locale*/
+    public static final String EVENTPROP_DP_READABLE_NAME		= "deploymentpackage.readablename";
+    /** The currently installed version of the DP. The attribute is not present, if no version is installed:
+     * <p>
+     * <ul>in the INSTALL event, when an installDeploymentPackage was called and no earlier version is present
+     * <ul>in the COMPLETE event after the _successfully_ completing an uninstallDeploymentPackage call
+     */
+    public static final String EVENTPROP_DP_CURRENT_VERSION		= "deploymentpackage.currentversion";
+    /** The version of DP after the successful completion of the install operation (used in INSTALL event only)*/
+    public static final String EVENTPROP_DP_NEXT_VERSION		= "deploymentpackage.nextversion";
     public static final String EVENTPROP_SUCCESSFUL	= "successful";
     
 	// generic alert types
@@ -70,9 +82,18 @@ public class DAConstants {
     // Deployment subtree root
     public static final String DMT_DEPLOYMENT_ROOT;
 
+    //icon cache storage
+    public static final String ICON_STORAGE_ROOT;
+    
     static {
+    	String val = System.getProperty("org.osgi.impl.service.deploymentadmin.iconcachearea");
+    	if (val == null) {
+    		ICON_STORAGE_ROOT = "iconcache";
+    	} else {
+    		ICON_STORAGE_ROOT = val;
+    	}
     	String prop = "info.dmtree.osgi.root";
-    	String val = System.getProperty(prop);
+    	val = System.getProperty(prop);
     	if (null == val)
     		throw new RuntimeException(prop + " system property is not defined.");
     	DMT_DEPLOYMENT_ROOT = val + "/Deployment/Inventory/Deployed/";
