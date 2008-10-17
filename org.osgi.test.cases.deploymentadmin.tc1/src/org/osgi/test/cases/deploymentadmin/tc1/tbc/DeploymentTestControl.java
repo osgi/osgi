@@ -30,6 +30,9 @@
  * Date          Author(s)
  * CR            Headline
  * ===========   ==============================================================
+ * Oct 14, 2008  Stoyan Boshev
+ *             	 Added new TCK and appropriate changes to move to BND tool  
+ * ===========   ==============================================================
  * Mar 11, 2005  Luiz Felipe Guimaraes
  * 26            Implement MEG TCK 
  * ===========   ==============================================================
@@ -77,7 +80,7 @@ import org.osgi.test.cases.deploymentadmin.tc1.tbc.Event.DeploymentEventHandlerI
 import org.osgi.test.cases.deploymentadmin.tc1.tbc.util.TestingBundle;
 import org.osgi.test.cases.deploymentadmin.tc1.tbc.util.TestingDeploymentPackage;
 import org.osgi.test.cases.deploymentadmin.tc1.tbc.util.TestingResource;
-import org.osgi.test.cases.util.DefaultTestBundleControl;
+import org.osgi.test.support.compatibility.DefaultTestBundleControl;
 
 /**
  * @author Luiz Felipe Guimaraes
@@ -96,8 +99,9 @@ public class DeploymentTestControl extends DefaultTestBundleControl {
 	private HashMap packages = new HashMap();
     
     private DeploymentEventHandlerImpl deploymentEventHandler;
+    DeploymentEventHandlerActivator deploymentEventHandlerActivator;
     private PermissionWorker permWorker;
-	
+    
 	/**
 	 * <remove>Prepare for each run. It is important that a test run is properly
 	 * initialized and that each case can run standalone. To save a lot of time
@@ -107,7 +111,7 @@ public class DeploymentTestControl extends DefaultTestBundleControl {
 	 * 
 	 * @throws InvalidSyntaxException
 	 */
-	public void prepare() {
+	public void setUp() {
 		log("#before each run");
 		
 		permissionAdmin = (PermissionAdmin) getContext().getService(getContext().getServiceReference(PermissionAdmin.class.getName()));
@@ -122,7 +126,9 @@ public class DeploymentTestControl extends DefaultTestBundleControl {
 				testClasses = tb1Srv.getTestClasses(this);
 			}
 		} catch (Exception e) {
-			log("Failed to install bundle tb1.jar");
+			e.printStackTrace();
+			fail("Failed to install bundle tb1.jar");
+//			log("Failed to install bundle tb1.jar");
 		}
 
 		// set this permissions to all resource processors
@@ -131,6 +137,10 @@ public class DeploymentTestControl extends DefaultTestBundleControl {
 		setBundleServicePermissions();
         startPermissionWorker();
         //
+	}
+	
+	public String getWebServer() {
+		return super.getWebServer() + "www/";
 	}
 	
     /**
@@ -178,10 +188,23 @@ public class DeploymentTestControl extends DefaultTestBundleControl {
             getContext().addBundleListener(bundleListener);
             
             deploymentEventHandler = new DeploymentEventHandlerImpl(this);
-            DeploymentEventHandlerActivator act = new DeploymentEventHandlerActivator(deploymentEventHandler);
-            act.start(getContext());
+            deploymentEventHandlerActivator = new DeploymentEventHandlerActivator(deploymentEventHandler);
+            deploymentEventHandlerActivator.start(getContext());
 		} catch (Exception e) {
-			log("#TestControl: Failed starting Handles and Listeners");
+        	e.printStackTrace();
+			fail("Failed starting Handles and Listeners");
+//			log("#TestControl: Failed starting Handles and Listeners");
+		}
+	}
+	
+	private void uninstallHandlersAndListeners() {
+		try {
+            getContext().removeBundleListener(bundleListener);
+            deploymentEventHandlerActivator.stop(getContext());
+		} catch (Exception e) {
+        	e.printStackTrace();
+			fail("Failed starting Handles and Listeners");
+//			log("#TestControl: Failed starting Handles and Listeners");
 		}
 	}
 	
@@ -197,7 +220,6 @@ public class DeploymentTestControl extends DefaultTestBundleControl {
 			bundles = new TestingBundle[] {new TestingBundle("bundles.tb1", "1.0", "bundle001.jar"), new TestingBundle("bundles.tb2", "1.0", "bundle002.jar")};
 			dp = new TestingDeploymentPackage(DeploymentConstants.getCodeName(DeploymentConstants.SIMPLE_DP), "1.0.0", "simple.dp", bundles);
 			packages.put(""+DeploymentConstants.SIMPLE_DP, dp);
-
 			//DeploymentConstants.SIMPLE_DP_CLONE
 			dp = new TestingDeploymentPackage(DeploymentConstants.getCodeName(DeploymentConstants.SIMPLE_DP), "1.0.0", "simple_clone.dp", null);
 			packages.put(""+DeploymentConstants.SIMPLE_DP_CLONE, dp);
@@ -421,6 +443,10 @@ public class DeploymentTestControl extends DefaultTestBundleControl {
             bundles = new TestingBundle[] { new TestingBundle(DeploymentConstants.PID_RESOURCE_PROCESSOR1, "1.0", "rp_bundle.jar")};
             dp = new TestingDeploymentPackage(DeploymentConstants.getCodeName(DeploymentConstants.NON_CUSTOMIZER_DP), "1.0", "non_customizer_rp.dp", bundles);
             packages.put(""+DeploymentConstants.NON_CUSTOMIZER_DP, dp);
+			//DeploymentConstants.SIMPLE_DP2
+			bundles = new TestingBundle[] {new TestingBundle("bundles.tb1", "1.0", "bundle001.jar")};
+			dp = new TestingDeploymentPackage(DeploymentConstants.getCodeName(DeploymentConstants.SIMPLE_DP2), "1.0.0", "simple2.dp", bundles);
+            packages.put(""+DeploymentConstants.SIMPLE_DP2, dp);
 	}
 
 	/**
@@ -446,36 +472,37 @@ public class DeploymentTestControl extends DefaultTestBundleControl {
 		bundleLocation = (tb1ServiceRef!=null)?tb1ServiceRef.getBundle().getLocation():"";
 	}
 
-	/**
-	 * <remove>Prepare for each method. It is important that each method can be
-	 * executed independently of each other method. Do not keep state between
-	 * methods, if possible. This method can be used to clean up any possible
-	 * remaining state. </remove>
-	 * 
-	 */
-	public void setState() {
-		log("#before each method");
-	}
-
-	/**
-	 * Clean up after each method. Notice that during debugging many times the
-	 * unsetState is never reached.
-	 */
-	public void unsetState() {
-		log("#after each method");
-	}
+//	/**
+//	 * <remove>Prepare for each method. It is important that each method can be
+//	 * executed independently of each other method. Do not keep state between
+//	 * methods, if possible. This method can be used to clean up any possible
+//	 * remaining state. </remove>
+//	 * 
+//	 */
+//	public void setState() {
+//		log("#before each method");
+//	}
+//
+//	/**
+//	 * Clean up after each method. Notice that during debugging many times the
+//	 * unsetState is never reached.
+//	 */
+//	public void unsetState() {
+//		log("#after each method");
+//	}
 
 	/**
 	 * Clean up after a run. Notice that during debugging many times the
 	 * unprepare is never reached.
 	 */
-	public void unprepare() {
-		log("#after each run");
+	public void tearDown() {
+//		log("#after each run");
+		uninstallHandlersAndListeners();
 		getContext().removeBundleListener(bundleListener);
-    synchronized (permWorker) {
-    	permWorker.setRunning(false);
-    	permWorker.notifyAll();
-    }
+	    synchronized (permWorker) {
+	    	permWorker.setRunning(false);
+	    	permWorker.notifyAll();
+	    }
 	}
 
 	/**
@@ -582,11 +609,21 @@ public class DeploymentTestControl extends DefaultTestBundleControl {
 	public void testDeploymentPackageIsStale() {
 		testClasses[17].run();
 	}
+    //GetDisplayName
+    public void testDeploymentPackageGetDisplayName() {
+    	testClasses[18].run();
+    }
+    
+    //GetIcon
+    public void testDeploymentPackageGetIcon() {
+    	testClasses[19].run();
+    }
 
     //Manifest Format
     public void testManifestFormat() {
-    	testClasses[18].run();
+    	testClasses[20].run();
     }
+    
 	
 	/**
 	 * @return Returns the permissionAdmin.
@@ -605,10 +642,11 @@ public class DeploymentTestControl extends DefaultTestBundleControl {
 			in = url.openStream();
 			return getDeploymentAdmin().installDeploymentPackage(in);
 		} catch (MalformedURLException e) {
+        	e.printStackTrace();
 			fail("Failed to open the URL");
 		} catch (IOException e) {
-      System.out.println("Exception occured:");
-      e.printStackTrace();
+		      System.out.println("Exception occured:");
+		      e.printStackTrace();
 			fail("Failed to open an InputStream");
 		} finally {
 			if (in != null)
@@ -628,8 +666,10 @@ public class DeploymentTestControl extends DefaultTestBundleControl {
 			File file = getDPFile(url.openStream(), rename);
 			return getDeploymentAdmin().installDeploymentPackage(file.toURL().openStream());
 		} catch (MalformedURLException e) {
+        	e.printStackTrace();
 			fail("Failed to open the URL");
 		} catch (IOException e) {
+        	e.printStackTrace();
 			fail("Failed to open an InputStream");
 		}
 		return null;
@@ -672,11 +712,13 @@ public class DeploymentTestControl extends DefaultTestBundleControl {
 			try {
 				dp.uninstall();
 			} catch (DeploymentException e) {
-				log("#Deployment Package could not be uninstalled. Uninstalling forcefully...");
+//				e.printStackTrace();
+//				log("#Deployment Package could not be uninstalled. Uninstalling forcefully...");
 				try {
                     dp.uninstallForced();
                 } catch (DeploymentException e1) {
-                    log("# Failed to uninstall deployment package: "+dp.getName());
+                	e1.printStackTrace();
+//                    log("# Failed to uninstall deployment package: "+dp.getName());
                 }
 			} 
 		}
@@ -735,20 +777,20 @@ public class DeploymentTestControl extends DefaultTestBundleControl {
     
 	public void setMininumPermission() {
         PermissionInfo[] info = new PermissionInfo[] {
-                new PermissionInfo(PackagePermission.class.getName(), "*", "EXPORT, IMPORT"),
-                // to find the Deployment Admin
-                new PermissionInfo(ServicePermission.class.getName(), "*", "GET"),
-                // to load files that are passed to the Deployment Admin
-                new PermissionInfo(FilePermission.class.getName(), "<<ALL FILES>>", "READ, WRITE, EXECUTE, DELETE"),
-                // to manipulate bundles
-                new PermissionInfo(AdminPermission.class.getName(), "*", "*"),
-                // to connect to director webserver
-                new PermissionInfo(SocketPermission.class.getName(), "*", "accept,connect,listen,resolve"),
-                // to read, write in properties whenever necessary
-                new PermissionInfo(PropertyPermission.class.getName(), "*", "read,write"),
-                };
+            new PermissionInfo(PackagePermission.class.getName(), "*", "EXPORT, IMPORT"),
+            // to find the Deployment Admin
+            new PermissionInfo(ServicePermission.class.getName(), "*", "GET"),
+            // to load files that are passed to the Deployment Admin
+            new PermissionInfo(FilePermission.class.getName(), "<<ALL FILES>>", "READ, WRITE, EXECUTE, DELETE"),
+            // to manipulate bundles
+            new PermissionInfo(AdminPermission.class.getName(), "*", "*"),
+            // to connect to director webserver
+            new PermissionInfo(SocketPermission.class.getName(), "*", "accept,connect,listen,resolve"),
+            // to read, write in properties whenever necessary
+            new PermissionInfo(PropertyPermission.class.getName(), "*", "read,write"),
+        };
             
-            setAssyncPermission(info);
+        setAssyncPermission(info);
 	}
     
     /**
@@ -806,6 +848,10 @@ public class DeploymentTestControl extends DefaultTestBundleControl {
         ServiceReference[] sr = getContext().getServiceReferences(
             ResourceProcessor.class.getName(), "(service.pid=" + pid + ")");
         
-        return (sr!=null)?getContext().getService(sr[0]):null;
+        return (sr!=null)? getContext().getService(sr[0]):null;
+    }
+    
+    public DeploymentEventHandlerActivator getEventHandlerActivator() {
+    	return deploymentEventHandlerActivator;
     }
 }
