@@ -270,10 +270,15 @@ public class PluginDelivered implements DataPlugin, ReadableDataSession,
     ///////////////////////////////////////////////////////////////////////////
     // Private methods
     
-	private void remove(String[] nodeUriArr, DmtSession session, String correlator) {
-        boolean b = removeNode(new File(store, nodeUriArr[5]));
-        AlertSender.sendDeliveredRemoveAlert(b, session.getPrincipal(), correlator, 
-        		PluginCtx.convertUri(nodeUriArr, 2), pluginCtx.getNotificationService());
+	private void remove(final String[] nodeUriArr, final DmtSession session, final String correlator) {
+		Thread t = new Thread () {
+			public void run() {
+		        boolean b = removeNode(new File(store, nodeUriArr[5]));
+		        AlertSender.sendDeliveredRemoveAlert(b, session.getPrincipal(), correlator, 
+		        		PluginCtx.convertUri(nodeUriArr, 2), pluginCtx.getNotificationService());
+			}
+		};
+		t.start();
     }
 	
     private byte[] extractData(String fileName) throws IOException {
