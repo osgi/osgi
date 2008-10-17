@@ -217,9 +217,9 @@ public class Configuration {
           new String[] { "Deployment Package" }), dp);
       tbc.failException("", DeploymentException.class);
     } catch (DeploymentException e) {
-      tbc
-          .pass("A DeploymentException was correctly thrown if the Autoconf Resource processor does not have ConfigurationPermission[*,CONFIGURE]. Message: "
-              + e.getMessage());
+//      tbc
+//          .pass("A DeploymentException was correctly thrown if the Autoconf Resource processor does not have ConfigurationPermission[*,CONFIGURE]. Message: "
+//              + e.getMessage());
     } catch (Exception e) {
       e.printStackTrace();
       tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION,
@@ -250,7 +250,7 @@ public class Configuration {
 		try {
 			info = tbc.getCondPermAdmin().addConditionalPermissionInfo(DeploymentConstants.CONDITION_SIGNER, new PermissionInfo[] { new PermissionInfo(ConfigurationPermission.class.getName(),"*",ConfigurationPermission.CONFIGURE)});
 			dp = tbc.installDeploymentPackage(tbc.getWebServer() + testDP.getFilename());
-			tbc.pass("A Deployment Package was installed using only ConfigurationPermission[*,CONFIGURE].");
+//			tbc.pass("A Deployment Package was installed using only ConfigurationPermission[*,CONFIGURE].");
 		} catch (Exception e) {
       e.printStackTrace();
 			tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { 

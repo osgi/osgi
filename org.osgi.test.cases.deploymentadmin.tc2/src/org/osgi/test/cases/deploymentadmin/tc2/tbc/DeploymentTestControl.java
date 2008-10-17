@@ -76,7 +76,7 @@ import org.osgi.test.cases.deploymentadmin.tc2.tbc.util.TestingDeploymentPackage
 import org.osgi.test.cases.deploymentadmin.tc2.tbc.util.TestingManagedService;
 import org.osgi.test.cases.deploymentadmin.tc2.tbc.util.TestingManagedServiceFactory;
 import org.osgi.test.cases.deploymentadmin.tc2.tbc.util.TestingResource;
-import org.osgi.test.cases.util.DefaultTestBundleControl;
+import org.osgi.test.support.compatibility.DefaultTestBundleControl;
 
 /**
  * @author Luiz Felipe Guimaraes
@@ -94,6 +94,10 @@ public class DeploymentTestControl extends DefaultTestBundleControl {
 	private HashMap packages = new HashMap();
 	private static Vector resourceProcessorOrder = new Vector();
 	
+	public String getWebServer() {
+		return super.getWebServer() + "www/";
+	}
+
 	/**
 	 * <remove>Prepare for each run. It is important that a test run is properly
 	 * initialized and that each case can run standalone. To save a lot of time
@@ -103,7 +107,7 @@ public class DeploymentTestControl extends DefaultTestBundleControl {
 	 * 
 	 * @throws InvalidSyntaxException
 	 */
-	public void prepare() {
+	public void setUp() {
 		log("#before each run");
 		
 		permissionAdmin = (PermissionAdmin) getContext().getService(getContext().getServiceReference(PermissionAdmin.class.getName()));
@@ -292,7 +296,7 @@ public class DeploymentTestControl extends DefaultTestBundleControl {
 	 * Clean up after a run. Notice that during debugging many times the
 	 * unprepare is never reached.
 	 */
-	public void unprepare() {
+	public void tearDown() {
 		log("#after each run");
 		getContext().removeBundleListener(bundleListener);
 	}
@@ -401,6 +405,7 @@ public class DeploymentTestControl extends DefaultTestBundleControl {
 		} catch (MalformedURLException e) {
 			fail("Failed to open the URL");
 		} catch (IOException e) {
+			e.printStackTrace();
 			fail("Failed to open an InputStream");
 		} finally {
 			if (in != null)

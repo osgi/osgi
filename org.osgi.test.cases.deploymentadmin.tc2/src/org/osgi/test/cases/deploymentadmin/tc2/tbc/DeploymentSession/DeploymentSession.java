@@ -175,7 +175,7 @@ public class DeploymentSession {
 			testSessionRP.getDataFile(tbc.getBundle(testRP.getBundles()[0].getName()));
 			tbc.failException("#", SecurityException.class);
 		} catch (SecurityException e) {
-			tbc.pass(MessagesConstants.getMessage(MessagesConstants.EXCEPTION_CORRECTLY_THROWN, new String[] { "SecurityException" }));
+//			tbc.pass(MessagesConstants.getMessage(MessagesConstants.EXCEPTION_CORRECTLY_THROWN, new String[] { "SecurityException" }));
 		} catch (Exception e) {
 			tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }));
 		} finally {

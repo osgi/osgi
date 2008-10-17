@@ -110,7 +110,7 @@ public class DeploymentCustomizerPermission {
 			tbc.failException("#", IllegalArgumentException.class);
 
 		} catch (IllegalArgumentException e) {
-			tbc.pass("IllegalArgumentException correctly thrown, when passing an invalid filter name.");
+//			tbc.pass("IllegalArgumentException correctly thrown, when passing an invalid filter name.");
 		}catch (Exception e) {
 			tbc.fail(MessagesConstants.getMessage(
 					MessagesConstants.EXCEPTION_THROWN,
@@ -133,7 +133,7 @@ public class DeploymentCustomizerPermission {
 			tbc.failException("#", IllegalArgumentException.class);
 
 		} catch (IllegalArgumentException e) {
-			tbc.pass("IllegalArgumentException correctly thrown, when the list of actions contains unknown operations.");
+//			tbc.pass("IllegalArgumentException correctly thrown, when the list of actions contains unknown operations.");
 		}catch (Exception e) {
 			tbc.fail(MessagesConstants.getMessage(
 					MessagesConstants.EXCEPTION_THROWN,
@@ -156,7 +156,7 @@ public class DeploymentCustomizerPermission {
 			tbc.failException("#", IllegalArgumentException.class);
 
 		} catch (IllegalArgumentException e) {
-			tbc.pass("IllegalArgumentException correctly thrown, when Symbolic name of the target bundle is null.");
+//			tbc.pass("IllegalArgumentException correctly thrown, when Symbolic name of the target bundle is null.");
 		}catch (Exception e) {
 			tbc.fail(MessagesConstants.getMessage(
 					MessagesConstants.EXCEPTION_THROWN,
@@ -179,7 +179,7 @@ public class DeploymentCustomizerPermission {
 			tbc.failException("#", IllegalArgumentException.class);
 
 		} catch (IllegalArgumentException e) {
-			tbc.pass("IllegalArgumentException correctly thrown, when the Action string is null.");
+//			tbc.pass("IllegalArgumentException correctly thrown, when the Action string is null.");
 		}catch (Exception e) {
 			tbc.fail(MessagesConstants.getMessage(
 					MessagesConstants.EXCEPTION_THROWN,
@@ -200,7 +200,7 @@ public class DeploymentCustomizerPermission {
 			tbc.failException("#", IllegalArgumentException.class);
 
 		} catch (IllegalArgumentException e) {
-			tbc.pass("IllegalArgumentException correctly thrown, when the list of actions contains unknown operations.");
+//			tbc.pass("IllegalArgumentException correctly thrown, when the list of actions contains unknown operations.");
 		}catch (Exception e) {
 			tbc.fail(MessagesConstants.getMessage(
 					MessagesConstants.EXCEPTION_THROWN,

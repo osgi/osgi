@@ -101,6 +101,7 @@ public class ResourceProcessor {
 			
 			tbc.assertTrue("Asserts that DeploymentAdmin calls the methods of a resource processor in the specified order when it is installing",resourceProcessor.isInstallUpdateOrdered());
 		} catch (Exception e) {
+			e.printStackTrace();
 			tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }));
 		} finally {
 			tbc.uninstall(new DeploymentPackage[] { dpInstallResource,dpResourceProcessor });
@@ -330,6 +331,7 @@ public class ResourceProcessor {
             dp2 = tbc.installDeploymentPackage(tbc.getWebServer() + testDP2.getFilename());
             tbc.failException("#", DeploymentException.class);
         } catch (DeploymentException e) {
+        	e.printStackTrace();
             tbc.assertEquals("DeploymentException.CODE_FOREIGN_CUSTOMIZER correctly thrown", DeploymentException.CODE_FOREIGN_CUSTOMIZER, e.getCode());
         } catch (Exception e) {
             tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }));

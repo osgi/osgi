@@ -118,6 +118,7 @@ public class InstallSession {
         try {
             rp = tbc.installDeploymentPackage(tbc.getWebServer() + testRP.getFilename());
         } catch (Exception e) {
+        	e.printStackTrace();
             tbc.fail("Failed to install testing resource processor");
         }
     }
@@ -166,6 +167,7 @@ public class InstallSession {
                 
                 tbc.assertTrue("Roll back was called during a failed installation", tsrp.isRolledback());
             } catch (Exception e1) {
+            	e1.printStackTrace();
                 tbc.fail("Failed to get resource processor from registry");
             }
         } catch (Exception e) {
@@ -530,7 +532,7 @@ public class InstallSession {
             TestingDeploymentPackage source = tbc.getTestingDeploymentPackage(DeploymentConstants.SIMPLE_UNINSTALL_BUNDLE);
             dp2 = tbc.installDeploymentPackage(tbc.getWebServer() + source.getFilename()); // If must not thrown any exceptions
             
-            tbc.pass("Asserts that any exceptions thrown during dropped() method must ignored");
+//            tbc.pass("Asserts that any exceptions thrown during dropped() method must ignored");
         } catch (Exception e) {
             tbc.fail(MessagesConstants.getMessage(
                 MessagesConstants.UNEXPECTED_EXCEPTION, new String[]{e.getClass().getName()}));
@@ -682,7 +684,7 @@ public class InstallSession {
                 Bundle b = log.getBundle();
                 if (b.getSymbolicName().indexOf("deployment") != -1) {
                     found = true;
-                    tbc.pass("Deployment Admin bundle logged the start bundle failure");
+//                    tbc.pass("Deployment Admin bundle logged the start bundle failure");
                 }
             }
             if (!found) {
