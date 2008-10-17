@@ -37,10 +37,13 @@
 
 package org.osgi.test.cases.deploymentadmin.tc1.tb1.DeploymentAdmin;
 
+import java.io.InputStream;
+import java.net.URL;
 import java.util.Iterator;
 import java.util.Vector;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleEvent;
+import org.osgi.framework.Version;
 import org.osgi.service.deploymentadmin.DeploymentException;
 import org.osgi.service.deploymentadmin.DeploymentPackage;
 import org.osgi.service.event.Event;
@@ -86,7 +89,10 @@ public class InstallDeploymentPackageUseCases implements TestInterface {
 		testInstallDeploymentPackageUseCases013();
         testInstallDeploymentPackageUseCases014();
         testInstallDeploymentPackageUseCases015();
-	}
+        testInstallDeploymentPackageUseCases016();
+        testInstallDeploymentPackageUseCases017();
+        testInstallDeploymentPackageUseCases018();
+    }
     
     /**
      * Sets permission needed and wait for PermissionWorker
@@ -116,15 +122,15 @@ public class InstallDeploymentPackageUseCases implements TestInterface {
             deploymentEventHandler.setVerifying(true);
 			dp = tbc.installDeploymentPackage(tbc.getWebServer() + testDP.getFilename());
 			synchronized (tbc) {
-        if(!deploymentEventHandler.isInstall()){
+			    if(!deploymentEventHandler.isInstall()){
 				  tbc.wait(DeploymentConstants.TIMEOUT);
-        }
+			    }
 			}
             String prop = (String)findProperty("deploymentpackage.name");
 			tbc.assertTrue("An install event occured", deploymentEventHandler.isInstall());
 			tbc.assertEquals("The installed deployment package is " + testDP.getName(), testDP.getName(), prop);
 		} catch (Exception e) {
-      e.printStackTrace();
+			e.printStackTrace();
 			tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }));
 		} finally {
 			tbc.uninstall(dp);
@@ -148,12 +154,12 @@ public class InstallDeploymentPackageUseCases implements TestInterface {
             deploymentEventHandler.reset();
             deploymentEventHandler.setHandlingUninstall(true);
             deploymentEventHandler.setVerifying(true);
-      tbc.uninstall(dp);
+            tbc.uninstall(dp);
 			synchronized (tbc) {
 				// waiting for uninstall event
-        if(!deploymentEventHandler.isUninstall()){
+		        if(!deploymentEventHandler.isUninstall()){
 				  tbc.wait(DeploymentConstants.TIMEOUT);
-        }
+		        }
 			}
 
 			String prop = (String)findProperty("deploymentpackage.name");
@@ -161,7 +167,7 @@ public class InstallDeploymentPackageUseCases implements TestInterface {
 			tbc.assertEquals("The installed deployment package is " + testDP.getName(), testDP.getName(), prop);
 			
 		} catch (Exception e) {
-      e.printStackTrace();
+			e.printStackTrace();
 			tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }));
 		} finally {
 			deploymentEventHandler.reset();
@@ -183,11 +189,11 @@ public class InstallDeploymentPackageUseCases implements TestInterface {
             deploymentEventHandler.reset();
             deploymentEventHandler.setHandlingComplete(true);
             deploymentEventHandler.setVerifying(true);
-      dp = tbc.installDeploymentPackage(tbc.getWebServer() + testDP.getFilename());
+            dp = tbc.installDeploymentPackage(tbc.getWebServer() + testDP.getFilename());
 			synchronized (tbc) {
-        if(!deploymentEventHandler.isComplete()){
+		        if(!deploymentEventHandler.isComplete()){
 				  tbc.wait(DeploymentConstants.TIMEOUT);
-        }
+		        }
 			}
 			
 			String dpNameProp = (String)findProperty("deploymentpackage.name");
@@ -197,7 +203,7 @@ public class InstallDeploymentPackageUseCases implements TestInterface {
 			tbc.assertTrue("The installation of deployment package was successfull ", successProp.booleanValue());
 			
 		} catch (Exception e) {
-      e.printStackTrace();
+			e.printStackTrace();
 			tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }));
 		} finally {
 			tbc.uninstall(dp);
@@ -216,17 +222,16 @@ public class InstallDeploymentPackageUseCases implements TestInterface {
 
 		try {
 			TestingDeploymentPackage testDP = tbc.getTestingDeploymentPackage(DeploymentConstants.SIMPLE_DP);
-			dp = tbc.installDeploymentPackage(tbc.getWebServer() + testDP.getFilename());
-
             deploymentEventHandler.reset();
             deploymentEventHandler.setHandlingComplete(true);
             deploymentEventHandler.setHandlingUninstall(true);
             deploymentEventHandler.setVerifying(true);
+			dp = tbc.installDeploymentPackage(tbc.getWebServer() + testDP.getFilename());
 			tbc.uninstall(dp);
 			synchronized (tbc) {
-        if(!deploymentEventHandler.isComplete()){
-  				tbc.wait(DeploymentConstants.TIMEOUT);
-        }
+		        if(!deploymentEventHandler.isComplete()){
+	  				tbc.wait(DeploymentConstants.TIMEOUT);
+		        }
 			}
 			
 			String dpNameProp = (String) findProperty("deploymentpackage.name");
@@ -236,7 +241,7 @@ public class InstallDeploymentPackageUseCases implements TestInterface {
 			tbc.assertTrue("The installation of deployment package was successfull ", successProp.booleanValue());
 
 		} catch (Exception e) {
-      e.printStackTrace();
+			e.printStackTrace();
 			tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }));
 		} finally {
 			deploymentEventHandler.reset();
@@ -263,7 +268,7 @@ public class InstallDeploymentPackageUseCases implements TestInterface {
 			tbc.assertTrue("Deployment Admin correctly set osgi-dp in location:", location.startsWith(DeploymentConstants.OSGI_DP_LOCATION));
 			tbc.assertEquals("Deployment Admin correctly set bundle symbolic name in location:", bsn, location.substring(location.indexOf(':')+1));
 		} catch (Exception e) {
-      e.printStackTrace();
+			e.printStackTrace();
 			tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }));
 		} finally {
 			tbc.uninstall(dp);
@@ -284,9 +289,9 @@ public class InstallDeploymentPackageUseCases implements TestInterface {
 			dp = tbc.installDeploymentPackage(tbc.getWebServer() + testDP.getFilename());
 			tbc.failException("#", DeploymentException.class);
 		} catch (DeploymentException e) {
-			tbc.pass("Correctly failed to install a deployment package with wrong extension");
+//			tbc.pass("Correctly failed to install a deployment package with wrong extension");
 		} catch (Exception e) {
-      e.printStackTrace();
+			e.printStackTrace();
 			tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }));
 		} finally {
 			tbc.uninstall(dp);
@@ -309,7 +314,7 @@ public class InstallDeploymentPackageUseCases implements TestInterface {
 		} catch (DeploymentException e) {
 			tbc.assertEquals("Correctly failed to install untrusted deployment package", DeploymentException.CODE_SIGNING_ERROR, e.getCode());
 		} catch (Exception e) {
-      e.printStackTrace();
+			e.printStackTrace();
 			tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }));
 		} finally {
 			tbc.uninstall(dp);
@@ -330,9 +335,9 @@ public class InstallDeploymentPackageUseCases implements TestInterface {
 			dp = tbc.installDeploymentPackage(tbc.getWebServer() + testDP.getFilename());
 			tbc.failException("#", DeploymentException.class);
 		} catch (DeploymentException e) {
-			tbc.pass("Correctly failed to install a deployment package with a wrong path name to a bundle in the jar file.");
+//			tbc.pass("Correctly failed to install a deployment package with a wrong path name to a bundle in the jar file.");
 		} catch (Exception e) {
-      e.printStackTrace();
+			e.printStackTrace();
 			tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }));
 		} finally {
 			tbc.uninstall(dp);
@@ -390,7 +395,7 @@ public class InstallDeploymentPackageUseCases implements TestInterface {
             }
 			tbc.assertTrue("The two testing bundles in the deployment package were stopped", (count==-1));
 		} catch (Exception e) {
-      e.printStackTrace();
+			e.printStackTrace();
 			tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }));
 		} finally {
             listener.reset();
@@ -410,9 +415,9 @@ public class InstallDeploymentPackageUseCases implements TestInterface {
 			TestingDeploymentPackage testDP = tbc.getTestingDeploymentPackage(DeploymentConstants.BUNDLE_THROWS_EXCEPTION_STOP_DP);
 			dp = tbc.installDeploymentPackage(tbc.getWebServer() + testDP.getFilename());
 			dp.uninstall();
-			tbc.pass("Exception thrown during stopping of a bundle was correctly ignored");
+//			tbc.pass("Exception thrown during stopping of a bundle was correctly ignored");
 		} catch (Exception e) {
-      e.printStackTrace();
+			e.printStackTrace();
 			tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }));
 		}
 	}
@@ -431,7 +436,7 @@ public class InstallDeploymentPackageUseCases implements TestInterface {
             dp = tbc.installDeploymentPackage(tbc.getWebServer() + testDP.getFilename());
             tbc.failException("#", DeploymentException.class);
         } catch (DeploymentException e) {
-            tbc.pass("DeploymentException correctly thrown");
+//            tbc.pass("DeploymentException correctly thrown");
         } catch (Exception e) {
             e.printStackTrace();
             tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }));
@@ -518,7 +523,7 @@ public class InstallDeploymentPackageUseCases implements TestInterface {
 				tbc.assertTrue("The uninstallation of deployment package was NOT successfull ",
 								!successProp.booleanValue());
 			} catch (Exception ex) {
-        e.printStackTrace();
+				e.printStackTrace();
 				tbc.fail(MessagesConstants.getMessage(
 						MessagesConstants.UNEXPECTED_EXCEPTION,
 						new String[] { ex.getClass().getName() }));
@@ -546,7 +551,7 @@ public class InstallDeploymentPackageUseCases implements TestInterface {
         try {
             testDP = tbc.getTestingDeploymentPackage(DeploymentConstants.STRANGE_PATH_DP);
             dp = tbc.installDeploymentPackage(tbc.getWebServer() + testDP.getFilename());
-            tbc.pass("No exception is thrown during the installation of a DP with strange path to bundles");
+//            tbc.pass("No exception is thrown during the installation of a DP with strange path to bundles");
         } catch (Exception e) {
             e.printStackTrace();
             tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }));
@@ -569,7 +574,7 @@ public class InstallDeploymentPackageUseCases implements TestInterface {
             dp = tbc.installDeploymentPackage(tbc.getWebServer() + testDP.getFilename());
             tbc.failException("#", DeploymentException.class);
         } catch (DeploymentException e) {
-            tbc.pass("DeploymentException correctly thrown");
+//            tbc.pass("DeploymentException correctly thrown");
         } catch (Exception e) {
             e.printStackTrace();
             tbc.fail(MessagesConstants.getMessage(
@@ -579,6 +584,167 @@ public class InstallDeploymentPackageUseCases implements TestInterface {
         }
     }
     
+	/**
+	 * Asserts that an event with deploymentpackage.readablename property is sent when an installation of dp is done.
+	 * 
+	 * @spec 
+	 */		
+	private void testInstallDeploymentPackageUseCases016() {
+		tbc.log("#testInstallDeploymentPackageUseCases016");
+		DeploymentPackage dp = null;
+		try {
+			TestingDeploymentPackage testDP = tbc.getTestingDeploymentPackage(DeploymentConstants.SIMPLE_DP2);
+			
+            deploymentEventHandler.reset();
+            deploymentEventHandler.setVerifying(true);
+			dp = tbc.installDeploymentPackage(tbc.getWebServer() + testDP.getFilename());
+			synchronized (tbc) {
+			    if(!deploymentEventHandler.isInstall()){
+				  tbc.wait(DeploymentConstants.TIMEOUT);
+			    }
+			}
+            String prop = (String)findProperty("deploymentpackage.name");
+			tbc.assertTrue("An install event occured", deploymentEventHandler.isInstall());
+			tbc.assertEquals("The installed deployment package is " + testDP.getName(), testDP.getName(), prop);
+			
+            prop = (String)findProperty("deploymentpackage.readablename");
+			tbc.assertNotNull("The event contains the display name property", prop);
+			tbc.assertEquals("The event display name property is the same as the one of the DP", prop, dp.getDisplayName());
+            
+            deploymentEventHandler.setVerifying(false);
+		} catch (Exception e) {
+			e.printStackTrace();
+			tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }));
+		} finally {
+			try {
+				tbc.getEventHandlerActivator().stop(tbc.getContext());
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			tbc.uninstall(dp);
+			deploymentEventHandler.reset();
+		}
+	}
+
+	/**
+	 * Asserts that an event with the deploymentpackage.nextversion property is sent when an installation of dp is completed.
+	 * 
+	 * @spec 
+	 */		
+	private void testInstallDeploymentPackageUseCases017() {
+		tbc.log("#testInstallDeploymentPackageUseCases017");
+		DeploymentPackage dp = null;
+		try {
+			TestingDeploymentPackage testDP = tbc.getTestingDeploymentPackage(DeploymentConstants.SIMPLE_DP);
+			
+			tbc.getEventHandlerActivator().start(tbc.getContext());
+            deploymentEventHandler.reset();
+            deploymentEventHandler.setVerifying(true);
+            deploymentEventHandler.setHandlingComplete(true);
+			dp = tbc.installDeploymentPackage(tbc.getWebServer() + testDP.getFilename());
+			synchronized (tbc) {
+			    if(!deploymentEventHandler.isComplete()){
+				  tbc.wait(DeploymentConstants.TIMEOUT);
+			    }
+			}
+            Version ver = (Version)findProperty("deploymentpackage.nextversion");
+			tbc.assertTrue("A complete event occured", deploymentEventHandler.isComplete());
+			tbc.assertNotNull("The next version property is set", ver);
+			tbc.assertEquals("The next version property correctly presents the DP version", ver, dp.getVersion());
+		} catch (Exception e) {
+			e.printStackTrace();
+			tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }));
+		} finally {
+			try {
+				tbc.getEventHandlerActivator().stop(tbc.getContext());
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			tbc.uninstall(dp);
+		}
+	}
+	
+	/**
+	 * Asserts that an event with the deploymentpackage.currentversion property is correctly sent when an installation of dp is being performed.
+	 * 
+	 * @spec 
+	 */		
+	private void testInstallDeploymentPackageUseCases018() {
+		tbc.log("#testInstallDeploymentPackageUseCases018");
+		DeploymentPackage dp = null;
+		DeploymentPackage newDP = null;
+		boolean newDPInstalled = false;
+		boolean dpInstalled = false;
+		try {
+			TestingDeploymentPackage testDP = tbc.getTestingDeploymentPackage(DeploymentConstants.SIMPLE_DP);
+			
+			tbc.getEventHandlerActivator().start(tbc.getContext());
+            deploymentEventHandler.reset();
+            deploymentEventHandler.setVerifying(true);
+            deploymentEventHandler.setHandlingComplete(true);
+			dp = tbc.installDeploymentPackage(tbc.getWebServer() + testDP.getFilename());
+			dpInstalled = true;
+			synchronized (tbc) {
+			    if(!deploymentEventHandler.isComplete()){
+				  tbc.wait(DeploymentConstants.TIMEOUT);
+			    }
+			}
+            Version ver1 = (Version)findProperty("deploymentpackage.currentversion");
+			tbc.assertTrue("Check complete event occured", deploymentEventHandler.isComplete());
+			tbc.assertNull("The current version property must not be set", ver1);
+            Version ver = (Version)findProperty("deploymentpackage.nextversion");
+			
+			testDP = tbc.getTestingDeploymentPackage(DeploymentConstants.SIMPLE_FIX_PACK_DP);
+            deploymentEventHandler.reset();
+            deploymentEventHandler.setVerifying(true);
+            deploymentEventHandler.setHandlingComplete(true);
+			newDP = tbc.installDeploymentPackage(tbc.getWebServer() + testDP.getFilename());
+			newDPInstalled = true;
+			synchronized (tbc) {
+			    if(!deploymentEventHandler.isComplete()){
+				  tbc.wait(DeploymentConstants.TIMEOUT);
+			    }
+			}
+            Version ver2 = (Version)findProperty("deploymentpackage.currentversion");
+			tbc.assertTrue("Check complete event occured", deploymentEventHandler.isComplete());
+			tbc.assertNotNull("The current version property must be set", ver2);
+			tbc.assertEquals("The current version property must be equal to the old DP's version", ver, ver2);
+			
+            deploymentEventHandler.reset();
+            deploymentEventHandler.setVerifying(true);
+            deploymentEventHandler.setHandlingComplete(true);
+            tbc.uninstall(newDP);
+			newDPInstalled = false;
+			dpInstalled = false;
+			synchronized (tbc) {
+			    if(!deploymentEventHandler.isComplete()){
+				  tbc.wait(DeploymentConstants.TIMEOUT);
+			    }
+			}
+			Vector events = deploymentEventHandler.getEvents();
+			Event e = null;
+			for (int i = 0; i < events.size(); i++) {
+				Event event = (Event)events.elementAt(i);
+				if (event.getTopic().equals("org/osgi/service/deployment/COMPLETE")) {
+					e = event;
+					break;
+				}
+			}
+			tbc.assertTrue("Check that complete event occured", deploymentEventHandler.isComplete());
+            ver2 = (Version)e.getProperty("deploymentpackage.currentversion");
+			tbc.assertNull("The current version property must not be set", ver2);
+		} catch (Exception e) {
+			e.printStackTrace();
+			tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }));
+		} finally {
+			if (dpInstalled) {
+				tbc.uninstall(dp);
+			} else if (newDPInstalled) {
+				tbc.uninstall(newDP);
+			}
+			deploymentEventHandler.reset();
+		}
+	}
     /**
      * @param string
      * @return
