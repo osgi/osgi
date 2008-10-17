@@ -20,6 +20,7 @@ import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.TimerTask;
+import java.util.Vector;
 
 import org.osgi.framework.Filter;
 import org.osgi.service.discovery.Discovery;
@@ -37,6 +38,8 @@ public class InformListenerTask extends TimerTask {
 	private Map listener;
 	private Discovery discovery;
 
+	private ServiceEndpointDescription[] lastLookupResult = new ServiceEndpointDescription[0];
+
 	/**
 	 * 
 	 * @param listeners
@@ -50,25 +53,65 @@ public class InformListenerTask extends TimerTask {
 	}
 
 	/**
-	 * 
+	 * TODO this code looks crap
 	 * 
 	 * @see java.lang.Runnable#run()
 	 */
 	public void run() {
-		if (listener.size() != 0) {
-			ServiceEndpointDescription[] descriptions = discovery.findService(
-					null, null);
-			for (int i = 0; i < descriptions.length; i++) {
-				ServiceEndpointDescription descr = descriptions[i];
-				Hashtable props = new Hashtable(descr.getProperties());
-				Iterator it = listener.keySet().iterator();
-				while (it.hasNext()) {
-					ServiceListener l = (ServiceListener) it.next();
-					Filter f = (Filter) listener.get(l);
-					if (f.match(props)) {
-						l.serviceAvailable(descr);
+		synchronized (listener) {
+			if (listener.size() != 0) {
+				ServiceEndpointDescription[] descriptions = discovery
+						.findService(null, null);
+				Vector availableServices = new Vector();
+				for (int i = 0; i < descriptions.length; i++) {
+					ServiceEndpointDescription descr = descriptions[i];
+					Hashtable props = new Hashtable(descr.getProperties());
+					// walk over the registered listeners
+					Iterator it = listener.keySet().iterator();
+					while (it.hasNext()) {
+						ServiceListener l = (ServiceListener) it.next();
+						Filter f = (Filter) listener.get(l);
+						// check if the listeners filter matches the given
+						// description properties
+						if (f.match(props)) {
+							ServiceEndpointDescription existingDescr = null;
+							boolean exists = false;
+							// check if this a new service description or not
+							for (int j = 0; j < lastLookupResult.length; j++) {
+								if (lastLookupResult[j].equals(descr)) {
+									exists = true;
+									existingDescr = descr;
+									availableServices.add(new Integer(j));
+								}
+								if (exists) {
+									// notify one listener that a service
+									// description matches the specified filter
+									// and
+									// does exist before
+									l.serviceModified(existingDescr, descr);
+								} else {
+									// notify one listener that a service
+									// description matches the specified filter
+									// and
+									// is new to him
+									l.serviceAvailable(descr);
+								}
+							}
+						}
 					}
 				}
+				// notify all about unavailable services
+				for (int i = 0; i < lastLookupResult.length; i++) {
+					if (!availableServices.contains(new Integer(i))) {
+						Iterator it = listener.keySet().iterator();
+						while (it.hasNext()) {
+							ServiceListener l = (ServiceListener) it.next();
+							l.serviceUnavailable(lastLookupResult[i]);
+						}
+					}
+				}
+				// now store the last find result for the next check
+				lastLookupResult = descriptions;
 			}
 		}
 	}

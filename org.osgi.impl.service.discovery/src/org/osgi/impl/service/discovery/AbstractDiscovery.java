@@ -80,7 +80,9 @@ public abstract class AbstractDiscovery implements Discovery {
 			logService.log(LogService.LOG_DEBUG, "destroy");
 		}
 		if (listenerAndFilter != null) {
-			listenerAndFilter.clear();
+			synchronized (listenerAndFilter) {
+				listenerAndFilter.clear();
+			}
 			listenerAndFilter = null;
 		}
 	}
