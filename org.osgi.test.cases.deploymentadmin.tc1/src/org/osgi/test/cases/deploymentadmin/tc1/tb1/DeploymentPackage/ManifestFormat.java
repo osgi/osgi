@@ -90,7 +90,7 @@ public class ManifestFormat implements TestInterface {
             dp = tbc.installDeploymentPackage(tbc.getWebServer() + testDP.getFilename());
             tbc.failException("#", DeploymentException.class);
         } catch (DeploymentException e) {
-            tbc.pass("Wrong DeploymentPackage-SymbolicName manifest cannot be installed");
+//            tbc.pass("Wrong DeploymentPackage-SymbolicName manifest cannot be installed");
         } catch (Exception e) {
             tbc.fail(MessagesConstants.getMessage(MessagesConstants.EXCEPTION_THROWN, new String[] {"DeploymentException", e.getClass().getName() }));
         } finally {
@@ -112,7 +112,7 @@ public class ManifestFormat implements TestInterface {
             dp = tbc.installDeploymentPackage(tbc.getWebServer() + testDP.getFilename());
             tbc.failException("#", DeploymentException.class);
         } catch (DeploymentException e) {
-            tbc.pass("Wrong DeploymentPackage-Version manifest cannot be installed");
+//            tbc.pass("Wrong DeploymentPackage-Version manifest cannot be installed");
         } catch (Exception e) {
             tbc.fail(MessagesConstants.getMessage(MessagesConstants.EXCEPTION_THROWN, new String[] {"DeploymentException", e.getClass().getName() }));
         } finally {
@@ -134,7 +134,7 @@ public class ManifestFormat implements TestInterface {
             dp = tbc.installDeploymentPackage(tbc.getWebServer() + testDP.getFilename());
             tbc.failException("#", DeploymentException.class);
         } catch (DeploymentException e) {
-            tbc.pass("Wrong DeploymentPackage-FixPack manifest cannot be installed");
+//            tbc.pass("Wrong DeploymentPackage-FixPack manifest cannot be installed");
         } catch (Exception e) {
             tbc.fail(MessagesConstants.getMessage(MessagesConstants.EXCEPTION_THROWN, new String[] {"DeploymentException", e.getClass().getName() }));
         } finally {
@@ -156,7 +156,7 @@ public class ManifestFormat implements TestInterface {
             dp = tbc.installDeploymentPackage(tbc.getWebServer() + testDP.getFilename());
             tbc.failException("#", DeploymentException.class);
         } catch (DeploymentException e) {
-            tbc.pass("Wrong Bundle-SymbolicName manifest cannot be installed");
+//            tbc.pass("Wrong Bundle-SymbolicName manifest cannot be installed");
         } catch (Exception e) {
             tbc.fail(MessagesConstants.getMessage(MessagesConstants.EXCEPTION_THROWN, new String[] {"DeploymentException", e.getClass().getName() }));
         } finally {
@@ -178,7 +178,7 @@ public class ManifestFormat implements TestInterface {
             dp = tbc.installDeploymentPackage(tbc.getWebServer() + testDP.getFilename());
             tbc.failException("#", DeploymentException.class);
         } catch (DeploymentException e) {
-            tbc.pass("Wrong Bundle-Version manifest cannot be installed");
+//            tbc.pass("Wrong Bundle-Version manifest cannot be installed");
         } catch (Exception e) {
             tbc.fail(MessagesConstants.getMessage(MessagesConstants.EXCEPTION_THROWN, new String[] {"DeploymentException", e.getClass().getName() }));
         } finally {
@@ -200,7 +200,7 @@ public class ManifestFormat implements TestInterface {
             dp = tbc.installDeploymentPackage(tbc.getWebServer() + testDP.getFilename());
             tbc.failException("#", DeploymentException.class);
         } catch (DeploymentException e) {
-            tbc.pass("Wrong Resource-Processor manifest cannot be installed");
+//            tbc.pass("Wrong Resource-Processor manifest cannot be installed");
         } catch (Exception e) {
             tbc.fail(MessagesConstants.getMessage(MessagesConstants.EXCEPTION_THROWN, new String[] {"DeploymentException", e.getClass().getName() }));
         } finally {
@@ -222,7 +222,7 @@ public class ManifestFormat implements TestInterface {
             dp = tbc.installDeploymentPackage(tbc.getWebServer() + testDP.getFilename());
             tbc.failException("#", DeploymentException.class);
         } catch (DeploymentException e) {
-            tbc.pass("Wrong DeploymentPackage-Missing manifest cannot be installed");
+//            tbc.pass("Wrong DeploymentPackage-Missing manifest cannot be installed");
         } catch (Exception e) {
             tbc.fail(MessagesConstants.getMessage(MessagesConstants.EXCEPTION_THROWN, new String[] {"DeploymentException", e.getClass().getName() }));
         } finally {

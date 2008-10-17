@@ -516,7 +516,7 @@ public class GetHeader implements TestInterface {
         	fixPackDP.getHeader(DeploymentConstants.DP_HEADER_CONTACT_ADRESS);
         	tbc.failException("", SecurityException.class);
         } catch (SecurityException e) {
-            tbc.pass(MessagesConstants.getMessage(MessagesConstants.EXCEPTION_CORRECTLY_THROWN, new String[] { "SecurityException" }));			
+//            tbc.pass(MessagesConstants.getMessage(MessagesConstants.EXCEPTION_CORRECTLY_THROWN, new String[] { "SecurityException" }));			
 		} catch (Exception e) {
             tbc.fail(MessagesConstants.getMessage(MessagesConstants.EXCEPTION_THROWN, new String[] {"SecurityException", e.getClass().getName() }));
 		} finally {
