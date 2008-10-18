@@ -257,6 +257,11 @@ public class SLPServiceDescriptionAdapter implements ServiceEndpointDescription 
 			throws ServiceLocationException {
 		String interf = convertJavaInterface2Path(interfaceName);
 		String path = createStringFromProperties(properties);
+
+		// add interface as property to enable LDAP filtering on it
+		path = appendPropertyToURLPath(path,
+				ServiceEndpointDescription.PROP_KEY_INTERFACE_NAME,
+				interfaceName);
 		if (version != null)
 			path = appendPropertyToURLPath(path,
 					ServiceEndpointDescription.PROP_KEY_VERSION, version);
@@ -359,6 +364,12 @@ public class SLPServiceDescriptionAdapter implements ServiceEndpointDescription 
 		}
 		javaInterfaceAndFilters.put(interfaceName, version);
 
+		// Put interface and version information to properties since base for matching
+		properties.put(ServiceEndpointDescription.PROP_KEY_INTERFACE_NAME,
+				new String[] { interfaceName });
+		properties.put(ServiceEndpointDescription.PROP_KEY_VERSION,
+				new String[] { version });
+
 		// Get endpoint-interface if it exists
 		Object endpointInterfacesValue = properties
 				.get(ServiceEndpointDescription.PROP_KEY_PROTOCOL_SPECIFIC_INTERFACE_NAME);
@@ -389,14 +400,18 @@ public class SLPServiceDescriptionAdapter implements ServiceEndpointDescription 
 				String key;
 				String value;
 
-				// TODO de-escape escaped chars
 				try {
 					while (st.hasMoreTokens()) {
-						key = st.nextToken();
+						key = deescapeReservedChars(st.nextToken());
+						
 						if (st.hasMoreTokens())
 							value = st.nextToken();
 						else
 							value = "";
+						
+						//TODO check whether got list of values --> create array. This should be done befor deescaping chars.
+						
+						value = deescapeReservedChars(value);
 
 						properties.put(key, value);
 					}
@@ -515,9 +530,18 @@ public class SLPServiceDescriptionAdapter implements ServiceEndpointDescription 
 	 */
 	public static String deescapeReservedChars(String value) {
 		// tokenize escapedchars as extra chars
-		StringTokenizer tokenizer = new StringTokenizer(value, SLPServiceDescriptionAdapter.ESCAPING_CHARACTER);
-		//TODO finish
-		return null;
+		StringTokenizer tokenizer = new StringTokenizer(value,
+				SLPServiceDescriptionAdapter.ESCAPING_CHARACTER);
+
+		StringBuffer buffer = new StringBuffer(tokenizer.nextToken());
+		while (tokenizer.hasMoreTokens()) {
+			String token = tokenizer.nextToken();
+			if (token.length() >= 2) {
+				buffer.append((char)Integer.parseInt(token.substring(0, 2), 16));
+				buffer.append(token.substring(2));
+			}
+		}
+		return buffer.toString();
 	}
 
 	/**
@@ -532,37 +556,15 @@ public class SLPServiceDescriptionAdapter implements ServiceEndpointDescription 
 		StringTokenizer tokenizer = new StringTokenizer(value, reservedChars,
 				true);
 
-		boolean isReservedChar = false;
-		// if there is only one token
-		if (tokenizer.countTokens() == 1) {
-			String token = tokenizer.nextToken();
-			// then it might be a reserved char
-			if (token.length() == 1) {
-				// if it's a reserved char
-				if (reservedChars.indexOf(token.charAt(0)) == -1)
-					isReservedChar = true;
-				else
-					return value;
-			}
-			// apparently there are no reserved chars
-			else
-				return value;
-		}
 		StringBuffer buffer = new StringBuffer();
 		while (tokenizer.hasMoreTokens()) {
-			if (isReservedChar) {
-				String token = tokenizer.nextToken();
-				if (token.length() != 1) {
-					// TODO log
-					throw new RuntimeException(
-							"Error while escaping reserved characters.");
-				}
-				buffer.append(ESCAPING_CHARACTER + Integer.toHexString(token.charAt(0)));
-				isReservedChar = false;
+			String token = tokenizer.nextToken();
+			if (token.length() == 1 && reservedChars.indexOf(token.charAt(0)) != -1)
+			{
+				buffer.append(ESCAPING_CHARACTER
+						+ Integer.toHexString(token.charAt(0)));
 			} else {
-				buffer.append(tokenizer.nextToken());
-				// next token will be reserved char
-				isReservedChar = true;
+				buffer.append(token);
 			}
 		}
 
