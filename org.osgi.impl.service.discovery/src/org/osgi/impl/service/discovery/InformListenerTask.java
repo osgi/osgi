@@ -31,14 +31,14 @@ import org.osgi.service.discovery.ServiceListener;
  * A TimerTask that compares in its run method the registered filters with the
  * available services and informs the listeners if its filter matches.
  * 
- * @version 0.5
+ * @version 0.6
  * @author Thomas Kiesslich
  */
 public class InformListenerTask extends TimerTask {
-	private Map listener;
+	private Map listeners;
 	private Discovery discovery;
 
-	private ServiceEndpointDescription[] lastLookupResult = new ServiceEndpointDescription[0];
+	private ServiceEndpointDescription[] lastLookupResult = null;
 
 	/**
 	 * 
@@ -47,70 +47,107 @@ public class InformListenerTask extends TimerTask {
 	 * @param disco
 	 *            the Instance of Discovery to get the published services from
 	 */
-	public InformListenerTask(Map listeners, Discovery disco) {
-		listener = listeners;
+	public InformListenerTask(Map serviceListeners, Discovery disco) {
+		listeners = serviceListeners;
 		discovery = disco;
 	}
 
 	/**
-	 * TODO this code looks crap
 	 * 
 	 * @see java.lang.Runnable#run()
 	 */
 	public void run() {
-		synchronized (listener) {
-			if (listener.size() != 0) {
+		synchronized (listeners) {
+			if (listeners.size() != 0) {
 				ServiceEndpointDescription[] descriptions = discovery
 						.findService(null, null);
 				Vector availableServices = new Vector();
-				for (int i = 0; i < descriptions.length; i++) {
-					ServiceEndpointDescription descr = descriptions[i];
-					// walk over the registered listeners
-					Iterator it = listener.keySet().iterator();
-					while (it.hasNext()) {
-						ServiceListener l = (ServiceListener) it.next();
-						Filter f = (Filter) listener.get(l);
-						// check if the listeners filter matches the given
-						// description properties
-						if (f.match(new Hashtable(descr.getProperties()))) {
-							ServiceEndpointDescription existingDescr = null;
-							boolean exists = false;
-							// check if this a new service description or not
-							for (int j = 0; j < lastLookupResult.length; j++) {
-								if (lastLookupResult[j].equals(descr)) {
-									exists = true;
-									existingDescr = descr;
-									availableServices.add(new Integer(j));
-								}
-								if (exists) {
-									// notify one listener that a service
-									// description matches the specified filter
-									// and
-									// does exist before
-									l.serviceModified(existingDescr, descr);
-								} else {
-									// notify one listener that a service
-									// description matches the specified filter
-									// and
-									// is new to him
-									l.serviceAvailable(descr);
-								}
-							}
-						}
-					}
-				}
+				notifyAvailableServices(descriptions, availableServices);
 				// notify all about unavailable services
-				for (int i = 0; i < lastLookupResult.length; i++) {
-					if (!availableServices.contains(new Integer(i))) {
-						Iterator it = listener.keySet().iterator();
-						while (it.hasNext()) {
-							ServiceListener l = (ServiceListener) it.next();
-							l.serviceUnavailable(lastLookupResult[i]);
-						}
-					}
-				}
+				notifyUnavailableServices(availableServices);
 				// now store the last find result for the next check
 				lastLookupResult = descriptions;
+			}
+		}
+	}
+
+	/**
+	 * @param descriptions
+	 * @param availableServices
+	 */
+	private void notifyAvailableServices(
+			ServiceEndpointDescription[] descriptions, Vector availableServices) {
+		for (int i = 0; i < descriptions.length; i++) {
+			ServiceEndpointDescription descr = descriptions[i];
+			// walk over the registered listeners
+			Iterator it = listeners.keySet().iterator();
+			while (it.hasNext()) {
+				ServiceListener listener = (ServiceListener) it.next();
+				notifiyAvailableServicePerListener(availableServices, descr,
+						listener, (Filter) listeners.get(listener));
+			}
+		}
+	}
+
+	/**
+	 * @param availableServices
+	 */
+	private void notifyUnavailableServices(Vector availableServices) {
+		for (int i = 0; i < lastLookupResult.length; i++) {
+			if (!availableServices.contains(new Integer(i))) {
+				Iterator it = listeners.keySet().iterator();
+				while (it.hasNext()) {
+					ServiceListener l = (ServiceListener) it.next();
+					l.serviceUnavailable(lastLookupResult[i]);
+				}
+			}
+		}
+	}
+
+	/**
+	 * @param availableServices
+	 * @param descr
+	 * @param l
+	 * @param f
+	 */
+	private void notifiyAvailableServicePerListener(Vector availableServices,
+			ServiceEndpointDescription descr, ServiceListener l, Filter f) {
+		// check if the listener filter matches the given
+		// description properties. That prerequisites that all information of a
+		// service description are in its properties bag
+		if ((f == null) || (f.match(new Hashtable(descr.getProperties())))) {
+			// check if this is the first run
+			if (lastLookupResult != null) {
+				// it's not
+				Integer index = null;
+				for (int j = 0; j < lastLookupResult.length; j++) {
+					// look up the last result map to see if we already know
+					// that description
+					// TODO we currently have not idea if a service description
+					// has changed or not. There is ID that identifies a service
+					// description. Should that ID part of the spec??
+					if (lastLookupResult[j].equals(descr)) {
+						index = new Integer(j);
+						availableServices.add(index);
+					}
+					if (index != null) {
+						// notify a listener that a service
+						// description matches the specified filter
+						// and
+						// does exist before
+						l.serviceModified(lastLookupResult[j], descr);
+					} else {
+						// notify a listener that a service
+						// description matches the specified filter
+						// and
+						// is new to him
+						l.serviceAvailable(descr);
+					}
+				}
+			} else {
+				// We assume this is the first run. We notify listeners that the
+				// matching service is available
+				l.serviceAvailable(descr);
 			}
 		}
 	}
