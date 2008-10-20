@@ -16,19 +16,20 @@
 package org.osgi.service.framework;
 
 /**
- * Describes the packages and services which are shared from a 
- * source framework to a target framework through a 
- * <code>FrameworkLink</code>.
+ * Describes the packages and services which are shared from a source framework
+ * to a target framework through a <code>FrameworkLink</code>.
+ * 
  * @see FrameworkLink
  * 
  * @ThreadSafe
- * @version $Revision: $
+ * @version $Revision: 5786 $
  */
 // TODO javadoc needs review
 /*
- *  TODO consider removing this class and changing FrameworkFactory.createFrameworkLink
- *  and FrameworkLink.update to take two String[] params.
- *  That may become unwieldy if we need to share other things though (e.g. resources).
+ * TODO consider removing this class and changing
+ * FrameworkFactory.createFrameworkLink and FrameworkLink.update to take two
+ * String[] params. That may become unwieldy if we need to share other things
+ * though (e.g. resources).
  */
 // TODO do we need to specify the start-level for the source and target bundles?
 public class LinkDescription {
@@ -36,20 +37,25 @@ public class LinkDescription {
 	private final String[] serviceFilters;
 
 	/**
-	 * Creates a link description that specifies the packages and
-	 * services to share from a source framework to a target framework 
-	 * @param imports a list of import package specifications that 
-	 *        specify the packages to import from a source framework.
-	 * @param serviceFilters a list of service filters specifications
-	 *        that specify the services to import from a source framework.
+	 * Creates a link description that specifies the packages and services to
+	 * share from a source framework to a target framework
+	 * 
+	 * @param imports
+	 *            a list of import package specifications that specify the
+	 *            packages to import from a source framework.
+	 * @param serviceFilters
+	 *            a list of service filters specifications that specify the
+	 *            services to import from a source framework.
 	 */
 	public LinkDescription(String[] imports, String[] serviceFilters) {
 		this.imports = imports == null ? new String[0] : imports;
-		this.serviceFilters = serviceFilters == null ? new String[0] : serviceFilters;
+		this.serviceFilters = serviceFilters == null ? new String[0]
+				: serviceFilters;
 	}
 
 	/**
 	 * Returns the import package specifications
+	 * 
 	 * @return the imports
 	 */
 	public String[] getImports() {
@@ -58,6 +64,7 @@ public class LinkDescription {
 
 	/**
 	 * Returns the service filter specifications
+	 * 
 	 * @return the service filters
 	 */
 	public String[] getServiceFilters() {

@@ -21,14 +21,14 @@ import org.osgi.framework.BundleException;
 import org.osgi.framework.launch.SystemBundle;
 
 /**
- * Framework service that is used to create child frameworks and links
- * between two frameworks.
+ * Framework service that is used to create child frameworks and links between
+ * two frameworks.
  * <p>
  * If present, there will only be a single instance of this service registered
  * with the Framework.
  * 
  * @ThreadSafe
- * @version $Revision: $
+ * @version $Revision: 5786 $
  */
 // TODO javadoc needs review
 public interface FrameworkFactory {
@@ -56,8 +56,8 @@ public interface FrameworkFactory {
 	 * 
 	 * @param configuration
 	 *            the framework configuration.
-	 * @return an unintialized SystemBundle in the {@link Bundle#INSTALLED 
-	 * INSTALLED} state
+	 * @return an unintialized SystemBundle in the {@link Bundle#INSTALLED
+	 *         INSTALLED} state
 	 * @see SystemBundle
 	 */
 	SystemBundle createChildBundle(Map configuration);
@@ -70,7 +70,7 @@ public interface FrameworkFactory {
 	 * source and target frameworks using the <code>BundleContext</code> of the
 	 * <code>SystemBundle</code> from each framework.
 	 * <p>
-	 * A Framework link can only be established between two framework system 
+	 * A Framework link can only be established between two framework system
 	 * bundle instances that are in the {@link Bundle#ACTIVE ACTIVE} state.
 	 * Framework links are not automatically recreated when either the source or
 	 * target frameworks are restarted.
