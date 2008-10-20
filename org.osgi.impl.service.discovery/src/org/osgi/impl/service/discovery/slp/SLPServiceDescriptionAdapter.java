@@ -255,13 +255,15 @@ public class SLPServiceDescriptionAdapter implements ServiceEndpointDescription 
 	public static ServiceURL createServiceURL(String interfaceName,
 			String version, String endpointInterface, Map properties)
 			throws ServiceLocationException {
-		String interf = convertJavaInterface2Path(interfaceName);
+
 		String path = createStringFromProperties(properties);
 
 		// add interface as property to enable LDAP filtering on it
-		path = appendPropertyToURLPath(path,
-				ServiceEndpointDescription.PROP_KEY_INTERFACE_NAME,
-				interfaceName);
+		if (interfaceName != null) {
+			path = appendPropertyToURLPath(path,
+					ServiceEndpointDescription.PROP_KEY_INTERFACE_NAME,
+					interfaceName);
+		}
 		if (version != null)
 			path = appendPropertyToURLPath(path,
 					ServiceEndpointDescription.PROP_KEY_VERSION, version);
@@ -302,7 +304,7 @@ public class SLPServiceDescriptionAdapter implements ServiceEndpointDescription 
 		}
 		int lifetime = lifeTime != null ? lifeTime.intValue()
 				: ServiceURL.LIFETIME_DEFAULT;
-
+		String interf = convertJavaInterface2Path(interfaceName);
 		StringBuffer buff = new StringBuffer();
 		buff.append("service:osgi");
 		buff.append(interf);
@@ -364,7 +366,8 @@ public class SLPServiceDescriptionAdapter implements ServiceEndpointDescription 
 		}
 		javaInterfaceAndFilters.put(interfaceName, version);
 
-		// Put interface and version information to properties since base for matching
+		// Put interface and version information to properties since base for
+		// matching
 		properties.put(ServiceEndpointDescription.PROP_KEY_INTERFACE_NAME,
 				new String[] { interfaceName });
 		properties.put(ServiceEndpointDescription.PROP_KEY_VERSION,
@@ -403,14 +406,16 @@ public class SLPServiceDescriptionAdapter implements ServiceEndpointDescription 
 				try {
 					while (st.hasMoreTokens()) {
 						key = deescapeReservedChars(st.nextToken());
-						
-						if (st.hasMoreTokens())
+
+						if (st.hasMoreTokens()) {
 							value = st.nextToken();
-						else
+						} else {
 							value = "";
-						
-						//TODO check whether got list of values --> create array. This should be done befor deescaping chars.
-						
+						}
+
+						// TODO check whether got list of values --> create
+						// array. This should be done befor deescaping chars.
+
 						value = deescapeReservedChars(value);
 
 						properties.put(key, value);
@@ -532,12 +537,17 @@ public class SLPServiceDescriptionAdapter implements ServiceEndpointDescription 
 		// tokenize escapedchars as extra chars
 		StringTokenizer tokenizer = new StringTokenizer(value,
 				SLPServiceDescriptionAdapter.ESCAPING_CHARACTER);
-
-		StringBuffer buffer = new StringBuffer(tokenizer.nextToken());
+		StringBuffer buffer = null;
+		if (tokenizer.hasMoreTokens()) {
+			buffer = new StringBuffer(tokenizer.nextToken());
+		} else {
+			buffer = new StringBuffer();
+		}
 		while (tokenizer.hasMoreTokens()) {
 			String token = tokenizer.nextToken();
 			if (token.length() >= 2) {
-				buffer.append((char)Integer.parseInt(token.substring(0, 2), 16));
+				buffer.append((char) Integer
+						.parseInt(token.substring(0, 2), 16));
 				buffer.append(token.substring(2));
 			}
 		}
@@ -559,8 +569,8 @@ public class SLPServiceDescriptionAdapter implements ServiceEndpointDescription 
 		StringBuffer buffer = new StringBuffer();
 		while (tokenizer.hasMoreTokens()) {
 			String token = tokenizer.nextToken();
-			if (token.length() == 1 && reservedChars.indexOf(token.charAt(0)) != -1)
-			{
+			if (token.length() == 1
+					&& reservedChars.indexOf(token.charAt(0)) != -1) {
 				buffer.append(ESCAPING_CHARACTER
 						+ Integer.toHexString(token.charAt(0)));
 			} else {
