@@ -21,11 +21,14 @@ import org.osgi.framework.BundleException;
 import org.osgi.framework.launch.SystemBundle;
 
 /**
- * Framework service that is used to create child frameworks and framework links
+ * Framework service that is used to create child frameworks and links
  * between two frameworks.
  * <p>
  * If present, there will only be a single instance of this service registered
  * with the Framework.
+ * 
+ * @ThreadSafe
+ * @version $Revision: $
  */
 // TODO javadoc needs review
 public interface FrameworkFactory {
@@ -36,7 +39,7 @@ public interface FrameworkFactory {
 	 * The new <code>SystemBundle</code> returned will be in the
 	 * {@link Bundle#INSTALLED INSTALLED} state. This child
 	 * <code>SystemBundle</code> can then be used to manage and control the
-	 * created child framework instance.
+	 * child framework instance.
 	 * <p>
 	 * The child framework lifecycle is tied to its parent framework. When the
 	 * parent <code>SystemBundle</code> enters the {@link Bundle#STOPPING
@@ -46,14 +49,15 @@ public interface FrameworkFactory {
 	 * state until all of the child frameworks have completed their shutdown
 	 * process. After the parent framework has completed the shutdown process
 	 * then all child framework instances become invalid and must not be allowed
-	 * to be re-initialized or re-started.
+	 * to re-initialize or re-start.
 	 * <p>
 	 * Child framework instances are not automatically recreated when their
 	 * parent framework is restarted.
 	 * 
 	 * @param configuration
-	 *            the framework configuration
-	 * @return an unintialized SystemBundle
+	 *            the framework configuration.
+	 * @return an unintialized SystemBundle in the {@link Bundle#INSTALLED 
+	 * INSTALLED} state
 	 * @see SystemBundle
 	 */
 	SystemBundle createChildBundle(Map configuration);
@@ -66,13 +70,15 @@ public interface FrameworkFactory {
 	 * source and target frameworks using the <code>BundleContext</code> of the
 	 * <code>SystemBundle</code> from each framework.
 	 * <p>
+	 * A Framework link can only be established between two framework system 
+	 * bundle instances that are in the {@link Bundle#ACTIVE ACTIVE} state.
 	 * Framework links are not automatically recreated when either the source or
 	 * target frameworks are restarted.
 	 * 
 	 * @param source
-	 *            the source framework to share packages and services from
+	 *            the source framework to share packages and services from.
 	 * @param target
-	 *            the target framework to share packages and services to
+	 *            the target framework to share packages and services to.
 	 * @param description
 	 *            describes the packages and services to share from the source
 	 *            framework to the target framework.

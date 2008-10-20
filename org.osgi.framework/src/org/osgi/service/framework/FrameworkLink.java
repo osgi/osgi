@@ -34,7 +34,35 @@ import org.osgi.framework.BundleException;
  * source bundle gets resolved to. The target bundle is also used to register
  * services acquired by the source framework as specified by the link
  * description.</li>
+ * <li>The framework should attempt to resolve and start the source bundle.</li>
  * </ul>
+ * A framework link will break if any of the following operations occur:
+ * <ul>
+ * <li>The source system bundle is stopped.</li>
+ * <li>The source bundle is uninstalled.</li>
+ * <li>The source bundle is updated using the {@link 
+ * Bundle#update(java.io.InputStream)} method.</li>
+ * <li>The target system bundle is stopped.</li>
+ * <li>The target bundle is uninstalled.</li>
+ * <li>The target bundle is updated using the {@link 
+ * Bundle#update(java.io.InputStream)} method.</li>
+ * </ul>
+ * <p>
+ * If a framework link is broken then the following operations must occur:
+ * <ul>
+ * <li>This framework link is unregistered as a service from the source and 
+ * target frameworks.</li>
+ * <li>The source bundle must be stopped.</li>
+ * <li>The target bundle must be stopped.</li>
+ * <li>If the source bundle was not updated with the {@link 
+ * Bundle#update(java.io.InputStream)} method the it must be uninstalled.</li>
+ * <li>If the target bundle was not updated with the {@link 
+ * Bundle#update(java.io.InputStream)} method the it must be uninstalled.</li>
+ * <li>The target bundle must be refreshed to ensure no bundles in the 
+ * target framework are using a package exported by the target bundle.</li>
+ * </ul>
+ * @ThreadSafe
+ * @version $Revision: $
  */
 //TODO javadoc needs review
 public interface FrameworkLink {
@@ -58,6 +86,28 @@ public interface FrameworkLink {
 	/**
 	 * Updates this framework link to share the packages and services specified
 	 * by the link description
+	 * <p>
+	 * When a link description is updated the following steps are required
+	 * to update this link
+	 * <ol>
+	 * <li>The source bundle must be stopped if it is active.</li>
+	 * <li>The source bundle must be updated with the correct Import-Package
+	 * metadata as specified by the link description.  After the update the
+	 * source bundle is in the {@link Bundle#UNINSTALLED UNRESOLVED} state and
+	 * no packages can be shared over this link.  This implies that the target
+	 * bundle should be unresolved and must not be exporting any packages.</li>
+	 * <li>The framework should attempt to resolve the source bundle.  If 
+	 * the source bundle cannot resolve then the update is complete.  Additional
+	 * bundles may need to be installed to allow the source bundle to resolve 
+	 * and share packages over this link.</li>
+	 * <li>If the source bundle resolves then the target bundle should become 
+	 * resolved and must export the packages which the source bundle got
+	 * resolved to.  The Export-Package metadata for the target bundle must use 
+	 * the Export-Package metadata for the packages which the source 
+	 * bundle got resolved to.
+	 * <li>If the source bundle is resolved and was active in step 1 then 
+	 * the source bundle is started.</li>
+	 * </ol>
 	 * 
 	 * @param description
 	 *            the link description
@@ -80,11 +130,13 @@ public interface FrameworkLink {
 	 * stops sharing services with the target framework.</li>
 	 * <li>{@link Bundle#uninstall() uninstall} - uninstalls the source and
 	 * target bundles and breaks this framework link.</li>
-	 * <li>{@link Bundle#update() update} - updates the source bundle and
-	 * refreshes the target bundle.</li>
+	 * <li>{@link Bundle#update() update} - updates the source bundle.  The 
+	 * content of the source bundle must remain unchanged.  This operation will
+	 * result in the source bundle being stopped, unresolved, and re-activated.
+	 * This will force the target bundle to stop and refresh.</li>
 	 * <li>{@link Bundle#update(java.io.InputStream) update(InputStream)} -
-	 * closes and ignores the input stream and does an {@link Bundle#update()
-	 * update} operation
+	 * updates the source bundle with the content specified.  This will 
+	 * remove the source bundle from the link and cause the link to break.
 	 * </ul>
 	 * The following source bundle states effect this framework link:
 	 * <ul>
@@ -119,8 +171,8 @@ public interface FrameworkLink {
 	 * target bundle and breaks this framework link.</li>
 	 * <li>{@link Bundle#update() update} - updates the target bundle.</li>
 	 * <li>{@link Bundle#update(java.io.InputStream) update(InputStream)} -
-	 * closes and ignores the input stream and does an {@link Bundle#update()
-	 * update} operation
+	 * updates the target bundle with the content specified.  This will 
+	 * remove the target bundle from the link and cause the link to break.
 	 * </ul>
 	 * The following target bundle states effect this framework link:
 	 * <ul>
