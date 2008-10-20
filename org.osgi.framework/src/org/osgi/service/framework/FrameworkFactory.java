@@ -22,7 +22,7 @@ import org.osgi.framework.launch.SystemBundle;
 
 /**
  * Framework service that is used to create child frameworks and links between
- * two frameworks.
+ * frameworks.
  * <p>
  * If present, there will only be a single instance of this service registered
  * with the Framework.
@@ -43,7 +43,7 @@ public interface FrameworkFactory {
 	 * <p>
 	 * The child framework lifecycle is tied to its parent framework. When the
 	 * parent <code>SystemBundle</code> enters the {@link Bundle#STOPPING
-	 * STOPPING} state then all child frameworks of the parent framework are
+	 * STOPPING} state then all child frameworks of that parent are
 	 * shutdown using the to the {@link SystemBundle#stop()} method. The parent
 	 * <code>SystemBundle</code> must not enter the {@link Bundle#RESOLVED}
 	 * state until all of the child frameworks have completed their shutdown

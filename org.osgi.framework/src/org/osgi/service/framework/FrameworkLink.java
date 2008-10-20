@@ -55,10 +55,10 @@ import org.osgi.framework.BundleException;
  * <li>The source bundle must be stopped.</li>
  * <li>The target bundle must be stopped.</li>
  * <li>If the source bundle was not updated with the
- * {@link Bundle#update(java.io.InputStream)} method the it must be uninstalled.
+ * {@link Bundle#update(java.io.InputStream)} method, it must be uninstalled.
  * </li>
  * <li>If the target bundle was not updated with the
- * {@link Bundle#update(java.io.InputStream)} method the it must be uninstalled.
+ * {@link Bundle#update(java.io.InputStream)} method, it must be uninstalled.
  * </li>
  * <li>The target bundle must be refreshed to ensure no bundles in the target
  * framework are using a package exported by the target bundle.</li>
