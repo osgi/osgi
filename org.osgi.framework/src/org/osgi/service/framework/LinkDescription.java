@@ -22,7 +22,7 @@ package org.osgi.service.framework;
  * @see FrameworkLink
  * 
  * @ThreadSafe
- * @version $Revision: 5786 $
+ * @version $Revision$
  */
 // TODO javadoc needs review
 /*

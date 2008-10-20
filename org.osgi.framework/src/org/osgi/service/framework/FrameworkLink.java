@@ -65,7 +65,7 @@ import org.osgi.framework.BundleException;
  * </ul>
  * 
  * @ThreadSafe
- * @version $Revision: 5786 $
+ * @version $Revision$
  */
 // TODO javadoc needs review
 public interface FrameworkLink {

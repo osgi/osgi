@@ -28,7 +28,7 @@ import org.osgi.framework.launch.SystemBundle;
  * with the Framework.
  * 
  * @ThreadSafe
- * @version $Revision: 5786 $
+ * @version $Revision$
  */
 // TODO javadoc needs review
 public interface FrameworkFactory {
