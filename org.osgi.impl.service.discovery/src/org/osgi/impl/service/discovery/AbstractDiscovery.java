@@ -60,9 +60,7 @@ public abstract class AbstractDiscovery implements Discovery {
 	 * Initialize this object.
 	 */
 	protected void init() {
-		if (logService != null) {
-			logService.log(LogService.LOG_DEBUG, "init");
-		}
+		log(LogService.LOG_DEBUG, "init");
 
 		// TODO read this from config rather than system property
 		autoPublish = System.getProperty(Discovery.OSGI_DISCOVERY,
@@ -76,14 +74,30 @@ public abstract class AbstractDiscovery implements Discovery {
 	 * Cleanup.
 	 */
 	protected void destroy() {
-		if (logService != null) {
-			logService.log(LogService.LOG_DEBUG, "destroy");
-		}
+		log(LogService.LOG_DEBUG, "destroy");
 		if (listenerAndFilter != null) {
 			synchronized (listenerAndFilter) {
 				listenerAndFilter.clear();
 			}
 			listenerAndFilter = null;
+		}
+	}
+
+	/**
+	 * 
+	 */
+	protected void log(int logLevel, String msg) {
+		if (getLogService() != null) {
+			getLogService().log(logLevel, msg);
+		}
+	}
+
+	/**
+	 * 
+	 */
+	protected void log(int logLevel, String msg, Exception e) {
+		if (getLogService() != null) {
+			getLogService().log(logLevel, msg, e);
 		}
 	}
 
@@ -102,11 +116,8 @@ public abstract class AbstractDiscovery implements Discovery {
 			// filters. Our Map is not capable of multiple keys. Discuss whether
 			// it's the required behaviour.
 			listenerAndFilter.put(listener, f);
-			if (logService != null) {
-				logService.log(LogService.LOG_DEBUG,
-						"listener added successfully. Listener: " + listener
-								+ "; filter: " + filter);
-			}
+			log(LogService.LOG_DEBUG, "listener added successfully. Listener: "
+					+ listener + "; filter: " + filter);
 		}
 	}
 
@@ -126,13 +137,10 @@ public abstract class AbstractDiscovery implements Discovery {
 		}
 		synchronized (listenerAndFilter) {
 			boolean removed = (null == listenerAndFilter.remove(listener));
-			if (logService != null) {
-				logService
-						.log(
-								LogService.LOG_DEBUG,
-								removed == true ? "listener removed successfull"
-										: "listener which had to be removed wasn't registered.");
-			}
+			log(
+					LogService.LOG_DEBUG,
+					removed == true ? "listener removed successfull"
+							: "listener which had to be removed wasn't registered.");
 		}
 	}
 
@@ -246,13 +254,10 @@ public abstract class AbstractDiscovery implements Discovery {
 					try {
 						sl.serviceAvailable(svcDescr);
 					} catch (Exception e) {
-						if (getLogService() != null) {
-							getLogService()
-									.log(
-											LogService.LOG_ERROR,
-											"Exceptions where thrown while notifying about a new remote service.",
-											e);
-						}
+						log(
+								LogService.LOG_ERROR,
+								"Exceptions where thrown while notifying about a new remote service.",
+								e);
 					}
 				}
 			}
@@ -274,13 +279,10 @@ public abstract class AbstractDiscovery implements Discovery {
 					try {
 						sl.serviceUnavailable(svcDescr);
 					} catch (Exception e) {
-						if (getLogService() != null) {
-							getLogService()
-									.log(
-											LogService.LOG_ERROR,
-											"Exceptions where thrown while notifying about removal of a remote service.",
-											e);
-						}
+						log(
+								LogService.LOG_ERROR,
+								"Exceptions where thrown while notifying about removal of a remote service.",
+								e);
 					}
 				}
 			}
@@ -303,13 +305,10 @@ public abstract class AbstractDiscovery implements Discovery {
 					try {
 						sl.serviceModified(oldSvcDescr, newSvcDescr);
 					} catch (Exception e) {
-						if (getLogService() != null) {
-							getLogService()
-									.log(
-											LogService.LOG_ERROR,
-											"Exceptions where thrown while notifying about modification of a remote service.",
-											e);
-						}
+						log(
+								LogService.LOG_ERROR,
+								"Exceptions where thrown while notifying about modification of a remote service.",
+								e);
 					}
 				}
 			}

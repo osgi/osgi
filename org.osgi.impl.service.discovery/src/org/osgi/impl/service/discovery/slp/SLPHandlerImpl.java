@@ -41,8 +41,7 @@ import ch.ethz.iks.slp.ServiceLocationException;
 import ch.ethz.iks.slp.ServiceURL;
 
 /**
- * TODO: check for null before calling logger or put it in an extra method TODO:
- * remove printStackTrace and do logging instead
+ * TODO: remove printStackTrace and do logging instead
  * 
  * @author Tim Diekmann
  * @author Thomas Kiesslich
@@ -54,9 +53,9 @@ public class SLPHandlerImpl extends AbstractDiscovery {
 
 	private Locator locator = null;
 	private Advertiser advertiser = null;
-	
+
 	private final int POLLDELAY = 30000;
-	
+
 	private Timer t = null;
 
 	/**
@@ -67,15 +66,10 @@ public class SLPHandlerImpl extends AbstractDiscovery {
 	public SLPHandlerImpl(final BundleContext context,
 			final LogService logService) {
 		super(context, logService);
-
 		locatorTracker = new ServiceTracker(context, Locator.class.getName(),
 				new LocatorServiceTracker(context));
-
 		advertiserTracker = new ServiceTracker(context, Advertiser.class
 				.getName(), new AdvertiserServiceTracker(context));
-
-		
-
 	}
 
 	public void init() {
@@ -83,7 +77,8 @@ public class SLPHandlerImpl extends AbstractDiscovery {
 		locatorTracker.open();
 		advertiserTracker.open();
 		t = new Timer(false);
-		t.scheduleAtFixedRate(new InformListenerTask(getListenerAndFilter(), this), POLLDELAY, POLLDELAY);
+		t.scheduleAtFixedRate(new InformListenerTask(getListenerAndFilter(),
+				this), POLLDELAY, POLLDELAY);
 	}
 
 	public void destroy() {
@@ -117,45 +112,36 @@ public class SLPHandlerImpl extends AbstractDiscovery {
 	public ServiceEndpointDescription[] findService(final String interfaceName,
 			final String filter) {
 		validateFilter(filter);
-
 		List result = new ArrayList();
-
 		// check whether SLP-Locator service exists
 		Locator locator = getLocator();
 		if (locator == null) {
-			getLogService().log(LogService.LOG_WARNING,
+			log(LogService.LOG_WARNING,
 					"No SLP-Locator. Find operation is not executed.");
-			return (ServiceEndpointDescription[]) result.toArray(new ServiceEndpointDescription[0]);
+			return (ServiceEndpointDescription[]) result
+					.toArray(new ServiceEndpointDescription[0]);
 		}
-
 		// TODO first look at cache
-
 		// find appropriate services
 		ServiceLocationEnumeration se;
 		try {
 			ServiceURL svcURL = SLPServiceDescriptionAdapter.createServiceURL(
 					interfaceName, null, null, null);
-			getLogService().log(LogService.LOG_DEBUG,
-					"try to find services with URL=" + svcURL.toString());
+			log(LogService.LOG_DEBUG, "try to find services with URL="
+					+ svcURL.toString());
 			se = locator.findServices(svcURL.getServiceType(), null, filter);
-
-			// TODO: in case result is empty do a search impying that service
+			// TODO: in case result is empty do a search implying that service
 			// interface is not java???
 		} catch (Exception e) {
-			e.printStackTrace();
-			getLogService().log(LogService.LOG_WARNING,
-					"Failed to find service", e);
-			return (ServiceEndpointDescription[]) result.toArray(new ServiceEndpointDescription[0]);
+			log(LogService.LOG_ERROR, "Failed to find service", e);
+			return (ServiceEndpointDescription[]) result
+					.toArray(new ServiceEndpointDescription[0]);
 		}
-
 		// iterate through found services and retrieve their attributes
 		while (se.hasMoreElements()) {
 			try {
 				ServiceURL url = (ServiceURL) se.next();
-				getLogService().log(LogService.LOG_DEBUG,
-						"adding serviceURL=" + url);
-				getLogService().log(LogService.LOG_DEBUG,
-						"try to find attributes for " + url);
+				log(LogService.LOG_DEBUG, "try to find attributes for " + url);
 				ServiceLocationEnumeration a = locator.findAttributes(url,
 						null, null); // takes some time :-(
 				SLPServiceDescriptionAdapter descriptionAdapter = new SLPServiceDescriptionAdapter(
@@ -172,14 +158,12 @@ public class SLPHandlerImpl extends AbstractDiscovery {
 					value = attributes.substring(attributes.indexOf("=") + 1);
 					descriptionAdapter.addProperty(key, value);
 				}
+				log(LogService.LOG_DEBUG, "adding serviceURL=" + url);
 				result.add(descriptionAdapter); // add to the result list
 			} catch (Exception e) {
-				e.printStackTrace();
-				getLogService().log(LogService.LOG_WARNING,
-						"Failed to find service", e);
+				log(LogService.LOG_ERROR, "Failed to find service", e);
 			}
 		}
-
 		ServiceEndpointDescription[] results = (ServiceEndpointDescription[]) result
 				.toArray(new ServiceEndpointDescription[0]);
 		if (results.length > 0) {
@@ -201,13 +185,11 @@ public class SLPHandlerImpl extends AbstractDiscovery {
 					buff.append(",(");
 				}
 			}
-			getLogService().log(LogService.LOG_DEBUG, buff.toString());
+			log(LogService.LOG_DEBUG, buff.toString());
 		} else {
-			getLogService().log(LogService.LOG_DEBUG, "0 services found");
+			log(LogService.LOG_DEBUG, "0 services found");
 		}
-
 		// TODO add to cache
-
 		return results;
 	}
 
@@ -220,9 +202,7 @@ public class SLPHandlerImpl extends AbstractDiscovery {
 		if (callback == null) {
 			throw new IllegalArgumentException("callback must not be null");
 		}
-
 		validateFilter(filter);
-
 		Thread executor = new Thread(new Runnable() {
 			public void run() {
 				try {
@@ -233,19 +213,14 @@ public class SLPHandlerImpl extends AbstractDiscovery {
 					try {
 						callback.servicesFound(services);
 					} catch (Exception e) {
-						if (getLogService() != null) {
-							getLogService()
-									.log(
-											LogService.LOG_ERROR,
-											"Exceptions where thrown in the callback of findService operation.",
-											e);
-						}
+						log(
+								LogService.LOG_ERROR,
+								"Exceptions where thrown in the callback of findService operation.",
+								e);
 					}
 				} catch (Exception e) {
-					if (getLogService() != null) {
-						getLogService().log(LogService.LOG_ERROR,
-								"Failed to execute async findService", e);
-					}
+					log(LogService.LOG_ERROR,
+							"Failed to execute async findService", e);
 				}
 			}
 		});
@@ -253,15 +228,14 @@ public class SLPHandlerImpl extends AbstractDiscovery {
 	}
 
 	// TODO: think whether we need a version with autopublish parameter
-	/*
+	/**
 	 * @see org.osgi.service.discovery.Discovery#publishService(java.util.Map,
-	 * java.util.Map, java.util.Map, boolean)
+	 *      java.util.Map, java.util.Map, boolean)
 	 */
 	public ServiceEndpointDescription publishService(
 			Map/* <String, String> */javaInterfacesAndVersions,
 			Map/* <String, String> */javaInterfacesAndEndpointInterfaces,
 			Map/* <String, Object> */properties, boolean autopublish) {
-
 		SLPServiceDescriptionAdapter svcDescr;
 		try {
 			svcDescr = new SLPServiceDescriptionAdapter(
@@ -269,16 +243,15 @@ public class SLPHandlerImpl extends AbstractDiscovery {
 					javaInterfacesAndEndpointInterfaces, properties);
 		} catch (ServiceLocationException e1) {
 			e1.printStackTrace();
-			// TODO log
+			log(LogService.LOG_ERROR, "Unable to create Service Description",
+					e1);
 			return null;
 		}
-
 		// TODO: act according autopublish parameter
-		// publish service via SLP
 		Advertiser advertiser = getAdvertiser();
 		if (advertiser != null) {
-			getLogService().log(LogService.LOG_DEBUG,
-					"Following service is published: " + svcDescr);
+			log(LogService.LOG_DEBUG, "Following service is published: "
+					+ svcDescr);
 
 			String[] interfaces = svcDescr.getInterfaceNames();
 			for (int k = 0; k < interfaces.length; k++) {
@@ -286,17 +259,14 @@ public class SLPHandlerImpl extends AbstractDiscovery {
 					advertiser.register(svcDescr.getServiceURL(interfaces[k]),
 							new Hashtable(svcDescr.getProperties()));
 				} catch (ServiceLocationException e) {
-					e.printStackTrace();
-					// TODO log
+					log(LogService.LOG_ERROR, "failed registering service", e);
 				}
 			}
 		} else {
-			getLogService().log(LogService.LOG_WARNING, "no Advertiser");
+			log(LogService.LOG_WARNING, "no Advertiser");
 		}
-
 		// inform the listener about the new available service
 		notifyListenersOnNewServiceDescription(svcDescr);
-
 		return svcDescr;
 	}
 
@@ -306,26 +276,17 @@ public class SLPHandlerImpl extends AbstractDiscovery {
 	public void unpublishService(
 			final ServiceEndpointDescription serviceDescription) {
 		validateServiceDescription(serviceDescription);
-
-		if (getLogService() != null) {
-			getLogService().log(LogService.LOG_DEBUG,
-					"unpublish service " + serviceDescription.toString());
-		}
-
+		log(LogService.LOG_DEBUG, "unpublish service "
+				+ serviceDescription.toString());
 		if (serviceDescription instanceof SLPServiceDescriptionAdapter) {
 			SLPServiceDescriptionAdapter slpSvcDescr = (SLPServiceDescriptionAdapter) serviceDescription;
-
 			Advertiser advertiser = getAdvertiser();
 			if (advertiser != null) {
 				String[] interfaceNames = slpSvcDescr.getInterfaceNames();
 				for (int k = 0; k < interfaceNames.length; k++) {
 					try {
-						getLogService()
-								.log(
-										LogService.LOG_DEBUG,
-										"unpublish service "
-												+ slpSvcDescr
-														.getServiceURL(interfaceNames[k]));
+						log(LogService.LOG_DEBUG, "unpublish service "
+								+ slpSvcDescr.getServiceURL(interfaceNames[k]));
 						advertiser.deregister(slpSvcDescr
 								.getServiceURL(interfaceNames[k]));
 
@@ -333,11 +294,13 @@ public class SLPHandlerImpl extends AbstractDiscovery {
 						notifyListenersOnRemovedServiceDescription(serviceDescription);
 					} catch (ServiceLocationException e) {
 						e.printStackTrace();
-						// TODO: log
+						log(LogService.LOG_ERROR,
+								"failed to deregister service for interface "
+										+ interfaceNames[k], e);
 					}
 				}
 			} else {
-				getLogService().log(LogService.LOG_WARNING, "no Advertiser");
+				log(LogService.LOG_WARNING, "no Advertiser");
 			}
 		}
 	}
@@ -358,29 +321,20 @@ public class SLPHandlerImpl extends AbstractDiscovery {
 		public Object addingService(ServiceReference reference) {
 			Locator loc = (Locator) context.getService(reference);
 			setLocator(loc);
-
-			if (getLogService() != null) {
-				getLogService().log(LogService.LOG_INFO, "bound Locator");
-			}
+			log(LogService.LOG_INFO, "bound Locator");
 			return loc;
 		}
 
 		public void modifiedService(ServiceReference reference, Object service) {
 			Locator loc = (Locator) context.getService(reference);
 			setLocator(loc);
-
-			if (getLogService() != null) {
-				getLogService().log(LogService.LOG_INFO, "rebound Locator");
-			}
+			log(LogService.LOG_INFO, "rebound Locator");
 		}
 
 		public void removedService(ServiceReference reference, Object service) {
 			context.ungetService(reference);
 			setLocator(null);
-
-			if (getLogService() != null) {
-				getLogService().log(LogService.LOG_INFO, "unbound Locator");
-			}
+			log(LogService.LOG_INFO, "unbound Locator");
 		}
 	}
 
@@ -397,10 +351,7 @@ public class SLPHandlerImpl extends AbstractDiscovery {
 		public Object addingService(final ServiceReference reference) {
 			Advertiser adv = (Advertiser) context.getService(reference);
 			setAdvertiser(adv);
-
-			if (getLogService() != null) {
-				getLogService().log(LogService.LOG_INFO, "bound Advertiser");
-			}
+			log(LogService.LOG_INFO, "bound Advertiser");
 			return adv;
 		}
 
@@ -408,20 +359,14 @@ public class SLPHandlerImpl extends AbstractDiscovery {
 				Object service) {
 			Advertiser adv = (Advertiser) context.getService(reference);
 			setAdvertiser(adv);
-
-			if (getLogService() != null) {
-				getLogService().log(LogService.LOG_INFO, "rebound Advertiser");
-			}
+			log(LogService.LOG_INFO, "rebound Advertiser");
 		}
 
 		public void removedService(final ServiceReference reference,
 				Object service) {
 			context.ungetService(reference);
 			setAdvertiser(null);
-
-			if (getLogService() != null) {
-				getLogService().log(LogService.LOG_INFO, "unbound Advertiser");
-			}
+			log(LogService.LOG_INFO, "unbound Advertiser");
 		}
 	}
 }
