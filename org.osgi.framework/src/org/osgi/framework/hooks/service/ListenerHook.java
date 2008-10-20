@@ -33,30 +33,31 @@ import org.osgi.framework.BundleContext;
 
 public interface ListenerHook {
 	/**
-	 * Add listener hook method. This method is called to provide the hook
+	 * Added listeners hook method. This method is called to provide the hook
 	 * implementation with information on the current service listeners. This
 	 * method will be called immediately after registration of this hook to
-	 * provide the current collection of service listeners which were had been
-	 * added prior to the hook being registered and also for the service
-	 * listeners added after this hook had been registered.
+	 * provide the current collection of service listeners which had been added
+	 * prior to the hook being registered. This method will also be called as
+	 * service listeners are added while this hook is registered.
 	 * 
 	 * @param listeners A collection of {@link ListenerInfo}s for service
 	 *        listeners which are now listening to service events. Attempting to
 	 *        add to or remove from the collection will result in an
-	 *        <code>UnsupportedOperationException</code>. This argument is not
+	 *        <code>UnsupportedOperationException</code>. The collection is not
 	 *        synchronized.
 	 */
 	void added(Collection/* <? extends ListenerInfo> */listeners);
 
 	/**
-	 * Remove listener hook method. This method is called during service
-	 * listener removal. This method will be called for the service listeners
-	 * removed after this hook had been registered.
+	 * Removed listeners hook method. This method is called to provide the hook
+	 * implementation with information on removed service listeners. This method
+	 * will be called as service listeners are removed while this hook is
+	 * registered.
 	 * 
 	 * @param listeners A collection of {@link ListenerInfo}s for service
 	 *        listeners which are no longer listening to service events.
 	 *        Attempting to add to or remove from the collection will result in
-	 *        an <code>UnsupportedOperationException</code>. This argument is
+	 *        an <code>UnsupportedOperationException</code>. The collection is
 	 *        not synchronized.
 	 */
 	void removed(Collection/* <? extends ListenerInfo> */listeners);

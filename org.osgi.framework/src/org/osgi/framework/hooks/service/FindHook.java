@@ -33,12 +33,12 @@ import org.osgi.framework.BundleContext;
 
 public interface FindHook {
 	/**
-	 * Find hook method. This method is called during the service find (for
-	 * example, {@link BundleContext#getServiceReferences(String, String)})
-	 * operation by the finding bundle and can filter the result of the find
-	 * operation.
+	 * Find hook method. This method is called during the service find operation
+	 * (for example, {@link BundleContext#getServiceReferences(String, String)}
+	 * ). This method can filter the result of the find operation.
 	 * 
-	 * @param context The bundle context of the finding bundle.
+	 * @param context The bundle context of the bundle performing the find
+	 *        operation.
 	 * @param name The class name of the services to find or <code>null</code>
 	 *        to find all services.
 	 * @param filter The filter criteria of the services to find or
@@ -47,13 +47,14 @@ public interface FindHook {
 	 *        of a call to
 	 *        {@link BundleContext#getAllServiceReferences(String, String)}
 	 * @param references A <code>Collection</code> of Service References to be
-	 *        returned to the finding bundle. The method implementation may
-	 *        remove a reference from the collection to prevent the reference
-	 *        from being returned to the finding bundle. The collection supports
-	 *        all the optional <code>Collection</code> operations except
+	 *        returned as a result of the find operation. The method
+	 *        implementation may remove service references from the collection
+	 *        to prevent the references from being returned to the bundle
+	 *        performing the find operation. The collection supports all the
+	 *        optional <code>Collection</code> operations except
 	 *        <code>add</code> and <code>addAll</code>. Attempting to add to the
 	 *        collection will result in an
-	 *        <code>UnsupportedOperationException</code>. This argument is not
+	 *        <code>UnsupportedOperationException</code>. The collection is not
 	 *        synchronized.
 	 */
 	void find(BundleContext context, String name, String filter,

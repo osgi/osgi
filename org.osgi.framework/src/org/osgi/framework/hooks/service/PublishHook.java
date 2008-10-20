@@ -34,20 +34,19 @@ import org.osgi.framework.ServiceEvent;
 public interface PublishHook {
 	/**
 	 * Event hook method. This method is called prior to service event delivery
-	 * when a publishing bundle registers, modifies or unregisters a service and
-	 * can filter the bundles which receive the event.
+	 * when a publishing bundle registers, modifies or unregisters a service.
+	 * This method can filter the bundles which receive the event.
 	 * 
 	 * @param event The service event to be delivered.
 	 * @param contexts A <code>Collection</code> of Bundle Contexts for bundles
 	 *        which have listeners to which the specified event will be
-	 *        delivered. The method implementation may remove a context from the
-	 *        collection to prevent the event from being delivered to the bundle
-	 *        associated with the context. The collection supports all the
-	 *        optional <code>Collection</code> operations except
-	 *        <code>add</code> and <code>addAll</code>. Attempting to add to the
-	 *        collection will result in an
-	 *        <code>UnsupportedOperationException</code>. This argument is not
-	 *        synchronized.
+	 *        delivered. The method implementation may remove bundle contexts
+	 *        from the collection to prevent the event from being delivered to
+	 *        the associated bundles. The collection supports all the optional
+	 *        <code>Collection</code> operations except <code>add</code> and
+	 *        <code>addAll</code>. Attempting to add to the collection will
+	 *        result in an <code>UnsupportedOperationException</code>. The
+	 *        collection is not synchronized.
 	 */
 	void event(ServiceEvent event,
 			Collection/* <? extends BundleContext> */contexts);
