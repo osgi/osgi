@@ -101,6 +101,7 @@ build.core.tests = \
 cmpn.specs = \
 	 org.osgi.application, \
 	 org.osgi.service.application, \
+	 org.osgi.service.blueprint, \
 	 org.osgi.service.cm, \
 	 org.osgi.service.component, \
 	 org.osgi.service.command, \
