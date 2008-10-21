@@ -119,7 +119,7 @@ public class InformListenerTask extends TimerTask {
 		// service description are in its properties bag
 		if ((f == null) || (f.match(new Hashtable(descr.getProperties())))) {
 			// check if this is the first run
-			if (lastLookupResult != null) {
+			if (lastLookupResult != null && lastLookupResult.length > 0) {
 				// it's not
 				Integer index = null;
 				for (int j = 0; j < lastLookupResult.length; j++) {
