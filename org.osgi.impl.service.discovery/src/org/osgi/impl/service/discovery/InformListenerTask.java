@@ -93,12 +93,14 @@ public class InformListenerTask extends TimerTask {
 	 * @param availableServices
 	 */
 	private void notifyUnavailableServices(Vector availableServices) {
-		for (int i = 0; i < lastLookupResult.length; i++) {
-			if (!availableServices.contains(new Integer(i))) {
-				Iterator it = listeners.keySet().iterator();
-				while (it.hasNext()) {
-					ServiceListener l = (ServiceListener) it.next();
-					l.serviceUnavailable(lastLookupResult[i]);
+		if (lastLookupResult != null) {
+			for (int i = 0; i < lastLookupResult.length; i++) {
+				if (!availableServices.contains(new Integer(i))) {
+					Iterator it = listeners.keySet().iterator();
+					while (it.hasNext()) {
+						ServiceListener l = (ServiceListener) it.next();
+						l.serviceUnavailable(lastLookupResult[i]);
+					}
 				}
 			}
 		}
