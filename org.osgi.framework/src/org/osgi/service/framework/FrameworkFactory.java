@@ -21,8 +21,8 @@ import org.osgi.framework.BundleException;
 import org.osgi.framework.launch.SystemBundle;
 
 /**
- * Framework service that is used to create child frameworks and links between
- * frameworks.
+ * Framework service that is used to create child frameworks and framework
+ * links.
  * <p>
  * If present, there will only be a single instance of this service registered
  * with the Framework.
@@ -43,8 +43,8 @@ public interface FrameworkFactory {
 	 * <p>
 	 * The child framework lifecycle is tied to its parent framework. When the
 	 * parent <code>SystemBundle</code> enters the {@link Bundle#STOPPING
-	 * STOPPING} state then all child frameworks of that parent are
-	 * shutdown using the to the {@link SystemBundle#stop()} method. The parent
+	 * STOPPING} state then all child frameworks of that parent are shutdown
+	 * using the to the {@link SystemBundle#stop()} method. The parent
 	 * <code>SystemBundle</code> must not enter the {@link Bundle#RESOLVED}
 	 * state until all of the child frameworks have completed their shutdown
 	 * process. After the parent framework has completed the shutdown process
@@ -84,8 +84,8 @@ public interface FrameworkFactory {
 	 *            framework to the target framework.
 	 * @return a framework link.
 	 * @throws BundleException
-	 *             The source or target system bundles are not active or if any
-	 *             other error occurred in establishing the link.
+	 *             If the source or target system bundles are not active or if
+	 *             any other error occurred in establishing the link.
 	 */
 	FrameworkLink createFrameworkLink(SystemBundle source, SystemBundle target,
 			LinkDescription description) throws BundleException;
