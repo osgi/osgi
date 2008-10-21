@@ -4,6 +4,7 @@ Bundle-Description				: \
 
 Bundle-Version					: ${cmpn.release.version}
 DynamicImport-Package			: *
+Import-Package					: *; resolution:=optional
 
 Export-Package 					: ${cmpn.packages}
 

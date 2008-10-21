@@ -4,6 +4,7 @@ Bundle-Description			: \
 
 Bundle-Version				: ${core.release.version}
 DynamicImport-Package		: *
+Import-Package				: *; resolution:=optional
 
 Export-Package 				: ${core.packages}
 Include-Resource			: legal/about.html, legal/LICENSE

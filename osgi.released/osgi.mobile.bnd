@@ -4,8 +4,8 @@ Bundle-Description				: \
 
 Bundle-Version					: ${mobile.release.version}
 Bundle-SymbolicName				: osgi.mobile
-
-DynamicImport-Package: *
+Import-Package					: *; resolution:=optional
+DynamicImport-Package			: *
 
 Export-Package					: ${mobile.packages}
 Include-Resource 				: legal/about.html, \
