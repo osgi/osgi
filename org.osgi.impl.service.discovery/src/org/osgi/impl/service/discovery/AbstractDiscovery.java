@@ -178,14 +178,6 @@ public abstract class AbstractDiscovery implements Discovery {
 		this.autoPublish = autoPublish;
 	}
 
-	/**
-	 * 
-	 * @return map of listeners and associated filters
-	 */
-	protected final Map getListeners() {
-		return listenerAndFilter;
-	}
-
 	protected BundleContext getContext() {
 		return context;
 	}
