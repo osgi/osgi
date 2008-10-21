@@ -12,4 +12,6 @@ Private-Package						= org.osgi.test.cases.log
 	org.osgi.impl.service.log; version=project, \
 	org.osgi.impl.service.cm;  version=project
 
+-runproperties					= report=true
+
 Test-Cases: ${classes;extending;*TestCase}
