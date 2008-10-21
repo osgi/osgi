@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.Timer;
 
 import org.osgi.framework.BundleContext;
@@ -89,19 +90,19 @@ public class SLPHandlerImpl extends AbstractDiscovery {
 		super.destroy();
 	}
 
-	synchronized Locator getLocator() {
+	private synchronized Locator getLocator() {
 		return locator;
 	}
 
-	synchronized void setLocator(final Locator locator) {
+	private synchronized void setLocator(final Locator locator) {
 		this.locator = locator;
 	}
 
-	synchronized Advertiser getAdvertiser() {
+	private synchronized Advertiser getAdvertiser() {
 		return advertiser;
 	}
 
-	synchronized void setAdvertiser(final Advertiser advertiser) {
+	private synchronized void setAdvertiser(final Advertiser advertiser) {
 		this.advertiser = advertiser;
 	}
 
@@ -368,5 +369,14 @@ public class SLPHandlerImpl extends AbstractDiscovery {
 			setAdvertiser(null);
 			log(LogService.LOG_INFO, "unbound Advertiser");
 		}
+	}
+	
+	/**
+	 * For test purposes only.
+	 * 
+	 * @return
+	 */
+	protected Set getListener() {
+		return getListenerAndFilter().keySet();
 	}
 }
