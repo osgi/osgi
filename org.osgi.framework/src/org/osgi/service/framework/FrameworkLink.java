@@ -64,14 +64,12 @@ import org.osgi.framework.BundleException;
  * <ul>
  * <li>This framework link is unregistered as a service from the source and
  * target frameworks.</li>
- * <li>The source bundle must be stopped.</li>
- * <li>The target bundle must be stopped.</li>
  * <li>If the source bundle was not updated with the
  * {@link Bundle#update(java.io.InputStream)} method, it must be uninstalled.</li>
  * <li>If the target bundle was not updated with the
  * {@link Bundle#update(java.io.InputStream)} method, it must be uninstalled.</li>
  * <li>The target bundle must be refreshed to ensure other bundles in the target 
- * framework are not importing packages exported by the target bundle.</li>
+ * framework are not importing packages previously exported by the target bundle.</li>
  * </ul>
  * 
  * <h3>The Source Bundle</h3>
@@ -84,7 +82,7 @@ import org.osgi.framework.BundleException;
  *   <ul>
  *   <li>The source bundle must acquire all available services that are
  * registered in the source framework and that match the link description.
- * See {@link LinkDescription#getServiceFilters()}</li>
+ * See {@link LinkDescription#getServiceFilters()}.</li>
  *   <li>The target bundle must start.</li>
  *   </ul>
  * </li>
@@ -129,11 +127,11 @@ import org.osgi.framework.BundleException;
  * Bundle lifecycle operations performed on the target bundle will effect
  * this framework link in the following ways:
  * <ul>
- * <li>{@link Bundle#start() start}</li> - starts the target bundle. If the
+ * <li>{@link Bundle#start() start}- starts the target bundle. If the
  * source bundle is active then the target bundle must register services in
  * the target framework that are acquired by the source bundle and that
  * match the link description. See
- * {@link LinkDescription#getServiceFilters()}</li>
+ * {@link LinkDescription#getServiceFilters()}.</li>
  * <li>{@link Bundle#stop() stop} - stops the target bundle. The target
  * bundle must unregister all shared services.</li>
  * <li>{@link Bundle#uninstall() uninstall} - uninstalls the target. This
