@@ -1,0 +1,17 @@
+Bundle-Description				: \
+	OSGi Service Platform Release ${version;=;${cmpn.release.version}} version ${cmpn.release.version}, \
+	Compendium Test Case Bundles.
+
+Bundle-Version					: ${cmpn.release.version}
+Bundle-Activator				: org.osgi.tools.group.Group
+
+Include-Resource				: \
+	${replace;${build.cmpn.tests};(.+);${target}/$1.jar} \
+    \
+    NOTICE=../osgi.companion/legal/NOTICE.txt, \
+ 	about.html=../osgi.companion/legal/about-ri.html
+
+#   org.osgi.test.cases.signature.cmpn, \
+
+Private-Package					: \
+	org.osgi.tools.group

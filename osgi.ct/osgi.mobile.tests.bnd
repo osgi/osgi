@@ -1,0 +1,16 @@
+Bundle-Description				: \
+	OSGi Service Platform Release ${version;=;${mobile.release.version}} version ${mobile.release.version}, \
+	Mobile Test Case Bundles.
+
+Bundle-Version					: ${mobile.release.version}
+Bundle-Activator				: org.osgi.tools.group.Group
+
+Include-Resource				: \
+	${replace;${build.mobile.tests};(.+);${target}/$1.jar}, \
+	  	\
+	 	NOTICE=../osgi.companion/legal/NOTICE.txt, \
+	 	about.html=../osgi.companion/legal/about-ri.html
+  	
+#		${target}/org.osgi.test.cases.signature.mobile.jar, \
+
+Private-Package					: org.osgi.tools.group
