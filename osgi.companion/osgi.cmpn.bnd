@@ -1,0 +1,15 @@
+Bundle-Description				: \
+	OSGi Service Platform Release ${version;=;${cmpn.release.version}} version ${cmpn.release.version}, \
+	Compendium Interfaces and Classes for use in compiling bundles.
+
+Bundle-Version					: ${cmpn.release.version}
+DynamicImport-Package			: *
+Import-Package					: *; resolution:=optional
+
+Export-Package 					: ${cmpn.packages}
+
+Include-Resource 				: legal/about.html, \
+  								  legal/LICENSE, \
+  								  xmlns/metatype=../xmlns/metatype, \
+  								  xmlns/scr=../xmlns/scr, \
+  								  xmlns/app=../xmlns/app
