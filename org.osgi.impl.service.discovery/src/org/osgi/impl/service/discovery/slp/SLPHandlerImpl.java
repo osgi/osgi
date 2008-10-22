@@ -55,7 +55,7 @@ public class SLPHandlerImpl extends AbstractDiscovery {
 	private Locator locator = null;
 	private Advertiser advertiser = null;
 
-	private final int POLLDELAY = 30000;
+	private final int POLLDELAY = 20000; //20 sec
 
 	private Timer t = null;
 
@@ -78,8 +78,8 @@ public class SLPHandlerImpl extends AbstractDiscovery {
 		locatorTracker.open();
 		advertiserTracker.open();
 		t = new Timer(false);
-		t.scheduleAtFixedRate(new InformListenerTask(getListenerAndFilter(),
-				this), POLLDELAY, POLLDELAY);
+		t.schedule(new InformListenerTask(getListenerAndFilter(),
+				this), 0, POLLDELAY);
 	}
 
 	public void destroy() {
@@ -260,6 +260,7 @@ public class SLPHandlerImpl extends AbstractDiscovery {
 					advertiser.register(svcDescr.getServiceURL(interfaces[k]),
 							new Hashtable(svcDescr.getProperties()));
 				} catch (ServiceLocationException e) {
+					e.printStackTrace();
 					log(LogService.LOG_ERROR, "failed registering service", e);
 				}
 			}
