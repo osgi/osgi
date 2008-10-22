@@ -1,0 +1,26 @@
+Bundle-Description				: \
+	OSGi Service Platform Release ${version;=;${mobile.release.version}} version ${mobile.release.version}, \
+	Mobile Reference Implementations.
+
+Bundle-Version					: ${mobile.release.version}
+Bundle-Activator				: org.osgi.tools.group.Group
+
+Include-Resource				: \
+	${replace;${build.mobile.impls};(.+);${target}/$1.jar}, \
+  	\
+	${repo;org.osgi.impl.bundle.servlet;2.1}, \
+  	${repo;org.eclipse.equinox.ds}, \
+  	${repo;org.eclipse.equinox.event}, \
+ 	${repo;org.eclipse.equinox.metatype}, \
+ 	\
+	apache/LICENSE=../licensed/licenses/ASL-2.0.txt, \
+ 	NOTICE=../osgi.companion/legal/NOTICE.txt, \
+ 	about.html=../osgi.companion/legal/about-ri.html
+ 	
+ 
+Private-Package					: \
+	org.osgi.tools.group
+
+Export-Package					: \
+	javax.microedition.io, \
+	javax.microedition.pki
