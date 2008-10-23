@@ -54,8 +54,8 @@
 			<arg value="as" />
 			<arg value="${target}/japi/osgi.core-latest.japi" />
 			<arg value="packages" />
-			<arg value="${target}/ee.minimum.jar" />
-			<arg value="${target}/osgi.core.jar" />
+			<arg value="${release.target}/ee.minimum.jar" />
+			<arg value="${release.target}/osgi.core.jar" />
 			<arg line="${japi.osgi.core}" />
 		</java>
 		<echo>osgi.cmpn</echo>
@@ -65,9 +65,9 @@
 			<arg value="as" />
 			<arg value="${target}/japi/osgi.cmpn-latest.japi" />
 			<arg value="packages" />
-			<arg value="${target}/ee.foundation.jar" />
-			<arg value="${target}/osgi.core.jar" />
-			<arg value="${target}/osgi.cmpn.jar" />
+			<arg value="${release.target}/ee.foundation.jar" />
+			<arg value="${release.target}/osgi.core.jar" />
+			<arg value="${release.target}/osgi.cmpn.jar" />
 			<arg value="${licensed-repo}/org.osgi.impl.bundle.servlet/org.osgi.impl.bundle.servlet-2.1.0.jar" />
 			<arg value="${licensed-repo}/com.icl.saxon/com.icl.saxon-6.5.1.jar" />
 			<arg line="${japi.osgi.cmpn}" />
@@ -79,9 +79,9 @@
 			<arg value="as" />
 			<arg value="${target}/japi/osgi.mobile-latest.japi" />
 			<arg value="packages" />
-			<arg value="${target}/ee.foundation.jar" />
-			<arg value="${target}/osgi.core.jar" />
-			<arg value="${target}/osgi.mobile.jar" />
+			<arg value="${release.target}/ee.foundation.jar" />
+			<arg value="${release.target}/osgi.core.jar" />
+			<arg value="${release.target}/osgi.mobile.jar" />
 			<arg value="${licensed-repo}/com.icl.saxon/com.icl.saxon-6.5.1.jar" />
 			<arg line="${japi.osgi.mobile}" />
 		</java>
@@ -92,7 +92,7 @@
 			<arg value="as" />
 			<arg value="${target}/japi/ee.minimum-latest.japi" />
 			<arg value="packages" />
-			<arg value="${target}/ee.minimum.jar" />
+			<arg value="${release.target}/ee.minimum.jar" />
 			<arg value="+java" />
 			<arg value="+javax" />
 		</java>
@@ -103,7 +103,7 @@
 			<arg value="as" />
 			<arg value="${target}/japi/ee.foundation-latest.japi" />
 			<arg value="packages" />
-			<arg value="${target}/ee.foundation.jar" />
+			<arg value="${release.target}/ee.foundation.jar" />
 			<arg value="+java" />
 			<arg value="+javax" />
 		</java>
