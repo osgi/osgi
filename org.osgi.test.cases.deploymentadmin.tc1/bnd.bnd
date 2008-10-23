@@ -74,7 +74,6 @@ Test-Cases							= ${classes;extending;org.junit.framework.TestCase|*DefaultTest
 	osgi; version=4.2
 
 -buildpath=\
-	org.osgi.service.deploymentadmin; version=project, \
     org.osgi.test.support; version=project , \
 		osgi;	version=4.2, \
 		ee.foundation, \
