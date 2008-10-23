@@ -12,6 +12,7 @@ project                 = ${basedir}
 src                     = src
 bin                     = src
 target					= ${project}/${target-dir}
+release.target			= ${if;${def;top};${def;top};${target}}
 workspace				= ${dir;${project}}
 build					= ${workspace}/cnf
 repo					= ${build}/repo
@@ -60,6 +61,13 @@ project.build			= ${tstamp;yyyyMMddhhmm}
 
 copyright = Copyright (c) OSGi Alliance (2000, ${tstamp;yyyy}). All Rights Reserved.
 copyright.html = Copyright &copy; OSGi Alliance (2000, ${tstamp;yyyy}). All Rights Reserved.
+
+osgi.version				= 4.2.0
+
+osgi.release.version		= ${osgi.version}.${project.build}
+core.release.version		= ${osgi.release.version}
+cmpn.release.version		= ${osgi.release.version}
+mobile.release.version		= ${osgi.release.version}
 
 # Documentation
 Bundle-Copyright       	= ${copyright}

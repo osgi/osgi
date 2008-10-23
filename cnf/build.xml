@@ -34,8 +34,7 @@
 
 		<available file="bnd.bnd" property="use.bnd" />
 
-		<bndprepare basedir="${projectdir}" print="false" />
-
+		<bndprepare basedir="${projectdir}" print="false" top="${release.dir}"/>
 		<!-- Now we have the same properties set as bnd 
 		-->
 
@@ -234,6 +233,7 @@
 		<echo>bin.includes:           ${bin.includes}</echo>
 		<echo>base.modfied:           ${base.modified} (${base.modified.readable})</echo>
 		<echo>target:                 ${target}</echo>
+		<echo>release.target:         ${release.target}</echo>
 		<echo>licensed repo:          ${licensed-repo}</echo>
 		<echo>repo:                   ${repo}</echo>
 		<echo>use.bnd:                ${use.bnd}</echo>

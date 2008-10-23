@@ -15,8 +15,8 @@ Export-Package					: \
 	org.osgi.tools.group
 
 Include-Resource				: \
-	${target-dir}/org.osgi.impl.service.http.jar, \
-	${target-dir}/org.osgi.impl.service.log.jar, \
+	${release.target}/org.osgi.impl.service.http.jar, \
+	${release.target}/org.osgi.impl.service.log.jar, \
 	NOTICE=../osgi.companion/legal/NOTICE.txt, \
  	../osgi.companion/legal/about-ri.html
   

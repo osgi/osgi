@@ -6,7 +6,7 @@ Bundle-Version					: ${mobile.release.version}
 Bundle-Activator				: org.osgi.tools.group.Group
 
 Include-Resource				: \
-	${replace;${build.mobile.tests};(.+);${target}/$1.jar}, \
+	${replace;${build.mobile.tests};(.+);${release.target}/$1.jar}, \
 	  	\
 	 	NOTICE=../osgi.companion/legal/NOTICE.txt, \
 	 	about.html=../osgi.companion/legal/about-ri.html

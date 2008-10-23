@@ -6,7 +6,7 @@ Bundle-Version					: ${cmpn.release.version}
 Bundle-Activator				: org.osgi.tools.group.Group
 
 Include-Resource				: \
-        ${replace;${build.cmpn.impls};(.+);${target}/$1.jar}, \
+        ${replace;${build.cmpn.impls};(.+);${release.target}/$1.jar}, \
 	  	\
 		${repo;org.osgi.impl.bundle.servlet;2.1}, \
 	  	${repo;org.eclipse.equinox.ds}, \
