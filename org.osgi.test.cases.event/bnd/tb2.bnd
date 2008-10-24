@@ -1,0 +1,9 @@
+Bundle-Activator: $(p).tb2.Activator
+Bundle-Version: 4
+
+Private-Package	: $(p).tb2
+
+
+
+
+
