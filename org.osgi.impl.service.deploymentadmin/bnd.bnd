@@ -10,7 +10,7 @@ Private-Package				= \
  	org.osgi.impl.service.dwnl, \
  	org.osgi.impl.service.dwnlimpl
 
-Export-Package 					= ${p}.perm, org.osgi.service.deploymentadmin
+Export-Package 					= ${p}.perm, org.osgi.service.deploymentadmin;-split-package:=merge-first
 Import-Package					= info.dmtree; resolution:=optional, *
 
 -buildpath						= \
