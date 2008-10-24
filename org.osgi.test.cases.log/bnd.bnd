@@ -1,6 +1,6 @@
 Bundle-Version: 3.0.0.${project.build}
 
-Private-Package						= org.osgi.test.cases.log
+Private-Package						= ${p}.*
 
 -buildpath							= \
 	org.osgi.service.log;					version=project	, \
@@ -10,7 +10,7 @@ Private-Package						= org.osgi.test.cases.log
 
 -runbundles						= \
 	org.osgi.impl.service.log; version=project, \
-	org.osgi.impl.service.cm;  version=project
+	org.osgi.impl.service.cm;  version=latest
 
 -runproperties					= report=true
 
