@@ -1,6 +1,6 @@
 Bundle-Activator: 		org.osgi.impl.service.log.Log
 Export-Package: 		org.osgi.service.log;-split-package:=first
-Private-Package: 		org.osgi.impl.service.log
+Private-Package: 		${p}.*
 
 Bundle-Name: 			impl.service.log
 Bundle-Description: 	OSGi Log Service Reference Implementation by IBM Corporation.
