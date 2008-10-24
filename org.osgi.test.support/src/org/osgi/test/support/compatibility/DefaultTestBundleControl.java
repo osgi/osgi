@@ -448,5 +448,35 @@ public abstract class DefaultTestBundleControl extends TestCase {
             throw e;
         }
     }
+    
+    public static String arrayToString(Object[] array) {
+        return arrayToString(array, false);
+    }
+
+    public static String arrayToString(Object[] array, boolean sort) {
+        StringBuffer buf = new StringBuffer();
+
+        if(sort) {
+            Arrays.sort(array);
+        }
+
+        if(array != null) {
+            buf.append("{ ");
+            for(int i = 0; i < array.length; i++) {
+                buf.append(array[i]);
+                if(i + 1 < array.length) {
+                    buf.append(", ");
+                }
+            }
+
+            buf.append(" }");
+
+        }
+        else {
+            buf.append("null");
+        }
+
+        return buf.toString();
+    }
 
 }
