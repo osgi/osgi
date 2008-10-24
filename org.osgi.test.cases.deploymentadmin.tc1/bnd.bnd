@@ -1,15 +1,7 @@
-Bundle-Version: 4.1.0.${project.build}
-
-Private-Package						= ${p}.tbc.*;-split-package:=merge-first, \
-	org.osgi.test.support.*;-split-package:=merge-first
-	
-Export-Package						= ${p}.tbc;-split-package:=merge-first, \
-	${p}.tbc.util;-split-package:=merge-first, \
-	${p}.tbc.BundleInfo;-split-package:=merge-first, \
-	${p}.tbc.Event;-split-package:=merge-first
-	
-Bundle-Category: osgi,test
-
+Bundle-Version						= 4.1.0.${project.build}
+Private-Package						= org.osgi.test.support.*
+Export-Package						= ${p}.tbc.*	
+Bundle-Category						= osgi,test
 Include-Resource					= \
 	www/tb1.jar=tb1.jar, \
 	www/simple.dp=res/simple.dp,\
@@ -67,18 +59,19 @@ Include-Resource					= \
 Test-Cases							= ${classes;extending;org.junit.framework.TestCase|*DefaultTestBundleControl}
 
 -runbundles							= \
-	org.osgi.impl.service.log; version=latest,\
-	org.eclipse.equinox.event;  version=latest, \
-	org.osgi.impl.service.deploymentadmin; version=project, \
-	org.osgi.impl.service.cm;  version=latest, \
-	osgi; version=4.2
+	org.osgi.impl.service.deploymentadmin; 			version=project, \
+	org.osgi.impl.service.log; 						version=latest,\
+	org.eclipse.equinox.event;  					version=latest, \
+	org.osgi.impl.service.cm;  						version=latest, \
+	osgi; 											version=4.2
 
 -buildpath=\
+	org.osgi.service.deploymentadmin; version=project, \
     org.osgi.test.support; version=project , \
 		osgi;	version=4.2, \
 		ee.foundation, \
 		${junit}
-		
+
 -runproperties= \
 	report=true, \
 	org.osgi.test.cases.deploymentadmin.timeout=10000, \
