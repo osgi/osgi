@@ -28,11 +28,6 @@ public class ConfigurationException extends Exception {
 	private final String		reason;
 
 	/**
-	 * Nested exception.
-	 */
-	private final Throwable	cause;
-
-	/**
 	 * Create a <code>ConfigurationException</code> object.
 	 * 
 	 * @param property name of the property that caused the problem,
@@ -43,7 +38,6 @@ public class ConfigurationException extends Exception {
 		super(property + " : " + reason);
 		this.property = property;
 		this.reason = reason;
-		this.cause = null;
 	}
 
 	/**
@@ -57,10 +51,9 @@ public class ConfigurationException extends Exception {
 	 */
 	public ConfigurationException(String property, String reason,
 			Throwable cause) {
-		super(property + " : " + reason);
+		super(property + " : " + reason, cause);
 		this.property = property;
 		this.reason = reason;
-		this.cause = cause;
 	}
 
 	/**
@@ -80,31 +73,5 @@ public class ConfigurationException extends Exception {
 	 */
 	public String getReason() {
 		return reason;
-	}
-
-	/**
-	 * Returns the cause of this exception or <code>null</code> if no cause
-	 * was specified when this exception was created.
-	 * 
-	 * @return The cause of this exception or <code>null</code> if no cause
-	 *         was specified.
-	 * @since 1.2
-	 */
-	public Throwable getCause() {
-		return cause;
-	}
-
-	/**
-	 * The cause of this exception can only be set when constructed.
-	 * 
-	 * @param cause Cause of the exception.
-	 * @return This object.
-	 * @throws java.lang.IllegalStateException This method will always throw an
-	 *         <code>IllegalStateException</code> since the cause of this
-	 *         exception can only be set when constructed.
-	 * @since 1.2
-	 */
-	public Throwable initCause(Throwable cause) {
-		throw new IllegalStateException();
 	}
 }

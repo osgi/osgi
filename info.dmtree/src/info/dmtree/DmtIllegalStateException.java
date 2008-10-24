@@ -26,16 +26,10 @@ public class DmtIllegalStateException extends RuntimeException {
     private static final long serialVersionUID = 2015244852018469700L;
 
     /**
-     * Nested exception.
-     */
-    private final Throwable cause;
-
-    /**
      * Create an instance of the exception with no message.
      */
     public DmtIllegalStateException() {
         super();
-        cause = null;
     }
 
     /**
@@ -45,7 +39,6 @@ public class DmtIllegalStateException extends RuntimeException {
      */
     public DmtIllegalStateException(String message) {
         super(message);
-        cause = null;
     }
 
     /**
@@ -55,8 +48,7 @@ public class DmtIllegalStateException extends RuntimeException {
      * @param cause the cause of the exception
      */
     public DmtIllegalStateException(Throwable cause) {
-        super();
-        this.cause = cause;
+        super(cause);
     }
 
     /**
@@ -67,32 +59,6 @@ public class DmtIllegalStateException extends RuntimeException {
      * @param cause the cause of the exception
      */
     public DmtIllegalStateException(String message, Throwable cause) {
-        super(message);
-        this.cause = cause;
+        super(message, cause);
     }
-
-    /**
-     * Returns the cause of this exception or <code>null</code> if no cause
-     * was specified when this exception was created.
-     * 
-     * @return the cause of this exception or <code>null</code> if no cause
-     *         was specified
-     */
-    public Throwable getCause() {
-        return cause;
-    }
-
-	/**
-	 * The cause of this exception can only be set when constructed.
-	 * 
-	 * @param cause Cause of the exception.
-	 * @return This object.
-	 * @throws java.lang.IllegalStateException This method will always throw an
-	 *         <code>IllegalStateException</code> since the cause of this
-	 *         exception can only be set when constructed.
-	 * @since 1.0.1
-	 */
-	public Throwable initCause(Throwable cause) {
-		throw new IllegalStateException();
-	}
 }

@@ -331,16 +331,16 @@ public class DmtException extends Exception {
      */
     private final int code;
 
-    /**
-     * The message associated with the exception, or <code>null</code> if
-     * there is no error message.
-     */
-    private final String message;
+	/**
+	 * The message associated with the exception, or <code>null</code> if there
+	 * is no error message.
+	 */
+	private final String		message;
 
-    /**
-     * The list of originating exceptions, or empty list or <code>null</code>
-     * if there are no originating exceptions.
-     */
+	/**
+	 * The list of originating exceptions, or empty list or <code>null</code> if
+	 * there are no originating exceptions.
+	 */
     private final Throwable[] causes;
 
     /**
@@ -416,6 +416,7 @@ public class DmtException extends Exception {
     
     private DmtException(String uri, int code, String message, 
             Throwable[] causes, boolean fatal) {
+    	super((Throwable) null);
         this.uri = uri;
         this.code = code;
         this.message = message;
@@ -521,7 +522,7 @@ public class DmtException extends Exception {
         if (uri != null)
             sb.append(": '").append(uri).append('\'');
         if (message != null)
-            sb.append(": ").append(message);
+			sb.append(": ").append(message);
 
         return sb.toString();
     }

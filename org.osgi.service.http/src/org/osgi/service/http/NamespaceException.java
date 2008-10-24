@@ -24,11 +24,7 @@ package org.osgi.service.http;
  */
 public class NamespaceException extends Exception {
     static final long serialVersionUID = 7235606031147877747L;
-	/**
-	 * Nested exception.
-	 */
-	private final Throwable	cause;
-
+    
 	/**
 	 * Construct a <code>NamespaceException</code> object with a detail message.
 	 * 
@@ -36,7 +32,6 @@ public class NamespaceException extends Exception {
 	 */
 	public NamespaceException(String message) {
 		super(message);
-		cause = null;
 	}
 
 	/**
@@ -47,47 +42,20 @@ public class NamespaceException extends Exception {
 	 * @param cause The nested exception.
 	 */
 	public NamespaceException(String message, Throwable cause) {
-		super(message);
-		this.cause = cause;
+		super(message, cause);
 	}
 
 	/**
 	 * Returns the nested exception.
-	 *
-     * <p>This method predates the general purpose exception chaining mechanism.
-     * The {@link #getCause()} method is now the preferred means of
-     * obtaining this information.
 	 * 
-	 * @return the nested exception or <code>null</code> if there is no nested
-	 *         exception.
+	 * <p>
+	 * This method predates the general purpose exception chaining mechanism.
+	 * The <code>getCause()</code> method is now the preferred means of
+	 * obtaining this information.
+	 * 
+	 * @return The result of calling <code>getCause()</code>.
 	 */
 	public Throwable getException() {
-		return cause;
-	}
-
-	/**
-	 * Returns the cause of this exception or <code>null</code> if no
-	 * cause was specified when this exception was created.
-	 *
-	 * @return  The cause of this exception or <code>null</code> if no
-	 * cause was specified.
-	 * @since 1.2 
-	 */
-	public Throwable getCause() {
-	    return cause;
-	}
-
-	/**
-	 * The cause of this exception can only be set when constructed.
-	 *
-	 * @param cause Cause of the exception.
-	 * @return This object.
-	 * @throws java.lang.IllegalStateException
-	 * This method will always throw an <code>IllegalStateException</code>
-	 * since the cause of this exception can only be set when constructed.
-	 * @since 1.2 
-	 */
-	public Throwable initCause(Throwable cause) {
-		throw new IllegalStateException();
+		return getCause();
 	}
 }

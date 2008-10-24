@@ -46,7 +46,6 @@ package org.osgi.service.application;
  */
 public class ApplicationException extends Exception {
 	private static final long serialVersionUID = -7173190453622508207L;
-	private final Throwable cause;
 	private final int errorCode;
 	
 	/**
@@ -60,10 +59,10 @@ public class ApplicationException extends Exception {
 	 * attribute is false.
 	 */
 	public static final int APPLICATION_NOT_LAUNCHABLE = 0x02;
-	
+
 	/**
-	 * An exception was thrown by the application or the corresponding
-	 * container during launch. The exception is available in {@link #getCause()}.
+	 * An exception was thrown by the application or the corresponding container
+	 * during launch. The exception is available from <code>getCause()</code>.
 	 */
 	public static final int APPLICATION_INTERNAL_ERROR = 0x03;
     
@@ -92,7 +91,8 @@ public class ApplicationException extends Exception {
 	 * @param errorCode The code of the error 
 	 */
 	public ApplicationException(int errorCode) {
-		this(errorCode, (Throwable) null);
+		super();
+		this.errorCode = errorCode;
 	}
 	
 	/**
@@ -102,8 +102,7 @@ public class ApplicationException extends Exception {
 	 * @param cause The cause of this exception.
 	 */
 	public ApplicationException(int errorCode, Throwable cause) {
-		super();
-		this.cause = cause;
+		super(cause);
 		this.errorCode = errorCode;
 	}
 
@@ -113,7 +112,8 @@ public class ApplicationException extends Exception {
 	 * @param message The associated message
 	 */
 	public ApplicationException(int errorCode, String message) {
-		this(errorCode, message, null);
+		super(message);
+		this.errorCode = errorCode;
 	}
 
 	/**
@@ -124,34 +124,8 @@ public class ApplicationException extends Exception {
 	 * @param cause The cause of this exception.
 	 */
 	public ApplicationException(int errorCode, String message, Throwable cause) {
-		super(message);
-		this.cause = cause;
+		super(message, cause);
 		this.errorCode = errorCode;
-	}
-
-	/**
-	 * Returns the cause of this exception or <code>null</code> if no cause
-	 * was specified when this exception was created.
-	 * 
-	 * @return The cause of this exception or <code>null</code> if no cause
-	 *         was specified.
-	 */
-	public Throwable getCause() {
-		return cause;
-	}
-
-	/**
-	 * The cause of this exception can only be set when constructed.
-	 * 
-	 * @param cause Cause of the exception.
-	 * @return This object.
-	 * @throws java.lang.IllegalStateException This method will always throw an
-	 *         <code>IllegalStateException</code> since the cause of this
-	 *         exception can only be set when constructed.
-	 * @since 1.1
-	 */
-	public Throwable initCause(Throwable cause) {
-		throw new IllegalStateException();
 	}
 
 	/**

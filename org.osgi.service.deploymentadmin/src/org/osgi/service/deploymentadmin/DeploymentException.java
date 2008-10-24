@@ -201,8 +201,6 @@ public class DeploymentException extends Exception {
 	public static final int	CODE_TIMEOUT					= 465;
 
 	private final int				code;
-	private final String			message;
-	private final Throwable		cause;
 
 	/**
 	 * Create an instance of the exception.
@@ -213,9 +211,8 @@ public class DeploymentException extends Exception {
 	 * @param cause the originating exception
 	 */
 	public DeploymentException(int code, String message, Throwable cause) {
+		super(message, cause);
 		this.code = code;
-		this.message = message;
-		this.cause = cause;
 	}
 
 	/**
@@ -227,7 +224,8 @@ public class DeploymentException extends Exception {
 	 * @param message Message associated with the exception
 	 */
 	public DeploymentException(int code, String message) {
-		this(code, message, null);
+		super(message);
+		this.code = code;
 	}
 
 	/**
@@ -238,28 +236,8 @@ public class DeploymentException extends Exception {
 	 *        predefined integer values (<code>CODE_X</code>).
 	 */
 	public DeploymentException(int code) {
-		this(code, null, null);
-	}
-
-	/**
-	 * @return Returns the cause.
-	 */
-	public Throwable getCause() {
-		return cause;
-	}
-
-	/**
-	 * The cause of this exception can only be set when constructed.
-	 * 
-	 * @param cause Cause of the exception.
-	 * @return This object.
-	 * @throws java.lang.IllegalStateException This method will always throw an
-	 *         <code>IllegalStateException</code> since the cause of this
-	 *         exception can only be set when constructed.
-	 * @since 1.1
-	 */
-	public Throwable initCause(Throwable cause) {
-		throw new IllegalStateException();
+		super();
+		this.code = code;
 	}
 
 	/**
@@ -267,12 +245,5 @@ public class DeploymentException extends Exception {
 	 */
 	public int getCode() {
 		return code;
-	}
-
-	/**
-	 * @return Returns the message.
-	 */
-	public String getMessage() {
-	    return message;
 	}
 }

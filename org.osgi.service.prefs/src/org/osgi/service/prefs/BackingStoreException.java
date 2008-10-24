@@ -23,59 +23,26 @@ package org.osgi.service.prefs;
  */
 public class BackingStoreException extends Exception {
     static final long serialVersionUID = -1415637364122829574L;
-	/**
-	 * Nested exception.
-	 */
-	private final Throwable	cause;
 
 	/**
 	 * Constructs a <code>BackingStoreException</code> with the specified detail
 	 * message.
 	 * 
-	 * @param s The detail message.
+	 * @param message The detail message.
 	 */
-	public BackingStoreException(String s) {
-		super(s);
-		this.cause = null;
+	public BackingStoreException(String message) {
+		super(message);
 	}
 	
 	/**
 	 * Constructs a <code>BackingStoreException</code> with the specified detail
 	 * message.
 	 * 
-	 * @param s The detail message.
+	 * @param message The detail message.
 	 * @param cause The cause of the exception. May be <code>null</code>.
 	 * @since 1.1 
 	 */
-	public BackingStoreException(String s, Throwable cause) {
-		super(s);
-		this.cause = cause;
+	public BackingStoreException(String message, Throwable cause) {
+		super(message, cause);
 	}
-	
-	/**
-	 * Returns the cause of this exception or <code>null</code> if no cause was
-	 * specified when this exception was created.
-	 * 
-	 * @return The cause of this exception or <code>null</code> if no cause was
-	 *         specified.
-	 * @since 1.1 
-	 */
-	public Throwable getCause() {
-		return cause;
-	}
-
-	/**
-	 * The cause of this exception can only be set when constructed.
-	 * 
-	 * @param cause Cause of the exception.
-	 * @return This object.
-	 * @throws java.lang.IllegalStateException This method will always throw an
-	 *         <code>IllegalStateException</code> since the cause of this
-	 *         exception can only be set when constructed.
-	 * @since 1.1 
-	 */
-	public Throwable initCause(Throwable cause) {
-		throw new IllegalStateException();
-	}
-
 }

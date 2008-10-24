@@ -37,10 +37,6 @@ package org.osgi.framework;
 
 public class ServiceException extends RuntimeException {
 	static final long		serialVersionUID	= 3038963223712959631L;
-	/**
-	 * Nested exception.
-	 */
-	private final Throwable	cause;
 
 	/**
 	 * Type of service exception.
@@ -86,7 +82,7 @@ public class ServiceException extends RuntimeException {
 	 * @param msg The message.
 	 */
 	public ServiceException(String msg) {
-		this(msg, UNSPECIFIED, null);
+		this(msg, UNSPECIFIED);
 	}
 
 	/**
@@ -98,9 +94,8 @@ public class ServiceException extends RuntimeException {
 	 * @param cause The cause of this exception.
 	 */
 	public ServiceException(String msg, int type, Throwable cause) {
-		super(msg);
+		super(msg, cause);
 		this.type = type;
-		this.cause = cause;
 	}
 
 	/**
@@ -111,31 +106,8 @@ public class ServiceException extends RuntimeException {
 	 * @param type The type for this exception.
 	 */
 	public ServiceException(String msg, int type) {
-		this(msg, type, null);
-	}
-
-	/**
-	 * Returns the cause of this exception or <code>null</code> if no cause
-	 * was specified when this exception was created.
-	 * 
-	 * @return The cause of this exception or <code>null</code> if no cause
-	 *         was specified.
-	 */
-	public Throwable getCause() {
-		return cause;
-	}
-
-	/**
-	 * The cause of this exception can only be set when constructed.
-	 * 
-	 * @param cause Cause of the exception.
-	 * @return This object.
-	 * @throws java.lang.IllegalStateException This method will always throw an
-	 *         <code>IllegalStateException</code> since the cause of this
-	 *         exception can only be set when constructed.
-	 */
-	public Throwable initCause(Throwable cause) {
-		throw new IllegalStateException();
+		super(msg);
+		this.type = type;
 	}
 
 	/**
