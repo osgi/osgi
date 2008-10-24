@@ -15,8 +15,7 @@
  */
 package org.osgi.service.framework;
 
-import org.osgi.framework.Bundle;
-import org.osgi.framework.BundleException;
+import org.osgi.framework.*;
 
 /**
  * A link between two frameworks. A framework link shares packages and services
@@ -172,14 +171,31 @@ import org.osgi.framework.BundleException;
  */
 // TODO javadoc needs review
 public interface FrameworkLink {
+
 	/**
-	 * Service registration property (named
-	 * <code>org.osgi.service.framework.linkID</code>) specifying the link id
-	 * for a framework link service. <code>FrameworkLink</code> services must be
-	 * registered with this property. The value of this property is a unique
-	 * <code>String</code> identifying the link.
+	 * Service property (named &quot;link.mode&quot;) identifying a 
+	 * links mode within a framework.
+	 * <p>
+	 * The possible values are {@link #MODE_SOURCE &quot;source&quot;} and 
+	 * {@link #MODE_TARGET &quot;target&quot;}
 	 */
-	public static String ID = "org.osgi.service.framework.linkID";
+	public static String MODE = "link.mode";
+
+	/**
+	 * A value for the service property value for 
+	 * {@link #MODE &quot;link.mode&quot;} (named &quot;source&quot;)
+	 * that identifies this link is registered in the source 
+	 * framework's service registry.
+	 */
+	public static String MODE_SOURCE = "source";
+
+	/**
+	 * A value for the service property value for 
+	 * {@link #MODE &quot;link.mode&quot;} (named &quot;target&quot;)
+	 * that identifies this link is registered in the target 
+	 * framework's service registry.
+	 */
+	public static String MODE_TARGET = "target";
 
 	/**
 	 * Returns the link description for this framework link. The link
@@ -240,9 +256,10 @@ public interface FrameworkLink {
 	public Bundle getTarget();
 
 	/**
-	 * Returns a unique link id which is given to the link when it is created.
+	 * Returns this links persistent service id which is given to the link when it is created.
 	 * 
 	 * @return the unique link id.
+	 * @see Constants#SERVICE_PID
 	 */
-	public String getLinkID();
+	public String getPID();
 }

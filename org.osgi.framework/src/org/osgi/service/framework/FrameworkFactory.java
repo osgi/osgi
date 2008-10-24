@@ -16,7 +16,6 @@
 package org.osgi.service.framework;
 
 import java.util.Map;
-
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleException;
 import org.osgi.framework.launch.Framework;
@@ -60,7 +59,7 @@ public interface FrameworkFactory {
 	 *         INSTALLED} state
 	 * @see Framework
 	 */
-	Framework createChildFramework(Map configuration);
+	Framework newChildFramework(Map configuration);
 
 	/**
 	 * Creates a link to share packages and services from a source framework to
@@ -83,6 +82,5 @@ public interface FrameworkFactory {
 	 * @throws BundleException If the source or target Frameworks are not active
 	 *         or if any other error occurred in establishing the link.
 	 */
-	FrameworkLink createFrameworkLink(Framework source, Framework target,
-			LinkDescription description) throws BundleException;
+	FrameworkLink newFrameworkLink(Framework source, Framework target, LinkDescription description) throws BundleException;
 }

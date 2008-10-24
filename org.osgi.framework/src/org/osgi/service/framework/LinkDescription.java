@@ -25,14 +25,8 @@ package org.osgi.service.framework;
  * @version $Revision$
  */
 // TODO javadoc needs review
-/*
- * TODO consider removing this class and changing
- * FrameworkFactory.createFrameworkLink and FrameworkLink.update to take two
- * String[] params. That may become unwieldy if we need to share other things
- * though (e.g. resources).
- */
 // TODO do we need to specify the start-level for the source and target bundles? (Bug 813)
-public class LinkDescription {
+public final class LinkDescription {
 	private final String[] imports;
 	private final String[] serviceFilters;
 
@@ -48,8 +42,8 @@ public class LinkDescription {
 	 *            services to import from a source framework.
 	 */
 	public LinkDescription(String[] imports, String[] serviceFilters) {
-		this.imports = (imports == null ? new String[0] : imports);
-		this.serviceFilters = (serviceFilters == null ? new String[0] : serviceFilters);
+		this.imports = (imports == null ? new String[0] : copyOf(imports));
+		this.serviceFilters = (serviceFilters == null ? new String[0] : copyOf(serviceFilters));
 	}
 
 	/**
