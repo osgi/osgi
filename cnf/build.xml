@@ -44,7 +44,7 @@
 		
 		<!-- mark init has been run -->
 		<property name="initialized" value="set" />
-		<echo>Enter project ${project.name}</echo>
+		<echo>Enter project ${project.name} (${release.target} ${release.dir})</echo>
 	</target>
 
 	<!-- 
