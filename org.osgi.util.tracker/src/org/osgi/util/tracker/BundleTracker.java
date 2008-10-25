@@ -153,6 +153,10 @@ public class BundleTracker implements BundleTrackerCustomizer {
 	 * <p>
 	 * This method should be called when this <code>BundleTracker</code> object
 	 * should end the tracking of bundles.
+	 * 
+	 * <p>
+	 * This implementation calls {@link #getBundles()} to get the list of
+	 * tracked bundles to remove.
 	 */
 	public synchronized void close() {
 		if (tracked == null) {
@@ -162,7 +166,7 @@ public class BundleTracker implements BundleTrackerCustomizer {
 			System.out.println("BundleTracker.close"); //$NON-NLS-1$
 		}
 		tracked.close();
-		Bundle[] bundles = getBundles();
+		Bundle[] bundles = getBundles(); 
 		Tracked outgoing = tracked;
 		tracked = null;
 		try {
@@ -260,8 +264,7 @@ public class BundleTracker implements BundleTrackerCustomizer {
 										 * use local var since we are not
 										 * synchronized
 										 */
-		if (tracked == null) /* if BundleTracker is not open */
-		{
+		if (tracked == null) { /* if BundleTracker is not open */
 			return null;
 		}
 		synchronized (tracked) {
@@ -395,7 +398,7 @@ public class BundleTracker implements BundleTrackerCustomizer {
 		/**
 		 * Tracked constructor.
 		 */
-		protected Tracked() {
+		Tracked() {
 			super();
 		}
 
@@ -443,7 +446,7 @@ public class BundleTracker implements BundleTrackerCustomizer {
 		 * 
 		 * @GuardedBy this
 		 */
-		protected void modified() {
+		void modified() {
 			super.modified(); /* increment the modification count */
 			BundleTracker.this.modified();
 		}
@@ -457,7 +460,7 @@ public class BundleTracker implements BundleTrackerCustomizer {
 		 * @return Customized object for the tracked item or <code>null</code>
 		 *         if the item is not to be tracked.
 		 */
-		protected Object customizerAdding(final Object item,
+		Object customizerAdding(final Object item,
 				final Object related) {
 			return customizer
 					.addingBundle((Bundle) item, (BundleEvent) related);
@@ -471,7 +474,7 @@ public class BundleTracker implements BundleTrackerCustomizer {
 		 * @param related Action related object.
 		 * @param object Customized object for the tracked item.
 		 */
-		protected void customizerModified(final Object item,
+		void customizerModified(final Object item,
 				final Object related, final Object object) {
 			customizer.modifiedBundle((Bundle) item, (BundleEvent) related,
 					object);
@@ -485,7 +488,7 @@ public class BundleTracker implements BundleTrackerCustomizer {
 		 * @param related Action related object.
 		 * @param object Customized object for the tracked item.
 		 */
-		protected void customizerRemoved(final Object item,
+		void customizerRemoved(final Object item,
 				final Object related, final Object object) {
 			customizer.removedBundle((Bundle) item, (BundleEvent) related,
 					object);

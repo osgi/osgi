@@ -99,7 +99,7 @@ abstract class AbstractTracked {
 	/**
 	 * AbstractTracked constructor.
 	 */
-	protected AbstractTracked() {
+	AbstractTracked() {
 		tracked = new HashMap();
 		trackingCount = 0;
 		adding = new ArrayList(6);
@@ -118,7 +118,7 @@ abstract class AbstractTracked {
 	 *        entries in the list are ignored.
 	 * @GuardedBy this
 	 */
-	protected void setInitial(Object[] list) {
+	void setInitial(Object[] list) {
 		if (list == null) {
 			return;
 		}
@@ -142,7 +142,7 @@ abstract class AbstractTracked {
 	 * synchronized on this object after the add listener call.
 	 * 
 	 */
-	protected void trackInitial() {
+	void trackInitial() {
 		while (true) {
 			Object item;
 			synchronized (this) {
@@ -191,7 +191,7 @@ abstract class AbstractTracked {
 	/**
 	 * Called by the owning Tracker object when it is closed.
 	 */
-	protected void close() {
+	void close() {
 		closed = true;
 	}
 
@@ -201,7 +201,7 @@ abstract class AbstractTracked {
 	 * @param item Item to be tracked.
 	 * @param related Action related object.
 	 */
-	protected void track(final Object item, final Object related) {
+	void track(final Object item, final Object related) {
 		Object object;
 		synchronized (this) {
 			object = tracked.get(item);
@@ -304,7 +304,7 @@ abstract class AbstractTracked {
 	 * @param item Item to be untracked.
 	 * @param related Action related object.
 	 */
-	protected void untrack(final Object item, final Object related) {
+	void untrack(final Object item, final Object related) {
 		Object object;
 		synchronized (this) {
 			if (initial.remove(item)) { /*
@@ -361,7 +361,7 @@ abstract class AbstractTracked {
 	 * 
 	 * @GuardedBy this
 	 */
-	protected int size() {
+	int size() {
 		return tracked.size();
 	}
 
@@ -373,7 +373,7 @@ abstract class AbstractTracked {
 	 * 
 	 * @GuardedBy this
 	 */
-	protected Object getCustomizedObject(final Object item) {
+	Object getCustomizedObject(final Object item) {
 		return tracked.get(item);
 	}
 
@@ -383,7 +383,7 @@ abstract class AbstractTracked {
 	 * @param list An array to contain the tracked items.
 	 * @GuardedBy this
 	 */
-	protected void getTracked(Object[] list) {
+	void getTracked(Object[] list) {
 		Iterator iter = tracked.keySet().iterator();
 		int i = 0;
 		while ((i < list.length) && iter.hasNext()) {
@@ -398,7 +398,7 @@ abstract class AbstractTracked {
 	 * 
 	 * @GuardedBy this
 	 */
-	protected void modified() {
+	void modified() {
 		trackingCount++;
 	}
 
@@ -412,7 +412,7 @@ abstract class AbstractTracked {
 	 * @GuardedBy this
 	 * @return The tracking count for this object.
 	 */
-	protected int getTrackingCount() {
+	int getTrackingCount() {
 		return trackingCount;
 	}
 
@@ -425,7 +425,7 @@ abstract class AbstractTracked {
 	 * @return Customized object for the tracked item or <code>null</code> if
 	 *         the item is not to be tracked.
 	 */
-	protected abstract Object customizerAdding(final Object item,
+	abstract Object customizerAdding(final Object item,
 			final Object related);
 
 	/**
@@ -436,7 +436,7 @@ abstract class AbstractTracked {
 	 * @param related Action related object.
 	 * @param object Customized object for the tracked item.
 	 */
-	protected abstract void customizerModified(final Object item,
+	abstract void customizerModified(final Object item,
 			final Object related, final Object object);
 
 	/**
@@ -447,6 +447,6 @@ abstract class AbstractTracked {
 	 * @param related Action related object.
 	 * @param object Customized object for the tracked item.
 	 */
-	protected abstract void customizerRemoved(final Object item,
+	abstract void customizerRemoved(final Object item,
 			final Object related, final Object object);
 }
