@@ -75,7 +75,7 @@ abstract class AbstractTracked {
 	 * This field is volatile because it is set by one thread and read by
 	 * another.
 	 */
-	protected volatile boolean	closed;
+	volatile boolean	closed;
 
 	/**
 	 * Initial list of items for the tracker. This is used to correctly process
