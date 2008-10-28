@@ -18,7 +18,6 @@ package org.osgi.util.tracker;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Map;
 
@@ -146,7 +145,7 @@ abstract class AbstractTracked {
 		while (true) {
 			Object item;
 			synchronized (this) {
-				if (initial.size() == 0) {
+				if (closed || (initial.size() == 0)) {
 					/*
 					 * if there are no more initial items
 					 */
@@ -202,44 +201,43 @@ abstract class AbstractTracked {
 	 * @param related Action related object.
 	 */
 	void track(final Object item, final Object related) {
-		Object object;
+		final Object object;
 		synchronized (this) {
-			object = tracked.get(item);
-		}
-		if (object != null) /* we are already tracking the item */
-		{
-			if (DEBUG) {
-				System.out.println("AbstractTracked.track[modified]: " + item); //$NON-NLS-1$
+			if (closed) {
+				return;
 			}
-			synchronized (this) {
+			object = tracked.get(item);
+			if (object == null) { /* we are not tracking the item */
+				if (adding.contains(item)) {
+					/* if this item is already in the process of being added. */
+					if (DEBUG) {
+						System.out
+								.println("AbstractTracked.track[already adding]: " + item); //$NON-NLS-1$
+					}
+					return;
+				}
+				adding.add(item); /* mark this item is being added */
+			}
+			else { /* we are currently tracking this item */
+				if (DEBUG) {
+					System.out
+					.println("AbstractTracked.track[modified]: " + item); //$NON-NLS-1$
+				}
 				modified(); /* increment modification count */
 			}
+		}
+
+		if (object == null) { /* we are not tracking the item */
+			trackAdding(item, related);
+		}
+		else {
 			/* Call customizer outside of synchronized region */
 			customizerModified(item, related, object);
 			/*
 			 * If the customizer throws an unchecked exception, it is safe to
 			 * let it propagate
 			 */
-			return;
 		}
-		synchronized (this) {
-			if (adding.contains(item)) { /*
-										 * if this item is already in the
-										 * process of being added.
-										 */
-				if (DEBUG) {
-					System.out
-							.println("AbstractTracked.track[already adding]: " + item); //$NON-NLS-1$
-				}
-				return;
-			}
-			adding.add(item); /* mark this item is being added */
-		}
-
-		trackAdding(item, related); /*
-									 * call trackAdding now that we have put the
-									 * item in the adding list
-									 */
 	}
 
 	/**
@@ -305,7 +303,7 @@ abstract class AbstractTracked {
 	 * @param related Action related object.
 	 */
 	void untrack(final Object item, final Object related) {
-		Object object;
+		final Object object;
 		synchronized (this) {
 			if (initial.remove(item)) { /*
 										 * if this item is already in the list
@@ -381,15 +379,12 @@ abstract class AbstractTracked {
 	 * Return the list of tracked items.
 	 * 
 	 * @param list An array to contain the tracked items.
+	 * @return The specified list if it is large enough to hold the tracked
+	 *         items or a new array large enough to hold the tracked items.
 	 * @GuardedBy this
 	 */
-	void getTracked(Object[] list) {
-		Iterator iter = tracked.keySet().iterator();
-		int i = 0;
-		while ((i < list.length) && iter.hasNext()) {
-			list[i] = iter.next();
-			i++;
-		}
+	Object[] getTracked(final Object[] list) {
+		return tracked.keySet().toArray(list);
 	}
 
 	/**

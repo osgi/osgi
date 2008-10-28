@@ -260,21 +260,19 @@ public class BundleTracker implements BundleTrackerCustomizer {
 	 *         bundles are being tracked.
 	 */
 	public Bundle[] getBundles() {
-		Tracked tracked = this.tracked; /*
-										 * use local var since we are not
-										 * synchronized
-										 */
-		if (tracked == null) { /* if BundleTracker is not open */
+		final Tracked t = tracked; /*
+									 * use local var since we are not
+									 * synchronized
+									 */
+		if (t == null) { /* if BundleTracker is not open */
 			return null;
 		}
-		synchronized (tracked) {
-			int length = tracked.size();
+		synchronized (t) {
+			int length = t.size();
 			if (length == 0) {
 				return null;
 			}
-			Bundle[] bundles = new Bundle[length];
-			tracked.getTracked(bundles);
-			return bundles;
+			return (Bundle[]) t.getTracked(new Bundle[length]);
 		}
 	}
 
@@ -288,15 +286,15 @@ public class BundleTracker implements BundleTrackerCustomizer {
 	 *         <code>Bundle</code> object is not being tracked.
 	 */
 	public Object getObject(Bundle bundle) {
-		Tracked tracked = this.tracked; /*
-										 * use local var since we are not
-										 * synchronized
-										 */
-		if (tracked == null) { /* if BundleTracker is not open */
+		final Tracked t = tracked; /*
+									 * use local var since we are not
+									 * synchronized
+									 */
+		if (t == null) { /* if BundleTracker is not open */
 			return null;
 		}
-		synchronized (tracked) {
-			return tracked.getCustomizedObject(bundle);
+		synchronized (t) {
+			return t.getCustomizedObject(bundle);
 		}
 	}
 
@@ -311,14 +309,14 @@ public class BundleTracker implements BundleTrackerCustomizer {
 	 * @param bundle Bundle to be removed.
 	 */
 	public void remove(Bundle bundle) {
-		Tracked tracked = this.tracked; /*
-										 * use local var since we are not
-										 * synchronized
-										 */
-		if (tracked == null) { /* if BundleTracker is not open */
+		final Tracked t = tracked; /*
+									 * use local var since we are not
+									 * synchronized
+									 */
+		if (t == null) { /* if BundleTracker is not open */
 			return;
 		}
-		tracked.untrack(bundle, null);
+		t.untrack(bundle, null);
 	}
 
 	/**
@@ -328,15 +326,15 @@ public class BundleTracker implements BundleTrackerCustomizer {
 	 * @return Number of bundles being tracked.
 	 */
 	public int size() {
-		Tracked tracked = this.tracked; /*
-										 * use local var since we are not
-										 * synchronized
-										 */
-		if (tracked == null) { /* if BundleTracker is not open */
+		final Tracked t = tracked; /*
+									 * use local var since we are not
+									 * synchronized
+									 */
+		if (t == null) { /* if BundleTracker is not open */
 			return 0;
 		}
-		synchronized (tracked) {
-			return tracked.size();
+		synchronized (t) {
+			return t.size();
 		}
 	}
 
@@ -360,15 +358,15 @@ public class BundleTracker implements BundleTrackerCustomizer {
 	 *         -1 if this <code>BundleTracker</code> object is not open.
 	 */
 	public int getTrackingCount() {
-		Tracked tracked = this.tracked; /*
-										 * use local var since we are not
-										 * synchronized
-										 */
-		if (tracked == null) { /* if BundleTracker is not open */
+		final Tracked t = tracked; /*
+									 * use local var since we are not
+									 * synchronized
+									 */
+		if (t == null) { /* if BundleTracker is not open */
 			return -1;
 		}
-		synchronized (tracked) {
-			return tracked.getTrackingCount();
+		synchronized (t) {
+			return t.getTrackingCount();
 		}
 	}
 

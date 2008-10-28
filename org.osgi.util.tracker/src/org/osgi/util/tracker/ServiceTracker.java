@@ -315,20 +315,20 @@ public class ServiceTracker implements ServiceTrackerCustomizer {
 	 * will be tracked by this <code>ServiceTracker</code> object.
 	 * 
 	 * @param trackAllServices If true, use getAllServiceReferences.
-	 * @param trackClass the class name with which the service was registered,
+	 * @param className the class name with which the service was registered,
 	 *        or null for all services.
 	 * @param filterString the filter criteria or null for all services.
 	 * @return the list of initial <code>ServiceReference</code> objects.
 	 * @throws InvalidSyntaxException if the filter uses an invalid syntax.
 	 */
 	private ServiceReference[] getInitialReferences(boolean trackAllServices,
-			String trackClass, String filterString)
+			String className, String filterString)
 			throws InvalidSyntaxException {
 		if (trackAllServices) {
-			return context.getAllServiceReferences(trackClass, filterString);
+			return context.getAllServiceReferences(className, filterString);
 		}
 		else {
-			return context.getServiceReferences(trackClass, filterString);
+			return context.getServiceReferences(className, filterString);
 		}
 	}
 
@@ -352,7 +352,7 @@ public class ServiceTracker implements ServiceTrackerCustomizer {
 		}
 		tracked.close();
 		ServiceReference[] references = getServiceReferences();
-		Tracked outgoing = tracked;
+		final Tracked outgoing = tracked;
 		tracked = null;
 		try {
 			context.removeServiceListener(outgoing);
@@ -466,16 +466,16 @@ public class ServiceTracker implements ServiceTrackerCustomizer {
 		}
 		Object object = getService(); 
 		while (object == null) {
-			Tracked tracked = this.tracked; /*
-											 * use local var since we are not
-											 * synchronized
-											 */
-			if (tracked == null) { /* if ServiceTracker is not open */
+			final Tracked t = tracked; /*
+										 * use local var since we are not
+										 * synchronized
+										 */
+			if (t == null) { /* if ServiceTracker is not open */
 				return null;
 			}
-			synchronized (tracked) {
-				if (tracked.size() == 0) {
-					tracked.wait(timeout);
+			synchronized (t) {
+				if (t.size() == 0) {
+					t.wait(timeout);
 				}
 			}
 			object = getService(); 
@@ -494,22 +494,21 @@ public class ServiceTracker implements ServiceTrackerCustomizer {
 	 *         <code>null</code> if no service are being tracked.
 	 */
 	public ServiceReference[] getServiceReferences() {
-		Tracked tracked = this.tracked; /*
-										 * use local var since we are not
-										 * synchronized
-										 */
-		if (tracked == null) { /* if ServiceTracker is not open */
+		final Tracked t = tracked; /*
+									 * use local var since we are not
+									 * synchronized
+									 */
+		if (t == null) { /* if ServiceTracker is not open */
 			return null;
 		}
-		synchronized (tracked) {
-			int length = tracked.size();
+		synchronized (t) {
+			int length = t.size();
 			if (length == 0) {
 				return null;
 			}
 
-			ServiceReference[] references = new ServiceReference[length];
-			tracked.getTracked(references);
-			return references;
+			return (ServiceReference[]) t
+					.getTracked(new ServiceReference[length]);
 		}
 	}
 
@@ -607,15 +606,15 @@ public class ServiceTracker implements ServiceTrackerCustomizer {
 	 *         tracked.
 	 */
 	public Object getService(ServiceReference reference) {
-		Tracked tracked = this.tracked; /*
-										 * use local var since we are not
-										 * synchronized
-										 */
-		if (tracked == null) { /* if ServiceTracker is not open */
+		final Tracked t = tracked; /*
+									 * use local var since we are not
+									 * synchronized
+									 */
+		if (t == null) { /* if ServiceTracker is not open */
 			return null;
 		}
-		synchronized (tracked) {
-			return tracked.getCustomizedObject(reference);
+		synchronized (t) {
+			return t.getCustomizedObject(reference);
 		}
 	}
 
@@ -633,14 +632,14 @@ public class ServiceTracker implements ServiceTrackerCustomizer {
 	 *         being tracked.
 	 */
 	public Object[] getServices() {
-		Tracked tracked = this.tracked; /*
-										 * use local var since we are not
-										 * synchronized
-										 */
-		if (tracked == null) { /* if ServiceTracker is not open */
+		final Tracked t = tracked; /*
+									 * use local var since we are not
+									 * synchronized
+									 */
+		if (t == null) { /* if ServiceTracker is not open */
 			return null;
 		}
-		synchronized (tracked) {
+		synchronized (t) {
 			ServiceReference[] references = getServiceReferences(); 
 			int length = (references == null) ? 0 : references.length;
 			if (length == 0) {
@@ -695,14 +694,14 @@ public class ServiceTracker implements ServiceTrackerCustomizer {
 	 * @param reference Reference to the service to be removed.
 	 */
 	public void remove(ServiceReference reference) {
-		Tracked tracked = this.tracked; /*
-										 * use local var since we are not
-										 * synchronized
-										 */
-		if (tracked == null) { /* if ServiceTracker is not open */
+		final Tracked t = tracked; /*
+									 * use local var since we are not
+									 * synchronized
+									 */
+		if (t == null) { /* if ServiceTracker is not open */
 			return;
 		}
-		tracked.untrack(reference, null);
+		t.untrack(reference, null);
 	}
 
 	/**
@@ -712,15 +711,15 @@ public class ServiceTracker implements ServiceTrackerCustomizer {
 	 * @return Number of services being tracked.
 	 */
 	public int size() {
-		Tracked tracked = this.tracked; /*
-										 * use local var since we are not
-										 * synchronized
-										 */
-		if (tracked == null) { /* if ServiceTracker is not open */
+		final Tracked t = tracked; /*
+									 * use local var since we are not
+									 * synchronized
+									 */
+		if (t == null) { /* if ServiceTracker is not open */
 			return 0;
 		}
-		synchronized (tracked) {
-			return tracked.size();
+		synchronized (t) {
+			return t.size();
 		}
 	}
 
@@ -746,15 +745,15 @@ public class ServiceTracker implements ServiceTrackerCustomizer {
 	 *         -1 if this <code>ServiceTracker</code> object is not open.
 	 */
 	public int getTrackingCount() {
-		Tracked tracked = this.tracked; /*
-										 * use local var since we are not
-										 * synchronized
-										 */
-		if (tracked == null) { /* if ServiceTracker is not open */
+		final Tracked t = tracked; /*
+									 * use local var since we are not
+									 * synchronized
+									 */
+		if (t == null) { /* if ServiceTracker is not open */
 			return -1;
 		}
-		synchronized (tracked) {
-			return tracked.getTrackingCount();
+		synchronized (t) {
+			return t.getTrackingCount();
 		}
 	}
 
