@@ -360,6 +360,10 @@ public class ServiceTracker implements ServiceTrackerCustomizer {
 		catch (IllegalStateException e) {
 			/* In case the context was stopped. */
 		}
+		modified(); /* clear the cache */
+		synchronized (outgoing) {
+			outgoing.notifyAll(); /* wake up any waiters */
+		}
 		if (references != null) {
 			for (int i = 0; i < references.length; i++) {
 				outgoing.untrack(references[i], null);
@@ -442,7 +446,9 @@ public class ServiceTracker implements ServiceTrackerCustomizer {
 
 	/**
 	 * Wait for at least one service to be tracked by this
-	 * <code>ServiceTracker</code> object.
+	 * <code>ServiceTracker</code>. This method will also return when this
+	 * <code>ServiceTracker</code> is closed.
+	 * 
 	 * <p>
 	 * It is strongly recommended that <code>waitForService</code> is not used
 	 * during the calling of the <code>BundleActivator</code> methods.
@@ -455,7 +461,7 @@ public class ServiceTracker implements ServiceTrackerCustomizer {
 	 * 
 	 * @param timeout time interval in milliseconds to wait. If zero, the method
 	 *        will wait indefinitely.
-	 * @return Returns the result of <code>getService()</code>.
+	 * @return Returns the result of {@link #getService()}.
 	 * @throws InterruptedException If another thread has interrupted the
 	 *         current thread.
 	 * @throws IllegalArgumentException If the value of timeout is negative.
@@ -488,7 +494,7 @@ public class ServiceTracker implements ServiceTrackerCustomizer {
 
 	/**
 	 * Return an array of <code>ServiceReference</code> objects for all services
-	 * being tracked by this <code>ServiceTracker</code> object.
+	 * being tracked by this <code>ServiceTracker</code>.
 	 * 
 	 * @return Array of <code>ServiceReference</code> objects or
 	 *         <code>null</code> if no service are being tracked.
@@ -514,7 +520,7 @@ public class ServiceTracker implements ServiceTrackerCustomizer {
 
 	/**
 	 * Returns a <code>ServiceReference</code> object for one of the services
-	 * being tracked by this <code>ServiceTracker</code> object.
+	 * being tracked by this <code>ServiceTracker</code>.
 	 * 
 	 * <p>
 	 * If multiple services are being tracked, the service with the highest
@@ -598,7 +604,7 @@ public class ServiceTracker implements ServiceTrackerCustomizer {
 	/**
 	 * Returns the service object for the specified
 	 * <code>ServiceReference</code> object if the referenced service is being
-	 * tracked by this <code>ServiceTracker</code> object.
+	 * tracked by this <code>ServiceTracker</code>.
 	 * 
 	 * @param reference Reference to the desired service.
 	 * @return Service object or <code>null</code> if the service referenced by
@@ -620,7 +626,7 @@ public class ServiceTracker implements ServiceTrackerCustomizer {
 
 	/**
 	 * Return an array of service objects for all services being tracked by this
-	 * <code>ServiceTracker</code> object.
+	 * <code>ServiceTracker</code>.
 	 * 
 	 * <p>
 	 * This implementation calls {@link #getServiceReferences()} to get the list
@@ -655,7 +661,7 @@ public class ServiceTracker implements ServiceTrackerCustomizer {
 
 	/**
 	 * Returns a service object for one of the services being tracked by this
-	 * <code>ServiceTracker</code> object.
+	 * <code>ServiceTracker</code>.
 	 * 
 	 * <p>
 	 * If any services are being tracked, this implementation returns the result
@@ -684,12 +690,12 @@ public class ServiceTracker implements ServiceTrackerCustomizer {
 	}
 
 	/**
-	 * Remove a service from this <code>ServiceTracker</code> object.
+	 * Remove a service from this <code>ServiceTracker</code>.
 	 * 
 	 * The specified service will be removed from this
-	 * <code>ServiceTracker</code> object. If the specified service was being
-	 * tracked then the <code>ServiceTrackerCustomizer.removedService</code>
-	 * method will be called for that service.
+	 * <code>ServiceTracker</code>. If the specified service was being tracked
+	 * then the <code>ServiceTrackerCustomizer.removedService</code> method will
+	 * be called for that service.
 	 * 
 	 * @param reference Reference to the service to be removed.
 	 */
@@ -706,7 +712,7 @@ public class ServiceTracker implements ServiceTrackerCustomizer {
 
 	/**
 	 * Return the number of services being tracked by this
-	 * <code>ServiceTracker</code> object.
+	 * <code>ServiceTracker</code>.
 	 * 
 	 * @return Number of services being tracked.
 	 */
@@ -724,25 +730,24 @@ public class ServiceTracker implements ServiceTrackerCustomizer {
 	}
 
 	/**
-	 * Returns the tracking count for this <code>ServiceTracker</code> object.
+	 * Returns the tracking count for this <code>ServiceTracker</code>.
 	 * 
 	 * The tracking count is initialized to 0 when this
-	 * <code>ServiceTracker</code> object is opened. Every time a service is
-	 * added, modified or removed from this <code>ServiceTracker</code> object
-	 * the tracking count is incremented.
+	 * <code>ServiceTracker</code> is opened. Every time a service is added,
+	 * modified or removed from this <code>ServiceTracker</code> the tracking
+	 * count is incremented.
 	 * 
 	 * <p>
 	 * The tracking count can be used to determine if this
-	 * <code>ServiceTracker</code> object has added, modified or removed a
-	 * service by comparing a tracking count value previously collected with the
-	 * current tracking count value. If the value has not changed, then no
-	 * service has been added, modified or removed from this
-	 * <code>ServiceTracker</code> object since the previous tracking count was
-	 * collected.
+	 * <code>ServiceTracker</code> has added, modified or removed a service by
+	 * comparing a tracking count value previously collected with the current
+	 * tracking count value. If the value has not changed, then no service has
+	 * been added, modified or removed from this <code>ServiceTracker</code>
+	 * since the previous tracking count was collected.
 	 * 
 	 * @since 1.2
-	 * @return The tracking count for this <code>ServiceTracker</code> object or
-	 *         -1 if this <code>ServiceTracker</code> object is not open.
+	 * @return The tracking count for this <code>ServiceTracker</code> or -1 if
+	 *         this <code>ServiceTracker</code> is not open.
 	 */
 	public int getTrackingCount() {
 		final Tracked t = tracked; /*

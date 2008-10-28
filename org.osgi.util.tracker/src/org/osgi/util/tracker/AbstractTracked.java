@@ -74,7 +74,7 @@ abstract class AbstractTracked {
 	 * This field is volatile because it is set by one thread and read by
 	 * another.
 	 */
-	volatile boolean	closed;
+	volatile boolean			closed;
 
 	/**
 	 * Initial list of items for the tracker. This is used to correctly process
@@ -221,7 +221,7 @@ abstract class AbstractTracked {
 			else { /* we are currently tracking this item */
 				if (DEBUG) {
 					System.out
-					.println("AbstractTracked.track[modified]: " + item); //$NON-NLS-1$
+							.println("AbstractTracked.track[modified]: " + item); //$NON-NLS-1$
 				}
 				modified(); /* increment modification count */
 			}
@@ -264,10 +264,11 @@ abstract class AbstractTracked {
 		}
 		finally {
 			synchronized (this) {
-				if (adding.remove(item)) { /*
-											 * if the item was not untracked
-											 * during the customizer callback
-											 */
+				if (adding.remove(item) && !closed) {
+					/*
+					 * if the item was not untracked during the customizer
+					 * callback
+					 */
 					if (object != null) {
 						tracked.put(item, object);
 						modified(); /* increment modification count */
@@ -420,8 +421,7 @@ abstract class AbstractTracked {
 	 * @return Customized object for the tracked item or <code>null</code> if
 	 *         the item is not to be tracked.
 	 */
-	abstract Object customizerAdding(final Object item,
-			final Object related);
+	abstract Object customizerAdding(final Object item, final Object related);
 
 	/**
 	 * Call the specific customizer modified method. This method must not be
@@ -431,8 +431,8 @@ abstract class AbstractTracked {
 	 * @param related Action related object.
 	 * @param object Customized object for the tracked item.
 	 */
-	abstract void customizerModified(final Object item,
-			final Object related, final Object object);
+	abstract void customizerModified(final Object item, final Object related,
+			final Object object);
 
 	/**
 	 * Call the specific customizer removed method. This method must not be
@@ -442,6 +442,6 @@ abstract class AbstractTracked {
 	 * @param related Action related object.
 	 * @param object Customized object for the tracked item.
 	 */
-	abstract void customizerRemoved(final Object item,
-			final Object related, final Object object);
+	abstract void customizerRemoved(final Object item, final Object related,
+			final Object object);
 }

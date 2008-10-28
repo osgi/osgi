@@ -25,17 +25,17 @@ import org.osgi.framework.SynchronousBundleListener;
  * The <code>BundleTracker</code> class simplifies tracking bundles much like
  * the <code>ServiceTracker</code> simplifies tracking services.
  * <p>
- * A <code>BundleTracker</code> object is constructed with state criteria and a
+ * A <code>BundleTracker</code> is constructed with state criteria and a
  * <code>BundleTrackerCustomizer</code> object. A <code>BundleTracker</code>
  * object can use the <code>BundleTrackerCustomizer</code> object to select
  * which bundles are tracked and to create a customized object to be tracked
- * with the bundle. The <code>BundleTracker</code> object can then be opened to
- * begin tracking all bundles whose state matches the specified state criteria.
+ * with the bundle. The <code>BundleTracker</code> can then be opened to begin
+ * tracking all bundles whose state matches the specified state criteria.
  * <p>
  * The <code>getBundles</code> method can be called to get the
  * <code>Bundle</code> objects of the bundles being tracked. The
- * <code>getCustomizedObject</code> method can be called to get the customized
- * object for a tracked bundle.
+ * <code>getObject</code> method can be called to get the customized object for
+ * a tracked bundle.
  * <p>
  * The <code>BundleTracker</code> class is thread-safe. It does not call a
  * <code>BundleTrackerCustomizer</code> object while holding any locks.
@@ -51,8 +51,7 @@ public class BundleTracker implements BundleTrackerCustomizer {
 	static final boolean			DEBUG	= false;
 
 	/**
-	 * Bundle context this <code>BundleTracker</code> object is tracking
-	 * against.
+	 * Bundle context this <code>BundleTracker</code> is tracking against.
 	 */
 	protected final BundleContext	context;
 
@@ -74,23 +73,23 @@ public class BundleTracker implements BundleTrackerCustomizer {
 	final int						mask;
 
 	/**
-	 * Create a <code>BundleTracker</code> object for bundles whose state is
-	 * present in the specified state mask.
+	 * Create a <code>BundleTracker</code> for bundles whose state is present in
+	 * the specified state mask.
 	 * 
 	 * <p>
 	 * Bundles whose state is present on the specified state mask will be
-	 * tracked by this <code>BundleTracker</code> object.
+	 * tracked by this <code>BundleTracker</code>.
 	 * 
 	 * @param context <code>BundleContext</code> object against which the
 	 *        tracking is done.
 	 * @param stateMask A bit mask of the <code>OR</code>ing of the bundle
 	 *        states to be tracked.
 	 * @param customizer The customizer object to call when bundles are added,
-	 *        modified, or removed in this <code>BundleTracker</code> object. If
+	 *        modified, or removed in this <code>BundleTracker</code>. If
 	 *        customizer is <code>null</code>, then this
-	 *        <code>BundleTracker</code> object will be used as the
+	 *        <code>BundleTracker</code> will be used as the
 	 *        <code>BundleTrackerCustomizer</code> object and the
-	 *        <code>BundleTracker</code> object will call the
+	 *        <code>BundleTracker</code> will call the
 	 *        <code>BundleTrackerCustomizer</code> methods on itself.
 	 * @see Bundle#getState()
 	 */
@@ -102,16 +101,16 @@ public class BundleTracker implements BundleTrackerCustomizer {
 	}
 
 	/**
-	 * Open this <code>BundleTracker</code> object and begin tracking bundles.
+	 * Open this <code>BundleTracker</code> and begin tracking bundles.
 	 * 
 	 * <p>
 	 * Bundle which match the state criteria specified when this
-	 * <code>BundleTracker</code> object was created are now tracked by this
-	 * <code>BundleTracker</code> object.
+	 * <code>BundleTracker</code> was created are now tracked by this
+	 * <code>BundleTracker</code>.
 	 * 
 	 * @throws java.lang.IllegalStateException if the <code>BundleContext</code>
-	 *         object with which this <code>BundleTracker</code> object was
-	 *         created is no longer valid.
+	 *         object with which this <code>BundleTracker</code> was created is
+	 *         no longer valid.
 	 * @throws java.lang.SecurityException If the caller and this class do not
 	 *         have the appropriate
 	 *         <code>AdminPermission[context bundle,LISTENER]</code>, and the
@@ -148,11 +147,11 @@ public class BundleTracker implements BundleTrackerCustomizer {
 	}
 
 	/**
-	 * Close this <code>BundleTracker</code> object.
+	 * Close this <code>BundleTracker</code>.
 	 * 
 	 * <p>
-	 * This method should be called when this <code>BundleTracker</code> object
-	 * should end the tracking of bundles.
+	 * This method should be called when this <code>BundleTracker</code> should
+	 * end the tracking of bundles.
 	 * 
 	 * <p>
 	 * This implementation calls {@link #getBundles()} to get the list of
@@ -187,9 +186,8 @@ public class BundleTracker implements BundleTrackerCustomizer {
 	 * <code>BundleTrackerCustomizer.addingBundle</code> method.
 	 * 
 	 * <p>
-	 * This method is only called when this <code>BundleTracker</code> object
-	 * has been constructed with a <code>null BundleTrackerCustomizer</code>
-	 * argument.
+	 * This method is only called when this <code>BundleTracker</code> has been
+	 * constructed with a <code>null BundleTrackerCustomizer</code> argument.
 	 * 
 	 * The default implementation returns the specified <code>Bundle</code>
 	 * object.
@@ -203,7 +201,7 @@ public class BundleTracker implements BundleTrackerCustomizer {
 	 *        called or <code>null</code> if there is no bundle event associated
 	 *        with the call to this method.
 	 * @return The customized object to be tracked for the bundle added to this
-	 *         <code>BundleTracker</code> object.
+	 *         <code>BundleTracker</code>.
 	 * @see BundleTrackerCustomizer
 	 */
 	public Object addingBundle(Bundle bundle, BundleEvent event) {
@@ -215,9 +213,8 @@ public class BundleTracker implements BundleTrackerCustomizer {
 	 * <code>BundleTrackerCustomizer.modifiedBundle</code> method.
 	 * 
 	 * <p>
-	 * This method is only called when this <code>BundleTracker</code> object
-	 * has been constructed with a <code>null BundleTrackerCustomizer</code>
-	 * argument.
+	 * This method is only called when this <code>BundleTracker</code> has been
+	 * constructed with a <code>null BundleTrackerCustomizer</code> argument.
 	 * 
 	 * The default implementation does nothing.
 	 * 
@@ -236,9 +233,8 @@ public class BundleTracker implements BundleTrackerCustomizer {
 	 * <code>BundleTrackerCustomizer.removedBundle</code> method.
 	 * 
 	 * <p>
-	 * This method is only called when this <code>BundleTracker</code> object
-	 * has been constructed with a <code>null BundleTrackerCustomizer</code>
-	 * argument.
+	 * This method is only called when this <code>BundleTracker</code> has been
+	 * constructed with a <code>null BundleTrackerCustomizer</code> argument.
 	 * 
 	 * The default implementation does nothing.
 	 * 
@@ -254,7 +250,7 @@ public class BundleTracker implements BundleTrackerCustomizer {
 
 	/**
 	 * Return an array of <code>Bundle</code> objects for all bundles being
-	 * tracked by this <code>BundleTracker</code> object.
+	 * tracked by this <code>BundleTracker</code>.
 	 * 
 	 * @return Array of <code>Bundle</code> objects or <code>null</code> if no
 	 *         bundles are being tracked.
@@ -278,8 +274,7 @@ public class BundleTracker implements BundleTrackerCustomizer {
 
 	/**
 	 * Returns the customized object for the specified <code>Bundle</code>
-	 * object if the bundle is being tracked by this <code>BundleTracker</code>
-	 * object.
+	 * object if the bundle is being tracked by this <code>BundleTracker</code>.
 	 * 
 	 * @param bundle Bundle being tracked.
 	 * @return Customized object or <code>null</code> if the specified
@@ -299,10 +294,10 @@ public class BundleTracker implements BundleTrackerCustomizer {
 	}
 
 	/**
-	 * Remove a bundle from this <code>BundleTracker</code> object.
+	 * Remove a bundle from this <code>BundleTracker</code>.
 	 * 
 	 * The specified bundle will be removed from this <code>BundleTracker</code>
-	 * object. If the specified bundle was being tracked then the
+	 * . If the specified bundle was being tracked then the
 	 * <code>BundleTrackerCustomizer.removedBundle</code> method will be called
 	 * for that bundle.
 	 * 
@@ -321,7 +316,7 @@ public class BundleTracker implements BundleTrackerCustomizer {
 
 	/**
 	 * Return the number of bundles being tracked by this
-	 * <code>BundleTracker</code> object.
+	 * <code>BundleTracker</code>.
 	 * 
 	 * @return Number of bundles being tracked.
 	 */
@@ -339,23 +334,23 @@ public class BundleTracker implements BundleTrackerCustomizer {
 	}
 
 	/**
-	 * Returns the tracking count for this <code>BundleTracker</code> object.
+	 * Returns the tracking count for this <code>BundleTracker</code>.
 	 * 
 	 * The tracking count is initialized to 0 when this
-	 * <code>BundleTracker</code> object is opened. Every time a bundle is
-	 * added, modified or removed from this <code>BundleTracker</code> object
-	 * the tracking count is incremented.
+	 * <code>BundleTracker</code> is opened. Every time a bundle is added,
+	 * modified or removed from this <code>BundleTracker</code> the tracking
+	 * count is incremented.
 	 * 
 	 * <p>
 	 * The tracking count can be used to determine if this
-	 * <code>BundleTracker</code> object has added, modified or removed a bundle
-	 * by comparing a tracking count value previously collected with the current
+	 * <code>BundleTracker</code> has added, modified or removed a bundle by
+	 * comparing a tracking count value previously collected with the current
 	 * tracking count value. If the value has not changed, then no bundle has
 	 * been added, modified or removed from this <code>BundleTracker</code>
-	 * object since the previous tracking count was collected.
+	 * since the previous tracking count was collected.
 	 * 
-	 * @return The tracking count for this <code>BundleTracker</code> object or
-	 *         -1 if this <code>BundleTracker</code> object is not open.
+	 * @return The tracking count for this <code>BundleTracker</code> or -1 if
+	 *         this <code>BundleTracker</code> is not open.
 	 */
 	public int getTrackingCount() {
 		final Tracked t = tracked; /*
