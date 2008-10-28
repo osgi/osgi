@@ -271,39 +271,43 @@ public class ServiceTracker implements ServiceTrackerCustomizer {
 	 *         created is no longer valid.
 	 * @since 1.3
 	 */
-	public synchronized void open(boolean trackAllServices) {
-		if (tracked != null) {
-			return;
-		}
-		if (DEBUG) {
-			System.out.println("ServiceTracker.open: " + filter); //$NON-NLS-1$
-		}
-		tracked = trackAllServices ? new AllTracked() : new Tracked();
-		synchronized (tracked) {
-			try {
-				context.addServiceListener(tracked, listenerFilter);
-				ServiceReference[] references;
-				if (trackClass != null) {
-					references = getInitialReferences(trackAllServices,
-							trackClass, null);
-				}
-				else {
-					if (trackReference != null) {
-						references = new ServiceReference[] {trackReference};
-					}
-					else { // user supplied filter
-						references = getInitialReferences(trackAllServices,
-								null, (listenerFilter != null) ? listenerFilter
-										: filter.toString());
-					}
-				}
-
-				tracked.setInitial(references); // set tracked with the initial
-				// references
+	public void open(boolean trackAllServices) {
+		synchronized (this) {
+			if (tracked != null) {
+				return;
 			}
-			catch (InvalidSyntaxException e) {
-				throw new RuntimeException(
-						"unexpected InvalidSyntaxException: " + e.getMessage()); //$NON-NLS-1$
+			if (DEBUG) {
+				System.out.println("ServiceTracker.open: " + filter); //$NON-NLS-1$
+			}
+			tracked = trackAllServices ? new AllTracked() : new Tracked();
+			synchronized (tracked) {
+				try {
+					context.addServiceListener(tracked, listenerFilter);
+					ServiceReference[] references;
+					if (trackClass != null) {
+						references = getInitialReferences(trackAllServices,
+								trackClass, null);
+					}
+					else {
+						if (trackReference != null) {
+							references = new ServiceReference[] {trackReference};
+						}
+						else { // user supplied filter
+							references = getInitialReferences(trackAllServices,
+									null,
+									(listenerFilter != null) ? listenerFilter
+											: filter.toString());
+						}
+					}
+					
+					tracked.setInitial(references); // set tracked with the
+													// initial
+					// references
+				}
+				catch (InvalidSyntaxException e) {
+					throw new RuntimeException(
+							"unexpected InvalidSyntaxException: " + e.getMessage()); //$NON-NLS-1$
+				}
 			}
 		}
 		/* Call tracked outside of synchronized region */
@@ -343,22 +347,26 @@ public class ServiceTracker implements ServiceTrackerCustomizer {
 	 * This implementation calls {@link #getServiceReferences()} to get the list
 	 * of tracked services to remove.
 	 */
-	public synchronized void close() {
-		if (tracked == null) {
-			return;
-		}
-		if (DEBUG) {
-			System.out.println("ServiceTracker.close: " + filter); //$NON-NLS-1$
-		}
-		tracked.close();
-		ServiceReference[] references = getServiceReferences();
-		final Tracked outgoing = tracked;
-		tracked = null;
-		try {
-			context.removeServiceListener(outgoing);
-		}
-		catch (IllegalStateException e) {
-			/* In case the context was stopped. */
+	public void close() {
+		final Tracked outgoing;
+		final ServiceReference[] references;
+		synchronized (this) {
+			if (tracked == null) {
+				return;
+			}
+			if (DEBUG) {
+				System.out.println("ServiceTracker.close: " + filter); //$NON-NLS-1$
+			}
+			tracked.close();
+			references = getServiceReferences();
+			outgoing = tracked;
+			tracked = null;
+			try {
+				context.removeServiceListener(outgoing);
+			}
+			catch (IllegalStateException e) {
+				/* In case the context was stopped. */
+			}
 		}
 		modified(); /* clear the cache */
 		synchronized (outgoing) {

@@ -116,29 +116,32 @@ public class BundleTracker implements BundleTrackerCustomizer {
 	 *         <code>AdminPermission[context bundle,LISTENER]</code>, and the
 	 *         Java Runtime Environment supports permissions.
 	 */
-	public synchronized void open() {
-		if (tracked != null) {
-			return;
-		}
-		if (DEBUG) {
-			System.out.println("BundleTracker.open"); //$NON-NLS-1$
-		}
-		tracked = new Tracked();
+	public void open() {
+		synchronized (this) {
+			if (tracked != null) {
+				return;
+			}
+			if (DEBUG) {
+				System.out.println("BundleTracker.open"); //$NON-NLS-1$
+			}
+			tracked = new Tracked();
 
-		synchronized (tracked) {
-			context.addBundleListener(tracked);
-			Bundle[] bundles = context.getBundles();
-			if (bundles != null) {
-				int length = bundles.length;
-				for (int i = 0; i < length; i++) {
-					int state = bundles[i].getState();
-					if ((state & mask) == 0) {
-						bundles[i] = null; // null out bundles whose states are
-						// not interesting
+			synchronized (tracked) {
+				context.addBundleListener(tracked);
+				Bundle[] bundles = context.getBundles();
+				if (bundles != null) {
+					int length = bundles.length;
+					for (int i = 0; i < length; i++) {
+						int state = bundles[i].getState();
+						if ((state & mask) == 0) {
+							bundles[i] = null; // null out bundles whose states
+												// are
+							// not interesting
+						}
 					}
+					tracked.setInitial(bundles); // set tracked with the initial
+					// bundles
 				}
-				tracked.setInitial(bundles); // set tracked with the initial
-				// bundles
 			}
 		}
 		/* Call tracked outside of synchronized region */
@@ -157,22 +160,26 @@ public class BundleTracker implements BundleTrackerCustomizer {
 	 * This implementation calls {@link #getBundles()} to get the list of
 	 * tracked bundles to remove.
 	 */
-	public synchronized void close() {
-		if (tracked == null) {
-			return;
-		}
-		if (DEBUG) {
-			System.out.println("BundleTracker.close"); //$NON-NLS-1$
-		}
-		tracked.close();
-		Bundle[] bundles = getBundles(); 
-		Tracked outgoing = tracked;
-		tracked = null;
-		try {
-			context.removeBundleListener(outgoing);
-		}
-		catch (IllegalStateException e) {
-			/* In case the context was stopped. */
+	public void close() {
+		final Bundle[] bundles;
+		final Tracked outgoing;
+		synchronized (this) {
+			if (tracked == null) {
+				return;
+			}
+			if (DEBUG) {
+				System.out.println("BundleTracker.close"); //$NON-NLS-1$
+			}
+			tracked.close();
+			bundles = getBundles();
+			outgoing = tracked;
+			tracked = null;
+			try {
+				context.removeBundleListener(outgoing);
+			}
+			catch (IllegalStateException e) {
+				/* In case the context was stopped. */
+			}
 		}
 		if (bundles != null) {
 			for (int i = 0; i < bundles.length; i++) {
@@ -366,21 +373,6 @@ public class BundleTracker implements BundleTrackerCustomizer {
 	}
 
 	/**
-	 * Called by the Tracked object whenever the set of tracked bundles is
-	 * modified.
-	 */
-	/*
-	 * This method must not be synchronized since it is called by Tracked while
-	 * Tracked is synchronized. We don't want synchronization interactions
-	 * between the listener thread and the user thread.
-	 */
-	void modified() {
-		if (DEBUG) {
-			System.out.println("BundleTracker.modified"); //$NON-NLS-1$
-		}
-	}
-
-	/**
 	 * Inner class which subclasses AbstractTracked. This class is the
 	 * <code>SynchronousBundleListener</code> object for the tracker.
 	 * 
@@ -431,17 +423,6 @@ public class BundleTracker implements BundleTrackerCustomizer {
 				 * to let it propagate
 				 */
 			}
-		}
-
-		/**
-		 * Increment the tracking count and tell the tracker there was a
-		 * modification.
-		 * 
-		 * @GuardedBy this
-		 */
-		void modified() {
-			super.modified(); /* increment the modification count */
-			BundleTracker.this.modified();
 		}
 
 		/**

@@ -19,6 +19,7 @@ package org.osgi.util.tracker;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -66,7 +67,7 @@ abstract class AbstractTracked {
 	 * 
 	 * @GuardedBy this
 	 */
-	private final ArrayList		adding;
+	private final List			adding;
 
 	/**
 	 * true if the tracked object is closed.
@@ -124,12 +125,13 @@ abstract class AbstractTracked {
 		int size = list.length;
 		for (int i = 0; i < size; i++) {
 			Object item = list[i];
-			if (item != null) {
-				if (DEBUG) {
-					System.out.println("AbstractTracked.setInitial: " + item); //$NON-NLS-1$
-				}
-				initial.add(item);
+			if (item == null) {
+				continue;
 			}
+			if (DEBUG) {
+				System.out.println("AbstractTracked.setInitial: " + item); //$NON-NLS-1$
+			}
+			initial.add(item);
 		}
 	}
 
@@ -389,7 +391,7 @@ abstract class AbstractTracked {
 	}
 
 	/**
-	 * Call the Tracker modified method. If this method is overridden, the
+	 * Increment the modification count. If this method is overridden, the
 	 * overriding method MUST call this method to increment the tracking count.
 	 * 
 	 * @GuardedBy this
