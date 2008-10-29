@@ -21,25 +21,25 @@ import org.osgi.framework.BundleEvent;
 
 /**
  * The <code>BundleTrackerCustomizer</code> interface allows a
- * <code>BundleTracker</code> object to customize the bundle objects that are
- * tracked. The <code>BundleTrackerCustomizer</code> object is called when a
- * bundle is being added to the <code>BundleTracker</code> object. The
+ * <code>BundleTracker</code> to customize the <code>Bundle</code>s that are
+ * tracked. A <code>BundleTrackerCustomizer</code> is called when a bundle is
+ * being added to a <code>BundleTracker</code>. The
  * <code>BundleTrackerCustomizer</code> can then return an object for the
- * tracked bundle. The <code>BundleTrackerCustomizer</code> object is also
- * called when a tracked bundle has been removed from the
- * <code>BundleTracker</code> object.
+ * tracked bundle. A <code>BundleTrackerCustomizer</code> is also called when a
+ * tracked bundle is modified or has been removed from a
+ * <code>BundleTracker</code>.
  * 
  * <p>
  * The methods in this interface may be called as the result of a
- * <code>BundleEvent</code> being received by a <code>BundleTracker</code>
- * object. Since <code>BundleEvent</code>s are received synchronously by the
- * <code>BundleTracker</code>, it is highly recommended that implementations
- * of these methods do not alter bundle states while being synchronized on any
+ * <code>BundleEvent</code> being received by a <code>BundleTracker</code>.
+ * Since <code>BundleEvent</code>s are received synchronously by the
+ * <code>BundleTracker</code>, it is highly recommended that implementations of
+ * these methods do not alter bundle states while being synchronized on any
  * object.
  * 
  * <p>
  * The <code>BundleTracker</code> class is thread-safe. It does not call a
- * <code>BundleTrackerCustomizer</code> object while holding any locks.
+ * <code>BundleTrackerCustomizer</code> while holding any locks.
  * <code>BundleTrackerCustomizer</code> implementations must also be
  * thread-safe.
  * 
@@ -49,58 +49,56 @@ import org.osgi.framework.BundleEvent;
  */
 public interface BundleTrackerCustomizer {
 	/**
-	 * A bundle is being added to the <code>BundleTracker</code> object.
+	 * A bundle is being added to the <code>BundleTracker</code>.
 	 * 
 	 * <p>
 	 * This method is called before a bundle which matched the search parameters
-	 * of the <code>BundleTracker</code> object is added to it. This method
-	 * should return the object to be tracked for this <code>Bundle</code>
-	 * object. The returned object is stored in the <code>BundleTracker</code>
-	 * object and is available from the
-	 * {@link BundleTracker#getBundles() getBundles} method.
+	 * of the <code>BundleTracker</code> is added to the
+	 * <code>BundleTracker</code>. This method should return the object to be
+	 * tracked for the specified <code>Bundle</code>. The returned object is
+	 * stored in the <code>BundleTracker</code> and is available from the
+	 * {@link BundleTracker#getObject(Bundle) getObject} method.
 	 * 
-	 * @param bundle Bundle being added to the <code>BundleTracker</code>
-	 *        object.
+	 * @param bundle The <code>Bundle</code> being added to the
+	 *        <code>BundleTracker</code>.
 	 * @param event The bundle event which caused this customizer method to be
-	 *        called or <code>null</code> if there is no bundle event
-	 *        associated with the call to this method.
-	 * @return The object to be tracked for the <code>Bundle</code> object or
-	 *         <code>null</code> if the <code>Bundle</code> object should
-	 *         not be tracked.
+	 *        called or <code>null</code> if there is no bundle event associated
+	 *        with the call to this method.
+	 * @return The object to be tracked for the specified <code>Bundle</code>
+	 *         object or <code>null</code> if the specified <code>Bundle</code>
+	 *         object should not be tracked.
 	 */
-	public abstract Object addingBundle(Bundle bundle, BundleEvent event);
+	public Object addingBundle(Bundle bundle, BundleEvent event);
 
 	/**
-	 * A bundle tracked by the <code>BundleTracker</code> object has been
-	 * modified.
+	 * A bundle tracked by the <code>BundleTracker</code> has been modified.
 	 * 
 	 * <p>
 	 * This method is called when a bundle being tracked by the
-	 * <code>BundleTracker</code> object has had its state modified.
+	 * <code>BundleTracker</code> has had its state modified.
 	 * 
-	 * @param bundle Bundle whose state has been modified.
+	 * @param bundle The <code>Bundle</code> whose state has been modified.
 	 * @param event The bundle event which caused this customizer method to be
-	 *        called or <code>null</code> if there is no bundle event
-	 *        associated with the call to this method.
-	 * @param object The tracked object for the modified bundle.
+	 *        called or <code>null</code> if there is no bundle event associated
+	 *        with the call to this method.
+	 * @param object The tracked object for the specified bundle.
 	 */
-	public abstract void modifiedBundle(Bundle bundle, BundleEvent event,
+	public void modifiedBundle(Bundle bundle, BundleEvent event,
 			Object object);
 
 	/**
-	 * A bundle tracked by the <code>BundleTracker</code> object has been
-	 * removed.
+	 * A bundle tracked by the <code>BundleTracker</code> has been removed.
 	 * 
 	 * <p>
 	 * This method is called after a bundle is no longer being tracked by the
-	 * <code>BundleTracker</code> object.
+	 * <code>BundleTracker</code>.
 	 * 
-	 * @param bundle Bundle that has been removed.
+	 * @param bundle The <code>Bundle</code> that has been removed.
 	 * @param event The bundle event which caused this customizer method to be
-	 *        called or <code>null</code> if there is no bundle event
-	 *        associated with the call to this method.
-	 * @param object The tracked object for the removed bundle.
+	 *        called or <code>null</code> if there is no bundle event associated
+	 *        with the call to this method.
+	 * @param object The tracked object for the specified bundle.
 	 */
-	public abstract void removedBundle(Bundle bundle, BundleEvent event,
+	public void removedBundle(Bundle bundle, BundleEvent event,
 			Object object);
 }

@@ -26,11 +26,11 @@ import org.osgi.framework.SynchronousBundleListener;
  * the <code>ServiceTracker</code> simplifies tracking services.
  * <p>
  * A <code>BundleTracker</code> is constructed with state criteria and a
- * <code>BundleTrackerCustomizer</code> object. A <code>BundleTracker</code>
- * object can use the <code>BundleTrackerCustomizer</code> object to select
- * which bundles are tracked and to create a customized object to be tracked
- * with the bundle. The <code>BundleTracker</code> can then be opened to begin
- * tracking all bundles whose state matches the specified state criteria.
+ * <code>BundleTrackerCustomizer</code> object. A <code>BundleTracker</code> can
+ * use the <code>BundleTrackerCustomizer</code> to select which bundles are
+ * tracked and to create a customized object to be tracked with the bundle. The
+ * <code>BundleTracker</code> can then be opened to begin tracking all bundles
+ * whose state matches the specified state criteria.
  * <p>
  * The <code>getBundles</code> method can be called to get the
  * <code>Bundle</code> objects of the bundles being tracked. The
@@ -38,7 +38,7 @@ import org.osgi.framework.SynchronousBundleListener;
  * a tracked bundle.
  * <p>
  * The <code>BundleTracker</code> class is thread-safe. It does not call a
- * <code>BundleTrackerCustomizer</code> object while holding any locks.
+ * <code>BundleTrackerCustomizer</code> while holding any locks.
  * <code>BundleTrackerCustomizer</code> implementations must also be
  * thread-safe.
  * 
@@ -51,12 +51,12 @@ public class BundleTracker implements BundleTrackerCustomizer {
 	static final boolean			DEBUG	= false;
 
 	/**
-	 * Bundle context this <code>BundleTracker</code> is tracking against.
+	 * The Bundle Context used by this <code>BundleTracker</code>.
 	 */
 	protected final BundleContext	context;
 
 	/**
-	 * <code>BundleTrackerCustomizer</code> object for this tracker.
+	 * The <code>BundleTrackerCustomizer</code> object for this tracker.
 	 */
 	final BundleTrackerCustomizer	customizer;
 
@@ -80,15 +80,15 @@ public class BundleTracker implements BundleTrackerCustomizer {
 	 * Bundles whose state is present on the specified state mask will be
 	 * tracked by this <code>BundleTracker</code>.
 	 * 
-	 * @param context <code>BundleContext</code> object against which the
-	 *        tracking is done.
-	 * @param stateMask A bit mask of the <code>OR</code>ing of the bundle
+	 * @param context The <code>BundleContext</code> against which the tracking
+	 *        is done.
+	 * @param stateMask The bit mask of the <code>OR</code>ing of the bundle
 	 *        states to be tracked.
 	 * @param customizer The customizer object to call when bundles are added,
 	 *        modified, or removed in this <code>BundleTracker</code>. If
 	 *        customizer is <code>null</code>, then this
 	 *        <code>BundleTracker</code> will be used as the
-	 *        <code>BundleTrackerCustomizer</code> object and the
+	 *        <code>BundleTrackerCustomizer</code> and this
 	 *        <code>BundleTracker</code> will call the
 	 *        <code>BundleTrackerCustomizer</code> methods on itself.
 	 * @see Bundle#getState()
@@ -108,9 +108,9 @@ public class BundleTracker implements BundleTrackerCustomizer {
 	 * <code>BundleTracker</code> was created are now tracked by this
 	 * <code>BundleTracker</code>.
 	 * 
-	 * @throws java.lang.IllegalStateException if the <code>BundleContext</code>
-	 *         object with which this <code>BundleTracker</code> was created is
-	 *         no longer valid.
+	 * @throws java.lang.IllegalStateException If the <code>BundleContext</code>
+	 *         with which this <code>BundleTracker</code> was created is no
+	 *         longer valid.
 	 * @throws java.lang.SecurityException If the caller and this class do not
 	 *         have the appropriate
 	 *         <code>AdminPermission[context bundle,LISTENER]</code>, and the
@@ -195,20 +195,20 @@ public class BundleTracker implements BundleTrackerCustomizer {
 	 * This method is only called when this <code>BundleTracker</code> has been
 	 * constructed with a <code>null BundleTrackerCustomizer</code> argument.
 	 * 
-	 * The default implementation returns the specified <code>Bundle</code>
-	 * object.
+	 * <p>
+	 * This implementation simply returns the specified <code>Bundle</code>.
+	 * 
 	 * <p>
 	 * This method can be overridden in a subclass to customize the object to be
 	 * tracked for the bundle being added.
 	 * 
-	 * @param bundle Bundle being added to this <code>BundleTracker</code>
-	 *        object.
+	 * @param bundle The <code>Bundle</code> being added to this
+	 *        <code>BundleTracker</code> object.
 	 * @param event The bundle event which caused this customizer method to be
 	 *        called or <code>null</code> if there is no bundle event associated
 	 *        with the call to this method.
-	 * @return The customized object to be tracked for the bundle added to this
-	 *         <code>BundleTracker</code>.
-	 * @see BundleTrackerCustomizer
+	 * @return The specified bundle.
+	 * @see BundleTrackerCustomizer#addingBundle(Bundle, BundleEvent)
 	 */
 	public Object addingBundle(Bundle bundle, BundleEvent event) {
 		return bundle;
@@ -222,16 +222,18 @@ public class BundleTracker implements BundleTrackerCustomizer {
 	 * This method is only called when this <code>BundleTracker</code> has been
 	 * constructed with a <code>null BundleTrackerCustomizer</code> argument.
 	 * 
-	 * The default implementation does nothing.
+	 * <p>
+	 * This implementation does nothing.
 	 * 
-	 * @param bundle Bundle whose state has been modified.
+	 * @param bundle The <code>Bundle</code> whose state has been modified.
 	 * @param event The bundle event which caused this customizer method to be
 	 *        called or <code>null</code> if there is no bundle event associated
 	 *        with the call to this method.
-	 * @param object The customized object for the bundle.
-	 * @see BundleTrackerCustomizer
+	 * @param object The customized object for the specified Bundle.
+	 * @see BundleTrackerCustomizer#modifiedBundle(Bundle, BundleEvent, Object)
 	 */
 	public void modifiedBundle(Bundle bundle, BundleEvent event, Object object) {
+		/* do nothing */
 	}
 
 	/**
@@ -242,23 +244,25 @@ public class BundleTracker implements BundleTrackerCustomizer {
 	 * This method is only called when this <code>BundleTracker</code> has been
 	 * constructed with a <code>null BundleTrackerCustomizer</code> argument.
 	 * 
-	 * The default implementation does nothing.
+	 * <p>
+	 * This implementation does nothing.
 	 * 
-	 * @param bundle Bundle being removed.
+	 * @param bundle The <code>Bundle</code> being removed.
 	 * @param event The bundle event which caused this customizer method to be
 	 *        called or <code>null</code> if there is no bundle event associated
 	 *        with the call to this method.
-	 * @param object The customized object for the bundle.
-	 * @see BundleTrackerCustomizer
+	 * @param object The customized object for the specified bundle.
+	 * @see BundleTrackerCustomizer#removedBundle(Bundle, BundleEvent, Object)
 	 */
 	public void removedBundle(Bundle bundle, BundleEvent event, Object object) {
+		/* do nothing */
 	}
 
 	/**
-	 * Return an array of <code>Bundle</code> objects for all bundles being
-	 * tracked by this <code>BundleTracker</code>.
+	 * Return an array of <code>Bundle</code>s for all bundles being tracked by
+	 * this <code>BundleTracker</code>.
 	 * 
-	 * @return Array of <code>Bundle</code> objects or <code>null</code> if no
+	 * @return An array of <code>Bundle</code>s or <code>null</code> if no
 	 *         bundles are being tracked.
 	 */
 	public Bundle[] getBundles() {
@@ -279,12 +283,13 @@ public class BundleTracker implements BundleTrackerCustomizer {
 	}
 
 	/**
-	 * Returns the customized object for the specified <code>Bundle</code>
-	 * object if the bundle is being tracked by this <code>BundleTracker</code>.
+	 * Returns the customized object for the specified <code>Bundle</code> if
+	 * the specified bundle is being tracked by this <code>BundleTracker</code>.
 	 * 
-	 * @param bundle Bundle being tracked.
-	 * @return Customized object or <code>null</code> if the specified
-	 *         <code>Bundle</code> object is not being tracked.
+	 * @param bundle The <code>Bundle</code> being tracked.
+	 * @return The customized object for the specified <code>Bundle</code> or
+	 *         <code>null</code> if the specified <code>Bundle</code> is not
+	 *         being tracked.
 	 */
 	public Object getObject(Bundle bundle) {
 		final Tracked t = tracked; /*
@@ -307,7 +312,7 @@ public class BundleTracker implements BundleTrackerCustomizer {
 	 * <code>BundleTrackerCustomizer.removedBundle</code> method will be called
 	 * for that bundle.
 	 * 
-	 * @param bundle Bundle to be removed.
+	 * @param bundle The <code>Bundle</code> to be removed.
 	 */
 	public void remove(Bundle bundle) {
 		final Tracked t = tracked; /*
@@ -324,7 +329,7 @@ public class BundleTracker implements BundleTrackerCustomizer {
 	 * Return the number of bundles being tracked by this
 	 * <code>BundleTracker</code>.
 	 * 
-	 * @return Number of bundles being tracked.
+	 * @return The number of bundles being tracked.
 	 */
 	public int size() {
 		final Tracked t = tracked; /*
@@ -401,8 +406,8 @@ public class BundleTracker implements BundleTrackerCustomizer {
 			if (closed) {
 				return;
 			}
-			Bundle bundle = event.getBundle();
-			int state = bundle.getState();
+			final Bundle bundle = event.getBundle();
+			final int state = bundle.getState();
 			if (DEBUG) {
 				System.out
 						.println("BundleTracker.Tracked.bundleChanged[" + state + "]: " + bundle); //$NON-NLS-1$ //$NON-NLS-2$
