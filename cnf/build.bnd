@@ -62,6 +62,7 @@ project.build			= ${tstamp;yyyyMMddhhmm}
 copyright = Copyright (c) OSGi Alliance (2000, ${tstamp;yyyy}). All Rights Reserved.
 copyright.html = Copyright &copy; OSGi Alliance (2000, ${tstamp;yyyy}). All Rights Reserved.
 
+osgi.release				= 4
 osgi.version				= 4.2.0
 
 osgi.release.version		= ${osgi.version}.${project.build}
