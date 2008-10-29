@@ -308,8 +308,8 @@ public class ServiceTracker implements ServiceTrackerCustomizer {
 					throw new RuntimeException(
 							"unexpected InvalidSyntaxException: " + e.getMessage()); //$NON-NLS-1$
 				}
-				tracked = t;
 			}
+			tracked = t;
 		}
 		/* Call tracked outside of synchronized region */
 		t.trackInitial(); /* process the initial references */
@@ -352,15 +352,15 @@ public class ServiceTracker implements ServiceTrackerCustomizer {
 		final Tracked outgoing;
 		final ServiceReference[] references;
 		synchronized (this) {
-			if (tracked == null) {
+			outgoing = tracked;
+			if (outgoing == null) {
 				return;
 			}
 			if (DEBUG) {
 				System.out.println("ServiceTracker.close: " + filter); //$NON-NLS-1$
 			}
-			tracked.close();
+			outgoing.close();
 			references = getServiceReferences();
-			outgoing = tracked;
 			tracked = null;
 			try {
 				context.removeServiceListener(outgoing);

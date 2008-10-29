@@ -163,15 +163,15 @@ public class BundleTracker implements BundleTrackerCustomizer {
 		final Bundle[] bundles;
 		final Tracked outgoing;
 		synchronized (this) {
-			if (tracked == null) {
+			outgoing = tracked;
+			if (outgoing == null) {
 				return;
 			}
 			if (DEBUG) {
 				System.out.println("BundleTracker.close"); //$NON-NLS-1$
 			}
-			tracked.close();
+			outgoing.close();
 			bundles = getBundles();
-			outgoing = tracked;
 			tracked = null;
 			try {
 				context.removeBundleListener(outgoing);
