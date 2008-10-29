@@ -117,6 +117,7 @@ public class BundleTracker implements BundleTrackerCustomizer {
 	 *         Java Runtime Environment supports permissions.
 	 */
 	public void open() {
+		final Tracked t;
 		synchronized (this) {
 			if (tracked != null) {
 				return;
@@ -124,29 +125,27 @@ public class BundleTracker implements BundleTrackerCustomizer {
 			if (DEBUG) {
 				System.out.println("BundleTracker.open"); //$NON-NLS-1$
 			}
-			tracked = new Tracked();
-
-			synchronized (tracked) {
-				context.addBundleListener(tracked);
+			t = new Tracked();
+			synchronized (t) {
+				context.addBundleListener(t);
 				Bundle[] bundles = context.getBundles();
 				if (bundles != null) {
 					int length = bundles.length;
 					for (int i = 0; i < length; i++) {
 						int state = bundles[i].getState();
 						if ((state & mask) == 0) {
-							bundles[i] = null; // null out bundles whose states
-												// are
-							// not interesting
+							/* null out bundles whose states are not interesting */
+							bundles[i] = null;
 						}
 					}
-					tracked.setInitial(bundles); // set tracked with the initial
-					// bundles
+					/* set tracked with the initial bundles */
+					t.setInitial(bundles); 
 				}
 			}
+			tracked = t;
 		}
 		/* Call tracked outside of synchronized region */
-
-		tracked.trackInitial(); // process the initial references
+		t.trackInitial(); /* process the initial references */
 	}
 
 	/**

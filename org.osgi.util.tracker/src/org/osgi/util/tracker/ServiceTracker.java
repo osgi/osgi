@@ -272,6 +272,7 @@ public class ServiceTracker implements ServiceTrackerCustomizer {
 	 * @since 1.3
 	 */
 	public void open(boolean trackAllServices) {
+		final Tracked t;
 		synchronized (this) {
 			if (tracked != null) {
 				return;
@@ -279,10 +280,10 @@ public class ServiceTracker implements ServiceTrackerCustomizer {
 			if (DEBUG) {
 				System.out.println("ServiceTracker.open: " + filter); //$NON-NLS-1$
 			}
-			tracked = trackAllServices ? new AllTracked() : new Tracked();
-			synchronized (tracked) {
+			t = trackAllServices ? new AllTracked() : new Tracked();
+			synchronized (t) {
 				try {
-					context.addServiceListener(tracked, listenerFilter);
+					context.addServiceListener(t, listenerFilter);
 					ServiceReference[] references;
 					if (trackClass != null) {
 						references = getInitialReferences(trackAllServices,
@@ -292,7 +293,7 @@ public class ServiceTracker implements ServiceTrackerCustomizer {
 						if (trackReference != null) {
 							references = new ServiceReference[] {trackReference};
 						}
-						else { // user supplied filter
+						else { /* user supplied filter */
 							references = getInitialReferences(trackAllServices,
 									null,
 									(listenerFilter != null) ? listenerFilter
@@ -300,18 +301,18 @@ public class ServiceTracker implements ServiceTrackerCustomizer {
 						}
 					}
 					
-					tracked.setInitial(references); // set tracked with the
-													// initial
-					// references
+					/* set tracked with the initial references */
+					t.setInitial(references); 
 				}
 				catch (InvalidSyntaxException e) {
 					throw new RuntimeException(
 							"unexpected InvalidSyntaxException: " + e.getMessage()); //$NON-NLS-1$
 				}
+				tracked = t;
 			}
 		}
 		/* Call tracked outside of synchronized region */
-		tracked.trackInitial(); // process the initial references
+		t.trackInitial(); /* process the initial references */
 	}
 
 	/**
