@@ -285,7 +285,7 @@ abstract class AbstractTracked {
 		/*
 		 * The item became untracked during the customizer callback.
 		 */
-		if (becameUntracked) {
+		if (becameUntracked && (object != null)) {
 			if (DEBUG) {
 				System.out
 						.println("AbstractTracked.trackAdding[removed]: " + item); //$NON-NLS-1$
