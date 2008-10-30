@@ -52,6 +52,14 @@ License					licenses/EPL-1.0.html
 URL						http://www.eclipse.org
 Modifications			NONE, library uses as is
 
+DNCHAINMATCHING-------------------------------------------------------------------
+Copyright				Part of Eclipse
+Used					DN Chain Matching code from Eclipse. Used by test cases.
+File					DNChainMatching.jar
+License					licenses/EPL-1.0.html
+URL						http://www.eclipse.org
+Modifications			built from eclipse source code for use in test case
+
 NANOXML-----------------------------------------------------------------
 Copyright               Copyright ©2000-2002 Marc De Scheemaecker, All Rights Reserved. 
 Used					Used in org.osgi.tools

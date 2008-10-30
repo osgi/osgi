@@ -213,6 +213,7 @@ public class DeploymentmoConstants {
     
     public static void init(){
         JarFile simpleDp = null;
+        JarFile tmpJarFile = null;
       	try {
       		//We need to get the Manifest from the jar because it is modified when it is generated.
       		if (DeploymentmoConstants.DELIVERED_AREA.getParent()!=null) {
@@ -224,17 +225,26 @@ public class DeploymentmoConstants {
       		TEMP_DIR.mkdir();
       		simpleDp =getJarFile(SIMPLE_DP);
       		SIMPLE_DP_MANIFEST = simpleDp.getManifest();
-      		SIMPLE_FIX_PACK_MANIFEST = getJarFile(SIMPLE_FIX_PACK_DP).getManifest();
+          tmpJarFile = getJarFile(SIMPLE_FIX_PACK_DP);
+      		SIMPLE_FIX_PACK_MANIFEST = tmpJarFile.getManifest();
+          tmpJarFile.close();
     
       		DeploymentmoTestControl.copyTempBundles();
-      		SIMPLE_DP_BUNDLE1_MANIFEST = getTempJarFile(DeploymentmoTestControl.getTempFileName(SIMPLE_DP, "bundle001.jar")).getManifest();
-      		SIMPLE_DP_BUNDLE2_MANIFEST = getTempJarFile(DeploymentmoTestControl.getTempFileName(SIMPLE_DP, "bundle002.jar")).getManifest();
-      		SIMPLE_FIX_PACK_BUNDLE1_MANIFEST = getTempJarFile(DeploymentmoTestControl.getTempFileName(SIMPLE_FIX_PACK_DP, "bundle001.jar")).getManifest();
+          tmpJarFile = getTempJarFile(DeploymentmoTestControl.getTempFileName(SIMPLE_DP, "bundle001.jar"));
+      		SIMPLE_DP_BUNDLE1_MANIFEST = tmpJarFile.getManifest();
+          tmpJarFile.close();
+          tmpJarFile = getTempJarFile(DeploymentmoTestControl.getTempFileName(SIMPLE_DP, "bundle002.jar"));
+      		SIMPLE_DP_BUNDLE2_MANIFEST = tmpJarFile.getManifest();
+          tmpJarFile.close();
+          tmpJarFile = getTempJarFile(DeploymentmoTestControl.getTempFileName(SIMPLE_FIX_PACK_DP, "bundle001.jar"));
+      		SIMPLE_FIX_PACK_BUNDLE1_MANIFEST = tmpJarFile.getManifest();
+          tmpJarFile.close();
       	} catch (Exception e) {
       		e.printStackTrace();
       	} finally {
           try{
             simpleDp.close();
+            tmpJarFile.close();
           }catch(Exception ex){
         	  ex.printStackTrace();
           }
