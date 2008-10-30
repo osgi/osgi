@@ -26,40 +26,48 @@ import org.apache.geronimo.transaction.GeronimoUserTransaction;
 import org.apache.geronimo.transaction.manager.GeronimoTransactionManager;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
-import org.osgi.framework.ServiceReference;
 
 public class Activator implements BundleActivator {
 
 	private static final String SERVICE_DESCRIPTION = "Transactions in OSGi";
 	private static final int TRANSACTION_TIMEOUT_SECONDS = 30;
 
+	private GeronimoTransactionManager manager;
+	private BundleContext context;
+
+	/**
+	 * Start
+	 */
 	public void start(BundleContext context) throws Exception {
-		registerTransactionManager(context);
-		registerUserTransaction(context);
+		this.manager = new GeronimoTransactionManager(TRANSACTION_TIMEOUT_SECONDS);
+		this.context = context;
+
+		registerTransactionManager();
+		registerUserTransaction();
 	}
 
-	private void registerTransactionManager(BundleContext context) throws XAException {
+	/**
+	 * Stop
+	 */
+	public void stop(BundleContext context) throws Exception {
+	}
+	
+	private void registerTransactionManager() throws XAException {
 		Properties p = new Properties();
 		p.put("service.description", SERVICE_DESCRIPTION);
-		GeronimoTransactionManager manager = new GeronimoTransactionManager(
-				TRANSACTION_TIMEOUT_SECONDS);
 		String[] ifaces = { TransactionManager.class.getName(),
 				TransactionSynchronizationRegistry.class.getName() };
 		context.registerService(ifaces, manager, p);
 	}
 
-	private void registerUserTransaction(BundleContext context) throws XAException {
+	private void registerUserTransaction()
+			throws XAException {
 		Properties p = new Properties();
 		p.put("service.description", SERVICE_DESCRIPTION);
-		
-		ServiceReference ref = context.getServiceReference(TransactionManager.class.getName());
-		TransactionManager manager = (TransactionManager) context.getService(ref);
 		GeronimoUserTransaction userTx = new GeronimoUserTransaction(manager);
 		String iface = UserTransaction.class.getName();
 		context.registerService(iface, userTx, p);
 	}
 
-	public void stop(BundleContext context) throws Exception {
-	}
 
 }
