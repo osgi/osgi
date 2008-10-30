@@ -139,6 +139,15 @@ public class DeploymentTestControl extends DefaultTestBundleControl {
     private void startPermissionWorker() {
         permWorker = new PermissionWorker(this);
         permWorker.start();
+        //make sure the thread has started
+        synchronized (permWorker) {
+          if (!permWorker.isRunning()) {
+            try {
+              permWorker.wait();
+            } catch (InterruptedException ie) {
+            }
+          }
+        }
     }
 
     /**
@@ -462,10 +471,11 @@ public class DeploymentTestControl extends DefaultTestBundleControl {
 	 */
 	public void unprepare() {
 		log("#after each run");
-        synchronized (permWorker) {
-			permWorker.setRunning(false);
-			permWorker.notifyAll();
-        }
+		getContext().removeBundleListener(bundleListener);
+    synchronized (permWorker) {
+    	permWorker.setRunning(false);
+    	permWorker.notifyAll();
+    }
 	}
 
 	/**
@@ -597,6 +607,8 @@ public class DeploymentTestControl extends DefaultTestBundleControl {
 		} catch (MalformedURLException e) {
 			fail("Failed to open the URL");
 		} catch (IOException e) {
+      System.out.println("Exception occured:");
+      e.printStackTrace();
 			fail("Failed to open an InputStream");
 		} finally {
 			if (in != null)
