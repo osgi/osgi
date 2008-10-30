@@ -54,7 +54,7 @@ import org.osgi.test.cases.deploymentadmin.tc2.tbc.DeploymentTestControl;
 public class BundleListenerImpl implements SynchronousBundleListener  {
 	
 	private DeploymentTestControl tbc;
-	private Vector events;
+	private Vector events = new Vector();
 	private int currentType;
 	private Bundle currentBundle;
 
