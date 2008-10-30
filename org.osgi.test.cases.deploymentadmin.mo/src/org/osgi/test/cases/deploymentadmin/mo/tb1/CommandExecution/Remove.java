@@ -120,6 +120,7 @@ public class Remove implements TestInterface {
 
 
 		} catch (Exception e) {
+      e.printStackTrace();
 			tbc.fail("Unexpected exception: " + e.getClass().getName());
 		} finally {
 			DeploymentmoTestControl.renameFileForced(fileSrc, fileDestiny);
@@ -149,8 +150,10 @@ public class Remove implements TestInterface {
 					DeploymentmoConstants.PRINCIPAL,
 					DeploymentmoConstants.OSGI_ROOT,
 					DmtSession.LOCK_TYPE_ATOMIC);
-
-			session.execute(DeploymentmoConstants.SIMPLE_DP_DELIVERED_OPERATIONS_REMOVE, null);
+			synchronized (tbc) {
+        session.execute(DeploymentmoConstants.SIMPLE_DP_DELIVERED_OPERATIONS_REMOVE, null);
+        tbc.wait(DeploymentmoConstants.TIMEOUT);
+      }
 			tbc.assertTrue("Asserts that the artifact is removed from this subtree when " +
 					"$/Deployment/Inventory/Delivered/[node_id]/Operations/Remove is executed",
 					!session.isNodeUri(DeploymentmoConstants.SIMPLE_DP_DELIVERED));
@@ -161,6 +164,7 @@ public class Remove implements TestInterface {
              
 
 		} catch (Exception e) {
+          e.printStackTrace();
 			tbc.fail("Unexpected exception: " + e.getClass().getName());
 		} finally {
 			DeploymentmoTestControl.renameFileForced(fileSrc, fileDestiny);
@@ -223,6 +227,7 @@ public class Remove implements TestInterface {
 
 
 		} catch (Exception e) {
+      e.printStackTrace();
 			tbc.fail("Unexpected exception: " + e.getClass().getName());
 		} finally {
 			DeploymentmoTestControl.renameFileForced(fileSrc, fileDestiny);
@@ -257,8 +262,11 @@ public class Remove implements TestInterface {
 			+ "/" + DeploymentmoConstants.MAP_CODE_TO_ARTIFACT[DeploymentmoConstants.SIMPLE_BUNDLE];
 
 			String bundleRemoveNode = bundleNode + "/Operations/Remove";
-			
-			session.execute(bundleRemoveNode, null);
+
+      synchronized (tbc) {
+        session.execute(bundleRemoveNode, null);
+        tbc.wait(DeploymentmoConstants.TIMEOUT);
+      }
 			tbc.assertTrue("Asserts that the artifact is removed from this subtree when " +
 					"$/Deployment/Inventory/Delivered/[node_id]/Operations/Remove is executed",
 					!session.isNodeUri(bundleNode));
@@ -268,6 +276,7 @@ public class Remove implements TestInterface {
 
 
 		} catch (Exception e) {
+      e.printStackTrace();
 			tbc.fail("Unexpected exception: " + e.getClass().getName());
 		} finally {
 			DeploymentmoTestControl.renameFileForced(fileSrc, fileDestiny);

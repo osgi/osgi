@@ -49,6 +49,7 @@ import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.util.jar.Manifest;
 
+import org.eclipse.osgi.internal.signedcontent.DNChainMatching;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleEvent;
 import org.osgi.service.deploymentadmin.DeploymentPackage;
@@ -245,10 +246,8 @@ public class InstallAndActivate implements TestInterface {
 			}
 			String signer = signerChildren[0];
 			
-			tbc.assertEquals("Asserting the signer of the deployment package",
-					DeploymentmoConstants.SIMPLE_DP_SIGNER,
-					session.getNodeValue(DeploymentmoConstants.getDeployedExtSignersSignerId(nodeId, signer)).toString());
-
+			tbc.assertTrue("Asserting the signer of the deployment package", DNChainMatching.match(DeploymentmoConstants.SIMPLE_DP_SIGNER, 
+			    session.getNodeValue(DeploymentmoConstants.getDeployedExtSignersSignerId(nodeId, signer)).toString()));
 			
 			//Bundle "bundles.tb1"
 			Bundle bundle1 = tbc.getBundle(DeploymentmoConstants.SIMPLE_FIX_PACK_BUNDLE1_SYMBNAME);
@@ -281,6 +280,7 @@ public class InstallAndActivate implements TestInterface {
 			tbc.assertTrue("Asserting that there is only one bundle node in DMT",children.length==1);
 
 		} catch (Exception e) {
+      e.printStackTrace();
 			tbc.fail("Unexpected exception: " + e.getClass().getName());
 		} finally {
         	if (!nodeId.equals("")) {
@@ -325,6 +325,7 @@ public class InstallAndActivate implements TestInterface {
 			
 
 		} catch (Exception e) {
+		  e.printStackTrace();
 			tbc.fail("Unexpected exception: " + e.getClass().getName());
 		} finally {
         	if (!nodeId.equals("")) {
@@ -604,21 +605,22 @@ public class InstallAndActivate implements TestInterface {
         TestingBlockingResourceProcessor testBlockRP = null;
         DmtSession session = openDefaultSession();
         SessionWorker worker1 = null;
+        BundleListenerImpl listener = tbc.getListener();
         try {
+            listener.begin();
             TestingArtifact artifact = tbc.getArtifact(DeploymentmoConstants.BLOCK_SESSION_RESOURCE_PROCESSOR);
             TestingDeploymentPackage testDP = artifact.getDeploymentPackage();
             
             worker1 = new SessionWorker(tbc,testDP);
             worker1.start();
-            
             int count = 0;
-            BundleListenerImpl listener = tbc.getListener();
             while ((count < DeploymentmoConstants.TIMEOUT) &&
                 !((listener.getCurrentType() == BundleEvent.STARTED) && 
                 (listener.getCurrentBundle().getSymbolicName().indexOf(DeploymentmoConstants.PID_RESOURCE_PROCESSOR3) != -1))) {
-                count++;
-                wait(1);
+                count+=100;
+                wait(100);
             }
+            listener.end();
             
             testBlockRP = (TestingBlockingResourceProcessor) tbc.getService(
                 ResourceProcessor.class, "(service.pid=" + DeploymentmoConstants.PID_RESOURCE_PROCESSOR3 + ")");
@@ -626,16 +628,20 @@ public class InstallAndActivate implements TestInterface {
             
             assertResultCode(session, DeploymentmoConstants.SIMPLE_DP, 465);
         } catch (Exception e) {
+          e.printStackTrace();
             tbc.fail(MessagesConstants.getMessage(
                 MessagesConstants.UNEXPECTED_EXCEPTION, new String[]{e.getClass().getName()}));
         } finally {
+            if (listener != null) {
+              listener.end();
+            }
             if (testBlockRP != null) {
-                testBlockRP.setReleased(true);
-                try {
-					worker1.join();
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
+              testBlockRP.setReleased(true);
+              try {
+      					worker1.join();
+      				} catch (InterruptedException e) {
+      					e.printStackTrace();
+      				}
             }
             tbc.closeSession(session);
         }
@@ -667,6 +673,7 @@ public class InstallAndActivate implements TestInterface {
             assertSimpleDpSubtree(session, nodeId);
             
 			} catch (Exception e) {
+          e.printStackTrace();
 			tbc.fail(MessagesConstants.getMessage(MessagesConstants.UNEXPECTED_EXCEPTION, new String[] { e.getClass().getName() }));
 		} finally {
 			tbc.uninstall(dp);
@@ -799,10 +806,8 @@ public class InstallAndActivate implements TestInterface {
 			}
 			String signer = signerChildren[0];
 			
-			tbc.assertEquals("Asserting the signer of the deployment package",
-					DeploymentmoConstants.SIMPLE_DP_SIGNER,
-					session.getNodeValue(DeploymentmoConstants.getDeployedExtSignersSignerId(nodeId, signer)).toString());
-	
+      tbc.assertTrue("Asserting the signer of the deployment package", DNChainMatching.match(DeploymentmoConstants.SIMPLE_DP_SIGNER, 
+          session.getNodeValue(DeploymentmoConstants.getDeployedExtSignersSignerId(nodeId, signer)).toString()));
 			
 			//Bundle "bundles.tb1"
 			Bundle bundle1 = tbc.getBundle(DeploymentmoConstants.SIMPLE_DP_BUNDLE1_SYMBNAME);

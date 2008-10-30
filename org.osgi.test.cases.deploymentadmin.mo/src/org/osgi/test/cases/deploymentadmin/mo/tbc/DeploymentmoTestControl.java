@@ -129,6 +129,13 @@ public class DeploymentmoTestControl extends DefaultTestBundleControl {
 		
 		deploymentAdmin = (DeploymentAdmin) bc.getService(bc.getServiceReference(DeploymentAdmin.class.getName()));
 
+    try {
+      //install the helper bundle
+      installBundle("DNChainMatching.jar");
+    } catch (Exception e) {
+      e.printStackTrace();
+      log("# Failed to install bundle DNChainMatching.jar");
+    }
 		try {
 			installBundle("tb1.jar");
 		} catch (Exception e) {
@@ -222,7 +229,6 @@ public class DeploymentmoTestControl extends DefaultTestBundleControl {
     */
    private void addBundleListener() {
        listener = new BundleListenerImpl(this);
-       getContext().addBundleListener(listener);
    }
 
     /**
