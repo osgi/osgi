@@ -1,0 +1,25 @@
+<?xml version='1.0'?>
+<testreport
+    target='/home/roman/osgi/trunk/org.osgi.impl.bundle.transaction/generated/org.osgi.impl.bundle.transaction.jar'
+    time='Thu Oct 30 10:22:46 CET 2008' 
+    framework='org.eclipse.osgi.launch.Equinox'>
+  <bundle location='System Bundle' 
+     modified='1225358565402' 
+     state='32' 
+     id='0' 
+     bsn='org.eclipse.osgi' 
+     version='3.5.0.v20080825-1800' 
+  />
+  <bundle location='/home/roman/osgi/trunk/org.osgi.impl.bundle.transaction/generated/org.osgi.impl.bundle.transaction.jar' 
+     modified='1225358566028' 
+     state='32' 
+     id='1' 
+     bsn='org.osgi.impl.bundle.transaction' 
+     version='0' 
+  />
+  <classname name='test.TransactionTest'/>
+  <classname name='testTransactionManager(test.TransactionTest)'/>
+  <classname name='testUserTransaction(test.TransactionTest)'/>
+  <test name='testTransactionManager(test.TransactionTest)'/>
+  <test name='testUserTransaction(test.TransactionTest)'/>
+</testreport>
