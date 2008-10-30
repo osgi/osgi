@@ -53,10 +53,10 @@ import org.osgi.test.cases.deploymentadmin.tc1.tbc.DeploymentTestControl;
 public class BundleListenerImpl implements SynchronousBundleListener  {
 	
 	private DeploymentTestControl tbc;
-	private Vector events;
+	private Vector events = new Vector();
 	private int currentType;
 	private Bundle currentBundle;
-    private boolean verifying;
+  private boolean verifying;
 
 	/**
 	 * @param control
@@ -70,18 +70,18 @@ public class BundleListenerImpl implements SynchronousBundleListener  {
 		currentBundle = event.getBundle();
 		events.add(event);
         
-        if (verifying) {
-            synchronized (tbc) {
-                tbc.notifyAll();
-            }
+    if (verifying) {
+        synchronized (tbc) {
+            tbc.notifyAll();
         }
+    }
 	}
 	
 	public void reset() {
 		currentType = 0;
 		currentBundle = null;
 		events = new Vector();
-        verifying = false;
+    verifying = false;
 	}
 	/**
 	 * @return Returns the events.
@@ -101,10 +101,10 @@ public class BundleListenerImpl implements SynchronousBundleListener  {
 	public int getCurrentType() {
 		return currentType;
 	}
-    /**
-     * @param verifying The verifying to set.
-     */
-    public void setVerifying(boolean verifying) {
-        this.verifying = verifying;
-    }
+  /**
+   * @param verifying The verifying to set.
+   */
+  public void setVerifying(boolean verifying) {
+      this.verifying = verifying;
+  }
 }

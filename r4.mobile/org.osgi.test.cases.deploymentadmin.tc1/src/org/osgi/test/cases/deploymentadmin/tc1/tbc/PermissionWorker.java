@@ -57,6 +57,7 @@ public class PermissionWorker extends Thread {
 
     public synchronized void run() {
     	running = true;
+      this.notifyAll(); // notify that it is started
         while (running) {
             try {
                 this.wait();
@@ -96,4 +97,8 @@ public class PermissionWorker extends Thread {
 	public void setRunning(boolean running) {
 		this.running = running;
 	}
+  
+  public boolean isRunning() {
+    return running;
+  }
 }

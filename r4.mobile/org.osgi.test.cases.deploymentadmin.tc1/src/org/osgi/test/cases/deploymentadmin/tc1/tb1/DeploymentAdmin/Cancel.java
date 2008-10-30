@@ -113,6 +113,8 @@ public class Cancel implements TestInterface {
                	this.wait(500);
             }
                
+            Thread.sleep(1000); // give some time to init the deployment session by the thread
+            
             tbc.assertTrue("Asserts that the installation was not completed", !installThread.isInstalled());
             
             boolean canceled = tbc.getDeploymentAdmin().cancel();
@@ -180,6 +182,7 @@ public class Cancel implements TestInterface {
             while (!installThread.isUninstalling()) {
                	this.wait(500);
             }
+            Thread.sleep(1000); // give some time to init the deployment session by the thread
             
             tbc.assertTrue("Asserts that the uninstallation was not completed", !installThread.isUninstalled());
             
@@ -250,6 +253,8 @@ public class Cancel implements TestInterface {
             while (!installThread.isRunning()) {
                	this.wait(500);
             }
+            
+            Thread.sleep(1000); // give some time to init the deployment session by the thread
                
             tbc.assertTrue("Asserts that the installation was not completed", !installThread.isInstalled());
 
