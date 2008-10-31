@@ -1,9 +1,9 @@
--buildpath=ee.foundation,\
- osgi,\
- org.apache.geronimo.specs.geronimo-j2ee-connector_1.5_spec,\
- org.apache.geronimo.specs.geronimo-jta_1.1_spec,\
- org.apache.geronimo.transaction,\
- org.apache.commons-logging,\
+-buildpath=ee.j2se;version=1.4,\
+ osgi;version=4.0,\
+ org.apache.geronimo.specs.geronimo-j2ee-connector_1.5_spec;version=2.0,\
+ org.apache.geronimo.specs.geronimo-jta_1.1_spec;version=1.1.1,\
+ org.apache.geronimo.transaction;version=2.1.1,\
+ org.apache.commons-logging;version=1.0.4,\
  ${junit}
 
 Private-Package = org.osgi.impl.bundle.transaction,\
