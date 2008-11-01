@@ -68,9 +68,6 @@ public class DmtSessionConstraints {
 		testConstraints007();
 		testConstraints008();
 		testConstraints009();
-		testConstraints010();
-		testConstraints011();
-		testConstraints012();
 	}
 
 	/**
@@ -321,83 +318,5 @@ public class DmtSessionConstraints {
 			tbc.closeSession(session2);
 		}
 	}
-
-	
-
-	/**
-	 * Test if concurrent updating sessions can be opened within different plugins
-     * 
-     * @spec 117.3 The DMT Admin Service
-	 */
-
-	private void testConstraints010() {
-		tbc.log("#testConstraints010");
-		DmtSession session1 = null;
-		DmtSession session2 = null;
-		try {
-			session1 = tbc.getDmtAdmin().getSession(DmtConstants.OSGi_LOG,
-					DmtSession.LOCK_TYPE_ATOMIC);
-			session2 = tbc.getDmtAdmin().getSession(
-					TestDataPluginActivator.ROOT,
-					DmtSession.LOCK_TYPE_ATOMIC);
-			tbc.pass("Two sessions could be opened with different plugins.");
-		} catch (Exception e) {
-			tbc.failUnexpectedException(e);
-		} finally {
-			tbc.closeSession(session1);
-			tbc.closeSession(session2);
-		}
-	}
-	
-	
-	/**
-	 * Test if concurrent updating sessions can be opened within different plugins
-     * 
-     * @spec 117.3 The DMT Admin Service
-	 */
-
-	private void testConstraints011() {
-		tbc.log("#testConstraints011");
-		DmtSession session1 = null;
-		DmtSession session2 = null;
-		try {
-			session1 = tbc.getDmtAdmin().getSession(DmtConstants.OSGi_LOG,
-					DmtSession.LOCK_TYPE_EXCLUSIVE);
-			session2 = tbc.getDmtAdmin().getSession(
-					TestDataPluginActivator.ROOT,
-					DmtSession.LOCK_TYPE_EXCLUSIVE);
-			tbc.pass("Two sessions could be opened with different plugins.");
-		} catch (Exception e) {
-			tbc.failUnexpectedException(e);
-		} finally {
-			tbc.closeSession(session1);
-			tbc.closeSession(session2);
-		}
-	}	
-	
-	/**
-	 * Test if concurrent updating sessions can be opened within different plugins
-     * 
-     * @spec 117.3 The DMT Admin Service
-	 */
-
-	private void testConstraints012() {
-		tbc.log("#testConstraints012");
-		DmtSession session1 = null;
-		DmtSession session2 = null;
-		try {
-			session1 = tbc.getDmtAdmin().getSession(DmtConstants.OSGi_LOG,
-					DmtSession.LOCK_TYPE_ATOMIC);
-			session2 = tbc.getDmtAdmin().getSession(
-					TestDataPluginActivator.ROOT,
-					DmtSession.LOCK_TYPE_EXCLUSIVE);
-			tbc.pass("Two sessions could be opened with different plugins.");
-		} catch (Exception e) {
-			tbc.failUnexpectedException(e);
-		} finally {
-			tbc.closeSession(session1);
-			tbc.closeSession(session2);
-		}
-	}		
 	
 }
