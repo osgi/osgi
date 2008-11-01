@@ -64,7 +64,7 @@ public class MonitorableImpl implements Monitorable, TestingMonitorable {
      * @return the name of StatusVariables published by this object
      */
 	public String[] getStatusVariableNames() {
-		tbc.log("#Start getStatusVariableNames()");
+		log("#Start getStatusVariableNames()");
 		return new String[]{sv0.getID(),sv1.getID()};
 	}
 
@@ -81,7 +81,7 @@ public class MonitorableImpl implements Monitorable, TestingMonitorable {
      *         StatusVariable
      */
 	public StatusVariable getStatusVariable(String arg0) throws IllegalArgumentException {
-		tbc.log("#Start getStatusVariable()");
+		log("#Start getStatusVariable()");
 		
 		if(arg0==null || arg0.equals(MonitorConstants.INVALID_MONITORABLE_SV)){
 			throw new IllegalArgumentException();
@@ -114,8 +114,8 @@ public class MonitorableImpl implements Monitorable, TestingMonitorable {
      *             StatusVariable
      */
 	public boolean notifiesOnChange(String arg0) throws IllegalArgumentException {
-		tbc.log("#Start notifiesOnChange()");
-		tbc.log("#notifiesOnChange receives " + arg0 + " as argument.");
+		log("#Start notifiesOnChange()");
+		log("#notifiesOnChange receives " + arg0 + " as argument.");
 		
 		if(arg0==null || arg0.equals(MonitorConstants.INVALID_MONITORABLE_SV)){
 			throw new IllegalArgumentException();
@@ -145,7 +145,7 @@ public class MonitorableImpl implements Monitorable, TestingMonitorable {
      *         StatusVariable
      */
 	public boolean resetStatusVariable(String arg0) throws IllegalArgumentException {
-		tbc.log("#Start resetStatusVariable()");
+		log("#Start resetStatusVariable()");
 		
 		if(arg0==null || arg0.equals(MonitorConstants.INVALID_MONITORABLE_SV)){
 			throw new IllegalArgumentException();
@@ -170,7 +170,7 @@ public class MonitorableImpl implements Monitorable, TestingMonitorable {
      *         StatusVariable
      */
 	public String getDescription(String arg0) throws IllegalArgumentException  {		
-		tbc.log("#Start getDescription()");
+		log("#Start getDescription()");
 		
 		if(arg0==null || arg0.equals(MonitorConstants.INVALID_MONITORABLE_SV)){
 			throw new IllegalArgumentException();
@@ -202,8 +202,14 @@ public class MonitorableImpl implements Monitorable, TestingMonitorable {
 	/**
 	 *	To set the MonitorTestControl 
 	 */
-	public void setMonitorTestControlInterface(MonitorTestControl tbc) {
+	public synchronized void setMonitorTestControlInterface(MonitorTestControl tbc) {
 		this.tbc = tbc;		
 	}	
+	
+	synchronized void log(String s) {
+		if ( tbc != null )
+			tbc.log(s);
+	}
+
 
 }

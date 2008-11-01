@@ -433,20 +433,30 @@ public class StartJob implements TestInterface {
 					new StatusVariable(MonitorConstants.SV_NAME1,
 							StatusVariable.CM_CC, "test1"));
 			
-			wait(MonitorConstants.SHORT_TIMEOUT);	
+      synchronized (tbc) {
+        if (tbc.getStatusVariableName() == null) {
+          tbc.wait(MonitorConstants.SHORT_TIMEOUT);
+        }
+      } 
 			
 			tbc.assertEquals(MessagesConstants.getMessage(
 					MessagesConstants.ASSERT_EQUALS, new String[] {
 							"variable of event modification", 0 + "" }), 0,
 					MonitorConstants.EVENT_COUNT);
 
+			
+     tbc.resetEvent();
+
 			tbc.getMonitorListener().updated(
 					MonitorConstants.SV_MONITORABLEID1,
 					new StatusVariable(MonitorConstants.SV_NAME1,
 							StatusVariable.CM_CC, "test1"));
 
+			
 			synchronized (tbc) {
-				tbc.wait(MonitorConstants.TIMEOUT);
+			  if (tbc.getStatusVariableName() == null) {
+			    tbc.wait(MonitorConstants.SHORT_TIMEOUT);
+			  }
 			}	
 			
 			tbc.assertEquals(MessagesConstants.getMessage(
