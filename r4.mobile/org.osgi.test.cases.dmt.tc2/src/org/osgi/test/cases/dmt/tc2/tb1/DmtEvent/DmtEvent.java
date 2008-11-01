@@ -83,6 +83,7 @@ public class DmtEvent implements TestInterface {
 	 */
 	private void testDmtEvent001() {
 		DmtSession session = null;
+		DmtEventListenerImpl eventListener = new DmtEventListenerImpl();
 		try {
 			tbc.log("#testDmtEvent001");
 			
@@ -92,25 +93,24 @@ public class DmtEvent implements TestInterface {
                 tbc.wait(DmtConstants.WAITING_TIME);
             }
 
-            DmtEventListenerImpl event = new DmtEventListenerImpl();
 			tbc.getDmtAdmin().addEventListener(DmtConstants.ALL_DMT_EVENTS,
-					TestExecPluginActivator.ROOT,event);
+					TestExecPluginActivator.ROOT,eventListener);
 			
 			session.createInteriorNode(TestExecPluginActivator.INEXISTENT_NODE);
 			session.setNodeValue(TestExecPluginActivator.LEAF_NODE,new DmtData("B"));
 			session.copy(TestExecPluginActivator.INTERIOR_NODE,TestExecPluginActivator.INEXISTENT_NODE,true);
 			session.renameNode(TestExecPluginActivator.INTERIOR_NODE,TestExecPluginActivator.RENAMED_NODE_NAME);
 			session.deleteNode(TestExecPluginActivator.INTERIOR_NODE);
-			tbc.assertEquals("Asserts that if the session is atomic, no event is sent before commit.",0,event.getCount());
+			tbc.assertEquals("Asserts that if the session is atomic, no event is sent before commit.",0,eventListener.getCount());
 			session.commit();
 			synchronized (tbc) {
 				tbc.wait(DmtConstants.WAITING_TIME);
 			}
-			tbc.assertEquals("Asserts that the number of events are correct",5,event.getCount());
-			tbc.assertTrue("Asserts that the order of the sent events is the expected.",event.isOrdered());
+			tbc.assertEquals("Asserts that the number of events are correct",5,eventListener.getCount());
+			tbc.assertTrue("Asserts that the order of the sent events is the expected.",eventListener.isOrdered());
 			
 			
-			info.dmtree.DmtEvent[] dmtEvents = event.getDmtEvents();
+			info.dmtree.DmtEvent[] dmtEvents = eventListener.getDmtEvents();
 			assertEvent(dmtEvents[0], session,info.dmtree.DmtEvent.ADDED,new String[] { TestExecPluginActivator.INEXISTENT_NODE},null);
 			assertEvent(dmtEvents[1], session,info.dmtree.DmtEvent.DELETED,new String[] { TestExecPluginActivator.INTERIOR_NODE},null);
 			assertEvent(dmtEvents[2], session,info.dmtree.DmtEvent.REPLACED,new String[] { TestExecPluginActivator.LEAF_NODE},null);
@@ -120,7 +120,9 @@ public class DmtEvent implements TestInterface {
 		} catch (Exception e) {
 			tbc.failUnexpectedException(e);
 		} finally {
+			tbc.getDmtAdmin().removeEventListener(eventListener);
 			tbc.closeSession(session);
+			
 		}
 	
 	}
@@ -165,27 +167,29 @@ public class DmtEvent implements TestInterface {
 	 */
 	private void testDmtEvent002() {
 		DmtSession session = null;
+		DmtEventListenerImpl eventListener = new DmtEventListenerImpl();
 		try {
 			tbc.log("#testDmtEvent002");
 			
-			DmtEventListenerImpl event = new DmtEventListenerImpl();
+			
 			tbc.getDmtAdmin().addEventListener(DmtConstants.ALL_DMT_EVENTS,
-					TestExecPluginActivator.INTERIOR_NODE,event);
+					TestExecPluginActivator.INTERIOR_NODE,eventListener);
 			
 			session = tbc.getDmtAdmin().getSession(TestExecPluginActivator.ROOT,DmtSession.LOCK_TYPE_ATOMIC);
 			session.close();
 			synchronized (tbc) {
 				tbc.wait(DmtConstants.WAITING_TIME);
 			}
-			tbc.assertEquals("Asserts that the number of events are correct",2,event.getCount());
+			tbc.assertEquals("Asserts that the number of events are correct",2,eventListener.getCount());
 			
-			info.dmtree.DmtEvent[] dmtEvents = event.getDmtEvents();
+			info.dmtree.DmtEvent[] dmtEvents = eventListener.getDmtEvents();
 			assertEvent(dmtEvents[0], session,info.dmtree.DmtEvent.SESSION_OPENED,null,null);
 			assertEvent(dmtEvents[1], session,info.dmtree.DmtEvent.SESSION_CLOSED,null,null);
 
 		} catch (Exception e) {
 			tbc.failUnexpectedException(e);
 		} finally {
+			tbc.getDmtAdmin().removeEventListener(eventListener);
 			tbc.closeSession(session);
 		}
 	
@@ -199,6 +203,7 @@ public class DmtEvent implements TestInterface {
 	 */
 	private void testDmtEvent003() {
 		DmtSession session = null;
+		DmtEventListenerImpl eventLisneter = new DmtEventListenerImpl();
 		try {
 			tbc.log("#testDmtEvent003");
 			
@@ -208,9 +213,8 @@ public class DmtEvent implements TestInterface {
                 tbc.wait(DmtConstants.WAITING_TIME);
             }
 
-            DmtEventListenerImpl event = new DmtEventListenerImpl();
 			tbc.getDmtAdmin().addEventListener(DmtConstants.ALL_DMT_EVENTS,
-					TestExecPluginActivator.ROOT,event);
+					TestExecPluginActivator.ROOT,eventLisneter);
 			
 			session.setNodeValue(TestExecPluginActivator.LEAF_NODE,new DmtData("B"));
 			session.createInteriorNode(TestExecPluginActivator.INEXISTENT_NODE);
@@ -219,9 +223,9 @@ public class DmtEvent implements TestInterface {
 				tbc.wait(DmtConstants.WAITING_TIME);
 			}
 			
-			tbc.assertEquals("Asserts that if the session is exclusive, events are sent before close.",2,event.getCount());
+			tbc.assertEquals("Asserts that if the session is exclusive, events are sent before close.",2,eventLisneter.getCount());
 
-			info.dmtree.DmtEvent[] dmtEvents = event.getDmtEvents();
+			info.dmtree.DmtEvent[] dmtEvents = eventLisneter.getDmtEvents();
 			//The first one must be the DmtEvent.REPLACED and the second one DmtEvent.ADDED 
 			assertEvent(dmtEvents[0], session,info.dmtree.DmtEvent.REPLACED,new String[] { TestExecPluginActivator.LEAF_NODE},null);
 			assertEvent(dmtEvents[1], session,info.dmtree.DmtEvent.ADDED,new String[] { TestExecPluginActivator.INEXISTENT_NODE},null);
@@ -229,6 +233,7 @@ public class DmtEvent implements TestInterface {
 		} catch (Exception e) {
 			tbc.failUnexpectedException(e);
 		} finally {
+			tbc.getDmtAdmin().removeEventListener(eventLisneter);
 			tbc.closeSession(session);
 		}
 	
