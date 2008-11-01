@@ -51,24 +51,27 @@ public class PermissionWorker extends Thread {
     private PermissionInfo[] permissions;
     private String location;
     private boolean running;
+    private boolean working;
     
     public PermissionWorker(ApplicationTestControl tbc) {
         this.tbc = tbc;
     }
 
     public synchronized void run() {
-    	running = true;
-        while (running) {
-			try {
-				this.wait();
-				tbc.getPermissionAdmin().setPermissions(location, permissions);
-				this.notifyAll();
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-		}
-
-	}
+      running = true;
+      working = false;
+      while (running) {
+      	try {
+      		this.wait();
+          working = true;
+      		tbc.getPermissionAdmin().setPermissions(location, permissions);
+          working = false;
+      		this.notifyAll();
+      	} catch (InterruptedException e) {
+      		e.printStackTrace();
+      	}
+      }
+    }
 
     /**
 	 * @return Returns the location.
@@ -92,10 +95,20 @@ public class PermissionWorker extends Thread {
      * @param permissions The permissions to set.
      */
     public void setPermissions(PermissionInfo[] permissions) {
-        this.permissions = permissions;
+      working = true;
+      this.permissions = permissions;
     }
     
-	public void setRunning(boolean running) {
-		this.running = running;
-	}
+    public void setRunning(boolean running) {
+    	this.running = running;
+    }
+    
+    public boolean isRunning() {
+      return running;
+    }
+    
+    public boolean isWorking() {
+      return working;
+    }
+  
 }
