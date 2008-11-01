@@ -496,7 +496,6 @@ public class IsSatisfied {
       tbc.log("#The second question must not appear because SESSION and BLANKET levels were used. Otherwise the test will fail.");
       
       ConditionConstants.CURRENT_ANSWERS_INDICES = null;//there should be only one answer in next evaluation
-      ConditionConstants.CURRENT_ANSWER_INDEX = ++answerIndex;
       tbc.assertTrue("Asserting that isSatisfied returns true.", condition3.isSatisfied(conditions, null));
     } catch (Exception e) {
       tbc.fail("Unexpected exception was thrown + : " 
