@@ -16,6 +16,13 @@ public class GetScheduleId implements TestInterface {
 	}
 
 	public void run() {
+    //cleanup of registered schedules
+    ScheduledApplication sa = tbc.getScheduledApplication();
+    while (sa != null) {
+      sa.remove();
+      sa = tbc.getScheduledApplication();
+    }
+
 		testGetScheduleId001();	
 		testGetScheduleId002();
 		testGetScheduleId003();

@@ -71,9 +71,9 @@ public class LifecycleStates {
         tbc.log("#testLifecycleStates001");
         ApplicationHandle handle = null;
         try {
-    	    synchronized (tbc) {
-    	    	tbc.wait(ApplicationConstants.SHORT_TIMEOUT);
-    		}
+      	    synchronized (this) {
+      	    	this.wait(ApplicationConstants.SHORT_TIMEOUT);
+      	    }
         	
             tbc.resetEventProperties();
             EventHandlerImpl.waitNotify = false;

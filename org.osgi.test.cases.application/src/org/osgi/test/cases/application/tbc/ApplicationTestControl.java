@@ -184,10 +184,19 @@ public class ApplicationTestControl extends DefaultTestBundleControl {
 	    ApplicationConstants.OSGI_APPLICATION_APPID_SCHEDULES_ID_RECURRING = ApplicationConstants.OSGI_APPLICATION_APPID_SCHEDULES_ID + "Cesar/Recurring";		
 	}
 
-	private void startPermissionWorker() {
-		worker = new PermissionWorker(this);
-		worker.start();
-	}
+  private void startPermissionWorker() {
+    worker = new PermissionWorker(this);
+    worker.start();
+    //make sure the thread has started
+    synchronized (worker) {
+      while (!worker.isRunning()) {
+        try {
+          worker.wait(50);
+        } catch (InterruptedException ie) {
+        }
+      }
+    }
+  }
 
 	public void setLocalPermission(PermissionInfo permission) {
 		PermissionInfo[] defaults = new PermissionInfo[] {
@@ -208,18 +217,19 @@ public class ApplicationTestControl extends DefaultTestBundleControl {
 		setPermission(defaults);
 	}
 
-	public void setPermission(PermissionInfo[] permissions) {
-		synchronized (worker) {
-			worker.setLocation(getTb2Location());
-			worker.setPermissions(permissions);
-			worker.notifyAll();
-			try {
-				worker.wait(1000);
-			} catch (InterruptedException e) {
-				log("#error on PermissionWorker wait.");
-			}
-		}
-	}
+  public void setPermission(PermissionInfo[] permissions) {
+    synchronized (worker) {
+      worker.setLocation(getTb2Location());
+      worker.setPermissions(permissions);
+      worker.notifyAll();
+      long start = System.currentTimeMillis();
+      while (worker.isWorking() && (System.currentTimeMillis() - start < 10000)) {
+        try {
+          worker.wait(1000);
+        } catch (InterruptedException e) {}
+      }
+    }
+  }
 
 	public void setDefaultPermission() {
 		PermissionInfo[] defaults = new PermissionInfo[] {
