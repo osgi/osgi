@@ -32,8 +32,8 @@ import java.util.List;
 // TODO do we need to specify the start-level for the source and target bundles?
 // (Bug 813)
 public final class LinkDescription {
-	private final List/* <? extends String> */imports;
-	private final List/* <? extends String> */serviceFilters;
+	private final List/* <String> */imports;
+	private final List/* <String> */serviceFilters;
 
 	/**
 	 * Creates a link description that specifies the packages and services to
@@ -49,8 +49,8 @@ public final class LinkDescription {
 	 *            source framework that match at least one of the service
 	 *            filters specified will be imported from a source framework.
 	 */
-	public LinkDescription(List/* <? extends String> */imports,
-			List/* <? extends String> */serviceFilters) {
+	public LinkDescription(List/* <String> */imports,
+			List/* <String> */serviceFilters) {
 		this.imports = (imports == null ? Collections.EMPTY_LIST : Collections
 				.unmodifiableList(new ArrayList(imports)));
 		this.serviceFilters = (serviceFilters == null ? Collections.EMPTY_LIST
@@ -65,7 +65,7 @@ public final class LinkDescription {
 	 *         <code>UnsupportedOperationException</code>. The list is not
 	 *         synchronized.
 	 */
-	public List/* <? extends String> */getImports() {
+	public List/* <String> */getImports() {
 		return imports;
 	}
 
@@ -77,7 +77,7 @@ public final class LinkDescription {
 	 *         <code>UnsupportedOperationException</code>. The list is not
 	 *         synchronized.
 	 */
-	public List/* <? extends String> */getServiceFilters() {
+	public List/* <String> */getServiceFilters() {
 		return serviceFilters;
 	}
 }
