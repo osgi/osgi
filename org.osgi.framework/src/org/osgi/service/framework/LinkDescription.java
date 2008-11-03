@@ -15,6 +15,10 @@
  */
 package org.osgi.service.framework;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 /**
  * Describes the packages and services which are shared from a source framework
  * to a target framework through a <code>FrameworkLink</code>.
@@ -27,8 +31,8 @@ package org.osgi.service.framework;
 // TODO javadoc needs review
 // TODO do we need to specify the start-level for the source and target bundles? (Bug 813)
 public final class LinkDescription {
-	private final String[] imports;
-	private final String[] serviceFilters;
+	private final List imports;
+	private final List serviceFilters;
 
 	/**
 	 * Creates a link description that specifies the packages and services to
@@ -41,9 +45,9 @@ public final class LinkDescription {
 	 *            a list of service filters specifications that specify the
 	 *            services to import from a source framework.
 	 */
-	public LinkDescription(String[] imports, String[] serviceFilters) {
-		this.imports = (imports == null ? new String[0] : copyOf(imports));
-		this.serviceFilters = (serviceFilters == null ? new String[0] : copyOf(serviceFilters));
+	public LinkDescription(List imports, List serviceFilters) {
+		this.imports = (imports == null ? Collections.EMPTY_LIST : Collections.unmodifiableList(new ArrayList(imports)));
+		this.serviceFilters = (serviceFilters == null ? Collections.EMPTY_LIST : Collections.unmodifiableList(new ArrayList(serviceFilters)));
 	}
 
 	/**
@@ -51,8 +55,8 @@ public final class LinkDescription {
 	 * 
 	 * @return the imports
 	 */
-	public String[] getImports() {
-		return copyOf(imports);
+	public List getImports() {
+		return imports;
 	}
 
 	/**
@@ -60,13 +64,7 @@ public final class LinkDescription {
 	 * 
 	 * @return the service filters
 	 */
-	public String[] getServiceFilters() {
-		return copyOf(serviceFilters);
-	}
-
-	private String[] copyOf(String[] array) {
-		String[] results = new String[array.length];
-		System.arraycopy(array, 0, results, 0, array.length);
-		return results;
+	public List getServiceFilters() {
+		return serviceFilters;
 	}
 }
