@@ -29,42 +29,55 @@ import java.util.List;
  * @version $Revision$
  */
 // TODO javadoc needs review
-// TODO do we need to specify the start-level for the source and target bundles? (Bug 813)
+// TODO do we need to specify the start-level for the source and target bundles?
+// (Bug 813)
 public final class LinkDescription {
-	private final List imports;
-	private final List serviceFilters;
+	private final List/* <? extends String> */imports;
+	private final List/* <? extends String> */serviceFilters;
 
 	/**
 	 * Creates a link description that specifies the packages and services to
 	 * share from a source framework to a target framework
 	 * 
 	 * @param imports
-	 *            a list of import package specifications that specify the
-	 *            packages to import from a source framework.
+	 *            a list of type <code>String</code>. Each element of the list
+	 *            is an import package specification that specifies a package to
+	 *            import from a source framework.
 	 * @param serviceFilters
-	 *            a list of service filters specifications that specify the
-	 *            services to import from a source framework.
+	 *            a list of type <code>String</code>. Each element of the list
+	 *            is a service filter specification. Services available in a
+	 *            source framework that match at least one of the service
+	 *            filters specified will be imported from a source framework.
 	 */
-	public LinkDescription(List imports, List serviceFilters) {
-		this.imports = (imports == null ? Collections.EMPTY_LIST : Collections.unmodifiableList(new ArrayList(imports)));
-		this.serviceFilters = (serviceFilters == null ? Collections.EMPTY_LIST : Collections.unmodifiableList(new ArrayList(serviceFilters)));
+	public LinkDescription(List/* <? extends String> */imports,
+			List/* <? extends String> */serviceFilters) {
+		this.imports = (imports == null ? Collections.EMPTY_LIST : Collections
+				.unmodifiableList(new ArrayList(imports)));
+		this.serviceFilters = (serviceFilters == null ? Collections.EMPTY_LIST
+				: Collections.unmodifiableList(new ArrayList(serviceFilters)));
 	}
 
 	/**
-	 * Returns the import package specifications
+	 * Returns the list of import package specifications.
 	 * 
-	 * @return the imports
+	 * @return the list of imports. The returned list is unmodifiable.
+	 *         Attempting to add to or remove from the list will result in an
+	 *         <code>UnsupportedOperationException</code>. The list is not
+	 *         synchronized.
 	 */
-	public List getImports() {
+	public List/* <? extends String> */getImports() {
 		return imports;
 	}
 
 	/**
-	 * Returns the service filter specifications
+	 * Returns the list of service filter specifications.
 	 * 
-	 * @return the service filters
+	 * @return the list service filters. The returned list is unmodifiable.
+	 *         Attempting to add to or remove from the list will result in an
+	 *         <code>UnsupportedOperationException</code>. The list is not
+	 *         synchronized.
 	 */
-	public List getServiceFilters() {
+	public List/* <? extends String> */getServiceFilters() {
 		return serviceFilters;
 	}
 }
