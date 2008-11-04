@@ -57,6 +57,8 @@ public interface FrameworkFactory {
 	 * @param configuration the framework configuration.
 	 * @return an unintialized Framework in the {@link Bundle#INSTALLED
 	 *         INSTALLED} state
+	 * @throws SecurityException If the caller does not have
+	 *         <code>AllPermission</code>.
 	 * @see Framework
 	 */
 	Framework newChildFramework(Map configuration);
