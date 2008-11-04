@@ -24,10 +24,16 @@ import org.osgi.framework.*;
  * When a link is established between two frameworks then:
  * <ul>
  * <li>This <code>FrameworkLink</code> is registered as a service by the system
- * bundles in both the source and target frameworks.</li>
+ * bundles in both the source and target frameworks. 
+ * <ul>
+ * <li>Service PID: The link is registered as a service using the same service PID in both 
+ * source/target frameworks.  The service PID is generated when the link is created by the 
+ * framework.  The service PID is unique within the two frameworks being linked.
+ * <li>Link mode: the link service will also be registered with a property identifying which
+ * side of the link the service represents, the source, or the target.</li>
+ * </ul>
  * <li>A source bundle is installed into the source framework. This bundle does
  * the following:
- * 
  * <ul>
  * <li>Imports the packages from the source framework as specified by the link
  * description.</li>
