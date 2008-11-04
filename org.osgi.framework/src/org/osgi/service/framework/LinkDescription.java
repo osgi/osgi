@@ -26,6 +26,7 @@ import java.util.List;
  * @see FrameworkLink
  * 
  * @ThreadSafe
+ * @Immutable
  * @version $Revision$
  */
 // TODO javadoc needs review
