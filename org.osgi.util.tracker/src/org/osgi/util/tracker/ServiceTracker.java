@@ -94,6 +94,18 @@ public class ServiceTracker implements ServiceTrackerCustomizer {
 	 * <code>ServiceListener</code> object
 	 */
 	private volatile Tracked			tracked;
+
+	/**
+	 * Accessor method for the current Tracked object. This method is only
+	 * intended to be used by the unsynchronized methods which do not modify the
+	 * tracked field.
+	 * 
+	 * @return The current Tracked object.
+	 */
+	private Tracked tracked() {
+		return tracked;
+	}
+
 	/**
 	 * Cached ServiceReference for getServiceReference.
 	 * 
@@ -147,8 +159,8 @@ public class ServiceTracker implements ServiceTrackerCustomizer {
 		catch (InvalidSyntaxException e) { // we could only get this exception
 			// if the ServiceReference was
 			// invalid
-			throw new IllegalArgumentException(
-					"unexpected InvalidSyntaxException: " + e.getMessage()); //$NON-NLS-1$
+			throw (RuntimeException) new IllegalArgumentException(
+					"unexpected InvalidSyntaxException: " + e.getMessage()).initCause(e); //$NON-NLS-1$
 		}
 	}
 
@@ -184,8 +196,8 @@ public class ServiceTracker implements ServiceTrackerCustomizer {
 		catch (InvalidSyntaxException e) { // we could only get this exception
 			// if the clazz argument was
 			// malformed
-			throw new IllegalArgumentException(
-					"unexpected InvalidSyntaxException: " + e.getMessage()); //$NON-NLS-1$
+			throw (RuntimeException) new IllegalArgumentException(
+					"unexpected InvalidSyntaxException: " + e.getMessage()).initCause(e); //$NON-NLS-1$
 		}
 	}
 
@@ -284,14 +296,16 @@ public class ServiceTracker implements ServiceTrackerCustomizer {
 			synchronized (t) {
 				try {
 					context.addServiceListener(t, listenerFilter);
-					ServiceReference[] references;
+					ServiceReference[] references = null;
 					if (trackClass != null) {
 						references = getInitialReferences(trackAllServices,
 								trackClass, null);
 					}
 					else {
 						if (trackReference != null) {
-							references = new ServiceReference[] {trackReference};
+							if (trackReference.getBundle() != null) {
+								references = new ServiceReference[] {trackReference};
+							}
 						}
 						else { /* user supplied filter */
 							references = getInitialReferences(trackAllServices,
@@ -300,13 +314,12 @@ public class ServiceTracker implements ServiceTrackerCustomizer {
 											: filter.toString());
 						}
 					}
-					
 					/* set tracked with the initial references */
 					t.setInitial(references); 
 				}
 				catch (InvalidSyntaxException e) {
 					throw new RuntimeException(
-							"unexpected InvalidSyntaxException: " + e.getMessage()); //$NON-NLS-1$
+							"unexpected InvalidSyntaxException: " + e.getMessage(), e); //$NON-NLS-1$
 				}
 			}
 			tracked = t;
@@ -335,9 +348,7 @@ public class ServiceTracker implements ServiceTrackerCustomizer {
 		if (trackAllServices) {
 			return context.getAllServiceReferences(className, filterString);
 		}
-		else {
-			return context.getServiceReferences(className, filterString);
-		}
+		return context.getServiceReferences(className, filterString);
 	}
 
 	/**
@@ -491,10 +502,7 @@ public class ServiceTracker implements ServiceTrackerCustomizer {
 		}
 		Object object = getService(); 
 		while (object == null) {
-			final Tracked t = tracked; /*
-										 * use local var since we are not
-										 * synchronized
-										 */
+			final Tracked t = tracked();
 			if (t == null) { /* if ServiceTracker is not open */
 				return null;
 			}
@@ -519,10 +527,7 @@ public class ServiceTracker implements ServiceTrackerCustomizer {
 	 *         no services are being tracked.
 	 */
 	public ServiceReference[] getServiceReferences() {
-		final Tracked t = tracked; /*
-									 * use local var since we are not
-									 * synchronized
-									 */
+		final Tracked t = tracked();
 		if (t == null) { /* if ServiceTracker is not open */
 			return null;
 		}
@@ -531,7 +536,6 @@ public class ServiceTracker implements ServiceTrackerCustomizer {
 			if (length == 0) {
 				return null;
 			}
-
 			return (ServiceReference[]) t
 					.getTracked(new ServiceReference[length]);
 		}
@@ -626,10 +630,7 @@ public class ServiceTracker implements ServiceTrackerCustomizer {
 	 *         tracked.
 	 */
 	public Object getService(ServiceReference reference) {
-		final Tracked t = tracked; /*
-									 * use local var since we are not
-									 * synchronized
-									 */
+		final Tracked t = tracked();
 		if (t == null) { /* if ServiceTracker is not open */
 			return null;
 		}
@@ -652,10 +653,7 @@ public class ServiceTracker implements ServiceTrackerCustomizer {
 	 *         are being tracked.
 	 */
 	public Object[] getServices() {
-		final Tracked t = tracked; /*
-									 * use local var since we are not
-									 * synchronized
-									 */
+		final Tracked t = tracked();
 		if (t == null) { /* if ServiceTracker is not open */
 			return null;
 		}
@@ -714,10 +712,7 @@ public class ServiceTracker implements ServiceTrackerCustomizer {
 	 * @param reference The reference to the service to be removed.
 	 */
 	public void remove(ServiceReference reference) {
-		final Tracked t = tracked; /*
-									 * use local var since we are not
-									 * synchronized
-									 */
+		final Tracked t = tracked();
 		if (t == null) { /* if ServiceTracker is not open */
 			return;
 		}
@@ -731,10 +726,7 @@ public class ServiceTracker implements ServiceTrackerCustomizer {
 	 * @return The number of services being tracked.
 	 */
 	public int size() {
-		final Tracked t = tracked; /*
-									 * use local var since we are not
-									 * synchronized
-									 */
+		final Tracked t = tracked();
 		if (t == null) { /* if ServiceTracker is not open */
 			return 0;
 		}
@@ -764,10 +756,7 @@ public class ServiceTracker implements ServiceTrackerCustomizer {
 	 *         this <code>ServiceTracker</code> is not open.
 	 */
 	public int getTrackingCount() {
-		final Tracked t = tracked; /*
-									 * use local var since we are not
-									 * synchronized
-									 */
+		final Tracked t = tracked();
 		if (t == null) { /* if ServiceTracker is not open */
 			return -1;
 		}

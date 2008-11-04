@@ -67,6 +67,17 @@ public class BundleTracker implements BundleTrackerCustomizer {
 	private volatile Tracked		tracked;
 
 	/**
+	 * Accessor method for the current Tracked object. This method is only
+	 * intended to be used by the unsynchronized methods which do not modify the
+	 * tracked field.
+	 * 
+	 * @return The current Tracked object.
+	 */
+	private Tracked tracked() {
+		return tracked;
+	}
+
+	/**
 	 * State mask for bundles being tracked. This field contains the ORed values
 	 * of the bundle states being tracked.
 	 */
@@ -266,10 +277,7 @@ public class BundleTracker implements BundleTrackerCustomizer {
 	 *         bundles are being tracked.
 	 */
 	public Bundle[] getBundles() {
-		final Tracked t = tracked; /*
-									 * use local var since we are not
-									 * synchronized
-									 */
+		final Tracked t = tracked();
 		if (t == null) { /* if BundleTracker is not open */
 			return null;
 		}
@@ -292,10 +300,7 @@ public class BundleTracker implements BundleTrackerCustomizer {
 	 *         being tracked.
 	 */
 	public Object getObject(Bundle bundle) {
-		final Tracked t = tracked; /*
-									 * use local var since we are not
-									 * synchronized
-									 */
+		final Tracked t = tracked();
 		if (t == null) { /* if BundleTracker is not open */
 			return null;
 		}
@@ -315,10 +320,7 @@ public class BundleTracker implements BundleTrackerCustomizer {
 	 * @param bundle The <code>Bundle</code> to be removed.
 	 */
 	public void remove(Bundle bundle) {
-		final Tracked t = tracked; /*
-									 * use local var since we are not
-									 * synchronized
-									 */
+		final Tracked t = tracked();
 		if (t == null) { /* if BundleTracker is not open */
 			return;
 		}
@@ -332,10 +334,7 @@ public class BundleTracker implements BundleTrackerCustomizer {
 	 * @return The number of bundles being tracked.
 	 */
 	public int size() {
-		final Tracked t = tracked; /*
-									 * use local var since we are not
-									 * synchronized
-									 */
+		final Tracked t = tracked();
 		if (t == null) { /* if BundleTracker is not open */
 			return 0;
 		}
@@ -364,10 +363,7 @@ public class BundleTracker implements BundleTrackerCustomizer {
 	 *         this <code>BundleTracker</code> is not open.
 	 */
 	public int getTrackingCount() {
-		final Tracked t = tracked; /*
-									 * use local var since we are not
-									 * synchronized
-									 */
+		final Tracked t = tracked();
 		if (t == null) { /* if BundleTracker is not open */
 			return -1;
 		}
