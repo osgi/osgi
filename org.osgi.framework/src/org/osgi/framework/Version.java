@@ -255,7 +255,7 @@ public class Version implements Comparable {
 	 */
 	public String toString() {
 		String base = major + SEPARATOR + minor + SEPARATOR + micro;
-		if (qualifier.length() == 0) { //$NON-NLS-1$
+		if (qualifier.length() == 0) {
 			return base;
 		}
 		else {
