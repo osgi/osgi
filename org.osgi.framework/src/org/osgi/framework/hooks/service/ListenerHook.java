@@ -34,28 +34,28 @@ import org.osgi.framework.BundleContext;
 public interface ListenerHook {
 	/**
 	 * Added listeners hook method. This method is called to provide the hook
-	 * implementation with information on the current service listeners. This
-	 * method will be called immediately after registration of this hook to
-	 * provide the current collection of service listeners which had been added
-	 * prior to the hook being registered. This method will also be called as
-	 * service listeners are added while this hook is registered.
+	 * implementation with information on newly added service listeners. This
+	 * method will be called as service listeners are added while this hook is
+	 * registered. Also, immediately after registration of this hook, this
+	 * method will be called to provide the current collection of service
+	 * listeners which had been added prior to the hook being registered.
 	 * 
-	 * @param listeners A collection of {@link ListenerInfo}s for service
-	 *        listeners which are now listening to service events. Attempting to
-	 *        add to or remove from the collection will result in an
-	 *        <code>UnsupportedOperationException</code>. The collection is not
-	 *        synchronized.
+	 * @param listeners A collection of {@link ListenerInfo}s for newly added
+	 *        service listeners which are now listening to service events.
+	 *        Attempting to add to or remove from the collection will result in
+	 *        an <code>UnsupportedOperationException</code>. The collection is
+	 *        not synchronized.
 	 */
 	void added(Collection/* <? extends ListenerInfo> */listeners);
 
 	/**
 	 * Removed listeners hook method. This method is called to provide the hook
-	 * implementation with information on removed service listeners. This method
-	 * will be called as service listeners are removed while this hook is
+	 * implementation with information on newly removed service listeners. This
+	 * method will be called as service listeners are removed while this hook is
 	 * registered.
 	 * 
-	 * @param listeners A collection of {@link ListenerInfo}s for service
-	 *        listeners which are no longer listening to service events.
+	 * @param listeners A collection of {@link ListenerInfo}s for newly removed
+	 *        service listeners which are no longer listening to service events.
 	 *        Attempting to add to or remove from the collection will result in
 	 *        an <code>UnsupportedOperationException</code>. The collection is
 	 *        not synchronized.
