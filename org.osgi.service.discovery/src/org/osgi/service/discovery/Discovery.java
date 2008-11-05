@@ -16,14 +16,14 @@
 
 package org.osgi.service.discovery;
 
+import java.util.Collection;
 import java.util.Map;
 
 /**
- * 
- * TODO: How to update published ServiceDescriptions? How to identify
- * ServiceDescriptions of the same service instance? <br>
- * TODO: how about to rename auto-publish to push/pull?<br>
- * TODO: how to propagate exceptions in async findService calls?
+ * Interface of the Discovery service. This service allows to publish services
+ * exposed for remote access as well as search for remote services. <BR>
+ * Discovery service implementations usually rely on some discovery protocols or
+ * other information distribution means.
  * 
  * @version $Revision$
  */
@@ -88,23 +88,23 @@ public interface Discovery {
 	 * Searches for services matching the provided interface name and filter.
 	 * 
 	 * @param interfaceName
-	 *            name of the interface returned services have to provide. If
-	 *            name is null then all services are considered to match.
+	 *            name of the interface that returned services have to provide.
+	 *            If name is null then all services are considered to match.
 	 * @param filter
-	 *            an LDAP filter which the service has to satisfy. Note that
-	 *            <code>ServiceEndpointDescription</code> defines some
-	 *            properties for service url, interface version etc.. If filter
-	 *            is null all services are considered to match.
-	 * @return Array of ServiceEndpointDescription objects matching the service
-	 *         that was found to satisfy the find criteria. The array is empty
-	 *         if none was found.
+	 *            an LDAP filter which the service has to satisfy. If filter is
+	 *            null all services are considered to match.
+	 * @return Collection of <code>ServiceEndpointDescription</code> objects
+	 *         which were found to match interface name and filter. The
+	 *         collection is empty if none was found. The collection represents
+	 *         a snapshot and as such is not going to be updated in case other matching
+	 *         services become available at a later point of time.
 	 */
-	ServiceEndpointDescription[] findService(String interfaceName, String filter);
+	Collection /* <? extends ServiceEndpointDescription> */findService(
+			String interfaceName, String filter);
 
 	/**
-	 * Asynchronous version of
-	 * <code>Discovery.findService(String interfaceName, String filter)</code>
-	 * method.
+	 * Asynchronous version of <code>Discovery.findService(String interfaceName,
+	 * String filter)</code> method.
 	 * 
 	 * @param interfaceName
 	 *            name of the interface returned services have to provide. If
@@ -125,18 +125,22 @@ public interface Discovery {
 			FindServiceCallback callback);
 
 	/**
-	 * Publish the provided service description.
+	 * Publish the provided service meta-data.
 	 * 
 	 * @param javaInterfacesAndVersions
-	 *            its an association between interfaces and versions. For every
-	 *            interface to publish you have to define its version.If you
-	 *            don't have a version, put "0.0.0" in it.
+	 *            names of java interfaces offered by the service and their
+	 *            version. For every interface to publish you have to define its
+	 *            version. If you don't have a version, put "0.0.0" in it.
 	 * @param javaInterfacesAndEndpointInterfaces
 	 *            associates java interfaces to general end point interface
 	 *            names. It is not needed to to have and end point interface for
-	 *            a java interface. The map can be null.
+	 *            a java interface. The map may be null.
 	 * @param properties
-	 *            a bag of properties to be published; can be null
+	 *            a bag of service properties (key-value pairs) to be published.
+	 *            It may be null. Note that Discovery might make use of certain
+	 *            standard properties like the ones defined by
+	 *            {@link ServiceEndpointDescription} for the publication process
+	 *            if they are provided.
 	 * 
 	 * @return an instance of {@link ServiceEndpointDescription} or null if the
 	 *         publishing failed

@@ -16,16 +16,27 @@
 
 package org.osgi.service.discovery;
 
+import java.util.Collection;
+
 /**
- * 
+ * Interface for callback objects, which can be provided with an asynchronous
+ * find service operation and which will be called when the operation actually
+ * finished.
  * 
  * @version $Revision$
  */
 public interface FindServiceCallback {
-    /**
-     * @param serviceEndpointDescriptions
-     *            Array of ServiceDescription objects satisfying the find criteria. The returned array is never null but
-     *            may be empty if none was found.
-     */
-    void servicesFound(ServiceEndpointDescription[] serviceEndpointDescriptions);
+	/**
+	 * Callback indicating that a previously started asynchronous find service
+	 * operation finished.
+	 * 
+	 * @param serviceEndpointDescriptions
+	 *            ServiceDescription objects satisfying the provided find
+	 *            criteria. The collection is never null but may be empty if
+	 *            none was found. The collection represents a snapshot and as
+	 *            such is not going to be updated in case other matching
+	 *            services become available at a later point of time.
+	 */
+	void servicesFound(
+			Collection /* <? extends ServiceEndpointDescription> */serviceEndpointDescriptions);
 }

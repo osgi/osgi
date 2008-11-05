@@ -17,36 +17,42 @@
 package org.osgi.service.discovery;
 
 /**
- * 
- * TODO: consider whether methods should also contain a source object (the particular discovery service which does the
- * notification)
+ * Describes the interface of listeners, which can be registered with
+ * Discovery to be notified on life-cycle changes of remote services.
  * 
  * @version $Revision$
  */
 public interface ServiceListener {
-    /**
-     * Callback indicating that the specified service was discovered and is known to the calling Discovery
-     * implementation.
-     * 
-     * @param serviceEndpointDescription
-     */
-    void serviceAvailable(ServiceEndpointDescription serviceEndpointDescription);
+	/**
+	 * Callback indicating that a service matching the listening criteria was
+	 * discovered and is known to the calling Discovery implementation.
+	 * 
+	 * @param serviceEndpointDescription
+	 *            meta-data which is known to Discovery regarding the new
+	 *            service.
+	 */
+	void serviceAvailable(ServiceEndpointDescription serviceEndpointDescription);
 
-    /**
-     * Callback indicating a change in the service endpoint description of a previously discovered service.
-     * 
-     * @param oldDescription
-     *            previous service endpoint description
-     * @param newDescription
-     *            new service endpoint description
-     */
-    void serviceModified(ServiceEndpointDescription oldDescription, ServiceEndpointDescription newDescription);
+	/**
+	 * Callback indicating a change in the service endpoint description of a
+	 * previously discovered service.
+	 * 
+	 * @param oldDescription
+	 *            previous service endpoint description
+	 * @param newDescription
+	 *            new service endpoint description
+	 */
+	void serviceModified(ServiceEndpointDescription oldDescription,
+			ServiceEndpointDescription newDescription);
 
-    /**
-     * Callback indicating that the specified service endpoint is no longer available.
-     * 
-     * @param serviceEndpointDescription
-     *            ServiceEndpointDescription of the service that is no longer available
-     */
-    void serviceUnavailable(ServiceEndpointDescription serviceEndpointDescription);
+	/**
+	 * Callback indicating that a previously discovered service endpoint is no longer
+	 * available.
+	 * 
+	 * @param serviceEndpointDescription
+	 *            ServiceEndpointDescription of the service that is no longer
+	 *            available
+	 */
+	void serviceUnavailable(
+			ServiceEndpointDescription serviceEndpointDescription);
 }
