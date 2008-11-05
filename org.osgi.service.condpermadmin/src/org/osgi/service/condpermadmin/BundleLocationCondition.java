@@ -80,7 +80,7 @@ public class BundleLocationCondition {
 		}
 		catch (InvalidSyntaxException e) {
 			// this should never happen, but just in case
-			throw new RuntimeException("Invalid filter: " + e.getFilter());
+			throw new RuntimeException("Invalid filter: " + e.getFilter(), e);
 		}
 		Hashtable matchProps = new Hashtable(2);
 		matchProps.put("location", bundleLocation);

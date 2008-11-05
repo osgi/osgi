@@ -19,7 +19,10 @@ package org.osgi.service.deploymentadmin;
 import java.io.InputStream;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
-import java.security.*;
+import java.security.AccessController;
+import java.security.Permission;
+import java.security.PermissionCollection;
+import java.security.PrivilegedAction;
 
 import org.osgi.framework.Bundle;
 
@@ -189,7 +192,7 @@ public final class DeploymentAdminPermission extends Permission {
                     return c.getConstructor(new Class[] {String.class, String.class});    
                 }
                 catch (Exception e) {
-                    throw new RuntimeException(e.getMessage());
+                    throw new RuntimeException(e);
                 }
             }});
     }
@@ -222,7 +225,7 @@ public final class DeploymentAdminPermission extends Permission {
 			throw e;
 		}
 		catch (Throwable e) {
-			throw new RuntimeException(e.toString());
+			throw new RuntimeException(e);
 		}
     }
 

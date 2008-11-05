@@ -597,7 +597,7 @@ public abstract class ApplicationDescriptor {
 				throw e;
 			}
 			catch (Throwable e) {
-				throw new RuntimeException(e.toString());
+				throw new RuntimeException(e);
 			}
 		}
 
@@ -617,7 +617,7 @@ public abstract class ApplicationDescriptor {
 				throw e;
 			}
 			catch (Throwable e) {
-				throw new RuntimeException(e.toString());
+				throw new RuntimeException(e);
 			}
 		}
 
@@ -637,7 +637,7 @@ public abstract class ApplicationDescriptor {
 				throw e;
 			}
 			catch (Throwable e) {
-				throw new RuntimeException(e.toString());
+				throw new RuntimeException(e);
 			}
 		}
 
@@ -657,7 +657,7 @@ public abstract class ApplicationDescriptor {
 				throw e;
 			}
 			catch (Throwable e) {
-				throw new RuntimeException(e.toString());
+				throw new RuntimeException(e);
 			}
 		}
 
@@ -685,7 +685,7 @@ public abstract class ApplicationDescriptor {
 				throw e;
 			}
 			catch (Throwable e) {
-				throw new RuntimeException(e.toString());
+				throw new RuntimeException(e);
 			}
 		}
 
@@ -708,7 +708,7 @@ public abstract class ApplicationDescriptor {
 				throw e;
 			}
 			catch (Throwable e) {
-				throw new RuntimeException(e.toString());
+				throw new RuntimeException(e);
 			}
 		}
 	}

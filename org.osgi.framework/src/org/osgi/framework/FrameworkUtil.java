@@ -16,7 +16,9 @@
 
 package org.osgi.framework;
 
-import java.lang.reflect.*;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.security.AccessController;
 import java.security.PrivilegedAction;
 
@@ -139,7 +141,7 @@ public class FrameworkUtil {
 			throw e;
 		}
 		catch (Throwable e) {
-			throw new RuntimeException(e.toString());
+			throw new RuntimeException(e);
 		}
 	}
 }

@@ -156,7 +156,7 @@ public class BundleSignerCondition {
 			throw e;
 		}
 		catch (Throwable e) {
-			throw new RuntimeException(e.toString());
+			throw new RuntimeException(e);
 		}
 	}
 

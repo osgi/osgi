@@ -271,7 +271,7 @@ public final class AdminPermission extends BasicPermission {
 			throw e;
 		}
 		catch (Throwable e) {
-			throw new RuntimeException(e.toString());
+			throw new RuntimeException(e);
 		}
 	}
 
@@ -305,7 +305,7 @@ public final class AdminPermission extends BasicPermission {
 			throw e;
 		}
 		catch (Throwable e) {
-			throw new RuntimeException(e.toString());
+			throw new RuntimeException(e);
 		}
 	}
 

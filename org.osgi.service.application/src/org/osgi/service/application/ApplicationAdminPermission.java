@@ -150,7 +150,7 @@ public class ApplicationAdminPermission extends Permission {
 			try {
 				newPerm = new ApplicationAdminPermission( this.filter, this.actions );
 			}catch( InvalidSyntaxException e ) {
-				throw new RuntimeException( "Internal error" ); /* this can never happen */
+				throw new RuntimeException(e); /* this can never happen */
 			}
 		}
 		else	

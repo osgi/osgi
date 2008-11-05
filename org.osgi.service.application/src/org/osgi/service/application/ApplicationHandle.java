@@ -314,7 +314,7 @@ public abstract class ApplicationHandle {
 				throw e;
 			}
 			catch (Throwable e) {
-				throw new RuntimeException(e.toString());
+				throw new RuntimeException(e);
 			}
 		}
 		void destroy() {
@@ -333,7 +333,7 @@ public abstract class ApplicationHandle {
 				throw e;
 			}
 			catch (Throwable e) {
-				throw new RuntimeException(e.toString());
+				throw new RuntimeException(e);
 			}
 		}
 	}
