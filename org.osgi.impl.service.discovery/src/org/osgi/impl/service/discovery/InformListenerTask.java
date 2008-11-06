@@ -16,9 +16,9 @@
 
 package org.osgi.impl.service.discovery;
 
+import java.util.Collection;
 import java.util.Hashtable;
 import java.util.Iterator;
-import java.util.Map;
 import java.util.TimerTask;
 import java.util.Vector;
 
@@ -35,10 +35,9 @@ import org.osgi.service.discovery.ServiceListener;
  * @author Thomas Kiesslich
  */
 public class InformListenerTask extends TimerTask {
-	private Map listeners;
 	private Discovery discovery;
 
-	private ServiceEndpointDescription[] lastLookupResult = null;
+	private Collection/* <ServiceEndpointDescription> */lastLookupResult = null;
 
 	/**
 	 * 
@@ -47,8 +46,7 @@ public class InformListenerTask extends TimerTask {
 	 * @param disco
 	 *            the Instance of Discovery to get the published services from
 	 */
-	public InformListenerTask(Map serviceListeners, Discovery disco) {
-		listeners = serviceListeners;
+	public InformListenerTask(Discovery disco) {
 		discovery = disco;
 	}
 
@@ -57,9 +55,9 @@ public class InformListenerTask extends TimerTask {
 	 * @see java.lang.Runnable#run()
 	 */
 	public void run() {
-		synchronized (listeners) {
-			if (listeners.size() != 0) {
-				ServiceEndpointDescription[] descriptions = discovery
+		synchronized (AbstractDiscovery.getListenerAndFilter()) {
+			if (AbstractDiscovery.getListenerAndFilter().size() != 0) {
+				Collection/* <ServiceEndpointDescription> */descriptions = discovery
 						.findService(null, null);
 				Vector availableServices = new Vector();
 				notifyAvailableServices(descriptions, availableServices);
@@ -76,15 +74,20 @@ public class InformListenerTask extends TimerTask {
 	 * @param availableServices
 	 */
 	private void notifyAvailableServices(
-			ServiceEndpointDescription[] descriptions, Vector availableServices) {
-		for (int i = 0; i < descriptions.length; i++) {
-			ServiceEndpointDescription descr = descriptions[i];
+			Collection/* <ServiceEndpointDescription> */descriptions,
+			Vector availableServices) {
+		Iterator descrIt = descriptions.iterator();
+		while (descrIt.hasNext()) {
+			ServiceEndpointDescription descr = (ServiceEndpointDescription) descrIt
+					.next();
 			// walk over the registered listeners
-			Iterator it = listeners.keySet().iterator();
+			Iterator it = AbstractDiscovery.getListenerAndFilter().keySet()
+					.iterator();
 			while (it.hasNext()) {
 				ServiceListener listener = (ServiceListener) it.next();
 				notifiyAvailableServicePerListener(availableServices, descr,
-						listener, (Filter) listeners.get(listener));
+						listener, (Filter) AbstractDiscovery
+								.getListenerAndFilter().get(listener));
 			}
 		}
 	}
@@ -94,14 +97,19 @@ public class InformListenerTask extends TimerTask {
 	 */
 	private void notifyUnavailableServices(Vector availableServices) {
 		if (lastLookupResult != null) {
-			for (int i = 0; i < lastLookupResult.length; i++) {
+			Iterator llrIt = lastLookupResult.iterator();
+			int i = 0;
+			while (llrIt.hasNext()) {
 				if (!availableServices.contains(new Integer(i))) {
-					Iterator it = listeners.keySet().iterator();
+					Iterator it = AbstractDiscovery.getListenerAndFilter()
+							.keySet().iterator();
 					while (it.hasNext()) {
 						ServiceListener l = (ServiceListener) it.next();
-						l.serviceUnavailable(lastLookupResult[i]);
+						l.serviceUnavailable((ServiceEndpointDescription) llrIt
+								.next());
 					}
 				}
+				i++;
 			}
 		}
 	}
@@ -119,25 +127,28 @@ public class InformListenerTask extends TimerTask {
 		// service description are in its properties bag
 		if ((f == null) || (f.match(new Hashtable(descr.getProperties())))) {
 			// check if this is the first run
-			if (lastLookupResult != null && lastLookupResult.length > 0) {
+			if (lastLookupResult != null && lastLookupResult.size() > 0) {
 				// it's not
-				Integer index = null;
-				for (int j = 0; j < lastLookupResult.length; j++) {
+				Iterator it = lastLookupResult.iterator();
+				while (it.hasNext()) {
+					Integer index = null;
+					ServiceEndpointDescription sed = (ServiceEndpointDescription) it
+							.next();
 					// look up the last result map to see if we already know
 					// that description
 					// TODO we currently have not idea if a service description
 					// has changed or not. There is ID that identifies a service
 					// description. Should that ID part of the spec??
-					if (lastLookupResult[j].equals(descr)) {
-						index = new Integer(j);
-						availableServices.add(index);
+					if (sed.equals(descr)) {
+						index = new Integer(0);
+						availableServices.add(sed);
 					}
 					if (index != null) {
 						// notify a listener that a service
 						// description matches the specified filter
 						// and
 						// does exist before
-						l.serviceModified(lastLookupResult[j], descr);
+						l.serviceModified(sed, descr);
 					} else {
 						// notify a listener that a service
 						// description matches the specified filter

@@ -19,7 +19,9 @@
 package org.osgi.impl.service.discovery.slp;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Hashtable;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -29,7 +31,6 @@ import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
 import org.osgi.impl.service.discovery.AbstractDiscovery;
 import org.osgi.impl.service.discovery.InformListenerTask;
-import org.osgi.service.discovery.FindServiceCallback;
 import org.osgi.service.discovery.ServiceEndpointDescription;
 import org.osgi.service.log.LogService;
 import org.osgi.util.tracker.ServiceTracker;
@@ -44,7 +45,7 @@ import ch.ethz.iks.slp.ServiceURL;
 /**
  * TODO: remove printStackTrace and do logging instead
  * 
- * @author Tim Diekmann
+ * @author Phillip Konradi
  * @author Thomas Kiesslich
  * 
  */
@@ -55,7 +56,7 @@ public class SLPHandlerImpl extends AbstractDiscovery {
 	private Locator locator = null;
 	private Advertiser advertiser = null;
 
-	private final int POLLDELAY = 20000; //20 sec
+	private final int POLLDELAY = 20000; // 20 sec
 
 	private Timer t = null;
 
@@ -78,8 +79,7 @@ public class SLPHandlerImpl extends AbstractDiscovery {
 		locatorTracker.open();
 		advertiserTracker.open();
 		t = new Timer(false);
-		t.schedule(new InformListenerTask(getListenerAndFilter(),
-				this), 0, POLLDELAY);
+		t.schedule(new InformListenerTask(this), 0, POLLDELAY);
 	}
 
 	public void destroy() {
@@ -110,7 +110,7 @@ public class SLPHandlerImpl extends AbstractDiscovery {
 	 * 
 	 * @see org.osgi.impl.service.discovery.ProtocolHandler#findService(org.osgi.service.discovery.ServiceDescription)
 	 */
-	public ServiceEndpointDescription[] findService(final String interfaceName,
+	public Collection/*<ServiceEndpointDescription>*/ findService(final String interfaceName,
 			final String filter) {
 		validateFilter(filter);
 		List result = new ArrayList();
@@ -119,8 +119,7 @@ public class SLPHandlerImpl extends AbstractDiscovery {
 		if (locator == null) {
 			log(LogService.LOG_WARNING,
 					"No SLP-Locator. Find operation is not executed.");
-			return (ServiceEndpointDescription[]) result
-					.toArray(new ServiceEndpointDescription[0]);
+			return result;
 		}
 		// TODO first look at cache
 		// find appropriate services
@@ -135,8 +134,7 @@ public class SLPHandlerImpl extends AbstractDiscovery {
 			// interface is not java???
 		} catch (Exception e) {
 			log(LogService.LOG_ERROR, "Failed to find service", e);
-			return (ServiceEndpointDescription[]) result
-					.toArray(new ServiceEndpointDescription[0]);
+			return result;
 		}
 		// iterate through found services and retrieve their attributes
 		while (se.hasMoreElements()) {
@@ -165,24 +163,23 @@ public class SLPHandlerImpl extends AbstractDiscovery {
 				log(LogService.LOG_ERROR, "Failed to find service", e);
 			}
 		}
-		ServiceEndpointDescription[] results = (ServiceEndpointDescription[]) result
-				.toArray(new ServiceEndpointDescription[0]);
-		if (results.length > 0) {
+		if (!result.isEmpty()) {
 			StringBuffer buff = new StringBuffer();
 			buff.append("number of services = ");
-			buff.append(results.length);
+			buff.append(result.size());
 			buff.append("; services = ");
-			for (int i = 0; i < results.length; i++) {
+			Iterator it = result.iterator();
+			while(it.hasNext()) {
 				buff.append("(");
-				String[] ifNames = results[i].getInterfaceNames();
-				for (int k = 0; k < ifNames.length; k++) {
-					buff.append(ifNames[k]);
-					if (k != ifNames.length - 1) {
+				Iterator/*String*/ ifNames = ((ServiceEndpointDescription) it.next()).getInterfaceNames().iterator();
+				while(ifNames.hasNext()) {
+					buff.append((String) ifNames.next());
+					if (ifNames.hasNext()) {
 						buff.append(",");
 					}
 				}
 				buff.append(")");
-				if (i != results.length - 1) {
+				if (it.hasNext()) {
 					buff.append(",(");
 				}
 			}
@@ -191,41 +188,7 @@ public class SLPHandlerImpl extends AbstractDiscovery {
 			log(LogService.LOG_DEBUG, "0 services found");
 		}
 		// TODO add to cache
-		return results;
-	}
-
-	/**
-	 * @see org.osgi.service.discovery.Discovery#findService(String,
-	 *      FindServiceCallback)
-	 */
-	public void findService(final String interfaceName, final String filter,
-			final FindServiceCallback callback) {
-		if (callback == null) {
-			throw new IllegalArgumentException("callback must not be null");
-		}
-		validateFilter(filter);
-		Thread executor = new Thread(new Runnable() {
-			public void run() {
-				try {
-					// do lookup
-					ServiceEndpointDescription[] services = findService(
-							interfaceName, filter);
-					// return result via callback
-					try {
-						callback.servicesFound(services);
-					} catch (Exception e) {
-						log(
-								LogService.LOG_ERROR,
-								"Exceptions where thrown in the callback of findService operation.",
-								e);
-					}
-				} catch (Exception e) {
-					log(LogService.LOG_ERROR,
-							"Failed to execute async findService", e);
-				}
-			}
-		});
-		executor.start();
+		return result;
 	}
 
 	// TODO: think whether we need a version with autopublish parameter
@@ -254,10 +217,10 @@ public class SLPHandlerImpl extends AbstractDiscovery {
 			log(LogService.LOG_DEBUG, "Following service is published: "
 					+ svcDescr);
 
-			String[] interfaces = svcDescr.getInterfaceNames();
-			for (int k = 0; k < interfaces.length; k++) {
+			Iterator interfaces = svcDescr.getInterfaceNames().iterator();
+			while(interfaces.hasNext()) {
 				try {
-					advertiser.register(svcDescr.getServiceURL(interfaces[k]),
+					advertiser.register(svcDescr.getServiceURL((String) interfaces.next()),
 							new Hashtable(svcDescr.getProperties()));
 				} catch (ServiceLocationException e) {
 					e.printStackTrace();
@@ -284,13 +247,14 @@ public class SLPHandlerImpl extends AbstractDiscovery {
 			SLPServiceDescriptionAdapter slpSvcDescr = (SLPServiceDescriptionAdapter) serviceDescription;
 			Advertiser advertiser = getAdvertiser();
 			if (advertiser != null) {
-				String[] interfaceNames = slpSvcDescr.getInterfaceNames();
-				for (int k = 0; k < interfaceNames.length; k++) {
+				Iterator interfaceNames = slpSvcDescr.getInterfaceNames().iterator();
+				while(interfaceNames.hasNext()) {
+					String interfaceName = (String) interfaceNames.next();
 					try {
 						log(LogService.LOG_DEBUG, "unpublish service "
-								+ slpSvcDescr.getServiceURL(interfaceNames[k]));
+								+ slpSvcDescr.getServiceURL(interfaceName));
 						advertiser.deregister(slpSvcDescr
-								.getServiceURL(interfaceNames[k]));
+								.getServiceURL(interfaceName));
 
 						// inform listeners about removal
 						notifyListenersOnRemovedServiceDescription(serviceDescription);
@@ -298,7 +262,7 @@ public class SLPHandlerImpl extends AbstractDiscovery {
 						e.printStackTrace();
 						log(LogService.LOG_ERROR,
 								"failed to deregister service for interface "
-										+ interfaceNames[k], e);
+										+ interfaceName, e);
 					}
 				}
 			} else {
@@ -371,7 +335,7 @@ public class SLPHandlerImpl extends AbstractDiscovery {
 			log(LogService.LOG_INFO, "unbound Advertiser");
 		}
 	}
-	
+
 	/**
 	 * For test purposes only.
 	 * 

@@ -10,6 +10,7 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.StringTokenizer;
 
+import org.osgi.framework.Constants;
 import org.osgi.service.discovery.ServiceEndpointDescription;
 
 import ch.ethz.iks.slp.ServiceLocationException;
@@ -40,7 +41,7 @@ public class SLPServiceDescriptionAdapter implements ServiceEndpointDescription 
 
 	public static final String ESCAPING_CHARACTER = "\\";
 
-	private Map/* <String, String> */javaInterfaceAndFilters;
+	private Map/* <String, String> */javaInterfaceAndVersions;
 	private Map/* <String, String> */javaAndEndpointInterfaces;
 	private Map/* <String, Object> */properties;
 
@@ -50,24 +51,25 @@ public class SLPServiceDescriptionAdapter implements ServiceEndpointDescription 
 	
 	private static final String ARRAYELEMENTSEPERATOR = ",";
 
-	public SLPServiceDescriptionAdapter(final Map interfacesAndFilters,
+	public SLPServiceDescriptionAdapter(final Map interfacesAndVersions,
 			final Map endPointInterfaces, final Map props)
 			throws ServiceLocationException {
 		// check the java interface map for validity
-		if (interfacesAndFilters == null) {
+		if (interfacesAndVersions == null) {
 			throw new IllegalArgumentException(
 					"Given set of Java interfaces must not be null.");
 		}
-		if (interfacesAndFilters.size() <= 0) {
+		if (interfacesAndVersions.size() <= 0) {
 			throw new IllegalArgumentException(
 					"Given set of Java interfaces must contain at least one service interface name.");
 		}
 
 		// create and copy maps
-		javaInterfaceAndFilters = new HashMap(interfacesAndFilters);
+		javaInterfaceAndVersions = new HashMap(interfacesAndVersions);
 		javaAndEndpointInterfaces = new HashMap();
-		if (endPointInterfaces != null)
+		if (endPointInterfaces != null) {
 			javaAndEndpointInterfaces.putAll(endPointInterfaces);
+		}
 		properties = new HashMap();
 		if (props != null) {
 			properties.putAll(props);
@@ -77,13 +79,13 @@ public class SLPServiceDescriptionAdapter implements ServiceEndpointDescription 
 	}
 
 	public SLPServiceDescriptionAdapter(final ServiceURL serviceURL) {
-		javaInterfaceAndFilters = new HashMap();
+		javaInterfaceAndVersions = new HashMap();
 		javaAndEndpointInterfaces = new HashMap();
 		properties = new HashMap();
 		serviceURLs = new HashMap();
 
 		String interfaceName = retrieveDataFromServiceURL(serviceURL,
-				javaInterfaceAndFilters, javaAndEndpointInterfaces, properties);
+				javaInterfaceAndVersions, javaAndEndpointInterfaces, properties);
 		serviceURLs.put(interfaceName, serviceURL);
 	}
 
@@ -91,7 +93,7 @@ public class SLPServiceDescriptionAdapter implements ServiceEndpointDescription 
 			throws ServiceLocationException {
 		// create arrays for java-interface, version and endpoint-interface
 		// info. Array indexes correlate.
-		int interfaceNmb = javaInterfaceAndFilters.size();
+		int interfaceNmb = javaInterfaceAndVersions.size();
 		String[] javaInterfaces = new String[interfaceNmb];
 		String[] versions = new String[interfaceNmb];
 		String[] endpointInterfaces = javaAndEndpointInterfaces.size() > 0 ? new String[interfaceNmb]
@@ -100,12 +102,12 @@ public class SLPServiceDescriptionAdapter implements ServiceEndpointDescription 
 		// Create a service url for each interface and gather also version and
 		// endpoint-interface information.
 		serviceURLs = new HashMap();
-		Iterator intfIterator = javaInterfaceAndFilters.keySet().iterator();
+		Iterator intfIterator = javaInterfaceAndVersions.keySet().iterator();
 		for (int i = 0; intfIterator.hasNext(); i++) {
 			Object currentInterface = intfIterator.next();
 			if (currentInterface instanceof String) {
 				javaInterfaces[i] = (String) currentInterface;
-				versions[i] = (String) javaInterfaceAndFilters
+				versions[i] = (String) javaInterfaceAndVersions
 						.get(javaInterfaces[i]);
 				if (endpointInterfaces != null) {
 					endpointInterfaces[i] = (String) javaAndEndpointInterfaces
@@ -127,7 +129,7 @@ public class SLPServiceDescriptionAdapter implements ServiceEndpointDescription 
 			}
 		}
 		// added version and endpoint-interface information to the properties
-		properties.put(ServiceEndpointDescription.PROP_KEY_INTERFACE_NAME, buff
+		properties.put(Constants.OBJECTCLASS, buff
 				.toString());
 		buff = new StringBuffer();
 		for (int j = 0; j < versions.length; j++) {
@@ -172,13 +174,13 @@ public class SLPServiceDescriptionAdapter implements ServiceEndpointDescription 
 	public String toString() {
 		StringBuffer sb = new StringBuffer("Service:\n");
 
-		Iterator intfIterator = this.javaInterfaceAndFilters.keySet()
+		Iterator intfIterator = this.javaInterfaceAndVersions.keySet()
 				.iterator();
 		while (intfIterator.hasNext()) {
 			String interfaceName = (String) intfIterator.next();
 			sb.append("interface=").append(interfaceName).append("\n");
 			sb.append("version=").append(
-					javaInterfaceAndFilters.get(interfaceName)).append("\n");
+					javaInterfaceAndVersions.get(interfaceName)).append("\n");
 			ServiceURL svcURL = getServiceURL(interfaceName);
 			sb.append("serviceURL=").append(
 					svcURL != null ? svcURL.toString() : "").append("\n");
@@ -204,9 +206,8 @@ public class SLPServiceDescriptionAdapter implements ServiceEndpointDescription 
 	 * 
 	 * @see org.osgi.service.discovery.ServiceEndpointDescription#getInterfaceNames()
 	 */
-	public String[] getInterfaceNames() {
-		return (String[]) javaInterfaceAndFilters.keySet().toArray(
-				new String[1]);
+	public Collection getInterfaceNames() {
+		return javaInterfaceAndVersions.keySet();
 	}
 
 	/**
@@ -222,7 +223,7 @@ public class SLPServiceDescriptionAdapter implements ServiceEndpointDescription 
 	 * @see org.osgi.service.discovery.ServiceEndpointDescription#getVersion(java.lang.String)
 	 */
 	public String getVersion(String interfaceName) {
-		return (String) javaInterfaceAndFilters.get(interfaceName);
+		return (String) javaInterfaceAndVersions.get(interfaceName);
 	}
 
 	/**
@@ -282,7 +283,7 @@ public class SLPServiceDescriptionAdapter implements ServiceEndpointDescription 
 		// add interface as property to enable LDAP filtering on it
 		if (interfaceName != null) {
 			path = appendPropertyToURLPath(path,
-					ServiceEndpointDescription.PROP_KEY_INTERFACE_NAME,
+					Constants.OBJECTCLASS,
 					interfaceName);
 		}
 		if (version != null)
@@ -389,7 +390,7 @@ public class SLPServiceDescriptionAdapter implements ServiceEndpointDescription 
 
 		// Put interface and version information to properties since base for
 		// matching
-		properties.put(ServiceEndpointDescription.PROP_KEY_INTERFACE_NAME,
+		properties.put(Constants.OBJECTCLASS,
 				new String[] { interfaceName });
 		properties.put(ServiceEndpointDescription.PROP_KEY_VERSION,
 				new String[] { version });
@@ -646,7 +647,7 @@ public class SLPServiceDescriptionAdapter implements ServiceEndpointDescription 
 	}
 
 	/**
-	 * 
+	 * TODO implement hashCode() appropriatly
 	 * @see java.lang.Object#hashCode()
 	 */
 	public int hashCode() {

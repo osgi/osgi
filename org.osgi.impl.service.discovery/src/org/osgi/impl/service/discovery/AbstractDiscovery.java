@@ -18,6 +18,7 @@
  */
 package org.osgi.impl.service.discovery;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Iterator;
@@ -27,6 +28,7 @@ import org.osgi.framework.BundleContext;
 import org.osgi.framework.Filter;
 import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.service.discovery.Discovery;
+import org.osgi.service.discovery.FindServiceCallback;
 import org.osgi.service.discovery.ServiceEndpointDescription;
 import org.osgi.service.discovery.ServiceListener;
 import org.osgi.service.log.LogService;
@@ -47,7 +49,7 @@ public abstract class AbstractDiscovery implements Discovery {
 
 	private LogService logService;
 	private boolean autoPublish = DEFAULT_AUTOPUBLISH;
-	private Map listenerAndFilter = null;
+	private static Map listenerAndFilter = null;
 
 	// TODO do we need a logService as parameter??
 	public AbstractDiscovery(final BundleContext context,
@@ -221,11 +223,11 @@ public abstract class AbstractDiscovery implements Discovery {
 		if (serviceDescription == null)
 			throw new IllegalArgumentException(
 					"serviceDescription must not be null.");
-
+		String ifName = (String) serviceDescription.getInterfaceNames().iterator().next();
 		if (serviceDescription.getInterfaceNames() == null
-				|| serviceDescription.getInterfaceNames().length <= 0
-				|| serviceDescription.getInterfaceNames()[0] == null
-				|| serviceDescription.getInterfaceNames()[0].length() <= 0) {
+				|| serviceDescription.getInterfaceNames().size() <= 0
+				|| ifName == null
+				|| ifName.length() <= 0) {
 			throw new IllegalArgumentException(
 					"serviceDescription must contain at least one service interface name.");
 		}
@@ -307,23 +309,60 @@ public abstract class AbstractDiscovery implements Discovery {
 		}
 	}
 
-	protected void validateFilter(final String filter) {
+	protected Filter validateFilter(final String filter) {
 		// check validity of the given filter
+		Filter f = null;
 		if (filter != null) {
 			try {
-				getContext().createFilter(filter);
+				f = getContext().createFilter(filter);
 			} catch (InvalidSyntaxException e1) {
 				// TODO log
 				throw new IllegalArgumentException(
 						"filter is not an LDAP filter");
 			}
 		}
+		return f;
 	}
 
 	/**
 	 * @return the listenerAndFilter
 	 */
-	protected Map getListenerAndFilter() {
+	protected static Map getListenerAndFilter() {
 		return listenerAndFilter;
+	}
+	
+	/**
+	 * 
+	 * @see org.osgi.service.discovery.Discovery#findService(java.lang.String,
+	 *      java.lang.String, org.osgi.service.discovery.FindServiceCallback)
+	 */
+	public void findService(final String interfaceName, final String filter,
+			final FindServiceCallback callback) {
+		if (callback == null) {
+			throw new IllegalArgumentException("callback must not be null");
+		}
+		validateFilter(filter);
+		Thread executor = new Thread(new Runnable() {
+			public void run() {
+				try {
+					// do lookup
+					Collection/*<ServiceEndpointDescription>*/ services = findService(
+							interfaceName, filter);
+					// return result via callback
+					try {
+						callback.servicesFound(services);
+					} catch (Exception e) {
+						log(
+								LogService.LOG_ERROR,
+								"Exceptions where thrown in the callback of findService operation.",
+								e);
+					}
+				} catch (Exception e) {
+					log(LogService.LOG_ERROR,
+							"Failed to execute async findService", e);
+				}
+			}
+		});
+		executor.start();
 	}
 }
