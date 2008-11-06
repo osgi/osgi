@@ -1,12 +1,15 @@
 Bundle-Version					= 1.0.0.${project.build}
 Bundle-Activator				= ${p}.Activator
 
+
 Private-Package					= ${p}.*
-Export-Package					= org.osgi.service.discovery
+Export-Package					= org.osgi.service.discovery, org.osgi.impl.service.discovery.jcs
 
 -buildpath						= \
  	org.osgi.service.discovery;	version=project, \
     ch.ethz.iks.slp; 			version=1.0, \
     org.eclipse.osgi;			version=3.5.0, \
 	ee.foundation;				version=1.0, \
-	osgi;						version="[4.0,4.2]"
+	org.apache.jcs;				version=1.3, \
+	org.osgi.impl.service.log;	version=1.0, \	
+	osgi;						version=1.4
