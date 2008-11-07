@@ -21,12 +21,10 @@ package org.osgi.impl.service.discovery;
 import java.util.Dictionary;
 import java.util.Hashtable;
 
-import org.eclipse.osgi.framework.console.CommandProvider;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
 import org.osgi.framework.ServiceRegistration;
-import org.osgi.impl.service.discovery.equinox.DiscoveryCommandProvider;
 import org.osgi.impl.service.discovery.jcs.JCSHandlerImpl;
 import org.osgi.impl.service.discovery.slp.SLPHandlerImpl;
 import org.osgi.service.discovery.Discovery;
@@ -63,8 +61,8 @@ public class Activator implements BundleActivator {
 	 * @see org.osgi.framework.BundleActivator#start(org.osgi.framework.BundleContext)
 	 */
 	public void start(final BundleContext context) throws Exception {
-		 commandProvider = context.registerService(CommandProvider.class
-				.getName(), new DiscoveryCommandProvider(context), null);
+//		 commandProvider = context.registerService(CommandProvider.class
+//				.getName(), new DiscoveryCommandProvider(context), null);
 
 		logServiceTracker = new ServiceTracker(context, LogService.class
 				.getName(), new ServiceTrackerCustomizer() {
