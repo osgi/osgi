@@ -19,8 +19,6 @@ package org.osgi.service.event;
 import java.util.Dictionary;
 import java.util.Enumeration;
 import java.util.Hashtable;
-import java.util.NoSuchElementException;
-import java.util.StringTokenizer;
 
 import org.osgi.framework.Filter;
 
@@ -83,12 +81,8 @@ public class Event {
 	 * @return A non-empty array with one element per property.
 	 */
 	public final String[] getPropertyNames() {
-		String[] names = new String[properties.size()];
-		Enumeration keys = properties.keys();
-		for (int i = 0; keys.hasMoreElements(); i++) {
-			names[i] = (String) keys.nextElement();
-		}
-		return names;
+		return (String[]) properties.keySet().toArray(
+				new String[properties.size()]);
 	}
 
 	/**
@@ -143,7 +137,9 @@ public class Event {
 	 * @return An integer which is a hash code value for this object.
 	 */
 	public int hashCode() {
-		return topic.hashCode() ^ properties.hashCode();
+		int h = 31 * 17 + topic.hashCode();
+		h = 31 * h + properties.hashCode();
+		return h;
 	}
 
 	/**
@@ -155,8 +151,6 @@ public class Event {
 		return getClass().getName() + " [topic=" + topic + "]"; //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
-	private static final String	SEPARATOR	= "/"; //$NON-NLS-1$
-
 	/**
 	 * Called by the constructor to validate the topic name.
 	 * 
@@ -164,37 +158,33 @@ public class Event {
 	 * @throws IllegalArgumentException If the topic name is invalid.
 	 */
 	private static void validateTopicName(String topic) {
-		try {
-			StringTokenizer st = new StringTokenizer(topic, SEPARATOR, true);
-			validateToken(st.nextToken());
-
-			while (st.hasMoreTokens()) {
-				st.nextToken(); // consume delimiter
-				validateToken(st.nextToken());
-			}
-		}
-		catch (NoSuchElementException e) {
-			throw new IllegalArgumentException("invalid topic"); //$NON-NLS-1$
-		}
-	}
-
-	private static final String	tokenAlphabet	= "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789_-"; //$NON-NLS-1$
-
-	/**
-	 * Validate a token.
-	 * 
-	 * @param token The token value to validate.
-	 * @throws IllegalArgumentException If the token is invalid.
-	 */
-	private static void validateToken(String token) {
-		int length = token.length();
-		if (length < 1) {	// token must contain at least one character
-			throw new IllegalArgumentException("invalid topic"); //$NON-NLS-1$
-		}
-		for (int i = 0; i < length; i++) { // each character in the token must be from the token alphabet
-			if (tokenAlphabet.indexOf(token.charAt(i)) == -1) { //$NON-NLS-1$
-				throw new IllegalArgumentException("invalid topic"); //$NON-NLS-1$
-			}
-		}
+	    char[] chars = topic.toCharArray();
+	    for (int i = 0; i < chars.length; i++) {
+	        char ch = chars[i];
+	        if (ch == '/') {
+	        	// Can't start or end with a '/' but anywhere else is okay
+				if (i == 0 || (i == chars.length - 1)) {
+	                throw new IllegalArgumentException("invalid topic"); //$NON-NLS-1$
+	            }
+	            // Can't have "//" as that implies empty token
+	            if (chars[i-1] == '/') {
+	                throw new IllegalArgumentException("invalid topic"); //$NON-NLS-1$
+	            }
+	            continue;
+	        }
+	        if (('A' <= ch) && (ch <= 'Z')) {
+	            continue;
+	        }
+	        if (('a' <= ch) && (ch <= 'z')) {
+	            continue;
+	        }
+	        if (('0' <= ch) && (ch <= '9')) {
+	            continue;
+	        }
+	        if ((ch == '_') || (ch == '-')) {
+	            continue;
+	        }
+	        throw new IllegalArgumentException("invalid topic"); //$NON-NLS-1$
+	    }
 	}
 }
