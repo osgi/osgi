@@ -5,12 +5,15 @@ Private-Package						= ${p}.*
 -buildpath							= \
 	org.osgi.service.discovery;				version=project	, \
 	org.osgi.impl.service.discovery;		version=project	, \
-	osgi;									version=4.1		, \
+	osgi;									version=4.2		, \
 	ee.j2se;                                version=1.4, \												, \
 	${junit}
 
 -runbundles							= \
 	org.osgi.impl.service.discovery; 		version=project, \
+	org.apache.jcs, \
+	org.apache.commons-logging, \
+	edu.oswego.cs.dl.util.concurrent, \
 	ch.ethz.iks.slp, \
 	org.osgi.impl.service.log
 

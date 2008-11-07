@@ -3,8 +3,6 @@
  */
 package org.osgi.test.cases.discovery;
 
-import java.net.URL;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
@@ -15,7 +13,6 @@ import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
 import org.osgi.service.discovery.Discovery;
 import org.osgi.service.discovery.ServiceEndpointDescription;
-import org.osgi.service.discovery.ServiceListener;
 import org.osgi.test.cases.discovery.internal.DiscoveryServiceListener;
 import org.osgi.test.cases.discovery.internal.DiscoveryTestServiceInterface;
 
@@ -53,8 +50,8 @@ public class DiscoveryTestCase extends TestCase {
 		ServiceEndpointDescription sed = discovery.publishService(jInterfaces, epInterfaces, properties);
 		assertNotNull(sed);
 		assertNotNull(sed.getInterfaceNames());
-		assertTrue(sed.getInterfaceNames().length == 1);
-		assertEquals(DiscoveryTestServiceInterface.class.getName(), sed.getInterfaceNames()[0]);
+		assertTrue(sed.getInterfaceNames().size() == 1);
+		assertEquals(DiscoveryTestServiceInterface.class.getName(), sed.getInterfaceNames().iterator().next());
 		assertEquals("1.0.0", sed.getVersion(DiscoveryTestServiceInterface.class.getName()));
 		assertEquals("mytestvalue", sed.getProperty("mytestkey"));
 		
@@ -73,8 +70,8 @@ public class DiscoveryTestCase extends TestCase {
 		ServiceEndpointDescription sed = discovery.publishService(jInterfaces, epInterfaces, properties, true);
 		assertNotNull(sed);
 		assertNotNull(sed.getInterfaceNames());
-		assertTrue(sed.getInterfaceNames().length == 1);
-		assertEquals(DiscoveryTestServiceInterface.class.getName(), sed.getInterfaceNames()[0]);
+		assertTrue(sed.getInterfaceNames().size() == 1);
+		assertEquals(DiscoveryTestServiceInterface.class.getName(), sed.getInterfaceNames().iterator().next());
 		assertEquals("1.0.0", sed.getVersion(DiscoveryTestServiceInterface.class.getName()));
 		assertEquals("mytestvalue", sed.getProperty("mytestkey"));
 		
@@ -96,24 +93,24 @@ public class DiscoveryTestCase extends TestCase {
 		ServiceEndpointDescription sed = discovery.publishService(jInterfaces, epInterfaces, properties, true);
 		assertNotNull(sed);
 		assertNotNull(sed.getInterfaceNames());
-		assertTrue(sed.getInterfaceNames().length == 1);
-		assertEquals(DiscoveryTestServiceInterface.class.getName(), sed.getInterfaceNames()[0]);
+		assertTrue(sed.getInterfaceNames().size() == 1);
+		assertEquals(DiscoveryTestServiceInterface.class.getName(), sed.getInterfaceNames().iterator().next());
 		assertEquals("1.0.0", sed.getVersion(DiscoveryTestServiceInterface.class.getName()));
 		assertEquals("mytestvalue", sed.getProperty("mytestkey"));
 		
 		assertEquals(sed, listener.getAvailableCalled());
 		
-		ServiceEndpointDescription[] descs = discovery.findService(DiscoveryTestServiceInterface.class.getName(), null);
+		Collection descs = discovery.findService(DiscoveryTestServiceInterface.class.getName(), null);
 		assertNotNull(descs);
-		assertTrue(descs.length == 1);
-		assertEquals(sed.getProperty("mytestkey"), descs[0].getProperty("mytestkey"));
-		assertEquals(sed.getInterfaceNames()[0], descs[0].getInterfaceNames()[0]);
-		assertEquals(sed.getVersion(DiscoveryTestServiceInterface.class.getName()), descs[0].getVersion(DiscoveryTestServiceInterface.class.getName()));
+		assertTrue(descs.size() == 1);
+		assertEquals(sed.getProperty("mytestkey"), ((ServiceEndpointDescription)descs.iterator().next()).getProperty("mytestkey"));
+		assertEquals(sed.getInterfaceNames().iterator().next(), ((ServiceEndpointDescription)descs.iterator().next()).getInterfaceNames().iterator().next());
+		assertEquals(sed.getVersion(DiscoveryTestServiceInterface.class.getName()), ((ServiceEndpointDescription)descs.iterator().next()).getVersion(DiscoveryTestServiceInterface.class.getName()));
 		
 		discovery.unpublishService(sed);
 		descs = discovery.findService(DiscoveryTestServiceInterface.class.getName(), "(mytestkey=mytestvalue)");
 		assertNotNull(descs);
-		assertTrue(descs.length == 0);
+		assertTrue(descs.size() == 0);
 		
 		assertEquals(sed, listener.getUnavailableCalled());
 
@@ -145,18 +142,18 @@ public class DiscoveryTestCase extends TestCase {
 		
 		assertEquals(sed1, listener.getAvailableCalled());
 		
-		ServiceEndpointDescription[] descs = discovery.findService(DiscoveryTestServiceInterface.class.getName(), "(mytestkey=mytestvalue)");
+		Collection descs = discovery.findService(DiscoveryTestServiceInterface.class.getName(), "(mytestkey=mytestvalue)");
 		assertNotNull(descs);
-		assertTrue(descs.length == 1);
-		assertEquals(sed.getProperty("mytestkey"), descs[0].getProperty("mytestkey"));
-		assertEquals(sed.getInterfaceNames()[0], descs[0].getInterfaceNames()[0]);
-		assertEquals(sed.getVersion(DiscoveryTestServiceInterface.class.getName()), descs[0].getVersion(DiscoveryTestServiceInterface.class.getName()));
+		assertTrue(descs.size() == 1);
+		assertEquals(sed.getProperty("mytestkey"), ((ServiceEndpointDescription)descs.iterator().next()).getProperty("mytestkey"));
+		assertEquals(sed.getInterfaceNames().iterator().next(), ((ServiceEndpointDescription)descs.iterator().next()).getInterfaceNames().iterator().next());
+		assertEquals(sed.getVersion(DiscoveryTestServiceInterface.class.getName()), ((ServiceEndpointDescription)descs.iterator().next()).getVersion(DiscoveryTestServiceInterface.class.getName()));
 		
 		discovery.unpublishService(sed);
 		
 		descs = discovery.findService(DiscoveryTestServiceInterface.class.getName(), "(mytestkey=mytestvalue)");
 		assertNotNull(descs);
-		assertTrue(descs.length == 0);
+		assertTrue(descs.size() == 0);
 		
 		discovery.unpublishService(sed1);
 		assertEquals(sed1, listener.getUnavailableCalled());
