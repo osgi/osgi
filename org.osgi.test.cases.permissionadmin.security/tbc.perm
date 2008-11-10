@@ -6,6 +6,6 @@
 # line in PermissionInfo encoded format.
 # See org.osgi.service.permissionadmin.PermissionInfo
 
-$(PACKAGEPERMISSIONS)
+${permissions;packages}
 (org.osgi.framework.ServicePermission "*" "get,register")
 (java.util.PropertyPermission "org.osgi.test.testcase.*" "read")

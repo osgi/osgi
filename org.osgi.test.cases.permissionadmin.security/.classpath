@@ -2,8 +2,6 @@
 <classpath>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry exported="true" kind="src" path="/org.osgi.service.permissionadmin"/>
-	<classpathentry sourcepath="/cnf/repo/ee.minimum/ee.minimum-1.0.0.jar" kind="lib" path="/cnf/repo/ee.minimum/ee.minimum-1.0.0.jar"/>
-	<classpathentry sourcepath="/cnf/repo/osgi/osgi-4.0.0.jar" kind="lib" path="/cnf/repo/osgi/osgi-4.0.0.jar"/>
-	<classpathentry sourcepath="/cnf/repo/org.osgi.internal/org.osgi.internal-4.1.0.jar" kind="lib" path="/cnf/repo/org.osgi.internal/org.osgi.internal-4.1.0.jar"/>
+	<classpathentry kind="con" path="aQute.bnd.classpath.container"/>
 	<classpathentry kind="output" path="src"/>
 </classpath>

@@ -27,19 +27,17 @@
  */
 package org.osgi.test.cases.permissionadmin.security.tbc;
 
-import org.osgi.service.permissionadmin.*;
-import org.osgi.test.cases.util.*;
+import org.osgi.service.permissionadmin.PermissionAdmin;
+import org.osgi.test.support.compatibility.DefaultTestBundleControl;
 
 public class PermissionPermissionsControl extends DefaultTestBundleControl {
 	PermissionAdmin	permissionAdmin;
 
-	public boolean checkPrerequisites() {
-		return serviceAvailable(PermissionAdmin.class) && securityNeeded(true);
-	}
-
-	public void prepare() throws Exception {
+	public void setUp() throws Exception {
 		/* Get the PermissionAdmin service */
 		permissionAdmin = (PermissionAdmin) getService(PermissionAdmin.class);
+		if ( permissionAdmin == null )
+			fail("No Permission Admin");
 	}
 
 	public void testSecurity() throws Exception {
