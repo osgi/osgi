@@ -80,3 +80,4 @@ Bundle-License			= ... TODO
 	org.eclipse.osgi;		version=3.5; 	framework=org.eclipse.osgi.launch.Equinox, \
 	com.springsource.junit; version=3.8;    export="junit.framework;version=3.8"
 
+-keystore							= ${build}/keystore; password:=testtest
