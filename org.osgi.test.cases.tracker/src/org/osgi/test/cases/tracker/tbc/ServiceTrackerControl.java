@@ -43,11 +43,6 @@ import org.osgi.util.tracker.ServiceTrackerCustomizer;
 public class ServiceTrackerControl extends DefaultTestBundleControl 
                                    implements ServiceTrackerCustomizer
 {
-	BundleContext	context;
-	
-	public void setBundleContext(BundleContext context) {
-		this.context=context;
-	}
 
     public void testTc1() throws Exception {
         Bundle  tb;

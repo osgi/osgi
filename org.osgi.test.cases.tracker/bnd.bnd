@@ -14,7 +14,7 @@ Private-Package						= ${p}.tbc, org.osgi.test.support.*
 Test-Cases: ${classes;extending;*TestCase}
 
 Include-Resource				= \
-	www/tb1.jar=tb1.jar, \
-	www/tb2.jar=tb2.jar, \
-	www/tb3.jar=tb3.jar, \
-	www/tb4.jar=tb4.jar
+	tb1.jar, \
+	tb2.jar, \
+	tb3.jar, \
+	tb4.jar
