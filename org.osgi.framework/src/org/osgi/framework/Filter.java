@@ -51,12 +51,8 @@ public interface Filter {
 	 * 
 	 * @param reference The reference to the service whose properties are used
 	 *        in the match.
-	 * 
 	 * @return <code>true</code> if the service's properties match this filter;
 	 *         <code>false</code> otherwise.
-	 * @throws IllegalArgumentException If the specified
-	 *         <code>ServiceReference</code> was not created by the same
-	 *         framework instance as this <code>Filter</code>.
 	 */
 	public boolean match(ServiceReference reference);
 
@@ -67,11 +63,9 @@ public interface Filter {
 	 * 
 	 * @param dictionary The <code>Dictionary</code> object whose keys are
 	 *        used in the match.
-	 * 
 	 * @return <code>true</code> if the <code>Dictionary</code> object's
 	 *         keys and values match this filter; <code>false</code>
 	 *         otherwise.
-	 * 
 	 * @throws IllegalArgumentException If <code>dictionary</code> contains
 	 *         case variants of the same key name.
 	 */
@@ -92,7 +86,6 @@ public interface Filter {
 	 * 
 	 * @param obj The object to compare against this <code>Filter</code>
 	 *        object.
-	 * 
 	 * @return If the other object is a <code>Filter</code> object, then
 	 *         returns <code>this.toString().equals(obj.toString()</code>;<code>false</code>
 	 *         otherwise.
@@ -114,11 +107,9 @@ public interface Filter {
 	 * 
 	 * @param dictionary The <code>Dictionary</code> object whose keys are
 	 *        used in the match.
-	 * 
 	 * @return <code>true</code> if the <code>Dictionary</code> object's
 	 *         keys and values match this filter; <code>false</code>
 	 *         otherwise.
-	 * 
 	 * @since 1.3
 	 */
 	public boolean matchCase(Dictionary dictionary);
