@@ -1,0 +1,6 @@
+Export-Package: ${p}.*
+Bundle-Description: Test Bundle for registry tests. Included in the org.osgi.test.cases.framework.registry.jar bundle.
+Bundle-Activator: $(p).tb2.DummyBundle
+
+
+

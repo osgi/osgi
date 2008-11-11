@@ -28,11 +28,18 @@
 
 package org.osgi.test.cases.framework.registry.tbc;
 
-import java.io.*;
-import java.util.*;
+import java.io.IOException;
+import java.util.Dictionary;
+import java.util.Hashtable;
 
-import org.osgi.framework.*;
-import org.osgi.test.cases.util.*;
+import org.osgi.framework.Bundle;
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.ServiceEvent;
+import org.osgi.framework.ServiceFactory;
+import org.osgi.framework.ServiceListener;
+import org.osgi.framework.ServiceReference;
+import org.osgi.framework.ServiceRegistration;
+import org.osgi.test.support.compatibility.DefaultTestBundleControl;
 
 public class RegistryControl 
 	extends DefaultTestBundleControl 
@@ -51,6 +58,7 @@ public class RegistryControl
         };
 
     static String[] methods = new String[] {
+    	"prepare",
         "testBasicRegistration",
         "testBasicFactory",
         "testFactoryException",
@@ -64,7 +72,7 @@ public class RegistryControl
         return methods;
     }
     
-    public void prepare() throws Exception {
+    public void setUp() throws Exception {
     	tb2 = installBundle( "tb2.jar" );
         tb2.start();
         _otherRef   = getContext().getServiceReference( BundleContext.class.getName() );
