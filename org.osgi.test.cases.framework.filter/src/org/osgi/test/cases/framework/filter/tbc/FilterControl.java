@@ -7,9 +7,10 @@
 package org.osgi.test.cases.framework.filter.tbc;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Dictionary;
-import java.util.Enumeration;
-import java.util.Vector;
+import java.util.Set;
+import java.util.TreeSet;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.InvalidSyntaxException;
@@ -24,34 +25,35 @@ import org.osgi.test.support.compatibility.DefaultTestBundleControl;
  * @author Ericsson Radio Systems AB
  */
 public class FilterControl extends DefaultTestBundleControl {
-	Bundle								tb1;
-	public static ServiceRegistration	serviceA;
-	public static Dictionary			serviceAProperties;
-	static String[]						methods	= new String[] {"prepare",
+	static Bundle tb1;
+	public static ServiceRegistration serviceA;
+	public static Dictionary serviceAProperties;
+	static String[] methods = new String[] { "prepare",
 			"test_framework_filter_m1", "test_framework_filter_m2",
 			"test_framework_filter_m3", "test_framework_filter_m4",
 			"test_framework_filter_m5", "test_framework_filter_m6",
 			"test_framework_filter_m9", "test_framework_filter_m10",
-			"test_framework_filter_s1",	 "test_framework_filter_s2",	
-			"test_framework_filter_s3",	 "test_framework_filter_s4",	
-			"test_framework_filter_s5",	 "test_framework_filter_s6",	
-			"test_framework_filter_s7",	 "test_framework_filter_s8",	
-			"test_framework_filter_s9"	};
+			"test_framework_filter_s1", "test_framework_filter_s2",
+			"test_framework_filter_s3", "test_framework_filter_s4",
+			"test_framework_filter_s5", "test_framework_filter_s6",
+			"test_framework_filter_s7", "test_framework_filter_s8",
+			"test_framework_filter_s9" };
 
 	public String[] getMethods() {
 		return methods;
 	}
 
-	public void prepare() throws Exception {
-		tb1 = installBundle("tb1.jar");
-		tb1.start();
+	public void setUp() throws Exception {
+		if (tb1 == null) {
+			tb1 = installBundle("tb1.jar");
+			tb1.start();
+		}
 	}
 
-	public void testFilter(String filter, String logtext) throws Exception {
-		ServiceReference refs[];
-		refs = getContext().getServiceReferences(
+	public void testFilter(String filter, String logtext, String [] ids) throws Exception {
+		ServiceReference refs[] = getContext().getServiceReferences(
 				"org.osgi.test.cases.framework.filter.tb1.TestService", filter);
-		logRefList(logtext, refs);
+		logRefList(logtext, refs, ids);
 	}
 
 	/**
@@ -60,7 +62,7 @@ public class FilterControl extends DefaultTestBundleControl {
 	 * @spec BundleContext.getServiceReferences(String, String)
 	 */
 	public void test_framework_filter_m1() throws Exception {
-		testFilter(null, "Testing null filter");
+		testFilter(null, "Testing null filter", new String[]{"a1", "b1", "b2", "c1", "c2", "c25", "d25"});
 	}
 
 	/**
@@ -69,19 +71,15 @@ public class FilterControl extends DefaultTestBundleControl {
 	 * @spec BundleContext.getServiceReferences(String, String)
 	 */
 	public void test_framework_filter_m2() throws Exception {
-		ServiceReference refs[];
-		String res;
 		try {
-			refs = getContext()
+			getContext()
 					.getServiceReferences(
 							"org.osgi.test.cases.framework.filter.tb1.TestService",
 							"(!(!(!(!(!(!(!(!(!(!(!(!(!(!(!(!(!(!(!(!(!(!(!(!(name=ServiceA))))))))))))))))))))))))");
-			res = "No exception thrown, Error!";
+			fail("The filter expression was wrong");
+		} catch (InvalidSyntaxException ise) {
+			pass("Exception thrown");
 		}
-		catch (InvalidSyntaxException ise) {
-			res = "Exception thrown, Ok.";
-		}
-		log("Testing invalid syntax" + res);
 	}
 
 	/**
@@ -90,7 +88,7 @@ public class FilterControl extends DefaultTestBundleControl {
 	 * @spec BundleContext.getServiceReferences(String, String)
 	 */
 	public void test_framework_filter_m3() throws Exception {
-		testFilter("(nAMe=ServiceA)", "Testing case insensitive");
+		testFilter("(nAMe=ServiceA)", "Testing case insensitive", new String[] {"a1"});
 	}
 
 	/**
@@ -102,7 +100,7 @@ public class FilterControl extends DefaultTestBundleControl {
 	public void test_framework_filter_m4() throws Exception {
 		testFilter(
 				"(  \t \r \n \u000B \u000C \u001C \u001D  \u001E \u001F |  (   \t \r \n \u000B \u000C \u001C \u001D  \u001E \u001F  name 	  =ServiceA)(  \t \r \n \u000B \u000C \u001C \u001D  \u001E \u001F  name=ServiceB)   \t \r \n \u000B \u000C \u001C \u001D  \u001E \u001F  )",
-				"Testing spaces in filter operation");
+				"Testing spaces in filter operation", new String[] {"a1", "b1", "b2"});
 	}
 
 	/**
@@ -111,7 +109,7 @@ public class FilterControl extends DefaultTestBundleControl {
 	 * @spec BundleContext.getServiceReferences(String, String)
 	 */
 	public void test_framework_filter_m5() throws Exception {
-		testFilter("(name=ServiceA)", "Testing type String");
+		testFilter("(name=ServiceA)", "Testing type String", new String[]{"a1"});
 	}
 
 	/**
@@ -120,10 +118,10 @@ public class FilterControl extends DefaultTestBundleControl {
 	 * @spec BundleContext.getServiceReferences(String, String)
 	 */
 	public void test_framework_filter_m6() throws Exception {
-		testFilter("(Integer=3)", "Testing type Integer");
-		testFilter("(Long=3)", "Testing type Long");
-		testFilter("(Byte=3)", "Testing type Byte");
-		testFilter("(Short=3)", "Testing type Short");
+		testFilter("(Integer=3)", "Testing type Integer", new String[]{"c25"});
+		testFilter("(Long=3)", "Testing type Long", new String[]{"c25"});
+		testFilter("(Byte=3)", "Testing type Byte", new String[]{"c25"});
+		testFilter("(Short=3)", "Testing type Short", new String[]{"c25"});
 	}
 
 	/**
@@ -133,7 +131,7 @@ public class FilterControl extends DefaultTestBundleControl {
 	 * @spec BundleContext.getServiceReferences(String, String)
 	 */
 	public void test_framework_filter_m9() throws Exception {
-		testFilter("(compatible=1.5)", "Testing array filter");
+		testFilter("(compatible=1.5)", "Testing array filter", new String[]{"c2"});
 	}
 
 	/**
@@ -143,7 +141,7 @@ public class FilterControl extends DefaultTestBundleControl {
 	 * @spec BundleContext.getServiceReferences(String, String)
 	 */
 	public void test_framework_filter_m10() throws Exception {
-		testFilter("(compatible=2.1)", "Testing Vector filter");
+		testFilter("(compatible=2.1)", "Testing Vector filter", new String[]{"c25"});
 	}
 
 	/**
@@ -153,9 +151,9 @@ public class FilterControl extends DefaultTestBundleControl {
 	 * @spec BundleContext.getServiceReferences(String, String)
 	 */
 	public void test_framework_filter_s1() throws Exception {
-		testFilter("(name~=servicea)", "Testing approximate equality (case)");
+		testFilter("(name~=servicea)", "Testing approximate equality (case)", new String[]{"a1"});
 		testFilter("(description~=Service A)",
-				"Testing approximate equality (white space)");
+				"Testing approximate equality (white space)", new String[]{"a1"});
 	}
 
 	/**
@@ -166,18 +164,18 @@ public class FilterControl extends DefaultTestBundleControl {
 	public void test_framework_filter_s2() throws Exception {
 		// Always finds the service object when filtering by ObjectA
 		testFilter("(ObjectA=0)",
-				"Testing object that implements java.lang.Comparable");
+				"Testing object that implements java.lang.Comparable", new String[]{"d25"});
 	}
 
 	/**
 	 * Testing = operator with an object that does not implement
-	 * <code>java.lang.Comparable</code> but has a special constructor. 
+	 * <code>java.lang.Comparable</code> but has a special constructor.
 	 * 
 	 * @spec BundleContext.getServiceReferences(String, String)
 	 */
 	public void test_framework_filter_s3() throws Exception {
 		testFilter("(ObjectB=4)",
-				"Testing = operator with object that does not implement java.lang.Comparable");
+				"Testing = operator with object that does not implement java.lang.Comparable", new String[]{"d25"});
 	}
 
 	/**
@@ -188,7 +186,7 @@ public class FilterControl extends DefaultTestBundleControl {
 	 */
 	public void test_framework_filter_s4() throws Exception {
 		testFilter("(ObjectB<=4)",
-				"Testing <= operator with object that does not implement java.lang.Comparable");
+				"Testing <= operator with object that does not implement java.lang.Comparable", new String[]{"d25"});
 	}
 
 	/**
@@ -199,7 +197,7 @@ public class FilterControl extends DefaultTestBundleControl {
 	 */
 	public void test_framework_filter_s5() throws Exception {
 		testFilter("(ObjectB>=4)",
-				"Testing >= operator with object that does not implement java.lang.Comparable");
+				"Testing >= operator with object that does not implement java.lang.Comparable", new String[]{"d25"});
 	}
 
 	/**
@@ -210,7 +208,7 @@ public class FilterControl extends DefaultTestBundleControl {
 	 */
 	public void test_framework_filter_s6() throws Exception {
 		testFilter("(ObjectB~=4)",
-				"Testing ~= operator with object that does not implement java.lang.Comparable");
+				"Testing ~= operator with object that does not implement java.lang.Comparable", new String[]{"d25"});
 	}
 
 	/**
@@ -223,27 +221,10 @@ public class FilterControl extends DefaultTestBundleControl {
 		String msg;
 		msg = "Testing < operator with object that does not implement java.lang.Comparable";
 		try {
-			testFilter("(ObjectB<4)", msg);
-		}
-		catch (InvalidSyntaxException ise) {
-			log(msg + ": Exception thrown, Ok.");
-		}
-	}
-
-	/**
-	 * Testing > operator with an object that does not implement
-	 * <code>java.lang.Comparable</code> but has a special constructor.
-	 * 
-	 * @spec BundleContext.getServiceReferences(String, String)
-	 */
-	public void test_framework_filter_s8() throws Exception {
-		String msg;
-		msg = "Testing > operator with object that does not implement java.lang.Comparable";
-		try {
-			testFilter("(ObjectB>4)", msg);
-		}
-		catch (InvalidSyntaxException ise) {
-			log(msg + ": Exception thrown, Ok.");
+			testFilter("(ObjectB<=4)", msg, new String[]{"d25"});
+			pass("Invalid syntax??");
+		} catch (InvalidSyntaxException ise) {
+			fail("Objects are not required to implement Comparable");
 		}
 	}
 
@@ -256,14 +237,30 @@ public class FilterControl extends DefaultTestBundleControl {
 	public void test_framework_filter_s9() throws Exception {
 		testFilter(
 				"(ObjectC=4)",
-				"Testing object that does not have a public constructor with a single java.lang.String argument");
+				"Testing object that does not have a public constructor with a single java.lang.String argument", new String[]{});
 	}
-	
+
 	/**
 	 * Help function used to sort and log an array of service references.
 	 */
-	public void logRefList(String prefix, ServiceReference refs[])
+	public void logRefList(String prefix, ServiceReference refs[], String ids[])
 			throws IOException {
+		
+		if ( refs == null && ids.length ==0 )
+			return;
+		
+		Set set = new TreeSet();
+		set.addAll( Arrays.asList(ids));
+		
+		for ( int i=0; i<refs.length; i++ ) {
+			String id = (String) refs[i].getProperty("id");
+			assertNotNull("Expecting an id for " + refs[i].getProperty("name") + ":" +refs[i].getProperty("version"),id);
+			assertTrue( "Did not expect " + id, set.contains(id));
+			set.remove(id);
+		}
+		assertTrue( "Remaining ids left in expected set: " + set, set.size() == 0);
+		
+		/*
 		StringBuffer logString = new StringBuffer();
 		if (refs != null) {
 			Vector services = new Vector();
@@ -289,9 +286,9 @@ public class FilterControl extends DefaultTestBundleControl {
 				comma = true;
 			}
 			logString.append(" }");
-		}
-		else
+		} else
 			logString.append("No services.");
 		log(prefix + logString.toString());
+		*/
 	}
 }

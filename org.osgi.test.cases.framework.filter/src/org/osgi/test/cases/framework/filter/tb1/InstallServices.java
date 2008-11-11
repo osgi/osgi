@@ -44,6 +44,7 @@ public class InstallServices implements BundleActivator {
 	public void start(BundleContext bc) {
 		_sa1 = new ServiceA();
 		_sa1Props = new Properties();
+		_sa1Props.put("id", "a1");
 		_sa1Props.put("name", "ServiceA");
 		_sa1Props.put("version", new Float(1.0));
 		_sa1Props.put("compatible", new Float(1.0));
@@ -58,6 +59,7 @@ public class InstallServices implements BundleActivator {
 		org.osgi.test.cases.framework.filter.tbc.FilterControl.serviceAProperties = _sa1Props;
 		_sb1 = new ServiceB();
 		_sb1Props = new Properties();
+		_sb1Props.put("id", "b1");
 		_sb1Props.put("name", "ServiceB");
 		_sb1Props.put("version", new Float(1.0));
 		_sb1Props.put("compatible", new Float(1.0));
@@ -70,6 +72,7 @@ public class InstallServices implements BundleActivator {
 				.registerService(TestService.class.getName(), _sb1, _sb1Props);
 		_sb2 = new ServiceB();
 		_sb2Props = new Properties();
+		_sb2Props.put("id", "b2");
 		_sb2Props.put("name", "ServiceB");
 		_sb2Props.put("version", new Float(2.0));
 		_sb2Props.put("compatible",
@@ -83,6 +86,7 @@ public class InstallServices implements BundleActivator {
 				.registerService(TestService.class.getName(), _sb2, _sb2Props);
 		_sc1 = new ServiceC();
 		_sc1Props = new Properties();
+		_sc1Props.put("id", "c1");
 		_sc1Props.put("name", "ServiceC");
 		_sc1Props.put("version", new Float(1.0));
 		_sc1Props.put("compatible", new Float(1.0));
@@ -95,6 +99,7 @@ public class InstallServices implements BundleActivator {
 				.registerService(TestService.class.getName(), _sc1, _sc1Props);
 		_sc2 = new ServiceC();
 		_sc2Props = new Properties();
+		_sc2Props.put("id", "c2");
 		_sc2Props.put("name", "ServiceC");
 		_sc2Props.put("version", new Float(2.0));
 		_sc2Props.put("compatible", new Float[] {new Float(1.0),
@@ -108,6 +113,7 @@ public class InstallServices implements BundleActivator {
 				.registerService(TestService.class.getName(), _sc2, _sc2Props);
 		_sc3 = new ServiceC();
 		_sc3Props = new Properties();
+		_sc3Props.put("id", "c25");
 		_sc3Props.put("name", "ServiceC");
 		_sc3Props.put("version", new Float(2.5));
 		Vector v = new Vector();
@@ -128,6 +134,7 @@ public class InstallServices implements BundleActivator {
 		// for testing several filters
 		_sd1 = new ServiceD();
 		_sd1Props = new Properties();
+		_sd1Props.put("id", "d25");
 		_sd1Props.put("name", "ServiceD");
 		_sd1Props.put("version", new Float(2.5));
 		_sd1Props.put("compatible", new Float(1.0));
