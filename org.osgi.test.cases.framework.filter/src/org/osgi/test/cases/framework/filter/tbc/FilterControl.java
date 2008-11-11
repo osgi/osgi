@@ -6,10 +6,16 @@
  */
 package org.osgi.test.cases.framework.filter.tbc;
 
-import java.io.*;
-import java.util.*;
-import org.osgi.framework.*;
-import org.osgi.test.cases.util.*;
+import java.io.IOException;
+import java.util.Dictionary;
+import java.util.Enumeration;
+import java.util.Vector;
+
+import org.osgi.framework.Bundle;
+import org.osgi.framework.InvalidSyntaxException;
+import org.osgi.framework.ServiceReference;
+import org.osgi.framework.ServiceRegistration;
+import org.osgi.test.support.compatibility.DefaultTestBundleControl;
 
 /**
  * This is the bundle initially installed and started by the TestCase when
@@ -75,7 +81,7 @@ public class FilterControl extends DefaultTestBundleControl {
 		catch (InvalidSyntaxException ise) {
 			res = "Exception thrown, Ok.";
 		}
-		log("Testing invalid syntax", res);
+		log("Testing invalid syntax" + res);
 	}
 
 	/**
@@ -286,6 +292,6 @@ public class FilterControl extends DefaultTestBundleControl {
 		}
 		else
 			logString.append("No services.");
-		log(prefix, logString.toString());
+		log(prefix + logString.toString());
 	}
 }
