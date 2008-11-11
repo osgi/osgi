@@ -1,0 +1,5 @@
+Bundle-Description: TB2 for service tracker test case
+Bundle-Activator: $(p).tb2.TB2Activator
+Private-Package: ${p}.tb2
+
+

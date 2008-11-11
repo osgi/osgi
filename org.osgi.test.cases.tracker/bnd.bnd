@@ -1,0 +1,20 @@
+Bundle-Version						= 4.0.0.${project.build}
+Private-Package						= ${p}.tbc, org.osgi.test.support.*
+
+-buildpath							= \
+	org.osgi.util.tracker;					version=project, \
+	org.osgi.test.support;					version=project, \
+	osgi;									version=4.0		, \
+	ee.minimum												, \
+	com.springsource.junit; version=3.8.2
+
+-runproperties						= report=true, org.osgi.framework.security=osgi
+-sign								= test; password:=testtest
+
+Test-Cases: ${classes;extending;*TestCase}
+
+Include-Resource				= \
+	www/tb1.jar=tb1.jar, \
+	www/tb2.jar=tb2.jar, \
+	www/tb3.jar=tb3.jar, \
+	www/tb4.jar=tb4.jar

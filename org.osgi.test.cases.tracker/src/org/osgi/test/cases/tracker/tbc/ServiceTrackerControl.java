@@ -28,16 +28,26 @@
 
 package org.osgi.test.cases.tracker.tbc;
 
-import java.util.*;
+import java.util.Properties;
 
-import org.osgi.framework.*;
-import org.osgi.test.cases.util.*;
-import org.osgi.util.tracker.*;
+import org.osgi.framework.Bundle;
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.Filter;
+import org.osgi.framework.ServiceReference;
+import org.osgi.framework.ServiceRegistration;
+import org.osgi.test.support.compatibility.DefaultTestBundleControl;
+import org.osgi.test.support.compatibility.Semaphore;
+import org.osgi.util.tracker.ServiceTracker;
+import org.osgi.util.tracker.ServiceTrackerCustomizer;
 
 public class ServiceTrackerControl extends DefaultTestBundleControl 
                                    implements ServiceTrackerCustomizer
 {
-
+	BundleContext	context;
+	
+	public void setBundleContext(BundleContext context) {
+		this.context=context;
+	}
 
     public void testTc1() throws Exception {
         Bundle  tb;
