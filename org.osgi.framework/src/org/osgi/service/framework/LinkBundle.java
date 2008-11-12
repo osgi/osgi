@@ -123,7 +123,7 @@ public interface LinkBundle extends Bundle {
 	 * if this is a child link bundle.
 	 * @return true if this is a parent link bundle
 	 */
-	boolean isParent();
+	boolean isParentLink();
 
 	/**
 	 * This operation is not supported for link bundles.  A <code>BundleException</code> of type
