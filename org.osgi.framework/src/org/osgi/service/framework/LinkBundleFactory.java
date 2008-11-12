@@ -35,15 +35,15 @@ import org.osgi.framework.launch.Framework;
 public interface LinkBundleFactory {
 	/**
 	 * Manifest header (named &quot;LinkServiceFilter-Import;) identifying the
-	 * packages that a child link bundle imports into a child framework from 
-	 * a parent framework.
+	 * service filters that are used by a child link bundle to select services 
+	 * that will be registered into a child framework from a parent link bundle.
 	 */
 	public static final String LINK_SERVICE_FILTER_IMPORT = "LinkServiceFilter-Import";
 
 	/**
 	 * Manifest header (named &quot;LinkServiceFilter-Export;) identifying the
-	 * packages that a child link bundle exports into a parent framework from a 
-	 * child framework.
+	 * service filters that are used by a parent link bundle to select services 
+	 * that will be registered into a parent framework from a child link bundle.
 	 */
 	public static final String LINK_SERVICE_FILTER_EXPORT = "LinkServiceFilter-Export";
 
