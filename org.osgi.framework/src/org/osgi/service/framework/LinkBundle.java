@@ -17,7 +17,6 @@ package org.osgi.service.framework;
 
 import java.io.InputStream;
 import java.util.Map;
-
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleException;
 import org.osgi.framework.launch.Framework;
@@ -116,7 +115,7 @@ public interface LinkBundle extends Bundle {
 	 * specified link manifest.
 	 * @param linkManifest the link manifest to update to.
 	 */
-	void update(Map /*<String, String>*/ linkManifest);
+	void update(Map /*<String, String>*/linkManifest);
 
 	/**
 	 * Returns true if this is a parent link bundle; false is returned 
@@ -129,13 +128,13 @@ public interface LinkBundle extends Bundle {
 	 * This operation is not supported for link bundles.  A <code>BundleException</code> of type
 	 * {@link BundleException#INVALID_OPERATION invalid operation} must be thrown.
 	 */
-	void update();
+	void update() throws BundleException;
 
 	/**
 	 * This operation is not supported for link bundles.  A <code>BundleException</code> of type
 	 * {@link BundleException#INVALID_OPERATION invalid operation} must be thrown.
 	 */
-	void update(InputStream input);
+	void update(InputStream input) throws BundleException;
 
 	/**
 	 * Uninstalls this link bundle and its companion bundle.
@@ -143,5 +142,5 @@ public interface LinkBundle extends Bundle {
 	 * If this link bundle is a child bundle then the companion child framework
 	 * is shutdown and its persistent storage area is deleted.
 	 */
-	void uninstall();
+	void uninstall() throws BundleException;
 }
