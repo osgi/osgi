@@ -2,5 +2,5 @@
 nodeploy						= true
 
 -buildpath = \
-	org.osgi.framework;				version=project, \
+	osgi;							version=4.0, \
 	ee.minimum;						version=1.1

@@ -18,7 +18,9 @@ package org.osgi.service.event;
 
 import java.util.Dictionary;
 import java.util.Enumeration;
-import java.util.Hashtable;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 
 import org.osgi.framework.Filter;
 
@@ -28,7 +30,7 @@ import org.osgi.framework.Filter;
  * <code>Event</code> objects are delivered to <code>EventHandler</code>
  * services which subscribe to the topic of the event.
  * 
- * @ThreadSafe
+ * @Immutable
  * @version $Revision$
  */
 public class Event {
@@ -40,25 +42,56 @@ public class Event {
 	 * The properties carried by this event. Keys are strings and values are
 	 * objects
 	 */
-	private final Hashtable	properties;
+	private final Map		/* <String,Object> */properties;
 
 	/**
 	 * Constructs an event.
 	 * 
 	 * @param topic The topic of the event.
-	 * @param properties The event's properties (may be <code>null</code>).
-	 * 
+	 * @param properties The event's properties (may be <code>null</code>). A
+	 *        property whose key is not of type <code>String</code> will be
+	 *        ignored.
 	 * @throws IllegalArgumentException If topic is not a valid topic name.
+	 * @since 1.2
 	 */
-	public Event(String topic, Dictionary properties) {
+	public Event(String topic, Map/* <String,Object> */properties) {
 		validateTopicName(topic);
 		this.topic = topic;
-		this.properties = new Hashtable();
+		int size = (properties == null) ? 1 : (properties.size() + 1);
+		this.properties = new HashMap(size);
+		if (properties != null) {
+			for (Iterator iter = properties.keySet().iterator(); iter.hasNext();) {
+				Object key = iter.next();
+				if (key instanceof String) {
+					Object value = properties.get(key);
+					this.properties.put(key, value);
+				}
+			}
+		}
+		this.properties.put(EventConstants.EVENT_TOPIC, topic);
+	}
+
+	/**
+	 * Constructs an event.
+	 * 
+	 * @param topic The topic of the event.
+	 * @param properties The event's properties (may be <code>null</code>). A
+	 *        property whose key is not of type <code>String</code> will be
+	 *        ignored.
+	 * @throws IllegalArgumentException If topic is not a valid topic name.
+	 */
+	public Event(String topic, Dictionary/* <String,Object> */properties) {
+		validateTopicName(topic);
+		this.topic = topic;
+		int size = (properties == null) ? 1 : (properties.size() + 1);
+		this.properties = new HashMap(size);
 		if (properties != null) {
 			for (Enumeration e = properties.keys(); e.hasMoreElements();) {
-				String key = (String) e.nextElement();
-				Object value = properties.get(key);
-				this.properties.put(key, value);
+				Object key = e.nextElement();
+				if (key instanceof String) {
+					Object value = properties.get(key);
+					this.properties.put(key, value);
+				}
 			}
 		}
 		this.properties.put(EventConstants.EVENT_TOPIC, topic);
@@ -68,7 +101,6 @@ public class Event {
 	 * Retrieves a property.
 	 * 
 	 * @param name the name of the property to retrieve
-	 * 
 	 * @return The value of the property, or <code>null</code> if not found.
 	 */
 	public final Object getProperty(String name) {
@@ -95,31 +127,30 @@ public class Event {
 	}
 
 	/**
-	 * Tests this event's properties against the given filter.
+	 * Tests this event's properties against the given filter using a case
+	 * sensitive match.
 	 * 
 	 * @param filter The filter to test.
-	 * 
 	 * @return true If this event's properties match the filter, false
 	 *         otherwise.
 	 */
 	public final boolean matches(Filter filter) {
-		return filter.matchCase(properties);
+		return filter.matchCase(new UnmodifiableDictionary(properties));
 	}
 
 	/**
 	 * Compares this <code>Event</code> object to another object.
 	 * 
 	 * <p>
-	 * An event is considered to be <b>equal to </b> another
-	 * event if the topic is equal and the properties are equal.
+	 * An event is considered to be <b>equal to</b> another event if the topic
+	 * is equal and the properties are equal.
 	 * 
 	 * @param object The <code>Event</code> object to be compared.
-	 * @return <code>true</code> if <code>object</code> is a
-	 *         <code>Event</code> and is equal to this object;
-	 *         <code>false</code> otherwise.
+	 * @return <code>true</code> if <code>object</code> is a <code>Event</code>
+	 *         and is equal to this object; <code>false</code> otherwise.
 	 */
 	public boolean equals(Object object) {
-		if (object == this) { // quicktest
+		if (object == this) { // quick test
 			return true;
 		}
 
@@ -186,5 +217,52 @@ public class Event {
 	        }
 	        throw new IllegalArgumentException("invalid topic"); //$NON-NLS-1$
 	    }
+	}
+	
+	/**
+	 * Unmodifiable wrapper for Dictionary.
+	 */
+	private static class UnmodifiableDictionary extends Dictionary {
+		private final Map	wrapped;
+		UnmodifiableDictionary(Map wrapped) {
+			this.wrapped = wrapped;
+		}
+		public Enumeration elements() {
+			return new IteratorEnumeration(wrapped.values().iterator());
+		}
+		public Object get(Object key) {
+			return wrapped.get(key);
+		}
+		public boolean isEmpty() {
+			return wrapped.isEmpty();
+		}
+		public Enumeration keys() {
+			return new IteratorEnumeration(wrapped.keySet().iterator());
+		}
+		public Object put(Object key, Object value) {
+			throw new UnsupportedOperationException();
+		}
+		public Object remove(Object key) {
+			throw new UnsupportedOperationException();
+		}
+		public int size() {
+			return wrapped.size();
+		}
+	}
+	
+	/**
+	 * Maps an Iterator to the Enumeration interface.
+	 */
+	private static class IteratorEnumeration implements Enumeration {
+		private final Iterator	iter;
+		IteratorEnumeration(Iterator iter) {
+			this.iter = iter;
+		}
+		public boolean hasMoreElements() {
+			return iter.hasNext();
+		}
+		public Object nextElement() {
+			return iter.next();
+		}
 	}
 }
