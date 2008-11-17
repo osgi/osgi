@@ -33,6 +33,7 @@ public class Thread implements java.lang.Runnable {
 	public final java.lang.String getName() { return null; }
 	public final int getPriority() { return 0; }
 	public final java.lang.ThreadGroup getThreadGroup() { return null; }
+	public static boolean holdsLock(java.lang.Object var0) { return false; }
 	public void interrupt() { }
 	public static boolean interrupted() { return false; }
 	public final boolean isAlive() { return false; }
