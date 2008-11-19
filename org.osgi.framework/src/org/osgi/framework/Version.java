@@ -174,7 +174,8 @@ public class Version implements Comparable {
 		int length = qualifier.length();
 		for (int i = 0; i < length; i++) {
 			if ("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789_-".indexOf(qualifier.charAt(i)) == -1) { //$NON-NLS-1$
-				throw new IllegalArgumentException("invalid qualifier"); //$NON-NLS-1$
+				throw new IllegalArgumentException(
+						"invalid qualifier: " + qualifier); //$NON-NLS-1$
 			}
 		}
 	}
