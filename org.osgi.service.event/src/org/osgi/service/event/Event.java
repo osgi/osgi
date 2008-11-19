@@ -190,16 +190,18 @@ public class Event {
 	 */
 	private static void validateTopicName(String topic) {
 	    char[] chars = topic.toCharArray();
-	    for (int i = 0; i < chars.length; i++) {
+	    for (int i = 0, length = chars.length; i < length; i++) {
 	        char ch = chars[i];
 	        if (ch == '/') {
 	        	// Can't start or end with a '/' but anywhere else is okay
-				if (i == 0 || (i == chars.length - 1)) {
-	                throw new IllegalArgumentException("invalid topic"); //$NON-NLS-1$
+				if (i == 0 || (i == length - 1)) {
+	                throw new IllegalArgumentException(
+							"invalid topic: " + topic); //$NON-NLS-1$
 	            }
 	            // Can't have "//" as that implies empty token
 	            if (chars[i-1] == '/') {
-	                throw new IllegalArgumentException("invalid topic"); //$NON-NLS-1$
+	                throw new IllegalArgumentException(
+							"invalid topic: " + topic); //$NON-NLS-1$
 	            }
 	            continue;
 	        }
@@ -215,7 +217,7 @@ public class Event {
 	        if ((ch == '_') || (ch == '-')) {
 	            continue;
 	        }
-	        throw new IllegalArgumentException("invalid topic"); //$NON-NLS-1$
+	        throw new IllegalArgumentException("invalid topic: " + topic); //$NON-NLS-1$
 	    }
 	}
 	
