@@ -63,7 +63,9 @@ public interface ServiceFactory {
 	 * <p>
 	 * The Framework caches the value returned (unless it is <code>null</code>),
 	 * and will return the same service object on any future call to
-	 * <code>BundleContext.getService</code> from the same bundle.
+	 * <code>BundleContext.getService</code> from the same bundle. This means
+	 * the Framework must not allow this method to be concurrently called for
+	 * the same bundle.
 	 * 
 	 * <p>
 	 * The Framework will check if the returned service object is an instance of
