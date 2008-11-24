@@ -21,68 +21,32 @@ import java.util.Map;
 
 /**
  * Interface of the Discovery service. This service allows to publish services
- * exposed for remote access as well as search for remote services. <BR>
+ * exposed for remote access as well as to search for remote services. <BR>
  * Discovery service implementations usually rely on some discovery protocols or
  * other information distribution means.
  * 
  * @version $Revision$
  */
 public interface Discovery {
-	/**
-	 * 
-	 */
-	final String OSGI_DISCOVERY = "osgi.discovery";
 
 	/**
-	 * 
+	 * Property identifying Discovery's default strategy for distribution of published
+	 * service information. It's up to the Discovery service to provide and
+	 * support this property. Value of this property is of type String.
 	 */
-	final String OSGI_DISCOVERY_NONE = "none";
+	public static final String PROP_KEY_PUBLISH_STRATEGY = "osgi.discovery.strategy.publication";
 
 	/**
-	 * 
+	 * Constant for a "push" publication strategy: published service information is
+	 * actively pushed to the network for discovery.
 	 */
-	final String OSGI_DISCOVERY_AUTO_PUBLISH = "auto-publish";
+	public static final String PROP_VAL_PUBLISH_STRATEGY_PUSH = "push";
 
 	/**
-	 * Add a ServiceListener for a particular service description.
-	 * 
-	 * @param filter
-	 *            a filter to services to listen for. If filter is
-	 *            <code>null</code> then all services are considered.
-	 * @param listener
-	 *            which is to call when discovery detects changes in
-	 *            availability or description of a service. The same listener
-	 *            object may be used to listen on multiple service filters.
-	 * @throws IllegalArgumentException
-	 *             if listener is null or if filter is invalid
+	 * Constant for a "pull" publication strategy: published service information is
+	 * available just upon lookup requests.
 	 */
-	void addServiceListener(ServiceListener listener, String filter);
-
-	/**
-	 * This method is the same as calling
-	 * <code>Discovery.addServiceListener(ServiceListener listener, String filter)</code>
-	 * with <code>filter</code> set to <code>null</code>.
-	 * 
-	 * @param listener
-	 *            which is to call when discovery detects changes in
-	 *            availability or description of a service. The same listener
-	 *            object may be used to listen on multiple service filters.
-	 * @throws IllegalArgumentException
-	 *             if listener is null
-	 * @see #addServiceListener(ServiceListener, String)
-	 */
-	void addServiceListener(ServiceListener listener);
-
-	/**
-	 * Removes a ServiceListener.
-	 * 
-	 * @param listener
-	 *            ServiceListener which should be removed. If that listener
-	 *            object was registered several times then all registrations
-	 *            will be removed. If that listener object haven't been added
-	 *            before, then the method returns without throwing exceptions.
-	 */
-	void removeServiceListener(ServiceListener listener);
+	public static final String PROP_VAL_PUBLISH_STRATEGY_PULL = "pull";
 
 	/**
 	 * Searches for services matching the provided interface name and filter.
@@ -96,12 +60,12 @@ public interface Discovery {
 	 * @return Collection of <code>ServiceEndpointDescription</code> objects
 	 *         which were found to match interface name and filter. The
 	 *         collection is empty if none was found. The collection represents
-	 *         a snapshot and as such is not going to be updated in case other matching
-	 *         services become available at a later point of time.
+	 *         a snapshot and as such is not going to be updated in case other
+	 *         matching services become available at a later point of time.
 	 */
 	Collection /* <? extends ServiceEndpointDescription> */findService(
 			String interfaceName, String filter);
-
+	
 	/**
 	 * Asynchronous version of <code>Discovery.findService(String interfaceName,
 	 * String filter)</code> method.
@@ -125,16 +89,20 @@ public interface Discovery {
 			FindServiceCallback callback);
 
 	/**
-	 * Publish the provided service meta-data.
+	 * Publish the provided service meta-data. <br>
+	 * 
+	 * Corresponds to calling {@link #publishService(Map, Map, Map, String)}
+	 * with default <code>publishStrategy</code>
 	 * 
 	 * @param javaInterfacesAndVersions
 	 *            names of java interfaces offered by the service and their
-	 *            version. For every interface to publish you have to define its
-	 *            version. If you don't have a version, put "0.0.0" in it.
+	 *            version. Version has to be provided for every interface to
+	 *            publish. If version is unknown, use String-value of
+	 *            <code>org.osgi.framework.Version.emptyVersion</code> constant.
 	 * @param javaInterfacesAndEndpointInterfaces
-	 *            associates java interfaces to general end point interface
-	 *            names. It is not needed to to have and end point interface for
-	 *            a java interface. The map may be null.
+	 *            associates java interfaces with endpoint's non-java interfaces
+	 *            names. It is not mandatory to provide an endpoint interface
+	 *            for a java interface. The map may be null.
 	 * @param properties
 	 *            a bag of service properties (key-value pairs) to be published.
 	 *            It may be null. Note that Discovery might make use of certain
@@ -142,11 +110,11 @@ public interface Discovery {
 	 *            {@link ServiceEndpointDescription} for the publication process
 	 *            if they are provided.
 	 * 
-	 * @return an instance of {@link ServiceEndpointDescription} or null if the
-	 *         publishing failed
+	 * @return an instance of <code>ServiceEndpointDescription</code> or null if
+	 *         the publishing failed
 	 * 
 	 * @throws IllegalArgumentException
-	 *             if javaInterfacesAndVersions is null or empty
+	 *             if <code>javaInterfacesAndVersions</code> is null or empty
 	 */
 	ServiceEndpointDescription publishService(
 			Map/* <String, String> */javaInterfacesAndVersions,
@@ -154,49 +122,73 @@ public interface Discovery {
 			Map/* <String, Object> */properties);
 
 	/**
-	 * Publish the provided service. The information is published by the
-	 * Discovery implementation.<b> If the parameter autopublish=true, the
-	 * Discovery implementation actively pushes the information about the
-	 * service to the network. Otherwise, it is just available upon request from
-	 * other Discovery implementations. The ServiceEndpointDescription is
-	 * matched using the Comparable interface.
+	 * Publish the provided service meta-data. <br>
 	 * 
 	 * @param javaInterfacesAndVersions
-	 *            its an association between interfaces and versions. For every
-	 *            interface to publish you have to define its version. If you
-	 *            don't have a version, put "0.0.0" in it.
+	 *            names of java interfaces offered by the service and their
+	 *            version. Version has to be provided for every interface to
+	 *            publish. If version is unknown, use String-value of
+	 *            <code>org.osgi.framework.Version.emptyVersion</code> constant.
 	 * @param javaInterfacesAndEndpointInterfaces
-	 *            associates java interfaces to general end point interface
-	 *            names. It is not needed to to have and end point interface for
-	 *            a java interface. The map can be null.
+	 *            associates java interfaces with endpoint's non-java interfaces
+	 *            names. It is not mandatory to provide an endpoint interface
+	 *            for a java interface. The map may be null.
 	 * @param properties
-	 *            a bag of properties to be published; can be null
-	 * @param autopublish
-	 *            if true, service information is actively pushed to the network
-	 *            for discovery
+	 *            a bag of service properties (key-value pairs) to be published.
+	 *            It may be null. Note that Discovery might make use of certain
+	 *            standard properties, e.g. the ones defined by
+	 *            {@link ServiceEndpointDescription}, for the publication
+	 *            process if they are provided.
+	 * @param publishStrategy
+	 *            strategy for distribution of the published service
+	 *            information. It may be {@link #PROP_VAL_PUBLISH_STRATEGY_PULL}
+	 *            , {@link #PROP_VAL_PUBLISH_STRATEGY_PUSH} or any other
+	 *            strategy supported by Discovery.
 	 * 
-	 * @return an instance of {@link ServiceEndpointDescription} or null if the
-	 *         publishing failed
+	 * @return an instance of <code>ServiceEndpointDescription</code> or null if
+	 *         the publishing failed
 	 * 
 	 * @throws IllegalArgumentException
-	 *             if javaInterfacesAndVersions is null or empty
+	 *             if <code>javaInterfacesAndVersions</code> is null or empty or
+	 *             if not supported <code>publishStrategy</code> has been
+	 *             provided.
 	 */
 	ServiceEndpointDescription publishService(
 			Map/* <String, String> */javaInterfacesAndVersions,
 			Map/* <String, String> */javaInterfacesAndEndpointInterfaces,
-			Map/* <String, Object> */properties, boolean autopublish);
+			Map/* <String, Object> */properties, String publishStrategy);
+
+	/**
+	 * Updates a service publication. <br>
+	 * Depending on Discovery's implementation and underlying protocol it may
+	 * result in an update or new re-publication of the service.
+	 * 
+	 * @param serviceEndpointDescription
+	 *            identifies the previously published service whose publication
+	 *            needs to be updated.
+	 * @param newProperties
+	 *            new set of service endpoint properties. It may be null.
+	 * 
+	 * @return new ServiceEndpointDescription identifying the published service
+	 * 
+	 * @throws IllegalArgumentException
+	 *             if <code>serviceEndpointDescription</code> is null or
+	 *             invalid.
+	 */
+	ServiceEndpointDescription updateService(
+			ServiceEndpointDescription serviceEndpointDescription,
+			Map/* <String, Object> */newProperties);
 
 	/**
 	 * Make the given service un-discoverable. The previous publish request for
-	 * a service is undone. The service information is also removed from the
-	 * local or global cache if cached before.
+	 * a service is undone.
 	 * 
 	 * @param serviceEndpointDescription
-	 *            ServiceEndpointDescription of the service to unpublish. If
-	 *            this ServiceEndpointDescription haven't been published before,
-	 *            then the method returns without throwing exceptions.
+	 *            ServiceEndpointDescription of the service to unpublish.
+	 * 
 	 * @throws IllegalArgumentException
-	 *             if serviceEndpointDescription is null or incomplete
+	 *             if <code>serviceEndpointDescription</code> is null or
+	 *             invalid.
 	 */
 	void unpublishService(ServiceEndpointDescription serviceEndpointDescription);
 }

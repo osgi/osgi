@@ -30,33 +30,29 @@ import java.util.Map;
  */
 public interface ServiceEndpointDescription {
 	/**
-	 * If value of <code>getProtocolSpecificInterfaceName</code> needs to be
-	 * described as a key-value pair e.g. by the discovery protocol, filter for
-	 * discovery etc. and there is no other key standardized for that purpose
-	 * yet, then this is the recommended property key to use.
+	 * Property identifying (non-Java) endpoint interface. Property value is of type String.
 	 */
-	public final String PROP_KEY_PROTOCOL_SPECIFIC_INTERFACE_NAME = "protocol-specific-interface-name";
+	public final String PROP_KEY_ENDPOINT_INTERFACE_NAME = "osgi.remote.endpoint.interface";
 
 	/**
-	 * If value of <code>getVersion</code> needs to be described as a key-value
-	 * pair e.g. by the discovery protocol, filter for discovery etc. and there
-	 * is no other key standardized for that purpose yet, then this is the
-	 * recommended property key to use.
+	 * Property uniquely identifying the endpoint. 
 	 */
-	public final String PROP_KEY_VERSION = "version";
+	public final String PROP_KEY_ENDPOINT_ID = "osgi.remote.endpoint.id";
 
 	/**
-	 * If value of <code>getServiceLocation</code> needs to be described as a
-	 * key-value pair e.g. by the discovery protocol, filter for discovery etc.
-	 * and there is no other key standardized for that purpose yet, then this is
-	 * the recommended property key to use.
+	 * Property identifying service version.
 	 */
-	public final String PROP_KEY_SERVICE_LOCATION = "location";
+	public final String PROP_KEY_VERSION = "service.version";
+
+	/**
+	  * Property identifying service location.
+	 */
+	public final String PROP_KEY_LOCATION = "osgi.remote.endpoint.location";
 
 	/**
 	 * @return full qualified service interface names provided by the advertised
-	 *         service (endpoint). The collection is never null or
-	 *         empty but contains at least one service interface. 
+	 *         service (endpoint). The collection is never null or empty but
+	 *         contains at least one service interface.
 	 */
 	Collection /* <? extends String> */getInterfaceNames();
 
@@ -71,7 +67,7 @@ public interface ServiceEndpointDescription {
 	 * 
 	 * @return The protocol specific service interface name.
 	 */
-	String getProtocolSpecificInterfaceName(String interfaceName);
+	String getEndpointInterfaceName(String interfaceName);
 
 	/**
 	 * @param interfaceName
