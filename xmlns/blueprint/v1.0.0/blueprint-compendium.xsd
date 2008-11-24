@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<xsd:schema xmlns="http://www.osgi.org/xmlns/blueprint/compendium/v1.0.0"
+            xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+            xmlns:osgi="http://www.osgi.org/xmlns/blueprint/v1.0.0"
+            targetNamespace="http://www.osgi.org/xmlns/blueprint/compendium/v1.0.0"
+            elementFormDefault="qualified"
+            attributeFormDefault="unqualified"
+            version="1.0-rc2">
+
+    <xsd:import namespace="http://www.osgi.org/xmlns/blueprint/v1.0.0"/>
+ 
+    <!-- property placeholder -->
+    
+    <xsd:element name="property-placeholder" type="TpropertyPlaceholder"/>
+    	
+    <xsd:complexType name="TpropertyPlaceholder">
+      <xsd:complexContent>
+        <xsd:extension base="osgi:identifiedType">
+          <xsd:sequence minOccurs="0" maxOccurs="1">
+             <!-- nested properties declaration -->
+             <xsd:element name="default-properties" type="osgi:propsType" minOccurs="0" maxOccurs="1"/>
+          </xsd:sequence>
+          <xsd:attribute name="persistent-id" type="xsd:string" use="required"/>
+          <xsd:attribute name="placeholder-prefix" type="xsd:string" use="optional" default="${"/>
+          <xsd:attribute name="placeholder-suffix" type="xsd:string" use="optional" default="}"/>
+          <xsd:attribute name="defaults-ref" type="xsd:string" use="optional"/>
+        </xsd:extension>
+      </xsd:complexContent>
+    </xsd:complexType>
+
+    <!--  managed-properties  -->
+
+    <xsd:element name="managed-properties" type="TmanagedProperties"/>
+
+    <xsd:complexType name="TmanagedProperties">        		
+       <xsd:attribute name="persistent-id" type="xsd:string" use="required"/>
+       <xsd:attribute name="update-strategy" type="TupdateStrategyType" use="optional"/>
+       <xsd:attribute name="update-method" type="xsd:string" use="optional"/>	
+    </xsd:complexType>
+	
+     <xsd:simpleType name="TupdateStrategyType">
+        <xsd:restriction base="xsd:string">
+            <xsd:enumeration value="none"/>
+            <xsd:enumeration value="bean-managed"/>
+            <xsd:enumeration value="container-managed"/>
+        </xsd:restriction>
+     </xsd:simpleType>
+	
+    <!--  managed-service-factory -->
+
+    <xsd:element name="managed-service-factory" type="TmanagedServiceFactory"/>
+ 	
+    <xsd:complexType name="TmanagedServiceFactory">
+    	<xsd:complexContent>
+    		<xsd:extension base="osgi:identifiedType">
+    			<xsd:sequence>
+	                <xsd:group ref="osgi:serviceElements"/>
+                    <xsd:element name="managed-component" type="TmanagedComponent" minOccurs="1" maxOccurs="1"/>
+    			</xsd:sequence>
+                <xsd:attribute name="factory-pid" type="xsd:string" use="required"/>
+ 	            <xsd:attribute name="interface" type="xsd:token" use="optional"/>
+                <xsd:attribute name="auto-export" type="osgi:TautoExportModes" default="disabled"/>
+                <xsd:attribute name="ranking" type="xsd:int" default="0"/>
+  	            <xsd:anyAttribute namespace="##other" processContents="lax"/>
+         	</xsd:extension>
+        </xsd:complexContent>
+     </xsd:complexType>
+
+	<xsd:complexType name="TmanagedComponent">
+		<xsd:group ref="osgi:componentElements"/>
+        <xsd:attribute name="class" type="xsd:string"/>
+        <xsd:attribute name="init-method" type="xsd:string"/>
+        <xsd:attribute name="destroy-method" type="xsd:string"/>
+        <xsd:attribute name="factory-method" type="xsd:string"/>
+        <xsd:attribute name="factory-component" type="xsd:string"/>
+        <xsd:anyAttribute namespace="##other" processContents="lax"/>		
+	</xsd:complexType>
+
+
+    <!-- config-properties -->
+
+    <xsd:element name="config-properties" type="TconfigProperties"/>
+
+    <xsd:complexType name="TconfigProperties">
+        <xsd:attribute name="persistent-id" type="xsd:string" use="required"/>
+        <xsd:attribute name="update" type="xsd:boolean" use="optional" default="false"/>
+    </xsd:complexType>
+
+</xsd:schema>
